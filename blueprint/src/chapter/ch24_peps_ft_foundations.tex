@@ -444,9 +444,7 @@ sections.
     \label{thm:peps_physRealizeLocalOp_injective}
     \lean{TNLean.PEPS.physRealizeLocalOp_injective}
     \leanok
-    \uses{def:peps_physRealizeLocalOp,
-        thm:peps_physRealizeLocalOp_spec,
-        def:IsVertexInjective}
+    \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, def:IsVertexInjective}
     If two virtual operations have the same canonical physical realization,
     then they agree.
 \end{theorem}
@@ -480,9 +478,7 @@ sections.
     \label{thm:peps_localVirtualOpOfPhysicalOp_spec}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_spec}
     \leanok
-    \uses{def:peps_localVirtualOpOfPhysicalOp,
-        def:peps_physRealizeLocalOp,
-        def:peps_localProjector}
+    \uses{def:peps_localVirtualOpOfPhysicalOp, def:peps_physRealizeLocalOp, def:peps_localProjector}
     For every coefficient function $c$, applying the local tensor map after
     the virtual pullback gives the projection of $O(\Phi_v(c))$ onto the
     image of $\Phi_v$.
@@ -509,8 +505,7 @@ sections.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_of_realizes}
     \leanok
-    \uses{def:IsVertexInjective,
-        thm:peps_localVirtualOpOfPhysicalOp_spec}
+    \uses{def:IsVertexInjective, thm:peps_localVirtualOpOfPhysicalOp_spec}
     If a physical operator $O$ realizes a virtual operation $T$ on every
     vector in the image of $\Phi_v$, then pulling back $O$ recovers $T$.
 \end{theorem}
@@ -524,8 +519,7 @@ sections.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_action_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_iff_projected_action_eq}
     \leanok
-    \uses{def:IsVertexInjective,
-        thm:peps_localVirtualOpOfPhysicalOp_spec}
+    \uses{def:IsVertexInjective, thm:peps_localVirtualOpOfPhysicalOp_spec}
     Two physical endpoint operations have the same virtual pullback exactly when
     their projected actions agree on every vector in the image of the local
     tensor map. For every coefficient function $c$,
@@ -546,9 +540,7 @@ sections.
     \label{thm:peps_localVirtualOpOfPhysicalOp_physRealizeLocalOp}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_physRealizeLocalOp}
     \leanok
-    \uses{def:peps_physRealizeLocalOp,
-        thm:peps_physRealizeLocalOp_spec,
-        thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
+    \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     Pulling back the canonical physical realization of a virtual operation
     recovers the original virtual operation.
 \end{theorem}
@@ -561,9 +553,7 @@ sections.
     \label{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     \lean{TNLean.PEPS.physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     \leanok
-    \uses{def:peps_physRealizeLocalOp,
-        def:peps_localVirtualOpOfPhysicalOp,
-        def:peps_localProjector}
+    \uses{def:peps_physRealizeLocalOp, def:peps_localVirtualOpOfPhysicalOp, def:peps_localProjector}
     Let $P_v=\Phi_v\circ\Psi_v$ be the local projector, and let
     $T_O=\Psi_v\circ O\circ\Phi_v$ be the virtual pullback of a physical
     operator $O$. Then
@@ -578,8 +568,7 @@ sections.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \leanok
-    \uses{thm:peps_physRealizeLocalOp_injective,
-        thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    \uses{thm:peps_physRealizeLocalOp_injective, thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     Suppose that the compressed physical action $P_vOP_v$ agrees with the
     canonical physical realization of a virtual operation $T$. Then the
     virtual pullback of $O$ is $T$.
@@ -595,8 +584,7 @@ sections.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \leanok
-    \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp,
-        thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp, thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     The compressed physical action $P_vOP_v$ is the canonical physical
     realization of a virtual operation $T$ if and only if the virtual
     pullback of $O$ is $T$.
@@ -622,8 +610,7 @@ sections.
     \label{thm:peps_localIncidentMatrixOp_single}
     \lean{TNLean.PEPS.localIncidentMatrixOp_single}
     \leanok
-    \uses{def:peps_localIncidentMatrixOp,
-        def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_localIncidentMatrixOp, def:peps_localVirtualConfigSplitAt}
     If the coefficient function is the unit basis function at one local virtual
     configuration, and the matrix acts on the distinguished incident edge, the
     result is the sum over the new distinguished edge index with the residual
@@ -653,9 +640,7 @@ sections.
     \label{thm:peps_localIncidentMatrixOp_physicalRealization}
     \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealization}
     \leanok
-    \uses{def:peps_localIncidentMatrixOp,
-        def:peps_physRealizeLocalOp,
-        thm:peps_physRealizeLocalOp_spec}
+    \uses{def:peps_localIncidentMatrixOp, def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec}
     If $A$ is vertex-injective, then a matrix acting on one edge incident to
     $v$ is realized by a physical operator on the physical space at $v$.
 \end{theorem}
@@ -736,8 +721,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \label{thm:peps_stateCoeff_splitAtEdge}
     \lean{TNLean.PEPS.stateCoeff_splitAtEdge}
     \leanok
-    \uses{def:peps_stateCoeff, def:peps_edgeMiddleVertices,
-        thm:peps_prod_univ_splitAtEdge}
+    \uses{def:peps_stateCoeff, def:peps_edgeMiddleVertices, thm:peps_prod_univ_splitAtEdge}
     For any edge $e=(u,v)$, each summand in the PEPS coefficient factors into
     the tensor contribution at $u$, the product over the middle region
     $V\setminus\{u,v\}$, and the tensor contribution at $v$.
@@ -894,9 +878,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \label{def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
     \lean{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig,
-        def:peps_edgeDiagonalInsertedBoundaryConfig,
-        def:peps_edgeBoundaryToInsertedBoundaryConfig}
+    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeDiagonalInsertedBoundaryConfig, def:peps_edgeBoundaryToInsertedBoundaryConfig}
     Ordinary edge-boundary data are equivalent to diagonal inserted-boundary
     data. This is the finite reindexing map used after the identity matrix has
     removed all off-diagonal inserted-boundary summands.

@@ -53,9 +53,7 @@
     \label{lem:blockwise_boundary_identities_from_left_trace_membership}
     \lean{MPSTensor.pgvwc07_boundary_identities_of_leftBoundaryComponent_mem_iSup}
     \leanok
-    \uses{lem:block_matrices_equal_from_trace_pairings,
-        def:blockwise_product_word_span,
-        def:ground_space_parent}
+    \uses{lem:block_matrices_equal_from_trace_pairings, def:blockwise_product_word_span, def:ground_space_parent}
     Let $A^1,\ldots,A^g$ be block tensors whose length-$m$ simultaneous word
     tuples span the product algebra. Let $C^j_a\in \MN{D_j}$ be matrices
     indexed by blocks $j$ and physical letters $a$. Suppose that, for every
@@ -69,9 +67,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_matrices_equal_from_trace_pairings,
-        def:ground_space_parent,
-        def:ground_space_map}
+    \uses{lem:block_matrices_equal_from_trace_pairings, def:ground_space_parent, def:ground_space_map}
     Write $\psi=\sum_j\phi_j$ with $\phi_j\in G_{m+2}(A^j)$. For each $j$,
     choose $E_j$ whose image under the length-$m+2$ ground-space map for
     $A^j$ is $\phi_j$. Comparing the coefficient of the word $awb$ in the
@@ -270,9 +266,7 @@
     \label{lem:pgvwc_cde_identities_from_trace_decompositions}
     \lean{MPSTensor.pgvwc07_complementary_word_cde_identities_of_trace_decomposition}
     \leanok
-    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
-        lem:blockwise_word_boundary_compatibility_from_traces,
-        lem:normalized_boundary_matrix_identities}
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord, lem:blockwise_word_boundary_compatibility_from_traces, lem:normalized_boundary_matrix_identities}
     Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
     at length $m$. Fix matrices $X_j$, and put
     $D^j_\beta=X_jA^j_\beta$. Suppose that $C^j_\rho$ is indexed by a block
@@ -303,9 +297,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
-        lem:blockwise_word_boundary_compatibility_from_traces,
-        lem:normalized_boundary_matrix_identities}
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord, lem:blockwise_word_boundary_compatibility_from_traces, lem:normalized_boundary_matrix_identities}
     Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces} gives
     $A^j_\beta C^j_\rho = D^j_\beta A^j_\rho$.
     The single-letter normalization gives the word normalization
@@ -415,9 +407,7 @@
     \label{lem:complementary_word_boundary_identities_from_trace_decompositions}
     \lean{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_trace_decomposition}
     \leanok
-    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
-        lem:blockwise_word_boundary_compatibility_from_traces,
-        lem:complementary_word_boundary_identities_from_pgvwc}
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord, lem:blockwise_word_boundary_compatibility_from_traces, lem:complementary_word_boundary_identities_from_pgvwc}
     Let $A^1,\ldots,A^g$ be block tensors with the common word-span property
     at length $m$. Fix matrices $X_j$. Suppose that $C^j_\rho$ is indexed
     by a block $j$ and a complementary word $\rho$ of length $M$. Assume
@@ -438,9 +428,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord,
-        lem:blockwise_word_boundary_compatibility_from_traces,
-        lem:complementary_word_boundary_identities_from_pgvwc}
+    \uses{lem:sum_evalWord_mul_conjTranspose_evalWord, lem:blockwise_word_boundary_compatibility_from_traces, lem:complementary_word_boundary_identities_from_pgvwc}
     Lemma~\ref{lem:blockwise_word_boundary_compatibility_from_traces}, applied
     with $D^j_\beta=X_jA^j_\beta$, gives
     $A^j_\beta C^j_\rho = (X_jA^j_\beta)A^j_\rho$.

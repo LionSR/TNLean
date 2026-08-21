@@ -14,8 +14,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{lemma}[Gauge equivalence of direct sums with phase-weight absorption]%
     \label{lem:gauge_equiv_block_gauge_phase_weight}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight}\leanok
-    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv,
-        def:gauge_phase_equiv}
+    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv, def:gauge_phase_equiv}
     Let $A_k, B_k$ be block families, and let $X_k \in \GL_{D_k}(\C)$
     and scalars $\zeta_k \in \C$ satisfy
     $B_k^i = \zeta_k \cdot X_k A_k^i X_k^{-1}$ for every block $k$ and
@@ -122,8 +121,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \label{lem:fundamentalTheorem_multiBlock_full}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
-    \uses{def:injective, def:same_mpv, def:gauge_equiv,
-        def:block_diagonal_tensor, lem:tensor_from_blocks_globalGauge_conj}
+    \uses{def:injective, def:same_mpv, def:gauge_equiv, def:block_diagonal_tensor, lem:tensor_from_blocks_globalGauge_conj}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.

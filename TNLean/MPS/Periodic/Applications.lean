@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
-import TNLean.Channel.KrausRepresentation
-import TNLean.Spectral.MixedTransfer
+import QICLean.Channel.KrausRepresentation
+import QICLean.Spectral.MixedTransfer
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.

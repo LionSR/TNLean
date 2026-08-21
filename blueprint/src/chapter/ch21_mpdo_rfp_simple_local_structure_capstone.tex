@@ -40,9 +40,7 @@
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       rectangular_remainder_eq_mul_sub_sq}
     \leanok
-    \uses{def:is_sal, def:mpo_source_zcl,
-      thm:mpdo_all_cut_markov_implies_sal,
-      thm:mpdo_inverse_map_nonzero_rectangular_remainder}
+    \uses{def:is_sal, def:mpo_source_zcl, thm:mpdo_all_cut_markov_implies_sal, thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     There is an injective matrix product density operator tensor satisfying
     the strong area law and source zero correlation length whose
     source-selected inverse-map factorization has positive semidefinite
@@ -99,9 +97,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp,
-        thm:mpdo_one_site_closure_two_site_blocking,
-        thm:mpdo_two_site_closure_two_site_blocking}
+    \uses{thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp, thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
     Identify the two-site physical space of $K$ with the one-site physical
     space of $K^{[2]}$, and identify the four-site physical space of $K$ with
     the two-site physical space of $K^{[2]}$. These identifications merely
@@ -149,9 +145,7 @@
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       blockTwo_normalizedTensor_not_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
-      thm:mpdo_sal_zcl_rank_one_normalization_obstruction,
-      thm:mpdo_rfp_via_ts_block_two}
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking, thm:mpdo_sal_zcl_rank_one_normalization_obstruction, thm:mpdo_rfp_via_ts_block_two}
     The four-sector tensor in
     Theorem~\ref{thm:mpdo_sal_zcl_rank_one_normalization_obstruction} has
     trace-preserving completely positive maps $S,T$ such that, for every
@@ -236,10 +230,7 @@
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       blockTwo_tensor_isRFPViaTS_and_pairwise_trace_obstruction}
     \leanok
-    \uses{thm:mpdo_pair_preserving_trace_obstruction,
-      thm:mpdo_four_sector_witness_rfp,
-      thm:mpdo_inverse_map_nonzero_rectangular_remainder,
-      thm:mpdo_virtual_spanning_active_trace_counterexample}
+    \uses{thm:mpdo_pair_preserving_trace_obstruction, thm:mpdo_four_sector_witness_rfp, thm:mpdo_inverse_map_nonzero_rectangular_remainder, thm:mpdo_virtual_spanning_active_trace_counterexample}
     For the inverse-map-selected four-sector factorization of the tensor in
     Theorem~\ref{thm:mpdo_four_sector_witness_rfp}, let
     $C_{k,h}=\tr(\eta_{k,h})$.  Then
@@ -295,8 +286,7 @@
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       inverseMap_provenance_preserves_rectangular_remainder}
     \leanok
-    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-        thm:mpdo_inverse_map_hayashi_sector_comparison}
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_inverse_map_hayashi_sector_comparison}
     There is a four-sector, bond-dimension-two tensor with a refined Hayashi
     decomposition whose four sectors are one-dimensional and have weight
     $1/4$. Its three-site state is diagonal, with
@@ -343,9 +333,7 @@
     \label{cor:mpdo_sal_zcl_local_sector_structure}
     \lean{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{def:mpdo, def:injective, def:is_sal,
-        def:mpo_physical_trace_transfer, def:nt_cpsv,
-        def:mpdo_physical_sector_factorization}
+    \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv, def:mpdo_physical_sector_factorization}
     Let $\mathcal K$ be an injective normal matrix product density operator
     tensor satisfying the strong area law and literal zero correlation length,
     \begin{align}
@@ -613,8 +601,7 @@
         MPOTensor.PhysicalSectorFactorization.%
           activePhysicalSupportRestrictionData}
     \leanok
-    \uses{def:mpdo_physical_support_restriction,
-        thm:mpdo_active_physical_sector_factor_supports}
+    \uses{def:mpdo_physical_support_restriction, thm:mpdo_active_physical_sector_factor_supports}
     Let $K$ be injective and let
     \begin{align}
         UK[\beta,\alpha]U^*
@@ -725,8 +712,7 @@
         MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport,
         MPOTensor.isBNTLayerOrthogonal_of_pairwise_orthogonal_twoSided_support}
     \leanok
-    \uses{def:mpdo_bnt_layer_orthogonality,
-        thm:mpdo_injective_mpdo_adjoint_closure}
+    \uses{def:mpdo_bnt_layer_orthogonality, thm:mpdo_injective_mpdo_adjoint_closure}
     Let $\{\mathcal K_x\}_{x=0}^{g-1}$ be injective MPO tensors, each of which
     generates positive semidefinite periodic operators at every positive
     length. If, for every pair $x\ne y$, the unstarred identities
@@ -767,8 +753,7 @@
     \label{cor:mpdo_common_weight_bnt_layer_supports}
     \lean{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis}
     \leanok
-    \uses{thm:mpdo_neighboring_sector_positivity,
-        thm:mpdo_bnt_layer_orthogonal_supports}
+    \uses{thm:mpdo_neighboring_sector_positivity, thm:mpdo_bnt_layer_orthogonal_supports}
     Let a BNT decomposition have a common nonzero weight within each sector,
     and suppose that its one-site words span the product of the virtual matrix
     algebras. For every sector $s$, assume a physical-sector factorization with
@@ -887,9 +872,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_ambient_sector_factorization_supported_bond,
-        thm:mpdo_bnt_layer_orthogonal_supports,
-        thm:mpdo_nonnegative_orthogonal_commuting_sectors_gsnnch}
+    \uses{thm:mpdo_ambient_sector_factorization_supported_bond, thm:mpdo_bnt_layer_orthogonal_supports, thm:mpdo_nonnegative_orthogonal_commuting_sectors_gsnnch}
     The physical-sector identities make every $A_x$ an MPDO.  The unstarred
     layer identities and one-site spanning therefore give pairwise orthogonal
     projections $P_x$ supporting the raw representatives on both sides.
@@ -1012,10 +995,7 @@ This is the calculation in
         MPOTensor.CaseIIAbsorptionCounterexample.ambient_isHorizontalCF,
         MPOTensor.CaseIIAbsorptionCounterexample.sectors_basis_doubledPhysTraceTransfer_not_isNilpotent}
     \leanok
-    \uses{def:nt_cpsv, def:sector_bnt_cf,
-        def:blockwise_product_word_span, rem:word_tuple_span_top,
-        def:horizontal_cf_mpdo,
-        def:mpo_physical_trace_transfer}
+    \uses{def:nt_cpsv, def:sector_bnt_cf, def:blockwise_product_word_span, rem:word_tuple_span_top, def:horizontal_cf_mpdo, def:mpo_physical_trace_transfer}
     Let $A_0,A_1$ be the bond-one tensors whose only nonzero doubled-physical
     entries are
     \begin{align}
@@ -1080,10 +1060,7 @@ This is the calculation in
         MPOTensor.CaseIIAbsorptionCounterexample.ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor,
         MPOTensor.CaseIIAbsorptionCounterexample.printed_absorbed_normality_step_is_false}
     \leanok
-    \uses{def:nt_cpsv, def:mpdo_common_sector_weight_absorption,
-        def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal,
-        def:mpdo_simple_cf_tensor, thm:mpdo_caseii_absorption_algebraic_data,
-        thm:mpdo_rfp_implies_sal}
+    \uses{def:nt_cpsv, def:mpdo_common_sector_weight_absorption, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal, def:mpdo_simple_cf_tensor, thm:mpdo_caseii_absorption_algebraic_data, thm:mpdo_rfp_implies_sal}
     Let $A_0$ have scalar entries $1/\sqrt2$ on doubled symbols $(0,0)$ and
     $(1,1)$, let $A_1$ have scalar entry $1$ only on $(2,2)$, and take
     $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted bond-diagonal assembly has
@@ -1184,8 +1161,7 @@ This is the calculation in
     \label{thm:mpdo_theorem49_iv_to_v_counterexample}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false}
     \leanok
-    \uses{def:mpdo_two_site_blocking, def:is_rfp_via_ts,
-        def:mpdo_neighboring_trace_factorization, def:sector_bnt_cf}
+    \uses{def:mpdo_two_site_blocking, def:is_rfp_via_ts, def:mpdo_neighboring_trace_factorization, def:sector_bnt_cf}
     There is a one-letter matrix product density operator $K$ whose BNT
     canonical presentation has one scalar normal representative $A=1$ and two
     copies with raw weights
@@ -1234,13 +1210,7 @@ This is the calculation in
 \begin{theorem}[Printed simple-MPDO implication chain]
     \label{thm:cpsv_theorem49_printed_status}
     \notready
-    \uses{def:mpdo_simple_cf_tensor, def:mpdo_two_site_blocking,
-        def:is_rfp_via_ts, def:is_sal,
-        def:mpdo_source_gsnnch, def:mpo_source_zcl,
-        thm:mpdo_sal_zcl_bnt_sector_structure,
-        thm:mpdo_sal_zcl_blocking_channels,
-        thm:mpdo_caseii_absorption_not_normal,
-        thm:mpdo_theorem49_iv_to_v_counterexample}
+    \uses{def:mpdo_simple_cf_tensor, def:mpdo_two_site_blocking, def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch, def:mpo_source_zcl, thm:mpdo_sal_zcl_bnt_sector_structure, thm:mpdo_sal_zcl_blocking_channels, thm:mpdo_caseii_absorption_not_normal, thm:mpdo_theorem49_iv_to_v_counterexample}
     Let $K$ be a simple tensor in block-injective canonical form with a basis
     of normal tensors, and let $M=K^{[2]}$.  According to
     \cite[Theorem~4.9]{Cirac2016MPDO_arXiv},
@@ -1292,15 +1262,7 @@ This is the calculation in
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
-    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl, thm:cpsv_example411_not_source_zcl,
-        thm:cpsv_example411_ambient_not_sal,
-        thm:cpsv_example412_literal_formula,
-        thm:cpsv_example412_literal_sal,
-        thm:cpsv_example412_literal_zcl_rfp_gap,
-        thm:cpsv_example412_four_cycle_ssa_defect,
-        thm:cpsv_example412_not_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps}
+    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch, def:mpo_source_zcl, thm:cpsv_example411_not_source_zcl, thm:cpsv_example411_ambient_not_sal, thm:cpsv_example412_literal_formula, thm:cpsv_example412_literal_sal, thm:cpsv_example412_literal_zcl_rfp_gap, thm:cpsv_example412_four_cycle_ssa_defect, thm:cpsv_example412_not_gsnnch, thm:cpsv_example412_normalized_rfp_maps}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
     following separations.  Example~4.10 applies correlated on-site bit-flip
@@ -1426,8 +1388,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_cyclic_edge_weight_tensor,
-        thm:mpdo_trace_pow_cyclic_product}
+    \uses{thm:mpdo_cyclic_edge_weight_tensor, thm:mpdo_trace_pow_cyclic_product}
     The closed cyclic-edge identity reduces each matrix entry to a product of
     local edge coefficients.  Ket--bra diagonality makes the product vanish
     unless $\sigma=\tau$, and in the diagonal case the product is
@@ -1457,9 +1418,7 @@ This is the calculation in
         MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply_eq_internal_mul_pow,
         MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply}
     \leanok
-    \uses{def:block_entropy,
-        def:cpsv_example411_binary_internal_transition_count,
-        def:cpsv_example411_binary_support_model}
+    \uses{def:block_entropy, def:cpsv_example411_binary_internal_transition_count, def:cpsv_example411_binary_support_model}
     Let $1\leq L\leq N$ and let $x\in\{0,1\}^L$.  The effective-binary block
     state is diagonal, and its entry at $x$ is
     \begin{align}
@@ -1474,10 +1433,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:block_entropy,
-        def:cpsv_example411_binary_internal_transition_count,
-        def:cpsv_example411_binary_support_model,
-        thm:cpsv_example411_binary_support_normalization}
+    \uses{def:block_entropy, def:cpsv_example411_binary_internal_transition_count, def:cpsv_example411_binary_support_model, thm:cpsv_example411_binary_support_normalization}
     Expanding the canonical reduced state as a sum over the complementary
     labels leaves only equal retained words.  The cycle product then factors
     into the internal edges and an endpoint-fixed complementary path.  Each
@@ -1524,8 +1480,7 @@ This is the calculation in
         MPOTensor.CPSVExample411Ambient.mpo_ambientM_eq_singleKrausMap,
         MPOTensor.CPSVExample411Ambient.mpo_ambientM_supported_apply}
     \leanok
-    \uses{def:cpsv_example411_ambient_support_inclusion,
-        thm:cpsv_example411_binary_support_normalization}
+    \uses{def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_binary_support_normalization}
     The supported one-site slices satisfy
     $\widetilde M^{\iota(k),\iota(h)}=M^{k,h}$, while a one-site slice vanishes
     if either physical leg lies outside the image of $\iota$.  For every
@@ -1541,8 +1496,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_sitewise_physical_coordinate_congruence,
-        thm:cpsv_example411_binary_support_normalization}
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence, thm:cpsv_example411_binary_support_normalization}
     The rectangular delta matrix collapses each local coordinate sum to the
     unique supported binary label.  Applying the same inclusion independently
     at every site gives the displayed congruence, and the supported entry
@@ -1555,8 +1509,7 @@ This is the calculation in
         MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_eq_partitionFunction,
         MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form}
     \leanok
-    \uses{def:cpsv_example411_ambient_support_inclusion,
-        thm:cpsv_example411_binary_support_normalization}
+    \uses{def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_binary_support_normalization}
     For every positive $N$, the ambient trace equals the binary partition
     function:
     \begin{align}
@@ -1569,8 +1522,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sal_physical_isometry_transport,
-        thm:cpsv_example411_binary_support_normalization}
+    \uses{thm:mpdo_sal_physical_isometry_transport, thm:cpsv_example411_binary_support_normalization}
     Cyclicity of the trace and $V^*V=I_2$ preserve the trace under the
     sitewise congruence.  The binary partition-function identity and its closed
     form then give the result.
@@ -1590,11 +1542,7 @@ This is the calculation in
         MPOTensor.CPSVExample411Ambient.ambientM_not_isSourceZCL,
         MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_not_idempotent}
     \leanok
-    \uses{def:mpo_source_zcl,
-        def:cpsv_example411_ambient_support_inclusion,
-        thm:cpsv_example411_binary_block_probability,
-        thm:mpdo_reduced_state_physical_isometry_transport,
-        lem:mpdo_source_zcl_marginal_stability}
+    \uses{def:mpo_source_zcl, def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_binary_block_probability, thm:mpdo_reduced_state_physical_isometry_transport, lem:mpdo_source_zcl_marginal_stability}
     Let $\rho^{(N)}_2$ denote the normalized two-site marginal of the
     effective binary model on the periodic ring of length $N$.  For the
     constant-zero word,
@@ -1625,15 +1573,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:mpo_physical_trace_transfer,
-        def:cpsv_example411_ambient_support_inclusion,
-        thm:cpsv_example411_binary_block_probability,
-        thm:mpdo_reduced_state_physical_isometry_transport,
-        lem:mpdo_source_zcl_marginal_stability,
-        thm:cpsv_example411_binary_support_normalization,
-        thm:cpsv_example411_ambient_normalization,
-        lem:mpdo_trace_loop_chain,
-        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \uses{def:mpo_physical_trace_transfer, def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_binary_block_probability, thm:mpdo_reduced_state_physical_isometry_transport, lem:mpdo_source_zcl_marginal_stability, thm:cpsv_example411_binary_support_normalization, thm:cpsv_example411_ambient_normalization, lem:mpdo_trace_loop_chain, thm:mpo_source_zcl_of_physical_trace_idempotent}
     Substitution in the exact finite-ring block formula gives the two displayed
     values.  Source zero correlation length would identify the normalized
     two-site marginal obtained from length four with that obtained from length
@@ -1698,8 +1638,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_example411_binary_internal_transition_count,
-        thm:cpsv_example411_binary_block_probability}
+    \uses{def:cpsv_example411_binary_internal_transition_count, thm:cpsv_example411_binary_block_probability}
     The reduced-state formula is diagonal.  For a binary word with $t$ internal
     transitions, its diagonal probability is
     \begin{align}
@@ -1729,8 +1668,7 @@ This is the calculation in
         MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_three,
         MPOTensor.CPSVExample411Spectrum.ambient_charpoly_roots_four}
     \leanok
-    \uses{def:cpsv_example411_ambient_support_inclusion,
-        thm:cpsv_example411_length_four_effective_spectra}
+    \uses{def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_length_four_effective_spectra}
     For every $L\leq4$, let $\rho_L:=\rho_L^{(4)}(M)$ be the effective reduced
     state and $\widetilde\rho_L:=\rho_L^{(4)}(\widetilde M)$ the ambient reduced
     state.  Let $\chi_A$ denote the characteristic polynomial of $A$.  Then
@@ -1746,9 +1684,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:matrix_single_kraus_isometry_charpoly,
-        thm:mpdo_reduced_state_physical_isometry_transport,
-        thm:cpsv_example411_length_four_effective_spectra}
+    \uses{thm:matrix_single_kraus_isometry_charpoly, thm:mpdo_reduced_state_physical_isometry_transport, thm:cpsv_example411_length_four_effective_spectra}
     The reduced ambient state is
     $\widetilde\rho_L=V^{\otimes L}\rho_L(V^{\otimes L})^*$.  Applying
     characteristic-polynomial cyclicity to the rectangular factors gives
@@ -1774,8 +1710,7 @@ This is the calculation in
         MPOTensor.CPSVExample411Entropy.blockEntropy_three,
         MPOTensor.CPSVExample411Entropy.blockEntropy_four}
     \leanok
-    \uses{def:block_entropy,
-        thm:cpsv_example411_length_four_effective_spectra}
+    \uses{def:block_entropy, thm:cpsv_example411_length_four_effective_spectra}
     The effective binary tensor generates positive semidefinite periodic
     operators.  On the ring of length four, write $S_L=S(\rho_L)$.  With
     $h(x)=-x\log x$, where $\log$ is the natural logarithm,
@@ -1790,9 +1725,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_example411_binary_support_normalization,
-        thm:cpsv_example411_length_four_effective_spectra,
-        lem:entropy_charpoly_roots}
+    \uses{thm:cpsv_example411_binary_support_normalization, thm:cpsv_example411_length_four_effective_spectra}
     Every positive-length periodic operator is diagonal, and each diagonal
     entry is a product of entries of
     $W=\left(\begin{smallmatrix}1&1/2\\1/2&1\end{smallmatrix}\right)$, hence is
@@ -1829,8 +1762,7 @@ This is the calculation in
         MPOTensor.CPSVExample411Entropy.mutualInfo_two_sub_one_pos,
         MPOTensor.CPSVExample411Entropy.M_not_isSAL}
     \leanok
-    \uses{def:is_sal,
-        thm:cpsv_example411_length_four_effective_entropies}
+    \uses{def:is_sal, thm:cpsv_example411_length_four_effective_entropies}
     For $I_L=S_L+S_{4-L}-S_4$,
     \begin{align}
       I_2-I_1
@@ -1844,9 +1776,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{lem:sal_const,
-        thm:cpsv_example411_length_four_effective_entropies,
-        thm:cpsv_example411_log_ratio_pos}
+    \uses{lem:sal_const, thm:cpsv_example411_length_four_effective_entropies, thm:cpsv_example411_log_ratio_pos}
     Since $I_2-I_1=2S_2-S_1-S_3$, expanding
     $h(x)=-x\log x$ and using the logarithm rules gives the displayed identity.
     The certified comparison
@@ -1858,17 +1788,14 @@ This is the calculation in
     \label{thm:cpsv_example411_ambient_not_sal}
     \lean{MPOTensor.CPSVExample411Entropy.ambientM_not_isSAL}
     \leanok
-    \uses{def:cpsv_example411_ambient_support_inclusion,
-        thm:cpsv_example411_length_four_mutual_information_obstruction,
-        thm:mpdo_sal_physical_isometry_transport}
+    \uses{def:cpsv_example411_ambient_support_inclusion, thm:cpsv_example411_length_four_mutual_information_obstruction, thm:mpdo_sal_physical_isometry_transport}
     The isometric inclusion of the effective binary tensor into the
     two-qubit one-site space does not satisfy saturation of the area law.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sal_physical_isometry_transport,
-        thm:cpsv_example411_length_four_mutual_information_obstruction}
+    \uses{thm:mpdo_sal_physical_isometry_transport, thm:cpsv_example411_length_four_mutual_information_obstruction}
     If the ambient tensor satisfied saturation, descent through the physical
     isometry would imply saturation for the effective binary tensor, contrary
     to the preceding theorem.
@@ -1926,8 +1853,7 @@ This is the calculation in
         MPOTensor.CPSVExample412Literal.M_isMPDO,
         MPOTensor.CPSVExample412Literal.trace_rho}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor,
-        def:cpsv_example412_configuration_sign}
+    \uses{def:cpsv_example412_literal_tensor, def:cpsv_example412_configuration_sign}
     For every $N>0$,
     \begin{align}
         \rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N},
@@ -1974,8 +1900,7 @@ This is the calculation in
         MPOTensor.CPSVExample412Literal.fourCycleTripartiteState,
         MPOTensor.CPSVExample412Literal.fourCycleWeight}
     \leanok
-    \uses{def:cpsv_example412_configuration_sign,
-        thm:cpsv_example412_literal_formula}
+    \uses{def:cpsv_example412_configuration_sign, thm:cpsv_example412_literal_formula}
     For the state in
     \cite[Example~4.12, lines~932--938]{Cirac2016MPDO_arXiv}, at $N=4$
     regard the sites as
@@ -2003,7 +1928,7 @@ This is the calculation in
         MPOTensor.CPSVExample412Literal.traceAC_fourCycleTripartiteState_entropy,
         MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_not_isSSAEquality}
     \leanok
-    \uses{def:cpsv_example412_four_cycle_tripartition, def:ssa_equality}
+    \uses{def:cpsv_example412_four_cycle_tripartition}
     The normalized four-site state is diagonal with probability $1/8$ on the
     eight even-parity configurations and zero on the eight odd-parity
     configurations.  Its relevant marginals are
@@ -2040,7 +1965,6 @@ This is the calculation in
     \label{thm:positive_commuting_overlapping_product_markov}
     \lean{Matrix.exists_quantumMarkovDecomposition_of_positive_overlapping_product}
     \leanok
-    \uses{def:entropy_quantum_markov_decomposition}
     Let $\rho_{ABC}$ be a trace-one operator, and let $X_{AB}$ and $Y_{BC}$
     be positive semidefinite operators. Suppose that their natural lifts to
     $ABC$ commute and that, after the natural reassociation of the three
@@ -2052,8 +1976,7 @@ This is the calculation in
     Then $\rho_{ABC}$ admits a quantum Markov decomposition on $B$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:entropy_quantum_markov_decomposition,
-        thm:commuting_overlapping_unitary_block_actions}
+    \uses{thm:commuting_overlapping_unitary_block_actions}
     The spatial decomposition
     \cite[Lemma~2.1]{Beigi2012Classification} gives a unitary decomposition
     $B=\bigoplus_q B_q^L\otimes B_q^R$ in which the two overlapping actions
@@ -2079,9 +2002,7 @@ This is the calculation in
         MPOTensor.nonempty_quantumMarkovDecomposition_fourCycle_of_isGSNNCHAt,
         MPOTensor.isSSAEquality_fourCycle_of_isGSNNCHAt}
     \leanok
-    \uses{def:mpdo_source_gsnnch,
-        def:entropy_quantum_markov_decomposition,
-        thm:hayashi_ssa_equality_reverse}
+    \uses{def:mpdo_source_gsnnch}
     Let $\rho$ be a positive semidefinite trace-one operator on four
     $d$-dimensional sites, and suppose that $\rho$ has the sector
     decomposition of Definition~4.8. Regroup the sites as
@@ -2093,10 +2014,7 @@ This is the calculation in
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_source_gsnnch,
-        def:entropy_quantum_markov_decomposition,
-        thm:positive_commuting_overlapping_product_markov,
-        thm:hayashi_ssa_equality_reverse}
+    \uses{def:mpdo_source_gsnnch, thm:positive_commuting_overlapping_product_markov}
     Write $B_j^{(x)}$ for the four translated bonds in sector $x$, $n_x$
     for its multiplicity, and $c>0$ for the common normalization. Set
     \begin{align}
@@ -2124,15 +2042,12 @@ This is the calculation in
     \lean{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_generic,
         MPOTensor.CPSVExample412Literal.M_not_isGSNNCH}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor,
-        thm:cpsv_example412_four_cycle_ssa_defect,
-        thm:mpdo_gsnnch_four_cycle_markov}
+    \uses{def:cpsv_example412_literal_tensor, thm:cpsv_example412_four_cycle_ssa_defect, thm:mpdo_gsnnch_four_cycle_markov}
     The tensor $M$ printed in Example~4.12 does not satisfy the GSNNCH
     condition of Definition~4.8 for its normalized density-operator family.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:cpsv_example412_four_cycle_ssa_defect,
-        thm:mpdo_gsnnch_four_cycle_markov}
+    \uses{thm:cpsv_example412_four_cycle_ssa_defect, thm:mpdo_gsnnch_four_cycle_markov}
     If $M$ were GSNNCH, its normalized four-site state would satisfy the
     hypotheses of the preceding theorem and hence equality in strong
     subadditivity for $A=\{0\}$, $B=\{1,3\}$, $C=\{2\}$. The generic
@@ -2149,8 +2064,7 @@ This is the calculation in
         MPOTensor.CPSVExample412Literal.physTraceTransfer_M_not_idempotent,
         MPOTensor.CPSVExample412Literal.M_not_isRFPViaTS}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor, def:mpo_source_zcl,
-        def:is_rfp_via_ts, thm:rfp_via_ts_physical_trace_idempotent}
+    \uses{def:cpsv_example412_literal_tensor, def:mpo_source_zcl, def:is_rfp_via_ts, thm:rfp_via_ts_physical_trace_idempotent}
     The physical-trace transfer of the printed tensor is
     \begin{align}
         \mathcal T_M=I+\sigma_z
@@ -2197,8 +2111,7 @@ This is the calculation in
         MPOTensor.CPSVExample412NormalizedRFP.refineMap_physClose1,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_isRFPViaTS}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor, def:is_rfp_via_ts,
-        thm:cpsv_example412_literal_formula}
+    \uses{def:cpsv_example412_literal_tensor, def:is_rfp_via_ts, thm:cpsv_example412_literal_formula}
     Let
     \begin{align}
         \widehat M&=\frac12 M.
@@ -2258,10 +2171,7 @@ This is the calculation in
 \begin{theorem}[Physical sector structure of absorbed BNT representatives]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
-    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf,
-        def:is_sal, def:mpo_physical_trace_transfer,
-        def:mpdo_physical_sector_factorization,
-        def:mpdo_neighboring_trace_factorization}
+    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     with BNT representatives $A_s$ and canonical coefficients $\mu_{s,q}$.
     Suppose that $K$ generates positive semidefinite periodic operators,

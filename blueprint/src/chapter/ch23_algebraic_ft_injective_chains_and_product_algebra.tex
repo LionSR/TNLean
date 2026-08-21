@@ -64,8 +64,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     \label{thm:fundamentalTheorem_injective_chain_gaugePhase}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase}
     \leanok
-    \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv,
-        def:non_ti_chain}
+    \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv, def:non_ti_chain}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
     $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites and
     common positive bond dimension $D$, and assume that $\mathbf{A}$ is
@@ -85,8 +84,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
 
 \begin{proof}
     \leanok
-    \uses{lem:chainCombinedTensor_smul_chain,
-        thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
+    \uses{lem:chainCombinedTensor_smul_chain, thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
     If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
     by a gauge and a nonzero scalar $\zeta$, rescale each site of
     $\mathbf{B}$ by $\zeta^{-1}$. Lemma~\ref{lem:chainCombinedTensor_smul_chain}
@@ -292,8 +290,7 @@ Chapter~\ref{ch:symmetry}.
 
 \begin{proof}
     \leanok
-    \uses{lem:blocked_chain_isInjective,
-        thm:fundamentalTheorem_injective_chain}
+    \uses{lem:blocked_chain_isInjective, thm:fundamentalTheorem_injective_chain}
     By Lemma~\ref{lem:blocked_chain_isInjective}, the blocked chain built from
     $A^{[L]}$ is injective.
     Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the two
@@ -385,8 +382,7 @@ $k$-th coordinate, as in Definition~\ref{def:block_ideal}.
 
 \begin{proof}
     \leanok
-    \uses{thm:ring_perm, thm:dim_preserved, thm:component_map_bijective,
-        thm:skolem_noether}
+    \uses{thm:ring_perm, thm:dim_preserved, thm:component_map_bijective, thm:skolem_noether}
     Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
     Theorem~\ref{thm:dim_preserved} identifies the matrix sizes
     $D_{\pi(k)} = D_k$.
@@ -481,9 +477,7 @@ applies.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:perBlockLinearExtension_mul,
-        lem:perBlockLinearExtension_bijective,
-        thm:unitary_skolem_noether_matrix}
+    \uses{lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective, thm:unitary_skolem_noether_matrix}
     By Lemmas~\ref{lem:perBlockLinearExtension_mul}
     and~\ref{lem:perBlockLinearExtension_bijective}, $T_k$ is a bijective
     multiplicative linear map. Positivity makes this algebra automorphism
@@ -495,8 +489,7 @@ applies.
     \label{def:piAlgEquiv}
     \lean{MPSTensor.piAlgEquiv}
     \leanok
-    \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul,
-        lem:perBlockLinearExtension_bijective}
+    \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective}
     The \emph{product algebra automorphism} is the $\C$-algebra
     equivalence
     \begin{align}

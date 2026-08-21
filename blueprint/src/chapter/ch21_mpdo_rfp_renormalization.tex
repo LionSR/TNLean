@@ -9,7 +9,6 @@ section.
     \label{lem:is_kraus_cptp_id}
     \lean{isKrausCPTP_id}
     \leanok
-    \uses{def:is_kraus_cptp}
     The identity map $\id(X)=X$ is trace-preserving completely positive,
     with single Kraus operator $A_0=I$.
 \end{lemma}
@@ -23,7 +22,6 @@ section.
     \label{thm:mpdo_single_kraus_isometry_cptp}
     \lean{isKrausCPTP_of_singleKraus}
     \leanok
-    \uses{def:is_kraus_cptp}
     Let $H$ and $K$ be finite-dimensional complex vector spaces, and let
     $V:H\to K$ satisfy $V^\dagger V=I_H$. Then the map
     \begin{align}
@@ -74,7 +72,7 @@ section.
     \label{lem:mpdo_single_kraus_map_cp}
     \lean{singleKrausMap_isKrausCP}
     \leanok
-    \uses{def:is_kraus_cp, def:mpdo_single_kraus_map}
+    \uses{def:mpdo_single_kraus_map}
     For every rectangular operator $V:H\to K$, the map
     $X\mapsto VXV^\dagger$ is completely positive.
 \end{lemma}
@@ -115,7 +113,6 @@ section.
     \label{lem:is_kraus_cptp_comp}
     \lean{isKrausCPTP_comp}
     \leanok
-    \uses{def:is_kraus_cptp}
     The composition of two trace-preserving completely positive maps is again
     trace-preserving completely positive. If $\mathcal{S}$ has Kraus operators
     $A_i$ and $\mathcal{T}$ has Kraus operators $B_j$, then
@@ -139,7 +136,6 @@ section.
     \label{lem:is_kraus_cp_comp}
     \lean{isKrausCP_comp}
     \leanok
-    \uses{def:is_kraus_cp}
     The composition of two completely positive rectangular Kraus maps is
     completely positive. If the two families are $(A_i)_i$ and $(B_j)_j$,
     the composite family is $(A_iB_j)_{i,j}$.
@@ -150,8 +146,7 @@ section.
     \lean{Matrix.tensorMapIdLM_isKrausCPTP}
     \lean{Matrix.idTensorMapLM_isKrausCPTP}
     \leanok
-    \uses{def:tensor_map_id, def:mpdo_id_tensor_map, def:is_kraus_cptp,
-        thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp}
+    \uses{def:mpdo_id_tensor_map, thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp}
     Let $\mathcal S:\End_{\C}(H)\to
         \End_{\C}(K)$ be trace-preserving and completely positive,
     and let $R$ be another finite-dimensional space. Then
@@ -201,7 +196,7 @@ section.
     \label{thm:mpdo_rectangular_kraus_map_cptp}
     \lean{Matrix.rectangularKrausMap_isKrausCPTP}
     \leanok
-    \uses{def:is_kraus_cptp, def:mpdo_rectangular_kraus_map}
+    \uses{def:mpdo_rectangular_kraus_map}
     Let $(A_a:H\to K)_a$ be a finite family of rectangular operators. If
     $\sum_a A_a^\dagger A_a=I_H$, then
     $X\mapsto\sum_a A_aXA_a^\dagger$ is trace-preserving and completely
@@ -216,7 +211,7 @@ section.
     \label{lem:mpdo_rectangular_kraus_map_cp}
     \lean{Matrix.rectangularKrausMap_isKrausCP}
     \leanok
-    \uses{def:is_kraus_cp, def:mpdo_rectangular_kraus_map}
+    \uses{def:mpdo_rectangular_kraus_map}
     Every finite rectangular Kraus family defines a completely positive map,
     without a resolution-of-identity assumption.
 \end{lemma}
@@ -260,8 +255,7 @@ section.
     \label{thm:mpdo_controlled_kraus_map_same_block}
     \lean{Matrix.controlledKrausMap_sameBlock_apply}
     \leanok
-    \uses{def:mpdo_controlled_kraus_map,
-      def:mpdo_rectangular_kraus_map}
+    \uses{def:mpdo_controlled_kraus_map, def:mpdo_rectangular_kraus_map}
     Let $X_{kk}:H_k\to H_k$ denote the $k$th diagonal block of $X$. Then
     \begin{align}
         \mathcal C(X)_{kk}
@@ -296,8 +290,7 @@ section.
     \label{thm:mpdo_controlled_kraus_map_cptp}
     \lean{Matrix.controlledKrausMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_controlled_kraus_map,
-        def:is_kraus_cptp}
+    \uses{def:mpdo_controlled_kraus_map}
     Suppose that for every $k$ the sectorwise Kraus family resolves the
     identity, $\sum_a A_{k,a}^\dagger A_{k,a}=I_{H_k}$. Then the
     orthogonally controlled map $\mathcal C$ is trace-preserving and completely
@@ -321,7 +314,7 @@ section.
     \label{lem:mpdo_compressed_cp_sum}
     \lean{isKrausCP_sum_comp_singleKrausMap}
     \leanok
-    \uses{def:is_kraus_cp, def:mpdo_single_kraus_map}
+    \uses{def:mpdo_single_kraus_map}
     Let $(P_i)_i$ be finitely many operators on $H$ and let each
     $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be completely positive. Then
     \begin{align}
@@ -341,7 +334,7 @@ section.
     \label{lem:mpdo_projector_controlled_trace_selection}
     \lean{trace_sum_comp_singleKrausMap_of_starProjections}
     \leanok
-    \uses{def:is_kraus_cptp, def:mpdo_single_kraus_map}
+    \uses{def:mpdo_single_kraus_map}
     Let $(P_i)_i$ be finitely many orthogonal projections on $H$, not
     necessarily resolving the identity, and let each
     $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be trace-preserving and
@@ -367,8 +360,7 @@ section.
     \lean{isKrausCPTP_sum_comp_singleKrausMap_of_starProjectionResolution,
         isKrausCPTP_sum_comp_singleKrausMap_of_projectiveResolution}
     \leanok
-    \uses{def:orthogonal_projection_channel, def:is_kraus_cptp,
-        def:mpdo_single_kraus_map}
+    \uses{def:orthogonal_projection_channel, def:mpdo_single_kraus_map}
     Let $(P_s)_{s\in I}$ be a finite family of orthogonal projections on
     $H$ such that $\sum_sP_s=I_H$. For each $s$, let
     $\Phi_s:\End_{\C}(H)\to\End_{\C}(K)$ be trace-preserving and completely
@@ -430,8 +422,7 @@ section.
     \label{lem:mpdo_right_partial_trace_cptp}
     \lean{Matrix.partialTraceRightLM_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_right_partial_trace_map,
-        def:is_kraus_cptp}
+    \uses{def:mpdo_right_partial_trace_map}
     The map $\tr_B$ is trace-preserving and completely positive for arbitrary
     finite-dimensional spaces $A$ and $B$.
 \end{lemma}
@@ -456,7 +447,7 @@ $A$ to matrices on $A\otimes B$, the elementary preparation operation used
 in the maps $\mathcal T_1$ and $\mathcal S_1$ of
 \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv},
 is a fully generic construction with no MPDO-specific content, stated as
-Definition~\ref{def:mpdo_state_preparation_map} in
+the corresponding definition in the companion quantum-channel volume in
 Chapter~\ref{ch:aux_channel_theory}.
 
 \begin{definition}[Preparation Kraus operators]
@@ -472,9 +463,7 @@ Chapter~\ref{ch:aux_channel_theory}.
     \label{thm:mpdo_state_preparation_kraus_action}
     \lean{Matrix.rectangularKrausMap_preparationKraus_eq}
     \leanok
-    \uses{def:mpdo_rectangular_kraus_map,
-      def:mpdo_state_preparation_map,
-      def:mpdo_state_preparation_kraus}
+    \uses{def:mpdo_rectangular_kraus_map, def:mpdo_state_preparation_kraus}
     If $\rho\succeq0$ and $A_j(e_a)=e_a\otimes\sqrt\rho\,e_j$, then
     \begin{align}
         \sum_j A_jXA_j^\dagger&=X\otimes\rho.
@@ -511,8 +500,7 @@ Chapter~\ref{ch:aux_channel_theory}.
     \label{lem:mpdo_state_preparation_cp}
     \lean{Matrix.preparationMap_isKrausCP}
     \leanok
-    \uses{def:is_kraus_cp, def:mpdo_state_preparation_map,
-      thm:mpdo_state_preparation_kraus_action}
+    \uses{thm:mpdo_state_preparation_kraus_action}
     If $\rho\geq0$, then the map $X\mapsto X\otimes\rho$ is completely
     positive. No trace normalization is required.
 \end{lemma}
@@ -521,9 +509,7 @@ Chapter~\ref{ch:aux_channel_theory}.
     \label{lem:mpdo_state_preparation_cptp}
     \lean{Matrix.preparationMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_state_preparation_map,
-      def:mpdo_state_preparation_kraus,
-      def:is_kraus_cptp}
+    \uses{def:mpdo_state_preparation_kraus}
     If $\rho\geq0$ and $\tr(\rho)=1$, then
     $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
     positive.
@@ -531,9 +517,7 @@ Chapter~\ref{ch:aux_channel_theory}.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_rectangular_kraus_map_cptp,
-      thm:mpdo_state_preparation_kraus_action,
-      thm:mpdo_state_preparation_kraus_resolution}
+    \uses{thm:mpdo_rectangular_kraus_map_cptp, thm:mpdo_state_preparation_kraus_action, thm:mpdo_state_preparation_kraus_resolution}
     Theorem~\ref{thm:mpdo_state_preparation_kraus_action} identifies the map
     with the rectangular Kraus family $(A_j)_j$, and
     Theorem~\ref{thm:mpdo_state_preparation_kraus_resolution} gives
@@ -642,7 +626,7 @@ the remaining sites unchanged.
     \label{def:is_rfp_via_ts}
     \lean{MPOTensor.IsRFPViaTS}
     \leanok
-    \uses{def:mpo_tensor, def:is_kraus_cptp, def:phys_close}
+    \uses{def:mpo_tensor, def:phys_close}
     An MPO tensor $M$ is a \emph{renormalization fixed point} if there exist two
     trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
     physical indices such that $\mathcal{S}[M_2(X)]=M_1(X)$ and
@@ -708,8 +692,7 @@ the remaining sites unchanged.
     \lean{MPSTensor.doubledTensor_isRFPViaTS_iff_isTransferIdempotent,
       MPSTensor.doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mps_transfer_idempotence,
-      def:physical_blocking_isometry}
+    \uses{def:is_rfp_via_ts, def:mps_transfer_idempotence, def:physical_blocking_isometry}
     Let $A=(A^i)_{i=0}^{d-1}$ be an MPS tensor, and let
     $M(A)^{ij}=A^i\otimes\overline{A^j}$ be its doubled MPO tensor. Then
     \begin{align}
@@ -746,10 +729,7 @@ the remaining sites unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence,
-      thm:rfp_via_ts_physical_trace_idempotent,
-      thm:matrix_support_completion_cptp,
-      thm:mpdo_single_kraus_map_cptp}
+    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence, thm:rfp_via_ts_physical_trace_idempotent, thm:matrix_support_completion_cptp, thm:mpdo_single_kraus_map_cptp}
     The blocking relation
     $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
     \begin{align}
@@ -857,8 +837,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_transition_matrix,
-      def:cpsv_fibonacci_boundary_counts}
+    \uses{def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts}
     Multiply the row indexed by $\alpha$ in $B^n$ by the two columns of $B$.
 \end{proof}
 
@@ -890,9 +869,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_transition_matrix,
-      def:cpsv_fibonacci_boundary_counts,
-      def:cpsv_fibonacci_periodic_count}
+    \uses{def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts, def:cpsv_fibonacci_periodic_count}
     Expand $B^{N+2}=B^{N+1}B$ and $B^{N+1}=B^NB$. Substitution of
     $B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)$ into the
     diagonal sums gives $a_{N+2}+a_N=3a_{N+1}$.
@@ -903,8 +880,7 @@ the remaining sites unchanged.
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_one,
       MPSTensor.FibonacciBoundary.periodicTransitionCount_two}
     \leanok
-    \uses{def:cpsv_fibonacci_periodic_count,
-      thm:cpsv_fibonacci_boundary_recurrence}
+    \uses{def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_boundary_recurrence}
     The first two periodic transition counts are $a_1=3$ and $a_2=7$.
 \end{theorem}
 
@@ -932,10 +908,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_transition_matrix,
-      def:cpsv_fibonacci_boundary_counts,
-      def:cpsv_fibonacci_periodic_count,
-      thm:cpsv_fibonacci_periodic_count_recurrence}
+    \uses{def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts, def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_recurrence}
     Use two-step induction on $N$. The cases $N=0$ and $N=1$ follow by direct
     calculation. Since $\tau_\pm^2=\tau_\pm+1$, each sequence
     $\tau_\pm^{2N}$ satisfies
@@ -947,8 +920,7 @@ the remaining sites unchanged.
     \label{thm:cpsv_fibonacci_transition_not_geometric}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_not_geometric}
     \leanok
-    \uses{def:cpsv_fibonacci_periodic_count,
-      thm:cpsv_fibonacci_periodic_count_values}
+    \uses{def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_values}
     There are no $r,s\in\N$ such that $a_N=rs^{N-1}$ for every $N>0$.
     This is the non-geometricity assertion at
     \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv} for the transition-count
@@ -983,8 +955,7 @@ the remaining sites unchanged.
     \label{thm:cpsv_fibonacci_open_boundary_rank_status}
     \lean{MPSTensor.FibonacciBoundary.rank_openBoundaryOperator_eq_x}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator,
-      def:cpsv_fibonacci_boundary_counts}
+    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_boundary_counts}
     For $n>0$ and $\alpha,\beta\in\{0,1\}$,
     \begin{align}
         \operatorname{rank}\rho^{(n)}_{\alpha\beta}(A)
@@ -995,9 +966,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator,
-      def:cpsv_fibonacci_transition_matrix,
-      def:cpsv_fibonacci_boundary_counts}
+    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts}
     A diagonal entry is nonzero exactly when its physical labels form an allowed
     path from $\alpha$ to $\beta$. Splitting a path at its first physical label
     shows that the numbers of supported words obey the transition rule determined
@@ -1012,8 +981,7 @@ the remaining sites unchanged.
     \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_periodicTransitionCount,
       MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_goldenRatio}
     \leanok
-    \uses{def:cpsv_fibonacci_support_tensor,
-      def:cpsv_fibonacci_periodic_count}
+    \uses{def:cpsv_fibonacci_support_tensor, def:cpsv_fibonacci_periodic_count}
     Let $A$ be obtained from any positive choice of fusion weights with the
     support prescribed in Definition~\ref{def:cpsv_fibonacci_support_tensor}.
     Set $\tau_\pm=(1\pm\sqrt5)/2$, as in
@@ -1030,11 +998,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator,
-      def:cpsv_fibonacci_periodic_count,
-      thm:cpsv_fibonacci_periodic_count_golden_ratio,
-      thm:cpsv_fibonacci_open_boundary_rank_status,
-      thm:to_mpo_diagonal_rank}
+    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_golden_ratio, thm:cpsv_fibonacci_open_boundary_rank_status, thm:to_mpo_diagonal_rank}
     The diagonal MPO rank counts physical words with nonzero periodic amplitude.
     For $N>0$, the supports obtained by closing the virtual endpoint at $0$ and
     at $1$ are disjoint, since the first physical bit determines the initial
@@ -1058,8 +1022,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_fibonacci_periodic_rank,
-      thm:cpsv_fibonacci_transition_not_geometric}
+    \uses{thm:cpsv_fibonacci_periodic_rank, thm:cpsv_fibonacci_transition_not_geometric}
     The operator rank equals $a_N$ at every positive length, while
     $a_1=3$ and $a_2=7$. A geometric formula would therefore give $r=3$ and
     $7=3s$, which is impossible in $\N$.
@@ -1078,8 +1041,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_fibonacci_operator_rank_not_geometric,
-      thm:mpdo_strong_rfp_periodic_rank_growth}
+    \uses{thm:cpsv_fibonacci_operator_rank_not_geometric, thm:mpdo_strong_rfp_periodic_rank_growth}
     Suppose otherwise, and let $P$ be the positive witness for the strong
     fixed-point relation. Then, for every $N>0$, the periodic ranks satisfy
     \begin{align}
@@ -1161,7 +1123,7 @@ the remaining sites unchanged.
     \lean{MPOTensor.refineFirstSite_isKrausCPTP,
       MPOTensor.coarsenFirstTwoSites_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_global_renormalization_maps, def:is_kraus_cptp}
+    \uses{def:mpdo_global_renormalization_maps}
     If $\mathcal S$ and $\mathcal T$ are trace-preserving completely positive,
     then so are $\widehat{\mathcal S}_N$ and
     $\widehat{\mathcal T}_N$ for every $N$.
@@ -1190,8 +1152,7 @@ the remaining sites unchanged.
       MPOTensor.coarsenFirstTwoSites_mpo,
       MPOTensor.exists_global_renormalization_maps}
     \leanok
-    \uses{def:phys_close, def:is_rfp_via_ts,
-      def:mpdo_global_renormalization_maps}
+    \uses{def:phys_close, def:is_rfp_via_ts, def:mpdo_global_renormalization_maps}
     Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
     $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$. Then, for
     every $N$ and $X$,
@@ -1211,8 +1172,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_global_renormalization_regrouping,
-      lem:phys_close_identity}
+    \uses{lem:mpdo_global_renormalization_regrouping, lem:phys_close_identity}
     For words $u,v$ on the $N$ spectator sites, write $M^{u,v}$ for their
     virtual word evaluation and write $[Y]^{(r)}_{u,v}$ for the block of an
     operator $Y$ on the first $r$ sites. Regrouping the first site gives
@@ -1306,8 +1266,7 @@ the remaining sites unchanged.
     \label{thm:to_mpo_zcl_iff_transfer_idempotent}
     \lean{MPSTensor.toMPOTensor_isZCL_iff_isTransferIdempotent}
     \leanok
-    \uses{def:mpo_is_zcl, def:mps_transfer_idempotence,
-        thm:to_mpo_transfer_map}
+    \uses{def:mpo_is_zcl, def:mps_transfer_idempotence, thm:to_mpo_transfer_map}
     For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
     map if and only if the MPS transfer map is idempotent:
     \begin{align}
@@ -1321,8 +1280,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:mpo_is_zcl, def:mps_transfer_idempotence,
-        thm:to_mpo_transfer_map}
+    \uses{def:mpo_is_zcl, def:mps_transfer_idempotence, thm:to_mpo_transfer_map}
     Both conditions assert idempotence of the corresponding transfer map.
     Theorem~\ref{thm:to_mpo_transfer_map} identifies those transfer maps, so
     the two predicates are equivalent.

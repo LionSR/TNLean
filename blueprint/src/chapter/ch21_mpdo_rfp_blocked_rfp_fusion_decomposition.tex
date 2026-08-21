@@ -37,11 +37,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:direct_sum_inverse_cptp_forward_unitary,
-      lem:cpsv_bnt_block_dimensions_positive,
-      thm:mpdo_transported_vertical_sector_composites_trace_preserving,
-      thm:mpdo_transported_vertical_sector_composites_schwarz,
-      thm:mpdo_transported_vertical_sector_composites_identity}
+    \uses{thm:direct_sum_inverse_cptp_forward_unitary, lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, thm:mpdo_transported_vertical_sector_composites_identity}
     The two basis-of-normal-tensors decompositions have positive matrix
     dimensions. The transported maps are completely positive and preserve
     the total block trace, and the preceding theorem gives both inverse laws.
@@ -83,10 +79,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_vertical_bond_contraction_encoded_matrix_unit,
-      lem:mpdo_vertical_sector_retraction,
-      thm:mpdo_transported_vertical_sector_unitary_relabeling,
-      thm:mpdo_transported_vertical_sector_maps}
+    \uses{lem:mpdo_vertical_bond_contraction_encoded_matrix_unit, lem:mpdo_vertical_sector_retraction, thm:mpdo_transported_vertical_sector_unitary_relabeling, thm:mpdo_transported_vertical_sector_maps}
     Decompose the weighted contraction family into its individual matrix
     summands. At the summand paired with $\alpha$, the unitary formula gives
     \begin{align}
@@ -109,8 +102,7 @@
     \lean{MPOTensor.mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex}
     \lean{MPOTensor.blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv}
     \leanok
-    \uses{thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      def:vertical_cf_mpdo, def:mpdo_two_site_blocking}
+    \uses{thm:mpdo_transported_vertical_sector_coefficient_comparison, def:vertical_cf_mpdo, def:mpdo_two_site_blocking}
     Under the hypotheses and with the sector correspondence of Theorem~
     \ref{thm:mpdo_transported_vertical_sector_coefficient_comparison}, let
     $B$ be the vertical reading of the two-site blocking, and write
@@ -143,9 +135,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      thm:coisometry_reconstruction_same_mpv_pos}
+    \uses{thm:mpdo_operator_product_mpo, lem:mpv_vertical_assembled, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:coisometry_reconstruction_same_mpv_pos}
     The two-site vertical canonical form first gives
     $O_L(B)=\sum_\delta\tr(\nu_\delta^L)
     O_L(A^{(2)}_\delta)$.
@@ -174,8 +164,7 @@
     \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction}
     \lean{MPOTensor.retainedVerticalProduct_projectorClosure_and_noPeriodicVectors}
     \leanok
-    \uses{thm:mpdo_blocked_vertical_operator_representations,
-      def:mpdo_two_site_blocking}
+    \uses{thm:mpdo_blocked_vertical_operator_representations, def:mpdo_two_site_blocking}
     Suppose that the vertical reading of $M$ is reconstructed from a retained
     tensor $A$ by a coisometry $U$. The two-site blocking is then reconstructed
     from the product of two copies of $A$ by the Kronecker square of $U$.
@@ -202,8 +191,7 @@
     \lean{MPOTensor.mulTensor_verticalAssembledTensor_reindex}
     \lean{MPOTensor.weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors}
     \leanok
-    \uses{thm:mpdo_retained_vertical_product_canonical_hypotheses,
-      lem:canonical_hypotheses_dependent_direct_summand}
+    \uses{thm:mpdo_retained_vertical_product_canonical_hypotheses, lem:canonical_hypotheses_dependent_direct_summand}
     In the retained coordinates, the product tensor is the orthogonal direct
     sum over ordered pairs of BNT copies. Its summand indexed by
     $((\alpha,q),(\beta,r))$ is
@@ -227,8 +215,7 @@
     \label{thm:mpdo_weighted_vertical_product_block_normal_decomposition}
     \lean{MPOTensor.exists_weightedVerticalProductBlock_normalDecomposition}
     \leanok
-    \uses{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses,
-      thm:projector_closure_canonical_form}
+    \uses{thm:mpdo_weighted_vertical_product_block_canonical_hypotheses, thm:projector_closure_canonical_form}
     For every ordered pair of retained BNT copies, the weighted product tensor
     has an exact orthogonal decomposition into positive multiples of normal
     tensors. The corresponding corner isometries are retained, intertwine in
@@ -286,10 +273,7 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.ambient_intertwine_adjoint}
     \lean{MPOTensor.RetainedProductSpectralFamily.ambient_compression}
     \leanok
-    \uses{def:mpdo_retained_product_spectral_family,
-      thm:mpdo_weighted_vertical_product_block_normal_decomposition,
-      thm:mpdo_retained_vertical_product_canonical_hypotheses,
-      lem:matrix_sigma_block_inclusion}
+    \uses{def:mpdo_retained_product_spectral_family, thm:mpdo_weighted_vertical_product_block_normal_decomposition, thm:mpdo_retained_vertical_product_canonical_hypotheses, lem:matrix_sigma_block_inclusion}
     Suppose that the one-site vertical tensor has the stated exact
     coisometric reconstruction, that $M$ is in normalized BNT-refined
     horizontal form, and that $M$ generates positive operators. Then simultaneous retained-product
@@ -335,11 +319,7 @@
     \label{thm:mpdo_literal_cpsv_retained_product_spectral_family}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_retainedProductSpectralFamily}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-      def:mpdo_retained_product_spectral_family,
-      thm:mpdo_literal_cpsv_positive_blocking,
-      thm:mpdo_vertical_projector_closure_literal_cpsv,
-      thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_retained_product_spectral_family, thm:mpdo_literal_cpsv_positive_blocking, thm:mpdo_vertical_projector_closure_literal_cpsv, thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in literal CPSV canonical form. Given an exact
     coisometric reconstruction of the one-site vertical tensor by a retained
@@ -379,9 +359,7 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.flat_reconstruction}
     \lean{MPOTensor.RetainedProductSpectralFamily.flat_sameMPV₂Pos}
     \leanok
-    \uses{def:mpdo_retained_product_spectral_family,
-      lem:matrix_sigma_block_inclusion,
-      lem:same_mpv_exact_isometric_decomposition}
+    \uses{def:mpdo_retained_product_spectral_family, lem:matrix_sigma_block_inclusion, lem:same_mpv_exact_isometric_decomposition}
     Enumerate the dependent family of active corners by a single finite label
     set. The resulting coefficients are positive, the blocks are normal, and
     the inclusion ranges are pairwise orthogonal. For every tensor letter,
@@ -424,9 +402,7 @@ exists_blockedBNT_gaugePhase_of_flatBlock}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
 exists_flatBlockedBNTComparison}
     \leanok
-    \uses{thm:mpdo_retained_product_flat_reconstruction,
-      thm:mpdo_retained_vertical_product_canonical_hypotheses,
-      thm:cpsv_bnt_characterization}
+    \uses{thm:mpdo_retained_product_flat_reconstruction, thm:mpdo_retained_vertical_product_canonical_hypotheses, thm:cpsv_bnt_characterization}
     Suppose that the one-site vertical tensor has the stated exact
     coisometric reconstruction, and let $(A^{(2)}_\gamma)_\gamma$ be a basis
     of normal tensors for the blocked vertical tensor. For every active
@@ -477,8 +453,7 @@ exists_flatBlockedBNTComparison}
 referenceInclusion_isometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.reference_compression}
     \leanok
-    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      lem:matrix_sigma_block_inclusion}
+    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, lem:matrix_sigma_block_inclusion}
     Assume that every blocked BNT label has positive multiplicity and that the
     blocked vertical tensor has the exact coisometric reconstruction
     $T=U_2^\dagger C_2U_2$. Let $E_{\gamma,0}$ be the canonical inclusion of
@@ -503,10 +478,7 @@ referenceInclusion_isometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
     \leanok
-    \uses{def:mpdo, thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_blocked_reference_corners,
-      thm:mpdo_retained_product_spectral_family_exists,
-      thm:mpdo_sector_weight_pos}
+    \uses{def:mpdo, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_sector_weight_pos}
     Assume that $M$ generates matrix product density operators and that the
     one-site and blocked vertical tensors admit exact coisometric
     reconstructions. Assume positive multiplicities and weights for the
@@ -529,12 +501,7 @@ activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 activeCoefficient_mul_phase_pos}
     \leanok
-    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_blocked_reference_corners,
-      thm:mpdo_retained_product_spectral_family_exists,
-      thm:mpdo_grouped_sector_compression_nonzero,
-      thm:mpdo_sector_weight_pos,
-      thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
+    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_grouped_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     Suppose that $M$ is in normalized BNT-refined horizontal form and generates
     positive operators. Assume exact coisometric reconstructions of its one-site and
     blocked vertical tensors, positive multiplicities and weights for the
@@ -553,12 +520,7 @@ activeCoefficient_mul_phase_pos}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 activeCoefficient_mul_phase_pos_of_cpsvCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-      thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_blocked_reference_corners,
-      thm:cpsv_literal_sector_compression_nonzero,
-      thm:mpdo_sector_weight_pos,
-      thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
+    \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:cpsv_literal_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     Suppose that the doubled-index MPS tensor of $M$ is in literal CPSV
     canonical form and that $M$ generates matrix product density operators.
     Assume exact coisometric reconstructions of the one-site and blocked
@@ -579,14 +541,7 @@ activeCoefficient_mul_phase_pos_of_cpsvCanonicalForm}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 exists_unitaryNormalization}
     \leanok
-    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_retained_product_spectral_family_exists,
-      lem:mpdo_horizontal_cf_block_two,
-      thm:mpdo_block_two_as_positive_blocking,
-      thm:mpdo_active_product_coefficient_phase_pos,
-      thm:mpdo_blocked_reference_corners,
-      thm:mpdo_pairwise_vertical_gram_conjugation,
-      thm:normal_tensor_gram_rigidity}
+    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
     Under the hypotheses of the preceding positivity theorem, for every
     active product corner $j$ there is a real number $\omega_j>0$ such that
     \begin{align}
@@ -615,11 +570,7 @@ exists_unitaryNormalization}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 exists_unitaryNormalization_of_cpsvCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-      thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_blocked_reference_corners,
-      thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos,
-      thm:cpsv_literal_positive_relative_gram_scalar}
+    \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:cpsv_literal_positive_relative_gram_scalar}
     Under the hypotheses of the preceding literal positivity theorem, for
     every active product corner $j$ there is a real number $\omega_j>0$ such
     that
@@ -665,13 +616,7 @@ exists_unitaryNormalization_of_cpsvCanonicalForm}
     \label{thm:mpdo_original_corner_family_exists}
     \lean{MPOTensor.RetainedProductSpectralFamily.exists_originalCornerFamily}
     \leanok
-    \uses{def:mpdo_original_corner_family,
-      thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      lem:mpdo_normalized_vertical_sector_positive_trace,
-      thm:mpdo_active_product_coefficient_phase_pos,
-      thm:mpdo_active_product_gauge_unitary_normalization,
-      thm:mpdo_normalized_grouped_sector_maps}
+    \uses{def:mpdo_original_corner_family, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_transported_vertical_sector_coefficient_comparison, lem:mpdo_normalized_vertical_sector_positive_trace, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_active_product_gauge_unitary_normalization, thm:mpdo_normalized_grouped_sector_maps}
     Let the active product corners be covered by blocked BNT representatives,
     let the blocked representatives be identified with the original BNT by
     the trace-ratio unitary conjugacies, and suppose that the active
@@ -715,9 +660,7 @@ exists_unitaryNormalization_of_cpsvCanonicalForm}
     \lean{MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily.%
 toBNTFusionCoisometryFamily}
     \leanok
-    \uses{def:mpdo_original_corner_family,
-      def:mpdo_bnt_fusion_coisometry_family,
-      thm:vertical_sector_coisometry}
+    \uses{def:mpdo_original_corner_family, def:mpdo_bnt_fusion_coisometry_family, thm:vertical_sector_coisometry}
     Given an original-label corner family, choose the distinguished retained
     copy of every BNT label. For fixed
     labels $\alpha,\beta$, let the multiplicity of $\gamma$ be the number of
@@ -782,8 +725,7 @@ toBNTFusionCoisometryFamily}
     \lean{MPOTensor.RetainedProductSpectralFamily.%
 exists_bntFusionCoisometryFamily}
     \leanok
-    \uses{thm:mpdo_original_corner_family_exists,
-      thm:mpdo_original_corner_family_to_fusion_coisometry}
+    \uses{thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry}
     Suppose that every active product corner has positive gauge--phase
     coefficient and that its gauge Gram matrix is a positive scalar multiple
     of the identity. Given the trace-ratio unitary correspondence between the
@@ -819,15 +761,7 @@ exists_bntFusionCoisometryFamily}
     \label{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition}
     \leanok
-    \uses{lem:cpsv_bnt_block_dimensions_positive,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      thm:mpdo_retained_product_spectral_family_exists,
-      thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_active_product_coefficient_phase_pos,
-      thm:mpdo_active_product_gauge_unitary_normalization,
-      thm:mpdo_original_corner_family_exists,
-      thm:mpdo_original_corner_family_to_fusion_coisometry,
-      thm:mpdo_normalized_product_corners_to_fusion_coisometry}
+    \uses{lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
     Under the one-site and two-site vertical basis-of-normal-tensors
     decompositions and the two completely positive, trace-preserving
     physical-closure transport identities, assume that the one-site tensor
@@ -890,15 +824,7 @@ exists_bntFusionCoisometryFamily}
     \lean{MPOTensor.%
 exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      thm:mpdo_literal_cpsv_retained_product_spectral_family,
-      thm:mpdo_active_product_corner_blocked_bnt_coverage,
-      thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos,
-      thm:mpdo_literal_cpsv_active_product_gauge_unitary_normalization,
-      thm:mpdo_original_corner_family_exists,
-      thm:mpdo_original_corner_family_to_fusion_coisometry,
-      thm:mpdo_normalized_product_corners_to_fusion_coisometry}
+    \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_literal_cpsv_retained_product_spectral_family, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:mpdo_literal_cpsv_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in literal CPSV canonical form. Given one-site
     and two-site vertical canonical decompositions and their trace-ratio
@@ -953,10 +879,7 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     \label{thm:mpdo_blocked_representations_idempotent_trace_scalars}
     \lean{MPOTensor.hasIdempotentCoefficientForm_of_blockedRepresentations}
     \leanok
-    \uses{def:mpdo_bnt_label_idempotent_coefficient_form,
-      def:mpdo_bnt_fusion_coisometry_family,
-      def:mpdo_bnt_eventual_power_sums_multiplicity_comparison,
-      thm:mpdo_blocked_vertical_operator_representations}
+    \uses{def:mpdo_bnt_label_idempotent_coefficient_form, def:mpdo_bnt_fusion_coisometry_family, def:mpdo_bnt_eventual_power_sums_multiplicity_comparison, thm:mpdo_blocked_vertical_operator_representations}
     Fix one-site and two-site vertical canonical decompositions whose sectors
     are identified by the transported unitary relabelling. Suppose that the
     product tensors have positive diagonal fusion matrices
@@ -999,9 +922,7 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     \label{thm:mpdo_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.exists_positiveFusionDecomposition_of_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts,
-      thm:vertical_cf_of_horizontal_cf,
-      thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
+    \uses{def:is_rfp_via_ts, thm:vertical_cf_of_horizontal_cf, thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     Let $M$ be in normalized BNT-refined horizontal form, generate matrix
     product density operators, and satisfy the renormalization fixed-point condition of
     Definition~\ref{def:is_rfp_via_ts}. Then one may choose a vertical basis
@@ -1061,8 +982,7 @@ exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
     \label{thm:mpdo_two_site_closure_two_site_blocking}
     \lean{MPOTensor.physClose2_blockTwo_eq_physClose4}
     \leanok
-    \uses{def:phys_close, def:mpdo_two_site_blocking,
-      def:mpdo_four_site_physical_closure}
+    \uses{def:phys_close, def:mpdo_two_site_blocking, def:mpdo_four_site_physical_closure}
     After identifying two blocked physical indices with four original
     indices, one has $(K^{[2]})_2(X)=K_4(X)$.
 \end{theorem}

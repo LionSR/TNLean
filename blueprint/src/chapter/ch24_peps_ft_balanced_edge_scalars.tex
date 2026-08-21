@@ -149,8 +149,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_symm}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.symm}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_inv,
-        thm:edgeScalarAt_ne_zero}
+    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_inv, thm:edgeScalarAt_ne_zero}
     If one gauge family differs from another by balanced edge scalars, then the
     second differs from the first by the inverse balanced edge-scalar family.
     % The inverse endpoint action is already stated exactly by
@@ -167,8 +166,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_trans}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul,
-        thm:edgeScalarAt_mul}
+    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul, thm:edgeScalarAt_mul}
     If one gauge family differs from a second by balanced edge scalars, and the
     second differs from a third by balanced edge scalars, then the first differs
     from the third by the pointwise product of the two scalar families.
@@ -186,9 +184,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_equivalence}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.equivalence}
     \leanok
-    \uses{thm:GaugeEquivModEdgeScalars_refl,
-        thm:GaugeEquivModEdgeScalars_symm,
-        thm:GaugeEquivModEdgeScalars_trans}
+    \uses{thm:GaugeEquivModEdgeScalars_refl, thm:GaugeEquivModEdgeScalars_symm, thm:GaugeEquivModEdgeScalars_trans}
     Gauge equivalence modulo balanced edge scalars is reflexive, symmetric,
     and transitive.
 \end{theorem}
@@ -202,8 +198,7 @@ constant.
     \label{def:GaugeEquivModEdgeScalars_setoid}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.setoid}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars,
-        thm:GaugeEquivModEdgeScalars_equivalence}
+    \uses{def:GaugeEquivModEdgeScalars, thm:GaugeEquivModEdgeScalars_equivalence}
     The preceding equivalence relation is the quotient relation on edge-gauge
     families modulo vertex-balanced edge scalars.
 \end{definition}
@@ -261,8 +256,7 @@ constant.
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective,
-        thm:peps_piProductFormsScalar}
+    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective, thm:peps_piProductFormsScalar}
     Let every bond space be nonzero. If two gauge families relate the same
     vertex-injective PEPS tensor to the same target tensor, then their edge
     gauges differ by nonzero scalars $c_e$ whose oriented product at every
@@ -377,8 +371,7 @@ remaining $v$-incident edges determine $\eta$ completely.
     \label{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
     \lean{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}
     \leanok
-    \uses{thm:peps_component_eq_of_regionProportional, def:peps_regionTwoBlock,
-        def:applyGauge, def:gaugeVertex}
+    \uses{thm:peps_component_eq_of_regionProportional, def:peps_regionTwoBlock, def:applyGauge, def:gaugeVertex}
     Suppose $A$ and $B$ have the same bond dimension on every edge, and that these
     bond dimensions are positive. Let $C$ be the gauge action of $X$ on $B$,
     reindexed along this bond-dimension equality, and assume that the $R$-blocked

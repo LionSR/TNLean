@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import TNLean.Algebra.PerronFrobenius.RankOne
+import QICLean.Algebra.PerronFrobenius.RankOne
 import TNLean.MPS.MPDO.ZCL
 
 /-!
@@ -194,8 +194,9 @@ theorem virtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℝ) :
     ∑ k, reconstructionCoefficients X k • virtualMatrix k = X := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [reconstructionCoefficients, virtualMatrix, pairingL, pairingQ,
-      Fin.sum_univ_four] <;> ring
+    simp only [reconstructionCoefficients, Fin.sum_univ_four, Matrix.add_apply,
+      Matrix.smul_apply] <;>
+    simp [virtualMatrix, pairingL, pairingQ] <;> ring
 
 /-- The sector virtual matrices span the full two-by-two matrix algebra. -/
 theorem virtualMatrix_span_eq_top :
@@ -216,6 +217,12 @@ noncomputable def complexVirtualMatrix (k : Fin 4) :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.map (virtualMatrix k) Complex.ofReal
 
+/-- Each entry of a complexified sector virtual matrix is the real-to-complex
+cast of the corresponding real entry. -/
+lemma complexVirtualMatrix_apply (k : Fin 4) (i j : Fin 2) :
+    complexVirtualMatrix k i j = (virtualMatrix k i j : ℂ) :=
+  rfl
+
 /-- A physical-diagonal MPO tensor whose four diagonal matrices are the sector
 virtual matrices above. -/
 noncomputable def mpoTensor : MPOTensor 4 2 :=
@@ -225,8 +232,8 @@ theorem complexVirtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ∑ k, reconstructionCoefficients X k • complexVirtualMatrix k = X := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [reconstructionCoefficients, complexVirtualMatrix, virtualMatrix,
-      pairingL, pairingQ, Fin.sum_univ_four] <;> ring
+    simp [reconstructionCoefficients, complexVirtualMatrix_apply, virtualMatrix,
+      pairingL, pairingQ, Fin.sum_univ_four] <;> push_cast <;> ring
 
 lemma complexVirtualMatrix_mem_tensor_span (k : Fin 4) :
     complexVirtualMatrix k ∈
@@ -252,11 +259,18 @@ theorem mpoTensor_isInjective : MPSTensor.IsInjective mpoTensor.toMPSTensor := b
 lemma physTraceTransfer_mpoTensor :
     MPOTensor.physTraceTransfer mpoTensor =
       Matrix.map pairingProjection Complex.ofReal := by
+  have hsum : (∑ k, virtualMatrix k) = pairingProjection := by
+    rw [← pairingL_mul_pairingQ]
+    ext i j
+    simp [virtualMatrix, Matrix.vecMulVec_apply, Matrix.mul_apply,
+      Matrix.sum_apply]
+  have hpt : MPOTensor.physTraceTransfer mpoTensor
+      = ∑ k, complexVirtualMatrix k := by
+    simp [MPOTensor.physTraceTransfer, mpoTensor]
   ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [MPOTensor.physTraceTransfer, mpoTensor, complexVirtualMatrix,
-      virtualMatrix, pairingL, pairingQ, pairingProjection,
-      Fin.sum_univ_four] <;> ring
+  rw [hpt, Matrix.map_apply, ← hsum]
+  simp only [Matrix.sum_apply, complexVirtualMatrix, Matrix.map_apply,
+    Complex.ofReal_sum]
 
 /-- The injective diagonal tensor has source zero correlation length because
 its physical-trace transfer is the idempotent `L Q`. -/

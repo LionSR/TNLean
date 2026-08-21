@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.TraceReindex
-import TNLean.MPS.Defs
+import QICLean.Algebra.TraceReindex
+import QICLean.MPS.Defs
 import TNLean.MPS.Core.MultiBlockWord
 
 import Mathlib.Algebra.BigOperators.Fin

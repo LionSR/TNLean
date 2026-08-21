@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixMulRange
-import TNLean.Kraus.Wielandt.RectangularSpan.Universality
+import QICLean.Algebra.MatrixMulRange
+import QICLean.Kraus.Wielandt.RectangularSpan.Universality
 import TNLean.Wielandt.RectangularSpan.Growth
 import TNLean.Wielandt.RectangularSpan.UniversalityAux
 

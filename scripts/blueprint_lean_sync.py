@@ -509,6 +509,141 @@ def print_missing_blueprint_warnings(missing: list[LeanDecl]) -> None:
     print()
 
 
+def _dependency_fetch_enabled() -> bool:
+    """Whether a missing dependency's Lean sources may be fetched over the network.
+
+    The TeX-only "Check blueprint compiles without errors" CI job has no Lean
+    toolchain and never runs ``lake exe cache get``, so a cross-volume citation
+    into the QICLean dependency (LionSR/TNLean#6622) has no checkout to resolve
+    against and reads as missing. Enabling a lightweight, source-only fetch in
+    that environment lets the sync check resolve those citations without a full
+    Lean build. Off by default locally so a plain checker run never touches the
+    network; opt in with ``BLUEPRINT_SYNC_FETCH_DEPS=1``.
+    """
+    return (
+        os.getenv("GITHUB_ACTIONS") == "true"
+        or os.getenv("BLUEPRINT_SYNC_FETCH_DEPS") == "1"
+    )
+
+
+def _fetch_dependency_sources(
+    package_dir: Path, url: str, rev: str, input_rev: str | None
+) -> bool:
+    """Shallow-fetch a Lake git dependency's sources at the manifest-pinned rev.
+
+    Only the Lean sources are needed (the sync checker greps declarations, it
+    does not build), so this checks the repository out without invoking Lake.
+    Returns ``True`` on success; on any failure it prints a one-line reason and
+    returns ``False`` so the caller degrades gracefully.
+    """
+    package_dir.mkdir(parents=True, exist_ok=True)
+
+    def git(*args: str) -> int:
+        return subprocess.run(
+            ["git", *args],
+            cwd=package_dir,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        ).returncode
+
+    if git("init", "-q") != 0:
+        print(f"  (could not initialise git repository in {package_dir})")
+        return False
+    git("remote", "remove", "origin")
+    if git("remote", "add", "origin", url) != 0:
+        print(f"  (could not add remote {url})")
+        return False
+    # Prefer the pinned commit; fall back to the input ref (tag/branch) when the
+    # host refuses a bare-SHA fetch, then check the exact commit out.
+    for ref in (rev, input_rev):
+        if not ref:
+            continue
+        if git("fetch", "-q", "--depth", "1", "origin", ref) == 0:
+            if git("checkout", "-q", "FETCH_HEAD") == 0:
+                return True
+    print(f"  (could not fetch {url} at {rev})")
+    return False
+
+
+def _resolve_dependency_lean_root(root: Path, package_name: str) -> Path | None:
+    """Resolve a Lake dependency's own Lean source root from lake-manifest.json.
+
+    A blueprint entry may cite a declaration that now lives in a separate
+    repository TNLean depends on (QICLean, since the quantum-channel
+    extraction, LionSR/TNLean#6622): the declaration genuinely exists in
+    TNLean's build environment, just not under ``TNLean/``. This walks the
+    checked-out dependency the same way ``collect_lean_decls`` walks
+    ``TNLean/``, so those citations resolve instead of reading as missing.
+
+    Returns ``None`` and prints a one-line explanation whenever the manifest,
+    the package checkout, or its Lean library directory cannot be found --
+    for example before ``lake update``/``lake exe cache get`` has run. This
+    is a normal, expected condition (not every checkout has resolved every
+    dependency), so callers should degrade gracefully rather than fail.
+    """
+    manifest_path = root / "lake-manifest.json"
+    if not manifest_path.is_file():
+        print(f"  (dependency '{package_name}' skipped: no lake-manifest.json)")
+        return None
+    try:
+        manifest = json.loads(manifest_path.read_text())
+    except (OSError, json.JSONDecodeError) as error:
+        print(
+            f"  (dependency '{package_name}' skipped: cannot parse "
+            f"lake-manifest.json: {error})"
+        )
+        return None
+    packages_dir = manifest.get("packagesDir", ".lake/packages")
+    entry = next(
+        (p for p in manifest.get("packages", []) if p.get("name") == package_name),
+        None,
+    )
+    if entry is None:
+        print(f"  (dependency '{package_name}' skipped: not in lake-manifest.json)")
+        return None
+    package_dir = root / packages_dir / package_name
+    if not package_dir.is_dir():
+        url = entry.get("url")
+        rev = entry.get("rev")
+        if _dependency_fetch_enabled() and entry.get("type") == "git" and url and rev:
+            print(
+                f"  (dependency '{package_name}' not checked out; fetching "
+                f"sources from {url})"
+            )
+            if not _fetch_dependency_sources(
+                package_dir, url, rev, entry.get("inputRev")
+            ):
+                return None
+        else:
+            print(
+                f"  (dependency '{package_name}' skipped: {package_dir} is not "
+                "checked out yet -- run `lake exe cache get` first)"
+            )
+            return None
+
+    lib_name: str | None = None
+    lakefile = package_dir / "lakefile.toml"
+    if lakefile.is_file():
+        match = re.search(
+            r"\[\[lean_lib\]\]\s*\n\s*name\s*=\s*\"([^\"]+)\"", lakefile.read_text()
+        )
+        if match:
+            lib_name = match.group(1)
+    candidates = [lib_name] if lib_name else []
+    for child in sorted(package_dir.iterdir()):
+        if child.is_dir() and child.name.lower() == package_name.lower():
+            candidates.append(child.name)
+    for candidate in candidates:
+        candidate_dir = package_dir / candidate
+        if candidate_dir.is_dir():
+            return candidate_dir
+    print(
+        f"  (dependency '{package_name}' skipped: no Lean library directory "
+        f"found under {package_dir})"
+    )
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Run sync check
 # ---------------------------------------------------------------------------
@@ -530,10 +665,26 @@ def run_sync(
 
     report = SyncReport()
 
-    # 1. Collect Lean declarations
+    # 1. Collect Lean declarations, including the qiclean dependency's own
+    # source: a blueprint entry may legitimately cite a declaration that
+    # moved there in the quantum-channel extraction (LionSR/TNLean#6622) --
+    # it still resolves in TNLean's build environment, just not under
+    # TNLean/. TNLean's own declarations take precedence on any name clash.
     print("Scanning Lean source tree …")
     report.lean_decls = collect_lean_decls(lean_root)
     print(f"  Found {len(report.lean_decls)} declarations in Lean source")
+    qiclean_root = _resolve_dependency_lean_root(root, "qiclean")
+    if qiclean_root is not None:
+        qiclean_decls = collect_lean_decls(qiclean_root)
+        added = 0
+        for fqn, decl in qiclean_decls.items():
+            if fqn not in report.lean_decls:
+                report.lean_decls[fqn] = decl
+                added += 1
+        print(
+            f"  Found {len(qiclean_decls)} declarations in the qiclean "
+            f"dependency ({added} new)"
+        )
 
     # 2. Collect blueprint entries and raw tag names
     print("Scanning blueprint .tex files …")

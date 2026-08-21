@@ -291,8 +291,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \label{thm:mpdo_algebra_root_of_unity_eigenvalue}
     \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent,
-        lem:mpdo_adjoint_blocked_eigenvector}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent, lem:mpdo_adjoint_blocked_eigenvector}
     Assume the blocked fixed-point-algebra tower holds. If $X\ne 0$,
     $E_1^\dagger X=\lambda X$, and $\lambda^n=1$ for some $n>0$, then
     $\lambda=1$.
@@ -308,8 +307,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \label{thm:mpdo_adjoint_fix_equality_from_algebra}
     \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent,
-        lem:mpdo_adjoint_fix_reverse}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent, lem:mpdo_adjoint_fix_reverse}
     If an MPO tensor satisfies the blocked fixed-point-algebra tower, then
     $\Fix(E_n^{\dagger})=\Fix(E_1^{\dagger})$ for every positive blocking
     size $n$.
@@ -323,8 +321,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \label{thm:mpdo_stationary_tower_from_algebra}
     \lean{MPOTensor.stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower,
-        thm:mpdo_adjoint_fix_equality_from_algebra}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_equality_from_algebra}
     Under the trace-preserving normalization and a positive-definite fixed
     point, if $M$ satisfies the blocked fixed-point-algebra tower, then the
     stationary tower $\mathcal{A}_n = \Fix(E_1^\dagger)$ is
@@ -336,8 +333,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     \label{thm:mpdo_algebra_tower_not_imply_zcl}
     \lean{MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl,
-        thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl, thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
     There exists an MPO tensor of physical and bond dimension two such that the
     doubled tensor is trace-preserving, the transfer map has a
     positive-definite fixed point, and a blocked fixed-point-algebra tower,
@@ -365,8 +361,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 
 \begin{remark}[Why the algebra tower does not imply doubled-index ZCL]%
     \label{rem:mpdo_algebra_tower_to_zcl_gap}
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl,
-        thm:mpdo_algebra_tower_not_imply_zcl, thm:newton_girard}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl, thm:mpdo_algebra_tower_not_imply_zcl}
     Write $E=E_1$ for the one-site transfer map. The present algebra predicate
     gives $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$ for every $n>0$.
     Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
@@ -441,7 +436,7 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $S=\widetilde R_1\widetilde S R_2$. The scalar
     Newton--Girard power-sum identity needed to obtain the trace-power form is
     already available as
-    Theorem~\ref{thm:newton_girard}. To obtain the trace-power conclusion of
+    the corresponding theorem in the companion quantum-channel volume. To obtain the trace-power conclusion of
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, one must impose the
     BNT-label hypotheses as a separate condition, relate them to the one-site
     and two-site vertical canonical forms, and construct the maps in

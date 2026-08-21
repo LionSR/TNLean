@@ -2,9 +2,7 @@
     \label{thm:appendixB_two_site_basic_support_projectors_commute}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts}
     \leanok
-    \uses{thm:appendixB_virtual_bond_projectors_commute,
-        thm:appendixB_physical_isometry_tensor_power,
-        thm:appendixB_two_site_basic_support_projector}
+    \uses{thm:appendixB_virtual_bond_projectors_commute, thm:appendixB_physical_isometry_tensor_power, thm:appendixB_two_site_basic_support_projector}
     Let $(P_2)_{01}$ and $(P_2)_{12}$ be the two adjacent placements of the
     two-site basic support projector on three physical sites. Then
     $(P_2)_{01}(P_2)_{12} =(P_2)_{12}(P_2)_{01}$.
@@ -103,8 +101,7 @@
     \label{thm:appendixB_qax_factor_action}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAX_factor_action}
     \leanok
-    \uses{def:appendixB_qax, thm:pair_lift_kronecker_matrices,
-        def:three_coordinate_identification}
+    \uses{def:appendixB_qax, thm:pair_lift_kronecker_matrices, def:three_coordinate_identification}
     On the homogeneous three-single-site coefficient space
     $(\C^d)^{\otimes3}$, the hatted Appendix~B (AX) representative acts as
     $[\widehat Q_{AX}]_{AX} =[\widehat Q_{AX}]\otimes I_d$.
@@ -124,8 +121,7 @@
     \label{thm:appendixB_qxb_factor_action}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action}
     \leanok
-    \uses{def:appendixB_qxb, thm:pair_lift_kronecker_matrices,
-        def:three_coordinate_identification}
+    \uses{def:appendixB_qxb, thm:pair_lift_kronecker_matrices, def:three_coordinate_identification}
     On the homogeneous three-single-site coefficient space
     $(\C^d)^{\otimes3}$, the hatted Appendix~B (XB) representative acts as
     $[\widehat Q_{XB}]_{XB} =I_d\otimes[\widehat Q_{XB}]$.
@@ -146,8 +142,7 @@
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_eq_parentInteraction}
     \leanok
-    \uses{lem:appendixB_basis_change_parent_interaction, def:appendixB_qax,
-        def:appendixB_qxb}
+    \uses{lem:appendixB_basis_change_parent_interaction, def:appendixB_qax, def:appendixB_qxb}
     As coefficient-space representatives,
     $\widehat Q_{AX}=q_2(A)$ and $\widehat Q_{XB}=q_2(A)$.
 \end{lemma}
@@ -163,8 +158,7 @@
     \lean{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent}
     \lean{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_idempotent}
     \leanok
-    \uses{lem:parent_interaction_idempotent,
-        lem:appendixB_qax_qxb_parent_interaction}
+    \uses{lem:parent_interaction_idempotent, lem:appendixB_qax_qxb_parent_interaction}
     The two Appendix~B two-site coefficient representatives are idempotent:
     \begin{align}
         \widehat Q_{AX}^{2}
@@ -187,10 +181,7 @@
     \label{thm:appendixB_overlapping_two_site_commutation}
     \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}
     \leanok
-    \uses{thm:appendixB_two_site_basic_support_projectors_commute,
-        thm:appendixB_two_site_basic_support_projector,
-        lem:appendixB_qax_qxb_idempotent,
-        def:overlapping_two_site_supports}
+    \uses{thm:appendixB_two_site_basic_support_projectors_commute, thm:appendixB_two_site_basic_support_projector, lem:appendixB_qax_qxb_idempotent, def:overlapping_two_site_supports}
     The two Appendix~B coefficient representatives satisfy
     \begin{align}
         \widehat Q_{AX}^{\,2}
@@ -232,8 +223,7 @@
     \lean{MPSTensor.adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ}
     \lean{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}
     \leanok
-    \uses{thm:local_term_two_three_ax_xb_lifts,
-        thm:ground_space_intersection, def:parent_interaction, def:injective}
+    \uses{thm:local_term_two_three_ax_xb_lifts, thm:ground_space_intersection, def:parent_interaction, def:injective}
     If $A$ is injective, then
     $G_3(A) = \ker(q_2(A)_{AX}) \cap \ker(q_2(A)_{XB})$.
     More generally, on $L+1$ sites, simultaneous annihilation by the two
@@ -255,9 +245,7 @@
     \lean{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}
     \lean{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}
     \leanok
-    \uses{thm:appendixB_overlapping_two_site_commutation,
-        thm:three_site_ground_space_adjacent_parent_kernels,
-        lem:appendixB_qax_qxb_parent_interaction}
+    \uses{thm:appendixB_overlapping_two_site_commutation, thm:three_site_ground_space_adjacent_parent_kernels, lem:appendixB_qax_qxb_parent_interaction}
     Let $A$ be injective and let an Appendix~B structural datum be fixed. Put
     \begin{align}
         \widehat K_{AXB}
@@ -363,8 +351,7 @@
     \label{thm:appendixB_adjacent_chain_commutation}
     \lean{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}
     \leanok
-    \uses{thm:appendixB_overlapping_two_site_commutation,
-        thm:three_site_commutator_chain_transport}
+    \uses{thm:appendixB_overlapping_two_site_commutation, thm:three_site_commutator_chain_transport}
     For every Appendix~B structural datum and every periodic chain of length
     $N>2$, the adjacent translated length-two parent interactions commute.
 \end{theorem}
@@ -381,8 +368,7 @@
     \label{def:appendixB_chain_local_projectors}
     \lean{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}
     \leanok
-    \uses{thm:appendixB_adjacent_chain_commutation,
-        lem:nncph_from_adjacent_two_site_commutation}
+    \uses{thm:appendixB_adjacent_chain_commutation, lem:nncph_from_adjacent_two_site_commutation}
     For an Appendix~B structural datum and a periodic chain of length $N>2$,
     set $p_i=h_i^{(N)}$ for $i\in\mathbb Z/N\mathbb Z$, where $h_i^{(N)}$ is
     the translated length-two parent interaction. These maps are idempotent
@@ -446,8 +432,7 @@
     \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2_identified_projectors}
     \leanok
-    \uses{def:overlapping_two_site_supports, def:appendixB_qax,
-        def:appendixB_qxb, lem:appendixB_overlapping_condition_parent_terms}
+    \uses{def:overlapping_two_site_supports, def:appendixB_qax, def:appendixB_qxb, lem:appendixB_overlapping_condition_parent_terms}
     Let $Q_{AX}$ and $Q_{XB}$ be the two-site coefficient-space transports of
     source projectors satisfying the Definition~D.2 local condition on
     $A X B$. If these transported projectors agree with the Appendix~B
@@ -481,8 +466,7 @@
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_eq_appendixBQAXOnCoeffSpace_lift}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQXBOnCoeffSpace_lift}
     \leanok
-    \uses{thm:local_term_two_three_ax_xb_lifts,
-        lem:appendixB_qax_qxb_parent_interaction}
+    \uses{thm:local_term_two_three_ax_xb_lifts, lem:appendixB_qax_qxb_parent_interaction}
     On the three-site $A,X,B$ window, the two adjacent length-two local terms
     are the two local lifts
     \begin{align}
@@ -539,8 +523,7 @@
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_commute_lifts}
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2}
     \leanok
-    \uses{lem:appendixB_overlapping_condition_from_lift_commutator,
-        lem:appendixB_overlapping_condition_parent_terms}
+    \uses{lem:appendixB_overlapping_condition_from_lift_commutator, lem:appendixB_overlapping_condition_parent_terms}
     If the Appendix~B $AX$ and $XB$ coefficient representatives satisfy the
     lifted Definition~D.2 commutator
     \begin{align}

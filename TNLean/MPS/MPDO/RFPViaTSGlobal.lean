@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
-import TNLean.Channel.LocalizedKrausCPTP
+import QICLean.Channel.LocalizedKrausCPTP
 import TNLean.MPS.MPDO.RetainedClass
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.SectorTrace

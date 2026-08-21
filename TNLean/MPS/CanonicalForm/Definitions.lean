@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Core.CanonicalNormalization
-import TNLean.MPS.Core.Transfer
+import QICLean.MPS.Core.Transfer
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.SharedInfra.BlockAssembly
-import TNLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 

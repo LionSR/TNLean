@@ -144,9 +144,8 @@ The results below turn reducing projections into support isometries, compress te
 \end{proof}
 
 The rectangular Gram-equality criterion that turns $B^\dagger B=A^\dagger A$
-into a unitary $U$ with $B=UA$ is a generic algebra fact, proved as
-Lemma~\ref{lem:exists_unitary_mul_eq_of_gram_eq} in
-Appendix~\ref{ch:channel_asymptotics_supporting_results}.
+into a unitary $U$ with $B=UA$ is a generic algebra fact, proved in the
+companion quantum-channel volume.
 
 \begin{lemma}[Corner tensors inherit projector closure]
     \label{lem:projector_closure_corner}
@@ -279,8 +278,7 @@ Appendix~\ref{ch:channel_asymptotics_supporting_results}.
     \label{lem:canonical_hypotheses_dependent_direct_summand}
     \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal}
     \leanok
-    \uses{lem:matrix_sigma_block_inclusion,
-        def:invariant_projector_closure, def:no_periodic_vectors}
+    \uses{lem:matrix_sigma_block_inclusion, def:invariant_projector_closure, def:no_periodic_vectors}
     Suppose that, after a change of coordinates, $A$ is the dependent direct
     sum of tensors $B_k$. If $A$ has invariant-projector closure and no
     nontrivial periodic vectors, then every $B_k$ has both properties. The
@@ -417,8 +415,7 @@ This section records the positive Perron eigenpair, its spectral normalization, 
     \label{thm:irreducible_tensor_smul_conj}
     \lean{MPSTensor.isIrreducibleTensor_smul_conj}
     \leanok
-    \uses{def:irreducible_tensor, def:support_proj,
-        lem:support_proj_range_factorization}
+    \uses{def:irreducible_tensor, def:support_proj, lem:support_proj_range_factorization}
     Let $B$ be an irreducible tensor, let $X$ be invertible, and let
     $c\ne0$. Then the rescaled conjugated tensor with letters
     $cX^{-1}B^vX$ is irreducible. In particular, the rescaled unital
@@ -446,8 +443,7 @@ This section records the positive Perron eigenpair, its spectral normalization, 
     \label{thm:spectral_unital_gauge_schwarz_setup}
     \lean{MPSTensor.spectralUnitalGauge_schwarz_setup}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map,
-        thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj}
+    \uses{def:irreducible_tensor, def:transfer_map, thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj}
     Let $B$ be an irreducible tensor with a positive definite transfer
     eigenvector, $\E_B(\rho)=r\rho$, where $\rho>0$ and $r>0$. Then the
     rescaled unital gauge
@@ -460,8 +456,7 @@ This section records the positive Perron eigenpair, its spectral normalization, 
 
 \begin{proof}
     \leanok
-    \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj,
-        thm:transfer_psd_fp_pd_irred}
+    \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj, thm:transfer_psd_fp_pd_irred}
     Unitality is Theorem~\ref{thm:unital_gauge_of_pd_fixed_point};
     irreducibility is Theorem~\ref{thm:irreducible_tensor_smul_conj}. The
     adjoint of a unital family is trace-preserving, so its transfer map is

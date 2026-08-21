@@ -77,8 +77,7 @@
     \label{thm:zgauge_equiv_periodicFT_irreducible_form}
     \lean{MPSTensor.zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm}
     \leanok
-    \uses{thm:periodic_ft, def:irreducible_form, def:blocked_tensor,
-        def:same_mpv, def:z_gauge_equiv}
+    \uses{thm:periodic_ft, def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
     Assume the periodic equal-case Fundamental Theorem at the blocked physical
     dimension. Let $C$ and $A^{[p]}$ be MPS tensors of the same bond dimension,
     both in irreducible form~II, and suppose that they have the same MPV family.
@@ -133,9 +132,7 @@
     \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
     \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
-    \uses{def:peripheral_equalcase_zgauge_sameMPV,
-        def:peripheral_equalcase_root_from_zgauge,
-        def:peripheral_equalcase_periodicFT_sameMPV}
+    \uses{def:peripheral_equalcase_zgauge_sameMPV, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV}
     If the blocked equal-case $Z$-gauge extraction hypothesis and the
     construction of $\widetilde A$ from that $Z$-gauge both hold, then the
     combined equal-case construction holds.
@@ -151,9 +148,7 @@
     \label{thm:p_refinement_forward_equalcase_reduction}
     \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
-    \uses{def:peripheral_equalcase_periodicFT_sameMPV,
-        def:irreducible_form, def:p_refinable,
-        thm:p_refinement_pullback_irreducible_form}
+    \uses{def:peripheral_equalcase_periodicFT_sameMPV, def:irreducible_form, def:p_refinable, thm:p_refinement_pullback_irreducible_form}
     Assume the blocked equal-case construction. Then every
     $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical
     tensor $\widetilde A$ with
@@ -175,9 +170,7 @@
     \label{thm:thm_4_1_p_refinement_forward_blocked_equalcase}
     \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
-    \uses{def:peripheral_equalcase_periodicFT_sameMPV,
-        def:irreducible_form, def:p_refinable, def:p_divisible_channel,
-        thm:p_refinement_forward_equalcase_reduction}
+    \uses{def:peripheral_equalcase_periodicFT_sameMPV, def:irreducible_form, def:p_refinable, def:p_divisible_channel, thm:p_refinement_forward_equalcase_reduction}
     Assume the blocked equal-case construction. Then for every tensor
     $B$ in irreducible form~II, $p$-refinability of $B$ implies
     $p$-divisibility of $\E_B$.
@@ -204,9 +197,7 @@ additional constructions used below.
     \label{thm:thm_4_1_p_refinement}
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
-        thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
-        thm:thm_4_1_p_refinement_reverse}
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, thm:periodic_ft, thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Assume the forward construction of $\widetilde A$ for
     refinability $\Rightarrow$ divisibility and the reverse transfer-map
@@ -251,8 +242,7 @@ additional constructions used below.
     \label{def:peripheral_equalcase_root_channel_from_zgauge}
     \lean{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge}
     \leanok
-    \uses{def:peripheral_equalcase_root_from_zgauge, def:z_gauge_equiv,
-        def:p_divisible_channel}
+    \uses{def:peripheral_equalcase_root_from_zgauge, def:z_gauge_equiv, def:p_divisible_channel}
     Fix $(d,D,p)$. This sharpened reconstruction hypothesis asks for a CPTP map
     $\E'$ such that $\E_C = (\E')^p$ and the Choi/Kraus rank of
     $\E'$ is at most $d$, whenever $C$ is related to $A^{[p]}$ by a
@@ -263,8 +253,7 @@ additional constructions used below.
     \label{thm:peripheral_equalcase_root_from_root_channel}
     \lean{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}
     \leanok
-    \uses{def:peripheral_equalcase_root_channel_from_zgauge,
-        def:peripheral_equalcase_root_from_zgauge}
+    \uses{def:peripheral_equalcase_root_channel_from_zgauge, def:peripheral_equalcase_root_from_zgauge}
     If the blocked-to-root channel-root hypothesis holds, then the tensor-level
     blocked-to-root reconstruction hypothesis holds as well.
 \end{theorem}

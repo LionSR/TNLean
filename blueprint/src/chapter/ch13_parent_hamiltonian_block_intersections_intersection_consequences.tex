@@ -78,8 +78,7 @@
     \label{lem:block_restrictions_mem_block_ground_spaces}
     \lean{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions}
     \leanok
-    \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions,
-        lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
+    \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions, lem:left_boundary_trace_decomposition_mem_block_ground_spaces}
     Let $A^1,\ldots,A^g$ be block tensors with common word-span separation at
     length $n$, and suppose that
     $\sum_a A^j_aA^{j\,\dagger}_a=\Id$ for every block $j$. If
@@ -203,8 +202,7 @@ direct.
     \label{lem:period_window_block_restriction_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_period_window}
     \leanok
-    \uses{lem:period_window_word_tuple_span_padding,
-        lem:block_restriction_intersection_subspace}
+    \uses{lem:period_window_word_tuple_span_padding, lem:block_restriction_intersection_subspace}
     Let $p>0$. Suppose the length-$p$ simultaneous block-word tuples span
     $\prod_j \MN{D_j}$, and suppose that, for every $0\le r<p$, the
     length-$(s+r)$ simultaneous block-word tuples span
@@ -234,8 +232,7 @@ direct.
     \label{lem:bnt_direct_sum_block_separation_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1}
     \leanok
-    \uses{lem:bnt_direct_sum_block_separation_word_span,
-        lem:block_restriction_intersection_subspace}
+    \uses{lem:bnt_direct_sum_block_separation_word_span, lem:block_restriction_intersection_subspace}
     Under the hypotheses of
     Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, assume in
     addition the normalization
@@ -269,10 +266,7 @@ direct.
     \label{lem:bnt_direct_sum_block_separation_period_window_block_intersection}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window}
     \leanok
-    \uses{lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_block_separation,
-        lem:block_separating_equations_from_pairwise_separation,
-        lem:period_window_block_restriction_intersection}
+    \uses{lem:direct_sum_two_block_dimension_step, lem:pair_trace_separation_to_pairwise_block_separation, lem:block_separating_equations_from_pairwise_separation, lem:period_window_block_restriction_intersection}
     Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional
@@ -363,9 +357,7 @@ direct.
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1}
     \leanok
-    \uses{def:pairwise_block_separating_words,
-        lem:bnt_direct_sum_block_separation_word_span,
-        thm:wordspan_propagation_unital}
+    \uses{def:pairwise_block_separating_words, lem:bnt_direct_sum_block_separation_word_span, thm:wordspan_propagation_unital}
     Let $A^1,\ldots,A^r$ be blocks satisfying the normalization
     $\sum_a A^j_aA^{j\,\dagger}_a=\Id$ and assume that every block is
     injective at length $L$:
@@ -451,8 +443,7 @@ direct.
     \label{thm:pgvwc_prepared_gauge_product_span}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint}
     \leanok
-    \uses{def:blockwise_product_word_span,
-        def:blocks_not_gauge_phase_equiv}
+    \uses{def:blockwise_product_word_span, def:blocks_not_gauge_phase_equiv}
     Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
     Suppose that every block $A^j$ is irreducible and that no two distinct
     blocks of the same bond dimension are gauge-phase equivalent. Let $L_0>0$,
@@ -480,16 +471,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{lem:tp_gauge_equiv,
-        thm:tp_gauge_from_adjoint_fixed,
-        thm:irreducible_tensor_to_transfer_map,
-        lem:tp_gauge_preserves_irreducibility,
-        lem:gauge_phase_equiv_transport_left_right,
-        lem:gauge_invariance_block_injective,
-        thm:is_normal_tensor_of_is_normal_left_canonical,
-        thm:cpsv_normal_mpv_phase_gauge,
-        lem:bnt_direct_sum_block_separation_word_span,
-        thm:word_tuple_span_gauge_invariance}
+    \uses{lem:tp_gauge_equiv, thm:tp_gauge_from_adjoint_fixed, thm:irreducible_tensor_to_transfer_map, lem:tp_gauge_preserves_irreducibility, lem:gauge_phase_equiv_transport_left_right, lem:gauge_invariance_block_injective, thm:is_normal_tensor_of_is_normal_left_canonical, thm:cpsv_normal_mpv_phase_gauge, lem:bnt_direct_sum_block_separation_word_span, thm:word_tuple_span_gauge_invariance}
     Define the prepared blocks by
     \begin{align}
         B^j_a&=(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}. \notag
@@ -518,8 +500,7 @@ direct.
     \label{thm:pgvwc_product_span_source_length}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{def:blockwise_product_word_span,
-        def:blocks_not_gauge_phase_equiv}
+    \uses{def:blockwise_product_word_span, def:blocks_not_gauge_phase_equiv}
     Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
     Suppose that every block $A^j$ is irreducible and that no two distinct
     blocks of the same bond dimension are gauge-phase equivalent. Let $L_0>0$,
@@ -544,9 +525,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{thm:wordspan_propagation_unital,
-        lem:unital_simultaneous_product_span_propagation,
-        thm:pgvwc_prepared_gauge_product_span}
+    \uses{thm:wordspan_propagation_unital, lem:unital_simultaneous_product_span_propagation, thm:pgvwc_prepared_gauge_product_span}
     Theorem~\ref{thm:wordspan_propagation_unital} first gives
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}=\MN{D_j}
@@ -575,8 +554,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_product_span_source_length,
-        lem:product_span_block_image_direct_sum}
+    \uses{thm:pgvwc_product_span_source_length, lem:product_span_block_image_direct_sum}
     Write $\phi_j=\Gamma_n^{A^j}(X_j)$ and suppose that
     $\sum_j\phi_j=0$. The simultaneous spanning equality gives
     \begin{align}
@@ -613,8 +591,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_product_span_source_length,
-        lem:block_restriction_intersection_subspace}
+    \uses{thm:pgvwc_product_span_source_length, lem:block_restriction_intersection_subspace}
     Let a vector belong to both restricted spaces. The two endpoint
     decompositions give boundary matrices $C_a^j$ and $D_b^j$. For every pair
     of physical indices $a,b$ and every middle word $w$ of length $m-1$, their
@@ -638,8 +615,7 @@ direct.
     \label{thm:pgvwc_product_span_doubly_normalized}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
     \leanok
-    \uses{def:blockwise_product_word_span,
-        def:blocks_not_gauge_phase_equiv, def:mpv_overlap}
+    \uses{def:blockwise_product_word_span, def:blocks_not_gauge_phase_equiv, def:mpv_overlap}
     Let $r\ge2$, and let the bond dimensions be positive. Suppose that the
     blocks are irreducible, have normalized self-overlap, are pairwise
     inequivalent up to gauge and phase, and are injective at a common length
@@ -656,9 +632,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{thm:wordspan_propagation_unital,
-        lem:bnt_direct_sum_block_separation_word_span,
-        lem:unital_simultaneous_product_span_propagation}
+    \uses{thm:wordspan_propagation_unital, lem:bnt_direct_sum_block_separation_word_span, lem:unital_simultaneous_product_span_propagation}
     Propagate injectivity to the two longer lengths used by the sharp block
     separation theorem, obtain the simultaneous span at
     $3(r-1)(L_0+1)$, and propagate it using the right-unital identity.
@@ -677,8 +651,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_product_span_doubly_normalized,
-        lem:product_span_block_image_direct_sum}
+    \uses{thm:pgvwc_product_span_doubly_normalized, lem:product_span_block_image_direct_sum}
     Apply nondegeneracy of the trace pairing to the simultaneous product span.
 \end{proof}
 
@@ -697,8 +670,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_product_span_doubly_normalized,
-        lem:block_restriction_intersection_subspace}
+    \uses{thm:pgvwc_product_span_doubly_normalized, lem:block_restriction_intersection_subspace}
     Use the simultaneous product span at length $m-1$ in the endpoint
     restriction calculation.
 \end{proof}

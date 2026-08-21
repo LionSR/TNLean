@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.ZCL
-import TNLean.Entropy.MarkovChain
+import QICLean.Entropy.MarkovChain
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.Chain.VirtualInsertion
-import TNLean.Algebra.PerronFrobenius.RankOne
+import QICLean.Algebra.PerronFrobenius.RankOne
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.DFinsupp
 

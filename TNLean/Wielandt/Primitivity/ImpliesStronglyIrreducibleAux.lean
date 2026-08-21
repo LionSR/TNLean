@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.EigenspaceMap
-import TNLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
-import TNLean.MPS.Core.TransferChannel
+import QICLean.Algebra.EigenspaceMap
+import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
+import QICLean.MPS.Core.TransferChannel
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!

@@ -2,13 +2,7 @@
     \label{def:mpdo_bnt_algebra_clause}
     \lean{MPOTensor.BNTAlgebraClause}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_operator_family,
-        def:mpdo_bnt_label_trace_scalar_family,
-        def:mpdo_diagonal_chi_family,
-        def:mpdo_positive_bnt_label_chi_trace_power_form,
-        def:mpdo_bnt_label_same_length_product_form,
-        def:mpdo_bnt_label_idempotent_coefficient_form}
+    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_operator_family, def:mpdo_bnt_label_trace_scalar_family, def:mpdo_diagonal_chi_family, def:mpdo_positive_bnt_label_chi_trace_power_form, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_idempotent_coefficient_form}
     Fix a coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, BNT-label
     operators $O_L(M_\alpha)$, and trace scalars
     $m_\alpha=\tr(\mu_\alpha)$. They satisfy the
@@ -77,9 +71,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         physTraceTransfer_verticalBNTMPO_posSemidef}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_algebra_tensor_clause,
-        def:mpo_physical_trace_transfer,
-        lem:mpdo_sitewise_physical_coordinate_congruence}
+    \uses{def:mpdo, def:mpdo_bnt_algebra_tensor_clause, def:mpo_physical_trace_transfer, lem:mpdo_sitewise_physical_coordinate_congruence}
     Let $M$ be a matrix product density operator with physical dimension $d$
     and bond dimension $D$, equipped with a tensor-attached BNT algebra
     clause, and let $M_\gamma$ be any retained normal tensor. Separating its
@@ -156,17 +148,14 @@
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
         gaugedTensor_not_retained_positive_sector}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause,
-        thm:mpdo_algebra_clause_terminal_transfer_positivity,
-        lem:mpdo_nonunitary_pair_terminal_not_positive}
+    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
     Neither $A$ nor $B$ can occur, up to the bond-dimension identification,
     as a retained bond-two sector of a tensor-attached BNT algebra clause for
     a matrix product density operator.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity,
-        lem:mpdo_nonunitary_pair_terminal_not_positive}
+    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
     Any such retained sector has positive-semidefinite terminal transfer by
     Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
     Lemma~\ref{lem:mpdo_nonunitary_pair_terminal_not_positive} gives the
@@ -224,8 +213,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,
-        thm:simplicity, lem:trace_ne_zero}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:simplicity, lem:trace_ne_zero}
     Multiplicativity makes the kernel an ideal of the simple matrix algebra.
     The map is nonzero: otherwise every letter of $B_k$ would vanish,
     contradicting the nonvanishing trace pairing for the injective family.
@@ -241,9 +229,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,
-        thm:mpdo_virtual_perBlockLinearExtension_bijective,
-        thm:unitary_skolem_noether_matrix}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:mpdo_virtual_perBlockLinearExtension_bijective, thm:unitary_skolem_noether_matrix}
     The per-block map is a bijective algebra endomorphism. Positivity makes it
     preserve adjoints, so unitary Skolem--Noether implements it by conjugation
     with a unitary matrix.
@@ -261,9 +247,7 @@
         tensorFamily_sameMPV_gaugedTensorFamily}
     \leanok
     \discussion{5284}
-    \uses{def:injective, def:same_mpv,
-        def:mpdo_virtual_perBlockLinearExtension,
-        lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \uses{def:injective, def:same_mpv, def:mpdo_virtual_perBlockLinearExtension, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     Regard the tensors $A$ and $B$ of
     Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     as one-block families. They are injective and have equal closed matrix
@@ -276,9 +260,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_virtual_perBlockLinearExtension,
-        thm:mpdo_positive_perBlockLinearExtension_unitary,
-        lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \uses{def:mpdo_virtual_perBlockLinearExtension, thm:mpdo_positive_perBlockLinearExtension_unitary, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     If the per-block extension were positive, its unitary-implementation
     theorem would give a unitary $U$ satisfying
     $B^i=UA^iU^\dagger$ for every letter~$i$.
@@ -449,8 +431,7 @@
     \label{thm:mpdo_bond_two_singleton_vertical_identity}
     \lean{MPOTensor.BondTwoSingletonBaseModel.verticalTensor_baseMPO}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_base_mpo,
-        def:mpdo_bond_two_singleton_deformation}
+    \uses{def:mpdo_bond_two_singleton_base_mpo, def:mpdo_bond_two_singleton_deformation}
     The vertical tensor of $M$ is exactly the matrix-unit singleton $A$ from
     Definition~\ref{def:mpdo_bond_two_singleton_deformation}.
 \end{theorem}
@@ -500,8 +481,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         twoSite_baseMPO_eq_bellProjector}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_ambient_ghz,
-        def:mpdo_bond_two_singleton_deformation}
+    \uses{thm:mpdo_bond_two_singleton_ambient_ghz, def:mpdo_bond_two_singleton_deformation}
     Let $\varepsilon$ identify a binary word of length two with its ordered
     pair of letters, and put $\ket{\Phi}=\ket{0,0}+\ket{1,1}$. Then
     \begin{align}
@@ -542,8 +522,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         verticalTensor_gaugeDeformedBaseMPO}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_physical_deformation,
-        thm:mpdo_bond_two_singleton_vertical_identity}
+    \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_vertical_identity}
     For every vertical letter $v$,
     \begin{align}
         \widetilde M_X^v&=XA^vX^{-1}.
@@ -551,8 +530,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_vertical_one_site_actions,
-        thm:mpdo_bond_two_singleton_vertical_identity}
+    \uses{def:mpdo_vertical_one_site_actions, thm:mpdo_bond_two_singleton_vertical_identity}
     Left and right multiplication on the physical indices become matrix
     multiplication on the vertically viewed tensor. Now use
     Theorem~\ref{thm:mpdo_bond_two_singleton_vertical_identity}.
@@ -563,8 +541,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         oneSite_gaugeDeformedBaseMPO_eq_terminalJ}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_physical_deformation,
-        def:mpdo_bond_two_singleton_deformation}
+    \uses{def:mpdo_bond_two_singleton_physical_deformation, def:mpdo_bond_two_singleton_deformation}
     After identifying one-site words with their single letters in $I$, the
     one-site operator of $M_X$ is
     \begin{align}
@@ -582,8 +559,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         twoSite_gaugeDeformedBaseMPO_eq_bellProjector}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_physical_deformation,
-        thm:mpdo_bond_two_singleton_bell_identity}
+    \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_bell_identity}
     Under the ordered-pair identification $\varepsilon$ from
     Theorem~\ref{thm:mpdo_bond_two_singleton_bell_identity},
     \begin{align}
@@ -604,9 +580,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_one_site,
-        thm:mpdo_bond_two_singleton_physical_two_site,
-        thm:mpdo_bond_two_singleton_scalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_one_site, thm:mpdo_bond_two_singleton_physical_two_site, thm:mpdo_bond_two_singleton_scalar_gram}
     If $M_X$ is a matrix product density operator, then there is a real number
     $\omega>0$ such that
     \begin{align}
@@ -617,9 +591,7 @@
     $X^\dagger X$ is nonscalar.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_one_site,
-        thm:mpdo_bond_two_singleton_physical_two_site,
-        thm:mpdo_bond_two_singleton_scalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_one_site, thm:mpdo_bond_two_singleton_physical_two_site, thm:mpdo_bond_two_singleton_scalar_gram}
     Positivity of the one- and two-site operators implies Hermiticity. Apply
     the two exact reindexing identities and then
     Theorem~\ref{thm:mpdo_bond_two_singleton_scalar_gram}.
@@ -647,14 +619,12 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         gaugeDeformedBaseMPO_gauge_not_isMPDO}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram,
-        lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram, lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
     For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$, the physical
     deformation $M_X$ is not a matrix product density operator.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram,
-        lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram, lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
     Otherwise Theorem~\ref{thm:mpdo_bond_two_singleton_physical_scalar_gram}
     would make $X^\dagger X$ scalar, contrary to
     Lemma~\ref{lem:mpdo_bond_two_singleton_physical_nonscalar_gram}.
@@ -813,9 +783,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPOBNTAlgebraTensorClause}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPO_hasBNTAlgebraTensorClause}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_vertical_identity,
-        thm:mpdo_bond_two_singleton_normalized_algebra,
-        thm:mpdo_bond_two_singleton_coisometry}
+    \uses{thm:mpdo_bond_two_singleton_vertical_identity, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bond_two_singleton_coisometry}
     The ambient tensor $M$ has a tensor-attached BNT algebra clause with one
     label, one copy, bond dimension two, normalized representative
     $\widehat A$, multiplicity weight $s^{-1}$, coefficient $s^L$, and
@@ -827,8 +795,7 @@
     \label{def:mpdo_bnt_multiplicity_spectrum_comparison}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison}
     \leanok
-    \uses{def:mpdo_diagonal_chi_family,
-        def:mpdo_bnt_label_trace_scalar_family}
+    \uses{def:mpdo_diagonal_chi_family, def:mpdo_bnt_label_trace_scalar_family}
     Fix the one-site diagonal multiplicity matrices $\mu_\alpha$ and the
     two-site diagonal multiplicity matrices $\nu_\gamma$ in the respective
     vertical canonical decompositions. A multiplicity-spectrum comparison
@@ -898,12 +865,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         toTwoSiteMultiplicitySpectrum}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpdo,
-        def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_two_site_multiplicity_spectrum,
-        def:mpdo_bnt_two_site_exact_sector_gauge,
-        def:mpdo_bnt_multiplicity_spectrum_comparison,
-        def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
+    \uses{def:cpsv_canonical_form, def:mpdo, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_two_site_multiplicity_spectrum, def:mpdo_bnt_two_site_exact_sector_gauge, def:mpdo_bnt_multiplicity_spectrum_comparison, def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
     Let $M$ be an MPDO whose doubled-index MPS tensor is in literal CPSV
     canonical form, equipped with a tensor-attached BNT algebra clause
     $\widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$.
@@ -1014,8 +976,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_blocked_reference_corners,
-        thm:mpdo_gram_dressed_reflected_marked_chain}
+    \uses{thm:mpdo_blocked_reference_corners, thm:mpdo_gram_dressed_reflected_marked_chain}
     Choose the first positive-weight copy of the matched two-site sector.
     Its distinguished inclusion is isometric and its compression selects the
     corresponding weighted normal tensor. Substituting the exact sector
@@ -1032,8 +993,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_oneSite_raw_sector_corner}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_two_site_exact_sector_gauge}
+    \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_two_site_exact_sector_gauge}
     In the setting above, each sector $\gamma$ admits an isometry
     $W_\gamma\colon\C^{d_\gamma}\to\C^d$ and a scalar
     $a_\gamma>0$ such that
@@ -1065,8 +1025,7 @@
     \lean{MPOTensor.IsMPDO.%
         markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint}
     \leanok
-    \uses{def:mpdo, def:vertical_tensor_mpdo,
-        def:mpdo_two_site_blocking}
+    \uses{def:mpdo, def:vertical_tensor_mpdo, def:mpdo_two_site_blocking}
     Let $M$ generate matrix product density operators, let $A$ be a vertical
     tensor, and suppose that an isometry $V$ selects from the two-site
     blocking a positive multiple of an invertible conjugate of $A$:
@@ -1218,8 +1177,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         gauge_gram_eq_pos_smul_one_of_positive_tail_reflected_target}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-        def:mpdo_bnt_two_site_exact_sector_gauge}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge}
     In the setting of the preceding theorem, suppose in addition that the
     doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that,
     for every positive tail length, the identity-dressed marked chain equals
@@ -1252,11 +1210,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_exact_sector_gauge_blocked_corner,
-        thm:mpdo_bnt_exact_sector_identity_oblique_physical_span,
-        thm:mpdo_literal_cpsv_positive_blocking,
-        thm:cpsv_original_coordinate_marked_lemma_l,
-        thm:eq3_of_dressed_adjoint}
+    \uses{thm:mpdo_bnt_exact_sector_gauge_blocked_corner, thm:mpdo_bnt_exact_sector_identity_oblique_physical_span, thm:mpdo_literal_cpsv_positive_blocking, thm:cpsv_original_coordinate_marked_lemma_l, thm:eq3_of_dressed_adjoint}
     The gauge-dressed corner gives a physical-letter coefficient family for the
     gauge-dressed mark and identifies its marked chains with the reflected
     target. The oblique theorem supplies a physical-letter coefficient family
@@ -1295,10 +1249,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_positive_tail_reflected_target}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-        def:mpdo_bnt_two_site_exact_sector_gauge,
-        thm:normalize_scalar_gram_matrix,
-        thm:normalized_conjugation_of_scalar_gram}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge, thm:normalize_scalar_gram_matrix, thm:normalized_conjugation_of_scalar_gram}
     Under the hypotheses of the preceding conditional theorem, define
     \begin{align}
         U_\gamma&=\omega_\gamma^{-1/2}Z_\gamma.
@@ -1328,9 +1279,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_conditional_identity_marked_gram,
-        thm:normalize_scalar_gram_matrix,
-        thm:normalized_conjugation_of_scalar_gram}
+    \uses{thm:mpdo_bnt_conditional_identity_marked_gram, thm:normalize_scalar_gram_matrix, thm:normalized_conjugation_of_scalar_gram}
     The preceding theorem gives
     $Z_\gamma^\dagger Z_\gamma=\omega_\gamma\Id$ with
     $\omega_\gamma>0$.  Therefore
@@ -1355,8 +1304,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         UnitarySectorConjugacy.ofAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-        def:mpdo_bnt_two_site_exact_sector_gauge}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge}
     Let $M$ be an MPDO whose doubled-index tensor is in literal CPSV
     canonical form, and let the one-site and two-site sectors be paired by the
     exact gauges $Z_\gamma$ above.  Then, for every sector $\gamma$ and every
@@ -1392,14 +1340,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner,
-        thm:mpdo_bnt_exact_sector_gauge_blocked_corner,
-        thm:mpdo_bnt_exact_sector_identity_oblique_physical_span,
-        thm:mpdo_two_site_prefix_gram_reflected_marked_chain,
-        thm:mpdo_reflected_marked_chain,
-        thm:cpsv_original_coordinate_marked_lemma_l,
-        thm:mpdo_bnt_conditional_identity_marked_gram,
-        thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+    \uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner, thm:mpdo_bnt_exact_sector_gauge_blocked_corner, thm:mpdo_bnt_exact_sector_identity_oblique_physical_span, thm:mpdo_two_site_prefix_gram_reflected_marked_chain, thm:mpdo_reflected_marked_chain, thm:cpsv_original_coordinate_marked_lemma_l, thm:mpdo_bnt_conditional_identity_marked_gram, thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     Put $G_\gamma=Z_\gamma^\dagger Z_\gamma$.  The two-site initial-block
     identity applied to the gauge corner identifies the marked chains of
     $G_\gamma M_\gamma G_\gamma^{-1}$ with the reflected-adjoint chains of
@@ -1457,9 +1398,7 @@
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.%
         ofEventuallyEqualPowerSums}
     \leanok
-    \uses{def:mpdo_bnt_multiplicity_spectrum_comparison,
-        lem:eventual_power_sum_equality_all_exponents,
-        thm:bounded_power_sum_multiset}
+    \uses{def:mpdo_bnt_multiplicity_spectrum_comparison, lem:eventual_power_sum_equality_all_exponents, thm:bounded_power_sum_multiset}
     Suppose that every entry of the one-site multiplicity matrices, every
     entry of the two-site multiplicity matrices, and every entry of the
     matrices $\chi_{\alpha,\beta,\gamma}$ is positive. Suppose also that
@@ -1500,9 +1439,7 @@
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.twoTrace_eq_traceScalar}
     \lean{MPOTensor.BNTAlgebraClause.twoMultiplicityTrace_eq_traceScalar}
     \leanok
-    \uses{def:mpdo_bnt_algebra_clause,
-        def:mpdo_bnt_multiplicity_spectrum_comparison,
-        lem:mpdo_bnt_idempotent_coefficient_form_of_chi}
+    \uses{def:mpdo_bnt_algebra_clause, def:mpdo_bnt_multiplicity_spectrum_comparison, lem:mpdo_bnt_idempotent_coefficient_form_of_chi}
     Suppose that the BNT algebra clause holds and that the one-site and
     two-site vertical multiplicity spectra have been compared as above.
     Then every two-site multiplicity matrix has the prescribed trace:
@@ -1578,12 +1515,7 @@
     \lean{MPOTensor.BNTLabelTheoremData.blockedComparison_ofChi}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_ofChi}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_operator_family,
-        def:mpdo_bnt_label_trace_scalar_family,
-        def:mpdo_bnt_algebra_clause,
-        def:mpdo_bnt_blocked_basis_label_assignment,
-        def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_operator_family, def:mpdo_bnt_label_trace_scalar_family, def:mpdo_bnt_algebra_clause, def:mpdo_bnt_blocked_basis_label_assignment, def:mpdo_bnt_blocked_basis_coefficient_comparison}
     The BNT-label theorem data consist of a BNT algebra clause together with
     the comparison with the chosen blocked bases.
     Explicitly, for every $L>0$ the product law is
@@ -1676,8 +1608,7 @@
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_posEntries}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_entry_pos}
     \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
+    \uses{def:mpdo_bnt_label_theorem_data, thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
     BNT-label theorem data give a positive blocked-basis $\chi$ trace-power
     witness by pulling the length-independent BNT-label $\chi$-family back
     along the blocked-basis comparison maps: writing $\chi_{n,i,j,k}$ for the
@@ -1697,9 +1628,7 @@
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_positiveBlockedChi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_theorem_data,
-        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form,
-        lem:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_theorem_data, thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form, lem:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
     For every positive blocked length $n$, the blocked-basis coefficients are
     traces of powers of the BNT-label $\chi$-matrices selected by the source
     and target label maps. Equivalently, they are traces of powers of the

@@ -18,8 +18,7 @@
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
     \leanok
-    \uses{def:is_canonical_form, def:transfer_map, def:fixed_point_proj,
-        thm:exponential_convergence_primitive}
+    \uses{def:is_canonical_form, def:transfer_map, thm:exponential_convergence_primitive}
     Fix one block $A_k$ in a family satisfying
     Definition~\ref{def:is_canonical_form}. Then the primitive transfer map of
     that block satisfies: $\E_{A_k}^{2^n}$ converges pointwise to an idempotent
@@ -90,8 +89,7 @@
 \begin{theorem}[Printed blocking-up-to-gauge equivalence]
     \label{thm:cpsv_rfp_gauge_printed_status}
     \notready
-    \uses{thm:cpsv_canonical_form_flow_phase_obstruction,
-        def:mps_transfer_idempotence}
+    \uses{thm:cpsv_canonical_form_flow_phase_obstruction, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, let
     \begin{align}
         A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix}, &
@@ -175,8 +173,7 @@
     \label{thm:blocked_gauge_phase_to_doubled_mpdo}
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
-    \uses{def:one_letter_mpdo_virtual_gauge_rfp,
-        def:blocked_gauge_phase_fixed_point}
+    \uses{def:one_letter_mpdo_virtual_gauge_rfp, def:blocked_gauge_phase_fixed_point}
     Every one-letter MPS blocking witness induces the exact doubled-MPO
     virtual-gauge condition.
 \end{theorem}
@@ -200,9 +197,7 @@
     \lean{MPSTensor.cubePhaseTensor_not_isTransferIdempotent}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
-    \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo,
-        def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge,
-        def:cpsv_canonical_form, def:mps_transfer_idempotence}
+    \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo, def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge, def:cpsv_canonical_form, def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, and set
     \begin{align}
         A&=\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
@@ -224,11 +219,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities,
-        lem:ft_perm_matrix_conj_submatrix, def:cube_phase_swap_gauge, def:mpdo,
-        lem:bond_dimension_one_identity_transfer_normal,
-        def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo,
-        thm:cpsv_canonical_form_flow_phase_obstruction}
+    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities, lem:ft_perm_matrix_conj_submatrix, def:cube_phase_swap_gauge, def:mpdo, lem:bond_dimension_one_identity_transfer_normal, def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo, thm:cpsv_canonical_form_flow_phase_obstruction}
     On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
     operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
     Moreover, $M$ is the direct sum of four bond-one scalar blocks with weights
@@ -264,8 +255,7 @@
 \end{remark}
 
 \begin{remark}\label{rem:zero_correlation_length}
-    \uses{thm:spectral_radius_le_one, def:correlation_length,
-        def:mps_transfer_idempotence}
+    \uses{thm:spectral_radius_le_one, def:correlation_length, def:mps_transfer_idempotence}
     When the transfer map is idempotent ($\E^2=\E$), connected correlations become
     separation-independent for all separations $n\ge 1$.
     Informally, this corresponds to zero correlation length ($\xi=0$).
@@ -342,8 +332,7 @@
     \label{def:is_positive_gap_physical_cid}
     \lean{MPSTensor.IsPositiveGapPhysicalCID}
     \leanok
-    \uses{def:physical_observable_transfer,
-        def:physical_two_point_expectation}
+    \uses{def:physical_observable_transfer, def:physical_two_point_expectation}
     For an observable $O$ on a block of $L$ physical spins, write
     \begin{align}
         \E_O(X)
@@ -407,8 +396,7 @@
 \begin{definition}[Virtual-insertion one-block auxiliary condition]\label{def:is_zcl}
     \lean{MPSTensor.IsZCL}
     \leanok
-    \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid,
-        def:source_bnt_zcl}
+    \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid, def:source_bnt_zcl}
     This auxiliary one-block predicate is the conjunction of
     $\E_A^2=\E_A$ and virtual-insertion distance independence. It is not the
     physical zero-correlation-length condition of
@@ -472,8 +460,7 @@
     \label{thm:rfp_iff_zcl}
     \lean{MPSTensor.rfp_iff_zcl}
     \leanok
-    \uses{def:is_canonical_form, def:mps_transfer_idempotence, def:is_zcl,
-        thm:zcl_iff_idempotent_transfer}
+    \uses{def:is_canonical_form, def:mps_transfer_idempotence, def:is_zcl, thm:zcl_iff_idempotent_transfer}
     Let $(A_k)_k$ satisfy the auxiliary block-family hypotheses of
     Definition~\ref{def:is_canonical_form}. For each $k$, the transfer map of
     $A_k$ is idempotent if and only if $A_k$ satisfies the one-block auxiliary

@@ -7,8 +7,8 @@ import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Core.TransferPeripheral
-import TNLean.Channel.Peripheral.PeriodicityRemoval
-import TNLean.Channel.Peripheral.Conjugation
+import QICLean.Channel.Peripheral.PeriodicityRemoval
+import QICLean.Channel.Peripheral.Conjugation
 
 import Mathlib.Analysis.Complex.Order
 import Mathlib.Analysis.Real.Sqrt

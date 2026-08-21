@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleMPSChainOverlapWindow
 import TNLean.PEPS.CycleMPSWordTransport
-import TNLean.Algebra.SkolemNoether
+import QICLean.Algebra.SkolemNoether
 
 /-!
 # The site-dependent insertion correspondence of the overlapping-window route

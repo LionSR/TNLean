@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Core.Transfer
+import QICLean.MPS.Core.Transfer
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Spectral.PeripheralToTransferMapGap
-import TNLean.MPS.Core.InvariantProjection
+import QICLean.MPS.Core.InvariantProjection
 import TNLean.Wielandt.Primitivity.ToNormal
-import TNLean.Channel.Primitive
-import TNLean.Channel.Irreducible.FromSpectral
+import QICLean.Channel.Primitive
+import QICLean.Channel.Irreducible.FromSpectral
 
 /-!
 # Connecting results for primitive MPS and complementary transfer-map gaps

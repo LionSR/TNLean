@@ -2,10 +2,7 @@
     \label{lem:closure_property_auxiliary_product_from_closing_restrictions}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_closing_restrictions}
     \leanok
-    \uses{def:l_blk_injective, def:ground_space_map,
-        rem:cyclic_window_operators, thm:ground_space_map_injective_blk,
-        thm:cyclic_window_boundary_matrix_transport,
-        lem:wrapped_middle_backgrounds}
+    \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators, thm:ground_space_map_injective_blk, thm:cyclic_window_boundary_matrix_transport, lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
@@ -64,8 +61,7 @@
     \label{lem:closure_property_auxiliary_product_from_right_products}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_right_products}
     \leanok
-    \uses{lem:closed_boundary_restriction_from_right_products,
-        lem:closure_property_auxiliary_product_from_closing_restrictions}
+    \uses{lem:closed_boundary_restriction_from_right_products, lem:closure_property_auxiliary_product_from_closing_restrictions}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
@@ -186,8 +182,7 @@
     \label{lem:closure_property_auxiliary_product_from_opposite_boundary_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products}
     \leanok
-    \uses{lem:closure_property_opposite_boundary_comparison_from_right_words,
-        lem:closure_property_auxiliary_product_from_right_products}
+    \uses{lem:closure_property_opposite_boundary_comparison_from_right_words, lem:closure_property_auxiliary_product_from_right_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
@@ -241,8 +236,7 @@
     \label{lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products}
     \leanok
-    \uses{lem:closure_property_opposite_boundary_comparison_from_left_words,
-        lem:closure_property_auxiliary_product_from_opposite_boundary_words}
+    \uses{lem:closure_property_opposite_boundary_comparison_from_left_words, lem:closure_property_auxiliary_product_from_opposite_boundary_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
     $Y_i(\tau)$ be matrices satisfying
@@ -298,8 +292,7 @@
     \label{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words}
     \leanok
-    \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
-        lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
+    \uses{lem:closure_property_boundary_one_sided_products_ground_space_map, lem:closure_property_auxiliary_product_from_opposite_boundary_left_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation,
     and let $Y_i(\tau)$ represent the length-$(L_0+1)$ cyclic restrictions of
@@ -352,10 +345,7 @@
     \label{thm:closure_property_boundary_restrictions_ground_space_map_left_words}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words}
     \leanok
-    \uses{lem:closure_property_boundary_one_sided_products_ground_space_map,
-        lem:closure_property_opposite_boundary_comparison_from_left_words,
-        lem:closure_property_opposite_boundary_comparison_from_right_words,
-        lem:closed_boundary_restrictions_from_first_letter_products}
+    \uses{lem:closure_property_boundary_one_sided_products_ground_space_map, lem:closure_property_opposite_boundary_comparison_from_left_words, lem:closure_property_opposite_boundary_comparison_from_right_words, lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0\le M$, and
     $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation,
     and let $Y_i(\tau)$ represent the length-$(L_0+1)$ cyclic restrictions of
@@ -405,12 +395,7 @@
     \label{thm:closure_property_boundary_restrictions_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:closure_property_boundary_one_sided_products_ground_space_map,
-        lem:closure_property_boundary_block_window_equation_ground_space_map,
-        lem:boundary_matrix_commutes_block_window,
-        lem:boundary_restrictions_from_commutation_one_sided_products,
-        lem:closed_boundary_restrictions_from_first_letter_products}
+    \uses{def:ground_space_map, rem:cyclic_window_operators, lem:closure_property_boundary_one_sided_products_ground_space_map, lem:closure_property_boundary_block_window_equation_ground_space_map, lem:boundary_matrix_commutes_block_window, lem:boundary_restrictions_from_commutation_one_sided_products, lem:closed_boundary_restrictions_from_first_letter_products}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation.
     Assume that, for all $i$ and $\tau$,

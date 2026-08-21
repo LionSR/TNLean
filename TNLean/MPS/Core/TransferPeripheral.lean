@@ -3,10 +3,10 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Peripheral.ClosureFixedPointKraus
-import TNLean.Channel.Peripheral.CyclicGroupKraus
-import TNLean.Channel.Peripheral.CyclicDecomposition.LetterShift
-import TNLean.MPS.Core.TransferChannel
+import QICLean.Channel.Peripheral.ClosureFixedPointKraus
+import QICLean.Channel.Peripheral.CyclicGroupKraus
+import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
+import QICLean.MPS.Core.TransferChannel
 
 /-!
 # Transfer-map forms of the peripheral fixed-point and cyclic-group results

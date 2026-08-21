@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.BilinearForm.Properties
 import TNLean.Algebra.ListProduct
-import TNLean.Algebra.MatrixTracePairing
-import TNLean.Algebra.RankOneSandwich
+import QICLean.Algebra.MatrixTracePairing
+import QICLean.Algebra.RankOneSandwich
 import TNLean.Algebra.ShiftedZeroTraceNilpotent
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.MPDO.PhysicalBlocking

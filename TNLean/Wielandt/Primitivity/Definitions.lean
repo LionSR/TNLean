@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
-import TNLean.MPS.Core.Transfer
-import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.Irreducible.Basic
+import QICLean.MPS.Core.Transfer
+import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Irreducible.Basic
 
 /-!
 # Primitivity and index definitions for the quantum Wielandt theorem

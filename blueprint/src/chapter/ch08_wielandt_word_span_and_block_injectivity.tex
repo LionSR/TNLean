@@ -79,9 +79,7 @@ condition.
     \label{thm:tp_primitive_irred_block_injective}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
     \leanok
-    \uses{thm:normal_tp_primitive_irred,
-        lem:one_block_injective_of_injective,
-        cor:blk_inj_zero_dim_one}
+    \uses{thm:normal_tp_primitive_irred, lem:one_block_injective_of_injective, cor:blk_inj_zero_dim_one}
     Let $A$ be a left-canonical MPS tensor with $D>0$.
     Suppose that $A$ is tensor-irreducible and that its transfer map is
     primitive.
@@ -90,9 +88,7 @@ condition.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:normal_tp_primitive_irred,
-        lem:one_block_injective_of_injective,
-        cor:blk_inj_zero_dim_one}
+    \uses{thm:normal_tp_primitive_irred, lem:one_block_injective_of_injective, cor:blk_inj_zero_dim_one}
     If $D=1$, trace preservation gives a nonzero one-site Kraus matrix, and
     every nonzero scalar matrix spans $\MN{1}$.
     Hence $A$ is one-site injective, so

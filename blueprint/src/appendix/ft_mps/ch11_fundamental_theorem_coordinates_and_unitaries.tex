@@ -70,8 +70,7 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
     \label{thm:sector_bnt_equal_mps_gaugeEquiv_witnesses}
     \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_witnesses}
     \leanok
-    \uses{thm:sector_bnt_equal_global_gauge,
-        lem:ft_total_dim_eq_of_match, def:ft_matched_flat_data}
+    \uses{thm:sector_bnt_equal_global_gauge, lem:ft_total_dim_eq_of_match, def:ft_matched_flat_data}
     Under the hypotheses of the equal-MPV theorem, one may choose
     simultaneously the sector bijection, bond-dimension equalities, copy
     bijections, phases, block gauges, total-dimension equality, and the
@@ -178,9 +177,7 @@ existential form and then repeat the construction over every matched copy.
     \label{lem:left_canonical_irreducible_unitary_gauge}
     \lean{MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:left_canonical_tensor, def:gauge_phase_equiv,
-        def:irreducible_tensor,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    \uses{def:left_canonical_tensor, def:gauge_phase_equiv, def:irreducible_tensor, lem:left_canonical_irreducible_same_phase_unitary_gauge}
     Let $A$ and $B$ be left-canonical irreducible tensors of common positive bond
     dimension that are gauge-phase equivalent. Then the gauge can be taken
     unitary: there are a unitary matrix $U$ and a scalar $\zeta$ with
@@ -203,10 +200,7 @@ existential form and then repeat the construction over every matched copy.
     \label{lem:sector_bnt_equal_unitary_matched_gauge}
     \lean{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnesses}
     \leanok
-    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,
-        thm:sector_bnt_global_gauge_of_copy_weight_matching,
-        lem:unitary_global_gauge_of_blocks}
+    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses, lem:left_canonical_irreducible_same_phase_unitary_gauge, thm:sector_bnt_global_gauge_of_copy_weight_matching, lem:unitary_global_gauge_of_blocks}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
     same MPV family at every positive length. There are a sector bijection
     $\beta$, copy bijections $\tau_k$, phases $\zeta_k$, sector unitaries $U_k$,
@@ -228,9 +222,7 @@ existential form and then repeat the construction over every matched copy.
     $Q_{\mathrm{flat}}^i=XP_{\mathrm{match}}^iX^{-1}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,
-        lem:unitary_global_gauge_of_blocks}
+    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses, lem:left_canonical_irreducible_same_phase_unitary_gauge, lem:unitary_global_gauge_of_blocks}
     Apply Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
     to each matched sector, retaining the phase in the copy-weight identity.
     Repeating $U_k$ on every copy gives $X=\bigoplus_{k,q}U_k$, which is unitary

@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Kraus.MixedMap.Gap
-import TNLean.MPS.Core.TransferChannel
-import TNLean.Spectral.GaugeConstruction
+import QICLean.Kraus.MixedMap.Gap
+import QICLean.MPS.Core.TransferChannel
+import QICLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecayRect
-import TNLean.Spectral.TransferOperatorGapNormalized
+import QICLean.Spectral.TransferOperatorGapNormalized
 
 /-!
 # Transfer-operator gap for normal tensor blocks

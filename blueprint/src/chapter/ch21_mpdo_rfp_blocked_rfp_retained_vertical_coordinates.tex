@@ -76,9 +76,7 @@
     \label{lem:mpdo_retained_vertical_sector_retraction}
     \lean{MPOTensor.retainedVerticalSectorPartialTrace_comp_normalizedEmbedding}
     \leanok
-    \uses{def:mpdo_retained_vertical_sector_coordinates,
-      lem:mpdo_retained_vertical_sector_extraction,
-      lem:mpdo_vertical_sector_retraction}
+    \uses{def:mpdo_retained_vertical_sector_coordinates, lem:mpdo_retained_vertical_sector_extraction, lem:mpdo_vertical_sector_retraction}
     Suppose that every multiplicity space is nonzero and every diagonal entry
     of $\mu_\alpha$ is positive. Then the retained-coordinate partial trace
     is a left inverse of the normalized retained-coordinate embedding.
@@ -93,8 +91,7 @@
     \label{lem:mpdo_retained_vertical_weighted_contraction}
     \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor_eq_sectorBlockDiagonal}
     \leanok
-    \uses{def:mpdo_retained_vertical_sector_coordinates,
-      def:mpdo_vertical_bond_matrix_contraction}
+    \uses{def:mpdo_retained_vertical_sector_coordinates, def:mpdo_vertical_bond_matrix_contraction}
     For every horizontal bond matrix $X$, contraction of
     $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ gives
     $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X)$.
@@ -214,9 +211,7 @@
     \label{lem:mpdo_vertical_bond_contraction_forward}
     \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_vertical_forward}
     \leanok
-    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction,
-      lem:mpdo_bond_contraction_composition,
-      lem:mpdo_vertical_bond_contraction_phys_close}
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction, lem:mpdo_bond_contraction_composition, lem:mpdo_vertical_bond_contraction_phys_close}
     Let $B_{ab}$ be an arbitrary vertical tensor. If
     $U\widetilde M_{ab}U^\dagger=B_{ab}$ for every pair $(a,b)$, then, for
     every bond matrix $X$, $U M(X)U^\dagger=B(X)$.
@@ -239,9 +234,7 @@
     \label{lem:mpdo_vertical_bond_contraction_reconstruction}
     \lean{MPOTensor.physClose1_eq_of_vertical_reconstruction}
     \leanok
-    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction,
-      lem:mpdo_bond_contraction_composition,
-      lem:mpdo_vertical_bond_contraction_phys_close}
+    \uses{def:phys_close, def:mpdo_vertical_bond_matrix_contraction, lem:mpdo_bond_contraction_composition, lem:mpdo_vertical_bond_contraction_phys_close}
     Let $B_{ab}$ be an arbitrary vertical tensor. If
     $\widetilde M_{ab}=U^\dagger B_{ab}U$ for every pair $(a,b)$, then, for
     every bond matrix $X$, $M(X)=U^\dagger B(X)U$.
@@ -264,11 +257,7 @@
     \lean{MPOTensor.mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor}
     \lean{MPOTensor.physClose1_eq_of_verticalAssembledTensor_reconstruction}
     \leanok
-    \uses{def:vertical_cf_mpdo, def:phys_close,
-      def:mpdo_vertical_bond_matrix_contraction,
-      lem:mpdo_vertical_bond_contraction_forward,
-      lem:mpdo_vertical_bond_contraction_reconstruction,
-      lem:mpdo_vertical_bond_contraction_assembled}
+    \uses{def:vertical_cf_mpdo, def:phys_close, def:mpdo_vertical_bond_matrix_contraction, lem:mpdo_vertical_bond_contraction_forward, lem:mpdo_vertical_bond_contraction_reconstruction, lem:mpdo_vertical_bond_contraction_assembled}
     Suppose that
     \begin{align}
         U\widetilde M_{ab}U^\dagger
@@ -430,10 +419,7 @@
     \lean{MPOTensor.transportTToVerticalCoordinates_contractBondMatrix}
     \lean{MPOTensor.transportSToVerticalCoordinates_contractBondMatrix}
     \leanok
-    \uses{def:mpdo_vertical_coordinate_map_transport,
-      lem:mpdo_vertical_bond_contraction_forward,
-      lem:mpdo_vertical_bond_contraction_reconstruction,
-      thm:mpdo_one_site_closure_two_site_blocking}
+    \uses{def:mpdo_vertical_coordinate_map_transport, lem:mpdo_vertical_bond_contraction_forward, lem:mpdo_vertical_bond_contraction_reconstruction, thm:mpdo_one_site_closure_two_site_blocking}
     For a bond matrix $X$, write $\mathcal M^{(1)}(X)$ and
     $\mathcal M^{(2)}(X)$ for the one-site and two-site physical closures,
     respectively, and write
@@ -497,9 +483,7 @@
     \lean{MPOTensor.transportedVerticalSectorT}
     \lean{MPOTensor.transportedVerticalSectorS}
     \leanok
-    \uses{def:mpdo_normalized_vertical_sector_maps,
-      def:mpdo_retained_vertical_sector_coordinates,
-      def:mpdo_vertical_coordinate_map_transport}
+    \uses{def:mpdo_normalized_vertical_sector_maps, def:mpdo_retained_vertical_sector_coordinates, def:mpdo_vertical_coordinate_map_transport}
     Define maps between the one-site and two-site simple-sector algebras by
     \begin{align}
         \widetilde T
@@ -545,8 +529,7 @@
     \lean{MPOTensor.verticalSectorTrace_retainedVerticalSectorPartialTrace}
     \lean{MPOTensor.trace_normalizedRetainedVerticalSectorEmbedding}
     \leanok
-    \uses{def:mpdo_positive_vertical_sector_family,
-      def:mpdo_retained_vertical_sector_coordinates}
+    \uses{def:mpdo_positive_vertical_sector_family, def:mpdo_retained_vertical_sector_coordinates}
     Suppose that every multiplicity space is nonzero and every diagonal entry
     of $\mu_\alpha$ is positive. The normalized embedding $R_\mu$ sends a
     positive sector family to a positive retained matrix and satisfies
@@ -669,10 +652,7 @@
     \lean{MPOTensor.verticalSectorTrace_transportedVerticalSectorT}
     \lean{MPOTensor.verticalSectorTrace_transportedVerticalSectorS}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps,
-      def:mpdo_positive_vertical_sector_family,
-      def:mpdo_vertical_sector_precompression,
-      lem:mpdo_normalized_vertical_sector_positive_trace}
+    \uses{def:mpdo_transported_vertical_sector_maps, def:mpdo_positive_vertical_sector_family, def:mpdo_vertical_sector_precompression, lem:mpdo_normalized_vertical_sector_positive_trace}
     Suppose that the physical maps are completely positive and trace
     preserving and $U_iU_i^\dagger=1$. For positive sector families
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$, the matrices $Z_T(X)$ and
@@ -715,13 +695,7 @@
     \lean{MPOTensor.transportedVerticalSectorT_trace_eq_iff}
     \lean{MPOTensor.transportedVerticalSectorS_trace_eq_iff}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps,
-      def:mpdo_positive_vertical_sector_family,
-      def:mpdo_vertical_sector_precompression,
-      lem:mpdo_normalized_retained_vertical_sector_embedding,
-      lem:mpdo_retained_vertical_sector_partial_trace,
-      lem:mpdo_coisometric_compression_trace,
-      lem:mpdo_vertical_sector_precompression_positive_trace}
+    \uses{def:mpdo_transported_vertical_sector_maps, def:mpdo_positive_vertical_sector_family, def:mpdo_vertical_sector_precompression, lem:mpdo_normalized_retained_vertical_sector_embedding, lem:mpdo_retained_vertical_sector_partial_trace, lem:mpdo_coisometric_compression_trace, lem:mpdo_vertical_sector_precompression_positive_trace}
     Suppose that the multiplicity spaces are nonzero, their diagonal weights
     are positive, the physical maps $T$ and $S$ are completely positive and
     trace preserving, and the vertical coordinate maps satisfy

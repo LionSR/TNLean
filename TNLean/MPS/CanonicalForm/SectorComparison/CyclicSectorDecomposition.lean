@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
-import TNLean.Channel.Peripheral.Conjugation
-import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import QICLean.Channel.Peripheral.Conjugation
+import QICLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
-import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
+import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter

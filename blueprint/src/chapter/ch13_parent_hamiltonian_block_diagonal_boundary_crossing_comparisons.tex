@@ -26,8 +26,7 @@
     \label{lem:block_diagonal_boundary_local_sum_mem}
     \lean{MPSTensor.blockDiagonal_boundary_cyclicRestrict_sum_mem_iSup_groundSpace}
     \leanok
-    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum,
-        lem:block_sum_local_ground_space}
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum, lem:block_sum_local_ground_space}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, with $\mu_j\ne0$, and suppose
     \begin{align}
         \psi
@@ -50,8 +49,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum,
-        lem:block_sum_local_ground_space}
+    \uses{lem:block_diagonal_boundary_cyclic_restriction_sum, lem:block_sum_local_ground_space}
     The hypothesis $\psi\in\mathcal G_{N,L}(B)$ says that the left-hand side
     before decomposition lies in $G_L(B)$.
     Lemma~\ref{lem:block_diagonal_boundary_cyclic_restriction_sum} rewrites this
@@ -82,8 +80,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_parent, rem:cyclic_window_operators,
-        thm:contiguous_restriction_ground_space_map}
+    \uses{def:ground_space_parent, rem:cyclic_window_operators, thm:contiguous_restriction_ground_space_map}
     When the window stays inside the chosen linear interval, the boundary matrix
     remains outside the window. Write
     $A_{\mathrm{left}}=A^j_{\tau_0}\cdots A^j_{\tau_{i-1}}$ and
@@ -200,8 +197,7 @@
     \label{lem:block_diagonal_boundary_crossing_trace_decomposition_boundary}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}
     \leanok
-    \uses{lem:block_diagonal_boundary_local_sum_mem,
-        lem:block_diagonal_boundary_crossing_trace_decomposition}
+    \uses{lem:block_diagonal_boundary_local_sum_mem, lem:block_diagonal_boundary_crossing_trace_decomposition}
     Assume that the physical dimension $d$ is positive, $0<N$, $L\le N$, and
     $\mu_j\ne0$ for every block $j$. Let the cyclic interval beginning at $i$
     cross the boundary cut, so $N<i+L$. Let
@@ -228,8 +224,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_local_sum_mem,
-        lem:block_diagonal_boundary_crossing_trace_decomposition}
+    \uses{lem:block_diagonal_boundary_local_sum_mem, lem:block_diagonal_boundary_crossing_trace_decomposition}
     Since $d>0$, extend the outside word $\rho$ to a full outside configuration
     $\tau$ whose entries between the end of the interval and the cut are the
     word $\rho$. By the nonzero-weight hypothesis,
@@ -284,8 +279,7 @@
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
     \leanok
-    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition,
-        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition, lem:fixed_complementary_word_boundary_compatibility_from_traces}
     Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
     cross the boundary cut, so $N<i+L$. Put $a=i+L-N$ and
     $\rho=\tau_a\cdots\tau_{i-1}$. Suppose also that the block tensors have
@@ -312,8 +306,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition,
-        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    \uses{lem:block_diagonal_boundary_crossing_trace_decomposition, lem:fixed_complementary_word_boundary_compatibility_from_traces}
     Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decomposition}
     gives matrices $C^j_{i,\tau}$ with
     \begin{align}
@@ -332,8 +325,7 @@
     \label{thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace}
     \leanok
-    \uses{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary,
-        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    \uses{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary, lem:fixed_complementary_word_boundary_compatibility_from_traces}
     Let
     \begin{align}
         \psi
@@ -363,8 +355,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary,
-        lem:fixed_complementary_word_boundary_compatibility_from_traces}
+    \uses{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary, lem:fixed_complementary_word_boundary_compatibility_from_traces}
     Lemma~\ref{lem:block_diagonal_boundary_crossing_trace_decompositions_boundary}
     gives matrices $C^j_{i,\rho}$ such that, for every boundary-crossing start
     $i$, outside word $\rho$ of length $N-L$, word $\beta$ of length
@@ -387,8 +378,7 @@
     \label{thm:block_diagonal_boundary_crossing_component_mem_ground_space}
     \lean{MPSTensor.blockDiagonal_boundary_crossing_component_mem_groundSpace_of_pgvwc_comparison_of_sum_mem_iSup}
     \leanok
-    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison,
-        lem:block_diagonal_boundary_crossing_matrix_identity}
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison, lem:block_diagonal_boundary_crossing_matrix_identity}
     Assume $0<N$, $L\le N$, and let the cyclic interval beginning at $i$
     cross the boundary cut, so $N<i+L$. Suppose that the block tensors have
     the common word-span property at length $N-i$ and that
@@ -410,8 +400,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison,
-        lem:block_diagonal_boundary_crossing_matrix_identity}
+    \uses{thm:block_diagonal_boundary_crossing_pgvwc_comparison, lem:block_diagonal_boundary_crossing_matrix_identity}
     Theorem~\ref{thm:block_diagonal_boundary_crossing_pgvwc_comparison}
     gives matrices $C^j_{i,\tau}$ satisfying
     (\ref{eq:ph_fixed_boundary_crossing_comparison}). Thus
@@ -445,8 +434,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula,
-        def:ground_space_parent, rem:cyclic_window_operators}
+    \uses{lem:block_diagonal_boundary_crossing_coefficient_formula, def:ground_space_parent, rem:cyclic_window_operators}
     Write a length-$L$ word in the boundary-crossing interval as
     $\alpha\beta$, where $\alpha$ is the segment inside
     $\{i,\ldots,N-1\}$ and $\beta$ is the segment after the interval wraps
@@ -556,8 +544,7 @@
     \label{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
     \lean{MPSTensor.blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup}
     \leanok
-    \uses{lem:block_diagonal_last_crossing_trace_form,
-        lem:blockwise_boundary_identities_from_left_trace_membership}
+    \uses{lem:block_diagonal_last_crossing_trace_form, lem:blockwise_boundary_identities_from_left_trace_membership}
     In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
     assume that the length-$m$ simultaneous word tuples span the product
     algebra and that
@@ -580,8 +567,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_last_crossing_trace_form,
-        lem:blockwise_boundary_identities_from_left_trace_membership}
+    \uses{lem:block_diagonal_last_crossing_trace_form, lem:blockwise_boundary_identities_from_left_trace_membership}
     Lemma~\ref{lem:block_diagonal_last_crossing_trace_form} writes the local
     block sum in the form
     \begin{align}
@@ -603,9 +589,7 @@
     \label{lem:block_diagonal_last_crossing_component_membership_from_sum_membership}
     \lean{MPSTensor.blockDiagonal_boundary_last_cyclicRestrict_component_mem_groundSpace_of_sum_mem_iSup}
     \leanok
-    \uses{lem:block_diagonal_last_crossing_component_trace_form,
-        lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
-        lem:left_boundary_component_mem_ground_space}
+    \uses{lem:block_diagonal_last_crossing_component_trace_form, lem:block_diagonal_last_crossing_coefficients_from_sum_membership, lem:left_boundary_component_mem_ground_space}
     In the setting of Lemma~\ref{lem:block_diagonal_last_crossing_trace_form},
     assume that the length-$m$ simultaneous word tuples span the product
     algebra and that
@@ -625,9 +609,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_last_crossing_component_trace_form,
-        lem:block_diagonal_last_crossing_coefficients_from_sum_membership,
-        lem:left_boundary_component_mem_ground_space}
+    \uses{lem:block_diagonal_last_crossing_component_trace_form, lem:block_diagonal_last_crossing_coefficients_from_sum_membership, lem:left_boundary_component_mem_ground_space}
     Lemma~\ref{lem:block_diagonal_last_crossing_coefficients_from_sum_membership}
     gives matrices $E_j$ satisfying
     (\ref{eq:ph_last_crossing_coefficient_comparison}). By

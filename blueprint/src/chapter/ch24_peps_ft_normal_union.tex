@@ -107,8 +107,7 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.regionUnionPart_inside_disjoint_three}
     \lean{TNLean.PEPS.regionUnionPart_pairwise_disjoint}
     \leanok
-    \uses{def:peps_regionUnionDecomposition,
-        lem:peps_regionUnionDecomposition_identities}
+    \uses{def:peps_regionUnionDecomposition, lem:peps_regionUnionDecomposition_identities}
     In the four-region decomposition, the left-only and right-only parts are
     disjoint from the overlap and from each other. Each inside part, and hence
     the union of the three inside regions, is disjoint from the outside region.
@@ -186,9 +185,7 @@ every finite union of injective regions.
 \begin{lemma}[Union of injective regions]%
     \label{lem:peps_injectiveRegion_union}
     \notready
-    \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities,
-        lem:peps_regionUnionDecomposition_disjoint,
-        lem:peps_injectiveRegion_union_contractionChain}
+    \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities, lem:peps_regionUnionDecomposition_disjoint, lem:peps_injectiveRegion_union_contractionChain}
     Let $V$ be a finite vertex set. Write $\inj(R)$ for the
     assertion that the PEPS tensor blocked to the region $R\subseteq V$ is
     injective. For two possibly overlapping regions $A,B\subseteq V$,
@@ -592,8 +589,7 @@ every finite union of injective regions.
     \label{thm:peps_regionBlockedTensorInjective_applyGauge}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_applyGauge}
     \leanok
-    \uses{def:applyGauge, thm:peps_regionBlockedWeight_applyGauge,
-        thm:peps_sum_regionBoundaryCoupling_mul_inv}
+    \uses{def:applyGauge, thm:peps_regionBlockedWeight_applyGauge, thm:peps_sum_regionBoundaryCoupling_mul_inv}
     Let $\widetilde B=\operatorname{Gauge}_X(B)$. If the blocked tensor family
     $\{T_{B,R}^{\nu}\}_{\nu}$ is linearly independent, then the blocked tensor
     family $\{T_{\widetilde B,R}^{\mu}\}_{\mu}$ is linearly independent.
@@ -650,8 +646,7 @@ every finite union of injective regions.
     \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf,
-        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf, thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     Let $A$ be vertex-injective with every bond dimension positive. Then the
     concrete region-injectivity predicate of $A$ satisfies union closure: for
     any two finite regions $R$ and $S$,
@@ -668,8 +663,7 @@ every finite union of injective regions.
     \label{thm:peps_regionInjectivityUnionClosure_of_overlap}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_overlap}
     \leanok
-    \uses{def:peps_regionInjectivityDataOf,
-        lem:peps_injectiveRegion_union_pos}
+    \uses{def:peps_regionInjectivityDataOf, lem:peps_injectiveRegion_union_pos}
     Let $A$ be a PEPS tensor with every bond dimension positive. Then the
     concrete region-injectivity predicate of $A$ satisfies union closure: for
     any two finite regions $R$ and $S$,
@@ -705,8 +699,7 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_injective}
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_binary_injective}
     \leanok
-    \uses{def:peps_regionInjectivityData,
-        lem:peps_regionUnionDecomposition_identities}
+    \uses{def:peps_regionInjectivityData, lem:peps_regionUnionDecomposition_identities}
     Under the union-closure hypothesis for region injectivity, if the indexed
     subfamilies $\{0,1\}$ and $\{1,2\}$ in the four-region decomposition
     are injective, then the inside subfamily $\{0,1,2\}$ is injective.

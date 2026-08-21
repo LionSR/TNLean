@@ -90,8 +90,7 @@
     \label{thm:mpdo_active_bnt_nonnilpotency_independent}
     \lean{MPOTensor.activeBNT_basis_not_isNilpotent_iff}
     \leanok
-    \uses{def:cpsv_active_bnt_sector_presentation,
-        def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:cpsv_active_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
     Let $P$ and $Q$ be active BNT sector presentations of the same
     doubled-index tensor. Every representative of $P$ has non-nilpotent
     physical-trace transfer if and only if every representative of $Q$ does.
@@ -104,8 +103,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_bnt_presentation_uniqueness,
-        thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
+    \uses{thm:cpsv_active_bnt_presentation_uniqueness, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
     Match the representatives by
     Theorem~\ref{thm:cpsv_active_bnt_presentation_uniqueness}, then apply
     Theorem~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} to each
@@ -116,9 +114,7 @@
     \label{def:mpdo_source_simple_tensor}
     \lean{MPOTensor.IsSourceSimple}
     \leanok
-    \uses{def:mpdo, def:mpdo_physical_blocking,
-        def:cpsv_active_bnt_sector_presentation,
-        def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:mpdo, def:mpdo_physical_blocking, def:cpsv_active_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
     A tensor generating MPDOs is \emph{source-simple} if there is a positive
     physical blocking length $L$ such that the doubled-index tensor of the
     $L$-site blocking has an active BNT sector presentation $P$ for which every
@@ -152,9 +148,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_active_bnt_sector_presentation,
-        lem:mpdo_three_first_site_contraction_coefficients,
-        thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:cpsv_active_bnt_sector_presentation, lem:mpdo_three_first_site_contraction_coefficients, thm:mpdo_closed_chain_physical_blocking}
     Choose a representative and one of its copies. Every copy weight over that
     representative is nonzero, so its power-sum coefficient cannot vanish at
     every sufficiently large length. At a large length where this coefficient
@@ -301,9 +295,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_blocking,
-        lem:mpdo_eval_word_scalar_scaling,
-        lem:mpdo_length_word_of_block}
+    \uses{def:mpdo_physical_blocking, lem:mpdo_eval_word_scalar_scaling, lem:mpdo_length_word_of_block}
     Unfold physical blocking and apply
     Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two encoded words;
     Lemma~\ref{lem:mpdo_length_word_of_block} gives their length $L$.
@@ -348,9 +340,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_nonnegative_rescaling,
-        thm:mpdo_block_tensor_scalar_scaling,
-        thm:mpdo_cpsv_bnt_scalar_scaling}
+    \uses{thm:mpdo_nonnegative_rescaling, thm:mpdo_block_tensor_scalar_scaling, thm:mpdo_cpsv_bnt_scalar_scaling}
     Positive rescaling preserves the MPDO condition. For a blocking length
     $L$, it multiplies the blocked tensor by the nonzero scalar $r^L$.
     Multiply every active copy weight by $r^L$ and apply
@@ -382,8 +372,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_source_simple_positive_rescaling,
-        thm:mpdo_mpo_scalar_scaling}
+    \uses{thm:mpdo_source_simple_positive_rescaling, thm:mpdo_mpo_scalar_scaling}
     Source simplicity is preserved by the preceding theorem, and
     $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$ with $r^N\ne0$ for every $N$.
 \end{proof}
@@ -398,9 +387,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_nonvanishing_source_simple_positive_rescaling,
-        thm:mpdo_source_simple_positive_rescaling_iff,
-        thm:mpdo_mpo_scalar_scaling}
+    \uses{thm:mpdo_nonvanishing_source_simple_positive_rescaling, thm:mpdo_source_simple_positive_rescaling_iff, thm:mpdo_mpo_scalar_scaling}
     The reverse direction is the preceding implication. For the forward
     direction, Theorem~\ref{thm:mpdo_source_simple_positive_rescaling_iff}
     gives source simplicity. If $\rho^{(N)}(M)=0$, then
@@ -415,8 +402,7 @@
     \label{def:mpdo_simple_tensor}
     \lean{MPOTensor.IsSimple}
     \leanok
-    \uses{def:mpdo, def:mpdo_physical_blocking,
-        def:mpdo_simple_cf_tensor}
+    \uses{def:mpdo, def:mpdo_physical_blocking, def:mpdo_simple_cf_tensor}
     A tensor generating MPDOs satisfies \emph{normalized
     fixed-representative simplicity} if there is a positive physical blocking
     length for which the blocked tensor admits the normalized canonical-form
@@ -441,10 +427,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal,
-        thm:is_normal_tensor_of_is_normal_left_canonical,
-        lem:sector_bnt_weight_unit_exists_of_struct,
-        thm:gauge_invariance, def:cpsv_active_bnt_sector_presentation}
+    \uses{cor:sector_bnt_cf_basis_normal, thm:is_normal_tensor_of_is_normal_left_canonical, lem:sector_bnt_weight_unit_exists_of_struct, thm:gauge_invariance, def:cpsv_active_bnt_sector_presentation}
     Use the normalized sector decomposition itself. Its copy weights are
     nonzero, and the unit-modulus copy supplies at least one representative.
     Its representatives are normal and eventually linearly independent. The
@@ -459,8 +442,7 @@
     \label{thm:mpdo_simple_implies_nonvanishing_source_simple_of_nonzero}
     \lean{MPOTensor.IsSimple.isNonvanishingSourceSimple}
     \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor,
-        def:mpdo_simple_tensor}
+    \uses{def:mpdo_nonvanishing_source_simple_tensor, def:mpdo_simple_tensor}
     Let $M$ satisfy normalized fixed-representative simplicity. If
     $\rho^{(N)}(M)\ne0$ for every $N>0$, then $M$ is nonvanishing
     source-simple.
@@ -484,9 +466,7 @@
         MPOTensor.SimpleVanishingCounterexample.%
             M_not_isNonvanishingSourceSimple}
     \leanok
-    \uses{def:mpdo_source_simple_tensor,
-        def:mpdo_nonvanishing_source_simple_tensor,
-        def:mpdo_simple_tensor}
+    \uses{def:mpdo_source_simple_tensor, def:mpdo_nonvanishing_source_simple_tensor, def:mpdo_simple_tensor}
     There is a one-letter bond-two tensor $M$ such that, for every $N\geq0$,
     \begin{align}
         \rho^{(N)}(M)&=\bigl(1+(-1)^N\bigr)I.
@@ -527,8 +507,7 @@ statement for BNT structure coefficients.
     \label{def:mpdo_simple_cf_tensor}
     \lean{MPOTensor.IsSimpleCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo,
-        def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:mpdo_doubled_phys_trace_transfer}
     A tensor generating MPDOs satisfies this predicate if it has a normalized
     horizontal basis-of-normal-tensors decomposition whose basis elements all
     have non-nilpotent physical-trace transfer. This records the
@@ -581,8 +560,7 @@ statement for BNT structure coefficients.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mixed_transfer_quasi_idempotent_of_direct_sum,
-        lem:transfer_map_smul, lem:trace_transfer_map_left_canonical}
+    \uses{thm:mixed_transfer_quasi_idempotent_of_direct_sum, lem:transfer_map_smul, lem:trace_transfer_map_left_canonical}
     By the normalization at \cite[line~246]{Cirac2016MPDO_arXiv}, some copy has
     weight $\mu$ with $|\mu|=1$.
     Theorem~\ref{thm:mixed_transfer_quasi_idempotent_of_direct_sum} restricts the
@@ -622,8 +600,7 @@ statement for BNT structure coefficients.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:bnt_unit_weight_quasi_idempotent_scalar,
-        thm:cpsv_gauge_transfer_quasi_idempotence}
+    \uses{thm:bnt_unit_weight_quasi_idempotent_scalar, thm:cpsv_gauge_transfer_quasi_idempotence}
     The horizontal canonical-form witness gives a normalized BNT sector
     decomposition whose assembled tensor is gauge equivalent to $M$. Transport
     the transfer equation across this gauge by

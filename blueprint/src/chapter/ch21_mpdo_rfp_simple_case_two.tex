@@ -5,9 +5,7 @@
     \lean{MPOTensor.%
       exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
-        lem:mpdo_doubled_phys_trace_transfer_to_mps,
-        lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
     Suppose a tensor with zero correlation length is gauge-equivalent, through
     block-diagonal copy gauges, to an assembled sector decomposition. There
     is a scalar $\lambda>0$ such that every copy satisfies
@@ -33,10 +31,7 @@
     \label{thm:mpdo_simple_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer,
-        lem:mpdo_doubled_phys_trace_transfer_to_mps,
-        lem:mpdo_doubled_phys_trace_transfer_blockwise,
-        lem:mpdo_simple_blockwise_zcl_equation}
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_simple_blockwise_zcl_equation}
     Let a tensor with zero correlation length be gauge-equivalent, through
     block-diagonal copy gauges, to an assembled sector decomposition whose
     basis elements all have non-nilpotent physical-trace transfer. Then the
@@ -72,8 +67,7 @@
     \label{cor:mpdo_simple_zcl_weight_copy_independent}
     \lean{MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL}
     \leanok
-    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl,
-        thm:mpdo_simple_weight_copy_independent}
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl, thm:mpdo_simple_weight_copy_independent}
     A simple canonical-form tensor
     (Definition~\ref{def:mpdo_simple_cf_tensor}) with zero correlation length
     has non-nilpotent basis transfers and weights independent of the copy
@@ -120,8 +114,7 @@
     \label{thm:mpdo_common_weight_coefficient}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_copies_mul_commonWeight_pow}
     \leanok
-    \uses{def:mpdo_common_sector_weight_absorption,
-      def:sector_weight_data, lem:mpdo_copy_weight_eq_common_weight}
+    \uses{def:mpdo_common_sector_weight_absorption, def:sector_weight_data, lem:mpdo_copy_weight_eq_common_weight}
     Let $r_j$ be the number of horizontal copies of representative $j$. Then
     its coefficient on a chain of length $N$ is
     \begin{align}
@@ -140,8 +133,7 @@
     \lean{MPSTensor.SectorDecomposition.commonWeight_ne_zero}
     \lean{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}
     \leanok
-    \uses{def:sector_weight_data,
-      thm:mpdo_common_weight_coefficient}
+    \uses{def:sector_weight_data, thm:mpdo_common_weight_coefficient}
     The common weight is nonzero, and hence for every chain length $N$,
     \begin{align}
         q_j=\sum_q\mu_{j,q}^{N}&=r_j\mu_j^{N}\ne0.
@@ -168,8 +160,7 @@
     \lean{MPSTensor.SectorDecomposition.%
       exists_common_threeSiteClosingMatrix_ne_zero}
     \leanok
-    \uses{def:mpdo_simple_tensor,
-      thm:mpdo_common_weight_coefficient_ne_zero}
+    \uses{def:mpdo_simple_tensor, thm:mpdo_common_weight_coefficient_ne_zero}
     Suppose the weights over each representative are independent of the copy
     index, and none of the physical-trace transfers
     $\mathcal B_j=\sum_i A_j^{ii}$ is nilpotent. There is one positive tail
@@ -202,9 +193,7 @@
     \label{thm:mpdo_common_weight_absorbed_mpv}
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_copies_mul_commonWeightAbsorbedBasis}
     \leanok
-    \uses{def:mpdo_common_sector_weight_absorption,
-      lem:paper_decomp_formula, lem:mpv_smul,
-      thm:mpdo_common_weight_coefficient}
+    \uses{def:mpdo_common_sector_weight_absorption, lem:paper_decomp_formula, lem:mpv_smul, thm:mpdo_common_weight_coefficient}
     After absorbing the common weight, the matrix product vector of the
     assembled tensor is
     \begin{align}
@@ -267,8 +256,7 @@
     \lean{MPOTensor.%
       reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}
     \leanok
-    \uses{def:mpdo_three_site_family_closure,
-      thm:mpdo_common_nonzero_bnt_tail_selection}
+    \uses{def:mpdo_three_site_family_closure, thm:mpdo_common_nonzero_bnt_tail_selection}
     Suppose that the doubled-index tensor has the horizontal BNT
     representation $S$, the copy weights over each representative agree, the
     physical-trace transfers
@@ -311,8 +299,7 @@
     \lean{MPOTensor.%
       isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
     \leanok
-    \uses{def:mpdo_three_site_family_closure,
-      def:mpdo_block_left_inverse}
+    \uses{def:mpdo_three_site_family_closure, def:mpdo_block_left_inverse}
     Let $x=(s,\alpha_1,\beta_1)$ and
     $y=(t,\alpha_3,\beta_3)$. For a three-site family closure and a
     simultaneous left inverse, the outer inverse contraction vanishes when
@@ -358,8 +345,7 @@
     \lean{MPOTensor.%
       exists_isMPOBlockLeftInverse_outer_inverse_threeSite_collapse}
     \leanok
-    \uses{thm:mpdo_one_letter_simultaneous_inverse,
-      thm:mpdo_bnt_three_site_outer_inverse_collapse}
+    \uses{thm:mpdo_one_letter_simultaneous_inverse, thm:mpdo_bnt_three_site_outer_inverse_collapse}
     Under the one-letter product-algebra spanning hypothesis, there is a
     simultaneous left inverse for which every three-site family closure has
     the preceding diagonal-sector contraction and vanishing off-diagonal

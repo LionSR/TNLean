@@ -44,9 +44,7 @@
     \label{thm:peps_regionInsertedCoeff_transport}
     \lean{TNLean.PEPS.regionInsertedCoeff_transport}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_tensor_transport,
-        thm:peps_regionComplementWeight_transport,
-        thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
+    \uses{def:peps_regionInsertedCoeff, def:peps_tensor_transport, thm:peps_regionComplementWeight_transport, thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
     Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
     of $R$. The region insertion coefficient of the transported tensor $A^\phi$
     over the image region, with $M$ inserted on the image of $f$ and the physical
@@ -98,8 +96,7 @@
     \label{thm:peps_bondDim_boundaryEdgeMap_translate}
     \lean{TNLean.PEPS.bondDim_boundaryEdgeMap_translate}
     \leanok
-    \uses{def:peps_torus_translation_invariant,
-        def:peps_torus_geometry_translation}
+    \uses{def:peps_torus_translation_invariant, def:peps_torus_geometry_translation}
     Let $A$ be translation invariant on the discrete torus, let $f$ be a crossing
     edge of $R$, and let $T_{a,b}$ be a translation. The bond dimension of $A$
     at the translated crossing edge equals its bond dimension at the reference
@@ -115,10 +112,7 @@
     \label{thm:peps_regionInsertedCoeff_translate_coeffIdentity}
     \lean{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity}
     \leanok
-    \uses{thm:peps_regionInsertedCoeff_transport,
-        thm:peps_regionInsertedCoeff_congrTensor,
-        thm:peps_bondDim_boundaryEdgeMap_translate,
-        def:peps_torus_translation_invariant}
+    \uses{thm:peps_regionInsertedCoeff_transport, thm:peps_regionInsertedCoeff_congrTensor, thm:peps_bondDim_boundaryEdgeMap_translate, def:peps_torus_translation_invariant}
     Let $A$ and $B$ be translation invariant on the discrete torus, and let $f$ be
     a crossing edge of $R$. Suppose a map $g$ realizes the coefficient identity
     at the reference edge:
@@ -253,8 +247,7 @@
     of the vertex-complement contraction is linearly independent.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_regionBlockedWeight_vertexComplement,
-        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \uses{thm:peps_regionBlockedWeight_vertexComplement, thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     Apply the injectivity theorem for an arbitrary finite region to
     $R=V\setminus\{v\}$. Theorem~\ref{thm:peps_regionBlockedWeight_vertexComplement}
     identifies the resulting blocked tensor with the vertex-complement tensor.
@@ -266,8 +259,7 @@
     \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
     \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_complementTwoBlock,
-        thm:peps_vertexComplementTensorInjective}
+    \uses{def:IsVertexInjective, def:peps_complementTwoBlock, thm:peps_vertexComplementTensorInjective}
     If $A$ is vertex-injective and every virtual bond space has positive
     dimension, then the complement two-block tensor at every vertex is
     injective.
@@ -284,8 +276,7 @@
     \label{thm:peps_oneVertexComplementComparison}
     \lean{TNLean.PEPS.one_vertex_complement_comparison}
     \leanok
-    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
-        thm:peps_twoInjectiveTensorInsertionComparison}
+    \uses{thm:peps_postAbsorptionEdgeInsertionEquality, thm:peps_twoInjectiveTensorInsertionComparison}
     Let the shared bond type and the two external boundary spaces be nonempty.
     After the edge gauges have been absorbed into the second tensor family
     $\widetilde B$, block one vertex $v$ against its complement. Assume that
@@ -374,8 +365,7 @@
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
     \leanok
-    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
-        def:GaugeEquivPEPS, def:IsVertexInjective}
+    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS, def:IsVertexInjective}
     Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
     already identified, every virtual bond of $A$ has positive dimension, and
     the graph is connected.
@@ -397,8 +387,7 @@
     % \cite{Molnar2018NormalPEPS}. The elimination plan for the positivity
     % hypotheses is recorded in
     % \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
-    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
-        def:IsVertexInjective}
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS, def:IsVertexInjective}
     Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
     graph, and suppose every virtual bond of $A$ and $B$ has positive
     dimension and that the graph is connected. If they give the same PEPS

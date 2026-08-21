@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexPhasePositivity
-import TNLean.Algebra.FinSum
+import QICLean.Algebra.ComplexPhasePositivity
+import QICLean.Algebra.FinSum
 import TNLean.MPS.Core.MultiBlock
-import TNLean.MPS.Core.TransferChannel
+import QICLean.MPS.Core.TransferChannel
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.SharedInfra.Scaling

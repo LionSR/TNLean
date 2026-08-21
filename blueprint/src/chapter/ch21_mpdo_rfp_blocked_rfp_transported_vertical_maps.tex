@@ -2,11 +2,7 @@
     \label{lem:mpdo_vertical_sector_t_image_preservation}
     \lean{MPOTensor.precompressionVerticalSectorT_image_preservation}
     \leanok
-    \uses{def:mpdo_vertical_sector_precompression,
-      lem:mpdo_normalized_retained_vertical_sector_embedding,
-      lem:mpdo_retained_vertical_weighted_contraction,
-      lem:mpdo_vertical_bond_contraction_reconstruction,
-      thm:mpdo_one_site_closure_two_site_blocking}
+    \uses{def:mpdo_vertical_sector_precompression, lem:mpdo_normalized_retained_vertical_sector_embedding, lem:mpdo_retained_vertical_weighted_contraction, lem:mpdo_vertical_bond_contraction_reconstruction, thm:mpdo_one_site_closure_two_site_blocking}
     For a bond matrix $X$, set
     $V_1(X)=\bigoplus_\alpha m_\alpha M_\alpha(X)$.
     Suppose that both vertical canonical forms satisfy their exact
@@ -46,11 +42,7 @@
     \label{lem:mpdo_vertical_sector_s_image_preservation}
     \lean{MPOTensor.precompressionVerticalSectorS_image_preservation}
     \leanok
-    \uses{def:mpdo_vertical_sector_precompression,
-      lem:mpdo_normalized_retained_vertical_sector_embedding,
-      lem:mpdo_retained_vertical_weighted_contraction,
-      lem:mpdo_vertical_bond_contraction_reconstruction,
-      thm:mpdo_one_site_closure_two_site_blocking}
+    \uses{def:mpdo_vertical_sector_precompression, lem:mpdo_normalized_retained_vertical_sector_embedding, lem:mpdo_retained_vertical_weighted_contraction, lem:mpdo_vertical_bond_contraction_reconstruction, thm:mpdo_one_site_closure_two_site_blocking}
     For a bond matrix $X$, set
     $V_2(X)=\bigoplus_\beta n_\beta A_\beta(X)$.
     Suppose that both vertical canonical forms satisfy their exact
@@ -90,8 +82,7 @@
     \label{lem:mpdo_vertical_sector_t_source_generated_trace}
     \lean{MPOTensor.transportedVerticalSectorT_trace_of_source_generated}
     \leanok
-    \uses{lem:mpdo_vertical_sector_t_image_preservation,
-      lem:mpdo_vertical_sector_precompression_positive_trace}
+    \uses{lem:mpdo_vertical_sector_t_image_preservation, lem:mpdo_vertical_sector_precompression_positive_trace}
     Under the hypotheses of
     Lemma~\ref{lem:mpdo_vertical_sector_t_image_preservation}, suppose in
     addition that $U_1U_1^\dagger=1$ and that $T$ is completely positive and
@@ -114,8 +105,7 @@
     \label{lem:mpdo_vertical_sector_s_source_generated_trace}
     \lean{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}
     \leanok
-    \uses{lem:mpdo_vertical_sector_s_image_preservation,
-      lem:mpdo_vertical_sector_precompression_positive_trace}
+    \uses{lem:mpdo_vertical_sector_s_image_preservation, lem:mpdo_vertical_sector_precompression_positive_trace}
     Under the hypotheses of
     Lemma~\ref{lem:mpdo_vertical_sector_s_image_preservation}, suppose in
     addition that $U_2U_2^\dagger=1$ and that $S$ is completely positive and
@@ -141,10 +131,7 @@
     \lean{MPOTensor.transportedVerticalSectorT_contractBondMatrix_trace_smul}
     \lean{MPOTensor.transportedVerticalSectorS_contractBondMatrix_trace_smul}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps,
-      lem:mpdo_normalized_retained_vertical_sector_embedding,
-      lem:mpdo_retained_vertical_sector_partial_trace,
-      thm:mpdo_vertical_coordinate_map_transport}
+    \uses{def:mpdo_transported_vertical_sector_maps, lem:mpdo_normalized_retained_vertical_sector_embedding, lem:mpdo_retained_vertical_sector_partial_trace, thm:mpdo_vertical_coordinate_map_transport}
     Suppose that every multiplicity space for $\mu_\alpha$ and $\nu_\beta$
     is nonzero, every diagonal entry of these two matrices is positive, and
     \begin{align}
@@ -249,8 +236,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_trace_nonincreasing_bounded_orbits,
-      thm:maximalSupport_fixedPoint_of_bounded_orbits}
     Boundedness of the forward orbits gives the mean-ergodic projection $P$.
     Set $\rho=P(\mathbf 1)$ and let $Q$ be the support projection of $\rho$.
     For every $j$, the maximal-support property of $\rho$ gives
@@ -290,11 +275,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
-      thm:trace_pairing_adjoint_positive,
-      thm:psd_trace_pairing_self_dual,
-      lem:posDef_weighted_trace_faithful,
-      thm:trace_preserving_iff_trace_adjoint_unital}
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span}
     Multilinearity gives
     \begin{align}
         C_L(\mathcal V)
@@ -381,9 +362,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_map_trace_preserving_from_fixed_product_span,
-      thm:direct_sum_full_matrix_extension_compatibility,
-      thm:direct_sum_extension_trace_transfer}
+    \uses{thm:positive_map_trace_preserving_from_fixed_product_span, thm:direct_sum_full_matrix_extension_compatibility, thm:direct_sum_extension_trace_transfer}
     Multilinearity first gives
     \begin{align}
         C_L(\mathcal V)
@@ -504,11 +483,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span,
-      thm:direct_sum_trace_preservation_sandwich,
-      lem:mpdo_transported_vertical_sector_fixed_generators,
-      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
-      thm:mpdo_transported_vertical_sector_trace_loss}
+    \uses{thm:positive_direct_sum_map_trace_preserving_from_fixed_product_span, thm:direct_sum_trace_preservation_sandwich, lem:mpdo_transported_vertical_sector_fixed_generators, thm:mpdo_vertical_bond_contractions_generate_sector_algebra, thm:mpdo_transported_vertical_sector_trace_loss}
     Each transported map is positive and trace nonincreasing, and hence so are
     the square composites $\widetilde S\widetilde T$ and
     $\widetilde T\widetilde S$. The fixed-generator lemma and the
@@ -609,9 +584,7 @@
     \label{lem:mpdo_transported_vertical_sector_t_extension}
     \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorT}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps,
-      lem:mpdo_vertical_sector_block_diagonal_reindex,
-      lem:mpdo_vertical_sector_blocks_reindex}
+    \uses{def:mpdo_transported_vertical_sector_maps, lem:mpdo_vertical_sector_block_diagonal_reindex, lem:mpdo_vertical_sector_blocks_reindex}
     Write $\widehat R_1$ for normalized state preparation,
     $\widehat{\widetilde R}_2$ for controlled partial trace, and $W_i$ for
     retained-coordinate reindexing. The full-matrix extension of the
@@ -633,9 +606,7 @@
     \label{lem:mpdo_transported_vertical_sector_s_extension}
     \lean{MPOTensor.directSumMapExtension_transportedVerticalSectorS}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps,
-      lem:mpdo_vertical_sector_block_diagonal_reindex,
-      lem:mpdo_vertical_sector_blocks_reindex}
+    \uses{def:mpdo_transported_vertical_sector_maps, lem:mpdo_vertical_sector_block_diagonal_reindex, lem:mpdo_vertical_sector_blocks_reindex}
     Write $\widehat R_2$ for normalized state preparation,
     $\widehat{\widetilde R}_1$ for controlled partial trace, and $W_i$ for
     retained-coordinate reindexing. The full-matrix extension of the
@@ -659,14 +630,7 @@
       MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap,
       MPOTensor.transportedVerticalSector_composites_traceAdjointSchwarz}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps,
-      lem:mpdo_transport_t_vertical_coordinates_cp,
-      lem:mpdo_transport_s_vertical_coordinates_cp,
-      lem:mpdo_transported_vertical_sector_t_extension,
-      lem:mpdo_transported_vertical_sector_s_extension,
-      thm:mpdo_vertical_sector_partial_trace_kraus,
-      lem:direct_sum_kraus_composition_schwarz,
-      thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    \uses{def:mpdo_transported_vertical_sector_maps, lem:mpdo_transport_t_vertical_coordinates_cp, lem:mpdo_transport_s_vertical_coordinates_cp, lem:mpdo_transported_vertical_sector_t_extension, lem:mpdo_transported_vertical_sector_s_extension, thm:mpdo_vertical_sector_partial_trace_kraus, lem:direct_sum_kraus_composition_schwarz, thm:mpdo_transported_vertical_sector_composites_trace_preserving}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
     the maps
@@ -715,11 +679,7 @@
     \label{thm:mpdo_transported_vertical_sector_composites_identity}
     \lean{MPOTensor.transportedVerticalSector_composites_eq_id}
     \leanok
-    \uses{thm:mpdo_transported_vertical_sector_composites_trace_preserving,
-      thm:mpdo_transported_vertical_sector_composites_schwarz,
-      lem:mpdo_transported_vertical_sector_fixed_generators,
-      thm:mpdo_vertical_bond_contractions_generate_sector_algebra,
-      thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
+    \uses{thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, lem:mpdo_transported_vertical_sector_fixed_generators, thm:mpdo_vertical_bond_contractions_generate_sector_algebra, thm:mpdo_fixed_contractions_trace_adjoint_schwarz_identity}
     Under precisely the hypotheses of
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
     the transported maps satisfy

@@ -194,8 +194,7 @@
         MPSTensor.tailRestrictₗ_one_eq_restrictFirst,
         MPSTensor.restrictFirst_eq_cyclicRestrictES_one}
     \leanok
-    \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent,
-        rem:euclidean_local_projector_ingredients}
+    \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent, rem:euclidean_local_projector_ingredients}
     Let $\iota_L$ denote the canonical identification of the $L$-site state
     space with its Hilbert-space realization, and let
     $R^{\mathrm{cyc}}_{i,\tau}$ denote cyclic restriction to the length-$L$
@@ -221,8 +220,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent,
-        rem:euclidean_local_projector_ingredients}
+    \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent, rem:euclidean_local_projector_ingredients}
     Expand the restriction maps on a configuration. At site $0$, cyclic order
     is ordinary order and fixing the complement fixes the final coordinate.
     A one-site prefix is its unique coordinate, which gives the middle identity.
@@ -237,8 +235,7 @@
         MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES,
         MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es,
-        rem:euclidean_local_projector_ingredients}
+    \uses{def:open_chain_ground_subspaces_es, rem:euclidean_local_projector_ingredients}
     For a tensor $B$, let $h_0$ and $h_1$ be the two translated length-two parent
     interactions on the three-site Hilbert space. Then
     \begin{align}
@@ -256,12 +253,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mem_open_chain_left_ground_space_es,
-        thm:mem_open_chain_tail_ground_space_es,
-        lem:local_term_es_kernel_restrictions,
-        lem:mem_ground_space_es,
-        lem:transported_es_local_projections,
-        thm:adjacent_local_term_coordinate_identifications}
+    \uses{thm:mem_open_chain_left_ground_space_es, thm:mem_open_chain_tail_ground_space_es, lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es, lem:transported_es_local_projections, thm:adjacent_local_term_coordinate_identifications}
     At site $0$, fixing the final physical coordinate is the cyclic restriction
     defining $h_0$. At site $1$, fixing the one-site prefix is the first-site
     restriction and hence the cyclic restriction defining $h_1$. The kernel
@@ -275,9 +267,7 @@
     \label{thm:parent_hamiltonian_kernel_le_chain_ground_space}
     \lean{MPSTensor.ker_parentHamiltonian_le_chainGroundSpace}
     \leanok
-    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es,
-        def:chain_ground_space, lem:transported_es_local_projections,
-        lem:local_term_es_kernel_restrictions, rem:projection_geometry_rowsum_identities}
+    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es, def:chain_ground_space, lem:transported_es_local_projections, lem:local_term_es_kernel_restrictions, rem:projection_geometry_rowsum_identities}
     Assume $N>0$ and $L\le N$. If a vector $\psi$ has zero energy for the
     finite periodic parent Hamiltonian, $H_N(A,L)\psi=0$, then every cyclic
     length-$L$ restriction of $\psi$ lies in the local MPS ground space.
@@ -314,8 +304,7 @@
     \label{lem:chain_ground_space_le_parent_hamiltonian_kernel}
     \lean{MPSTensor.chainGroundSpace_le_ker_parentHamiltonian}
     \leanok
-    \uses{def:parent_hamiltonian, def:chain_ground_space,
-        thm:chain_ground_space_implies_frustration_free}
+    \uses{def:parent_hamiltonian, def:chain_ground_space, thm:chain_ground_space_implies_frustration_free}
     Assume $N>0$ and $L\le N$. Then
     $G_L^{(N)}(A)\subseteq\ker H_N(A,L)$.
 \end{lemma}
@@ -342,10 +331,7 @@
     \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES}
     \leanok
-    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es,
-        def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space,
-        lem:chain_ground_space_le_parent_hamiltonian_kernel,
-        def:chain_ground_space_es}
+    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es, def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space, lem:chain_ground_space_le_parent_hamiltonian_kernel, def:chain_ground_space_es}
     Assume $N>0$ and $L\le N$. Then
     $\ker H_N(A,L)=G_L^{(N)}(A)$. Equivalently, after the canonical
     Hilbert-space identification,
@@ -370,8 +356,7 @@
     \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
     \lean{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}
     \leanok
-    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
-        lem:mem_ground_space_es}
+    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es}
     If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels
     of the two adjacent Hilbert-space $L$-site local terms have common kernel
     equal to the Hilbert-space $(L+1)$-site MPS ground space:
@@ -384,8 +369,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions,
-        lem:mem_ground_space_es}
+    \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es}
     Lemma~\ref{lem:local_term_es_kernel_restrictions} translates the two local
     kernel assumptions into the left and right $L$-site ground conditions. The
     open-chain intersection property,
@@ -467,8 +451,7 @@
     \lean{MPSTensor.parentHamiltonianES_norm_bound_of_quadratic_form}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form}
     \leanok
-    \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel,
-        lem:quadratic_form_to_norm_bound}
+    \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel, lem:quadratic_form_to_norm_bound}
     Let $H_{N,L}^{\mathrm{ES}}(A)$ be the Hilbert-space representative of the
     parent Hamiltonian. If a constant $\gamma>0$ satisfies the uniform
     quadratic-form estimate
@@ -562,8 +545,7 @@
     \label{lem:two_projection_friedrichs_product}
     \lean{Submodule.norm_starProjection_starProjection_le_of_friedrichs_bound}
     \leanok
-    \uses{def:friedrichs_overlap_bound,
-        lem:two_projection_friedrichs_compression}
+    \uses{def:friedrichs_overlap_bound, lem:two_projection_friedrichs_compression}
     Let $P_U$ and $P_V$ be the orthogonal projections onto $U$ and $V$. If the
     Friedrichs overlap of $U$ and $V$ is at most $\eta$, where $\eta\ge0$, then
     every $v\in(U\cap V)^\perp$ satisfies
@@ -583,8 +565,7 @@
     \label{lem:two_projection_friedrichs_directional}
     \lean{Submodule.norm_starProjection_starProjection_le_of_friedrichs_bound_of_mem}
     \leanok
-    \uses{def:friedrichs_overlap_bound,
-        lem:two_projection_friedrichs_product}
+    \uses{def:friedrichs_overlap_bound, lem:two_projection_friedrichs_product}
     Under the hypotheses of
     Lemma~\ref{lem:two_projection_friedrichs_product}, every
     $v\in U\cap(U\cap V)^\perp$ satisfies
@@ -605,8 +586,7 @@
     \label{lem:two_projection_kernel_complement_compression}
     \lean{Submodule.norm_starProjection_orthogonal_comp_le_of_friedrichs_bound}
     \leanok
-    \uses{def:friedrichs_overlap_bound,
-        lem:two_projection_friedrichs_directional}
+    \uses{def:friedrichs_overlap_bound, lem:two_projection_friedrichs_directional}
     Let $P$ and $Q$ be the orthogonal projections onto $K^\perp$ and
     $L^\perp$. If the Friedrichs overlap of these two ranges is at most
     $\eta\ge0$, then every
@@ -772,8 +752,7 @@
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_le}
     \lean{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_norm_bound_of_lt}
     \leanok
-    \uses{lem:finite_overlap_projection_rowsum_reduction,
-        rem:projection_geometry_rowsum_identities}
+    \uses{lem:finite_overlap_projection_rowsum_reduction, rem:projection_geometry_rowsum_identities}
     Let $P_i$ be a finite family of symmetric projections and let
     $\gamma\le1$. Suppose an interaction predicate has at most $m>0$
     off-diagonal neighbours in each row, noninteracting ordered cross terms are
@@ -791,8 +770,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:finite_overlap_projection_rowsum_reduction,
-        rem:projection_geometry_rowsum_identities}
+    \uses{lem:finite_overlap_projection_rowsum_reduction, rem:projection_geometry_rowsum_identities}
     Cauchy--Schwarz and symmetric idempotence turn the norm-compression estimate
     into
     $\re\langle P_i v,P_jv\rangle

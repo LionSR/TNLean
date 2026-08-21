@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
-import TNLean.Algebra.PerronFrobenius.RankOne
+import QICLean.Algebra.PerronFrobenius.RankOne
 
 /-!
 # Stabilized rank-one matrix powers

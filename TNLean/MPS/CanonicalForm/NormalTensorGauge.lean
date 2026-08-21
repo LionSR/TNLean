@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexPhasePositivity
-import TNLean.Channel.Irreducible.SpectralRadius
+import QICLean.Algebra.ComplexPhasePositivity
+import QICLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.Core.TransferChannel
+import QICLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral

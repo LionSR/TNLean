@@ -2,8 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Channel.MarginalSupportAbsorption
-import TNLean.Channel.Schwarz.StrongSubadditivityPosDef
+import QICLean.Channel.MarginalSupportAbsorption
+import QICLean.Channel.Schwarz.StrongSubadditivityPosDef
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Complex.Module
 

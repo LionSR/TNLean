@@ -16,12 +16,7 @@
     \lean{Matrix.supportCompletion_trace}
     \lean{Matrix.supportCompletion_apply_of_supported}
     \leanok
-    \uses{def:is_kraus_cp, def:is_kraus_cptp,
-        def:mpdo_state_preparation_map,
-        def:mpdo_equiv_reindex_map,
-        def:mpdo_right_partial_trace_map,
-        def:mpdo_single_kraus_map,
-        def:trace_prepare_map}
+    \uses{def:mpdo_equiv_reindex_map, def:mpdo_right_partial_trace_map, def:mpdo_single_kraus_map}
     Let $P\in\MN{m}$ be an orthogonal projection, let
     $\rho\in\MN{n}$ be positive semidefinite with $\tr(\rho)=1$, and let
     $\mathcal E\colon\MN{m}\to\MN{n}$ be completely positive.  Define the
@@ -57,17 +52,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_state_preparation_cp,
-        lem:mpdo_state_preparation_cptp,
-        thm:mpdo_equiv_reindex_cptp,
-        lem:mpdo_right_partial_trace_cptp,
-        lem:mpdo_single_kraus_map_apply,
-        lem:mpdo_single_kraus_map_cp,
-        lem:is_kraus_cp_comp,
-        lem:is_kraus_cptp_comp,
-        lem:is_kraus_cp_add,
-        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
-        def:trace_prepare_map}
+    \uses{lem:mpdo_state_preparation_cp, lem:mpdo_state_preparation_cptp, thm:mpdo_equiv_reindex_cptp, lem:mpdo_right_partial_trace_cptp, lem:mpdo_single_kraus_map_apply, lem:mpdo_single_kraus_map_cp, lem:is_kraus_cp_comp, lem:is_kraus_cptp_comp}
     The map $\mathcal D_\rho$ factors as state preparation, interchange of
     the two tensor factors, and partial trace.  The map
     $X\mapsto(I-P)X(I-P)^\dagger$ has a single Kraus operator.  Thus the two
@@ -130,10 +115,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         UnitarySectorConjugacy.physicalS_physClose2}
     \leanok
-    \uses{def:mpdo_bnt_ambient_sector_maps,
-        def:mpdo_bnt_direct_sum_unitary_conjugations,
-        def:mpdo_faithful_uniform_density,
-        def:is_rfp_via_ts}
+    \uses{def:mpdo_bnt_ambient_sector_maps, def:mpdo_bnt_direct_sum_unitary_conjugations, def:mpdo_faithful_uniform_density, def:is_rfp_via_ts}
     Suppose that the one-site and two-site sector decompositions are paired by
     a relabelling $\sigma$ and unitaries $U_\gamma$ satisfying
     \begin{align}
@@ -203,16 +185,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_ambient_sector_complete_positivity,
-        thm:mpdo_bnt_ambient_sector_trace,
-        thm:mpdo_bnt_ambient_sector_tensor_letters,
-        thm:mpdo_bnt_direct_sum_unitary_conjugations,
-        thm:matrix_support_completion_cptp,
-        thm:mpdo_faithful_uniform_density,
-        lem:mpdo_coisometric_compression_trace,
-        lem:mpdo_vertical_bond_contraction_phys_close,
-        lem:mpdo_vertical_bond_contraction_reconstruction,
-        thm:mpdo_one_site_closure_two_site_blocking}
+    \uses{thm:mpdo_bnt_ambient_sector_complete_positivity, thm:mpdo_bnt_ambient_sector_trace, thm:mpdo_bnt_ambient_sector_tensor_letters, thm:mpdo_bnt_direct_sum_unitary_conjugations, thm:matrix_support_completion_cptp, thm:mpdo_faithful_uniform_density, lem:mpdo_coisometric_compression_trace, lem:mpdo_vertical_bond_contraction_phys_close, lem:mpdo_vertical_bond_contraction_reconstruction, thm:mpdo_one_site_closure_two_site_blocking}
     Complete positivity of the four outer maps and of the two direct-sum
     conjugations gives complete positivity of $\mathcal T_0$ and
     $\mathcal S_0$.  Their traces are
@@ -254,9 +227,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         UnitarySectorConjugacy.ofPositiveTailReflectedTarget}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-        def:mpdo_bnt_two_site_exact_sector_gauge,
-        def:is_rfp_via_ts}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge, def:is_rfp_via_ts}
     Let the one-site and blocked two-site BNT decompositions have the
     source-derived exact sector pairing, including the matched multiplicity
     spectrum, and suppose that $M$ generates matrix product density operators
@@ -281,8 +252,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy,
-        thm:mpdo_bnt_conditional_physical_channels}
+    \uses{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy, thm:mpdo_bnt_conditional_physical_channels}
     For each sector,
     Theorem~\ref{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     supplies a unitary $U_\gamma$ satisfying
@@ -299,8 +269,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}
     \lean{MPOTensor.HasBNTAlgebraTensorClause.isRFPViaTS}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form,
-        def:mpdo_bnt_algebra_tensor_clause, def:is_rfp_via_ts}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_algebra_tensor_clause, def:is_rfp_via_ts}
     Let $M$ be an MPDO whose doubled-index tensor is in literal CPSV
     canonical form.  If $M$ has a tensor-attached BNT algebra clause, then
     there are trace-preserving completely positive maps
@@ -334,9 +303,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_algebra_tensor_clause_spectrum,
-        thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy,
-        thm:mpdo_bnt_conditional_physical_channels}
+    \uses{thm:mpdo_bnt_algebra_tensor_clause_spectrum, thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy, thm:mpdo_bnt_conditional_physical_channels}
     The tensor-attached algebra clause determines the two-site vertical
     decomposition, the sector relabelling, and exact invertible gauges.
     Theorem~\ref{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}

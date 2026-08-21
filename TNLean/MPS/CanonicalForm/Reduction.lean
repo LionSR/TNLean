@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
-import TNLean.Algebra.PosSemidefSupport
-import TNLean.MPS.Core.InvariantProjection
+import QICLean.Algebra.PosSemidefSupport
+import QICLean.MPS.Core.InvariantProjection
 
 /-!
 # Iterated invariant-projection splitting: irreducible block decomposition

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CommutingOverlappingDecomp
-import TNLean.Algebra.PositiveSemidefiniteNormalization
-import TNLean.Entropy.MarkovChain
+import QICLean.Algebra.PositiveSemidefiniteNormalization
+import QICLean.Entropy.MarkovChain
 
 /-!
 # Quantum Markov structure from a positive commuting overlapping product

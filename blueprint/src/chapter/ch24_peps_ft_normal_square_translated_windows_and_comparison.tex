@@ -47,8 +47,7 @@
     \lean{TNLean.PEPS.not_topMarginUpEdge_marginCover_seven}
     \lean{TNLean.PEPS.not_fourSidedBoundaryMarginCover_seven}
     \leanok
-    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
-        lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData, lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
     A translated edge window records that a chosen edge is one of the
     translated horizontal or vertical edge pictures, together with a
     rectangular cover of the complementary block. Such a window gives the
@@ -86,8 +85,7 @@
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_endpoint_disjoint_cover_of_marginCovers}
     \lean{TNLean.PEPS.not_forall_normalSquareEdgeMarginCover_seven}
     \leanok
-    \uses{def:peps_normalSquareTranslatedEdgeWindow,
-        def:peps_normalEdgeBlockingHypotheses}
+    \uses{def:peps_normalSquareTranslatedEdgeWindow, def:peps_normalEdgeBlockingHypotheses}
     Given rectangular injectivity hypotheses, finite union closure, and a
     translated edge window at every edge of the finite square lattice, the
     corresponding one-edge blockings determine the normal edge-blocking
@@ -119,9 +117,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective_of_union}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionS_injective_of_union}
     \leanok
-    \uses{def:peps_regionInjectivityData,
-        def:peps_normalRectangleInjectivityHypotheses,
-        lem:peps_normalSquareRegionRS_rectangular_decomposition}
+    \uses{def:peps_regionInjectivityData, def:peps_normalRectangleInjectivityHypotheses, lem:peps_normalSquareRegionRS_rectangular_decomposition}
     If region injectivity is closed under unions, then the coordinate
     square-lattice rectangular injectivity hypotheses imply that the displayed
     regions $R$ and $S$ are injective.
@@ -138,9 +134,7 @@
     \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionS}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionT}
     \leanok
-    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
-        lem:peps_normalSquareRegionRS_injective_of_unionClosure,
-        lem:peps_normalSquareRegionT_injective_of_cover}
+    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap, lem:peps_normalSquareRegionRS_injective_of_unionClosure, lem:peps_normalSquareRegionT_injective_of_cover}
     Fix a square-lattice PEPS tensor with every bond dimension positive whose
     blocked tensor is injective on every contiguous $2\times3$ and $3\times2$
     rectangle. Then the displayed regions $R$ and $S$ are injective. If
@@ -190,8 +184,7 @@
     \lean{TNLean.PEPS.notMem_normalSquareComparisonRegion}
     \lean{TNLean.PEPS.insert_normalSquareComparisonRegion}
     \leanok
-    \uses{def:peps_normalSquareComparisonRegions,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_normalSquareComparisonRegions, lem:peps_squareLatticeCoordinateRegion_identities}
     For any offset $(a,b)$ a vertex with coordinates $(x,y)$ lies in the
     comparison region at $(a,b)$ if and only if
     \begin{align}
@@ -271,8 +264,7 @@
     \label{lem:peps_normalSquareComparisonRegion_complementBands}
     \lean{TNLean.PEPS.compl_normalSquareComparisonRegion_eq_bands}
     \leanok
-    \uses{def:peps_normalSquareComparisonRegions,
-        lem:peps_normalSquareComparisonRegion_membership}
+    \uses{def:peps_normalSquareComparisonRegions, lem:peps_normalSquareComparisonRegion_membership}
     On a finite $n\times m$ lattice, if $2\le a$, $1\le b$, $a+3\le n$, and
     $b+3\le m$ then the complement of the comparison region at $(a,b)$ is the
     union of the same four bands of
@@ -313,10 +305,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonRegion_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonSquare_injective}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses,
-        def:peps_regionInjectivityData,
-        lem:peps_squareLatticeRectangleInjectivity_rectangles,
-        lem:peps_normalSquareWideRectangle_injective}
+    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_squareLatticeRectangleInjectivity_rectangles, lem:peps_normalSquareWideRectangle_injective}
     Assume rectangular injectivity and union closure. On a finite $n\times m$
     lattice, if $a+3\le n$ and $b+3\le m$ then the comparison region at $(a,b)$
     is injective, being the union of a $2\times3$ and a $3\times2$ rectangle,
@@ -334,11 +323,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonSquare_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonRegion_injective}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses,
-        def:peps_regionInjectivityData,
-        lem:peps_normalSquareWideRectangle_injective,
-        lem:peps_normalSquareComparisonSquare_complementBands,
-        lem:peps_normalSquareComparisonRegion_complementBands}
+    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_normalSquareWideRectangle_injective, lem:peps_normalSquareComparisonSquare_complementBands, lem:peps_normalSquareComparisonRegion_complementBands}
     Assume rectangular injectivity and union closure. On a finite $n\times m$
     lattice, if $2\le a$, $2\le b$, $a+5\le n$, and $b+5\le m$ then the
     complement of the comparison square at $(a,b)$ is injective, being the union

@@ -35,8 +35,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{def:ghz_tensor, def:ground_space_map, def:ground_space_parent,
-        def:two_site_ket}
+    \uses{def:ghz_tensor, def:ground_space_map, def:ground_space_parent, def:two_site_ket}
     By definition,
     $\Gamma_2(X)(\sigma_1,\sigma_2)
     =\tr(A^{\sigma_1}A^{\sigma_2}X)$.
@@ -50,8 +49,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     \label{thm:constant_ket_mem_ghz_chain_ground_space}
     \lean{MPSTensor.constantKet_mem_ghz_chainGroundSpace}
     \leanok
-    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
-        thm:ghz_ground_space_two}
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket, thm:ghz_ground_space_two}
     For $N\ge2$ and $a\in\{0,1\}$, one has
     $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
 \end{theorem}
@@ -80,8 +78,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     \label{thm:ghz_chain_ground_space_two}
     \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
     \leanok
-    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket,
-        thm:ghz_ground_space_two}
+    \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket, thm:ghz_ground_space_two}
     For $N\ge2$, the common nearest-neighbour cyclic ground space of the GHZ
     tensor satisfies
     \begin{align}
@@ -99,8 +96,7 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:ghz_ground_space_two,
-        thm:constant_ket_mem_ghz_chain_ground_space}
+    \uses{thm:ghz_ground_space_two, thm:constant_ket_mem_ghz_chain_ground_space}
     Let $\psi\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$. For every cyclic
     nearest-neighbour window and outside assignment $\tau$, one has
     \begin{align}

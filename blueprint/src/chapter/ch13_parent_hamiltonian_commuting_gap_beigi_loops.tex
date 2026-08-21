@@ -66,9 +66,7 @@
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop}
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData}
     \leanok
-    \uses{thm:beigi_ordered_cycle_ground_space_dimension,
-        thm:beigi_eventually_constant_sector_graph,
-        thm:nncph_eventual_ground_space_dimension}
+    \uses{thm:beigi_ordered_cycle_ground_space_dimension, thm:beigi_eventually_constant_sector_graph, thm:nncph_eventual_ground_space_dimension}
     If the parent-ground-space dimension is eventually constant, then for
     every $N>2$ it equals the number of positive loops in the sector graph.
     In particular, this conclusion holds under the BNT and all-chain
@@ -196,9 +194,7 @@
     \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_isInjective}
     \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_isNormal}
     \leanok
-    \uses{def:beigi_normalized_minimal_loop_tensor,
-        thm:beigi_minimal_loop_tensor_injective,
-        def:mps_transfer_idempotence}
+    \uses{def:beigi_normalized_minimal_loop_tensor, thm:beigi_minimal_loop_tensor_injective, def:mps_transfer_idempotence}
     The transfer map of the unnormalized coordinate tensor is
     \begin{align}
         \mathcal E_a(Z)
@@ -230,8 +226,7 @@
     \lean{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopTensor}
     \lean{MPSTensor.BeigiSectorGraphData.mpv_normalizedMinimalLoopTensor}
     \leanok
-    \uses{def:beigi_loop_product_state, def:beigi_loop_schmidt_support,
-        def:beigi_normalized_minimal_loop_tensor, lem:mpv_rotate_physical}
+    \uses{def:beigi_loop_product_state, def:beigi_loop_schmidt_support, def:beigi_normalized_minimal_loop_tensor, lem:mpv_rotate_physical}
     For every $N>0$, the periodic matrix product vector of $C_a$ has
     coefficient $\prod_{n=0}^{N-1}\varphi_a(r_n,l_{n+1})$ on a cyclic
     configuration in sector~$a$, and coefficient zero on every other sector
@@ -362,9 +357,7 @@
     \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_ker_parentHamiltonian}
     \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_parentHamiltonianGroundSpaceES}
     \leanok
-    \uses{def:beigi_sector_graph, def:beigi_loop_product_state,
-        thm:beigi_complement_product_conjugation,
-        thm:beigi_complement_product_fixed_vector}
+    \uses{def:beigi_sector_graph, def:beigi_loop_product_state, thm:beigi_complement_product_conjugation, thm:beigi_complement_product_fixed_vector}
     Let $a\to a$ be a positive loop. For every $N\geq2$, its physical
     cyclic product-of-pairs state belongs to the kernel of the length-two
     periodic parent Hamiltonian. Equivalently, its Euclidean representative
@@ -415,8 +408,7 @@
     \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES}
     \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData}
     \leanok
-    \uses{thm:beigi_loop_product_state_ground_state,
-        cor:beigi_parent_ground_space_loop_number}
+    \uses{thm:beigi_loop_product_state_ground_state, cor:beigi_parent_ground_space_loop_number}
     Suppose that the parent-ground-space dimension is eventually constant.
     For every $N>2$, the positive-loop product states form a nonzero pairwise
     orthogonal family and
@@ -472,9 +464,7 @@
     \label{thm:nncph_implies_rfp}
     \lean{MPSTensor.nncph_implies_rfp}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:bnt, def:has_nncph_ground_spaces,
-        def:normal, thm:beigi_loop_product_states_span_ground_space,
-        thm:beigi_normalized_minimal_loop_tensor_rfp}
+    \uses{def:mps_transfer_idempotence, def:bnt, def:has_nncph_ground_spaces, def:normal, thm:beigi_loop_product_states_span_ground_space, thm:beigi_normalized_minimal_loop_tensor_rfp}
     Let $B$ be normal and in left-canonical form. Suppose that the family
     $A_j$ is a BNT for $B$, and that the nearest-neighbor parent Hamiltonian
     of $B$ has the all-chain ground-space property of
@@ -605,14 +595,7 @@
     \label{thm:nncph_implies_rfp_basis_direct_sum}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:has_nncph_ground_spaces,
-        thm:bnt_cf_basis_is_bnt_for_direct_sum,
-        thm:beigi_loop_product_states_span_ground_space,
-        thm:beigi_normalized_minimal_loop_tensor_rfp,
-        lem:beigi_normalized_minimal_loop_mixed_transfer_zero,
-        lem:mixed_transfer_gauge_phase_zero,
-        thm:cpsv_normal_mpv_phase_gauge,
-        thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    \uses{def:mps_transfer_idempotence, def:has_nncph_ground_spaces, thm:bnt_cf_basis_is_bnt_for_direct_sum, thm:beigi_loop_product_states_span_ground_space, thm:beigi_normalized_minimal_loop_tensor_rfp, lem:beigi_normalized_minimal_loop_mixed_transfer_zero, lem:mixed_transfer_gauge_phase_zero, thm:cpsv_normal_mpv_phase_gauge, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and set
     \[
@@ -669,8 +652,7 @@
     \label{thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces}
     \leanok
-    \uses{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces,
-        thm:nncph_implies_rfp_basis_direct_sum}
+    \uses{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces, thm:nncph_implies_rfp_basis_direct_sum}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and set $A=\bigoplus_{j=1}^g A_j$. Then
     \begin{align}
