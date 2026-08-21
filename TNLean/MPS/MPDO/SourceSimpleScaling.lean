@@ -23,6 +23,8 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
   closed MPO by `c ^ N`.
 * `MPOTensor.blockTensor_smul`: length-`L` blocking turns a scalar `c` into
   `c ^ L`.
+* `MPOTensor.normalizedMPO_smul`: the normalized density operator is unchanged
+  by any nonzero complex rescaling of the tensor.
 * `MPOTensor.isMPDO_smul_ofReal_iff`: MPDO is invariant under strictly positive
   real rescaling.
 * `MPOTensor.isSourceSimple_smul_ofReal_iff`: source simplicity is invariant
@@ -84,6 +86,22 @@ theorem blockTensor_smul (c : ℂ) (M : MPOTensor d D) (L : ℕ) :
   simp only [blockTensor_apply, Pi.smul_apply]
   rw [evalWord_smul c M (MPSTensor.wordOfBlock d L i)
     (MPSTensor.wordOfBlock d L j) (by simp), MPSTensor.length_wordOfBlock]
+
+/-- Rescaling the tensor by a nonzero complex scalar leaves every normalized
+density operator unchanged.  At chain length `N` the closed operator and its
+trace are both multiplied by `c ^ N`, and the two factors cancel in the
+normalization; when the trace vanishes, both sides are zero by the
+inverse-of-zero convention, so no nonzero-trace hypothesis is needed.
+
+Project-derived from the normalization convention of arXiv:1606.00608,
+line 792, and the exact closed-MPO scaling law above. -/
+theorem normalizedMPO_smul {c : ℂ} (hc : c ≠ 0) (M : MPOTensor d D) (N : ℕ) :
+    normalizedMPO (c • M) N = normalizedMPO M N := by
+  have hcN : c ^ N ≠ 0 := pow_ne_zero N hc
+  rw [normalizedMPO, normalizedMPO, mpo_smul, Matrix.trace_smul, smul_smul,
+    smul_eq_mul]
+  congr 1
+  field_simp
 
 /-- Nonnegative real rescaling preserves the MPDO property, including the zero scalar.
 

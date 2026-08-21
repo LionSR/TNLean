@@ -260,6 +260,29 @@
     virtual trace.
 \end{proof}
 
+\begin{theorem}[Normalization is invariant under nonzero rescaling]
+    \label{thm:mpdo_normalized_mpo_scaling_invariance}
+    \lean{MPOTensor.normalizedMPO_smul}
+    \leanok
+    \uses{def:mpo_family}
+    Let $M$ be an MPO tensor and let $c\in\mathbb C$ be nonzero. For every
+    chain length $N$, the normalized density operators agree:
+    \begin{align}
+        \tr\!\left[\rho^{(N)}(cM)\right]^{-1}\rho^{(N)}(cM)
+        &=\tr\!\left[\rho^{(N)}(M)\right]^{-1}\rho^{(N)}(M),
+        \notag
+    \end{align}
+    with the inverse of zero understood to be zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_mpo_scalar_scaling}
+    By Theorem~\ref{thm:mpdo_mpo_scalar_scaling}, the closed operator and its
+    trace are both multiplied by $c^N$, and the two nonzero factors cancel in
+    the normalization. When the trace vanishes, both sides are zero by the
+    convention on the inverse of zero.
+\end{proof}
+
 \begin{definition}[Word encoded by a physical-block index]
     \label{def:mpdo_word_of_block}
     \lean{MPSTensor.wordOfBlock}
