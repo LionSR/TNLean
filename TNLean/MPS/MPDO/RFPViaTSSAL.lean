@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Entropy.MutualInformationDataProcessing
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.RFPViaTSGlobal
+import TNLean.MPS.MPDO.SALTraceTransfer
 
 /-!
 # Saturation of the area law for MPDO renormalization fixed points
@@ -477,13 +478,8 @@ theorem isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero
     (M : MPOTensor d D) (hM : IsMPDO M)
     (hTrace : ∀ N, 0 < N → Matrix.trace (mpo M N) ≠ 0)
     (hRFP : IsRFPViaTS M) : IsSourceZCL M ∧ IsSAL M := by
-  have hTransfer : physTraceTransfer M ≠ 0 := by
-    intro hZero
-    apply hTrace 1 Nat.zero_lt_one
-    rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
-    simp
-  exact ⟨isSourceZCL_of_isRFPViaTS M hRFP hTransfer,
-    isSAL_of_isRFPViaTS_of_trace_ne_zero M hM hTrace hRFP⟩
+  have hSAL := isSAL_of_isRFPViaTS_of_trace_ne_zero M hM hTrace hRFP
+  exact ⟨isSourceZCL_of_isRFPViaTS M hRFP hSAL.physTraceTransfer_ne_zero, hSAL⟩
 
 /-- A matrix product density operator in normalized BNT-refined horizontal
 form satisfying the local renormalization fixed-point equations obeys the

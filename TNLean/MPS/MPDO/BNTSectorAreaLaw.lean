@@ -7,6 +7,7 @@ import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.PhysicalSupportRestriction
+import TNLean.MPS.MPDO.SALTraceTransfer
 import TNLean.MPS.MPDO.SimpleLocalStructure
 
 /-!
@@ -438,13 +439,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
     simpa using hEq i
   have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
     fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
-  have hTransfer : physTraceTransfer M ≠ 0 := by
-    intro hZero
-    exact (Classical.choose_spec hSAL).1 1 Nat.zero_lt_one (by
-      rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
-      simp)
   have hSourceZCL : IsSourceZCL M :=
-    isSourceZCL_of_physTraceTransfer_sq M hTransfer hZCL_sq
+    hSAL.isSourceZCL_of_physTraceTransfer_sq hZCL_sq
   exact ⟨commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s,
     commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL s,
