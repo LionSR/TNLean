@@ -518,7 +518,8 @@ positivity.
     \label{thm:two_variable_operator_schwarz}
     \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional_of_traceAdjointMap}
     \leanok
-    \uses{def:2positive_map, def:pinv}
+    \uses{def:positive_map, def:2positive_map, def:pinv,
+        def:trace_pairing_adjoint}
     Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be positive and suppose
     that $E=T^*$ for a two-positive map
     $T:\MN{D_{\rm out}}\to\MN{D_{\rm in}}$. For every
@@ -557,7 +558,7 @@ positivity.
         \notag
     \end{align}
     for every $A\in\MN{D}$. A $2$-positive map satisfies this for every
-    $B$ (Theorem~\ref{thm:two_variable_operator_schwarz}).
+    $B$ (Theorem~\ref{thm:two_variable_operator_schwarz_two_positive}).
 \end{definition}
 
 \begin{definition}[Equality-attaining set]\label{def:equality_attaining}
