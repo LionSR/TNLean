@@ -91,17 +91,20 @@ theorem factorization_of_forall_mulVec_mem_range
 support inverse from `Matrix.PosSemidef.supportInv`. This is Wolf's
 "inverse on the range": `B * B⁺` is the support projection of `B Bᴴ`
 (`mul_pinv_eq_supportProj`). -/
-noncomputable def pinv (B : Mat) : Mat :=
+noncomputable def pinv {n : Type*} [Fintype n] [DecidableEq n]
+    (B : Matrix n n ℂ) : Matrix n n ℂ :=
   Bᴴ * (Matrix.PosSemidef.supportInv (Matrix.posSemidef_self_mul_conjTranspose B))
 
 /-- The matrix `B * Bᴴ` is positive semidefinite (the PSD certificate used
 throughout the Douglas development for the support-inverse `(B Bᴴ)⁻¹_supp`). -/
-abbrev posSemidefBB (B : Mat) : (B * Bᴴ).PosSemidef :=
+abbrev posSemidefBB {n : Type*} [Fintype n] [DecidableEq n]
+    (B : Matrix n n ℂ) : (B * Bᴴ).PosSemidef :=
   Matrix.posSemidef_self_mul_conjTranspose B
 
 /-- The pseudoinverse is a right inverse on the support: `B * B⁺` equals the
 support projection of `B * Bᴴ`. -/
-theorem mul_pinv_eq_supportProj (B : Mat) :
+theorem mul_pinv_eq_supportProj {n : Type*} [Fintype n] [DecidableEq n]
+    (B : Matrix n n ℂ) :
     B * pinv B = (posSemidefBB B).supportProj := by
   unfold pinv
   have h := (posSemidefBB B).self_mul_supportInv

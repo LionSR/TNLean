@@ -123,7 +123,8 @@ theorem ker_subset_of_block_psd (P : Matrix (Fin D₁) (Fin D₁) ℂ)
 
 /-- For PSD `R`, `R * pinv R = supportProj R`: the pseudoinverse is a right
 support-inverse. -/
-theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
+theorem R_mul_pinv_eq_supportProj {n : Type*} [Fintype n] [DecidableEq n]
+    (R : Matrix n n ℂ) (hR : R.PosSemidef) :
     R * (Douglas.pinv R) = hR.supportProj := by
   rw [Douglas.mul_pinv_eq_supportProj R]
   exact hR.supportProj_sq_eq_supportProj
