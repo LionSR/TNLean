@@ -1476,14 +1476,15 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.verticalTransportCoefficients}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family}
-    Given a label bijection $e:\Lambda'\to\Lambda$ and nonzero scalars
-    $s_\alpha$, the transported coefficient family is
+    Given a label bijection $e:\Lambda'\to\Lambda$ and scalars $s_\alpha$,
+    the transported coefficient family is
     \begin{align}
         \widetilde c^{(L)}_{\alpha,\beta,\gamma}
-        =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
           c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
+    Here division is totalized by the convention $z/0=0$.
 \end{definition}
 
 \begin{theorem}[Transport of the same-length product law]%
@@ -1498,10 +1499,30 @@
     transported coefficient family.
 \end{theorem}
 \begin{proof}\leanok
-    Apply $\Phi_L$ to the source product expansion and reindex the resulting
-    finite sum by $e$.  Substitution of the representative normalizations
-    produces the transported coefficients; the nonzero factor
-    $s_\gamma^L$ cancels in every summand.
+    For every positive length $L$, multiplication of the two transported
+    representatives and the source product law give
+    \begin{align}
+        O'_L(\alpha)O'_L(\beta)
+        &=(s_\alpha s_\beta)^L
+          \Phi_L\bigl(O_L(e(\alpha))O_L(e(\beta))\bigr)
+        \notag\\
+        &=(s_\alpha s_\beta)^L
+          \sum_\delta c^{(L)}_{e(\alpha),e(\beta),\delta}
+          \Phi_L(O_L(\delta)).
+        \notag
+    \end{align}
+    Reindexing by $\delta=e(\gamma)$ and using $s_\gamma\ne0$ yields
+    \begin{align}
+        O'_L(\alpha)O'_L(\beta)
+        &=\sum_\gamma
+          \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}
+          \,s_\gamma^L\Phi_L(O_L(e(\gamma)))
+        \notag\\
+        &=\sum_\gamma
+          \widetilde c^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Abstract covariance of vertically transported coefficients]%
@@ -1519,12 +1540,20 @@
     family.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding theorem gives a second product expansion of the target
-    operators.  Uniqueness of coefficients in a linearly independent family
-    identifies it with the given target expansion.
+    The target product law and
+    Theorem~\ref{thm:mpdo_vertical_bnt_product_transport} give
+    \begin{align}
+        \sum_\gamma c'^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma)
+        &=O'_L(\alpha)O'_L(\beta)
+        =\sum_\gamma
+          \widetilde c^{(L)}_{\alpha,\beta,\gamma}O'_L(\gamma).
+        \notag
+    \end{align}
+    Linear independence of the target operators identifies the two
+    coefficient families term by term.
 \end{proof}
 
-\begin{theorem}[Scale covariance of tensor-attached BNT coefficients]%
+\begin{theorem}[Tensor-attached coefficient covariance]%
     \label{thm:mpdo_vertical_bnt_coefficient_covariance}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport}
@@ -1539,7 +1568,7 @@
     coefficients satisfy
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
           c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
@@ -1548,8 +1577,15 @@
     the explicit transport hypothesis.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the abstract covariance theorem to the product laws carried by the
-    two tensor-attached BNT clauses.
+    The two tensor-attached BNT clauses carry the product laws required by the
+    abstract covariance theorem.  Hence
+    \begin{align}
+        {c'}^{(L)}_{\alpha,\beta,\gamma}
+        &=\widetilde c^{(L)}_{\alpha,\beta,\gamma}
+        =\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Abstract exact comparison under compatible normalization]%
@@ -1562,12 +1598,18 @@
     $s_\alpha s_\beta=s_\gamma$, then
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+        &=c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The scale factor in the covariance law is one.
+    The compatible normalization and $s_\gamma\ne0$ give
+    \begin{align}
+        \left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+        &=\left(\frac{s_\gamma}{s_\gamma}\right)^L=1.
+        \notag
+    \end{align}
+    Substitution in the abstract covariance law gives the result.
 \end{proof}
 
 \begin{theorem}[Exact tensor-attached comparison under compatible normalization]%
@@ -1581,12 +1623,21 @@
     $s_\alpha s_\beta=s_\gamma$, then
     \begin{align}
         {c'}^{(L)}_{\alpha,\beta,\gamma}
-        =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
+        &=c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}.
         \notag
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The scale factor in the covariance law is one.
+    The tensor-attached exact comparison is the specialization
+    \begin{align}
+        {c'}^{(L)}_{\alpha,\beta,\gamma}
+        &=\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L
+          c^{(L)}_{e(\alpha),e(\beta),e(\gamma)}
+        =c^{(L)}_{e(\alpha),e(\beta),e(\gamma)},
+        \notag
+    \end{align}
+    where the last equality uses $s_\alpha s_\beta=s_\gamma$ and
+    $s_\gamma\ne0$.
 \end{proof}
 
 % Project-derived counterexample to the cross-presentation assertion formerly
