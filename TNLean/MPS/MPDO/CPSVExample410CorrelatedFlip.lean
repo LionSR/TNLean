@@ -172,11 +172,11 @@ theorem twoBondWeight_false_false : twoBondWeight false false = 7 / 16 := by
 probability $3/16$.
 
 Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
-theorem twoBondWeight_of_ne_false_false (u v : Bool) (h : ¬(u = false ∧ v = false)) :
+theorem twoBondWeight_of_pair_ne_false_false (u v : Bool) (h : (u, v) ≠ (false, false)) :
     twoBondWeight u v = 3 / 16 := by
   rcases u <;> rcases v <;>
     first
-      | exact absurd ⟨rfl, rfl⟩ h
+      | exact absurd rfl h
       | norm_num [twoBondWeight, flipProb, flipWeight, Fintype.sum_prod_type, Fintype.sum_bool]
 
 /-- The one-bond distribution is the marginal of the bond pattern
@@ -197,7 +197,7 @@ theorem twoBondWeight_eq_marginal (u v : Bool) :
     twoBondWeight u v = ∑ w : Bool, ∑ x : Bool, bondWeight (u, v, w, x) := by
   rw [bondWeight_eq_bondWeightValue]
   rcases u <;> rcases v <;>
-    norm_num [twoBondWeight_false_false, twoBondWeight_of_ne_false_false, bondWeightValue,
+    norm_num [twoBondWeight_false_false, twoBondWeight_of_pair_ne_false_false, bondWeightValue,
       Fintype.sum_bool]
 
 /-- The weight family of a one-spin window: the two boundary bond halves are
@@ -223,19 +223,25 @@ lines 897--905. -/
 noncomputable def windowWeightThree (x : Bool × Bool × Bool × Bool) : ℝ :=
   twoBondWeight x.2.1 x.2.2.1 / 4
 
-/-- The one-spin window weights are normalized. -/
+/-- The one-spin window weights are normalized.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
 theorem sum_windowWeightOne : ∑ x : Bool × Bool, windowWeightOne x = 1 := by
   norm_num [windowWeightOne, Fintype.sum_prod_type, Fintype.sum_bool]
 
-/-- The two-spin window weights are normalized. -/
+/-- The two-spin window weights are normalized.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
 theorem sum_windowWeightTwo : ∑ x : Bool × Bool × Bool, windowWeightTwo x = 1 := by
   norm_num [windowWeightTwo, oneBondWeight_false, oneBondWeight_true,
     Fintype.sum_prod_type, Fintype.sum_bool]
 
-/-- The three-spin window weights are normalized. -/
+/-- The three-spin window weights are normalized.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
 theorem sum_windowWeightThree :
     ∑ x : Bool × Bool × Bool × Bool, windowWeightThree x = 1 := by
-  norm_num [windowWeightThree, twoBondWeight_false_false, twoBondWeight_of_ne_false_false,
+  norm_num [windowWeightThree, twoBondWeight_false_false, twoBondWeight_of_pair_ne_false_false,
     Fintype.sum_prod_type, Fintype.sum_bool]
 
 /-- The natural-logarithm entropy of the one-spin window weights.
@@ -346,7 +352,7 @@ Displayed value: CPSV16, arXiv:1606.00608, Example 4.10, lines 900--903. -/
 theorem entropyThree_eq :
     entropyThree = 6 * log 2 - 7 / 16 * log 7 - 9 / 16 * log 3 := by
   rw [entropyThree]
-  norm_num [windowWeightThree, twoBondWeight_false_false, twoBondWeight_of_ne_false_false,
+  norm_num [windowWeightThree, twoBondWeight_false_false, twoBondWeight_of_pair_ne_false_false,
     Fintype.sum_prod_type, Fintype.sum_bool, negMulLog_seven_sixtyfourths,
     negMulLog_three_sixtyfourths]
   ring
