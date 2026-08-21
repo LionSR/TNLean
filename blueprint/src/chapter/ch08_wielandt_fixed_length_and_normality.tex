@@ -12,7 +12,7 @@ Section~\ref{sec:app_wielandt_exact_word_support}; the blocked fixed-length
 construction is in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{lemma}[Eigenvector padding]\label{lem:eigenvector_padding}
-    \lean{MPSTensor.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
+    \lean{Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
     \leanok
     \uses{def:cumulative_vector_span, def:vector_spread_span}
     Suppose $A^{i_0}\varphi=\mu\varphi$ with $\mu\neq0$.
@@ -34,7 +34,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{theorem}[Fixed-length vector spanning implies matrix spanning]%
     \label{thm:lemma2b_assembly}
-    \lean{MPSTensor.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
+    \lean{Kraus.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
     \leanok
     \uses{def:word_span, def:vector_spread_span}
     Assume:

@@ -18,4 +18,3 @@ import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 import TNLean.Wielandt.Primitivity.ToNormal
-import TNLean.Wielandt.Primitivity.TracePairing

@@ -34,9 +34,9 @@ theorem, equivalently Jacobson's density theorem.
   `cumulativeSpan_le_algSpan_toSubmodule`: containment lemmas.
 * `mul_mem_cumulativeSpan_add`: closure under multiplication (adding lengths).
 * `mem_cumulativeSpan_of_mem_algSpan`: every element of `algSpan A` is in some
-  `cumulativeSpan A N` (via `Algebra.adjoin_induction`).
+  `Kraus.cumulativeSpan A N` (via `Algebra.adjoin_induction`).
 * `exists_cumulativeSpan_eq_top_of_algSpan_eq_top`: `algSpan A = ⊤ → ∃ N,
-  cumulativeSpan A N = ⊤` (via Noetherian chain stabilization).
+  Kraus.cumulativeSpan A N = ⊤` (via Noetherian chain stabilization).
 
 ### Part 2: Invariant submodule characterization
 
@@ -50,10 +50,10 @@ The complete chain from `IsIrreducibleTensor A` to cumulative full matrix span:
 1. `IsIrreducibleTensor A` → `IsIrreducibleAction A` (proved in `IrreducibleTensorAction.lean`)
 2. `IsIrreducibleAction A` → `algSpan A = ⊤` (Burnside/Jacobson density, proved in
    `BurnsideTheorem.lean`)
-3. `algSpan A = ⊤` → `∃ N, cumulativeSpan A N = ⊤` (proved in this file, Part 1)
+3. `algSpan A = ⊤` → `∃ N, Kraus.cumulativeSpan A N = ⊤` (proved in this file, Part 1)
 
-**Important**: `∃ N, cumulativeSpan A N = ⊤` does NOT imply `IsNormal`.
-Counterexample: `A₁ = e₁₂, A₂ = e₂₁` generates `M₂(ℂ)` but `wordSpan A n`
+**Important**: `∃ N, Kraus.cumulativeSpan A N = ⊤` does NOT imply `IsNormal`.
+Counterexample: `A₁ = e₁₂, A₂ = e₂₁` generates `M₂(ℂ)` but `Kraus.wordSpan A n`
 alternates. Aperiodicity (e.g., `IsPrimitiveMPS`) is needed for IsNormal.
 
 ## References
@@ -81,14 +81,14 @@ theorem evalWord_mem_algSpan (A : MPSTensor d D) (w : List (Fin d)) :
 
 /-- The word span at any length is contained in the algebra span (as submodules). -/
 theorem wordSpan_le_algSpan_toSubmodule (A : MPSTensor d D) (n : ℕ) :
-    wordSpan A n ≤ (algSpan A).toSubmodule := by
+    Kraus.wordSpan A n ≤ (algSpan A).toSubmodule := by
   apply Submodule.span_le.mpr
   rintro M ⟨σ, rfl⟩
   exact evalWord_mem_algSpan A (List.ofFn σ)
 
 /-- The cumulative span is contained in the algebra span. -/
 theorem cumulativeSpan_le_algSpan_toSubmodule (A : MPSTensor d D) (n : ℕ) :
-    cumulativeSpan A n ≤ (algSpan A).toSubmodule := by
+    Kraus.cumulativeSpan A n ≤ (algSpan A).toSubmodule := by
   apply Submodule.span_le.mpr
   rintro M ⟨w, _, rfl⟩
   exact evalWord_mem_algSpan A w
@@ -100,20 +100,20 @@ theorem evalWord_mul_evalWord_mem_cumulativeSpan
     (A : MPSTensor d D)
     {w₁ w₂ : List (Fin d)} {m n : ℕ}
     (hw₁ : w₁.length ≤ m) (hw₂ : w₂.length ≤ n) :
-    evalWord A w₁ * evalWord A w₂ ∈ cumulativeSpan A (m + n) := by
+    evalWord A w₁ * evalWord A w₂ ∈ Kraus.cumulativeSpan A (m + n) := by
   rw [← evalWord_append]
-  apply mem_cumulativeSpan_generator
+  apply Kraus.mem_cumulativeSpan_generator
   rw [List.length_append]
   omega
 
 /-- The cumulative span is closed under multiplication (adding lengths). -/
 theorem mul_mem_cumulativeSpan_add (A : MPSTensor d D) {m n : ℕ}
     {x y : Matrix (Fin D) (Fin D) ℂ}
-    (hx : x ∈ cumulativeSpan A m) (hy : y ∈ cumulativeSpan A n) :
-    x * y ∈ cumulativeSpan A (m + n) := by
+    (hx : x ∈ Kraus.cumulativeSpan A m) (hy : y ∈ Kraus.cumulativeSpan A n) :
+    x * y ∈ Kraus.cumulativeSpan A (m + n) := by
   -- Matrix multiplication is bilinear, so generator closure extends to both spans.
   apply LinearMap.BilinMap.apply_apply_mem_of_mem_span
-    (P' := cumulativeSpan A (m + n))
+    (P' := Kraus.cumulativeSpan A (m + n))
     (s := {M | ∃ w : List (Fin d), w.length ≤ m ∧ M = evalWord A w})
     (t := {M | ∃ w : List (Fin d), w.length ≤ n ∧ M = evalWord A w})
     (B := LinearMap.mul ℂ (Matrix (Fin D) (Fin D) ℂ))
@@ -129,22 +129,22 @@ theorem mul_mem_cumulativeSpan_add (A : MPSTensor d D) {m n : ℕ}
 Proven via `Algebra.adjoin_induction`. -/
 theorem mem_cumulativeSpan_of_mem_algSpan (A : MPSTensor d D)
     {x : Matrix (Fin D) (Fin D) ℂ} (hx : x ∈ algSpan A) :
-    ∃ N : ℕ, x ∈ cumulativeSpan A N := by
+    ∃ N : ℕ, x ∈ Kraus.cumulativeSpan A N := by
   induction hx using Algebra.adjoin_induction with
   | mem x hxS =>
     rcases hxS with ⟨i, rfl⟩
     refine ⟨1, ?_⟩
     simpa only [Kraus.evalWord, Matrix.mul_one] using
-      (mem_cumulativeSpan_generator (A := A) (n := 1) (w := [i]) (by simp))
+      (Kraus.mem_cumulativeSpan_generator A (n := 1) (w := [i]) (by simp))
   | algebraMap r =>
     refine ⟨0, ?_⟩
     rw [Algebra.algebraMap_eq_smul_one]
-    exact (cumulativeSpan A 0).smul_mem r (one_mem_cumulativeSpan A 0)
+    exact (Kraus.cumulativeSpan A 0).smul_mem r (one_mem_cumulativeSpan A 0)
   | add x y _ _ ihx ihy =>
     rcases ihx with ⟨Nx, hNx⟩
     rcases ihy with ⟨Ny, hNy⟩
     refine ⟨max Nx Ny, ?_⟩
-    exact (cumulativeSpan A (max Nx Ny)).add_mem
+    exact (Kraus.cumulativeSpan A (max Nx Ny)).add_mem
       ((cumulativeSpan_mono' A (le_max_left Nx Ny)) hNx)
       ((cumulativeSpan_mono' A (le_max_right Nx Ny)) hNy)
   | mul x y _ _ ihx ihy =>
@@ -158,18 +158,18 @@ is all of `M_D(ℂ)`, then the cumulative span reaches ⊤ at some finite level.
 Uses the Noetherian property of finite-dimensional modules. -/
 lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
     (h : algSpan A = ⊤) :
-    ∃ N : ℕ, cumulativeSpan A N = ⊤ := by
+    ∃ N : ℕ, Kraus.cumulativeSpan A N = ⊤ := by
   -- Every matrix is in the algebra span, hence in some cumulative span
   have hmem : ∀ x : Matrix (Fin D) (Fin D) ℂ, x ∈ algSpan A := by
     intro x; rw [h]; exact Algebra.mem_top
-  have hx : ∀ x : Matrix (Fin D) (Fin D) ℂ, ∃ N, x ∈ cumulativeSpan A N :=
+  have hx : ∀ x : Matrix (Fin D) (Fin D) ℂ, ∃ N, x ∈ Kraus.cumulativeSpan A N :=
     fun x => mem_cumulativeSpan_of_mem_algSpan A (hmem x)
   -- The module is Noetherian (finite-dimensional over a field)
   have : IsNoetherian ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     isNoetherian_of_isNoetherianRing_of_finite ℂ _
   -- Construct the monotone chain as an order homomorphism
   let f : ℕ →o Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    ⟨cumulativeSpan A, fun _ _ h => cumulativeSpan_mono' A h⟩
+    ⟨Kraus.cumulativeSpan A, fun _ _ h => cumulativeSpan_mono' A h⟩
   -- Noetherian ⟹ the ascending chain stabilizes
   obtain ⟨N₀, hstab⟩ := (monotone_stabilizes_iff_noetherian.mpr ‹_›) f
   -- Show the stable value is ⊤.
@@ -178,7 +178,7 @@ lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
   rcases hx x with ⟨M, hM⟩
   rcases le_total M N₀ with hMN | hNM
   · exact (cumulativeSpan_mono' A hMN) hM
-  · have heq : cumulativeSpan A M = cumulativeSpan A N₀ := (hstab M hNM).symm
+  · have heq : Kraus.cumulativeSpan A M = Kraus.cumulativeSpan A N₀ := (hstab M hNM).symm
     simpa [heq] using hM
 
 /-! ## Part 2: Invariant submodule characterization -/

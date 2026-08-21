@@ -25,7 +25,7 @@ variable {d D : ℕ}
 
 If `A` is normalized and primitive in the spreading sense, and `φ` is a nonzero
 eigenvector of some `A i₀` with nonzero corresponding eigenvalue `μ`, then
-`vectorSpreadSpan A φ (D - 1) = ⊤`.
+`Kraus.vectorSpreadSpan A φ (D - 1) = ⊤`.
 
 This is the fixed-length conclusion `H_{D-1}(A, φ) = ℂ^D`.
 Paper: arXiv:0909.5347, Lemma 2(a); Wolf, Chapter 6. -/
@@ -36,7 +36,7 @@ theorem vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector [NeZero D]
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
-    vectorSpreadSpan A φ (D - 1) = ⊤ := by
+    Kraus.vectorSpreadSpan A φ (D - 1) = ⊤ := by
   have hFull : Kraus.HasEventuallyFullWordSpan A :=
     (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP A hNorm).2
       (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)

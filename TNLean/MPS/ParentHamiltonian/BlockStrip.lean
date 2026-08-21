@@ -74,7 +74,7 @@ private theorem exists_right_factor_of_block_letter_compatibility
     fun σ => evalWord A (List.ofFn σ)
   have hSurj : Function.Surjective (Fintype.linearCombination ℂ gen) := by
     apply (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ gen).mp
-    simpa [gen, wordSpan, Kraus.wordSpan] using
+    simpa [gen, Kraus.wordSpan, Kraus.wordSpan] using
       (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   obtain ⟨c, hc⟩ := hSurj (1 : Matrix (Fin D) (Fin D) ℂ)
   have hc' : ∑ τ, c τ • gen τ = (1 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -139,12 +139,12 @@ tensor. -/
 theorem exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top
     {A : MPSTensor d D} {α : Type*} {K : ℕ}
     {F Z : α → Matrix (Fin D) (Fin D) ℂ}
-    (hWord : wordSpan A K = ⊤)
+    (hWord : Kraus.wordSpan A K = ⊤)
     (hCompat : ∀ τ : Fin K → Fin d,
       ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
         ∀ a : α, Z a * evalWord A (List.ofFn τ) = F a * Yτ) :
     ∃ Y : Matrix (Fin D) (Fin D) ℂ, ∀ a : α, Z a = F a * Y := by
-  have hspan : ∀ M ∈ wordSpan A K,
+  have hspan : ∀ M ∈ Kraus.wordSpan A K,
       ∃ Y : Matrix (Fin D) (Fin D) ℂ, ∀ a : α, Z a * M = F a * Y := by
     apply Submodule.span_induction
     · intro M hM
@@ -162,7 +162,7 @@ theorem exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top
       refine ⟨c • Y, ?_⟩
       intro a
       simp [hY a]
-  have hOne : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A K := by
+  have hOne : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A K := by
     simp [hWord]
   obtain ⟨Y, hY⟩ := hspan 1 hOne
   refine ⟨Y, ?_⟩
@@ -209,7 +209,7 @@ theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective
     fun σ => evalWord A (List.ofFn σ)
   have hSurj : Function.Surjective (Fintype.linearCombination ℂ gen) := by
     apply (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ gen).mp
-    simpa [gen, wordSpan, Kraus.wordSpan] using
+    simpa [gen, Kraus.wordSpan, Kraus.wordSpan] using
       (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   obtain ⟨c, hc⟩ := hSurj (1 : Matrix (Fin D) (Fin D) ℂ)
   have hc' : ∑ σ, c σ • gen σ = (1 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -242,7 +242,7 @@ theorem commutes_all_of_commutes_long_words_of_isNBlkInjective
   have hφ : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ X := by
     apply LinearMap.ext_on_range
       (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-    · simpa [wordSpan, Kraus.wordSpan] using
+    · simpa [Kraus.wordSpan, Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ
       simpa [LinearMap.mulLeft_apply, LinearMap.mulRight_apply] using hBlock σ

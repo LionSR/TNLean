@@ -167,10 +167,10 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ IsInjective (blockTensor A L) := by
   have hDpos : 0 < D := NeZero.pos D
   let L : ℕ := iIndex A
-  have hNonempty : ({n : ℕ | 0 < n ∧ wordSpan A n = ⊤}).Nonempty := by
+  have hNonempty : ({n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}).Nonempty := by
     obtain ⟨N, hNpos, hNblk⟩ := hN
     exact ⟨N, hNpos, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
-  have hTop : wordSpan A L = ⊤ := by
+  have hTop : Kraus.wordSpan A L = ⊤ := by
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
   have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
     simpa [L] using
@@ -178,11 +178,11 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
   have hKraus_pos : 1 ≤ krausRank A := by
     rw [krausRank, Nat.one_le_iff_ne_zero]
     intro hzero
-    have hbot : wordSpan A 1 = (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+    have hbot : Kraus.wordSpan A 1 = (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
       Submodule.finrank_eq_zero.mp hzero
     obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp A hTP
-    have hmem : A i₀ ∈ wordSpan A 1 := by
-      have := evalWord_mem_wordSpan A ([i₀] : List (Fin d))
+    have hmem : A i₀ ∈ Kraus.wordSpan A 1 := by
+      have := Kraus.evalWord_mem_wordSpan A ([i₀] : List (Fin d))
       simpa [evalWord] using this
     rw [hbot] at hmem
     exact hi₀ hmem
@@ -228,36 +228,38 @@ theorem isNBlkInjective_pow_four_of_isNormal_leftCanonical [NeZero D]
 /-!
 ## IsNormal is preserved by blocking
 
-The key observation: if `wordSpan A N = ⊤`, then `wordSpan A (m * N) = ⊤` for all `m ≥ 1`
-(because `⊤ * wordSpan A k ⊇ wordSpan A k` via the identity). Combined with the containment
-`wordSpan A (n * P) ≤ wordSpan (blockTensor A P) n`, this gives:
+The key observation: if `Kraus.wordSpan A N = ⊤`, then `Kraus.wordSpan A (m * N) = ⊤` for
+all `m ≥ 1` (because `⊤ * Kraus.wordSpan A k ⊇ Kraus.wordSpan A k` via the identity).
+Combined with the containment
+`Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (blockTensor A P) n`, this gives:
 `IsNormal A → IsNormal (blockTensor A P)`.
 
 This bypasses the blocked-irreducibility gap entirely for the IsNormal conclusion.
 -/
 
-/-- The word span at `N + k` contains the word span at `k` when `wordSpan A N = ⊤`.
+/-- The word span at `N + k` contains the word span at `k` when `Kraus.wordSpan A N = ⊤`.
 
-Proof: `wordSpan A N * wordSpan A k ≤ wordSpan A (N + k)`, and `1 ∈ wordSpan A N = ⊤`
-gives `M = 1 * M ∈ wordSpan A N * wordSpan A k` for any `M ∈ wordSpan A k`. -/
+Proof: `Kraus.wordSpan A N * Kraus.wordSpan A k ≤ Kraus.wordSpan A (N + k)`, and
+`1 ∈ Kraus.wordSpan A N = ⊤` gives `M = 1 * M ∈ Kraus.wordSpan A N * Kraus.wordSpan A k`
+for any `M ∈ Kraus.wordSpan A k`. -/
 private theorem wordSpan_le_wordSpan_add_of_wordSpan_eq_top
-    (A : MPSTensor d D) {N : ℕ} (hN : wordSpan A N = ⊤) (k : ℕ) :
-    wordSpan A k ≤ wordSpan A (N + k) := by
+    (A : MPSTensor d D) {N : ℕ} (hN : Kraus.wordSpan A N = ⊤) (k : ℕ) :
+    Kraus.wordSpan A k ≤ Kraus.wordSpan A (N + k) := by
   intro M hM
-  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A N := by
+  have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A N := by
     rw [hN]; exact Submodule.mem_top
-  have hprod : (1 : Matrix (Fin D) (Fin D) ℂ) * M ∈ wordSpan A N * wordSpan A k :=
+  have hprod : (1 : Matrix (Fin D) (Fin D) ℂ) * M ∈ Kraus.wordSpan A N * Kraus.wordSpan A k :=
     Submodule.mul_mem_mul h1 hM
   rw [one_mul] at hprod
-  exact wordSpan_mul_le A N k hprod
+  exact Kraus.wordSpan_mul_le A N k hprod
 
-/-- The word span at any positive multiple of `N` is `⊤` when `wordSpan A N = ⊤`.
+/-- The word span at any positive multiple of `N` is `⊤` when `Kraus.wordSpan A N = ⊤`.
 
-Proof by induction: `wordSpan A ((m+1)*N) ⊇ wordSpan A (m*N)` via the preceding lemma
+Proof by induction: `Kraus.wordSpan A ((m+1)*N) ⊇ Kraus.wordSpan A (m*N)` via the preceding lemma
 (with `k = m*N`). -/
 private theorem wordSpan_mul_eq_top_of_wordSpan_eq_top
-    (A : MPSTensor d D) {N : ℕ} (hN : wordSpan A N = ⊤) (m : ℕ) (hm : 0 < m) :
-    wordSpan A (m * N) = ⊤ := by
+    (A : MPSTensor d D) {N : ℕ} (hN : Kraus.wordSpan A N = ⊤) (m : ℕ) (hm : 0 < m) :
+    Kraus.wordSpan A (m * N) = ⊤ := by
   induction m with
   | zero => exact absurd rfl (Nat.ne_of_gt hm)
   | succ n ih =>
@@ -265,18 +267,18 @@ private theorem wordSpan_mul_eq_top_of_wordSpan_eq_top
     · simp [hn, hN]
     · have hn_pos : 0 < n := Nat.pos_of_ne_zero hn
       have hprev := ih hn_pos
-      have hle : wordSpan A (n * N) ≤ wordSpan A ((n + 1) * N) := by
-        calc wordSpan A (n * N)
-            ≤ wordSpan A (N + n * N) :=
+      have hle : Kraus.wordSpan A (n * N) ≤ Kraus.wordSpan A ((n + 1) * N) := by
+        calc Kraus.wordSpan A (n * N)
+            ≤ Kraus.wordSpan A (N + n * N) :=
               wordSpan_le_wordSpan_add_of_wordSpan_eq_top A hN (n * N)
-          _ = wordSpan A ((n + 1) * N) := by ring_nf
+          _ = Kraus.wordSpan A ((n + 1) * N) := by ring_nf
       exact eq_top_iff.mpr (hprev ▸ hle)
 
 /-- Fixed-length injectivity persists at positive multiples of the length. -/
 theorem isNBlkInjective_mul_of_isNBlkInjective
     (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m) (hN : IsNBlkInjective A N) :
     IsNBlkInjective A (m * N) := by
-  have hwordN : wordSpan A N = ⊤ :=
+  have hwordN : Kraus.wordSpan A N = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hN
   exact (wordSpan_eq_top_iff_isNBlkInjective A (m * N)).mp
     (wordSpan_mul_eq_top_of_wordSpan_eq_top A hwordN m hm)
@@ -333,26 +335,26 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
 
 /-- **IsNormal is preserved by blocking.**
 
-If `A` is normal (`∃ N, 0 < N ∧ wordSpan A N = ⊤`), then `blockTensor A P` is also normal
-for any `P ≥ 1`. The proof uses:
-1. `wordSpan A N = ⊤ → wordSpan A (P * N) = ⊤` (word span at multiples);
-2. `wordSpan A (n * P) ≤ wordSpan (blockTensor A P) n` (blocking containment).
+If `A` is normal (`∃ N, 0 < N ∧ Kraus.wordSpan A N = ⊤`), then `blockTensor A P`
+is also normal for any `P ≥ 1`. The proof uses:
+1. `Kraus.wordSpan A N = ⊤ → Kraus.wordSpan A (P * N) = ⊤` (word span at multiples);
+2. `Kraus.wordSpan A (n * P) ≤ Kraus.wordSpan (blockTensor A P) n` (blocking containment).
 
-Taking `n = N` in (2) and using (1) with `m = P`: `wordSpan A (N * P) = ⊤` and
-`wordSpan (blockTensor A P) N ⊇ wordSpan A (N * P) = ⊤`. -/
+Taking `n = N` in (2) and using (1) with `m = P`: `Kraus.wordSpan A (N * P) = ⊤` and
+`Kraus.wordSpan (blockTensor A P) N ⊇ Kraus.wordSpan A (N * P) = ⊤`. -/
 theorem isNormal_blockTensor_of_isNormal
     (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : IsNormal A) :
     IsNormal (d := blockPhysDim d P) (D := D) (blockTensor (d := d) (D := D) A P) := by
   obtain ⟨N, hNpos, hNblk⟩ := hN
-  have hwordN : wordSpan A N = ⊤ :=
+  have hwordN : Kraus.wordSpan A N = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
-  have hwordNP : wordSpan A (P * N) = ⊤ :=
+  have hwordNP : Kraus.wordSpan A (P * N) = ⊤ :=
     wordSpan_mul_eq_top_of_wordSpan_eq_top A hwordN (N := N) (m := P) hP
-  -- wordSpan A (N * P) ≤ wordSpan (blockTensor A P) N
-  have hle : wordSpan A (N * P) ≤
-      wordSpan (blockTensor (d := d) (D := D) A P) N :=
+  -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (blockTensor A P) N
+  have hle : Kraus.wordSpan A (N * P) ≤
+      Kraus.wordSpan (blockTensor (d := d) (D := D) A P) N :=
     wordSpan_le_wordSpan_blockTensor A P N
-  have hwordNP' : wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
+  have hwordNP' : Kraus.wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
   rw [hwordNP'] at hle
   refine ⟨N, hNpos, ?_⟩
   exact (wordSpan_eq_top_iff_isNBlkInjective

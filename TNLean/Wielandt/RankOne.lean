@@ -8,7 +8,5 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Wielandt.RankOne
 
-import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.ExtractionFull
 import TNLean.Wielandt.RankOne.MatrixFittingRange
-import TNLean.Wielandt.RankOne.Products

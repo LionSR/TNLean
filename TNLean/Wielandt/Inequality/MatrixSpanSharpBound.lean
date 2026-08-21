@@ -45,7 +45,7 @@ strictly stronger than the qualitative `∃ N` statement exported by
 2. Rewrite as `IsNormal A` via `hasEventuallyFullKrausRank_iff_isNormal`.
 3. Apply the sharp theorem `vecMulVec_eigenvector_exact_wordSpan` from
    `TNLean.Wielandt.RectangularSpan.Universality`, which assembles:
-   - one-sided `rectSpan` strict growth under normality,
+   - one-sided `Kraus.rectSpan` strict growth under normality,
    - the sharp bound `r + D·D' ≤ D² − D + 1`,
    - eigenvector padding from the actual word-span level up to `D² − D + 1`.
 
@@ -86,7 +86,7 @@ theorem vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector
     {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
     ∀ ψ : Fin D → ℂ,
-      Matrix.vecMulVec φ ψ ∈ wordSpan A (D ^ 2 - D + 1) := by
+      Matrix.vecMulVec φ ψ ∈ Kraus.wordSpan A (D ^ 2 - D + 1) := by
   -- Proposition 3 supplies the normality needed by the sharp theorem.
   exact vecMulVec_eigenvector_exact_wordSpan A i₀
     (isNormal_of_isPrimitivePaper A hNorm hPrim) hNotInv hμ heig

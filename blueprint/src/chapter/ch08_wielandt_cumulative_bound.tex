@@ -19,7 +19,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
 \end{definition}
 
 \begin{definition}[Word span]\label{def:word_span}
-    \lean{MPSTensor.wordSpan}
+    \lean{Kraus.wordSpan}
     \leanok
     \uses{def:eval_word}
     The \emph{word span} at length~$n$ is the subspace
@@ -32,7 +32,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
 \end{definition}
 
 \begin{definition}[Cumulative span]\label{def:cumulative_span}
-    \lean{MPSTensor.cumulativeSpan}
+    \lean{Kraus.cumulativeSpan}
     \leanok
     \uses{def:word_span}
     The \emph{cumulative span} at level~$n$ is
@@ -55,7 +55,7 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
 
 \begin{definition}[Fixed-length vector span of an MPS tensor]
     \label{def:mps_vector_spread_span}
-    \lean{MPSTensor.vectorSpreadSpan}
+    \lean{Kraus.vectorSpreadSpan}
     \leanok
     \uses{def:vector_spread_span}
     For an MPS tensor $A$, its fixed-length vector span is the fixed-length
@@ -629,7 +629,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{proof}
 
 \begin{lemma}[Monotonicity of cumulative span]\label{lem:cumulative_mono}
-    \lean{MPSTensor.cumulativeSpan_mono}
+    \lean{Kraus.cumulativeSpan_mono}
     \leanok
     \uses{def:cumulative_span}
     For every $n$, one has $T_n(A)\le T_{n+1}(A)$.
@@ -641,7 +641,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{proof}
 
 \begin{lemma}[Dimension bound]\label{lem:cumulative_finrank_le}
-    \lean{MPSTensor.cumulativeSpan_finrank_le}
+    \lean{Kraus.cumulativeSpan_finrank_le}
     \leanok
     \uses{def:cumulative_span}
     For every $n$, one has $\dim T_n(A)\le D^2$.
@@ -652,7 +652,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{proof}
 
 \begin{theorem}[Cumulative span stabilisation]\label{thm:cumulative_stable}
-    \lean{MPSTensor.cumulativeSpan_stable}
+    \lean{Kraus.cumulativeSpan_stable}
     \leanok
     \uses{def:cumulative_span}
     If $T_n(A)=T_{n+1}(A)$, then $T_m(A)=T_n(A)$ for every $m\ge n$.
@@ -667,7 +667,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{proof}
 
 \begin{theorem}[Dimension growth]\label{thm:cumulative_strict_mono}
-    \lean{MPSTensor.cumulativeSpan_finrank_strict_mono}
+    \lean{Kraus.cumulativeSpan_finrank_strict_mono}
     \leanok
     \uses{def:cumulative_span}
     If $T_n(A)\neq T_{n+1}(A)$, then
@@ -697,7 +697,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Positive-length propagation of block injectivity]
     \label{thm:wordspan_blk_inj_succ}
-    \lean{MPSTensor.wordSpan_succ_eq_mul_left}
+    \lean{Kraus.wordSpan_succ_eq_mul_left}
     \lean{MPSTensor.isNBlkInjective_succ_of_isNBlkInjective}
     \lean{MPSTensor.isNBlkInjective_of_le}
     \leanok
@@ -736,7 +736,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Cumulative span reaches $\MN{D}$]\label{thm:cumulative_eq_top}
     \label{thm:wielandt_bound}
-    \lean{MPSTensor.cumulativeSpan_eq_top}
+    \lean{Kraus.cumulativeSpan_eq_top}
     \leanok
     \uses{def:cumulative_span, def:normal}
     Let $D>0$. If $A$ is normal, then $T_{D^2}(A)=\MN{D}$.
@@ -798,7 +798,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Eigenvector extraction for an MPS tensor]
     \label{thm:mps_eigenvector_from_full_cumulative_span}
-    \lean{MPSTensor.exists_eigenvector_of_cumulativeSpan_eq_top}
+    \lean{Kraus.exists_eigenvector_of_cumulativeSpan_eq_top}
     \leanok
     \uses{def:cumulative_span, thm:eigenvector_from_full_cumulative_span}
     The conclusion of
@@ -846,7 +846,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Sharp nonzero trace product]%
     \label{thm:nonzero_trace_word_sharp}
-    \lean{MPSTensor.exists_nonzero_trace_word_sharp}
+    \lean{Kraus.exists_nonzero_trace_word_sharp}
     \leanok
     \uses{def:normal}
     Let $D>0$. If $A$ is normal, then there exists a word $w$ of length at
@@ -867,7 +867,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Sharp nonzero trace product --- positive length]%
     \label{thm:nonzero_trace_word_sharp_pos}
-    \lean{MPSTensor.exists_nonzero_trace_word_sharp_pos}
+    \lean{Kraus.exists_nonzero_trace_word_sharp_pos}
     \leanok
     \uses{def:normal, thm:nonzero_trace_word_sharp}
     If $A$ is normal and $D\ge1$, then there exists a word~$w$ of
@@ -897,7 +897,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \section{Eigenvector spreading}
 
 \begin{definition}[Cumulative vector span]\label{def:cumulative_vector_span}
-    \lean{MPSTensor.cumulativeVectorSpan}
+    \lean{Kraus.cumulativeVectorSpan}
     \leanok
     \uses{def:mps_tensor}
     Given an MPS tensor~$A$ and a vector $\varphi\in\C^D$, the

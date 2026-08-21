@@ -8,7 +8,7 @@ import TNLean.Wielandt.Inequality.EigenvectorSpreading
 import TNLean.Wielandt.Inequality.MatrixSpanSharpBound
 import TNLean.Wielandt.Inequality.NonzeroTraceWord
 import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
-import TNLean.Wielandt.RankOne.Products
+import QICLean.Kraus.Wielandt.RankOne.Products
 
 /-!
 # Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf Section 6.9)
@@ -30,13 +30,13 @@ Wolf's Theorem 6.9 in *Quantum Channels & Operations: Guided Tour*.
 ### Part 2 — Case (3): noninvertible one-step element with nonzero eigenvalue
 
 Theorem 1 gives the case-(3) bound:
-*if the one-step subspace `S₁(A) = wordSpan A 1` contains a noninvertible matrix
+*if the one-step subspace `S₁(A) = Kraus.wordSpan A 1` contains a noninvertible matrix
 with a nonzero eigenvalue, then `i(A) ≤ D²`.*
 
 * `wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector`:
-  under paper primitivity, normalization, `X ∈ wordSpan A 1`, noninvertibility of
+  under paper primitivity, normalization, `X ∈ Kraus.wordSpan A 1`, noninvertibility of
   `X`, and eigenvector data `φ ≠ 0`, `μ ≠ 0`, we prove
-  `wordSpan A (D ^ 2) = ⊤`.
+  `Kraus.wordSpan A (D ^ 2) = ⊤`.
 
 * `iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector`:
   the corresponding numeric bound `iIndex A ≤ D ^ 2`.
@@ -48,12 +48,12 @@ The former single-Kraus statements
 ### Part 3 — Case (2): invertible one-step element
 
 Theorem 1 also gives the case-(2) bound:
-*if `wordSpan A 1` contains an invertible matrix, then
+*if `Kraus.wordSpan A 1` contains an invertible matrix, then
 `i(A) ≤ D² − krausRank(A) + 1`.*
 
 * `wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit`:
-  under paper primitivity, normalization, `X ∈ wordSpan A 1`, and `IsUnit X`, we
-  prove `wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+  under paper primitivity, normalization, `X ∈ Kraus.wordSpan A 1`, and `IsUnit X`, we
+  prove `Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
 
 * `iIndex_le_of_mem_wordSpan_one_of_isUnit`:
   the corresponding numeric bound
@@ -84,8 +84,8 @@ Theorem 1 bound itself.
 The proof uses the blocking trick: the sharp Lemma 1 word product of length
 `n ≤ D² − krausRank(A) + 1` becomes a Kraus operator of the `n`-blocked tensor.
 Writing `B := blockTensor A n`, the blocked invertible case uses case (2) to get
-`wordSpan B (D² - krausRank B + 1) = ⊤`, which is then padded to level `D²`.
-The blocked noninvertible case uses case (3) to get `wordSpan B (D²) = ⊤`
+`Kraus.wordSpan B (D² - krausRank B + 1) = ⊤`, which is then padded to level `D²`.
+The blocked noninvertible case uses case (3) to get `Kraus.wordSpan B (D²) = ⊤`
 directly. Transferring the blocked conclusion back to the original tensor
 yields the general bound.
 
@@ -126,10 +126,10 @@ theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
 /-! ## Part 2: Case (3) — noninvertible with nonzero eigenvalue gives `D²` -/
 
 /-- **Theorem 1, case (3)**: under the paper-faithful one-step subspace
-noninvertible eigenvalue hypotheses, `wordSpan A (D ^ 2) = ⊤`.
+noninvertible eigenvalue hypotheses, `Kraus.wordSpan A (D ^ 2) = ⊤`.
 
 If `A` is normalized and primitive in the paper's sense, and some arbitrary
-matrix `X ∈ S₁(A) = wordSpan A 1` is noninvertible and has a nonzero eigenvalue
+matrix `X ∈ S₁(A) = Kraus.wordSpan A 1` is noninvertible and has a nonzero eigenvalue
 with eigenvector `φ ≠ 0`, then the exact word span at level `D ^ 2` is the full
 matrix algebra.
 
@@ -145,40 +145,40 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A)
     {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ wordSpan A 1)
+    (hX : X ∈ Kraus.wordSpan A 1)
     (hNotInv : ¬ IsUnit (toLin' X))
     {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
     (heig : X *ᵥ φ = μ • φ) :
-    wordSpan A (D ^ 2) = ⊤ := by
-  let B : MPSTensor (d + 1) D := oneStepAugment A X
+    Kraus.wordSpan A (D ^ 2) = ⊤ := by
+  let B : MPSTensor (d + 1) D := Kraus.oneStepAugment A X
   have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
   have hNB : IsNormal B := by
     simpa [B] using isNormal_oneStepAugment_of_mem_wordSpan_one A hX hN
   have heigB : B (0 : Fin (d + 1)) *ᵥ φ = μ • φ := by
-    simpa [B, oneStepAugment] using heig
+    simpa [B, Kraus.oneStepAugment] using heig
   have hNotInvB : ¬ IsUnit (toLin' (B (0 : Fin (d + 1)))) := by
-    simpa [B, oneStepAugment] using hNotInv
-  have hCum : cumulativeVectorSpan B φ (D - 1) = ⊤ :=
+    simpa [B, Kraus.oneStepAugment] using hNotInv
+  have hCum : Kraus.cumulativeVectorSpan B φ (D - 1) = ⊤ :=
     eigenvector_spreading B φ hφ (0 : Fin (d + 1)) μ hμ heigB hNB
-  have hVec : vectorSpreadSpan B φ (D - 1) = ⊤ :=
-    vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
+  have hVec : Kraus.vectorSpreadSpan B φ (D - 1) = ⊤ :=
+    Kraus.vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
       B φ (D - 1) (0 : Fin (d + 1)) μ hμ heigB hCum
   have hRankOne : ∀ ψ : Fin D → ℂ,
-      vecMulVec φ ψ ∈ wordSpan B (D ^ 2 - D + 1) :=
+      vecMulVec φ ψ ∈ Kraus.wordSpan B (D ^ 2 - D + 1) :=
     vecMulVec_eigenvector_exact_wordSpan B (0 : Fin (d + 1)) hNB hNotInvB hμ heigB
   have hBasis : ∀ j : Fin D,
-      vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan B (D ^ 2 - D + 1) :=
+      vecMulVec φ (Pi.single j (1 : ℂ)) ∈ Kraus.wordSpan B (D ^ 2 - D + 1) :=
     fun j => hRankOne (Pi.single j 1)
-  have hAssembly : wordSpan B ((D - 1) + (D ^ 2 - D + 1)) = ⊤ :=
-    wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis B φ hVec hBasis
+  have hAssembly : Kraus.wordSpan B ((D - 1) + (D ^ 2 - D + 1)) = ⊤ :=
+    Kraus.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis B φ hVec hBasis
   have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hArith : (D - 1) + (D ^ 2 - D + 1) = D ^ 2 := by
     have hDD2 : D ≤ D ^ 2 := Nat.le_self_pow (by omega) D
     zify [hD_pos, hDD2]; ring
-  have hBtop : wordSpan B (D ^ 2) = ⊤ := by
+  have hBtop : Kraus.wordSpan B (D ^ 2) = ⊤ := by
     rwa [hArith] at hAssembly
-  have hEq : wordSpan B (D ^ 2) = wordSpan A (D ^ 2) := by
-    simpa [B] using wordSpan_oneStepAugment_eq A hX (D ^ 2)
+  have hEq : Kraus.wordSpan B (D ^ 2) = Kraus.wordSpan A (D ^ 2) := by
+    simpa [B] using Kraus.wordSpan_oneStepAugment_eq A hX (D ^ 2)
   rwa [hEq] at hBtop
 
 /-- **Theorem 1, case (3)**: under the paper-faithful one-step subspace
@@ -192,16 +192,16 @@ theorem iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A)
     {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ wordSpan A 1)
+    (hX : X ∈ Kraus.wordSpan A 1)
     (hNotInv : ¬ IsUnit (toLin' X))
     {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
     (heig : X *ᵥ φ = μ • φ) :
     iIndex A ≤ D ^ 2 := by
-  have htop : wordSpan A (D ^ 2) = ⊤ :=
+  have htop : Kraus.wordSpan A (D ^ 2) = ⊤ :=
     wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector
       A hNorm hPrim hX hNotInv hφ hμ heig
   exact Nat.sInf_le
-    (show D ^ 2 ∈ {n : ℕ | 0 < n ∧ wordSpan A n = ⊤} from
+    (show D ^ 2 ∈ {n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤} from
       ⟨pow_pos (NeZero.pos D) 2, htop⟩)
 
 /-- **Theorem 1, case (3)**: generator corollary of the one-step subspace theorem.
@@ -221,10 +221,10 @@ lemma wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
     (hNotInv : ¬ IsUnit (toLin' (A i₀)))
     {φ : Fin D → ℂ} {μ : ℂ} (hφ : φ ≠ 0) (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
-    wordSpan A (D ^ 2) = ⊤ := by
+    Kraus.wordSpan A (D ^ 2) = ⊤ := by
   exact
     wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector
-      A hNorm hPrim (apply_mem_wordSpan_one A i₀) hNotInv hφ hμ heig
+      A hNorm hPrim (Kraus.apply_mem_wordSpan_one A i₀) hNotInv hφ hμ heig
 
 /-- **Theorem 1, case (3)**: generator corollary of the one-step subspace theorem.
 
@@ -242,15 +242,15 @@ lemma iIndex_le_sq_of_noninvertible_eigenvector
     iIndex A ≤ D ^ 2 := by
   exact
     iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector
-      A hNorm hPrim (apply_mem_wordSpan_one A i₀) hNotInv hφ hμ heig
+      A hNorm hPrim (Kraus.apply_mem_wordSpan_one A i₀) hNotInv hφ hμ heig
 
 /-! ## Part 3: Case (2) — invertible one-step subspace element -/
 
 /-- **Theorem 1, case (2)**: under the paper-faithful one-step subspace
-invertibility hypothesis, `wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
+invertibility hypothesis, `Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤`.
 
 If `A` is normalized and primitive in the paper's sense and some arbitrary
-matrix `X ∈ S₁(A) = wordSpan A 1` is invertible, then the sharp case-(2)
+matrix `X ∈ S₁(A) = Kraus.wordSpan A 1` is invertible, then the sharp case-(2)
 word-length bound holds.
 
 The proof adds `X` as a redundant first generator. This leaves every exact word
@@ -265,24 +265,24 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A)
     {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ wordSpan A 1)
+    (hX : X ∈ Kraus.wordSpan A 1)
     (hInv : IsUnit X) :
-    wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
-  let B : MPSTensor (d + 1) D := oneStepAugment A X
+    Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
+  let B : MPSTensor (d + 1) D := Kraus.oneStepAugment A X
   have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
   have hNB : IsNormal B := by
     simpa [B] using isNormal_oneStepAugment_of_mem_wordSpan_one A hX hN
   have hInvB : IsUnit (B (0 : Fin (d + 1))) := by
-    simpa [B, oneStepAugment] using hInv
+    simpa [B, Kraus.oneStepAugment] using hInv
   have hKraus : krausRank B = krausRank A := by
     simpa [B] using krausRank_oneStepAugment A hX
-  have hBtop : wordSpan B (D ^ 2 - krausRank B + 1) = ⊤ :=
+  have hBtop : Kraus.wordSpan B (D ^ 2 - krausRank B + 1) = ⊤ :=
     wordSpan_eq_top_of_isNormal_of_isUnit B (0 : Fin (d + 1)) hInvB hNB
-  have hBtop' : wordSpan B (D ^ 2 - krausRank A + 1) = ⊤ := by
+  have hBtop' : Kraus.wordSpan B (D ^ 2 - krausRank A + 1) = ⊤ := by
     simpa [hKraus] using hBtop
-  have hEq : wordSpan B (D ^ 2 - krausRank A + 1) =
-      wordSpan A (D ^ 2 - krausRank A + 1) := by
-    simpa [B] using wordSpan_oneStepAugment_eq A hX (D ^ 2 - krausRank A + 1)
+  have hEq : Kraus.wordSpan B (D ^ 2 - krausRank A + 1) =
+      Kraus.wordSpan A (D ^ 2 - krausRank A + 1) := by
+    simpa [B] using Kraus.wordSpan_oneStepAugment_eq A hX (D ^ 2 - krausRank A + 1)
   rwa [hEq] at hBtop'
 
 /-- **Theorem 1, case (2)**: under the paper-faithful one-step subspace
@@ -296,15 +296,15 @@ theorem iIndex_le_of_mem_wordSpan_one_of_isUnit
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A)
     {X : Matrix (Fin D) (Fin D) ℂ}
-    (hX : X ∈ wordSpan A 1)
+    (hX : X ∈ Kraus.wordSpan A 1)
     (hInv : IsUnit X) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by
-  have htop : wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ :=
+  have htop : Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ :=
     wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
       A hNorm hPrim hX hInv
   exact Nat.sInf_le
     (show D ^ 2 - krausRank A + 1 ∈
-        {n : ℕ | 0 < n ∧ wordSpan A n = ⊤} from ⟨by omega, htop⟩)
+        {n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤} from ⟨by omega, htop⟩)
 
 /-- **Theorem 1, case (2)**: generator corollary of the one-step subspace theorem.
 
@@ -320,9 +320,9 @@ lemma wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
     (hPrim : IsPrimitivePaper A)
     (i₀ : Fin d)
     (hInv : IsUnit (A i₀)) :
-    wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
+    Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
   exact wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
-    A hNorm hPrim (apply_mem_wordSpan_one A i₀) hInv
+    A hNorm hPrim (Kraus.apply_mem_wordSpan_one A i₀) hInv
 
 /-- **Theorem 1, case (2)**: generator corollary of the one-step subspace theorem.
 
@@ -337,7 +337,7 @@ lemma iIndex_le_of_isPrimitivePaper_of_isUnit
     (hInv : IsUnit (A i₀)) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by
   exact iIndex_le_of_mem_wordSpan_one_of_isUnit
-    A hNorm hPrim (apply_mem_wordSpan_one A i₀) hInv
+    A hNorm hPrim (Kraus.apply_mem_wordSpan_one A i₀) hInv
 
 /-! ## Part 4: Case (1) — General bound via blocking
 
@@ -346,8 +346,8 @@ The full Wielandt bound combines sharp Lemma 1 (a word product of length
 product becomes a Kraus operator of the `n`-blocked tensor. In the blocked
 invertible case, case (2) gives a sharper level
 `D² - krausRank (blockTensor A n) + 1`, which is then padded to `D²`; in the
-blocked noninvertible case, case (3) gives `wordSpan (blockTensor A n) (D²) = ⊤`
-directly. This transfers to `wordSpan A (D² · n) = ⊤`.
+blocked noninvertible case, case (3) gives `Kraus.wordSpan (blockTensor A n) (D²) = ⊤`
+directly. This transfers to `Kraus.wordSpan A (D² · n) = ⊤`.
 
 Paper: arXiv:0909.5347, Theorem 1 case (1); Wolf, Theorem 6.9. -/
 
@@ -360,11 +360,11 @@ Under paper primitivity and normalization:
 2. This matrix has a nonzero eigenvalue `μ` with eigenvector `φ`.
 3. The `n`-blocked tensor `blockTensor A n` has this matrix as a Kraus operator.
 4. In the blocked invertible case, case (2) yields
-   `wordSpan (blockTensor A n) (D² - krausRank (blockTensor A n) + 1) = ⊤`,
-   hence also `wordSpan (blockTensor A n) (D²) = ⊤`; in the blocked
-   noninvertible case, case (3) gives `wordSpan (blockTensor A n) (D²) = ⊤`
+   `Kraus.wordSpan (blockTensor A n) (D² - krausRank (blockTensor A n) + 1) = ⊤`,
+   hence also `Kraus.wordSpan (blockTensor A n) (D²) = ⊤`; in the blocked
+   noninvertible case, case (3) gives `Kraus.wordSpan (blockTensor A n) (D²) = ⊤`
    directly.
-5. Transferring back: `wordSpan A (D² · n) = ⊤`.
+5. Transferring back: `Kraus.wordSpan A (D² · n) = ⊤`.
 6. Hence `i(A) ≤ D² · n ≤ (D² − krausRank(A) + 1) · D²`.
 
 Paper: arXiv:0909.5347, Theorem 1; Wolf, Theorem 6.9.
@@ -408,24 +408,24 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
     · -- B i₀ is invertible: apply case (2) to blocked tensor, then permanence
       have hInvTop := wordSpan_eq_top_of_isNormal_of_isUnit B i₀ hInv hNB
       -- Use permanence to extend to level D² (since D²-krausRank B+1 ≤ D²)
-      have hD2top : wordSpan B (D ^ 2) = ⊤ := by
+      have hD2top : Kraus.wordSpan B (D ^ 2) = ⊤ := by
         apply wordSpan_eq_top_of_ge_of_isUnit B i₀ hInv hInvTop
         have hkB : krausRank B ≤ D ^ 2 := by
-          simpa [krausRank] using wordSpan_finrank_le B 1
-        -- krausRank B ≥ 1 since B i₀ is a unit (hence nonzero) in wordSpan B 1
+          simpa [krausRank] using Kraus.wordSpan_finrank_le B 1
+        -- krausRank B ≥ 1 since B i₀ is a unit (hence nonzero) in Kraus.wordSpan B 1
         have hkB_pos : 1 ≤ krausRank B := by
           rw [krausRank, Nat.one_le_iff_ne_zero]
           intro h0
           have hbot := Submodule.finrank_eq_zero.mp h0
-          have hBmem : B i₀ ∈ wordSpan B 1 := by
-            have := evalWord_mem_wordSpan B ([i₀] : List (Fin (blockPhysDim d n)))
+          have hBmem : B i₀ ∈ Kraus.wordSpan B 1 := by
+            have := Kraus.evalWord_mem_wordSpan B ([i₀] : List (Fin (blockPhysDim d n)))
             simpa [evalWord] using this
           rw [hbot] at hBmem
           change B i₀ = 0 at hBmem
           exact not_isUnit_zero (hBmem ▸ hInv)
         omega
-      -- Transfer: wordSpan A (D² * n) = ⊤
-      have hAtop : wordSpan A (D ^ 2 * n) = ⊤ :=
+      -- Transfer: Kraus.wordSpan A (D² * n) = ⊤
+      have hAtop : Kraus.wordSpan A (D ^ 2 * n) = ⊤ :=
         wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A n (D ^ 2) hD2top
       -- iIndex A ≤ D² * n ≤ D² * (D²-d'+1) = (D²-d'+1) * D²
       calc iIndex A ≤ D ^ 2 * n :=
@@ -436,11 +436,11 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
     · -- B i₀ is not invertible: apply case (3) to blocked tensor
       have hNotInv : ¬ IsUnit (toLin' (B i₀)) :=
         fun h => hInv (Matrix.isUnit_toLin'_iff.mp h)
-      have hD2top : wordSpan B (D ^ 2) = ⊤ :=
+      have hD2top : Kraus.wordSpan B (D ^ 2) = ⊤ :=
         wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector
           B hNormB hPrimB i₀ hNotInv hφ hμ heigB
-      -- Transfer: wordSpan A (D² * n) = ⊤
-      have hAtop : wordSpan A (D ^ 2 * n) = ⊤ :=
+      -- Transfer: Kraus.wordSpan A (D² * n) = ⊤
+      have hAtop : Kraus.wordSpan A (D ^ 2 * n) = ⊤ :=
         wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A n (D ^ 2) hD2top
       calc iIndex A ≤ D ^ 2 * n :=
           Nat.sInf_le ⟨Nat.mul_pos (pow_pos hD_pos 2) hn_pos, hAtop⟩

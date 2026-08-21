@@ -24,7 +24,7 @@ a lower bound on `1 - ρ`).
   bound when spectral radius < 1
 * `compl_eigenvalue_norm_lt_one_of_primitive` in `Peripheral/Spectrum.lean` —
   primitive channels have a complementary transfer-map gap
-* `cumulativeSpan_eq_top` in `Wielandt/SpanGrowth/NonzeroTraceProduct.lean` —
+* `Kraus.cumulativeSpan_eq_top` in `Wielandt/SpanGrowth/NonzeroTraceProduct.lean` —
   the D² Wielandt bound
 
 ## Main results

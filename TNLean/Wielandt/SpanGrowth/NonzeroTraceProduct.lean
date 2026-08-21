@@ -29,61 +29,16 @@ variable {d D : ℕ}
 Paper: arXiv:0909.5347, Lemma 1, proof paragraphs 1–3. -/
 theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤ := by
+    Kraus.cumulativeSpan A (D ^ 2) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_bound A hN
-
-/-- **Lemma 1, coarse span form** (arXiv:0909.5347): if `A` is normal, its cumulative
-word span equals the full matrix algebra by step `D²`. -/
-theorem cumulativeSpan_eq_top [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤ := by
-  obtain ⟨N, _, hN⟩ := hN
-  exact Kraus.cumulativeSpan_eq_top A hN
-
-/-- A coarse corollary permitting the empty word: if `A` is normal, some word `w` of
-length at most `D²` satisfies `Matrix.trace (evalWord A w) ≠ 0`. -/
-theorem exists_nonzero_trace_word [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    ∃ w : List (Fin d),
-      w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w) ≠ 0 := by
-  obtain ⟨N, _, hN⟩ := hN
-  exact Kraus.exists_nonzero_trace_word A hN
-
-/-- The dimension of the cumulative span at step one is at least that of the exact
-one-step word span, as used in the sharp form of arXiv:0909.5347, Lemma 1. -/
-theorem finrank_cumulativeSpan_one_ge_wordSpan_one (A : MPSTensor d D) :
-    Module.finrank ℂ (cumulativeSpan A 1) ≥
-      Module.finrank ℂ (wordSpan A 1) :=
-  Kraus.finrank_cumulativeSpan_one_ge_wordSpan_one A
 
 /-- **Lemma 1, sharp span form** (arXiv:0909.5347): if `A` is normal, its cumulative
 word span is full by step `D² − dim(S₁(A)) + 1`. -/
 theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1) = ⊤ := by
+    Kraus.cumulativeSpan A (D ^ 2 - Module.finrank ℂ (Kraus.wordSpan A 1) + 1) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp A hN
-
-/-- A sharp corollary permitting the empty word: if `A` is normal, some word `w` of
-length at most `D² − dim(S₁(A)) + 1` has nonzero trace. -/
-theorem exists_nonzero_trace_word_sharp [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    ∃ w : List (Fin d),
-      w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1 ∧
-        Matrix.trace (evalWord A w) ≠ 0 := by
-  obtain ⟨N, _, hN⟩ := hN
-  exact Kraus.exists_nonzero_trace_word_sharp A hN
-
-/-- **Lemma 1, sharp positive-length form** (arXiv:0909.5347): if `A` is normal, some
-nonempty word `w` of length at most `D² − dim(S₁(A)) + 1` has nonzero trace. -/
-theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    ∃ w : List (Fin d),
-      1 ≤ w.length ∧
-      w.length ≤ D ^ 2 - Module.finrank ℂ (wordSpan A 1) + 1 ∧
-        Matrix.trace (evalWord A w) ≠ 0 := by
-  obtain ⟨N, hNpos, hN⟩ := hN
-  exact Kraus.exists_nonzero_trace_word_sharp_pos A hN hNpos
 
 end MPSTensor

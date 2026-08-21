@@ -381,7 +381,7 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hSpan : ∀ j : Fin r, wordSpan (A j) (N - L) = ⊤)
+    (hSpan : ∀ j : Fin r, Kraus.wordSpan (A j) (N - L) = ⊤)
     (hIdentity : ∀ (j : Fin r) (i : Fin N),
       N < i.val + L →
         ∀ ρ : Fin (N - L) → Fin d,
@@ -432,7 +432,7 @@ theorem
   refine blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities
     μ A hN hLN X ?_ hIdentity
   intro j
-  exact wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
+  exact Kraus.wordSpan_eq_top_of_ge_of_unital (A j) (hUnital j)
     ((wordSpan_eq_top_iff_isNBlkInjective (A j) L₀).mpr (hBlk j)) (by omega)
 
 /-- Source complementary-word comparisons give the periodic constraints for each
