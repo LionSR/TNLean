@@ -7,9 +7,10 @@ import TNLean.Channel.Schwarz.TwoVariable
 import TNLean.Channel.Schwarz.SchurComplement
 
 /-!
-# The unconditional two-variable operator Schwarz inequality
+# The equal-dimensional unconditional two-variable operator Schwarz inequality
 
-This file proves the unconditional form of Wolf's Theorem 5.3 (Eq. (5.4)):
+This file proves the equal-dimensional unconditional form of Wolf's Theorem 5.3
+(Eq. (5.4)):
 for a 2-positive map `E` and all `A, B`,
 `E(A†B) · pinv(E(B†B)) · E(B†A) ≤ E(A†A)`, with the inverse taken on the
 range via the Moore–Penrose pseudoinverse `Douglas.pinv`.
@@ -25,6 +26,12 @@ than the `EuclideanSpace`/`PiLp` range-ker duality route that caused
 `whnf` timeouts (documented in
 `docs/paper-gaps/wolf_ch5_two_variable_unconditional.tex`).
 
+**Scope restriction (equal dimensions):** Wolf states the theorem for
+$E:M_{d'}(\mathbb C)\to M_d(\mathbb C)$, while `Is2PositiveMap` currently
+describes only endomorphisms of one matrix algebra. The rectangular theorem
+remains unformalized. See
+`docs/paper-gaps/wolf_ch5_two_variable_unconditional.tex`.
+
 ## Main results
 
 * `ker_EBB_le_ker_EAB`: `ker(E(B†B)) ⊆ ker(E(A†B))`, the kernel-inclusion
@@ -33,8 +40,8 @@ than the `EuclideanSpace`/`PiLp` range-ker duality route that caused
   `E(B†B) · (pinv(E(B†B)) · E(B†A)) = E(B†A)`, i.e. the range inclusion
   `ran E(B†A) ⊆ ran E(B†B)` in pseudoinverse form.
 * `schwarz_two_variable_unconditional`: the unconditional inequality
-  `E(A†B) · pinv(E(B†B)) · E(B†A) ≤ E(A†A)`, Wolf's Eq. (5.4) literally, no
-  witness vector assumed to exist.
+  `E(A†B) · pinv(E(B†B)) · E(B†A) ≤ E(A†A)`, the equal-dimensional
+  specialization of Wolf's Eq. (5.4), with no witness vector assumed to exist.
 
 ## References
 
@@ -111,7 +118,12 @@ theorem EBB_mul_pinv_mul_EBA_eq (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMa
 with the inverse taken on the range via the Moore–Penrose pseudoinverse
 `Douglas.pinv`. Unlike `SchwarzTwoVariable.schwarz_two_variable`, no
 witness vector `w` is assumed to exist: the pseudoinverse witness
-`w = pinv(E(B†B)) · E(B†A) · v` is constructed explicitly for every `v`. -/
+`w = pinv(E(B†B)) · E(B†A) · v` is constructed explicitly for every `v`.
+
+**Scope restriction (equal dimensions):** Wolf allows a two-positive map
+$E:M_{d'}(\mathbb C)\to M_d(\mathbb C)$. This theorem treats $d'=d$ because
+`Is2PositiveMap` is presently defined only for endomorphisms. See
+`docs/paper-gaps/wolf_ch5_two_variable_unconditional.tex`. -/
 theorem schwarz_two_variable_unconditional (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
     (A B : Mat) :
     E (Aᴴ * B) * Douglas.pinv (E (Bᴴ * B)) * E (Bᴴ * A) ≤ E (Aᴴ * A) := by
