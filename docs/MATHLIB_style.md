@@ -1,3 +1,9 @@
+<!-- Canonical source: https://github.com/texra-ai/texra-lean-skills/blob/main/docs/MATHLIB_style.md
+     This file is a stamped mirror: the body below this header is the shared
+     canonical text; project-specific material lives only in the "Project
+     addendum" section at the end. Edit the canonical file upstream and
+     re-copy; edit only the addendum here. -->
+
 # Library Style Guidelines
 
 In addition to the [naming conventions](naming.html),
@@ -752,7 +758,7 @@ In this case, no deprecation attribute is required for X, but it is for W.
 
 Named instances do not require deprecations. Deprecated declarations can be deleted after 6 months.
 
-TNLean also permits a narrow repository-local exception for exact pass-through
+A project may also permit a narrow repository-local exception for exact pass-through
 declarations with no independent mathematical content.  A public theorem,
 definition, or abbreviation may be removed without a transition declaration
 only when all of the following hold:
@@ -760,7 +766,7 @@ only when all of the following hold:
 - the old declaration merely forwards to an existing theorem or definition,
   exposes a field of a bundled structure, or names a proof step now written
   directly at the use site;
-- all non-Archive uses in TNLean have been migrated or were already absent, and
+- all non-archive uses in the project have been migrated or were already absent, and
   no blueprint `\lean{...}` tag cites the old name;
 - the PR body and an audit note name the removed declarations, give the
   replacement for each one, and state that this repository-local exception is
@@ -772,3 +778,14 @@ The `nonrec` keyword tells Lean to assume that apparently recursive calls in the
 are not actually recursive, and instead look for declarations in other namespaces with the same name.
 Avoid `nonrec` when the recursive call conflicts with another declaration *in a namespace*, because then adding the namespace to that declaration is more informative (to both Lean and the user). If it conflicts with a declaration in the root namespace, then both `nonrec` and `_root_.[...]` are acceptable. Sometimes avoiding `nonrec` requires forgoing the use of dot notation within the body of that declaration.
 (There are currently many places in Mathlib that break this rule.)
+
+
+## Project addendum (TNLean)
+
+TNLean exercises the repository-local pass-through exception described in
+the deprecation section: a public declaration that merely forwards to an
+existing theorem, exposes a bundled-structure field, or names a proof step
+now written at the use site may be removed without a transition declaration,
+provided all non-`Archive` uses are migrated, no blueprint `\lean{...}` tag
+cites the old name, and the PR body plus an audit note name each removed
+declaration with its replacement.

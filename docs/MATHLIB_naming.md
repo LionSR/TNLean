@@ -1,3 +1,9 @@
+<!-- Canonical source: https://github.com/texra-ai/texra-lean-skills/blob/main/docs/MATHLIB_naming.md
+     This file is a stamped mirror: the body below this header is the shared
+     canonical text; project-specific material lives only in the "Project
+     addendum" section at the end. Edit the canonical file upstream and
+     re-copy; edit only the addendum here. -->
+
 # Mathlib naming conventions
 
 This guide is written for Lean 4.

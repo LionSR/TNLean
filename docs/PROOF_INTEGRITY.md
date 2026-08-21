@@ -1,3 +1,9 @@
+<!-- Canonical source: https://github.com/texra-ai/texra-lean-skills/blob/main/docs/PROOF_INTEGRITY.md
+     This file is a stamped mirror: the body below this header is the shared
+     canonical text; project-specific material lives only in the "Project
+     addendum" section at the end. Edit the canonical file upstream and
+     re-copy; edit only the addendum here. -->
+
 # Lean Proof Integrity Rules
 
 This file is the **single source of truth** for proof integrity checks in this
@@ -50,64 +56,10 @@ There are no sanctioned axiom declarations in this repository. Any new
 `axiom` declaration is a blocker.
 
 Historically, `hayashi_ssa_equality_characterization_forward` in
-`TNLean/Axioms/Entropy.lean` was sanctioned for issue #632 / gate #236. It is
-now a theorem proved in `TNLean/Analysis/EntropyMarkovForward.lean`; the
-compatibility module was relocated to
-`TNLean/Entropy/SSAEqualityCharacterization.lean`, which retains the
-established public name. The reverse direction is proved in
-`TNLean/Analysis/EntropyMarkovReverse.lean`, and the biconditional combines the
-two proved implications.
-
-`TNLean/Analysis/LiebConcavity.lean` (formerly
-`TNLean/Axioms/OperatorConvexity.lean`) declares no axioms: the operator
-Jensen inequalities for the concave real power, convex real power, and logarithm
-(`posMap_rpow_concave_jensen`, `posMap_rpow_convex_jensen`,
-`posMap_log_concave_jensen`) and Lieb's concavity theorem (`lieb_concavity_posDef`)
-are all proved there, the former three from the Loewner integral representation of
-the power function and the last from the operator integral representation of the
-fractional product together with the vectorization isometry. The former
-`trace_rpow_concave_axiom` / `trace_rpow_convex_axiom` were discharged earlier; see
-`TNLean/Analysis/OperatorConvexity.lean`. The `TNLean/Axioms/` directory held
-only proved theorems and was dissolved: its four modules were relocated to
-their subject homes and the `_axiom` suffix was dropped from the one
-declaration name that still carried it.
-
-### Circular reasoning
-
-Lean's kernel forbids literal declaration cycles, so focus on **mathematical
-circularity**:
-
-- Proofs that assume (or trivially reintroduce) the statement being proved as a
-  local hypothesis, then immediately close the goal from that hypothesis
-- Helper lemmas in the same file that essentially restate the main goal and are
-  only used to prove that goal
-- Local `have`/`let` bindings that are just the goal rephrased, used to solve
-  the goal without any real argument
-- Newly introduced `axiom` that makes a difficult statement trivially provable
-  without connecting to existing Mathlib / core theorems
-- Abuse of `unsafe` features to fabricate proofs instead of giving a genuine
-  derivation
-- `by exact h` where `h` came from an unjustified assumption identical to the
-  goal
-
-### Castle-in-the-air (ungrounded proofs)
-
-Proofs that avoid grounding in Mathlib:
-
-- Custom re-declarations of standard Mathlib lemmas (e.g., re-proving
-  `add_comm` instead of importing it)
-- `axiom` or `sorry`-based helper lemmas for facts that already exist in
-  Mathlib
-- Chains of custom lemmas that never bottom out in Mathlib or Lean core
-- `private` helper lemmas that duplicate Mathlib API (e.g., custom matrix
-  transpose lemmas when `Matrix.transpose_*` exists)
-- Overly long proof chains replaceable by a single Mathlib lemma
-
-When flagging, perform an actual lookup (grep, `#find?`, `exact?`,
-`library_search`). If an equivalent exists, cite the Mathlib lemma and module
-path. If not, state "no equivalent found" with search evidence.
-
----
+Any historically sanctioned axiom, and the theorem that later discharged
+it, is project fact rather than policy: record that history in the
+project's own conventions addendum (CLAUDE.md or a local docs page), not
+here.
 
 ## Warnings
 
@@ -159,3 +111,16 @@ acceptable with justification.
 
 **Updating rules**: Edit this file and all referencing workflows will
 automatically pick up the changes.
+
+
+## Project addendum (TNLean)
+
+### Sanctioned-axiom history
+
+There are no sanctioned axiom declarations in this repository; any new
+`axiom` declaration is a blocker. The one historically sanctioned axiom
+(`hayashi_ssa_equality_characterization_forward`, issue #632 / gate #236)
+was discharged as a theorem and its modules moved to the
+[QICLean](https://github.com/LionSR/QICLean) companion library in the
+quantum-channel extraction; QICLean's copy of this document records that
+history in its own addendum.

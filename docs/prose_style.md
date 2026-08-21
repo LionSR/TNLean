@@ -1,6 +1,12 @@
+<!-- Canonical source: https://github.com/texra-ai/texra-lean-skills/blob/main/docs/prose_style.md
+     This file is a stamped mirror: the body below this header is the shared
+     canonical text; project-specific material lives only in the "Project
+     addendum" section at the end. Edit the canonical file upstream and
+     re-copy; edit only the addendum here. -->
+
 # Prose Style Guide
 
-This document specifies the prose conventions for **all reader-facing text in TNLean**.
+This document specifies the prose conventions for **all reader-facing text in the project**.
 It is the authoritative source for:
 
 1. The "no Lean jargon in the leanblueprint" rule.
@@ -119,8 +125,8 @@ without opening the `.lean` files, the prose has failed.
 ### Allowed in Lean docstrings
 
 - Mathematical descriptions of what the declaration means.
-- In migrated docstring regions (currently `TNLean/MPS/ParentHamiltonian`),
-  inline mathematical expressions should use `\(...\)`, not backtick code spans.
+- In migrated docstring regions (each project designates its own), inline
+  mathematical expressions should use `\(...\)`, not backtick code spans.
   Reserve backticks for genuine Lean references.
 - Backticks around genuine Lean references (e.g. ``` `Fin d` ```, ``` `evalWord` ```)
   when explaining how to use the API of *this* declaration. Use sparingly — prefer
@@ -140,7 +146,7 @@ terminology, and hypotheses used in the cited source. If the formalization uses
 a local auxiliary name, describe the mathematical statement first and put the
 local convention in an explicitly marked note only when the reader needs it.
 
-For MPS canonical-form and fundamental-theorem material, this means that formulas
+For theorem-dense material, this means that formulas
 such as
 ```tex
 A^i = \bigoplus_k \mu_k A_k^i,
@@ -302,7 +308,7 @@ leave the genuine ones alone.
 The word "data" is also context-sensitive. It is acceptable in established
 mathematical phrases or when naming a formal structure whose fields are listed
 immediately. It should not replace the formula or tuple that the reader needs,
-especially in the MPS fundamental-theorem chapters.
+especially in theorem-dense chapters.
 
 ---
 
@@ -327,3 +333,12 @@ especially in the MPS fundamental-theorem chapters.
   `\begin{definition}`. Definitions introduce new objects; theorems prove properties.
 
 See `CLAUDE.md` for the full docs index.
+
+
+## Project addendum (TNLean)
+
+- The designated migrated docstring region is `TNLean/MPS/ParentHamiltonian`:
+  inline mathematics there uses `\(...\)`, never backtick code spans.
+- The formula-completeness rule bites hardest in the MPS canonical-form and
+  fundamental-theorem chapters; prose there must carry the full formulas and
+  tuples, not name them away.
