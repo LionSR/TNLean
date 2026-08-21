@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from qic_blueprint_boundary_report import (
     LEDGER_COLUMNS,
+    blueprint_environments,
     blueprint_file_manifest,
     boundary_report,
     environment_uses,
@@ -589,6 +590,32 @@ Actual proof.
         report = boundary_report(self.root)
         self.assertEqual(report["environment_count"], 1)
         self.assertEqual(report["items"][0]["end_line"], 12)
+        self.assertEqual(report["simulated_output_errors"], [])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_metadata_tokens_in_raw_text_are_ignored(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{verbatim}
+\label{thm:displayed}
+\lean{MPSTensor.staying}
+\uses{thm:missing}
+See Theorem~\ref{thm:missing}.
+\end{verbatim}
+\begin{proof}
+Proof.
+\end{proof}
+"""
+        )
+        report = boundary_report(self.root)
+        item = report["items"][0]
+        self.assertEqual(item["labels"], ["thm:qic"])
+        self.assertEqual(item["declarations"], ["Kraus.moved"])
+        environment = blueprint_environments(self.root / "blueprint" / "src")[0]
+        self.assertEqual(environment.uses, ())
+        self.assertEqual(environment.references, ())
         self.assertEqual(report["simulated_output_errors"], [])
 
     def test_rejects_unbalanced_non_item_environment(self) -> None:

@@ -239,6 +239,16 @@ def _raw_text_line_numbers(source_lines: list[str]) -> set[int]:
     return raw_lines
 
 
+def _source_text_without_raw_lines(
+    source_lines: list[str], raw_text_lines: set[int], start_line: int, end_line: int
+) -> str:
+    """Return a source interval with raw-text lines erased."""
+    return "\n".join(
+        "" if line_no in raw_text_lines else source_lines[line_no - 1]
+        for line_no in range(start_line, end_line + 1)
+    )
+
+
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
     """Parse theorem-like items, including an attached proof and intervening lines."""
     records: list[BlueprintEnvironment] = []
@@ -304,10 +314,12 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                     f"unterminated proof after {rel}:{statement_end_line}"
                 )
 
-            raw_statement_body = "\n".join(
-                source_lines[start_line - 1 : statement_end_line]
+            raw_statement_body = _source_text_without_raw_lines(
+                source_lines, raw_text_lines, start_line, statement_end_line
             )
-            raw_body = "\n".join(source_lines[start_line - 1 : item_end_line])
+            raw_body = _source_text_without_raw_lines(
+                source_lines, raw_text_lines, start_line, item_end_line
+            )
             body = _strip_tex_comments(raw_body)
             labels = tuple(LABEL_RE.findall(body))
             declarations: list[str] = []
