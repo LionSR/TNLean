@@ -38,6 +38,17 @@ ENV_END_RE = re.compile(r"\\end\{(" + "|".join(ENVIRONMENTS) + r")\}")
 PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}")
 PROOF_END_RE = re.compile(r"\\end\{proof\}")
 ENV_TOKEN_RE = re.compile(r"\\(begin|end)\{([^}]+)\}")
+RAW_TEXT_ENVIRONMENTS = {
+    "verbatim",
+    "verbatim*",
+    "Verbatim",
+    "BVerbatim",
+    "LVerbatim",
+    "SaveVerbatim",
+    "lstlisting",
+    "minted",
+    "comment",
+}
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 LEAN_RE = re.compile(r"\\lean\{([^}]*)\}", re.DOTALL)
 USES_RE = re.compile(r"\\uses\{([^}]*)\}", re.DOTALL)
@@ -141,15 +152,115 @@ class NonItemBlock:
         return f"@{self.file}:{self.line}-{self.end_line}"
 
 
+def _balanced_environment_ranges(
+    source_lines: list[str], relative_root: str
+) -> tuple[list[tuple[int, int]], list[tuple[int, int]]]:
+    """Return balanced environment ranges while treating raw text as opaque."""
+    stack: list[tuple[str, int]] = []
+    ranges: list[tuple[int, int]] = []
+    raw_text_ranges: list[tuple[int, int]] = []
+    raw_environment: str | None = None
+    for line_no, line in enumerate(source_lines, start=1):
+        cursor = 0
+        while cursor < len(line):
+            if raw_environment is not None:
+                closing = re.search(
+                    rf"\\end\{{{re.escape(raw_environment)}\}}", line[cursor:]
+                )
+                if closing is None:
+                    break
+                cursor += closing.end()
+                opened, opened_line = stack.pop()
+                ranges.append((opened_line, line_no))
+                raw_text_ranges.append((opened_line, line_no))
+                raw_environment = None
+                continue
+
+            cleaned_suffix = _strip_tex_comments(line[cursor:])
+            token = ENV_TOKEN_RE.search(cleaned_suffix)
+            if token is None:
+                break
+            action, environment = token.groups()
+            cursor += token.end()
+            if action == "begin":
+                stack.append((environment, line_no))
+                if environment in RAW_TEXT_ENVIRONMENTS:
+                    raw_environment = environment
+                continue
+            if not stack:
+                raise ValueError(
+                    f"unmatched \\end{{{environment}}} at {relative_root}:{line_no}"
+                )
+            opened, opened_line = stack.pop()
+            if opened != environment:
+                raise ValueError(
+                    f"mismatched environment at {relative_root}:{line_no}: "
+                    f"opened {opened} at line {opened_line}, closed {environment}"
+                )
+            ranges.append((opened_line, line_no))
+    if stack:
+        environment, opened_line = stack[-1]
+        raise ValueError(
+            f"unterminated environment {environment} opened at "
+            f"{relative_root}:{opened_line}"
+        )
+    return ranges, raw_text_ranges
+
+
+def _raw_text_line_numbers(source_lines: list[str]) -> set[int]:
+    """Return lines whose TeX contents are interpreted as raw text."""
+    raw_environment: str | None = None
+    raw_start = 0
+    raw_lines: set[int] = set()
+    for line_no, line in enumerate(source_lines, start=1):
+        cursor = 0
+        while cursor < len(line):
+            if raw_environment is not None:
+                closing = re.search(
+                    rf"\\end\{{{re.escape(raw_environment)}\}}", line[cursor:]
+                )
+                if closing is None:
+                    break
+                raw_lines.update(range(raw_start, line_no + 1))
+                cursor += closing.end()
+                raw_environment = None
+                continue
+            cleaned_suffix = _strip_tex_comments(line[cursor:])
+            token = ENV_TOKEN_RE.search(cleaned_suffix)
+            if token is None:
+                break
+            action, environment = token.groups()
+            cursor += token.end()
+            if action == "begin" and environment in RAW_TEXT_ENVIRONMENTS:
+                raw_environment = environment
+                raw_start = line_no
+    if raw_environment is not None:
+        raw_lines.update(range(raw_start, len(source_lines) + 1))
+    return raw_lines
+
+
+def _source_text_without_raw_lines(
+    source_lines: list[str], raw_text_lines: set[int], start_line: int, end_line: int
+) -> str:
+    """Return a source interval with raw-text lines erased."""
+    return "\n".join(
+        "" if line_no in raw_text_lines else source_lines[line_no - 1]
+        for line_no in range(start_line, end_line + 1)
+    )
+
+
 def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
     """Parse theorem-like items, including an attached proof and intervening lines."""
     records: list[BlueprintEnvironment] = []
     for path in blueprint_content_files(blueprint_src):
         rel = path.relative_to(blueprint_src.parent).as_posix()
         source_lines = path.read_text(errors="replace").splitlines()
+        raw_text_lines = _raw_text_line_numbers(source_lines)
         stack: list[dict[str, object]] = []
         statements: list[dict[str, object]] = []
         for line_no, line in enumerate(source_lines, start=1):
+            if line_no in raw_text_lines:
+                continue
             begin = ENV_BEGIN_RE.search(line)
             if begin is not None:
                 stack.append(
@@ -185,6 +296,8 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
             proof_depth = 0
             proof_started = False
             for line_no in range(statement_end_line + 1, next_statement_line):
+                if line_no in raw_text_lines:
+                    continue
                 line = source_lines[line_no - 1]
                 begins = len(PROOF_BEGIN_RE.findall(line))
                 ends = len(PROOF_END_RE.findall(line))
@@ -201,10 +314,12 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
                     f"unterminated proof after {rel}:{statement_end_line}"
                 )
 
-            raw_statement_body = "\n".join(
-                source_lines[start_line - 1 : statement_end_line]
+            raw_statement_body = _source_text_without_raw_lines(
+                source_lines, raw_text_lines, start_line, statement_end_line
             )
-            raw_body = "\n".join(source_lines[start_line - 1 : item_end_line])
+            raw_body = _source_text_without_raw_lines(
+                source_lines, raw_text_lines, start_line, item_end_line
+            )
             body = _strip_tex_comments(raw_body)
             labels = tuple(LABEL_RE.findall(body))
             declarations: list[str] = []
@@ -241,33 +356,48 @@ def _atomic_non_item_environment_ranges(
     source_lines: list[str], item_spans: list[tuple[int, int]], relative_root: str
 ) -> dict[int, int]:
     """Return maximal balanced TeX environments lying outside item spans."""
-    stack: list[tuple[str, int]] = []
-    ranges: list[tuple[int, int]] = []
+    ranges, raw_text_ranges = _balanced_environment_ranges(
+        source_lines, relative_root
+    )
+    raw_text_lines = {
+        line_no
+        for start, end in raw_text_ranges
+        for line_no in range(start, end + 1)
+    }
     for line_no, line in enumerate(source_lines, start=1):
+        if line_no in raw_text_lines:
+            continue
         cleaned_line = _strip_tex_comments(line)
-        for token in ENV_TOKEN_RE.finditer(cleaned_line):
-            action, environment = token.groups()
-            if action == "begin":
-                stack.append((environment, line_no))
-                continue
-            if not stack:
-                raise ValueError(
-                    f"unmatched \\end{{{environment}}} at {relative_root}:{line_no}"
-                )
-            opened, opened_line = stack.pop()
-            if opened != environment:
-                raise ValueError(
-                    f"mismatched environment at {relative_root}:{line_no}: "
-                    f"opened {opened} at line {opened_line}, closed {environment}"
-                )
-            ranges.append((opened_line, line_no))
-    if stack:
-        environment, opened_line = stack[-1]
-        raise ValueError(
-            f"unterminated environment {environment} opened at "
-            f"{relative_root}:{opened_line}"
+        if INPUT_LINE_RE.fullmatch(cleaned_line) is None:
+            continue
+        containing_environment = next(
+            (
+                (start, end)
+                for start, end in ranges
+                if start <= line_no <= end
+            ),
+            None,
         )
-
+        if containing_environment is not None:
+            start, end = containing_environment
+            raise ValueError(
+                f"standalone \\input at {relative_root}:{line_no} is nested "
+                f"inside TeX environment {start}-{end}"
+            )
+        containing_item = next(
+            (
+                (start, end)
+                for start, end in item_spans
+                if start <= line_no <= end
+            ),
+            None,
+        )
+        if containing_item is not None:
+            start, end = containing_item
+            raise ValueError(
+                f"standalone \\input at {relative_root}:{line_no} is nested "
+                f"inside theorem-like item {start}-{end}"
+            )
     candidates: list[tuple[int, int]] = []
     for start, end in ranges:
         contained_in_item = False
@@ -308,9 +438,11 @@ def blueprint_non_item_blocks(
     Single-line environments remain in their surrounding paragraph. An outer
     environment containing item lines is rejected because partitioning it at
     the item boundary would produce malformed TeX. Elsewhere, blank lines and
-    item boundaries split blocks. Router ``\\input`` commands
-    are single-line blocks so each simulated output can prune them without
-    pulling in every sibling chapter.
+    item boundaries split blocks. Top-level router ``\\input`` commands are
+    single-line blocks so each simulated output can prune them without pulling
+    in every sibling chapter; an ``\\input`` nested inside a TeX environment
+    is rejected because its dependency could not be tracked separately.
+    Commands displayed inside raw-text environments are ignored.
     """
     spans_by_file: dict[str, list[tuple[int, int]]] = {}
     for item in environments:

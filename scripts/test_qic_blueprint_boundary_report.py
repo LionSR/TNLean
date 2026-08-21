@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from qic_blueprint_boundary_report import (
     LEDGER_COLUMNS,
+    blueprint_environments,
     blueprint_file_manifest,
     boundary_report,
     environment_uses,
@@ -473,6 +474,149 @@ See Theorem~\ref{thm:tn}.
             r"environment at src/chapter/ch01.tex:1-6 contains theorem-like item lines",
         ):
             boundary_report(self.root)
+
+    def test_rejects_input_nested_in_non_item_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\input{chapter/picture}
+\end{figure}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"standalone \\input at src/chapter/ch01.tex:6 is nested inside "
+            r"TeX environment 5-7",
+        ):
+            boundary_report(self.root)
+
+    def test_rejects_input_nested_in_item_environment(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\input{chapter/proof-detail}
+\end{theorem}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"standalone \\input at src/chapter/ch01.tex:3 is nested inside "
+            r"TeX environment 1-4",
+        ):
+            boundary_report(self.root)
+
+    def test_rejects_input_between_statement_and_attached_proof(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\input{chapter/proof-detail}
+\begin{proof}
+Proof.
+\end{proof}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"standalone \\input at src/chapter/ch01.tex:4 is nested inside "
+            r"theorem-like item 1-7",
+        ):
+            boundary_report(self.root)
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_literal_input_in_raw_text_environment_is_ignored(
+        self, _source_sha
+    ) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\begin{verbatim}
+\input{chapter/displayed-example}
+\end{verbatim}
+\end{figure}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["simulated_output_errors"], [])
+        self.assertNotIn(
+            "src/chapter/displayed-example.tex",
+            report["simulated_qic_source_files"],
+        )
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_environment_tokens_in_raw_text_are_ignored(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+
+\begin{figure}
+\begin{verbatim}
+\begin{theorem}
+Displayed literally.
+\end{theorem}
+\begin{center}
+\end{verbatim}
+\end{figure}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["environment_count"], 1)
+        self.assertEqual(report["simulated_output_errors"], [])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_proof_tokens_in_raw_text_are_ignored(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{verbatim}
+\begin{proof}
+Displayed literally.
+\end{proof}
+\begin{proof}
+\end{verbatim}
+\begin{proof}
+Actual proof.
+\end{proof}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["environment_count"], 1)
+        self.assertEqual(report["items"][0]["end_line"], 12)
+        self.assertEqual(report["simulated_output_errors"], [])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_metadata_tokens_in_raw_text_are_ignored(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{verbatim}
+\label{thm:displayed}
+\lean{MPSTensor.staying}
+\uses{thm:missing}
+See Theorem~\ref{thm:missing}.
+\end{verbatim}
+\begin{proof}
+Proof.
+\end{proof}
+"""
+        )
+        report = boundary_report(self.root)
+        item = report["items"][0]
+        self.assertEqual(item["labels"], ["thm:qic"])
+        self.assertEqual(item["declarations"], ["Kraus.moved"])
+        environment = blueprint_environments(self.root / "blueprint" / "src")[0]
+        self.assertEqual(environment.uses, ())
+        self.assertEqual(environment.references, ())
+        self.assertEqual(report["simulated_output_errors"], [])
 
     def test_rejects_unbalanced_non_item_environment(self) -> None:
         self.write_blueprint(
