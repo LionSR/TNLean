@@ -1193,6 +1193,23 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### projector-selected sector closure assembly — candidate
+- **Pattern:** expand a closure as a finite sum of sector closures, distribute
+  a projector-controlled sum of linear maps over it, use the orthogonal
+  selector identity to retain the matching sector, and finish with the
+  sectorwise closure equation.
+- **Seen:** four paired coarse-graining/refinement occurrences in
+  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, across
+  `exists_chainCoordinateRFP_of_projectiveSectorDecomposition` and
+  `exists_chainCoordinateRFP_of_orthogonalSectorDecomposition` (2026-08-20).
+- **Abstraction (proposed):** a helper for one direction, parametrized by the
+  two closure lengths and the sectorwise map equation, if a second file needs
+  the same projector-selected finite-sum argument.
+- **Notes:** all occurrences are presently in one file, below the two-file
+  promotion threshold. The coarse-graining and refinement maps have opposite
+  matrix dimensions, so a useful abstraction must not conceal their
+  orientation.
+
 ### explicit finite-generator word-tuple spanning — candidate
 - **Pattern:** unfold `MPSTensor.WordTupleSpanTop`, place one or more explicit
   word tuples in the span by `Submodule.subset_span`, express an arbitrary

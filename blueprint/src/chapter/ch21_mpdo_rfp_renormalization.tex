@@ -317,6 +317,47 @@ section.
     rectangular Kraus family $(\widetilde A_{k,a})_{k,a}$.
 \end{proof}
 
+\begin{lemma}[Compressed sums of completely positive maps]
+    \label{lem:mpdo_compressed_cp_sum}
+    \lean{isKrausCP_sum_comp_singleKrausMap}
+    \leanok
+    \uses{def:is_kraus_cp, def:mpdo_single_kraus_map}
+    Let $(P_i)_i$ be finitely many operators on $H$ and let each
+    $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be completely positive. Then
+    \begin{align}
+        X&\mapsto\sum_i\Phi_i(P_iXP_i^\dagger)
+        \notag
+    \end{align}
+    is completely positive. No completeness or orthogonality condition on
+    the $P_i$ is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:mpdo_rectangular_kraus_map_cp}
+    Composing each Kraus family of $\Phi_i$ with the corresponding $P_i$
+    gives one combined rectangular Kraus family representing the sum.
+\end{proof}
+
+\begin{lemma}[Trace selection by projector-controlled sums]
+    \label{lem:mpdo_projector_controlled_trace_selection}
+    \lean{trace_sum_comp_singleKrausMap_of_starProjections}
+    \leanok
+    \uses{def:is_kraus_cptp, def:mpdo_single_kraus_map}
+    Let $(P_i)_i$ be finitely many orthogonal projections on $H$, not
+    necessarily resolving the identity, and let each
+    $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be trace-preserving and
+    completely positive. Then, for every $X$,
+    \begin{align}
+        \tr\Bigl(\sum_i\Phi_i(P_iXP_i)\Bigr)
+        &=\tr\Bigl(\Bigl(\sum_iP_i\Bigr)X\Bigr).
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Trace preservation of each $\Phi_i$ reduces the left side to
+    $\sum_i\tr(P_iXP_i)$; cyclicity of the trace and idempotence of each
+    projection give $\tr(P_iXP_i)=\tr(P_iX)$.
+\end{proof}
+
 % Classification: conditional helper.
 % This is a project-derived abstraction of the projection-first channel
 % assembly in CPSV16, Appendix C.2, lines 1810--1817, not a theorem stated
