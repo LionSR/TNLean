@@ -91,7 +91,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L804, 817, 825, 832, 906, 913 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L329, 335, 341, 355, 366, 372 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L452, 971, 975, 981, 986 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L453, 972, 976, 982, 987 `tenkz` → `P-grid` | — | — |
 | `ch23_algebraic_ft_foundations.tex` | L48, 52, 494, 498, 699, 703, 716, 720, 763, 767, 771, 780, 784 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft.tex` | L27, 57, 93 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_balanced_edge_scalars.tex` | L21 `tenkz` → `P-grid` | — | — |
