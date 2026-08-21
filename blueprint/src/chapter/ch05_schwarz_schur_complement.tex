@@ -39,6 +39,20 @@
   $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$ is Hermitian.
 \end{lemma}
 
+\begin{theorem}[Quadratic form of the block matrix]
+  \label{thm:block_quadratic_form}
+  \lean{SchurComplement.block_quadratic_form}
+  \leanok
+  \uses{def:blockMatrix}
+  For vectors $x\in\mathbb C^{D_1}$ and $y\in\mathbb C^{D_2}$,
+  \begin{align}
+    \begin{pmatrix}x\\y\end{pmatrix}^{\!\dagger}
+      \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}
+      \begin{pmatrix}x\\y\end{pmatrix}
+    =x^\dagger P x+x^\dagger Qy+y^\dagger Q^\dagger x+y^\dagger Ry.
+  \end{align}
+\end{theorem}
+
 \begin{definition}[Schur complement]\label{def:schurComplement}
   \lean{SchurComplement.schurComplement}
   \leanok
@@ -55,6 +69,13 @@
   $Q\operatorname{supp}(R)=Q$.
 \end{theorem}
 
+\begin{proof}\leanok
+  Since $R(1-\operatorname{supp}(R))=0$, the kernel inclusion gives
+  $Q(1-\operatorname{supp}(R))=0$. Expanding this equality yields
+  $Q-Q\operatorname{supp}(R)=0$, and hence
+  $Q\operatorname{supp}(R)=Q$.
+\end{proof}
+
 \begin{theorem}[Pseudoinverse support identities]
   \label{thm:schur_pinv_support_identities}
   \lean{SchurComplement.R_mul_pinv_eq_supportProj}
@@ -64,7 +85,8 @@
   \leanok
   \uses{def:pinv}
   If $R$ is positive semi-definite, then
-  $RR^+=R^+R=\operatorname{supp}(R)$ and $R^+$ is Hermitian.
+  $RR^+=R^+R=\operatorname{supp}(R)$,
+  $\operatorname{supp}(R)R^+=R^+$, and $R^+$ is Hermitian.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -83,6 +105,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{thm:block_quadratic_form}
   A vector in $\ker(R)$ has zero quadratic form in the lower-right principal
   subspace. Positivity therefore places the corresponding block vector in
   the kernel of the full matrix, whose upper component is $Qy$.
@@ -125,8 +148,7 @@
 
 \begin{proof}\leanok
   \uses{thm:block_psd_kernel_inclusion,
-    thm:schur_complement_quadratic_form,
-    thm:schur_pinv_support_identities}
+    thm:schur_complement_quadratic_form}
   By Theorem~\ref{thm:block_psd_kernel_inclusion},
   $\ker(R)\subseteq\ker(Q)$. In
   Theorem~\ref{thm:schur_complement_quadratic_form}, take
