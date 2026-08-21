@@ -1,0 +1,38 @@
+% Kernel fixture: the arc route (issue #6201).  An arc leaves and enters
+% along its ends' faces (LANGUAGE-1.0 section 2.4).  The east-to-north and
+% north-to-west returns round their corner junctions; the same-face pair on
+% the ring bows a fold outward; the string turns from its physical face
+% toward its open tip; the cell-to-cell pair has no face to honour and
+% stays the straight bond -- the chord answer.
+% Expected records: the saved routes carry cubic segments wherever a face
+% directed one, the faceless arc's record matches the straight bond's
+% geometry, and the bead addressed on the return stands on the drawn
+% curve, not on the chord between its ends.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+  \tn[at=(1,2), skin=box, name=a1, ports={0:virtual, 180:virtual, 90:physical}]{A}
+  \tn[at=(1,3), skin=box, name=a2, ports={0:virtual, 180:virtual, 90:physical}]{B}
+  \tn[at=(2,1), skin=none, name=jw, ports={0:virtual, 90:virtual}]{}
+  \tn[at=(2,4), skin=none, name=je, ports={90:virtual, 180:virtual}]{}
+  \tn[at=(1,5), skin=ring, wires=2, name=r,
+      ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho}
+  \tnwire{a1.0}{a2.180}
+  \tnwire[route=arc]{a2.0}{je.90}
+  \tnwire{je.180}{jw.0}
+  \tnwire[route=arc, name=ret]{jw.90}{a1.180}
+  \tnwire{r.180@1}{open w}
+  \tnwire{r.180@2}{open w}
+  \tnwire[route=arc]{r.0@1}{r.0@2}
+  \tnwire[route=arc]{(1,7)}{(2,7)}
+  \tnwire[kind=string, species=operator, name=s, route=arc]{a1.90}{open nw}
+  \tn[skin=dot, at=on ret 0.5, size=s]{}
+\end{tenkz}
+\end{document}

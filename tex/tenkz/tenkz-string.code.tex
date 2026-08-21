@@ -303,6 +303,18 @@
     \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}
   }
 
+% An open string whose finished path arrives from the caller: the kernel's
+% arc route states its curve as one cubic whose ends honour their faces, so
+% the path is built where the faces are known and saved here unchanged.
+\cs_new_protected:Npn \__tenkz_string_declare_curve:nn #1#2
+  {
+    \__tenkz_string_register:nn {#1} {open}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
+    \use:e { \exp_not:N \path [ spath/save = #1 ] \exp_not:n {#2} ; }
+    \tenkz@event{string|id=#1|kind=open|pts=2}
+  }
+\cs_generate_variant:Nn \__tenkz_string_declare_curve:nn { VV }
+
 % An open route whose intermediate points are topological hull turns.  Its
 % faces stay straight so every boundary wire leaves through the face named by
 % the route model; only the turns consume the caller's shared corner radius.

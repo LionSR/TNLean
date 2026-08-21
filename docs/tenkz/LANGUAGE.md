@@ -136,8 +136,8 @@ The canonical examples include these distinctions:
   seals the west and bends the east, because the specific statement
   outranks the general one. A cup that finds no pair to bend is an error,
   not a blank space.
-- `route=arc` is the canonical curved spelling; the route family is
-  `straight`, `orth`, and `arc`.
+- `route=arc` bows a waypointless wire, leaving and entering along its
+  ends' faces; the route family is `straight`, `orth`, and `arc`.
 
 ## Extension gates
 
