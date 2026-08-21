@@ -56,7 +56,10 @@ normalized density-operator family, which the rescaling by `1 / 2` leaves
 unchanged, so the obstruction proved for the printed tensor transports to the
 normalized representative.
 
-Source conclusion: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--938. -/
+Derived consequence: CPSV16 Example 4.12 (arXiv:1606.00608, lines 932--938)
+concerns the printed tensor; the density-normalized representative and this
+transported obstruction are project-derived from the rescaling invariance of
+Definition 4.8. -/
 theorem Mhat_not_isGSNNCH : ¬ IsGSNNCH Mhat := by
   rw [Mhat, isGSNNCH_smul_iff (by norm_num)]
   exact CPSVExample412Literal.M_not_isGSNNCH
