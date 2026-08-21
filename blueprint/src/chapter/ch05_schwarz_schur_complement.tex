@@ -15,6 +15,13 @@
   \end{enumerate}
   Here $R^+$ denotes the pseudoinverse (inverse on the support) and the
   inverse square roots are extended by zero on the respective kernels.
+
+  \textbf{Local fix (Wolf Theorem 5.2, condition (3)):}
+  The third condition is false as printed when $P$ is singular. For
+  $P=0$ and $Q=R=1$ in dimension one, the printed condition holds but the
+  block matrix is not positive semi-definite. The missing condition is
+  $\ker(P)\subseteq\ker(Q^\dagger)$; see
+  \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
 \end{theorem}
 
 \begin{definition}[Block matrix]\label{def:blockMatrix}
@@ -61,6 +68,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+  \uses{lem:mul_pinv_eq_supportProj}
   These identities follow from the support inverse and the spectral calculus
   of the Hermitian matrix $R$.
 \end{proof}
@@ -162,7 +170,8 @@
 
   \textbf{Scope restriction (Wolf Theorem 5.2, conditions (1) and (2)):}
   This proves exactly the first two conditions of the source theorem. The
-  contraction condition (3) remains open, as recorded in
+  printed contraction condition (3) is false in the singular case; its
+  corrected form remains to be formalized, as recorded in
   \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
 \end{theorem}
 

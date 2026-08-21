@@ -15,7 +15,11 @@ Working towards Wolf's Theorem 5.2: for a self-adjoint 2×2 block matrix
 
 1. `M` is PSD
 2. `ker(R) ⊆ ker(Q)` and the pseudoinverse Schur complement `P − Q·R⁺·Q†` is PSD
-3. `ker(R) ⊆ ker(Q)` and `‖P^{-1/2}·Q·R^{-1/2}‖ ≤ 1` (contraction form)
+3. `ker(R) ⊆ ker(Q)`, `ker(P) ⊆ ker(Q†)`, and
+   `‖P^{-1/2}·Q·R^{-1/2}‖ ≤ 1` (corrected contraction form)
+
+Wolf's printed condition (3) omits the left-support condition. The omission is
+substantive when `P` is singular: `P = 0`, `Q = R = 1` is a counterexample.
 
 ## Main results
 
@@ -29,8 +33,8 @@ Working towards Wolf's Theorem 5.2: for a self-adjoint 2×2 block matrix
 
 ## Remaining gap towards Wolf Thm 5.2
 
-The contraction equivalence (2) ⇔ (3) is not yet formalized; see
-`docs/paper-gaps/schur_complement_tfae.tex`.
+The corrected contraction equivalence (2) ⇔ (3), with both support conditions,
+is not yet formalized; see `docs/paper-gaps/schur_complement_tfae.tex`.
 
 ## Implementation notes
 
