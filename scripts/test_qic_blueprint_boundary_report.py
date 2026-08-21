@@ -507,6 +507,24 @@ See Theorem~\ref{thm:tn}.
         ):
             boundary_report(self.root)
 
+    def test_rejects_input_between_statement_and_attached_proof(self) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\input{chapter/proof-detail}
+\begin{proof}
+Proof.
+\end{proof}
+"""
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            r"standalone \\input at src/chapter/ch01.tex:4 is nested inside "
+            r"theorem-like item 1-7",
+        ):
+            boundary_report(self.root)
+
     @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
     def test_literal_input_in_raw_text_environment_is_ignored(
         self, _source_sha
@@ -549,6 +567,28 @@ Displayed literally.
         )
         report = boundary_report(self.root)
         self.assertEqual(report["environment_count"], 1)
+        self.assertEqual(report["simulated_output_errors"], [])
+
+    @patch("qic_blueprint_boundary_report.source_sha", return_value="a" * 40)
+    def test_proof_tokens_in_raw_text_are_ignored(self, _source_sha) -> None:
+        self.write_blueprint(
+            r"""\begin{theorem}\label{thm:qic}
+\lean{Kraus.moved}
+\end{theorem}
+\begin{verbatim}
+\begin{proof}
+Displayed literally.
+\end{proof}
+\begin{proof}
+\end{verbatim}
+\begin{proof}
+Actual proof.
+\end{proof}
+"""
+        )
+        report = boundary_report(self.root)
+        self.assertEqual(report["environment_count"], 1)
+        self.assertEqual(report["items"][0]["end_line"], 12)
         self.assertEqual(report["simulated_output_errors"], [])
 
     def test_rejects_unbalanced_non_item_environment(self) -> None:

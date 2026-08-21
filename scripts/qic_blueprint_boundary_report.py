@@ -286,6 +286,8 @@ def blueprint_environments(blueprint_src: Path) -> list[BlueprintEnvironment]:
             proof_depth = 0
             proof_started = False
             for line_no in range(statement_end_line + 1, next_statement_line):
+                if line_no in raw_text_lines:
+                    continue
                 line = source_lines[line_no - 1]
                 begins = len(PROOF_BEGIN_RE.findall(line))
                 ends = len(PROOF_END_RE.findall(line))
@@ -350,17 +352,42 @@ def _atomic_non_item_environment_ranges(
         for start, end in raw_text_ranges
         for line_no in range(start, end + 1)
     }
+    for line_no, line in enumerate(source_lines, start=1):
+        if line_no in raw_text_lines:
+            continue
+        cleaned_line = _strip_tex_comments(line)
+        if INPUT_LINE_RE.fullmatch(cleaned_line) is None:
+            continue
+        containing_environment = next(
+            (
+                (start, end)
+                for start, end in ranges
+                if start <= line_no <= end
+            ),
+            None,
+        )
+        if containing_environment is not None:
+            start, end = containing_environment
+            raise ValueError(
+                f"standalone \\input at {relative_root}:{line_no} is nested "
+                f"inside TeX environment {start}-{end}"
+            )
+        containing_item = next(
+            (
+                (start, end)
+                for start, end in item_spans
+                if start <= line_no <= end
+            ),
+            None,
+        )
+        if containing_item is not None:
+            start, end = containing_item
+            raise ValueError(
+                f"standalone \\input at {relative_root}:{line_no} is nested "
+                f"inside theorem-like item {start}-{end}"
+            )
     candidates: list[tuple[int, int]] = []
     for start, end in ranges:
-        for line_no in range(start, end + 1):
-            if line_no in raw_text_lines:
-                continue
-            cleaned_line = _strip_tex_comments(source_lines[line_no - 1])
-            if INPUT_LINE_RE.fullmatch(cleaned_line) is not None:
-                raise ValueError(
-                    f"standalone \\input at {relative_root}:{line_no} is nested "
-                    f"inside TeX environment {start}-{end}"
-                )
         contained_in_item = False
         overlaps_item = False
         for item_start, item_end in item_spans:
