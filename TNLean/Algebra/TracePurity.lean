@@ -111,7 +111,10 @@ theorem IsHermitian.trace_re_sq_eq_card_mul_trace_sq_re_iff
           Q = (Unitary.conjStarAlgAut ℂ (Matrix (Fin D) (Fin D) ℂ) U) Δ := hspec
           _ = (hQ.eigenvalues i : ℂ) • 1 := by rw [hΔ]; simp
   · rintro ⟨r, rfl⟩
-    simp [pow_two]
+    simp only [Complex.coe_smul, trace_smul, trace_one, Fintype.card_fin,
+      Complex.real_smul, Complex.mul_re, Complex.ofReal_re, Complex.natCast_re,
+      Complex.ofReal_im, Complex.natCast_im, mul_zero, sub_zero, pow_two,
+      Algebra.mul_smul_comm, mul_one, Complex.mul_im, zero_mul, add_zero]
     ring
 
 /-- A positive semidefinite matrix whose squared trace norm is one has trace at

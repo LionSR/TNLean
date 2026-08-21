@@ -1207,6 +1207,22 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### transport of diagonal spectral identities — candidate
+- **Pattern:** diagonalize a Hermitian matrix as a unitary conjugate of its
+  eigenvalue diagonal, prove a scalar or polynomial identity on that diagonal,
+  and transport the identity back through the conjugation algebra
+  automorphism.
+- **Seen:** three occurrences in
+  `TNLean/Algebra/HermitianTracePower.lean` and
+  `TNLean/Algebra/TracePurity.lean` (two occurrences), recorded 2026-08-21.
+- **Abstraction:** a proposed Hermitian spectral-transport lemma exposing the
+  diagonalization equality and preserving polynomial identities through the
+  conjugation algebra automorphism.
+- **Notes:** the three conclusions differ: a trace-power formula, scalarity
+  from constant eigenvalues, and idempotency from idempotent eigenvalues. A
+  useful abstraction should remove the repeated diagonalization argument
+  without hiding these distinct mathematical steps.
+
 ### projector-selected sector closure assembly — candidate
 - **Pattern:** expand a closure as a finite sum of sector closures, distribute
   a projector-controlled sum of linear maps over it, use the orthogonal
