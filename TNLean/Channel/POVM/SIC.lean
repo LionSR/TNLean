@@ -265,7 +265,7 @@ reconstructed from its trace pairings with the unscaled SIC projectors.
 
 Source: Wolf, *Quantum Channels & Operations*, Chapter 2, equation (2.33);
 `Notes/WolfNoteTexSource/ch02_representations.tex`, lines 839--848. -/
-theorem diagonalRepresentation (X : Matrix (Fin d) (Fin d) ℂ) :
+theorem diagonal_representation (X : Matrix (Fin d) (Fin d) ℂ) :
     X = (d : ℂ)⁻¹ •
       ∑ i, ((((d : ℂ) + 1) * (S.projector i * X).trace - X.trace) •
         S.projector i) := by
@@ -306,7 +306,7 @@ associated with the operators \(P_i/\sqrt d\) is the depolarizing channel
 
 Source: Wolf, *Quantum Channels & Operations*, Chapter 2, equation (2.34);
 `Notes/WolfNoteTexSource/ch02_representations.tex`, lines 850--859. -/
-theorem krausChannel_identity (X : Matrix (Fin d) (Fin d) ℂ) :
+theorem kraus_channel_identity (X : Matrix (Fin d) (Fin d) ℂ) :
     (d : ℂ)⁻¹ • ∑ i, S.projector i * X * S.projector i =
       ((d : ℂ) + 1)⁻¹ • (X.trace • 1 + X) := by
   have hsum : ∑ i, S.projector i * X * S.projector i = S.frameMap X := by
@@ -348,7 +348,7 @@ theorem krausMap_eq (X : Matrix (Fin d) (Fin d) ℂ) :
   rw [Kraus.mapLM_apply, Kraus.map_apply]
   simp_rw [S.kraus_mul_mul_conjTranspose]
   rw [← Finset.smul_sum]
-  exact S.krausChannel_identity X
+  exact S.kraus_channel_identity X
 
 /-- The SIC Kraus operators satisfy the trace-preserving normalization. -/
 theorem kraus_isTP : Kraus.IsTP S.kraus := by

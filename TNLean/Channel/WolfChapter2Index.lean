@@ -193,7 +193,7 @@ project import.
   - `SICPOVM.toPOVM` — the effects `Pᵢ/d` form a POVM ✓
   - `SICPOVM.linearIndependent_projector` — the `d²` projectors form an
     operator basis ✓
-  - `SICPOVM.diagonalRepresentation` — Wolf Equation (2.33) ✓
+  - `SICPOVM.diagonal_representation` — Wolf Equation (2.33) ✓
   - `SICPOVM.krausMap_eq` / `SICPOVM.isChannel_krausMap` — the Kraus
     operators `Pᵢ/√d` define the channel in Wolf Equation (2.34) ✓
 
