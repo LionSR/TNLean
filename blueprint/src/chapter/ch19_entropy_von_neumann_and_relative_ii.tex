@@ -810,21 +810,6 @@
     $\mathcal R_\sigma(X)$ does not change its value.
 \end{proof}
 
-\begin{definition}[Support projection of a Hermitian matrix]
-    \label{def:hermitian_support_projection}
-    \lean{Matrix.IsHermitian.supportProj,
-        Matrix.IsHermitian.supportProj_isHermitian,
-        Matrix.IsHermitian.mul_supportProj_self}
-    \leanok
-    Let $A$ be Hermitian, with spectral decomposition
-    $A=U\diag(\lambda_i)U^\dagger$. Its support projection is
-    \begin{align}
-        P_A
-        &=U\diag(\mathbf 1_{\lambda_i\ne 0})U^\dagger.
-        \label{eq:entropy_hermitian_support}
-    \end{align}
-\end{definition}
-
 \begin{theorem}[Support projection absorption under kernel inclusion]
     \label{thm:support_projection_absorption_kernel_inclusion}
     \lean{Matrix.IsHermitian.supportProj_mul_mul_supportProj_of_mulVec_kernel_le}

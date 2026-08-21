@@ -15,22 +15,26 @@ Working towards Wolf's Theorem 5.2: for a self-adjoint 2×2 block matrix
 
 1. `M` is PSD
 2. `ker(R) ⊆ ker(Q)` and the pseudoinverse Schur complement `P − Q·R⁺·Q†` is PSD
-3. `ker(R) ⊆ ker(Q)` and `‖P^{-1/2}·Q·R^{-1/2}‖ ≤ 1` (contraction form)
+3. `ker(R) ⊆ ker(Q)`, `ker(P) ⊆ ker(Q†)`, and
+   `‖P^{-1/2}·Q·R^{-1/2}‖ ≤ 1` (corrected contraction form)
+
+Wolf's printed condition (3) omits the left-support condition. The omission is
+substantive when `P` is singular: `P = 0`, `Q = R = 1` is a counterexample.
 
 ## Main results
 
 * `ker_subset_of_block_psd` : the kernel-inclusion half of (1) ⟹ (2)
 * `block_quadratic_form` : the quadratic-form expansion of the block matrix
+* `blockMatrix_posSemidef_iff` : the equivalence of the block positivity and
+  pseudoinverse Schur-complement conditions in Wolf's Theorem 5.2
 * `R_mul_pinv_eq_supportProj`, `pinv_mul_self_eq_supportProj`,
   `supportProj_mul_pinv_eq_pinv`, `pinv_isHermitian` : pseudoinverse algebra for
   PSD `R`, building on the general `Matrix.PosSemidef.supportProj_sq_eq_supportProj`
 
 ## Remaining gap towards Wolf Thm 5.2
 
-The Schur-complement-PSD half of (1) ⟹ (2) (quadratic-form minimisation with
-`y = -R⁺Q†x`), the converse (2) ⟹ (1) (completing the square), and the
-contraction equivalence (2) ⇔ (3) are not formalized here; see
-`docs/paper-gaps/schur_complement_tfae.tex`.
+The corrected contraction equivalence (2) ⇔ (3), with both support conditions,
+is not yet formalized; see `docs/paper-gaps/schur_complement_tfae.tex`.
 
 ## Implementation notes
 
@@ -202,5 +206,105 @@ theorem supportProj_mul_pinv_eq_pinv (R : Matrix (Fin D₂) (Fin D₂) ℂ)
         rw [Douglas.pinv, Matrix.mul_assoc]
     _ = Rᴴ * (Matrix.posSemidef_self_mul_conjTranspose R).supportInv := by rw [key]
     _ = Douglas.pinv R := by rw [Douglas.pinv]
+
+/-! ### Pseudoinverse Schur-complement equivalence -/
+
+/-- Completing the square for a block quadratic form using the pseudoinverse
+of its lower-right block.
+
+This is the quadratic identity underlying conditions (1) and (2) of Wolf,
+*Quantum Channels & Operations*, Theorem 5.2; see
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 103--118. -/
+theorem schur_complement_quadratic_form
+    (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
+    (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef)
+    (hker : ∀ v : Fin D₂ → ℂ, R *ᵥ v = 0 → Q *ᵥ v = 0)
+    (x : Fin D₁ → ℂ) (y : Fin D₂ → ℂ) :
+    (star (Sum.elim x y)) ᵥ* (blockMatrix P Q R) ⬝ᵥ (Sum.elim x y) =
+      (star ((Douglas.pinv R * Qᴴ) *ᵥ x + y)) ᵥ* R ⬝ᵥ
+        ((Douglas.pinv R * Qᴴ) *ᵥ x + y) +
+      (star x) ᵥ* (schurComplement P Q R) ⬝ᵥ x := by
+  classical
+  have hQ : Q * hR.supportProj = Q :=
+    hR.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le hker
+  have hQH : hR.supportProj * Qᴴ = Qᴴ := by
+    have h := congrArg Matrix.conjTranspose hQ
+    simpa [Matrix.conjTranspose_mul, hR.supportProj_isHermitian.eq] using h
+  have hKR : Douglas.pinv R * R = hR.supportProj :=
+    pinv_mul_self_eq_supportProj R hR
+  have hRK : R * Douglas.pinv R = hR.supportProj :=
+    R_mul_pinv_eq_supportProj R hR
+  have hRQ : R * (Douglas.pinv R * Qᴴ) = Qᴴ := by
+    calc
+      R * (Douglas.pinv R * Qᴴ) = (R * Douglas.pinv R) * Qᴴ :=
+        (Matrix.mul_assoc _ _ _).symm
+      _ = hR.supportProj * Qᴴ := by rw [hRK]
+      _ = Qᴴ := hQH
+  simp [blockMatrix, schurComplement, Function.star_sumElim, vecMul_fromBlocks,
+    add_vecMul, dotProduct_mulVec, vecMul_sub, Matrix.mul_assoc,
+    (pinv_isHermitian R hR).eq, star_mulVec, hQ, hKR, hRQ]
+  abel
+
+/-- Positivity of a block matrix implies positivity of its pseudoinverse Schur
+complement.
+
+This is the Schur-complement part of (1) implies (2) in Wolf, *Quantum
+Channels & Operations*, Theorem 5.2; see
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 103--118. -/
+theorem schurComplement_posSemidef_of_blockMatrix_posSemidef
+    (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
+    (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hP : P.PosSemidef) (hR : R.PosSemidef)
+    (hM : (blockMatrix P Q R).PosSemidef) :
+    (schurComplement P Q R).PosSemidef := by
+  have hker := ker_subset_of_block_psd P Q R hM
+  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg ?_ fun x => ?_
+  · exact hP.isHermitian.sub
+      (Matrix.isHermitian_mul_mul_conjTranspose Q (pinv_isHermitian R hR))
+  have hnonneg := hM.dotProduct_mulVec_nonneg
+    (Sum.elim x (-((Douglas.pinv R * Qᴴ) *ᵥ x)))
+  rw [dotProduct_mulVec, schur_complement_quadratic_form P Q R hR hker] at hnonneg
+  simpa [← dotProduct_mulVec] using hnonneg
+
+/-- The kernel and pseudoinverse Schur-complement conditions imply positivity
+of the block matrix.
+
+This is (2) implies (1) in Wolf, *Quantum Channels & Operations*, Theorem 5.2;
+see `Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 103--118. -/
+theorem blockMatrix_posSemidef_of_schurComplement_posSemidef
+    (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
+    (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hP : P.PosSemidef) (hR : R.PosSemidef)
+    (hker : ∀ v : Fin D₂ → ℂ, R *ᵥ v = 0 → Q *ᵥ v = 0)
+    (hS : (schurComplement P Q R).PosSemidef) :
+    (blockMatrix P Q R).PosSemidef := by
+  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg
+    (blockMatrix_isHermitian P Q R hP.isHermitian hR.isHermitian) fun z => ?_
+  rw [dotProduct_mulVec, ← Sum.elim_comp_inl_inr z,
+    schur_complement_quadratic_form P Q R hR hker]
+  exact add_nonneg
+    (by simpa only [dotProduct_mulVec] using (hR.dotProduct_mulVec_nonneg
+      ((Douglas.pinv R * Qᴴ) *ᵥ (z ∘ Sum.inl) + z ∘ Sum.inr)))
+    (by simpa only [dotProduct_mulVec] using
+      (hS.dotProduct_mulVec_nonneg (z ∘ Sum.inl)))
+
+/-- A block matrix is positive semidefinite if and only if the kernel of its
+lower-right block is contained in the kernel of the off-diagonal block and its
+pseudoinverse Schur complement is positive semidefinite.
+
+This is the equivalence of conditions (1) and (2) in Wolf, *Quantum Channels &
+Operations*, Theorem 5.2; see
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 103--118. -/
+theorem blockMatrix_posSemidef_iff
+    (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
+    (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hP : P.PosSemidef) (hR : R.PosSemidef) :
+    (blockMatrix P Q R).PosSemidef ↔
+      (∀ v : Fin D₂ → ℂ, R *ᵥ v = 0 → Q *ᵥ v = 0) ∧
+        (schurComplement P Q R).PosSemidef := by
+  constructor
+  · intro hM
+    exact ⟨ker_subset_of_block_psd P Q R hM,
+      schurComplement_posSemidef_of_blockMatrix_posSemidef P Q R hP hR hM⟩
+  · rintro ⟨hker, hS⟩
+    exact blockMatrix_posSemidef_of_schurComplement_posSemidef
+      P Q R hP hR hker hS
 
 end SchurComplement
