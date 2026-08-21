@@ -36,7 +36,7 @@ private theorem allZero_contradiction [NeZero D]
     {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {k : ℕ} (hk : 0 < k)
     (hzero : ∀ w : List (Fin d), w.length = k → evalWord A w = 0) : False := by
-  have hws : wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  have hws : Kraus.wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   -- Strong induction on k.
   suffices ∀ k, 0 < k → (∀ w : List (Fin d), w.length = k → evalWord A w = 0) → False from
     this k hk hzero
@@ -46,8 +46,8 @@ private theorem allZero_contradiction [NeZero D]
     intro hk_pos hk_zero
     by_cases hkL : k ≤ L₀
     · -- Case k ≤ L₀: factor every length-L₀ word as (take k) ++ (drop k).
-      have hws_bot : wordSpan A L₀ = ⊥ := by
-        rw [eq_bot_iff, wordSpan]
+      have hws_bot : Kraus.wordSpan A L₀ = ⊥ := by
+        rw [eq_bot_iff, Kraus.wordSpan]
         apply Submodule.span_le.mpr
         rintro _ ⟨σ, rfl⟩
         rw [SetLike.mem_coe, Submodule.mem_bot]
@@ -75,11 +75,11 @@ private theorem allZero_contradiction [NeZero D]
         have hlen : (List.ofFn σ₁ ++ w₂).length = k := by simp [hw₂]; omega
         have := hk_zero _ hlen
         rwa [evalWord_append] at this
-      -- The map M ↦ M * evalWord A w₂ vanishes on wordSpan A L₀ = ⊤.
+      -- The map M ↦ M * evalWord A w₂ vanishes on Kraus.wordSpan A L₀ = ⊤.
       have hright : LinearMap.mulRight ℂ (evalWord A w₂) = 0 := by
         apply LinearMap.ext_on_range
           (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-          (hv := by simpa only [wordSpan, Kraus.wordSpan] using hws)
+          (hv := by simpa only [Kraus.wordSpan, Kraus.wordSpan] using hws)
         intro σ₁
         simp [LinearMap.mulRight_apply, hmul_zero σ₁]
       -- Taking M = 1: evalWord A w₂ = 0.
@@ -102,7 +102,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     (mpv A : NSiteSpace d N) ≠ 0 := by
-  have hws : wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+  have hws : Kraus.wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   intro hzero
   -- mpv = 0 means tr(evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → Fin d.
   have htr_zero : ∀ σ : Fin N → Fin d,
@@ -115,12 +115,12 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
     -- Show ∀ M, tr(evalWord A w₂ * M) = 0 to get evalWord A w₂ = 0.
     apply (Matrix.ext_iff_trace_mul_right (A := evalWord A w₂) (B := 0)).2
     intro M
-    -- The functional P ↦ tr(P * evalWord A w₂) vanishes on wordSpan A L₀ = ⊤.
+    -- The functional P ↦ tr(P * evalWord A w₂) vanishes on Kraus.wordSpan A L₀ = ⊤.
     have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
         (LinearMap.mulRight ℂ (evalWord A w₂)) = 0 := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
-        (hv := by simpa only [wordSpan, Kraus.wordSpan] using hws)
+        (hv := by simpa only [Kraus.wordSpan, Kraus.wordSpan] using hws)
       intro σ₁
       simp only [LinearMap.comp_apply, LinearMap.mulRight_apply,
         Matrix.traceLinearMap_apply]

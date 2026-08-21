@@ -36,7 +36,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
       evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
       (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
       Matrix.vecMulVec φ ψ ∈
-        wordSpan (blockTensor (d := d) (D := D) A N₀) m_blocked := by
+        Kraus.wordSpan (blockTensor (d := d) (D := D) A N₀) m_blocked := by
   change Kraus.wordSpan A N₀ = ⊤ at hN₀
   exact Kraus.exists_rankOne_mem_wordSpan_blockTensor A hN₀ hN₀pos
 
@@ -46,7 +46,7 @@ For any normal MPS tensor `A` with positive bond dimension, some fixed-length
 word span is the full matrix algebra. -/
 theorem wielandt_lemma2b [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
-    ∃ N : ℕ, wordSpan A N = ⊤ := by
+    ∃ N : ℕ, Kraus.wordSpan A N = ⊤ := by
   classical
   obtain ⟨N₀, hN₀pos, hN₀⟩ := hN
   obtain ⟨σ₀, τ₀, φ, ψ, μ, ν, m_blocked,

@@ -10,6 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.Wielandt.Inequality.Bounds
 import TNLean.Wielandt.Inequality.EigenvectorSpreading
-import TNLean.Wielandt.Inequality.MatrixSpanExistence
 import TNLean.Wielandt.Inequality.MatrixSpanSharpBound
 import TNLean.Wielandt.Inequality.NonzeroTraceWord

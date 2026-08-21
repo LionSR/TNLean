@@ -24,10 +24,10 @@ variable {d D : ℕ}
 some longer length \(n\) span the full matrix algebra, then \(Z=0\). -/
 theorem eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
     {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
-    (htop : wordSpan A n = ⊤) (hkn : k ≤ n)
+    (htop : Kraus.wordSpan A n = ⊤) (hkn : k ≤ n)
     (hzero : ∀ σ : Fin k → Fin d, evalWord A (List.ofFn σ) * Z = 0) :
     Z = 0 := by
-  have hzero_span : ∀ M ∈ wordSpan A n, M * Z = 0 := by
+  have hzero_span : ∀ M ∈ Kraus.wordSpan A n, M * Z = 0 := by
     apply Submodule.span_induction
     · intro M hM
       rcases hM with ⟨σ, rfl⟩
@@ -74,7 +74,7 @@ theorem eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul
     Z = 0 := by
   exact eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)
-    (wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
+    (Kraus.wordSpan_top_of_mul A ((wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj) q hq)
     hkq hzero
 
 end MPSTensor

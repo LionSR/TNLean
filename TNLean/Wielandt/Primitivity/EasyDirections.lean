@@ -16,8 +16,8 @@ eventually full Kraus rank, and strong irreducibility.
 ## What is proved here
 
 * `vectorSpreadSpan_eq_top_of_wordSpan_eq_top`:
-  If `wordSpan A N = ⊤` (the exact word span at level N is full) and `φ ≠ 0`,
-  then `vectorSpreadSpan A φ N = ⊤` (exact vector spread at level N is full).
+  If `Kraus.wordSpan A N = ⊤` (the exact word span at level N is full) and `φ ≠ 0`,
+  then `Kraus.vectorSpreadSpan A φ N = ⊤` (exact vector spread at level N is full).
   This is the (b)→(a) direction of Proposition 3.
 
 * `isPrimitivePaper_of_hasEventuallyFullKrausRank`:
@@ -56,11 +56,11 @@ variable {d D : ℕ}
 
 /-! ## (b)→(a): Full word span implies full vector spread -/
 
-/-- If `wordSpan A N = ⊤` and `φ ≠ 0`, then `vectorSpreadSpan A φ N = ⊤`.
+/-- If `Kraus.wordSpan A N = ⊤` and `φ ≠ 0`, then `Kraus.vectorSpreadSpan A φ N = ⊤`.
 
-**Proof sketch**: The map `f : M ↦ M *ᵥ φ` sends `wordSpan A N` onto
-`vectorSpreadSpan A φ N` (by `map_wordSpan_eq_vectorSpreadSpan`). If
-`wordSpan A N = ⊤`, then the image is `range f`. Since `φ ≠ 0`, the map
+**Proof sketch**: The map `f : M ↦ M *ᵥ φ` sends `Kraus.wordSpan A N` onto
+`Kraus.vectorSpreadSpan A φ N` (by `Kraus.map_wordSpan_eq_vectorSpreadSpan`). If
+`Kraus.wordSpan A N = ⊤`, then the image is `range f`. Since `φ ≠ 0`, the map
 `f` is surjective: for any target vector `v`, we can build `M` with
 `M *ᵥ φ = v` using `Matrix.single` basis elements.
 
@@ -69,9 +69,9 @@ Paper: This is implicit in Proposition 3's direction (b)⟹(a).
 (arXiv:0909.5347, Proposition 3) -/
 theorem vectorSpreadSpan_eq_top_of_wordSpan_eq_top
     (A : MPSTensor d D) {N : ℕ}
-    (htop : wordSpan A N = ⊤)
+    (htop : Kraus.wordSpan A N = ⊤)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0) :
-    vectorSpreadSpan A φ N = ⊤ :=
+    Kraus.vectorSpreadSpan A φ N = ⊤ :=
   Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top A htop φ hφ
 
 /-! ## (b)→(a): Eventually full Kraus rank implies paper-primitivity -/
@@ -79,8 +79,8 @@ theorem vectorSpreadSpan_eq_top_of_wordSpan_eq_top
 /-- **Proposition 3, direction (b)⟹(a)**:
 If `A` has eventually full Kraus rank, then `A` is primitive in the paper's sense.
 
-This is the easy direction: if some `wordSpan A N = ⊤`, then taking `q = N`,
-we have `vectorSpreadSpan A φ N = ⊤` for every nonzero `φ` by
+This is the easy direction: if some `Kraus.wordSpan A N = ⊤`, then taking `q = N`,
+we have `Kraus.vectorSpreadSpan A φ N = ⊤` for every nonzero `φ` by
 `vectorSpreadSpan_eq_top_of_wordSpan_eq_top`.
 
 Paper: "(b) ⟹ (a)" in Proposition 3, arXiv:0909.5347. -/
@@ -110,19 +110,19 @@ provided the tensor has eventually full Kraus rank.
 Paper: "q(E_A) ≤ i(A)" (arXiv:0909.5347, equation (2)).
 
 The proof uses `vectorSpreadSpan_eq_top_of_wordSpan_eq_top`: since
-`wordSpan A (iIndex A) = ⊤`, we have `vectorSpreadSpan A φ (iIndex A) = ⊤`
+`Kraus.wordSpan A (iIndex A) = ⊤`, we have `Kraus.vectorSpreadSpan A φ (iIndex A) = ⊤`
 for all nonzero φ, so `qIndex A ≤ iIndex A`. -/
 theorem qIndex_le_iIndex (A : MPSTensor d D)
     (hA : HasEventuallyFullKrausRank A) :
     qIndex A ≤ iIndex A := by
   -- iIndex A lies in the positive full-span set since hA makes it nonempty.
-  have hne : {n : ℕ | 0 < n ∧ wordSpan A n = ⊤}.Nonempty := by
+  have hne : {n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}.Nonempty := by
     obtain ⟨N, hNpos, hN⟩ := hA
     exact ⟨N, hNpos, hN⟩
-  have hi : wordSpan A (iIndex A) = ⊤ := (Nat.sInf_mem hne).2
+  have hi : Kraus.wordSpan A (iIndex A) = ⊤ := (Nat.sInf_mem hne).2
   -- iIndex A witnesses that the qIndex-defining set is nonempty
   have hq_mem : iIndex A ∈ {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
-      vectorSpreadSpan A φ q = ⊤} := by
+      Kraus.vectorSpreadSpan A φ q = ⊤} := by
     exact ⟨(Nat.sInf_mem hne).1,
       fun φ hφ => vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hi φ hφ⟩
   -- qIndex A = sInf of a set containing iIndex A, so qIndex A ≤ iIndex A

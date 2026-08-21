@@ -25,9 +25,6 @@ in the `IsPrimitivePaper` language of the paper.
   exists a word product of length ≤ D² − krausRank(A) + 1 with nonzero trace.
   This is the exact bound from Lemma 1 of arXiv:0909.5347.
 
-* `cumulativeSpan_eq_top_of_isPrimitivePaper_sharp`:
-  (sharp) the cumulative span T_{D²−krausRank(A)+1}(A) = M_D(ℂ).
-
 * `exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos`:
   for positive `D`, there is a positive-length word of length
   ≤ D² − krausRank(A) + 1 with nonzero trace. The proof uses the
@@ -66,7 +63,8 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     ∃ w : List (Fin d), w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w) ≠ 0 := by
-  exact exists_nonzero_trace_word A (isNormal_of_isPrimitivePaper A hNorm hPrim)
+  obtain ⟨N, _, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
+  exact Kraus.exists_nonzero_trace_word A hN
 
 /-- **Lemma 1, sharp version**.
 
@@ -91,23 +89,8 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp [NeZero D]
     ∃ w : List (Fin d),
       w.length ≤ D ^ 2 - krausRank A + 1 ∧
       Matrix.trace (evalWord A w) ≠ 0 := by
-  exact exists_nonzero_trace_word_sharp A (isNormal_of_isPrimitivePaper A hNorm hPrim)
-
-/-- **Lemma 1, sharp cumulative span**.
-
-If `A` is normalized and primitive in the spreading sense, then the cumulative
-span reaches ⊤ by step D² − krausRank(A) + 1:
-  T_{D²−krausRank(A)+1}(A) = M_D(ℂ).
-
-Paper: arXiv:0909.5347, Lemma 1: "T_{D²−d+1}(A) = M_D(ℂ)".
--/
-theorem cumulativeSpan_eq_top_of_isPrimitivePaper_sharp [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitivePaper A) :
-    cumulativeSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
-  exact cumulativeSpan_eq_top_of_isNormal_sharp A
-    (isNormal_of_isPrimitivePaper A hNorm hPrim)
+  obtain ⟨N, _, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
+  exact Kraus.exists_nonzero_trace_word_sharp A hN
 
 /-- **Lemma 1, sharp positive-length version**.
 
@@ -132,7 +115,7 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos [NeZero D]
       1 ≤ w.length ∧
       w.length ≤ D ^ 2 - krausRank A + 1 ∧
       Matrix.trace (evalWord A w) ≠ 0 := by
-  exact exists_nonzero_trace_word_sharp_pos A
-    (isNormal_of_isPrimitivePaper A hNorm hPrim)
+  obtain ⟨N, hNpos, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
+  exact Kraus.exists_nonzero_trace_word_sharp_pos A hN hNpos
 
 end MPSTensor
