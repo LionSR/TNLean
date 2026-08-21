@@ -602,3 +602,88 @@ preservation by the weighted-trace argument in
     Hence $\nu\tr(X)=0$ and therefore $\nu=0$. In either case,
     $|\nu|<1$.
 \end{proof}
+
+\section{Anti-linear conjugation of the spectrum}
+
+Entrywise complex conjugation is an anti-linear involution of the matrix
+space. Conjugating a linear map on both sides by this involution yields a
+linear map again, and all spectral data conjugate accordingly. These facts
+transport the spectral clauses of the normal-tensor definition of
+\cite{Cirac2016MPDO_arXiv} across entrywise conjugation of a tensor.
+
+\begin{definition}[Entrywise-conjugation transport]%
+    \label{def:entrywise_conj_transport}
+    \lean{entrywiseConjTransport}
+    \lean{entrywiseConjTransportRingEquiv}
+    \leanok
+    Let $\sigma:\MN D\to\MN D$ denote entrywise complex conjugation,
+    $\sigma(X)=\overline X$. The \emph{transport along entrywise conjugation}
+    of a linear map $\Phi:\MN D\to\MN D$ is
+    \begin{align}
+        \Phi\longmapsto\sigma\circ\Phi\circ\sigma.
+        \label{eq:entrywise_conj_transport}
+    \end{align}
+    Both factors $\sigma$ conjugate the scalars, so the transported map is
+    again linear. The transport is an involution, respects sums and
+    composition, and sends the scalar $\mu$ to $\overline\mu$; it is therefore
+    a ring automorphism of the endomorphism ring that conjugates the scalars.
+\end{definition}
+
+\begin{theorem}[Spectrum under anti-linear conjugation]%
+    \label{thm:entrywise_conj_transport_spectrum}
+    \lean{spectrum_entrywiseConjTransport}
+    \lean{hasEigenvalue_entrywiseConjTransport_iff}
+    \leanok
+    \uses{def:entrywise_conj_transport}
+    For every linear map $\Phi:\MN D\to\MN D$,
+    \begin{align}
+        \operatorname{spec}(\sigma\circ\Phi\circ\sigma)
+        &=\overline{\operatorname{spec}(\Phi)},
+        \label{eq:entrywise_conj_spectrum}
+    \end{align}
+    and $\mu$ is an eigenvalue of $\sigma\circ\Phi\circ\sigma$ if and only if
+    $\overline\mu$ is an eigenvalue of $\Phi$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:entrywise_conj_transport}
+    The transport sends $\overline\mu\,\Id-\Phi$ to
+    $\mu\,\Id-\sigma\circ\Phi\circ\sigma$, and a ring automorphism preserves
+    invertibility, which gives~(\ref{eq:entrywise_conj_spectrum}). For the
+    eigenvalue statement, if
+    $(\sigma\circ\Phi\circ\sigma)(V)=\mu V$ with $V\neq0$, then applying
+    $\sigma$ to both sides gives
+    $\Phi(\overline V)=\overline\mu\,\overline V$ with $\overline V\neq0$;
+    the converse follows because the transport is an involution.
+\end{proof}
+
+\begin{theorem}[Peripheral data under anti-linear conjugation]%
+    \label{thm:entrywise_conj_transport_peripheral}
+    \lean{peripheralEigenvalues_entrywiseConjTransport}
+    \lean{spectralRadius_entrywiseConjTransport}
+    \lean{IsPrimitive.entrywiseConjTransport_iff}
+    \leanok
+    \uses{def:entrywise_conj_transport, def:peripheral_eigenvalues,
+        def:primitive_channel}
+    For every linear map $\Phi:\MN D\to\MN D$, the peripheral eigenvalues of
+    $\sigma\circ\Phi\circ\sigma$ are the complex conjugates of the peripheral
+    eigenvalues of $\Phi$, the spectral radii agree,
+    \begin{align}
+        r(\sigma\circ\Phi\circ\sigma)&=r(\Phi),
+        \label{eq:entrywise_conj_spectral_radius}
+    \end{align}
+    and $\sigma\circ\Phi\circ\sigma$ is primitive if and only if $\Phi$ is
+    primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:entrywise_conj_transport_spectrum}
+    Complex conjugation preserves the modulus. Conjugating the spectrum and
+    the eigenvalues by Theorem~\ref{thm:entrywise_conj_transport_spectrum}
+    therefore preserves the supremum of the moduli of the spectral values,
+    which gives~(\ref{eq:entrywise_conj_spectral_radius}), and maps the
+    unit-circle eigenvalues of $\Phi$ onto those of
+    $\sigma\circ\Phi\circ\sigma$. Since $\{1\}$ is fixed by conjugation, the
+    peripheral eigenvalues equal $\{1\}$ after transport if and only if they
+    do before.
+\end{proof}

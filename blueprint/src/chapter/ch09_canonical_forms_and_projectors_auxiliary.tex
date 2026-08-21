@@ -347,22 +347,24 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \label{thm:cpsv_map_star_preservation}
     \lean{MPSTensor.IsLeftCanonical.mapStar}
     \lean{MPSTensor.GaugeEquiv.mapStar}
+    \lean{MPSTensor.IsNormal.mapStar}
     \lean{MPSTensor.IsNormalTensor.mapStar}
     \leanok
-    \uses{def:left_canonical_tensor,def:nt_cpsv,def:gauge_equiv}
+    \uses{def:left_canonical_tensor,def:nt_cpsv,def:gauge_equiv,def:normal}
     For a tensor or matrix, an overline denotes entrywise conjugation. If $A$
     and $B$ are gauge equivalent through $X$, then $\overline A$ and
     $\overline B$ are gauge equivalent through $\overline X$. If $A$ is
-    left-canonical, then $\overline A$ is left-canonical. Independently, if $A$
+    left-canonical, then $\overline A$ is left-canonical. If $A$ is
+    algebraically normal, then $\overline A$ is algebraically normal.
+    Independently, if $A$
     is a CPSV normal tensor, then $\overline A$ is a CPSV normal tensor.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:left_canonical_tensor,def:gauge_equiv,
-        thm:cpsv_normal_bond_dim_pos,thm:cpsv_normal_tp_gauge,
-        thm:cpsv_normal_eventually_injective,
-        thm:cpsv_normal_tensor_gauge_transport,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:left_canonical_tensor,def:gauge_equiv,def:normal,def:nt_cpsv,
+        thm:cpsv_map_star_transfer_fixed_point,
+        thm:cpsv_map_star_irreducible,
+        thm:entrywise_conj_transport_peripheral}
     Entrywise conjugating $B^i=X A^i X^{-1}$ gives
     $\overline{B^i}=\overline X\,\overline{A^i}\,(\overline X)^{-1}$.
     Conjugating the left-canonical identity gives
@@ -371,26 +373,35 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
         &=\overline{\sum_i(A^i)^\dagger A^i}
          =\overline{\Id}=\Id.
     \end{align}
-    For the normal-tensor assertion, put $A$ into the trace-preserving Perron
-    gauge supplied by Theorem~\ref{thm:cpsv_normal_tp_gauge}. Gauge transport
-    preserves normal-tensor status, and entrywise conjugation preserves the
-    gauge relation. The Perron representative is trace-preserving, hence
-    left-canonical, and conjugation preserves this identity. Moreover,
-    \lean{MPSTensor.IsNormal.mapStar}
-    entrywise conjugation preserves its positive-length block injectivity.
-    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} therefore
-    makes the conjugated representative a CPSV normal tensor. Transporting
-    back through the conjugated gauge gives the result for $\overline A$.
+    Entrywise conjugation maps the span of the length-$N$ products of $A$
+    onto the span of those of $\overline A$, so it preserves positive-length
+    block injectivity and hence algebraic normality.
+    For the normal-tensor assertion, the transfer map of $\overline A$ is the
+    anti-linear conjugate $\sigma\circ\E_A\circ\sigma$
+    by~(\ref{eq:cpsv_map_star_transfer_operator}). By
+    Theorem~\ref{thm:entrywise_conj_transport_peripheral} this conjugation
+    preserves the spectral radius and primitivity, and by
+    Theorem~\ref{thm:cpsv_map_star_irreducible} entrywise conjugation
+    preserves irreducibility. Hence both clauses of
+    Definition~\ref{def:nt_cpsv} hold for $\overline A$.
 \end{proof}
 
 \begin{theorem}[Transfer maps and positive diagonal matrices under
     entrywise conjugation]
     \label{thm:cpsv_map_star_transfer_fixed_point}
+    \lean{MPSTensor.transferMap_mapStar_eq_entrywiseConjTransport}
     \lean{MPSTensor.transferMap_mapStar}
     \lean{MPSTensor.map_star_eq_self_of_posDef_isDiag}
     \leanok
-    \uses{def:transfer_map}
-    For every tensor $A$ and matrix $X$,
+    \uses{def:transfer_map, def:entrywise_conj_transport}
+    Let $\sigma$ denote entrywise conjugation. For every tensor $A$, as
+    operators on the matrix space,
+    \begin{align}
+        \E_{\overline A}
+        &=\sigma\circ\E_A\circ\sigma;
+        \label{eq:cpsv_map_star_transfer_operator}
+    \end{align}
+    evaluating at $\overline X$ gives, for every matrix $X$,
     \begin{align}
         \E_{\overline A}(\overline X)
         &=\overline{\E_A(X)}.
@@ -404,11 +415,33 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:transfer_map}
-    Entrywise conjugation commutes with finite sums and matrix products, which
-    gives~(\ref{eq:cpsv_map_star_transfer}). The diagonal entries of a
+    \uses{def:transfer_map, def:entrywise_conj_transport}
+    Entrywise conjugation commutes with finite sums, matrix products, and
+    conjugate transposition, which
+    gives~(\ref{eq:cpsv_map_star_transfer_operator}) on every matrix, and
+    (\ref{eq:cpsv_map_star_transfer}) follows since $\sigma$ is an
+    involution. The diagonal entries of a
     positive-definite complex matrix are real, while all off-diagonal entries
     of a diagonal matrix vanish. This proves~(\ref{eq:cpsv_map_star_posdef_diag}).
+\end{proof}
+
+\begin{theorem}[Irreducibility under entrywise conjugation]%
+    \label{thm:cpsv_map_star_irreducible}
+    \lean{MPSTensor.IsIrreducibleTensor.mapStar}
+    \leanok
+    \uses{def:irreducible_tensor}
+    If $A$ is irreducible, then $\overline A$ is irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:irreducible_tensor}
+    Suppose $P$ is a nontrivial invariant orthogonal projection for
+    $\overline A$, so $(\Id-P)\,\overline{A^i}\,P=0$ for every~$i$.
+    Conjugating entrywise gives
+    $(\Id-\overline P)A^i\overline P=0$, and $\overline P$ is again a
+    Hermitian idempotent distinct from $0$ and $\Id$. Hence $\overline P$ is
+    a nontrivial invariant orthogonal projection for $A$, contradicting the
+    irreducibility of~$A$.
 \end{proof}
 
 \begin{definition}[CPSV canonical form]
