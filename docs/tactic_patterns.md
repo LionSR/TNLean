@@ -1263,6 +1263,23 @@ current counts and full location lists).
   reconstruction pattern now; retain the explicit proofs until another
   direct word-tuple occurrence identifies a materially smaller theorem.
 
+### rational negMulLog prime-logarithm expansion — candidate
+- **Pattern:** rewrite `Real.negMulLog (a / b)` for an explicit rational into a
+  linear combination of logarithms of small primes: unfold `negMulLog`, split
+  the quotient with `Real.log_div`, express `b` (and composite `a`) as prime
+  powers, apply `Real.log_pow`/`Real.log_mul`, then `push_cast` and `ring`.
+- **Seen:** eight private lemmas in
+  `TNLean/MPS/MPDO/CPSVExample410CorrelatedFlip.lean`
+  (`negMulLog_quarter` through `negMulLog_nine_128ths`) (2026-08-21).
+- **Abstraction (proposed):** one lemma computing
+  `negMulLog ((a : ℝ) / 2 ^ k)` from the prime factorization of `a`, or a
+  small simp set bundling `negMulLog`, `Real.log_div`, `Real.log_pow`, and
+  `Real.log_mul` with the needed positivity side conditions.
+- **Notes:** all occurrences are presently in one file, below the two-file
+  promotion threshold. The sibling exact-entropy statements in
+  `TNLean/MPS/MPDO/CPSVExample411Entropy.lean` keep `negMulLog` values
+  unexpanded, so no second file uses the pattern yet.
+
 ### Hermitian extraction from a finite-order channel eigenvector — candidate
 - **Pattern:** from `E X = μ • X`, `X ≠ 0`, `μ ≠ 1`, and `μ ^ p = 1`,
   use trace preservation and the Hermitian parts `X + Xᴴ` and
