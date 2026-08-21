@@ -265,8 +265,8 @@ omit [Fintype n] [DecidableEq n] in
 /-- The trace-pairing adjoint of a positive map between finite matrix algebras
 is positive.
 
-This is the rectangular trace-adjoint positivity used in Wolf, *Quantum
-Channels & Operations*, Chapter 3, lines 722--735 of
+This is the rectangular trace-adjoint positivity stated in Wolf, *Quantum
+Channels & Operations*, Chapter 3, lines 24--26 of
 `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`. -/
 theorem IsPositiveMap.traceAdjointMap
     [Finite n] [Fintype p] {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
@@ -282,7 +282,7 @@ theorem IsPositiveMap.traceAdjointMap
 omit [Fintype n] [DecidableEq n] in
 /-- Positivity is invariant under the trace-pairing adjoint.
 
-Source: Wolf, *Quantum Channels & Operations*, Chapter 3, lines 722--735 of
+Source: Wolf, *Quantum Channels & Operations*, Chapter 3, lines 24--26 of
 `Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`. -/
 theorem isPositiveMap_traceAdjointMap_iff
     [Finite n] [Fintype p]
@@ -368,9 +368,9 @@ omit [Fintype n] [DecidableEq n] in
 /-- The trace-pairing adjoint of a `k`-positive map between finite matrix
 algebras is `k`-positive.
 
-For `k = 2`, this is the trace-adjoint step in Wolf, *Quantum Channels &
-Operations*, Theorem 5.3; see
-`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 180--193. -/
+Source: Wolf, *Quantum Channels & Operations*, Chapter 3, lines 79--80 of
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`. The case `k = 2`
+is used in Wolf's Theorem 5.3. -/
 theorem IsNPositiveMap.traceAdjointMap
     [Finite n] [Fintype p] {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
     (hE : IsNPositiveMap k E) : IsNPositiveMap k (Matrix.traceAdjointMap E) := by
@@ -382,8 +382,8 @@ theorem IsNPositiveMap.traceAdjointMap
 omit [Fintype n] [DecidableEq n] in
 /-- `k`-positivity is invariant under the trace-pairing adjoint.
 
-Source context: Wolf, *Quantum Channels & Operations*, Theorem 5.3,
-`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 180--193. -/
+Source: Wolf, *Quantum Channels & Operations*, Chapter 3, lines 79--80 of
+`Notes/WolfNoteTexSource/ch03_positive_not_completely.tex`. -/
 theorem isNPositiveMap_traceAdjointMap_iff
     [Finite n] [Fintype p]
     {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ} :

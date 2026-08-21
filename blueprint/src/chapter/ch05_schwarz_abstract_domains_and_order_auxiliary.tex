@@ -490,11 +490,35 @@ positivity.
     support projection, the displayed identity follows.
 \end{proof}
 
+\begin{lemma}[Two-variable Schwarz inequality for a two-positive map]
+    \label{lem:two_variable_operator_schwarz_two_positive}
+    \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional}
+    \leanok
+    \uses{lem:two_variable_operator_schwarz_conditional,
+        thm:EBB_mul_pinv_mul_EBA_eq}
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be two-positive. Then, for
+    every $A,B\in\MN{D_{\rm in}}$,
+    \begin{align}
+        E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
+         & \le E(A^\dagger A).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The range inclusion gives
+    $E(B^\dagger B)E(B^\dagger B)^+E(B^\dagger A)=E(B^\dagger A)$.
+    Thus, for every vector $v$, the choice
+    $w=E(B^\dagger B)^+E(B^\dagger A)v$ satisfies the hypothesis of the
+    conditional inequality. Substitution gives the result.
+\end{proof}
+
 \begin{theorem}[Two-variable operator Schwarz inequality]
     \label{thm:two_variable_operator_schwarz}
     \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional_of_traceAdjointMap}
     \leanok
     \uses{def:2positive_map, def:pinv,
+        lem:two_variable_operator_schwarz_two_positive,
         thm:k_positive_trace_pairing_adjoint}
     Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be positive and suppose
     that $E=T^*$ for a two-positive map
@@ -512,26 +536,14 @@ positivity.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:two_variable_operator_schwarz_conditional,
-        thm:EBB_mul_pinv_mul_EBA_eq,
+    \uses{lem:two_variable_operator_schwarz_two_positive,
         thm:k_positive_trace_pairing_adjoint}
     By trace-adjoint invariance of two-positivity
     (Theorem~\ref{thm:k_positive_trace_pairing_adjoint}), $E=T^*$ is
-    two-positive. Hence the preceding conditional and range-inclusion
-    results apply to $E$ with its rectangular input and output dimensions.
-    For every $v$, the vector $w = E(B^\dagger B)^{+}E(B^\dagger A)\,v$
-    satisfies the side condition $E(B^\dagger B)\,w = E(B^\dagger A)\,v$ of
-    the conditional lemma
-    (Lemma~\ref{lem:two_variable_operator_schwarz_conditional}): this is
-    exactly Lemma~\ref{thm:EBB_mul_pinv_mul_EBA_eq} evaluated at $v$. The
-    kernel inclusion $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$,
-    obtained from the ampliated PSD block matrix of the conditional
-    lemma's proof,
-    gives $\operatorname{ran}(E(B^\dagger A))\subseteq
-    \operatorname{ran}(E(B^\dagger B))$, so the pseudoinverse is a genuine
-    right-inverse witness for $E(B^\dagger A)$ on the support of
-    $E(B^\dagger B)$. Applying the conditional lemma with this $w$ for
-    every $v$ gives the displayed matrix inequality.
+    two-positive. Hence
+    Lemma~\ref{lem:two_variable_operator_schwarz_two_positive} applies to
+    $E$ with its rectangular input and output dimensions. The resulting
+    inequality is precisely the displayed conclusion.
 \end{proof}
 
 \begin{definition}[Per-$B$ Schwarz hypothesis]\label{def:has_schwarz_inequality_for}
