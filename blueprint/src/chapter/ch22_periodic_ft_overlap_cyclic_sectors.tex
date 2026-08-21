@@ -2,8 +2,7 @@
     \label{thm:cyclic_sector_offdiag_shift}
     \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
-        thm:offdiag_shift_adjoint_cyclic_shift}
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp, thm:offdiag_shift_adjoint_cyclic_shift}
     If a periodic tensor admits a cyclic sector decomposition, then for every
     $k$ and every physical letter $i$ there exists a family
     $P_0,\ldots,P_{m-1}$ such that each $P_u$ is an orthogonal projection,
@@ -29,8 +28,7 @@
     \label{thm:cyclic_sector_eq_sum_offdiag}
     \lean{MPSTensor.IsCyclicSectorDecomp.eq_sum_offDiag}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
-        thm:eq_sum_offdiag_adjoint_cyclic_shift}
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp, thm:eq_sum_offdiag_adjoint_cyclic_shift}
     If a periodic tensor admits a cyclic sector decomposition, then for every
     physical letter $i$ there exists a family $P_0,\ldots,P_{m-1}$ such that
     each $P_u$ is an orthogonal projection,
@@ -165,8 +163,7 @@
     \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}
     \leanok
-    \uses{def:cyclic_sector_decomp, def:mpv_overlap, def:blocked_tensor,
-        thm:offdiag_shift_adjoint_cyclic_shift}
+    \uses{def:cyclic_sector_decomp, def:mpv_overlap, def:blocked_tensor, thm:offdiag_shift_adjoint_cyclic_shift}
     Let $A$ and $B$ be left-canonical tensors with cyclic sector
     decompositions $\{A_u\}_{u\in\Z_m}$ and
     $\{B_v\}_{v\in\Z_m}$. For every $u,v\in\Z_m$ and every $N>0$,
@@ -198,8 +195,7 @@
     \label{lem:offdiag_eigenvector_eq_zero_periodic}
     \lean{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
-        lem:peripheral_pow_singleton}
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp}
     Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
     orthogonal projections satisfying
     \begin{align}
@@ -307,10 +303,7 @@
     Then $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:sector_blocked_normal_periodic,
-        thm:periodic_self_overlap_tendsto,
-        thm:overlap_decay_irr_tp,
-        thm:overlap_decay_rect_irr_tp}
+    \uses{lem:sector_blocked_normal_periodic, thm:periodic_self_overlap_tendsto, thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
     Write $\bar A\sim\bigoplus_{u\in\Z_m}A_u$ and
     $\bar B\sim\bigoplus_{v\in\Z_m}B_v$. For every $N$,
     \begin{align}
@@ -374,8 +367,7 @@
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
     \lean{MPSTensor.sectorMatch_propagation}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp,
-        lem:sector_overlap_succ_eq_cyclic_sector_decomp}
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp, lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_uA_u$ and $\bar B\sim\bigoplus_vB_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Suppose
@@ -471,9 +463,7 @@
     \label{lem:periodic_global_gauge_assembly}
     \lean{MPSTensor.repeatedBlocks_of_globalGauge}
     \leanok
-    \uses{def:cyclic_sector_decomp, def:periodic_global_gauge,
-        lem:periodic_global_gauge_eq_sum,
-        lem:left_canonical_irreducible_unitary_gauge}
+    \uses{def:cyclic_sector_decomp, def:periodic_global_gauge, lem:periodic_global_gauge_eq_sum, lem:left_canonical_irreducible_unitary_gauge}
     Let $m\ge1$, and let $A$ and $B$ carry the cyclic off-diagonal structure
     \begin{align}
         A^i & =\sum_uP_uA^iP_{u+1}, \notag \\

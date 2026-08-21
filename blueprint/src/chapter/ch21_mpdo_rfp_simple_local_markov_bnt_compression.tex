@@ -8,7 +8,6 @@ strong subadditivity for a normalized three-site reduced state.
     \label{def:mpdo_eta_structure}
     \lean{MPOTensor.EtaStructure}
     \leanok
-    \uses{def:entropy_quantum_markov_decomposition}
     For a three-site density operator $\rho_{ABC}$, the local $\eta$-structure
     is the quantum Markov decomposition on the middle subsystem $B$ produced by
     equality in strong subadditivity. Concretely, after a unitary change of
@@ -45,8 +44,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.EtaStructure.sum_sectorProjection}
     \lean{MPOTensor.EtaStructure.sectorProjection_mul_eq_zero}
     \leanok
-    \uses{def:orthogonal_projection_channel,
-        def:mpdo_hayashi_sector_projection}
+    \uses{def:orthogonal_projection_channel, def:mpdo_hayashi_sector_projection}
     Each $Q_k$ is an orthogonal projection, distinct summands are mutually
     orthogonal, and the family resolves the identity:
     \begin{align}
@@ -64,10 +62,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_hayashi_sector_projection,
-        lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one,
-        thm:star_projection_coisometric_transport,
-        thm:orthogonal_projection_star_projection_channel}
+    \uses{def:mpdo_hayashi_sector_projection, lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one, thm:star_projection_coisometric_transport, thm:orthogonal_projection_star_projection_channel}
     The coordinate projections satisfy
     \begin{align}
         E_k^*&=E_k,
@@ -149,8 +144,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_bnt_markov_key_formula}
     \lean{MPOTensor.isMPOBlockLeftInverse_bnt_markov_key_formula}
     \leanok
-    \uses{thm:mpdo_bnt_three_site_outer_inverse_collapse,
-      thm:mpdo_bnt_outer_inverse_markov_block}
+    \uses{thm:mpdo_bnt_three_site_outer_inverse_collapse, thm:mpdo_bnt_outer_inverse_markov_block}
     Let $x=(s,\alpha_1,\beta_1)$ and
     $y=(t,\alpha_3,\beta_3)$. Comparing the two expressions for the same
     outer inverse contraction gives
@@ -266,8 +260,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.bntMarkovBlockNonzero_eq_of_probability_ne_zero}
     \lean{MPOTensor.existsUnique_bntMarkovBlockNonzero_of_probability_ne_zero}
     \leanok
-    \uses{thm:mpdo_bnt_markov_key_formula,
-      thm:mpdo_bnt_markov_label_exists,def:mpdo_bnt_markov_block}
+    \uses{thm:mpdo_bnt_markov_key_formula, thm:mpdo_bnt_markov_label_exists, def:mpdo_bnt_markov_block}
     Suppose, in addition, that every closing matrix $R_s$ is nonzero. If
     $p_k\ne0$, there is a unique normal sector $j_k$ for which
     $O_{j_k}^{(k)}\ne0$.
@@ -334,7 +327,7 @@ strong subadditivity for a normalized three-site reduced state.
       mutualInfoChain_one_eq_of_isSSAEquality_tripartite_m}
     \lean{MPOTensor.isSAL_of_isSSAEquality_tripartite_m}
     \leanok
-    \uses{def:is_sal, def:ssa_equality}
+    \uses{def:is_sal}
     Let $1\leq m\leq\lfloor N/2\rfloor$, and divide the chain into four
     consecutive regions $A,B,C,D$ of lengths $m-1,1,N-m-1,1$. If the tensor
     saturates the area law, then its marginal on $ABC$ satisfies
@@ -370,7 +363,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:mpdo_all_cut_markov_implies_sal}
     \lean{MPOTensor.isSAL_of_quantumMarkovDecomposition_tripartite_m}
     \leanok
-    \uses{def:is_sal, def:mpdo, def:entropy_quantum_markov_decomposition}
+    \uses{def:is_sal, def:mpdo}
     Suppose that the periodic operators are positive semidefinite and have
     nonzero trace at every positive chain length. For every $N$ and every
     $1\leq m\leq\lfloor N/2\rfloor$, divide the chain into four consecutive
@@ -383,8 +376,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_sal_ssa_equality,
-        thm:entropy_ssa_equality_quantum_markov}
+    \uses{thm:mpdo_sal_ssa_equality}
     The quantum Markov decomposition gives equality in strong subadditivity
     at every admissible cut:
     $S(\rho_{ABC})+S(\rho_B)=S(\rho_{AB})+S(\rho_{BC})$.
@@ -396,7 +388,7 @@ strong subadditivity for a normalized three-site reduced state.
     \label{thm:sal_implies_eta_structure}
     \lean{MPOTensor.sal_implies_eta_structure}
     \leanok
-    \uses{def:ssa_equality, def:mpdo_eta_structure}
+    \uses{def:mpdo_eta_structure}
     If a normalized three-site reduced state satisfies the equality case of
     strong subadditivity --- the local entropy form of the simple-MPDO strong
     area law --- then it admits the local $\eta$-structure of
@@ -405,7 +397,6 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:entropy_ssa_equality_quantum_markov}
     This is the forward implication of the Hayashi equality
     characterization. The product-reference raw Petz formula, including its
     singular-support compression, is given by
@@ -446,8 +437,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{Entropy.rightMarginalAlong,
       Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong}
     \leanok
-    \uses{def:entropy_quantum_markov_decomposition,
-      lem:partial_trace_right_along}
+    \uses{lem:partial_trace_right_along}
     Suppose that $C\simeq C'\otimes E$ and
     \begin{align}
         \rho_{ABC}
@@ -515,10 +505,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sal_ssa_equality, thm:ssa_equality_reindex_factors,
-        thm:sal_implies_eta_structure,
-        thm:quantum_markov_right_marginal,
-        lem:mpdo_reduced_state_collapse_last}
+    \uses{thm:mpdo_sal_ssa_equality, thm:sal_implies_eta_structure, thm:quantum_markov_right_marginal, lem:mpdo_reduced_state_collapse_last}
     Divide the first $N-1$ sites into consecutive regions of lengths $1$, $1$,
     and $N-3$. Let $\rho^{\mathrm{flat}}_{ABC}$ denote this marginal in the
     corresponding index set
@@ -572,9 +559,7 @@ strong subadditivity for a normalized three-site reduced state.
       exists_etaStructure_reducedBlockState_four_reindex_of_isSAL}
     \lean{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}
     \leanok
-    \uses{thm:mpdo_normalized_three_site_bnt_family_closure,
-      thm:mpdo_bnt_sector_projection_resolution,
-      thm:mpdo_four_site_sal_eta_structure}
+    \uses{thm:mpdo_normalized_three_site_bnt_family_closure, thm:mpdo_bnt_sector_projection_resolution, thm:mpdo_four_site_sal_eta_structure}
     Suppose that the common blocking has been performed, so that the BNT
     representatives have a simultaneous one-letter span. For the normalized
     three-site marginal $\sigma_3^{(4)}$, there are a simultaneous inverse
@@ -686,8 +671,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}
     \leanok
-    \uses{def:mpdo_completed_bnt_sector_projection,
-      thm:mpdo_bnt_projector_local_selection}
+    \uses{def:mpdo_completed_bnt_sector_projection, thm:mpdo_bnt_projector_local_selection}
     Let $K$ be simple, in biCF, and satisfy SAL. Assume in addition that the
     common blocking has been performed, the copy weights over each BNT
     representative agree, and the representatives have a simultaneous
@@ -712,8 +696,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_four_site_sal_bnt_sector_projectors,
-      thm:mpdo_bnt_projector_local_selection}
+    \uses{thm:mpdo_four_site_sal_bnt_sector_projectors, thm:mpdo_bnt_projector_local_selection}
     A unit-modulus BNT weight supplies the label $s_0$. The Markov-sector
     projections $Q_k$ are mutually orthogonal and sum to the identity, so
     partitioning all labels by $\widehat S_s$ proves orthogonality and the
@@ -738,8 +721,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}
     \leanok
-    \uses{thm:mpdo_simple_weight_copy_independent,
-      thm:mpdo_sal_bnt_separating_projectors_copy_independent}
+    \uses{thm:mpdo_simple_weight_copy_independent, thm:mpdo_sal_bnt_separating_projectors_copy_independent}
     Let $K$ be a simple tensor in block-injective canonical form which satisfies
     ZCL and SAL. For the representatives $\mathcal K_i$ of its BNT, there are
     orthogonal projectors $P_s$ such that
@@ -772,8 +754,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}
     \leanok
-    \uses{def:mpdo_sitewise_physical_matrix,
-      thm:mpdo_bnt_projector_local_selection}
+    \uses{def:mpdo_sitewise_physical_matrix, thm:mpdo_bnt_projector_local_selection}
     For every nonempty periodic chain and every normal-sector label $s$,
     \begin{align}
         P_s^{\otimes N} \sigma^{(N)}(K)\,P_s^{\otimes N}
@@ -789,8 +770,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_projector_local_selection,
-      thm:mpdo_four_site_sal_bnt_sector_projectors}
+    \uses{thm:mpdo_bnt_projector_local_selection, thm:mpdo_four_site_sal_bnt_sector_projectors}
     Sitewise multiplication by $P_s$ is the periodic MPO obtained by changing
     every local physical matrix by $P_s$. The preceding theorem replaces
     each normal representative by itself when its label is $s$ and by the
@@ -830,8 +810,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_toMPSTensor}
     \lean{MPOTensor.physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \leanok
-    \uses{def:mpo_physical_trace_transfer,
-      def:mpdo_common_sector_weight_absorption}
+    \uses{def:mpo_physical_trace_transfer, def:mpdo_common_sector_weight_absorption}
     Suppose the weights over each BNT representative are copy-independent.
     For $\mathcal K_s=\mu_sA_s$ and
     $\mathcal B_s=\mathcal T_{A_s}$, one has
@@ -854,8 +833,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
-    \uses{def:mpo_physical_trace_transfer,
-      def:mpdo_common_sector_weight_absorption}
+    \uses{def:mpo_physical_trace_transfer, def:mpdo_common_sector_weight_absorption}
     Let $K$ be gauge equivalent to the weighted direct sum of BNT
     representatives $A_s$, with copy weights $\mu_{s,q}$. If its
     physical-trace transfer is literally idempotent, then every weighted copy
@@ -875,11 +853,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:global_gauge_of_blocks,
-      lem:mpdo_doubled_phys_trace_transfer_to_mps,
-      lem:mpdo_doubled_phys_trace_transfer_blockwise,
-      lem:mpdo_copy_weight_eq_common_weight,
-      thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+    \uses{def:global_gauge_of_blocks, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_copy_weight_eq_common_weight, thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
     gives the same identity for the weighted direct sum. Its diagonal block
     indexed by $(s,q)$ is
@@ -898,8 +872,7 @@ strong subadditivity for a normalized three-site reduced state.
       exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \leanok
-    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl,
-      def:mpdo_common_sector_weight_absorption}
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl, def:mpdo_common_sector_weight_absorption}
     Let $K$ be a simple tensor in its chosen canonical form and suppose that
     $K$ has scale-invariant source zero correlation length. Then the copy
     weights over each normal representative $A_s$ agree. For every $A_s$ with
@@ -921,9 +894,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
-      lem:mpdo_simple_blockwise_zcl_equation,
-      thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+    \uses{cor:mpdo_simple_zcl_weight_copy_independent, lem:mpdo_simple_blockwise_zcl_equation, thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
     common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
     then gives the displayed quadratic identity. The common weight is nonzero,
@@ -933,10 +904,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{remark}[Sectorwise hypotheses in the canonical BNT application]
     \label{rem:mpdo_prop4to2_sectorwise_zcl_boundary}
-    \uses{thm:mpdo_absorbed_bnt_sector_zcl,
-      thm:mpdo_bnt_physical_support_restriction,
-      thm:mpdo_proportional_commuting_sector_positivity,
-      thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
+    \uses{thm:mpdo_absorbed_bnt_sector_zcl, thm:mpdo_bnt_physical_support_restriction, thm:mpdo_proportional_commuting_sector_positivity, thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
     In the canonical absorbed BNT presentation, ambient source zero
     correlation length supplies source zero correlation length for every
     absorbed representative by
@@ -967,9 +935,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}
     \leanok
-    \uses{def:mpdo, def:mpo_source_zcl, lem:mpdo_trace_loop_chain,
-      cor:mpdo_absorbed_bnt_sector_is_mpdo,
-      thm:mpdo_absorbed_bnt_sector_zcl}
+    \uses{def:mpdo, def:mpo_source_zcl, lem:mpdo_trace_loop_chain, cor:mpdo_absorbed_bnt_sector_is_mpdo, thm:mpdo_absorbed_bnt_sector_zcl}
     Let $M$ generate matrix product density operators and have source zero
     correlation length. Then, for every $N\geq1$,
     $\tr(\sigma^{(N)}(M))>0$.
@@ -1013,8 +979,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}
     \leanok
-    \uses{def:is_sal, def:mpo_source_zcl,
-      def:mpdo_common_sector_weight_absorption}
+    \uses{def:is_sal, def:mpo_source_zcl, def:mpdo_common_sector_weight_absorption}
     Let $K$ saturate the area law and have zero correlation length, and let
     its horizontal BNT canonical form, up to block-diagonal gauge, have normal
     representatives $A_s$, common copy weights $\mu_s$, and copy numbers
@@ -1047,13 +1012,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:entropy_pairwise_annihilating_support,
-      thm:positive_weighted_sum_termwise_equality,
-      lem:sal_const, thm:entropy_strong_subadditivity,
-      thm:mpdo_tripartite_block_entropy_identifications,
-      thm:mpdo_bnt_projector_local_selection,
-      cor:mpdo_absorbed_bnt_sector_is_mpdo,
-      thm:mpdo_source_zcl_strict_positive_length_normalization}
+    \uses{lem:sal_const, thm:mpdo_tripartite_block_entropy_identifications, thm:mpdo_bnt_projector_local_selection, cor:mpdo_absorbed_bnt_sector_is_mpdo, thm:mpdo_source_zcl_strict_positive_length_normalization}
     The BNT projections carry every normalized marginal on mutually
     annihilating supports, so the preceding support form of entropy
     additivity gives
@@ -1078,9 +1037,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
       commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL}
     \leanok
-    \uses{def:injective, def:mpdo, def:is_sal,
-      def:mpo_physical_trace_transfer,
-      def:mpdo_common_sector_weight_absorption}
+    \uses{def:injective, def:mpdo, def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_common_sector_weight_absorption}
     Let $K$ be an MPDO tensor in biCF, written up to a block-diagonal
     gauge as a weighted BNT direct sum whose BNT representatives have
     nonnilpotent physical-trace transfers. Suppose that the weights over each
@@ -1100,13 +1057,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:global_gauge_of_blocks, def:gauge_equiv,
-      thm:gauge_invariance, lem:mpdo_trace_loop_chain,
-      thm:mpo_source_zcl_of_physical_trace_idempotent,
-      thm:mpdo_bnt_physical_support_restriction,
-      cor:mpdo_absorbed_bnt_sector_is_mpdo,
-      thm:mpdo_absorbed_bnt_sector_sal,
-      thm:mpdo_absorbed_bnt_sector_literal_zcl}
+    \uses{def:global_gauge_of_blocks, def:gauge_equiv, thm:gauge_invariance, lem:mpdo_trace_loop_chain, thm:mpo_source_zcl_of_physical_trace_idempotent, thm:mpdo_bnt_physical_support_restriction, cor:mpdo_absorbed_bnt_sector_is_mpdo, thm:mpdo_absorbed_bnt_sector_sal, thm:mpdo_absorbed_bnt_sector_literal_zcl}
     The block-diagonal gauge identifies the MPV families of $K$ and its
     weighted BNT direct sum. Saturation gives $\tr(\sigma^{(1)}(K))>0$. Since
     $\tr(\sigma^{(1)}(K))=\tr(\mathcal T_K)$, one has

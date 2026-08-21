@@ -3,8 +3,7 @@
     \lean{TNLean.PEPS.NormalRectangleInjectivityHypotheses}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses}
     \leanok
-    \uses{def:peps_regionInjectivityData,
-        def:peps_squareLatticeCoordinateRegions}
+    \uses{def:peps_regionInjectivityData, def:peps_squareLatticeCoordinateRegions}
     In the square-lattice normal theorem, every $2\times 3$ and
     $3\times 2$ rectangular region is assumed injective. The corresponding
     abstract hypotheses specify which finite regions have these two shapes and
@@ -34,8 +33,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rect23_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rect32_injective}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_normalRectangleInjectivityHypotheses, lem:peps_squareLatticeCoordinateRegion_identities}
     Under the coordinate square-lattice rectangular injectivity hypotheses,
     every bounded contiguous $2\times3$ rectangle and every bounded
     contiguous $3\times2$ rectangle is injective.
@@ -51,9 +49,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHorizontalBlock_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHole_injective_of_union}
     \leanok
-    \uses{def:peps_regionInjectivityData,
-        def:peps_normalRectangleInjectivityHypotheses,
-        lem:peps_normalSquareRegionTHole_rectangular_decomposition}
+    \uses{def:peps_regionInjectivityData, def:peps_normalRectangleInjectivityHypotheses, lem:peps_normalSquareRegionTHole_rectangular_decomposition}
     For the displayed local $T$-region inside its $5\times6$ coordinate window,
     if the smaller edge-block bounds
     $x_0 + 5 \leq n$ and $y_0 + 5 \leq m$ hold in the finite $n\times m$
@@ -78,10 +74,7 @@
     \lean{TNLean.PEPS.NormalSquareVerticalRegionTRectangleCover}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalT_inj_of_cover}
     \leanok
-    \uses{def:peps_normalSquareRectangleCover,
-        def:peps_normalRectangleInjectivityHypotheses,
-        lem:peps_normalSquareRectangleCover_injective,
-        lem:peps_regionInjectivityUnionClosure_finite}
+    \uses{def:peps_normalSquareRectangleCover, def:peps_normalRectangleInjectivityHypotheses, lem:peps_normalSquareRectangleCover_injective, lem:peps_regionInjectivityUnionClosure_finite}
     If the displayed local $T$-region has a nonempty finite cover by
     contiguous $2\times3$ and $3\times2$ rectangles, then rectangular
     injectivity and finite union closure imply that $T$ is injective. The
@@ -102,11 +95,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.%
         edgeComplement_injective_of_T_cover}
     \leanok
-    \uses{def:peps_normalSquareRectangleCover,
-        def:peps_normalRectangleInjectivityHypotheses,
-        lem:peps_normalSquareRectangleCover_injective,
-        lem:peps_regionInjectivityUnionClosure_finite,
-        lem:peps_normalSquareEdgeComplementRegion_coverOfT}
+    \uses{def:peps_normalSquareRectangleCover, def:peps_normalRectangleInjectivityHypotheses, lem:peps_normalSquareRectangleCover_injective, lem:peps_regionInjectivityUnionClosure_finite, lem:peps_normalSquareEdgeComplementRegion_coverOfT}
     If the finite-lattice complementary block $A_3$ has a nonempty finite
     cover by contiguous $2\times3$ and $3\times2$ rectangles, then
     rectangular injectivity and finite union closure imply that $A_3$ is
@@ -130,8 +119,7 @@
     \lean{TNLean.PEPS.normalSquareEdgeComplementRectangleCoverOfT}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeComplementRectangleCoverOfVerticalT}
     \leanok
-    \uses{def:peps_normalSquareRectangleCover,
-        lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    \uses{def:peps_normalSquareRectangleCover, lem:peps_normalSquareEdgeComplementRegion_topCollar}
     In the normalized horizontal-edge $5\times7$ frame with lower-left corner
     $(0,0)$, any rectangular cover of the local $T$-region extends to a
     rectangular cover of the edge-complementary block $A_3$ by adjoining the
@@ -174,10 +162,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalComp_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalComp_inj_of_cover}
     \leanok
-    \uses{lem:peps_normalSquareEdgeComplementRegion,
-        lem:peps_normalSquareRegionT_window_complement,
-        def:peps_regionInjectivityData,
-        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    \uses{lem:peps_normalSquareEdgeComplementRegion, lem:peps_normalSquareRegionT_window_complement, def:peps_regionInjectivityData, lem:peps_squareLatticeRectangleInjectivity_rectangles}
     In the normalized horizontal-edge $5\times7$ frame, the finite-lattice
     complementary block $A_3$ is the local-window $T$-region together with
     two top-collar contiguous $3\times2$ rectangles. Consequently, if the
@@ -260,8 +245,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.wideRectangle_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.shortRectangle_injective}
     \leanok
-    \uses{lem:peps_injectiveRegion_union,
-        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    \uses{lem:peps_injectiveRegion_union, lem:peps_squareLatticeRectangleInjectivity_rectangles}
     A contiguous rectangle whose width is at least two and whose height is at
     least three is the union of the source $2\times3$ rectangles sliding over
     it, so rectangular injectivity and union closure prove it injective. The
@@ -280,9 +264,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorEdgeComplement_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.interiorVerticalEdgeComplement_injective}
     \leanok
-    \uses{lem:peps_normalSquareEdgeComplementRegion,
-        lem:peps_normalSquareWideRectangle_injective,
-        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    \uses{lem:peps_normalSquareEdgeComplementRegion, lem:peps_normalSquareWideRectangle_injective, lem:peps_squareLatticeRectangleInjectivity_rectangles}
     Let the two edge blocks be removed at an interior position of a sufficiently
     large lattice, with one row and column of room below and to the left and
     further room above and to the right. Then the complementary block $A_3$ is
@@ -315,9 +297,7 @@
     \lean{TNLean.PEPS.NormalSquareInteriorEdgeDatum}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData}
     \leanok
-    \uses{lem:peps_normalSquareInteriorEdgeComplement_injective,
-        lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
-        def:peps_normalEdgeBlockingHypotheses}
+    \uses{lem:peps_normalSquareInteriorEdgeComplement_injective, lem:peps_normalSquareHorizontalTranslatedEdge_blockingData, def:peps_normalEdgeBlockingHypotheses}
     For an interior horizontal or vertical edge with the corresponding interior
     margins, the translated edge-blocking datum is built with no rectangular
     cover: its complementary-block injectivity is the interior $A_3$
@@ -367,10 +347,7 @@
     \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain_of_verticalT}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain_of_verticalTCover}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_normalSquareEdgeComplementRegion,
-        lem:peps_normalSquareRegionT_edgeBlocks_injective,
-        lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_normalSquareEdgeComplementRegion, lem:peps_normalSquareRegionT_edgeBlocks_injective, lem:peps_normalSquareEdgeComplementRegion_topCollar}
     In the normalized $5\times7$ horizontal-edge frame, the red block is the
     vertical $2\times3$ block, the blue block is the horizontal $3\times2$
     block, and the complementary block is the finite-lattice edge complement
@@ -422,9 +399,7 @@
     \lean{TNLean.PEPS.horizontalTranslatedBlue_zero}
     \lean{TNLean.PEPS.horizontalTranslatedComp_zero}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_normalSquareEdgeComplementRegion,
-        lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_normalSquareEdgeComplementRegion, lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     For any coordinate origin whose horizontal blocking window lies in the
     finite square lattice, there is a distinguished horizontal edge with the
     same relative position as in the normalized picture. The translated red
@@ -469,8 +444,7 @@
     \lean{TNLean.PEPS.verticalTranslatedBlue_zero}
     \lean{TNLean.PEPS.verticalTranslatedComp_zero}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     For any coordinate origin whose vertical blocking window lies in the
     finite square lattice, there is a distinguished vertical edge with the same
     relative position as in the normalized vertical picture. The translated
@@ -501,11 +475,7 @@
     \label{thm:peps_bondDim_interiorEdge_eq_of_normalSquareRectangularInjectivity}
     \lean{TNLean.PEPS.bondDim_apply_eq_of_normalSquareInteriorEdge}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses,
-        def:peps_regionInjectivityData,
-        def:peps_regionInjectivityDataOf,
-        def:peps_same_state,
-        lem:peps_normalSquareInteriorEdgeBlocking}
+    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, def:peps_regionInjectivityDataOf, def:peps_same_state, lem:peps_normalSquareInteriorEdgeBlocking}
     Let $A$ and $B$ be PEPS tensors on the $n\times m$ square lattice with
     positive physical dimension $d>0$ and positive bond dimensions at every
     edge, generating the same state. Suppose both tensors satisfy the
@@ -528,9 +498,7 @@
     dimension at the edge is not assumed.
     \begin{proof}
         \leanok
-        \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
-            lem:peps_normalSquareVerticalTranslatedEdge_blockingData,
-            thm:peps_bondDim_eq_of_normalBlocking}
+        \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData, lem:peps_normalSquareVerticalTranslatedEdge_blockingData, thm:peps_bondDim_eq_of_normalBlocking}
         Suppose $e$ is horizontal; the vertical case is the rotated argument.
         Place the translated frame at $(x_0,y_0)=(x_e-1,y_e-2)$, so the
         interior margins give $2\le x_0$, $2\le y_0$, $x_0+8\le n$, and

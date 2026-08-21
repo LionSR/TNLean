@@ -84,8 +84,7 @@ on the bond space.
     \label{lem:twisted_tensor_block_comm}
     \lean{MPSTensor.twistedTensor_blockTensor_comm}
     \leanok
-    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor,
-        lem:eval_word_twisted_tensor}
+    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor, lem:eval_word_twisted_tensor}
     For every $g\in G$ and $L\ge0$,
     \begin{align}
         \widetilde{(A^{[L]})}^{\,U^{[L]}}_g
@@ -106,8 +105,7 @@ on the bond space.
     \label{thm:on_site_symmetric_block_tensor}
     \lean{MPSTensor.isOnSiteSymmetric_blockTensor}
     \leanok
-    \uses{def:on_site_symmetric, def:block_kron_action,
-        lem:twisted_tensor_block_comm}
+    \uses{def:on_site_symmetric, def:block_kron_action, lem:twisted_tensor_block_comm}
     If $A$ has MPV-family invariance under $U$, then $A^{[L]}$ has
     MPV-family invariance under $U^{[L]}$ for every $L$.
 \end{theorem}
@@ -138,8 +136,7 @@ on the bond space.
 
 \begin{remark}[Fundamental-Theorem route for injective symmetry]%
     \label{rem:injective_symmetry_ft_route}
-    \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar,
-        lem:twisted_tensor_mul, thm:virtual_rep_injective}
+    \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul, thm:virtual_rep_injective}
     The injective virtual-representation theorem is not proved from
     virtual-boundary nondecay. The on-site symmetry condition first identifies
     $A$ and $\widetilde{A}_g$ as the same MPV family; the single-block
@@ -290,9 +287,7 @@ on the bond space.
     \label{thm:virtual_rep_injective}
     \lean{MPSTensor.virtual_rep_of_symmetric_injective}
     \leanok
-    \uses{def:injective, def:on_site_symmetric, def:projective_rep,
-        def:scalar_cocycle, lem:gauge_unique_up_to_scalar,
-        lem:twisted_tensor_mul}
+    \uses{def:injective, def:on_site_symmetric, def:projective_rep, def:scalar_cocycle, lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
     Let $A$ be an injective MPS tensor that is on-site symmetric
     under a group representation $U : G \to \GL_{d}(\C)$.
     Then there exist:
@@ -340,8 +335,7 @@ on the bond space.
 
 \begin{proof}
     \leanok
-    \uses{def:on_site_symmetric, lem:gauge_equiv_twisted,
-        lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
+    \uses{def:on_site_symmetric, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul}
     Since $A$ is injective and on-site symmetric, each twisted tensor
     $\widetilde{A}_g$ is gauge equivalent to~$A$
     (Lemma~\ref{lem:gauge_equiv_twisted}).
@@ -426,8 +420,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     \label{thm:cocycle_gauge_independence}
     \lean{MPSTensor.cohomologousTo_of_isInjective}
     \leanok
-    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
-        def:cohomologous_to}
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar, def:cohomologous_to}
     If the bond dimension satisfies $D \ge 1$ and two projective
     representations $\rho_1,\rho_2$ (with cocycles
     $\omega_1,\omega_2$) both arise as virtual representations of the
@@ -436,8 +429,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar,
-        def:cohomologous_to}
+    \uses{thm:virtual_rep_injective, lem:gauge_unique_up_to_scalar, def:cohomologous_to}
     Gauge uniqueness gives nonzero scalars $f(k)$ with
     $X_2(k)=f(k)\,X_1(k)$ for every physical twist $k$.  Since the
     projective representation is $\rho_a(g)=X_a(g^{-1})$, setting

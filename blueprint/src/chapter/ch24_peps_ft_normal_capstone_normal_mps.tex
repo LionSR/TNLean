@@ -42,8 +42,7 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.cycleNormalPEPSBlockingHypotheses}
     \lean{TNLean.PEPS.isCrossingEdge_cycleEdge_iff}
     \leanok
-    \uses{def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityData}
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityData}
     A closed chain of $n$ sites is the cycle graph on $n$ vertices, and a
     block of consecutive sites is an arc: the vertices reached clockwise
     from a starting site. Suppose $0 < L$, $3L \le n$, every arc
@@ -93,9 +92,7 @@ chains, one tensor per site, which is the setting of
     is proved, not assumed.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,
-        thm:fundamentalTheorem_normalPEPS_connected,
-        lem:peps_injectiveRegion_union_pos}
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_connected, lem:peps_injectiveRegion_union_pos}
     Positive bond dimensions give union closure of injective regions for
     each tensor (Lemma~\ref{lem:peps_injectiveRegion_union_pos}), hence for
     the doubly injective assignment. The arc-injectivity hypothesis then
@@ -125,9 +122,7 @@ chains, one tensor per site, which is the setting of
     connectivity is needed, as in the general uniqueness clause.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,
-        thm:fundamentalTheorem_normalPEPS_gauge_unique,
-        lem:peps_injectiveRegion_union_pos}
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:peps_injectiveRegion_union_pos}
     The arc-injectivity hypothesis and union closure from the positive bond
     dimensions (Lemma~\ref{lem:peps_injectiveRegion_union_pos}) assemble the
     normal blocking hypotheses on the cycle
@@ -185,8 +180,7 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.matrix_eq_zero_of_isNBlkInjective}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_cycleTensorOfMPS}
     \leanok
-    \uses{def:cycleTensorOfMPS, def:l_blk_injective,
-        def:peps_regionInjectivityDataOf}
+    \uses{def:cycleTensorOfMPS, def:l_blk_injective, def:peps_regionInjectivityDataOf}
     Let $0 < L < n$ with $n \ge 3$, let the bond dimension be positive, and
     suppose $A$ is $L$-block injective. Then for every arc of $L$
     consecutive sites of the closed chain, the blocked tensor of the arc of
@@ -554,8 +548,7 @@ to $n \ge 2L + 1$.
     the other is an automorphism of the matrix algebra, hence inner.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
-        thm:mps_chain_gaugeEquiv_sameState}
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, thm:mps_chain_gaugeEquiv_sameState}
     Regard $A$ and $B$ as constant site-dependent chains on $n$ sites.
     Window injectivity of a constant chain is block injectivity of the
     single tensor, and agreement of the matrix product vectors at size $n$
@@ -584,8 +577,7 @@ to $n \ge 2L + 1$.
     and $C^i = \lambda A^i$ for every $i$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:exists_mpvTransport, lem:isNBlkInjective_of_le,
-        def:eval_word}
+    \uses{lem:exists_mpvTransport, lem:isNBlkInjective_of_le, def:eval_word}
     Transport word products of $A$ to those of $C$ at the window length
     $L$, at $L + 1$, at the complementary length $n - 1 - L$, and at
     $n - L$ (Lemma~\ref{lem:exists_mpvTransport}, matrix-product version;

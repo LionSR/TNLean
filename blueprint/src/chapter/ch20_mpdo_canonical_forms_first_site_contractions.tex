@@ -14,12 +14,7 @@
     \lean{MPOTensor.IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight}
     \lean{MPOTensor.IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo,
-        def:mpdo_three_first_site_contractions,
-        thm:representative_grouped_insert_eq,
-        thm:postblocked_representative_grouped_insert_eq,
-        thm:cpsv_original_coordinate_marked_lemma_l,
-        thm:mpdo_first_site_invariant_comm}
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:mpdo_three_first_site_contractions, thm:representative_grouped_insert_eq, thm:postblocked_representative_grouped_insert_eq, thm:cpsv_original_coordinate_marked_lemma_l, thm:mpdo_first_site_invariant_comm}
     Let $M$ be in normalized BNT-refined horizontal form. For doubled-index
     matrices
     $Y,Z$, suppose that
@@ -65,10 +60,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:representative_grouped_insert_eq,
-        thm:postblocked_representative_grouped_insert_eq,
-        thm:cpsv_original_coordinate_marked_lemma_l,
-        thm:mpdo_first_site_invariant_comm}
+    \uses{thm:representative_grouped_insert_eq, thm:postblocked_representative_grouped_insert_eq, thm:cpsv_original_coordinate_marked_lemma_l, thm:mpdo_first_site_invariant_comm}
     For the normalized BNT-refined assertion, positive-length MPV equality
     gives the first-site identity for the BNT sector decomposition. The representative-grouped
     Lemma~L gives $YA_j=ZA_j$ for every representative. First-site insertion
@@ -402,8 +394,7 @@ tensor. This is the contraction in
     \lean{MPOTensor.insertedTensor_braRightAction_toMPSTensor}
     \lean{MPOTensor.insertedTensor_ketLeftBraRightAction_toMPSTensor}
     \leanok
-    \uses{def:mpdo_three_first_site_contractions,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:mpdo_three_first_site_contractions, def:mpdo_vertical_one_site_actions}
     Let $\widehat M$ be the doubled-index tensor associated with $M$. Then
     insertion of $Y_L$, $Y_R$, and $Y_C$ gives, respectively, the
     doubled-index tensors associated with
@@ -412,8 +403,7 @@ tensor. This is the contraction in
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_three_first_site_contractions,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:mpdo_three_first_site_contractions, def:mpdo_vertical_one_site_actions}
     Write the output and summed doubled indices as $(a,b)$ and $(c,e)$.
     The Kronecker deltas in $Y_L$ and $Y_R$ remove, respectively, the sums
     over $e$ and $c$; $Y_C$ leaves both multiplications. The resulting
@@ -459,9 +449,7 @@ tensor. This is the contraction in
     \label{thm:blockwise_opposite_insert_rotated_mpo}
     \lean{MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries}
     \leanok
-    \uses{def:mpdo_three_first_site_contractions,
-        lem:mpdo_three_first_site_contraction_coefficients,
-        thm:blockwise_opposite_insert_eq}
+    \uses{def:mpdo_three_first_site_contractions, lem:mpdo_three_first_site_contraction_coefficients, thm:blockwise_opposite_insert_eq}
     Let the doubled-index tensor $\widehat M$ generate the same positive-length MPV
     family as a BNT canonical form $\bigoplus_{j,q}\mu_{j,q}A_j$. If,
     entrywise at every positive length,
@@ -480,8 +468,7 @@ tensor. This is the contraction in
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_three_first_site_contraction_coefficients,
-        thm:blockwise_opposite_insert_eq}
+    \uses{lem:mpdo_three_first_site_contraction_coefficients, thm:blockwise_opposite_insert_eq}
     Lemma~\ref{lem:mpdo_three_first_site_contraction_coefficients} turns the
     two operator identities into equality of the corresponding first-site
     contractions. Equality of matrix product vectors gives these
@@ -525,8 +512,7 @@ tensor. This is the contraction in
     \lean{MPOTensor.firstSiteMatrix_mul_mpo_of_ketLeftMul_invariant}
     \lean{MPOTensor.firstSiteMatrix_mul_mpo_comm}
     \leanok
-    \uses{def:mpdo, def:mpo_family, def:mpdo_vertical_one_site_actions,
-        thm:mpdo_opposite_corner_zero}
+    \uses{def:mpdo, def:mpo_family, def:mpdo_vertical_one_site_actions, thm:mpdo_opposite_corner_zero}
     Let $M$ generate an MPDO and let $P=P^\dagger$ satisfy $PM=PMP$ on the
     vertically viewed tensor. For every total length $L\geq1$, write
     $P_1=P\otimes\Id^{\otimes(L-1)}$. Then
@@ -560,10 +546,7 @@ tensor. This is the contraction in
     \label{thm:blockwise_one_sub_mp_zero}
     \lean{MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpv_representation,
-        def:mpdo_vertical_one_site_actions,
-        thm:mpdo_first_site_invariant_comm,
-        thm:blockwise_opposite_insert_rotated_mpo}
+    \uses{def:mpdo, def:horizontal_cf_mpv_representation, def:mpdo_vertical_one_site_actions, thm:mpdo_first_site_invariant_comm, thm:blockwise_opposite_insert_rotated_mpo}
     Let $M$ generate an MPDO whose doubled-index tensor $\widehat M$ generates
     the same positive-length MPV family as a BNT canonical form
     $\bigoplus_{j,q}\mu_{j,q}A_j$, and let $P=P^\dagger$ satisfy $PM=PMP$ on
@@ -574,8 +557,7 @@ tensor. This is the contraction in
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_first_site_invariant_comm,
-        thm:blockwise_opposite_insert_rotated_mpo}
+    \uses{thm:mpdo_first_site_invariant_comm, thm:blockwise_opposite_insert_rotated_mpo}
     For every tail length $N$, Theorem~\ref{thm:mpdo_first_site_invariant_comm}
     turns $PM=PMP$ into the entrywise identities
     $P_1H^{(N+1)}=P_1H^{(N+1)}P_1$ and

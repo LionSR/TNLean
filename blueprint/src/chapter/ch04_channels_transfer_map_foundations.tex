@@ -132,8 +132,7 @@
     \label{thm:orthogonal_projection_complement_channel}
     \lean{IsOrthogonalProjection.one_sub}
     \leanok
-    \uses{def:orthogonal_projection_channel,
-        thm:orthogonal_projection_star_projection_channel}
+    \uses{def:orthogonal_projection_channel, thm:orthogonal_projection_star_projection_channel}
     If $P \in \MN{D}$ is an orthogonal projection, then $\Id-P$ is an
     orthogonal projection.
 \end{theorem}
@@ -164,7 +163,7 @@
 \begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
     \lean{MPSTensor.transferMap_isCPMap}
     \leanok
-    \uses{def:transfer_map, def:cp_map}
+    \uses{def:transfer_map}
     The transfer map $\E_A(X)=\sum_i A^iX(A^i)^\dagger$
     is completely positive.
 \end{theorem}
@@ -179,7 +178,6 @@
     \label{thm:trace_mul_kraus_map_adjoint}
     \lean{Kraus.trace_mul_mapLM_adjoint}
     \leanok
-    \uses{def:kraus_map}
     For matrices $\rho$ and $X$ and a finite family $(K_i)_i$,
     \begin{align}
         \tr\!\left(\rho\sum_i K_iXK_i^\dagger\right)
@@ -188,7 +186,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:trace_mul_map_eq_trace_adjointMap_mul}
     Apply Lemma~\ref{lem:trace_mul_map_eq_trace_adjointMap_mul} to the Kraus
     map determined by $(K_i)_i$.
 \end{proof}
@@ -205,8 +202,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:trace_mul_kraus_map_adjoint,
-        thm:kraus_map_eq_transfer_map}
+    \uses{thm:trace_mul_kraus_map_adjoint}
     Identify the two Kraus maps with the corresponding transfer maps.
 \end{proof}
 
@@ -254,7 +250,7 @@
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
     \lean{MPSTensor.transferMap_isChannel}
     \leanok
-    \uses{def:transfer_map, def:channel}
+    \uses{def:transfer_map}
     If $\sum_i(A^i)^\dagger A^i=\Id$, then the transfer map
     $\E_A(X)=\sum_i A^iX(A^i)^\dagger$ is a quantum channel (CPTP).
 \end{theorem}

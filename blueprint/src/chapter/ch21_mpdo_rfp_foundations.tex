@@ -141,8 +141,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:mpo_is_zcl_iff_to_mps_rfp}
     \lean{MPOTensor.isZCL_iff_toMPSTensor_isTransferIdempotent}
     \leanok
-    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:mps_transfer_idempotence,
-        lem:mpo_transfer_eq_mps}
+    \uses{def:mpo_is_zcl, def:mpo_to_mps, def:mps_transfer_idempotence, lem:mpo_transfer_eq_mps}
     An MPO tensor satisfies the doubled-index transfer condition if and only if
     its doubled-index MPS view is a renormalization fixed point.
 \end{theorem}
@@ -159,8 +158,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:rfp_via_ts_physical_trace_idempotent}
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpo_physical_trace_transfer,
-      thm:is_kraus_cptp_trace_map}
+    \uses{def:is_rfp_via_ts, def:mpo_physical_trace_transfer}
     If $M$ is a renormalization fixed point via trace-preserving maps, then
     $\mathcal T_M^2=\mathcal T_M$.
     This proves the zero-correlation-length component of implication
@@ -222,8 +220,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         physClose1_obstructionBoundary_not_posSemidef,
       MPOTensor.KatoDeformedRFPObstruction.tensor_not_isRFPViaTS}
     \leanok
-    \uses{def:mpdo, def:phys_close, def:mpo_physical_trace_transfer,
-      def:is_rfp_via_ts}
+    \uses{def:mpdo, def:phys_close, def:mpo_physical_trace_transfer, def:is_rfp_via_ts}
     Let $Z=\operatorname{diag}(1,-1)$ and let $K$ be the bond-two MPO tensor
     whose nonzero physical letters are
     \begin{align}
@@ -267,7 +264,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_trace_loop_chain, lem:is_kraus_cptp_map_pos}
+    \uses{lem:mpdo_trace_loop_chain}
     Since the two virtual sectors are diagonal, set $z_0=1$ and $z_1=-1$.
     A physical configuration $\sigma$ has weight
     \begin{align}
@@ -303,9 +300,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
       MPOTensor.KatoDeformedRFPObstruction.%
       exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS}
     \leanok
-    \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction, def:mpdo,
-      def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal,
-      def:cpsv_canonical_form}
+    \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction, def:mpdo, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal, def:cpsv_canonical_form}
     Let $K$ be the bond-two MPO tensor of
     Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction}, and let
     $A_K$ be its doubled-index MPS tensor, an MPS tensor with four physical
@@ -348,9 +343,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction,
-      def:cpsv_canonical_form, def:is_sal,
-      lem:bond_dimension_one_identity_transfer_normal}
+    \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction, def:cpsv_canonical_form, def:is_sal, lem:bond_dimension_one_identity_transfer_normal}
     Every letter of $A_K$ is diagonal and the block letters are scalars, so
     the weighted direct sum is the entrywise check
     \begin{align}
@@ -390,8 +383,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:rfp_via_ts_source_zcl}
     \lean{MPOTensor.isSourceZCL_of_isRFPViaTS}
     \leanok
-    \uses{thm:rfp_via_ts_physical_trace_idempotent,
-      thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \uses{thm:rfp_via_ts_physical_trace_idempotent, thm:mpo_source_zcl_of_physical_trace_idempotent}
     If $M$ is a renormalization fixed point via trace-preserving maps and
     $\mathcal T_M\ne0$, then $M$ satisfies the nonzero up-to-scalar
     physical-trace relation.
@@ -463,7 +455,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:mpdo_ancillary_trace_map_is_kraus_cptp}
     \lean{MPOTensor.ancillaryTraceMap_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    \uses{def:mpdo_ancillary_trace_map}
     For every ancillary dimension, the one-site ancillary trace map is
     trace-preserving and completely positive.
 \end{theorem}
@@ -498,7 +490,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{def:mpdo_has_trace_preserving_spin_reduction}
     \lean{MPOTensor.HasTracePreservingSpinReduction}
     \leanok
-    \uses{def:mpdo_ancillary_trace_map, def:is_kraus_cptp}
+    \uses{def:mpdo_ancillary_trace_map}
     The spin reduction obtained by tracing the ancillary index is
     trace-preserving completely positive: the ancillary trace map
     $\tr_a$ satisfies Definition~\ref{def:is_kraus_cptp}.
@@ -510,8 +502,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{cor:mpdo_has_trace_preserving_spin_reduction}
     \lean{MPOTensor.hasTracePreservingSpinReduction}
     \leanok
-    \uses{def:mpdo_has_trace_preserving_spin_reduction,
-        thm:mpdo_ancillary_trace_map_is_kraus_cptp}
+    \uses{def:mpdo_has_trace_preserving_spin_reduction, thm:mpdo_ancillary_trace_map_is_kraus_cptp}
     For every ancillary dimension, the spin reduction obtained by tracing the
     ancillary index is trace-preserving and completely positive.
 \end{corollary}
@@ -692,8 +683,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     up-to-scalar physical-trace relation.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:phys_trace_transfer_witnessM,
-        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \uses{lem:phys_trace_transfer_witnessM, thm:mpo_source_zcl_of_physical_trace_idempotent}
     Lemma~\ref{lem:phys_trace_transfer_witnessM} gives
     $\mathcal T_{M_{\mathrm w}}=1$. The identity is nonzero and idempotent, so
     the relation holds with $\lambda=1$.
@@ -703,8 +693,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
     \lean{MPOTensor.purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq}
     \leanok
-    \uses{def:mpdo_purification_tensor,
-        def:mpo_physical_trace_transfer, def:mps_transfer_idempotence}
+    \uses{def:mpdo_purification_tensor, def:mpo_physical_trace_transfer, def:mps_transfer_idempotence}
     Suppose that $M$ is the ancillary contraction of a fixed spin--ancilla
     tensor $A$ through a bond identification $e$:
     \begin{align}
@@ -753,8 +742,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:phys_trace_transfer_sq_of_local_purification_rfp}
     \lean{MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer,
-        def:mps_transfer_idempotence}
+    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer, def:mps_transfer_idempotence}
     If an MPO tensor $M$ is the ancilla contraction of a pure-state
     renormalization fixed point, then its physical-trace transfer
     $\mathcal T_M=\sum_i M^{ii}$ is idempotent:
@@ -772,9 +760,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent}
     \lean{MPOTensor.isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq}
     \leanok
-    \uses{def:is_local_purification_rfp, def:lpdo,
-        thm:purification_tensor_rfp_iff_physical_trace_idempotent,
-        thm:phys_trace_transfer_sq_of_local_purification_rfp}
+    \uses{def:is_local_purification_rfp, def:lpdo, thm:purification_tensor_rfp_iff_physical_trace_idempotent, thm:phys_trace_transfer_sq_of_local_purification_rfp}
     An MPO tensor satisfies the local purification RFP condition if and only if
     it has a local purification and its physical-trace transfer is idempotent:
     \begin{align}
@@ -796,9 +782,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nondegenerate_prfp_iff_lpdo_normalized_zcl}
     \lean{MPOTensor.isNondegeneratePRFP_iff}
     \leanok
-    \uses{def:is_nondegenerate_prfp, def:lpdo,
-        thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent,
-        thm:phys_trace_transfer_sq_of_local_purification_rfp}
+    \uses{def:is_nondegenerate_prfp, def:lpdo, thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent, thm:phys_trace_transfer_sq_of_local_purification_rfp}
     An MPO tensor is a nondegenerate purification renormalization fixed point if
     and only if it is a local purification density operator
     (Definition~\ref{def:lpdo}) and
@@ -844,8 +828,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:phys_trace_transfer_sq_of_local_purification_rfp,
-        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \uses{thm:phys_trace_transfer_sq_of_local_purification_rfp, thm:mpo_source_zcl_of_physical_trace_idempotent}
     Theorem~\ref{thm:phys_trace_transfer_sq_of_local_purification_rfp} gives
     idempotence of the physical-trace transfer, and the nonzero hypothesis lets
     Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent} conclude the
@@ -857,8 +840,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nondegenerate_prfp_source_zcl}
     \lean{MPOTensor.IsNondegeneratePRFP.isSourceZCL}
     \leanok
-    \uses{def:is_nondegenerate_prfp,
-        thm:source_zcl_of_local_purification_rfp}
+    \uses{def:is_nondegenerate_prfp, thm:source_zcl_of_local_purification_rfp}
     Every nondegenerate purification renormalization fixed point satisfies the
     nonzero up-to-scalar physical-trace relation.
 \end{theorem}
@@ -941,8 +923,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{cor:nondegenerate_prfp_is_global_prfp}
     \lean{MPOTensor.IsNondegeneratePRFP.isPRFP}
     \leanok
-    \uses{def:is_nondegenerate_prfp,
-        thm:is_prfp_of_local_purification_rfp}
+    \uses{def:is_nondegenerate_prfp, thm:is_prfp_of_local_purification_rfp}
     Every nondegenerate purification renormalization fixed point satisfies the
     positive-length global purification predicate of Definition~4.3 in
     \cite[lines~744--758]{Cirac2016MPDO_arXiv}.
@@ -960,10 +941,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \begin{theorem}[Printed purification fixed-point equivalence]
     \label{thm:cpsv_theorem44_printed_status}
     \notready
-    \uses{def:mpdo_global_purification_equation, def:mpdo_is_prfp,
-        def:mpo_source_zcl, def:mpdo_purification_rfp_witness,
-        thm:global_prfp_not_source_zcl,
-        thm:nonzero_global_prfp_not_source_zcl}
+    \uses{def:mpdo_global_purification_equation, def:mpdo_is_prfp, def:mpo_source_zcl, def:mpdo_purification_rfp_witness, thm:global_prfp_not_source_zcl, thm:nonzero_global_prfp_not_source_zcl}
     Let an MPO tensor admit the global purification equation of
     Definition~\ref{def:mpdo_global_purification_equation}.  According to
     \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}, being a purification
@@ -983,9 +961,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:global_prfp_not_source_zcl}
     \lean{MPOTensor.exists_isPRFP_not_isSourceZCL}
     \leanok
-    \uses{def:mpdo_is_prfp, def:mpo_source_zcl,
-        def:is_local_purification_rfp,
-        thm:is_prfp_of_local_purification_rfp}
+    \uses{def:mpdo_is_prfp, def:mpo_source_zcl, def:is_local_purification_rfp, thm:is_prfp_of_local_purification_rfp}
     There is an MPO tensor satisfying the bare positive-length global
     purification RFP predicate which does not satisfy the nonzero up-to-scalar
     physical-trace relation.
@@ -1005,8 +981,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nonzero_global_prfp_not_source_zcl}
     \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
     \leanok
-    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer,
-        def:mpo_source_zcl}
+    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_source_zcl}
     There is an MPO tensor which is an MPDO, satisfies the positive-length
     global purification RFP predicate, and has nonzero physical-trace transfer,
     but does not satisfy the nonzero up-to-scalar physical-trace relation.

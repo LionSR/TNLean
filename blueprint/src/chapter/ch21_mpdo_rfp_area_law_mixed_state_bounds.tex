@@ -3,7 +3,7 @@
 \begin{definition}[Block entropy of an MPDO]\label{def:block_entropy}
     \lean{MPOTensor.blockEntropy}
     \leanok
-    \uses{def:mpo_tensor, def:von_neumann_entropy}
+    \uses{def:mpo_tensor}
     For a fixed system size $N$, a block length $L\le N$, and an MPO tensor $M$
     such that $\rho^{(N)}(M)$ is positive semidefinite, let
     \begin{align}
@@ -139,8 +139,7 @@
     \cite[Proposition~4.5, line~801]{Cirac2016MPDO_arXiv}.
 \end{proposition}
 \begin{proof}\leanok
-    \uses{thm:entropy_strong_subadditivity, def:block_entropy,
-        thm:mpdo_tripartite_block_entropy_identifications}
+    \uses{def:block_entropy, thm:mpdo_tripartite_block_entropy_identifications}
     Apply strong subadditivity to the reduced state of the first $N-L$ spins,
     split into three contiguous segments of lengths $1$, $L$, and $N-2L-1$.
     Tracing the appropriate segments yields the four block entropies
@@ -265,7 +264,6 @@
     \label{def:mpdo_id_tensor_map}
     \lean{Matrix.idTensorMap}
     \leanok
-    \uses{def:tensor_map_id}
     For a linear map $\Psi_B$ and a bipartite matrix $\rho_{AB}$, define
     \begin{align}
         (\id_A\otimes\Psi_B)(\rho_{AB})
@@ -280,7 +278,7 @@
     \label{def:mpdo_tensor_map_both}
     \lean{Matrix.tensorMapBoth}
     \leanok
-    \uses{def:tensor_map_id, def:mpdo_id_tensor_map}
+    \uses{def:mpdo_id_tensor_map}
     For linear maps $\Phi_A$ and $\Psi_B$, set
     \begin{align}
         (\Phi_A\otimes\Psi_B)(\rho)
@@ -294,7 +292,6 @@
     \label{lem:mpdo_tensor_map_id_pos}
     \lean{IsKrausCPTP.tensorMapId_posSemidef}
     \leanok
-    \uses{def:is_kraus_cptp, def:tensor_map_id}
     If $\Phi_A$ is trace-preserving completely positive and
     $\rho_{AB}\geq0$, then
     $(\Phi_A\otimes\id_B)(\rho)\geq0$.
@@ -304,8 +301,7 @@
     \label{lem:mpdo_id_tensor_map_pos}
     \lean{IsKrausCPTP.idTensorMap_posSemidef}
     \leanok
-    \uses{def:is_kraus_cptp, def:mpdo_id_tensor_map,
-      lem:mpdo_tensor_map_id_pos}
+    \uses{def:mpdo_id_tensor_map, lem:mpdo_tensor_map_id_pos}
     If $\Psi_B$ is trace-preserving completely positive and
     $\rho_{AB}\geq0$, then
     $(\id_A\otimes\Psi_B)(\rho)\geq0$.
@@ -315,8 +311,7 @@
     \label{lem:mpdo_tensor_map_both_pos}
     \lean{IsKrausCPTP.tensorMapBoth_posSemidef}
     \leanok
-    \uses{def:mpdo_tensor_map_both, lem:mpdo_tensor_map_id_pos,
-      lem:mpdo_id_tensor_map_pos}
+    \uses{def:mpdo_tensor_map_both, lem:mpdo_tensor_map_id_pos, lem:mpdo_id_tensor_map_pos}
     If $\Phi_A$ and $\Psi_B$ are trace-preserving completely positive and
     $\rho_{AB}\geq0$, then $(\Phi_A\otimes\Psi_B)(\rho)\geq0$.
 \end{lemma}
@@ -325,7 +320,6 @@
     \label{thm:mpdo_mutual_information_data_processing_left}
     \lean{IsKrausCPTP.mutualInformation_tensorMapId_le}
     \leanok
-    \uses{def:is_kraus_cptp, def:mutual_information, def:tensor_map_id}
     Let $\rho_{AB}$ be a bipartite density operator and let $\Phi_A$ be a
     trace-preserving completely positive map whose input and output matrix
     algebras may have different dimensions. Then
@@ -334,8 +328,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_tensor_map_id_pos,
-      thm:mutual_information_monotone_tripartite}
+    \uses{lem:mpdo_tensor_map_id_pos}
     Choose a rectangular Stinespring isometry for $\Phi_A$. Conjugating by
     $W=V_A\otimes\id_B$ gives
     $\omega_{A'EB}=W\rho_{AB}W^\dagger$. Since
@@ -371,8 +364,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_id_tensor_map_pos,
-      thm:mpdo_mutual_information_data_processing_left}
+    \uses{lem:mpdo_id_tensor_map_pos, thm:mpdo_mutual_information_data_processing_left}
     Exchange the two tensor factors and apply
     Theorem~\ref{thm:mpdo_mutual_information_data_processing_left}.
 \end{proof}
@@ -389,9 +381,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_tensor_map_both_pos,
-      thm:mpdo_mutual_information_data_processing_left,
-      thm:mpdo_mutual_information_data_processing_right}
+    \uses{lem:mpdo_tensor_map_both_pos, thm:mpdo_mutual_information_data_processing_left, thm:mpdo_mutual_information_data_processing_right}
     Apply the two one-sided inequalities successively.
 \end{proof}
 
@@ -442,8 +432,7 @@
     \lean{MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO,
       MPOTensor.tensorMapBoth_bipartitionedNormalizedMPO_reverse}
     \leanok
-    \uses{def:mpdo_split_normalized_mpo,
-      thm:mpdo_global_renormalization_maps}
+    \uses{def:mpdo_split_normalized_mpo, thm:mpdo_global_renormalization_maps}
     Suppose that $N=(a+1)+(b+2)=(a+2)+(b+1)$. The local closure equations
     imply
     \begin{align}
@@ -473,8 +462,7 @@
     \lean{MPOTensor.mutualInformation_bipartition_eq_of_local_transfers,
       MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS}
     \leanok
-    \uses{lem:mpdo_rfp_transfer_across_cut,
-      thm:mpdo_mutual_information_data_processing}
+    \uses{lem:mpdo_rfp_transfer_across_cut, thm:mpdo_mutual_information_data_processing}
     Let $M$ be a renormalization fixed point. If its $N$-site operator is
     positive semidefinite and has nonzero trace, then
     $I(\sigma^{(N)}_{a+1:b+2})
@@ -516,9 +504,7 @@
     \label{thm:mpdo_rfp_implies_sal}
     \lean{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
-    \uses{lem:mpdo_chain_mutual_information_bipartition,
-      lem:mpdo_rfp_transfer_across_cut,
-      thm:mpdo_rfp_split_mutual_information_eq}
+    \uses{lem:mpdo_chain_mutual_information_bipartition, lem:mpdo_rfp_transfer_across_cut, thm:mpdo_rfp_split_mutual_information_eq}
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
     renormalization fixed-point equations of Definition~4.1, then $M$ saturates
@@ -543,8 +529,7 @@
     \label{cor:mpdo_horizontal_rfp_implies_sal}
     \lean{MPOTensor.isSAL_of_isRFPViaTS}
     \leanok
-    \uses{lem:mpdo_rfp_positive_length_trace_nonzero,
-      thm:mpdo_rfp_implies_sal}
+    \uses{lem:mpdo_rfp_positive_length_trace_nonzero, thm:mpdo_rfp_implies_sal}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
     fixed-point equations of Definition~4.1. Then $M$ saturates the area law.
@@ -561,8 +546,7 @@
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS,
       MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero}
     \leanok
-    \uses{thm:rfp_via_ts_physical_trace_idempotent,
-      thm:mpdo_rfp_implies_sal}
+    \uses{thm:rfp_via_ts_physical_trace_idempotent, thm:mpdo_rfp_implies_sal}
     Let $M$ generate positive semidefinite ring operators with
     $\tr[\rho^{(N)}(M)]\neq0$ for every $N\geq1$. If $M$ satisfies the local
     renormalization fixed-point equations of Definition~4.1, then
@@ -587,8 +571,7 @@
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS,
       MPOTensor.isSAL_of_isRFPViaTS}
     \leanok
-    \uses{lem:mpdo_rfp_positive_length_trace_nonzero,
-      thm:mpdo_rfp_implies_zcl_and_sal}
+    \uses{lem:mpdo_rfp_positive_length_trace_nonzero, thm:mpdo_rfp_implies_zcl_and_sal}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
     fixed-point equations of Definition~4.1. Then
@@ -605,7 +588,7 @@
     \label{lem:block_entropy_nonneg}
     \lean{blockEntropy_nonneg}
     \leanok
-    \uses{def:block_entropy, thm:entropy_nonneg}
+    \uses{def:block_entropy}
     For a normalized positive semidefinite finite-chain operator, every block entropy
     is non-negative: $0\le S_m$.
 \end{lemma}
@@ -618,13 +601,13 @@
     \label{lem:mutual_info_chain_nonneg}
     \lean{mutualInfoChain_nonneg}
     \leanok
-    \uses{def:mutual_info_chain, thm:entropy_strong_subadditivity, lem:block_entropy_nonneg}
+    \uses{def:mutual_info_chain, lem:block_entropy_nonneg}
     Let $M$ generate an MPDO whose finite-chain operator $\rho^{(N)}(M)$ is positive
     semidefinite with nonzero trace. For every block length $L\le N$, one has
     $0\le I_L$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:entropy_strong_subadditivity, def:block_entropy, lem:block_entropy_nonneg}
+    \uses{def:block_entropy, lem:block_entropy_nonneg}
     Apply strong subadditivity with a trivial middle subsystem (equivalently,
     subadditivity) to the bipartition of the chain into the first $L$ and last
     $N-L$ spins: $S_N+S_0\le S_L+S_{N-L}$. Since $S_0\ge0$
@@ -661,14 +644,12 @@
     \label{lem:rank_one_entropy_zero}
     \lean{vonNeumannEntropy_eq_zero_of_rank_le_one}
     \leanok
-    \uses{lem:trace_one_positive_rank, thm:entropy_le_log_rank,
-        thm:entropy_nonneg}
+    \uses{lem:trace_one_positive_rank}
     A positive semidefinite matrix of trace one and rank at most one has zero
     von Neumann entropy.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:trace_one_positive_rank, thm:entropy_le_log_rank,
-        thm:entropy_nonneg}
+    \uses{lem:trace_one_positive_rank}
     Its rank is positive by Lemma~\ref{lem:trace_one_positive_rank}, hence it is
     exactly one. The rank bound gives $S\le\log 1=0$, while entropy is
     non-negative.
@@ -727,7 +708,7 @@
     \label{thm:block_ancillary_trace_channel}
     \lean{MPOTensor.blockAncillaryTraceMap_isKrausCPTP}
     \leanok
-    \uses{def:block_ancillary_trace, def:is_kraus_cptp}
+    \uses{def:block_ancillary_trace}
     The map $\Tr_{\mathrm{anc},L}$ is trace-preserving and
     completely positive.
 \end{theorem}
@@ -777,9 +758,7 @@
       MPOTensor.trace_purificationDensity_eq_pureState,
       MPOTensor.bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap}
     \leanok
-    \uses{def:block_ancillary_trace,
-      def:mpdo_purification_tensor, def:mpdo_purification_density,
-      def:mpdo_split_normalized_mpo}
+    \uses{def:block_ancillary_trace, def:mpdo_purification_tensor, def:mpdo_purification_density, def:mpdo_split_normalized_mpo}
     Fix a local-purification representation
     \begin{align}
         M^{ij}
@@ -826,9 +805,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:block_ancillary_trace_coefficients,
-      thm:block_ancillary_trace_channel,
-      thm:mpo_eq_purification_density}
+    \uses{thm:block_ancillary_trace_coefficients, thm:block_ancillary_trace_channel, thm:mpo_eq_purification_density}
     The coefficient formula for one block gives
     \begin{align}
         &\Tr_{\mathrm{anc},N}
@@ -904,8 +881,7 @@
     \label{thm:local_channel_image_mutual_info_bound}
     \lean{MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image}
     \leanok
-    \uses{def:mutual_info_chain, def:mpdo_split_normalized_mpo,
-      def:mpdo_tensor_map_both, def:is_kraus_cptp, def:doubled_tensor}
+    \uses{def:mutual_info_chain, def:mpdo_split_normalized_mpo, def:mpdo_tensor_map_both, def:doubled_tensor}
     Let $M$ be an MPO tensor whose generated $N$-site operator is positive
     semidefinite. Let $A$ be an MPS tensor of bond dimension $D'\geq1$ whose
     $N$-site vector is nonzero. Suppose that, across the cut $L\mid(N-L)$, the
@@ -922,8 +898,7 @@
     Then $I_L(M)\leq4\log D'$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_mutual_information_data_processing,
-      prop:pure_mutual_info_bound}
+    \uses{thm:mpdo_mutual_information_data_processing, prop:pure_mutual_info_bound}
     Write $\sigma_A^{(N)}$ for the normalized pure state of $A$ in the
     $L\mid(N-L)$ bipartition. Then
     \begin{align}
@@ -944,8 +919,7 @@
       MPOTensor.mutualInfoChain_le_of_lpdoWitness,
       MPOTensor.IsLPDO.exists_mutualInfoChain_le_purifyingBond}
     \leanok
-    \uses{def:lpdo, def:mutual_info_chain,
-      thm:lpdo_block_channel_image}
+    \uses{def:lpdo, def:mutual_info_chain, thm:lpdo_block_channel_image}
     Fix a local-purification representation with purifying MPS bond dimension
     $D'$. If the $N$-site operator is positive semidefinite and its purifying
     pure state is nonzero, then $I_L(M)\leq4\log D'$ for every $L\leq N$.
@@ -958,11 +932,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:lpdo_block_channel_image,
-      thm:block_ancillary_trace_channel,
-      thm:local_channel_image_mutual_info_bound,
-      thm:lpdo_is_mpdo,
-      thm:mpo_eq_purification_density}
+    \uses{thm:lpdo_block_channel_image, thm:block_ancillary_trace_channel, thm:local_channel_image_mutual_info_bound, thm:lpdo_is_mpdo, thm:mpo_eq_purification_density}
     By Theorem~\ref{thm:lpdo_block_channel_image},
     \begin{align}
         I_L(M)

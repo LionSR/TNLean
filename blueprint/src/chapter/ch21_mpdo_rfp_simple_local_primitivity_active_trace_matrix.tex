@@ -40,8 +40,7 @@
     \label{thm:mpdo_sector_eta_data_trace_matrix}
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrix_ofSectorTensors}
     \leanok
-    \uses{def:mpdo_explicit_eta_of_sector_tensors,
-        def:mpdo_explicit_eta_trace_matrix, def:mpdo_closed_sector_tensors}
+    \uses{def:mpdo_explicit_eta_of_sector_tensors, def:mpdo_explicit_eta_trace_matrix, def:mpdo_closed_sector_tensors}
     Under the hypotheses of
     Definition~\ref{def:mpdo_explicit_eta_of_sector_tensors}, the trace
     matrix of the explicit $\eta$-data is the pairing of the closed sector
@@ -88,8 +87,7 @@
       MPOTensor.PhysicalSectorFactorization.activeSectorOneSiteSpace}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix}
     \leanok
-    \uses{def:mpdo_one_site_sector_matrix_space,
-      def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_one_site_sector_matrix_space, def:mpdo_minimal_neighboring_operator}
     For sector weights $p_k$, let $I_*=\{k:p_k\ne0\}$. The one-site matrices
     and their spaces on $I_*$ are
     \begin{align}
@@ -118,8 +116,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       activeSectorOneSiteMatrixFamily_span_eq_top}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      thm:mpdo_sector_virtual_matrix_spanning}
+    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_sector_virtual_matrix_spanning}
     For every sector entry, the one-site matrix used in the directed-cut
     argument equals the virtual matrix used in the spanning argument. If all
     sector virtual matrices span $\MN{D}$ and the matrices in every
@@ -135,9 +132,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       mul_eq_zero_of_mem_activeSectorOneSiteSpace}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      thm:mpdo_active_one_site_matrix_spanning,
-      thm:mpdo_directed_cut_one_site_spaces}
+    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_active_one_site_matrix_spanning, thm:mpdo_directed_cut_one_site_spaces}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix. For every $S\subseteq I_*$,
     ${\cal A}_S+{\cal A}_{I_*\setminus S}=\MN{D}$, and both spaces are
@@ -153,8 +148,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_active_neighboringOperator_ne_zero}
     \leanok
-    \uses{thm:mpdo_active_sector_complementary_spaces,
-      lem:matrix_one_sided_product_obstruction}
+    \uses{thm:mpdo_active_sector_complementary_spaces, lem:matrix_one_sided_product_obstruction}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix. Then for every $k,h\in I_*$ there
     is a directed walk
@@ -235,8 +229,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       activeSectorTraceMatrix_pow_two_diag_pos}
     \leanok
-    \uses{thm:mpdo_active_one_site_matrix_spanning,
-      thm:mpdo_active_trace_matrix_positive_entries}
+    \uses{thm:mpdo_active_one_site_matrix_spanning, thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the active one-site matrices span $\MN{D}$ and each active
     sector contains a nonzero such matrix. For every $k\in I_*$ there is an
     $h\in I_*$ such that
@@ -254,8 +247,7 @@
     \label{thm:mpdo_active_trace_matrix_irreducible}
     \lean{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_isIrreducible}
     \leanok
-    \uses{thm:mpdo_active_neighboring_support_strongly_connected,
-      thm:mpdo_active_trace_matrix_positive_entries}
+    \uses{thm:mpdo_active_neighboring_support_strongly_connected, thm:mpdo_active_trace_matrix_positive_entries}
     Suppose that the neighboring operators are positive semidefinite, the
     active one-site matrices span $\MN{D}$, and each active sector contains a
     nonzero such matrix. Then the non-negative matrix $T^*$ is irreducible.
@@ -272,10 +264,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       activeSectorTraceMatrix_isPrimitive}
     \leanok
-    \uses{thm:matrix_primitive_of_two_three_returns,
-      thm:mpdo_active_sector_two_step_return,
-      thm:mpdo_active_trace_matrix_irreducible,
-      thm:mpdo_sector_support_triangle_closure}
+    \uses{thm:matrix_primitive_of_two_three_returns, thm:mpdo_active_sector_two_step_return, thm:mpdo_active_trace_matrix_irreducible, thm:mpdo_sector_support_triangle_closure}
     Suppose that the neighboring operators are positive semidefinite, the
     active one-site matrices span $\MN{D}$, each active sector contains a
     nonzero such matrix, and every nonzero edge closes through a third active
@@ -297,9 +286,7 @@
     \lean{MPOTensor.%
       exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
     \leanok
-    \uses{def:mpdo, def:injective, def:mpdo_eta_structure,
-      def:mpdo_three_site_closure,
-      def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    \uses{def:mpdo, def:injective, def:mpdo_eta_structure, def:mpdo_three_site_closure, def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
     Let ${\cal K}$ be an injective tensor generating MPDOs, let $R$ close a
     three-site state $\rho$, and choose a Hayashi decomposition with weights
     $p_k$. Fix outer indices
@@ -314,13 +301,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_eta_coherent_positive_choice,
-      thm:mpdo_zero_weight_reparameterized_neighboring_operator,
-      lem:mpdo_sector_tensor_left_zero_of_weight_zero,
-      thm:mpdo_sector_virtual_matrix_spanning,
-      thm:mpdo_active_one_site_matrix_spanning,
-      thm:mpdo_sector_support_triangle_closure,
-      thm:mpdo_physical_sector_rephasing_invariance}
+    \uses{thm:mpdo_eta_coherent_positive_choice, thm:mpdo_zero_weight_reparameterized_neighboring_operator, lem:mpdo_sector_tensor_left_zero_of_weight_zero, thm:mpdo_sector_virtual_matrix_spanning, thm:mpdo_active_one_site_matrix_spanning, thm:mpdo_sector_support_triangle_closure, thm:mpdo_physical_sector_rephasing_invariance}
     Choose the coherent positive phases. Injectivity gives the full virtual
     matrix span, while zero-weight reparameterization removes the inactive
     summands from the active span. A nonzero virtual matrix exists in every
@@ -340,8 +321,7 @@
     \lean{MPOTensor.%
       exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}
     \leanok
-    \uses{def:mpdo, def:injective, def:is_sal,
-        def:mpdo_active_sector_trace_matrix}
+    \uses{def:mpdo, def:injective, def:is_sal, def:mpdo_active_sector_trace_matrix}
     Let ${\cal K}$ be an injective tensor that generates MPDOs and satisfies
     SAL, and choose the positive semidefinite neighboring operators of
     Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses}. Restrict the sector
@@ -359,13 +339,7 @@
 \end{theorem}
 
 \begin{proof}
-    \uses{def:mpdo_normalized_four_site_tail,
-      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-      thm:mpdo_four_site_sal_eta_structure,
-      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
-      thm:mpdo_three_site_closure_reduced,
-      thm:mpdo_inverse_map_active_sector_witnesses,
-      thm:mpdo_active_sector_three_step_return_and_primitivity}
+    \uses{def:mpdo_normalized_four_site_tail, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, thm:mpdo_three_site_closure_reduced, thm:mpdo_inverse_map_active_sector_witnesses, thm:mpdo_active_sector_three_step_return_and_primitivity}
     \leanok
     Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
     Hayashi decomposition, and
@@ -390,9 +364,7 @@
     \lean{MPOTensor.%
       exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      thm:mpdo_sector_trace_matrix_primitive,
-      thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_sector_trace_matrix_primitive, thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Let ${\cal K}$ be injective and suppose that it satisfies SAL and source
     zero correlation length. Then there are a physical-sector factorization,
     weights $p_k\geq0$ with $\sum_k p_k=1$, and positive semidefinite
@@ -414,9 +386,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_inverse_map_active_sector_witnesses,
-      thm:mpdo_active_sector_three_step_return_and_primitivity,
-      lem:mpo_source_zcl_normalized_idempotent}
+    \uses{thm:mpdo_inverse_map_active_sector_witnesses, thm:mpdo_active_sector_three_step_return_and_primitivity, lem:mpo_source_zcl_normalized_idempotent}
     Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} gives one
     rephased factorization with positive neighboring operators and vanishing
     left tensors on the zero-weight sectors. Apply
@@ -460,8 +430,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_sal_phys_trace_transfer_nonzero,
-      thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \uses{lem:mpdo_sal_phys_trace_transfer_nonzero, thm:mpo_source_zcl_of_physical_trace_idempotent}
     The preceding lemma gives $\mathcal T_{\cal K}\ne0$. Apply
     Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent}.
 \end{proof}
@@ -471,9 +440,7 @@
     \lean{MPOTensor.%
       exists_activeTraceMatrix_relations_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{def:injective, def:is_sal, def:mpo_physical_trace_transfer,
-      def:mpdo_physical_sector_factorization,
-      def:mpdo_active_sector_trace_matrix}
+    \uses{def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_active_sector_trace_matrix}
     Let ${\cal K}$ be injective and satisfy SAL and the literal identity
     \begin{align}
         \mathcal T_{\cal K}^2&=\mathcal T_{\cal K}. \notag
@@ -491,8 +458,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_sal_literal_idempotence_source_zcl,
-      thm:mpdo_active_trace_matrix_zcl_relations}
+    \uses{thm:mpdo_sal_literal_idempotence_source_zcl, thm:mpdo_active_trace_matrix_zcl_relations}
     SAL makes the one-site periodic trace nonzero, and hence
     $\mathcal T_{\cal K}\ne0$.
     Theorem~\ref{thm:mpdo_sal_literal_idempotence_source_zcl} therefore gives
@@ -510,8 +476,7 @@
       reindex_activeSectorTraceMatrix}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.factorization}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_active_sector_trace_matrix}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_active_sector_trace_matrix}
     There is a tensor of bond dimension two with four one-dimensional physical
     sectors and weights $p_k$ such that the following statements hold
     simultaneously: the tensor is injective and has source zero correlation
@@ -609,10 +574,7 @@
       MPOTensor.ActiveSectorSpanningCounterexample.%
         exists_oneSector_neighboringTraceFactorization}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_neighboring_trace_factorization,
-      thm:mpdo_virtual_spanning_active_trace_counterexample,
-      thm:mpdo_inverse_map_nonzero_rectangular_remainder}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization, thm:mpdo_virtual_spanning_active_trace_counterexample, thm:mpdo_inverse_map_nonzero_rectangular_remainder}
     The tensor in
     Theorem~\ref{thm:mpdo_virtual_spanning_active_trace_counterexample}
     also admits a physical-sector factorization with one sector.  Write each
@@ -879,8 +841,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      thm:psd_trace_square_le_square_trace}
+    \uses{def:mpdo_active_sector_trace_matrix}
     Hermiticity of $\eta_{k,h}$ gives
     $\eta_{k,h}^2=\eta_{k,h}\,\eta_{k,h}^\dagger$, which is positive
     semidefinite, so its trace is a non-negative real number. The upper
@@ -895,8 +856,7 @@
       activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL,
       MPOTensor.activeSectorTraceMatrix_pow_two_pos}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_active_sector_trace_matrix, def:mpo_physical_trace_transfer}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
     and sector weights $p_k$. Suppose that every neighboring operator
     is positive semidefinite, that the physical-trace transfer is
@@ -930,9 +890,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      thm:mpdo_active_sector_three_step_return_and_primitivity,
-      thm:matrix_primitive_pow_two_rank_one}
+    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_active_sector_three_step_return_and_primitivity, thm:matrix_primitive_pow_two_rank_one}
     On the active sectors, collect the left and right sector-tensor
     traces into rectangular matrices $L$ and $Q$ with
     \begin{align}
@@ -1066,8 +1024,7 @@
       MPOTensor.prod_traceSq_eq_zero_of_not_forall_active,
       MPOTensor.sum_prod_traceSq_eq_sum_active}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      thm:mpdo_cyclic_neighboring_trace_products}
+    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_cyclic_neighboring_trace_products}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
     and sector weights $p_k$, such that the left tensor of every
     zero-weight sector vanishes. Then, for $N\geq1$, the sum over all
@@ -1102,11 +1059,7 @@
     \label{thm:mpdo_overlap_formula}
     \lean{MPOTensor.mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow}
     \leanok
-    \uses{lem:mpdo_active_sector_trace_sq_matrix,
-      thm:mpdo_doubled_overlap_hilbert_schmidt,
-      thm:mpdo_trace_pow_cyclic_product,
-      lem:mpdo_trace_conjugate_physical_invariant,
-      lem:mpdo_sum_prod_traceSq_active}
+    \uses{lem:mpdo_active_sector_trace_sq_matrix, thm:mpdo_doubled_overlap_hilbert_schmidt, thm:mpdo_trace_pow_cyclic_product, lem:mpdo_trace_conjugate_physical_invariant, lem:mpdo_sum_prod_traceSq_active}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
     and sector weights $p_k$, such that every neighboring operator is
     positive semidefinite and the left tensor of every zero-weight sector
@@ -1124,12 +1077,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_active_sector_trace_sq_matrix,
-      thm:mpdo_doubled_overlap_hilbert_schmidt,
-      thm:mpdo_trace_pow_cyclic_product,
-      thm:mpdo_cyclic_neighboring_trace_products,
-      lem:mpdo_trace_conjugate_physical_invariant,
-      lem:mpdo_sum_prod_traceSq_active}
+    \uses{lem:mpdo_active_sector_trace_sq_matrix, thm:mpdo_doubled_overlap_hilbert_schmidt, thm:mpdo_trace_pow_cyclic_product, thm:mpdo_cyclic_neighboring_trace_products, lem:mpdo_trace_conjugate_physical_invariant, lem:mpdo_sum_prod_traceSq_active}
     Write $\rho=\rho^{(N)}({\cal K})$, $\widetilde\rho=\rho^{(N)}(\widetilde{\cal K})$
     for the physically conjugated MPO, and $\Omega_k$ for the cyclic
     neighboring product of Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products}.
@@ -1241,9 +1189,7 @@
     \label{thm:mpdo_active_sector_singleton}
     \lean{MPOTensor.card_activeSector_eq_one_of_literal_ZCL}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix, def:nt_cpsv,
-      thm:mpdo_active_trace_matrix_literal_zcl_powers,
-      thm:mpdo_overlap_formula}
+    \uses{def:mpdo_active_sector_trace_matrix, def:nt_cpsv, thm:mpdo_active_trace_matrix_literal_zcl_powers, thm:mpdo_overlap_formula}
     Let ${\cal K}$ be an MPO tensor of positive bond dimension $D$ with a
     physical-sector factorization and sector weights $p_k$, and let
     $I_*=\{k:p_k\ne0\}$. Suppose that every neighboring operator
@@ -1274,13 +1220,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix,
-      lem:mpdo_active_sector_trace_sq_matrix,
-      thm:mpdo_active_trace_matrix_literal_zcl_powers,
-      thm:mpdo_active_sector_three_step_return_and_primitivity,
-      thm:mpdo_overlap_formula,
-      thm:mpdo_trace_pow_similarity_squared_diagonal,
-      thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
+    \uses{def:mpdo_active_sector_trace_matrix, lem:mpdo_active_sector_trace_sq_matrix, thm:mpdo_active_trace_matrix_literal_zcl_powers, thm:mpdo_active_sector_three_step_return_and_primitivity, thm:mpdo_overlap_formula, thm:mpdo_trace_pow_similarity_squared_diagonal, thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
     By contradiction, suppose $|I_*|\geq2$. The overlap formula and the
     normal self-overlap limit
     (\cite[lines~1080--1100]{Cirac2016MPDO_arXiv}) give
@@ -1299,8 +1239,7 @@
     \label{thm:mpdo_active_trace_matrix_pow_two_eq}
     \lean{MPOTensor.activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL}
     \leanok
-    \uses{thm:mpdo_active_sector_singleton,
-      thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    \uses{thm:mpdo_active_sector_singleton, thm:mpdo_active_trace_matrix_literal_zcl_powers}
     Let ${\cal K}$ be an MPO tensor of positive bond dimension $D$ with a
     physical-sector factorization and sector weights $p_k$, and let
     $I_*=\{k:p_k\ne0\}$. Suppose that every neighboring operator
@@ -1331,8 +1270,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_active_sector_singleton,
-      thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    \uses{thm:mpdo_active_sector_singleton, thm:mpdo_active_trace_matrix_literal_zcl_powers}
     On the singleton active sector set, $T^*$ is a scalar $t$. Stabilization
     gives $t^2=t^3$, and positivity of $(T^*)^2$ gives $t^2>0$, hence
     $t=1$ and $t^2=t$.
@@ -1364,9 +1302,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_active_sector_singleton,
-      thm:mpdo_active_trace_matrix_pow_two_eq,
-      thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    \uses{thm:mpdo_active_sector_singleton, thm:mpdo_active_trace_matrix_pow_two_eq, thm:mpdo_active_trace_matrix_literal_zcl_powers}
     Write $I_*=\{k_0\}$. Strict positivity of $(T^*)^2$ and
     $(T^*)^2=T^*$ give
     \begin{align}
@@ -1382,8 +1318,7 @@
     \label{thm:mpdo_casei_rank_one_coefficients_of_is_sal}
     \lean{MPOTensor.exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{def:mpdo, def:injective, def:is_sal,
-      def:mpo_physical_trace_transfer, def:nt_cpsv}
+    \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective MPO tensor. Suppose
     that ${\cal K}$ satisfies the strong area law, that its physical-trace
     transfer is literally idempotent,
@@ -1429,8 +1364,7 @@
     \label{thm:mpdo_rephased_zero_weight_incident_vanish}
     \lean{MPOTensor.rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_incident}
     \leanok
-    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-      def:mpdo_physical_sector_rephasing}
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization, def:mpdo_physical_sector_rephasing}
     Let $(\eta_{k,h})_{k,h}$ be the neighboring operators of the
     zero-weight-reparameterized inverse-map factorization, after a coherent
     sector rephasing, and let $(p_k)_k$ be its Hayashi weights. If
@@ -1447,9 +1381,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_physical_sector_rephasing_invariance,
-      thm:mpdo_zero_weight_reparameterized_neighboring_operator,
-      lem:mpdo_sector_tensor_left_zero_of_weight_zero}
+    \uses{thm:mpdo_physical_sector_rephasing_invariance, thm:mpdo_zero_weight_reparameterized_neighboring_operator, lem:mpdo_sector_tensor_left_zero_of_weight_zero}
     Rephasing changes a neighboring operator by
     \begin{align}
         (\eta_z)_{k,h}&=z_k^{-1}z_h\eta_{k,h}.
@@ -1464,8 +1396,7 @@
     \label{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
     \lean{MPOTensor.exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses}
     \leanok
-    \uses{def:mpdo, def:injective, def:is_sal,
-      def:mpo_physical_trace_transfer, def:nt_cpsv}
+    \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective MPO tensor satisfying the strong area law.
     Suppose that its physical-trace transfer is literally idempotent and that
     its underlying tensor is normal. Then one can choose a single coherently
@@ -1497,15 +1428,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_normal_bond_dim_pos,
-      def:mpdo_normalized_four_site_tail,
-      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-      thm:mpdo_four_site_sal_eta_structure,
-      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
-      thm:mpdo_three_site_closure_reduced,
-      thm:mpdo_inverse_map_active_sector_witnesses,
-      thm:mpdo_casei_rank_one_coefficients,
-      thm:mpdo_rephased_zero_weight_incident_vanish}
+    \uses{thm:cpsv_normal_bond_dim_pos, def:mpdo_normalized_four_site_tail, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, thm:mpdo_three_site_closure_reduced, thm:mpdo_inverse_map_active_sector_witnesses, thm:mpdo_casei_rank_one_coefficients, thm:mpdo_rephased_zero_weight_incident_vanish}
     Normality makes the bond dimension positive. The strong area law supplies
     the four-site Hayashi decomposition, while the normalized four-site tail
     gives nonzero outer indices and the required three-site closure. Choose the
@@ -1519,8 +1442,7 @@
     \label{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     \lean{MPOTensor.exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{def:mpdo, def:injective, def:is_sal,
-      def:mpo_physical_trace_transfer, def:nt_cpsv}
+    \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective normal MPO tensor satisfying the strong area
     law and literal physical-trace idempotence,
     \begin{align}

@@ -155,8 +155,7 @@ symmetry-protected topological (SPT) order.
 \begin{theorem}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked AKLT tensor]\label{thm:aklt_blocked_z2z2_symmetric}
     \lean{MPSTensor.aklt_blocked_isOnSiteSymmetric_Z2Z2}
     \leanok
-    \uses{def:aklt_blocked, def:aklt_blocked_z2z2_action, def:on_site_symmetric,
-        thm:aklt_z2z2_symmetric}
+    \uses{def:aklt_blocked, def:aklt_blocked_z2z2_action, def:on_site_symmetric, thm:aklt_z2z2_symmetric}
     The length-$2$ blocked AKLT tensor is on-site symmetric under
     $\Z_2 \times \Z_2$, with each group element acting by the Kronecker square
     $P_g \otimes P_g$ of the corresponding single-site spin-$1$ $\pi$-rotation
@@ -196,8 +195,7 @@ symmetry-protected topological (SPT) order.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:has_string_order_of_symmetric_injective, thm:aklt_blocked_injective,
-        thm:aklt_blocked_z2z2_symmetric, thm:aklt_unitary_z2z2, def:transfer_map}
+    \uses{thm:has_string_order_of_symmetric_injective, thm:aklt_blocked_injective, thm:aklt_blocked_z2z2_symmetric, thm:aklt_unitary_z2z2, def:transfer_map}
     The blocked tensor is injective (Theorem~\ref{thm:aklt_blocked_injective}) and
     on-site symmetric under $\Z_2 \times \Z_2$
     (Theorem~\ref{thm:aklt_blocked_z2z2_symmetric}), and each group element acts

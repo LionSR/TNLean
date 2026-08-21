@@ -35,8 +35,7 @@
     \lean{MPSTensor.HasOverlappingTwoSiteCommutation.complement}
     \lean{MPSTensor.adjacent_twoSite_cyclicWindowsOverlap}
     \leanok
-    \uses{def:nsite_space_parent, def:cyclic_window_support,
-        def:cyclic_windows_overlap}
+    \uses{def:nsite_space_parent, def:cyclic_window_support, def:cyclic_windows_overlap}
     On a three-site space
     $\mc H_A\otimes\mc H_X\otimes\mc H_B$, let $Q_{AX}$ and $Q_{XB}$ be
     two-site projectors. Their local actions on the three-site space are the
@@ -97,8 +96,7 @@
     \lean{MPSTensor.leftPairLift_toMatrix_reindex}
     \lean{MPSTensor.rightPairLift_toMatrix_reindex}
     \leanok
-    \uses{def:overlapping_two_site_supports,
-        def:three_coordinate_identification}
+    \uses{def:overlapping_two_site_supports, def:three_coordinate_identification}
     Let $\mc H=\C^d$, and let $Q$ be an endomorphism of
     $\mc H\otimes\mc H$. Under the canonical identifications of two- and
     three-site configurations with pairs and right-associated triples, the
@@ -183,8 +181,7 @@
     \label{thm:local_term_two_three_commute_from_ax_xb}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation}
     \leanok
-    \uses{def:overlapping_two_site_supports,
-        thm:local_term_two_three_ax_xb_lifts}
+    \uses{def:overlapping_two_site_supports, thm:local_term_two_three_ax_xb_lifts}
     Suppose the canonical two-site parent interaction $q(A)=1-P_{G_2(A)}$
     satisfies the overlapping $AX/XB$ commutation condition of
     Definition~\ref{def:overlapping_two_site_supports}. Then, on the three-site
@@ -206,8 +203,7 @@
     \label{thm:local_term_two_three_commute_from_two_site_q}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors}
     \leanok
-    \uses{def:overlapping_two_site_supports,
-        thm:local_term_two_three_ax_xb_lifts}
+    \uses{def:overlapping_two_site_supports, thm:local_term_two_three_ax_xb_lifts}
     Let $Q_{AX}$ and $Q_{XB}$ be two-site projectors whose lifted $AX$ and
     $XB$ actions commute. Suppose that $q(A)=Q_{AX}$ and $q(A)=Q_{XB}$.
     Then the first two translated length-two local terms on the three-site
@@ -233,8 +229,7 @@
     \label{thm:local_term_two_three_commute_from_source_q}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}
     \leanok
-    \uses{def:overlapping_two_site_supports,
-        thm:local_term_two_three_ax_xb_lifts}
+    \uses{def:overlapping_two_site_supports, thm:local_term_two_three_ax_xb_lifts}
     Suppose the projectors $Q_{AX}$ and $Q_{XB}$ satisfy the
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv} local parent-commuting
     condition on $A X B$, and suppose that the canonical two-site parent
@@ -258,8 +253,7 @@
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2_complement}
     \leanok
-    \uses{def:overlapping_two_site_supports,
-        thm:local_term_two_three_ax_xb_lifts}
+    \uses{def:overlapping_two_site_supports, thm:local_term_two_three_ax_xb_lifts}
     Suppose the Appendix~D.2 projectors $Q_{AX}$ and $Q_{XB}$ satisfy the
     local parent-commuting condition on $A X B$, and suppose that the canonical
     two-site parent interaction is their complement on both faces:
@@ -308,8 +302,7 @@
     \lean{MPSTensor.isCommutingParentHam_of_cyclicWindowsOverlap_commute}
     \lean{MPSTensor.isNNCPH_of_twoSite_cyclicWindowsOverlap_commute}
     \leanok
-    \uses{def:is_commuting_parent_ham, def:is_nncph,
-        def:cyclic_windows_overlap}
+    \uses{def:is_commuting_parent_ham, def:is_nncph, def:cyclic_windows_overlap}
     Let $L\le N$. Suppose that $h_i h_j=h_j h_i$ whenever the length-$L$
     cyclic supports of the two local terms meet. Then the parent Hamiltonian
     has commuting local terms: $h_i h_j=h_j h_i$ for all $i,j$. In the case
@@ -317,8 +310,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:cyclic_window_nonoverlap_positive,
-        lem:transported_es_nonoverlap_positive}
+    \uses{lem:cyclic_window_nonoverlap_positive, lem:transported_es_nonoverlap_positive}
     If the two cyclic supports meet, the hypothesis gives the commutation
     relation. If they are disjoint, the corresponding local terms commute by
     locality.
@@ -355,8 +347,7 @@
     \lean{MPSTensor.isNNCPH_of_adjacent_twoSite_commute}
     \lean{MPSTensor.HasProductPairLocalProjectors.of_adjacent_twoSite_commute}
     \leanok
-    \uses{lem:two_site_cyclic_window_overlap_cases,
-        lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
+    \uses{lem:two_site_cyclic_window_overlap_cases, lem:commuting_parent_ham_overlap_reduction, lem:local_term_idempotent}
     Let $N\ge2$. Suppose that, for every $i\in\Z/N\Z$, the translated
     length-two local term commutes with its cyclic right neighbor:
     \begin{align}

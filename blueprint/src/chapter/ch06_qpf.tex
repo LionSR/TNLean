@@ -13,9 +13,7 @@ maps~\cite[Chapter~6, especially Theorems~6.2--6.5 and Corollary~6.3]{Wolf2012Qu
 and~\cite{Evans1978Spectral}.
 
 
-\input{chapter/ch06_qpf_cesaro_fixed_points}
 
-\input{chapter/ch06_qpf_weighted_cesaro}
 
 \section{Positive definiteness}
 
@@ -167,7 +165,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:kraus_fixed_support_lower_zero}
     \lean{Kraus.lowerZero_of_posSemidef_fixedPoint}
     \leanok
-    \uses{def:kraus_map, def:support_proj}
+    \uses{def:support_proj}
     Let $\rho\geq0$ be fixed by the Kraus map of a finite matrix family $K$, and
     let $Q$ be the support projection of $\rho$. Then $Q$ is an orthogonal
     projection and
@@ -192,7 +190,6 @@ and~\cite{Evans1978Spectral}.
     \label{thm:kraus_lower_zero_invariant_compression}
     \lean{Kraus.lowerZero_implies_invariance}
     \leanok
-    \uses{def:kraus_map}
     Let $K$ be a finite matrix family with Kraus map $E$, and let $Q$ be an
     orthogonal projection. If $(\Id-Q)K_iQ=0$ for every $i$, then
     \begin{align}
@@ -215,7 +212,6 @@ and~\cite{Evans1978Spectral}.
     \label{thm:kraus_invariant_compression_lower_zero}
     \lean{Kraus.invariance_implies_lowerZero}
     \leanok
-    \uses{def:kraus_map}
     Let $K$ be a finite matrix family with Kraus map $E$, and let $Q$ be an
     orthogonal projection. If
     \begin{align}
@@ -247,7 +243,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:cp_fixed_support_invariant}
     \lean{Kraus.invariantCompression_of_supportProj_fixed_by_cpMap}
     \leanok
-    \uses{def:cp_map, def:support_proj}
+    \uses{def:support_proj}
     Let $E$ be completely positive, let $\rho\geq0$ satisfy $E(\rho)=\rho$,
     and let $Q$ be the support projection of $\rho$. Then $Q$ is an
     orthogonal projection and
@@ -261,8 +257,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    \uses{thm:kraus_fixed_support_lower_zero,
-        thm:kraus_lower_zero_invariant_compression}
+    \uses{thm:kraus_fixed_support_lower_zero, thm:kraus_lower_zero_invariant_compression}
     The fixed-point equation makes the complementary Kraus corners vanish,
     $(\Id-Q)K_iQ=0$. Expanding the Kraus sum then gives
     Equation~(\ref{eq:cp_fixed_support_invariant}).
@@ -300,15 +295,14 @@ and~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_pd_irred}
     \lean{posDef_of_posSemidef_fixedPoint_irreducible_cp}
     \leanok
-    \uses{def:cp_map, def:irreducible_cp}
+    \uses{def:irreducible_cp}
     If $E$ is completely positive and irreducible and $\rho \ge 0$, $\rho \neq 0$
     is a fixed point of $E$, then $\rho$ is positive definite.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:cp_fixed_support_invariant, thm:nonzero_psd_support,
-        thm:full_support_posdef}
+    \uses{thm:cp_fixed_support_invariant, thm:nonzero_psd_support, thm:full_support_posdef}
     Let $Q$ be the support projection of $\rho$.
     Theorem~\ref{thm:cp_fixed_support_invariant} makes $Q$ an invariant
     orthogonal projection, so irreducibility gives $Q=0$ or $Q=\Id$.
@@ -424,7 +418,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_unique_irred_cp}
     \lean{posSemidef_fixedPoint_unique_of_irreducible_cp}
     \leanok
-    \uses{def:cp_map, def:irreducible_cp}
+    \uses{def:irreducible_cp}
     Let $E$ be a completely positive irreducible map on $\MN{D}$. If
     $\rho,\sigma\geq0$ are fixed points of $E$ and $\rho\neq0$, then
     $\sigma=c\rho$ for some $c\in\C$.
@@ -553,7 +547,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    \uses{thm:transfer_channel, thm:cesaro_fixedpoint}
+    \uses{thm:transfer_channel}
     Under the normalization $\sum_i (A^i)^\dagger A^i = \Id$,
     the transfer map is a quantum channel
     (Theorem~\ref{thm:transfer_channel}).
@@ -592,8 +586,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists, thm:transfer_psd_fp_pd_irred,
-        thm:psd_fp_unique_irred}
+    \uses{thm:psd_fp_exists, thm:transfer_psd_fp_pd_irred, thm:psd_fp_unique_irred}
     Existence is the channel fixed-point theorem
     (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
     to positive definite, and Theorem~\ref{thm:psd_fp_unique_irred} gives
@@ -638,7 +631,6 @@ and~\cite{Evans1978Spectral}.
 \begin{theorem}[Left-canonical (trace-preserving) gauge]\label{thm:left_canonical_gauge}
     \lean{Kraus.gauged_isTP_of_map_conjTranspose_fixedPoint}
     \lean{gauged_tracePreserving}
-    \uses{def:tp_kraus}
     \leanok
     Let $\sigma$ be a fixed point of the adjoint transfer map
     $\sum_i (A^i)^\dagger \sigma A^i = \sigma$,
@@ -790,7 +782,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:pf_eigenvector_existence_general}
     \lean{exists_posSemidef_eigenvector_general}
     \leanok
-    \uses{def:positive_map}
     Let $E:\MN{D}\to\MN{D}$ be a positive linear map with $D>0$. Then
     there are a nonzero positive semidefinite matrix $\rho$ and a real number
     $r\geq0$ such that
@@ -816,7 +807,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:pf_eigenvector_existence}
     \lean{exists_posSemidef_eigenvector}
     \leanok
-    \uses{def:positive_map}
     Let $E:\MN{D}\to\MN{D}$ be a positive linear map with $D>0$, and assume
     that $E(\sigma)\neq0$ for every nonzero positive semidefinite matrix
     $\sigma$. Then there are a nonzero positive semidefinite matrix $\rho$
@@ -878,9 +868,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_posdef_adjoint_eigenvector, thm:kraus_map_eq_transfer_map,
-        thm:kraus_map_irreducible_of_transfer_map,
-        thm:transfer_map_irreducible_of_tensor}
+    \uses{thm:kraus_posdef_adjoint_eigenvector, thm:transfer_map_irreducible_of_tensor}
     By Theorem~\ref{thm:transfer_map_irreducible_of_tensor}, $\E_A$ is
     irreducible, and since $\mathcal K_A = \E_A$
     (Theorem~\ref{thm:kraus_map_eq_transfer_map}), its Kraus map $\mathcal K_A$ is
@@ -913,8 +901,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_eigenvector,
-        lem:tp_gauge_equiv}
+    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_eigenvector, lem:tp_gauge_equiv}
     By Theorem~\ref{thm:posDef_adjoint_eigenvector},
     obtain $\sigma$ positive definite and $r > 0$ with
     $\E_A^\dagger(\sigma) = r\sigma$.
@@ -967,7 +954,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving,
         IsPositiveMap.peripheral_Jordan_trivial_of_unital}
     \leanok
-    \uses{def:positive_map, def:trace_preserving, def:unital_linear_map}
     Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving or unital
     linear map with $D>0$.  If $\lambda$ is an eigenvalue of $T$ with
     $|\lambda|=1$, then $\ker(T-\lambda)^k=\ker(T-\lambda)$ for all
@@ -975,8 +961,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_trace_nonincreasing_bounded_orbits,
-        thm:positive_unital_bounded_orbits}
     If a rank-$2$ generalized eigenvector existed, the binomial expansion
     $T^n X=\lambda^n X+n\lambda^{n-1}(T-\lambda)X$ (when
     $(T-\lambda)^2X=0$) would make $\|T^nX\|$ grow linearly with $n$.  This
@@ -1003,8 +987,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}
     \leanok
-    \uses{thm:kraus_posdef_adjoint_eigenvector,
-        thm:kraus_tp_gauge_from_adjoint_fixed, thm:kraus_tp_spectral_radius_bound}
+    \uses{thm:kraus_posdef_adjoint_eigenvector, thm:kraus_tp_gauge_from_adjoint_fixed}
     Choose Kraus operators $\{K_i\}$ for $E$; their Kraus map is $E$, so it
     is irreducible.
     Theorem~\ref{thm:kraus_posdef_adjoint_eigenvector}
@@ -1033,7 +1016,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{theorem}[Eigenvalue $1$ for positive trace-preserving maps]
     \label{thm:eigenvalue_one_tp}
     \lean{IsPositiveMap.eigenvalue_one_exists_of_tracePreserving}\leanok
-    \uses{def:positive_map, def:trace_preserving}
     Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving linear map
     with $D>0$.  Then there exists a nonzero positive semidefinite matrix
     $\rho$ such that $T(\rho)=\rho$.
@@ -1069,7 +1051,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{IsStationaryMap.exists_stationaryState}
     \lean{IsStationaryMap, IsStationaryMap.IsPositive, IsStationaryMap.IsTracePreserving}
     \leanok
-    \uses{def:density_matrices, thm:brouwer_density_matrices}
+    \uses{thm:brouwer_density_matrices}
     Let $D\ge 1$ and let $T\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a
     continuous, trace-preserving, positive (not necessarily linear) map.
     Then $T$ has at least one stationary state: a density matrix $\rho$
@@ -1100,7 +1082,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{IsPositiveMap.exists_posSemidef_fixedPoints_decomposition}
     \lean{IsChannel.posSemidef_parts_of_hermitian_fixedPoint}
     \leanok
-    \uses{def:positive_map, def:channel}
     Let $E\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a positive,
     trace-preserving linear map and $X=E(X)$ a fixed point.
     Decompose $X$ into Hermitian and anti-Hermitian parts and then each into
@@ -1116,7 +1097,6 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:positive_map}
     The proof follows Wolf: first handle Hermitian fixed points by the
     orthogonality argument using the support projection (equation~(6.46)--(6.47)
     in the source). This gives the two-part decomposition for a Hermitian

@@ -212,8 +212,7 @@ physical state symmetry requires additional hypotheses.
 \begin{theorem}[Physical endpoint criterion for string order]
     \label{thm:pgwsvc08_physical_string_order}
     \notready
-    \uses{def:has_physical_string_order,
-        lem:pgwsvc08_twisted_spectral_radius}
+    \uses{def:has_physical_string_order, lem:pgwsvc08_twisted_spectral_radius}
     This is Theorem~1 of~\cite{PerezGarcia2008StringOrder}.  A pure finitely
     correlated state has physical string order if and only if
     there exist a unitary $\widetilde u\ne\Id$, a unitary virtual matrix $V$,
@@ -515,7 +514,6 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{thm:kraus_rectangular_freedom}
     Set $B^i := V\, A^i\, V^\dagger$. The transfer-map covariance relation
     \begin{tenkzequation}
         \tenkzkernel
@@ -560,8 +558,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer,
-        thm:left_canonical_gauge, thm:eigenvalue_bound}
+    \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer, thm:left_canonical_gauge, thm:eigenvalue_bound}
     By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the twisted transfer
     map is the mixed transfer operator $F_{A,B_u}$, as in
     (\ref{eq:symmetry_twisted_mixed_transfer}).
@@ -578,8 +575,7 @@ physical state symmetry requires additional hypotheses.
     \label{thm:twisted_transfer_modulus_one_gauge_phase}
     \lean{MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase}
     \leanok
-    \uses{def:twisted_transfer_map, def:twisted_mixed_companion,
-        def:gauge_phase_equiv, def:injective}
+    \uses{def:twisted_transfer_map, def:twisted_mixed_companion, def:gauge_phase_equiv, def:injective}
     Let $A$ be an injective MPS tensor with $\E_A(\Id)=\Id$, and let $u$
     satisfy $u u^\dagger = \Id$.
     If
@@ -593,8 +589,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer,
-        thm:left_canonical_gauge, thm:modulus_one_gauge_irr_tp}
+    \uses{lem:unitary_kraus_mixing, lem:twisted_transfer_eq_mixed_transfer, thm:left_canonical_gauge, thm:modulus_one_gauge_irr_tp}
     By Lemma~\ref{lem:twisted_transfer_eq_mixed_transfer}, the twisted transfer
     map is the mixed transfer operator $F_{A,B_u}$.
     Because $B_u$ is obtained from $A$ by unitary mixing of the Kraus operators,
@@ -613,8 +608,7 @@ physical state symmetry requires additional hypotheses.
     \label{thm:string_order_implies_twisted_gauge_phase}
     \lean{MPSTensor.gaugePhaseEquiv_twisted_of_hasStringOrder}
     \leanok
-    \uses{def:has_string_order, def:twisted_mixed_companion,
-        def:gauge_phase_equiv, def:injective}
+    \uses{def:has_string_order, def:twisted_mixed_companion, def:gauge_phase_equiv, def:injective}
     Let $A$ be injective, let $\Lambda \in \MN{D}$, and assume
     $u u^\dagger = \Id$ and $\E_A(\Id)=\Id$.
     If virtual-boundary nondecay holds for $u$ with boundary parameter
@@ -624,9 +618,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{lem:boundary_string_order_tendsto_zero,
-        thm:twisted_transfer_spectral_radius_le_one,
-        thm:twisted_transfer_modulus_one_gauge_phase}
+    \uses{lem:boundary_string_order_tendsto_zero, thm:twisted_transfer_spectral_radius_le_one, thm:twisted_transfer_modulus_one_gauge_phase}
     If $\rho(\E_u) < 1$, Lemma~\ref{lem:boundary_string_order_tendsto_zero}
     forces every virtual-boundary sequence to decay to zero, contradicting
     Definition~\ref{def:has_string_order}.
@@ -736,8 +728,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{thm:twisted_transfer_eigen_of_virtual_unitary,
-        def:string_order_boundary_param}
+    \uses{thm:twisted_transfer_eigen_of_virtual_unitary, def:string_order_boundary_param}
     Choose the boundary matrices $X = V^\dagger$ and $Y = V$, where $V$ is the
     unitary from the virtual local-covariance datum.
     By Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary},
@@ -756,8 +747,7 @@ physical state symmetry requires additional hypotheses.
     \label{thm:local_symmetry_iff_spectral_radius}
     \lean{MPSTensor.localSymmetry_iff_spectralRadius_one}
     \leanok
-    \uses{def:local_symmetry, def:twisted_transfer_map, def:injective,
-        thm:twisted_transfer_spectral_radius_le_one}
+    \uses{def:local_symmetry, def:twisted_transfer_map, def:injective, thm:twisted_transfer_spectral_radius_le_one}
     Let $A$ be injective, and assume $u u^\dagger = \Id$, $\E_A(\Id)=\Id$,
     $\Lambda$ is positive definite, $\tr(\Lambda)=1$, and
     $\E_A^\dagger(\Lambda)=\Lambda$.
@@ -770,10 +760,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{thm:twisted_transfer_eigen_of_virtual_unitary,
-        thm:twisted_transfer_modulus_one_gauge_phase,
-        thm:virtual_unitary_of_twisted_gauge_phase,
-        thm:boundary_state_invariant_of_virtual_unitary}
+    \uses{thm:twisted_transfer_eigen_of_virtual_unitary, thm:twisted_transfer_modulus_one_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
     The forward direction is
     Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary}.
     For the reverse direction, start from a unitary peripheral eigenmatrix.
@@ -799,10 +786,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{thm:string_order_implies_twisted_gauge_phase,
-        thm:virtual_unitary_of_twisted_gauge_phase,
-        thm:boundary_state_invariant_of_virtual_unitary,
-        lem:has_string_order_of_local_symmetry}
+    \uses{thm:string_order_implies_twisted_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary, lem:has_string_order_of_local_symmetry}
     If virtual-boundary nondecay holds,
     Theorem~\ref{thm:string_order_implies_twisted_gauge_phase} gives a
     gauge-phase equivalence with the companion tensor.
@@ -853,8 +837,7 @@ physical state symmetry requires additional hypotheses.
 
 \begin{proof}
     \leanok
-    \uses{thm:string_order_implies_twisted_gauge_phase,
-        thm:virtual_unitary_of_twisted_gauge_phase}
+    \uses{thm:string_order_implies_twisted_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase}
     Virtual-boundary nondecay first gives gauge-phase equivalence with the
     companion tensor by
     Theorem~\ref{thm:string_order_implies_twisted_gauge_phase}.

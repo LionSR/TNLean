@@ -61,8 +61,7 @@
 \begin{theorem}[Printed BNT characterization]
     \label{thm:cpsv_prop27_printed_status}
     \notready
-    \uses{def:bnt_cpsv, def:cpsv_canonical_form, def:gauge_phase_equiv,
-        thm:cpsv_bnt_characterization}
+    \uses{def:bnt_cpsv, def:cpsv_canonical_form, def:gauge_phase_equiv, thm:cpsv_bnt_characterization}
     Let
     \begin{align}
         A^i&=\bigoplus_{k=1}^{r}\mu_k\widetilde A_k^i
@@ -87,8 +86,7 @@
     \lean{MPSTensor.SectorDecomposition.%
         exists_phase_match_of_isCPSVBasisOfNormalTensors}
     \leanok
-    \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor,
-        def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor, def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
     Let $A$ have a canonical-form MPV expansion
     \begin{align}
         \ket{V^{(N)}(A)}
@@ -123,15 +121,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_mpv_phase_gauge,
-        thm:cpsv_normal_mpv_phase_alternative,
-        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
-        lem:bnt_finite_index_overlap_orthonormal_li,
-        lem:finite_geometric_sum_eventual_vanishing,
-        lem:sector_decomposition_coeff_not_eventually_zero,
-        def:mpv_phase_class_data,
-        thm:cpsv_normal_separated_eventually_li,
-        thm:mpv_decomposition}
+    \uses{thm:cpsv_normal_mpv_phase_gauge, thm:cpsv_normal_mpv_phase_alternative, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, lem:bnt_finite_index_overlap_orthonormal_li, lem:finite_geometric_sum_eventual_vanishing, lem:sector_decomposition_coeff_not_eventually_zero, def:mpv_phase_class_data, thm:cpsv_normal_separated_eventually_li, thm:mpv_decomposition}
     First discard the zero-weight summands; they contribute zero at every
     positive length. Reindex the remaining summands, group them into the MPV
     phase classes of Definition~\ref{def:mpv_phase_class_data}, and choose one
@@ -201,8 +191,7 @@
     \label{thm:cpsv_bnt_uniqueness_counterexample}
     \lean{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}
     \leanok
-    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
-        def:block_diagonal_tensor}
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
     There is a normal tensor with a one-block canonical-form expansion which
     admits two bases of normal tensors of different cardinalities. Hence the
     unrestricted uniqueness sentence of
@@ -247,8 +236,7 @@
     \label{thm:cpsv_bnt_uniqueness_converse_coverage}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage}
     \leanok
-    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos,
-        def:block_diagonal_tensor, def:gauge_phase_equiv}
+    \uses{def:bnt_cpsv, def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor, def:gauge_phase_equiv}
     Let $A$ have a canonical-form MPV expansion
     \begin{align}
         \ket{V^{(N)}(A)}
@@ -269,10 +257,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_bnt_characterization,
-        thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,
-        thm:cpsv_normal_mpv_phase_gauge,
-        lem:gauge_phase_equiv_cast_compose, def:gauge_phase_equiv}
+    \uses{thm:cpsv_bnt_characterization, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_mpv_phase_gauge, lem:gauge_phase_equiv_cast_compose, def:gauge_phase_equiv}
     For each $A_j$, choose an active canonical-form block
     $\widetilde A_{\ell(j)}$ representing it, and then choose a member
     $B_{f(j)}$ representing that block. If $f(j)=f(j')$, then

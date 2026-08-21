@@ -134,7 +134,6 @@ mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_mixed_tp_eigenvalue_bound}
     This is the MPS formulation of
     Theorem~\ref{thm:kraus_mixed_tp_eigenvalue_bound}: the map
     $F_{AB}^{\mathrm{rect}}$ is the mixed Kraus map of the two matrix
@@ -167,10 +166,7 @@ mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv,
-        thm:qpf, thm:right_canonical_gauge,
-        thm:ks_peripheral, thm:kraus_commute,
-        thm:left_multiplicative_identity, thm:simplicity, thm:skolem_noether}
+    \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv, thm:qpf, thm:right_canonical_gauge, thm:simplicity, thm:skolem_noether}
     Since $\rho_{\spec}(F_{AB})\leq1$ by
     Lemma~\ref{thm:spectral_radius_le_one}, the hypothesis gives an
     eigenvalue $\mu$ with $|\mu|=1$ and a nonzero eigenvector $X$ satisfying
@@ -318,8 +314,7 @@ mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound_rect, thm:gauged_intertwining_core,
-        thm:rectangular_intertwining_dim_eq}
+    \uses{thm:eigenvalue_bound_rect, thm:gauged_intertwining_core, thm:rectangular_intertwining_dim_eq}
     Theorem~\ref{thm:eigenvalue_bound_rect} gives $|\mu|\leq1$ for every
     eigenvalue of $F_{AB}^{\mathrm{rect}}$. If its spectral radius were
     $1$, there would be a modulus-one eigenvector
@@ -366,8 +361,7 @@ mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_operator_gap_rect, lem:spectral_radius_pow_zero,
-        thm:overlap_trace_rect}
+    \uses{thm:transfer_operator_gap_rect, lem:spectral_radius_pow_zero, thm:overlap_trace_rect}
     The gap $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$ from
     Theorem~\ref{thm:transfer_operator_gap_rect} and
     Lemma~\ref{lem:spectral_radius_pow_zero} imply operator-norm convergence
@@ -497,8 +491,7 @@ Perron--Frobenius fixed point.
     \label{thm:modulus_one_gauge_irr_tp}
     \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}
     \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv,
-        def:irreducible_tensor, thm:eigenvalue_bound}
+    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:irreducible_tensor, thm:eigenvalue_bound}
     Let $A$ and $B$ be irreducible trace-preserving normalized MPS tensors
     of bond dimension~$D$. If $\rho_{\spec}(F_{AB})\geq1$, then $A$ and $B$
     are gauge-phase equivalent.
@@ -506,11 +499,7 @@ Perron--Frobenius fixed point.
 
 \begin{proof}
     \leanok
-    \uses{thm:modulus_one_gauge, thm:qpf, thm:right_canonical_gauge,
-        thm:ks_peripheral, thm:kraus_commute,
-        thm:left_multiplicative_identity, thm:transfer_psd_fp_pd_irred,
-        thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase,
-        thm:skolem_noether}
+    \uses{thm:modulus_one_gauge, thm:qpf, thm:right_canonical_gauge, thm:transfer_psd_fp_pd_irred, thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase, thm:skolem_noether}
     Choose a modulus-one eigenvector as in
     Theorem~\ref{thm:modulus_one_gauge}. The proof follows its five steps,
     with one change. Separate gauging, the block Kraus family, and the
@@ -529,16 +518,14 @@ Perron--Frobenius fixed point.
     \label{thm:transfer_operator_gap_irr_tp}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
     \leanok
-    \uses{def:gauge_phase_equiv, def:irreducible_tensor,
-        def:mixed_transfer}
+    \uses{def:gauge_phase_equiv, def:irreducible_tensor, def:mixed_transfer}
     Let $A$ and $B$ be irreducible trace-preserving normalized MPS tensors
     of the same bond dimension that are not gauge-phase equivalent. Then
     $\rho_{\spec}(F_{AB})<1$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:spectral_radius_le_one,
-        thm:modulus_one_gauge_irr_tp}
+    \uses{thm:spectral_radius_le_one, thm:modulus_one_gauge_irr_tp}
     Lemma~\ref{thm:spectral_radius_le_one} gives
     $\rho_{\spec}(F_{AB})\leq1$, while the contrapositive of
     Theorem~\ref{thm:modulus_one_gauge_irr_tp} excludes equality.
@@ -548,8 +535,7 @@ Perron--Frobenius fixed point.
     \label{thm:overlap_decay_irr_tp}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP}
     \leanok
-    \uses{def:mpv_overlap, def:gauge_phase_equiv,
-        def:irreducible_tensor}
+    \uses{def:mpv_overlap, def:gauge_phase_equiv, def:irreducible_tensor}
     Let $A$ and $B$ be irreducible trace-preserving normalized tensors of
     the same bond dimension that are not gauge-phase equivalent. Then
     $O_{AB}(N)\to0$ as $N\to\infty$.
@@ -597,8 +583,7 @@ Perron--Frobenius fixed point.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_operator_gap_rect_irr_tp,
-        thm:overlap_trace_rect}
+    \uses{thm:transfer_operator_gap_rect_irr_tp, thm:overlap_trace_rect}
     Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$, so
     $(F_{AB}^{\mathrm{rect}})^N\to0$. The rectangular overlap--trace identity
@@ -633,8 +618,7 @@ a gauge-phase match. The following two results isolate that spectral step.
     \label{thm:nt_overlap_norm_one_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
     \leanok
-    \uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv,
-        def:mpv_overlap}
+    \uses{def:irreducible_tensor, def:gauge_phase_equiv, def:mpv_overlap}
     Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension with
     $\sum_i(A^i)^\dagger A^i=\Id$ and
     $\sum_i(B^i)^\dagger B^i=\Id$. If
@@ -645,8 +629,7 @@ a gauge-phase match. The following two results isolate that spectral step.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
-        thm:modulus_one_gauge_irr_tp}
+    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one, thm:modulus_one_gauge_irr_tp}
     By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one}, the
     mixed-transfer spectral radius is at least~$1$, and
     Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase

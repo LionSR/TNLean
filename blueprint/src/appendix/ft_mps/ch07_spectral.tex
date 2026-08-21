@@ -120,7 +120,7 @@ matrix-unit indices gives
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
     \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
     \leanok
-    \uses{def:mixed_transfer_rect, thm:kraus_mixed_tp_spectral_radius_bound}
+    \uses{def:mixed_transfer_rect}
     For normalized tensors of bond dimensions $D_1$ and $D_2$,
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})\leq1$.
 \end{lemma}
@@ -171,7 +171,6 @@ dimension once they are invertible.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ks_peripheral, thm:kraus_commute}
     Embed the gauged families and transported eigenvector into the block
     matrices
     \begin{align}
@@ -332,7 +331,6 @@ $E^n=P+N^n$ for $n\geq1$.
 \begin{lemma}[Trace of the fixed-point projection]\label{lem:fixedPointProj_trace}
     \lean{fixedPointProj_trace}
     \leanok
-    \uses{def:fixed_point_proj}
     The fixed-point projection $P$ has operator trace $\Tr(P)=1$.
 \end{lemma}
 
@@ -367,7 +365,7 @@ spectral radius $\rho_{\spec}(N)$ itself.
     \label{thm:primitive_fixedPoint_compl_lt_one_irred_channel}
     \lean{spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel}
     \leanok
-    \uses{def:fixed_point_proj, def:irreducible_cp, def:primitive_channel}
+    \uses{def:irreducible_cp}
     Let $E:\MN{D}\to\MN{D}$ be an irreducible primitive channel, and let
     $\rho\ne0$ be a positive semidefinite fixed point. Then
     $\tr(\rho)\ne0$ and, for $P=P_\rho$,
@@ -375,7 +373,6 @@ spectral radius $\rho_{\spec}(N)$ itself.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:primitive_compl_lt_one,thm:spectralRadius_lt_one_of_eigenvalues_lt_one}
     Positive semidefiniteness and $\rho\ne0$ imply $\tr(\rho)\ne0$.
     Every eigenvalue of $E-P$ has modulus strictly less than one by
     irreducibility and primitivity. Since $\MN{D}$ is finite-dimensional,
@@ -386,7 +383,7 @@ spectral radius $\rho_{\spec}(N)$ itself.
     \label{thm:spectralRadius_compl_lt_one_peripheralPrimitive_irred}
     \lean{MPSTensor.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor, def:primitive_channel}
+    \uses{def:irreducible_tensor}
     Let $A$ be an irreducible normalized MPS tensor whose transfer map
     $\E_A$ is primitive. Then there is a nonzero positive semidefinite
     fixed point $\rho$ of $\E_A$ with $\tr(\rho)\neq0$ such that, for
@@ -394,8 +391,7 @@ spectral radius $\rho_{\spec}(N)$ itself.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists,
-        thm:primitive_fixedPoint_compl_lt_one_irred_channel}
+    \uses{thm:psd_fp_exists, thm:primitive_fixedPoint_compl_lt_one_irred_channel}
     The channel fixed-point existence theorem
     (Theorem~\ref{thm:psd_fp_exists}) supplies a nonzero positive
     semidefinite fixed point $\rho$. Apply
@@ -422,8 +418,7 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:isUnit_peripheral_eigenvector}
     \lean{Kraus.isUnit_peripheral_eigenvector}
     \leanok
-    \uses{def:kraus_map, def:unital_kraus, def:kraus_adjoint_map,
-        def:irreducible_cp}
+    \uses{def:irreducible_cp}
     Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
     positive-definite adjoint fixed point.
     If $X \ne 0$ satisfies $E(X) = \mu X$ with $|\mu| = 1$,
@@ -432,8 +427,7 @@ projections, and tracking how the channel shifts the resulting corners.
 
 \begin{proof}
     \leanok
-    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
-        thm:psd_fp_pd_irred}
+    \uses{thm:psd_fp_pd_irred}
     By the Kadison--Schwarz inequality
     (\ref{eq:schwarz_kadison}), the gap
     $G=E(X^\dagger X)-E(X)^\dagger E(X)$ is positive semidefinite.
@@ -449,8 +443,7 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:peripheral_mul_closure}
     \lean{Kraus.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
-    \uses{def:kraus_map, def:unital_kraus, def:kraus_adjoint_map,
-        def:irreducible_cp, def:peripheral_eigenvalues}
+    \uses{def:irreducible_cp}
     Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
     positive-definite adjoint fixed point.
     If $\mu, \nu$ are peripheral eigenvalues of $E$, then so is $\mu\nu$.
@@ -458,9 +451,7 @@ projections, and tracking how the channel shifts the resulting corners.
 
 \begin{proof}
     \leanok
-    \uses{lem:isUnit_peripheral_eigenvector,
-        thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
-        thm:right_multiplicative_identity}
+    \uses{lem:isUnit_peripheral_eigenvector}
     Take eigenvectors $X$ and $Y$ for $\mu$ and $\nu$, respectively.
     The Kadison--Schwarz equality at $X$ places $X$ in the multiplicative
     domain. Thus the right multiplicative identity
@@ -495,8 +486,7 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:peripheral_unitary_eigenvector}
     \lean{Kraus.exists_peripheral_unitary_of_irreducible_schwarz}
     \leanok
-    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
-        thm:psd_fp_unique_irred_cp}
+    \uses{thm:psd_fp_unique_irred_cp}
     For an irreducible unital Schwarz map with faithful adjoint fixed point,
     each peripheral eigenvalue admits a unitary eigenvector.
 \end{lemma}
@@ -514,8 +504,6 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:peripheral_unitary_powers}
     \lean{Kraus.map_powers_of_peripheral_unitary}
     \leanok
-    \uses{thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
-        thm:right_multiplicative_identity}
     If $E(U)=\mu U$ with $|\mu|=1$ and $U$ unitary, then
     $E(U^n)=\mu^nU^n$ for every $n$.
 \end{lemma}
@@ -531,8 +519,7 @@ projections, and tracking how the channel shifts the resulting corners.
     \label{lem:normalized_peripheral_unitary}
     \lean{Kraus.exists_normalized_peripheral_unitary_of_irreducible_schwarz}
     \leanok
-    \uses{lem:peripheral_unitary_eigenvector, lem:peripheral_unitary_powers,
-        lem:irreducible_unital_fixed_points_scalar}
+    \uses{lem:peripheral_unitary_eigenvector, lem:peripheral_unitary_powers, lem:irreducible_unital_fixed_points_scalar}
     Peripheral unitary eigenvectors can be normalized compatibly with
     the faithful fixed-point state.
 \end{lemma}
@@ -730,15 +717,12 @@ them.
     \label{lem:peripheral_closed_under_mul_group}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_mul}
     \leanok
-    \uses{def:kraus_map, def:unital_kraus, def:kraus_adjoint_map,
-        def:irreducible_cp, def:peripheral_eigenvalues}
+    \uses{def:irreducible_cp}
     The product of two peripheral eigenvalues is peripheral.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peripheral_unitary_eigenvector,
-        thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
-        thm:right_multiplicative_identity}
+    \uses{lem:peripheral_unitary_eigenvector}
     Peripheral eigenvalues admit unitary eigenvectors
     (Lemma~\ref{lem:peripheral_unitary_eigenvector}). If $U_\alpha,U_\beta$
     are unitary eigenvectors for $\alpha,\beta$, the multiplicative-domain
@@ -751,8 +735,7 @@ them.
     \label{lem:peripheral_closed_under_inv_group}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv}
     \leanok
-    \uses{def:kraus_map, def:unital_kraus, def:kraus_adjoint_map,
-        def:irreducible_cp, def:peripheral_eigenvalues}
+    \uses{def:irreducible_cp}
     The inverse of a peripheral eigenvalue is peripheral.
 \end{lemma}
 

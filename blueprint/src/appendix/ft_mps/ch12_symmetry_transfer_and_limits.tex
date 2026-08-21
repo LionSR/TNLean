@@ -53,7 +53,6 @@ physical endpoint correlator of Definition~\ref{def:physical_string_order_param}
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_same_map_of_unitary_combination}
     Theorem~\ref{thm:kraus_same_map_of_unitary_combination} applies to the
     unitary combination defining $B_u$. Equivalently, expand
     $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$. The coefficient of
@@ -132,7 +131,6 @@ placed in one trace-preserving gauge obtained from their common transfer map.
 
 \begin{proof}
     \leanok
-    \uses{thm:kraus_same_map_of_unitary_combination}
     This is exactly the usual invariance of a Kraus decomposition under a
     unitary change of Kraus operators; see
     Theorem~\ref{thm:kraus_same_map_of_unitary_combination}.
@@ -177,8 +175,7 @@ placed in one trace-preserving gauge obtained from their common transfer map.
     \label{def:twisted_tp_gauge_setup_construction}
     \lean{MPSTensor.twistedTPGaugeSetup}
     \leanok
-    \uses{def:twisted_tp_gauge_setup, lem:transfer_map_twisted_companion,
-        thm:psd_fp_unique}
+    \uses{def:twisted_tp_gauge_setup, lem:transfer_map_twisted_companion, thm:psd_fp_unique}
     Let $D>0$. If $A$ is injective, $uu^\dagger=\Id_d$, and
     $\E_A(\Id)=\Id$, define the common trace-preserving gauge setup for
     $(A,u)$ by choosing the unique positive definite stationary state of the
@@ -205,8 +202,7 @@ placed in one trace-preserving gauge obtained from their common transfer map.
     \label{thm:twisted_tp_gauge_has_eigenvalue}
     \lean{MPSTensor.twistedTPGaugeSetup_hasEigenvalue}
     \leanok
-    \uses{def:twisted_tp_gauge_setup,
-        lem:twisted_transfer_eq_mixed_transfer}
+    \uses{def:twisted_tp_gauge_setup, lem:twisted_transfer_eq_mixed_transfer}
     If $V\ne0$ and $\E_u(V)=\lambda V$, then $\lambda$ is an eigenvalue of the
     mixed transfer map $F_{A',B'}$ in any common trace-preserving gauge setup.
 \end{theorem}

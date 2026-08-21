@@ -2,12 +2,7 @@
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     \leanok
-    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp,
-        def:periodic_corner_letter, def:periodic_corner_product,
-        lem:periodic_corner_product_append,
-        lem:periodic_corner_product_blockmatch_pow, lem:periodic_corner_contraction,
-        thm:periodic_product_one_phase_extraction,
-        thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
+    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp, def:periodic_corner_letter, def:periodic_corner_product, lem:periodic_corner_product_append, lem:periodic_corner_product_blockmatch_pow, lem:periodic_corner_contraction, thm:periodic_product_one_phase_extraction, thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Let the
@@ -168,8 +163,7 @@
     \label{thm:periodic_overlap_gauge_equiv_sector_match}
     \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
     \leanok
-    \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match,
-        def:cyclic_sector_decomp}
+    \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match, def:cyclic_sector_decomp}
     Let $A$ and $B$ be periodic tensors with the same period $m$. Let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical, with
@@ -195,10 +189,7 @@
 \begin{theorem}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
     \lean{MPSTensor.periodicOverlapDichotomy}
     \leanok
-    \uses{thm:periodic_overlap_zero_ne_period,
-        thm:periodic_overlap_zero_no_sector_match,
-        thm:periodic_overlap_zero_ne_dim,
-        thm:periodic_overlap_gauge_equiv_sector_match}
+    \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
     Let $A$ and $B$ be periodic tensors. Then at least one of the following
     alternatives holds:
     \begin{enumerate}
@@ -208,10 +199,7 @@
     \end{enumerate}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:periodic_overlap_zero_ne_period,
-        thm:periodic_overlap_zero_no_sector_match,
-        thm:periodic_overlap_zero_ne_dim,
-        thm:periodic_overlap_gauge_equiv_sector_match}
+    \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
     If $m_A\ne m_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$ by
     Theorem~\ref{thm:periodic_overlap_zero_ne_period}. Assume $m_A=m_B=m$.
@@ -255,8 +243,7 @@
     independent for every sufficiently large $N$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:periodic_bond_dimension_pos,
-        thm:periodic_self_overlap_tendsto}
+    \uses{thm:periodic_bond_dimension_pos, thm:periodic_self_overlap_tendsto}
     The Gram matrix converges to the diagonal matrix whose $j$-th diagonal
     entry is the positive period of $A_j$. Its determinant therefore has a
     nonzero limit, so the Gram matrix is invertible for every sufficiently
@@ -299,9 +286,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_bond_dimension_pos,
-        thm:periodic_family_li_of_cross_overlap_decay,
-        thm:periodic_overlap_dichotomy}
+    \uses{thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy}
     Periodicity makes every bond dimension positive. For distinct $i,j$, the
     repeated-block alternative in
     Theorem~\ref{thm:periodic_overlap_dichotomy} contradicts pairwise
@@ -371,8 +356,7 @@
     \label{thm:peripheral_periodic_ft_proportional_same}
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2_pos, thm:periodic_overlap_dichotomy,
-        thm:periodic_self_overlap_tendsto}
+    \uses{def:periodic_tensor, def:same_mpv2_pos, thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
     Let $A$ and $B$ be periodic tensors with the same matrix product vectors
     at every positive length.
     Then their bond dimensions agree, and after identifying the bond spaces,
@@ -512,14 +496,7 @@
     present result and returns its conclusion to the unnormalized blocks.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:finite_coefficient_isolation,
-        lem:nonzero_proportional_mpv_basic,
-        thm:gauge_phase_mpv_scaling,
-        thm:mpv_decomposition,
-        thm:periodic_bond_dimension_pos,
-        thm:periodic_family_li_of_cross_overlap_decay,
-        thm:periodic_overlap_dichotomy,
-        lem:sector_decomposition_coeff_not_eventually_zero}
+    \uses{lem:finite_coefficient_isolation, lem:nonzero_proportional_mpv_basic, thm:gauge_phase_mpv_scaling, thm:mpv_decomposition, thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy, lem:sector_decomposition_coeff_not_eventually_zero}
     Fix $j_0\in J$ and suppose that its overlap with every $B_k$ tends to
     zero. Let $T\subseteq J$ be the set of all indices with this property.
     For every $j\notin T$, choose $k(j)$ for which the mixed overlap does not
@@ -585,10 +562,7 @@
     unit-modulus scalar.
 \end{theorem}
 \begin{proof}
-    \uses{lem:periodic_overlap_hypothesis_gauge_transport,
-        lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance,
-        thm:periodic_multiplicity_nondecaying_overlap,
-        thm:spectral_periodic_sector_normalization}
+    \uses{lem:periodic_overlap_hypothesis_gauge_transport, lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance, thm:periodic_multiplicity_nondecaying_overlap, thm:spectral_periodic_sector_normalization}
     \leanok
     Normalize all representatives by their pure Perron gauges and assemble
     the gauges block diagonally.  The multiplicity matrices and their grouped

@@ -36,8 +36,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.edgeMiddleWeightOn}
     \lean{TNLean.PEPS.edgeOpenMiddleWeightOn}
     \leanok
-    \uses{def:peps_edgeMiddlePhysicalConfig,
-        def:peps_edgeMiddleConfig, def:peps_edgeOpenMiddleWeight}
+    \uses{def:peps_edgeMiddlePhysicalConfig, def:peps_edgeMiddleConfig, def:peps_edgeOpenMiddleWeight}
     The ordinary and open middle contractions may be written using only the
     middle physical configuration, rather than a physical configuration on all
     vertices. This is the middle tensor in the three-site chain obtained after
@@ -49,8 +48,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.edgeMiddleWeight_eq_on}
     \lean{TNLean.PEPS.edgeOpenMiddleWeight_eq_on}
     \leanok
-    \uses{def:peps_edgeMiddleWeightOn,
-        def:peps_edgeMiddlePhysicalConfig}
+    \uses{def:peps_edgeMiddleWeightOn, def:peps_edgeMiddlePhysicalConfig}
     The middle contractions written with a global physical configuration are
     the corresponding middle-indexed contractions evaluated on the restricted
     middle physical configuration.
@@ -86,8 +84,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
     \lean{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig}
     \leanok
-    \uses{def:peps_edgeMiddleConfigToOpenMiddleConfig,
-        def:peps_edgeOpenMiddleConfigToMiddleConfig}
+    \uses{def:peps_edgeMiddleConfigToOpenMiddleConfig, def:peps_edgeOpenMiddleConfigToMiddleConfig}
     For fixed edge-boundary data, ordinary middle configurations are equivalent
     to compatible open-middle configurations. This is the finite reindexing
     used when the inserted matrix is the identity.
@@ -97,8 +94,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn}
     \lean{TNLean.PEPS.edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn}
     \leanok
-    \uses{def:peps_edgeMiddleWeightOn,
-        def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
+    \uses{def:peps_edgeMiddleWeightOn, def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
     The ordinary middle tensor and the open middle tensor agree after restoring
     the fixed distinguished-edge index and reindexing the finite sum, with the
     physical index already restricted to the middle block.
@@ -140,8 +136,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
     \lean{TNLean.PEPS.edgeMiddleWeight_eq_edgeOpenMiddleWeight}
     \leanok
-    \uses{def:peps_edgeOpenMiddleWeight,
-        def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
+    \uses{def:peps_edgeOpenMiddleWeight, def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
     Restoring the fixed distinguished-edge index identifies the ordinary blocked
     middle tensor with the open middle tensor. This is the finite reindexing
     used before the identity matrix collapses the two inserted bond indices to
@@ -156,8 +151,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeInsertedCoeff_identity_diagonal_summand}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity_diagonal_summand}
     \leanok
-    \uses{def:peps_edgeBoundaryToInsertedBoundaryConfig,
-        thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
+    \uses{def:peps_edgeBoundaryToInsertedBoundaryConfig, thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
     On the diagonal boundary datum selected by the identity matrix, the
     inserted-edge summand is the ordinary edge-blocked summand. Thus the
     remaining identity-insertion step is purely a finite summation statement:
@@ -190,11 +184,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeInsertedCoeff_identity}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity}
     \leanok
-    \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBlockedCoeff,
-        def:peps_edgeBoundaryToInsertedBoundaryConfig,
-        def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig,
-        thm:peps_edgeInsertedCoeff_identity_diagonal_summand,
-        thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
+    \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBlockedCoeff, def:peps_edgeBoundaryToInsertedBoundaryConfig, def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig, thm:peps_edgeInsertedCoeff_identity_diagonal_summand, thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
     If the inserted matrix on the distinguished edge is the identity, then the
     edge insertion coefficient is the ordinary edge-blocked coefficient.
 \end{theorem}
@@ -221,8 +211,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{def:peps_edgeMiddleWeight}
     \lean{TNLean.PEPS.edgeMiddleWeight}
     \leanok
-    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeMiddleConfig,
-        def:peps_edgeMiddleVertices}
+    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeMiddleConfig, def:peps_edgeMiddleVertices}
     Fixing the edge-centered boundary data, the blocked middle tensor is the sum
     over global virtual configurations compatible with those data of the product
     of local tensor entries over the middle region $V\setminus\{u,v\}$.
@@ -281,8 +270,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{def:peps_edgeBlockedCoeff}
     \lean{TNLean.PEPS.edgeBlockedCoeff}
     \leanok
-    \uses{def:peps_edgeLeftLocalConfig, def:peps_edgeMiddleWeight,
-        def:peps_edgeRightLocalConfig}
+    \uses{def:peps_edgeLeftLocalConfig, def:peps_edgeMiddleWeight, def:peps_edgeRightLocalConfig}
     The edge-blocked coefficient is the three-block contraction obtained from
     the left endpoint tensor, the blocked middle tensor, and the right endpoint
     tensor at the chosen edge.
@@ -292,15 +280,12 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedCoeff_eq_stateCoeff}
     \lean{TNLean.PEPS.edgeBlockedCoeff_eq_stateCoeff}
     \leanok
-    \uses{def:peps_edgeBlockedCoeff, thm:peps_stateCoeff_splitAtEdge,
-        def:peps_virtualConfigEquivEdgeBoundary}
+    \uses{def:peps_edgeBlockedCoeff, thm:peps_stateCoeff_splitAtEdge, def:peps_virtualConfigEquivEdgeBoundary}
     For every edge $e$, the edge-blocked three-block coefficient is exactly the
     original PEPS state coefficient.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:peps_virtualConfigEquivEdgeBoundary,
-        thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches,
-        thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
+    \uses{def:peps_virtualConfigEquivEdgeBoundary, thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches, thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
     Write $\Coeff_A(\sigma)$ for the PEPS state coefficient and
     $C_A(e;\sigma)$ for the edge-blocked coefficient, and put $e=(u,v)$ and
     $M_e=V\setminus\{u,v\}$. The equivalence
@@ -328,8 +313,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity_eq_stateCoeff}
     \leanok
-    \uses{thm:peps_edgeInsertedCoeff_identity,
-        thm:peps_edgeBlockedCoeff_eq_stateCoeff}
+    \uses{thm:peps_edgeInsertedCoeff_identity, thm:peps_edgeBlockedCoeff_eq_stateCoeff}
     If the inserted matrix on the distinguished edge is the identity, then the
     edge insertion coefficient is the original PEPS state coefficient.
 \end{theorem}
@@ -372,8 +356,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_sameState_edgeInsertedCoeff_identity_eq}
     \lean{TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq}
     \leanok
-    \uses{def:peps_same_state,
-        thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
+    \uses{def:peps_same_state, thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
     If two PEPS tensors have the same state, then their edge-centered identity
     insertions agree at every edge and every physical configuration.
 \end{theorem}
@@ -414,8 +397,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
     \lean{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}
     \leanok
-    \uses{def:peps_edgeMiddleTensorFamily,
-        lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
+    \uses{def:peps_edgeMiddleTensorFamily, lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
     If the complement configuration space is empty and the residual
     boundary-label set is nonempty, then the edge-middle tensor family is not
     injective.
@@ -456,9 +438,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_singletonRegionInjectivityComparison_of_isVertexInjective}
     \lean{TNLean.PEPS.singletonRegionInjectivityComparison_of_isVertexInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_singletonRegionTensor,
-        def:peps_regionInjectivityDataOf,
-        thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \uses{def:IsVertexInjective, def:peps_singletonRegionTensor, def:peps_regionInjectivityDataOf, thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     Let $A$ be vertex-injective with every bond dimension positive. Then the
     concrete region-injectivity predicate of $A$ satisfies the singleton
     comparison: injectivity of a singleton blocked tensor implies injectivity of
@@ -493,8 +473,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity,
         TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_singletonRegionTensor,
-        thm:peps_singletonRegionTensorInjective}
+    \uses{def:IsVertexInjective, def:peps_singletonRegionTensor, thm:peps_singletonRegionTensorInjective}
     Assume that a region-injectivity predicate $\kappa$ satisfies, for every
     vertex $v$, $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
     Then, for every vertex $v$,
@@ -512,8 +491,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_finiteRegionInjectivityFromSingletons}
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}
     \leanok
-    \uses{thm:peps_singletonRegionInjectivityFromVertexInjectivity,
-        lem:peps_regionInjectivityUnionClosure_finite}
+    \uses{thm:peps_singletonRegionInjectivityFromVertexInjectivity, lem:peps_regionInjectivityUnionClosure_finite}
     Assume that $\kappa$ satisfies singleton comparison and union closure:
     $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$ for every
     vertex $v$, and
@@ -532,8 +510,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{def:peps_edgeMiddleRegionInjectivityComparison}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison}
     \leanok
-    \uses{def:peps_regionInjectivityData,
-        def:peps_edgeMiddleTensorFamily}
+    \uses{def:peps_regionInjectivityData, def:peps_edgeMiddleTensorFamily}
     A comparison from finite-region injectivity to the edge-middle tensor
     records the following assertion: if the middle vertex region
     $V\setminus\{u,v\}$ is injective after blocking, then the middle tensor
@@ -560,8 +537,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedEndpointTensorMaps_injective_all}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all}
     \leanok
-    \uses{def:IsVertexInjective,
-        thm:peps_edgeBlockedEndpointTensorMaps_injective}
+    \uses{def:IsVertexInjective, thm:peps_edgeBlockedEndpointTensorMaps_injective}
     If the original PEPS tensor is vertex-injective, then the two endpoint
     tensor maps in the edge-blocked three-site chain are injective at every
     edge.
@@ -576,8 +552,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        def:peps_edgeMiddleTensorFamily}
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleTensorFamily}
     For a vertex-injective PEPS tensor, injectivity of the edge-blocked middle
     tensor gives the full injectivity statement for the edge-blocked three-site
     chain.
@@ -593,9 +568,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        def:peps_edgeMiddleTensorFamily,
-        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleTensorFamily, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     If every edge-middle tensor is injective, then a vertex-injective PEPS
     tensor gives an injective edge-blocked three-site chain at every edge.
 \end{theorem}
@@ -611,9 +584,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        def:peps_edgeMiddleRegionInjectivityComparison,
-        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleRegionInjectivityComparison, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     Suppose the middle region $V\setminus\{u,v\}$ is injective after
     blocking, and suppose this region-injectivity assertion has been identified
     with injectivity of the corresponding edge-middle tensor family. Then a
@@ -632,8 +603,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeMiddleTensorInjective_all_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all}
     \leanok
-    \uses{def:peps_edgeMiddleRegionInjectivityComparison,
-        def:peps_edgeMiddleTensorFamily}
+    \uses{def:peps_edgeMiddleRegionInjectivityComparison, def:peps_edgeMiddleTensorFamily}
     Suppose every edge-middle region $V\setminus\{u,v\}$ is injective after
     blocking, and suppose finite-region injectivity has been identified with
     injectivity of the corresponding edge-middle tensor family. Then every
@@ -650,10 +620,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        def:peps_edgeMiddleRegionInjectivityComparison,
-        thm:peps_edgeBlockedThreeSiteInjective_all_of_middle,
-        thm:peps_edgeMiddleTensorInjective_all_of_region}
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleRegionInjectivityComparison, thm:peps_edgeBlockedThreeSiteInjective_all_of_middle, thm:peps_edgeMiddleTensorInjective_all_of_region}
     Suppose every edge-middle region $V\setminus\{u,v\}$ is injective after
     blocking, and suppose finite-region injectivity has been identified with
     injectivity of the corresponding edge-middle tensor family. Then a
@@ -673,8 +640,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeMiddleTensorInjective_of_singletons}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons}
     \leanok
-    \uses{thm:peps_finiteRegionInjectivityFromSingletons,
-        def:peps_edgeMiddleRegionInjectivityComparison}
+    \uses{thm:peps_finiteRegionInjectivityFromSingletons, def:peps_edgeMiddleRegionInjectivityComparison}
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Assume $M_e\ne\varnothing$.
     Assume also singleton comparison, union closure for $\kappa$, and the
     comparison
@@ -692,8 +658,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons}
     \leanok
-    \uses{thm:peps_edgeMiddleTensorInjective_of_singletons,
-        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    \uses{thm:peps_edgeMiddleTensorInjective_of_singletons, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Under the hypotheses of the
     preceding theorem, vertex injectivity of $A$ gives injectivity of the
     edge-blocked three-site chain at $e$.
@@ -723,9 +688,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card}
     \leanok
-    \uses{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card,
-        thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons,
-        def:peps_edgeMiddleRegionInjectivityComparison}
+    \uses{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card, thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons, def:peps_edgeMiddleRegionInjectivityComparison}
     Assume singleton comparison, union closure for $\kappa$, the comparison
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$, and vertex
     injectivity of $A$. If $2<|V|$, then

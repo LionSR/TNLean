@@ -54,10 +54,7 @@ $X A^j=A^jX$.
     \label{thm:reduced_wrapped_boundary_compatibilities}
     \lean{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective}
     \leanok
-    \uses{def:chain_ground_space, def:l_blk_injective,
-        lem:cyclic_window_range_antitonicity,
-        lem:wrapped_window_one_sided_compatibility,
-        lem:mirror_wrapped_window_one_sided_compatibility}
+    \uses{def:chain_ground_space, def:l_blk_injective, lem:cyclic_window_range_antitonicity, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$.
     Suppose $\psi\in\mathcal G_{N,L}(A)$, $N\ge2$, $L_0<L\le N$, and
     $\psi=\Gamma_N(X)$ for a boundary matrix $X$. Then there are two families
@@ -74,9 +71,7 @@ $X A^j=A^jX$.
 
 \begin{proof}
     \leanok
-    \uses{lem:cyclic_window_range_antitonicity,
-        lem:wrapped_window_one_sided_compatibility,
-        lem:mirror_wrapped_window_one_sided_compatibility}
+    \uses{lem:cyclic_window_range_antitonicity, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
     First use Lemma~\ref{lem:cyclic_window_range_antitonicity} to reduce the
     cyclic constraints from range $L$ to range $L_0+1$. Then apply the two
     cyclic-interval compatibility lemmas at the two boundary positions to obtain
@@ -87,9 +82,7 @@ $X A^j=A^jX$.
     \label{lem:closure_property_boundary_crossing_equations_ground_space_map}
     \lean{MPSTensor.closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators,
-        lem:wrapped_window_one_sided_compatibility,
-        lem:mirror_wrapped_window_one_sided_compatibility}
+    \uses{def:ground_space_map, rem:cyclic_window_operators, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
@@ -117,8 +110,7 @@ $X A^j=A^jX$.
     \label{lem:closure_property_boundary_one_sided_products_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}
     \leanok
-    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,
-        lem:wrapped_middle_backgrounds}
+    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map, lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
@@ -370,8 +362,7 @@ $X A^j=A^jX$.
     \label{lem:boundary_transport_wrapped_product_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
     \leanok
-    \uses{lem:closure_property_boundary_condition_product_window_witnesses,
-        lem:closure_property_boundary_crossing_equations_ground_space_map}
+    \uses{lem:closure_property_boundary_condition_product_window_witnesses, lem:closure_property_boundary_crossing_equations_ground_space_map}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
     $L_0\le M$. Let $\psi=\Gamma_{M+1}(X)$, and suppose that matrices
     $Y_i(\rho)$ represent all length-$(L_0+1)$ cyclic restrictions of $\psi$.

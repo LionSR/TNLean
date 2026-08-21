@@ -34,8 +34,7 @@
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
     \leanok
-    \uses{rem:euclidean_local_projector_ingredients,
-        rem:cyclic_window_operators}
+    \uses{rem:euclidean_local_projector_ingredients, rem:cyclic_window_operators}
     Fix a tensor $A$ with physical dimension $d>0$ and a coefficient
     $c\in\mathbb R$. For every chain length $N$ and site $i\in\Fin{N}$, set
     $h_i^{(N)}:=h_{i,\mathrm{ES}}^{(N,2)}(A)$, the Euclidean range-two parent
@@ -71,9 +70,7 @@
 
 \begin{proof}
     \leanok
-    \uses{rem:cyclic_window_operators,
-        def:cyclic_window_complement_indexing,
-        thm:three_site_commutator_chain_transport}
+    \uses{rem:cyclic_window_operators, def:cyclic_window_complement_indexing, thm:three_site_commutator_chain_transport}
     For a cyclic three-site window beginning at $i$, write
     $\mathcal C_{N-3}$ for its ordered complementary configurations and
     $R_{i,\tau}^{(3)}$ for restriction with complement $\tau$ fixed.
@@ -126,8 +123,7 @@
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
     \leanok
-    \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es,
-        rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
+    \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es, rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
     For a fixed chain length $N$, suppose the Hilbert-space local terms
     $h_{i,\mathrm{ES}}$ satisfy the ordered row-sum estimate
     \begin{align}
@@ -161,8 +157,7 @@
     \label{lem:parent_hamiltonian_ordered_rowsum_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds}
     \leanok
-    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
-        lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
+    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms
     satisfy the ordered row-sum estimate (\ref{eq:ph_ordered_rowsum_estimate})
     with $\gamma=1/(4L)$. If $L>1$, then $1/(4L)>0$ and, for every
@@ -172,8 +167,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+    \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic, lem:parent_hamiltonian_es_quadratic_reduction}
     The fixed-chain row-sum reduction supplies the quadratic-form estimate with
     $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
     identification of the Hilbert-space Hamiltonian then allow
@@ -187,9 +181,7 @@
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}
     \leanok
-    \uses{lem:anticommutator_projection_rowsum_reduction,
-        lem:parent_hamiltonian_es_quadratic_reduction,
-        lem:transported_es_local_projections}
+    \uses{lem:anticommutator_projection_rowsum_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms satisfy
     the anticommutator martingale estimate
     \begin{align}
@@ -222,9 +214,7 @@
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}
     \leanok
-    \uses{lem:finite_overlap_projection_anticommutator_reduction,
-        lem:parent_hamiltonian_es_quadratic_reduction,
-        lem:transported_es_local_projections}
+    \uses{lem:finite_overlap_projection_anticommutator_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
     the overlap relation on local windows has at most $m$ off-diagonal
     neighbours in each row and in each column. If non-overlapping local terms
@@ -285,8 +275,7 @@
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le}
     \leanok
-    \uses{lem:finite_overlap_projection_norm_reduction, def:parent_hamiltonian_es,
-        lem:transported_es_local_projections}
+    \uses{lem:finite_overlap_projection_norm_reduction, def:parent_hamiltonian_es, lem:transported_es_local_projections}
     For a fixed chain length $N$, let $m>0$ and $\gamma\le1$. Suppose an overlap
     predicate on local windows has at most $m$ overlapping off-diagonal windows in
     each row, non-overlapping local terms have non-negative ordered cross terms,
@@ -303,8 +292,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:finite_overlap_projection_norm_reduction,
-        lem:transported_es_local_projections}
+    \uses{lem:finite_overlap_projection_norm_reduction, lem:transported_es_local_projections}
     Apply the finite-overlap norm-compression projection reduction to the family
     $P_i=h_{i,\mathrm{ES}}$. If a separate coefficient $\eta$ is used, first weaken
     the compression estimate using $\eta\le(1-\gamma)/m$.
@@ -365,8 +353,7 @@
     \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
     \lean{MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap}
     \leanok
-    \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap,
-        lem:transported_es_nonoverlap_positive}
+    \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap, lem:transported_es_nonoverlap_positive}
     If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
     Hilbert-space local terms have non-negative ordered cross term:
     $0\le\re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle$.
@@ -404,8 +391,7 @@
     \label{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_ordered_cross_term}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
     the hypotheses of the fixed-chain finite-overlap martingale reduction hold
     with $\gamma=1/(4L)$ and this value of $m$. Then $1/(4L)>0$, and the
@@ -425,9 +411,7 @@
     \label{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
-        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
-        lem:cyclic_window_nonoverlap_positive}
+    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections, lem:cyclic_window_nonoverlap_positive}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
@@ -443,9 +427,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
-        lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections,
-        lem:cyclic_window_nonoverlap_positive}
+    \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections, lem:cyclic_window_nonoverlap_positive}
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
     bound $m=2(L-1)$ for the overlap relation among length-$L$ local windows,
     and
@@ -492,9 +474,7 @@
     \label{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_anticommutator_gap,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
-        lem:cyclic_windows_overlap_symmetry}
+    \uses{lem:parent_hamiltonian_finite_overlap_anticommutator_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:cyclic_windows_overlap_symmetry}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
     length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
     $N\ge2L$ that overlapping off-diagonal terms satisfy
@@ -526,8 +506,7 @@
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
-        rem:projection_geometry_rowsum_identities}
+    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, rem:projection_geometry_rowsum_identities}
     Fix $L>1$. Suppose uniformly for every $N\ge2L$ and every overlapping
     off-diagonal pair that
     \begin{align}
@@ -542,8 +521,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
-        rem:projection_geometry_rowsum_identities}
+    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, rem:projection_geometry_rowsum_identities}
     For an overlapping pair, Cauchy--Schwarz and
     $h_{i,\mathrm{ES}}^2=h_{i,\mathrm{ES}}$ give
     \begin{align}
@@ -570,9 +548,7 @@
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
     overlapping off-diagonal pair that
     \begin{align}
@@ -599,9 +575,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+    \uses{lem:parent_hamiltonian_finite_overlap_norm_quadratic, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction}
     The overlap-cardinality lemma gives at most $m=2(L-1)$ overlapping
     off-diagonal neighbours in each row, while the non-overlap positivity lemma
     handles disjoint supports. The finite-overlap norm-compression reduction gives
@@ -615,10 +589,7 @@
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt}
     \leanok
-    \uses{rem:projection_geometry_rowsum_identities,
-        lem:parent_hamiltonian_finite_overlap_anticommutator_gap,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+    \uses{rem:projection_geometry_rowsum_identities, lem:parent_hamiltonian_finite_overlap_anticommutator_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$, and let $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ and every
     overlapping off-diagonal pair that
     \begin{align}
@@ -649,10 +620,7 @@
 
 \begin{proof}
     \leanok
-    \uses{rem:projection_geometry_rowsum_identities,
-        lem:parent_hamiltonian_finite_overlap_anticommutator_gap,
-        lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_es_quadratic_reduction}
+    \uses{rem:projection_geometry_rowsum_identities, lem:parent_hamiltonian_finite_overlap_anticommutator_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction}
     The overlap-cardinality lemma gives at most $m=2(L-1)$ overlapping
     off-diagonal neighbours in each row, while the non-overlap positivity lemma
     handles disjoint supports. The symmetric anticommutator conversion of

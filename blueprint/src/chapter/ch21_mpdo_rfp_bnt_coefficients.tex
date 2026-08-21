@@ -60,8 +60,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum}
     \leanok
-    \uses{def:mpdo_bnt_label_operator_family,
-        def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_operator_family, def:mpdo_bnt_label_coefficient_family}
     A BNT-label operator family and a BNT-label coefficient system have
     same-length product form when, for every positive length $L$,
     \begin{align}
@@ -90,8 +89,7 @@
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum}
     \leanok
-    \uses{def:mpdo_bnt_label_trace_scalar_family,
-        def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_trace_scalar_family, def:mpdo_bnt_label_coefficient_family}
     A BNT-label trace-scalar family and a BNT-label coefficient system have
     idempotent coefficient form when, for every BNT label $\gamma$,
     \begin{align}
@@ -126,9 +124,7 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.targetLabel}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_blocked_structure_coefficients,
-        def:mpdo_bnt_blocked_basis_label_assignment}
+    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_blocked_structure_coefficients, def:mpdo_bnt_blocked_basis_label_assignment}
     A comparison between the BNT-label coefficients and the chosen
     blocked-basis coefficients consists of a BNT-label assignment together
     with the equality
@@ -147,8 +143,7 @@
     \label{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_diagonal_chi_family}
+    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_diagonal_chi_family}
     A BNT-label coefficient system and a diagonal $\chi$-family are
     compatible when, for every positive length $L$,
     \begin{align}
@@ -165,8 +160,7 @@
     \label{lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
-        thm:mpdo_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form, thm:mpdo_trace_matrix_pow}
     Under positive-length BNT-label trace-power form, for every $L>0$,
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \tr(\chi_{\alpha,\beta,\gamma}^{L})$.
@@ -180,8 +174,7 @@
     \label{lem:mpdo_bnt_label_of_chi_positive_length_trace_power}
     \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     The coefficient family canonically determined by a diagonal
     $\chi$-family satisfies the positive-length trace-power condition with
     respect to the same $\chi$-family.
@@ -195,9 +188,7 @@
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}
     \leanok
-    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
-        def:mpdo_diagonal_chi_family,
-        lem:mpdo_bnt_label_of_chi_positive_length_trace_power}
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form, def:mpdo_diagonal_chi_family, lem:mpdo_bnt_label_of_chi_positive_length_trace_power}
     A positive BNT-label $\chi$ witness consists of a length-independent
     diagonal $\chi_{\alpha,\beta,\gamma}$-family, positivity of every
     diagonal entry, and the positive-length trace-power identity for the
@@ -212,8 +203,7 @@
     \label{lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.eq_trace_pow}
     \leanok
-    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form,
-        lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form, lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
     A positive BNT-label $\chi$ witness gives, for every $L>0$, the formula
     $c^{(L)}_{\alpha,\beta,\gamma}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$.
@@ -227,8 +217,7 @@
     \label{thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_chi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_same_length_product_form,
-        lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_same_length_product_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     If the same-length BNT product identity holds and the BNT-label
     coefficients come from a positive length-independent $\chi$-witness, then
     for every $L>0$,
@@ -250,8 +239,7 @@
     \label{thm:mpdo_bnt_label_same_length_product_eq_sum_of_chi_trace_pow}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_ofChi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_same_length_product_form,
-        def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_coefficient_family}
     If the same-length BNT product identity holds with the coefficient family
     canonically determined by a diagonal $\chi$-family, then for every
     $L>0$,
@@ -273,8 +261,7 @@
     \label{thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_chi_trace}
     \leanok
-    \uses{def:mpdo_bnt_label_idempotent_coefficient_form,
-        lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_idempotent_coefficient_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     If the BNT trace scalars satisfy the idempotent coefficient condition and
     the BNT-label coefficients come from a positive length-independent
     $\chi$-witness, then
@@ -296,8 +283,7 @@
     \label{thm:mpdo_bnt_label_idempotent_eq_sum_of_chi_trace}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_ofChi_trace}
     \leanok
-    \uses{def:mpdo_bnt_label_idempotent_coefficient_form,
-        def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_idempotent_coefficient_form, def:mpdo_bnt_label_coefficient_family}
     If the BNT trace scalars satisfy the idempotent coefficient condition with
     the coefficient family canonically determined by a diagonal
     $\chi$-family, then
@@ -323,9 +309,7 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
         blocked_coeff_eq_pulledBlockedChi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
-        def:mpdo_positive_bnt_label_chi_trace_power_form,
-        lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison, def:mpdo_positive_bnt_label_chi_trace_power_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     If the chosen blocked-basis coefficients are compared with the fixed
     BNT-label coefficient system, and that BNT-label system has a positive
     length-independent $\chi$-witness, then each positive-length blocked
@@ -393,8 +377,7 @@
     \label{def:mpdo_has_blocked_structure_chi_trace_power_form}
     \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_blocked_structure_coefficients,
-        def:mpdo_blocked_structure_chi_family}
+    \uses{def:mpdo_blocked_structure_coefficients, def:mpdo_blocked_structure_chi_family}
     The blocked multiplication coefficients are in trace-power form when, for
     every positive blocked size $n$ and every multiplication triple $(i,j,k)$,
     the coefficient $c^{(n)}_{i,j,k}$ equals
@@ -411,8 +394,7 @@
     \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
     \leanok
-    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
-        lem:mpdo_blocked_structure_chi_trace_matrix_pow}
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form, lem:mpdo_blocked_structure_chi_trace_matrix_pow}
     Under trace-power form for the blocked multiplication coefficients,
     for every positive blocked size $n$,
     $c^{(n)}_{i,j,k}=\tr(\chi_{n,i,j,k}^{\,n})$.
@@ -426,8 +408,7 @@
     \label{def:mpdo_positive_blocked_structure_chi_trace_power_form}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
-        def:mpdo_blocked_structure_chi_family}
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form, def:mpdo_blocked_structure_chi_family}
     A positive blocked $\chi$ trace-power witness consists of a blocked
     $\chi$ family, positivity of all its diagonal entries, and the
     positive-length trace-power identity for the blocked multiplication
@@ -452,9 +433,7 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
         toPositiveBlockedStructureChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
-        def:mpdo_positive_bnt_label_chi_trace_power_form,
-        def:mpdo_positive_blocked_structure_chi_trace_power_form}
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison, def:mpdo_positive_bnt_label_chi_trace_power_form, def:mpdo_positive_blocked_structure_chi_trace_power_form}
     Suppose that the chosen blocked-basis coefficients are compared with a
     fixed BNT-label coefficient system, and that this BNT-label system has a
     positive length-independent $\chi$-witness. Then the chosen blocked
@@ -524,10 +503,7 @@
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.entry_eq_one_of_lengthIndependent}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.coeff_eq_dim_of_lengthIndependent}
     \leanok
-    \uses{def:mpdo_bnt_label_length_independent,
-        def:mpdo_bnt_label_positive_length_chi_trace_power_form,
-        def:mpdo_positive_bnt_label_chi_trace_power_form,
-        lem:constant_power_sum_dichotomy}
+    \uses{def:mpdo_bnt_label_length_independent, def:mpdo_bnt_label_positive_length_chi_trace_power_form, def:mpdo_positive_bnt_label_chi_trace_power_form, lem:constant_power_sum_dichotomy}
     Suppose a BNT-label coefficient system is in trace-power form
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \tr(\chi_{\alpha,\beta,\gamma}^{\,L})$
@@ -555,8 +531,7 @@
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
         lengthIndependent_of_forall_entry_eq_one}
     \leanok
-    \uses{def:mpdo_bnt_label_length_independent,
-        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{def:mpdo_bnt_label_length_independent, def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     If a BNT-label coefficient system is in trace-power form with respect
     to a diagonal $\chi$-family all of whose entries equal one, then for
     every $L>0$, $c^{(L)}_{\alpha,\beta,\gamma}
@@ -592,9 +567,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients}
     \leanok
-    \uses{def:mpdo_bnt_label_length_independent,
-        thm:mpdo_bond_two_singleton_normalized_algebra,
-        thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \uses{def:mpdo_bnt_label_length_independent, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bnt_algebra_tensor_to_rfp}
     There is an MPDO $M$ in literal CPSV canonical form that is a
     renormalization fixed point and has a tensor-attached BNT presentation
     with one label and
@@ -608,11 +581,7 @@
     invariant under every possible presentation of $M$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_ambient_ghz,
-        thm:mpdo_bond_two_singleton_cpsv_form,
-        thm:mpdo_bond_two_singleton_normalized_algebra,
-        thm:mpdo_bond_two_singleton_tensor_clause,
-        thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \uses{thm:mpdo_bond_two_singleton_ambient_ghz, thm:mpdo_bond_two_singleton_cpsv_form, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bond_two_singleton_tensor_clause, thm:mpdo_bnt_algebra_tensor_to_rfp}
     The bond-two singleton tensor is positive on every nonempty chain, is in
     literal canonical form, and carries the displayed one-label BNT algebra
     clause. The reverse implication of Theorem~4.14 supplies the two
@@ -645,9 +614,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         oneLabelCoeffs_rescaling_stable_not_lengthIndependent}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_length_independent,
-        def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent, def:mpo_physical_trace_transfer}
     Theorem~\ref{thm:mpdo_length_dependent_rfp_example} answers the
     question of \cite[lines~995--999]{Cirac2016MPDO_arXiv} affirmatively,
     but its one-label block has a single diagonal entry $\sqrt{1/2}$, and
@@ -714,9 +681,7 @@
     tensor stated there.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpo_physical_trace_transfer,
-        def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_length_independent}
+    \uses{def:mpo_physical_trace_transfer, def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
     The $(a,b)$ entry of $\mathcal T_R$ is
     $\frac{25}{32}\tr(A^a)\,\tr(A^b)$, and
     $\sum_a\tr(A^a)^2=2\cdot\left(\frac45\right)^2=\frac{32}{25}$,
@@ -830,8 +795,7 @@
         blockTensor_R_not_isHorizontalCF}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_not_isSimple}
     \leanok
-    \uses{def:mpdo_simple_tensor, def:horizontal_cf_mpdo,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:mpdo_simple_tensor, def:horizontal_cf_mpdo, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     Let $R$ be the dimer tensor of
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}. For
     every integer $L\geq0$, the transfer map of its $L$-site blocking satisfies
@@ -852,11 +816,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent,
-        thm:mpdo_blocking_doubled_index, thm:cpsv_physical_reindexing,
-        thm:transfer_map_block_tensor_quasi_idempotent,
-        thm:mpdo_horizontal_cf_quasi_idempotent_scalar,
-        lem:mpdo_simple_tensor_horizontal_cf}
+    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent, thm:mpdo_blocking_doubled_index, thm:cpsv_physical_reindexing, thm:transfer_map_block_tensor_quasi_idempotent, thm:mpdo_horizontal_cf_quasi_idempotent_scalar, lem:mpdo_simple_tensor_horizontal_cf}
     By
     Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
     the one-site transfer map satisfies
@@ -993,8 +953,7 @@
     \label{thm:mpdo_bnt_label_rescaling_stable_cf}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
     \leanok
-    \uses{def:cpsv_canonical_form, def:nt_cpsv,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:cpsv_canonical_form, def:nt_cpsv, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The doubled-index tensor $A=R^{\bullet\bullet}$ (bond dimension $4$,
     $16$ letters $R^{pq}$, $p,q\in\{0,\ldots,3\}$) is in the canonical form
     of Definition~\ref{def:cpsv_canonical_form}
@@ -1031,10 +990,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
     \leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer,
-        def:mpdo_source_simple_tensor,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_cf}
+    \uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_source_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
     Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single retained normal
     block in the displayed canonical form, where
     $\mu=\sqrt{337/512}$. Then
@@ -1073,9 +1029,7 @@
     claim about other presentations or blockings.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_cf}
+    \uses{def:mpdo_doubled_phys_trace_transfer, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
     A nilpotent idempotent is zero, but the $(0,0)$ entry of
     $\mathcal T_R$ is
     \begin{align}
@@ -1100,8 +1054,7 @@
         toMPSTensor_blockTensor_R_one}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple}
     \leanok
-    \uses{def:mpdo_source_simple_tensor,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:mpdo_source_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is source-simple. The positive blocking length is
     $L=1$. After the canonical relabeling of the doubled physical alphabet,
     the active basis of normal tensors has one member, namely the retained
@@ -1109,10 +1062,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_representative_sector_decomposition,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo,
-        thm:mpdo_bnt_label_rescaling_stable_cf,
-        thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
+    \uses{thm:cpsv_active_representative_sector_decomposition, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
     condition. Choose the one-site blocking. Its doubled-index tensor is the
     canonical physical relabeling of $R^{\bullet\bullet}$. Refine the canonical
@@ -1127,14 +1077,12 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         R_isNonvanishingSourceSimple}
     \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:mpdo_nonvanishing_source_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is nonvanishing source-simple.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple, thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     Source simplicity follows from the preceding theorem. For every positive
     length $N$, evaluating the entry identity of
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} at the all-zero
@@ -1156,16 +1104,13 @@
         MPOTensor.RescalingStableLengthDependentRFP.%
         R_not_isSimple}
     \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor,
-        def:mpdo_simple_tensor,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:mpdo_nonvanishing_source_simple_tensor, def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The dimer tensor $R$ is nonvanishing source-simple, and hence source-simple,
     but it does not satisfy normalized fixed-representative simplicity.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple,
-        thm:mpdo_bnt_label_rescaling_stable_not_simple}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple, thm:mpdo_bnt_label_rescaling_stable_not_simple}
     Combine
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple}
     with Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_not_simple}.
@@ -1176,8 +1121,7 @@
     \label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}
     \leanok
-    \uses{def:is_rfp_via_ts,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The tensor $R$ of
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is a
     renormalization fixed point in the sense of
@@ -1243,8 +1187,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         R_oneLabelBNTAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The tensor $R$ has a one-label vertical BNT presentation. Its component
     has $16$ physical letters, bond dimension $4$, and
     \begin{align}
@@ -1280,10 +1223,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:is_normal_tensor_of_is_normal_left_canonical,
-        lem:mpo_doubled,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
+    \uses{thm:is_normal_tensor_of_is_normal_left_canonical, lem:mpo_doubled, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
     Each letter of $M_0$ is a nonzero multiple of a matrix unit, so the letters
     span $M_4(\C)$. The tensor $A$ is left-canonical; hence $M_0$ is
     left-canonical and algebraically normal, and therefore is a normal tensor.
@@ -1326,8 +1266,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         hadamard2_mul_diagonal_oneLabelChi_mul_hadamard2}
     \leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     For every positive chain length $N$, the closed operator of $R$
     factors literally as
     \begin{align}
@@ -1373,10 +1312,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         oneLabelCoeffs_coeff_eq_wMat_pow_trace}
     \leanok
-    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form,
-        lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
+    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
     The hand-defined family $c^{(L)}_{0,0,0}$ is a positive BNT-label
     $\chi$ trace-power model
     (Definition~\ref{def:mpdo_positive_bnt_label_chi_trace_power_form}) with
@@ -1430,9 +1366,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         coeff_eq_of_linearIndependentAt}
     \leanok
-    \uses{def:mpdo_bnt_label_linear_independent,
-        def:mpdo_bnt_label_same_length_product_form,
-        def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_linear_independent, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_coefficient_family}
     Two coefficient systems satisfying the same-length product law for the
     same operator family agree at every positive length at which the
     operators are linearly independent.
@@ -1492,9 +1426,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         hasSameLengthProductForm_verticalTransport}
     \leanok
-    \uses{def:mpdo_vertical_bnt_explicit_transport,
-        def:mpdo_vertical_bnt_transported_coefficients,
-        def:mpdo_bnt_label_same_length_product_form}
+    \uses{def:mpdo_vertical_bnt_explicit_transport, def:mpdo_vertical_bnt_transported_coefficients, def:mpdo_bnt_label_same_length_product_form}
     An explicit vertical transport carries a same-length product law to the
     transported coefficient family.
 \end{theorem}
@@ -1530,9 +1462,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         coeff_eq_verticalTransport_of_linearIndependentAt}
     \leanok
-    \uses{def:mpdo_bnt_label_linear_independent,
-        thm:mpdo_bnt_label_coeff_unique,
-        thm:mpdo_vertical_bnt_product_transport}
+    \uses{def:mpdo_bnt_label_linear_independent, thm:mpdo_bnt_label_coeff_unique, thm:mpdo_vertical_bnt_product_transport}
     Suppose that source and target operator families satisfy same-length
     product laws and are related by an explicit vertical transport.  At a
     positive length where the target operators are linearly independent,
@@ -1558,10 +1488,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_vertical_bnt_explicit_transport,
-        def:mpdo_bnt_label_linear_independent,
-        thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
+    \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_vertical_bnt_explicit_transport, def:mpdo_bnt_label_linear_independent, thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
     Suppose that two tensor-attached vertical BNT presentations are related
     by an explicit vertical transport.  At every positive length $L$ at
     which the target operators are linearly independent, their structure
@@ -1617,8 +1544,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport_of_scale_mul_eq}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause,
-        thm:mpdo_vertical_bnt_coefficient_transport_exact_abstract}
+    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_vertical_bnt_coefficient_transport_exact_abstract}
     Under the hypotheses of the preceding theorem, if
     $s_\alpha s_\beta=s_\gamma$, then
     \begin{align}
@@ -1690,8 +1616,7 @@
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
         sameMPV₂Pos_and_no_relabelled_coefficient_equality}
     \leanok
-    \uses{def:mpdo, def:gauge_equiv, def:same_mpv2_pos,
-        def:mpdo_vertical_coefficient_presentation_counterexample}
+    \uses{def:mpdo, def:gauge_equiv, def:same_mpv2_pos, def:mpdo_vertical_coefficient_presentation_counterexample}
     The tensors $M_P$ and $M_Q$ are related by the nonunitary gauge $X$.
     For every positive length $N$, their unnormalized periodic operators are
     equal:
@@ -1753,8 +1678,7 @@
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
         sameMPV₂Pos_and_lengthIndependent_mismatch}
     \leanok
-    \uses{def:same_mpv2_pos, def:mpdo_bnt_label_length_independent,
-        def:mpdo_vertical_coefficient_presentation_counterexample}
+    \uses{def:same_mpv2_pos, def:mpdo_bnt_label_length_independent, def:mpdo_vertical_coefficient_presentation_counterexample}
     The coefficients in the $P$ presentation are length independent, whereas
     those in the $Q$ presentation are not.  More precisely,
     \begin{align}
@@ -1775,8 +1699,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         coeff_assoc_of_linearIndependentAt}
     \leanok
-    \uses{def:mpdo_bnt_label_linear_independent,
-        def:mpdo_bnt_label_same_length_product_form}
+    \uses{def:mpdo_bnt_label_linear_independent, def:mpdo_bnt_label_same_length_product_form}
     At every positive length $L$ at which the operators are linearly
     independent, the structure coefficients of the same-length product law
     satisfy
@@ -1824,9 +1747,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         tracePowerCoeff_assoc_of_linearIndependentAt}
     \leanok
-    \uses{thm:mpdo_bnt_label_coeff_associativity,
-        def:mpdo_bnt_label_same_length_product_form,
-        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{thm:mpdo_bnt_label_coeff_associativity, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     For a coefficient system satisfying the same-length product law for a
     BNT-label operator family and in trace-power form, at every positive
     length $L$ at which the labelled operators are linearly independent, the
@@ -1856,11 +1777,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R}
     \leanok
-    \uses{def:cpsv_canonical_form,
-        def:mpdo,
-        def:is_rfp_via_ts,
-        def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_label_length_independent}
+    \uses{def:cpsv_canonical_form, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_label_length_independent}
     There is an MPDO $M$ in literal CPSV canonical form that is a
     renormalization fixed point and has a tensor-attached BNT presentation
     whose structure coefficients depend on the positive chain length.  One
@@ -1879,11 +1796,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_cf,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo,
-        thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
-        thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     The preceding results show that $R$ is an MPDO in literal CPSV canonical
     form, construct its fixed-point maps and its tensor-attached one-label
     BNT clause, and identify the clause's coefficients with the displayed

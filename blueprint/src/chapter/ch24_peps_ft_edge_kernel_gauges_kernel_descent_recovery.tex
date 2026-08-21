@@ -43,8 +43,7 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.EdgeMiddleBoundaryLabel,
         TNLean.PEPS.EdgeMiddleKernelDescentData}
     \leanok
-    \uses{def:peps_edgeMiddleTensorFamily,
-        def:peps_finiteRegionKernelDescent}
+    \uses{def:peps_edgeMiddleTensorFamily, def:peps_finiteRegionKernelDescent}
     Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. An edge-middle kernel descent
     datum is indexed by boundary labels $\rho$ consisting of the two residual
     endpoint configurations. It assigns to every finitely supported coefficient
@@ -65,9 +64,7 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective,
         TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
     \leanok
-    \uses{def:peps_edgeMiddleKernelDescentData,
-        lem:peps_finiteRegionKernelDescent,
-        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    \uses{def:peps_edgeMiddleKernelDescentData, lem:peps_finiteRegionKernelDescent, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. If an edge-middle kernel descent
     datum is given, then $T_{A,M_e}$ is injective. Consequently, if $A$ is
     vertex-injective, the edge-blocked three-site chain at $e$ is injective.
@@ -89,10 +86,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeMiddleTensorInjective_of_kernelDescent,
-        lem:peps_localCoeff_eq_zero_of_contract_zero,
-        lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeMiddleTensorInjective_of_kernelDescent, lem:peps_localCoeff_eq_zero_of_contract_zero, lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
     For a tensor map or blocked tensor family $T$, write
     $\inj(T)$ for the assertion that $T$ is injective. If $A$
     is vertex-injective and every bond dimension is positive, then for every
@@ -111,8 +105,7 @@ produces the global gauge family that relates the two tensors.
     this obstruction.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent,
-        lem:peps_localCoeff_eq_zero_of_contract_zero}
+    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent, lem:peps_localCoeff_eq_zero_of_contract_zero}
     Fix $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. From vertex injectivity,
     construct the edge-middle descent datum required by
     Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}: for each
@@ -154,8 +147,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_virtualInsertionPhysicalRealization}
     \lean{TNLean.PEPS.edgeVirtualInsertionPhysicalRealization}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_localIncidentMatrixOp,
-        thm:peps_localIncidentMatrixOp_physicalRealization}
+    \uses{def:IsVertexInjective, def:peps_localIncidentMatrixOp, thm:peps_localIncidentMatrixOp_physicalRealization}
     Let $A$ be vertex-injective and let $e=(u,v)$ be an edge. For every
     matrix $M$ on the bond space of $e$, the one-leg virtual action induced
     by $M$ on the local tensor at $u$, and likewise at $v$, is realized by
@@ -205,8 +197,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \leanok
-    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
-        def:peps_localIncidentMatrixOp}
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq, def:peps_localIncidentMatrixOp}
     Let $e=(u,v)$. A physical operator at the left endpoint pulls back to
     the one-edge virtual action of $M^{\mathsf T}$ if and only if its
     compressed physical action is the canonical realization of that
@@ -222,8 +213,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \leanok
-    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
-        def:peps_localIncidentMatrixOp}
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq, def:peps_localIncidentMatrixOp}
     Let $e=(u,v)$. A physical operator at the right endpoint pulls back to
     the one-edge virtual action of $M$ if and only if its compressed physical
     action is the canonical realization of that one-edge virtual action.
@@ -237,8 +227,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \lean{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \leanok
-    \uses{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
-        thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \uses{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq, thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     Let $e=(u,v)$. If
     $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
     $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$, then
@@ -267,8 +256,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgePhysicalToVirtualInsertion_of_projected_realization_eq}
     \lean{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
     \leanok
-    \uses{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq,
-        thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    \uses{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq, thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
     Let $e=(u,v)$. Suppose that
     $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
     $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$. Suppose also that
@@ -294,9 +282,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
     \leanok
-    \uses{def:peps_edgeInsertedCoeff,
-        def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig,
-        thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig, thm:peps_localTensorMap_localIncidentMatrixOp_single}
     Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
     operator on $v$ realizes the one-edge virtual matrix action on the
     distinguished incident edge, then the inserted-edge coefficient at
@@ -314,9 +300,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization}
     \leanok
-    \uses{def:peps_edgeInsertedCoeff,
-        def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig,
-        thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig, thm:peps_localTensorMap_localIncidentMatrixOp_single}
     Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
     operator on $u$ realizes the one-edge virtual action of $M^{\mathsf T}$ on
     the distinguished incident edge, then the inserted-edge coefficient for
@@ -335,9 +319,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_endpointPhysicalRealization}
     \leanok
-    \uses{thm:peps_localIncidentMatrixOp_physicalRealization,
-        thm:peps_edgeInsertedCoeff_leftPhysicalRealization,
-        thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
+    \uses{thm:peps_localIncidentMatrixOp_physicalRealization, thm:peps_edgeInsertedCoeff_leftPhysicalRealization, thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     If the PEPS tensor is vertex-injective, then for every physical
     configuration $\sigma$, each inserted edge matrix is realized by physical
     operators at the endpoint tensors: the left endpoint realizes
@@ -354,10 +336,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_physical_to_virtual_insertion}
     \lean{TNLean.PEPS.physical_to_virtual_insertion}
     \leanok
-    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeBoundaryConfig,
-        def:peps_edgeLeftLocalConfig, def:peps_edgeRightLocalConfig,
-        def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap,
-        def:peps_localIncidentMatrixOp}
+    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeBoundaryConfig, def:peps_edgeLeftLocalConfig, def:peps_edgeRightLocalConfig, def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap, def:peps_localIncidentMatrixOp}
     Let $e=(u,v)$. Assume that the edge-blocked three-site chain at $e$ is
     injective and that every virtual bond has positive dimension. Let $O_1,O_2$
     be physical operators at the endpoint tensors, and
@@ -438,10 +417,7 @@ produces the global gauge family that relates the two tensors.
     \label{thm:peps_edgeInsertedCoeff_injective}
     \lean{TNLean.PEPS.edgeInsertedCoeff_injective}
     \leanok
-    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeInsertedCoeff,
-        thm:peps_edgeInsertedCoeff_leftPhysicalRealization,
-        thm:peps_edgeInsertedCoeff_rightPhysicalRealization,
-        thm:peps_physical_to_virtual_insertion}
+    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeInsertedCoeff, thm:peps_edgeInsertedCoeff_leftPhysicalRealization, thm:peps_edgeInsertedCoeff_rightPhysicalRealization, thm:peps_physical_to_virtual_insertion}
     Let the edge-blocked three-site chain of $B$ at $e$ be injective, and
     assume every virtual bond of $B$ has positive dimension. If two matrices
     $M,M'\in\MN{D_B(e)}$ give the same inserted coefficient at every physical

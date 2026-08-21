@@ -64,7 +64,6 @@ family $\{A^i\}$ under the trace.
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_nondeg}
     If $\Phi_A(M) = 0$, then (\ref{eq:single_trace_pairing}) gives
     $\tr(M A^i) = 0$ for every~$i$. The $\{A^i\}$ span $\MN{D}$, so
     $\tr(M N) = 0$ for all~$N$, and $M = 0$ by
@@ -249,8 +248,7 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
 
 \begin{proof}
     \leanok
-    \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
-        lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
+    \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity, lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
     Theorem~\ref{thm:linear_ext} gives the unique linear~$T$ with
     $T(A^i) = B^i$, and Theorem~\ref{thm:linear_ext_mul} makes it
     multiplicative. It is nonzero: otherwise $B^i = 0$ for all~$i$, against

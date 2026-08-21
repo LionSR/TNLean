@@ -124,8 +124,7 @@ on decay rates.
     \label{thm:connected_correlator_traceless_reduction}
     \lean{MPSTensor.connectedCorrelator_eq_trace_transfer_tracelessPart}
     \leanok
-    \uses{def:connected_correlator, def:correlator_traceless_part,
-        def:transfer_map}
+    \uses{def:connected_correlator, def:correlator_traceless_part, def:transfer_map}
     Suppose that $\rho$ is a right fixed point of the transfer map,
     $\E_A(\rho)=\rho$.  Then, for every $n\geq0$,
     \begin{align}
@@ -232,8 +231,7 @@ on decay rates.
 
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
-    \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
-        thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
+    \uses{thm:correlator_exponential_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
     The condition $|\lambda_2|<1$ turns the bound in
     Theorem~\ref{thm:correlator_exponential_bound} into exponential decay. It
     is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
@@ -297,8 +295,7 @@ single-tensor transfer map $\E_A$.
     \label{thm:exponential_convergence_primitive}
     \lean{MPSTensor.exponential_convergence_of_primitive}
     \leanok
-    \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
-        thm:primitive_overlap}
+    \uses{thm:primitive_overlap}
     Fix an injective, trace-preserving MPS tensor $A$ with positive
     definite fixed point $\rho$.
     Let
@@ -336,8 +333,7 @@ single-tensor transfer map $\E_A$.
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
     \lean{MPSTensor.correlation_length_bound}
     \leanok
-    \uses{def:correlation_length, thm:exponential_convergence_primitive,
-        def:injective}
+    \uses{def:correlation_length, thm:exponential_convergence_primitive, def:injective}
     For an injective trace-preserving MPS tensor, there exist
     $C>0$ and $\xi>0$ such that, for all $n\ge 0$ and all
     traceless $X\in\MN{D}$, i.e.\ $\tr(X)=0$,
@@ -387,8 +383,7 @@ single-tensor transfer map $\E_A$.
 \section{Relation to parent Hamiltonians}
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
-    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates,
-        def:correlation_length, thm:correlator_exponential_bound}
+    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates, def:correlation_length, thm:correlator_exponential_bound}
     Suppose that the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
     (Definition~\ref{def:parent_hamiltonian}) whose ground state is the matrix
     product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and that

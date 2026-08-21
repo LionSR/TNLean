@@ -142,7 +142,7 @@ orthogonal projector is the canonical representative used here.
     \label{def:ground_space_map_es}
     \lean{MPSTensor.groundSpaceMapES}
     \leanok
-    \uses{def:ground_space_map, def:frobenius_vectorization}
+    \uses{def:ground_space_map}
     Let $U\colon\MN{D}\to\ell^2(\Fin{D}\times\Fin{D})$ be Frobenius
     vectorization in column--row coordinates.  The Hilbert-space boundary map
     is
@@ -160,7 +160,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:ground_space_map_es_frobenius}
     \lean{MPSTensor.groundSpaceMapES_frobeniusEquivEuclidean_apply}
     \leanok
-    \uses{def:ground_space_map_es, def:frobenius_vectorization}
+    \uses{def:ground_space_map_es}
     Let $U\colon\MN{D}\to\ell^2(\Fin{D}\times\Fin{D})$ be Frobenius
     vectorization, with the target indexed in column--row order, and let
     $\iota_L$ be the computational-basis identification on the physical
@@ -180,7 +180,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:ground_space_map_es_single}
     \lean{MPSTensor.groundSpaceMapES_single}
     \leanok
-    \uses{def:ground_space_map_es, def:frobenius_vectorization}
+    \uses{def:ground_space_map_es}
     Let $e_{(b,a)}$ denote the Frobenius coordinate vector representing the
     virtual matrix unit $E_{ab}$.  Then
     $\Gamma_L^{\mathrm{ES}}(e_{(b,a)})=\iota_L(\Gamma_L(E_{ab}))$.
@@ -223,8 +223,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_map_es_frobenius,
-        thm:ground_space_map_injective_blk}
+    \uses{thm:ground_space_map_es_frobenius, thm:ground_space_map_injective_blk}
     Write each virtual vector uniquely as $U(X)$ by Frobenius vectorization.
     The transport identity reduces equality of their images under
     $\Gamma_L^{\mathrm{ES}}$ to equality of the images of the corresponding
@@ -243,8 +242,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_map_es_injective_block,
-        thm:wordspan_blk_inj_succ}
+    \uses{thm:ground_space_map_es_injective_block, thm:wordspan_blk_inj_succ}
     Positive-length propagation makes $A$ block injective at length $L$.
     The preceding theorem then gives injectivity of
     $\Gamma_L^{\mathrm{ES}}$.
@@ -453,9 +451,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{def:gram_reshuffle,
-        thm:euclidean_operator_norm_sq_le_frobenius,
-        thm:gram_reshuffle_matrix_norm_sq}
+    \uses{def:gram_reshuffle, thm:euclidean_operator_norm_sq_le_frobenius, thm:gram_reshuffle_matrix_norm_sq}
     Apply Theorem~\ref{thm:euclidean_operator_norm_sq_le_frobenius} to
     $R(\mathcal L)$, then use
     Theorem~\ref{thm:gram_reshuffle_matrix_norm_sq} to rewrite its entrywise
@@ -483,10 +479,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{def:rectangular_choi,
-        thm:gram_reshuffle_norm_sq_le_rectangular_choi,
-        thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq,
-        thm:l2_operator_norm_matrix_unit}
+    \uses{def:rectangular_choi, thm:gram_reshuffle_norm_sq_le_rectangular_choi, thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq, thm:l2_operator_norm_matrix_unit}
     Use Theorem~\ref{thm:gram_reshuffle_norm_sq_le_rectangular_choi} and expand
     the Choi matrix in matrix units.  For each of the $|I|^2$ input matrix
     units, Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
@@ -598,8 +591,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_gram_choi_reshuffling,
-        thm:gram_reshuffle_single}
+    \uses{thm:ground_space_gram_choi_reshuffling, thm:gram_reshuffle_single}
     The two operators have equal matrix coefficients on every pair of standard
     basis vectors.  Hence they are equal.
 \end{proof}
@@ -608,8 +600,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:ground_space_gram_geometric_fixed_point}
     \lean{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     \leanok
-    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map,
-        def:fixed_point_proj, def:trace_preserving}
+    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map}
     Let $A$ be an MPS tensor of bond dimension $D$, let $\rho\in\MN{D}$ satisfy
     $\tr(\rho)\neq0$, and let $P_\rho$ be the fixed-point projection
     \begin{align}
@@ -632,9 +623,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:pow_decomp,
-        thm:ground_space_gram_eq_gram_reshuffle, thm:gram_reshuffle_sub,
-        thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
+    \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:ground_space_gram_eq_gram_reshuffle, thm:gram_reshuffle_sub, thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
     Write $N=\mathcal E_A-P_\rho$.  The power decomposition gives
     $\mathcal E_A^n=P_\rho+N^n$ for $n\geq1$, while
     Theorem~\ref{thm:geometric_bound_of_spectral_radius_lt_one} gives
@@ -672,8 +661,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:ground_space_gram_tendsto_fixed_point}
     \lean{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
     \leanok
-    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map,
-        def:fixed_point_proj, def:trace_preserving}
+    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map}
     Let $A$ be an MPS tensor of bond dimension $D$, let $\rho\in\MN{D}$ satisfy
     $\tr(\rho)\neq0$, and let $P_\rho$ be the corresponding fixed-point
     projection.  If $\mathcal E_A$ is trace-preserving,
@@ -729,7 +717,7 @@ windows.
     \lean{Matrix.gramReshuffleMatrix_fixedPointProj}
     \lean{Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}
     \leanok
-    \uses{def:fixed_point_proj, def:gram_reshuffle, def:frobenius_vectorization}
+    \uses{def:gram_reshuffle}
     Let $\rho\in\MN{D}$ have nonzero trace and define
     $P_\rho(X):=(\tr X/\tr\rho)\rho$.  Then
     \begin{align}
@@ -744,7 +732,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{def:fixed_point_proj, def:gram_reshuffle, def:frobenius_vectorization}
+    \uses{def:gram_reshuffle}
     For matrix units $E_{ca}$, direct evaluation gives
     \begin{align}
       R(P_\rho)_{(b,a),(e,c)}
@@ -762,7 +750,7 @@ windows.
     \lean{Matrix.gramReshuffle_fixedPointProj_isUnit}
     \lean{Matrix.gramReshuffle_fixedPointProj_injective}
     \leanok
-    \uses{def:fixed_point_proj, def:gram_reshuffle}
+    \uses{def:gram_reshuffle}
     If $D>0$ and $\rho\in\MN{D}$ is positive definite, then
     $R(P_\rho)$ is positive definite and $\mathscr R(P_\rho)$ is invertible,
     hence injective.
@@ -954,10 +942,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_geometric_fixed_point,
-        thm:fixed_point_gram_metric_is_unit,
-        thm:arbitrary_base_neumann_inverse_bound,
-        thm:arbitrary_base_neumann_inverse_displacement}
+    \uses{thm:primitive_ground_space_gram_geometric_fixed_point, thm:fixed_point_gram_metric_is_unit, thm:arbitrary_base_neumann_inverse_bound, thm:arbitrary_base_neumann_inverse_displacement}
     Start from the squared estimate
     $\lVert\mathcal K_n-\mathcal K_\infty\rVert^2
       \leq D^3(Cr^n)^2$.
@@ -975,9 +960,7 @@ windows.
     \label{thm:primitive_ground_space_map_geometric_inverse_gram_bounds}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
     \leanok
-    \uses{def:ground_space_map_es, def:inverse_gram,
-        thm:primitive_ground_space_gram_geometric_inverse_bounds,
-        thm:inverse_gram_identities}
+    \uses{def:ground_space_map_es, def:inverse_gram, thm:primitive_ground_space_gram_geometric_inverse_bounds, thm:inverse_gram_identities}
     Under the hypotheses of
     Theorem~\ref{thm:primitive_ground_space_gram_geometric_inverse_bounds},
     there are constants $g,c,r>0$ with $r<1$ and
@@ -997,8 +980,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_geometric_inverse_bounds,
-        thm:inverse_gram_identities}
+    \uses{thm:primitive_ground_space_gram_geometric_inverse_bounds, thm:inverse_gram_identities}
     Invertibility of
     $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}=\mathcal K_n$
     implies injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram
@@ -1030,8 +1012,7 @@ windows.
     \label{thm:primitive_ground_space_gram_eventual_inverse_bound}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
     \leanok
-    \uses{def:primitive_mps,
-        thm:primitive_ground_space_gram_tendsto_fixed_point}
+    \uses{def:primitive_mps, thm:primitive_ground_space_gram_tendsto_fixed_point}
     Let $A$ be a primitive MPS tensor whose fixed-point witness $\rho$ is
     positive definite, and put
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  For every $0<a<1$, all
@@ -1048,10 +1029,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point,
-        thm:fixed_point_gram_metric_is_unit,
-        thm:arbitrary_base_neumann_inverse_bound,
-        thm:arbitrary_base_neumann_inverse_displacement}
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point, thm:fixed_point_gram_metric_is_unit, thm:arbitrary_base_neumann_inverse_bound, thm:arbitrary_base_neumann_inverse_displacement}
     The positive-definite fixed point makes
     $\mathcal K_\infty$ invertible.  Gram convergence implies that eventually
     \begin{align}
@@ -1067,8 +1045,7 @@ windows.
     \label{thm:primitive_ground_space_gram_inverse_tendsto}
     \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto}
     \leanok
-    \uses{def:primitive_mps,
-        thm:primitive_ground_space_gram_tendsto_fixed_point}
+    \uses{def:primitive_mps, thm:primitive_ground_space_gram_tendsto_fixed_point}
     Under the same primitive-MPS and positive-definite fixed-point hypotheses,
     \begin{align}
       \mathcal K_n^{-1}&\longrightarrow\mathcal K_\infty^{-1}
@@ -1079,9 +1056,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point,
-        thm:fixed_point_gram_metric_is_unit,
-        thm:inverse_tendsto_at_unit}
+    \uses{thm:primitive_ground_space_gram_tendsto_fixed_point, thm:fixed_point_gram_metric_is_unit, thm:inverse_tendsto_at_unit}
     Inversion is continuous at the invertible operator
     $\mathcal K_\infty$, so the claim follows from
     $\mathcal K_n\to\mathcal K_\infty$.
@@ -1091,9 +1066,7 @@ windows.
     \label{thm:primitive_ground_space_map_eventual_inverse_gram_bound}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
     \leanok
-    \uses{def:ground_space_map_es, def:inverse_gram,
-        thm:primitive_ground_space_gram_eventual_inverse_bound,
-        thm:inverse_gram_identities}
+    \uses{def:ground_space_map_es, def:inverse_gram, thm:primitive_ground_space_gram_eventual_inverse_bound, thm:inverse_gram_identities}
     Under the same hypotheses, for every $0<a<1$ and all sufficiently large
     $n$, the physical boundary map $\Gamma_n^{\mathrm{ES}}$ is injective and
     its inverse Gram operator is $\mathcal K_n^{-1}$.  Moreover,
@@ -1107,8 +1080,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_gram_eventual_inverse_bound,
-        thm:inverse_gram_identities}
+    \uses{thm:primitive_ground_space_gram_eventual_inverse_bound, thm:inverse_gram_identities}
     Eventual invertibility of
     $(\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}}$ implies eventual
     injectivity of $\Gamma_n^{\mathrm{ES}}$.  The inverse-Gram identities then
@@ -1155,9 +1127,7 @@ windows.
     \label{thm:ground_space_map_es_injective_range_projector}
     \lean{MPSTensor.injectiveRangeProjector_groundSpaceMapES_eq_starProjection}
     \leanok
-    \uses{def:ground_space_map_es, def:ground_space_es,
-        def:injective_range_projector,
-        thm:ground_space_map_es_injective_block}
+    \uses{def:ground_space_map_es, def:ground_space_es, def:injective_range_projector, thm:ground_space_map_es_injective_block}
     If $A$ is $L$-block injective, then the injective range projector of
     $\Gamma_L^{\mathrm{ES}}$ is the physical orthogonal projector onto the
     local ground space:
@@ -1171,8 +1141,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:injective_range_projector_inverse_gram,
-        thm:range_ground_space_map_es}
+    \uses{thm:injective_range_projector_inverse_gram, thm:range_ground_space_map_es}
     The general injective range-projector theorem identifies
     $Q_{\Gamma_L^{\mathrm{ES}}}$ with the orthogonal projector onto
     $\range(\Gamma_L^{\mathrm{ES}})$.  The exact-range theorem identifies
@@ -1183,8 +1152,7 @@ windows.
     \label{thm:ground_space_es_projection_inverse_gram}
     \lean{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
     \leanok
-    \uses{def:ground_space_es, def:ground_space_map_es, def:inverse_gram,
-        thm:ground_space_map_es_injective_block_of_le}
+    \uses{def:ground_space_es, def:ground_space_map_es, def:inverse_gram, thm:ground_space_map_es_injective_block_of_le}
     Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that
     $L\ge L_0$.  Then the physical orthogonal projector onto the local ground
     space is
@@ -1201,8 +1169,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_map_es_injective_range_projector,
-        thm:wordspan_blk_inj_succ}
+    \uses{thm:ground_space_map_es_injective_range_projector, thm:wordspan_blk_inj_succ}
     Positive-length propagation makes $A$ block injective at length $L$.
     Apply the physical range-projector identity at that length and unfold its
     inverse-Gram expression.
@@ -1254,8 +1221,7 @@ windows.
 
 \begin{proof}
     \leanok
-    \uses{thm:inverse_gram_identities,
-        thm:neumann_inverse_norm_bound}
+    \uses{thm:inverse_gram_identities, thm:neumann_inverse_norm_bound}
     If $E$ is trivial, then $S_T=0$ and the bound follows from $a<1$.
     Otherwise, identify $S_T$ with the ring inverse of $T^\dagger T$ and apply
     Theorem~\ref{thm:neumann_inverse_norm_bound} to
@@ -1425,9 +1391,7 @@ translated copies of the local interaction.
 \begin{lemma}[Translated local terms are idempotent]\label{lem:local_term_idempotent}
     \lean{MPSTensor.localTerm_idempotent}
     \leanok
-    \uses{def:local_term_parent, lem:parent_interaction_idempotent,
-        lem:local_term_apply_of_le, lem:extract_window_replace_window,
-        lem:replace_window_replace_window_same}
+    \uses{def:local_term_parent, lem:parent_interaction_idempotent, lem:local_term_apply_of_le, lem:extract_window_replace_window, lem:replace_window_replace_window_same}
     For every site $i$, one has $h_i(A,L)^2=h_i(A,L)$.
 \end{lemma}
 
@@ -1493,8 +1457,7 @@ translated copies of the local interaction.
 \begin{lemma}[Local term annihilates the periodic MPS vector]\label{lem:local_term_annihilates_mpv}
     \lean{MPSTensor.localTerm_annihilates_mpv}
     \leanok
-    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space,
-        lem:parent_interaction_apply_mem_ground_space}
+    \uses{def:local_term_parent, def:mpv, lem:mpv_window_mem_ground_space, lem:parent_interaction_apply_mem_ground_space}
     For each site $i$, one has $h_iV^{(N)}(A)=0$.
 \end{lemma}
 

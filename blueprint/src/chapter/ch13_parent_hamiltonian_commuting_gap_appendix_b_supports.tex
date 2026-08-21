@@ -315,8 +315,7 @@
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}
     \leanok
-    \uses{def:appendixB_two_site_bond_embedding,
-        def:appendixB_two_site_basic_space}
+    \uses{def:appendixB_two_site_bond_embedding, def:appendixB_two_site_basic_space}
     Opening the outer virtual bond in the two-site contraction of
     \cite[Equations~(3.17)--(3.18)]{Cirac2016MPDO_arXiv} gives the following
     local-support family. For every boundary matrix $Y$,
@@ -348,8 +347,7 @@
     \label{thm:appendixB_two_site_basic_support_projector}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_spec}
     \leanok
-    \uses{def:appendixB_two_site_basic_support_projector,
-        def:appendixB_two_site_bond_embedding, def:parent_interaction}
+    \uses{def:appendixB_two_site_basic_support_projector, def:appendixB_two_site_bond_embedding, def:parent_interaction}
     The projector $P_2$ satisfies
     \begin{align}
         P_2^2
@@ -409,9 +407,7 @@
     \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondEmbedding}
     \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondSupportProjection}
     \leanok
-    \uses{def:is_residual_isometry_family,
-        def:appendixB_two_site_bond_embedding,
-        def:appendixB_two_site_basic_support_projector}
+    \uses{def:is_residual_isometry_family, def:appendixB_two_site_bond_embedding, def:appendixB_two_site_basic_support_projector}
     Let
     $\mathcal V=\bigsqcup_j\{j\}\times[D_j]\times[D_j]$
     be the disjoint union of the within-sector virtual pairs, and let
@@ -443,10 +439,7 @@
     \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondSupportProjection_eq_complement}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_residualFamilyAppendixBData}
     \leanok
-    \uses{thm:residual_isometry_family_one_gram,
-        def:residual_family_two_site_support,
-        thm:appendixB_two_site_basic_embedding_range,
-        def:parent_interaction}
+    \uses{thm:residual_isometry_family_one_gram, def:residual_family_two_site_support, thm:appendixB_two_site_basic_embedding_range, def:parent_interaction}
     The common physical map is an isometry, $V^*V=1$. Moreover, the
     equal-sector bond embedding and the physical support projector satisfy
     \begin{align}

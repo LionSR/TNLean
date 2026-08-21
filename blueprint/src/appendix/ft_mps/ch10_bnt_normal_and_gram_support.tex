@@ -55,7 +55,6 @@ arguments.
     \label{lem:perron_gauge_primitive_iff}
     \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
     \leanok
-    \uses{def:primitive_channel}
     Let $\sigma$ be positive definite. The transfer map of the Perron gauge
     determined by $\sigma$ is primitive if and only if the original transfer
     map is primitive.
@@ -90,8 +89,7 @@ arguments.
     \lean{MPSTensor.NonzeroProportionalMPV₂.%
         exists_unit_phase_power_of_isNormalTensor}
     \leanok
-    \uses{def:nt_cpsv, def:mpv_state,
-        def:nonzero_proportional_mpv}
+    \uses{def:nt_cpsv, def:mpv_state, def:nonzero_proportional_mpv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for every positive $N$, their matrix product
     vectors are proportional by a nonzero scalar. Then there is $a\in\C$,
@@ -102,8 +100,7 @@ arguments.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{lem:nonzero_proportional_mpv_basic,
-        thm:normal_proportional_mpv_geometric_phase}
+    \uses{lem:nonzero_proportional_mpv_basic, thm:normal_proportional_mpv_geometric_phase}
     Positive-length nonzero proportionality implies eventual nonzero
     proportionality. Apply
     Theorem~\ref{thm:normal_proportional_mpv_geometric_phase}.

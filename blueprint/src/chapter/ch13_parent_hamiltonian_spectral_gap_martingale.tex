@@ -337,8 +337,7 @@ norm estimate is derived here.
     \label{def:spectator_boundary_maps_es}
     \lean{MPSTensor.tailBoundaryMapES, MPSTensor.leftBoundaryMapES}
     \leanok
-    \uses{def:tail_boundary_map, def:left_boundary_map,
-        def:frobenius_vectorization}
+    \uses{def:tail_boundary_map, def:left_boundary_map}
     Transport the tail and left boundary maps through the canonical Euclidean
     identifications on their virtual matrix families and physical coefficient
     spaces.  Denote the resulting continuous maps by
@@ -353,9 +352,7 @@ norm estimate is derived here.
     \lean{MPSTensor.tailBoundaryMapES_comp_tailVirtualMapES}
     \lean{MPSTensor.leftBoundaryMapES_comp_leftVirtualMapES}
     \leanok
-    \uses{def:spectator_boundary_maps_es,
-      thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
-      thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
+    \uses{def:spectator_boundary_maps_es, thm:tail_boundary_map_range_es_transport, thm:left_boundary_map_range_es_transport, thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization}
     Equip each virtual matrix fiber with the unweighted Hilbert--Schmidt inner
     product and flatten the finite family of fibers into a Euclidean space.
     The resulting continuous tail and left boundary maps have ranges
@@ -369,9 +366,7 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:spectator_boundary_maps_es,
-      thm:tail_boundary_map_range_es_transport,thm:left_boundary_map_range_es_transport,
-      thm:tail_boundary_map_factorization,thm:left_boundary_map_factorization}
+    \uses{def:spectator_boundary_maps_es, thm:tail_boundary_map_range_es_transport, thm:left_boundary_map_range_es_transport, thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization}
     Transport the algebraic range descriptions through the Euclidean
     identification.  The two factorization identities follow by evaluating a
     virtual matrix \(X\) fiberwise and applying the corresponding algebraic
@@ -389,8 +384,7 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_map_es, def:spectator_boundary_maps_es,
-        thm:ground_space_map_es_frobenius, def:prefix_restrict}
+    \uses{def:ground_space_map_es, def:spectator_boundary_maps_es, thm:ground_space_map_es_frobenius, def:prefix_restrict}
     Recover every spectator fiber by restricting to its fixed suffix and use
     injectivity of the length-$K$ ground-space map.
 \end{proof}
@@ -465,7 +459,7 @@ norm estimate is derived here.
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q}
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}
     \leanok
-    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram}
+    \uses{def:tail_boundary_map, def:left_boundary_map, def:ground_space_gram}
     Let $q\in\mathbb N$, let $X=(X_u)_{u\in\Fin d^K}$, and let
     $Z=(Z_j)_{j\in\Fin d^q}$ be virtual boundary-matrix families.  After the
     canonical identification of $K+(l+q)$ with $(K+l)+q$, the mixed Gram for
@@ -494,8 +488,7 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:tail_boundary_map,def:left_boundary_map,def:ground_space_gram,
-        lem:eval_word_append,thm:ground_space_map_es_frobenius}
+    \uses{def:tail_boundary_map, def:left_boundary_map, def:ground_space_gram, lem:eval_word_append, thm:ground_space_map_es_frobenius}
     Split a physical configuration into a prefix $u$, an overlap word $\tau$
     of length $l$, and an increment configuration $j$ of length $q$.  The
     adjoint relation turns the mixed Gram into the physical inner product of
@@ -516,7 +509,7 @@ norm estimate is derived here.
     \label{thm:spectator_boundary_mixed_gram_centered}
     \lean{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
     \leanok
-    \uses{thm:spectator_boundary_mixed_gram,thm:fixed_point_gram_metric_exact}
+    \uses{thm:spectator_boundary_mixed_gram, thm:fixed_point_gram_metric_exact}
     Specialize the preceding theorem to $q=1$.  Let
     $X=(X_u)_{u\in\Fin d^K}$ and
     $Z=(Z_j)_{j\in\Fin d^1}$ be the resulting boundary families.  If
@@ -540,7 +533,7 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:spectator_boundary_mixed_gram,thm:fixed_point_gram_metric_exact}
+    \uses{thm:spectator_boundary_mixed_gram, thm:fixed_point_gram_metric_exact}
     Substitute the exact mixed-Gram formula and the right-multiplication action
     of $\mathcal K_\infty$, then distribute subtraction through the two finite
     sums and the second argument of the inner product.
@@ -552,10 +545,7 @@ norm estimate is derived here.
     \lean{MPSTensor.tailVirtualMapES_adjoint_apply}
     \lean{MPSTensor.leftVirtualMapES_adjoint_apply}
     \leanok
-    \uses{def:fixed_point_proj,
-        def:gram_reshuffle,
-        def:frobenius_vectorization,
-        thm:spectator_boundary_hilbert_factorization}
+    \uses{def:gram_reshuffle, thm:spectator_boundary_hilbert_factorization}
     For arbitrary virtual dimension, the adjoints of the tail and left virtual
     maps are
     \begin{align}
@@ -576,8 +566,7 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:fixed_point_gram_metric_exact,
-        thm:fixed_point_gram_metric_is_unit}
+    \uses{thm:fixed_point_gram_metric_exact, thm:fixed_point_gram_metric_is_unit}
     For the tail adjoint, test against an arbitrary matrix $Y$ and use the
     Hilbert--Schmidt trace pairing fiberwise:
     \begin{align}
@@ -603,10 +592,7 @@ norm estimate is derived here.
     \lean{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}
     \lean{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors}
     \leanok
-    \uses{thm:c3_spectator_projector_residual,
-        def:ground_space_gram,
-        def:fixed_point_proj,
-        def:gram_reshuffle}
+    \uses{thm:c3_spectator_projector_residual, def:ground_space_gram, def:gram_reshuffle}
     Let $\rho\in\MN{D}$ be positive definite and set
     $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $S_\infty=\mathcal K_\infty^{-1}$.  Write $J_{\rm t}$ and $J_{\rm l}$
@@ -657,11 +643,7 @@ norm estimate is derived here.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:c3_spectator_projector_residual,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:spectator_boundary_mixed_gram_centered,
-        thm:fixed_point_gram_metric_exact,
-        thm:limiting_metric_inverse_virtual_adjoints}
+    \uses{thm:c3_spectator_projector_residual, thm:spectator_boundary_direct_sum_gram, thm:spectator_boundary_mixed_gram_centered, thm:fixed_point_gram_metric_exact, thm:limiting_metric_inverse_virtual_adjoints}
     Add and subtract the product in which all three finite Gram factors are
     replaced by their limiting values, and telescope the resulting product
     from left to right.  Substitute the direct-sum Gram and inverse-Gram
@@ -698,8 +680,7 @@ norm estimate is derived here.
     \label{thm:martingale_criterion}
     \lean{MPSTensor.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional}
     \leanok
-    \uses{lem:anticommutator_projection_rowsum_reduction,
-        lem:quadratic_form_to_norm_bound}
+    \uses{lem:anticommutator_projection_rowsum_reduction, lem:quadratic_form_to_norm_bound}
     Let $P_i$ be a finite family of symmetric projections on a
     finite-dimensional complex Hilbert space, let $H=\sum_iP_i$, and let
     $0<\gamma\le1$.  Suppose that a real coefficient matrix $(c_{ij})$ has row
@@ -730,8 +711,7 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{lem:anticommutator_projection_rowsum_reduction,
-        lem:quadratic_form_to_norm_bound}
+    \uses{lem:anticommutator_projection_rowsum_reduction, lem:quadratic_form_to_norm_bound}
     The row-and-column reduction gives the quadratic-form inequality.  The sum
     of symmetric projections is positive, so the abstract martingale criterion
     converts that inequality into the norm lower bound on $(\ker H)^\perp$.
@@ -818,8 +798,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:open_parent_hamiltonian_full_window}
     \lean{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}
     \leanok
-    \uses{def:open_parent_hamiltonian_es,
-        rem:euclidean_local_projector_ingredients}
+    \uses{def:open_parent_hamiltonian_es, rem:euclidean_local_projector_ingredients}
     If $L>0$, then
     \begin{align}
         H^{\mathrm{open}}_{L,L}(A)
@@ -830,8 +809,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, rem:cyclic_window_operators,
-        def:extract_window, rem:euclidean_local_projector_ingredients}
+    \uses{def:open_parent_hamiltonian_es, rem:cyclic_window_operators, def:extract_window, rem:euclidean_local_projector_ingredients}
     The interaction has one window:
     \begin{align}
         I_{L,L}&=\{0\}.
@@ -879,8 +857,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_full_window,
-        lem:parent_interaction_es_kernel}
+    \uses{thm:open_parent_hamiltonian_full_window, lem:parent_interaction_es_kernel}
     The full-window identity and the local kernel formula give
     \begin{align}
         \ker H^{\mathrm{open}}_{L,L}(A)
@@ -928,8 +905,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{rem:projection_geometry_rowsum_identities,
-        lem:transported_es_local_projections}
+    \uses{rem:projection_geometry_rowsum_identities, lem:transported_es_local_projections}
     Taking the inner product of the sum with $v$ gives
     \begin{align}
         \sum_{i\in I_{L,N}}\re
@@ -994,10 +970,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{lem:mem_ground_space_es,
-        thm:contiguous_restriction_ground_space_map,
-        rem:cyclic_window_operators, rem:euclidean_local_projector_ingredients,
-        lem:local_term_es_kernel_restrictions}
+    \uses{lem:mem_ground_space_es, thm:contiguous_restriction_ground_space_map, rem:cyclic_window_operators, rem:euclidean_local_projector_ingredients, lem:local_term_es_kernel_restrictions}
     Let $v=\iota_N(\Gamma_N^A(X))\in G_N^{\mathrm{ES}}(A)$. For every
     non-wrapping window $[s,s+L-1]$ and complementary configuration $\tau$,
     Theorem~\ref{thm:contiguous_restriction_ground_space_map} gives
@@ -1022,8 +995,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:open_hamiltonian_kernel_le_ground_space}
     \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
-        def:l_blk_injective}
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
     $L_0$-block-injective, then
     \begin{align}
@@ -1034,10 +1006,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_zero_local_terms,
-        lem:mem_ground_space_es, rem:contiguous_window_operators,
-        rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions,
-        thm:normal_open_chain_range_reduction}
+    \uses{thm:open_parent_hamiltonian_zero_local_terms, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions, thm:normal_open_chain_range_reduction}
     In the following display, $s$ ranges over all starts satisfying
     $s+L_0+1\leq N$, and $\tau$ ranges over all complementary configurations.
     The three ingredients give
@@ -1058,8 +1027,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:open_parent_hamiltonian_kernel_ground_space}
     \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
-        def:l_blk_injective}
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
     $L_0$-block-injective, then
     \begin{align}
@@ -1074,8 +1042,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_ground_space_le_hamiltonian_kernel,
-        thm:open_hamiltonian_kernel_le_ground_space}
+    \uses{thm:open_ground_space_le_hamiltonian_kernel, thm:open_hamiltonian_kernel_le_ground_space}
     The two preceding inclusions identify each space as a subspace of the
     other, so antisymmetry gives the equality.
 \end{proof}
@@ -1084,8 +1051,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:nachtergaele_open_chain_projector_defect}
     \lean{MPSTensor.re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es,
-        def:l_blk_injective}
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\ge1$ and let $A$ be $L_0$-block-injective with $L_0>0$. Set
     $n=K+L_0$ and $l=L_0$, and write
     \begin{align}
@@ -1110,9 +1076,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_chain_left_tail_ground_intersection,
-        thm:projector_defect_to_friedrichs,
-        thm:friedrichs_ground_space_excitation_anticommutator}
+    \uses{thm:open_chain_left_tail_ground_intersection, thm:projector_defect_to_friedrichs, thm:friedrichs_ground_space_excitation_anticommutator}
     The open-chain intersection theorem identifies $S\cap T$ with the ground
     space on $\Lambda_{n+1}$. The projector-defect adapter gives a Friedrichs
     overlap bound, and the reduced two-projection theorem gives the stated
@@ -1136,8 +1100,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:pow_decomp,
-        thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    \uses{thm:geometric_bound_of_spectral_radius_lt_one, thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
     Reconstruct the norm infrastructure from the exact adjoint--self identity
     \begin{align}
         J_K^\dagger J_K U(X)
@@ -1220,8 +1183,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_ground_space_reassociation}
     \lean{MPSTensor.physicalReassocES_comp_groundSpaceMapES}
     \leanok
-    \uses{def:whole_increment_physical_reassociation,
-        def:ground_space_map_es}
+    \uses{def:whole_increment_physical_reassociation, def:ground_space_map_es}
     For every $K,L,Q\in\N$,
     \begin{align}
         \mathscr A_{K,L,Q}\Gamma_{K+(L+Q)}^{\mathrm{ES}}
@@ -1231,8 +1193,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:whole_increment_physical_reassociation,
-        def:ground_space_map_es}
+    \uses{def:whole_increment_physical_reassociation, def:ground_space_map_es}
     Evaluate both sides at a physical word.  Reassociation changes only the
     parenthesization of its coordinate set, so both coefficients are the trace
     pairing with the same word product.
@@ -1254,9 +1215,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:reassociated_tail_boundary_factorization}
     \lean{MPSTensor.reassocTailBoundaryMapES_comp_tailVirtualMapES}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        thm:spectator_boundary_hilbert_factorization,
-        thm:whole_increment_ground_space_reassociation}
+    \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_hilbert_factorization, thm:whole_increment_ground_space_reassociation}
     The reassociated tail map satisfies
     \begin{align}
         \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
@@ -1267,9 +1226,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        thm:spectator_boundary_hilbert_factorization,
-        thm:whole_increment_ground_space_reassociation}
+    \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_hilbert_factorization, thm:whole_increment_ground_space_reassociation}
     Substitute the definition of the reassociated tail map, use the ordinary
     tail factorization, and then reassociate the full boundary map.
 \end{proof}
@@ -1278,9 +1235,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_projector_residual}
     \lean{MPSTensor.whole_increment_injectiveRangeProjector_residual_eq}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        thm:reassociated_tail_boundary_factorization,
-        thm:spectator_boundary_hilbert_factorization}
+    \uses{def:reassociated_tail_boundary_map, thm:reassociated_tail_boundary_factorization, thm:spectator_boundary_hilbert_factorization}
     Let $T=\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}$,
     $S=\Gamma^{\mathrm{left}}_{K+L,Q}$, and
     $C=\Gamma_{K+L+Q}^{\mathrm{ES}}$.  Assume separately that $T$, $S$, and
@@ -1292,8 +1247,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:reassociated_tail_boundary_factorization,
-        thm:spectator_boundary_hilbert_factorization}
+    \uses{thm:reassociated_tail_boundary_factorization, thm:spectator_boundary_hilbert_factorization}
     Apply the common-factorization range-projector identity to $T$, $S$, and
     $C$, using the two displayed factorizations.  No canonicality or norm
     estimate is used.
@@ -1303,8 +1257,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_mixed_gram}
     \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        thm:spectator_boundary_mixed_gram}
+    \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_mixed_gram}
     With the notation of
     Theorem~\ref{thm:spectator_boundary_mixed_gram},
     \begin{align}
@@ -1318,9 +1271,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        def:whole_increment_physical_reassociation,
-        thm:spectator_boundary_mixed_gram}
+    \uses{def:reassociated_tail_boundary_map, def:whole_increment_physical_reassociation, thm:spectator_boundary_mixed_gram}
     Expand the reassociated tail map.  Its adjoint introduces
     $\mathscr A_{K,L,Q}^{-1}$, so the preceding coordinate formula applies.
 \end{proof}
@@ -1329,8 +1280,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_mixed_gram_centered}
     \lean{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered}
     \leanok
-    \uses{thm:whole_increment_mixed_gram,
-        thm:fixed_point_gram_metric_exact}
+    \uses{thm:whole_increment_mixed_gram, thm:fixed_point_gram_metric_exact}
     Let $\rho\in\MN{D}$ have nonzero trace and set
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  Then
     \begin{align}
@@ -1347,8 +1297,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_mixed_gram,
-        thm:fixed_point_gram_metric_exact}
+    \uses{thm:whole_increment_mixed_gram, thm:fixed_point_gram_metric_exact}
     Substitute the reassociated mixed-Gram formula and the action of the
     limiting metric, then distribute subtraction over the finite sums.
 \end{proof}
@@ -1406,8 +1355,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.wholeIncrementLeftOverlapFactorES_norm_le}
     \lean{MPSTensor.wholeIncrementRightOverlapFactorES_norm_le}
     \leanok
-    \uses{def:whole_increment_left_overlap_factor,
-        def:whole_increment_right_overlap_factor}
+    \uses{def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor}
     The overlap factors satisfy
     \begin{align}
       \lVert F_{K,Q}\rVert&\leq\lVert J_Q^{\mathrm{left}}\rVert,\\
@@ -1417,8 +1365,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:whole_increment_left_overlap_factor,
-        def:whole_increment_right_overlap_factor}
+    \uses{def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor}
     Expand the squared direct-sum norms fiberwise and apply the operator-norm
     bound to each fiber.  Summing gives the two inequalities without a factor
     depending on the number of spectator words.
@@ -1428,9 +1375,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{def:whole_increment_centered_residual}
     \lean{MPSTensor.wholeIncrementCenteredResidualES}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        def:whole_increment_left_overlap_factor,
-        def:whole_increment_right_overlap_factor}
+    \uses{def:reassociated_tail_boundary_map, def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor}
     Assume $\operatorname{tr}(\rho)\neq 0$ and let
     $\mathcal K_\infty=\mathscr R(P_\rho)$.  Define
     \begin{align}
@@ -1446,10 +1391,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_centered_factorization}
     \lean{MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors}
     \leanok
-    \uses{def:whole_increment_centered_residual,
-        thm:whole_increment_left_overlap_factor_apply,
-        thm:whole_increment_right_overlap_factor_apply,
-        thm:whole_increment_mixed_gram_centered}
+    \uses{def:whole_increment_centered_residual, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_mixed_gram_centered}
     The centered residual factors as
     \begin{align}
       R_{K,L,Q}
@@ -1461,10 +1403,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:whole_increment_centered_residual,
-        thm:whole_increment_left_overlap_factor_apply,
-        thm:whole_increment_right_overlap_factor_apply,
-        thm:whole_increment_mixed_gram_centered}
+    \uses{def:whole_increment_centered_residual, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_mixed_gram_centered}
     Test both sides against arbitrary boundary families, use the two fiber
     formulas, and apply the centered mixed-Gram identity.
 \end{proof}
@@ -1473,9 +1412,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_centered_residual_bound}
     \lean{MPSTensor.wholeIncrementCenteredResidualES_norm_le}
     \leanok
-    \uses{thm:whole_increment_centered_factorization,
-        thm:whole_increment_overlap_factor_norms,
-        thm:boundary_fiberwise_map_norm}
+    \uses{thm:whole_increment_centered_factorization, thm:whole_increment_overlap_factor_norms, thm:boundary_fiberwise_map_norm}
     The factorization gives
     \begin{align}
       \lVert R_{K,L,Q}\rVert
@@ -1487,9 +1424,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_centered_factorization,
-        thm:whole_increment_overlap_factor_norms,
-        thm:boundary_fiberwise_map_norm}
+    \uses{thm:whole_increment_centered_factorization, thm:whole_increment_overlap_factor_norms, thm:boundary_fiberwise_map_norm}
     Apply submultiplicativity to the three factors and use the operator norm of
     a fiberwise direct sum.
 \end{proof}
@@ -1498,8 +1433,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_centered_residual_bound_left_canonical}
     \lean{MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical}
     \leanok
-    \uses{thm:whole_increment_centered_residual_bound,
-        thm:whole_increment_left_virtual_norm}
+    \uses{thm:whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm}
     If $A$ is left-canonical, then
     \begin{align}
       \lVert R_{K,L,Q}\rVert
@@ -1510,8 +1444,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_centered_residual_bound,
-        thm:whole_increment_left_virtual_norm}
+    \uses{thm:whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm}
     Substitute $\lVert J_Q^{\mathrm{left}}\rVert\leq1$ into the preceding
     estimate.
 \end{proof}
@@ -1520,8 +1453,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:primitive_whole_increment_centered_residual_bound}
     \lean{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}
     \leanok
-    \uses{def:primitive_mps,
-        thm:whole_increment_centered_residual_bound_left_canonical}
+    \uses{def:primitive_mps, thm:whole_increment_centered_residual_bound_left_canonical}
     Let $A$ be a primitive MPS tensor with positive-definite fixed point
     $\rho$.  Then $A$ satisfies the left-canonical centered residual estimate
     of Theorem~\ref{thm:whole_increment_centered_residual_bound_left_canonical}.
@@ -1529,8 +1461,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:primitive_mps,
-        thm:whole_increment_centered_residual_bound_left_canonical}
+    \uses{def:primitive_mps, thm:whole_increment_centered_residual_bound_left_canonical}
     Use the left-canonical normalization contained in the primitive-MPS
     hypotheses together with positive definiteness of $\rho$.
 \end{proof}
@@ -1539,11 +1470,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_limiting_overlap_product}
     \lean{MPSTensor.wholeIncrement_limitingOverlapProduct_eq}
     \leanok
-    \uses{def:whole_increment_left_overlap_factor,
-        def:whole_increment_right_overlap_factor,
-        thm:whole_increment_left_overlap_factor_apply,
-        thm:whole_increment_right_overlap_factor_apply,
-        thm:limiting_metric_inverse_virtual_adjoints}
+    \uses{def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:limiting_metric_inverse_virtual_adjoints}
     Assume $D>0$.  For a positive-definite matrix $\rho$, the product
     $F_{K,Q}^\dagger\mathcal K_\infty^{\oplus}G_{K,Q}$ equals the corresponding
     virtual-word expression formed from $J_K^{\mathrm{tail}}$,
@@ -1553,9 +1480,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_left_overlap_factor_apply,
-        thm:whole_increment_right_overlap_factor_apply,
-        thm:limiting_metric_inverse_virtual_adjoints}
+    \uses{thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:limiting_metric_inverse_virtual_adjoints}
     Compare matrix fibers, use the explicit limiting-metric action and its
     inverse, and evaluate the two virtual adjoints.
 \end{proof}
@@ -1564,8 +1489,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:reassociated_tail_boundary_gram}
     \lean{MPSTensor.reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        thm:spectator_boundary_direct_sum_gram}
+    \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_direct_sum_gram}
     Reassociation preserves the tail Gram:
     \begin{align}
       (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})^\dagger
@@ -1576,8 +1500,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:reassociated_tail_boundary_map,
-        thm:spectator_boundary_direct_sum_gram}
+    \uses{def:reassociated_tail_boundary_map, thm:spectator_boundary_direct_sum_gram}
     The reassociation is unitary, so its adjoint cancels it.  The ordinary tail
     Gram is the fiberwise direct sum of $\mathcal K_{L+Q}$.
 \end{proof}
@@ -1586,8 +1509,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:reassociated_tail_inverse_gram}
     \lean{MPSTensor.inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram}
     \leanok
-    \uses{thm:reassociated_tail_boundary_gram,
-        thm:inverse_gram_identities}
+    \uses{thm:reassociated_tail_boundary_gram, thm:inverse_gram_identities}
     If $\Gamma_{L+Q}^{\mathrm{ES}}$ is injective, then the inverse Gram of the
     reassociated tail map is the fiberwise direct sum of
     $(\mathcal K_{L+Q})^{-1}$.
@@ -1595,8 +1517,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:reassociated_tail_boundary_gram,
-        thm:inverse_gram_identities}
+    \uses{thm:reassociated_tail_boundary_gram, thm:inverse_gram_identities}
     Multiply the proposed fiberwise inverse on both sides by the Gram from
     Theorem~\ref{thm:reassociated_tail_boundary_gram} and use the inverse-Gram
     identities.
@@ -1607,9 +1528,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.wholeIncrementLeftFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
     \lean{MPSTensor.wholeIncrementTailFiniteGramCancellation_eq_groundSpaceMapES_adjoint}
     \leanok
-    \uses{thm:left_finite_gram_cancellation,
-        thm:reassociated_tail_boundary_factorization,
-        thm:inverse_gram_identities}
+    \uses{thm:left_finite_gram_cancellation, thm:reassociated_tail_boundary_factorization, thm:inverse_gram_identities}
     If $\Gamma_{K+L}^{\mathrm{ES}}$ and
     $\Gamma_{L+Q}^{\mathrm{ES}}$ are injective, respectively, then
     \begin{align}
@@ -1631,9 +1550,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:left_finite_gram_cancellation,
-        thm:reassociated_tail_boundary_factorization,
-        thm:inverse_gram_identities}
+    \uses{thm:left_finite_gram_cancellation, thm:reassociated_tail_boundary_factorization, thm:inverse_gram_identities}
     The left identity is the preceding finite-Gram cancellation at length
     $K+L$.  For the tail identity, cancel the fiberwise Gram with its inverse
     and take the adjoint of the reassociated tail factorization.
@@ -1675,8 +1592,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:reassociated_tail_pseudoinverse_bound}
     \lean{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}
     \leanok
-    \uses{thm:reassociated_tail_inverse_gram,
-        thm:boundary_fiberwise_map_norm}
+    \uses{thm:reassociated_tail_inverse_gram, thm:boundary_fiberwise_map_norm}
     If $\Gamma_{L+Q}^{\mathrm{ES}}$ is injective, then
     \begin{align}
       \left\lVert\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}
@@ -1688,8 +1604,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:reassociated_tail_inverse_gram,
-        thm:boundary_fiberwise_map_norm}
+    \uses{thm:reassociated_tail_inverse_gram, thm:boundary_fiberwise_map_norm}
     Use the square-root pseudoinverse identity, substitute the fiberwise inverse
     Gram, and bound the norm of the fiberwise map.
 \end{proof}
@@ -1698,8 +1613,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_virtual_correction_telescope}
     \lean{MPSTensor.wholeIncrement_virtualResidual_eq_centered_sub_gramErrors}
     \leanok
-    \uses{def:whole_increment_centered_residual,
-        thm:whole_increment_limiting_overlap_product}
+    \uses{def:whole_increment_centered_residual, thm:whole_increment_limiting_overlap_product}
     Assume $D>0$, let $\rho$ be positive definite, and assume that
     $\Gamma_{K+L+Q}^{\mathrm{ES}}$ is injective.  Write
     $K_t=\mathcal K_{L+Q}^{\oplus\Omega_K}$,
@@ -1726,8 +1640,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:whole_increment_centered_residual,
-        thm:whole_increment_limiting_overlap_product}
+    \uses{def:whole_increment_centered_residual, thm:whole_increment_limiting_overlap_product}
     Substitute the centered residual and the limiting overlap product, distribute
     composition over subtraction, and telescope the product algebraically.
 \end{proof}
@@ -1748,9 +1661,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_centered_projector_sandwich_bound}
     \lean{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}
     \leanok
-    \uses{def:whole_increment_centered_projector_sandwich,
-        def:whole_increment_centered_residual, def:inverse_gram,
-        def:ground_space_map_es}
+    \uses{def:whole_increment_centered_projector_sandwich, def:whole_increment_centered_residual, def:inverse_gram, def:ground_space_map_es}
     Assume $D>0$, let $\rho$ be positive definite, and suppose that
     $\Gamma_{L+Q}^{\mathrm{ES}}$ and $\Gamma_{K+L}^{\mathrm{ES}}$ are
     injective.  Put
@@ -1769,11 +1680,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:whole_increment_centered_projector_sandwich,
-        thm:reassociated_tail_inverse_gram,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:reassociated_tail_pseudoinverse_bound,
-        thm:left_spectator_pseudoinverse_bound}
+    \uses{def:whole_increment_centered_projector_sandwich, thm:reassociated_tail_inverse_gram, thm:spectator_boundary_direct_sum_gram, thm:reassociated_tail_pseudoinverse_bound, thm:left_spectator_pseudoinverse_bound}
     Apply submultiplicativity to the centered residual between the two
     pseudoinverse factors.  Bound the exterior factors by the square roots of
     the corresponding inverse-Gram norms.
@@ -1783,16 +1690,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_finite_gram_corrections}
     \lean{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections}
     \leanok
-    \uses{thm:whole_increment_projector_residual,
-        thm:reassociated_tail_inverse_gram,
-        thm:reassociated_tail_boundary_gram,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:whole_increment_virtual_correction_telescope,
-        thm:whole_increment_finite_gram_cancellations,
-        def:whole_increment_tail_gram_correction,
-        def:whole_increment_full_inverse_gram_correction,
-        def:whole_increment_left_gram_correction,
-        def:whole_increment_centered_projector_sandwich}
+    \uses{thm:whole_increment_projector_residual, thm:reassociated_tail_inverse_gram, thm:reassociated_tail_boundary_gram, thm:spectator_boundary_direct_sum_gram, thm:whole_increment_virtual_correction_telescope, thm:whole_increment_finite_gram_cancellations, def:whole_increment_tail_gram_correction, def:whole_increment_full_inverse_gram_correction, def:whole_increment_left_gram_correction, def:whole_increment_centered_projector_sandwich}
     Assume $D>0$, let $\rho$ be positive definite, and suppose that
     $\Gamma_{L+Q}^{\mathrm{ES}}$, $\Gamma_{K+L}^{\mathrm{ES}}$, and
     $\Gamma_{K+L+Q}^{\mathrm{ES}}$ are injective.  Then the whole-increment
@@ -1802,16 +1700,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_projector_residual,
-        thm:reassociated_tail_inverse_gram,
-        thm:reassociated_tail_boundary_gram,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:whole_increment_virtual_correction_telescope,
-        thm:whole_increment_finite_gram_cancellations,
-        def:whole_increment_tail_gram_correction,
-        def:whole_increment_full_inverse_gram_correction,
-        def:whole_increment_left_gram_correction,
-        def:whole_increment_centered_projector_sandwich}
+    \uses{thm:whole_increment_projector_residual, thm:reassociated_tail_inverse_gram, thm:reassociated_tail_boundary_gram, thm:spectator_boundary_direct_sum_gram, thm:whole_increment_virtual_correction_telescope, thm:whole_increment_finite_gram_cancellations, def:whole_increment_tail_gram_correction, def:whole_increment_full_inverse_gram_correction, def:whole_increment_left_gram_correction, def:whole_increment_centered_projector_sandwich}
     Substitute the common-factorization residual, the two fiberwise Gram
     identities and inverse-Gram identities, and the virtual telescope.  The
     left finite Gram then cancels its inverse, leaving the four physical
@@ -1824,15 +1713,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}
     \lean{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}
     \leanok
-    \uses{def:whole_increment_tail_gram_correction,
-        def:whole_increment_full_inverse_gram_correction,
-        def:whole_increment_left_gram_correction,
-        thm:reassociated_tail_pseudoinverse_bound,
-        thm:reassociated_tail_inverse_gram,
-        thm:inverse_gram_identities,
-        thm:boundary_fiberwise_map_norm,
-        thm:inverse_gram_limiting_resolvent,
-        thm:left_spectator_pseudoinverse_bound}
+    \uses{def:whole_increment_tail_gram_correction, def:whole_increment_full_inverse_gram_correction, def:whole_increment_left_gram_correction, thm:reassociated_tail_pseudoinverse_bound, thm:reassociated_tail_inverse_gram, thm:inverse_gram_identities, thm:boundary_fiberwise_map_norm, thm:inverse_gram_limiting_resolvent, thm:left_spectator_pseudoinverse_bound}
     Assume $D>0$ and let $\rho$ be positive definite.  Put
     $I_t=\mathcal K_{L+Q}^{-1}$,
     $I_f=\mathcal K_{K+L+Q}^{-1}$,
@@ -1872,15 +1753,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{def:whole_increment_tail_gram_correction,
-        def:whole_increment_full_inverse_gram_correction,
-        def:whole_increment_left_gram_correction,
-        thm:reassociated_tail_pseudoinverse_bound,
-        thm:reassociated_tail_inverse_gram,
-        thm:inverse_gram_identities,
-        thm:boundary_fiberwise_map_norm,
-        thm:inverse_gram_limiting_resolvent,
-        thm:left_spectator_pseudoinverse_bound}
+    \uses{def:whole_increment_tail_gram_correction, def:whole_increment_full_inverse_gram_correction, def:whole_increment_left_gram_correction, thm:reassociated_tail_pseudoinverse_bound, thm:reassociated_tail_inverse_gram, thm:inverse_gram_identities, thm:boundary_fiberwise_map_norm, thm:inverse_gram_limiting_resolvent, thm:left_spectator_pseudoinverse_bound}
     Unfold each correction and apply submultiplicativity.  Use the reassociated
     tail pseudoinverse estimate and the fiberwise-map norm bound in all three
     cases.  For the full correction, insert the inverse resolvent identity; for
@@ -1893,10 +1766,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.c3RightOverlapFactorES}
     \lean{MPSTensor.c3CenteredVirtualResidualES}
     \leanok
-    \uses{def:fixed_point_proj, def:gram_reshuffle,
-        def:whole_increment_left_overlap_factor,
-        def:whole_increment_right_overlap_factor,
-        thm:spectator_boundary_hilbert_factorization}
+    \uses{def:gram_reshuffle, def:whole_increment_left_overlap_factor, def:whole_increment_right_overlap_factor, thm:spectator_boundary_hilbert_factorization}
     Let $A$ be an MPS tensor, let $\Omega_K$ be the set of length-$K$ words
     in the physical alphabet, and let
     $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$ with its
@@ -1937,11 +1807,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.c3_centeredVirtualResidualES_norm_le}
     \lean{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
     \leanok
-    \uses{def:c3_centered_overlap_factors_residual, def:ground_space_gram,
-        def:primitive_mps,
-        thm:whole_increment_left_overlap_factor_apply,
-        thm:whole_increment_right_overlap_factor_apply,
-        thm:whole_increment_overlap_factor_norms}
+    \uses{def:c3_centered_overlap_factors_residual, def:ground_space_gram, def:primitive_mps, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_overlap_factor_norms}
     For every $K\in\N$, the common overlap factors have fiber formulas
     \begin{align}
         (F_KX)_{u,j}&=A^jX_u,&
@@ -1985,13 +1851,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:c3_projector_gram_error_telescope,
-        thm:whole_increment_left_overlap_factor_apply,
-        thm:whole_increment_right_overlap_factor_apply,
-        thm:whole_increment_overlap_factor_norms,
-        thm:boundary_fiberwise_map_norm,
-        thm:primitive_ground_space_gram_geometric_fixed_point,
-        thm:primitive_tail_virtual_map_norm_uniform}
+    \uses{thm:c3_projector_gram_error_telescope, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_overlap_factor_norms, thm:boundary_fiberwise_map_norm, thm:primitive_ground_space_gram_geometric_fixed_point, thm:primitive_tail_virtual_map_norm_uniform}
     Evaluate the two factors on each common direct-sum fiber.  The direct-sum
     norm identity gives the two bounds without a factor counting spectator
     configurations.  Substitute these fiber formulas into the centered
@@ -2043,8 +1903,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:inverse_gram_limiting_resolvent}
     \lean{MPSTensor.inverseGram_sub_limitingInverse_eq_resolvent}
     \leanok
-    \uses{def:ground_space_gram, def:inverse_gram, def:fixed_point_proj,
-        def:gram_reshuffle}
+    \uses{def:ground_space_gram, def:inverse_gram, def:gram_reshuffle}
     Assume $D\geq1$ and let $\rho\in\MN{D}$ be positive definite.  Set
     $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $S_\infty=\mathcal K_\infty^{-1}$.  If
@@ -2058,8 +1917,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_gram_is_unit_of_injective,
-        thm:fixed_point_gram_metric_is_unit, thm:inverse_gram_identities}
+    \uses{thm:ground_space_gram_is_unit_of_injective, thm:fixed_point_gram_metric_is_unit, thm:inverse_gram_identities}
     Both Gram endomorphisms are invertible.  Apply the identity
     $A^{-1}-B^{-1}=B^{-1}(B-A)A^{-1}$ with
     $A=\mathcal K_n$ and $B=\mathcal K_\infty$.
@@ -2082,8 +1940,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:inverse_gram_identities,
-        thm:spectator_boundary_hilbert_factorization}
+    \uses{thm:inverse_gram_identities, thm:spectator_boundary_hilbert_factorization}
     The direct-sum Gram and inverse Gram cancel fiberwise.  The remaining
     composition is the adjoint of
     $\Gamma_{K,L}^{\mathrm{left}}J_L^{\mathrm{left}}
@@ -2105,9 +1962,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:inverse_gram_identities,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:boundary_fiberwise_map_norm}
+    \uses{thm:inverse_gram_identities, thm:spectator_boundary_direct_sum_gram, thm:boundary_fiberwise_map_norm}
     The square-root pseudoinverse identity gives the left-hand side as the
     square root of the norm of the tail boundary inverse Gram.  This inverse
     Gram is the fiberwise lift of $S_L$, whose norm is at most
@@ -2129,9 +1984,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:inverse_gram_identities,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:boundary_fiberwise_map_norm}
+    \uses{thm:inverse_gram_identities, thm:spectator_boundary_direct_sum_gram, thm:boundary_fiberwise_map_norm}
     The adjoint-side square-root identity reduces the left-hand side to the
     norm of the left boundary inverse Gram.  The direct-sum inverse-Gram formula
     and the fiberwise norm estimate give the result.
@@ -2143,9 +1996,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.c3FullInverseGramCorrectionES}
     \lean{MPSTensor.c3LeftFiniteGramCorrectionES}
     \leanok
-    \uses{def:ground_space_gram, def:inverse_gram, def:fixed_point_proj,
-        def:gram_reshuffle, def:tail_boundary_map, def:left_boundary_map,
-        thm:c3_projector_gram_error_telescope}
+    \uses{def:ground_space_gram, def:inverse_gram, def:gram_reshuffle, def:tail_boundary_map, def:left_boundary_map, thm:c3_projector_gram_error_telescope}
     Assume $D\geq1$ and let $\rho\in\MN{D}$ be positive definite.  Set
     $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $S_\infty=\mathcal K_\infty^{-1}$.  Suppose that
@@ -2205,10 +2056,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:boundary_fiberwise_map_sub,
-        thm:inverse_gram_limiting_resolvent,
-        thm:left_finite_gram_cancellation,
-        thm:spectator_boundary_direct_sum_gram}
+    \uses{thm:boundary_fiberwise_map_sub, thm:inverse_gram_limiting_resolvent, thm:left_finite_gram_cancellation, thm:spectator_boundary_direct_sum_gram}
     The direct-sum inverse-Gram formula identifies the initial factor with the
     pseudoinverse factor of $T$.  Theorem~\ref{thm:left_finite_gram_cancellation}
     replaces the final product in $Q_1$ and $Q_2$ by $C^\dagger$.
@@ -2259,11 +2107,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:c3_correction_factorizations,
-        thm:tail_spectator_pseudoinverse_bound,
-        thm:left_spectator_pseudoinverse_bound,
-        thm:boundary_fiberwise_map_norm,
-        thm:inverse_gram_identities}
+    \uses{thm:c3_correction_factorizations, thm:tail_spectator_pseudoinverse_bound, thm:left_spectator_pseudoinverse_bound, thm:boundary_fiberwise_map_norm, thm:inverse_gram_identities}
     Apply submultiplicativity to the factorizations in
     Theorem~\ref{thm:c3_correction_factorizations}.  The two spectator
     pseudoinverse estimates control the exterior factors, and
@@ -2276,9 +2120,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{def:c3_centered_physical_sandwich}
     \lean{MPSTensor.c3CenteredProjectorResidualES}
     \leanok
-    \uses{def:c3_centered_overlap_factors_residual,
-        thm:tail_boundary_map_factorization,
-        thm:left_boundary_map_factorization}
+    \uses{def:c3_centered_overlap_factors_residual, thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization}
     Let $R_{K,l}$ be the centered virtual residual and let $S_n$ be the inverse
     Gram at length $n$.  The centered physical sandwich is
     \begin{align}
@@ -2294,10 +2136,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_corrections}
     \lean{MPSTensor.c3CenteredProjectorResidualES_norm_le}
     \leanok
-    \uses{def:c3_centered_physical_sandwich,
-        def:c3_correction_sandwiches,
-        def:open_chain_ground_subspaces_es,
-        def:ground_space_es}
+    \uses{def:c3_centered_physical_sandwich, def:c3_correction_sandwiches, def:open_chain_ground_subspaces_es, def:ground_space_es}
     Whenever the three finite Grams are invertible, the common-ambient defect is
     \begin{align}
       P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
@@ -2314,10 +2153,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:c3_projector_gram_error_telescope,
-        thm:spectator_boundary_direct_sum_gram,
-        thm:tail_spectator_pseudoinverse_bound,
-        thm:left_spectator_pseudoinverse_bound}
+    \uses{thm:c3_projector_gram_error_telescope, thm:spectator_boundary_direct_sum_gram, thm:tail_spectator_pseudoinverse_bound, thm:left_spectator_pseudoinverse_bound}
     Distribute the two exterior pseudoinverse factors across the exact four-term
     telescope.  The three non-centred terms are precisely $Q_1,Q_2,Q_3$.
     Submultiplicativity and the two square-root pseudoinverse estimates give the
@@ -2331,8 +2167,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
     \leanok
     \discussion{6134}
-    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es,
-        def:ground_space_es}
+    \uses{def:primitive_mps, def:open_chain_ground_subspaces_es, def:ground_space_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     every spectator length $K$ and every $l\geq1$ satisfying $cr^l<1$,
@@ -2349,16 +2184,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:fixed_point_gram_metric_is_unit,
-        thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
-        thm:primitive_tail_virtual_map_norm_uniform,
-        thm:geometric_smallness_at_c3_lengths,
-        thm:c3_centered_overlap_factorization_geometric,
-        thm:c3_centered_physical_assembly,
-        thm:c3_correction_bounds,
-        thm:spectator_boundary_hilbert_factorization,
-        thm:range_ground_space_map_es,
-        thm:injective_range_projector_inverse_gram}
+    \uses{thm:fixed_point_gram_metric_is_unit, thm:primitive_ground_space_map_geometric_inverse_gram_bounds, thm:primitive_tail_virtual_map_norm_uniform, thm:geometric_smallness_at_c3_lengths, thm:c3_centered_overlap_factorization_geometric, thm:c3_centered_physical_assembly, thm:c3_correction_bounds, thm:spectator_boundary_hilbert_factorization, thm:range_ground_space_map_es, thm:injective_range_projector_inverse_gram}
     Put $\mathcal K_\infty=\mathscr R(P_\rho)$ and
     $\mathcal I_\infty=\mathcal K_\infty^{-1}$.  Choose $g,c,r>0$ from
     the geometric Gram and inverse-Gram estimate, so that
@@ -2395,8 +2221,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:whole_increment_ground_projection_defect_geometric}
     \lean{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}
     \leanok
-    \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
-        def:spectator_boundary_maps_es, def:ground_space_es}
+    \uses{def:primitive_mps, def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es, def:ground_space_es}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There are constants $C,c,r>0$, with $r<1$, such that for
     all $K,L,Q\in\mathbb N$ with $L\geq1$ and $cr^L<1$,
@@ -2415,16 +2240,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_ground_space_map_geometric_inverse_gram_bounds,
-        thm:primitive_tail_virtual_map_norm_uniform,
-        thm:fixed_point_gram_metric_is_unit,
-        thm:primitive_whole_increment_centered_residual_bound,
-        thm:whole_increment_left_virtual_norm,
-        thm:whole_increment_centered_projector_sandwich_bound,
-        thm:whole_increment_correction_bounds,
-        thm:whole_increment_finite_gram_corrections,
-        thm:injective_range_projector_inverse_gram,
-        thm:range_ground_space_map_es}
+    \uses{thm:primitive_ground_space_map_geometric_inverse_gram_bounds, thm:primitive_tail_virtual_map_norm_uniform, thm:fixed_point_gram_metric_is_unit, thm:primitive_whole_increment_centered_residual_bound, thm:whole_increment_left_virtual_norm, thm:whole_increment_centered_projector_sandwich_bound, thm:whole_increment_correction_bounds, thm:whole_increment_finite_gram_corrections, thm:injective_range_projector_inverse_gram, thm:range_ground_space_map_es}
     Bound the centered sandwich and the three finite-Gram corrections in the
     exact projector telescope.  Geometric convergence of the finite Grams and
     the uniform tail-map bound make each term at most a fixed multiple of
@@ -2436,8 +2252,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:uniform_whole_increment_defect_seven_sixteenths}
     \lean{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
     \leanok
-    \uses{thm:whole_increment_ground_projection_defect_geometric,
-        thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
+    \uses{thm:whole_increment_ground_projection_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
     Let $A$ be primitive with positive-definite fixed point $\rho$ and nonzero
     bond dimension.  There is an integer $p>0$, measured in sites of $A$, such
     that $A$ is $p$-block injective and, for every $K\in\mathbb N$,
@@ -2452,8 +2267,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:whole_increment_ground_projection_defect_geometric,
-        thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
+    \uses{thm:whole_increment_ground_projection_defect_geometric, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ}
     Choose $p$ above a positive block-injectivity length and sufficiently large
     that $cr^p<1$ and $Cr^p/(1-cr^p)<7/16$.  Block injectivity propagates to
     $p$, and the geometric whole-increment estimate applies with $L=Q=p$ for
@@ -2488,8 +2302,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
     \lean{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
     \leanok
-    \uses{def:primitive_mps, def:l_blk_injective,
-        def:open_chain_ground_subspaces_es, def:ground_space_es}
+    \uses{def:primitive_mps, def:l_blk_injective, def:open_chain_ground_subspaces_es, def:ground_space_es}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
     positive-definite fixed point.  There are an overlap length $l>1$, measured
     in sites of $A$, and a number $\varepsilon_l\geq0$ such that $A$ is
@@ -2507,9 +2320,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:fnw_overlapping_window_contraction,
-        thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ,
-        thm:nachtergaele_open_chain_projector_defect}
+    \uses{thm:fnw_overlapping_window_contraction, thm:normal_from_primitive_posdef, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
     The geometric projector estimate supplies $C,c,r>0$ with $r<1$.  Since
     \begin{align}
         \sqrt{n+1}\,r^n&\longrightarrow0,
@@ -2530,9 +2341,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{lem:blocked_to_cyclic_ground_projector_comparison}
     \lean{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq}
     \leanok
-    \uses{thm:three_block_whole_increment_defect_seven_sixteenths,
-        thm:friedrichs_ground_space_excitation_anticommutator,
-        thm:three_site_anticommutator_cyclic_transport}
+    \uses{thm:three_block_whole_increment_defect_seven_sixteenths, thm:friedrichs_ground_space_excitation_anticommutator, thm:three_site_anticommutator_cyclic_transport}
     Let $A$ be an MPS tensor with nonzero physical dimension, let $p$ be any
     blocking length, and set $B=\operatorname{block}_p(A)$.  Then
     \begin{align}
@@ -2567,8 +2376,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \lean{MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth,
         MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped}
     \leanok
-    \uses{def:primitive_mps, def:l_blk_injective, def:blocked_tensor,
-        def:parent_ground_space_es, def:parent_hamiltonian_es}
+    \uses{def:primitive_mps, def:l_blk_injective, def:blocked_tensor, def:parent_ground_space_es, def:parent_hamiltonian_es}
     Let $A$ be a primitive MPS tensor with nonzero physical and bond dimensions,
     and suppose that its fixed point is positive definite.  There is a blocking
     length $p>0$ such that $A$ is $p$-block injective and, with
@@ -2582,8 +2390,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{lem:blocked_to_cyclic_ground_projector_comparison,
-        lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
+    \uses{lem:blocked_to_cyclic_ground_projector_comparison, lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
     Choose $p$ so that the three-block projector defect is at most $7/16$.
     Lemma~\ref{lem:blocked_to_cyclic_ground_projector_comparison} gives the same
     coefficient for every overlapping cyclic pair.  For range two each row has
@@ -2702,9 +2509,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:projection_anticommutator_upper_bound,
-        thm:cyclic_knabe_double_counting,
-        rem:projection_geometry_rowsum_identities}
+    \uses{thm:projection_anticommutator_upper_bound, thm:cyclic_knabe_double_counting, rem:projection_geometry_rowsum_identities}
     Translation of the reversed leg gives
     \begin{align}
         \sum_i\operatorname{Re}\langle h_{i+q}v,h_i v\rangle
@@ -2761,8 +2566,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_knabe_double_counting,
-        thm:cyclic_knabe_cross_estimates}
+    \uses{thm:cyclic_knabe_double_counting, thm:cyclic_knabe_cross_estimates}
     Put $c=m-R+1$. Summing the window gaps and applying
     Theorem~\ref{thm:cyclic_knabe_double_counting} gives
     \begin{align}
@@ -2955,8 +2759,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:weighted_sum_kernel, thm:weighted_sum_loewner,
-        lem:positive_gap_transfer_loewner}
+    \uses{thm:weighted_sum_kernel, thm:weighted_sum_loewner, lem:positive_gap_transfer_loewner}
     The weighted sum is positive and, by
     Theorem~\ref{thm:weighted_sum_loewner}, dominated by the unweighted
     sum; by the kernel equality~(\ref{eq:ph_weighted_sum_kernel}) of
@@ -2997,8 +2800,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:martingale_mps_original_site_multiples}
     \lean{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
     \leanok
-    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner,
-        lem:blocked_original_aligned_sparse_sum}
+    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner, lem:blocked_original_aligned_sparse_sum}
     Under the hypotheses of Theorem~\ref{thm:martingale_mps}, one can choose
     the same $p>0$ so that the original tensor has interaction range $2p$ and,
     for every $N\ge4$ and every
@@ -3012,8 +2814,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner,
-        lem:blocked_original_aligned_sparse_sum}
+    \uses{thm:martingale_mps, lem:positive_gap_transfer_loewner, lem:blocked_original_aligned_sparse_sum}
     Let $B=\operatorname{block}_p(A)$, and let $U$ be the canonical
     configuration isometry.  Lemma~\ref{lem:blocked_original_aligned_sparse_sum}
     gives, for every blocked site $i$,
@@ -3044,8 +2845,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:normal_mps_parent_hamiltonian_gap}
     \notready
     \discussion{5926}
-    \uses{thm:martingale_mps_original_site_multiples,
-        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
+    \uses{thm:martingale_mps_original_site_multiples, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     Let $A$ be a normal tensor.  There exist an interaction range $L>1$ and
     a constant $\gamma>0$ such that, for every $N\ge2L$ and every
     $v\in(\ker H_{N,L}(A))^\perp$,
@@ -3063,8 +2863,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 \begin{proof}
     \notready
     \discussion{5926}
-    \uses{thm:martingale_mps_original_site_multiples,
-        thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
+    \uses{thm:martingale_mps_original_site_multiples, thm:anticommutator_gap_bound, thm:parent_hamiltonian_gapped}
     The divisible-length case is
     Theorem~\ref{thm:martingale_mps_original_site_multiples}.  It remains to
     control chains of length $Np+r$, $0<r<p$, by a boundary/remainder argument
@@ -3075,23 +2874,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:overlap_norm_gap_bound}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound}
     \leanok
-    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es,
-        thm:parent_ground_space_es_kernel,
-        rem:euclidean_local_projector_ingredients,
-        lem:local_term_es_average,
-        lem:transported_es_positive,
-        lem:transported_es_local_projections,
-        lem:transported_es_nonoverlap_positive,
-        lem:parent_hamiltonian_es_quadratic_reduction,
-        lem:parent_hamiltonian_ordered_rowsum_gap,
-        lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic,
-        lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap,
-        lem:cyclic_window_overlap_cardinality,
-        lem:cyclic_window_nonoverlap_positive,
-        lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap,
-        lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap,
-        lem:parent_hamiltonian_cyclic_overlap_norm_gap,
-        thm:overlap_norm_gap_bound_constant}
+    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es, thm:parent_ground_space_es_kernel, rem:euclidean_local_projector_ingredients, lem:local_term_es_average, lem:transported_es_positive, lem:transported_es_local_projections, lem:transported_es_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction, lem:parent_hamiltonian_ordered_rowsum_gap, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_norm_gap, thm:overlap_norm_gap_bound_constant}
     Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}

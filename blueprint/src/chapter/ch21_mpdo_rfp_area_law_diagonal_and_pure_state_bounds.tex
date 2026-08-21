@@ -169,9 +169,7 @@
     \label{thm:mpo_diagonal_cut_classical_mutual_information}
     \lean{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log}
     \leanok
-    \uses{thm:mpo_diagonal_cut_rank,
-      thm:classical_mutual_information_le_log_rank,
-      thm:matrix_rank_scalar_extension}
+    \uses{thm:mpo_diagonal_cut_rank, thm:classical_mutual_information_le_log_rank, thm:matrix_rank_scalar_extension}
     Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
     periodic cut of an MPO with bond dimension $D$. Suppose its scalar
     extension to $\C$ is the cut matrix $P^{\C}$ from
@@ -241,8 +239,7 @@
       MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
       MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
     \leanok
-    \uses{def:mpo_normalized_diagonal_cut_distribution,
-      thm:mpo_diagonal_cut_rank}
+    \uses{def:mpo_normalized_diagonal_cut_distribution, thm:mpo_diagonal_cut_rank}
     Let $D\geq1$. Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
     semidefinite, and that $Z>0$. Then $W_{x,y}\geq0$, the scalar extension of
     $W$ to $\C$ is the diagonal cut matrix of
@@ -273,8 +270,7 @@
     diagonal coefficients satisfies $I(X:Y)\leq2\log D$.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information,
-      lem:mpo_diagonal_cut_mass_trace}
+    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information, lem:mpo_diagonal_cut_mass_trace}
     Global diagonality and positivity give the fixed-length hypotheses of
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
     Since the chain operator is diagonal,
@@ -334,8 +330,7 @@
       MPOTensor.bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition,
       MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le}
     \leanok
-    \uses{def:mpdo_split_normalized_mpo,
-      def:bipartite_operator_schmidt_rank}
+    \uses{def:mpdo_split_normalized_mpo, def:bipartite_operator_schmidt_rank}
     Let $M$ be an MPO tensor of operator bond dimension $D$, and let
     $N=L+K$. Opening the two virtual bonds at the consecutive cut gives
     \begin{align}
@@ -455,8 +450,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:marginal_support_right_absorption,
-      thm:right_marginal_support_right_absorption}
     Let $P_A$ and $P_B$ be the support projections of the marginals. The two
     right-absorption identities give
     $\rho_{AB}(P_A\otimes P_B)=\rho_{AB}$. The support projection of
@@ -484,11 +477,7 @@
     spaces are permitted.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:marginal_support_left_absorption,
-      thm:marginal_support_right_absorption,
-      thm:right_marginal_support_left_absorption,
-      thm:right_marginal_support_right_absorption,
-      thm:operator_schmidt_rank_local_isometry}
+    \uses{thm:operator_schmidt_rank_local_isometry}
     The four marginal-support absorption identities give
     \begin{align}
       (P_A\otimes P_B)\rho&=\rho,
@@ -511,7 +500,6 @@
     \lean{Matrix.partialTraceRight_kronecker_conj_of_right_isometry,
       Matrix.partialTraceLeft_kronecker_conj_of_left_isometry}
     \leanok
-    \uses{def:partial_trace, def:partial_trace_left}
     Let $A:H_A\to K_A$ and $B:H_B\to K_B$ be linear maps between
     finite-dimensional complex spaces, and let $X$ be an operator on
     $H_A\otimes H_B$. If $B^\dagger B=1$, then
@@ -558,9 +546,7 @@
     their spaces has dimension zero.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:partial_trace_product_isometry,
-      thm:compression_on_support_posDef,
-      thm:operator_schmidt_rank_marginal_support_compression}
+    \uses{lem:partial_trace_product_isometry, thm:compression_on_support_posDef, thm:operator_schmidt_rank_marginal_support_compression}
     Insert the reconstruction $\rho=W\rho_cW^\dagger$ into the two covariance
     identities of Lemma~\ref{lem:partial_trace_product_isometry}, and multiply
     by the corresponding adjoint isometries. Each displayed marginal is the
@@ -576,8 +562,7 @@
       Matrix.supportedMarginalMap_diagonal,
       Matrix.supportedMarginalReconstruction_eq}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank,
-      thm:operator_schmidt_coefficient_space}
+    \uses{def:bipartite_operator_schmidt_rank, thm:operator_schmidt_coefficient_space}
     Let $\rho\geq0$ be a bipartite complex matrix whose first marginal is
     faithful. Choose an eigenbasis in which
     $\tr_B\rho=\diag(p_1,\ldots,p_{d_A})$ with
@@ -715,7 +700,6 @@
     \label{thm:relative_entropy_support_compression}
     \lean{TNLean.quantumRelativeEntropy_support_compression}
     \leanok
-    \uses{def:quantum_relative_entropy}
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite with
     $\ker\omega\subseteq\ker\rho$. Let $V:\C^k\to\C^D$ satisfy
     \begin{align}
@@ -733,10 +717,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:isometric_nonunital_conjugation,
-      thm:cfc_rectangular_isometry_zero,
-      thm:isometric_embedding_trace,
-      thm:support_compression_reconstruction}
+    \uses{def:isometric_nonunital_conjugation, thm:cfc_rectangular_isometry_zero, thm:isometric_embedding_trace, thm:support_compression_reconstruction}
     Theorem~\ref{thm:support_compression_reconstruction} reconstructs both
     $\rho$ and $\omega$ from their compressions. Apply
     Theorem~\ref{thm:cfc_rectangular_isometry_zero} to the logarithm, use
@@ -752,7 +733,6 @@
     \lean{Matrix.PosSemidef.sqrt_transpose}
     \lean{Matrix.IsHermitian.supportProj_transpose}
     \leanok
-    \uses{def:hermitian_support_projection}
     If $A\in\MN{n}$ is Hermitian and $f:\R\to\R$, then
     \begin{align}
       f(A)^T&=f(A^T).
@@ -775,7 +755,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:hermitian_support_projection}
     For a Hermitian matrix, transpose is entrywise complex conjugation.
     Apply covariance of the continuous functional calculus under this real
     star-algebra automorphism. Continuity of $f$ is needed only on the finite
@@ -788,7 +767,6 @@
     \label{thm:mpdo_support_log_kronecker}
     \lean{Matrix.log_kronecker_posSemidef}
     \leanok
-    \uses{def:hermitian_support_projection}
     Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
     orthogonal projections onto their respective ranges. Then
     \begin{align}
@@ -803,7 +781,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:hermitian_support_projection, lem:cfc_conj_unitary}
     Diagonalize $A$ and $B$. On a product eigenvector with eigenvalues
     $a,b\geq0$, equation~(\ref{eq:mpdo_support_log_tensor_product}) becomes
     \begin{align}
@@ -855,7 +832,6 @@
     \label{thm:support_log_vector_jensen}
     \lean{Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log}
     \leanok
-    \uses{def:hermitian_support_projection}
     Let $A\in\MN{n}$ be positive semidefinite and let $v\in\C^n$ satisfy
     $\langle v,v\rangle=1$ and $P_{\supp(A)}v=v$. Then
     \begin{align}
@@ -869,7 +845,6 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:hermitian_support_projection}
     Diagonalize $A=U\diag(\mu_i)U^\dagger$, set $w=U^\dagger v$, and put
     $p_i=|w_i|^2$. The support condition implies
     $\mu_i=0\Longrightarrow w_i=0$, so every spectral weight at zero vanishes.
@@ -945,8 +920,7 @@
     \label{thm:relative_entropy_q2_posdef}
     \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef}
     \leanok
-    \uses{def:quantum_relative_entropy,
-      def:sandwiched_renyi_two_trace}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\rho,\omega\in\MN{D}$ satisfy $\rho\succeq0$, $\omega\succ0$, and
     $\tr\rho=1$. Then
     \begin{align}
@@ -957,12 +931,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cfc_transpose_hermitian,
-      thm:mpdo_support_log_kronecker,
-      thm:log_sqrt_possemidef,
-      thm:log_rpow_posdef,
-      thm:support_log_vector_jensen,
-      thm:sandwiched_renyi_two_weighted}
+    \uses{thm:cfc_transpose_hermitian, thm:mpdo_support_log_kronecker, thm:log_sqrt_possemidef, thm:log_rpow_posdef, thm:support_log_vector_jensen, thm:sandwiched_renyi_two_weighted}
     Set $R=\sqrt\rho$, $T=\omega^{-1/2}$,
     $\Delta=R^T\otimes T$, and $v=\operatorname{vec}(R)$. The vectorization
     is column-stacking, with factor order
@@ -1036,10 +1005,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:isometric_nonunital_conjugation,
-      thm:cfc_rectangular_isometry_zero,
-      thm:isometric_embedding_trace,
-      thm:support_compression_reconstruction}
+    \uses{def:isometric_nonunital_conjugation, thm:cfc_rectangular_isometry_zero, thm:isometric_embedding_trace, thm:support_compression_reconstruction}
     The function $x\mapsto x^{-1/4}$ is taken to be zero at $x=0$, so
     Theorem~\ref{thm:cfc_rectangular_isometry_zero} applies. Reconstruct
     $\rho$ and $\omega$, combine the three expanded factors by
@@ -1050,8 +1016,7 @@
     \label{thm:relative_entropy_q2_faithful_reduction}
     \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
     \leanok
-    \uses{def:quantum_relative_entropy,
-      def:sandwiched_renyi_two_trace}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite matrices of trace one
     with $\ker\omega\subseteq\ker\rho$. Assume that for every dimension and
     every pair of trace-one matrices $A\succeq0$ and $B\succ0$,
@@ -1070,11 +1035,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:compression_on_support_posDef,
-      thm:isometric_embedding_trace,
-      thm:support_compression_reconstruction,
-      thm:relative_entropy_support_compression,
-      thm:sandwiched_renyi_two_support_compression}
+    \uses{thm:compression_on_support_posDef, thm:isometric_embedding_trace, thm:support_compression_reconstruction, thm:relative_entropy_support_compression, thm:sandwiched_renyi_two_support_compression}
     Choose an isometric inclusion of the support of $\omega$. Its compression
     $\omega_V=V^\dagger\omega V$ is positive definite by
     Theorem~\ref{thm:compression_on_support_posDef}, while
@@ -1090,8 +1051,7 @@
     \label{thm:relative_entropy_q2_support}
     \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace}
     \leanok
-    \uses{def:quantum_relative_entropy,
-      def:sandwiched_renyi_two_trace}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite matrices of trace one.
     If $\ker\omega\subseteq\ker\rho$, then
     \begin{align}
@@ -1101,8 +1061,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:relative_entropy_q2_posdef,
-      thm:relative_entropy_q2_faithful_reduction}
+    \uses{thm:relative_entropy_q2_posdef, thm:relative_entropy_q2_faithful_reduction}
     Apply Theorem~\ref{thm:relative_entropy_q2_faithful_reduction} with the
     faithful comparison from Theorem~\ref{thm:relative_entropy_q2_posdef}.
     Compression to the support of $\omega$ preserves both entropy functionals
@@ -1212,8 +1171,7 @@ terms of operator-Schmidt rank.
     \label{thm:rectangular_choi_rank_bound}
     \lean{Matrix.rectangularChoi_frobenius_sq_le_finrank_range}
     \leanok
-    \uses{def:rectangular_choi,
-      def:rectangular_hilbert_schmidt_contraction}
+    \uses{def:rectangular_choi, def:rectangular_hilbert_schmidt_contraction}
     If $\mathcal L:\MN{d}\to\MN{e}$ is a Hilbert--Schmidt contraction, then
     \begin{align}
         \left\|J(\mathcal L)\right\|_F^2
@@ -1244,9 +1202,7 @@ terms of operator-Schmidt rank.
       Matrix.supportedMarginalWhitenedState_eq_rectangularChoi,
       Matrix.finrank_range_weightedHilbertSchmidtMap}
     \leanok
-    \uses{thm:supported_marginal_channel,
-      def:rectangular_choi,
-      def:weighted_hilbert_schmidt_map}
+    \uses{thm:supported_marginal_channel, def:rectangular_choi}
     Let $\rho_{AB}\geq0$, and choose an eigenbasis of its faithful first
     marginal
     $\sigma=\diag(p_1,\ldots,p_{d_A})>0$.  Suppose also that the second
@@ -1292,9 +1248,7 @@ terms of operator-Schmidt rank.
       Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank,
       Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank}
     \leanok
-    \uses{thm:full_support_eigenbasis_whitening_choi,
-      thm:rectangular_choi_rank_bound,
-      thm:weighted_hilbert_schmidt_contraction_full_support}
+    \uses{thm:full_support_eigenbasis_whitening_choi, thm:rectangular_choi_rank_bound}
     Under the hypotheses of
     Theorem~\ref{thm:full_support_eigenbasis_whitening_choi},
     the matrix
@@ -1316,9 +1270,7 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:full_support_eigenbasis_whitening_choi,
-      thm:rectangular_choi_rank_bound,
-      thm:weighted_hilbert_schmidt_contraction_full_support}
+    \uses{thm:full_support_eigenbasis_whitening_choi, thm:rectangular_choi_rank_bound}
     The matrix $W$ is a congruence of $\rho_{AB}\geq0$, so it is positive
     semidefinite and Hermitian; consequently
     $\tr(W^2)=\|W\|_F^2$.
@@ -1346,7 +1298,6 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:cfc_conj_unitary}
     Apply Lemma~\ref{lem:cfc_conj_unitary} to the function $x\mapsto x^s$.
 \end{proof}
 
@@ -1362,7 +1313,6 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:multiplicative_functional_calculus_tensor_product}
     Apply
     Theorem~\ref{thm:multiplicative_functional_calculus_tensor_product} to
     $x\mapsto x^s$, using $(xy)^s=x^sy^s$ for $x,y\geq0$.
@@ -1432,8 +1382,7 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_osr_faithful}
     \lean{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef}
     \leanok
-    \uses{def:sandwiched_renyi_two_trace,
-      def:bipartite_operator_schmidt_rank}
+    \uses{def:sandwiched_renyi_two_trace, def:bipartite_operator_schmidt_rank}
     Let $\rho_{AB}\succeq0$ have positive definite marginals $\rho_A$ and
     $\rho_B$. Then
     \begin{align}
@@ -1445,12 +1394,7 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:partial_trace_product_isometry,
-      thm:operator_schmidt_rank_local_isometry,
-      thm:full_support_eigenbasis_whitened_choi_bound,
-      thm:rpow_kronecker_possemidef,
-      thm:rpow_neg_quarter_inv_sqrt_sqrt,
-      thm:sandwiched_renyi_two_unitary_invariance}
+    \uses{lem:partial_trace_product_isometry, thm:operator_schmidt_rank_local_isometry, thm:full_support_eigenbasis_whitened_choi_bound, thm:rpow_kronecker_possemidef, thm:rpow_neg_quarter_inv_sqrt_sqrt, thm:sandwiched_renyi_two_unitary_invariance}
     Choose a unitary $U$ that diagonalizes the first marginal and conjugate
     $\rho_{AB}$ by $U^\dagger\otimes1$. The two marginals become
     $\diag(p_i)$ and $\rho_B$, while positivity and operator-Schmidt rank are
@@ -1471,8 +1415,7 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_osr_support}
     \lean{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank}
     \leanok
-    \uses{def:sandwiched_renyi_two_trace,
-      def:bipartite_operator_schmidt_rank}
+    \uses{def:sandwiched_renyi_two_trace, def:bipartite_operator_schmidt_rank}
     Let $\rho_{AB}\succeq0$ be any finite-dimensional bipartite operator. Then
     \begin{align}
       Q_2(\rho_{AB},\rho_A\otimes\rho_B)
@@ -1485,11 +1428,7 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sandwiched_renyi_two_osr_faithful,
-      thm:sandwiched_renyi_two_support_compression,
-      thm:product_marginals_kernel,
-      thm:operator_schmidt_rank_marginal_support_compression,
-      thm:faithful_marginals_support_compression}
+    \uses{thm:sandwiched_renyi_two_osr_faithful, thm:sandwiched_renyi_two_support_compression, thm:product_marginals_kernel, thm:operator_schmidt_rank_marginal_support_compression, thm:faithful_marginals_support_compression}
     Compress both factors simultaneously to the supports of $\rho_A$ and
     $\rho_B$. The compressed marginals are positive definite by
     Theorem~\ref{thm:faithful_marginals_support_compression}, even when a
@@ -1584,8 +1523,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{thm:sandwiched_renyi_trace_two}
     \lean{TNLean.sandwichedRenyiTrace_two}
     \leanok
-    \uses{def:sandwiched_renyi_trace,
-      def:sandwiched_renyi_two_trace}
+    \uses{def:sandwiched_renyi_trace, def:sandwiched_renyi_two_trace}
     If $\rho\geq0$ and $\omega>0$, then
     \begin{align}
         \widetilde Q_2(\rho\Vert\omega)&=Q_2(\rho,\omega).
@@ -1594,8 +1532,7 @@ logarithmic divergence, or a comparison with relative entropy.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:sandwiched_renyi_trace,
-      def:sandwiched_renyi_two_trace}
+    \uses{def:sandwiched_renyi_trace, def:sandwiched_renyi_two_trace}
     At $\alpha=2$ the sandwiching exponent is $-1/4$.
     Since $\omega^{-1/4}\rho\,\omega^{-1/4}$ is positive semidefinite, its
     continuous-functional-calculus square is its ordinary matrix square.
@@ -1605,8 +1542,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
     \lean{Entropy.mutualInformation_le_log_operatorSchmidtRank}
     \leanok
-    \uses{def:entropy_mutual_information,
-      def:bipartite_operator_schmidt_rank}
+    \uses{def:bipartite_operator_schmidt_rank}
     Let $\rho_{AB}\succeq0$ be a finite-dimensional bipartite operator with
     $\tr\rho_{AB}=1$. Then
     \begin{align}
@@ -1618,14 +1554,7 @@ logarithmic divergence, or a comparison with relative entropy.
     operator-Schmidt rank is the ordinary operator-Schmidt rank.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:relative_entropy_product_marginals,
-      thm:product_marginals_kernel,
-      lem:relative_entropy_submatrix_equiv,
-      thm:sandwiched_renyi_two_submatrix_equiv,
-      thm:relative_entropy_q2_support,
-      thm:sandwiched_renyi_two_nonneg,
-      thm:sandwiched_renyi_two_osr_support,
-      thm:operator_schmidt_rank_pos}
+    \uses{thm:product_marginals_kernel, thm:sandwiched_renyi_two_submatrix_equiv, thm:relative_entropy_q2_support, thm:sandwiched_renyi_two_nonneg, thm:sandwiched_renyi_two_osr_support, thm:operator_schmidt_rank_pos}
     Set $\omega=\rho_A\otimes\rho_B$. The marginals are positive semidefinite,
     $\tr\omega=1$, and Theorem~\ref{thm:product_marginals_kernel} gives
     $\ker\omega\subseteq\ker\rho_{AB}$. Reindex the product basis by a single
@@ -1672,11 +1601,7 @@ logarithmic divergence, or a comparison with relative entropy.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_split_normalized_mpo,
-      lem:mpdo_chain_mutual_information_bipartition,
-      thm:mpdo_periodic_cut_operator_schmidt_rank,
-      thm:mutual_information_le_log_operator_schmidt_rank,
-      thm:operator_schmidt_rank_pos}
+    \uses{def:mpdo_split_normalized_mpo, lem:mpdo_chain_mutual_information_bipartition, thm:mpdo_periodic_cut_operator_schmidt_rank, thm:mutual_information_le_log_operator_schmidt_rank, thm:operator_schmidt_rank_pos}
     Reindex the normalized chain operator across the consecutive cut. Its
     trace is one, and its positivity is preserved by this reindexing. Hence
     \begin{align}
@@ -1769,7 +1694,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{def:pure_sal}
     \lean{MPSTensor.pureBlockEntropy, MPSTensor.IsSAL}
     \leanok
-    \uses{def:mps_tensor, def:von_neumann_entropy}
+    \uses{def:mps_tensor}
     For an MPS tensor $A$, a system size $N$, and a block length $L\le N$, let
     \begin{align}
         \sigma^{(N)}(A)
@@ -2008,7 +1933,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{lem:pure_block_entropy_env_charpoly}
     \lean{MPSTensor.pureBlockEntropy_eq_env_charpoly}
     \leanok
-    \uses{lem:schmidt_gram_transfer_power, lem:charpoly_root_entropy_cyclic_swap}
+    \uses{lem:schmidt_gram_transfer_power}
     Let $A$ be an MPS tensor, let $L\le N$, put $m=N-L$, and write
     $c=(\tr\rho^{(N)})^{-1}$. Then the pure block entropy is the
     charpoly-root entropy sum of the $D^2\times D^2$ bond environment:
@@ -2044,9 +1969,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{thm:rfp-saturates-area-law}
     \lean{MPSTensor.isSAL_of_isTransferIdempotent}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:pure_sal,
-        lem:pure_block_entropy_env_charpoly,
-        lem:rfp_schmidt_gram_collapse}
+    \uses{def:mps_transfer_idempotence, def:pure_sal, lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
     If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
     area law: for every chain length $N$ and every block length
     $1\le L<\lfloor N/2\rfloor$, the pure-state block entropy is constant in the
@@ -2170,8 +2093,7 @@ logarithmic divergence, or a comparison with relative entropy.
 \begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
     \lean{MPSTensor.pureBlockEntropy_le}
     \leanok
-    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank,
-        thm:entropy_le_log_rank, lem:reduced_pure_block_state_density}
+    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank, lem:reduced_pure_block_state_density}
     Let $A$ be an MPS tensor of bond dimension $D\geq1$ with
     $V^{(N)}(A)\neq0$. For every block length $L\le N$,
     $S_L^{(N)}(A)\leq2\log D$, uniformly in $L$ and $N$. This is the area law of
@@ -2179,8 +2101,7 @@ logarithmic divergence, or a comparison with relative entropy.
     by a constant independent of the block size.
 \end{proposition}
 \begin{proof}\leanok
-    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank,
-        thm:entropy_le_log_rank, lem:reduced_pure_block_state_density}
+    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank, lem:reduced_pure_block_state_density}
     The reduced state $\rho_L^{(N)}(A)$ is a density matrix
     (Lemma~\ref{lem:reduced_pure_block_state_density}), so its rank is positive
     by Lemma~\ref{lem:trace_one_positive_rank}. Its rank is at most $D^2$ by
@@ -2192,7 +2113,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{lem:pure_block_entropy_nonneg}
     \lean{MPSTensor.pureBlockEntropy_nonneg}
     \leanok
-    \uses{def:pure_sal, thm:entropy_nonneg, lem:reduced_pure_block_state_density}
+    \uses{def:pure_sal, lem:reduced_pure_block_state_density}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq0$ and every block length
     $L\le N$, the pure-state block entropy is non-negative:
     $0\le S_L^{(N)}(A)$.

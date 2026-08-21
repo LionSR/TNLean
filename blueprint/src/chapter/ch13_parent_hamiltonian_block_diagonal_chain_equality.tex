@@ -30,8 +30,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_periodic_chain_inclusions}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1}
     \leanok
-    \uses{lem:isup_chain_ground_space_block_le_assembled,
-        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    \uses{lem:isup_chain_ground_space_block_le_assembled, lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, one has
     \begin{align}
@@ -169,9 +168,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_boundary_representation_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary}
     \leanok
-    \uses{lem:block_diagonal_boundary_representation_inclusion,
-        lem:block_diagonal_boundary_closing_equality,
-        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    \uses{lem:block_diagonal_boundary_representation_inclusion, lem:block_diagonal_boundary_closing_equality, lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, suppose
     every vector $\psi\in\mathcal G_{N,L}(B)$ has block-diagonal boundary
@@ -202,8 +199,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_complementary_identities_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}
     \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities,
-        lem:bnt_block_diagonal_boundary_representation_equality}
+    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities, lem:bnt_block_diagonal_boundary_representation_equality}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
     in addition that $L+L_0\le N$. Assume further that, for every
@@ -232,8 +228,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities,
-        lem:bnt_block_diagonal_boundary_representation_equality}
+    \uses{lem:block_diagonal_boundary_periodic_components_from_complementary_identities, lem:bnt_block_diagonal_boundary_representation_equality}
     For each $\psi$,
     Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
     gives matrices $X_j$ with
@@ -260,8 +255,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_pgvwc_comparison_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison}
     \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison,
-        lem:bnt_block_diagonal_boundary_representation_equality}
+    \uses{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison, lem:bnt_block_diagonal_boundary_representation_equality}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
     in addition that $L+L_0\le N$. Assume further that, for every
@@ -293,8 +287,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison,
-        lem:bnt_block_diagonal_boundary_representation_equality}
+    \uses{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison, lem:bnt_block_diagonal_boundary_representation_equality}
     For each $\psi$,
     Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison}
     gives matrices $X_j$ with
@@ -352,9 +345,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_crossing_pgvwc_comparison_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison}
     \leanok
-    \uses{lem:bnt_block_diagonal_boundary_representation_equality,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space,
-        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    \uses{lem:bnt_block_diagonal_boundary_representation_equality, thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space, lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
     in addition that $L+L_0\le N$. Assume also that, for every
@@ -385,9 +376,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_boundary_representation_equality,
-        thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space,
-        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    \uses{lem:bnt_block_diagonal_boundary_representation_equality, thm:block_diagonal_boundary_crossing_pgvwc_comparison_chain_ground_space, lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality} reduces
     the claim to producing, for each $\psi$, block-diagonal boundary conditions
     $X_j$ whose single-block components lie in
@@ -447,8 +436,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_trace_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition}
     \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition,
-        lem:bnt_block_diagonal_boundary_representation_equality}
+    \uses{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition, lem:bnt_block_diagonal_boundary_representation_equality}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
     in addition that $L+L_0\le N$. Assume also that, for some middle-word length
@@ -486,8 +474,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition,
-        lem:bnt_block_diagonal_boundary_representation_equality}
+    \uses{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition, lem:bnt_block_diagonal_boundary_representation_equality}
     For each $\psi$,
     Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     gives matrices $X_j$ with
@@ -514,8 +501,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_trace_decomposition_bnt_span_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}
     \leanok
-    \uses{lem:unital_block_separating_product_span,
-        lem:bnt_block_diagonal_trace_decomposition_equality}
+    \uses{lem:unital_block_separating_product_span, lem:bnt_block_diagonal_trace_decomposition_equality}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_boundary_representation_equality}, assume
     in addition that $L+L_0\le N$ and
@@ -554,8 +540,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
 
 \begin{proof}
     \leanok
-    \uses{lem:unital_block_separating_product_span,
-        lem:bnt_block_diagonal_trace_decomposition_equality}
+    \uses{lem:unital_block_separating_product_span, lem:bnt_block_diagonal_trace_decomposition_equality}
     Lemma~\ref{lem:unital_block_separating_product_span} gives
     $\spn\{(A^1_w,\ldots,A^g_w):|w|=m\} = \prod_j\MN{D_j}$.
     Applying
@@ -568,9 +553,7 @@ Lemma~\ref{lem:complementary_word_boundary_identities_from_pgvwc}.
     \label{lem:bnt_block_diagonal_boundary_decomposition_equality}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition}
     \leanok
-    \uses{lem:block_diagonal_boundary_decomposition_inclusion,
-        lem:isup_chain_ground_space_block_le_assembled,
-        lem:bnt_block_diagonal_periodic_constraints_internal_sum}
+    \uses{lem:block_diagonal_boundary_decomposition_inclusion, lem:isup_chain_ground_space_block_le_assembled, lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     Let $A_1,\ldots,A_g$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional

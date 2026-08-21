@@ -175,8 +175,7 @@ recorded in the route note
     extracted on the second.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:chain_overlapWindow_exists_bondOperator,
-        lem:exists_arcTransport, lem:isWindowInjective_arc_span}
+    \uses{lem:chain_overlapWindow_exists_bondOperator, lem:exists_arcTransport, lem:isWindowInjective_arc_span}
     A virtual insertion $X$ on the bond is realized on each of the
     $L+1$ overlapping windows around it by deformed window tensors
     placing $X$ after the first $L-j$ letters of the window starting at
@@ -238,9 +237,7 @@ recorded in the route note
     with the site-dependent Lemma~5 as its engine.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{lem:chain_exists_conjugation_of_sameState,
-        lem:chain_overlapWindow_exists_bondOperator,
-        lem:isWindowInjective_arc_span}
+    \uses{lem:chain_exists_conjugation_of_sameState, lem:chain_overlapWindow_exists_bondOperator, lem:isWindowInjective_arc_span}
     The per-bond conjugations
     (Lemma~\ref{lem:chain_exists_conjugation_of_sameState}) give window
     covariance with nonzero scalars: on every arc of $m$ sites with
@@ -286,8 +283,7 @@ recorded in the route note
     \label{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
     \leanok
-    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
-        lem:isWindowInjective_one_of_isInjective}
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, lem:isWindowInjective_one_of_isInjective}
     Let $A_0,\ldots,A_{n-1}$ and $B_0,\ldots,B_{n-1}$ be two
     site-dependent closed chains on $n\ge3$ sites, with common physical
     dimension and common positive bond dimension. Suppose every local tensor
@@ -299,8 +295,7 @@ recorded in the route note
     \cite[Theorem~\textup{thm:inj\_MPS}, lines~688--725]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,
-        lem:isWindowInjective_one_of_isInjective}
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, lem:isWindowInjective_one_of_isInjective}
     Apply Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap}
     with $L=1$. The size condition becomes $n\ge3$, and
     Lemma~\ref{lem:isWindowInjective_one_of_isInjective} converts the
@@ -324,8 +319,7 @@ recorded in the route note
     \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
-        def:mps_chain_cyclic_shift}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState, def:mps_chain_cyclic_shift}
     Let $A_0,\ldots,A_{n-1}$ be an injective site-dependent closed chain
     with positive bond dimension on $n\ge3$ sites. If its generated state
     is invariant under the cyclic shift $A_v\mapsto A_{v+1}$, then there
@@ -365,8 +359,7 @@ recorded in the route note
     \label{cor:exists_gauge_to_first_of_cyclicShiftInvariantState}
     \lean{TNLean.PEPS.exists_gauge_to_first_of_cyclicShiftInvariantState}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
-        cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift, cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
     Let $A_0,\ldots,A_{n-1}$ be an injective site-dependent closed chain
     with positive bond dimension on $n\ge3$ sites. If its generated state
     is invariant under the cyclic translation of the sites, then for every
@@ -386,8 +379,7 @@ recorded in the route note
     \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,
-        def:mps_chain_cyclic_shift}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift, def:mps_chain_cyclic_shift}
     Let $A_0,\ldots,A_{n-1}$ be an injective site-dependent closed chain on
     $n\ge3$ sites, with one physical dimension $d$ and one positive bond
     dimension $D$. If the closed-chain state is invariant under the cyclic
@@ -428,10 +420,7 @@ recorded in the route note
         uniform bond dimension]%
     \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
     \notready
-    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState,
-        thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant,
-        def:peps_torus_uniform_bond_dim,
-        thm:peps_stateCoeff_translationInvariant}
+    \uses{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState, thm:fundamentalTheorem_PEPS, def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim, thm:peps_stateCoeff_translationInvariant}
     Let $A$ be an injective PEPS on the discrete torus with orientation-uniform
     bond dimensions, horizontal dimension $D_h$ and vertical dimension $D_v$,
     and positive bond dimensions. If the generated state is invariant under all
@@ -561,8 +550,7 @@ recorded in the route note
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,
-        def:chain_arc_window_injective}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState, def:chain_arc_window_injective}
     Under the positive-bond-dimension hypotheses of
     Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState},
     suppose $Z_v$ and $Z'_v$ are two families of invertible matrices
@@ -598,8 +586,7 @@ dimensions; this uniform-dimension restriction is the only narrowing.
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
     \leanok
-    \uses{thm:fundamentalTheorem_PEPS, def:peps_normalPEPSBlockingHypotheses,
-        def:GaugeEquivPEPS, def:IsVertexInjective}
+    \uses{thm:fundamentalTheorem_PEPS, def:peps_normalPEPSBlockingHypotheses, def:GaugeEquivPEPS, def:IsVertexInjective}
     Suppose PEPS tensors $A$ and $B$ are vertex injective with positive bond
     dimensions on a connected graph, generate the same state, and $A$ satisfies
     the normal blocking hypotheses. Then their defining tensors are related by

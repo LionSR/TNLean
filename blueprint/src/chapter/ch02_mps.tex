@@ -369,8 +369,7 @@ boundary conditions (PBC).
         MPSTensor.NonzeroProportionalMPV₂.symm,
         MPSTensor.SameMPV₂Pos.toNonzeroProportionalMPV₂}
     \leanok
-    \uses{def:proportional_mpv, def:nonzero_proportional_mpv,
-        def:eventually_nonzero_proportional_mpv, def:same_mpv2_pos}
+    \uses{def:proportional_mpv, def:nonzero_proportional_mpv, def:eventually_nonzero_proportional_mpv, def:same_mpv2_pos}
     Nonzero proportionality implies weak proportionality and eventual nonzero
     proportionality, is symmetric, and equality of MPV families is the special
     case with scalar $1$, at every positive length.
@@ -659,9 +658,7 @@ $A^{-1}A=\Id$. This is the identity used in
 \end{proof}
 
 \begin{remark}\leanok
-    \uses{lem:primitive_implies_irreducible, thm:burnside_matrix,
-        thm:normal_from_primitive_posdef, thm:algspan_to_normal,
-        thm:blocking_primitivity}
+    \uses{lem:primitive_implies_irreducible, thm:burnside_matrix, thm:normal_from_primitive_posdef, thm:algspan_to_normal, thm:blocking_primitivity}
     The algebraic characterization of normality in
     Definition~\ref{def:normal} --- eventual full matrix span,
     equivalently eventual block injectivity --- is equivalent to the
@@ -755,8 +752,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \label{lem:block_diagonal_of_commutes_block_projection}
     \lean{Matrix.isBlockDiagonal'_of_commutes_blockProjection}
     \leanok
-    \uses{def:block_projection, def:block_diagonal_matrix,
-        lem:block_diagonal_iff_off_block_zero}
+    \uses{def:block_projection, def:block_diagonal_matrix, lem:block_diagonal_iff_off_block_zero}
     If a matrix on $\bigoplus_k \C^{D_k}$ commutes with every block projection
     $P_j$, then it is block diagonal.
 \end{lemma}

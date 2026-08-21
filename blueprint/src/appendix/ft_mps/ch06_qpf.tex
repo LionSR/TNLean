@@ -14,7 +14,6 @@ convex domain and the limit argument used for channel fixed points.
 \begin{theorem}[Density matrices are compact]\label{thm:density_compact}
     \lean{densityMatrices_isCompact}
     \leanok
-    \uses{def:density_matrices}
     $\mc{D}_D$ is compact in the entrywise topology on $\MN{D}$.
 \end{theorem}
 
@@ -32,7 +31,6 @@ convex domain and the limit argument used for channel fixed points.
 \begin{theorem}[Density matrices are convex]\label{thm:density_convex}
     \lean{densityMatrices_isConvex}
     \leanok
-    \uses{def:density_matrices}
     $\mc{D}_D$ is convex.
 \end{theorem}
 
@@ -44,7 +42,6 @@ convex domain and the limit argument used for channel fixed points.
 \begin{theorem}[Density matrices are nonempty]\label{thm:density_nonempty}
     \lean{densityMatrices_nonempty}
     \leanok
-    \uses{def:density_matrices}
     For $D \ge 1$, $\mc{D}_D \neq \varnothing$.
 \end{theorem}
 
@@ -55,12 +52,11 @@ convex domain and the limit argument used for channel fixed points.
 \begin{theorem}[Channels preserve density matrices]\label{thm:channel_preserves_density}
     \lean{IsChannel.map_densityMatrices}
     \leanok
-    \uses{def:channel, def:density_matrices}
     If $E$ is a quantum channel, then
     $E(\mc{D}_D) \subseteq \mc{D}_D$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:cp_is_positive}
+\begin{proof}\leanok
     Complete positivity implies positivity by
     Theorem~\ref{thm:cp_is_positive}, so $E(\rho) \ge 0$; trace preservation
     gives $\tr(E(\rho)) = \tr(\rho) = 1$.
@@ -72,7 +68,7 @@ convex domain and the limit argument used for channel fixed points.
     \lean{fixedPoint_of_compact_retract, fixedPoint_of_compact_retract_fin}
     \lean{exists_fixedPoint_closedCube, exists_fixedPoint_unitCube}
     \leanok
-    \uses{def:density_matrices, thm:density_compact}
+    \uses{thm:density_compact}
     Let $D > 0$. Every continuous map from the compact convex set of
     density matrices in $\MN{D}$ to itself has a fixed point.
 \end{theorem}
@@ -89,7 +85,7 @@ convex domain and the limit argument used for channel fixed points.
     \label{lem:cesaro_mean_density}
     \lean{IsChannel.cesaroMean_mem_densityMatrices}
     \leanok
-    \uses{def:cesaro_mean, thm:channel_preserves_density, thm:density_convex}
+    \uses{thm:channel_preserves_density, thm:density_convex}
     Let $E$ be a quantum channel and $\rho\in\mc{D}_D$. Then, for every
     $N\geq0$,
     \begin{align}
@@ -111,8 +107,7 @@ convex domain and the limit argument used for channel fixed points.
     \label{lem:cesaro_subseq_fixed}
     \lean{IsChannel.cesaroMean_subseq_limit_fixedPoint}
     \leanok
-    \uses{lem:cesaro_mean_density, thm:density_compact,
-        thm:cesaro_telescope}
+    \uses{lem:cesaro_mean_density, thm:density_compact}
     Let $E$ be a quantum channel, $\rho\in\mc{D}_D$, and
     $\psi:\N\to\N$ satisfy $\psi(k)\to\infty$. If
     \begin{align}
@@ -199,7 +194,6 @@ outer square-root factors yields
     \label{thm:kraus_tp_gauge_from_adjoint_fixed}
     \lean{Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint}
     \leanok
-    \uses{def:kraus_map}
     Let $\{K_i\}_{i=0}^{d-1}$ be a finite Kraus family and let $\rho$ be
     positive definite with $\sum_i K_i^\dagger \rho K_i = \rho$. Define the
     gauged family $B_i = \rho^{1/2} K_i \rho^{-1/2}$. Then $B$ is
@@ -297,7 +291,6 @@ outer square-root factors yields
     \label{thm:adjoint_transfer_ne_zero}
     \lean{Kraus.mapLM_ne_zero_of_exists_ne_zero}
     \leanok
-    \uses{def:kraus_map}
     If some Kraus operator $K_i \neq 0$, then the Kraus map
     $X \mapsto \sum_i K_i X K_i^\dagger$ is nonzero.
 \end{theorem}
@@ -317,7 +310,6 @@ outer square-root factors yields
     \label{thm:kraus_map_cp}
     \lean{Kraus.isCPMap_mapLM}
     \leanok
-    \uses{def:kraus_map}
     The Kraus map of a finite matrix family $\{K_i\}_{i=0}^{d-1}$ is
     completely positive.
 \end{theorem}
@@ -330,7 +322,7 @@ outer square-root factors yields
     \label{thm:kraus_conjTranspose_irreducible}
     \lean{Kraus.isIrreducibleMap_mapLM_conjTranspose}
     \leanok
-    \uses{def:kraus_map, def:irreducible_cp}
+    \uses{def:irreducible_cp}
     If the Kraus map of $\{K_i\}_{i=0}^{d-1}$ is irreducible, then so is the
     Kraus map of the conjugate-transposed family $\{K_i^\dagger\}$.
 \end{theorem}
@@ -350,7 +342,7 @@ outer square-root factors yields
     \label{thm:kraus_posdef_adjoint_eigenvector}
     \lean{Kraus.exists_posDef_adjoint_eigenvector}
     \leanok
-    \uses{def:kraus_map, def:irreducible_cp}
+    \uses{def:irreducible_cp}
     Let $\{K_i\}_{i=0}^{d-1}$ be a family with $D > 0$ and some
     $K_i \neq 0$, whose Kraus map $\mathcal K_K$ is irreducible. Then there
     exist a positive definite matrix~$\sigma$ and a positive real $r > 0$
@@ -367,9 +359,7 @@ outer square-root factors yields
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pf_eigenvector_existence, thm:adjoint_transfer_ne_zero,
-        thm:psd_eigenvector_pd_irred, thm:kraus_conjTranspose_irreducible,
-        thm:kraus_map_cp}
+    \uses{thm:pf_eigenvector_existence, thm:adjoint_transfer_ne_zero, thm:psd_eigenvector_pd_irred, thm:kraus_conjTranspose_irreducible, thm:kraus_map_cp}
     The conjugate-transposed family $\{K_i^\dagger\}$ has the same Kraus map
     as the adjoint of $\mathcal K_K$, so it is completely positive
     (Theorem~\ref{thm:kraus_map_cp}), and by

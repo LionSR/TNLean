@@ -19,8 +19,7 @@ product states, and the square lattice.
         NormalPEPSBlockingHypotheses.endpoint_injective_disjoint_cover_at_edge}
     \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.mem_withSite_iff}
     \leanok
-    \uses{def:peps_normalEdgeBlockingHypotheses,
-        def:peps_normalOneSiteSeparationHypotheses}
+    \uses{def:peps_normalEdgeBlockingHypotheses, def:peps_normalOneSiteSeparationHypotheses}
     The general normal theorem assumes both the edge-centred blockings into
     three injective regions and the one-site comparison regions with injective
     complements. These two assumptions are collected as the normal PEPS
@@ -140,9 +139,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.%
         normalSquarePEPSBlockingHypotheses_mem_withSite_iff_of_marginCovers}
     \leanok
-    \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows,
-        def:peps_normalPEPSBlockingHypotheses,
-        def:peps_normalOneSiteSeparationHypotheses}
+    \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows, def:peps_normalPEPSBlockingHypotheses, def:peps_normalOneSiteSeparationHypotheses}
     Given rectangular injectivity hypotheses, finite union closure, oriented
     margin-and-cover hypotheses at every edge, and one-site separation, the finite
     square lattice satisfies the general normal blocking hypotheses. The
@@ -161,10 +158,7 @@ product states, and the square lattice.
 \begin{theorem}[Fundamental Theorem for normal PEPS]%
     \label{thm:fundamentalTheorem_normalPEPS}
     \notready
-    \uses{thm:peps_normalEdgeBlockingHypotheses_injectiveChain,
-        def:peps_normalPEPSBlockingHypotheses,
-        thm:peps_oneVertexComplementComparison,
-        def:GaugeEquivPEPS}
+    \uses{thm:peps_normalEdgeBlockingHypotheses_injectiveChain, def:peps_normalPEPSBlockingHypotheses, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS}
     Suppose two normal PEPS generate the same state, can be blocked into
     three-site injective chains around every edge, and for every site admit
     two injective regions with injective complements that differ exactly at
@@ -206,8 +200,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.bondDim_eq_of_normalBlocking}
     \lean{TNLean.PEPS.bondDim_apply_eq_of_blockingData}
     \leanok
-    \uses{def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair}
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityDataPair}
     Let $A$ and $B$ be PEPS tensors on a finite simple graph with the same
     positive physical dimension and positive bond dimensions, generating the
     same state and satisfying the normal blocking hypotheses at the doubly
@@ -224,8 +217,7 @@ product states, and the square lattice.
     two parties of the blocked chain.
     \begin{proof}
         \leanok
-        \uses{thm:peps_edgeBlockedThreeSiteInjective,
-            thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+        \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
         Fix an edge. Blocking both networks into the shared three regions
         around it produces two three-site chains on the three-vertex complete
         graph whose super-sites carry the blocked-region weight families,
@@ -256,8 +248,7 @@ product states, and the square lattice.
     % blockings and the single-crossing hypothesis are the source's blocking
     % hypothesis made explicit, not restrictions; both readings are recorded
     % in \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
-    \uses{def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
     Let $A$ and $B$ be PEPS tensors on a connected finite simple graph with
     the same positive physical dimension and positive bond dimensions,
     generating the same state. Suppose the normal blocking
@@ -297,10 +288,7 @@ product states, and the square lattice.
     % so that they meet only along the distinguished edge.
     \begin{proof}
         \leanok
-        \uses{thm:peps_bondDim_eq_of_normalBlocking,
-            lem:peps_injectiveRegion_union_pos,
-            thm:peps_region_edge_gauge_of_coeff_transfer,
-            thm:gaugeConsistency}
+        \uses{thm:peps_bondDim_eq_of_normalBlocking, lem:peps_injectiveRegion_union_pos, thm:peps_region_edge_gauge_of_coeff_transfer, thm:gaugeConsistency}
         The bond dimensions of the two tensors agree on every edge by
         Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}.
         The union closure of injective regions for either tensor follows from
@@ -334,8 +322,7 @@ product states, and the square lattice.
     \label{thm:fundamentalTheorem_normalPEPS_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_gauge_unique}
     \leanok
-    \uses{def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair, def:gaugeVertex}
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityDataPair, def:gaugeVertex}
     Let $A$ and $B$ be PEPS tensors on a finite simple graph with equal bond
     dimensions, the bond dimensions of the first tensor positive, satisfying
     the normal blocking hypotheses at the doubly injective assignment of the
@@ -351,8 +338,7 @@ product states, and the square lattice.
     connectivity is needed.
     \begin{proof}
         \leanok
-        \uses{thm:peps_gaugeConj_eq_of_coeffIdentities,
-            lem:peps_injectiveRegion_union_pos}
+        \uses{thm:peps_gaugeConj_eq_of_coeffIdentities, lem:peps_injectiveRegion_union_pos}
         The inserted-edge coefficient is multilinear in the site tensors, one
         factor per site, so each scalar-free per-vertex relation makes every
         inserted coefficient of $B$ equal the corresponding inserted

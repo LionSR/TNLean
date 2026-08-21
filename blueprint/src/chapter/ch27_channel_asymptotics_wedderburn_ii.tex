@@ -4,9 +4,7 @@
     \label{thm:starSubalgebra_orthogonal_isotypic_decomposition}
     \lean{StarSubalgebra.exists_orthogonal_isotypic_decomposition}
     \leanok
-    \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition,
-        lem:starSubalgebra_isOrtho_sSup_not_sameIsotype, lem:starSubalgebra_sameIsotype_of_le_sSup,
-        lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm, lem:starSubalgebra_sameIsotype_trans}
+    \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition, lem:starSubalgebra_isOrtho_sSup_not_sameIsotype, lem:starSubalgebra_sameIsotype_of_le_sSup, lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm, lem:starSubalgebra_sameIsotype_trans}
     Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^D$ is the supremum of a finite family $\mathcal{C}$ of pairwise orthogonal subspaces, the
     isotypic components, and each component $C\in\mathcal{C}$ is the supremum $C=\bigvee_{W\in\mathcal{D}_C}W$ of a finite, nonempty class
     $\mathcal{D}_C$ of pairwise orthogonal subspaces irreducible under $S$ that are pairwise of the same type. Moreover, for distinct components
@@ -15,9 +13,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition,
-        lem:starSubalgebra_isOrtho_sSup_not_sameIsotype, lem:starSubalgebra_sameIsotype_of_le_sSup,
-        lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm, lem:starSubalgebra_sameIsotype_trans}
+    \uses{thm:starSubalgebra_orthogonal_irreducible_decomposition, lem:starSubalgebra_isOrtho_sSup_not_sameIsotype, lem:starSubalgebra_sameIsotype_of_le_sSup, lem:starSubalgebra_sameIsotype_refl, lem:starSubalgebra_sameIsotype_symm, lem:starSubalgebra_sameIsotype_trans}
     Theorem~\ref{thm:starSubalgebra_orthogonal_irreducible_decomposition} supplies a finite, pairwise orthogonal family $\mathcal{D}$ of
     irreducible pieces with $\bigvee_{W\in\mathcal{D}}W=\C^D$. For each piece $W$, let $\mathcal{D}_W$ be the class of pieces of $\mathcal{D}$
     of the same type as $W$, and let $C_W$ be its supremum. Each piece lies in its own class by Lemma~\ref{lem:starSubalgebra_sameIsotype_refl}, so
@@ -92,8 +88,7 @@ form $\MN{d_k}\otimes\Id_{m_k}$ of
     \label{thm:starSubalgebra_isotypic_tensor_factorization}
     \lean{StarSubalgebra.exists_isotypic_tensor_factorization}
     \leanok
-    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition,
-        thm:starSubalgebra_adapted_orthonormal_basis} Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^D$ is the supremum
+    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition, thm:starSubalgebra_adapted_orthonormal_basis} Let $S$ be a $*$-subalgebra of $\MN{D}$. Then $\C^D$ is the supremum
     of a finite family of pairwise orthogonal isotypic components, and each component carries an orthonormal basis $(f_{i,j})$, indexed by a
     multiplicity index $i<m$ and an irreducible index $j<d$, such that every $A\in S$ acts by
     \begin{align}
@@ -107,8 +102,7 @@ form $\MN{d_k}\otimes\Id_{m_k}$ of
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition,
-        thm:starSubalgebra_adapted_orthonormal_basis} Theorem~\ref{thm:starSubalgebra_orthogonal_isotypic_decomposition}
+    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition, thm:starSubalgebra_adapted_orthonormal_basis} Theorem~\ref{thm:starSubalgebra_orthogonal_isotypic_decomposition}
     writes $\C^D$ as the supremum of finitely many pairwise orthogonal components, each the supremum of a finite, nonempty class of pairwise
     orthogonal irreducible pieces of one type. Applying Theorem~\ref{thm:starSubalgebra_adapted_orthonormal_basis} to each class
     equips each component with its adapted orthonormal basis.
@@ -141,8 +135,7 @@ is the unital case of the block representation invoked by~\cite[Theorem~6.14]{Wo
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition,
-        thm:starSubalgebra_adapted_orthonormal_basis}
+    \uses{thm:starSubalgebra_orthogonal_isotypic_decomposition, thm:starSubalgebra_adapted_orthonormal_basis}
     Theorem~\ref{thm:starSubalgebra_orthogonal_isotypic_decomposition}
     writes $\C^D$ as the supremum of finitely many pairwise orthogonal
     isotypic components, each the supremum of a finite, nonempty same-type
@@ -239,8 +232,7 @@ blockwise on the basis to a block-diagonal matrix.
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis,
-        lem:starSubalgebra_unitary_change_of_basis_block}
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis, lem:starSubalgebra_unitary_change_of_basis_block}
     Let $(f_{k,i,j})$ be the adapted orthonormal basis of
     Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}, and
     let $U$ be the unitary supplied by
@@ -395,8 +387,7 @@ subalgebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:commuting_overlapping_middle_coefficients,
-        thm:starSubalgebra_complementary_spatial_actions}
+    \uses{thm:commuting_overlapping_middle_coefficients, thm:starSubalgebra_complementary_spatial_actions}
     Let $S$ be the commutant of the family $(Y_{cc'})_{c,c'}$ together with
     its adjoints. Hermiticity gives $Y_{cc'}^*=Y_{c'c}$.
     Theorem~\ref{thm:commuting_overlapping_middle_coefficients} therefore
@@ -539,11 +530,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis,
-        lem:starSubalgebra_unitary_change_of_basis_block,
-        lem:starSubalgebra_double_commutant,
-        lem:starSubalgebra_scalar_commutant_irreducible, def:starSubalgebra_intertwiner,
-        def:starSubalgebra_sameIsotype}
+    \uses{thm:starSubalgebra_global_adapted_orthonormal_basis, lem:starSubalgebra_unitary_change_of_basis_block, lem:starSubalgebra_double_commutant, lem:starSubalgebra_scalar_commutant_irreducible, def:starSubalgebra_intertwiner, def:starSubalgebra_sameIsotype}
     Let $(f_{k,i,j})$ be the adapted orthonormal basis of
     Theorem~\ref{thm:starSubalgebra_global_adapted_orthonormal_basis}, write
     $W_{k,i}$ for the span of the row $(f_{k,i,j})_{j<d_k}$, and let $U$ be
@@ -604,14 +591,12 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
     \lean{Kraus.fixedPointAlgebra_isSemisimpleRing}
     \leanok
-    \uses{thm:adjointFixedPointsStarSubalgebra}
     The adjoint-fixed-point $*$-subalgebra of a trace-preserving Kraus map
     on $\MN{D}$ is a semisimple ring.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:adjointFixedPointsStarSubalgebra}
     The subalgebra is finite-dimensional as a subalgebra of $\MN{D}$, hence
     Artinian. Following~\cite[Theorem~6.14]{Wolf2012Quantum}, it suffices to
     show that the Jacobson radical $J$ vanishes. If $x\in J$, then
@@ -645,7 +630,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     \label{thm:fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix}
     \lean{Kraus.fixedPointsStarSubalgebra_exists_algEquiv_pi_matrix}
     \leanok
-    \uses{thm:starSubalgebra_wedderburnArtin, thm:fixedPointsStarSubalgebra}
+    \uses{thm:starSubalgebra_wedderburnArtin}
     Let $E$ be a unital Kraus map on $\MN{D}$ whose adjoint map $E^*$ has a
     positive definite fixed point $\rho>0$. There exist $n\in\N$ and
     dimensions $d_1,\ldots,d_n\geq1$ such that the fixed-point
@@ -655,7 +640,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:starSubalgebra_wedderburnArtin, thm:fixedPointsStarSubalgebra}
+    \uses{thm:starSubalgebra_wedderburnArtin}
     By Theorem~\ref{thm:fixedPointsStarSubalgebra}, the fixed-point set
     $\Fix(E)$ is a $*$-subalgebra of $\MN{D}$. Applying
     Theorem~\ref{thm:starSubalgebra_wedderburnArtin} gives the asserted
@@ -699,7 +684,6 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     \label{thm:adjointFixedPoints_block_form}
     \lean{Kraus.adjointFixedPoints_blockDiagonal_iff}
     \leanok
-    \uses{def:adjoint_fixed_points, def:tp_kraus}
     Let $E$ be a trace-preserving Kraus map on $\MN{D}$ with a positive
     definite fixed point $\rho>0$, $E(\rho)=\rho$. There are $n\in\N$,
     positive dimensions $d_0,\ldots,d_{n-1}$ and multiplicities
@@ -730,8 +714,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:adjointFixedPointsStarSubalgebra,
-        thm:starSubalgebra_unitary_block_diagonal_iff}
+    \uses{thm:starSubalgebra_unitary_block_diagonal_iff}
     The fixed points of $E^*$ form a $*$-subalgebra of $\MN{D}$ because
     $E$ is trace-preserving with a positive definite fixed point
     (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}).
@@ -745,7 +728,6 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     \label{thm:fixedPoints_block_form}
     \lean{Kraus.fixedPoints_blockDiagonal_iff}
     \leanok
-    \uses{def:kraus_fixed_points, def:kraus_adjoint_map, def:unital_kraus}
     Let $E$ be a unital Kraus map on $\MN{D}$ whose adjoint map $E^*$ has a
     positive definite fixed point $\rho>0$. There are $n\in\N$, positive
     dimensions $d_k$ and multiplicities $m_k$ with
@@ -763,8 +745,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:fixedPointsStarSubalgebra,
-        thm:starSubalgebra_unitary_block_diagonal_iff}
+    \uses{thm:starSubalgebra_unitary_block_diagonal_iff}
     The fixed points of the unital map $E$ form a $*$-subalgebra of
     $\MN{D}$ by Theorem~\ref{thm:fixedPointsStarSubalgebra}, and
     Theorem~\ref{thm:starSubalgebra_unitary_block_diagonal_iff} supplies

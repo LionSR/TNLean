@@ -64,8 +64,7 @@
     \label{thm:peps_horizontal_consecutive_window_extend_eq}
     \lean{TNLean.PEPS.horizontalConsecutiveWindow_extend_eq}
     \leanok
-    \uses{def:peps_corner_extension,
-        thm:peps_corner_extension_state_preserves}
+    \uses{def:peps_corner_extension, thm:peps_corner_extension_state_preserves}
     Assume the one-orientation $L\times K$ window-injectivity hypotheses,
     union closure for injective regions, positive bond dimensions, and the
     bounds $2\le L$, $2\le K$, $2L+1\le W$, and $2K+1\le H$.
@@ -114,8 +113,7 @@
     \label{thm:peps_horizontal_staircase_patch_extend_eq}
     \lean{TNLean.PEPS.horizontalStaircase_patch_extend_eq}
     \leanok
-    \uses{def:peps_horizontal_staircase_patch,
-        thm:peps_corner_extension_state_preserves}
+    \uses{def:peps_horizontal_staircase_patch, thm:peps_corner_extension_state_preserves}
     Assume positive bond dimensions and the bounds
     $0<L$, $0<K$, $2L\le W$, and $2K\le H$.
     If the deformed states of the two end-window inserts agree, then their
@@ -222,8 +220,7 @@
     \lean{TNLean.PEPS.bareExtendInsert_trans}
     \lean{TNLean.PEPS.extendInsert_trans}
     \leanok
-    \uses{def:peps_corner_extension,
-        thm:peps_corner_extension_coefficient_composition}
+    \uses{def:peps_corner_extension, thm:peps_corner_extension_coefficient_composition}
     The corner extension is linear in the inserted boundary coefficients. For
     nested regions $R\subseteq S\subseteq P$, the bare extension satisfies
     \begin{align}
@@ -286,9 +283,7 @@
     \label{thm:peps_extend_insert_kernel_trivial_added_injective}
     \lean{TNLean.PEPS.extendInsert_kernel_trivial_of_addedInjective}
     \leanok
-    \uses{def:peps_corner_extension,
-        def:peps_assemble_subregion_physical_config,
-        thm:peps_assemble_subregion_physical_config_restricts}
+    \uses{def:peps_corner_extension, def:peps_assemble_subregion_physical_config, thm:peps_assemble_subregion_physical_config_restricts}
     Let $R\subseteq S$ be finite regions. Suppose that all bond dimensions are
     positive and that the added block $Q=S\setminus R$ is blocked-tensor
     injective. If a region insert $C$ on $R$ has zero corner extension,
@@ -380,8 +375,7 @@
     \label{thm:peps_extend_insert_cancel_added_injective}
     \lean{TNLean.PEPS.extendInsert_cancel_addedInjective}
     \leanok
-    \uses{thm:peps_corner_extension_linear_transitive,
-        thm:peps_extend_insert_kernel_trivial_added_injective}
+    \uses{thm:peps_corner_extension_linear_transitive, thm:peps_extend_insert_kernel_trivial_added_injective}
     Let $R\subseteq S$, and suppose that all bond dimensions are positive and
     that $S\setminus R$ is blocked-tensor injective. If two inserts on $R$
     have the same corner extension to $S$,

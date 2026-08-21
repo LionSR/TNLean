@@ -94,7 +94,6 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 
 \begin{proof}
     \leanok
-    \uses{thm:newton_girard}
     Construct diagonal matrices $\diag(\alpha)$ and
     $\diag(\beta)$. The power-sum hypothesis gives
     $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
@@ -224,8 +223,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
     \lean{MPSTensor.SectorDecomposition.coeff_mul_not_eventually_zero}
     \leanok
-    \uses{def:sector_weight_data,
-        lem:finite_geometric_sum_eventual_vanishing}
+    \uses{def:sector_weight_data, lem:finite_geometric_sum_eventual_vanishing}
     For any sector decomposition $P$ and any sector $j$, the coefficient
     $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.  More
     generally, for every positive integer $p$, the subsequence
@@ -244,8 +242,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \label{lem:sector_bnt_coeff_not_eventually_zero}
     \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
     \leanok
-    \uses{def:sector_bnt_cf,
-        lem:sector_decomposition_coeff_not_eventually_zero}
+    \uses{def:sector_bnt_cf, lem:sector_decomposition_coeff_not_eventually_zero}
     For a BNT canonical form $P$ and any sector $j$, the sector coefficient
     $c_{P,j}^{(N)} = \sum_q \mu_{j,q}^N$ is not eventually zero in $N$. Only
     nonvanishing of the copy weights is used, not any modulus condition.
@@ -267,8 +264,7 @@ finite-set construction used to package matches in both directions.
     \label{thm:sector_bnt_proportional_exact_match}
     \lean{MPSTensor.exists_block_match_exact_of_eventuallyProportional}
     \leanok
-    \uses{def:sector_bnt_cf, lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_eventually_zero}
+    \uses{def:sector_bnt_cf, lem:sector_bnt_combined_family_eventually_li, lem:sector_bnt_coeff_not_eventually_zero}
     Let $P$ and $Q$ be BNT canonical forms whose total MPV families are
     eventually nonzero and proportional. For every sector $j$ of $P$, there is
     a sector $k$ of $Q$ with equal bond dimension, gauge-phase-equivalent basis
@@ -276,11 +272,7 @@ finite-set construction used to package matches in both directions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_combined_family_eventually_li,
-        lem:sector_bnt_coeff_not_eventually_zero,
-        cor:sector_bnt_cf_basis_normal,
-        thm:cpsv_normal_overlap_dichotomy,
-        thm:gauge_phase_mpv_scaling}
+    \uses{lem:sector_bnt_combined_family_eventually_li, lem:sector_bnt_coeff_not_eventually_zero, cor:sector_bnt_cf_basis_normal, thm:cpsv_normal_overlap_dichotomy, thm:gauge_phase_mpv_scaling}
     Suppose the chosen sector decays against every sector of $Q$, and separate
     all such $P$-sectors from the remaining ones. For each remaining sector,
     choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the

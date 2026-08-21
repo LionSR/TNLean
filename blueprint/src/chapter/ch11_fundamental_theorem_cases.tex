@@ -8,8 +8,7 @@
 \begin{theorem}[Printed proportional fundamental theorem]
     \label{thm:cpsv_theorem210_printed_status}
     \notready
-    \uses{def:bnt_cpsv, def:cpsv_canonical_form, def:gauge_phase_equiv,
-        thm:cpgsv_multiblock_ft_source}
+    \uses{def:bnt_cpsv, def:cpsv_canonical_form, def:gauge_phase_equiv, thm:cpgsv_multiblock_ft_source}
     Let $A$ and $B$ be tensors in canonical form whose matrix product vectors
     are proportional at every positive length.  According to
     \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}, arbitrary chosen bases of normal
@@ -27,8 +26,7 @@
     \label{thm:cpgsv_multiblock_ft_source}
     \lean{MPSTensor.fundamentalTheorem_proportional_canonicalForm}
     \leanok
-    \uses{def:sector_bnt_cf, def:gauge_phase_equiv,
-        thm:sector_bnt_proportional_sector_match_witnesses}
+    \uses{def:sector_bnt_cf, def:gauge_phase_equiv, thm:sector_bnt_proportional_sector_match_witnesses}
     Let $P$ and $Q$ be BNT canonical forms (Definition~\ref{def:sector_bnt_cf}),
     with bases of normal tensors $(P_j)_{j=1}^{g_a}$ and $(Q_k)_{k=1}^{g_b}$.
     Every listed sector has a positive number of copies, and every copy weight
@@ -74,8 +72,7 @@
     \label{lem:left_canonical_irreducible_phase_norm}
     \lean{MPSTensor.gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:left_canonical_tensor, def:irreducible_tensor,
-        thm:eigenvalue_unique_irred}
+    \uses{def:left_canonical_tensor, def:irreducible_tensor, thm:eigenvalue_unique_irred}
     Let $A$ and $B$ be left-canonical tensors of common positive bond
     dimension, with $B$ irreducible. If $X$ is invertible, $\zeta\ne0$, and
     $B^i=\zeta XA^iX^{-1}$ for every $i$, then $|\zeta|=1$.
@@ -93,8 +90,7 @@
     \label{lem:left_canonical_irreducible_same_phase_unitary_gauge}
     \lean{MPSTensor.exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:left_canonical_tensor, def:irreducible_tensor,
-        lem:left_canonical_irreducible_phase_norm, thm:psd_fp_unique_irred}
+    \uses{def:left_canonical_tensor, def:irreducible_tensor, lem:left_canonical_irreducible_phase_norm, thm:psd_fp_unique_irred}
     Let $A$ and $B$ be left-canonical irreducible tensors of common positive
     bond dimension satisfying $B^i=\zeta XA^iX^{-1}$ for an invertible $X$ and
     a nonzero scalar $\zeta$. There is a unitary matrix $U$, with the same scalar
@@ -125,8 +121,7 @@
 \begin{corollary}[Printed Canonical Form II unitary refinement]
     \label{cor:cpsv_corollary_a6_printed_status}
     \notready
-    \uses{def:cpsv_cfii, thm:cpsv_theorem210_printed_status,
-        cor:cpsv_corollary211_printed_status}
+    \uses{def:cpsv_cfii, thm:cpsv_theorem210_printed_status, cor:cpsv_corollary211_printed_status}
     According to \cite[Corollary~A.6]{Cirac2016MPDO_arXiv}, the gauge matrices
     in Theorem~2.10 and Corollary~2.11 may be chosen unitary when both tensors
     are in Canonical Form II.
@@ -159,8 +154,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_proportional_sector_match_witnesses,
-        lem:left_canonical_irreducible_unitary_gauge}
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses, lem:left_canonical_irreducible_unitary_gauge}
     The proportional sector-matching theorem gives a bijection $\beta$,
     invertible matrices $X_k$, and unit-modulus phases $\zeta_k$ with
     $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. The matched tensors are
@@ -181,8 +175,7 @@
 \begin{corollary}[Printed equal-MPV fundamental theorem]
     \label{cor:cpsv_corollary211_printed_status}
     \notready
-    \uses{thm:cpsv_theorem210_printed_status, def:cpsv_canonical_form,
-        thm:cpgsv_equal_case_source}
+    \uses{thm:cpsv_theorem210_printed_status, def:cpsv_canonical_form, thm:cpgsv_equal_case_source}
     According to \cite[Corollary~2.11]{Cirac2016MPDO_arXiv}, two
     canonical-form tensors generating the same matrix product vectors at every
     positive length have equal bond dimensions and are conjugate by one
@@ -235,8 +228,7 @@
     \label{cor:sector_bnt_equal_unitary_global_gauge}
     \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary}
     \leanok
-    \uses{lem:sector_bnt_equal_unitary_matched_gauge,
-        thm:sector_bnt_equal_mps_gaugeEquiv_literal}
+    \uses{lem:sector_bnt_equal_unitary_matched_gauge, thm:sector_bnt_equal_mps_gaugeEquiv_literal}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
     same MPV family at every positive length. Assume every listed sector has a
     positive number of copies and every copy weight is nonzero, as in

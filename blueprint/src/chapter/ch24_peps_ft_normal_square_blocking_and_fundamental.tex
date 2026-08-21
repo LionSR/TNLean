@@ -55,10 +55,7 @@
     \lean{TNLean.PEPS.NormalSquareBlockingRegions}
     \lean{TNLean.PEPS.normalSquareBlockingRegions_of_TCover}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses,
-        def:peps_regionInjectivityData,
-        lem:peps_normalSquareRegionRS_injective_of_unionClosure,
-        lem:peps_normalSquareRegionT_injective_of_cover}
+    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_normalSquareRegionRS_injective_of_unionClosure, lem:peps_normalSquareRegionT_injective_of_cover}
     In the translationally invariant square-lattice proof, the source paper
     assumes that every $2\times 3$ and $3\times 2$ region is injective.
     The formal statement here is the corresponding abstract, scope-restricted
@@ -123,11 +120,7 @@
 \begin{theorem}[Normal edge blocking to a three-site injective chain]%
     \label{thm:peps_normalEdgeBlockingToInjectiveChain}
     \notready
-    \uses{lem:peps_injectiveRegion_union,
-        def:peps_normalSquareBlockingRegions,
-        def:peps_normalEdgeBlockingHypotheses,
-        thm:peps_normalEdgeBlockingHypotheses_injectiveChain,
-        thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    \uses{lem:peps_injectiveRegion_union, def:peps_normalSquareBlockingRegions, def:peps_normalEdgeBlockingHypotheses, thm:peps_normalEdgeBlockingHypotheses_injectiveChain, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     Under the square-lattice normality hypotheses of
     \cite[Theorem~3]{Molnar2018NormalPEPS}, the regions $R$, $S$, and
     $T$, together with their translated variants, give an edge-centred
@@ -173,8 +166,7 @@
 \begin{theorem}[Translationally invariant normal gauge absorption]%
     \label{thm:peps_tiNormalGaugeAbsorption}
     \notready
-    \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
-        thm:peps_edge_gauge_absorption}
+    \uses{thm:peps_normalEdgeBlockingToInjectiveChain, thm:peps_edge_gauge_absorption}
     In the translationally invariant normal square-lattice case, the edge
     gauges obtained after blocking are represented by one horizontal matrix
     $X$ and one vertical matrix $Y$, unique up to scalar. Absorbing these
@@ -227,9 +219,7 @@
 \begin{theorem}[Fundamental Theorem for normal square-lattice PEPS]%
     \label{thm:fundamentalTheorem_normalSquarePEPS}
     \notready
-    \uses{thm:peps_tiNormalGaugeAbsorption,
-        thm:peps_oneVertexComplementComparison,
-        def:GaugeEquivPEPS}
+    \uses{thm:peps_tiNormalGaugeAbsorption, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant normal square-lattice PEPS
     tensors such that every $2\times 3$ and $3\times 2$ region is
     injective. If they generate the same state on an $n\times m$ region with
@@ -254,10 +244,7 @@
     \label{thm:fundamentalTheorem_normalSquarePEPS_unconditional}
     \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS,
-        def:peps_normalRectangleInjectivityHypotheses,
-        def:applyGauge,
-        def:peps_edgeInsertedCoeff}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS, def:peps_normalRectangleInjectivityHypotheses, def:applyGauge, def:peps_edgeInsertedCoeff}
     Let $A$ and $B$ be PEPS tensors on the open $n\times m$ square lattice
     with the same positive physical dimension, equal and positive bond
     dimensions, generating the same state, and such that every contiguous

@@ -145,8 +145,7 @@ This is the single-block identity in
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_normalized_four_site_tail,
-        lem:mpo_eval_word_append}
+    \uses{def:mpdo_normalized_four_site_tail, lem:mpo_eval_word_append}
     Expanding the partial trace over the fourth site and factoring each
     length-four word at its last letter gives
     \begin{align}
@@ -438,8 +437,7 @@ This is the single-block identity in
     \label{thm:mpdo_inverse_map_hayashi_sector_comparison}
     \lean{MPOTensor.inverseMap_hayashi_sector_comparison}
     \leanok
-    \uses{def:mpdo_three_site_closure,
-        def:mpdo_hayashi_inverse_factors}
+    \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
     Suppose that $\mathcal K$ is injective, $\rho$ is its three-site closure
     against $R$, and a Hayashi decomposition of $\rho$ has been chosen. Write
     \begin{align}
@@ -718,8 +716,7 @@ In the middle-site basis selected by $U_B$, the same factorization
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_inverse_map_hayashi_sector_comparison,
-        thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
+    \uses{thm:mpdo_inverse_map_hayashi_sector_comparison, thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
     On a diagonal sector, the sectorwise comparison gives
     $R_{\beta_3,\alpha_1}\widetilde\kappa^{(k)}
     =p_kA^{(k)}B^{(k)}$, and dividing by the nonzero entry
@@ -754,8 +751,7 @@ In the middle-site basis selected by $U_B$, the same factorization
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_factorization,
-        thm:mpdo_normalized_four_site_tail_entry_ne_zero}
+    \uses{thm:mpdo_sector_factorization, thm:mpdo_normalized_four_site_tail_entry_ne_zero}
     A nonzero four-site trace supplies outer indices with
     $(R_4)_{\beta_3,\alpha_1}\ne0$, and the sector factorization applies.
 \end{proof}

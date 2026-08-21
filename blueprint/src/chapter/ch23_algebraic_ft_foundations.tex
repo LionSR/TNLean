@@ -247,8 +247,7 @@ boundary conventions.
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension,
-        def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
+    \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension, def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
     Expand the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}). Extend the
     dependent sum in~(\ref{eq:varying_bond_obc_coeff}) to the common dimension
     $D$ by Theorem~\ref{thm:pi_fin_sum_zero_extension}. Every extended path
@@ -269,8 +268,7 @@ boundary conventions.
 
 \begin{proof}
     \leanok
-    \uses{thm:varying_bond_obc_zero_pad_coeff,
-        thm:varying_bond_obc_zero_bond}
+    \uses{thm:varying_bond_obc_zero_pad_coeff, thm:varying_bond_obc_zero_bond}
     Apply positive-length coefficient preservation and then the vanishing of
     the open-chain contraction.
 \end{proof}
@@ -349,8 +347,7 @@ boundary conventions.
     \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
         OBCChainTensor.exists_pgvwc07_site_independent_tensor}
     \leanok
-    \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad,
-        def:chain_cyclic_block_tensor}
+    \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad, def:chain_cyclic_block_tensor}
     This is the cyclic-block construction in
     \cite[Theorem~3]{PerezGarcia2007Matrix}, conditional on its open-chain
     input. Let $N\geq1$. Suppose a translation-invariant state on the $N$-site
@@ -363,8 +360,7 @@ boundary conventions.
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_coeff_sum_cyclic, thm:varying_bond_obc_zero_pad_coeff,
-        thm:chain_cyclic_block_average}
+    \uses{thm:chain_coeff_sum_cyclic, thm:varying_bond_obc_zero_pad_coeff, thm:chain_cyclic_block_average}
     The cyclic rotation of the padded square chain satisfies
     \begin{align}
         c_{(\widetilde A)^{(k)},\sigma}
@@ -642,8 +638,7 @@ insertion data.
 
 \begin{proof}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether,
-        lem:blocking_preserves_injectivity}
+    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether, lem:blocking_preserves_injectivity}
     The $\mc{V}(A)=\mc{V}(B)$ hypothesis gives, for every $X\in\MN{D}$,
     equality of the virtual-insertion trace coefficients
     \begin{align}

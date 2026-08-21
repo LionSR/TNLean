@@ -3,9 +3,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily}
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily_operator}
     \leanok
-    \uses{def:mpdo_bnt_fusion_isometry_family,
-        def:mpdo_bnt_label_operator_family,
-        def:mpdo_positive_bnt_label_chi_trace_power_form}
+    \uses{def:mpdo_bnt_fusion_isometry_family, def:mpdo_bnt_label_operator_family, def:mpdo_positive_bnt_label_chi_trace_power_form}
     The tensors of a fusion-isometry family generate the concrete BNT-label
     operator family $O_L(M_\gamma)$, and the positive diagonal matrices give
     the positive trace-power witness for the coefficient family
@@ -89,13 +87,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.mpo_mul_mpo_eq_sum}
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily_hasSameLengthProductForm}
     \leanok
-    \uses{def:mpdo_bnt_fusion_coisometry_family,
-        def:mpdo_bnt_fusion_isometry_family,
-        def:mpdo_bnt_fusion_operator_family,
-        thm:mpdo_operator_product_mpo,
-        lem:mpdo_word_product_conjugation,
-        lem:mpdo_word_product_block_kronecker,
-        def:mpdo_bnt_label_same_length_product_form}
+    \uses{def:mpdo_bnt_fusion_coisometry_family, def:mpdo_bnt_fusion_isometry_family, def:mpdo_bnt_fusion_operator_family, thm:mpdo_operator_product_mpo, lem:mpdo_word_product_conjugation, lem:mpdo_word_product_block_kronecker, def:mpdo_bnt_label_same_length_product_form}
     An active-support fusion coisometry family, and hence also a full-support
     fusion-isometry family, satisfies the same-length product law with the
     trace-power coefficients of its diagonal matrices. For every chain
@@ -136,11 +128,7 @@
     \label{def:mpdo_bnt_fusion_algebra_clause}
     \lean{MPOTensor.BNTFusionIsometryFamily.toBNTAlgebraClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_clause,
-        def:mpdo_bnt_fusion_isometry_family,
-        def:mpdo_bnt_label_idempotent_coefficient_form,
-        def:mpdo_positive_bnt_label_chi_trace_power_form,
-        thm:mpdo_fusion_same_length_product}
+    \uses{def:mpdo_bnt_algebra_clause, def:mpdo_bnt_fusion_isometry_family, def:mpdo_bnt_label_idempotent_coefficient_form, def:mpdo_positive_bnt_label_chi_trace_power_form, thm:mpdo_fusion_same_length_product}
     Suppose the fusion-isometry identity holds with positive diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$, and suppose the trace scalars satisfy the
     length-one idempotent law for the corresponding trace-power coefficients.
@@ -169,9 +157,7 @@
     \lean{MPOTensor.BNTFusionTensorClause}
     \lean{MPOTensor.HasBNTFusionTensorClause}
     \leanok
-    \uses{def:vertical_cf_mpdo,
-        def:mpdo_bnt_fusion_coisometry_family,
-        def:mpdo_bnt_label_idempotent_coefficient_form}
+    \uses{def:vertical_cf_mpdo, def:mpdo_bnt_fusion_coisometry_family, def:mpdo_bnt_label_idempotent_coefficient_form}
     Choose a vertical canonical decomposition
     \begin{align}
         U\widetilde M U^\dagger
@@ -239,8 +225,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \cite[Appendix~C.4, lines~2001--2046]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_blocked_vertical_operator_representations,
-      thm:mpdo_blocked_representations_idempotent_trace_scalars}
+    \uses{thm:mpdo_blocked_vertical_operator_representations, thm:mpdo_blocked_representations_idempotent_trace_scalars}
     The sector correspondence expresses the blocked closed-chain operator in
     the one-site normal-tensor basis. Multiplication of the one-site vertical
     decomposition gives a second expression in the same basis. At every
@@ -255,8 +240,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \label{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
-        def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in literal CPSV canonical form. If the
     one-site and two-site physical closures are related in both directions by
@@ -290,11 +274,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
-      thm:mpdo_literal_cpsv_vertical_decomposition_block_two,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      thm:mpdo_literal_cpsv_vertical_product_positive_fusion_decomposition,
-      thm:mpdo_paired_vertical_decompositions_fusion}
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition, thm:mpdo_literal_cpsv_vertical_decomposition_block_two, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_literal_cpsv_vertical_product_positive_fusion_decomposition, thm:mpdo_paired_vertical_decompositions_fusion}
     Choose the literal one-site and two-site vertical decompositions.
     Transporting the two physical maps through them identifies their normal
     sectors by trace-ratio unitary conjugacies. The literal positive-fusion
@@ -307,9 +287,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \label{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF}
     \leanok
-    \uses{def:is_rfp_via_ts,
-        def:horizontal_cf_mpdo,
-        def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:is_rfp_via_ts, def:horizontal_cf_mpdo, def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ be a matrix product density operator in normalized BNT-refined
     horizontal form. If the one-site and two-site physical closures are
     related in both directions by trace-preserving completely positive maps
@@ -323,10 +301,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     See \path{docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:vertical_cf_of_horizontal_cf,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      thm:mpdo_transported_vertical_product_positive_fusion_decomposition,
-      thm:mpdo_paired_vertical_decompositions_fusion}
+    \uses{thm:vertical_cf_of_horizontal_cf, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_transported_vertical_product_positive_fusion_decomposition, thm:mpdo_paired_vertical_decompositions_fusion}
     Choose the one-site and two-site vertical canonical decompositions supplied
     by the normalized BNT-refined horizontal form. The renormalization maps
     identify their normal sectors and give positive fusion coisometries.
@@ -339,9 +314,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \lean{MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause}
     \lean{MPOTensor.HasBNTFusionTensorClause.to_hasBNTAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_fusion_algebra_clause,
-        def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_algebra_clause, def:mpdo_bnt_fusion_tensor_clause}
     Suppose the active-sector fusion clause holds for a chosen vertical canonical
     decomposition. Then the algebra clause holds for the same decomposition.
     For every positive chain length $L$, its coefficients are
@@ -374,10 +347,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
 \begin{theorem}[Printed algebra and fusion characterization]
     \label{thm:cpsv_theorem414_printed_status}
     \notready
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
-        def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_fusion_tensor_clause,
-        thm:mpdo_cpsv_bnt_rfp_equivalence}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_tensor_clause, thm:mpdo_cpsv_bnt_rfp_equivalence}
     For a canonical-form tensor generating matrix product density operators,
     \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} states that the fixed-point
     condition, the tensor-attached BNT algebra clause, and the displayed fusion
@@ -398,9 +368,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}
     \lean{MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
-        def:mpdo_bnt_algebra_tensor_clause,
-        def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ be an MPDO whose doubled-index tensor is in literal CPSV
     canonical form.  Consider the following conditions:
     \begin{enumerate}
@@ -444,9 +412,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor,
-        thm:mpdo_bnt_fusion_tensor_to_algebra_tensor,
-        thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \uses{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor, thm:mpdo_bnt_fusion_tensor_to_algebra_tensor, thm:mpdo_bnt_algebra_tensor_to_rfp}
     A renormalization fixed point has the active-support fusion clause by
     Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}.  Such a
     fusion clause gives the tensor-attached algebra clause by
@@ -650,8 +616,7 @@ separate step.
     \label{thm:mpdo_left_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFusion_apply}
     \leanok
-    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product,
-        lem:matrix_block_conjugation_restriction}
+    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product, lem:matrix_block_conjugation_restriction}
     Site by site,
     \begin{align}
         &U^{\mathrm L}_{\alpha,\beta,\gamma}
@@ -713,8 +678,7 @@ separate step.
     \label{thm:mpdo_right_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFusion_apply}
     \leanok
-    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product,
-        lem:matrix_block_conjugation_restriction}
+    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product, lem:matrix_block_conjugation_restriction}
     Site by site,
     \begin{align}
         &U^{\mathrm R}_{\alpha,\beta,\gamma}
@@ -745,9 +709,7 @@ separate step.
     \label{def:mpdo_triple_fusion_comparison}
     \lean{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison}
     \leanok
-    \uses{def:mpdo_left_fusion_isometry,
-        def:mpdo_right_fusion_isometry,
-        def:mpdo_operator_product_associator}
+    \uses{def:mpdo_left_fusion_isometry, def:mpdo_right_fusion_isometry, def:mpdo_operator_product_associator}
     The canonical comparison from the right-associated full direct sum to the
     left-associated full direct sum is
     \begin{align}
@@ -785,8 +747,7 @@ separate step.
     \cite[lines~181--191]{Bultinck2017Anyons}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_right_fusion_isometry_isometry,
-        def:mpdo_operator_product_associator}
+    \uses{thm:mpdo_right_fusion_isometry_isometry, def:mpdo_operator_product_associator}
     Substitute (\ref{eq:rfp_triple_comparison}). The isometry identity
     $(U^{\mathrm R})^\dagger U^{\mathrm R}=1$ and the two-sided inverse
     identities for the permutation matrix $A$ leave
@@ -812,8 +773,7 @@ separate step.
     decomposition.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_left_fusion_isometry_isometry,
-        def:mpdo_operator_product_associator}
+    \uses{thm:mpdo_left_fusion_isometry_isometry, def:mpdo_operator_product_associator}
     Substitute (\ref{eq:rfp_triple_comparison}). The isometry identity
     $(U^{\mathrm L})^\dagger U^{\mathrm L}=1$ and the two-sided inverse
     identities for $A$ leave
@@ -826,11 +786,7 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         tripleFusionComparison_intertwines_of_lengthIndependent}
     \leanok
-    \uses{def:mpdo_triple_fusion_comparison,
-        thm:mpdo_operator_product_associativity,
-        thm:mpdo_left_fusion_apply,
-        thm:mpdo_right_fusion_apply,
-        thm:mpdo_bnt_length_independent_zipper}
+    \uses{def:mpdo_triple_fusion_comparison, thm:mpdo_operator_product_associativity, thm:mpdo_left_fusion_apply, thm:mpdo_right_fusion_apply, thm:mpdo_bnt_length_independent_zipper}
     Suppose the positive trace-power coefficients are independent of the
     positive chain length. For every pair of physical indices $i,k$, let
     \begin{align}
@@ -886,8 +842,7 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{def:mpdo_final_label_selector_words,
-        thm:mpdo_bnt_length_independent_zipper}
+    \uses{def:mpdo_final_label_selector_words, thm:mpdo_bnt_length_independent_zipper}
     Suppose the positive trace-power coefficients are independent of the
     positive chain length, and suppose that common selectors exist at a
     positive length. Then every pair fusion isometry is surjective:
@@ -915,8 +870,7 @@ separate step.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
     \leanok
-    \uses{thm:cpsv_bnt_blocked_simultaneous_span,
-        thm:mpdo_pair_fusion_selector_completeness}
+    \uses{thm:cpsv_bnt_blocked_simultaneous_span, thm:mpdo_pair_fusion_selector_completeness}
     Suppose that the labelled tensors in the fusion family form a basis of
     normal tensors and that the positive trace-power coefficients are
     independent of the positive chain length. Then every pair fusion

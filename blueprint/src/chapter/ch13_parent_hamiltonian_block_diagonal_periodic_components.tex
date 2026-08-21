@@ -2,8 +2,7 @@
     \label{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison_boundary}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_of_boundary}
     \leanok
-    \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison,
-        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
     Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
     is $L_0$-block-injective and satisfies
     $\sum_a A^j_aA^{j\dagger}_a=\Id$. Assume also that the simultaneous tuples
@@ -31,8 +30,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison,
-        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    \uses{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
     Choose a block-diagonal boundary representation of $\psi$. For that
     representation,
     Lemma~\ref{lem:block_diagonal_boundary_trace_decomposition_from_pgvwc_comparison}
@@ -54,8 +52,7 @@
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$. Assume also that, for some middle-word length
@@ -89,8 +86,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_boundary}
     By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, there are
     matrices $X_j$ with
     $\psi=\Gamma_N^{\oplus_j\mu_jA_j}(\bigoplus_jX_j)$.
@@ -104,8 +100,7 @@
     \label{lem:block_diagonal_boundary_periodic_components_from_trace_decomposition_bnt_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span}
     \leanok
-    \uses{lem:unital_block_separating_product_span,
-        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
+    \uses{lem:unital_block_separating_product_span, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$ and
@@ -139,8 +134,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:unital_block_separating_product_span,
-        lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
+    \uses{lem:unital_block_separating_product_span, lem:block_diagonal_boundary_periodic_components_from_trace_decomposition}
     Lemma~\ref{lem:unital_block_separating_product_span} gives
     $\spn\{(A^1_w,\ldots,A^g_w):|w|=m\} = \prod_j\MN{D_j}$.
     Applying
@@ -153,8 +147,7 @@
     \label{lem:block_diagonal_boundary_periodic_components_from_pgvwc_comparison}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$. Let
@@ -179,8 +172,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
     By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, there are
     matrices $X_j$ with
     $\psi=\Gamma_N^{\oplus_j\mu_jA_j}(\bigoplus_jX_j)$.
@@ -194,8 +186,7 @@
     \label{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$ and that every boundary-crossing interval
@@ -225,8 +216,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_periodic_components_from_crossing_boundary}
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices} supplies
     block-diagonal boundary conditions $X_j$, and
     Lemma~\ref{lem:block_diagonal_boundary_periodic_components_from_crossing_boundary},
@@ -238,8 +228,7 @@
     \label{thm:block_diagonal_boundary_periodic_components_from_short_crossing_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bnt_c1}
     \leanok
-    \uses{thm:block_diagonal_boundary_periodic_components_from_crossing_span,
-        lem:unital_block_separating_product_span}
+    \uses{thm:block_diagonal_boundary_periodic_components_from_crossing_span, lem:unital_block_separating_product_span}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$. Assume also that, for every boundary-crossing
@@ -276,8 +265,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:block_diagonal_boundary_periodic_components_from_crossing_span,
-        lem:unital_block_separating_product_span}
+    \uses{thm:block_diagonal_boundary_periodic_components_from_crossing_span, lem:unital_block_separating_product_span}
     For a boundary-crossing interval beginning at $i$, either
     $N-i < (L_0+1) +(g-1)((L_0+1)+((L_0+1)+(L_0+1)))$
     or
@@ -331,8 +319,7 @@
     \label{lem:parent_cyclic_translate_preserves_chain_space}
     \lean{MPSTensor.cyclicTranslateState_mem_chainGroundSpace}
     \leanok
-    \uses{def:parent_cyclic_translate_configuration,
-        def:parent_cyclic_translate_state}
+    \uses{def:parent_cyclic_translate_configuration, def:parent_cyclic_translate_state}
     If $\psi\in\mathcal G_{N,L}(A)$, then
     $T_s\psi\in\mathcal G_{N,L}(A)$ for every cyclic translation $s$.
 \end{lemma}
@@ -364,9 +351,7 @@
     \label{lem:block_boundary_intertwiner_from_global_cut}
     \lean{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq}
     \leanok
-    \uses{def:parent_cyclic_translate_state,
-        lem:parent_cyclic_translate_append,
-        lem:block_matrices_equal_from_trace_pairings}
+    \uses{def:parent_cyclic_translate_state, lem:parent_cyclic_translate_append, lem:block_matrices_equal_from_trace_pairings}
     Let $X_j,Y_j\in\MN{D_j}$, and suppose
     \begin{align}
         T_K\!\left(\sum_j\Gamma_{K+S}^{A_j}(X_j)\right)
@@ -398,11 +383,7 @@
     \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
-        thm:pgvwc_product_span_source_length,
-        lem:parent_cyclic_translate_preserves_chain_space,
-        lem:block_boundary_intertwiner_from_global_cut,
-        lem:block_diagonal_boundary_component_right_boundary_matrices}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_source_length, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut, lem:block_diagonal_boundary_component_right_boundary_matrices}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices_source_length},
     assume in addition that $L+L_0\le N$. Thus
@@ -436,11 +417,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
-        thm:pgvwc_product_span_source_length,
-        lem:parent_cyclic_translate_preserves_chain_space,
-        lem:block_boundary_intertwiner_from_global_cut,
-        lem:block_diagonal_boundary_component_right_boundary_matrices}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_source_length, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut, lem:block_diagonal_boundary_component_right_boundary_matrices}
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
     gives boundary matrices $X_j$. Translate the periodic state so that the
     cut moves past the final $L_0$ sites. By
@@ -523,10 +500,7 @@
     \label{thm:block_diagonal_chain_space_global_cut_independent}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
-        lem:block_diagonal_boundary_representation_inclusion,
-        lem:block_diagonal_boundary_closing_equality,
-        thm:pgvwc_block_space_independence_source_length}
+    \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut, lem:block_diagonal_boundary_representation_inclusion, lem:block_diagonal_boundary_closing_equality, thm:pgvwc_block_space_independence_source_length}
     Under the same hypotheses,
     \begin{align}
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
@@ -539,10 +513,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
-        lem:block_diagonal_boundary_representation_inclusion,
-        lem:block_diagonal_boundary_closing_equality,
-        thm:pgvwc_block_space_independence_source_length}
+    \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut, lem:block_diagonal_boundary_representation_inclusion, lem:block_diagonal_boundary_closing_equality, thm:pgvwc_block_space_independence_source_length}
     Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     gives the forward inclusion in the displayed equality. Every periodic
     single-block vector is a periodic vector for the block-diagonal tensor,
@@ -568,8 +539,7 @@
     \label{cor:block_diagonal_kernel_global_cut}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{thm:block_diagonal_chain_space_global_cut,
-        lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Under the same hypotheses, suppose additionally that every periodic
     single-block chain space is contained in its matrix-product-vector line.
     Then
@@ -583,8 +553,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:block_diagonal_chain_space_global_cut,
-        lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     The parent-Hamiltonian kernel is the periodic chain space. Apply the
     preceding block decomposition and then the assumed single-block
     containments.
@@ -594,8 +563,7 @@
     \label{lem:block_diagonal_boundary_periodic_components_from_complementary_identities}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, assume in
     addition that $L+L_0\le N$. Let
@@ -621,8 +589,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices,
-        lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices, lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     By Lemma~\ref{lem:bnt_block_diagonal_open_boundary_matrices}, there are
     matrices $X_j$ with
     $\psi=\Gamma_N^{\oplus_j\mu_jA_j}(\bigoplus_jX_j)$.
