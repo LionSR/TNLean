@@ -223,14 +223,14 @@ For the non-periodic MPS Fundamental Theorem background:
   copy weight is nonzero, and eventual linear independence gives a bijective
   gauge-phase matching. Neither restriction validates the unrestricted source
   sentence.
-- `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem
+- `tnlean_bnt_ft_theorem_surface.tex` separates paper-level theorem
   statements from auxiliary formal declarations.
-- `nonperiodic_mps_bnt_comparison_inputs.tex` compares the current
+- `rmp_nonperiodic_bnt_comparison_inputs.tex` compares the current
   canonical-form/BNT/after-blocking proof boundary against the local paper
   sources.
-- `david2006_direct_sum_input.tex` explains the older MPS representation
+- `pgvwc07_direct_sum_input.tex` explains the older MPS representation
   paper's direct-sum input behind block-injective canonical form.
-- `quantum_wielandt_deviation.tex` records the local proof boundary for the
+- `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
   blocked canonical form as an all-length matrix-product-vector identity
@@ -291,7 +291,7 @@ For the periodic (irreducible-form) MPS Fundamental Theorem of
 arXiv:1708.00029, the overlap-dichotomy development has one route-alignment
 note.
 
-- `1708_periodic_overlap_route_alignment.tex` records where the Lean
+- `dccsp17_periodic_overlap_route_alignment.tex` records where the Lean
   development of the periodic overlap dichotomy (`MPS/Periodic/Overlap/`)
   substitutes a mathematically equivalent proof route for the Appendix-A
   argument: the different-period decay via the peripheral spectrum (Case 1),

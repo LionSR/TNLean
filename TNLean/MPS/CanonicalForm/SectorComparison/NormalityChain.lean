@@ -380,7 +380,7 @@ persists at positive multiples.
 surface. It allows equal weight moduli, but it does not carry repeated
 gauge-phase-equivalent copies and their individual weights from the full CPSV16
 BNT multiplicity decomposition. The restriction is documented in
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective
     [∀ k, NeZero (dim k)]
     (h : IsNormalCanonicalFormBNT (d := d) μ blocks) :
@@ -426,7 +426,7 @@ weight moduli, but they do not carry repeated gauge-phase-equivalent copies and
 their individual weights from the full CPSV16 BNT multiplicity decomposition.
 This theorem is a two-family common-blocking result in that restricted setting,
 not the source-level CPSV16 multiplicity theorem. The restriction is documented
-in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+in `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

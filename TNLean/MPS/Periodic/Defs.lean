@@ -197,7 +197,7 @@ structure.
 **Scope restriction (length, representation, and normalization):** this
 structure is a normalized MPV-level representation of the source irreducible
 form and imposes the additional empty-word equality. Documented in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 structure IsIrreducibleForm (A : MPSTensor d D) where
   /-- Number of blocks. -/
   r : ℕ

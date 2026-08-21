@@ -29,7 +29,7 @@ Direct uses of `mu_strict_anti` across TNLean (32 sites):
 
 Weakening to `Antitone` would require rewriting (i) `fundamentalTheorem_canonicalForm`, (ii) the full tail-reduction induction in `NondecayingOverlap.lean`, (iii) the dominant-adjusted scalar machinery in `ProportionalDominant.lean`, and (iv) the closed `_dominant_*_CFBNT` proofs.
 
-Even harder: with `r_j > 1` allowed, the SCOPE-restricted same-block-structure equal-MPV theorem either needs an explicit `r_j = 1` hypothesis added (defeating the point) or needs to be re-proved on top of multi-copy data.  The re-proof opens the multiplicity-recovery gap (`docs/paper-gaps/ft_one_copy_scope_restriction.tex`) — Newton-Girard recovery of multiplicities from `∑_q μ_{j,q}^N` — which is a paper-level obligation, not a refactor.
+Even harder: with `r_j > 1` allowed, the SCOPE-restricted same-block-structure equal-MPV theorem either needs an explicit `r_j = 1` hypothesis added (defeating the point) or needs to be re-proved on top of multi-copy data.  The re-proof opens the multiplicity-recovery gap (`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`) — Newton-Girard recovery of multiplicities from `∑_q μ_{j,q}^N` — which is a paper-level obligation, not a refactor.
 
 **Verdict for (a): high-risk, high-effort, low-reversibility.  Rejected.**
 

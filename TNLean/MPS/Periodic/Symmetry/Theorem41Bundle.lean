@@ -32,7 +32,7 @@ hypothesis `PRefinementInverseCanonicalization`, `p`-refinability of `B` is equi
 This is a conditional version of arXiv:1708.00029, Theorem 4.1; the source
 statement, lines 728--731, does not assume the two canonicalization hypotheses.
 The converse root/Kraus-rank gap is recorded in
-`docs/paper-gaps/periodic_thm41_root_kraus_rank.tex`. This theorem combines
+`docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`. This theorem combines
 `thm_4_1_p_refinement_forward` and `thm_4_1_p_refinement_reverse` into a
 single biconditional. -/
 theorem thm_4_1_p_refinement

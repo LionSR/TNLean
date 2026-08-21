@@ -68,6 +68,9 @@ jobs:
           python3 scripts/test_tenkz_equation_audit.py
           python3 scripts/test_tnlog.py
           python3 scripts/test_texcase.py
+
+      - name: Check paper-gap references resolve
+        run: python3 scripts/paper_gaps_site.py --check
           python3 scripts/test_tenkz_kernel_audit.py
 
       - name: Build blueprint bibliography

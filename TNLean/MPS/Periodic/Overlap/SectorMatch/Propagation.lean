@@ -154,7 +154,7 @@ tensors — the compressions `P k · A i · P (k+1)` and `Q l · B i · Q (l+1)`
 identify their `m`-fold cyclic products with the supplied `blocksA k`/`blocksB l`,
 so that the match transports along these transitions. This is a formalization of
 the same step via the `IsCyclicSectorDecomp` relation 𝓔_A^{*}(P_{k+1}) = P_k; see
-docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
+docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     [NeZero D]
     (A B : MPSTensor d D)

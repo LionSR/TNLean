@@ -680,7 +680,7 @@ the other.
 
 **Scope restriction (active nonzero BNT data):** This theorem does not cover
 inactive zero-weight canonical-form summands.  See
-`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
+`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -710,7 +710,7 @@ identifying their equal total bond dimensions.
 
 **Scope restriction (active nonzero BNT data):** This theorem does not cover
 inactive zero-weight canonical-form summands.  See
-`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
+`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -748,7 +748,7 @@ For each `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimensi
 
 **Scope restriction (active nonzero BNT data):** This theorem does not compare
 BNT families containing representatives with identically zero coefficients.
-See `docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`. -/
+See `docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`. -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

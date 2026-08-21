@@ -68,7 +68,7 @@ corollary of the cited active fundamental theorem and the coisometry-alignment l
 **Scope restriction (equal ambient dimension and nonzero tensors):** The theorem
 assumes a common ambient bond dimension and excludes zero tensors. It does not prove
 the heterogeneous ambient statement of the cited source corollary. See
-`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`.
+`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`.
 
 Source: arXiv:2011.12127v2, lines 1831--1906; arXiv:1606.00608,
 lines 237--301 and 1135--1199. -/

@@ -42,7 +42,7 @@ theorem starts from the uniform identity
 \(\bigotimes_v A_v(\sigma_v)=z\cdot\bigotimes_v B_v(\sigma_v)\).  The paper
 first obtains a cyclically shifted product identity between sector labels; the
 reduction from that identity to the uniform form used here is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 
 The reference entries are the formal analogue of choosing one nonzero matrix
 entry in each right-invertible sector block after the \(F_u,\Omega_u\)
@@ -143,7 +143,7 @@ proportionality to sector scalars satisfying \(\prod_v \kappa_v=1\) and
 theorem starts from the uniform product-tensor identity, as in
 `exists_kappa_of_piTensorProduct_eq_smul`; the contraction producing that
 identity from the \(F_u,\Omega_u\) maps is recorded separately in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem exists_kappa_product_one_of_piTensorProduct_eq_root_smul
     {d m : ℕ} [NeZero m]
     {row col : Fin m → Type*}

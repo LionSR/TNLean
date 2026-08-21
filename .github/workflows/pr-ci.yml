@@ -758,6 +758,10 @@ jobs:
         run: |
           python3 scripts/test_tnlog.py
           python3 scripts/test_texcase.py
+
+      - name: Check paper-gap references resolve
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/paper_gaps_site.py --check
           python3 scripts/test_tenkz_kernel_audit.py
 
       # Build the root manual as well as its input chapters.  This is the

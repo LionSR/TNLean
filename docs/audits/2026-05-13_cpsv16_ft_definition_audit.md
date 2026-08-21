@@ -10,7 +10,7 @@ PGVWC07 (quant-ph/0608197).
 - `blueprint/comments202605/cpsv16_fundamental_theorem_analysis.md`
 - `audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md`
 - `audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md`
-- `docs/paper-gaps/ft_one_copy_scope_restriction.tex`
+- `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`
 
 The prior audits focused on **proofs** (the wrong-direction subgraph, the
 combined-family LI workarounds, the discharge plan). This audit focuses on
@@ -152,7 +152,7 @@ and the BNT expansion coefficient for block $j$ at length $N$ is
 $\sum_{q=1}^{r_j} \mu_{j,q}^N$, a finite sum of unit-modulus complex numbers.
 
 (d) **Comparison.** This is the headline narrowing already documented in
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex` and called out by both
+`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex` and called out by both
 prior audits. To make the discrepancy precise:
 
 | Aspect | Lean `IsCanonicalFormBNT` | CPSV16 BNT (eqs. 20a–b) |
@@ -932,7 +932,7 @@ above projection uses:
 - Non-decay of $\sum_q \nu_{k_0,q}^N$: paper's Corollary `Lem1` (the
   Vandermonde-style algebraic fact); already partly in
   `TNLean/Wielandt/...` and `ScalarPowerSumIdentity` modules (cf.
-  `docs/paper-gaps/ft_one_copy_scope_restriction.tex`); also derivable
+  `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`); also derivable
   directly from Lemma A.2 applied within the $B$-BNT.
 - Boundedness of $c_N$: derivable from the multiplicity-aware BNT expansion
   plus pairwise orthogonality of BNT MPV families in the limit.
@@ -990,7 +990,7 @@ the obstruction is definitional, not mathematical.
   (analysis memo); `audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md`
   (paper-vs-code structural map);
   `audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md` (discharge plan);
-  `docs/paper-gaps/ft_one_copy_scope_restriction.tex` (scope restriction).
+  `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex` (scope restriction).
 - **Code:**
   - `TNLean/MPS/BNT/Construction.lean` (`IsCanonicalFormBNT`,
     `IsNormalCanonicalFormBNT`, `BlockPermutationGaugePhaseConclusion`).
