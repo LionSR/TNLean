@@ -15,8 +15,8 @@ clauses; the explicit counterexample is in
 `TNLean/MPS/MPDO/VerticalCoefficientPresentationCounterexample.lean`.  This
 file proves the positive replacement statement: once an explicit vertical
 transport is assumed between the two per-length operator families, consisting
-of a label equivalence \(e\), nonzero scalars \(s_\alpha\), and per-length
-algebra isomorphisms \(\Phi_L\) with
+of a label equivalence \(e\), nonzero scalars \(s_\alpha\), and algebra
+isomorphisms \(\Phi_L\) at each positive length with
 \[
   O'_L(\alpha) = s_\alpha^L\,\Phi_L\bigl(O_L(e\alpha)\bigr),
 \]
@@ -75,9 +75,9 @@ variable {Λ Λ' : Type*} {O O' : ℕ → Type*}
 /-- Explicit vertical transport between two BNT-label operator families.
 
 The transport consists of a label equivalence \(e\), nonzero scalars
-\(s_\alpha\), and, at each length, a linear equivalence \(\Phi_L\) of the
-ambient algebras respecting products, such that for every label \(\alpha\)
-and every positive length \(L\),
+\(s_\alpha\), and, at each positive length, a linear equivalence \(\Phi_L\)
+of the ambient algebras respecting products, such that for every label
+\(\alpha\) and every positive length \(L\),
 \[
   O'_L(\alpha) = s_\alpha^L\,\Phi_L\bigl(O_L(e\alpha)\bigr).
 \]
@@ -110,26 +110,27 @@ structure BNTVerticalTransport
   Source: `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`,
   eq:vertical-coefficient-explicit-transport. -/
   scale_ne_zero : ∀ α : Λ', scale α ≠ 0
-  /-- The length-\(L\) algebra isomorphism \(\Phi_L\), as a linear
-  equivalence of the ambient algebras.
+  /-- The algebra isomorphism \(\Phi_L\) at each positive length \(L\), as
+  a linear equivalence of the ambient algebras.
 
   Source: `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`,
   eq:vertical-coefficient-explicit-transport. -/
-  map : ∀ L : ℕ, O L ≃ₗ[ℂ] O' L
+  map : ∀ L : ℕ, 0 < L → (O L ≃ₗ[ℂ] O' L)
   /-- Each \(\Phi_L\) respects products, so it is an isomorphism of
   algebras.
 
   Source: `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`,
   eq:vertical-coefficient-explicit-transport. -/
-  map_mul : ∀ (L : ℕ) (x y : O L), map L (x * y) = map L x * map L y
+  map_mul : ∀ (L : ℕ) (hL : 0 < L) (x y : O L),
+    map L hL (x * y) = map L hL x * map L hL y
   /-- The transport relation
   \(O'_L(\alpha) = s_\alpha^L\,\Phi_L(O_L(e\alpha))\) at every positive
   length.
 
   Source: `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`,
   eq:vertical-coefficient-explicit-transport. -/
-  transport : ∀ L : ℕ, 0 < L → ∀ α : Λ',
-    op'.operator L α = scale α ^ L • map L (op.operator L (relabel α))
+  transport : ∀ (L : ℕ) (hL : 0 < L), ∀ α : Λ',
+    op'.operator L α = scale α ^ L • map L hL (op.operator L (relabel α))
 
 namespace BNTVerticalTransport
 
@@ -155,6 +156,8 @@ noncomputable def transportedCoefficients (T : BNTVerticalTransport op op')
   coeff L α β γ := (T.scale α * T.scale β / T.scale γ) ^ L *
     c.coeff L (T.relabel α) (T.relabel β) (T.relabel γ)
 
+/-- Unfolds the transported coefficients along a vertical transport: relabel
+the three indices and multiply by the \(L\)-th power of the scale ratio. -/
 @[simp]
 theorem transportedCoefficients_coeff (T : BNTVerticalTransport op op')
     (c : BNTLabelCoefficientFamily Λ) (L : ℕ) (α β γ : Λ') :
@@ -186,30 +189,31 @@ theorem hasSameLengthProductForm_transported
     op'.HasSameLengthProductForm (T.transportedCoefficients c) := by
   intro L hL α β
   calc op'.operator L α * op'.operator L β
-      = (T.scale α ^ L • T.map L (op.operator L (T.relabel α))) *
-          (T.scale β ^ L • T.map L (op.operator L (T.relabel β))) := by
+      = (T.scale α ^ L • T.map L hL (op.operator L (T.relabel α))) *
+          (T.scale β ^ L • T.map L hL (op.operator L (T.relabel β))) := by
         rw [T.transport L hL α, T.transport L hL β]
     _ = (T.scale α * T.scale β) ^ L •
-          T.map L (op.operator L (T.relabel α) * op.operator L (T.relabel β)) := by
+          T.map L hL
+            (op.operator L (T.relabel α) * op.operator L (T.relabel β)) := by
         rw [smul_mul_smul_comm, ← T.map_mul, mul_pow]
     _ = ∑ δ : Λ,
           ((T.scale α * T.scale β) ^ L *
             c.coeff L (T.relabel α) (T.relabel β) δ) •
-            T.map L (op.operator L δ) := by
+            T.map L hL (op.operator L δ) := by
         rw [h L hL, map_sum, Finset.smul_sum]
         simp_rw [map_smul, smul_smul]
     _ = ∑ γ : Λ',
           ((T.scale α * T.scale β) ^ L *
             c.coeff L (T.relabel α) (T.relabel β) (T.relabel γ)) •
-            T.map L (op.operator L (T.relabel γ)) :=
+            T.map L hL (op.operator L (T.relabel γ)) :=
         (Equiv.sum_comp T.relabel fun δ ↦
           ((T.scale α * T.scale β) ^ L *
             c.coeff L (T.relabel α) (T.relabel β) δ) •
-            T.map L (op.operator L δ)).symm
+            T.map L hL (op.operator L δ)).symm
     _ = ∑ γ : Λ',
           (T.transportedCoefficients c).coeff L α β γ • op'.operator L γ := by
         refine Finset.sum_congr rfl fun γ _ ↦ ?_
-        have hΦ : T.map L (op.operator L (T.relabel γ)) =
+        have hΦ : T.map L hL (op.operator L (T.relabel γ)) =
             (T.scale γ ^ L)⁻¹ • op'.operator L γ := by
           rw [T.transport L hL γ,
             inv_smul_smul₀ (pow_ne_zero L (T.scale_ne_zero γ))]

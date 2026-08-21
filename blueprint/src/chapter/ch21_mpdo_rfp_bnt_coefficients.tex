@@ -1590,15 +1590,16 @@
 \begin{definition}[Explicit vertical transport between labelled operator families]%
     \label{def:mpdo_bnt_vertical_transport}
     \lean{MPOTensor.BNTVerticalTransport}
-    \lean{MPOTensor.BNTVerticalTransport.transportedCoefficients}
+    \lean{MPOTensor.BNTVerticalTransport.transportedCoefficients,
+        MPOTensor.BNTVerticalTransport.transportedCoefficients_coeff}
     \leanok
     \uses{def:mpdo_bnt_label_operator_family,
         def:mpdo_bnt_label_coefficient_family}
     An \emph{explicit vertical transport} between two BNT-label operator
     families with operators $O_L$ and $O'_L$ consists of a label
-    equivalence $e$, nonzero scalars $s_\alpha$, and, at each length, an
-    isomorphism $\Phi_L$ of the ambient algebras, such that for every
-    label $\alpha$ and every positive length $L$,
+    equivalence $e$, nonzero scalars $s_\alpha$, and, at each positive
+    length, an isomorphism $\Phi_L$ of the ambient algebras, such that for
+    every label $\alpha$ and every positive length $L$,
     \begin{align}
         O'_L(\alpha)&=s_\alpha^L\,\Phi_L\bigl(O_L(e\alpha)\bigr).
         \notag
@@ -1665,8 +1666,7 @@
         thm:mpdo_bnt_vertical_transport_product_form,
         thm:mpdo_bnt_label_coeff_unique,
         def:mpdo_bnt_label_linear_independent,
-        def:mpdo_bnt_algebra_tensor_clause,
-        thm:mpdo_vertical_coefficients_not_presentation_invariant}
+        def:mpdo_bnt_algebra_tensor_clause}
     Let two BNT-label operator families satisfying the same-length product
     law, with coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ and
     ${c'}^{(L)}_{\alpha,\beta,\gamma}$, be related by an explicit vertical
