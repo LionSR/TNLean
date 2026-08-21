@@ -268,7 +268,8 @@ conjugate-transposed tensor.
     \label{thm:half_chain_comparison_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainComparison_sub_diagonal}
     \leanok
-    \uses{thm:half_chain_gram_geometric, lem:half_chain_gram_limit_diagonal}
+    \uses{def:half_chain_gram, def:transfer_map, def:fixed_point_proj,
+        def:trace_preserving}
     Let $A$ have trace-preserving transfer map with diagonal fixed point
     $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_D)$,
     $\tr(\Lambda)\neq0$, satisfying the spectral condition
