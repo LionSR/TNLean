@@ -176,7 +176,7 @@ no glyph and, by the `skin=none` rule it inherits, no label — unless the
 author declares a skin, while every record — the bonds bridging an open
 hole, its boundary entries — stands unchanged.
 
-### 2.4 Wire keys (11)
+### 2.4 Wire keys (10)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
