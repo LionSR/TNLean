@@ -185,7 +185,6 @@ hole, its boundary entries — stands unchanged.
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
 | `closed` | flag | — | false | `TKZ-WIRE-*` |
 | `wind=` | pair | cycle `{p,q}` | zero | `TKZ-WIND-*` |
-| `around=` | address-list | — | empty | `TKZ-WIRE-*` |
 | `cross=` | crossing-list | — | empty | `TKZ-CROSS-*` |
 | `crossing=` | small-enum | `over` `under` `alternate` `alternate=over` `alternate=under` | empty | `TKZ-CROSS-*` |
 | `dir=` | small-enum | `to` `from` `none` | `none` | `TKZ-WIRE-*` |
@@ -649,11 +648,10 @@ string. `via=` belongs to waypoint-routed closed strings and is mutually
 exclusive with `wind=`.
 <!-- Consumers: rmp-iii-a-torus-one, rmp-workbench-iii-eq59. -->
 
-**Detours.** `around=<address list>` routes the wire past the named records
-against their measured silhouettes plus daylight — the pulling-through
-idiom, and the hull route with the side left to the engine.
-<!-- Consumers: rmp-iii-a-pulling-through, rmp-iii-a-g-injective-projector,
-     rmp-workbench-iii-g-injective-pull, rmp-workbench-iii-mpo-injective-white. -->
+**Detours.** A detour is a side of a selection: `route={<side> of
+<selector>}` sends the wire past the selected records against their
+measured silhouettes plus daylight, and the crossing set is the answer to
+that claim. There is no separate detour key.
 
 **Closures.** Side policy words and selector keys normalize to wires whose
 `origin` field records the policy that generated them (`origin=trace`,
@@ -1090,6 +1088,7 @@ row is what names where the meaning went.
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
 | `nudge=` (atom and mark) | a basis member `(r,c,k)`, an ordinary address, or the label station rule (§6) |
 | `inset=` | nothing: concentric order is doctrine on the hull (§5) |
+| `around=` | `route={<side> of <selector>}`; a detour is a side of a selection |
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |

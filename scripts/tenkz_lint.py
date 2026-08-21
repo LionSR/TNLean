@@ -177,8 +177,9 @@ def tombstone_patterns(
             )
         else:
             # A lookbehind takes no variable width, so a live owner is stepped
-            # over as the source spells it: no space around a choice's equals,
-            # one space after the open word, none around a face's colon.  A
+            # over as the source spells it: no space beside a choice's
+            # equals, one space after the open word, none beside a face's
+            # colon.  A
             # spaced `owner = word` is therefore reported, which over-reports
             # a live spelling rather than passing a dead one, and is what the
             # hardcoded expression this replaced did.  Matching only where a
