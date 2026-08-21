@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Schur Complement TFAE --- Open Gap}
+\title{Schur Complement TFAE --- Contraction Gap}
 \author{}
 \date{2026-08-04}
 
@@ -40,42 +40,37 @@ Schur complement $P - Q R^{+} Q^\dagger$.\footnote{Formal declarations:
 \leanid{SchurComplement.blockMatrix}, \leanid{SchurComplement.blockMatrix_isHermitian},
 and \leanid{SchurComplement.schurComplement} in
 \doclink{TNLean/Channel/Schwarz/SchurComplement}.}
-The kernel-inclusion half of (1)$\Rightarrow$(2) is proved: if the block matrix
-is PSD then $\ker(R) \subseteq \ker(Q)$.\footnote{Formal declaration:
-\leanid{SchurComplement.ker_subset_of_block_psd}.} The proof uses the
-quadratic-form expansion of the block
-matrix\footnote{\leanid{SchurComplement.block_quadratic_form}.}
-together with the pseudoinverse/support-projection algebra for PSD $R$: $R R^{+} = R^{+}R
-= \operatorname{supportProj}(R)$, $\operatorname{supportProj}(R)\,R^{+} = R^{+}$, $R^{+}$
-is Hermitian, and $R^2$ has the same support projection as $R$.\footnote{Formal
-declarations: \leanid{SchurComplement.R_mul_pinv_eq_supportProj},
-\leanid{SchurComplement.pinv_mul_self_eq_supportProj},
-\leanid{SchurComplement.supportProj_mul_pinv_eq_pinv},
-\leanid{SchurComplement.pinv_isHermitian}, and
-\leanid{SchurComplement.supportProj_sq_eq_supportProj}.}
+Conditions (1) and (2) are equivalent with the source's exact hypotheses:
+the block matrix is PSD if and only if $\ker(R)\subseteq\ker(Q)$ and
+$P-QR^+Q^\dagger$ is PSD.\footnote{Formal declaration:
+\leanid{SchurComplement.blockMatrix_posSemidef_iff}.}
+The forward implication combines the kernel inclusion
+\leanid{SchurComplement.ker_subset_of_block_psd} with quadratic-form
+minimisation at $y=-R^+Q^\dagger x$. The reverse implication uses the completed
+square
+\begin{align}
+  \begin{pmatrix}x\\y\end{pmatrix}^{\!\dagger}
+  \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}
+  \begin{pmatrix}x\\y\end{pmatrix}
+  &=(R^+Q^\dagger x+y)^\dagger R(R^+Q^\dagger x+y)
+    +x^\dagger(P-QR^+Q^\dagger)x.
+\end{align}
+This identity is formalized as
+\leanid{SchurComplement.schur_complement_quadratic_form}. It rests on the
+support absorption $Q\operatorname{supp}(R)=Q$ and the pseudoinverse identities
+$RR^+=R^+R=\operatorname{supp}(R)$ and $(R^+)^\dagger=R^+$.
 
 \section{What remains}
-The standard argument has three steps, of which only the kernel-inclusion part
-of the first is formalized:
-\begin{enumerate}
-  \item[(1)$\Rightarrow$(2), Schur half] Quadratic-form minimisation: for the block matrix
-    $\bigl[\begin{smallmatrix} P & Q \\ Q^\dagger & R \end{smallmatrix}\bigr]$,
-    the optimal choice $y = -R^{+} Q^\dagger x$ gives
-    $x^\dagger (P - Q R^{+} Q^\dagger) x \ge 0$ for all~$x$. Not formalized.
-  \item[(2)$\Rightarrow$(1)] Completing the square using $\ker(R) \subseteq \ker(Q)$
-    and $P \ge Q R^{+} Q^\dagger$ to exhibit the block matrix as PSD. Not formalized.
-  \item[(2)$\Rightarrow$(3) and (3)$\Rightarrow$(1)] Algebraic manipulation with
-    $P^{1/2}$ and $R^{1/2}$ identifies $P \ge Q R^{+} Q^\dagger$ with the contraction
-    bound $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$, and the operator-norm characterisation
-    $\|L\| \le 1 \iff L L^\dagger \le I$ recovers the block PSD decomposition via
-    $K = P^{-1/2} Q R^{-1/2}$. Not formalized; requires additional operator-norm lemmas.
-\end{enumerate}
+It remains to prove (2)$\Longleftrightarrow$(3). Algebraic manipulation with
+$P^{1/2}$ and $R^{1/2}$ identifies $P \ge Q R^{+} Q^\dagger$ with the contraction
+bound $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$. The reverse route uses the
+operator-norm characterization $\|L\| \le 1 \iff L L^\dagger \le I$ and the
+support extensions of both inverse square roots. These operator-norm and
+support-factorization statements are not yet formalized in the required form.
 
 \section{Verdict}
-Wolf Theorem~5.2 is an \emph{open gap}: only the kernel-inclusion half of
-(1)$\Rightarrow$(2), together with the pseudoinverse/support-projection algebra
-it depends on, is formalized. The Schur-complement-PSD half of (1)$\Rightarrow$(2),
-the converse (2)$\Rightarrow$(1), and the contraction equivalence
-(2)$\Longleftrightarrow$(3) remain open, tracked in \ghissue{5511}.
+Wolf Theorem~5.2 is partially formalized: conditions (1) and (2) are proved
+equivalent without any additional hypothesis. Only the contraction equivalence
+(2)$\Longleftrightarrow$(3) remains open, tracked in \ghissue{5501}.
 
 \end{document}

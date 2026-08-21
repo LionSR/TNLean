@@ -4,17 +4,17 @@
   \notready
   \uses{def:schurComplement, def:blockMatrix}
   Let $P \in \MN{D_1}$, $R \in \MN{D_2}$ be positive semi-definite
-  and $Q \in \MN{D_1,D_2}$ such that $\ker(R) \subseteq \ker(Q)$.
-  Wolf's Theorem~5.2 states that the following are equivalent:
+  and let $Q \in \MN{D_1,D_2}$. Wolf's Theorem~5.2 states that the
+  following are equivalent:
   \begin{enumerate}
     \item The block matrix $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$ is PSD,
-    \item $P \ge Q R^+ Q^\dagger$ (pseudoinverse Schur complement),
-    \item $Q = P^{1/2} K R^{1/2}$ for a contraction $K$ with $\|K\|_\infty \le 1$.
+    \item $\ker(R) \subseteq \ker(Q)$ and
+      $P \ge Q R^+ Q^\dagger$,
+    \item $\ker(R) \subseteq \ker(Q)$ and
+      $\|P^{-1/2}Q R^{-1/2}\|_\infty \le 1$.
   \end{enumerate}
   Here $R^+$ denotes the pseudoinverse (inverse on the support) and the
-  square roots $P^{1/2}, R^{1/2}$ are the positive semidefinite square roots,
-  with their inverses extended by zero on the kernel.
-% The proof is deferred (paper-gap schur_complement_tfae).
+  inverse square roots are extended by zero on the respective kernels.
 \end{theorem}
 
 \begin{definition}[Block matrix]\label{def:blockMatrix}
@@ -38,3 +38,139 @@
   \uses{def:pinv}
   The pseudoinverse Schur complement $P - Q R^+ Q^\dagger$.
 \end{definition}
+
+\begin{theorem}[Support absorption under kernel inclusion]
+  \label{thm:support_absorption_of_kernel_inclusion}
+  \lean{Matrix.IsHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le}
+  \leanok
+  Let $R$ be Hermitian and let $Q$ be a matrix with the same column index
+  such that $\ker(R)\subseteq\ker(Q)$. Then
+  $Q\operatorname{supp}(R)=Q$.
+\end{theorem}
+
+\begin{theorem}[Pseudoinverse support identities]
+  \label{thm:schur_pinv_support_identities}
+  \lean{SchurComplement.R_mul_pinv_eq_supportProj}
+  \lean{SchurComplement.pinv_mul_self_eq_supportProj}
+  \lean{SchurComplement.supportProj_mul_pinv_eq_pinv}
+  \lean{SchurComplement.pinv_isHermitian}
+  \leanok
+  \uses{def:pinv}
+  If $R$ is positive semi-definite, then
+  $RR^+=R^+R=\operatorname{supp}(R)$ and $R^+$ is Hermitian.
+\end{theorem}
+
+\begin{proof}\leanok
+  These identities follow from the support inverse and the spectral calculus
+  of the Hermitian matrix $R$.
+\end{proof}
+
+\begin{theorem}[Kernel inclusion from block positivity]
+  \label{thm:block_psd_kernel_inclusion}
+  \lean{SchurComplement.ker_subset_of_block_psd}
+  \leanok
+  \uses{def:blockMatrix}
+  If $\begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}$ is positive
+  semi-definite, then $\ker(R)\subseteq\ker(Q)$.
+\end{theorem}
+
+\begin{proof}\leanok
+  A vector in $\ker(R)$ has zero quadratic form in the lower-right principal
+  subspace. Positivity therefore places the corresponding block vector in
+  the kernel of the full matrix, whose upper component is $Qy$.
+\end{proof}
+
+\begin{theorem}[Pseudoinverse completion of the square]
+  \label{thm:schur_complement_quadratic_form}
+  \lean{SchurComplement.schur_complement_quadratic_form}
+  \leanok
+  \uses{def:blockMatrix, def:schurComplement}
+  If $R$ is positive semi-definite and
+  $\ker(R)\subseteq\ker(Q)$, then
+  \begin{align}
+    \begin{pmatrix}x\\y\end{pmatrix}^{\!\dagger}
+      \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}
+      \begin{pmatrix}x\\y\end{pmatrix}
+    &=(R^+Q^\dagger x+y)^\dagger R(R^+Q^\dagger x+y)
+      +x^\dagger(P-QR^+Q^\dagger)x.
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:support_absorption_of_kernel_inclusion,
+    thm:schur_pinv_support_identities}
+  The kernel inclusion gives
+  $Q\operatorname{supp}(R)=Q$. Expanding the right-hand side and using
+  $RR^+=R^+R=\operatorname{supp}(R)$ and $(R^+)^\dagger=R^+$ yields the
+  four terms of the block quadratic form.
+\end{proof}
+
+\begin{theorem}[Schur-complement positivity from block positivity]
+  \label{thm:schur_complement_psd_of_block_psd}
+  \lean{SchurComplement.schurComplement_posSemidef_of_blockMatrix_posSemidef}
+  \leanok
+  \uses{def:blockMatrix, def:schurComplement}
+  If $P$ and $R$ are positive semi-definite and
+  $\begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}$ is positive
+  semi-definite, then $P-QR^+Q^\dagger$ is positive semi-definite.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:block_psd_kernel_inclusion,
+    thm:schur_complement_quadratic_form,
+    thm:schur_pinv_support_identities}
+  By Theorem~\ref{thm:block_psd_kernel_inclusion},
+  $\ker(R)\subseteq\ker(Q)$. In
+  Theorem~\ref{thm:schur_complement_quadratic_form}, take
+  $y=-R^+Q^\dagger x$. The completed-square term vanishes, and positivity of
+  the block matrix gives
+  $x^\dagger(P-QR^+Q^\dagger)x\ge 0$ for every $x$.
+\end{proof}
+
+\begin{theorem}[Block positivity from Schur-complement positivity]
+  \label{thm:block_psd_of_schur_complement_psd}
+  \lean{SchurComplement.blockMatrix_posSemidef_of_schurComplement_posSemidef}
+  \leanok
+  \uses{def:blockMatrix, def:schurComplement}
+  Suppose that $P$ and $R$ are positive semi-definite,
+  $\ker(R)\subseteq\ker(Q)$, and $P-QR^+Q^\dagger$ is positive
+  semi-definite. Then
+  $\begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}$ is positive
+  semi-definite.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{lem:blockMatrix_isHermitian,
+    thm:schur_complement_quadratic_form}
+  Theorem~\ref{thm:schur_complement_quadratic_form} writes every quadratic
+  form of the block matrix as the sum of quadratic forms of $R$ and of
+  $P-QR^+Q^\dagger$. Both are nonnegative.
+\end{proof}
+
+\begin{theorem}[Block positivity and the pseudoinverse Schur complement]
+  \label{thm:block_psd_iff_schur_complement_psd}
+  \lean{SchurComplement.blockMatrix_posSemidef_iff}
+  \leanok
+  \uses{def:blockMatrix, def:schurComplement}
+  Let $P$ and $R$ be positive semi-definite. Then
+  \begin{align}
+    \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}\ge 0
+    \quad\Longleftrightarrow\quad
+    \ker(R)\subseteq\ker(Q)
+    \ \text{and}\ P-QR^+Q^\dagger\ge 0.
+  \end{align}
+
+  \textbf{Scope restriction (Wolf Theorem 5.2, conditions (1) and (2)):}
+  This proves exactly the first two conditions of the source theorem. The
+  contraction condition (3) remains open, as recorded in
+  \texttt{docs/paper-gaps/schur\_complement\_tfae.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:block_psd_kernel_inclusion,
+    thm:schur_complement_psd_of_block_psd,
+    thm:block_psd_of_schur_complement_psd}
+  The forward implication combines kernel inclusion with positivity of the
+  Schur complement. The reverse implication is
+  Theorem~\ref{thm:block_psd_of_schur_complement_psd}.
+\end{proof}
