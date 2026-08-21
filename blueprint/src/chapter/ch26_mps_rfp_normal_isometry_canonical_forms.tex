@@ -45,8 +45,7 @@ ambient bond space.
     \label{thm:canonical_from_primitive}
     \lean{MPSTensor.IsCanonicalForm.of_peripheral_primitive}
     \leanok
-    \uses{def:is_canonical_form, def:injective, def:tp_kraus,
-        def:primitive_channel}
+    \uses{def:is_canonical_form, def:injective}
     Let $(\mu_k,A_k)_{k=1}^r$ be nonzero weights and injective left-canonical
     blocks with positive bond dimensions, non-increasing moduli
     $|\mu_1|\ge\cdots\ge|\mu_r|>0$, and
@@ -57,13 +56,12 @@ ambient bond space.
 
 \begin{proof}
     \leanok
-    \uses{def:is_canonical_form, thm:primitive_compl_lt_one,
-        thm:primitive_overlap}
+    \uses{def:is_canonical_form, thm:primitive_overlap}
     The injectivity, left-canonical identity, weight ordering, and
     nonzero-weight clauses are exactly the hypotheses. For each block,
     peripheral primitivity gives the complementary spectral gap
     $\rho_{\spec}(\E_{A_k}-P)<1$ by
-    Theorem~\ref{thm:primitive_compl_lt_one}.
+    the corresponding theorem in the companion quantum-channel volume.
     Theorem~\ref{thm:primitive_overlap} then yields
     $O_{A_kA_k}(N)\to1$.
 \end{proof}
@@ -122,8 +120,7 @@ ambient bond space.
     \cite[Appendix~B]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible,
-        thm:form_II}
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible, thm:form_II}
     By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
     is injective. By Theorem~\ref{thm:injective_irreducible}, its transfer map
     $\E_A$ is irreducible, and hence $A$ is irreducible as a tensor. Applying
@@ -136,8 +133,7 @@ ambient bond space.
     \label{thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:injective, def:fixed_point_proj,
-        thm:exponential_convergence_primitive}
+    \uses{def:mps_transfer_idempotence, def:injective, thm:exponential_convergence_primitive}
     Let $A$ be an injective left-canonical RFP tensor with positive-definite
     fixed point $\rho$ of the transfer map $\E_A$. Then
     $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)} \rho$
@@ -158,9 +154,7 @@ ambient bond space.
     \label{thm:rfp_nt_structural_full}
     \lean{MPSTensor.rfp_nt_structural_full}
     \leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical,
-        thm:rfp_nt_cfii_diagonal_fixed_point,
-        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     A normal left-canonical renormalization fixed-point tensor $A$ admits a
     decomposition $A^i=X\Lambda U^iX^{-1}$, where
     $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
@@ -216,9 +210,7 @@ ambient bond space.
     \label{thm:rfp_nt_structural_full_sq_sum}
     \lean{MPSTensor.rfp_nt_structural_full_sqSum}
     \leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical,
-        thm:rfp_nt_cfii_diagonal_fixed_point,
-        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     The decomposition in Theorem~\ref{thm:rfp_nt_structural_full} additionally records that the
     diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$. This square-sum
     identity is the trace-normalization seed: the explicit weights are
@@ -227,9 +219,7 @@ ambient bond space.
     $\rho$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical,
-        thm:rfp_nt_cfii_diagonal_fixed_point,
-        thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     The diagonal fixed-point reduction and the rank-one classification of
     injective left-canonical renormalization fixed points produce the diagonal
     weights $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, so
@@ -320,8 +310,7 @@ ambient bond space.
     \label{thm:rfp_nt_structural_full_blocks_unit_pair}
     \lean{MPSTensor.rfp_nt_structural_full_blocks_unit_pair}
     \leanok
-    \uses{thm:rfp_nt_structural_full_blocks,
-        thm:rfp_nt_structural_full_unit_pair}
+    \uses{thm:rfp_nt_structural_full_blocks, thm:rfp_nt_structural_full_unit_pair}
     Under the hypotheses of
     Theorem~\ref{thm:rfp_nt_structural_full_blocks}, each block admits a
     decomposition $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$ with
@@ -528,8 +517,7 @@ ambient bond space.
     \label{thm:normal_rfp_iff_isometry_canonical_form}
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
-    \uses{def:nt_cpsv, def:mps_transfer_idempotence,
-        def:is_isometry_canonical_form, thm:cpsv_normal_bond_dim_pos}
+    \uses{def:nt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, thm:cpsv_normal_bond_dim_pos}
     A normal tensor is a renormalization fixed point if and only if it has the
     square-root fixed-point form of
     Definition~\ref{def:is_isometry_canonical_form}. Its bond dimension is
@@ -539,12 +527,7 @@ ambient bond space.
     \cite[Appendix~B, lines~1274--1301]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge,
-        thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal,
-        lem:rfp_parent_gauge_invariance,
-        lem:isometry_canonical_form_gauge_invariant,
-        thm:isometry_canonical_form_of_rfp_nt,
-        thm:is_rfp_of_isometry_canonical_form}
+    \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance, lem:isometry_canonical_form_gauge_invariant, thm:isometry_canonical_form_of_rfp_nt, thm:is_rfp_of_isometry_canonical_form}
     Normality first gives positive bond dimension by
     Theorem~\ref{thm:cpsv_normal_bond_dim_pos}. For the forward implication,
     choose the pure trace-preserving Perron gauge from

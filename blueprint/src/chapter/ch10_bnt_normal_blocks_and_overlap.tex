@@ -13,7 +13,6 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:spectral_radius_one_matrix_dim_pos}
     \leanok
     If the bond dimension were zero, the bond-matrix space and its endomorphism
     algebra would each contain only zero. The transfer operator would therefore
@@ -38,14 +37,7 @@ matching between normal blocks.
     invertible similarity.
 \end{theorem}
 \begin{proof}
-    \uses{lem:trace_mul_transfer_map_adjoint,
-        lem:irreducible_transfer_perron_pair,
-        lem:spectral_radius_one_matrix_dim_pos,
-        thm:posDef_adjoint_eigenvector,
-        thm:spectral_radius_real_pf_irred,
-        thm:tp_gauge_from_adjoint_fixed,
-        lem:tp_gauge_equiv,
-        lem:similarity_irred_iff}
+    \uses{lem:trace_mul_transfer_map_adjoint, lem:irreducible_transfer_perron_pair, thm:posDef_adjoint_eigenvector, thm:spectral_radius_real_pf_irred, thm:tp_gauge_from_adjoint_fixed, lem:tp_gauge_equiv, lem:similarity_irred_iff}
     \leanok
     Positive-definite right and left Perron eigenvectors have the same positive
     eigenvalue by the trace pairing.  The spectral-radius identity makes this
@@ -67,8 +59,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pure_perron_tp_gauge,
-        lem:perron_gauge_primitive_iff}
+    \uses{thm:pure_perron_tp_gauge, lem:perron_gauge_primitive_iff}
     Pure Perron normalization gives a trace-preserving gauge by a pure
     similarity. Irreducibility and primitivity are invariant under this
     similarity.
@@ -95,9 +86,7 @@ matching between normal blocks.
     \label{thm:cpsv_bnt_is_bnt}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.isBNT}
     \leanok
-    \uses{def:bnt, def:bnt_cpsv,
-        lem:cpsv_bnt_block_dimensions_positive,
-        thm:cpsv_normal_eventually_injective}
+    \uses{def:bnt, def:bnt_cpsv, lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_normal_eventually_injective}
     If $(A_j)_{j=1}^{g}$ is a coefficient-form basis of normal tensors for
     $A$, then $(A_j)_{j=1}^{g}$ is an algebraic basis of normal tensors for
     $A$. Only this implication from spectral normality to algebraic normality
@@ -105,8 +94,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:cpsv_bnt_block_dimensions_positive,
-        thm:cpsv_normal_eventually_injective}
+    \uses{lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_normal_eventually_injective}
     Every block has positive bond dimension, so spectral normality implies
     eventual block injectivity for each block. The spanning identities and
     eventual linear independence are unchanged.
@@ -116,7 +104,7 @@ matching between normal blocks.
     \label{thm:rect_overlap_norm_one_dim_eq}
     \lean{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
     \leanok
-    \uses{def:mpv_overlap, def:irreducible_tensor, def:tp_kraus}
+    \uses{def:mpv_overlap, def:irreducible_tensor}
     Let $A$ and $B$ be irreducible trace-preserving tensors of positive,
     possibly different, bond dimensions. If $|O_{AB}(N)|\longrightarrow 1$,
     then their bond dimensions are equal.
@@ -152,8 +140,7 @@ matching between normal blocks.
     \lean{MPSTensor.norm_eq_one_of_gaugePhase_cast_of_isNormalTensor}
     \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor}
     \leanok
-    \uses{def:nt_cpsv, def:mpv_block_phase_equiv,
-        def:gauge_phase_equiv}
+    \uses{def:nt_cpsv, def:mpv_block_phase_equiv, def:gauge_phase_equiv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for some nonzero $\zeta\in\C$,
     $\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}$ for $N\geq 0$.
@@ -164,8 +151,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge, thm:rect_overlap_norm_one_dim_eq,
-        thm:nt_overlap_norm_one_gauge}
+    \uses{thm:cpsv_normal_tp_gauge, thm:rect_overlap_norm_one_dim_eq, thm:nt_overlap_norm_one_gauge}
     Apply Theorem~\ref{thm:cpsv_normal_tp_gauge} to both tensors. Gauge
     invariance of matrix product vectors preserves the phase relation, whose
     self-overlap identities imply unit modulus for the phase. The resulting
@@ -199,9 +185,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge, thm:overlap_decay_rect_irr_tp,
-        thm:overlap_decay_irr_tp, thm:gauge_invariance,
-        thm:gauge_phase_mpv_scaling, thm:cpsv_normal_mpv_phase_gauge}
+    \uses{thm:cpsv_normal_tp_gauge, thm:overlap_decay_rect_irr_tp, thm:overlap_decay_irr_tp, thm:gauge_invariance, thm:gauge_phase_mpv_scaling, thm:cpsv_normal_mpv_phase_gauge}
     Put both tensors in their pure trace-preserving gauges. If their bond
     dimensions differ, rectangular overlap decay gives $O_{AB}(N)\to0$. If
     their dimensions agree but they are not gauge-phase equivalent, the
@@ -231,8 +215,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_overlap_dichotomy,
-        thm:gauge_phase_mpv_scaling}
+    \uses{thm:cpsv_normal_overlap_dichotomy, thm:gauge_phase_mpv_scaling}
     Apply Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}. In its second
     alternative, gauge-phase covariance gives
     $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for every configuration
@@ -267,8 +250,7 @@ matching between normal blocks.
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
         exists_unit_phase_power_of_isNormalTensor}
     \leanok
-    \uses{def:nt_cpsv, def:mpv_state,
-        def:eventually_nonzero_proportional_mpv}
+    \uses{def:nt_cpsv, def:mpv_state, def:eventually_nonzero_proportional_mpv}
     Let $A$ and $B$ be normal tensors of positive, possibly different, bond
     dimensions. Suppose that, for all sufficiently large $N$, their matrix
     product vectors are proportional by a nonzero scalar. Then there is
@@ -282,9 +264,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:eventual_proportional_normalized_overlap_norm_one,
-        thm:cpsv_normal_mpv_phase_alternative,
-        thm:cpsv_normal_mpv_phase_gauge}
+    \uses{thm:eventual_proportional_normalized_overlap_norm_one, thm:cpsv_normal_mpv_phase_alternative, thm:cpsv_normal_mpv_phase_gauge}
     Normality gives $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, so
     Theorem~\ref{thm:eventual_proportional_normalized_overlap_norm_one} gives
     $|O_{AB}(N)|\to1$. The first alternative in
@@ -309,8 +289,7 @@ matching between normal blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge,
-        lem:bnt_finite_index_overlap_orthonormal_li}
+    \uses{thm:cpsv_normal_tp_gauge, lem:bnt_finite_index_overlap_orthonormal_li}
     Put every tensor in the pure trace-preserving gauge of
     Theorem~\ref{thm:cpsv_normal_tp_gauge}. Distinct gauge-phase classes have
     overlaps tending to zero, while each self-overlap tends to one. The finite

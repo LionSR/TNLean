@@ -107,9 +107,7 @@
     \label{thm:finite_kronecker_positive_rescaling}
     \lean{Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef}
     \leanok
-    \uses{def:finite_kronecker_product,
-        lem:finite_kronecker_elementary,
-        thm:kronecker_factor_positive_rescaling}
+    \uses{def:finite_kronecker_product, lem:finite_kronecker_elementary, thm:kronecker_factor_positive_rescaling}
     Let $N\geq1$, and let $A_0,\ldots,A_{N-1}$ be nonzero complex square
     matrices, with possibly different dimensions. If their finite Kronecker
     product is positive semidefinite, then there are nonzero scalars
@@ -124,8 +122,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:finite_kronecker_elementary,
-        thm:kronecker_factor_positive_rescaling}
+    \uses{lem:finite_kronecker_elementary, thm:kronecker_factor_positive_rescaling}
     The assertion is proved by induction on $N$. Separate the first factor
     from the remaining Kronecker product and apply
     Theorem~\ref{thm:kronecker_factor_positive_rescaling}. Absorb the inverse
@@ -227,9 +224,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}
     \leanok
-    \uses{def:mpdo_sector_virtual_matrix_families,
-        def:mpdo_minimal_neighboring_operator,
-        thm:trace_nondeg}
+    \uses{def:mpdo_sector_virtual_matrix_families, def:mpdo_minimal_neighboring_operator}
     For a physical-sector factorization, let $A_{k;x,y}\in\MN{D}$ be the
     virtual matrix obtained from the physical matrix entry $(x,y)$ within
     sector $k$. Suppose that all such matrices span $\MN{D}$ and that both
@@ -247,7 +242,6 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_nondeg}
     A nonzero entry of $\eta_{k,h}$, together with nonzero sector matrices at
     $k$ and $h$, gives matrices $A$ from sector $k$ and $B$ from sector $h$
     with $AB\ne0$. By nondegeneracy of the trace pairing, choose $Y$ with
@@ -343,9 +337,7 @@
     \label{lem:mpdo_eta_cycle_fin_kronecker}
     \lean{MPOTensor.cyclicEtaTensorProduct_submatrix_eq_finKronecker}
     \leanok
-    \uses{def:finite_kronecker_product,
-        def:mpdo_cyclic_eta_tensor_product,
-        def:mpdo_eta_cycle_fiber}
+    \uses{def:finite_kronecker_product, def:mpdo_cyclic_eta_tensor_product, def:mpdo_eta_cycle_fiber}
     Reindexing a cyclic neighboring-operator block along its horizontal bond
     fiber gives the finite Kronecker product
     $\bigotimes_{n=0}^{N-1}\eta_{k_n,k_{n+1}}$.
@@ -362,9 +354,7 @@
     \label{thm:mpdo_eta_cycle_positive_rescaling}
     \lean{MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef}
     \leanok
-    \uses{def:mpdo_cyclic_eta_tensor_product,
-        lem:mpdo_eta_cycle_fin_kronecker,
-        thm:finite_kronecker_positive_rescaling}
+    \uses{def:mpdo_cyclic_eta_tensor_product, lem:mpdo_eta_cycle_fin_kronecker, thm:finite_kronecker_positive_rescaling}
     Let $N\geq1$, and fix a cyclic sector assignment
     $k_0,\ldots,k_{N-1}$ such that every operator
     $\eta_{k_n,k_{n+1}}$ is nonzero. If the corresponding cyclic tensor
@@ -382,8 +372,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_eta_cycle_fin_kronecker,
-        thm:finite_kronecker_positive_rescaling}
+    \uses{lem:mpdo_eta_cycle_fin_kronecker, thm:finite_kronecker_positive_rescaling}
     Reindex the cyclic sector block by the shared horizontal-bond indices.
     Its matrix entries then become the finite Kronecker product of the
     consecutive neighboring operators. Apply
@@ -395,10 +384,7 @@
     \label{cor:mpdo_sector_eta_cycle_positive_rescaling}
     \lean{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}
     \leanok
-    \uses{def:mpdo, def:injective, def:mpdo_eta_structure,
-        def:mpdo_three_site_closure, def:mpdo_sector_eta,
-        thm:mpdo_eta_cycle_positive_rescaling,
-        thm:mpdo_cyclic_eta_posSemidef}
+    \uses{def:mpdo, def:injective, def:mpdo_eta_structure, def:mpdo_three_site_closure, def:mpdo_sector_eta, thm:mpdo_eta_cycle_positive_rescaling, thm:mpdo_cyclic_eta_posSemidef}
     Let ${\cal K}$ be an injective MPDO, let $R$ give a three-site closure,
     and fix an $\eta$-structure and a nonzero tail entry. Let $N\geq1$. For a
     cyclic sector assignment $k_0,\ldots,k_{N-1}$, suppose that every
@@ -418,8 +404,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_eta_cycle_positive_rescaling,
-        thm:mpdo_cyclic_eta_posSemidef}
+    \uses{thm:mpdo_eta_cycle_positive_rescaling, thm:mpdo_cyclic_eta_posSemidef}
     The fixed-sector cyclic product is positive semidefinite by
     Theorem~\ref{thm:mpdo_cyclic_eta_posSemidef}. Apply
     Theorem~\ref{thm:mpdo_eta_cycle_positive_rescaling}.
@@ -468,9 +453,7 @@
     \label{thm:mpdo_cyclic_eta_posSemidef}
     \lean{MPOTensor.cyclicEtaTensorProduct_posSemidef}
     \leanok
-    \uses{def:mpdo, def:mpdo_cyclic_eta_tensor_product,
-        thm:mpdo_fixed_sector_cyclic_eta,
-        thm:mpdo_conjugated_chain_congruence}
+    \uses{def:mpdo, def:mpdo_cyclic_eta_tensor_product, thm:mpdo_fixed_sector_cyclic_eta, thm:mpdo_conjugated_chain_congruence}
     Let ${\cal K}$ be an MPDO whose transformed physical slices satisfy the
     sector factorization hypothesis. Then for every $N\ge1$ and every
     cyclic sector assignment $k_1,\ldots,k_N$ with $k_{N+1}=k_1$,
@@ -489,8 +472,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_fixed_sector_cyclic_eta,
-        thm:mpdo_conjugated_chain_congruence}
+    \uses{thm:mpdo_fixed_sector_cyclic_eta, thm:mpdo_conjugated_chain_congruence}
     The cyclic tensor product $\Omega_k$ of
     Definition~\ref{def:mpdo_cyclic_eta_tensor_product} is a diagonal
     sector block of the basis-conjugated chain by
@@ -510,9 +492,7 @@
     \lean{MPOTensor.etaOfSectorTensors_self_posSemidef}
     \lean{MPOTensor.etaOfSectorTensors_kronecker_posSemidef}
     \leanok
-    \uses{def:mpdo, def:injective, def:mpdo_sector_eta,
-        thm:mpdo_cyclic_eta_posSemidef,
-        thm:kronecker_factor_positive_rescaling}
+    \uses{def:mpdo, def:injective, def:mpdo_sector_eta, thm:mpdo_cyclic_eta_posSemidef, thm:kronecker_factor_positive_rescaling}
     Let ${\cal K}$ be an injective MPDO with the chosen Hayashi
     decomposition and a nonzero tail entry. Then for all sectors $k,h$:
     \begin{enumerate}
@@ -527,8 +507,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_cyclic_eta_posSemidef,
-        thm:kronecker_factor_positive_rescaling}
+    \uses{thm:mpdo_cyclic_eta_posSemidef, thm:kronecker_factor_positive_rescaling}
     The chain of length one projected to the sector $k$ is $\eta_{k,k}$ up
     to the exchange of its two tensor factors, and the chain of length two
     projected to $(k,h)$ is $\eta_{k,h}\otimes\eta_{h,k}$, both positive by
@@ -543,13 +522,7 @@
     \lean{MPOTensor.exists_rephased_inverseMapPhysicalSectorFactorization}
     \lean{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}
     \leanok
-    \uses{def:mpdo_physical_sector_rephasing,
-        def:mpdo_eta_recurrent_support,
-        lem:mpdo_eta_reachability_equivalence,
-        lem:directed_closed_walk_finite_cycle,
-        thm:positive_rescaling_phase_unique,
-        thm:mpdo_eta_cycle_positive_rescaling,
-        thm:directed_cycle_coboundary}
+    \uses{def:mpdo_physical_sector_rephasing, def:mpdo_eta_recurrent_support, lem:mpdo_eta_reachability_equivalence, lem:directed_closed_walk_finite_cycle, thm:positive_rescaling_phase_unique, thm:mpdo_eta_cycle_positive_rescaling, thm:directed_cycle_coboundary}
     Let $(\eta_{k,h})$ be a neighboring-operator family for which every
     nonempty cyclic tensor product is positive semidefinite. Suppose, in
     addition, that every nonzero edge $k\to h$ admits a directed return path
@@ -574,13 +547,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_eta_reachability_equivalence,
-        lem:directed_closed_walk_finite_cycle,
-        thm:positive_rescaling_phase_unique,
-        thm:mpdo_eta_cycle_positive_rescaling,
-        thm:directed_cycle_coboundary,
-        def:mpdo_physical_sector_rephasing,
-        thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    \uses{lem:mpdo_eta_reachability_equivalence, lem:directed_closed_walk_finite_cycle, thm:positive_rescaling_phase_unique, thm:mpdo_eta_cycle_positive_rescaling, thm:directed_cycle_coboundary, def:mpdo_physical_sector_rephasing, thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     For a nonzero edge, choose a directed return path and close it with the
     edge. Positive rescaling of the corresponding cyclic tensor product
     supplies a scalar that makes the edge operator positive; retain only its
@@ -605,13 +572,7 @@
     \lean{MPOTensor.exists_positive_inverseMapPhysicalSectorFactorization}
     \lean{MPOTensor.exists_positive_physicalSectorFactorization_of_isSAL}
     \leanok
-    \uses{def:mpdo, def:injective, def:is_sal,
-        def:mpdo_sector_eta,
-        def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-        thm:mpdo_zero_weight_reparameterized_neighboring_operator,
-        thm:mpdo_sector_virtual_matrix_spanning,
-        thm:mpdo_sector_support_triangle_closure,
-        thm:mpdo_eta_coherent_positive_choice_recurrent}
+    \uses{def:mpdo, def:injective, def:is_sal, def:mpdo_sector_eta, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_zero_weight_reparameterized_neighboring_operator, thm:mpdo_sector_virtual_matrix_spanning, thm:mpdo_sector_support_triangle_closure, thm:mpdo_eta_coherent_positive_choice_recurrent}
     Let ${\cal K}$ be an injective MPO tensor satisfying SAL. Then it admits
     a physical-sector factorization for which every neighboring operator
     $\eta_{k,h}=\sum_a (r_k)_a\otimes(l_h)_a$ is positive semidefinite.
@@ -621,16 +582,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_eta_recurrent_support,
-        thm:mpdo_cyclic_eta_posSemidef,
-        thm:mpdo_eta_cycle_positive_rescaling,
-        def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-        thm:mpdo_zero_weight_reparameterized_neighboring_operator,
-        thm:mpdo_sector_virtual_matrix_spanning,
-        thm:mpdo_sector_support_triangle_closure,
-        thm:positive_rescaling_phase_unique,
-        thm:directed_cycle_coboundary,
-        thm:mpdo_eta_coherent_positive_choice_recurrent}
+    \uses{def:mpdo_eta_recurrent_support, thm:mpdo_cyclic_eta_posSemidef, thm:mpdo_eta_cycle_positive_rescaling, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_zero_weight_reparameterized_neighboring_operator, thm:mpdo_sector_virtual_matrix_spanning, thm:mpdo_sector_support_triangle_closure, thm:positive_rescaling_phase_unique, thm:directed_cycle_coboundary, thm:mpdo_eta_coherent_positive_choice_recurrent}
     First set the right tensor to zero in every zero-weight sector. The left
     tensor already vanishes there, so this does not alter the factorization
     and removes every support edge incident to such a sector. Every remaining
@@ -650,8 +602,7 @@
     \label{thm:mpdo_eta_positivity_choice_symmetric}
     \lean{MPOTensor.exists_explicitEtaOperators_sectorEta}
     \leanok
-    \uses{def:mpdo_explicit_eta_operators,
-        thm:mpdo_sector_eta_pair_posSemidef}
+    \uses{def:mpdo_explicit_eta_operators, thm:mpdo_sector_eta_pair_posSemidef}
     In the setting of Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef},
     assume in addition that the nonzero neighboring operators occur in
     symmetric pairs: $\eta_{k,h}=0$ forces $\eta_{h,k}=0$. Then there is a
@@ -673,8 +624,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_eta_pair_posSemidef,
-        thm:kronecker_factor_positive_rescaling}
+    \uses{thm:mpdo_sector_eta_pair_posSemidef, thm:kronecker_factor_positive_rescaling}
     The diagonal operators are positive by
     Theorem~\ref{thm:mpdo_sector_eta_pair_posSemidef}, and their scalar is
     taken to be one. For a pair of distinct sectors, either both

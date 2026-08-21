@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixRankBaseChange
-import TNLean.Entropy.ClassicalMutualInformation
+import QICLean.Entropy.ClassicalMutualInformation
 import TNLean.MPS.MPDO.Defs
 
 /-!

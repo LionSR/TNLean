@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AreaLaw
-import TNLean.Entropy.StrongSubadditivity
+import QICLean.Entropy.StrongSubadditivity
 import Mathlib.Algebra.BigOperators.Fin
 
 /-!

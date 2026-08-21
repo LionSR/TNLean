@@ -123,8 +123,7 @@
     \label{thm:peps_deformedRegionState_bondInsertedRegionInsert}
     \lean{TNLean.PEPS.deformedRegionState_bondInsertedRegionInsert}
     \leanok
-    \uses{def:peps_bond_inserted_region_insert,
-        def:peps_regionInsertedCoeff}
+    \uses{def:peps_bond_inserted_region_insert, def:peps_regionInsertedCoeff}
     For every physical configuration $\sigma$ on $R$ and $\tau$ on
     $V\setminus R$, the deformed state of the bond-inserted region insert is
     the region insertion coefficient:
@@ -239,8 +238,7 @@ physical configuration on $V$ with
     \label{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_extendInsert_bondInserted}
     \leanok
-    \uses{thm:peps_deformedRegionState_bondInsertedRegionInsert,
-        thm:peps_corner_extension_state_preserves}
+    \uses{thm:peps_deformedRegionState_bondInsertedRegionInsert, thm:peps_corner_extension_state_preserves}
     Let $R\subseteq S$, and suppose that all bond dimensions are positive.
     For every global physical configuration $\sigma$,
     \begin{align}
@@ -272,8 +270,7 @@ physical configuration on $V$ with
     \label{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_regionTwoBlock,
-        def:peps_regionComplementTwoBlock}
+    \uses{def:peps_regionInsertedCoeff, def:peps_regionTwoBlock, def:peps_regionComplementTwoBlock}
     The abstract two-block insertion coefficient of the pair
     $(B_{A,R},B_{A,R^c})$ is the region insertion coefficient:
     \begin{align}
@@ -310,8 +307,7 @@ physical configuration on $V$ with
     \label{thm:peps_sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
     \lean{TNLean.PEPS.sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
     \leanok
-    \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff,
-        thm:peps_regionInsertedCoeff_reindexTensor}
+    \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff, thm:peps_regionInsertedCoeff_reindexTensor}
     Suppose $A$ and $B$ have identified bond dimensions. Write $B^h$ for the
     transported tensor, and write $\phi_f$ for the induced transport on the
     boundary bond $f$. If
@@ -359,8 +355,7 @@ physical configuration on $V$ with
     \label{thm:peps_regionInsertedCoeff_complement_reading}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}
     \leanok
-    \uses{thm:peps_twoBlockInsertedCoeff_swap,
-        thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    \uses{thm:peps_twoBlockInsertedCoeff_swap, thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     For a boundary edge $f\in\partial R$, the region-inserted coefficient can be
     read by contracting the complement block first:
     \begin{align}
@@ -399,8 +394,7 @@ physical configuration on $V$ with
     \label{thm:peps_region_insertion_virtual_pullback_realizes}
     \lean{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
     \leanok
-    \uses{def:peps_same_state, def:IsVertexInjective, def:peps_localTensorMap,
-        thm:peps_physical_to_virtual_insertion}
+    \uses{def:peps_same_state, def:IsVertexInjective, def:peps_localTensorMap, thm:peps_physical_to_virtual_insertion}
     Assume that $A$ and $B$ have the same PEPS state, are vertex-injective,
     and have positive bond dimensions. Let $v$ be the in-region endpoint of
     $f$, and let $W$ be the virtual pullback, for $B$ at $v$, of the
@@ -457,8 +451,7 @@ physical configuration on $V$ with
         TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum_compl,
         TNLean.PEPS.regionInsertedCoeff_eq_smul_op_regionStateVec_compl}
     \leanok
-    \uses{def:peps_region_out_endpoint_block_inverse,
-        thm:peps_regionInsertedCoeff_complement_reading}
+    \uses{def:peps_region_out_endpoint_block_inverse, thm:peps_regionInsertedCoeff_complement_reading}
     With $f'$ the boundary edge $f$ read on $V\setminus R$, one has
     \begin{align}
         C_A(R,f,X;\sigma,\tau)
@@ -489,8 +482,7 @@ physical configuration on $V$ with
         TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff,
         TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}
     \leanok
-    \uses{def:peps_region_out_endpoint_block_inverse,
-        thm:peps_regionInsertedCoeff_complement_cast}
+    \uses{def:peps_region_out_endpoint_block_inverse, thm:peps_regionInsertedCoeff_complement_cast}
     Assume that $A$'s components at the in-region endpoint of $f$ and at the
     in-complement-region endpoint of the complementary boundary edge are linearly
     independent, and that $A$ and $B$ define the same PEPS state. Let

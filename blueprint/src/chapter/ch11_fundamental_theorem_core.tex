@@ -17,9 +17,7 @@ for its sector-level conclusion.
     \label{thm:sector_bnt_proportional_sector_match_witnesses}
     \lean{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}
     \leanok
-    \uses{def:sector_bnt_cf,
-        thm:sector_bnt_proportional_bijective_match,
-        lem:sector_bnt_norm_phase_of_matched_mpv}
+    \uses{def:sector_bnt_cf, thm:sector_bnt_proportional_bijective_match, lem:sector_bnt_norm_phase_of_matched_mpv}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
     eventually nonzero proportional MPV families.
     Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
@@ -64,8 +62,7 @@ for its sector-level conclusion.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_proportional_bijective_match,
-        lem:sector_bnt_norm_phase_of_matched_mpv}
+    \uses{thm:sector_bnt_proportional_bijective_match, lem:sector_bnt_norm_phase_of_matched_mpv}
     Theorem~\ref{thm:sector_bnt_proportional_bijective_match} gives a bijection
     $\beta:J(Q)\simeq J(P)$ together with equal bond dimensions, gauge-phase
     equivalence, and
@@ -166,8 +163,7 @@ for its sector-level conclusion.
     \label{def:sector_bnt_copy_weight_matching_of_coeff_identity}
     \lean{MPSTensor.SectorBNTCopyWeightMatching.of_coeff_identity}
     \leanok
-    \uses{def:sector_bnt_copy_weight_matching,
-        lem:sector_bnt_matched_sector_weight_equiv}
+    \uses{def:sector_bnt_copy_weight_matching, lem:sector_bnt_matched_sector_weight_equiv}
     The construction takes as input a sector matching
     $\beta:J(Q)\simeq J(P)$, nonzero sector phases $\zeta_k$, and the eventual
     matched-sector coefficient identities
@@ -203,10 +199,7 @@ for its sector-level conclusion.
     \label{thm:ft_sector_bnt_equal_sector_data_different_dims}
     \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
     \leanok
-    \uses{def:same_mpv2_pos, def:sector_bnt_cf, def:gauge_phase_equiv,
-        thm:sector_bnt_bijective_match_of_sameMPV,
-        lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
-        def:sector_bnt_copy_weight_matching_of_coeff_identity}
+    \uses{def:same_mpv2_pos, def:sector_bnt_cf, def:gauge_phase_equiv, thm:sector_bnt_bijective_match_of_sameMPV, lem:sector_bnt_coeff_identity_via_matched_mpv_phase, def:sector_bnt_copy_weight_matching_of_coeff_identity}
     Let $P$ and $Q$ be BNT canonical forms, possibly with different sector
     counts and different bond dimensions before matching. If their total
     tensors generate the same MPV family at every positive length, then there
@@ -329,9 +322,7 @@ cancel before the block gauges are assembled.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_bijective_match_of_sameMPV,
-        lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
-        def:sector_bnt_copy_weight_matching_of_coeff_identity}
+    \uses{thm:sector_bnt_bijective_match_of_sameMPV, lem:sector_bnt_coeff_identity_via_matched_mpv_phase, def:sector_bnt_copy_weight_matching_of_coeff_identity}
     The full-basis matching theorem gives the bijection and block gauges. The
     self-overlap comparison
     \begin{align}
@@ -391,8 +382,7 @@ cancel before the block gauges are assembled.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses,
-        thm:sector_bnt_global_gauge_of_copy_weight_matching}
+    \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses, thm:sector_bnt_global_gauge_of_copy_weight_matching}
     Lemma~\ref{lem:sector_bnt_equal_matched_copy_weight_witnesses} gives
     $\beta$, the bond-dimension identifications, the phases $\zeta_k$, the
     block gauges $X_k$, and copy permutations $\tau_k$ satisfying

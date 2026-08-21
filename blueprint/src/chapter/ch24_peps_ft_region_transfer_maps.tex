@@ -83,8 +83,7 @@
     \label{def:peps_region_insertion_transfer_of_realizes}
     \lean{TNLean.PEPS.regionInsertionTransfer_of_realizes}
     \leanok
-    \uses{def:peps_region_transfer_realizes,
-        thm:peps_region_transfer_realized_maps}
+    \uses{def:peps_region_transfer_realizes, thm:peps_region_transfer_realized_maps}
     Suppose the forward and reverse boundary matrix transfers are realized on
     the two tensors, the two tensors have the same state and the same bond
     dimensions, and the region and complement-region blocked maps of $B$ are
@@ -108,9 +107,7 @@
         TNLean.PEPS.regionInsertionTransfer_of_reconcile,
         TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}
     \leanok
-    \uses{def:peps_region_resonate_reconcile,
-        thm:peps_hform_of_region_incident_form, def:peps_same_state,
-        def:IsVertexInjective, def:peps_regionInjectivityData}
+    \uses{def:peps_region_resonate_reconcile, thm:peps_hform_of_region_incident_form, def:peps_same_state, def:IsVertexInjective, def:peps_regionInjectivityData}
     Assume that $A$ and $B$ have the same PEPS state, are vertex-injective,
     have positive bond dimensions, and have injective blocked maps for $R$ and
     $R^c$. If the incident-form condition holds in both directions, then the
@@ -256,9 +253,7 @@
         TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm,
         TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}
     \leanok
-    \uses{thm:peps_region_transfer_coeff_double_factorization,
-        thm:peps_hform_of_region_incident_form,
-        thm:peps_region_insertion_virtual_pullback_realizes}
+    \uses{thm:peps_region_transfer_coeff_double_factorization, thm:peps_hform_of_region_incident_form, thm:peps_region_insertion_virtual_pullback_realizes}
     Under the hypotheses of
     Theorem~\ref{thm:peps_region_transfer_coeff_double_factorization}, assume in
     addition that $A$ and $B$ are vertex-injective, that $D_A(e)>0$ and
@@ -326,9 +321,7 @@
     \label{def:peps_region_insertion_transfer_of_coeff_transfer}
     \lean{TNLean.PEPS.regionInsertionTransfer_of_coeffTransfer}
     \leanok
-    \uses{def:peps_region_insertion_transfer,
-        def:peps_coeff_transfer_map,
-        thm:peps_coeff_transfer_map_properties}
+    \uses{def:peps_region_insertion_transfer, def:peps_coeff_transfer_map, thm:peps_coeff_transfer_map_properties}
     Suppose coefficient transfers exist in both directions:
     \begin{align}
         C_A(R,f,X;\sigma,\tau)

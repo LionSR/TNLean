@@ -108,8 +108,7 @@ The next two lemmas connect irreducible matrix actions with the cumulative word
 span used throughout Chapter~\ref{ch:wielandt}.
 
 \begin{remark}[Burnside input for cumulative spanning]
-    \uses{thm:irreducible_tensor_to_action, thm:burnside_matrix,
-        lem:algspan_cumulative_span}
+    \uses{thm:irreducible_tensor_to_action, thm:burnside_matrix, lem:algspan_cumulative_span}
     The passage from irreducible tensors to full algebra spanning first passes
     through the irreducible action on $\C^D$. Burnside's theorem then says that
     the resulting irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. Once
@@ -417,8 +416,7 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit,
         MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit}
     \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
-        cor:wielandt_case2_one_step_index}
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span, cor:wielandt_case2_one_step_index}
     Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
     $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
     sense of Definition~\ref{def:paper_primitive}.
@@ -435,8 +433,7 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
 
 \begin{proof}
     \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
-        cor:wielandt_case2_one_step_index}
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span, cor:wielandt_case2_one_step_index}
     Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
     Lemma~\ref{lem:kraus_mem_word_span_one}.
 \end{proof}
@@ -446,8 +443,7 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector,
         MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
     \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
-        cor:wielandt_case3_one_step_index}
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span, cor:wielandt_case3_one_step_index}
     Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
     $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
     sense of Definition~\ref{def:paper_primitive}.
@@ -465,8 +461,7 @@ Theorem~\ref{thm:wielandt_case3_one_step_span}.
 
 \begin{proof}
     \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
-        cor:wielandt_case3_one_step_index}
+    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span, cor:wielandt_case3_one_step_index}
     Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
     Lemma~\ref{lem:kraus_mem_word_span_one}.
 \end{proof}
@@ -572,9 +567,7 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{proof}
     \leanok
-    \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
-        thm:eigenvector_spreading, lem:blocking_transfer,
-        thm:lemma2b_assembly}
+    \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector, thm:eigenvector_spreading, lem:blocking_transfer, thm:lemma2b_assembly}
     Set $B=A^{[L]}$, which is normal by
     Theorem~\ref{thm:isNormal_blockTensor}. The word eigenvectors transfer to
     single-index eigenvectors of $B$ and $B^T$ by
@@ -612,8 +605,7 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{proof}
     \leanok
-    \uses{def:blocked_tensor, thm:isNormal_blockTensor,
-        thm:eigenvector_from_trace}
+    \uses{def:blocked_tensor, thm:isNormal_blockTensor, thm:eigenvector_from_trace}
     Set $B=A^{[N_0]}$.
     By (\ref{eq:mps_blocked_tensor}) and
     $S_{N_0}(A)=\MN{D}$, one has $S_1(B)=\MN{D}$.
@@ -650,8 +642,7 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{proof}
     \leanok
-    \uses{thm:rankone_extraction_blockTensor,
-        thm:wielandt_blocked_assembly}
+    \uses{thm:rankone_extraction_blockTensor, thm:wielandt_blocked_assembly}
     By normality, some $N_0>0$ has $S_{N_0}(A)=\MN{D}$.
     Theorem~\ref{thm:rankone_extraction_blockTensor} produces eigenvectors
     and a rank-one element
@@ -686,7 +677,7 @@ Theorem~\ref{thm:normal_from_primitive_posdef}.
     \lean{MPSTensor.%
         overlap_tendsto_one_of_peripheralPrimitive_of_irreducible}
     \leanok
-    \uses{def:primitive_channel, def:irreducible_tensor, def:mpv_overlap}
+    \uses{def:irreducible_tensor, def:mpv_overlap}
     Let $A$ have positive bond dimension and satisfy
     $\sum_i(A^i)^\dagger A^i=\Id$.
     If $A$ is tensor-irreducible and the transfer map is primitive, then

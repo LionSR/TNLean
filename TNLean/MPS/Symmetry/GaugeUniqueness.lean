@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Chain.OneSidedInverse
-import TNLean.Algebra.ScalarCommutant
+import QICLean.Algebra.ScalarCommutant
 
 /-!
 # Gauge uniqueness for injective MPS tensors

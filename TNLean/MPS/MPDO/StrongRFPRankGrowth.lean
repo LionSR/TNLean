@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixRankKronecker
-import TNLean.Channel.SingleKrausPositivity
+import QICLean.Channel.SingleKrausPositivity
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 import TNLean.MPS.MPDO.StrongRFP
 

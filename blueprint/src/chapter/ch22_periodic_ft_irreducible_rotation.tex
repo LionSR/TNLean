@@ -22,7 +22,6 @@
     If $A$ is spectrally periodic, then its bond dimension satisfies $D\geq1$.
 \end{theorem}
 \begin{proof}
-    \uses{lem:spectral_radius_one_matrix_dim_pos}
     \leanok
     In bond dimension zero the matrix space and its endomorphism algebra are
     zero-dimensional, so the transfer map has spectral radius zero.  This
@@ -56,7 +55,7 @@
     $\{e^{2\pi i k/m}:0\le k<m\}$. This is the normalized form-II
     convention used later in the source.
     A $1$-periodic tensor is exactly an irreducible tensor with
-    primitive transfer map (Definition~\ref{def:primitive_channel}).
+    primitive transfer map (the corresponding definition in the companion quantum-channel volume).
 \end{definition}
 
 \begin{theorem}[Perron normalization of spectrally periodic tensors]
@@ -128,8 +127,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
-    \uses{def:ft_matched_flat_data,
-        lem:tensor_from_blocks_globalGauge_conj}
+    \uses{def:ft_matched_flat_data, lem:tensor_from_blocks_globalGauge_conj}
     \leanok
     Repeat $X_j$ on every copy indexed by a diagonal entry of $R_j$, and take
     their block-diagonal direct sum.  On the $(j,q)$ block, conjugation by
@@ -140,16 +138,14 @@
     \label{thm:spectral_periodic_sector_normalization}
     \lean{MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis}
     \leanok
-    \uses{def:spectral_periodic_tensor, def:periodic_sector_basis_replacement,
-        def:periodic_tensor}
+    \uses{def:spectral_periodic_tensor, def:periodic_sector_basis_replacement, def:periodic_tensor}
     Suppose every representative $A_j$ is spectrally $m_j$-periodic.  There
     are left-canonical $m_j$-periodic representatives $B_j$, each purely
     similar to $A_j$, such that the two full multiplicity-bearing tensors are
     purely similar.  Every multiplicity matrix $R_j$ is unchanged.
 \end{theorem}
 \begin{proof}
-    \uses{thm:spectral_periodic_normalization,
-        thm:periodic_sector_basis_replacement_gauge}
+    \uses{thm:spectral_periodic_normalization, thm:periodic_sector_basis_replacement_gauge}
     \leanok
     Apply the positive Perron gauge separately to every representative and
     assemble these gauges with
@@ -282,17 +278,13 @@ of~\cite{DeLasCuevas2017Irreducible}.
     \label{thm:periodic_rotate_physical}
     \lean{MPSTensor.isPeriodic_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, thm:transfer_map_rotate_physical,
-        thm:left_canonical_rotate_physical,
-        thm:irreducible_tensor_rotate_physical}
+    \uses{def:rotate_physical, thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
     If $uu^\dagger=\Id$ and $A$ is periodic with period~$m$, then
     $A_u$ is periodic with the same period.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_map_rotate_physical,
-        thm:left_canonical_rotate_physical,
-        thm:irreducible_tensor_rotate_physical}
+    \uses{thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
     Assembles transfer-map invariance, left-canonical preservation, and
     irreducibility preservation.
 \end{proof}
@@ -335,19 +327,14 @@ of~\cite{DeLasCuevas2017Irreducible}.
     \label{thm:irreducible_form_rotate_physical}
     \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:irreducible_form,
-        thm:periodic_rotate_physical,
-        thm:same_mpv_rotate_physical,
-        thm:rotate_physical_blocks}
+    \uses{def:rotate_physical, def:irreducible_form, thm:periodic_rotate_physical, thm:same_mpv_rotate_physical, thm:rotate_physical_blocks}
     If $uu^\dagger=\Id$ and $A$ is in irreducible form, then
     $A_u$ is in irreducible form with the same block structure and
     rotated blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_rotate_physical,
-        thm:same_mpv_rotate_physical,
-        thm:rotate_physical_blocks}
+    \uses{thm:periodic_rotate_physical, thm:same_mpv_rotate_physical, thm:rotate_physical_blocks}
     Each block remains periodic by
     Theorem~\ref{thm:periodic_rotate_physical}, equality of MPV families
     transfers via Theorem~\ref{thm:same_mpv_rotate_physical}, and

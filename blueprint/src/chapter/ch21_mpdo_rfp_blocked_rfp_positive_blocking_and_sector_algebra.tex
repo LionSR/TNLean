@@ -172,8 +172,7 @@ physical indices, as in
     \lean{MPOTensor.mpo_blockTwo_eq_reindex_blockTensor}
     \lean{MPOTensor.IsMPDO.blockTwo}
     \leanok
-    \uses{def:mpdo_physical_blocking,
-        def:mpdo_two_site_blocking, def:mpdo}
+    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, def:mpdo}
     Let $\varphi:\{0,\ldots,d^2-1\}\to
     \{0,\ldots,d-1\}^2$ be the canonical bijection. Then
     $(K^{[2]})^{i,j}
@@ -197,11 +196,7 @@ physical indices, as in
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor}
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking,
-        thm:mpdo_blocking_doubled_index,
-        thm:mpdo_block_two_as_positive_blocking,
-        thm:cpsv_physical_reindexing,
-        thm:cpsv_literal_canonical_form_positive_blocking}
+    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, thm:mpdo_blocking_doubled_index, thm:mpdo_block_two_as_positive_blocking, thm:cpsv_physical_reindexing, thm:cpsv_literal_canonical_form_positive_blocking}
     Let $A_M$ be the doubled-index MPS tensor associated to an MPO tensor
     $M$. If $A_M$ is in literal CPSV canonical form and $L\geq1$, then the
     doubled-index MPS tensor associated to $M^{[L]}$ is again in literal CPSV
@@ -210,11 +205,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking,
-        thm:mpdo_blocking_doubled_index,
-        thm:mpdo_block_two_as_positive_blocking,
-        thm:cpsv_physical_reindexing,
-        thm:cpsv_literal_canonical_form_positive_blocking}
+    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, thm:mpdo_blocking_doubled_index, thm:mpdo_block_two_as_positive_blocking, thm:cpsv_physical_reindexing, thm:cpsv_literal_canonical_form_positive_blocking}
     The doubled-index tensor of $M^{[L]}$ is, under the canonical pairing of
     ket and bra words, a physical relabeling of $A_M^{[L]}$:
     \begin{align}
@@ -235,8 +226,7 @@ physical indices, as in
     \label{thm:mpdo_literal_cpsv_vertical_decomposition}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_cpsvVerticalDecomposition}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
-        def:bnt_cpsv}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:bnt_cpsv}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in literal CPSV canonical form. Then there are
     normal tensors $A_\alpha$, positive multiplicities $r_\alpha$, positive
@@ -261,9 +251,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
-        thm:cpsv_literal_normalized_grouped_sector_maps,
-        lem:same_mpv_exact_isometric_decomposition}
+    \uses{thm:cpsv_literal_vertical_bnt_grouping_with_isometries, thm:cpsv_literal_normalized_grouped_sector_maps, lem:same_mpv_exact_isometric_decomposition}
     Group the normal vertical corners into phase classes and normalize their
     physical sector maps. The exact original-sector reconstruction gives
     positive-length matrix-product-vector equality with the corresponding
@@ -280,8 +268,7 @@ physical indices, as in
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_cpsvVerticalDecomposition_blockTwo}
     \leanok
-    \uses{def:mpdo_two_site_blocking, def:vertical_tensor_mpdo,
-        def:bnt_cpsv}
+    \uses{def:mpdo_two_site_blocking, def:vertical_tensor_mpdo, def:bnt_cpsv}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}, the concrete
     two-site block $M^{[2]}$ has a decomposition of the same form:
@@ -305,9 +292,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_positive_blocking,
-        thm:mpdo_block_two_as_positive_blocking,
-        thm:mpdo_literal_cpsv_vertical_decomposition}
+    \uses{thm:mpdo_literal_cpsv_positive_blocking, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_literal_cpsv_vertical_decomposition}
     Two-site blocking preserves both literal CPSV canonical form and
     matrix-product-density-operator positivity. Apply
     Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition} to $M^{[2]}$.
@@ -318,8 +303,7 @@ physical indices, as in
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_cpsvVerticalDecomposition_pair}
     \leanok
-    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
-        thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition, thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}, there exist
     simultaneously a one-site vertical decomposition of $M$ and a two-site
@@ -329,8 +313,7 @@ physical indices, as in
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
-        thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition, thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
     Choose the one-site and two-site decompositions independently and take
     their ordered pair.
 \end{proof}
@@ -339,8 +322,7 @@ physical indices, as in
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo_two_site_blocking,
-        thm:sector_bnt_cf_block_tensor}
+    \uses{def:horizontal_cf_mpdo, def:mpdo_two_site_blocking, thm:sector_bnt_cf_block_tensor}
     If an MPO tensor $K$ is in normalized BNT-refined horizontal form, then its
     two-site blocking $K^{[2]}$ is again in that form.
 \end{lemma}
@@ -368,9 +350,7 @@ physical indices, as in
     \label{thm:mpdo_vertical_cf_before_after_block_two}
     \lean{MPOTensor.verticalCF_and_blockTwo_of_horizontalCF}
     \leanok
-    \uses{thm:vertical_cf_of_horizontal_cf,
-        thm:mpdo_block_two_as_positive_blocking,
-        lem:mpdo_horizontal_cf_block_two}
+    \uses{thm:vertical_cf_of_horizontal_cf, thm:mpdo_block_two_as_positive_blocking, lem:mpdo_horizontal_cf_block_two}
     Let $K$ be an MPO tensor in normalized BNT-refined horizontal form that
     generates matrix product density operators. Then both $K$ and $K^{[2]}$
     satisfy the
@@ -429,8 +409,7 @@ physical indices, as in
     \lean{MPOTensor.normalizedVerticalSectorEmbedding_isKrausDirectSumMap}
     \lean{MPOTensor.verticalSectorPartialTrace_isKrausDirectSumMap}
     \leanok
-    \uses{def:mpdo_normalized_vertical_sector_maps,
-        def:kraus_map_between_direct_sums}
+    \uses{def:mpdo_normalized_vertical_sector_maps, def:kraus_map_between_direct_sums}
     Let $(d_\alpha)_\alpha$ and $(r_\alpha)_\alpha$ be finite families of
     dimensions with $r_\alpha>0$, and suppose that every diagonal entry of
     $\mu_\alpha$ is positive. Then the normalized embedding
@@ -458,14 +437,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_equiv_reindex_cptp,
-        thm:mpdo_state_preparation_kraus_resolution,
-        thm:mpdo_controlled_kraus_map_cptp,
-        thm:mpdo_controlled_kraus_map_same_block,
-        thm:mpdo_controlled_dependent_partial_trace_same_block,
-        thm:mpdo_controlled_kraus_map_off_block,
-        thm:mpdo_controlled_dependent_partial_trace_cptp,
-        lem:is_kraus_cp_comp}
+    \uses{thm:mpdo_equiv_reindex_cptp, thm:mpdo_state_preparation_kraus_resolution, thm:mpdo_controlled_kraus_map_cptp, thm:mpdo_controlled_kraus_map_same_block, thm:mpdo_controlled_dependent_partial_trace_same_block, thm:mpdo_controlled_kraus_map_off_block, thm:mpdo_controlled_dependent_partial_trace_cptp, lem:is_kraus_cp_comp}
     Exchange the two coordinates within each sector by
     $w(\alpha,q,i)=(\alpha,i,q)$. Let $R_w$ be the corresponding matrix
     reindexing. For the normalized embedding, set
@@ -561,8 +533,7 @@ physical indices, as in
     \lean{MPOTensor.weightedVerticalBondContractionProduct}
     \lean{MPOTensor.WeightedVerticalBondContractionProductSpanTop}
     \leanok
-    \uses{def:mpdo_normalized_vertical_sector_maps,
-        def:mpdo_vertical_bond_matrix_contraction}
+    \uses{def:mpdo_normalized_vertical_sector_maps, def:mpdo_vertical_bond_matrix_contraction}
     For vertical BNT tensors $M_\alpha$ with simple matrix algebras
     $M_{d_\alpha}$ and a family of complex scalars $(c_\alpha)_\alpha$, define
     \begin{align}
@@ -625,8 +596,7 @@ physical indices, as in
     \label{lem:mpdo_weighted_contraction_matrix_unit_words}
     \lean{MPOTensor.weightedVerticalBondContractionProduct_single}
     \leanok
-    \uses{def:mpdo_weighted_vertical_contraction_products,
-        lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
+    \uses{def:mpdo_weighted_vertical_contraction_products, lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
     For a word $w=((a_1,b_1),\ldots,(a_L,b_L))$,
     \begin{align}
         V_c(E_{b_1a_1})\cdots V_c(E_{b_La_L})
@@ -640,8 +610,7 @@ physical indices, as in
     \lean{MPOTensor.%
         weightedVerticalBondContractionProductSpanTop_of_wordTupleSpanTop}
     \leanok
-    \uses{def:mpdo_vertical_sector_scaling_equivalence,
-        lem:mpdo_weighted_contraction_matrix_unit_words}
+    \uses{def:mpdo_vertical_sector_scaling_equivalence, lem:mpdo_weighted_contraction_matrix_unit_words}
     Fix $L\geq0$ and suppose that every $c_\alpha$ is nonzero. If the
     simultaneous word tuples $(M_\alpha^w)_\alpha$ of length $L$ span
     $\prod_\alpha M_{d_\alpha}$, then
@@ -661,8 +630,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_weighted_contraction_span_transfer,
-        thm:cpsv_bnt_blocked_simultaneous_span}
+    \uses{lem:mpdo_weighted_contraction_span_transfer, thm:cpsv_bnt_blocked_simultaneous_span}
     Choose $L>0$ for which the simultaneous word tuples
     $(M_\alpha^w)_\alpha$ span $\prod_\alpha M_{d_\alpha}$. Since every
     $c_\alpha$ is nonzero, so is $c_\alpha^L$. Apply
@@ -684,8 +652,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_vertical_sector_retraction,
-        thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    \uses{lem:mpdo_vertical_sector_retraction, thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
     Since every multiplicity space is nonzero and every diagonal entry is
     positive,
     $m_\alpha
@@ -764,8 +731,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:direct_sum_full_matrix_extension_compatibility,
-        thm:mean_ergodic_projection_density_block_form}
+    \uses{thm:direct_sum_full_matrix_extension_compatibility, thm:mean_ergodic_projection_density_block_form}
     Extend $F$ to the full matrix algebra by diagonal compression followed by
     block-diagonal embedding, and choose a numbered basis of the ambient
     space. The extension is positive and trace preserving, its trace adjoint
@@ -805,8 +771,7 @@ physical indices, as in
     \lean{MPOTensor.%
         eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
     \leanok
-    \uses{def:mpdo_weighted_vertical_contraction_products,
-        def:mpdo_vertical_fixed_point_products}
+    \uses{def:mpdo_weighted_vertical_contraction_products, def:mpdo_vertical_fixed_point_products}
     Let $F$ be a linear endomorphism of
     $\mathcal A=\prod_\alpha M_{d_\alpha}$. Suppose that the following three
     conditions hold, with the second required for every bond matrix $X$:
@@ -851,8 +816,7 @@ physical indices, as in
     \lean{Matrix.IsPositiveDirectSumMap.%
         exists_posDef_fixedFamily_of_fixed_product_span}
     \leanok
-    \uses{thm:positive_map_faithful_fixed_point_from_product_span,
-        thm:direct_sum_full_matrix_extension_compatibility}
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span, thm:direct_sum_full_matrix_extension_compatibility}
     Let $F$ be a positive trace-preserving endomorphism of
     $\mathcal A=\prod_\alpha M_{d_\alpha}$. Suppose that each $V_j$ is
     fixed by $F$ and, for some $L>0$, the identity belongs to
@@ -896,9 +860,7 @@ physical indices, as in
     \lean{MPOTensor.%
         eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
     \leanok
-    \uses{thm:mpdo_direct_sum_faithful_fixed_family,
-        thm:mpdo_density_blocks_fixed_point_product_dimension,
-        thm:mpdo_fixed_contractions_product_dimension}
+    \uses{thm:mpdo_direct_sum_faithful_fixed_family, thm:mpdo_density_blocks_fixed_point_product_dimension, thm:mpdo_fixed_contractions_product_dimension}
     Let $F$ be a positive trace-preserving endomorphism of
     $\mathcal A=\prod_\alpha M_{d_\alpha}$ whose trace adjoint satisfies the
     Schwarz inequality. Suppose that, for some $L>0$,

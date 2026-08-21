@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
-import TNLean.MPS.Core.Transfer
-import TNLean.Channel.KrausFreedom
-import TNLean.Channel.KrausRepresentation
+import QICLean.MPS.Core.Transfer
+import QICLean.Channel.KrausFreedom
+import QICLean.Channel.KrausRepresentation
 import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Analysis.Matrix.Order
 

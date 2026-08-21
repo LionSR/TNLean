@@ -71,8 +71,7 @@
     \label{thm:mpdo_closed_sector_physical_trace_transfer}
     \lean{MPOTensor.physTraceTransfer_eq_sum_closedSector}
     \leanok
-    \uses{def:mpo_physical_trace_transfer,
-        def:mpdo_closed_sector_pairing_operator}
+    \uses{def:mpo_physical_trace_transfer, def:mpdo_closed_sector_pairing_operator}
     More generally, any sector factorization
     $U_B\kappa_{\beta,\alpha}U_B^\dagger
     =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha$ gives the closed-sector
@@ -106,8 +105,7 @@
     \label{cor:mpdo_concrete_closed_sector_physical_trace_transfer}
     \lean{MPOTensor.concrete_physTraceTransfer_eq_sum_closedSector}
     \leanok
-    \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
-        thm:mpdo_closed_sector_physical_trace_transfer}
+    \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure, thm:mpdo_closed_sector_physical_trace_transfer}
     Let ${\cal K}$ be injective. Let $R$ and $\rho$ give a three-site
     closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
     virtual indices $\alpha_1,\beta_3$ such that
@@ -117,8 +115,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_factorization,
-        thm:mpdo_closed_sector_physical_trace_transfer}
+    \uses{thm:mpdo_sector_factorization, thm:mpdo_closed_sector_physical_trace_transfer}
     The inverse-map sector tensors satisfy the sector factorization of
     Theorem~\ref{thm:mpdo_sector_factorization}. Apply
     Theorem~\ref{thm:mpdo_closed_sector_physical_trace_transfer}.
@@ -130,10 +127,7 @@
     \lean{MPOTensor.closedSector_operator_normalized_idempotent}
     \lean{MPOTensor.closedSector_operator_idempotent_of_physTraceTransfer_sq}
     \leanok
-    \uses{def:mpo_source_zcl,
-        def:mpdo_injective_inverse_layer, def:mpdo_eta_structure,
-        cor:mpdo_concrete_closed_sector_physical_trace_transfer,
-        lem:mpo_source_zcl_normalized_idempotent}
+    \uses{def:mpo_source_zcl, def:mpdo_injective_inverse_layer, def:mpdo_eta_structure, cor:mpdo_concrete_closed_sector_physical_trace_transfer, lem:mpo_source_zcl_normalized_idempotent}
     Let ${\cal K}$ be injective. Let $R$ and $\rho$ give a three-site
     closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
     virtual indices $\alpha_1,\beta_3$ such that
@@ -156,8 +150,7 @@
 
 \begin{proof}
     \leanok
-    \uses{cor:mpdo_concrete_closed_sector_physical_trace_transfer,
-        lem:mpo_source_zcl_normalized_idempotent}
+    \uses{cor:mpdo_concrete_closed_sector_physical_trace_transfer, lem:mpo_source_zcl_normalized_idempotent}
     Substitute
     $S=\mathcal T_{\cal K}$ from
     Corollary~\ref{cor:mpdo_concrete_closed_sector_physical_trace_transfer}
@@ -172,8 +165,7 @@
     \label{thm:mpdo_closed_sector_trace_normalized_pow_relation}
     \lean{MPOTensor.closedSectorTraceMatrix_normalized_relations}
     \leanok
-    \uses{def:mpdo_concrete_closed_sector_trace_matrix,
-        thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    \uses{def:mpdo_concrete_closed_sector_trace_matrix, thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_closed_sector_pairing_normalized_idempotent},
     suppose that ${\cal K}$ satisfies the positive-real up-to-scalar
@@ -424,8 +416,7 @@ This is the contraction in
     \label{def:mpdo_cyclic_eta_tensor_product}
     \lean{MPOTensor.cyclicEtaTensorProduct}
     \leanok
-    \uses{def:mpdo_sector_chain_coordinates,
-        def:mpdo_explicit_eta_operators}
+    \uses{def:mpdo_sector_chain_coordinates, def:mpdo_explicit_eta_operators}
     Let $N\geq1$ and let $k$ be a sector configuration. Define the matrix
     $\Omega_k$ on $I_k$ by
     \begin{align}
@@ -445,9 +436,7 @@ This is the contraction in
     \label{thm:mpdo_fixed_sector_cyclic_eta}
     \lean{MPOTensor.mpo_submatrix_sector_eq_cyclicEtaTensorProduct}
     \leanok
-    \uses{def:mpdo_conjugate_physical,
-        def:mpdo_cyclic_eta_tensor_product,
-        def:mpdo_eta_of_sector_tensors}
+    \uses{def:mpdo_conjugate_physical, def:mpdo_cyclic_eta_tensor_product, def:mpdo_eta_of_sector_tensors}
     Suppose that the physical slices in the Hayashi basis satisfy
     \begin{align}
         U_B\kappa_{\beta,\alpha}U_B^\dagger
@@ -487,10 +476,7 @@ This is the contraction in
     \label{thm:mpdo_sector_adapted_decomposition}
     \lean{MPOTensor.mpo_reindex_sectorChainEquiv_eq_blockDiagonal_cyclicEta}
     \leanok
-    \uses{def:mpdo_sector_chain_coordinates,
-        def:mpdo_conjugate_physical,
-        def:mpdo_cyclic_eta_tensor_product,
-        def:mpdo_eta_of_sector_tensors}
+    \uses{def:mpdo_sector_chain_coordinates, def:mpdo_conjugate_physical, def:mpdo_cyclic_eta_tensor_product, def:mpdo_eta_of_sector_tensors}
     Under the same sector factorization hypothesis, for every $N\geq1$,
     \begin{align}
         \reindex_{\Phi_N}

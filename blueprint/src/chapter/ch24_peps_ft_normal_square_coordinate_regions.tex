@@ -185,8 +185,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.normalSquareRegionR_rectangular_decomposition}
     \lean{TNLean.PEPS.normalSquareRegionS_rectangular_decomposition}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_squareLatticeCoordinateRegion_identities}
     If the displayed $3\times3$ window containing $R$ and $S$ lies in
     the finite square lattice, then $R$ is the union of a contiguous
     $2\times3$ rectangle and a contiguous $3\times2$ rectangle, while
@@ -204,8 +203,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.normalSquareRegionTHorizontalBlock_rectangular}
     \lean{TNLean.PEPS.normalSquareRegionTHole_rectangular_decomposition}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_squareLatticeCoordinateRegion_identities}
     If the two edge blocks cut out of the displayed $T$-region lie in the
     finite square lattice, then they are respectively a contiguous
     $2\times3$ rectangle and a contiguous $3\times2$ rectangle.
@@ -225,8 +223,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.normalSquareRegionT_union_THole}
     \lean{TNLean.PEPS.normalSquareRegionT_union_verticalBlock_union_horizontalBlock}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_squareLatticeCoordinateRegion_identities}
     The two edge blocks removed from the displayed local $T$-region lie inside
     the local $5\times6$ coordinate window. They are disjoint from each other
     and from this local $T$ region, and their union with it is exactly that
@@ -244,8 +241,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_union_THole}
     \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_squareLatticeCoordinateRegion_identities}
     The finite-lattice complementary block around the edge is disjoint from
     the two displayed edge blocks, and its union with them is the full finite
     square lattice. The local-window $T$ region is contained in this
@@ -266,8 +262,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.normalSquareVerticalEdgeComplementRegion}
     \lean{TNLean.PEPS.NormalSquareVerticalEdgeComplementRectangleCover}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_normalSquareEdgeComplementRegion}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_normalSquareEdgeComplementRegion}
     A rectangular cover of a square-lattice region is a nonempty finite family
     of regions whose union is exactly the given region, and each member is a
     contiguous $2\times3$ or $3\times2$ rectangle. The two cases used in the
@@ -312,8 +307,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.not_normalSquareVerticalEdgeComplementRectangleCover_at_origin}
     \lean{TNLean.PEPS.not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five}
     \leanok
-    \uses{def:peps_normalSquareRectangleCover,
-        lem:peps_normalSquareRegionT_window_complement}
+    \uses{def:peps_normalSquareRectangleCover, lem:peps_normalSquareRegionT_window_complement}
     The present origin-based local-window model for the displayed $T$-region
     admits no nonempty finite cover by contained contiguous $2\times3$ and
     $3\times2$ rectangles whenever the ambient lattice contains the
@@ -348,9 +342,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \label{lem:peps_normalSquareRectangleCover_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.injective_of_rectangleCover}
     \leanok
-    \uses{def:peps_normalSquareRectangleCover,
-        def:peps_normalRectangleInjectivityHypotheses,
-        lem:peps_regionInjectivityUnionClosure_finite}
+    \uses{def:peps_normalSquareRectangleCover, def:peps_normalRectangleInjectivityHypotheses, lem:peps_regionInjectivityUnionClosure_finite}
     If a square-lattice region has a nonempty finite cover by contiguous
     $2\times3$ and $3\times2$ rectangles, then rectangular injectivity and
     finite union closure imply that the region is injective.
@@ -365,8 +357,7 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
     \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
     \lean{TNLean.PEPS.mem_normalSquareRegionS_sdiff_regionR}
     \leanok
-    \uses{def:peps_squareLatticeCoordinateRegions,
-        lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_squareLatticeCoordinateRegions, lem:peps_squareLatticeCoordinateRegion_identities}
     For the displayed regions $R$ and $S$ with the same lower-left corner,
     $R$ is contained in $S$. The difference $S\setminus R$ is exactly
     the lower-right site of the $3\times3$ square: in coordinates, the site

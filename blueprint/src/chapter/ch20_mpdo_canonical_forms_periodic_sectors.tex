@@ -26,8 +26,7 @@
     \label{thm:mpdo_no_periodic_sector_projector}
     \lean{MPOTensor.isEmpty_periodicSectorProjector}
     \leanok
-    \uses{def:mpdo, def:mpdo_periodic_sector_projector,
-        thm:psd_commute_of_commute_pow}
+    \uses{def:mpdo, def:mpdo_periodic_sector_projector, thm:psd_commute_of_commute_pow}
     Let $M$ generate matrix product density operators. Then $M$ admits no
     periodic-sector projector.
 \end{theorem}
@@ -48,8 +47,7 @@
     \label{def:mpdo_periodic_vector_yields_projector}
     \lean{MPOTensor.PeriodicVectorYieldsProjector}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
-        def:mpdo_periodic_sector_projector}
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_periodic_sector_projector}
     Say that \emph{periodic vectors of $M$ supply projectors} if for every
     nontrivial $p$-periodic vector of the vertically viewed tensor
     $\widetilde M$ --- an irreducible restriction $B$ of $\widetilde M$ to a
@@ -74,9 +72,7 @@
     \label{thm:mpdo_vertical_no_periodic_vectors}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor}
     \leanok
-    \uses{def:mpdo, def:vertical_tensor_mpdo, def:no_periodic_vectors,
-        def:mpdo_periodic_vector_yields_projector,
-        thm:mpdo_no_periodic_sector_projector}
+    \uses{def:mpdo, def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_periodic_vector_yields_projector, thm:mpdo_no_periodic_sector_projector}
     Let $M$ generate matrix product density operators and suppose that
     periodic vectors of $M$ supply projectors. Then the vertically viewed
     tensor $\widetilde M$ has no nontrivial $p$-periodic vectors. This is
@@ -89,8 +85,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_periodic_vector_yields_projector,
-        thm:mpdo_no_periodic_sector_projector}
+    \uses{def:mpdo_periodic_vector_yields_projector, thm:mpdo_no_periodic_sector_projector}
     A nontrivial $p$-periodic vector of $\widetilde M$ supplies a
     periodic-sector projector for $M$, and
     Theorem~\ref{thm:mpdo_no_periodic_sector_projector} shows that no such
@@ -155,8 +150,7 @@
     \lean{MPOTensor.exists_word_verticalTensor_stackedTensor}
     \lean{MPOTensor.stackedTensor_ketLeftMul_invariant}
     \leanok
-    \uses{def:mpo_stacked_layers, def:vertical_tensor_mpdo,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:mpo_stacked_layers, def:vertical_tensor_mpdo, def:mpdo_vertical_one_site_actions}
     The vertically viewed letters of a layer product are the products of the
     layers' vertically viewed letters,
     $(MM')_{(a,a'),(b,b')}=M_{ab}M'_{a'b'}$. Hence every vertically viewed
@@ -169,8 +163,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpo_stacked_layers, def:vertical_tensor_mpdo,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:mpo_stacked_layers, def:vertical_tensor_mpdo, def:mpdo_vertical_one_site_actions}
     The letter identity is a direct computation from the layer product:
     contracting the shared physical index composes the physical-space
     operators. Induction on $p$ writes each vertical letter of $M^{[p]}$ as
@@ -186,8 +179,7 @@
     \label{def:mpdo_periodic_sector_projector_of_cyclic}
     \lean{MPOTensor.periodicSectorProjectorOfCyclicData}
     \leanok
-    \uses{def:mpdo, def:mpdo_periodic_sector_projector,
-        def:mpdo_vertical_one_site_actions, def:mpo_stacked_layers}
+    \uses{def:mpdo, def:mpdo_periodic_sector_projector, def:mpdo_vertical_one_site_actions, def:mpo_stacked_layers}
     Let $M$ generate matrix product density operators, let $p\ge 1$, and let
     $Q$ be an orthogonal projector on the physical space satisfying
     $QA_w=QA_wQ$ for every product $A_w$ of $p$ letters of $\widetilde M$
@@ -197,8 +189,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpo_stacked_vertical_letters, thm:mpo_stacked_layers_power,
-        thm:mpdo_first_site_invariant_comm}
+    \uses{thm:mpo_stacked_vertical_letters, thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm}
     By Theorem~\ref{thm:mpo_stacked_vertical_letters} the word invariance
     gives $QM^{[p]}=QM^{[p]}Q$ on the stacked tensor, which generates matrix
     product density operators by
@@ -215,8 +206,7 @@
     \label{def:mpdo_periodic_vector_yields_cyclic_projector}
     \lean{MPOTensor.PeriodicVectorYieldsCyclicProjector}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_vertical_one_site_actions}
     Say that \emph{periodic vectors of $M$ supply cyclic projectors} if for
     every nontrivial $p$-periodic vector of the vertically viewed tensor
     $\widetilde M$ --- presented as in
@@ -242,9 +232,7 @@
     \lean{MPOTensor.periodicVectorYieldsProjector_of_cyclic}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector}
     \leanok
-    \uses{def:mpdo, def:mpdo_periodic_vector_yields_cyclic_projector,
-        def:mpdo_periodic_vector_yields_projector,
-        def:vertical_tensor_mpdo, def:no_periodic_vectors}
+    \uses{def:mpdo, def:mpdo_periodic_vector_yields_cyclic_projector, def:mpdo_periodic_vector_yields_projector, def:vertical_tensor_mpdo, def:no_periodic_vectors}
     Let $M$ generate matrix product density operators. If periodic vectors
     of $M$ supply cyclic projectors, then they supply periodic-sector
     projectors, and the vertically viewed tensor $\widetilde M$ has no
@@ -257,8 +245,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_periodic_sector_projector_of_cyclic,
-        thm:mpdo_vertical_no_periodic_vectors}
+    \uses{def:mpdo_periodic_sector_projector_of_cyclic, thm:mpdo_vertical_no_periodic_vectors}
     A nontrivial $p$-periodic vector supplies an invariant non-commuting
     projector, which is a periodic-sector projector by
     Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}. The
@@ -271,8 +258,7 @@
     \label{thm:mpdo_displaced_invariant_projector}
     \lean{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors,
-        def:mpdo_vertical_one_site_actions, def:support_proj}
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_vertical_one_site_actions, def:support_proj}
     Let $M$ be an MPO tensor and let $\widetilde M$ carry a nontrivial
     $p$-periodic vector, presented as in
     Definition~\ref{def:no_periodic_vectors}: an irreducible restriction
@@ -291,11 +277,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_unital_gauge_schwarz_setup,
-        lem:eigenvalue_transport_unital_gauge,
-        thm:transfer_peripheral_cyclic_structure,
-        thm:cyclic_decomposition_irreducible_schwarz,
-        lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
+    \uses{thm:spectral_unital_gauge_schwarz_setup, lem:eigenvalue_transport_unital_gauge, thm:transfer_peripheral_cyclic_structure, thm:cyclic_decomposition_irreducible_schwarz, lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
     The rescaled unital gauge $K$ of the corner satisfies the hypotheses of
     the cyclic decomposition of the peripheral spectrum
     (Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}), and the
@@ -326,8 +308,7 @@
     \label{thm:cpsv_literal_displaced_noncommutation}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpo_family,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:cpsv_canonical_form, def:mpo_family, def:mpdo_vertical_one_site_actions}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in literal
     CPSV canonical form. If $Q^2=Q$ and
     $Q\widetilde M\ne Q\widetilde M Q$, then there is an integer $N\geq0$
@@ -344,8 +325,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:representative_one_sub_mp_zero,
-        lem:mpdo_first_site_insertions_vertical_mul}
+    \uses{thm:representative_one_sub_mp_zero, lem:mpdo_first_site_insertions_vertical_mul}
     Suppose instead that $Q_1H^{(N+1)}=H^{(N+1)}Q_1$ for every $N\geq0$.
     Idempotence gives
     \begin{align}
@@ -366,8 +346,7 @@
     \label{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
-        def:no_periodic_vectors}
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:no_periodic_vectors}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in literal CPSV canonical form. Then the
     vertically viewed tensor $\widetilde M$ has no nontrivial periodic
@@ -376,12 +355,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_displaced_invariant_projector,
-        thm:cpsv_literal_displaced_noncommutation,
-        thm:mpo_stacked_vertical_letters,
-        thm:mpo_stacked_layers_power,
-        thm:mpdo_first_site_invariant_comm,
-        thm:psd_commute_of_commute_pow}
+    \uses{thm:mpdo_displaced_invariant_projector, thm:cpsv_literal_displaced_noncommutation, thm:mpo_stacked_vertical_letters, thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm, thm:psd_commute_of_commute_pow}
     A nontrivial periodic vector supplies an integer $p\geq1$ and an
     orthogonal projector $Q$ such that every word $A_w$ of length $p$ in the
     letters of $\widetilde M$ satisfies $QA_w=QA_wQ$, while
@@ -411,12 +385,7 @@
     \lean{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo,
-        def:no_periodic_vectors, thm:representative_one_sub_mp_zero,
-        lem:mpdo_first_site_insertions_vertical_mul,
-        thm:mpdo_displaced_invariant_projector,
-        thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm,
-        thm:psd_commute_of_commute_pow}
+    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:no_periodic_vectors, thm:representative_one_sub_mp_zero, lem:mpdo_first_site_insertions_vertical_mul, thm:mpdo_displaced_invariant_projector, thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm, thm:psd_commute_of_commute_pow}
     Let $M$ be in normalized BNT-refined horizontal form. If an idempotent
     $Q$ satisfies
     $Q\widetilde M\ne Q\widetilde MQ$, then for some $N\ge 0$,
@@ -433,11 +402,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:representative_one_sub_mp_zero,
-        lem:mpdo_first_site_insertions_vertical_mul,
-        thm:mpdo_displaced_invariant_projector,
-        thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm,
-        thm:psd_commute_of_commute_pow}
+    \uses{thm:representative_one_sub_mp_zero, lem:mpdo_first_site_insertions_vertical_mul, thm:mpdo_displaced_invariant_projector, thm:mpo_stacked_layers_power, thm:mpdo_first_site_invariant_comm, thm:psd_commute_of_commute_pow}
     Suppose first that $Q_1$ commutes with $H^{(N+1)}$ for every $N$.
     Since $Q^2=Q$, this gives
     $Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1$ at every positive length.
@@ -488,9 +453,7 @@
     \lean{MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation}
     \leanok
-    \uses{def:mpdo, def:mpdo_noninvariant_projector_noncommuting,
-        def:mpdo_periodic_vector_yields_cyclic_projector,
-        def:vertical_tensor_mpdo, def:no_periodic_vectors}
+    \uses{def:mpdo, def:mpdo_noninvariant_projector_noncommuting, def:mpdo_periodic_vector_yields_cyclic_projector, def:vertical_tensor_mpdo, def:no_periodic_vectors}
     Let $M$ generate matrix product density operators. If displaced
     projectors of $M$ never commute, then periodic vectors of $M$ supply
     cyclic projectors, and the vertically viewed tensor $\widetilde M$ has
@@ -503,8 +466,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_displaced_invariant_projector,
-        thm:mpdo_cyclic_projector_reduction}
+    \uses{thm:mpdo_displaced_invariant_projector, thm:mpdo_cyclic_projector_reduction}
     A nontrivial $p$-periodic vector supplies the invariant, displaced
     projector of Theorem~\ref{thm:mpdo_displaced_invariant_projector}; the
     non-commutation hypothesis upgrades the displacement to the all-length
@@ -540,9 +502,7 @@
     \label{thm:mpdo_vertical_no_periodic_vectors_injective}
     \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_isInjective}
     \leanok
-    \uses{def:mpdo, def:injective, def:vertical_tensor_mpdo,
-        def:no_periodic_vectors, thm:mpdo_displaced_invariant_projector,
-        thm:mpdo_commute_of_isInjective}
+    \uses{def:mpdo, def:injective, def:vertical_tensor_mpdo, def:no_periodic_vectors, thm:mpdo_displaced_invariant_projector, thm:mpdo_commute_of_isInjective}
     Let $M$ generate matrix product density operators and let $M$'s
     doubled-index tensor be injective. Then the vertically viewed tensor
     $\widetilde M$ has no nontrivial periodic vectors, unconditionally.

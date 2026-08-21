@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.EigenvectorProjection
-import TNLean.Algebra.FinSum
+import QICLean.Algebra.FinSum
 import TNLean.MPS.MPDO.TopologicalDensityDecomposition
 
 /-!

@@ -61,76 +61,73 @@ separate public-surface occurrence and therefore appears separately.
 
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
-| `ch02_mps.tex` | L25, 56, 176, 208, 281, 865, 995 `tenkz` → `P-grid` | — | — |
-| `ch03_single.tex` | L243 `tenkz` → `P-grid` | — | — |
-| `ch04_channels_choi_foundations.tex` | L87 `tenkz` → `P-grid` | — | — |
-| `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
-| `ch12_symmetry_string_order.tex` | L41, 80, 362, 367, 398, 404, 449, 455, 488, 493, 531, 537, 842, 847 `tenkz` → `P-grid` | — | — |
-| `ch12_symmetry_virtual_and_cohomology.tex` | L181, 196, 330, 459, 473 `tenkz` → `P-grid` | — | — |
-| `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | L55 `tenkz` → `P-grid` | — | — |
+| `ch02_mps.tex` | L25, 56, 176, 208, 281, 861, 991 `tenkz` → `P-grid` | — | — |
+| `ch03_single.tex` | L241 `tenkz` → `P-grid` | — | — |
+| `ch11_fundamental_theorem_core.tex` | L40, 44 `tenkz` → `P-grid` | — | — |
+| `ch12_symmetry_string_order.tex` | L41, 80, 361, 366, 397, 403, 448, 454, 487, 492, 529, 535, 826, 831 `tenkz` → `P-grid` | — | — |
+| `ch12_symmetry_virtual_and_cohomology.tex` | L178, 193, 325, 451, 465 `tenkz` → `P-grid` | — | — |
+| `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | L53 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | L276 `tenkz` → `P-grid` | — | — |
-| `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L101 `tenkz` → `P-grid` | — | — |
-| `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1617, 1659 `tenkz` → `P-grid` | — | — |
+| `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L99 `tenkz` → `P-grid` | — | — |
+| `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1580, 1622 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
-| `ch16_channel_representations_choi_and_kraus.tex` | L718 `tenkz` → `P-grid` | — | — |
-| `ch16_channel_representations_dilations_and_ordered_cp.tex` | L23 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L154, 161, 181, 186, 234, 240, 350, 444 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L105, 109, 221, 229, 377, 390, 441 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L759, 765 `tenkz` → `P-grid` | — | — |
+| `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L146, 153, 173, 178, 226, 232, 342, 434 `tenkz` → `P-grid` | — | — |
+| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L104, 108, 219, 227, 375, 388, 439 `tenkz` → `P-grid` | — | — |
+| `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L738, 744 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_foundations.tex` | L17, 126, 373, 377 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | L19, 24 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_foundations.tex` | L88, 93 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 293, 294, 295, 296, 298 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L363, 373, 608, 617, 629, 638, 650, 655 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L45, 61, 65, 491 `tenkz` → `P-grid` | L603, 605 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_renormalization.tex` | L690, 693, 696, 699 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L804, 817, 825, 832, 906, 913 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L329, 335, 341, 355, 366, 372 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L453, 972, 976, 982, 987 `tenkz` → `P-grid` | — | — |
-| `ch23_algebraic_ft_foundations.tex` | L48, 52, 494, 498, 699, 703, 716, 720, 763, 767, 771, 780, 784 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L209, 213, 286, 287, 288, 289, 291 `tntree` → `C-tree` | — |
+| `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L541, 546 `tntree` → `C-tree` | — |
+| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L361, 371, 600, 609, 621, 630, 642, 647 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L43, 59, 63, 457 `tenkz` → `P-grid` | L569, 571 `tntree` → `C-tree` | — |
+| `ch21_mpdo_rfp_renormalization.tex` | L674, 677, 680, 683 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L274, 280 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 264, 269, 274, 281, 286, 484, 702, 708, 712 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L770, 783, 791, 798, 868, 875 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L183 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L320, 326, 332, 346, 357, 363 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L441, 955, 959, 965, 970 `tenkz` → `P-grid` | — | — |
+| `ch23_algebraic_ft_foundations.tex` | L48, 52, 490, 494, 694, 698, 711, 715, 758, 762, 766, 775, 779 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft.tex` | L27, 57, 93 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_balanced_edge_scalars.tex` | L21 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | L84, 104, 294, 300, 312, 324, 577, 596 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_edge_kernel_gauges_insertion_algebra_local_gauges.tex` | L53, 60 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | L175, 180, 187, 400, 407, 414 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_edge_middle.tex` | L273 `tenkz` → `P-grid` | — | L246 `tenkz` → `R-record` |
+| `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | L82, 102, 287, 293, 305, 317, 569, 588 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_edge_kernel_gauges_insertion_algebra_local_gauges.tex` | L47, 54 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | L167, 172, 179, 379, 386, 393 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_edge_middle.tex` | L262 `tenkz` → `P-grid` | — | L235 `tenkz` → `R-record` |
 | `ch24_peps_ft_foundations.tex` | L49, 377 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_normal_capstone_normal_peps.tex` | — | — | L45, 92, 108 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | L193, 199 `tenkz` → `P-grid` | — | L21, 28, 89, 95, 115, 151, 163 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_coordinate_regions.tex` | — | — | L100, 106, 126, 293 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | — | — | L206, 229 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_translated_windows_and_comparison.tex` | — | — | L382 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_union.tex` | L214, 263, 289, 301, 316 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_region_transfer_covariance.tex` | L351, 355, 359, 363 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_normal_capstone_normal_peps.tex` | — | — | L44, 91, 107 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | L185, 191 `tenkz` → `P-grid` | — | L21, 28, 86, 92, 112, 144, 156 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_square_coordinate_regions.tex` | — | — | L100, 106, 126, 288 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | — | — | L191, 214 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_square_translated_windows_and_comparison.tex` | — | — | L367 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_union.tex` | L211, 260, 286, 298, 313 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_region_transfer_covariance.tex` | L342, 346, 350, 354 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | L23 `tenkz` → `P-grid` | — | — |
-| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457, 606, 612 `tenkz` → `P-grid` | — | — |
-| `ch26_mps_rfp_physical_blocking.tex` | L198, 202, 220, 225 `tenkz` → `P-grid` | — | — |
+| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L442, 446, 589, 595 `tenkz` → `P-grid` | — | — |
+| `ch26_mps_rfp_physical_blocking.tex` | L194, 198, 216, 221 `tenkz` → `P-grid` | — | — |
 
 ### Blueprint reconciliation
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 191 |
+| `tenkz` | 188 |
 | `tenkzcd` | 0 |
 | `tenkzplanes` | 0 |
 | `tnpic` | 0 |
 | `tntree` | 11 |
-| **Total** | **202** |
+| **Total** | **199** |
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 173 |
+| preserve | 170 |
 | codemod | 11 |
 | redraw | 18 |
-| **Total** | **202** |
+| **Total** | **199** |
 
-The raw count is 191 environment openings plus 11 command occurrences,
-which reconciles to 202. The issue baseline counted 106 `tenkz`,
+The raw count is 188 environment openings plus 11 command occurrences,
+which reconciles to 199. The issue baseline counted 106 `tenkz`,
 36 `tenkzfree`, 18 `tenkzlattice`, 6 `tenkzcd`, 0 `tenkzeq`,
 0 `tenkzplanes`, and 41 `\tnpic`/`\tntree` lines; the six `tenkzcd`
 pictures have since been respelled onto plain tikz-cd, discharging every

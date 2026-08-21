@@ -108,8 +108,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_normal_tp_gauge, thm:CFII_data,
-        def:global_gauge_of_blocks}
+    \uses{thm:cpsv_normal_tp_gauge, thm:CFII_data, def:global_gauge_of_blocks}
     Write the retained part of the canonical-form decomposition as
     $C^i=\bigoplus_k\mu_kA_k^i$, and let
     $U\in\C^{S\times D}$ satisfy $UU^\dagger=\Id_S$ and
@@ -171,8 +170,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:gauge_equiv, lem:exists_unitary_mul_eq_of_gram_eq,
-        def:unitary_gl}
+    \uses{def:gauge_equiv, def:unitary_gl}
     Choose $X\in\GL(n,\C)$ such that, for every physical index~$i$,
     $E^i=XC^iX^{-1}$. Equality of the
     Gram matrices $U_AU_A^\dagger$ and $U_BU_B^\dagger$ gives a unitary
@@ -210,7 +208,7 @@
     \label{thm:form_II}
     \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:irreducible_tensor, def:tp_kraus}
+    \uses{def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor with
     $\sum_i(A^i)^\dagger A^i=\Id$ and $D>0$. Then there exist a unitary $U$
     and a diagonal positive definite $\Lambda$ such that, for
@@ -273,7 +271,7 @@ below.
 \begin{definition}[Normal canonical form conditions]
     \label{def:is_normal_canonical_form}
     \lean{MPSTensor.IsNormalCanonicalForm}\leanok
-    \uses{def:irreducible_tensor, def:primitive_channel, def:tp_kraus}
+    \uses{def:irreducible_tensor}
     Scaling factors $(\mu_k)_{k=1}^r$ and block tensors $(A_k)_{k=1}^r$
     satisfy the \emph{normal canonical form conditions} if:
     \begin{enumerate}
@@ -438,28 +436,25 @@ then infer primitivity of the sector maps. This is the blocking step of
     \label{thm:blocking_primitivity}
     \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:blocked_tensor, def:transfer_map, def:primitive_channel,
-        def:tp_kraus, def:irreducible_tensor}
+    \uses{def:blocked_tensor, def:transfer_map, def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor with $D>0$ and
     $\sum_i(A^i)^\dagger A^i=\Id$. Then there exists a blocking length $p>0$
     such that $\sigma_\partial(\E_{A^{[p]}})=\{1\}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peripheral_roots_irred_fp, thm:peripheral_finite,
-        lem:common_power_eq_one, lem:peripheral_pow_singleton}
     Pass to the conjugate-transposed Kraus family $K_i:=(A^i)^\dagger$, which
     is unital with irreducible Kraus map. The TP fixed-point theorem for
     $\E_A$ provides a positive definite fixed point for the adjoint of $K$, so
-    Theorem~\ref{thm:peripheral_roots_irred_fp} shows that every peripheral
+    the corresponding theorem in the companion quantum-channel volume shows that every peripheral
     eigenvalue is a root of unity. Since $\sigma_\partial(\E_A)$ is finite
-    (Theorem~\ref{thm:peripheral_finite}),
-    Lemma~\ref{lem:common_power_eq_one} gives a common exponent $p$ with
+    (the corresponding theorem in the companion quantum-channel volume),
+    the corresponding lemma in the companion quantum-channel volume gives a common exponent $p$ with
     $\mu^p=1$ for every $\mu\in\sigma_\partial(\E_A)$, and
-    Lemma~\ref{lem:peripheral_pow_singleton} gives
+    the corresponding lemma in the companion quantum-channel volume gives
     $\sigma_\partial(\E_A^p)=\{1\}$. Blocking by $p$ takes the $p$th power of
     the transfer map, so $\E_{A^{[p]}}$ is primitive in the
-    peripheral-spectrum sense of Definition~\ref{def:primitive_channel}.
+    peripheral-spectrum sense of the corresponding definition in the companion quantum-channel volume.
     The blocked map need not remain irreducible: eigenvalue~$1$ may have several
     cyclic corners. The adjoint-fixed projections are therefore compressed
     before irreducibility and primitivity are asserted sector by sector in
@@ -544,8 +539,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \label{thm:cyclic_sector_decomp_after_blocking_isometry}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry}
     \leanok
-    \uses{def:blocked_tensor, def:transfer_map, def:left_canonical_tensor,
-        def:irreducible_tensor, def:peripheral_eigenvalues}
+    \uses{def:blocked_tensor, def:transfer_map, def:left_canonical_tensor, def:irreducible_tensor}
     Let $A$ be a left-canonical irreducible tensor, and suppose the adjoint
     transfer map $\E_{A^\dagger}$ has a positive-definite fixed point, is
     irreducible as a positive map, and has peripheral spectrum
@@ -572,8 +566,7 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     These isometries also realize the blocked corner letters
     $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
     \begin{proof}\leanok
-        \uses{thm:cyclic_decomposition_irreducible_schwarz,
-            thm:adjoint_fixed_projection_block_decomp_isometry}
+        \uses{thm:cyclic_decomposition_irreducible_schwarz, thm:adjoint_fixed_projection_block_decomp_isometry}
         Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}, applied to
         $\E_{A^\dagger}$, provides projections $P_k$ satisfying
         $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating $m$ times gives
@@ -608,8 +601,7 @@ Theorem.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:blocked_irreducibility_direct_support,
-        thm:normal_from_primitive_posdef}
+    \uses{lem:blocked_irreducibility_direct_support, thm:normal_from_primitive_posdef}
     The primitive peripheral spectrum, tensor irreducibility, and
     left-canonical normalization give primitive fixed-point data. The fixed
     point is positive definite by
@@ -626,8 +618,7 @@ refines them into primitive irreducible blocks.
     \label{thm:tp_primitive_blockdecomp}
     \lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
     \leanok
-    \uses{def:blocked_tensor, def:same_mpv2_pos,
-        thm:common_blocking_period_tp_irreducible}
+    \uses{def:blocked_tensor, def:same_mpv2_pos, thm:common_blocking_period_tp_irreducible}
     For any MPS tensor $A$, there exist $p\ge1$, nonzero weights
     $(\mu_k)_{k=1}^r$, and blocks $(B_k)_{k=1}^r$ such that, for every blocked
     $\sigma$ of positive length~$N$,
@@ -651,10 +642,7 @@ refines them into primitive irreducible blocks.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:tp_gauge_arbitrary,
-        thm:common_blocking_period_tp_irreducible,
-        lem:block_weights_ne_zero,
-        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
+    \uses{thm:tp_gauge_arbitrary, thm:common_blocking_period_tp_irreducible, lem:block_weights_ne_zero, thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
     Theorem~\ref{thm:tp_gauge_arbitrary} supplies the left-canonical nontrivial
     blocks, the positive-length equality, and the bound $\sum_kD_k\le D$.
     Apply Theorem~\ref{thm:common_blocking_period_tp_irreducible} directly to
@@ -673,9 +661,7 @@ refines them into primitive irreducible blocks.
     \label{thm:unconditional_common_primitive_irreducible_blocks}
     \lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
     \leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
-        def:same_mpv2_pos}
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem, thm:common_blocked_cyclic_sector_reindexed_nonzero_part, def:same_mpv2_pos}
     Let $A$ and $B$ have the same MPV family at every positive length. Then
     there is a positive blocking length at which both blocked tensors have the
     same positive-length MPV family as weighted direct sums of
@@ -686,8 +672,7 @@ refines them into primitive irreducible blocks.
 
 \begin{proof}
     \leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem, thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
     Apply
     Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
     choose the common blocking length and the two common cyclic-sector

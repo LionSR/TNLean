@@ -25,8 +25,7 @@
     \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
     \leanok
-    \uses{def:representative_word_tuple_span,
-      def:sector_weight_data, cor:nonvanishing_finite_power_sum}
+    \uses{def:representative_word_tuple_span, def:sector_weight_data, cor:nonvanishing_finite_power_sum}
     Let $A_{\mathrm{tot}}$ be the tensor of a sector decomposition with basis
     representatives $(A_j)_{j=0}^{g-1}$, multiplicities $r_j>0$, nonzero weights
     $\mu_{j,q}$, and grouped coefficients
@@ -54,8 +53,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:representative_word_tuple_span,
-      lem:paper_decomp_formula, cor:nonvanishing_finite_power_sum}
+    \uses{def:representative_word_tuple_span, lem:paper_decomp_formula, cor:nonvanishing_finite_power_sum}
     At a fixed tail length $L$, expand the first-site equality at system size
     $L+1$ and group all copies lying over the same representative. For every
     length-$L$ word $w$ this gives
@@ -138,10 +136,7 @@
     \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero}
     \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree}
     \leanok
-    \uses{def:representative_word_tuple_span,
-        def:marked_representative_direct_sum,
-        lem:marked_representative_trace_expansion,
-        cor:nonvanishing_finite_power_sum}
+    \uses{def:representative_word_tuple_span, def:marked_representative_direct_sum, lem:marked_representative_trace_expansion, cor:nonvanishing_finite_power_sum}
     Let $(C_j^s)$ and $(E_j^s)$ be two marked families over the same sector
     decomposition. Fix a tail length $L$, and suppose that, for every marked
     index $s$ and every unmarked word $w$ of length $L$,
@@ -165,9 +160,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:representative_word_tuple_span,
-        lem:marked_representative_trace_expansion,
-        cor:nonvanishing_finite_power_sum}
+    \uses{def:representative_word_tuple_span, lem:marked_representative_trace_expansion, cor:nonvanishing_finite_power_sum}
     Fix $s$ and a tail length $L$, and put
     $\Delta_j=c_j^{(L+1)}(C_j^s-E_j^s)$.
     Lemma~\ref{lem:marked_representative_trace_expansion} gives
@@ -194,10 +187,7 @@
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         trace_groupedMarkedTensor_eq_representative_markedTensor}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
-        thm:cpsv_active_representative_sector_decomposition,
-        def:marked_representative_direct_sum,
-        lem:marked_representative_trace_expansion}
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_active_representative_sector_decomposition, def:marked_representative_direct_sum, lem:marked_representative_trace_expansion}
     Let $T_{\mathrm{grp}}$ be the full grouped tensor of
     Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement}, and let
     $P_{\mathrm{act}}$ be its active representative sector decomposition.
@@ -223,8 +213,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_representative_sector_decomposition,
-        lem:marked_representative_trace_expansion}
+    \uses{thm:cpsv_active_representative_sector_decomposition, lem:marked_representative_trace_expansion}
     Split the finite sum over listed coordinates into active and inactive
     parts. The inactive marked blocks vanish. Reindex the active part by the
     class-copy pairs $(j,q)$ and use the bond-dimension identifications to
@@ -241,10 +230,7 @@
     \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
         insertedTensor_representative_eq_of_firstSiteActionAgree}
     \leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_identity,
-        thm:cpsv_active_representative_sector_decomposition,
-        thm:representative_grouped_marked_separation,
-        thm:representative_grouped_insert_eq}
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_active_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
     Let $(C_j^s)_j$ and $(E_j^s)_j$ be two marked families on the active
     representatives. Form their full-coordinate marked tensors by retaining
     the inactive listed coordinates as zero blocks. If
@@ -266,10 +252,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_identity,
-        thm:cpsv_active_representative_sector_decomposition,
-        thm:representative_grouped_marked_separation,
-        thm:representative_grouped_insert_eq}
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_active_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
     Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity} rewrites
     (\ref{eq:cpsv_retained_marked_trace_agreement}) into marked-trace
     agreement for $P_{\mathrm{act}}$. Its representatives have eventual
@@ -300,9 +283,7 @@
         linearMarkedTensor_eq_of_trace_agree}
     \lean{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
-        thm:cpsv_full_coordinate_marked_trace_identity,
-        thm:cpsv_retained_representative_grouped_lemma_l}
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
     Let $A$ be in literal CPSV canonical form. For canonical-form data and
     its active BNT refinement, write
     \begin{align}
@@ -345,8 +326,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_identity,
-        thm:cpsv_retained_representative_grouped_lemma_l}
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
     Induction on $w$ in (\ref{eq:cpsv_original_coisometry_reconstruction})
     gives
     $CA^w=V^\dagger EB^wV$. Cyclicity of trace and $VV^\dagger=\Id$ give
@@ -386,8 +366,7 @@
     \lean{MPSTensor.FirstSiteActionAgree.blockTensor}
     \lean{MPSTensor.insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq}
     \leanok
-    \uses{def:first_site_action_physical_blocking, def:blocked_tensor,
-        def:l_blk_injective}
+    \uses{def:first_site_action_physical_blocking, def:blocked_tensor, def:l_blk_injective}
     This auxiliary statement supplies the identity needed to combine the
     block-injectivity argument
     \cite[lines~318--345]{Cirac2016MPDO_arXiv} with Appendix~C.3, Lemma~L
@@ -446,8 +425,7 @@
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_firstSiteActionAgree}
     \lean{MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree}
     \leanok
-    \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor,
-      def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
+    \uses{def:sector_bnt_cf, def:sector_decomposition_block_tensor, def:representative_word_tuple_span, thm:representative_grouped_insert_eq}
     Let $P$ be a BNT canonical form with basis representatives
     $(A_j)_{j=0}^{g-1}$, and suppose that the representatives have already
     been blocked so that every $A_j$ is injective. Then representative
@@ -493,10 +471,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_direct_sum_block_separation_word_span,
-      lem:block_separating_equations_from_pairwise_separation,
-      lem:product_word_span_from_bnt_block_separation,
-      thm:representative_grouped_insert_eq}
+    \uses{lem:bnt_direct_sum_block_separation_word_span, lem:block_separating_equations_from_pairwise_separation, lem:product_word_span_from_bnt_block_separation, thm:representative_grouped_insert_eq}
     Injectivity of $A_j$ implies that its homogeneous words span
     $\MN{D_j}$ at every positive length. Apply the three-block separation
     argument with source length $1$. For each ordered pair of distinct
@@ -566,9 +541,7 @@
     \label{cor:bnt_marked_representative_separation}
     \lean{MPSTensor.IsBNTCanonicalForm.markedTensor_basis_eq_of_trace_agree}
     \leanok
-    \uses{def:sector_bnt_cf,
-        thm:postblocked_representative_grouped_insert_eq,
-        thm:representative_grouped_marked_separation}
+    \uses{def:sector_bnt_cf, thm:postblocked_representative_grouped_insert_eq, thm:representative_grouped_marked_separation}
     Let $(C_j^s)$ and $(E_j^s)$ be two marked families over a BNT canonical
     form. If their closed marked chains agree for every marked index $s$ and
     every unmarked word $w$ of positive length, then $C_j^s=E_j^s$ for every
@@ -577,8 +550,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:postblocked_representative_grouped_insert_eq,
-        thm:representative_grouped_marked_separation}
+    \uses{thm:postblocked_representative_grouped_insert_eq, thm:representative_grouped_marked_separation}
     The BNT canonical-form hypotheses give eventual representative word-tuple
     separation. Apply
     Theorem~\ref{thm:representative_grouped_marked_separation}.
@@ -593,8 +565,7 @@
     \lean{MPSTensor.trace_linearMarkedTensor_mul_evalWord_gauge}
     \lean{MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree}
     \leanok
-    \uses{def:horizontal_cf_mpdo,
-        cor:bnt_marked_representative_separation}
+    \uses{def:horizontal_cf_mpdo, cor:bnt_marked_representative_separation}
     Let $M$ be an MPO tensor in normalized BNT-refined horizontal form. For two
     coefficient families $f_{u,z}$ and $g_{u,z}$, put
     $C^u=\sum_z f_{u,z}M^z$ and $E^u=\sum_z g_{u,z}M^z$.

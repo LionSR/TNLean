@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexPhasePositivity
+import QICLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.PeriodicBlocking
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Chain.Defs
-import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Channel.Peripheral.CyclicDecomposition
+import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Complex
 
 /-!

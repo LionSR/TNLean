@@ -260,8 +260,7 @@ sector maps. The cyclic projections come from
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:blocked_tensor, def:same_mpv2, def:transfer_map,
-        def:left_canonical_tensor, def:irreducible_tensor}
+    \uses{def:blocked_tensor, def:same_mpv2, def:transfer_map, def:left_canonical_tensor, def:irreducible_tensor}
     Let $A$ be a left-canonical irreducible tensor. Then there is a
     period-removing length $m\ge1$ such that $A^{[m]}$ admits:
     \begin{enumerate}
@@ -292,9 +291,7 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_peripheral_cyclic_structure,
-        thm:cyclic_decomposition_irreducible_schwarz,
-        thm:adjoint_fixed_projection_block_decomp_isometry}
+    \uses{thm:transfer_peripheral_cyclic_structure, thm:cyclic_decomposition_irreducible_schwarz, thm:adjoint_fixed_projection_block_decomp_isometry}
     The peripheral cyclic-structure theorem identifies the period and its
     primitive root. The cyclic decomposition of the adjoint transfer map gives
     projections $(P_k)$ with $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating the cyclic relation
@@ -309,9 +306,7 @@ sector maps. The cyclic projections come from
     \label{thm:blocked_sector_unconditional}
     \lean{MPSTensor.primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking}
     \leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking,
-        thm:sector_irred_unconditional,
-        thm:primitive_adjoint_equiv}
+    \uses{thm:cyclic_sector_decomp_after_blocking, thm:sector_irred_unconditional, thm:primitive_adjoint_equiv}
     Let $A$ be a left-canonical irreducible tensor whose adjoint transfer map has
     peripheral spectrum
     $\{\gamma^j:0\le j<m\}$ for a primitive $m$th root of unity $\gamma$,
@@ -342,8 +337,7 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_irred_unconditional,
-        thm:primitive_adjoint_equiv}
+    \uses{thm:sector_irred_unconditional, thm:primitive_adjoint_equiv}
     Theorem~\ref{thm:sector_irred_unconditional} gives irreducibility of
     $(\E_A^\dagger)^m$ on each corner $P_u$. The compression equivalences
     in (\ref{eq:canonical_sector_compression}) intertwine the adjoint transfer
@@ -380,8 +374,7 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_peripheral_cyclic_structure,
-        thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
+    \uses{thm:transfer_peripheral_cyclic_structure, thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
     Left-canonicality makes $K_i:=(A^i)^\dagger$ unital, irreducibility passes
     to the adjoint map, and the quantum Perron--Frobenius theorem provides a
     positive-definite fixed point; the cyclic peripheral-spectrum theorem and
@@ -396,11 +389,7 @@ sector maps. The cyclic projections come from
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
     \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, def:same_mpv2_pos,
-        thm:exists_common_blocked_cyclic_sector_family_common_multiple,
-        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
-        thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
-        thm:common_blocked_cyclic_sector_derived_properties}
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, def:same_mpv2_pos, thm:exists_common_blocked_cyclic_sector_family_common_multiple, thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks, thm:same_mpv2_pos_to_tensor_from_blocks_block_power, thm:common_blocked_cyclic_sector_derived_properties}
     If two tensors generate the same MPV family at every positive length, then
     the cyclic-sector decompositions on the two sides can be expressed at one
     common positive blocking length $p$. For every $N\ge1$ and every blocked
@@ -425,11 +414,7 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks,
-        thm:exists_common_blocked_cyclic_sector_family_common_multiple,
-        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
-        thm:same_mpv2_pos_to_tensor_from_blocks_block_power,
-        thm:common_blocked_cyclic_sector_derived_properties}
+    \uses{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks, thm:exists_common_blocked_cyclic_sector_family_common_multiple, thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks, thm:same_mpv2_pos_to_tensor_from_blocks_block_power, thm:common_blocked_cyclic_sector_derived_properties}
     Start from
     Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}. With
     $p_A,p_B$ the least common multiples of the period-removal lengths on the
@@ -466,8 +451,7 @@ Section~\ref{sec:app_canonical_cyclic_sectors}.
 \begin{definition}[Primitive irreducible cyclic-sector decomposition]%
     \label{def:primitive_irreducible_cyclic_sectors}
     \lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}\leanok
-    \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_channel,
-        def:tp_kraus}
+    \uses{def:blocked_tensor, def:irreducible_tensor}
     $A$ \emph{has primitive irreducible cyclic sectors} of period $m\ge1$ if
     there is a family $(C_k)_{k=1}^m$ with
     $A^{[m]}\sim\bigoplus_{k=1}^mC_k$ with unit weights, each $C_k$

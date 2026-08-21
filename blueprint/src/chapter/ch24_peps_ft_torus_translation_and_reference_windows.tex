@@ -132,8 +132,7 @@ site-independent tensor and produces the global phase of
     \label{thm:peps_stateCoeff_translationInvariant}
     \lean{TNLean.PEPS.stateCoeff_translationInvariant}
     \leanok
-    \uses{def:peps_torus_translation_invariant,
-        thm:peps_stateCoeff_transport}
+    \uses{def:peps_torus_translation_invariant, thm:peps_stateCoeff_transport}
     If $A$ is translation invariant on the discrete torus, then
     $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
     $\tau_{a,b}$ and every physical configuration $\sigma$.
@@ -177,8 +176,7 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.bondDim_torusUpEdge_const}
     \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
     \leanok
-    \uses{def:peps_torus_translation_invariant,
-        def:peps_torus_uniform_bond_dim}
+    \uses{def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim}
     If $A$ is translation invariant on the discrete torus, then its bond
     dimensions are orientation-uniform. Explicitly, with
     $D_h=D_{e_h}$ at the reference right edge $e_h$ and
@@ -239,8 +237,7 @@ site-independent tensor and produces the global phase of
     \label{lem:peps_reference_edge_boundary_windows}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_referenceEdge}
     \leanok
-    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
-        lem:peps_reference_edge_right_endpoint_staircase_window}
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
     If $j=0$ or $L\le j$, then the reference edge $e$ is a boundary edge
     of $W_j$: exactly one of its two endpoints lies in the window.
 \end{lemma}
@@ -255,8 +252,7 @@ site-independent tensor and produces the global phase of
     \label{lem:peps_reference_edge_interior_windows}
     \lean{TNLean.PEPS.referenceEdge_endpoints_mem_staircaseWindow_of_interior}
     \leanok
-    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,
-        lem:peps_reference_edge_right_endpoint_staircase_window}
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
     If $1\le j<L$, then both endpoints of $e$ lie in $W_j$.
 \end{lemma}
 \begin{proof}\leanok

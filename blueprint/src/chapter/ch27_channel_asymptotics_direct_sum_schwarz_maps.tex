@@ -56,7 +56,6 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:kadison_schwarz}
     Choose a Kraus family $K_{i,r}$ for the map on the $i$-th paired
     summand. The canonical extension of the coordinatewise map is the
     controlled Kraus map
@@ -130,8 +129,7 @@
     \lean{Matrix.directSumTraceAdjointStarAlgEquiv_apply}
     \lean{Matrix.directSumTraceAdjointStarAlgEquiv_symm_apply}
     \leanok
-    \uses{def:kraus_map_between_direct_sums,
-        lem:direct_sum_rectangular_trace_adjoint} Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
+    \uses{def:kraus_map_between_direct_sums, lem:direct_sum_rectangular_trace_adjoint} Let $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal A$ be
     mutually inverse completely positive trace-preserving maps between finite direct sums of full matrix algebras. Their trace adjoints are mutually
     inverse unital completely positive maps. Moreover, for all $X,Y\in\mathcal B$,
     \begin{align}
@@ -387,8 +385,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:unitary_skolem_noether_matrix,
-        thm:corner_compression_partial_isometry_transport}
+    \uses{thm:unitary_skolem_noether_matrix, thm:corner_compression_partial_isometry_transport}
     Choose spatial compressions
     \[
         \Phi_Q:\MN{n_Q}\simeq Q\MN DQ,\qquad
@@ -432,8 +429,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:unitary_skolem_noether_matrix, thm:dim_preserved,
-        thm:direct_sum_inverse_cptp_star_equiv}
+    \uses{thm:unitary_skolem_noether_matrix, thm:dim_preserved, thm:direct_sum_inverse_cptp_star_equiv}
     The restriction of $\Phi$ to a matched block is a star-algebra
     isomorphism. After reindexing by $D_i=E_{\sigma(i)}$, it is an
     automorphism of a full complex matrix algebra. Skolem--Noether writes
@@ -496,11 +492,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:direct_sum_inverse_cptp_star_equiv,
-        thm:direct_sum_star_equiv_block_unitary,
-        lem:direct_sum_block_unitary_trace_preserving,
-        lem:direct_sum_trace_adjoint_star_equiv_inverse,
-        lem:direct_sum_rectangular_trace_adjoint}
+    \uses{thm:direct_sum_inverse_cptp_star_equiv, thm:direct_sum_star_equiv_block_unitary, lem:direct_sum_block_unitary_trace_preserving, lem:direct_sum_trace_adjoint_star_equiv_inverse, lem:direct_sum_rectangular_trace_adjoint}
     Let $\Phi=S^*:\mathcal A\simeq\mathcal B$ be the star-algebra
     isomorphism obtained from the inverse pair.
     Theorem~\ref{thm:direct_sum_star_equiv_block_unitary} supplies $\sigma$,
@@ -522,9 +514,6 @@
     \label{thm:adjoint_mean_ergodic_projection_weighted_block_form}
     \lean{IsPositiveMap.exists_block_densities_of_adjoint_meanErgodicProjection}
     \leanok
-    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
-        thm:fixedPointsStarSubalgebra,
-        thm:positive_retraction_finite_star_algebra}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace preserving, suppose that
     $T^*$ satisfies the Schwarz inequality, and suppose that there is a
     positive definite matrix $\rho$ satisfying $T(\rho)=\rho$. Let $P_T$ be
@@ -547,9 +536,6 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
-        thm:fixedPointsStarSubalgebra,
-        thm:positive_retraction_finite_star_algebra}
     The map $P_T^*$ is a positive unital idempotent map whose range is
     $\Fix(T^*)$. For $A\in\Fix(T^*)$, the Schwarz inequality gives
     $T^*(A^*A)\geq T^*(A)^*T^*(A)=A^*A$, while
@@ -621,8 +607,7 @@
     \label{thm:direct_sum_fixed_points_density_block_form}
     \lean{Matrix.IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints}
     \leanok
-    \uses{thm:direct_sum_full_matrix_extension_compatibility,
-        thm:mean_ergodic_projection_density_block_form}
+    \uses{thm:direct_sum_full_matrix_extension_compatibility, thm:mean_ergodic_projection_density_block_form}
     Let $\mathcal A=\bigoplus_{i\in I}\MN{n_i}$ be a finite direct sum.
     Suppose that $T:\mathcal A\to\mathcal A$ is positive and preserves the
     total trace, that its trace adjoint satisfies the Schwarz inequality,
@@ -647,8 +632,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:direct_sum_full_matrix_extension_compatibility,
-        thm:mean_ergodic_projection_density_block_form}
+    \uses{thm:direct_sum_full_matrix_extension_compatibility, thm:mean_ergodic_projection_density_block_form}
     Extend $T$ by diagonal compression and block-diagonal embedding. The
     canonical extension is positive and trace preserving, its trace adjoint
     satisfies the Schwarz inequality, and the embedded family $\iota(\rho)$

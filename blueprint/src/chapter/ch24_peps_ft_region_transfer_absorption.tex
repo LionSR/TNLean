@@ -102,8 +102,7 @@
     \label{thm:peps_regionInsertedCoeff_applyGauge}
     \lean{TNLean.PEPS.regionInsertedCoeff_applyGauge}
     \leanok
-    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff,
-        thm:peps_edge_gauge_absorption, def:applyGauge}
+    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff, thm:peps_edge_gauge_absorption, def:applyGauge}
     Let $X$ be an edge-gauge family, write $B^X$ for the gauged tensor, and let
     $f$ be a crossing edge of $R$. Inserting $M$ on $f$ between the region and
     its complement in $B^X$ equals inserting, in $B$, the matrix obtained by
@@ -222,10 +221,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:applyGauge,
-        def:peps_absorbedBoundaryGauge,
-        thm:peps_regionEdgeOrient_absorbedBoundaryGauge,
-        thm:peps_regionInsertedCoeff_applyGauge}
+    \uses{def:peps_regionInsertedCoeff, def:applyGauge, def:peps_absorbedBoundaryGauge, thm:peps_regionEdgeOrient_absorbedBoundaryGauge, thm:peps_regionInsertedCoeff_applyGauge}
     Let $R$ be a region with boundary edge $f$ and assume the
     bond-dimension equality $h:D_A=D_B$. Suppose the per-edge gauge $Z$ realizes
     the conjugation-form region-insertion identity at $f$: for every matrix $M$
@@ -266,9 +262,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     \label{thm:peps_edgeInsertedCoeff_eq_applyGauge_of_region}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_applyGauge_of_region}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff,
-        def:applyGauge,
-        thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff, def:applyGauge, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     Let $R$ be a region with boundary edge $f$, assume the bond-dimension
     equality $h:D_A=D_B$ and that every bond dimension of $A$ is positive, and
     suppose the absorbed region equality holds: for every matrix $M$ on the bond
@@ -334,9 +328,7 @@ $\phi_{h_f}(M)$ is inserted on both sides.
     \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_edge}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_edge}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff,
-        def:applyGauge,
-        thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff, def:applyGauge, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     Assume the bond-dimension equality $h:D_A=D_B$ and suppose the edge-level
     absorbed equality holds at an edge $e$: for every global physical
     configuration $\sigma$ and every matrix $N$ on the bond space of $e$,

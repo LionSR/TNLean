@@ -142,8 +142,7 @@ product extends by linearity to all of $\MN{D}$.
     \lean{MPSTensor.right_witness_unique_of_isNBlkInjective}
     \lean{MPSTensor.left_witness_unique_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, lem:padded_complement_annihilation,
-        lem:wordspan_blk_inj}
+    \uses{def:l_blk_injective, lem:padded_complement_annihilation, lem:wordspan_blk_inj}
     Let $A$ be $L_0$-block-injective with $L_0>0$. If two boundary matrices
     have the same product with every one-site tensor on one fixed side, then the
     two boundary matrices are equal.
@@ -195,8 +194,7 @@ product extends by linearity to all of $\MN{D}$.
     \label{thm:ground_space_map_mpv_of_positive_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes}
     \leanok
-    \uses{lem:word_commutation_multiple_lengths,
-        thm:ground_space_map_mpv_of_long_word_commutes}
+    \uses{lem:word_commutation_multiple_lengths, thm:ground_space_map_mpv_of_long_word_commutes}
     Let $A$ be injective after blocking $L_0>0$ sites. If $X$ commutes with
     every word product of some positive length $m$, then
     $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
@@ -213,8 +211,7 @@ product extends by linearity to all of $\MN{D}$.
     \label{thm:ground_space_map_mpv_of_common_middle}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}
     \leanok
-    \uses{lem:common_middle_same_witness_commutation,
-        thm:ground_space_map_mpv_of_positive_word_commutes}
+    \uses{lem:common_middle_same_witness_commutation, thm:ground_space_map_mpv_of_positive_word_commutes}
     Let $A$ be injective after blocking $L_0>0$ sites. Suppose there are
     matrices $Y_\mu$ such that
     \begin{align}
@@ -236,8 +233,7 @@ product extends by linearity to all of $\MN{D}$.
     \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
-    \uses{lem:two_sided_middle_of_wrapped_witness_comparison,
-        thm:ground_space_map_mpv_of_common_middle}
+    \uses{lem:two_sided_middle_of_wrapped_witness_comparison, thm:ground_space_map_mpv_of_common_middle}
     Let $A$ be injective after blocking $L_0>0$ sites, and fix a physical letter
     $\eta$ used outside the complementary sites. Suppose that, for every
     boundary condition $\tau$ and every physical letter $j$,
@@ -268,9 +264,7 @@ product extends by linearity to all of $\MN{D}$.
     \label{thm:conditional_normal_range_reduction_witness_comparison}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
-    \uses{thm:cyclic_normal_open_chain_range_reduction,
-        thm:reduced_wrapped_boundary_compatibilities,
-        thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    \uses{thm:cyclic_normal_open_chain_range_reduction, thm:reduced_wrapped_boundary_compatibilities, thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     Let $A$ be injective after blocking $L_0>0$ sites and let $D \ge 1$. Assume
     $N \ge 2$ and $L_0 < L \le N$. Suppose that, for every physical letter
     $\eta$ used in the two boundary conditions and every boundary matrix
@@ -287,9 +281,7 @@ product extends by linearity to all of $\MN{D}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_normal_open_chain_range_reduction,
-        thm:reduced_wrapped_boundary_compatibilities,
-        thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    \uses{thm:cyclic_normal_open_chain_range_reduction, thm:reduced_wrapped_boundary_compatibilities, thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     The cyclic-to-open-chain reduction writes any chain ground state as
     $\Gamma_N(X)$. The two boundary-crossing cyclic windows give
     \begin{align}

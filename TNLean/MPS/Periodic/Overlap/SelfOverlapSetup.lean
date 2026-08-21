@@ -18,11 +18,11 @@ import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Spectral.TransferOperatorGapNT
-import TNLean.Channel.Irreducible.PerronFrobenius
-import TNLean.Channel.Schwarz.MultiplicativeDomainFull
+import QICLean.Channel.Irreducible.PerronFrobenius
+import QICLean.Channel.Schwarz.MultiplicativeDomainFull
 
 import TNLean.Algebra.GramMatrixLI
-import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
+import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 import Mathlib.Analysis.InnerProductSpace.l2Space
 
 /-!

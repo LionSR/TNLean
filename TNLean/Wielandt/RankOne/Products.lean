@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Kraus.Wielandt.RankOne.Products
-import TNLean.MPS.Core.Injectivity
-import TNLean.MPS.Core.Word
+import QICLean.Kraus.Wielandt.RankOne.Products
+import QICLean.MPS.Core.Injectivity
+import QICLean.MPS.Core.Word
 
 /-!
 # Eigenvectors from Wielandt word products

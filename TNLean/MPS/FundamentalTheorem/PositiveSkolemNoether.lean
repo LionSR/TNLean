@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.SkolemNoetherUnitary
-import TNLean.Channel.Schwarz.PositiveMapProperties
+import QICLean.Algebra.SkolemNoetherUnitary
+import QICLean.Channel.Schwarz.PositiveMapProperties
 
 /-!
 # Positive automorphisms of complex matrix algebras

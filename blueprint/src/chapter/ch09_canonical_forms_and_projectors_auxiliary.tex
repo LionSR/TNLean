@@ -27,13 +27,7 @@
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary}
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
     \leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        thm:nonzero_irreducible_block_decomposition,
-        thm:unital_data_irreducible,
-        thm:irreducible_tensor_to_action,
-        lem:irreducible_action_to_tensor,
-        thm:irreducible_unital_scalar_fixed_point,
-        thm:pgvwc07_dual_diag_unital}
+    \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
     Every MPS tensor has an unnormalized positive-length PGVWC07 witness.
     More precisely, the construction has four stages. First, a nonzero
     irreducible block remains irreducible under nonzero scalar rescaling and can
@@ -47,13 +41,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        thm:nonzero_irreducible_block_decomposition,
-        thm:unital_data_irreducible,
-        thm:irreducible_tensor_to_action,
-        lem:irreducible_action_to_tensor,
-        thm:irreducible_unital_scalar_fixed_point,
-        thm:pgvwc07_dual_diag_unital}
+    \uses{def:pgvwc07_positive_length_witness, thm:nonzero_irreducible_block_decomposition, thm:unital_data_irreducible, thm:irreducible_tensor_to_action, lem:irreducible_action_to_tensor, thm:irreducible_unital_scalar_fixed_point, thm:pgvwc07_dual_diag_unital}
     Follow \cite[Theorem~4]{PerezGarcia2007Matrix}. The nonzero irreducible
     decomposition is obtained by strict dimension induction. On a nonzero
     current block, Perron--Frobenius gives a positive semidefinite eigenvector
@@ -139,8 +127,7 @@
     \label{thm:pgvwc07_ti_canonical_form_nonzero}
     \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
     \leanok
-    \uses{thm:pgvwc07_positive_length_witness,
-        thm:pgvwc07_positive_length_weight_normalization}
+    \uses{thm:pgvwc07_positive_length_witness, thm:pgvwc07_positive_length_weight_normalization}
     Suppose that $V^{(N)}(A)_\sigma\neq0$ for some $N>0$ and some
     word~$\sigma$. Then there are a scalar $s>0$ and a nonempty finite family
     of positive-bond-dimension blocks $(A_k)_{k=1}^r$ with positive weights
@@ -162,8 +149,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pgvwc07_positive_length_witness,
-        thm:pgvwc07_positive_length_weight_normalization}
+    \uses{thm:pgvwc07_positive_length_witness, thm:pgvwc07_positive_length_weight_normalization}
     Choose the structured witness from
     Theorem~\ref{thm:pgvwc07_positive_length_witness}. The assumed nonzero
     coefficient makes its block family nonempty, so
@@ -321,8 +307,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \label{thm:is_normal_tensor_of_is_normal_left_canonical}
     \lean{MPSTensor.isNormalTensor_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv,
-        def:strongly_irreducible_paper}
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, def:strongly_irreducible_paper}
     Let $D>0$. If $A$ is algebraically normal and left-canonical, then
     \begin{align}
         A
@@ -332,8 +317,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv,
-        def:strongly_irreducible_paper}
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, def:strongly_irreducible_paper}
     Algebraic normality together with
     $\sum_i(A^i)^\dagger A^i=\Id$ makes the transfer map strongly irreducible.
     It consequently has a positive-definite fixed point, no nontrivial
@@ -350,7 +334,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.IsNormal.mapStar}
     \lean{MPSTensor.IsNormalTensor.mapStar}
     \leanok
-    \uses{def:left_canonical_tensor,def:nt_cpsv,def:gauge_equiv,def:normal}
+    \uses{def:left_canonical_tensor, def:nt_cpsv, def:gauge_equiv, def:normal}
     For a tensor or matrix, an overline denotes entrywise conjugation. If $A$
     and $B$ are gauge equivalent through $X$, then $\overline A$ and
     $\overline B$ are gauge equivalent through $\overline X$. If $A$ is
@@ -361,10 +345,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:left_canonical_tensor,def:gauge_equiv,def:normal,def:nt_cpsv,
-        thm:cpsv_map_star_transfer_fixed_point,
-        thm:cpsv_map_star_irreducible,
-        thm:entrywise_conj_transport_peripheral}
+    \uses{def:left_canonical_tensor, def:gauge_equiv, def:normal, def:nt_cpsv, thm:cpsv_map_star_transfer_fixed_point, thm:cpsv_map_star_irreducible}
     Entrywise conjugating $B^i=X A^i X^{-1}$ gives
     $\overline{B^i}=\overline X\,\overline{A^i}\,(\overline X)^{-1}$.
     Conjugating the left-canonical identity gives
@@ -379,7 +360,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     For the normal-tensor assertion, the transfer map of $\overline A$ is the
     anti-linear conjugate $\sigma\circ\E_A\circ\sigma$
     by~(\ref{eq:cpsv_map_star_transfer_operator}). By
-    Theorem~\ref{thm:entrywise_conj_transport_peripheral} this conjugation
+    the corresponding theorem in the companion quantum-channel volume this conjugation
     preserves the spectral radius and primitivity, and by
     Theorem~\ref{thm:cpsv_map_star_irreducible} entrywise conjugation
     preserves irreducibility. Hence both clauses of
@@ -393,7 +374,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.transferMap_mapStar}
     \lean{MPSTensor.map_star_eq_self_of_posDef_isDiag}
     \leanok
-    \uses{def:transfer_map, def:entrywise_conj_transport}
+    \uses{def:transfer_map}
     Let $\sigma$ denote entrywise conjugation. For every tensor $A$, as
     operators on the matrix space,
     \begin{align}
@@ -415,7 +396,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:transfer_map, def:entrywise_conj_transport}
+    \uses{def:transfer_map}
     Entrywise conjugation commutes with finite sums, matrix products, and
     conjugate transposition, which
     gives~(\ref{eq:cpsv_map_star_transfer_operator}) on every matrix, and
@@ -490,8 +471,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \label{thm:cpsv_remove_zero_weight_blocks}
     \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_active}
     \leanok
-    \uses{def:same_mpv2_pos, def:block_diagonal_tensor,
-        thm:mpv_decomposition}
+    \uses{def:same_mpv2_pos, def:block_diagonal_tensor, thm:mpv_decomposition}
     Let $(A_k)_{k=1}^r$ be blocks with weights $(\mu_k)_{k=1}^r$, and put
     $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then the full weighted direct sum and
     the direct sum over $K_{\mathrm{act}}$ have the same matrix product vectors
@@ -650,7 +630,6 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \label{thm:cpsv_primitivity_similarity}
     \lean{IsPrimitive.similarityMap_iff}
     \leanok
-    \uses{def:primitive_channel}
     For an invertible matrix $C$, a linear map $E$ is primitive if and
     only if
     \begin{align}
@@ -681,11 +660,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:nt_cpsv,
-        thm:cpsv_gauge_transfer_similarity,
-        thm:cpsv_spectral_radius_similarity,
-        lem:similarity_irred_iff,
-        thm:cpsv_primitivity_similarity}
+    \uses{def:nt_cpsv, thm:cpsv_gauge_transfer_similarity, thm:cpsv_spectral_radius_similarity, lem:similarity_irred_iff, thm:cpsv_primitivity_similarity}
     With $S_X(Y)=XYX^\dagger$, the transfer maps satisfy
     \begin{align}
         \E_B
@@ -709,20 +684,13 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.GaugeEquiv.blockTensor}
     \lean{MPSTensor.IsNormalTensor.blockTensor}
     \leanok
-    \uses{def:nt_cpsv, def:blocked_tensor,
-        thm:cpsv_normal_tp_gauge,
-        thm:tp_primitive_irreducible_extra_blocking,
-        thm:cpsv_normal_tensor_gauge_transport,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:nt_cpsv, def:blocked_tensor, thm:cpsv_normal_tp_gauge, thm:tp_primitive_irreducible_extra_blocking, thm:cpsv_normal_tensor_gauge_transport, thm:is_normal_tensor_of_is_normal_left_canonical}
     Let $A$ be a CPSV normal tensor and let $L\geq1$. Then the blocked tensor
     $A^{[L]}$ is a CPSV normal tensor.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge,
-        thm:tp_primitive_irreducible_extra_blocking,
-        thm:cpsv_normal_tensor_gauge_transport,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{thm:cpsv_normal_tp_gauge, thm:tp_primitive_irreducible_extra_blocking, thm:cpsv_normal_tensor_gauge_transport, thm:is_normal_tensor_of_is_normal_left_canonical}
     Choose a trace-preserving gauge $B^i=XA^iX^{-1}$. Positive blocking gives
     \begin{align}
         (B^{[L]})^I
@@ -743,8 +711,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \lean{MPSTensor.CPSVCanonicalFormData.blockTensor}
     \lean{MPSTensor.IsCPSVCanonicalForm.blockTensor}
     \leanok
-    \uses{def:cpsv_canonical_form, def:blocked_tensor,
-        thm:cpsv_normal_tensor_positive_blocking}
+    \uses{def:cpsv_canonical_form, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
     Let $A$ have canonical-form data
     \begin{align}
         A^i
@@ -765,8 +732,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, def:blocked_tensor,
-        thm:cpsv_normal_tensor_positive_blocking}
+    \uses{def:cpsv_canonical_form, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
     Write $I=(i_1,\ldots,i_L)$. Since $L\geq1$, the word $I$ is nonempty.
     Repeatedly inserting $UU^\dagger=\Id$ into
     $A^{i_1}\cdots A^{i_L}$ gives
@@ -790,10 +756,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \label{thm:cpsv_canonical_form_representative_after_blocking}
     \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking}
     \leanok
-    \uses{def:cpsv_canonical_form, def:blocked_tensor, def:same_mpv2_pos,
-        thm:unconditional_common_primitive_irreducible_blocks,
-        thm:normal_tp_primitive_irred,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:cpsv_canonical_form, def:blocked_tensor, def:same_mpv2_pos, thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical}
     % Maintainer source anchor: CPSV16 lines 214--251, especially
     % eq:II_Aiplusk1, eq:II_CF1, and the proposition at lines 249--251.
     For every tensor $A$, there are a positive integer $p$, a bond dimension
@@ -811,10 +774,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:unconditional_common_primitive_irreducible_blocks,
-        thm:normal_tp_primitive_irred,
-        thm:is_normal_tensor_of_is_normal_left_canonical,
-        def:cpsv_canonical_form}
+    \uses{thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical, def:cpsv_canonical_form}
     Apply Theorem~\ref{thm:unconditional_common_primitive_irreducible_blocks}
     to $A$ and itself. It gives $p\ge1$, weights $\mu_k$, and
     left-canonical, primitive, tensor-irreducible blocks $C_k$ such that, for
@@ -995,8 +955,7 @@ definition.
     \label{thm:projector_closure_irreducible_corners}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
     \leanok
-    \uses{def:invariant_projector_closure, def:irreducible_tensor,
-        def:same_mpv2, def:block_diagonal_tensor}
+    \uses{def:invariant_projector_closure, def:irreducible_tensor, def:same_mpv2, def:block_diagonal_tensor}
     Suppose $A$ has invariant-projector closure. Then there are isometries
     $V_1,\ldots,V_r$ with $V_k^\dagger V_k=\Id$, pairwise orthogonal ranges,
     and $\sum_kV_kV_k^\dagger=\Id$, such that $A^iV_k=V_kA_k^i$ for the
@@ -1006,9 +965,7 @@ definition.
 
 \begin{proof}
     \leanok
-    \uses{def:has_inv_proj, thm:invariant_projector_closure_commutes,
-        lem:projection_support_isometry, lem:projector_closure_corner,
-        lem:mpv_partition_isometries}
+    \uses{def:has_inv_proj, thm:invariant_projector_closure_commutes, lem:projection_support_isometry, lem:projector_closure_corner, lem:mpv_partition_isometries}
     Proceed by strong induction on the bond dimension. If $A$ is irreducible,
     the single corner $V=\Id$ suffices. Otherwise, $A$ has a nontrivial
     invariant projection $P$, which commutes with every $A^i$ by
@@ -1056,8 +1013,7 @@ definition.
         exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
     \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
     \leanok
-    \uses{def:invariant_projector_closure, def:no_periodic_vectors,
-        def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
+    \uses{def:invariant_projector_closure, def:no_periodic_vectors, def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
     Suppose $A$ has invariant-projector closure and no nontrivial
     $p$-periodic vectors. Then there are normal tensors
     $A_1,\ldots,A_r$ of positive bond dimensions $D_1,\ldots,D_r$, with
@@ -1087,9 +1043,7 @@ definition.
 
 \begin{proof}
     \leanok
-    \uses{thm:projector_closure_irreducible_corners,
-        lem:irreducible_transfer_perron_pair,
-        lem:irreducible_block_spectral_normalization}
+    \uses{thm:projector_closure_irreducible_corners, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization}
     Decompose $A$ into irreducible corners $B_k$ along isometries $V_k$
     by Theorem~\ref{thm:projector_closure_irreducible_corners}; every matrix
     product vector coefficient of $A$ is the sum of those of the corners. A

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.BNTLeftTripleFusion
 import TNLean.MPS.MPDO.BNTRightTripleFusion
 import TNLean.MPS.MPDO.BNTAssociativity
-import TNLean.Algebra.ScalarCommutant
+import QICLean.Algebra.ScalarCommutant
 
 /-!
 # Final-sector restrictions of triple fusion

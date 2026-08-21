@@ -18,13 +18,7 @@
     \label{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     \lean{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}
     \leanok
-    \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property,
-        thm:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_virtualInsertionPhysicalRealization,
-        thm:peps_edgeInsertedCoeff_endpointPhysicalRealization,
-        thm:peps_edgeInsertedCoeff_injective,
-        thm:peps_physical_to_virtual_insertion,
-        thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
+    \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property, thm:peps_edgeBlockedThreeSiteInjective, thm:peps_virtualInsertionPhysicalRealization, thm:peps_edgeInsertedCoeff_endpointPhysicalRealization, thm:peps_edgeInsertedCoeff_injective, thm:peps_physical_to_virtual_insertion, thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
     Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
     the edge $e$ are injective, suppose every virtual bond of $A$ and $B$ has
     positive dimension, and suppose the two PEPS tensors define the same state.
@@ -215,9 +209,7 @@
     \label{thm:peps_exists_edgeGaugeFamily}
     \lean{TNLean.PEPS.exists_edgeGaugeFamily}
     \leanok
-    \uses{thm:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeBlockedInsertionAlgebraIsomorphism,
-        thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism, thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
     Let $A$ and $B$ be vertex-injective PEPS tensors with the same PEPS state.
     Suppose the corresponding virtual bond dimensions are equal and every
     virtual bond of $A$ has positive dimension. Then there is a family
@@ -384,9 +376,7 @@
     \label{thm:peps_localGauge_exists_of_blockedMiddleGaugeFormula}
     \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
     \leanok
-    \uses{def:peps_blockedMiddleGaugeFormula,
-        thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula,
-        thm:localGauge_exists}
+    \uses{def:peps_blockedMiddleGaugeFormula, thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula, thm:localGauge_exists}
     Suppose that the edge-centred three-site reduction supplies invertible
     matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
     configurations $\eta$ and physical indices $\sigma$,

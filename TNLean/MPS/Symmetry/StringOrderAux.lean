@@ -3,18 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexPhasePositivity
-import TNLean.Analysis.MatrixSqrt
+import QICLean.Algebra.ComplexPhasePositivity
+import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
-import TNLean.MPS.Core.CPPrimitive
+import QICLean.MPS.Core.CPPrimitive
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Irreducible.Adjoint
-import TNLean.Channel.FixedPoint.CanonicalGauge
-import TNLean.Channel.Irreducible.Ergodicity
-import TNLean.Channel.Irreducible.PerronFrobenius
-import TNLean.Channel.Irreducible.Similarity
-import TNLean.Channel.Irreducible.SpectralRadius
-import TNLean.Channel.KrausRepresentation
+import QICLean.Channel.FixedPoint.CanonicalGauge
+import QICLean.Channel.Irreducible.Ergodicity
+import QICLean.Channel.Irreducible.PerronFrobenius
+import QICLean.Channel.Irreducible.Similarity
+import QICLean.Channel.Irreducible.SpectralRadius
+import QICLean.Channel.KrausRepresentation
 
 /-!
 # String order: trace-preserving gauge reduction and auxiliary proofs

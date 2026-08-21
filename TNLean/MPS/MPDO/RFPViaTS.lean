@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.TracePairing
-import TNLean.Channel.KrausCPTP
+import QICLean.Channel.KrausCPTP
 import TNLean.MPS.MPDO.PhysicalClosure
 import TNLean.MPS.MPDO.ZCL
 

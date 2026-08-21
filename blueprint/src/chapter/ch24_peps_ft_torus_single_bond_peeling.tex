@@ -18,8 +18,7 @@
     \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge}
     \lean{TNLean.PEPS.not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge}
     \leanok
-    \uses{def:peps_horizontal_staircase_reference_edge,
-        def:peps_horizontal_staircase_patch}
+    \uses{def:peps_horizontal_staircase_reference_edge, def:peps_horizontal_staircase_patch}
     Assume
     $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
     $b+2K-1\le H$.
@@ -105,8 +104,7 @@
     \lean{TNLean.PEPS.compl_leftWindow_eq_rightWindow_union_complEndPair}
     \lean{TNLean.PEPS.compl_rightWindow_eq_leftWindow_union_complEndPair}
     \leanok
-    \uses{def:peps_horizontal_staircase_patch,
-        lem:peps_horizontal_staircase_end_pair_disjoint}
+    \uses{def:peps_horizontal_staircase_patch, lem:peps_horizontal_staircase_end_pair_disjoint}
     If $2L\le W$, the complement of either end window splits as the opposite
     end window and the complement of the end pair:
     \begin{align}
@@ -162,8 +160,7 @@
     \label{thm:peps_staircase_pair_insert_eq_open}
     \lean{TNLean.PEPS.staircasePair_insert_eq_open}
     \leanok
-    \uses{thm:peps_staircase_pair_cancel,
-        thm:peps_corner_extension_linear_transitive}
+    \uses{thm:peps_staircase_pair_cancel, thm:peps_corner_extension_linear_transitive}
     Let $S=W_0\cup W_{L+K-1}$ be the staircase end pair. Suppose that the
     one-orientation $L\times K$ window injectivity hypotheses hold for a
     tensor $B$, unions of injective regions are injective, all bond dimensions
@@ -193,10 +190,7 @@
     \label{thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase}
     \leanok
-    \uses{def:peps_bond_inserted_region_insert,
-        thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted,
-        thm:peps_staircase_end_reference_edge_boundary,
-        thm:peps_staircase_pair_insert_eq_open}
+    \uses{def:peps_bond_inserted_region_insert, thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted, thm:peps_staircase_end_reference_edge_boundary, thm:peps_staircase_pair_insert_eq_open}
     Let the torus have width $W$ and height $H$.
     Suppose that the one-orientation $L\times K$ window injectivity
     hypotheses hold for a tensor $B$, unions of injective regions are
@@ -250,8 +244,7 @@
     \label{def:peps_window_edge_coeff_identity_witness}
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness}
     \leanok
-    \uses{def:peps_regionInsertedCoeff,
-        thm:peps_staircase_end_reference_edge_boundary}
+    \uses{def:peps_regionInsertedCoeff, thm:peps_staircase_end_reference_edge_boundary}
     Let $W$ be the left end window of a horizontal staircase with parameters
     $(L,K)$ and lower-left coordinate $(a,b)$, and let $e$ be its reference
     edge. Suppose that

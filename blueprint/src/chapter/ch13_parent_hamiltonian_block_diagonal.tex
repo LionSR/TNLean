@@ -14,9 +14,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1}
     \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1}
     \leanok
-    \uses{lem:unital_block_separating_product_span,
-        lem:product_span_block_image_direct_sum,
-        lem:block_restriction_intersection_subspace}
+    \uses{lem:unital_block_separating_product_span, lem:product_span_block_image_direct_sum, lem:block_restriction_intersection_subspace}
     Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional
@@ -188,8 +186,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:block_sum_local_ground_space}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
     \leanok
-    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum,
-        lem:local_ground_space_block_le_assembled}
+    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum, lem:local_ground_space_block_le_assembled}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$. Then, for every length $L$,
     $G_L(B)=\bigvee_{j=1}^gG_L(A_j)$.
@@ -208,8 +205,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace}
     \leanok
-    \uses{lem:block_sum_local_ground_space,
-        lem:periodic_constraints_propagated_subspace_sequence}
+    \uses{lem:block_sum_local_ground_space, lem:periodic_constraints_propagated_subspace_sequence}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$, and set $S_M:=\bigvee_{j=1}^gG_M(A_j)$. If, for every
     $M\ge L$,
@@ -228,8 +224,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1}
     \leanok
-    \uses{lem:bnt_direct_sum_unital_block_intersection_ge,
-        lem:block_diagonal_periodic_constraints_propagated_sum}
+    \uses{lem:bnt_direct_sum_unital_block_intersection_ge, lem:block_diagonal_periodic_constraints_propagated_sum}
     Let $A_1,\ldots,A_g$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional
@@ -267,8 +262,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
-        lem:product_span_block_image_direct_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum, lem:product_span_block_image_direct_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, set
     $S_N:=\bigvee_{j=1}^gG_N(A_j)$. Then, for every $N\ge L$,
@@ -341,8 +335,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \label{lem:bnt_block_diagonal_open_boundary_matrices}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
-        lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum, lem:block_diagonal_boundary_of_open_boundary_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum},
     every vector
@@ -361,8 +354,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,
-        lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum, lem:block_diagonal_boundary_of_open_boundary_sum}
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     places $\psi$ in $\bigvee_{j=1}^gG_N(A_j)$. Applying
     Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum} gives
@@ -381,8 +373,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{thm:pgvwc_direct_sum_intersection_source_length,
-        thm:pgvwc_block_space_independence_source_length}
+    \uses{thm:pgvwc_direct_sum_intersection_source_length, thm:pgvwc_block_space_independence_source_length}
     Let $g\ge2$. Let $A_j$ be irreducible blocks, pairwise inequivalent up to
     gauge and phase, and injective at the common
     length $L_0>0$. Assume the canonical normalization of
@@ -417,9 +408,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_direct_sum_intersection_source_length,
-        thm:pgvwc_block_space_independence_source_length,
-        lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{thm:pgvwc_direct_sum_intersection_source_length, thm:pgvwc_block_space_independence_source_length, lem:block_diagonal_boundary_of_open_boundary_sum}
     Put $S_M=\sum_jG_M(A_j)$. For every $M$ with $L\le M<N$,
     Theorem~\ref{thm:pgvwc_direct_sum_intersection_source_length} gives
     \begin{align}

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Topology.Instances.Matrix
 import TNLean.Algebra.FinTupleEquiv
-import TNLean.Channel.KrausCPTP
+import QICLean.Channel.KrausCPTP
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.MPDO.OperatorProduct

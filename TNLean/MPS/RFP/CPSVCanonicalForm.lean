@@ -9,7 +9,7 @@ import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.NormalIsometryCharacterization
 import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.SharedInfra.Scaling
-import TNLean.Analysis.SpectralRadius
+import QICLean.Analysis.SpectralRadius
 
 /-!
 # Active blocks of a literal CPSV renormalization fixed point

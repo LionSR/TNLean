@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleArcRegion
 import TNLean.PEPS.Defs
-import TNLean.MPS.Defs
+import QICLean.MPS.Defs
 import TNLean.MPS.Core.CyclicTrace
 
 /-!

@@ -45,8 +45,7 @@
     \label{thm:mpdo_finite_chain_reduced_proportionality}
     \lean{MPOTensor.reducedBlockState_eq_of_nonzeroProportionalMPV₂_at}
     \leanok
-    \uses{thm:mpdo_finite_chain_normalized_proportionality,
-      def:mpo_to_mps}
+    \uses{thm:mpdo_finite_chain_normalized_proportionality, def:mpo_to_mps}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_finite_chain_normalized_proportionality}, for every
     $L\leq N$ the reduced operators on the first $L$ sites agree:
@@ -70,8 +69,7 @@
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.%
       eventually_normalizedMPO_eq}
     \leanok
-    \uses{def:eventually_nonzero_proportional_mpv, def:mpo_tensor,
-      def:mpo_to_mps}
+    \uses{def:eventually_nonzero_proportional_mpv, def:mpo_tensor, def:mpo_to_mps}
     If the doubled-index tensors of $M$ and $C$ are eventually nonzero
     proportional, then, for every sufficiently large $N$,
     \begin{align}
@@ -294,8 +292,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       reindex_reducedBlockState_add_three_eq_threeSuffixSectorContraction}
     \leanok
-    \uses{def:mpdo_suffix_sector_contraction,
-      def:mpdo_physical_sector_chain_coordinates}
+    \uses{def:mpdo_suffix_sector_contraction, def:mpdo_physical_sector_chain_coordinates}
     Let $\widetilde{\mathcal K}$ be the tensor in physical-sector
     coordinates. For $L\geq0$ and $R\geq1$, the normalized $L$-site
     marginal obtained from a chain of length $L+R$ satisfies
@@ -355,8 +352,7 @@
     \label{lem:mpdo_eta_two_boundary_contraction_separated}
     \lean{Matrix.etaTwoBoundaryContraction_eq_separated}
     \leanok
-    \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
-        def:mpdo_right_partial_trace_map, def:partial_trace_left}
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization, def:mpdo_right_partial_trace_map}
     Suppose $\eta_{q,h}$ has a rank-one trace factorization. For fixed
     boundary sectors $u,v$, set
     \begin{align}
@@ -392,8 +388,7 @@
     \label{thm:mpdo_eta_fourth_region_trace_formula}
     \lean{Matrix.eta_fourth_region_trace_formula}
     \leanok
-    \uses{def:mpdo_generic_eta_rank_one_trace_factorization,
-        def:mpdo_right_partial_trace_map, def:partial_trace_left}
+    \uses{def:mpdo_generic_eta_rank_one_trace_factorization, def:mpdo_right_partial_trace_map}
     Let $\eta_{q,h}$ be arbitrary matrices on
     $H_{q,r}\otimes H_{h,l}$ with a rank-one trace factorization. For a
     nonempty retained sector word $k=(k_0,\ldots,k_{L-1})$, write
@@ -444,8 +439,7 @@
     \lean{MPOTensor.CommutingBondTraceMatrixObstruction.%
       normal_sourceZCL_fixed_commutingBond_does_not_force_traceMatrix_primitive}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:mpdo,
-      def:injective, def:normal}
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:mpdo, def:injective, def:normal}
     There is an injective normal tensor $\mathcal K$, of physical dimension two
     and bond dimension one, which generates MPDOs and has source zero
     correlation length, together with one positive two-site bond $B$ whose
@@ -551,8 +545,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.cyclicActiveSectorTraceMatrix}
     \lean{MPOTensor.PhysicalSectorFactorization.neighboringOperator_trace_re_pos_iff}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
     For a physical-sector factorization with neighboring operators
     $\eta_{k,h}$, retain a sector $k$ when there is a sector $h$ such that
     $\eta_{k,h}\ne0$ and $h\leadsto k$, where $\leadsto$ denotes reachability
@@ -584,8 +577,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       map_cyclicNeighboringProduct_eq_zero_of_not_forall_isCyclicActiveSector}
     \leanok
-    \uses{def:mpdo_cyclic_active_sector,
-      def:mpdo_physical_sector_chain_coordinates}
+    \uses{def:mpdo_cyclic_active_sector, def:mpdo_physical_sector_chain_coordinates}
     Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
     configuration. If $k_n\notin C$ for some $n$, then $\Omega_k=0$.
     Thus deleting the sectors outside $C$ leaves every finite cyclic
@@ -644,11 +636,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}
     \leanok
-    \uses{def:injective, def:mpdo_eta_local_structure_data,
-      thm:mpdo_eta_fixed_bond_product_tensor,
-      thm:mpdo_fixed_bond_positive_physical_sector_representative,
-      def:mpdo_physical_sector_factorization,
-      def:mpdo_cyclic_active_sector}
+    \uses{def:injective, def:mpdo_eta_local_structure_data, thm:mpdo_eta_fixed_bond_product_tensor, thm:mpdo_fixed_bond_positive_physical_sector_representative, def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $K$ be an injective tensor with an eta-local structure. Let $C$ be the
     exact fixed-product tensor selected from its commuting bond, and let $F$ be
     the associated positive physical-sector factorization. Then any two sectors
@@ -685,8 +673,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data,
-      thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    \uses{def:mpdo_eta_local_structure_data, thm:mpdo_fixed_bond_positive_physical_sector_representative}
     Let $K$ have an eta-local structure, let $F$ be the positive
     physical-sector factorization of its selected fixed-product tensor, and
     express $K$ in the physical coordinates of $F$. For every $N\geq2$ and
@@ -710,8 +697,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       selectedFixedProduct_reducedBlockState_succ_succ_eq_succ_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data,
-      thm:mpdo_selected_fixed_product_reduced_states}
+    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_selected_fixed_product_reduced_states}
     Let $K$ have an eta-local structure and source zero correlation length,
     and let $C$ be the selected fixed-product tensor in its physical-sector
     coordinates. For every $L>0$, the normalized $L$-site reduced states of
@@ -731,9 +717,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       selectedFixedProduct_reducedBlockState_add_three_eq_succ_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data,
-      thm:mpdo_selected_fixed_product_reduced_states,
-      thm:mpdo_source_zcl_iterated_marginal_stability}
+    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_selected_fixed_product_reduced_states, thm:mpdo_source_zcl_iterated_marginal_stability}
     Under the preceding hypotheses, for every $L>0$, the normalized
     $L$-site reduced states of the selected fixed-product tensor obtained
     from chain lengths $L+3$ and $L+1$ are equal.
@@ -750,8 +734,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data,
-      thm:mpdo_fixed_bond_positive_physical_sector_representative}
+    \uses{def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_fixed_bond_positive_physical_sector_representative}
     Let $K$ have an eta-local structure and source zero correlation length.
     For every $N\geq2$, the trace of the selected fixed-product periodic
     operator is a strictly positive real number.
@@ -800,8 +783,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_cyclic_active_sector}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a physical-sector factorization whose neighboring operators are
     positive semidefinite, and let $T_C$ be the trace matrix on its
     cyclic-active sectors. Assume that every ordered pair of cyclic-active
@@ -813,9 +795,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_suffix_sector_contraction,
-      thm:mpdo_suffix_marginal_block_expansion,
-      thm:matrix_irreducible_square_support_stabilization}
+    \uses{def:mpdo_suffix_sector_contraction, thm:mpdo_suffix_marginal_block_expansion, thm:matrix_irreducible_square_support_stabilization}
     Fix $q,h$ and choose a retained sector path from $h$ to $q$. Positivity
     makes its retained trace product $P_{h,q}$ nonzero. Tracing one suffix
     site and two suffix sites gives the respective block-trace coefficients
@@ -836,8 +816,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_adjacent_marginals}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_cyclic_active_sector}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a physical-sector factorization whose neighboring operators are
     positive semidefinite, and let $T_C$ be the trace matrix on its
     cyclic-active sectors. Assume that every ordered pair of cyclic-active
@@ -854,9 +833,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_suffix_sector_contraction,
-      thm:mpdo_suffix_marginal_block_expansion,
-      thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
+    \uses{def:mpdo_suffix_sector_contraction, thm:mpdo_suffix_marginal_block_expansion, thm:mpdo_cyclic_active_square_positive_adjacent_marginals}
     By
     Theorem~\ref{thm:mpdo_cyclic_active_square_positive_adjacent_marginals},
     every entry of $T_C^2$ is positive. For fixed $q,h$, choose a positive
@@ -882,12 +859,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
     \leanok
-    \uses{def:injective, def:mpo_source_zcl,
-      def:mpdo_eta_local_structure_data,
-      def:mpdo_physical_sector_factorization,
-      thm:mpdo_eta_fixed_bond_product_tensor,
-      thm:mpdo_fixed_bond_positive_physical_sector_representative,
-      def:mpdo_cyclic_active_sector}
+    \uses{def:injective, def:mpo_source_zcl, def:mpdo_eta_local_structure_data, def:mpdo_physical_sector_factorization, thm:mpdo_eta_fixed_bond_product_tensor, thm:mpdo_fixed_bond_positive_physical_sector_representative, def:mpdo_cyclic_active_sector}
     Let $K$ be an injective tensor with an eta-local structure and source zero
     correlation length. Let $F$ be the
     positive physical-sector factorization of the selected fixed-product
@@ -900,13 +872,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_source_zcl_marginal_stability,
-      thm:mpdo_eta_fixed_bond_product_tensor,
-      thm:mpdo_fixed_bond_positive_physical_sector_representative,
-      thm:mpdo_selected_fixed_product_cyclic_recurrence,
-      thm:mpdo_selected_fixed_product_adjacent_marginals,
-      thm:mpdo_selected_fixed_product_positive_traces,
-      thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
+    \uses{lem:mpdo_source_zcl_marginal_stability, thm:mpdo_eta_fixed_bond_product_tensor, thm:mpdo_fixed_bond_positive_physical_sector_representative, thm:mpdo_selected_fixed_product_cyclic_recurrence, thm:mpdo_selected_fixed_product_adjacent_marginals, thm:mpdo_selected_fixed_product_positive_traces, thm:mpdo_cyclic_active_square_cube_adjacent_marginals}
     Express the original tensor in the physical coordinates of $F$. At every
     length $N\geq2$, its closed operator is a positive scalar multiple of the
     selected closed operator. Source zero correlation length therefore gives
@@ -923,10 +889,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
     \leanok
-    \uses{def:injective, def:mpo_source_zcl,
-      def:mpdo_eta_local_structure_data,
-      thm:mpdo_fixed_bond_positive_physical_sector_representative,
-      def:hayashi_markov_decomposition}
+    \uses{def:injective, def:mpo_source_zcl, def:mpdo_eta_local_structure_data, thm:mpdo_fixed_bond_positive_physical_sector_representative}
     Let $K$ be an injective tensor with an eta-local structure and source zero
     correlation length. Express $K$ in the one-site physical coordinates of the
     positive fixed-product factorization selected by the eta-local structure.
@@ -936,16 +899,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_selected_fixed_product_cyclic_recurrence,
-      thm:mpdo_selected_fixed_product_adjacent_marginals,
-      thm:mpdo_selected_fixed_product_iterated_marginals,
-      thm:mpdo_selected_fixed_product_positive_traces,
-      thm:mpdo_selected_fixed_product_reduced_states,
-      thm:mpdo_selected_fixed_product_square_cube,
-      thm:mpdo_cyclic_active_square_positive_adjacent_marginals,
-      thm:mpdo_cyclic_active_explicit_fourth_region_blocks,
-      thm:mpdo_cyclic_active_markov_of_fourth_region,
-      thm:matrix_primitive_pow_two_rank_one}
+    \uses{thm:mpdo_selected_fixed_product_cyclic_recurrence, thm:mpdo_selected_fixed_product_adjacent_marginals, thm:mpdo_selected_fixed_product_iterated_marginals, thm:mpdo_selected_fixed_product_positive_traces, thm:mpdo_selected_fixed_product_reduced_states, thm:mpdo_selected_fixed_product_square_cube, thm:mpdo_cyclic_active_square_positive_adjacent_marginals, thm:mpdo_cyclic_active_explicit_fourth_region_blocks, thm:mpdo_cyclic_active_markov_of_fourth_region, thm:matrix_primitive_pow_two_rank_one}
     The selected trace matrix is recurrent, and its square is strictly
     positive. After the positive normalization of
     Theorem~\ref{thm:mpdo_selected_fixed_product_square_cube}, its square and
@@ -1037,9 +991,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl,
-      thm:mpdo_cyclic_active_trace_matrix_primitive,
-      thm:matrix_primitive_pow_two_rank_one}
+    \uses{def:mpo_source_zcl, thm:mpdo_cyclic_active_trace_matrix_primitive, thm:matrix_primitive_pow_two_rank_one}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_cyclic_active_trace_matrix_primitive}, suppose that
     the physical-trace transfer has source zero correlation length. There is
@@ -1084,8 +1036,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       sum_cyclicActive_partialTraceRight_threeSiteSectorClosure}
     \leanok
-    \uses{def:mpdo_cyclic_active_sector,
-      thm:mpdo_sector_closure_partial_traces}
+    \uses{def:mpdo_cyclic_active_sector, thm:mpdo_sector_closure_partial_traces}
     Let $C$ be the set of cyclic-active sectors and suppose that every
     neighboring operator is positive semidefinite. For $q,h\in C$,
     \begin{align}
@@ -1136,8 +1087,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       reindex_reducedBlockState_add_three_eq_cyclicActiveFourthRegionBlock}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_cyclic_active_sector}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a physical-sector factorization with positive semidefinite
     neighboring operators. Suppose that $\lambda>0$ and that functions
     $a,b$ on the cyclic-active sectors satisfy
@@ -1154,8 +1104,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_cyclic_active_three_boundary_trace,
-      thm:mpdo_cyclic_active_deletion}
+    \uses{thm:mpdo_cyclic_active_three_boundary_trace, thm:mpdo_cyclic_active_deletion}
     Expand the reduced state as a direct sum of three-suffix contractions.
     Terms outside positive-length cyclic support vanish. For a retained
     cyclic-active word, the three traced suffix sites leave the interior
@@ -1169,10 +1118,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_cyclicActiveFourthRegion_formula_of_isSourceZCL}
     \leanok
-    \uses{thm:mpdo_source_zcl_iterated_marginal_stability,
-      thm:mpdo_cyclic_active_explicit_fourth_region_blocks,
-      thm:mpdo_cyclic_active_three_boundary_trace,
-      thm:mpdo_cyclic_active_deletion}
+    \uses{thm:mpdo_source_zcl_iterated_marginal_stability, thm:mpdo_cyclic_active_explicit_fourth_region_blocks, thm:mpdo_cyclic_active_three_boundary_trace, thm:mpdo_cyclic_active_deletion}
     Let $\mathcal K$ be injective and have source zero correlation length,
     and suppose its neighboring operators are positive semidefinite. There
     are $\lambda>0$ and strictly positive functions $a,b$ on the
@@ -1201,9 +1147,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_hayashiMarkovDecomposition_cyclicActiveCut_of_fourthRegion}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_cyclic_active_sector,
-      def:hayashi_markov_decomposition}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_cyclic_active_sector}
     Let $F$ be a positive-dimensional physical-sector factorization whose
     neighboring operators are positive semidefinite. Fix $A,C\geq0$,
     $\lambda\in\mathbb R$, and strictly positive functions $a,b$ on the
@@ -1230,9 +1174,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
       exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL}
     \leanok
-    \uses{thm:mpdo_cyclic_active_fourth_region_factorization,
-      thm:mpdo_cyclic_active_markov_of_fourth_region,
-      def:hayashi_markov_decomposition}
+    \uses{thm:mpdo_cyclic_active_fourth_region_factorization, thm:mpdo_cyclic_active_markov_of_fourth_region}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_cyclic_active_fourth_region_factorization}, for
     arbitrary $A,C\geq 0$, the fourth-region marginal on consecutive regions
@@ -1262,9 +1204,7 @@
     \label{thm:mpdo_physical_sector_factorization_zcl_sal}
     \lean{MPOTensor.PhysicalSectorFactorization.isSAL_of_isSourceZCL}
     \leanok
-    \uses{thm:mpdo_cyclic_active_markov_all_cuts,
-      thm:mpdo_all_cut_markov_implies_sal,
-      thm:mpdo_sal_physical_isometry_transport}
+    \uses{thm:mpdo_cyclic_active_markov_all_cuts, thm:mpdo_all_cut_markov_implies_sal, thm:mpdo_sal_physical_isometry_transport}
     Let $\mathcal K$ have positive bond dimension and be injective, and let
     $F$ be a physical-sector factorization of $\mathcal K$. Suppose every
     neighboring operator $\eta^F_{q,h}$ is positive semidefinite. If the
@@ -1292,8 +1232,7 @@
     \label{thm:mpdo_translation_invariant_commuting_form_zcl_sal}
     \lean{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl,
-        def:is_sal, def:mpdo, def:injective}
+    \uses{def:mpdo_eta_local_structure_data, def:mpo_source_zcl, def:is_sal, def:mpdo, def:injective}
     Let $\mathcal K$ be an injective tensor generating MPDOs. Suppose
     that there is one
     positive two-site bond $B$ whose translates commute and, for every
@@ -1318,11 +1257,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_selected_fixed_product_markov_cuts,
-        thm:mpdo_all_cut_markov_implies_sal,
-        thm:mpdo_sal_physical_isometry_transport,
-        lem:mpdo_sitewise_physical_coordinate_congruence,
-        thm:mpdo_source_zcl_strict_positive_length_normalization}
+    \uses{thm:mpdo_selected_fixed_product_markov_cuts, thm:mpdo_all_cut_markov_implies_sal, thm:mpdo_sal_physical_isometry_transport, lem:mpdo_sitewise_physical_coordinate_congruence, thm:mpdo_source_zcl_strict_positive_length_normalization}
     Express $\mathcal K$ in the one-site physical coordinates selected by
     the fixed bond. Positivity of every periodic operator is preserved by
     this isometry, and its trace is unchanged, hence nonzero at every
@@ -1343,8 +1278,7 @@
     \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}
     \lean{MPOTensor.hasGSNNCHForm_of_etaLocalStructure}
     \leanok
-    \uses{thm:mpdo_eta_local_structure_has_commuting_bond_product,
-        thm:mpdo_commuting_bond_product_has_gsnnch_form}
+    \uses{thm:mpdo_eta_local_structure_has_commuting_bond_product, thm:mpdo_commuting_bond_product_has_gsnnch_form}
     The single positive bond determined by the $\eta$-local structure gives
     the one-sector instance of the explicit GSNNCH decomposition.
 \end{theorem}
@@ -1358,9 +1292,7 @@
     \label{thm:mpdo_injective_sal_is_gsnnch}
     \lean{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}
     \leanok
-    \uses{def:is_sal, cor:mpdo_eta_local_structure_of_is_sal,
-        thm:mpdo_eta_local_structure_has_gsnnch_form,
-        thm:mpdo_gsnnch_of_sector_form}
+    \uses{def:is_sal, cor:mpdo_eta_local_structure_of_is_sal, thm:mpdo_eta_local_structure_has_gsnnch_form, thm:mpdo_gsnnch_of_sector_form}
     Every injective MPO tensor satisfying SAL generates Gibbs states of a
     nearest-neighbor commuting Hamiltonian: the normalized finite-chain
     states are density operators with the explicit sector form of

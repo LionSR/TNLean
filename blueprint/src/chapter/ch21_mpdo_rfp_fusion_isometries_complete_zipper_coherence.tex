@@ -54,10 +54,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         exists_blocked_completeZipperFusionFamily}
     \leanok
-    \uses{thm:mpdo_bnt_common_positive_blocked_fusion,
-        thm:mpdo_pair_fusion_bnt_completeness,
-        thm:mpdo_one_letter_simultaneous_inverse,
-        def:mpdo_complete_zipper_fusion_family}
+    \uses{thm:mpdo_bnt_common_positive_blocked_fusion, thm:mpdo_pair_fusion_bnt_completeness, thm:mpdo_one_letter_simultaneous_inverse, def:mpdo_complete_zipper_fusion_family}
     Suppose that the labelled tensors of a length-independent fusion family
     form a source basis of normal tensors. There is one common positive
     blocking at which they determine a complete zipper fusion family. Its
@@ -135,9 +132,7 @@
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         inversePrintedFMatrix_mul_printedFMatrix}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family,
-        lem:mpdo_complete_zipper_final_block_selector,
-        lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_fusion_family, lem:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
     Fix $a,b,c,d\in\Lambda$. There is an invertible matrix
     \begin{align}
         F^{abc}_d:
@@ -159,8 +154,7 @@
     the printed $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo_complete_zipper_final_block_selector,
-        lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
     Form the full left- and right-associated synthesis matrices $L$ and $R$
     and their analysis matrices $L^+$ and $R^+$. Applying
     (\ref{eq:rfp_fusion_reconstruction}) twice to the two associative
@@ -266,8 +260,7 @@
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         twoEdgeInversePrintedFMatrix}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family,
-        thm:mpdo_complete_zipper_printed_fmove}
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove}
     Fix labels $a,b,c,d,e$. The five fusion trees in equation~(33) of
     \cite{Bultinck2017Anyons} determine five multiplicity spaces and five
     synthesis maps into the fourfold bond space. These spaces use the integer
@@ -312,9 +305,7 @@
         threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix}
     \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}
     \leanok
-    \uses{def:mpdo_complete_zipper_fourfold_fusion_data,
-        thm:mpdo_complete_zipper_printed_fmove,
-        lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_fourfold_fusion_data, thm:mpdo_complete_zipper_printed_fmove, lem:matrix_kronecker_identity_cancellation}
     The three-edge and two-edge composites of the forward printed
     $F$-matrices are equal. The corresponding composites of the inverse
     $F$-matrices are also equal. In the upper/lower convention of
@@ -354,8 +345,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fourfoldBondMatrix_threeEdge_eq_twoEdge}
     \leanok
-    \uses{def:mpdo_operator_product_associator,
-        def:mpdo_bnt_fusion_isometry_family}
+    \uses{def:mpdo_operator_product_associator, def:mpdo_bnt_fusion_isometry_family}
     Fix four labels $\alpha,\beta,\gamma,\delta$ in a BNT fusion-isometry
     family, and write $A=\{1,\ldots,D_\alpha\}$,
     $B=\{1,\ldots,D_\beta\}$, $C=\{1,\ldots,D_\gamma\}$, and

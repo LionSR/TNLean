@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Spectral.TransferOperatorGapInjective
-import TNLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
 import TNLean.Spectral.PeripheralToTransferMapGap

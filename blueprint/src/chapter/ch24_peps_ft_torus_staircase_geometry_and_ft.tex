@@ -78,8 +78,7 @@
     \lean{TNLean.PEPS.horizontalStaircasePatch_eq_endPair_union_corner}
     \lean{TNLean.PEPS.horizontalStaircasePatch_sdiff_endPair}
     \leanok
-    \uses{def:peps_horizontal_staircase_patch,
-        lem:peps_horizontal_staircase_end_pair_disjoint}
+    \uses{def:peps_horizontal_staircase_patch, lem:peps_horizontal_staircase_end_pair_disjoint}
     If $L,K>0$, $2L\le W$, and $2K\le H$, then the corner is disjoint from
     the end pair and the patch decomposes as $P=S\cup C$, with
     $P\setminus S=C$.
@@ -96,8 +95,7 @@
     \label{def:peps_torusRectangleInjectivityHypotheses}
     \lean{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses}
     \leanok
-    \uses{def:peps_regionInjectivityData,
-        def:peps_torus_geometry_translation}
+    \uses{def:peps_regionInjectivityData, def:peps_torus_geometry_translation}
     On the discrete torus, the rectangular injectivity hypotheses assert
     that every contiguous $2\times3$ and every contiguous $3\times2$
     coordinate rectangle is injective for the given region-injectivity
@@ -114,9 +112,7 @@
     \lean{TNLean.PEPS.isCrossingEdge_torusHorizontalRectangleBlockingDatum}
     \lean{TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum}
     \leanok
-    \uses{def:peps_torusRectangleInjectivityHypotheses,
-        def:peps_regionInjectivityData,
-        def:peps_torus_geometry_translation}
+    \uses{def:peps_torusRectangleInjectivityHypotheses, def:peps_regionInjectivityData, def:peps_torus_geometry_translation}
     At a frame origin $(x_0,y_0)$ with at least two columns and one row of
     margin below and to the left (one column and two rows in the rotated
     case), and with the removed blocks either touching the seam
@@ -147,11 +143,7 @@
     \label{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
     \lean{TNLean.PEPS.bondDim_eq_of_normalTorusRectangle}
     \leanok
-    \uses{def:peps_torus_translation_invariant,
-        def:peps_regionInjectivityData,
-        def:peps_regionInjectivityDataOf,
-        def:peps_same_state,
-        def:peps_torusRectangleInjectivityHypotheses}
+    \uses{def:peps_torus_translation_invariant, def:peps_regionInjectivityData, def:peps_regionInjectivityDataOf, def:peps_same_state, def:peps_torusRectangleInjectivityHypotheses}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the
     $n\times m$ torus with $n,m\geq 7$, positive physical dimension $d>0$,
     and positive bond dimensions at every edge, generating the same state.
@@ -171,10 +163,7 @@
     assumptions; the bond dimension is not assumed as a hypothesis.
     \begin{proof}
         \leanok
-        \uses{lem:peps_torusRectangleReferenceBlockingData,
-            thm:peps_bondDim_eq_of_normalBlocking,
-            thm:peps_torusUniformBondDim_of_translationInvariant,
-            def:peps_torus_geometry_translation}
+        \uses{lem:peps_torusRectangleReferenceBlockingData, thm:peps_bondDim_eq_of_normalBlocking, thm:peps_torusUniformBondDim_of_translationInvariant, def:peps_torus_geometry_translation}
         Place the frame at $(x_0,y_0)=(n-5,m-5)$; since $n,m\geq 7$ the
         margins hold with the touching-seam alternative. Let $e_h$ and $e_v$
         be the horizontal and vertical reference edges of
@@ -213,11 +202,7 @@
     \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
     \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS,
-        thm:peps_oneVertexComplementComparison,
-        def:peps_torus_translation_invariant,
-        thm:peps_torusUniformBondDim_of_translationInvariant,
-        def:GaugeEquivPEPS}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS, thm:peps_oneVertexComplementComparison, def:peps_torus_translation_invariant, thm:peps_torusUniformBondDim_of_translationInvariant, def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant normal PEPS on the discrete
     torus such that every $2\times 3$ and $3\times 2$ region is injective. If
     they generate the same state on an $n\times m$ region with $n,m\geq 7$, then
@@ -246,13 +231,7 @@
     \label{thm:fundamentalTheorem_normalTorusPEPS_unconditional}
     \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS,
-        thm:peps_oneVertexComplementComparison,
-        thm:peps_sameState_transport,
-        thm:peps_stateCoeff_translationInvariant,
-        thm:peps_torusUniformBondDim_of_translationInvariant,
-        def:peps_torusRectangleInjectivityHypotheses,
-        def:GaugeEquivPEPS}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS, thm:peps_oneVertexComplementComparison, thm:peps_sameState_transport, thm:peps_stateCoeff_translationInvariant, thm:peps_torusUniformBondDim_of_translationInvariant, def:peps_torusRectangleInjectivityHypotheses, def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
     $n\times m$ torus with $n,m\geq 7$, with positive physical dimension and
     positive bond dimensions,
@@ -289,8 +268,7 @@
     per-vertex relation itself).
     \begin{proof}
         \leanok
-        \uses{lem:peps_injectiveRegion_union_pos,
-            thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
+        \uses{lem:peps_injectiveRegion_union_pos, thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
         The union closure of injective regions follows from the positive bond
         dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}, and
         the bond-dimension equality $D_A=D_B$ is derived from the rectangular
@@ -497,8 +475,7 @@
     the source's sizes $n,m\geq 7$.
     \begin{proof}
         \leanok
-        \uses{thm:torusAbsorbedGauge_unique_scalar,
-            def:peps_edgeInsertedCoeff}
+        \uses{thm:torusAbsorbedGauge_unique_scalar, def:peps_edgeInsertedCoeff}
         The inserted-edge coefficient is multilinear in the site tensors, one
         factor per site, so the per-vertex relation scales every inserted
         coefficient by $\lambda^{nm}=1$: each family realizes the absorbed

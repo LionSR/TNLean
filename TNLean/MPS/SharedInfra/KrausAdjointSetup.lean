@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.Adjoint
-import TNLean.MPS.Core.CPPrimitive
-import TNLean.QPF.PosDef
-import TNLean.Channel.Schwarz.Basic
+import QICLean.MPS.Core.CPPrimitive
+import QICLean.QPF.PosDef
+import QICLean.Channel.Schwarz.Basic
 
 /-!
 # Shared Kraus-adjoint setup for cyclic-sector arguments

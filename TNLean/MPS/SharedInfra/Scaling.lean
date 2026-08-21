@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexPhasePositivity
+import QICLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Periodic.Defs
-import TNLean.Analysis.SpectralRadius
+import QICLean.Analysis.SpectralRadius
 
 /-!
 # Shared scaling lemmas for MPS tensors

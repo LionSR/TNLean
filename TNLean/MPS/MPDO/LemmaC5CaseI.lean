@@ -13,13 +13,13 @@ import TNLean.MPS.MPDO.Purity
 import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
 import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.Analysis.MatrixTraceInequalities
+import QICLean.Analysis.MatrixTraceInequalities
 import TNLean.Algebra.MatrixCyclicTracePower
 import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.PerronFrobenius.PerronVector
-import TNLean.Algebra.PerronFrobenius.RankOne
+import QICLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.PerronFrobenius.Substochastic
-import TNLean.Algebra.TraceReindex
+import QICLean.Algebra.TraceReindex
 
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components

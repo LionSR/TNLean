@@ -4,8 +4,7 @@
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}
     \lean{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks}
     \leanok
-    \uses{def:bnt_span, def:is_frustration_free, def:parent_hamiltonian,
-        thm:chain_ground_space_implies_frustration_free}
+    \uses{def:bnt_span, def:is_frustration_free, def:parent_hamiltonian, thm:chain_ground_space_implies_frustration_free}
     Let $B$ be a canonical-form tensor with BNT components
     $A_1,\ldots,A_g$. If every component vector has zero energy for the
     parent Hamiltonian, $H_L^{(N)}(B)V^{(N)}(A_j)=0$ for $1\le j\le g$, then
@@ -45,9 +44,7 @@
     \label{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan}
     \leanok
-    \uses{thm:parent_hamiltonian_kernel_le_chain_ground_space,
-        def:parent_hamiltonian, def:chain_ground_space, def:bnt_span,
-        def:mpv_submodule, lem:bnt_span_eq_sum_mpv_submodules}
+    \uses{thm:parent_hamiltonian_kernel_le_chain_ground_space, def:parent_hamiltonian, def:chain_ground_space, def:bnt_span, def:mpv_submodule, lem:bnt_span_eq_sum_mpv_submodules}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$. Suppose $N>0$, $L\le N$, and
     the periodic chain constraints for $B$ split into the block constraints:
     \begin{align}
@@ -95,8 +92,7 @@
     \label{lem:block_diagonal_kernel_to_bnt_span_from_pgvwc_comparison}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison}
     \leanok
-    \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting,
-        lem:bnt_block_diagonal_pgvwc_comparison_ground_space}
+    \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting, lem:bnt_block_diagonal_pgvwc_comparison_ground_space}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$.
     Suppose the physical alphabet and all block dimensions are nonempty. Assume
     that the block family is irreducible, left-canonical, has normalized
@@ -138,8 +134,7 @@
     \label{lem:block_diagonal_kernel_to_bnt_span_from_crossing_pgvwc_comparison}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_crossing_pgvwc_comparison}
     \leanok
-    \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting,
-        lem:bnt_block_diagonal_crossing_pgvwc_comparison_ground_space}
+    \uses{lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting, lem:bnt_block_diagonal_crossing_pgvwc_comparison_ground_space}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$.
     Suppose the physical alphabet and all block dimensions are nonempty. Assume
     that the block family is irreducible, left-canonical, has normalized
@@ -182,8 +177,7 @@
     \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}
     \lean{MPSTensor.hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bntMPSVectorSpan}
     \leanok
-    \uses{def:parent_hamiltonian_ground_space_spanning,
-        lem:bnt_span_le_parent_hamiltonian_kernel, def:has_nncph_ground_spaces}
+    \uses{def:parent_hamiltonian_ground_space_spanning, lem:bnt_span_le_parent_hamiltonian_kernel, def:has_nncph_ground_spaces}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\ne0$. Then, for
     every $N>L$, the source parent-Hamiltonian spanning condition
     $\ker H_L^{(N)}(B) =\spn\{V^{(N)}(A_j):j=0,\ldots,r-1\}$
@@ -237,10 +231,7 @@
     \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_mpv}
     \lean{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_chain_eq_iSup_chain}
     \leanok
-    \uses{def:parent_hamiltonian_ground_space_spanning,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        lem:block_diagonal_parent_spanning_reverse_inclusion,
-        lem:bnt_span_eq_sum_mpv_submodules}
+    \uses{def:parent_hamiltonian_ground_space_spanning, thm:parent_hamiltonian_kernel_eq_chain_ground_space, lem:block_diagonal_parent_spanning_reverse_inclusion, lem:bnt_span_eq_sum_mpv_submodules}
     Let $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, where $\mu_j\ne0$. Suppose that,
     for every $N>L$,
     $G_L^{(N)}(B) =\bigvee_{j=0}^{r-1}\spn\{V^{(N)}(A_j)\}$.
@@ -279,8 +270,7 @@
     \lean{MPSTensor.GaugeEquiv.localTerm_eq}
     \lean{MPSTensor.GaugeEquiv.isNNCPH}
     \leanok
-    \uses{def:gauge_equiv, def:mps_transfer_idempotence,
-        def:parent_interaction}
+    \uses{def:gauge_equiv, def:mps_transfer_idempotence, def:parent_interaction}
     A virtual similarity preserves the physical blocking relation and hence
     transfer idempotence. It also preserves every local MPS space, so the
     canonical parent interaction and all its translated local terms are
@@ -311,8 +301,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance,
-        thm:left_canonical_rfp_chain_commutation, thm:gauge_invariance_normal}
+    \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance, thm:left_canonical_rfp_chain_commutation, thm:gauge_invariance_normal}
     Put $A$ into its trace-preserving gauge. This is a pure similarity, since
     the normal-tensor normalization fixes the transfer spectral radius at one.
     Similarity preserves the physical blocking relation and the local MPS
@@ -357,9 +346,7 @@
     \lean{MPSTensor.rfp_hasParentHamiltonianGroundSpaceSpanning_single}
     \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_single}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:nt_cpsv,
-        def:parent_hamiltonian_ground_space_spanning,
-        def:has_nncph_ground_spaces}
+    \uses{def:mps_transfer_idempotence, def:nt_cpsv, def:parent_hamiltonian_ground_space_spanning, def:has_nncph_ground_spaces}
     Let $A$ have positive bond dimension and be a normal renormalization
     fixed-point tensor in the sense of \cite{Cirac2016MPDO_arXiv}. If the
     canonical-form tensor consists of the single normal sector $A$, then for
@@ -375,11 +362,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_eventually_injective, thm:rfp_nt_injective,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        thm:chain_ground_space_eq_mpv_blk,
-        lem:bnt_span_eq_sum_mpv_submodules,
-        thm:rfp_implies_nncph_ground_state}
+    \uses{thm:cpsv_normal_eventually_injective, thm:rfp_nt_injective, thm:parent_hamiltonian_kernel_eq_chain_ground_space, thm:chain_ground_space_eq_mpv_blk, lem:bnt_span_eq_sum_mpv_submodules, thm:rfp_implies_nncph_ground_state}
     Spectral normality gives eventual block injectivity. The fixed-point
     equation then implies that the one-site matrices already span the full
     matrix algebra. Thus $A$ is injective. For $N>2$, the finite-volume kernel
@@ -398,8 +381,7 @@
     \label{thm:rfp_multiplicity_one_bnt_nncph}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_nncph_basisDirectSum}
     \leanok
-    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:is_nncph,
-        lem:nncph_from_adjacent_two_site_commutation}
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:is_nncph, lem:nncph_from_adjacent_two_site_commutation}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
     tensor. If $B$ is a renormalization fixed point, then for every $N>2$
@@ -441,8 +423,7 @@
     \label{thm:rfp_multiplicity_one_bnt_parent_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}
     \leanok
-    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
-        def:parent_hamiltonian_ground_space_spanning}
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:parent_hamiltonian_ground_space_spanning}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
     tensor. If $B$ is a renormalization fixed point, then for every $N>2$,
@@ -476,8 +457,7 @@
     \label{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}
     \leanok
-    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence,
-        def:has_nncph_ground_spaces}
+    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:has_nncph_ground_spaces}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and let $B=\bigoplus_{j=1}^g A_j$ contain one copy of every basis
     tensor. If $B$ is a renormalization fixed point, then for every $N>2$ its
@@ -495,9 +475,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:rfp_multiplicity_one_bnt_nncph,
-        thm:rfp_multiplicity_one_bnt_parent_ground_spaces,
-        rem:nncph_ground_spaces_decomposition}
+    \uses{thm:rfp_multiplicity_one_bnt_nncph, thm:rfp_multiplicity_one_bnt_parent_ground_spaces, rem:nncph_ground_spaces_decomposition}
     Theorem~\ref{thm:rfp_multiplicity_one_bnt_nncph} gives pairwise
     commutation of the translated two-site interactions for every $N>2$.
     The parent-Hamiltonian construction gives the zero-energy equation.

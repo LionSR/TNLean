@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Circle
-import TNLean.Algebra.KroneckerFactorPositivity
+import QICLean.Algebra.KroneckerFactorPositivity
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSectorSupportRecurrence
 

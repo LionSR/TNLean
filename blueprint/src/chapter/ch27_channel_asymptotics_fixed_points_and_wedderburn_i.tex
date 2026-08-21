@@ -75,7 +75,7 @@ uniform in $h$.
     \label{thm:adjointMap_absorbs_scalarConditionalExpectation}
     \lean{Kraus.adjointMap_absorbs_scalarConditionalExpectation}
     \leanok
-    \uses{def:scalar_conditional_expectation, def:tp_kraus}
+    \uses{def:scalar_conditional_expectation}
     If $T$ is trace-preserving, then
     $T^*\circ E_\sigma=E_\sigma$.
 \end{lemma}
@@ -119,8 +119,7 @@ uniform in $h$.
     \label{thm:scalar_conditional_expectation_isConditionalExpectation}
     \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok
-    \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
-        def:tp_kraus}
+    \uses{def:is_conditional_expectation, def:scalar_conditional_expectation}
     Let $K$ be a trace-preserving Kraus family, let $\rho>0$ satisfy
     $T(\rho)=\rho$ for the associated channel
     $T(\rho)=\sum_iK_i\rho K_i^\dagger$, and assume every adjoint fixed point
@@ -129,11 +128,7 @@ uniform in $h$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:scalar_conditional_expectation_isCPMap,
-        thm:scalar_conditional_expectation_unital,
-        thm:scalar_conditional_expectation_idempotent,
-        lem:scalar_conditional_expectation_mem_adjointFixedPoints,
-        lem:scalar_conditional_expectation_fixes_scalar}
+    \uses{thm:scalar_conditional_expectation_isCPMap, thm:scalar_conditional_expectation_unital, thm:scalar_conditional_expectation_idempotent, lem:scalar_conditional_expectation_mem_adjointFixedPoints, lem:scalar_conditional_expectation_fixes_scalar}
     Complete positivity implies positivity. The evaluation formula gives
     unitality and idempotence, while trace preservation places the range in
     the adjoint fixed-point algebra. Every element of that algebra is scalar
@@ -155,8 +150,6 @@ uniform in $h$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_unital_adjoint_mean_ergodic_retraction,
-        thm:fixedPointsStarSubalgebra}
     The trace adjoint of the mean-ergodic projection is positive, unital, and
     idempotent, and its fixed points are exactly the fixed points of $T^*$.
     The Schwarz inequality and the faithful fixed point make this fixed-point
@@ -208,7 +201,6 @@ channel-level argument below uses its Kraus analogue.
     \label{thm:support_proj_fixed}
     \lean{Channel.support_proj_fixed}
     \leanok
-    \uses{def:channel}
     Let $E$ be a quantum channel, let $\rho\geq0$ satisfy $E(\rho)=\rho$,
     and let $P$ be the support projection of $\rho$. Then
     $PE(PXP)P=E(PXP)$ for every $X\in\MN{D}$.
@@ -226,13 +218,13 @@ channel-level argument below uses its Kraus analogue.
 \begin{definition}[Stationary state]\label{def:stationaryState}
     \lean{Channel.stationaryState}
     \leanok
-    \uses{def:channel, def:irreducible_cp}
+    \uses{def:irreducible_cp}
     For an irreducible channel $E$ on $\MN{D}$ with $D\geq1$, the
     \emph{stationary state} is the unique density-matrix fixed point
     $\rho_\infty$ satisfying $E(\rho_\infty)=\rho_\infty$,
     $\rho_\infty>0$, and $\tr(\rho_\infty)=1$. Existence, uniqueness, and
     positive definiteness follow from
-    Theorem~\ref{thm:channel_density_fp_irred}.
+    the corresponding theorem in the companion quantum-channel volume.
 \end{definition}
 
 \begin{definition}[Stationary support]\label{def:stationarySupport}
@@ -427,8 +419,7 @@ sector is positive definite.
     \label{thm:cornerFixedPointsStarSubalgebra}
     \lean{Kraus.cornerFixedPointsStarSubalgebra}
     \leanok
-    \uses{thm:compression_on_support_posDef, rem:corner_algebra_star_instances,
-        thm:adjointFixedPointsStarSubalgebra, thm:support_proj_fixed}
+    \uses{thm:compression_on_support_posDef, rem:corner_algebra_star_instances, thm:support_proj_fixed}
     Let $T(X)=\sum_iK_iXK_i^\dagger$ be a trace-preserving finite Kraus map,
     with adjoint $T^*(Y)=\sum_iK_i^\dagger YK_i$. Let $\rho\succeq0$ satisfy
     $T(\rho)=\rho$, and let $Q=\supp(\rho)$. Then
@@ -448,9 +439,7 @@ sector is positive definite.
 
 \begin{proof}
     \leanok
-    \uses{thm:supported_kraus_corner_compression,
-        thm:compression_on_support_posDef, thm:adjointFixedPointsStarSubalgebra,
-        thm:support_proj_fixed}
+    \uses{thm:supported_kraus_corner_compression, thm:compression_on_support_posDef, thm:support_proj_fixed}
     The set in (\ref{eq:spectral_corner_fixed_set}) is the fixed-point set
     of the compressed map $\widetilde{T}^*$ on the support sector. Since
     $\rho$ is fixed by $T$, Theorem~\ref{thm:support_proj_fixed} gives
@@ -462,7 +451,7 @@ sector is positive definite.
     $\rho$ is a positive-definite fixed point by
     Theorem~\ref{thm:compression_on_support_posDef}. The structure theorem
     for fixed points of unital Schwarz maps with a positive-definite fixed
-    point (Theorem~\ref{thm:adjointFixedPointsStarSubalgebra}) makes the
+    point (the corresponding theorem in the companion quantum-channel volume) makes the
     compressed fixed points a $*$-algebra. The compression isomorphism is
     multiplicative and star-preserving, intertwines the compressed adjoint
     map with the corner-restricted map, and transports this structure back
@@ -752,8 +741,7 @@ isometry.
     \label{lem:starSubalgebra_intertwiner_inner_scale}
     \lean{StarSubalgebra.exists_real_smul_inner_of_intertwiner}
     \leanok
-    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
-        lem:starSubalgebra_scalar_commutant_irreducible}
+    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace, lem:starSubalgebra_scalar_commutant_irreducible}
     Let $S$ be a $*$-subalgebra of $\MN{D}$, let
     $W\subseteq\C^D$ be irreducible under $S$, and let $f$ be an
     intertwiner from $W$ into a subspace $W'$. Then there exists a real
@@ -767,8 +755,7 @@ isometry.
 
 \begin{proof}
     \leanok
-    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace,
-        lem:starSubalgebra_scalar_commutant_irreducible}
+    \uses{def:starSubalgebra_intertwiner, def:starSubalgebra_irreducibleSubspace, lem:starSubalgebra_scalar_commutant_irreducible}
     Let $P_W$ be the orthogonal projection onto $W$. The operator
     $g=P_Wf^*f$ maps $W$ into itself and commutes there with every member of
     $S$. Indeed, for $A\in S$, the adjoint $A^*$ also belongs to $S$, and
@@ -961,8 +948,7 @@ isometry.
     \label{lem:starSubalgebra_isOrtho_not_sameIsotype}
     \lean{StarSubalgebra.isOrtho_of_not_sameIsotype}
     \leanok
-    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant,
-        lem:starSubalgebra_sameIsotype_iso}
+    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant, lem:starSubalgebra_sameIsotype_iso}
     Let $S$ be a $*$-subalgebra of $\MN{D}$, and let
     $W,W'\subseteq\C^D$ be irreducible under $S$. If $W$ and $W'$ are
     not of the same type, then $W\perp W'$.
@@ -970,8 +956,7 @@ isometry.
 
 \begin{proof}
     \leanok
-    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant,
-        lem:starSubalgebra_sameIsotype_iso}
+    \uses{lem:starSubalgebra_intertwiner_irreducible, lem:starSubalgebra_projection_commutant, lem:starSubalgebra_sameIsotype_iso}
     The orthogonal projection $P_{W'}$ onto $W'$ commutes with every member
     of $S$ by Lemma~\ref{lem:starSubalgebra_projection_commutant} and
     carries $W$ into $W'$, so it is an intertwiner. By

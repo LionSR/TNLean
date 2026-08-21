@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FinSum
+import QICLean.Algebra.FinSum
 import TNLean.MPS.RFP.StructuralForm
-import TNLean.Spectral.GaugeConstruction
-import TNLean.Channel.KrausRepresentation
+import QICLean.Spectral.GaugeConstruction
+import QICLean.Channel.KrausRepresentation
 import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!

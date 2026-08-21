@@ -88,8 +88,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
     \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
     \leanok
-    \uses{def:word_span, def:blocked_tensor,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    \uses{def:word_span, def:blocked_tensor, lem:isNBlkInjective_iff_blockTensor_isInjective}
     If the blocked tensor $A^{[L]}$ satisfies
     $S_n(A^{[L]})=\MN{D}$, then $S_{nL}(A)=\MN{D}$.
     In particular, $A$ is $L$-block injective if and only if $A^{[L]}$ is
@@ -113,8 +112,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:bounded_injective_blocking_normal_left_canonical}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal, def:blocked_tensor, thm:wielandt_general,
-        thm:wielandt_proposition_three}
+    \uses{def:normal, def:blocked_tensor, thm:wielandt_general, thm:wielandt_proposition_three}
     Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
     Then there is a positive blocking length $L\le D^4$ such that the blocked
     tensor $A^{[L]}$ is one-site injective.
@@ -150,9 +148,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:exact_pow_four_block_injectivity_normal_left_canonical}
     \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical,
-        lem:blocking_transfer,
-        thm:wordspan_blk_inj_succ}
+    \uses{thm:bounded_injective_blocking_normal_left_canonical, lem:blocking_transfer, thm:wordspan_blk_inj_succ}
     Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
     Then $S_{D^4}(A)=\MN{D}$; equivalently, $A$ is
     $D^4$-block injective.
@@ -160,9 +156,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical,
-        lem:blocking_transfer,
-        thm:wordspan_blk_inj_succ}
+    \uses{thm:bounded_injective_blocking_normal_left_canonical, lem:blocking_transfer, thm:wordspan_blk_inj_succ}
     Choose $L$ with $0<L\le D^4$ and $S_L(A)=\MN{D}$, and write
     $D^4=L+k$.
     Induction on $k$, using positive-length propagation at each step, gives
@@ -174,8 +168,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.%
         exists_common_isNBlkInjective_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:l_blk_injective, def:normal,
-        thm:bounded_injective_blocking_normal_left_canonical}
+    \uses{def:l_blk_injective, def:normal, thm:bounded_injective_blocking_normal_left_canonical}
     Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension,
     left-canonical normal tensors. There is a positive integer $L$ such that
     every $A_j$ is $L$-block injective.
@@ -194,8 +187,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
-    \uses{thm:normal_tp_primitive_irred,
-        thm:bounded_injective_blocking_normal_left_canonical}
+    \uses{thm:normal_tp_primitive_irred, thm:bounded_injective_blocking_normal_left_canonical}
     Let $(A_x)_{x\in X}$ be a finite separated normal-canonical family whose
     blocks have positive virtual bond dimension. Then there is a positive
     integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
@@ -258,7 +250,7 @@ Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
     \lean{MPSTensor.IsPrimitiveMPS}
     \leanok
-    \uses{def:mps_tensor, def:transfer_map, def:fixed_point_proj}
+    \uses{def:mps_tensor, def:transfer_map}
     Assume $D>0$.
     A tensor $A$ together with a matrix $\rho\in\MN{D}$ is
     \emph{primitive} if

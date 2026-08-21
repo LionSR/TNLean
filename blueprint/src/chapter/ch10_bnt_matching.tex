@@ -33,8 +33,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     \label{lem:sector_bnt_matched_sector_weight_multiset_eq}
     \lean{MPSTensor.matched_sector_weight_multiset_eq}
     \leanok
-    \uses{def:sector_weight_data,
-        thm:power_sum_multiset}
+    \uses{def:sector_weight_data, thm:power_sum_multiset}
     Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
     $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
     $\zeta \in \C \setminus \{0\}$. Suppose that for every $N > N_0$,
@@ -112,8 +111,7 @@ projection.
     \label{thm:sector_bnt_exact_block_match}
     \lean{MPSTensor.exists_block_match_exact}
     \leanok
-    \uses{def:sector_bnt_cf, def:same_mpv2_pos,
-        thm:sector_bnt_proportional_exact_match}
+    \uses{def:sector_bnt_cf, def:same_mpv2_pos, thm:sector_bnt_proportional_exact_match}
     Let $P, Q$ be two BNT canonical forms with the same MPV family (at all
     positive lengths). For every sector $j$ of $P$ there exist a sector $k$ of
     $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
@@ -133,8 +131,7 @@ projection.
     \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
-    \uses{def:sector_bnt_cf, def:same_mpv2_pos,
-        thm:sector_bnt_proportional_full_basis_match}
+    \uses{def:sector_bnt_cf, def:same_mpv2_pos, thm:sector_bnt_proportional_full_basis_match}
     Let $P, Q$ be two BNT canonical forms with the same MPV family at every
     positive length. Then for every sector $k$ of $Q$ there exist a sector $j$
     of $P$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
@@ -161,9 +158,7 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
     \lean{MPSTensor.bijective_match_of_sameMPV}
     \leanok
-    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
-        lem:sector_bnt_bijection_from_matches,
-        def:sector_bnt_cf, def:same_mpv2_pos}
+    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV, lem:sector_bnt_bijection_from_matches, def:sector_bnt_cf, def:same_mpv2_pos}
     Let $P, Q$ be two BNT canonical forms with the same MPV family at every
     positive length. Then there is a bijection
     $\beta : J(Q) \simeq J(P)$ such that for every $k \in J(Q)$ the bond
@@ -173,8 +168,7 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$ holds on the full basis
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
-        lem:sector_bnt_bijection_from_matches}
+    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV, lem:sector_bnt_bijection_from_matches}
     Apply the full-basis matcher in both directions, using symmetry of the
     same-MPV relation. Lemma~\ref{lem:sector_bnt_bijection_from_matches}
     converts these two families of matches into the required bijection.
