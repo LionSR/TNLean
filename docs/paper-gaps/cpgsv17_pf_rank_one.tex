@@ -886,6 +886,61 @@ obstruction under every condition used in the simple Case-II passage, at the
 normalized fixed-representative boundary. It refutes the absorption inference,
 not the source assertion that some suitable factorization exists.
 
+\section{The unit-closure-trace necessary condition}
+
+The existential assertion of condition~(iv) quantifies over all possible
+physical-sector factorizations of each absorbed representative, so a
+counterexample must exclude every factorization and a proof may choose any.
+The formalization now records a constraint that every qualifying
+factorization imposes on the tensor itself, independently of the choice.
+
+Let $\mathcal K$ be any MPO tensor admitting a physical-sector factorization
+with positive semidefinite neighboring operators $\eta_{k,h}$ and real
+families satisfying
+\[
+  \operatorname{tr}(\eta_{k,h})=a_kb_h,\qquad \sum_k a_kb_k=1.
+\]
+Closing the physical legs of the factorized slices and using unitary
+invariance of the trace writes the physical-trace transfer as a rectangular
+product $\mathcal T_{\mathcal K}=LQ$ with
+$L_{\beta,k}=\operatorname{tr}((l_k)_\beta)$ and
+$Q_{k,\alpha}=\operatorname{tr}((r_k)_\alpha)$, and the opposite product is
+the rank-one coefficient matrix
+\[
+  (QL)_{k,h}=\operatorname{tr}(\eta_{k,h})=a_kb_h.
+\]
+Cyclic invariance of the trace gives
+$\operatorname{tr}((LQ)^N)=\operatorname{tr}((QL)^N)$ for every $N\geq1$,
+and all positive powers of the normalized rank-one matrix equal the matrix
+itself, of trace one. Hence
+\[
+  \operatorname{tr}\bigl(\mathcal T_{\mathcal K}^{\,N}\bigr)=1,\qquad
+  \operatorname{tr}\rho^{(N)}(\mathcal K)=1,\qquad N\geq1.
+\]
+The formal statements are
+\leanid{MPOTensor.PhysicalSectorFactorization.physTraceTransfer\_eq\_leftTraceMatrix\_mul\_rightTraceMatrix},
+\leanid{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace\_physTraceTransfer\_pow\_eq\_one},
+and
+\leanid{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace\_mpo\_eq\_one}
+in \path{TNLean/MPS/MPDO/NeighboringTraceObstruction.lean}.
+
+Three consequences follow. First, the normalization
+$\operatorname{tr}(T)=1$ invoked at line~1498 is a constraint on the tensor
+rather than a convention: a tensor with a closed chain of non-unit trace
+admits no factorization of the required form. Second, the per-representative
+assertion of condition~(iv) carries the implicit normalization
+$\operatorname{tr}(\mathcal T_{\mathcal K_s})=1$ for each absorbed
+representative, whereas the ambient normalization at lines~1755--1759
+constrains only the weighted sum over representatives. Whether the standing
+hypotheses of condition~(ii) imply this per-representative unit trace is
+part of the open content of the all-sector structure statement; if some
+admissible tensor violates it, the violation immediately refutes the printed
+per-representative assertion for that tensor. Third, under literal zero
+correlation length the condition says that the physical-trace transfer of
+each absorbed representative is an idempotent of unit trace; the four-sector
+active-trace witness is consistent with this, since its physical-trace
+transfer is a rank-one coordinate projection.
+
 \section{Conclusion}
 
 The proof in Appendix C.2 contains an unjustified matrix step as written: a

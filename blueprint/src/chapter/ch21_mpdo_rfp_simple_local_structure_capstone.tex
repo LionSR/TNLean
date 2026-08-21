@@ -2360,6 +2360,14 @@ This is the calculation in
 % Independently,
 % thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
 % (iv)=>(v).  Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+% The necessary condition thm:mpdo_neighboring_trace_unit_closure shows that
+% any qualifying factorization of a tensor forces every nonempty closed chain
+% of that tensor to have unit trace.  The per-representative assertion below
+% therefore carries the implicit normalization tr(T_{K_s}) = 1 for each
+% absorbed representative, which the line-1498 normalization asserts but the
+% ambient normalization at lines 1755-1759 supplies only summed over
+% representatives.  Whether the standing hypotheses of (ii) imply this
+% per-representative unit trace is part of the remaining content of #6775.
 \begin{theorem}[Physical sector structure of absorbed BNT representatives]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
