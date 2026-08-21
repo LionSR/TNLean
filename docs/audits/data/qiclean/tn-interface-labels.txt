@@ -48,6 +48,7 @@ def:von_neumann_entropy
 eq:channel_kraus_representation
 eq:channel_power_decomp
 eq:gram_reshuffle_single
+eq:matrix_support_completion_agreement
 eq:mpu_reduced_projection_coordinate_identities
 eq:mpu_reduced_projection_transversality
 eq:spec_commutant_action
@@ -79,6 +80,8 @@ lem:linear_map_to_alg
 lem:matrix_one_sided_product_obstruction
 lem:matrix_sigma_block_inclusion
 lem:mpdo_coisometric_compression_trace
+lem:mpdo_compressed_cp_sum
+lem:mpdo_projector_controlled_trace_selection
 lem:mpdo_right_partial_trace_cptp
 lem:mpdo_single_kraus_map_cp
 lem:mpdo_state_preparation_cptp
@@ -188,6 +191,7 @@ thm:mpdo_direct_sum_faithful_fixed_family
 thm:mpdo_equiv_reindex_cptp
 thm:mpdo_faithful_uniform_density
 thm:mpdo_mutual_information_data_processing
+thm:mpdo_projective_resolution_channel_cptp
 thm:mpdo_rectangular_kraus_map_equiv
 thm:mpdo_single_kraus_map_cptp
 thm:mpdo_state_preparation_kraus_action
