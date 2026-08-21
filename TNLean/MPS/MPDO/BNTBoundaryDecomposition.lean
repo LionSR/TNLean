@@ -112,7 +112,8 @@ theorem physCloseN_eq_sum_flatBasis_of_gauge_toTensor
 copy sum is absorbed into the representative and the virtual boundary becomes
 the sum of its diagonal copy blocks.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1646--1665 and 1810--1825. -/
+Source: arXiv:1606.00608, gauge-matrix similarity convention at lines
+186--195, and Appendix C.2, lines 1646--1665 and 1810--1825. -/
 theorem physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor
     (S : MPSTensor.SectorDecomposition (d * d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
