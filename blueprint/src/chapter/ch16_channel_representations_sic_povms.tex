@@ -223,3 +223,129 @@ equations~(2.31)--(2.32)]{Wolf2012Quantum}.
     The unit-purity identity implies $P\ne0$, and a singleton containing a
     nonzero vector is linearly independent.
 \end{proof}
+
+\section{Symmetric informationally complete measurements}
+
+\begin{definition}[Symmetric informationally complete family]
+    \label{def:sic_povm_family}
+    \lean{SICPOVM}
+    \leanok
+    Let $d\ge1$. A symmetric informationally complete family in dimension $d$
+    consists of $d^2$ rank-one orthogonal projections $P_i\in\MN{d}$ satisfying
+    \begin{align}
+        \sum_iP_i=d\Id,
+        \qquad
+        \tr(P_iP_j)=\frac{1}{d+1}\quad(i\ne j).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[POVM effects and Kraus operators]
+    \label{thm:sic_povm_normalizations}
+    \lean{SICPOVM.toPOVM}
+    \lean{SICPOVM.kraus_isTP}
+    \leanok
+    \uses{def:sic_povm_family}
+    For a symmetric informationally complete family $(P_i)_i$, the operators
+    \begin{align}
+        E_i=\frac1dP_i,
+        \qquad
+        K_i=\frac1{\sqrt d}P_i
+    \end{align}
+    are, respectively, the effects of a POVM and a trace-preserving Kraus
+    family.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity of the $E_i$ follows from positivity of the projections, and
+    \begin{align}
+        \sum_iE_i=\frac1d\sum_iP_i=\Id.
+    \end{align}
+    Since the $P_i$ are Hermitian and idempotent,
+    \begin{align}
+        \sum_iK_i^\dagger K_i
+        =\frac1d\sum_iP_i^2
+        =\Id.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Operator-basis property]
+    \label{thm:sic_povm_operator_basis}
+    \lean{SICPOVM.linearIndependent_projector}
+    \leanok
+    \uses{thm:sic_povm_overlap_bound_equality,
+      thm:sic_povm_equality_linear_independent,
+      thm:sic_povm_singleton_linear_independent}
+    The $d^2$ projectors in a symmetric informationally complete family form a
+    basis of $\MN{d}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $d\ge2$, the family realizes equality in the SIC--POVM overlap bound,
+    so Theorem~\ref{thm:sic_povm_equality_linear_independent} gives linear
+    independence. For $d=1$, the family is a nonzero singleton. Since
+    $\dim\MN{d}=d^2$, linear independence implies the basis property.
+\end{proof}
+
+\begin{theorem}[Diagonal representation]
+    \label{thm:sic_povm_diagonal_representation}
+    \lean{SICPOVM.diagonalRepresentation}
+    \leanok
+    \uses{thm:sic_povm_operator_basis}
+    Let $(P_i)_i$ be a symmetric informationally complete family. Every
+    $\rho\in\MN{d}$ satisfies
+    \begin{align}
+        \rho=\frac1d\sum_i
+        \left((d+1)\tr(P_i\rho)-\tr(\rho)\right)P_i.
+        \label{eq:sic_povm_diagonal_representation}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Define
+    \begin{align}
+        F(X)=\sum_i\tr(P_iX)P_i.
+    \end{align}
+    For every $j$, the constant-overlap identity and $\sum_iP_i=d\Id$ give
+    \begin{align}
+        F(P_j)
+        &=P_j+\frac1{d+1}\sum_{i\ne j}P_i\\
+        &=\frac{d}{d+1}(P_j+\Id).
+    \end{align}
+    The operator-basis property therefore yields
+    \begin{align}
+        F(X)=\frac{d}{d+1}\left(X+\tr(X)\Id\right)
+    \end{align}
+    for every $X\in\MN{d}$. Expanding the right-hand side of
+    \eqref{eq:sic_povm_diagonal_representation} and substituting this identity
+    gives $\rho$.
+\end{proof}
+
+\begin{theorem}[SIC Kraus channel]
+    \label{thm:sic_povm_kraus_channel}
+    \lean{SICPOVM.krausChannel_identity}
+    \lean{SICPOVM.krausMap_eq}
+    \lean{SICPOVM.isChannel_krausMap}
+    \leanok
+    \uses{thm:sic_povm_diagonal_representation,
+      thm:sic_povm_normalizations}
+    For every $\rho\in\MN{d}$,
+    \begin{align}
+        \frac1d\sum_{i=1}^{d^2}P_i\rho P_i
+        =\frac{\Id\tr(\rho)+\rho}{d+1}.
+        \label{eq:sic_povm_kraus_channel}
+    \end{align}
+    Equivalently, the left-hand side is the quantum channel with Kraus
+    operators $K_i=P_i/\sqrt d$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Rank-one sandwiching gives
+    \begin{align}
+        P_i\rho P_i=\tr(\rho P_i)P_i.
+    \end{align}
+    Summing this identity and applying the frame-operator formula in the proof
+    of Theorem~\ref{thm:sic_povm_diagonal_representation} proves
+    \eqref{eq:sic_povm_kraus_channel}. The Kraus normalization in
+    Theorem~\ref{thm:sic_povm_normalizations} proves that this map is a quantum
+    channel.
+\end{proof}

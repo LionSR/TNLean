@@ -70,6 +70,7 @@ import TNLean.Channel.OperatorSystemExtensionStarSubalgebra
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.RankOneNaimark
+import TNLean.Channel.POVM.SIC
 import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.PartialTranspose
