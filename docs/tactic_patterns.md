@@ -1207,6 +1207,23 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### closed-sector rectangular trace factorization — candidate
+- **Pattern:** promote the physical isometry of a `PhysicalSectorFactorization`
+  to the unitary group, apply `physTraceTransfer_eq_sum_closedSector` with the
+  factorization field, and identify the closed-sector sum entrywise with a
+  rectangular product of sector-trace matrices.
+- **Seen:** the inline `hphys` proof in
+  `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean` (active restriction) and
+  `physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix` in
+  `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` (all sectors), recorded
+  2026-08-21.
+- **Abstraction:** the all-sector lemma is the abstraction; the active-sector
+  call site could re-derive its restricted rectangle by filtering the
+  all-sector factorization through the inactive-sector vanishing hypothesis.
+- **Notes:** the active-sector variant also prunes zero-weight columns, so the
+  refactor needs a small filtered-sum bridge before the inline proof can be
+  deleted.
+
 ### transport of diagonal spectral identities — candidate
 - **Pattern:** diagonalize a Hermitian matrix as a unitary conjugate of its
   eigenvalue diagonal, prove a scalar or polynomial identity on that diagonal,
