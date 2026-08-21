@@ -102,6 +102,7 @@ import TNLean.Algebra.StarSubalgebraSpatial
 import TNLean.Algebra.StarSubalgebraUnitaryIntertwiner
 import TNLean.Algebra.TracePairing
 import TNLean.Algebra.TracePowerCharPoly
+import TNLean.Algebra.TracePurity
 import TNLean.Algebra.TraceReindex
 import TNLean.Algebra.UnitModulusPowerSum
 import TNLean.Algebra.ZModCyclicSums
