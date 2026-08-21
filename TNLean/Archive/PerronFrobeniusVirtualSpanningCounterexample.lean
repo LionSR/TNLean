@@ -194,8 +194,9 @@ theorem virtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℝ) :
     ∑ k, reconstructionCoefficients X k • virtualMatrix k = X := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [reconstructionCoefficients, virtualMatrix, pairingL, pairingQ,
-      Fin.sum_univ_four] <;> ring
+    simp only [reconstructionCoefficients, Fin.sum_univ_four, Matrix.add_apply,
+      Matrix.smul_apply] <;>
+    simp [virtualMatrix, pairingL, pairingQ] <;> ring
 
 /-- The sector virtual matrices span the full two-by-two matrix algebra. -/
 theorem virtualMatrix_span_eq_top :
