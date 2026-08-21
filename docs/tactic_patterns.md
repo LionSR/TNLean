@@ -1228,17 +1228,20 @@ current counts and full location lists).
   a projector-controlled sum of linear maps over it, use the orthogonal
   selector identity to retain the matching sector, and finish with the
   sectorwise closure equation.
-- **Seen:** four paired coarse-graining/refinement occurrences in
-  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, across
-  `exists_chainCoordinateRFP_of_projectiveSectorDecomposition` and
-  `exists_chainCoordinateRFP_of_orthogonalSectorDecomposition` (2026-08-20).
-- **Abstraction (proposed):** a helper for one direction, parametrized by the
-  two closure lengths and the sectorwise map equation, if a second file needs
-  the same projector-selected finite-sum argument.
-- **Notes:** all occurrences are presently in one file, below the two-file
-  promotion threshold. The coarse-graining and refinement maps have opposite
-  matrix dimensions, so a useful abstraction must not conceal their
-  orientation.
+- **Seen:** four call sites in
+  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, one coarse-graining/refinement
+  pair in each of `exists_chainCoordinateRFP_of_projectiveSectorDecomposition`
+  and `exists_chainCoordinateRFP_of_orthogonalSectorDecomposition`
+  (2026-08-20).
+- **Abstraction (file-local):** the private theorem
+  `sum_comp_singleKrausMap_firstSiteMatrix_properties` (lines 445--513)
+  extracts all four copies. It is parametrized by `n` and `m`, corresponding
+  to input and output chain lengths `n + 1` and `m + 1`, the sectorwise maps
+  `F`, and their closure equation.
+- **Notes:** all call sites remain in one file, and no further occurrences are
+  identified, so the pattern remains below the promotion threshold. The
+  parameters `n` and `m` retain the opposite matrix orientations of the
+  coarse-graining and refinement maps explicitly.
 
 ### explicit finite-generator word-tuple spanning — candidate
 - **Pattern:** unfold `MPSTensor.WordTupleSpanTop`, place one or more explicit
