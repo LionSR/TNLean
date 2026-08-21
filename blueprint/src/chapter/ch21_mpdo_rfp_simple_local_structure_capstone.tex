@@ -87,14 +87,15 @@
     \lean{MPOTensor.blockTwo_isRFPViaTS_of_two_four_maps}
     \leanok
     \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
-    Let $K$ be an MPO tensor. Suppose that trace-preserving completely positive maps
-    $S_{24}$ and $T_{24}$ satisfy
+    Let $K$ be an MPO tensor. Suppose that trace-preserving completely positive
+    maps $S_{24}$ and $T_{24}$ satisfy the following identities for every
+    virtual matrix $X$:
     \begin{align}
         S_{24}[\mathcal K_4(X)]&=\mathcal K_2(X), &
-        T_{24}[\mathcal K_2(X)]&=\mathcal K_4(X) \notag
+        T_{24}[\mathcal K_2(X)]&=\mathcal K_4(X). \notag
     \end{align}
-    for every virtual matrix $X$. Then the two-site physical blocking
-    $K^{[2]}$ is a renormalization fixed point.
+    Then the two-site physical blocking $K^{[2]}$ is a renormalization fixed
+    point.
 \end{theorem}
 
 \begin{proof}\leanok
