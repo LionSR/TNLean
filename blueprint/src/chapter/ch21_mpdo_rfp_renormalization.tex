@@ -373,17 +373,17 @@ section.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_rectangular_kraus_map_cptp}
-    Choose Kraus operators $(A_{s,a})_a$ for $\Phi_s$, and set
-    $B_{s,a}=A_{s,a}P_s$. These operators give the displayed map, and
+    \uses{lem:mpdo_compressed_cp_sum, lem:mpdo_projector_controlled_trace_selection}
+    Lemma~\ref{lem:mpdo_compressed_cp_sum} shows that the displayed map is
+    completely positive. By
+    Lemma~\ref{lem:mpdo_projector_controlled_trace_selection},
     \begin{align}
-        \sum_{s,a}B_{s,a}^\dagger B_{s,a}
-         & =\sum_sP_s^\dagger
-        \left(\sum_aA_{s,a}^\dagger A_{s,a}\right)P_s
-        =\sum_sP_s=I_H.
+        \tr\bigl(\Phi(X)\bigr)
+         & =\tr\Bigl(\Bigl(\sum_sP_s\Bigr)X\Bigr)
+        =\tr(X),
         \notag
     \end{align}
-    Apply Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp}.
+    where the last equality uses $\sum_sP_s=I_H$. Thus $\Phi$ is a channel.
 \end{proof}
 
 \begin{definition}[Right partial trace]
