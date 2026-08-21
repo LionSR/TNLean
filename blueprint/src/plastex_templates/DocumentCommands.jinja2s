@@ -1,7 +1,1 @@
-name: path
-<code class="path">{{ obj }}</code>
-
-name: samepage
-{{ obj }}
-
-name: tenkzkernel endinput
+name: tenkzkernel

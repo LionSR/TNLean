@@ -29,14 +29,13 @@ from pathlib import Path
 
 _SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(_SCRIPTS))
+from playwright.sync_api import Page, sync_playwright
+
 # The rule deciding what a bracket after a row break means belongs to the
 # renderer. It is read from there rather than restated, so the two cannot
 # come to disagree; the module it lives in imports no renderer of its own.
-sys.path.insert(0, str(_SCRIPTS.parent / "blueprint/src/Packages"))
-
-from playwright.sync_api import Page, sync_playwright
-
-from _tnlean_utils import CONTROL_WORD, DIMENSION_EXPRESSION, ROW_BREAK_LENGTH
+from texra_blueprint.texgrammar import (
+    CONTROL_WORD, DIMENSION_EXPRESSION, ROW_BREAK_LENGTH)
 from test_tenkz_equation_web import serve
 
 

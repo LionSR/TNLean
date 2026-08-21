@@ -742,6 +742,8 @@ jobs:
       - name: Install blueprint Python dependencies
         if: env.TEX_CHANGED == 'true'
         uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.1.0'
 
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'
@@ -762,7 +764,7 @@ jobs:
 
       - name: Check paper-gap references resolve
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/paper_gaps_site.py --check
+        run: texra-blueprint paper-gaps check
 
       # Build the root manual as well as its input chapters.  This is the
       # syntax gate for manual2.tex, tenkzmanual2.sty, and the expl3 package
@@ -884,7 +886,7 @@ jobs:
           # corruption from a build that reported success, so both fail here.
           if grep -qE "WARNING: (unrecognized command/environment|Using default renderer)" \
                "$tmp_output_file"; then
-            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/_tnlean_patches.py"
+            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/tnlean_patches.py or the texra-blueprint plugin"
             exit 1
           fi
 

@@ -1,0 +1,34 @@
+# Configuration for the shared texra-blueprint tooling.
+# https://github.com/LionSR/texra-blueprint
+
+[paper_gaps]
+dir         = "docs/paper-gaps"
+site_base   = "https://sirui-lu.com/TNLean"
+blob_base   = "https://github.com/LionSR/TNLean/blob/main/docs/paper-gaps"
+bib_author  = "The {TNLean} contributors"
+institution = "TNLean"
+title       = "TNLean paper-gap notes"
+scan_roots  = ["TNLean", "blueprint/src", "docs"]
+skip        = ["command.tex", "common.tex", "template.tex"]
+
+# The source-key registry: every note is named <key>_<topic>.tex. Author
+# initials plus two-digit year, or a canonical short name for a book or
+# review; tnlean marks internal theorem-surface audits with no single
+# external source. Enforced by `texra-blueprint paper-gaps check`.
+[paper_gaps.sources]
+cpgsv17 = "arXiv:1511.08090 (MPDO renormalization fixed points)"
+cpgsv21 = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
+cpsv16  = "arXiv:1606.00608 (matrix product density operators)"
+cpsv17  = "arXiv:1606.00608 / arXiv:1703.09188 mixed"
+dccsp17 = "arXiv:1708.00029 (irreducible forms of MPS)"
+hjpw04  = "Hayden, Jozsa, Petz, Winter (2004)"
+knabe88 = "Knabe, J. Stat. Phys. 52 (1988)"
+mpu     = "arXiv:1703.09188 (matrix product unitaries)"
+peps    = "arXiv:1804.04964 (normal PEPS)"
+pgvwc07 = "quant-ph/0608197 (MPS representations)"
+pgwsvc08 = "arXiv:0802.0447 (string order and symmetries)"
+rmp     = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
+spc11   = "arXiv:1010.3732 (SPT classification)"
+spwc10  = "arXiv:0909.5347 (quantum Wielandt inequality)"
+tnlean  = "internal theorem-surface audit, no single external source"
+wolf    = "Wolf, Quantum Channels & Operations (2012 lecture notes)"

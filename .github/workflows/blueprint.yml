@@ -55,6 +55,8 @@ jobs:
 
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.1.0'
 
       - name: Check native tenkz sources and picture pipeline
         run: |
@@ -71,7 +73,7 @@ jobs:
           python3 scripts/test_tenkz_kernel_audit.py
 
       - name: Check paper-gap references resolve
-        run: python3 scripts/paper_gaps_site.py --check
+        run: texra-blueprint paper-gaps check
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
@@ -102,7 +104,7 @@ jobs:
           # published. This is the gate that pr-ci.yml applies to a branch.
           if grep -qE "WARNING: (unrecognized command/environment|Using default renderer)" \
                "$tmp_output_file"; then
-            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/_tnlean_patches.py"
+            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/tnlean_patches.py or the texra-blueprint plugin"
             exit 1
           fi
           if [ "$cmd_status" -ne 0 ]; then
