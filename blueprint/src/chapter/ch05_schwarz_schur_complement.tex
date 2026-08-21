@@ -66,20 +66,6 @@
   The pseudoinverse Schur complement $P - Q R^+ Q^\dagger$.
 \end{definition}
 
-\begin{theorem}[Block quadratic form]
-  \label{thm:block_quadratic_form}
-  \lean{SchurComplement.block_quadratic_form}
-  \leanok
-  \uses{def:blockMatrix}
-  For vectors $x$ and $y$,
-  \begin{align}
-    \begin{pmatrix}x\\y\end{pmatrix}^{\!\dagger}
-    \begin{pmatrix}P&Q\\Q^\dagger&R\end{pmatrix}
-    \begin{pmatrix}x\\y\end{pmatrix}
-    =x^\dagger Px+x^\dagger Qy+y^\dagger Q^\dagger x+y^\dagger Ry.
-  \end{align}
-\end{theorem}
-
 \begin{theorem}[Support absorption under kernel inclusion]
   \label{thm:support_absorption_of_kernel_inclusion}
   \lean{Matrix.IsHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le}
