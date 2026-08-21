@@ -12,13 +12,16 @@ them. Chapters 1&ndash;12 of the blueprint contain this theorem, the theory
 its proof rests on (quantum channels, Perron&ndash;Frobenius theory, the
 quantum Wielandt inequality, canonical forms), and a first application to
 symmetry-protected topological phases. This part is available as a separate
-PDF via the "FT&ndash;MPS Blueprint" button above.
+PDF via the "FT&ndash;MPS Blueprint" button above. The quantum-channel
+theory itself now lives in the companion library
+[QICLean](https://github.com/LionSR/QICLean), with its own blueprint and
+documentation at [sirui-lu.com/QICLean](https://sirui-lu.com/QICLean/);
+TNLean depends on it as an ordinary Lake package.
 
 The library goes beyond these chapters: parent Hamiltonians, matrix-product
-density operators and renormalization fixed points, correlation decay,
-quantum Markov semigroups, entropy inequalities, and projected entangled pair
-states are developed in the later blueprint chapters and in the source tree,
-at varying levels of completeness.
+density operators and renormalization fixed points, correlation decay, and
+projected entangled pair states are developed in the later blueprint
+chapters and in the source tree, at varying levels of completeness.
 
 ## Companion Paper
 
