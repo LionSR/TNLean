@@ -15,12 +15,12 @@ holds for every `A`, and for `A` at which equality is attained, the
 pseudoinverse sandwich `E(A†B) · pinv(E(B†B)) · E(B†X)` agrees with
 `E(A†X)` for *every* `X`, not only `X = A`.
 
-The proof is Wolf's `t A + X` quadratic-in-`t` completing-the-square
-argument: expanding the (matrix-valued) nonnegative quadratic form of the
-Schwarz inequality at `A + t X` for real `t`, the `t²`-coefficient vanishes
-at the equality point `A`, so the remaining linear-in-`t` term must vanish
-identically; applying this at `X` and at `i X` and combining isolates the
-one-sided identity Eq. (5.5).
+The proof uses Wolf's quadratic argument.  At an equality point `A`, the
+constant term in the nonnegative quadratic form associated with `A + t X`
+vanishes, while its quadratic coefficient is nonnegative.  Evaluating first
+for real `t` and then with `X` replaced by `i X` forces both linear terms to
+vanish; combining the resulting identities gives the one-sided identity
+Eq. (5.5).
 
 ## Main definitions
 
