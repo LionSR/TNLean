@@ -70,6 +70,7 @@
   \label{thm:support_absorption_of_kernel_inclusion}
   \lean{Matrix.IsHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le}
   \leanok
+  \uses{def:hermitian_support_projection}
   Let $R$ be Hermitian and let $Q$ be a matrix with the same column index
   such that $\ker(R)\subseteq\ker(Q)$. Then
   $Q\operatorname{supp}(R)=Q$.
@@ -89,7 +90,7 @@
   \lean{SchurComplement.supportProj_mul_pinv_eq_pinv}
   \lean{SchurComplement.pinv_isHermitian}
   \leanok
-  \uses{def:pinv}
+  \uses{def:pinv, def:hermitian_support_projection}
   If $R$ is positive semi-definite, then
   $RR^+=R^+R=\operatorname{supp}(R)$,
   $\operatorname{supp}(R)R^+=R^+$, and $R^+$ is Hermitian.
@@ -97,8 +98,14 @@
 
 \begin{proof}\leanok
   \uses{lem:mul_pinv_eq_supportProj}
-  These identities follow from the support inverse and the spectral calculus
-  of the Hermitian matrix $R$.
+  The pseudoinverse-factorization identity, together with equality of the
+  supports of $R^2$ and $R$, gives $RR^+=\operatorname{supp}(R)$.
+  The spectral calculus shows that the support inverse of $R^2$ commutes with
+  $R$; the definition of $R^+$ then shows that $R^+$ is Hermitian. Taking
+  adjoints in the first identity gives
+  $R^+R=\operatorname{supp}(R)$. Finally, write $R=\sqrt R\sqrt R$.
+  The support projection absorbs $\sqrt R$, and the defining factorization of
+  $R^+$ therefore gives $\operatorname{supp}(R)R^+=R^+$.
 \end{proof}
 
 \begin{theorem}[Kernel inclusion from block positivity]
@@ -156,6 +163,8 @@
   \uses{thm:block_psd_kernel_inclusion,
     thm:schur_complement_quadratic_form,
     thm:schur_pinv_support_identities}
+  Since $P$ and $R^+$ are Hermitian, so are $QR^+Q^\dagger$ and
+  $P-QR^+Q^\dagger$.
   By Theorem~\ref{thm:block_psd_kernel_inclusion},
   $\ker(R)\subseteq\ker(Q)$. In
   Theorem~\ref{thm:schur_complement_quadratic_form}, take

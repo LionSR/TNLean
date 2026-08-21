@@ -1,5 +1,19 @@
 \section{Douglas Factorization}\label{sec:douglas}
 
+\begin{definition}[Support projection of a Hermitian matrix]
+  \label{def:hermitian_support_projection}
+  \lean{Matrix.IsHermitian.supportProj,
+    Matrix.IsHermitian.supportProj_isHermitian,
+    Matrix.IsHermitian.mul_supportProj_self}
+  \leanok
+  Let $A$ be Hermitian, with spectral decomposition
+  $A=U\diag(\lambda_i)U^\dagger$. Its support projection is
+  \begin{align}
+    P_A=U\diag(\mathbf 1_{\lambda_i\ne 0})U^\dagger,
+  \end{align}
+  the orthogonal projection onto the range of $A$.
+\end{definition}
+
 \begin{theorem}[Douglas factorisation]\label{thm:douglas_tfae}
   \lean{Douglas.douglas_tfae}
   \uses{def:pinv, lem:mul_pinv_eq_supportProj}
@@ -23,7 +37,7 @@
 \begin{lemma}[Pseudoinverse-factorization identity]\label{lem:mul_pinv_eq_supportProj}
   \lean{Douglas.mul_pinv_eq_supportProj}
   \leanok
-  \uses{def:pinv}
+  \uses{def:pinv, def:hermitian_support_projection}
   $B \cdot B^+ = P_{\mathrm{supp}}(B B^\dagger)$,
   where $P_{\mathrm{supp}}(X)$ denotes the support projection of $X$
   (the orthogonal projection onto the range of $X$).
