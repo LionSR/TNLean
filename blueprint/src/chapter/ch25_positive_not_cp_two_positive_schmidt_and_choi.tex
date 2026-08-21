@@ -90,7 +90,9 @@ rank-$k$ projection forms of the same condition.
 \begin{definition}[Blockwise ampliation]\label{def:blockwise_ampliation}
     \lean{nPositiveAmpliation}
     \leanok
-    For a linear map $E : \MN{D}\to\MN{D}$, its $k$-fold ampliation acts on
+    For a linear map $E : \MN{D_{\rm in}}\to\MN{D_{\rm out}}$, its $k$-fold
+    ampliation maps $\MN{D_{\rm in}}\otimes\MN{k}$ to
+    $\MN{D_{\rm out}}\otimes\MN{k}$ and acts on
     block matrices by
     \begin{align}
         E^{(k)}(X)_{(i,p),(j,q)}

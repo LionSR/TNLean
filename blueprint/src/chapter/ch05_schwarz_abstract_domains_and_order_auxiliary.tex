@@ -492,11 +492,13 @@ positivity.
 
 \begin{theorem}[Two-variable operator Schwarz inequality]
     \label{thm:two_variable_operator_schwarz}
-    \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional}
+    \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional_of_traceAdjointMap}
     \leanok
     \uses{def:2positive_map, def:pinv}
-    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be a $2$-positive
-    complex-linear map. For every $A,B\in\MN{D_{\rm in}}$,
+    Let $E:\MN{D_{\rm in}}\to\MN{D_{\rm out}}$ be positive and suppose
+    that $E=T^*$ for a two-positive map
+    $T:\MN{D_{\rm out}}\to\MN{D_{\rm in}}$. For every
+    $A,B\in\MN{D_{\rm in}}$,
     \begin{align}
         E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
          & \le E(A^\dagger A),

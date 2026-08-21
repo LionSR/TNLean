@@ -36,6 +36,9 @@ than the `EuclideanSpace`/`PiLp` range-ker duality route that caused
 * `schwarz_two_variable_unconditional`: the unconditional inequality
   `E(A†B) · pinv(E(B†B)) · E(B†A) ≤ E(A†A)`, Wolf's Eq. (5.4), with no
   witness vector assumed to exist.
+* `schwarz_two_variable_unconditional_of_traceAdjointMap`: Wolf's theorem in
+  its stated trace-adjoint form, with `E = T*` and the reverse map `T`
+  two-positive.
 
 ## References
 
@@ -140,5 +143,31 @@ theorem schwarz_two_variable_unconditional
   rw [heq] at hineq
   rw [Matrix.sub_mulVec, dotProduct_sub]
   exact sub_nonneg.mpr hineq
+
+omit [DecidableEq m] in
+/-- **Wolf's trace-adjoint form of the two-variable Schwarz inequality**
+(Wolf, Theorem 5.3, Eq. (5.4)). Let
+`E : M_m(ℂ) → M_n(ℂ)` be the positive trace adjoint of
+`T : M_n(ℂ) → M_m(ℂ)`. If `T` is two-positive, then for all `A, B ∈ M_m(ℂ)`,
+
+`E(A†B) · pinv(E(B†B)) · E(B†A) ≤ E(A†A)`.
+
+This declaration records Wolf's stated hypotheses explicitly. Rectangular
+two-positivity is invariant under the trace adjoint, so the result follows
+from `schwarz_two_variable_unconditional` applied to `E`.
+
+Wolf, *Quantum Channels & Operations*, Theorem 5.3 and Eq. (5.4),
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 180--190. -/
+theorem schwarz_two_variable_unconditional_of_traceAdjointMap
+    (E : MatIn →ₗ[ℂ] MatOut) (T : MatOut →ₗ[ℂ] MatIn)
+    (hE : E = Matrix.traceAdjointMap T) (_hEpos : IsPositiveMap E)
+    (hT2pos : Is2PositiveMap T) (A B : MatIn) :
+    E (Aᴴ * B) * Douglas.pinv (E (Bᴴ * B)) * E (Bᴴ * A) ≤ E (Aᴴ * A) := by
+  have hE2pos : Is2PositiveMap E := by
+    change IsNPositiveMap 2 E
+    rw [hE]
+    change IsNPositiveMap 2 T at hT2pos
+    exact hT2pos.traceAdjointMap
+  exact schwarz_two_variable_unconditional E hE2pos A B
 
 end SchwarzTwoVariable

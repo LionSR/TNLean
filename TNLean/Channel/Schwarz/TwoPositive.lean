@@ -239,11 +239,12 @@ theorem isNPositiveMap_one_iff_isPositiveMap
     have hjq : jq.2 = 0 := Subsingleton.elim jq.2 0
     simp [nPositiveAmpliation, hip, hjq]
 
-omit [DecidableEq n] in
+omit [Fintype n] [DecidableEq n] in
 private theorem traceAdjointMap_map_isHermitian_of_isPositiveMap
-    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
-    (hE : IsPositiveMap E) {X : Matrix n n ℂ} (hX : X.IsHermitian) :
+    [Finite n] [Fintype p] {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
+    (hE : IsPositiveMap E) {X : Matrix p p ℂ} (hX : X.IsHermitian) :
     (Matrix.traceAdjointMap E X).IsHermitian := by
+  let := Fintype.ofFinite n
   classical
   rw [Matrix.IsHermitian]
   ext i j
@@ -260,11 +261,13 @@ private theorem traceAdjointMap_map_isHermitian_of_isPositiveMap
     _ = Matrix.trace (X * E (Matrix.single j i 1)) := by
           rw [Matrix.trace_mul_comm]
 
-omit [DecidableEq n] in
-/-- The trace-pairing adjoint of a positive map is positive. -/
+omit [Fintype n] [DecidableEq n] in
+/-- The trace-pairing adjoint of a positive map between finite matrix algebras
+is positive. -/
 theorem IsPositiveMap.traceAdjointMap
-    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    [Finite n] [Fintype p] {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
     (hE : IsPositiveMap E) : IsPositiveMap (Matrix.traceAdjointMap E) := by
+  let := Fintype.ofFinite n
   intro X hX
   refine Matrix.PosSemidef.of_forall_trace_mul_nonneg
     (traceAdjointMap_map_isHermitian_of_isPositiveMap hE hX.1) ?_
@@ -272,11 +275,14 @@ theorem IsPositiveMap.traceAdjointMap
   rw [Matrix.trace_traceAdjointMap_mul]
   exact Matrix.PosSemidef.trace_mul_nonneg hX (hE B hB)
 
-omit [DecidableEq n] in
+omit [Fintype n] [DecidableEq n] in
 /-- Positivity is invariant under the trace-pairing adjoint. -/
 theorem isPositiveMap_traceAdjointMap_iff
-    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    [Finite n] [Fintype p]
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ} :
     IsPositiveMap (Matrix.traceAdjointMap E) ↔ IsPositiveMap E := by
+  let := Fintype.ofFinite n
+  classical
   constructor
   · intro h
     have h' := h.traceAdjointMap
@@ -299,7 +305,8 @@ theorem isCPMap_traceAdjointMap_iff
 
 omit [DecidableEq n] in
 private theorem trace_mul_eq_sum_trace_blocks
-    (k : ℕ) (A B : Matrix (n × Fin k) (n × Fin k) ℂ) :
+    {q : Type*} [Fintype q]
+    (k : ℕ) (A B : Matrix (q × Fin k) (q × Fin k) ℂ) :
     Matrix.trace (A * B) =
       ∑ p : Fin k, ∑ q : Fin k,
         Matrix.trace
@@ -316,13 +323,14 @@ private theorem trace_mul_eq_sum_trace_blocks
     rw [Finset.sum_comm]
   rw [Finset.sum_comm]
 
-omit [DecidableEq n] in
+omit [Fintype n] [DecidableEq n] in
 /-- The trace-pairing adjoint commutes with the blockwise ampliation:
 `(E^{(k)})^* = (E^*)^{(k)}`. -/
 theorem nPositiveAmpliation_traceAdjointMap
-    (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ) :
+    [Finite n] [Fintype p] (k : ℕ) (E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ) :
     nPositiveAmpliation k (Matrix.traceAdjointMap E) =
       Matrix.traceAdjointMap (nPositiveAmpliation k E) := by
+  let := Fintype.ofFinite n
   classical
   apply LinearMap.ext
   intro ρ
@@ -345,20 +353,25 @@ theorem nPositiveAmpliation_traceAdjointMap
         E (Matrix.of fun i j => X (i, q) (j, p)))
   rw [Matrix.trace_traceAdjointMap_mul]
 
-omit [DecidableEq n] in
-/-- The trace-pairing adjoint of a `k`-positive map is `k`-positive. -/
+omit [Fintype n] [DecidableEq n] in
+/-- The trace-pairing adjoint of a `k`-positive map between finite matrix
+algebras is `k`-positive. -/
 theorem IsNPositiveMap.traceAdjointMap
-    {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ}
+    [Finite n] [Fintype p] {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ}
     (hE : IsNPositiveMap k E) : IsNPositiveMap k (Matrix.traceAdjointMap E) := by
+  let := Fintype.ofFinite n
   rw [isNPositiveMap_iff_isPositiveMap_nPositiveAmpliation] at hE ⊢
   rw [nPositiveAmpliation_traceAdjointMap]
   exact hE.traceAdjointMap
 
-omit [DecidableEq n] in
+omit [Fintype n] [DecidableEq n] in
 /-- `k`-positivity is invariant under the trace-pairing adjoint. -/
 theorem isNPositiveMap_traceAdjointMap_iff
-    {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    [Finite n] [Fintype p]
+    {k : ℕ} {E : Matrix n n ℂ →ₗ[ℂ] Matrix p p ℂ} :
     IsNPositiveMap k (Matrix.traceAdjointMap E) ↔ IsNPositiveMap k E := by
+  let := Fintype.ofFinite n
+  classical
   constructor
   · intro h
     have h' := h.traceAdjointMap
