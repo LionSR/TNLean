@@ -1263,7 +1263,10 @@ This is the calculation in
     \label{thm:cpsv_examples410_412_status}
     \notready
     \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl, thm:cpsv_example411_not_source_zcl,
+        def:mpo_source_zcl,
+        def:cpsv_example410_correlated_flip_weights,
+        thm:cpsv_example410_mutual_information_defect,
+        thm:cpsv_example411_not_source_zcl,
         thm:cpsv_example411_ambient_not_sal,
         thm:cpsv_example412_literal_formula,
         thm:cpsv_example412_literal_sal,
@@ -1336,6 +1339,168 @@ This is the calculation in
     four-site member of the normalized family and so does not compare
     commuting realizations at different chain lengths.
 \end{theorem}
+
+% Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
+% Scope restriction: classical weight families only; the identification with
+% reduced-state spectra of the corrected tensor is not part of these entries.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{definition}[Correlated-flip weight families for Example 4.10]
+    \label{def:cpsv_example410_correlated_flip_weights}
+    \lean{CPSVExample410CorrelatedFlip.flipWeight,
+        CPSVExample410CorrelatedFlip.flipProb,
+        CPSVExample410CorrelatedFlip.bondPattern,
+        CPSVExample410CorrelatedFlip.bondWeight,
+        CPSVExample410CorrelatedFlip.bondWeightValue,
+        CPSVExample410CorrelatedFlip.oneBondWeight,
+        CPSVExample410CorrelatedFlip.twoBondWeight,
+        CPSVExample410CorrelatedFlip.windowWeightOne,
+        CPSVExample410CorrelatedFlip.windowWeightTwo,
+        CPSVExample410CorrelatedFlip.windowWeightThree}
+    \leanok
+    Place one maximally entangled qubit pair on each bond of the four-spin
+    ring and apply, independently at every spin, the corrected correlated
+    flip with flip probability one quarter.  A joint flip configuration
+    $s\in\{0,1\}^4$ has probability
+    \begin{align}
+        P(s)&=\prod_{n=1}^4\left(\tfrac14\right)^{s_n}
+            \left(\tfrac34\right)^{1-s_n},
+        \notag
+    \end{align}
+    and its bond pattern $t\in\{0,1\}^4$ is $t_n=s_n\oplus s_{n+1}$, with
+    spin five identified with spin one.  Write $q$ for the pushforward of
+    $P$ to bond patterns.  The weight family of a window of $k$ consecutive
+    spins, $1\le k\le 3$, assigns to each configuration of its $k-1$
+    interior bond labels and its two boundary qubits one quarter of the
+    marginal probability of those interior labels; the four-spin window
+    weight family is $q$ itself.
+\end{definition}
+
+% Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Exact bond-pattern distribution for Example 4.10]
+    \label{thm:cpsv_example410_bond_distribution}
+    \lean{CPSVExample410CorrelatedFlip.sum_flipProb,
+        CPSVExample410CorrelatedFlip.bondWeight_eq_bondWeightValue,
+        CPSVExample410CorrelatedFlip.sum_bondWeight,
+        CPSVExample410CorrelatedFlip.oneBondWeight_false,
+        CPSVExample410CorrelatedFlip.oneBondWeight_true,
+        CPSVExample410CorrelatedFlip.twoBondWeight_false_false,
+        CPSVExample410CorrelatedFlip.twoBondWeight_of_ne_false_false,
+        CPSVExample410CorrelatedFlip.oneBondWeight_eq_marginal,
+        CPSVExample410CorrelatedFlip.twoBondWeight_eq_marginal,
+        CPSVExample410CorrelatedFlip.sum_windowWeightOne,
+        CPSVExample410CorrelatedFlip.sum_windowWeightTwo,
+        CPSVExample410CorrelatedFlip.sum_windowWeightThree}
+    \leanok
+    \uses{def:cpsv_example410_correlated_flip_weights}
+    The bond-pattern distribution takes the value $41/128$ on the unflipped
+    pattern, $15/128$ on each of the four patterns flipping two cyclically
+    adjacent bonds, $9/128$ on the two patterns flipping two opposite bonds
+    and on the fully flipped pattern, and zero on the eight patterns with an
+    odd number of flipped bonds.  Its one-bond marginal is $(5/8,3/8)$, and
+    its two-adjacent-bond marginal assigns $7/16$ to the doubly unflipped
+    pair and $3/16$ to each of the three remaining pairs.  All the window
+    weight families are probability distributions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_example410_correlated_flip_weights}
+    Each value is a finite sum of products of the factors $1/4$ and $3/4$
+    over the sixteen flip configurations, evaluated exactly.
+\end{proof}
+
+% Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Exact window entropies for Example 4.10]
+    \label{thm:cpsv_example410_window_entropies}
+    \lean{CPSVExample410CorrelatedFlip.entropyOne,
+        CPSVExample410CorrelatedFlip.entropyTwo,
+        CPSVExample410CorrelatedFlip.entropyThree,
+        CPSVExample410CorrelatedFlip.entropyFour,
+        CPSVExample410CorrelatedFlip.entropyOne_eq,
+        CPSVExample410CorrelatedFlip.entropyTwo_eq,
+        CPSVExample410CorrelatedFlip.entropyThree_eq,
+        CPSVExample410CorrelatedFlip.entropyFour_eq}
+    \leanok
+    \uses{thm:cpsv_example410_bond_distribution}
+    Let $\tilde S_k$ denote the entropy $\sum_x h(w(x))$ of the window
+    weight family for $k$ consecutive spins, with $h(x)=-x\log x$ and $\log$
+    the natural logarithm.  Then
+    \begin{align}
+        \tilde S_1&=2\log 2,\notag\\
+        \tilde S_2&=5\log 2-\tfrac58\log 5-\tfrac38\log 3,\notag\\
+        \tilde S_3&=6\log 2-\tfrac7{16}\log 7-\tfrac9{16}\log 3,\notag\\
+        \tilde S_4&=7\log 2-\tfrac{41}{128}\log 41
+            -\tfrac{57}{64}\log 3-\tfrac{15}{32}\log 5.
+        \notag
+    \end{align}
+    Divided by $\log 2$ these are the printed decimals $2$, $2.9544$,
+    $3.8802$, and $2.7839$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_example410_bond_distribution}
+    The window weight families list the values
+    $(1/4)^{[4]}$; $(5/32)^{[4]},(3/32)^{[4]}$;
+    $(7/64)^{[4]},(3/64)^{[12]}$; and
+    $(41/128)^{[1]},(15/128)^{[4]},(9/128)^{[3]}$.
+    Summing $h$ over each family and expanding the logarithms of the
+    rational values gives the displayed closed forms.
+\end{proof}
+
+% Project-derived scalar certificate for CPSV16 Example 4.10.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Positivity of the Example 4.10 logarithmic ratio]
+    \label{thm:cpsv_example410_log_ratio_pos}
+    \lean{CPSVExamples410411Arithmetic.example410_integer_inequality,
+        CPSVExamples410411Arithmetic.example410_log_ratio_pos}
+    \leanok
+    The exact scalar ratio from the four-site calculation satisfies
+    \[
+      \log\!\left(
+        \frac{2^{32}7^7}{3^3 5^{20}}
+      \right)>0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The numerator and denominator are the integers
+    $2^{32}7^7=3537090251849728$ and $3^3 5^{20}=2574920654296875$, so the
+    ratio is greater than one and its logarithm is strictly positive.
+\end{proof}
+
+% Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
+% See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{theorem}[Exact mutual-information defect for Example 4.10]
+    \label{thm:cpsv_example410_mutual_information_defect}
+    \lean{CPSVExample410CorrelatedFlip.mutualInfoOne,
+        CPSVExample410CorrelatedFlip.mutualInfoTwo,
+        CPSVExample410CorrelatedFlip.mutualInfoTwo_sub_mutualInfoOne_eq,
+        CPSVExample410CorrelatedFlip.mutualInfoTwo_sub_mutualInfoOne_pos}
+    \leanok
+    \uses{thm:cpsv_example410_window_entropies}
+    For $\tilde I_1=\tilde S_1+\tilde S_3-\tilde S_4$ and
+    $\tilde I_2=2\tilde S_2-\tilde S_4$,
+    \begin{align}
+        \tilde I_2-\tilde I_1
+        &=\frac1{16}\log\!\left(
+            \frac{2^{32}7^7}{3^3 5^{20}}\right)>0.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_example410_window_entropies,
+        thm:cpsv_example410_log_ratio_pos}
+    Since $\tilde I_2-\tilde I_1=2\tilde S_2-\tilde S_1-\tilde S_3$,
+    substituting the closed forms and collecting logarithms gives the
+    displayed identity; positivity follows from the certified integer
+    comparison.
+\end{proof}
 
 % CPSV16 Example 4.11, lines 907--924.
 % Scope restriction: this is the effective supported model; the ambient
