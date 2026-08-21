@@ -33,6 +33,11 @@ them with the spectra of the reductions of a corrected tensor, and proving the
 zero-correlation-length and area-law clauses of the example, are the remaining
 operator-level obligations.
 
+**Local fix (left-right correlated flip):** the printed channel at source
+lines 901--902 applies both Pauli factors to the left qubit.  Here the second
+factor acts on the right qubit, as derived in
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
+
 **Scope restriction (classical weight layer):** the uniform boundary factors
 record maximally mixed halves of the boundary bonds, and the identification of
 these weight families with reduced-state spectra is not made in this module.
@@ -72,6 +77,12 @@ channels act independently.
 Source channel: CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
 noncomputable def flipProb (s : Bool × Bool × Bool × Bool) : ℝ :=
   flipWeight s.1 * flipWeight s.2.1 * flipWeight s.2.2.1 * flipWeight s.2.2.2
+
+/-- Every flip configuration has nonnegative probability.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+theorem flipProb_nonneg (s : Bool × Bool × Bool × Bool) : 0 ≤ flipProb s := by
+  rcases s with ⟨_ | _, _ | _, _ | _, _ | _⟩ <;> norm_num [flipProb, flipWeight]
 
 /-- The bond difference pattern of a flip configuration: bond $n$ carries the
 flipped Bell state exactly when the flips at spins $n$ and $n+1$ disagree,
@@ -127,6 +138,13 @@ theorem bondWeight_eq_bondWeightValue : bondWeight = bondWeightValue := by
   rcases t with ⟨_ | _, _ | _, _ | _, _ | _⟩ <;>
     norm_num [bondWeight, bondWeightValue, bondPattern, flipProb, flipWeight,
       Fintype.sum_prod_type, Fintype.sum_bool]
+
+/-- Every bond pattern has nonnegative probability.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+theorem bondWeight_nonneg (t : Bool × Bool × Bool × Bool) : 0 ≤ bondWeight t := by
+  rw [bondWeight_eq_bondWeightValue]
+  rcases t with ⟨_ | _, _ | _, _ | _, _ | _⟩ <;> norm_num [bondWeightValue]
 
 /-- The bond pattern distribution is normalized.
 
@@ -229,6 +247,28 @@ the channel and the entropy values (CPSV16, arXiv:1606.00608, Example 4.10,
 lines 900--904). -/
 noncomputable def windowWeightThree (x : Bool × Bool × Bool × Bool) : ℝ :=
   twoBondWeight x.2.1 x.2.2.1 / 4
+
+/-- Every one-spin window weight is nonnegative.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+theorem windowWeightOne_nonneg (x : Bool × Bool) : 0 ≤ windowWeightOne x := by
+  norm_num [windowWeightOne]
+
+/-- Every two-spin window weight is nonnegative.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+theorem windowWeightTwo_nonneg (x : Bool × Bool × Bool) : 0 ≤ windowWeightTwo x := by
+  rcases x with ⟨_, _ | _, _⟩ <;>
+    norm_num [windowWeightTwo, oneBondWeight_false, oneBondWeight_true]
+
+/-- Every three-spin window weight is nonnegative.
+
+Derived from CPSV16, arXiv:1606.00608, Example 4.10, lines 897--905. -/
+theorem windowWeightThree_nonneg (x : Bool × Bool × Bool × Bool) :
+    0 ≤ windowWeightThree x := by
+  rcases x with ⟨_, _ | _, _ | _, _⟩ <;>
+    norm_num [windowWeightThree, twoBondWeight_false_false,
+      twoBondWeight_of_pair_ne_false_false]
 
 /-- The one-spin window weights are normalized.
 
