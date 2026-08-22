@@ -202,6 +202,15 @@ a source theorem. The note must identify the missing hypothesis and the
 elimination plan (formalize the source-faithful version, derive the
 stricter version inside a particular argument, etc.).
 
+When the formalization of the source theorem lives in the QICLean
+companion library, the required note lives in QICLean's `docs/paper-gaps/`
+collection instead of this repository's (the Wolf notes were consolidated
+there by #6906). TNLean must still reference the note wherever the
+restriction is load-bearing: blueprint prose cites `\cite{gap:<slug>}`
+with a bibliography entry carrying the published URL; docstrings and
+`docs/` files cite the published URL directly. A local copy of a
+QICLean-owned note must not be reintroduced.
+
 This rule was retroactively codified after the equalMPS audit
 (`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`) found that the
 proportionality-conditional Lean theorem was being treated as the
