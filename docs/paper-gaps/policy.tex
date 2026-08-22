@@ -102,13 +102,39 @@ should be produced by the shared commands \verb|\tr| and \verb|\leanid| rather
 than by local redefinitions in each note. This keeps the documents visually
 consistent and avoids contradictory local conventions.
 
+\section{Naming}
+
+A note's file name has the form \path{<key>_<topic>.tex}. The key names the
+source the note examines: the authors' initials followed by a two-digit year
+(\path{cpsv16}, \path{pgvwc07}, \path{spwc10}), or an established short name
+for the source---a book or review (\path{wolf}, \path{rmp}) or a paper known
+by its subject (\path{mpu} for matrix product unitaries, \path{peps} for
+normal PEPS). A key may also name a small fixed collection of companion
+papers examined together (\path{cpsv17}). A note that audits the formal
+development itself, with no single external source, takes the key
+\path{tnlean}. The registry of keys, each with the source it names, is
+maintained alongside the index generator, which rejects an unregistered key.
+
+The topic part states the mathematical subject, not the history of the note.
+A file name is permanent once other documents cite it; version suffixes are
+not used, since a note is revised in place (see Revision below) and its
+history is preserved by the repository.
+
 \section{Classification}
 
 The conclusion of a note should give a verdict. The usual classifications are:
 a notational clarification, a local correction, a scope restriction, an
 unfaithful theorem, a source claim that is false as printed, or an open gap.
 The classification should follow the mathematics, not the amount of formal
-work required.
+work required. Each note declares its classification and its status
+machine-readably with \verb|\gapnote{<kind>}{<status>}| directly after
+\verb|\maketitle|: the kind in the kebab-cased vocabulary above
+(\path{clarification}, \path{local-correction}, \path{scope-restriction},
+\path{unfaithful}, \path{false-source}, \path{open-gap}) and the status
+one of \path{open}, \path{resolved}, or \path{historical}. Severity is
+derived from the kind, so it is never stated separately. A resolved note
+keeps its classification and changes only its status; the published index
+lists open notes first and dims the resolved ones.
 
 A local correction records a small adjustment whose corrected statement is still
 available in the cited argument. A scope restriction records a theorem proved

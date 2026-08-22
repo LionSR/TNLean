@@ -41,7 +41,7 @@ For a primitive quantum channel E_A on M_D(C) with Kraus operators {A_k}_{k=1}^d
 
 ## 2. One-step subspace: deviation resolved
 
-The previous deviation note (`docs/paper-gaps/quantum_wielandt_deviation.tex`, #1049) flagged that cases (2) and (3) were originally formalized only for a **single Kraus operator** (`A i0`), whereas the paper allows the special matrix to be an arbitrary element of S_1(A).
+The previous deviation note (`docs/paper-gaps/spwc10_wielandt_one_step_subspace.tex`, #1049) flagged that cases (2) and (3) were originally formalized only for a **single Kraus operator** (`A i0`), whereas the paper allows the special matrix to be an arbitrary element of S_1(A).
 
 This has been resolved. The current `Inequality/Bounds.lean` contains:
 

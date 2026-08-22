@@ -23,6 +23,14 @@ density operators and renormalization fixed points, correlation decay, and
 projected entangled pair states are developed in the later blueprint
 chapters and in the source tree, at varying levels of completeness.
 
+## Paper-Gap Notes
+
+Where the formalization deviates from a cited source &mdash; a missing
+hypothesis, a scalar correction, a scope restriction, a replacement proof
+route &mdash; the deviation is recorded as a standalone mathematical note.
+The [paper-gap notes](paper-gaps/) are indexed by source paper; each note has
+a stable link, a PDF, and a citation entry.
+
 ## Companion Paper
 
 S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network

@@ -285,7 +285,7 @@ multiplicity-bearing presentation and positive-length proportionality agree
 with the source. This theorem constructs the three fields of
 `PeriodicOverlapHypothesis`; it does not assert the unique basis matching in
 source theorem `thm:bd`. This restriction is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem PeriodicOverlapHypothesis.ofSectorDecompositions
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ)
@@ -414,7 +414,7 @@ from this declaration. Pairwise non-repetition is supplied explicitly, as in
 the source basis of periodic tensors. This theorem proves the three fields of
 `PeriodicOverlapHypothesis`; it does not prove the unique block matching
 conclusion of source theorem `thm:bd`. These restrictions are recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

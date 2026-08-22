@@ -219,7 +219,7 @@ Phase 7 is the cleanup — file deletions. Net negative LoC.
 
 ## Open paper-gap commitments to preserve
 
-* `docs/paper-gaps/ft_one_copy_scope_restriction.tex` — currently records the multiplicity-recovery gap. **Reclassify**: the new surface eliminates this gap as a scope restriction. The paper-gap doc should be updated or retired once Phase 7 completes.
+* `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex` — currently records the multiplicity-recovery gap. **Reclassify**: the new surface eliminates this gap as a scope restriction. The paper-gap doc should be updated or retired once Phase 7 completes.
 * `docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex` — non-dominant projection failure. **Permanent paper-gap**: the analysis showing per-block projection fails for non-dominant blocks remains a useful informational document.
 
 ## What is preserved (NOT retired)

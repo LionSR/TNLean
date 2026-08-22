@@ -51,7 +51,7 @@ irreducibility and `SameMPV` (non-repetition of blocks for both tensors, the per
 overlap dichotomy, and a per-block weight-power equality). The Prop introduced here
 asserts an unconditional abstract equal-case hypothesis, so it is strictly stronger
 than the current repository theorem; callers committing to it are committing to the
-hypotheses recorded in `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+hypotheses recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 The convention follows the analogous
 hypothesis in `MPS/Periodic/Applications.lean`. -/
 def PeriodicEqualCaseFT (d D : ℕ) : Prop :=

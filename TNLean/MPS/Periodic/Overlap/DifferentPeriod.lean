@@ -48,7 +48,7 @@ they must have the same period.
 arXiv:0909.5347, via eigenvalue uniqueness (Wolf Theorem 6.3). This is the
 load-bearing step of the substitute proof route for different-period decay — the
 peripheral spectrum in place of the paper's lcm-blocking and one-site translation
-argument — documented in docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
+argument — documented in docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
     [NeZero D] {A B : MPSTensor d D}
     {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
@@ -119,7 +119,7 @@ spectrum {e^{2πi r/m} : 0 ≤ r < m}, so agreement forces m_a = m_b; hence
 different periods exclude gauge-phase equivalence, and equal-or-orthogonal (the
 irreducible trace-preserving overlap dichotomy) gives the decay. This is a
 mathematically equivalent substitute for the paper's step, documented in
-docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
+docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 theorem periodicOverlap_tendsto_zero_of_ne_period
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

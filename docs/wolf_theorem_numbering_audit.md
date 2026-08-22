@@ -257,7 +257,7 @@ criterion used to establish its positivity threshold.
 - `blueprint/src/chapter/ch25_positive_not_cp_choi_and_decomposable_maps.tex`
 - `blueprint/src/chapter/ch25_positive_not_cp_positivity_reduction_and_breuer_hall.tex`
 - `docs/paper-gaps/README.md`
-- `docs/paper-gaps/breuer_hall_even_dim_restriction.tex`
+- `docs/paper-gaps/wolf_breuer_hall_even_dim_restriction.tex`
 - `docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`
 
 ### Reproducibility
@@ -315,7 +315,7 @@ theorem uses the necessary unital hypothesis, as documented in
 - `TNLean/Channel/Schwarz/TwoVariable.lean`
 - `TNLean/Channel/Schwarz/TwoVariableUnconditional.lean`
 - `blueprint/src/chapter/ch05_schwarz_schur_complement.tex`
-- `docs/paper-gaps/schur_complement_tfae.tex`
+- `docs/paper-gaps/wolf_schur_complement_tfae.tex`
 
 **Theorem 5.3**
 

@@ -196,7 +196,7 @@ Two recommended next steps (in priority order):
 - Structural map (where each step lives): `audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md`
 - Deletion archaeology: `audits/2026-05-13_cpsv16_ft_deletion_candidates_and_archaeology.md`
 - Source-paper analysis: `blueprint/comments202605/cpsv16_fundamental_theorem_analysis.md`
-- Scope restriction: `docs/paper-gaps/ft_one_copy_scope_restriction.tex`
+- Scope restriction: `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`
 - Equal-MPV induction (the architecture we are mirroring): `NondecayingOverlap.lean:82–623`
 - Leading-block contradiction (Plan A's base case): `ProportionalDominant.lean:850` (`dominant_projection_contradictions_*`)
 - Restored phase-adjusted helper (this PR): `ProportionalDominant.lean:368–509`

@@ -10,6 +10,15 @@ on:
       - 'lean-toolchain'
       - 'lake-manifest.json'
       - 'blueprint/src/**'
+      - 'docs/paper-gaps/**'
+      - 'scripts/paper_gaps_site.py'
+      - 'scripts/package-paper-gaps.sh'
+      - 'scripts/build-paper-gaps.sh'
+      # Trees the paper-gap reference check scans (scan_references in
+      # scripts/paper_gaps_site.py); without these the check never runs
+      # on merge pushes that only touch a scanned file.
+      - 'blueprint/comments/**'
+      - 'docs/**/*.md'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
       - 'docs/tenkz/**'
@@ -69,6 +78,9 @@ jobs:
           python3 scripts/test_tnlog.py
           python3 scripts/test_texcase.py
           python3 scripts/test_tenkz_kernel_audit.py
+
+      - name: Check paper-gap references resolve
+        run: python3 scripts/paper_gaps_site.py --check
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
