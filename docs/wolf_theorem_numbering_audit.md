@@ -62,8 +62,8 @@ examined here.
 - `blueprint/src/chapter/ch05_schwarz_retractions_and_peripheral_equality.tex`
 - `blueprint/src/chapter/ch12_auxiliary_wolf_ch01_positive_maps.tex`
 - `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`
-- `docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex`
-- `docs/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop1_5_one_factor_scope.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.pdf`
 
 **Proposition 1.6**
 
@@ -75,12 +75,12 @@ examined here.
 - `TNLean/Channel/Schwarz/SchwarzNormal.lean`
 - `blueprint/src/chapter/ch12_auxiliary_wolf_ch01_positive_maps.tex`
 - `blueprint/src/chapter/ch18_operator_convexity_schwarz_and_jensen.tex`
-- `docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`
-- `docs/paper-gaps/wolf_prop16_cp_positivity_commutative_side.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_operator_jensen_lieb.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop16_cp_positivity_commutative_side.pdf`
 
 **Proposition 1.7**
 
-- `docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_operator_jensen_lieb.pdf`
 
 ### Reproducibility
 
@@ -186,8 +186,8 @@ criterion used to establish its positivity threshold.
 - `TNLean/Channel/Schwarz/TwoPositive.lean`
 - `blueprint/src/chapter/ch25_positive_not_cp_npositivity_infimum.tex`
 - `blueprint/src/chapter/ch25_positive_not_cp_two_positive_schmidt_and_choi.tex`
-- `docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`
-- `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop_3_2_top_index_scope.pdf`
 
 **Lemma 3.1**
 
@@ -197,8 +197,8 @@ criterion used to establish its positivity threshold.
 - `TNLean/Channel/NPositivitySpectralCriterion.lean`
 - `TNLean/Channel/SchmidtRank.lean`
 - `blueprint/src/chapter/ch25_positive_not_cp_two_positive_schmidt_and_choi.tex`
-- `docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex`
-- `docs/paper-gaps/wolf_t_eta_top_index_scope.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_lemma_3_1_top_index_scope.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_t_eta_top_index_scope.pdf`
 
 **Proposition 3.2**
 
@@ -207,9 +207,9 @@ criterion used to establish its positivity threshold.
 - `TNLean/Channel/ReductionCriterion.lean`
 - `blueprint/src/chapter/ch25_positive_not_cp_npositivity_infimum.tex`
 - `blueprint/src/chapter/ch25_positive_not_cp_two_positive_schmidt_and_choi.tex`
-- `docs/paper-gaps/wolf_lemma_3_1_top_index_scope.tex`
-- `docs/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.tex`
-- `docs/paper-gaps/wolf_prop_3_2_top_index_scope.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_lemma_3_1_top_index_scope.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop_3_2_schmidt_rank_reading.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop_3_2_top_index_scope.pdf`
 
 **Proposition 3.3**
 
@@ -239,8 +239,8 @@ criterion used to establish its positivity threshold.
 
 - `TNLean/Analysis/MatrixTraceInequalities.lean`
 - `blueprint/src/chapter/ch25_positive_not_cp_trace_normalization_and_lorentz_cone.tex`
-- `docs/paper-gaps/wolf_ch3_lorentz_cone_trace_sign.tex`
-- `docs/paper-gaps/wolf_lecture_notes_errata.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch3_lorentz_cone_trace_sign.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_lecture_notes_errata.pdf`
 
 **Example 3.1**
 
@@ -257,8 +257,8 @@ criterion used to establish its positivity threshold.
 - `blueprint/src/chapter/ch25_positive_not_cp_choi_and_decomposable_maps.tex`
 - `blueprint/src/chapter/ch25_positive_not_cp_positivity_reduction_and_breuer_hall.tex`
 - `docs/paper-gaps/README.md`
-- `docs/paper-gaps/wolf_breuer_hall_even_dim_restriction.tex`
-- `docs/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_breuer_hall_even_dim_restriction.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ex3_1_choi_positivity_subcase_scope.pdf`
 
 ### Reproducibility
 
@@ -305,7 +305,7 @@ respectively, to powers with exponent in `[1, 2]` and powers with exponent in
 `[0, 1]`. The logarithm inequality is Corollary 5.2(3). Its printed subunital
 form is false because the logarithm is unbounded below at zero, so the Lean
 theorem uses the necessary unital hypothesis, as documented in
-`docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`.
+`https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_operator_jensen_lieb.pdf`.
 
 ### Citing files
 
@@ -315,7 +315,7 @@ theorem uses the necessary unital hypothesis, as documented in
 - `TNLean/Channel/Schwarz/TwoVariable.lean`
 - `TNLean/Channel/Schwarz/TwoVariableUnconditional.lean`
 - `blueprint/src/chapter/ch05_schwarz_schur_complement.tex`
-- `docs/paper-gaps/wolf_schur_complement_tfae.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_schur_complement_tfae.pdf`
 
 **Theorem 5.3**
 
@@ -324,7 +324,7 @@ theorem uses the necessary unital hypothesis, as documented in
 - `TNLean/Channel/Schwarz/TwoVariableEquality.lean`
 - `TNLean/Channel/Schwarz/TwoVariableUnconditional.lean`
 - `blueprint/src/chapter/ch07_spectral_mixed_transfer_and_overlap.tex`
-- `docs/paper-gaps/wolf_ch5_two_variable_unconditional.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_two_variable_unconditional.pdf`
 
 **Proposition 5.1**
 
@@ -354,14 +354,14 @@ theorem uses the necessary unital hypothesis, as documented in
 - `TNLean/Channel/Schwarz/OperatorMonotone.lean`
 - `blueprint/src/chapter/ch18_operator_convexity.tex`
 - `blueprint/src/chapter/ch18_operator_convexity_schwarz_and_jensen.tex`
-- `docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_operator_jensen_lieb.pdf`
 
 **Theorem 5.15**
 
 - `TNLean/Analysis/LiebConcavity.lean`
 - `TNLean/Analysis/LiebSubBoundary.lean`
 - `blueprint/src/chapter/ch18_operator_convexity_lieb_and_resolvent.tex`
-- `docs/paper-gaps/wolf_ch5_operator_jensen_lieb.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_operator_jensen_lieb.pdf`
 
 **Theorem 5.17**
 
@@ -372,8 +372,8 @@ theorem uses the necessary unital hypothesis, as documented in
 - `TNLean/Channel/Schwarz/SchwarzNotCP.lean`
 - `blueprint/src/chapter/ch05_schwarz_abstract_domains_and_order_auxiliary.tex`
 - `blueprint/src/chapter/ch27_channel_asymptotics_fixed_point_algebras.tex`
-- `docs/paper-gaps/wolf_lecture_notes_errata.tex`
-- `docs/paper-gaps/wolf_thm6_12_abstract_schwarz_fixed_points.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_lecture_notes_errata.pdf`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_thm6_12_abstract_schwarz_fixed_points.pdf`
 
 ### Reproducibility
 
@@ -489,7 +489,7 @@ All three cited Chapter 8 numbers agree with the printed notes.
 
 - `TNLean/Analysis/Birkhoff.lean`
 - `blueprint/src/chapter/ch19_entropy_majorization.tex`
-- `docs/paper-gaps/wolf_ch8_birkhoff_doubly_substochastic_gap.tex`
+- `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch8_birkhoff_doubly_substochastic_gap.pdf`
 
 **Theorem 8.16**
 
