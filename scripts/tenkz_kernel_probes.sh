@@ -1740,7 +1740,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
   exit 1
 }
 skin_pairing_count=$(
-  grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
+  grep -c '^wire|.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
 [ "$skin_pairing_count" -eq 26 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
