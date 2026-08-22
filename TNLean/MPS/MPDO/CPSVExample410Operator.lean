@@ -17,7 +17,8 @@ one quarter to the ring of Bell pairs in CPSV16 Example 4.10.
 
 **Local fix (left-right correlated flip):** the channel printed at source lines 901--902 repeats
 the left-qubit label. The tensor below uses one Pauli flip on each qubit of the same spin, as
-required by the Bell-pair network and by the entropy values printed at line 904.
+required by the Bell-pair network and by the entropy values printed at line 904. See
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
 
 ## Main definitions
 
