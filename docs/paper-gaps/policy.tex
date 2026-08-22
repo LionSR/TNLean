@@ -126,7 +126,15 @@ The conclusion of a note should give a verdict. The usual classifications are:
 a notational clarification, a local correction, a scope restriction, an
 unfaithful theorem, a source claim that is false as printed, or an open gap.
 The classification should follow the mathematics, not the amount of formal
-work required.
+work required. Each note declares its classification and its status
+machine-readably with \verb|\gapnote{<kind>}{<status>}| directly after
+\verb|\maketitle|: the kind in the kebab-cased vocabulary above
+(\path{clarification}, \path{local-correction}, \path{scope-restriction},
+\path{unfaithful}, \path{false-source}, \path{open-gap}) and the status
+one of \path{open}, \path{resolved}, or \path{historical}. Severity is
+derived from the kind, so it is never stated separately. A resolved note
+keeps its classification and changes only its status; the published index
+lists open notes first and dims the resolved ones.
 
 A local correction records a small adjustment whose corrected statement is still
 available in the cited argument. A scope restriction records a theorem proved

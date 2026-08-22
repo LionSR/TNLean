@@ -40,3 +40,9 @@
 \providecommand{\C}{\mathbb{C}}
 \providecommand{\MN}[1]{M_{#1}(\C)}
 \providecommand{\MD}{M_D(\C)}
+
+% Verdict marker: \gapnote{<kind>}{<status>}. Kind is the policy
+% classification (clarification, local-correction, scope-restriction,
+% unfaithful, false-source, open-gap); status is open, resolved, or
+% historical. Machine-read by the site index; prints a verdict line.
+\newcommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
