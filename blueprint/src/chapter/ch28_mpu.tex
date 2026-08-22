@@ -7899,7 +7899,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         SpinChain.finiteChainSiteEquiv,SpinChain.finiteChainConfigEquiv,
         SpinChain.finiteChainMPOMatrix}
     \leanok
-    \uses{def:mpu, def:qca_local_algebra}
+    \uses{def:mpo_family, def:qca_local_algebra}
     For $a\in\mathbb Z$ and $N\in\mathbb N$, let
     $I_{a,N}=[a,a+N)\cap\mathbb Z$.  The increasing bijection
     $\{0,\ldots,N-1\}\simeq I_{a,N}$ identifies the periodic configuration
@@ -7914,7 +7914,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         SpinChain.finiteChainConjugation,
         SpinChain.finiteChainConjugation_apply}
     \leanok
-    \uses{def:mpu_finite_chain_realization}
+    \uses{def:mpu, def:mpu_finite_chain_realization}
     If $\mathcal U$ is an MPU and $N>1$, then $U_a^{(N)}$ is unitary and
     defines the star-algebra automorphism
     \begin{align}
@@ -7926,7 +7926,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:mpu}
+    \uses{def:mpu, thm:mpu_reindex_unitary}
     Simultaneous reindexing preserves both unitarity equations for $U^{(N)}$.
     Conjugation by the resulting unitary preserves multiplication, the unit,
     complex scalars, and the adjoint.

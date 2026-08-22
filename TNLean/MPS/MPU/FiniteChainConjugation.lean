@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Finset.Sort
 import TNLean.MPS.MPU.Basic
 import TNLean.QCA.LocalLimit
-import Mathlib.Data.Finset.Sort
 
 /-!
 # Finite-chain conjugation by a matrix product unitary
