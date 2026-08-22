@@ -508,9 +508,6 @@
     summand matching and the same unitaries.
 \end{proof}
 
-% Scope restriction documented in
-% https://sirui-lu.com/QICLean/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.pdf
-% (QICLean paper-gap note).
 \begin{theorem}[Weighted block form of the adjoint Ces\`aro projection on full support]%
     \label{thm:adjoint_mean_ergodic_projection_weighted_block_form}
     \lean{IsPositiveMap.exists_block_densities_of_adjoint_meanErgodicProjection}
@@ -532,7 +529,9 @@
     \end{align}
     for every $A\in\MN{D}$. This is the full-support
     conditional-expectation step in the proof of
-    \cite[Theorem~6.14]{Wolf2012Quantum}.
+    \cite[Theorem~6.14]{Wolf2012Quantum}. The remaining projection step is
+    documented in the companion completion record
+    \cite{gap:wolf_theorem6_14_fixed_point_projection_gap}.
 \end{theorem}
 
 \begin{proof}
@@ -555,9 +554,6 @@
     (\ref{eq:spectral_ds_adjoint_projection}).
 \end{proof}
 
-% Scope restriction and factor-order convention documented in
-% https://sirui-lu.com/QICLean/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.pdf
-% (QICLean paper-gap note).
 \begin{theorem}[Density-block form of the Ces\`aro projection on full support]%
     \label{thm:mean_ergodic_projection_density_block_form}
     \lean{IsPositiveMap.exists_block_densities_of_meanErgodicProjection}
@@ -582,7 +578,9 @@
     $\C^{m_k}\otimes\C^{d_k}$, so $\tr_{m_k}$ traces the first factor. This
     is the full-support part of Equation~(6.63) in
     \cite[Theorem~6.14]{Wolf2012Quantum}; the density matrices are not yet
-    asserted to be positive definite.
+    asserted to be positive definite. The scope restriction and factor-order
+    convention are documented in the companion completion record
+    \cite{gap:wolf_theorem6_14_fixed_point_projection_gap}.
 \end{theorem}
 
 \begin{proof}
@@ -603,9 +601,6 @@
     $\tr_{m_k}(\sigma_k\otimes X)=X$.
 \end{proof}
 
-% Scope restriction documented in
-% https://sirui-lu.com/QICLean/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.pdf
-% (QICLean paper-gap note).
 \begin{theorem}[Density-block form of fixed points on a finite direct sum]%
     \label{thm:direct_sum_fixed_points_density_block_form}
     \lean{Matrix.IsPositiveDirectSumMap.exists_block_densities_of_fixedPoints}
@@ -630,7 +625,9 @@
     \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}; it does not
     assert the channel hypotheses for the particular sector maps in that
     argument. This is the full-support restriction: the support reduction
-    and complementary zero summand of the general theorem remain open.
+    and complementary zero summand of the general theorem remain open; the
+    precise remaining step is documented in the companion completion record
+    \cite{gap:wolf_theorem6_14_fixed_point_projection_gap}.
 \end{theorem}
 
 \begin{proof}
