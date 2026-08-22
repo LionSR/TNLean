@@ -446,15 +446,15 @@ then infer primitivity of the sector maps. This is the blocking step of
     Pass to the conjugate-transposed Kraus family $K_i:=(A^i)^\dagger$, which
     is unital with irreducible Kraus map. The TP fixed-point theorem for
     $\E_A$ provides a positive definite fixed point for the adjoint of $K$, so
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} shows that every peripheral
+    the corresponding theorem in the companion quantum-channel volume~\cite[``Roots of unity via adjoint fixed point'']{QICLean2026Blueprint} shows that every peripheral
     eigenvalue is a root of unity. Since $\sigma_\partial(\E_A)$ is finite
-    (the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}),
-    the corresponding lemma in the companion quantum-channel volume~\cite{QICLean2026Blueprint} gives a common exponent $p$ with
+    (the corresponding theorem in the companion quantum-channel volume~\cite[``Finiteness of peripheral eigenvalues'']{QICLean2026Blueprint}),
+    the corresponding lemma in the companion quantum-channel volume~\cite[``Common exponent for a finite set of roots of unity'']{QICLean2026Blueprint} gives a common exponent $p$ with
     $\mu^p=1$ for every $\mu\in\sigma_\partial(\E_A)$, and
-    the corresponding lemma in the companion quantum-channel volume~\cite{QICLean2026Blueprint} gives
+    the corresponding lemma in the companion quantum-channel volume~\cite[``Powering collapses peripheral eigenvalues'']{QICLean2026Blueprint} gives
     $\sigma_\partial(\E_A^p)=\{1\}$. Blocking by $p$ takes the $p$th power of
     the transfer map, so $\E_{A^{[p]}}$ is primitive in the
-    peripheral-spectrum sense of the corresponding definition in the companion quantum-channel volume~\cite{QICLean2026Blueprint}.
+    peripheral-spectrum sense of the corresponding definition in the companion quantum-channel volume~\cite[``Primitive map'']{QICLean2026Blueprint}.
     The blocked map need not remain irreducible: eigenvalue~$1$ may have several
     cyclic corners. The adjoint-fixed projections are therefore compressed
     before irreducibility and primitivity are asserted sector by sector in
@@ -566,8 +566,8 @@ canonical form is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     These isometries also realize the blocked corner letters
     $\varphi_k(C_k^\alpha)=P_k(A^{[m]})^\alpha P_k$.
     \begin{proof}\leanok
-        \uses{thm:cyclic_decomposition_irreducible_schwarz, thm:adjoint_fixed_projection_block_decomp_isometry}
-        Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz}, applied to
+        \uses{thm:adjoint_fixed_projection_block_decomp_isometry}
+        Theorem~\cite[``Cyclic decomposition for irreducible finite Kraus maps'']{QICLean2026Blueprint}, applied to
         $\E_{A^\dagger}$, provides projections $P_k$ satisfying
         $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating $m$ times gives
         $(\E_{A^\dagger})^m(P_k)=P_k$, and

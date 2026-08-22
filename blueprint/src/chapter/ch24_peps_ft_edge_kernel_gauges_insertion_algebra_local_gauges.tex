@@ -156,7 +156,7 @@
     \label{thm:matrixAlgEquiv_inner_of_fin}
     \lean{Matrix.matrixAlgEquiv_inner_of_fin}
     \leanok
-    \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
+    \uses{thm:matrixAlgEquiv_fin_eq}
     Let $\varphi:\MN{D}\to\MN{E}$ be a $\C$-algebra isomorphism. Then
     $D=E$; let $h$ denote this equality and
     $\iota_h:\MN{D}\to\MN{E}$ the canonical index-relabelling isomorphism.
@@ -168,7 +168,7 @@
     By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D=E$, so $\iota_h$ is defined.
     Then $\varphi\circ\iota_h^{-1}$ is a $\C$-algebra automorphism of
     $\MN{E}$, and Skolem--Noether
-    (Theorem~\ref{thm:skolem_noether}) gives $X\in\GL_E(\C)$ with
+    (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) gives $X\in\GL_E(\C)$ with
     $(\varphi\circ\iota_h^{-1})(N)=XNX^{-1}$. Evaluating at
     $N=\iota_h(M)$ gives $\varphi(M)=X\iota_h(M)X^{-1}$.
 \end{proof}

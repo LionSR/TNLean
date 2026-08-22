@@ -105,7 +105,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_t0_map_cptp, thm:mpdo_physical_sector_t1_preparation_cptp, thm:mpdo_t2_map_cptp, lem:is_kraus_cptp_comp}
+    \uses{thm:mpdo_t0_map_cptp, thm:mpdo_physical_sector_t1_preparation_cptp, thm:mpdo_t2_map_cptp}
     Each constituent map is trace-preserving and completely positive, and
     this property is preserved under composition.
 \end{proof}
@@ -219,13 +219,13 @@ outer-sector summand. The composite channel has type
     \label{thm:mpdo_physical_sector_s_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_isKrausCPTP}
     \leanok
-    \uses{thm:mpdo_s0_map_cptp, thm:mpdo_physical_sector_s1_map_cptp, thm:mpdo_s2_map_cptp, lem:is_kraus_cptp_comp}
+    \uses{thm:mpdo_s0_map_cptp, thm:mpdo_physical_sector_s1_map_cptp, thm:mpdo_s2_map_cptp}
     The channel $\mathcal S$ is trace-preserving and completely positive.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:is_kraus_cptp_comp}
+
     Each of the three factors is trace-preserving and completely positive,
     and this property is preserved under composition.
 \end{proof}

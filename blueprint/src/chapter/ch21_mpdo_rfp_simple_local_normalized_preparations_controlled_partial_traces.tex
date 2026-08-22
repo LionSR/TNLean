@@ -2,7 +2,7 @@
     \label{def:mpdo_controlled_dependent_partial_trace}
     \lean{Matrix.controlledPartialTraceRightLM}
     \leanok
-    \uses{def:mpdo_controlled_kraus_map, def:mpdo_right_partial_trace_map}
+
     Let
     \begin{align}
         H & =\bigoplus_{i\in I}(A_i\otimes B_i), \notag \\
@@ -16,13 +16,13 @@
     \label{thm:mpdo_controlled_dependent_partial_trace_same_block}
     \lean{Matrix.controlledPartialTraceRightLM_sameBlock_apply}
     \leanok
-    \uses{def:mpdo_controlled_dependent_partial_trace, def:mpdo_right_partial_trace_map}
+    \uses{def:mpdo_controlled_dependent_partial_trace}
     If $X_{ii}$ denotes the $i$th diagonal block of $X$, then
     $[\mathcal C_{\tr}(X)]_{ii}=\tr_{B_i}(X_{ii})$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_controlled_kraus_map_same_block}
+
     If $(K_{i,j})_j$ is the Kraus family chosen for $\tr_{B_i}$, then the
     diagonal-block formula gives
     \begin{align}
@@ -43,7 +43,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_controlled_kraus_map_cptp, lem:mpdo_right_partial_trace_cptp}
+
     Choose Kraus operators $(V_{i,a})_a$ for $\tr_{B_i}$ and extend each
     $V_{i,a}$ by zero outside the $i$th summand. Their controlled family
     satisfies
@@ -95,7 +95,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.t0Map}
     \lean{MPOTensor.PhysicalSectorFactorization.t0Map}
     \leanok
-    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_controlled_dependent_partial_trace, def:mpdo_equiv_reindex_map}
+    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_controlled_dependent_partial_trace}
     Define $\mathcal T_0$ by the two-site regrouping followed, in each pair
     $(k,h)$, by the partial trace over $R_k\otimes L_h$. Its output is indexed
     by the retained outer factors $L_k\otimes R_h$. Thus, writing $R_{\Phi_2}$
@@ -117,12 +117,12 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, thm:mpdo_controlled_dependent_partial_trace_cptp, lem:is_kraus_cptp_comp}
+    \uses{thm:mpdo_controlled_dependent_partial_trace_cptp}
     By (\ref{eq:rfp_t0_factorization}), $\mathcal T_0$ is the composition of
     the controlled dependent partial trace with reindexing along the two-site
     equivalence. The first map is trace-preserving and completely positive by
     Theorem~\ref{thm:mpdo_controlled_dependent_partial_trace_cptp}, and the
-    second by Theorem~\ref{thm:mpdo_equiv_reindex_cptp}. Their composition is
+    second by Theorem~\cite[``Equivalence reindexing is trace-preserving completely positive'']{QICLean2026Blueprint}. Their composition is
     therefore trace-preserving and completely positive.
 \end{proof}
 
@@ -133,7 +133,7 @@
         MPOTensor.PhysicalSectorFactorization.s2Map,
         MPOTensor.PhysicalSectorFactorization.s2Map_apply}
     \leanok
-    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_equiv_reindex_map}
+    \uses{def:mpdo_two_site_subspin_regrouping}
     The map $\mathcal S_2$ is matrix reindexing along the inverse two-site
     equivalence. Thus
     \begin{align}
@@ -152,10 +152,10 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_equiv_reindex_cptp}
+
     If $\Phi_2$ is the two-site regrouping, then
     $\mathcal S_2=R_{\Phi_2^{-1}}$. It is therefore trace-preserving and
-    completely positive by Theorem~\ref{thm:mpdo_equiv_reindex_cptp}.
+    completely positive by Theorem~\cite[``Equivalence reindexing is trace-preserving completely positive'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{definition}[Three-site subspin regrouping]
@@ -197,7 +197,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.s0Map,
         MPOTensor.PhysicalSectorFactorization.s0Map_sameBlock_apply}
     \leanok
-    \uses{def:mpdo_three_site_subspin_regrouping, def:mpdo_controlled_dependent_partial_trace, def:mpdo_equiv_reindex_map}
+    \uses{def:mpdo_three_site_subspin_regrouping, def:mpdo_controlled_dependent_partial_trace}
     Define $\mathcal S_0$ by the three-site regrouping followed, for every
     outer pair $(k,h)$, by the partial trace over
     \begin{align}
@@ -224,13 +224,13 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, thm:mpdo_controlled_dependent_partial_trace_cptp, lem:is_kraus_cptp_comp}
+    \uses{thm:mpdo_controlled_dependent_partial_trace_cptp}
     By (\ref{eq:rfp_s0_factorization}), $\mathcal S_0$ is the composition of
     the controlled dependent partial trace with reindexing along the three-site
     equivalence. The controlled trace and equivalence reindexing are
     trace-preserving and completely positive by
     Theorems~\ref{thm:mpdo_controlled_dependent_partial_trace_cptp}
-    and~\ref{thm:mpdo_equiv_reindex_cptp}, respectively. Their composition
+    and~\cite[``Equivalence reindexing is trace-preserving completely positive'']{QICLean2026Blueprint}, respectively. Their composition
     has the same property.
 \end{proof}
 
@@ -239,7 +239,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.t2Map}
     \lean{MPOTensor.PhysicalSectorFactorization.t2Map}
     \leanok
-    \uses{def:mpdo_three_site_subspin_regrouping, def:mpdo_equiv_reindex_map}
+    \uses{def:mpdo_three_site_subspin_regrouping}
     The map $\mathcal T_2$ is matrix reindexing along the inverse three-site
     equivalence. On each summand it sends
     \begin{align}
@@ -259,10 +259,10 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_equiv_reindex_cptp}
+
     If $\Phi_3$ is the three-site regrouping, then
     $\mathcal T_2=R_{\Phi_3^{-1}}$. It is therefore trace-preserving and
-    completely positive by Theorem~\ref{thm:mpdo_equiv_reindex_cptp}.
+    completely positive by Theorem~\cite[``Equivalence reindexing is trace-preserving completely positive'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{definition}[Fiberwise partial-trace maps]
@@ -270,7 +270,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.t0SectorMap}
     \lean{MPOTensor.ExplicitEtaOperators.s0SectorMap}
     \leanok
-    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_three_site_subspin_regrouping, def:mpdo_right_partial_trace_map, def:mpdo_equiv_reindex_map}
+    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_three_site_subspin_regrouping}
     For fixed sectors $(k,h)$, define the fiberwise form of $\mathcal T_0$ by
     regrouping two sites and tracing $R_k\otimes L_h$. For fixed
     $(k,l,h)$, define the fiberwise form of $\mathcal S_0$ by regrouping three
@@ -290,7 +290,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, lem:mpdo_right_partial_trace_cptp, lem:is_kraus_cptp_comp}
+
     The fiberwise forms factor as
     \begin{align}
         \mathcal T_0^{(k,h)}
@@ -313,7 +313,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.s2SectorMap}
     \lean{MPOTensor.ExplicitEtaOperators.t2SectorMap}
     \leanok
-    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_three_site_subspin_regrouping, def:mpdo_equiv_reindex_map}
+    \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_three_site_subspin_regrouping}
     On fixed sector pairs, define $\mathcal S_2$ and $\mathcal T_2$ by the
     same inverse regroupings as the corresponding global shifts.
 \end{definition}
@@ -328,13 +328,13 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_equiv_reindex_cptp}
+
     The shifts $\mathcal S_2^{(k,h)}$ and $\mathcal T_2^{(k,h)}$ are
     reindexings along the inverse two-site and three-site equivalences of
     Definitions~\ref{def:mpdo_two_site_subspin_regrouping}
     and~\ref{def:mpdo_three_site_subspin_regrouping}, respectively. They are
     therefore trace-preserving and completely positive by
-    Theorem~\ref{thm:mpdo_equiv_reindex_cptp}.
+    Theorem~\cite[``Equivalence reindexing is trace-preserving completely positive'']{QICLean2026Blueprint}.
 \end{proof}
 
 To record the domains and codomains, set

@@ -324,12 +324,12 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 \subsection{Block permutation algebra}
 
 The $k$-th block ideal consists of the tuples that vanish outside the
-$k$-th coordinate, as in Definition~\ref{def:block_ideal}.
+$k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}.
 
 \begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
     \lean{TwoSidedIdeal.isAtom_blockIdeal}
     \leanok
-    \uses{def:block_ideal}
+
     Each block ideal $I_k$ is an atom in the lattice of two-sided ideals of
     $\prod_{j=0}^{r-1} R_j$.
 \end{theorem}
@@ -347,7 +347,7 @@ $k$-th coordinate, as in Definition~\ref{def:block_ideal}.
     \lean{TwoSidedIdeal.exists_blockEquiv_of_ringEquiv_pi_simple}
     \lean{TwoSidedIdeal.ringEquiv_pi_simple_permutes_blockIdeals}
     \leanok
-    \uses{def:block_ideal}
+
     Let $\{R_i\}_{i\in I}$ and $\{S_j\}_{j\in J}$ be two finite families of
     simple rings. Every ring isomorphism
     $T : \prod_{i\in I}R_i \to \prod_{j\in J}S_j$ determines an equivalence
@@ -382,15 +382,15 @@ $k$-th coordinate, as in Definition~\ref{def:block_ideal}.
 
 \begin{proof}
     \leanok
-    \uses{thm:ring_perm, thm:dim_preserved, thm:component_map_bijective, thm:skolem_noether}
+    \uses{thm:ring_perm}
     Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
-    Theorem~\ref{thm:dim_preserved} identifies the matrix sizes
+    Theorem~\cite[``Summand matching and dimension preservation'']{QICLean2026Blueprint} identifies the matrix sizes
     $D_{\pi(k)} = D_k$.
-    For each $k$, Theorem~\ref{thm:component_map_bijective} gives a bijective
+    For each $k$, Theorem~\cite[``Paired component maps are bijections'']{QICLean2026Blueprint} gives a bijective
     multiplicative map from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ extracted from the
     elements supported on one factor of~$T$; after reindexing by the dimension equality,
     this is a $\C$-algebra automorphism of $\MN{D_k}$.
-    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) makes each such
+    Skolem--Noether (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) makes each such
     automorphism inner.
 
     This is a standard result in the theory of semisimple algebras;
@@ -400,10 +400,10 @@ $k$-th coordinate, as in Definition~\ref{def:block_ideal}.
 \begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
     Theorem~\ref{thm:ring_perm} is a ring-level statement: it only uses the
     ideal structure of $\prod_k R_k$.
-    Theorem~\ref{thm:component_map_bijective} stays at this ring level: once the
+    Theorem~\cite[``Paired component maps are bijections'']{QICLean2026Blueprint} stays at this ring level: once the
     block ideals are permuted, one can extract the corresponding single-block
     maps without using scalar multiplication.
-    Theorems~\ref{thm:dim_preserved}
+    Theorems~\cite[``Summand matching and dimension preservation'']{QICLean2026Blueprint}
     and~\ref{thm:pi_auto_decomp} require an upgrade to $\C$-algebra
     automorphisms. The reason is threefold: dimension preservation compares
     the blocks as $\C$-vector spaces; Skolem--Noether applies to the resulting
@@ -477,7 +477,7 @@ applies.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective, thm:unitary_skolem_noether_matrix}
+    \uses{lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective}
     By Lemmas~\ref{lem:perBlockLinearExtension_mul}
     and~\ref{lem:perBlockLinearExtension_bijective}, $T_k$ is a bijective
     multiplicative linear map. Positivity makes this algebra automorphism

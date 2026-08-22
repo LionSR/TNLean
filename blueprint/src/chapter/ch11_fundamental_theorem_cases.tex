@@ -72,14 +72,14 @@
     \label{lem:left_canonical_irreducible_phase_norm}
     \lean{MPSTensor.gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible}
     \leanok
-    \uses{def:left_canonical_tensor, def:irreducible_tensor, thm:eigenvalue_unique_irred}
+    \uses{def:left_canonical_tensor, def:irreducible_tensor}
     Let $A$ and $B$ be left-canonical tensors of common positive bond
     dimension, with $B$ irreducible. If $X$ is invertible, $\zeta\ne0$, and
     $B^i=\zeta XA^iX^{-1}$ for every $i$, then $|\zeta|=1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:eigenvalue_unique_irred}
+
     Let $\rho$ be a nonzero positive fixed point of $\E_A$ and set
     $\sigma=X\rho X^\dagger$. Then $\sigma$ is nonzero and positive, and
     $\E_B(\sigma)=|\zeta|^2\sigma$. The map $\E_B$ also has a nonzero positive

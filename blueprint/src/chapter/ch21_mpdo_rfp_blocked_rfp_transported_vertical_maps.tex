@@ -300,7 +300,7 @@
     \lean{Matrix.IsTraceNonincreasingBetweenDirectSums.directSumExtension}
     \lean{Matrix.IsTracePreservingMap.isTracePreservingDirectSumMap_of_extension}
     \leanok
-    \uses{def:direct_sum_full_matrix_extension}
+
     Let
     $\mathcal A=\bigoplus_{\alpha\in I}\mathcal M_{d_\alpha\times d_\alpha}$,
     let $\iota:\mathcal A\to\End(\bigoplus_\alpha
@@ -362,7 +362,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_map_trace_preserving_from_fixed_product_span, thm:direct_sum_full_matrix_extension_compatibility, thm:direct_sum_extension_trace_transfer}
+    \uses{thm:positive_map_trace_preserving_from_fixed_product_span, thm:direct_sum_extension_trace_transfer}
     Multilinearity first gives
     \begin{align}
         C_L(\mathcal V)
@@ -630,7 +630,7 @@
         MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap,
         MPOTensor.transportedVerticalSector_composites_traceAdjointSchwarz}
     \leanok
-    \uses{def:mpdo_transported_vertical_sector_maps, lem:mpdo_transport_t_vertical_coordinates_cp, lem:mpdo_transport_s_vertical_coordinates_cp, lem:mpdo_transported_vertical_sector_t_extension, lem:mpdo_transported_vertical_sector_s_extension, thm:mpdo_vertical_sector_partial_trace_kraus, lem:direct_sum_kraus_composition_schwarz, thm:mpdo_transported_vertical_sector_composites_trace_preserving}
+    \uses{def:mpdo_transported_vertical_sector_maps, lem:mpdo_transport_t_vertical_coordinates_cp, lem:mpdo_transport_s_vertical_coordinates_cp, lem:mpdo_transported_vertical_sector_t_extension, lem:mpdo_transported_vertical_sector_s_extension, thm:mpdo_vertical_sector_partial_trace_kraus, thm:mpdo_transported_vertical_sector_composites_trace_preserving}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_transported_vertical_sector_composites_trace_preserving},
     the maps
