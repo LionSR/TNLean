@@ -283,14 +283,14 @@ given in Section~\ref{sec:app_spectral_perron_projection}.
     \leanok
     Let $E$ be trace-preserving with fixed point $\rho$, where
     $\tr(\rho)\neq0$, and let $P$ be the fixed-point projection of
-    the corresponding definition in the companion quantum-channel volume. If
+    the corresponding definition in the companion quantum-channel volume~\cite{QICLean2026Blueprint}. If
     $\rho_{\spec}(E-P)<1$, then $\Tr(E^n)\to1$ as $n\to\infty$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{lem:fixedPointProj_trace}
-    By the power decomposition (established in the companion quantum-channel volume),
+    By the power decomposition (established in the companion quantum-channel volume~\cite{QICLean2026Blueprint}),
     $E^n=P+(E-P)^n$ for $n\geq1$. Since $\rho_{\spec}(E-P)<1$, the
     Gelfand formula gives $(E-P)^n\to0$, so
     $\Tr(E^n)\to\Tr(P)$. Lemma~\ref{lem:fixedPointProj_trace}
