@@ -32,6 +32,7 @@ tnlean = "internal theorem-surface audit, no single external source"
 wolf = "Wolf, Quantum Channels & Operations (2012 lecture notes)"
 
 [paper_gaps.group_aliases]
+cpgsv17 = "cpsv16"
 cpgsv21 = "rmp"
 
 [paper_gaps.aliases]

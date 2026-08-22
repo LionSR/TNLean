@@ -76,7 +76,7 @@ GAPNOTE_RE = re.compile(r"\\gapnote\{([a-z<>-]+)\}\{([a-z<>-]+)\}")
 # Keys listed here are folded into their target key's group on the index
 # page, so one source gets one heading. Both filename prefixes remain
 # registered and accepted.
-GROUP_ALIASES = {"cpgsv21": "rmp"}
+GROUP_ALIASES = {"cpgsv17": "cpsv16", "cpgsv21": "rmp"}
 # Slugs published before the source-key registry, mapped to the notes that
 # hold their content today. The site keeps serving the old PDF URLs so
 # external citations do not break. ``--check`` verifies the targets exist.
