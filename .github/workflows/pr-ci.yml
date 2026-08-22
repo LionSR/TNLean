@@ -770,8 +770,10 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
 
+      # Also installed for paper-gap-only changes: the reference check
+      # below runs the texra-blueprint CLI from this step's pip install.
       - name: Install blueprint Python dependencies
-        if: env.TEX_CHANGED == 'true'
+        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.0'
