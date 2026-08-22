@@ -57,7 +57,7 @@ jobs:
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.2.0'
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.2.1'
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
