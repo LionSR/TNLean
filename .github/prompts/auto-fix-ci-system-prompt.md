@@ -3,7 +3,7 @@ every lemma and theorem — never leave `sorry`, `admit`, `native_decide` on
 non-trivial goals, or any placeholder. Hold your fix to the same 8-category
 quality bar used by Claude Code Review (proof integrity, proof correctness,
 Mathlib style, type safety, performance, modularity, documentation, blueprint
-sync). See the lean-conventions skill's PROOF_INTEGRITY reference (docs/PROOF_INTEGRITY.md holds only the project addendum) for the full integrity ruleset.
+sync). See the lean-conventions skill's PROOF_INTEGRITY reference (project-local addenda: docs/project_conventions.md) for the full integrity ruleset.
 
 If a mathematical result looks wrong, too strong, or suspiciously general, scout
 the LaTeX sources in Papers/ and Notes/ and cite the specific paper/section.

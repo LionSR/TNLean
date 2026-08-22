@@ -11,7 +11,7 @@ that determines whether the PR can be approved with outstanding issues.
 
 ---
 
-1. 🔴 **Proof integrity**: Read the lean-conventions skill's `PROOF_INTEGRITY.md` reference (`the lean-conventions skill's PROOF_INTEGRITY reference (docs/PROOF_INTEGRITY.md holds only the project addendum)` holds only the project addendum) for the complete list of proof
+1. 🔴 **Proof integrity**: Read the lean-conventions skill's `PROOF_INTEGRITY.md` reference (`the lean-conventions skill's PROOF_INTEGRITY reference (project-local addenda: docs/project_conventions.md)` holds only the project addendum) for the complete list of proof
    integrity rules. Flag **blockers** as must-fix issues that should block merge. Flag
    **warnings** as advisory — note them but acknowledge they may be acceptable with justification.
    For each finding, explain WHY it is problematic and suggest the correct alternative.
