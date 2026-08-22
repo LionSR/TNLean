@@ -7893,6 +7893,63 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{Cirac2017MPU}.  No norm completion is taken.
 \end{definition}
 
+\begin{definition}[Finite-chain realization of a periodic MPU]
+    \label{def:mpu_finite_chain_realization}
+    \lean{SpinChain.finiteChainRegion,SpinChain.card_finiteChainRegion,
+        SpinChain.finiteChainSiteEquiv,SpinChain.finiteChainConfigEquiv,
+        SpinChain.finiteChainMPOMatrix}
+    \leanok
+    \uses{def:mpu, def:qca_local_algebra}
+    For $a\in\mathbb Z$ and $N\in\mathbb N$, let
+    $I_{a,N}=[a,a+N)\cap\mathbb Z$.  The increasing bijection
+    $\{0,\ldots,N-1\}\simeq I_{a,N}$ identifies the periodic configuration
+    basis with $\operatorname{Config}_d(I_{a,N})$.  In this basis, write
+    $U_{a}^{(N)}$ for the matrix obtained by simultaneously reindexing the rows
+    and columns of $U^{(N)}$.
+\end{definition}
+
+\begin{definition}[Finite-chain MPU conjugation]
+    \label{def:mpu_finite_chain_conjugation}
+    \lean{SpinChain.finiteChainMPUUnitary,
+        SpinChain.finiteChainConjugation,
+        SpinChain.finiteChainConjugation_apply}
+    \leanok
+    \uses{def:mpu_finite_chain_realization}
+    If $\mathcal U$ is an MPU and $N>1$, then $U_a^{(N)}$ is unitary and
+    defines the star-algebra automorphism
+    \begin{align}
+        \operatorname{Ad}_{U_a^{(N)}}(B)
+         & =U_a^{(N)}B\,U_a^{(N)\dagger}.
+    \end{align}
+    The factor order is the one in
+    \cite[lines~2300--2306]{Cirac2017MPU}.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{def:mpu}
+    Simultaneous reindexing preserves both unitarity equations for $U^{(N)}$.
+    Conjugation by the resulting unitary preserves multiplication, the unit,
+    complex scalars, and the adjoint.
+\end{proof}
+
+\begin{definition}[Finite-chain term on a local observable]
+    \label{def:mpu_finite_chain_local_observable}
+    \lean{SpinChain.finiteChainLocalObservable,
+        SpinChain.finiteChainLocalObservable_apply}
+    \leanok
+    \uses{def:qca_local_inclusion, def:qca_algebraic_local_algebra,
+        def:mpu_finite_chain_conjugation}
+    Let $\Lambda\subseteq I_{a,N}$ and $A\in\mathcal A_\Lambda$.  Set
+    $A_L=\iota_{\Lambda,I_{a,N}}(A)$.  For $N>1$, the finite-chain term in
+    \cite[lines~2300--2306]{Cirac2017MPU} is the star-algebra map
+    \begin{align}
+        \mathcal A_\Lambda&\longrightarrow\mathcal A_{\mathrm{loc}}, \\
+        A&\longmapsto
+        \iota_{I_{a,N}}\!\left(U_a^{(N)}A_LU_a^{(N)\dagger}\right).
+    \end{align}
+    No stabilization in $N$ is asserted.
+\end{definition}
+
 \begin{definition}[Operator norm on the local algebra]
     \label{def:qca_algebraic_local_operator_norm}
     \lean{SpinChain.algebraicLocalOperatorNorm,
