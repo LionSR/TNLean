@@ -127,7 +127,7 @@ matrix-unit indices gives
 
 \begin{proof}\leanok
     This is the MPS formulation of
-    the corresponding theorem in the companion quantum-channel volume: the rectangular
+    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}: the rectangular
     mixed transfer is the mixed Kraus map, and the two tensor normalization
     identities are its trace-preserving hypotheses.
 \end{proof}
@@ -194,7 +194,7 @@ dimension once they are invertible.
     maps give a faithful weighted trace for the block map. Applying the
     Kadison--Schwarz inequality to $Y$ and pairing its positive semidefinite
     gap with this fixed point shows that the gap vanishes. The Kraus
-    relation of the corresponding theorem in the companion quantum-channel volume then gives
+    relation of the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} then gives
     $Y(C^i)^\dagger=\mu(C^i)^\dagger Y$; applying the same argument to the
     complementary product gives $C^iY=\mu YC^i$. Expanding these block
     relations gives (\ref{eq:spectral_gauged_intertwining}).
@@ -318,14 +318,14 @@ This section proves the rank-one Perron limit
 convergence (Theorem~\ref{thm:primitive_overlap}). Let $E:\MN{D}\to\MN{D}$
 be trace-preserving with a fixed point $\rho\neq0$, $\tr(\rho)\neq0$. Write
 $P:=P_\rho$ for the fixed-point projection of
-the corresponding definition in the companion quantum-channel volume (Chapter~\ref{ch:channels}),
+the corresponding definition in the companion quantum-channel volume~\cite{QICLean2026Blueprint} (Chapter~\ref{ch:channels}),
 \begin{align}
     P(X)
      & =\frac{\tr(X)}{\tr(\rho)}\rho,
     \notag
 \end{align}
 and $N:=E-P$ for the complementary part. The power decomposition
-(the corresponding theorem in the companion quantum-channel volume, Chapter~\ref{ch:channels}) gives
+(the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}, Chapter~\ref{ch:channels}) gives
 $E^n=P+N^n$ for $n\geq1$.
 
 \begin{lemma}[Trace of the fixed-point projection]\label{lem:fixedPointProj_trace}
@@ -355,7 +355,7 @@ $O_{AA}(N)=\Tr(\E_A^N)$, so Theorem~\ref{thm:trace_pow_one} yields the
 primitive self-overlap limit of Theorem~\ref{thm:primitive_overlap}. The
 hypothesis $\rho_{\spec}(N)<1$ is exactly the complementary transfer-map gap
 that the complementary spectral-radius theorem for primitive maps
-(the corresponding theorem in the companion quantum-channel volume, Chapter~\ref{ch:channels})
+(the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}, Chapter~\ref{ch:channels})
 supplies: for a primitive $E$ all eigenvalues bounded by $1$ in modulus and
 no trace-zero fixed point, every eigenvalue of $N=E-P$ has modulus strictly
 less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
@@ -429,7 +429,7 @@ projections, and tracking how the channel shifts the resulting corners.
     \leanok
     \uses{thm:psd_fp_pd_irred}
     By the Kadison--Schwarz inequality
-    (established in the companion quantum-channel volume), the gap
+    (established in the companion quantum-channel volume~\cite{QICLean2026Blueprint}), the gap
     $G=E(X^\dagger X)-E(X)^\dagger E(X)$ is positive semidefinite.
     Pairing $G$ with the positive-definite adjoint fixed point and using
     $E(X)=\mu X$ and $|\mu|=1$ gives weighted trace zero, hence $G=0$.
@@ -455,7 +455,7 @@ projections, and tracking how the channel shifts the resulting corners.
     Take eigenvectors $X$ and $Y$ for $\mu$ and $\nu$, respectively.
     The Kadison--Schwarz equality at $X$ places $X$ in the multiplicative
     domain. Thus the right multiplicative identity
-    (established in the companion quantum-channel volume) gives
+    (established in the companion quantum-channel volume~\cite{QICLean2026Blueprint}) gives
     $E(YX)=E(Y)E(X)=(\nu\mu)YX$.
     Since $X$ and $Y$ are invertible by
     Lemma~\ref{lem:isUnit_peripheral_eigenvector}, $YX\ne 0$, and
@@ -511,7 +511,7 @@ projections, and tracking how the channel shifts the resulting corners.
 \begin{proof}\leanok
     The Kadison--Schwarz equality at the unitary eigenvector places $U$ in
     the multiplicative domain, so the right multiplicative identity
-    (established in the companion quantum-channel volume) gives
+    (established in the companion quantum-channel volume~\cite{QICLean2026Blueprint}) gives
     $E(U^n)=E(U)^n=\mu^nU^n$ by induction on $n$.
 \end{proof}
 
