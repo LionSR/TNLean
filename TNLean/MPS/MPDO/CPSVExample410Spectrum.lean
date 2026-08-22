@@ -16,7 +16,8 @@ weight. This gives the full four-site spectrum at flip probability one quarter.
 
 **Local fix (left-right correlated flip):** CPSV16 lines 901--902 repeat the left-qubit label.
 This module uses the left-right flip defined in `CPSVExample410Operator`, whose bond-pattern
-weights agree with the entropy values printed at source line 904.
+weights agree with the entropy values printed at source line 904. See
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
 
 ## Main result
 
