@@ -5297,7 +5297,6 @@
 \fp_new:N   \l__tenkz_kernel_r_arc_t_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_s_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_tf_fp
-\fp_new:N   \l__tenkz_kernel_r_arc_sf_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_af_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_ab_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_cax_fp
@@ -7087,9 +7086,10 @@
         % A wrap's beads divide the whole drawn route, fold and run and
         % fold, by arc length -- the same contract every other route
         % keeps.  Both folds' control frames are built before any walk
-        % (the walk spends the angle registers), the folds are congruent
-        % so one walked length serves both, and the target settles into
-        % whichever stretch holds its share.
+        % (the walk spends the angle registers), each fold's length is
+        % walked in its own frame -- only the middle run's length comes
+        % in closed form -- and the target settles into whichever
+        % stretch holds its share.
         \fp_set_eq:NN \l__tenkz_kernel_r_arc_ex_fp \l__tenkz_kernel_r_xb_fp
         \fp_set_eq:NN \l__tenkz_kernel_r_arc_ey_fp \l__tenkz_kernel_r_yb_fp
         \fp_set:Nn \l__tenkz_kernel_r_arc_gax_fp
@@ -12468,7 +12468,6 @@
     \fp_set:Nn \l__tenkz_kernel_r_arc_s_fp {1}
     \__tenkz_kernel_r_arc_end:nn {#1} {from}
     \fp_set_eq:NN \l__tenkz_kernel_r_arc_tf_fp \l__tenkz_kernel_r_arc_t_fp
-    \fp_set_eq:NN \l__tenkz_kernel_r_arc_sf_fp \l__tenkz_kernel_r_arc_s_fp
     % the to end arrives forward along the chord when it has no face
     \fp_set_eq:NN \l__tenkz_kernel_r_arc_t_fp \l__tenkz_kernel_r_arc_a_fp
     \fp_set:Nn \l__tenkz_kernel_r_arc_s_fp {-1}
