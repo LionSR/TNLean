@@ -74,10 +74,42 @@ mathematical obstruction.
   physical-trace ZCL, normalized fixed-representative simple canonical form,
   and biCF. The first absorbed representative nevertheless has transfer
   spectral radius $1/2$ and is not normal.
-- Scope: this is proof-path drift in the printed argument, not a refutation of
-  the asserted all-sector conclusion. The alternative factorization remains
-  open in issue #6775, and the subsequent projector-controlled channel
-  assembly remains open in issue #6632.
+- Scope: this is proof-path drift in the printed argument. The non-Cartesian
+  construction below refutes only the implication from the inherited local
+  analytic properties; it has no ambient simple-biCF witness. The source-context
+  factorization remains issue #6775, the alternative direct sector-mixing
+  channel problem remains issue #6793, and their projector-controlled outer
+  assembly is formalized in #6632.
+
+### An absorbed normal representative need not have neighboring trace factors
+
+- Location: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
+- Main declaration:
+  `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
+- Statement refuted: injectivity, SAL, literal physical-trace idempotence, and
+  being a nonzero scalar multiple of a normal tensor imply the existence of a
+  physical-sector factorization with normalized rank-one neighboring traces.
+- Witness: the four diagonal physical slices are the outer products determined
+  by
+  \[
+  L=\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix},\qquad
+  R=\begin{pmatrix}
+  1/4&-3/100\\1/4&-1/100\\1/4&1/100\\1/4&3/100
+  \end{pmatrix}.
+  \]
+  Here $LR=\operatorname{diag}(1,0)$, while $RL$ has rank two. The four
+  slices span $M_2(\mathbb C)$ and admit positive scalar neighboring
+  operators, which give injectivity and SAL. Perron normalization supplies the
+  required normal representative.
+- Universal obstruction: the scalar slice and two simple-spectrum slices
+  force the left and right factors in every possible sector decomposition to
+  be one-dimensional. The resulting neighboring trace matrix has a nonzero
+  two-by-two minor and therefore cannot be of the form $(a_kb_h)_{k,h}$.
+- Boundary: these low-level analytic hypotheses do not imply the
+  factorization. The witness does not supply the ambient simple-biCF
+  reconstruction or line-246 unit-weight convention, so the source-context
+  assertion remains open in issue #6775. Direct blocked channels, as in issue
+  #6793, give an alternative route to (ii)$\Rightarrow$(v).
 
 ### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
 
