@@ -42,7 +42,19 @@ def bibtex_alpha_abbrev(parts: list[str]) -> str:
 
 
 class BibTeXAlphaLabelStyle(AlphaLabelStyle):
-    """Alpha labels with BibTeX-like initials for TeX-accented surnames."""
+    """Alpha labels with BibTeX-like initials for TeX-accented surnames.
+
+    Paper-gap notes (``type = {Paper-gap note}``) are labelled by their entry-key
+    slug instead of the author/year alpha label: every such note shares the same
+    contributor author and year, so alpha labels degenerate into indistinct
+    ``con26a``/``con26b``-style suffixes that identify nothing.
+    """
+
+    def format_label(self, entry):
+        if entry.fields.get("type") == "Paper-gap note":
+            slug = entry.key.split(":", 1)[-1]
+            return slug.replace("_", r"\_")
+        return super().format_label(entry)
 
     def format_lab_names(self, persons):
         numnames = len(persons)
