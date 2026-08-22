@@ -32,6 +32,11 @@ on:
       - '.github/workflows/pr-ci.yml'
       - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
+      # Trees the paper-gap reference check scans (texra-blueprint
+      # paper-gaps check); without these the check never runs
+      # on merge pushes that only touch a scanned file.
+      - 'blueprint/comments/**'
+      - 'docs/**/*.md'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
       - 'docs/tenkz/**'
@@ -93,6 +98,11 @@ on:
       - 'texra-blueprint.toml'
       - 'scripts/package-paper-gaps.sh'
       - 'scripts/build-paper-gaps.sh'
+      # Trees the paper-gap reference check scans (texra-blueprint
+      # paper-gaps check); without these the check never runs
+      # on PRs that only touch a scanned file.
+      - 'blueprint/comments/**'
+      - 'docs/**/*.md'
       - '**.lean'
       - 'lakefile.*'
       - 'lean-toolchain'
