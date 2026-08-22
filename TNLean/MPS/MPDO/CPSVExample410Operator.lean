@@ -4,9 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
-import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
 import TNLean.MPS.MPDO.LocalPurificationRFP
-import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 
 /-!
 # Corrected operator for CPSV16 Example 4.10
