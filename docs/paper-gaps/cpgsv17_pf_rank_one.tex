@@ -1144,10 +1144,16 @@ $\mathcal K=\mu A$ with $A$ normal and $\mu\ne0$. It does not package an
 ambient simple tensor in biCF whose canonical reconstruction contains
 $\mathcal K$. Moreover, for the singleton normalization produced here,
 $|\mu|=\sqrt r$, where $r$ is the Perron value of the unnormalized transfer.
-The trace of that transfer is $11619/2500$, so $r\ge11619/10000>1$ and
-$|\mu|>1$. Thus the line-246 convention $|\mu|\le1$, with at least one unit
-coefficient, fails; rescaling to unit weight destroys literal ZCL. This is the
-scale tension recorded in
+The transfer endomorphism has trace $1353/5000$. Its nonzero eigenvalues are
+roots of
+\[
+ \lambda^3-\frac{1353}{5000}\lambda^2-\frac{27}{5000}\lambda
+   +\frac{9}{20000}=0,
+\]
+whose Perron root is $r\approx0.284$. Hence $|\mu|\approx0.533<1$. Since this
+normalization has only one coefficient, the line-246 convention requires that
+coefficient to have unit modulus and therefore fails. Rescaling to unit weight
+destroys literal ZCL. This is the scale tension recorded in
 \path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
 Consequently the construction does not resolve \ghissue{6775} or refute the
 printed source-context assertion.
