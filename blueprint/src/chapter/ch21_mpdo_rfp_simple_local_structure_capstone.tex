@@ -1396,7 +1396,13 @@ This is the calculation in
     \leanok
     \uses{def:cpsv_example410_corrected_tensor, def:mpo_source_zcl}
     The corrected tensor is locally purified and hence positive at every
-    chain length.  Its physical-trace transfer is the nonzero projector
+    chain length.  It has source zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_example410_corrected_tensor, def:mpo_source_zcl}
+    Its physical-trace transfer is the nonzero projector
     \begin{align}
         P & =\frac12
         \begin{pmatrix}
@@ -1407,7 +1413,7 @@ This is the calculation in
         \end{pmatrix}. \notag
     \end{align}
     Since $P^2=P$, the tensor has source zero correlation length.
-\end{theorem}
+\end{proof}
 
 \begin{theorem}[Four-site spectrum of the corrected tensor]
     \label{thm:cpsv_example410_four_site_spectrum}
