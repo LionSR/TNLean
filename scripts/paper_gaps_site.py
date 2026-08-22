@@ -16,7 +16,9 @@ commentary), the Markdown documentation, and the notes themselves for
 ``paper-gaps/<name>.tex`` references and fails when a referenced note does
 not exist, the same way ``leanblueprint checkdecls`` fails on an unresolved
 declaration. It also enforces the ``<key>_<topic>.tex`` naming convention
-of ``docs/paper-gaps/policy.tex``.
+of ``docs/paper-gaps/policy.tex`` and the ``\\gapnote{<kind>}{<status>}``
+verdict marker every note declares (policy, Classification); the index
+lists open notes first and dims the resolved ones.
 """
 
 from __future__ import annotations
@@ -63,6 +65,14 @@ SOURCE_KEYS = {
     "tnlean": "internal theorem-surface audit, no single external source",
     "wolf": "Wolf, Quantum Channels & Operations (2012 lecture notes)",
 }
+# Verdict marker vocabulary (docs/paper-gaps/policy.tex, Classification).
+# Every note declares ``\gapnote{<kind>}{<status>}``; ``--check`` enforces
+# exactly one marker with a registered kind and status, and the index
+# lists open notes first and dims the resolved ones.
+GAP_KINDS = {"clarification", "local-correction", "scope-restriction",
+             "unfaithful", "false-source", "open-gap"}
+GAP_STATUSES = ("open", "historical", "resolved")
+GAPNOTE_RE = re.compile(r"\\gapnote\{([a-z<>-]+)\}\{([a-z<>-]+)\}")
 # Keys listed here are folded into their target key's group on the index
 # page, so one source gets one heading. Both filename prefixes remain
 # registered and accepted.
@@ -158,6 +168,8 @@ class Note:
     slug: str
     title: str = ""
     date: str = ""
+    kind: str = ""
+    status: str = ""
     citations: int = 0
 
     @property
@@ -191,6 +203,9 @@ def parse_note(path: Path) -> Note:
     note.title = _detex(raw_title) if raw_title else path.stem.replace("_", " ")
     raw_date = _braced_arg(tex, "date") or ""
     note.date = _git_date(path) if "today" in raw_date or not raw_date else raw_date.strip()
+    m = GAPNOTE_RE.search(tex)
+    if m:
+        note.kind, note.status = m.group(1), m.group(2)
     return note
 
 
@@ -246,6 +261,24 @@ def check() -> int:
             print(f"::error::paper-gap note '{p.name}' carries a version suffix; "
                   f"notes are revised in place (docs/paper-gaps/policy.tex, Naming)")
             failures += 1
+        markers = GAPNOTE_RE.findall(p.read_text(encoding="utf-8"))
+        if len(markers) != 1:
+            print(f"::error::paper-gap note '{p.name}' must declare exactly one "
+                  f"\\gapnote{{<kind>}}{{<status>}} verdict marker, found "
+                  f"{len(markers)} (docs/paper-gaps/policy.tex, Classification)")
+            failures += 1
+        else:
+            kind, status = markers[0]
+            if kind not in GAP_KINDS:
+                print(f"::error::paper-gap note '{p.name}' declares unknown verdict "
+                      f"kind '{kind}'; the vocabulary is "
+                      f"{', '.join(sorted(GAP_KINDS))}")
+                failures += 1
+            if status not in GAP_STATUSES:
+                print(f"::error::paper-gap note '{p.name}' declares unknown verdict "
+                      f"status '{status}'; the vocabulary is "
+                      f"{', '.join(GAP_STATUSES)}")
+                failures += 1
     for old, new in sorted(LEGACY_ALIASES.items()):
         if new not in existing:
             print(f"::error::legacy alias '{old}' points at '{new}.tex', "
@@ -253,7 +286,8 @@ def check() -> int:
             failures += 1
     if not failures:
         print(f"paper-gaps check: {len(counts)} referenced slugs resolve, "
-              f"all note names carry registered source keys")
+              f"all note names carry registered source keys, and every note "
+              f"declares a verdict marker")
     return 1 if failures else 0
 
 
@@ -274,6 +308,7 @@ table { border-collapse:collapse; width:100%; font-size:.95rem; }
 td { padding:.3rem .5rem .3rem 0; vertical-align:top; }
 td.date { white-space:nowrap; width:6.5rem; font-size:.85rem; }
 span.n { font-size:.8rem; white-space:nowrap; }
+tr.resolved { opacity:.55; }
 """
 
 
@@ -316,16 +351,23 @@ def build(out: Path) -> None:
 
     rows = []
     for g in ordered:
-        members = sorted(groups[g], key=lambda n: n.slug)
+        # Open notes first, resolved last (docs/paper-gaps/policy.tex,
+        # Classification); slug order within each status.
+        rank = {st: i for i, st in enumerate(GAP_STATUSES)}
+        members = sorted(groups[g],
+                         key=lambda n: (rank.get(n.status, len(rank)), n.slug))
         heading = group_heading(g)
         rows.append(f"<h2>{html.escape(heading)} <small>{len(members)}</small></h2>")
         rows.append("<table>")
         for n in members:
             cited = (f' <span class="n">\u00b7 cited \u00d7{n.citations}</span>'
                      if n.citations else "")
+            verdict = (f' <span class="n">\u00b7 {html.escape(n.kind)}'
+                       f' ({html.escape(n.status)})</span>' if n.kind else "")
+            cls = ' class="resolved"' if n.status == "resolved" else ""
             rows.append(
-                f'<tr><td class="date">{html.escape(n.date)}</td>'
-                f'<td><a href="{n.slug}.pdf">{html.escape(n.title)}</a>{cited} '
+                f'<tr{cls}><td class="date">{html.escape(n.date)}</td>'
+                f'<td><a href="{n.slug}.pdf">{html.escape(n.title)}</a>{verdict}{cited} '
                 f'<span class="n">(<a href="{GITHUB_BLOB}/{n.slug}.tex">tex</a>)</span>'
                 f"</td></tr>")
         rows.append("</table>")
