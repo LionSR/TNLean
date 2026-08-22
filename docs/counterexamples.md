@@ -258,14 +258,14 @@ mathematical obstruction.
 
 ### Irreducible channels need not be primitive
 
-- Location: `TNLean/QPF/Primitive.lean`
+- Location: `QICLean/QPF/Primitive.lean`
 - Statement refuted: irreducibility of a channel implies primitivity.
 - Witness: an irreducible channel can have period greater than `1`; primitivity
   is a stronger peripheral-spectrum condition.
 
 ### The peripheral eigenvalue set alone does not imply irreducibility
 
-- Location: `TNLean/Channel/Semigroup/Primitivity/MainTheorem.lean`
+- Location: `QICLean/Channel/Semigroup/Primitivity/MainTheorem.lean`
 - Statement refuted: `peripheralEigenvalues E = {1}` implies irreducibility.
 - Witness: the identity map on `M_2(C)` has peripheral eigenvalue set `{1}` in
   the current definition but is not irreducible.

@@ -57,19 +57,19 @@ cd blueprint && leanblueprint pdf
 
 ## Architecture
 
-The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers**.
-See `docs/import_structure.md`; `TNLean.lean` is generated.
+TNLean contains the tensor-network layers and depends on QICLean for matrix
+analysis, topology, channel and entropy theory, quantum Perron--Frobenius and
+spectral results, and channel-generic Kraus/Wielandt APIs. See
+`docs/import_structure.md`; `TNLean.lean` is generated.
 
 | Layer | Modules | Content |
 |-------|---------|---------|
-| **0** | `Algebra/`, `Analysis/`, `Topology/` | Matrix lemmas, trace pairings, Gram matrices, Frobenius norms, Skolem-Noether, cocycle cohomology, Brouwer FPT |
-| **1-2** | `Channel/` (Basic, Choi, Kraus, Stinespring, Transfer) | Quantum channel representations (Wolf Ch. 2) |
-| **2b-2c** | `Channel/Schwarz/`, `Channel/FixedPoint/`, `Channel/Irreducible/`, `Channel/Peripheral/`, `Channel/Semigroup/`, `Channel/KoashiImoto/`, `QPF/`, `Spectral/` | Kadison-Schwarz, Perron-Frobenius, spectral theory, peripheral spectrum, GKSL semigroups (Wolf Ch. 5-7); common invariant algebra of jointly invariant states (HJPW appendix) |
-| **3** | `MPS/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, word evaluation, blocking, transfer matrices, overlap matrices |
+| **0** | `Algebra/` | Tensor-network-facing algebra and compatibility results not owned by QICLean |
+| **3** | `MPS/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, finite-Kraus compatibility wrappers, word evaluation, blocking, transfer matrices, overlap matrices |
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |
 | **5b** | `MPS/RFP/` | Renormalization fixed-point scaffolding |
-| **6** | `Wielandt/` | Span-growth, rank-one extraction, rectangular span, Wielandt bound, primitivity equivalences |
+| **6** | `Wielandt/` | Tensor-typed span-growth, primitivity, and Wielandt consequences built on QICLean |
 
 **Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), and `Archive/` (legacy, excluded from root imports).
 

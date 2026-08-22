@@ -27,29 +27,27 @@ the marker into handwritten code does not make that file disposable.
 ## Conceptual layers
 
 The generated files sort imports by module name; they do not encode dependency
-order as comments. The library nevertheless follows the conceptual layers that
-were formerly documented inline in `TNLean.lean`:
+order as comments. TNLean now depends on QICLean, which owns the former
+foundational layers: general matrix analysis and topology; quantum channels,
+entropy, and Schwarz inequalities; quantum Perron--Frobenius and spectral
+theory; and the channel-generic finite-Kraus and quantum Wielandt APIs. Within
+TNLean, the remaining source follows these conceptual layers:
 
 | Layer | Main areas | Responsibility |
 | --- | --- | --- |
-| 0 | `Algebra` | General matrix, representation, block, and finite-dimensional algebra. |
-| 0b | `Analysis` | Ergodic, projection, functional-calculus, matrix-order, norm, and trace analysis. |
-| 1 | `Topology` | Convex projection, Brouwer, compactness, and fixed-point infrastructure. |
-| 2 | `Channel`, `Entropy` | Quantum channels; Choi, Kraus, and Stinespring theory; entropy and recovery. |
-| 2b | `Channel.Schwarz` and related analysis | Schwarz inequalities, operator convexity and monotonicity, and relative-entropy results. |
-| 2c | `Channel.FixedPoint`, `Channel.Irreducible`, `Channel.Peripheral`, `Channel.Semigroup`, `Channel.KoashiImoto`, `QPF`, `Spectral` | Fixed points, quantum Perron--Frobenius theory, peripheral spectrum, spectral gaps, semigroups, and the common invariant algebra of jointly invariant states. |
-| 2d | `Kraus` | Word evaluation, injectivity, block injectivity, normality, and invariant orthogonal projections of a finite Kraus family. These notions are stated in `namespace Kraus`, while the established matrix-product-state compatibility predicates remain in `MPS.Core`. |
-| 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, words, blocking, transfer matrices, and overlaps. |
+| 0 | `Algebra` | Tensor-network-facing algebra and compatibility results not owned by QICLean. |
+| 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, finite-Kraus compatibility wrappers, words, blocking, transfer matrices, and overlaps. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |
 | 5 | `MPS.BNT`, `MPS.CanonicalForm`, `MPS.Irreducible`, `MPS.Periodic`, `MPS.Structure` | Multi-block canonical forms, periodicity, and structural assembly. |
 | 5b | `MPS.RFP` | Renormalization fixed-point theory. |
-| 6 | `Wielandt` | Span growth, rank-one extraction, primitivity, and quantum Wielandt inequalities. |
+| 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the
-two-dimensional injective and normal-tensor developments. Public chapter-index
-and semigroup modules are part of the production tree and therefore enter the
-generated import surface automatically.
+two-dimensional injective and normal-tensor developments. `QCA` contains the
+quasi-local and cellular-automaton layer. Public chapter-index modules are part
+of the production tree and therefore enter the generated import surface
+automatically.
 
 ## Archive exclusion
 
