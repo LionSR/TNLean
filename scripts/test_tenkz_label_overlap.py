@@ -2298,6 +2298,9 @@ def main() -> int:
         # as a bond, so its record joins the audit with the same severity
         # split: a kernel-chosen band crossing it is a hard error, an
         # author's chosen one the advisory.
+        # 26215 sp is emphwidth/2 (0.80pt / 2): the paper halo under a
+        # pairing's foreground, the wider of its two layers at the house
+        # metrics.
         skin_ink = (
             "wire-ink|picture=1|name=skin-atom-1-1|origin=skin|stroke=26215|"
             "points=0,0;2000000,0\n"
@@ -2323,23 +2326,14 @@ def main() -> int:
 
         # And the records exist end to end: the declared-skin fixture's
         # rendered pairings each write an `origin=skin` record at the
-        # paper-halo half stroke, and the fixture still audits clean.
+        # halo half stroke (26215 sp, as above), and the fixture audits
+        # with no hard findings -- its one standing advisory, a label on
+        # a pairing no earlier record could see, is the rule's own
+        # organic evidence.
         skin_fixture = ROOT / "tests/tenkz/kernel/k_skin_pairings.tex"
-        target = work / skin_fixture.name
-        target.write_text(skin_fixture.read_text(encoding="utf-8"),
-                          encoding="utf-8")
-        run = subprocess.run(
-            [engine, "-interaction=nonstopmode", "-halt-on-error",
-             target.name],
-            cwd=work, env=env, text=True,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            timeout=180,
-        )
-        if run.returncode:
-            print(run.stdout)
-            raise AssertionError("k_skin_pairings did not compile")
-        skin_status, skin_audit = audit_status(
-            work / "k_skin_pairings.tnlog")
+        skin_status, skin_audit = audit_status(compile_tex(
+            "k_skin_pairings.tex",
+            skin_fixture.read_text(encoding="utf-8")))
         skin_records = [event for event in skin_audit.events()
                         if event.kind == "wire-ink"
                         and event.attrs.get("origin") == "skin"]
