@@ -1,0 +1,79 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Intertwiner Count in the Quadratic Reconstruction Argument}
+\author{}
+\date{2026-08-22}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\section{The printed dependence step}
+
+The proof of Theorem~7 of P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac
+\cite{PerezGarcia2007Matrix} compares two translation-invariant matrix product
+representations through matrices acting on a $D^2$-dimensional doubled bond
+space. The local source is
+\path{Papers/quant-ph_0608197/MPSarchive.tex}, lines~1080--1095. It produces
+$D^4$ invertible matrices $W_1,\ldots,W_{D^4}$ satisfying
+\begin{align}
+    W_k(C_i\otimes I) & =(B_i\otimes I)W_{k+1}
+                      &                        & (1\leq k\leq D^4-1),                                      \label{eq:source-chain}
+\end{align}
+and then chooses an index $n$ for which $W_1,\ldots,W_{n-1}$ are linearly
+independent but $W_n$ belongs to their span.
+
+The ambient matrix space is
+\begin{align}
+    M_{D^2}(\mathbb C),\qquad \dim_{\mathbb C}M_{D^2}(\mathbb C)=D^4.
+\end{align}
+Consequently, $D^4$ matrices need not be linearly dependent. The dependence
+asserted after~\eqref{eq:source-chain} does not follow from the printed count.
+
+\section{The corrected cut count}
+
+A window of $D^4$ consecutive open-boundary matrices has $D^4+1$ cuts: one
+before the first site, one after the last site, and $D^4-1$ internal cuts. If a
+comparison of the two open-boundary representations supplies an intertwiner at
+every cut, then one obtains
+\begin{align}
+    W_0,W_1,\ldots,W_{D^4} & \in M_{D^2}(\mathbb C),                 \label{eq:full-chain}                                                                                       \\
+    W_k(C_i\otimes I)      & =(B_i\otimes I)W_{k+1}
+                           &                                                               & (0\leq k\leq D^4-1).                                      \label{eq:full-relations}
+\end{align}
+The $D^4+1$ vectors in~\eqref{eq:full-chain} are necessarily linearly
+dependent as a family. Since every $W_k$ is invertible, $W_0\neq0$. Choose the
+first dependent vector. Then there is an index $1\leq n\leq D^4$ such that
+$W_0,\ldots,W_{n-1}$ are linearly independent and $W_n$ lies in their span.
+After shifting indices, this is exactly the dependence hypothesis required by
+the chain-combination lemma at source lines~1022--1049.
+
+The current formal quadratic-system structure stores only gauges attached to
+the $D^4$ sites. It therefore constructs the $D^4-1$ internal-cut
+intertwiners and proves the $D^4-2$ relations between consecutive internal
+cuts. It has no fields representing the gauges at the two endpoint cuts.
+Those endpoint intertwiners must be derived from a future comparison theorem
+for the surrounding open-boundary representations. They are not consequences
+of the internal quadratic equations alone.
+
+\section{Verdict}
+
+The source's $D^4$-intertwiner count is off by one for the stated dimension
+argument. The local correction is to use the full chain of $D^4+1$ cut
+intertwiners around the $D^4$-site window. Once the two endpoint cuts and all
+$D^4$ adjacent relations are supplied, linear dependence and the subsequent
+combination argument are valid. The formal development currently proves only
+the internal chain and does not claim that this chain forces dependence, so
+the reconstruction capstone remains open.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

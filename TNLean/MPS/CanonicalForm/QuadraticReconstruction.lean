@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
-import TNLean.MPS.Defs
+import QICLean.MPS.Defs
 
 /-!
 # Quadratic reconstruction system for the translation-invariant canonical form
@@ -23,7 +23,8 @@ equations displayed at MPSarchive.tex lines 1139-1152:
 
 * `B i ⊗ 1 = Y j * A j i * Z (j + 1)` for all physical indices `i` and window
   sites `j`;
-* `Y j * Z j = 1` at every window site where both unknowns exist;
+* `Y (j + 1) * Z (j + 1) = 1` at every internal cut represented by the
+  window;
 * `∑ i, B i * (B i)ᴴ = 1`.
 
 The reconstruction theorem (MPSarchive.tex lines 1154-1165) asserts that the
@@ -31,8 +32,8 @@ system is solvable whenever the state admits a translation-invariant
 representation with condition C1, and that any solution is unitarily conjugate
 to the canonical one. Its proof reduces, as in the uniqueness theorem
 `thm-uniq`, to two lemmas formalized below: the chain-combination lemma
-`lem-same-matr` (lines 1023-1052) and the Kronecker intertwiner lemma
-`lem-horn` (lines 1073-1079).
+`lem-same-matr` (lines 1022-1049) and the Kronecker intertwiner lemma
+`lem-horn` (lines 1053-1058).
 
 ## Main declarations
 
@@ -43,11 +44,11 @@ to the canonical one. Its proof reduces, as in the uniqueness theorem
 * `Matrix.kronecker_one_intertwines_iff_kroneckerSlice_intertwines`,
   `Matrix.exists_nonzero_intertwiner_of_kronecker_one_intertwines` - PGVWC07
   Lemma `lem-horn` in multiplicity-slice form, and the nonzero-intertwiner
-  consequence used at line 1094.
+  consequence used at lines 1094-1095.
 * `MPSTensor.QuadraticReconstructionSolution.chainIntertwiner`,
   `MPSTensor.QuadraticReconstructionSolution.chainIntertwiner_mul_kronecker` -
-  the invertible chain of intertwiners comparing two solutions of system (S),
-  the first step of the reconstruction proof (lines 1168-1179).
+  the internal chain of intertwiners comparing two solutions of system (S),
+  the first step of the reconstruction proof (lines 1167-1176).
 -/
 
 open scoped Matrix Kronecker
@@ -55,7 +56,7 @@ open scoped Matrix Kronecker
 /-! ## The chain-combination lemma `lem-same-matr` -/
 
 /-- The coefficient sequence of PGVWC07, Lemma `lem-same-matr`
-(arXiv:quant-ph/0608197, MPSarchive.tex lines 1023-1052). With the source's
+(arXiv:quant-ph/0608197, MPSarchive.tex lines 1022-1049). With the source's
 one-based data `λ_1, …, λ_{n-1}` written zero-based as `lam 0, …, lam (n - 1)`,
 the value at `j` is the source coefficient
 `μ_{j+1} = λ_1 x^{j+1} + λ_2 x^{j} + ⋯ + λ_{j+1} x`. -/
@@ -63,7 +64,7 @@ def pgvwc07ChainCoeff (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) : ℂ :=
   ∑ k ∈ Finset.range (j + 1), lam k * x ^ (j + 1 - k)
 
 /-- The recurrence `μ_{j+1} = x (λ_{j+1} + μ_j)` satisfied by the coefficients
-of PGVWC07 Lemma `lem-same-matr` (MPSarchive.tex lines 1035-1043). -/
+of PGVWC07 Lemma `lem-same-matr` (MPSarchive.tex lines 1032-1037). -/
 theorem pgvwc07ChainCoeff_succ (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) :
     pgvwc07ChainCoeff lam x (j + 1) = x * (lam (j + 1) + pgvwc07ChainCoeff lam x j) := by
   unfold pgvwc07ChainCoeff
@@ -81,7 +82,7 @@ theorem pgvwc07ChainCoeff_succ (lam : ℕ → ℂ) (x : ℂ) (j : ℕ) :
   ring
 
 /-- **PGVWC07, Lemma `lem-same-matr`** (arXiv:quant-ph/0608197, MPSarchive.tex
-lines 1023-1052), zero-based. Let `T`, `S` be linear maps on the same spaces
+lines 1022-1049), zero-based. Let `T`, `S` be linear maps on the same spaces
 and `Y 0, …, Y n` vectors such that `T (Y k) = S (Y (k + 1))` for `k < n`, the
 vectors `Y 0, …, Y (n - 1)` are linearly independent, and
 `Y n = ∑ k < n, lam k • Y k`. For any solution `x ≠ 0` of the polynomial
@@ -149,12 +150,12 @@ variable {R : Type*} [CommRing R]
 /-- The multiplicity slice of a matrix on a doubled index: the `(a, b)` slice
 of `W` is the matrix of entries `W (p, a) (q, b)`. This realizes the tensor
 factorization `M_{nm} = M_n ⊗ M_m` used in PGVWC07, Lemma `lem-horn`
-(arXiv:quant-ph/0608197, MPSarchive.tex lines 1073-1079). -/
+(arXiv:quant-ph/0608197, MPSarchive.tex lines 1053-1058). -/
 def kroneckerSlice (W : Matrix (n × m) (n × m) R) (a b : m) : Matrix n n R :=
   fun p q ↦ W (p, a) (q, b)
 
 /-- **PGVWC07, Lemma `lem-horn`** (arXiv:quant-ph/0608197, MPSarchive.tex
-lines 1073-1079) in multiplicity-slice form: `W` solves the amplified matrix
+lines 1053-1058) in multiplicity-slice form: `W` solves the amplified matrix
 equation `W (C ⊗ 1) = (B ⊗ 1) W` if and only if every multiplicity slice of
 `W` solves the unamplified equation `X C = B X`. The source phrases this as
 the solution space of the amplified equation being `S ⊗ M_n` for `S` the
@@ -177,7 +178,7 @@ theorem kronecker_one_intertwines_iff_kroneckerSlice_intertwines
       Fintype.sum_prod_type, mul_comm] using h'
 
 /-- The consequence of PGVWC07 Lemma `lem-horn` used in the uniqueness and
-reconstruction proofs (arXiv:quant-ph/0608197, MPSarchive.tex line 1094): a
+reconstruction proofs (arXiv:quant-ph/0608197, MPSarchive.tex lines 1094-1095): a
 nonzero simultaneous solution `W` of the amplified equations
 `W (C i ⊗ 1) = (B i ⊗ 1) W` yields a nonzero matrix `X` with `X * C i = B i * X`
 for every `i`. -/
@@ -214,18 +215,21 @@ form, so that the window length is `D ^ 4`), a solution consists of matrices
 tensor `B` of bond dimension `D` satisfying the quadratic equations
 
 * `B i ⊗ 1 = Y j * A j i * Z (j + 1)` for all `i`, `j`;
-* `Y j * Z j = 1` at every window site where both unknowns are defined;
+* `Y (j + 1) * Z (j + 1) = 1` at every internal cut represented by the
+  window;
 * `∑ i, B i * (B i)ᴴ = 1`.
 
-Here `leftGauge j` is the source unknown `Y (L₀ + 1 + j)` and `rightGauge j`
-is the source unknown `Z (L₀ + 2 + j)`, both indexed from `j = 0`. -/
+Here `leftGauge j` is the source unknown `Y (L₀ + 1 + j)`, while
+`rightGauge j` is the source unknown `Z (L₀ + 2 + j)`, both indexed from
+`j = 0`. Thus `leftGauge (j + 1) * rightGauge j = 1` is the source equation
+`Y (L₀ + 2 + j) * Z (L₀ + 2 + j) = 1`. -/
 structure QuadraticReconstructionSolution
     (A : Fin m → Fin d → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) where
   /-- The row unknowns `Y j` of system (S), zero-based over the window. -/
   leftGauge : Fin m → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
   /-- The column unknowns `Z (j + 1)` of system (S), zero-based over the
-  window: `rightGauge j` is the source unknown attached to the right of the
-  window site `j`. -/
+  window: `rightGauge j` is the source unknown `Z (L₀ + 2 + j)` attached to
+  the right of window site `L₀ + 1 + j`. -/
   rightGauge : Fin m → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
   /-- The translation-invariant tensor unknowns `B i` of system (S). -/
   tensor : MPSTensor d D
@@ -233,8 +237,9 @@ structure QuadraticReconstructionSolution
   (S), MPSarchive.tex lines 1147-1149. -/
   kronecker_eq : ∀ (i : Fin d) (j : Fin m),
     tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) = leftGauge j * A j i * rightGauge j
-  /-- The inversion equations `Y j * Z j = 1` of system (S), MPSarchive.tex
-  line 1150, at the window sites where both unknowns are defined. -/
+  /-- The internal inversion equations `Y (j + 1) * Z (j + 1) = 1` of
+  system (S), MPSarchive.tex line 1150. In the zero-based stored variables this
+  is `leftGauge (j + 1) * rightGauge j = 1`. -/
   leftGauge_mul_rightGauge : ∀ (j : Fin m) (h : (j : ℕ) + 1 < m),
     leftGauge ⟨(j : ℕ) + 1, h⟩ * rightGauge j = 1
   /-- The normalization equation `∑ i, B i * (B i)ᴴ = 1` of system (S),
@@ -248,7 +253,7 @@ variable {A : Fin m → Fin d → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
 /-- In a solution of system (S), each row unknown paired by an inversion
 equation is invertible. This is the invertibility of the `Y j` used implicitly
 in the reconstruction argument of PGVWC07 (arXiv:quant-ph/0608197,
-MPSarchive.tex lines 1167-1176). -/
+MPSarchive.tex lines 1142-1152). -/
 theorem isUnit_leftGauge (s : QuadraticReconstructionSolution A)
     {j : Fin m} (h : (j : ℕ) + 1 < m) :
     IsUnit (s.leftGauge ⟨(j : ℕ) + 1, h⟩) :=
@@ -258,7 +263,7 @@ theorem isUnit_leftGauge (s : QuadraticReconstructionSolution A)
 /-- In a solution of system (S), each column unknown paired by an inversion
 equation is invertible. This is the invertibility of the `Z j` used implicitly
 in the reconstruction argument of PGVWC07 (arXiv:quant-ph/0608197,
-MPSarchive.tex lines 1167-1176). -/
+MPSarchive.tex lines 1142-1152). -/
 theorem isUnit_rightGauge (s : QuadraticReconstructionSolution A)
     {j : Fin m} (h : (j : ℕ) + 1 < m) :
     IsUnit (s.rightGauge j) :=
@@ -267,11 +272,19 @@ theorem isUnit_rightGauge (s : QuadraticReconstructionSolution A)
 
 /-- The intertwiner comparing two solutions of system (S) at a window site:
 with row unknowns `Y`, `Y'` and column unknowns `Z`, `Z'` of the two solutions,
-the matrix attached to site `j + 1` is `W = Y' (j + 1) * Z j`, which equals
-`Y' (j + 1) * (Y (j + 1))⁻¹` by the inversion equations. This is the chain of
-invertible matrices `W_k` in the reconstruction proof of PGVWC07
-(arXiv:quant-ph/0608197, MPSarchive.tex lines 1168-1179), obtained there by
-reasoning as in the uniqueness theorem `thm-uniq` (lines 1080-1091). -/
+the matrix at the internal cut after site `j` is
+`W (j + 1) = Y' (j + 1) * Z (j + 1)`, which equals
+`Y' (j + 1) * (Y (j + 1))⁻¹` by the inversion equations. For a window of
+`m` sites this definition gives exactly `m - 1` internal intertwiners. This is
+the internal part of the chain used in the reconstruction proof of PGVWC07
+(arXiv:quant-ph/0608197, MPSarchive.tex lines 1167-1176), by comparison with
+the uniqueness proof at lines 1080-1086.
+
+**Local fix (`docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex`):**
+The internal chain alone has only `m - 1` intertwiners and does not force a
+linear dependence. For the source window `m = D ^ 4`, the dimension argument
+requires `D ^ 4 + 1` cut intertwiners. The two endpoint cuts are deliberately
+not invented here; they must come from a future open-boundary gauge comparison. -/
 def chainIntertwiner (s t : QuadraticReconstructionSolution A) (j : ℕ) (h : j + 1 < m) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   t.leftGauge ⟨j + 1, h⟩ * s.rightGauge ⟨j, Nat.lt_of_succ_lt h⟩
@@ -280,7 +293,7 @@ def chainIntertwiner (s t : QuadraticReconstructionSolution A) (j : ℕ) (h : j 
 as the product of a row unknown and a column unknown that are each paired by an
 inversion equation. This is the invertibility of the matrices `W_k` in the
 reconstruction proof of PGVWC07 (arXiv:quant-ph/0608197, MPSarchive.tex lines
-1168-1179). -/
+1167-1176). -/
 theorem isUnit_chainIntertwiner (s t : QuadraticReconstructionSolution A)
     {j : ℕ} (h : j + 1 < m) :
     IsUnit (chainIntertwiner s t j h) :=
@@ -288,13 +301,15 @@ theorem isUnit_chainIntertwiner (s t : QuadraticReconstructionSolution A)
     (s.isUnit_rightGauge (j := ⟨j, Nat.lt_of_succ_lt h⟩) h)
 
 /-- **Chain relation between two solutions of system (S)** (PGVWC07,
-arXiv:quant-ph/0608197, MPSarchive.tex lines 1168-1179): the invertible
+arXiv:quant-ph/0608197, MPSarchive.tex lines 1167-1176): the invertible
 intertwiners `W` of `chainIntertwiner` satisfy
 `W (j + 1) * (B i ⊗ 1) = (C i ⊗ 1) * W (j + 2)` for the tensors `B`, `C` of
 the two solutions, at every window site where both inversion equations are
-available. This is the input to the combination lemma `lem-same-matr` in the
-reconstruction proof, where the source writes the chain as
-`W_k (C_i ⊗ 1) = (B_i ⊗ 1) W_{k+1}` (lines 1080-1091). -/
+available. For a window of `m` sites, this theorem supplies exactly `m - 2`
+adjacent relations among the `m - 1` internal intertwiners. It does not supply
+the endpoint relations or the dependence hypothesis of `lem-same-matr`. The
+source writes the corresponding relation as
+`W_k (C_i ⊗ 1) = (B_i ⊗ 1) W_{k+1}` at lines 1080-1086. -/
 theorem chainIntertwiner_mul_kronecker (s t : QuadraticReconstructionSolution A)
     (i : Fin d) {j : ℕ} (h1 : j + 1 < m) (h2 : j + 2 < m) :
     chainIntertwiner s t j h1 * (s.tensor i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
