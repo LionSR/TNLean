@@ -121,6 +121,12 @@ A file name is permanent once other documents cite it; version suffixes are
 not used, since a note is revised in place (see Revision below) and its
 history is preserved by the repository.
 
+Blueprint prose cites a note like any other source, with
+\verb|\cite{gap:<slug>}|; the bibliography entry carries the published URL
+of the note, whether the note lives in this repository or in another one.
+Lean docstrings and comments use the repository path form
+\path{docs/paper-gaps/<slug>.tex}.
+
 \section{Classification}
 
 The conclusion of a note should give a verdict. The usual classifications are:
