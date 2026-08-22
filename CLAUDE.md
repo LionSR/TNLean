@@ -30,7 +30,7 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 
 # Blueprint validation. Requires leanblueprint plus the pinned shared
 # plasTeX plugin (blueprint/src/plastex.cfg loads it unconditionally):
-#   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.6'
+#   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.7'
 # Run after lake build succeeds.
 cd blueprint && leanblueprint checkdecls
 
