@@ -10,6 +10,8 @@ institution = "TNLean"
 title       = "TNLean paper-gap notes"
 scan_roots  = ["TNLean", "blueprint/src", "blueprint/comments", "docs"]
 skip        = ["command.tex", "common.tex", "template.tex"]
+# Every note must carry a \gapnote{kind}{status} verdict marker.
+require_verdict = true
 
 # The source-key registry: every note is named <key>_<topic>.tex. Author
 # initials plus two-digit year, or a canonical short name for a book or
