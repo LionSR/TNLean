@@ -210,20 +210,36 @@ OVERFLOW = """() => {
 }"""
 
 
+def _page_ships_mathjax(page: Page) -> bool:
+    """Whether this page pulls in the MathJax bundle at all.
+
+    Every content page and every dependency-graph page loads the bundle
+    through a script whose source names it, and that tag is in the static
+    HTML before any script runs.  The dependency-graph chooser, by contrast,
+    is a bare list of links with no mathematics and no bundle; waiting on it
+    for a startup promise it never creates could only ever time out.
+    """
+    return page.evaluate(
+        "() => [...document.scripts].some(script =>"
+        " /mathjax|tex-(chtml|mml|svg)/i.test(script.src))")
+
+
 def _settle(page: Page) -> None:
     """Wait until MathJax has finished its first pass over this page.
 
     The bundle is fetched asynchronously, so at the moment the document is
     parsed it may not have installed itself yet.  Waiting for the promise to
     exist, and only then for it to resolve, is what keeps a page from being
-    read before its mathematics is set.
+    read before its mathematics is set.  A page that ships no bundle carries
+    no mathematics to wait for, so only the pictures are settled there.
     """
-    page.wait_for_function(
-        "() => window.MathJax && window.MathJax.startup"
-        " && window.MathJax.startup.promise",
-        timeout=120_000,
-    )
-    page.evaluate("() => window.MathJax.startup.promise")
+    if _page_ships_mathjax(page):
+        page.wait_for_function(
+            "() => window.MathJax && window.MathJax.startup"
+            " && window.MathJax.startup.promise",
+            timeout=120_000,
+        )
+        page.evaluate("() => window.MathJax.startup.promise")
     # An image that failed is complete too, with no width, so this settles
     # whether the pictures arrived or not.
     page.wait_for_function(
