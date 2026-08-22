@@ -21136,17 +21136,26 @@
   {
     \clist_map_inline:nn { bond , physical~leg , trace }
       {
-        \group_begin:
-        \cs_set_eq:NN \tikz@options \prg_do_nothing:
-        \tikzset {##1}
-        % the sync hides inside the deferred option's own group, which a
-        % token-level search cannot enter: read the options as a string
-        \tl_set:Ne \l__tenkz_kernel_scratch_tl
-          { \tl_to_str:N \tikz@options }
-        \str_if_in:NnT \l__tenkz_kernel_scratch_tl
-          { pgflowlevelsynccm }
-          { \msg_error:nnn {tenkz}{kernel-restyle-transform} {##1} }
-        \group_end:
+        % The class's stored definition is inspected as a string, never
+        % executed: a stateful hook in a user's restyle runs exactly as
+        % often as the renderer strokes, and the search sees a canvas
+        % transform wherever the definition spells one -- at top level
+        % or nested inside a preaction or postaction, which a deferred
+        % execution would hide.  Indirection through a user-named style
+        % that itself transforms is outside the guard's reach; the
+        % refusal defends the documented footgun, not an adversary, and
+        % TNLOG states the contract in exactly those terms.
+        \cs_if_exist:cT { pgfk@/tikz/##1/.@cmd }
+          {
+            \tl_set:Ne \l__tenkz_kernel_scratch_tl
+              { \cs_replacement_spec:c { pgfk@/tikz/##1/.@cmd } }
+            \str_if_in:NnT \l__tenkz_kernel_scratch_tl
+              { transform~canvas }
+              { \msg_error:nnn {tenkz}{kernel-restyle-transform} {##1} }
+            \str_if_in:NnT \l__tenkz_kernel_scratch_tl
+              { pgflowlevelsynccm }
+              { \msg_error:nnn {tenkz}{kernel-restyle-transform} {##1} }
+          }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_end:

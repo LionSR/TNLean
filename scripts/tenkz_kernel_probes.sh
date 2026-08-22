@@ -2625,6 +2625,8 @@ for contract_negative in \
   n_atom_nudge_key \
   n_mark_nudge_key \
   n_wire_restyle_transform \
+  n_wire_restyle_nested \
+  n_leg_restyle_transform \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -2711,6 +2713,10 @@ do
   [ "$contract_negative" = n_mark_nudge_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_wire_restyle_transform ] &&
+    expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
+  [ "$contract_negative" = n_wire_restyle_nested ] &&
+    expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
+  [ "$contract_negative" = n_leg_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
