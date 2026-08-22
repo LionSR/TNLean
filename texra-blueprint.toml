@@ -44,6 +44,7 @@ ft_equal_gauge = { ancestors_of = "thm:sector_bnt_equal_global_gauge", title = "
 
 # Keys whose sources share a description are folded under one heading.
 [paper_gaps.group_aliases]
+cpgsv17 = "cpsv16"
 cpgsv21 = "rmp"
 
 # Slugs published before the source-key registry, mapped to the notes that
