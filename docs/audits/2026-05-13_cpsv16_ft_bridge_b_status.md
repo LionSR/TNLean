@@ -137,7 +137,7 @@ its first consumer will also add the corresponding blueprint entry.
   the non-dominant case).
 * `audits/2026-05-13_cpsv16_ft_definition_audit.md` §10 (Plan C YES
   verdict).
-* `docs/paper-gaps/ft_one_copy_scope_restriction.tex` (scope restriction).
+* `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex` (scope restriction).
 * `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` (cancellation
   obligation tracker for the open non-dominant case).
 * Issue #1641 (Plan C workplan).

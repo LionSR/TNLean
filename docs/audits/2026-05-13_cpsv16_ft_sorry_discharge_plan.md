@@ -469,7 +469,7 @@ as an induction on $r_A+r_B$:
 - **Source paper:** arXiv:1606.00608v4, Appendix A, pp. 29–32 (Theorem II.1 proof).
 - **Blueprint analysis:** `blueprint/comments202605/cpsv16_fundamental_theorem_analysis.md`
 - **Paper‑gaps plan:** `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`
-- **Scope restriction:** `docs/paper-gaps/ft_one_copy_scope_restriction.tex`
+- **Scope restriction:** `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`
 - **Equal‑MPV induction:** `NondecayingOverlap.lean:82–623`
 - **Leading‑block contradiction:** `ProportionalDominant.lean:746` (post-PR #1639 line number)
 - **Conditional tail‑peeling:** `ProportionalExpansion.lean:376–753`

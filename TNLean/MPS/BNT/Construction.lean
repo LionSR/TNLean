@@ -72,7 +72,7 @@ the repeated equal-class copies of the full arXiv:1606.00608 BNT decomposition.
 The raw multiplicity data (weights `μ_{j,q}` with multiplicities, contributing the
 power sum `c_N^{(j)} = ∑_q μ_{j,q}^N`) is carried instead by `SectorDecomposition`
 and the SectorBNT comparison theorems; see
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`.
 
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
 (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
@@ -337,7 +337,7 @@ supplied explicitly.
 allows equal weight moduli, but it does not carry repeated gauge-phase-equivalent
 copies and their individual weights from the full CPSV16 BNT multiplicity
 decomposition. The restriction is documented in
-`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+`docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. -/
 lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :

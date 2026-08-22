@@ -274,7 +274,7 @@ its periodic self-overlap limit `m_a` along the subsequence `m_a * ℕ`.
 
 Source: arXiv:1708.00029, theorem `thm:bd`, lines 613--623, with the periodic overlap
 dichotomy from Appendix A, lines 1023--1117. The positive-length formulation is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 -/
 theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
@@ -317,7 +317,7 @@ periodic side by a unit-modulus phase so that the MPV families agree at every po
 **Scope restriction (conditional fixed phase):** this is an additional
 assumption, not the hypothesis or conclusion of source theorem `thm:bd` at
 arXiv:1708.00029, lines 613--632. Its relation to the source phase argument is
-recorded in `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 def PeripheralProportionalCaseRootFromRescaling (d D₁ D₂ : ℕ) : Prop :=
   ∀ {A : MPSTensor d D₁} {B : MPSTensor d D₂} {m_a : ℕ},
     IsPeriodic m_a A →
@@ -333,7 +333,7 @@ upgrades proportional periodic MPVs to `HetRepeatedBlocks`.
 **Scope restriction (conditional fixed phase):** the fixed phase-rescaling
 property is an extra premise and this theorem is only a sufficient conditional
 route toward arXiv:1708.00029, theorem `thm:bd`, lines 613--632. The source gap
-is recorded in `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+is recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (hRescale : PeripheralProportionalCaseRootFromRescaling d D₁ D₂)
@@ -367,7 +367,7 @@ MPVs. Here the required non-decaying partners and their repeated-block
 classification are supplied directly through `PeriodicOverlapHypothesis`.
 Thus this theorem is a conditional matching lemma toward `thm:bd`, not its
 formalization. The gap is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 
 The proof follows the same finite-matching pattern as the current
 sector-decomposition matching theorem:
@@ -391,7 +391,7 @@ the sectorwise Perron normalization and transports the hypothesis back to the
 original spectral-radius-one blocks. The remaining source-faithfulness gap is
 to package the matching conclusion while retaining equality of matched
 periods, as recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses the proved
@@ -473,7 +473,7 @@ non-decaying cross-family overlap hypotheses remain additional inputs.
 `thm:bd` at arXiv:1708.00029, lines 613--632 assumes proportionality of the
 assembled MPVs and derives these witnesses. This declaration is only the
 subsequent finite matching step. The gap is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
@@ -609,7 +609,7 @@ families from `IsIrreducibleForm`.
 `thm:bdequal` at arXiv:1708.00029, lines 643--690 instead assumes equality of
 the multiplicity-bearing MPV families. Thus this is a conditional component,
 not the source theorem. The gap is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem fundamentalTheorem_periodic_equalCase_matching
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
@@ -643,7 +643,7 @@ only one-dimensional multiplicity spaces. Source theorem `thm:bdequal` at
 arXiv:1708.00029, lines 643--690 derives the corresponding facts from equal
 MPVs and allows arbitrary diagonal multiplicity matrices `R_j, S_j`. Hence the
 present result is not the full source theorem. The gap is recorded in
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
+`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem fundamentalTheorem_periodic_equalCase
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)

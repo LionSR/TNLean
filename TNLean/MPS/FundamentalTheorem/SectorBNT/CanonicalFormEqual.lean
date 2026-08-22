@@ -40,7 +40,7 @@ ambient bond dimensions, and no gauge equivalence between the original tensors, 
 **Scope restriction (active canonical-form tensors):** This is the active-only corrected form of the
 cited unitary theorem. It compares the extracted nonzero-weight SectorBNT tensors rather than the
 literal ambient canonical forms. The restricted source interpretation is recorded in
-`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`.
+`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`.
 
 Source: arXiv:2011.12127v2, lines 1831--1906, especially Corollary IV.5 and the unitary
 note at lines 1905--1906; arXiv:1606.00608, lines 354--361 and 1172--1199. -/
@@ -100,7 +100,7 @@ dimensions and does not claim gauge equivalence of the original tensors.
 **Scope restriction (active canonical-form tensors):** This is the active-only corrected form of the
 cited equal fundamental theorem. It compares the extracted nonzero-weight SectorBNT tensors rather
 than the literal ambient canonical forms. The restricted source interpretation is recorded in
-`docs/paper-gaps/canonical_bnt_ft_theorem_surface.tex`.
+`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`.
 
 Source: arXiv:2011.12127v2, lines 1831--1900, especially Corollary IV.5;
 arXiv:1606.00608, lines 354--361 and 1172--1192. -/

@@ -41,7 +41,7 @@ uses weights `μ_j > 0`. The local normal-canonical definition only assumes
 nonzero complex weights, so the positive-weight convention is stated here as a
 separate hypothesis. The imaginary-zero conjunct records the paper's real-weight
 convention. See
-`docs/paper-gaps/1708_normal_canonical_irreducible_form_weights.tex`. -/
+`docs/paper-gaps/dccsp17_normal_canonical_irreducible_form_weights.tex`. -/
 def toIsIrreducibleFormOfWeightPos
     (hNCF : IsNormalCanonicalForm (d := d) μ blocks)
     (hμpos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0) :

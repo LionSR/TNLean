@@ -266,7 +266,7 @@ at length `T` is the full product algebra.
 
 The identity-padding hypothesis `hPad` cannot be derived from `hCum` alone.
 The section *The homogeneous padding point* in
-`docs/paper-gaps/nonperiodic_mps_bnt_comparison_inputs.tex` records the
+`docs/paper-gaps/rmp_nonperiodic_bnt_comparison_inputs.tex` records the
 obstruction: take `d = 1` and `D₁ = D₂ = 1` with `A₀ = 2` and `B₀ = 3`.
 The cumulative pair span through length one is all of `ℂ ⊕ ℂ`, since
 `(1, 1)` (the empty word) and `(2, 3)` (the length-one word) are linearly

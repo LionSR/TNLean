@@ -66,7 +66,7 @@ The `m`-factor cyclic contraction below produces the uniform product-tensor
 identity and the unit-modulus
 normalization of the resulting sector phases; after that, the algebraic scalar
 extraction and the phase-coboundary lemma perform the κ/θ/φ telescoping. See
-docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
+docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 lemma sectorTensor_proportional_of_blockedMatch
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]

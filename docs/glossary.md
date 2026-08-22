@@ -433,7 +433,7 @@ model different levels of data and different sources.
   `toHasPrimitiveBlocks` in its namespace.
 - **Caveat:** this is a one-representative-per-gauge-phase-class surface. It
   suppresses repeated copies and their power-sum coefficients; see
-  `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. It is not equivalent by
+  `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. It is not equivalent by
   renaming to `MPSTensor.IsBNTCanonicalForm`.
 
 ### `MPSTensor.IsBNTCanonicalForm`
