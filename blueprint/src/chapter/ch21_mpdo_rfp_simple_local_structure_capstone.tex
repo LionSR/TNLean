@@ -1345,14 +1345,6 @@ This is the calculation in
     commuting realizations at different chain lengths.
 \end{theorem}
 
-\begin{lemma}[Complex square of a real square root]
-    \label{lem:complex_ofreal_sqrt_sq}
-    \lean{Complex.ofReal_sqrt_sq}
-    \leanok
-    If $x\geq 0$, then the complex coercion of its real square root satisfies
-    $((\sqrt{x}:\mathbb R):\mathbb C)^2=x$.
-\end{lemma}
-
 \begin{proof}
     \leanok
     Apply the real identity $(\sqrt{x})^2=x$ and commute the real embedding
@@ -1401,7 +1393,9 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_example410_corrected_tensor, def:mpo_source_zcl}
+    \uses{def:cpsv_example410_corrected_tensor,
+        lem:complex_ofreal_sqrt_sq,
+        thm:mpo_source_zcl_of_physical_trace_idempotent}
     Its physical-trace transfer is the nonzero projector
     \begin{align}
         P & =\frac12

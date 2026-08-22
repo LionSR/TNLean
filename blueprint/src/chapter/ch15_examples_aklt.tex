@@ -304,6 +304,14 @@ eigenvectors and the identity is the leading one. The subleading modulus
 $\tfrac13$ gives the correlation length $\xi = 1/\log 3$, and connected
 correlations decay as $(\tfrac13)^n$.
 
+\begin{lemma}[Complex square of a real square root]
+    \label{lem:complex_ofreal_sqrt_sq}
+    \lean{Complex.ofReal_sqrt_sq}
+    \leanok
+    If $x\geq 0$, then the complex coercion of its real square root satisfies
+    $((\sqrt{x}:\mathbb R):\mathbb C)^2=x$.
+\end{lemma}
+
 \begin{theorem}[Pauli eigenvectors of the AKLT transfer map]\label{thm:aklt_pauli_eigenvectors}
     \lean{MPSTensor.aklt_transferMap_sigmaZ, MPSTensor.aklt_transferMap_sigmaX,
         MPSTensor.aklt_transferMap_sigmaY}
@@ -320,6 +328,7 @@ correlations decay as $(\tfrac13)^n$.
 
 \begin{proof}
     \leanok
+    \uses{lem:complex_ofreal_sqrt_sq}
     Each identity is an entrywise computation from the AKLT matrices, using
     $(\sqrt{3})^2 = 3$ and $(\sqrt{2})^2 = 2$ to clear the prefactors.
 \end{proof}
