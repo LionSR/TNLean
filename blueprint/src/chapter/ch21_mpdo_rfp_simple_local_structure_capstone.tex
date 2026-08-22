@@ -97,7 +97,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp, thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
+    \uses{thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
     Identify the two-site physical space of $K$ with the one-site physical
     space of $K^{[2]}$, and identify the four-site physical space of $K$ with
     the two-site physical space of $K^{[2]}$. These identifications merely
@@ -1581,8 +1581,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_example410_window_entropies,
-        thm:cpsv_example410_log_ratio_pos}
+    \uses{thm:cpsv_example410_window_entropies, thm:cpsv_example410_log_ratio_pos}
     Since $\tilde I_2-\tilde I_1=2\tilde S_2-\tilde S_1-\tilde S_3$,
     substituting the closed forms and collecting logarithms gives the
     displayed identity; positivity follows from the certified integer
@@ -2425,9 +2424,7 @@ This is the calculation in
     \lean{MPOTensor.isGSNNCH_smul_iff,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_not_isGSNNCH}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor, def:mpdo_source_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps,
-        thm:cpsv_example412_not_gsnnch}
+    \uses{def:cpsv_example412_literal_tensor, def:mpdo_source_gsnnch, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_not_gsnnch}
     The condition of Definition~4.8 constrains only the normalized
     density-operator family, and that family is unchanged by any nonzero
     complex rescaling of the tensor. The condition is therefore invariant
@@ -2436,9 +2433,7 @@ This is the calculation in
     nearest-neighbor commuting Hamiltonian.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_normalized_mpo_scaling_invariance,
-        thm:cpsv_example412_not_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps}
+    \uses{thm:mpdo_normalized_mpo_scaling_invariance, thm:cpsv_example412_not_gsnnch, thm:cpsv_example412_normalized_rfp_maps}
     For nonzero $c$ and every chain length, the normalized density operator
     of $cM$ equals that of $M$, so every clause of Definition~4.8 holds for
     $cM$ exactly when it holds for $M$. Taking $c=\frac12$ transports the
@@ -2448,13 +2443,24 @@ This is the calculation in
 % **Missing statement; proof-path drift:** Analytic inheritance is complete
 % for every common-weight absorbed BNT representative, but the explicit
 % bond-one construction refutes preservation of normality under all conditions
-% used in Appendix C.2.  The printed implication (ii)=>(iv) therefore needs a
-% factorization argument that does not use absorbed normality; tracked in
-% #6775.  Direct per-representative blocked channels are a separate possible
-% route to (ii)=>(v), tracked in #6793, and their outer-sector composition is
-% tracked in #6632.  Independently,
+% used in Appendix C.2.  The
+% non-Cartesian four-letter construction below shows that the resulting local
+% analytic properties do not alone imply a neighboring trace factorization.
+% It does not supply the ambient biCF witness required to refute the printed
+% implication (ii)=>(iv).  The source-context factorization remains #6775,
+% while direct per-representative blocked channels remain the alternative route
+% tracked in #6793; their outer-sector composition is formalized in #6632.
+% Independently,
 % thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
 % (iv)=>(v).  Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+% The necessary condition thm:mpdo_neighboring_trace_unit_closure shows that
+% any qualifying factorization of a tensor forces every nonempty closed chain
+% of that tensor to have unit trace.  The per-representative assertion below
+% therefore carries the implicit normalization tr(T_{K_s}) = 1 for each
+% absorbed representative, which the line-1498 normalization asserts but the
+% ambient normalization at lines 1755-1759 supplies only summed over
+% representatives.  Whether the standing hypotheses of (ii) imply this
+% per-representative unit trace is part of the remaining content of #6775.
 \begin{theorem}[Physical sector structure of absorbed BNT representatives]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
@@ -2490,3 +2496,48 @@ This is the calculation in
     {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
     imposed at line~849 and restated at line~1628 of the same source.
 \end{theorem}
+
+\begin{theorem}[Counterexample to the low-level absorbed-sector implication]
+    \label{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}
+    \lean{MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample}
+    \leanok
+    \uses{def:is_sal, def:mpo_physical_trace_transfer,
+        def:mpdo_physical_sector_factorization,
+        def:mpdo_neighboring_trace_factorization}
+    There are tensors $K,A$ of physical dimension four and virtual dimension
+    two, and a nonzero scalar $\mu$, such that $K=\mu A$, the tensor $A$ is
+    normal, and $K$ is injective, satisfies the strong area law, and obeys
+    \begin{align}
+        \mathcal T_K^2&=\mathcal T_K.
+        \notag
+    \end{align}
+    Nevertheless, no physical-sector factorization of $K$ has positive
+    neighboring operators whose traces are of the form $a_kb_h$ with
+    $\sum_k a_kb_k=1$. Hence these local analytic hypotheses do not by
+    themselves imply the asserted factorization. This does not refute the
+    all-sector assertion in
+    \cite[Theorem~4.9 and Appendix~C.2, lines~1647--1782]
+      {Cirac2016MPDO_arXiv}, whose hypotheses include an ambient simple tensor
+    in biCF and its canonical reconstruction.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take
+    \begin{align}
+      L&=\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix}, &
+      R&=\begin{pmatrix}
+        1/4&-3/100\\1/4&-1/100\\1/4&1/100\\1/4&3/100
+      \end{pmatrix},
+    \end{align}
+    and let the four diagonal physical slices be the outer products of the
+    corresponding columns of $L$ and rows of $R$. Then
+    $LR=\operatorname{diag}(1,0)$, whereas $RL$ has rank two. The scalar
+    slice and two simple-spectrum slices force every summand in any
+    physical-sector factorization to have one-dimensional left and right
+    factors. The resulting neighboring trace matrix has a nonzero
+    two-by-two minor, so it cannot equal $(a_kb_h)_{k,h}$. The four slices
+    span the full two-by-two matrix algebra, and their displayed scalar
+    neighboring operators are positive. Finally, Perron normalization and a
+    canonical gauge express the tensor as a nonzero scalar multiple of a
+    normal tensor.
+\end{proof}
