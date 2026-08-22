@@ -2622,6 +2622,8 @@ for contract_negative in \
   n_wire_bend_key \
   n_wire_around_key \
   n_mark_inset_key \
+  n_atom_nudge_key \
+  n_mark_nudge_key \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -2702,6 +2704,10 @@ do
   [ "$contract_negative" = n_wire_around_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_mark_inset_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_atom_nudge_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_mark_nudge_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
