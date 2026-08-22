@@ -1306,7 +1306,6 @@
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { kind }
   { index, string } { kind }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { via } { via }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { bend } { bend }
 \keys_define:nn { tenkz-kernel-wire }
   {
     weight .code:n   = { \__tenkz_kernel_weight:n {#1} } ,
@@ -1315,7 +1314,6 @@
   }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { species } { species }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { wind } { wind }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { around } { around }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { cross } { cross }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { dir }
   { to, from, none } { dir }
@@ -1348,7 +1346,6 @@
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
   { selected, secondary, complement, collar, neutral } { slot }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { inset } { inset }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { label~pos } { label-pos }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { nudge } { nudge }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { name } { name }
@@ -2354,7 +2351,7 @@
     \__tenkz_model_map_ids:nn {wire}
       {
         \tl_set:Nn \l__tenkz_model_last_tl {##1}
-        \clist_map_inline:nn {via, around}
+        \clist_map_inline:nn {via}
           {
             \__tenkz_model_get:nnN {##1} {####1}
               \l__tenkz_kernel_list_tl

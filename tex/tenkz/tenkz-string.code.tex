@@ -78,7 +78,7 @@
 
 % ---------- state ------------------------------------------------------------
 \seq_new:N \l__tenkz_string_ids_seq          % declaration order
-\__tenkz_prop_new_indexed:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|around
+\__tenkz_prop_new_indexed:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|route
 \prop_new:N \l__tenkz_string_source_prop     % id -> caller|generated
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
 \__tenkz_prop_new_indexed:N \l__tenkz_string_cross_prop      % unordered pair -> declarations
@@ -91,7 +91,6 @@
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
 \seq_new:N \l__tenkz_string_processed_seq    % directed crossing pairs split
-\seq_new:N \l__tenkz_string_obstacles_seq    % measured around= address list
 \seq_new:N \l__tenkz_string_segments_seq
 \prop_new:N \l__tenkz_string_self_gap_prop   % self id -> component boundary
 \prop_new:N \l__tenkz_string_external_gap_prop % under id -> component boundaries
@@ -107,9 +106,6 @@
 \tl_new:N \l__tenkz_string_first_tl
 \tl_new:N \l__tenkz_string_last_tl
 \tl_new:N \l__tenkz_string_tmp_tl
-\tl_new:N \l__tenkz_string_normal_tl
-\tl_new:N \l__tenkz_string_tmax_tl
-\tl_new:N \l__tenkz_string_tmin_tl
 \tl_new:N \l__tenkz_string_self_path_tl
 \tl_new:N \l__tenkz_string_self_final_tl
 \tl_new:N \l__tenkz_string_self_initial_point_tl
@@ -119,13 +115,6 @@
 \tl_new:N \l__tenkz_string_loop_second_tl
 \tl_new:N \l__tenkz_string_loop_third_tl
 \tl_new:N \l__tenkz_string_loop_reference_tl
-\fp_new:N \l__tenkz_string_x_fp
-\fp_new:N \l__tenkz_string_y_fp
-\fp_new:N \l__tenkz_string_xb_fp
-\fp_new:N \l__tenkz_string_yb_fp
-\fp_new:N \l__tenkz_string_dir_fp
-\fp_new:N \l__tenkz_string_tangent_fp
-\fp_new:N \l__tenkz_string_scale_fp
 \fp_new:N \l__tenkz_string_ax_fp
 \fp_new:N \l__tenkz_string_ay_fp
 \fp_new:N \l__tenkz_string_bx_fp
@@ -405,106 +394,6 @@
                + #7 * sind( 360 * #6 * #1 / \l__tenkz_string_n_int ) , 5 ) }
   }
 
-% A detour past measured obstacles: string #1 from point #2 to point #3
-% (braced pairs).  Two flank waypoints sit beyond the obstacle union's
-% tangential extent and on its outer support line in direction #4.  This
-% clearance envelope keeps the approach legs outside offset silhouettes; one
-% maximum-support apex can still clip an obstacle away from that apex.  #5 is
-% an address list encoded as a braced list of
-% {family}{hx}{hy}{corner}{theta}{cx}{cy} records in pitch units; #6 is the
-% caller-space length of one pitch unit.  Geometry's support fold is consumed
-% read-only.
-\cs_new_protected:Npn \__tenkz_string_declare_around:nnnnnn #1#2#3#4#5#6
-  {
-    \__tenkz_string_register:nn {#1} {around}
-    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
-    \fp_set:Nn \l__tenkz_string_dir_fp {#4}
-    \fp_set:Nn \l__tenkz_string_tangent_fp {#4 - 90}
-    \fp_set:Nn \l__tenkz_string_scale_fp {#6}
-    \seq_clear:N \l__tenkz_string_obstacles_seq
-    \tl_map_inline:nn {#5}
-      { \seq_put_right:Nn \l__tenkz_string_obstacles_seq {##1} }
-    \__tenkz_geom_support_max:nnN
-      {l__tenkz_string_obstacles_seq}
-      {\fp_use:N \l__tenkz_string_dir_fp}
-      \l__tenkz_string_normal_tl
-    \__tenkz_geom_support_max:nnN
-      {l__tenkz_string_obstacles_seq}
-      {\fp_use:N \l__tenkz_string_tangent_fp}
-      \l__tenkz_string_tmax_tl
-    \__tenkz_geom_support_max:nnN
-      {l__tenkz_string_obstacles_seq}
-      {\fp_eval:n {\l__tenkz_string_tangent_fp + 180}}
-      \l__tenkz_string_tmin_tl
-    \tl_set:Ne \l__tenkz_string_normal_tl
-      {
-        \fp_eval:n
-          {\l__tenkz_string_normal_tl
-            + \__tenkz_metric_ratio:n {daylight}}
-      }
-    \tl_set:Ne \l__tenkz_string_tmax_tl
-      {
-        \fp_eval:n
-          {\l__tenkz_string_tmax_tl
-            + \__tenkz_metric_ratio:n {daylight}}
-      }
-    \tl_set:Ne \l__tenkz_string_tmin_tl
-      {
-        \fp_eval:n
-          {-\l__tenkz_string_tmin_tl
-            - \__tenkz_metric_ratio:n {daylight}}
-      }
-    \fp_set:Nn \l__tenkz_string_x_fp
-      {
-        (\l__tenkz_string_normal_tl
-          * cosd(\l__tenkz_string_dir_fp)
-          + \l__tenkz_string_tmin_tl
-            * cosd(\l__tenkz_string_tangent_fp))
-        * \l__tenkz_string_scale_fp
-      }
-    \fp_set:Nn \l__tenkz_string_y_fp
-      {
-        (\l__tenkz_string_normal_tl
-          * sind(\l__tenkz_string_dir_fp)
-          + \l__tenkz_string_tmin_tl
-            * sind(\l__tenkz_string_tangent_fp))
-        * \l__tenkz_string_scale_fp
-      }
-    \fp_set:Nn \l__tenkz_string_xb_fp
-      {
-        (\l__tenkz_string_normal_tl
-          * cosd(\l__tenkz_string_dir_fp)
-          + \l__tenkz_string_tmax_tl
-            * cosd(\l__tenkz_string_tangent_fp))
-        * \l__tenkz_string_scale_fp
-      }
-    \fp_set:Nn \l__tenkz_string_yb_fp
-      {
-        (\l__tenkz_string_normal_tl
-          * sind(\l__tenkz_string_dir_fp)
-          + \l__tenkz_string_tmax_tl
-            * sind(\l__tenkz_string_tangent_fp))
-        * \l__tenkz_string_scale_fp
-      }
-    \use:e
-      {
-        \exp_not:N \path [ spath/save = #1 ]
-          ( \exp_not:n {#2} )
-          to [ curve~through =
-            { ( \fp_use:N \l__tenkz_string_x_fp ,
-                \fp_use:N \l__tenkz_string_y_fp )
-              .. ( \fp_use:N \l__tenkz_string_xb_fp ,
-                   \fp_use:N \l__tenkz_string_yb_fp ) } ]
-          ( \exp_not:n {#3} ) ;
-      }
-    \tenkz@event{string|id=#1|kind=around|
-      flank1=\fp_eval:n {round(\l__tenkz_string_x_fp,5)},
-        \fp_eval:n {round(\l__tenkz_string_y_fp,5)}|
-      flank2=\fp_eval:n {round(\l__tenkz_string_xb_fp,5)},
-        \fp_eval:n {round(\l__tenkz_string_yb_fp,5)}}
-  }
-
-% ---------- crossings ----------------------------------------------------------
 \cs_new_protected:Npn \__tenkz_string_under:nn #1#2
   { \__tenkz_string_under_at:nnn {#1} {#2} {1} }
 

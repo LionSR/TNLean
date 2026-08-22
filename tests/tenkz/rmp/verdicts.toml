@@ -882,11 +882,11 @@ id = "rmp-iv-ground-space-2d"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "2410e7dce6e67d82e155f7916b6575454d228432924964a6c7857714f48a95df"
+case_sha256 = "a36afb3fe1ba52666f1a2e9f2108244763377fdcbba04677c4209c69a2dc2c73"
 reviewed = "2026-08-05"
 renderer = "fable-w6-vision-review-2026-08-05-200dpi"
 second_viewer = "fable-w6-countersign-2026-08-05-400dpi"
-note = "Kernel migration verified against GS2D.pdf and the paper's fig4 twin at 900dpi: the sites are now the source's box tensors, the sheet and the boundary operator are two nested contours with X on the outer one at the east, and the perimeter bonds are cut just past the inner window as in the source. The old note's 'arrowed legs absent' claim is a misreading: both source PDFs draw plain undirected legs, so physical=up records the source faithfully and no directed-leg capability is needed here. Residue: the kernel extends every physical leg through both windows at the hull's full page-up reach, so the sheet stands under a forest of long verticals where the source draws short out-of-plane ticks; meaning is intact but the default is crowded (K3, family-level leg-reach metric)."
+note = "Kernel migration verified against GS2D.pdf and the paper's fig4 twin at 900dpi: the sites are now the source's box tensors, the sheet and the boundary operator are two nested contours with X on the outer one at the east, and the perimeter bonds are cut just past the inner window as in the source. The old note's 'arrowed legs absent' claim is a misreading: both source PDFs draw plain undirected legs, so physical=up records the source faithfully and no directed-leg capability is needed here. Residue: the kernel extends every physical leg through both windows at the hull's full page-up reach, so the sheet stands under a forest of long verticals where the source draws short out-of-plane ticks; meaning is intact but the default is crowded (K3, family-level leg-reach metric). Re-pinned 2026-08-22: the inert inset=1 was dropped from the outer contour with the key's retirement (#6194); the with/without rasters are byte-identical at 400dpi, so the reviewed render is unchanged."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-one"

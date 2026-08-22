@@ -181,6 +181,10 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "string": {
         "picture": _is_picture_id,
         "id": _any,
+        # "around" stays reader-accepted for stored 1.2 streams: its writer
+        # was demolished with the around= key (#6249), and dropping the
+        # word from the reader is a breaking change reserved for the
+        # next event-major bump (TNLOG.md section 7).
         "kind": _enum("open", "closed", "wind", "around"),
         "pts": _is_positive_int,
     },

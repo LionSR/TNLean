@@ -1,0 +1,10 @@
+% Negative: the retired wire `around=` detour key has no parser path.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,2), skin=box, name=o]{O}
+  \tnwire[around={o}]{(1,1)}{(1,3)}
+\end{tenkz}
+\end{document}

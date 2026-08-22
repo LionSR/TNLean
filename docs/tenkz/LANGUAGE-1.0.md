@@ -176,7 +176,7 @@ no glyph and, by the `skin=none` rule it inherits, no label — unless the
 author declares a skin, while every record — the bonds bridging an open
 hole, its boundary entries — stands unchanged.
 
-### 2.4 Wire keys (11)
+### 2.4 Wire keys (10)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -185,7 +185,6 @@ hole, its boundary entries — stands unchanged.
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
 | `closed` | flag | — | false | `TKZ-WIRE-*` |
 | `wind=` | pair | cycle `{p,q}` | zero | `TKZ-WIND-*` |
-| `around=` | address-list | — | empty | `TKZ-WIRE-*` |
 | `cross=` | crossing-list | — | empty | `TKZ-CROSS-*` |
 | `crossing=` | small-enum | `over` `under` `alternate` `alternate=over` `alternate=under` | empty | `TKZ-CROSS-*` |
 | `dir=` | small-enum | `to` `from` `none` | `none` | `TKZ-WIRE-*` |
@@ -261,11 +260,13 @@ signed two-axis offsets, not a row list, selector, or untyped number.
 
 The angle is minted rather than borrowed, and the reason is worth stating
 because it is the only new type here that could have been avoided on paper.
-A bearing is not a plain number: a number is a bend factor or an inset
-count, page quantities with no frame, whereas an angle is read in a record's
-own axes and transforms with them. Typing a face and a label placement as
-`number` would have kept the count lower by reviving a type these amendments
-retired and by flattening the distinction the local-axes rule exists to make.
+A bearing is not a plain number: the numbers these tables once carried --
+a bend factor, an inset count -- were page quantities with no frame, and
+they left the registry with their keys, whereas an angle is read in a
+record's own axes and transforms with them. Typing a face and a label
+placement as `number` would have kept the count lower by reviving a type
+these amendments retired and by flattening the distinction the local-axes
+rule exists to make.
 The census gains one and says so.
 
 The census covers key values; positional label arguments are mathematics and
@@ -649,11 +650,10 @@ string. `via=` belongs to waypoint-routed closed strings and is mutually
 exclusive with `wind=`.
 <!-- Consumers: rmp-iii-a-torus-one, rmp-workbench-iii-eq59. -->
 
-**Detours.** `around=<address list>` routes the wire past the named records
-against their measured silhouettes plus daylight — the pulling-through
-idiom, and the hull route with the side left to the engine.
-<!-- Consumers: rmp-iii-a-pulling-through, rmp-iii-a-g-injective-projector,
-     rmp-workbench-iii-g-injective-pull, rmp-workbench-iii-mpo-injective-white. -->
+**Detours.** A detour is a side of a selection: `route={<side> of
+<selector>}` sends the wire past the selected records against their
+measured silhouettes plus daylight, and the crossing set is the answer to
+that claim. There is no separate detour key.
 
 **Closures.** Side policy words and selector keys normalize to wires whose
 `origin` field records the policy that generated them (`origin=trace`,
@@ -1090,6 +1090,7 @@ row is what names where the meaning went.
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
 | `nudge=` (atom and mark) | a basis member `(r,c,k)`, an ordinary address, or the label station rule (§6) |
 | `inset=` | nothing: concentric order is doctrine on the hull (§5) |
+| `around=` | nothing: the key detoured no ink; a detour an author intends is `route={<side> of <selector>}` |
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |

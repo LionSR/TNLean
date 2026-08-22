@@ -27,7 +27,7 @@ before the 0.9 freeze, and assigns the header spelling and the ignorable-kind
 marking to #4162 and #4703. Until that change lands, a reader cannot negotiate
 and the surface is held by whole-file digest instead: `tests/tenkz/`
 `golden-events.sha256` (9 corpus streams), `tests/tenkz/kernel/golden.sha256`
-(12 kernel probes), and `tests/tenkz/strings/golden.sha256` (30 string probes)
+(14 kernel probes), and `tests/tenkz/strings/golden.sha256` (28 string probes)
 pin exact bytes. Those digests make field order and spacing part of the pinned
 surface even though no schema states them, which is why §4 is normative here.
 
@@ -156,7 +156,7 @@ first, the rest sorted, no `picture=`.
 | `kernel-boundary` | `signature` | closes the record block with the picture's exposed-index multiset, comma-space joined, possibly empty |
 | `check` | `scope`, then `relation` or `product`, `result`, `modulo`, and result-specific fields | one equation-level verdict, emitted after every picture of its scope |
 | `warning` | `picture`, `code`, then code-specific fields | one non-fatal geometry or readability diagnostic |
-| `string` | `id`, `kind` (`open`, `closed`, `wind`, `around`), `class`, `pts`, `flank1`, `flank2` | one declared curve |
+| `string` | `id`, `kind` (`open`, `closed`, `wind`; readers also accept the retired `around` from stored 1.2 streams), `class`, `pts` | one declared curve |
 | `stringbead` | `id`, `t`, `x`, `y` | one bead at parameter `t` on a string |
 | `stringcross` | `under`, `over`, `hits` | one over-under crossing |
 | `ink-use` | `picture`, `class` (`glyph`, `wire`), `id`, `shape` | opens an ink-owner scope for the geometry that follows |
@@ -262,7 +262,7 @@ of them is a change to the surface.
 
 The last row is the one to read twice. `picture`'s `metrics`, every `warning`
 payload field beyond `code`, `check`'s `modulo`, `left-kind`, and `right-kind`,
-`string`'s `class`, `flank1`, and `flank2`, and the whole open vocabulary of
+`string`'s `class`, and the whole open vocabulary of
 the four record kinds all pass through unvalidated. The reader tolerating a
 field is not the same as the format having one.
 
