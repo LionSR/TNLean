@@ -205,7 +205,7 @@ def test_sugar_expansion_checks_every_token() -> None:
             entry.kind,
             (
                 *entry.fields[:4],
-                "sugar(route=bogus)",
+                "sugar(stroke=bogus)",
                 entry.fields[5],
             ),
         )
