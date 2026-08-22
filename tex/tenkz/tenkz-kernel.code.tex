@@ -11612,9 +11612,11 @@
 % centred on the mark's own arc-length station, along the route's local
 % direction there, stroked to the barb's own configured reach.  The
 % station is arc length along the route's resolved geometry -- straight
-% segments exactly, a cubic by sixteen sub-chords of the true curve, so
-% the cover sits on a bowed segment's drawn bow rather than on the chord
-% between its ends (#6360) -- read off the SAME points sequence the
+% segments exactly, a cubic by sub-chords of the true curve whose count
+% the control net's own deviation bound chooses, the residual widening
+% the cover wherever the count's ceiling binds, so the cover sits on a
+% bowed segment's drawn bow rather than on the chord between its ends,
+% at any size (#6360) -- read off the SAME points sequence the
 % centreline walk above just built, so no path is re-saved and no style
 % is re-executed.
 \fp_new:N \l__tenkz_kernel_ink_mark_total_fp
@@ -11632,6 +11634,8 @@
 \fp_new:N \l__tenkz_kernel_ink_mark_wy_fp
 \bool_new:N \l__tenkz_kernel_ink_mark_cubic_bool
 \int_new:N \l__tenkz_kernel_ink_mark_sub_int
+\fp_new:N \l__tenkz_kernel_ink_mark_resid_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_found_resid_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_px_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_py_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_qx_fp
@@ -11671,6 +11675,7 @@
         \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
           { \dim_to_fp:n { \tl_item:nn {#1} {6} } }
         \bool_set_false:N \l__tenkz_kernel_ink_mark_cubic_bool
+        \fp_zero:N \l__tenkz_kernel_ink_mark_resid_fp
         \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
       }
       {
@@ -11697,8 +11702,11 @@
             % (3/4) D / N^2, D the larger second difference of the
             % control net, so N^2 >= 6 D / barblen keeps the walked
             % polyline within an eighth of the barb cover's own radius
-            % of the true curve, at any size or bow the page can carry.
-            % Sixteen is the floor and sixty-four the ceiling.
+            % of the true curve.  Sixteen is the floor and sixty-four
+            % the ceiling; where a pathological cubic outruns the
+            % ceiling, the residual (3/4) D / N^2 is carried into the
+            % cover's stroke below, so the guarantee holds at any size
+            % by over-claiming ink, the direction every cover here errs.
             \fp_set:Nn \l__tenkz_kernel_ink_mark_len_fp
               {
                 max (
@@ -11726,6 +11734,11 @@
                         6 * \l__tenkz_kernel_ink_mark_len_fp
                         / \dim_to_fp:n { \__tenkz_dim:n {barblen} } ) ) ) )
                   }
+              }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_resid_fp
+              {
+                3 * \l__tenkz_kernel_ink_mark_len_fp
+                / ( 4 * \l__tenkz_kernel_ink_mark_sub_int ^ 2 )
               }
             \bool_set_true:N \l__tenkz_kernel_ink_mark_cubic_bool
             \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
@@ -11858,6 +11871,8 @@
                   - \l__tenkz_kernel_ink_mark_py_fp )
           }
         \__tenkz_kernel_r_wire_ink_mark_unit:
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_found_resid_fp
+          \l__tenkz_kernel_ink_mark_resid_fp
         \bool_set_true:N \l__tenkz_kernel_ink_mark_found_bool
       }
   }
@@ -11867,8 +11882,15 @@
 % on any bearing, honest in the same direction a dash gap's over-report is.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_emit:
   {
+    % The found segment's residual chord deviation widens the cover: it
+    % is zero wherever the subdivision met its bound, and exactly the
+    % proven gap where a pathological cubic outran the ceiling, so a
+    % label on the true curve intersects the emitted band at any size.
     \fp_set:Nn \l__tenkz_kernel_ink_mark_barb_fp
-      { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+      {
+        \dim_to_fp:n { \__tenkz_dim:n {barblen} }
+        + 2 * \l__tenkz_kernel_ink_mark_found_resid_fp
+      }
     \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
       {
         \l__tenkz_kernel_ink_mark_mx_fp
@@ -11938,6 +11960,7 @@
             * \l__tenkz_kernel_ink_mark_total_fp
           }
         \fp_zero:N \l__tenkz_kernel_ink_mark_run_fp
+        \fp_zero:N \l__tenkz_kernel_ink_mark_found_resid_fp
         \bool_set_false:N \l__tenkz_kernel_ink_mark_found_bool
         \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
           {
