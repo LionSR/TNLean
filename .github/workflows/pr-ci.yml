@@ -16,6 +16,7 @@ on:
       - 'lakefile.*'
       - 'lean-toolchain'
       - 'lake-manifest.json'
+      - 'texra-blueprint.toml'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
       - 'scripts/check_numbered_lean_files.py'
@@ -89,6 +90,9 @@ on:
     paths:
       - 'docs/paper-gaps/**/*.tex'
       - 'docs/paper-gaps/**/*.bib'
+      - 'texra-blueprint.toml'
+      - 'scripts/package-paper-gaps.sh'
+      - 'scripts/build-paper-gaps.sh'
       - '**.lean'
       - 'lakefile.*'
       - 'lean-toolchain'
@@ -193,6 +197,7 @@ jobs:
       lean: ${{ steps.filter.outputs.lean }}
       module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
+      paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       corpus: ${{ steps.filter.outputs.corpus }}
       shrink: ${{ steps.filter.outputs.shrink }}
       workflow: ${{ steps.filter.outputs.workflow }}
@@ -221,6 +226,7 @@ jobs:
               - 'docs/CONTRIBUTING.md'
             blueprint:
               - 'blueprint/src/**'
+              - 'texra-blueprint.toml'
               - 'tex/tenkz/**'
               - 'docs/tenkz/**'
               - 'docs/slides/**'
@@ -248,6 +254,18 @@ jobs:
               - 'scripts/test_tenkz_kernel_audit.py'
               - 'scripts/test_tnlog.py'
               - 'scripts/test_texcase.py'
+            # Everything the paper-gap reference check reads: the notes,
+            # the trees it scans for references, its configuration, and
+            # the wrapper scripts.
+            paper_gaps:
+              - 'docs/paper-gaps/**'
+              - '**.lean'
+              - 'blueprint/src/**'
+              - 'blueprint/comments/**'
+              - 'docs/**/*.md'
+              - 'texra-blueprint.toml'
+              - 'scripts/package-paper-gaps.sh'
+              - 'scripts/build-paper-gaps.sh'
             corpus:
               - 'tex/tenkz/**'
               - 'tests/tenkz/**'
@@ -688,6 +706,9 @@ jobs:
       # push/dispatch); the Lean-blueprint sync checks run on Lean-only
       # changes too.
       TEX_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true' }}
+      # The paper-gap reference check also runs when only the notes, the
+      # Lean sources, the Markdown docs, or the generator changed.
+      PAPER_GAPS_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.paper_gaps == 'true' || needs.changes.outputs.workflow == 'true' }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -763,7 +784,7 @@ jobs:
           python3 scripts/test_tenkz_kernel_audit.py
 
       - name: Check paper-gap references resolve
-        if: env.TEX_CHANGED == 'true'
+        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         run: texra-blueprint paper-gaps check
 
       # Build the root manual as well as its input chapters.  This is the

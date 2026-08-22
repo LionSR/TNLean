@@ -8,7 +8,7 @@ blob_base   = "https://github.com/LionSR/TNLean/blob/main/docs/paper-gaps"
 bib_author  = "The {TNLean} contributors"
 institution = "TNLean"
 title       = "TNLean paper-gap notes"
-scan_roots  = ["TNLean", "blueprint/src", "docs"]
+scan_roots  = ["TNLean", "blueprint/src", "blueprint/comments", "docs"]
 skip        = ["command.tex", "common.tex", "template.tex"]
 
 # The source-key registry: every note is named <key>_<topic>.tex. Author
