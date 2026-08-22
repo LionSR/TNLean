@@ -1,0 +1,10 @@
+% Negative: cols= carries the positive-integer type; a word refuses with
+% the stated diagnostic instead of a bare TeX arithmetic error.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=abc, bonds=none]
+  \tn{A}
+\end{tenkz}
+\end{document}

@@ -2627,6 +2627,7 @@ for contract_negative in \
   n_wire_restyle_transform \
   n_wire_restyle_nested \
   n_leg_restyle_transform \
+  n_picture_cols_word \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -2718,6 +2719,8 @@ do
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
   [ "$contract_negative" = n_leg_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
+  [ "$contract_negative" = n_picture_cols_word ] &&
+    expected='[TKZ-ATOM-POSITIVE-INTEGER]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
