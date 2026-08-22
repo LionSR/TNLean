@@ -8,7 +8,7 @@ div.theorem_thmcontent {
 	border-left: .15rem solid black;
 }
 
-/* A file path (Packages/_tnlean_patches.py) is one long unbroken word. At a
+/* A file path (Packages/tnlean_patches.py) is one long unbroken word. At a
  * phone's width it would otherwise reach past the column, so it is allowed to
  * break wherever it must. */
 code.path {
