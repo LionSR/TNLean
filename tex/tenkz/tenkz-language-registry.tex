@@ -57,8 +57,6 @@
 % removes the parser row; the ledger status moves with the parser and not
 % before, which is how every retirement here has been booked since session 0.
 %
-%   kernel-mark:nudge      a label takes a station against measured ink
-%   kernel-atom:nudge      an off-cell record is a basis member or an address
 %   kernel-wire:via        a waypoint is a side of a selection
 %   kernel-wire:weight     the port type decides the stroke
 %
@@ -66,6 +64,9 @@
 % rows were removed (the inert-key retirement, #6194/#6249): their
 % tombstone rows stand at the foot of this file, and around=, never
 % sentenced but equally inert, left with them.
+% The nudge= pair left the same way (#6356): amendment seven's mechanism
+% -- extent from counts, labels from ink -- had already landed, so the
+% retirement was bookkeeping, and its tombstone rows stand below.
 %
 % One sentence was overturned by the corpus it was passed on.
 % kernel-picture:check stood condemned as an audit switch the author should
@@ -182,7 +183,6 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{pairing~cross}{indexed-crossing-list}{empty}{kernel}{Per-instance crossings of generated skin pairings.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{size}{size-class}{m}{kernel}{Per-atom metric size class.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{label~pos}{angle}{auto}{kernel}{Label quadrant; auto takes the first free face in the order s, n, e, w, and south when every face carries ink.}
-\__tenkz_language_registry_key:nnnnnn {kernel-atom}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{void}{void-policy}{unset}{kernel}{Hole or removed site.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{physical}{physical-policy}{unset}{kernel}{Site's own answer to the picture's physical policy.}
 % Issue 5383: stored but never read by ink passes or the signature fold.
@@ -229,7 +229,6 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{label~pos}{angle}{auto}{kernel}{Label quadrant.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{name}{identifier}{generated}{kernel}{Addressable name.}
 % Extension-gate: #5570.  The flag reads the way the corpus draws: a mark is
 % a contour, and a region that carries paper under it says so.
@@ -295,6 +294,16 @@
   {no successor: the key recorded a list and detoured nothing, so delete
     it; a detour an author intends is route={<side> of <selector>}, a
     side of a selection whose crossing set answers the claim}
+%
+% The sentenced nudge= pair, retired 2026-08-22 (#6356): amendment seven's
+% replacement doctrine was already landed, so nothing displaces by hand.
+% One row carries both scopes, as the contract's section 10 states it,
+% because the ledger holds one spelling per row for the lint to match.
+\__tenkz_language_registry_tombstone:nnn {kernel-atom}{nudge}
+  {no successor, on either scope: an off-cell atom is a basis member or
+    an address, and a mark's label takes its station against measured
+    ink -- label pos= names a bearing, and auto stands on the first
+    free face}
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
