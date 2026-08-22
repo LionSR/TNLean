@@ -39,6 +39,7 @@ import TNLean.MPS.MPU.SourceUSecondCutMetric
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.SourceVCounterexample
 import TNLean.MPS.MPU.SourceVIsometry
+import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedWitnessReblocking
 import TNLean.MPS.MPU.TensorProduct
