@@ -1,27 +1,33 @@
 # Documentation Files
 
-This directory contains both upstream-derived mathlib guidance and TNLean-owned
-project policy. Keep those roles separate.
+This directory contains shared convention mirrors, upstream-derived mathlib
+guidance, and TNLean-owned project policy. Keep those roles separate.
 
-## Upstream-derived guidance
+## Shared convention mirrors
 
-The following files follow mathlib documentation and style conventions. Do not
-add TNLean-specific policy to them. If they need to change, sync or compare them
-with the corresponding mathlib source first, then document the reason in the PR.
+The following files are stamped mirrors of the canonical documents in
+[texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills)
+`docs/`. The body below each mirror header is the shared canonical text:
+edit it upstream and re-copy, never locally. TNLean-specific material goes
+only in the "Project addendum" section at the end of each file.
 
 - `MATHLIB_doc.md`
+- `MATHLIB_naming.md`
 - `MATHLIB_pr-review.md`
 - `MATHLIB_style.md`
-- `MATHLIB_naming.md`
+- `PROOF_INTEGRITY.md`
+- `prose_style.md`
+
+The mirrored MATHLIB files also track mathlib's own documentation and style
+conventions; changes reconciling them with mathlib belong upstream too.
 
 ## TNLean-owned policy
 
 The following files are maintained by this project and may record TNLean-specific
-rules, proof-integrity policy, blueprint conventions, GitHub workflow, and
-source-faithfulness requirements.
+rules, blueprint conventions, GitHub workflow, and source-faithfulness
+requirements.
 
 - `CONTRIBUTING.md`
-- `PROOF_INTEGRITY.md`
 - `blueprint_style_guide.md`
 - `ci-automation.md`
 - `counterexamples.md`
@@ -29,7 +35,6 @@ source-faithfulness requirements.
 - `getting_started.md`
 - `paper-gaps/`
 - `pr_review_management.md`
-- `prose_style.md`
 - `stale_issue_audit.md`
 - `tactic_development.md`
 - `tactic_patterns.md`
@@ -37,8 +42,8 @@ source-faithfulness requirements.
 - `upgrade_4_29.md`
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
-`prose_style.md` or `blueprint_style_guide.md`, not in the upstream-derived
-mathlib files.
+the `prose_style.md` project addendum or in `blueprint_style_guide.md`, not
+in a mirrored canonical body.
 
 ## Audit memos
 
