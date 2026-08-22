@@ -86,13 +86,11 @@ kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Tombstoned; \allo
 kernel-\allowbreak{}atom & \texttt{cluster} & pair & empty & Expander: \allowbreak{}RxC \allowbreak{}addressable \allowbreak{}sub-\allowbreak{}atom \allowbreak{}group. \\
 kernel-\allowbreak{}atom & \texttt{role} & semantic-\allowbreak{}role & empty & Prelude \allowbreak{}species \allowbreak{}spelling. \\
 kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string\textbar{}\allowbreak{}pairing) & index & Bond,\allowbreak{} \allowbreak{}travelling \allowbreak{}string,\allowbreak{} \allowbreak{}or \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairing. \\
-kernel-\allowbreak{}wire & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}orth\textbar{}\allowbreak{}arc) & straight & Path \allowbreak{}family; \allowbreak{}arc \allowbreak{}honours \allowbreak{}the \allowbreak{}ends' \allowbreak{}faces. \\
+kernel-\allowbreak{}wire & \texttt{route} & route-\allowbreak{}spec & straight & straight,\allowbreak{} \allowbreak{}orth,\allowbreak{} \allowbreak{}arc \allowbreak{}(\allowbreak{}honours \allowbreak{}the \allowbreak{}ends' \allowbreak{}faces),\allowbreak{} \allowbreak{}or \allowbreak{}the \allowbreak{}hull \allowbreak{}route \allowbreak{}{<side> \allowbreak{}of \allowbreak{}<selector>}. \\
 kernel-\allowbreak{}wire & \texttt{via} & address-\allowbreak{}list & empty & Waypoints. \\
-kernel-\allowbreak{}wire & \texttt{bend} & number & metric & Arc \allowbreak{}bend \allowbreak{}factor. \\
 kernel-\allowbreak{}wire & \texttt{weight} & enum(\allowbreak{}single\textbar{}\allowbreak{}double\textbar{}\allowbreak{}bundle=n) & single & Strand \allowbreak{}multiplicity \allowbreak{}in \allowbreak{}the \allowbreak{}boundary \allowbreak{}signature; \allowbreak{}every \allowbreak{}weight \allowbreak{}strokes \allowbreak{}one \allowbreak{}rail. \\
 kernel-\allowbreak{}wire & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 kernel-\allowbreak{}wire & \texttt{wind} & pair & zero & Homotopy \allowbreak{}class \allowbreak{}on \allowbreak{}traced \allowbreak{}frames. \\
-kernel-\allowbreak{}wire & \texttt{around} & address-\allowbreak{}list & empty & Silhouette \allowbreak{}detour \allowbreak{}targets. \\
 kernel-\allowbreak{}wire & \texttt{cross} & crossing-\allowbreak{}list & empty & Declared \allowbreak{}over \allowbreak{}and \allowbreak{}under \allowbreak{}crossings. \\
 kernel-\allowbreak{}wire & \texttt{crossing} & enum(\allowbreak{}over\textbar{}\allowbreak{}under\textbar{}\allowbreak{}alternate\textbar{}\allowbreak{}alternate=over\textbar{}\allowbreak{}alternate=under) & empty & Default \allowbreak{}crossing \allowbreak{}order \allowbreak{}at \allowbreak{}every \allowbreak{}crossing \allowbreak{}the \allowbreak{}string \allowbreak{}makes. \\
 kernel-\allowbreak{}wire & \texttt{dir} & direction-\allowbreak{}policy & none & Direction \allowbreak{}mark \allowbreak{}of \allowbreak{}a \allowbreak{}directed \allowbreak{}index. \\
@@ -102,7 +100,6 @@ kernel-\allowbreak{}wire & \texttt{closed} & flag & false & A \allowbreak{}smoot
 kernel-\allowbreak{}mark & \texttt{form} & enum(\allowbreak{}bracket\textbar{}\allowbreak{}enclosure\textbar{}\allowbreak{}label\textbar{}\allowbreak{}prose) & label & Mark \allowbreak{}form; \allowbreak{}the \allowbreak{}prose \allowbreak{}form \allowbreak{}records \allowbreak{}its \allowbreak{}text \allowbreak{}and \allowbreak{}draws \allowbreak{}nothing. \\
 kernel-\allowbreak{}mark & \texttt{slot} & semantic-\allowbreak{}slot & selected & Semantic \allowbreak{}tint. \\
 kernel-\allowbreak{}mark & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
-kernel-\allowbreak{}mark & \texttt{inset} & number & 0 & Nested-\allowbreak{}contour \allowbreak{}step. \\
 kernel-\allowbreak{}mark & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant. \\
 kernel-\allowbreak{}mark & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
 kernel-\allowbreak{}mark & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\

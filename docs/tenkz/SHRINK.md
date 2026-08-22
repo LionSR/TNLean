@@ -3234,3 +3234,56 @@ ports in the blueprint's own form; the respelled panels compile and both
 expose the boundary signature the surrounding prose asserts.
 
 Meters unchanged: the census counts key rows, and these are tombstones.
+
+### 2026-08-22 — the three inert keys leave the parser
+
+`inset=` on marks and `bend=` and `around=` on wires each recorded a value
+in the event stream and moved no ink: the catalogue's compile sweep
+(#6182) rasterised each with the key, with a different value, and with the
+key deleted, and every triple came back byte-identical, with the model
+fields read by no render code. Grep found no consumer of `bend=` or
+`around=` anywhere in the corpus, the blueprint, the manual, or the
+slides; `inset=` had two writers, both migrated here by deleting the key,
+with the with/without rasters byte-identical at 400dpi
+(`rmp-iv-ground-space-2d` re-pinned on that evidence, and the ch24
+blueprint figure). The three refusal fixtures `n_mark_inset_key.tex`,
+`n_wire_bend_key.tex`, and `n_wire_around_key.tex` pin the unknown-key
+answer.
+
+`inset=` and `bend=` execute their session-1 sentences: concentric
+contours take their order from containment and declaration, and an arc
+leaves and enters along its ends' faces — a sentence that became
+executable when the arc route landed (#6201) and `route=arc` began to
+draw the curve its faces admit. `around=`, never sentenced, was the same
+class found later (#6249). All three migrations are rendering-neutral:
+each key moved no ink, so each successor is deletion, with `route=arc`
+and the hull route `route={<side> of <selector>}` named only for a curve
+or a detour an author independently intends. The contract's Detours
+paragraph now says exactly that, and its stale consumer comments — four
+cases that no longer write the key — left with it.
+
+Meters: m1 kernel 63 → 60 (census 86 → 83), m2 parser paths 75 → 72;
+`tests/tenkz/census-baseline.json` moves in this change.
+Extension-gate: #6194 and #6249 — the parser-leaf identity change is the
+three removals themselves; no key is added. Reopening
+trigger: a source figure whose contour spacing or wire detour cannot be
+said with containment ranking or `route={<side> of <selector>}` reopens
+the corresponding key's issue with the figure as the demand evidence.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-mark:inset | retired: recorded a number, moved no ink; both writers migrated with byte-identical rasters; permanent |
+| flag:consumers:key:kernel-wire:bend | retired: sentenced session 1, executable once route=arc drew (#6201); zero consumers; permanent |
+| flag:consumers:key:kernel-wire:around | retired: zero consumers and no render read; a detour is a side of a selection; permanent |
+| flag:lonely-type:address-list | dies with its last carrier: `via=` is sentenced (session 1, tracker #4709 item 1) and the type leaves the census when its parser row does; expiry 0.9 |
+| flag:lonely-type:number | departed: its last carriers, `bend=` and `inset=`, retire in this session, and the value type leaves the registry vocabulary with them; the contract's section 2.7 now speaks of it in the past tense; permanent |
+| flag:lonely-type:route-spec | keep-because: the route row carries the structured type the contract's own table states, one grammar with one owner, exactly as trace-spec and void-policy stand; expiry 1.0 |
+
+Review sweep, same session: the address-validation pass no longer
+enumerates `around` as a field to check, so the model field truly has no
+reader; the string tier's detour machinery
+(`\__tenkz_string_declare_around:nnnnnn`, its obstacle sequence, and one
+hundred lines of clearance-envelope geometry), reachable only from a
+direct-call test after the key left, is demolished with that test and its
+two golden rows -- the string-probe suite stands at 28 artifacts,
+byte-identical.

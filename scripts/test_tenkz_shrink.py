@@ -205,7 +205,7 @@ def test_sugar_expansion_checks_every_token() -> None:
             entry.kind,
             (
                 *entry.fields[:4],
-                "sugar(route=bogus)",
+                "sugar(stroke=bogus)",
                 entry.fields[5],
             ),
         )
@@ -302,15 +302,15 @@ def test_alias_replacements_are_registered_vocabulary() -> None:
             "alias",
             (
                 "kernel-wire",
-                "route=curve",
-                "route=bogus",
-                "Legacy curved-route value. Sunset 1.0.",
+                "stroke=curve",
+                "stroke=bogus",
+                "Legacy curved-stroke value. Sunset 1.0.",
             ),
         ),
     ]
     errors = check(changed_value)
     assert any(
-        "value alias kernel-wire:route=curve replacement value 'bogus'"
+        "value alias kernel-wire:stroke=curve replacement value 'bogus'"
         in error
         for error in errors
     ), errors
