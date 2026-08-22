@@ -34,6 +34,8 @@ of the chosen simple blocking, is not asserted here.
 
 * `MPOTensor.sourceIndexValue_eq_of_common_rank_scale`: cancellation of a
   supplied common positive rank scale.
+* `MPOTensor.sourceIndexValue_eq_add_of_common_rank_product`: additivity from
+  supplied source-rank product identities with a common positive factor.
 * `MPOTensor.sourceIndexValue_eq_logb_rightRank_div`: the right-rank formula
   under a supplied rank-product equality.
 * `MPOTensor.sourceIndexValue_eq_neg_logb_leftRank_div`: the left-rank formula
@@ -42,7 +44,7 @@ of the chosen simple blocking, is not asserted here.
 
 namespace MPOTensor
 
-variable {d D e E : ℕ}
+variable {d D e E f F : ℕ}
 
 /-- The source-index value of a specified tensor with positive right and left
 source-cut ranks:
@@ -73,6 +75,39 @@ theorem sourceIndexValue_eq_of_common_rank_scale
   have hrReal : (r[U] : ℝ) ≠ 0 := by exact_mod_cast hrU.ne'
   have hℓReal : (ℓ[U] : ℝ) ≠ 0 := by exact_mod_cast hℓU.ne'
   rw [Real.logb_mul hcReal hrReal, Real.logb_mul hcReal hℓReal]
+  ring
+
+/-- Suppose the right and left source ranks of specified tensors $U$, $V$, and
+$W$ satisfy
+$$
+r[W] = c\,r[U]r[V], \qquad \ell[W] = c\,\ell[U]\ell[V]
+$$
+for a positive natural number $c$. Then the base-$2$ source-index value of $W$
+is the sum of those of $U$ and $V$.
+
+This is the logarithmic cancellation in arXiv:1703.09188, Theorem `IndexTh`
+(ii), lines 837--845. It is a specified-tensor logarithmic cancellation lemma,
+not the public blocking-independent MPU index. -/
+theorem sourceIndexValue_eq_add_of_common_rank_product
+    (U : MPOTensor d D) (V : MPOTensor e E) (W : MPOTensor f F)
+    (c : ℕ) (hc : 0 < c)
+    (hrU : 0 < r[U]) (hℓU : 0 < ℓ[U])
+    (hrV : 0 < r[V]) (hℓV : 0 < ℓ[V])
+    (hrW : 0 < r[W]) (hℓW : 0 < ℓ[W])
+    (hr : r[W] = c * r[U] * r[V]) (hℓ : ℓ[W] = c * ℓ[U] * ℓ[V]) :
+    sourceIndexValue W hrW hℓW =
+      sourceIndexValue U hrU hℓU + sourceIndexValue V hrV hℓV := by
+  rw [sourceIndexValue, sourceIndexValue, sourceIndexValue, hr, hℓ,
+    Nat.cast_mul, Nat.cast_mul, Nat.cast_mul, Nat.cast_mul]
+  have hcReal : (c : ℝ) ≠ 0 := by exact_mod_cast hc.ne'
+  have hrUReal : (r[U] : ℝ) ≠ 0 := by exact_mod_cast hrU.ne'
+  have hℓUReal : (ℓ[U] : ℝ) ≠ 0 := by exact_mod_cast hℓU.ne'
+  have hrVReal : (r[V] : ℝ) ≠ 0 := by exact_mod_cast hrV.ne'
+  have hℓVReal : (ℓ[V] : ℝ) ≠ 0 := by exact_mod_cast hℓV.ne'
+  rw [Real.logb_mul (mul_ne_zero hcReal hrUReal) hrVReal,
+    Real.logb_mul hcReal hrUReal,
+    Real.logb_mul (mul_ne_zero hcReal hℓUReal) hℓVReal,
+    Real.logb_mul hcReal hℓUReal]
   ring
 
 /-- If the supplied source ranks satisfy $r\ell=d^2$ and $d$ is positive, then
