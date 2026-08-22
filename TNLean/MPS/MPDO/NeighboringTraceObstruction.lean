@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixCyclicTracePower
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorTrace
@@ -20,20 +21,18 @@ $(a_kb_h)_{k,h}$.  Cyclic invariance of the trace then forces every positive
 power of the physical-trace transfer, and hence every nonempty closed chain,
 to have unit trace.
 
-The normalization $\operatorname{tr}(T)=1$ invoked at line 1498 of the
-source is therefore not a convention but a genuine constraint on the tensor:
-a tensor whose closed chains do not all have unit trace admits no
-factorization of the required form.  The ambient normalization of the
-density operators constrains only the weighted sum over the representatives
-of a basis of normal tensors (arXiv:1606.00608, lines 1755--1759), not each
+For a tensor carrying only the factorization data, the normalization
+$\operatorname{tr}(T)=1$ invoked at line 1498 of the source is therefore not
+a convention but a genuine constraint: a tensor whose closed chains do not
+all have unit trace admits no factorization of the required form.  The
+ambient normalization of the density operators constrains only the weighted sum
+over the representatives of a basis of normal tensors (arXiv:1606.00608, lines 1755--1759), not each
 representative separately, so the per-representative assertion of
 Theorem 4.9 carries this unit-trace normalization as an implicit hypothesis
 on each absorbed representative.
 
 ## Main results
 
-* `Matrix.trace_pow_mul_comm`: positive powers of the two products of a
-  rectangular pair of matrices have equal traces.
 * `PhysicalSectorFactorization.physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix`:
   the physical-trace transfer is the rectangular product of the closed
   sector-trace matrices.
@@ -54,34 +53,6 @@ on each absorbed representative.
 -/
 
 open scoped Matrix BigOperators
-
-namespace Matrix
-
-/-- Positive powers of the two products of a rectangular pair of matrices
-have equal traces:
-\[
-  \operatorname{tr}((LQ)^N)=\operatorname{tr}((QL)^N),\qquad N\geq1.
-\]
-This is the cyclic-invariance calculation used with the closed sector-trace
-matrices of arXiv:1606.00608, Appendix C.2, lines 1473--1493; it
-generalizes the idempotent trace-power identity
-`Matrix.trace_pow_eq_trace_of_rectangular_idempotent` to arbitrary
-rectangular pairs. -/
-theorem trace_pow_mul_comm {a b : Type*} [Fintype a] [Fintype b]
-    [DecidableEq a] [DecidableEq b] {R : Type*} [CommSemiring R]
-    (L : Matrix a b R) (Q : Matrix b a R) {N : ℕ} (hN : 0 < N) :
-    Matrix.trace ((L * Q) ^ N) = Matrix.trace ((Q * L) ^ N) := by
-  have key : ∀ M : ℕ, (L * Q) ^ (M + 1) = L * ((Q * L) ^ M * Q) := by
-    intro M
-    induction M with
-    | zero => simp
-    | succ M ih =>
-      rw [pow_succ, ih, pow_succ]
-      simp only [Matrix.mul_assoc]
-  obtain ⟨M, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
-  rw [key M, Matrix.trace_mul_comm, Matrix.mul_assoc, ← pow_succ]
-
-end Matrix
 
 namespace MPOTensor.PhysicalSectorFactorization
 
