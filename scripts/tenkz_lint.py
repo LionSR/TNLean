@@ -138,9 +138,17 @@ def tombstone_patterns(
     A row stating no spelling gets no pattern; the language check reports it.
     """
     owners: dict[str, set[tuple[str, str]]] = {}
+    # A name-valued key owns every word: `name=around` is a legal
+    # identifier carrying a retired key's spelling as its value, and the
+    # lint must step over it exactly as it steps over a live enum word.
+    name_frames: set[tuple[str, str]] = set()
     for entry in entries:
         if entry.kind != "key":
             continue
+        if entry.fields[2] in {
+            "identifier", "declared-name", "silhouette-name", "semantic-role"
+        }:
+            name_frames.add((entry.fields[1].replace("~", " ") + "=", ""))
         enum = re.fullmatch(r"enum\(([^)]*)\)", entry.fields[2])
         if enum is None:
             continue
@@ -185,7 +193,7 @@ def tombstone_patterns(
             # hardcoded expression this replaced did.  Matching only where a
             # key may appear would trade that for a possible under-report,
             # which is the failure this ledger exists to prevent.
-            frames = sorted(owners.get(key, set()))
+            frames = sorted(owners.get(key, set()) | name_frames)
             expression = (
                 "".join(
                     f"(?<!{re.escape(before)})"

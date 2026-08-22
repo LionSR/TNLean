@@ -3277,6 +3277,7 @@ the corresponding key's issue with the figure as the demand evidence.
 | flag:consumers:key:kernel-wire:around | retired: zero consumers and no render read; a detour is a side of a selection; permanent |
 | flag:lonely-type:address-list | dies with its last carrier: `via=` is sentenced (session 1, tracker #4709 item 1) and the type leaves the census when its parser row does; expiry 0.9 |
 | flag:lonely-type:number | departed: its last carriers, `bend=` and `inset=`, retire in this session, and the value type leaves the registry vocabulary with them; the contract's section 2.7 now speaks of it in the past tense; permanent |
+| flag:lonely-type:route-spec | keep-because: the route row carries the structured type the contract's own table states, one grammar with one owner, exactly as trace-spec and void-policy stand; expiry 1.0 |
 
 Review sweep, same session: the address-validation pass no longer
 enumerates `around` as a field to check, so the model field truly has no
