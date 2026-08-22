@@ -194,6 +194,7 @@ env:
     .lake/build
     .lake/packages/Gametheory/.lake/build
     .lake/packages/checkdecls/.lake/build
+    .lake/packages/qiclean/.lake/build
 
 jobs:
   # Per-job change gating. Push and dispatch runs skip this and run
