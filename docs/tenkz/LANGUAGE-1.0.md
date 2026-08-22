@@ -132,7 +132,7 @@ that contraction and retires nothing.
 | `wide=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `wires=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
-| `name=` | identifier | — | generated | `TKZ-NAME-*` |
+| `name=` | identifier | — | none; an unnamed atom answers only to its cell | `TKZ-NAME-*` |
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
 | `frame=` | small-enum | `flat` `plane` `circle` | `flat` | `TKZ-FRAME-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
@@ -241,7 +241,7 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 
 | Key | Type | Default |
 |---|---|---|
-| `pitch=` | length | em-relative; the exact ratio is a named row of the metric registry |
+| `pitch=` | length | a fixed 11mm; the metric registry owns the ratios measured against it |
 | `sizes=` | size-table | bundled table |
 | `strict` | flag | false; only five refusal fixtures enable it |
 | `theme=` | identifier | `house` |

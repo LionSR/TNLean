@@ -2720,7 +2720,7 @@ do
   [ "$contract_negative" = n_leg_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
   [ "$contract_negative" = n_picture_cols_word ] &&
-    expected='[TKZ-ATOM-POSITIVE-INTEGER]'
+    expected='[TKZ-PICTURE-POSITIVE-INTEGER]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {

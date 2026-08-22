@@ -185,6 +185,8 @@
 \msg_new:nnn {tenkz}{kernel-frame-member-occupied}
   { [TKZ-FRAME-MEMBER-OCCUPIED]~member~(#1,#2,#3)~is~already~claimed~
     by~record~#4. }
+\msg_new:nnn {tenkz}{kernel-picture-positive}
+  { [TKZ-PICTURE-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer. }
 \msg_new:nnn {tenkz}{kernel-atom-positive}
   { [TKZ-ATOM-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer~
     (record~#3). }
@@ -1017,7 +1019,7 @@
               { \tl_use:N \l__tenkz_kernel_list_item_tl }
           }
           {
-            \msg_error:nneee {tenkz}{kernel-choice}
+            \msg_error:nneeee {tenkz}{kernel-choice}
               {align} {#1} {midline|<row~number>}
               { \tl_use:N \l__tenkz_model_last_tl }
           }
@@ -1245,10 +1247,20 @@
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { rows } { rows }
 % cols= carries the row's stated type: an illegal value refuses with the
-% positive-integer diagnostic instead of a bare TeX arithmetic error
-% (#6198 sweep).
-\__tenkz_kernel_positive_integer:nnn
-  { tenkz-kernel-picture } { cols } { cols }
+% picture-scope positive-integer diagnostic instead of a bare TeX
+% arithmetic error (#6198 sweep).
+\keys_define:nn { tenkz-kernel-picture }
+  {
+    cols .code:n =
+      {
+        \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {#1}
+          { \__tenkz_kernel_stage_put:nn {cols} {#1} }
+          {
+            \msg_error:nnee {tenkz}{kernel-picture-positive}
+              {cols} {#1}
+          }
+      }
+  }
 \keys_define:nn {tenkz-kernel-picture}
   {
     frame .code:n = { \__tenkz_kernel_frame:n {#1} }
@@ -1286,10 +1298,12 @@
     \str_case:nnF {#2}
       {
         {true}  {#3}
-        {false} { }
+        % a false-valued sugar flag expands nothing but is still the
+        % sugar spelling: strict mode refuses it like the bare word
+        {false} { \__tenkz_kernel_sugar:n {#1} }
       }
       {
-        \msg_error:nneee {tenkz}{kernel-choice}
+        \msg_error:nneeee {tenkz}{kernel-choice}
           {#1} {#2} {true|false}
           { \tl_use:N \l__tenkz_model_last_tl }
       }
