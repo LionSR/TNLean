@@ -88,11 +88,13 @@ Prefer the weakest mechanism that removes the duplication, in this order:
 
 The core `grind` tactic (congruence closure, E-matching over annotated
 lemmas, case splitting, linear-arithmetic and commutative-ring solvers) is
-available on this toolchain and already used in the codebase
-(`TNLean/Channel/Schwarz/OperatorJensenAux.lean`,
-`TNLean/Analysis/LiebConcavity.lean`) — chiefly as a side-condition
-discharger, e.g. `fun_prop (disch := grind)` and spectrum-membership
-arithmetic. It produces ordinary kernel-checked proofs, so none of the proof-integrity
+available on this toolchain. The worked usage examples moved to the
+companion QICLean library in the quantum-channel extraction
+(`QICLean/Channel/Schwarz/OperatorJensenAux.lean`,
+`QICLean/Analysis/LiebConcavity.lean`); there it serves chiefly as a
+side-condition discharger, e.g. `fun_prop (disch := grind)` and
+spectrum-membership arithmetic, and the same patterns apply here. It
+produces ordinary kernel-checked proofs, so none of the proof-integrity
 blocker concerns (the `lean-conventions` skill's PROOF_INTEGRITY reference)
 apply (it is *not* in the `native_decide` class).
 

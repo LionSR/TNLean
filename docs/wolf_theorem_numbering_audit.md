@@ -1,5 +1,16 @@
 # Wolf theorem-number audit
 
+> **Where the sources and modules live now.** This audit predates the
+> quantum-channel extraction. The archived chapter PDFs
+> (`Notes/WolfNotePDF/`) and the searchable transcriptions
+> (`Notes/WolfNoteTexSource/`) moved to the companion
+> [QICLean](https://github.com/LionSR/QICLean) repository, and the audited
+> modules recorded below under extracted stacks — `TNLean/Channel/...`,
+> `TNLean/Kraus/...`, `TNLean/Entropy/...`, `TNLean/Analysis/...`, and
+> parts of `TNLean/Algebra/...` and `TNLean/MPS/Core/...` — now live in
+> QICLean under the corresponding `QICLean/...` paths. The audit's verdicts
+> are unchanged; re-checking a citation requires a QICLean checkout.
+
 This table records the verification of live numbered references to theorem-like
 results in M. Wolf, *Quantum Channels & Operations: Guided Tour*. The printed
 chapter PDFs in `Notes/WolfNotePDF/` determine the numbers. The searchable
