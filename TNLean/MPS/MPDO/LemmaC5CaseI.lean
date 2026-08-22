@@ -224,7 +224,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
       (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
         ∑ a : F.ActiveSector p,
           (F.leftTensor a beta).trace * (F.rightTensor a alpha).trace
-    apply F.sum_eq_sum_activeSector_of_eq_zero p
+    apply Finset.sum_eq_sum_subtype_ne_zero p
     intro k hk
     rw [hinactive k hk beta, Matrix.trace_zero, zero_mul]
   -- From literal ZCL, L*Q is idempotent

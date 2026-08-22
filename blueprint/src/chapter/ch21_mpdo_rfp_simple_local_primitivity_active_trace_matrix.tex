@@ -364,7 +364,9 @@
     \lean{MPOTensor.%
         exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_sector_trace_matrix_primitive, thm:mpdo_closed_sector_pairing_normalized_idempotent}
+    \uses{def:mpdo_active_sector_trace_matrix, lem:finset_sum_subtype_ne_zero,
+      thm:mpdo_sector_trace_matrix_primitive,
+      thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Let ${\cal K}$ be injective and suppose that it satisfies SAL and source
     zero correlation length. Then there are a physical-sector factorization,
     weights $p_k\geq0$ with $\sum_k p_k=1$, and positive semidefinite
@@ -860,7 +862,8 @@
         activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL,
         MPOTensor.activeSectorTraceMatrix_pow_two_pos}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_active_sector_trace_matrix, def:mpo_physical_trace_transfer,
+      lem:finset_sum_subtype_ne_zero}
     Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
     and sector weights $p_k$. Suppose that every neighboring operator
     is positive semidefinite, that the physical-trace transfer is

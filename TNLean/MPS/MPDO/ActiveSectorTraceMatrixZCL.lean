@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.MaximalOverlap
+import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.MPS.MPDO.NeighboringTraceObstruction
 
 /-!
@@ -72,7 +73,7 @@ theorem activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
       (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
         ∑ a : F.ActiveSector p,
           (F.leftTensor a beta).trace * (F.rightTensor a alpha).trace
-    apply F.sum_eq_sum_activeSector_of_eq_zero p
+    apply Finset.sum_eq_sum_subtype_ne_zero p
     intro k hk
     rw [hinactive k hk beta, Matrix.trace_zero, zero_mul]
   have hrect : IsIdempotentElem (((lam : ℂ)⁻¹ • L) * Q) := by
