@@ -11631,6 +11631,7 @@
 \fp_new:N \l__tenkz_kernel_ink_mark_wx_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_wy_fp
 \bool_new:N \l__tenkz_kernel_ink_mark_cubic_bool
+\int_new:N \l__tenkz_kernel_ink_mark_sub_int
 \fp_new:N \l__tenkz_kernel_ink_mark_px_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_py_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_qx_fp
@@ -11691,6 +11692,41 @@
               { \dim_to_fp:n { \tl_item:nn {#1} {11} } }
             \fp_set:Nn \l__tenkz_kernel_ink_mark_wy_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {12} } }
+            % The sub-chord count is chosen, not fixed: for a cubic cut
+            % into N uniform pieces the chord deviation is at most
+            % (3/4) D / N^2, D the larger second difference of the
+            % control net, so N^2 >= 6 D / barblen keeps the walked
+            % polyline within an eighth of the barb cover's own radius
+            % of the true curve, at any size or bow the page can carry.
+            % Sixteen is the floor and sixty-four the ceiling.
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_len_fp
+              {
+                max (
+                  sqrt (
+                    ( \l__tenkz_kernel_ink_mark_ox_fp
+                      - 2 * \l__tenkz_kernel_ink_mark_cax_fp
+                      + \l__tenkz_kernel_ink_mark_cbx_fp ) ^ 2 +
+                    ( \l__tenkz_kernel_ink_mark_oy_fp
+                      - 2 * \l__tenkz_kernel_ink_mark_cay_fp
+                      + \l__tenkz_kernel_ink_mark_cby_fp ) ^ 2 ) ,
+                  sqrt (
+                    ( \l__tenkz_kernel_ink_mark_cax_fp
+                      - 2 * \l__tenkz_kernel_ink_mark_cbx_fp
+                      + \l__tenkz_kernel_ink_mark_wx_fp ) ^ 2 +
+                    ( \l__tenkz_kernel_ink_mark_cay_fp
+                      - 2 * \l__tenkz_kernel_ink_mark_cby_fp
+                      + \l__tenkz_kernel_ink_mark_wy_fp ) ^ 2 ) )
+              }
+            \int_set:Nn \l__tenkz_kernel_ink_mark_sub_int
+              {
+                \fp_to_int:n
+                  {
+                    max ( 16 , min ( 64 ,
+                      ceil ( sqrt (
+                        6 * \l__tenkz_kernel_ink_mark_len_fp
+                        / \dim_to_fp:n { \__tenkz_dim:n {barblen} } ) ) ) )
+                  }
+              }
             \bool_set_true:N \l__tenkz_kernel_ink_mark_cubic_bool
             \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
           }
@@ -11739,10 +11775,11 @@
       }
   }
 % Run one bounded segment through #1 (a step over the standing p/q chord).
-% A straight segment is its own chord; a cubic walks sixteen sub-chords of
-% the true curve, so the station and the tangent settle on the drawn bow,
-% not on the chord between its ends (#6360) -- the same dyadic subdivision
-% doctrine the auditor's cubic walk certifies.
+% A straight segment is its own chord; a cubic walks the sub-chords the
+% bounds pass chose for it -- enough that the polyline stays within an
+% eighth of the barb cover's radius of the true curve -- so the station
+% and the tangent settle on the drawn bow, not on the chord between its
+% ends (#6360), at any size or bow.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_seg:n #1
   {
     \bool_if:NTF \l__tenkz_kernel_ink_mark_cubic_bool
@@ -11751,13 +11788,14 @@
           \l__tenkz_kernel_ink_mark_ox_fp
         \fp_set_eq:NN \l__tenkz_kernel_ink_mark_qy_fp
           \l__tenkz_kernel_ink_mark_oy_fp
-        \int_step_inline:nn {16}
+        \int_step_inline:nn { \l__tenkz_kernel_ink_mark_sub_int }
           {
             \fp_set_eq:NN \l__tenkz_kernel_ink_mark_px_fp
               \l__tenkz_kernel_ink_mark_qx_fp
             \fp_set_eq:NN \l__tenkz_kernel_ink_mark_py_fp
               \l__tenkz_kernel_ink_mark_qy_fp
-            \__tenkz_kernel_r_wire_ink_mark_point:nNN { ##1 / 16 }
+            \__tenkz_kernel_r_wire_ink_mark_point:nNN
+              { ##1 / \l__tenkz_kernel_ink_mark_sub_int }
               \l__tenkz_kernel_ink_mark_qx_fp
               \l__tenkz_kernel_ink_mark_qy_fp
             #1
