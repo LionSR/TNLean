@@ -56,31 +56,12 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
     $D\ge2$, so the nonzero bond dimension must be~$1$.
 \end{proof}
 
-\begin{lemma}[Two-sided span from one nonzero matrix]
-    \label{lem:two_sided_nonzero_matrix_span}
-    \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
-    \leanok
-    If $C\in\MN{D}$ is nonzero, then
-    \begin{align}
-        \spn_{\C}\{RCS:R,S\in\MN{D}\}
-         & =\MN{D}.
-        \label{eq:wld_two_sided_nonzero_span}
-    \end{align}
-    This is the matrix-factorization input used in~%
-    \cite[Lemma~3]{PerezGarcia2007Matrix}.
-\end{lemma}
-
-\begin{proof}\leanok
-    Choose a nonzero entry $C_{pq}$. Then every matrix unit $E_{ij}$
-    is a scalar multiple of $E_{ip}CE_{qj}$, so the span in
-    (\ref{eq:wld_two_sided_nonzero_span}) contains the standard matrix basis.
-\end{proof}
 
 \begin{lemma}[Exact words around a nonzero middle matrix]
     \label{lem:block_injective_two_sided_word_span}
     \lean{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
     \leanok
-    \uses{def:l_blk_injective, lem:two_sided_nonzero_matrix_span}
+    \uses{def:l_blk_injective}
     If $A$ is $L$-block injective and $X\neq0$, then
     \begin{align}
         \spn_{\C}\{A^uXA^v:|u|=|v|=L\}
@@ -89,10 +70,10 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
     \end{align}
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:two_sided_nonzero_matrix_span}
+\begin{proof}\leanok
     By $L$-block injectivity, the length-$L$ word products span
     $\MN{D}$. Bilinearity of $(R,S)\mapsto RXS$ reduces the claim to
-    Lemma~\ref{lem:two_sided_nonzero_matrix_span}, with $R$ and $S$ chosen
+    Lemma~\cite[``Two-sided span from one nonzero matrix'']{QICLean2026Blueprint}, with $R$ and $S$ chosen
     among those word products.
 \end{proof}
 
@@ -153,53 +134,6 @@ span used throughout Chapter~\ref{ch:wielandt}.
     single $N$ with $T_N(A)=\MN{D}$.
 \end{proof}
 
-\begin{definition}[Fitting decomposition]\label{def:fitting_decomp}
-    \lean{Wielandt.FittingDecomposition}
-    \leanok
-    A \emph{Fitting decomposition} of a linear endomorphism
-    $f:V\to V$ on a finite-dimensional vector space over an
-    algebraically closed field consists of:
-    \begin{enumerate}
-        \item $f$ is nilpotent on the generalized $0$-eigenspace,
-        \item $f$ is invertible on each generalized $\mu$-eigenspace
-              for $\mu\neq0$,
-        \item the generalized eigenspaces span~$V$,
-        \item the generalized eigenspaces are linearly independent.
-    \end{enumerate}
-\end{definition}
-
-\begin{theorem}[Fitting decomposition exists]\label{thm:fitting_decomp}
-    \lean{Wielandt.fittingDecomposition}
-    \leanok
-    \uses{def:fitting_decomp}
-    Every linear endomorphism on a finite-dimensional vector space
-    over an algebraically closed field admits a Fitting decomposition.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Nilpotency on the zero generalized eigenspace follows from
-    the definition of generalized eigenspaces.
-    Invertibility on nonzero generalized eigenspaces follows
-    because $f-\mu$ is nilpotent there, so
-    $f=\mu(1-(1-f/\mu))$ is invertible.
-    Spanning and independence are standard results for
-    generalized eigenspaces over algebraically closed fields.
-    In~\cite{Sanz2010Quantum} and \cite[Lemma~6.3(b)]{Wolf2012Quantum},
-    the Jordan normal form is used directly.
-    The argument is phrased in terms of generalized eigenspaces instead.
-\end{proof}
-
-\begin{theorem}[Nilpotent power bound]\label{thm:nilpotent_pow_bound}
-    \lean{Wielandt.nilpotent_pow_eq_zero_of_finrank}
-    \leanok
-    If $f$ is nilpotent on a space of dimension~$n$, then $f^n=0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    A nilpotent endomorphism on an $n$-dimensional space has
-    nilpotency index at most~$n$.
-\end{proof}
 
 \begin{theorem}[Cumulative span reaches $\MN{D}$ --- explicit bound]\label{thm:cumulative_eq_top_bound}
     \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_bound}
@@ -240,21 +174,6 @@ span used throughout Chapter~\ref{ch:wielandt}.
     At least one has nonzero trace because $\tr(\Id)=D\neq0$.
 \end{proof}
 
-\begin{theorem}[Nonzero trace implies eigenvector]\label{thm:eigenvector_from_trace}
-    \lean{exists_eigenvector_of_trace_ne_zero}
-    \leanok
-    If $M\in\MN{D}$ has $\tr(M)\neq0$, then $M$ has a nonzero eigenvalue
-    $\mu\neq0$ and a corresponding eigenvector $\varphi\neq0$ satisfying
-    $M\varphi=\mu\varphi$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The trace is the sum of the eigenvalues of $M$, counted with
-    multiplicity, so a nonzero trace gives a nonzero eigenvalue~$\mu$.
-    Choosing a nonzero vector $\varphi\in\ker(M-\mu\Id)$ gives
-    $M\varphi=\mu\varphi$.
-\end{proof}
 
 \begin{theorem}[Eigenvalue extraction]\label{thm:eigenvalue_extraction}
     \lean{Kraus.exists_word_eigenvector}
@@ -267,10 +186,10 @@ span used throughout Chapter~\ref{ch:wielandt}.
 
 \begin{proof}
     \leanok
-    \uses{thm:nonzero_trace_word, thm:eigenvector_from_trace}
+    \uses{thm:nonzero_trace_word}
     By Theorem~\ref{thm:nonzero_trace_word}, there is a word $w_0$ with
     $\tr(A^{w_0})\neq0$ and $|w_0|\le D^2$.
-    By Theorem~\ref{thm:eigenvector_from_trace}, $A^{w_0}$ has a nonzero
+    By Theorem~\cite[``Nonzero trace implies eigenvector'']{QICLean2026Blueprint}, $A^{w_0}$ has a nonzero
     eigenvector.
 \end{proof}
 
@@ -605,14 +524,14 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{proof}
     \leanok
-    \uses{def:blocked_tensor, thm:isNormal_blockTensor, thm:eigenvector_from_trace}
+    \uses{def:blocked_tensor, thm:isNormal_blockTensor}
     Set $B=A^{[N_0]}$.
     By (\ref{eq:mps_blocked_tensor}) and
     $S_{N_0}(A)=\MN{D}$, one has $S_1(B)=\MN{D}$.
     Hence $\Id\in S_1(B)$, so not all blocked generators can have trace
     zero.
     Choose $j_0$ with $\tr(B^{j_0})\neq0$.
-    By Theorem~\ref{thm:eigenvector_from_trace},
+    By Theorem~\cite[``Nonzero trace implies eigenvector'']{QICLean2026Blueprint},
     $B^{j_0}$ has a nonzero eigenvector $\varphi$
     with eigenvalue $\mu\neq0$.
     Writing $j_0$ as the blocked index corresponding to a word

@@ -14,7 +14,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{lemma}[Eigenvector padding]\label{lem:eigenvector_padding}
     \lean{Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
     \leanok
-    \uses{def:cumulative_vector_span, def:vector_spread_span}
+    \uses{def:cumulative_vector_span}
     Suppose $A^{i_0}\varphi=\mu\varphi$ with $\mu\neq0$.
     Then $K_n(A,\varphi)=H_n(A,\varphi)$ for every~$n$.
     In particular, if $K_n(A,\varphi)=\C^D$, then
@@ -36,7 +36,7 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:lemma2b_assembly}
     \lean{Kraus.wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis}
     \leanok
-    \uses{def:word_span, def:vector_spread_span}
+    \uses{def:word_span}
     Assume:
     \begin{enumerate}
         \item $H_n(A,\varphi)=\C^D$

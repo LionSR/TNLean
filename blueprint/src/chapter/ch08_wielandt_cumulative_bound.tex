@@ -5,18 +5,6 @@ Section~\ref{sec:app_wielandt_exact_word_support}. The stabilization and
 spectral linear algebra behind the cumulative estimates are collected in
 Section~\ref{sec:app_wielandt_cumulative_support}.
 
-\begin{definition}[Word evaluation for a finite matrix family]
-    \label{def:kraus_eval_word}
-    \lean{Kraus.evalWord}
-    \leanok
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices.
-    For a word $w=(i_1,\ldots,i_n)$, its \emph{word evaluation} is
-    \begin{align}
-        K^w=K^{i_1}\cdots K^{i_n},
-        \notag
-    \end{align}
-    with the empty word evaluated as the identity matrix.
-\end{definition}
 
 \begin{definition}[Word span]\label{def:word_span}
     \lean{Kraus.wordSpan}
@@ -39,25 +27,12 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
     $T_n(A)=S_0(A)+S_1(A)+\cdots+S_n(A)$.
 \end{definition}
 
-\begin{definition}[Fixed-length vector span]\label{def:vector_spread_span}
-    \lean{Kraus.vectorSpreadSpan}
-    \leanok
-    \uses{def:kraus_eval_word}
-    The \emph{fixed-length vector span} at length~$n$ is
-    \begin{align}
-        H_n(K,\varphi)
-         & =\spn_{\C}\{K^w\varphi:|w|=n\}\subseteq\C^D.
-        \notag
-    \end{align}
-    This is $S_n(K)\ket{\varphi}$ in the notation
-    of~\cite{Sanz2010Quantum}.
-\end{definition}
 
 \begin{definition}[Fixed-length vector span of an MPS tensor]
     \label{def:mps_vector_spread_span}
     \lean{Kraus.vectorSpreadSpan}
     \leanok
-    \uses{def:vector_spread_span}
+
     For an MPS tensor $A$, its fixed-length vector span is the fixed-length
     vector span of the underlying finite matrix family.
 \end{definition}
@@ -89,7 +64,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
 \begin{definition}[Paper primitivity]\label{def:paper_primitive}
     \lean{MPSTensor.IsPrimitivePaper}
     \leanok
-    \uses{def:vector_spread_span}
+
     The transfer map is \emph{primitive in the sense of
         \cite{Sanz2010Quantum}} if there is a positive integer $q$ such that
     \begin{align}
@@ -135,7 +110,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     \label{def:strongly_irreducible_paper}
     \lean{MPSTensor.IsStronglyIrreduciblePaper}
     \leanok
-    \uses{def:transfer_map, def:irreducible_cp}
+    \uses{def:transfer_map}
     We call the tensor \emph{strongly irreducible} here if there is a matrix
     $\rho>0$ such that
     \begin{align}
@@ -154,143 +129,6 @@ The next seven results use the following notation. For nonnegative integers
 $d$ and $D$, let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$
 matrices, and let $\E_K$ be its Kraus map.
 
-\begin{theorem}[Iterated Kraus map on a rank-one matrix]
-    \label{thm:kraus_iterate_rank_one_sum}
-    \lean{Kraus.mapLM_pow_rankOne_eq_sum}
-    \leanok
-    For every choice of $d$, $D$, and $K$ as above, every $q\ge0$, and every
-    $\varphi\in\C^D$,
-    \begin{align}
-        \E_K^q(\ketbra{\varphi}{\varphi})
-        =\sum_{|w|=q}\ketbra{K^w\varphi}{K^w\varphi}.
-        \notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Expand the Kraus representation of the $q$-fold iterate. Each summand is
-    $K^w\ketbra{\varphi}{\varphi}(K^w)^\dagger
-        =\ketbra{K^w\varphi}{K^w\varphi}$.
-\end{proof}
-
-\begin{theorem}[Positive rank-one image from vector spreading]
-    \label{thm:kraus_rank_one_posdef_from_spreading}
-    \lean{Kraus.mapLM_pow_rankOne_posDef_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span}
-    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
-    $H_q(K,\varphi)=\C^D$ for every nonzero
-    $\varphi\in\C^D$. Then
-    $\E_K^q(\ketbra{\varphi}{\varphi})>0$ for every
-    $\varphi\neq0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_iterate_rank_one_sum}
-    The preceding theorem expresses the image as the frame operator of the
-    spanning family $(K^w\varphi)_{|w|=q}$. A finite frame operator is positive
-    definite exactly when its vectors span the ambient space.
-\end{proof}
-
-\begin{theorem}[Positive-semidefinite preservation by Kraus iterates]
-    \label{thm:kraus_iterate_psd}
-    \lean{Kraus.mapLM_pow_posSemidef}
-    \leanok
-    For every choice of $d$, $D$, and $K$ as above and every $n\ge0$, the
-    iterate $\E_K^n$ maps positive-semidefinite
-    matrices to positive-semidefinite matrices.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_iterate_rank_one_sum}
-    Decompose a positive-semidefinite matrix into a finite sum of rank-one
-    positive matrices and apply Theorem~\ref{thm:kraus_iterate_rank_one_sum}
-    to every summand.
-\end{proof}
-
-\begin{theorem}[Positivity improvement from vector spreading]
-    \label{thm:kraus_positivity_improving_from_spreading}
-    \lean{Kraus.mapLM_pow_positivityImproving_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span}
-    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$.
-    Then $\E_K^q(\rho)>0$ for every nonzero positive-semidefinite matrix
-    $\rho$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_rank_one_posdef_from_spreading, thm:kraus_iterate_psd}
-    Write $\rho$ as a sum of rank-one positive matrices. At least one vector
-    in this decomposition is nonzero, so its image is positive definite by
-    Theorem~\ref{thm:kraus_rank_one_posdef_from_spreading}; all remaining
-    images are positive semidefinite by Theorem~\ref{thm:kraus_iterate_psd}.
-\end{proof}
-
-\begin{theorem}[Definiteness of fixed points from vector spreading]
-    \label{thm:kraus_fixed_point_posdef_from_spreading}
-    \lean{Kraus.posDef_fixedPoint_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span}
-    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. Then every nonzero
-    positive-semidefinite fixed point of $\E_K$ is positive definite.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_positivity_improving_from_spreading}
-    A fixed point of $\E_K$ is fixed by $\E_K^q$, whose action on every
-    nonzero positive-semidefinite matrix is positive definite.
-\end{proof}
-
-\begin{theorem}[Definiteness of fixed points of positive powers]
-    \label{thm:kraus_power_fixed_point_posdef_from_spreading}
-    \lean{Kraus.posDef_pow_fixedPoint_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span}
-    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, suppose
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. For every $p>0$, each
-    nonzero
-    positive-semidefinite fixed point of $\E_K^p$ is positive definite.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_positivity_improving_from_spreading, thm:kraus_iterate_psd}
-    If $\E_K^p(\rho)=\rho$, then $\E_K^{pq}(\rho)=\rho$. Factor this iterate
-    as $\E_K^q\E_K^{(p-1)q}$. The inner image is nonzero and positive
-    semidefinite, so the outer application is positive definite.
-\end{proof}
-
-\begin{theorem}[Irreducibility from vector spreading]
-    \label{thm:kraus_irreducible_from_spreading}
-    \lean{Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span, def:irreducible_cp}
-    For every choice of $d$, $D$, and $K$ as above and every $q\ge0$, if
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$, then the Kraus map
-    $\E_K$ is irreducible.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_invariant_compression_lower_zero}
-    Let $P$ be an invariant orthogonal projection. Every word $K^w$ preserves
-    $\operatorname{ran}P$. If $P\neq0$, choose a nonzero vector in this range.
-    Its length-$q$ word orbit spans $\C^D$ by hypothesis and remains in
-    $\operatorname{ran}P$, hence $P=\Id$.
-\end{proof}
-
-\begin{theorem}[Conjugate eigenmatrix of a positive map]
-    \label{thm:positive-map-conj-eigenvector}
-    \lean{Kraus.conjTranspose_eigenvector}
-    \leanok
-    Let $E:\MN{D}\to\MN{D}$ be positive. If $E(X)=\mu X$, then
-    $E(X^\dagger)=\overline\mu X^\dagger$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Positivity implies that $E$ preserves adjoints. Taking the adjoint of
-    $E(X)=\mu X$ gives the result.
-\end{proof}
 
 \begin{theorem}[Powers of a transfer-map eigenmatrix]
     \label{thm:transfer-map-eigenmatrix-power}
@@ -301,123 +139,9 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    This is the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} for the eigenspace of $\mu$.
+    This is the corresponding theorem in the companion quantum-channel volume~\cite[``Powers on an eigenspace'']{QICLean2026Blueprint} for the eigenspace of $\mu$.
 \end{proof}
 
-\begin{theorem}[Finite-order eigenmatrix is power-fixed]
-    \label{thm:root-eigenvector-power-fixed}
-    \lean{Kraus.pow_eigenvector_of_root}
-    \leanok
-    Let $E:\MN{D}\to\MN{D}$ be linear. If $E(X)=\mu X$ and $\mu^p=1$, then
-    $E^p(X)=X$.
-\end{theorem}
-
-\begin{proof}\leanok
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} gives $E^p(X)=\mu^pX=X$.
-\end{proof}
-
-\begin{theorem}[Conjugate finite-order eigenmatrix is power-fixed]
-    \label{thm:positive-map-conj-power-fixed}
-    \lean{Kraus.pow_conjTranspose_eigenvector_of_root}
-    \leanok
-    Let $E:\MN{D}\to\MN{D}$ be positive. If $E(X)=\mu X$ and $\mu^p=1$,
-    then $E^p(X^\dagger)=X^\dagger$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:positive-map-conj-eigenvector, thm:root-eigenvector-power-fixed}
-    The conjugate eigenvalue is $\overline\mu$, and
-    $(\overline\mu)^p=\overline{\mu^p}=1$.
-\end{proof}
-
-\begin{theorem}[Trace of a non-fixed eigenmatrix]
-    \label{thm:trace-preserving-eigenvector-trace-zero}
-    \lean{Kraus.trace_eigenvector_eq_zero}
-    \leanok
-    Let $E:\MN{D}\to\MN{D}$ preserve the trace. If $E(X)=\mu X$ and
-    $\mu\neq1$, then $\tr(X)=0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Trace preservation gives $\mu\tr(X)=\tr(E(X))=\tr(X)$. Since
-    $\mu-1\neq0$, the trace vanishes.
-\end{proof}
-
-\begin{theorem}[Hermitian power-fixed point from a finite-order eigenmatrix]
-    \label{thm:kraus-hermitian-power-fixed-point}
-    \lean{Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint}
-    \leanok
-    Let $E$ be a channel, and suppose $E(X)=\mu X$ with $X\neq0$,
-    $\mu\neq1$, and $\mu^p=1$. Then there is a nonzero Hermitian matrix $H$
-    such that $\tr(H)=0$ and $E^p(H)=H$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:root-eigenvector-power-fixed, thm:positive-map-conj-power-fixed, thm:trace-preserving-eigenvector-trace-zero}
-    At least one of $X+X^\dagger$ and $i(X^\dagger-X)$ is nonzero. Both are
-    Hermitian, both have trace zero, and each is fixed by $E^p$.
-\end{proof}
-
-\begin{theorem}[Uniqueness of power-fixed positive matrices for a Kraus map]
-    \label{thm:kraus-power-fixed-point-unique-from-spreading}
-    \lean{Kraus.posSemidef_pow_fixedPoint_unique}
-    \leanok
-    \uses{def:vector_spread_span}
-    Suppose $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. If $p>0$ and
-    $\rho,\sigma$ are nonzero positive-semidefinite fixed points of
-    $\E_K^p$, then $\sigma=c\rho$ for some $c\in\C$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_power_fixed_point_posdef_from_spreading, thm:posdef_fixedpoint_proportional}
-    Fixed-length spreading makes every nonzero positive-semidefinite fixed
-    point of $\E_K^p$ positive definite. The critical-scalar argument then
-    gives proportionality.
-\end{proof}
-
-\begin{theorem}[Powers of completely positive maps]
-    \label{thm:cp-map-natural-power}
-    \lean{IsCPMap.pow}
-    \leanok
-    If $E$ is completely positive, then $E^p$ is completely positive for every
-    $p\geq0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Induct on $p$, using complete positivity of the identity map at $p=0$ and
-    closure of completely positive maps under composition for the induction
-    step.
-\end{proof}
-
-\begin{theorem}[Powers of channels]
-    \label{thm:channel-natural-power}
-    \lean{Kraus.isChannel_pow}
-    \leanok
-    If $E$ is a channel, then $E^p$ is a channel for every $p\geq0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:cp-map-natural-power}
-    Complete positivity and trace preservation are both closed under
-    composition and hold for the identity map.
-\end{proof}
-
-\begin{theorem}[Vanishing of Hermitian power-fixed points]
-    \label{thm:kraus-hermitian-power-fixed-point-zero}
-    \lean{Kraus.hermitian_pow_fixedPoint_eq_zero}
-    \leanok
-    \uses{def:vector_spread_span}
-    Let $K$ be trace-preserving and suppose
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi$. If $p>0$ and
-    $H=H^\dagger$ satisfies $\tr(H)=0$ and $\E_K^p(H)=H$, then $H=0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:channel-natural-power, thm:kraus-power-fixed-point-unique-from-spreading, thm:positive_fixedpoint_decomp}
-    Decompose $H$ as a difference of positive-semidefinite fixed points of the
-    channel $\E_K^p$. Both are proportional to one nonzero fixed point. Their
-    traces and $\tr(H)=0$ force equal coefficients, hence $H=0$.
-\end{proof}
 
 \begin{theorem}[Hermitian power-fixed point from a peripheral eigenvector]
     \label{thm:hermitian-power-fixed-point}
@@ -439,8 +163,8 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus-hermitian-power-fixed-point}
-    Apply Theorem~\ref{thm:kraus-hermitian-power-fixed-point} to the transfer
+
+    Apply Theorem~\cite[``Hermitian power-fixed point from a finite-order eigenmatrix'']{QICLean2026Blueprint} to the transfer
     channel. The resulting matrix is nonzero, Hermitian, trace zero, and fixed
     by $\E_A^p$. A nonzero positive-semidefinite matrix has positive trace, so
     this matrix is not positive semidefinite.
@@ -450,7 +174,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \label{thm:mps-power-fixed-point-unique-from-spreading}
     \lean{MPSTensor.posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper}
     \leanok
-    \uses{def:transfer_map, def:vector_spread_span}
+    \uses{def:transfer_map}
     Suppose there is a length $q\geq0$ such that
     $H_q(A,\varphi)=\C^D$ for every nonzero $\varphi\in\C^D$. Let $p>0$.
     If $\rho$ and $\sigma$ are nonzero positive-semidefinite fixed points of
@@ -458,72 +182,11 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus-power-fixed-point-unique-from-spreading}
-    This is Theorem~\ref{thm:kraus-power-fixed-point-unique-from-spreading}
+
+    This is Theorem~\cite[``Uniqueness of power-fixed positive matrices for a Kraus map'']{QICLean2026Blueprint}
     for the Kraus family formed by the matrices of the tensor.
 \end{proof}
 
-\begin{theorem}[Positive-definite fixed point from vector spreading]
-    \label{thm:kraus_posdef_fixed_point_from_tp_spreading}
-    \lean{Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span}
-    Let $D>0$, and let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of
-    $D\times D$ matrices satisfying
-    \begin{align}
-        \sum_{i=0}^{d-1}(K^i)^\dagger K^i
-         & =\Id.
-        \notag
-    \end{align}
-    Suppose there is a common length $q\ge0$ such that
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi\in\C^D$.
-    Then there is a positive-definite matrix $\rho$ such that
-    $\E_K(\rho)=\rho$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_fixed_point_posdef_from_spreading}
-    The normalization makes $\E_K$ a channel. The Ces\`aro fixed-point theorem,
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}, gives a nonzero positive-semidefinite
-    fixed point. The common fixed-length spreading hypothesis makes this fixed
-    point positive definite by
-    Theorem~\ref{thm:kraus_fixed_point_posdef_from_spreading}.
-\end{proof}
-
-\begin{theorem}[Primitivity from vector spreading]
-    \label{thm:kraus_primitive_from_tp_spreading}
-    \lean{Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top}
-    \leanok
-    \uses{def:vector_spread_span}
-    Let $D>0$, and let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of
-    $D\times D$ matrices satisfying
-    \begin{align}
-        \sum_{i=0}^{d-1}(K^i)^\dagger K^i
-         & =\Id.
-        \notag
-    \end{align}
-    Suppose there is a common length $q\ge0$ such that
-    $H_q(K,\varphi)=\C^D$ for every nonzero $\varphi\in\C^D$.
-    Then the Kraus map $\E_K$ is primitive: it has a nonzero fixed point and
-    $1$ is its only peripheral eigenvalue.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_irreducible_from_spreading, thm:kraus-hermitian-power-fixed-point, thm:kraus-hermitian-power-fixed-point-zero}
-    The normalization makes $\E_K$ a channel, so
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} gives a nonzero positive-semidefinite
-    fixed point. This supplies the peripheral eigenvalue $1$.
-    Theorem~\ref{thm:kraus_irreducible_from_spreading} gives irreducibility.
-    Thus $\E_K$ is an irreducible channel. By
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}, every peripheral
-    eigenvalue $\mu$ is a root of unity; choose $p>0$ with
-    $\mu^p=1$.
-
-    Suppose $\mu\neq1$. Theorem~\ref{thm:kraus-hermitian-power-fixed-point}
-    gives a nonzero Hermitian matrix $H$ with $\tr(H)=0$ and
-    $\E_K^p(H)=H$. Theorem~\ref{thm:kraus-hermitian-power-fixed-point-zero}
-    gives $H=0$, a contradiction. Thus $\mu=1$.
-\end{proof}
 
 \begin{theorem}[Strengthened form of the primitivity equivalence]
     \label{thm:wielandt_proposition_three}
@@ -548,14 +211,14 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:kraus_posdef_fixed_point_from_tp_spreading, thm:kraus_primitive_from_tp_spreading, thm:kraus_irreducible_from_spreading}
+
     If $S_i(A)=\MN{D}$ and $\varphi\neq0$, then
     $S_i(A)\varphi=\C^D$, proving (2)$\Rightarrow$(1).
     For (1)$\Rightarrow$(3), regard the matrices of $A$ as a finite Kraus
-    family. Theorems~\ref{thm:kraus_posdef_fixed_point_from_tp_spreading}
-    and~\ref{thm:kraus_primitive_from_tp_spreading} give a positive-definite
+    family. Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint}
+    and~\cite[``Primitivity from vector spreading'']{QICLean2026Blueprint} give a positive-definite
     fixed point and show that $1$ is the only peripheral eigenvalue.
-    Theorem~\ref{thm:kraus_irreducible_from_spreading} gives irreducibility.
+    Theorem~\cite[``Irreducibility from vector spreading'']{QICLean2026Blueprint} gives irreducibility.
     Together these facts say that $\E_A$ is strongly irreducible.
 
     For (3)$\Rightarrow$(2), write
@@ -773,42 +436,20 @@ matrices, and let $\E_K$ be its Kraus map.
     Hence $T_{D^2-d'+1}(A)=\MN{D}$.
 \end{proof}
 
-\begin{theorem}[Eigenvector extraction from a full cumulative span]
-    \label{thm:eigenvector_from_full_cumulative_span}
-    \lean{Kraus.exists_eigenvector_of_cumulativeSpan_eq_top}
-    \leanok
-    Let $T_N(K)$ be the span of the products of at most $N$ matrices from a
-    finite family $K$. If $D>0$ and $T_N(K)=\MN{D}$, then there are a word
-    $w$, a nonzero scalar $\mu$, and a nonzero vector $\varphi\in\C^D$ such
-    that
-    \begin{align}
-        |w|        & \le N, \notag        \\
-        K^w\varphi & = \mu\varphi. \notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:eigenvector_from_trace}
-    Since the identity lies in $T_N(K)$ and has nonzero trace, some word of
-    length at most $N$ has nonzero trace. Such a matrix has a nonzero
-    eigenvalue and a corresponding nonzero eigenvector by
-    Theorem~\ref{thm:eigenvector_from_trace}.
-\end{proof}
 
 \begin{theorem}[Eigenvector extraction for an MPS tensor]
     \label{thm:mps_eigenvector_from_full_cumulative_span}
     \lean{Kraus.exists_eigenvector_of_cumulativeSpan_eq_top}
     \leanok
-    \uses{def:cumulative_span, thm:eigenvector_from_full_cumulative_span}
+    \uses{def:cumulative_span}
     The conclusion of
-    Theorem~\ref{thm:eigenvector_from_full_cumulative_span} holds for the
+    Theorem~\cite[``Eigenvector extraction from a full cumulative span'']{QICLean2026Blueprint} holds for the
     matrix family of an MPS tensor whenever its cumulative span at level $N$
     is the full matrix algebra.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:eigenvector_from_full_cumulative_span}
+
     Apply the finite-family theorem to the matrices of the tensor.
 \end{proof}
 
@@ -934,67 +575,12 @@ matrices, and let $\E_K$ be its Kraus map.
     step $D-1$.
 \end{proof}
 
-\begin{theorem}[Cumulative eigenvector spreading for finite families]
-    \label{thm:kraus_cumulative_eigenvector_spreading}
-    \lean{Kraus.eigenvector_spreading_of_cumulativeSpan_eq_top}
-    \leanok
-    \uses{def:kraus_eval_word}
-    Let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices,
-    where $D>0$, and let $\varphi\neq0$. If, for some $N$, words in $K$ of length at most $N$
-    span $\MN{D}$, then the vectors $K^w\varphi$ with $|w|\leq D-1$ span
-    $\C^D$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The cumulative vector spaces are monotone and have dimension at most $D$.
-    Once two consecutive spaces agree, the common space is invariant under
-    every $K^i$. Full cumulative matrix span then forces it to contain
-    $\MN{D}\varphi=\C^D$. Since the initial space is nonzero, it reaches
-    dimension $D$ by step $D-1$.
-\end{proof}
-
-\begin{lemma}[Eigenvector padding for finite families]
-    \label{lem:kraus_eigenvector_padding}
-    \lean{Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector}
-    \leanok
-    \uses{def:kraus_eval_word, def:vector_spread_span}
-    Suppose $K^{i_0}\varphi=\mu\varphi$ with $\mu\neq0$. For every $n$, the
-    span of $K^w\varphi$ over words with $|w|\leq n$ equals
-    $H_n(K,\varphi)$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Repeating the letter $i_0$ pads a word of length $m\leq n$ to length $n$.
-    Its action on $\varphi$ gains the nonzero factor $\mu^{n-m}$, so every
-    shorter-word vector belongs to the fixed-length span. The reverse inclusion
-    is immediate.
-\end{proof}
-
-\begin{theorem}[Fixed-length spreading from eventual word-span fullness]
-    \label{thm:eigenvector_spreading_eventually_full}
-    \lean{Kraus.vectorSpreadSpan_eq_top_of_hasEventuallyFullWordSpan_of_eigenvector}
-    \leanok
-    \uses{def:kraus_eventually_full_word_span, def:vector_spread_span}
-    Let $K=(K^i)_{i=0}^{d-1}$ be a finite family of $D\times D$ matrices, where
-    $D>0$, and suppose that $S_n(K)=\MN{D}$ for every sufficiently large
-    $n$. If $\varphi\neq0$, $\mu\neq0$, and
-    $K^{i_0}\varphi=\mu\varphi$, then
-    $H_{D-1}(K,\varphi)=\C^D$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_cumulative_eigenvector_spreading, lem:kraus_eigenvector_padding}
-    Eventual fullness gives a level at which the cumulative matrix span is
-    all of $\MN{D}$. The cumulative vector spaces therefore reach $\C^D$ by
-    level $D-1$. The eigenvector relation then pads shorter words to length
-    $D-1$ by nonzero powers of $\mu$.
-\end{proof}
 
 \begin{theorem}[Fixed-length eigenvector spreading for a primitive channel]
     \label{thm:eigenvector_spreading_primitive}
     \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector}
     \leanok
-    \uses{def:paper_primitive, def:vector_spread_span, thm:wielandt_proposition_three, thm:eigenvector_spreading, lem:eigenvector_padding}
+    \uses{def:paper_primitive, thm:wielandt_proposition_three, thm:eigenvector_spreading, lem:eigenvector_padding}
     Let $D>0$, suppose $\sum_i(A^i)^\dagger A^i=\Id$, and assume that
     $A$ is primitive in the sense of
     Definition~\ref{def:paper_primitive}. If $\varphi\neq0$, $\mu\neq0$, and
@@ -1136,7 +722,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:rank_one_noninvertible_eigenvector_primitive}
     \lean{MPSTensor.vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector}
     \leanok
-    \uses{def:paper_primitive, thm:wielandt_proposition_three, def:fitting_decomp, thm:nilpotent_pow_bound}
+    \uses{def:paper_primitive, thm:wielandt_proposition_three}
     Let $D>0$, suppose $\sum_i(A^i)^\dagger A^i=\Id$, and assume that
     $A$ is primitive in the sense of
     Definition~\ref{def:paper_primitive}. Suppose $A^{i_0}$ is not invertible
@@ -1244,7 +830,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, thm:nonzero_trace_word_primitive_sharp, thm:eigenvector_from_trace, thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator, cor:wielandt_case3_generator}
+    \uses{thm:wielandt_proposition_three, thm:nonzero_trace_word_primitive_sharp, thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator, cor:wielandt_case3_generator}
     Theorem~\ref{thm:wielandt_proposition_three} gives normality.
     By Theorem~\ref{thm:nonzero_trace_word_primitive_sharp}, there exists a
     \emph{positive-length} word~$w$ with
@@ -1252,7 +838,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     $d'=\krausrk(A)$.
     The matrix $A^w$ has nonzero trace, hence a nonzero eigenvalue~$\mu$
     and eigenvector~$\varphi$ by
-    Theorem~\ref{thm:eigenvector_from_trace}.
+    Theorem~\cite[``Nonzero trace implies eigenvector'']{QICLean2026Blueprint}.
     Set $n=|w|$ and let $B=A^{[n]}$ be the blocked tensor.
     Then $B$ is normal by Theorem~\ref{thm:isNormal_blockTensor}, and the
     encoding of $w$ as a single block index gives $B^{i_0}=A^w$.

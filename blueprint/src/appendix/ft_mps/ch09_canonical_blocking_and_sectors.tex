@@ -124,7 +124,7 @@ through its own period agrees with the directly $p$-blocked block.
     \label{thm:channel_posdef_fixed_point_unique_irreducible}
     \lean{isIrreducibleMap_of_channel_posDef_fixedPoint_unique}
     \leanok
-    \uses{def:irreducible_cp}
+
     Let $E$ be a channel with a positive-definite fixed point. If all nonzero
     positive semidefinite fixed points of $E$ are proportional, then $E$ is
     irreducible.
@@ -347,7 +347,7 @@ Support isometries first realize the cyclic corners. The remaining results place
     \label{thm:supported_corner_compression_isometry}
     \lean{MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry}
     \leanok
-    \uses{def:support_proj}
+
     Let $A$ be a tensor normalized on the support of an orthogonal projection
     $P$, so that $PA^iP=A^i$ and
     $\sum_i(A^i)^\dagger A^i=P$. Then there are a corner tensor $C$, a
@@ -374,8 +374,8 @@ Support isometries first realize the cyclic corners. The remaining results place
         \label{eq:canonical_corner_trace}
     \end{align}
     \begin{proof}\leanok
-        \uses{thm:supported_kraus_corner_compression}
-        Apply Theorem~\ref{thm:supported_kraus_corner_compression} to the
+
+        Apply Theorem~\cite[``Compression of a supported finite Kraus family'']{QICLean2026Blueprint} to the
         family $(A^i)_i$. It gives $C$, $\varphi$, and $V$ satisfying
         (\ref{eq:canonical_support_isometry}) and $\varphi(C^i)=A^i$. It remains
         to identify the coefficients of the associated words. For each word
@@ -593,7 +593,7 @@ The first theorem derives the overlap condition from a prepared primitive family
     positive semidefinite fixed point $\rho$ of $\E_{A_k}$ with fixed-point
     projector $P$; primitivity gives the complementary gap
     $\rho_{\spec}(\E_{A_k}-P)<1$
-    (the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}).
+    (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}).
     Theorem~\ref{thm:primitive_overlap} then yields
     $O_{A_kA_k}(N)\to1$.
 \end{proof}

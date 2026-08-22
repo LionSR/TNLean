@@ -228,7 +228,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \label{thm:mpdo_normalized_state_physical_isometry_transport}
     \lean{MPOTensor.normalizedMPO_changePhysicalBasis_of_isometry}
     \leanok
-    \uses{def:block_entropy, def:mpdo_single_kraus_map, def:mpdo_sitewise_physical_matrix}
+    \uses{def:block_entropy, def:mpdo_sitewise_physical_matrix}
     Let $V:\C^d\to\C^e$ satisfy $V^*V=I$, and let $K^V$ be obtained from an MPO
     tensor $K$ by conjugating each physical matrix by $V$.  The normalized
     periodic operators satisfy
@@ -263,7 +263,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \label{thm:mpdo_block_reduced_state_single_kraus_sitewise}
     \lean{MPOTensor.blockReducedState_singleKraus_sitewise}
     \leanok
-    \uses{def:block_entropy, def:mpdo_single_kraus_map, def:mpdo_sitewise_physical_matrix}
+    \uses{def:block_entropy, def:mpdo_sitewise_physical_matrix}
     Let $V:\C^d\to\C^e$ satisfy $V^*V=I$.  If an operator on $L+K$ sites is
     conjugated by $V^{\otimes(L+K)}$, then its first-$L$-site marginal is
     conjugated by $V^{\otimes L}$.
@@ -302,7 +302,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
         Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry,
         Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry}
     \leanok
-    \uses{def:mpdo_single_kraus_map, lem:matrix_rectangular_charpoly_cyclicity}
+    \uses{lem:matrix_rectangular_charpoly_cyclicity}
     Let $V:\C^d\to\C^e$ satisfy $V^*V=I_d$, and let $A$ be a $d\times d$
     matrix. Then $d\leq e$ and
     \begin{align}
@@ -338,7 +338,7 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \label{thm:mpdo_reduced_state_physical_isometry_transport}
     \lean{MPOTensor.reducedBlockState_changePhysicalBasis_of_isometry}
     \leanok
-    \uses{def:block_entropy, def:mpdo_single_kraus_map, def:mpdo_sitewise_physical_matrix}
+    \uses{def:block_entropy, def:mpdo_sitewise_physical_matrix}
     Let $V:\C^d\to\C^e$ be an isometry, and let $K^V$ be obtained from an MPO
     tensor $K$ by conjugating each physical matrix by $V$.  For every
     $0\leq L\leq N$, the contiguous reduced states satisfy

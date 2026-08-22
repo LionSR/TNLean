@@ -97,7 +97,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp, thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
+    \uses{thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
     Identify the two-site physical space of $K$ with the one-site physical
     space of $K^{[2]}$, and identify the four-site physical space of $K$ with
     the two-site physical space of $K^{[2]}$. These identifications merely
@@ -1262,19 +1262,7 @@ This is the calculation in
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
-    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl,
-        def:cpsv_example410_correlated_flip_weights,
-        thm:cpsv_example410_mutual_information_defect,
-        thm:cpsv_example411_not_source_zcl,
-        thm:cpsv_example411_ambient_not_sal,
-        thm:cpsv_example412_literal_formula,
-        thm:cpsv_example412_literal_sal,
-        thm:cpsv_example412_literal_zcl_rfp_gap,
-        thm:cpsv_example412_four_cycle_ssa_defect,
-        thm:cpsv_example412_not_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps,
-        thm:cpsv_example412_normalized_not_gsnnch}
+    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch, def:mpo_source_zcl, def:cpsv_example410_correlated_flip_weights, thm:cpsv_example410_mutual_information_defect, thm:cpsv_example411_not_source_zcl, thm:cpsv_example411_ambient_not_sal, thm:cpsv_example412_literal_formula, thm:cpsv_example412_literal_sal, thm:cpsv_example412_literal_zcl_rfp_gap, thm:cpsv_example412_four_cycle_ssa_defect, thm:cpsv_example412_not_gsnnch, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
     following separations.  Example~4.10 applies correlated on-site bit-flip
@@ -1500,8 +1488,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_example410_window_entropies,
-        thm:cpsv_example410_log_ratio_pos}
+    \uses{thm:cpsv_example410_window_entropies, thm:cpsv_example410_log_ratio_pos}
     Since $\tilde I_2-\tilde I_1=2\tilde S_2-\tilde S_1-\tilde S_3$,
     substituting the closed forms and collecting logarithms gives the
     displayed identity; positivity follows from the certified integer
@@ -2344,9 +2331,7 @@ This is the calculation in
     \lean{MPOTensor.isGSNNCH_smul_iff,
         MPOTensor.CPSVExample412NormalizedRFP.Mhat_not_isGSNNCH}
     \leanok
-    \uses{def:cpsv_example412_literal_tensor, def:mpdo_source_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps,
-        thm:cpsv_example412_not_gsnnch}
+    \uses{def:cpsv_example412_literal_tensor, def:mpdo_source_gsnnch, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_not_gsnnch}
     The condition of Definition~4.8 constrains only the normalized
     density-operator family, and that family is unchanged by any nonzero
     complex rescaling of the tensor. The condition is therefore invariant
@@ -2355,9 +2340,7 @@ This is the calculation in
     nearest-neighbor commuting Hamiltonian.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_normalized_mpo_scaling_invariance,
-        thm:cpsv_example412_not_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps}
+    \uses{thm:mpdo_normalized_mpo_scaling_invariance, thm:cpsv_example412_not_gsnnch, thm:cpsv_example412_normalized_rfp_maps}
     For nonzero $c$ and every chain length, the normalized density operator
     of $cM$ equals that of $M$, so every clause of Definition~4.8 holds for
     $cM$ exactly when it holds for $M$. Taking $c=\frac12$ transports the

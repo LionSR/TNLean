@@ -409,7 +409,7 @@ physical indices, as in
     \lean{MPOTensor.normalizedVerticalSectorEmbedding_isKrausDirectSumMap}
     \lean{MPOTensor.verticalSectorPartialTrace_isKrausDirectSumMap}
     \leanok
-    \uses{def:mpdo_normalized_vertical_sector_maps, def:kraus_map_between_direct_sums}
+    \uses{def:mpdo_normalized_vertical_sector_maps}
     Let $(d_\alpha)_\alpha$ and $(r_\alpha)_\alpha$ be finite families of
     dimensions with $r_\alpha>0$, and suppose that every diagonal entry of
     $\mu_\alpha$ is positive. Then the normalized embedding
@@ -437,7 +437,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_equiv_reindex_cptp, thm:mpdo_state_preparation_kraus_resolution, thm:mpdo_controlled_kraus_map_cptp, thm:mpdo_controlled_kraus_map_same_block, thm:mpdo_controlled_dependent_partial_trace_same_block, thm:mpdo_controlled_kraus_map_off_block, thm:mpdo_controlled_dependent_partial_trace_cptp, lem:is_kraus_cp_comp}
+    \uses{thm:mpdo_controlled_dependent_partial_trace_same_block, thm:mpdo_controlled_dependent_partial_trace_cptp}
     Exchange the two coordinates within each sector by
     $w(\alpha,q,i)=(\alpha,i,q)$. Let $R_w$ be the corresponding matrix
     reindexing. For the normalized embedding, set
@@ -731,7 +731,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:direct_sum_full_matrix_extension_compatibility, thm:mean_ergodic_projection_density_block_form}
+
     Extend $F$ to the full matrix algebra by diagonal compression followed by
     block-diagonal embedding, and choose a numbered basis of the ambient
     space. The extension is positive and trace preserving, its trace adjoint
@@ -816,7 +816,7 @@ physical indices, as in
     \lean{Matrix.IsPositiveDirectSumMap.%
         exists_posDef_fixedFamily_of_fixed_product_span}
     \leanok
-    \uses{thm:positive_map_faithful_fixed_point_from_product_span, thm:direct_sum_full_matrix_extension_compatibility}
+    \uses{thm:positive_map_faithful_fixed_point_from_product_span}
     Let $F$ be a positive trace-preserving endomorphism of
     $\mathcal A=\prod_\alpha M_{d_\alpha}$. Suppose that each $V_j$ is
     fixed by $F$ and, for some $L>0$, the identity belongs to

@@ -1247,7 +1247,7 @@ nonzero spectrum as a set.
     and let $B$ be the rank-one diagonal idempotent from
     Lemma~\ref{lem:mpu_diagonal_one_at}.  For $1\le k\le n$ we have
     $\tr(A^k)=1=\tr(B^k)$.  The finite-range half of the Newton--Girard
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} then yields $\chi_A = \chi_B =
+    the corresponding theorem in the companion quantum-channel volume~\cite[``Newton--Girard trace recursion'']{QICLean2026Blueprint} then yields $\chi_A = \chi_B =
         X^{\,n-1}(X-1)$.
 \end{proof}
 
@@ -3437,10 +3437,10 @@ Let $D$ be a positive integer and let
 $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map. The transfer matrix
 $\widehat T$ of $T$ under the column-stacking identification
 $M_D(\mathbb C)\cong\mathbb C^{D^2}$ is defined in the companion
-quantum-channel volume~\cite{QICLean2026Blueprint}, the matrix-units
+quantum-channel volume~\cite[``Transfer matrix of a matrix endomorphism'']{QICLean2026Blueprint}, the matrix-units
 special case of the one-family transfer matrix of the corresponding
 definition in the companion quantum-channel
-volume~\cite{QICLean2026Blueprint}.
+volume~\cite[``Transfer matrix in one family'']{QICLean2026Blueprint}.
 
 \begin{theorem}[Functoriality of transfer matrices]
     \label{thm:mpu_transfer_matrix_functoriality}
@@ -3459,21 +3459,6 @@ volume~\cite{QICLean2026Blueprint}.
     row and column indices.
 \end{proof}
 
-\begin{theorem}[Transfer matrices intertwine column stacking]
-    \label{thm:mpu_transfer_matrix_vectorization}
-    \lean{transferMatrix_mulVec_eq}
-    \leanok
-    For every $\rho\in M_D(\mathbb C)$,
-    \begin{align}
-        \widehat T\,\operatorname{vec}(\rho)
-         & =\operatorname{vec}(T(\rho)).
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Expand $\rho$ in the matrix-unit basis and compare every vectorized
-    coordinate.
-\end{proof}
 
 \begin{theorem}[Trace preservation fixes the vectorized identity on the left]
     \label{thm:transfer_matrix_trace_preserving_identity_left_fixed}
@@ -3487,7 +3472,7 @@ volume~\cite{QICLean2026Blueprint}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:matrix_vec_identity_trace_pairing}
+
     On the column indexed by the matrix unit $E_{k\ell}$,
     \begin{align}
         \bigl((\Phi\rvert\widehat T\bigr)_{(\ell,k)}
@@ -3529,7 +3514,7 @@ volume~\cite{QICLean2026Blueprint}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_transfer_matrix_vectorization}
+
     Column stacking is a linear bijection and intertwines $T$ with
     multiplication by $\widehat T$.  It therefore carries nonzero
     eigenmatrices to nonzero eigenvectors and conversely.
@@ -3930,7 +3915,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:transfer_map_corner_intertwine, thm:mpu_dependent_block_inclusion_identities, thm:mpu_shifted_trace_power_moments, thm:mpu_shifted_trace_power_spectrum, thm:mpu_trace_power_all, thm:mpu_transfer_matrix_power_trace, thm:mpu_transfer_matrix_vectorization, thm:mpu_transfer_matrix_eigenvalues}
+    \uses{lem:transfer_map_corner_intertwine, thm:mpu_dependent_block_inclusion_identities, thm:mpu_shifted_trace_power_moments, thm:mpu_shifted_trace_power_spectrum, thm:mpu_trace_power_all, thm:mpu_transfer_matrix_power_trace, thm:mpu_transfer_matrix_eigenvalues}
     Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
     Let $U$ be the reconstruction coisometry and let $J_k$ be the flattened
     inclusion of the $k$th block.  Define the ambient inclusion and transported
@@ -4138,7 +4123,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_card_active, thm:mpu_active_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_active_full_support_geometry, thm:matrix_posdef_coisometric_transport, lem:transfer_map_corner_intertwine, thm:transfer_matrix_trace_preserving_identity_left_fixed, thm:mpu_transfer_matrix_vectorization, thm:matrix_vec_identity_trace_pairing, thm:mpu_normalized_transfer_stabilization, thm:mpu_stabilized_fixed_pair_uniqueness}
+    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_card_active, thm:mpu_active_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_active_full_support_geometry, thm:matrix_posdef_coisometric_transport, lem:transfer_map_corner_intertwine, thm:transfer_matrix_trace_preserving_identity_left_fixed, thm:mpu_normalized_transfer_stabilization, thm:mpu_stabilized_fixed_pair_uniqueness}
     The shifted trace identities satisfy $\tr(E^N)=1$ for every integer
     $N>1$ and give
     \begin{align}
@@ -5083,7 +5068,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         LinearMap.IsSymmetricProjection.angleDefect_block,
         LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
     \leanok
-    \uses{}
+
     Let $P$ and $Q$ be orthogonal projections on a complex inner-product space.
     The compression of $Q$ to $\operatorname{ran}P$ is self-adjoint. If a unit
     vector $x\in\operatorname{ran}P$ satisfies
@@ -5310,7 +5295,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_two_projection_reduced_projection}
     \lean{LinearMap.IsSymmetricProjection.reducedProjection}
     \leanok
-    \uses{}
+
     Let $P$ and $Q$ be orthogonal projections on a finite-dimensional complex
     inner-product space. Define $\widetilde P$ as the orthogonal projection onto
     $\operatorname{ran}(PQ)$.
@@ -5476,7 +5461,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_support_compression_posdef}
     \lean{Matrix.PosSemidef.compression_posDef_of_support_action_ne_zero}
     \leanok
-    \uses{def:support_proj}
+
     Let $\rho\succeq0$. If
     \begin{align}
         \operatorname{supp}(\rho)(Vx) & \neq0
@@ -5501,7 +5486,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.trace_compressed_fixed_pair_reducedProjection,
         MPOTensor.compressed_fixed_pair_posDef_reducedProjection}
     \leanok
-    \uses{def:mpo_family, def:mpo_transfer_map, def:support_proj, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, lem:mpu_transfer_map_virtual_sandwich, lem:mpu_support_compression_posdef, thm:mpu_matrix_reduced_projection, thm:mpu_two_projection_reduced_projection_transversality}
+    \uses{def:mpo_family, def:mpo_transfer_map, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, lem:mpu_transfer_map_virtual_sandwich, lem:mpu_support_compression_posdef, thm:mpu_matrix_reduced_projection, thm:mpu_two_projection_reduced_projection_transversality}
     Let $W=(W^{ij})$ be an MPO tensor. Let $L,R\succeq0$ satisfy
     \begin{align}
         E_W(X)                & =\operatorname{tr}(LX)R, &
@@ -5580,7 +5565,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:reduced_projection_invertible_factor}
     \lean{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
     \leanok
-    \uses{def:support_proj, def:mpu_matrix_reduced_projection, def:mpu_ambient_support_inverse_extension}
+    \uses{def:mpu_matrix_reduced_projection, def:mpu_ambient_support_inverse_extension}
     Let $L,R\succeq0$, let $P$ and $Q$ be their support projections, and let
     $\widetilde P$ be the reduced projection of $P$ and $Q$. There are
     invertible support-inverse extensions of $L$ and $R$, together with an
@@ -5600,7 +5585,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.leftRank_hat_eq_reducedProjection,
         MPOTensor.exists_units_for_hat_reducedProjection}
     \leanok
-    \uses{def:mpo_family, def:support_proj, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, def:mpu_right_rank, def:mpu_left_rank, def:mpu_ambient_support_inverse_extension, thm:reduced_projection_invertible_factor}
+    \uses{def:mpo_family, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, def:mpu_right_rank, def:mpu_left_rank, def:mpu_ambient_support_inverse_extension, thm:reduced_projection_invertible_factor}
     Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square
     matrices of the same size, let $P$ be an orthogonal projection, let $Q$
     be a square matrix of the same size, and set $\widetilde P$ equal to
@@ -5639,7 +5624,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:support_proj, def:mpu_virtual_sandwich, thm:mpu_matrix_reduced_projection, thm:mpu_virtual_sandwich_source_ranks, thm:mpu_ambient_support_inverse_extension}
+    \uses{def:mpu_virtual_sandwich, thm:mpu_matrix_reduced_projection, thm:mpu_virtual_sandwich_source_ranks, thm:mpu_ambient_support_inverse_extension}
     Expanding each virtual sandwich and using $XL=P$ and $RZ=Q$ gives
     (\ref{eq:mpu_reduced_hat_chain_pwqy}). The absorptions
     $QW^{ij}=W^{ij}=W^{ij}P$ give, letter by letter,
@@ -5931,7 +5916,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{Matrix.PosSemidef.supportInvExtension,
         Matrix.PosSemidef.supportInvExtensionInverse}
     \leanok
-    \uses{def:support_proj}
+
     Let $A\succeq0$ have support projection $P$, and let $A^+$ denote its
     inverse on the support. Define
     \begin{align}

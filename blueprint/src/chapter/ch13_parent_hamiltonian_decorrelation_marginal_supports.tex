@@ -16,20 +16,6 @@
     \end{align}
 \end{proof}
 
-\begin{lemma}[Adjoint identity for the right partial trace]
-    \label{lem:trace_lift_left_factor_mul}
-    \lean{Matrix.trace_leftKroneckerEmbed_mul}
-    \leanok
-    For every operator $M$ on $H_L$ and every operator $\rho$ on
-    $H_L\otimes H_R$, one has
-    $\tr((M\otimes\Id_R)\rho)=\tr(M\tr_R\rho)$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Expand both traces in product bases and sum first over the identity entry
-    on $H_R$.
-\end{proof}
 
 Left and right absorption by the marginal support projector — for $\rho$
 positive semidefinite on $H_L\otimes H_R$ with $P_L$ the orthogonal
@@ -38,7 +24,7 @@ $(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$, which for
 $H_L=H_A\otimes H_X$ and $H_R=H_B$ are precisely the $P_{AX}$
 support-projector identities in \cite[Appendix~D.2, lines
     2228--2235]{Cirac2016MPDO_arXiv} — are pure bipartite-operator facts with no
-tensor-network content, proved in the companion quantum-channel volume~\cite{QICLean2026Blueprint}. The
+tensor-network content, proved in the companion quantum-channel volume~\cite[``Left absorption by the marginal support projector'', ``Right absorption by the marginal support projector'', ``Partial trace over the left factor'']{QICLean2026Blueprint}. The
 partial trace over the left factor that they and the absorption theorems
 below are stated against is defined there as well.
 
@@ -60,51 +46,12 @@ below are stated against is defined there as well.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Positivity of the left partial trace]
-    \label{thm:partial_trace_left_pos}
-    \lean{Matrix.PosSemidef.partialTraceLeft}
-    \leanok
-    For finite-dimensional $H_L$ and $H_R$, if $\rho\geq 0$, then
-    $\tr_L\rho\geq 0$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    If $\rho^{(k)}$ is the principal submatrix indexed by
-    $\{k\}\times H_R$, then
-    \begin{align}
-        (\tr_L\rho)_{r,s}
-         & =\sum_k\rho_{(k,r),(k,s)} =\sum_k\rho^{(k)}_{r,s}.
-        \notag
-    \end{align}
-    Each $\rho^{(k)}$ is positive semidefinite, and hence so is their finite
-    sum.
-\end{proof}
-
-\begin{lemma}[Adjoint identity for the left partial trace]
-    \label{lem:trace_lift_right_factor_mul}
-    \lean{Matrix.trace_rightKroneckerEmbed_mul}
-    \leanok
-    For every operator $M$ on $H_R$, one has
-    $\tr((\Id_L\otimes M)\rho)=\tr(M\tr_L\rho)$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Expanding in product bases gives
-    \begin{align}
-        \tr((\Id_L\otimes M)\rho)
-         & =\sum_{l,r}\sum_{k,s}\delta_{l,k}M_{rs}
-        \rho_{(k,s),(l,r)} =\sum_{r,s}M_{rs}\sum_l\rho_{(l,s),(l,r)} =\tr(M\tr_L\rho).
-        \notag
-    \end{align}
-\end{proof}
 
 Left and right absorption by the right marginal support — for $\rho\geq0$
 and $P_R$ the support projector of $\tr_L\rho$, the identities
 $(\Id_L\otimes P_R)\rho=\rho$ and $\rho(\Id_L\otimes P_R)=\rho$ — are the
 same kind of generic bipartite-operator fact, proved in the companion
-quantum-channel volume~\cite{QICLean2026Blueprint} alongside the
+quantum-channel volume~\cite[``Left absorption by the right marginal support'', ``Right absorption by the right marginal support'']{QICLean2026Blueprint} alongside the
 left-marginal absorption theorems above.
 
 We now use the explicit tripartite indexing

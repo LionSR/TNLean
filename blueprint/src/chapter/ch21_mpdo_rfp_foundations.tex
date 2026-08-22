@@ -439,7 +439,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{def:mpdo_ancillary_trace_map}
     \lean{MPOTensor.ancillaryTraceMap}
     \leanok
-    \uses{def:mpdo_right_partial_trace_map}
+
     For a matrix $X$ on the spin--ancilla space, the ancillary trace map is
     \begin{align}
         [\tr_a(X)]_{ij}
@@ -461,8 +461,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_right_partial_trace_cptp}
-    This is Lemma~\ref{lem:mpdo_right_partial_trace_cptp} with $A$ the spin
+
+    This is Lemma~\cite[``The right partial trace is trace-preserving completely positive'']{QICLean2026Blueprint} with $A$ the spin
     space and $B$ the ancillary space.
 \end{proof}
 
@@ -493,7 +493,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \uses{def:mpdo_ancillary_trace_map}
     The spin reduction obtained by tracing the ancillary index is
     trace-preserving completely positive: the ancillary trace map
-    $\tr_a$ satisfies the corresponding definition in the companion quantum-channel volume~\cite{QICLean2026Blueprint}.
+    $\tr_a$ satisfies the corresponding definition in the companion quantum-channel volume~\cite[``Trace-preserving completely positive map'']{QICLean2026Blueprint}.
     This is the structure described immediately after Definition~4.3 in
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}

@@ -113,7 +113,7 @@ The results below turn reducing projections into support isometries, compress te
     \label{lem:projection_support_isometry}
     \lean{IsOrthogonalProjection.exists_support_isometry}
     \leanok
-    \uses{def:orthogonal_projection_channel}
+
     Every orthogonal projection $P$ on $\C^D$ factors through an isometry:
     there are $n\in\N$ and $V\in\C^{D\times n}$ such that
     \begin{align}
@@ -145,13 +145,13 @@ The results below turn reducing projections into support isometries, compress te
 
 The rectangular Gram-equality criterion that turns $B^\dagger B=A^\dagger A$
 into a unitary $U$ with $B=UA$ is a generic algebra fact, proved in the
-companion quantum-channel volume~\cite{QICLean2026Blueprint}.
+companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unitary'']{QICLean2026Blueprint}.
 
 \begin{lemma}[Corner tensors inherit projector closure]
     \label{lem:projector_closure_corner}
     \lean{MPSTensor.hasInvariantProjectorClosure_compress_of_commutes}
     \leanok
-    \uses{def:invariant_projector_closure, def:orthogonal_projection_channel}
+    \uses{def:invariant_projector_closure}
     Let $A$ have invariant-projector closure, and let $V$ be an isometry,
     $V^\dagger V=\Id$, whose range projection $VV^\dagger$ commutes with every
     $A^i$. Then the corner tensor $B^i=V^\dagger A^iV$ again has
@@ -339,11 +339,11 @@ This section records the positive Perron eigenpair, its spectral normalization, 
 
 \begin{proof}
     \leanok
-    \uses{thm:pf_eigenvector_existence, def:irreducible_cp}
+
     Irreducibility of the tensor makes the transfer map an irreducible
     completely positive map, and a nonzero matrix makes it nonzero, so it
     does not annihilate any nonzero PSD matrix. The Perron--Frobenius theorem
-    for positive maps (Theorem~\ref{thm:pf_eigenvector_existence}) gives a
+    for positive maps (Theorem~\cite[``Positive-eigenvalue specialization'']{QICLean2026Blueprint}) gives a
     nonzero PSD eigenvector with eigenvalue $r>0$, and irreducibility upgrades
     it to a positive-definite one
     (\cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum}).
@@ -362,12 +362,12 @@ This section records the positive Perron eigenpair, its spectral normalization, 
 
 \begin{proof}
     \leanok
-    \uses{def:nt_cpsv, thm:spectral_radius_pf_irred}
+    \uses{def:nt_cpsv}
     The rescaling identity $\E_{r^{-1/2}B}(X)=r^{-1}\E_B(X)$ gives
     $\E_{r^{-1/2}B}(\rho)=r^{-1}r\rho=\rho$, so $\rho$ is a
     positive-definite fixed point of $\E_{r^{-1/2}B}$. The rescaled map
     remains irreducible and completely positive, so
-    Theorem~\ref{thm:spectral_radius_pf_irred} identifies its spectral radius
+    Theorem~\cite[``Spectral radius is the Perron eigenvalue'']{QICLean2026Blueprint} identifies its spectral radius
     with the eigenvalue one. The eigenvalues of modulus one of
     $\E_{r^{-1/2}B}$ are the eigenvalues of $\E_B$ of modulus~$r$, divided by
     $r$; by hypothesis the only such eigenvalue is one, so the peripheral
@@ -381,7 +381,7 @@ This section records the positive Perron eigenpair, its spectral normalization, 
     \lean{Matrix.supportProj_mul_conjTranspose_mul_self}
     \lean{Matrix.one_sub_supportProj_mul_mul_supportProj_eq_zero}
     \leanok
-    \uses{def:support_proj}
+
     The support projection $\pi$ of a positive semidefinite matrix $\rho$
     factors as $\pi=\rho W$ for a spectral pseudo-inverse $W$, witnessing
     that the range of $\pi$ is the range of $\rho$. For a rectangular
@@ -393,7 +393,7 @@ This section records the positive Perron eigenpair, its spectral normalization, 
 
 \begin{proof}
     \leanok
-    \uses{def:support_proj}
+
     In the spectral decomposition
     $\rho=U\diag(\lambda)U^\dagger$, take
     $W=U\diag(\lambda^{+})U^\dagger$, where $\lambda^{+}$ inverts the
@@ -415,7 +415,7 @@ This section records the positive Perron eigenpair, its spectral normalization, 
     \label{thm:irreducible_tensor_smul_conj}
     \lean{MPSTensor.isIrreducibleTensor_smul_conj}
     \leanok
-    \uses{def:irreducible_tensor, def:support_proj, lem:support_proj_range_factorization}
+    \uses{def:irreducible_tensor, lem:support_proj_range_factorization}
     Let $B$ be an irreducible tensor, let $X$ be invertible, and let
     $c\ne0$. Then the rescaled conjugated tensor with letters
     $cX^{-1}B^vX$ is irreducible. In particular, the rescaled unital

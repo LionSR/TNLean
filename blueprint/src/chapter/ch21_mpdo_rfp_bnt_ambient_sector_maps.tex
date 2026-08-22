@@ -136,7 +136,7 @@
     \lean{MPOTensor.normalizedVerticalSectorAmbientRestorationExtension_factorization}
     \lean{MPOTensor.normalizedVerticalSectorAmbientRestorationExtension_isKrausCP}
     \leanok
-    \uses{def:kraus_map_between_direct_sums, def:mpdo_bnt_ambient_sector_maps}
+    \uses{def:mpdo_bnt_ambient_sector_maps}
     Represent a sector family by its block-diagonal matrix.  For a map whose
     domain is a sector algebra, first extract the diagonal sector blocks from
     an arbitrary matrix.  With these canonical full-matrix representatives,
@@ -145,7 +145,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_vertical_sector_partial_trace_kraus, lem:mpdo_single_kraus_map_cp, thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cp_comp}
+    \uses{thm:mpdo_vertical_sector_partial_trace_kraus}
     Each raw retraction is the composition of compression by $W_i$, a unitary
     relabelling of coordinates, sectorwise partial trace, and block-diagonal
     inclusion.  Each normalized embedding is the composition of diagonal-block
@@ -224,7 +224,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_normalized_vertical_sector_positive_trace, lem:mpdo_coisometric_compression_trace, thm:mpdo_equiv_reindex_cptp}
+    \uses{lem:mpdo_normalized_vertical_sector_positive_trace, lem:mpdo_coisometric_compression_trace}
     Sectorwise partial trace and block-diagonal inclusion preserve the total
     trace, which gives
     (\ref{eq:mpdo_bnt_ambient_sector_R1_trace}) and
@@ -267,7 +267,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_retained_vertical_sector_retraction, thm:mpdo_equiv_reindex_cptp}
+    \uses{lem:mpdo_retained_vertical_sector_retraction}
     Compressing an expansion by $W_i^\dagger$ gives the original retained
     block-diagonal matrix because $W_i W_i^\dagger=I$.  On every sector,
     \begin{align}
