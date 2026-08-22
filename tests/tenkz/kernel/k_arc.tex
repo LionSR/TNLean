@@ -6,8 +6,13 @@
 % stays the straight bond -- the chord answer.
 % Expected records: the saved routes carry cubic segments wherever a face
 % directed one, the faceless arc's record matches the straight bond's
-% geometry, and the bead addressed on the return stands on the drawn
-% curve, not on the chord between its ends.
+% geometry, the bead addressed on the return stands on the drawn
+% curve, not on the chord between its ends, and the pair of faces no
+% single curve can honour -- two ports facing away from each other
+% along the chord's own line -- draws as the wrap: a fold out of each
+% face joined by a run beside the chord; the bead at a quarter of the
+% wrap's own length stands on the first fold, pinning the whole-route
+% arclength meaning.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -17,7 +22,7 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+\begin{tenkz}[rows={wire,wire}, cols=9, bonds=none]
   \tn[at=(1,2), skin=box, name=a1, ports={0:virtual, 180:virtual, 90:physical}]{A}
   \tn[at=(1,3), skin=box, name=a2, ports={0:virtual, 180:virtual, 90:physical}]{B}
   \tn[at=(2,1), skin=none, name=jw, ports={0:virtual, 90:virtual}]{}
@@ -34,5 +39,10 @@
   \tnwire[route=arc]{(1,7)}{(2,7)}
   \tnwire[kind=string, species=operator, name=s, route=arc]{a1.90}{open nw}
   \tn[skin=dot, at=on ret 0.5, size=s]{}
+  \tn[at=(1,8), skin=box, name=w1, ports={180:virtual, 0:virtual}]{C}
+  \tn[at=(1,9), skin=box, name=w2, ports={0:virtual, 180:virtual}]{D}
+  \tnwire{w1.0}{w2.180}
+  \tnwire[route=arc, name=wrap]{w1.180}{w2.0}
+  \tn[skin=dot, at=on wrap 0.25, size=s]{}
 \end{tenkz}
 \end{document}
