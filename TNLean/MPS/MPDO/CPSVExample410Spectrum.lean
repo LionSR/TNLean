@@ -137,12 +137,13 @@ private lemma VFour_apply (σ : Fin 4 → Fin 4) (t : Bool × Bool × Bool × Bo
 private lemma bellEmbedding_isometry : bellEmbeddingᴴ * bellEmbedding = 1 := by
   ext u v
   rcases u <;> rcases v <;>
-    simp [bellEmbedding, Matrix.mul_apply, Fintype.sum_prod_type, Fin.sum_univ_two,
-      Matrix.conjTranspose_apply] <;>
+    norm_num [bellEmbedding, Matrix.mul_apply, Fintype.sum_prod_type,
+      Fin.sum_univ_two, Matrix.conjTranspose_apply] <;>
     rw [← pow_two, ← Complex.ofReal_inv, ← Complex.ofReal_pow, inv_pow,
       Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)] <;>
     norm_num
 
+set_option linter.unusedFintypeInType false in
 private lemma kron_isometry {a b c d : Type*} [Fintype a] [Fintype b]
     [Fintype c] [Fintype d] [DecidableEq b] [DecidableEq d]
     (A : Matrix a b ℂ) (B : Matrix c d ℂ) (hA : Aᴴ * A = 1) (hB : Bᴴ * B = 1) :
@@ -150,6 +151,7 @@ private lemma kron_isometry {a b c d : Type*} [Fintype a] [Fintype b]
   rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hA, hB,
     Matrix.one_kronecker_one]
 
+set_option linter.unusedFintypeInType false in
 private lemma reindex_isometry {a b a' b' : Type*} [Fintype a] [Fintype b]
     [Fintype a'] [Fintype b'] [DecidableEq b] [DecidableEq b']
     (A : Matrix a b ℂ) (ha : a ≃ a') (hb : b ≃ b') (hA : Aᴴ * A = 1) :
