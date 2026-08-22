@@ -538,6 +538,24 @@ PAIR_TRACE_SOURCE = r"""
 \end{document}
 """
 
+ARCH_MARK_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, name=a, ports={90:virtual}]{A}
+  \tn[at=(1,2), skin=box, name=b, ports={90:virtual}]{B}
+  \tnwire[route=arc, dir=to]{a.90}{b.90}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=8, bonds=none]
+  \tn[at=(1,1), skin=box, name=a, ports={90:virtual}]{A}
+  \tn[at=(1,8), skin=box, name=b, ports={90:virtual}]{B}
+  \tnwire[route=arc, dir=to]{a.90}{b.90}
+\end{tenkz}
+\end{document}
+"""
+
 NESTED_CLAIM_SOURCE = r"""
 \documentclass{standalone}
 \usepackage{tenkz}
@@ -2410,6 +2428,102 @@ def main() -> int:
                 "a label inside the barb cover's stroke band, clear of the "
                 "centreline, was not flagged: "
                 + "; ".join(f.msg for f in mark_seeded_audit.findings))
+
+        # ---- the barb cover of a bowed route sits on the bow (#6360) ----
+        # A directed arc places its Straight Barb at arc length along the
+        # true cubic; a cover computed on the chord between the segment's
+        # ends sits off the drawn route entirely.  The arch below bows to
+        # y ~ 1019000 sp at its half-way station while its chord runs at
+        # y = 0: the cover must stand at the bow, a label on the barb
+        # there must read as ink, and the same label held against the old
+        # chord-station cover -- seeded synthetically at the chord -- must
+        # show the miss this fix removes.
+        arch_status, arch_audit = audit_status(
+            compile_tex("arch-mark.tex", ARCH_MARK_SOURCE))
+        arch_marks = [event for event in arch_audit.events("k1")
+                      if event.kind == "wire-ink"
+                      and event.attrs.get("origin") == "mark"]
+        if arch_status != 0 or len(arch_marks) != 1:
+            raise AssertionError(
+                "the directed arc did not emit exactly one barb cover: "
+                + "; ".join(event.raw for event in arch_marks))
+        # The second picture is the same arch four times as wide: its
+        # control net demands more than the sixteen-piece floor, and the
+        # cover must still stand on the bow (y ~ 7100000 sp), not on the
+        # chord at y = 0 -- pinning the adaptive count end to end.
+        wide_marks = [event for event in arch_audit.events("k2")
+                      if event.kind == "wire-ink"
+                      and event.attrs.get("origin") == "mark"]
+        if len(wide_marks) != 1:
+            raise AssertionError(
+                "the wide arch did not emit exactly one barb cover: "
+                + "; ".join(event.raw for event in wide_marks))
+        wx1, wy1, wx2, wy2 = parse_two_point_ink(
+            wide_marks[0].attrs["points"])
+        if min(wy1, wy2) < 6500000:
+            raise AssertionError(
+                "the wide arch's barb cover fell toward the chord: "
+                f"points={wide_marks[0].attrs['points']}")
+        # The certified widening is visible in the strokes: each arch's
+        # cover exceeds the bare barb (170394 sp = barblen 2.6pt) by its
+        # own computed sandwich loss, and the wide arch, carrying four
+        # times the curvature, exceeds the modest one.
+        small_stroke = int(arch_marks[0].attrs["stroke"])
+        wide_stroke = int(wide_marks[0].attrs["stroke"])
+        if not (170394 < small_stroke < wide_stroke):
+            raise AssertionError(
+                "the covers do not carry their certified widening: "
+                f"small={small_stroke}, wide={wide_stroke}")
+        ax1, ay1, ax2, ay2 = parse_two_point_ink(
+            arch_marks[0].attrs["points"])
+        if min(ay1, ay2) < 900000:
+            raise AssertionError(
+                "the arch's barb cover fell toward the chord instead of "
+                f"the bow: points={arch_marks[0].attrs['points']}")
+        arch_stroke = int(arch_marks[0].attrs["stroke"])
+        arch_cx = (ax1 + ax2) // 2
+        arch_cy = (ay1 + ay2) // 2
+        arch_label = (
+            "label-use|picture=k1\n"
+            "bbox|picture=k1|class=label|id=96|owner=0|"
+            f"xmin={arch_cx - 1000}|xmax={arch_cx + 1000}|"
+            f"ymin={arch_cy - 1000}|ymax={arch_cy + 1000}|"
+            "shape=rect|radius=0|station=n|provenance=auto\n"
+        )
+        arch_log = arch_audit.log_path.read_text(encoding="utf-8")
+        arch_seeded = work / "arch-mark-seeded.tnlog"
+        arch_seeded.write_text(arch_log + arch_label, encoding="utf-8")
+        arch_seed_status, arch_seed_audit = audit_status(arch_seeded)
+        arch_found = [
+            finding for finding in arch_seed_audit.findings
+            if finding.rule == "label-on-ink" and "mark route" in finding.msg]
+        if arch_seed_status != 1 or len(arch_found) != 1:
+            raise AssertionError(
+                "a label on the bowed barb was not flagged against the "
+                "arc-length cover: "
+                + "; ".join(f.msg for f in arch_seed_audit.findings))
+        # The pre-fix miss, watched: replace the cover with the chord
+        # station's geometry (the same span at y = 0) and the same label
+        # draws no mark finding at all.
+        chord_cover = (
+            f"wire-ink|picture=k1|name=wire-3|origin=mark|"
+            f"stroke={arch_stroke}|"
+            f"points={ax1},0;{ax2},0\n"
+        )
+        arch_chord_log = "".join(
+            line + "\n" for line in arch_log.splitlines()
+            if not (line.startswith("wire-ink") and "origin=mark" in line))
+        arch_chord = work / "arch-mark-chord.tnlog"
+        arch_chord.write_text(arch_chord_log + chord_cover + arch_label,
+                              encoding="utf-8")
+        chord_status, chord_audit = audit_status(arch_chord)
+        chord_found = [
+            finding for finding in chord_audit.findings
+            if finding.rule == "label-on-ink" and "mark route" in finding.msg]
+        if chord_found:
+            raise AssertionError(
+                "the chord-station cover unexpectedly reached the bowed "
+                "barb; the regression no longer demonstrates the miss")
 
         # ---- skin pairings join the wire-ink surface (#6357) ----
         # A declared skin's rendered pairing is drawn ink in the same sense
