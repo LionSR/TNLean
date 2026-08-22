@@ -2450,9 +2450,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_u_open_two_site}
     \lean{MPOTensor.sum_sourceX₁_mul_sourceU,
         MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂,
-        MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair}
+        MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair,
+        MPOTensor.blockTwo_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂}
     \leanok
-    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
+        thm:mpu_source_factorization_entries}
     For $q=(q_1,q_2)$ and $j=(j_1,j_2)$, the untraced two-site product is
     \begin{align}
         (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})_{\alpha,\gamma}
@@ -2481,7 +2483,42 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Substitution and reordering of the scalar finite sums give the displayed
     partial contraction and the untraced two-site identity, with the virtual
-    indices $\alpha$ and $\gamma$ left open.
+    indices $\alpha$ and $\gamma$ left open. Encoding both physical pairs by
+    the standard equivalence $\Fin d\times\Fin d\simeq\Fin(d^2)$ gives the
+    corresponding formula for the concrete two-site block.
+\end{proof}
+
+\begin{theorem}[Reflected open two-site source factorization]
+    \label{thm:mpu_source_v_open_two_site}
+    \lean{MPOTensor.mul_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁,
+        MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁}
+    \leanok
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
+        thm:mpu_source_factorization_entries}
+    The reflected factorization of the same untraced two-site product is
+    \begin{align}
+        (\mathcal U^{i_1j_1}\mathcal U^{i_2j_2})_{\alpha,\gamma}
+        =\sum_{l,r}(X_2)_{(\alpha,i_1),l}
+        v_{(j_2,j_1),(r,l)}(Y_1)_{r,(i_2,\gamma)}.
+    \end{align}
+    Thus the physical row of $v$ is $(j_2,j_1)$, while its source column is
+    $(r,l)$. Both orders remain explicit in the formula for the concrete
+    two-site block under $\Fin d\times\Fin d\simeq\Fin(d^2)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    Expand the first tensor letter through $M_2=X_2Y_2$ and the second through
+    $M_1=X_1Y_1$. Then
+    \begin{align}
+        \sum_\beta
+        (X_2)_{(\alpha,i_1),l}(Y_2)_{l,(j_1,\beta)}
+        (X_1)_{(\beta,j_2),r}(Y_1)_{r,(i_2,\gamma)}
+        = (X_2)_{(\alpha,i_1),l}
+        v_{(j_2,j_1),(r,l)}(Y_1)_{r,(i_2,\gamma)}.
+    \end{align}
+    Summing over $l$ and $r$ gives the result. The two-site block statement
+    follows by decoding its ket and bra indices into ordered pairs.
 \end{proof}
 
 \begin{theorem}[Open periodic-tail source expansion]
@@ -4610,7 +4647,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{SF}
     \notready
     \discussion{6019}
-    \uses{ThmFund1, def:mpu_source_uv}
+    \uses{ThmFund1, def:mpu_source_uv, thm:mpu_source_u_open_two_site,
+        thm:mpu_source_v_open_two_site}
     Let $\mathcal U$ be a simple tensor under the source's standing
     canonical-form-II convention. Its standard form is the depth-two form of
     the two-site block $\mathcal U_2$ determined by the source unitaries $u$ and
