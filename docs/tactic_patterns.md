@@ -1200,32 +1200,25 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** the two public MPS declarations retain their statements while their
   duplicated conjugate-transpose projection arguments are removed.
 
+### Closed-sector rectangular trace factorization
+- **Pattern:** three MPDO proofs promoted a physical-sector isometry to a unitary,
+  expanded `physTraceTransfer` as a closed-sector sum, and identified that sum
+  with a rectangular product of sector-trace matrices. The active-sector proofs
+  additionally filtered away zero-weight sectors.
+- **Reuse:** `physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix` owns the
+  all-sector factorization, while `sum_eq_sum_activeSector_of_eq_zero` owns the
+  filtered-sum step.
+- **Result:** the duplicated `hphys` blocks in
+  `ActiveSectorTraceMatrixZCL.lean` and `LemmaC5CaseI.lean` are short
+  specializations of these two lemmas. This completes the promotion tracked in
+  issue #6931.
+
 ---
 
 ## Candidates
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
-
-### closed-sector rectangular trace factorization — candidate
-- **Pattern:** promote the physical isometry of a `PhysicalSectorFactorization`
-  to the unitary group, apply `physTraceTransfer_eq_sum_closedSector` with the
-  factorization field, and identify the closed-sector sum entrywise with a
-  rectangular product of sector-trace matrices.
-- **Seen:** the inline `hphys` proofs in
-  `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean:69-96` and
-  `TNLean/MPS/MPDO/LemmaC5CaseI.lean:220-247` (active restrictions), and
-  `physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix` in
-  `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` (all sectors), recorded
-  2026-08-21.
-- **Abstraction:** the all-sector lemma is the abstraction. Issue #6931 tracks
-  extraction of an active-sector specialization and refactoring of both
-  existing active-sector call sites.
-- **Notes:** both active-sector proofs already contain the required filtered-sum
-  bridge using `Finset.sum_subtype`, `Finset.sum_filter`, and inactive-sector
-  vanishing. Promotion is deferred to #6931 because it changes two established
-  Case-I proofs but does not affect the source-facing necessary condition in
-  PR #6863.
 
 ### transport of diagonal spectral identities — candidate
 - **Pattern:** diagonalize a Hermitian matrix as a unitary conjugate of its
