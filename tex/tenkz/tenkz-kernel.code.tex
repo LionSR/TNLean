@@ -186,7 +186,7 @@
   { [TKZ-FRAME-MEMBER-OCCUPIED]~member~(#1,#2,#3)~is~already~claimed~
     by~record~#4. }
 \msg_new:nnn {tenkz}{kernel-picture-positive}
-  { [TKZ-PICTURE-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer. }
+  { [TKZ-PIC-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer. }
 \msg_new:nnn {tenkz}{kernel-atom-positive}
   { [TKZ-ATOM-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer~
     (record~#3). }
@@ -1298,9 +1298,27 @@
     \str_case:nnF {#2}
       {
         {true}  {#3}
-        % a false-valued sugar flag expands nothing but is still the
-        % sugar spelling: strict mode refuses it like the bare word
-        {false} { \__tenkz_kernel_sugar:n {#1} }
+        % A false-valued sugar flag is still the sugar spelling --
+        % strict mode refuses it like the bare word -- and it stands
+        % the expansion down, so a later false overrides an earlier
+        % flag under the last-wins doctrine the alphabet follows.
+        {false}
+          {
+            \__tenkz_kernel_sugar:n {#1}
+            \str_case:nn {#1}
+              {
+                {sandwich}
+                  {
+                    \keys_set:nn {tenkz-kernel-picture}
+                      { rows = {wire} }
+                  }
+                {planes}
+                  {
+                    \keys_set:nn {tenkz-kernel-picture}
+                      { frame = flat }
+                  }
+              }
+          }
       }
       {
         \msg_error:nneeee {tenkz}{kernel-choice}

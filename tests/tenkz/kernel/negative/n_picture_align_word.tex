@@ -1,0 +1,10 @@
+% Negative: align= carries the midline-or-row-number type; a word refuses
+% with the stated diagnostic instead of dying inside an fp read.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket,op,bra}, cols=1, align=bogus, bonds=none]
+  \tn{A}
+\end{tenkz}
+\end{document}
