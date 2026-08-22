@@ -18579,6 +18579,24 @@
     \__tenkz_model_get:nnN {#1} {name} \l__tenkz_kernel_scratch_tl
     \exp_args:NVV \__tenkz_render_skin_pairing:nn
       \l__tenkz_kernel_r_hue_tl \l__tenkz_kernel_scratch_tl
+    % A drawn pairing is ink in the same sense as a bond, so the label
+    % audit must see it (#6357).  The renderer paints a wirewidth
+    % foreground under an emphwidth paper halo; the recorded band takes
+    % the wider of the two by computing it, per the trace doctrine, so a
+    % label erased by either layer cannot pass unflagged even if the
+    % metric table reorders the two widths.
+    \tl_set:Ne \l__tenkz_kernel_ink_stroke_tl
+      {
+        \dim_to_decimal_in_sp:n
+          {
+            \dim_max:nn
+              { \__tenkz_dim:n {emphwidth} }
+              { \__tenkz_dim:n {wirewidth} }
+            / 2
+          }
+      }
+    \exp_args:NV \__tenkz_kernel_r_wire_ink_event:nn
+      \l__tenkz_kernel_scratch_tl {skin}
   }
 
 % Build and save one pairing route before any dependent `on <wire> t`

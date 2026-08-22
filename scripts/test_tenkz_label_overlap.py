@@ -2293,6 +2293,59 @@ def main() -> int:
                 "centreline, was not flagged: "
                 + "; ".join(f.msg for f in mark_seeded_audit.findings))
 
+        # ---- skin pairings join the wire-ink surface (#6357) ----
+        # A declared skin's rendered pairing is drawn ink in the same sense
+        # as a bond, so its record joins the audit with the same severity
+        # split: a kernel-chosen band crossing it is a hard error, an
+        # author's chosen one the advisory.
+        # 26215 sp is emphwidth/2 (0.80pt / 2): the paper halo under a
+        # pairing's foreground, the wider of its two layers at the house
+        # metrics.
+        skin_ink = (
+            "wire-ink|picture=1|name=skin-atom-1-1|origin=skin|stroke=26215|"
+            "points=0,0;2000000,0\n"
+        )
+        for name, claim, severity, expected_status in (
+                ("skin-ink-auto.tnlog", "|station=s|provenance=auto",
+                 "HARD", 1),
+                ("skin-ink-explicit.tnlog", "|provenance=explicit",
+                 "ADV", 0),
+        ):
+            status, audit = audit_status(
+                ink_log(name, skin_ink,
+                        ink_label(-100000, -18022, claim)))
+            found = [finding for finding in audit.findings
+                     if finding.rule == "label-on-ink"]
+            if (status != expected_status or len(found) != 1
+                    or found[0].severity != severity
+                    or "skin route" not in found[0].msg):
+                raise AssertionError(
+                    f"{name}: a label on skin-pairing ink did not read as "
+                    f"one {severity} label-on-ink: "
+                    + "; ".join(f.msg for f in audit.findings))
+
+        # And the records exist end to end: the declared-skin fixture's
+        # rendered pairings each write an `origin=skin` record at the
+        # halo half stroke (26215 sp, as above), and the fixture audits
+        # with no hard findings -- its one standing advisory, a label on
+        # a pairing no earlier record could see, is the rule's own
+        # organic evidence.
+        skin_fixture = ROOT / "tests/tenkz/kernel/k_skin_pairings.tex"
+        skin_status, skin_audit = audit_status(compile_tex(
+            "k_skin_pairings.tex",
+            skin_fixture.read_text(encoding="utf-8")))
+        skin_records = [event for event in skin_audit.events()
+                        if event.kind == "wire-ink"
+                        and event.attrs.get("origin") == "skin"]
+        if skin_status != 0 or not skin_records or any(
+                event.attrs.get("stroke") != "26215"
+                for event in skin_records):
+            raise AssertionError(
+                "the declared-skin fixture did not write its pairings as "
+                "origin=skin records at the halo half stroke: "
+                f"{len(skin_records)} record(s); "
+                + "; ".join(f.msg for f in skin_audit.findings))
+
         # Coverage: at least one compiled fixture's `wire-ink` record must
         # actually carry a `c:`-prefixed cubic sextuple, not only the
         # synthetic cubic streams above -- a regression that silently drops
