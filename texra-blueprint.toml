@@ -1,0 +1,60 @@
+# Configuration for the texra-blueprint shared tooling.
+# The [paper_gaps] table mirrors the registry in scripts/paper_gaps_site.py.
+
+[paper_gaps]
+dir             = "docs/paper-gaps"
+site_base       = "https://sirui-lu.com/TNLean"
+blob_base       = "https://github.com/LionSR/TNLean/blob/main/docs/paper-gaps"
+bib_author      = "The {TNLean} contributors"
+institution     = "TNLean"
+title           = "TNLean paper-gap notes"
+scan_roots      = ["TNLean", "blueprint/src", "blueprint/comments", "docs"]
+skip            = ["command.tex", "common.tex", "template.tex"]
+policy          = "policy.tex"
+require_verdict = true
+
+[paper_gaps.sources]
+cpgsv17 = "arXiv:1511.08090 (MPDO renormalization fixed points)"
+cpgsv21 = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
+cpsv16 = "arXiv:1606.00608 (matrix product density operators)"
+cpsv17 = "arXiv:1606.00608 / arXiv:1703.09188 mixed"
+dccsp17 = "arXiv:1708.00029 (irreducible forms of MPS)"
+hjpw04 = "Hayden, Jozsa, Petz, Winter (2004)"
+knabe88 = "Knabe, J. Stat. Phys. 52 (1988)"
+mpu = "arXiv:1703.09188 (matrix product unitaries)"
+peps = "arXiv:1804.04964 (normal PEPS)"
+pgvwc07 = "quant-ph/0608197 (MPS representations)"
+pgwsvc08 = "arXiv:0802.0447 (string order and symmetries)"
+rmp = "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)"
+spc11 = "arXiv:1010.3732 (SPT classification)"
+spwc10 = "arXiv:0909.5347 (quantum Wielandt inequality)"
+tnlean = "internal theorem-surface audit, no single external source"
+wolf = "Wolf, Quantum Channels & Operations (2012 lecture notes)"
+
+[paper_gaps.group_aliases]
+cpgsv21 = "rmp"
+
+[paper_gaps.aliases]
+1703_two_projection_projector_typo = "mpu_two_projection_projector_typo"
+1708_normal_canonical_irreducible_form_weights = "dccsp17_normal_canonical_irreducible_form_weights"
+1708_periodic_overlap_route_alignment = "dccsp17_periodic_overlap_route_alignment"
+algebraic_ft_same_state_combined_mpv_gap = "tnlean_algebraic_ft_same_state_combined_mpv_gap"
+breuer_hall_even_dim_restriction = "wolf_breuer_hall_even_dim_restriction"
+brouwer_general_compact_convex = "wolf_brouwer_general_compact_convex"
+canonical_bnt_ft_theorem_surface = "tnlean_bnt_ft_theorem_surface"
+choi_rectangular_scope = "wolf_choi_rectangular_scope"
+common_sector_relabeling_hypothesis = "cpsv16_sector_relabeling_hypothesis"
+conditional_after_blocking_ft_cpsv_statement = "rmp_conditional_after_blocking_ft_statement"
+cpgsv17_mpu_blocking_rank_product_exponent = "mpu_blocking_rank_product_exponent"
+david2006_direct_sum_input = "pgvwc07_direct_sum_input"
+ft_one_copy_scope_restriction = "cpsv16_ft_one_copy_scope_restriction"
+issue1530_ft_dependency_audit = "tnlean_ft_dependency_audit"
+knabe_finite_range_coefficient = "knabe88_finite_range_coefficient"
+mps_common_blocking_span_equality = "rmp_common_blocking_span_equality"
+nonperiodic_mps_bnt_comparison_inputs = "rmp_nonperiodic_bnt_comparison_inputs"
+periodic_thm41_root_kraus_rank = "dccsp17_root_kraus_rank_thm41"
+power_sum_alternative_route = "cpsv16_power_sum_alternative_route"
+quantum_wielandt_deviation = "spwc10_wielandt_one_step_subspace"
+quantum_wielandt_deviation_v1 = "spwc10_wielandt_one_step_subspace"
+schuch2011_spt_interpolation_upper_range = "spc11_spt_interpolation_upper_range"
+schur_complement_tfae = "wolf_schur_complement_tfae"
