@@ -11635,6 +11635,7 @@
 \bool_new:N \l__tenkz_kernel_ink_mark_cubic_bool
 \fp_new:N \l__tenkz_kernel_ink_mark_resid_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_found_resid_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_found_len_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_lerr_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_flat_fp
 \seq_new:N \l__tenkz_kernel_ink_mark_stack_seq
@@ -11955,6 +11956,8 @@
         \__tenkz_kernel_r_wire_ink_mark_unit:
         \fp_set_eq:NN \l__tenkz_kernel_ink_mark_found_resid_fp
           \l__tenkz_kernel_ink_mark_resid_fp
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_found_len_fp
+          \l__tenkz_kernel_ink_mark_len_fp
         \bool_set_true:N \l__tenkz_kernel_ink_mark_found_bool
       }
   }
@@ -11968,11 +11971,25 @@
     % is zero wherever the subdivision met its bound, and exactly the
     % proven gap where a pathological cubic outran the ceiling, so a
     % label on the true curve intersects the emitted band at any size.
+    % The cover widens by the found piece's flatness and the walk's
+    % accumulated sandwich loss.  A found piece shorter than the barb
+    % cannot vouch for its own direction -- a small near-cusp passes the
+    % flatness floor with a sideways tangent -- so such a station is
+    % covered isotropically, the barb's own length joining the width.
+    % The sum is clamped inside TeX's dimension range: a pathological
+    % accumulation saturates the cover instead of overflowing the page.
     \fp_set:Nn \l__tenkz_kernel_ink_mark_barb_fp
       {
-        \dim_to_fp:n { \__tenkz_dim:n {barblen} }
-        + 2 * \l__tenkz_kernel_ink_mark_found_resid_fp
-        + 2 * \l__tenkz_kernel_ink_mark_lerr_fp
+        min (
+          \dim_to_fp:n { \c_max_dim } / 4 ,
+          \dim_to_fp:n { \__tenkz_dim:n {barblen} }
+          + 2 * \l__tenkz_kernel_ink_mark_found_resid_fp
+          + 2 * \l__tenkz_kernel_ink_mark_lerr_fp
+          + \fp_compare:nNnTF
+              { \l__tenkz_kernel_ink_mark_found_len_fp } <
+              { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+              { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+              { 0 } )
       }
     \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
       {
@@ -12050,6 +12067,8 @@
         % (the prefix), and the sum of the two is exactly what stands
         % here at emit time
         \fp_zero:N \l__tenkz_kernel_ink_mark_found_resid_fp
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_found_len_fp
+          { \dim_to_fp:n { \c_max_dim } }
         \bool_set_false:N \l__tenkz_kernel_ink_mark_found_bool
         \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
           {

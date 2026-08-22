@@ -2464,6 +2464,16 @@ def main() -> int:
             raise AssertionError(
                 "the wide arch's barb cover fell toward the chord: "
                 f"points={wide_marks[0].attrs['points']}")
+        # The certified widening is visible in the strokes: each arch's
+        # cover exceeds the bare barb (170394 sp = barblen 2.6pt) by its
+        # own computed sandwich loss, and the wide arch, carrying four
+        # times the curvature, exceeds the modest one.
+        small_stroke = int(arch_marks[0].attrs["stroke"])
+        wide_stroke = int(wide_marks[0].attrs["stroke"])
+        if not (170394 < small_stroke < wide_stroke):
+            raise AssertionError(
+                "the covers do not carry their certified widening: "
+                f"small={small_stroke}, wide={wide_stroke}")
         ax1, ay1, ax2, ay2 = parse_two_point_ink(
             arch_marks[0].attrs["points"])
         if min(ay1, ay2) < 900000:
