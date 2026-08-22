@@ -1,27 +1,33 @@
 # Documentation Files
 
-This directory contains both upstream-derived mathlib guidance and TNLean-owned
-project policy. Keep those roles separate.
+This directory contains TNLean-owned project policy and the TNLean-local
+addenda to the shared Lean conventions. The shared convention text itself
+is not stored here. Keep those roles separate.
 
-## Upstream-derived guidance
+## Shared conventions
 
-The following files follow mathlib documentation and style conventions. Do not
-add TNLean-specific policy to them. If they need to change, sync or compare them
-with the corresponding mathlib source first, then document the reason in the PR.
+The canonical convention documents (Mathlib style, naming, documentation,
+PR review, proof integrity, prose style) are the references of the
+`lean-conventions` skill in
+[texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills),
+installed automatically through `.claude/settings.json`. Consult the skill
+for the shared rules; edits to them belong upstream, and this directory
+keeps no copy of the canonical text.
 
-- `MATHLIB_doc.md`
-- `MATHLIB_pr-review.md`
-- `MATHLIB_style.md`
-- `MATHLIB_naming.md`
+TNLean-specific additions to the shared conventions go only in
+[`project_conventions.md`](project_conventions.md), one section per shared
+reference.
+
+The MATHLIB references also track mathlib's own documentation and style
+conventions; changes reconciling them with mathlib belong upstream too.
 
 ## TNLean-owned policy
 
 The following files are maintained by this project and may record TNLean-specific
-rules, proof-integrity policy, blueprint conventions, GitHub workflow, and
-source-faithfulness requirements.
+rules, blueprint conventions, GitHub workflow, and source-faithfulness
+requirements.
 
 - `CONTRIBUTING.md`
-- `PROOF_INTEGRITY.md`
 - `blueprint_style_guide.md`
 - `ci-automation.md`
 - `counterexamples.md`
@@ -29,7 +35,7 @@ source-faithfulness requirements.
 - `getting_started.md`
 - `paper-gaps/`
 - `pr_review_management.md`
-- `prose_style.md`
+- `project_conventions.md`
 - `stale_issue_audit.md`
 - `tactic_development.md`
 - `tactic_patterns.md`
@@ -37,8 +43,8 @@ source-faithfulness requirements.
 - `upgrade_4_29.md`
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
-`prose_style.md` or `blueprint_style_guide.md`, not in the upstream-derived
-mathlib files.
+the prose section of [`project_conventions.md`](project_conventions.md) or
+in `blueprint_style_guide.md`; shared rules belong upstream in the skill.
 
 ## Audit memos
 

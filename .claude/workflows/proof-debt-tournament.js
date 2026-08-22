@@ -211,8 +211,7 @@ commented-out proof blocks and debug artifacts ('-- sorry', #check/#eval/#print 
 'Scratch' content imported from real files); overlong files (how many files exceed the 100-char
 line or a healthy size); TODO/FIXME/HACK markers (count and cluster them); deprecated aliases
 that were never cleaned. Quantify each repo-wide with rg counts and name the worst offenders.` },
-  { key: 'naming-docs', prompt: `Lens: NAMING & DOC CONSISTENCY. The project follows Mathlib conventions (docs/MATHLIB_naming.md,
-docs/MATHLIB_doc.md). Sample broadly and find systematic inconsistencies that make search and
+  { key: 'naming-docs', prompt: `Lens: NAMING & DOC CONSISTENCY. The project follows Mathlib conventions (the lean-conventions skill's MATHLIB_naming and MATHLIB_doc references). Sample broadly and find systematic inconsistencies that make search and
 review harder at scale: the same concept under different names in different modules (e.g. what
 words are used for 'blocking', 'transfer', 'canonical form', 'injective/normal' across MPS,
 PEPS, Channel, Wielandt); theorem names violating snake_case or not describing the conclusion;

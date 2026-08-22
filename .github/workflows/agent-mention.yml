@@ -141,8 +141,12 @@ jobs:
             actions: read
 
           # Load Lean skills from the official leanprover skills repository
-          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
-          plugins: 'lean@leanprover'
+          plugin_marketplaces: |
+            https://github.com/leanprover/skills.git
+            https://github.com/texra-ai/texra-lean-skills.git
+          plugins: |
+            lean@leanprover
+            texra-lean-skills@texra-lean-skills
           system-prompt-file: .github/prompts/claude-code-system-prompt.md
 
       - name: Auto-create PR for completed issue work

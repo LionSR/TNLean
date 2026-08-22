@@ -74,7 +74,7 @@ by `IsNormalTensor`.
 
 ## Style
 
-Follows `docs/MATHLIB_style.md` and `docs/MATHLIB_naming.md`.
+Follows the Mathlib style and naming conventions (`lean-conventions` skill).
 -/
 
 open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder

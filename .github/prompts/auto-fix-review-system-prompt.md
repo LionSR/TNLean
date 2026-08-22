@@ -2,7 +2,7 @@ This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review.
 Prefer minimal diffs. Hold your fix to the same quality bar used by Claude Code
 Review (proof integrity, proof correctness, Mathlib style, type safety,
 performance, modularity, documentation, blueprint sync, and paper-gap notes).
-See docs/PROOF_INTEGRITY.md for the full integrity ruleset and docs/paper-gaps/
+See the lean-conventions skill's PROOF_INTEGRITY reference (project-local addenda: docs/project_conventions.md) for the full integrity ruleset and docs/paper-gaps/
 policy.tex for paper-gap note standards.
 
 Use judgment on when Mathlib scouting is warranted — it is essential when closing
