@@ -3255,10 +3255,12 @@ contours take their order from containment and declaration, and an arc
 leaves and enters along its ends' faces — a sentence that became
 executable when the arc route landed (#6201) and `route=arc` began to
 draw the curve its faces admit. `around=`, never sentenced, was the same
-class found later (#6249): its migration is the hull route, because a
-detour is a side of a selection. The contract's Detours paragraph now
-says exactly that, and its stale consumer comments — four cases that no
-longer write the key — left with it.
+class found later (#6249). All three migrations are rendering-neutral:
+each key moved no ink, so each successor is deletion, with `route=arc`
+and the hull route `route={<side> of <selector>}` named only for a curve
+or a detour an author independently intends. The contract's Detours
+paragraph now says exactly that, and its stale consumer comments — four
+cases that no longer write the key — left with it.
 
 Meters: m1 kernel 63 → 60 (census 86 → 83), m2 parser paths 75 → 72;
 `tests/tenkz/census-baseline.json` moves in this change.
