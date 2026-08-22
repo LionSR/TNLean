@@ -1,5 +1,5 @@
 label	line	result_anchor	anchor_regex	boundary_regex
-eq:II_auxcor	358	Corollary 2.11	(?<![A-Za-z0-9])Corollary 2\.11(?![0-9]|\.[0-9])	inactive\s+zero\-weight\s+block\s+boundary
+eq:II_auxcor	358	Corollary 2.11	(?<![A-Za-z0-9])Corollary 2\.11(?![0-9]|\.[0-9])	nonzero\-coefficient\s+local\s+correction
 AA=A	401	Theorem 3.1	(?<![A-Za-z0-9])Theorem 3\.1(?![0-9]|\.[0-9])	malformed\s+source\s+blocking\s+indices
 III_CFI_RFP	546	Theorem 3.11	(?<![A-Za-z0-9])Theorem 3\.11(?![0-9]|\.[0-9])	repeated\-copy\s+physical\-routing\s+boundary
 eq:III_isometry	551	Theorem 3.11	(?<![A-Za-z0-9])Theorem 3\.11(?![0-9]|\.[0-9])	repeated\-copy\s+physical\-routing\s+boundary
@@ -17,7 +17,7 @@ scprod	1086	Appendix A's overlap lemma	(?<![A-Za-z0-9])Appendix A's overlap lemm
 rel	1096	Appendix A's overlap lemma	(?<![A-Za-z0-9])Appendix A's overlap lemma(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
 eq-Appendix:II:A=XAX	1139	Proposition 2.7	(?<![A-Za-z0-9])Proposition 2\.7(?![0-9]|\.[0-9])	inactive\s+zero\-weight\s+boundary
 eq:app_aux	1159	Lemma A.5	(?<![A-Za-z0-9])Lemma A\.5(?![0-9]|\.[0-9])	zero\-entry\s+boundary
-eq:II_auxcor	1176	Appendix A restatement	(?<![A-Za-z0-9])Appendix A restatement(?![A-Za-z0-9])	inactive\s+zero\-weight\s+block\s+boundary
+eq:II_auxcor	1176	Appendix A restatement	(?<![A-Za-z0-9])Appendix A restatement(?![A-Za-z0-9])	nonzero\-coefficient\s+local\s+correction
 eq_III_NT_RFP	1277	Appendix B's RFP characterization	(?<![A-Za-z0-9])Appendix B's RFP characterization(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
 sigma3	1355	Lemma Lsigma3	(?<![A-Za-z0-9])Lemma Lsigma3(?![0-9]|\.[0-9])	supported\-sector\s+normalization
 Qketc	1421	Lemma propSN	(?<![A-Za-z0-9])Lemma propSN(?![A-Za-z0-9])	active\-sector\s+restriction
