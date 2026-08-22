@@ -388,7 +388,8 @@ private theorem reduced_four_eq_bellDiagonal :
 
 set_option maxRecDepth 10000 in
 /-- The normalized four-site state has nonzero eigenvalues $41/128$ once, $15/128$ four times,
-and $9/128$ three times. Its remaining 248 characteristic-polynomial roots are zero. -/
+and $9/128$ three times. Its remaining 248 characteristic-polynomial roots are zero. CPSV16
+Example 4.10, lines 897--905. -/
 theorem charpoly_roots_four :
     (reducedBlockState M 4 4 (by omega)).charpoly.roots =
       248 • {(0 : ℂ)} + {(41 / 128 : ℂ)} + 4 • {(15 / 128 : ℂ)} +
