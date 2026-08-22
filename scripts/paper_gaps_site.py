@@ -46,7 +46,7 @@ POLICY = "policy.tex"
 # internal theorem-surface audits with no single external source. The
 # registry is enforced by ``--check``.
 SOURCE_KEYS = {
-    "cpgsv17": "arXiv:1511.08090 (MPDO renormalization fixed points)",
+    "cpgsv17": "arXiv:1606.00608 (MPDO renormalization fixed points)",
     "cpgsv21": "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)",
     "cpsv16": "arXiv:1606.00608 (matrix product density operators)",
     "cpsv17": "arXiv:1606.00608 / arXiv:1703.09188 mixed",
