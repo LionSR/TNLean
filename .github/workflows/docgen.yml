@@ -57,7 +57,7 @@ jobs:
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.4'
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.6'
 
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
@@ -72,27 +72,16 @@ jobs:
           set -o pipefail
           tmp_output_file="$(mktemp)"
 
-          set +o pipefail
-          leanblueprint web 2>&1 | tee "$tmp_output_file"
-          cmd_status=${PIPESTATUS[0]}
-          set -o pipefail
+          # texra-blueprint web wraps leanblueprint web and fails when the
+          # renderer meets a command it does not know (unrecognized
+          # command/environment, default-renderer fallback) — the gate that
+          # pr-ci.yml applies to a branch. The log is kept for the label
+          # check below.
+          texra-blueprint web 2>&1 | tee "$tmp_output_file"
 
           if grep -q "^ERROR:" "$tmp_output_file"; then
             echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
             exit 1
-          fi
-          # A command plasTeX does not know reaches the page through whichever
-          # template happens to share its name, and a node with no template at
-          # all reaches it through the fallback. Both produced reader-visible
-          # corruption from a build that reported success, so neither may be
-          # published. This is the gate that pr-ci.yml applies to a branch.
-          if grep -qE "WARNING: (unrecognized command/environment|Using default renderer)" \
-               "$tmp_output_file"; then
-            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/tnlean_patches.py or the texra-blueprint plugin"
-            exit 1
-          fi
-          if [ "$cmd_status" -ne 0 ]; then
-            exit "$cmd_status"
           fi
           if grep -R "tenkz SVG unavailable" web --include='*.html'; then
             echo "::error::Blueprint contains unrendered tenkz SVG placeholders"
