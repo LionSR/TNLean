@@ -1206,8 +1206,8 @@ abstracted — record why, so it is not re-proposed).
   with a rectangular product of sector-trace matrices. The active-sector proofs
   additionally filtered away zero-weight sectors.
 - **Reuse:** `physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix` owns the
-  all-sector factorization, while `sum_eq_sum_activeSector_of_eq_zero` owns the
-  filtered-sum step.
+  all-sector factorization, while the layer-0 lemma
+  `Finset.sum_eq_sum_subtype_ne_zero` owns the filtered-sum step.
 - **Result:** the duplicated `hphys` blocks in
   `ActiveSectorTraceMatrixZCL.lean` and `LemmaC5CaseI.lean` are short
   specializations of these two lemmas. This completes the promotion tracked in

@@ -35,20 +35,6 @@ abbrev ActiveSector (F : PhysicalSectorFactorization K)
     (p : Fin F.sectorCount → ℝ) :=
   {k : Fin F.sectorCount // p k ≠ 0}
 
-/-- A sum over all sectors equals its restriction to the active sectors when every
-inactive summand vanishes. -/
-theorem sum_eq_sum_activeSector_of_eq_zero {R : Type*} [AddCommMonoid R]
-    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
-    (f : Fin F.sectorCount → R) (hzero : ∀ k, p k = 0 → f k = 0) :
-    ∑ k, f k = ∑ k : F.ActiveSector p, f k := by
-  rw [← Finset.sum_subtype (Finset.univ.filter (fun k ↦ p k ≠ 0)) (by simp) f]
-  rw [Finset.sum_filter]
-  apply Finset.sum_congr rfl
-  intro k _
-  by_cases hk : p k ≠ 0
-  · simp [hk]
-  · rw [ite_eq_right hk, hzero k (not_ne_iff.mp hk)]
-
 /-- The entries of the virtual matrices belonging to active sectors. -/
 abbrev ActiveSectorEntryIndex (F : PhysicalSectorFactorization K)
     (p : Fin F.sectorCount → ℝ) :=

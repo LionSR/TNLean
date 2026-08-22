@@ -953,12 +953,52 @@
     \end{align}
 \end{proof}
 
+\begin{lemma}[Restricting finite sums to nonzero weights]
+    \label{lem:finset_sum_subtype_ne_zero}
+    \lean{Finset.sum_eq_sum_subtype_ne_zero}
+    \leanok
+    Let $I$ be finite, let $p_i$ be weights in a type with zero, and let $f_i$
+    take values in a commutative additive monoid. If $f_i=0$ whenever $p_i=0$,
+    then
+    \begin{align}
+        \sum_{i\in I}f_i&=\sum_{\substack{i\in I\\p_i\ne0}}f_i.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Split the full sum according to whether $p_i$ vanishes. Every term in the
+    zero-weight part vanishes by hypothesis.
+\end{proof}
+
+\begin{lemma}[Cyclic trace identity for rectangular powers]
+    \label{lem:matrix_trace_pow_mul_comm}
+    \lean{Matrix.trace_pow_mul_comm}
+    \leanok
+    For rectangular matrices $L$ and $Q$ over a commutative semiring and every
+    integer $N\geq1$,
+    \begin{align}
+        \tr\bigl((LQ)^N\bigr)&=\tr\bigl((QL)^N\bigr).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $N=M+1$. Induction on $M$ gives
+    $(LQ)^{M+1}=L(QL)^M Q$. Moving the first factor cyclically through the
+    trace and reassociating the product gives $\tr((QL)^{M+1})$.
+\end{proof}
+
 \begin{theorem}[Unit closure traces from a neighboring trace factorization]
     \label{thm:mpdo_neighboring_trace_unit_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.leftTraceMatrix,
       MPOTensor.PhysicalSectorFactorization.rightTraceMatrix,
+      MPOTensor.PhysicalSectorFactorization.trace_neighboringOperator_eq_sum_trace_mul_trace,
       MPOTensor.PhysicalSectorFactorization.physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix,
       MPOTensor.PhysicalSectorFactorization.rightTraceMatrix_mul_leftTraceMatrix_apply,
+      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.rightTraceMatrix_mul_leftTraceMatrix_eq_vecMulVec,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_pow_eq_one,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_eq_one,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_mpo_eq_one}
@@ -1004,7 +1044,9 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_neighboring_trace_factorization}
+    \uses{def:mpdo_neighboring_trace_factorization,
+      def:mpo_physical_trace_transfer, thm:mpdo_closed_sector_physical_trace_transfer,
+      lem:matrix_trace_pow_mul_comm, lem:mpdo_trace_loop_chain}
     Closing the physical legs of each factorized slice and using unitary
     invariance of the trace expresses each entry of the physical-trace
     transfer as $\sum_k\tr((l_k)_\beta)\tr((r_k)_\alpha)$, which is the
