@@ -29,14 +29,13 @@ from pathlib import Path
 
 _SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(_SCRIPTS))
+from playwright.sync_api import Page, sync_playwright
+
 # The rule deciding what a bracket after a row break means belongs to the
 # renderer. It is read from there rather than restated, so the two cannot
 # come to disagree; the module it lives in imports no renderer of its own.
-sys.path.insert(0, str(_SCRIPTS.parent / "blueprint/src/Packages"))
-
-from playwright.sync_api import Page, sync_playwright
-
-from _tnlean_utils import CONTROL_WORD, DIMENSION_EXPRESSION, ROW_BREAK_LENGTH
+from texra_blueprint.texgrammar import (
+    CONTROL_WORD, DIMENSION_EXPRESSION, ROW_BREAK_LENGTH)
 from test_tenkz_equation_web import serve
 
 
@@ -211,20 +210,36 @@ OVERFLOW = """() => {
 }"""
 
 
+def _page_ships_mathjax(page: Page) -> bool:
+    """Whether this page pulls in the MathJax bundle at all.
+
+    Every content page and every dependency-graph page loads the bundle
+    through a script whose source names it, and that tag is in the static
+    HTML before any script runs.  The dependency-graph chooser, by contrast,
+    is a bare list of links with no mathematics and no bundle; waiting on it
+    for a startup promise it never creates could only ever time out.
+    """
+    return page.evaluate(
+        "() => [...document.scripts].some(script =>"
+        " /mathjax|tex-(chtml|mml|svg)/i.test(script.src))")
+
+
 def _settle(page: Page) -> None:
     """Wait until MathJax has finished its first pass over this page.
 
     The bundle is fetched asynchronously, so at the moment the document is
     parsed it may not have installed itself yet.  Waiting for the promise to
     exist, and only then for it to resolve, is what keeps a page from being
-    read before its mathematics is set.
+    read before its mathematics is set.  A page that ships no bundle carries
+    no mathematics to wait for, so only the pictures are settled there.
     """
-    page.wait_for_function(
-        "() => window.MathJax && window.MathJax.startup"
-        " && window.MathJax.startup.promise",
-        timeout=120_000,
-    )
-    page.evaluate("() => window.MathJax.startup.promise")
+    if _page_ships_mathjax(page):
+        page.wait_for_function(
+            "() => window.MathJax && window.MathJax.startup"
+            " && window.MathJax.startup.promise",
+            timeout=120_000,
+        )
+        page.evaluate("() => window.MathJax.startup.promise")
     # An image that failed is complete too, with no width, so this settles
     # whether the pictures arrived or not.
     page.wait_for_function(
