@@ -4721,6 +4721,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Auxiliary source-index identities]
     \label{thm:mpu_specified_source_index_identities}
     \lean{MPOTensor.sourceIndexValue_eq_of_common_rank_scale,
+        MPOTensor.sourceIndexValue_eq_add_of_common_rank_product,
         MPOTensor.sourceIndexValue_eq_logb_rightRank_div,
         MPOTensor.sourceIndexValue_eq_neg_logb_leftRank_div}
     \leanok
@@ -4736,6 +4737,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \operatorname{ind}_{\mathrm{src}}(\mathcal V)
          & =\operatorname{ind}_{\mathrm{src}}(\mathcal U).
     \end{align}
+    Let $\mathcal U$, $\mathcal V$, and $\mathcal W$ instead have positive
+    source ranks and suppose that
+    \begin{align}
+        r_{\mathcal W} & =c r_{\mathcal U}r_{\mathcal V}, \\
+        \ell_{\mathcal W} & =c\ell_{\mathcal U}\ell_{\mathcal V}.
+    \end{align}
+    for a positive $c$. Then
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(\mathcal W)
+         & =\operatorname{ind}_{\mathrm{src}}(\mathcal U)
+          +\operatorname{ind}_{\mathrm{src}}(\mathcal V).
+    \end{align}
     If $d$, $r_{\mathcal U}$, and $\ell_{\mathcal U}$ are positive and a
     specified tensor has $r_{\mathcal U}\ell_{\mathcal U}=d^2$, then
     \begin{align}
@@ -4743,16 +4756,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =\log_2\frac{r_{\mathcal U}}d
         =-\log_2\frac{\ell_{\mathcal U}}d.
     \end{align}
-    % Auxiliary to paper_v2.tex lines 681--704; issue 6255.
+    % Auxiliary to paper_v2.tex lines 681--704 and IndexTh lines 837--845;
+    % issues 6255 and 6923.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpu_specified_source_index_value}
     Expand the definition. For common scaling, apply
     $\log_2(cx)=\log_2c+\log_2x$ to both ranks and cancel the two copies of
-    $\log_2c$. For the equivalent formulas, apply the same product identity to
-    $r_{\mathcal U}\ell_{\mathcal U}=d^2$ and use
-    $\log_2(x/y)=\log_2x-\log_2y$.
+    $\log_2c$. For the three-tensor identity, apply the product formula twice
+    to each rank and cancel the common term. For the equivalent formulas,
+    apply the same product identity to $r_{\mathcal U}\ell_{\mathcal U}=d^2$
+    and use $\log_2(x/y)=\log_2x-\log_2y$.
 \end{proof}
 
 \begin{definition}[Index]
