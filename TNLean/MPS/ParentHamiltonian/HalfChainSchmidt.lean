@@ -58,8 +58,8 @@ positive diagonal dual fixed point `Λ` appears as the fixed point of
   \(D^2 \times D^2\) comparison matrix \(WG\).
 - `MPSTensor.exists_geometric_bound_halfChainGram_sub_fixedPointProj`: the
   transfer-error term, geometric in \(L\) under a complementary
-  spectral-radius gap (the correction of the order \(|\nu_2|^{N/2}\),
-  lines 979--981).
+  spectral-radius gap.  The decay radius is chosen strictly above the
+  complementary spectral radius and below one (lines 979--981).
 - `MPSTensor.fixedPointProj_single_entry_diagonal`: for diagonal \(\Lambda\)
   the limiting Gram matrix is the diagonal matrix of eigenvalues of
   \(\Lambda\) (the display
@@ -242,9 +242,10 @@ section Convergence
 trace preserving with fixed point \(\Lambda\) and the complementary part of
 the transfer map has spectral radius below one, then every half-chain Gram
 entry converges geometrically to the corresponding entry of the rank-one
-fixed-point projection, uniformly in the boundary indices.  This is the
-correction term of the order \(|\nu_2|^{N/2}\) controlled by the subleading
-spectrum.
+fixed-point projection, uniformly in the boundary indices.  The proof chooses
+a decay radius strictly above the complementary spectral radius and below one;
+without a semisimplicity hypothesis it does not assert decay at the spectral
+radius itself.
 Source: arXiv:quant-ph/0608197, lines 977--981. -/
 theorem exists_geometric_bound_halfChainGram_sub_fixedPointProj
     (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
@@ -294,7 +295,7 @@ theorem exists_geometric_bound_halfChainGram_sub_fixedPointProj
     _ ≤ ‖T ^ L‖ := hop
     _ ≤ C * r ^ L := hbound L
 
-/-- For a positive diagonal fixed point
+/-- For a diagonal fixed point
 \(\Lambda = \mathrm{diag}(\lambda_1, \ldots, \lambda_D)\) the limiting Gram
 entries reproduce the source's display
 \(\lambda_\alpha \delta_{\alpha,\alpha'} \delta_{\beta,\beta'}\) up to the
@@ -366,8 +367,8 @@ private theorem entrywise_mul_bound {n : Type*} [Fintype n]
 converges entrywise, geometrically in the half-chain length, to the diagonal
 matrix with entries
 \(\lambda_\alpha \lambda_\beta / \mathrm{tr}(\Lambda)^2\): the trace
-normalization of \(\Lambda \otimes \Lambda\) for the positive diagonal fixed
-point \(\Lambda = \mathrm{diag}(\lambda_1, \ldots, \lambda_D)\).
+normalization of \(\Lambda \otimes \Lambda\) for the diagonal fixed point
+\(\Lambda = \mathrm{diag}(\lambda_1, \ldots, \lambda_D)\).
 Together with `charpoly_halfChainReducedMatrix` this expresses the half-chain
 interpretation of \(\Lambda\) at the level of the boundary comparison matrix:
 the nonzero spectrum of the half-chain reduced density matrix is that of a

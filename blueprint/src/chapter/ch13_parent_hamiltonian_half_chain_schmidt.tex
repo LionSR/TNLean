@@ -39,7 +39,7 @@ conjugate-transposed tensor.
     vector
     \begin{align}
         \ket{\Psi_{\alpha,\beta}}
-        &=\sum_{\sigma}
+         & =\sum_{\sigma}
         \bra{\alpha}A^{\sigma}\ket{\beta}\,\ket{\sigma}.
         \label{eq:half_chain_vector}
     \end{align}
@@ -71,7 +71,7 @@ conjugate-transposed tensor.
     half-chain family with its complementary family. Equivalently,
     \begin{align}
         \ket{\psi}
-        &=\sum_{\alpha,\beta}
+         & =\sum_{\alpha,\beta}
         \ket{\Psi_{\alpha,\beta}}\ket{\Psi_{\beta,\alpha}}.
         \label{eq:half_chain_resolution}
     \end{align}
@@ -82,8 +82,8 @@ conjugate-transposed tensor.
     Insert the resolution of the identity
     $\sum_{\beta}\ket{\beta}\bra{\beta}$ at the two cut bonds of the ring
     trace: $\tr(A^{\sigma}A^{\tau})
-    =\sum_{\alpha,\beta}\bra{\alpha}A^{\sigma}\ket{\beta}
-    \bra{\beta}A^{\tau}\ket{\alpha}$.
+        =\sum_{\alpha,\beta}\bra{\alpha}A^{\sigma}\ket{\beta}
+        \bra{\beta}A^{\tau}\ket{\alpha}$.
 \end{proof}
 
 \begin{definition}[Half-chain reduced density matrix]%
@@ -99,7 +99,7 @@ conjugate-transposed tensor.
     over the complementary half,
     \begin{align}
         (\rho_L)_{\sigma\sigma'}
-        &=\sum_{\tau}
+         & =\sum_{\tau}
         V^{(2L)}(A)_{\sigma\tau}\,
         \overline{V^{(2L)}(A)_{\sigma'\tau}},
         \label{eq:half_chain_reduced_entry}
@@ -115,7 +115,7 @@ conjugate-transposed tensor.
     The \emph{half-chain Gram matrix} is $G=\Psi^{\dagger}\Psi$, the matrix of
     overlaps
     $G_{(\alpha,\beta),(\alpha',\beta')}
-    =\braket{\Psi_{\alpha,\beta}}{\Psi_{\alpha',\beta'}}$ of the half-chain
+        =\braket{\Psi_{\alpha,\beta}}{\Psi_{\alpha',\beta'}}$ of the half-chain
     vectors.
 \end{definition}
 
@@ -128,7 +128,7 @@ conjugate-transposed tensor.
     on matrix units:
     \begin{align}
         \braket{\Psi_{\alpha,\beta}}{\Psi_{\alpha',\beta'}}
-        &=\bra{\alpha'}\E_A^{L}
+         & =\bra{\alpha'}\E_A^{L}
         \bigl(\ket{\beta'}\bra{\beta}\bigr)\ket{\alpha}.
         \label{eq:half_chain_gram_transfer}
     \end{align}
@@ -138,7 +138,7 @@ conjugate-transposed tensor.
     \leanok
     Expand the overlap as a sum over configurations of products
     $\bra{\alpha'}A^{\sigma}\ket{\beta'}
-    \overline{\bra{\alpha}A^{\sigma}\ket{\beta}}$ and recognize the entry of
+        \overline{\bra{\alpha}A^{\sigma}\ket{\beta}}$ and recognize the entry of
     $\sum_{\sigma}A^{\sigma}\ket{\beta'}\bra{\beta}(A^{\sigma})^{\dagger}$,
     which is the $L$-fold transfer map applied to the matrix unit.
 \end{proof}
@@ -153,7 +153,7 @@ conjugate-transposed tensor.
     half-chain reduced density matrix factors exactly as
     \begin{align}
         \rho_L
-        &=\Psi\,\bigl(SG^{\mathsf T}S\bigr)\,\Psi^{\dagger},
+         & =\Psi\,\bigl(SG^{\mathsf T}S\bigr)\,\Psi^{\dagger},
         \label{eq:half_chain_factorization}
     \end{align}
     where $SG^{\mathsf T}S$ is the Gram matrix of the complementary family.
@@ -179,7 +179,7 @@ conjugate-transposed tensor.
     agree after matching the trivial kernel factors:
     \begin{align}
         X^{D^2}\,\chi_{\rho_L}(X)
-        &=X^{d^L}\,\chi_{(SG^{\mathsf T}S)G}(X).
+         & =X^{d^L}\,\chi_{(SG^{\mathsf T}S)G}(X).
         \label{eq:half_chain_charpoly}
     \end{align}
     In particular the nonzero spectrum of $\rho_L$, with multiplicities, is
@@ -203,7 +203,7 @@ conjugate-transposed tensor.
     Let $A$ have trace-preserving transfer map $\E_A$ with fixed point
     $\Lambda$, $\tr(\Lambda)\neq0$, and suppose
     \begin{align}
-        \rho_{\mathrm{spec}}\bigl(\E_A-P_{\Lambda}\bigr)&<1,
+        \rho_{\mathrm{spec}}\bigl(\E_A-P_{\Lambda}\bigr) & <1,
         \label{eq:half_chain_c2_gap}
     \end{align}
     where $P_{\Lambda}$ is the fixed-point projection. Then there are
@@ -215,15 +215,16 @@ conjugate-transposed tensor.
         -\bra{\alpha'}P_{\Lambda}
         \bigl(\ket{\beta'}\bra{\beta}\bigr)\ket{\alpha}
         \Bigr|
-        &\leq C r^{L}.
+         & \leq C r^{L}.
         \label{eq:half_chain_gram_geometric}
     \end{align}
     The hypothesis (\ref{eq:half_chain_c2_gap}) expresses the generic
     condition C2 of \cite{PerezGarcia2007Matrix} in the trace-preserving
     gauge: apart from the simple eigenvalue one, the spectrum of $\E_A$ lies
-    strictly inside the unit disc, and the correction term is of the order of
-    the subleading spectral radius, the bound of order $|\nu_2|^{N/2}$ of the
-    source.
+    strictly inside the unit disc. The proof chooses $r$ strictly between the
+    spectral radius of $\E_A-P_{\Lambda}$ and one. Without a semisimplicity
+    assumption on the subleading spectrum, the theorem does not assert the
+    same estimate with $r$ equal to that spectral radius.
 \end{theorem}
 
 \begin{proof}
@@ -248,7 +249,7 @@ conjugate-transposed tensor.
     \begin{align}
         \bra{\alpha'}P_{\Lambda}
         \bigl(\ket{\beta'}\bra{\beta}\bigr)\ket{\alpha}
-        &=\frac{\lambda_\alpha}{\tr(\Lambda)}\,
+         & =\frac{\lambda_\alpha}{\tr(\Lambda)}\,
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \label{eq:half_chain_limit_diagonal}
     \end{align}
@@ -281,7 +282,7 @@ conjugate-transposed tensor.
         -\frac{\lambda_\alpha\lambda_\beta}{\tr(\Lambda)^2}\,
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
         \Bigr|
-        &\leq C r^{L}.
+         & \leq C r^{L}.
         \label{eq:half_chain_comparison_geometric}
     \end{align}
     The limiting matrix is the diagonal matrix $\Lambda\otimes\Lambda$ up to
