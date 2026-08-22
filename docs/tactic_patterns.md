@@ -1200,6 +1200,19 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** the two public MPS declarations retain their statements while their
   duplicated conjugate-transpose projection arguments are removed.
 
+### Closed-sector rectangular trace factorization
+- **Pattern:** three MPDO proofs promoted a physical-sector isometry to a unitary,
+  expanded `physTraceTransfer` as a closed-sector sum, and identified that sum
+  with a rectangular product of sector-trace matrices. The active-sector proofs
+  additionally filtered away zero-weight sectors.
+- **Reuse:** `physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix` owns the
+  all-sector factorization, while the layer-0 lemma
+  `Finset.sum_eq_sum_subtype_ne_zero` owns the filtered-sum step.
+- **Result:** the duplicated `hphys` blocks in
+  `ActiveSectorTraceMatrixZCL.lean` and `LemmaC5CaseI.lean` are short
+  specializations of these two lemmas. This completes the promotion tracked in
+  issue #6931.
+
 ---
 
 ## Candidates
