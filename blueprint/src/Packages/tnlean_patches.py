@@ -8,6 +8,10 @@ registered by ``tenkz_pic``.
 
 from texra_blueprint.Packages.texra_patches import DECL_REPLACEMENTS
 
+# In-place mutation of the plugin's module-level dict is the documented
+# extension point at the pinned texra-blueprint version; a version bump
+# must re-verify that DECL_REPLACEMENTS stays a plain mutable dict.
+
 DECL_REPLACEMENTS["MPSTensor.exponentialconvergenceofprimitive"] = (
     "MPSTensor.exponential_convergence_of_primitive"
 )
