@@ -2453,7 +2453,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂}
     \leanok
-    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
+        thm:mpu_source_factorization_entries}
     For $q=(q_1,q_2)$ and $j=(j_1,j_2)$, the untraced two-site product is
     \begin{align}
         (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})_{\alpha,\gamma}
@@ -2492,7 +2493,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.mul_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁}
     \leanok
-    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
+        thm:mpu_source_factorization_entries}
     The reflected factorization of the same untraced two-site product is
     \begin{align}
         (\mathcal U^{i_1j_1}\mathcal U^{i_2j_2})_{\alpha,\gamma}
