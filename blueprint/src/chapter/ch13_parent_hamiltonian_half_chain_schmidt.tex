@@ -1,0 +1,309 @@
+\section{Half-chain Schmidt spectrum and the dual fixed point}%
+\label{sec:half_chain_schmidt}
+
+This section carries out the Schmidt-decomposition step behind the half-chain
+interpretation of the positive diagonal fixed point $\Lambda$ of
+\cite[Theorem~6]{PerezGarcia2007Matrix}; it does not establish the full
+statement of that theorem. On a ring of $2L$ sites the matrix product vector
+splits at the two boundaries into a pair of half-chain families, the overlaps
+of the half-chain vectors are matrix elements of the $L$-fold transfer map,
+and the unnormalized half-chain reduced density matrix factors exactly through
+the half-chain Gram matrix. Away from zero, its spectrum is that of a boundary
+comparison matrix of size $D^2$, and under the generic spectral condition of
+the source that comparison matrix converges entrywise, geometrically in $L$,
+to the diagonal matrix with entries $\lambda_\alpha\lambda_\beta$ up to the
+trace normalization of $\Lambda$. Two conclusions of the source remain outside
+this section: the passage from entrywise convergence of the comparison matrix
+to convergence of its eigenvalues, and the normalization of the finite-size
+reduced density matrix to unit trace. The finite-size convention throughout is
+the ring of $N=2L$ sites split into two halves of $L$ sites each.
+
+The source states its canonical form with a trace-preserving dual map and a
+positive diagonal fixed point $\Lambda$ of that dual. Here the trace-preserving
+direction is placed on the transfer map itself and $\Lambda$ is its fixed
+point; the two conventions are exchanged by passing to the
+conjugate-transposed tensor.
+
+\begin{definition}[Half-chain boundary families]%
+    \label{def:half_chain_family}
+    \lean{MPSTensor.halfChainMatrix}
+    \lean{MPSTensor.halfChainMatrix_apply}
+    \lean{MPSTensor.halfChainSwapMatrix}
+    \lean{MPSTensor.halfChainSwapMatrix_apply}
+    \leanok
+    \uses{def:mps_tensor, def:eval_word}
+    For a tensor $A$ and a half-chain length $L$, the \emph{half-chain family}
+    is the matrix $\Psi$ with rows indexed by configurations
+    $\sigma\in\Fin{d}^L$ and columns indexed by boundary pairs
+    $(\alpha,\beta)$, whose column at $(\alpha,\beta)$ is the half-chain
+    vector
+    \begin{align}
+        \ket{\Psi_{\alpha,\beta}}
+         & =\sum_{\sigma}
+        \bra{\alpha}A^{\sigma}\ket{\beta}\,\ket{\sigma}.
+        \label{eq:half_chain_vector}
+    \end{align}
+    The \emph{complementary family} $\Phi$ is the matrix with rows indexed by
+    boundary pairs and columns by configurations, whose row at
+    $(\alpha,\beta)$ is the vector $\ket{\Psi_{\beta,\alpha}}$ with the two
+    boundary indices swapped.
+\end{definition}
+
+\begin{definition}[Half-chain coefficient kernel]%
+    \label{def:half_chain_kernel}
+    \lean{MPSTensor.halfChainKernel}
+    \lean{MPSTensor.halfChainKernel_apply}
+    \leanok
+    \uses{def:mpv}
+    The \emph{coefficient kernel} of the ring of $2L$ sites is the matrix over
+    the two half-chain configuration spaces whose entry at $(\sigma,\tau)$ is
+    the matrix product vector component
+    $V^{(2L)}(A)_{\sigma\tau}=\tr(A^{\sigma}A^{\tau})$ of the joined
+    configuration.
+\end{definition}
+
+\begin{lemma}[Splitting of the ring state at the two boundaries]%
+    \label{lem:half_chain_kernel_split}
+    \lean{MPSTensor.halfChainKernel_eq_mul}
+    \leanok
+    \uses{def:half_chain_family, def:half_chain_kernel}
+    The coefficient kernel factors as the product $\Psi\Phi$ of the
+    half-chain family with its complementary family. Equivalently,
+    \begin{align}
+        \ket{\psi}
+         & =\sum_{\alpha,\beta}
+        \ket{\Psi_{\alpha,\beta}}\ket{\Psi_{\beta,\alpha}}.
+        \label{eq:half_chain_resolution}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Insert the resolution of the identity
+    $\sum_{\beta}\ket{\beta}\bra{\beta}$ at the two cut bonds of the ring
+    trace: $\tr(A^{\sigma}A^{\tau})
+        =\sum_{\alpha,\beta}\bra{\alpha}A^{\sigma}\ket{\beta}
+        \bra{\beta}A^{\tau}\ket{\alpha}$.
+\end{proof}
+
+\begin{definition}[Half-chain reduced density matrix]%
+    \label{def:half_chain_reduced}
+    \lean{MPSTensor.halfChainReducedMatrix}
+    \lean{MPSTensor.halfChainReducedMatrix_apply}
+    \lean{MPSTensor.posSemidef_halfChainReducedMatrix}
+    \leanok
+    \uses{def:half_chain_kernel}
+    The \emph{unnormalized half-chain reduced density matrix} of the ring
+    state on $2L$ sites is $\rho_L=KK^{\dagger}$ with $K$ the coefficient
+    kernel. Entrywise this is the partial trace of the unnormalized ring state
+    over the complementary half,
+    \begin{align}
+        (\rho_L)_{\sigma\sigma'}
+         & =\sum_{\tau}
+        V^{(2L)}(A)_{\sigma\tau}\,
+        \overline{V^{(2L)}(A)_{\sigma'\tau}},
+        \label{eq:half_chain_reduced_entry}
+    \end{align}
+    and $\rho_L$ is positive semidefinite.
+\end{definition}
+
+\begin{definition}[Half-chain Gram matrix]%
+    \label{def:half_chain_gram}
+    \lean{MPSTensor.halfChainGram}
+    \leanok
+    \uses{def:half_chain_family}
+    The \emph{half-chain Gram matrix} is $G=\Psi^{\dagger}\Psi$, the matrix of
+    overlaps
+    $G_{(\alpha,\beta),(\alpha',\beta')}
+        =\braket{\Psi_{\alpha,\beta}}{\Psi_{\alpha',\beta'}}$ of the half-chain
+    vectors.
+\end{definition}
+
+\begin{lemma}[Half-chain overlaps through the transfer map]%
+    \label{lem:half_chain_gram_transfer}
+    \lean{MPSTensor.halfChainGram_apply_eq_transferMap_pow}
+    \leanok
+    \uses{def:half_chain_gram, def:transfer_map}
+    The half-chain overlaps are matrix elements of the $L$-fold transfer map
+    on matrix units:
+    \begin{align}
+        \braket{\Psi_{\alpha,\beta}}{\Psi_{\alpha',\beta'}}
+         & =\bra{\alpha'}\E_A^{L}
+        \bigl(\ket{\beta'}\bra{\beta}\bigr)\ket{\alpha}.
+        \label{eq:half_chain_gram_transfer}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand the overlap as a sum over configurations of products
+    $\bra{\alpha'}A^{\sigma}\ket{\beta'}
+        \overline{\bra{\alpha}A^{\sigma}\ket{\beta}}$ and recognize the entry of
+    $\sum_{\sigma}A^{\sigma}\ket{\beta'}\bra{\beta}(A^{\sigma})^{\dagger}$,
+    which is the $L$-fold transfer map applied to the matrix unit.
+\end{proof}
+
+\begin{theorem}[Half-chain Schmidt factorization]%
+    \label{thm:half_chain_schmidt_factorization}
+    \lean{MPSTensor.halfChainReducedMatrix_eq_mul_swap_gram}
+    \lean{MPSTensor.halfChainSwapMatrix_mul_conjTranspose}
+    \leanok
+    \uses{def:half_chain_reduced, def:half_chain_gram}
+    Let $S$ denote the swap of the two boundary indices. The unnormalized
+    half-chain reduced density matrix factors exactly as
+    \begin{align}
+        \rho_L
+         & =\Psi\,\bigl(SG^{\mathsf T}S\bigr)\,\Psi^{\dagger},
+        \label{eq:half_chain_factorization}
+    \end{align}
+    where $SG^{\mathsf T}S$ is the Gram matrix of the complementary family.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:half_chain_kernel_split}
+    By the splitting $K=\Psi\Phi$ of
+    Lemma~\ref{lem:half_chain_kernel_split},
+    $\rho_L=\Psi(\Phi\Phi^{\dagger})\Psi^{\dagger}$, and the Gram matrix
+    $\Phi\Phi^{\dagger}$ of the complementary family is the transpose of the
+    boundary-swapped half-chain Gram matrix.
+\end{proof}
+
+\begin{theorem}[Boundary comparison of the half-chain spectrum]%
+    \label{thm:half_chain_charpoly}
+    \lean{MPSTensor.charpoly_halfChainReducedMatrix}
+    \leanok
+    \uses{def:half_chain_reduced, def:half_chain_gram}
+    The characteristic polynomials of the half-chain reduced density matrix
+    and of the boundary comparison matrix $(SG^{\mathsf T}S)G$ of size $D^2$
+    agree after matching the trivial kernel factors:
+    \begin{align}
+        X^{D^2}\,\chi_{\rho_L}(X)
+         & =X^{d^L}\,\chi_{(SG^{\mathsf T}S)G}(X).
+        \label{eq:half_chain_charpoly}
+    \end{align}
+    In particular the nonzero spectrum of $\rho_L$, with multiplicities, is
+    that of the boundary comparison matrix.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:half_chain_schmidt_factorization, lem:matrix_rectangular_charpoly_cyclicity}
+    Apply the rectangular cyclicity of the characteristic polynomial to the
+    factorization (\ref{eq:half_chain_factorization}), regrouping the product
+    as $\Psi$ times $(SG^{\mathsf T}S)\Psi^{\dagger}$; the reversed product is
+    $(SG^{\mathsf T}S)\Psi^{\dagger}\Psi=(SG^{\mathsf T}S)G$.
+\end{proof}
+
+\begin{theorem}[Geometric transfer error of the half-chain overlaps]%
+    \label{thm:half_chain_gram_geometric}
+    \lean{MPSTensor.exists_geometric_bound_halfChainGram_sub_fixedPointProj}
+    \leanok
+    \uses{def:half_chain_gram, def:transfer_map}
+    Let $A$ have trace-preserving transfer map $\E_A$ with fixed point
+    $\Lambda$, $\tr(\Lambda)\neq0$, and suppose
+    \begin{align}
+        \rho_{\mathrm{spec}}\bigl(\E_A-P_{\Lambda}\bigr) & <1,
+        \label{eq:half_chain_c2_gap}
+    \end{align}
+    where $P_{\Lambda}$ is the fixed-point projection. Then there are
+    constants $C>0$ and $0<r<1$ such that for every $L\geq1$ and all boundary
+    pairs,
+    \begin{align}
+        \Bigl|
+        G_{(\alpha,\beta),(\alpha',\beta')}
+        -\bra{\alpha'}P_{\Lambda}
+        \bigl(\ket{\beta'}\bra{\beta}\bigr)\ket{\alpha}
+        \Bigr|
+         & \leq C r^{L}.
+        \label{eq:half_chain_gram_geometric}
+    \end{align}
+    The hypothesis (\ref{eq:half_chain_c2_gap}) expresses the generic
+    condition C2 of \cite{PerezGarcia2007Matrix} in the trace-preserving
+    gauge: apart from the simple eigenvalue one, the spectrum of $\E_A$ lies
+    strictly inside the unit disc. The proof chooses $r$ strictly between the
+    spectral radius of $\E_A-P_{\Lambda}$ and one. Without a semisimplicity
+    assumption on the subleading spectrum, the theorem does not assert the
+    same estimate with $r$ equal to that spectral radius.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:half_chain_gram_transfer, thm:geometric_bound_of_spectral_radius_lt_one}
+    Write $\E_A^{L}=P_{\Lambda}+(\E_A-P_{\Lambda})^{L}$ for $L\geq1$ by the
+    power decomposition. By (\ref{eq:half_chain_gram_transfer}) the deviation
+    of a Gram entry from the fixed-point projection entry is an entry of
+    $(\E_A-P_{\Lambda})^{L}$ applied to a matrix unit, bounded by the operator
+    norm of the $L$-th power, which decays geometrically below unit spectral
+    radius.
+\end{proof}
+
+\begin{lemma}[Diagonal limit of the half-chain overlaps]%
+    \label{lem:half_chain_gram_limit_diagonal}
+    \lean{MPSTensor.fixedPointProj_single_entry_diagonal}
+    \leanok
+    For a diagonal fixed point
+    $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_D)$ with
+    $\tr(\Lambda)\neq0$, the limiting overlaps form a diagonal matrix in the
+    boundary pairs:
+    \begin{align}
+        \bra{\alpha'}P_{\Lambda}
+        \bigl(\ket{\beta'}\bra{\beta}\bigr)\ket{\alpha}
+         & =\frac{\lambda_\alpha}{\tr(\Lambda)}\,
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \label{eq:half_chain_limit_diagonal}
+    \end{align}
+    For $\tr(\Lambda)=1$ this is the display
+    $\lambda_\alpha\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$ of
+    \cite{PerezGarcia2007Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Evaluate the fixed-point projection on the matrix unit: its trace is
+    $\delta_{\beta,\beta'}$, and the diagonal entry of $\Lambda$ at
+    $(\alpha',\alpha)$ is $\lambda_\alpha\delta_{\alpha,\alpha'}$.
+\end{proof}
+
+\begin{theorem}[Geometric convergence to the doubled fixed-point spectrum]%
+    \label{thm:half_chain_comparison_geometric}
+    \lean{MPSTensor.exists_geometric_bound_halfChainComparison_sub_diagonal}
+    \leanok
+    \uses{def:half_chain_gram, def:transfer_map}
+    Let $A$ have trace-preserving transfer map with diagonal fixed point
+    $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_D)$,
+    $\tr(\Lambda)\neq0$, satisfying the spectral condition
+    (\ref{eq:half_chain_c2_gap}). Then there are constants $C>0$ and $0<r<1$
+    such that for every $L\geq1$ the boundary comparison matrix satisfies,
+    entrywise,
+    \begin{align}
+        \Bigl|
+        \bigl((SG^{\mathsf T}S)G\bigr)_{(\alpha,\beta),(\alpha',\beta')}
+        -\frac{\lambda_\alpha\lambda_\beta}{\tr(\Lambda)^2}\,
+        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
+        \Bigr|
+         & \leq C r^{L}.
+        \label{eq:half_chain_comparison_geometric}
+    \end{align}
+    The limiting matrix is the diagonal matrix $\Lambda\otimes\Lambda$ up to
+    the trace normalization. Together with
+    Theorem~\ref{thm:half_chain_charpoly}, the nonzero spectrum of the
+    half-chain reduced density matrix on the ring of $2L$ sites is that of a
+    $D^2\times D^2$ matrix converging entrywise, geometrically in $L$, to
+    $\Lambda\otimes\Lambda/\tr(\Lambda)^2$. The remaining passage to the
+    convergence of the eigenvalues themselves is the continuity of the
+    spectrum of a matrix in its entries and is not part of this section.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:half_chain_gram_geometric, lem:half_chain_gram_limit_diagonal}
+    Both factors of the comparison matrix are entrywise within $Cr^{L}$ of
+    their diagonal limits by Theorem~\ref{thm:half_chain_gram_geometric} and
+    Lemma~\ref{lem:half_chain_gram_limit_diagonal}, the swapped-transposed
+    factor because swapping and transposing permute entries and exchange the
+    two diagonal weights. The limit entries are bounded, so the product
+    deviates from the product of the limits by at most a constant multiple of
+    $r^{L}$, with constant $D^2\bigl(C(B+C)+BC\bigr)+1$ for an entry bound
+    $B$ on the limits.
+\end{proof}
