@@ -92,9 +92,9 @@ available on this toolchain and already used in the codebase
 (`TNLean/Channel/Schwarz/OperatorJensenAux.lean`,
 `TNLean/Analysis/LiebConcavity.lean`) — chiefly as a side-condition
 discharger, e.g. `fun_prop (disch := grind)` and spectrum-membership
-arithmetic. It produces ordinary kernel-checked proofs, so none of the
-`docs/PROOF_INTEGRITY.md` blocker concerns apply (it is *not* in the
-`native_decide` class).
+arithmetic. It produces ordinary kernel-checked proofs, so none of the proof-integrity
+blocker concerns (the `lean-conventions` skill's PROOF_INTEGRITY reference)
+apply (it is *not* in the `native_decide` class).
 
 Where it fits in this project:
 
@@ -115,7 +115,8 @@ Where it fits in this project:
   ring solver is commutative), and instance-synthesis problems are outside
   its reach; those stay on the lemma/simp-set/macro path.
 - **Budget.** `grind` searches, so it costs elaboration time. If a call
-  needs a `maxHeartbeats` bump (a `docs/PROOF_INTEGRITY.md` warning), write
+  needs a `maxHeartbeats` bump (a warning in the skill's PROOF_INTEGRITY
+  reference), write
   the explicit proof instead. When an explicit 2-3 line proof is stable and
   fast, prefer it; `grind` earns its keep on goals whose explicit proofs are
   long, brittle, or repeated.
@@ -134,7 +135,8 @@ These extend the design notes in `TNLean/MPS/Tactic/Basic.lean`:
 - **Docstring states the pattern.** Every promoted tactic's docstring shows
   the tactic block it replaces, so `grep` on the old pattern leads to the
   replacement.
-- **Named per Mathlib conventions** (`docs/MATHLIB_naming.md`): tactics and
+- **Named per Mathlib conventions** (the skill's MATHLIB_naming reference):
+  tactics and
   simp attributes are `snake_case`; MPS-specific sets carry the `mps_` prefix.
 - **One file per topic.** Keep MPS-specific tactics in `TNLean/MPS/Tactic/`,
   cross-cutting ones in `TNLean/Tactic/`; do not scatter `register_simp_attr`
@@ -167,4 +169,4 @@ not a Lean parser:
   paper-realignment relaxation here since statements are untouched.
 - Ledger updates (`docs/tactic_patterns.md`) do not require blueprint
   changes; the ledger is engineering metadata, not mathematics, and the
-  prose rules of `docs/prose_style.md` do not apply to it.
+  prose rules of the skill's prose_style reference do not apply to it.

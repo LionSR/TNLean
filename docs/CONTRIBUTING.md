@@ -269,10 +269,11 @@ Every PR touching Lean code should be reviewed against these criteria:
 1. **Proof correctness** -- No unexplained `sorry`. No `axiom` unless discussed.
    Run `rg -n "sorry|axiom" <file>` to verify.
 
-2. **Mathlib style** -- Follow the naming conventions in
-   [MATHLIB_naming.md](MATHLIB_naming.md) and documentation standards in
-   [MATHLIB_doc.md](MATHLIB_doc.md). See [MATHLIB_pr-review.md](MATHLIB_pr-review.md)
-   for the full Mathlib review guide. For renames that intentionally omit
+2. **Mathlib style** -- Follow the naming conventions in the
+   `lean-conventions` skill's MATHLIB_naming reference and the documentation
+   standards in its MATHLIB_doc reference (both in
+   [texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills)).
+   See its MATHLIB_pr-review reference for the full Mathlib review guide. For renames that intentionally omit
    deprecated aliases under the mathematical-language exception, confirm the
    PR body states the reason (see [CONTRIBUTING.md Section Mathematical-language renames](#mathematical-language-renames)).
 
@@ -303,12 +304,16 @@ This project follows Mathlib conventions with project-specific additions.
 
 ### Reference guides
 
-- **Documentation style**: [MATHLIB_doc.md](MATHLIB_doc.md) -- module headers, docstrings,
-  LaTeX in comments, sectioning comments.
-- **Naming conventions**: [MATHLIB_naming.md](MATHLIB_naming.md) -- capitalization rules,
-  symbol-to-name dictionary, variable conventions.
-- **Review guide**: [MATHLIB_pr-review.md](MATHLIB_pr-review.md) -- detailed examples of
-  style, documentation, location, and improvement considerations.
+The canonical guides live in the `lean-conventions` skill of
+[texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills);
+TNLean-local addenda are in [project_conventions.md](project_conventions.md).
+
+- **Documentation style**: the skill's MATHLIB_doc reference -- module headers,
+  docstrings, LaTeX in comments, sectioning comments.
+- **Naming conventions**: the skill's MATHLIB_naming reference -- capitalization
+  rules, symbol-to-name dictionary, variable conventions.
+- **Review guide**: the skill's MATHLIB_pr-review reference -- detailed examples
+  of style, documentation, location, and improvement considerations.
 
 ### Project-specific conventions
 
@@ -339,8 +344,8 @@ identifiers in backticks.
 **Sectioning comments**: Use `/-! ### Section Title -/` to organize long files
 into logical sections.
 
-**Variable naming**: Follow the conventions in [MATHLIB_naming.md](MATHLIB_naming.md). For
-this project specifically:
+**Variable naming**: Follow the conventions in the `lean-conventions` skill's
+MATHLIB_naming reference. For this project specifically:
 - `A`, `B` for MPS tensors
 - `E` for transfer matrices / quantum channels
 - `d` for physical dimension, `D` for bond dimension
@@ -356,8 +361,9 @@ one-step rename without a deprecated alias is preferred.
 #### When to skip a deprecated alias
 
 Skip the alias when the old name contains a term that appears in, or is a
-contextual variant of, the banned-vocabulary list in
-[`docs/prose_style.md` Section 2](prose_style.md#2-banned-software-engineering-terms--replacements).
+contextual variant of, the banned-vocabulary list in the `lean-conventions`
+skill's prose_style reference, Section 2 (TNLean addenda:
+[project_conventions.md](project_conventions.md)).
 Apply context-qualified bans only in the stated context: for example, "Assembly"
 is banned as a section or chapter title, but not when it is part of a standard
 mathematical phrase.

@@ -22,11 +22,11 @@ pinned: true
 5. If unaddressed comments exist: do NOT merge. Either fix first or flag to user.
 6. Present summary to user and let them decide.
 
-## Mathlib-style PR and Documentation Standards (from docs/MATHLIB_pr-review.md and docs/MATHLIB_doc.md)
+## Mathlib-style PR and Documentation Standards (from the `lean-conventions` skill's MATHLIB_pr-review and MATHLIB_doc references)
 
 PRs should follow the mathlib review checklist — review for: **style**, **documentation**, **location**, **improvements**, and **library integration**.
 
-### Documentation (docs/MATHLIB_doc.md)
+### Documentation (MATHLIB_doc reference)
 - Every file needs: copyright header, imports, module docstring with `/-! -/`
 - Module docstring sections (in order): Main definitions, Main statements, Notation, Implementation notes, References, Tags
 - Every `def` must have a docstring. Theorems encouraged. Use backticks for Lean names, LaTeX for math.
@@ -56,8 +56,8 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
   `MPS/CanonicalForm: assemble cyclic sectors at a common blocking length`, or
   `Tracking: Wolf Chapter 6 spectral properties`.
 
-### Review checklist (docs/MATHLIB_pr-review.md)
-- **Style**: code formatting, naming conventions (`MATHLIB_naming.md`), PR title/description informative
+### Review checklist (MATHLIB_pr-review reference)
+- **Style**: code formatting, naming conventions (MATHLIB_naming reference), PR title/description informative
 - **Documentation**: docstrings on defs, cross-references, proof sketches in comments for complex proofs, warnings for restricted-use code
 - **Location**: declarations in right files, no duplicate results, imports not too heavy, files not too long (>1000 lines → split)
 - **Improvements**: split long proofs into lemmas, use better tactics for readability, simplify proof structure

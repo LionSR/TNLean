@@ -1,24 +1,24 @@
 # Documentation Files
 
-This directory contains shared convention mirrors, upstream-derived mathlib
-guidance, and TNLean-owned project policy. Keep those roles separate.
+This directory contains TNLean-owned project policy and the TNLean-local
+addenda to the shared Lean conventions. The shared convention text itself
+is not stored here. Keep those roles separate.
 
-## Shared convention mirrors
+## Shared conventions
 
-The following files are stamped mirrors of the canonical documents in
-[texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills)
-`docs/`. The body below each mirror header is the shared canonical text:
-edit it upstream and re-copy, never locally. TNLean-specific material goes
-only in the "Project addendum" section at the end of each file.
+The canonical convention documents (Mathlib style, naming, documentation,
+PR review, proof integrity, prose style) are the references of the
+`lean-conventions` skill in
+[texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills),
+installed automatically through `.claude/settings.json`. Consult the skill
+for the shared rules; edits to them belong upstream, and this directory
+keeps no copy of the canonical text.
 
-- `MATHLIB_doc.md`
-- `MATHLIB_naming.md`
-- `MATHLIB_pr-review.md`
-- `MATHLIB_style.md`
-- `PROOF_INTEGRITY.md`
-- `prose_style.md`
+TNLean-specific additions to the shared conventions go only in
+[`project_conventions.md`](project_conventions.md), one section per shared
+reference.
 
-The mirrored MATHLIB files also track mathlib's own documentation and style
+The MATHLIB references also track mathlib's own documentation and style
 conventions; changes reconciling them with mathlib belong upstream too.
 
 ## TNLean-owned policy
@@ -35,6 +35,7 @@ requirements.
 - `getting_started.md`
 - `paper-gaps/`
 - `pr_review_management.md`
+- `project_conventions.md`
 - `stale_issue_audit.md`
 - `tactic_development.md`
 - `tactic_patterns.md`
@@ -42,8 +43,8 @@ requirements.
 - `upgrade_4_29.md`
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
-the `prose_style.md` project addendum or in `blueprint_style_guide.md`, not
-in a mirrored canonical body.
+the prose section of [`project_conventions.md`](project_conventions.md) or
+in `blueprint_style_guide.md`; shared rules belong upstream in the skill.
 
 ## Audit memos
 

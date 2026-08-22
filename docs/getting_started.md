@@ -185,33 +185,35 @@ document that spells it out in full.
 **Naming.** Definitions are `camelCase`, predicates are named `IsFoo`,
 theorems and lemmas are `snake_case`, and files are `CamelCase.lean`. The
 full capitalization rules and the symbol-to-name dictionary (how to spell
-`⊗`, `≤`, `⁻¹`, and so on in an identifier) are in
-[`docs/MATHLIB_naming.md`](MATHLIB_naming.md).
+`⊗`, `≤`, `⁻¹`, and so on in an identifier) are in the MATHLIB_naming
+reference of the `lean-conventions` skill
+([texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills)).
 
 **Style.** Line length, variable-letter conventions (`A`, `B` for MPS
 tensors, `E` for channels, `d`/`D` for physical/bond dimension), and tactic
-formatting follow [`docs/MATHLIB_style.md`](MATHLIB_style.md), with a small
+formatting follow the skill's MATHLIB_style reference, with a small
 number of project additions collected in
-[`docs/CONTRIBUTING.md`](CONTRIBUTING.md#6-lean-code-style).
+[`docs/CONTRIBUTING.md`](CONTRIBUTING.md#6-lean-code-style) and
+[`docs/project_conventions.md`](project_conventions.md).
 
 **Docstrings.** Every new `def`, `structure`, `class`, and significant
 `theorem` needs a docstring, and every file needs a module header with a
 `## Main definitions` list and a `## References` section citing the source
-paper. The Markdown and LaTeX conventions for writing them are in
-[`docs/MATHLIB_doc.md`](MATHLIB_doc.md).
+paper. The Markdown and LaTeX conventions for writing them are in the skill's
+MATHLIB_doc reference.
 
 **Proof integrity.** Finished work must not contain `sorry`, `admit`, or a
 new `axiom`; a small set of other patterns (`native_decide`, unsafe casts,
 disabled timeouts) are also blockers or warnings. The complete list, and what
-counts as an acceptable exception, is in
-[`docs/PROOF_INTEGRITY.md`](PROOF_INTEGRITY.md).
+counts as an acceptable exception, is in the skill's PROOF_INTEGRITY
+reference (TNLean addenda: [`docs/project_conventions.md`](project_conventions.md)).
 
 **Prose.** Docstrings, blueprint prose, issues, and pull request text should
 read as mathematics, not software documentation: no Lean identifiers inside
 blueprint prose, no software-engineering metaphors ("pipeline", "wrapper",
 "boilerplate"), and none of the stock filler phrasing that AI writing tends
-to reach for. The banned terms and their replacements are in
-[`docs/prose_style.md`](prose_style.md).
+to reach for. The banned terms and their replacements are in the skill's prose_style
+reference.
 
 **Local checks.** Before pushing, run the checks relevant to the change:
 
