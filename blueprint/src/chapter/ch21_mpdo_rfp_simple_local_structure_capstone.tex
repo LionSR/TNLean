@@ -1262,19 +1262,36 @@ This is the calculation in
 \begin{theorem}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
     \notready
-    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch, def:mpo_source_zcl, def:cpsv_example410_correlated_flip_weights, thm:cpsv_example410_mutual_information_defect, thm:cpsv_example411_not_source_zcl, thm:cpsv_example411_ambient_not_sal, thm:cpsv_example412_literal_formula, thm:cpsv_example412_literal_sal, thm:cpsv_example412_literal_zcl_rfp_gap, thm:cpsv_example412_four_cycle_ssa_defect, thm:cpsv_example412_not_gsnnch, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
+    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
+        def:mpo_source_zcl,
+        def:cpsv_example410_corrected_tensor,
+        def:cpsv_example410_correlated_flip_weights,
+        thm:cpsv_example410_source_zcl,
+        thm:cpsv_example410_four_site_spectrum,
+        thm:cpsv_example410_mutual_information_defect,
+        thm:cpsv_example411_not_source_zcl,
+        thm:cpsv_example411_ambient_not_sal,
+        thm:cpsv_example412_literal_formula,
+        thm:cpsv_example412_literal_sal,
+        thm:cpsv_example412_literal_zcl_rfp_gap,
+        thm:cpsv_example412_four_cycle_ssa_defect,
+        thm:cpsv_example412_not_gsnnch,
+        thm:cpsv_example412_normalized_rfp_maps,
+        thm:cpsv_example412_normalized_not_gsnnch}
     The three examples in
     \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
     following separations.  Example~4.10 applies correlated on-site bit-flip
     noise to a four-spin ring of Bell pairs and claims zero correlation length
     without saturation of the area law.  The displayed channel repeats the
-    left-qubit label; replacing the second occurrence by the right-qubit label
-    reproduces all four printed entropies.  At $p=1/4$, the exact calculation
-    recorded in the accompanying paper-gap note gives $I_2>I_1$ for the
-    displayed reduced spectra.  This calculation alone does not identify those
-    density operators as the reductions of the corrected tensor or establish
-    its zero-correlation-length property.  The printed universal exception list
-    also omits $p=1$, where equality returns.
+    left-qubit label.  We interpret the second occurrence as the right-qubit
+    label and fix $p=1/4$.  The resulting tensor is an MPDO and has source zero
+    correlation length.  Its normalized four-site state has nonzero spectrum
+    $(41/128)^{[1]},(15/128)^{[4]},(9/128)^{[3]}$, agreeing with the corrected
+    bond-pattern calculation.  The analogous identifications for the one-,
+    two-, and three-site reductions remain open, so the exact inequality
+    $I_2>I_1$ for the weight families does not yet prove that this tensor fails
+    saturation.  We make no claim about the printed universal statement for
+    $p\ne0,1/2$, whose exception list also omits $p=1$.
 
     Example~4.11 uses the bond-weight matrix
     \begin{align}
@@ -1328,9 +1345,95 @@ This is the calculation in
     commuting realizations at different chain lengths.
 \end{theorem}
 
+% Local correction of CPSV16 Example 4.10, lines 897--905.
+% The source repeats the left-qubit label; this definition uses one left and
+% one right bit flip and fixes p=1/4. See
+% docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
+\begin{definition}[Corrected tensor for Example 4.10]
+    \label{def:cpsv_example410_corrected_tensor}
+    \lean{MPOTensor.CPSVExample410Operator.channelCoeff,
+        MPOTensor.CPSVExample410Operator.pairEquiv,
+        MPOTensor.CPSVExample410Operator.correlatedFlip,
+        MPOTensor.CPSVExample410Operator.purifier,
+        MPOTensor.CPSVExample410Operator.purifierTerm,
+        MPOTensor.CPSVExample410Operator.M}
+    \leanok
+    Identify the local four-dimensional spin with two qubits and write
+    $U=\sigma_x\otimes\sigma_x$.  Starting from one Bell pair on every bond,
+    apply independently at each site the channel
+    \begin{align}
+        \mathcal E(X) & =\tfrac14 UXU^*+\tfrac34X. \notag
+    \end{align}
+    Equivalently, use the local purification with Kraus amplitudes
+    $\sqrt3/2$ for the identity and $1/2$ for the correlated flip.  This is
+    distinct from the repeated-left expression printed in the source.
+\end{definition}
+
+\begin{theorem}[Source zero correlation length of the corrected tensor]
+    \label{thm:cpsv_example410_source_zcl}
+    \lean{MPOTensor.CPSVExample410Operator.M_isLPDO,
+        MPOTensor.CPSVExample410Operator.M_isMPDO,
+        MPOTensor.CPSVExample410Operator.traceProjector,
+        MPOTensor.CPSVExample410Operator.physTraceTransfer_M,
+        MPOTensor.CPSVExample410Operator.traceProjector_sq,
+        MPOTensor.CPSVExample410Operator.physTraceTransfer_M_sq,
+        MPOTensor.CPSVExample410Operator.physTraceTransfer_M_ne_zero,
+        MPOTensor.CPSVExample410Operator.M_isSourceZCL}
+    \leanok
+    \uses{def:cpsv_example410_corrected_tensor, def:mpo_source_zcl}
+    The corrected tensor is locally purified and hence positive at every
+    chain length.  It has source zero correlation length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_example410_corrected_tensor,
+        lem:complex_ofreal_sqrt_sq,
+        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Its physical-trace transfer is the nonzero projector
+    \begin{align}
+        P & =\frac12
+        \begin{pmatrix}
+          1&0&0&1\\
+          0&0&0&0\\
+          0&0&0&0\\
+          1&0&0&1
+        \end{pmatrix}. \notag
+    \end{align}
+    Since $P^2=P$, the tensor has source zero correlation length.
+\end{proof}
+
+\begin{theorem}[Four-site spectrum of the corrected tensor]
+    \label{thm:cpsv_example410_four_site_spectrum}
+    \lean{MPOTensor.CPSVExample410Spectrum.charpoly_roots_four}
+    \leanok
+    \uses{def:cpsv_example410_corrected_tensor}
+    The normalized four-site reduced state has characteristic-polynomial
+    roots
+    \begin{align}
+        0^{[248]},\quad
+        (41/128)^{[1]},\quad
+        (15/128)^{[4]},\quad
+        (9/128)^{[3]}. \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:cpsv_example410_corrected_tensor,
+        thm:cpsv_example410_bond_distribution}
+    The sixteen bond patterns define orthonormal Bell-network vectors.
+    Exactly eight have even parity and may have nonzero weight; the eight
+    odd-parity patterns have zero weight.  The normalized state is the
+    isometric image of the diagonal bond-pattern distribution.  Thus its
+    nonzero roots are precisely the nonzero bond weights, and the remaining
+    $4^4-2^4=240$ ambient directions together with the eight zero-weight
+    patterns give $248$ zero roots.
+\end{proof}
+
 % Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
-% Scope restriction: classical weight families only; the identification with
-% reduced-state spectra of the corrected tensor is not part of these entries.
+% Scope restriction: the weight families are identified with the corrected
+% tensor only for the full four-site state; shorter reductions remain open.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 \begin{definition}[Correlated-flip weight families for Example 4.10]
     \label{def:cpsv_example410_correlated_flip_weights}
