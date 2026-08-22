@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixCyclicTracePower
 import TNLean.MPS.MPDO.NeighboringPreparation
+import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
 import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorTrace
 
@@ -77,7 +78,7 @@ noncomputable def rightTraceMatrix (F : PhysicalSectorFactorization K) :
   Matrix.of fun k alpha ↦ (F.rightTensor k alpha).trace
 
 /-- The trace of a neighboring operator is the contraction of the closed
-right and left sector tensors over the shared virtual index:
+right and left sector tensors over the shared physical index:
 \[
   \operatorname{tr}(\eta_{k,h})
     =\sum_\alpha\operatorname{tr}((r_k)_\alpha)\operatorname{tr}((l_h)_\alpha).
