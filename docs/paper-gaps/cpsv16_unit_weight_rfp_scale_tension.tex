@@ -344,10 +344,10 @@ It does not itself decide the claimed all-sector factorization. The
 non-Cartesian witness in
 \path{TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean} refutes the
 implication from injectivity, SAL, literal ZCL, and scalar relation to a normal
-tensor. Its singleton coefficient has modulus $\sqrt r>1$, so it does not obey
-the line-246 unit-weight convention, which cannot be restored without losing
-literal ZCL. Thus \ghissue{6775} remains open at the ambient source-context
-boundary. The alternative direct construction of the blocked channel pair,
+tensor. Its singleton coefficient has modulus $\sqrt r\approx0.533<1$, so the
+unit clause of the line-246 convention has no witness. Rescaling to unit weight
+destroys literal ZCL. Thus \ghissue{6775} remains open at the ambient
+source-context boundary. The alternative direct construction of the blocked channel pair,
 using a genuine coarsening or mixing of physical-sector labels, remains in
 \ghissue{6793}. The subsequent combination through the orthogonal outer
 physical sectors is formalized in \ghissue{6632}.
