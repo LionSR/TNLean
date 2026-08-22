@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.EntropyDecomposition
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
 import TNLean.MPS.MPDO.LocalPurificationRFP
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
@@ -103,12 +103,10 @@ theorem physTraceTransfer_M : physTraceTransfer M = traceProjector := by
   have h1 : (finProdFinEquiv (m := 2) (n := 2)).symm (1 : Fin 4) = (0, 1) := by decide
   have h2 : (finProdFinEquiv (m := 2) (n := 2)).symm (2 : Fin 4) = (1, 0) := by decide
   have h3 : (finProdFinEquiv (m := 2) (n := 2)).symm (3 : Fin 4) = (1, 1) := by decide
-  have hsqrtTwoSq : ((↑(Real.sqrt 2) : ℂ) ^ 2) = 2 := by
-    rw [← Complex.ofReal_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-    norm_num
-  have hsqrtThreeSq : ((↑(Real.sqrt 3) : ℂ) ^ 2) = 3 := by
-    rw [← Complex.ofReal_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 3)]
-    norm_num
+  have hsqrtTwoSq : ((↑(Real.sqrt 2) : ℂ) ^ 2) = 2 :=
+    Complex.ofReal_sqrt_sq 2 (by positivity)
+  have hsqrtThreeSq : ((↑(Real.sqrt 3) : ℂ) ^ 2) = 3 :=
+    Complex.ofReal_sqrt_sq 3 (by positivity)
   have hsqrtTwoNe : (↑(Real.sqrt 2) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2))
   ext a b

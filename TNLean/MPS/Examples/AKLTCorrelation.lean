@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Core.Correlations
 
@@ -57,12 +58,12 @@ of the three Pauli matrices by `-1/3`.  These four matrices form a basis of
 `M₂(ℂ)`, so the spectrum is `{1, -1/3, -1/3, -1/3}`. -/
 
 /-- `(√3)² = 3` as a complex equation. -/
-private lemma aklt_sqrt3_sq : (↑(Real.sqrt 3) : ℂ) ^ 2 = 3 := by
-  rw [← Complex.ofReal_pow, Real.sq_sqrt (by positivity), Complex.ofReal_ofNat]
+private lemma aklt_sqrt3_sq : (↑(Real.sqrt 3) : ℂ) ^ 2 = 3 :=
+  Complex.ofReal_sqrt_sq 3 (by positivity)
 
 /-- `(√2)² = 2` as a complex equation. -/
-private lemma aklt_sqrt2_sq : (↑(Real.sqrt 2) : ℂ) ^ 2 = 2 := by
-  rw [← Complex.ofReal_pow, Real.sq_sqrt (by positivity), Complex.ofReal_ofNat]
+private lemma aklt_sqrt2_sq : (↑(Real.sqrt 2) : ℂ) ^ 2 = 2 :=
+  Complex.ofReal_sqrt_sq 2 (by positivity)
 
 /-- `σz = diag(1, -1)` is an eigenvector of the AKLT transfer map with eigenvalue
 `-1/3`. -/

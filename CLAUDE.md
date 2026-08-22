@@ -339,3 +339,4 @@ follow-up, not against the temporary `sorry` count.
 | `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/Algebra/TracePairing.lean` |
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
+| `Complex.ofReal_sqrt_sq` | helper theorem | Squaring the complex coercion of a nonnegative real square root | `TNLean/Algebra/ComplexSqrt.lean` |
