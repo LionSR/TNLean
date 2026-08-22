@@ -548,6 +548,11 @@ ARCH_MARK_SOURCE = r"""
   \tn[at=(1,2), skin=box, name=b, ports={90:virtual}]{B}
   \tnwire[route=arc, dir=to]{a.90}{b.90}
 \end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=8, bonds=none]
+  \tn[at=(1,1), skin=box, name=a, ports={90:virtual}]{A}
+  \tn[at=(1,8), skin=box, name=b, ports={90:virtual}]{B}
+  \tnwire[route=arc, dir=to]{a.90}{b.90}
+\end{tenkz}
 \end{document}
 """
 
@@ -2442,6 +2447,23 @@ def main() -> int:
             raise AssertionError(
                 "the directed arc did not emit exactly one barb cover: "
                 + "; ".join(event.raw for event in arch_marks))
+        # The second picture is the same arch four times as wide: its
+        # control net demands more than the sixteen-piece floor, and the
+        # cover must still stand on the bow (y ~ 7100000 sp), not on the
+        # chord at y = 0 -- pinning the adaptive count end to end.
+        wide_marks = [event for event in arch_audit.events("k2")
+                      if event.kind == "wire-ink"
+                      and event.attrs.get("origin") == "mark"]
+        if len(wide_marks) != 1:
+            raise AssertionError(
+                "the wide arch did not emit exactly one barb cover: "
+                + "; ".join(event.raw for event in wide_marks))
+        wx1, wy1, wx2, wy2 = parse_two_point_ink(
+            wide_marks[0].attrs["points"])
+        if min(wy1, wy2) < 6500000:
+            raise AssertionError(
+                "the wide arch's barb cover fell toward the chord: "
+                f"points={wide_marks[0].attrs['points']}")
         ax1, ay1, ax2, ay2 = parse_two_point_ink(
             arch_marks[0].attrs["points"])
         if min(ay1, ay2) < 900000:
