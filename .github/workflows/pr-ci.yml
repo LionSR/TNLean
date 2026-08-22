@@ -776,7 +776,7 @@ jobs:
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.1'
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.2'
 
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'
