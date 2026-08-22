@@ -1,5 +1,14 @@
 # Numbering in the local Wolf transcription
 
+> **Where the transcription lives.** The transcription and the archived
+> chapter PDFs moved to the companion
+> [QICLean](https://github.com/LionSR/QICLean) repository in the
+> quantum-channel extraction: they are `Notes/WolfNoteTexSource/` and
+> `Notes/WolfNotePDF/` *in QICLean*, not in this repository. Every
+> `Notes/WolfNoteTexSource/...` path in this document and in the
+> `docs/paper-gaps/` notes refers to that directory; checking such a
+> citation requires a QICLean checkout.
+
 The files in `Notes/WolfNoteTexSource/` are a useful searchable transcription
 of M. Wolf, *Quantum Channels & Operations: Guided Tour*.  Their automatically
 rendered theorem numbers are not, in general, the theorem numbers of the

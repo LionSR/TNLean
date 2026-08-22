@@ -4,6 +4,10 @@ TNLean keeps several source-faithful formulations of the same broad mathematical
 ideas. They are not interchangeable merely because their names are similar. This
 glossary identifies the public entry points, records the bridges that may be used,
 and states the hypotheses or known gaps that prevent stronger identifications.
+Declarations under `QICLean/` paths moved to the companion
+[QICLean](https://github.com/LionSR/QICLean) library in the quantum-channel
+extraction; TNLean imports them through its Lake dependency, so they remain
+usable here under the same names.
 
 For new declarations, prefer namespace overloading (`MPSTensor.IsInjective`,
 `MPSChainTensor.IsInjective`, and so on) rather than putting the carrier name into
@@ -15,8 +19,8 @@ is deliberately source-faithful.
 ### `MPSTensor.IsNormal`
 
 - **Declaration:** `MPSTensor.IsNormal (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/Core/Injectivity.lean`; the finite-family owner is
-  `Kraus.IsNormal` in `TNLean/Kraus/Injectivity.lean`.
+- **Defined in:** `QICLean/MPS/Core/Injectivity.lean`; the finite-family owner is
+  `Kraus.IsNormal` in `QICLean/Kraus/Injectivity.lean`.
 - **Meaning:** there is a positive word length `N` for which the length-`N`
   products of the matrices of `A` span the full `D × D` matrix algebra; equivalently,
   `A` becomes injective after blocking `N` sites.
@@ -127,7 +131,7 @@ normalizations.
 
 - **Declaration:**
   `_root_.IsPrimitive (E : V →ₗ[ℂ] V) : Prop`.
-- **Defined in:** `TNLean/Channel/Peripheral/Spectrum.lean`.
+- **Defined in:** `QICLean/Channel/Peripheral/Spectrum.lean`.
 - **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`.
 - **Source:** Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3,
   Theorem 6.7; compare arXiv:2011.12127 §IV.
@@ -248,8 +252,8 @@ normalizations.
 #### `MPSTensor.IsInjective`
 
 - **Declaration:** `MPSTensor.IsInjective (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/Core/Injectivity.lean`; the finite-family owner is
-  `Kraus.IsInjective` in `TNLean/Kraus/Injectivity.lean`.
+- **Defined in:** `QICLean/MPS/Core/Injectivity.lean`; the finite-family owner is
+  `Kraus.IsInjective` in `QICLean/Kraus/Injectivity.lean`.
 - **Meaning:** the one-site matrices `{A i}` span the full matrix algebra; this
   is the linear-algebraic injectivity of the tensor as a virtual-to-physical map.
 - **Source:** arXiv:1804.04964 §2,
@@ -265,8 +269,8 @@ normalizations.
 
 - **Declaration:**
   `MPSTensor.IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop`.
-- **Defined in:** `TNLean/MPS/Core/Injectivity.lean`; the finite-family owner is
-  `Kraus.IsNBlkInjective` in `TNLean/Kraus/Injectivity.lean`.
+- **Defined in:** `QICLean/MPS/Core/Injectivity.lean`; the finite-family owner is
+  `Kraus.IsNBlkInjective` in `QICLean/Kraus/Injectivity.lean`.
 - **Meaning:** products indexed by all words of exactly length `N` span the full
   matrix algebra.
 - **Source:** arXiv:0909.5347, equation (1) and the following definition of
