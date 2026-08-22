@@ -1212,17 +1212,20 @@ current counts and full location lists).
   to the unitary group, apply `physTraceTransfer_eq_sum_closedSector` with the
   factorization field, and identify the closed-sector sum entrywise with a
   rectangular product of sector-trace matrices.
-- **Seen:** the inline `hphys` proof in
-  `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean` (active restriction) and
+- **Seen:** the inline `hphys` proofs in
+  `TNLean/MPS/MPDO/ActiveSectorTraceMatrixZCL.lean:69-96` and
+  `TNLean/MPS/MPDO/LemmaC5CaseI.lean:220-247` (active restrictions), and
   `physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix` in
   `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` (all sectors), recorded
   2026-08-21.
-- **Abstraction:** the all-sector lemma is the abstraction; the active-sector
-  call site could re-derive its restricted rectangle by filtering the
-  all-sector factorization through the inactive-sector vanishing hypothesis.
-- **Notes:** the active-sector variant also prunes zero-weight columns, so the
-  refactor needs a small filtered-sum bridge before the inline proof can be
-  deleted.
+- **Abstraction:** the all-sector lemma is the abstraction. Issue #6931 tracks
+  extraction of an active-sector specialization and refactoring of both
+  existing active-sector call sites.
+- **Notes:** both active-sector proofs already contain the required filtered-sum
+  bridge using `Finset.sum_subtype`, `Finset.sum_filter`, and inactive-sector
+  vanishing. Promotion is deferred to #6931 because it changes two established
+  Case-I proofs but does not affect the source-facing necessary condition in
+  PR #6863.
 
 ### transport of diagonal spectral identities — candidate
 - **Pattern:** diagonalize a Hermitian matrix as a unitary conjugate of its
