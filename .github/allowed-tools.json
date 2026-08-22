@@ -1,7 +1,7 @@
 {
   "lean-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*",
   "lean-review-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*",
-  "blueprint-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex git+https://github.com/LionSR/texra-blueprint@v0.2.3),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*",
+  "blueprint-auto-fix": "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex git+https://github.com/LionSR/texra-blueprint@v0.3.0),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*",
   "lean-linter-warning-auto-fix": "Read,Edit,Glob,Grep,Bash(python3 *),Bash(lake build),Bash(lake build *),Bash(lake env),Bash(lake env *),Bash(git diff *),Bash(git status),Bash(grep *),Bash(rg *)",
   "claude-interactive": "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*",
   "blueprint-prose-review": "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*",
