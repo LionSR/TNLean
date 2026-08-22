@@ -5,9 +5,8 @@
 > [QICLean](https://github.com/LionSR/QICLean) repository in the
 > quantum-channel extraction: they are `Notes/WolfNoteTexSource/` and
 > `Notes/WolfNotePDF/` *in QICLean*, not in this repository. Every
-> `Notes/WolfNoteTexSource/...` path in this document and in the
-> `docs/paper-gaps/` notes refers to that directory; checking such a
-> citation requires a QICLean checkout.
+> `Notes/WolfNoteTexSource/...` path in this document refers to that directory;
+> checking such a citation requires a QICLean checkout.
 
 The files in `Notes/WolfNoteTexSource/` are a useful searchable transcription
 of M. Wolf, *Quantum Channels & Operations: Guided Tour*.  Their automatically
