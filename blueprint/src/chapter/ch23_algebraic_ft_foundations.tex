@@ -329,8 +329,8 @@ boundary conventions.
     \begin{align}
         D_{\sigma_0}P\cdots D_{\sigma_{N-1}}P
          & =\operatorname{diag}\left(
-        \prod_{j=0}^{N-1}A_{j+k}^{\sigma_j}
-        \right)_{k=0}^{N-1}.
+                               \prod_{j=0}^{N-1}A_{j+k}^{\sigma_j}
+                               \right)_{k=0}^{N-1}.
         \label{eq:chain_cyclic_block_product}
     \end{align}
     Taking the trace of~(\ref{eq:chain_cyclic_block_product}) sums the traces
@@ -420,18 +420,18 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     matrices $Y_0,\ldots,Y_{m-1}$ and $Z_0,\ldots,Z_{m-1}$ in $\MN{D^2}$
     together with matrices $B_i\in\MN{D}$ satisfying
     \begin{align}
-        B_i\otimes\Id &= Y_j A^{[j]}_i Z_j &&\forall\, i,j,
-        \label{eq:quadratic_system_gauge}\\
-        Y_{j+1}Z_j &= \Id &&\forall\, j\le m-2,
-        \label{eq:quadratic_system_inverse}\\
-        \sum_i B_iB_i^{\dagger} &= \Id.
+        B_i\otimes\Id           & = Y_j A^{[j]}_i Z_j &  & \forall\, i,j,
+        \label{eq:quadratic_system_gauge}                                      \\
+        Y_{j+1}Z_j              & = \Id               &  & \forall\, j\le m-2,
+        \label{eq:quadratic_system_inverse}                                    \\
+        \sum_i B_iB_i^{\dagger} & = \Id.
         \label{eq:quadratic_system_normalization}
     \end{align}
     In the system~(S) of \cite{PerezGarcia2007Matrix} the window consists of
     the $m=D^4$ matrices of the unique open-boundary canonical form at the
     sites $L_0+1,\ldots,L_0+D^4$; the unknown $Y_j$ above is the source
-    unknown at site $L_0+1+j$, and $Z_j$ is the source unknown attached to
-    the right of that site.
+    unknown $Y_{L_0+1+j}$, while $Z_j$ is the source unknown
+    $Z_{L_0+2+j}$ attached to the right of that site.
 \end{definition}
 
 \begin{lemma}[Invertibility of the paired gauges]
@@ -460,12 +460,12 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     $0\le k\le n-1$, the vectors $Y_0,\ldots,Y_{n-1}$ are linearly
     independent, and
     \begin{align}
-        Y_n &= \sum_{k=0}^{n-1}\lambda_k Y_k.
+        Y_n & = \sum_{k=0}^{n-1}\lambda_k Y_k.
         \label{eq:chain_combination_dependence}
     \end{align}
     Let $x\neq0$ be a solution of the polynomial equation
     \begin{align}
-        \sum_{k=0}^{n-1}\lambda_k x^{n-k} &= 1,
+        \sum_{k=0}^{n-1}\lambda_k x^{n-k} & = 1,
         \label{eq:chain_combination_polynomial}
     \end{align}
     and define $\mu_j=\sum_{k=0}^{j}\lambda_k x^{j+1-k}$. Then the
@@ -483,7 +483,7 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     $T$ termwise and using the chain relation,
     \begin{align}
         T(Y)
-        &=\sum_{k=0}^{n-1}\mu_k S(Y_{k+1})
+         & =\sum_{k=0}^{n-1}\mu_k S(Y_{k+1})
         =S\Bigl(\sum_{k=0}^{n-2}\mu_k Y_{k+1}+Y_n\Bigr)
         =S\Bigl(\sum_{j=0}^{n-1}(\lambda_j+\mu_{j-1})Y_j\Bigr),
         \label{eq:chain_combination_reindex}
@@ -503,7 +503,7 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     \leanok
     Let $B,C\in\MN{n}$ and let $W$ act on the doubled space. Then
     \begin{align}
-        W(C\otimes\Id) &= (B\otimes\Id)W
+        W(C\otimes\Id) & = (B\otimes\Id)W
         \label{eq:kronecker_intertwiner_equation}
     \end{align}
     holds if and only if every multiplicity slice $X_{ab}$ of $W$, with
@@ -537,18 +537,20 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     $Z'_j$, and tensors $B_i$, $C_i$. For every window site $j$ carrying an
     inversion equation, the matrix
     \begin{align}
-        W_{j+1} &= Y'_{j+1}Z_j = Y'_{j+1}Y_{j+1}^{-1}
+        W_{j+1} & = Y'_{j+1}Z_j = Y'_{j+1}Y_{j+1}^{-1}
         \label{eq:solution_chain_intertwiner}
     \end{align}
     is invertible, and whenever the neighbouring site also carries an
     inversion equation,
     \begin{align}
-        W_{j+1}(B_i\otimes\Id) &= (C_i\otimes\Id)W_{j+2} &&\forall\, i.
+        W_{j+1}(B_i\otimes\Id) & = (C_i\otimes\Id)W_{j+2} &  & \forall\, i.
         \label{eq:solution_chain_relation}
     \end{align}
-    This is the chain of invertible intertwiners produced at the start of the
-    proof of \cite[Theorem~8]{PerezGarcia2007Matrix} by reasoning as in the
-    uniqueness theorem, and it is the input to
+    Thus a window of $m$ sites supplies exactly $m-1$ internal
+    intertwiners and $m-2$ relations between consecutive internal
+    intertwiners. This is the internal part of the chain produced at the start
+    of the proof of \cite[Theorem~8]{PerezGarcia2007Matrix}. It does not by
+    itself provide the linear dependence required by
     Lemma~\ref{lem:pgvwc07_chain_combination}.
 \end{lemma}
 
@@ -564,6 +566,7 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
 
 \begin{theorem}[Obtaining the translation-invariant canonical form]
     \label{thm:pgvwc07_quadratic_reconstruction}
+    \notready
     \uses{def:pgvwc07_quadratic_system}
     Consider a translation-invariant state with unique open-boundary
     canonical form such that the rank of each reduced density operator of
@@ -587,16 +590,22 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner,
         lem:pgvwc07_quadratic_system_units, lem:pgvwc07_solution_chain}
     The canonical representation solves the system by the freedom in the
-    open-boundary representation. Conversely, comparing a solution with the
-    canonical representation along the window produces the chain of
-    invertible intertwiners of Lemma~\ref{lem:pgvwc07_solution_chain}; the
-    combination of
-    Lemma~\ref{lem:pgvwc07_chain_combination} and the slice extraction of
-    Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} produce a nonzero matrix
-    $R$ and a scalar $x\neq0$ with $RB_i=\tfrac1x A_iR$. The normalization
+    open-boundary representation. For the converse, a comparison of the two
+    open-boundary representations must first supply intertwiners at all
+    $D^4+1$ cuts around the $D^4$-site window, including both endpoint cuts,
+    together with the $D^4$ adjacent relations. Linear dependence in
+    $M_{D^2}(\C)$ then provides the hypothesis of
+    Lemma~\ref{lem:pgvwc07_chain_combination}. The internal construction in
+    Lemma~\ref{lem:pgvwc07_solution_chain} gives only $D^4-1$ intertwiners
+    and $D^4-2$ relations, so it does not force this dependence.
+
+    Once the full cut chain is supplied, the combination lemma and the slice
+    extraction of Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} give a
+    nonzero matrix $R$ and a scalar $x\neq0$ with
+    $RB_i=\tfrac1x A_iR$. The normalization
     (\ref{eq:quadratic_system_normalization}), the invariance of the
     positive diagonal fixed point, and the uniqueness of the fixed point of
-    the transfer map under condition C1 force $|x|=1$ and $R$ unitary.
+    the transfer map under condition C1 then force $|x|=1$ and $R$ unitary.
 \end{proof}
 
 %% ---------------------------------------------------------
