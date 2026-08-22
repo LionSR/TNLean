@@ -513,6 +513,31 @@ STYLED_SOURCE = r"""
 \end{document}
 """
 
+STYLED_TRACE_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\tikzset{bond/.append style={line width=4pt}}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, physical=updown, trace=physical,
+              west=open, east=open]
+  \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
+\end{tenkz}
+\end{document}
+"""
+
+PAIR_TRACE_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, physical=updown, trace=physical]
+  \tn[skin=box]{A} & \tn[skin=box]{B} \\
+  \tn[skin=box]{C} & \tn[skin=box]{D}
+\end{tenkz}
+\end{document}
+"""
+
 NESTED_CLAIM_SOURCE = r"""
 \documentclass{standalone}
 \usepackage{tenkz}
@@ -2232,6 +2257,99 @@ def main() -> int:
                 "a label in the trace's paper-halo annulus, clear of the "
                 "coloured band's old half stroke, was not flagged: "
                 + "; ".join(f.msg for f in halo_audit.findings))
+
+        # The trace's two emission paths each understated the drawn ink in
+        # one direction (#6359).  The foreground stroke inherits the
+        # restylable `bond` style, so a widened bond draws past the fixed
+        # halo sum: the after-atom record must follow the resolved width,
+        # and a label on that outer foreground ink must read as ink.
+        styled_trace_status, styled_trace_audit = audit_status(
+            compile_tex("styled-trace.tex", STYLED_TRACE_SOURCE))
+        styled_traces = [event for event in styled_trace_audit.events("k1")
+                         if event.kind == "wire-ink"
+                         and event.attrs.get("origin") == "trace"]
+        if styled_trace_status != 0 or not styled_traces or any(
+                event.attrs.get("stroke") != "131072"
+                for event in styled_traces):
+            raise AssertionError(
+                "a restyled-bond trace did not record its widened "
+                "foreground: "
+                + "; ".join(event.raw for event in styled_traces))
+        # The record's first run is the vertical rise at the trace's own
+        # west x; a label strictly between the old halo half stroke
+        # (120586) and the widened band (131072) sits on drawn foreground
+        # the halo-only record missed.
+        styled_run = next(
+            (event for event in styled_traces
+             if event.attrs["points"].startswith("0,530808;0,1310253;")),
+            None)
+        if styled_run is None:
+            raise AssertionError(
+                "the restyled trace lost its west rise; its records were: "
+                + "; ".join(event.raw for event in styled_traces))
+        styled_log = styled_trace_audit.log_path.read_text(encoding="utf-8")
+        styled_log += (
+            "label-use|picture=k1\n"
+            "bbox|picture=k1|class=label|id=98|owner=0|"
+            "xmin=125000|xmax=126000|ymin=700000|ymax=703000|"
+            "shape=rect|radius=0|station=n|provenance=auto\n"
+        )
+        styled_seeded = work / "styled-trace-seeded.tnlog"
+        styled_seeded.write_text(styled_log, encoding="utf-8")
+        styled_seed_status, styled_seed_audit = audit_status(styled_seeded)
+        styled_found = [
+            finding for finding in styled_seed_audit.findings
+            if finding.rule == "label-on-ink"
+            and "trace route" in finding.msg]
+        if styled_seed_status != 1 or len(styled_found) != 1:
+            raise AssertionError(
+                "a label on a restyled trace's outer foreground ink was "
+                "not flagged: "
+                + "; ".join(f.msg for f in styled_seed_audit.findings))
+
+        # And the queued path: a multi-row physical pair trace rides the
+        # queued index route, whose capture reads only the foreground; the
+        # paper halo is painted crossgap/2 beyond it.  The record takes
+        # the wider of the two, and a label in the halo's annulus beyond
+        # the foreground band must read as ink.
+        pair_status, pair_audit = audit_status(
+            compile_tex("pair-trace.tex", PAIR_TRACE_SOURCE))
+        pair_traces = [event for event in pair_audit.events("k1")
+                       if event.kind == "wire-ink"
+                       and event.attrs.get("origin") == "trace"]
+        if pair_status != 0 or not pair_traces or any(
+                event.attrs.get("stroke") != "120586"
+                for event in pair_traces):
+            raise AssertionError(
+                "a queued pair trace did not record the halo band: "
+                + "; ".join(event.raw for event in pair_traces))
+        pair_run = next(
+            (event for event in pair_traces
+             if event.attrs["points"].startswith("0,0;0,779436;")),
+            None)
+        if pair_run is None:
+            raise AssertionError(
+                "the pair trace lost its west rise; its records were: "
+                + "; ".join(event.raw for event in pair_traces))
+        pair_log = pair_audit.log_path.read_text(encoding="utf-8")
+        pair_log += (
+            "label-use|picture=k1\n"
+            "bbox|picture=k1|class=label|id=97|owner=0|"
+            "xmin=30000|xmax=33000|ymin=300000|ymax=303000|"
+            "shape=rect|radius=0|station=n|provenance=auto\n"
+        )
+        pair_seeded = work / "pair-trace-seeded.tnlog"
+        pair_seeded.write_text(pair_log, encoding="utf-8")
+        pair_seed_status, pair_seed_audit = audit_status(pair_seeded)
+        pair_found = [
+            finding for finding in pair_seed_audit.findings
+            if finding.rule == "label-on-ink"
+            and "trace route" in finding.msg]
+        if pair_seed_status != 1 or len(pair_found) != 1:
+            raise AssertionError(
+                "a label in a queued trace's halo annulus was not "
+                "flagged: "
+                + "; ".join(f.msg for f in pair_seed_audit.findings))
 
         # A directed wire's Straight Barb postaction paints ink the
         # centreline walk cannot see (#6330 review, direction-mark ink).

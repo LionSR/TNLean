@@ -11549,6 +11549,14 @@
 % the queued index class.  The path is still saved first -- unregistered,
 % purely as the measured object -- and the stroke replays that saved path,
 % so the auditor and the renderer read one resolved route here too.
+% One authority for the trace halo's half-width in scaled points: both
+% trace emission paths widen their band by this same number, so a change
+% to the halo sum lands once.
+\cs_new:Npn \__tenkz_kernel_r_trace_halo_sp:
+  {
+    \dim_to_decimal_in_sp:n
+      { ( \__tenkz_dim:n {wirewidth} + \__tenkz_dim:n {crossgap} ) / 2 }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke:nn #1#2
   {
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
@@ -11558,20 +11566,25 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke_aux:nn #1#2
   {
     \path [ spath/save = {#1} ] #2 ;
-    % The `trace` style's preaction paints a paper halo of line width
-    % wirewidth + crossgap (tenkz-core.code.tex, the `trace` style), a fixed
-    % sum the style hard-codes rather than deriving from the resolved
-    % colour-band width, so the record matches that same fixed sum exactly:
-    % recording only the band's half-width would leave the halo's own
-    % annulus -- crossgap/2 beyond the band -- invisible to the audit, and a
-    % label sitting there is erased with no finding (#6330 review).
+    % A trace paints two layers: a foreground stroke inheriting the
+    % restylable `bond` style and a paper preaction halo of the fixed sum
+    % wirewidth + crossgap (tenkz-core.code.tex, the `trace` style).  The
+    % record must dominate the union of the two (#6359): the capture key
+    % rides the one real stroke to read the resolved foreground width, and
+    % the recorded band is the wider of that and the halo, so neither a
+    % label erased in the halo's annulus nor one standing on a widened
+    % foreground's outer ink can evade the audit.
+    \__tenkz_render_stroke:nn
+      { trace , spath/use = {#1} , tenkz~ink~capture~width } { }
     \tl_set:Ne \l__tenkz_kernel_ink_stroke_tl
       {
-        \dim_to_decimal_in_sp:n
-          { ( \__tenkz_dim:n {wirewidth} + \__tenkz_dim:n {crossgap} ) / 2 }
+        \fp_eval:n
+          {
+            max ( \g__tenkz_kernel_ink_width_tl ,
+                  \__tenkz_kernel_r_trace_halo_sp: )
+          }
       }
     \__tenkz_kernel_r_wire_ink_event:nn {#1} { trace }
-    \__tenkz_render_stroke:nn { trace , spath/use = {#1} } { }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_event:nn #1#2
   {
@@ -16752,6 +16765,21 @@
       \l__tenkz_kernel_r_wire_style_tl { }
     \tl_set_eq:NN \l__tenkz_kernel_ink_stroke_tl
       \g__tenkz_kernel_ink_width_tl
+    % A queued trace paints the same paper halo as the after-atom path,
+    % crossgap/2 beyond the captured foreground band; the record takes
+    % the wider of the two, so a label in the halo's annulus is read
+    % (#6359).
+    \str_if_eq:VnT \l__tenkz_kernel_ink_origin_tl {trace}
+      {
+        \tl_set:Ne \l__tenkz_kernel_ink_stroke_tl
+          {
+            \fp_eval:n
+              {
+                max ( \l__tenkz_kernel_ink_stroke_tl ,
+                      \__tenkz_kernel_r_trace_halo_sp: )
+              }
+          }
+      }
     \exp_args:NVV \__tenkz_kernel_r_wire_ink_event:nn
       \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_ink_origin_tl
     \tl_clear:N \l__tenkz_kernel_ink_origin_tl
