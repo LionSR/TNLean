@@ -11,14 +11,17 @@ Reads every note in ``docs/paper-gaps/*.tex`` and produces, under OUT_DIR:
 * ``<slug>.pdf``       -- copied from docs/paper-gaps when present
 * ``paper-gaps.bib``   -- one @techreport per note, key ``gap:<slug>``
 
-``--check`` scans the Lean sources, the blueprint, and the notes themselves
-for ``paper-gaps/<name>.tex`` references and fails when a referenced note
-does not exist, the same way ``leanblueprint checkdecls`` fails on an
-unresolved declaration.
+``--check`` scans the Lean sources, the blueprint (chapters and committed
+commentary), the Markdown documentation, and the notes themselves for
+``paper-gaps/<name>.tex`` references and fails when a referenced note does
+not exist, the same way ``leanblueprint checkdecls`` fails on an unresolved
+declaration. It also enforces the ``<key>_<topic>.tex`` naming convention
+of ``docs/paper-gaps/policy.tex``.
 """
 
 from __future__ import annotations
 
+import datetime
 import html
 import re
 import shutil
@@ -36,9 +39,12 @@ GITHUB_BLOB = "https://github.com/LionSR/TNLean/blob/main/docs/paper-gaps"
 EXCLUDE = {"command.tex", "common.tex", "template.tex", "references.bib"}
 POLICY = "policy.tex"
 # Registered source keys: every note is named <key>_<topic>.tex. Author
-# initials plus two-digit year, or a canonical short name for a book or
-# review; ``tnlean`` marks internal theorem-surface audits with no single
-# external source. The registry is enforced by ``--check``.
+# initials plus two-digit year, or an established short name for the source
+# (a book or review such as ``wolf``/``rmp``, or a paper known by its
+# subject such as ``mpu``/``peps``); a key may also cover a small fixed set
+# of companion sources examined together (``cpsv17``). ``tnlean`` marks
+# internal theorem-surface audits with no single external source. The
+# registry is enforced by ``--check``.
 SOURCE_KEYS = {
     "cpgsv17": "arXiv:1511.08090 (MPDO renormalization fixed points)",
     "cpgsv21": "Cirac, Perez-Garcia, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021)",
@@ -56,6 +62,41 @@ SOURCE_KEYS = {
     "spwc10": "arXiv:0909.5347 (quantum Wielandt inequality)",
     "tnlean": "internal theorem-surface audit, no single external source",
     "wolf": "Wolf, Quantum Channels & Operations (2012 lecture notes)",
+}
+# Keys listed here are folded into their target key's group on the index
+# page, so one source gets one heading. Both filename prefixes remain
+# registered and accepted.
+GROUP_ALIASES = {"cpgsv21": "rmp"}
+# Slugs published before the source-key registry, mapped to the notes that
+# hold their content today. The site keeps serving the old PDF URLs so
+# external citations do not break. ``--check`` verifies the targets exist.
+LEGACY_ALIASES = {
+    "1703_two_projection_projector_typo": "mpu_two_projection_projector_typo",
+    "1708_normal_canonical_irreducible_form_weights":
+        "dccsp17_normal_canonical_irreducible_form_weights",
+    "1708_periodic_overlap_route_alignment": "dccsp17_periodic_overlap_route_alignment",
+    "algebraic_ft_same_state_combined_mpv_gap":
+        "tnlean_algebraic_ft_same_state_combined_mpv_gap",
+    "breuer_hall_even_dim_restriction": "wolf_breuer_hall_even_dim_restriction",
+    "brouwer_general_compact_convex": "wolf_brouwer_general_compact_convex",
+    "canonical_bnt_ft_theorem_surface": "tnlean_bnt_ft_theorem_surface",
+    "choi_rectangular_scope": "wolf_choi_rectangular_scope",
+    "common_sector_relabeling_hypothesis": "cpsv16_sector_relabeling_hypothesis",
+    "conditional_after_blocking_ft_cpsv_statement":
+        "rmp_conditional_after_blocking_ft_statement",
+    "cpgsv17_mpu_blocking_rank_product_exponent": "mpu_blocking_rank_product_exponent",
+    "david2006_direct_sum_input": "pgvwc07_direct_sum_input",
+    "ft_one_copy_scope_restriction": "cpsv16_ft_one_copy_scope_restriction",
+    "issue1530_ft_dependency_audit": "tnlean_ft_dependency_audit",
+    "knabe_finite_range_coefficient": "knabe88_finite_range_coefficient",
+    "mps_common_blocking_span_equality": "rmp_common_blocking_span_equality",
+    "nonperiodic_mps_bnt_comparison_inputs": "rmp_nonperiodic_bnt_comparison_inputs",
+    "periodic_thm41_root_kraus_rank": "dccsp17_root_kraus_rank_thm41",
+    "power_sum_alternative_route": "cpsv16_power_sum_alternative_route",
+    "quantum_wielandt_deviation": "spwc10_wielandt_one_step_subspace",
+    "quantum_wielandt_deviation_v1": "spwc10_wielandt_one_step_subspace",
+    "schuch2011_spt_interpolation_upper_range": "spc11_spt_interpolation_upper_range",
+    "schur_complement_tfae": "wolf_schur_complement_tfae",
 }
 BIB_AUTHOR = "The {TNLean} contributors"
 
@@ -99,6 +140,11 @@ def _braced_arg(tex: str, command: str) -> str | None:
     return None
 
 
+def _bib_escape(s: str) -> str:
+    """Escape TeX-special characters for a printable BibTeX field."""
+    return re.sub(r"([&%#_])", r"\\\1", s)
+
+
 def _git_date(path: Path) -> str:
     out = subprocess.run(
         ["git", "log", "-1", "--format=%as", "--", str(path)],
@@ -121,17 +167,17 @@ class Note:
     @property
     def year(self) -> str:
         m = re.match(r"(\d{4})", self.date)
-        return m.group(1) if m else "2026"
+        return m.group(1) if m else str(datetime.date.today().year)
 
     def bibtex(self) -> str:
-        title = self.title.replace("\u2013", "--").replace("\u2014", "---")
+        title = _bib_escape(self.title.replace("\u2013", "--").replace("\u2014", "---"))
         return (
             f"@techreport{{gap:{self.slug},\n"
             f"  author      = {{{BIB_AUTHOR}}},\n"
             f"  title       = {{{title}}},\n"
             f"  institution = {{TNLean}},\n"
             f"  type        = {{Paper-gap note}},\n"
-            f"  number      = {{{self.slug}}},\n"
+            f"  number      = {{{_bib_escape(self.slug)}}},\n"
             f"  year        = {{{self.year}}},\n"
             f"  url         = {{{SITE_BASE}/paper-gaps/{self.slug}.pdf}},\n"
             f"}}"
@@ -159,8 +205,12 @@ def scan_references() -> tuple[Counter, dict[str, set[str]]]:
     """Reference counts per slug from Lean, blueprint, and other notes."""
     counts: Counter = Counter()
     locations: dict[str, set[str]] = {}
+    # ``blueprint`` is scanned per committed subtree so that local build
+    # output under ``blueprint/web`` and ``blueprint/print`` stays out.
     for root, glob in ((REPO / "TNLean", "*.lean"),
                        (REPO / "blueprint" / "src", "*.tex"),
+                       (REPO / "blueprint" / "comments", "*.tex"),
+                       (REPO / "docs", "*.md"),
                        (GAPS, "*.tex")):
         for f in sorted(root.rglob(glob)):
             try:
@@ -186,9 +236,20 @@ def check() -> int:
     for p in sorted(GAPS.glob("*.tex")):
         if p.name in EXCLUDE or p.name == POLICY:
             continue
-        if p.stem.split("_", 1)[0] not in SOURCE_KEYS:
-            print(f"::error::paper-gap note '{p.name}' does not start with a "
-                  f"registered source key (see SOURCE_KEYS in scripts/paper_gaps_site.py)")
+        key, _, topic = p.stem.partition("_")
+        if key not in SOURCE_KEYS or not topic:
+            print(f"::error::paper-gap note '{p.name}' is not named <key>_<topic>.tex "
+                  f"with a registered source key (see SOURCE_KEYS in "
+                  f"scripts/paper_gaps_site.py)")
+            failures += 1
+        elif re.search(r"_v\d+$", p.stem):
+            print(f"::error::paper-gap note '{p.name}' carries a version suffix; "
+                  f"notes are revised in place (docs/paper-gaps/policy.tex, Naming)")
+            failures += 1
+    for old, new in sorted(LEGACY_ALIASES.items()):
+        if new not in existing:
+            print(f"::error::legacy alias '{old}' points at '{new}.tex', "
+                  f"which does not exist")
             failures += 1
     if not failures:
         print(f"paper-gaps check: {len(counts)} referenced slugs resolve, "
@@ -216,10 +277,11 @@ span.n { font-size:.8rem; white-space:nowrap; }
 """
 
 
-def group_heading(prefix: str, members: list[Note]) -> str:
+def group_heading(prefix: str) -> str:
     """Heading text for a source-key group, from the registry."""
+    keys = ", ".join([prefix] + sorted(k for k, v in GROUP_ALIASES.items() if v == prefix))
     desc = SOURCE_KEYS.get(prefix)
-    return f"{prefix} \u00b7 {desc}" if desc else prefix
+    return f"{keys} \u00b7 {desc}" if desc else keys
 
 
 def build(out: Path) -> None:
@@ -238,23 +300,24 @@ def build(out: Path) -> None:
         if pdf.stem in notes or pdf.stem == "policy":
             shutil.copy2(pdf, out / pdf.name)
             copied += 1
+    # Old published URLs keep resolving: serve each pre-registry slug as a
+    # copy of the note that holds its content today.
+    for old, new in LEGACY_ALIASES.items():
+        src = GAPS / f"{new}.pdf"
+        if src.exists():
+            shutil.copy2(src, out / f"{old}.pdf")
     (out / "paper-gaps.bib").write_text(
         "\n\n".join(notes[s].bibtex() for s in sorted(notes)) + "\n", encoding="utf-8")
 
     groups: dict[str, list[Note]] = {}
     for n in notes.values():
-        groups.setdefault(n.prefix, []).append(n)
-    for g in [g for g, ms in groups.items() if len(ms) == 1]:
-        groups.setdefault("misc", []).extend(groups.pop(g))
-    ordered = sorted((g for g in groups if g != "misc"),
-                     key=lambda g: (-len(groups[g]), g))
-    if "misc" in groups:
-        ordered.append("misc")
+        groups.setdefault(GROUP_ALIASES.get(n.prefix, n.prefix), []).append(n)
+    ordered = sorted(groups, key=lambda g: (-len(groups[g]), g))
 
     rows = []
     for g in ordered:
         members = sorted(groups[g], key=lambda n: n.slug)
-        heading = "Miscellaneous" if g == "misc" else group_heading(g, members)
+        heading = group_heading(g)
         rows.append(f"<h2>{html.escape(heading)} <small>{len(members)}</small></h2>")
         rows.append("<table>")
         for n in members:
