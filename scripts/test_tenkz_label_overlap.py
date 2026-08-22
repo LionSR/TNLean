@@ -2280,8 +2280,13 @@ def main() -> int:
         # (120586) and the widened band (131072) sits on drawn foreground
         # the halo-only record missed.
         styled_run = next(
-            event for event in styled_traces
-            if event.attrs["points"].startswith("0,530808;0,1310253;"))
+            (event for event in styled_traces
+             if event.attrs["points"].startswith("0,530808;0,1310253;")),
+            None)
+        if styled_run is None:
+            raise AssertionError(
+                "the restyled trace lost its west rise; its records were: "
+                + "; ".join(event.raw for event in styled_traces))
         styled_log = styled_trace_audit.log_path.read_text(encoding="utf-8")
         styled_log += (
             "label-use|picture=k1\n"
@@ -2319,8 +2324,13 @@ def main() -> int:
                 "a queued pair trace did not record the halo band: "
                 + "; ".join(event.raw for event in pair_traces))
         pair_run = next(
-            event for event in pair_traces
-            if event.attrs["points"].startswith("0,0;0,779436;"))
+            (event for event in pair_traces
+             if event.attrs["points"].startswith("0,0;0,779436;")),
+            None)
+        if pair_run is None:
+            raise AssertionError(
+                "the pair trace lost its west rise; its records were: "
+                + "; ".join(event.raw for event in pair_traces))
         pair_log = pair_audit.log_path.read_text(encoding="utf-8")
         pair_log += (
             "label-use|picture=k1\n"

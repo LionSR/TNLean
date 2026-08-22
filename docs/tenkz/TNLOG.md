@@ -188,8 +188,8 @@ the drawn dashes would in fact have cleared it. The same doctrine covers the
 `origin=mark` record above and the trace halo below -- every one of them
 would rather over-claim ink than leave a real collision unrecorded.
 
-A `trace` route's own `stroke` field carries the *halo's* half-width, not
-the colour band alone: `trace/.style` (`tex/tenkz/tenkz-core.code.tex`,
+A `trace` route's own `stroke` field carries the wider of its two
+layers, never the colour band alone: `trace/.style` (`tex/tenkz/tenkz-core.code.tex`,
 the `trace` style) paints a `preaction` paper halo of line width
 `wirewidth + crossgap` under the visible band, and a label sitting in that
 annulus is erased just as surely as one sitting on the band itself, and the

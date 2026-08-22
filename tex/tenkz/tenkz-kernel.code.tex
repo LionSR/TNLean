@@ -11549,6 +11549,14 @@
 % the queued index class.  The path is still saved first -- unregistered,
 % purely as the measured object -- and the stroke replays that saved path,
 % so the auditor and the renderer read one resolved route here too.
+% One authority for the trace halo's half-width in scaled points: both
+% trace emission paths widen their band by this same number, so a change
+% to the halo sum lands once.
+\cs_new:Npn \__tenkz_kernel_r_trace_halo_sp:
+  {
+    \dim_to_decimal_in_sp:n
+      { ( \__tenkz_dim:n {wirewidth} + \__tenkz_dim:n {crossgap} ) / 2 }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_stroke:nn #1#2
   {
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
@@ -11573,11 +11581,7 @@
         \fp_eval:n
           {
             max ( \g__tenkz_kernel_ink_width_tl ,
-                  \dim_to_decimal_in_sp:n
-                    {
-                      ( \__tenkz_dim:n {wirewidth}
-                        + \__tenkz_dim:n {crossgap} ) / 2
-                    } )
+                  \__tenkz_kernel_r_trace_halo_sp: )
           }
       }
     \__tenkz_kernel_r_wire_ink_event:nn {#1} { trace }
@@ -16772,11 +16776,7 @@
             \fp_eval:n
               {
                 max ( \l__tenkz_kernel_ink_stroke_tl ,
-                      \dim_to_decimal_in_sp:n
-                        {
-                          ( \__tenkz_dim:n {wirewidth}
-                            + \__tenkz_dim:n {crossgap} ) / 2
-                        } )
+                      \__tenkz_kernel_r_trace_halo_sp: )
               }
           }
       }
