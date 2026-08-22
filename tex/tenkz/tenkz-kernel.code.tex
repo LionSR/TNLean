@@ -5297,7 +5297,6 @@
 \fp_new:N   \l__tenkz_kernel_r_arc_t_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_s_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_tf_fp
-\fp_new:N   \l__tenkz_kernel_r_arc_sf_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_af_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_ab_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_cax_fp
@@ -5306,6 +5305,29 @@
 \fp_new:N   \l__tenkz_kernel_r_arc_cby_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_px_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_py_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_delta_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_mx_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_my_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_nx_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_ny_fp
+\bool_new:N \l__tenkz_kernel_r_arc_wrap_bool
+% the wrap resolver's saved far end, fold-two control frame, and the two
+% stretch lengths
+\fp_new:N   \l__tenkz_kernel_r_arc_ex_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_ey_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_gax_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_gay_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_gbx_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_gby_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_lone_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_ltwo_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_lthree_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_h_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_side_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_done_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_dtwo_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_hx_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_hy_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_len_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_tgt_fp
 \seq_new:N  \l__tenkz_kernel_r_arc_cum_seq
@@ -7059,16 +7081,231 @@
       { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-2} }
     \exp_args:Ne \__tenkz_kernel_r_arc_controls:n
       { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-4} }
-    % `on w t' asks for an arclength fraction, not the cubic's parameter:
-    % walk sixteen chords of the cubic, find where the asked-for share of
-    % the total length falls, and read the parameter off that chord
+    \bool_if:NTF \l__tenkz_kernel_r_arc_wrap_bool
+      {
+        % A wrap's beads divide the whole drawn route, fold and run and
+        % fold, by arc length -- the same contract every other route
+        % keeps.  Both folds' control frames are built before any walk
+        % (the walk spends the angle registers), each fold's length is
+        % walked in its own frame -- only the middle run's length comes
+        % in closed form -- and the target settles into whichever
+        % stretch holds its share.
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_ex_fp \l__tenkz_kernel_r_xb_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_ey_fp \l__tenkz_kernel_r_yb_fp
+        \fp_set:Nn \l__tenkz_kernel_r_arc_gax_fp
+          {
+            \l__tenkz_kernel_r_arc_nx_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * cosd ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_gay_fp
+          {
+            \l__tenkz_kernel_r_arc_ny_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * sind ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_gbx_fp
+          {
+            \l__tenkz_kernel_r_arc_ex_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * cosd ( \l__tenkz_kernel_r_arc_ab_fp + 180 )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_gby_fp
+          {
+            \l__tenkz_kernel_r_arc_ey_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * sind ( \l__tenkz_kernel_r_arc_ab_fp + 180 )
+          }
+        % fold one's frame: P to M, controls off the from face and back
+        % along the chord bearing, at fold one's own closure distance
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cax_fp
+          {
+            \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_arc_done_fp
+              * cosd ( \l__tenkz_kernel_r_arc_af_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cay_fp
+          {
+            \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_arc_done_fp
+              * sind ( \l__tenkz_kernel_r_arc_af_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cbx_fp
+          {
+            \l__tenkz_kernel_r_arc_mx_fp - \l__tenkz_kernel_r_arc_done_fp
+              * cosd ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cby_fp
+          {
+            \l__tenkz_kernel_r_arc_my_fp - \l__tenkz_kernel_r_arc_done_fp
+              * sind ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+        % the from end survives the walks in its own registers, because
+        % each fold's frame is loaded into the shared cubic registers
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_hx_fp \l__tenkz_kernel_r_x_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_hy_fp \l__tenkz_kernel_r_y_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_arc_mx_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp \l__tenkz_kernel_r_arc_my_fp
+        \__tenkz_kernel_r_onwire_arc_walk:
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_lone_fp
+          \l__tenkz_kernel_r_arc_len_fp
+        \fp_set:Nn \l__tenkz_kernel_r_arc_ltwo_fp
+          {
+            sqrt (
+              ( \l__tenkz_kernel_r_arc_nx_fp
+                - \l__tenkz_kernel_r_arc_mx_fp ) ^ 2 +
+              ( \l__tenkz_kernel_r_arc_ny_fp
+                - \l__tenkz_kernel_r_arc_my_fp ) ^ 2 )
+          }
+        % the second fold is not the first mirrored: the predicate admits
+        % faces at unequal turns, so its length is walked, not reused
+        \fp_set_eq:NN \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_arc_nx_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_y_fp \l__tenkz_kernel_r_arc_ny_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_arc_ex_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp \l__tenkz_kernel_r_arc_ey_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cax_fp
+          \l__tenkz_kernel_r_arc_gax_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cay_fp
+          \l__tenkz_kernel_r_arc_gay_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cbx_fp
+          \l__tenkz_kernel_r_arc_gbx_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cby_fp
+          \l__tenkz_kernel_r_arc_gby_fp
+        \__tenkz_kernel_r_onwire_arc_walk:
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_lthree_fp
+          \l__tenkz_kernel_r_arc_len_fp
+        \fp_set:Nn \l__tenkz_kernel_r_arc_tgt_fp
+          {
+            ( \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-1} )
+            * ( \l__tenkz_kernel_r_arc_lone_fp
+                + \l__tenkz_kernel_r_arc_ltwo_fp
+                + \l__tenkz_kernel_r_arc_lthree_fp )
+          }
+        \fp_compare:nNnTF
+          { \l__tenkz_kernel_r_arc_tgt_fp } >
+          {
+            \l__tenkz_kernel_r_arc_lone_fp
+            + \l__tenkz_kernel_r_arc_ltwo_fp
+          }
+          {
+            % the second fold's frame and cumulative table are current
+            \fp_set:Nn \l__tenkz_kernel_r_arc_tgt_fp
+              {
+                \l__tenkz_kernel_r_arc_tgt_fp
+                - \l__tenkz_kernel_r_arc_lone_fp
+                - \l__tenkz_kernel_r_arc_ltwo_fp
+              }
+            \__tenkz_kernel_r_onwire_arc_locate:nn {#1}
+              {
+                \l__tenkz_kernel_r_arc_lthree_fp > 0
+                  ? \l__tenkz_kernel_r_arc_tgt_fp
+                    / \l__tenkz_kernel_r_arc_lthree_fp
+                  : 1
+              }
+          }
+          {
+            \fp_compare:nNnTF
+              { \l__tenkz_kernel_r_arc_tgt_fp } >
+              { \l__tenkz_kernel_r_arc_lone_fp }
+              {
+                % the middle run
+                \fp_set:Nn \l__tenkz_kernel_r_arc_t_fp
+                  {
+                    \l__tenkz_kernel_r_arc_ltwo_fp > 0
+                      ? ( \l__tenkz_kernel_r_arc_tgt_fp
+                          - \l__tenkz_kernel_r_arc_lone_fp )
+                        / \l__tenkz_kernel_r_arc_ltwo_fp
+                      : 0
+                  }
+                \__tenkz_geom_store:nnn {#1}
+                  {
+                    \l__tenkz_kernel_r_arc_mx_fp
+                    + \l__tenkz_kernel_r_arc_t_fp
+                      * ( \l__tenkz_kernel_r_arc_nx_fp
+                          - \l__tenkz_kernel_r_arc_mx_fp )
+                  }
+                  {
+                    \l__tenkz_kernel_r_arc_my_fp
+                    + \l__tenkz_kernel_r_arc_t_fp
+                      * ( \l__tenkz_kernel_r_arc_ny_fp
+                          - \l__tenkz_kernel_r_arc_my_fp )
+                  }
+              }
+              {
+                % fold one again: its frame and table were spent by the
+                % second fold's walk, so both are rebuilt
+                \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
+                  \l__tenkz_kernel_r_arc_hx_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
+                  \l__tenkz_kernel_r_arc_hy_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp
+                  \l__tenkz_kernel_r_arc_mx_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp
+                  \l__tenkz_kernel_r_arc_my_fp
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cax_fp
+                  {
+                    \l__tenkz_kernel_r_arc_hx_fp
+                    + \l__tenkz_kernel_r_arc_done_fp
+                      * cosd ( \l__tenkz_kernel_r_arc_tf_fp )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cay_fp
+                  {
+                    \l__tenkz_kernel_r_arc_hy_fp
+                    + \l__tenkz_kernel_r_arc_done_fp
+                      * sind ( \l__tenkz_kernel_r_arc_tf_fp )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cbx_fp
+                  {
+                    \l__tenkz_kernel_r_arc_mx_fp
+                    - \l__tenkz_kernel_r_arc_done_fp
+                      * cosd ( \l__tenkz_kernel_r_arc_a_fp )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cby_fp
+                  {
+                    \l__tenkz_kernel_r_arc_my_fp
+                    - \l__tenkz_kernel_r_arc_done_fp
+                      * sind ( \l__tenkz_kernel_r_arc_a_fp )
+                  }
+                \__tenkz_kernel_r_onwire_arc_measure:nn {#1}
+                  {
+                    \l__tenkz_kernel_r_arc_lone_fp > 0
+                      ? \l__tenkz_kernel_r_arc_tgt_fp
+                        / \l__tenkz_kernel_r_arc_lone_fp
+                      : 0
+                  }
+              }
+          }
+      }
+      {
+        \__tenkz_kernel_r_onwire_arc_measure:nn {#1}
+          { \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-1} }
+      }
+    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+      \l__tenkz_kernel_ow_t_tl
+    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+      \l__tenkz_kernel_ow_c_tl
+    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+      \l__tenkz_kernel_ow_b_tl
+    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
+      \l__tenkz_kernel_ow_a_tl
+  }
+% `on w t' asks for an arclength fraction, not the cubic's parameter:
+% walk the cubic in thirty-two chords, find where the asked-for share of
+% the total length falls, and read the parameter off that chord.  The
+% chord walk underestimates each sub-arc alike, so the found parameter is
+% exact at both ends and off by under a tenth of a percent of the length
+% between them at drawing curvatures -- well under a point at any pitch a
+% page carries.
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire_arc_measure:nn #1#2
+  {
+    \__tenkz_kernel_r_onwire_arc_walk:
+    \__tenkz_kernel_r_onwire_arc_locate:nn {#1} {#2}
+  }
+% the length walk: thirty-two sub-chords of the standing cubic frame into
+% the running length and its cumulative table
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire_arc_walk:
+  {
     \fp_zero:N \l__tenkz_kernel_r_arc_len_fp
     \seq_clear:N \l__tenkz_kernel_r_arc_cum_seq
     \fp_set_eq:NN \l__tenkz_kernel_r_arc_px_fp \l__tenkz_kernel_r_x_fp
     \fp_set_eq:NN \l__tenkz_kernel_r_arc_py_fp \l__tenkz_kernel_r_y_fp
-    \int_step_inline:nn {16}
+    \int_step_inline:nn {32}
       {
-        \__tenkz_kernel_r_arc_point:nNN { ##1 / 16 }
+        \__tenkz_kernel_r_arc_point:nNN { ##1 / 32 }
           \l__tenkz_kernel_r_arc_af_fp \l__tenkz_kernel_r_arc_ab_fp
         \fp_add:Nn \l__tenkz_kernel_r_arc_len_fp
           {
@@ -7085,14 +7322,16 @@
         \fp_set_eq:NN \l__tenkz_kernel_r_arc_py_fp
           \l__tenkz_kernel_r_arc_ab_fp
       }
+  }
+% the locate half: place the asked-for share of the walked length and
+% store the cubic's point there under the geometry id
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire_arc_locate:nn #1#2
+  {
     \fp_set:Nn \l__tenkz_kernel_r_arc_tgt_fp
-      {
-        ( \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-1} )
-        * \l__tenkz_kernel_r_arc_len_fp
-      }
+      { (#2) * \l__tenkz_kernel_r_arc_len_fp }
     \fp_set:Nn \l__tenkz_kernel_r_arc_t_fp {1}
     \fp_zero:N \l__tenkz_kernel_r_arc_px_fp
-    \int_step_inline:nn {16}
+    \int_step_inline:nn {32}
       {
         \fp_set:Nn \l__tenkz_kernel_r_arc_py_fp
           { \seq_item:Nn \l__tenkz_kernel_r_arc_cum_seq {##1} }
@@ -7109,7 +7348,7 @@
                       + ( \l__tenkz_kernel_r_arc_tgt_fp
                           - \l__tenkz_kernel_r_arc_px_fp )
                         / ( \l__tenkz_kernel_r_arc_py_fp
-                            - \l__tenkz_kernel_r_arc_px_fp ) ) / 16
+                            - \l__tenkz_kernel_r_arc_px_fp ) ) / 32
                   }
               }
           }
@@ -7121,14 +7360,6 @@
     \__tenkz_geom_store:nnn {#1}
       { \l__tenkz_kernel_r_arc_af_fp }
       { \l__tenkz_kernel_r_arc_ab_fp }
-    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
-      \l__tenkz_kernel_ow_t_tl
-    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
-      \l__tenkz_kernel_ow_c_tl
-    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
-      \l__tenkz_kernel_ow_b_tl
-    \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
-      \l__tenkz_kernel_ow_a_tl
   }
 
 % the same fraction of a wire that runs straight between its two ends
@@ -12184,7 +12415,7 @@
   }
 
 % The control frame of an arc route.  The word's contract sentence
-% (LANGUAGE-1.0 section 10) is the geometry: the curve leaves and enters
+% (LANGUAGE-1.0 section 2.4) is the geometry: the curve leaves and enters
 % along its ends' faces.  A port states the angle its ink leaves at, so its
 % control point stands outside that face; an open end states the direction
 % its tip projects, so its control point stands back along it; any other
@@ -12202,8 +12433,29 @@
 % is a third of the chord, which leaves a faceless arc's controls on the
 % chord itself.
 %
+% One pair of faces no single curve can honour: two ports facing away
+% from each other along the chord's own line.  Every control point then
+% lies on that line and any one cubic retraces itself, so the route is
+% drawn as a wrap instead -- a half-circle fold out of each face joined
+% by a run parallel to the chord, standing half a chord to the side of
+% it, on the side the from-turn names.  The travel tangents at both ends
+% still honour the faces exactly.
+%
 % Reads the trimmed endpoints from the x/y and xb/yb registers and leaves
-% the finished cubic in \l__tenkz_kernel_r_arc_path_tl.
+% the finished path in \l__tenkz_kernel_r_arc_path_tl; the wrap flag and
+% its two run stations stay readable for the early on-wire resolver.
+% The per-unit-chord control distance that closes the circular arc a
+% turn of #1 degrees admits: (4/3) tan(#1/4) of the radius, and the
+% chord subtends #1.  The straight limit is a third of the chord.
+\cs_new_protected:Npn \__tenkz_kernel_r_arc_close:nN #1#2
+  {
+    \fp_set:Nn #2
+      {
+        \fp_compare:nNnTF {#1} > { 1 }
+          { ( 4 * tand ( (#1) / 4 ) ) / ( 6 * sind ( (#1) / 2 ) ) }
+          { ( 1 / 3 ) }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_arc_controls:n #1
   {
     \fp_set:Nn \l__tenkz_kernel_r_arc_a_fp
@@ -12216,66 +12468,178 @@
     \fp_set:Nn \l__tenkz_kernel_r_arc_s_fp {1}
     \__tenkz_kernel_r_arc_end:nn {#1} {from}
     \fp_set_eq:NN \l__tenkz_kernel_r_arc_tf_fp \l__tenkz_kernel_r_arc_t_fp
-    \fp_set_eq:NN \l__tenkz_kernel_r_arc_sf_fp \l__tenkz_kernel_r_arc_s_fp
     % the to end arrives forward along the chord when it has no face
     \fp_set_eq:NN \l__tenkz_kernel_r_arc_t_fp \l__tenkz_kernel_r_arc_a_fp
     \fp_set:Nn \l__tenkz_kernel_r_arc_s_fp {-1}
     \__tenkz_kernel_r_arc_end:nn {#1} {to}
-    % the leaving direction, the arriving direction, and the turn between
-    % them folded into [0, 180]
-    \fp_set:Nn \l__tenkz_kernel_r_arc_af_fp
-      {
-        \l__tenkz_kernel_r_arc_tf_fp
-        + 90 * ( 1 - \l__tenkz_kernel_r_arc_sf_fp )
-      }
+    % the leaving direction (the from side is always forward: a port
+    % leaves outward and the chord preset leaves forward, so the side
+    % sign is spent) and the arriving direction
+    \fp_set_eq:NN \l__tenkz_kernel_r_arc_af_fp \l__tenkz_kernel_r_arc_tf_fp
     \fp_set:Nn \l__tenkz_kernel_r_arc_ab_fp
       {
         \l__tenkz_kernel_r_arc_t_fp
         + 90 * ( 1 + \l__tenkz_kernel_r_arc_s_fp )
       }
-    \fp_set:Nn \l__tenkz_kernel_r_arc_d_fp
+    % each tangent's signed turn off the chord, folded into (-180, 180]
+    \fp_set:Nn \l__tenkz_kernel_r_arc_px_fp
       {
-        abs (
-          \l__tenkz_kernel_r_arc_ab_fp - \l__tenkz_kernel_r_arc_af_fp
-          - 360 * round (
-              ( \l__tenkz_kernel_r_arc_ab_fp
-                - \l__tenkz_kernel_r_arc_af_fp ) / 360 ) )
+        ( \l__tenkz_kernel_r_arc_af_fp - \l__tenkz_kernel_r_arc_a_fp )
+        - 360 * round (
+            ( \l__tenkz_kernel_r_arc_af_fp
+              - \l__tenkz_kernel_r_arc_a_fp ) / 360 )
       }
-    \fp_set:Nn \l__tenkz_kernel_r_arc_d_fp
+    \fp_set:Nn \l__tenkz_kernel_r_arc_py_fp
+      {
+        ( \l__tenkz_kernel_r_arc_a_fp - \l__tenkz_kernel_r_arc_ab_fp )
+        - 360 * round (
+            ( \l__tenkz_kernel_r_arc_a_fp
+              - \l__tenkz_kernel_r_arc_ab_fp ) / 360 )
+      }
+    \bool_lazy_and:nnTF
+      {
+        \fp_compare_p:nNn
+          { abs ( \l__tenkz_kernel_r_arc_px_fp ) } > {135}
+      }
+      {
+        \fp_compare_p:nNn
+          { abs ( \l__tenkz_kernel_r_arc_py_fp ) } > {135}
+      }
+      {
+        \bool_set_true:N \l__tenkz_kernel_r_arc_wrap_bool
+        \__tenkz_kernel_r_arc_wrap:
+      }
+      {
+        \bool_set_false:N \l__tenkz_kernel_r_arc_wrap_bool
+        % the turn between the leaving and the arriving direction, folded
+        % into [0, 180]
+        \fp_set:Nn \l__tenkz_kernel_r_arc_delta_fp
+          {
+            abs (
+              \l__tenkz_kernel_r_arc_ab_fp - \l__tenkz_kernel_r_arc_af_fp
+              - 360 * round (
+                  ( \l__tenkz_kernel_r_arc_ab_fp
+                    - \l__tenkz_kernel_r_arc_af_fp ) / 360 ) )
+          }
+        \__tenkz_kernel_r_arc_close:nN
+          { \l__tenkz_kernel_r_arc_delta_fp }
+          \l__tenkz_kernel_r_arc_d_fp
+        \fp_set:Nn \l__tenkz_kernel_r_arc_d_fp
+          {
+            \l__tenkz_kernel_r_arc_d_fp *
+            sqrt (
+              ( \l__tenkz_kernel_r_xb_fp - \l__tenkz_kernel_r_x_fp ) ^ 2 +
+              ( \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp ) ^ 2 )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cax_fp
+          {
+            \l__tenkz_kernel_r_x_fp
+            + \l__tenkz_kernel_r_arc_d_fp
+              * cosd ( \l__tenkz_kernel_r_arc_af_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cay_fp
+          {
+            \l__tenkz_kernel_r_y_fp
+            + \l__tenkz_kernel_r_arc_d_fp
+              * sind ( \l__tenkz_kernel_r_arc_af_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cbx_fp
+          {
+            \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_arc_s_fp
+              * \l__tenkz_kernel_r_arc_d_fp
+              * cosd ( \l__tenkz_kernel_r_arc_t_fp )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_arc_cby_fp
+          {
+            \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_arc_s_fp
+              * \l__tenkz_kernel_r_arc_d_fp
+              * sind ( \l__tenkz_kernel_r_arc_t_fp )
+          }
+        \tl_set:Ne \l__tenkz_kernel_r_arc_path_tl
+          {
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+            ~ .. ~ controls ~
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_arc_cax_fp }
+              { \l__tenkz_kernel_r_arc_cay_fp }
+            ~ and ~
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_arc_cbx_fp }
+              { \l__tenkz_kernel_r_arc_cby_fp }
+            ~ .. ~
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+          }
+      }
+  }
+% The wrap: both faces point away from each other along the chord's own
+% line, so every tangency-honouring control lies on that line and one
+% cubic can only retrace it.  The route instead folds out of each face
+% and joins the two folds by a run parallel to the chord, half a chord
+% to the side of it, on the side the from-turn names; each fold's
+% control distance follows its own subtended turn through the shared
+% closure factor, and the travel tangents at the ends honour the faces
+% exactly.  The run stations and the two fold distances stay in their
+% registers for the early on-wire resolver.
+\cs_new_protected:Npn \__tenkz_kernel_r_arc_wrap:
+  {
+    % half the chord, and the side of it the run stands on.  The side is
+    % the one the from-turn names; the antiparallel tie -- both turns at
+    % 180 exactly, the headline opposed pair -- is not left to the fold's
+    % rounding: it stands on the right of travel, the south of an
+    % eastward chord, by stated convention.
+    \fp_set:Nn \l__tenkz_kernel_r_arc_h_fp
       {
         sqrt (
           ( \l__tenkz_kernel_r_xb_fp - \l__tenkz_kernel_r_x_fp ) ^ 2 +
           ( \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp ) ^ 2 )
-        * \fp_compare:nNnTF { \l__tenkz_kernel_r_arc_d_fp } > { 1 }
+        / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_arc_side_fp
+      {
+        \l__tenkz_kernel_r_arc_a_fp
+        + 90 * \fp_compare:nNnTF
+            { abs ( \l__tenkz_kernel_r_arc_px_fp ) } < { 359 / 2 }
             {
-              ( 4 * tand ( \l__tenkz_kernel_r_arc_d_fp / 4 ) )
-              / ( 6 * sind ( \l__tenkz_kernel_r_arc_d_fp / 2 ) )
+              \fp_compare:nNnTF
+                { \l__tenkz_kernel_r_arc_px_fp } < {0} { (-1) } { 1 }
             }
-            { ( 1 / 3 ) }
+            { (-1) }
       }
-    \fp_set:Nn \l__tenkz_kernel_r_arc_cax_fp
+    % each fold's control distance follows its own subtended turn -- the
+    % same quantity that admitted it to this branch -- through the shared
+    % closure factor, so a near-threshold wrap is not over-bulged by the
+    % half-circle constant
+    \__tenkz_kernel_r_arc_close:nN
+      { abs ( \l__tenkz_kernel_r_arc_px_fp ) }
+      \l__tenkz_kernel_r_arc_done_fp
+    \fp_set:Nn \l__tenkz_kernel_r_arc_done_fp
+      { \l__tenkz_kernel_r_arc_done_fp * \l__tenkz_kernel_r_arc_h_fp }
+    \__tenkz_kernel_r_arc_close:nN
+      { abs ( \l__tenkz_kernel_r_arc_py_fp ) }
+      \l__tenkz_kernel_r_arc_dtwo_fp
+    \fp_set:Nn \l__tenkz_kernel_r_arc_dtwo_fp
+      { \l__tenkz_kernel_r_arc_dtwo_fp * \l__tenkz_kernel_r_arc_h_fp }
+    \fp_set:Nn \l__tenkz_kernel_r_arc_mx_fp
       {
-        \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_arc_sf_fp
-          * \l__tenkz_kernel_r_arc_d_fp
-          * cosd ( \l__tenkz_kernel_r_arc_tf_fp )
+        \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_arc_h_fp
+          * cosd ( \l__tenkz_kernel_r_arc_side_fp )
       }
-    \fp_set:Nn \l__tenkz_kernel_r_arc_cay_fp
+    \fp_set:Nn \l__tenkz_kernel_r_arc_my_fp
       {
-        \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_arc_sf_fp
-          * \l__tenkz_kernel_r_arc_d_fp
-          * sind ( \l__tenkz_kernel_r_arc_tf_fp )
+        \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_arc_h_fp
+          * sind ( \l__tenkz_kernel_r_arc_side_fp )
       }
-    \fp_set:Nn \l__tenkz_kernel_r_arc_cbx_fp
+    \fp_set:Nn \l__tenkz_kernel_r_arc_nx_fp
       {
-        \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_arc_s_fp
-          * \l__tenkz_kernel_r_arc_d_fp
-          * cosd ( \l__tenkz_kernel_r_arc_t_fp )
+        \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_arc_h_fp
+          * cosd ( \l__tenkz_kernel_r_arc_side_fp )
       }
-    \fp_set:Nn \l__tenkz_kernel_r_arc_cby_fp
+    \fp_set:Nn \l__tenkz_kernel_r_arc_ny_fp
       {
-        \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_arc_s_fp
-          * \l__tenkz_kernel_r_arc_d_fp
-          * sind ( \l__tenkz_kernel_r_arc_t_fp )
+        \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_arc_h_fp
+          * sind ( \l__tenkz_kernel_r_arc_side_fp )
       }
     \tl_set:Ne \l__tenkz_kernel_r_arc_path_tl
       {
@@ -12283,10 +12647,50 @@
           { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
         ~ .. ~ controls ~
         \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_arc_cax_fp } { \l__tenkz_kernel_r_arc_cay_fp }
+          {
+            \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_arc_done_fp
+              * cosd ( \l__tenkz_kernel_r_arc_af_fp )
+          }
+          {
+            \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_arc_done_fp
+              * sind ( \l__tenkz_kernel_r_arc_af_fp )
+          }
         ~ and ~
         \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_arc_cbx_fp } { \l__tenkz_kernel_r_arc_cby_fp }
+          {
+            \l__tenkz_kernel_r_arc_mx_fp - \l__tenkz_kernel_r_arc_done_fp
+              * cosd ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+          {
+            \l__tenkz_kernel_r_arc_my_fp - \l__tenkz_kernel_r_arc_done_fp
+              * sind ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+        ~ .. ~
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_arc_mx_fp } { \l__tenkz_kernel_r_arc_my_fp }
+        --
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_arc_nx_fp } { \l__tenkz_kernel_r_arc_ny_fp }
+        ~ .. ~ controls ~
+        \__tenkz_kernel_r_pair:nn
+          {
+            \l__tenkz_kernel_r_arc_nx_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * cosd ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+          {
+            \l__tenkz_kernel_r_arc_ny_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * sind ( \l__tenkz_kernel_r_arc_a_fp )
+          }
+        ~ and ~
+        \__tenkz_kernel_r_pair:nn
+          {
+            \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * cosd ( \l__tenkz_kernel_r_arc_ab_fp + 180 )
+          }
+          {
+            \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_arc_dtwo_fp
+              * sind ( \l__tenkz_kernel_r_arc_ab_fp + 180 )
+          }
         ~ .. ~
         \__tenkz_kernel_r_pair:nn
           { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
