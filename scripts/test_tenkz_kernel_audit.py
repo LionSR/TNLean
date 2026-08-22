@@ -19,7 +19,7 @@ kernel-boundary|signature=open:e, open:w
 string|id=a|kind=open|pts=2
 string|id=b|kind=open|pts=2
 string|id=c|kind=wind|pts=2
-string|id=d|kind=around|pts=2
+string|id=d|kind=closed|pts=2
 stringcross|under=b|over=a|hits=1
 picture|id=k2|lang=kernel|scope=1
 atom|id=atom-2|cell=1-2|kind=tn

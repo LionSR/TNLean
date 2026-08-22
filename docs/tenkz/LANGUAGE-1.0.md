@@ -1088,7 +1088,7 @@ row is what names where the meaning went.
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
 | `nudge=` (atom and mark) | a basis member `(r,c,k)`, an ordinary address, or the label station rule (§6) |
 | `inset=` | nothing: concentric order is doctrine on the hull (§5) |
-| `around=` | `route={<side> of <selector>}`; a detour is a side of a selection |
+| `around=` | nothing: the key detoured no ink; a detour an author intends is `route={<side> of <selector>}` |
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |
