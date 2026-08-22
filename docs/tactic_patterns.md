@@ -46,7 +46,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Channel/Peripheral/CesaroRecurrence.lean`, and
   `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`.
 - **Abstraction:** `Module.End.pow_apply_of_mem_eigenspace` in
-  `TNLean/Algebra/EigenspaceMap.lean` handles the zero vector directly and is used by all
+  `QICLean/Algebra/EigenspaceMap.lean` (QICLean dependency) handles the zero vector directly and is used by all
   three consumers.
 
 ### finite-Kraus transfer-power trace pairing — promoted
@@ -58,7 +58,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Kraus/Wielandt/Primitivity/StronglyIrreducibleToFullWordSpan.lean` and
   `TNLean/Wielandt/Primitivity/TracePairing.lean` before promotion (2026-08-20).
 - **Abstraction:** `Kraus.sum_normSq_trace_conjTranspose_mul_evalWord` in
-  `TNLean/Kraus/TracePairing.lean`.
+  `QICLean/Kraus/TracePairing.lean` (QICLean dependency).
 - **Notes:** the Kraus theorem owns the generic identity. The established
   `MPSTensor.sum_normSq_trace_conjTranspose_mul_evalWord` statement is a direct
   reformulation using `Kraus.mapLM_eq_transferMap`; the primitive full-word-span
@@ -89,7 +89,7 @@ abstracted — record why, so it is not re-proposed).
   (2026-08-13).
 - **Abstraction:** `LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_self`
   and `LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_compression`
-  in `TNLean/Analysis/TwoProjectionCompressionSpectrum.lean`.
+  in `QICLean/Analysis/TwoProjectionCompressionSpectrum.lean` (QICLean dependency).
 - **Notes:** all six motivating call sites now use the public ambient equations;
   later two-projection block assembly can use the same facts without repeating
   subtype coercion arguments.
@@ -112,7 +112,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Analysis/ProjectionGeometry.lean` and
   `TNLean/Analysis/TwoProjectionAngleBlock.lean` before promotion (2026-08-12).
 - **Abstraction:** `LinearMap.IsIdempotentElem.apply_apply` in
-  `TNLean/Analysis/IdempotentEndomorphism.lean`.
+  `QICLean/Analysis/IdempotentEndomorphism.lean` (QICLean dependency).
 - **Notes:** all motivating call sites now use the generic pointwise lemma. The
   abstraction assumes only a semiring, an additive commutative monoid, and a
   module; it does not depend on inner-product or projection symmetry.
@@ -144,7 +144,7 @@ abstracted — record why, so it is not re-proposed).
   `BNTMarkovSectorProjectors.lean`, and `InverseMapActiveSectorRecurrence.lean`
   before promotion (2026-08-11).
 - **Abstraction:** `HayashiMarkovDecomposition.h_state_apply_middle_sector` in
-  `TNLean/Analysis/EntropyMarkovReverse.lean`.
+  `QICLean/Analysis/EntropyMarkovReverse.lean` (QICLean dependency).
 - **Notes:** the theorem routes the coordinate evaluation through
   `HayashiMarkov.liftB_conj_apply` and `HayashiMarkov.blockState_apply` while retaining
   the dependent conditional for equal versus unequal sectors. Diagonal and off-diagonal
@@ -188,7 +188,7 @@ abstracted — record why, so it is not re-proposed).
   (2026-08-10).
 - **Abstraction:** `Matrix.singleKrausMap_kronecker` and
   `Matrix.singleKrausMap_mul_of_isometry` in
-  `TNLean/Channel/SingleKrausPositivity.lean`.
+  `QICLean/Channel/SingleKrausPositivity.lean` (QICLean dependency).
 - **Notes:** both consumer modules now invoke the two matrix identities directly;
   the private helper copies were removed.
 
@@ -198,7 +198,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** duplicate 6-line helpers in `TNLean/MPS/RFP/BNTOrthogonality.lean`
   and `TNLean/MPS/RFP/PhysicalObservableRealization.lean` before promotion
   (2026-08-10).
-- **Abstraction:** `Matrix.submatrix_sum` in `TNLean/Algebra/FinSum.lean`.
+- **Abstraction:** `Matrix.submatrix_sum` in `QICLean/Algebra/FinSum.lean` (QICLean dependency).
 - **Notes:** the theorem is polymorphic over the entry additive commutative
   monoid. Its four motivating calls now share the neutral matrix identity.
 
@@ -210,7 +210,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** the five transfer-map compatibility declarations in
   `TNLean/Channel/Peripheral/{ClosureFixedPoint,CyclicGroup}.lean` (2026-08-09).
 - **Abstraction:** `Kraus.isIrreducibleMap_mapLM_of_transferMap` in
-  `TNLean/MPS/Core/TransferChannel.lean`.
+  `QICLean/MPS/Core/TransferChannel.lean` (QICLean dependency).
 - **Notes:** the generic theorems use `Kraus.mapLM`; each transfer-map statement
   applies this conversion once before invoking its generic counterpart.
 
@@ -237,7 +237,7 @@ abstracted — record why, so it is not re-proposed).
   `MaximalRank.lean`, and `WeightedCornerFixedPoints.lean` before promotion
   (2026-08-09).
 - **Abstraction:** `Matrix.conjTranspose_cfc_sqrt` in
-  `TNLean/Analysis/MatrixSqrt.lean`.
+  `QICLean/Analysis/MatrixSqrt.lean` (QICLean dependency).
 - **Notes:** the helper needs no positivity hypothesis because `CFC.sqrt_nonneg`
   is unconditional. All six motivating proofs are now one-line applications;
   the caller files lose fifteen lines.
@@ -248,7 +248,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** four occurrences across `Channel/FixedPoint/Corollaries.lean` and
   `WeightedCornerFixedPoints.lean` before promotion (2026-08-09).
 - **Abstraction:** `Matrix.PosDef.isUnit_det_cfc_sqrt` in
-  `TNLean/Analysis/MatrixSqrt.lean`.
+  `QICLean/Analysis/MatrixSqrt.lean` (QICLean dependency).
 - **Notes:** the theorem retains the caller's `DecidableEq` instance so the
   determinant does not require proof-irrelevance transport. The four proof
   blocks become one-line applications.
@@ -260,7 +260,7 @@ abstracted — record why, so it is not re-proposed).
   `PerronFrobenius.lean`, and `SpectralRadius.lean` before promotion
   (2026-08-09).
 - **Abstraction:** `Kraus.trace_mul_transferMap_adjoint` in
-  `TNLean/Channel/Irreducible/KrausSetup.lean`.
+  `QICLean/Channel/Irreducible/KrausSetup.lean` (QICLean dependency).
 - **Notes:** Channel callers use the theorem on the existing Kraus-setup import
   boundary, while `MPS.Core.TransferChannel` provides the root-level transfer-map
   compatibility statement without importing irreducibility theory. The declaration
@@ -280,7 +280,7 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:**
   `Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor` and
   `Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap` in
-  `TNLean/MPS/Core/TransferChannel.lean`.
+  `QICLean/MPS/Core/TransferChannel.lean` (QICLean dependency).
 - **Notes:** the compatibility module is the unique boundary between the
   Kraus-owned irreducibility equivalence and transfer-map notation. Downstream
   callers no longer repeat the equality conversion or import
@@ -309,7 +309,7 @@ abstracted — record why, so it is not re-proposed).
   `CanonicalForm/NormalTensorGauge.lean`, and `Periodic/Defs.lean` before
   promotion.
 - **Abstraction:** `matrix_dim_ne_zero_of_spectralRadius_eq_one` in
-  `TNLean/Channel/Peripheral/Spectrum.lean`.
+  `QICLean/Channel/Peripheral/Spectrum.lean` (QICLean dependency).
 - **Notes:** the shared lemma is independent of positivity and transfer-map
   structure; callers supply only the spectral-radius-one identity. Net source
   delta: 0 lines relative to the unabstracted draft (14 removed, 14 added).
@@ -321,7 +321,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** three occurrences across `MatrixFamilySupport.lean` and
   `WeightedHilbertSchmidt.lean` before promotion.
 - **Abstraction:** `Matrix.PosSemidef.supportProj_congr` in
-  `TNLean/Algebra/PosSemidefSupport.lean`.
+  `QICLean/Algebra/PosSemidefSupport.lean` (QICLean dependency).
 - **Notes:** the lemma isolates the dependent proof transport that ordinary
   rewriting does not resolve directly.
 
@@ -372,7 +372,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/RFP/StructuralFull.lean`, and
   `TNLean/PEPS/TorusWindowChain4.lean`.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
-  `TNLean/Algebra/FinSum.lean`.
+  `QICLean/Algebra/FinSum.lean` (QICLean dependency).
 - **Result:** all 37 sites call the shared lemma, and all 27 consumer files
   import `TNLean.Algebra.FinSum` directly. The broad final passes found 18 sites
   in 13 new files, including functional binders, one-line semicolon proofs,
@@ -425,7 +425,7 @@ abstracted — record why, so it is not re-proposed).
   `CPSVVerticalCanonicalForm.lean`, `RFPPositiveFusionDecomposition.lean`,
   `CPSVVerticalDecomposition.lean`, and `PooledKrausFamily.lean` before promotion.
 - **Abstraction:** `Fintype.sum_finSigmaFinEquiv` in
-  `TNLean/Algebra/FinSum.lean`.
+  `QICLean/Algebra/FinSum.lean` (QICLean dependency).
 - **Notes:** the shared lemma is polymorphic over the additive commutative monoid,
   so callers retain only their application-specific summand.
 
@@ -439,7 +439,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/FundamentalTheorem/SectorBNT/ProportionalMatch/Core.lean`, and
   `TNLean/MPS/Periodic/ProportionalOverlap.lean` (2026-08-02).
 - **Abstraction:** `LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul`
-  in `TNLean/Algebra/FinSum.lean`.
+  in `QICLean/Algebra/FinSum.lean` (QICLean dependency).
 - **Notes:** the lemma is polymorphic over the scalar ring and module. The first
   two callers now retain only their decomposition-specific total-sum and
   complementary-state identities; the periodic overlap bridge is the third
@@ -467,7 +467,7 @@ abstracted — record why, so it is not re-proposed).
   `RelativeEntropyDataProcessing.lean`, and `StrongSubadditivityPosDef.lean`
   before promotion.
 - **Abstraction:** `Matrix.partialTraceRight_submatrix_prod_equiv` in
-  `TNLean/Channel/PartialTrace.lean`.
+  `QICLean/Channel/PartialTrace.lean` (QICLean dependency).
 - **Notes:** the two data-processing proofs now call the shared covariance
   theorem; the same theorem is also used to transport partial-trace Petz
   recovery from finite cyclic coordinates to arbitrary finite products.
@@ -480,7 +480,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** three occurrences across `StrongSubadditivityPosDef.lean` and
   `SSAEqualityPetzRecovery.lean` before promotion.
 - **Abstraction:** `Matrix.partialTraceRight_submatrix_prodAssoc` in
-  `TNLean/Analysis/Entropy.lean`.
+  `QICLean/Analysis/Entropy.lean` (QICLean dependency).
 - **Notes:** the two strong-subadditivity data-processing proofs and the HJPW
   product-reference recovery proof now use the shared reassociation identity.
 
@@ -591,7 +591,7 @@ abstracted — record why, so it is not re-proposed).
   (2026-08-20).
 - **Abstraction:**
   `exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef`
-  in `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`.
+  in `QICLean/Channel/Irreducible/FixedPointUniqueness.lean` (QICLean dependency).
 - **Notes:** the shared theorem includes the load-bearing hypothesis that every
   nonzero positive-semidefinite fixed point is positive definite; without this
   hypothesis the proportionality statement is false for the identity map. The
@@ -606,14 +606,14 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** five former proofs in `Kraus.Blocking`, `Kraus.Wielandt.RankOne.Construction`,
   `Kraus.Wielandt.RectangularSpan.Basic`, `MPS.MPDO.Defs`, and
   `MPS.MPU.SourceUReflectedKernel`.
-- **Abstraction:** `List.ofFn_reverse` in `TNLean/Kraus/Word.lean`.
+- **Abstraction:** `List.ofFn_reverse` in `QICLean/Kraus/Word.lean` (QICLean dependency).
 - **Result:** all five consumers use the shared theorem directly.
 
 ### Finite Kraus setup for channels
 - **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
   `Channel/Semigroup/Primitivity/Helpers.lean` before promotion (issue #6576).
 - **Abstraction:** `IsChannel.exists_kraus_map_eq_and_normalized` in
-  `TNLean/Channel/KrausMap.lean` packages a finite Kraus family, the equality with
+  `QICLean/Channel/KrausMap.lean` (QICLean dependency) packages a finite Kraus family, the equality with
   its Kraus linear map, and the trace-preserving normalization.
 - **Notes:** issue #6576 deliberately promoted this two-copy pattern before a third
   occurrence because both peripheral arguments require the complete setup. Each
@@ -625,7 +625,7 @@ abstracted — record why, so it is not re-proposed).
   `IsNBlkInjective` hypothesis after the predicate was single-sourced through
   `Kraus.wordSpan`.
 - **Reuse:** `MPSTensor.IsNBlkInjective.span_eq_top` in
-  `TNLean/MPS/Core/Injectivity.lean` supplies the literal span equality.
+  `QICLean/MPS/Core/Injectivity.lean` (QICLean dependency) supplies the literal span equality.
 - **Call sites:** the odd- and even-length Majumdar-Ghosh obstructions and the
   diagonal-restriction non-normality counterexample.
 
@@ -633,7 +633,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** prove that `Matrix.toEuclideanLin (A * B)` is the composition of the
   Euclidean linear maps represented by `A` and `B` by expanding both sides through
   `Matrix.toLin_mul` in the standard orthonormal basis.
-- **Reuse:** `Matrix.toEuclideanLin_mul` in `TNLean/Analysis/TraceNormAbs.lean` is the shared
+- **Reuse:** `Matrix.toEuclideanLin_mul` in `QICLean/Analysis/TraceNormAbs.lean` (QICLean dependency) is the shared
   layer-0 statement.
 - **Result:** `TNLean/Analysis/MatrixReducedProjection.lean` uses the shared theorem directly,
   and `PositiveOnAbelian.Internal.toEuclideanLin_mul` remains as a compatibility wrapper for
@@ -808,7 +808,7 @@ abstracted — record why, so it is not re-proposed).
   $\ker(\rho_A\otimes\rho_B)\subseteq\ker\rho_{AB}$ for a positive
   semidefinite bipartite operator.
 - **Reuse:** `Matrix.PosSemidef.productMarginals_kernel_le` in
-  `TNLean/Channel/MarginalSupportAbsorption.lean` records this support-kernel
+  `QICLean/Channel/MarginalSupportAbsorption.lean` (QICLean dependency) records this support-kernel
   fact once, using the two marginal support absorptions.
 - **Result:** `MarginalSupportWhitenedChoi` and the new entropy theorem
   `Entropy.mutualInformation_le_log_operatorSchmidtRank` both use the shared
@@ -820,7 +820,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** `TNLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
   simultaneous-diagonalization proof of the support-correct tensor logarithm.
 - **Reuse:** `Matrix.log_kronecker_posSemidef` in
-  `TNLean/Analysis/CfcKronecker.lean` is the canonical low-layer theorem.
+  `QICLean/Analysis/CfcKronecker.lean` (QICLean dependency) is the canonical low-layer theorem.
 - **Result:** the duplicate proof was removed from
   `TNLean/Channel/Schwarz/SSAEqualityDPI.lean`; the faithful entropy comparison
   uses the Analysis declaration directly.
@@ -829,7 +829,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** `TNLean/Analysis/LiebConcavity.lean` carried a private copy of
   the conjugation star-algebra homomorphism and its functional-calculus
   covariance proof solely to commute real powers with transpose.
-- **Reuse:** `Matrix.cfc_transpose` in `TNLean/Analysis/CfcConjugation.lean`
+- **Reuse:** `Matrix.cfc_transpose` in `QICLean/Analysis/CfcConjugation.lean` (QICLean dependency)
   supplies the public covariance theorem.
 - **Result:** `rpow_transpose` keeps its private interface and now reduces to
   the public theorem after rewriting both powers as continuous functional
@@ -840,7 +840,7 @@ abstracted — record why, so it is not re-proposed).
   of the reference matrix is positive semidefinite and used Hermiticity to
   identify the resulting congruence with an equal-factor sandwich.
 - **Reuse:** `_root_.Matrix.PosSemidef.rpow_mul_mul_rpow` in
-  `TNLean/Analysis/SandwichedRenyiTwo.lean` proves
+  `QICLean/Analysis/SandwichedRenyiTwo.lean` (QICLean dependency) proves
   `(ω ^ r * ρ * ω ^ r).PosSemidef` from `ρ.PosSemidef` and
   `ω.PosSemidef`, for arbitrary real `r`.
 - **Result:** `sandwichedRenyiTwoTrace_nonneg`, `sandwichedRenyiTrace_nonneg`,
@@ -853,7 +853,7 @@ abstracted — record why, so it is not re-proposed).
   coordinates of a unit vector form a probability distribution.
 - **Reuse:** `Matrix.IsHermitian.spectralWeight`, `sum_spectralWeight`,
   `re_dotProduct_mulVec_eq_sum`, and `re_dotProduct_cfc_mulVec_eq_sum` in
-  `TNLean/Analysis/SpectralQuadraticForm.lean` provide the basis-independent API used by both
+  `QICLean/Analysis/SpectralQuadraticForm.lean` (QICLean dependency) provide the basis-independent API used by both
   `SupportLogJensen.lean` and `Channel/Schwarz/DiagonalJensen.lean`.
 - **Result:** the Channel proof imports the lowest-layer Analysis helper instead of carrying its
   own spectral calculation, while the support-aware logarithmic proof uses the same formulas and
@@ -1001,7 +1001,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
 - **Reuse:** `Complex.ne_zero_of_norm_eq_one` in
-  `TNLean/Algebra/ComplexPhasePositivity.lean` now states this scalar fact once.
+  `QICLean/Algebra/ComplexPhasePositivity.lean` (QICLean dependency) now states this scalar fact once.
 - **Result:** a repository-wide semantic audit migrated 32 call sites across
   18 files, including nested `inv_ne_zero` uses and tactic-form contradiction
   proofs. No exact-hypothesis conversion from `h : ‖z‖ = 1` to `z ≠ 0`
@@ -1367,7 +1367,7 @@ current counts and full location lists).
   `re_trace_posPart_map_le_of_scaledTrace` (scaled-trace case) before
   factoring (review on 2026-08-09).
 - **Abstraction:** `Matrix.re_trace_posPart_map_le_aux` in
-  `TNLean/Analysis/TraceNormContractivity.lean` isolates the shared
+  `QICLean/Analysis/TraceNormContractivity.lean` (QICLean dependency) isolates the shared
   projection-chaining estimate; both source-facing lemmas are now
   one-`calc`-block corollaries.
 - **Notes:** the abstraction removes ~15 duplicated proof lines from each

@@ -45,9 +45,10 @@ TNLean, the remaining source follows these conceptual layers:
 
 `PiAlgebra` provides related algebraic formulations. `PEPS` contains the
 two-dimensional injective and normal-tensor developments. `QCA` contains the
-quasi-local and cellular-automaton layer. Public chapter-index modules are part
-of the production tree and therefore enter the generated import surface
-automatically.
+quasi-local and cellular-automaton layer. `Spectral` contains MPS-specific
+transfer-operator gap and overlap-decay results built on QICLean's spectral
+theory. Public chapter-index modules are part of the production tree and
+therefore enter the generated import surface automatically.
 
 ## Archive exclusion
 
