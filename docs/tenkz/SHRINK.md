@@ -3274,6 +3274,7 @@ the corresponding key's issue with the figure as the demand evidence.
 | flag:consumers:key:kernel-wire:bend | retired: sentenced session 1, executable once route=arc drew (#6201); zero consumers; permanent |
 | flag:consumers:key:kernel-wire:around | retired: zero consumers and no render read; a detour is a side of a selection; permanent |
 | flag:lonely-type:address-list | dies with its last carrier: `via=` is sentenced (session 1, tracker #4709 item 1) and the type leaves the census when its parser row does; expiry 0.9 |
+| flag:lonely-type:number | departed: its last carriers, `bend=` and `inset=`, retire in this session, and the value type leaves the registry vocabulary with them; the contract's section 2.7 now speaks of it in the past tense; permanent |
 
 Review sweep, same session: the address-validation pass no longer
 enumerates `around` as a field to check, so the model field truly has no

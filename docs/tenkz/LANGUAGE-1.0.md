@@ -260,11 +260,13 @@ signed two-axis offsets, not a row list, selector, or untyped number.
 
 The angle is minted rather than borrowed, and the reason is worth stating
 because it is the only new type here that could have been avoided on paper.
-A bearing is not a plain number: a number is a bend factor or an inset
-count, page quantities with no frame, whereas an angle is read in a record's
-own axes and transforms with them. Typing a face and a label placement as
-`number` would have kept the count lower by reviving a type these amendments
-retired and by flattening the distinction the local-axes rule exists to make.
+A bearing is not a plain number: the numbers these tables once carried --
+a bend factor, an inset count -- were page quantities with no frame, and
+they left the registry with their keys, whereas an angle is read in a
+record's own axes and transforms with them. Typing a face and a label
+placement as `number` would have kept the count lower by reviving a type
+these amendments retired and by flattening the distinction the local-axes
+rule exists to make.
 The census gains one and says so.
 
 The census covers key values; positional label arguments are mathematics and
