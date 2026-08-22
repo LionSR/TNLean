@@ -13,5 +13,16 @@
       "Bash(gh *)",
       "Bash(*)"
     ]
+  },
+  "extraKnownMarketplaces": {
+    "texra-lean-skills": {
+      "source": {
+        "source": "github",
+        "repo": "texra-ai/texra-lean-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "texra-lean-skills@texra-lean-skills": true
   }
 }

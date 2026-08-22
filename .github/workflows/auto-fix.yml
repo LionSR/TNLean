@@ -223,8 +223,12 @@ jobs:
       setup_lean: true
       # See pr-ci.yml: per-run lake caches evict the main build cache.
       use_github_cache: false
-      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
-      plugins: 'lean@leanprover'
+      plugin_marketplaces: |
+            https://github.com/leanprover/skills.git
+            https://github.com/texra-ai/texra-lean-skills.git
+      plugins: |
+            lean@leanprover
+            texra-lean-skills@texra-lean-skills
       claude-prompt-file: .github/prompts/auto-fix-ci-prompt.md
       claude-prompt-context: |
         Context added by caller:
@@ -350,8 +354,12 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
-          plugins: 'lean@leanprover'
+          plugin_marketplaces: |
+            https://github.com/leanprover/skills.git
+            https://github.com/texra-ai/texra-lean-skills.git
+          plugins: |
+            lean@leanprover
+            texra-lean-skills@texra-lean-skills
           allowed_tools_preset: lean-review-auto-fix
           allowed_tools_preset_map_file: .github/allowed-tools.json
           system-prompt-file: .github/prompts/auto-fix-review-system-prompt.md

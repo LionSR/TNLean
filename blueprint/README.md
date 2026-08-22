@@ -61,5 +61,4 @@ source-faithful statement exists.
 The detailed style rules are in:
 
 - `docs/blueprint_style_guide.md`
-- `docs/prose_style.md`
-- `docs/MATHLIB_doc.md`
+- the `lean-conventions` skill (prose_style, MATHLIB_doc references)

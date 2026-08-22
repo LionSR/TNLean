@@ -9,7 +9,7 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    preambles, prose macros, bibliographies, and build entry points. They share
    only the repository-wide tensor-network language in `tex/tenkz/`; neither
    document tree imports files from the other.
-3. **Mathematical language only — zero Lean jargon.** See [`prose_style.md`](prose_style.md) Section 1 for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
+3. **Mathematical language only — zero Lean jargon.** See the `lean-conventions` skill's prose_style reference, Section 1, for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
 6. **Don't invent terminology or notation.** Don't create ad-hoc notation like `⟨·,·⟩^ip` when standard notation exists. Don't name things that the literature doesn't name. If Lean calls it `IsInjective`, the blueprint says "injective" — not "Condition C1".
@@ -30,16 +30,15 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 9. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
    `\qquad \text{for all ...}` and similar tails in displays. State the
    quantifier in the surrounding sentence, or use mathematical quantifier
-   notation when it is part of the formula. See [`prose_style.md`](prose_style.md)
-   for the full rule and examples.
+   notation when it is part of the formula. See the skill's prose_style
+   reference for the full rule and examples.
 10. **Paper source first.** When a theorem, lemma, or proof sketch formalizes a
     cited result, compare against the paper source before introducing local names.
     Use the source notation and display the defining equations whenever possible.
     If Lean proves an auxiliary reformulation, state the source result first.
     Put maintainer-only proof-status notes in LaTeX comments, not displayed
-    mathematical prose. The explicit proof-status markers in
-    [`prose_style.md`](prose_style.md) are for Lean docstrings and comments, not
-    blueprint-visible paragraphs.
+    mathematical prose. The explicit proof-status markers in the skill's prose_style reference
+    are for Lean docstrings and comments, not blueprint-visible paragraphs.
 11. **Proofs are carried by formulas.** For mathematical proof sketches,
     especially tensor-network and overlap arguments, state the main equations
     explicitly instead of replacing them by verbal paraphrase. Short equations
@@ -133,7 +132,10 @@ The rules for prose tone, the no-Lean-jargon-in-blueprint requirement, and the f
 banned-language tables (software-engineering jargon and LLM writing patterns) live
 in their own document:
 
-> **See [`prose_style.md`](prose_style.md) for the authoritative prose style guide.**
+> **See the `lean-conventions` skill's prose_style reference
+> ([texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills))
+> for the authoritative prose style guide, and
+> [`project_conventions.md`](project_conventions.md) for the TNLean addenda.**
 
 That document covers:
 

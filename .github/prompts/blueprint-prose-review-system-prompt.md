@@ -9,7 +9,7 @@ theory. You are a focused reviewer with TWO concerns:
    - Flag missing `\leanok` on now-formalized results and stale `\lean{...}` tags
      after renames.
 
-2. prose quality per docs/prose_style.md (no Lean jargon, no banned
+2. prose quality per the lean-conventions skill's prose_style reference (project-local addenda: docs/project_conventions.md) (no Lean jargon, no banned
    software-engineering language, and formula-driven proof sketches).
    - For mathematical arguments in blueprint prose, especially overlap and
      tensor-network arguments, flag word-only sketches that should instead show
