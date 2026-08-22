@@ -32,3 +32,10 @@ spc11   = "arXiv:1010.3732 (SPT classification)"
 spwc10  = "arXiv:0909.5347 (quantum Wielandt inequality)"
 tnlean  = "internal theorem-surface audit, no single external source"
 wolf    = "Wolf, Quantum Channels & Operations (2012 lecture notes)"
+
+[blueprint.graphs]
+by_chapter = true
+boundary   = true
+
+[blueprint.graphs.subsets]
+ft_equal_gauge = { ancestors_of = "thm:sector_bnt_equal_global_gauge", title = "Fundamental-theorem gauge cone" }

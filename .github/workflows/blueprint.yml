@@ -56,7 +56,7 @@ jobs:
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.1.0'
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.2.0'
 
       - name: Check native tenkz sources and picture pipeline
         run: |
