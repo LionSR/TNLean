@@ -1,0 +1,256 @@
+{
+  "baseline": {
+    "broad_companion_volume_placeholders": 79,
+    "qic_theorem_like_entries": 1245,
+    "same_label_same_declaration_citation_occurrences": 336,
+    "same_label_same_declaration_labeled_items_including_remarks": 259,
+    "same_label_same_declaration_theorem_like_entries": 258,
+    "tn_theorem_like_entries": 3736
+  },
+  "changes": {
+    "broad_placeholders_upgraded_to_statement_specific_citations": 79,
+    "paper_gap_citations_removed_with_their_entire_qic_owned_entries": 5,
+    "removed_dependency_targets": 216,
+    "removed_incoming_internal_reference_occurrences_replaced_by_precise_citations": 87,
+    "removed_label_only_planned_duplicate_entries": 1,
+    "removed_label_only_planned_duplicate_labels": [
+      "thm:brouwer_simplex"
+    ],
+    "removed_qic_owned_same_label_entries": 244,
+    "removed_same_label_same_declaration_citation_occurrences": 320,
+    "removed_theorem_like_entries": 244
+  },
+  "comparison": {
+    "criteria": "A QIC-owned duplicate has the same active label and at least one identical Lean declaration in both blueprints. Labeled remarks are included in the residual audit. TN-facing interface statements are retained only when their formulation is explicitly in MPS/transfer-map vocabulary or is used as a named TN specialization.",
+    "qiclean_blueprint_sha256": "e494313222fafcaf0dc044dc95020c0cbb176e095e36ecf8d2cd7a5fc6413941",
+    "qiclean_read_only_commit": "822eefea698c8f2f6ac3f3da6f19156aec7afd1f",
+    "tnlean_base_commit": "8de1245b84354f45b540ae1dc476b667d907a450"
+  },
+  "generated_date": "2026-08-22",
+  "issue": 6873,
+  "residual": {
+    "declaration_only_interface_entries": 4,
+    "declaration_only_interfaces": [
+      {
+        "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+        "justification": "TN word-span notation tied to blocked MPS injectivity and the Sanz et al. convention",
+        "label": "def:word_span",
+        "shared_lean_declarations": [
+          "Kraus.wordSpan"
+        ],
+        "title": "Word span"
+      },
+      {
+        "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+        "justification": "explicit MPS specialization of the finite-family vector-spread span",
+        "label": "def:mps_vector_spread_span",
+        "shared_lean_declarations": [
+          "Kraus.vectorSpreadSpan"
+        ],
+        "title": "Fixed-length vector span of an MPS tensor"
+      },
+      {
+        "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+        "justification": "MPS specialization used by the TN Wielandt chain",
+        "label": "thm:mps_eigenvector_from_full_cumulative_span",
+        "shared_lean_declarations": [
+          "Kraus.exists_eigenvector_of_cumulativeSpan_eq_top"
+        ],
+        "title": "Eigenvector extraction for an MPS tensor"
+      },
+      {
+        "file": "chapter/ch08_wielandt_fixed_length_and_normality.tex",
+        "justification": "TN-facing padding lemma in the fixed-length MPS normality argument",
+        "label": "lem:eigenvector_padding",
+        "shared_lean_declarations": [
+          "Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector"
+        ],
+        "title": "Eigenvector padding"
+      }
+    ],
+    "deferred_cases": [],
+    "qic_owned_duplicate_entries": 0,
+    "same_label_interface_citation_occurrences": 16,
+    "same_label_interface_entries": 15,
+    "same_label_interfaces": [
+      {
+        "file": "chapter/ch02_mps.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "def:transfer_map",
+        "shared_lean_declarations": [
+          "MPSTensor.transferMap"
+        ],
+        "title": "Transfer map"
+      },
+      {
+        "file": "chapter/ch02_mps.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "def:injective",
+        "shared_lean_declarations": [
+          "MPSTensor.IsInjective"
+        ],
+        "title": "Injectivity"
+      },
+      {
+        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:injective_irreducible",
+        "shared_lean_declarations": [
+          "MPSTensor.injective_implies_irreducibleCP"
+        ],
+        "title": "Injectivity implies irreducibility"
+      },
+      {
+        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:transfer_cp",
+        "shared_lean_declarations": [
+          "MPSTensor.transferMap_isCPMap"
+        ],
+        "title": "Transfer map is CP"
+      },
+      {
+        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+        "justification": "MPS transfer-map specialization of the generic Kraus trace-adjoint identity",
+        "label": "lem:trace_mul_transfer_map_adjoint",
+        "shared_lean_declarations": [
+          "trace_mul_transferMap_adjoint"
+        ],
+        "title": "Trace adjointness of a transfer map"
+      },
+      {
+        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "lem:trace_transfer_map_left_canonical",
+        "shared_lean_declarations": [
+          "MPSTensor.trace_transferMap"
+        ],
+        "title": "Left-canonical transfer maps preserve trace"
+      },
+      {
+        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:transfer_channel",
+        "shared_lean_declarations": [
+          "MPSTensor.transferMap_isChannel"
+        ],
+        "title": "Transfer map is a channel"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:transfer_psd_fp_pd_irred",
+        "shared_lean_declarations": [
+          "MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible"
+        ],
+        "title": "Transfer-map PSD fixed point --- irreducible version"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:psd_fp_pd",
+        "shared_lean_declarations": [
+          "MPSTensor.posSemidef_fixedPoint_isPosDef"
+        ],
+        "title": "PSD fixed point is positive definite"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:psd_fp_unique_irred",
+        "shared_lean_declarations": [
+          "MPSTensor.posSemidef_fixedPoint_unique_of_irreducible"
+        ],
+        "title": "Irreducible fixed-point uniqueness"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:psd_fp_unique",
+        "shared_lean_declarations": [
+          "MPSTensor.posSemidef_fixedPoint_unique"
+        ],
+        "title": "Uniqueness of PSD fixed point"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:psd_fp_exists",
+        "shared_lean_declarations": [
+          "MPSTensor.exists_posSemidef_fixedPoint"
+        ],
+        "title": "Existence of PSD fixed point"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:qpf",
+        "shared_lean_declarations": [
+          "MPSTensor.quantum_perron_frobenius"
+        ],
+        "title": "Quantum Perron--Frobenius"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
+        "label": "thm:qpf_irreducible",
+        "shared_lean_declarations": [
+          "MPSTensor.quantum_perron_frobenius_irreducible"
+        ],
+        "title": "Quantum Perron--Frobenius for irreducible transfer maps"
+      },
+      {
+        "file": "chapter/ch06_qpf.tex",
+        "justification": "MPS left-canonical gauge interface, stated directly for the tensor matrices",
+        "label": "thm:left_canonical_gauge",
+        "shared_lean_declarations": [
+          "Kraus.gauged_isTP_of_map_conjTranspose_fixedPoint",
+          "gauged_tracePreserving"
+        ],
+        "title": "Left-canonical (trace-preserving) gauge"
+      }
+    ],
+    "shared_declaration_names": 20,
+    "shared_label_names": 15,
+    "statement_specific_qiclean_citations": 135,
+    "unqualified_broad_qiclean_citations": 0
+  },
+  "schema_version": 1,
+  "validation": {
+    "duplicate_audit": {
+      "all_residual_entries_classified_as_tn_interfaces": true,
+      "qic_owned_duplicate_entries_after": 0,
+      "qic_theorem_like_entries": 1245,
+      "same_label_shared_declaration_entries_after": 15,
+      "status": "passed",
+      "tn_theorem_like_entries_after": 3492
+    },
+    "git_diff_check": "passed",
+    "lake_build_TNLean": {
+      "latest_progress": "9710/10128",
+      "lean_errors_observed": 0,
+      "note": "The isolated full build exceeded the command wall-clock after sustained successful compilation; PR CI must complete it.",
+      "status": "timed_out",
+      "timeout_seconds": 600
+    },
+    "leanblueprint_checkdecls": {
+      "reason": "TNLean.olean was not produced before the full-build timeout; checkdecls therefore could not import the TNLean umbrella module.",
+      "status": "blocked"
+    },
+    "leanblueprint_pdf": {
+      "pages": 876,
+      "status": "passed"
+    },
+    "leanblueprint_web": "passed",
+    "reference_audit": {
+      "duplicate_label_definitions": 0,
+      "empty_uses_macros": 0,
+      "missing_uses_targets": 0,
+      "statement_specific_qiclean_citations": 135,
+      "status": "passed",
+      "unique_labels": 4405,
+      "unqualified_qiclean_citations": 0
+    },
+    "status": "partial"
+  }
+}

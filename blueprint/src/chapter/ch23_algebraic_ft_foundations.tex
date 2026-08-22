@@ -615,7 +615,7 @@ insertion data.
     \label{lem:virtual_bond_gauge}
     \lean{MPSTensor.virtual_bond_gauge}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether}
+    \uses{thm:physRealize_mul, thm:simplicity}
     Let $A=(A_0,A_1,A_2)$ and $B=(B_0,B_1,B_2)$ be two
     3-site injective periodic chains with common bond dimension
     $D\ge1$ and $\mc{V}(A)=\mc{V}(B)$ (same MPV family).
@@ -638,7 +638,7 @@ insertion data.
 
 \begin{proof}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity, thm:skolem_noether, lem:blocking_preserves_injectivity}
+    \uses{thm:physRealize_mul, thm:simplicity, lem:blocking_preserves_injectivity}
     The $\mc{V}(A)=\mc{V}(B)$ hypothesis gives, for every $X\in\MN{D}$,
     equality of the virtual-insertion trace coefficients
     \begin{align}
@@ -653,7 +653,7 @@ insertion data.
     Setting $T(X)=Y$ defines a $\C$-linear multiplicative map,
     hence a nonzero $\C$-algebra endomorphism of $\MN{D}$, which is
     bijective by Theorem~\ref{thm:simplicity}.
-    Skolem--Noether (Theorem~\ref{thm:skolem_noether}) gives
+    Skolem--Noether (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) gives
     $Z\in\GL_D(\C)$ with $T(X)=Z^{-1}XZ$.
 \end{proof}
 

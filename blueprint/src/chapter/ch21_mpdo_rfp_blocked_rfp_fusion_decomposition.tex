@@ -37,11 +37,11 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:direct_sum_inverse_cptp_forward_unitary, lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, thm:mpdo_transported_vertical_sector_composites_identity}
+    \uses{lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_composites_trace_preserving, thm:mpdo_transported_vertical_sector_composites_schwarz, thm:mpdo_transported_vertical_sector_composites_identity}
     The two basis-of-normal-tensors decompositions have positive matrix
     dimensions. The transported maps are completely positive and preserve
     the total block trace, and the preceding theorem gives both inverse laws.
-    Apply Theorem~\ref{thm:direct_sum_inverse_cptp_forward_unitary} to this
+    Apply Theorem~\cite[``Unitary action of an invertible CPTP map'']{QICLean2026Blueprint} to this
     pair. Its equivalence of summands, dimension equalities, and unitary
     matrices give the two displayed formulas without changing the chosen
     relabelling.

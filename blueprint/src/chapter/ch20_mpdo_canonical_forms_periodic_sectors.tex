@@ -258,7 +258,7 @@
     \label{thm:mpdo_displaced_invariant_projector}
     \lean{MPOTensor.exists_displaced_invariant_projector_of_periodic_vector}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_vertical_one_site_actions, def:support_proj}
+    \uses{def:vertical_tensor_mpdo, def:no_periodic_vectors, def:mpdo_vertical_one_site_actions}
     Let $M$ be an MPO tensor and let $\widetilde M$ carry a nontrivial
     $p$-periodic vector, presented as in
     Definition~\ref{def:no_periodic_vectors}: an irreducible restriction
@@ -277,14 +277,14 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_unital_gauge_schwarz_setup, lem:eigenvalue_transport_unital_gauge, thm:transfer_peripheral_cyclic_structure, thm:cyclic_decomposition_irreducible_schwarz, lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
+    \uses{thm:spectral_unital_gauge_schwarz_setup, lem:eigenvalue_transport_unital_gauge, lem:kraus_cyclic_shift, lem:support_proj_range_factorization}
     The rescaled unital gauge $K$ of the corner satisfies the hypotheses of
     the cyclic decomposition of the peripheral spectrum
     (Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}), and the
     eigenvalue $\mu/r\ne 1$ of modulus one
     (Lemma~\ref{lem:eigenvalue_transport_unital_gauge}) forces the
     peripheral cyclic group to have order $m\ge 2$.
-    Theorem~\ref{thm:cyclic_decomposition_irreducible_schwarz} produces
+    Theorem~\cite[``Cyclic decomposition for irreducible finite Kraus maps'']{QICLean2026Blueprint} produces
     orthogonal projections $P_0,\ldots,P_{m-1}$ summing to the identity
     with $\E_K(P_{k+1})=P_k$, and the letter-level shift
     $K_vP_{k+1}=P_kK_v$ holds

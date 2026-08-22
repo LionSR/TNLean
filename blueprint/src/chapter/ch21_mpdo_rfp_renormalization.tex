@@ -5,148 +5,17 @@ to state the mixed-state renormalization condition. The renormalization fixed
 point of \cite[Definition~4.1]{Cirac2016MPDO_arXiv} is stated in the next
 section.
 
-\begin{lemma}[Identity map is trace-preserving completely positive]
-    \label{lem:is_kraus_cptp_id}
-    \lean{isKrausCPTP_id}
-    \leanok
-    The identity map $\id(X)=X$ is trace-preserving completely positive,
-    with single Kraus operator $A_0=I$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    Take $r=1$ and $A_0=I$; then $\id(X)=IXI^\dagger=X$ and
-    $A_0^\dagger A_0=I$.
-\end{proof}
-
-\begin{theorem}[Conjugation by an isometry is trace-preserving completely positive]
-    \label{thm:mpdo_single_kraus_isometry_cptp}
-    \lean{isKrausCPTP_of_singleKraus}
-    \leanok
-    Let $H$ and $K$ be finite-dimensional complex vector spaces, and let
-    $V:H\to K$ satisfy $V^\dagger V=I_H$. Then the map
-    \begin{align}
-        \Phi_V:\End_{\C}(H) & \longrightarrow\End_{\C}(K),
-        \notag                                             \\
-        \Phi_V(X)           & =VXV^\dagger,
-        \notag
-    \end{align}
-    is trace-preserving and completely positive. This is the general
-    one-isometry form of the local basis change used in
-    \cite[Appendix~C.2, lines~1439 and~1520]{Cirac2016MPDO_arXiv}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Take the sole Kraus operator to be $V$. Its resolution of the identity is
-    precisely $V^\dagger V=I_H$.
-\end{proof}
-
-\begin{definition}[Single-Kraus map]
-    \label{def:mpdo_single_kraus_map}
-    \lean{singleKrausMap}
-    \leanok
-    For a rectangular matrix $V:H\to K$, define the linear map
-    \begin{align}
-        \Phi_V(X) & =VXV^\dagger.
-        \notag
-    \end{align}
-\end{definition}
-
-\begin{lemma}[Evaluation of the single-Kraus map]
-    \label{lem:mpdo_single_kraus_map_apply}
-    \lean{singleKrausMap_apply}
-    \leanok
-    \uses{def:mpdo_single_kraus_map}
-    For every matrix $X$, one has $\Phi_V(X)=VXV^\dagger$.
-\end{lemma}
-
-\begin{theorem}[The single-Kraus map of an isometry is a channel]
-    \label{thm:mpdo_single_kraus_map_cptp}
-    \lean{singleKrausMap_isKrausCPTP}
-    \leanok
-    \uses{def:mpdo_single_kraus_map, thm:mpdo_single_kraus_isometry_cptp}
-    If $V^\dagger V=I_H$, then $\Phi_V$ is trace-preserving and completely
-    positive.
-\end{theorem}
-
-\begin{lemma}[A single-Kraus map is completely positive]
-    \label{lem:mpdo_single_kraus_map_cp}
-    \lean{singleKrausMap_isKrausCP}
-    \leanok
-    \uses{def:mpdo_single_kraus_map}
-    For every rectangular operator $V:H\to K$, the map
-    $X\mapsto VXV^\dagger$ is completely positive.
-\end{lemma}
-
-\begin{definition}[Matrix reindexing along an equivalence]
-    \label{def:mpdo_equiv_reindex_map}
-    \lean{Matrix.equivReindexMap}
-    \leanok
-    Let $e:I\simeq J$ be an equivalence of index sets. The associated
-    matrix reindexing is the linear map
-    $R_e:\C^{I\times I}\to\C^{J\times J}$ determined by
-    \begin{align}
-        [R_e(X)]_{j,j'}
-         & =X_{e^{-1}(j),e^{-1}(j')}.
-        \notag
-    \end{align}
-\end{definition}
-
-\begin{theorem}[Equivalence reindexing is trace-preserving completely positive]
-    \label{thm:mpdo_equiv_reindex_cptp}
-    \lean{Matrix.equivReindexMap_isKrausCPTP}
-    \leanok
-    \uses{def:mpdo_equiv_reindex_map, thm:mpdo_single_kraus_isometry_cptp}
-    For every equivalence $e:I\simeq J$ between finite index sets, the
-    reindexing map $R_e$ is trace-preserving and completely positive.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Let $P_e:\C^I\to\C^J$ be the permutation matrix of $e$. Then
-    $R_e(X)=P_eXP_e^\dagger$ and $P_e^\dagger P_e=I_{\C^I}$.
-    The claim follows from the preceding isometry lemma.
-\end{proof}
 
 % The concrete dependent-sum equivalences for T_0, S_0, T_2, and S_2 are
 % stated in ch21_mpdo_rfp_simple_local_normalized_preparations.tex after the eta preparations.
 
-\begin{lemma}[Composition of trace-preserving completely positive maps]
-    \label{lem:is_kraus_cptp_comp}
-    \lean{isKrausCPTP_comp}
-    \leanok
-    The composition of two trace-preserving completely positive maps is again
-    trace-preserving completely positive. If $\mathcal{S}$ has Kraus operators
-    $A_i$ and $\mathcal{T}$ has Kraus operators $B_j$, then
-    $\mathcal{S}\circ\mathcal{T}$ has Kraus operators $A_iB_j$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    The Kraus form of the composite and its resolution of the identity are
-    \begin{align}
-        (\mathcal{S}\circ\mathcal{T})(X)
-         & =\sum_{i,j}(A_iB_j)X(A_iB_j)^\dagger,
-        \notag                                                       \\
-        \sum_{i,j}(A_iB_j)^\dagger(A_iB_j)
-         & =\sum_j B_j^\dagger\left(\sum_i A_i^\dagger A_i\right)B_j
-        =\sum_j B_j^\dagger B_j=I.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Composition of completely positive rectangular Kraus maps]
-    \label{lem:is_kraus_cp_comp}
-    \lean{isKrausCP_comp}
-    \leanok
-    The composition of two completely positive rectangular Kraus maps is
-    completely positive. If the two families are $(A_i)_i$ and $(B_j)_j$,
-    the composite family is $(A_iB_j)_{i,j}$.
-\end{lemma}
 
 \begin{theorem}[Tensor extension preserves trace-preserving complete positivity]
     \label{thm:mpdo_tensor_map_id_cptp}
     \lean{Matrix.tensorMapIdLM_isKrausCPTP}
     \lean{Matrix.idTensorMapLM_isKrausCPTP}
     \leanok
-    \uses{def:mpdo_id_tensor_map, thm:mpdo_equiv_reindex_cptp, lem:is_kraus_cptp_comp}
+    \uses{def:mpdo_id_tensor_map}
     Let $\mathcal S:\End_{\C}(H)\to
         \End_{\C}(K)$ be trace-preserving and completely positive,
     and let $R$ be another finite-dimensional space. Then
@@ -179,142 +48,12 @@ section.
     is needed for this preservation statement.
 \end{proof}
 
-\begin{definition}[Rectangular Kraus map]
-    \label{def:mpdo_rectangular_kraus_map}
-    \lean{Matrix.rectangularKrausMap}
-    \leanok
-    Let $I$ be a finite index set, let $J$ be an arbitrary index set, and let
-    $(A_a\in\C^{J\times I})_a$ be a finite family of matrices. Its
-    rectangular Kraus map is
-    \begin{align}
-        \Phi_A(X) & =\sum_a A_aXA_a^\dagger.
-        \notag
-    \end{align}
-\end{definition}
-
-\begin{theorem}[Rectangular Kraus resolution]
-    \label{thm:mpdo_rectangular_kraus_map_cptp}
-    \lean{Matrix.rectangularKrausMap_isKrausCPTP}
-    \leanok
-    \uses{def:mpdo_rectangular_kraus_map}
-    Let $(A_a:H\to K)_a$ be a finite family of rectangular operators. If
-    $\sum_a A_a^\dagger A_a=I_H$, then
-    $X\mapsto\sum_a A_aXA_a^\dagger$ is trace-preserving and completely
-    positive.
-\end{theorem}
-\begin{proof}\leanok
-    The displayed family is already a Kraus representation, and the assumed
-    identity is precisely its trace-preserving normalization.
-\end{proof}
-
-\begin{lemma}[A rectangular Kraus family is completely positive]
-    \label{lem:mpdo_rectangular_kraus_map_cp}
-    \lean{Matrix.rectangularKrausMap_isKrausCP}
-    \leanok
-    \uses{def:mpdo_rectangular_kraus_map}
-    Every finite rectangular Kraus family defines a completely positive map,
-    without a resolution-of-identity assumption.
-\end{lemma}
-
-\begin{theorem}[Relabeling a rectangular Kraus family]
-    \label{thm:mpdo_rectangular_kraus_map_equiv}
-    \lean{Matrix.rectangularKrausMap_equiv}
-    \leanok
-    \uses{def:mpdo_rectangular_kraus_map}
-    If $e:I\simeq I'$ and $A'_b=A_{e^{-1}(b)}$, then
-    $\Phi_{A'}=\Phi_A$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Reindexing the finite sum gives
-    $\sum_{b\in I'}A_{e^{-1}(b)}XA_{e^{-1}(b)}^\dagger
-        =\sum_{a\in I}A_aXA_a^\dagger$.
-\end{proof}
-
-\begin{definition}[Orthogonally controlled Kraus map]
-    \label{def:mpdo_controlled_kraus_map}
-    \lean{Matrix.controlledKrausMap}
-    \leanok
-    \uses{def:mpdo_rectangular_kraus_map}
-    Let $H=\bigoplus_k H_k$ and $K=\bigoplus_k K_k$. For each $k$, let
-    $(A_{k,a}:H_k\to K_k)_a$ be a finite family of operators, and let
-    $\widetilde A_{k,a}:H\to K$ agree with $A_{k,a}$ on $H_k$ and vanish on
-    every other summand. The orthogonally controlled Kraus map is
-    \begin{align}
-        \mathcal C(X)
-         & =\sum_{k,a}\widetilde A_{k,a}X\widetilde A_{k,a}^\dagger.
-        \notag
-    \end{align}
-    In particular, $\mathcal C(X)_{kl}=0$ for $k\ne l$. This is the sector
-    control in the definitions of $\mathcal T_1$ and $\mathcal S_1$ in
-    \cite[Appendix~C.2, lines~1523--1535 and~1548--1555]
-    {Cirac2016MPDO_arXiv}.
-\end{definition}
-
-\begin{theorem}[Diagonal blocks of an orthogonally controlled map]
-    \label{thm:mpdo_controlled_kraus_map_same_block}
-    \lean{Matrix.controlledKrausMap_sameBlock_apply}
-    \leanok
-    \uses{def:mpdo_controlled_kraus_map, def:mpdo_rectangular_kraus_map}
-    Let $X_{kk}:H_k\to H_k$ denote the $k$th diagonal block of $X$. Then
-    \begin{align}
-        \mathcal C(X)_{kk}
-         & =\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger
-        =\Phi_{A_k}(X_{kk}).
-        \notag
-    \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    If $j\ne k$, then every zero-extended Kraus operator satisfies
-    $[\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]_{(k,b),(k,c)}=0$.
-    Hence only the $j=k$ terms survive, and
-    $[\mathcal C(X)]_{kk}=\sum_a A_{k,a}X_{kk}A_{k,a}^\dagger$.
-\end{proof}
-
-\begin{theorem}[Off-diagonal blocks of an orthogonally controlled map]
-    \label{thm:mpdo_controlled_kraus_map_off_block}
-    \lean{Matrix.controlledKrausMap_apply_of_ne}
-    \leanok
-    \uses{def:mpdo_controlled_kraus_map}
-    If $k\ne l$, then $\mathcal C(X)_{kl}=0$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    For every $(j,a)$ and $k\ne l$, the zero-extended operator satisfies
-    $[\widetilde A_{j,a}X\widetilde A_{j,a}^\dagger]_{(k,b),(l,c)}=0$.
-    Therefore $[\mathcal C(X)]_{kl}=\sum_{j,a}0=0$.
-\end{proof}
-
-\begin{theorem}[Orthogonal control preserves trace-preserving complete positivity]
-    \label{thm:mpdo_controlled_kraus_map_cptp}
-    \lean{Matrix.controlledKrausMap_isKrausCPTP}
-    \leanok
-    \uses{def:mpdo_controlled_kraus_map}
-    Suppose that for every $k$ the sectorwise Kraus family resolves the
-    identity, $\sum_a A_{k,a}^\dagger A_{k,a}=I_{H_k}$. Then the
-    orthogonally controlled map $\mathcal C$ is trace-preserving and completely
-    positive.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:mpdo_rectangular_kraus_map_cptp}
-    Each embedded operator has support in one summand, and therefore
-    \begin{align}
-        \sum_{k,a}\widetilde A_{k,a}^\dagger\widetilde A_{k,a}
-         & =\bigoplus_k\left(\sum_a A_{k,a}^\dagger A_{k,a}\right)
-        =\bigoplus_k I_{H_k}=I_H.
-        \notag
-    \end{align}
-    Apply Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} to the combined
-    rectangular Kraus family $(\widetilde A_{k,a})_{k,a}$.
-\end{proof}
 
 \begin{lemma}[Compressed sums of completely positive maps]
     \label{lem:mpdo_compressed_cp_sum}
     \lean{isKrausCP_sum_comp_singleKrausMap}
     \leanok
-    \uses{def:mpdo_single_kraus_map}
+
     Let $(P_i)_i$ be finitely many operators on $H$ and let each
     $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be completely positive. Then
     \begin{align}
@@ -325,7 +64,7 @@ section.
     the $P_i$ is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:mpdo_rectangular_kraus_map_cp}
+
     Composing each Kraus family of $\Phi_i$ with the corresponding $P_i$
     gives one combined rectangular Kraus family representing the sum.
 \end{proof}
@@ -334,7 +73,7 @@ section.
     \label{lem:mpdo_projector_controlled_trace_selection}
     \lean{trace_sum_comp_singleKrausMap_of_starProjections}
     \leanok
-    \uses{def:mpdo_single_kraus_map}
+
     Let $(P_i)_i$ be finitely many orthogonal projections on $H$, not
     necessarily resolving the identity, and let each
     $\Phi_i:\End_{\C}(H)\to\End_{\C}(K)$ be trace-preserving and
@@ -355,175 +94,16 @@ section.
 % This is a project-derived abstraction of the projection-first channel
 % assembly in CPSV16, Appendix C.2, lines 1810--1817, not a theorem stated
 % there in this general form.
-\begin{theorem}[Projective-resolution control preserves channels]
-    \label{thm:mpdo_projective_resolution_channel_cptp}
-    \lean{isKrausCPTP_sum_comp_singleKrausMap_of_starProjectionResolution,
-        isKrausCPTP_sum_comp_singleKrausMap_of_projectiveResolution}
-    \leanok
-    \uses{def:orthogonal_projection_channel, def:mpdo_single_kraus_map}
-    Let $(P_s)_{s\in I}$ be a finite family of orthogonal projections on
-    $H$ such that $\sum_sP_s=I_H$. For each $s$, let
-    $\Phi_s:\End_{\C}(H)\to\End_{\C}(K)$ be trace-preserving and completely
-    positive. Then
-    \begin{align}
-        \Phi(X) & =\sum_s\Phi_s(P_sXP_s)
-        \notag
-    \end{align}
-    is trace-preserving and completely positive.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{lem:mpdo_compressed_cp_sum, lem:mpdo_projector_controlled_trace_selection}
-    Lemma~\ref{lem:mpdo_compressed_cp_sum} shows that the displayed map is
-    completely positive. By
-    Lemma~\ref{lem:mpdo_projector_controlled_trace_selection},
-    \begin{align}
-        \tr\bigl(\Phi(X)\bigr)
-         & =\tr\Bigl(\Bigl(\sum_sP_s\Bigr)X\Bigr)
-        =\tr(X),
-        \notag
-    \end{align}
-    where the last equality uses $\sum_sP_s=I_H$. Thus $\Phi$ is a channel.
-\end{proof}
 
-\begin{definition}[Right partial trace]
-    \label{def:mpdo_right_partial_trace_map}
-    \lean{Matrix.partialTraceRightLM}
-    \leanok
-    For a matrix $X$ on $A\otimes B$, the right partial trace is the linear map
-    from matrices on $A\otimes B$ to matrices on $A$ given by
-    \begin{align}
-        [\tr_B(X)]_{ij}
-         & =\sum_k X_{(i,k),(j,k)}.
-        \notag
-    \end{align}
-    After the retained and discarded subspins have been regrouped as
-    $A\otimes B$, this is the partial-trace ingredient of the maps
-    $\mathcal T_0$ and $\mathcal S_0$ in
-    \cite[Appendix~C.2, lines~1521--1522 and~1547]{Cirac2016MPDO_arXiv}.
-\end{definition}
-
-\begin{theorem}[Right partial trace of a Kronecker product]
-    \label{thm:mpdo_right_partial_trace_kronecker}
-    \lean{Matrix.partialTraceRight_kronecker}
-    \leanok
-    \uses{def:mpdo_right_partial_trace_map}
-    For square matrices $X$ on $A$ and $Y$ on $B$,
-    $\tr_B(X\otimes Y)=\tr(Y)X$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    For all $i,j$,
-    $[\tr_B(X\otimes Y)]_{ij}
-        =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}$.
-\end{proof}
-
-\begin{lemma}[The right partial trace is trace-preserving completely positive]
-    \label{lem:mpdo_right_partial_trace_cptp}
-    \lean{Matrix.partialTraceRightLM_isKrausCPTP}
-    \leanok
-    \uses{def:mpdo_right_partial_trace_map}
-    The map $\tr_B$ is trace-preserving and completely positive for arbitrary
-    finite-dimensional spaces $A$ and $B$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpdo_rectangular_kraus_map_cptp}
-    For each basis vector $e_k$ of $B$, define
-    $V_k:A\otimes B\to A$ by
-    $V_k(e_i\otimes e_\ell)=\delta_{k\ell}e_i$. Then
-    \begin{align}
-        \sum_k V_kXV_k^\dagger & =\tr_B(X),
-        \notag                                    \\
-        \sum_k V_k^\dagger V_k & =I_{A\otimes B}.
-        \notag
-    \end{align}
-    Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp} applies.
-\end{proof}
 
 The state-preparation map $\mathcal P_\rho(X)=X\otimes\rho$ from matrices on
 $A$ to matrices on $A\otimes B$, the elementary preparation operation used
 in the maps $\mathcal T_1$ and $\mathcal S_1$ of
 \cite[Appendix~C.2, lines~1527--1533 and~1551--1555]{Cirac2016MPDO_arXiv},
 is a fully generic construction with no MPDO-specific content, stated as
-the corresponding definition in the companion quantum-channel volume~\cite{QICLean2026Blueprint} in
+the corresponding definition in the companion quantum-channel volume~\cite[``State-preparation map'']{QICLean2026Blueprint} in
 Chapter~\ref{ch:aux_channel_theory}.
 
-\begin{definition}[Preparation Kraus operators]
-    \label{def:mpdo_state_preparation_kraus}
-    \lean{Matrix.preparationKraus}
-    \leanok
-    Let $R=\sqrt\rho$. For an orthonormal basis $(e_j)_j$ of $B$, define
-    rectangular operators $A_j:A\to A\otimes B$ by
-    $A_j(e_a)=e_a\otimes Re_j$.
-\end{definition}
-
-\begin{theorem}[Kraus action of state preparation]
-    \label{thm:mpdo_state_preparation_kraus_action}
-    \lean{Matrix.rectangularKrausMap_preparationKraus_eq}
-    \leanok
-    \uses{def:mpdo_rectangular_kraus_map, def:mpdo_state_preparation_kraus}
-    If $\rho\succeq0$ and $A_j(e_a)=e_a\otimes\sqrt\rho\,e_j$, then
-    \begin{align}
-        \sum_j A_jXA_j^\dagger & =X\otimes\rho.
-        \notag
-    \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    Put $R=\sqrt\rho$. Since $R$ is Hermitian and $R^2=\rho$, the
-    $((a,s),(b,t))$ entry of the left-hand side is
-    \begin{align}
-        X_{ab}\sum_jR_{sj}\overline{R_{tj}}
-         & =X_{ab}(R^2)_{st}=X_{ab}\rho_{st}.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{theorem}[Preparation Kraus operators resolve the identity]
-    \label{thm:mpdo_state_preparation_kraus_resolution}
-    \lean{Matrix.preparationKraus_resolution}
-    \leanok
-    \uses{def:mpdo_state_preparation_kraus}
-    If $\rho\geq0$ and $\tr(\rho)=1$, then
-    $\sum_j A_j^\dagger A_j=I_A$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Since $R$ is Hermitian and $R^2=\rho$, the diagonal entries of the sum are
-    $\sum_{j,t}\overline{R_{tj}}R_{tj}
-        =\tr(R^2)=\tr(\rho)=1$, while its off-diagonal entries vanish.
-\end{proof}
-
-\begin{lemma}[Positive state preparation is completely positive]
-    \label{lem:mpdo_state_preparation_cp}
-    \lean{Matrix.preparationMap_isKrausCP}
-    \leanok
-    \uses{thm:mpdo_state_preparation_kraus_action}
-    If $\rho\geq0$, then the map $X\mapsto X\otimes\rho$ is completely
-    positive. No trace normalization is required.
-\end{lemma}
-
-\begin{lemma}[State preparation is trace-preserving completely positive]
-    \label{lem:mpdo_state_preparation_cptp}
-    \lean{Matrix.preparationMap_isKrausCPTP}
-    \leanok
-    \uses{def:mpdo_state_preparation_kraus}
-    If $\rho\geq0$ and $\tr(\rho)=1$, then
-    $\mathcal P_\rho:X\mapsto X\otimes\rho$ is trace-preserving completely
-    positive.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpdo_rectangular_kraus_map_cptp, thm:mpdo_state_preparation_kraus_action, thm:mpdo_state_preparation_kraus_resolution}
-    Theorem~\ref{thm:mpdo_state_preparation_kraus_action} identifies the map
-    with the rectangular Kraus family $(A_j)_j$, and
-    Theorem~\ref{thm:mpdo_state_preparation_kraus_resolution} gives
-    $\sum_j A_j^\dagger A_j=I_A$. Apply
-    Theorem~\ref{thm:mpdo_rectangular_kraus_map_cptp}.
-\end{proof}
 
 \begin{definition}[Physical closure maps]
     \label{def:phys_close}
@@ -729,7 +309,7 @@ the remaining sites unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence, thm:rfp_via_ts_physical_trace_idempotent, thm:matrix_support_completion_cptp, thm:mpdo_single_kraus_map_cptp}
+    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence, thm:rfp_via_ts_physical_trace_idempotent, thm:matrix_support_completion_cptp}
     The blocking relation
     $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
     \begin{align}

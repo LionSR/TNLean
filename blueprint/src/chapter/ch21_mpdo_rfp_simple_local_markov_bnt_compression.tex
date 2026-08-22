@@ -44,7 +44,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.EtaStructure.sum_sectorProjection}
     \lean{MPOTensor.EtaStructure.sectorProjection_mul_eq_zero}
     \leanok
-    \uses{def:orthogonal_projection_channel, def:mpdo_hayashi_sector_projection}
+    \uses{def:mpdo_hayashi_sector_projection}
     Each $Q_k$ is an orthogonal projection, distinct summands are mutually
     orthogonal, and the family resolves the identity:
     \begin{align}
@@ -62,7 +62,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_hayashi_sector_projection, lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one, thm:star_projection_coisometric_transport, thm:orthogonal_projection_star_projection_channel}
+    \uses{def:mpdo_hayashi_sector_projection}
     The coordinate projections satisfy
     \begin{align}
         E_k^*      & =E_k,
@@ -400,7 +400,7 @@ strong subadditivity for a normalized three-site reduced state.
     This is the forward implication of the Hayashi equality
     characterization. The product-reference raw Petz formula, including its
     singular-support compression, is given by
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}. The singular-support
+    the corresponding theorem in the companion quantum-channel volume~\cite[``Raw Petz factorization for a product reference'']{QICLean2026Blueprint}. The singular-support
     equality-to-recovery theorem is still separate. Beyond it, the remaining
     structural ingredient is the family-level Koashi--Imoto decomposition and
     the induced action of the middle-system channel on its common direct-sum
@@ -578,7 +578,7 @@ strong subadditivity for a normalized three-site reduced state.
     \cite[Appendix~C.2, lines~1714--1737]{Cirac2016MPDO_arXiv}.
     The Hayashi decomposition uses the forward equality characterization of
     strong subadditivity recorded in
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint}; no additional
+    the corresponding theorem in the companion quantum-channel volume~\cite[``Hayashi SSA-equality characterization'']{QICLean2026Blueprint}; no additional
     analytic assumption is introduced here.
 \end{theorem}
 

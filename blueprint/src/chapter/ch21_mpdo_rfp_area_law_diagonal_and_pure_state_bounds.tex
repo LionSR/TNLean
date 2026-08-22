@@ -283,31 +283,12 @@
     so the trace positivity hypothesis supplies the required normalization.
 \end{proof}
 
-\begin{definition}[Operator-Schmidt rank]
-    \label{def:bipartite_operator_schmidt_rank}
-    \lean{Matrix.HasOperatorSchmidtDecomposition}
-    \lean{Matrix.operatorSchmidtRank}
-    \lean{Matrix.hasOperatorSchmidtDecomposition_operatorSchmidtRank}
-    \lean{Matrix.operatorSchmidtRank_minimal}
-    \leanok
-    For a bipartite density operator
-    $\rho\in\MN{d_A}\otimes\MN{d_B}$, its
-    \emph{operator-Schmidt rank} is the least integer $r$ for which there are
-    matrices $A_t\in\MN{d_A}$ and $B_t\in\MN{d_B}$ satisfying
-    \begin{align}
-        \rho & =\sum_{t=1}^{r}A_t\otimes B_t.
-        \notag
-    \end{align}
-    No Hermiticity or positivity condition is imposed on the factors. This is
-    the definition in \cite[Equation~(1)]{DeLasCuevas2019Separability}; the
-    same formula defines the rank of an arbitrary complex bipartite matrix.
-\end{definition}
 
 \begin{theorem}[Positivity of the operator-Schmidt rank]
     \label{thm:operator_schmidt_rank_pos}
     \lean{Matrix.operatorSchmidtRank_pos_of_ne_zero}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     Every nonzero finite-dimensional bipartite operator $X$ satisfies
     \begin{align}
         0 & <\operatorname{OSR}(X).
@@ -318,7 +299,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     If $\operatorname{OSR}(X)=0$, a shortest product decomposition of $X$ is
     an empty sum. Hence $X=0$.
 \end{proof}
@@ -330,7 +311,7 @@
         MPOTensor.bipartitionedNormalizedMPO_hasOperatorSchmidtDecomposition,
         MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le}
     \leanok
-    \uses{def:mpdo_split_normalized_mpo, def:bipartite_operator_schmidt_rank}
+    \uses{def:mpdo_split_normalized_mpo}
     Let $M$ be an MPO tensor of operator bond dimension $D$, and let
     $N=L+K$. Opening the two virtual bonds at the consecutive cut gives
     \begin{align}
@@ -383,7 +364,7 @@
     \lean{Matrix.range_operatorSchmidtMap_eq_operatorBlockSpan,
         Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     Write $\rho_{ij}\in\MN{d_B}$ for the blocks determined by a basis
     of the first factor, and define
     $\mathcal R_\rho(X)=\sum_{i,j}X_{ij}\rho_{ij}$. Then
@@ -395,7 +376,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     The minimality theorem at the preceding definition proves that the range
     dimension $\dim\range\mathcal R_\rho$ is the least admissible
     product-decomposition length: it is itself an admissible length and no
@@ -412,7 +393,7 @@
     \lean{Matrix.operatorSchmidtRank_local_mul_le,
         Matrix.operatorSchmidtRank_local_isometry_conj}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     Let $V_A:\mathcal H_A\to\mathcal K_A$ and
     $V_B:\mathcal H_B\to\mathcal K_B$ be isometries between finite-dimensional
     complex spaces. For every operator $X$ on
@@ -462,7 +443,7 @@
     \lean{Matrix.PosSemidef.eq_marginalSupport_expansion_compression,
         Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     Let $\rho\geq0$ be an operator on $H_A\otimes H_B$. Let
     $V_A:\widehat H_A\to H_A$ and $V_B:\widehat H_B\to H_B$ be isometries
     whose range projectors are the support projectors $P_A$ and $P_B$ of the
@@ -546,13 +527,13 @@
     their spaces has dimension zero.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:partial_trace_product_isometry, thm:compression_on_support_posDef, thm:operator_schmidt_rank_marginal_support_compression}
+    \uses{lem:partial_trace_product_isometry, thm:operator_schmidt_rank_marginal_support_compression}
     Insert the reconstruction $\rho=W\rho_cW^\dagger$ into the two covariance
     identities of Lemma~\ref{lem:partial_trace_product_isometry}, and multiply
     by the corresponding adjoint isometries. Each displayed marginal is the
     compression of a positive semidefinite matrix to its support, so its
     positive definiteness follows from
-    Theorem~\ref{thm:compression_on_support_posDef}.
+    Theorem~\cite[``Faithful compression onto the support'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{theorem}[Channel of a faithful bipartite marginal]
@@ -562,7 +543,7 @@
         Matrix.supportedMarginalMap_diagonal,
         Matrix.supportedMarginalReconstruction_eq}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank, thm:operator_schmidt_coefficient_space}
+    \uses{thm:operator_schmidt_coefficient_space}
     Let $\rho\geq0$ be a bipartite complex matrix whose first marginal is
     faithful. Choose an eigenbasis in which
     $\tr_B\rho=\diag(p_1,\ldots,p_{d_A})$ with
@@ -763,36 +744,6 @@
     projection, specialize to $f(x)=1$ for $x\neq0$ and $f(0)=0$.
 \end{proof}
 
-\begin{theorem}[Logarithm of a tensor product on its support]
-    \label{thm:mpdo_support_log_kronecker}
-    \lean{Matrix.log_kronecker_posSemidef}
-    \leanok
-    Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
-    orthogonal projections onto their respective ranges. Then
-    \begin{align}
-        \log(A\otimes B)
-         & =(\log A)\otimes P_B+P_A\otimes(\log B).
-        \label{eq:mpdo_support_log_tensor_product}
-    \end{align}
-    Here the logarithm is extended by zero on the kernel. Neither matrix is
-    required to be positive definite, and either index set may be empty.
-    This auxiliary identity is project-derived rather than a theorem of
-    CPSV16.
-\end{theorem}
-
-\begin{proof}\leanok
-    Diagonalize $A$ and $B$. On a product eigenvector with eigenvalues
-    $a,b\geq0$, equation~(\ref{eq:mpdo_support_log_tensor_product}) becomes
-    \begin{align}
-        \log(ab)
-         & =\log(a)\mathbf 1_{b\ne0}
-        +\mathbf 1_{a\ne0}\log(b).
-        \notag
-    \end{align}
-    If $a,b>0$, this is the ordinary product identity for the logarithm. If
-    either eigenvalue is zero, both sides vanish. Conjugating the resulting
-    diagonal identity by the product eigenbasis proves the formula.
-\end{proof}
 
 \begin{theorem}[Logarithm of a positive square root]
     \label{thm:log_sqrt_possemidef}
@@ -931,7 +882,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cfc_transpose_hermitian, thm:mpdo_support_log_kronecker, thm:log_sqrt_possemidef, thm:log_rpow_posdef, thm:support_log_vector_jensen, thm:sandwiched_renyi_two_weighted}
+    \uses{thm:cfc_transpose_hermitian, thm:log_sqrt_possemidef, thm:log_rpow_posdef, thm:support_log_vector_jensen, thm:sandwiched_renyi_two_weighted}
     Set $R=\sqrt\rho$, $T=\omega^{-1/2}$,
     $\Delta=R^T\otimes T$, and $v=\operatorname{vec}(R)$. The vectorization
     is column-stacking, with factor order
@@ -961,7 +912,7 @@
     support condition is essential when $\rho$ is singular: it removes the
     zero spectral weights before Jensen's inequality is applied.
 
-    Theorems~\ref{thm:mpdo_support_log_kronecker},
+    Theorems~\cite[``Logarithm of a tensor product on its support'']{QICLean2026Blueprint},
     \ref{thm:log_sqrt_possemidef}, \ref{thm:log_rpow_posdef}, and
     \ref{thm:cfc_transpose_hermitian} give
     \begin{align}
@@ -1035,10 +986,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:compression_on_support_posDef, thm:isometric_embedding_trace, thm:support_compression_reconstruction, thm:relative_entropy_support_compression, thm:sandwiched_renyi_two_support_compression}
+    \uses{thm:isometric_embedding_trace, thm:support_compression_reconstruction, thm:relative_entropy_support_compression, thm:sandwiched_renyi_two_support_compression}
     Choose an isometric inclusion of the support of $\omega$. Its compression
     $\omega_V=V^\dagger\omega V$ is positive definite by
-    Theorem~\ref{thm:compression_on_support_posDef}, while
+    Theorem~\cite[``Faithful compression onto the support'']{QICLean2026Blueprint}, while
     $\rho_V=V^\dagger\rho V$ remains positive semidefinite. Reconstruction
     and (\ref{eq:mpdo_isometric_trace}) show that both compressed matrices
     have trace one. Apply (\ref{eq:mpdo_faithful_relative_q2_hypothesis}) to
@@ -1298,7 +1249,7 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the corresponding lemma in the companion quantum-channel volume~\cite{QICLean2026Blueprint} to the function $x\mapsto x^s$.
+    Apply the corresponding lemma in the companion quantum-channel volume~\cite[``Functional calculus under unitary conjugation'']{QICLean2026Blueprint} to the function $x\mapsto x^s$.
 \end{proof}
 
 \begin{theorem}[Real powers of positive tensor products]
@@ -1314,7 +1265,7 @@ terms of operator-Schmidt rank.
 
 \begin{proof}\leanok
     Apply
-    the corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} to
+    the corresponding theorem in the companion quantum-channel volume~\cite[``Multiplicative functional calculus on positive tensor products'']{QICLean2026Blueprint} to
     $x\mapsto x^s$, using $(xy)^s=x^sy^s$ for $x,y\geq0$.
 \end{proof}
 
@@ -1382,7 +1333,7 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_osr_faithful}
     \lean{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef}
     \leanok
-    \uses{def:sandwiched_renyi_two_trace, def:bipartite_operator_schmidt_rank}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\rho_{AB}\succeq0$ have positive definite marginals $\rho_A$ and
     $\rho_B$. Then
     \begin{align}
@@ -1415,7 +1366,7 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_osr_support}
     \lean{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank}
     \leanok
-    \uses{def:sandwiched_renyi_two_trace, def:bipartite_operator_schmidt_rank}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\rho_{AB}\succeq0$ be any finite-dimensional bipartite operator. Then
     \begin{align}
         Q_2(\rho_{AB},\rho_A\otimes\rho_B)
@@ -1542,7 +1493,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
     \lean{Entropy.mutualInformation_le_log_operatorSchmidtRank}
     \leanok
-    \uses{def:bipartite_operator_schmidt_rank}
+
     Let $\rho_{AB}\succeq0$ be a finite-dimensional bipartite operator with
     $\tr\rho_{AB}=1$. Then
     \begin{align}
@@ -1558,10 +1509,10 @@ logarithmic divergence, or a comparison with relative entropy.
     Set $\omega=\rho_A\otimes\rho_B$. The marginals are positive semidefinite,
     $\tr\omega=1$, and Theorem~\ref{thm:product_marginals_kernel} gives
     $\ker\omega\subseteq\ker\rho_{AB}$. Reindex the product basis by a single
-    finite coordinate set. The corresponding lemma in the companion quantum-channel volume~\cite{QICLean2026Blueprint} and
+    finite coordinate set. The corresponding lemma in the companion quantum-channel volume~\cite[``Reindexing invariance of the quantum relative entropy'']{QICLean2026Blueprint} and
     Theorem~\ref{thm:sandwiched_renyi_two_submatrix_equiv} preserve the two
     functionals, so Theorem~\ref{thm:relative_entropy_q2_support} applies.
-    The corresponding theorem in the companion quantum-channel volume~\cite{QICLean2026Blueprint} identifies its left
+    The corresponding theorem in the companion quantum-channel volume~\cite[``Relative entropy against the product of the marginals'']{QICLean2026Blueprint} identifies its left
     side with mutual information. Thus, with
     $q=Q_2(\rho_{AB},\omega)$,
     \begin{align}
