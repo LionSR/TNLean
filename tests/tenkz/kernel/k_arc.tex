@@ -10,7 +10,9 @@
 % curve, not on the chord between its ends, and the pair of faces no
 % single curve can honour -- two ports facing away from each other
 % along the chord's own line -- draws as the wrap: a fold out of each
-% face joined by a run beside the chord.
+% face joined by a run beside the chord; the bead at a quarter of the
+% wrap's own length stands on the first fold, pinning the whole-route
+% arclength meaning.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -40,6 +42,7 @@
   \tn[at=(1,8), skin=box, name=w1, ports={180:virtual, 0:virtual}]{C}
   \tn[at=(1,9), skin=box, name=w2, ports={0:virtual, 180:virtual}]{D}
   \tnwire{w1.0}{w2.180}
-  \tnwire[route=arc]{w1.180}{w2.0}
+  \tnwire[route=arc, name=wrap]{w1.180}{w2.0}
+  \tn[skin=dot, at=on wrap 0.25, size=s]{}
 \end{tenkz}
 \end{document}
