@@ -17,6 +17,8 @@ This module introduces no new definitions.
 
 ## Main results
 
+* `Matrix.trace_pow_mul_comm`: positive powers of the two products of a rectangular pair
+  have equal traces.
 * `Matrix.trace_pow_eq_of_intertwining`: intertwining matrices have equal trace powers when
   the intertwiner has a specified two-sided inverse.
 * `pow_apply_eq_sum_path_indicator`: expands a matrix-power entry as a path sum.
@@ -30,6 +32,26 @@ section cyclicTrace
 /-! These lemmas are generic `CommSemiring`-valued matrix combinatorics. -/
 
 variable {n : Type*} [Fintype n] [DecidableEq n] {R : Type*} [CommSemiring R]
+
+/-- Positive powers of the two products of a rectangular pair of matrices have equal traces:
+\[
+  \operatorname{tr}((LQ)^N)=\operatorname{tr}((QL)^N),\qquad N\geq1.
+\]
+This is the cyclic-invariance calculation used with the closed sector-trace matrices of
+arXiv:1606.00608, Appendix C.2, lines 1473--1493. -/
+theorem Matrix.trace_pow_mul_comm {a b : Type*} [Fintype a] [Fintype b]
+    [DecidableEq a] [DecidableEq b] (L : Matrix a b R) (Q : Matrix b a R)
+    {N : ℕ} (hN : 0 < N) :
+    Matrix.trace ((L * Q) ^ N) = Matrix.trace ((Q * L) ^ N) := by
+  have key : ∀ M : ℕ, (L * Q) ^ (M + 1) = L * ((Q * L) ^ M * Q) := by
+    intro M
+    induction M with
+    | zero => simp
+    | succ M ih =>
+      rw [pow_succ, ih, pow_succ]
+      simp only [Matrix.mul_assoc]
+  obtain ⟨M, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
+  rw [key M, Matrix.trace_mul_comm, Matrix.mul_assoc, ← pow_succ]
 
 /-- If `P * B = A * P` and `Q` is a two-sided inverse of `P`, then `A` and `B` have
 identical traces at every natural-number power. -/

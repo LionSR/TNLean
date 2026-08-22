@@ -22,6 +22,7 @@ import TNLean.Algebra.EigenvectorProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.KramersDegeneracy
