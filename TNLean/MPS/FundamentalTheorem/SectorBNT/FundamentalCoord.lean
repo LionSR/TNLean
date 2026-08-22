@@ -678,9 +678,11 @@ family at every positive length are globally conjugate: their total bond
 dimensions agree, and a single invertible gauge `Y` carries one total tensor to
 the other.
 
-**Scope restriction (active nonzero BNT data):** This theorem does not cover
-inactive zero-weight canonical-form summands.  See
-`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`. -/
+**Local fix (nonzero coefficients):** CPSV16 Corollary 2.11 is read with every
+canonical-form coefficient nonzero, the convention implicit in its normalization
+`|μ_k| ≤ 1` with one coefficient equal to one; a zero-coefficient summand is
+not a block.  Documented in
+`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -708,9 +710,11 @@ On the restricted BNT canonical-form class, two forms generating the same MPV
 family at every positive length are related by one unitary global gauge after
 identifying their equal total bond dimensions.
 
-**Scope restriction (active nonzero BNT data):** This theorem does not cover
-inactive zero-weight canonical-form summands.  See
-`docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`. -/
+**Local fix (nonzero coefficients):** CPSV16 Corollary 2.11 is read with every
+canonical-form coefficient nonzero, the convention implicit in its normalization
+`|μ_k| ≤ 1` with one coefficient equal to one; a zero-coefficient summand is
+not a block.  Documented in
+`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -746,9 +750,11 @@ For each `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimensi
 (`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
 `P.basis (β k)` by a unit phase and gauge conjugation.
 
-**Scope restriction (active nonzero BNT data):** This theorem does not compare
-BNT families containing representatives with identically zero coefficients.
-See `docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex`. -/
+**Local fix (nonzero coefficients):** CPSV16 Theorem 2.10 is read with every
+canonical-form coefficient nonzero, the convention implicit in its normalization
+`|μ_k| ≤ 1` with one coefficient equal to one; a zero-coefficient summand is
+not a block.  Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
