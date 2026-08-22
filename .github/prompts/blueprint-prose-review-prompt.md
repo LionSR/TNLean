@@ -3,7 +3,7 @@ Review this PR for TWO categories ONLY:
   (B) prose quality — banned AI/software language, no Lean jargon, and
       formula-driven proof sketches.
 
-Authoritative source for category B: `docs/prose_style.md`. Read it once
+Authoritative source for category B: the lean-conventions skill's `prose_style.md` reference (`the lean-conventions skill's prose_style reference (docs/prose_style.md holds only the project addendum)` holds only the project addendum). Read it once
 before reviewing; do not paraphrase the tables here. In particular, enforce
 the rule that equations carry mathematical proof sketches: overlap arguments
 should display the limiting identities, and tensor-network arguments should
@@ -104,7 +104,7 @@ matches — the blueprint clearly *is* ready and the tag is stale.
 
 ## Category B — 🟡 Prose quality, formulas, and no-Lean-jargon
 
-**Read `docs/prose_style.md` before reviewing.** It is the single
+**Read the lean-conventions skill's `prose_style.md` reference (`the lean-conventions skill's prose_style reference (docs/prose_style.md holds only the project addendum)` holds only the project addendum) before reviewing.** It is the single
 authoritative source for:
   §1 — no Lean jargon in blueprint prose;
   §2 — banned software-engineering terms;

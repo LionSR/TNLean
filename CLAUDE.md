@@ -84,7 +84,11 @@ See `docs/import_structure.md`; `TNLean.lean` is generated.
 
 ## Conventions & Style Guides
 
-Detailed conventions live in `docs/`. Read the relevant file before working in that area:
+Detailed conventions live in `docs/`. The Mathlib-style, proof-integrity, and
+prose documents are pointers into the `lean-conventions` skill
+(texra-ai/texra-lean-skills, auto-installed via `.claude/settings.json`);
+read the skill reference plus the file's project addendum. Read the relevant
+file before working in that area:
 
 | File | Covers |
 |------|--------|

@@ -37,7 +37,7 @@ Instructions:
 
 Quality bar (same rubric as Claude Code Review — your fix MUST satisfy ALL of these before committing):
 
-- Proof integrity (BLOCKER): no `sorry`, `admit`, `native_decide` on non-trivial goals, `unsafeCast`, or new axioms. See docs/PROOF_INTEGRITY.md.
+- Proof integrity (BLOCKER): no `sorry`, `admit`, `native_decide` on non-trivial goals, `unsafeCast`, or new axioms. See the lean-conventions skill's PROOF_INTEGRITY reference (docs/PROOF_INTEGRITY.md holds only the project addendum).
 - Proof correctness (BLOCKER): structured proofs, not brute-force `simp`/`omega`/`ring` chains. If a result looks wrong, too strong, or suspiciously general, scout Papers/Notes for the original theorems, compare hypotheses/conclusions, cite the specific paper/section.
 - Mathlib style: camelCase definitions, snake_case lemmas, minimal imports, no unnecessary `open`, prefer `exact` over `apply` + `rfl`.
 - Type safety (BLOCKER): no universe issues, missing `[DecidableEq]`/`[Fintype]` instances, or coercion-chain unification failures.
