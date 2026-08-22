@@ -1,0 +1,11 @@
+% Negative: a canvas transform nested inside a path action of a wire class
+% is refused like a top-level one; the guard reads the stored definition.
+\documentclass{standalone}
+\usepackage{tenkz}
+\tikzset{bond/.append style={preaction={draw, transform canvas={xshift=10pt}}}}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnwire{(1,1)}{(1,2)}
+\end{tenkz}
+\end{document}

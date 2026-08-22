@@ -1,0 +1,10 @@
+% Negative: the physical-leg class is guarded like the bond class.
+\documentclass{standalone}
+\usepackage{tenkz}
+\tikzset{physical leg/.append style={transform canvas={yshift=4pt}}}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[name=A, ports={90:physical:$i$}]{A}
+\end{tenkz}
+\end{document}
