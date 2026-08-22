@@ -354,7 +354,8 @@ the matrix dimension is at least two.
 
 **Local fix (one-dimensional equality families):** Wolf's concluding
 linear-independence assertion fails for `d = 1` and `n > 1`; see
-`docs/paper-gaps/wolf_sic_povm_linear_independence.tex`. The hypothesis `2 ≤ d`
+`https://sirui-lu.com/QICLean/paper-gaps/wolf_sic_povm_linear_independence.pdf`
+(QICLean paper-gap note). The hypothesis `2 ≤ d`
 is exactly the nondegeneracy condition needed by the coefficient equation.
 
 Source: Wolf, *Quantum Channels & Operations*, Chapter 2, Proposition "SIC POVMs";
@@ -451,7 +452,8 @@ independent.
 
 **Local fix (one-dimensional equality families):** This is the `n = 1` branch
 of the corrected nondegeneracy condition; see
-`docs/paper-gaps/wolf_sic_povm_linear_independence.tex`.
+`https://sirui-lu.com/QICLean/paper-gaps/wolf_sic_povm_linear_independence.pdf`
+(QICLean paper-gap note).
 
 Source context: Wolf, *Quantum Channels & Operations*, Chapter 2, Proposition
 "SIC POVMs"; `Notes/WolfNoteTexSource/ch02_representations.tex`, lines 807--823. -/

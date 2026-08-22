@@ -28,7 +28,7 @@ tracker**.
 | #2318 W state as MPS + lower bound | Item (a) done by PR #2946: `TNLean/MPS/Examples/WState.lean` sorry-free. Item (b) explicitly delegated to open #2947. Closed with pointer to #2947. |
 | #2470 PEPS RegionInsertionTransfer from SameState | Discharged via the coherent-frame route: `exists_regionEdgeGauge_of_blockingData` (`TNLean/PEPS/CoherentFrameInstance2.lean:174`) → `regionInsertionTransfer_of_coeffTransfer` (`RegionBlock/RegionReconcile.lean:323`). Closure comment cites the alternate route; one docstring at `RegionReconcile.lean:310-318` is now stale. |
 | #2616 PEPS torus reference blocking datum + transport | All three deliverables exist (`torusHorizontalReferenceBlockingDatum`, `regionInsertedCoeff_translate_coeffIdentity` at `RegionTransferCovariance.lean:139`, `transportBlockingDataAlong_redBlue`); feeds `fundamentalTheorem_normalTorusPEPS_unconditional` (`TorusFundamentalTheorem2.lean:298`, `\leanok`, sorry-free). |
-| #3965 Wolf Ch1 conditional-expectation classification | PRs #4138/#4147. `StarSubalgebra.exists_block_densities_of_positive_retraction` (`TNLean/Channel/PositiveConditionalExpectationDirectSum.lean:672`), blueprint `thm:positive_retraction_finite_star_algebra` `\leanok`, scope restriction resolved per `docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex`. |
+| #3965 Wolf Ch1 conditional-expectation classification | PRs #4138/#4147. `StarSubalgebra.exists_block_densities_of_positive_retraction` (`TNLean/Channel/PositiveConditionalExpectationDirectSum.lean:672`), blueprint `thm:positive_retraction_finite_star_algebra` `\leanok`, scope restriction resolved per `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop1_5_one_factor_scope.pdf` (QICLean paper-gap note). |
 | #4065 Disable per-run lake cache in CI | `.github/workflows/auto-fix.yml:226` passes `use_github_cache: false`; all local `lean-env-action` calls carry `use-github-cache: false`; `gh api .../caches` shows no `lake-*` entries. |
 | #5086 tenkz plane frame with declared basis | Label `all-resolved`, bot reports 3/3 sub-issues closed; acceptance verified in tree (`rmp-iii-a-ghz-state`, `fig21d_cubic` respelled, kernel guards `plane-rise-low`/`plane-slant-band` at `tenkz-kernel.code.tex:4578,4594`). Caveat for closer: `planes-interleave` guard still lattice-tier only. |
 | #5422 Wolf Prop 6.2 (TP peripheral Jordan blocks) | PR #5431 merged 2026-08-04. `IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving` (`TNLean/Channel/Peripheral/JordanBlocks.lean:222`), blueprint `thm:peripheral_jordan_trivial` `\leanok` with scope restriction stated. Unital half already split to #5447. |
@@ -205,7 +205,7 @@ CLOSED by audit (14): #631, #2318, #2470, #2616, #3965, #4065, #5086, #5422,
 | #664 | ACTIVE | blueprint path renamed ch11b→ch22 |
 | #764 | ACTIVE | |
 | #765 | ACTIVE | |
-| #766 | ACTIVE, needs reframe | cited declaration deleted (statement false); see `docs/paper-gaps/wolf_prop2_11_lorentz_scalar_filtering_gap.tex` |
+| #766 | ACTIVE, needs reframe | cited declaration deleted (statement false); see `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop2_11_lorentz_scalar_filtering_gap.pdf` (QICLean paper-gap note) |
 | #829 | ACTIVE | |
 | #952 | ACTIVE, cross-linked with #5164 | |
 | #992 | tracker, updated | Ch1 not closed; #3958 added |
