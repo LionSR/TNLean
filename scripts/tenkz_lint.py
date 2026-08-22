@@ -138,9 +138,9 @@ def tombstone_patterns(
     A row stating no spelling gets no pattern; the language check reports it.
     """
     owners: dict[str, set[tuple[str, str]]] = {}
-    # A name-valued key owns every word: `name=around` is a legal
-    # identifier carrying a retired key's spelling as its value, and the
-    # lint must step over it exactly as it steps over a live enum word.
+    # A name-valued key owns every word: a legal identifier may carry a
+    # retired key's spelling as its value, and the lint must step over
+    # that use exactly as it steps over a live enum word.
     name_frames: set[tuple[str, str]] = set()
     for entry in entries:
         if entry.kind != "key":
