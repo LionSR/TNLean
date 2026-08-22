@@ -11610,17 +11610,49 @@
 % thread of the same review forbids.  Instead this covers it honestly, on
 % the same envelope doctrine as a dashed wire's gap: a short segment,
 % centred on the mark's own arc-length station, along the route's local
-% chord there, stroked to the barb's own configured reach.  The station is
-% arc length along the route's resolved geometry -- its straight segments
-% exactly, a cubic segment by its chord, an underestimate that can only
-% shift the found station toward the route's own drawn middle, never off
-% the route -- read off the SAME points sequence the centreline walk above
-% just built, so no path is re-saved and no style is re-executed.
+% direction there, stroked to the barb's own configured reach.  The
+% station is arc length along the route's resolved geometry -- straight
+% segments exactly, a cubic by sub-chords of the true curve whose count
+% the control net's own deviation bound chooses, the residual widening
+% the cover wherever the count's ceiling binds, so the cover sits on a
+% bowed segment's drawn bow rather than on the chord between its ends,
+% at any size (#6360) -- read off the SAME points sequence the
+% centreline walk above just built, so no path is re-saved and no style
+% is re-executed.
 \fp_new:N \l__tenkz_kernel_ink_mark_total_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_target_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_run_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_len_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_step_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_ox_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_oy_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cax_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cay_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cbx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_cby_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_wx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_wy_fp
+\bool_new:N \l__tenkz_kernel_ink_mark_cubic_bool
+\fp_new:N \l__tenkz_kernel_ink_mark_resid_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_found_resid_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_found_len_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_lerr_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_flat_fp
+\seq_new:N \l__tenkz_kernel_ink_mark_stack_seq
+\tl_new:N \l__tenkz_kernel_ink_mark_piece_tl
+\tl_new:N \l__tenkz_kernel_ink_mark_step_tl
+\fp_new:N \l__tenkz_kernel_ink_mark_max_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_may_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mbx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mby_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mcx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mcy_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_dax_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_day_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_dbx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_dby_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mmx_fp
+\fp_new:N \l__tenkz_kernel_ink_mark_mmy_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_px_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_py_fp
 \fp_new:N \l__tenkz_kernel_ink_mark_qx_fp
@@ -11659,19 +11691,30 @@
           { \dim_to_fp:n { \tl_item:nn {#1} {5} } }
         \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
           { \dim_to_fp:n { \tl_item:nn {#1} {6} } }
+        \bool_set_false:N \l__tenkz_kernel_ink_mark_cubic_bool
+        \fp_zero:N \l__tenkz_kernel_ink_mark_resid_fp
         \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
       }
       {
         \tl_if_eq:NNTF \l__tenkz_kernel_ink_final_tl \c_spath_curveto_tl
           {
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_ox_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {2} } }
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_py_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_oy_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {3} } }
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_qx_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cax_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {5} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cay_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {6} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cbx_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {8} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_cby_fp
+              { \dim_to_fp:n { \tl_item:nn {#1} {9} } }
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_wx_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {11} } }
-            \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp
+            \fp_set:Nn \l__tenkz_kernel_ink_mark_wy_fp
               { \dim_to_fp:n { \tl_item:nn {#1} {12} } }
+            \bool_set_true:N \l__tenkz_kernel_ink_mark_cubic_bool
             \bool_set_true:N \l__tenkz_kernel_ink_mark_drawn_bool
           }
           { \bool_set_false:N \l__tenkz_kernel_ink_mark_drawn_bool }
@@ -11698,6 +11741,162 @@
             - \l__tenkz_kernel_ink_mark_py_fp )
           / \l__tenkz_kernel_ink_mark_len_fp
           : 0
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_seg:n #1
+  {
+    \bool_if:NTF \l__tenkz_kernel_ink_mark_cubic_bool
+      {
+        \tl_set:Nn \l__tenkz_kernel_ink_mark_step_tl {#1}
+        \seq_clear:N \l__tenkz_kernel_ink_mark_stack_seq
+        \seq_push:Ne \l__tenkz_kernel_ink_mark_stack_seq
+          {
+            {0}
+            { \fp_use:N \l__tenkz_kernel_ink_mark_ox_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_oy_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_cax_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_cay_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_cbx_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_cby_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_wx_fp }
+            { \fp_use:N \l__tenkz_kernel_ink_mark_wy_fp }
+          }
+        \bool_until_do:nn
+          { \seq_if_empty_p:N \l__tenkz_kernel_ink_mark_stack_seq }
+          {
+            \seq_pop:NN \l__tenkz_kernel_ink_mark_stack_seq
+              \l__tenkz_kernel_ink_mark_piece_tl
+            \exp_last_unbraced:NV
+              \__tenkz_kernel_r_wire_ink_mark_piece:nnnnnnnnn
+              \l__tenkz_kernel_ink_mark_piece_tl
+          }
+      }
+      { #1 }
+  }
+% One stacked piece: emit it as a chord when its interior controls sit
+% within tolerance of that chord (or at the depth cap), else split it at
+% the parameter midpoint and stack the far half over the near one.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_piece:nnnnnnnnn
+    #1#2#3#4#5#6#7#8#9
+  {
+    % chord and flatness: the larger distance of the two controls from
+    % the chord, taken as plain point distance when the chord degenerates
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_len_fp
+      { sqrt ( ( (#8) - (#2) ) ^ 2 + ( (#9) - (#3) ) ^ 2 ) }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_flat_fp
+      {
+        \fp_compare:nNnTF { \l__tenkz_kernel_ink_mark_len_fp } > { 0 }
+          {
+            max (
+              abs ( ( (#8) - (#2) ) * ( (#3) - (#5) )
+                    - ( (#9) - (#3) ) * ( (#2) - (#4) ) )
+                / \l__tenkz_kernel_ink_mark_len_fp ,
+              abs ( ( (#8) - (#2) ) * ( (#3) - (#7) )
+                    - ( (#9) - (#3) ) * ( (#2) - (#6) ) )
+                / \l__tenkz_kernel_ink_mark_len_fp )
+          }
+          {
+            max (
+              sqrt ( ( (#4) - (#2) ) ^ 2 + ( (#5) - (#3) ) ^ 2 ) ,
+              sqrt ( ( (#6) - (#2) ) ^ 2 + ( (#7) - (#3) ) ^ 2 ) )
+          }
+      }
+    \bool_lazy_or:nnTF
+      { \int_compare_p:nNn {#1} > { 5 } }
+      {
+        \fp_compare_p:nNn { \l__tenkz_kernel_ink_mark_flat_fp } <
+          {
+            max ( \dim_to_fp:n { \__tenkz_dim:n {barblen} } / 8 ,
+                  1 / 20 )
+          }
+      }
+      {
+        % emitted: the piece is one chord; the sandwich prices its
+        % arc-length loss exactly (polygon minus chord), and its
+        % flatness stands ready for the found-station residual
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp {#2}
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_py_fp {#3}
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_qx_fp {#8}
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_qy_fp {#9}
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_resid_fp
+          { \l__tenkz_kernel_ink_mark_flat_fp }
+        \fp_add:Nn \l__tenkz_kernel_ink_mark_lerr_fp
+          {
+            sqrt ( ( (#4) - (#2) ) ^ 2 + ( (#5) - (#3) ) ^ 2 )
+            + sqrt ( ( (#6) - (#4) ) ^ 2 + ( (#7) - (#5) ) ^ 2 )
+            + sqrt ( ( (#8) - (#6) ) ^ 2 + ( (#9) - (#7) ) ^ 2 )
+            - \l__tenkz_kernel_ink_mark_len_fp
+          }
+        \tl_use:N \l__tenkz_kernel_ink_mark_step_tl
+      }
+      {
+        % split at the parameter midpoint (de Casteljau) and stack the
+        % far half under the near one, so the walk stays in route order
+        \__tenkz_kernel_r_wire_ink_mark_split:nnnnnnnnn
+          {#1} {#2} {#3} {#4} {#5} {#6} {#7} {#8} {#9}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_split:nnnnnnnnn
+    #1#2#3#4#5#6#7#8#9
+  {
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_max_fp { ( (#2) + (#4) ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_may_fp { ( (#3) + (#5) ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_mbx_fp { ( (#4) + (#6) ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_mby_fp { ( (#5) + (#7) ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_mcx_fp { ( (#6) + (#8) ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_mcy_fp { ( (#7) + (#9) ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_dax_fp
+      {
+        ( \l__tenkz_kernel_ink_mark_max_fp
+          + \l__tenkz_kernel_ink_mark_mbx_fp ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_day_fp
+      {
+        ( \l__tenkz_kernel_ink_mark_may_fp
+          + \l__tenkz_kernel_ink_mark_mby_fp ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_dbx_fp
+      {
+        ( \l__tenkz_kernel_ink_mark_mbx_fp
+          + \l__tenkz_kernel_ink_mark_mcx_fp ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_dby_fp
+      {
+        ( \l__tenkz_kernel_ink_mark_mby_fp
+          + \l__tenkz_kernel_ink_mark_mcy_fp ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_mmx_fp
+      {
+        ( \l__tenkz_kernel_ink_mark_dax_fp
+          + \l__tenkz_kernel_ink_mark_dbx_fp ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_ink_mark_mmy_fp
+      {
+        ( \l__tenkz_kernel_ink_mark_day_fp
+          + \l__tenkz_kernel_ink_mark_dby_fp ) / 2
+      }
+    % far half first, so the near half pops first
+    \seq_push:Ne \l__tenkz_kernel_ink_mark_stack_seq
+      {
+        { \int_eval:n { #1 + 1 } }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_mmx_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_mmy_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_dbx_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_dby_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_mcx_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_mcy_fp }
+        {#8} {#9}
+      }
+    \seq_push:Ne \l__tenkz_kernel_ink_mark_stack_seq
+      {
+        { \int_eval:n { #1 + 1 } }
+        {#2} {#3}
+        { \fp_use:N \l__tenkz_kernel_ink_mark_max_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_may_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_dax_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_day_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_mmx_fp }
+        { \fp_use:N \l__tenkz_kernel_ink_mark_mmy_fp }
       }
   }
 % One segment of the settling pass: extend the running length by this
@@ -11755,6 +11954,10 @@
                   - \l__tenkz_kernel_ink_mark_py_fp )
           }
         \__tenkz_kernel_r_wire_ink_mark_unit:
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_found_resid_fp
+          \l__tenkz_kernel_ink_mark_resid_fp
+        \fp_set_eq:NN \l__tenkz_kernel_ink_mark_found_len_fp
+          \l__tenkz_kernel_ink_mark_len_fp
         \bool_set_true:N \l__tenkz_kernel_ink_mark_found_bool
       }
   }
@@ -11764,8 +11967,30 @@
 % on any bearing, honest in the same direction a dash gap's over-report is.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_emit:
   {
+    % The found segment's residual chord deviation widens the cover: it
+    % is zero wherever the subdivision met its bound, and exactly the
+    % proven gap where a pathological cubic outran the ceiling, so a
+    % label on the true curve intersects the emitted band at any size.
+    % The cover widens by the found piece's flatness and the walk's
+    % accumulated sandwich loss.  A found piece shorter than the barb
+    % cannot vouch for its own direction -- a small near-cusp passes the
+    % flatness floor with a sideways tangent -- so such a station is
+    % covered isotropically, the barb's own length joining the width.
+    % The sum is clamped inside TeX's dimension range: a pathological
+    % accumulation saturates the cover instead of overflowing the page.
     \fp_set:Nn \l__tenkz_kernel_ink_mark_barb_fp
-      { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+      {
+        min (
+          \dim_to_fp:n { \c_max_dim } / 4 ,
+          \dim_to_fp:n { \__tenkz_dim:n {barblen} }
+          + 2 * \l__tenkz_kernel_ink_mark_found_resid_fp
+          + 2 * \l__tenkz_kernel_ink_mark_lerr_fp
+          + \fp_compare:nNnTF
+              { \l__tenkz_kernel_ink_mark_found_len_fp } <
+              { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+              { \dim_to_fp:n { \__tenkz_dim:n {barblen} } }
+              { 0 } )
+      }
     \fp_set:Nn \l__tenkz_kernel_ink_mark_px_fp
       {
         \l__tenkz_kernel_ink_mark_mx_fp
@@ -11809,18 +12034,22 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink_mark_walk:
   {
     \fp_zero:N \l__tenkz_kernel_ink_mark_total_fp
+    \fp_zero:N \l__tenkz_kernel_ink_mark_lerr_fp
     \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
       {
         \__tenkz_kernel_r_wire_ink_mark_bounds:n {##1}
         \bool_if:NT \l__tenkz_kernel_ink_mark_drawn_bool
           {
-            \fp_add:Nn \l__tenkz_kernel_ink_mark_total_fp
+            \__tenkz_kernel_r_wire_ink_mark_seg:n
               {
-                sqrt(
-                  ( \l__tenkz_kernel_ink_mark_qx_fp
-                    - \l__tenkz_kernel_ink_mark_px_fp ) ^ 2
-                  + ( \l__tenkz_kernel_ink_mark_qy_fp
-                      - \l__tenkz_kernel_ink_mark_py_fp ) ^ 2 )
+                \fp_add:Nn \l__tenkz_kernel_ink_mark_total_fp
+                  {
+                    sqrt(
+                      ( \l__tenkz_kernel_ink_mark_qx_fp
+                        - \l__tenkz_kernel_ink_mark_px_fp ) ^ 2
+                      + ( \l__tenkz_kernel_ink_mark_qy_fp
+                          - \l__tenkz_kernel_ink_mark_py_fp ) ^ 2 )
+                  }
               }
           }
       }
@@ -11832,6 +12061,14 @@
             * \l__tenkz_kernel_ink_mark_total_fp
           }
         \fp_zero:N \l__tenkz_kernel_ink_mark_run_fp
+        % the accumulator keeps the total pass's sum and the settling
+        % pass adds its walked prefix on top: the station shift is
+        % bounded by the target's error (the full total) plus the run's
+        % (the prefix), and the sum of the two is exactly what stands
+        % here at emit time
+        \fp_zero:N \l__tenkz_kernel_ink_mark_found_resid_fp
+        \fp_set:Nn \l__tenkz_kernel_ink_mark_found_len_fp
+          { \dim_to_fp:n { \c_max_dim } }
         \bool_set_false:N \l__tenkz_kernel_ink_mark_found_bool
         \seq_map_inline:Nn \l__tenkz_kernel_ink_seq
           {
@@ -11839,7 +12076,14 @@
               {
                 \__tenkz_kernel_r_wire_ink_mark_bounds:n {##1}
                 \bool_if:NT \l__tenkz_kernel_ink_mark_drawn_bool
-                  { \__tenkz_kernel_r_wire_ink_mark_settle: }
+                  {
+                    \__tenkz_kernel_r_wire_ink_mark_seg:n
+                      {
+                        \bool_if:NF
+                          \l__tenkz_kernel_ink_mark_found_bool
+                          { \__tenkz_kernel_r_wire_ink_mark_settle: }
+                      }
+                  }
               }
           }
         \__tenkz_kernel_r_wire_ink_mark_emit:
