@@ -1,0 +1,9 @@
+% Negative: the retired wire `bend=` factor key has no parser path.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnwire[bend=2]{(1,1)}{(1,2)}
+\end{tenkz}
+\end{document}

@@ -138,9 +138,17 @@ def tombstone_patterns(
     A row stating no spelling gets no pattern; the language check reports it.
     """
     owners: dict[str, set[tuple[str, str]]] = {}
+    # A name-valued key owns every word: a legal identifier may carry a
+    # retired key's spelling as its value, and the lint must step over
+    # that use exactly as it steps over a live enum word.
+    name_frames: set[tuple[str, str]] = set()
     for entry in entries:
         if entry.kind != "key":
             continue
+        if entry.fields[2] in {
+            "identifier", "declared-name", "silhouette-name", "semantic-role"
+        }:
+            name_frames.add((entry.fields[1].replace("~", " ") + "=", ""))
         enum = re.fullmatch(r"enum\(([^)]*)\)", entry.fields[2])
         if enum is None:
             continue
@@ -177,14 +185,15 @@ def tombstone_patterns(
             )
         else:
             # A lookbehind takes no variable width, so a live owner is stepped
-            # over as the source spells it: no space around a choice's equals,
-            # one space after the open word, none around a face's colon.  A
+            # over as the source spells it: no space beside a choice's
+            # equals, one space after the open word, none beside a face's
+            # colon.  A
             # spaced `owner = word` is therefore reported, which over-reports
             # a live spelling rather than passing a dead one, and is what the
             # hardcoded expression this replaced did.  Matching only where a
             # key may appear would trade that for a possible under-report,
             # which is the failure this ledger exists to prevent.
-            frames = sorted(owners.get(key, set()))
+            frames = sorted(owners.get(key, set()) | name_frames)
             expression = (
                 "".join(
                     f"(?<!{re.escape(before)})"

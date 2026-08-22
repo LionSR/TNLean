@@ -1,0 +1,11 @@
+% Negative: the retired mark `nudge=` displacement key has no parser path.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, name=a]{A}
+  \tn[at=(1,2), skin=box, name=b]{B}
+  \tnmark[form=enclosure, nudge={0,0.25}]{(1,1) .. (1,2)}{$X$}
+\end{tenkz}
+\end{document}

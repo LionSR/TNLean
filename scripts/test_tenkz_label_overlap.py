@@ -513,6 +513,31 @@ STYLED_SOURCE = r"""
 \end{document}
 """
 
+STYLED_TRACE_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\tikzset{bond/.append style={line width=4pt}}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, physical=updown, trace=physical,
+              west=open, east=open]
+  \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
+\end{tenkz}
+\end{document}
+"""
+
+PAIR_TRACE_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, physical=updown, trace=physical]
+  \tn[skin=box]{A} & \tn[skin=box]{B} \\
+  \tn[skin=box]{C} & \tn[skin=box]{D}
+\end{tenkz}
+\end{document}
+"""
+
 NESTED_CLAIM_SOURCE = r"""
 \documentclass{standalone}
 \usepackage{tenkz}
@@ -2233,6 +2258,99 @@ def main() -> int:
                 "coloured band's old half stroke, was not flagged: "
                 + "; ".join(f.msg for f in halo_audit.findings))
 
+        # The trace's two emission paths each understated the drawn ink in
+        # one direction (#6359).  The foreground stroke inherits the
+        # restylable `bond` style, so a widened bond draws past the fixed
+        # halo sum: the after-atom record must follow the resolved width,
+        # and a label on that outer foreground ink must read as ink.
+        styled_trace_status, styled_trace_audit = audit_status(
+            compile_tex("styled-trace.tex", STYLED_TRACE_SOURCE))
+        styled_traces = [event for event in styled_trace_audit.events("k1")
+                         if event.kind == "wire-ink"
+                         and event.attrs.get("origin") == "trace"]
+        if styled_trace_status != 0 or not styled_traces or any(
+                event.attrs.get("stroke") != "131072"
+                for event in styled_traces):
+            raise AssertionError(
+                "a restyled-bond trace did not record its widened "
+                "foreground: "
+                + "; ".join(event.raw for event in styled_traces))
+        # The record's first run is the vertical rise at the trace's own
+        # west x; a label strictly between the old halo half stroke
+        # (120586) and the widened band (131072) sits on drawn foreground
+        # the halo-only record missed.
+        styled_run = next(
+            (event for event in styled_traces
+             if event.attrs["points"].startswith("0,530808;0,1310253;")),
+            None)
+        if styled_run is None:
+            raise AssertionError(
+                "the restyled trace lost its west rise; its records were: "
+                + "; ".join(event.raw for event in styled_traces))
+        styled_log = styled_trace_audit.log_path.read_text(encoding="utf-8")
+        styled_log += (
+            "label-use|picture=k1\n"
+            "bbox|picture=k1|class=label|id=98|owner=0|"
+            "xmin=125000|xmax=126000|ymin=700000|ymax=703000|"
+            "shape=rect|radius=0|station=n|provenance=auto\n"
+        )
+        styled_seeded = work / "styled-trace-seeded.tnlog"
+        styled_seeded.write_text(styled_log, encoding="utf-8")
+        styled_seed_status, styled_seed_audit = audit_status(styled_seeded)
+        styled_found = [
+            finding for finding in styled_seed_audit.findings
+            if finding.rule == "label-on-ink"
+            and "trace route" in finding.msg]
+        if styled_seed_status != 1 or len(styled_found) != 1:
+            raise AssertionError(
+                "a label on a restyled trace's outer foreground ink was "
+                "not flagged: "
+                + "; ".join(f.msg for f in styled_seed_audit.findings))
+
+        # And the queued path: a multi-row physical pair trace rides the
+        # queued index route, whose capture reads only the foreground; the
+        # paper halo is painted crossgap/2 beyond it.  The record takes
+        # the wider of the two, and a label in the halo's annulus beyond
+        # the foreground band must read as ink.
+        pair_status, pair_audit = audit_status(
+            compile_tex("pair-trace.tex", PAIR_TRACE_SOURCE))
+        pair_traces = [event for event in pair_audit.events("k1")
+                       if event.kind == "wire-ink"
+                       and event.attrs.get("origin") == "trace"]
+        if pair_status != 0 or not pair_traces or any(
+                event.attrs.get("stroke") != "120586"
+                for event in pair_traces):
+            raise AssertionError(
+                "a queued pair trace did not record the halo band: "
+                + "; ".join(event.raw for event in pair_traces))
+        pair_run = next(
+            (event for event in pair_traces
+             if event.attrs["points"].startswith("0,0;0,779436;")),
+            None)
+        if pair_run is None:
+            raise AssertionError(
+                "the pair trace lost its west rise; its records were: "
+                + "; ".join(event.raw for event in pair_traces))
+        pair_log = pair_audit.log_path.read_text(encoding="utf-8")
+        pair_log += (
+            "label-use|picture=k1\n"
+            "bbox|picture=k1|class=label|id=97|owner=0|"
+            "xmin=30000|xmax=33000|ymin=300000|ymax=303000|"
+            "shape=rect|radius=0|station=n|provenance=auto\n"
+        )
+        pair_seeded = work / "pair-trace-seeded.tnlog"
+        pair_seeded.write_text(pair_log, encoding="utf-8")
+        pair_seed_status, pair_seed_audit = audit_status(pair_seeded)
+        pair_found = [
+            finding for finding in pair_seed_audit.findings
+            if finding.rule == "label-on-ink"
+            and "trace route" in finding.msg]
+        if pair_seed_status != 1 or len(pair_found) != 1:
+            raise AssertionError(
+                "a label in a queued trace's halo annulus was not "
+                "flagged: "
+                + "; ".join(f.msg for f in pair_seed_audit.findings))
+
         # A directed wire's Straight Barb postaction paints ink the
         # centreline walk cannot see (#6330 review, direction-mark ink).
         # Compile a single `dir=to` leg, read back the kernel's own
@@ -2292,6 +2410,59 @@ def main() -> int:
                 "a label inside the barb cover's stroke band, clear of the "
                 "centreline, was not flagged: "
                 + "; ".join(f.msg for f in mark_seeded_audit.findings))
+
+        # ---- skin pairings join the wire-ink surface (#6357) ----
+        # A declared skin's rendered pairing is drawn ink in the same sense
+        # as a bond, so its record joins the audit with the same severity
+        # split: a kernel-chosen band crossing it is a hard error, an
+        # author's chosen one the advisory.
+        # 26215 sp is emphwidth/2 (0.80pt / 2): the paper halo under a
+        # pairing's foreground, the wider of its two layers at the house
+        # metrics.
+        skin_ink = (
+            "wire-ink|picture=1|name=skin-atom-1-1|origin=skin|stroke=26215|"
+            "points=0,0;2000000,0\n"
+        )
+        for name, claim, severity, expected_status in (
+                ("skin-ink-auto.tnlog", "|station=s|provenance=auto",
+                 "HARD", 1),
+                ("skin-ink-explicit.tnlog", "|provenance=explicit",
+                 "ADV", 0),
+        ):
+            status, audit = audit_status(
+                ink_log(name, skin_ink,
+                        ink_label(-100000, -18022, claim)))
+            found = [finding for finding in audit.findings
+                     if finding.rule == "label-on-ink"]
+            if (status != expected_status or len(found) != 1
+                    or found[0].severity != severity
+                    or "skin route" not in found[0].msg):
+                raise AssertionError(
+                    f"{name}: a label on skin-pairing ink did not read as "
+                    f"one {severity} label-on-ink: "
+                    + "; ".join(f.msg for f in audit.findings))
+
+        # And the records exist end to end: the declared-skin fixture's
+        # rendered pairings each write an `origin=skin` record at the
+        # halo half stroke (26215 sp, as above), and the fixture audits
+        # with no hard findings -- its one standing advisory, a label on
+        # a pairing no earlier record could see, is the rule's own
+        # organic evidence.
+        skin_fixture = ROOT / "tests/tenkz/kernel/k_skin_pairings.tex"
+        skin_status, skin_audit = audit_status(compile_tex(
+            "k_skin_pairings.tex",
+            skin_fixture.read_text(encoding="utf-8")))
+        skin_records = [event for event in skin_audit.events()
+                        if event.kind == "wire-ink"
+                        and event.attrs.get("origin") == "skin"]
+        if skin_status != 0 or not skin_records or any(
+                event.attrs.get("stroke") != "26215"
+                for event in skin_records):
+            raise AssertionError(
+                "the declared-skin fixture did not write its pairings as "
+                "origin=skin records at the halo half stroke: "
+                f"{len(skin_records)} record(s); "
+                + "; ".join(f.msg for f in skin_audit.findings))
 
         # Coverage: at least one compiled fixture's `wire-ink` record must
         # actually carry a `c:`-prefixed cubic sextuple, not only the

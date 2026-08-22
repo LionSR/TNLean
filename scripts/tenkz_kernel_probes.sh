@@ -1740,7 +1740,7 @@ grep -Fq 'TENKZ-HULL-BOX-POOL=1' "$WORK/r_hull_live.tex.transcript" || {
   exit 1
 }
 skin_pairing_count=$(
-  grep -c '^wire.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
+  grep -c '^wire|.*|origin=skin|' "$WORK/k_skin_pairings.tnlog" || true
 )
 [ "$skin_pairing_count" -eq 26 ] || {
   echo "FAIL: declared skin pairings were not materialized as WIRE records" >&2
@@ -1924,7 +1924,7 @@ command -v pdftoppm >/dev/null 2>&1 || {
   exit 1
 }
 for pixel_fixture in \
-    k_plane k_skin_pairings r_bracket_trace_return r_dir_open_bearings \
+    k_arc k_plane k_skin_pairings r_bracket_trace_return r_dir_open_bearings \
     r_hull_live r_ink_semantics r_label_turn r_metrics_compact \
     r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
@@ -1993,6 +1993,7 @@ python3 -c \
 for path in sys.argv[1:]:
     data = open(path, "rb").read()
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
+  "$WORK/k_arc.png" \
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
   "$WORK/k_plane.png" "$WORK/r_bracket_trace_return.png" \
   "$WORK/r_dir_open_bearings.png" \
@@ -2618,6 +2619,11 @@ for contract_negative in \
   n_padded_duplicate_port \
   n_rounding_duplicate_port \
   n_atom_down_key \
+  n_wire_bend_key \
+  n_wire_around_key \
+  n_mark_inset_key \
+  n_atom_nudge_key \
+  n_mark_nudge_key \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -2692,6 +2698,16 @@ do
   [ "$contract_negative" = n_rounding_duplicate_port ] &&
     expected='[TKZ-PORT-DUPLICATE]'
   [ "$contract_negative" = n_atom_down_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_wire_bend_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_wire_around_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_mark_inset_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_atom_nudge_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_mark_nudge_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'

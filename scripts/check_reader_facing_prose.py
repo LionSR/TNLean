@@ -405,7 +405,8 @@ def main() -> int:
             print("✓ No reader-facing prose violations found.")
         return 0
     print_findings(findings, ci=args.ci)
-    message = "Reader-facing prose violates docs/prose_style.md."
+    message = ("Reader-facing prose violates the lean-conventions "
+               "prose_style reference (see docs/project_conventions.md).")
     if args.ci:
         print(f"::error::{message}")
     else:

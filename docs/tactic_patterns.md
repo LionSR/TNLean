@@ -1228,17 +1228,20 @@ current counts and full location lists).
   a projector-controlled sum of linear maps over it, use the orthogonal
   selector identity to retain the matching sector, and finish with the
   sectorwise closure equation.
-- **Seen:** four paired coarse-graining/refinement occurrences in
-  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, across
-  `exists_chainCoordinateRFP_of_projectiveSectorDecomposition` and
-  `exists_chainCoordinateRFP_of_orthogonalSectorDecomposition` (2026-08-20).
-- **Abstraction (proposed):** a helper for one direction, parametrized by the
-  two closure lengths and the sectorwise map equation, if a second file needs
-  the same projector-selected finite-sum argument.
-- **Notes:** all occurrences are presently in one file, below the two-file
-  promotion threshold. The coarse-graining and refinement maps have opposite
-  matrix dimensions, so a useful abstraction must not conceal their
-  orientation.
+- **Seen:** four call sites in
+  `TNLean/MPS/MPDO/BNTChannelComposition.lean`, one coarse-graining/refinement
+  pair in each of `exists_chainCoordinateRFP_of_projectiveSectorDecomposition`
+  and `exists_chainCoordinateRFP_of_orthogonalSectorDecomposition`
+  (2026-08-20).
+- **Abstraction (file-local):** the private theorem
+  `sum_comp_singleKrausMap_firstSiteMatrix_properties` (lines 445--513)
+  extracts all four copies. It is parametrized by `n` and `m`, corresponding
+  to input and output chain lengths `n + 1` and `m + 1`, the sectorwise maps
+  `F`, and their closure equation.
+- **Notes:** all call sites remain in one file, and no further occurrences are
+  identified, so the pattern remains below the promotion threshold. The
+  parameters `n` and `m` retain the opposite matrix orientations of the
+  coarse-graining and refinement maps explicitly.
 
 ### explicit finite-generator word-tuple spanning — candidate
 - **Pattern:** unfold `MPSTensor.WordTupleSpanTop`, place one or more explicit
@@ -1259,6 +1262,23 @@ current counts and full location lists).
   while the related matrix proof has a different codomain. Record the common
   reconstruction pattern now; retain the explicit proofs until another
   direct word-tuple occurrence identifies a materially smaller theorem.
+
+### rational negMulLog prime-logarithm expansion — candidate
+- **Pattern:** rewrite `Real.negMulLog (a / b)` for an explicit rational into a
+  linear combination of logarithms of small primes: unfold `negMulLog`, split
+  the quotient with `Real.log_div`, express `b` (and composite `a`) as prime
+  powers, apply `Real.log_pow`/`Real.log_mul`, then `push_cast` and `ring`.
+- **Seen:** eight private lemmas in
+  `TNLean/MPS/MPDO/CPSVExample410CorrelatedFlip.lean`
+  (`negMulLog_quarter` through `negMulLog_nine_128ths`) (2026-08-21).
+- **Abstraction (proposed):** one lemma computing
+  `negMulLog ((a : ℝ) / 2 ^ k)` from the prime factorization of `a`, or a
+  small simp set bundling `negMulLog`, `Real.log_div`, `Real.log_pow`, and
+  `Real.log_mul` with the needed positivity side conditions.
+- **Notes:** all occurrences are presently in one file, below the two-file
+  promotion threshold. The sibling exact-entropy statements in
+  `TNLean/MPS/MPDO/CPSVExample411Entropy.lean` keep `negMulLog` values
+  unexpanded, so no second file uses the pattern yet.
 
 ### Hermitian extraction from a finite-order channel eigenvector — candidate
 - **Pattern:** from `E X = μ • X`, `X ≠ 0`, `μ ≠ 1`, and `μ ^ p = 1`,

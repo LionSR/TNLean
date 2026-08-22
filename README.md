@@ -13,6 +13,12 @@
 ![Lean](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json)
 ![Mathlib](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/mathlib.json)
 
+<p align="center">
+  <a href="https://sirui-lu.com/TNLean/blueprint/">Blueprint</a> ·
+  <a href="https://sirui-lu.com/TNLean/docs/">Documentation</a> ·
+  <a href="https://sirui-lu.com/TNLean/paper-gaps/">Paper-gap notes</a>
+</p>
+
 TNLean is a [Lean 4](https://lean-lang.org/) library, built on
 [Mathlib](https://github.com/leanprover-community/mathlib4), that formalizes
 the mathematics of tensor networks: matrix product states (MPS), their
@@ -35,14 +41,14 @@ theorem, at varying levels of completeness; the sections below say what is
 proved and what is not.
 
 The mathematics is written up in the
-[blueprint](https://lionsr.github.io/TNLean/blueprint/), which states each
+[blueprint](https://sirui-lu.com/TNLean/blueprint/), which states each
 definition and theorem in ordinary mathematical language and links it to the
 Lean proof. It is available as a
-[web version](https://lionsr.github.io/TNLean/blueprint/), a
-[full PDF](https://lionsr.github.io/TNLean/blueprint.pdf), and a
-[separate FT-MPS PDF](https://lionsr.github.io/TNLean/blueprint-ch01-12.pdf),
+[web version](https://sirui-lu.com/TNLean/blueprint/), a
+[full PDF](https://sirui-lu.com/TNLean/blueprint.pdf), and a
+[separate FT-MPS PDF](https://sirui-lu.com/TNLean/blueprint-ch01-12.pdf),
 the fundamental-theorem part that is being released first. The generated
-[API documentation](https://lionsr.github.io/TNLean/docs/) covers every
+[API documentation](https://sirui-lu.com/TNLean/docs/) covers every
 declaration in the Lean source.
 
 New to the repository? [`docs/getting_started.md`](docs/getting_started.md)
@@ -148,7 +154,8 @@ each at an earlier stage.
   fundamental theorem.
 
 Where a formal statement does not exactly match its cited source, the
-discrepancy is recorded as a mathematical note under `docs/paper-gaps/`.
+discrepancy is recorded as a mathematical note under `docs/paper-gaps/`,
+published at [sirui-lu.com/TNLean/paper-gaps](https://sirui-lu.com/TNLean/paper-gaps/).
 
 ## Organization of the source
 
@@ -188,9 +195,9 @@ authoritative, always-current picture is:
 
 - the `sorries` and `axioms` badges at the top of this page, counting
   unfinished proofs and assumed results;
-- the [blueprint](https://lionsr.github.io/TNLean/blueprint/), which marks
+- the [blueprint](https://sirui-lu.com/TNLean/blueprint/), which marks
   each theorem as formalized or not; and
-- `docs/paper-gaps/`, which records where a formal statement diverges from
+- the [paper-gap notes](https://sirui-lu.com/TNLean/paper-gaps/) (`docs/paper-gaps/`), which record where a formal statement diverges from
   its cited source.
 
 ## Building

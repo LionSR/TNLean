@@ -138,9 +138,11 @@ jobs:
           plugin_marketplaces: |
             https://github.com/anthropics/claude-code.git
             https://github.com/leanprover/skills.git
+            https://github.com/texra-ai/texra-lean-skills.git
           plugins: |
             code-review@claude-code-plugins
             lean@leanprover
+            texra-lean-skills@texra-lean-skills
           claude-prompt-file: .trusted-actions/.github/prompts/claude-code-review-prompt.md
           claude-prompt-context: |
             PR number: ${{ needs.gate.outputs.pr_number }}

@@ -27,7 +27,7 @@ before the 0.9 freeze, and assigns the header spelling and the ignorable-kind
 marking to #4162 and #4703. Until that change lands, a reader cannot negotiate
 and the surface is held by whole-file digest instead: `tests/tenkz/`
 `golden-events.sha256` (9 corpus streams), `tests/tenkz/kernel/golden.sha256`
-(12 kernel probes), and `tests/tenkz/strings/golden.sha256` (30 string probes)
+(14 kernel probes), and `tests/tenkz/strings/golden.sha256` (28 string probes)
 pin exact bytes. Those digests make field order and spacing part of the pinned
 surface even though no schema states them, which is why §4 is normative here.
 
@@ -156,14 +156,14 @@ first, the rest sorted, no `picture=`.
 | `kernel-boundary` | `signature` | closes the record block with the picture's exposed-index multiset, comma-space joined, possibly empty |
 | `check` | `scope`, then `relation` or `product`, `result`, `modulo`, and result-specific fields | one equation-level verdict, emitted after every picture of its scope |
 | `warning` | `picture`, `code`, then code-specific fields | one non-fatal geometry or readability diagnostic |
-| `string` | `id`, `kind` (`open`, `closed`, `wind`, `around`), `class`, `pts`, `flank1`, `flank2` | one declared curve |
+| `string` | `id`, `kind` (`open`, `closed`, `wind`; readers also accept the retired `around` from stored 1.2 streams), `class`, `pts` | one declared curve |
 | `stringbead` | `id`, `t`, `x`, `y` | one bead at parameter `t` on a string |
 | `stringcross` | `under`, `over`, `hits` | one over-under crossing |
 | `ink-use` | `picture`, `class` (`glyph`, `wire`), `id`, `shape` | opens an ink-owner scope for the geometry that follows |
 | `label-use` | `picture` | a label node claimed no ink owner |
 | `bbox` | `picture`, `class=label`, `id`, `owner`, `xmin`, `xmax`, `ymin`, `ymax`, `shape`, `radius`, then optionally `station` (`s`, `n`, `e`, `w`) and `provenance` (`auto`, `explicit`) | one measured label box, in integer scaled points.  `provenance=auto` with `station=` is the dot chooser's verified promise of an ink-free face; `provenance=explicit` (no station) records the author's own `label pos=`.  Both fields are absent on every label site the chooser has not claimed — every non-dot label, and a dot whose ink the occupancy reading could not chart (its blind ledger; issue 6195) |
 | `glyph-geometry` | `picture`, `owner`, `shape`, `xmin`, `xmax`, `ymin`, `ymax`, `radius`, `stroke`, `x1`, `y1`, `x2`, `y2`, `x3`, `y3` | one measured glyph silhouette, in integer scaled points |
-| `wire-ink` | `picture`, `name`, `origin` (`bond`, `physical-leg`, `port`, `trace`, `leg`, `mark`), `stroke`, `points` | one drawn route, read back from the saved soft path the renderer strokes: `points=` opens on the route's first point, a bare `x,y` extends a polyline, and a `c:`-prefixed sextuple `c:x1,y1,x2,y2,x3,y3` is a cubic to `x3,y3` with the two control pairs before it; `stroke=` is half the stroke width the route's resolved style draws it with, so a restyled wire class widens the recorded band with the ink; the record is written at the stroke pass, after crossing surgery, so an under-strand's crossing gap splits it into one record per drawn component; every coordinate is an integer scaled point.  A `dir=to`/`dir=from` route additionally writes one `origin=mark` record, a short segment at the direction barb's arc-length station whose stroke covers the barb's own configured reach: the Straight Barb postaction is not reproduced stroke-for-stroke, only over-covered, the same doctrine as the dash rule below.  Caller-declared strings emit no record |
+| `wire-ink` | `picture`, `name`, `origin` (`bond`, `physical-leg`, `port`, `trace`, `leg`, `mark`, `skin`), `stroke`, `points` | one drawn route, read back from the saved soft path the renderer strokes: `points=` opens on the route's first point, a bare `x,y` extends a polyline, and a `c:`-prefixed sextuple `c:x1,y1,x2,y2,x3,y3` is a cubic to `x3,y3` with the two control pairs before it; `stroke=` is half the stroke width the route's resolved style draws it with, so a restyled wire class widens the recorded band with the ink; the record is written at the stroke pass, after crossing surgery, so an under-strand's crossing gap splits it into one record per drawn component; every coordinate is an integer scaled point.  A `dir=to`/`dir=from` route additionally writes one `origin=mark` record, a short segment at the direction barb's arc-length station whose stroke covers the barb's own configured reach: the Straight Barb postaction is not reproduced stroke-for-stroke, only over-covered, the same doctrine as the dash rule below.  Caller-declared strings emit no record.  A declared skin's rendered pairing writes `origin=skin` records from its saved route -- one per drawn component, since pairings join the crossing police and a gap splits the record like any other; the `stroke` is half the wider of the pairing's two layers, the paper halo and the foreground, so a label erased by either intersects the recorded band |
 | `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `clear`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, the standoff the rows it passes demand of it — signed by the side the return runs, measured from its own row line, and `arc` for a frame sector, which stands off no row line — and the semicolon-separated polyline it lays, all in integer scaled points |
 | `tree` | `picture`, `id`, `style`, `leaves`, `vertices`, `topology`, `role`, `species` | one fusion tree |
 | `geomprobe` | `id`, then a caller-supplied payload | one geometry probe, for fixtures |
@@ -188,14 +188,18 @@ the drawn dashes would in fact have cleared it. The same doctrine covers the
 `origin=mark` record above and the trace halo below -- every one of them
 would rather over-claim ink than leave a real collision unrecorded.
 
-A `trace` route's own `stroke` field carries the *halo's* half-width, not
-the colour band alone: `trace/.style` (`tex/tenkz/tenkz-core.code.tex`,
+A `trace` route's own `stroke` field carries the wider of its two
+layers, never the colour band alone: `trace/.style` (`tex/tenkz/tenkz-core.code.tex`,
 the `trace` style) paints a `preaction` paper halo of line width
 `wirewidth + crossgap` under the visible band, and a label sitting in that
-annulus is erased just as surely as one sitting on the band itself. Recording
-only the band's half-width would leave that annulus unflagged, so the
-`origin=trace` record's `stroke` is `(wirewidth + crossgap) / 2` and the
-audit's label-on-ink test never sees the narrower, wrong number.
+annulus is erased just as surely as one sitting on the band itself, and the
+foreground stroke inherits the restylable `bond` class, so a widened bond
+draws past the fixed halo sum. Recording either layer alone would leave the
+other's ink unflagged, so the `origin=trace` record's `stroke` is the wider
+of `(wirewidth + crossgap) / 2` and the resolved foreground half stroke, on
+both trace paths -- the after-atom return and the queued multi-row pair
+trace alike -- and the audit's label-on-ink test never sees a narrower,
+wrong number.
 
 ## 4. Order
 
@@ -262,7 +266,7 @@ of them is a change to the surface.
 
 The last row is the one to read twice. `picture`'s `metrics`, every `warning`
 payload field beyond `code`, `check`'s `modulo`, `left-kind`, and `right-kind`,
-`string`'s `class`, `flank1`, and `flank2`, and the whole open vocabulary of
+`string`'s `class`, and the whole open vocabulary of
 the four record kinds all pass through unvalidated. The reader tolerating a
 field is not the same as the format having one.
 
