@@ -1213,6 +1213,16 @@ abstracted — record why, so it is not re-proposed).
   specializations of these two lemmas. This completes the promotion tracked in
   issue #6931.
 
+### Complex squares of real square roots
+- **Pattern:** finite matrix computations repeatedly converted
+  $((\sqrt{x}:\mathbb R):\mathbb C)^2$ back to $x$ through
+  `Complex.ofReal_pow` and `Real.sq_sqrt`.
+- **Reuse:** the layer-0 lemma `Complex.ofReal_sqrt_sq` owns the coercion and
+  nonnegative-square-root identity.
+- **Result:** the five occurrences in the corrected CPSV16 Example 4.10 tensor
+  and spectrum proofs, together with the two older AKLT helpers, now reuse the
+  same lemma.
+
 ---
 
 ## Candidates

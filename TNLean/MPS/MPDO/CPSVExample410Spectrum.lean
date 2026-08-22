@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.EntropyDecomposition
 import TNLean.MPS.MPDO.CPSVExample410Operator
 import TNLean.MPS.MPDO.SourceZCLMarginal
 
@@ -118,9 +119,8 @@ private def VFour : Matrix (Fin 4 → Fin 4) (Bool × Bool × Bool × Bool) ℂ 
 
 private lemma VFour_apply (σ : Fin 4 → Fin 4) (t : Bool × Bool × Bool × Bool) :
     VFour σ t = if physicalBondPattern σ = t then 1 / 4 else 0 := by
-  have hsqrtTwoSq : ((↑(Real.sqrt 2) : ℂ) ^ 2) = 2 := by
-    rw [← Complex.ofReal_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-    norm_num
+  have hsqrtTwoSq : ((↑(Real.sqrt 2) : ℂ) ^ 2) = 2 :=
+    Complex.ofReal_sqrt_sq 2 (by positivity)
   have hsqrtTwoFourth : ((↑(Real.sqrt 2) : ℂ) ^ 4) = 4 := by
     rw [show ((↑(Real.sqrt 2) : ℂ) ^ 4) = ((↑(Real.sqrt 2) : ℂ) ^ 2) ^ 2 by ring,
       hsqrtTwoSq]
@@ -174,9 +174,8 @@ private theorem amplitude (κ : Fin 4 → Fin 2) (σ : Fin 4 → Fin 4) :
     Matrix.trace ((List.ofFn fun l => purifier (σ l) (κ l)).prod) =
       (∏ n, channelCoeff (κ n)) * VFour σ
         (CPSVExample410CorrelatedFlip.bondPattern (flipTuple κ)) := by
-  have hsqrtTwoSq : ((↑(Real.sqrt 2) : ℂ) ^ 2) = 2 := by
-    rw [← Complex.ofReal_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-    norm_num
+  have hsqrtTwoSq : ((↑(Real.sqrt 2) : ℂ) ^ 2) = 2 :=
+    Complex.ofReal_sqrt_sq 2 (by positivity)
   have hsqrtTwoFourth : ((↑(Real.sqrt 2) : ℂ) ^ 4) = 4 := by
     rw [show ((↑(Real.sqrt 2) : ℂ) ^ 4) = ((↑(Real.sqrt 2) : ℂ) ^ 2) ^ 2 by ring,
       hsqrtTwoSq]
@@ -217,9 +216,8 @@ private lemma channelCoeff_normSq (k : Fin 2) :
   have h1 : finTwoEquiv (1 : Fin 2) = true := by decide
   fin_cases k
   · simp [channelCoeff, boolOfFin, CPSVExample410CorrelatedFlip.flipWeight, h0]
-    have hsqrtThreeSq : ((↑(Real.sqrt 3) : ℂ) ^ 2) = 3 := by
-      rw [← Complex.ofReal_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 3)]
-      norm_num
+    have hsqrtThreeSq : ((↑(Real.sqrt 3) : ℂ) ^ 2) = 3 :=
+      Complex.ofReal_sqrt_sq 3 (by positivity)
     field_simp
     ring_nf at hsqrtThreeSq ⊢
     rw [hsqrtThreeSq]

@@ -1345,6 +1345,20 @@ This is the calculation in
     commuting realizations at different chain lengths.
 \end{theorem}
 
+\begin{lemma}[Complex square of a real square root]
+    \label{lem:complex_ofreal_sqrt_sq}
+    \lean{Complex.ofReal_sqrt_sq}
+    \leanok
+    If $x\geq 0$, then the complex coercion of its real square root satisfies
+    $((\sqrt{x}:\mathbb R):\mathbb C)^2=x$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the real identity $(\sqrt{x})^2=x$ and commute the real embedding
+    with powers.
+\end{proof}
+
 % Local correction of CPSV16 Example 4.10, lines 897--905.
 % The source repeats the left-qubit label; this definition uses one left and
 % one right bit flip and fixes p=1/4. See
@@ -1399,8 +1413,7 @@ This is the calculation in
     \label{thm:cpsv_example410_four_site_spectrum}
     \lean{MPOTensor.CPSVExample410Spectrum.charpoly_roots_four}
     \leanok
-    \uses{def:cpsv_example410_corrected_tensor,
-        thm:cpsv_example410_bond_distribution}
+    \uses{def:cpsv_example410_corrected_tensor}
     The normalized four-site reduced state has characteristic-polynomial
     roots
     \begin{align}
