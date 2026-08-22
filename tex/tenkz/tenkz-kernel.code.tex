@@ -5322,6 +5322,9 @@
 \fp_new:N   \l__tenkz_kernel_r_arc_gby_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_lone_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_ltwo_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_lthree_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_hx_fp
+\fp_new:N   \l__tenkz_kernel_r_arc_hy_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_len_fp
 \fp_new:N   \l__tenkz_kernel_r_arc_tgt_fp
 \seq_new:N  \l__tenkz_kernel_r_arc_cum_seq
@@ -7127,6 +7130,10 @@
             \l__tenkz_kernel_r_arc_my_fp - \l__tenkz_kernel_r_arc_d_fp
               * sind ( \l__tenkz_kernel_r_arc_a_fp )
           }
+        % the from end survives the walks in its own registers, because
+        % each fold's frame is loaded into the shared cubic registers
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_hx_fp \l__tenkz_kernel_r_x_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_hy_fp \l__tenkz_kernel_r_y_fp
         \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_arc_mx_fp
         \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp \l__tenkz_kernel_r_arc_my_fp
         \__tenkz_kernel_r_onwire_arc_walk:
@@ -7140,11 +7147,29 @@
               ( \l__tenkz_kernel_r_arc_ny_fp
                 - \l__tenkz_kernel_r_arc_my_fp ) ^ 2 )
           }
+        % the second fold is not the first mirrored: the predicate admits
+        % faces at unequal turns, so its length is walked, not reused
+        \fp_set_eq:NN \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_arc_nx_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_y_fp \l__tenkz_kernel_r_arc_ny_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_arc_ex_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp \l__tenkz_kernel_r_arc_ey_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cax_fp
+          \l__tenkz_kernel_r_arc_gax_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cay_fp
+          \l__tenkz_kernel_r_arc_gay_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cbx_fp
+          \l__tenkz_kernel_r_arc_gbx_fp
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_cby_fp
+          \l__tenkz_kernel_r_arc_gby_fp
+        \__tenkz_kernel_r_onwire_arc_walk:
+        \fp_set_eq:NN \l__tenkz_kernel_r_arc_lthree_fp
+          \l__tenkz_kernel_r_arc_len_fp
         \fp_set:Nn \l__tenkz_kernel_r_arc_tgt_fp
           {
             ( \seq_item:Nn \l__tenkz_kernel_ow_run_stack_seq {-1} )
-            * ( 2 * \l__tenkz_kernel_r_arc_lone_fp
-                + \l__tenkz_kernel_r_arc_ltwo_fp )
+            * ( \l__tenkz_kernel_r_arc_lone_fp
+                + \l__tenkz_kernel_r_arc_ltwo_fp
+                + \l__tenkz_kernel_r_arc_lthree_fp )
           }
         \fp_compare:nNnTF
           { \l__tenkz_kernel_r_arc_tgt_fp } >
@@ -7153,34 +7178,18 @@
             + \l__tenkz_kernel_r_arc_ltwo_fp
           }
           {
-            % fold two: N to the saved far end, walked afresh
-            \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
-              \l__tenkz_kernel_r_arc_nx_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
-              \l__tenkz_kernel_r_arc_ny_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp
-              \l__tenkz_kernel_r_arc_ex_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp
-              \l__tenkz_kernel_r_arc_ey_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_arc_cax_fp
-              \l__tenkz_kernel_r_arc_gax_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_arc_cay_fp
-              \l__tenkz_kernel_r_arc_gay_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_arc_cbx_fp
-              \l__tenkz_kernel_r_arc_gbx_fp
-            \fp_set_eq:NN \l__tenkz_kernel_r_arc_cby_fp
-              \l__tenkz_kernel_r_arc_gby_fp
+            % the second fold's frame and cumulative table are current
             \fp_set:Nn \l__tenkz_kernel_r_arc_tgt_fp
               {
                 \l__tenkz_kernel_r_arc_tgt_fp
                 - \l__tenkz_kernel_r_arc_lone_fp
                 - \l__tenkz_kernel_r_arc_ltwo_fp
               }
-            \__tenkz_kernel_r_onwire_arc_measure:nn {#1}
+            \__tenkz_kernel_r_onwire_arc_locate:nn {#1}
               {
-                \l__tenkz_kernel_r_arc_lone_fp > 0
+                \l__tenkz_kernel_r_arc_lthree_fp > 0
                   ? \l__tenkz_kernel_r_arc_tgt_fp
-                    / \l__tenkz_kernel_r_arc_lone_fp
+                    / \l__tenkz_kernel_r_arc_lthree_fp
                   : 1
               }
           }
@@ -7213,8 +7222,41 @@
                   }
               }
               {
-                % fold one, already walked: locate directly
-                \__tenkz_kernel_r_onwire_arc_locate:nn {#1}
+                % fold one again: its frame and table were spent by the
+                % second fold's walk, so both are rebuilt
+                \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
+                  \l__tenkz_kernel_r_arc_hx_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
+                  \l__tenkz_kernel_r_arc_hy_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp
+                  \l__tenkz_kernel_r_arc_mx_fp
+                \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp
+                  \l__tenkz_kernel_r_arc_my_fp
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cax_fp
+                  {
+                    \l__tenkz_kernel_r_arc_hx_fp
+                    + \l__tenkz_kernel_r_arc_d_fp
+                      * cosd ( \l__tenkz_kernel_r_arc_tf_fp )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cay_fp
+                  {
+                    \l__tenkz_kernel_r_arc_hy_fp
+                    + \l__tenkz_kernel_r_arc_d_fp
+                      * sind ( \l__tenkz_kernel_r_arc_tf_fp )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cbx_fp
+                  {
+                    \l__tenkz_kernel_r_arc_mx_fp
+                    - \l__tenkz_kernel_r_arc_d_fp
+                      * cosd ( \l__tenkz_kernel_r_arc_a_fp )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_r_arc_cby_fp
+                  {
+                    \l__tenkz_kernel_r_arc_my_fp
+                    - \l__tenkz_kernel_r_arc_d_fp
+                      * sind ( \l__tenkz_kernel_r_arc_a_fp )
+                  }
+                \__tenkz_kernel_r_onwire_arc_measure:nn {#1}
                   {
                     \l__tenkz_kernel_r_arc_lone_fp > 0
                       ? \l__tenkz_kernel_r_arc_tgt_fp
