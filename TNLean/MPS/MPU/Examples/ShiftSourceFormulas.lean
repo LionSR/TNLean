@@ -291,10 +291,14 @@ noncomputable def shiftExampleU₂SourceURowEquiv (d : ℕ) [NeZero d] :
   Equiv.prodCongr (shiftExampleU₂LeftRankEquiv d)
     (shiftExampleU₂RightRankEquiv d)
 
-/-- Paper coordinates for the source column of $v_2^{(2)}$.  Each active
-rank pair is reversed, exactly as in the reflected source convention.
+/-- Coordinates for the source column of $v_2^{(2)}$.
 
-Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
+The outer coordinate has the order $(r,\ell)$ fixed by the diagram defining
+$v$ in arXiv:1703.09188, equation `vdagger` (lines 520--543).  Within each
+primitive-shift rank, `Equiv.prodComm` changes the tensor-product rank order to
+the four-spin order in which equation `eq:uv2_U2` is printed (lines
+2018--2026).  This is an explicit formalization reindexing; the paper states
+the resulting matrix, not this intermediate equivalence. -/
 noncomputable def shiftExampleU₂SourceVColumnEquiv (d : ℕ) [NeZero d] :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       (Fin r[shiftExampleU₂ d] × Fin ℓ[shiftExampleU₂ d]) :=
@@ -312,10 +316,14 @@ noncomputable def shiftExampleU₃SourceURowEquiv (d : ℕ) [NeZero d] :
   Equiv.prodCongr (shiftExampleU₃LeftRankEquiv d)
     (shiftExampleU₃RightRankEquiv d)
 
-/-- Paper coordinates for the source column of $v_3^{(2)}$.  Each active
-rank pair is reversed, exactly as in the reflected source convention.
+/-- Coordinates for the source column of $v_3^{(2)}$.
 
-Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
+The outer coordinate has the order $(r,\ell)$ fixed by the diagram defining
+$v$ in arXiv:1703.09188, equation `vdagger` (lines 520--543).  Within each
+primitive-shift rank, `Equiv.prodComm` changes the tensor-product rank order to
+the four-spin order in which equation `eq:uv2_U3` is printed (lines
+2028--2034).  This is an explicit formalization reindexing; the paper states
+the resulting matrix, not this intermediate equivalence. -/
 noncomputable def shiftExampleU₃SourceVColumnEquiv (d : ℕ) [NeZero d] :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       (Fin r[shiftExampleU₃ d] × Fin ℓ[shiftExampleU₃ d]) :=
@@ -324,10 +332,14 @@ noncomputable def shiftExampleU₃SourceVColumnEquiv (d : ℕ) [NeZero d] :
     (Equiv.prodCongr (shiftExampleU₃RightRankEquiv d)
       (shiftExampleU₃LeftRankEquiv d))
 
-/-- Reorder two pairs so that the $u_3$ source coordinates exhibit the single
-swap $\mathbb S$ from `eq:SF_u1_u3`.
+/-- Reorder two pairs so that the $u_3$ source coordinates exhibit one swap.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+After expanding the product ranks in the outer $(\ell,r)$ order fixed by the
+diagram defining $u$ in arXiv:1703.09188, equation `uu` (lines 532--543), this
+map sends $((a,b),(c,e))$ to $((e,b),(c,a))$.  It thereby gives the two
+composite indices in which equation `eq:SF_u1_u3` prints $u_3=\mathbb S$
+(lines 2009--2016).  This shuffle is formalization infrastructure; the paper
+states the final swap, not the intermediate reindexing. -/
 def shiftExampleU₃SourceUSwapShuffle (d : ℕ) :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       ((Fin d × Fin d) × (Fin d × Fin d)) where
@@ -336,10 +348,14 @@ def shiftExampleU₃SourceUSwapShuffle (d : ℕ) :
   left_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
   right_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
 
-/-- Reorder two pairs so that the $v_3$ source coordinates exhibit the single
-swap $\mathbb S$ from `eq:SF_u1_u3`.
+/-- Reorder two pairs so that the $v_3$ source coordinates exhibit one swap.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+After expanding the product ranks in the outer $(r,\ell)$ order fixed by the
+diagram defining $v$ in arXiv:1703.09188, equation `vdagger` (lines 520--543),
+this map sends $((a,b),(c,e))$ to $((a,c),(b,e))$.  It thereby gives the two
+composite indices in which equation `eq:SF_u1_u3` prints $v_3=\mathbb S$
+(lines 2009--2016).  This shuffle is formalization infrastructure; the paper
+states the final swap, not the intermediate reindexing. -/
 def shiftExampleU₃SourceVSwapShuffle (d : ℕ) :
     ((Fin d × Fin d) × (Fin d × Fin d)) ≃
       ((Fin d × Fin d) × (Fin d × Fin d)) where
