@@ -358,11 +358,65 @@
 % Key trees fill one staging table; each command copies it onto its record
 % and clears it, so one tree serves every use site.
 \prop_new:N \l__tenkz_kernel_stage_prop
+\prop_new:N \l__tenkz_kernel_sugar_active_prop
+\prop_new:N \l__tenkz_kernel_sugar_saved_prop
+\tl_new:N \l__tenkz_kernel_sugar_current_tl
 
 \cs_new_protected:Npn \__tenkz_kernel_stage_put:nn #1#2
   { \prop_put:Nnn \l__tenkz_kernel_stage_prop {#1} {#2} }
 \cs_new_protected:Npn \__tenkz_kernel_stage_put:ne #1#2
   { \prop_put:Nne \l__tenkz_kernel_stage_prop {#1} {#2} }
+
+% A sugar flag owns only the fields written by its own expansion.  Its first
+% true spelling saves the preceding values; a later false restores them.  A
+% direct author spelling relinquishes that ownership and therefore survives a
+% subsequent false.
+\cs_new_protected:Npn \__tenkz_kernel_sugar_save:nn #1#2
+  {
+    \prop_get:NnN
+      \l__tenkz_kernel_stage_prop {#2} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
+      {
+        \prop_put:Nnn
+          \l__tenkz_kernel_sugar_saved_prop {#1/#2} { \q_no_value }
+      }
+      {
+        \prop_put:NnV
+          \l__tenkz_kernel_sugar_saved_prop {#1/#2}
+          \l__tenkz_kernel_scratch_tl
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_sugar_restore:nn #1#2
+  {
+    \prop_get:NnN
+      \l__tenkz_kernel_sugar_saved_prop {#1/#2}
+      \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
+      { \prop_remove:Nn \l__tenkz_kernel_stage_prop {#2} }
+      {
+        \prop_put:NnV
+          \l__tenkz_kernel_stage_prop {#2} \l__tenkz_kernel_scratch_tl
+      }
+    \prop_remove:Nn \l__tenkz_kernel_sugar_saved_prop {#1/#2}
+  }
+\cs_new_protected:Npn \__tenkz_kernel_sugar_abandon:nn #1#2
+  {
+    \tl_if_eq:NnF \l__tenkz_kernel_sugar_current_tl {#1}
+      {
+        \prop_remove:Nn \l__tenkz_kernel_sugar_active_prop {#1}
+        \clist_map_inline:nn {#2}
+          {
+            \prop_remove:Nn
+              \l__tenkz_kernel_sugar_saved_prop {#1/##1}
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_sugar_clear:
+  {
+    \prop_clear:N \l__tenkz_kernel_sugar_active_prop
+    \prop_clear:N \l__tenkz_kernel_sugar_saved_prop
+    \tl_clear:N \l__tenkz_kernel_sugar_current_tl
+  }
 
 % The contract writes cell addresses unbraced (`at=(1,2)` and
 % `at=(1,2,3)`).  A keyval comma splitter would tear them, so every option
@@ -1215,7 +1269,14 @@
 % ---------- picture keys -------------------------------------------------------
 % "Picture options declare topology and policy; they create no hidden atoms."
 
-\__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { rows } { rows }
+\keys_define:nn { tenkz-kernel-picture }
+  {
+    rows .code:n =
+      {
+        \__tenkz_kernel_sugar_abandon:nn {sandwich} {rows}
+        \__tenkz_kernel_stage_put:nn {rows} {#1}
+      }
+  }
 % cols= carries the row's stated type: an illegal value refuses with the
 % picture-scope positive-integer diagnostic instead of a bare TeX
 % arithmetic error (#6198 sweep).
@@ -1224,7 +1285,11 @@
   { kernel-picture-positive } { \msg_error:nnee } { }
 \keys_define:nn {tenkz-kernel-picture}
   {
-    frame .code:n = { \__tenkz_kernel_frame:n {#1} }
+    frame .code:n =
+      {
+        \__tenkz_kernel_sugar_abandon:nn {planes} {frame,basis}
+        \__tenkz_kernel_frame:n {#1}
+      }
   }
 \__tenkz_kernel_side:nn { tenkz-kernel-picture } { west }
 \__tenkz_kernel_side:nn { tenkz-kernel-picture } { east }
@@ -1251,18 +1316,37 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { check } { check }
 \__tenkz_kernel_unknown:nn  { tenkz-kernel-picture } { picture }
 
-% A flag-shaped sugar key carries flag semantics (#6198 sweep): true or
-% the bare spelling expands, false expands nothing, and any other value
-% refuses instead of silently behaving as true.
-\cs_new_protected:Npn \__tenkz_kernel_sugar_flag:nnn #1#2#3
+% A flag-shaped sugar key carries last-wins flag semantics (#6198 sweep):
+% true or the bare spelling expands, a later false retracts that expansion,
+% and any other value refuses instead of silently behaving as true.
+\cs_new_protected:Npn \__tenkz_kernel_sugar_flag:nnnn #1#2#3#4
   {
     \str_case:nnF {#2}
       {
-        {true}  {#3}
-        % A false-valued sugar flag is still the sugar spelling, so strict
-        % mode refuses it like the bare word, but it stages no fields.
+        {true}
+          {
+            \__tenkz_kernel_sugar:n {#1}
+            \prop_if_in:NnF \l__tenkz_kernel_sugar_active_prop {#1}
+              {
+                \clist_map_inline:nn {#3}
+                  { \__tenkz_kernel_sugar_save:nn {#1} {##1} }
+                \prop_put:Nnn
+                  \l__tenkz_kernel_sugar_active_prop {#1} {true}
+              }
+            \tl_set:Nn \l__tenkz_kernel_sugar_current_tl {#1}
+            #4
+            \tl_clear:N \l__tenkz_kernel_sugar_current_tl
+          }
         {false}
-          { \__tenkz_kernel_sugar:n {#1} }
+          {
+            \__tenkz_kernel_sugar:n {#1}
+            \prop_if_in:NnT \l__tenkz_kernel_sugar_active_prop {#1}
+              {
+                \clist_map_inline:nn {#3}
+                  { \__tenkz_kernel_sugar_restore:nn {#1} {##1} }
+                \prop_remove:Nn \l__tenkz_kernel_sugar_active_prop {#1}
+              }
+          }
       }
       {
         \msg_error:nneeee {tenkz}{kernel-choice}
@@ -1275,9 +1359,8 @@
   {
     sandwich .code:n =
       {
-        \__tenkz_kernel_sugar_flag:nnn {sandwich} {#1}
+        \__tenkz_kernel_sugar_flag:nnnn {sandwich} {#1} {rows}
           {
-            \__tenkz_kernel_sugar:n {sandwich}
             \keys_set:nn {tenkz-kernel-picture} {rows={ket,op,bra}}
           }
       },
@@ -1288,9 +1371,8 @@
     surface .code:n  = { \__tenkz_kernel_desugar_surface:n {#1} },
     planes .code:n =
       {
-        \__tenkz_kernel_sugar_flag:nnn {planes} {#1}
+        \__tenkz_kernel_sugar_flag:nnnn {planes} {#1} {frame,basis}
           {
-            \__tenkz_kernel_sugar:n {planes}
             \keys_set:nn {tenkz-kernel-picture}
               {frame={plane,basis={ket~at~(0,0),bra~at~(2,2)}}}
           }
@@ -21220,6 +21302,7 @@
     \prop_clear:N \l__tenkz_kernel_basis_east_prop
     \prop_clear:N \l__tenkz_kernel_basis_north_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
+    \__tenkz_kernel_sugar_clear:
     \seq_clear:N \l__tenkz_kernel_stack_seq
     \int_set:Nn \l__tenkz_kernel_row_int { 1 }
     \int_set:Nn \l__tenkz_kernel_col_int { 1 }
@@ -21272,6 +21355,7 @@
     \prop_map_inline:Nn \l__tenkz_kernel_policy_prop
       { \exp_args:Ne \__tenkz_model_record_picture:n { ##1 = { \exp_not:n {##2} } } }
     \prop_clear:N \l__tenkz_kernel_stage_prop
+    \__tenkz_kernel_sugar_clear:
     % The named metric profile acts once, here, on the group-local pitch:
     % the pitch is the one base dimension, so scaling it scales every named
     % ratio while the print-size floors hold (tenkz-metric.code.tex).
