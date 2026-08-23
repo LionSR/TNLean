@@ -543,11 +543,6 @@ private lemma star_VOne (σ : Fin 1 → Fin 4) (x : Bool × Bool) :
   rw [VOne_apply]
   exact star_mul_of_fixed _ _ (star_bitEmbedding _ _) (star_bitEmbedding _ _)
 
-private lemma bitEmbedding_inner (i j : Fin 2) :
-    ∑ b : Bool, bitEmbedding i b * bitEmbedding j b = if i = j then 1 else 0 := by
-  fin_cases i <;> fin_cases j <;>
-    norm_num [bitEmbedding, Fintype.sum_bool, finTwoEquiv]
-
 private lemma VFour_append_one (σ : Fin 3 → Fin 4) (q : Fin 2 × Fin 2)
     (t : Bool × Bool × Bool × Bool) :
     VFour (Fin.append σ (rowOneEquiv q)) t =
@@ -609,20 +604,14 @@ private def collapseThreeEntry (σ τ : Fin 3 → Fin 4)
   (if (pairEquiv (σ 2)).2 = (pairEquiv (τ 2)).2 then 1 / 2 else 0) *
   (if (pairEquiv (σ 0)).1 = (pairEquiv (τ 0)).1 then 1 / 2 else 0)
 
-private lemma VFour_collapse_one' (σ τ : Fin 3 → Fin 4)
-    (t : Bool × Bool × Bool × Bool) :
-    ∑ z : Fin 1 → Fin 4, VFour (Fin.append σ z) t * VFour (Fin.append τ z) t =
-      collapseThreeEntry σ τ t := by
-  simpa only [collapseThreeEntry] using VFour_collapse_one σ τ t
-
 private lemma weighted_VFour_collapse_one (σ τ : Fin 3 → Fin 4)
     (t : Bool × Bool × Bool × Bool) :
     (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) *
       VFour (Fin.append σ z) t * VFour (Fin.append τ z) t) =
       (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) * collapseThreeEntry σ τ t := by
-  simpa only [Finset.mul_sum, mul_assoc] using
+  simpa only [Finset.mul_sum, mul_assoc, collapseThreeEntry] using
     congrArg ((CPSVExample410CorrelatedFlip.bondWeight t : ℂ) * ·)
-      (VFour_collapse_one' σ τ t)
+      (VFour_collapse_one σ τ t)
 
 private lemma bitEmbedding_norm (b : Bool) :
     ∑ i : Fin 2, bitEmbedding i b * bitEmbedding i b = 1 := by
