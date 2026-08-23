@@ -1,0 +1,123 @@
+\section{Isometric enlargements of the physical space}
+
+% The results in this section are project-derived coordinate statements.  The
+% cited CPSV16 passages are construction context, not source statements of the
+% invariance theorem below.
+
+\begin{definition}[Doubled physical matrix]
+    \label{def:mpdo_doubled_physical_matrix}
+    \lean{MPOTensor.doubledPhysicalMatrix}
+    \leanok
+    Let $V:\C^d\to\C^e$ be a linear map.  Its action on the doubled
+    ket--bra index is the matrix $W:\C^{d^2}\to\C^{e^2}$ with
+    \begin{align}
+        W_{(i,j),(p,q)}
+         &=V_{i,p}\,\overline{V_{j,q}}.
+        \label{eq:mpdo_doubled_physical_matrix}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Transport under an isometric physical embedding]
+    \label{thm:mpdo_isometric_physical_embedding}
+    \lean{MPSTensor.transferMap_kraus_isometry,
+        MPSTensor.isLeftCanonical_kraus_isometry,
+        MPSTensor.isInjective_kraus_isometry,
+        MPSTensor.isInjective_of_kraus_mixing_isInjective,
+        MPSTensor.isInjective_kraus_isometry_iff,
+        MPSTensor.GaugeEquiv.sum_smul,
+        MPOTensor.doubledPhysicalMatrix_isometry,
+        MPOTensor.toMPSTensor_changePhysicalBasis,
+        MPOTensor.transferMap_toMPSTensor_changePhysicalBasis,
+        MPOTensor.isInjective_toMPSTensor_changePhysicalBasis_iff,
+        MPOTensor.isLeftCanonical_toMPSTensor_changePhysicalBasis,
+        MPOTensor.isNormalTensor_toMPSTensor_changePhysicalBasis_iff,
+        MPOTensor.IsMPDO.changePhysicalBasis,
+        MPOTensor.isMPDO_changePhysicalBasis_iff,
+        MPOTensor.IsSAL.changePhysicalBasis_of_isometry,
+        MPOTensor.isSAL_changePhysicalBasis_iff,
+        MPOTensor.physTraceTransfer_changePhysicalBasis,
+        MPOTensor.gaugeEquiv_toMPSTensor_changePhysicalBasis,
+        MPOTensor.physicalSliceColumnCoisometry,
+        MPOTensor.physicalSliceColumnCoisometry_mul_conjTranspose,
+        MPOTensor.physicalSliceColumns_changePhysicalBasis,
+        MPOTensor.physicalSliceColumns_mul_conjTranspose_changePhysicalBasis,
+        MPOTensor.physicalSupportProj_changePhysicalBasis}
+    \leanok
+    \uses{def:mpdo_doubled_physical_matrix, def:injective,
+        def:left_canonical_tensor, def:nt_cpsv, def:gauge_equiv,
+        def:mpdo, def:is_sal}
+    Let $\mathcal K=\{\mathcal K^{pq}\}_{p,q=0}^{d-1}$ be an MPO tensor and
+    set
+    $\mathcal K_V^{ij}=\sum_{p,q}V_{i,p}\overline{V_{j,q}}\mathcal K^{pq}$.
+    Write $A^{(p,q)}=\mathcal K^{pq}$ and
+    $A_V^{(i,j)}=\mathcal K_V^{ij}$ for the associated doubled-index MPS
+    tensors.  For every $V$, the matrix in
+    (\ref{eq:mpdo_doubled_physical_matrix}) satisfies
+    $A_V^\tau=\sum_\sigma W_{\tau,\sigma}A^\sigma$.
+
+    Suppose now that $V^\dagger V=\Id$. Then
+    \begin{align}
+        W^\dagger W &=\Id,
+        & \E_{A_V} &=\E_A,
+        \label{eq:mpdo_embedding_transfer} \\
+        A_V\text{ is injective}
+          &\Longleftrightarrow A\text{ is injective},
+        & A_V\text{ is normal}
+          &\Longleftrightarrow A\text{ is normal},
+        \notag \\
+        \mathcal K_V\text{ is an MPDO}
+          &\Longleftrightarrow \mathcal K\text{ is an MPDO},
+        & \mathcal K_V\text{ saturates the area law}
+          &\Longleftrightarrow \mathcal K\text{ saturates the area law},
+        \notag \\
+        \mathcal T_{\mathcal K_V} &=\mathcal T_{\mathcal K},
+        & P_{\mathcal K_V} &=V P_{\mathcal K}V^\dagger.
+        \label{eq:mpdo_embedding_trace_support}
+    \end{align}
+    Here $P_{\mathcal K}$ is the orthogonal projection onto the joint column
+    span of the physical slices of $\mathcal K$.  Left-canonical normalization
+    of $A$ implies left-canonical normalization of $A_V$.
+
+    For arbitrary $V$, positivity of every positive-length periodic operator
+    for $\mathcal K$ implies the same positivity for $\mathcal K_V$.
+    Moreover, if two doubled-index tensors are related by one virtual gauge,
+    applying the same $V$ to their physical indices preserves that gauge.
+
+    This theorem is project-derived and is not stated in
+    \cite{Cirac2016MPDO_arXiv}.  Its application is to the normal-block and
+    per-sector constructions in lines~217--246, 1628--1665, and 1740--1782 of
+    that source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $(\sigma,\rho)$ entry of $W^\dagger W$ factors into the product of
+    the corresponding ket and bra entries of $V^\dagger V$, which gives the
+    first identity in (\ref{eq:mpdo_embedding_transfer}).  Isometric mixing of
+    a Kraus family therefore gives the second identity.  Conversely, each
+    original matrix is recovered from the mixed family by
+    $A^\sigma=\sum_\tau\overline{W_{\tau,\sigma}}A_V^\tau$; this proves the
+    injectivity equivalence.  The transfer-map identity and the equivalence
+    between irreducibility of a Kraus family and of its transfer map preserve
+    the three clauses of normality without a new spectral argument.
+
+    At length $N$, the periodic operator of $\mathcal K_V$ is
+    $V^{\otimes N}\rho^{(N)}(\mathcal K)(V^{\otimes N})^\dagger$.
+    This proves positivity for arbitrary $V$.  Under the isometry hypothesis,
+    traces and the mutual informations of every contiguous block agree in the
+    two physical spaces, which gives the MPDO and area-law equivalences in
+    (\ref{eq:mpdo_embedding_trace_support}).  Contracting the two physical
+    indices and using $V^\dagger V=\Id$ gives the equality of the matrices
+    $\mathcal T$.
+
+    Finally, let $Z_{\mathcal K}$ stack all columns of all physical slices.
+    Directly from the definition,
+    $Z_{\mathcal K_V}=VZ_{\mathcal K}R$, where $R$ is the blockwise copy of
+    $V^\dagger$ and $RR^\dagger=\Id$.  Hence
+    $Z_{\mathcal K_V}Z_{\mathcal K_V}^\dagger
+      =VZ_{\mathcal K}Z_{\mathcal K}^\dagger V^\dagger$,
+    and taking column-support projections proves the last identity in
+    (\ref{eq:mpdo_embedding_trace_support}).  A common virtual similarity
+    distributes termwise through the physical sums, proving the gauge
+    assertion.
+\end{proof}

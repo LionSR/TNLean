@@ -221,6 +221,7 @@ import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PhysicalClosure
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
+import TNLean.MPS.MPDO.PhysicalIsometricEmbedding
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
 import TNLean.MPS.MPDO.PhysicalSectorActiveFactorSupport
 import TNLean.MPS.MPDO.PhysicalSectorActiveNeighboring
