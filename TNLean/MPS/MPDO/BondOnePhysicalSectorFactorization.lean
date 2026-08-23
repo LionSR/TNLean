@@ -150,8 +150,8 @@ factorization $1=1\cdot1$.
 
 **Scope restriction (virtual bond dimension one):** This is a conditional
 boundary specialization of CPSV16 Theorem 4.9 and Appendix C.2.  It does not
-prove the unrestricted absorbed-BNT representative assertion tracked in issue
-#6775 and documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+prove the unrestricted absorbed-BNT representative assertion documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Theorem 4.9 and Appendix C.2, lines 1381--1403,
 1441--1450, and 1647--1782. -/
@@ -177,7 +177,7 @@ physical-sector conclusion at virtual bond dimension one.
 
 **Scope restriction (virtual bond dimension one):** This theorem is a
 conditional boundary specialization of CPSV16 Theorem 4.9.  The unrestricted
-all-sector assertion remains open in issue #6775 and is documented in
+all-sector assertion is documented in
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Theorem 4.9 and Appendix C.2, lines 1381--1403,
