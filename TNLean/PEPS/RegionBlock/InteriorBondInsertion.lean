@@ -22,10 +22,12 @@ Thus the assembled deformed state is
 \]
 where `p_A(R)` is the non-boundary bond product and `E_A` is the coefficient obtained by
 inserting `X` on `e` in the closed network.  The singleton contains the ordered left endpoint,
-so no transpose is introduced.  This is the interior-bond case of the paper's statement that
-one virtual operation is a physical operation on every window containing an endpoint.  The
-extension uses the same contraction operation of adjoining genuine tensors that occurs later
-in the sketch's end-region comparison.
+so no transpose is introduced.  This supplies the insert used for the interior-bond case of the
+paper's staircase.  For an injective window, `physicalOpOfRegionInsert_realizes` separately turns
+this insert into an actual physical operator on the window.  The closed-state extension identity
+below supplies the common-state calculation; it is not being used by itself as a local physical
+realization.  The extension uses the same contraction operation of adjoining genuine tensors that
+occurs later in the sketch's end-region comparison.
 
 ## References
 
@@ -90,6 +92,9 @@ region times the closed-network coefficient with the same virtual operation on t
 The extension identity adjoins the genuine tensors without changing the closed state.  The
 normalizing ratio cancels the singleton's non-boundary bond product.  Since the singleton
 contains the ordered left endpoint of `e`, the boundary orientation is the identity.
+
+This is a closed-state identity.  The open-boundary physical realization on an injective region is
+`physicalOpOfRegionInsert_realizes` in `TNLean/PEPS/RegionBlock/PhysicalOperation.lean`.
 
 Source: arXiv:1804.04964, the virtual-operation realization at lines 2320--2321 of
 `Papers/1804.04964/paper_normal.tex`; compare the tensor adjoining at lines 2415--2444. -/
