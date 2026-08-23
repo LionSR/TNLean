@@ -70,10 +70,11 @@ authored chapter at all.
 **F4. No styling catalogue.** quantikz §V.A (p. 18) prints the table every
 styling question needs: style name against affected commands, then global
 restyling via `tikzset` and per-gate overrides, each rendered. tenkz has the
-better semantic model (themes, species, roles, slots) and no equivalent
-catalogue: nothing states what ink `theme=house` binds, what the house hue
-cycle is, which slots exist for regions and marks, or what a `species`
-declaration changes, and `theme=` never occurs in an authored chapter.
+better semantic model (species, roles, and slots) and no equivalent
+catalogue: nothing assembles the house hue cycle, the slots for regions and
+marks, and the effect of a `species` declaration into one rendered account.
+The house palette binds when the package loads; a cited palette enters through
+the declaration's `hue=` field.
 
 **F5. No migration narrative.** quantikz §VII (pp. 24–25) gives a
 conversion table (QCircuit spelling to quantikz spelling) plus a bulleted

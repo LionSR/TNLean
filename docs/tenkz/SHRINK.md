@@ -3338,3 +3338,23 @@ itself; no key is added.
 |---|---|
 | flag:consumers:key:kernel-setup:sizes | retired: stored a table, read by nothing; use size= on the picture or atom; permanent |
 | flag:lonely-type:size-table | departed: its sole carrier was the inert sizes= setup key; permanent |
+
+### 2026-08-23 — the inert theme= setup key is retired
+
+The setup key `theme=` stored an arbitrary identifier in each picture model,
+but no ink or rendering pass read that field.  The registry sweep (#6198)
+compiled absent, `house`, and nonsense-value forms to byte-identical events
+and pixels and found no reader outside the parser row.  The house palette is
+bound when the package loads; a palette taken from a cited source reaches ink
+through `\tndeclare{species}{<name>}{hue=source:<colour>}`.  The parser and
+registry rows therefore leave, and `n_setup_theme_key.tex` pins the
+unknown-key answer.
+
+Meters: m1 kernel 57 → 56 (census 80 → 79), m2 parser paths 69 → 68;
+`tests/tenkz/census-baseline.json` moves in this change.
+Extension-gate: #6889 — the parser-leaf identity change is the removal
+itself; no key is added.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-setup:theme | retired: stored an identifier, read by nothing; the house palette binds at load and cited palettes enter through species hue declarations; permanent |

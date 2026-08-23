@@ -237,13 +237,12 @@ A mark takes the `species=` that atoms and wires already carry, with the same
 type and the same meaning, so one semantic identity has one spelling and a
 cited paper's palette reaches a contour and the string that ends in it alike.
 
-### 2.6 Setup keys (4)
+### 2.6 Setup keys (2)
 
 | Key | Type | Default |
 |---|---|---|
 | `pitch=` | length | a fixed 11mm; the metric registry owns the ratios measured against it |
 | `strict` | flag | false; only five refusal fixtures enable it |
-| `theme=` | identifier | `house` |
 
 ### 2.7 Value types (23)
 
@@ -1085,6 +1084,7 @@ row is what names where the meaning went.
 | `trace style=racetrack` | closure depth follows the selection the closure clears (§5) |
 | `inline`, `compact` | math-style sensing + `size=`; a page-constrained picture declares `metrics=compact` (§2.2) |
 | `sizes=` | `size=` on the picture or atom; the bundled metric table is fixed |
+| `theme=` | the house theme binds at load; a cited palette reaches ink through `\tndeclare{species}{<name>}{hue=source:<colour>}` |
 | `via=` | `route={<side> of <selector>}` where the waypoint cleared records (§12.3); nothing where it only bent a line past cells that hold none (§12.1), and nothing on a wound string, whose class is already its path (§5, §12.2) |
 | `bend=` | nothing: an arc leaves and enters along its ends' faces |
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
