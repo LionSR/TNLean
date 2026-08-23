@@ -68,15 +68,13 @@ implying ZCL. That conclusion contradicted the source theorem above, so it was
 a counterexample to the local Lean predicate, not to Definition
 \path{def:Puri-RFP}.
 
-For this reason the file \path{TNLean/MPS/MPDO/PRFP.lean}, the corresponding
-blueprint section, and the counterexample registry entry were removed. The
-coverage audit now records the source PRFP definition as open, not as
-formalized.\footnote{This note records the divergence removed in
-\href{https://github.com/LionSR/TNLean/pull/2386}{PR \#2386}. The faithful
-replacement is tracked by
-\href{https://github.com/LionSR/TNLean/issues/2383}{issue \#2383} and the
-MPDO coverage tracker
-\href{https://github.com/LionSR/TNLean/issues/2380}{issue \#2380}.}
+The current formalization keeps the two conditions separate.
+\path{TNLean/MPS/MPDO/PRFP.lean} records the positive-length global equation
+and pure-state RFP witness of Definition~4.3, while
+\path{TNLean/MPS/MPDO/LocalPurificationRFP.lean} gives the local tensor
+condition its own name. The Blueprint and coverage audit mark the source PRFP
+definition complete, and the counterexample registry distinguishes the local
+condition from the global nilpotent-sector obstruction discussed below.
 
 \section{Global formalization and its obstruction}
 
