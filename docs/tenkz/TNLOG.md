@@ -154,7 +154,7 @@ first, the rest sorted, no `picture=`.
 |---|---|---|
 | `picture` | `id` (`k<n>`), `lang` (always `kernel`), `metrics` (when a metric profile is declared), `size` (when the resolved size class is not `m`, whether the author stated it or the surrounding mathematics did), `scope` (when inside `tenkzeq`) | opens a picture |
 | `kernel-boundary` | `signature` | closes the record block with the picture's exposed-index multiset, comma-space joined, possibly empty |
-| `check` | `scope`, then `relation` or `product`, `result`, `modulo`, and result-specific fields | one equation-level verdict, emitted after every picture of its scope |
+| `check` | `scope`, then `relation` or `product`, `result`, and result-specific fields | one equation-level verdict, emitted after every picture of its scope |
 | `warning` | `picture`, `code`, then code-specific fields | one non-fatal geometry or readability diagnostic |
 | `string` | `id`, `kind` (`open`, `closed`, `wind`; readers also accept the retired `around` from stored 1.2 streams), `class`, `pts` | one declared curve |
 | `stringbead` | `id`, `t`, `x`, `y` | one bead at parameter `t` on a string |
@@ -265,7 +265,7 @@ of them is a change to the surface.
 | an untabled field never appears on a tabled kind | accepts any untabled field as opaque |
 
 The last row is the one to read twice. `picture`'s `metrics`, every `warning`
-payload field beyond `code`, `check`'s `modulo`, `left-kind`, and `right-kind`,
+payload field beyond `code`, `check`'s `left-kind` and `right-kind`,
 `string`'s `class`, and the whole open vocabulary of
 the four record kinds all pass through unvalidated. The reader tolerating a
 field is not the same as the format having one.
