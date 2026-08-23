@@ -1,7 +1,8 @@
 \section{Saturation of the area law}
 
 \begin{definition}[Block entropy of an MPDO]\label{def:block_entropy}
-    \lean{MPOTensor.blockEntropy}
+    \lean{MPOTensor.blockEntropy,
+        MPOTensor.blockEntropy_of_charpoly_roots_eq}
     \leanok
     \uses{def:mpo_tensor}
     For a fixed system size $N$, a block length $L\le N$, and an MPO tensor $M$
@@ -15,7 +16,11 @@
     \end{align}
     denote the normalized state and the reduced state of the first $L$ of $N$
     spins. The \emph{$L$-block entropy} is
-    $S_L^{(N)}(M)=S(\rho_L^{(N)}(M))$.
+    $S_L^{(N)}(M)=S(\rho_L^{(N)}(M))$. If the characteristic roots of the
+    reduced state are the real multiset $\{r_j\}_j$, then
+    \begin{align}
+        S_L^{(N)}(M) & =\sum_j -r_j\log r_j. \notag
+    \end{align}
 \end{definition}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
