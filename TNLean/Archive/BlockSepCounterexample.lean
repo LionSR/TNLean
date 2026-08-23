@@ -103,20 +103,25 @@ lemma span_mat1_eq_top (a : ℂ) (ha : a ≠ 0) : (ℂ ∙ mat1 a) = ⊤ := by
   -- Now it’s a scalar identity.
   simp [mat1, div_eq_mul_inv, ha]
 
+/-- A one-letter family whose single matrix spans is injective: the range of a
+constant family is the singleton containing that matrix. -/
+private lemma isInjective_of_singleton_span {M : Matrix (Fin 1) (Fin 1) ℂ}
+    (h : (ℂ ∙ M) = ⊤) : Kraus.IsInjective (fun _ : Fin 1 => M) := by
+  unfold Kraus.IsInjective
+  rw [Set.range_const]
+  exact h
+
 lemma AEx_isInjective : ∀ k, Kraus.IsInjective (AEx k) := by
   classical
   intro k
   fin_cases k
   · -- k = 0
-    -- Unfold the definition: range is a singleton containing `mat1 1`.
-    simpa [Kraus.IsInjective, AEx, Set.range_const] using
-      (span_mat1_eq_top (a := (1 : ℂ)) one_ne_zero)
+    exact isInjective_of_singleton_span (span_mat1_eq_top 1 one_ne_zero)
   · -- k = 1
     -- Here `3/2 ≠ 0`.
     have hne : ((3 : ℂ) / 2) ≠ 0 := by
       norm_num
-    simpa [Kraus.IsInjective, AEx, Set.range_const] using
-      (span_mat1_eq_top (a := ((3 : ℂ) / 2)) hne)
+    exact isInjective_of_singleton_span (span_mat1_eq_top (3 / 2) hne)
 
 /-- The weighted MPV sum cancels for all system sizes (here `d = 1`, so there is only one σ at each
 size). -/
