@@ -168,14 +168,14 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{boundary}{enum(open|none|periodic)}{none}{sugar(west, east)}{All-side boundary word.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{lattice}{pair}{empty}{sugar(rows=, cols=)}{RxC wire-row lattice preset.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{ring}{integer}{empty}{sugar(rows=, cols=, frame=circle, west=trace, east=trace)}{Circle-frame ring preset.}
-\__tenkz_language_registry_key:nnnnnn {kernel-picture}{surface}{identifier}{empty}{sugar(west=trace, east=trace, north=trace, south=trace)}{Torus closure preset.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{surface}{enum(torus)}{empty}{sugar(west=trace, east=trace, north=trace, south=trace)}{Torus closure preset.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{planes}{flag}{false}{sugar(frame={plane, basis={ket at (0,0), bra at (2,2)}})}{Plane frame with ket and bra basis members.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{physical}{physical-policy}{none}{sugar(rows)}{Expander: frame-owned outward physical port per frame-cell atom; geometric overlays are excluded.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{skin}{silhouette-name}{theme default}{kernel}{Declared silhouette.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{wide}{positive-integer}{1}{kernel}{Cells spanned.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{wires}{positive-integer}{1}{kernel}{Wire rows spanned.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{at}{address}{next chain cell}{kernel}{Placement address.}
-\__tenkz_language_registry_key:nnnnnn {kernel-atom}{name}{identifier}{generated}{kernel}{Addressable name.}
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{name}{identifier}{none}{kernel}{Addressable name; an unnamed atom answers only to its cell.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{ports}{typed-port-list}{from skin}{kernel}{Typed faces and slots.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{species}{declared-name}{empty}{kernel}{Semantic species.}
 % Extension-gate: #5009 -- crossings with picture-external wires belong to
@@ -195,9 +195,9 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Tombstoned; stored, read by nothing. Sunset 1.0.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{cluster}{pair}{empty}{sugar(name=, skin=)}{Expander: RxC addressable sub-atom group.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{role}{semantic-role}{empty}{sugar(species=)}{Prelude species spelling.}
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string|pairing)}{index}{kernel}{Bond, travelling string, or generated skin pairing.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string)}{index}{kernel}{Bond or travelling string; a declared skin's pairing arrives generated, never authored.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{route}{route-spec}{straight}{kernel}{straight, orth, arc (honours the ends' faces), or the hull route {<side> of <selector>}.}
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints of a string; an index bond draws its chord and reads none.}
 % The multiplicity is a claim the boundary-signature audit carries, not a
 % count the rail draws: `double` and `bundle=n` both stroke one rail and
 % expand to their own multiplicity in the exposed entry (LANGUAGE-1.0 2.4).
@@ -211,7 +211,7 @@
 % the side a string passes on.  cross= stays as the per-crossing exception.
 % Consumers: rmp-iii-a-pulling-through, rmp-workbench-iii-g-injective-pull,
 % rmp-workbench-iii-mpo-injective-white.
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{crossing}{enum(over|under|alternate|alternate=over|alternate=under)}{empty}{kernel}{Default crossing order at every crossing the string makes.}
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{crossing}{enum(over|under|alternate|alternate=over|alternate=under)}{empty}{kernel}{Default order for the crossings a hull route derives.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{dir}{direction-policy}{none}{kernel}{Direction mark of a directed index.}
 % Extension-gate: #5543 -- the sources draw two non-solid rails and no third:
 % a dashed one for an index drawn but not contracted, a dotted one for a
@@ -226,15 +226,15 @@
 % four spellings struck from it are the tombstone rows at the foot of this
 % file, which are where a dead spelling lives and the only place it lives.
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|enclosure|label|prose)}{label}{kernel}{Mark form; the prose form records its text and draws nothing.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{unset}{kernel}{Semantic tint of the contour; species= outranks it, and an unset slot falls back to the passive hue.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{species}{declared-name}{empty}{kernel}{Semantic species.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{label~pos}{angle}{auto}{kernel}{Label quadrant.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{name}{identifier}{generated}{kernel}{Addressable name.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{label~pos}{angle}{auto}{kernel}{Label bearing: a compass word or a degree value.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{name}{identifier}{generated}{kernel}{Recorded name; no address grammar resolves a mark yet.}
 % Extension-gate: #5570.  The flag reads the way the corpus draws: a mark is
 % a contour, and a region that carries paper under it says so.
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under the contour.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{em-relative}{kernel}{Base metric.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Size-class table.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under an enclosure's contour; a bracket takes none.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{11mm}{kernel}{Base metric; the default is a fixed length, not an em-relative one.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Stored, read by nothing; size_resolve reads the picture size key.}
 % Nothing in the benchmark or in a workflow turns the flag on, and 51 of the
 % 130 benchmark cases spell physical= alone, which it refuses.  The five
 % refusal fixtures tests/tenkz/kernel/negative/n_strict_*.tex are the only
@@ -243,8 +243,8 @@
 % instead: eleven sugar spellings pinned byte-identical to their expansions
 % in events and in pixels.
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; only five refusal fixtures enable it.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Semantic ink theme.}
-\__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; source:* reproduces a cited palette.}
+\__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Stored, read by nothing; the house ink binds at load.}
+\__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; the source: prefix records provenance and strips to the colour it names.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{pairings}{port-pair-list}{empty}{kernel}{Skin-internal wires between own ports.}
 

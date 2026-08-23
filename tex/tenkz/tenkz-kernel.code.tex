@@ -185,6 +185,8 @@
 \msg_new:nnn {tenkz}{kernel-frame-member-occupied}
   { [TKZ-FRAME-MEMBER-OCCUPIED]~member~(#1,#2,#3)~is~already~claimed~
     by~record~#4. }
+\msg_new:nnn {tenkz}{kernel-picture-positive}
+  { [TKZ-PIC-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer. }
 \msg_new:nnn {tenkz}{kernel-atom-positive}
   { [TKZ-ATOM-POSITIVE-INTEGER]~#1=#2~must~be~a~positive~integer~
     (record~#3). }
@@ -988,6 +990,8 @@
     \__tenkz_kernel_stage_put:nn {#1} {cup}
     \__tenkz_kernel_stage_put:nn {cup-#1} {#2}
   }
+% One positive-integer parser serves every scope.  The parser family selects
+% the scope-specific diagnostic without duplicating the accepted alphabet.
 \cs_new_protected:Npn \__tenkz_kernel_positive_integer:nnn #1#2#3
   {
     \keys_define:nn {#1}
@@ -997,9 +1001,41 @@
             \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {##1}
               { \__tenkz_kernel_stage_put:nn {#3} {##1} }
               {
-                \msg_error:nneee {tenkz}{kernel-atom-positive}
-                  {#2} {##1} { \tl_use:N \l__tenkz_model_last_tl }
+                \str_case:nn {#1}
+                  {
+                    {tenkz-kernel-picture}
+                      {
+                        \msg_error:nnee {tenkz}{kernel-picture-positive}
+                          {#2} {##1}
+                      }
+                    {tenkz-kernel-atom}
+                      {
+                        \msg_error:nneee {tenkz}{kernel-atom-positive}
+                          {#2} {##1}
+                          { \tl_use:N \l__tenkz_model_last_tl }
+                      }
+                  }
               }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_align:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_list_item_tl {#1}
+    \tl_trim_spaces:N \l__tenkz_kernel_list_item_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_list_item_tl {midline}
+      { \__tenkz_kernel_stage_put:nn {align} {midline} }
+      {
+        \exp_args:NnV \regex_match:nnTF { \A [1-9]\d* \Z }
+          \l__tenkz_kernel_list_item_tl
+          {
+            \__tenkz_kernel_stage_put:ne {align}
+              { \tl_use:N \l__tenkz_kernel_list_item_tl }
+          }
+          {
+            \msg_error:nneeee {tenkz}{kernel-choice}
+              {align} {#1} {midline|<row~number>}
+              { \tl_use:N \l__tenkz_model_last_tl }
           }
       }
   }
@@ -1224,7 +1260,11 @@
 % "Picture options declare topology and policy; they create no hidden atoms."
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { rows } { rows }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { cols } { cols }
+% cols= carries the row's stated type: an illegal value refuses with the
+% picture-scope positive-integer diagnostic instead of a bare TeX
+% arithmetic error (#6198 sweep).
+\__tenkz_kernel_positive_integer:nnn
+  { tenkz-kernel-picture } { cols } { cols }
 \keys_define:nn {tenkz-kernel-picture}
   {
     frame .code:n = { \__tenkz_kernel_frame:n {#1} }
@@ -1237,7 +1277,12 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { open } { open }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { bonds }
   { grid, none } { bonds }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { align } { align }
+% align= is the midline word or a row number: anything else refused here
+% instead of deep in an fp read (#6198 sweep).
+\keys_define:nn { tenkz-kernel-picture }
+  {
+    align .code:n = { \__tenkz_kernel_align:n {#1} }
+  }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { size }
   { s, m, l } { size }
 % metrics=: the named metric profile of the picture's pitch.  Math style
@@ -1249,26 +1294,51 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { check } { check }
 \__tenkz_kernel_unknown:nn  { tenkz-kernel-picture } { picture }
 
+% A flag-shaped sugar key carries flag semantics (#6198 sweep): true or
+% the bare spelling expands, false expands nothing, and any other value
+% refuses instead of silently behaving as true.
+\cs_new_protected:Npn \__tenkz_kernel_sugar_flag:nnn #1#2#3
+  {
+    \str_case:nnF {#2}
+      {
+        {true}  {#3}
+        % A false-valued sugar flag is still the sugar spelling, so strict
+        % mode refuses it like the bare word, but it stages no fields.
+        {false}
+          { \__tenkz_kernel_sugar:n {#1} }
+      }
+      {
+        \msg_error:nneeee {tenkz}{kernel-choice}
+          {#1} {#2} {true|false}
+          { \tl_use:N \l__tenkz_model_last_tl }
+      }
+  }
 % picture-scope sugar: each expansion is the sugar ledger's row, verbatim.
 \keys_define:nn { tenkz-kernel-picture }
   {
     sandwich .code:n =
       {
-        \__tenkz_kernel_sugar:n {sandwich}
-        \keys_set:nn {tenkz-kernel-picture} {rows={ket,op,bra}}
+        \__tenkz_kernel_sugar_flag:nnn {sandwich} {#1}
+          {
+            \__tenkz_kernel_sugar:n {sandwich}
+            \keys_set:nn {tenkz-kernel-picture} {rows={ket,op,bra}}
+          }
       },
-    sandwich .default:n = ,
+    sandwich .default:n = true ,
     boundary .code:n = { \__tenkz_kernel_desugar_boundary:n {#1} },
     lattice .code:n  = { \__tenkz_kernel_desugar_lattice:n {#1} },
     ring .code:n     = { \__tenkz_kernel_desugar_ring:n {#1} },
     surface .code:n  = { \__tenkz_kernel_desugar_surface:n {#1} },
     planes .code:n =
       {
-        \__tenkz_kernel_sugar:n {planes}
-        \keys_set:nn {tenkz-kernel-picture}
-          {frame={plane,basis={ket~at~(0,0),bra~at~(2,2)}}}
+        \__tenkz_kernel_sugar_flag:nnn {planes} {#1}
+          {
+            \__tenkz_kernel_sugar:n {planes}
+            \keys_set:nn {tenkz-kernel-picture}
+              {frame={plane,basis={ket~at~(0,0),bra~at~(2,2)}}}
+          }
       },
-    planes .default:n = ,
+    planes .default:n = true ,
     physical .code:n = { \__tenkz_kernel_desugar_physical:n {#1} }
   }
 
