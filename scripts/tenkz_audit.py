@@ -52,7 +52,7 @@ Hard errors (exit 1):
   kernel-check        A kernel equation check reported a malformed relation
                       or unequal boundary signatures.
   eq-boundary-mismatch Two panels of one equation group expose different
-                       boundary kinds, multiplicities, or orientations.  A
+                       boundary kinds or orientations.  A
                        tensor equation equates two maps of one type, so the
                        multisets of open legs must agree side-to-side, an
                        index leaving one side must leave the other, and only
@@ -65,11 +65,9 @@ Hard errors (exit 1):
                       panel at all fails the same way.
   eq-check-drift      The stream's check policy is not its source's: it
                       retires a relation the source never opted out of, the
-                      source opts out of a relation the stream checked anyway,
-                      or the two disagree about comparing modulo bundles.  The
-                      stream is then stale against the source it is read with;
-                      only the waivers both state stand, and the comparison
-                      runs in the stricter of the two readings.
+                      source opts out of a relation the stream checked anyway.
+                      The stream is then stale against the source it is read
+                      with; only the waivers both state stand.
 
 Advisories (never affect the exit code):
   eq-sibling-mismatch  Consecutive kernel pictures joined by `=` in the
@@ -440,7 +438,6 @@ class ScopePolicy(NamedTuple):
     """What one equation's own source says about how it is checked."""
 
     waived: set[int]         # relations its `check={off={k: ...}}` retires
-    modulo_bundles: bool     # whether it compares a bundle as its multiplicity
     relation_order: tuple[int, ...]  # the gap each relation glyph sits on
     product_gaps: set[int]   # gaps holding no glyph, joining by juxtaposition
 
@@ -1829,9 +1826,9 @@ class Audit:
     def _source_check_policy(self) -> Optional[dict[int, ScopePolicy]]:
         r"""Per scope, the check policy the source itself declares.
 
-        The policy is the relations it waives, whether it compares modulo
-        bundles, and which gap between its panels each joiner occupies.  That
-        last part is exact rather than heuristic.  `tenkzeq` makes `=` the
+        The policy is the relations it waives and the gap between its panels
+        that each joiner occupies.  The latter is exact rather than heuristic.
+        `tenkzeq` makes `=` the
         active relation glyph over its whole body while a picture resets it,
         so between two panels every unescaped `=` records one relation and a
         gap holding none joins its panels by juxtaposition -- a product.
@@ -1839,10 +1836,9 @@ class Audit:
         joiners the kernel recorded, `\mbox{a=b}` included, which no reading
         of the mathematics could do.  `None` when no source is linked: the stream is then the only
         witness of its own policy, which is honoured and reported.  With a
-        source, a waiver counts and a bundle expansion applies only where the
-        environment's own `check=` says so, so a stale or edited stream can
-        neither retire a comparison the author never opted out of nor loosen
-        one the author never loosened.
+        source, a waiver counts only where the environment's own `check=` says
+        so, so a stale or edited stream cannot retire a comparison the author
+        never opted out of.
         """
         if not self.tex_linked:
             return None
@@ -1888,7 +1884,6 @@ class Audit:
             }
             authorized[scope] = ScopePolicy(
                 _tenkzeq_declared_offs(self._tex_src, begin) or set(),
-                _tenkzeq_declares_bundles(self._tex_src, begin),
                 relation_order,
                 product_gaps,
             )
@@ -1960,41 +1955,15 @@ class Audit:
                 )
                 if pair is not None
             }
-            # Only a comparison states the mode it ran in; a waiver ran none
-            # and says nothing, so a scope whose every relation is waived
-            # leaves the mode unobserved rather than observed to be off.
-            stated = [
-                event for event in records
-                if event.attrs.get("result") in {"equal", "mismatch", "contracted"}
-            ]
-            logged_modulo = any(
-                event.attrs.get("modulo") == "bundles" for event in stated
-            )
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
             source = (
                 None if policy is None
-                else policy.get(scope, ScopePolicy(set(), False, (), set()))
+                else policy.get(scope, ScopePolicy(set(), (), set()))
             )
             declared = set() if source is None else source.waived
-            declared_modulo = logged_modulo if source is None else source.modulo_bundles
             relation_order = () if source is None else source.relation_order
             relation_gaps = set(relation_order)
             product_gaps = set() if source is None else source.product_gaps
-            # A bundle expansion loosens the comparison, so the source has to
-            # ask for it: a stale stream carrying `modulo=bundles` past a
-            # source that no longer says so would accept a bundle against a
-            # count the current source rejects.  The comparison then runs in
-            # the stricter of the two readings.
-            modulo = logged_modulo and declared_modulo
-            if policy is not None and stated and logged_modulo != declared_modulo:
-                self.hard(
-                    "eq-check-drift", where,
-                    f"equation scope {scope} compares "
-                    f"{'modulo bundles' if logged_modulo else 'strand for strand'}"
-                    f" but its source asks for "
-                    f"{'modulo bundles' if declared_modulo else 'strand for strand'}"
-                    f"; the stream is not this source's",
-                )
             closed = (
                 scope not in malformed_scopes
                 # An equation asserts at least one relation, so a scope
@@ -2062,7 +2031,7 @@ class Audit:
                 # waivers name relations and the walk visits gaps, so they are
                 # mapped onto the gaps their glyphs sit on first.
                 self._compare_adjacent(
-                    members, scope, modulo,
+                    members, scope,
                     _waived_gaps(waived, relation_order),
                 )
                 continue
@@ -2071,7 +2040,7 @@ class Audit:
                 # k-th gap: the walk is the same one, and it can say which
                 # relation each pair sits on.
                 self._compare_adjacent(
-                    members, scope, modulo, waived, by_relation=True
+                    members, scope, waived, by_relation=True
                 )
                 continue
             # A composite side's signature is a fold over an interface the
@@ -2092,7 +2061,6 @@ class Audit:
                     self.pictures[left[0]], self.pictures[right[0]],
                     self.hard, "eq-boundary-mismatch",
                     f"sit on relation {relation} of equation scope {scope}",
-                    modulo=modulo,
                 )
 
     @staticmethod
@@ -2106,7 +2074,7 @@ class Audit:
         sides.append(members[start:])
         return sides
 
-    def _compare_adjacent(self, members: list[int], scope: int, modulo: bool,
+    def _compare_adjacent(self, members: list[int], scope: int,
                           waived_gaps: set[int],
                           by_relation: bool = False) -> None:
         """Compare a scope's panels pair by pair, skipping the waived gaps.
@@ -2127,13 +2095,11 @@ class Audit:
                 if by_relation else
                 f"are adjacent panels {gap} and {gap + 1} of equation "
                 f"scope {scope}",
-                modulo=modulo,
             )
 
     def _compare_panels(self, left: Picture, right: Picture,
                         report: Callable[[str, str, str], None], rule: str,
-                        relation: str, source: str = "",
-                        modulo: bool = False) -> None:
+                        relation: str, source: str = "") -> None:
         """Report when two panels expose different open-leg classes.
 
         Only the page face is dropped: a panel drawn rotated cuts the same
@@ -2144,8 +2110,8 @@ class Audit:
         sig_left, sig_right = left.kernel_boundary(), right.kernel_boundary()
         if sig_left is None or sig_right is None or sig_left == sig_right:
             return
-        classes_left = boundary_classes(sig_left, modulo)
-        classes_right = boundary_classes(sig_right, modulo)
+        classes_left = boundary_classes(sig_left)
+        classes_right = boundary_classes(sig_right)
         if classes_left == classes_right:
             return
         report(rule, f"{self.log_path.name}:{left.line}",
@@ -2374,32 +2340,6 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
     return declared
 
 
-def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
-    """True when one equation's own options ask to compare modulo bundles.
-
-    The equivalence is read from the options themselves and not from the
-    whole value: an opt-out's reason is prose an author writes about the
-    mathematics, and prose that names an option is still prose.
-    """
-    check_value = _tenkzeq_check_value(source, position)
-    if check_value is None:
-        return False
-    for key, value in top_level_options(check_value):
-        if key != "modulo" or value is None:
-            continue
-        # The key list strips one layer of braces from a value, so
-        # `modulo=bundles` and `modulo={bundles}` are one thing to the kernel
-        # and one thing here.
-        word = value.strip()
-        if word.startswith("{") and word.endswith("}"):
-            word = word[1:-1].strip()
-        if word == "bundles":
-            return True
-    return False
-
-
-_ORIENTATIONS = frozenset({"to", "from"})
-_BUNDLE = re.compile(r"bundle=([1-9]\d*)")
 _PRODUCT_PAIR = re.compile(r"(\d+)-(\d+)")
 
 
@@ -2436,42 +2376,28 @@ def _product_pair(event: Event, panels: int) -> int | None:
     return left
 
 
-def boundary_classes(signature: tuple[str, ...],
-                     modulo_bundles: bool = False) -> Counter:
-    """The multiset of open-leg classes a boundary signature exposes.
-
-    Under `check={modulo=bundles}` a bundled strand stands for its own
-    multiplicity of single strands, and the comparison expands it, exactly as
-    the kernel's own comparison does.
-    """
+def boundary_classes(signature: tuple[str, ...]) -> Counter:
+    """The multiset of open-leg classes a boundary signature exposes."""
     classes: Counter = Counter()
     for item in signature:
-        kind, weight, orientation = signature_entry_class(item)
-        bundle = _BUNDLE.fullmatch(weight) if modulo_bundles else None
-        if bundle is None:
-            classes[(kind, weight, orientation)] += 1
-        else:
-            classes[(kind, "single", orientation)] += int(bundle.group(1))
+        classes[signature_entry_class(item)] += 1
     return classes
 
 
-def signature_entry_class(item: str) -> tuple[str, str, str]:
+def signature_entry_class(item: str) -> tuple[str, tuple[str, ...]]:
     """Classify one boundary-signature entry, dropping only its page face.
 
-    An entry is ``kind:face`` followed by the optional fields the index
-    itself carries: a strand weight, and the orientation of a directed
-    index (``to`` when it leaves the panel, ``from`` when it enters).  A
-    rotated panel cuts its indices on other faces of its frame, so the face
-    is not compared; weight and orientation are the index's own and are.
+    An entry is ``kind:face`` followed by fields the index itself carries,
+    presently the orientation of a directed index.  A rotated panel cuts its
+    indices on other faces of its frame, so the face is not compared; every
+    remaining field belongs to the index and must agree.
     """
     parts = [part.strip() for part in item.split(":")]
     kind = parts[0]
     if kind in {"edge", "open"}:
         kind = "virtual"
-    rest = parts[2:]
-    orientation = next((part for part in rest if part in _ORIENTATIONS), "none")
-    weight = next((part for part in rest if part not in _ORIENTATIONS), "single")
-    return kind, re.sub(r"\s*=\s*", "=", weight), orientation
+    qualifiers = tuple(re.sub(r"\s*=\s*", "=", part) for part in parts[2:])
+    return kind, qualifiers
 
 
 _RELATION_MARK = re.compile(r"(?<!\\)(?:\\\\)*=")
