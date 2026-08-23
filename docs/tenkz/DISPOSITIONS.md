@@ -77,7 +77,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch20_mpdo_foundations.tex` | L17, 126, 373, 377 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | L19, 24 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_foundations.tex` | L88, 93 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_foundations.tex` | L117, 122 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L209, 213, 286, 287, 288, 289, 291 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L541, 546 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L361, 371, 600, 609, 621, 630, 642, 647 `tenkz` → `P-grid` | — | — |
