@@ -12,6 +12,7 @@ import TNLean.MPS.MPU.PhysicalAncilla
 
 This file formalizes strict equivalence and equivalence after attaching physical
 identity ancillas and then blocking, following arXiv:1703.09188, lines 706--724.
+It also formalizes strict equivalence under symmetry from lines 1340--1354.
 
 The virtual bond dimension is fixed along every path. The source does not specify
 a stabilization that compares tensors of different virtual bond dimensions, so
@@ -23,11 +24,42 @@ only the canonical-form condition from the paper is omitted along the path.
 * `MPOTensor.StrictlyEquivalent`: path connectedness inside the fixed-bond MPU locus.
 * `MPOTensor.Equivalent`: strict equivalence after positive identity-ancilla
   attachment and a common positive blocking length.
+* `MPOTensor.FiniteChainOperatorSymmetry`: an operator action at specified chain lengths.
+* `MPOTensor.StrictlyEquivalentUnderSymmetry`: strict equivalence through invariant MPUs.
 -/
 
 namespace MPOTensor
 
 variable {da db D : ℕ}
+
+/-- A finite-chain operator symmetry consists of an action on every finite-chain
+operator space and a set of chain lengths on which that action is imposed.
+
+The action is defined for every physical dimension, but no continuity, linearity,
+or compatibility between different chain lengths is assumed at this abstract
+level.
+
+Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
+lines 1345--1354. -/
+structure FiniteChainOperatorSymmetry where
+  applicable : Set ℕ
+  action : {d N : ℕ} →
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →
+      Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ
+
+/-- A matrix product operator tensor is invariant under a finite-chain symmetry
+when every applicable periodic operator satisfies
+\(\mathcal S[W^{(N)}]=W^{(N)}\).
+
+**Local fix (arXiv:1703.09188, line 1353):** the displayed source equation
+repeats the transformed operator on both sides. The intended right-hand side is
+the original operator. See `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
+Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
+lines 1345--1354. -/
+def IsInvariantUnderSymmetry (S : FiniteChainOperatorSymmetry)
+    (W : MPOTensor da D) : Prop :=
+  ∀ ⦃N : ℕ⦄, N ∈ S.applicable → S.action (mpo W N) = mpo W N
 
 /-- Two fixed-bond MPU tensors in canonical form are strictly equivalent when,
 after explicitly identifying their physical dimensions, they are joined by a
@@ -49,6 +81,41 @@ def StrictlyEquivalent (U : MPOTensor da D) (V : MPOTensor db D)
     MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
       JoinedIn {W : MPOTensor db D | IsMPU W}
         (reindexPhysical (finCongr hphys).symm U) V
+
+/-- Two fixed-bond canonical-form MPU tensors are strictly equivalent under
+`S` when they are joined by a continuous path of MPUs invariant under `S` at
+every applicable chain length.
+
+Lines 1340--1343 introduce this definition in full analogy with
+`def:strictly-equivalent-tensors`, whose endpoints are in canonical form.
+Canonical form is required only at the endpoints. The physical dimension is
+identified explicitly, and the virtual bond dimension remains fixed along the
+path.
+
+**Scope restriction (arXiv:1703.09188, lines 1340--1354):** the paper does not
+specify a stabilization for unequal raw virtual bond dimensions, so this
+definition only compares tensors in one fixed ambient bond dimension. See
+`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+
+Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
+lines 1345--1354. -/
+def StrictlyEquivalentUnderSymmetry (S : FiniteChainOperatorSymmetry)
+    (U : MPOTensor da D) (V : MPOTensor db D) (hphys : da = db) : Prop :=
+  MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
+    MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
+      JoinedIn {W : MPOTensor db D | IsMPU W ∧ IsInvariantUnderSymmetry S W}
+        (reindexPhysical (finCongr hphys).symm U) V
+
+/-- Forgetting symmetry invariance from a strict symmetry-preserving path gives
+ordinary strict equivalence.
+
+Source: arXiv:1703.09188, Definitions `def:strictly-equivalent-tensors` and
+`def:strictly-equivalent-symmetry`, lines 708--714 and 1345--1354. -/
+theorem StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent
+    {S : FiniteChainOperatorSymmetry} {U : MPOTensor da D} {V : MPOTensor db D}
+    {hphys : da = db} (h : StrictlyEquivalentUnderSymmetry S U V hphys) :
+    StrictlyEquivalent U V hphys :=
+  ⟨h.1, h.2.1, h.2.2.mono fun _ hW ↦ hW.1⟩
 
 private theorem blockedAncillaPhysicalDim_eq (k : ℕ) {pa pb : ℕ}
     (hphys : pa * da = pb * db) :

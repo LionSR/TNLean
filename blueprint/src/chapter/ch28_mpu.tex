@@ -6445,24 +6445,61 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \subsection{Equivalence under symmetries}
 
+\begin{definition}[Finite-chain operator symmetry]
+    \label{def:mpu_finite_chain_operator_symmetry}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry,
+        MPOTensor.IsInvariantUnderSymmetry}
+    \leanok
+    A finite-chain operator symmetry $\mathcal S$ specifies a set $A$ of
+    applicable chain lengths and, for every physical dimension $d$ and length
+    $N$, a map
+    \begin{align}
+        \mathcal S_{d,N}\colon
+        \operatorname{Mat}_{d^N}(\mathbb C)
+        &\longrightarrow \operatorname{Mat}_{d^N}(\mathbb C).
+    \end{align}
+    We suppress the subscripts on $\mathcal S_{d,N}$ when $d$ and $N$ are
+    understood. An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
+    \begin{align}
+        \mathcal S_{d,N}[W^{(N)}] & =W^{(N)}
+    \end{align}
+    for every $N\in A$.
+    % Source lines: paper_v2.tex 1345--1354.
+\end{definition}
+
 \begin{definition}[Strict equivalence under a symmetry]
     \label{def:strictly-equivalent-symmetry}
-    \notready
-    \discussion{6017}
-    \uses{def:strictly-equivalent-tensors}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry}
+    \leanok
+    \discussion{6948}
+    \uses{def:strictly-equivalent-tensors, def:mpu_finite_chain_operator_symmetry}
     % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
     % operator on the right-hand side. Invariance requires the original MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    Two tensors $\mathcal U$ and $\mathcal V$ are strictly equivalent under a
-    symmetry $\mathcal S$ if they have the same physical dimension and there is
-    a continuous path $\mathcal W(p)$ of MPU tensors from $\mathcal U$ to
-    $\mathcal V$, not necessarily in canonical form, such that
+    Fix a virtual bond dimension $D$. Two canonical-form tensors $\mathcal U$
+    and $\mathcal V$ are strictly equivalent under a symmetry $\mathcal S$ if
+    they have the same physical dimension and there is a continuous path
+    $\mathcal W(p)$ of fixed-bond MPU tensors from $\mathcal U$ to $\mathcal V$,
+    not necessarily in canonical form, such that
     \begin{align}
         \mathcal S[W^{(N)}(p)] & =W^{(N)}(p)
     \end{align}
-    for every $p\in[0,1]$ and every chain length under consideration.
+    for every $p\in[0,1]$ and every applicable chain length $N$.
     % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
+
+\begin{lemma}[Forgetting symmetry from strict equivalence]
+    \label{lem:mpu_strict_symmetry_equivalence_forget}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent}
+    \leanok
+    \uses{def:strictly-equivalent-symmetry, def:strictly-equivalent-tensors}
+    Strict equivalence under a symmetry implies strict equivalence.
+\end{lemma}
+
+\begin{proof}\leanok
+    The same path lies in the larger locus obtained by forgetting invariance
+    under $\mathcal S$.
+\end{proof}
 
 \begin{definition}[Admissible strict equivalence under a symmetry]
     \label{def:mpu_admissible_strict_symmetry_equivalence}
