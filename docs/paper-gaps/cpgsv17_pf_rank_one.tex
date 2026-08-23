@@ -994,7 +994,10 @@ all-index coefficient equation in Lemma~C.5: CPSV16 quantifies sector labels
 without defining TNLean's active--inactive split or its ambient filler sectors.
 
 The Case-II sectorwise analytic slice is formalized separately. Literal
-physical-trace idempotence first descends to every weighted canonical block by
+physical-trace idempotence gives copy independence in the source standing
+simple-canonical form by
+\leanid{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}. It first
+descends to every weighted canonical block by
 \leanid{MPOTensor.weighted_basis_physTraceTransfer_sq_of_literal_ZCL}, and then
 to every absorbed BNT representative by
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL}.
