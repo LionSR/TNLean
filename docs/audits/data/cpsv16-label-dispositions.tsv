@@ -136,7 +136,7 @@ eq:gibbs-sal	1	1608	active	equation	Inherits Proposition 4to2's complete status 
 KBNTs	1	1630	active	figure	Graphical display supporting the Appendix C simple-MPDO argument in Blueprint Chapter 21; it is notation or an internal proof step, so no standalone formalization is warranted.
 AppKxKy=0	1	1636	active	figure	Graphical display supporting the Appendix C simple-MPDO argument in Blueprint Chapter 21; it is notation or an internal proof step, so no standalone formalization is warranted.
 ApprhoNComm	1	1641	active	equation	Displayed identity supporting the Appendix C simple-MPDO argument in Blueprint Chapter 21; it is notation or an internal proof step, so no standalone formalization is warranted.
-lemmus	1	1648	active	theorem-like	Source Lemma C.10; mapped to MPOTensor.weight_copy_independent_of_isSourceZCL in Blueprint Chapter 21.
+lemmus	1	1648	active	theorem-like	Source Lemma C.10; mapped to MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent in Blueprint Chapter 21. The IsSourceZCL theorem is a separate scale-invariant generalization.
 CFK	1	1663	active	figure	Graphical display supporting the Appendix C simple-MPDO argument in Blueprint Chapter 21; it is notation or an internal proof step, so no standalone formalization is warranted.
 biCFK	1	1668	active	figure	Graphical display supporting the Appendix C simple-MPDO argument in Blueprint Chapter 21; it is notation or an internal proof step, so no standalone formalization is warranted.
 Kidentity	1	1673	active	figure	Graphical display supporting the Appendix C simple-MPDO argument in Blueprint Chapter 21; it is notation or an internal proof step, so no standalone formalization is warranted.

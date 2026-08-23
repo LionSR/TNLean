@@ -191,6 +191,7 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   positive-length global equations do not detect nilpotent hidden sectors.
 - Proposition 4.5 is complete for monotonicity and finite-chain bounds, but its
   unrestricted thermodynamic-limit clause is false.
+- Lemma C.10 (`lemmus`) is linked to the exact literal-ZCL theorem. The former source node used the broader positive-up-to-scale relation; that valid generalization remains separate.
 - Theorem 4.9(iv)$\Rightarrow$(v) is refuted by the scalar BNT presentation
   with raw copy weights $1$ and $1/2$: explicit component witnesses establish
   all standing hypotheses, condition (iv), and MPDO positivity of the blocked
