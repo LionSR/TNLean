@@ -7635,6 +7635,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_3 & =\mathbb S,      & v_3 & =\mathbb S.
     \end{align}
     These are the formulas in \cite[equation~\texttt{eq:SF\_u1\_u3}]{Cirac2017MPU}.
+    The $U_3$ equalities use the source-coordinate presentation of that
+    equation; they are distinct from the blocked four-spin presentation below.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -7646,55 +7648,95 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     swap $\mathbb S$ in both orientations.
 \end{proof}
 
-\begin{theorem}[Two-site supplied source tensors for $U_2$]
+\begin{theorem}[Central gates in the supplied two-site factorizations of $U_2$]
     \label{thm:threeMPU_U2_supplied_source_uv_two}
-    \lean{MPOTensor.shiftExampleU₂_sourceU_two_eq_identitySwapIdentity,
-        MPOTensor.shiftExampleU₂_sourceV_two_eq_swapSwap_mul_identitySwapIdentity}
+    \lean{MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₁_mul_u₂_two_mul_Y₂,
+        MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_v₂_two_reflected_mul_Y₁}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
-    After blocking two sites and retaining the paper's four-spin order,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
+        thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    The two open-leg factorizations of the blocked tensor have, as their
+    respective central gates,
     \begin{align}
         u_2^{(2)} & =\Id\otimes\mathbb S\otimes\Id, \\
         v_2^{(2)} & =(\mathbb S\otimes\mathbb S)
             (\Id\otimes\mathbb S\otimes\Id).
     \end{align}
+    Here the two physical sites are decoded into the four-spin order of the
+    paper, and the factors $X_1,Y_2$ and $X_2,Y_1$ remain as the two open
+    boundaries of the respective factorizations.
     This is \cite[equation~\texttt{eq:uv2\_U2}]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:threeMPU_supplied_source_factors,
-        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
-    Expand the two supplied source contractions in product-rank coordinates.
-    Each normalized identity-vector contraction contributes one Kronecker
-    delta, and the scalar normalizations cancel.  Reindexing the four remaining
-    spin coordinates gives $\Id\otimes\mathbb S\otimes\Id$ for $u_2^{(2)}$.
-    The reflected contraction first exchanges the two pairs and then exchanges
-    the middle spins, giving the displayed ordered product for $v_2^{(2)}$.
+        def:mpu_source_uv, thm:mpu_source_u_open_two_site,
+        thm:mpu_source_v_open_two_site}
+    Write $B_2=\mathcal U_{2,2}$ for the actual two-site block and decode
+    $I=(I_1,I_2)$ and $J=(J_1,J_2)$.  If $\pi$ is the four-spin physical
+    identification and $\iota_u,\iota_v$ are the two source-rank
+    identifications, the asserted open-leg equalities are
+    \begin{align}
+        (B_2)_{I,J;\alpha,\gamma}
+        & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
+        [\Id\otimes\mathbb S\otimes\Id]_
+            {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        (Y_2)_{l,(J_2,\gamma)}, \\
+        (B_2)_{I,J;\alpha,\gamma}
+        & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
+        [(\mathbb S\otimes\mathbb S)
+            (\Id\otimes\mathbb S\otimes\Id)]_
+            {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        (Y_1)_{r,(I_2,\gamma)}.
+    \end{align}
+    These follow from the two exact open two-site factorizations.  Evaluating
+    the supplied sources in product-rank coordinates reduces their normalized
+    identity-vector contractions to the two displayed matrices.
 \end{proof}
 
-\begin{theorem}[Two-site supplied source tensors for $U_3$]
+\begin{theorem}[Central gates in the supplied two-site factorizations of $U_3$]
     \label{thm:threeMPU_U3_supplied_source_uv_two}
-    \lean{MPOTensor.shiftExampleU₃_sourceU_two_eq_identitySwapIdentity_mul_swapSwap,
-        MPOTensor.shiftExampleU₃_sourceV_two_eq_identitySwapIdentity}
+    \lean{MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₁_mul_u₃_two_mul_Y₂,
+        MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_v₃_two_reflected_mul_Y₁}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
-    After blocking two sites and retaining the paper's four-spin order,
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
+        thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    The two open-leg factorizations of the blocked tensor have, as their
+    respective central gates,
     \begin{align}
         u_3^{(2)} & =(\Id\otimes\mathbb S\otimes\Id)
             (\mathbb S\otimes\mathbb S), \\
         v_3^{(2)} & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
+    Again the four-spin order is the one displayed in the paper, and the
+    source factors at the two open boundaries are retained explicitly.
     This is \cite[equation~\texttt{eq:uv2\_U3}]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:threeMPU_supplied_source_factors,
-        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
-    Reverse the order of the left-shift and right-shift supplied factors in the
-    preceding calculation.  The unreflected contraction therefore exchanges
-    the middle spins before exchanging the two pairs, while the reflected
-    contraction only exchanges the middle spins.  This gives the two displayed
-    matrices in their stated order.
+        def:mpu_source_uv, thm:mpu_source_u_open_two_site,
+        thm:mpu_source_v_open_two_site}
+    With $B_3=\mathcal U_{3,2}$ for the actual two-site block and the
+    corresponding identifications $\pi,\iota_u,\iota_v$, the exact equalities
+    are
+    \begin{align}
+        (B_3)_{I,J;\alpha,\gamma}
+        & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
+        [(\Id\otimes\mathbb S\otimes\Id)
+            (\mathbb S\otimes\mathbb S)]_
+            {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        (Y_2)_{l,(J_2,\gamma)}, \\
+        (B_3)_{I,J;\alpha,\gamma}
+        & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
+        [\Id\otimes\mathbb S\otimes\Id]_
+            {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        (Y_1)_{r,(I_2,\gamma)}.
+    \end{align}
+    They follow by reversing the order of the left-shift and right-shift
+    supplied factors in the preceding calculation.  The first contraction
+    exchanges the middle spins before exchanging the two pairs, whereas the
+    reflected contraction only exchanges the middle spins.
 \end{proof}
 
 \begin{proposition}[Standard forms of the three shift MPUs]
