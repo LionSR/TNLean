@@ -1230,6 +1230,20 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### factor pairing under a two-index finite sum — candidate
+- **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a
+  pointwise identity proved by `ring` to pair corresponding scalar factors from
+  two products, then factor the independent index sums.
+- **Seen:** three occurrences in the private proofs `VFour_collapse_one`,
+  `VThree_collapse_one`, and `VTwo_collapse_one` in
+  `TNLean/MPS/MPDO/CPSVExample410Spectrum.lean` (2026-08-23).
+- **Abstraction:** a possible file-local lemma that combines the pointwise ring
+  rearrangement with `sum_two_four_factors` for products of varying lengths.
+- **Notes:** the three products have different numbers and kinds of factors, so
+  the shared finite-sum factorization is generic while the ring identities stay
+  explicit. No occurrence in a second file is known, so this remains below the
+  promotion threshold.
+
 ### transport of diagonal spectral identities — candidate
 - **Pattern:** diagonalize a Hermitian matrix as a unitary conjugate of its
   eigenvalue diagonal, prove a scalar or polynomial identity on that diagonal,
