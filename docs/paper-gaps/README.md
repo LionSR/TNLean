@@ -101,6 +101,13 @@ For MPDO renormalization fixed points:
   counterexample to Theorem 4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$
   satisfy the global convention and every condition-(iv) clause, while the
   blocked tensor fails Definition 4.1.
+- `cpgsv17_mpdo_mutual_information_bound.tex` is the resolved false-source
+  record for Proposition 4.5.  The monotonicity and finite-chain bounds remain
+  proved separately.  The parity-sensitive tensor is an MPDO, but at every
+  fixed nonempty cut its mutual information alternates between $0$ and
+  $h_2(1/3)>0$, so the printed thermodynamic-limit clause is formally refuted.
+  Aperiodicity or convergence is a genuine boundary condition absent from the
+  proposition.
 - `cpgsv17_mpdo_theorem_4_9_implication_label.tex` records the cyclic mismatch
   among the Appendix C proposition labels, the hidden use of the ZCL lemma
   `lemmus` in the printed proof of `prop3to4`, and the distinction between the

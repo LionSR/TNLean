@@ -133,7 +133,7 @@
 \begin{theorem}[Printed mutual-information proposition]
     \label{thm:cpsv_prop45_printed_status}
     \notready
-    \uses{def:mutual_info_chain, thm:parity_mpdo_no_mutual_info_limit}
+    \uses{def:mutual_info_chain, thm:cpsv_prop45_limit_counterexample}
     According to \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, one has
     $I_L\le I_{L+1}$ for $L<\lfloor N/2\rfloor$, the mutual information is
     bounded in terms of the bond dimension, and the indicated iterated
@@ -278,6 +278,26 @@
     $I_L^{(N)}=h_2(1/3)+h_2(1/3)-h_2(1/3)=h_2(1/3)$.
     The binary entropy is strictly positive at $1/3$. Thus the odd and even
     subsequences have distinct constant values.
+\end{proof}
+
+\begin{theorem}[Counterexample to the Proposition 4.5 limit clause]
+    \label{thm:cpsv_prop45_limit_counterexample}
+    \lean{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}
+    \leanok
+    \uses{def:mpdo, thm:parity_mpdo_no_mutual_info_limit}
+    The parity-sensitive tensor is an MPDO, and for every fixed $L\geq1$ the
+    sequence $K\mapsto I_L^{(L+K+1)}$ has no real limit.  Thus the unrestricted
+    thermodynamic-limit clause of
+    \cite[Proposition~4.5]{Cirac2016MPDO_arXiv} is false.  An aperiodicity or
+    convergence condition that excludes the parity oscillation is a genuine
+    boundary condition, not a hypothesis of the printed proposition.
+\end{theorem}
+
+\begin{proof}\leanok
+    The MPDO property follows from positivity of every positive-length
+    periodic operator.  The preceding odd- and even-length formulas give two
+    subsequences with the distinct values $0$ and $h_2(1/3)>0$ at every fixed
+    nonempty cut, so no real limit exists.
 \end{proof}
 
 \begin{definition}[Map on the second tensor factor]
