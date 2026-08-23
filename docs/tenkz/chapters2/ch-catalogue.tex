@@ -348,22 +348,19 @@ contracts is what its two ends are.  A wire between two ports takes them
 both, whatever its stroke; a wire between two atoms named as wholes
 leaves their ports where they were.  That is how the dashed diagonals of
 the benchmark's dual lattice recall an edge without contracting one:
-their ends are junctions with no ports to take.  \tnkey{weight=} says how
-many indices one drawn rail stands for, and \tnkey{dir=} marks a directed
-index against its dual.
+their ends are junctions with no ports to take.  \tnkey{dir=} marks a
+directed index against its dual.  Multiplicity is mathematics carried by
+the index label, not a second field on the rail.
 
 \begin{tnexample}[
   wide,
-  caption={the three strokes, a bundle, and a direction},
+  caption={the three strokes and a direction},
   index={Left: the three declared rail patterns.  The four sites declare
     no ports, so the three rails differ in pattern and in nothing else.
-    Right: one rail standing for three indices, carrying the direction
-    mark that distinguishes a space from its dual.  The bundle is
-    recorded, not drawn: the event stream reads \tnval{weight=bundle=3}
-    and the page shows one line.},
+    Right: one rail carrying the direction mark that distinguishes a
+    space from its dual.},
   signature={kernel-boundary|signature=}]
-% Ink: stroke= is the rail's pattern; weight=bundle=n records
-%   that one rail carries n indices; dir= marks the direction.
+% Ink: stroke= is the rail's pattern; dir= marks the direction.
 \begin{tenkz}[rows={wire}, cols=4, bonds=none]
   \tn[at=(1,1), name=p]{} \tn[at=(1,2), name=q]{}
   \tn[at=(1,3), name=r]{} \tn[at=(1,4), name=s]{}
@@ -374,7 +371,7 @@ index against its dual.
 \qquad
 \begin{tenkz}[rows={wire}, cols=2, bonds=none]
   \tn[at=(1,1), name=u]{U} \tn[at=(1,2), name=v]{V}
-  \tnwire[weight=bundle=3, dir=to]{u.0}{v.180}
+  \tnwire[dir=to]{u.0}{v.180}
 \end{tenkz}
 \end{tnexample}
 

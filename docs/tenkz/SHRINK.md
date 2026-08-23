@@ -3358,3 +3358,24 @@ itself; no key is added.
 | flag | verdict |
 |---|---|
 | flag:consumers:key:kernel-setup:theme | retired: stored an identifier, read by nothing; the house palette binds at load and cited palettes enter through species hue declarations; permanent |
+
+### 2026-08-23 — the sentenced weight= wire key is retired
+
+The wire key `weight=` had no authored consumer in the benchmark or
+blueprint corpus.  It never changed the rail on the page: `single`, `double`,
+and `bundle=n` all drew the same stroke.  Its only effect was a suffix in
+boundary-signature records, together with the zero-demand
+`modulo=bundles` comparison branch.  Amendment nine assigns the stroke to the
+resolved endpoint type, while index multiplicity remains mathematics carried
+by the label.  The parser row, registry row, option normalizer, signature
+suffix, bundle-expansion branch, and six manufactured fixtures therefore
+leave together.  `n_wire_weight_key.tex` pins the unknown-key answer.
+
+Meters: m1 kernel 56 → 55 (census 79 → 78), m2 parser paths 68 → 67;
+`tests/tenkz/census-baseline.json` moves in this change.
+Extension-gate: #6897 — the parser-leaf identity change is the removal
+itself; no key is added.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-wire:weight | retired: zero authored consumers; it changed no ink, endpoint type owns stroke, and multiplicity belongs to the mathematical label; permanent |

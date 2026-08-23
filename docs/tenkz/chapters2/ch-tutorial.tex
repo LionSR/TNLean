@@ -280,16 +280,13 @@ Example~\ref{tnex:tut-eq}'s~$B$.
 \ddbendpar Relations are one of three joiner classes.  A sum also
 requires equal signatures; a product instead contracts the facing cut,
 east entries of the left factor cancelling west entries of the right,
-and exposes the rest.  The comparison can be taken up to bundling ---
-\tnkey{check=}\tnval{\{signature, modulo=bundles\}} reads a bundled index
-and its members as one entry --- and a relation whose two sides are
-known, unequal, and equal anyway for a reason the diagram does not draw
-carries a recorded opt-out,
+and exposes the rest.  A relation whose two sides are known, unequal, and
+equal anyway for a reason the diagram does not draw carries a recorded opt-out,
 \tnval{off=\{<relation>: <reason>\}}, written to the event stream beside
 the waiver.  The audit cannot be switched off silently.
 
 \tnexercise{ex:tut-checkword} Why does
-\tnkey{check=}\tnval{\{signature, modulo=member\}} refuse?
+\tnkey{check=}\tnval{\{signature=false\}} refuse?
 
 \subsection{A sheet of tensors}
 
@@ -504,10 +501,9 @@ free loop, or keep the two ends for a bond.
 rather than passing over them, because a spelling the audit ignores is a
 comparison you believe is running and is not.  The coded error is
 \tnval{[TKZ-EQ-CHECK-WORD]}: \emph{the audit does not know
-`modulo=member'; check= states the audit (signature), the equivalence it
-is taken up to (modulo=bundles), and its recorded opt-outs
-(off=\{<relation>: <reason>\})}.  The one admitted equivalence word is
-\tnval{bundles}.
+`signature=false'; check= states the audit (signature) and its recorded opt-outs
+(off=\{<relation>: <reason>\})}.  The word \tnval{signature} names the
+audit; it is not a switch and therefore takes no value.
 
 \begin{tnexample}[
   answer={ex:tut-pepstensor},
