@@ -6352,11 +6352,65 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1041--1084.
 \end{lemma}
 
+\begin{lemma}[Odd-dimensional skew-symmetric determinant]
+    \label{lem:mpu_skew_symmetric_det_zero}
+    \lean{Matrix.det_eq_zero_of_transpose_eq_neg_of_odd_card}
+    \leanok
+    Let $I$ be a finite set of odd cardinality and let
+    $A\in\operatorname{Mat}_I(\mathbb C)$ satisfy $A^T=-A$. Then
+    \begin{align}
+        \det A & =0.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Transpose invariance, skew symmetry, and the determinant of a negated
+    matrix give
+    \begin{align}
+        \det A
+         & =\det(A^T)
+          =\det(-A)
+          =(-1)^{|I|}\det A
+          =-\det A.
+    \end{align}
+    Since the complex numbers have characteristic zero, $\det A=0$.
+\end{proof}
+
+\begin{lemma}[Parity of a nonsingular skew-symmetric matrix]
+    \label{lem:mpu_skew_symmetric_even_card}
+    \lean{Matrix.even_card_of_transpose_eq_neg_of_det_ne_zero}
+    \leanok
+    Let $I$ be finite and let $A\in\operatorname{Mat}_I(\mathbb C)$ satisfy
+    $A^T=-A$ and $\det A\ne0$. Then $|I|$ is even.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_skew_symmetric_det_zero}
+    If $|I|$ were odd, Lemma~\ref{lem:mpu_skew_symmetric_det_zero} would give
+    $\det A=0$. Hence $|I|$ is not odd and is therefore even.
+\end{proof}
+
+\begin{theorem}[Even dimension of a skew-symmetric unitary]
+    \label{thm:mpu_skew_unitary_even_dimension}
+    \lean{Matrix.UnitaryGroup.even_dimension_of_transpose_eq_neg}
+    \leanok
+    Let $U\in\operatorname{Mat}_d(\mathbb C)$ be unitary and satisfy
+    $U^T=-U$. Then $d$ is even. This is the parity obstruction in
+    \cite[Proposition~V.2, Case~II]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1098--1126, especially line 1125.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_skew_symmetric_even_card}
+    The determinant of a unitary matrix is a unit, so it is nonzero. Apply
+    Lemma~\ref{lem:mpu_skew_symmetric_even_card} to $U$.
+\end{proof}
+
 \begin{proposition}[Orthogonal and symplectic standard forms]
     \label{corconj}
     \notready
     \discussion{5713}
-    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU}
+    \uses{prop1conj, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_skew_unitary_even_dimension}
     Let an MPU in standard form be invariant under complex conjugation. Its
     standard-form unitaries can be chosen in exactly one of the following two
     cases. In Case I,
