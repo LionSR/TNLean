@@ -325,6 +325,14 @@ readings: one `**Scope restriction**` or `**Local fix**` marker per
 declaration; a per-declaration marker is justified only when that
 declaration's restriction differs from the module's.
 
+Consolidation is per module, and the surviving marker stays
+self-contained: it states the deviation and cites the paper-gap note by
+path, so the module remains auditable on its own. A sentence naming
+another Lean module is not a marker. A consolidated marker must also
+claim no more than it covers: when only some declarations of a module
+carry the restriction, name them or leave the marker on them, rather
+than asserting it of the whole module.
+
 Every item on that list multiplies downstream statements and hypothesis
 lists and makes further proof writing harder. When an audit finds such a
 reading, the repair is to delete the scaffolding, not to document it.
