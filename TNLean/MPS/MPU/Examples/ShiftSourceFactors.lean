@@ -5,19 +5,20 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
-import TNLean.MPS.MPU.SourceUV
+import TNLean.MPS.MPU.SourceFactorsTensorProduct
 
 /-!
 # Supplied source factors for the cyclic-shift examples
 
-This module chooses the source factorizations used for the three shift families
-in arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3`
-(lines 2009--2034).  The choices are explicit; none of the statements below
-identifies these factors with the factors chosen by compact singular-value
-decomposition.
+This module constructs explicit formalization witnesses realizing the source
+matrices printed for the three shift families in arXiv:1703.09188, equations
+`eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034).  The paper does
+not print these normalized factors or their intermediate coordinate
+identities.  None of the statements below identifies the supplied witnesses
+with factors chosen by compact singular-value decomposition.
 -/
 
-open scoped Matrix Kronecker BigOperators
+open scoped Matrix BigOperators
 
 namespace MPOTensor
 
@@ -104,28 +105,32 @@ private theorem scaled_conjTranspose_mul_inverse_scaled_column (d : ℕ)
 
 /-- The product coordinates are the right source coordinates of the right shift.
 
-Source: arXiv:1703.09188, lines 2009--2034. -/
+Formalization coordinate for the printed source formulas in arXiv:1703.09188,
+lines 2009--2034; the paper does not state this intermediate equivalence. -/
 noncomputable def rightShiftRightRankEquiv (d : ℕ) :
     Fin d × Fin d ≃ Fin r[rightShiftTensor d] :=
   finProdFinEquiv.trans (finCongr (rightRank_rightShiftTensor d).symm)
 
 /-- The unique coordinate is the left source coordinate of the right shift.
 
-Source: arXiv:1703.09188, lines 2009--2034. -/
+Formalization coordinate for the printed source formulas in arXiv:1703.09188,
+lines 2009--2034; the paper does not state this intermediate equivalence. -/
 noncomputable def rightShiftLeftRankEquiv (d : ℕ) [NeZero d] :
     Fin 1 ≃ Fin ℓ[rightShiftTensor d] :=
   finCongr (leftRank_rightShiftTensor d).symm
 
 /-- The unique coordinate is the right source coordinate of the left shift.
 
-Source: arXiv:1703.09188, lines 2009--2034. -/
+Formalization coordinate for the printed source formulas in arXiv:1703.09188,
+lines 2009--2034; the paper does not state this intermediate equivalence. -/
 noncomputable def leftShiftRightRankEquiv (d : ℕ) [NeZero d] :
     Fin 1 ≃ Fin r[leftShiftTensor d] :=
   finCongr (rightRank_leftShiftTensor d).symm
 
 /-- The product coordinates are the left source coordinates of the left shift.
 
-Source: arXiv:1703.09188, lines 2009--2034. -/
+Formalization coordinate for the printed source formulas in arXiv:1703.09188,
+lines 2009--2034; the paper does not state this intermediate equivalence. -/
 noncomputable def leftShiftLeftRankEquiv (d : ℕ) :
     Fin d × Fin d ≃ Fin ℓ[leftShiftTensor d] :=
   finProdFinEquiv.trans (finCongr (leftRank_leftShiftTensor d).symm)
@@ -133,7 +138,8 @@ noncomputable def leftShiftLeftRankEquiv (d : ℕ) :
 /-- Remove the unique virtual coordinate from a source-cut row of the
 bond-one identity tensor.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization coordinate for equation `eq:SF_u1_u3` in arXiv:1703.09188,
+lines 2009--2016; the paper does not state this intermediate equivalence. -/
 def identitySourceRowEquiv (d : ℕ) : Fin 1 × Fin d ≃ Fin d where
   toFun x := x.2
   invFun i := (0, i)
@@ -143,7 +149,8 @@ def identitySourceRowEquiv (d : ℕ) : Fin 1 × Fin d ≃ Fin d where
 /-- Remove the unique virtual coordinate from a source-cut column of the
 bond-one identity tensor.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization coordinate for equation `eq:SF_u1_u3` in arXiv:1703.09188,
+lines 2009--2016; the paper does not state this intermediate equivalence. -/
 def identitySourceColumnEquiv (d : ℕ) : Fin d × Fin 1 ≃ Fin d where
   toFun x := x.1
   invFun i := (i, 0)
@@ -165,7 +172,9 @@ def identitySourceColumnEquiv (d : ℕ) : Fin d × Fin 1 ≃ Fin d where
 /-- Both source cuts of the bond-one identity tensor are the identity after
 removing their unique virtual coordinates.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization identity used to realize equation `eq:SF_u1_u3` in
+arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
+source-cut formula. -/
 theorem sourceCutM₁_identityMPUTensor (d : ℕ) :
     sourceCutM₁ (identityMPUTensor d) =
       Matrix.reindex (identitySourceRowEquiv d).symm
@@ -183,7 +192,9 @@ theorem sourceCutM₁_identityMPUTensor (d : ℕ) :
 /-- The second source cut of the bond-one identity tensor is the same
 reindexed identity as its first source cut.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization identity used to realize equation `eq:SF_u1_u3` in
+arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
+source-cut formula. -/
 theorem sourceCutM₂_identityMPUTensor (d : ℕ) :
     sourceCutM₂ (identityMPUTensor d) =
       Matrix.reindex (identitySourceRowEquiv d).symm
@@ -198,7 +209,9 @@ theorem sourceCutM₂_identityMPUTensor (d : ℕ) :
 /-- The right source rank of the bond-one identity tensor is its physical
 dimension.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization rank identity used to realize equation `eq:SF_u1_u3` in
+arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
+identity. -/
 theorem rightRank_identityMPUTensor (d : ℕ) :
     r[identityMPUTensor d] = d := by
   rw [rightRank, sourceCutM₁_identityMPUTensor, Matrix.rank_reindex,
@@ -208,7 +221,9 @@ theorem rightRank_identityMPUTensor (d : ℕ) :
 /-- The left source rank of the bond-one identity tensor is its physical
 dimension.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization rank identity used to realize equation `eq:SF_u1_u3` in
+arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
+identity. -/
 theorem leftRank_identityMPUTensor (d : ℕ) :
     ℓ[identityMPUTensor d] = d := by
   rw [leftRank, sourceCutM₂_identityMPUTensor, Matrix.rank_reindex,
@@ -218,7 +233,8 @@ theorem leftRank_identityMPUTensor (d : ℕ) :
 /-- Physical coordinates are the right source coordinates of the bond-one
 identity tensor.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization coordinate for equation `eq:SF_u1_u3` in arXiv:1703.09188,
+lines 2009--2016; the paper does not state this intermediate equivalence. -/
 noncomputable def identityRightRankEquiv (d : ℕ) :
     Fin d ≃ Fin r[identityMPUTensor d] :=
   finCongr (rightRank_identityMPUTensor d).symm
@@ -226,16 +242,18 @@ noncomputable def identityRightRankEquiv (d : ℕ) :
 /-- Physical coordinates are the left source coordinates of the bond-one
 identity tensor.
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization coordinate for equation `eq:SF_u1_u3` in arXiv:1703.09188,
+lines 2009--2016; the paper does not state this intermediate equivalence. -/
 noncomputable def identityLeftRankEquiv (d : ℕ) :
     Fin d ≃ Fin ℓ[identityMPUTensor d] :=
   finCongr (leftRank_identityMPUTensor d).symm
 
 /-- Explicit supplied source factors for the bond-one identity tensor.
 
-Both cuts are transported identity matrices.  This is the building block for
-$u_1=v_1=\Id\otimes\Id$ in arXiv:1703.09188, equation
-`eq:SF_u1_u3` (lines 2009--2016). -/
+Both cuts are transported identity matrices.  This explicit formalization
+witness realizes $u_1=v_1=\Id\otimes\Id$ in arXiv:1703.09188, equation
+`eq:SF_u1_u3` (lines 2009--2016); the paper does not print the normalized
+factor witness itself. -/
 noncomputable def identitySourceFactors (d : ℕ) :
     SourceFactors (identityMPUTensor d) (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
   let eRow := identitySourceRowEquiv d
@@ -296,8 +314,10 @@ noncomputable def identitySourceFactors (d : ℕ) :
 
 The first cut is the identity in the coordinates `rightShiftRightRankEquiv`.
 The second cut uses the normalized vectorization of the identity matrix.  This
-is the elementary right-shift factorization used in arXiv:1703.09188,
-equations `eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034). -/
+explicit formalization witness realizes the right-shift contribution to the
+printed formulas `eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` in
+arXiv:1703.09188, lines 2009--2034; the paper does not print the normalized
+factor witness itself. -/
 noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
     SourceFactors (rightShiftTensor d) (1 : Matrix (Fin d) (Fin d) ℂ) := by
   let eR := rightShiftRightRankEquiv d
@@ -351,8 +371,10 @@ noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
 
 The first cut uses the normalized vectorization of the identity matrix.  The
 second cut is the identity in the coordinates `leftShiftLeftRankEquiv`.  This
-is the elementary left-shift factorization used in arXiv:1703.09188,
-equations `eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034). -/
+explicit formalization witness realizes the left-shift contribution to the
+printed formulas `eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` in
+arXiv:1703.09188, lines 2009--2034; the paper does not print the normalized
+factor witness itself. -/
 noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
     SourceFactors (leftShiftTensor d) (1 : Matrix (Fin d) (Fin d) ℂ) := by
   let eR := leftShiftRightRankEquiv d
@@ -403,181 +425,12 @@ noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
   exact ⟨C, R, Z, P, Pᴴ, P, hcut₁, hcut₂, hweighted, hP.1,
     hRZ, hP.1⟩
 
-/-- Product source coordinates, followed by the multiplicative right-rank
-identification for an independent tensor product.
-
-Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
-noncomputable def tensorProductRightRankEquiv
-    {d D e E : ℕ} (U : MPOTensor d D) (V : MPOTensor e E) :
-    Fin r[U] × Fin r[V] ≃ Fin r[tensorProduct U V] :=
-  finProdFinEquiv.trans (finCongr (rightRank_tensorProduct U V).symm)
-
-/-- Product source coordinates, followed by the multiplicative left-rank
-identification for an independent tensor product.
-
-Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
-noncomputable def tensorProductLeftRankEquiv
-    {d D e E : ℕ} (U : MPOTensor d D) (V : MPOTensor e E) :
-    Fin ℓ[U] × Fin ℓ[V] ≃ Fin ℓ[tensorProduct U V] :=
-  finProdFinEquiv.trans (finCongr (leftRank_tensorProduct U V).symm)
-
-private theorem tensorProductCutShuffle_symm_apply
-    (a b c f : ℕ) (x : Fin a × Fin b) (y : Fin c × Fin f) :
-    (tensorProductCutShuffle a b c f).symm
-        (finProdFinEquiv (x.1, y.1), finProdFinEquiv (x.2, y.2)) = (x, y) :=
-  (tensorProductCutShuffle a b c f).symm_apply_apply (x, y)
-
-/-- Supplied source factors are multiplicative under the independent tensor
-product when both source weights are identities.
-
-Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
-noncomputable def SourceFactors.independentTensorProduct
-    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
-    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
-    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ)) :
-    SourceFactors (tensorProduct U V)
-      (1 : Matrix (Fin (D * E)) (Fin (D * E)) ℂ) := by
-  let eRow := tensorProductCutShuffle D d E e
-  let eCol := tensorProductCutShuffle d D e E
-  let eR := tensorProductRightRankEquiv U V
-  let eL := tensorProductLeftRankEquiv U V
-  let X₁ := Matrix.reindex eRow eR (S.X₁ ⊗ₖ T.X₁)
-  let Y₁ := Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁)
-  let Z₁ := Matrix.reindex eCol eR (S.Z₁ ⊗ₖ T.Z₁)
-  let X₂ := Matrix.reindex eRow eL (S.X₂ ⊗ₖ T.X₂)
-  let Y₂ := Matrix.reindex eL eCol (S.Y₂ ⊗ₖ T.Y₂)
-  let Z₂ := Matrix.reindex eCol eL (S.Z₂ ⊗ₖ T.Z₂)
-  have hSX₁ : S.X₁.IsIsometry := by
-    have h := S.X₁_weighted_isometry
-    rw [show sourceWeight (d := d) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 by
-      simp [sourceWeight]] at h
-    simpa [Matrix.IsIsometry] using h
-  have hTX₁ : T.X₁.IsIsometry := by
-    have h := T.X₁_weighted_isometry
-    rw [show sourceWeight (d := e) (1 : Matrix (Fin E) (Fin E) ℂ) = 1 by
-      simp [sourceWeight]] at h
-    simpa [Matrix.IsIsometry] using h
-  have hKX₁ : (S.X₁ ⊗ₖ T.X₁).IsIsometry := by
-    rw [Matrix.IsIsometry, Matrix.conjTranspose_kronecker,
-      ← Matrix.mul_kronecker_mul]
-    change (S.X₁ᴴ * S.X₁) ⊗ₖ (T.X₁ᴴ * T.X₁) = 1
-    rw [show S.X₁ᴴ * S.X₁ = 1 by exact hSX₁,
-      show T.X₁ᴴ * T.X₁ = 1 by exact hTX₁]
-    simp
-  have hKX₂ : (S.X₂ ⊗ₖ T.X₂).IsIsometry := by
-    rw [Matrix.IsIsometry, Matrix.conjTranspose_kronecker,
-      ← Matrix.mul_kronecker_mul]
-    change (S.X₂ᴴ * S.X₂) ⊗ₖ (T.X₂ᴴ * T.X₂) = 1
-    rw [show S.X₂ᴴ * S.X₂ = 1 by exact S.X₂_isometry,
-      show T.X₂ᴴ * T.X₂ = 1 by exact T.X₂_isometry]
-    simp
-  have hX₁ : X₁.IsIsometry :=
-    Matrix.IsIsometry.reindex _ hKX₁ eRow eR
-  have hX₂ : X₂.IsIsometry :=
-    Matrix.IsIsometry.reindex _ hKX₂ eRow eL
-  have hcut₁ : sourceCutM₁ (tensorProduct U V) = X₁ * Y₁ := by
-    rw [sourceCutM₁_tensorProduct, S.sourceCutM₁_eq, T.sourceCutM₁_eq]
-    change Matrix.reindexLinearEquiv ℂ ℂ eRow eCol
-        ((S.X₁ * S.Y₁) ⊗ₖ (T.X₁ * T.Y₁)) =
-      Matrix.reindexLinearEquiv ℂ ℂ eRow eR (S.X₁ ⊗ₖ T.X₁) *
-        Matrix.reindexLinearEquiv ℂ ℂ eR eCol (S.Y₁ ⊗ₖ T.Y₁)
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eR eCol,
-      Matrix.mul_kronecker_mul]
-  have hcut₂ : sourceCutM₂ (tensorProduct U V) = X₂ * Y₂ := by
-    rw [sourceCutM₂_tensorProduct, S.sourceCutM₂_eq, T.sourceCutM₂_eq]
-    change Matrix.reindexLinearEquiv ℂ ℂ eRow eCol
-        ((S.X₂ * S.Y₂) ⊗ₖ (T.X₂ * T.Y₂)) =
-      Matrix.reindexLinearEquiv ℂ ℂ eRow eL (S.X₂ ⊗ₖ T.X₂) *
-        Matrix.reindexLinearEquiv ℂ ℂ eL eCol (S.Y₂ ⊗ₖ T.Y₂)
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eL eCol,
-      Matrix.mul_kronecker_mul]
-  have hweighted : X₁ᴴ * sourceWeight (d := d * e)
-      (1 : Matrix (Fin (D * E)) (Fin (D * E)) ℂ) * X₁ = 1 := by
-    rw [show sourceWeight (d := d * e)
-        (1 : Matrix (Fin (D * E)) (Fin (D * E)) ℂ) = 1 by
-      simp [sourceWeight]]
-    simpa [Matrix.IsIsometry] using hX₁
-  have hY₁Z₁ : Y₁ * Z₁ = 1 := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eR eCol (S.Y₁ ⊗ₖ T.Y₁) *
-      Matrix.reindexLinearEquiv ℂ ℂ eCol eR (S.Z₁ ⊗ₖ T.Z₁) = 1
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eR eCol eR,
-      ← Matrix.mul_kronecker_mul, S.Y₁_mul_Z₁, T.Y₁_mul_Z₁]
-    simp
-  have hY₂Z₂ : Y₂ * Z₂ = 1 := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eL eCol (S.Y₂ ⊗ₖ T.Y₂) *
-      Matrix.reindexLinearEquiv ℂ ℂ eCol eL (S.Z₂ ⊗ₖ T.Z₂) = 1
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eL eCol eL,
-      ← Matrix.mul_kronecker_mul, S.Y₂_mul_Z₂, T.Y₂_mul_Z₂]
-    simp
-  exact ⟨X₁, Y₁, Z₁, X₂, Y₂, Z₂, hcut₁, hcut₂,
-    hweighted, hX₂, hY₁Z₁, hY₂Z₂⟩
-
-/-- The supplied source $u$ of an independent tensor product is the product
-of the two constituent source entries in the product rank coordinates.
-
-Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
-theorem SourceFactors.sourceU_independentTensorProduct_apply
-    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
-    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
-    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
-    (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) (rᵤ : Fin r[U]) (rᵥ : Fin r[V])
-    (i₁ i₂ : Fin d) (j₁ j₂ : Fin e) :
-    SourceFactors.sourceU (tensorProduct U V)
-        (SourceFactors.independentTensorProduct S T)
-        (tensorProductLeftRankEquiv U V (lᵤ, lᵥ),
-          tensorProductRightRankEquiv U V (rᵤ, rᵥ))
-        (finProdFinEquiv (i₁, j₁), finProdFinEquiv (i₂, j₂)) =
-      SourceFactors.sourceU U S (lᵤ, rᵤ) (i₁, i₂) *
-        SourceFactors.sourceU V T (lᵥ, rᵥ) (j₁, j₂) := by
-  simp only [SourceFactors.sourceU, SourceFactors.independentTensorProduct]
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro β _
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro γ _
-  rw [tensorProductCutShuffle_symm_apply d D e E (i₁, β) (j₁, γ),
-    tensorProductCutShuffle_symm_apply D d E e (β, i₂) (γ, j₂)]
-  ring
-
-/-- The supplied source $v$ of an independent tensor product is the product
-of the two constituent source entries in the product rank coordinates.
-
-Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
-theorem SourceFactors.sourceV_independentTensorProduct_apply
-    {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
-    (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
-    (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
-    (j₁ j₂ : Fin d) (k₁ k₂ : Fin e)
-    (rᵤ : Fin r[U]) (rᵥ : Fin r[V]) (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) :
-    SourceFactors.sourceV (tensorProduct U V)
-        (SourceFactors.independentTensorProduct S T)
-        (finProdFinEquiv (j₁, k₁), finProdFinEquiv (j₂, k₂))
-        (tensorProductRightRankEquiv U V (rᵤ, rᵥ),
-          tensorProductLeftRankEquiv U V (lᵤ, lᵥ)) =
-      SourceFactors.sourceV U S (j₁, j₂) (rᵤ, lᵤ) *
-        SourceFactors.sourceV V T (k₁, k₂) (rᵥ, lᵥ) := by
-  simp only [SourceFactors.sourceV, SourceFactors.independentTensorProduct]
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro α _
-  rw [Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro γ _
-  rw [tensorProductCutShuffle_symm_apply D d E e (α, j₁) (γ, k₁),
-    tensorProductCutShuffle_symm_apply d D e E (j₂, α) (k₂, γ)]
-  ring
-
 /-- Entry formula for the source $u$ supplied by the bond-one identity
 factors.  The source row is written in the paper order (left, right).
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
+arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
+entry formula. -/
 theorem sourceU_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
     SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
         (identityLeftRankEquiv d l, identityRightRankEquiv d r) (i₁, i₂) =
@@ -589,7 +442,9 @@ theorem sourceU_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
 /-- Entry formula for the source $v$ supplied by the bond-one identity
 factors.  Its source column has the paper order (right, left).
 
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
+Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
+arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
+entry formula. -/
 theorem sourceV_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
     SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
         (j₁, j₂) (identityRightRankEquiv d r, identityLeftRankEquiv d l) =
@@ -601,8 +456,9 @@ theorem sourceV_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
 
 /-- Entry formula for the source $u$ supplied by the right-shift factors.
 
-Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
-`eq:uv2_U3` (lines 2009--2034). -/
+Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
+`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
+does not state this intermediate entry formula. -/
 theorem sourceU_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
     SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
@@ -615,8 +471,9 @@ theorem sourceU_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
 
 /-- Entry formula for the source $v$ supplied by the right-shift factors.
 
-Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
-`eq:uv2_U3` (lines 2009--2034). -/
+Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
+`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
+does not state this intermediate entry formula. -/
 theorem sourceV_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (j₁ j₂ a b : Fin d) :
     SourceFactors.sourceV (rightShiftTensor d) (rightShiftSourceFactors d)
@@ -631,8 +488,9 @@ theorem sourceV_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
 
 /-- Entry formula for the source $u$ supplied by the left-shift factors.
 
-Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
-`eq:uv2_U3` (lines 2009--2034). -/
+Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
+`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
+does not state this intermediate entry formula. -/
 theorem sourceU_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
     SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
@@ -646,8 +504,9 @@ theorem sourceU_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
 
 /-- Entry formula for the source $v$ supplied by the left-shift factors.
 
-Source: arXiv:1703.09188, equations `eq:SF_u1_u3`, `eq:uv2_U2`, and
-`eq:uv2_U3` (lines 2009--2034). -/
+Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
+`eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
+does not state this intermediate entry formula. -/
 theorem sourceV_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (j₁ j₂ a b : Fin d) :
     SourceFactors.sourceV (leftShiftTensor d) (leftShiftSourceFactors d)
