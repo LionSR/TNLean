@@ -469,10 +469,11 @@
 % implication from these inherited analytic properties to the printed
 % per-representative factorization is refuted by
 % thm:mpdo_sal_zcl_bnt_sector_structure_counterexample.  The source-context
-% factorization remains #6775.  A direct sector-coarsening or sector-mixing
-% construction of the blocked channel pairs is the alternative route in
-% #6793; their composition through the orthogonal outer physical sectors is
-% formalized in #6632.
+% factorization remains #6775.  The source first projects into each local
+% physical subspace labelled by j and then applies the blocked channel pair
+% supplied by that factorization; this composition is formalized in #6632.  The
+% project-derived direct sector-mixing alternative formerly tracked in #6793
+% is not a separate source obligation.
 % The raw implication (iv)=>(v) is separately refuted.  Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Arbitrary virtual boundaries of canonical block sums]
