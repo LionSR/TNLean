@@ -20,7 +20,7 @@ Schumacher--Werner/GNVW index construction.
 **Local fix (star-closed input):** The printed statement of GNVW Lemma 7 says only
 "subalgebra". Coefficient generation, one-sided and two-sided containment, and leastness remain
 valid for arbitrary algebra input, although every support-algebra declaration in this module uses
-the uniform `A : StarSubalgebra` interface. The commutant characterizations actually fail without
+the uniform `A : StarSubalgebra` input. The commutant characterizations actually fail without
 involution closure; `StarSubalgebra` is the necessary correction for those clauses.
 Schumacher--Werner,
 quant-ph/0405174, lines 1161--1171, instead derives adjoint closure of the support algebra
