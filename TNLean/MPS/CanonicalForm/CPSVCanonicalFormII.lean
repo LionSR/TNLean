@@ -135,6 +135,7 @@ theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
       dim := data.dim
       dim_pos := data.dim_pos
       weights := data.weights
+      weights_ne_zero := data.weights_ne_zero
       blocks := newBlocks
       blocks_normal := fun k => (blockData k).normal
       total_dim_le := data.total_dim_le

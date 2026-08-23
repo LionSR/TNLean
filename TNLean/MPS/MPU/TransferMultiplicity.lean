@@ -10,12 +10,11 @@ import TNLean.MPS.SharedInfra.Scaling
 import Mathlib.LinearAlgebra.Eigenspace.Zero
 
 /-!
-# Active Canonical Blocks and Transfer Multiplicity
+# Canonical Blocks and Transfer Multiplicity
 
 This file proves the algebraic multiplicity step in arXiv:1703.09188,
 Proposition `prop:normal-tensor`, lines 349--354. For literal CPSV canonical-form
-data, the shifted transfer-trace identities force exactly one nonzero-weight
-canonical block.
+data, the shifted transfer-trace identities force exactly one canonical block.
 
 Each normal block supplies an unweighted fixed vector. Its weighted block has
 eigenvalue `weight * star weight`; after embedding the corresponding diagonal
@@ -24,7 +23,7 @@ this eigenvalue to be one. The resulting ambient fixed vectors are linearly
 independent. Applying the all-positive trace-power characteristic-polynomial
 theorem to the square of the transfer matrix bounds their number by one.
 
-No positivity, normality, diagonalizability, full-active-support, or first-moment
+No positivity, normality, diagonalizability, full-support, or first-moment
 hypothesis is imposed on the ambient tensor.
 
 ## References
@@ -107,29 +106,28 @@ private theorem ambientBlockCompression_eq_zero_of_ne
 linearly independent. -/
 private theorem linearIndependent_ambientBlockCorners
     (data : CPSVCanonicalFormData A)
-    (X : (k : data.Active) → Matrix (Fin (data.dim k.1)) (Fin (data.dim k.1)) ℂ)
+    (X : (k : Fin data.r) → Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ)
     (hX : ∀ k, X k ≠ 0) :
-    LinearIndependent ℂ (fun k : data.Active =>
-      data.ambientBlockInclusion k.1 * X k * (data.ambientBlockInclusion k.1)ᴴ) := by
+    LinearIndependent ℂ (fun k : Fin data.r =>
+      data.ambientBlockInclusion k * X k * (data.ambientBlockInclusion k)ᴴ) := by
   classical
   rw [Fintype.linearIndependent_iff]
   intro c hsum k
   have hcompressed := congrArg
     (fun Z : Matrix (Fin D) (Fin D) ℂ =>
-      (data.ambientBlockInclusion k.1)ᴴ * Z * data.ambientBlockInclusion k.1) hsum
+      (data.ambientBlockInclusion k)ᴴ * Z * data.ambientBlockInclusion k) hsum
   simp only [Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_smul, Matrix.smul_mul,
     Matrix.mul_zero, Matrix.zero_mul] at hcompressed
-  have hterm : ∀ l : data.Active,
-      (data.ambientBlockInclusion k.1)ᴴ *
-          (data.ambientBlockInclusion l.1 * X l * (data.ambientBlockInclusion l.1)ᴴ) *
-        data.ambientBlockInclusion k.1 = if l = k then X k else 0 := by
+  have hterm : ∀ l : Fin data.r,
+      (data.ambientBlockInclusion k)ᴴ *
+          (data.ambientBlockInclusion l * X l * (data.ambientBlockInclusion l)ᴴ) *
+        data.ambientBlockInclusion k = if l = k then X k else 0 := by
     intro l
     by_cases hlk : l = k
     · subst l
       rw [ite_eq_left rfl, data.ambientBlockCompression_self]
     · rw [ite_eq_right hlk]
-      exact data.ambientBlockCompression_eq_zero_of_ne
-        (k := k.1) (l := l.1) (fun h => hlk (Subtype.ext h.symm)) (X l)
+      exact data.ambientBlockCompression_eq_zero_of_ne (fun h => hlk h.symm) (X l)
   simp_rw [hterm] at hcompressed
   have hck : c k • X k = 0 := by
     calc
@@ -164,91 +162,90 @@ private theorem transferMap_blockFixedVector (data : CPSVCanonicalFormData A) (k
   (Classical.choose_spec
     (exists_nonzero_transferMap_fixedVector_of_normal (data.blocks_normal k))).2
 
-/-- The transfer eigenvalue contributed by a weighted active block. -/
-noncomputable def activeTransferEigenvalue
-    (data : CPSVCanonicalFormData A) (k : data.Active) : ℂ :=
-  data.weights k.1 * starRingEnd ℂ (data.weights k.1)
+/-- The transfer eigenvalue contributed by a weighted block. -/
+noncomputable def transferEigenvalue
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) : ℂ :=
+  data.weights k * starRingEnd ℂ (data.weights k)
 
-/-- The weighted active block acts on its unweighted fixed vector with eigenvalue
+/-- The weighted block acts on its unweighted fixed vector with eigenvalue
 `weight * star weight`. -/
 private theorem transferMap_weightedBlock_blockFixedVector
-    (data : CPSVCanonicalFormData A) (k : data.Active) :
-    Kraus.transferMap (fun i => data.weights k.1 • data.blocks k.1 i)
-        (data.blockFixedVector k.1) =
-      data.activeTransferEigenvalue k • data.blockFixedVector k.1 := by
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+    Kraus.transferMap (fun i => data.weights k • data.blocks k i)
+        (data.blockFixedVector k) =
+      data.transferEigenvalue k • data.blockFixedVector k := by
   rw [transferMap_smul, data.transferMap_blockFixedVector]
-  simp [activeTransferEigenvalue]
+  simp [transferEigenvalue]
 
-/-- The ambient matrix obtained by transporting one active block fixed vector. -/
-private noncomputable def ambientActiveVector
-    (data : CPSVCanonicalFormData A) (k : data.Active) : Matrix (Fin D) (Fin D) ℂ :=
-  data.ambientBlockInclusion k.1 * data.blockFixedVector k.1 *
-    (data.ambientBlockInclusion k.1)ᴴ
+/-- The ambient matrix obtained by transporting one block fixed vector. -/
+private noncomputable def ambientFixedVector
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) : Matrix (Fin D) (Fin D) ℂ :=
+  data.ambientBlockInclusion k * data.blockFixedVector k *
+    (data.ambientBlockInclusion k)ᴴ
 
-/-- An active block's transported ambient vector is nonzero. -/
-private theorem ambientActiveVector_ne
-    (data : CPSVCanonicalFormData A) (k : data.Active) :
-    data.ambientActiveVector k ≠ 0 := by
+/-- A block's transported ambient vector is nonzero. -/
+private theorem ambientFixedVector_ne
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+    data.ambientFixedVector k ≠ 0 := by
   intro hzero
-  apply data.blockFixedVector_ne k.1
+  apply data.blockFixedVector_ne k
   calc
-    data.blockFixedVector k.1 =
-        (data.ambientBlockInclusion k.1)ᴴ * data.ambientActiveVector k *
-          data.ambientBlockInclusion k.1 :=
-      (data.ambientBlockCompression_self k.1 (data.blockFixedVector k.1)).symm
+    data.blockFixedVector k =
+        (data.ambientBlockInclusion k)ᴴ * data.ambientFixedVector k *
+          data.ambientBlockInclusion k :=
+      (data.ambientBlockCompression_self k (data.blockFixedVector k)).symm
     _ = 0 := by rw [hzero]; simp
 
 /-- Before spectral normalization, the transported ambient vector has the weighted
 block eigenvalue `weight * star weight`. -/
-private theorem transferMap_ambientActiveVector
-    (data : CPSVCanonicalFormData A) (k : data.Active) :
-    Kraus.transferMap A (data.ambientActiveVector k) =
-      data.activeTransferEigenvalue k • data.ambientActiveVector k := by
-  rw [ambientActiveVector, transferMap_conj_of_intertwine A
-    (fun i => data.weights k.1 • data.blocks k.1 i)
-    (data.ambientBlockInclusion k.1) (data.mul_ambientBlockInclusion k.1)
-    (data.blockFixedVector k.1)]
+private theorem transferMap_ambientFixedVector
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+    Kraus.transferMap A (data.ambientFixedVector k) =
+      data.transferEigenvalue k • data.ambientFixedVector k := by
+  rw [ambientFixedVector, transferMap_conj_of_intertwine A
+    (fun i => data.weights k • data.blocks k i)
+    (data.ambientBlockInclusion k) (data.mul_ambientBlockInclusion k)
+    (data.blockFixedVector k)]
   rw [data.transferMap_weightedBlock_blockFixedVector k]
   simp [Matrix.mul_smul, Matrix.smul_mul]
 
-/-- An active block's weighted transfer eigenvalue is nonzero. -/
-private theorem activeTransferEigenvalue_ne
-    (data : CPSVCanonicalFormData A) (k : data.Active) :
-    data.activeTransferEigenvalue k ≠ 0 := by
-  simp [activeTransferEigenvalue, k.2]
+/-- A block's weighted transfer eigenvalue is nonzero. -/
+private theorem transferEigenvalue_ne
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+    data.transferEigenvalue k ≠ 0 := by
+  simp [transferEigenvalue, data.weights_ne_zero k]
 
-/-- Shifted ambient transfer traces normalize every active weighted-block
-eigenvalue to one. -/
-theorem activeTransferEigenvalue_eq_one
+/-- Shifted ambient transfer traces normalize every weighted-block eigenvalue to one. -/
+theorem transferEigenvalue_eq_one
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1)
-    (k : data.Active) :
-    data.activeTransferEigenvalue k = 1 := by
-  have hEig : Module.End.HasEigenvalue (Kraus.transferMap A) (data.activeTransferEigenvalue k) :=
-    hasEigenvalue_of_eigenvector_eq _ _ (data.ambientActiveVector k)
-      (data.transferMap_ambientActiveVector k) (data.ambientActiveVector_ne k)
+    (k : Fin data.r) :
+    data.transferEigenvalue k = 1 := by
+  have hEig : Module.End.HasEigenvalue (Kraus.transferMap A) (data.transferEigenvalue k) :=
+    hasEigenvalue_of_eigenvector_eq _ _ (data.ambientFixedVector k)
+      (data.transferMap_ambientFixedVector k) (data.ambientFixedVector_ne k)
   have hEigMatrix : Module.End.HasEigenvalue
-      (transferMatrix (Kraus.transferMap A)).toLin' (data.activeTransferEigenvalue k) :=
+      (transferMatrix (Kraus.transferMap A)).toLin' (data.transferEigenvalue k) :=
     (transferMatrix_hasEigenvalue_iff (Kraus.transferMap A) _).mp hEig
-  have hspecLin : data.activeTransferEigenvalue k ∈
+  have hspecLin : data.transferEigenvalue k ∈
       spectrum ℂ (transferMatrix (Kraus.transferMap A)).toLin' :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mp hEigMatrix
-  have hspec : data.activeTransferEigenvalue k ∈
+  have hspec : data.transferEigenvalue k ∈
       spectrum ℂ (transferMatrix (Kraus.transferMap A)) := by
     simpa using hspecLin
   exact Matrix.eq_one_of_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt
-    (transferMatrix (Kraus.transferMap A)) htrace hspec (data.activeTransferEigenvalue_ne k)
+    (transferMatrix (Kraus.transferMap A)) htrace hspec (data.transferEigenvalue_ne k)
 
-/-- Under shifted ambient transfer traces, each transported active-block vector
+/-- Under shifted ambient transfer traces, each transported block vector
 is fixed by the ambient transfer map. -/
-private theorem transferMap_ambientActiveVector_eq_self
+private theorem transferMap_ambientFixedVector_eq_self
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1)
-    (k : data.Active) :
-    Kraus.transferMap A (data.ambientActiveVector k) = data.ambientActiveVector k := by
-  rw [data.transferMap_ambientActiveVector k, data.activeTransferEigenvalue_eq_one htrace k,
+    (k : Fin data.r) :
+    Kraus.transferMap A (data.ambientFixedVector k) = data.ambientFixedVector k := by
+  rw [data.transferMap_ambientFixedVector k, data.transferEigenvalue_eq_one htrace k,
     one_smul]
 
 /-- The shifted trace hypothesis bounds the one-eigenspace of the squared
@@ -280,50 +277,45 @@ private theorem finrank_eigenspace_one_transferMatrix_sq_le_one
       · exact mul_ne_zero (pow_ne_zero _ Polynomial.X_ne_zero)
           (Polynomial.X_sub_C_ne_zero 1)
 
-/-- The active canonical blocks give linearly independent ambient transfer fixed
-vectors. -/
-private theorem linearIndependent_ambientActiveVector
+/-- The canonical blocks give linearly independent ambient transfer fixed vectors. -/
+private theorem linearIndependent_ambientFixedVector
     (data : CPSVCanonicalFormData A) :
-    LinearIndependent ℂ data.ambientActiveVector := by
-  change LinearIndependent ℂ (fun k : data.Active =>
-    data.ambientBlockInclusion k.1 * data.blockFixedVector k.1 *
-      (data.ambientBlockInclusion k.1)ᴴ)
+    LinearIndependent ℂ data.ambientFixedVector := by
+  change LinearIndependent ℂ (fun k : Fin data.r =>
+    data.ambientBlockInclusion k * data.blockFixedVector k *
+      (data.ambientBlockInclusion k)ᴴ)
   exact data.linearIndependent_ambientBlockCorners
-    (fun k : data.Active => data.blockFixedVector k.1)
-    (fun k => data.blockFixedVector_ne k.1)
+    (fun k : Fin data.r => data.blockFixedVector k)
+    (fun k => data.blockFixedVector_ne k)
 
-/-- Shifted transfer traces force exactly one active CPSV canonical block.
+/-- Shifted transfer traces force exactly one CPSV canonical block.
 
 This is the algebraic-multiplicity step in arXiv:1703.09188, Proposition
-`prop:normal-tensor`, lines 349--354. No full-active-support, positivity,
+`prop:normal-tensor`, lines 349--354. No full-support, positivity,
 normality, diagonalizability, or first-moment hypothesis is required for the
 ambient tensor. -/
-theorem card_active_eq_one_of_shifted_transfer_trace
+theorem r_eq_one_of_shifted_transfer_trace
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1) :
-    Fintype.card data.Active = 1 := by
+    data.r = 1 := by
   classical
-  have hactive : Nonempty data.Active := by
+  have hr_pos : 0 < data.r := by
     by_contra hempty
-    have : IsEmpty data.Active := not_nonempty_iff.mp hempty
-    have hweight : ∀ k : Fin data.r, data.weights k = 0 := by
-      intro k
-      by_contra hk
-      exact isEmptyElim (⟨k, hk⟩ : data.Active)
+    have hr0 : data.r = 0 := by omega
+    have hsum : (∑ k : Fin data.r, data.dim k) = 0 := by
+      have : IsEmpty (Fin data.r) := by
+        rw [hr0]
+        infer_instance
+      exact Fintype.sum_empty _
     have hAzero : A = 0 := by
       funext i
       rw [data.reconstruct i]
-      have hassembly : toTensorFromBlocks data.weights data.blocks i = 0 := by
-        unfold toTensorFromBlocks
-        simp only [hweight, zero_smul]
-        change Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
-          (Matrix.blockDiagonal' (0 : ∀ k : Fin data.r,
-            Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ)) = 0
-        rw [Matrix.blockDiagonal'_zero]
-        simp
-      rw [hassembly]
-      simp
+      have : IsEmpty (Fin (∑ k : Fin data.r, data.dim k)) := by
+        rw [hsum]
+        infer_instance
+      ext x y
+      simp [Matrix.mul_apply]
     have htwo := htrace 2 (by omega)
     rw [hAzero] at htwo
     have htransferZero :
@@ -334,27 +326,27 @@ theorem card_active_eq_one_of_shifted_transfer_trace
     simp at htwo
   let M := transferMatrix (Kraus.transferMap A)
   let f : Module.End ℂ (Fin D × Fin D → ℂ) := (M ^ 2).toLin'
-  let v : data.Active → f.eigenspace (1 : ℂ) := fun k =>
-    ⟨(data.ambientActiveVector k).vec, by
+  let v : Fin data.r → f.eigenspace (1 : ℂ) := fun k =>
+    ⟨(data.ambientFixedVector k).vec, by
       rw [Module.End.mem_eigenspace_iff]
-      change (M ^ 2).toLin' (data.ambientActiveVector k).vec =
-        (1 : ℂ) • (data.ambientActiveVector k).vec
+      change (M ^ 2).toLin' (data.ambientFixedVector k).vec =
+        (1 : ℂ) • (data.ambientFixedVector k).vec
       rw [Matrix.toLin'_apply]
-      change transferMatrix (Kraus.transferMap A) ^ 2 *ᵥ (data.ambientActiveVector k).vec = _
+      change transferMatrix (Kraus.transferMap A) ^ 2 *ᵥ (data.ambientFixedVector k).vec = _
       rw [← transferMatrix_pow, transferMatrix_mulVec_eq]
-      have hfix := data.transferMap_ambientActiveVector_eq_self htrace k
-      have hpow : ((Kraus.transferMap A) ^ 2) (data.ambientActiveVector k) =
-          data.ambientActiveVector k := by
-        change Kraus.transferMap A (Kraus.transferMap A (data.ambientActiveVector k)) =
-          data.ambientActiveVector k
+      have hfix := data.transferMap_ambientFixedVector_eq_self htrace k
+      have hpow : ((Kraus.transferMap A) ^ 2) (data.ambientFixedVector k) =
+          data.ambientFixedVector k := by
+        change Kraus.transferMap A (Kraus.transferMap A (data.ambientFixedVector k)) =
+          data.ambientFixedVector k
         rw [hfix, hfix]
       rw [hpow, one_smul]⟩
   have hLIvec : LinearIndependent ℂ
-      (fun k : data.Active => (data.ambientActiveVector k).vec) := by
+      (fun k : Fin data.r => (data.ambientFixedVector k).vec) := by
     rw [Fintype.linearIndependent_iff]
     intro c hsum k
     apply Fintype.linearIndependent_iff.mp
-      data.linearIndependent_ambientActiveVector c _ k
+      data.linearIndependent_ambientFixedVector c _ k
     exact Matrix.vec_inj.mp (by
       funext x
       have hx := congrFun hsum x
@@ -368,12 +360,12 @@ theorem card_active_eq_one_of_shifted_transfer_trace
     have hcoe := congrArg
       (fun z : f.eigenspace (1 : ℂ) => (z : Fin D × Fin D → ℂ)) hsum
     simpa [v] using hcoe
-  have hcard_le_finrank : Fintype.card data.Active ≤ Module.finrank ℂ (f.eigenspace 1) :=
+  have hcard_le_finrank : Fintype.card (Fin data.r) ≤ Module.finrank ℂ (f.eigenspace 1) :=
     hLIv.fintype_card_le_finrank
   have hfinrank_le : Module.finrank ℂ (f.eigenspace 1) ≤ 1 := by
     simpa [f, M] using finrank_eigenspace_one_transferMatrix_sq_le_one
       (A := A) htrace
-  have hcard_pos : 0 < Fintype.card data.Active := Fintype.card_pos_iff.mpr hactive
+  rw [Fintype.card_fin] at hcard_le_finrank
   omega
 
 end CPSVCanonicalFormData

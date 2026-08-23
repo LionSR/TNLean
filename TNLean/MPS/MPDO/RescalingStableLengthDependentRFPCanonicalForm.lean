@@ -440,6 +440,7 @@ noncomputable def canonicalFormData : MPSTensor.CPSVCanonicalFormData R.toMPSTen
   dim := fun _ => 4
   dim_pos := fun _ => by norm_num
   weights := fun _ => (weight : ℂ)
+  weights_ne_zero := fun _ => by exact_mod_cast weight_ne
   blocks := fun _ => retainedBlock
   blocks_normal := fun _ => retainedBlock_isNormalTensor
   total_dim_le := by simp

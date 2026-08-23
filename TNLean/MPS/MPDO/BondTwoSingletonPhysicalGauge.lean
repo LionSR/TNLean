@@ -457,7 +457,7 @@ theorem gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm :
       (gaugeDeformedBaseMPO gauge).toMPSTensor := by
   rw [gaugeDeformedBaseMPO_toMPSTensor_eq_symbolBlocks]
   exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
-    (fun _ : Fin 4 ↦ by simp) (fun _ : Fin 4 ↦ (5 / 4 : ℂ))
+    (fun _ : Fin 4 ↦ by simp) (fun _ : Fin 4 ↦ (5 / 4 : ℂ)) (fun _ ↦ by norm_num)
     gaugeDeformedSymbolBlocks
     (fun a ↦ gaugeDeformedSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
 

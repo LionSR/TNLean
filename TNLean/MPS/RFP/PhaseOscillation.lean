@@ -107,6 +107,12 @@ theorem primitiveCubeRoot_isPrimitiveRoot :
   simpa [primitiveCubeRoot, mul_assoc] using
     Complex.isPrimitiveRoot_exp 3 (by norm_num)
 
+/-- Both canonical weights `1` and `primitiveCubeRoot` are nonzero. -/
+theorem cubePhaseWeight_ne_zero (k : Fin 2) : cubePhaseWeight k ≠ 0 := by
+  fin_cases k
+  · exact one_ne_zero
+  · exact primitiveCubeRoot_isPrimitiveRoot.ne_zero (by norm_num)
+
 private lemma two_pow_even_mod_three (n : ℕ) : 2 ^ (2 * n) % 3 = 1 := by
   have h := Nat.ModEq.pow n (show 4 ≡ 1 [MOD 3] by decide)
   simpa [Nat.ModEq, pow_mul] using h
@@ -157,7 +163,7 @@ private theorem primitiveCubeRoot_two_pow_not_tendsto (z : ℂ) :
 Source: arXiv:1606.00608, equations `eq:II_ABasicTensors` and `II_CF1`, lines 219--246. -/
 noncomputable def cubePhaseCanonicalData : CPSVCanonicalFormData cubePhaseTensor := by
   exact CPSVCanonicalFormData.ofBlocks
-    (fun _ => by simp) cubePhaseWeight (fun _ => scalarUnitTensor)
+    (fun _ => by simp) cubePhaseWeight cubePhaseWeight_ne_zero (fun _ => scalarUnitTensor)
     (fun _ => scalarUnitTensor_isNormalTensor)
 
 /-- The cube-phase canonical-form data satisfy the normalization at

@@ -31,7 +31,7 @@ the virtual bond dimension remains \(D\).
   property.
 * `MPOTensor.transferMap_normalizedFlattening_tensorPhysicalId`: the normalized transfer map is
   unchanged.
-* `MPOTensor.hasFullActiveSupport_tensorPhysicalIdCFIIData`: full active support is preserved.
+* `MPOTensor.hasFullSupport_tensorPhysicalIdCFIIData`: full support is preserved.
 -/
 
 open scoped Matrix Kronecker
@@ -332,6 +332,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
   dim := data.dim
   dim_pos := data.dim_pos
   weights := data.weights
+  weights_ne_zero := data.weights_ne_zero
   blocks := fun k ↦ normalizedDiagonalLift (data.blocks k) x
   blocks_normal := fun k ↦
     isNormalTensor_normalizedDiagonalLift (data.blocks_normal k) x hx
@@ -370,22 +371,22 @@ noncomputable def normalizedDiagonalLiftCFIIData
       rw [transferMap_normalizedDiagonalLift (data.blocks k) x hx]
       exact hΛfix⟩
 
-/-- Full active support is unchanged by the normalized diagonal lift. -/
-theorem hasFullActiveSupport_normalizedDiagonalLiftCFIIData
+/-- Full support is unchanged by the normalized diagonal lift. -/
+theorem hasFullSupport_normalizedDiagonalLiftCFIIData
     {A : MPSTensor (d * d) D} (data : MPSTensor.CPSVCanonicalFormIIData A)
-    (hfull : data.toCPSVCanonicalFormData.HasFullActiveSupport)
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport)
     (x : ℕ) (hx : 0 < x) :
-    (normalizedDiagonalLiftCFIIData data x hx).toCPSVCanonicalFormData.HasFullActiveSupport := by
-  change ∑ k : data.toCPSVCanonicalFormData.Active, data.dim k.1 = D
+    (normalizedDiagonalLiftCFIIData data x hx).toCPSVCanonicalFormData.HasFullSupport := by
+  change ∑ k, data.dim k = D
   exact hfull
 
-/-- Full active support is preserved when canonical-form-II data are transported across a tensor
+/-- Full support is preserved when canonical-form-II data are transported across a tensor
 identity. -/
-private theorem hasFullActiveSupport_castCFIIData
+private theorem hasFullSupport_castCFIIData
     {d D : ℕ} {A B : MPSTensor d D} (h : A = B)
     (data : MPSTensor.CPSVCanonicalFormIIData B)
-    (hfull : data.toCPSVCanonicalFormData.HasFullActiveSupport) :
-    (h.symm ▸ data).toCPSVCanonicalFormData.HasFullActiveSupport := by
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport) :
+    (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
   subst h
   exact hfull
 
@@ -405,24 +406,24 @@ noncomputable def tensorPhysicalIdCFIIData (U : MPOTensor d D)
     (normalizedDiagonalLiftCFIIData data x hx).reindexPhysical
       (doubledPhysicalAncillaShuffle d x)
 
-/-- Full active support is preserved by physical identity-ancilla attachment.
+/-- Full support is preserved by physical identity-ancilla attachment.
 
-The active weights and virtual block dimensions are unchanged by the construction.
+The weights and virtual block dimensions are unchanged by the construction.
 
 Source: arXiv:1703.09188, lines 706--724. -/
-theorem hasFullActiveSupport_tensorPhysicalIdCFIIData (U : MPOTensor d D)
+theorem hasFullSupport_tensorPhysicalIdCFIIData (U : MPOTensor d D)
     (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
-    (hfull : data.toCPSVCanonicalFormData.HasFullActiveSupport)
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport)
     (x : ℕ) (hx : 0 < x) :
-    (tensorPhysicalIdCFIIData U data x hx).toCPSVCanonicalFormData.HasFullActiveSupport := by
+    (tensorPhysicalIdCFIIData U data x hx).toCPSVCanonicalFormData.HasFullSupport := by
   let lifted := normalizedDiagonalLiftCFIIData data x hx
-  have hlift : lifted.toCPSVCanonicalFormData.HasFullActiveSupport :=
-    hasFullActiveSupport_normalizedDiagonalLiftCFIIData data hfull x hx
+  have hlift : lifted.toCPSVCanonicalFormData.HasFullSupport :=
+    hasFullSupport_normalizedDiagonalLiftCFIIData data hfull x hx
   let shuffled := lifted.reindexPhysical (doubledPhysicalAncillaShuffle d x)
-  have hshuffle : shuffled.toCPSVCanonicalFormData.HasFullActiveSupport :=
-    MPSTensor.CPSVCanonicalFormData.hasFullActiveSupport_reindexPhysical
+  have hshuffle : shuffled.toCPSVCanonicalFormData.HasFullSupport :=
+    MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
       lifted.toCPSVCanonicalFormData hlift (doubledPhysicalAncillaShuffle d x)
-  exact hasFullActiveSupport_castCFIIData
+  exact hasFullSupport_castCFIIData
     (normalizedFlattening_tensorPhysicalId U x hx) shuffled hshuffle
 
 /-- Identity-ancilla attachment leaves the transfer map of the normalized

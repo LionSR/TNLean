@@ -27,12 +27,10 @@ because its one-site closed MPO vanishes.
 * `MPOTensor.SimpleVanishingCounterexample.mpo_one_eq_zero`: the one-site MPO vanishes.
 * `MPOTensor.SimpleVanishingCounterexample.M_isSimple`: normalized simplicity after blocking
   two sites.
-* `MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple`: the active canonical-block
-  reading of Definition 4.7.
+* `MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple`: the canonical-block reading
+  of Definition 4.7.
 * `MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple`: failure of the
   strengthened positive-length nonvanishing predicate.
-* `M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple`: deprecated
-  transition theorem stating the three preceding conclusions together.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -249,14 +247,10 @@ with blocking and BNT decomposition at lines 227--231 and 271--301. -/
 theorem M_isSimple : IsSimple M :=
   ⟨M_isMPDO, 2, by norm_num, blockTensor_M_two_isSimpleCanonicalForm⟩
 
-/-- The sign-flip tensor satisfies the documented active canonical-block reading of Definition
-4.7. Normalized simplicity supplies the active blocked BNT and nonnilpotency witness.
-Positive-length nontriviality follows from that active presentation; its exact closed-MPO
+/-- The sign-flip tensor satisfies the documented canonical-block reading of Definition
+4.7. Normalized simplicity supplies the blocked BNT and nonnilpotency witness.
+Positive-length nontriviality follows from that presentation; its exact closed-MPO
 formula identifies `N = 2` as one possible nonzero length.
-
-**Local fix (dormant BNT candidates):** The source-simple predicate excludes the dormant
-candidates admitted by the literal BNT definition.  See
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 Source: arXiv:1606.00608, canonical-block convention at lines 217--246 and
 Definition 4.7 at lines 815--822. -/
@@ -269,21 +263,5 @@ CPSV16 Definition 4.7. -/
 theorem M_not_isNonvanishingSourceSimple : ¬ IsNonvanishingSourceSimple M := by
   intro hSource
   exact hSource.mpo_ne_zero 1 (by norm_num) mpo_one_eq_zero
-
-/-- The sign-flip tensor is normalized-simple and satisfies the documented active
-canonical-block reading of source simplicity, but it does not satisfy the additional
-positive-length nonvanishing condition.
-
-**Local fix (dormant BNT candidates):** The source-simple conjunct excludes candidates admitted
-by the literal BNT definition.  See
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
-Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
-@[deprecated
-  "Use `M_isSimple`, `M_isSourceSimple`, and `M_not_isNonvanishingSourceSimple`."
-  (since := "2026-08-20")]
-theorem M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple :
-    IsSimple M ∧ IsSourceSimple M ∧ ¬ IsNonvanishingSourceSimple M :=
-  ⟨M_isSimple, M_isSourceSimple, M_not_isNonvanishingSourceSimple⟩
 
 end MPOTensor.SimpleVanishingCounterexample

@@ -78,14 +78,13 @@ For MPDO renormalization fixed points:
   `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean`. The unrestricted printed
   statement (iii), including inactive product sectors, is not claimed.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
-  elements with nilpotent physical-trace transfer matrices. The documented
-  active canonical-block reading is `MPOTensor.IsSourceSimple`: it
-  existentially chooses a positive physical blocking and an active BNT sector
-  presentation whose representative physical-trace transfers are all
-  nonnilpotent. Every representative has a positive number of copies and every
-  copy has nonzero weight, so dormant candidates are absent. This is the local
-  correction recorded in `cpsv16_bnt_uniqueness_zero_coefficient.tex`, not the
-  unrestricted literal-BNT reading. Positive-length nontriviality is derived
+  elements with nilpotent physical-trace transfer matrices. The formal
+  predicate is `MPOTensor.IsSourceSimple`: it existentially chooses a positive
+  physical blocking and a BNT sector presentation whose representative
+  physical-trace transfers are all nonnilpotent. Every representative has a
+  positive number of copies and every copy has nonzero weight, the
+  nonzero-coefficient convention recorded in
+  `cpsv16_bnt_uniqueness_zero_coefficient.tex`. Positive-length nontriviality is derived
   from this presentation, while isolated vanishing lengths remain possible.
   The separate predicate
   `MPOTensor.IsNonvanishingSourceSimple` adds nonvanishing of every
@@ -96,7 +95,7 @@ For MPDO renormalization fixed points:
   `MPOTensor.IsNonvanishingSourceSimple`, witnessed by blocking length one, but
   fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
   Normalized simplicity implies source simplicity unconditionally because its
-  normalized sector decomposition gives an active presentation after gauge
+  normalized sector decomposition gives a BNT sector presentation after gauge
   transport; the strengthened predicate still requires positive-length
   nonvanishing. The same note records the exact scalar repeated-copy
   counterexample to Theorem 4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$
@@ -208,21 +207,12 @@ For MPDO renormalization fixed points:
 
 For the non-periodic MPS Fundamental Theorem background:
 
-- `cpsv16_bnt_characterization_active_blocks.tex` records the local correction
-  to the BNT characterization: coverage concerns precisely the nonzero-weight
-  canonical-form blocks, while candidate normality from Definition 2.4 appears
-  explicitly on the characterized side of the equivalence.
-- `cpsv16_bnt_uniqueness_zero_coefficient.tex` records that the uniqueness
-  sentence at CPSV16 line 1148 is false under the literal BNT definition: an
-  unrelated normal tensor may be adjoined with coefficient identically zero.
-  It gives a bond-dimension-one, two-symbol counterexample and identifies
-  converse coverage of candidates by active canonical-form blocks as the
-  missing condition for one restricted uniqueness theorem. It also records the
-  active-presentation restriction used for the documented reading of
-  Definition 4.7: every representative has a positive number of copies, every
-  copy weight is nonzero, and eventual linear independence gives a bijective
-  gauge-phase matching. Neither restriction validates the unrestricted source
-  sentence.
+- `cpsv16_bnt_uniqueness_zero_coefficient.tex` records the nonzero-coefficient
+  convention: every coefficient of a CPSV16 canonical form is nonzero, as the
+  line-246 normalization presupposes. Under this convention Proposition 2.7,
+  the line-1148 uniqueness sentence, Theorem 2.10, Corollaries 2.11, 3.12,
+  and A.6, and Lemma A.5 are formalized as stated, and the note lists the
+  blueprint node for each.
 - `tnlean_bnt_ft_theorem_surface.tex` separates paper-level theorem
   statements from auxiliary formal declarations.
 - `rmp_nonperiodic_bnt_comparison_inputs.tex` compares the current

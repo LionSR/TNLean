@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPU
 
-import TNLean.MPS.MPU.ActiveTransferMultiplicity
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
@@ -45,5 +44,6 @@ import TNLean.MPS.MPU.SuppliedWitnessReblocking
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.TransferMatrix
+import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.VirtualSandwich

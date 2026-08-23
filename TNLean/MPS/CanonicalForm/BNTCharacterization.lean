@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBlocks
+import QICLean.Algebra.FinSum
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
@@ -15,17 +15,15 @@ import TNLean.MPS.Overlap.NormalTensorDichotomy
 This module proves the characterization of a basis of normal tensors from
 arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines 271--280 and
 1135--1146). For a tensor in canonical form, a finite candidate family is a
-basis of normal tensors if and only if every candidate is normal, every active
+basis of normal tensors if and only if every candidate is normal, every
 canonical-form summand is gauge-phase equivalent to one member of the family,
 and distinct members are not gauge-phase equivalent.
 
 The canonical-form hypotheses below record the context of the source
-proposition: the displayed summands are normal and their weighted direct sum
-generates the same positive-length matrix product vectors as the original
-tensor. Coverage is restricted to nonzero-weight summands, as explained in
-`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. Positive bond
-dimensions are implicit in the source's matrix algebras and are made explicit
-through typeclass assumptions.
+proposition: the displayed summands are normal with nonzero coefficients, and
+their weighted direct sum generates the same positive-length matrix product
+vectors as the original tensor. Positive bond dimensions are implicit in the
+source's matrix algebras and are made explicit through typeclass assumptions.
 -/
 
 open scoped Matrix BigOperators
@@ -234,8 +232,14 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
       (hSum := hPBsum) (hLI := hLIN) (i₀ := j₀) hj₀T
   exact (P.coeff_not_eventually_zero j₀) hCoeffEventuallyZero
 
-/-- The all-active-block form of the CPSV16 basis characterization. -/
-private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
+/-- Characterization of a basis of normal tensors by coverage of the normal
+canonical-form summands and minimality under gauge-phase equivalence.
+
+This is arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines 271--280
+and 1135--1146).  The canonical-form coefficients are nonzero, as in the
+construction at lines 214--225; candidate normality, which is part of the BNT
+definition at lines 271--274, is stated on the characterized side of the iff. -/
+theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
     {r g : ℕ} {dimCF : Fin r → ℕ} {dimB : Fin g → ℕ}
     [∀ k, NeZero (dimCF k)] [∀ j, NeZero (dimB j)]
     (A : MPSTensor d D) (μ : Fin r → ℂ)
@@ -373,104 +377,17 @@ private theorem isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
         have hComponent := congrArg (fun v : MPVSpace d N => v σ) hGroup
         simpa [c, mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hComponent
 
-/-- Characterization of a basis of normal tensors by coverage of the active
-normal canonical-form summands and minimality under gauge-phase equivalence.
-
-This is arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines 271--280
-and 1135--1146).
-
-**Local fix (active CF blocks and candidate normality):** Definition
-`eq:II_CF1` at lines 238--244 permits zero weights syntactically, although the
-construction at lines 214--225 lists the nonzero blocks and normalizes their
-completely positive maps. Accordingly, coverage is required precisely when
-the displayed weight is nonzero. Candidate normality, which is part of the BNT
-definition at lines 271--274, is stated on the characterized side of the iff.
-See `docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
-theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
-    {r g : ℕ} {dimCF : Fin r → ℕ} {dimB : Fin g → ℕ}
-    [∀ k, NeZero (dimCF k)] [∀ j, NeZero (dimB j)]
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dimCF k))
-    (basis : (j : Fin g) → MPSTensor d (dimB j))
-    (hBlocksNormal : ∀ k, IsNormalTensor (blocks k))
-    (hCF : SameMPV₂Pos A (toTensorFromBlocks (d := d) μ blocks)) :
-    IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) ↔
-      (∀ j, IsNormalTensor (basis j)) ∧
-      (∀ k : Fin r, μ k ≠ 0 →
-        ∃ j : Fin g, ∃ hdim : dimB j = dimCF k,
-        ∃ X : GL (Fin (dimCF k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
-          ∀ i, blocks k i = ζ •
-            ((X : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ) *
-              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
-              (↑(X⁻¹) : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ))) ∧
-      (∀ j k : Fin g, j ≠ k → ∀ hdim : dimB j = dimB k,
-        ¬ ∃ X : GL (Fin (dimB k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
-          ∀ i, basis k i = ζ •
-            ((X : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ) *
-              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
-              (↑(X⁻¹) : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ))) := by
-  classical
-  let Active := {k : Fin r // μ k ≠ 0}
-  let activeEquiv : Fin (Fintype.card Active) ≃ Active :=
-    (Fintype.equivFin Active).symm
-  let dimActive : Fin (Fintype.card Active) → ℕ :=
-    fun k ↦ dimCF (activeEquiv k)
-  let μActive : Fin (Fintype.card Active) → ℂ :=
-    fun k ↦ μ (activeEquiv k)
-  let blocksActive : (k : Fin (Fintype.card Active)) → MPSTensor d (dimActive k) :=
-    fun k ↦ blocks (activeEquiv k)
-  let : ∀ k, NeZero (dimActive k) := fun k ↦ by
-    simp only [dimActive]
-    infer_instance
-  have hActiveNormal : ∀ k, IsNormalTensor (blocksActive k) := by
-    intro k
-    exact hBlocksNormal (activeEquiv k)
-  have hμActive : ∀ k, μActive k ≠ 0 := by
-    intro k
-    exact (activeEquiv k).property
-  have hActiveCF :
-      SameMPV₂Pos A (toTensorFromBlocks (d := d) μActive blocksActive) :=
-    hCF.trans <| by
-      simpa only [μActive, blocksActive, dimActive] using
-        sameMPV₂Pos_toTensorFromBlocks_active μ blocks activeEquiv
-  have hCharacterization :=
-    isCPSVBasisOfNormalTensors_iff_active_blocks_covered_and_minimal
-      A μActive blocksActive basis hActiveNormal hμActive hActiveCF
-  constructor
-  · intro hBNT
-    obtain ⟨hBasisNormal, hCover, hDistinct⟩ := hCharacterization.mp hBNT
-    refine ⟨hBasisNormal, ?_, hDistinct⟩
-    intro k hk
-    let kActive : Active := ⟨k, hk⟩
-    let l : Fin (Fintype.card Active) := activeEquiv.symm kActive
-    have hkIndex : k = (activeEquiv l : Fin r) := by
-      change k = (activeEquiv (activeEquiv.symm kActive) : Fin r)
-      exact (congrArg Subtype.val (activeEquiv.apply_symm_apply kActive)).symm
-    rw [hkIndex]
-    simpa only [dimActive, blocksActive] using hCover l
-  · rintro ⟨hBasisNormal, hCover, hDistinct⟩
-    apply hCharacterization.mpr
-    refine ⟨hBasisNormal, ?_, hDistinct⟩
-    intro k
-    simpa [dimActive, blocksActive] using
-      hCover (activeEquiv k) (activeEquiv k).property
-
 /-- Characterization of a basis of normal tensors for literal CPSV canonical-form data.
 
 This specializes arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines
-271--301 and 1137--1148), to the data of eq. `II_CF1`.
-
-**Local fix (active blocks):** Only blocks with nonzero weight are covered: a
-syntactically listed zero-weight block contributes nothing to any positive-length
-matrix product vector. See
-`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
+271--301 and 1137--1148), to the data of eq. `II_CF1`. -/
 theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
     {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
     (data : CPSVCanonicalFormData A)
     (basis : (j : Fin g) → MPSTensor d (dimB j)) :
     IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) ↔
       (∀ j, IsNormalTensor (basis j)) ∧
-      (∀ k : Fin data.r, data.weights k ≠ 0 →
+      (∀ k : Fin data.r,
         ∃ j : Fin g, ∃ hdim : dimB j = data.dim k,
         ∃ X : GL (Fin (data.dim k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
           ∀ i, data.blocks k i = ζ •
@@ -485,7 +402,7 @@ theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
               (↑(X⁻¹) : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ))) := by
   let : ∀ k, NeZero (data.dim k) := fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
   exact isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
-    A data.weights data.blocks basis data.blocks_normal
+    A data.weights data.blocks basis data.blocks_normal data.weights_ne_zero
       data.sameMPV₂Pos_toTensorFromBlocks
 
 end MPSTensor

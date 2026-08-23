@@ -659,30 +659,15 @@ private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- **Restricted equal-case fundamental theorem.**
+/-- **Equal-case fundamental theorem** (CPSV16 Corollary 2.11, lines 354--361;
+CPSV21 Corollary 4.5).
 
-This is the active, nonzero, converse-covered correction of
-CPSV16 Corollary 2.11.  The CPSV16 convention permits an unrelated normal summand whose
-coefficient vanishes at every positive length; such a summand can change the
-ambient bond dimension while preserving all positive-length MPVs.
+Two BNT canonical forms generating the same MPV family at every positive
+length are globally conjugate: their total bond dimensions agree, and a single
+invertible gauge `Y` carries one total tensor to the other.
 
-The theorem is also a SectorBNT analogue of CPSV21 Corollary 4.5,
-pending a theorem connecting the canonical tensors of that source to the
-SectorBNT hypotheses.  In CPSV21 the actual canonical summands have positive coefficients.
-An extraneous zero-coefficient member allowed by its weak BNT definition is not
-an ambient canonical summand, so the unequal-cardinality counterexample to
-CPSV21 Theorem 4.4 does not refute Corollary 4.5.
-
-On the restricted BNT canonical-form class, two forms generating the same MPV
-family at every positive length are globally conjugate: their total bond
-dimensions agree, and a single invertible gauge `Y` carries one total tensor to
-the other.
-
-**Local fix (nonzero coefficients):** CPSV16 Corollary 2.11 is read with every
-canonical-form coefficient nonzero, the convention implicit in its normalization
-`|μ_k| ≤ 1` with one coefficient equal to one; a zero-coefficient summand is
-not a block.  Documented in
-`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
+**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+-/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -699,22 +684,15 @@ theorem fundamentalTheorem_equal_canonicalForm
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
 
-/-- **Restricted Canonical Form II unitary refinement, equal case.**
+/-- **Canonical Form II unitary refinement, equal case** (CPSV16 Corollary A.6,
+lines 1197--1199).
 
-This is the active, nonzero, converse-covered correction of the equal case of
-CPSV16 Corollary A.6.  The literal statement permits inactive zero-weight
-summands, which can change the ambient bond dimension while preserving all
-positive-length MPVs.
+Two BNT canonical forms generating the same MPV family at every positive
+length are related by one unitary global gauge after identifying their equal
+total bond dimensions.
 
-On the restricted BNT canonical-form class, two forms generating the same MPV
-family at every positive length are related by one unitary global gauge after
-identifying their equal total bond dimensions.
-
-**Local fix (nonzero coefficients):** CPSV16 Corollary 2.11 is read with every
-canonical-form coefficient nonzero, the convention implicit in its normalization
-`|μ_k| ≤ 1` with one coefficient equal to one; a zero-coefficient summand is
-not a block.  Documented in
-`docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex`. -/
+**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+-/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -733,28 +711,17 @@ theorem fundamentalTheorem_equal_canonicalForm_unitary
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_unitaryGauge_literal hP hQ hEqual
 
-/-- **Restricted proportional multi-block fundamental theorem.**
+/-- **Proportional multi-block fundamental theorem** (CPSV16 Theorem 2.10,
+lines 349--352; CPSV21 Theorem 4.4).
 
-This is the active, nonzero, converse-covered correction of CPSV16 Theorem 2.10
-and CPSV21 Theorem 4.4.  Their literal BNT definitions permit an unrelated
-normal representative whose coefficient vanishes at every length, so the
-unrestricted equality of BNT cardinalities is false.  In the CPSV21
-counterexample, the extra representative belongs only to the chosen BNT; the
-underlying canonical tensor may still consist of an actual summand with
-coefficient one.  Thus this obstruction to Theorem 4.4 does not create a
-zero-coefficient ambient canonical summand.
-
-On the restricted BNT canonical-form class, eventual projective proportionality
-of the generated MPV families matches the normal-tensor sectors bijectively.
-For each `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimension
+Eventual projective proportionality of the generated MPV families of two BNT
+canonical forms matches the normal-tensor sectors bijectively.  For each
+`Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimension
 (`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
 `P.basis (β k)` by a unit phase and gauge conjugation.
 
-**Local fix (nonzero coefficients):** CPSV16 Theorem 2.10 is read with every
-canonical-form coefficient nonzero, the convention implicit in its normalization
-`|μ_k| ≤ 1` with one coefficient equal to one; a zero-coefficient summand is
-not a block.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
+**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+-/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

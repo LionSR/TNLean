@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.NormalIsometryCharacterization
@@ -12,11 +12,11 @@ import TNLean.MPS.SharedInfra.Scaling
 import QICLean.Analysis.SpectralRadius
 
 /-!
-# Active blocks of a literal CPSV renormalization fixed point
+# Blocks of a literal CPSV renormalization fixed point
 
 This file proves the first source-facing part of arXiv:1606.00608, Corollary 3.12
 (lines 583--590), using the observation in its proof at line 1303 that every
-active normal-tensor block of a renormalization fixed point is itself a
+normal-tensor block of a renormalization fixed point is itself a
 renormalization fixed point.
 -/
 
@@ -157,18 +157,14 @@ private theorem gaugePhaseEquiv_of_smul
 
 namespace CPSVCanonicalFormData
 
-/-- Every active listed block of a literal CPSV canonical-form renormalization fixed point has
+/-- Every listed block of a literal CPSV canonical-form renormalization fixed point has
 unit-modulus weight and is itself a renormalization fixed point.
 
-This is the active-block consequence of arXiv:1606.00608, Corollary 3.12, lines 583--590,
-with the proof observation at line 1303.
-
-**Scope restriction (active canonical blocks):** the printed assertion concerns arbitrary BNT
-members, whereas literal BNT data may contain unused zero-coefficient members. This theorem
-therefore restricts to `data.Active`; see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem active_weight_norm_one_and_block_rfp
+This is the block consequence of arXiv:1606.00608, Corollary 3.12, lines 583--590,
+with the proof observation at line 1303. -/
+theorem weight_norm_one_and_block_rfp
     (data : CPSVCanonicalFormData A) (hRFP : IsTransferIdempotent A)
-    (k : data.Active) :
+    (k : Fin data.r) :
     ‖data.weights k‖ = 1 ∧ IsTransferIdempotent (data.blocks k) := by
   let : ∀ j : Fin data.r, NeZero (data.dim j) :=
     fun j => ⟨Nat.ne_of_gt (data.dim_pos j)⟩
@@ -184,60 +180,57 @@ theorem active_weight_norm_one_and_block_rfp
     isTransferIdempotent_block_of_isTransferIdempotent_directSum
       scaledBlocks hRetained k
   exact norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
-    (data.blocks k) (data.blocks_normal k) (data.weights k) k.property hScaledBlock
+    (data.blocks k) (data.blocks_normal k) (data.weights k) (data.weights_ne_zero k)
+    hScaledBlock
 
-namespace ActiveBNTRefinement
+namespace BNTRefinement
 
-/-- The chosen active phase-class representatives of a literal CPSV canonical-form
+/-- The chosen phase-class representatives of a literal CPSV canonical-form
 renormalization fixed point have simultaneous square-root isometry canonical forms, and their
 residual tensors satisfy the full joint residual-isometry equation.
 
-Only nonzero-weight active classes occur. Distinct representatives are separated by
-`representativesNotEquiv`; the idempotence of every mixed active pair is inherited from the
-retained direct sum. After independent trace-preserving Perron gauges, the mixed spectral gap
-forces each off-diagonal map to vanish. The conclusion includes the empty active family.
+Distinct representatives are separated by `representativesNotEquiv`; the idempotence of every
+mixed pair is inherited from the retained direct sum. After independent trace-preserving Perron
+gauges, the mixed spectral gap forces each off-diagonal map to vanish. The conclusion includes
+the empty family.
 
 The square-root diagonal follows TNLean's corrected convention for arXiv:1606.00608,
-Corollary `III.cor3`, lines 583--590; see `IsIsometryCanonicalForm`.
-
-**Scope restriction (active canonical blocks):** the printed corollary's arbitrary-BNT reading is
-false; this theorem uses representatives of the nonzero-weight active gauge-phase classes. See
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
+Corollary `III.cor3`, lines 583--590; see `IsIsometryCanonicalForm`. -/
 theorem exists_residualIsometryFamily_of_isTransferIdempotent
-    {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement)
+    {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement)
     (hRFP : IsTransferIdempotent A) :
-    ∃ (X : (j : Fin data.activePhaseClasses.g) →
-        Matrix (Fin (data.dim (data.activeRepresentativeIndex j)))
-          (Fin (data.dim (data.activeRepresentativeIndex j))) ℂ)
-      (Λ : (j : Fin data.activePhaseClasses.g) →
-        Fin (data.dim (data.activeRepresentativeIndex j)) → ℝ)
-      (U : (j : Fin data.activePhaseClasses.g) →
-        MPSTensor d (data.dim (data.activeRepresentativeIndex j))),
+    ∃ (X : (j : Fin data.phaseClasses.g) →
+        Matrix (Fin (data.dim (data.representativeIndex j)))
+          (Fin (data.dim (data.representativeIndex j))) ℂ)
+      (Λ : (j : Fin data.phaseClasses.g) →
+        Fin (data.dim (data.representativeIndex j)) → ℝ)
+      (U : (j : Fin data.phaseClasses.g) →
+        MPSTensor d (data.dim (data.representativeIndex j))),
       (∀ j, (X j).det ≠ 0) ∧
       (∀ j k, 0 < Λ j k) ∧
       (∀ j, ∑ k, Λ j k = 1) ∧
-      (∀ j i, data.blocks (data.activeRepresentativeIndex j) i =
+      (∀ j i, data.blocks (data.representativeIndex j) i =
         X j * Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)) *
           U j i * (X j)⁻¹) ∧
       IsResidualIsometryFamily U := by
   classical
-  let repDim : Fin data.activePhaseClasses.g → ℕ :=
-    fun j => data.dim (data.activeRepresentativeIndex j)
-  let B : (j : Fin data.activePhaseClasses.g) → MPSTensor d (repDim j) :=
-    fun j => data.blocks (data.activeRepresentativeIndex j)
-  let μ : Fin data.activePhaseClasses.g → ℂ :=
-    fun j => data.weights (data.activeRepresentativeIndex j)
-  let C : (j : Fin data.activePhaseClasses.g) → MPSTensor d (repDim j) :=
+  let repDim : Fin data.phaseClasses.g → ℕ :=
+    fun j => data.dim (data.representativeIndex j)
+  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (repDim j) :=
+    fun j => data.blocks (data.representativeIndex j)
+  let μ : Fin data.phaseClasses.g → ℂ :=
+    fun j => data.weights (data.representativeIndex j)
+  let C : (j : Fin data.phaseClasses.g) → MPSTensor d (repDim j) :=
     fun j i => μ j • B j i
   let : ∀ k : Fin data.r, NeZero (data.dim k) :=
     fun k => ⟨Nat.ne_of_gt (data.dim_pos k)⟩
-  let : ∀ j : Fin data.activePhaseClasses.g, NeZero (repDim j) :=
-    fun j => ⟨Nat.ne_of_gt (data.dim_pos (data.activeRepresentativeIndex j))⟩
-  have hActive : ∀ j, ‖μ j‖ = 1 ∧ IsTransferIdempotent (B j) := fun j =>
-    data.active_weight_norm_one_and_block_rfp hRFP (data.activeRepresentativeIndex j)
-  have hμ : ∀ j, ‖μ j‖ = 1 := fun j => (hActive j).1
+  let : ∀ j : Fin data.phaseClasses.g, NeZero (repDim j) :=
+    fun j => ⟨Nat.ne_of_gt (data.dim_pos (data.representativeIndex j))⟩
+  have hBlock : ∀ j, ‖μ j‖ = 1 ∧ IsTransferIdempotent (B j) := fun j =>
+    data.weight_norm_one_and_block_rfp hRFP (data.representativeIndex j)
+  have hμ : ∀ j, ‖μ j‖ = 1 := fun j => (hBlock j).1
   have hμne : ∀ j, μ j ≠ 0 := fun j => Complex.ne_zero_of_norm_eq_one (hμ j)
-  have hBRFP : ∀ j, IsTransferIdempotent (B j) := fun j => (hActive j).2
+  have hBRFP : ∀ j, IsTransferIdempotent (B j) := fun j => (hBlock j).2
   have hBICF : ∀ j, IsIsometryCanonicalForm (B j) := fun j =>
     (ref.representativeNormal j).isTransferIdempotent_iff_isIsometryCanonicalForm.mp (hBRFP j)
   let allScaled : (k : Fin data.r) → MPSTensor d (data.dim k) :=
@@ -250,11 +243,11 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
     (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
       C).2 fun j k =>
         mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
-          allScaled hRetained (data.activeRepresentativeIndex j)
-            (data.activeRepresentativeIndex k)
+          allScaled hRetained (data.representativeIndex j)
+            (data.representativeIndex k)
   choose σ _hσ _hσfix hTP hGauge _hPrim hIrr using
     fun j => (ref.representativeNormal j).exists_tpGauge
-  let P : (j : Fin data.activePhaseClasses.g) → MPSTensor d (repDim j) :=
+  let P : (j : Fin data.phaseClasses.g) → MPSTensor d (repDim j) :=
     fun j i => μ j • tpGauge (B j) (σ j) i
   have hGaugeC : ∀ j, GaugeEquiv (C j) (P j) := by
     intro j
@@ -292,38 +285,34 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
   simpa only [B, repDim] using
     exists_residualIsometryFamily_of_isIsometryCanonicalForm B hBICF hBZero
 
-end ActiveBNTRefinement
+end BNTRefinement
 
 end CPSVCanonicalFormData
 
 namespace IsCPSVCanonicalForm
 
-/-- Predicate-level form of the corrected active Corollary 3.12: for the canonical witness data
-and its chosen active BNT refinement, the representative blocks possess simultaneous square-root
-isometry forms with a joint residual-isometry family.
+/-- Predicate-level form of Corollary 3.12: for the canonical witness data and its chosen BNT
+refinement, the representative blocks possess simultaneous square-root isometry forms with a
+joint residual-isometry family.
 
-Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590.
-
-**Scope restriction (active canonical blocks):** the printed corollary's arbitrary-BNT reading is
-false; this theorem uses representatives of the nonzero-weight active gauge-phase classes. See
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem exists_activeBNT_residualIsometryFamily_of_isTransferIdempotent
+Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590. -/
+theorem exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent
     (hCF : IsCPSVCanonicalForm A) (hRFP : IsTransferIdempotent A) :
-    ∃ (X : (j : Fin hCF.data.activePhaseClasses.g) →
-        Matrix (Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j)))
-          (Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j))) ℂ)
-      (Λ : (j : Fin hCF.data.activePhaseClasses.g) →
-        Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j)) → ℝ)
-      (U : (j : Fin hCF.data.activePhaseClasses.g) →
-        MPSTensor d (hCF.data.dim (hCF.data.activeRepresentativeIndex j))),
+    ∃ (X : (j : Fin hCF.data.phaseClasses.g) →
+        Matrix (Fin (hCF.data.dim (hCF.data.representativeIndex j)))
+          (Fin (hCF.data.dim (hCF.data.representativeIndex j))) ℂ)
+      (Λ : (j : Fin hCF.data.phaseClasses.g) →
+        Fin (hCF.data.dim (hCF.data.representativeIndex j)) → ℝ)
+      (U : (j : Fin hCF.data.phaseClasses.g) →
+        MPSTensor d (hCF.data.dim (hCF.data.representativeIndex j))),
       (∀ j, (X j).det ≠ 0) ∧
       (∀ j k, 0 < Λ j k) ∧
       (∀ j, ∑ k, Λ j k = 1) ∧
-      (∀ j i, hCF.data.blocks (hCF.data.activeRepresentativeIndex j) i =
+      (∀ j i, hCF.data.blocks (hCF.data.representativeIndex j) i =
         X j * Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)) *
           U j i * (X j)⁻¹) ∧
       IsResidualIsometryFamily U := by
-  let ref := CPSVCanonicalFormData.activeBNTRefinement hCF.data
+  let ref := CPSVCanonicalFormData.bntRefinement hCF.data
   exact ref.exists_residualIsometryFamily_of_isTransferIdempotent hRFP
 
 end IsCPSVCanonicalForm

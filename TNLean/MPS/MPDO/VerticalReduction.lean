@@ -25,8 +25,8 @@ normalization or grouping into a basis of normal tensors is asserted here.
 * `MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor`:
   every one-sided invariant orthogonal projection of the vertically viewed
   tensor is reducing under normalized BNT-refined horizontal form.
-* `ActiveBNTRefinement.hasInvariantProjectorClosure_verticalTensor`: the same
-  closure from explicit literal-CF data and its active BNT refinement.
+* `BNTRefinement.hasInvariantProjectorClosure_verticalTensor`: the same
+  closure from explicit literal-CF data and its BNT refinement.
 * `MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor`:
   the predicate-level literal-CF conclusion.
 * `MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry`:
@@ -74,7 +74,7 @@ theorem IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor
 
 end MPOTensor
 
-namespace MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
+namespace MPSTensor.CPSVCanonicalFormData.BNTRefinement
 
 open MPOTensor
 
@@ -91,7 +91,7 @@ give right invariance.
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
 theorem hasInvariantProjectorClosure_verticalTensor
     (M : MPOTensor d D) (data : MPSTensor.CPSVCanonicalFormData M.toMPSTensor)
-    (ref : data.ActiveBNTRefinement) (hM : IsMPDO M) :
+    (ref : data.BNTRefinement) (hM : IsMPDO M) :
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
   intro P hP hInv v
   have hLeft : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P := by
@@ -120,7 +120,7 @@ theorem hasInvariantProjectorClosure_verticalTensor
   rw [← verticalTensor_braRightMul, hRight, verticalTensor_braRightMul,
     verticalTensor_ketLeftMul]
 
-end MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
+end MPSTensor.CPSVCanonicalFormData.BNTRefinement
 
 namespace MPSTensor.IsCPSVCanonicalForm
 
@@ -137,7 +137,7 @@ theorem hasInvariantProjectorClosure_verticalTensor
     (hM : IsMPDO M) :
     MPSTensor.HasInvariantProjectorClosure (verticalTensor M) := by
   let data := Classical.choice hCanonical
-  let ref := data.activeBNTRefinement
+  let ref := data.bntRefinement
   exact ref.hasInvariantProjectorClosure_verticalTensor M data hM
 
 end MPSTensor.IsCPSVCanonicalForm

@@ -208,9 +208,9 @@ the source blocks a positive number of physical sites at
 arXiv:1606.00608, line 815. This predicate strengthens the source simplicity
 condition of lines 815--822 by requiring the blocked tensor itself to admit the
 normalized canonical-form witness above, including the global unit-weight
-convention of line 246. The documented active canonical-block reading is
-`MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`; its
-qualification is recorded in
+convention of line 246. The canonical-block reading is
+`MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`; the
+nonzero-coefficient convention is recorded in
 `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 **Scope restriction (fixed representative):** This permits a positive physical

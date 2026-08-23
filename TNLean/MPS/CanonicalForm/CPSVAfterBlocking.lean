@@ -52,7 +52,7 @@ theorem exists_cpsvCanonicalForm_representative_after_blocking
     intro N _hN σ
     rfl
   obtain ⟨p, hp, rA, dimA, μA, blocksA, rB, dimB, μB, blocksB,
-      hABlocks, _hBBlocks, _hBlocksAgree, _hμA, _hμB, hLeftA, _hLeftB,
+      hABlocks, _hBBlocks, _hBlocksAgree, hμA, _hμB, hLeftA, _hLeftB,
       hPrimitiveA, _hPrimitiveB, hIrreducibleA, _hIrreducibleB,
       hDimA, _hDimB⟩ :=
     unconditional_commonPrimitiveIrreducibleBlocks A A hRefl
@@ -66,7 +66,7 @@ theorem exists_cpsvCanonicalForm_representative_after_blocking
         (hLeftA k) (hPrimitiveA k) (hIrreducibleA k))
       (hLeftA k)
   refine ⟨p, hp, ∑ k : Fin rA, dimA k, B, ?_, ?_⟩
-  · exact (CPSVCanonicalFormData.ofBlocks hDimA μA blocksA hNormalA).isCPSVCanonicalForm
+  · exact (CPSVCanonicalFormData.ofBlocks hDimA μA hμA blocksA hNormalA).isCPSVCanonicalForm
   · exact hABlocks
 
 end MPSTensor

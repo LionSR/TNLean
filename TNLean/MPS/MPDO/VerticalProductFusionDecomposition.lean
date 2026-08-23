@@ -216,11 +216,6 @@ private theorem groupedFusionCoisometry_reconstruction
 /-- The positive original-label corners determine the fusion coisometries of
 the BNT family.
 
-**Scope restriction (active product BNT):** Only active product corners are
-retained.  A BNT label absent from a fixed product pair has zero fusion
-multiplicity.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 **Local fix (Figure-11 fixed-pair support):** The construction uses the
 distinguished retained copy of each label and permits an empty active family
 for its product pair.  Documented in
@@ -258,11 +253,6 @@ end OriginalCornerFamily
 
 /-- Positive normalized product corners determine a family of fusion
 coisometries for the original one-site BNT labels.
-
-**Scope restriction (active product BNT):** Only active product corners are
-retained. A one-site BNT label absent from a fixed product pair has zero fusion
-multiplicity. Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 **Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
 active family; no unsupported corner is inserted. Documented in
@@ -427,11 +417,6 @@ including when a common zero corner is discarded by the forward map.
 **Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
 stronger than the literal CPSV canonical form used in Appendix C.4 through
 Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
-**Scope restriction (active product BNT):** Only active product corners are
-retained.  A one-site BNT label absent from a fixed product pair has zero
-fusion multiplicity.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 **Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
 active family; no unsupported corner is inserted.  Documented in

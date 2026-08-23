@@ -437,7 +437,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Let $A$ have bond dimension $D$. It is in the canonical
     form of \cite[Section~2.3]{Cirac2016MPDO_arXiv} if there are positive
     integers $D_1,\ldots,D_r$, normal tensors $A_k$ of bond dimension $D_k$,
-    weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
+    nonzero weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
     $U\in\C^{S\times D}$ such that $S\le D$ and, for every physical index~$i$,
     \begin{align}
         UU^\dagger
@@ -460,71 +460,26 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
          & \Longrightarrow\exists k,\ |\mu_k|=1.
         \label{eq:cpsv_weight_normalization}
     \end{align}
-    No weight is required to be nonzero, and no ordering or separation condition
-    is imposed.
+    Every weight $\mu_k$ is nonzero. This is the reading of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} adopted here: the remark in
+    line~219 there places the degenerate case in the block dimensions
+    ($D_k=0$), and lines~224--225 choose each $\mu_k$ so that the transfer map
+    of $\mu_kA_k$ has spectral radius one, which a vanishing weight cannot
+    satisfy. The reading loses nothing, since if $\mu_{k_0}=0$ then
+    $\mu_{k_0}A_{k_0}^i=0$ is the zero matrix of size $D_{k_0}$ and
+    \begin{align}
+        \bigoplus_{k=1}^r\mu_kA_k^i
+         & =\bigoplus_{k\ne k_0}\mu_kA_k^i\oplus0_{D_{k_0}},
+        \label{eq:cpsv_zero_weight_summand}
+    \end{align}
+    so $A^i$ is the same coisometric image of the direct sum over the
+    remaining indices, with the $D_{k_0}$ coordinates of the omitted summand
+    moved to the zero complement. No ordering or separation condition is
+    imposed.
 
     The basis-of-normal-tensors refinement is
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
-
-\begin{theorem}[Removing zero-weight blocks at positive length]%
-    \label{thm:cpsv_remove_zero_weight_blocks}
-    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_active}
-    \leanok
-    \uses{def:same_mpv2_pos, def:block_diagonal_tensor, thm:mpv_decomposition}
-    Let $(A_k)_{k=1}^r$ be blocks with weights $(\mu_k)_{k=1}^r$, and put
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then the full weighted direct sum and
-    the direct sum over $K_{\mathrm{act}}$ have the same matrix product vectors
-    at every positive length. Equivalently, for $N>0$ and every configuration
-    $\sigma$,
-    \begin{align}
-        \sum_{k=1}^r \mu_k^N V^{(N)}(A_k)_\sigma
-         & =\sum_{k\in K_{\mathrm{act}}}
-        \mu_k^N V^{(N)}(A_k)_\sigma.
-        \label{eq:cpsv_remove_zero_weight_blocks}
-    \end{align}
-    The restriction to positive lengths is essential: at length zero, a
-    zero-weight block contributes through $\mu_k^0=1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpv_decomposition}
-    Expand both matrix product vectors using
-    Theorem~\ref{thm:mpv_decomposition}. If $\mu_k=0$ and $N>0$, then
-    $\mu_k^N=0$. The inactive part of the finite sum therefore vanishes, and
-    reindexing the remaining terms by $K_{\mathrm{act}}$ gives
-    (\ref{eq:cpsv_remove_zero_weight_blocks}).
-\end{proof}
-
-\begin{theorem}[Active part of CPSV canonical form]%
-    \label{thm:cpsv_canonical_form_active_blocks}
-    \lean{MPSTensor.CPSVCanonicalFormData.activeEquiv,
-        MPSTensor.CPSVCanonicalFormData.activeDim,
-        MPSTensor.CPSVCanonicalFormData.activeWeight,
-        MPSTensor.CPSVCanonicalFormData.activeBlocks}
-    \lean{MPSTensor.CPSVCanonicalFormData.sameMPV₂Pos_activeBlocks}
-    \leanok
-    \uses{def:cpsv_canonical_form, thm:cpsv_remove_zero_weight_blocks}
-    Let $A$ have canonical-form data as in~(\ref{eq:cpsv_canonical_form}), and
-    put $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then
-    \begin{align}
-        \mc{V}^+(A)
-         & =\mc{V}^+\!\left(
-        \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k\right).
-        \label{eq:cpsv_active_blocks_same_mpv}
-    \end{align}
-    This conclusion uses no weight normalization. The bounds and unit-modulus
-    condition in~(\ref{eq:cpsv_weight_normalization}) remain separate
-    assumptions on the canonical-form data.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:cpsv_remove_zero_weight_blocks}
-    The canonical-form reconstruction first identifies the positive-length
-    matrix product vectors of $A$ with those of the full weighted block sum.
-    Theorem~\ref{thm:cpsv_remove_zero_weight_blocks} then removes precisely the
-    zero-weight summands.
-\end{proof}
 
 \begin{theorem}[Physical relabeling preserves CPSV normal and canonical form]
     \label{thm:cpsv_physical_reindexing}
@@ -853,14 +808,13 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \uses{def:cpsv_canonical_form, def:bnt_cpsv}
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 278--301 and 1137--1148.
     Let $A$ have canonical-form data as in~(\ref{eq:cpsv_canonical_form}), and
-    let $(B_j)_{j=1}^{g}$ have positive bond dimensions. With
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$, the family $(B_j)_{j=1}^{g}$ is a
-    basis of normal tensors for $A$ if and only if
+    let $(B_j)_{j=1}^{g}$ have positive bond dimensions. The family
+    $(B_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ if and only if
     \begin{align}
          & \bigl(\forall j,\ B_j\text{ is normal}\bigr)
         \notag                                          \\
          & \quad\land
-        \bigl(\forall k\in K_{\mathrm{act}},\ \exists j,X_k,\phi_k,\
+        \bigl(\forall k,\ \exists j,X_k,\phi_k,\
         \forall i,\ A_k^i=e^{i\phi_k}X_kB_j^iX_k^{-1}\bigr)
         \notag                                          \\
          & \quad\land
@@ -872,14 +826,6 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     and every scalar $e^{i\phi}$ has modulus one. This is
     \cite[Proposition~2.7 and Appendix~A]{Cirac2016MPDO_arXiv}, specialized to
     the literal canonical-form data.
-
-    \textbf{Local fix (active blocks):} coverage in
-    (\ref{eq:cpsv_cf_bnt_characterization}) applies only to listed blocks with
-    $\mu_k\ne0$. The display defining canonical form permits $\mu_k=0$, and a
-    zero-weight block contributes nothing to any positive-length matrix product
-    vector. Thus the theorem does not claim coverage of every syntactically
-    listed block. The comparison is recorded in
-    \cite{gap:cpsv16_bnt_characterization_active_blocks}.
 \end{theorem}
 
 \begin{proof}\leanok

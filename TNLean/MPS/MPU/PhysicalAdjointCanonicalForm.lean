@@ -86,6 +86,7 @@ noncomputable def physicalAdjointNormalizedFlattening
   dim := data.dim
   dim_pos := data.dim_pos
   weights := fun k ↦ star (data.weights k)
+  weights_ne_zero := fun k ↦ star_ne_zero.mpr (data.weights_ne_zero k)
   blocks := fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
     (MPSTensor.mapStar (data.blocks k))
   blocks_normal := fun k ↦
@@ -167,18 +168,12 @@ noncomputable def physicalAdjointNormalizedFlattening
     data.physicalAdjointNormalizedFlattening.ambient_coisometry =
       data.ambient_coisometry.map (starRingEnd ℂ) := rfl
 
-/-- Physical adjunction preserves full active support of reduced CFII data. -/
-theorem hasFullActiveSupport_physicalAdjointNormalizedFlattening
+/-- Physical adjunction preserves full support of reduced CFII data. -/
+theorem hasFullSupport_physicalAdjointNormalizedFlattening
     (data : CPSVCanonicalFormIIData U.normalizedFlattening)
-    (hfull : data.toCPSVCanonicalFormData.HasFullActiveSupport) :
-    data.physicalAdjointNormalizedFlattening.toCPSVCanonicalFormData.HasFullActiveSupport := by
-  classical
-  simp only [MPSTensor.CPSVCanonicalFormData.HasFullActiveSupport]
-  change (∑ k : {k : Fin data.r // star (data.weights k) ≠ 0}, data.dim k.1) = D
-  let e : {k : Fin data.r // star (data.weights k) ≠ 0} ≃
-      data.toCPSVCanonicalFormData.Active :=
-    Equiv.subtypeEquiv (Equiv.refl _) (fun k ↦ star_ne_zero)
-  apply (e.sum_comp (fun k ↦ data.dim k.1)).trans
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport) :
+    data.physicalAdjointNormalizedFlattening.toCPSVCanonicalFormData.HasFullSupport := by
+  change ∑ k, data.dim k = D
   exact hfull
 
 end MPSTensor.CPSVCanonicalFormIIData

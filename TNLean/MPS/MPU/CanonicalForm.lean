@@ -8,7 +8,7 @@ import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.MPDO.PhysicalBlocking
-import TNLean.MPS.MPU.ActiveTransferMultiplicity
+import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferMatrix
 
 /-!
@@ -19,10 +19,9 @@ representative is used as an ambient tensor.
 
 **Scope restriction (full-support irreducibility):** This module treats the
 intended reduced canonical representative in the argument for arXiv:1703.09188,
-Proposition `prop:normal-tensor`. The paper's canonical-form definition itself
-permits displayed zero-weight blocks, and the formalization does not construct
-the reduced representative obtained by omitting them. Consequently the MPU
-normality capstone below assumes full active support and does not claim bare
+Proposition `prop:normal-tensor`. The formalization does not construct the reduced
+representative obtained by omitting the ambient zero complement. Consequently the
+MPU normality capstone below assumes full support and does not claim bare
 `IsMPU` implies ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
@@ -35,58 +34,30 @@ variable {d D : ℕ} {A : MPSTensor d D}
 
 namespace CPSVCanonicalFormData
 
-/-- The active CPSV blocks occupy the entire ambient bond space.
+/-- The CPSV blocks occupy the entire ambient bond space.
 
-**Local fix (full active support):** This condition excludes both an ambient
-zero complement and displayed inactive blocks. It describes the intended reduced
-representative used in arXiv:1703.09188, Proposition `prop:normal-tensor`, lines
-319--326 and 344--354, rather than every tensor satisfying the paper's literal
-canonical-form definition. See
+**Local fix (full support):** This condition excludes an ambient zero complement. It
+describes the intended reduced representative used in arXiv:1703.09188, Proposition
+`prop:normal-tensor`, lines 319--326 and 344--354, rather than every tensor satisfying
+the paper's literal canonical-form definition. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-def HasFullActiveSupport (data : CPSVCanonicalFormData A) : Prop :=
-  ∑ k : data.Active, data.dim k.1 = D
+def HasFullSupport (data : CPSVCanonicalFormData A) : Prop :=
+  ∑ k, data.dim k = D
 
-/-- Positive blocking identifies the active retained indices exactly with the original active
-indices.
-
-Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. The positivity
-assumption excludes the zero-site block, whose weights are all raised to the zeroth power. -/
-noncomputable def activeEquivBlockTensor (data : CPSVCanonicalFormData A)
-    (p : ℕ) (hp : 0 < p) :
-    (data.blockTensor p hp).Active ≃ data.Active where
-  toFun k := ⟨k.1, by
-    have hk := k.property
-    change data.weights k.1 ^ p ≠ 0 at hk
-    exact (pow_ne_zero_iff hp.ne').mp hk⟩
-  invFun k := ⟨k.1, by
-    change data.weights k.1 ^ p ≠ 0
-    exact pow_ne_zero p k.property⟩
-  left_inv k := Subtype.ext rfl
-  right_inv k := Subtype.ext rfl
-
-/-- Full active support is preserved by blocking a positive number of sites.
-
-This uses the exact active-index equivalence, so it makes no claim for the zero-site block.
+/-- Full support is preserved by blocking a positive number of sites.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
-theorem hasFullActiveSupport_blockTensor (data : CPSVCanonicalFormData A)
-    (hfull : data.HasFullActiveSupport) (p : ℕ) (hp : 0 < p) :
-    (data.blockTensor p hp).HasFullActiveSupport := by
-  classical
-  change (∑ k : (data.blockTensor p hp).Active, (data.blockTensor p hp).dim k.1) = D
-  calc
-    (∑ k : (data.blockTensor p hp).Active, (data.blockTensor p hp).dim k.1) =
-        ∑ k : (data.blockTensor p hp).Active, data.dim ((data.activeEquivBlockTensor p hp) k).1 :=
-      rfl
-    _ = ∑ k : data.Active, data.dim k.1 :=
-      (data.activeEquivBlockTensor p hp).sum_comp (fun k : data.Active ↦ data.dim k.1)
-    _ = D := hfull
+theorem hasFullSupport_blockTensor (data : CPSVCanonicalFormData A)
+    (hfull : data.HasFullSupport) (p : ℕ) (hp : 0 < p) :
+    (data.blockTensor p hp).HasFullSupport := by
+  change ∑ k, data.dim k = D
+  exact hfull
 
-/-- Full active support is unchanged by a bijective relabeling of the physical alphabet. -/
-theorem hasFullActiveSupport_reindexPhysical {d' : ℕ} (data : CPSVCanonicalFormData A)
-    (hfull : data.HasFullActiveSupport) (e : Fin d' ≃ Fin d) :
-    (data.reindexPhysical e).HasFullActiveSupport := by
-  change ∑ k : data.Active, data.dim k.1 = D
+/-- Full support is unchanged by a bijective relabeling of the physical alphabet. -/
+theorem hasFullSupport_reindexPhysical {d' : ℕ} (data : CPSVCanonicalFormData A)
+    (hfull : data.HasFullSupport) (e : Fin d' ≃ Fin d) :
+    (data.reindexPhysical e).HasFullSupport := by
+  change ∑ k, data.dim k = D
   exact hfull
 
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
@@ -132,18 +103,16 @@ private theorem isIrreducibleTensor_reindexBond
     rw [hone'] at h
     simpa [Q] using h
 
-/-- An active canonical-form block of ambient bond dimension makes the ambient tensor
+/-- A canonical-form block of ambient bond dimension makes the ambient tensor
 irreducible.
 
 **Scope restriction (full ambient block):** Proposition `prop:normal-tensor` of
 arXiv:1703.09188, lines 344--354, is used for the intended reduced representative
-after lines 319--326. The paper's canonical-form definition still permits
-zero-weight displayed blocks; this theorem assumes the resulting ambient-dimensional
-active block directly. See
+after lines 319--326. This theorem assumes the resulting ambient-dimensional
+block directly. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isIrreducibleTensor_of_active_dim_eq
-    (data : CPSVCanonicalFormData A) (k : Fin data.r)
-    (hk : data.weights k ≠ 0) (hDim : data.dim k = D) :
+theorem isIrreducibleTensor_of_dim_eq
+    (data : CPSVCanonicalFormData A) (k : Fin data.r) (hDim : data.dim k = D) :
     Kraus.IsIrreducibleFamily A := by
   classical
   have hsum : ∑ j : Fin data.r, data.dim j = D := by
@@ -249,79 +218,79 @@ theorem isIrreducibleTensor_of_active_dim_eq
       (data.ambient_coisometryᴴ * toTensorFromBlocks data.weights data.blocks i)
       data.ambient_coisometry (Equiv.refl _) (finCongr hsum).symm (Equiv.refl _)]
     simp
-  have hirr := isIrreducibleTensor_smul_conj B hB hUunit hk
+  have hirr := isIrreducibleTensor_smul_conj B hB hUunit (data.weights_ne_zero k)
   have hinv : U⁻¹ = Uᴴ := Matrix.inv_eq_left_inv (mul_eq_one_comm.mpr hUcois)
   convert hirr using 1
   funext i
   rw [hrec i, hinv, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
 
-/-- Under full active support, the unique active block has the ambient bond dimension. -/
-theorem active_dim_eq_of_card_active_eq_one_of_fullActiveSupport
-    (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
-    (hfull : data.HasFullActiveSupport) (k : data.Active) :
-    data.dim k.1 = D := by
-  classical
-  let : Unique data.Active :=
-    Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
-  have hk : k = default := Subsingleton.elim _ _
-  have hsum : (∑ j : data.Active, data.dim j.1) = data.dim k.1 := by
-    rw [hk]
-    exact Fintype.sum_unique (fun j : data.Active => data.dim j.1)
+/-- With a single block, every index equals the given one. -/
+private theorem eq_of_r_eq_one (data : CPSVCanonicalFormData A) (hr : data.r = 1)
+    (j k : Fin data.r) : j = k := by
+  apply Fin.ext
+  have := j.isLt
+  have := k.isLt
+  omega
+
+/-- Under full support, the unique block has the ambient bond dimension. -/
+theorem dim_eq_of_r_eq_one_of_fullSupport
+    (data : CPSVCanonicalFormData A) (hr : data.r = 1)
+    (hfull : data.HasFullSupport) (k : Fin data.r) :
+    data.dim k = D := by
+  have hsum : (∑ j, data.dim j) = data.dim k := by
+    rw [Finset.sum_eq_single k]
+    · intro j _ hj
+      exact absurd (data.eq_of_r_eq_one hr j k) hj
+    · intro h
+      exact absurd (Finset.mem_univ k) h
   exact hsum.symm.trans hfull
 
-/-- Under full active support, the unique active block inclusion is onto as well
-as isometric. -/
+/-- Under full support, the unique block inclusion is onto as well as isometric. -/
 theorem ambientBlockInclusion_mul_conjTranspose_eq_one
-    (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
-    (hfull : data.HasFullActiveSupport) (k : data.Active) :
-    data.ambientBlockInclusion k.1 * (data.ambientBlockInclusion k.1)ᴴ = 1 := by
-  have hdim := data.active_dim_eq_of_card_active_eq_one_of_fullActiveSupport
-    hcard hfull k
-  have hcarddim : Fintype.card (Fin D) = Fintype.card (Fin (data.dim k.1)) := by
+    (data : CPSVCanonicalFormData A) (hr : data.r = 1)
+    (hfull : data.HasFullSupport) (k : Fin data.r) :
+    data.ambientBlockInclusion k * (data.ambientBlockInclusion k)ᴴ = 1 := by
+  have hdim := data.dim_eq_of_r_eq_one_of_fullSupport hr hfull k
+  have hcarddim : Fintype.card (Fin D) = Fintype.card (Fin (data.dim k)) := by
     simp [hdim]
   exact (Matrix.mul_eq_one_comm_of_card_eq
-      (Fin D) (Fin (data.dim k.1)) ℂ
-      (A := data.ambientBlockInclusion k.1)
-      (B := (data.ambientBlockInclusion k.1)ᴴ) hcarddim).mpr
-    (data.ambientBlockInclusion_conjTranspose_mul_self k.1)
+      (Fin D) (Fin (data.dim k)) ℂ
+      (A := data.ambientBlockInclusion k)
+      (B := (data.ambientBlockInclusion k)ᴴ) hcarddim).mpr
+    (data.ambientBlockInclusion_conjTranspose_mul_self k)
 
-/-- Full active support and a unique active block force ambient tensor irreducibility.
+/-- Full support and a unique block force ambient tensor irreducibility.
 
-**Scope restriction (unique full-support active block):** This is the algebraic
+**Scope restriction (unique full-support block):** This is the algebraic
 irreducibility conclusion for the intended reduced representative in
 arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. The reduction
-that omits displayed zero-weight blocks is not formalized here; see
+that omits the ambient zero complement is not formalized here; see
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport
-    (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
-    (hfull : data.HasFullActiveSupport) : Kraus.IsIrreducibleFamily A := by
-  classical
-  let : Unique data.Active :=
-    Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
-  let k : data.Active := default
-  apply data.isIrreducibleTensor_of_active_dim_eq k.1 k.2
-  have hsum : (∑ j : data.Active, data.dim j.1) = data.dim k.1 :=
-    Fintype.sum_unique (fun j : data.Active => data.dim j.1)
-  exact hsum.symm.trans hfull
+theorem isIrreducibleTensor_of_r_eq_one_of_fullSupport
+    (data : CPSVCanonicalFormData A) (hr : data.r = 1)
+    (hfull : data.HasFullSupport) : Kraus.IsIrreducibleFamily A := by
+  let k : Fin data.r := ⟨0, by omega⟩
+  exact data.isIrreducibleTensor_of_dim_eq k
+    (data.dim_eq_of_r_eq_one_of_fullSupport hr hfull k)
 
-/-- Combine the full-support one-active-block conclusion with supplied transfer-radius and
+/-- Combine the full-support one-block conclusion with supplied transfer-radius and
 primitivity fields.
 
 **Scope restriction (supplied spectral data):** The radius and primitivity fields
 are the spectral conclusions of arXiv:1703.09188, Proposition
 `prop:normal-tensor`, lines 349--354. The full-support premise describes the
 intended reduced representative after lines 319--326; the reduction that omits
-zero-weight displayed blocks is not formalized here. See
+the ambient zero complement is not formalized here. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isNormalTensor_of_card_active_eq_one_of_fullActiveSupport
-    (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
-    (hfull : data.HasFullActiveSupport)
+theorem isNormalTensor_of_r_eq_one_of_fullSupport
+    (data : CPSVCanonicalFormData A) (hr : data.r = 1)
+    (hfull : data.HasFullSupport)
     (hrad : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.transferMap A)) = 1)
     (hprim : IsPrimitive (Kraus.transferMap A)) : IsNormalTensor A where
   no_invariant_proj :=
-    data.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport hcard hfull
+    data.isIrreducibleTensor_of_r_eq_one_of_fullSupport hr hfull
   spectral_radius_one := hrad
   primitive_transfer := hprim
 
@@ -347,7 +316,7 @@ private theorem sqrt_blockPhysDim (d p : ℕ) :
 between a doubled blocked index and a block of doubled indices.
 
 The identity holds for every blocking length; positivity is required only when it is used to
-preserve the active support and normal blocks.
+preserve the full support and normal blocks.
 
 Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, equation
 `eq:transfer-op`, and line 356. -/
@@ -382,30 +351,30 @@ noncomputable def blockTensorCFIIData (U : MPOTensor d D)
   exact (data.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
 
 /-- The normalized flattening of an MPU is normal when the chosen CPSV canonical-form
-representative has full active support.
+representative has full support.
 
-**Scope restriction (full active support):** Bare `IsMPU` does not imply normality for a
+**Scope restriction (full support):** Bare `IsMPU` does not imply normality for a
 nonminimal ambient representative: adjoining a zero virtual direct summand preserves all
 periodic operators but introduces a nontrivial invariant projection. This theorem treats
 the intended reduced representative in arXiv:1703.09188, Proposition
-`prop:normal-tensor`, lines 319--326 and 344--354, by requiring full active support.
+`prop:normal-tensor`, lines 319--326 and 344--354, by requiring full support.
 See `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
     [NeZero d] [NeZero D] {U : MPOTensor d D}
     (hU : U.IsMPU)
     (data : MPSTensor.CPSVCanonicalFormData U.normalizedFlattening)
-    (hfull : data.HasFullActiveSupport) :
+    (hfull : data.HasFullSupport) :
     MPSTensor.IsNormalTensor U.normalizedFlattening := by
   have htrace : ∀ N : ℕ, 1 < N →
       Matrix.trace
         (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 :=
     fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
-  have hcard : Fintype.card data.Active = 1 :=
-    data.card_active_eq_one_of_shifted_transfer_trace htrace
+  have hr : data.r = 1 :=
+    data.r_eq_one_of_shifted_transfer_trace htrace
   obtain ⟨hrad, hprim⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
       (Kraus.transferMap U.normalizedFlattening) htrace
-  exact data.isNormalTensor_of_card_active_eq_one_of_fullActiveSupport
-    hcard hfull hrad hprim
+  exact data.isNormalTensor_of_r_eq_one_of_fullSupport
+    hr hfull hrad hprim
 
 end MPOTensor

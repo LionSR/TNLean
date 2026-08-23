@@ -14,9 +14,6 @@ block-diagonal similarity and a rectangular coisometry.  This file proves that c
 one marked physical letter pass across the rectangular reconstruction, identifies physical linear
 marks with the full grouped marked tensor, and obtains Lemma L on the original bond space.
 
-Inactive listed coordinates remain in every full grouped tensor.  Their marked blocks vanish from
-the zero raw weight; no statement is made about the corresponding unweighted blocks.
-
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
@@ -99,22 +96,21 @@ private theorem cast_linearMarkedTensor
   subst n
   rfl
 
-namespace CPSVCanonicalFormData.ActiveBNTRefinement
+namespace CPSVCanonicalFormData.BNTRefinement
 
 variable {A : MPSTensor d D} {data : CPSVCanonicalFormData A}
 
 /-- Linear marking of the full grouped tensor is exactly the full grouped marked tensor formed
 from the representative linear marks.
 
-Active copies carry their raw weight and phase.  Every inactive listed coordinate remains present,
-but its marked block is zero because its raw weight is zero.
+Every copy carries its raw weight and phase.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1848--1858. -/
 theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
-    (ref : data.ActiveBNTRefinement) (f : Fin e → Fin d → ℂ) :
+    (ref : data.BNTRefinement) (f : Fin e → Fin d → ℂ) :
     linearMarkedTensor f ref.groupedTensor =
       ref.groupedMarkedTensor
-        (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) := by
+        (fun j => linearMarkedTensor f (data.blocks (data.representativeIndex j))) := by
   classical
   rw [← funext ref.regroupedTensor_eq_groupedTensor,
     linearMarkedTensor_toTensorFromBlocks]
@@ -123,27 +119,19 @@ theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
       data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) =
         ref.groupedMarkedBlocks
           (fun j => linearMarkedTensor f
-            (data.blocks (data.activeRepresentativeIndex j))) k := by
+            (data.blocks (data.representativeIndex j))) k := by
     intro k
     funext u
-    by_cases hk : data.weights k ≠ 0
-    · let ka : data.Active := ⟨k, hk⟩
-      change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
-        ref.groupedMarkedBlocks
-          (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) k u
-      rw [ref.groupedMarkedBlocks_active _ ka, ref.regroupedBlocksActive ka]
-      rw [cast_linearMarkedTensor (ref.copyDimEq ka)]
-      simp only [linearMarkedTensor, Pi.smul_apply, Finset.smul_sum, smul_smul]
-      apply Finset.sum_congr rfl
-      intro z _
-      congr 1
-      ring
-    · change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
-        ref.groupedMarkedBlocks
-          (fun j => linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))) k u
-      have hzero : data.weights k = 0 := not_ne_iff.mp hk
-      rw [hzero]
-      simp [groupedMarkedBlocks, hk]
+    change data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u =
+      ref.groupedMarkedBlocks
+        (fun j => linearMarkedTensor f (data.blocks (data.representativeIndex j))) k u
+    rw [groupedMarkedBlocks, ref.regroupedBlocksEq k]
+    rw [cast_linearMarkedTensor (ref.copyDimEq k)]
+    simp only [linearMarkedTensor, Pi.smul_apply, Finset.smul_sum, smul_smul]
+    apply Finset.sum_congr rfl
+    intro z _
+    congr 1
+    ring
   unfold toTensorFromBlocks
   funext u
   change (Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv)
@@ -153,14 +141,14 @@ theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
       (Matrix.blockDiagonal' fun k =>
         (1 : ℂ) • ref.groupedMarkedBlocks
           (fun j => linearMarkedTensor f
-            (data.blocks (data.activeRepresentativeIndex j))) k u)
+            (data.blocks (data.representativeIndex j))) k u)
   have hBlockDiagonal :
       (Matrix.blockDiagonal' fun k =>
         data.weights k • linearMarkedTensor f (ref.regroupedBlocks k) u) =
       (Matrix.blockDiagonal' fun k =>
         (1 : ℂ) • ref.groupedMarkedBlocks
           (fun j => linearMarkedTensor f
-            (data.blocks (data.activeRepresentativeIndex j))) k u) := by
+            (data.blocks (data.representativeIndex j))) k u) := by
     congr 1
     funext k
     simpa using congrFun (hBlocks k) u
@@ -171,11 +159,11 @@ theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
 Equality of every positive-tail closed chain with one marked physical letter implies equality of
 the two linear marked tensors on the original bond space.  The proof uses the original ambient
 coisometry in the orientation `U * Uᴴ = 1`, the listed block gauge, and the full
-grouped tensor including inactive zero-weight coordinates.
+grouped tensor.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem linearMarkedTensor_eq_of_trace_agree
-    (ref : data.ActiveBNTRefinement) (f g : Fin e → Fin d → ℂ)
+    (ref : data.BNTRefinement) (f g : Fin e → Fin d → ℂ)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A (List.ofFn w)) =
         Matrix.trace (linearMarkedTensor g A u * Kraus.evalWord A (List.ofFn w))) :
@@ -191,10 +179,10 @@ theorem linearMarkedTensor_eq_of_trace_agree
   have hGauge : ∀ i, B i =
       (X : Matrix _ _ ℂ) * ref.groupedTensor i *
         (↑(X⁻¹) : Matrix _ _ ℂ) := fun _ => rfl
-  let Cf := fun j : Fin data.activePhaseClasses.g =>
-    linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))
-  let Cg := fun j : Fin data.activePhaseClasses.g =>
-    linearMarkedTensor g (data.blocks (data.activeRepresentativeIndex j))
+  let Cf := fun j : Fin data.phaseClasses.g =>
+    linearMarkedTensor f (data.blocks (data.representativeIndex j))
+  let Cg := fun j : Fin data.phaseClasses.g =>
+    linearMarkedTensor g (data.blocks (data.representativeIndex j))
   have hGroupedTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (ref.groupedMarkedTensor Cf u * Kraus.evalWord ref.groupedTensor (List.ofFn w)) =
         Matrix.trace (ref.groupedMarkedTensor Cg u *
@@ -233,7 +221,7 @@ theorem linearMarkedTensor_eq_of_trace_agree
 /-- Physical first-site Lemma L in the original bond coordinates of a literal CPSV canonical
 form. -/
 theorem insertedTensor_eq_of_firstSiteActionAgree
-    (ref : data.ActiveBNTRefinement) {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (ref : data.BNTRefinement) {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
   apply ref.linearMarkedTensor_eq_of_trace_agree Y Z
@@ -241,7 +229,7 @@ theorem insertedTensor_eq_of_firstSiteActionAgree
   simpa [linearMarkedTensor, insertedTensor] using
     hAct.trace_evalWord u (List.ofFn w)
 
-end CPSVCanonicalFormData.ActiveBNTRefinement
+end CPSVCanonicalFormData.BNTRefinement
 
 namespace IsCPSVCanonicalForm
 
@@ -255,7 +243,7 @@ theorem linearMarkedTensor_eq_of_trace_agree
         Matrix.trace (linearMarkedTensor g A u * Kraus.evalWord A (List.ofFn w))) :
     linearMarkedTensor f A = linearMarkedTensor g A := by
   let data := Classical.choice hCanonical
-  let ref := data.activeBNTRefinement
+  let ref := data.bntRefinement
   exact ref.linearMarkedTensor_eq_of_trace_agree f g hTrace
 
 /-- Predicate-level physical first-site Lemma L in the original bond coordinates of a literal
@@ -265,7 +253,7 @@ theorem insertedTensor_eq_of_firstSiteActionAgree
     {Y Z : Matrix (Fin d) (Fin d) ℂ} (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
   let data := Classical.choice hCanonical
-  let ref := data.activeBNTRefinement
+  let ref := data.bntRefinement
   exact ref.insertedTensor_eq_of_firstSiteActionAgree hAct
 
 end IsCPSVCanonicalForm

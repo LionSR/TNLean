@@ -220,6 +220,7 @@ private noncomputable def cubePhaseDoubledCanonicalData :
     CPSVCanonicalFormData
       (toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor)) :=
   CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
+    (fun q => norm_ne_zero_iff.mp (by rw [norm_cubePhaseDoubledWeight]; exact one_ne_zero))
     (fun _ : Fin 4 => scalarUnitTensor)
     (fun _ => scalarUnitTensor_isNormalTensor)
 

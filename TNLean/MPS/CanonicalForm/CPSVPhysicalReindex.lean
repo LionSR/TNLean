@@ -67,6 +67,7 @@ noncomputable def reindexPhysical {A : MPSTensor d₂ D}
   dim := data.dim
   dim_pos := data.dim_pos
   weights := data.weights
+  weights_ne_zero := data.weights_ne_zero
   blocks := fun k ↦ Kraus.reindexPhysical e (data.blocks k)
   blocks_normal := fun k ↦ (data.blocks_normal k).reindexPhysical e
   total_dim_le := data.total_dim_le
