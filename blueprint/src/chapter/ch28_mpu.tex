@@ -836,9 +836,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.reindexPhysical_blockTensor_blockTensor}
     \leanok
     \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
-    Iterating blocking at lengths $m$ and $n$, then applying the canonical
-    regrouping of the physical indices, agrees with direct blocking at length
-    $mn$.
+    Let $e$ be the canonical bijection which groups a word of length $mn$ into
+    $n$ consecutive words of length $m$. Iterating blocking at lengths $m$ and
+    $n$, then applying this physical reindexing, agrees with direct blocking at
+    length $mn$:
+    \begin{align}
+        e^*((\mathcal U_m)_n) & =\mathcal U_{mn}.
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -4995,22 +4999,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpdo_block_two_as_positive_blocking,
         thm:mpu_source_ranks_physical_reindexing,
         lem:mpu_iterated_physical_blocking}
-    For the right cut, factor the two-site block of each tensor through its
-    source tensor $u$. The diagonal cut through the two blocked factors retains
-    one physical leg and one right source leg from each factor. Hence the
-    resulting matrix factors through
+    Use the canonical physical reindexing to identify iterated two-site
+    blocking with direct four-site blocking. For the right cut, factor the
+    two-site block of each tensor through its source tensor $u$. The diagonal
+    cut through the two blocked factors retains one physical leg and one right
+    source leg from each factor. Thus, for suitable rectangular matrices
+    $A_{1,4}$ and $B_{1,4}$,
     \begin{align}
-        (\mathbb C^d\otimes\mathbb C^{r[\mathcal U]})
-        \otimes
-        (\mathbb C^d\otimes\mathbb C^{r[\mathcal V]}),
+        M_1((\mathcal U\mathcal V)_4) & =A_{1,4}B_{1,4},
     \end{align}
-    whose dimension is $d^2r[\mathcal U]r[\mathcal V]$. Matrix rank is at most
-    the dimension of this intermediate space. For the left cut, use the
-    reflected $v$ factorization. Its physical order $(j_2,j_1)$ and source
-    order $(r,l)$ give the analogous intermediate dimension
-    $d^2\ell[\mathcal U]\ell[\mathcal V]$. Finally, identify iterated two-site
-    blocking with direct four-site blocking by the standard physical
-    reindexing; both source-cut ranks are invariant under this relabeling.
+    where the columns of $A_{1,4}$ and the rows of $B_{1,4}$ are indexed by
+    \begin{align}
+        \mathcal K_1
+         & =(\mathbb C^d\otimes\mathbb C^{r[\mathcal U]})
+        \otimes
+        (\mathbb C^d\otimes\mathbb C^{r[\mathcal V]}).
+    \end{align}
+    Consequently,
+    \begin{align}
+        r[(\mathcal U\mathcal V)_4]
+         &=\operatorname{rank}(A_{1,4}B_{1,4})
+        \leq\dim(\mathcal K_1)
+        =d^2r[\mathcal U]r[\mathcal V].
+    \end{align}
+    For the left cut, use the reflected $v$ factorization, with its physical
+    order $(j_2,j_1)$ and source order $(r,\ell)$. For suitable rectangular
+    matrices $A_{2,4}$ and $B_{2,4}$,
+    \begin{align}
+        M_2((\mathcal U\mathcal V)_4) & =A_{2,4}B_{2,4},
+    \end{align}
+    where the intermediate space is
+    \begin{align}
+        \mathcal K_2
+         & =(\mathbb C^d\otimes\mathbb C^{\ell[\mathcal U]})
+        \otimes
+        (\mathbb C^d\otimes\mathbb C^{\ell[\mathcal V]}).
+    \end{align}
+    Hence
+    \begin{align}
+        \ell[(\mathcal U\mathcal V)_4]
+         &=\operatorname{rank}(A_{2,4}B_{2,4})
+        \leq\dim(\mathcal K_2)
+        =d^2\ell[\mathcal U]\ell[\mathcal V].
+    \end{align}
+    Both source-cut ranks are unchanged by the canonical physical relabeling.
 \end{proof}
 
 \begin{lemma}[Composition additivity]
