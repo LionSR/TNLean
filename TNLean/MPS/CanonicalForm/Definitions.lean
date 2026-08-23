@@ -196,6 +196,10 @@ structure CPSVCanonicalFormData (A : MPSTensor d D) where
   dim_pos : ∀ k, 0 < dim k
   /-- Scalar weight of each retained block (CPSV16, eq. `II_Aiplusk1`). -/
   weights : Fin r → ℂ
+  /-- Every retained weight is nonzero: the blocks of CPSV16, lines 214--225, are the
+  nonzero summands, normalized at line 246 by `‖μ_k‖ ≤ 1` with one weight of modulus
+  one. -/
+  weights_ne_zero : ∀ k, weights k ≠ 0
   /-- Retained normal blocks (CPSV16, eq. `II_CF1`). -/
   blocks : (k : Fin r) → MPSTensor d (dim k)
   /-- Every retained block is normal (CPSV16, lines 233--245 and eq. `II_CF1`). -/
@@ -234,6 +238,7 @@ coordinates.
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 noncomputable def ofBlocks {r : ℕ} {dim : Fin r → ℕ}
     (dim_pos : ∀ k, 0 < dim k) (weights : Fin r → ℂ)
+    (weights_ne_zero : ∀ k, weights k ≠ 0)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (blocks_normal : ∀ k, IsNormalTensor (blocks k)) :
     CPSVCanonicalFormData (toTensorFromBlocks (d := d) weights blocks) where
@@ -241,6 +246,7 @@ noncomputable def ofBlocks {r : ℕ} {dim : Fin r → ℕ}
   dim := dim
   dim_pos := dim_pos
   weights := weights
+  weights_ne_zero := weights_ne_zero
   blocks := blocks
   blocks_normal := blocks_normal
   total_dim_le := le_rfl
@@ -272,7 +278,7 @@ theorem mpv_eq_sum_weight_pow (data : CPSVCanonicalFormData A)
 
 /-- CPSV16 line 246's weight convention, separated from literal canonical-form
 membership.  The unit weight is required exactly when the ambient tensor is
-nonzero; no retained weight is required to be nonzero.
+nonzero.
 
 Source: arXiv:1606.00608, Section 2.3, line 246. -/
 structure IsWeightNormalized (data : CPSVCanonicalFormData A) : Prop where

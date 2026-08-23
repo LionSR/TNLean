@@ -86,6 +86,7 @@ noncomputable def physicalAdjointNormalizedFlattening
   dim := data.dim
   dim_pos := data.dim_pos
   weights := fun k ↦ star (data.weights k)
+  weights_ne_zero := fun k ↦ star_ne_zero.mpr (data.weights_ne_zero k)
   blocks := fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
     (MPSTensor.mapStar (data.blocks k))
   blocks_normal := fun k ↦

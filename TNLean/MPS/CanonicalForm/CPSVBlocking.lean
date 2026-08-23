@@ -153,6 +153,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
   dim := data.dim
   dim_pos := data.dim_pos
   weights := fun k ↦ data.weights k ^ p
+  weights_ne_zero := fun k ↦ pow_ne_zero p (data.weights_ne_zero k)
   blocks := fun k ↦ MPSTensor.blockTensor (d := d) (D := data.dim k) (data.blocks k) p
   blocks_normal := fun k ↦ (data.blocks_normal k).blockTensor p hp
   total_dim_le := data.total_dim_le

@@ -332,6 +332,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
   dim := data.dim
   dim_pos := data.dim_pos
   weights := data.weights
+  weights_ne_zero := data.weights_ne_zero
   blocks := fun k ↦ normalizedDiagonalLift (data.blocks k) x
   blocks_normal := fun k ↦
     isNormalTensor_normalizedDiagonalLift (data.blocks_normal k) x hx

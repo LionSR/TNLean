@@ -437,7 +437,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Let $A$ have bond dimension $D$. It is in the canonical
     form of \cite[Section~2.3]{Cirac2016MPDO_arXiv} if there are positive
     integers $D_1,\ldots,D_r$, normal tensors $A_k$ of bond dimension $D_k$,
-    weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
+    nonzero weights $\mu_k\in\C$, and, writing $S=\sum_kD_k$, a matrix
     $U\in\C^{S\times D}$ such that $S\le D$ and, for every physical index~$i$,
     \begin{align}
         UU^\dagger
@@ -460,8 +460,11 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
          & \Longrightarrow\exists k,\ |\mu_k|=1.
         \label{eq:cpsv_weight_normalization}
     \end{align}
-    No weight is required to be nonzero, and no ordering or separation condition
-    is imposed.
+    Every weight $\mu_k$ is nonzero by definition: the summands of
+    \eqref{eq:cpsv_canonical_form} are the nonzero terms of line~246 of
+    \cite{Cirac2016MPDO_arXiv}. No ordering or separation condition is imposed;
+    the normalization \eqref{eq:cpsv_weight_normalization} is recorded
+    separately from canonical-form membership.
 
     The basis-of-normal-tensors refinement is
     Definition~\ref{def:bnt}; it is not part of canonical form itself.

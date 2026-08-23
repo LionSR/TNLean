@@ -195,7 +195,8 @@ private theorem corollary312Tensor_isCPSVCanonicalForm :
       exact hxzero.symm
   rw [← hEq]
   exact (CPSVCanonicalFormData.ofBlocks
-    (fun _ : Fin 1 => by simp) (fun _ => (1 : ℂ)) (fun _ => corollary312Tensor)
+    (fun _ : Fin 1 => by simp) (fun _ => (1 : ℂ)) (fun _ => one_ne_zero)
+    (fun _ => corollary312Tensor)
     (fun _ => corollary312Tensor_isNormalTensor)).isCPSVCanonicalForm
 
 private theorem corollary312Tensor_isTransferIdempotent :

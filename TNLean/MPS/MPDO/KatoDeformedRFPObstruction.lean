@@ -389,6 +389,11 @@ private noncomputable def block1Weight : ℂ := (1 : ℂ) / (2 * Real.sqrt 2)
 private noncomputable def katoCFWeights : Fin 2 → ℂ :=
   fun k => match k with | 0 => block0Weight | 1 => block1Weight
 
+private lemma katoCFWeights_ne_zero (k : Fin 2) : katoCFWeights k ≠ 0 := by
+  have hs : (Real.sqrt 2 : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_pos.mpr (show (0 : ℝ) < 2 by norm_num)).ne'
+  fin_cases k <;> simp [katoCFWeights, block0Weight, block1Weight, hs]
+
 private lemma block0Weight_times_amplitude :
     block0Weight * blockLetterAmplitude = (1 / 2 : ℂ) := by
   calc
@@ -584,7 +589,7 @@ theorem tensor_toMPSTensor_isCPSVCanonicalForm :
     MPSTensor.IsCPSVCanonicalForm (MPOTensor.toMPSTensor tensor) := by
   rw [toMPSTensor_eq_toTensorFromBlocks]
   exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
-    (fun _ => by norm_num) katoCFWeights katoCFBlocks
+    (fun _ => by norm_num) katoCFWeights katoCFWeights_ne_zero katoCFBlocks
     katoCFBlocks_normal).isCPSVCanonicalForm
 
 /-! ### Strong Area Law (SAL)
