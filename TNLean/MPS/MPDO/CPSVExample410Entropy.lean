@@ -47,20 +47,14 @@ namespace MPOTensor.CPSVExample410Entropy
 
 open CPSVExample410Operator CPSVExample410Spectrum
 
-private lemma blockEntropy_of_roots {L : ℕ} (hL : L ≤ 4) (s : Multiset ℝ)
-    (hroots : (reducedBlockState M 4 L hL).charpoly.roots =
-      s.map (fun r : ℝ ↦ (r : ℂ))) :
-    blockEntropy M 4 L hL (M_isMPDO 4 (by omega)) = (s.map Real.negMulLog).sum := by
-  exact Matrix.vonNeumannEntropy_of_charpoly_roots_eq
-    (reducedBlockState_isHermitian M 4 L hL (M_isMPDO 4 (by omega))) s hroots
-
 /-- The one-site block entropy of the corrected $p=1/4$ tensor on the four-site ring equals the
 one-spin correlated-flip window entropy. This is a project-derived consequence of the spectrum,
 not a universal-in-$p$ claim from CPSV16. -/
 theorem blockEntropy_one :
     blockEntropy M 4 1 (by omega) (M_isMPDO 4 (by omega)) =
       CPSVExample410CorrelatedFlip.entropyOne := by
-  rw [blockEntropy_of_roots (by omega) (4 • {(1 / 4 : ℝ)})]
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
+    (4 • {(1 / 4 : ℝ)})]
   · rw [CPSVExample410CorrelatedFlip.entropyOne]
     simp only [Multiset.map_nsmul, Multiset.map_singleton, Multiset.sum_nsmul,
       Multiset.sum_singleton]
@@ -76,7 +70,7 @@ spectrum. -/
 theorem blockEntropy_two :
     blockEntropy M 4 2 (by omega) (M_isMPDO 4 (by omega)) =
       CPSVExample410CorrelatedFlip.entropyTwo := by
-  rw [blockEntropy_of_roots (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
     (8 • {(0 : ℝ)} + 4 • {(5 / 32 : ℝ)} + 4 • {(3 / 32 : ℝ)})]
   · rw [CPSVExample410CorrelatedFlip.entropyTwo]
     simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
@@ -96,7 +90,7 @@ spectrum. -/
 theorem blockEntropy_three :
     blockEntropy M 4 3 (by omega) (M_isMPDO 4 (by omega)) =
       CPSVExample410CorrelatedFlip.entropyThree := by
-  rw [blockEntropy_of_roots (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
     (48 • {(0 : ℝ)} + 4 • {(7 / 64 : ℝ)} + 12 • {(3 / 64 : ℝ)})]
   · rw [CPSVExample410CorrelatedFlip.entropyThree]
     simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
@@ -115,7 +109,7 @@ This identity is project-derived from the exact full-state spectrum. -/
 theorem blockEntropy_four :
     blockEntropy M 4 4 (by omega) (M_isMPDO 4 (by omega)) =
       CPSVExample410CorrelatedFlip.entropyFour := by
-  rw [blockEntropy_of_roots (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
     (248 • {(0 : ℝ)} + {(41 / 128 : ℝ)} + 4 • {(15 / 128 : ℝ)} +
       3 • {(9 / 128 : ℝ)})]
   · rw [CPSVExample410CorrelatedFlip.entropyFour,

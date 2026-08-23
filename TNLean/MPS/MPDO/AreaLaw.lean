@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.NatInterval
-import QICLean.Analysis.Entropy
-import TNLean.MPS.MPDO.Defs
 import Mathlib.Data.List.Rotate
 import Mathlib.Logic.Equiv.Fin.Rotate
+import QICLean.Analysis.EntropyDecomposition
+import TNLean.Algebra.NatInterval
+import TNLean.MPS.MPDO.Defs
 
 /-!
 # Saturation of the area law for MPDO and MPS tensors
@@ -37,6 +37,8 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 * `MPOTensor.reducedBlockState`: the reduced state of the first `L` spins of
   `σ^{(N)}(M)`.
 * `MPOTensor.blockEntropy`: the block entropy `S_L`.
+* `MPOTensor.blockEntropy_of_charpoly_roots_eq`: computes block entropy from a real
+  characteristic-root multiset.
 * `MPOTensor.mutualInfoChain`: the mutual information `I_L = S_L + S_{N-L} - S_N`.
 * `MPOTensor.IsSAL`: the saturation-of-the-area-law predicate for MPDO.
 * `MPSTensor.normalizedPureState`, `MPSTensor.pureBlockEntropy`,
@@ -375,6 +377,16 @@ noncomputable def blockEntropy (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef) : ℝ :=
   vonNeumannEntropy (reducedBlockState M N L hL)
     (reducedBlockState_isHermitian M N L hL hM)
+
+/-- The block entropy is the sum of `Real.negMulLog` over any real multiset whose
+complex image is the characteristic-root multiset of the reduced block state. -/
+theorem blockEntropy_of_charpoly_roots_eq (M : MPOTensor d D) (hM : IsMPDO M)
+    {N L : ℕ} (hN : 0 < N) (hL : L ≤ N) (s : Multiset ℝ)
+    (hroots : (reducedBlockState M N L hL).charpoly.roots =
+      s.map (fun r : ℝ ↦ (r : ℂ))) :
+    blockEntropy M N L hL (hM N hN) = (s.map Real.negMulLog).sum := by
+  exact Matrix.vonNeumannEntropy_of_charpoly_roots_eq
+    (reducedBlockState_isHermitian M N L hL (hM N hN)) s hroots
 
 /-- The **mutual information** `I_L = S_L + S_{N-L} - S_N` between a block of `L`
 spins and the rest of the chain, for the normalized state `σ^{(N)}(M)`.

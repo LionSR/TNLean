@@ -602,6 +602,13 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Block entropy from real characteristic roots
+- **Pattern:** derive a block entropy from a known real multiset of characteristic roots.
+- **Reuse:** `MPOTensor.blockEntropy_of_charpoly_roots_eq` in
+  `TNLean/MPS/MPDO/AreaLaw.lean` owns the shared entropy argument.
+- **Result:** both CPSV16 Example 4.10 and 4.11 entropy modules reuse the theorem instead of
+  duplicating private wrappers around the matrix entropy API.
+
 ### Reversing `List.ofFn` by `Fin.rev`
 - **Seen:** five former proofs in `Kraus.Blocking`, `Kraus.Wielandt.RankOne.Construction`,
   `Kraus.Wielandt.RectangularSpan.Basic`, `MPS.MPDO.Defs`, and
