@@ -129,7 +129,7 @@ namespace IsQCA
 
 /-- Every one-dimensional QCA becomes a nearest-neighbor QCA after some positive site blocking.
 
-This packages propagation normalization and preservation of the QCA axioms. It does not
+This combines propagation normalization with preservation of the QCA axioms. It does not
 construct the Schumacher--Werner support algebras or circuit, nor an MPU standard form.
 
 Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
