@@ -105,6 +105,7 @@ SKETCHROW
       if (atxlevel("    ## Section") != 0 ||
           atxlevel("####### Section") != 0 ||
           atxlevel("##Section") != 0 ||
+          atxlevel("##\tSection") != 2 ||
           atxlevel("#6235") != 0 || atxlevel("###") != 3) exit 71
     }
     # Markdown gives fences and ATX headings the same indentation allowance.
@@ -119,7 +120,7 @@ SKETCHROW
       while (substr(copy, h + 1, 1) == "#") h++
       if (h == 0 || h > 6) return 0
       separator = substr(copy, h + 1, 1)
-      if (separator != "" && separator != " ") return 0
+      if (separator != "" && separator != " " && separator != "\t") return 0
       return h
     }
     # The run of fence characters opening or closing a fence on this line:
