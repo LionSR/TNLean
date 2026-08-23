@@ -2249,7 +2249,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Entry forms of the source-cut factorizations]
     \label{thm:mpu_source_factorization_entries}
-    \lean{MPOTensor.sourceX₁_mul_sourceY₁_apply,
+    \lean{MPOTensor.SourceFactors.X₁_mul_Y₁_apply,
+        MPOTensor.SourceFactors.X₂_mul_Y₂_apply,
+        MPOTensor.sourceX₁_mul_sourceY₁_apply,
         MPOTensor.sourceX₂_mul_sourceY₂_apply}
     \leanok
     \uses{thm:mpu_source_factorizations, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
@@ -2381,13 +2383,20 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Source tensors $u$ and $v$]
     \label{def:mpu_source_uv}
-    \lean{MPOTensor.sourceU,MPOTensor.sourceV,
+    \lean{MPOTensor.SourceFactors.sourceU,
+        MPOTensor.SourceFactors.sourceV,
+        MPOTensor.SourceFactors.sourceU_apply,
+        MPOTensor.SourceFactors.sourceV_apply,
+        MPOTensor.sourceFactors_sourceU,
+        MPOTensor.sourceFactors_sourceV,
+        MPOTensor.sourceU,MPOTensor.sourceV,
         MPOTensor.sourceU_apply,MPOTensor.sourceV_apply,
         MPOTensor.sourceU_conjTranspose_apply,
         MPOTensor.sourceV_conjTranspose_apply}
     \leanok
     \uses{def:mpu_weighted_source_factors}
-    For a positive definite source weight $\rho$, define
+    Given any six source factors satisfying the two source-cut
+    factorizations and their normalization identities, define
     \begin{align}
         u & : \mathbb C^d\otimes\mathbb C^d
         \longrightarrow \mathbb C^\ell\otimes\mathbb C^r, \\
@@ -2404,7 +2413,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     The source legs of $u$ have order $\ell\times r$, whereas those of $v$
     have order $r\times\ell$. These are the two source tensors introduced
     after the source-cut decompositions in \cite[Section~III]{Cirac2017MPU}.
-    The entry formulas also fix the conjugate-transpose orientation.
+    The entry formulas also fix the conjugate-transpose orientation. The
+    compact singular-value decompositions above give one such choice and
+    recover the same tensors $u$ and $v$.
 \end{definition}
 
 \begin{theorem}[Exact translated two-site source factorization]
@@ -2448,7 +2459,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Open two-site source factorization]
     \label{thm:mpu_source_u_open_two_site}
-    \lean{MPOTensor.sum_sourceX₁_mul_sourceU,
+    \lean{MPOTensor.SourceFactors.mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂,
+        MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₁_mul_sourceU_mul_Y₂,
+        MPOTensor.sum_sourceX₁_mul_sourceU,
         MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂,
         MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂}
@@ -2490,7 +2503,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Reflected open two-site source factorization]
     \label{thm:mpu_source_v_open_two_site}
-    \lean{MPOTensor.mul_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁,
+    \lean{MPOTensor.SourceFactors.mul_apply_eq_sum_X₂_mul_sourceV_reflected_mul_Y₁,
+        MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceV_reflected_mul_Y₁,
+        MPOTensor.mul_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁}
     \leanok
     \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
