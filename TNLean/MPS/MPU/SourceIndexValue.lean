@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.SourceCuts
+import TNLean.MPS.MPU.BlockingRanks
 import Mathlib.Analysis.SpecialFunctions.Log.Base
 
 /-!
@@ -34,6 +34,8 @@ of the chosen simple blocking, is not asserted here.
 
 * `MPOTensor.sourceIndexValue_eq_of_common_rank_scale`: cancellation of a
   supplied common positive rank scale.
+* `MPOTensor.sourceIndexValue_blockTensor_eq_of_products`: blocking invariance
+  under supplied endpoint rank-product identities.
 * `MPOTensor.sourceIndexValue_eq_add_of_common_rank_product`: additivity from
   supplied source-rank product identities with a common positive factor.
 * `MPOTensor.sourceIndexValue_eq_logb_rightRank_div`: the right-rank formula
@@ -76,6 +78,36 @@ theorem sourceIndexValue_eq_of_common_rank_scale
   have hℓReal : (ℓ[U] : ℝ) ≠ 0 := by exact_mod_cast hℓU.ne'
   rw [Real.logb_mul hcReal hrReal, Real.logb_mul hcReal hℓReal]
   ring
+
+/-- Suppose $k₀ \le k$, the physical dimension $d$ is positive, and the
+endpoint source ranks satisfy
+$$
+r_{k₀}\ell_{k₀}=d^{2k₀}, \qquad r_k\ell_k=d^{2k}.
+$$
+Then the specified source-index values of the two blocked tensors agree.
+
+This composes the rank-growth and logarithmic-cancellation steps in
+arXiv:1703.09188, Proposition IV.2, lines 697--704. The endpoint product
+identities and rank positivity are explicit hypotheses; this theorem neither
+chooses a simple blocking nor asserts the public blocking-independent index.
+
+**Local fix (rank-product exponent):** Source line 703 prints $d^k$; consistently
+with Theorem III.8 and the blocked physical dimension $d^k$, the endpoint
+product is $d^{2k}$. See
+`docs/paper-gaps/mpu_blocking_rank_product_exponent.tex`. -/
+theorem sourceIndexValue_blockTensor_eq_of_products (U : MPOTensor d D) {k₀ k : ℕ}
+    (h : k₀ ≤ k) (hd : 0 < d)
+    (hr₀ : 0 < r[blockTensor U k₀]) (hℓ₀ : 0 < ℓ[blockTensor U k₀])
+    (hr : 0 < r[blockTensor U k]) (hℓ : 0 < ℓ[blockTensor U k])
+    (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
+    (hprod : r[blockTensor U k] * ℓ[blockTensor U k] = d ^ (2 * k)) :
+    sourceIndexValue (blockTensor U k) hr hℓ =
+      sourceIndexValue (blockTensor U k₀) hr₀ hℓ₀ := by
+  obtain ⟨hrScale, hℓScale⟩ :=
+    blockingRanks_eq_pow_mul_of_products U h hd hprod₀ hprod
+  exact sourceIndexValue_eq_of_common_rank_scale
+    (blockTensor U k₀) (blockTensor U k) (d ^ (k - k₀)) (Nat.pow_pos hd)
+    hr₀ hℓ₀ hrScale hℓScale
 
 /-- Suppose the right and left source ranks of specified tensors $U$, $V$, and
 $W$ satisfy

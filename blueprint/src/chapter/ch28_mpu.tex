@@ -4808,6 +4808,41 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     and use $\log_2(x/y)=\log_2x-\log_2y$.
 \end{proof}
 
+\begin{theorem}[Conditional blocking invariance of the specified source-index value]
+    \label{thm:mpu_specified_source_index_blocking_invariance}
+    \lean{MPOTensor.sourceIndexValue_blockTensor_eq_of_products}
+    \leanok
+    \uses{def:mpu_specified_source_index_value, thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
+    Let $d>0$ and $k_0\leq k$. Suppose that all four endpoint source ranks
+    $r_{k_0}$, $\ell_{k_0}$, $r_k$, and $\ell_k$ are positive and satisfy
+    \begin{align}
+        r_{k_0}\ell_{k_0} & =d^{2k_0}, &
+        r_k\ell_k         & =d^{2k}.
+    \end{align}
+    Then the specified source-index values agree:
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(\mathcal U_k)
+         & =\operatorname{ind}_{\mathrm{src}}(\mathcal U_{k_0}).
+    \end{align}
+    This statement assumes the endpoint products; it neither selects a simple
+    blocking nor defines the public index.
+    % Auxiliary to paper_v2.tex lines 690--704; issue 6958.
+    % **Local fix (rank-product exponent):** Source line 703 prints $d^k$; the
+    % consistent blocked identity is $d^{2k}$. See
+    % docs/paper-gaps/mpu_blocking_rank_product_exponent.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
+    Exact blocking growth gives the common positive factor $d^{k-k_0}$:
+    \begin{align}
+        r_k    & =d^{k-k_0}r_{k_0}, &
+        \ell_k & =d^{k-k_0}\ell_{k_0}.
+    \end{align}
+    Its logarithm occurs once in each rank term and therefore cancels from
+    their difference.
+\end{proof}
+
 \begin{definition}[Index]
     \label{def:index}
     \notready
@@ -4852,7 +4887,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{index-well-defined}
     \notready
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_all_later_simple_blockings}
+    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings}
     The source index is independent of the chosen simple blocking. More
     precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
     are simple, then
