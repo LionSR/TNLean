@@ -79,6 +79,9 @@ pure-state RFP.
 * `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL`:
   even MPDO positivity and a nonzero physical-trace transfer do not remove a
   nilpotent sector invisible to the positive-length global density operators.
+* `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent`:
+  the same nonzero witness refutes the literal zero-correlation-length conclusion
+  printed in CPSV16 Theorem 4.4.
 
 ## References
 
@@ -732,5 +735,17 @@ theorem exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL :
   exact ⟨nilpotentGlobalPRFP, nilpotentGlobalPRFP_isPRFP,
     nilpotentGlobalPRFP_isMPDO, physTraceTransfer_nilpotentGlobalPRFP_ne_zero,
     nilpotentGlobalPRFP_not_isSourceZCL⟩
+
+/-- The positive-length global purification-RFP condition does not imply the
+literal zero-correlation-length equation printed in arXiv:1606.00608, Theorem
+4.4, lines 777--784, even for an MPDO with nonzero physical-trace transfer; see
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
+theorem exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent :
+    ∃ M : MPOTensor 1 3,
+      IsPRFP M ∧ IsMPDO M ∧ physTraceTransfer M ≠ 0 ∧
+        ¬ IsPhysicalTraceIdempotent M := by
+  obtain ⟨M, hPRFP, hMPDO, h0, hnot⟩ :=
+    exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL
+  exact ⟨M, hPRFP, hMPDO, h0, fun h ↦ hnot (h.isSourceZCL h0)⟩
 
 end MPOTensor
