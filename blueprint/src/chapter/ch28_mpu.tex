@@ -9433,3 +9433,108 @@ $\omega^{-1}$.
     inversion.  These are the two defining properties of a quantum cellular
     automaton.
 \end{proof}
+
+\begin{definition}[Expansion of a blocked region]
+    \label{def:qca_expanded_region}
+    \lean{SpinChain.expandedRegion,SpinChain.blockSiteEquiv}
+    \leanok
+    Let $L>0$ be a block length and let $\Lambda\subset\mathbb Z$ be finite.
+    The expansion of $\Lambda$ is
+    \begin{align}
+        \widehat\Lambda_L
+        &=\{Lx+r:x\in\Lambda,\ 0\leq r<L\}.
+    \end{align}
+    Every $z\in\widehat\Lambda_L$ has unique block coordinates $(x,r)$ with
+    $x\in\Lambda$ and $0\leq r<L$.  Increasing $r$ gives the consecutive-site
+    order within the block.  This is the finite-region site grouping used in
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}; it does not assert the
+    QCA-to-MPU converse stated at line~2308.
+\end{definition}
+
+\begin{theorem}[Coordinates and monotonicity of expanded regions]
+    \label{thm:qca_expanded_region_coordinates}
+    \lean{SpinChain.mem_expandedRegion,SpinChain.expandedRegion_mono,
+        SpinChain.mem_expandedRegion_blockSite,
+        SpinChain.blockSiteEquiv_apply_fst_val,
+        SpinChain.blockSiteEquiv_apply_snd,
+        SpinChain.blockSiteEquiv_symm_apply_val}
+    \leanok
+    \uses{def:qca_expanded_region}
+    An integer $z$ belongs to $\widehat\Lambda_L$ exactly when its quotient by
+    $L$ belongs to $\Lambda$.  The inverse block-coordinate map sends $(x,r)$
+    to $Lx+r$, and $\Lambda\subseteq\Gamma$ implies
+    $\widehat\Lambda_L\subseteq\widehat\Gamma_L$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_expanded_region}
+    Apply Euclidean division by the positive integer $L$.  Its quotient and
+    residue are unique, the residue lies in $\{0,\ldots,L-1\}$, and taking the
+    inverse coordinates gives $Lx+r$.  Monotonicity follows by retaining the
+    same quotient and residue.
+\end{proof}
+
+\begin{definition}[Blocking equivalence for finite configurations]
+    \label{def:qca_configuration_blocking}
+    \lean{SpinChain.Config.blocking}
+    \leanok
+    \uses{def:qca_expanded_region}
+    For on-site dimension $d$, configurations of $d^L$-level blocked spins on
+    $\Lambda$ are equivalent to configurations of $d$-level spins on
+    $\widehat\Lambda_L$.  The blocked label at $x$ is decoded into its ordered
+    length-$L$ word, and its $r$th letter is placed at $Lx+r$.
+\end{definition}
+
+\begin{theorem}[Evaluation and restriction of blocked configurations]
+    \label{thm:qca_configuration_blocking_formulas}
+    \lean{SpinChain.Config.blocking_apply,
+        SpinChain.Config.blocking_symm_apply,
+        SpinChain.Config.restrict_blocking}
+    \leanok
+    \uses{def:qca_configuration_blocking, thm:qca_expanded_region_coordinates}
+    Evaluation at $Lx+r$ reads the $r$th letter of the blocked spin at $x$.
+    Conversely, encoding collects these letters in increasing residue order.
+    At the configuration level, decoding commutes with restriction from
+    $\Gamma$ to $\Lambda\subseteq\Gamma$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_configuration_blocking, thm:qca_expanded_region_coordinates}
+    The two evaluation formulas are the inverse laws for the ordered word
+    encoding.  Restriction preserves the quotient block coordinate and residue,
+    so both sides have the same value at every expanded site.
+\end{proof}
+
+\begin{definition}[Finite local-algebra blocking equivalence]
+    \label{def:qca_local_blocking}
+    \lean{SpinChain.localBlocking}
+    \leanok
+    \uses{def:qca_local_algebra, def:qca_configuration_blocking}
+    Reindexing matrix rows and columns by the configuration blocking
+    equivalence gives a star-algebra equivalence
+    \begin{align}
+        \mathcal A^{(d^L)}_\Lambda
+        &\simeq \mathcal A^{(d)}_{\widehat\Lambda_L}.
+    \end{align}
+    This is only a finite-region equivalence.  No compatibility with local
+    inclusions, extension to the algebraic-local or quasi-local algebra,
+    propagation statement, or transport of quantum cellular automata is
+    asserted here.
+\end{definition}
+
+\begin{theorem}[Finite local-algebra blocking formulas]
+    \label{thm:qca_local_blocking_formulas}
+    \lean{SpinChain.localBlocking_apply,SpinChain.localBlocking_norm,
+        SpinChain.localBlocking_isometry}
+    \leanok
+    \uses{def:qca_local_blocking}
+    Matrix entries are transported by applying the inverse configuration
+    equivalence to both indices.  The blocking equivalence preserves the
+    operator norm and is an isometry.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_local_blocking}
+    The entry formula is matrix reindexing.  A star-algebra equivalence between
+    finite matrix algebras preserves the C-star norm and hence distances.
+\end{proof}
