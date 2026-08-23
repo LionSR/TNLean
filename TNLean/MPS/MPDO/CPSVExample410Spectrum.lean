@@ -10,20 +10,26 @@ import TNLean.MPS.MPDO.CPSVExample410Operator
 import TNLean.MPS.MPDO.SourceZCLMarginal
 
 /-!
-# Four-site spectrum of corrected CPSV16 Example 4.10
+# Reduced-state spectra of corrected CPSV16 Example 4.10
 
 The corrected tensor is a mixture of products of Bell states. A flip configuration on the four
 spins determines the cyclic difference pattern on the four bonds. The corresponding sixteen
 Bell-network vectors form an orthonormal family, while the eight odd-parity patterns have zero
-weight. This gives the full four-site spectrum at flip probability one quarter.
+weight. Successive prefix partial traces give the one-, two-, and three-site spectra from this
+four-site decomposition at flip probability one quarter.
 
 **Local fix (left-right correlated flip):** CPSV16 lines 901--902 repeat the left-qubit label.
 This module uses the left-right flip defined in `CPSVExample410Operator`, whose bond-pattern
 weights agree with the entropy values printed at source line 904. See
 `docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
 
-## Main result
+## Main results
 
+* `charpoly_roots_one`: the one-site state has four roots $1/4$.
+* `charpoly_roots_two`: the two-site state has eight zero roots and nonzero roots $5/32$ and
+  $3/32$, each four times.
+* `charpoly_roots_three`: the three-site state has 48 zero roots, root $7/64$ four times, and
+  root $3/64$ twelve times.
 * `charpoly_roots_four`: the normalized four-site state has nonzero roots $41/128$ once,
   $15/128$ four times, and $9/128$ three times.
 
@@ -385,6 +391,504 @@ private theorem reduced_four_eq_bellDiagonal :
   simp only [inv_one, one_mul, Nat.sub_self, pow_zero, Matrix.mul_one]
   change mpo M 4 σ τ = _
   rw [mpo_four_eq_bellDiagonal]
+
+private lemma VFour_apply_bell (σ : Fin 4 → Fin 4)
+    (t : Bool × Bool × Bool × Bool) :
+    VFour σ t =
+      bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) t.1 *
+        (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) t.2.1 *
+          (bellEmbedding ((pairEquiv (σ 2)).2, (pairEquiv (σ 3)).1) t.2.2.1 *
+            bellEmbedding ((pairEquiv (σ 3)).2, (pairEquiv (σ 0)).1) t.2.2.2)) := by
+  rfl
+
+private def bitEmbedding : Matrix (Fin 2) Bool ℂ := fun i b =>
+  if finTwoEquiv i = b then 1 else 0
+
+private lemma bitEmbedding_isometry : bitEmbeddingᴴ * bitEmbedding = 1 := by
+  ext b c
+  rcases b <;> rcases c <;>
+    norm_num [bitEmbedding, Matrix.mul_apply, Fin.sum_univ_two,
+      Matrix.conjTranspose_apply, Matrix.one_apply, finTwoEquiv]
+
+private def rawThree : Matrix
+    (Fin 2 × ((Fin 2 × Fin 2) × ((Fin 2 × Fin 2) × Fin 2)))
+    (Bool × Bool × Bool × Bool) ℂ :=
+  bitEmbedding ⊗ₖ (bellEmbedding ⊗ₖ (bellEmbedding ⊗ₖ bitEmbedding))
+
+private def rowThreeEquiv :
+    (Fin 2 × ((Fin 2 × Fin 2) × ((Fin 2 × Fin 2) × Fin 2))) ≃
+      (Fin 3 → Fin 4) where
+  toFun x n := if n = 0 then pairEquiv.symm (x.1, x.2.1.1)
+    else if n = 1 then pairEquiv.symm (x.2.1.2, x.2.2.1.1)
+    else pairEquiv.symm (x.2.2.1.2, x.2.2.2)
+  invFun σ := ((pairEquiv (σ 0)).1,
+    (((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1),
+      ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1), (pairEquiv (σ 2)).2))
+  left_inv x := by rcases x with ⟨l0, ⟨⟨r0, l1⟩, ⟨⟨r1, l2⟩, r2⟩⟩⟩; simp
+  right_inv σ := by funext n; fin_cases n <;> simp
+
+private def VThree : Matrix (Fin 3 → Fin 4) (Bool × Bool × Bool × Bool) ℂ :=
+  Matrix.reindex rowThreeEquiv (Equiv.refl _) rawThree
+
+private lemma VThree_apply (σ : Fin 3 → Fin 4) (x : Bool × Bool × Bool × Bool) :
+    VThree σ x =
+      bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+          (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) x.2.2.1 *
+            bitEmbedding (pairEquiv (σ 2)).2 x.2.2.2)) := by
+  rfl
+
+private lemma VThree_isometry : VThreeᴴ * VThree = 1 := by
+  apply reindex_isometry rawThree rowThreeEquiv (Equiv.refl _)
+  apply kron_isometry bitEmbedding _ bitEmbedding_isometry
+  apply kron_isometry bellEmbedding _ bellEmbedding_isometry
+  exact kron_isometry bellEmbedding bitEmbedding bellEmbedding_isometry bitEmbedding_isometry
+
+private def rawTwo : Matrix
+    (Fin 2 × ((Fin 2 × Fin 2) × Fin 2)) (Bool × Bool × Bool) ℂ :=
+  bitEmbedding ⊗ₖ (bellEmbedding ⊗ₖ bitEmbedding)
+
+private def rowTwoEquiv :
+    (Fin 2 × ((Fin 2 × Fin 2) × Fin 2)) ≃ (Fin 2 → Fin 4) where
+  toFun x n := if n = 0 then pairEquiv.symm (x.1, x.2.1.1)
+    else pairEquiv.symm (x.2.1.2, x.2.2)
+  invFun σ := ((pairEquiv (σ 0)).1,
+    ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1), (pairEquiv (σ 1)).2)
+  left_inv x := by rcases x with ⟨l0, ⟨⟨r0, l1⟩, r1⟩⟩; simp
+  right_inv σ := by funext n; fin_cases n <;> simp
+
+private def VTwo : Matrix (Fin 2 → Fin 4) (Bool × Bool × Bool) ℂ :=
+  Matrix.reindex rowTwoEquiv (Equiv.refl _) rawTwo
+
+private lemma VTwo_apply (σ : Fin 2 → Fin 4) (x : Bool × Bool × Bool) :
+    VTwo σ x = bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+      (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+        bitEmbedding (pairEquiv (σ 1)).2 x.2.2) := by
+  rfl
+
+private lemma VTwo_isometry : VTwoᴴ * VTwo = 1 := by
+  apply reindex_isometry rawTwo rowTwoEquiv (Equiv.refl _)
+  apply kron_isometry bitEmbedding _ bitEmbedding_isometry
+  exact kron_isometry bellEmbedding bitEmbedding bellEmbedding_isometry bitEmbedding_isometry
+
+private def rawOne : Matrix (Fin 2 × Fin 2) (Bool × Bool) ℂ :=
+  bitEmbedding ⊗ₖ bitEmbedding
+
+private def rowOneEquiv : (Fin 2 × Fin 2) ≃ (Fin 1 → Fin 4) where
+  toFun x _ := pairEquiv.symm x
+  invFun σ := pairEquiv (σ 0)
+  left_inv x := by simp
+  right_inv σ := by funext n; fin_cases n; simp
+
+private def VOne : Matrix (Fin 1 → Fin 4) (Bool × Bool) ℂ :=
+  Matrix.reindex rowOneEquiv (Equiv.refl _) rawOne
+
+private lemma VOne_apply (σ : Fin 1 → Fin 4) (x : Bool × Bool) :
+    VOne σ x = bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+      bitEmbedding (pairEquiv (σ 0)).2 x.2 := by
+  rfl
+
+private lemma VOne_isometry : VOneᴴ * VOne = 1 := by
+  apply reindex_isometry rawOne rowOneEquiv (Equiv.refl _)
+  exact kron_isometry bitEmbedding bitEmbedding bitEmbedding_isometry bitEmbedding_isometry
+
+private lemma bellEmbedding_partial_right (a b : Fin 2) (u : Bool) :
+    ∑ z : Fin 2, bellEmbedding (a, z) u * bellEmbedding (b, z) u =
+      if a = b then 1 / 2 else 0 := by
+  fin_cases a <;> fin_cases b <;> rcases u <;>
+    norm_num [bellEmbedding, Fin.sum_univ_two, finTwoEquiv, ← pow_two,
+      ← Complex.ofReal_inv, ← Complex.ofReal_pow, inv_pow,
+      Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+
+private lemma bellEmbedding_partial_left (a b : Fin 2) (u : Bool) :
+    ∑ z : Fin 2, bellEmbedding (z, a) u * bellEmbedding (z, b) u =
+      if a = b then 1 / 2 else 0 := by
+  fin_cases a <;> fin_cases b <;> rcases u <;>
+    norm_num [bellEmbedding, Fin.sum_univ_two, finTwoEquiv, ← pow_two,
+      ← Complex.ofReal_inv, ← Complex.ofReal_pow, inv_pow,
+      Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+
+private lemma star_bitEmbedding (i : Fin 2) (b : Bool) :
+    star (bitEmbedding i b) = bitEmbedding i b := by
+  simp [bitEmbedding]
+
+private lemma star_bellEmbedding (a b : Fin 2) (u : Bool) :
+    star (bellEmbedding (a, b) u) = bellEmbedding (a, b) u := by
+  simp only [RCLike.star_def]
+  simp [bellEmbedding]
+  split_ifs <;> norm_num
+
+private lemma star_mul_of_fixed (a b : ℂ) (ha : star a = a) (hb : star b = b) :
+    star (a * b) = a * b := by
+  change (starRingEnd ℂ) a = a at ha
+  change (starRingEnd ℂ) b = b at hb
+  change (starRingEnd ℂ) (a * b) = a * b
+  rw [map_mul, ha, hb]
+
+private lemma star_VThree (σ : Fin 3 → Fin 4) (x : Bool × Bool × Bool × Bool) :
+    star (VThree σ x) = VThree σ x := by
+  rw [VThree_apply]
+  exact star_mul_of_fixed _ _ (star_bitEmbedding _ _)
+    (star_mul_of_fixed _ _ (star_bellEmbedding _ _ _)
+      (star_mul_of_fixed _ _ (star_bellEmbedding _ _ _) (star_bitEmbedding _ _)))
+
+private lemma star_VTwo (σ : Fin 2 → Fin 4) (x : Bool × Bool × Bool) :
+    star (VTwo σ x) = VTwo σ x := by
+  rw [VTwo_apply]
+  exact star_mul_of_fixed _ _ (star_bitEmbedding _ _)
+    (star_mul_of_fixed _ _ (star_bellEmbedding _ _ _) (star_bitEmbedding _ _))
+
+private lemma star_VOne (σ : Fin 1 → Fin 4) (x : Bool × Bool) :
+    star (VOne σ x) = VOne σ x := by
+  rw [VOne_apply]
+  exact star_mul_of_fixed _ _ (star_bitEmbedding _ _) (star_bitEmbedding _ _)
+
+private lemma bitEmbedding_inner (i j : Fin 2) :
+    ∑ b : Bool, bitEmbedding i b * bitEmbedding j b = if i = j then 1 else 0 := by
+  fin_cases i <;> fin_cases j <;>
+    norm_num [bitEmbedding, Fintype.sum_bool, finTwoEquiv]
+
+private lemma VFour_append_one (σ : Fin 3 → Fin 4) (q : Fin 2 × Fin 2)
+    (t : Bool × Bool × Bool × Bool) :
+    VFour (Fin.append σ (rowOneEquiv q)) t =
+      bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) t.1 *
+        (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) t.2.1 *
+          (bellEmbedding ((pairEquiv (σ 2)).2, q.1) t.2.2.1 *
+            bellEmbedding (q.2, (pairEquiv (σ 0)).1) t.2.2.2)) := by
+  rw [VFour_apply_bell]
+  have h0 : Fin.append σ (rowOneEquiv q) 0 = σ 0 := rfl
+  have h1 : Fin.append σ (rowOneEquiv q) 1 = σ 1 := rfl
+  have h2 : Fin.append σ (rowOneEquiv q) 2 = σ 2 := rfl
+  have h3 : Fin.append σ (rowOneEquiv q) 3 = pairEquiv.symm q := rfl
+  rw [h0, h1, h2, h3]
+  simp
+
+private lemma sum_two_four_factors (a b : ℂ) (f g : Fin 2 → ℂ) :
+    (∑ l, ∑ r, a * b * f l * g r) = a * b * (∑ l, f l) * ∑ r, g r := by
+  simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
+  congr 1
+  rw [Finset.mul_sum]
+
+private lemma VFour_collapse_one (σ τ : Fin 3 → Fin 4)
+    (t : Bool × Bool × Bool × Bool) :
+    ∑ z : Fin 1 → Fin 4, VFour (Fin.append σ z) t * VFour (Fin.append τ z) t =
+      (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) t.1 *
+        bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) t.1) *
+      (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) t.2.1 *
+        bellEmbedding ((pairEquiv (τ 1)).2, (pairEquiv (τ 2)).1) t.2.1) *
+      (if (pairEquiv (σ 2)).2 = (pairEquiv (τ 2)).2 then 1 / 2 else 0) *
+      (if (pairEquiv (σ 0)).1 = (pairEquiv (τ 0)).1 then 1 / 2 else 0) := by
+  rw [← rowOneEquiv.sum_comp, Fintype.sum_prod_type]
+  simp_rw [VFour_append_one]
+  simp_rw [show ∀ (l r : Fin 2),
+      (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) t.1 *
+        (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) t.2.1 *
+          (bellEmbedding ((pairEquiv (σ 2)).2, l) t.2.2.1 *
+            bellEmbedding (r, (pairEquiv (σ 0)).1) t.2.2.2))) *
+      (bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) t.1 *
+        (bellEmbedding ((pairEquiv (τ 1)).2, (pairEquiv (τ 2)).1) t.2.1 *
+          (bellEmbedding ((pairEquiv (τ 2)).2, l) t.2.2.1 *
+            bellEmbedding (r, (pairEquiv (τ 0)).1) t.2.2.2))) =
+      (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) t.1 *
+        bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) t.1) *
+      (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) t.2.1 *
+        bellEmbedding ((pairEquiv (τ 1)).2, (pairEquiv (τ 2)).1) t.2.1) *
+      (bellEmbedding ((pairEquiv (σ 2)).2, l) t.2.2.1 *
+        bellEmbedding ((pairEquiv (τ 2)).2, l) t.2.2.1) *
+      (bellEmbedding (r, (pairEquiv (σ 0)).1) t.2.2.2 *
+        bellEmbedding (r, (pairEquiv (τ 0)).1) t.2.2.2) by intros; ring]
+  rw [sum_two_four_factors]
+  rw [bellEmbedding_partial_right, bellEmbedding_partial_left]
+
+private def collapseThreeEntry (σ τ : Fin 3 → Fin 4)
+    (t : Bool × Bool × Bool × Bool) : ℂ :=
+  (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) t.1 *
+    bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) t.1) *
+  (bellEmbedding ((pairEquiv (σ 1)).2, (pairEquiv (σ 2)).1) t.2.1 *
+    bellEmbedding ((pairEquiv (τ 1)).2, (pairEquiv (τ 2)).1) t.2.1) *
+  (if (pairEquiv (σ 2)).2 = (pairEquiv (τ 2)).2 then 1 / 2 else 0) *
+  (if (pairEquiv (σ 0)).1 = (pairEquiv (τ 0)).1 then 1 / 2 else 0)
+
+private lemma VFour_collapse_one' (σ τ : Fin 3 → Fin 4)
+    (t : Bool × Bool × Bool × Bool) :
+    ∑ z : Fin 1 → Fin 4, VFour (Fin.append σ z) t * VFour (Fin.append τ z) t =
+      collapseThreeEntry σ τ t := by
+  simpa only [collapseThreeEntry] using VFour_collapse_one σ τ t
+
+private lemma weighted_VFour_collapse_one (σ τ : Fin 3 → Fin 4)
+    (t : Bool × Bool × Bool × Bool) :
+    (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) *
+      VFour (Fin.append σ z) t * VFour (Fin.append τ z) t) =
+      (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) * collapseThreeEntry σ τ t := by
+  simpa only [Finset.mul_sum, mul_assoc] using
+    congrArg ((CPSVExample410CorrelatedFlip.bondWeight t : ℂ) * ·)
+      (VFour_collapse_one' σ τ t)
+
+private lemma bitEmbedding_norm (b : Bool) :
+    ∑ i : Fin 2, bitEmbedding i b * bitEmbedding i b = 1 := by
+  rcases b <;> norm_num [bitEmbedding, Fin.sum_univ_two, finTwoEquiv]
+
+private lemma VThree_append_one (σ : Fin 2 → Fin 4) (q : Fin 2 × Fin 2)
+    (x : Bool × Bool × Bool × Bool) :
+    VThree (Fin.append σ (rowOneEquiv q)) x =
+      bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+          (bellEmbedding ((pairEquiv (σ 1)).2, q.1) x.2.2.1 *
+            bitEmbedding q.2 x.2.2.2)) := by
+  rw [VThree_apply]
+  have h0 : Fin.append σ (rowOneEquiv q) 0 = σ 0 := rfl
+  have h1 : Fin.append σ (rowOneEquiv q) 1 = σ 1 := rfl
+  have h2 : Fin.append σ (rowOneEquiv q) 2 = pairEquiv.symm q := rfl
+  rw [h0, h1, h2]
+  simp
+
+private lemma VThree_collapse_one (σ τ : Fin 2 → Fin 4)
+    (x : Bool × Bool × Bool × Bool) :
+    ∑ z : Fin 1 → Fin 4, VThree (Fin.append σ z) x * VThree (Fin.append τ z) x =
+      (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+      (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+        bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) x.2.1) *
+      (if (pairEquiv (σ 1)).2 = (pairEquiv (τ 1)).2 then 1 / 2 else 0) := by
+  rw [← rowOneEquiv.sum_comp, Fintype.sum_prod_type]
+  simp_rw [VThree_append_one]
+  simp_rw [show ∀ (l r : Fin 2),
+      (bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+          (bellEmbedding ((pairEquiv (σ 1)).2, l) x.2.2.1 * bitEmbedding r x.2.2.2))) *
+      (bitEmbedding (pairEquiv (τ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) x.2.1 *
+          (bellEmbedding ((pairEquiv (τ 1)).2, l) x.2.2.1 * bitEmbedding r x.2.2.2))) =
+      (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+      (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+        bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) x.2.1) *
+      (bellEmbedding ((pairEquiv (σ 1)).2, l) x.2.2.1 *
+        bellEmbedding ((pairEquiv (τ 1)).2, l) x.2.2.1) *
+      (bitEmbedding r x.2.2.2 * bitEmbedding r x.2.2.2) by intros; ring]
+  rw [sum_two_four_factors, bellEmbedding_partial_right, bitEmbedding_norm]
+  ring
+
+private lemma VTwo_append_one (σ : Fin 1 → Fin 4) (q : Fin 2 × Fin 2)
+    (x : Bool × Bool × Bool) :
+    VTwo (Fin.append σ (rowOneEquiv q)) x =
+      bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (σ 0)).2, q.1) x.2.1 * bitEmbedding q.2 x.2.2) := by
+  rw [VTwo_apply]
+  have h0 : Fin.append σ (rowOneEquiv q) 0 = σ 0 := rfl
+  have h1 : Fin.append σ (rowOneEquiv q) 1 = pairEquiv.symm q := rfl
+  rw [h0, h1]
+  simp
+
+private lemma VTwo_collapse_one (σ τ : Fin 1 → Fin 4) (x : Bool × Bool × Bool) :
+    ∑ z : Fin 1 → Fin 4, VTwo (Fin.append σ z) x * VTwo (Fin.append τ z) x =
+      (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+      (if (pairEquiv (σ 0)).2 = (pairEquiv (τ 0)).2 then 1 / 2 else 0) := by
+  rw [← rowOneEquiv.sum_comp, Fintype.sum_prod_type]
+  simp_rw [VTwo_append_one]
+  simp_rw [show ∀ (l r : Fin 2),
+      (bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (σ 0)).2, l) x.2.1 * bitEmbedding r x.2.2)) *
+      (bitEmbedding (pairEquiv (τ 0)).1 x.1 *
+        (bellEmbedding ((pairEquiv (τ 0)).2, l) x.2.1 * bitEmbedding r x.2.2)) =
+      (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+      (bellEmbedding ((pairEquiv (σ 0)).2, l) x.2.1 *
+        bellEmbedding ((pairEquiv (τ 0)).2, l) x.2.1) *
+      (bitEmbedding r x.2.2 * bitEmbedding r x.2.2) by intros; ring]
+  simp_rw [← Finset.mul_sum, bitEmbedding_norm, mul_one]
+  trans (bitEmbedding (pairEquiv (σ 0)).1 x.1 *
+      bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+    ∑ l, bellEmbedding ((pairEquiv (σ 0)).2, l) x.2.1 *
+      bellEmbedding ((pairEquiv (τ 0)).2, l) x.2.1
+  · rw [Finset.mul_sum]
+  · rw [bellEmbedding_partial_right]
+
+private def collapseTwoEntry (σ τ : Fin 2 → Fin 4)
+    (x : Bool × Bool × Bool × Bool) : ℂ :=
+  (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+  (bellEmbedding ((pairEquiv (σ 0)).2, (pairEquiv (σ 1)).1) x.2.1 *
+    bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) x.2.1) *
+  (if (pairEquiv (σ 1)).2 = (pairEquiv (τ 1)).2 then 1 / 2 else 0)
+
+private lemma weighted_VThree_collapse_one (σ τ : Fin 2 → Fin 4)
+    (x : Bool × Bool × Bool × Bool) :
+    (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) *
+      VThree (Fin.append σ z) x * VThree (Fin.append τ z) x) =
+      (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) *
+        collapseTwoEntry σ τ x := by
+  simpa only [Finset.mul_sum, mul_assoc, collapseTwoEntry] using
+    congrArg ((CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) * ·)
+      (VThree_collapse_one σ τ x)
+
+private def collapseOneEntry (σ τ : Fin 1 → Fin 4) (x : Bool × Bool × Bool) : ℂ :=
+  (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
+  (if (pairEquiv (σ 0)).2 = (pairEquiv (τ 0)).2 then 1 / 2 else 0)
+
+private lemma weighted_VTwo_collapse_one (σ τ : Fin 1 → Fin 4)
+    (x : Bool × Bool × Bool) :
+    (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) *
+      VTwo (Fin.append σ z) x * VTwo (Fin.append τ z) x) =
+      (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) * collapseOneEntry σ τ x := by
+  simpa only [Finset.mul_sum, mul_assoc, collapseOneEntry] using
+    congrArg ((CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) * ·)
+      (VTwo_collapse_one σ τ x)
+
+private theorem reduced_three_eq_bellDiagonal :
+    reducedBlockState M 4 3 (by omega) = singleKrausMap VThree
+      (Matrix.diagonal fun x =>
+        (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ)) := by
+  ext σ τ
+  have hcollapse := collapse_last M (N := 4) (a := 3) (b := 0) (c := 1)
+    (by omega) σ τ
+  change (∑ z : Fin 1 → Fin 4,
+      reducedBlockState M 4 4 (by omega) (Fin.append σ z) (Fin.append τ z)) = _
+    at hcollapse
+  rw [← hcollapse]
+  simp_rw [reduced_four_eq_bellDiagonal]
+  simp only [singleKrausMap_diagonal_apply_of_real VFour _ star_VFour]
+  rw [singleKrausMap_diagonal_apply_of_real VThree _ star_VThree]
+  rw [Finset.sum_comm]
+  trans ∑ t, (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) *
+    collapseThreeEntry σ τ t
+  · apply Finset.sum_congr rfl
+    intro t _
+    exact weighted_VFour_collapse_one σ τ t
+  · simp_rw [CPSVExample410CorrelatedFlip.windowWeightThree,
+      CPSVExample410CorrelatedFlip.twoBondWeight_eq_marginal]
+    rcases hσl : finTwoEquiv (pairEquiv (σ 0)).1 with _ | _ <;>
+      rcases hτl : finTwoEquiv (pairEquiv (τ 0)).1 with _ | _ <;>
+      rcases hσr : finTwoEquiv (pairEquiv (σ 2)).2 with _ | _ <;>
+      rcases hτr : finTwoEquiv (pairEquiv (τ 2)).2 with _ | _ <;>
+      simp [collapseThreeEntry, VThree_apply, bitEmbedding,
+        ← finTwoEquiv.apply_eq_iff_eq, hσl, hτl, hσr, hτr,
+        Fintype.sum_prod_type] <;> ring
+
+private theorem reduced_two_eq_bellDiagonal :
+    reducedBlockState M 4 2 (by omega) = singleKrausMap VTwo
+      (Matrix.diagonal fun x =>
+        (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ)) := by
+  ext σ τ
+  have hcollapse := collapse_last M (N := 4) (a := 2) (b := 0) (c := 1)
+    (by omega) σ τ
+  change (∑ z : Fin 1 → Fin 4,
+      reducedBlockState M 4 3 (by omega) (Fin.append σ z) (Fin.append τ z)) = _
+    at hcollapse
+  rw [← hcollapse]
+  simp_rw [reduced_three_eq_bellDiagonal]
+  simp only [singleKrausMap_diagonal_apply_of_real VThree _ star_VThree]
+  rw [singleKrausMap_diagonal_apply_of_real VTwo _ star_VTwo, Finset.sum_comm]
+  trans ∑ x, (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) *
+    collapseTwoEntry σ τ x
+  · apply Finset.sum_congr rfl
+    intro x _
+    exact weighted_VThree_collapse_one σ τ x
+  · simp_rw [CPSVExample410CorrelatedFlip.windowWeightThree,
+      CPSVExample410CorrelatedFlip.windowWeightTwo,
+      CPSVExample410CorrelatedFlip.twoBondWeight_eq_marginal,
+      CPSVExample410CorrelatedFlip.oneBondWeight_eq_marginal]
+    rcases hσl : finTwoEquiv (pairEquiv (σ 0)).1 with _ | _ <;>
+      rcases hτl : finTwoEquiv (pairEquiv (τ 0)).1 with _ | _ <;>
+      rcases hσr : finTwoEquiv (pairEquiv (σ 1)).2 with _ | _ <;>
+      rcases hτr : finTwoEquiv (pairEquiv (τ 1)).2 with _ | _ <;>
+      simp [collapseTwoEntry, VTwo_apply, bitEmbedding,
+        ← finTwoEquiv.apply_eq_iff_eq, hσl, hτl, hσr, hτr,
+        Fintype.sum_prod_type] <;> ring
+
+private theorem reduced_one_eq_bellDiagonal :
+    reducedBlockState M 4 1 (by omega) = singleKrausMap VOne
+      (Matrix.diagonal fun x =>
+        (CPSVExample410CorrelatedFlip.windowWeightOne x : ℂ)) := by
+  ext σ τ
+  have hcollapse := collapse_last M (N := 4) (a := 1) (b := 0) (c := 1)
+    (by omega) σ τ
+  change (∑ z : Fin 1 → Fin 4,
+      reducedBlockState M 4 2 (by omega) (Fin.append σ z) (Fin.append τ z)) = _
+    at hcollapse
+  rw [← hcollapse]
+  simp_rw [reduced_two_eq_bellDiagonal]
+  simp only [singleKrausMap_diagonal_apply_of_real VTwo _ star_VTwo]
+  rw [singleKrausMap_diagonal_apply_of_real VOne _ star_VOne, Finset.sum_comm]
+  trans ∑ x, (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) *
+    collapseOneEntry σ τ x
+  · apply Finset.sum_congr rfl
+    intro x _
+    exact weighted_VTwo_collapse_one σ τ x
+  · rcases hσl : finTwoEquiv (pairEquiv (σ 0)).1 with _ | _ <;>
+      rcases hτl : finTwoEquiv (pairEquiv (τ 0)).1 with _ | _ <;>
+      rcases hσr : finTwoEquiv (pairEquiv (σ 0)).2 with _ | _ <;>
+      rcases hτr : finTwoEquiv (pairEquiv (τ 0)).2 with _ | _ <;>
+      simp [collapseOneEntry, VOne_apply, bitEmbedding,
+        ← finTwoEquiv.apply_eq_iff_eq, hσl, hτl, hσr, hτr,
+        CPSVExample410CorrelatedFlip.windowWeightTwo,
+        CPSVExample410CorrelatedFlip.windowWeightOne,
+        CPSVExample410CorrelatedFlip.oneBondWeight_false,
+        CPSVExample410CorrelatedFlip.oneBondWeight_true,
+        Fintype.sum_prod_type] <;> ring
+
+/-- The normalized one-site state has four characteristic-polynomial roots equal to $1/4$.
+This spectrum is a project-derived consequence of the corrected $p=1/4$ reading of CPSV16
+Example 4.10. -/
+theorem charpoly_roots_one :
+    (reducedBlockState M 4 1 (by omega)).charpoly.roots = 4 • {(1 / 4 : ℂ)} := by
+  rw [reduced_one_eq_bellDiagonal,
+    Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry VOne VOne_isometry]
+  simp only [Fintype.card_fun, Fintype.card_fin, Fintype.card_prod, Fintype.card_bool,
+    Nat.reducePow]
+  rw [Matrix.charpoly_roots_diagonal_ofReal]
+  have huniv : (Finset.univ.val : Multiset (Bool × Bool)) =
+      {(false, false), (false, true), (true, false), (true, true)} := by decide
+  rw [huniv]
+  norm_num [CPSVExample410CorrelatedFlip.windowWeightOne]
+  simp only [← Multiset.singleton_add]
+  abel
+
+/-- The normalized two-site state has eight zero roots, four roots $5/32$, and four roots
+$3/32$. This spectrum is a project-derived consequence of the corrected $p=1/4$ reading of
+CPSV16 Example 4.10. -/
+theorem charpoly_roots_two :
+    (reducedBlockState M 4 2 (by omega)).charpoly.roots =
+      8 • {(0 : ℂ)} + 4 • {(5 / 32 : ℂ)} + 4 • {(3 / 32 : ℂ)} := by
+  rw [reduced_two_eq_bellDiagonal,
+    Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry VTwo VTwo_isometry]
+  simp only [Fintype.card_fun, Fintype.card_fin, Fintype.card_prod, Fintype.card_bool,
+    Nat.reducePow]
+  rw [Matrix.charpoly_roots_diagonal_ofReal]
+  have huniv : (Finset.univ.val : Multiset (Bool × Bool × Bool)) =
+      {(false, false, false), (false, false, true),
+        (false, true, false), (false, true, true),
+        (true, false, false), (true, false, true),
+        (true, true, false), (true, true, true)} := by decide
+  rw [huniv]
+  norm_num [CPSVExample410CorrelatedFlip.windowWeightTwo,
+    CPSVExample410CorrelatedFlip.oneBondWeight_false,
+    CPSVExample410CorrelatedFlip.oneBondWeight_true]
+  simp only [← Multiset.singleton_add]
+  abel
+
+/-- The normalized three-site state has 48 zero roots, four roots $7/64$, and twelve roots
+$3/64$. This spectrum is a project-derived consequence of the corrected $p=1/4$ reading of
+CPSV16 Example 4.10. -/
+theorem charpoly_roots_three :
+    (reducedBlockState M 4 3 (by omega)).charpoly.roots =
+      48 • {(0 : ℂ)} + 4 • {(7 / 64 : ℂ)} + 12 • {(3 / 64 : ℂ)} := by
+  rw [reduced_three_eq_bellDiagonal,
+    Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry VThree VThree_isometry]
+  simp only [Fintype.card_fun, Fintype.card_fin, Fintype.card_prod, Fintype.card_bool,
+    Nat.reducePow]
+  rw [Matrix.charpoly_roots_diagonal_ofReal]
+  have huniv : (Finset.univ.val : Multiset (Bool × Bool × Bool × Bool)) =
+      {(false, false, false, false), (false, false, false, true),
+        (false, false, true, false), (false, false, true, true),
+        (false, true, false, false), (false, true, false, true),
+        (false, true, true, false), (false, true, true, true),
+        (true, false, false, false), (true, false, false, true),
+        (true, false, true, false), (true, false, true, true),
+        (true, true, false, false), (true, true, false, true),
+        (true, true, true, false), (true, true, true, true)} := by decide
+  rw [huniv]
+  norm_num [CPSVExample410CorrelatedFlip.windowWeightThree,
+    CPSVExample410CorrelatedFlip.twoBondWeight_false_false,
+    CPSVExample410CorrelatedFlip.twoBondWeight_of_pair_ne_false_false]
+  simp only [← Multiset.singleton_add]
+  abel
 
 set_option maxRecDepth 10000 in
 /-- The normalized four-site state has nonzero eigenvalues $41/128$ once, $15/128$ four times,
