@@ -6,7 +6,7 @@
 
 \input{command}
 
-\title{Full-Matrix and Star-Closed Scope of the GNVW Support-Algebra Formalization}
+\title{Full-Matrix Scope of the GNVW Support-Algebra Formalization}
 \author{}
 \date{2026-08-23}
 
@@ -17,7 +17,7 @@
 \section{The general support-algebra statement}
 
 Let $\mathcal B_1$ and $\mathcal B_2$ be finite-dimensional $C^*$-algebras and
-let $\mathcal A\subseteq\mathcal B_1\otimes\mathcal B_2$ be a subalgebra.
+let $\mathcal A\subseteq\mathcal B_1\otimes\mathcal B_2$ be a $C^*$-subalgebra.
 Gross, Nesme, Vogts, and Werner prove that there is a smallest $C^*$-subalgebra
 $\mathcal C_1\subseteq\mathcal B_1$ for which
 \begin{align}
@@ -65,19 +65,29 @@ generated-support-algebra constructions in Section~4.3
 \path{Papers/quant-ph_0405174/qca.tex}, lines 1137--1169, with source labels
 \path{a2supp} and \path{a2Supp}.
 
-The source does not require $\mathcal A$ itself to be closed under the
-involution.
+Here ``subalgebra'' is understood in the finite-dimensional $C^*$-algebra
+sense, and hence includes closure under the involution.  This interpretation
+is forced by the three clauses of Lemma~7.  For example, if
+$\mathcal B_2=\mathbb C$ and
+$\mathcal A=\operatorname{span}\{\Id,N\}\subset M_2(\mathbb C)$ for a nonzero
+nilpotent matrix unit $N$, then the smallest $C^*$-subalgebra containing
+$\mathcal A$ is $M_2(\mathbb C)$, but its commutant is not
+$\mathcal A'$.  Thus the lemma would be false if ``subalgebra'' meant an
+arbitrary algebra not closed under the involution.  The precursor makes the
+same convention explicit: every observable algebra is closed under adjoints
+in \cite[lines~1161--1171]{SchumacherWerner2004QCA}.
 
-\section{The full-matrix, star-closed formal statement}
+\section{The full-matrix formal statement}
 
 Let $I$ and $J$ be finite sets and let
 \begin{align}
     \mathcal A&\subseteq M_{I\times J}(\mathbb C)
       \cong M_I(\mathbb C)\otimes M_J(\mathbb C)
 \end{align}
-be a star-subalgebra. Thus the formal statement makes two restrictions: both
-tensor factors are full complex matrix algebras, and the input algebra
-$\mathcal A$ is closed under the involution. For $X\in\mathcal A$, define its
+be a star-subalgebra. Thus the formal statement makes one restriction: both
+tensor factors are full complex matrix algebras.  The star-subalgebra type
+makes the source's $C^*$-subalgebra convention explicit and is not an
+additional hypothesis. For $X\in\mathcal A$, define its
 two coefficient families by
 \begin{align}
     X^{\mathrm L}_{rs}(i,j)&=X((i,r),(j,s)), &
@@ -161,24 +171,25 @@ algebra $\mathcal R_{2x}$ is exactly an instance of
 sufficient for the support-algebra step used by the Cirac--P\'erez-Garc\'ia--
 Schuch--Verstraete spin-chain argument.
 
-The star-closed-input restriction also holds in this application.  The map
-$\omega$ preserves every operation of the local star-algebra
-\cite[lines~2300--2306]{Cirac2017MPU}.  The algebra whose support is taken in
-lines~2313--2328 is
+The use of a star-subalgebra also agrees directly with this application.  The
+map $\omega$ preserves every operation of the local star-algebra
+\cite[lines~2300--2306]{Cirac2017MPU}, and the algebra whose support is taken
+in lines~2313--2328 is
 \begin{align}
     \omega(\mathcal A_{2x}\otimes\mathcal A_{2x+1}).
 \end{align}
 It is the image, under the star-automorphism $\omega$, of a local full matrix
-star-algebra.  It is therefore a star-subalgebra.
+star-algebra.  It is therefore a star-subalgebra, as the source convention
+already requires.
 
-The two restrictions recorded here are open scope boundaries of the TNLean
-formalization, not mathematical gaps in GNVW Lemma~7 or equation~(22).
+The restriction to full matrix factors is an open scope boundary in TNLean.
+It is not a mathematical gap in GNVW Lemma~7 or equation~(22).
 
 \section{Elimination plan}
 
-To remove the restrictions, one should formalize the same construction for
+To remove the restriction, one should formalize the same construction for
 arbitrary finite-dimensional $C^*$-algebras $\mathcal B_1$ and $\mathcal B_2$
-and an ordinary, not necessarily star-closed, subalgebra
+and a $C^*$-subalgebra
 $\mathcal A\subseteq\mathcal B_1\otimes\mathcal B_2$.
 Choose a basis of $\mathcal B_2$ and its dual basis, extract the coefficients
 $a_\mu$ with the maps $\operatorname{id}\otimes\omega_\mu$, and define
@@ -193,8 +204,8 @@ basis and their coefficient functionals. This is the direct coefficient route
 of the source and requires no bicommutant or density theorem.
 
 Until this generic construction is formalized, source-labelled entries may
-carry completion markers only when they explicitly state both the full complex
-matrix-factor restriction and the star-closed-input restriction.
+carry completion markers only when they explicitly state the full complex
+matrix-factor restriction.
 
 \bibliographystyle{alpha}
 \bibliography{references}
