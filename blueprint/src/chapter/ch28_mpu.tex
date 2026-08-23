@@ -7006,11 +7006,41 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the original endpoints.
 \end{proof}
 
+\begin{lemma}[SWAP trace contraction]
+    \label{lem:matrix_trace_swap_kronecker}
+    \lean{Matrix.trace_swapMatrix_mul_kronecker,
+        Matrix.trace_swapMatrix_mul_kronecker_conjTranspose_of_mem_unitaryGroup}
+    \leanok
+    For matrices $A,B\in\mathbb C^{n\times n}$ and the exchange matrix $\mathbb S$ on
+    $\mathbb C^n\otimes\mathbb C^n$,
+    \begin{align}
+        \tr\!\left[\mathbb S(A\otimes B)\right] & =\tr(AB).
+    \end{align}
+    In particular, if $U$ is unitary, then
+    \begin{align}
+        \tr\!\left[\mathbb S(U\otimes U^\dagger)\right] & =n.
+    \end{align}
+    % Source identity: paper_v2.tex lines 1608--1610.
+\end{lemma}
+
+\begin{proof}\leanok
+    In product coordinates, the exchange matrix has entries
+    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$. Therefore
+    \begin{align}
+        \tr\!\left[\mathbb S(A\otimes B)\right]
+         & =\sum_{i,j}A_{j,i}B_{i,j}
+          =\sum_{i,j}A_{i,j}B_{j,i}
+          =\tr(AB).
+    \end{align}
+    Taking $A=U$ and $B=U^\dagger$ gives
+    $\tr(UU^\dagger)=\tr(\Id)=n$.
+\end{proof}
+
 \begin{lemma}[Trace formula for the time-reversal sign]
     \label{eq:sigma-from-trace}
     \notready
     \discussion{5714}
-    \uses{PropChiral}
+    \uses{PropChiral, lem:matrix_trace_swap_kronecker}
     For a time-reversal-invariant MPU in standard form, the sign $\sigma$ is
     \begin{align}
         \sigma & =\frac1{d^2}\tr\!\left[\mathbb S_{12,34}

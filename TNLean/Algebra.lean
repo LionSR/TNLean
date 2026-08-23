@@ -48,4 +48,5 @@ import TNLean.Algebra.ShiftedZeroTraceNilpotent
 import TNLean.Algebra.SkewSymmetricMatrix
 import TNLean.Algebra.SpinCover
 import TNLean.Algebra.SpinCover.EulerAngles
+import TNLean.Algebra.SwapTrace
 import TNLean.Algebra.TracePairing
