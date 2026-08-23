@@ -119,18 +119,19 @@ aggregators by hand.
 ### Key definitions
 
 A handful of names recur throughout the library and are worth knowing before
-you start reading. The basic tensor-level definitions moved to the companion
-QICLean library in the quantum-channel extraction; TNLean imports them through
-its Lake dependency, so they are used here under the same names:
+you start reading. The root-level `MPSTensor` abbreviation and the finite-family
+API live in the companion QICLean library; its operations and predicates use
+the `Kraus` namespace. TNLean retains the matrix-product-state vocabulary in
+`TNLean/MPS/Defs.lean`:
 
 | Name | What it is | Defined in |
 |---|---|---|
-| `MPSTensor d D` | A `Fin d`-indexed family of `D × D` complex matrices — the tensor `A^i` of a matrix product state. | `QICLean/MPS/Core/Word.lean` |
-| `MPSTensor.evalWord` | The matrix product `A_{i_1} A_{i_2} \cdots A_{i_n}` along a word of physical indices; it specializes `Kraus.evalWord` to matrix product tensors. | `QICLean/MPS/Core/Word.lean` |
-| `IsInjective` | The matrices of a tensor span the full matrix algebra. | `QICLean/MPS/Core/Injectivity.lean` |
-| `IsNormal` | The tensor becomes injective after blocking sites (eventual full Kraus rank). | `QICLean/MPS/Core/Injectivity.lean` |
-| `transferMap` | The completely positive map $E_A(X) = \sum_i A_i X A_i^\dagger$. | `QICLean/MPS/Core/Transfer.lean` |
-| `SameMPV` / `GaugeEquiv` | Two tensors generate the same states at every system size / are related by conjugation `B i = X * A i * X⁻¹`. | `QICLean/MPS/Defs.lean` |
+| `MPSTensor d D` | A `Fin d`-indexed family of `D × D` complex matrices — the tensor `A^i` of a matrix product state. | `QICLean/Kraus/Word.lean` |
+| `Kraus.evalWord` | The matrix product `A_{i_1} A_{i_2} \cdots A_{i_n}` along a word of physical indices. | `QICLean/Kraus/Word.lean` |
+| `Kraus.IsInjective` | The matrices of a tensor span the full matrix algebra. | `QICLean/Kraus/Injectivity.lean` |
+| `Kraus.IsNormal` | The tensor becomes injective after blocking sites (eventual full Kraus rank). | `QICLean/Kraus/Injectivity.lean` |
+| `Kraus.transferMap` | The completely positive map $E_A(X) = \sum_i A_i X A_i^\dagger$. | `QICLean/Kraus/Transfer.lean` |
+| `MPSTensor.SameMPV` / `MPSTensor.GaugeEquiv` | Two tensors generate the same states at every system size / are related by conjugation `B i = X * A i * X⁻¹`. | `TNLean/MPS/Defs.lean` |
 | `fundamentalTheorem_singleBlock` | The single-block fundamental theorem: injective + same states implies gauge equivalent. | `TNLean/MPS/FundamentalTheorem/Basic.lean` |
 
 For anything not in this short list — what a predicate means, which source it
@@ -159,14 +160,14 @@ If your goal is to understand the fundamental theorem of matrix product
 states, this is a concrete path through the source, in reading order,
 alongside the corresponding blueprint chapters:
 
-1. `QICLean/MPS/Core/Word.lean` (in the QICLean dependency) — `MPSTensor`,
-   `MPSTensor.evalWord`. The basic objects: a tensor is a family of matrices,
+1. `QICLean/Kraus/Word.lean` (in the QICLean dependency) — `MPSTensor`,
+   `Kraus.evalWord`. The basic objects: a tensor is a family of matrices,
    and a word evaluates to a matrix product.
-2. `QICLean/MPS/Defs.lean` — `mpv` (the matrix-product-vector coefficient),
-   `SameMPV`, `GaugeEquiv`. What it means for two tensors to generate the
-   same states, and what a gauge transformation is. Read alongside
-   `blueprint/src/chapter/ch02_mps.tex`.
-3. `QICLean/MPS/Core/Injectivity.lean` — `IsInjective`, `IsNormal`. The
+2. `TNLean/MPS/Defs.lean` — `MPSTensor.mpv` (the matrix-product-vector
+   coefficient), `MPSTensor.SameMPV`, `MPSTensor.GaugeEquiv`. What it means
+   for two tensors to generate the same states, and what a gauge transformation
+   is. Read alongside `blueprint/src/chapter/ch02_mps.tex`.
+3. `QICLean/Kraus/Injectivity.lean` — `Kraus.IsInjective`, `Kraus.IsNormal`. The
    spanning condition the single-block theorem needs.
 4. `TNLean/MPS/Structure/LinearExtension.lean` and
    `QICLean/Algebra/SkolemNoether.lean` — the two algebraic facts the proof
