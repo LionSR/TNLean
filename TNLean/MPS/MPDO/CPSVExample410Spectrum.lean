@@ -558,7 +558,8 @@ private lemma VFour_append_one (σ : Fin 3 → Fin 4) (q : Fin 2 × Fin 2)
   rw [h0, h1, h2, h3]
   simp
 
-private lemma sum_two_four_factors (a b : ℂ) (f g : Fin 2 → ℂ) :
+private lemma sum_two_four_factors {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (a b : ℂ) (f : ι → ℂ) (g : κ → ℂ) :
     (∑ l, ∑ r, a * b * f l * g r) = a * b * (∑ l, f l) * ∑ r, g r := by
   simp_rw [← Finset.mul_sum, ← Finset.sum_mul]
   congr 1
