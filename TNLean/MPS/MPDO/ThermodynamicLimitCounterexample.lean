@@ -670,4 +670,13 @@ theorem not_exists_tendsto_parityMutualInfoAfterCut (L : ℕ) (hLpos : 0 < L) :
   rw [Real.dist_eq, abs_lt] at hOddIndex hEvenIndex
   linarith [binEntropy_one_div_three_pos]
 
+/-- The unrestricted thermodynamic-limit clause of arXiv:1606.00608,
+Proposition 4.5, lines 801--806, is false: `parityTensor` is an MPDO, but its
+mutual information has no real limit at any fixed nonempty cut. -/
+theorem proposition45_limit_counterexample :
+    IsMPDO parityTensor ∧
+      ∀ L : ℕ, 0 < L →
+        ¬∃ x : ℝ, Tendsto (parityMutualInfoAfterCut L) atTop (nhds x) :=
+  ⟨parityTensor_isMPDO, not_exists_tendsto_parityMutualInfoAfterCut⟩
+
 end MPOTensor.ThermodynamicLimitCounterexample
