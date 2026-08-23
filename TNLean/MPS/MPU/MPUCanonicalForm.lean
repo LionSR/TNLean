@@ -89,7 +89,6 @@ def toMPUCanonicalFormData {A : MPSTensor d D} (data : CPSVCanonicalFormData A) 
   dim := data.dim
   dim_pos := data.dim_pos
   weights := data.weights
-  weights_ne_zero := data.weights_ne_zero
   blocks := data.blocks
   blocks_canonical := fun k ↦
     ⟨(data.blocks_normal k).no_invariant_proj,
