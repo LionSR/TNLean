@@ -18009,7 +18009,7 @@
 % corner and reserves no face, as every endpoint reading does.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_route_point:nnNN #1#2#3#4
   {
-    \tenkz@string@beadpath {#1} {#2} {tenkz-label-route-point}
+    \tenkz@string@beadpath {tenkz-bead-#1} {#2} {tenkz-label-route-point}
     \pgfpointanchor {tenkz-label-route-point} {center}
     \fp_set:Nn #3 { \dim_to_fp:n { \use:c {pgf@x} } }
     \fp_set:Nn #4 { \dim_to_fp:n { \use:c {pgf@y} } }

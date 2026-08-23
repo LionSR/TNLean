@@ -5,8 +5,20 @@
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
 \int_new:N \l__tenkz_test_frame_side_count_int
+\int_new:N \l__tenkz_test_frame_route_count_int
 \cs_new_eq:NN
   \__tenkz_test_frame_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_new_eq:NN \__tenkz_test_frame_beadpath:nnn \tenkz@string@beadpath
+\cs_set_protected:Npn \tenkz@string@beadpath #1#2#3
+  {
+    \str_if_eq:nnT {#3} {tenkz-label-route-point}
+      {
+        \int_gincr:N \l__tenkz_test_frame_route_count_int
+        \str_if_eq:nnF {#1} {tenkz-bead-cup-1-2}
+          { \errmessage{closure~occupancy~did~not~read~the~frozen~bead~route} }
+      }
+    \__tenkz_test_frame_beadpath:nnn {#1} {#2} {#3}
+  }
 \cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
   {
     \__tenkz_test_frame_side_auto:nN {#1} #2
@@ -74,5 +86,7 @@
 \ExplSyntaxOn
 \int_compare:nNnF { \l__tenkz_test_frame_side_count_int } = {4}
   { \errmessage{frame-cell~fixture~did~not~station~four~labels} }
+\int_compare:nNnF { \l__tenkz_test_frame_route_count_int } = {2}
+  { \errmessage{closure~occupancy~did~not~sample~the~frozen~route~twice} }
 \ExplSyntaxOff
 \end{document}
