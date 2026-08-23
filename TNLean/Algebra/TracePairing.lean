@@ -144,7 +144,8 @@ theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : Kraus.IsInjective A
   classical
   apply (LinearMap.ker_eq_bot').2
   intro M hM
-  -- The linear functional `N ↦ trace (M * N)` vanishes on the spanning set `{A i}`, hence is zero.
+  -- The linear functional `N ↦ trace (M * N)` vanishes on the spanning set `{A i}`,
+  -- hence is zero.
   have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M) = 0 := by
     apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
     intro i
@@ -172,7 +173,8 @@ theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) (hBzero : ∀ i, B i = 0) : False := by
   have htr_zero : Matrix.traceLinearMap (Fin D) ℂ ℂ = 0 := by
     apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)
-    intro i; simpa [Matrix.traceLinearMap_apply, Kraus.evalWord, hBzero i] using hAB.trace_evalWord [i]
+    intro i; simpa [Matrix.traceLinearMap_apply, Kraus.evalWord, hBzero i] using
+      hAB.trace_evalWord [i]
   have : Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ) = 0 := by
     simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
   simp [Matrix.trace_one, Fintype.card_fin, (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D)] at this

@@ -26,7 +26,8 @@ variable {d D : ℕ}
 
 /-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
 
-This proposition states the analytic content that connects `IsPDivisibleChannel (Kraus.transferMap B) p`
+This proposition states the analytic content that connects
+`IsPDivisibleChannel (Kraus.transferMap B) p`
 (a channel-level `p`-th-root statement) to the existence of a witness tensor
 `A : MPSTensor d D` whose `p`-blocked transfer map matches that of `B`.
 
@@ -128,8 +129,9 @@ Kraus-reducible witness). Then `IsPDivisibleChannel (Kraus.transferMap B) p` imp
 
 The proof follows the paper (arXiv:1708.00029 Section 4.1, converse paragraph): from the inverse
 canonicalization we obtain `A : MPSTensor d D` with
-`Kraus.transferMap B = Kraus.transferMap (blockTensor A p)`; this matches two Kraus representations of
-the same CP map (`blockTensor A p` with `d^p` operators and `B` with `d` operators), so
+`Kraus.transferMap B = Kraus.transferMap (blockTensor A p)`; this matches two Kraus
+representations of the same CP map (`blockTensor A p` with `d^p` operators and `B` with
+`d` operators), so
 Wolf Theorem 2.1(4) (`kraus_isometry_freedom_iff`) supplies an isometry
 `V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
 `blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with

@@ -99,7 +99,8 @@ theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁
 theorem isIrreducibleTensor_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
     Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e A) ↔ Kraus.IsIrreducibleFamily A := by
-  rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily, hasInvariantProj_reindexPhysical_equiv e A]
+  rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily,
+    hasInvariantProj_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves algebraic injectivity. -/
 theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)

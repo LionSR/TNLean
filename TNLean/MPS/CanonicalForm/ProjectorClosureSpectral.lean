@@ -295,7 +295,8 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
       starRingEnd ℂ (((Real.sqrt r : ℝ) : ℂ))⁻¹ = (r : ℂ)⁻¹ := by
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
-  have hmap : Kraus.transferMap (d := d) (D := n) (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i)
+  have hmap : Kraus.transferMap (d := d) (D := n)
+      (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i)
       = (r : ℂ)⁻¹ • Kraus.transferMap (d := d) (D := n) B := by
     apply LinearMap.ext
     intro X
@@ -312,7 +313,8 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         (Kraus.transferMap (d := d) (D := n)
           (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i))
-        (Kraus.transferMap_isCPMap _) (isIrreducibleCP_transferMap_of_isIrreducibleTensor _ hIrrScaled)
+        (Kraus.transferMap_isCPMap _)
+        (isIrreducibleCP_transferMap_of_isIrreducibleTensor _ hIrrScaled)
         ρ 1 hρ (by norm_num) (by simpa using hfix))
   · refine isPrimitive_of_unique_norm_one _ ρ hfix hρ_ne ?_
     intro μ hμ hμnorm

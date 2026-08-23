@@ -65,7 +65,8 @@ private theorem evalWord_mem_span_of_isTransferIdempotent
             exact Submodule.subset_span ⟨i, by simp [Kraus.evalWord]⟩
         | cons j w =>
             have hword :
-                Kraus.evalWord A (i :: j :: w) = ∑ k : Fin d, V (i, j) k • Kraus.evalWord A (k :: w) := by
+                Kraus.evalWord A (i :: j :: w) =
+                  ∑ k : Fin d, V (i, j) k • Kraus.evalWord A (k :: w) := by
               calc
                 Kraus.evalWord A (i :: j :: w) = (A i * A j) * Kraus.evalWord A w := by
                   simp [Kraus.evalWord, Matrix.mul_assoc]

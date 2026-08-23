@@ -230,7 +230,8 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
         exact div_nonneg (by positivity) (le_of_lt htr_re_pos)
       have htr_re_ne : (Matrix.trace ρ).re ≠ 0 := by
         linarith
-      have hDdiv : ((((D : ℝ) / (Matrix.trace ρ).re : ℝ)) : ℂ) = (D : ℂ) / Matrix.trace ρ := by
+      have hDdiv : ((((D : ℝ) / (Matrix.trace ρ).re : ℝ)) : ℂ) =
+          (D : ℂ) / Matrix.trace ρ := by
         calc
           ((((D : ℝ) / (Matrix.trace ρ).re : ℝ)) : ℂ)
               = (D : ℂ) / ((((Matrix.trace ρ).re : ℝ)) : ℂ) := by
@@ -900,7 +901,8 @@ theorem isTransferIdempotent_of_isIsometryCanonicalForm (A : MPSTensor d D)
   have hXDrDrX : (X * Dr) * (Dr * Xᴴ) = R := by
     rw [hR, Matrix.mul_assoc X Dr (Dr * Xᴴ), ← Matrix.mul_assoc Dr Dr Xᴴ,
       ← Matrix.mul_assoc X (Dr * Dr) Xᴴ, hDr_sq]
-  have hclosed : ∀ Y : Mat, Kraus.transferMap A Y = Matrix.trace (X⁻¹ * Y * (X⁻¹)ᴴ) • R := by
+  have hclosed : ∀ Y : Mat, Kraus.transferMap A Y =
+      Matrix.trace (X⁻¹ * Y * (X⁻¹)ᴴ) • R := by
     intro Y
     have hsumm : ∀ i, A i * Y * (A i)ᴴ
         = (X * Dr) * (U i * (X⁻¹ * Y * (X⁻¹)ᴴ) * (U i)ᴴ) * (Dr * Xᴴ) := by

@@ -47,7 +47,8 @@ theorem, equivalently Jacobson's density theorem.
 
 The complete chain from `Kraus.IsIrreducibleFamily A` to cumulative full matrix span:
 
-1. `Kraus.IsIrreducibleFamily A` → `IsIrreducibleAction A` (proved in `IrreducibleTensorAction.lean`)
+1. `Kraus.IsIrreducibleFamily A` → `IsIrreducibleAction A` (proved in
+   `IrreducibleTensorAction.lean`)
 2. `IsIrreducibleAction A` → `algSpan A = ⊤` (Burnside/Jacobson density, proved in
    `BurnsideTheorem.lean`)
 3. `algSpan A = ⊤` → `∃ N, Kraus.cumulativeSpan A N = ⊤` (proved in this file, Part 1)

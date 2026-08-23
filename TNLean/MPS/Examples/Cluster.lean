@@ -686,7 +686,8 @@ Using the closed form `E(X) = ((X₀₀ + X₁₁)/2)·I` (`clusterBlocked_trans
 the diagonal entries of `E(X)` are each `(X₀₀ + X₁₁)/2`, so applying `E` again
 reproduces the same scalar. -/
 theorem clusterBlocked_transferMap_idempotent :
-    Kraus.transferMap clusterBlocked ∘ₗ Kraus.transferMap clusterBlocked = Kraus.transferMap clusterBlocked := by
+    Kraus.transferMap clusterBlocked ∘ₗ Kraus.transferMap clusterBlocked =
+      Kraus.transferMap clusterBlocked := by
   ext X i j : 3
   rw [LinearMap.comp_apply, clusterBlocked_transferMap_apply,
     clusterBlocked_transferMap_apply]

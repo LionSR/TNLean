@@ -70,7 +70,8 @@ private theorem single_mem_span_diagonalRestrictionUnits (a b : Fin 2) :
     simp [Matrix.single]
 
 /-- The doubled-index tensor is injective. -/
-private theorem diagonalRestrictionUnits_isInjective : Kraus.IsInjective diagonalRestrictionUnits := by
+private theorem diagonalRestrictionUnits_isInjective :
+    Kraus.IsInjective diagonalRestrictionUnits := by
   rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   rw [Matrix.matrix_eq_sum_single M]

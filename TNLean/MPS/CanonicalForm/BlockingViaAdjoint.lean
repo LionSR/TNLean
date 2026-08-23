@@ -31,8 +31,8 @@ open Matrix Finset Complex
 We equip `Matrix (Fin D) (Fin D) ℂ` with the Frobenius inner product coming from
 `Matrix.toMatrixInnerProductSpace` with weight matrix `1`.
 
-With this choice, the adjoint of `Kraus.transferMap A` is the transfer map of the conjugate-transposed
-Kraus family `i ↦ (A i)ᴴ`.
+With this choice, the adjoint of `Kraus.transferMap A` is the transfer map of the
+conjugate-transposed Kraus family `i ↦ (A i)ᴴ`.
 -/
 
 section TransferAdjoint

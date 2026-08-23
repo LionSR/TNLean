@@ -46,8 +46,8 @@ with the PSD fixed point `ρ` of the original transfer map:
 1. From TP + IsPrimitive + Kraus.IsIrreducibleFamily → `IsPrimitiveMPS A ρ` with `ρ.PosDef`
    (via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` +
     `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`)
-2. `ρ` is also fixed by `Kraus.transferMap (blockTensor A P)` (since `Kraus.transferMap (blockTensor A P) = E^P`
-   and `E ρ = ρ` implies `E^P ρ = ρ`)
+2. `ρ` is also fixed by `Kraus.transferMap (blockTensor A P)` (since
+   `Kraus.transferMap (blockTensor A P) = E^P` and `E ρ = ρ` implies `E^P ρ = ρ`)
 3. Uniqueness of PSD fixed points of `E^P`: if `E^P σ = σ`, set `σ' = σ - c•ρ`.
    From the complementary transfer-map gap of `IsPrimitiveMPS A ρ`,
    `E^n → Pρ` exponentially.

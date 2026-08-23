@@ -168,7 +168,8 @@ theorem tensor_proportional
   have hW_eq : W = lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     have hsmul : lambda_ • W = 1 := by
       have := hZW; rw [hZ_eq, smul_mul_assoc, one_mul] at this; exact this
-    have h1 : lambda_⁻¹ • (lambda_ • W) = lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    have h1 : lambda_⁻¹ • (lambda_ • W) =
+        lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
       rw [hsmul]
     rwa [smul_smul, inv_mul_cancel₀ hne, one_smul] at h1
   have hA₂_eq : ∀ j, A₂ j = lambda_⁻¹ • B₂ j := by

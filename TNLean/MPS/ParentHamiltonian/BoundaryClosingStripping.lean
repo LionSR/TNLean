@@ -366,7 +366,8 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
         ext r
         simp [α', αTail]
       have hstep :
-          Kraus.evalWord A (List.ofFn α') = A (α' 0) * Kraus.evalWord A (List.ofFn (α' ∘ Fin.succ)) :=
+          Kraus.evalWord A (List.ofFn α') =
+            A (α' 0) * Kraus.evalWord A (List.ofFn (α' ∘ Fin.succ)) :=
         Kraus.evalWord_ofFn_succ A α'
       rw [hαlist, hstep, htail]
       simp [α', α₀]

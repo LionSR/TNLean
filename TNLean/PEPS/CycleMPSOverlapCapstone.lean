@@ -235,7 +235,8 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
         A i * Kraus.evalWord A (List.ofFn v) * Kraus.evalWord A (List.ofFn w) := by
     intro i v w
     have hword := hw (i :: (List.ofFn v ++ List.ofFn w)) (by simp; omega)
-    rw [Kraus.evalWord_cons, Kraus.evalWord_cons, Kraus.evalWord_append, Kraus.evalWord_append] at hword
+    rw [Kraus.evalWord_cons, Kraus.evalWord_cons, Kraus.evalWord_append,
+      Kraus.evalWord_append] at hword
     rw [Matrix.mul_assoc, Matrix.mul_assoc]
     exact hword
   -- Linearize the trailing window through `Λ_L`.

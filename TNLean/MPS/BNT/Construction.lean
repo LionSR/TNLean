@@ -307,9 +307,9 @@ theorem spans_mpv_and_eventually_li_of_separated_normal_bnt_data [∀ k, NeZero 
 /-- Separated-hypotheses version of `IsNormalCanonicalFormBNT.isBNT`.
 
 Here `hNCF` supplies normality via the primitive-transfer-map characterization from
-`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `Kraus.IsNormal` hypotheses
-(eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
-Wielandt / primitive-to-normal implication. -/
+`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `Kraus.IsNormal`
+hypotheses (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes
+from the Wielandt / primitive-to-normal implication. -/
 theorem isBNT_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))

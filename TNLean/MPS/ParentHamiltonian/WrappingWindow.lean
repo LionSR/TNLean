@@ -856,7 +856,8 @@ theorem left_witness_unique_of_isNBlkInjective
         | nil =>
             simpa [Kraus.evalWord] using hY j
         | cons k rest =>
-            have htail : Kraus.evalWord A (k :: rest) * Y₁ = Kraus.evalWord A (k :: rest) * Y₂ :=
+            have htail : Kraus.evalWord A (k :: rest) * Y₁ =
+                Kraus.evalWord A (k :: rest) * Y₂ :=
               ih (by simp)
             calc
               Kraus.evalWord A (j :: k :: rest) * Y₁

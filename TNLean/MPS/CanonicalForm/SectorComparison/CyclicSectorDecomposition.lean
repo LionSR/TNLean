@@ -97,7 +97,8 @@ private theorem cyclic_projection_mem_multiplicativeDomain
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
   have hK_apply :
       ∀ X : MatrixAlg D,
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X = KadisonSchwarz.krausMap K X := by
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X =
+          KadisonSchwarz.krausMap K X := by
     intro X
     simp [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
   intro k
@@ -264,7 +265,8 @@ private theorem
     isPrimitive_restriction_of_cyclic_decomp (T := T)
       hγprim hperiph P hPproj hPsum hcyclic hMulLeft hMulRight hPne u
   have hTpow :
-      Kraus.transferMap (d := blockPhysDim d m) (D := D) (fun i => (blockTensor A m i)ᴴ) = T ^ m := by
+      Kraus.transferMap (d := blockPhysDim d m) (D := D)
+        (fun i => (blockTensor A m i)ᴴ) = T ^ m := by
     ext X : 1
     exact transferMap_adjoint_blocked_eq_pow A m X
   obtain ⟨hPrimAdj, hIrrAdj⟩ :=
@@ -399,7 +401,8 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
   have hIrrKLM : IsIrreducibleMap (Kraus.mapLM (fun i => (A i)ᴴ)) := by
     rw [Kraus.mapLM_eq_transferMap]; exact hIrrK
   obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
-    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrKLM
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix
+      hIrrKLM
   have hperiph_range :
       peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by

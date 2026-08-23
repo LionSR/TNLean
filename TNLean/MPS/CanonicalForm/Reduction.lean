@@ -206,7 +206,8 @@ private lemma mpv_cast_dim {n m : ℕ} (h : n = m) (A : MPSTensor d n)
 
 /-- `Kraus.IsIrreducibleFamily` is preserved by a type cast along a bond-dimension equality. -/
 private lemma isIrreducibleTensor_cast {n m : ℕ} (h : n = m) (A : MPSTensor d n) :
-    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔ Kraus.IsIrreducibleFamily A := by
+    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔
+      Kraus.IsIrreducibleFamily A := by
   cases h; rfl
 
 end CastLemmas

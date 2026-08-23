@@ -197,7 +197,8 @@ theorem linearMarkedTensor_eq_of_trace_agree
     linearMarkedTensor g (data.blocks (data.activeRepresentativeIndex j))
   have hGroupedTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (ref.groupedMarkedTensor Cf u * Kraus.evalWord ref.groupedTensor (List.ofFn w)) =
-        Matrix.trace (ref.groupedMarkedTensor Cg u * Kraus.evalWord ref.groupedTensor (List.ofFn w)) := by
+        Matrix.trace (ref.groupedMarkedTensor Cg u *
+          Kraus.evalWord ref.groupedTensor (List.ofFn w)) := by
     intro L hL u w
     rw [← ref.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor f,
       ← ref.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor g]

@@ -147,7 +147,8 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     have hle : i.val ≤ (List.ofFn (replaceWindow L hLN i σ τ)).length := by
       simp [List.length_ofFn]
     rw [← hlist, List.rotate_eq_drop_append_take hle,
-        Kraus.evalWord_append, Matrix.trace_mul_comm, ← Kraus.evalWord_append, List.take_append_drop]
+        Kraus.evalWord_append, Matrix.trace_mul_comm, ← Kraus.evalWord_append,
+        List.take_append_drop]
   -- Prove the rotated list equals τ ++ complement elementwise
   apply List.ext_getElem
   · have : compList.length = N - L := by simp [compList, List.length_ofFn]

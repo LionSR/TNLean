@@ -67,11 +67,13 @@ noncomputable def twoBlockBlocks (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) :
             j)
       k
 
-/-- Assemble two blocks into a block-diagonal tensor via `toTensorFromBlocks` with weights `μ ≡ 1`.
+/-- Assemble two blocks into a block-diagonal tensor via `toTensorFromBlocks` with weights
+`μ ≡ 1`.
 
 This is the explicit 2-block direct sum tensor used throughout canonical-form arguments.
 -/
-noncomputable def twoBlockTensor (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) : MPSTensor d (n + m) :=
+noncomputable def twoBlockTensor (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) :
+    MPSTensor d (n + m) :=
   toTensorFromBlocks (d := d) (r := 2) (dim := ![n, m])
     (μ := fun _ => (1 : ℂ)) (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂)
 

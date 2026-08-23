@@ -92,7 +92,8 @@ private theorem common_blocking_primitive
       _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blocks1 k) σ' := by
             simpa [smul_eq_mul] using
               (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ'))
-      _ = ∑ k : Fin r1, (μ1 k) ^ N * mpv (blockTensor (d := d) (D := dim1 k) (blocks1 k) 1) σ := by
+      _ = ∑ k : Fin r1, (μ1 k) ^ N *
+            mpv (blockTensor (d := d) (D := dim1 k) (blocks1 k) 1) σ := by
             refine Finset.sum_congr rfl ?_
             intro k _
             rw [mpv_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (σ := σ)]

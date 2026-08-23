@@ -52,7 +52,8 @@ lemma isNBlkInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
 
 /-- Casting the bond dimension preserves irreducibility. -/
 lemma isIrreducibleTensor_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔ Kraus.IsIrreducibleFamily A := by
+    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔
+      Kraus.IsIrreducibleFamily A := by
   subst h
   rfl
 

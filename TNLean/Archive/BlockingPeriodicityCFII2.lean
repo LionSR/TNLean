@@ -89,7 +89,8 @@ private lemma diag_eq_of_lt_zero_lt {z : ℂ} (hz : 0 < z) : ((z.re : ℝ) : ℂ
     simp [hz_im]
 
 /-- For a positive definite matrix, the diagonal entries are real and positive. -/
-private lemma re_pos_of_posDef_diag (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef) (i : Fin D) :
+private lemma re_pos_of_posDef_diag (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef)
+    (i : Fin D) :
     0 < (Λ i i).re := by
   have hpos : (0 : ℂ) < Λ i i := Matrix.PosDef.diag_pos hΛ
   exact (Complex.lt_def).1 hpos |>.1
@@ -159,7 +160,8 @@ section Unitalize
 noncomputable def unitalize (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
   fun i => diagInvSqrt (D := D) Λ * B i * diagSqrt (D := D) Λ
 
-/-- If `Λ` is a positive definite fixed point of `transferMap B`, then `unitalize B Λ` is unital. -/
+/-- If `Λ` is a positive definite fixed point of `transferMap B`, then `unitalize B Λ` is
+unital. -/
 lemma unitalize_isUnitalKraus_of_fixedPoint
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (hDiag : Λ.IsDiag)
@@ -184,7 +186,8 @@ lemma unitalize_isUnitalKraus_of_fixedPoint
   -- Unfold unitality.
   -- (This is just the defining equation.)
   simpa [KadisonSchwarz.IsUnitalKraus, unitalize, S, Sinv] using (show
-      (∑ i : Fin d, (Sinv * B i * S) * (Sinv * B i * S)ᴴ = (1 : Matrix (Fin D) (Fin D) ℂ)) from by
+      (∑ i : Fin d, (Sinv * B i * S) * (Sinv * B i * S)ᴴ =
+        (1 : Matrix (Fin D) (Fin D) ℂ)) from by
     calc
       ∑ i : Fin d, (Sinv * B i * S) * (Sinv * B i * S)ᴴ
         = ∑ i : Fin d, Sinv * (B i * Λ * (B i)ᴴ) * Sinv := by
@@ -340,7 +343,8 @@ lemma range_mulVecLin_supportProj_eq
     Submodule.finrank_mono hker
   have frange (M : Matrix (Fin D) (Fin D) ℂ) :
       Module.finrank ℂ ↥(LinearMap.range (Matrix.mulVecLin M)) =
-        Module.finrank ℂ (Fin D → ℂ) - Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin M)) := by
+        Module.finrank ℂ (Fin D → ℂ) -
+          Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin M)) := by
     have hdim := LinearMap.finrank_range_add_finrank_ker (Matrix.mulVecLin M)
     have := congrArg (fun n => n - Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin M))) hdim
     simpa [Nat.add_sub_cancel, Nat.add_sub_cancel_left] using this
@@ -375,7 +379,8 @@ lemma isIrreducibleTensor_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
     IsIrreducibleTensor (d := d) (D := D)
-      (fun i => (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
+      (fun i =>
+        (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
   classical
   intro hHas
   rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩

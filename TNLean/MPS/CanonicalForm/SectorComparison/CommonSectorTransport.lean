@@ -139,12 +139,14 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
     cases hFamilyB
     simpa [flatBlocksB] using hTPB x
   have hPrimA' : ∀ x, _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d p) (D := familyA.commonFlatDim x) (flatBlocksA x)) := by
+      (Kraus.transferMap (d := blockPhysDim d p) (D := familyA.commonFlatDim x)
+        (flatBlocksA x)) := by
     intro x
     cases hFamilyA
     simpa [flatBlocksA] using hPrimA x
   have hPrimB' : ∀ x, _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d p) (D := familyB.commonFlatDim x) (flatBlocksB x)) := by
+      (Kraus.transferMap (d := blockPhysDim d p) (D := familyB.commonFlatDim x)
+        (flatBlocksB x)) := by
     intro x
     cases hFamilyB
     simpa [flatBlocksB] using hPrimB x

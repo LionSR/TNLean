@@ -62,7 +62,8 @@ lemma lowerZero_evalWord (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
                 simp [Kraus.evalWord, Matrix.mul_assoc]
         _ = (1 - P) * A i * (P + (1 - P)) * Kraus.evalWord A w * P := by
                 simp [hsum, Matrix.mul_assoc]
-        _ = (1 - P) * A i * P * Kraus.evalWord A w * P + (1 - P) * A i * (1 - P) * Kraus.evalWord A w * P := by
+        _ = (1 - P) * A i * P * Kraus.evalWord A w * P
+              + (1 - P) * A i * (1 - P) * Kraus.evalWord A w * P := by
                 noncomm_ring
         _ = 0 + (1 - P) * A i * (1 - P) * Kraus.evalWord A w * P := by
                 simp [hLower i, Matrix.mul_assoc]
@@ -129,9 +130,11 @@ lemma evalWord_diagPart_eq (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
         -- Now simplify each term.
         rw [hExpand]
         -- Diagonal term on `P`.
-        have hDiagP : (P * A i * P) * (P * Kraus.evalWord A w * P) = P * A i * P * Kraus.evalWord A w * P := by
+        have hDiagP : (P * A i * P) * (P * Kraus.evalWord A w * P) =
+            P * A i * P * Kraus.evalWord A w * P := by
           -- isolate the `P*P` factor
-          have : (P * A i * P) * (P * Kraus.evalWord A w * P) = P * A i * (P * P) * Kraus.evalWord A w * P := by
+          have : (P * A i * P) * (P * Kraus.evalWord A w * P) =
+              P * A i * (P * P) * Kraus.evalWord A w * P := by
             noncomm_ring
           -- use idempotence `P*P=P`
           simpa [hPP] using this
@@ -156,7 +159,8 @@ lemma evalWord_diagPart_eq (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
           simpa [hQQ] using this
         -- Put it together.
         simp [hDiagP, hCrossPQ, hCrossQP, hDiagQ]
-      -- Next, rewrite the RHS `P * Kraus.evalWord A (i::w) * P` and `Q * Kraus.evalWord A (i::w) * Q`.
+      -- Next, rewrite the RHS `P * Kraus.evalWord A (i::w) * P` and
+      -- `Q * Kraus.evalWord A (i::w) * Q`.
       have hPpart : P * Kraus.evalWord A (i :: w) * P = P * A i * P * Kraus.evalWord A w * P := by
         calc
           P * Kraus.evalWord A (i :: w) * P
@@ -166,7 +170,8 @@ lemma evalWord_diagPart_eq (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
                   simp [Matrix.mul_assoc]
           _ = P * A i * (P + (1 - P)) * Kraus.evalWord A w * P := by
                   simp [hsum, Matrix.mul_assoc]
-          _ = P * A i * P * Kraus.evalWord A w * P + P * A i * (1 - P) * Kraus.evalWord A w * P := by
+          _ = P * A i * P * Kraus.evalWord A w * P
+                + P * A i * (1 - P) * Kraus.evalWord A w * P := by
                   noncomm_ring
           _ = P * A i * P * Kraus.evalWord A w * P := by
                   -- the cross term uses `(1-P) * Kraus.evalWord A w * P = 0`
@@ -201,7 +206,8 @@ lemma evalWord_diagPart_eq (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
         _ = (P * A i * P + (1 - P) * A i * (1 - P)) *
               (P * Kraus.evalWord A w * P + (1 - P) * Kraus.evalWord A w * (1 - P)) := by
                   simp [ih, Matrix.mul_assoc]
-        _ = P * A i * P * Kraus.evalWord A w * P + (1 - P) * A i * (1 - P) * Kraus.evalWord A w * (1 - P) := by
+        _ = P * A i * P * Kraus.evalWord A w * P
+              + (1 - P) * A i * (1 - P) * Kraus.evalWord A w * (1 - P) := by
                   simpa [Matrix.mul_assoc] using hMulDiag
         _ = P * Kraus.evalWord A (i :: w) * P + (1 - P) * Kraus.evalWord A (i :: w) * (1 - P) := by
                   rw [← hPpart, ← hQpart]

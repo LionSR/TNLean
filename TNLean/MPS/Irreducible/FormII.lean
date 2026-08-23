@@ -152,7 +152,8 @@ private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
     rw [← Matrix.star_eq_conjTranspose]; exact Matrix.UnitaryGroup.star_mul_self U
   have hVV' : V * Vᴴ = 1 := by
     rw [← Matrix.star_eq_conjTranspose]; exact Unitary.mul_star_self_of_mem U.prop
-  -- Each summand: (Vᴴ Aᵢ V)ᴴ * (Vᴴ Aᵢ V) = Vᴴ * Aᵢᴴ * (V * Vᴴ) * Aᵢ * V = Vᴴ * Aᵢᴴ * Aᵢ * V
+  -- Each summand: (Vᴴ Aᵢ V)ᴴ * (Vᴴ Aᵢ V) = Vᴴ * Aᵢᴴ * (V * Vᴴ) * Aᵢ * V
+  --   = Vᴴ * Aᵢᴴ * Aᵢ * V
   have h_each : ∀ i : Fin d,
       (Vᴴ * A i * V)ᴴ * (Vᴴ * A i * V) =
       Vᴴ * ((A i)ᴴ * A i) * V := by

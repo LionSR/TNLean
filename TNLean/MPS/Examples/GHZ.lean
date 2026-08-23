@@ -71,7 +71,8 @@ private lemma ghz_transferMap_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 
 
 /-- The transfer map of the GHZ tensor is idempotent: `E² = E`. -/
 theorem ghz_transferMap_idempotent :
-    Kraus.transferMap ghzTensor ∘ₗ Kraus.transferMap ghzTensor = Kraus.transferMap ghzTensor := by
+    Kraus.transferMap ghzTensor ∘ₗ Kraus.transferMap ghzTensor =
+      Kraus.transferMap ghzTensor := by
   ext X i j : 3
   simp only [LinearMap.comp_apply]
   rw [ghz_transferMap_entry, ghz_transferMap_entry]

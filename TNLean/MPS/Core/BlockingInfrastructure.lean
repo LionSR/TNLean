@@ -727,7 +727,8 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
   -- Rewrite transfer maps as iterates of the original transfer map.
   rw [transferMap_blockTensor]          -- goal: IsPrimitive ((Kraus.transferMap A) ^ (p * m))
   rw [pow_mul]                          -- goal: IsPrimitive (((Kraus.transferMap A) ^ p) ^ m)
-  rw [← transferMap_blockTensor]        -- goal: IsPrimitive ((Kraus.transferMap (blockTensor A p)) ^ m)
+  -- goal: IsPrimitive ((Kraus.transferMap (blockTensor A p)) ^ m)
+  rw [← transferMap_blockTensor]
   exact isPrimitive_pow_of_isPrimitive _ m hm hPrim
 
 end PrimitivityMultiples

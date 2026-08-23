@@ -231,14 +231,16 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     intro X hX
     have hword1 : Kraus.wordSpan A 1 = ⊤ := by
       have hRange :
-          Set.range (fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = Set.range A := by
+          Set.range (fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) =
+            Set.range A := by
         ext M
         constructor
         · rintro ⟨σ, rfl⟩
           exact ⟨σ 0, by simp [Kraus.evalWord]⟩
         · rintro ⟨i, rfl⟩
           exact ⟨fun _ => i, by simp [Kraus.evalWord]⟩
-      change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤
+      change Submodule.span ℂ
+        (Set.range fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤
       rw [hRange]
       exact hA
     have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1 := by

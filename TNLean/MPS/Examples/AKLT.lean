@@ -146,7 +146,8 @@ private abbrev Kraus.wordSpan :=
 
 private lemma product_in_wordSpan (i j : Fin 3) :
     akltTensor i * akltTensor j ∈ Kraus.wordSpan := by
-  rw [show akltTensor i * akltTensor j = Kraus.evalWord akltTensor [i, j] from by simp [Kraus.evalWord]]
+  rw [show akltTensor i * akltTensor j = Kraus.evalWord akltTensor [i, j] from by
+        simp [Kraus.evalWord]]
   have : [i, j] = List.ofFn (![i, j] : Fin 2 → Fin 3) := by
     simp [List.ofFn_succ, List.ofFn_zero]
   rw [this]

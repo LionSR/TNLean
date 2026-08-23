@@ -101,7 +101,8 @@ theorem transferMap_blockTensor_hasEigenvalue
 theorem transferMap_blockTensor_fixedPoint
     (A : MPSTensor d D) (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
     (hX : Kraus.transferMap (d := d) (D := D) A X = X) :
-    Kraus.transferMap (d := blockPhysDim d L) (D := D) (blockTensor (d := d) (D := D) A L) X = X := by
+    Kraus.transferMap (d := blockPhysDim d L) (D := D)
+        (blockTensor (d := d) (D := D) A L) X = X := by
   -- A fixed point is fixed by every iterate.
   have hpow : ((Kraus.transferMap (d := d) (D := D) A) ^ L) X = X := by
     induction L with

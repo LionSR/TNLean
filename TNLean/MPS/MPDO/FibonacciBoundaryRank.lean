@@ -176,7 +176,8 @@ This is the endpoint-support fact needed to split the periodic trace support int
 its two diagonal boundary sectors. -/
 lemma evalWord_closed_endpoint_support_disjoint (W : FusionWeights) (p : Fin 8)
     (w : List (Fin 8)) :
-    ¬(Kraus.evalWord (tensor W) (p :: w) 0 0 ≠ 0 ∧ Kraus.evalWord (tensor W) (p :: w) 1 1 ≠ 0) := by
+    ¬(Kraus.evalWord (tensor W) (p :: w) 0 0 ≠ 0 ∧
+      Kraus.evalWord (tensor W) (p :: w) 1 1 ≠ 0) := by
   rw [evalWord_apply_ne_zero_iff, evalWord_apply_ne_zero_iff]
   simp only [isSupportedWord, Bool.and_eq_true, Bool.not_eq_true',
     decide_eq_false_iff_not, beq_iff_eq]
