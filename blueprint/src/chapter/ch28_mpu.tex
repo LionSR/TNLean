@@ -7614,13 +7614,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{threeMPU, def:mpu_weighted_source_factors,
         thm:mpu_shift_source_cuts_ranks}
-    Equip $U_1$ with the tensor product of the two bond-one identity source
-    factorizations.  Equip $U_2$ with the tensor product of the left-shift and
-    right-shift source factorizations, in that order, and equip $U_3$ with the
-    tensor product in the reverse order.  In all three cases the virtual weight
-    is the identity.  These are explicit supplied source-factor witnesses; no
-    identification with an arbitrary compact singular-value decomposition is
-    asserted.
+    Assume $d>0$. Equip $U_1$ with the tensor product of the two bond-one
+    identity source factorizations.  Equip $U_2$ with the tensor product of the
+    left-shift and right-shift source factorizations, in that order, and equip
+    $U_3$ with the tensor product in the reverse order.  In all three cases the
+    virtual weight is the identity.  These are explicit supplied source-factor
+    witnesses; no identification with an arbitrary compact singular-value
+    decomposition is asserted.
 \end{definition}
 
 \begin{theorem}[One-site supplied source tensors for $U_1$ and $U_3$]
@@ -7629,7 +7629,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₃_sourceUV_eq_swap}
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
-    In the source coordinates of the supplied factorizations,
+    Assume $d>0$. In the source coordinates of the supplied factorizations,
     \begin{align}
         u_1 & =\Id\otimes\Id, & v_1 & =\Id\otimes\Id, \\
         u_3 & =\mathbb S,      & v_3 & =\mathbb S.
@@ -7655,8 +7655,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
-    The two open-leg factorizations of the blocked tensor have, as their
-    respective central gates,
+    Assume $d>0$. The two open-leg factorizations of the blocked tensor have,
+    as their respective central gates,
     \begin{align}
         u_2^{(2)} & =\Id\otimes\mathbb S\otimes\Id, \\
         v_2^{(2)} & =(\mathbb S\otimes\mathbb S)
@@ -7701,8 +7701,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
-    The two open-leg factorizations of the blocked tensor have, as their
-    respective central gates,
+    Assume $d>0$. The two open-leg factorizations of the blocked tensor have,
+    as their respective central gates,
     \begin{align}
         u_3^{(2)} & =(\Id\otimes\mathbb S\otimes\Id)
             (\mathbb S\otimes\mathbb S), \\
@@ -7746,8 +7746,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{threeMPU, thm:threeMPU_supplied_source_uv_one,
         thm:threeMPU_U2_supplied_source_uv_two,
         thm:threeMPU_U3_supplied_source_uv_two}
-    For the fixed standard-form source factors, the corresponding unitaries
-    satisfy
+    Assume $d>0$. For the fixed standard-form source factors, the corresponding
+    unitaries satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
