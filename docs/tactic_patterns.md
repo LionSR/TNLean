@@ -1359,24 +1359,6 @@ current counts and full location lists).
   they encode the source-cut orientations and should not be inferred by a
   searching tactic.
 
-### tensor product of source factors at arbitrary weights — candidate
-- **Pattern:** the tensor product of two supplied source factors is
-  constructed only for identity source weights
-  (`SourceFactors.independentTensorProductOfIdentityWeight`), discharging each
-  weighted-isometry step through the simplification `sourceWeight 1 = 1`.
-- **Seen:** `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean` (definition at
-  line 62 and the two entrywise `..._apply` theorems), from a PR review
-  suggestion, recorded 2026-08-24.
-- **Abstraction (proposed):** a source-weight shuffle
-  `sourceWeight (ρ ⊗ₖ σ) ≅ sourceWeight ρ ⊗ₖ sourceWeight σ` relating the
-  reindexed virtual Kronecker weight to the two constituent source weights,
-  so that an arbitrary-weight `SourceFactors.independentTensorProduct` becomes
-  available and the present identity-weight construction is its `ρ := 1`
-  corollary.
-- **Notes:** recorded only, not implemented; the shift formulas use only
-  identity weights, so no second call site exists yet.  Promotion waits for a
-  consumer with nontrivial source weights.
-
 ### factor pairing under a two-index finite sum — candidate
 - **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a
   pointwise identity proved by `ring` to pair corresponding scalar factors from
