@@ -65,7 +65,7 @@ abbrev FusionBondSpace (D : ℕ) : Type :=
 Doubled-index MPS tensor and blocking `n` physical sites. -/
 noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
     FusionBondSpace D →ₗ[ℂ] FusionBondSpace D :=
-  MPSTensor.transferMap
+  Kraus.transferMap
     (d := MPSTensor.blockPhysDim (d * d) n) (D := D)
     (MPSTensor.blockTensor (d := d * d) (D := D) M.toMPSTensor n)
 

@@ -152,19 +152,19 @@ theorem trace_linearMarkedTensor_mul_evalWord_gauge {A B : MPSTensor d D}
       B z = (X : Matrix (Fin D) (Fin D) ℂ) * A z *
         (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
     (u : Fin e) (w : List (Fin d)) :
-    Matrix.trace (linearMarkedTensor f B u * evalWord B w) =
-      Matrix.trace (linearMarkedTensor f A u * evalWord A w) := by
+    Matrix.trace (linearMarkedTensor f B u * Kraus.evalWord B w) =
+      Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A w) := by
   rw [linearMarkedTensor_gauge f X hX u, evalWord_gauge X hX]
   rw [show
       ((X : Matrix (Fin D) (Fin D) ℂ) * linearMarkedTensor f A u *
           (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
-        ((X : Matrix (Fin D) (Fin D) ℂ) * evalWord A w *
+        ((X : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w *
           (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) =
         (X : Matrix (Fin D) (Fin D) ℂ) *
-          (linearMarkedTensor f A u * evalWord A w) *
+          (linearMarkedTensor f A u * Kraus.evalWord A w) *
           (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) by
     simp [Matrix.mul_assoc]]
-  exact trace_conj_eq X _
+  exact Kraus.trace_conj_eq X _
 
 end MPSTensor
 
@@ -195,10 +195,10 @@ theorem linearMarkedTensor_eq_of_trace_agree
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin (d * d)),
       Matrix.trace
           (MPSTensor.linearMarkedTensor f M.toMPSTensor u *
-            MPSTensor.evalWord M.toMPSTensor (List.ofFn w)) =
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
         Matrix.trace
           (MPSTensor.linearMarkedTensor g M.toMPSTensor u *
-            MPSTensor.evalWord M.toMPSTensor (List.ofFn w))) :
+            Kraus.evalWord M.toMPSTensor (List.ofFn w))) :
     MPSTensor.linearMarkedTensor f M.toMPSTensor =
       MPSTensor.linearMarkedTensor g M.toMPSTensor := by
   classical

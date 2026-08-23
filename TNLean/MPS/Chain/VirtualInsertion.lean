@@ -23,54 +23,54 @@ variable {d D : ℕ}
 /-- The physical realization of a right virtual insertion.
 For injective `A`, `physRealize A hA X` is the `d × d` matrix of coefficients
 that rewrites each `A i * X` in the spanning family `{A j}`. -/
-noncomputable def physRealize (A : MPSTensor d D) (hA : IsInjective A)
+noncomputable def physRealize (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin d) (Fin d) ℂ :=
-  fun i j => decompositionMap (A := A) hA (A i * X) j
+  fun i j => Kraus.decompositionMap (A := A) hA (A i * X) j
 
 /-- Defining property of `physRealize`: each right-inserted matrix decomposes
 in the span of `{A j}` with coefficients read from `physRealize`. -/
-theorem physRealize_spec (A : MPSTensor d D) (hA : IsInjective A)
+theorem physRealize_spec (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     A i * X = ∑ j, (physRealize A hA X) i j • A j :=
-  (decompositionMap_sum (A := A) hA (A i * X)).symm
+  (Kraus.decompositionMap_sum (A := A) hA (A i * X)).symm
 
 /-- Left-bond analogue of `physRealize`:
 `physRealizeLeft A hA X` captures coefficients that rewrite each `X * A i`. -/
-noncomputable def physRealizeLeft (A : MPSTensor d D) (hA : IsInjective A)
+noncomputable def physRealizeLeft (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin d) (Fin d) ℂ :=
-  fun i j => decompositionMap (A := A) hA (X * A i) j
+  fun i j => Kraus.decompositionMap (A := A) hA (X * A i) j
 
 /-- Defining property for the left-bond realization map. -/
-theorem physRealizeLeft_spec (A : MPSTensor d D) (hA : IsInjective A)
+theorem physRealizeLeft_spec (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     X * A i = ∑ j, (physRealizeLeft A hA X) i j • A j :=
-  (decompositionMap_sum (A := A) hA (X * A i)).symm
+  (Kraus.decompositionMap_sum (A := A) hA (X * A i)).symm
 
 /-- `physRealize` preserves multiplication. -/
-theorem physRealize_mul (A : MPSTensor d D) (hA : IsInjective A)
+theorem physRealize_mul (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
     physRealize A hA (X * Y) = physRealize A hA X * physRealize A hA Y := by
   ext i k
-  change decompositionMap (A := A) hA (A i * (X * Y)) k =
+  change Kraus.decompositionMap (A := A) hA (A i * (X * Y)) k =
     (physRealize A hA X * physRealize A hA Y) i k
   have hdecomp :
-      decompositionMap (A := A) hA (A i * (X * Y))
-        = ∑ j, (physRealize A hA X) i j • decompositionMap (A := A) hA (A j * Y) := by
+      Kraus.decompositionMap (A := A) hA (A i * (X * Y))
+        = ∑ j, (physRealize A hA X) i j • Kraus.decompositionMap (A := A) hA (A j * Y) := by
     calc
-      decompositionMap (A := A) hA (A i * (X * Y))
-          = decompositionMap (A := A) hA ((A i * X) * Y) := by
+      Kraus.decompositionMap (A := A) hA (A i * (X * Y))
+          = Kraus.decompositionMap (A := A) hA ((A i * X) * Y) := by
               simp [Matrix.mul_assoc]
-      _ = decompositionMap (A := A) hA ((∑ j, (physRealize A hA X) i j • A j) * Y) := by
+      _ = Kraus.decompositionMap (A := A) hA ((∑ j, (physRealize A hA X) i j • A j) * Y) := by
             rw [← physRealize_spec A hA X i]
-      _ = decompositionMap (A := A) hA (∑ j, (physRealize A hA X) i j • (A j * Y)) := by
+      _ = Kraus.decompositionMap (A := A) hA (∑ j, (physRealize A hA X) i j • (A j * Y)) := by
             simp [Finset.sum_mul]
-      _ = ∑ j, (physRealize A hA X) i j • decompositionMap (A := A) hA (A j * Y) := by
+      _ = ∑ j, (physRealize A hA X) i j • Kraus.decompositionMap (A := A) hA (A j * Y) := by
             simp
   calc
-    decompositionMap (A := A) hA (A i * (X * Y)) k
-        = (∑ j, (physRealize A hA X) i j • decompositionMap (A := A) hA (A j * Y)) k := by
+    Kraus.decompositionMap (A := A) hA (A i * (X * Y)) k
+        = (∑ j, (physRealize A hA X) i j • Kraus.decompositionMap (A := A) hA (A j * Y)) k := by
             simpa using congrArg (fun f => f k) hdecomp
-    _ = ∑ j, (physRealize A hA X) i j * (decompositionMap (A := A) hA (A j * Y)) k := by
+    _ = ∑ j, (physRealize A hA X) i j * (Kraus.decompositionMap (A := A) hA (A j * Y)) k := by
           simp
     _ = ∑ j, (physRealize A hA X) i j * (physRealize A hA Y) j k := by
           simp [physRealize]

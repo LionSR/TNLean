@@ -27,7 +27,7 @@
 
 
 \begin{theorem}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
-    \lean{MPSTensor.injective_implies_irreducibleCP}
+    \lean{Kraus.injective_implies_irreducibleCP}
     \leanok
     \uses{def:injective, def:transfer_map}
     If $A$ is an injective MPS tensor, then its transfer map $\E_A$
@@ -44,7 +44,7 @@
 \section{Transfer maps}
 
 \begin{theorem}[Transfer map is CP]\label{thm:transfer_cp}
-    \lean{MPSTensor.transferMap_isCPMap}
+    \lean{Kraus.transferMap_isCPMap}
     \leanok
     \uses{def:transfer_map}
     The transfer map $\E_A(X)=\sum_i A^iX(A^i)^\dagger$
@@ -60,7 +60,7 @@
 
 \begin{lemma}[Trace adjointness of a transfer map]
     \label{lem:trace_mul_transfer_map_adjoint}
-    \lean{trace_mul_transferMap_adjoint}
+    \lean{Kraus.trace_mul_transferMap_adjoint}
     \leanok
     \uses{def:transfer_map}
     The trace-adjoint identity of
@@ -93,7 +93,7 @@
 
 \begin{lemma}[Left-canonical transfer maps preserve trace]
     \label{lem:trace_transfer_map_left_canonical}
-    \lean{MPSTensor.trace_transferMap}
+    \lean{Kraus.trace_transferMap}
     \leanok
     \uses{def:transfer_map, def:left_canonical_tensor}
     If $A$ is left canonical, then, for every bond matrix $X$,
@@ -116,7 +116,7 @@
 \end{proof}
 
 \begin{theorem}[Transfer map is a channel]\label{thm:transfer_channel}
-    \lean{MPSTensor.transferMap_isChannel}
+    \lean{Kraus.isChannel_transferMap}
     \leanok
     \uses{def:transfer_map}
     If $\sum_i(A^i)^\dagger A^i=\Id$, then the transfer map

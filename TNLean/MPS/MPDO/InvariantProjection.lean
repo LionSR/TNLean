@@ -394,7 +394,7 @@ literal-gauge transport for the general case is supplied in
 the single trailing letter is the identity matrix, giving only a
 trace-level identity, not enough to separate the opposite-corner difference. -/
 theorem ketLeftMul_eq_braRightMul_of_commute_of_isInjective
-    (M : MPOTensor d D) (hInj : MPSTensor.IsInjective M.toMPSTensor)
+    (M : MPOTensor d D) (hInj : Kraus.IsInjective M.toMPSTensor)
     {Q : Matrix (Fin d) (Fin d) ℂ} (hQidem : IsIdempotentElem Q)
     (hComm : Commute (firstSiteMatrix Q 1) (mpo M 2)) :
     M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q := by

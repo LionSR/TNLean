@@ -77,7 +77,7 @@ This is the adjoint-closure step that connects equations `AppKxKy=0` and `PjKiPj
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1634--1639 and 1680--1691. -/
 theorem exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO
-    (K : MPOTensor d D) (hInj : MPSTensor.IsInjective K.toMPSTensor) (hK : IsMPDO K) :
+    (K : MPOTensor d D) (hInj : Kraus.IsInjective K.toMPSTensor) (hK : IsMPDO K) :
     ∃ X : GL (Fin D) ℂ, ∀ β α : Fin D,
       (physicalSlice K β α)ᴴ =
         ∑ ν : Fin D, ∑ μ : Fin D,
@@ -175,7 +175,7 @@ theorem mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
 
 /-- Adjoint closure makes the same physical support projection fix every slice on the right. -/
 theorem physicalSlice_mul_physicalSupportProj_of_isInjective_isMPDO
-    (K : MPOTensor d D) (hInj : MPSTensor.IsInjective K.toMPSTensor) (hK : IsMPDO K)
+    (K : MPOTensor d D) (hInj : Kraus.IsInjective K.toMPSTensor) (hK : IsMPDO K)
     (β α : Fin D) :
     physicalSlice K β α * physicalSupportProj K = physicalSlice K β α := by
   obtain ⟨_, hAdj⟩ :=
@@ -252,7 +252,7 @@ theorem isBNTLayerOrthogonal_iff_physicalSlice_mul_apply_eq_zero
 column spaces orthogonal. -/
 theorem physicalSliceColumns_conjTranspose_mul_eq_zero
     (K : (x : Fin g) → MPOTensor d (bondDim x))
-    (hInj : ∀ x, MPSTensor.IsInjective (K x).toMPSTensor)
+    (hInj : ∀ x, Kraus.IsInjective (K x).toMPSTensor)
     (hMPDO : ∀ x, IsMPDO (K x)) (hOrth : IsBNTLayerOrthogonal K)
     {x y : Fin g} (hxy : x ≠ y) :
     (physicalSliceColumns (K x))ᴴ * physicalSliceColumns (K y) = 0 := by
@@ -285,7 +285,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppKxKy=0` and `PjKiPj`,
 lines 1634--1639 and 1680--1691. -/
 theorem exists_pairwise_orthogonal_twoSided_physicalSupport
     (K : (x : Fin g) → MPOTensor d (bondDim x))
-    (hInj : ∀ x, MPSTensor.IsInjective (K x).toMPSTensor)
+    (hInj : ∀ x, Kraus.IsInjective (K x).toMPSTensor)
     (hMPDO : ∀ x, IsMPDO (K x)) (hOrth : IsBNTLayerOrthogonal K) :
     ∃ P : Fin g → Matrix (Fin d) (Fin d) ℂ,
       (∀ x, IsOrthogonalProjection (P x)) ∧

@@ -31,7 +31,7 @@ boundary conditions (PBC).
 \end{definition}
 
 \begin{definition}[Word evaluation]\label{def:eval_word}
-    \lean{MPSTensor.evalWord}
+    \lean{Kraus.evalWord}
     \leanok
     \uses{def:mps_tensor}
     Given a word $w = (i_1, \ldots, i_L) \in \{0,\ldots,d{-}1\}^L$,
@@ -84,7 +84,7 @@ boundary conditions (PBC).
 \end{proof}
 
 \begin{lemma}[Multiplicativity of word evaluation]\label{lem:eval_word_append}
-    \lean{MPSTensor.evalWord_append}
+    \lean{Kraus.evalWord_append}
     \leanok
     \uses{def:eval_word}
     For any words $w_1, w_2$,
@@ -185,7 +185,7 @@ boundary conditions (PBC).
 \end{definition}
 
 \begin{definition}[Transfer map]\label{def:transfer_map}
-    \lean{MPSTensor.transferMap}
+    \lean{Kraus.transferMap}
     \leanok
     \uses{def:mps_tensor}
     The \emph{transfer map} associated to a tensor~$A$ is the
@@ -409,7 +409,7 @@ boundary conditions (PBC).
 \end{proof}
 
 \begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
-    \lean{MPSTensor.evalWord_smul}
+    \lean{Kraus.evalWord_smul}
     \leanok
     \uses{def:eval_word}
     Let $\zeta A$ denote the tensor with matrices
@@ -561,7 +561,7 @@ boundary conditions (PBC).
 \section{Injectivity and normality}
 
 \begin{definition}[Injectivity]\label{def:injective}
-    \lean{MPSTensor.IsInjective}
+    \lean{Kraus.IsInjective}
     \leanok
     \uses{def:mps_tensor}
     A tensor~$A$ is \emph{injective} if its matrices span the
@@ -587,7 +587,7 @@ $A^{-1}A=\Id$. This is the identity used in
 \cite[Section~2.3, lines~324--331]{Cirac2016MPDO_arXiv}.
 
 \begin{definition}[$L$-block injectivity]\label{def:l_blk_injective}
-    \lean{MPSTensor.IsNBlkInjective}
+    \lean{Kraus.IsNBlkInjective}
     \leanok
     \uses{def:mps_tensor}
     A tensor~$A$ is \emph{$L$-block injective} if
@@ -602,7 +602,7 @@ $A^{-1}A=\Id$. This is the identity used in
 
 \begin{lemma}[One-site injectivity gives one-block injectivity]
     \label{lem:one_block_injective_of_injective}
-    \lean{MPSTensor.isNBlkInjective_one_of_isInjective}
+    \lean{Kraus.isNBlkInjective_one_of_isInjective}
     \leanok
     \uses{def:injective, def:l_blk_injective}
     If the one-site matrices $\{A^i\}_{i=0}^{d-1}$ span $\MN{D}$, then the
@@ -617,7 +617,7 @@ $A^{-1}A=\Id$. This is the identity used in
 \end{proof}
 
 \begin{definition}[Normal tensor]\label{def:normal}
-    \lean{MPSTensor.IsNormal}
+    \lean{Kraus.IsNormal}
     \leanok
     \uses{def:l_blk_injective}
     A tensor~$A$ is \emph{normal}

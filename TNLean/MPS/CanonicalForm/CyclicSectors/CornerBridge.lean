@@ -55,14 +55,14 @@ Given a `∗`-algebra compression equivalence `φ : M_n(ℂ) ≃ₗ[ℂ] cornerS
 intertwining the compressed adjoint transfer map (of `C`) with the
 `P·B`-adjoint transfer map on the corner (`hIntertwine`), and preserving both
 multiplication (`hMul`) and the adjoint (`hStar`), primitivity and
-irreducibility of the corner restriction of the ambient `T = transferMap Bᴴ`
-transport to primitivity and irreducibility of `transferMap Cᴴ`.
+irreducibility of the corner restriction of the ambient `T = Kraus.transferMap Bᴴ`
+transport to primitivity and irreducibility of `Kraus.transferMap Cᴴ`.
 
 The proof uses `hMul` / `hStar` to lift orthogonal projections on
 `M_n(ℂ)` to corner projections `Q = (φ Q').1 ≤ P`, transports
 `PreservesCorner` across `φ` via the intertwining identity, and applies
 `IsPrimitive.conj_iff_cross` to move primitivity across the cross-space
-conjugation `cornerRestriction P T = φ.conj (transferMap Cᴴ)`.
+conjugation `cornerRestriction P T = φ.conj (Kraus.transferMap Cᴴ)`.
 -/
 theorem compressedTensor_adjointTransferMap_cornerBridge
     {r D n : ℕ} [NeZero n]
@@ -70,11 +70,11 @@ theorem compressedTensor_adjointTransferMap_cornerBridge
     (T : MatrixEnd D)
     (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
     (hT :
-      transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
+      Kraus.transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
     (hPproj : IsOrthogonalProjection P)
     (hIntertwine : ∀ X : Matrix (Fin n) (Fin n) ℂ,
-      (φ (transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
-        transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
+      (φ (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
+        Kraus.transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
     (hMul : ∀ X Y : Matrix (Fin n) (Fin n) ℂ,
       (φ (X * Y)).1 = (φ X).1 * (φ Y).1)
     (hStar : ∀ X : Matrix (Fin n) (Fin n) ℂ,
@@ -84,22 +84,22 @@ theorem compressedTensor_adjointTransferMap_cornerBridge
       _root_.IsPrimitive (cornerRestriction P T hInv))
     (hCornerIrr : IsIrreducibleOnCorner P T) :
     _root_.IsPrimitive
-      (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
+      (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
       IsIrreducibleMap
-        (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) := by
+        (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) := by
   classical
   set F_C : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ :=
-    transferMap (d := r) (D := n) (fun i => (C i)ᴴ) with hF_C_def
+    Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ) with hF_C_def
   have hPherm : Pᴴ = P := hPproj.1.eq
   -- On the corner, the ambient `T` and the `P*B`-adjoint transfer map agree.
   have hTeq :
       ∀ Y : MatrixAlg D, P * Y * P = Y →
-        transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) Y = T Y := by
+        Kraus.transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) Y = T Y := by
     intro Y hY
     have hstep :
-        transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) Y =
-          transferMap (d := r) (D := D) (fun i => (B i)ᴴ) Y := by
-      simp only [transferMap_apply]
+        Kraus.transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) Y =
+          Kraus.transferMap (d := r) (D := D) (fun i => (B i)ᴴ) Y := by
+      simp only [Kraus.transferMap_apply]
       refine Finset.sum_congr rfl ?_
       intro i _
       have hPBi : ((P * B i)ᴴ) = (B i)ᴴ * P := by

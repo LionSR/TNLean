@@ -38,8 +38,8 @@ def HasPrimitiveIrreducibleCyclicSectors {d D : ℕ} (A : MPSTensor d D) : Prop 
     SameMPV₂ (blockTensor (d := d) (D := D) A m)
       (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
     (∀ k, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
-    (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (Kraus.transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
+    (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
     (∀ k, 0 < dim k)
 
 /-- A finite family of nonzero-weight blocks with per-block primitive irreducible cyclic sectors
@@ -71,9 +71,9 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
         (toTensorFromBlocks (d := blockPhysDim d (period k))
           (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) ∧
       (∀ s, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (Kraus.transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
           (sectorBlocks k s))) ∧
-      (∀ s, IsIrreducibleTensor (sectorBlocks k s)) ∧
+      (∀ s, Kraus.IsIrreducibleFamily (sectorBlocks k s)) ∧
       (∀ s, 0 < sectorDim k s) := by
     intro k
     exact (hcyc k).choose_spec.2.choose_spec.choose_spec
@@ -87,9 +87,9 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
     fun k => (hSector k).2.1
   have sector_primitive : ∀ k s,
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (Kraus.transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
           (sectorBlocks k s)) := fun k => (hSector k).2.2.1
-  have sector_irreducible : ∀ k s, IsIrreducibleTensor (sectorBlocks k s) :=
+  have sector_irreducible : ∀ k s, Kraus.IsIrreducibleFamily (sectorBlocks k s) :=
     fun k => (hSector k).2.2.2.1
   have sector_dim_pos : ∀ k s, 0 < sectorDim k s :=
     fun k => (hSector k).2.2.2.2
@@ -113,11 +113,11 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
           blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
             (sectorBlocks k s) (extra k) i = 1) ∧
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
+        (Kraus.transferMap (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
           (D := sectorDim k s)
           (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
             (sectorBlocks k s) (extra k))) ∧
-      IsIrreducibleTensor
+      Kraus.IsIrreducibleFamily
         (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
           (sectorBlocks k s) (extra k)) := by
     intro k s

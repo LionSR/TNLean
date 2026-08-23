@@ -49,7 +49,7 @@ private theorem phaseFlipTensor_conjTranspose (i : Fin 2) :
 
 private theorem phaseFlipTensor_transferMap_apply
     (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
-    MPSTensor.transferMap phaseFlipTensor X i j =
+    Kraus.transferMap phaseFlipTensor X i j =
       if i = j then X i j else (-7 / 25 : ℂ) * X i j := by
   have hstarFour : (starRingEnd ℂ) (4 : ℂ) = 4 :=
     map_natCast (starRingEnd ℂ) 4
@@ -57,7 +57,7 @@ private theorem phaseFlipTensor_transferMap_apply
     map_natCast (starRingEnd ℂ) 5
   fin_cases i <;> fin_cases j <;>
     simp only [phaseFlipTensor, Fin.zero_eta, Fin.isValue, Fin.mk_one,
-      MPSTensor.transferMap_apply, Fin.sum_univ_two, Matrix.add_apply,
+      Kraus.transferMap_apply, Fin.sum_univ_two, Matrix.add_apply,
       zero_ne_one, one_ne_zero, ↓reduceIte]
   all_goals simp [Matrix.vecMul, dotProduct, Fin.sum_univ_two, Matrix.mul_apply,
     Matrix.conjTranspose_apply, RCLike.star_def]
@@ -66,24 +66,24 @@ private theorem phaseFlipTensor_transferMap_apply
   all_goals ring
 
 private theorem phaseFlipTensor_transferMap_adjoint :
-    (MPSTensor.transferMap phaseFlipTensor).adjoint =
-      MPSTensor.transferMap phaseFlipTensor := by
+    (Kraus.transferMap phaseFlipTensor).adjoint =
+      Kraus.transferMap phaseFlipTensor := by
   apply LinearMap.ext
   intro X
   rw [MPSTensor.transferMap_adjoint_apply_eq_adjointMap]
-  simp [Kraus.adjointMap, MPSTensor.transferMap_apply,
+  simp [Kraus.adjointMap, Kraus.transferMap_apply,
     phaseFlipTensor_conjTranspose]
 
 private theorem phaseFlipTensor_transferMap_pow_adjoint (n : ℕ) :
-    ((MPSTensor.transferMap phaseFlipTensor) ^ n).adjoint =
-      (MPSTensor.transferMap phaseFlipTensor) ^ n := by
-  have hSymmetric : (MPSTensor.transferMap phaseFlipTensor).IsSymmetric :=
+    ((Kraus.transferMap phaseFlipTensor) ^ n).adjoint =
+      (Kraus.transferMap phaseFlipTensor) ^ n := by
+  have hSymmetric : (Kraus.transferMap phaseFlipTensor).IsSymmetric :=
     (LinearMap.eq_adjoint_iff _ _).mp phaseFlipTensor_transferMap_adjoint.symm
   exact (hSymmetric.pow n).adjoint_eq
 
 private theorem phaseFlipTensor_transferMap_pow_apply
     (n : ℕ) (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
-    ((MPSTensor.transferMap phaseFlipTensor) ^ n) X i j =
+    ((Kraus.transferMap phaseFlipTensor) ^ n) X i j =
       if i = j then X i j else (-7 / 25 : ℂ) ^ n * X i j := by
   induction n generalizing X with
   | zero =>
@@ -110,15 +110,15 @@ private theorem phaseFlip_eigenvalue_pow_ne_one {n : ℕ} (hn : 0 < n) :
 
 private theorem phaseFlipTensor_transferMap_pow_fixed
     {X : Matrix (Fin 2) (Fin 2) ℂ}
-    (hX : MPSTensor.transferMap phaseFlipTensor X = X) (n : ℕ) :
-    (MPSTensor.transferMap phaseFlipTensor ^ n) X = X := by
+    (hX : Kraus.transferMap phaseFlipTensor X = X) (n : ℕ) :
+    (Kraus.transferMap phaseFlipTensor ^ n) X = X := by
   rw [Module.End.pow_apply]
   exact Function.IsFixedPt.iterate hX n
 
 private theorem phaseFlipTensor_transferMap_pow_fixed_iff
     {n : ℕ} (hn : 0 < n) (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    (MPSTensor.transferMap phaseFlipTensor ^ n) X = X ↔
-      MPSTensor.transferMap phaseFlipTensor X = X := by
+    (Kraus.transferMap phaseFlipTensor ^ n) X = X ↔
+      Kraus.transferMap phaseFlipTensor X = X := by
   constructor
   · intro hX
     apply Matrix.ext
@@ -144,8 +144,8 @@ private theorem phaseFlipMPO_isTP :
       Kraus.adjointMap phaseFlipTensor.toMPOTensor.toMPSTensor 1 = 1 by
     simpa [Kraus.IsTP, Kraus.adjointMap, Matrix.mul_one] using hAdjointOne
   rw [← MPSTensor.transferMap_adjoint_apply_eq_adjointMap]
-  have hMap : MPSTensor.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor =
-      MPSTensor.transferMap phaseFlipTensor := by
+  have hMap : Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor =
+      Kraus.transferMap phaseFlipTensor := by
     rw [← MPOTensor.transferMap_eq_toMPSTensor,
       MPSTensor.toMPOTensor_transferMap]
   rw [hMap, phaseFlipTensor_transferMap_adjoint]

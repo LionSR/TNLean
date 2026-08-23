@@ -105,7 +105,7 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
     hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic_exists hB_cyclic_exists
     hdim₀ (hNondegA u₀) hMatch
   -- Stage 2: each sector of `A` is a normal tensor.
-  have hNormal : ∀ u, IsNormal (blocksA u) := fun u =>
+  have hNormal : ∀ u, Kraus.IsNormal (blocksA u) := fun u =>
     sectorBlocked_isNormal_of_isPeriodic A hA blocksA hA_blocks_lc hA_mpv
       hA_cyclic_exists u (hNondegA u)
   -- Stage 3: contract the (reindexed) per-sector matches into a unitary global gauge.

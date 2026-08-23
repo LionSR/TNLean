@@ -32,13 +32,13 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 private theorem scalarUnitTensor_transferMap :
-    transferMap scalarUnitTensor = LinearMap.id := by
+    Kraus.transferMap scalarUnitTensor = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext a b
   fin_cases a
   fin_cases b
-  simp [transferMap_apply, scalarUnitTensor]
+  simp [Kraus.transferMap_apply, scalarUnitTensor]
 
 /-- The one-dimensional scalar unit tensor is normal.
 
@@ -121,7 +121,7 @@ theorem phaseFlipTensor_not_isTransferIdempotent :
   intro hRFP
   have h := LinearMap.congr_fun hRFP (!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℂ)
   have h01 := congrFun (congrFun h 0) 1
-  norm_num [IsTransferIdempotent, LinearMap.comp_apply, transferMap_apply, phaseFlipTensor,
+  norm_num [IsTransferIdempotent, LinearMap.comp_apply, Kraus.transferMap_apply, phaseFlipTensor,
     Matrix.mul_apply, Matrix.conjTranspose_apply] at h01
   norm_num [Matrix.vecMul, dotProduct] at h01
   norm_num [Matrix.mul_apply, Matrix.conjTranspose_apply] at h01

@@ -48,8 +48,8 @@ theorem trace_evalWord_mul_cast_of_heq
     {D₁ D₂ : ℕ} (hD : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hA : A ≍ B)
     (w : List (Fin d)) (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    Matrix.trace (evalWord A w * X) =
-      Matrix.trace (evalWord B w *
+    Matrix.trace (Kraus.evalWord A w * X) =
+      Matrix.trace (Kraus.evalWord B w *
         cast (congrArg (fun n ↦ Matrix (Fin n) (Fin n) ℂ) hD) X) := by
   cases hD
   rw [eq_of_heq hA]
@@ -66,9 +66,9 @@ theorem trace_evalWord_toTensorFromBlocks_mul
     (weight : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (w : List (Fin d))
     (X : Matrix (Fin (∑ j : Fin r, dim j)) (Fin (∑ j : Fin r, dim j)) ℂ) :
-    Matrix.trace (evalWord (toTensorFromBlocks weight A) w * X) =
+    Matrix.trace (Kraus.evalWord (toTensorFromBlocks weight A) w * X) =
       ∑ j : Fin r, Matrix.trace
-        ((weight j) ^ w.length • evalWord (A j) w *
+        ((weight j) ^ w.length • Kraus.evalWord (A j) w *
           Matrix.finSigmaDiagonalBlock X j) := by
   classical
   let e : ((j : Fin r) × Fin (dim j)) ≃ Fin (∑ j : Fin r, dim j) :=
@@ -83,11 +83,11 @@ theorem trace_evalWord_toTensorFromBlocks_mul
   have hmul :
       Matrix.reindex e e
           (Matrix.blockDiagonal' fun j : Fin r ↦
-            weight j ^ w.length • evalWord (A j) w) *
+            weight j ^ w.length • Kraus.evalWord (A j) w) *
           Matrix.reindex e e Xσ =
         Matrix.reindex e e
           (Matrix.blockDiagonal' (fun j : Fin r ↦
-              weight j ^ w.length • evalWord (A j) w) * Xσ) := by
+              weight j ^ w.length • Kraus.evalWord (A j) w) * Xσ) := by
     exact Matrix.reindexLinearEquiv_mul ℂ ℂ e e e _ _
   rw [show finSigmaFinEquiv = e from rfl, hmul, Matrix.trace_reindex]
   rw [Matrix.trace_blockDiagonal'_mul]
@@ -107,27 +107,27 @@ theorem trace_evalWord_gauge_mul
       (G : Matrix (Fin D) (Fin D) ℂ) * A i *
         (↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ))
     (w : List (Fin d)) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.trace (evalWord B w * X) =
-      Matrix.trace (evalWord A w *
+    Matrix.trace (Kraus.evalWord B w * X) =
+      Matrix.trace (Kraus.evalWord A w *
         ((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X *
           (G : Matrix (Fin D) (Fin D) ℂ))) := by
   rw [evalWord_gauge G hG]
   calc
-    Matrix.trace (((G : Matrix (Fin D) (Fin D) ℂ) * evalWord A w *
+    Matrix.trace (((G : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w *
           (↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ)) * X) =
-        Matrix.trace (((G : Matrix (Fin D) (Fin D) ℂ) * evalWord A w) *
+        Matrix.trace (((G : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w) *
           ((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X)) := by
       simp only [Matrix.mul_assoc]
     _ = Matrix.trace
         (((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X) *
-          ((G : Matrix (Fin D) (Fin D) ℂ) * evalWord A w)) :=
+          ((G : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w)) :=
       Matrix.trace_mul_comm _ _
     _ = Matrix.trace
         ((((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X) *
-          (G : Matrix (Fin D) (Fin D) ℂ)) * evalWord A w) := by
+          (G : Matrix (Fin D) (Fin D) ℂ)) * Kraus.evalWord A w) := by
       simp only [Matrix.mul_assoc]
     _ = Matrix.trace
-        (evalWord A w * (((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X) *
+        (Kraus.evalWord A w * (((↑(G⁻¹) : Matrix (Fin D) (Fin D) ℂ) * X) *
           (G : Matrix (Fin D) (Fin D) ℂ))) := Matrix.trace_mul_comm _ _
 
 /-- An arbitrary virtual boundary of a gauge-transformed finite block sum is
@@ -153,9 +153,9 @@ theorem trace_evalWord_gauge_toTensorFromBlocks_mul
     (w : List (Fin d))
     (X : Matrix (Fin (∑ j : Fin r, dim j))
       (Fin (∑ j : Fin r, dim j)) ℂ) :
-    Matrix.trace (evalWord B w * X) =
+    Matrix.trace (Kraus.evalWord B w * X) =
       ∑ j : Fin r, Matrix.trace
-        ((weight j) ^ w.length • evalWord (A j) w *
+        ((weight j) ^ w.length • Kraus.evalWord (A j) w *
           Matrix.finSigmaDiagonalBlock
             ((↑(G⁻¹) : Matrix (Fin (∑ j : Fin r, dim j))
                 (Fin (∑ j : Fin r, dim j)) ℂ) * X *

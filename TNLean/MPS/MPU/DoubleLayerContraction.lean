@@ -148,7 +148,7 @@ Source: arXiv:1703.09188, equations `eq:transfer-op` and `WIsom`, lines
 336--340 and 390--395. -/
 theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
     normalizedDiagonal (doubleLayerTensor U) =
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)).submatrix
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening)).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
   classical
   have hd : (0 : ℝ) < d := by
@@ -160,7 +160,7 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
   rcases finProdFinEquiv.surjective p with ⟨⟨p₁, p₂⟩, rfl⟩
   rcases finProdFinEquiv.surjective q with ⟨⟨q₁, q₂⟩, rfl⟩
   simp only [normalizedDiagonal, contractPhysical, doubleLayerTensor_apply,
-    normalizedFlattening, MPSTensor.transferMap_apply, transferMatrix,
+    normalizedFlattening, Kraus.transferMap_apply, transferMatrix,
     Matrix.submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
     physicalAdjointTensor_apply, Matrix.kronecker_apply,
     Equiv.symm_apply_apply, Matrix.one_apply, smul_eq_mul,
@@ -209,11 +209,11 @@ Source: arXiv:1703.09188, lines 397--405. -/
 theorem normalizedDiagonal_doubleLayerTensor_blockTensor [NeZero d]
     (U : MPOTensor d D) (L : ℕ) :
     normalizedDiagonal (doubleLayerTensor (blockTensor U L)) =
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ L).submatrix
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ L).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
   rw [doubleLayerTensor_blockTensor, normalizedDiagonal_blockTensor L,
     normalizedDiagonal_doubleLayerTensor]
-  let E := transferMatrix (MPSTensor.transferMap U.normalizedFlattening)
+  let E := transferMatrix (Kraus.transferMap U.normalizedFlattening)
   change (E.submatrix finProdFinEquiv.symm finProdFinEquiv.symm) ^ L =
     (E ^ L).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
   induction L with
@@ -549,7 +549,7 @@ Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
 theorem IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero
     [NeZero d] {U : MPOTensor d D} (hU : IsMPU U)
     (J : ℕ) (hJ : 0 < J) (ρ Φ : Fin D × Fin D → ℂ)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ Φ)
     {m : ℕ} (hm : 0 < m)
     (X : Fin m → Matrix (Fin (MPSTensor.blockPhysDim d J))

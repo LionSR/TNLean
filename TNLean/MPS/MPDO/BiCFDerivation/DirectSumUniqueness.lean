@@ -83,7 +83,7 @@ external distinctness hypothesis on the MPV lines: later BNT-level arguments
 must supply that hypothesis from the paper's pairwise-different block states. -/
 theorem not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
-    (hA : IsInjective A) (hB : IsInjective B)
+    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B)
     (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
     (hDistinct : mpvSubmodule A N ≠ mpvSubmodule B N) :
     ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L) := by
@@ -110,7 +110,7 @@ uniqueness theorem at range \(L_0+1\) in the nondegenerate range
 \(L_0+1<N\), rather than assuming the one-site span condition. -/
 theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
-    {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hB : IsNBlkInjective B L₀)
+    {L₀ : ℕ} (hA : Kraus.IsNBlkInjective A L₀) (hB : Kraus.IsNBlkInjective B L₀)
     (hL₀ : 0 < L₀) (hN : 2 ≤ N) (hNlarge : L₀ + 1 < N)
     (hDistinct : mpvSubmodule A N ≠ mpvSubmodule B N) :
     ¬ (D₁ = D₂ ∧ groundSpace A (L₀ + 1) = groundSpace B (L₀ + 1)) := by
@@ -134,8 +134,8 @@ theorem not_bondDim_eq_and_groundSpace_succ_eq_of_mpvSubmodule_ne
 MPV state. -/
 theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
-    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
-    (hA : IsInjective A) (hB : IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
+    (hAblk : Kraus.IsNBlkInjective A L) (hBblk : Kraus.IsNBlkInjective B L)
+    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
     (hDistinct :
       ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
         ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
@@ -155,8 +155,8 @@ nondegenerate boundary-closing range used by the normal uniqueness theorem. -/
 theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
     {L₀ : ℕ}
-    (hA0 : IsNBlkInjective A L₀) (hB0 : IsNBlkInjective B L₀)
-    (hAblk : IsNBlkInjective A (L₀ + 1)) (hBblk : IsNBlkInjective B (L₀ + 1))
+    (hA0 : Kraus.IsNBlkInjective A L₀) (hB0 : Kraus.IsNBlkInjective B L₀)
+    (hAblk : Kraus.IsNBlkInjective A (L₀ + 1)) (hBblk : Kraus.IsNBlkInjective B (L₀ + 1))
     (hD : D₂ ≤ D₁) (hL₀ : 0 < L₀)
     (hDistinct :
       ∃ N : ℕ, 2 ≤ N ∧ L₀ + 1 < N ∧
@@ -179,10 +179,10 @@ input.  The additional block-injectivity hypotheses at `L + (L + L)` are only
 used to identify zero image vectors with zero boundary matrices. -/
 theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
-    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
-    (hAblk3 : IsNBlkInjective A (L + (L + L)))
-    (hBblk3 : IsNBlkInjective B (L + (L + L)))
-    (hA : IsInjective A) (hB : IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
+    (hAblk : Kraus.IsNBlkInjective A L) (hBblk : Kraus.IsNBlkInjective B L)
+    (hAblk3 : Kraus.IsNBlkInjective A (L + (L + L)))
+    (hBblk3 : Kraus.IsNBlkInjective B (L + (L + L)))
+    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
     (hDistinct :
       ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
         ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :

@@ -18,7 +18,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{theorem}[Transfer-map PSD fixed point --- irreducible version]
     \label{thm:transfer_psd_fp_pd_irred}
-    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
+    \lean{Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible}
     \leanok
     \uses{def:transfer_map}
     Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible. If
@@ -35,7 +35,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{theorem}[PSD fixed point is positive definite]
     \label{thm:psd_fp_pd}
-    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef}
+    \lean{Kraus.posSemidef_fixedPoint_isPosDef}
     \leanok
     \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor and let $\rho \ge 0$,
@@ -55,7 +55,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{theorem}[Irreducible fixed-point uniqueness]
     \label{thm:psd_fp_unique_irred}
-    \lean{MPSTensor.posSemidef_fixedPoint_unique_of_irreducible}
+    \lean{Kraus.posSemidef_fixedPoint_unique_of_irreducible}
     \leanok
     \uses{def:transfer_map}
     Let $A$ be an MPS tensor whose transfer map is irreducible. If
@@ -71,7 +71,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{theorem}[Uniqueness of PSD fixed point]
     \label{thm:psd_fp_unique}
-    \lean{MPSTensor.posSemidef_fixedPoint_unique}
+    \lean{Kraus.posSemidef_fixedPoint_unique}
     \leanok
     \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor. If $\rho,\sigma\geq0$ are nonzero
@@ -88,7 +88,7 @@ and~\cite{Evans1978Spectral}.
 \section{Existence and the Perron--Frobenius theorem}
 
 \begin{theorem}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
-    \lean{MPSTensor.exists_posSemidef_fixedPoint}
+    \lean{Kraus.exists_posSemidef_fixedPoint}
     \leanok
     \uses{def:transfer_map}
     Assume $D \ge 1$. Let $A$ be an MPS tensor with
@@ -110,7 +110,7 @@ and~\cite{Evans1978Spectral}.
 \end{proof}
 
 \begin{theorem}[Quantum Perron--Frobenius]\label{thm:qpf}
-    \lean{MPSTensor.quantum_perron_frobenius}
+    \lean{Kraus.quantum_perron_frobenius}
     \leanok
     \uses{def:injective, def:transfer_map}
     Assume $D \ge 1$. Let $A$ be an injective MPS tensor with
@@ -128,7 +128,7 @@ and~\cite{Evans1978Spectral}.
 
 \begin{theorem}[Quantum Perron--Frobenius for irreducible transfer maps]
     \label{thm:qpf_irreducible}
-    \lean{MPSTensor.quantum_perron_frobenius_irreducible}
+    \lean{Kraus.quantum_perron_frobenius_irreducible}
     \leanok
     \uses{def:transfer_map}
     Assume $D\ge 1$. Let $A$ be an MPS tensor such that its transfer map is

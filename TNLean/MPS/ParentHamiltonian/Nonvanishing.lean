@@ -33,12 +33,12 @@ a zero length-\(k\) prefix. If \(k>L_0\), use the span equality
 with the identity matrix to show that every product of length \(k-L_0\) is zero,
 then recurse. -/
 private theorem allZero_contradiction [NeZero D]
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {k : ℕ} (hk : 0 < k)
-    (hzero : ∀ w : List (Fin d), w.length = k → evalWord A w = 0) : False := by
+    (hzero : ∀ w : List (Fin d), w.length = k → Kraus.evalWord A w = 0) : False := by
   have hws : Kraus.wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   -- Strong induction on k.
-  suffices ∀ k, 0 < k → (∀ w : List (Fin d), w.length = k → evalWord A w = 0) → False from
+  suffices ∀ k, 0 < k → (∀ w : List (Fin d), w.length = k → Kraus.evalWord A w = 0) → False from
     this k hk hzero
   intro k
   induction k using Nat.strongRecOn with
@@ -54,12 +54,12 @@ private theorem allZero_contradiction [NeZero D]
         have hsplit := List.take_append_drop k (List.ofFn σ)
         have htake_len : (List.take k (List.ofFn σ)).length = k := by
           rw [List.length_take]; simp; omega
-        calc evalWord A (List.ofFn σ)
-            = evalWord A (List.take k (List.ofFn σ) ++
+        calc Kraus.evalWord A (List.ofFn σ)
+            = Kraus.evalWord A (List.take k (List.ofFn σ) ++
                 List.drop k (List.ofFn σ)) := by rw [hsplit]
-          _ = evalWord A (List.take k (List.ofFn σ)) *
-                evalWord A (List.drop k (List.ofFn σ)) := evalWord_append ..
-          _ = 0 * evalWord A (List.drop k (List.ofFn σ)) := by
+          _ = Kraus.evalWord A (List.take k (List.ofFn σ)) *
+                Kraus.evalWord A (List.drop k (List.ofFn σ)) := Kraus.evalWord_append ..
+          _ = 0 * Kraus.evalWord A (List.drop k (List.ofFn σ)) := by
                 rw [hk_zero _ htake_len]
           _ = 0 := zero_mul _
       exact absurd (hws ▸ hws_bot) top_ne_bot
@@ -68,23 +68,23 @@ private theorem allZero_contradiction [NeZero D]
       have hkL₀_pos : 0 < k - L₀ := by omega
       apply ih (k - L₀) (by omega) hkL₀_pos
       intro w₂ hw₂
-      -- For each σ₁ of length L₀: evalWord A (ofFn σ₁) * evalWord A w₂ = 0.
+      -- For each σ₁ of length L₀: Kraus.evalWord A (ofFn σ₁) * Kraus.evalWord A w₂ = 0.
       have hmul_zero : ∀ σ₁ : Fin L₀ → Fin d,
-          evalWord A (List.ofFn σ₁) * evalWord A w₂ = 0 := by
+          Kraus.evalWord A (List.ofFn σ₁) * Kraus.evalWord A w₂ = 0 := by
         intro σ₁
         have hlen : (List.ofFn σ₁ ++ w₂).length = k := by simp [hw₂]; omega
         have := hk_zero _ hlen
-        rwa [evalWord_append] at this
-      -- The map M ↦ M * evalWord A w₂ vanishes on Kraus.wordSpan A L₀ = ⊤.
-      have hright : LinearMap.mulRight ℂ (evalWord A w₂) = 0 := by
+        rwa [Kraus.evalWord_append] at this
+      -- The map M ↦ M * Kraus.evalWord A w₂ vanishes on Kraus.wordSpan A L₀ = ⊤.
+      have hright : LinearMap.mulRight ℂ (Kraus.evalWord A w₂) = 0 := by
         apply LinearMap.ext_on_range
-          (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+          (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
           (hv := by simpa only [Kraus.wordSpan, Kraus.wordSpan] using hws)
         intro σ₁
         simp [LinearMap.mulRight_apply, hmul_zero σ₁]
-      -- Taking M = 1: evalWord A w₂ = 0.
-      have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * evalWord A w₂ = 0 :=
-        show LinearMap.mulRight ℂ (evalWord A w₂) 1 = 0 by rw [hright]; simp
+      -- Taking M = 1: Kraus.evalWord A w₂ = 0.
+      have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w₂ = 0 :=
+        show LinearMap.mulRight ℂ (Kraus.evalWord A w₂) 1 = 0 by rw [hright]; simp
       simpa using h1
 
 /-- For a tensor that is injective after blocking, the MPS vector is nonzero on
@@ -99,33 +99,33 @@ block-injectivity span identity
 forces every suffix product of length \(N-L_0\) to vanish. Strong induction on
 the word length then gives a contradiction. -/
 theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     (mpv A : NSiteSpace d N) ≠ 0 := by
   have hws : Kraus.wordSpan A L₀ = ⊤ := (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   intro hzero
-  -- mpv = 0 means tr(evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → Fin d.
+  -- mpv = 0 means tr(Kraus.evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → Fin d.
   have htr_zero : ∀ σ : Fin N → Fin d,
-      Matrix.trace (evalWord A (List.ofFn σ)) = 0 := by
+      Matrix.trace (Kraus.evalWord A (List.ofFn σ)) = 0 := by
     intro σ; simpa [mpv, coeff] using congrFun hzero σ
   -- All products of length (N - L₀) are zero by trace nondegeneracy.
   have hprod_zero : ∀ w₂ : List (Fin d), w₂.length = N - L₀ →
-      evalWord A w₂ = 0 := by
+      Kraus.evalWord A w₂ = 0 := by
     intro w₂ hw₂
-    -- Show ∀ M, tr(evalWord A w₂ * M) = 0 to get evalWord A w₂ = 0.
-    apply (Matrix.ext_iff_trace_mul_right (A := evalWord A w₂) (B := 0)).2
+    -- Show ∀ M, tr(Kraus.evalWord A w₂ * M) = 0 to get Kraus.evalWord A w₂ = 0.
+    apply (Matrix.ext_iff_trace_mul_right (A := Kraus.evalWord A w₂) (B := 0)).2
     intro M
-    -- The functional P ↦ tr(P * evalWord A w₂) vanishes on Kraus.wordSpan A L₀ = ⊤.
+    -- The functional P ↦ tr(P * Kraus.evalWord A w₂) vanishes on Kraus.wordSpan A L₀ = ⊤.
     have hφ : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-        (LinearMap.mulRight ℂ (evalWord A w₂)) = 0 := by
+        (LinearMap.mulRight ℂ (Kraus.evalWord A w₂)) = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+        (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
         (hv := by simpa only [Kraus.wordSpan, Kraus.wordSpan] using hws)
       intro σ₁
       simp only [LinearMap.comp_apply, LinearMap.mulRight_apply,
         Matrix.traceLinearMap_apply]
-      -- tr(evalWord A (List.ofFn σ₁) * evalWord A w₂) = tr(evalWord A (σ₁ ++ w₂))
-      rw [← evalWord_append]
+      -- tr(Kraus.evalWord A (List.ofFn σ₁) * Kraus.evalWord A w₂) = tr(Kraus.evalWord A (σ₁ ++ w₂))
+      rw [← Kraus.evalWord_append]
       -- This is a trace of a length-N word product, hence 0.
       have hlen : (List.ofFn σ₁ ++ w₂).length = N := by simp [hw₂]; omega
       let σ' : Fin N → Fin d :=
@@ -136,9 +136,9 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
         · intro i h1 h2; simp [σ']
       rw [← hw_eq]
       exact htr_zero σ'
-    -- From hφ: ∀ P, tr(P * evalWord A w₂) = 0. By trace commutativity:
-    calc Matrix.trace (evalWord A w₂ * M)
-        = Matrix.trace (M * evalWord A w₂) := Matrix.trace_mul_comm ..
+    -- From hφ: ∀ P, tr(P * Kraus.evalWord A w₂) = 0. By trace commutativity:
+    calc Matrix.trace (Kraus.evalWord A w₂ * M)
+        = Matrix.trace (M * Kraus.evalWord A w₂) := Matrix.trace_mul_comm ..
       _ = 0 := by
           simpa [Matrix.traceLinearMap_apply] using congrArg (· M) hφ
       _ = Matrix.trace (0 * M) := by simp

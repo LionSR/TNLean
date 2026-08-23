@@ -45,7 +45,7 @@ but gives no explicit bound. This file provides constructive bounds.
 * [M. Wolf, *Quantum Channels & Operations*, Section 6.3]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal
+open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal Kraus
 open Matrix Finset
 
 attribute [local instance 1001]
@@ -76,18 +76,18 @@ radius `< 1`. The convergence estimate then follows from Gelfand's formula. -/
 theorem exponential_convergence_of_primitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
+    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
     ∃ (C : ℝ) (δ : ℝ),
       0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
-        ‖((transferMap (d := d) (D := D) A)^[n]) X -
+        ‖((Kraus.transferMap (d := d) (D := D) A)^[n]) X -
           fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
   classical
   let V := Matrix (Fin D) (Fin D) ℂ
-  let E : V →ₗ[ℂ] V := transferMap (d := d) (D := D) A
+  let E : V →ₗ[ℂ] V := Kraus.transferMap (d := d) (D := D) A
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ (ne_of_gt hρ_pd.trace_pos)
   let N : V →ₗ[ℂ] V := E - P
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
@@ -98,9 +98,9 @@ theorem exponential_convergence_of_primitive [NeZero D]
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   have hCh : IsChannel E := by
-    simpa only [E] using transferMap_isChannel (A := A) hNorm
+    simpa only [E] using Kraus.isChannel_transferMap A hNorm
   have hIrr : IsIrreducibleMap E := by
-    simpa only [E] using injective_implies_irreducibleCP A hA
+    simpa only [E] using Kraus.injective_implies_irreducibleCP A hA
   have hρ_ne : ρ ≠ 0 := by
     intro hρ0
     exact (ne_of_gt hρ_pd.trace_pos) (by simp [hρ0])
@@ -143,7 +143,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
   · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
     have hpowEq :=
       pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := ρ) htrρ
-        (transferMap_isChannel (A := A) hNorm).tp hρ_fix hn1
+        (Kraus.isChannel_transferMap A hNorm).tp hρ_fix hn1
     calc
       ‖((E^[n]) X) - P X‖ = ‖(E ^ n) X - P X‖ := by simp [E, Module.End.pow_apply]
       _ = ‖(P + N ^ n) X - P X‖ := by rw [hpowEq]
@@ -170,16 +170,16 @@ form `geometric_apply_bound_of_spectralRadius_lt_one` of
 theorem correlation_length_bound [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hA : IsInjective A) :
+    (hA : Kraus.IsInjective A) :
     ∃ (C : ℝ) (ξ : ℝ),
       0 < C ∧ 0 < ξ ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
         Matrix.trace X = 0 →
-        ‖((transferMap (d := d) (D := D) A)^[n]) X‖ ≤
+        ‖((Kraus.transferMap (d := d) (D := D) A)^[n]) X‖ ≤
           C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
   classical
   let V := Matrix (Fin D) (Fin D) ℂ
-  let E : V →ₗ[ℂ] V := transferMap (d := d) (D := D) A
+  let E : V →ₗ[ℂ] V := Kraus.transferMap (d := d) (D := D) A
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
@@ -243,7 +243,7 @@ theorem correlation_length_bound [NeZero D]
   · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
     have hpowEq :=
       pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := ρ) htrρ
-        (transferMap_isChannel (A := A) hNorm).tp hρ_fix hn1
+        (Kraus.isChannel_transferMap A hNorm).tp hρ_fix hn1
     calc
       ‖((E^[n]) X)‖ = ‖(E ^ n) X‖ := by simp [E, Module.End.pow_apply]
       _ = ‖(P + N ^ n) X‖ := by rw [hpowEq]
@@ -269,21 +269,21 @@ uniform bound. -/
 theorem transfer_map_gap_of_injective [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hA : IsInjective A) :
+    (hA : Kraus.IsInjective A) :
     ∃ (δ : ℝ), 0 < δ ∧
-      ∀ (μ : ℂ), Module.End.HasEigenvalue (transferMap (d := d) (D := D) A) μ →
+      ∀ (μ : ℂ), Module.End.HasEigenvalue (Kraus.transferMap (d := d) (D := D) A) μ →
         μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
-  set E := transferMap (d := d) (D := D) A
-  -- Step 1: IsInjective → IsPrimitive (transferMap A)
+  set E := Kraus.transferMap (d := d) (D := D) A
+  -- Step 1: Kraus.IsInjective → IsPrimitive (Kraus.transferMap A)
   have hPrim : _root_.IsPrimitive E :=
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
-  have hE_eq : E = mixedTransferMap A A := (mixedTransferMap_self A).symm
+  have hE_eq : E = Kraus.mixedTransferMap A A := (Kraus.mixedTransferMap_self A).symm
   have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
     intro μ hμ
-    exact eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
+    exact Kraus.eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
   -- Step 3: non-1 eigenvalues have ‖μ‖ < 1, then extract uniform gap
   exact uniform_eigenvalue_gap_of_finite_lt_one (Module.End.finite_hasEigenvalue E)
     fun μ hμ hne => lt_of_le_of_ne (hbound μ hμ)

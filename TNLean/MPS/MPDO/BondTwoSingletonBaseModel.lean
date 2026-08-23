@@ -161,13 +161,13 @@ def baseSymbolTensor (a : Fin 4) : MPSTensor 4 1 :=
   fun i ↦ if i = a then 1 else 0
 
 private theorem baseSymbolTensor_transferMap (a : Fin 4) :
-    MPSTensor.transferMap (baseSymbolTensor a) = LinearMap.id := by
+    Kraus.transferMap (baseSymbolTensor a) = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext x y
   fin_cases x
   fin_cases y
-  simp [MPSTensor.transferMap_apply, baseSymbolTensor]
+  simp [Kraus.transferMap_apply, baseSymbolTensor]
 
 /-- Every symbol block in the four-block decomposition is a normal tensor. -/
 theorem baseSymbolTensor_isNormalTensor (a : Fin 4) :
@@ -429,7 +429,7 @@ theorem normalizedSingletonTensor_isNormalTensor :
     MPSTensor.IsNormalTensor normalizedSingletonTensor := by
   have hs : ((singletonScale : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt singletonScale_pos
-  have hNormal : MPSTensor.IsNormal normalizedSingletonTensor :=
+  have hNormal : Kraus.IsNormal normalizedSingletonTensor :=
     (singletonTensor_isInjective.smul hs).isNormal
   exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical
     normalizedSingletonTensor hNormal normalizedSingletonTensor_isLeftCanonical

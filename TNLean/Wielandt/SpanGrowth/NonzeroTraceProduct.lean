@@ -28,7 +28,7 @@ variable {d D : ℕ}
 
 Paper: arXiv:0909.5347, Lemma 1, proof paragraphs 1–3. -/
 theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
+    (A : MPSTensor d D) (hN : Kraus.IsNormal A) :
     Kraus.cumulativeSpan A (D ^ 2) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_bound A hN
@@ -36,7 +36,7 @@ theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
 /-- **Lemma 1, sharp span form** (arXiv:0909.5347): if `A` is normal, its cumulative
 word span is full by step `D² − dim(S₁(A)) + 1`. -/
 theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
+    (A : MPSTensor d D) (hN : Kraus.IsNormal A) :
     Kraus.cumulativeSpan A (D ^ 2 - Module.finrank ℂ (Kraus.wordSpan A 1) + 1) = ⊤ := by
   obtain ⟨N, _, hN⟩ := hN
   exact Kraus.cumulativeSpan_eq_top_of_wordSpan_eq_top_sharp A hN

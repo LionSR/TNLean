@@ -55,7 +55,7 @@ def physicalPairSwapEquiv (d : ℕ) : Fin (d * d) ≃ Fin (d * d) :=
 conjugation to every virtual matrix entry and exchanging the two flattened physical coordinates. -/
 theorem normalizedFlattening_physicalAdjointTensor (U : MPOTensor d D) :
     (physicalAdjointTensor U).normalizedFlattening =
-      MPSTensor.reindexPhysical (physicalPairSwapEquiv d)
+      Kraus.reindexPhysical (physicalPairSwapEquiv d)
         (MPSTensor.mapStar U.normalizedFlattening) := by
   ext ij β α
   rw [show ij = finProdFinEquiv (ij.divNat, ij.modNat) by
@@ -86,7 +86,7 @@ noncomputable def physicalAdjointNormalizedFlattening
   dim := data.dim
   dim_pos := data.dim_pos
   weights := fun k ↦ star (data.weights k)
-  blocks := fun k ↦ MPSTensor.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+  blocks := fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
     (MPSTensor.mapStar (data.blocks k))
   blocks_normal := fun k ↦
     (MPSTensor.IsNormalTensor.mapStar (data.blocks_normal k)).reindexPhysical
@@ -106,7 +106,7 @@ noncomputable def physicalAdjointNormalizedFlattening
         (MPSTensor.toTensorFromBlocks data.weights data.blocks
           (MPOTensor.physicalPairSwapEquiv d i)).map (starRingEnd ℂ) =
           MPSTensor.toTensorFromBlocks (fun k ↦ star (data.weights k))
-            (fun k ↦ MPSTensor.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+            (fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
               (MPSTensor.mapStar (data.blocks k))) i := by
       simp only [MPSTensor.toTensorFromBlocks, Kraus.reindexPhysical]
       rw [show ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
@@ -158,7 +158,7 @@ noncomputable def physicalAdjointNormalizedFlattening
 @[simp] theorem physicalAdjointNormalizedFlattening_blocks
     (data : CPSVCanonicalFormIIData U.normalizedFlattening) (k : Fin data.r) :
     data.physicalAdjointNormalizedFlattening.blocks k =
-      MPSTensor.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+      Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
         (MPSTensor.mapStar (data.blocks k)) := rfl
 
 /-- The transported ambient coisometry is the entrywise conjugate of the original one. -/

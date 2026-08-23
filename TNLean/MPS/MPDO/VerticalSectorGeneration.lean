@@ -82,7 +82,8 @@ preservation, and the trace-adjoint Schwarz inequalities.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1995. -/
 structure VerticalSectorHypotheses {g₁ g₂ d D : ℕ} : Type
-    extends VerticalSectorFixedGeneratorHypotheses (g₁ := g₁) (g₂ := g₂) (d := d) (D := D) where
+    extends VerticalSectorFixedGeneratorHypotheses (g₁ := g₁) (g₂ := g₂) (d := d)
+      (D := D) where
   /-- The one-site vertical tensors form a basis of normal tensors.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1980--1995. -/
@@ -275,7 +276,7 @@ theorem weightedVerticalBondContractionProduct_single
     rw [hih]
     simp only [weightedVerticalBondContraction,
       MPSTensor.contractBondMatrix_single_mod_div, MPSTensor.wordTuple]
-    rw [List.ofFn_succ, MPSTensor.evalWord_cons]
+    rw [List.ofFn_succ, Kraus.evalWord_cons]
     rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
     simp only [pow_succ]
     rw [mul_comm]

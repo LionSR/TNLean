@@ -81,12 +81,12 @@ theorem sameMPVFrom_zero_iff {A B : MPSTensor d D} :
 
 /-! ## Trace agreement on word extensions -/
 
-/-- If `SameMPVFrom N₀ A B`, then `tr(evalWord A w) = tr(evalWord B w)` for
+/-- If `SameMPVFrom N₀ A B`, then `tr(Kraus.evalWord A w) = tr(Kraus.evalWord B w)` for
 all words `w` of length `|w| ≥ N₀`. -/
 lemma SameMPVFrom.trace_evalWord_of_length_ge
     {A B : MPSTensor d D} {N₀ : ℕ}
     (h : SameMPVFrom N₀ A B) {w : List (Fin d)} (hw : N₀ ≤ w.length) :
-    Matrix.trace (evalWord A w) = Matrix.trace (evalWord B w) := by
+    Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   have := h w.length hw w.get
   simp only [mpv, coeff, List.ofFn_get] at this
   exact this
@@ -95,7 +95,7 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
 
 /-- For an injective tensor, `Kraus.wordSpan A n = ⊤` for all `n ≥ 1`. -/
 theorem wordSpan_eq_top_of_isInjective
-    {A : MPSTensor d D} (hA : IsInjective A)
+    {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {n : ℕ} (hn : 0 < n) : Kraus.wordSpan A n = ⊤ := by
   classical
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
@@ -107,18 +107,18 @@ theorem wordSpan_eq_top_of_isInjective
       rw [eq_top_iff, ← hA.span_eq_top]
       apply Submodule.span_le.mpr
       rintro _ ⟨i, rfl⟩
-      have : A i = evalWord A [i] := by simp
+      have : A i = Kraus.evalWord A [i] := by simp
       rw [this]; exact Kraus.evalWord_mem_wordSpan A [i]
     · -- Inductive step: Kraus.wordSpan A n ≤ Kraus.wordSpan A (n+1)
       rw [eq_top_iff, ← ih hn']
       apply Submodule.span_le.mpr
       rintro _ ⟨σ, rfl⟩
-      have key : evalWord A (List.ofFn σ) =
-          ∑ i, c i • evalWord A (List.ofFn σ ++ [i]) := by
-        conv_lhs => rw [show evalWord A (List.ofFn σ) = evalWord A (List.ofFn σ) * 1
+      have key : Kraus.evalWord A (List.ofFn σ) =
+          ∑ i, c i • Kraus.evalWord A (List.ofFn σ ++ [i]) := by
+        conv_lhs => rw [show Kraus.evalWord A (List.ofFn σ) = Kraus.evalWord A (List.ofFn σ) * 1
           from (mul_one _).symm, hc, Finset.mul_sum]
-        simp only [Algebra.mul_smul_comm, evalWord_append, evalWord_cons,
-          evalWord_nil, mul_one]
+        simp only [Algebra.mul_smul_comm, Kraus.evalWord_append, Kraus.evalWord_cons,
+          Kraus.evalWord_nil, mul_one]
       dsimp only
       rw [show Kraus.evalWord A (List.ofFn σ) =
           ∑ i, c i • Kraus.evalWord A (List.ofFn σ ++ [i]) from key]
@@ -137,7 +137,7 @@ and finrank transfer; (2) `S = Σ cᵢ Bⁱ = 1` by trace nondegeneracy;
 (3) downward induction on word length using the `A`-decomposition of `1`. -/
 theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     {A B : MPSTensor d D}
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     SameMPV A B := by
   -- Handle N₀ = 0 trivially.
@@ -148,8 +148,8 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
   -- ── Step 1: Kraus.wordSpan B N₀ = ⊤ (composition identity) ──
   have hWB : Kraus.wordSpan B N₀ = ⊤ := by
-    let genA := fun σ : Fin N₀ → Fin d => evalWord A (List.ofFn σ)
-    let genB := fun σ : Fin N₀ → Fin d => evalWord B (List.ofFn σ)
+    let genA := fun σ : Fin N₀ → Fin d => Kraus.evalWord A (List.ofFn σ)
+    let genB := fun σ : Fin N₀ → Fin d => Kraus.evalWord B (List.ofFn σ)
     let lcA := Fintype.linearCombination ℂ genA
     let lcB := Fintype.linearCombination ℂ genB
     let ΦA := traceMulRightPi (d := d) (D := D) A
@@ -164,12 +164,12 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
       simp only [lcA, lcB, Fintype.linearCombination_apply, Finset.sum_mul,
         smul_mul_assoc, Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
       apply Finset.sum_congr rfl; intro σ _
-      conv_lhs => rw [show evalWord A (List.ofFn σ) * A j =
-          evalWord A (List.ofFn σ ++ [j]) from by
-        rw [show A j = evalWord A [j] from by simp, ← evalWord_append]]
-      conv_rhs => rw [show evalWord B (List.ofFn σ) * B j =
-          evalWord B (List.ofFn σ ++ [j]) from by
-        rw [show B j = evalWord B [j] from by simp, ← evalWord_append]]
+      conv_lhs => rw [show Kraus.evalWord A (List.ofFn σ) * A j =
+          Kraus.evalWord A (List.ofFn σ ++ [j]) from by
+        rw [show A j = Kraus.evalWord A [j] from by simp, ← Kraus.evalWord_append]]
+      conv_rhs => rw [show Kraus.evalWord B (List.ofFn σ) * B j =
+          Kraus.evalWord B (List.ofFn σ ++ [j]) from by
+        rw [show B j = Kraus.evalWord B [j] from by simp, ← Kraus.evalWord_append]]
       have key := hFrom.trace_evalWord_of_length_ge
         (show N₀ ≤ (List.ofFn σ ++ [j]).length by simp)
       rw [key]
@@ -211,26 +211,26 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     have hf : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
         (LinearMap.mulLeft ℂ (S - 1)) = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin N₀ → Fin d => evalWord B (List.ofFn σ))
+        (v := fun σ : Fin N₀ → Fin d => Kraus.evalWord B (List.ofFn σ))
         (hv := hWB)
       intro σ
       simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
         Matrix.traceLinearMap_apply, LinearMap.zero_apply, sub_mul, map_sub,
         one_mul]
-      -- Goal: tr(S · evalWord B (List.ofFn σ)) - tr(evalWord B (List.ofFn σ)) = 0
-      -- Both sides equal tr(evalWord A (List.ofFn σ))
-      have h_SN : Matrix.trace (S * evalWord B (List.ofFn σ)) =
-          Matrix.trace (evalWord A (List.ofFn σ)) := by
-        change Matrix.trace ((∑ i, c i • B i) * evalWord B (List.ofFn σ)) = _
+      -- Goal: tr(S · Kraus.evalWord B (List.ofFn σ)) - tr(Kraus.evalWord B (List.ofFn σ)) = 0
+      -- Both sides equal tr(Kraus.evalWord A (List.ofFn σ))
+      have h_SN : Matrix.trace (S * Kraus.evalWord B (List.ofFn σ)) =
+          Matrix.trace (Kraus.evalWord A (List.ofFn σ)) := by
+        change Matrix.trace ((∑ i, c i • B i) * Kraus.evalWord B (List.ofFn σ)) = _
         rw [Finset.sum_mul]
         simp only [smul_mul_assoc, Matrix.trace_sum, Matrix.trace_smul,
-          smul_eq_mul, ← evalWord_cons]
-        have : Matrix.trace (evalWord A (List.ofFn σ)) =
-            ∑ i, c i * Matrix.trace (evalWord A (i :: List.ofFn σ)) := by
-          conv_lhs => rw [show evalWord A (List.ofFn σ) = 1 * evalWord A (List.ofFn σ)
+          smul_eq_mul, ← Kraus.evalWord_cons]
+        have : Matrix.trace (Kraus.evalWord A (List.ofFn σ)) =
+            ∑ i, c i * Matrix.trace (Kraus.evalWord A (i :: List.ofFn σ)) := by
+          conv_lhs => rw [show Kraus.evalWord A (List.ofFn σ) = 1 * Kraus.evalWord A (List.ofFn σ)
             from (one_mul _).symm, hc, Finset.sum_mul]
           simp only [smul_mul_assoc, Matrix.trace_sum, Matrix.trace_smul,
-            smul_eq_mul, ← evalWord_cons]
+            smul_eq_mul, ← Kraus.evalWord_cons]
         rw [this]; apply Finset.sum_congr rfl; intro i _; congr 1
         exact (hFrom.trace_evalWord_of_length_ge (w := i :: List.ofFn σ) (by simp)).symm
       rw [h_SN, (hFrom.trace_evalWord_of_length_ge (show N₀ ≤ (List.ofFn σ).length by simp)).symm,
@@ -239,11 +239,11 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
       using congrFun (congrArg DFunLike.coe hf) N
   -- ── Step 3: SameMPV by downward induction ──
   suffices h_all : ∀ w : List (Fin d),
-      Matrix.trace (evalWord A w) = Matrix.trace (evalWord B w) by
+      Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) by
     intro N σ; simpa [mpv, coeff] using h_all (List.ofFn σ)
   -- Induction on k = N₀ − |w|
   suffices h_k : ∀ k, ∀ w : List (Fin d), w.length + k = N₀ →
-      Matrix.trace (evalWord A w) = Matrix.trace (evalWord B w) by
+      Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) by
     intro w
     by_cases hle : N₀ ≤ w.length
     · exact hFrom.trace_evalWord_of_length_ge hle
@@ -253,21 +253,21 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
   | succ k ih =>
     intro w hw
     -- Decompose using A: tr(w_A) = Σ cᵢ tr((w++[i])_A)
-    have hA_sum : Matrix.trace (evalWord A w) =
-        ∑ i : Fin d, c i * Matrix.trace (evalWord A (w ++ [i])) := by
-      conv_lhs => rw [show evalWord A w = evalWord A w * 1 from (mul_one _).symm, hc,
+    have hA_sum : Matrix.trace (Kraus.evalWord A w) =
+        ∑ i : Fin d, c i * Matrix.trace (Kraus.evalWord A (w ++ [i])) := by
+      conv_lhs => rw [show Kraus.evalWord A w = Kraus.evalWord A w * 1 from (mul_one _).symm, hc,
         Finset.mul_sum]
       simp only [Algebra.mul_smul_comm, Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
       apply Finset.sum_congr rfl; intro i _; congr 1
-      rw [show A i = evalWord A [i] from by simp, ← evalWord_append]
+      rw [show A i = Kraus.evalWord A [i] from by simp, ← Kraus.evalWord_append]
     -- Decompose using B (S = 1): tr(w_B) = Σ cᵢ tr((w++[i])_B)
-    have hB_sum : Matrix.trace (evalWord B w) =
-        ∑ i : Fin d, c i * Matrix.trace (evalWord B (w ++ [i])) := by
-      conv_lhs => rw [show evalWord B w = evalWord B w * 1 from (mul_one _).symm,
+    have hB_sum : Matrix.trace (Kraus.evalWord B w) =
+        ∑ i : Fin d, c i * Matrix.trace (Kraus.evalWord B (w ++ [i])) := by
+      conv_lhs => rw [show Kraus.evalWord B w = Kraus.evalWord B w * 1 from (mul_one _).symm,
         show (1 : Matrix (Fin D) (Fin D) ℂ) = S from hS.symm, Finset.mul_sum]
       simp only [Algebra.mul_smul_comm, Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
       apply Finset.sum_congr rfl; intro i _; congr 1
-      rw [show B i = evalWord B [i] from by simp, ← evalWord_append]
+      rw [show B i = Kraus.evalWord B [i] from by simp, ← Kraus.evalWord_append]
     rw [hA_sum, hB_sum]
     apply Finset.sum_congr rfl; intro i _; congr 1
     exact ih (w ++ [i]) (by simp; omega)
@@ -278,7 +278,7 @@ If `A` is injective and `SameMPVFrom N₀ A B` for any threshold `N₀`, then
 `A` and `B` are gauge equivalent. -/
 theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D]
     {A B : MPSTensor d D}
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     GaugeEquiv A B :=
   fundamentalTheorem_singleBlock hA (sameMPV_of_sameMPVFrom_of_injective hA hFrom)

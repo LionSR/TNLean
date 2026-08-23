@@ -122,8 +122,8 @@ theorem exists_verticalComponent_eq_smul_single (p q : Fin 4) :
   simp only [pp, qq, Prod.eta, Equiv.apply_symm_apply]
 
 /-- The normalized vertical component is injective at one site. -/
-theorem verticalComponent_isInjective : MPSTensor.IsInjective verticalComponent := by
-  unfold MPSTensor.IsInjective
+theorem verticalComponent_isInjective : Kraus.IsInjective verticalComponent := by
+  unfold Kraus.IsInjective
   apply le_antisymm le_top
   rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
   apply Submodule.span_le.mpr
@@ -166,7 +166,7 @@ theorem verticalComponent_isLeftCanonical : verticalComponent.IsLeftCanonical :=
     Matrix.submatrix_one_equiv]
 
 /-- Algebraic injectivity makes the normalized vertical component normal. -/
-theorem verticalComponent_isNormal : MPSTensor.IsNormal verticalComponent :=
+theorem verticalComponent_isNormal : Kraus.IsNormal verticalComponent :=
   verticalComponent_isInjective.isNormal
 
 /-- The normalized vertical component is a CPSV normal tensor. -/
@@ -418,15 +418,15 @@ private theorem pureState_mul_self (B : MPSTensor d D) (L : ℕ) :
   ring
 
 private theorem transferMap_A_diagonal (x : Fin 2 → ℂ) :
-    MPSTensor.transferMap A (Matrix.diagonal x) =
+    Kraus.transferMap A (Matrix.diagonal x) =
       Matrix.diagonal (wMat.mulVec x) := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [MPSTensor.transferMap_apply, A, wMat,
+    simp [Kraus.transferMap_apply, A, wMat,
       dotProduct, Fin.sum_univ_four, Fin.sum_univ_two] <;> ring
 
 private theorem transferMap_A_pow_single_diag (N : ℕ) (i : Fin 2) :
-    (MPSTensor.transferMap A ^ N) (Matrix.single i i 1) =
+    (Kraus.transferMap A ^ N) (Matrix.single i i 1) =
       Matrix.diagonal (fun j ↦ (wMat ^ N) j i) := by
   induction N with
   | zero =>
@@ -445,7 +445,7 @@ private theorem transferMap_A_pow_single_diag (N : ℕ) (i : Fin 2) :
       · simp [Matrix.diagonal_apply_ne _ hjk]
 
 private theorem transferMap_A_single_offdiag (i j : Fin 2) (hij : i ≠ j) :
-    MPSTensor.transferMap A (Matrix.single i j 1) = 0 := by
+    Kraus.transferMap A (Matrix.single i j 1) = 0 := by
   fin_cases i <;> fin_cases j
   · exact (hij rfl).elim
   · exact transferMap_A_single01
@@ -454,7 +454,7 @@ private theorem transferMap_A_single_offdiag (i j : Fin 2) (hij : i ≠ j) :
 
 private theorem transferMap_A_pow_single_offdiag
     (L : ℕ) (hL : 0 < L) (i j : Fin 2) (hij : i ≠ j) :
-    (MPSTensor.transferMap A ^ L) (Matrix.single i j 1) = 0 := by
+    (Kraus.transferMap A ^ L) (Matrix.single i j 1) = 0 := by
   obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hL.ne'
   rw [pow_succ, Module.End.mul_apply, transferMap_A_single_offdiag i j hij, map_zero]
 
@@ -462,15 +462,15 @@ private theorem transferMap_A_pow_single_offdiag
 theorem mpvOverlap_A_eq_wMat_pow_trace (L : ℕ) (hL : 0 < L) :
     MPSTensor.mpvOverlap A A L = (wMat ^ L).trace := by
   rw [← MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap A A L,
-    MPSTensor.mixedTransferMap_self]
+    Kraus.mixedTransferMap_self]
   rw [Matrix.linearMap_trace_eq_sum_apply_single]
   simp only [Matrix.trace]
   apply Finset.sum_congr rfl
   intro i _
   calc
     (∑ j : Fin 2,
-        ((MPSTensor.transferMap A ^ L) (Matrix.single i j 1)) i j) =
-        ((MPSTensor.transferMap A ^ L) (Matrix.single i i 1)) i i := by
+        ((Kraus.transferMap A ^ L) (Matrix.single i j 1)) i j) =
+        ((Kraus.transferMap A ^ L) (Matrix.single i i 1)) i i := by
       apply Finset.sum_eq_single i
       · intro j _ hji
         rw [transferMap_A_pow_single_offdiag L hL i j hji.symm]

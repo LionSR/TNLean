@@ -59,7 +59,7 @@ the RFP/BNT projections expose only the assumptions used at each step.
 structure HasInjectiveBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
-  block_injective : ∀ k, IsInjective (A k)
+  block_injective : ∀ k, Kraus.IsInjective (A k)
 
 namespace HasInjectiveBlocks
 
@@ -67,7 +67,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasInjectiveBlocks` from pointwise injectivity. -/
-theorem ofForall (hA : ∀ k, IsInjective (A k)) : HasInjectiveBlocks (d := d) A where
+theorem ofForall (hA : ∀ k, Kraus.IsInjective (A k)) : HasInjectiveBlocks (d := d) A where
   block_injective := hA
 
 end HasInjectiveBlocks
@@ -76,7 +76,7 @@ end HasInjectiveBlocks
 structure HasIrreducibleBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block has no nontrivial invariant orthogonal projection. -/
-  block_irreducible : ∀ k, IsIrreducibleTensor (A k)
+  block_irreducible : ∀ k, Kraus.IsIrreducibleFamily (A k)
 
 namespace HasIrreducibleBlocks
 
@@ -84,7 +84,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasIrreducibleBlocks` from pointwise irreducibility. -/
-theorem ofForall (hA : ∀ k, IsIrreducibleTensor (A k)) : HasIrreducibleBlocks (d := d) A where
+theorem ofForall (hA : ∀ k, Kraus.IsIrreducibleFamily (A k)) : HasIrreducibleBlocks (d := d) A where
   block_irreducible := hA
 
 end HasIrreducibleBlocks
@@ -99,7 +99,7 @@ structure HasPrimitiveBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block transfer map has `1` as its unique peripheral eigenvalue. -/
   block_primitive : ∀ k,
-    _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
+    _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))
 
 namespace HasPrimitiveBlocks
 
@@ -107,7 +107,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasPrimitiveBlocks` from pointwise peripheral primitivity. -/
-theorem ofForall (hA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
+theorem ofForall (hA : ∀ k, _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))) :
     HasPrimitiveBlocks (d := d) A where
   block_primitive := hA
 
@@ -185,7 +185,7 @@ require strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
-  block_injective : ∀ k, IsInjective (A k)
+  block_injective : ∀ k, Kraus.IsInjective (A k)
   /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- Non-increasing ordering of the block weights by modulus. -/
@@ -219,12 +219,12 @@ The algebraic canonical-form clauses are supplied as hypotheses. The self-overla
 clause follows from peripheral primitivity of each left-canonical injective block
 via the spectral gap of the complementary transfer map. -/
 theorem of_peripheral_primitive
-    (hInj : ∀ k, IsInjective (A k))
+    (hInj : ∀ k, Kraus.IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1)
     (hμ_antitone : Antitone (fun k : Fin r => ‖μ k‖))
     (hμ_ne_zero : ∀ k, μ k ≠ 0)
     (hDim : ∀ k, 0 < dim k)
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))) :
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))) :
     IsCanonicalForm μ A := by
   refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, hDim, ?_⟩
   intro k
@@ -269,12 +269,12 @@ field. -/
 structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is irreducible in the invariant-projection sense. -/
-  block_irreducible : ∀ k, IsIrreducibleTensor (A k)
+  block_irreducible : ∀ k, Kraus.IsIrreducibleFamily (A k)
   /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- Each block transfer map is primitive in the peripheral-spectrum sense. -/
   block_primitive : ∀ k,
-    _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
+    _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))
   /-- Non-increasing ordering of the block weights by modulus. -/
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/

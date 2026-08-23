@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.ParentHamiltonian.GramConvergence
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 
@@ -21,7 +21,7 @@ operator norm of the tail virtual map by the squared entrywise mass of that valu
 * `MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform`
 -/
 
-open scoped Matrix
+open scoped Matrix Kraus
 
 namespace MPSTensor
 
@@ -39,14 +39,14 @@ theorem tailVirtualMapES_adjoint_comp_self_apply (A : MPSTensor d D) (K : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     (tailVirtualMapES A K).adjoint (tailVirtualMapES A K
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
-    Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (X * ((transferMap A) ^ K) 1) := by
+    Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (X * ((Kraus.transferMap A) ^ K) 1) := by
   rw [tailVirtualMapES_adjoint_apply]
   simp_rw [boundaryFamilyEquiv_tailVirtualMapES_apply,
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
-  have hsum : (∑ u : Cfg d K, evalWord A (List.ofFn u) * (evalWord A (List.ofFn u))ᴴ) =
-      ((transferMap (d := d) (D := D) A) ^ K) 1 := by
+  have hsum : (∑ u : Cfg d K, Kraus.evalWord A (List.ofFn u) * (Kraus.evalWord A (List.ofFn u))ᴴ) =
+      ((Kraus.transferMap (d := d) (D := D) A) ^ K) 1 := by
     symm
-    simpa only [Matrix.mul_one] using transferMap_pow_apply' A K 1
+    simpa only [Matrix.mul_one] using Kraus.transferMap_pow_apply' A K 1
   simpa only [Matrix.mul_assoc, Matrix.mul_sum] using
     congrArg (fun M => Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (X * M)) hsum
 
@@ -79,8 +79,8 @@ theorem tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq
     (A : MPSTensor d D) (K : ℕ) :
     ‖tailVirtualMapES A K‖ ^ 4 ≤
       ∑ p : (Fin D × Fin D),
-        ‖(((transferMap (d := d) (D := D) A) ^ K) 1) p.1 p.2‖ ^ 2 := by
-  let M := ((transferMap (d := d) (D := D) A) ^ K) 1
+        ‖(((Kraus.transferMap (d := d) (D := D) A) ^ K) 1) p.1 p.2‖ ^ 2 := by
+  let M := ((Kraus.transferMap (d := d) (D := D) A) ^ K) 1
   let U := Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
   have hnorm_adj_sq : ‖(tailVirtualMapES A K).adjoint ∘L (tailVirtualMapES A K)‖ =
       ‖tailVirtualMapES A K‖ * ‖tailVirtualMapES A K‖ :=
@@ -132,7 +132,7 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
     (hP : IsPrimitiveMPS A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ^ 4 ≤ C := by
   let : NormedRing (Matrix (Fin D) (Fin D) ℂ) := Matrix.instL2OpNormedRing
-  let E := transferMap (d := d) (D := D) A
+  let E := Kraus.transferMap (d := d) (D := D) A
   have htr : Matrix.trace ρ ≠ 0 := by
     intro h
     exact hP.fixedPoint_ne_zero
@@ -142,7 +142,7 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
   let T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N
   have hTP : IsTracePreservingMap E := by
     intro X
-    exact trace_transferMap A X hP.norm
+    exact Kraus.trace_transferMap A X hP.norm
   have hgap : spectralRadius ℂ T < 1 := by
     dsimp only [T, N, E, P]
     convert hP.complementary_transfer_map_gap using 1

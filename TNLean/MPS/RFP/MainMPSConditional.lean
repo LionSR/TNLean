@@ -50,9 +50,9 @@ theorem isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum_of_spect
       ¬ IsTransferIdempotent (P.basis j) →
         ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
           ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (transferMap (P.basis j)) ν r ∧
+          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
           Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (transferMap (P.basis j))) ν l ∧
+            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
           Matrix.trace (l * r) = 1)
     (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
     HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis :=

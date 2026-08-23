@@ -65,16 +65,16 @@ bond generating the same state are equal, by injectivity of the rest of the
 chain. -/
 theorem eq_of_trace_mul_evalWord_eq {B : MPSTensor d D} {m : ℕ}
     (hspan : Submodule.span ℂ (Set.range fun ρ : Fin m → Fin d =>
-      evalWord B (List.ofFn ρ)) = ⊤)
+      Kraus.evalWord B (List.ofFn ρ)) = ⊤)
     {M N : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ ρ : Fin m → Fin d,
-      Matrix.trace (M * evalWord B (List.ofFn ρ)) =
-        Matrix.trace (N * evalWord B (List.ofFn ρ))) : M = N := by
+      Matrix.trace (M * Kraus.evalWord B (List.ofFn ρ)) =
+        Matrix.trace (N * Kraus.evalWord B (List.ofFn ρ))) : M = N := by
   have hmaps :
       (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ M) =
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ N) := by
     apply LinearMap.ext_on_range
-      (v := fun ρ : Fin m → Fin d => evalWord B (List.ofFn ρ)) (hv := hspan)
+      (v := fun ρ : Fin m → Fin d => Kraus.evalWord B (List.ofFn ρ)) (hv := hspan)
     intro ρ
     simpa only [Matrix.traceLinearMap_apply, LinearMap.comp_apply,
       LinearMap.mulLeft_apply] using h ρ
@@ -133,7 +133,7 @@ lists of length `n`. -/
 theorem trace_evalWord_eq_of_mpv_eq {A B : MPSTensor d D} {n : ℕ}
     (hAB : ∀ σ : Fin n → Fin d, mpv A σ = mpv B σ)
     {w : List (Fin d)} (hw : w.length = n) :
-    Matrix.trace (evalWord A w) = Matrix.trace (evalWord B w) := by
+    Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   subst hw
   simpa [mpv, coeff, List.ofFn_get] using hAB w.get
 
@@ -141,9 +141,9 @@ theorem trace_evalWord_eq_of_mpv_eq {A B : MPSTensor d D} {n : ℕ}
 length `n`. -/
 theorem evalWord_eq_of_forall_fin_eq {A C : MPSTensor d D} {n : ℕ}
     (hAC : ∀ σ : Fin n → Fin d,
-      evalWord C (List.ofFn σ) = evalWord A (List.ofFn σ))
+      Kraus.evalWord C (List.ofFn σ) = Kraus.evalWord A (List.ofFn σ))
     {w : List (Fin d)} (hw : w.length = n) :
-    evalWord C w = evalWord A w := by
+    Kraus.evalWord C w = Kraus.evalWord A w := by
   subst hw
   simpa [List.ofFn_get] using hAC w.get
 
@@ -164,32 +164,32 @@ the pairing against the complementary length-`q` products is injective for
 matches the `A`- and `B`-pairings on the spanning window family. -/
 theorem exists_mpvTransport {A B : MPSTensor d D} {n k q : ℕ} (hkq : k + q = n)
     (hAk : Submodule.span ℂ (Set.range fun τ : Fin k → Fin d =>
-      evalWord A (List.ofFn τ)) = ⊤)
+      Kraus.evalWord A (List.ofFn τ)) = ⊤)
     (hAq : Submodule.span ℂ (Set.range fun ρ : Fin q → Fin d =>
-      evalWord A (List.ofFn ρ)) = ⊤)
+      Kraus.evalWord A (List.ofFn ρ)) = ⊤)
     (hAB : ∀ σ : Fin n → Fin d, mpv A σ = mpv B σ) :
     ∃ Λ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       ∀ τ : Fin k → Fin d,
-        Λ (evalWord A (List.ofFn τ)) = evalWord B (List.ofFn τ) := by
+        Λ (Kraus.evalWord A (List.ofFn τ)) = Kraus.evalWord B (List.ofFn τ) := by
   classical
   set ΨA : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ((Fin q → Fin d) → ℂ) :=
     LinearMap.pi fun ρ => (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-      (LinearMap.mulRight ℂ (evalWord A (List.ofFn ρ))) with hΨA
+      (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn ρ))) with hΨA
   set ΨB : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ((Fin q → Fin d) → ℂ) :=
     LinearMap.pi fun ρ => (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-      (LinearMap.mulRight ℂ (evalWord B (List.ofFn ρ))) with hΨB
+      (LinearMap.mulRight ℂ (Kraus.evalWord B (List.ofFn ρ))) with hΨB
   have hΨA_apply : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (ρ : Fin q → Fin d),
-      ΨA M ρ = Matrix.trace (M * evalWord A (List.ofFn ρ)) := fun M ρ => rfl
+      ΨA M ρ = Matrix.trace (M * Kraus.evalWord A (List.ofFn ρ)) := fun M ρ => rfl
   have hΨB_apply : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (ρ : Fin q → Fin d),
-      ΨB M ρ = Matrix.trace (M * evalWord B (List.ofFn ρ)) := fun M ρ => rfl
+      ΨB M ρ = Matrix.trace (M * Kraus.evalWord B (List.ofFn ρ)) := fun M ρ => rfl
   refine exists_linearMap_apply_eq _ _ ΨA ΨB hAk ?_ ?_
   · -- Injectivity of the `A`-pairing: spanning at length `q` plus trace
     -- nondegeneracy.
     rw [LinearMap.ker_eq_bot']
     intro M hM
     have h : ∀ ρ : Fin q → Fin d,
-        Matrix.trace (M * evalWord A (List.ofFn ρ)) =
-          Matrix.trace ((0 : Matrix (Fin D) (Fin D) ℂ) * evalWord A (List.ofFn ρ)) := by
+        Matrix.trace (M * Kraus.evalWord A (List.ofFn ρ)) =
+          Matrix.trace ((0 : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A (List.ofFn ρ)) := by
       intro ρ
       rw [Matrix.zero_mul, Matrix.trace_zero, ← hΨA_apply]
       exact congrArg (· ρ) hM
@@ -198,7 +198,7 @@ theorem exists_mpvTransport {A B : MPSTensor d D} {n k q : ℕ} (hkq : k + q = n
     -- closed-chain coefficient of the concatenated word, equal at length `n`.
     intro τ
     funext ρ
-    rw [hΨA_apply, hΨB_apply, ← evalWord_append, ← evalWord_append]
+    rw [hΨA_apply, hΨB_apply, ← Kraus.evalWord_append, ← Kraus.evalWord_append]
     exact trace_evalWord_eq_of_mpv_eq hAB (by simp [hkq])
 
 /-- **Word transport from equal word products.**  If `C` and `A` have equal
@@ -212,24 +212,24 @@ This is the transport used after the gauge of arXiv:1804.04964 Lemma 5
 when the two closed chains have matching matrix products at length `n`. -/
 theorem exists_evalWordTransport {A C : MPSTensor d D} {n k q : ℕ} (hkq : k + q = n)
     (hAk : Submodule.span ℂ (Set.range fun τ : Fin k → Fin d =>
-      evalWord A (List.ofFn τ)) = ⊤)
+      Kraus.evalWord A (List.ofFn τ)) = ⊤)
     (hAq : Submodule.span ℂ (Set.range fun ρ : Fin q → Fin d =>
-      evalWord A (List.ofFn ρ)) = ⊤)
-    (hAC : ∀ w : List (Fin d), w.length = n → evalWord C w = evalWord A w) :
+      Kraus.evalWord A (List.ofFn ρ)) = ⊤)
+    (hAC : ∀ w : List (Fin d), w.length = n → Kraus.evalWord C w = Kraus.evalWord A w) :
     ∃ Λ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       ∀ τ : Fin k → Fin d,
-        Λ (evalWord A (List.ofFn τ)) = evalWord C (List.ofFn τ) := by
+        Λ (Kraus.evalWord A (List.ofFn τ)) = Kraus.evalWord C (List.ofFn τ) := by
   classical
   set ΨA : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((Fin q → Fin d) → Matrix (Fin D) (Fin D) ℂ) :=
-    LinearMap.pi fun ρ => LinearMap.mulRight ℂ (evalWord A (List.ofFn ρ)) with hΨA
+    LinearMap.pi fun ρ => LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn ρ)) with hΨA
   set ΨC : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       ((Fin q → Fin d) → Matrix (Fin D) (Fin D) ℂ) :=
-    LinearMap.pi fun ρ => LinearMap.mulRight ℂ (evalWord C (List.ofFn ρ)) with hΨC
+    LinearMap.pi fun ρ => LinearMap.mulRight ℂ (Kraus.evalWord C (List.ofFn ρ)) with hΨC
   have hΨA_apply : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (ρ : Fin q → Fin d),
-      ΨA M ρ = M * evalWord A (List.ofFn ρ) := fun M ρ => rfl
+      ΨA M ρ = M * Kraus.evalWord A (List.ofFn ρ) := fun M ρ => rfl
   have hΨC_apply : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (ρ : Fin q → Fin d),
-      ΨC M ρ = M * evalWord C (List.ofFn ρ) := fun M ρ => rfl
+      ΨC M ρ = M * Kraus.evalWord C (List.ofFn ρ) := fun M ρ => rfl
   refine exists_linearMap_apply_eq _ _ ΨA ΨC hAk ?_ ?_
   · -- Injectivity of the `A`-pairing: a matrix annihilating a spanning
     -- family on the right annihilates the identity.
@@ -237,7 +237,7 @@ theorem exists_evalWordTransport {A C : MPSTensor d D} {n k q : ℕ} (hkq : k + 
     intro M hM
     have hmul : LinearMap.mulLeft ℂ M = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun ρ : Fin q → Fin d => evalWord A (List.ofFn ρ)) (hv := hAq)
+        (v := fun ρ : Fin q → Fin d => Kraus.evalWord A (List.ofFn ρ)) (hv := hAq)
       intro ρ
       have hρ := congrArg (fun f => f ρ) hM
       simpa only [hΨA_apply, LinearMap.mulLeft_apply, LinearMap.zero_apply,
@@ -250,7 +250,7 @@ theorem exists_evalWordTransport {A C : MPSTensor d D} {n k q : ℕ} (hkq : k + 
     -- length-`n` matrix product of the concatenated word.
     intro τ
     funext ρ
-    rw [hΨA_apply, hΨC_apply, ← evalWord_append, ← evalWord_append]
+    rw [hΨA_apply, hΨC_apply, ← Kraus.evalWord_append, ← Kraus.evalWord_append]
     exact (evalWord_eq_of_forall_fin_eq (n := n)
       (fun σ => hAC (List.ofFn σ) (by simp)) (by simp [hkq])).symm
 

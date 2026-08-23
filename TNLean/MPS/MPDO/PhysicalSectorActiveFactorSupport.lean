@@ -139,8 +139,8 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 1381--1388. -/
 theorem sectorCoordinateTensor_isInjective
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor) :
-    MPSTensor.IsInjective F.sectorCoordinateTensor.toMPSTensor := by
+    (hK : Kraus.IsInjective K.toMPSTensor) :
+    Kraus.IsInjective F.sectorCoordinateTensor.toMPSTensor := by
   change Submodule.span ℂ (Set.range F.sectorCoordinateTensor.toMPSTensor) = ⊤
   rw [← F.sectorCoordinateMatrixFamily_span_eq_top hK]
   congr 1
@@ -173,7 +173,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 consequence of the injective MPDO factorization stated there. -/
 theorem sectorProductFamily_conjTranspose_mem_span
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (k : Fin F.sectorCount) :
     ∀ q, ∃ c : Fin D × Fin D → ℂ,
@@ -205,7 +205,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 product-family closure. -/
 theorem leftTensor_conjTranspose_mem_span_of_isActiveSector
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
     ∀ β, ∃ c : Fin D → ℂ,
@@ -259,7 +259,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 product-family closure. -/
 theorem rightTensor_conjTranspose_mem_span_of_isActiveSector
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
     ∀ α, ∃ c : Fin D → ℂ,
@@ -324,7 +324,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 finite-dimensional normalization of the factors appearing there. -/
 theorem activeSector_factorSupport_twoSided
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
     (∀ β,

@@ -100,8 +100,8 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
     cyclicRestrictₗ hN L i τ
         (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ =
       Matrix.trace
-        (((evalWord (A j) headWord * evalWord (A j) middleWord) *
-            evalWord (A j) tailWord) *
+        (((Kraus.evalWord (A j) headWord * Kraus.evalWord (A j) middleWord) *
+            Kraus.evalWord (A j) tailWord) *
           ((μ j) ^ N • X j)) := by
   classical
   simp only
@@ -192,7 +192,7 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
           · simp [headWord, List.length_ofFn]
             omega
   simp only [groundSpaceMap_apply, cyclicRestrictₗ_apply]
-  rw [hcfg, evalWord_append, evalWord_append]
+  rw [hcfg, Kraus.evalWord_append, Kraus.evalWord_append]
   simp [headWord, middleWord, tailWord, Matrix.mul_assoc]
 
 /-- A boundary-crossing interval is local when the boundary matrix
@@ -223,10 +223,10 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_cross
     (hi : N < i.val + L)
     (hIdentity : ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ β : Fin (i.val + L - N) → Fin d,
-        (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-            evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+        (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+            Kraus.evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
               τ ⟨i.val + L - N + k.val, by omega⟩) =
-          evalWord (A j) (List.ofFn β) * E) :
+          Kraus.evalWord (A j) (List.ofFn β) * E) :
     cyclicRestrictₗ hN L i τ
         (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
       groundSpace (A j) L := by
@@ -246,17 +246,17 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_cross
     simpa [tailWord, headWord] using
       ofFn_eq_boundary_crossing_tail_append_head i hi σ
   have hIdentityσ :
-      (Xj * evalWord (A j) headWord) * evalWord (A j) middleWord =
-        evalWord (A j) headWord * E := by
+      (Xj * Kraus.evalWord (A j) headWord) * Kraus.evalWord (A j) middleWord =
+        Kraus.evalWord (A j) headWord * E := by
     simpa [Xj, headWord, middleWord] using
       hE (fun k : Fin (i.val + L - N) => σ ⟨N - i.val + k.val, by omega⟩)
   rw [blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
     μ A hN hLN X j i τ hi σ]
   simp only [groundSpaceMap_apply]
-  rw [hσ, evalWord_append]
-  set H := evalWord (A j) headWord
-  set M := evalWord (A j) middleWord
-  set T := evalWord (A j) tailWord
+  rw [hσ, Kraus.evalWord_append]
+  set H := Kraus.evalWord (A j) headWord
+  set M := Kraus.evalWord (A j) middleWord
+  set T := Kraus.evalWord (A j) tailWord
   calc
     Matrix.trace ((T * H) * E) = Matrix.trace (T * (H * E)) := by
       rw [Matrix.mul_assoc]
@@ -300,29 +300,29 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_bound
     (hi : N < i.val + L)
     (hBoundary : ∃ Y : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ β : Fin (i.val + L - N) → Fin d,
-        ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) =
-          evalWord (A j) (List.ofFn β) * Y) :
+        ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) =
+          Kraus.evalWord (A j) (List.ofFn β) * Y) :
     cyclicRestrictₗ hN L i τ
         (groundSpaceMap (A j) N ((μ j) ^ N • X j)) ∈
       groundSpace (A j) L := by
   rcases hBoundary with ⟨Y, hY⟩
   refine blockDiagonal_boundary_cyclicRestrict_component_mem_groundSpace_of_crossing_matrix
     μ A hN hLN X j i τ hi ?_
-  refine ⟨Y * evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+  refine ⟨Y * Kraus.evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
     τ ⟨i.val + L - N + k.val, by omega⟩), ?_⟩
   intro β
   calc
-    (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-          evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+    (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+          Kraus.evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
             τ ⟨i.val + L - N + k.val, by omega⟩)
         =
-      (evalWord (A j) (List.ofFn β) * Y) *
-          evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+      (Kraus.evalWord (A j) (List.ofFn β) * Y) *
+          Kraus.evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
             τ ⟨i.val + L - N + k.val, by omega⟩) := by
           rw [hY β]
     _ =
-      evalWord (A j) (List.ofFn β) *
-        (Y * evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
+      Kraus.evalWord (A j) (List.ofFn β) *
+        (Y * Kraus.evalWord (A j) (List.ofFn fun k : Fin (N - L) =>
           τ ⟨i.val + L - N + k.val, by omega⟩)) := by
           rw [Matrix.mul_assoc]
 
@@ -354,8 +354,8 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
       N < i.val + L →
         ∃ Y : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
           ∀ β : Fin (i.val + L - N) → Fin d,
-            ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) =
-              evalWord (A j) (List.ofFn β) * Y) :
+            ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) =
+              Kraus.evalWord (A j) (List.ofFn β) * Y) :
     ∀ j : Fin r,
       groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
   exact blockDiagonal_boundary_component_chainGroundSpace_of_crossing_windows
@@ -387,9 +387,9 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_
         ∀ ρ : Fin (N - L) → Fin d,
           ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
             ∀ β : Fin (i.val + L - N) → Fin d,
-              (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                  evalWord (A j) (List.ofFn ρ) =
-                evalWord (A j) (List.ofFn β) * E) :
+              (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                  Kraus.evalWord (A j) (List.ofFn ρ) =
+                Kraus.evalWord (A j) (List.ofFn β) * E) :
     ∀ j : Fin r,
       groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
   exact blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
@@ -398,8 +398,8 @@ theorem blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_
         (A := A j)
         (α := Fin (i.val + L - N) → Fin d)
         (K := N - L)
-        (F := fun β => evalWord (A j) (List.ofFn β))
-        (Z := fun β => ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β))
+        (F := fun β => Kraus.evalWord (A j) (List.ofFn β))
+        (Z := fun β => ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β))
         (hSpan j)
         (hIdentity j i hi)
 
@@ -416,7 +416,7 @@ theorem
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     (hNlarge : L + L₀ ≤ N)
     (hIdentity : ∀ (j : Fin r) (i : Fin N),
@@ -424,9 +424,9 @@ theorem
         ∀ ρ : Fin (N - L) → Fin d,
           ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
             ∀ β : Fin (i.val + L - N) → Fin d,
-              (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                  evalWord (A j) (List.ofFn ρ) =
-                evalWord (A j) (List.ofFn β) * E) :
+              (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                  Kraus.evalWord (A j) (List.ofFn ρ) =
+                Kraus.evalWord (A j) (List.ofFn β) * E) :
     ∀ j : Fin r,
       groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
   refine blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities
@@ -459,7 +459,7 @@ theorem
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L₀ L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     (hNlarge : L + L₀ ≤ N)
     (C : ∀ (j : Fin r) (_ : Fin N),
@@ -467,9 +467,9 @@ theorem
     (hCompat : ∀ (j : Fin r) (i : Fin N),
       N < i.val + L →
         ∀ ρ : Fin (N - L) → Fin d, ∀ β : Fin (i.val + L - N) → Fin d,
-          evalWord (A j) (List.ofFn β) * C j i ρ =
-            (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-              evalWord (A j) (List.ofFn ρ)) :
+          Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
+            (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+              Kraus.evalWord (A j) (List.ofFn ρ)) :
     ∀ j : Fin r,
       groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ chainGroundSpace (A j) L N := by
   refine
@@ -534,7 +534,7 @@ theorem
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -552,9 +552,9 @@ theorem
             ∀ ρ : Fin (N - L) → Fin d,
               ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
                 ∀ β : Fin (i.val + L - N) → Fin d,
-                  (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                      evalWord (A j) (List.ofFn ρ) =
-                    evalWord (A j) (List.ofFn β) * E) :
+                  (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                      Kraus.evalWord (A j) (List.ofFn ρ) =
+                    Kraus.evalWord (A j) (List.ofFn β) * E) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
@@ -603,7 +603,7 @@ theorem
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -621,9 +621,9 @@ theorem
               ∀ ρ : Fin (N - L) → Fin d,
                 ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
                   ∀ β : Fin (i.val + L - N) → Fin d,
-                    (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                        evalWord (A j) (List.ofFn ρ) =
-                      evalWord (A j) (List.ofFn β) * E) :
+                    (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                        Kraus.evalWord (A j) (List.ofFn ρ) =
+                      Kraus.evalWord (A j) (List.ofFn β) * E) :
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by

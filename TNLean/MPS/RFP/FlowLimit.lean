@@ -81,8 +81,8 @@ Source: arXiv:1606.00608, Theorem 3.1, lines 382--405, and its proof at
 lines 1205--1209. -/
 def AppearsAsRenormalizationFlowLimit (A : MPSTensor d D) : Prop :=
   ∃ d₀ : ℕ, ∃ B : MPSTensor d₀ D,
-    Tendsto (fun n : ℕ ↦ (transferMatrix (transferMap B)) ^ (2 ^ n : ℕ))
-      atTop (𝓝 (transferMatrix (transferMap A)))
+    Tendsto (fun n : ℕ ↦ (transferMatrix (Kraus.transferMap B)) ^ (2 ^ n : ℕ))
+      atTop (𝓝 (transferMatrix (Kraus.transferMap A)))
 
 /-- A tensor which appears as a renormalization-flow limit has an idempotent
 transfer map.
@@ -92,11 +92,11 @@ theorem IsTransferIdempotent.of_appearsAsRenormalizationFlowLimit
     {A : MPSTensor d D} (hA : AppearsAsRenormalizationFlowLimit A) :
     IsTransferIdempotent A := by
   obtain ⟨d₀, B, hlim⟩ := hA
-  have hIdem : IsIdempotentElem (transferMatrix (transferMap A)) :=
+  have hIdem : IsIdempotentElem (transferMatrix (Kraus.transferMap A)) :=
     isIdempotentElem_of_tendsto_pow_two_pow
-      (transferMatrix (transferMap B)) (transferMatrix (transferMap A)) hlim
-  change transferMatrix (transferMap A) * transferMatrix (transferMap A) =
-    transferMatrix (transferMap A) at hIdem
+      (transferMatrix (Kraus.transferMap B)) (transferMatrix (Kraus.transferMap A)) hlim
+  change transferMatrix (Kraus.transferMap A) * transferMatrix (Kraus.transferMap A) =
+    transferMatrix (Kraus.transferMap A) at hIdem
   apply transferMatrix_injective
   simpa only [transferMatrix_comp] using hIdem
 
@@ -107,9 +107,9 @@ theorem IsTransferIdempotent.appearsAsRenormalizationFlowLimit
     {A : MPSTensor d D} (hA : IsTransferIdempotent A) :
     AppearsAsRenormalizationFlowLimit A := by
   refine ⟨d, A, ?_⟩
-  have hIdem : IsIdempotentElem (transferMatrix (transferMap A)) := by
-    change transferMatrix (transferMap A) * transferMatrix (transferMap A) =
-      transferMatrix (transferMap A)
+  have hIdem : IsIdempotentElem (transferMatrix (Kraus.transferMap A)) := by
+    change transferMatrix (Kraus.transferMap A) * transferMatrix (Kraus.transferMap A) =
+      transferMatrix (Kraus.transferMap A)
     rw [← transferMatrix_comp]
     exact congrArg transferMatrix hA
   apply tendsto_const_nhds.congr'

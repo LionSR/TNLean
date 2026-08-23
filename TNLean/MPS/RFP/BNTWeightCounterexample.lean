@@ -49,11 +49,11 @@ theorem halvedWeightTensor_eq_halvedDecomp_toTensor :
       (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor := rfl
 
 private lemma scalarUnitTensor_evalWord (w : List (Fin 1)) :
-    evalWord scalarUnitTensor w = 1 := by
+    Kraus.evalWord scalarUnitTensor w = 1 := by
   induction w with
   | nil => rfl
   | cons i w ih =>
-      rw [evalWord_cons, ih]
+      rw [Kraus.evalWord_cons, ih]
       simp [scalarUnitTensor]
 
 private lemma scalarUnitTensor_mpv {N : ℕ} (σ : Fin N → Fin 1) :
@@ -80,12 +80,12 @@ private theorem physicalObservableTransfer_one
     {D : ℕ} (A : MPSTensor 1 D) (L : ℕ)
     (O : Matrix (Fin L → Fin 1) (Fin L → Fin 1) ℂ) :
     physicalObservableTransfer A L O =
-      O (0 : Fin L → Fin 1) (0 : Fin L → Fin 1) • (transferMap A) ^ L := by
+      O (0 : Fin L → Fin 1) (0 : Fin L → Fin 1) • (Kraus.transferMap A) ^ L := by
   apply LinearMap.ext
   intro X
   change physicalObservableTransfer A L O X =
-    O (0 : Fin L → Fin 1) (0 : Fin L → Fin 1) • ((transferMap A) ^ L) X
-  rw [transferMap_pow_apply']
+    O (0 : Fin L → Fin 1) (0 : Fin L → Fin 1) • ((Kraus.transferMap A) ^ L) X
+  rw [Kraus.transferMap_pow_apply']
   simp only [physicalObservableTransfer, Finset.univ_unique, Pi.default_def,
     Fin.default_eq_zero, Fin.isValue, Finset.sum_singleton, List.ofFn_const]
   rw [Matrix.mul_assoc]

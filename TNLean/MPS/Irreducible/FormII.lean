@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.Reduction
 import QICLean.Algebra.MatrixAux
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import QICLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
@@ -23,7 +23,7 @@ to channel / QPF normalization, following:
 
 ## Main results
 
-### Part 1: Equivalence of `IsIrreducibleTensor` and `IsIrreducibleMap (transferMap A)`
+### Part 1: Equivalence of `Kraus.IsIrreducibleFamily` and `IsIrreducibleMap (Kraus.transferMap A)`
 
 * `MPSTensor.invariance_implies_lowerZero`: the invariance condition for a projection
   under a transfer map implies `(1 - P) * A i * P = 0` for all `i`.
@@ -53,7 +53,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Part 1: IsIrreducibleTensor is equivalent to IsIrreducibleMap -/
+/-! ## Part 1: Kraus.IsIrreducibleFamily is equivalent to IsIrreducibleMap -/
 
 /-- The invariance condition for a projection `P` under the transfer map
 implies `(1 - P) * A i * P = 0` for every Kraus operator.
@@ -62,11 +62,11 @@ This is the transfer-map form of `Kraus.invariance_implies_lowerZero`. -/
 lemma invariance_implies_lowerZero
     (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
     (hProj : IsOrthogonalProjection P)
-    (hInv : ∀ X, P * transferMap (d := d) (D := D) A (P * X * P) * P =
-                  transferMap (d := d) (D := D) A (P * X * P)) :
+    (hInv : ∀ X, P * Kraus.transferMap (d := d) (D := D) A (P * X * P) * P =
+                  Kraus.transferMap (d := d) (D := D) A (P * X * P)) :
     ∀ i : Fin d, (1 - P) * A i * P = 0 := by
   refine Kraus.invariance_implies_lowerZero A P hProj fun X => ?_
-  simpa only [transferMap_apply, Kraus.map_apply] using hInv X
+  simpa only [Kraus.transferMap_apply, Kraus.map_apply] using hInv X
 
 /-- **Irreducible tensor ⇒ irreducible CP map.**
 
@@ -79,9 +79,9 @@ If an MPS tensor `A` has no nontrivial invariant orthogonal projection
 If `P ≠ 0` and `P ≠ 1`, this would witness `HasInvariantProj A`, contradicting
 the irreducibility hypothesis. -/
 theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
-    (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
+    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
 
 /-- **Irreducible CP map ⇒ irreducible tensor.**
 
@@ -94,9 +94,9 @@ shows that `P * E(PXP) * P = E(PXP)` for all `X`.  Since `P ≠ 0` and `P ≠ 1`
 this contradicts the irreducibility of `E`. -/
 theorem isIrreducibleTensor_of_isIrreducibleMap
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
-    IsIrreducibleTensor A :=
-  Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A hIrr
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A)) :
+    Kraus.IsIrreducibleFamily A :=
+  Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrr
 
 /-! ## Part 2: CFII-style diagonal positive-definite fixed point -/
 
@@ -105,20 +105,20 @@ section CFII
 private theorem transferMap_unitaryConj_of_decidable [DecidableEq (Fin D)]
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap (d := d) (D := D)
+    Kraus.transferMap (d := d) (D := D)
       (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) X =
     (↑U : Matrix _ _ ℂ)ᴴ *
-      (transferMap (d := d) (D := D) A
+      (Kraus.transferMap (d := d) (D := D) A
         ((↑U : Matrix _ _ ℂ) * X * (↑U : Matrix _ _ ℂ)ᴴ)) *
     (↑U : Matrix _ _ ℂ) := by
   set V : Matrix (Fin D) (Fin D) ℂ := ↑U with hV_def
-  change transferMap (d := d) (D := D) (fun i => Vᴴ * A i * V) X =
-    Vᴴ * (transferMap (d := d) (D := D) A (V * X * Vᴴ)) * V
+  change Kraus.transferMap (d := d) (D := D) (fun i => Vᴴ * A i * V) X =
+    Vᴴ * (Kraus.transferMap (d := d) (D := D) A (V * X * Vᴴ)) * V
   have hVV : Vᴴ * V = 1 := by
     rw [← Matrix.star_eq_conjTranspose]; exact Matrix.UnitaryGroup.star_mul_self U
   have hVV' : V * Vᴴ = 1 := by
     rw [← Matrix.star_eq_conjTranspose]; exact Unitary.mul_star_self_of_mem U.prop
-  simp only [transferMap_apply, Finset.mul_sum, Finset.sum_mul]
+  simp only [Kraus.transferMap_apply, Finset.mul_sum, Finset.sum_mul]
   congr 1; ext1 i
   rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose]
@@ -132,10 +132,10 @@ For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
 theorem transferMap_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap (d := d) (D := D)
+    Kraus.transferMap (d := d) (D := D)
       (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) X =
     (↑U : Matrix _ _ ℂ)ᴴ *
-      (transferMap (d := d) (D := D) A
+      (Kraus.transferMap (d := d) (D := D) A
         ((↑U : Matrix _ _ ℂ) * X * (↑U : Matrix _ _ ℂ)ᴴ)) *
     (↑U : Matrix _ _ ℂ) := by
   exact transferMap_unitaryConj_of_decidable A U X
@@ -152,7 +152,8 @@ private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
     rw [← Matrix.star_eq_conjTranspose]; exact Matrix.UnitaryGroup.star_mul_self U
   have hVV' : V * Vᴴ = 1 := by
     rw [← Matrix.star_eq_conjTranspose]; exact Unitary.mul_star_self_of_mem U.prop
-  -- Each summand: (Vᴴ Aᵢ V)ᴴ * (Vᴴ Aᵢ V) = Vᴴ * Aᵢᴴ * (V * Vᴴ) * Aᵢ * V = Vᴴ * Aᵢᴴ * Aᵢ * V
+  -- Each summand: (Vᴴ Aᵢ V)ᴴ * (Vᴴ Aᵢ V) = Vᴴ * Aᵢᴴ * (V * Vᴴ) * Aᵢ * V
+  --   = Vᴴ * Aᵢᴴ * Aᵢ * V
   have h_each : ∀ i : Fin d,
       (Vᴴ * A i * V)ᴴ * (Vᴴ * A i * V) =
       Vᴴ * ((A i)ᴴ * A i) * V := by
@@ -183,27 +184,27 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
     [DecidableEq (Fin D)]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
                       * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
-        transferMap (d := d) (D := D)
+        Kraus.transferMap (d := d) (D := D)
           (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
   -- Step 1: The transfer map is a channel (from TP hypothesis).
-  have hCh : IsChannel (transferMap (d := d) (D := D) A) :=
-    transferMap_isChannel A (by convert hTP)
+  have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
+    Kraus.isChannel_transferMap A (by unfold Kraus.IsTP; convert hTP)
   -- Step 2: Get a PSD fixed point ρ ≠ 0 from the channel.
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := transferMap (d := d) (D := D) A) hD
+    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hD
   -- Step 3: Convert irreducibility: tensor → CP map.
-  have hIrrCP : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+  have hIrrCP : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
   -- Step 4: Upgrade PSD to PD via quantum Perron–Frobenius.
   have hρ_pd : ρ.PosDef :=
-    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrCP ρ hρ_psd hρ_ne hρ_fix
+    Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrCP ρ hρ_psd hρ_ne hρ_fix
   -- Step 5: Diagonalize ρ via the spectral theorem for Hermitian matrices.
   have hH : ρ.IsHermitian := hρ_pd.isHermitian
   set U_raw := hH.eigenvectorUnitary with hU_raw_def
@@ -241,7 +242,7 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
       (Umatᴴ * A i * Umat)ᴴ * (Umatᴴ * A i * Umat) = 1 :=
     tp_of_unitaryConj A U_raw (by convert hTP)
   -- Step 9: Λ is a fixed point of the conjugated transfer map.
-  have hΛ_fix : transferMap (d := d) (D := D)
+  have hΛ_fix : Kraus.transferMap (d := d) (D := D)
       (fun i => Umatᴴ * A i * Umat) Λ = Λ := by
     rw [transferMap_unitaryConj_of_decidable A U_raw Λ, ← h_spectral, hρ_fix, ← hΛ_eq]
   -- Step 10: Assemble

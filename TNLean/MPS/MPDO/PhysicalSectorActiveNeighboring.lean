@@ -352,7 +352,7 @@ noncomputable def canonical
 /-- The canonical physical-support restriction carried by the witness. -/
 noncomputable def restrictionData
     (W : ActivePhysicalCompressionWitness F)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     PhysicalSupportRestrictionData (physicalSupportProj K) K :=
   F.activePhysicalSupportRestrictionData W.factorSupport hK hpos
@@ -368,7 +368,7 @@ noncomputable abbrev factorization
 canonical restriction datum. -/
 noncomputable abbrev factorizationForRestrictionData
     (W : ActivePhysicalCompressionWitness F)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     PhysicalSectorFactorization
       (changePhysicalBasis (W.restrictionData hK hpos).inclusionᴴ K) :=

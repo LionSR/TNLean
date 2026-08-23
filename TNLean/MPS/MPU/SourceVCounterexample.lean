@@ -234,10 +234,10 @@ theorem sourceYTensor_gram_ne_inserted :
 point of its transfer map. -/
 theorem no_posDef_fixed (sigma : Matrix (Fin 2) (Fin 2) ℂ)
     (hsigma : sigma.PosDef) :
-    MPSTensor.transferMap tensor.normalizedFlattening sigma ≠ sigma := by
+    Kraus.transferMap tensor.normalizedFlattening sigma ≠ sigma := by
   intro h
   have hentry := congrArg (fun M => M (1 : Fin 2) (1 : Fin 2)) h
-  norm_num [normalizedFlattening, toMPSTensor, MPSTensor.transferMap_apply,
+  norm_num [normalizedFlattening, toMPSTensor, Kraus.transferMap_apply,
     tensor, bondMatrix, Matrix.mul_apply] at hentry
   have hdiag : 0 < sigma (1 : Fin 2) (1 : Fin 2) := hsigma.diag_pos
   rw [← hentry] at hdiag

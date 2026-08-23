@@ -40,7 +40,7 @@ def gaugedTensorFamily : Fin 1 → MPSTensor 4 2 :=
   fun _ ↦ gaugedTensor
 
 /-- The source one-block family is injective. -/
-lemma tensorFamily_isInjective : ∀ k, IsInjective (tensorFamily k) :=
+lemma tensorFamily_isInjective : ∀ k, Kraus.IsInjective (tensorFamily k) :=
   fun _ ↦ tensor_isInjective
 
 /-- Corresponding blocks of the two families have the same closed matrix

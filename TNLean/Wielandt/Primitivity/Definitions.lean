@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.EigenvectorSpreading
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import QICLean.Channel.Peripheral.Spectrum
 import QICLean.Channel.Irreducible.Basic
 
@@ -23,7 +23,7 @@ The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
 
 * `krausRank A`: the dimension of `S₁(A) = Kraus.wordSpan A 1`, i.e.
   `dim(span{A₁,…,Aₐ})`.
-* `HasEventuallyFullKrausRank A`: `∃ i ≥ 1, S_i(A) = M_D(ℂ)`, i.e. `IsNormal A`.
+* `HasEventuallyFullKrausRank A`: `∃ i ≥ 1, S_i(A) = M_D(ℂ)`, i.e. `Kraus.IsNormal A`.
 * `IsPrimitivePaper A`: spreading primitivity — there exists `q ≥ 1` such that
   for every nonzero φ, `H_q(A,φ) = ℂ^D`. This is Proposition 3(a) of the paper.
 * `IsStronglyIrreduciblePaper A`: Proposition 3(c) — the transfer map `E_A` has
@@ -47,16 +47,16 @@ There are four distinct primitivity predicates in the codebase:
 * `IsPrimitivePaper A` in this file: the uniform spreading condition from
   Proposition 3(a).
 * `IsPeripherallyPrimitive A` in this file: the transfer-map formulation of
-  `_root_.IsPrimitive (transferMap A)`.
+  `_root_.IsPrimitive (Kraus.transferMap A)`.
 
 The intended relationships are:
 
-* `HasEventuallyFullKrausRank A ↔ IsNormal A` — proved as
+* `HasEventuallyFullKrausRank A ↔ Kraus.IsNormal A` — proved as
   `hasEventuallyFullKrausRank_iff_isNormal`.
 * `IsPrimitivePaper A` is equivalent to `HasEventuallyFullKrausRank A`
   (and to `IsStronglyIrreduciblePaper A` under normalization). The full circular
   equivalence **(a)↔(b)↔(c)** is proved in `Primitivity/Equivalence.lean`.
-* `IsPeripherallyPrimitive A` is definitionally `_root_.IsPrimitive (transferMap A)`.
+* `IsPeripherallyPrimitive A` is definitionally `_root_.IsPrimitive (Kraus.transferMap A)`.
 * `IsStronglyIrreduciblePaper` combines `IsPeripherallyPrimitive A` with a
   positive-definite fixed point and irreducibility. This is Proposition 3(c) in the paper
   and Theorem 6.7(3) in Wolf's Chapter 6.
@@ -102,13 +102,13 @@ Paper: "We say that the set `{A₁,…,Aₐ}` has eventually full Kraus rank if
 there exists `i` such that `S_i(A) = M_D(ℂ)`."
 (arXiv:0909.5347, Definition after equation (1))
 
-This is equivalent to `IsNormal A` (see `hasEventuallyFullKrausRank_iff_isNormal`). -/
+This is equivalent to `Kraus.IsNormal A` (see `hasEventuallyFullKrausRank_iff_isNormal`). -/
 def HasEventuallyFullKrausRank (A : MPSTensor d D) : Prop :=
   ∃ i : ℕ, 0 < i ∧ Kraus.wordSpan A i = ⊤
 
-/-- `HasEventuallyFullKrausRank` is equivalent to `IsNormal`. -/
+/-- `HasEventuallyFullKrausRank` is equivalent to `Kraus.IsNormal`. -/
 theorem hasEventuallyFullKrausRank_iff_isNormal (A : MPSTensor d D) :
-    HasEventuallyFullKrausRank A ↔ IsNormal A := by
+    HasEventuallyFullKrausRank A ↔ Kraus.IsNormal A := by
   constructor
   · rintro ⟨i, hi, hspan⟩
     exact ⟨i, hi, (wordSpan_eq_top_iff_isNBlkInjective A i).mp hspan⟩
@@ -166,7 +166,7 @@ peripheral spectrum `{1}`, i.e. `1` is the only eigenvalue of `E_A` on the unit
 circle.
 
 This is the transfer-map formulation of the canonical predicate
-`_root_.IsPrimitive (transferMap A)` from
+`_root_.IsPrimitive (Kraus.transferMap A)` from
 `TNLean/Channel/Peripheral/Spectrum.lean`.
 
 For orientation, the codebase distinguishes four related notions:
@@ -180,7 +180,7 @@ For orientation, the codebase distinguishes four related notions:
 Paper: "E_A is primitive" means `1` is the only eigenvalue with `|λ| = 1`.
 Wolf Chapter 6 Definition 6.2(2). -/
 def IsPeripherallyPrimitive (A : MPSTensor d D) : Prop :=
-  _root_.IsPrimitive (transferMap (d := d) (D := D) A)
+  _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
 
 /-! ## Strong irreducibility (Proposition 3(c)) -/
 
@@ -215,18 +215,18 @@ eigenvector", which implicitly asserts uniqueness of the fixed-point space. -/
 def IsStronglyIrreduciblePaper (A : MPSTensor d D) : Prop :=
   ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
     ρ.PosDef ∧
-    transferMap (d := d) (D := D) A ρ = ρ ∧
+    Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
     IsPeripherallyPrimitive A ∧
-    IsIrreducibleMap (transferMap (d := d) (D := D) A)
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A)
 
 /-- Constructor for `IsStronglyIrreduciblePaper` from separate hypotheses. -/
 theorem isStronglyIrreduciblePaper_of
     {A : MPSTensor d D}
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hpd : ρ.PosDef)
-    (hfix : transferMap (d := d) (D := D) A ρ = ρ)
+    (hfix : Kraus.transferMap (d := d) (D := D) A ρ = ρ)
     (hprim : IsPeripherallyPrimitive A)
-    (hirr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
+    (hirr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A)) :
     IsStronglyIrreduciblePaper A :=
   ⟨ρ, hpd, hfix, hprim, hirr⟩
 
@@ -234,7 +234,7 @@ theorem isStronglyIrreduciblePaper_of
 theorem IsStronglyIrreduciblePaper.posDef_fixedPoint
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosDef ∧ transferMap (d := d) (D := D) A ρ = ρ := by
+      ρ.PosDef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
   obtain ⟨ρ, hpd, hfix, _, _⟩ := h
   exact ⟨ρ, hpd, hfix⟩
 
@@ -248,14 +248,14 @@ theorem IsStronglyIrreduciblePaper.isPeripherallyPrimitive
 /-- Strong irreducibility implies irreducibility of the transfer map. -/
 theorem IsStronglyIrreduciblePaper.isIrreducibleMap
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
   obtain ⟨_, _, _, _, hirr⟩ := h
   exact hirr
 
 /-- Strong irreducibility implies the peripheral spectrum is `{1}`. -/
 theorem IsStronglyIrreduciblePaper.peripheralEigenvalues_eq
     {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    peripheralEigenvalues (transferMap (d := d) (D := D) A) = {1} :=
+    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) = {1} :=
   h.isPeripherallyPrimitive
 
 end MPSTensor

@@ -108,7 +108,7 @@ With \(n = K + L₀\) and \(l = L₀\), this identifies the common range of
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). The proof is the existing
 open-chain grow-back theorem at the block-injectivity length. -/
 theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
-    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hL₀ : 0 < L₀) :
     openChainLeftGroundSpaceES A (K + L₀) ⊓
       openChainTailGroundSpaceES A K (L₀ + 1) =
@@ -138,7 +138,7 @@ after identifying its common ground-space range. The later FNW transfer-mixing
 estimate supplies the numerical bound on this defect; it is not asserted here. -/
 theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
     [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) {η : ℝ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) {η : ℝ}
     (hDefect :
       ‖openChainTailGroundProjectionES A K (L₀ + 1) ∘L
           openChainLeftGroundProjectionES A (K + L₀) -
@@ -160,15 +160,12 @@ theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
   have hInter : U ⊓ V = groundSpaceES A (K + L₀ + 1) := by
     rw [inf_comm]
     exact openChainLeft_inf_tailGroundSpaceES hInj hL₀
+  change ‖U.starProjection ∘L V.starProjection -
+    (groundSpaceES A (K + L₀ + 1)).starProjection‖ ≤ η at hDefect
   have hη : 0 ≤ η := (norm_nonneg _).trans hDefect
-  have hDefect' :
-      ‖U.starProjection ∘L V.starProjection -
-        (groundSpaceES A (K + L₀ + 1)).starProjection‖ ≤ η := by
-    simpa [U, V, openChainTailGroundProjectionES,
-      openChainLeftGroundProjectionES] using hDefect
   have hAngle : Submodule.IsFriedrichsBound U V η := by
     apply Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le
-    simpa only [hInter] using hDefect'
+    simpa only [hInter] using hDefect
   exact
     Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound
       U V hη hAngle v

@@ -38,18 +38,18 @@ namespace MPSTensor
 /-- Physical reindexing commutes with bond-dimension casts. -/
 theorem reindexPhysical_cast_dim {d₁ d₂ D₁ D₂ : ℕ} (e : Fin d₁ ≃ Fin d₂)
     (h : D₁ = D₂) (A : MPSTensor d₂ D₁) :
-    reindexPhysical e (cast (congr_arg (MPSTensor d₂) h) A) =
-      cast (congr_arg (MPSTensor d₁) h) (reindexPhysical e A) := by
+    Kraus.reindexPhysical e (cast (congr_arg (MPSTensor d₂) h) A) =
+      cast (congr_arg (MPSTensor d₁) h) (Kraus.reindexPhysical e A) := by
   subst h
   rfl
 
 /-- Reindexing by a physical-index equivalence does not change the transfer map. -/
 theorem transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
     (A : MPSTensor d₂ D) :
-    transferMap (d := d₁) (D := D) (reindexPhysical e A) =
-      transferMap (d := d₂) (D := D) A := by
+    Kraus.transferMap (d := d₁) (D := D) (Kraus.reindexPhysical e A) =
+      Kraus.transferMap (d := d₂) (D := D) A := by
   ext X i j
-  simp only [transferMap_apply, reindexPhysical]
+  simp only [Kraus.transferMap_apply, Kraus.reindexPhysical]
   have hsum :
       (∑ x : Fin d₁, A (e x) * X * (A (e x))ᴴ) =
         ∑ x : Fin d₂, A x * X * (A x)ᴴ :=
@@ -63,7 +63,7 @@ theorem transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ 
 theorem leftCanonical_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
     (A : MPSTensor d₂ D) :
     (∑ i : Fin d₁,
-        (reindexPhysical e A i)ᴴ * reindexPhysical e A i = 1) ↔
+        (Kraus.reindexPhysical e A i)ᴴ * Kraus.reindexPhysical e A i = 1) ↔
       (∑ i : Fin d₂, (A i)ᴴ * A i = 1) := by
   simp only [Kraus.reindexPhysical]
   have hsum :
@@ -79,14 +79,14 @@ theorem leftCanonical_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ �
 theorem isPrimitive_transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
     _root_.IsPrimitive
-        (transferMap (d := d₁) (D := D) (reindexPhysical e A)) ↔
-      _root_.IsPrimitive (transferMap (d := d₂) (D := D) A) := by
+        (Kraus.transferMap (d := d₁) (D := D) (Kraus.reindexPhysical e A)) ↔
+      _root_.IsPrimitive (Kraus.transferMap (d := d₂) (D := D) A) := by
   rw [transferMap_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves invariant projections. -/
 theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
     (A : MPSTensor d₂ D) :
-    HasInvariantProj (reindexPhysical e A) ↔ HasInvariantProj A := by
+    Kraus.HasInvariantProj (Kraus.reindexPhysical e A) ↔ Kraus.HasInvariantProj A := by
   constructor
   · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
     refine ⟨P, hPproj, hP0, hP1, ?_⟩
@@ -98,26 +98,27 @@ theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁
 /-- Reindexing by a physical-index equivalence preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
-    IsIrreducibleTensor (reindexPhysical e A) ↔ IsIrreducibleTensor A := by
-  rw [IsIrreducibleTensor, IsIrreducibleTensor, hasInvariantProj_reindexPhysical_equiv e A]
+    Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e A) ↔ Kraus.IsIrreducibleFamily A := by
+  rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily,
+    hasInvariantProj_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves algebraic injectivity. -/
 theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
     (A : MPSTensor d₂ D) :
-    IsInjective (reindexPhysical e A) ↔ IsInjective A := by
-  have hRange : Set.range (reindexPhysical e A) = Set.range A := by
+    Kraus.IsInjective (Kraus.reindexPhysical e A) ↔ Kraus.IsInjective A := by
+  have hRange : Set.range (Kraus.reindexPhysical e A) = Set.range A := by
     ext X
     constructor
     · rintro ⟨i, rfl⟩
       exact ⟨e i, rfl⟩
     · rintro ⟨i, rfl⟩
       exact ⟨e.symm i, by simp [Kraus.reindexPhysical]⟩
-  simp [IsInjective, hRange]
+  simp [Kraus.IsInjective, hRange]
 
 /-- Reindexing both tensors by a physical-index equivalence preserves gauge-phase equivalence. -/
 theorem gaugePhaseEquiv_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A B : MPSTensor d₂ D) :
-    GaugePhaseEquiv (reindexPhysical e A) (reindexPhysical e B) ↔
+    GaugePhaseEquiv (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) ↔
       GaugePhaseEquiv A B := by
   constructor
   · rintro ⟨X, ζ, hζ, hXB⟩
@@ -136,7 +137,7 @@ Source context: arXiv:1606.00608, the physical-basis identifications used in
 canonical-form blocking at lines 317--345. -/
 theorem mpvOverlap_reindexPhysical_equiv {d₁ d₂ D₁ D₂ N : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D₁) (B : MPSTensor d₂ D₂) :
-    mpvOverlap (reindexPhysical e A) (reindexPhysical e B) N =
+    mpvOverlap (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) N =
       mpvOverlap A B N := by
   classical
   let E : Cfg d₁ N ≃ Cfg d₂ N :=
@@ -190,11 +191,11 @@ theorem linearIndependent_mpvState_reindexPhysical_equiv
     (e : Fin d₁ ≃ Fin d₂) (A : (j : Fin r) → MPSTensor d₂ (dim j))
     (hLI : LinearIndependent ℂ (fun j ↦ mpvState (A j) N)) :
     LinearIndependent ℂ
-      (fun j ↦ mpvState (reindexPhysical e (A j)) N) := by
+      (fun j ↦ mpvState (Kraus.reindexPhysical e (A j)) N) := by
   let E : Cfg d₁ N ≃ Cfg d₂ N :=
     Equiv.arrowCongr (Equiv.refl (Fin N)) e
   apply linearIndependent_mpvState_of_configEquiv E
-    (fun j ↦ reindexPhysical e (A j)) A
+    (fun j ↦ Kraus.reindexPhysical e (A j)) A
   · intro j σ
     rw [mpv_reindexPhysical]
     congr 1

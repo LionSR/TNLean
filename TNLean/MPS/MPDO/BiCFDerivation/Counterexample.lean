@@ -47,7 +47,7 @@ def duplicateScalarBlocks :
 
 /-- Each duplicate scalar block is injective. -/
 theorem duplicateScalarBlocks_isInjective :
-    ∀ k, IsInjective (duplicateScalarBlocks k) := by
+    ∀ k, Kraus.IsInjective (duplicateScalarBlocks k) := by
   intro k
   have hspan : (ℂ ∙ (1 : Matrix (Fin 1) (Fin 1) ℂ)) = ⊤ := by
     refine (Submodule.span_singleton_eq_top_iff ℂ
@@ -58,7 +58,7 @@ theorem duplicateScalarBlocks_isInjective :
     obtain rfl : i = 0 := Fin.eq_zero i
     obtain rfl : j = 0 := Fin.eq_zero j
     simp
-  simpa [duplicateScalarBlocks, duplicateScalarDim, IsInjective, Set.range_const] using
+  simpa [duplicateScalarBlocks, duplicateScalarDim, Kraus.IsInjective, Set.range_const] using
     hspan
 
 /-- The duplicate scalar blocks are left-canonical. -/
@@ -107,7 +107,7 @@ theorem duplicateScalarBlocks_not_hasBiCF :
   have hTrace :
       ∀ w : Fin L → Fin 1,
         (∑ k : Fin 2,
-          Matrix.trace (Δ k * evalWord (duplicateScalarBlocks k) (List.ofFn w))) = 0 := by
+          Matrix.trace (Δ k * Kraus.evalWord (duplicateScalarBlocks k) (List.ofFn w))) = 0 := by
     intro w
     simp [Δ, duplicateScalarBlocks, duplicateScalarDim, Matrix.trace_fin_one]
   have hzero := hL Δ hTrace 0
@@ -119,7 +119,7 @@ other `HorizontalCFData` fields alone. -/
 @[deprecated "Use the five component duplicate-scalar counterexample theorems directly."
   (since := "2026-08-15")]
 theorem duplicateScalarBlocks_counterexample :
-    (∀ k, IsInjective (duplicateScalarBlocks k)) ∧
+    (∀ k, Kraus.IsInjective (duplicateScalarBlocks k)) ∧
       (∀ k, ∑ i : Fin 1,
         (duplicateScalarBlocks k i)ᴴ * duplicateScalarBlocks k i = 1) ∧
       (∀ k, duplicateScalarWeights k ≠ 0) ∧

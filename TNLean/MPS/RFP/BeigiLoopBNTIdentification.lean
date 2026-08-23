@@ -49,10 +49,10 @@ This conversion applies in particular to the loop tensors used in the BNT identi
 arXiv:1606.00608, line 1307.
 -/
 theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
-    (A : MPSTensor d D) (hNormal : IsNormal A)
+    (A : MPSTensor d D) (hNormal : Kraus.IsNormal A)
     (hRFP : IsTransferIdempotent A) : IsNormalTensor A := by
-  have hInjective : IsInjective A := rfp_nt_structural A hNormal hRFP
-  have hIrr : IsIrreducibleTensor A :=
+  have hInjective : Kraus.IsInjective A := rfp_nt_structural A hNormal hRFP
+  have hIrr : Kraus.IsIrreducibleFamily A :=
     isIrreducibleTensor_of_isPrimitivePaper A (isPrimitivePaper_of_isNormal A hNormal)
   have hApply : ∃ i, A i ≠ 0 := by
     by_contra hzero
@@ -74,7 +74,7 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hApply
   have hρne : ρ ≠ 0 := (Matrix.PosDef.isUnit hρ).ne_zero
-  have hIdemρ : transferMap A (transferMap A ρ) = transferMap A ρ := by
+  have hIdemρ : Kraus.transferMap A (Kraus.transferMap A ρ) = Kraus.transferMap A ρ := by
     exact DFunLike.congr_fun hRFP ρ
   have hrIdem : (r : ℂ) * (r : ℂ) = (r : ℂ) := by
     have hzero : (((r : ℂ) * (r : ℂ) - (r : ℂ)) • ρ) = 0 := by
@@ -82,7 +82,7 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
         (((r : ℂ) * (r : ℂ) - (r : ℂ)) • ρ) =
             ((r : ℂ) * (r : ℂ)) • ρ - (r : ℂ) • ρ := by
               rw [sub_smul]
-        _ = transferMap A (transferMap A ρ) - transferMap A ρ := by
+        _ = Kraus.transferMap A (Kraus.transferMap A ρ) - Kraus.transferMap A ρ := by
               rw [hρeig, map_smul, hρeig, smul_smul]
         _ = 0 := sub_eq_zero.mpr hIdemρ
     exact sub_eq_zero.mp ((smul_eq_zero.mp hzero).resolve_right hρne)
@@ -94,20 +94,20 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
   have hrOne : r = 1 := by
     exact_mod_cast hrOneComplex
   subst r
-  have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (transferMap A) μ →
+  have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap A) μ →
       ‖μ‖ = (1 : ℝ) → μ = (1 : ℂ) := by
     intro μ hμ hμnorm
     obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-    have hXeq : transferMap A X = μ • X :=
+    have hXeq : Kraus.transferMap A X = μ • X :=
       Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
     have hXne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
-    have hIdemX : transferMap A (transferMap A X) = transferMap A X := by
+    have hIdemX : Kraus.transferMap A (Kraus.transferMap A X) = Kraus.transferMap A X := by
       exact DFunLike.congr_fun hRFP X
     have hμIdem : μ * μ = μ := by
       have hzero : ((μ * μ - μ) • X) = 0 := by
         calc
           ((μ * μ - μ) • X) = (μ * μ) • X - μ • X := by rw [sub_smul]
-          _ = transferMap A (transferMap A X) - transferMap A X := by
+          _ = Kraus.transferMap A (Kraus.transferMap A X) - Kraus.transferMap A X := by
                 rw [hXeq, map_smul, hXeq, smul_smul]
           _ = 0 := sub_eq_zero.mpr hIdemX
       exact sub_eq_zero.mp ((smul_eq_zero.mp hzero).resolve_right hXne)
@@ -218,7 +218,7 @@ Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 -/
 theorem transferMap_smul_eq_of_norm_eq_one
     (A : MPSTensor d D) (ζ : ℂ) (hζ : ‖ζ‖ = 1) :
-    transferMap (fun i => ζ • A i) = transferMap A := by
+    Kraus.transferMap (fun i => ζ • A i) = Kraus.transferMap A := by
   have hstar : starRingEnd ℂ ζ * ζ = 1 := by
     simpa [Complex.normSq_eq_norm_sq, hζ] using
       (Complex.normSq_eq_conj_mul_self (z := ζ)).symm
@@ -249,7 +249,7 @@ theorem isTransferIdempotent_of_unit_gaugePhase
   have hTensor : B = fun i => ζ • C i := by
     funext i
     simpa [C] using hrel i
-  have hMap : transferMap B = transferMap C := by
+  have hMap : Kraus.transferMap B = Kraus.transferMap C := by
     rw [hTensor]
     exact transferMap_smul_eq_of_norm_eq_one C ζ hζ
   rw [IsTransferIdempotent, hMap]
@@ -467,7 +467,7 @@ theorem nncph_implies_rfp
     {r : ℕ} {dim : Fin r → ℕ} (A : (j : Fin r) → MPSTensor d (dim j))
     (hBNT : IsBNT B r dim A)
     (hNNCPH : HasNNCPHGroundSpaces B A)
-    (hNT : IsNormal B) (hLeft : IsLeftCanonical B) :
+    (hNT : Kraus.IsNormal B) (hLeft : IsLeftCanonical B) :
     IsTransferIdempotent B := by
   classical
   have hNNCPH3 : IsNNCPH B 3 := (hNNCPH 3 (by omega)).isNNCPH
@@ -605,7 +605,7 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
   intro j k
   by_cases hjk : j = k
   · subst k
-    rw [mixedTransferMap₂_self]
+    rw [Kraus.mixedTransferMap₂_self]
     change IsTransferIdempotent (P.basis j)
     exact hBlockRFP j
   · obtain ⟨hdimJ, hGaugeJ⟩ :=
@@ -615,16 +615,16 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
       (hPhase k).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
         (hBasisNormal k) (hLoopNormal (loopOf k))
     have hLoopZero :
-        mixedTransferMap₂
+        Kraus.mixedTransferMap₂
             (F.normalizedMinimalLoopTensor (loopOf j))
             (F.normalizedMinimalLoopTensor (loopOf k)) = 0 :=
       F.normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne (hLoopOf_ne hjk)
     have hCastZero :
-        mixedTransferMap₂
+        Kraus.mixedTransferMap₂
             (cast (congr_arg (MPSTensor d) hdimJ) (P.basis j))
             (cast (congr_arg (MPSTensor d) hdimK) (P.basis k)) = 0 :=
       mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv hGaugeJ hGaugeK hLoopZero
-    have hZero : mixedTransferMap₂ (P.basis j) (P.basis k) = 0 :=
+    have hZero : Kraus.mixedTransferMap₂ (P.basis j) (P.basis k) = 0 :=
       (mixedTransferMap₂_cast_eq_zero_iff
         hdimJ hdimK (P.basis j) (P.basis k)).1 hCastZero
     rw [hZero]

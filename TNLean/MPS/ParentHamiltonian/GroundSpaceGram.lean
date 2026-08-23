@@ -67,7 +67,7 @@ theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
 /-- Block injectivity at length \(L\) makes the Hilbert-space boundary map
 \(\Gamma_L^{\mathrm{ES}}\) injective. -/
 theorem groundSpaceMapES_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
-    (hInj : IsNBlkInjective A L) :
+    (hInj : Kraus.IsNBlkInjective A L) :
     Function.Injective (groundSpaceMapES A L) := by
   intro x y hxy
   obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
@@ -83,7 +83,7 @@ theorem groundSpaceMapES_injective_of_isNBlkInjective {A : MPSTensor d D} {L : �
 Hilbert-space boundary map is injective at every length \(L \ge L₀\). -/
 theorem groundSpaceMapES_injective_of_isNBlkInjective_of_le
     {A : MPSTensor d D} {L₀ L : ℕ} (hL₀ : 0 < L₀)
-    (hInj : IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
     Function.Injective (groundSpaceMapES A L) :=
   groundSpaceMapES_injective_of_isNBlkInjective
     (isNBlkInjective_of_le hL₀ hInj hL)
@@ -94,7 +94,7 @@ physical local ground space. This is the physical range projector, not the
 virtual transfer fixed-point projector `fixedPointProj`; it does not assert an
 overlapping-window estimate. -/
 theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
-    (A : MPSTensor d D) (L : ℕ) (hInj : IsNBlkInjective A L) :
+    (A : MPSTensor d D) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L) :
     ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
       (groundSpaceMapES_injective_of_isNBlkInjective hInj) =
         (groundSpaceES A L).starProjection := by
@@ -113,7 +113,7 @@ range projector, not the virtual `fixedPointProj`; it does not assert an
 overlapping-window estimate. -/
 theorem groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
     (A : MPSTensor d D) {L₀ L : ℕ} (hL₀ : 0 < L₀)
-    (hInj : IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
     (groundSpaceES A L).starProjection =
       (groundSpaceMapES A L).comp
         ((ContinuousLinearMap.inverseGram (groundSpaceMapES A L)
@@ -147,7 +147,7 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
     (A : MPSTensor d D) (L : ℕ) (a b c e : Fin D) :
     inner ℂ (EuclideanSpace.single (b, a) 1)
       (groundSpaceGram A L (EuclideanSpace.single (e, c) 1)) =
-      Matrix.rectangularChoi ((transferMap (d := d) (D := D) A) ^ L)
+      Matrix.rectangularChoi ((Kraus.transferMap (d := d) (D := D) A) ^ L)
         (c, e) (a, b) := by
   classical
   rw [groundSpaceGram, ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right]
@@ -156,7 +156,7 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
     (WithLp.toLp 2 (groundSpaceMap A L (Matrix.single a b 1)))
     (WithLp.toLp 2 (groundSpaceMap A L (Matrix.single c e 1))) = _
   rw [EuclideanSpace.inner_toLp_toLp, Matrix.rectangularChoi_apply,
-    transferMap_pow_apply']
+    Kraus.transferMap_pow_apply']
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
         W e c * star (W b a) := by
@@ -173,24 +173,24 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
         rw [Matrix.mul_apply]
         simp [Matrix.single_apply]
   rw [show (∑ σ : Fin L → Fin d,
-      evalWord A (List.ofFn σ) * Matrix.single c a 1 *
-        (evalWord A (List.ofFn σ))ᴴ) =
+      Kraus.evalWord A (List.ofFn σ) * Matrix.single c a 1 *
+        (Kraus.evalWord A (List.ofFn σ))ᴴ) =
       ∑ σ ∈ (Finset.univ : Finset (Fin L → Fin d)),
-        evalWord A (List.ofFn σ) * Matrix.single c a 1 *
-          (evalWord A (List.ofFn σ))ᴴ by rfl, Matrix.sum_apply]
+        Kraus.evalWord A (List.ofFn σ) * Matrix.single c a 1 *
+          (Kraus.evalWord A (List.ofFn σ))ᴴ by rfl, Matrix.sum_apply]
   simp_rw [hmul]
   simp [groundSpaceMap_apply, Matrix.trace_mul_single, dotProduct]
 
 /-- The Gram operator of \(\Gamma_L\) equals the reshuffling of the Choi matrix
 of the \(L\)-fold transfer map. -/
 theorem groundSpaceGram_eq_gramReshuffle (A : MPSTensor d D) (L : ℕ) :
-    groundSpaceGram A L = Matrix.gramReshuffle ((transferMap A) ^ L) := by
+    groundSpaceGram A L = Matrix.gramReshuffle ((Kraus.transferMap A) ^ L) := by
   apply ContinuousLinearMap.coe_injective
   refine (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.ext fun ⟨e, c⟩ => ?_
   apply PiLp.ext
   rintro ⟨b, a⟩
   have h := (inner_single_groundSpaceGram_single_eq_rectangularChoi A L a b c e).trans
-    (Matrix.inner_single_gramReshuffle_single ((transferMap A) ^ L) a b c e).symm
+    (Matrix.inner_single_gramReshuffle_single ((Kraus.transferMap A) ^ L) a b c e).symm
   simpa [PiLp.inner_apply] using h
 
 end MPSTensor

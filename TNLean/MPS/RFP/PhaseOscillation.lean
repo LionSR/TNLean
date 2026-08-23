@@ -75,7 +75,7 @@ private lemma blockTransferSum_lowerMatrixUnit :
   rw [show
     (blockTransferSum cubePhaseBlock lowerMatrixUnit).submatrix
         (blockIncl i cubePhaseBondDim) (blockIncl j cubePhaseBondDim) =
-      mixedTransferMap₂ (cubePhaseBlock i) (cubePhaseBlock j)
+      Kraus.mixedTransferMap₂ (cubePhaseBlock i) (cubePhaseBlock j)
         (lowerMatrixUnit.submatrix
           (blockIncl i cubePhaseBondDim) (blockIncl j cubePhaseBondDim)) by
     simpa only [blockTransferSum] using
@@ -85,7 +85,7 @@ private lemma blockTransferSum_lowerMatrixUnit :
       blockIncl, scalarUnitTensor]
 
 private lemma transferMap_lowerMatrixUnit :
-    transferMap cubePhaseTensor reindexedLowerMatrixUnit =
+    Kraus.transferMap cubePhaseTensor reindexedLowerMatrixUnit =
       primitiveCubeRoot • reindexedLowerMatrixUnit := by
   rw [cubePhaseTensor_eq_directSum, reindexedLowerMatrixUnit,
     transferMap_directSumTensor_reindex, blockTransferSum_lowerMatrixUnit]
@@ -93,7 +93,7 @@ private lemma transferMap_lowerMatrixUnit :
   simp
 
 private lemma transferMap_pow_lowerMatrixUnit (n : ℕ) :
-    (transferMap cubePhaseTensor ^ n) reindexedLowerMatrixUnit =
+    (Kraus.transferMap cubePhaseTensor ^ n) reindexedLowerMatrixUnit =
       primitiveCubeRoot ^ n • reindexedLowerMatrixUnit := by
   induction n with
   | zero => simp
@@ -193,7 +193,7 @@ theorem cubePhaseTensor_not_tendsto_dyadic_transferMap :
             (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ →
           Matrix (Fin (∑ k : Fin 2, cubePhaseBondDim k))
             (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ,
-        ∀ ρ, Tendsto (fun n : ℕ => (transferMap cubePhaseTensor ^ (2 ^ n)) ρ)
+        ∀ ρ, Tendsto (fun n : ℕ => (Kraus.transferMap cubePhaseTensor ^ (2 ^ n)) ρ)
           atTop (𝓝 (E ρ))) := by
   refine ⟨cubePhaseCanonicalData.isCPSVCanonicalForm,
     cubePhaseCanonicalData_isWeightNormalized, ?_⟩

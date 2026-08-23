@@ -51,13 +51,13 @@ noncomputable def reindexPhysical {d' : ℕ} (P : SectorDecomposition d)
     (e : Fin d' ≃ Fin d) : SectorDecomposition d' where
   basisCount := P.basisCount
   basisDim := P.basisDim
-  basis := fun j ↦ MPSTensor.reindexPhysical e (P.basis j)
+  basis := fun j ↦ Kraus.reindexPhysical e (P.basis j)
   sectors := P.sectors
 
 @[simp]
 theorem reindexPhysical_basis {d' : ℕ} (P : SectorDecomposition d)
     (e : Fin d' ≃ Fin d) (j : Fin P.basisCount) :
-    (P.reindexPhysical e).basis j = MPSTensor.reindexPhysical e (P.basis j) :=
+    (P.reindexPhysical e).basis j = Kraus.reindexPhysical e (P.basis j) :=
   rfl
 
 @[simp]
@@ -84,7 +84,7 @@ physically reindexing its assembled tensor.
 Source: arXiv:1606.00608, canonical-form blocking at lines 317--345. -/
 theorem reindexPhysical_toTensor {d' : ℕ} (P : SectorDecomposition d)
     (e : Fin d' ≃ Fin d) :
-    (P.reindexPhysical e).toTensor = MPSTensor.reindexPhysical e P.toTensor :=
+    (P.reindexPhysical e).toTensor = Kraus.reindexPhysical e P.toTensor :=
   rfl
 
 /-- A bijective relabelling of the physical alphabet preserves BNT canonical
@@ -106,8 +106,8 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
   basis_normalized_self_overlap := by
     change ∀ j : Fin P.basisCount,
       Tendsto (fun N : ℕ ↦ mpvOverlap
-        (MPSTensor.reindexPhysical e (P.basis j))
-        (MPSTensor.reindexPhysical e (P.basis j)) N) atTop (nhds 1)
+        (Kraus.reindexPhysical e (P.basis j))
+        (Kraus.reindexPhysical e (P.basis j)) N) atTop (nhds 1)
     intro j
     refine (hCF.basis_normalized_self_overlap j).congr' ?_
     filter_upwards with N
@@ -115,7 +115,7 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
   bnt_data := by
     change ∃ N₀ : ℕ, ∀ N > N₀,
       LinearIndependent ℂ (fun j : Fin P.basisCount ↦
-        mpvState (MPSTensor.reindexPhysical e (P.basis j)) N)
+        mpvState (Kraus.reindexPhysical e (P.basis j)) N)
     obtain ⟨N₀, hLI⟩ := hCF.bnt_data
     refine ⟨N₀, fun N hN ↦ ?_⟩
     exact linearIndependent_mpvState_reindexPhysical_equiv e P.basis (hLI N hN)
@@ -124,8 +124,8 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
       ∀ hdim : P.basisDim j = P.basisDim k,
         ¬ GaugePhaseEquiv
           (cast (congr_arg (MPSTensor d') hdim)
-            (MPSTensor.reindexPhysical e (P.basis j)))
-          (MPSTensor.reindexPhysical e (P.basis k))
+            (Kraus.reindexPhysical e (P.basis j)))
+          (Kraus.reindexPhysical e (P.basis k))
     intro j k hjk hdim hGauge
     apply hCF.basis_distinct j k hjk hdim
     rw [← MPSTensor.reindexPhysical_cast_dim e hdim (P.basis j)] at hGauge
@@ -268,7 +268,7 @@ theorem IsBNTCanonicalForm.blockTensor
     IsBNTCanonicalForm (P.blockTensor p) := by
   classical
   have hPrimitive : ∀ j : Fin P.basisCount,
-      _root_.IsPrimitive (transferMap (P.basis j)) := by
+      _root_.IsPrimitive (Kraus.transferMap (P.basis j)) := by
     intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     exact

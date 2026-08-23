@@ -79,7 +79,7 @@ theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 
   let B : MPSTensor d D := tpGauge (d := d) (D := D) A σ
   have hExtra := tp_primitive_irreducible_extra_blocking
     (d := d) (D := D) B hTP hPrim hIrr hp
-  have hNormalAlg : IsNormal (MPSTensor.blockTensor (d := d) (D := D) B p) :=
+  have hNormalAlg : Kraus.IsNormal (MPSTensor.blockTensor (d := d) (D := D) B p) :=
     isNormal_of_tp_primitive_irreducible
       (d := blockPhysDim d p) (D := D)
       (MPSTensor.blockTensor (d := d) (D := D) B p) hExtra.1 hExtra.2.1 hExtra.2.2
@@ -106,15 +106,15 @@ theorem evalWord_eq_coisometry_reconstruction_of_ne_nil
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ v, A v = Uᴴ * B v * U) :
     ∀ w : List (Fin s), w ≠ [] →
-      evalWord A w = Uᴴ * evalWord B w * U
+      Kraus.evalWord A w = Uᴴ * Kraus.evalWord B w * U
   | [], hnil => False.elim (hnil rfl)
   | v :: w, _ => by
       induction w generalizing v with
       | nil =>
-          simpa [evalWord] using hReconstruct v
+          simpa [Kraus.evalWord] using hReconstruct v
       | cons v' w ih =>
-          change A v * evalWord A (v' :: w) =
-            Uᴴ * (B v * evalWord B (v' :: w)) * U
+          change A v * Kraus.evalWord A (v' :: w) =
+            Uᴴ * (B v * Kraus.evalWord B (v' :: w)) * U
           rw [hReconstruct v, ih v' (by simp)]
           simp only [Matrix.mul_assoc]
           rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul]
@@ -167,7 +167,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
     calc
       MPSTensor.blockTensor (d := d) (D := D) A p i =
           data.ambient_coisometryᴴ *
-            evalWord (toTensorFromBlocks (d := d) data.weights data.blocks)
+            Kraus.evalWord (toTensorFromBlocks (d := d) data.weights data.blocks)
               (wordOfBlock d p i) *
             data.ambient_coisometry := by
             simpa [MPSTensor.blockTensor] using
@@ -206,7 +206,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
     exact ⟨Λ, hΛpos, hΛdiag, by
-      change transferMap (MPSTensor.blockTensor (data.blocks k) p) Λ = Λ
+      change Kraus.transferMap (MPSTensor.blockTensor (data.blocks k) p) Λ = Λ
       exact transferMap_blockTensor_fixedPoint (data.blocks k) p Λ hΛfix⟩
 
 end CPSVCanonicalFormIIData

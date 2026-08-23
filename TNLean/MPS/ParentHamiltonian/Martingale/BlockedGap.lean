@@ -174,8 +174,8 @@ private theorem blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES
   simp only [LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft',
     Equiv.coe_fn_mk, groundSpaceMapES]
   let X := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x
-  change Matrix.trace (MPSTensor.evalWord A _ * X) =
-    Matrix.trace (MPSTensor.evalWord A _ * X)
+  change Matrix.trace (Kraus.evalWord A _ * X) =
+    Matrix.trace (Kraus.evalWord A _ * X)
   rw [hword]
 
 /-- The full three-block ground space maps exactly to the original-site ground
@@ -317,7 +317,7 @@ private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
-      0 < p ∧ IsNBlkInjective A p ∧
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (_hN : 2 * 2 ≤ N) (i j : Fin N),
           j ∈ Finset.univ.erase i → cyclicWindowsOverlap N 2 i j →
             ∀ v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N),
@@ -332,7 +332,7 @@ private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths hρ
   let B := blockTensor A p
-  have hBInj : IsInjective B :=
+  have hBInj : Kraus.IsInjective B :=
     (isNBlkInjective_iff_blockTensor_isInjective A p).mp hInj
   have hBlockedDefect :
       ‖openChainTailGroundProjectionES B 1 2 ∘L
@@ -350,7 +350,7 @@ private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
             localTermES B 2 (0 : Fin 3) w⟫_ℂ).re := by
     intro w
     have hAnti := re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
-      (A := B) (K := 1) (L₀ := 1) (isNBlkInjective_one_of_isInjective hBInj)
+      (A := B) (K := 1) (L₀ := 1) (Kraus.isNBlkInjective_one_of_isInjective hBInj)
         (by omega) hBlockedDefect w
     norm_num only at hAnti
     change -(7 / 16 : ℝ) *
@@ -413,7 +413,7 @@ theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
-      0 < p ∧ IsNBlkInjective A p ∧
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (_hN : 4 ≤ N)
           (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
           v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
@@ -439,7 +439,7 @@ theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
-      0 < p ∧ IsNBlkInjective A p ∧
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∃ γ > 0, ∀ (N : ℕ) (_hN : 4 ≤ N)
           (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
           v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →

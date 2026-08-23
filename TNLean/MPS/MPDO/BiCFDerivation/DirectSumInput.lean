@@ -42,13 +42,13 @@ noncomputable def leftTraceWordMap (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin L → Fin d) → ℂ :=
   LinearMap.pi fun t : Fin L → Fin d =>
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-      (LinearMap.mulRight ℂ (evalWord A (List.ofFn t)))
+      (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn t)))
 
 @[simp]
 lemma leftTraceWordMap_apply (A : MPSTensor d D) (L : ℕ)
     (Z : Matrix (Fin D) (Fin D) ℂ) (t : Fin L → Fin d) :
     leftTraceWordMap A L Z t =
-      Matrix.trace (Z * evalWord A (List.ofFn t)) := by
+      Matrix.trace (Z * Kraus.evalWord A (List.ofFn t)) := by
   simp [leftTraceWordMap, Matrix.traceLinearMap_apply]
 
 /-- **Three-block direct-sum input, left block.**
@@ -65,37 +65,37 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
+    (hA : Kraus.IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0)
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0)
     (Z : Matrix (Fin D₁) (Fin D₁) ℂ) :
     ∃ W : Matrix (Fin D₂) (Fin D₂) ℂ, ∀ t : Fin L → Fin d,
-      Matrix.trace (Z * evalWord A (List.ofFn t)) +
-        Matrix.trace (W * evalWord B (List.ofFn t)) = 0 := by
+      Matrix.trace (Z * Kraus.evalWord A (List.ofFn t)) +
+        Matrix.trace (W * Kraus.evalWord B (List.ofFn t)) = 0 := by
   classical
   let spanA : Submodule ℂ (Matrix (Fin D₁) (Fin D₁) ℂ) :=
     Submodule.span ℂ
       (Set.range fun uv : (Fin L → Fin d) × (Fin L → Fin d) =>
-        evalWord A (List.ofFn uv.1) * ΔA * evalWord A (List.ofFn uv.2))
+        Kraus.evalWord A (List.ofFn uv.1) * ΔA * Kraus.evalWord A (List.ofFn uv.2))
   have hZ : Z ∈ spanA := by
     change Z ∈ Submodule.span ℂ
       (Set.range fun uv : (Fin L → Fin d) × (Fin L → Fin d) =>
-        evalWord A (List.ofFn uv.1) * ΔA * evalWord A (List.ofFn uv.2))
+        Kraus.evalWord A (List.ofFn uv.1) * ΔA * Kraus.evalWord A (List.ofFn uv.2))
     rw [span_range_evalWord_mul_nonzero_mul_evalWord_eq_top hA hΔA]
     exact Submodule.mem_top
   induction hZ using Submodule.span_induction with
   | mem Y hY =>
     rcases hY with ⟨uv, rfl⟩
     rcases uv with ⟨u, v⟩
-    refine ⟨evalWord B (List.ofFn u) * ΔB * evalWord B (List.ofFn v), ?_⟩
+    refine ⟨Kraus.evalWord B (List.ofFn u) * ΔB * Kraus.evalWord B (List.ofFn v), ?_⟩
     intro t
-    let Au := evalWord A (List.ofFn u)
-    let Av := evalWord A (List.ofFn v)
-    let At := evalWord A (List.ofFn t)
-    let Bu := evalWord B (List.ofFn u)
-    let Bv := evalWord B (List.ofFn v)
-    let Bt := evalWord B (List.ofFn t)
+    let Au := Kraus.evalWord A (List.ofFn u)
+    let Av := Kraus.evalWord A (List.ofFn v)
+    let At := Kraus.evalWord A (List.ofFn t)
+    let Bu := Kraus.evalWord B (List.ofFn u)
+    let Bv := Kraus.evalWord B (List.ofFn v)
+    let Bt := Kraus.evalWord B (List.ofFn t)
     have hAcycle :
         Matrix.trace ((Au * ΔA * Av) * At) =
           Matrix.trace (ΔA * (Av * (At * Au))) := by
@@ -108,7 +108,7 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
         (Matrix.trace_mul_comm Bu (ΔB * Bv * Bt))
     have hRel' := hRel (Fin.append v (Fin.append t u))
     rw [hAcycle, hBcycle]
-    simpa [Au, Av, At, Bu, Bv, Bt, List.ofFn_fin_append, evalWord_append,
+    simpa [Au, Av, At, Bu, Bv, Bt, List.ofFn_fin_append, Kraus.evalWord_append,
       Matrix.mul_assoc] using hRel'
   | zero =>
     refine ⟨0, ?_⟩
@@ -122,12 +122,12 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
     have h1 := hW₁ t
     have h2 := hW₂ t
     calc
-      Matrix.trace ((Y₁ + Y₂) * evalWord A (List.ofFn t)) +
-          Matrix.trace ((W₁ + W₂) * evalWord B (List.ofFn t))
-          = (Matrix.trace (Y₁ * evalWord A (List.ofFn t)) +
-              Matrix.trace (W₁ * evalWord B (List.ofFn t))) +
-            (Matrix.trace (Y₂ * evalWord A (List.ofFn t)) +
-              Matrix.trace (W₂ * evalWord B (List.ofFn t))) := by
+      Matrix.trace ((Y₁ + Y₂) * Kraus.evalWord A (List.ofFn t)) +
+          Matrix.trace ((W₁ + W₂) * Kraus.evalWord B (List.ofFn t))
+          = (Matrix.trace (Y₁ * Kraus.evalWord A (List.ofFn t)) +
+              Matrix.trace (W₁ * Kraus.evalWord B (List.ofFn t))) +
+            (Matrix.trace (Y₂ * Kraus.evalWord A (List.ofFn t)) +
+              Matrix.trace (W₂ * Kraus.evalWord B (List.ofFn t))) := by
               simp [Matrix.add_mul, Matrix.trace_add, add_assoc, add_left_comm]
       _ = 0 := by simp [h1, h2]
   | smul a Y _ hY =>
@@ -135,10 +135,10 @@ theorem exists_right_trace_test_of_three_block_trace_relation_left
     refine ⟨a • W, ?_⟩
     intro t
     calc
-      Matrix.trace ((a • Y) * evalWord A (List.ofFn t)) +
-          Matrix.trace ((a • W) * evalWord B (List.ofFn t))
-          = a * (Matrix.trace (Y * evalWord A (List.ofFn t)) +
-              Matrix.trace (W * evalWord B (List.ofFn t))) := by
+      Matrix.trace ((a • Y) * Kraus.evalWord A (List.ofFn t)) +
+          Matrix.trace ((a • W) * Kraus.evalWord B (List.ofFn t))
+          = a * (Matrix.trace (Y * Kraus.evalWord A (List.ofFn t)) +
+              Matrix.trace (W * Kraus.evalWord B (List.ofFn t))) := by
               simp [Matrix.trace_smul, mul_add]
       _ = 0 := by simp [hW t]
 
@@ -152,14 +152,14 @@ theorem exists_left_trace_test_of_three_block_trace_relation_right
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hB : IsNBlkInjective B L) (hΔB : ΔB ≠ 0)
+    (hB : Kraus.IsNBlkInjective B L) (hΔB : ΔB ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0)
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0)
     (W : Matrix (Fin D₂) (Fin D₂) ℂ) :
     ∃ Z : Matrix (Fin D₁) (Fin D₁) ℂ, ∀ t : Fin L → Fin d,
-      Matrix.trace (Z * evalWord A (List.ofFn t)) +
-        Matrix.trace (W * evalWord B (List.ofFn t)) = 0 := by
+      Matrix.trace (Z * Kraus.evalWord A (List.ofFn t)) +
+        Matrix.trace (W * Kraus.evalWord B (List.ofFn t)) = 0 := by
   classical
   obtain ⟨Z, hZ⟩ :=
     exists_right_trace_test_of_three_block_trace_relation_left
@@ -177,10 +177,10 @@ theorem leftTraceWordMap_range_le_of_three_block_trace_relation_left
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
+    (hA : Kraus.IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) :
     (leftTraceWordMap A L).range ≤ (leftTraceWordMap B L).range := by
   rintro f ⟨Z, rfl⟩
   obtain ⟨W, hW⟩ :=
@@ -189,8 +189,8 @@ theorem leftTraceWordMap_range_le_of_three_block_trace_relation_left
   ext t
   calc
     leftTraceWordMap B L (-W) t =
-        -Matrix.trace (W * evalWord B (List.ofFn t)) := by simp
-    _ = Matrix.trace (Z * evalWord A (List.ofFn t)) := by
+        -Matrix.trace (W * Kraus.evalWord B (List.ofFn t)) := by simp
+    _ = Matrix.trace (Z * Kraus.evalWord A (List.ofFn t)) := by
         simpa using neg_eq_of_add_eq_zero_left (hW t)
     _ = leftTraceWordMap A L Z t := by simp
 
@@ -200,11 +200,11 @@ theorem leftTraceWordMap_range_eq_of_three_block_trace_relation
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hΔA : ΔA ≠ 0) (hΔB : ΔB ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) :
     (leftTraceWordMap A L).range = (leftTraceWordMap B L).range := by
   apply le_antisymm
   · exact leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel
@@ -215,14 +215,14 @@ theorem leftTraceWordMap_range_eq_of_three_block_trace_relation
     ext t
     calc
       leftTraceWordMap A L (-Z) t =
-          -Matrix.trace (Z * evalWord A (List.ofFn t)) := by simp
-      _ = Matrix.trace (W * evalWord B (List.ofFn t)) := by
+          -Matrix.trace (Z * Kraus.evalWord A (List.ofFn t)) := by simp
+      _ = Matrix.trace (W * Kraus.evalWord B (List.ofFn t)) := by
           simpa using neg_eq_of_add_eq_zero_right (hZ t)
       _ = leftTraceWordMap B L W t := by simp
 
 /-- Block injectivity makes the length-`L` trace-test map injective. -/
 theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
-    (hA : IsNBlkInjective A L) :
+    (hA : Kraus.IsNBlkInjective A L) :
     Function.Injective (leftTraceWordMap A L) := by
   classical
   apply LinearMap.ker_eq_bot.mp
@@ -231,7 +231,7 @@ theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
   have hφ :
       (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Z) = 0 := by
     apply LinearMap.ext_on_range
-      (v := fun t : Fin L → Fin d => evalWord A (List.ofFn t))
+      (v := fun t : Fin L → Fin d => Kraus.evalWord A (List.ofFn t))
     · exact hA.span_eq_top
     · intro t
       simpa [leftTraceWordMap_apply, Matrix.traceLinearMap_apply] using
@@ -242,7 +242,7 @@ theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
 /-- Under block injectivity, the trace-test image has the full boundary-matrix
 dimension. -/
 theorem leftTraceWordMap_range_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
-    (hA : IsNBlkInjective A L) :
+    (hA : Kraus.IsNBlkInjective A L) :
     Module.finrank ℂ ((leftTraceWordMap A L).range) = D ^ 2 := by
   rw [LinearMap.finrank_range_of_inj
     (leftTraceWordMap_injective_of_isNBlkInjective hA)]
@@ -255,7 +255,7 @@ the smaller block, and both blocks are length-`L` block-injective, then their
 bond dimensions are equal and the trace-test images are equal. -/
 theorem leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hD : D₂ ≤ D₁)
     (hLe : (leftTraceWordMap A L).range ≤ (leftTraceWordMap B L).range) :
     D₁ = D₂ ∧ (leftTraceWordMap A L).range = (leftTraceWordMap B L).range := by
@@ -280,11 +280,11 @@ theorem leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hD : D₂ ≤ D₁) (hΔA : ΔA ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) :
     D₁ = D₂ ∧ (leftTraceWordMap A L).range = (leftTraceWordMap B L).range := by
   exact leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge
     hA hB hD (leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel)
@@ -300,11 +300,11 @@ lemma not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hD : D₂ < D₁) (hΔA : ΔA ≠ 0) :
     ¬ ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0 := by
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0 := by
   intro hRel
   obtain ⟨hEq, _⟩ :=
     leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge
@@ -321,8 +321,8 @@ test matrix must vanish by the strict-size contradiction.  The remaining test
 matrix then vanishes by block injectivity at the three-block length. -/
 lemma pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
-    (hB3 : IsNBlkInjective B (L + (L + L))) (hD : D₂ < D₁) :
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
+    (hB3 : Kraus.IsNBlkInjective B (L + (L + L))) (hD : D₂ < D₁) :
     PairTraceSeparatingAt A B (L + (L + L)) := by
   intro ΔA ΔB hRel
   have hΔA : ΔA = 0 := by
@@ -340,9 +340,9 @@ three-block length once both blocks are injective at the source length and the
 target three-block length. -/
 lemma pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
-    (hA3 : IsNBlkInjective A (L + (L + L)))
-    (hB3 : IsNBlkInjective B (L + (L + L))) (hD : D₁ ≠ D₂) :
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
+    (hA3 : Kraus.IsNBlkInjective A (L + (L + L)))
+    (hB3 : Kraus.IsNBlkInjective B (L + (L + L))) (hD : D₁ ≠ D₂) :
     PairTraceSeparatingAt A B (L + (L + L)) := by
   rcases lt_or_gt_of_ne hD with hlt | hgt
   · exact pairTraceSeparatingAt_symm

@@ -215,7 +215,7 @@ private theorem trace_conjugatePhysical_sector_word_eq_zero_of_ne
             Matrix.kroneckerMap (· * ·) (l q β) (r q α))
     {N : ℕ} [NeZero N] (k h : Fin N → Fin hη.m)
     (x : SectorFiber hη k) (y : SectorFiber hη h) (hne : k ≠ h) :
-    Matrix.trace (MPSTensor.evalWord
+    Matrix.trace (Kraus.evalWord
         (fun n : Fin N =>
           conjugatePhysical K hη.U_B
             (hη.decompB.symm ⟨k n, x n⟩)

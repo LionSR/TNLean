@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.Peripheral.ClosureFixedPointKraus
 import QICLean.Channel.Peripheral.CyclicGroupKraus
 import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 
 /-!
 # Transfer-map forms of the peripheral fixed-point and cyclic-group results
@@ -50,9 +50,9 @@ theorem isUnit_peripheral_eigenvector
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K))
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K))
     (X : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
-    (hEig : MPSTensor.transferMap (d := d) (D := D) K X = μ • X)
+    (hEig : Kraus.transferMap (d := d) (D := D) K X = μ • X)
     (hμ : ‖μ‖ = 1) (hX_ne : X ≠ 0) :
     IsUnit X := by
   have hIrr' : IsIrreducibleMap (Kraus.mapLM K) :=
@@ -71,11 +71,11 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
     ∀ μ : ℂ,
-      μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
+      μ ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) K) →
         ∀ n : ℕ,
-          μ ^ n ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) := by
+          μ ^ n ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) K) := by
   have hIrr' : IsIrreducibleMap (Kraus.mapLM K) :=
     Kraus.isIrreducibleMap_mapLM_of_transferMap K hIrr
   simpa only [Kraus.mapLM_eq_transferMap] using
@@ -90,9 +90,9 @@ theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
     ∀ μ : ℂ,
-      μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
+      μ ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) K) →
         ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
   have hIrr' : IsIrreducibleMap (Kraus.mapLM K) :=
     Kraus.isIrreducibleMap_mapLM_of_transferMap K hIrr
@@ -108,11 +108,11 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
     ∀ μ ν : ℂ,
-      μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
-      ν ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
-        μ * ν ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) := by
+      μ ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) K) →
+      ν ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) K) →
+        μ * ν ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) K) := by
   have hIrr' : IsIrreducibleMap (Kraus.mapLM K) :=
     Kraus.isIrreducibleMap_mapLM_of_transferMap K hIrr
   simpa only [Kraus.mapLM_eq_transferMap] using
@@ -126,8 +126,8 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot {d D : ℕ} [NeZero D]
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
-    let E := MPSTensor.transferMap (d := d) (D := D) K
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
+    let E := Kraus.transferMap (d := d) (D := D) K
     let hfin := peripheralEigenvalues_finite (f := E)
     let m := hfin.toFinset.card
     0 < m ∧
@@ -145,7 +145,7 @@ MPS transfer map instead of the finite Kraus map. -/
 theorem one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj
     {r n : ℕ} (K : Fin r → MatrixAlg n) {P P' : MatrixAlg n}
     (hP : IsOrthogonalProjection P) (hP' : IsOrthogonalProjection P')
-    (hmap : transferMap (d := r) (D := n) K P' = P) :
+    (hmap : Kraus.transferMap (d := r) (D := n) K P' = P) :
     ∀ v, (1 - P) * K v * P' = 0 := by
   have hmap' : Kraus.mapLM K P' = P := by rw [Kraus.mapLM_eq_transferMap]; exact hmap
   exact Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj K hP hP' hmap'
@@ -157,7 +157,7 @@ theorem kraus_mul_cyclicProj
     {r n m : ℕ} [NeZero m] (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
     (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, Kraus.transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
     ∀ (v : Fin r) (k : Fin m), K v * P (k + 1) = P k * K v := by
   have hcyclic' : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
     rw [Kraus.mapLM_eq_transferMap]; exact hcyclic k
@@ -169,7 +169,7 @@ the finite Kraus map. -/
 theorem cyclicProj_ne_zero
     {r n m : ℕ} [NeZero m] [NeZero n] (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, Kraus.transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
     ∀ k : Fin m, P k ≠ 0 := by
   have hcyclic' : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
     rw [Kraus.mapLM_eq_transferMap]; exact hcyclic k
@@ -183,9 +183,9 @@ theorem evalWord_mul_cyclicProj {r n m : ℕ} [NeZero m]
     (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
     (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, Kraus.transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
     ∀ (w : List (Fin r)) (k : Fin m),
-      evalWord K w * P k = P (k - (w.length : Fin m)) * evalWord K w := by
+      Kraus.evalWord K w * P k = P (k - (w.length : Fin m)) * Kraus.evalWord K w := by
   have hcyclicLM : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
     rw [Kraus.mapLM_eq_transferMap]
     exact hcyclic k
@@ -201,15 +201,15 @@ theorem evalWord_mul_cyclicProj {r n m : ℕ} [NeZero m]
       have := Kraus.kraus_mul_cyclicProj K P hproj hsum hcyclicLM v
         (k - (w.length : Fin m) - 1)
       rwa [sub_add_cancel] at this
-    calc evalWord K (v :: w) * P k
-        = K v * (evalWord K w * P k) := by rw [evalWord_cons, Matrix.mul_assoc]
-      _ = K v * (P (k - (w.length : Fin m)) * evalWord K w) := by rw [ih k]
-      _ = (K v * P (k - (w.length : Fin m))) * evalWord K w := by
+    calc Kraus.evalWord K (v :: w) * P k
+        = K v * (Kraus.evalWord K w * P k) := by rw [Kraus.evalWord_cons, Matrix.mul_assoc]
+      _ = K v * (P (k - (w.length : Fin m)) * Kraus.evalWord K w) := by rw [ih k]
+      _ = (K v * P (k - (w.length : Fin m))) * Kraus.evalWord K w := by
           rw [Matrix.mul_assoc]
-      _ = P (k - (w.length : Fin m) - 1) * (K v * evalWord K w) := by
+      _ = P (k - (w.length : Fin m) - 1) * (K v * Kraus.evalWord K w) := by
           rw [hstep, Matrix.mul_assoc]
-      _ = P (k - ((v :: w).length : Fin m)) * evalWord K (v :: w) := by
-          rw [evalWord_cons]
+      _ = P (k - ((v :: w).length : Fin m)) * Kraus.evalWord K (v :: w) := by
+          rw [Kraus.evalWord_cons]
           congr 2
           rw [List.length_cons, Nat.cast_add, Nat.cast_one, sub_sub]
 

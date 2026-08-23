@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.OperatorNormFrobenius
 import QICLean.Analysis.SpectralRadiusPowerDecay
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 
@@ -23,7 +23,7 @@ reshuffling identity with geometric decay of the complementary transfer map.
 - `MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
 -/
 
-open scoped Matrix Matrix.Norms.L2Operator NNReal ENNReal
+open scoped Matrix Matrix.Norms.L2Operator NNReal ENNReal Kraus
 open Matrix
 
 namespace MPSTensor
@@ -36,24 +36,24 @@ projection decays geometrically, up to the dimension-cubed norm-conversion facto
 theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (htr : trace ρ ≠ 0)
-    (hTP : IsTracePreservingMap (transferMap A))
-    (hρ : transferMap A ρ = ρ)
+    (hTP : IsTracePreservingMap (Kraus.transferMap A))
+    (hρ : Kraus.transferMap A ρ = ρ)
     (hgap :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (transferMap A - fixedPointProj ρ htr)) < 1) :
+          (Kraus.transferMap A - fixedPointProj ρ htr)) < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, 1 ≤ n →
       ‖groundSpaceGram A n - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ ^ 2 ≤
         (D : ℝ) ^ 3 * (C * r ^ n) ^ 2 := by
-  let N := transferMap A - fixedPointProj ρ htr
+  let N := Kraus.transferMap A - fixedPointProj ρ htr
   let T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N
   rcases _root_.geometric_bound_of_spectralRadius_lt_one T (by simpa [T, N] using hgap) with
     ⟨C, r, hC, hr_pos, hr_lt_one, hbound⟩
   refine ⟨C, r, hC, hr_pos, hr_lt_one, ?_⟩
   intro n hn
-  have hpow : (transferMap A) ^ n = fixedPointProj ρ htr + N ^ n := by
+  have hpow : (Kraus.transferMap A) ^ n = fixedPointProj ρ htr + N ^ n := by
     simpa [N] using
-      pow_eq_fixedPointProj_add_compl_pow (E := transferMap A) (ρ := ρ) htr hTP hρ hn
+      pow_eq_fixedPointProj_add_compl_pow (E := Kraus.transferMap A) (ρ := ρ) htr hTP hρ hn
   calc
     ‖groundSpaceGram A n - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ ^ 2 =
         ‖Matrix.gramReshuffle (N ^ n)‖ ^ 2 := by
@@ -76,12 +76,12 @@ operators converge to the reshuffled fixed-point projection. -/
 theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (htr : trace ρ ≠ 0)
-    (hTP : IsTracePreservingMap (transferMap A))
-    (hρ : transferMap A ρ = ρ)
+    (hTP : IsTracePreservingMap (Kraus.transferMap A))
+    (hρ : Kraus.transferMap A ρ = ρ)
     (hgap :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (transferMap A - fixedPointProj ρ htr)) < 1) :
+          (Kraus.transferMap A - fixedPointProj ρ htr)) < 1) :
     Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop
       (nhds (Matrix.gramReshuffle (fixedPointProj ρ htr))) := by
   rcases groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
@@ -130,9 +130,9 @@ theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     intro h
     exact hP.fixedPoint_ne_zero
       ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
-  have hTP : IsTracePreservingMap (transferMap A) := by
+  have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
     intro X
-    exact trace_transferMap A X hP.norm
+    exact Kraus.trace_transferMap A X hP.norm
   exact MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 
@@ -151,9 +151,9 @@ theorem IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     intro h
     exact hP.fixedPoint_ne_zero
       ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
-  have hTP : IsTracePreservingMap (transferMap A) := by
+  have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
     intro X
-    exact trace_transferMap A X hP.norm
+    exact Kraus.trace_transferMap A X hP.norm
   exact MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 

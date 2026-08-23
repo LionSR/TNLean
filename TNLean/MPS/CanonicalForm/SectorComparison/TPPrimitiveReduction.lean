@@ -95,7 +95,7 @@ a decomposition:
 
 * a family of **weighted blocked blocks** `blocks k` indexed by `Fin r`, each with:
   - left-canonical (TP) normalization `∑ᵢ (blocks k i)ᴴ * (blocks k i) = I`;
-  - primitive transfer map `_root_.IsPrimitive (transferMap (blocks k))`;
+  - primitive transfer map `_root_.IsPrimitive (Kraus.transferMap (blocks k))`;
   - positive bond dimension;
   - nonzero weight `μ k`.
 
@@ -126,7 +126,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
         (blocks k i)ᴴ * blocks k i = 1) ∧
       -- (b) Blocks have primitive transfer maps
       (∀ k, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dim k) (blocks k))) ∧
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k) (blocks k))) ∧
       -- (c) Positive bond dimensions
       (∀ k, 0 < dim k) ∧
       -- (d) Nonzero weights

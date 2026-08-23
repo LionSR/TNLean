@@ -102,7 +102,7 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
-      0 < p ∧ IsNBlkInjective A p ∧
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ K : ℕ,
           ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
                 (leftBoundaryMapES A (K + p) p).range.starProjection -
@@ -126,7 +126,7 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
     (hlarge.and (hsmall.and hcoefficient)).exists
   have hp : 0 < p := lt_of_lt_of_le (by omega) hp_large
   have hLle : L ≤ p := le_trans (le_max_right 1 L) hp_large
-  have hInj : IsNBlkInjective A p := isNBlkInjective_of_le hLpos hLinj hLle
+  have hInj : Kraus.IsNBlkInjective A p := isNBlkInjective_of_le hLpos hLinj hLle
   refine ⟨p, hp, hInj, fun K ↦ ?_⟩
   exact (hDefect K p p (by omega) hp_small).trans hp_coefficient.le
 
@@ -137,7 +137,7 @@ theorem IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteent
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
-      0 < p ∧ IsNBlkInjective A p ∧
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
               (leftBoundaryMapES A (p + p) p).range.starProjection -
             (groundSpaceES A (p + p + p)).starProjection‖ ≤ 7 / 16 := by
@@ -156,7 +156,7 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
-      1 < l ∧ IsNBlkInjective A l ∧ 0 ≤ ε ∧
+      1 < l ∧ Kraus.IsNBlkInjective A l ∧ 0 ≤ ε ∧
       ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       ∀ K : ℕ,
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
@@ -183,7 +183,7 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
   let ε := (1 - c * r ^ l)⁻¹ * (C * r ^ l)
   have hl : 1 < l := lt_of_lt_of_le (by omega) hl_large
   have hLle : L ≤ l := le_trans (le_max_right 2 L) hl_large
-  have hInj : IsNBlkInjective A l := isNBlkInjective_of_le hLpos hLinj hLle
+  have hInj : Kraus.IsNBlkInjective A l := isNBlkInjective_of_le hLpos hLinj hLle
   have hden : 0 < 1 - c * r ^ l := sub_pos.mpr hl_small
   have hε : 0 ≤ ε := by
     dsimp only [ε]

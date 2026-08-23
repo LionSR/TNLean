@@ -29,12 +29,12 @@ variable {d D : ℕ}
 Under a positive normality witness, this produces nonzero right and transpose
 eigenvectors and a rank-one element in a bounded word span of the blocked tensor. -/
 theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
-    (A : MPSTensor d D) {N₀ : ℕ} (hN₀ : IsNBlkInjective A N₀) (hN₀pos : 0 < N₀) :
+    (A : MPSTensor d D) {N₀ : ℕ} (hN₀ : Kraus.IsNBlkInjective A N₀) (hN₀pos : 0 < N₀) :
     ∃ (σ₀ τ₀ : Fin N₀ → Fin d)
       (φ ψ : Fin D → ℂ) (μ ν : ℂ) (m_blocked : ℕ),
       φ ≠ 0 ∧ ψ ≠ 0 ∧ μ ≠ 0 ∧ ν ≠ 0 ∧
-      evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
-      (evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
+      Kraus.evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
+      (Kraus.evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
       Matrix.vecMulVec φ ψ ∈
         Kraus.wordSpan (blockTensor (d := d) (D := D) A N₀) m_blocked := by
   change Kraus.wordSpan A N₀ = ⊤ at hN₀
@@ -45,7 +45,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
 For any normal MPS tensor `A` with positive bond dimension, some fixed-length
 word span is the full matrix algebra. -/
 theorem wielandt_lemma2b [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
+    (A : MPSTensor d D) (hN : Kraus.IsNormal A) :
     ∃ N : ℕ, Kraus.wordSpan A N = ⊤ := by
   classical
   obtain ⟨N₀, hN₀pos, hN₀⟩ := hN

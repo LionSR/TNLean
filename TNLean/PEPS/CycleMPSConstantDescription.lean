@@ -84,7 +84,7 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
     {n d D : ℕ} [NeZero n] (hn : 3 ≤ n) (hD : 0 < D)
     (A : MPSChainTensor d D n)
     (hA : IsInjective A) (hTI : IsCyclicShiftInvariantState A) :
-    ∃ B : MPSTensor d D, MPSTensor.IsInjective B ∧ SameState A (fun _ : Fin n => B) := by
+    ∃ B : MPSTensor d D, Kraus.IsInjective B ∧ SameState A (fun _ : Fin n => B) := by
   have hn0 : 0 < n := by omega
   have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   -- The cyclic-shift comparison: one invertible gauge per bond.
@@ -148,19 +148,19 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
         simp only [Matrix.mul_assoc]
   -- The arc product telescopes: the running products survive only at the ends.
   have htel : ∀ (w : List (Fin d)) (s : ℕ), s + w.length ≤ n →
-      arcEval A s w = (P s : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord B w *
+      arcEval A s w = (P s : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B w *
         (((P (s + w.length))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
     intro w
     induction w with
     | nil =>
         intro s _
-        simp only [arcEval_nil, List.length_nil, Nat.add_zero, MPSTensor.evalWord_nil,
+        simp only [arcEval_nil, List.length_nil, Nat.add_zero, Kraus.evalWord_nil,
           Matrix.mul_one, Units.mul_inv]
     | cons i w ih =>
         intro s hs
         have hsn : s < n := by simp only [List.length_cons] at hs; omega
         have hsle : s + 1 + w.length ≤ n := by simp only [List.length_cons] at hs; omega
-        rw [arcEval_cons, MPSTensor.evalWord_cons, ih (s + 1) hsle, hcast s hsn, hmain s hsn i]
+        rw [arcEval_cons, Kraus.evalWord_cons, ih (s + 1) hsle, hcast s hsn, hmain s hsn i]
         have hlen : s + (i :: w).length = s + 1 + w.length := by
           rw [List.length_cons]; omega
         rw [hlen]
@@ -246,7 +246,7 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
     simpa only [smul_smul, inv_mul_cancel₀ hlam0, one_smul] using h
   -- The closed coefficient up to the residual scalar.
   have hcoeffA : ∀ σ : Fin n → Fin d, coeff A σ =
-      lam⁻¹ * Matrix.trace (MPSTensor.evalWord B (List.ofFn σ)) := by
+      lam⁻¹ * Matrix.trace (Kraus.evalWord B (List.ofFn σ)) := by
     intro σ
     have hlenσ : (List.ofFn σ).length = n := List.length_ofFn
     have h0n : 0 + (List.ofFn σ).length = n := by rw [Nat.zero_add, hlenσ]
@@ -281,7 +281,7 @@ theorem exists_constant_injectiveMPS_of_cyclicShiftInvariantState
   · -- The constant chain generates the same closed state.
     intro σ
     rw [hcoeffA σ, coeff_eq_trace_arcEval (fun _ : Fin n => fun i => c • B i) σ,
-      arcEval_const, MPSTensor.evalWord_smul, List.length_ofFn, Matrix.trace_smul,
+      arcEval_const, Kraus.evalWord_smul, List.length_ofFn, Matrix.trace_smul,
       smul_eq_mul, hc]
 
 end PEPS

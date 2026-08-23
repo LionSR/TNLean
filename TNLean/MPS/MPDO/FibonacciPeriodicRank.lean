@@ -31,8 +31,8 @@ namespace FibonacciBoundary
 
 private lemma closed_endpoint_support_disjoint (W : FusionWeights) {N : ℕ}
     (hN : 0 < N) (σ : Fin N → Fin 8) :
-    ¬(evalWord (tensor W) (List.ofFn σ) 0 0 ≠ 0 ∧
-      evalWord (tensor W) (List.ofFn σ) 1 1 ≠ 0) := by
+    ¬(Kraus.evalWord (tensor W) (List.ofFn σ) 0 0 ≠ 0 ∧
+      Kraus.evalWord (tensor W) (List.ofFn σ) 1 1 ≠ 0) := by
   cases N with
   | zero => simp at hN
   | succ n =>
@@ -42,19 +42,19 @@ private lemma closed_endpoint_support_disjoint (W : FusionWeights) {N : ℕ}
 private lemma mpv_ne_zero_iff_closed_endpoint (W : FusionWeights) {N : ℕ}
     (hN : 0 < N) (σ : Fin N → Fin 8) :
     mpv (tensor W) σ ≠ 0 ↔
-      evalWord (tensor W) (List.ofFn σ) 0 0 ≠ 0 ∨
-        evalWord (tensor W) (List.ofFn σ) 1 1 ≠ 0 := by
+      Kraus.evalWord (tensor W) (List.ofFn σ) 0 0 ≠ 0 ∨
+        Kraus.evalWord (tensor W) (List.ofFn σ) 1 1 ≠ 0 := by
   rw [mpv, coeff, Matrix.trace_fin_two]
   have hdisjoint := closed_endpoint_support_disjoint W hN σ
   constructor
   · contrapose!
     simp_all
   · rintro (h | h)
-    · have h1 : evalWord (tensor W) (List.ofFn σ) 1 1 = 0 := by
+    · have h1 : Kraus.evalWord (tensor W) (List.ofFn σ) 1 1 = 0 := by
         by_contra h1
         exact hdisjoint ⟨h, h1⟩
       simp [h, h1]
-    · have h0 : evalWord (tensor W) (List.ofFn σ) 0 0 = 0 := by
+    · have h0 : Kraus.evalWord (tensor W) (List.ofFn σ) 0 0 = 0 := by
         by_contra h0
         exact hdisjoint ⟨h0, h⟩
       simp [h, h0]

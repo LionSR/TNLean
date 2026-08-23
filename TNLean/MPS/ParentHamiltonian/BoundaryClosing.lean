@@ -35,7 +35,7 @@ product equation for these two conditions gives the corresponding equation for
 \] -/
 theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -52,15 +52,15 @@ theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
         (k : Fin (M + 1 - (L₀ + 1))),
       ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k)
     (hProductEq : ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-      YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+      YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
         YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-          evalWord A (List.ofFn σ)) :
+          Kraus.evalWord A (List.ofFn σ)) :
     ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) =
+          Kraus.evalWord A (List.ofFn σ) =
         YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) := by
+          Kraus.evalWord A (List.ofFn σ) := by
   intro j σ
   have hwrap := wrappedMiddleBackground_witness_eq_of_complement_eq
     (A := A) hInj hL₀ hM η μ (ρPlus j σ) (hρPlus j σ)
@@ -73,16 +73,16 @@ theorem boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
       (mirrorMiddleBackground L₀ (M + 1) η μ))
   calc
     YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ)
+          Kraus.evalWord A (List.ofFn σ)
         = YAt ⟨M, by omega⟩ (ρPlus j σ) * A j *
-          evalWord A (List.ofFn σ) := by
+          Kraus.evalWord A (List.ofFn σ) := by
             rw [← hwrap]
     _ = YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-          evalWord A (List.ofFn σ) :=
+          Kraus.evalWord A (List.ofFn σ) :=
             hProductEq j σ
     _ = YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) := by
+          Kraus.evalWord A (List.ofFn σ) := by
             rw [hmirror]
 
 /-- Complement reduction for a boundary-crossing product equation.
@@ -101,7 +101,7 @@ This reduces the closure-property comparison to an adjacent-window product
 identity between compatible boundary conditions. -/
 theorem boundary_closing_product_eq_of_compatible_backgrounds
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -115,14 +115,14 @@ theorem boundary_closing_product_eq_of_compatible_backgrounds
     (hρMinus : ∀ k : Fin (M + 1 - (L₀ + 1)),
       ρMinus ⟨k.val + 1, by omega⟩ = μ k)
     (htransport : ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-      YAt ⟨M, by omega⟩ ρPlus * A j * evalWord A (List.ofFn σ) =
-        YAt ⟨M + 1 - L₀, by omega⟩ ρMinus * A j * evalWord A (List.ofFn σ)) :
+      YAt ⟨M, by omega⟩ ρPlus * A j * Kraus.evalWord A (List.ofFn σ) =
+        YAt ⟨M + 1 - L₀, by omega⟩ ρMinus * A j * Kraus.evalWord A (List.ofFn σ)) :
     ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) =
+          Kraus.evalWord A (List.ofFn σ) =
         YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) := by
+          Kraus.evalWord A (List.ofFn σ) := by
   exact boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments
     (A := A) hInj hL₀ hM YAt hYAt η μ
     (fun _ _ => ρPlus) (fun _ _ => ρMinus)
@@ -149,7 +149,7 @@ arXiv:2011.12127, Section IV.C, lines 2078--2079, states the corresponding
 closure-property step, but does not display these coordinate equations. -/
 theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -158,11 +158,11 @@ theorem closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
         groundSpaceMap A (L₀ + 1) (YAt i τ)) :
     (∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
-      evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+      Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
         τ ⟨k.val + L₀, by omega⟩)) * A j * X =
           YAt ⟨M, by omega⟩ τ * A j) ∧
     (∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
-      X * A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+      X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
         τ ⟨k.val + 1, by omega⟩)) =
           A j * YAt ⟨M + 1 - L₀, by omega⟩ τ) := by
   constructor
@@ -189,7 +189,7 @@ These are the boundary-crossing equations after reindexing the complementary
 sites by the same word \(\mu\). -/
 lemma closure_property_boundary_one_sided_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -200,9 +200,9 @@ lemma closure_property_boundary_one_sided_products_of_groundSpaceMap
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
     (∀ (η j : Fin d),
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
-        evalWord A (List.ofFn μ) * A j * X) ∧
+        Kraus.evalWord A (List.ofFn μ) * A j * X) ∧
     (∀ (η j : Fin d),
-      X * A j * evalWord A (List.ofFn μ) =
+      X * A j * Kraus.evalWord A (List.ofFn μ) =
         A j * YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ)) := by
   obtain ⟨hWrap, hMirror⟩ :=
@@ -243,16 +243,16 @@ of the closure property described in arXiv:2011.12127, Section IV.C,
 lines 2078--2079. -/
 theorem boundary_closing_endpoint_word_products_common_background
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (ρ : Fin (M + 1) → Fin d)
     (Y : Fin ((L₀ - 1) + 1) → Matrix (Fin D) (Fin D) ℂ)
     (hY : ∀ r : Fin ((L₀ - 1) + 1),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
           (cyclicForwardSite (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) r.val) ρ ψ =
         groundSpaceMap A (L₀ + 1) (Y r)) :
-    Y 0 * evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+    Y 0 * Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
         ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) =
-      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+      Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
         Y (Fin.last (L₀ - 1)) := by
   refine adjacent_cyclicRestrictₗ_witness_product_common_background_named
     (A := A) hInj (show 0 < M + 1 by omega) (show L₀ + 1 ≤ M + 1 by omega)
@@ -299,7 +299,7 @@ windows in the coordinate proof of the closure property described in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_condition_product_of_window_witnesses
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -308,9 +308,9 @@ theorem closure_property_boundary_condition_product_of_window_witnesses
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (ρ : Fin (M + 1) → Fin d) :
     YAt ⟨M + 1 - L₀, by omega⟩ ρ *
-        evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+        Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
           ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) =
-      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+      Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
         YAt ⟨M, by omega⟩ ρ := by
   let i₀ : Fin (M + 1) := ⟨M + 1 - L₀, by omega⟩
   let Y : Fin ((L₀ - 1) + 1) → Matrix (Fin D) (Fin D) ℂ :=
@@ -349,7 +349,7 @@ property described in arXiv:2011.12127, Section IV.C,
 lines 2078--2079. -/
 lemma closure_property_boundary_condition_long_product_of_window_witnesses
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -358,9 +358,9 @@ lemma closure_property_boundary_condition_long_product_of_window_witnesses
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (ρ : Fin (M + 1) → Fin d) :
     YAt ⟨M, by omega⟩ ρ *
-        evalWord A (List.ofFn (fun r : Fin (M + 2 - L₀) =>
+        Kraus.evalWord A (List.ofFn (fun r : Fin (M + 2 - L₀) =>
           ρ ⟨(M + r.val) % (M + 1), Nat.mod_lt _ (by omega)⟩)) =
-      evalWord A (List.ofFn (fun r : Fin (M + 2 - L₀) =>
+      Kraus.evalWord A (List.ofFn (fun r : Fin (M + 2 - L₀) =>
           ρ ⟨(L₀ + r.val) % (M + 1), Nat.mod_lt _ (by omega)⟩)) *
         YAt ⟨M + 1 - L₀, by omega⟩ ρ := by
   let i₀ : Fin (M + 1) := ⟨M, by omega⟩
@@ -424,7 +424,7 @@ rather than deriving arXiv:2011.12127, Section IV.C, lines 2078--2079; documente
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_boundary_first_products_of_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (YPlus YMinus : Matrix (Fin D) (Fin D) ℂ)
@@ -605,7 +605,7 @@ rather than deriving arXiv:2011.12127, Section IV.C, lines 2078--2079; documente
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -629,9 +629,9 @@ lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
           (k : Fin (M + 1 - (L₀ + 1))),
         ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
       ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
+            Kraus.evalWord A (List.ofFn σ) := by
   let ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d :=
     fun j _ => wrappedMiddleBackground L₀ (M + 1) j μ
   let ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d :=
@@ -652,7 +652,7 @@ lemma closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
       (hYAt ⟨M + 1 - L₀, by omega⟩
         (mirrorMiddleBackground L₀ (M + 1) j μ)) (hRestrict j) j
     simpa [ρPlus, ρMinus] using
-      congrArg (fun Y => Y * evalWord A (List.ofFn σ)) hfirst
+      congrArg (fun Y => Y * Kraus.evalWord A (List.ofFn σ)) hfirst
 
 /-- Auxiliary boundary-condition product obtained from right-products for the
 two boundary-crossing restrictions.
@@ -674,7 +674,7 @@ This is the composition of the right-product-to-restriction step with the
 auxiliary product extraction from equal boundary-crossing restrictions. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_right_products
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -695,9 +695,9 @@ lemma closure_property_auxiliary_boundary_product_eq_of_right_products
           (k : Fin (M + 1 - (L₀ + 1))),
         ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
       ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
+            Kraus.evalWord A (List.ofFn σ) := by
   refine closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
     (A := A) hInj hL₀ hM YAt hYAt μ ?_
   intro η
@@ -721,7 +721,7 @@ injectivity, so that the length-\(L_0\) word products span the full matrix
 algebra. -/
 lemma closure_property_mirror_right_product_eq_of_right_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ)
@@ -729,25 +729,25 @@ lemma closure_property_mirror_right_product_eq_of_right_word_products
     (hWord : ∀ (η j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) =
-        evalWord A (List.ofFn μ) * A j * X *
-          evalWord A (List.ofFn σ)) :
+          Kraus.evalWord A (List.ofFn σ) =
+        Kraus.evalWord A (List.ofFn μ) * A j * X *
+          Kraus.evalWord A (List.ofFn σ)) :
     ∀ (η j : Fin d),
       YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j =
-        evalWord A (List.ofFn μ) * A j * X := by
+        Kraus.evalWord A (List.ofFn μ) * A j * X := by
   intro η j
   have hzero : ∀ σ : Fin L₀ → Fin d,
       (YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j -
-          evalWord A (List.ofFn μ) * A j * X) *
-        evalWord A (List.ofFn σ) = 0 := by
+          Kraus.evalWord A (List.ofFn μ) * A j * X) *
+        Kraus.evalWord A (List.ofFn σ) = 0 := by
     intro σ
     simpa [sub_mul, sub_eq_zero, Matrix.mul_assoc] using hWord η j σ
   have hsub :
       YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j -
-          evalWord A (List.ofFn μ) * A j * X = 0 :=
+          Kraus.evalWord A (List.ofFn μ) * A j * X = 0 :=
     eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
       (A := A) (L₀ := L₀) (k := L₀) (q := 1) hInj (by omega) (by omega) hzero
   exact sub_eq_zero.mp hsub
@@ -775,7 +775,7 @@ Together with the equation for the window beginning at \(M\), this gives the
 product equations needed for the auxiliary boundary-condition product. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -786,13 +786,13 @@ lemma closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (hLast : ∀ (η j : Fin d),
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
-        evalWord A (List.ofFn μ) * A j * X)
+        Kraus.evalWord A (List.ofFn μ) * A j * X)
     (hMirrorPadded : ∀ (η j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) =
-        evalWord A (List.ofFn μ) * A j * X *
-          evalWord A (List.ofFn σ)) :
+          Kraus.evalWord A (List.ofFn σ) =
+        Kraus.evalWord A (List.ofFn μ) * A j * X *
+          Kraus.evalWord A (List.ofFn σ)) :
     ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
     ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
       (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
@@ -802,9 +802,9 @@ lemma closure_property_auxiliary_boundary_product_eq_of_mirror_padded_products
           (k : Fin (M + 1 - (L₀ + 1))),
         ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
       ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
+            Kraus.evalWord A (List.ofFn σ) := by
   refine closure_property_auxiliary_boundary_product_eq_of_right_products
     (A := A) hInj hL₀ hM YAt hYAt μ ?_
   have hMirrorRight :=

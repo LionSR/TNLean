@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausCornerCompression
 import QICLean.Channel.Peripheral.CyclicDecomposition
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
+import TNLean.MPS.Defs
 
 /-!
 # Compression to cyclic sectors
@@ -57,10 +58,10 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
+        mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+        (φ (Kraus.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
@@ -83,28 +84,28 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       _ = V * (Vᴴ * A i * V) := by simp only [Matrix.mul_assoc]
       _ = V * C i := by rw [hCompression i]
   have hEvalCompression (w : List (Fin d)) :
-      evalWord C w = Vᴴ * evalWord A w * V := by
+      Kraus.evalWord C w = Vᴴ * Kraus.evalWord A w * V := by
     calc
-      evalWord C w = 1 * evalWord C w := (Matrix.one_mul _).symm
-      _ = (Vᴴ * V) * evalWord C w := by rw [hVtV]
-      _ = Vᴴ * (V * evalWord C w) := Matrix.mul_assoc _ _ _
-      _ = Vᴴ * (evalWord A w * V) := by
-        rw [evalWord_intertwine A C V hIntertwineLetter w]
-      _ = Vᴴ * evalWord A w * V := (Matrix.mul_assoc _ _ _).symm
+      Kraus.evalWord C w = 1 * Kraus.evalWord C w := (Matrix.one_mul _).symm
+      _ = (Vᴴ * V) * Kraus.evalWord C w := by rw [hVtV]
+      _ = Vᴴ * (V * Kraus.evalWord C w) := Matrix.mul_assoc _ _ _
+      _ = Vᴴ * (Kraus.evalWord A w * V) := by
+        rw [Kraus.evalWord_intertwine A C V hIntertwineLetter w]
+      _ = Vᴴ * Kraus.evalWord A w * V := (Matrix.mul_assoc _ _ _).symm
   refine ⟨n, C, φ, V, hdim, hCtp, ?_, ?_, hMul, hStar, hLetter, hVtV, hVVt, hφV⟩
   · intro N σ
     let w := List.ofFn σ
-    change Matrix.trace (evalWord C w) = Matrix.trace (P * evalWord A w)
+    change Matrix.trace (Kraus.evalWord C w) = Matrix.trace (P * Kraus.evalWord A w)
     rw [hEvalCompression]
     calc
-      Matrix.trace (Vᴴ * evalWord A w * V) =
-          Matrix.trace ((evalWord A w * V) * Vᴴ) := by
+      Matrix.trace (Vᴴ * Kraus.evalWord A w * V) =
+          Matrix.trace ((Kraus.evalWord A w * V) * Vᴴ) := by
             rw [Matrix.mul_assoc]
             exact Matrix.trace_mul_comm _ _
-      _ = Matrix.trace (evalWord A w * P) := by rw [Matrix.mul_assoc, hVVt]
-      _ = Matrix.trace (P * evalWord A w) := Matrix.trace_mul_comm _ _
+      _ = Matrix.trace (Kraus.evalWord A w * P) := by rw [Matrix.mul_assoc, hVVt]
+      _ = Matrix.trace (P * Kraus.evalWord A w) := Matrix.trace_mul_comm _ _
   · intro X
-    simpa [Kraus.adjointMap, transferMap_apply] using hIntertw X
+    simpa [Kraus.adjointMap, Kraus.transferMap_apply] using hIntertw X
 
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
@@ -124,10 +125,10 @@ theorem exists_compressedTensor_of_supported_projection_with_letter
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
+        mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+        (φ (Kraus.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
@@ -153,10 +154,10 @@ theorem exists_compressedTensor_of_supported_projection
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv C σ = Matrix.trace (P * evalWord A (List.ofFn σ))) ∧
+        mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+        (φ (Kraus.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by

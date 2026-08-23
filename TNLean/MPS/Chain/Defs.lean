@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 
 import Batteries.Data.Fin
 import Mathlib.Logic.Equiv.Fin.Rotate
@@ -43,7 +43,7 @@ def SameState (A B : MPSChainTensor d D n) : Prop :=
 
 /-- Every local tensor in the chain is injective. -/
 def IsInjective (A : MPSChainTensor d D n) : Prop :=
-  ∀ k : Fin n, MPSTensor.IsInjective (A k)
+  ∀ k : Fin n, Kraus.IsInjective (A k)
 
 /-- Cyclic successor on `Fin n`, sending the last site back to `0`. -/
 def cyclicSucc : Fin n → Fin n :=

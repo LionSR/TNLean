@@ -263,8 +263,8 @@ private theorem exists_schmidtWordCore {r L : ℕ}
     (S : Fin d → Matrix (Fin L) (Fin r) ℂ)
     (w : List (Fin d)) (hw : w ≠ []) :
     ∃ R : Matrix (Fin L) (Fin r) ℂ,
-      evalWord (fun i ↦ S i * Y) w = R * Y ∧
-        evalWord (fun i ↦ Y * S i) w = Y * R := by
+      Kraus.evalWord (fun i ↦ S i * Y) w = R * Y ∧
+        Kraus.evalWord (fun i ↦ Y * S i) w = Y * R := by
   induction w with
   | nil => exact (hw rfl).elim
   | cons i w ih =>
@@ -273,8 +273,8 @@ private theorem exists_schmidtWordCore {r L : ℕ}
         exact ⟨S i, by simp, by simp⟩
       · obtain ⟨R, hraw, hminimal⟩ := ih htail
         refine ⟨S i * Y * R, ?_, ?_⟩
-        · simp only [evalWord_cons, hraw, Matrix.mul_assoc]
-        · simp only [evalWord_cons, hminimal, Matrix.mul_assoc]
+        · simp only [Kraus.evalWord_cons, hraw, Matrix.mul_assoc]
+        · simp only [Kraus.evalWord_cons, hminimal, Matrix.mul_assoc]
 
 /-- The ambient and Schmidt-support loop tensors have equal traces on every
 nonempty word.
@@ -286,15 +286,15 @@ Schmidt-support refinement recorded in
 private theorem trace_evalWord_loopCoordinateTensor_eq_minimal
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     (w : List (Fin d)) (hw : w ≠ []) :
-    Matrix.trace (evalWord (F.loopCoordinateTensor l) w) =
-      Matrix.trace (evalWord (F.minimalLoopCoordinateTensor l) w) := by
+    Matrix.trace (Kraus.evalWord (F.loopCoordinateTensor l) w) =
+      Matrix.trace (Kraus.evalWord (F.minimalLoopCoordinateTensor l) w) := by
   rw [F.loopCoordinateTensor_eq_bridge_mul_leftFactor l]
   obtain ⟨R, hraw, hminimal⟩ := exists_schmidtWordCore
     (F.loopSchmidtFactorization l).leftFactor
     (F.loopSchmidtBridge l) w hw
   rw [hraw]
   change Matrix.trace (R * (F.loopSchmidtFactorization l).leftFactor) =
-    Matrix.trace (evalWord
+    Matrix.trace (Kraus.evalWord
       (fun i ↦ (F.loopSchmidtFactorization l).leftFactor *
         F.loopSchmidtBridge l i) w)
   rw [hminimal]

@@ -164,15 +164,15 @@ private lemma single_sum_one (X : Matrix (Fin 2) (Fin 2) ℂ) :
 /-- The transfer map of the Bell-pair chain tensor is
 `𝔼(X) = tr(X) · diag(Λ)`, evaluated entrywise. -/
 theorem bellPairChainTensor_transferMap_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    transferMap bellPairChainTensor X = (1 / 2 * Matrix.trace X) • 1 := by
-  rw [transferMap_apply, ← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+    Kraus.transferMap bellPairChainTensor X = (1 / 2 * Matrix.trace X) • 1 := by
+  rw [Kraus.transferMap_apply, ← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   simp_rw [bellPairChainTensor_letter_conj]
   exact single_sum_one X
 
 /-- The transfer map of the Bell-pair chain tensor in rank-one form:
 `𝔼(X) = tr(X) · diag(Λ)`. -/
 theorem bellPairChainTensor_transferMap :
-    transferMap bellPairChainTensor =
+    Kraus.transferMap bellPairChainTensor =
       (Matrix.traceLinearMap (Fin 2) ℂ ℂ).smulRight ((1 / 2 : ℂ) • 1) := by
   ext X
   rw [bellPairChainTensor_transferMap_apply, LinearMap.smulRight_apply,
@@ -247,8 +247,8 @@ private lemma bell_trace_pauliZ_mul (X : Matrix (Fin 2) (Fin 2) ℂ) :
 /-! ### One-letter observable transfer maps -/
 
 private lemma evalWord_ofFn_const_one (A : MPSTensor d D) (i : Fin d) :
-    evalWord A (List.ofFn fun _ : Fin 1 => i) = A i := by
-  rw [List.ofFn_const, List.replicate_one, evalWord_cons, evalWord_nil, mul_one]
+    Kraus.evalWord A (List.ofFn fun _ : Fin 1 => i) = A i := by
+  rw [List.ofFn_const, List.replicate_one, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
 
 private lemma sum_fin_one_arrow (F : (Fin 1 → Fin d) → Matrix (Fin D) (Fin D) ℂ) :
     (∑ σ : Fin 1 → Fin d, F σ) = ∑ i : Fin d, F fun _ => i := by
@@ -362,9 +362,9 @@ theorem bellPairChainTensor_adjacent_twoPointExpectation :
     physicalTwoPointExpectation bellPairChainTensor 1 1
       bellPairChainZFirst bellPairChainZSecond 2 0 = 1 := by
   have hcomp : physicalObservableTransfer bellPairChainTensor 1 bellPairChainZSecond ∘ₗ
-        ((transferMap bellPairChainTensor) ^ 0) ∘ₗ
+        ((Kraus.transferMap bellPairChainTensor) ^ 0) ∘ₗ
         physicalObservableTransfer bellPairChainTensor 1 bellPairChainZFirst ∘ₗ
-          ((transferMap bellPairChainTensor) ^ 2) =
+          ((Kraus.transferMap bellPairChainTensor) ^ 2) =
       (Matrix.traceLinearMap (Fin 2) ℂ ℂ).smulRight ((1 / 2 : ℂ) • 1) := by
     ext X
     simp only [LinearMap.comp_apply, pow_zero, Module.End.one_apply, pow_two,
@@ -389,9 +389,9 @@ theorem bellPairChainTensor_shifted_twoPointExpectation :
     physicalTwoPointExpectation bellPairChainTensor 1 1
       bellPairChainZFirst bellPairChainZSecond 1 1 = 0 := by
   have hcomp : physicalObservableTransfer bellPairChainTensor 1 bellPairChainZSecond ∘ₗ
-        ((transferMap bellPairChainTensor) ^ 1) ∘ₗ
+        ((Kraus.transferMap bellPairChainTensor) ^ 1) ∘ₗ
         physicalObservableTransfer bellPairChainTensor 1 bellPairChainZFirst ∘ₗ
-          ((transferMap bellPairChainTensor) ^ 1) = 0 := by
+          ((Kraus.transferMap bellPairChainTensor) ^ 1) = 0 := by
     ext X
     simp only [LinearMap.comp_apply, pow_one]
     rw [bell_observableTransfer_snd, bell_observableTransfer_fst,
@@ -423,8 +423,8 @@ theorem bellPairChainTensor_not_isPhysicalCID :
 
 /-- The four letters of the Bell-pair chain tensor are the (rescaled) matrix
 units, so they span the full matrix algebra. -/
-theorem bellPairChainTensor_isInjective : IsInjective bellPairChainTensor := by
-  rw [IsInjective, eq_top_iff]
+theorem bellPairChainTensor_isInjective : Kraus.IsInjective bellPairChainTensor := by
+  rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   rw [Matrix.matrix_eq_sum_single M]
   refine Submodule.sum_mem _ fun a _ => Submodule.sum_mem _ fun b _ => ?_
@@ -437,7 +437,7 @@ theorem bellPairChainTensor_isInjective : IsInjective bellPairChainTensor := by
 
 /-- The Bell-pair chain tensor is algebraically normal: it is already
 `1`-block injective. -/
-theorem bellPairChainTensor_isNormal : IsNormal bellPairChainTensor :=
+theorem bellPairChainTensor_isNormal : Kraus.IsNormal bellPairChainTensor :=
   bellPairChainTensor_isInjective.isNormal
 
 /-- The Bell-pair chain tensor is left-canonical:

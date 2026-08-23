@@ -76,7 +76,7 @@ and the SectorBNT comparison theorems; see
 
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
 (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
-`IsNormal` (the equivalent algebraic eventual-block-injectivity notion). The
+`Kraus.IsNormal` (the equivalent algebraic eventual-block-injectivity notion). The
 primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
@@ -285,7 +285,7 @@ theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
 
 /-- The NT hypotheses already supply the `spans_mpv` and `eventually_li` hypotheses used by the
 proportional-FT / permutation arguments. The only missing ingredient for a full `IsBNT`
-construction is blockwise `IsNormal`. -/
+construction is blockwise `Kraus.IsNormal`. -/
 theorem spans_mpv_and_eventually_li_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -307,14 +307,14 @@ theorem spans_mpv_and_eventually_li_of_separated_normal_bnt_data [∀ k, NeZero 
 /-- Separated-hypotheses version of `IsNormalCanonicalFormBNT.isBNT`.
 
 Here `hNCF` supplies normality via the primitive-transfer-map characterization from
-`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` hypotheses
-(eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
-Wielandt / primitive-to-normal implication. -/
+`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `Kraus.IsNormal`
+hypotheses (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes
+from the Wielandt / primitive-to-normal implication. -/
 theorem isBNT_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNCF : IsNormalCanonicalForm μ A)
-    (hNormal : ∀ j, IsNormal (A j))
+    (hNormal : ∀ j, Kraus.IsNormal (A j))
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A := by
   obtain ⟨hSpans, hLI⟩ :=
@@ -329,7 +329,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- A normal-canonical-form decomposition with BNT separation yields a valid `IsBNT`
-structure once the equivalent blockwise `IsNormal` witnesses (eventual block injectivity) are
+structure once the equivalent blockwise `Kraus.IsNormal` witnesses (eventual block injectivity) are
 supplied explicitly.
 
 **Scope restriction (basis of representatives):** The hypothesis
@@ -340,7 +340,7 @@ decomposition. The restriction is documented in
 `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. -/
 lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
-    (hNormal : ∀ j, IsNormal (A j)) :
+    (hNormal : ∀ j, Kraus.IsNormal (A j)) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
   isBNT_of_separated_normal_bnt_data μ A
     hNCF.toIsNormalCanonicalForm

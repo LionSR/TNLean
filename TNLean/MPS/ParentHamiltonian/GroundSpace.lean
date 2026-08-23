@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
 
 import Mathlib.LinearAlgebra.Dimension.Finite
@@ -33,11 +33,11 @@ noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d L :=
   LinearMap.pi fun σ : Fin L → Fin d =>
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-      (LinearMap.mulLeft ℂ (evalWord A (List.ofFn σ)))
+      (LinearMap.mulLeft ℂ (Kraus.evalWord A (List.ofFn σ)))
 
 @[simp] lemma groundSpaceMap_apply (A : MPSTensor d D) (L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) (σ : Fin L → Fin d) :
-    groundSpaceMap A L X σ = Matrix.trace (evalWord A (List.ofFn σ) * X) := by
+    groundSpaceMap A L X σ = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * X) := by
   simp [groundSpaceMap, Matrix.traceLinearMap_apply]
 
 /-- Ground space on \(L\) consecutive sites:
@@ -73,7 +73,7 @@ theorem GaugeEquiv.groundSpace_le {A B : MPSTensor d D}
   ext σ
   rw [groundSpaceMap_apply, groundSpaceMap_apply]
   rw [evalWord_gauge X hX]
-  exact (trace_gauge_boundary X (evalWord A (List.ofFn σ)) Y).symm
+  exact (trace_gauge_boundary X (Kraus.evalWord A (List.ofFn σ)) Y).symm
 
 /-- Gauge-equivalent tensors have identical local ground spaces at every
 length. -/

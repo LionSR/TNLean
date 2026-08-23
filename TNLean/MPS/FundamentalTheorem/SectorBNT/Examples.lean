@@ -56,7 +56,7 @@ noncomputable abbrev singletonDecomp (C : MPSTensor d D) :
 /-- **Example 1**: a single BNT sector with a single copy and weight `1`. -/
 noncomputable example
     (C : MPSTensor d D) [NeZero D]
-    (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1)) :
     IsBNTCanonicalForm (singleSectorDecomposition C) :=
@@ -87,7 +87,7 @@ raw weights `(1, -1)`.  The sector coefficient is `1 + (-1)^N`, which is
 must retain the raw copy weights in its coefficient. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
@@ -158,7 +158,7 @@ illustrating equal-modulus grouping in the CPSV16 two-layer BNT
 decomposition. -/
 noncomputable example
     (C : MPSTensor d D) (θ : ℝ) (hDpos : 0 < D)
-    (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :
@@ -280,7 +280,7 @@ equals `1`.  See also
 for the original counter-example. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
-    (hCIrr : IsIrreducibleTensor C)
+    (hCIrr : Kraus.IsIrreducibleFamily C)
     (hCLeft : IsLeftCanonical C)
     (hCSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) C C N) atTop (𝓝 1))
     (hCNonzero : ∃ N0 : ℕ, ∀ N > N0, mpvState C N ≠ 0) :

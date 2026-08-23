@@ -56,7 +56,7 @@ lemma oneSiteDoubledEquiv_diagonal (i : Fin (MPSTensor.blockPhysDim 4 1)) :
 relabeling of its doubled-index tensor. -/
 theorem toMPSTensor_blockTensor_R_one :
     (MPOTensor.blockTensor R 1).toMPSTensor =
-      MPSTensor.reindexPhysical oneSiteDoubledEquiv R.toMPSTensor := by
+      Kraus.reindexPhysical oneSiteDoubledEquiv R.toMPSTensor := by
   funext ij
   change
     R (MPSTensor.singleBlockEquiv 4 ij.divNat)
@@ -103,9 +103,9 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
     exact ref.isActiveCPSVBasisOfNormalTensors hActive
   · intro j
     change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
-      (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock))
+      (Kraus.reindexPhysical oneSiteDoubledEquiv retainedBlock))
     have hTransfer : MPOTensor.doubledPhysTraceTransfer 4
-        (MPSTensor.reindexPhysical oneSiteDoubledEquiv retainedBlock) =
+        (Kraus.reindexPhysical oneSiteDoubledEquiv retainedBlock) =
         MPOTensor.doubledPhysTraceTransfer 4 retainedBlock := by
       rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.doubledPhysTraceTransfer]
       change (∑ i : Fin (MPSTensor.blockPhysDim 4 1),

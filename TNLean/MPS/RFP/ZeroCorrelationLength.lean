@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.Core.Correlations
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import TNLean.MPS.RFP.Defs
 import QICLean.Spectral.MixedTransfer
 
@@ -58,8 +58,8 @@ noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
     (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   ∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-    O τ σ • ((LinearMap.mulLeft ℂ (evalWord A (List.ofFn σ))).comp
-      (LinearMap.mulRight ℂ (evalWord A (List.ofFn τ))ᴴ))
+    O τ σ • ((LinearMap.mulLeft ℂ (Kraus.evalWord A (List.ofFn σ))).comp
+      (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn τ))ᴴ))
 
 /-- The periodic-chain two-region expectation obtained by placing observables
 $O_1$ and $O_2$ on physical blocks, with $n_1$ and $n_2$ unobserved sites in
@@ -71,8 +71,8 @@ noncomputable def physicalTwoPointExpectation (A : MPSTensor d D)
     (O₂ : Matrix (Fin L₂ → Fin d) (Fin L₂ → Fin d) ℂ)
     (n₁ n₂ : ℕ) : ℂ :=
   LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
-    (physicalObservableTransfer A L₂ O₂ ∘ₗ ((transferMap A) ^ n₂) ∘ₗ
-      physicalObservableTransfer A L₁ O₁ ∘ₗ ((transferMap A) ^ n₁))
+    (physicalObservableTransfer A L₂ O₂ ∘ₗ ((Kraus.transferMap A) ^ n₂) ∘ₗ
+      physicalObservableTransfer A L₁ O₁ ∘ₗ ((Kraus.transferMap A) ^ n₁))
 
 /-- Physical correlations independent of distance in the sense of
 arXiv:1606.00608, Definition 3.3 (lines 437--445): for two observables on
@@ -147,7 +147,7 @@ positive-gap physical predicate is `IsPositiveGapPhysicalCID` above.  See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 def IsCID (A : MPSTensor d D) : Prop :=
   ∀ (ρR : Matrix (Fin D) (Fin D) ℂ),
-    ρR.PosDef → transferMap A ρR = ρR →
+    ρR.PosDef → Kraus.transferMap A ρR = ρR →
     ∀ (X Y : Matrix (Fin D) (Fin D) ℂ) (n m : ℕ),
       1 ≤ n → 1 ≤ m →
       connectedCorrelator A ρR X Y n = connectedCorrelator A ρR X Y m
@@ -167,14 +167,14 @@ theorem isPositiveGapPhysicalCID_of_isTransferIdempotent
     (A : MPSTensor d D) (hRFP : IsTransferIdempotent A) :
     IsPositiveGapPhysicalCID A := by
   intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ _ _ hn₁ hn₂ hm₁ hm₂ _
-  have hIdem : IsIdempotentElem (transferMap A) := hRFP
-  have hpow_n₁ : (transferMap A) ^ n₁ = transferMap A :=
+  have hIdem : IsIdempotentElem (Kraus.transferMap A) := hRFP
+  have hpow_n₁ : (Kraus.transferMap A) ^ n₁ = Kraus.transferMap A :=
     hIdem.pow_eq (Nat.ne_of_gt hn₁)
-  have hpow_n₂ : (transferMap A) ^ n₂ = transferMap A :=
+  have hpow_n₂ : (Kraus.transferMap A) ^ n₂ = Kraus.transferMap A :=
     hIdem.pow_eq (Nat.ne_of_gt hn₂)
-  have hpow_m₁ : (transferMap A) ^ m₁ = transferMap A :=
+  have hpow_m₁ : (Kraus.transferMap A) ^ m₁ = Kraus.transferMap A :=
     hIdem.pow_eq (Nat.ne_of_gt hm₁)
-  have hpow_m₂ : (transferMap A) ^ m₂ = transferMap A :=
+  have hpow_m₂ : (Kraus.transferMap A) ^ m₂ = Kraus.transferMap A :=
     hIdem.pow_eq (Nat.ne_of_gt hm₂)
   simp only [physicalTwoPointExpectation, hpow_n₁, hpow_n₂, hpow_m₁, hpow_m₂]
 
@@ -199,7 +199,7 @@ theorem. The rectangular mixed transfer operator is the corresponding linear
 map form of the displayed mixed-sector matrix. -/
 def IsBNTLocallyOrthogonal
     (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
-  ∀ j j' : Fin g, j ≠ j' → mixedTransferMap₂ (blocks j) (blocks j') = 0
+  ∀ j j' : Fin g, j ≠ j' → Kraus.mixedTransferMap₂ (blocks j) (blocks j') = 0
 
 /-- BNT zero correlation length in the source sense of arXiv:1606.00608,
 Definition 3.6 (lines 476--478): `blocks` is a basis of normal tensors for
@@ -277,10 +277,10 @@ agree: this is the independence-of-separation step at gaps $2$ and $1$
 (arXiv:1606.00608, Definition 3.3). -/
 private lemma trace_mul_transferMap_sq_eq_of_isCID
     (A : MPSTensor d D) (ρR : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_pd : ρR.PosDef) (hρ_fix : transferMap A ρR = ρR) (hCID : IsCID A)
+    (hρ_pd : ρR.PosDef) (hρ_fix : Kraus.transferMap A ρR = ρR) (hCID : IsCID A)
     (X N : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.trace (N * transferMap A (transferMap A (X * ρR))) =
-      Matrix.trace (N * transferMap A (X * ρR)) := by
+    Matrix.trace (N * Kraus.transferMap A (Kraus.transferMap A (X * ρR))) =
+      Matrix.trace (N * Kraus.transferMap A (X * ρR)) := by
   have h := hCID ρR hρ_pd hρ_fix X N 2 1 (by omega) (by omega)
   simp only [connectedCorrelator_def, twoPointExpectation_transfer] at h
   simp only [pow_succ, pow_zero, one_mul, Module.End.mul_apply] at h
@@ -305,9 +305,9 @@ theorem isCID_implies_isTransferIdempotent
     (A : MPSTensor d D)
     (ρR : Matrix (Fin D) (Fin D) ℂ)
     (hρ_pd : ρR.PosDef)
-    (hρ_fix : transferMap A ρR = ρR)
+    (hρ_fix : Kraus.transferMap A ρR = ρR)
     (hCID : IsCID A) : IsTransferIdempotent A := by
-  change transferMap A ∘ₗ transferMap A = transferMap A
+  change Kraus.transferMap A ∘ₗ Kraus.transferMap A = Kraus.transferMap A
   obtain ⟨u, rfl⟩ := hρ_pd.isUnit
   apply LinearMap.ext; intro Z
   simp only [LinearMap.comp_apply]
@@ -342,10 +342,10 @@ theorem zcl_iff_idempotent_transfer (A : MPSTensor d D) :
   · exact fun ⟨hLO, _⟩ => hLO
   · intro hRFP
     refine ⟨hRFP, fun ρR _ _ X Y n m hn hm => ?_⟩
-    have hIdem : IsIdempotentElem (transferMap A) := hRFP
-    have hpow_n : (transferMap A) ^ n = transferMap A :=
+    have hIdem : IsIdempotentElem (Kraus.transferMap A) := hRFP
+    have hpow_n : (Kraus.transferMap A) ^ n = Kraus.transferMap A :=
       hIdem.pow_eq (Nat.ne_of_gt hn)
-    have hpow_m : (transferMap A) ^ m = transferMap A :=
+    have hpow_m : (Kraus.transferMap A) ^ m = Kraus.transferMap A :=
       hIdem.pow_eq (Nat.ne_of_gt hm)
     simp only [connectedCorrelator_def, twoPointExpectation_transfer,
       hpow_n, hpow_m]

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.WolfTheorem68
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 
 /-!
@@ -54,7 +54,7 @@ theorem isNormal_of_isPrimitiveMPS_with_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (hρ_pd : ρ.PosDef) :
-    IsNormal A := by
+    Kraus.IsNormal A := by
   exact (hasEventuallyFullKrausRank_iff_isNormal A).mp
     (hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 

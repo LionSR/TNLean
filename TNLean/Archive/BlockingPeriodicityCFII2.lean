@@ -89,7 +89,8 @@ private lemma diag_eq_of_lt_zero_lt {z : ℂ} (hz : 0 < z) : ((z.re : ℝ) : ℂ
     simp [hz_im]
 
 /-- For a positive definite matrix, the diagonal entries are real and positive. -/
-private lemma re_pos_of_posDef_diag (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef) (i : Fin D) :
+private lemma re_pos_of_posDef_diag (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛ : Λ.PosDef)
+    (i : Fin D) :
     0 < (Λ i i).re := by
   have hpos : (0 : ℂ) < Λ i i := Matrix.PosDef.diag_pos hΛ
   exact (Complex.lt_def).1 hpos |>.1
@@ -159,11 +160,12 @@ section Unitalize
 noncomputable def unitalize (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
   fun i => diagInvSqrt (D := D) Λ * B i * diagSqrt (D := D) Λ
 
-/-- If `Λ` is a positive definite fixed point of `transferMap B`, then `unitalize B Λ` is unital. -/
+/-- If `Λ` is a positive definite fixed point of `Kraus.transferMap B`, then `unitalize B Λ` is
+unital. -/
 lemma unitalize_isUnitalKraus_of_fixedPoint
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (hDiag : Λ.IsDiag)
-    (hfix : transferMap (d := d) (D := D) B Λ = Λ) :
+    (hfix : Kraus.transferMap (d := d) (D := D) B Λ = Λ) :
     KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) := by
   classical
   let S : Matrix (Fin D) (Fin D) ℂ := diagSqrt (D := D) Λ
@@ -184,7 +186,8 @@ lemma unitalize_isUnitalKraus_of_fixedPoint
   -- Unfold unitality.
   -- (This is just the defining equation.)
   simpa [KadisonSchwarz.IsUnitalKraus, unitalize, S, Sinv] using (show
-      (∑ i : Fin d, (Sinv * B i * S) * (Sinv * B i * S)ᴴ = (1 : Matrix (Fin D) (Fin D) ℂ)) from by
+      (∑ i : Fin d, (Sinv * B i * S) * (Sinv * B i * S)ᴴ =
+        (1 : Matrix (Fin D) (Fin D) ℂ)) from by
     calc
       ∑ i : Fin d, (Sinv * B i * S) * (Sinv * B i * S)ᴴ
         = ∑ i : Fin d, Sinv * (B i * Λ * (B i)ᴴ) * Sinv := by
@@ -198,8 +201,8 @@ lemma unitalize_isUnitalKraus_of_fixedPoint
                         simp [Matrix.mul_assoc, hS_mul]
     _ = Sinv * (∑ i : Fin d, B i * Λ * (B i)ᴴ) * Sinv := by
           simp [Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
-    _ = Sinv * transferMap (d := d) (D := D) B Λ * Sinv := by
-          simp [MPSTensor.transferMap_apply, Matrix.mul_assoc]
+    _ = Sinv * Kraus.transferMap (d := d) (D := D) B Λ * Sinv := by
+          simp [Kraus.transferMap_apply, Matrix.mul_assoc]
     _ = Sinv * Λ * Sinv := by simp [hfix]
     _ = 1 := by simp [hInvΛ]
   )
@@ -340,7 +343,8 @@ lemma range_mulVecLin_supportProj_eq
     Submodule.finrank_mono hker
   have frange (M : Matrix (Fin D) (Fin D) ℂ) :
       Module.finrank ℂ ↥(LinearMap.range (Matrix.mulVecLin M)) =
-        Module.finrank ℂ (Fin D → ℂ) - Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin M)) := by
+        Module.finrank ℂ (Fin D → ℂ) -
+          Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin M)) := by
     have hdim := LinearMap.finrank_range_add_finrank_ker (Matrix.mulVecLin M)
     have := congrArg (fun n => n - Module.finrank ℂ ↥(LinearMap.ker (Matrix.mulVecLin M))) hdim
     simpa [Nat.add_sub_cancel, Nat.add_sub_cancel_left] using this
@@ -373,9 +377,10 @@ section Irreducibility
 /-- Unitary conjugation preserves tensor irreducibility. -/
 lemma isIrreducibleTensor_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleTensor (d := d) (D := D)
-      (fun i => (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
+    Kraus.IsIrreducibleFamily (d := d) (D := D)
+      (fun i =>
+        (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
   classical
   intro hHas
   rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
@@ -464,8 +469,8 @@ This is the key irreducibility-preservation step for the CFII unitalization. -/
 lemma hasInvariantProj_of_hasInvariantProj_unitalize
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (_hDiag : Λ.IsDiag) :
-    HasInvariantProj (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) →
-      HasInvariantProj (d := d) (D := D) B := by
+    Kraus.HasInvariantProj (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) →
+      Kraus.HasInvariantProj (d := d) (D := D) B := by
   classical
   rintro ⟨P, hPproj, hP0, hP1, hLower⟩
   -- Similarity matrices.
@@ -639,8 +644,8 @@ lemma hasInvariantProj_of_hasInvariantProj_unitalize
 lemma isIrreducibleTensor_unitalize
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (hDiag : Λ.IsDiag)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) B) :
-    IsIrreducibleTensor (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) := by
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) B) :
+    Kraus.IsIrreducibleFamily (d := d) (D := D) (unitalize (d := d) (D := D) B Λ) := by
   intro hHas
   exact hIrr (hasInvariantProj_of_hasInvariantProj_unitalize (d := d) (D := D)
     (B := B) (Λ := Λ) hΛ hDiag hHas)
@@ -659,10 +664,10 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrrT : IsIrreducibleTensor (d := d) (D := D) A) :
+    (hIrrT : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
     ∃ p : ℕ, 0 < p ∧
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D)
+        (Kraus.transferMap (d := blockPhysDim d p) (D := D)
           (blockTensor (d := d) (D := D) A p)) := by
   classical
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
@@ -681,15 +686,15 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     unitalize_adjoint_fixedPoint_of_TP (d := d) (D := D)
       (B := B) (Λ := Λ) hΛ_pd hΛ_diag (by simpa [B] using hTPB)
   -- Irreducibility: preserved by unitary conjugation and by similarity unitalization.
-  have hIrrB : IsIrreducibleTensor (d := d) (D := D) B :=
+  have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
     isIrreducibleTensor_unitaryConj (d := d) (D := D) (A := A) U hIrrT
-  have hIrrC_tensor : IsIrreducibleTensor (d := d) (D := D) C :=
+  have hIrrC_tensor : Kraus.IsIrreducibleFamily (d := d) (D := D) C :=
     isIrreducibleTensor_unitalize (d := d) (D := D) (B := B) (Λ := Λ) hΛ_pd hΛ_diag hIrrB
-  have hIrrC : IsIrreducibleMap (transferMap (d := d) (D := D) C) :=
+  have hIrrC : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) C) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) C hIrrC_tensor
   -- Root-of-unity peripheral eigenvalues for the unitalized map.
   let E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-    transferMap (d := d) (D := D) C
+    Kraus.transferMap (d := d) (D := D) C
   have hfin : (peripheralEigenvalues E).Finite := peripheralEigenvalues_finite (f := E)
   have hroot : ∀ μ ∈ hfin.toFinset, ∃ q : ℕ, 0 < q ∧ μ ^ q = 1 := by
     intro μ hμ
@@ -704,12 +709,12 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     intro μ hμ
     have hμ_fin : μ ∈ hfin.toFinset := hfin.mem_toFinset.mpr hμ
     exact hp_all μ hμ_fin
-  -- Transport `μ ^ p = 1` back to `transferMap A` using conjugation invariance.
+  -- Transport `μ ^ p = 1` back to `Kraus.transferMap A` using conjugation invariance.
   have hVV : V * Vᴴ = 1 := by
     simpa [V, Matrix.star_eq_conjTranspose] using (Unitary.mul_star_self_of_mem U.prop)
   have hVV' : Vᴴ * V = 1 := by
     simpa [V, Matrix.star_eq_conjTranspose] using (Matrix.UnitaryGroup.star_mul_self U)
-  -- Similarity between `transferMap C` and `transferMap B`.
+  -- Similarity between `Kraus.transferMap C` and `Kraus.transferMap B`.
   let S : Matrix (Fin D) (Fin D) ℂ := diagSqrt (D := D) Λ
   let Sinv : Matrix (Fin D) (Fin D) ℂ := diagInvSqrt (D := D) Λ
   have hSSinv : S * Sinv = 1 := by
@@ -718,47 +723,48 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     simpa [S, Sinv] using diagInvSqrt_mul_diagSqrt_of_posDef (D := D) (Λ := Λ) hΛ_pd
   let Φ : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     mulLeftRightLinearEquiv (D := D) S S Sinv Sinv hSSinv hSinvS hSSinv hSinvS
-  have hEC_conj : E = Φ.symm.conj (transferMap (d := d) (D := D) B) := by
+  have hEC_conj : E = Φ.symm.conj (Kraus.transferMap (d := d) (D := D) B) := by
     ext X
-    simp [E, C, unitalize, Φ, S, Sinv, MPSTensor.transferMap_apply, Matrix.mul_assoc,
+    simp [E, C, unitalize, Φ, S, Sinv, Kraus.transferMap_apply, Matrix.mul_assoc,
       LinearEquiv.conj_apply_apply]
-  -- Similarity between `transferMap B` and `transferMap A` (unitary conjugation).
+  -- Similarity between `Kraus.transferMap B` and `Kraus.transferMap A` (unitary conjugation).
   let Ψ : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     mulLeftRightLinearEquiv (D := D) V Vᴴ Vᴴ V hVV hVV' hVV' hVV
-  have hEB_conj : transferMap (d := d) (D := D) B =
-      Ψ.symm.conj (transferMap (d := d) (D := D) A) := by
+  have hEB_conj : Kraus.transferMap (d := d) (D := D) B =
+      Ψ.symm.conj (Kraus.transferMap (d := d) (D := D) A) := by
     ext X
-    simp [B, Ψ, MPSTensor.transferMap_apply, Matrix.mul_assoc,
+    simp [B, Ψ, Kraus.transferMap_apply, Matrix.mul_assoc,
       LinearEquiv.conj_apply_apply]
   have hperA : ∀ μ : ℂ,
-      μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) → μ ^ p = 1 := by
+      μ ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) → μ ^ p = 1 := by
     intro μ hμA
-    have hμB : μ ∈ peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
-      have : peripheralEigenvalues (transferMap (d := d) (D := D) B) =
-          peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
+    have hμB : μ ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
+      have : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) =
+          peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
         simpa [hEB_conj] using
-          (peripheralEigenvalues_conj (S := Ψ.symm) (E := transferMap (d := d) (D := D) A))
+          (peripheralEigenvalues_conj (S := Ψ.symm) (E := Kraus.transferMap (d := d) (D := D) A))
       simpa [this] using hμA
     have hμC : μ ∈ peripheralEigenvalues E := by
       have : peripheralEigenvalues E =
-          peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
+          peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
         simpa [hEC_conj] using
-          (peripheralEigenvalues_conj (S := Φ.symm) (E := transferMap (d := d) (D := D) B))
+          (peripheralEigenvalues_conj (S := Φ.symm) (E := Kraus.transferMap (d := d) (D := D) B))
       simpa [this] using hμB
     exact hperE μ hμC
-  -- Fixed point for `transferMap A`: transport `Λ` back by the unitary.
+  -- Fixed point for `Kraus.transferMap A`: transport `Λ` back by the unitary.
   let ρA : Matrix (Fin D) (Fin D) ℂ := V * Λ * Vᴴ
-  have hfixA : transferMap (d := d) (D := D) A ρA = ρA := by
+  have hfixA : Kraus.transferMap (d := d) (D := D) A ρA = ρA := by
     -- Rewrite the fixed-point equation for `B` using the conjugation identity
-    -- `transferMap B = Ψ.symm.conj (transferMap A)`, then apply `Ψ` to transport the equation.
-    have hfixB' : transferMap (d := d) (D := D) B Λ = Λ := by
+    -- `Kraus.transferMap B = Ψ.symm.conj (Kraus.transferMap A)`, then apply `Ψ` to
+    -- transport the equation.
+    have hfixB' : Kraus.transferMap (d := d) (D := D) B Λ = Λ := by
       simpa [B, V] using hfixB
-    have hfixB_conj : (Ψ.symm.conj (transferMap (d := d) (D := D) A)) Λ = Λ := by
+    have hfixB_conj : (Ψ.symm.conj (Kraus.transferMap (d := d) (D := D) A)) Λ = Λ := by
       simpa [hEB_conj] using hfixB'
     have hfixA' := congrArg (fun X => Ψ X) hfixB_conj
     -- Simplify the conjugation expression.
     have hfixA'' :
-        transferMap (d := d) (D := D) A (Ψ Λ) = Ψ Λ := by
+        Kraus.transferMap (d := d) (D := D) A (Ψ Λ) = Ψ Λ := by
       simpa [LinearEquiv.conj_apply_apply] using hfixA'
     -- Finally identify `Ψ Λ` with `ρA = V * Λ * Vᴴ`.
     simpa [ρA, Ψ] using hfixA''
@@ -771,9 +777,9 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
       simpa using this
     -- Positive definite matrices are nonzero.
     exact (Matrix.PosDef.isUnit hΛ_pd).ne_zero hΛ0
-  have hprim_pow : peripheralEigenvalues ((transferMap (d := d) (D := D) A) ^ p) = {1} :=
+  have hprim_pow : peripheralEigenvalues ((Kraus.transferMap (d := d) (D := D) A) ^ p) = {1} :=
     peripheralEigenvalues_pow_eq_singleton
-      (E := transferMap (d := d) (D := D) A)
+      (E := Kraus.transferMap (d := d) (D := D) A)
       (p := p)
       hp_pos
       hperA

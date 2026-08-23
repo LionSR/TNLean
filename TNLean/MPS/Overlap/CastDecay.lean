@@ -35,13 +35,13 @@ still yields decay for the original uncasted overlap. -/
 theorem mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (hdim : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hA_inj : Kraus.IsInjective A) (hB_inj : Kraus.IsInjective B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
     (hNot :
       ¬ GaugePhaseEquiv (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
     Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) := by
-  have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) A) :=
+  have hAcst_inj : Kraus.IsInjective (cast (congr_arg (MPSTensor d) hdim) A) :=
     (isInjective_cast_dim hdim A).mpr hA_inj
   have hAcst_norm :
       ∑ i : Fin d,
@@ -56,13 +56,13 @@ overlap-decay theorem still yields decay for the original uncasted overlap. -/
 theorem mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (hdim : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
     (hNot :
       ¬ GaugePhaseEquiv (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
     Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) := by
-  have hAcst_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor d) hdim) A) :=
+  have hAcst_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) hdim) A) :=
     (isIrreducibleTensor_cast_dim hdim A).mpr hA_irr
   have hAcst_norm :
       ∑ i : Fin d,

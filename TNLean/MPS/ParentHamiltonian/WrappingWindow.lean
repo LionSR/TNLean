@@ -146,8 +146,8 @@ sites \(0,\ldots,M-1\). -/
 theorem evalWord_cyclicCfg_snoc {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
-    evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ)) =
-    evalWord A (List.ofFn (fun k : Fin M =>
+    Kraus.evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ)) =
+    Kraus.evalWord A (List.ofFn (fun k : Fin M =>
       cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ
         (Fin.castSucc k))) *
     A (σ_w ⟨0, by omega⟩) := by
@@ -173,12 +173,12 @@ tail (window sites 1..L-1) and complement (sites L-1..M-1). -/
 theorem init_evalWord_split {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
-    evalWord A (List.ofFn (fun k : Fin M =>
+    Kraus.evalWord A (List.ofFn (fun k : Fin M =>
       cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ (Fin.castSucc k))) =
-    evalWord A (List.ofFn (fun k : Fin (L - 1) => σ_w ⟨k.val + 1, by omega⟩)) *
-    evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
+    Kraus.evalWord A (List.ofFn (fun k : Fin (L - 1) => σ_w ⟨k.val + 1, by omega⟩)) *
+    Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
       τ ⟨k.val + L - 1, by omega⟩)) := by
-  rw [← evalWord_append]
+  rw [← Kraus.evalWord_append]
   congr 1
   apply List.ext_getElem
   · simp only [List.length_ofFn, List.length_append]; omega
@@ -272,11 +272,11 @@ the final window letter, then the complement word, then the remaining
 private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
     {M L : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1) (hL : 1 < L)
     (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d) :
-    evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L
+    Kraus.evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) L
       ⟨M + 1 - L + 1, by omega⟩ σ_w τ)) =
     A (σ_w ⟨L - 1, by omega⟩) *
-      evalWord A (List.ofFn (fun k : Fin (M + 1 - L) => τ ⟨k.val + 1, by omega⟩)) *
-      evalWord A (List.ofFn (fun k : Fin (L - 1) =>
+      Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) => τ ⟨k.val + 1, by omega⟩)) *
+      Kraus.evalWord A (List.ofFn (fun k : Fin (L - 1) =>
         σ_w ⟨k.val, Nat.lt_trans k.isLt (by omega)⟩)) := by
   let cfg : Fin (M + 1) → Fin d :=
     cyclicCfg (by omega : 0 < M + 1) L ⟨M + 1 - L + 1, by omega⟩ σ_w τ
@@ -323,7 +323,7 @@ private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
         simp only [List.length_ofFn]
         simp [tail, comp, head, hkC]
   rw [show List.ofFn cfg = List.ofFn (Fin.cons (σ_w ⟨L - 1, by omega⟩) tail) by rw [hcons]]
-  rw [evalWord_ofFn_cons, htail, evalWord_append]
+  rw [evalWord_ofFn_cons, htail, Kraus.evalWord_append]
   simp [comp, head, Matrix.mul_assoc]
 
 /-! ### Trace rotation and matrix equation extraction
@@ -333,34 +333,34 @@ across the periodic boundary,
 then extract a matrix equation via `groundSpaceMap_injective`. -/
 
 private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
-    (hA : IsInjective A) {L : ℕ} (hL : 1 < L) {M : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1)
+    (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L) {M : ℕ} (hM : 1 ≤ M) (hLN : L ≤ M + 1)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin (M + 1) → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (hY : ∀ τ σ_w, Matrix.trace (evalWord A (List.ofFn
+    (hY : ∀ τ σ_w, Matrix.trace (Kraus.evalWord A (List.ofFn
           (cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ)) * X) =
-        Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ)) :
+        Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y τ)) :
     ∀ (σ_tail : Fin (L - 1) → Fin d) (τ : Fin (M + 1) → Fin d),
-      X * evalWord A (List.ofFn σ_tail) *
-        evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
+      X * Kraus.evalWord A (List.ofFn σ_tail) *
+        Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
           τ ⟨k.val + L - 1, by omega⟩)) =
-      evalWord A (List.ofFn σ_tail) * Y τ := by
+      Kraus.evalWord A (List.ofFn σ_tail) * Y τ := by
   -- Trace rotation FIRST (before mkσ to avoid whnf blowup)
   have hTraceRot : ∀ (σ_w : Fin L → Fin d) (τ : Fin (M + 1) → Fin d),
       Matrix.trace (A (σ_w ⟨0, by omega⟩) * X *
-        evalWord A (List.ofFn (fun k : Fin M =>
+        Kraus.evalWord A (List.ofFn (fun k : Fin M =>
           cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ (Fin.castSucc k)))) =
-      Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ) := by
+      Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y τ) := by
     intro σ_w τ
-    set P := evalWord A (List.ofFn (fun k : Fin M =>
+    set P := Kraus.evalWord A (List.ofFn (fun k : Fin M =>
       cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ (Fin.castSucc k)))
     set Aj := A (σ_w ⟨0, by omega⟩)
     calc Matrix.trace (Aj * X * P)
         = Matrix.trace (P * (Aj * X)) := Matrix.trace_mul_comm (Aj * X) P
       _ = Matrix.trace (P * Aj * X) := by rw [← Matrix.mul_assoc]
-      _ = Matrix.trace (evalWord A (List.ofFn
+      _ = Matrix.trace (Kraus.evalWord A (List.ofFn
             (cyclicCfg (by omega : 0 < M + 1) L ⟨M, by omega⟩ σ_w τ)) * X) := by
           rw [← evalWord_cyclicCfg_snoc hM (by omega) hL σ_w τ]
-      _ = Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ) := hY τ σ_w
+      _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y τ) := hY τ σ_w
   -- Build σ_w from j and σ_tail
   let mkσ (j : Fin d) (σ_tail : Fin (L - 1) → Fin d) : Fin L → Fin d :=
     fun k => if h : k.val = 0 then j else σ_tail ⟨k.val - 1, by omega⟩
@@ -372,8 +372,8 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
     intro j σ_tail; ext ⟨k, hk⟩
     simp [mkσ]
   have mkσ_evalWord : ∀ j σ_tail,
-      evalWord A (List.ofFn (mkσ j σ_tail)) =
-      A j * evalWord A (List.ofFn σ_tail) := by
+      Kraus.evalWord A (List.ofFn (mkσ j σ_tail)) =
+      A j * Kraus.evalWord A (List.ofFn σ_tail) := by
     intro j σ_tail
     have hlist : List.ofFn (mkσ j σ_tail) = [j] ++ List.ofFn σ_tail := by
       apply List.ext_getElem
@@ -387,7 +387,7 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
           simp only [List.length_cons, List.length_nil]
           rw [List.getElem_ofFn]
           simp [mkσ, show k ≠ 0 from hk0]
-    rw [hlist, evalWord_append]; simp [evalWord_cons, evalWord_nil]
+    rw [hlist, Kraus.evalWord_append]; simp [Kraus.evalWord_cons, Kraus.evalWord_nil]
   -- Matrix equation via groundSpaceMap_injective on 1 site
   intro σ_tail τ
   apply groundSpaceMap_injective hA (show 0 < 1 from by omega)
@@ -395,7 +395,7 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
   simp only [groundSpaceMap_apply]
   rw [show List.ofFn σ₁ = [σ₁ 0] from by
     apply List.ext_getElem <;> simp]
-  simp only [evalWord_cons, evalWord_nil, mul_one]
+  simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
   have key := hTraceRot (mkσ (σ₁ 0) σ_tail) τ
   rw [mkσ_zero] at key
   rw [init_evalWord_split hM (by omega) hL (mkσ (σ₁ 0) σ_tail) τ] at key
@@ -411,14 +411,14 @@ complementary second cyclic-window comparison is the remaining local step
 needed for the two-sided relation. -/
 theorem wrapping_window_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin (M + 1) → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (hY : ∀ τ σ_w, Matrix.trace (evalWord A (List.ofFn
+    (hY : ∀ τ σ_w, Matrix.trace (Kraus.evalWord A (List.ofFn
           (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1) ⟨M, by omega⟩ σ_w τ)) * X) =
-        Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ)) :
+        Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y τ)) :
     ∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
-      evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+      Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
         τ ⟨k.val + L₀, by omega⟩)) * A j * X =
       Y τ * A j := by
   have hM1 : 1 ≤ M := by omega
@@ -433,25 +433,25 @@ theorem wrapping_window_compatibility_of_isNBlkInjective
   simp only [fin_cons_mk_succ] at key
   have key' :
       Matrix.trace
-          (evalWord A (List.ofFn σ_tail) *
-            (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+          (Kraus.evalWord A (List.ofFn σ_tail) *
+            (Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
               τ ⟨k.val + L₀, by omega⟩)) *
               A j * X)) =
-        Matrix.trace (A j * evalWord A (List.ofFn σ_tail) * Y τ) := by
+        Matrix.trace (A j * Kraus.evalWord A (List.ofFn σ_tail) * Y τ) := by
     simpa [Matrix.mul_assoc] using key
   simp only [groundSpaceMap_apply] at *
   calc
     Matrix.trace
-        (evalWord A (List.ofFn σ_tail) *
-          (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        (Kraus.evalWord A (List.ofFn σ_tail) *
+          (Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
             τ ⟨k.val + L₀, by omega⟩)) *
             A j * X))
-      = Matrix.trace (A j * evalWord A (List.ofFn σ_tail) * Y τ) := key'
-    _ = Matrix.trace ((evalWord A (List.ofFn σ_tail) * Y τ) * A j) := by
+      = Matrix.trace (A j * Kraus.evalWord A (List.ofFn σ_tail) * Y τ) := key'
+    _ = Matrix.trace ((Kraus.evalWord A (List.ofFn σ_tail) * Y τ) * A j) := by
           simpa [Matrix.mul_assoc] using
-            (Matrix.trace_mul_comm (A j) (evalWord A (List.ofFn σ_tail) * Y τ))
+            (Matrix.trace_mul_comm (A j) (Kraus.evalWord A (List.ofFn σ_tail) * Y τ))
     _ = Matrix.trace
-        (evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
+        (Kraus.evalWord A (List.ofFn σ_tail) * (Y τ * A j)) := by
           simp [Matrix.mul_assoc]
 
 /-- The second cyclic position used in the closure property exposes the
@@ -459,14 +459,14 @@ compatibility \(X A_j C_τ = A_j Y_τ\) after block-injective cancellation of th
 trailing \(L₀\)-site block. -/
 theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin (M + 1) → Fin d) → Matrix (Fin D) (Fin D) ℂ)
-    (hY : ∀ τ σ_w, Matrix.trace (evalWord A (List.ofFn
+    (hY : ∀ τ σ_w, Matrix.trace (Kraus.evalWord A (List.ofFn
           (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1) ⟨M + 1 - L₀, by omega⟩ σ_w τ)) * X) =
-        Matrix.trace (evalWord A (List.ofFn σ_w) * Y τ)) :
+        Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y τ)) :
     ∀ (j : Fin d) (τ : Fin (M + 1) → Fin d),
-      X * A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+      X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
         τ ⟨k.val + 1, by omega⟩)) =
       A j * Y τ := by
   intro j τ
@@ -477,12 +477,12 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
   have hfactor := evalWord_cyclicCfg_cons (A := A) (show 1 ≤ M by omega) (by omega) (by omega)
     (Fin.snoc σ_head j) τ
   have hfactor' :
-      evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1)
+      Kraus.evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1)
           ⟨M + 1 - L₀, by omega⟩ (Fin.snoc σ_head j) τ)) =
         A j *
-          evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+          Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
             τ ⟨k.val + 1, by omega⟩)) *
-          evalWord A (List.ofFn σ_head) := by
+          Kraus.evalWord A (List.ofFn σ_head) := by
     convert hfactor using 2
     · have hstart : (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1)) =
           ⟨M - L₀ + 1, by omega⟩ := by
@@ -512,28 +512,28 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
   have key' :
       Matrix.trace
           ((A j *
-              evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
                 τ ⟨k.val + 1, by omega⟩)) *
-              evalWord A (List.ofFn σ_head)) * X) =
-        Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
+              Kraus.evalWord A (List.ofFn σ_head)) * X) =
+        Matrix.trace (Kraus.evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
     simpa [Fin.init, Fin.init_snoc, Matrix.mul_assoc] using key
   calc
     Matrix.trace
-        (evalWord A (List.ofFn σ_head) *
-          (X * A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        (Kraus.evalWord A (List.ofFn σ_head) *
+          (X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
             τ ⟨k.val + 1, by omega⟩))))
       = Matrix.trace
           ((A j *
-              evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
                 τ ⟨k.val + 1, by omega⟩)) *
-              evalWord A (List.ofFn σ_head)) * X) := by
+              Kraus.evalWord A (List.ofFn σ_head)) * X) := by
             simpa [Matrix.mul_assoc] using
               (Matrix.trace_mul_cycle'
-                (evalWord A (List.ofFn σ_head))
+                (Kraus.evalWord A (List.ofFn σ_head))
                 X
-                (A j * evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+                (A j * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
                   τ ⟨k.val + 1, by omega⟩))))
-    _ = Matrix.trace (evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ_head) * (A j * Y τ)) := by
           simpa [Matrix.mul_assoc] using key'
 
 /-! ### Complement-word algebraic closure
@@ -623,19 +623,19 @@ theorem two_sided_middle_compatibility_of_wrapped_witness_comparison
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
-      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+      Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
     (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
-      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+      X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
       Ywrap (wrappedMiddleBackground L₀ N η μ) =
         Ymirror (mirrorMiddleBackground L₀ N η μ)) :
     ∃ Y : (Fin (N - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       (∀ (j : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d),
-        evalWord A (List.ofFn μ) * A j * X = Y μ * A j) ∧
+        Kraus.evalWord A (List.ofFn μ) * A j * X = Y μ * A j) ∧
       (∀ (j : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d),
-        X * A j * evalWord A (List.ofFn μ) = A j * Y μ) := by
+        X * A j * Kraus.evalWord A (List.ofFn μ) = A j * Y μ) := by
   refine ⟨fun μ => Ywrap (wrappedMiddleBackground L₀ N η μ), ?_, ?_⟩
   · intro j μ
     have h := hWrap j (wrappedMiddleBackground L₀ N η μ)
@@ -657,11 +657,11 @@ theorem commutes_words_of_two_sided_middle_compatibility
     {A : MPSTensor d D} {m : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin m → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hLeft : ∀ (j : Fin d) (μ : Fin m → Fin d),
-      evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
+      Kraus.evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
     (hRight : ∀ (j : Fin d) (μ : Fin m → Fin d),
-      X * A j * evalWord A (List.ofFn μ) = A j * Y μ) :
+      X * A j * Kraus.evalWord A (List.ofFn μ) = A j * Y μ) :
     ∀ ω : Fin (m + 2) → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X := by
   intro ω
   let a : Fin d := ω ⟨0, by omega⟩
   let tail : Fin (m + 1) → Fin d := Fin.tail ω
@@ -675,13 +675,13 @@ theorem commutes_words_of_two_sided_middle_compatibility
     simp [a]
   rw [hω, evalWord_ofFn_cons, evalWord_ofFn_snoc]
   calc
-    X * (A a * (evalWord A (List.ofFn μ) * A b))
-        = (X * A a * evalWord A (List.ofFn μ)) * A b := by
+    X * (A a * (Kraus.evalWord A (List.ofFn μ) * A b))
+        = (X * A a * Kraus.evalWord A (List.ofFn μ)) * A b := by
             simp [Matrix.mul_assoc]
     _ = (A a * Y μ) * A b := by rw [hRight a μ]
     _ = A a * (Y μ * A b) := by simp [Matrix.mul_assoc]
-    _ = A a * (evalWord A (List.ofFn μ) * A b * X) := by rw [← hLeft b μ]
-    _ = (A a * (evalWord A (List.ofFn μ) * A b)) * X := by
+    _ = A a * (Kraus.evalWord A (List.ofFn μ) * A b * X) := by rw [← hLeft b μ]
+    _ = (A a * (Kraus.evalWord A (List.ofFn μ) * A b)) * X := by
             simp [Matrix.mul_assoc]
 
 /-- If \(X\) commutes with all words of a fixed length \(m\), then it commutes
@@ -694,11 +694,11 @@ the block-injective boundary-contraction theorem. -/
 theorem commutes_words_mul_of_commutes_words {A : MPSTensor d D}
     {m q : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X) :
     ∀ ω : Fin (q * m) → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X := by
   suffices hList : ∀ q : ℕ, ∀ w : List (Fin d), w.length = q * m →
-      X * evalWord A w = evalWord A w * X by
+      X * Kraus.evalWord A w = Kraus.evalWord A w * X by
     intro ω
     exact hList q (List.ofFn ω) (by simp)
   intro q
@@ -722,24 +722,24 @@ theorem commutes_words_mul_of_commutes_words {A : MPSTensor d D}
         omega
       have hdrop_comm := ih (w.drop m) hdrop_len
       calc
-        X * evalWord A w
-            = X * evalWord A (w.take m ++ w.drop m) := by
+        X * Kraus.evalWord A w
+            = X * Kraus.evalWord A (w.take m ++ w.drop m) := by
                 rw [List.take_append_drop m w]
-        _ = X * (evalWord A (w.take m) * evalWord A (w.drop m)) := by
-                rw [evalWord_append]
-        _ = (X * evalWord A (w.take m)) * evalWord A (w.drop m) := by
+        _ = X * (Kraus.evalWord A (w.take m) * Kraus.evalWord A (w.drop m)) := by
+                rw [Kraus.evalWord_append]
+        _ = (X * Kraus.evalWord A (w.take m)) * Kraus.evalWord A (w.drop m) := by
                 rw [Matrix.mul_assoc]
-        _ = (evalWord A (w.take m) * X) * evalWord A (w.drop m) := by
+        _ = (Kraus.evalWord A (w.take m) * X) * Kraus.evalWord A (w.drop m) := by
                 rw [← hμ, hComm μ]
-        _ = evalWord A (w.take m) * (X * evalWord A (w.drop m)) := by
+        _ = Kraus.evalWord A (w.take m) * (X * Kraus.evalWord A (w.drop m)) := by
                 simp [Matrix.mul_assoc]
-        _ = evalWord A (w.take m) * (evalWord A (w.drop m) * X) := by
+        _ = Kraus.evalWord A (w.take m) * (Kraus.evalWord A (w.drop m) * X) := by
                 rw [hdrop_comm]
-        _ = (evalWord A (w.take m) * evalWord A (w.drop m)) * X := by
+        _ = (Kraus.evalWord A (w.take m) * Kraus.evalWord A (w.drop m)) * X := by
                 simp [Matrix.mul_assoc]
-        _ = evalWord A (w.take m ++ w.drop m) * X := by
-                rw [evalWord_append]
-        _ = evalWord A w * X := by
+        _ = Kraus.evalWord A (w.take m ++ w.drop m) * X := by
+                rw [Kraus.evalWord_append]
+        _ = Kraus.evalWord A w * X := by
                 rw [List.take_append_drop m w]
 
 /-! ### Main commutation result
@@ -749,10 +749,10 @@ Extend from the boundary-crossing equation to full commutation via spanning. -/
 /-- If a boundary matrix commutes with all words of some length \(m ≥ L₀\), then
 block injectivity forces it to commute with every generator. -/
 theorem boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes
-    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hm : L₀ ≤ m) {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X) :
     ∀ j : Fin d, X * A j = A j * X := by
   intro j
   exact commutes_all_of_commutes_long_words_of_isNBlkInjective
@@ -767,7 +767,7 @@ all padding words up to any length whose exact word span is \(\top\). -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
     (htop : Kraus.wordSpan A n = ⊤) (hkn : k ≤ n)
-    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    (hzero : ∀ σ : Fin k → Fin d, Z * Kraus.evalWord A (List.ofFn σ) = 0) :
     Z = 0 := by
   have hzero_span : ∀ M ∈ Kraus.wordSpan A n, Z * M = 0 := by
     apply Submodule.span_induction
@@ -782,14 +782,14 @@ theorem eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
         (w.take k).get ⟨i.val, by simp [htake_len]⟩
       have hσk : List.ofFn σk = w.take k := by
         simpa [σk, htake_len] using (List.ofFn_get (w.take k))
-      have hprefix : Z * evalWord A (w.take k) = 0 := by
+      have hprefix : Z * Kraus.evalWord A (w.take k) = 0 := by
         simpa [hσk] using hzero σk
       calc
-        Z * evalWord A w = Z * evalWord A (w.take k ++ w.drop k) := by
+        Z * Kraus.evalWord A w = Z * Kraus.evalWord A (w.take k ++ w.drop k) := by
           rw [List.take_append_drop k w]
-        _ = Z * (evalWord A (w.take k) * evalWord A (w.drop k)) := by
-          rw [evalWord_append]
-        _ = (Z * evalWord A (w.take k)) * evalWord A (w.drop k) := by
+        _ = Z * (Kraus.evalWord A (w.take k) * Kraus.evalWord A (w.drop k)) := by
+          rw [Kraus.evalWord_append]
+        _ = (Z * Kraus.evalWord A (w.take k)) * Kraus.evalWord A (w.drop k) := by
           rw [Matrix.mul_assoc]
         _ = 0 := by rw [hprefix, zero_mul]
     · simp
@@ -808,9 +808,9 @@ If \(A\) is \(L₀\)-block-injective, then every positive multiple of \(L₀\) h
 word span. Hence a zero-product relation at length \(k\) already forces \(Z = 0\)
 as soon as \(k\) is bounded by such a multiple. -/
 theorem eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
-    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
+    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
-    (hzero : ∀ σ : Fin k → Fin d, Z * evalWord A (List.ofFn σ) = 0) :
+    (hzero : ∀ σ : Fin k → Fin d, Z * Kraus.evalWord A (List.ofFn σ) = 0) :
     Z = 0 := by
   exact eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)
@@ -825,14 +825,14 @@ periodic-boundary comparison: a positive block-injective word span turns
 equality after multiplying by each one-site tensor into equality of the
 boundary matrices. -/
 theorem right_witness_unique_of_isNBlkInjective
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY : ∀ j : Fin d, Y₁ * A j = Y₂ * A j) :
     Y₁ = Y₂ := by
-  have hzero : ∀ σ : Fin 1 → Fin d, (Y₁ - Y₂) * evalWord A (List.ofFn σ) = 0 := by
+  have hzero : ∀ σ : Fin 1 → Fin d, (Y₁ - Y₂) * Kraus.evalWord A (List.ofFn σ) = 0 := by
     intro σ
-    have heval : evalWord A (List.ofFn σ) = A (σ 0) := by
-      simp [evalWord]
+    have heval : Kraus.evalWord A (List.ofFn σ) = A (σ 0) := by
+      simp [Kraus.evalWord]
     rw [heval, sub_mul, hY (σ 0), sub_self]
   have hsub : Y₁ - Y₂ = 0 :=
     eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul
@@ -842,31 +842,32 @@ theorem right_witness_unique_of_isNBlkInjective
 /-- A left boundary witness is unique once all one-site tensors have the same
 products with it. -/
 theorem left_witness_unique_of_isNBlkInjective
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY : ∀ j : Fin d, A j * Y₁ = A j * Y₂) :
     Y₁ = Y₂ := by
   have hlist : ∀ w : List (Fin d), w ≠ [] →
-      evalWord A w * Y₁ = evalWord A w * Y₂ := by
+      Kraus.evalWord A w * Y₁ = Kraus.evalWord A w * Y₂ := by
     intro w hw
     induction w with
     | nil => cases hw rfl
     | cons j rest ih =>
         cases rest with
         | nil =>
-            simpa [evalWord] using hY j
+            simpa [Kraus.evalWord] using hY j
         | cons k rest =>
-            have htail : evalWord A (k :: rest) * Y₁ = evalWord A (k :: rest) * Y₂ :=
+            have htail : Kraus.evalWord A (k :: rest) * Y₁ =
+                Kraus.evalWord A (k :: rest) * Y₂ :=
               ih (by simp)
             calc
-              evalWord A (j :: k :: rest) * Y₁
-                  = A j * (evalWord A (k :: rest) * Y₁) := by
-                      simp [evalWord, Matrix.mul_assoc]
-              _ = A j * (evalWord A (k :: rest) * Y₂) := by rw [htail]
-              _ = evalWord A (j :: k :: rest) * Y₂ := by
-                      simp [evalWord, Matrix.mul_assoc]
+              Kraus.evalWord A (j :: k :: rest) * Y₁
+                  = A j * (Kraus.evalWord A (k :: rest) * Y₁) := by
+                      simp [Kraus.evalWord, Matrix.mul_assoc]
+              _ = A j * (Kraus.evalWord A (k :: rest) * Y₂) := by rw [htail]
+              _ = Kraus.evalWord A (j :: k :: rest) * Y₂ := by
+                      simp [Kraus.evalWord, Matrix.mul_assoc]
   have hword : ∀ σ : Fin L₀ → Fin d,
-      evalWord A (List.ofFn σ) * Y₁ = evalWord A (List.ofFn σ) * Y₂ := by
+      Kraus.evalWord A (List.ofFn σ) * Y₁ = Kraus.evalWord A (List.ofFn σ) * Y₂ := by
     intro σ
     apply hlist
     intro hnil
@@ -875,7 +876,7 @@ theorem left_witness_unique_of_isNBlkInjective
     omega
   have hmul : LinearMap.mulRight ℂ Y₁ = LinearMap.mulRight ℂ Y₂ := by
     apply LinearMap.ext_on_range
-      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+      (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
     · simpa [Kraus.wordSpan, Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ
@@ -894,7 +895,7 @@ The boundary-crossing local condition forces the boundary matrix into the center
 of the algebra generated by \(\{A_j\}\), giving the periodic-chain uniqueness
 step. -/
 theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
-    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
+    (hA : Kraus.IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ∀ (i : Fin N) (τ : Fin N → Fin d),
       cyclicRestrictₗ (by omega : 0 < N) L i τ (groundSpaceMap A N X) ∈
@@ -906,9 +907,9 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
   -- Extract Y_τ from boundary-crossing ground-space membership.
   have hGS : ∀ τ : Fin (M + 1) → Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
       ∀ σ_w : Fin L → Fin d,
-        Matrix.trace (evalWord A (List.ofFn
+        Matrix.trace (Kraus.evalWord A (List.ofFn
           (cyclicCfg hN0 L ⟨M, by omega⟩ σ_w τ)) * X) =
-        Matrix.trace (evalWord A (List.ofFn σ_w) * Y) := by
+        Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y) := by
     intro τ
     have hmem := hψ ⟨M, by omega⟩ τ
     rw [groundSpace, LinearMap.mem_range] at hmem
@@ -923,15 +924,15 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
   have hMatEq := wrapping_window_matEq hA hL hM (by omega) Y (fun τ σ_w => hY τ σ_w)
   -- Extend to all M₁ via spanning in σ_tail (Kraus.wordSpan(L-1) = ⊤)
   have hMatEq2 : ∀ (M₁ : Matrix (Fin D) (Fin D) ℂ) (τ : Fin (M + 1) → Fin d),
-      X * M₁ * evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
+      X * M₁ * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
         τ ⟨k.val + L - 1, by omega⟩)) = M₁ * Y τ := by
     intro M₁ τ
     have hfg : (LinearMap.mulLeft ℂ X).comp
-        (LinearMap.mulRight ℂ (evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
+        (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
           τ ⟨k.val + L - 1, by omega⟩)))) =
         LinearMap.mulRight ℂ (Y τ) := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin (L - 1) → Fin d => evalWord A (List.ofFn σ))
+        (v := fun σ : Fin (L - 1) → Fin d => Kraus.evalWord A (List.ofFn σ))
       · simpa [Kraus.wordSpan, Kraus.wordSpan] using
           wordSpan_eq_top_of_isInjective hA (by omega : 0 < L - 1)
       · intro σ_tail
@@ -944,31 +945,31 @@ theorem boundary_matrix_commutes {A : MPSTensor d D} [NeZero D]
     rw [← Matrix.mul_assoc] at this; exact this
   -- Y τ = X * compProd(τ) (take M₁ = 1)
   have hYeq : ∀ τ : Fin (M + 1) → Fin d,
-      Y τ = X * evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
+      Y τ = X * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
         τ ⟨k.val + L - 1, by omega⟩)) := by
     intro τ; have := hMatEq2 1 τ; rw [mul_one, one_mul] at this; exact this.symm
   -- (X * M₁ - M₁ * X) * compProd(τ) = 0 for all M₁, τ
   have hCommComp : ∀ (M₁ : Matrix (Fin D) (Fin D) ℂ) (τ : Fin (M + 1) → Fin d),
-      (X * M₁ - M₁ * X) * evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
+      (X * M₁ - M₁ * X) * Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
         τ ⟨k.val + L - 1, by omega⟩)) = 0 := by
     intro M₁ τ
     have h1 := hMatEq2 M₁ τ
     rw [hYeq τ, ← Matrix.mul_assoc] at h1
     rw [sub_mul, sub_eq_zero]; exact h1
   -- Conclude: X * M₁ = M₁ * X
-  have : NeZero d := neZero_d_of_isInjective hA
+  have : NeZero d := Kraus.neZero_d_of_isInjective hA
   have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
   have hComm : ∀ M₁ : Matrix (Fin D) (Fin D) ℂ, X * M₁ = M₁ * X := by
     intro M₁
     by_cases hML : M + 1 = L
     · have h0 : M + 1 - L = 0 := by omega
       have := hCommComp M₁ (fun _ => ⟨0, hd⟩)
-      simp only [h0, List.ofFn_zero, evalWord_nil, mul_one] at this
+      simp only [h0, List.ofFn_zero, Kraus.evalWord_nil, mul_one] at this
       exact sub_eq_zero.mp this
     · have hML' : 0 < M + 1 - L := by omega
       have hφ : LinearMap.mulLeft ℂ (X * M₁ - M₁ * X) = 0 := by
         apply LinearMap.ext_on_range
-          (v := fun f : Fin (M + 1 - L) → Fin d => evalWord A (List.ofFn f))
+          (v := fun f : Fin (M + 1 - L) → Fin d => Kraus.evalWord A (List.ofFn f))
         · simpa [Kraus.wordSpan, Kraus.wordSpan] using wordSpan_eq_top_of_isInjective hA hML'
         · intro f
           simp only [LinearMap.mulLeft_apply, LinearMap.zero_apply]

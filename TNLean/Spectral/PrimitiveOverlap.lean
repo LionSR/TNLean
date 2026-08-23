@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Primitive
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.MPVOverlapTrace
 
@@ -27,7 +27,7 @@ less than `1`, then `LinearMap.trace (E^n) → 1`.
 
 For MPS tensors, the identity
 
-`LinearMap.trace ((transferMap A)^N) = mpvOverlap A A N`
+`LinearMap.trace ((Kraus.transferMap A)^N) = mpvOverlap A A N`
 
 then yields `mpvOverlap A A N → 1`.
 
@@ -39,7 +39,7 @@ hypothesis. Connecting this to Wolf's characterizations (irreducible +
 aperiodic, peripheral spectrum roots of unity, etc.) is a separate module.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Kraus
 open Matrix Filter
 
 namespace MPSTensor
@@ -84,39 +84,39 @@ then the MPV self-overlap converges to `1`.
 theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : transferMap (d := d) (D := D) A ρ = ρ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Kraus.transferMap (d := d) (D := D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0) (hρ_psd : ρ.PosSemidef)
     (hSpect :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ
+            ((Kraus.transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ
               (by
                 -- `trace ρ ≠ 0` for PSD nonzero `ρ`.
                 intro htr0
                 have : ρ = 0 := (Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0
                 exact hρ_ne this))) < 1) :
     Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)) := by
-  -- First derive `trace((transferMap A)^N) → 1`.
-  have hTP : IsTracePreservingMap (transferMap (d := d) (D := D) A) := by
+  -- First derive `trace((Kraus.transferMap A)^N) → 1`.
+  have hTP : IsTracePreservingMap (Kraus.transferMap (d := d) (D := D) A) := by
     intro X
-    exact trace_transferMap A X hNorm
+    exact Kraus.trace_transferMap A X hNorm
   have htrρ : Matrix.trace ρ ≠ 0 := by
     intro htr0
     exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)
   have hTrace :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
-          ((transferMap (d := d) (D := D) A) ^ N))
+          ((Kraus.transferMap (d := d) (D := D) A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) :=
     linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one (D := D)
-      (E := transferMap (d := d) (D := D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
+      (E := Kraus.transferMap (d := d) (D := D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
   -- Rewrite the transfer-map trace as a mixed-transfer trace (self-case).
   have hTrace' :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
-          ((mixedTransferMap (d := d) (D := D) A A) ^ N))
+          ((Kraus.mixedTransferMap (d := d) (D := D) A A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) := by
-    simpa [mixedTransferMap_self] using hTrace
+    simpa [Kraus.mixedTransferMap_self] using hTrace
   -- Now convert the trace identity to the MPV-overlap identity.
   simpa using
     (Filter.Tendsto.congr

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.PerronFrobenius.Existence
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.FormII
@@ -54,11 +54,11 @@ This is the transfer-map form of `Kraus.exists_posDef_adjoint_eigenvector`. -/
 theorem exists_posDef_adjoint_eigenvector
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
-      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
+      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     Kraus.exists_posDef_adjoint_eigenvector (K := A)
       (Kraus.isIrreducibleMap_mapLM_of_transferMap _
@@ -82,7 +82,7 @@ construction. -/
 theorem exists_tp_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
       σ.PosDef ∧ 0 < r ∧
@@ -113,7 +113,7 @@ rescaled tensor `r^{-1/2} A`. -/
 theorem exists_unital_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B : MPSTensor d D) (r : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ),
       ρ.PosDef ∧ 0 < r ∧
@@ -127,11 +127,11 @@ theorem exists_unital_data_of_irreducible
   classical
   let Aadj : MPSTensor d D := fun i => (A i)ᴴ
   have hIrrAdjMap :
-      IsIrreducibleMap (transferMap (d := d) (D := D) Aadj) := by
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) Aadj) := by
     simpa [Aadj] using
       isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
         (d := d) (D := D) A hIrr
-  have hIrrAdj : IsIrreducibleTensor (d := d) (D := D) Aadj :=
+  have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
     isIrreducibleTensor_of_isIrreducibleMap Aadj hIrrAdjMap
   have hAadj : ∃ i, Aadj i ≠ 0 := by
     rcases hA with ⟨i, hi⟩
@@ -140,7 +140,7 @@ theorem exists_unital_data_of_irreducible
     exact hi (Matrix.conjTranspose_eq_zero.mp (by simpa [Aadj] using h))
   obtain ⟨ρ, r, hρ, hr, hρ_eig_adj⟩ :=
     exists_posDef_adjoint_eigenvector (d := d) (D := D) Aadj hIrrAdj hAadj
-  have hρ_eig : transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ := by
+  have hρ_eig : Kraus.transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hρ_eig_adj
   let B : MPSTensor d D := spectralUnitalGauge (d := d) (D := D) A r ρ
   have hB_unital : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by

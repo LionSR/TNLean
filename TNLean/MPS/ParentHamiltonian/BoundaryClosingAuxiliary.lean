@@ -40,7 +40,7 @@ The proof applies the left-multiplied boundary comparison
 and then chooses the corresponding auxiliary boundary conditions. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -58,9 +58,9 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
           (k : Fin (M + 1 - (L₀ + 1))),
         ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
       ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
+            Kraus.evalWord A (List.ofFn σ) := by
   have hLeft :=
     closure_property_mirror_left_word_products_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ

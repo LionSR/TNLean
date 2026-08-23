@@ -41,21 +41,21 @@ variable {d D : ℕ}
 
 private theorem parentHamiltonianES_blockTensor_conj_ker_eq
     [NeZero D] (A : MPSTensor d D) (p : ℕ) (hp : 0 < p)
-    (hInj : IsNBlkInjective A p) {N : ℕ} (hN : 4 ≤ N) :
+    (hInj : Kraus.IsNBlkInjective A p) {N : ℕ} (hN : 4 ≤ N) :
     LinearMap.ker
         ((blockedConfigLinearIsometryEquiv d N p).toLinearEquiv.toLinearMap.comp
           ((parentHamiltonianES (blockTensor A p) 2 N).comp
             (blockedConfigLinearIsometryEquiv d N p).symm.toLinearEquiv.toLinearMap)) =
       LinearMap.ker (parentHamiltonianES A (2 * p) (N * p)) := by
   let U := blockedConfigLinearIsometryEquiv d N p
-  have hB : IsInjective (blockTensor A p) :=
+  have hB : Kraus.IsInjective (blockTensor A p) :=
     (isNBlkInjective_iff_blockTensor_isInjective A p).mp hInj
   have hNpos : 0 < N := by omega
   have hNp : 0 < N * p := Nat.mul_pos hNpos hp
   have hBchain := chainGroundSpace_eq_mpvSubmodule hB (by omega) (by omega)
     (by omega : 2 ≤ N)
   have hAchain := chainGroundSpace_eq_mpvSubmodule_normal
-    (⟨p, hp, hInj⟩ : IsNormal A) hInj hp (by nlinarith) (by nlinarith)
+    (⟨p, hp, hInj⟩ : Kraus.IsNormal A) hInj hp (by nlinarith) (by nlinarith)
       (by nlinarith : 2 * p ≤ N * p) (by nlinarith)
   let eB := WithLp.linearEquiv 2 ℂ (NSiteSpace (blockPhysDim d p) N)
   let eA := WithLp.linearEquiv 2 ℂ (NSiteSpace d (N * p))
@@ -119,7 +119,7 @@ extension is not proved here. See
 theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
-    ∃ p : ℕ, 0 < p ∧ IsNBlkInjective A p ∧
+    ∃ p : ℕ, 0 < p ∧ Kraus.IsNBlkInjective A p ∧
       ∀ (N : ℕ) (_hN : 4 ≤ N) (v : EuclideanSpace ℂ (Cfg d (N * p))),
         v ∈ (parentHamiltonianGroundSpaceES A (2 * p) (N * p))ᗮ →
           (1 / 8 : ℝ) * ‖v‖ ≤ ‖parentHamiltonianES A (2 * p) (N * p) v‖ := by

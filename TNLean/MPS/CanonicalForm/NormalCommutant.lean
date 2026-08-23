@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.ScalarCommutant
 import QICLean.Algebra.MatrixGramUnitary
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.LinearAlgebra.Matrix.PosDef
 
@@ -36,12 +36,12 @@ are proved in the matrix-product-density-operator canonical-form development.
 
 ## Main results
 
-* `MPSTensor.IsNormal.eq_smul_one_of_commute`:
+* `Kraus.IsNormal.eq_smul_one_of_commute`:
   a matrix commuting with every matrix of a normal tensor is scalar.
-* `MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute`:
+* `Kraus.IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute`:
   if $X \ne 0$ and $X^\dagger X$ commutes with every matrix of a normal
   tensor, then $X^\dagger X = \omega\,\Id$ with $\omega > 0$.
-* `MPSTensor.IsNormal.smul_mem_unitaryGroup_of_commute`:
+* `Kraus.IsNormal.smul_mem_unitaryGroup_of_commute`:
   under the same hypotheses, $\omega^{-1/2}X$ is unitary.
 * `Matrix.gram_conj_eq_conjTranspose_of_dressed_adjoint` /
   `Matrix.gram_conj_eq_gram_conj_of_dressed_adjoint` /
@@ -50,12 +50,12 @@ are proved in the matrix-product-density-operator canonical-form development.
 * `Matrix.gram_conj_eq_of_dressed_target` /
   `Matrix.gram_conj_eq_gram_conj_of_common_dressed_target`:
   conditional algebraic consequences of an abstract common target.
-* `MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq` /
-  `MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`:
+* `Kraus.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq` /
+  `Kraus.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`:
   the relative two-gauge form of eq3, without a self-adjoint-letter
   hypothesis.
-* `MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint` /
-  `MPSTensor.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint`:
+* `Kraus.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint` /
+  `Kraus.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint`:
   conditional same-letter specializations in the identity reference gauge.
 
 ## References
@@ -206,7 +206,7 @@ theorem smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul
 
 end Matrix
 
-namespace MPSTensor
+namespace Kraus
 
 variable {d D : ℕ}
 
@@ -217,14 +217,14 @@ evaluations, and after blocking these span the full matrix algebra.
 This is the commutant triviality behind the step "since $M_\alpha$ is a NT in
 the vertical direction" in the proof of Proposition 4.13 of arXiv:1606.00608,
 line 1921. -/
-theorem IsNormal.eq_smul_one_of_commute {A : MPSTensor d D} (hA : IsNormal A)
+theorem IsNormal.eq_smul_one_of_commute {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {S : Matrix (Fin D) (Fin D) ℂ} (hS : ∀ i, S * A i = A i * S) :
     ∃ c : ℂ, S = c • 1 := by
   obtain ⟨N, _hNpos, hN⟩ := hA
-  have hwords : ∀ M ∈ Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ),
+  have hwords : ∀ M ∈ Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ),
       S * M = M * S := by
     rintro _ ⟨σ, rfl⟩
-    exact commutes_evalWord_of_commutes_letters S A hS (List.ofFn σ)
+    exact Kraus.commutes_evalWord_of_commutes_letters S A hS (List.ofFn σ)
   obtain ⟨c, hc⟩ := Matrix.isScalar_of_commute_span_eq_top S hN hwords
   refine ⟨c, ?_⟩
   rw [hc, Matrix.scalar_apply, Matrix.smul_one_eq_diagonal]
@@ -239,7 +239,7 @@ of Proposition 4.13 of arXiv:1606.00608, lines 1914--1921.  It compares the
 sector $k$ directly with the distinguished sector $1$ and does not assume that
 the letters of the representative tensor are self-adjoint. -/
 theorem IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
     (hgram : ∀ i,
       Xᴴ * X * A i * (Xᴴ * X)⁻¹ = Yᴴ * Y * A i * (Yᴴ * Y)⁻¹) :
@@ -290,7 +290,7 @@ tensor, then its Gram matrix is a positive real multiple of the identity.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
 theorem IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det)
     (hgram : ∀ i, Xᴴ * X * A i * (Xᴴ * X)⁻¹ = A i) :
     ∃ ω : ℝ, 0 < ω ∧ Xᴴ * X = (ω : ℂ) • 1 := by
@@ -306,7 +306,7 @@ unitary after division by the square root of its positive Gram scalar.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
 theorem IsNormal.exists_unitary_normalization_of_gram_conj_eq
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det)
     (hgram : ∀ i, Xᴴ * X * A i * (Xᴴ * X)⁻¹ = A i) :
     ∃ ω : ℝ, 0 < ω ∧
@@ -329,7 +329,7 @@ This is an algebraic consequence of the Figure 8 equality in
 arXiv:1606.00608, proof of Proposition 4.13, lines 1909--1921.  It is not the
 source-facing reflected marked-chain statement. -/
 theorem IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target
-    {A C : MPSTensor d D} (hA : IsNormal A)
+    {A C : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
     (hdX : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * C i * Xᴴ)
     (hdY : ∀ i, Y * A i * Y⁻¹ = Y⁻¹ᴴ * C i * Yᴴ) :
@@ -342,7 +342,7 @@ theorem IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target
 division by the square root of its positive Gram scalar.  In the normalization
 $Y=\Id$, this is $\omega^{-1/2}X$ from arXiv:1606.00608, lines 1904--1908. -/
 theorem IsNormal.smul_mul_nonsing_inv_mem_unitaryGroup_of_common_dressed_target
-    {A C : MPSTensor d D} (hA : IsNormal A)
+    {A C : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X Y : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hY : IsUnit Y.det)
     (hdX : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * C i * Xᴴ)
     (hdY : ∀ i, Y * A i * Y⁻¹ = Y⁻¹ᴴ * C i * Yᴴ) :
@@ -361,7 +361,7 @@ constant $\omega$ (arXiv:1606.00608, proof of Proposition 4.13, lines
 only $X \ne 0$ is needed here, and invertibility of $X$ follows from the
 conclusion. -/
 theorem IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ≠ 0)
     (hcomm : ∀ i, Xᴴ * X * A i = A i * (Xᴴ * X)) :
     ∃ ω : ℝ, 0 < ω ∧ Xᴴ * X = (ω : ℂ) • 1 := by
@@ -395,7 +395,7 @@ Proposition 4.13, lines 1906--1908): a nonzero $X$ whose Gram matrix commutes
 with every matrix of a normal tensor becomes unitary after dividing by the
 square root of the positive constant from eq3:proof.IV.12. -/
 theorem IsNormal.smul_mem_unitaryGroup_of_commute
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ≠ 0)
     (hcomm : ∀ i, Xᴴ * X * A i = A i * (Xᴴ * X)) :
     ∃ ω : ℝ, 0 < ω ∧
@@ -412,10 +412,10 @@ $X^\dagger X = \omega\,\Id$ for a necessarily positive constant $\omega$.
 argument of Figure 7 does not assume $(A^v)^\dagger=A^v$ and does not assert
 an individual dressed-adjoint identity.  Thus this theorem is only a
 same-letter conditional specialization.  The source-facing relative theorem
-is `IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq`.  See
+is `Kraus.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq`.  See
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hX0 : X ≠ 0)
     (hdress : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * (A i)ᴴ * Xᴴ)
     (hsa : ∀ i, (A i)ᴴ = A i) :
@@ -432,7 +432,7 @@ $\omega^{-1/2}X$ is unitary.
 same-letter specialization, not the relative two-gauge conclusion of the
 source.  See `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint
-    {A : MPSTensor d D} (hA : IsNormal A)
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hX0 : X ≠ 0)
     (hdress : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * (A i)ᴴ * Xᴴ)
     (hsa : ∀ i, (A i)ᴴ = A i) :
@@ -441,4 +441,4 @@ theorem IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint
   hA.smul_mem_unitaryGroup_of_commute hX0 fun i =>
     Matrix.commute_gram_of_dressed_adjoint_of_conjTranspose_eq hX (hdress i) (hsa i)
 
-end MPSTensor
+end Kraus

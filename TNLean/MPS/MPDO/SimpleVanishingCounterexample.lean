@@ -102,11 +102,11 @@ theorem mpo_one_eq_zero : mpo M 1 = 0 := by
   norm_num
 
 private lemma scalarUnitTensor_evalWord (w : List (Fin 1)) :
-    MPSTensor.evalWord MPSTensor.scalarUnitTensor w = 1 := by
+    Kraus.evalWord MPSTensor.scalarUnitTensor w = 1 := by
   induction w with
   | nil => rfl
   | cons i w ih =>
-      rw [MPSTensor.evalWord_cons, ih]
+      rw [Kraus.evalWord_cons, ih]
       simp [MPSTensor.scalarUnitTensor]
 
 private theorem signFlip_isBNTCanonicalForm :
