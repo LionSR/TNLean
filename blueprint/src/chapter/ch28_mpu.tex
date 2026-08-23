@@ -10359,3 +10359,414 @@ the converse theorem.
     Lemma~\ref{lem:qca_finite_propagation_blocked} and
     Lemma~\ref{lem:qca_translation_covariant_blocked}, respectively.
 \end{proof}
+
+Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
+local action associated with an MPU by eventual finite-chain conjugation.  In
+lines~2300--2306, eventual constancy is used to obtain a norm-preserving
+star-algebra automorphism of $\mathcal A_{\mathrm{loc}}$, together with a
+translation formula and the support bound
+$\mathcal N=[-4D^4,4D^4]\cap\mathbb Z$, and then to extend this automorphism to
+$\mathcal A$.  The results below isolate the direct-limit and completion
+argument.  They begin with compatible forward and inverse finite-local actions
+and assume a forward norm formula, a support bound, and a unit-translation
+formula.  The inverse norm formula follows from forward isometry and mutual
+invertibility.  The numerical radius above belongs to the MPU-specific
+stabilization argument: the generic result below neither proves that radius nor
+constructs the finite-local actions from an MPU.  It also does not provide the
+blocked circuit or MPU standard form discussed at line~2308.
+
+\begin{definition}[Compatible finite-local automorphism data]
+    \label{def:qca_compatible_local_automorphism}
+    \lean{SpinChain.CompatibleLocalAutomorphism}
+    \leanok
+    \uses{thm:qca_algebraic_local_algebra_universal}
+    For each finite region $\Lambda$, let
+    \begin{align}
+        f_\Lambda,g_\Lambda\colon\mathcal A_\Lambda
+        &\longrightarrow\mathcal A_{\mathrm{loc}}
+    \end{align}
+    be star-algebra homomorphisms such that, whenever
+    $\Lambda\subseteq\Gamma$,
+    \begin{align}
+        f_\Gamma\circ\iota_{\Lambda,\Gamma}&=f_\Lambda,&
+        g_\Gamma\circ\iota_{\Lambda,\Gamma}&=g_\Lambda.
+    \end{align}
+    Let $f,g\colon\mathcal A_{\mathrm{loc}}\to
+    \mathcal A_{\mathrm{loc}}$ be the maps induced by these compatible
+    families.  Compatible finite-local automorphism data require
+    \begin{align}
+        g(f_\Lambda(A))&=\iota_\Lambda(A),&
+        f(g_\Lambda(A))&=\iota_\Lambda(A)
+    \end{align}
+    for every $A\in\mathcal A_\Lambda$.
+\end{definition}
+
+\begin{definition}[Induced algebraic-local homomorphisms]
+    \label{def:qca_compatible_local_homs}
+    \lean{SpinChain.CompatibleLocalAutomorphism.forwardHom,
+        SpinChain.CompatibleLocalAutomorphism.inverseHom}
+    \leanok
+    \uses{def:qca_compatible_local_automorphism,
+        thm:qca_algebraic_local_algebra_universal}
+    The compatible families induce star-algebra homomorphisms
+    \begin{align}
+        f,g\colon\mathcal A_{\mathrm{loc}}
+        &\longrightarrow\mathcal A_{\mathrm{loc}}.
+    \end{align}
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:qca_algebraic_local_algebra_universal}
+    Apply the star-algebra universal property to each compatible family.
+\end{proof}
+
+\begin{lemma}[Evaluation of the induced homomorphisms]
+    \label{lem:qca_compatible_local_homs_evaluation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.forwardHom_localObservable,
+        SpinChain.CompatibleLocalAutomorphism.inverseHom_localObservable}
+    \leanok
+    \uses{def:qca_compatible_local_homs}
+    For every finite region $\Lambda$ and $A\in\mathcal A_\Lambda$,
+    \begin{align}
+        f(\iota_\Lambda(A))&=f_\Lambda(A),&
+        g(\iota_\Lambda(A))&=g_\Lambda(A).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:qca_algebraic_local_algebra_universal}
+    These are the evaluation identities supplied by the universal property.
+\end{proof}
+
+\begin{definition}[Induced algebraic-local equivalence]
+    \label{def:qca_compatible_algebraic_equiv}
+    \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv}
+    \leanok
+    \uses{def:qca_compatible_local_automorphism,
+        def:qca_compatible_local_homs}
+    Compatible finite-local automorphism data determine a star-algebra
+    equivalence
+    \begin{align}
+        F\colon\mathcal A_{\mathrm{loc}}
+        &\simeq\mathcal A_{\mathrm{loc}}
+    \end{align}
+    whose forward and inverse maps are $f$ and $g$, respectively.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{def:qca_compatible_local_automorphism,
+        lem:qca_compatible_local_homs_evaluation}
+    Induct on finite-region representatives in the algebraic direct limit.
+    The two inverse assumptions give
+    \begin{align}
+        g(f(\iota_\Lambda(A)))&=g(f_\Lambda(A))=\iota_\Lambda(A),\\
+        f(g(\iota_\Lambda(A)))&=f(g_\Lambda(A))=\iota_\Lambda(A).
+    \end{align}
+    Thus $f$ and $g$ are mutually inverse.
+\end{proof}
+
+\begin{lemma}[Evaluation of the algebraic equivalence]
+    \label{lem:qca_compatible_algebraic_equiv_evaluation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_apply,
+        SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_symm_apply}
+    \leanok
+    \uses{def:qca_compatible_algebraic_equiv,
+        def:qca_compatible_local_homs}
+    For every $A\in\mathcal A_{\mathrm{loc}}$,
+    \begin{align}
+        F(A)&=f(A),&F^{-1}(A)&=g(A).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_compatible_algebraic_equiv}
+    Both identities follow from the defining forward and inverse maps of $F$.
+\end{proof}
+
+\begin{definition}[Forward local norm hypothesis]
+    \label{def:qca_compatible_local_norm}
+    \lean{SpinChain.CompatibleLocalAutomorphism.ForwardNormPreserving}
+    \leanok
+    \uses{def:qca_compatible_local_automorphism,
+        def:qca_algebraic_local_operator_norm}
+    Assume $d>0$.  The forward local norm hypothesis is
+    \begin{align}
+        \lVert f_\Lambda(A)\rVert&=\lVert A\rVert
+    \end{align}
+    for every finite region $\Lambda$ and every $A\in\mathcal A_\Lambda$.
+\end{definition}
+
+\begin{lemma}[Forward algebraic norm formula]
+    \label{lem:qca_compatible_algebraic_norm}
+    \lean{SpinChain.CompatibleLocalAutomorphism.norm_algebraicEquiv}
+    \leanok
+    \uses{def:qca_compatible_algebraic_equiv,
+        def:qca_compatible_local_norm,
+        def:qca_algebraic_local_operator_norm}
+    Under the forward local norm hypothesis, every
+    $A\in\mathcal A_{\mathrm{loc}}$ satisfies
+    \begin{align}
+        \lVert F(A)\rVert&=\lVert A\rVert.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_compatible_algebraic_equiv_evaluation,
+        lem:qca_compatible_local_homs_evaluation,
+        def:qca_algebraic_local_operator_norm}
+    Induct on finite-region representatives.  For
+    $A=\iota_\Lambda(A_\Lambda)$,
+    \begin{align}
+        \lVert F(A)\rVert
+        &=\lVert f_\Lambda(A_\Lambda)\rVert
+         =\lVert A_\Lambda\rVert
+         =\lVert A\rVert.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Forward and inverse algebraic isometries]
+    \label{lem:qca_compatible_algebraic_isometry}
+    \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_isometry,
+        SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_symm_isometry}
+    \leanok
+    \uses{lem:qca_compatible_algebraic_norm,
+        def:qca_compatible_algebraic_equiv}
+    Under the forward local norm hypothesis, for all
+    $A,B\in\mathcal A_{\mathrm{loc}}$,
+    \begin{align}
+        \lVert F(A)-F(B)\rVert&=\lVert A-B\rVert,&
+        \lVert F^{-1}(A)-F^{-1}(B)\rVert&=\lVert A-B\rVert.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_compatible_algebraic_norm,
+        def:qca_compatible_algebraic_equiv}
+    Apply the forward norm identity to $A-B$ to prove that $F$ is an isometry.
+    Since $F\circ F^{-1}$ is the identity, the right-inverse law then makes
+    $F^{-1}$ an isometry as well.
+\end{proof}
+
+\begin{lemma}[Inverse algebraic norm formula]
+    \label{lem:qca_compatible_algebraic_inverse_norm}
+    \lean{SpinChain.CompatibleLocalAutomorphism.norm_algebraicEquiv_symm}
+    \leanok
+    \uses{lem:qca_compatible_algebraic_isometry}
+    Under the forward local norm hypothesis, every
+    $A\in\mathcal A_{\mathrm{loc}}$ satisfies
+    \begin{align}
+        \lVert F^{-1}(A)\rVert&=\lVert A\rVert.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_compatible_algebraic_isometry}
+    Apply the inverse isometry to the distance from $A$ to $0$ and use
+    $F^{-1}(0)=0$.
+\end{proof}
+
+\begin{definition}[Completed compatible local automorphism]
+    \label{def:qca_compatible_quasi_local_equiv}
+    \lean{SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv}
+    \leanok
+    \uses{def:qca_compatible_algebraic_equiv,
+        lem:qca_compatible_algebraic_isometry,
+        def:completion_star_alg_equiv}
+    Under the forward local norm hypothesis, the algebraic equivalence extends
+    to a star-algebra equivalence
+    \begin{align}
+        \overline F\colon\mathcal A&\simeq\mathcal A
+    \end{align}
+    of the quasi-local completion.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{lem:qca_compatible_algebraic_isometry,
+        def:completion_star_alg_equiv}
+    The forward norm formula makes $F$ an isometry, and the inverse law makes
+    $F^{-1}$ an isometry.  Apply the completion extension for star-algebra
+    equivalences to these two continuous maps.
+\end{proof}
+
+\begin{lemma}[Dense evaluation of the completed automorphism]
+    \label{lem:qca_compatible_quasi_local_dense_evaluation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_algebraicToQuasiLocal,
+        SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_symm_algebraicToQuasiLocal}
+    \leanok
+    \uses{def:qca_compatible_quasi_local_equiv,
+        def:completion_star_alg_equiv}
+    Let $j\colon\mathcal A_{\mathrm{loc}}\to\mathcal A$ be the canonical
+    completion map.  For every $A\in\mathcal A_{\mathrm{loc}}$,
+    \begin{align}
+        \overline F(j(A))&=j(F(A)),&
+        \overline F^{-1}(j(A))&=j(F^{-1}(A)).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_compatible_quasi_local_equiv,
+        def:completion_star_alg_equiv}
+    These are the canonical-image formulas for the continuous extension of a
+    star-algebra equivalence and for its inverse.
+\end{proof}
+
+\begin{lemma}[Finite evaluation of the completed automorphism]
+    \label{lem:qca_compatible_quasi_local_finite_evaluation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_quasiLocalObservable,
+        SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_symm_quasiLocalObservable}
+    \leanok
+    \uses{lem:qca_compatible_quasi_local_dense_evaluation,
+        lem:qca_compatible_algebraic_equiv_evaluation,
+        lem:qca_compatible_local_homs_evaluation,
+        def:qca_quasi_local_observable}
+    For every finite region $\Lambda$ and $A\in\mathcal A_\Lambda$,
+    \begin{align}
+        \overline F(j_\Lambda(A))&=j(f_\Lambda(A)),&
+        \overline F^{-1}(j_\Lambda(A))&=j(g_\Lambda(A)).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_compatible_quasi_local_dense_evaluation,
+        lem:qca_compatible_algebraic_equiv_evaluation,
+        lem:qca_compatible_local_homs_evaluation}
+    Substitute $j_\Lambda=j\circ\iota_\Lambda$ into the dense evaluation
+    formulas and use
+    $F(\iota_\Lambda(A))=f_\Lambda(A)$ and
+    $F^{-1}(\iota_\Lambda(A))=g_\Lambda(A)$.
+\end{proof}
+
+\begin{definition}[Finite-local support bound]
+    \label{def:qca_compatible_local_support_bound}
+    \lean{SpinChain.CompatibleLocalAutomorphism.MapsSupportWithin}
+    \leanok
+    \uses{def:qca_compatible_local_automorphism,
+        def:qca_supported_in,def:qca_region_sumset}
+    For a finite neighborhood $\mathcal N\subset\mathbb Z$, the forward family
+    has support bound $\mathcal N$ if
+    \begin{align}
+        f_\Lambda(A)&\in
+        \iota_{\Lambda+\mathcal N}
+        (\mathcal A_{\Lambda+\mathcal N})
+    \end{align}
+    for every finite region $\Lambda$ and every $A\in\mathcal A_\Lambda$.
+\end{definition}
+
+\begin{theorem}[Propagation from a finite-local support bound]
+    \label{thm:qca_compatible_local_propagation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.propagatesWithin_quasiLocalEquiv}
+    \leanok
+    \uses{def:qca_compatible_local_support_bound,
+        lem:qca_compatible_quasi_local_finite_evaluation,
+        def:qca_propagates_within}
+    If the forward family has support bound $\mathcal N$, then the completed
+    automorphism $\overline F$ propagates within $\mathcal N$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_compatible_local_support_bound,
+        lem:qca_compatible_quasi_local_finite_evaluation}
+    Let $X=j_\Lambda(A)$ be supported in $\Lambda$.  Choose
+    $B\in\mathcal A_{\Lambda+\mathcal N}$ such that
+    $f_\Lambda(A)=\iota_{\Lambda+\mathcal N}(B)$.  Then
+    \begin{align}
+        \overline F(X)
+        &=j(f_\Lambda(A))
+         =j_{\Lambda+\mathcal N}(B),
+    \end{align}
+    so the image is supported in $\Lambda+\mathcal N$.
+\end{proof}
+
+\begin{definition}[Finite-local unit-translation formula]
+    \label{def:qca_compatible_local_unit_translation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.CommutesWithUnitTranslation}
+    \leanok
+    \uses{def:qca_compatible_local_automorphism,
+        def:qca_algebraic_local_translation}
+    The forward family commutes with unit translation if, for every finite
+    region $\Lambda$ and every $A\in\mathcal A_\Lambda$,
+    \begin{align}
+        f_{\Lambda+1}(\tau_{1,\Lambda}(A))
+        &=\tau_1(f_\Lambda(A)).
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Algebraic commutation with unit translation]
+    \label{lem:qca_compatible_algebraic_unit_translation}
+    \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_commutes_unitTranslation}
+    \leanok
+    \uses{def:qca_compatible_local_unit_translation,
+        def:qca_compatible_algebraic_equiv,
+        def:qca_algebraic_local_translation}
+    If the finite-local unit-translation formula holds, then every
+    $A\in\mathcal A_{\mathrm{loc}}$ satisfies
+    \begin{align}
+        F(\tau_1(A))&=\tau_1(F(A)).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_compatible_local_unit_translation,
+        lem:qca_compatible_algebraic_equiv_evaluation,
+        lem:qca_compatible_local_homs_evaluation,
+        def:qca_algebraic_local_translation}
+    Induct on finite-region representatives and write
+    $A=\iota_\Lambda(A_\Lambda)$.  Then
+    \begin{align}
+        F(\tau_1(A))
+        &=f_{\Lambda+1}(\tau_{1,\Lambda}(A_\Lambda))
+         =\tau_1(f_\Lambda(A_\Lambda))
+         =\tau_1(F(A)).
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Translation covariance from unit translation]
+    \label{thm:qca_compatible_translation_covariant}
+    \lean{SpinChain.CompatibleLocalAutomorphism.translationCovariant_quasiLocalEquiv}
+    \leanok
+    \uses{lem:qca_compatible_algebraic_unit_translation,
+        lem:qca_compatible_quasi_local_dense_evaluation,
+        def:qca_quasi_local_translation,
+        thm:qca_translation_covariant_iff_commute_one}
+    If the finite-local unit-translation formula holds, then the completed
+    automorphism $\overline F$ is translation covariant.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:qca_compatible_algebraic_unit_translation,
+        lem:qca_compatible_quasi_local_dense_evaluation,
+        def:qca_quasi_local_translation,
+        thm:qca_translation_covariant_iff_commute_one}
+    By Theorem~\ref{thm:qca_translation_covariant_iff_commute_one}, it suffices
+    to prove that $\overline F$ commutes with translation by one site.  Induct
+    on the completion.  On every $A\in\mathcal A_{\mathrm{loc}}$,
+    \begin{align}
+        \overline F(\overline\tau_1(j(A)))
+        &=j(F(\tau_1(A)))
+         =j(\tau_1(F(A)))
+         =\overline\tau_1(\overline F(j(A))).
+    \end{align}
+    The equality set is closed because both composites are continuous, so the
+    identity extends from the canonical dense subalgebra to the completion.
+\end{proof}
+
+\begin{theorem}[QCA assembled from compatible finite-local actions]
+    \label{thm:qca_compatible_local_automorphism}
+    \lean{SpinChain.CompatibleLocalAutomorphism.isQCA_quasiLocalEquiv}
+    \leanok
+    \uses{def:qca_compatible_quasi_local_equiv,
+        thm:qca_compatible_local_propagation,
+        thm:qca_compatible_translation_covariant,def:qca}
+    Let $d>0$.  Suppose the compatible forward family preserves the local
+    operator norm, has a finite support bound, and satisfies the finite-local
+    unit-translation formula.  Then the completed automorphism $\overline F$ is
+    a one-dimensional QCA.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_compatible_local_propagation,
+        thm:qca_compatible_translation_covariant}
+    The support hypothesis supplies a finite forward propagation neighborhood,
+    while the unit-translation formula supplies translation covariance.  These
+    are exactly the two defining properties of a one-dimensional QCA.
+\end{proof}
