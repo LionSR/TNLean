@@ -61,7 +61,7 @@ theorem M_isMPDO : IsMPDO M := by
 /-- The one-site block entropy on the four-site ring is $\log 2$. -/
 theorem blockEntropy_one :
     blockEntropy M 4 1 (by omega) (M_isMPDO 4 (by omega)) = Real.log 2 := by
-  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M (by omega) (M_isMPDO 4 (by omega))
     (2 • {(1 / 2 : ℝ)})]
   · simp only [Multiset.map_nsmul, Multiset.map_singleton, Multiset.sum_nsmul,
       Multiset.sum_singleton, Real.negMulLog]
@@ -76,7 +76,7 @@ theorem blockEntropy_one :
 theorem blockEntropy_two :
     blockEntropy M 4 2 (by omega) (M_isMPDO 4 (by omega)) =
       2 * Real.negMulLog (14 / 41) + 2 * Real.negMulLog (13 / 82) := by
-  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M (by omega) (M_isMPDO 4 (by omega))
     (2 • {(14 / 41 : ℝ)} + 2 • {(13 / 82 : ℝ)})]
   · simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
       Multiset.sum_nsmul, Multiset.map_singleton, Multiset.sum_singleton]
@@ -91,7 +91,7 @@ theorem blockEntropy_three :
     blockEntropy M 4 3 (by omega) (M_isMPDO 4 (by omega)) =
       2 * Real.negMulLog (10 / 41) + 4 * Real.negMulLog (4 / 41) +
         2 * Real.negMulLog (5 / 82) := by
-  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M (by omega) (M_isMPDO 4 (by omega))
     (2 • {(10 / 41 : ℝ)} + 4 • {(4 / 41 : ℝ)} + 2 • {(5 / 82 : ℝ)})]
   · simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
       Multiset.sum_nsmul, Multiset.map_singleton, Multiset.sum_singleton]
@@ -105,7 +105,7 @@ theorem blockEntropy_four :
     blockEntropy M 4 4 (by omega) (M_isMPDO 4 (by omega)) =
       2 * Real.negMulLog (8 / 41) + 12 * Real.negMulLog (2 / 41) +
         2 * Real.negMulLog (1 / 82) := by
-  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M (by omega) (M_isMPDO 4 (by omega))
     (2 • {(8 / 41 : ℝ)} + 12 • {(2 / 41 : ℝ)} + 2 • {(1 / 82 : ℝ)})]
   · simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
       Multiset.sum_nsmul, Multiset.map_singleton, Multiset.sum_singleton]

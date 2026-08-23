@@ -380,13 +380,13 @@ noncomputable def blockEntropy (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
 
 /-- The block entropy is the sum of `Real.negMulLog` over any real multiset whose
 complex image is the characteristic-root multiset of the reduced block state. -/
-theorem blockEntropy_of_charpoly_roots_eq (M : MPOTensor d D) (hM : IsMPDO M)
-    {N L : ℕ} (hN : 0 < N) (hL : L ≤ N) (s : Multiset ℝ)
+theorem blockEntropy_of_charpoly_roots_eq (M : MPOTensor d D) {N L : ℕ}
+    (hL : L ≤ N) (hM : (mpo M N).PosSemidef) (s : Multiset ℝ)
     (hroots : (reducedBlockState M N L hL).charpoly.roots =
       s.map (fun r : ℝ ↦ (r : ℂ))) :
-    blockEntropy M N L hL (hM N hN) = (s.map Real.negMulLog).sum := by
+    blockEntropy M N L hL hM = (s.map Real.negMulLog).sum := by
   exact Matrix.vonNeumannEntropy_of_charpoly_roots_eq
-    (reducedBlockState_isHermitian M N L hL (hM N hN)) s hroots
+    (reducedBlockState_isHermitian M N L hL hM) s hroots
 
 /-- The **mutual information** `I_L = S_L + S_{N-L} - S_N` between a block of `L`
 spins and the rest of the chain, for the normalized state `σ^{(N)}(M)`.
