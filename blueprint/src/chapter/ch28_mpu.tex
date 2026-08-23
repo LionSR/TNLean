@@ -10371,7 +10371,7 @@ any part of that external structure theorem beyond this change of grouping.
     \label{lem:qca_blocked_neighborhood_subset_nearest_neighbor}
     \lean{SpinChain.blockedNeighborhood_subset_Icc_one}
     \leanok
-    \uses{lem:qca_blocked_neighborhood_membership}
+    \uses{def:qca_blocked_neighborhood}
     Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be finite.  If
     $|n|<L$ for every $n\in\mathcal N$, then
     \begin{align}
@@ -10396,7 +10396,7 @@ any part of that external structure theorem beyond this change of grouping.
     \label{lem:qca_blocked_neighborhood_subset_nearest_neighbor_sup}
     \lean{SpinChain.blockedNeighborhood_subset_Icc_one_of_sup}
     \leanok
-    \uses{lem:qca_blocked_neighborhood_subset_nearest_neighbor}
+    \uses{def:qca_blocked_neighborhood}
     Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be finite.  If
     \begin{align}
         \sup_{n\in\mathcal N}|n|&<L,
@@ -10419,7 +10419,7 @@ any part of that external structure theorem beyond this change of grouping.
     \label{lem:qca_blocked_neighborhood_canonical_nearest_neighbor}
     \lean{SpinChain.blockedNeighborhood_subset_Icc_one_sup_add_one}
     \leanok
-    \uses{lem:qca_blocked_neighborhood_subset_nearest_neighbor_sup}
+    \uses{def:qca_blocked_neighborhood}
     For every finite $\mathcal N\subset\mathbb Z$, define
     \begin{align}
         L_{\mathcal N}&=1+\sup_{n\in\mathcal N}|n|.
@@ -10440,11 +10440,9 @@ any part of that external structure theorem beyond this change of grouping.
 
 \begin{lemma}[Nearest-neighbor propagation after a bounded blocking]
     \label{lem:qca_propagates_within_blocked_nearest_neighbor}
-    \lean{SpinChain.PropagatesWithin.blocked_nearestNeighbor}
+    \lean{SpinChain.PropagatesWithin.blocked_nearest_neighbor}
     \leanok
-    \uses{lem:qca_propagates_within_blocked,
-        lem:qca_blocked_neighborhood_subset_nearest_neighbor,
-        lem:qca_propagation_neighborhood_mono}
+    \uses{def:qca_propagates_within, def:qca_blocked_automorphism}
     Let $d,L>0$.  Suppose that $\omega$ propagates within the finite
     neighborhood $\mathcal N$ and that $|n|<L$ for every $n\in\mathcal N$.
     For every finite blocked region $\Lambda$ and every observable
@@ -10467,11 +10465,10 @@ any part of that external structure theorem beyond this change of grouping.
 
 \begin{theorem}[Finite propagation becomes nearest-neighbor]
     \label{thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
-    \lean{SpinChain.HasFinitePropagation.exists_blocked_nearestNeighbor}
+    \lean{SpinChain.HasFinitePropagation.exists_blocked_nearest_neighbor}
     \leanok
-    \uses{lem:qca_propagates_within_blocked,
-        lem:qca_blocked_neighborhood_canonical_nearest_neighbor,
-        lem:qca_propagation_neighborhood_mono}
+    \uses{def:qca_finite_propagation, def:qca_propagates_within,
+        def:qca_blocked_automorphism}
     Let $d>0$.  If $\omega$ has finite forward propagation, then there exists
     a positive integer $L$ such that, for every finite blocked region
     $\Lambda$ and every observable $X\in\mathcal A^{(d^L)}$ supported in
@@ -10494,10 +10491,10 @@ any part of that external structure theorem beyond this change of grouping.
 
 \begin{theorem}[A QCA becomes nearest-neighbor after blocking]
     \label{thm:qca_exists_blocked_nearest_neighbor}
-    \lean{SpinChain.IsQCA.exists_blocked_nearestNeighbor}
+    \lean{SpinChain.IsQCA.exists_blocked_nearest_neighbor}
     \leanok
-    \uses{lem:qca_blocked,
-        thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
+    \uses{def:qca, def:qca_blocked_automorphism,
+        def:qca_propagates_within}
     Let $d>0$ and let $\omega$ be a one-dimensional QCA on
     $\mathcal A^{(d)}$.  There exists a positive integer $L$ such that
     $\omega^{[L]}$ is a QCA on $\mathcal A^{(d^L)}$ and, for every finite

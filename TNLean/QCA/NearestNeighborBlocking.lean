@@ -21,11 +21,11 @@ theorem.  It does not construct support algebras, finite-depth circuits, or an M
   nearest-neighbor carries.
 * `SpinChain.blockedNeighborhood_subset_Icc_one_of_sup` — the corresponding supremum criterion.
 * `SpinChain.blockedNeighborhood_subset_Icc_one_sup_add_one` — the canonical block length.
-* `SpinChain.PropagatesWithin.blocked_nearestNeighbor` — transport a bounded neighborhood to a
+* `SpinChain.PropagatesWithin.blocked_nearest_neighbor` — transport a bounded neighborhood to a
   nearest-neighbor propagation bound.
-* `SpinChain.HasFinitePropagation.exists_blocked_nearestNeighbor` — every finite propagation bound
+* `SpinChain.HasFinitePropagation.exists_blocked_nearest_neighbor` — every finite propagation bound
   becomes nearest-neighbor after a positive blocking.
-* `SpinChain.IsQCA.exists_blocked_nearestNeighbor` — the same blocking preserves the QCA property.
+* `SpinChain.IsQCA.exists_blocked_nearest_neighbor` — the same blocking preserves the QCA property.
 
 ## References
 
@@ -85,7 +85,7 @@ namespace PropagatesWithin
 
 /-- A propagation bound becomes nearest-neighbor after blocking by more than every absolute
 original displacement. -/
-lemma blocked_nearestNeighbor {d L : ℕ} [NeZero d] [NeZero L]
+lemma blocked_nearest_neighbor {d L : ℕ} [NeZero d] [NeZero L]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 : Finset ℤ}
     (hω : PropagatesWithin ω 𝓝) (h𝓝 : ∀ n ∈ 𝓝, Int.natAbs n < L) :
     PropagatesWithin (blockedAutomorphism d L ω) (Finset.Icc (-1) 1) :=
@@ -97,7 +97,7 @@ namespace HasFinitePropagation
 
 /-- Every finite forward propagation bound becomes nearest-neighbor after some positive site
 blocking.  The witness is one more than the supremum of the absolute displacements. -/
-theorem exists_blocked_nearestNeighbor {d : ℕ} [NeZero d]
+theorem exists_blocked_nearest_neighbor {d : ℕ} [NeZero d]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : HasFinitePropagation ω) :
     ∃ (L : ℕ) (_ : NeZero L) (_ : 0 < L),
@@ -116,13 +116,13 @@ namespace IsQCA
 
 This packages propagation normalization and preservation of the QCA axioms. It does not
 construct the Schumacher--Werner support algebras or circuit, nor an MPU standard form. -/
-theorem exists_blocked_nearestNeighbor {d : ℕ} [NeZero d]
+theorem exists_blocked_nearest_neighbor {d : ℕ} [NeZero d]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : IsQCA ω) :
     ∃ (L : ℕ) (_ : NeZero L) (_ : 0 < L),
       IsQCA (blockedAutomorphism d L ω) ∧
         PropagatesWithin (blockedAutomorphism d L ω) (Finset.Icc (-1) 1) := by
-  obtain ⟨L, hL, hLpos, hprop⟩ := hω.hasFinitePropagation.exists_blocked_nearestNeighbor
+  obtain ⟨L, hL, hLpos, hprop⟩ := hω.hasFinitePropagation.exists_blocked_nearest_neighbor
   exact ⟨L, hL, hLpos, hω.blocked, hprop⟩
 
 end IsQCA
