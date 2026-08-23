@@ -9,18 +9,17 @@ Declarations under `QICLean/` paths moved to the companion
 extraction; TNLean imports them through its Lake dependency, so they remain
 usable here under the same names.
 
-For new declarations, prefer namespace overloading (`MPSTensor.IsInjective`,
+For new declarations, prefer namespace overloading (`Kraus.IsInjective`,
 `MPSChainTensor.IsInjective`, and so on) rather than putting the carrier name into
 the predicate name. Preserve a paper's established terminology when a declaration
 is deliberately source-faithful.
 
 ## Normality
 
-### `MPSTensor.IsNormal`
+### `Kraus.IsNormal`
 
-- **Declaration:** `MPSTensor.IsNormal (A : MPSTensor d D) : Prop`.
-- **Defined in:** `QICLean/MPS/Core/Injectivity.lean`; the finite-family owner is
-  `Kraus.IsNormal` in `QICLean/Kraus/Injectivity.lean`.
+- **Declaration:** `Kraus.IsNormal (A : MPSTensor d D) : Prop`.
+- **Defined in:** `QICLean/Kraus/Injectivity.lean`.
 - **Meaning:** there is a positive word length `N` for which the length-`N`
   products of the matrices of `A` span the full `D × D` matrix algebra; equivalently,
   `A` becomes injective after blocking `N` sites.
@@ -30,11 +29,11 @@ is deliberately source-faithful.
   `Papers/2011.12127/TN-Review-main.tex:1815-1830`.
 - **Sanctioned bridges:**
   `MPSTensor.hasEventuallyFullKrausRank_iff_isNormal`,
-  `MPSTensor.IsInjective.isNormal`, and
+  `Kraus.IsInjective.isNormal`, and
   `MPSTensor.IsNormalTensor.isNormal`.
 - **Caveat:** `MPSTensor.IsNormalTensor.isNormal` derives nonzero bond dimension
   from the spectral-radius-one clause; it requires no external positivity
-  assumption. There is no equivalence theorem between `MPSTensor.IsNormal` and
+  assumption. There is no equivalence theorem between `Kraus.IsNormal` and
   `MPSTensor.IsNormalTensor`, and this glossary makes no such claim. In
   particular, the reverse direction would have to recover the CPSV
   spectral-radius normalization, not just eventual block injectivity.
@@ -58,7 +57,7 @@ is deliberately source-faithful.
   expose a positive-dimension instance in their signatures. These bridges run
   only from the normalized spectral predicate to downstream algebraic or
   asymptotic consequences; they do **not** establish an equivalence with
-  `MPSTensor.IsNormal`.
+  `Kraus.IsNormal`.
 
 ### Basis-level normality
 
@@ -68,7 +67,8 @@ is deliberately source-faithful.
   `MPSTensor.IsBNT A_total g dim A_bnt` in `TNLean/MPS/BNT/Basic.lean`.
 - **Meaning:** both say that a finite family of normal blocks spans every
   positive-length matrix-product-vector family and is eventually linearly
-  independent. The first uses `IsNormalTensor`; the second uses `IsNormal`.
+  independent. The first uses `IsNormalTensor`; the second uses
+  `Kraus.IsNormal`.
 - **Sources:** arXiv:1606.00608,
   `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`, and arXiv:2011.12127,
   Definition 4.2, `Papers/2011.12127/TN-Review-main.tex:1846-1850`.
@@ -161,9 +161,8 @@ normalizations.
 - **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`.
 - **Source:** Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3,
   Theorem 6.7; compare arXiv:2011.12127 §IV.
-- **Sanctioned bridges:** `_root_.isPrimitive_iff`,
-  `_root_.isPrimitive_iff_period_one`, and, for transfer maps,
-  `MPSTensor.isPeripherallyPrimitive_iff`.
+- **Sanctioned bridges:** `_root_.isPrimitive_iff` and
+  `_root_.isPrimitive_iff_period_one`.
 - **Caveat:** `_root_.isPrimitive_iff_period_one` requires a specified nonzero
   fixed point and finiteness of `peripheralEigenvalues E`; it is not an
   unconditional period-one characterization of an arbitrary linear map. By
@@ -177,10 +176,9 @@ normalizations.
   `MPSTensor.IsPeripherallyPrimitive (A : MPSTensor d D) : Prop`.
 - **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
 - **Meaning:** a thin MPS wrapper around
-  `_root_.IsPrimitive (MPSTensor.transferMap A)`.
+  `_root_.IsPrimitive (Kraus.transferMap A)`.
 - **Source:** Wolf §6.3, Theorem 6.7, and arXiv:0909.5347 Proposition 3(c).
-- **Sanctioned bridges:** `MPSTensor.isPeripherallyPrimitive_iff`,
-  `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive`, and
+- **Sanctioned bridges:** `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive` and
   `MPSTensor.isPeripherallyPrimitive_of_isPrimitivePaper`.
 - **Caveat:** the last bridge requires `[NeZero D]` and the left-canonical
   normalization `∑ i, (A i)ᴴ * A i = 1`.
@@ -219,7 +217,7 @@ normalizations.
   Its Proposition 3 equivalences are the normalization-conditional declarations
   listed under `IsPrimitivePaper`.
 - **Caveat:** despite appearing in the primitivity development, this is the same
-  algebraic eventual-span condition as `MPSTensor.IsNormal`, not the generic
+  algebraic eventual-span condition as `Kraus.IsNormal`, not the generic
   peripheral-spectrum predicate `_root_.IsPrimitive`.
 
 ### `MPSTensor.IsPrimitiveMPS` and `MPSTensor.HasPrimitiveFixedPoint`
@@ -275,28 +273,26 @@ normalizations.
 
 ### MPS predicates
 
-#### `MPSTensor.IsInjective`
+#### `Kraus.IsInjective`
 
-- **Declaration:** `MPSTensor.IsInjective (A : MPSTensor d D) : Prop`.
-- **Defined in:** `QICLean/MPS/Core/Injectivity.lean`; the finite-family owner is
-  `Kraus.IsInjective` in `QICLean/Kraus/Injectivity.lean`.
+- **Declaration:** `Kraus.IsInjective (A : MPSTensor d D) : Prop`.
+- **Defined in:** `QICLean/Kraus/Injectivity.lean`.
 - **Meaning:** the one-site matrices `{A i}` span the full matrix algebra; this
   is the linear-algebraic injectivity of the tensor as a virtual-to-physical map.
 - **Source:** arXiv:1804.04964 §2,
   `Papers/1804.04964/paper_normal.tex:196-222`; see also arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:298-300`.
-- **Sanctioned bridges:** `MPSTensor.isNBlkInjective_one_of_isInjective`,
-  `MPSTensor.IsInjective.isNormal`, and
+- **Sanctioned bridges:** `Kraus.isNBlkInjective_one_of_isInjective`,
+  `Kraus.IsInjective.isNormal`, and
   `MPSTensor.isNBlkInjective_iff_blockTensor_isInjective`.
 - **Caveat:** this is one-site injectivity. A tensor can fail this predicate and
-  satisfy `IsNBlkInjective A N` for a larger `N`.
+  satisfy `Kraus.IsNBlkInjective A N` for a larger `N`.
 
-#### `MPSTensor.IsNBlkInjective`
+#### `Kraus.IsNBlkInjective`
 
 - **Declaration:**
-  `MPSTensor.IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop`.
-- **Defined in:** `QICLean/MPS/Core/Injectivity.lean`; the finite-family owner is
-  `Kraus.IsNBlkInjective` in `QICLean/Kraus/Injectivity.lean`.
+  `Kraus.IsNBlkInjective (A : MPSTensor d D) (N : ℕ) : Prop`.
+- **Defined in:** `QICLean/Kraus/Injectivity.lean`.
 - **Meaning:** products indexed by all words of exactly length `N` span the full
   matrix algebra.
 - **Source:** arXiv:0909.5347, equation (1) and the following definition of
@@ -304,16 +300,16 @@ normalizations.
   injective after blocking.
 - **Sanctioned bridge:**
   `MPSTensor.isNBlkInjective_iff_blockTensor_isInjective` in
-  `TNLean/MPS/Chain/BlockedChainFT.lean`.
+  `TNLean/MPS/Core/Blocking.lean`.
 - **Caveat:** no positivity condition on `N` is built into this predicate;
-  `MPSTensor.IsNormal` explicitly requires a positive witness.
+  `Kraus.IsNormal` explicitly requires a positive witness.
 
 #### `MPSChainTensor.IsInjective` and `MPSChainTensor.IsWindowInjective`
 
 - **Declarations:** `MPSChainTensor.IsInjective A` in
   `TNLean/MPS/Chain/Defs.lean`, and `MPSChainTensor.IsWindowInjective A L` in
   `TNLean/PEPS/CycleMPSChainArc.lean`.
-- **Meaning:** the first requires one-site `MPSTensor.IsInjective` at every site
+- **Meaning:** the first requires one-site `Kraus.IsInjective` at every site
   of a non-translation-invariant chain. The second requires every cyclic window
   of length `L` to have full arc-product span.
 - **Source:** arXiv:1804.04964 §2, lines 145--222, and the normal-window
@@ -332,12 +328,12 @@ normalizations.
 - **Declaration:** `MPOTensor.IsInjective (K : MPOTensor d D) : Prop`.
 - **Defined in:** `TNLean/MPS/MPDO/SimpleLocalStructure.lean`.
 - **Meaning:** an abbreviation for
-  `MPSTensor.IsInjective K.toMPSTensor` on the doubled physical index.
+  `Kraus.IsInjective K.toMPSTensor` on the doubled physical index.
 - **Source:** arXiv:1606.00608 Appendix C.2, where an inverse tensor is used for
   the blocked simple MPDO tensor; see
   `Papers/1606.00608/MPDO-22-12-17-2.tex:1628-1658`.
 - **Sanctioned bridge:** this is a definitional abbreviation; unfold it to use
-  the `MPSTensor.IsInjective` API.
+  the `Kraus.IsInjective` API.
 - **Caveat:** it does not mean injectivity of the MPO as an operator on every
   chain length.
 
