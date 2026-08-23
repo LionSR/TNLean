@@ -133,7 +133,9 @@
 \begin{theorem}[Printed mutual-information proposition]
     \label{thm:cpsv_prop45_printed_status}
     \notready
-    \uses{def:mutual_info_chain, thm:cpsv_prop45_limit_counterexample}
+    \uses{prop:mutual_info_monotone,
+        thm:mpdo_finite_chain_mutual_information_four_log,
+        thm:cpsv_prop45_limit_counterexample}
     According to \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, one has
     $I_L\le I_{L+1}$ for $L<\lfloor N/2\rfloor$, the mutual information is
     bounded in terms of the bond dimension, and the indicated iterated
@@ -141,7 +143,7 @@
 
     The monotonicity and finite-chain bound hold.  The limit assertion is false
     without an additional convergence hypothesis.  For the parity-sensitive
-    positive MPDO of Theorem~\ref{thm:parity_mpdo_no_mutual_info_limit}, the
+    positive MPDO of Theorem~\ref{thm:cpsv_prop45_limit_counterexample}, the
     mutual information is $0$ at odd chain lengths and $h_2(1/3)>0$ at even
     chain lengths, so the inner limit does not exist.
 \end{theorem}
@@ -284,7 +286,8 @@
     \label{thm:cpsv_prop45_limit_counterexample}
     \lean{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}
     \leanok
-    \uses{def:mpdo, thm:parity_mpdo_no_mutual_info_limit}
+    \uses{thm:parity_mpdo_no_thermodynamic_limit,
+        thm:parity_mpdo_no_mutual_info_limit}
     The parity-sensitive tensor is an MPDO, and for every fixed $L\geq1$ the
     sequence $K\mapsto I_L^{(L+K+1)}$ has no real limit.  Thus the unrestricted
     thermodynamic-limit clause of
