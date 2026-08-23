@@ -1,0 +1,113 @@
+% Regression: frame-readable wire records reserve the faces their ink uses.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_frame_side_count_int
+\int_new:N \l__tenkz_test_frame_route_count_int
+\cs_new_eq:NN
+  \__tenkz_test_frame_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_new_eq:NN \__tenkz_test_frame_beadpath:nnn \tenkz@string@beadpath
+\cs_set_protected:Npn \tenkz@string@beadpath #1#2#3
+  {
+    \str_if_eq:nnT {#3} {tenkz-label-route-point}
+      {
+        \int_gincr:N \l__tenkz_test_frame_route_count_int
+        \str_case:nnF {#1}
+          {
+            {tenkz-bead-cup-1-2}   { }
+            {tenkz-bead-wrap-1}     { }
+          }
+          { \errmessage{closure~occupancy~did~not~read~a~frozen~bead~route} }
+      }
+    \__tenkz_test_frame_beadpath:nnn {#1} {#2} {#3}
+  }
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_frame_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_frame_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l_tmpa_tl
+    \str_case:VnF \l_tmpa_tl
+      {
+        {P}
+          {
+            \str_if_eq:VnF #2 {w}
+              { \errmessage{far~port~slot~answered~the~wrong~face} }
+          }
+        {Q}
+          {
+            \str_if_eq:VnF #2 {w}
+              { \errmessage{spanning~atom~name~answered~the~wrong~face} }
+          }
+        {R}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{generated~closure~answered~the~wrong~face} }
+          }
+        {T}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{closure~bead~answered~the~wrong~face} }
+          }
+        {U}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{closure~corner~lost~one~of~its~two~faces} }
+          }
+      }
+      { \errmessage{unexpected~label~in~frame-cell~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% The far port lies on the second row of a spanning atom.  The horizontal
+% wire therefore takes the labelled atom's east face.
+\begin{tenkz}[lattice={3x3}, bonds=none]
+  \tn[at=(2,1), name=P, skin=dot,
+      ports={90:virtual,270:virtual}]{P}
+  \tn[at=(1,3), name=A, wires=2,
+      ports={180@2:virtual}]{}
+  \tn[at=(1,1), name=N]{} \tn[at=(3,1), name=S]{}
+  \tnwire{P.90}{N} \tnwire{P.270}{S} \tnwire{P}{A.180@2}
+\end{tenkz}
+% The bare name denotes the middle of the three-row rectangle, not its
+% anchor cell.  Its horizontal wire therefore takes the east face.
+\begin{tenkz}[lattice={3x3}, bonds=none]
+  \tn[at=(1,2), name=Q, skin=dot, wires=3,
+      ports={90:virtual,270:virtual}]{Q}
+  \tn[at=(1,1), name=QN]{}
+  \tn[at=(3,1), name=QS]{}
+  \tn[at=(2,3), name=QE]{}
+  \tnwire{Q.90}{QN} \tnwire{Q.270}{QS} \tnwire{Q}{QE}
+\end{tenkz}
+% A one-sided south trace leaves the boundary atom through its south face.
+\begin{tenkz}[lattice={1x1}, bonds=none, south=trace]
+  \tn[at=(1,1), skin=dot]{R}
+\end{tenkz}
+% A bead a quarter of the way round an east cup sees the saved curved route,
+% not the vertical chord between the cup's boundary sites.  The transverse
+% probe puts a declared crossing at the bead and cuts the live cup route; the
+% occupancy reading must retain the frozen, unsurgered route used to place T.
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+  \tn[at=(1,1)]{} \\ \tn[at=(2,1)]{}
+  \tn[at=on cup-1-2 0.25, name=T, skin=dot]{T}
+  \tnwire[kind=string, name=probe, crossing=over,
+    cross={over at crossing of probe and cup-1-2}]
+    {1 n of T}{1 s of T}
+\end{tenkz}
+% At the first corner of a flat trace, the incoming and outgoing pieces take
+% two adjacent faces.  Reading only their common secant would call the corner
+% oblique and leave its south face falsely free.
+\begin{tenkz}[lattice={1x1}, bonds=none, west=trace, east=trace]
+  \tn[at=(1,1)]{}
+  \tn[at=on wrap-1 0.19449155, skin=dot]{U}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_frame_side_count_int } = {5}
+  { \errmessage{frame-cell~fixture~did~not~station~five~labels} }
+\int_compare:nNnF { \l__tenkz_test_frame_route_count_int } = {6}
+  { \errmessage{closure~occupancy~did~not~sample~two~frozen~routes} }
+\ExplSyntaxOff
+\end{document}
