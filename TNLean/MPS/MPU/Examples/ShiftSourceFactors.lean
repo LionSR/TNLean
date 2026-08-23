@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
-import TNLean.MPS.MPU.SourceFactorsTensorProduct
+import TNLean.MPS.MPU.SourceUV
 
 /-!
 # Supplied source factors for the cyclic-shift examples

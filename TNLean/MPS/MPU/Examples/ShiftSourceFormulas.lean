@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
+import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import QICLean.Channel.MaximallyEntangled
 
 /-!
@@ -173,7 +174,7 @@ of $U_2$; the right-shift left source has its unique value.
 Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
 noncomputable def shiftExampleU₂LeftRankEquiv (d : ℕ) [NeZero d] :
     Fin d × Fin d ≃ Fin ℓ[shiftExampleU₂ d] :=
-  (Equiv.prodUnique (Fin d × Fin d) (Fin 1)).symm |>.trans
+  (Equiv.prodUnique (Fin d × Fin d) (Fin 1)).symm.trans
     ((Equiv.prodCongr (leftShiftLeftRankEquiv d)
       (rightShiftLeftRankEquiv d)).trans
         (tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)))
@@ -184,7 +185,7 @@ coordinates of $U_2$; the left-shift right source has its unique value.
 Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
 noncomputable def shiftExampleU₂RightRankEquiv (d : ℕ) [NeZero d] :
     Fin d × Fin d ≃ Fin r[shiftExampleU₂ d] :=
-  (Equiv.uniqueProd (Fin d × Fin d) (Fin 1)).symm |>.trans
+  (Equiv.uniqueProd (Fin d × Fin d) (Fin 1)).symm.trans
     ((Equiv.prodCongr (leftShiftRightRankEquiv d)
       (rightShiftRightRankEquiv d)).trans
         (tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)))
@@ -196,7 +197,7 @@ Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
 (lines 2009--2016 and 2028--2034). -/
 noncomputable def shiftExampleU₃LeftRankEquiv (d : ℕ) [NeZero d] :
     Fin d × Fin d ≃ Fin ℓ[shiftExampleU₃ d] :=
-  (Equiv.uniqueProd (Fin d × Fin d) (Fin 1)).symm |>.trans
+  (Equiv.uniqueProd (Fin d × Fin d) (Fin 1)).symm.trans
     ((Equiv.prodCongr (rightShiftLeftRankEquiv d)
       (leftShiftLeftRankEquiv d)).trans
         (tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)))
@@ -208,7 +209,7 @@ Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
 (lines 2009--2016 and 2028--2034). -/
 noncomputable def shiftExampleU₃RightRankEquiv (d : ℕ) [NeZero d] :
     Fin d × Fin d ≃ Fin r[shiftExampleU₃ d] :=
-  (Equiv.prodUnique (Fin d × Fin d) (Fin 1)).symm |>.trans
+  (Equiv.prodUnique (Fin d × Fin d) (Fin 1)).symm.trans
     ((Equiv.prodCongr (rightShiftRightRankEquiv d)
       (leftShiftRightRankEquiv d)).trans
         (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)))
