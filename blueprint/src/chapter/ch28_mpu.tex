@@ -7602,12 +7602,110 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unitarity, so all three tensors are matrix product unitaries.
 \end{proof}
 
+\begin{definition}[Supplied source factors for the three shift MPUs]
+    \label{def:threeMPU_supplied_source_factors}
+    \lean{MPOTensor.identitySourceFactors,
+        MPOTensor.rightShiftSourceFactors,
+        MPOTensor.leftShiftSourceFactors,
+        MPOTensor.SourceFactors.independentTensorProduct,
+        MPOTensor.shiftExampleU₁SourceFactors,
+        MPOTensor.shiftExampleU₂SourceFactors,
+        MPOTensor.shiftExampleU₃SourceFactors}
+    \leanok
+    \uses{threeMPU, def:mpu_weighted_source_factors,
+        thm:mpu_shift_source_cuts_ranks}
+    Equip $U_1$ with the tensor product of the two bond-one identity source
+    factorizations.  Equip $U_2$ with the tensor product of the left-shift and
+    right-shift source factorizations, in that order, and equip $U_3$ with the
+    tensor product in the reverse order.  In all three cases the virtual weight
+    is the identity.  These are explicit supplied source-factor witnesses; no
+    identification with an arbitrary compact singular-value decomposition is
+    asserted.
+\end{definition}
+
+\begin{theorem}[One-site supplied source tensors for $U_1$ and $U_3$]
+    \label{thm:threeMPU_supplied_source_uv_one}
+    \lean{MPOTensor.shiftExampleU₁_sourceUV_eq_identityTensorIdentity,
+        MPOTensor.shiftExampleU₃_sourceUV_eq_swap}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    In the source coordinates of the supplied factorizations,
+    \begin{align}
+        u_1 & =\Id\otimes\Id, & v_1 & =\Id\otimes\Id, \\
+        u_3 & =\mathbb S,      & v_3 & =\mathbb S.
+    \end{align}
+    These are the formulas in \cite[equation~\texttt{eq:SF\_u1\_u3}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors,
+        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
+    For the identity tensor, both source contractions are products of two
+    Kronecker deltas.  For $U_3$, the right-shift and left-shift contractions
+    interchange the two composite indices.  Thus their tensor product is the
+    swap $\mathbb S$ in both orientations.
+\end{proof}
+
+\begin{theorem}[Two-site supplied source tensors for $U_2$]
+    \label{thm:threeMPU_U2_supplied_source_uv_two}
+    \lean{MPOTensor.shiftExampleU₂_sourceU_two_eq_identitySwapIdentity,
+        MPOTensor.shiftExampleU₂_sourceV_two_eq_swapSwap_mul_identitySwapIdentity}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    After blocking two sites and retaining the paper's four-spin order,
+    \begin{align}
+        u_2^{(2)} & =\Id\otimes\mathbb S\otimes\Id, \\
+        v_2^{(2)} & =(\mathbb S\otimes\mathbb S)
+            (\Id\otimes\mathbb S\otimes\Id).
+    \end{align}
+    This is \cite[equation~\texttt{eq:uv2\_U2}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors,
+        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
+    Expand the two supplied source contractions in product-rank coordinates.
+    Each normalized identity-vector contraction contributes one Kronecker
+    delta, and the scalar normalizations cancel.  Reindexing the four remaining
+    spin coordinates gives $\Id\otimes\mathbb S\otimes\Id$ for $u_2^{(2)}$.
+    The reflected contraction first exchanges the two pairs and then exchanges
+    the middle spins, giving the displayed ordered product for $v_2^{(2)}$.
+\end{proof}
+
+\begin{theorem}[Two-site supplied source tensors for $U_3$]
+    \label{thm:threeMPU_U3_supplied_source_uv_two}
+    \lean{MPOTensor.shiftExampleU₃_sourceU_two_eq_identitySwapIdentity_mul_swapSwap,
+        MPOTensor.shiftExampleU₃_sourceV_two_eq_identitySwapIdentity}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    After blocking two sites and retaining the paper's four-spin order,
+    \begin{align}
+        u_3^{(2)} & =(\Id\otimes\mathbb S\otimes\Id)
+            (\mathbb S\otimes\mathbb S), \\
+        v_3^{(2)} & =\Id\otimes\mathbb S\otimes\Id.
+    \end{align}
+    This is \cite[equation~\texttt{eq:uv2\_U3}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors,
+        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
+    Reverse the order of the left-shift and right-shift supplied factors in the
+    preceding calculation.  The unreflected contraction therefore exchanges
+    the middle spins before exchanging the two pairs, while the reflected
+    contraction only exchanges the middle spins.  This gives the two displayed
+    matrices in their stated order.
+\end{proof}
+
 \begin{proposition}[Standard forms of the three shift MPUs]
     \label{prop:threeMPU_standard_forms}
     \notready
     \discussion{5715}
-    \uses{threeMPU}
-    Their standard-form unitaries satisfy
+    \uses{threeMPU, thm:threeMPU_supplied_source_uv_one,
+        thm:threeMPU_U2_supplied_source_uv_two,
+        thm:threeMPU_U3_supplied_source_uv_two}
+    For the fixed standard-form source factors, the corresponding unitaries
+    satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
@@ -7618,6 +7716,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\mathbb S\otimes\mathbb S), &
         v_3^{(2)}                    & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
+    The preceding theorems establish these matrices for explicit supplied
+    source-factor witnesses.  It remains to identify that supplied choice with
+    the fixed standard-form choice.
     % Source lines: paper_v2.tex 2002--2042.
 \end{proposition}
 
