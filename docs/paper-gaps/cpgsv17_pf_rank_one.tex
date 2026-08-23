@@ -1219,10 +1219,17 @@ $\mathcal K=\mu A$ with $A$ normal and $0<|\mu|<1$. It does not package an
 ambient simple tensor in biCF whose canonical reconstruction contains
 $\mathcal K$. Moreover, for the singleton normalization produced here,
 $|\mu|=\sqrt r$, where $r$ is the Perron value of the unnormalized transfer.
-For the positive test matrix $H=\operatorname{diag}(20,1)$, the exact
-positive-definite gap $H-\mathcal E_{\mathcal K}^*(H)>0$ has determinant
-$19861/2000$. Pairing it with a positive-definite Perron eigenmatrix $\rho$
-of $\mathcal E_{\mathcal K}$ gives the trace-adjoint identity
+For the positive test matrix $H=\operatorname{diag}(20,1)$, direct
+calculation of the adjoint action gives the gap
+\begin{align}
+  H-\mathcal E_{\mathcal K}^*(H)
+    &=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0,
+  \notag
+\end{align}
+whose $(1,1)$-entry $85/8$ and determinant
+$85/8\cdot4697/5000-(9/40)^2=19861/2000$ are both positive, certifying
+positive definiteness. Pairing it with a positive-definite Perron
+eigenmatrix $\rho$ of $\mathcal E_{\mathcal K}$ gives the trace-adjoint identity
 \begin{align}
   0
     &<\operatorname{tr}\bigl((H-\mathcal E_{\mathcal K}^*(H))\rho\bigr)

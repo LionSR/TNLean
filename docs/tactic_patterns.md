@@ -1258,11 +1258,13 @@ abstracted — record why, so it is not re-proposed).
   `0 < Matrix.trace (B * A)` from `A.PosDef`, `B.PosSemidef`, and `B ≠ 0`
   by combining `Matrix.PosSemidef.trace_mul_nonneg` with faithfulness of the
   positive-definite weighted trace.
-- **Seen:** 3 occurrences across 2 TNLean files: twice in
-  `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean` and once in
+- **Seen:** 3 occurrences across 2 TNLean files: `htraceNe`/`htracePos`
+  (lines 150-163) and `hgapNe`/`hgapPos` (lines 164-186) in
+  `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`, and
+  `htr_ne` (lines 253-257) in
   `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean` (2026-08-23). QICLean also
   contains the same proof as the private theorem
-  `trace_mul_pos_of_posDef_posSemidef_ne_zero` in
+  `trace_mul_pos_of_posDef_posSemidef_ne_zero` (lines 44-57) in
   `QICLean/Channel/Irreducible/Growth/OrthogonalTrace.lean`.
 - **Abstraction (proposed):** expose the existing QICLean theorem as public API
   and replace all three TNLean call sites with it. The pinned QICLean release
