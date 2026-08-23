@@ -319,6 +319,12 @@ one-page paper-gap note. The convention must not be modeled:
 - no per-declaration marker stamped across a whole module; one marker on
   the definition or in the module docstring suffices.
 
+The marker rule applies to every marker family, not only degenerate
+readings: one `**Scope restriction**` or `**Local fix**` marker per
+(restriction, module), placed on the module docstring or the defining
+declaration; a per-declaration marker is justified only when that
+declaration's restriction differs from the module's.
+
 Every item on that list multiplies downstream statements and hypothesis
 lists and makes further proof writing harder. When an audit finds such a
 reading, the repair is to delete the scaffolding, not to document it.
