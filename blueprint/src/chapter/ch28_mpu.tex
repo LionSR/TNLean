@@ -7642,10 +7642,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{def:threeMPU_supplied_source_factors,
         def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
-    For the identity tensor, both source contractions are products of two
-    Kronecker deltas.  For $U_3$, the right-shift and left-shift contractions
-    interchange the two composite indices.  Thus their tensor product is the
-    swap $\mathbb S$ in both orientations.
+    Write the source and physical indices as
+    $((a,b),(c,e))$ and $((i,j),(k,l))$, respectively, and set
+    $s=d^{-1/2}$.  The identity factors give
+    \begin{align}
+        [u_1]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =[v_1]_{((i,j),(k,l)),((a,b),(c,e))} \\
+         & =(\delta_{a,i}\delta_{c,k})(\delta_{b,j}\delta_{e,l}) \\
+         & =\delta_{a,i}\delta_{b,j}\delta_{c,k}\delta_{e,l}.
+    \end{align}
+    For $U_3$, the right-shift and left-shift factors instead give
+    \begin{align}
+        [u_3]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =(s\delta_{c,i}\delta_{a,k})
+            (d\,s\delta_{e,j}\delta_{b,l}) \\
+         & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j}, \\
+        [v_3]_{((i,j),(k,l)),((a,b),(c,e))}
+         & =(d\,s\delta_{a,k}\delta_{c,i})
+            (s\delta_{b,l}\delta_{e,j}) \\
+         & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j},
+    \end{align}
+    where $d\,s^2=1$.  The first display is the identity matrix, while the
+    second interchanges the two composite indices and is therefore
+    $\mathbb S$ in both orientations.
 \end{proof}
 
 \begin{theorem}[Central gates in the supplied two-site factorizations of $U_2$]
