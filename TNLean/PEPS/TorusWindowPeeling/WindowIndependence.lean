@@ -17,9 +17,12 @@ extracts the bond operator on the distinguished edge `e` from the open-boundary 
 That peeling consumes a family of inserts on the staircase windows all sharing one deformed state,
 with the two end windows carrying the bond-inserted inserts of `M` and `M'`.  The sketch describes
 this family as the realization of one virtual operation on the bond `e` as a physical operation on
-any window containing an endpoint of `e`; this file supplies the load-bearing fact behind that
-correspondence: the deformed state of a bond-inserted insert is **window-independent** up to the
-window's interior-bond multiplicity.
+any window containing an endpoint of `e`; this file supplies the closed-state coefficient identity
+and normalization used in that construction: the deformed state of a bond-inserted insert is
+**window-independent** up to the window's interior-bond multiplicity.  Equality after complementary
+contraction is not itself a local physical realization.  The latter is the open-boundary theorem
+`staircaseVirtualOperationPhysicalOp_realizes` in
+`TNLean/PEPS/TorusWindowVirtualOperationFamily.lean`.
 
 ## The window-independence
 
@@ -35,18 +38,19 @@ assembled deformed state is exactly the region-inserted coefficient
 restriction round-trip `assembleRegionσ_restrict`.  Cross-multiplying by the two interior-bond
 products cancels the region-dependent scalars and equates the two assembled deformed states.
 
-This is the realization of the sketch's ``a virtual operation on a given bond is a physical
-operation on any window containing an endpoint'' for the two end windows of the staircase, which
-carry the bond-inserted inserts the peeling consumes.  The two end windows sit on opposite sides of
-`e`, so their orientations differ by a transpose; the general statement carries the orientation
-explicitly, and the same-side corollary specializes it.
+This is the closed-state identity used for the two end windows of the staircase.  The two end
+windows sit on opposite sides of `e`, so their orientations differ by a transpose; the general
+statement carries the orientation explicitly, and the same-side corollary specializes it.  The
+physical-operator construction is a separate open-boundary result and does not follow from this
+complement contraction.
 
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
   generating the same state*, arXiv:1804.04964, the corollary and proof sketch at lines
   2296--2445 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the
-  filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
+  subsection ``The common-state family is complete'' in
+  `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 -/
 
 open scoped BigOperators Matrix
@@ -81,7 +85,7 @@ interior-bond multiple of the edge-inserted coefficient; the restriction round-t
 `assembleRegionσ_restrict` reassembles `cfg` from its two restrictions.
 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) (cfg : V → Fin d) :
@@ -121,13 +125,13 @@ edge-inserted coefficient (`deformedRegionStateAssembled_bondInserted_eq_smul_ed
 since the edge-inserted coefficient mentions only the shared edge and the two orientations agree;
 cross-multiplying by the interior-bond products matches the two scalars.
 
-This is the realization of the sketch's correspondence between one virtual operation on the bond and
-the physical operation on either window containing an endpoint of it, for windows where the bond is
-a boundary edge.
+This is the window-independent closed-state coefficient identity for boundary-edge inserts.  It is
+one input to the staircase construction, but does not by itself construct the physical operator on
+either window.  See `staircaseVirtualOperationPhysicalOp_realizes` for that open-boundary identity.
 
 Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (a virtual operation on a bond is a physical operation on any
-window containing an endpoint); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+window containing an endpoint); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem bondInserted_windowIndependent (R₁ R₂ : Finset V) (e : Edge G)
     (hf : IsRegionBoundaryEdge (G := G) R₁ e) (hg : IsRegionBoundaryEdge (G := G) R₂ e)
     (M₁ M₂ : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
