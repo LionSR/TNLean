@@ -3311,3 +3311,10 @@ removals themselves; no key is added.
 |---|---|
 | flag:consumers:key:kernel-atom:nudge | retired: sentenced by amendment seven, read by nothing, written by nothing; permanent |
 | flag:consumers:key:kernel-mark:nudge | retired: sentenced by amendment seven, the label station rule landed in #6168; permanent |
+
+### 2026-08-23 — correction to the arc-route citation
+
+The two references to #6201 in the 2026-08-22 retirement of `bend=` should
+be read as references to #6881. Issue #6201 identified that `route=arc` drew
+no distinct curve; PR #6881 made the route leave and enter along its ends'
+faces. This correction is appended because shrink sessions are immutable.
