@@ -292,14 +292,7 @@ theorem sum_mul_activeSectorFinEquiv
           H.a k.1 * H.b k.1) +
           ∑ k : {k : Fin F.sectorCount // ¬ F.IsActiveSector k},
             H.a k.1 * H.b k.1 := by rw [hinactive, add_zero]
-    _ = ∑ k : Fin F.sectorCount, H.a k * H.b k := by
-      convert hsplit using 1
-      congr 1
-      apply Finset.sum_congr
-      · ext k
-        simp
-      · intro k _
-        rfl
+    _ = ∑ k : Fin F.sectorCount, H.a k * H.b k := hsplit
     _ = 1 := H.sum_mul
 
 end NeighboringTraceFactorization
