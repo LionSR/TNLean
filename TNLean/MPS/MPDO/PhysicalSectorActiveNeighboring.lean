@@ -35,7 +35,8 @@ it defines $T_{k,h}$ at lines 1452--1455 and proves primitivity through
 line 1471.  The congruence
 $\tilde\eta_{k,h} = (V^R_k \otimes V^L_h)^\dagger \eta_{k,h}
 (V^R_k \otimes V^L_h)$, its positive semidefiniteness, and the restriction of
-the trace factors $a_k,b_h$ are additional constructions. Recorded in
+the trace factors $a_k,b_h$, including the treatment of inactive sectors as
+zero blocks, are additional constructions. Recorded in
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
@@ -120,9 +121,13 @@ theorem neighboringOperator_eq_sum_kronecker
 vanishes.
 
 Indeed, inactivity means that either every left factor or every right factor
-in the sector vanishes, so every summand in $\eta_{k,k}$ vanishes. This is the
-zero-block case of the factorization in arXiv:1606.00608, Appendix C.2,
-equations `AppUkU=rl` and `etarl`, lines 1381--1445. -/
+in the sector vanishes, so every summand in $\eta_{k,k}$ vanishes.
+
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`etarl`, lines 1383--1450, defines the sector factorization and
+$\eta_{k,h}$; line 1434 selects physical indices $\alpha,\beta$ for which the
+scalar $m_{\beta,\alpha}$ is nonzero, thereby obtaining the direct-sum form
+`formK` on line 1436. -/
 theorem neighboringOperator_self_eq_zero_of_not_isActiveSector
     (F : PhysicalSectorFactorization K) {k : Fin F.sectorCount}
     (hk : ¬ F.IsActiveSector k) :
