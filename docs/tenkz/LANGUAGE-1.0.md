@@ -228,7 +228,7 @@ ends' faces, and the stroke follows the resolved endpoint type (§5).
 | `form=` | small-enum | `bracket` `enclosure` `label` | `label` |
 | `species=` | identifier | — | empty |
 | `tint` | flag | — | false |
-| `label pos=` | angle | a bearing in the host's own axes, or `auto` | `auto` |
+| `label pos=` | angle | a bearing in the host's own axes; omit the key for automatic placement | `auto` |
 | `name=` | identifier | — | generated |
 
 A mark takes the `species=` that atoms and wires already carry, with the same
@@ -338,9 +338,10 @@ spanning atom at a midway or on-wire address keeps every slot a
 frame-anchored one would. A cell named without a member
 index denotes the whole cell, which is what a cell means to a selection.
 
-Every record class is addressable by name, generated names included, and the
-picture is a record (§2). It answers to `picture`, which is how a route or a
-mark names the whole diagram without a second grammar for doing so.
+Atoms, wires, and pictures are addressable by name, generated names included.
+A mark's generated `name=` is recorded but no address grammar resolves it.
+The picture answers to `picture`, which is how a route or a mark names the
+whole diagram without a second grammar for doing so.
 
 A **selector** names a set of records — one address, a braced comma-separated
 list, a range, or one selector less another:
@@ -924,9 +925,9 @@ triangle with nothing declared. A declared skin
 pairings; a pairing is a WIRE whose endpoints are the skin's own ports.
 Skins contain no free ink: an element that is not a port or a pairing of
 ports is not declarable. A declared species
-(`\tndeclare{species}{flux}{hue=source:red}`) binds semantic ink;
-`hue=source:*` values reproduce a cited paper's palette instead of the house
-cycle.
+(`\tndeclare{species}{flux}{hue=source:red}`) binds semantic ink. The
+`source:` prefix records provenance, while the literal colour after it is the
+colour used; it does not retrieve or reproduce a cited palette.
 
 ### Declaration keys (3)
 
@@ -1079,7 +1080,7 @@ row is what names where the meaning went.
 | `trace style=racetrack` | closure depth follows the selection the closure clears (§5) |
 | `inline`, `compact` | math-style sensing + `size=`; a page-constrained picture declares `metrics=compact` (§2.2) |
 | `sizes=` | `size=` on the picture or atom; the bundled metric table is fixed |
-| `theme=` | the house theme binds at load; a cited palette reaches ink through `\tndeclare{species}{<name>}{hue=source:<colour>}` |
+| `theme=` | the house theme binds at load; source-tagged literal ink is declared by `\tndeclare{species}{<name>}{hue=source:<colour>}` |
 | `via=` | `route={<side> of <selector>}` where the waypoint cleared records (§12.3); nothing where it only bent a line past cells that hold none (§12.1), and nothing on a wound string, whose class is already its path (§5, §12.2) |
 | `bend=` | nothing: an arc leaves and enters along its ends' faces |
 | `weight=` | nothing: the port type decides the stroke, and multiplicity is mathematics carried by the index label |
@@ -1292,8 +1293,8 @@ the whole picture.
    coded hard error.
 5. Open ink is declared content: the boundary signature is computed from
    port and wire records and written to the event stream.
-6. Raw TikZ is not public syntax. Themes rebind ink and typography; they add
-   no topology.
+6. Raw TikZ is not public syntax. The house theme binds ink and typography at
+   load; species declarations may replace semantic ink by a literal colour.
 7. One concept, one canonical spelling; sugar is declared, expanded, and
    tested; tombstones never return.
 
