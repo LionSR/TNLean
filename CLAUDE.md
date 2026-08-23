@@ -298,6 +298,45 @@ the statement smuggles an unwarranted hypothesis). The lighter markers
 are for deviations that are mathematically correct as stated, just
 narrower or differently phrased than the source.
 
+#### Degenerate readings are conventions, not gaps
+
+A source definition read hyper-literally often admits a degenerate case
+that its authors plainly do not intend: a canonical-form summand with
+coefficient zero, a basis member that contributes nothing at every
+length, a sector of probability zero, an empty block padding the bond
+dimension. Such a reading is **not** a faithfulness gap. The intended
+reading is adopted as the library's convention, baked into the definition
+(a `≠ 0` or `0 <` field), and recorded once as a **Local fix** with a
+one-page paper-gap note. The convention must not be modeled:
+
+- no parallel predicate families (`raw` versus `active`, `literal` versus
+  `normalized`) with bridge lemmas between them;
+- no counterexample modules refuting the literal reading;
+- no `\notready` "printed status" blueprint nodes beside the formalized
+  theorem;
+- no side hypotheses (`∀ k, μ k ≠ 0`) repeated on every downstream
+  statement when the definition already carries them;
+- no per-declaration marker stamped across a whole module; one marker on
+  the definition or in the module docstring suffices.
+
+The marker rule applies to every marker family, not only degenerate
+readings: one `**Scope restriction**` or `**Local fix**` marker per
+(restriction, module), placed on the module docstring or the defining
+declaration; a per-declaration marker is justified only when that
+declaration's restriction differs from the module's.
+
+Every item on that list multiplies downstream statements and hypothesis
+lists and makes further proof writing harder. When an audit finds such a
+reading, the repair is to delete the scaffolding, not to document it.
+The 2026-08-23 nonzero-coefficient cleanup
+(`docs/audits/2026-08-23_nonzero_coefficient_convention.md`) removed
+about 2,300 lines built around one such reading.
+
+A genuine source error is different: a printed claim that fails on
+nondegenerate data (an explicit tensor with nonzero weights, a wrong
+exponent, an off-by-one chain length) keeps its counterexample and its
+**Local fix** or **false-source** record.
+
 A paper-realignment PR may:
 
 - Delete fields, hypotheses, or whole theorems that are documented as
