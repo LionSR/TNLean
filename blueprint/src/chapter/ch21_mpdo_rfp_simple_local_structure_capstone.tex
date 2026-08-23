@@ -2630,14 +2630,16 @@ This is the calculation in
 
 \begin{theorem}[Counterexample to the low-level absorbed-sector implication]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}
-    \lean{MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample}
+    \lean{MPOTensor.NonCartesianActiveSectorCandidate.exists_normalTensor_scalar_representation,
+        MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample}
     \leanok
     \uses{def:is_sal, def:mpo_physical_trace_transfer,
         def:mpdo_physical_sector_factorization,
         def:mpdo_neighboring_trace_factorization}
     There are tensors $K,A$ of physical dimension four and virtual dimension
-    two, and a nonzero scalar $\mu$, such that $K=\mu A$, the tensor $A$ is
-    normal, and $K$ is injective, satisfies the strong area law, and obeys
+    two, and a nonzero scalar $\mu$ with $|\mu|\leq 1$, such that $K=\mu A$,
+    the tensor $A$ is normal, and $K$ is injective, satisfies the strong area
+    law, and obeys
     \begin{align}
         \mathcal T_K^2&=\mathcal T_K.
         \notag
@@ -2668,7 +2670,15 @@ This is the calculation in
     factors. The resulting neighboring trace matrix has a nonzero
     two-by-two minor, so it cannot equal $(a_kb_h)_{k,h}$. The four slices
     span the full two-by-two matrix algebra, and their displayed scalar
-    neighboring operators are positive. Finally, Perron normalization and a
-    canonical gauge express the tensor as a nonzero scalar multiple of a
-    normal tensor.
+    neighboring operators are positive. For the positive test matrix
+    $H=\operatorname{diag}(20,1)$, direct calculation gives
+    \begin{align}
+        H-\mathcal E_K^*(H)
+          &=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
+        \notag
+    \end{align}
+    Pairing this inequality with a positive-definite Perron eigenmatrix of
+    $\mathcal E_K$ shows that its Perron value $r$ is at most one. Perron
+    normalization and a canonical gauge therefore express the tensor as
+    $K=\mu A$ with $A$ normal and $|\mu|=\sqrt r\leq1$.
 \end{proof}

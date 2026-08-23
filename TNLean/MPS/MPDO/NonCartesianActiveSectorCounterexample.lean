@@ -70,9 +70,13 @@ private lemma adjointMap_normalizingCoefficientWitness :
       Matrix.vecMulVec]
     norm_num [Matrix.star_apply]
 
+/-- The upper-triangular factor in the exact congruence certificate for the
+positive-definite adjoint-transfer gap. -/
 private def normalizingCoefficientGapFactor : Matrix (Fin 2) (Fin 2) ℂ :=
   !![1, -9 / 425; 0, 1]
 
+/-- The positive diagonal factor in the exact congruence certificate for the
+adjoint-transfer gap. -/
 private def normalizingCoefficientGapDiagonal :
     Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.diagonal ![85 / 8, 19861 / 21250]
@@ -310,7 +314,8 @@ theorem exists_normalTensor_scalar_representation :
 
 /-- Counterexample to the low-level implication asserting that injectivity,
 SAL, literal physical-trace idempotence, and being a nonzero scalar multiple
-of a normal tensor yield a neighboring trace factorization.
+of a normal tensor with coefficient norm at most one yield a neighboring trace
+factorization.
 
 This theorem does not package the ambient simple-biCF canonical reconstruction
 or the global unit-weight convention assumed in arXiv:1606.00608, lines
@@ -319,14 +324,14 @@ implication `(ii) ⇒ (iv)`. See `docs/paper-gaps/cpgsv17_pf_rank_one.tex` and
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 theorem full_lowLevel_counterexample :
     ∃ (K A : MPOTensor 4 2) (mu : ℂ),
-      mu ≠ 0 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧
+      mu ≠ 0 ∧ ‖mu‖ ≤ 1 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧
       K.IsInjective ∧ K.IsSAL ∧
       physTraceTransfer K * physTraceTransfer K = physTraceTransfer K ∧
       (¬∃ F : PhysicalSectorFactorization K,
         Nonempty F.NeighboringTraceFactorization) := by
-  obtain ⟨A, mu, hmu, _, hrecover, hNormal⟩ :=
+  obtain ⟨A, mu, hmu, hmu_norm, hrecover, hNormal⟩ :=
     exists_normalTensor_scalar_representation
-  exact ⟨tensor, A, mu, hmu, hrecover, hNormal, tensor_isInjective,
+  exact ⟨tensor, A, mu, hmu, hmu_norm, hrecover, hNormal, tensor_isInjective,
     tensor_isSAL, physTraceTransfer_tensor_idempotent,
     not_exists_neighboringTraceFactorization⟩
 
