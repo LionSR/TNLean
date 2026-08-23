@@ -197,7 +197,10 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   all standing hypotheses, condition (iv), and MPDO positivity of the blocked
   tensor, but Definition 4.1 for that block would force
   $1+2^{-4}=1+2^{-2}$. This is an unfaithful statement, not an unfinished
-  outer-sector assembly. The non-Cartesian four-letter witness refutes only the
+  outer-sector assembly. At virtual bond dimension one, SAL and literal ZCL do
+  give the complete normalized one-sector factorization; this is a conditional
+  boundary specialization, not the all-sector theorem. The non-Cartesian
+  four-letter witness refutes only the
   low-level implication from injectivity, SAL, literal ZCL, and a nonzero
   scalar relation to a normal tensor: no factorization has normalized rank-one
   neighboring traces. It does not supply the ambient simple-biCF
