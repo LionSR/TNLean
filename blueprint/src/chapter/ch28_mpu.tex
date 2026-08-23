@@ -10460,6 +10460,161 @@ the converse theorem.
     Lemma~\ref{lem:qca_translation_covariant_blocked}, respectively.
 \end{proof}
 
+Line~2308 of \cite{Cirac2017MPU} invokes the external
+Schumacher--Werner structure theorem to obtain support algebras, a depth-two
+nearest-neighbor circuit, and an MPU in standard form.  The next statements
+establish only the elementary normalization of a finite propagation
+neighborhood to $[-1,1]\cap\mathbb Z$ by regrouping sites.  They do not prove
+any part of that external structure theorem beyond this change of grouping.
+
+\begin{lemma}[Nearest-neighbor carries from a strict displacement bound]
+    \label{lem:qca_blocked_neighborhood_subset_nearest_neighbor}
+    \lean{SpinChain.blockedNeighborhood_subset_Icc_one}
+    \leanok
+    \uses{def:qca_blocked_neighborhood}
+    Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be finite.  If
+    $|n|<L$ for every $n\in\mathcal N$, then
+    \begin{align}
+        \mathcal C_L(\mathcal N)&\subseteq[-1,1]\cap\mathbb Z.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_neighborhood_membership}
+    If $\mathcal N=\varnothing$, membership in
+    $\mathcal C_L(\mathcal N)$ is impossible.  In general, a point
+    $b\in\mathcal C_L(\mathcal N)$ supplies residues $0\leq r,s<L$ and
+    $n\in\mathcal N$ such that
+    \begin{align}
+        r+n&=bL+s.
+    \end{align}
+    Since $-L<n<L$, the equality is incompatible with $b\leq-2$ and with
+    $b\geq2$.  Thus $-1\leq b\leq1$, including for negative displacements.
+\end{proof}
+
+\begin{lemma}[Supremum criterion for nearest-neighbor carries]
+    \label{lem:qca_blocked_neighborhood_subset_nearest_neighbor_sup}
+    \lean{SpinChain.blockedNeighborhood_subset_Icc_one_of_sup}
+    \leanok
+    \uses{def:qca_blocked_neighborhood}
+    Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be finite.  If
+    \begin{align}
+        \sup_{n\in\mathcal N}|n|&<L,
+    \end{align}
+    then
+    \begin{align}
+        \mathcal C_L(\mathcal N)&\subseteq[-1,1]\cap\mathbb Z.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_neighborhood_subset_nearest_neighbor}
+    Every $|n|$ is bounded above by the finite supremum, so the strict
+    supremum bound supplies the pointwise hypothesis.  When
+    $\mathcal N=\varnothing$, the supremum is $0$ and the conclusion is
+    vacuous.
+\end{proof}
+
+\begin{lemma}[Canonical nearest-neighbor block length]
+    \label{lem:qca_blocked_neighborhood_canonical_nearest_neighbor}
+    \lean{SpinChain.blockedNeighborhood_subset_Icc_one_sup_add_one}
+    \leanok
+    \uses{def:qca_blocked_neighborhood}
+    For every finite $\mathcal N\subset\mathbb Z$, define
+    \begin{align}
+        L_{\mathcal N}&=1+\sup_{n\in\mathcal N}|n|.
+    \end{align}
+    Then $L_{\mathcal N}>0$ and
+    \begin{align}
+        \mathcal C_{L_{\mathcal N}}(\mathcal N)
+        &\subseteq[-1,1]\cap\mathbb Z.
+    \end{align}
+    With the finite-supremum convention, $L_{\varnothing}=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_neighborhood_subset_nearest_neighbor_sup}
+    The finite supremum is strictly smaller than its successor, which is
+    positive even when $\mathcal N$ is empty.
+\end{proof}
+
+\begin{lemma}[Nearest-neighbor propagation after a bounded blocking]
+    \label{lem:qca_propagates_within_blocked_nearest_neighbor}
+    \lean{SpinChain.PropagatesWithin.blocked_nearest_neighbor}
+    \leanok
+    \uses{def:qca_propagates_within, def:qca_blocked_automorphism}
+    Let $d,L>0$.  Suppose that $\omega$ propagates within the finite
+    neighborhood $\mathcal N$ and that $|n|<L$ for every $n\in\mathcal N$.
+    For every finite blocked region $\Lambda$ and every observable
+    $X\in\mathcal A^{(d^L)}$ supported in $\Lambda$, the observable
+    $\omega^{[L]}(X)$ is supported in
+    \begin{align}
+        \Lambda+([-1,1]\cap\mathbb Z).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_propagates_within_blocked,
+        lem:qca_blocked_neighborhood_subset_nearest_neighbor,
+        lem:qca_propagation_neighborhood_mono}
+    Blocking first gives propagation within $\mathcal C_L(\mathcal N)$.
+    The carry bound places this neighborhood inside
+    $[-1,1]\cap\mathbb Z$, and enlargement of propagation neighborhoods gives
+    the claim.
+\end{proof}
+
+\begin{theorem}[Finite propagation becomes nearest-neighbor]
+    \label{thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
+    \lean{SpinChain.HasFinitePropagation.exists_blocked_nearest_neighbor}
+    \leanok
+    \uses{def:qca_finite_propagation, def:qca_propagates_within,
+        def:qca_blocked_automorphism}
+    Let $d>0$.  If $\omega$ has finite forward propagation, then there exists
+    a positive integer $L$ such that, for every finite blocked region
+    $\Lambda$ and every observable $X\in\mathcal A^{(d^L)}$ supported in
+    $\Lambda$, the observable $\omega^{[L]}(X)$ is supported in
+    \begin{align}
+        \Lambda+([-1,1]\cap\mathbb Z).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:qca_propagates_within_blocked,
+        lem:qca_blocked_neighborhood_canonical_nearest_neighbor,
+        lem:qca_propagation_neighborhood_mono}
+    Choose a finite propagation neighborhood $\mathcal N$ and take
+    $L=1+\sup_{n\in\mathcal N}|n|$.  This $L$ is positive, including when
+    $\mathcal N$ is empty.  Blocking gives propagation within
+    $\mathcal C_L(\mathcal N)$; the canonical carry inclusion and propagation
+    monotonicity then give the nearest-neighbor bound.
+\end{proof}
+
+\begin{theorem}[A QCA becomes nearest-neighbor after blocking]
+    \label{thm:qca_exists_blocked_nearest_neighbor}
+    \lean{SpinChain.IsQCA.exists_blocked_nearest_neighbor}
+    \leanok
+    \uses{def:qca, def:qca_blocked_automorphism,
+        def:qca_propagates_within}
+    Let $d>0$ and let $\omega$ be a one-dimensional QCA on
+    $\mathcal A^{(d)}$.  There exists a positive integer $L$ such that
+    $\omega^{[L]}$ is a QCA on $\mathcal A^{(d^L)}$ and, for every finite
+    blocked region $\Lambda$ and every observable
+    $X\in\mathcal A^{(d^L)}$ supported in $\Lambda$, the observable
+    $\omega^{[L]}(X)$ is supported in
+    \begin{align}
+        \Lambda+([-1,1]\cap\mathbb Z).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked,
+        thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
+    Apply the preceding theorem to the finite propagation of $\omega$, using
+    the canonical positive block length.  At the same length, site blocking
+    preserves both finite propagation and translation covariance, hence the
+    QCA property.
+\end{proof}
+
 Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
 local action associated with an MPU by eventual finite-chain conjugation.  In
 lines~2300--2306, eventual constancy is used to obtain a norm-preserving
