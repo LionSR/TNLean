@@ -613,13 +613,13 @@ abstracted — record why, so it is not re-proposed).
   concrete source-tensor $u$ proof now instantiates this lemma without constructing a
   distributed matrix-entry expression.
 - **Performance:** the cached target build before the refactor reported 25 s.
-  Profiler counts fell from 16,129,355 heartbeats in the former concrete proof
-  to 10,252,678 in the abstract helper plus 3,646,777 at its concrete call site
-  (13,899,455 total, a 13.8% reduction).  Post-refactor local wall runs
-  reported 72--89 s while unrelated checkouts were rebuilding dependencies
-  and saturating the host, so they are not comparable; the heartbeat reduction
-  projects the uncontended target below 22 s, with the isolated PR check serving
-  as the authoritative verification of the 25 s limit.
+  Profiler-reported cumulative module-elaboration totals fell from 16,129,355
+  heartbeats before the refactor to 13,899,455 after it, a 13.8% reduction.
+  These are module-level cumulative measurements, not per-proof costs.
+  Post-refactor local wall runs reported 72--89 s while unrelated checkouts were
+  rebuilding dependencies and saturating the host, so they are not comparable;
+  the heartbeat reduction projects the uncontended target below 22 s, with the
+  isolated PR check serving as the authoritative verification of the 25 s limit.
 
 ### Block entropy from real characteristic roots
 - **Pattern:** derive a block entropy from a known real multiset of characteristic roots.
