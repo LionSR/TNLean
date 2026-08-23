@@ -205,12 +205,12 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   scalar relation to a normal tensor: no factorization has normalized rank-one
   neighboring traces. It does not supply the ambient simple-biCF
   reconstruction or the line-246 unit-weight convention, so the printed
-  source-context factorization remains open in #6775. A direct blocked-channel
-  construction through genuine sector coarsening or mixing remains the
-  alternative route in #6793, followed by the formalized projector-controlled
-  outer-sector combination in #6632. The two `\notready` nodes preserve the
-  open source-context factorization and the unfinished direct-channel
-  statement separately. The
+  source-context factorization remains open in #6775. Proposition C.7 then
+  constructs the representative channel pairs, and the projector-controlled
+  outer-sector combination is formalized in #6632. The direct sector-mixing
+  alternative formerly tracked in #6793 is not a separate source statement.
+  The two `\notready` nodes preserve the source-context factorization and its
+  blocked-channel consequence separately. The
   printed proof of `prop3to4` has separate proof-path drift because it invokes
   the ZCL lemma `lemmus` although its displayed statement assumes only
   condition-(iv) data; the completed Lean proof avoids that hidden hypothesis.

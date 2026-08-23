@@ -77,9 +77,11 @@ mathematical obstruction.
 - Scope: this is proof-path drift in the printed argument. The non-Cartesian
   construction below refutes only the implication from the inherited local
   analytic properties; it has no ambient simple-biCF witness. The source-context
-  factorization remains issue #6775, the alternative direct sector-mixing
-  channel problem remains issue #6793, and their projector-controlled outer
-  assembly is formalized in #6632.
+  factorization remains issue #6775. The source constructs the representative
+  channels from that factorization and then projects onto the outer BNT
+  subspaces; the projector-controlled assembly is formalized in #6632. The
+  direct sector-mixing alternative formerly tracked in #6793 is not a separate
+  source obligation.
 
 ### An absorbed normal representative need not have neighboring trace factors
 
@@ -108,8 +110,9 @@ mathematical obstruction.
 - Boundary: these low-level analytic hypotheses do not imply the
   factorization. The witness does not supply the ambient simple-biCF
   reconstruction or line-246 unit-weight convention, so the source-context
-  assertion remains open in issue #6775. Direct blocked channels, as in issue
-  #6793, give an alternative route to (ii)$\Rightarrow$(v).
+  assertion remains open in issue #6775. The explicit label-mixing channels of
+  the earlier active-spanning example do not give the general construction
+  used by the source.
 
 ### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
 
