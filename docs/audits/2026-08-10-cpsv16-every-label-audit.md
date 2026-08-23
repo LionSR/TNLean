@@ -153,7 +153,7 @@ the printed statement.
 | Lemma A.5 | none since the nonzero-coefficient convention; anchor on `thm:bounded_power_sum_multiset` | `thm:bounded_power_sum_multiset` |
 | Corollary A.6 | none since the nonzero-coefficient convention; anchor on `cor:sector_bnt_proportional_unitary_sector_match` | unitary refinements in Chapter 11 |
 | Proposition C.14 | `thm:cpsv_prop_c14_printed_status` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
-| Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Example 4.10 is complete for the corrected fixed-$p=1/4$ witness under #6301; Example 4.11 is classified under #6302; Example 4.12 has the literal normalization obstruction, normalized channel equations, strict four-site SSA defect, and full GSNNCH exclusion complete, with the line-246 unit-weight boundary recorded |
+| Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Example 4.10 is complete for the corrected fixed-$p=1/4$ witness under #6301; Example 4.11's printed SAL clause is refuted and its printed non-ZCL clause is verified under #6302; Example 4.12 has the literal normalization obstruction, normalized channel equations, strict four-site SSA defect, and full GSNNCH exclusion complete under #6038, with the line-246 unit-weight boundary recorded |
 | Appendix D `RFP-gauge` | `thm:cpsv_rfp_gauge_printed_status` | cube-phase obstruction plus active issue #5920 |
 | Appendix D Fibonacci periodic rank formula | `thm:cpsv_fibonacci_periodic_rank`; `thm:cpsv_fibonacci_operator_rank_not_geometric`; `thm:cpsv_fibonacci_not_strong_rfp` | complete periodic rank formula, non-geometricity, and $\lnot\,\mathrm{IsStrongRFP}$ conclusion |
 
