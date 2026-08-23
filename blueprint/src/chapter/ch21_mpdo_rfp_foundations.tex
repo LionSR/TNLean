@@ -1046,7 +1046,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nonzero_global_prfp_not_physical_trace_idempotence}
     \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
     \leanok
-    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_physical_trace_idempotence, thm:nonzero_global_prfp_not_source_zcl}
+    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_physical_trace_idempotence}
     There is an MPO tensor which is an MPDO, satisfies the positive-length
     global purification RFP predicate, and has nonzero physical-trace transfer,
     but its physical-trace transfer is not idempotent.
@@ -1054,6 +1054,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
+    \uses{thm:nonzero_global_prfp_not_source_zcl, thm:mpo_source_zcl_of_physical_trace_idempotent}
     Use the tensor from
     Theorem~\ref{thm:nonzero_global_prfp_not_source_zcl}.  If its nonzero
     physical-trace transfer were idempotent, then it would satisfy the
