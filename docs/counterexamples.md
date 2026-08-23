@@ -90,8 +90,9 @@ mathematical obstruction.
 - Main declaration:
   `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
 - Statement refuted: injectivity, SAL, literal physical-trace idempotence, and
-  being a nonzero scalar multiple of a normal tensor imply the existence of a
-  physical-sector factorization with normalized rank-one neighboring traces.
+  a representation $K=\mu A$ with $A$ normal and $0<|\mu|<1$ imply the
+  existence of a physical-sector factorization with normalized rank-one
+  neighboring traces.
 - Witness: the four diagonal physical slices are the outer products determined
   by
   \[
@@ -102,8 +103,9 @@ mathematical obstruction.
   \]
   Here $LR=\operatorname{diag}(1,0)$, while $RL$ has rank two. The four
   slices span $M_2(\mathbb C)$ and admit positive scalar neighboring
-  operators, which give injectivity and SAL. Perron normalization supplies the
-  required normal representative.
+  operators, which give injectivity and SAL. An exact positive test-matrix
+  estimate puts the Perron normalization coefficient strictly between zero
+  and one and supplies the required normal representative.
 - Universal obstruction: the scalar slice and two simple-spectrum slices
   force the left and right factors in every possible sector decomposition to
   be one-dimensional. The resulting neighboring trace matrix has a nonzero
