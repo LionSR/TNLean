@@ -18,13 +18,16 @@ matrix-unit reconstruction, leastness, and commutant characterizations used in t
 Schumacher--Werner/GNVW index construction.
 
 **Local fix (star-closed input):** The printed statement of GNVW Lemma 7 says only
-"subalgebra", but its $C^*$-generated support and commutant clauses require involution closure.
-The `StarSubalgebra` input records this necessary correction. Schumacher--Werner,
+"subalgebra". Its coefficient-generated support and leastness clauses remain valid for arbitrary
+algebra input, but its commutant characterization fails without involution closure. The
+`StarSubalgebra` input records the necessary correction for that clause and is used uniformly by
+this API. Schumacher--Werner,
 quant-ph/0405174, lines 1161--1171, instead derives adjoint closure of the support algebra
 conditionally from adjoint closure of its observable-algebra input. The GNVW QCA application
 supplies this hypothesis at arXiv:0910.3675v2, lines 1251--1265. The MPU application supplies it
 through the local star-automorphism at arXiv:1703.09188, lines 2300--2306, for the support-algebra
-input in lines 2313--2334.
+input in lines 2313--2334. The correction and its counterexample are documented in
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, GNVW Lemma 7 permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this file takes full complex matrix
@@ -96,9 +99,10 @@ This is the complex matrix-algebra specialization of GNVW Lemma `lem:spp`,
 arXiv:0910.3675v2, lines 1188--1191. The MPU application is arXiv:1703.09188, Appendix,
 lines 2320--2334.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, GNVW Lemma 7 permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this definition uses full complex
@@ -116,9 +120,10 @@ This is the symmetric construction in GNVW, arXiv:0910.3675v2, lines 1211--1219,
 Schumacher--Werner, quant-ph/0405174, lines 1137--1169. The MPU application is
 arXiv:1703.09188, Appendix, lines 2320--2334.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, the GNVW construction permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this definition uses full complex
@@ -190,9 +195,10 @@ This is the least-support assertion of GNVW Lemma `lem:spp`, arXiv:0910.3675v2,
 lines 1181--1191, specialized to the matrix coefficients of Schumacher--Werner,
 quant-ph/0405174, lines 1137--1169.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, GNVW leastness permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem assumes full complex
@@ -217,9 +223,10 @@ This is the symmetric least-support assertion in GNVW, arXiv:0910.3675v2,
 lines 1211--1219, specialized to Schumacher--Werner, quant-ph/0405174,
 lines 1137--1169.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, the GNVW construction permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem assumes full complex
@@ -243,9 +250,10 @@ For finite matrix factors, containment in $B \otimes M_n(\mathbb C)$ is exactly 
 left coefficients in $B$. This is GNVW Lemma `lem:spp`, arXiv:0910.3675v2,
 lines 1181--1191.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, GNVW Lemma 7 permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem assumes full complex
@@ -401,9 +409,10 @@ This is the symmetric one-sided containment of GNVW, arXiv:0910.3675v2, lines 12
 and uses the same Kronecker span whose left-oriented specialization is
 `Matrix.tensorSubmodule`.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, the GNVW construction permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem assumes full complex
@@ -431,9 +440,10 @@ quant-ph/0405174, lines 1161--1168, and GNVW, arXiv:0910.3675v2, lines 1211--121
 paper applies these support algebras to $\mathcal R_{2x}$ at arXiv:1703.09188, Appendix,
 lines 2313--2334.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, GNVW equation (22) permits
 arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem assumes full complex
@@ -568,9 +578,10 @@ This is the commutant characterization in GNVW Lemma `lem:spp`, arXiv:0910.3675v
 lines 1192--1208. The proof is the source's coefficientwise commutator expansion; compare
 Schumacher--Werner, quant-ph/0405174, lines 1174--1194.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, the GNVW commutant
 characterization permits arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem
@@ -595,9 +606,10 @@ This is the symmetric commutant characterization of GNVW Lemma `lem:spp`,
 arXiv:0910.3675v2, lines 1192--1208; compare Schumacher--Werner,
 quant-ph/0405174, lines 1174--1194.
 
-**Local fix (star-closed input):** `StarSubalgebra` records the necessary involution-closure
-hypothesis omitted from the printed GNVW lemma; the QCA/MPU observable-algebra application
-supplies it.
+**Local fix (star-closed input):** Coefficient generation and leastness remain valid without
+involution closure, but the printed GNVW commutant clause does not. This API uniformly uses the
+corrected `StarSubalgebra` input, which the QCA/MPU application supplies. See
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Scope restriction (full matrix factors):** After that correction, the GNVW commutant
 characterization permits arbitrary finite-dimensional $C^*$-algebra factors, whereas this theorem

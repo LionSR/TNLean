@@ -11,6 +11,17 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For GNVW support algebras, the source correction and the remaining scope
+restriction are recorded separately.
+
+- `gnvw12_support_algebra_star_closure.tex` records the necessary
+  star-closed-input correction to the printed support-algebra lemma, the
+  non-star-closed counterexample, and why the QCA and MPU applications supply
+  the corrected hypothesis. This local correction is resolved.
+- `gnvw12_support_algebra_full_matrix_scope.tex` records the remaining open
+  restriction from arbitrary finite-dimensional $C^*$-algebra factors to
+  full complex matrix factors.
+
 For the present non-periodic MPS Fundamental Theorem work, the repeated-copy and
 equal-modulus comparison has these current reference points.
 
