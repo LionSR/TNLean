@@ -1253,6 +1253,27 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### positive-definite trace pairing with a nonzero positive matrix — candidate
+- **Pattern:** prove
+  `0 < Matrix.trace (B * A)` from `A.PosDef`, `B.PosSemidef`, and `B ≠ 0`
+  by combining `Matrix.PosSemidef.trace_mul_nonneg` with faithfulness of the
+  positive-definite weighted trace.
+- **Seen:** 3 occurrences across 2 TNLean files: twice in
+  `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean` and once in
+  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean` (2026-08-23). QICLean also
+  contains the same proof as the private theorem
+  `trace_mul_pos_of_posDef_posSemidef_ne_zero` in
+  `QICLean/Channel/Irreducible/Growth/OrthogonalTrace.lean`.
+- **Abstraction (proposed):** expose the existing QICLean theorem as public API
+  and replace all three TNLean call sites with it. The pinned QICLean release
+  keeps that theorem private, so this TNLean PR cannot perform the promotion
+  without changing the dependency checkout or pin.
+- **Notes:** Mathlib provides positivity of the trace of a positive-definite
+  matrix and QICLean provides the weighted-trace faithfulness theorem, but
+  neither exposes this exact strict pairing statement through TNLean's pinned
+  imports. Keep the local proofs until QICLean publishes the general lemma;
+  do not add a TNLean wrapper around companion-library matrix API.
+
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 

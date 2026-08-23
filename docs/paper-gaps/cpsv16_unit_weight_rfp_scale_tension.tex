@@ -343,8 +343,11 @@ It does not itself decide the claimed all-sector factorization. The
 non-Cartesian witness in
 \path{TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean} refutes the
 implication from injectivity, SAL, literal ZCL, and scalar relation to a normal
-tensor. Its singleton coefficient has modulus $\sqrt r\approx0.533<1$, so the
-unit clause of the line-246 convention has no witness. Rescaling to unit weight
+tensor. Its singleton coefficient satisfies the exact strict bound
+$0<|\mu|=\sqrt r<1$, formalized in
+\leanid{MPOTensor.NonCartesianActiveSectorCandidate.%
+transferMap_posDef_eigenvalue_lt_one}. Thus the unit clause of the line-246
+convention has no witness. Rescaling to unit weight
 destroys literal ZCL. Thus \ghissue{6775} remains open at the ambient
 source-context boundary. This is also the remaining input to the source's
 channel construction: Proposition~\texttt{3to5} constructs the representative
