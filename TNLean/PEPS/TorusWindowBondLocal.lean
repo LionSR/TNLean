@@ -7,7 +7,7 @@ import TNLean.PEPS.TorusWindowMult
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
 
 /-!
-# The window witness from two-directional bond locality on the left end window
+# A conditional window witness from bond locality on the left end window
 
 The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 (arXiv:1804.04964, the corollary at lines 2297--2318 of `Papers/1804.04964/paper_normal.tex`) feeds
@@ -17,8 +17,9 @@ identity on the reference edge `e`.  The reduction
 produces the witness from the two cross-tensor coefficient transfers and the forward-transfer
 multiplicativity.  This file restates that reduction with its two coefficient-transfer inputs
 replaced by the single block-frame predicate they reduce to --- *bond locality of the transfer
-kernel* on the left end window --- so the unconditional window witness assembles from exactly the
-two genuinely-new staircase residuals: two-directional bond locality and forward multiplicativity.
+kernel* on the left end window.  This is a conditional packaging theorem.  Bond locality and
+forward multiplicativity are not hypotheses of the source corollary, and this file does not assert
+that the paper's staircase argument factors through them.
 
 ## The packaging
 
@@ -34,10 +35,10 @@ through their legs on `e`.  Feeding the two directions of bond locality through
 the forward multiplicativity `hmul` over the chosen forward transfer completes the input the witness
 reduction consumes.
 
-This isolates the residual of the window route to exactly the two block-frame inputs.  Everything
-else --- the four window/host injectivities, the additivity, homogeneity, identity preservation, the
-two-sided inverse, the Skolem--Noether read-off, and the witness packaging --- is the unconditional
-region-level algebra discharged here from the torus arc-window injectivity hypotheses.
+Under these additional inputs, everything else --- the four window/host injectivities, the
+additivity, homogeneity, identity preservation, the two-sided inverse, the Skolem--Noether read-off,
+and the witness packaging --- is the unconditional region-level algebra discharged here from the
+torus arc-window injectivity hypotheses.
 
 ## The port verdict
 
@@ -50,11 +51,10 @@ touches the reference edge `e` with one endpoint, so the `e`-leg is a single
 `Fin (bondDim e)` index --- a vector, not a square matrix --- and window injectivity
 `RegionBlockedTensorInjective` is linear independence across the window's whole multi-bond
 perimeter, not a single-bond matrix-algebra span.  No per-window square-matrix family exists, so the
-matrix-intertwining route does not transfer per window; the forward multiplicativity must come from
-the cross-tensor physical-realization homomorphism, whose region read-off currently needs the
-single-vertex spanning `span_stateOpenCoeff_eq_top` at `e`'s in-region endpoint (absent for a normal
-tensor).  This is the residual `hbondAB`/`hbondBA`/`hmul` packaged here, recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
+matrix-intertwining route does not transfer per window.  The present conditional theorem obtains
+the transfer from bond locality and takes multiplicativity as an input.  The source-faithful route
+instead compares the overlapping physical operations and recovers the fixed-edge virtual operation
+as in Lemma 5; see `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
 
 ## References
 
@@ -214,14 +214,13 @@ theorem windowCoeffTransferBA_of_bondLocal {A B : Tensor (torusGraph width heigh
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
       ha0 haw hbh⟩ hbondBA
 
-/-! ### The unconditional window witness from two-directional bond locality
+/-! ### The conditional window witness from two-directional bond locality
 
 Feeding the two coefficient transfers built from bond locality, together with the forward
 multiplicativity over the chosen forward transfer, to the witness reduction
-`exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer`.  The witness assembles from exactly the
-two genuinely-new staircase residuals --- two-directional bond locality `hbondAB`/`hbondBA` and
-forward multiplicativity `hmul` --- with every region/host injectivity discharged from the torus
-arc-window hypotheses. -/
+`exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer`.  With the additional bond-locality and
+multiplicativity inputs, every region/host injectivity is discharged from the torus arc-window
+hypotheses. -/
 
 /-- **The window-region witness from two-directional bond locality on the left end window.**
 
@@ -235,13 +234,11 @@ block-frame predicate the cross-tensor coefficient transfer reduces to
 (`bondLocal_iff_coeffTransfer`, unconditional on the window/host injectivity available at the
 minimal size).
 
-This is the §5.2 packaging with the two coefficient-transfer inputs of
+This is a conditional §5.2 packaging with the two coefficient-transfer inputs of
 `exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer` replaced by the single block-frame
-predicate `IsBondLocalTransferKernel` they reduce to.  The residual is exactly
-`hbondAB`/`hbondBA`/`hmul`: the forward multiplicativity is the cross-tensor physical-realization
-homomorphism the one-dimensional matrix-intertwining port cannot supply per window (the `e`-leg is a
-vector, not a square matrix), and bond locality is the single-vertex-spanning content
-`span_stateOpenCoeff_eq_top` at `e`'s in-region endpoint, absent for a normal tensor.
+predicate `IsBondLocalTransferKernel` they reduce to.  These inputs are stronger than the source
+corollary and are not marked as its remaining proof obligations.  The source-faithful residual is
+the Lemma 5 converse for the overlapping physical operations at lines 2368--2444.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
 `Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;

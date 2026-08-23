@@ -699,12 +699,12 @@ unions, all of which decompose at $(2L+1)\times(2K+1)$.
 
 \section{Formalization plan}
 
-The geometry and state-equality layers of the derivation above are complete;
-the cross-bond-pushing multiplicativity is the irreducible obstruction
-identified in the consolidated account, and the layer list below should be
-read as the plan for everything \emph{except} that one input. The build is a
-campaign comparable to the landed three-block witness production, in
-independently landable layers:
+The geometry, state-equality, and forward fixed-edge-operation layers of the
+derivation above are complete.  The remaining source step is the converse at
+lines 2368--2444: from physical operations on the overlapping windows that
+produce one state, recover the virtual operation $X$ on the highlighted edge
+and prove the Lemma~5 maps from $O_1$ and $O_3^{\mathsf T}$ are algebra
+homomorphisms.  The layer list below records the campaign around that step:
 
 \begin{enumerate}
   \item \emph{Window geometry} (no tensors): the one-orientation
@@ -722,8 +722,11 @@ independently landable layers:
   \item \emph{Chaining and corner stripping}: extension of an
     open-boundary equality by contraction, and the completion-inversion
     step removing the corner block.
-  \item \emph{The single-crossing extraction} on the staircase pair,
-    reusing the existing single-boundary-edge comparison engine.
+  \item \emph{The Lemma~5 converse on the staircase}: compare the first and
+    last physical operations after adjoining the genuine corner tensors,
+    invert the resulting regions, recover the unique virtual operation $X$,
+    and prove the $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$
+    homomorphisms by composition.
   \item \emph{The per-edge witness}: the insertion correspondence and
     Skolem--Noether at one reference edge per orientation, producing
     the same coefficient-identity witness shape the landed translation
@@ -1486,49 +1489,22 @@ absence of a normality hypothesis.
 The verdict in this subsection concerns only the discarded construction just
 described.  It is not the current verdict on the paper's fixed-edge argument.
 
-The verdict, sharpened by the
-hypothesis audit, is that the obstruction is not removable by adding a
-hypothesis: \emph{the source genuinely needs region injectivity only,
-the campaign captured that hypothesis faithfully, and the obstruction is real
-and intrinsic to the source's own block-level pushing.} Normality is not the
-dropped hypothesis; there is nothing to add. The corollary's hypotheses are
-faithfully captured and admit no counterexample, but the source's sketch is
-\emph{not} a rigorous proof: as Part~1 records, it asserts the cross-bond
-pushing by a Lemma~5 analogy that fails dimensionally. That pushing is a
-\emph{block-level} construction, the two-dimensional analogue of the
-one-dimensional window inversion, and it is not a single-window span nor a
-single-vertex span. At the corollary's minimal size the natural
-coarse frame carrying it (red block the left end window, single-crossing
-partner the right end window) has third block $\mathrm{univ}\setminus S$, which
-is not injective; this is the documented wall, and it is a wall of the
-\emph{construction}, not of the hypotheses.
+The discarded route tried to move an operation between two different
+boundary bonds of one intermediate window.  A direct one-dimensional
+matrix-span argument does not type in that geometry, while the natural
+three-block replacement has the non-injective host described below.  These
+facts rule out that auxiliary construction under the corollary hypotheses;
+they do not identify a missing hypothesis of the paper or obstruct its
+fixed-edge comparison.
 
-The route to the corollary is therefore the one this note already prescribes,
-and it does \emph{not} involve adding a normality or single-vertex hypothesis.
-It is the deformed-window-tensor family on all $L+K$ windows sharing one common
-state, built so that each intermediate window $W_j$ carries the simultaneous
-realization of the operation on its two incident boundary bonds $g_{j-1}$ and
-$g_j$ --- the two-dimensional bond-operator extraction, the matrix-tensor
-analogue of \leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}. Its
-single missing ingredient is the window-inversion that pushes one operation
-across two distinct boundary bonds of one window. That ingredient is supplied
-not by single-vertex injectivity and not by window injectivity alone, but by a
-coarse blocking frame around \emph{each intermediate bond crossing} whose three
-regions are injective at the minimal size and whose single red-to-blue crossing
-is the relevant bond --- the same coarse-three-site mechanism
-(\leanid{coeffTransferMap\_mul\_of\_coherentFrames}) the back half already uses,
-applied per intermediate bond rather than at the end-pair crossing. The
-research content that remains is whether such a per-bond coarse frame exists at
-the minimal size for the intermediate bonds (where the partner block is a
-\emph{neighbouring} window, not the diagonally opposite one), or whether those
-crossings inherit the same $\mathrm{univ}\setminus S$-type non-injectivity. The
-per-step transport \leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow\_%
-bondTransport\_extend\_eq} (\path{TNLean/PEPS/TorusWindowBondTransport.lean})
-and the now-uniform interior-bond rescaling
-(\leanid{TNLean.PEPS.regionInteriorBondProd\_staircaseWindow\_eq}) are the
-landed foundation; the per-bond coarse frame for the simultaneous two-bond
-realization is the unbuilt block-level construction. No hypothesis change to
-the capstone is warranted by this audit.
+The source keeps the highlighted edge $e$ fixed.  Every staircase window
+contains at least one endpoint of $e$, and the common-state family constructed
+above realizes the same $X$ on that edge throughout.  Thus no different-bond
+push or per-intermediate-bond coarse frame belongs to the remaining plan.  The
+remaining task is the converse comparison of the physical operations, with
+the corner adjoining and inversion at lines 2415--2444 and the composition
+argument of Lemma~5.  No hypothesis change to the capstone is warranted by
+this audit.
 
 \subsection{Retired audit: per-bond coarse frames at the minimal size}
 
