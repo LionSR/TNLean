@@ -11,12 +11,12 @@ import Mathlib.Analysis.Matrix.Hermitian
 
 This file closes the missing direction
 
-`IsIrreducibleTensor A → Matrix.IsIrreducibleAction A`.
+`Kraus.IsIrreducibleFamily A → Matrix.IsIrreducibleAction A`.
 
 The key idea is classical: if `W ≤ ℂ^D` is a nontrivial invariant subspace, then the orthogonal
 projection onto `W` (in the finite-dimensional Hilbert space `EuclideanSpace ℂ (Fin D)`) is a
 nontrivial Hermitian idempotent matrix `P` satisfying `(1 - P) * A i * P = 0` for all `i`.
-This produces `HasInvariantProj A`, contradicting `IsIrreducibleTensor A`.
+This produces `Kraus.HasInvariantProj A`, contradicting `Kraus.IsIrreducibleFamily A`.
 -/
 
 open scoped Matrix BigOperators
@@ -27,13 +27,13 @@ variable {d D : ℕ}
 
 noncomputable section
 
-/-- `IsIrreducibleTensor` implies `Matrix.IsIrreducibleAction`.
+/-- `Kraus.IsIrreducibleFamily` implies `Matrix.IsIrreducibleAction`.
 
 If a nontrivial `A`-invariant submodule `W` existed, its orthogonal projection would give a
-nontrivial invariant orthogonal projection matrix, contradicting `IsIrreducibleTensor`. -/
+nontrivial invariant orthogonal projection matrix, contradicting `Kraus.IsIrreducibleFamily`. -/
 lemma isIrreducibleAction_of_isIrreducibleTensor
     {d D : ℕ} (A : MPSTensor d D)
-    (hIrrT : IsIrreducibleTensor (d := d) (D := D) A) :
+    (hIrrT : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
     Matrix.IsIrreducibleAction (d := d) (D := D) A := by
   classical
   intro W hW
@@ -147,8 +147,8 @@ lemma isIrreducibleAction_of_isIrreducibleTensor
       simpa [P, p'] using this
     -- Now `toEuclideanLin (1 - P)` kills vectors in `W'`.
     simp [Matrix.toEuclideanLin, hfix]
-  -- Build `HasInvariantProj A`, contradicting `IsIrreducibleTensor A`.
-  have : HasInvariantProj (d := d) (D := D) A :=
+  -- Build `Kraus.HasInvariantProj A`, contradicting `Kraus.IsIrreducibleFamily A`.
+  have : Kraus.HasInvariantProj (d := d) (D := D) A :=
     ⟨P, horth, hP_ne0, hP_ne1, hPinv⟩
   exact hIrrT this
 

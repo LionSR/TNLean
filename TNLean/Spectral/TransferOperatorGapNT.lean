@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.MixedMap.Gap
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import QICLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecayRect
 import QICLean.Spectral.TransferOperatorGapNormalized
@@ -17,7 +17,7 @@ finite-family forms are proved in `TNLean.Kraus.MixedMap.Gap`; only transfer-map
 notation remains here.
 -/
 
-open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
+open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Kraus
 
 namespace MPSTensor
 
@@ -29,14 +29,26 @@ theorem gaugePhaseEquiv_of_krausGaugePhaseEquiv
   rcases eq_or_ne D 0 with rfl | hD
   · exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact a.elim0⟩
   let _ : NeZero D := ⟨hD⟩
-  rcases h with ⟨X, Xinv, μ, hmul, _, hμ, hInter⟩
-  have hX_u : IsUnit X.det := Matrix.isUnit_det_of_right_inverse hmul
-  exact MPSTensor.gaugePhaseEquiv_of_gauged_intertwining
-    (A := A) (B := B) (SA := 1) (SB := 1) (X' := X) (μ := μ)
-    (by simp) (by simp) hX_u hμ (by simpa [gaugeTensor] using hInter)
+  rcases h with ⟨X, Xinv, μ, hXXinv, hXinvX, hμ, hInter⟩
+  have hμ_ne0 : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
+  let Y : GL (Fin D) ℂ := ⟨Xinv, X, hXinvX, hXXinv⟩
+  refine ⟨Y, μ⁻¹, inv_ne_zero hμ_ne0, fun i => ?_⟩
+  have hstep : Xinv * A i * X = μ • B i := by
+    calc
+      Xinv * A i * X = Xinv * (A i * X) := Matrix.mul_assoc _ _ _
+      _ = Xinv * (μ • X * B i) := by rw [hInter i]
+      _ = Xinv * (μ • (X * B i)) := by rw [smul_mul_assoc]
+      _ = μ • (Xinv * (X * B i)) := by rw [mul_smul_comm]
+      _ = μ • (Xinv * X * B i) := by rw [Matrix.mul_assoc]
+      _ = μ • (1 * B i) := by rw [hXinvX]
+      _ = μ • B i := by rw [Matrix.one_mul]
+  show B i = μ⁻¹ • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i *
+    ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+  show B i = μ⁻¹ • (Xinv * A i * X)
+  rw [hstep, smul_smul, inv_mul_cancel₀ hμ_ne0, one_smul]
 
 private theorem irreducibleMap_of_irreducibleTensor
-    (A : MPSTensor d D) (hA : IsIrreducibleTensor A) :
+    (A : MPSTensor d D) (hA : Kraus.IsIrreducibleFamily A) :
     IsIrreducibleMap (Kraus.mapLM A) :=
   Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA
 
@@ -44,31 +56,31 @@ private theorem irreducibleMap_of_irreducibleTensor
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hsr : mixedTransferSpectralRadius A B ≥ 1) :
+    (hsr : Kraus.mixedTransferSpectralRadius A B ≥ 1) :
     GaugePhaseEquiv A B :=
   gaugePhaseEquiv_of_krausGaugePhaseEquiv <|
     Kraus.modulus_one_mixedMapSpectralRadius_implies_gauge A B
       (irreducibleMap_of_irreducibleTensor A hA_irr)
       (irreducibleMap_of_irreducibleTensor B hB_irr)
       hA_left hB_left (by
-        simpa [mixedTransferSpectralRadius, mixedTransferMap,
+        simpa [Kraus.mixedTransferSpectralRadius, Kraus.mixedTransferMap,
           Kraus.mixedMapSpectralRadius] using hsr)
 
 /-- Strict mixed-transfer-operator gap for distinct irreducible left-canonical blocks of the
 same bond dimension. -/
 theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
     (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hAB : ¬ GaugePhaseEquiv A B) :
-    mixedTransferSpectralRadius A B < 1 := by
+    Kraus.mixedTransferSpectralRadius A B < 1 := by
   have hK : ¬ Kraus.GaugePhaseEquiv A B :=
     fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
-  simpa [mixedTransferSpectralRadius, mixedTransferMap,
+  simpa [Kraus.mixedTransferSpectralRadius, Kraus.mixedTransferMap,
     Kraus.mixedMapSpectralRadius] using
     Kraus.mixedMapSpectralRadius_lt_one_of_irreducible_TP A B
       (irreducibleMap_of_irreducibleTensor A hA_irr)
@@ -78,16 +90,16 @@ theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
 /-- Mixed transfer iterates decay for distinct irreducible left-canonical blocks. -/
 theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
     (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hAB : ¬ GaugePhaseEquiv A B)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X)
+    Filter.Tendsto (fun n => ((Kraus.mixedTransferMap A B) ^ n) X)
       Filter.atTop (nhds 0) := by
   have hK : ¬ Kraus.GaugePhaseEquiv A B :=
     fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
-  simpa [mixedTransferMap] using
+  simpa [Kraus.mixedTransferMap] using
     Kraus.mixedMapLM_pow_tendsto_zero_of_irreducible_TP A B
       (irreducibleMap_of_irreducibleTensor A hA_irr)
       (irreducibleMap_of_irreducibleTensor B hB_irr)
@@ -96,13 +108,13 @@ theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
 /-- Overlap decay for distinct irreducible left-canonical blocks of the same bond dimension. -/
 theorem mpvOverlap_tendsto_zero_of_irreducible_TP [NeZero D]
     (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hAB : ¬ GaugePhaseEquiv A B) :
     Filter.Tendsto (fun N => mpvOverlap A B N) Filter.atTop (nhds 0) :=
   mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one (A := A) (B := B) <|
-    by simpa only [mixedTransferMap₂_same_dim, mixedTransferSpectralRadius] using
+    by simpa only [Kraus.mixedTransferMap₂_same_dim, Kraus.mixedTransferSpectralRadius] using
       spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
         A B hA_irr hB_irr hA_left hB_left hAB
 
@@ -111,12 +123,12 @@ bond sizes. -/
 theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
     [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hD : D₁ ≠ D₂) :
-    mixedTransferSpectralRadius₂ A B < 1 := by
-  simpa [mixedTransferSpectralRadius₂, mixedTransferMap₂,
+    Kraus.mixedTransferSpectralRadius₂ A B < 1 := by
+  simpa [Kraus.mixedTransferSpectralRadius₂, Kraus.mixedTransferMap₂,
     Kraus.mixedMapSpectralRadius] using
     Kraus.mixedMapSpectralRadius_lt_one_of_dim_ne_of_irreducible_TP A B
       (irreducibleMap_of_irreducibleTensor A hA_irr)
@@ -127,13 +139,13 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
 theorem mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
     [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hD : D₁ ≠ D₂) :
     Filter.Tendsto (fun N => mpvOverlap A B N) Filter.atTop (nhds 0) := by
   apply mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one (A := A) (B := B)
-  simpa only [mixedTransferSpectralRadius₂] using
+  simpa only [Kraus.mixedTransferSpectralRadius₂] using
     mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       A B hA_irr hB_irr hA_left hB_left hD
 

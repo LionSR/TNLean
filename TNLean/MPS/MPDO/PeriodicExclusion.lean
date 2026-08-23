@@ -142,10 +142,10 @@ def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
     Vᴴ * V = 1 → (∀ v : Fin (D * D), verticalTensor M v * V = V * B v) →
-    MPSTensor.IsIrreducibleTensor B → ρ.PosDef → 0 < r →
-    MPSTensor.transferMap (d := D * D) (D := n) B ρ = (r : ℂ) • ρ →
+    Kraus.IsIrreducibleFamily B → ρ.PosDef → 0 < r →
+    Kraus.transferMap (d := D * D) (D := n) B ρ = (r : ℂ) • ρ →
     ∀ μ : ℂ,
-      Module.End.HasEigenvalue (MPSTensor.transferMap (d := D * D) (D := n) B) μ →
+      Module.End.HasEigenvalue (Kraus.transferMap (d := D * D) (D := n) B) μ →
       ‖μ‖ = r → μ ≠ (r : ℂ) →
       ∃ p : ℕ, Nonempty (PeriodicSectorProjector M p)
 

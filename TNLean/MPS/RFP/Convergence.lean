@@ -45,7 +45,7 @@ oscillate under repeated squaring. That obstruction is formalized in
   Source: `Papers/1606.00608/`
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder Kraus
 
 namespace MPSTensor
 
@@ -76,14 +76,14 @@ theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
       E_infty ∘ₗ E_infty = E_infty ∧
       ∀ ρ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
         Filter.Tendsto
-          (fun n : ℕ => ((transferMap (A k) ^ (2 ^ n : ℕ) : _) ρ))
+          (fun n : ℕ => ((Kraus.transferMap (A k) ^ (2 ^ n : ℕ) : _) ρ))
           Filter.atTop
           (nhds (E_infty ρ)) := by
   have hInj := hCF.block_injective k
   have hNorm := hCF.leftCanonical k
   let : NeZero (dim k) := ⟨Nat.ne_of_gt (hCF.dim_pos k)⟩
   -- Obtain the unique positive-definite fixed point (quantum Perron-Frobenius).
-  obtain ⟨ρ₀, hufp⟩ := injective_transfer_unique_fixed_point' (A k) hInj hNorm
+  obtain ⟨ρ₀, hufp⟩ := Kraus.injective_transfer_unique_fixed_point' (A k) hInj hNorm
   have htr : Matrix.trace ρ₀ ≠ 0 := ne_of_gt hufp.pos_def.trace_pos
   -- The witness is the rank-one fixed-point projection P(X) = (tr X / tr ρ₀) • ρ₀.
   refine ⟨fixedPointProj ρ₀ htr,
@@ -92,10 +92,10 @@ theorem rg_flow_converges_of_cf {r : ℕ} {dim : Fin r → ℕ}
   obtain ⟨C, δ, hC, hδ, hδ1, hbound⟩ :=
     exponential_convergence_of_primitive (A k) hNorm hInj ρ₀ hufp.pos_def hufp.fixed
   -- Step 1: E^n X → P X for all n (not just 2^n).
-  have h_allN : Filter.Tendsto (fun n => (transferMap (A k) ^ n) X)
+  have h_allN : Filter.Tendsto (fun n => (Kraus.transferMap (A k) ^ n) X)
       Filter.atTop (nhds (fixedPointProj ρ₀ htr X)) := by
     -- Norm bound: ‖(E^n) X - P X‖ ≤ C · (1-δ)^n · ‖X‖.
-    have h_norm_bound : ∀ n, ‖(transferMap (A k) ^ n) X - fixedPointProj ρ₀ htr X‖ ≤
+    have h_norm_bound : ∀ n, ‖(Kraus.transferMap (A k) ^ n) X - fixedPointProj ρ₀ htr X‖ ≤
         C * (1 - δ) ^ n * ‖X‖ := fun n => by
       simpa [Module.End.pow_apply] using hbound n X
     -- The bounding sequence C · (1-δ)^n · ‖X‖ → 0.

@@ -126,7 +126,7 @@ theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρtrace : Matrix.trace ρ = 1)
     (J : ℕ) (hJ : 0 < J)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     let ρ' : Fin (D * D) → ℂ := fun i ↦ ρ.vec (finProdFinEquiv.symm i)
     let Φ' : Fin (D * D) → ℂ := fun i ↦
@@ -200,11 +200,11 @@ theorem IsMPU.exists_reduced_cfii_forced_block_simple_contractions
     (hfull : cfii.toCPSVCanonicalFormData.HasFullActiveSupport) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ.PosDef ∧ Matrix.trace ρ = 1 ∧
-      MPSTensor.transferMap U.normalizedFlattening ρ = ρ ∧
+      Kraus.transferMap U.normalizedFlattening ρ = ρ ∧
       Matrix.vecMul (1 : Matrix (Fin D) (Fin D) ℂ).vec
-          (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) =
+          (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
         (1 : Matrix (Fin D) (Fin D) ℂ).vec ∧
-      transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ (D * D - 1) =
+      transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ (D * D - 1) =
         Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec ∧
       let J := D * D - 1
       let ρ' : Fin (D * D) → ℂ := fun i ↦ ρ.vec (finProdFinEquiv.symm i)

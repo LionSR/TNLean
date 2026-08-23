@@ -26,8 +26,8 @@ variable {d D : ℕ}
 /-- Normality is unchanged after adding a redundant one-step generator. -/
 theorem isNormal_oneStepAugment_of_mem_wordSpan_one (A : MPSTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Kraus.wordSpan A 1)
-    (hN : IsNormal A) :
-    IsNormal (Kraus.oneStepAugment A X) := by
+    (hN : Kraus.IsNormal A) :
+    Kraus.IsNormal (Kraus.oneStepAugment A X) := by
   obtain ⟨N, hNpos, hNtop⟩ := (hasEventuallyFullKrausRank_iff_isNormal A).2 hN
   exact (hasEventuallyFullKrausRank_iff_isNormal (Kraus.oneStepAugment A X)).1
     ⟨N, hNpos, by simpa [Kraus.wordSpan_oneStepAugment_eq A hX N] using hNtop⟩
@@ -49,7 +49,7 @@ theorem wordSpan_eq_top_of_ge_of_isUnit (A : MPSTensor d D)
 
 private theorem hasEventuallyFullWordSpan_of_isNormal_of_isUnit
     (A : MPSTensor d D) (i₀ : Fin d) (hU : IsUnit (A i₀))
-    (hN : IsNormal A) : Kraus.HasEventuallyFullWordSpan A := by
+    (hN : Kraus.IsNormal A) : Kraus.HasEventuallyFullWordSpan A := by
   obtain ⟨N, _hNpos, hNtop⟩ := (hasEventuallyFullKrausRank_iff_isNormal A).2 hN
   exact Filter.eventually_atTop.mpr
     ⟨N, fun m hm => Kraus.wordSpan_eq_top_of_ge_of_isUnit A i₀ hU hNtop hm⟩
@@ -59,7 +59,7 @@ word span at level `D² - krausRank A + 1` is full.
 
 Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
-    (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : IsNormal A) :
+    (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : Kraus.IsNormal A) :
     Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
   unfold krausRank Kraus.wordSpan
   exact Kraus.wordSpan_eq_top_of_hasEventuallyFullWordSpan_of_isUnit A i₀ hU
@@ -69,7 +69,7 @@ theorem wordSpan_eq_top_of_isNormal_of_isUnit (A : MPSTensor d D)
 
 Paper: arXiv:0909.5347, Theorem 1 case (2); Wolf, Theorem 6.9. -/
 theorem iIndex_le_of_isNormal_of_isUnit (A : MPSTensor d D)
-    (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : IsNormal A) :
+    (i₀ : Fin d) (hU : IsUnit (A i₀)) (hN : Kraus.IsNormal A) :
     iIndex A ≤ D ^ 2 - krausRank A + 1 := by
   rw [iIndex]
   exact Nat.sInf_le ⟨by omega,

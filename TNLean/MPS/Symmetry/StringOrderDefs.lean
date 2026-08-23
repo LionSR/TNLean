@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import QICLean.Channel.KrausFreedom
 import QICLean.Channel.KrausRepresentation
 import TNLean.Spectral.TransferOperatorGap
@@ -31,7 +31,7 @@ The main equivalence theorems live in `TNLean.MPS.Symmetry.StringOrder`.
 * Wolf, *Quantum Channels & Operations*, Chapter 2
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
 
 attribute [local instance]
   ContinuousLinearMap.toNormedAddCommGroup
@@ -78,8 +78,8 @@ lemma twistedTransferMap_apply (A : MPSTensor d D)
 map with `u = 1`. -/
 lemma twistedTransferMap_one (A : MPSTensor d D)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    twistedTransferMap A 1 X = transferMap A X := by
-  simp only [twistedTransferMap_apply, transferMap_apply,
+    twistedTransferMap A 1 X = Kraus.transferMap A X := by
+  simp only [twistedTransferMap_apply, Kraus.transferMap_apply,
     Matrix.one_apply]
   congr 1; ext n
   simp [Finset.sum_ite_eq', Finset.mem_univ]
@@ -95,9 +95,9 @@ unitary-mixed companion family. In symbols, `ℰ_u = F_{A,B}` with
 `B := twistedMixedCompanion A u`. -/
 lemma twistedTransferMap_eq_mixedTransfer (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) :
-    twistedTransferMap A u = mixedTransferMap A (twistedMixedCompanion A u) := by
+    twistedTransferMap A u = Kraus.mixedTransferMap A (twistedMixedCompanion A u) := by
   ext X i j
-  simp only [twistedTransferMap_apply, mixedTransferMap_apply, twistedMixedCompanion,
+  simp only [twistedTransferMap_apply, Kraus.mixedTransferMap_apply, twistedMixedCompanion,
     Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, Matrix.mul_sum, Matrix.mul_smul,
     starRingEnd_apply, star_star, Matrix.mul_assoc]
 
@@ -107,8 +107,8 @@ lemma transferMap_twistedMixedCompanion_eq (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap (twistedMixedCompanion A u) X = transferMap A X := by
-  simpa only [transferMap_apply] using
+    Kraus.transferMap (twistedMixedCompanion A u) X = Kraus.transferMap A X := by
+  simpa only [Kraus.transferMap_apply] using
     kraus_same_map_of_unitary_combination (twistedMixedCompanion A u) A uᴴ
       (by simpa only [Matrix.conjTranspose_conjTranspose] using hu)
       (fun j => by
@@ -364,8 +364,8 @@ $$\mathcal{E}(V X V^\dagger) = V \, \mathcal{E}(X) \, V^\dagger$$
 The transfer map commutes with virtual conjugation by `V`. -/
 def CondC2 : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ,
-    transferMap A (V * X * Vᴴ) =
-      V * transferMap A X * Vᴴ
+    Kraus.transferMap A (V * X * Vᴴ) =
+      V * Kraus.transferMap A X * Vᴴ
 
 /-- **Condition C3** (doubled transfer-matrix commutation):
 The doubled transfer matrix `E = ∑_j A_j ⊗ Ā_j` commutes with
@@ -431,7 +431,7 @@ theorem condC1_imp_condC2
   have hc : ∀ Z : Matrix (Fin D) (Fin D) ℂ, Vᴴ * (V * Z) = Z :=
     fun Z => by rw [← Matrix.mul_assoc, hVc, Matrix.one_mul]
   intro X
-  simp only [transferMap_apply]
+  simp only [Kraus.transferMap_apply]
   -- Show LHS = RHS via: RHS → conjugated Kraus → C1 → unitary mixing → LHS
   symm
   rw [Finset.mul_sum, Finset.sum_mul]
@@ -459,31 +459,31 @@ arXiv:0802.0447).  The proof identifies `V A_i V†` as an alternative
 Kraus family for the same channel and applies rectangular Kraus
 freedom. -/
 theorem condC2_imp_condC1_of_injective
-    (_hA : IsInjective A)
+    (_hA : Kraus.IsInjective A)
     (hV : V * Vᴴ = 1)
     (hC2 : CondC2 A V) :
     ∃ u : Matrix (Fin d) (Fin d) ℂ, u * uᴴ = 1 ∧ CondC1 A u V := by
   let B : MPSTensor d D := fun i => V * A i * Vᴴ
   have hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      transferMap B X = transferMap A X := by
+      Kraus.transferMap B X = Kraus.transferMap A X := by
     intro X
     calc
-      transferMap B X
-          = V * transferMap A (Vᴴ * X * V) * Vᴴ := by
-              simp [B, transferMap_apply, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]
-      _ = transferMap A X := by
+      Kraus.transferMap B X
+          = V * Kraus.transferMap A (Vᴴ * X * V) * Vᴴ := by
+              simp [B, Kraus.transferMap_apply, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]
+      _ = Kraus.transferMap A X := by
             have hVV : V * (Vᴴ * X * V) * Vᴴ = X := by
               calc
                 V * (Vᴴ * X * V) * Vᴴ = (V * Vᴴ) * X * (V * Vᴴ) := by
                   simp only [Matrix.mul_assoc]
                 _ = X := by
                   simp only [hV, Matrix.one_mul, Matrix.mul_one]
-            have hC2' : transferMap A X =
-                V * transferMap A (Vᴴ * X * V) * Vᴴ := by
+            have hC2' : Kraus.transferMap A X =
+                V * Kraus.transferMap A (Vᴴ * X * V) * Vᴴ := by
               simpa only [hVV] using hC2 (Vᴴ * X * V)
             exact hC2'.symm
   rcases kraus_rectangular_freedom B A
-      (fun X => by simpa only [transferMap_apply] using hB_eq X)
+      (fun X => by simpa only [Kraus.transferMap_apply] using hB_eq X)
       (Nat.le_refl d) with ⟨u, hu, huK⟩
   refine ⟨u, mul_eq_one_comm.mp hu, ?_⟩
   intro i

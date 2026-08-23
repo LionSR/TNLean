@@ -54,7 +54,7 @@ This is the one-block specialization of the BNT canonical form in
 arXiv:1606.00608, Section 2.3, lines 217--301. -/
 theorem isBNTCanonicalForm_singleSectorDecomposition [NeZero D]
     {A : MPSTensor d D}
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
     (hSelf : Tendsto (fun N : ℕ => mpvOverlap (d := d) A A N) atTop (𝓝 1)) :
     IsBNTCanonicalForm (singleSectorDecomposition A) where

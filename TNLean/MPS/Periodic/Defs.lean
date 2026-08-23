@@ -23,7 +23,7 @@ The predicate `IsSpectrallyPeriodic` describes irreducible spectral-radius-one
 blocks before trace-preserving normalization, whereas `IsPeriodic` also includes
 left-canonical normalization.
 -/
-open scoped Matrix BigOperators Matrix.Norms.Operator
+open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
 
 namespace MPSTensor
 
@@ -82,20 +82,20 @@ Source: arXiv:1708.00029, lines 248--261 and 313--332. -/
 structure IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- The transfer map has no nontrivial invariant projection, as required for
   each irreducible-form block in arXiv:1708.00029, lines 248--261. -/
-  irreducible : IsIrreducibleTensor A
+  irreducible : Kraus.IsIrreducibleFamily A
   /-- The transfer map has spectral radius one, following the rescaling in
   arXiv:1708.00029, lines 248--255 and the definition at lines 260--261. -/
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (transferMap (d := d) (D := D) A)) = 1
+        (Kraus.transferMap (d := d) (D := D) A)) = 1
   /-- The period is positive, as in the periodic-block description of
   arXiv:1708.00029, lines 257--258. -/
   period_pos : 0 < m
   /-- The unit-circle eigenvalues are exactly the `m`-th roots of unity, as in
   arXiv:1708.00029, lines 257--258. -/
   peripheral_eq :
-    peripheralEigenvalues (transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
+    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A spectrally periodic block has nonzero bond dimension.
 
@@ -106,7 +106,7 @@ theorem IsSpectrallyPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
     (hA : IsSpectrallyPeriodic m A) : D ≠ 0 :=
   matrix_dim_ne_zero_of_spectralRadius_eq_one
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-      (transferMap (d := d) (D := D) A))
+      (Kraus.transferMap (d := d) (D := D) A))
     hA.spectral_radius_one
 
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
@@ -116,14 +116,14 @@ This is the periodic analogue of the primitivity conditions in arXiv:1708.00029,
 Section 2.1. -/
 structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   /-- No nontrivial invariant projection. -/
-  irreducible : IsIrreducibleTensor A
+  irreducible : Kraus.IsIrreducibleFamily A
   /-- Left-canonical normalization. -/
   leftCanonical : IsLeftCanonical A
   /-- Period is positive. -/
   period_pos : 0 < m
   /-- Peripheral eigenvalues are exactly `m`-th roots of unity. -/
   peripheral_eq :
-    peripheralEigenvalues (transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
+    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A positive period has a primitive root in `ℂ`; this is a consequence of
 the period, not an additional periodicity hypothesis.
@@ -146,7 +146,7 @@ theorem IsPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
   intro hD
   subst D
   have hOne :
-      (1 : ℂ) ∈ peripheralEigenvalues (transferMap (d := d) (D := 0) A) := by
+      (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := 0) A) := by
     rw [hA.peripheral_eq]
     simp
   exact hOne.1 (Subsingleton.elim _ _)
@@ -231,15 +231,15 @@ def ZGaugeEquiv (m : ℕ) (A B : MPSTensor d D) : Prop :=
 /-- For period `1`, periodicity is equivalent to irreducible + left-canonical + primitive. -/
 theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
     IsPeriodic 1 A ↔
-      IsIrreducibleTensor A ∧
+      Kraus.IsIrreducibleFamily A ∧
       IsLeftCanonical A ∧
-      IsPrimitive (transferMap (d := d) (D := D) A) := by
+      IsPrimitive (Kraus.transferMap (d := d) (D := D) A) := by
   constructor
   · intro h
     refine ⟨h.irreducible, h.leftCanonical, ?_⟩
     rw [IsPrimitive]
     calc
-      peripheralEigenvalues (transferMap (d := d) (D := D) A)
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A)
           = {μ : ℂ | μ ^ 1 = 1} := h.peripheral_eq
       _ = ({1} : Set ℂ) := by
         ext μ
@@ -249,7 +249,7 @@ theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
     refine ⟨hIrr, hLC, by decide, ?_⟩
     rw [IsPrimitive] at hPrim
     calc
-      peripheralEigenvalues (transferMap (d := d) (D := D) A)
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A)
           = ({1} : Set ℂ) := hPrim
       _ = {μ : ℂ | μ ^ 1 = 1} := by
         ext μ
@@ -331,27 +331,27 @@ private lemma evalWord_leftMul_of_commute
     {A : MPSTensor d D} {Z : Matrix (Fin D) (Fin D) ℂ}
     (hcomm : ∀ i : Fin d, Z * A i = A i * Z) :
     ∀ w : List (Fin d),
-      evalWord (fun i => Z * A i) w = Z ^ w.length * evalWord A w
-  | [] => by simp [evalWord]
+      Kraus.evalWord (fun i => Z * A i) w = Z ^ w.length * Kraus.evalWord A w
+  | [] => by simp [Kraus.evalWord]
   | i :: w => by
       have hCommZi : Commute Z (A i) := by
         exact hcomm i
       have hCommPow : A i * Z ^ w.length = Z ^ w.length * A i :=
         (hCommZi.symm.pow_right w.length).eq
       calc
-        evalWord (fun j => Z * A j) (i :: w)
-            = (Z * A i) * evalWord (fun j => Z * A j) w := by
-                simp [evalWord]
-        _ = (Z * A i) * (Z ^ w.length * evalWord A w) := by
+        Kraus.evalWord (fun j => Z * A j) (i :: w)
+            = (Z * A i) * Kraus.evalWord (fun j => Z * A j) w := by
+                simp [Kraus.evalWord]
+        _ = (Z * A i) * (Z ^ w.length * Kraus.evalWord A w) := by
               rw [evalWord_leftMul_of_commute hcomm w]
-        _ = Z * (A i * Z ^ w.length) * evalWord A w := by
+        _ = Z * (A i * Z ^ w.length) * Kraus.evalWord A w := by
               simp [Matrix.mul_assoc]
-        _ = Z * (Z ^ w.length * A i) * evalWord A w := by
+        _ = Z * (Z ^ w.length * A i) * Kraus.evalWord A w := by
               rw [hCommPow]
-        _ = (Z * Z ^ w.length) * (A i * evalWord A w) := by
+        _ = (Z * Z ^ w.length) * (A i * Kraus.evalWord A w) := by
               simp [Matrix.mul_assoc]
-        _ = Z ^ (w.length + 1) * evalWord A (i :: w) := by
-              simp [evalWord, pow_succ', Matrix.mul_assoc]
+        _ = Z ^ (w.length + 1) * Kraus.evalWord A (i :: w) := by
+              simp [Kraus.evalWord, pow_succ', Matrix.mul_assoc]
 
 /-- Blocking a `ℤ_m`-gauge equivalence by a full period kills the `Z`-phase and
 produces an ordinary gauge equivalence. -/
@@ -363,16 +363,16 @@ theorem ZGaugeEquiv.blockTensor_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
   refine ⟨Y⁻¹, ?_⟩
   intro i
   have hWord :
-      evalWord A (wordOfBlock d m i) =
-        (Y : Matrix (Fin D) (Fin D) ℂ) * evalWord B (wordOfBlock d m i) *
+      Kraus.evalWord A (wordOfBlock d m i) =
+        (Y : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B (wordOfBlock d m i) *
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
     calc
-      evalWord A (wordOfBlock d m i)
-          = Z ^ (wordOfBlock d m i).length * evalWord A (wordOfBlock d m i) := by
+      Kraus.evalWord A (wordOfBlock d m i)
+          = Z ^ (wordOfBlock d m i).length * Kraus.evalWord A (wordOfBlock d m i) := by
               simp [length_wordOfBlock, hpow]
-      _ = evalWord (fun j => Z * A j) (wordOfBlock d m i) :=
+      _ = Kraus.evalWord (fun j => Z * A j) (wordOfBlock d m i) :=
             (evalWord_leftMul_of_commute hcomm (wordOfBlock d m i)).symm
-      _ = (Y : Matrix (Fin D) (Fin D) ℂ) * evalWord B (wordOfBlock d m i) *
+      _ = (Y : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B (wordOfBlock d m i) *
             (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
             simpa using
               (evalWord_gauge (A := B) (B := fun j => Z * A j) Y
@@ -393,22 +393,22 @@ theorem IsPeriodic.period_eq_of_repeatedBlocks
     {m n : ℕ} {A B : MPSTensor d D}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (_hRep : RepeatedBlocks A B)
-    (hSpec : peripheralEigenvalues (transferMap (d := d) (D := D) A) =
-      peripheralEigenvalues (transferMap (d := d) (D := D) B)) :
+    (hSpec : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B)) :
     m = n := by
   rcases hA.primitiveRoot with ⟨ω, hω⟩
   rcases hB.primitiveRoot with ⟨η, hη⟩
   have hωm : ω ^ m = 1 := hω.pow_eq_one
   have hηn : η ^ n = 1 := hη.pow_eq_one
-  have hω_mem_A : ω ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
+  have hω_mem_A : ω ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
     rw [hA.peripheral_eq]
     exact hωm
-  have hη_mem_B : η ∈ peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
+  have hη_mem_B : η ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
     rw [hB.peripheral_eq]
     exact hηn
-  have hω_mem_B : ω ∈ peripheralEigenvalues (transferMap (d := d) (D := D) B) := by
+  have hω_mem_B : ω ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
     simpa [hSpec] using hω_mem_A
-  have hη_mem_A : η ∈ peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
+  have hη_mem_A : η ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
     simpa [hSpec] using hη_mem_B
   have hωn : ω ^ n = 1 := by
     have : ω ∈ ({μ : ℂ | μ ^ n = 1} : Set ℂ) := by simpa [hB.peripheral_eq] using hω_mem_B

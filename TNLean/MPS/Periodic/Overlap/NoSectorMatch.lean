@@ -69,7 +69,7 @@ lemma sectorBlocked_isNormal_of_isPeriodic
         (toTensorFromBlocks (μ := fun _ => 1) blocks))
     (hCyclic : IsCyclicSectorDecomp A blocks)
     (u : Fin m) (hNonzero : dim u ≠ 0) :
-    IsNormal (blocks u) := by
+    Kraus.IsNormal (blocks u) := by
   have : NeZero (dim u) := ⟨hNonzero⟩
   obtain ⟨hPrim, hIrr⟩ :=
     primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
@@ -96,21 +96,21 @@ private theorem gaugePhaseEquiv_blockTensor
     funext j
     simpa [C] using hX j
   have hGauge :
-      evalWord C (wordOfBlock d L i) =
+      Kraus.evalWord C (wordOfBlock d L i) =
         (X : Matrix (Fin D) (Fin D) ℂ) *
-          evalWord A (wordOfBlock d L i) *
+          Kraus.evalWord A (wordOfBlock d L i) *
           ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
     simpa [C] using
       (evalWord_gauge (A := A) (B := C) X (by intro j; rfl)
         (wordOfBlock d L i))
   calc
     blockTensor (d := d) (D := D) B L i
-        = evalWord B (wordOfBlock d L i) := rfl
-    _ = evalWord (fun j => ζ • C j) (wordOfBlock d L i) := by simp [hB]
+        = Kraus.evalWord B (wordOfBlock d L i) := rfl
+    _ = Kraus.evalWord (fun j => ζ • C j) (wordOfBlock d L i) := by simp [hB]
     _ = (ζ ^ (wordOfBlock d L i).length) •
-          evalWord C (wordOfBlock d L i) := by
+          Kraus.evalWord C (wordOfBlock d L i) := by
           simpa using
-            (evalWord_smul (ζ := ζ) (A := C) (wordOfBlock d L i))
+            (Kraus.evalWord_smul (ζ := ζ) (K := C) (wordOfBlock d L i))
     _ = (ζ ^ L) •
           ((X : Matrix (Fin D) (Fin D) ℂ) *
             blockTensor (d := d) (D := D) A L i *
@@ -313,10 +313,10 @@ private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
       A B hA hB blocksA blocksB hA_mpv hB_mpv hGPE_block
   have : NeZero (dimA u) := ⟨hNondegA u⟩
   have : NeZero (dimB v) := ⟨hNondegB v⟩
-  have hA_irr : IsIrreducibleTensor (blocksA u) :=
+  have hA_irr : Kraus.IsIrreducibleFamily (blocksA u) :=
     (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
       A hA blocksA hA_blocks_lc hA_mpv hA_cyclic u (hNondegA u)).2
-  have hB_irr : IsIrreducibleTensor (blocksB v) :=
+  have hB_irr : Kraus.IsIrreducibleFamily (blocksB v) :=
     (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
       B hB blocksB hB_blocks_lc hB_mpv hB_cyclic v (hNondegB v)).2
   have hdim : dimA u = dimB v := by

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.Wielandt.Primitivity.Definitions
 
 /-!
@@ -30,7 +30,7 @@ orthogonal projection. -/
 theorem isIrreducibleTensor_of_isPrimitivePaper
     (A : MPSTensor d D)
     (hPrim : IsPrimitivePaper A) :
-    IsIrreducibleTensor A := by
+    Kraus.IsIrreducibleFamily A := by
   obtain ⟨q, _, hq⟩ := hPrim
   exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
     (Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq)

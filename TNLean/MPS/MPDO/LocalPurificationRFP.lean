@@ -217,12 +217,12 @@ lemma transferMap_witnessM :
 /-- The combined spin-ancilla tensor is a pure-state RFP: its transfer map is the
 identity, since the amplitudes satisfy `∑ |A|² = 1`. -/
 lemma witnessAcombined_isTransferIdempotent : MPSTensor.IsTransferIdempotent witnessAcombined := by
-  have h : MPSTensor.transferMap witnessAcombined = LinearMap.id := by
+  have h : Kraus.transferMap witnessAcombined = LinearMap.id := by
     refine LinearMap.ext fun X => ?_
     ext a b
     obtain rfl : a = 0 := Subsingleton.elim a 0
     obtain rfl : b = 0 := Subsingleton.elim b 0
-    rw [MPSTensor.transferMap_apply, Matrix.sum_apply, Fin.sum_univ_four]
+    rw [Kraus.transferMap_apply, Matrix.sum_apply, Fin.sum_univ_four]
     have e0 : (0 : Fin (2 * 2)).divNat = 0 ∧ (0 : Fin (2 * 2)).modNat = 0 := by decide
     have e1 : (1 : Fin (2 * 2)).divNat = 0 ∧ (1 : Fin (2 * 2)).modNat = 1 := by decide
     have e2 : (2 : Fin (2 * 2)).divNat = 1 ∧ (2 : Fin (2 * 2)).modNat = 0 := by decide
@@ -343,7 +343,7 @@ theorem purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq
   set s : (Fin D' × Fin D') ≃ (Fin D' × Fin D') := Equiv.prodComm (Fin D') (Fin D')
     with hs
   set K' : Matrix (Fin D' × Fin D') (Fin D' × Fin D') ℂ :=
-    transferMatrix (MPSTensor.transferMap (purificationTensor A)) with hK'
+    transferMatrix (Kraus.transferMap (purificationTensor A)) with hK'
   set K : Matrix (Fin D' × Fin D') (Fin D' × Fin D') ℂ :=
     ∑ i : Fin d, ∑ k : Fin dK, (A i k) ⊗ₖ ((A i k).map (starRingEnd ℂ)) with hKdef
   -- Swapping the two Kronecker factors is a bond-pair reindexing.
@@ -592,7 +592,7 @@ theorem exists_isPRFP_not_isSourceZCL :
     · intro i j
       simp [A]
     · rw [MPSTensor.IsTransferIdempotent]
-      simp [purificationTensor, A, MPSTensor.transferMap]
+      simp [purificationTensor, A, Kraus.transferMap]
   refine ⟨0, isPRFP_of_isLocalPurificationRFP hLocal, ?_⟩
   intro hZCL
   exact hZCL.1 (by simp [physTraceTransfer])
@@ -667,11 +667,11 @@ private lemma trace_nilpotentTransfer_pow {N : ℕ} (hN : 0 < N) :
     simp [supportProjection, Matrix.trace, Fin.sum_univ_three]
 
 private lemma scalarPurifier_evalWord (w : List (Fin (1 * 1))) :
-    MPSTensor.evalWord (purificationTensor scalarPurifier) w = 1 := by
+    Kraus.evalWord (purificationTensor scalarPurifier) w = 1 := by
   induction w with
   | nil => rfl
   | cons i w ih =>
-      rw [MPSTensor.evalWord_cons, ih]
+      rw [Kraus.evalWord_cons, ih]
       simp [purificationTensor, scalarPurifier]
 
 private lemma scalarPurifier_mpv {N : ℕ} (σ : Fin N → Fin (1 * 1)) :
@@ -707,7 +707,7 @@ private lemma scalarPurifier_isTransferIdempotent :
   ext a b
   fin_cases a
   fin_cases b
-  simp [LinearMap.comp_apply, MPSTensor.transferMap_apply, purificationTensor,
+  simp [LinearMap.comp_apply, Kraus.transferMap_apply, purificationTensor,
     scalarPurifier]
 
 private lemma nilpotentGlobalPRFP_isPRFP : IsPRFP nilpotentGlobalPRFP := by

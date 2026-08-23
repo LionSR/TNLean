@@ -128,10 +128,10 @@ theorem gramDressing_gauge_eq_one
       (w : Fin L → Fin (d * d)),
       Matrix.trace
           (MPSTensor.linearMarkedTensor fGauge M.toMPSTensor u *
-            MPSTensor.evalWord M.toMPSTensor (List.ofFn w)) =
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
         Matrix.trace
           (MPSTensor.linearMarkedTensor fOne M.toMPSTensor u *
-            MPSTensor.evalWord M.toMPSTensor (List.ofFn w)) := by
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) := by
     intro L _hL u w
     rw [hPhysicalGauge u, hPhysicalOne u,
       evalWord_toMPSTensor_ofFn]

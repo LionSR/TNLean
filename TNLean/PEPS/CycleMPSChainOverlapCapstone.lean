@@ -815,7 +815,7 @@ theorem fundamentalTheorem_injectiveMPSChain_gauge_unique {n d D : ℕ} [NeZero 
     exact h
   have hscalar := Matrix.isScalar_of_commute_span_eq_top
     (Z := (C 0 : Matrix (Fin D) (Fin D) ℂ))
-    (MPSTensor.IsInjective.span_eq_top (hA 0)) (fun M hM => by
+    (Kraus.IsInjective.span_eq_top (hA 0)) (fun M hM => by
       rcases hM with ⟨i, rfl⟩
       exact hcommA0 i)
   rcases hscalar with ⟨c, hc⟩

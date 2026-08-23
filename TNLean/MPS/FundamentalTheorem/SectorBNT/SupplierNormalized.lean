@@ -78,16 +78,16 @@ private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
   classical
   obtain ⟨N₀, hN₀, σ₀, hσ₀⟩ := hNZ
   let w := List.ofFn σ₀
-  let M := evalWord A w
+  let M := Kraus.evalWord A w
   have hM : Matrix.trace M ≠ 0 := by
     simpa [mpv, coeff, M, w] using hσ₀
   obtain ⟨q, hq, htrace⟩ := exists_trace_pow_mul_ne_zero M hM p hp
-  have heval : ∀ r : ℕ, evalWord A (List.replicate r w).flatten = M ^ r := by
+  have heval : ∀ r : ℕ, Kraus.evalWord A (List.replicate r w).flatten = M ^ r := by
     intro r
     induction r with
     | zero => simp [M]
     | succ r ih =>
-      rw [List.replicate_succ, List.flatten_cons, evalWord_append, ih, pow_succ']
+      rw [List.replicate_succ, List.flatten_cons, Kraus.evalWord_append, ih, pow_succ']
   have hlenPow : ∀ r : ℕ, (List.replicate r w).flatten.length = r * N₀ := by
     intro r
     induction r with

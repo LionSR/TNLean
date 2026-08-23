@@ -37,7 +37,7 @@ noncomputable def pairAlgSpan {D₁ D₂ : ℕ}
   Algebra.adjoin ℂ (Set.range fun i : Fin d => (A i, B i))
 
 private lemma algebra_adjoin_eq_top_of_isInjective {D : ℕ} {A : MPSTensor d D}
-    (hA : IsInjective A) :
+    (hA : Kraus.IsInjective A) :
     Algebra.adjoin ℂ (Set.range A) = (⊤ : Subalgebra ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
   classical
   apply Subalgebra.ext
@@ -59,7 +59,7 @@ private lemma algebra_adjoin_eq_top_of_isInjective {D : ℕ} {A : MPSTensor d D}
 /-- The first coordinate projection of the pair algebra is full when the first
 block is injective. -/
 theorem pairAlgSpan_map_fst_eq_top_of_isInjective {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hA : IsInjective A) :
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hA : Kraus.IsInjective A) :
     (pairAlgSpan A B).map
       (AlgHom.fst ℂ (Matrix (Fin D₁) (Fin D₁) ℂ) (Matrix (Fin D₂) (Fin D₂) ℂ)) =
         (⊤ : Subalgebra ℂ (Matrix (Fin D₁) (Fin D₁) ℂ)) := by
@@ -81,7 +81,7 @@ theorem pairAlgSpan_map_fst_eq_top_of_isInjective {D₁ D₂ : ℕ}
 /-- The second coordinate projection of the pair algebra is full when the
 second block is injective. -/
 theorem pairAlgSpan_map_snd_eq_top_of_isInjective {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hB : IsInjective B) :
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (hB : Kraus.IsInjective B) :
     (pairAlgSpan A B).map
       (AlgHom.snd ℂ (Matrix (Fin D₁) (Fin D₁) ℂ) (Matrix (Fin D₂) (Fin D₂) ℂ)) =
         (⊤ : Subalgebra ℂ (Matrix (Fin D₂) (Fin D₂) ℂ)) := by
@@ -130,7 +130,7 @@ theorem pair_mul_mem_pairAllWordsSpan {D₁ D₂ : ℕ}
             ((pairEvalWordTuple A B w).1 * (pairEvalWordTuple A B v).1,
               (pairEvalWordTuple A B w).2 * (pairEvalWordTuple A B v).2) =
               pairEvalWordTuple A B (w ++ v) := by
-          ext <;> simp [pairEvalWordTuple, evalWord_append]
+          ext <;> simp [pairEvalWordTuple, Kraus.evalWord_append]
         rw [hEq]
         exact Submodule.subset_span ⟨w ++ v, rfl⟩
     | zero =>

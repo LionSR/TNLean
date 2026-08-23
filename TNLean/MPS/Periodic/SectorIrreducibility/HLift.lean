@@ -98,31 +98,31 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hIrrAdj :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hMulLeft :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
     (hMulRight :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
     {k : Fin m} {X : MatrixAlg D}
     (hXP : X * P k = X)
     (hPX : P k * X = X)
     (hXfix :
-      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X = X) :
+      ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X = X) :
     ∃ c : ℂ, X = c • P k := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
@@ -161,28 +161,28 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hIrrAdj :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hMulLeft :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
     (hMulRight :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
     SectorFixedPointAlgebraRigidity
       (D := D) (m := m)
-      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+      (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   change SectorFixedPointAlgebraRigidity (D := D) (m := m) T P
   intro k X Y hXP hPX hYP hPY hXfix hYfix
   obtain ⟨c, hcX⟩ :=
@@ -229,48 +229,48 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hIrrAdj :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hMulLeft :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
     (hMulRight :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
     (hRigidity :
       SectorFixedPointAlgebraRigidity
         (D := D) (m := m)
-        (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P) :
+        (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P) :
     ∀ k : Fin m, ∀ Q : MatrixAlg D,
       IsOrthogonalProjection Q →
       Q * P k = Q → P k * Q = Q →
       PreservesCorner Q
-        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+        ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
       ∃ R : MatrixAlg D,
         IsOrthogonalProjection R ∧
         PreservesCorner R
-          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
+          (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
         (Q = 0 ↔ R = 0) ∧
         (Q = P k ↔ R = 1) := by
   classical
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   have hStarT : ∀ X : MatrixAlg D, T Xᴴ = (T X)ᴴ := by
     intro X
-    simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
+    simpa [T, Kraus.transferMap_apply, Kraus.map] using
       (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) X).symm
-  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
+  have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
     isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (A := A) hIrrAdj
-  have hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+  have hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrrTensor
   intro k Q hQproj hQP hPQ hQcorner
   have hQfix : (T ^ m) Q = Q := by
@@ -384,33 +384,33 @@ theorem hLift_cyclicDecomp_mps
     [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hIrrAdj :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hMulLeft :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
     (hMulRight :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
     ∀ k : Fin m, ∀ Q : MatrixAlg D,
       IsOrthogonalProjection Q →
       Q * P k = Q → P k * Q = Q →
       PreservesCorner Q
-        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
+        ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
       ∃ R : MatrixAlg D,
         IsOrthogonalProjection R ∧
         PreservesCorner R
-          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
+          (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
         (Q = 0 ↔ R = 0) ∧
         (Q = P k ↔ R = 1) := by
   exact
@@ -424,30 +424,30 @@ theorem isIrreducibleOnCorner_of_cyclic_decomp_mps
     [NeZero D] {A : MPSTensor d D}
     [NeZero m]
     (hIrr :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hMulLeft :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
     (hMulRight :
       ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) :
     ∀ k : Fin m,
       IsIrreducibleOnCorner
-        (P k) ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
+        (P k) ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
   exact
     isIrreducible_restriction_of_cyclic_decomp
-      (T := transferMap (d := d) (D := D) (fun i => (A i)ᴴ))
+      (T := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ))
       hIrr P hPproj hPsum hcyclic
       (hLift_cyclicDecomp_mps
         (A := A) (m := m) hIrr hTP P hPproj hPsum hcyclic hMulLeft hMulRight)
@@ -458,7 +458,7 @@ Given the basic input of a cyclic-sector decomposition `P` of the adjoint transf
 multiplicativity condition `SectorFixedPointAlgebraRigidity` follows automatically when the
 original tensor `A` is irreducible. The proof combines three observations:
 
-1. `IsIrreducibleTensor A` yields irreducibility of the adjoint transfer map via
+1. `Kraus.IsIrreducibleFamily A` yields irreducibility of the adjoint transfer map via
    `isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`;
 2. Each `P k` belongs to the multiplicative domain of the Kraus family `i ↦ (A i)ᴴ`
    by a Kadison–Schwarz argument using the cyclic shift condition;
@@ -468,15 +468,15 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (P : Fin m → MatrixAlg D)
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic : ∀ k,
-      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     SectorFixedPointAlgebraRigidity
-      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+      (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   -- 1. Irreducibility of the adjoint transfer map
   have hIrrAdj : IsIrreducibleMap T :=
@@ -498,24 +498,24 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
       calc
         KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
             = T (P k * (P k)ᴴ) := by
-              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
         _ = T (P k) := by rw [hPk_star, (hPproj k).2]
         _ = T (P k) * (T (P k))ᴴ := by
               rw [hTPk_proj.1.eq, hTPk_proj.2]
         _ = KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
-              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
     have hLeft :
         KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
           (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
       calc
         KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
             = T ((P k)ᴴ * P k) := by
-              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
         _ = T (P k) := by rw [hPk_star, (hPproj k).2]
         _ = (T (P k))ᴴ * T (P k) := by
               rw [hTPk_proj.1.eq, hTPk_proj.2]
         _ = (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
-              simp [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
     exact ⟨
       (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
       (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
@@ -523,12 +523,12 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
   have hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D,
       T (P k * X) = T (P k) * T X := by
     intro k X
-    simpa [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+    simpa [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
       KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
   have hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D,
       T (X * P k) = T X * T (P k) := by
     intro k X
-    simpa [T, K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+    simpa [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
       KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
   -- 5. Delegate to the existing theorem that needs irreducibility + multiplicativity
   exact

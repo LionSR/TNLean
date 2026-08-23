@@ -54,9 +54,9 @@ decomposition, where
 applies. -/
 theorem IsHorizontalCF.eq_one_of_transferMap_comp_self_eq_smul
     {M : MPOTensor d D} (hHorizontal : IsHorizontalCF M) (c : ℂ)
-    (h : MPSTensor.transferMap M.toMPSTensor ∘ₗ
-        MPSTensor.transferMap M.toMPSTensor =
-      c • MPSTensor.transferMap M.toMPSTensor) :
+    (h : Kraus.transferMap M.toMPSTensor ∘ₗ
+        Kraus.transferMap M.toMPSTensor =
+      c • Kraus.transferMap M.toMPSTensor) :
     c = 1 := by
   obtain ⟨S, hCF, hTotal, X, hEq⟩ := hHorizontal
   subst D
@@ -77,10 +77,10 @@ with scalar $(337/512)^L$.
 Project example; the physical blocking convention is arXiv:1606.00608,
 lines 227--231. -/
 theorem transferMap_blockTensor_R_toMPSTensor_quasi_idempotent (L : ℕ) :
-    MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor *
-        MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor =
+    Kraus.transferMap (MPOTensor.blockTensor R L).toMPSTensor *
+        Kraus.transferMap (MPOTensor.blockTensor R L).toMPSTensor =
       (337/512 : ℂ) ^ L •
-        MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor := by
+        Kraus.transferMap (MPOTensor.blockTensor R L).toMPSTensor := by
   rw [MPOTensor.toMPSTensor_blockTensor,
     MPSTensor.transferMap_reindexPhysical_equiv]
   apply MPSTensor.transferMap_blockTensor_quasi_idempotent
@@ -106,10 +106,10 @@ theorem blockTensor_R_not_isHorizontalCF (L : ℕ) (hL : 0 < L) :
   intro hHorizontal
   have hBlocked := transferMap_blockTensor_R_toMPSTensor_quasi_idempotent L
   have hBlockedComp :
-      MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor ∘ₗ
-          MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor =
+      Kraus.transferMap (MPOTensor.blockTensor R L).toMPSTensor ∘ₗ
+          Kraus.transferMap (MPOTensor.blockTensor R L).toMPSTensor =
         (337/512 : ℂ) ^ L •
-          MPSTensor.transferMap (MPOTensor.blockTensor R L).toMPSTensor := by
+          Kraus.transferMap (MPOTensor.blockTensor R L).toMPSTensor := by
     simpa only [Module.End.mul_eq_comp] using hBlocked
   have hone := hHorizontal.eq_one_of_transferMap_comp_self_eq_smul
     ((337/512 : ℂ) ^ L) hBlockedComp

@@ -166,7 +166,7 @@ to the full interval.  This is the ground-space step in the C1--C3 argument of
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
 theorem ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N) ≤ groundSpaceES A N := by
   intro v hv
   rw [mem_groundSpaceES_iff]
@@ -196,7 +196,7 @@ degeneracy.  This is the finite-volume kernel identification used in
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
 theorem ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N) = groundSpaceES A N :=
   le_antisymm
     (ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective

@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Algebra.Star.BigOperators
@@ -130,7 +130,7 @@ theorem mpvOverlap_smul_self (c : ℂ) {d D : ℕ} (A : MPSTensor d D) (N : ℕ)
     mpvOverlap (fun i => c • A i) (fun i => c • A i) N =
       (c * star c) ^ N * mpvOverlap A A N := by
   classical
-  simp only [mpvOverlap, mpv, coeff, evalWord_smul, List.length_ofFn,
+  simp only [mpvOverlap, mpv, coeff, Kraus.evalWord_smul, List.length_ofFn,
     Matrix.trace_smul, smul_eq_mul, star_mul, star_pow]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun σ _ => ?_

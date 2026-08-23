@@ -306,7 +306,7 @@ preceding equation (zippercondition2), and Section "Associativity and the pentag
 the injectivity argument following equation (pentagon3). -/
 theorem exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective
     (α β γ ε : Λ)
-    (hε : MPSTensor.IsInjective (Fam.tensor ε).toMPSTensor)
+    (hε : Kraus.IsInjective (Fam.tensor ε).toMPSTensor)
     (C : Matrix (Fam.LeftFinalIndex α β γ ε)
       (Fam.RightFinalIndex α β γ ε) ℂ)
     (hC : ∀ ij : Fin (p * p),

@@ -66,8 +66,8 @@ theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     {L : ℕ} (hSpan : P.RepresentativeWordTupleSpanAt L)
     (hTrace : ∀ (s : Fin e) (w : Fin L → Fin d),
-      Matrix.trace (P.markedTensor C s * evalWord P.toTensor (List.ofFn w)) =
-        Matrix.trace (P.markedTensor E s * evalWord P.toTensor (List.ofFn w)))
+      Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
+        Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w)))
     (j₀ : Fin P.basisCount) (hcoeff : P.coeff (L + 1) j₀ ≠ 0) :
     C j₀ = E j₀ := by
   classical
@@ -83,15 +83,15 @@ theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
       P.trace_markedTensor_mul_evalWord E s (List.ofFn w)] at h
     simp only [List.length_ofFn] at h
     have hsubtr : ∀ j : Fin P.basisCount,
-        Matrix.trace (Δ j * evalWord (P.basis j) (List.ofFn w)) =
+        Matrix.trace (Δ j * Kraus.evalWord (P.basis j) (List.ofFn w)) =
           P.coeff (L + 1) j *
-              Matrix.trace (C j s * evalWord (P.basis j) (List.ofFn w)) -
+              Matrix.trace (C j s * Kraus.evalWord (P.basis j) (List.ofFn w)) -
             P.coeff (L + 1) j *
-              Matrix.trace (E j s * evalWord (P.basis j) (List.ofFn w)) := by
+              Matrix.trace (E j s * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
       intro j
       change Matrix.trace
           ((P.coeff (L + 1) j • (C j s - E j s)) *
-            evalWord (P.basis j) (List.ofFn w)) = _
+            Kraus.evalWord (P.basis j) (List.ofFn w)) = _
       rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul, sub_mul,
         Matrix.trace_sub, mul_sub]
     simp_rw [hsubtr]
@@ -118,8 +118,8 @@ theorem markedTensor_basis_eq_of_trace_agree
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
-      Matrix.trace (P.markedTensor C s * evalWord P.toTensor (List.ofFn w)) =
-        Matrix.trace (P.markedTensor E s * evalWord P.toTensor (List.ofFn w))) :
+      Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
+        Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by
   classical
   obtain ⟨L₀, hSpan⟩ := hSpan
@@ -168,8 +168,8 @@ theorem markedTensor_basis_eq_of_trace_agree
     (hCF : IsBNTCanonicalForm P)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
-      Matrix.trace (P.markedTensor C s * evalWord P.toTensor (List.ofFn w)) =
-        Matrix.trace (P.markedTensor E s * evalWord P.toTensor (List.ofFn w))) :
+      Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
+        Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by
   exact P.markedTensor_basis_eq_of_trace_agree C E
     hCF.eventuallyRepresentativeWordTupleSpan hTrace

@@ -76,8 +76,8 @@ agree under all virtual insertions on both bonds are proportional. -/
 theorem tensor_proportional
     (A₁ A₂ B₁ B₂ : MPSTensor d D)
     (hD : 0 < D)
-    (hA₁ : IsInjective A₁) (hA₂ : IsInjective A₂)
-    (hB₁ : IsInjective B₁) (hB₂ : IsInjective B₂)
+    (hA₁ : Kraus.IsInjective A₁) (hA₂ : Kraus.IsInjective A₂)
+    (hB₁ : Kraus.IsInjective B₁) (hB₂ : Kraus.IsInjective B₂)
     (hInt : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
       Matrix.trace (A₁ i * X * A₂ j) = Matrix.trace (B₁ i * X * B₂ j))
     (hExt : ∀ (Y : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
@@ -91,23 +91,23 @@ theorem tensor_proportional
     external_products_eq A₁ A₂ B₁ B₂ hExt
   -- Step 2: Extract Z with A₁ i = Z * B₁ i for all i.
   -- Decompose 1 in the spanning set {A₂ j}, apply same coefficients to {B₂ j}.
-  let Z := Fintype.linearCombination ℂ B₂ (decompositionMap hA₂ 1)
+  let Z := Fintype.linearCombination ℂ B₂ (Kraus.decompositionMap hA₂ 1)
   have hZ : ∀ i, A₁ i = Z * B₁ i := by
     intro i
-    have h : Fintype.linearCombination ℂ A₂ (decompositionMap hA₂ 1) * A₁ i =
-        Fintype.linearCombination ℂ B₂ (decompositionMap hA₂ 1) * B₁ i := by
+    have h : Fintype.linearCombination ℂ A₂ (Kraus.decompositionMap hA₂ 1) * A₁ i =
+        Fintype.linearCombination ℂ B₂ (Kraus.decompositionMap hA₂ 1) * B₁ i := by
       simp only [Fintype.linearCombination_apply, Finset.sum_mul, smul_mul_assoc]
       simp_rw [hProdL i]
-    rwa [decompositionMap_spec, one_mul] at h
+    rwa [Kraus.decompositionMap_spec, one_mul] at h
   -- Step 3: Extract W with A₂ j = W * B₂ j for all j.
-  let W := Fintype.linearCombination ℂ B₁ (decompositionMap hA₁ 1)
+  let W := Fintype.linearCombination ℂ B₁ (Kraus.decompositionMap hA₁ 1)
   have hW : ∀ j, A₂ j = W * B₂ j := by
     intro j
-    have h : Fintype.linearCombination ℂ A₁ (decompositionMap hA₁ 1) * A₂ j =
-        Fintype.linearCombination ℂ B₁ (decompositionMap hA₁ 1) * B₂ j := by
+    have h : Fintype.linearCombination ℂ A₁ (Kraus.decompositionMap hA₁ 1) * A₂ j =
+        Fintype.linearCombination ℂ B₁ (Kraus.decompositionMap hA₁ 1) * B₂ j := by
       simp only [Fintype.linearCombination_apply, Finset.sum_mul, smul_mul_assoc]
       simp_rw [hProdR _ j]
-    rwa [decompositionMap_spec, one_mul] at h
+    rwa [Kraus.decompositionMap_spec, one_mul] at h
   -- Step 4: Show Z * M * W = M for all M via spanning arguments.
   have hZMW : ∀ M : Matrix (Fin D) (Fin D) ℂ, Z * M * W = M := by
     -- First: Z * B₁ i * W = B₁ i for all i (by spanning in B₂)
@@ -168,7 +168,8 @@ theorem tensor_proportional
   have hW_eq : W = lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     have hsmul : lambda_ • W = 1 := by
       have := hZW; rw [hZ_eq, smul_mul_assoc, one_mul] at this; exact this
-    have h1 : lambda_⁻¹ • (lambda_ • W) = lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    have h1 : lambda_⁻¹ • (lambda_ • W) =
+        lambda_⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ) := by
       rw [hsmul]
     rwa [smul_smul, inv_mul_cancel₀ hne, one_smul] at h1
   have hA₂_eq : ∀ j, A₂ j = lambda_⁻¹ • B₂ j := by

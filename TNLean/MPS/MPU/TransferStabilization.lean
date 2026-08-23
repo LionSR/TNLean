@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixStabilization
 import TNLean.Algebra.MatrixPosDefTransport
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.TransferMatrix
 
@@ -63,8 +63,8 @@ Source: arXiv:1703.09188, lines 397--409. -/
 noncomputable def IsMPU.normalizedTransferStabilization
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D) :
     Matrix.StabilizedRankOneData
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) (D * D - 1) := by
-  let E := transferMatrix (MPSTensor.transferMap U.normalizedFlattening)
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening)) (D * D - 1) := by
+  let E := transferMatrix (Kraus.transferMap U.normalizedFlattening)
   have hDD : 4 ≤ D * D :=
     Nat.mul_le_mul (by omega : 2 ≤ D) (by omega : 2 ≤ D)
   have hchar : E.charpoly = X ^ (Fintype.card (Fin D × Fin D) - 1) * (X - 1) := by
@@ -92,14 +92,14 @@ theorem IsMPU.exists_normalized_transfer_stabilizes_to_rank_one
     ∃ J : ℕ, 0 < J ∧ J ≤ D * D - 1 ∧
       ∃ ρ Φ : Fin D × Fin D → ℂ,
         Φ ⬝ᵥ ρ = 1 ∧
-        transferMatrix (MPSTensor.transferMap U.normalizedFlattening) *ᵥ ρ = ρ ∧
+        transferMatrix (Kraus.transferMap U.normalizedFlattening) *ᵥ ρ = ρ ∧
         Matrix.vecMul Φ
-          (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) = Φ ∧
-        transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+          (transferMatrix (Kraus.transferMap U.normalizedFlattening)) = Φ ∧
+        transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
           Matrix.vecMulVec ρ Φ ∧
         ∀ k, J ≤ k →
-          transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ k =
-            transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J := by
+          transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ k =
+            transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J := by
   let data := hU.normalizedTransferStabilization hD
   refine ⟨data.exponent, data.exponent_pos, data.exponent_le,
     data.right, data.left, ?_, data.right_fixed, data.left_fixed,
@@ -127,21 +127,21 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
       (ρ : Matrix (Fin D) (Fin D) ℂ),
       (∀ l : cfii.toCPSVCanonicalFormData.Active, l = k) ∧
       Λ.PosDef ∧ Λ.IsDiag ∧ Matrix.trace Λ = 1 ∧
-      MPSTensor.transferMap (cfii.blocks k.1) Λ = Λ ∧
+      Kraus.transferMap (cfii.blocks k.1) Λ = Λ ∧
       ρ = cfii.ambientBlockInclusion k.1 * Λ *
         (cfii.ambientBlockInclusion k.1)ᴴ ∧
       ρ.PosDef ∧ Matrix.trace ρ = 1 ∧
-      MPSTensor.transferMap U.normalizedFlattening ρ = ρ ∧
+      Kraus.transferMap U.normalizedFlattening ρ = ρ ∧
       Matrix.vecMul (1 : Matrix (Fin D) (Fin D) ℂ).vec
-        (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) =
+        (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
           (1 : Matrix (Fin D) (Fin D) ℂ).vec ∧
-      transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ (D * D - 1) =
+      transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ (D * D - 1) =
         Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
   classical
   let base := cfii.toCPSVCanonicalFormData
   have htrace : ∀ N : ℕ, 1 < N →
       Matrix.trace
-        (transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ N) = 1 :=
+        (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 :=
     fun N hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
   have hcard : Fintype.card base.Active = 1 :=
     base.card_active_eq_one_of_shifted_transfer_trace htrace
@@ -158,14 +158,14 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
   have hΛdiag : Λ.IsDiag := hΛ₀diag.smul _
   have hΛtrace : Matrix.trace Λ = 1 := by
     simp [Λ, Matrix.trace_smul, hΛtrace_ne]
-  have hΛfix : MPSTensor.transferMap (cfii.blocks k.1) Λ = Λ := by
+  have hΛfix : Kraus.transferMap (cfii.blocks k.1) Λ = Λ := by
     simp only [Λ, map_smul, hΛ₀fix]
   have hweight : base.activeTransferEigenvalue k = 1 :=
     base.activeTransferEigenvalue_eq_one htrace k
   have hweight' : cfii.weights k.1 * starRingEnd ℂ (cfii.weights k.1) = 1 := by
     simpa [base, MPSTensor.CPSVCanonicalFormData.activeTransferEigenvalue] using hweight
   have hweightedFix :
-      MPSTensor.transferMap (fun i => cfii.weights k.1 • cfii.blocks k.1 i) Λ = Λ := by
+      Kraus.transferMap (fun i => cfii.weights k.1 • cfii.blocks k.1 i) Λ = Λ := by
     rw [MPSTensor.transferMap_smul, hΛfix, hweight', one_smul]
   let V := base.ambientBlockInclusion k.1
   let ρ : Matrix (Fin D) (Fin D) ℂ := V * Λ * Vᴴ
@@ -179,8 +179,8 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
     change Matrix.trace (V * Λ * Vᴴ) = 1
     rw [Matrix.trace_mul_comm (V * Λ) Vᴴ, ← Matrix.mul_assoc, hVstarV,
       Matrix.one_mul, hΛtrace]
-  have hρfix : MPSTensor.transferMap U.normalizedFlattening ρ = ρ := by
-    change MPSTensor.transferMap U.normalizedFlattening (V * Λ * Vᴴ) = V * Λ * Vᴴ
+  have hρfix : Kraus.transferMap U.normalizedFlattening ρ = ρ := by
+    change Kraus.transferMap U.normalizedFlattening (V * Λ * Vᴴ) = V * Λ * Vᴴ
     rw [MPSTensor.transferMap_conj_of_intertwine U.normalizedFlattening
       (fun i => cfii.weights k.1 • cfii.blocks k.1 i) V
       (base.mul_ambientBlockInclusion k.1) Λ, hweightedFix]
@@ -227,18 +227,18 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
         rw [Matrix.mul_sum, Matrix.sum_mul]
       _ = 1 := by rw [hweightedLeft, Matrix.mul_one, hVVstar]
   have hleft : Matrix.vecMul (1 : Matrix (Fin D) (Fin D) ℂ).vec
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) =
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
         (1 : Matrix (Fin D) (Fin D) ℂ).vec :=
     vecMul_vec_one_transferMatrix_eq_of_trace_preserving _
-      (fun X => MPSTensor.trace_transferMap U.normalizedFlattening X hAleft)
-  have hright : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) *ᵥ ρ.vec =
+      (fun X => Kraus.trace_transferMap U.normalizedFlattening X hAleft)
+  have hright : transferMatrix (Kraus.transferMap U.normalizedFlattening) *ᵥ ρ.vec =
       ρ.vec := by
     rw [transferMatrix_mulVec_eq, hρfix]
   have hpair : (1 : Matrix (Fin D) (Fin D) ℂ).vec ⬝ᵥ ρ.vec = 1 := by
     rw [Matrix.vec_one_dotProduct_vec_eq_trace, hρtrace]
   have hpower := (hU.normalizedTransferStabilization hD).power_eq_vec_mul_vec_of_fixed
     ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec hpair hright hleft
-  change transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ (D * D - 1) =
+  change transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ (D * D - 1) =
     Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec at hpower
   refine ⟨k, Λ, ρ, fun l => Subsingleton.elim _ _, hΛpd, hΛdiag, hΛtrace,
     hΛfix, rfl, hρpd, hρtrace, hρfix, hleft, ?_⟩
@@ -249,8 +249,8 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
 Source: arXiv:1703.09188, lines 397--409, specialized to `D = 1`. -/
 theorem IsMPU.normalized_transfer_matrix_eq_one_fin_one
     [NeZero d] {U : MPOTensor d 1} (hU : IsMPU U) :
-    transferMatrix (MPSTensor.transferMap U.normalizedFlattening) = 1 := by
-  let E := transferMatrix (MPSTensor.transferMap U.normalizedFlattening)
+    transferMatrix (Kraus.transferMap U.normalizedFlattening) = 1 := by
+  let E := transferMatrix (Kraus.transferMap U.normalizedFlattening)
   have hchar : E.charpoly = X ^ (Fintype.card (Fin 1 × Fin 1) - 1) * (X - 1) := by
     simpa [E, Fintype.card_prod, Fintype.card_fin] using hU.normalizedFlattening_charpoly
   have hpow :=
@@ -267,7 +267,7 @@ Source: arXiv:1703.09188, lines 397--409, specialized to `D = 1`. -/
 noncomputable def IsMPU.normalizedTransferStabilization_fin_one
     [NeZero d] {U : MPOTensor d 1} (hU : IsMPU U) :
     Matrix.StabilizedRankOneData
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) 1 := by
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening)) 1 := by
   have hE := hU.normalized_transfer_matrix_eq_one_fin_one
   apply Matrix.StabilizedRankOneData.of_power_succ_eq 1 1 Nat.zero_lt_one le_rfl
   · rw [hE]

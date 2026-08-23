@@ -77,11 +77,11 @@ theorem repeatedCopyTensor_toMPSTensor :
   rfl
 
 private lemma scalarBNT_evalWord (w : List (Fin 1)) :
-    MPSTensor.evalWord scalarBNT.toMPSTensor w = 1 := by
+    Kraus.evalWord scalarBNT.toMPSTensor w = 1 := by
   induction w with
   | nil => rfl
   | cons i w ih =>
-      rw [MPSTensor.evalWord_cons, ih]
+      rw [Kraus.evalWord_cons, ih]
       simp [scalarBNT, toMPSTensor]
 
 /-- The raw repeated-copy presentation satisfies the source's BNT canonical

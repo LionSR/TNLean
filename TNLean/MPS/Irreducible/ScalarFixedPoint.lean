@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.Irreducible.FormII
 import QICLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
@@ -42,17 +42,17 @@ scalar line.  The channel-theoretic input is Wolf Theorem 6.6, formalized as
 theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     {d D : ℕ} [Nonempty (Fin D)]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hUnital : transferMap (d := d) (D := D) A 1 = 1)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hUnital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (hfix : transferMap (d := d) (D := D) A X = X) :
+    (hfix : Kraus.transferMap (d := d) (D := D) A X = X) :
     ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
   classical
   have : NeZero D := by
     rcases ‹Nonempty (Fin D)› with ⟨i⟩
     exact ⟨Nat.ne_of_gt (lt_of_le_of_lt (Nat.zero_le i.1) i.2)⟩
   have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by
-    simpa [transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
+    simpa [Kraus.transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital
   have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) := by
     rw [Kraus.mapLM_eq_transferMap]

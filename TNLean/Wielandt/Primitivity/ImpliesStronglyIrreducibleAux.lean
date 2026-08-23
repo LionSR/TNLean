@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.EigenspaceMap
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!
@@ -36,9 +36,9 @@ variable {d D : ℕ}
 theorem transferMap_pow_smul_eigenvector
     (A : MPSTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
-    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    (hEig : Kraus.transferMap (d := d) (D := D) A X = μ • X)
     (n : ℕ) :
-    ((transferMap (d := d) (D := D) A) ^ n) X = μ ^ n • X := by
+    ((Kraus.transferMap (d := d) (D := D) A) ^ n) X = μ ^ n • X := by
   exact Module.End.pow_apply_of_mem_eigenspace
     (Module.End.mem_eigenspace_iff.mpr hEig) n
 
@@ -49,7 +49,7 @@ theorem trace_eigenvector_eq_zero
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
-    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    (hEig : Kraus.transferMap (d := d) (D := D) A X = μ • X)
     (hμ_ne : μ ≠ 1) :
     Matrix.trace X = 0 := by
   rw [← Kraus.mapLM_eq_transferMap] at hEig
@@ -73,11 +73,11 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
-    (hEig : transferMap (d := d) (D := D) A X = μ • X)
+    (hEig : Kraus.transferMap (d := d) (D := D) A X = μ • X)
     (hX_ne : X ≠ 0) (hμ_ne : μ ≠ 1) {p : ℕ} (hroot : μ ^ p = 1) :
     ∃ H : Matrix (Fin D) (Fin D) ℂ,
       H.IsHermitian ∧ H ≠ 0 ∧ H.trace = 0 ∧
-      ((transferMap (d := d) (D := D) A) ^ p) H = H ∧
+      ((Kraus.transferMap (d := d) (D := D) A) ^ p) H = H ∧
       ¬H.PosSemidef := by
   rw [← Kraus.mapLM_eq_transferMap] at hEig
   obtain ⟨H, hH, hH_ne, hH_tr, hH_fix⟩ :=
@@ -96,7 +96,7 @@ variable {d D : ℕ}
 /-- **Uniqueness of PSD fixed points of `E^p` under paper-primitivity.**
 
 If `A` is paper-primitive (with witness `q`), then any two nonzero PSD fixed
-points of `(transferMap A)^p` (with `p > 0`) are proportional.
+points of `(Kraus.transferMap A)^p` (with `p > 0`) are proportional.
 
 **Proof**: Upgrade both matrices, and every nonzero positive-semidefinite fixed
 point of the same power, to positive definite matrices. Fixed-point
@@ -108,8 +108,8 @@ theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
     (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
     (hσ_psd : σ.PosSemidef) (hσ_ne : σ ≠ 0)
     {p : ℕ} (hp : 0 < p)
-    (hρ_fix : ((transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
-    (hσ_fix : ((transferMap (d := d) (D := D) A) ^ p) σ = σ) :
+    (hρ_fix : ((Kraus.transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
+    (hσ_fix : ((Kraus.transferMap (d := d) (D := D) A) ^ p) σ = σ) :
     ∃ c : ℂ, σ = c • ρ := by
   rw [← Kraus.mapLM_eq_transferMap] at hρ_fix hσ_fix
   exact Kraus.posSemidef_pow_fixedPoint_unique
@@ -130,7 +130,7 @@ theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
     (hPrim : IsPrimitivePaper A) :
     IsPeripherallyPrimitive A := by
   obtain ⟨q, _, hq⟩ := hPrim
-  change IsPrimitive (transferMap (d := d) (D := D) A)
+  change IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
   simpa only [Kraus.mapLM_eq_transferMap] using
     Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
 

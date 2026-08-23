@@ -90,34 +90,35 @@ private theorem cyclic_projection_mem_multiplicativeDomain
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain (fun i : Fin d => (A i)ᴴ) := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
   have hK_apply :
       ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X = KadisonSchwarz.krausMap K X := by
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X =
+          KadisonSchwarz.krausMap K X := by
     intro X
-    simp [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap]
+    simp [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
   intro k
   have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
-  have hTPk_eq : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
+  have hTPk_eq : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
     simpa [show k - 1 + 1 = k by abel] using hcyclic (k - 1)
   have hTPk_proj :
-      IsOrthogonalProjection (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) := by
+      IsOrthogonalProjection (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) := by
     simpa [hTPk_eq] using hPproj (k - 1)
   have hRight :
       KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =
         KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
     calc
       KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
-          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * (P k)ᴴ) := by
+          = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * (P k)ᴴ) := by
               rw [hK_apply]
-      _ = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+      _ = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
             rw [hPk_star, (hPproj k).2]
-      _ = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ := by
+      _ = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+            (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ := by
               rw [hTPk_proj.1.eq, hTPk_proj.2]
       _ = KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
             rw [hK_apply]
@@ -126,12 +127,12 @@ private theorem cyclic_projection_mem_multiplicativeDomain
         (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
     calc
       KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
-          = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((P k)ᴴ * P k) := by
+          = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((P k)ᴴ * P k) := by
               rw [hK_apply]
-      _ = transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+      _ = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
             rw [hPk_star, (hPproj k).2]
-      _ = (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+      _ = (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ *
+            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
               rw [hTPk_proj.1.eq, hTPk_proj.2]
       _ = (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
             rw [hK_apply]
@@ -149,15 +150,15 @@ private theorem cyclic_projection_mul_left
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     ∀ k : Fin m, ∀ X : MatrixAlg D,
-      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X := by
+      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hMulDomain := cyclic_projection_mem_multiplicativeDomain (A := A) hTP P hPproj hcyclic
   intro k X
-  simpa [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+  simpa [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
     KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
 
 /-- The adjoint transfer map is multiplicative on the right of a cyclic
@@ -170,15 +171,15 @@ private theorem cyclic_projection_mul_right
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     ∀ k : Fin m, ∀ X : MatrixAlg D,
-      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
+      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
+          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hMulDomain := cyclic_projection_mem_multiplicativeDomain (A := A) hTP P hPproj hcyclic
   intro k X
-  simpa [K, MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using
+  simpa [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
     KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
 
 private theorem compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner
@@ -186,19 +187,19 @@ private theorem compressedTensor_adjointTransferMap_primitive_and_irreducible_of
     (B : MPSTensor r D) (C : MPSTensor r n) (P : MatrixAlg D)
     (T : MatrixEnd D)
     (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
-    (hT : transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
+    (hT : Kraus.transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
     (hPproj : IsOrthogonalProjection P)
     (hIntertwine :
       ∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
+        (φ (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
+          Kraus.transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
     (hMul : ∀ X Y : Matrix (Fin n) (Fin n) ℂ, (φ (X * Y)).1 = (φ X).1 * (φ Y).1)
     (hStar : ∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ)
     (hInv : PreservesCorner P T)
     (hCornerPrim : _root_.IsPrimitive (cornerRestriction P T hInv))
     (hCornerIrr : IsIrreducibleOnCorner P T) :
-    _root_.IsPrimitive (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
-      IsIrreducibleMap (transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) :=
+    _root_.IsPrimitive (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
+      IsIrreducibleMap (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) :=
   compressedTensor_adjointTransferMap_cornerBridge
     (B := B) (C := C) (P := P) (T := T) (φ := φ)
     hT hPproj hIntertwine hMul hStar hInv hCornerPrim hCornerIrr
@@ -207,7 +208,7 @@ private theorem compressedTensor_adjointTransferMap_primitive_and_irreducible_of
 transfer map to the compressed cyclic-sector tensors.
 
 The only remaining hypothesis beyond the cyclic-sector decomposition data is the
-corner irreducibility theorem for `((transferMap A†)^m)` on each projection
+corner irreducibility theorem for `((Kraus.transferMap A†)^m)` on each projection
 `P k`. In particular, this theorem isolates the orbit-sum / `hProjStep` part of
 the non-periodic proof chain from the subsequent compression-transport
 step. -/
@@ -219,7 +220,7 @@ private theorem
     {γ : ℂ}
     (hγprim : IsPrimitiveRoot γ m)
     (hperiph :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)))
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -230,12 +231,12 @@ private theorem
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hIntertwine :
       ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+        (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := blockPhysDim d m) (D := D)
+          Kraus.transferMap (d := blockPhysDim d m) (D := D)
             (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul :
       ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -248,11 +249,11 @@ private theorem
       ∀ k : Fin m,
         IsIrreducibleOnCorner
           (P k)
-          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m)) :
+          ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m)) :
     ∀ u : Fin m,
-      _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
-        IsIrreducibleTensor (blocks u) := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+      _root_.IsPrimitive (Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
+        Kraus.IsIrreducibleFamily (blocks u) := by
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hcyclic
   have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hcyclic
   have hPne : ∀ k : Fin m, P k ≠ 0 := cyclic_projection_nonzero_of_sum_one hPsum hcyclic
@@ -264,7 +265,8 @@ private theorem
     isPrimitive_restriction_of_cyclic_decomp (T := T)
       hγprim hperiph P hPproj hPsum hcyclic hMulLeft hMulRight hPne u
   have hTpow :
-      transferMap (d := blockPhysDim d m) (D := D) (fun i => (blockTensor A m i)ᴴ) = T ^ m := by
+      Kraus.transferMap (d := blockPhysDim d m) (D := D)
+        (fun i => (blockTensor A m i)ᴴ) = T ^ m := by
     ext X : 1
     exact transferMap_adjoint_blocked_eq_pow A m X
   obtain ⟨hPrimAdj, hIrrAdj⟩ :=
@@ -281,17 +283,17 @@ private theorem
   let : InnerProductSpace ℂ (Matrix (Fin (dim u)) (Fin (dim u)) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
-      transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =
-        (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint := by
+      Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =
+        (Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint := by
     simpa only using
       (transferMap_conjTranspose_eq_adjoint
         (d := blockPhysDim d m) (D := dim u) (A := blocks u))
   have hPrimAdj' :
       _root_.IsPrimitive
-        ((transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint) := by
+        ((Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint) := by
     simpa only [hAdj] using hPrimAdj
   refine ⟨(IsPrimitive.adjoint_iff
-    (E := transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))).1 hPrimAdj', ?_⟩
+    (E := Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))).1 hPrimAdj', ?_⟩
   exact isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (blocks u) hIrrAdj
 
 /-- Unconditional: cyclic-sector blocks after period removal are primitive and
@@ -305,11 +307,11 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     {γ : ℂ}
     (hγprim : IsPrimitiveRoot γ m)
     (hperiph :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)))
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -320,12 +322,12 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     (hPsum : ∑ k : Fin m, P k = 1)
     (hcyclic :
       ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hIntertwine :
       ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+        (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := blockPhysDim d m) (D := D)
+          Kraus.transferMap (d := blockPhysDim d m) (D := D)
             (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul :
       ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -335,9 +337,9 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
         (φ k Xᴴ).1 = ((φ k X).1)ᴴ)
     (hNondeg : ∀ k, dim k ≠ 0) :
     ∀ u : Fin m,
-      _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
-        IsIrreducibleTensor (blocks u) := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+      _root_.IsPrimitive (Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
+        Kraus.IsIrreducibleFamily (blocks u) := by
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   have hIrrAdj : IsIrreducibleMap T := by
     simpa [T] using
       isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (A := A) hIrr
@@ -363,10 +365,10 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A) :
+    (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ (m : ℕ) (_ : NeZero m) (_ : 0 < m) (γ : ℂ),
       IsPrimitiveRoot γ m ∧
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) ∧
       ∃ (dim : Fin m → ℕ)
         (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -379,15 +381,15 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
             blocks) ∧
         (∀ k, IsOrthogonalProjection (P k)) ∧
         (∑ k : Fin m, P k = 1) ∧
-        (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+        (∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
         (∀ k (i : Fin (blockPhysDim d m)),
           P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
         (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-          mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+          mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
         (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-          (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+          (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
               (fun i => (blocks k i)ᴴ) X)).1 =
-            transferMap (d := blockPhysDim d m) (D := D)
+            Kraus.transferMap (d := blockPhysDim d m) (D := D)
               (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
         (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
           (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -399,9 +401,10 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
   have hIrrKLM : IsIrreducibleMap (Kraus.mapLM (fun i => (A i)ᴴ)) := by
     rw [Kraus.mapLM_eq_transferMap]; exact hIrrK
   obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
-    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix hIrrKLM
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix
+      hIrrKLM
   have hperiph_range :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [← Kraus.mapLM_eq_transferMap, hperiph_set]
     ext x
@@ -429,7 +432,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A) :
+    (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ (m : ℕ) (_ : NeZero m) (_ : 0 < m)
       (dim : Fin m → ℕ)
       (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
@@ -442,15 +445,15 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
           blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
       (∑ k : Fin m, P k = 1) ∧
-      (∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+      (∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
       (∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
+        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+        (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := blockPhysDim d m) (D := D)
+          Kraus.transferMap (d := blockPhysDim d m) (D := D)
             (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -481,15 +484,15 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A) :
+    (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ (m : ℕ) (_ : 0 < m)
       (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
       (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ (blockTensor A m)
         (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+        (Kraus.transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, 0 < dim k) := by
   obtain ⟨m, hne, hm_pos, _γ, hγ_prim, hperiph_range, hdecomp⟩ :=
     exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irreducible
@@ -499,8 +502,8 @@ theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducible
       _hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
     hdecomp
   have hPrimIrr : ∀ u : Fin m,
-      _root_.IsPrimitive (transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
-        IsIrreducibleTensor (blocks u) :=
+      _root_.IsPrimitive (Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)) ∧
+        Kraus.IsIrreducibleFamily (blocks u) :=
     primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
       A hTP hIrr hγ_prim hperiph_range blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar
       hNondeg

@@ -81,12 +81,12 @@ theorem periodicOverlapDichotomy
         hB_letter⟩ :=
         exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic B hB
       have hAShift :
-          ∀ k, transferMap (d := d) (D := D₁) (fun i => (A i)ᴴ) (PA (k + 1)) =
+          ∀ k, Kraus.transferMap (d := d) (D := D₁) (fun i => (A i)ᴴ) (PA (k + 1)) =
             PA k := by
         intro k
         simpa [cyclicNextOfPos, Fin.add_def] using hAShift' k
       have hBShift :
-          ∀ k, transferMap (d := d) (D := D₁) (fun i => (B i)ᴴ) (PB (k + 1)) =
+          ∀ k, Kraus.transferMap (d := d) (D := D₁) (fun i => (B i)ᴴ) (PB (k + 1)) =
             PB k := by
         intro k
         simpa [cyclicNextOfPos, Fin.add_def] using hBShift' k

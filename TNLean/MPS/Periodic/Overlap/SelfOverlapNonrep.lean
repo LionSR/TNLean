@@ -65,14 +65,14 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclic :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     {u v : Fin m} (hOrth : P u * P v = 0)
     {U : MatrixAlg D} {ζ : ℂ} (hζ : ‖ζ‖ = 1)
     (hSupp : U = P u * U * P v)
-    (hEig : ((transferMap (d := d) (D := D) A) ^ m) U = ζ • U) :
+    (hEig : ((Kraus.transferMap (d := d) (D := D) A) ^ m) U = ζ • U) :
     U = 0 := by
   classical
-  set E := transferMap (d := d) (D := D) A with hE_def
+  set E := Kraus.transferMap (d := d) (D := D) A with hE_def
   -- The original transfer map is irreducible and trace preserving.
   have hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1 := hP.leftCanonical
   -- Trace preservation: `tr (E X) = tr X` for every `X`.
@@ -80,7 +80,7 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     intro X
     have hsum : Matrix.trace (E X) =
         Matrix.trace ((∑ i : Fin d, (A i)ᴴ * A i) * X) := by
-      simp only [hE_def, transferMap_apply, Finset.sum_mul, Matrix.trace_sum]
+      simp only [hE_def, Kraus.transferMap_apply, Finset.sum_mul, Matrix.trace_sum]
       refine Finset.sum_congr rfl fun i _ => ?_
       rw [Matrix.trace_mul_cycle (A i) X (A i)ᴴ, Matrix.mul_assoc]
     rw [hsum, hNorm, Matrix.one_mul]
@@ -92,7 +92,7 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     have hμroot : μ ∈ {z : ℂ | z ^ m = 1} := by rw [← hP.peripheral_eq]; exact hμ
     simpa using hμroot
   obtain ⟨ρ, _hρ_psd, hρ_ne, hρ_fix⟩ :=
-    exists_posSemidef_fixedPoint A hP.leftCanonical (NeZero.pos D)
+    Kraus.exists_posSemidef_fixedPoint A hP.leftCanonical (NeZero.pos D)
   have hsingleton : peripheralEigenvalues (E ^ m) = {1} :=
     peripheralEigenvalues_pow_eq_singleton (E := E) (p := m) (NeZero.pos m)
       hperiph_pow ρ hρ_fix hρ_ne
@@ -153,13 +153,13 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     calc
       E (P a * X * P b)
           = ∑ i : Fin d, A i * (P a * X * P b) * (A i)ᴴ := by
-            rw [hE_def, transferMap_apply]
+            rw [hE_def, Kraus.transferMap_apply]
       _ = ∑ i : Fin d, P (a + 1) * (A i * (P a * X * P b) * (A i)ᴴ) * P (b + 1) := by
             exact Finset.sum_congr rfl fun i _ => hterm i
       _ = P (a + 1) * (∑ i : Fin d, A i * (P a * X * P b) * (A i)ᴴ) * P (b + 1) := by
             rw [Finset.mul_sum, Finset.sum_mul]
       _ = P (a + 1) * E (P a * X * P b) * P (b + 1) := by
-            rw [hE_def, transferMap_apply]
+            rw [hE_def, Kraus.transferMap_apply]
   -- By induction, `E^t U` is supported on the `(u + t • 1, v + t • 1)` block.
   have hEt_supp : ∀ t : ℕ,
       (E ^ t) U = P (u + t • (1 : Fin m)) * ((E ^ t) U) * P (v + t • (1 : Fin m)) := by

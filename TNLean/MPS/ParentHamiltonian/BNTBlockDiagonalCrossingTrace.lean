@@ -69,12 +69,12 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
           σ ⟨k.val, by omega⟩
         (∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) headWord * C j) * evalWord (A j) tailWord)) =
+            ((Kraus.evalWord (A j) headWord * C j) * Kraus.evalWord (A j) tailWord)) =
         (∑ j : Fin r,
           Matrix.trace
-            ((((μ j) ^ N • X j) * evalWord (A j) headWord *
-                evalWord (A j) middleWord) *
-              evalWord (A j) tailWord)) := by
+            ((((μ j) ^ N • X j) * Kraus.evalWord (A j) headWord *
+                Kraus.evalWord (A j) middleWord) *
+              Kraus.evalWord (A j) tailWord)) := by
   classical
   obtain ⟨φ, hφmem, hφsum⟩ :=
     (Submodule.mem_iSup_iff_exists_finsupp
@@ -111,26 +111,26 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
   have hLeft :
       (∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) headWord * C j) * evalWord (A j) tailWord)) =
+            ((Kraus.evalWord (A j) headWord * C j) * Kraus.evalWord (A j) tailWord)) =
         ∑ j : Fin r, φ j σ := by
     refine Finset.sum_congr rfl ?_
     intro j _
     have hφj :
-        φ j σ = Matrix.trace (evalWord (A j) (List.ofFn σ) * C j) := by
+        φ j σ = Matrix.trace (Kraus.evalWord (A j) (List.ofFn σ) * C j) := by
       rw [hC j, groundSpaceMap_apply]
     calc
       Matrix.trace
-          ((evalWord (A j) headWord * C j) * evalWord (A j) tailWord)
+          ((Kraus.evalWord (A j) headWord * C j) * Kraus.evalWord (A j) tailWord)
           =
         Matrix.trace
-          (evalWord (A j) tailWord * (evalWord (A j) headWord * C j)) :=
+          (Kraus.evalWord (A j) tailWord * (Kraus.evalWord (A j) headWord * C j)) :=
             Matrix.trace_mul_comm _ _
       _ =
         Matrix.trace
-          ((evalWord (A j) tailWord * evalWord (A j) headWord) * C j) := by
+          ((Kraus.evalWord (A j) tailWord * Kraus.evalWord (A j) headWord) * C j) := by
             rw [Matrix.mul_assoc]
-      _ = Matrix.trace (evalWord (A j) (List.ofFn σ) * C j) := by
-            rw [hσ, evalWord_append]
+      _ = Matrix.trace (Kraus.evalWord (A j) (List.ofFn σ) * C j) := by
+            rw [hσ, Kraus.evalWord_append]
       _ = φ j σ := hφj.symm
   have hSum :
       (∑ j : Fin r, φ j σ) =
@@ -151,9 +151,9 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
   have hRight :
       (∑ j : Fin r,
           Matrix.trace
-            ((((μ j) ^ N • X j) * evalWord (A j) headWord *
-                evalWord (A j) middleWord) *
-              evalWord (A j) tailWord)) =
+            ((((μ j) ^ N • X j) * Kraus.evalWord (A j) headWord *
+                Kraus.evalWord (A j) middleWord) *
+              Kraus.evalWord (A j) tailWord)) =
         ∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
             (groundSpaceMap (A j) N ((μ j) ^ N • X j)) σ := by
@@ -164,19 +164,19 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup
         μ A hN hLN X j i τ hi σ
     calc
       Matrix.trace
-          ((((μ j) ^ N • X j) * evalWord (A j) headWord *
-              evalWord (A j) middleWord) *
-            evalWord (A j) tailWord)
+          ((((μ j) ^ N • X j) * Kraus.evalWord (A j) headWord *
+              Kraus.evalWord (A j) middleWord) *
+            Kraus.evalWord (A j) tailWord)
           =
         Matrix.trace
           (((μ j) ^ N • X j) *
-            ((evalWord (A j) headWord * evalWord (A j) middleWord) *
-              evalWord (A j) tailWord)) := by
+            ((Kraus.evalWord (A j) headWord * Kraus.evalWord (A j) middleWord) *
+              Kraus.evalWord (A j) tailWord)) := by
             simp [Matrix.mul_assoc]
       _ =
         Matrix.trace
-          (((evalWord (A j) headWord * evalWord (A j) middleWord) *
-              evalWord (A j) tailWord) *
+          (((Kraus.evalWord (A j) headWord * Kraus.evalWord (A j) middleWord) *
+              Kraus.evalWord (A j) tailWord) *
             ((μ j) ^ N • X j)) :=
             Matrix.trace_mul_comm _ _
       _ =
@@ -235,13 +235,13 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
         ∀ w : Fin (N - i.val) → Fin d,
           (∑ j : Fin r,
             Matrix.trace
-              ((evalWord (A j) (List.ofFn β) * C j) *
-                evalWord (A j) (List.ofFn w))) =
+              ((Kraus.evalWord (A j) (List.ofFn β) * C j) *
+                Kraus.evalWord (A j) (List.ofFn w))) =
           (∑ j : Fin r,
             Matrix.trace
-              ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
-                  evalWord (A j) (List.ofFn ρ)) *
-                evalWord (A j) (List.ofFn w))) := by
+              ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
+                  Kraus.evalWord (A j) (List.ofFn ρ)) *
+                Kraus.evalWord (A j) (List.ofFn w))) := by
   classical
   let τ : Fin N → Fin d := fun t =>
     if htail : i.val + L - N ≤ t.val ∧ t.val < i.val then
@@ -353,13 +353,13 @@ theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
               ∀ w : Fin (N - i.val) → Fin d,
                 (∑ j : Fin r,
                   Matrix.trace
-                    ((evalWord (A j) (List.ofFn β) * C j i ρ) *
-                      evalWord (A j) (List.ofFn w))) =
+                    ((Kraus.evalWord (A j) (List.ofFn β) * C j i ρ) *
+                      Kraus.evalWord (A j) (List.ofFn w))) =
                 (∑ j : Fin r,
                   Matrix.trace
-                    ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
-                        evalWord (A j) (List.ofFn ρ)) *
-                      evalWord (A j) (List.ofFn w))) := by
+                    ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
+                        Kraus.evalWord (A j) (List.ofFn ρ)) *
+                      Kraus.evalWord (A j) (List.ofFn w))) := by
   classical
   have hExists :
       ∀ i : Fin N, ∀ ρ : Fin (N - L) → Fin d,
@@ -369,13 +369,13 @@ theorem blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
               ∀ w : Fin (N - i.val) → Fin d,
                 (∑ j : Fin r,
                   Matrix.trace
-                    ((evalWord (A j) (List.ofFn β) * C j) *
-                      evalWord (A j) (List.ofFn w))) =
+                    ((Kraus.evalWord (A j) (List.ofFn β) * C j) *
+                      Kraus.evalWord (A j) (List.ofFn w))) =
                 (∑ j : Fin r,
                   Matrix.trace
-                    ((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) *
-                        evalWord (A j) (List.ofFn ρ)) *
-                      evalWord (A j) (List.ofFn w))) := by
+                    ((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) *
+                        Kraus.evalWord (A j) (List.ofFn ρ)) *
+                      Kraus.evalWord (A j) (List.ofFn w))) := by
     intro i ρ
     by_cases hi : N < i.val + L
     · obtain ⟨C, hC⟩ :=
@@ -427,9 +427,9 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
       let ρ : Fin (N - L) → Fin d := fun k =>
         τ ⟨i.val + L - N + k.val, by omega⟩
       ∀ j : Fin r, ∀ β : Fin (i.val + L - N) → Fin d,
-        evalWord (A j) (List.ofFn β) * C j =
-          (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-            evalWord (A j) (List.ofFn ρ) := by
+        Kraus.evalWord (A j) (List.ofFn β) * C j =
+          (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+            Kraus.evalWord (A j) (List.ofFn ρ) := by
   classical
   obtain ⟨C, hTrace⟩ :=
     blockDiagonal_boundary_crossing_trace_decomposition_of_sum_mem_iSup

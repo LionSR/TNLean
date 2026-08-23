@@ -33,7 +33,7 @@ variable {d D : ℕ}
 
 Uses `trace_ne_zero_of_injective` from `TracePairing`. -/
 private theorem linearExtension_nonzero {A B : MPSTensor d (Nat.succ D')}
-    (hA : IsInjective A) (hAB : SameMPV A B)
+    (hA : Kraus.IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₗ[ℂ]
          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ}
     (hT : ∀ i : Fin d, T (A i) = B i) : T ≠ 0 := by
@@ -45,7 +45,7 @@ private theorem linearExtension_nonzero {A B : MPSTensor d (Nat.succ D')}
 If `A` is injective and `A` and `B` generate the same MPV family, then they are gauge equivalent,
 meaning `B i = X * A i * X⁻¹` for some invertible matrix `X`. -/
 theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
-    (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
+    (hA : Kraus.IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
   classical
   cases D with
   | zero =>
@@ -64,7 +64,7 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
 
 /-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
 theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
-    (hA : IsInjective A) :
+    (hA : Kraus.IsInjective A) :
     SameMPV A B ↔ GaugeEquiv A B :=
   ⟨fundamentalTheorem_singleBlock hA, GaugeEquiv.sameMPV⟩
 

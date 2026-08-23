@@ -31,7 +31,7 @@ The conclusion is at length \(L\), where block injectivity makes \(\Gamma_L\)
 injective; no uniqueness is claimed for the longer $(L+1)$-site matrices
 themselves. -/
 theorem cyclicRestrictₗ_first_products_eq_of_restriction_eq
-    {A : MPSTensor d D} {N L : ℕ} (hInj : IsNBlkInjective A L)
+    {A : MPSTensor d D} {N L : ℕ} (hInj : Kraus.IsNBlkInjective A L)
     (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i : Fin N) (τ₁ τ₂ : Fin N → Fin d) (ψ : NSiteSpace d N)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
@@ -108,7 +108,7 @@ outside configuration has the same word on the sites outside the window as
 \] -/
 theorem wrappedMiddleBackground_first_products_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
@@ -138,7 +138,7 @@ independence step for the last-site boundary-restriction matrix in the
 periodic-boundary coordinate comparison. -/
 theorem wrappedMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
@@ -212,7 +212,7 @@ outside configuration has the same word on the sites outside the window as
 \] -/
 theorem mirrorMiddleBackground_first_products_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
@@ -242,7 +242,7 @@ is the independence step for the second boundary-restriction matrix in the
 periodic-boundary coordinate comparison. -/
 theorem mirrorMiddleBackground_witness_eq_of_complement_eq
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}

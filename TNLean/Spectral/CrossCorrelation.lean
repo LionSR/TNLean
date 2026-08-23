@@ -42,30 +42,30 @@ section BlockSeparation
 
 /-- **Cross-correlation decay**: For injective MPS tensors `A` and `B`
 that are not gauge-phase equivalent, the cross-correlation
-$$\sum_\sigma \mathrm{tr}(\mathrm{evalWord}(A,\sigma) \cdot X \cdot
-  \mathrm{evalWord}(B,\sigma)^\dagger)$$
+$$\sum_\sigma \mathrm{tr}(\mathrm{Kraus.evalWord}(A,\sigma) \cdot X \cdot
+  \mathrm{Kraus.evalWord}(B,\sigma)^\dagger)$$
 converges to zero as the system size `N → ∞`.
 
 This is the trace of `F_{AB}^N(X)`, which tends to zero since
 `F_{AB}^N(X) → 0` by `mixedTransfer_pow_tendsto_zero`. -/
 theorem cross_correlation_tendsto_zero
     (A B : MPSTensor d D)
-    (hA : IsInjective A) (hB : IsInjective B)
+    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hAB : ¬ GaugePhaseEquiv A B)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Filter.Tendsto
-      (fun N => Matrix.trace (((mixedTransferMap A B) ^ N) X))
+      (fun N => Matrix.trace (((Kraus.mixedTransferMap A B) ^ N) X))
       Filter.atTop (nhds 0) := by
   have hK : ¬ Kraus.GaugePhaseEquiv A B :=
     fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
-  simpa [mixedTransferMap] using
+  simpa [Kraus.mixedTransferMap] using
     Kraus.cross_correlation_tendsto_zero A B
       (Kraus.isIrreducibleMap_mapLM_of_transferMap A
-        (injective_implies_irreducibleCP A hA))
+        (Kraus.injective_implies_irreducibleCP A hA))
       (Kraus.isIrreducibleMap_mapLM_of_transferMap B
-        (injective_implies_irreducibleCP B hB))
+        (Kraus.injective_implies_irreducibleCP B hB))
       hA_norm hB_norm hK X
 
 /-- **Self-correlation persists**: If `ρ` is a fixed point of `E_A`, then
@@ -74,9 +74,9 @@ the off-diagonal decay: self-terms persist while cross-terms vanish. -/
 theorem self_correlation_persists
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hfp : transferMap (d := d) (D := D) A ρ = ρ) :
+    (hfp : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
     ∀ N : ℕ,
-      Matrix.trace (((transferMap (d := d) (D := D) A) ^ N) ρ) = Matrix.trace ρ := by
+      Matrix.trace (((Kraus.transferMap (d := d) (D := D) A) ^ N) ρ) = Matrix.trace ρ := by
   rw [← Kraus.mapLM_eq_transferMap] at hfp ⊢
   exact Kraus.self_correlation_persists A ρ hfp
 

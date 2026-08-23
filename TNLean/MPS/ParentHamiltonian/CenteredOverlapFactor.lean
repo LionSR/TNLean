@@ -127,7 +127,7 @@ theorem boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply
     (u : Cfg d K) (j : Cfg d Q) :
     boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d Q)
         (wholeIncrementLeftOverlapFactorES A K Q x) (u, j) =
-      evalWord A (List.ofFn j) *
+      Kraus.evalWord A (List.ofFn j) *
         boundaryFamilyEquiv (D := D) (Cfg d K) x u := by
   apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
   rw [← boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
@@ -155,7 +155,7 @@ theorem boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply
     boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d Q)
         (wholeIncrementRightOverlapFactorES A K Q y) (u, j) =
       boundaryFamilyEquiv (D := D) (Cfg d Q) y j *
-        evalWord A (List.ofFn u) := by
+        Kraus.evalWord A (List.ofFn u) := by
   apply (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).injective
   rw [← boundaryFamilyFiber_eq_frobeniusEquivEuclidean]
   calc
@@ -257,7 +257,7 @@ theorem boundaryFamilyEquiv_c3LeftOverlapFactorES_apply
     (u : Cfg d K) (j : Cfg d 1) :
     boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
         (c3LeftOverlapFactorES A K x) (u, j) =
-      evalWord A (List.ofFn j) *
+      Kraus.evalWord A (List.ofFn j) *
         boundaryFamilyEquiv (D := D) (Cfg d K) x u := by
   simpa only [c3LeftOverlapFactorES] using
     boundaryFamilyEquiv_wholeIncrementLeftOverlapFactorES_apply A K 1 x u j
@@ -271,7 +271,7 @@ theorem boundaryFamilyEquiv_c3RightOverlapFactorES_apply
     boundaryFamilyEquiv (D := D) (Cfg d K × Cfg d 1)
         (c3RightOverlapFactorES A K y) (u, j) =
       boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
-        evalWord A (List.ofFn u) := by
+        Kraus.evalWord A (List.ofFn u) := by
   simpa only [c3RightOverlapFactorES] using
     boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply A K 1 y u j
 

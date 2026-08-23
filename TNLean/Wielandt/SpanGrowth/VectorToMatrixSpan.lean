@@ -30,8 +30,8 @@ theorem wordSpan_blockTensor_le (A : MPSTensor d D) (L n : ℕ) :
   apply Submodule.span_le.mpr
   rintro M ⟨σ, rfl⟩
   have hblock :
-      evalWord (blockTensor (d := d) (D := D) A L) (List.ofFn σ) =
-        evalWord A (flattenBlockedWord d L (List.ofFn σ)) :=
+      Kraus.evalWord (blockTensor (d := d) (D := D) A L) (List.ofFn σ) =
+        Kraus.evalWord A (flattenBlockedWord d L (List.ofFn σ)) :=
     evalWord_blockTensor (A := A) (L := L) (List.ofFn σ)
   have hlen : (flattenBlockedWord d L (List.ofFn σ)).length = n * L := by
     simpa [List.length_ofFn] using

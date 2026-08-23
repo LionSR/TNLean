@@ -71,38 +71,38 @@ theorem pgvwc07_complementary_word_cde_identities_of_trace_decomposition
       ∀ w : Fin m → Fin d,
         (∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) (List.ofFn β) * C j ρ) *
-              evalWord (A j) (List.ofFn w))) =
+            ((Kraus.evalWord (A j) (List.ofFn β) * C j ρ) *
+              Kraus.evalWord (A j) (List.ofFn w))) =
         (∑ j : Fin r,
           Matrix.trace
-            (((X j * evalWord (A j) (List.ofFn β)) *
-                evalWord (A j) (List.ofFn ρ)) *
-              evalWord (A j) (List.ofFn w)))) :
+            (((X j * Kraus.evalWord (A j) (List.ofFn β)) *
+                Kraus.evalWord (A j) (List.ofFn ρ)) *
+              Kraus.evalWord (A j) (List.ofFn w)))) :
     ∀ j : Fin r,
       ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        E = (∑ ρ : Fin M → Fin d, C j ρ * (evalWord (A j) (List.ofFn ρ))ᴴ) ∧
+        E = (∑ ρ : Fin M → Fin d, C j ρ * (Kraus.evalWord (A j) (List.ofFn ρ))ᴴ) ∧
         (∀ β : Fin K → Fin d,
-          X j * evalWord (A j) (List.ofFn β) =
-            evalWord (A j) (List.ofFn β) * E) ∧
+          X j * Kraus.evalWord (A j) (List.ofFn β) =
+            Kraus.evalWord (A j) (List.ofFn β) * E) ∧
         (∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
-          evalWord (A j) (List.ofFn β) * C j ρ =
-            evalWord (A j) (List.ofFn β) * E *
-              evalWord (A j) (List.ofFn ρ)) := by
+          Kraus.evalWord (A j) (List.ofFn β) * C j ρ =
+            Kraus.evalWord (A j) (List.ofFn β) * E *
+              Kraus.evalWord (A j) (List.ofFn ρ)) := by
   classical
   intro j
   let E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-    ∑ ρ : Fin M → Fin d, C j ρ * (evalWord (A j) (List.ofFn ρ))ᴴ
+    ∑ ρ : Fin M → Fin d, C j ρ * (Kraus.evalWord (A j) (List.ofFn ρ))ᴴ
   have hCompat :
       ∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
-        evalWord (A j) (List.ofFn β) * C j ρ =
-          (X j * evalWord (A j) (List.ofFn β)) *
-            evalWord (A j) (List.ofFn ρ) :=
+        Kraus.evalWord (A j) (List.ofFn β) * C j ρ =
+          (X j * Kraus.evalWord (A j) (List.ofFn β)) *
+            Kraus.evalWord (A j) (List.ofFn ρ) :=
     (pgvwc07_complementary_word_compatibility_of_trace_decomposition
       (A := A) (m := m) (K := K) (M := M) hSpan X C hCoeff) j
   have hIds :=
     pgvwc07_boundary_word_matrix_identities_of_two_length_compatibility
       (A := A j) (K := K) (M := M) (C := C j)
-      (Dmat := fun β : Fin K → Fin d => X j * evalWord (A j) (List.ofFn β))
+      (Dmat := fun β : Fin K → Fin d => X j * Kraus.evalWord (A j) (List.ofFn β))
       (sum_evalWord_mul_conjTranspose_evalWord (A j) (hUnital j) M)
       hCompat
   refine ⟨E, rfl, ?_, ?_⟩
@@ -147,23 +147,23 @@ theorem pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomp
       ∀ w : Fin m → Fin d,
         (∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) (List.ofFn β) * C j ρ) *
-              evalWord (A j) (List.ofFn w))) =
+            ((Kraus.evalWord (A j) (List.ofFn β) * C j ρ) *
+              Kraus.evalWord (A j) (List.ofFn w))) =
         (∑ j : Fin r,
           Matrix.trace
-            (((((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                evalWord (A j) (List.ofFn ρ)) *
-              evalWord (A j) (List.ofFn w)))) :
+            (((((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                Kraus.evalWord (A j) (List.ofFn ρ)) *
+              Kraus.evalWord (A j) (List.ofFn w)))) :
     ∀ j : Fin r,
       ∃ E : Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
-        E = (∑ ρ : Fin M → Fin d, C j ρ * (evalWord (A j) (List.ofFn ρ))ᴴ) ∧
+        E = (∑ ρ : Fin M → Fin d, C j ρ * (Kraus.evalWord (A j) (List.ofFn ρ))ᴴ) ∧
         (∀ β : Fin K → Fin d,
-          ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β) =
-            evalWord (A j) (List.ofFn β) * E) ∧
+          ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β) =
+            Kraus.evalWord (A j) (List.ofFn β) * E) ∧
         (∀ ρ : Fin M → Fin d, ∀ β : Fin K → Fin d,
-          evalWord (A j) (List.ofFn β) * C j ρ =
-            evalWord (A j) (List.ofFn β) * E *
-              evalWord (A j) (List.ofFn ρ)) := by
+          Kraus.evalWord (A j) (List.ofFn β) * C j ρ =
+            Kraus.evalWord (A j) (List.ofFn β) * E *
+              Kraus.evalWord (A j) (List.ofFn ρ)) := by
   exact
     pgvwc07_complementary_word_cde_identities_of_trace_decomposition
       (A := A) (m := m) (K := K) (M := M) hSpan

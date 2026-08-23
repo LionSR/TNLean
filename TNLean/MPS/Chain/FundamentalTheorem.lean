@@ -65,7 +65,7 @@ theorem fundamentalTheorem_injective_chain
   /- Note: this formulation only assumes injectivity of `A`. The proof applies
   the single-block theorem to `chainCombinedTensor A`; no separate injectivity
   hypothesis on `B` is required. -/
-  have hCA : MPSTensor.IsInjective (MPSTensor.chainCombinedTensor A) :=
+  have hCA : Kraus.IsInjective (MPSTensor.chainCombinedTensor A) :=
     MPSTensor.chainCombinedTensor_isInjective A ⟨0, hn⟩ (hA ⟨0, hn⟩)
   obtain ⟨X, hX⟩ := MPSTensor.fundamentalTheorem_singleBlock hCA hMPV
   exact ⟨fun _ => X, fun k i => by

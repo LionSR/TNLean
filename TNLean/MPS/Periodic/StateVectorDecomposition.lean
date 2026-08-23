@@ -118,11 +118,11 @@ private theorem projector_mul_evalWord_eq_evalWord_mul_projector
     (Q : Fin p → MatrixAlg D) (A : MPSTensor d D)
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
     (u : Fin p) (w : List (Fin d)) :
-    Q u * evalWord A w = evalWord A w * Q (u + w.length • (1 : Fin p)) := by
+    Q u * Kraus.evalWord A w = Kraus.evalWord A w * Q (u + w.length • (1 : Fin p)) := by
   induction w generalizing u with
   | nil => simp
   | cons i w ih =>
-      simp only [evalWord_cons, List.length_cons, add_smul, one_smul]
+      simp only [Kraus.evalWord_cons, List.length_cons, add_smul, one_smul]
       rw [← Matrix.mul_assoc, hshift u i, Matrix.mul_assoc, ih (u + 1)]
       have hindex :
           u + 1 + w.length • (1 : Fin p) =
@@ -143,16 +143,16 @@ private theorem cornerProd_eq_projector_mul_evalWord
     (hQproj : ∀ k, IsOrthogonalProjection (Q k))
     (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
     (u : Fin p) (w : List (Fin d)) :
-    cornerProd Q A u w = Q u * evalWord A w := by
+    cornerProd Q A u w = Q u * Kraus.evalWord A w := by
   rw [cornerProd_eq_conj_evalWord Q A hQproj hshift]
   have htransport := projector_mul_evalWord_eq_evalWord_mul_projector Q A hshift u w
   calc
-    Q u * evalWord A w * Q (u + w.length • (1 : Fin p)) =
-        evalWord A w * Q (u + w.length • (1 : Fin p)) *
+    Q u * Kraus.evalWord A w * Q (u + w.length • (1 : Fin p)) =
+        Kraus.evalWord A w * Q (u + w.length • (1 : Fin p)) *
           Q (u + w.length • (1 : Fin p)) := by rw [htransport]
-    _ = evalWord A w * Q (u + w.length • (1 : Fin p)) := by
+    _ = Kraus.evalWord A w * Q (u + w.length • (1 : Fin p)) := by
       rw [Matrix.mul_assoc, (hQproj _).2]
-    _ = Q u * evalWord A w := htransport.symm
+    _ = Q u * Kraus.evalWord A w := htransport.symm
 
 /-- At positive length, the trace of the boundary-aware corner product equals the
 coefficient of the corresponding explicit projector-component chain.
@@ -174,7 +174,7 @@ state-vector decomposition at every length. For
     = \sum_u \operatorname{tr}(F_u(\sigma)).
 \]
 Here `cornerProd` is the repeated corner-transition product starting with the
-boundary projector `Q u`. At length zero, `evalWord` gives
+boundary projector `Q u`. At length zero, `Kraus.evalWord` gives
 \(A^{[]} = 1\), while `cornerProd` gives \(F_u([]) = Q_u\), so the formula
 reads \(\operatorname{tr}(1) = \sum_u \operatorname{tr}(Q_u)\). It does not
 identify the empty `projectorComponentChain` coefficient, whose chain evaluation
@@ -192,9 +192,9 @@ theorem mpv_eq_sum_trace_cornerProd
     mpv A σ = ∑ u : Fin p, Matrix.trace (cornerProd Q A u (List.ofFn σ)) := by
   simp only [mpv, coeff, cornerProd_eq_projector_mul_evalWord Q A hQproj hshift]
   calc
-    (evalWord A (List.ofFn σ)).trace =
-        ((∑ u : Fin p, Q u) * evalWord A (List.ofFn σ)).trace := by rw [hQsum, one_mul]
-    _ = ∑ u : Fin p, (Q u * evalWord A (List.ofFn σ)).trace := by
+    (Kraus.evalWord A (List.ofFn σ)).trace =
+        ((∑ u : Fin p, Q u) * Kraus.evalWord A (List.ofFn σ)).trace := by rw [hQsum, one_mul]
+    _ = ∑ u : Fin p, (Q u * Kraus.evalWord A (List.ofFn σ)).trace := by
       rw [Finset.sum_mul, Matrix.trace_sum]
 
 /-- At every positive length, inserting the cyclic resolution of the identity
@@ -212,9 +212,9 @@ theorem mpv_eq_sum_projectorComponentChain_coeff
   simp only [mpv, coeff, MPSChainTensor.coeff, projectorComponentChain_eval Q A hQproj,
     cornerProd_eq_projector_mul_evalWord Q A hQproj hshift]
   calc
-    (evalWord A (List.ofFn σ)).trace =
-        ((∑ u : Fin p, Q u) * evalWord A (List.ofFn σ)).trace := by rw [hQsum, one_mul]
-    _ = ∑ u : Fin p, (Q u * evalWord A (List.ofFn σ)).trace := by
+    (Kraus.evalWord A (List.ofFn σ)).trace =
+        ((∑ u : Fin p, Q u) * Kraus.evalWord A (List.ofFn σ)).trace := by rw [hQsum, one_mul]
+    _ = ∑ u : Fin p, (Q u * Kraus.evalWord A (List.ofFn σ)).trace := by
       rw [Finset.sum_mul, Matrix.trace_sum]
 
 /-- If the chain length does not close the cyclic sector, every component
@@ -276,7 +276,7 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
     _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA
   have hCyclic' :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
   let Q : Fin p → MatrixAlg D := fun k => P (-k)

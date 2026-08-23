@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixGramUnitary
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 
 /-!
 # Gauges for coisometric reconstructions

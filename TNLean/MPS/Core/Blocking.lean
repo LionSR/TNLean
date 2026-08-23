@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import QICLean.Kraus.Blocking
 
 import Mathlib.Data.Fintype.BigOperators
@@ -89,7 +89,7 @@ noncomputable def blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : �
 /-- Block injectivity is injectivity of the corresponding blocked family. -/
 lemma isNBlkInjective_iff_blockTensor_isInjective
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
-    IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
+    Kraus.IsNBlkInjective A N ↔ Kraus.IsInjective (blockTensor A N) := by
   exact Kraus.isNBlkInjective_iff_blockTensor_isInjective A N
 
 /-- Flatten a word in blocked indices into a word in the original alphabet. -/
@@ -418,7 +418,7 @@ theorem leftCanonical_blockTensor
 
 /-- Evaluating a repeated single-letter word gives a matrix power. -/
 lemma evalWord_replicate (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) (L : ℕ) :
-    evalWord A (List.replicate L i) = (A i) ^ L := by
+    Kraus.evalWord A (List.replicate L i) = (A i) ^ L := by
   exact Kraus.evalWord_replicate A i L
 
 variable {d D : ℕ}

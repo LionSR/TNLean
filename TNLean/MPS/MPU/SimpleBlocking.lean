@@ -624,7 +624,7 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     {bound : ℕ}
     (data : Matrix.StabilizedRankOneData
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) bound) :
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening)) bound) :
     ∃ Φ ρ : Fin (D * D) → ℂ,
       Φ ⬝ᵥ ρ = 1 ∧
       normalizedDiagonal (doubleLayerTensor U) *ᵥ ρ = ρ ∧
@@ -658,7 +658,7 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
       _ = 1 := by simpa [dotProduct, mul_comm] using data.pairing_eq_one
   have hErho : E *ᵥ ρ = ρ := by
     rw [show E = (transferMatrix
-      (MPSTensor.transferMap U.normalizedFlattening)).submatrix
+      (Kraus.transferMap U.normalizedFlattening)).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm by
       exact normalizedDiagonal_doubleLayerTensor U]
     rw [Matrix.submatrix_mulVec_equiv]
@@ -671,7 +671,7 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
     rfl
   have hEΦ : Matrix.vecMul Φ E = Φ := by
     rw [show E = (transferMatrix
-      (MPSTensor.transferMap U.normalizedFlattening)).submatrix
+      (Kraus.transferMap U.normalizedFlattening)).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm by
       exact normalizedDiagonal_doubleLayerTensor U]
     rw [Matrix.submatrix_vecMul_equiv]

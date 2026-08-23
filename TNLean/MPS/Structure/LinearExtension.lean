@@ -32,7 +32,7 @@ variable {d D : ℕ}
 then there exists a unique linear map $T : \MN{D} \to \MN{D}$
 satisfying $T(A^i) = B^i$ for all $i$. -/
 theorem linearExtension_exists_unique {A B : MPSTensor d D}
-    (hA : IsInjective A) (hAB : SameMPV A B) :
+    (hA : Kraus.IsInjective A) (hAB : SameMPV A B) :
     ∃! T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
       (∀ i : Fin d, T (A i) = B i) := by
   classical
@@ -76,7 +76,7 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
 $T : \MN{D} \to \MN{D}$ is the linear map satisfying $T(A^i) = B^i$ for all $i$,
 then $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$. -/
 theorem linearExtension_mul {A B : MPSTensor d D}
-    (hA : IsInjective A) (hAB : SameMPV A B)
+    (hA : Kraus.IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : ∀ i : Fin d, T (A i) = B i) :
     ∀ M N : Matrix (Fin D) (Fin D) ℂ, T (M * N) = T M * T N := by
@@ -85,7 +85,7 @@ theorem linearExtension_mul {A B : MPSTensor d D}
   let ΦB := traceMulRightPi (d := d) (D := D) B
   have htr3 : ∀ i j k : Fin d,
       Matrix.trace (A i * A j * A k) = Matrix.trace (B i * B j * B k) := fun i j k =>
-    by simpa [evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j, k]
+    by simpa [Kraus.evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j, k]
   have hΦComp : (ΦB ∘ₗ T) = ΦA :=
     LinearMap.ext_on_range (hv := hA.span_eq_top) fun i => by
       ext j; change traceMulRightPi B (T (A i)) j = traceMulRightPi A (A i) j

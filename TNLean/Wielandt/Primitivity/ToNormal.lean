@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import QICLean.Analysis.SpectralRadiusPowerDecay
 import QICLean.Channel.Irreducible.FixedPoint
 import QICLean.Channel.Primitive
-import QICLean.MPS.Core.InvariantProjection
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import Mathlib.Analysis.Normed.Operator.CompleteCodomain
 
@@ -56,7 +56,7 @@ not as the final primitive-to-normal theorem.
   arXiv:1606.00608](https://arxiv.org/abs/1606.00608), Appendix A
 -/
 
-open scoped Matrix ComplexOrder BigOperators Matrix.Norms.L2Operator
+open scoped Matrix ComplexOrder BigOperators Matrix.Norms.L2Operator Kraus
 open Matrix Filter MPSTensor
 
 namespace MPSTensor
@@ -88,10 +88,10 @@ theorem IsPrimitiveMPS.fixedPoint_unique
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (σ : Matrix (Fin D) (Fin D) ℂ)
-    (hσ : transferMap (d := d) (D := D) A σ = σ) :
+    (hσ : Kraus.transferMap (d := d) (D := D) A σ = σ) :
     σ = (trace σ / trace ρ) • ρ := by
   have htr := hP.trace_ne_zero
-  set E := transferMap (d := d) (D := D) A
+  set E := Kraus.transferMap (d := d) (D := D) A
   set c := trace σ / trace ρ
   set σ' := σ - c • ρ
   -- σ' has trace zero
@@ -135,7 +135,7 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
     (hP : IsPrimitiveMPS A ρ) :
     let V := Matrix (Fin D) (Fin D) ℂ
     let Φ := Module.End.toContinuousLinearMap V
-    let Ê := Φ (transferMap (d := d) (D := D) A -
+    let Ê := Φ (Kraus.transferMap (d := d) (D := D) A -
       fixedPointProj (D := D) ρ hP.trace_ne_zero)
     Tendsto (fun n => Ê ^ n) atTop (nhds 0) :=
   _root_.pow_tendsto_zero_of_spectralRadius_lt_one _ hP.complementary_transfer_map_gap
@@ -147,7 +147,7 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
 theorem IsPrimitiveMPS.transferMap_isChannel
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
-    IsChannel (transferMap (d := d) (D := D) A) :=
+    IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
   Kraus.isChannel_transferMap A hP.norm
 
 /-- **Irreducible transfer map implies a positive-definite fixed point.**
@@ -160,7 +160,7 @@ fixed point already present in `IsPrimitiveMPS`. -/
 theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
-    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A)) :
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A)) :
     ρ.PosDef :=
   posDef_of_posSemidef_fixedPoint_irreducible_cp
     (Kraus.mapLM A) (Kraus.isCPMap_mapLM A)
@@ -172,18 +172,18 @@ theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
 omit [NeZero D] in
 /-- Irreducibility of a tensor gives irreducibility of its transfer map. -/
 theorem isIrreducibleMap_of_isIrreducibleTensor
-    (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
+    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
 
-/-- **IsIrreducibleTensor ⟹ PosDef** for primitive tensors.
+/-- **Kraus.IsIrreducibleFamily ⟹ PosDef** for primitive tensors.
 
-Combines the implication `IsIrreducibleTensor → IsIrreducibleMap` with the
+Combines the implication `Kraus.IsIrreducibleFamily → IsIrreducibleMap` with the
 channel-level positive-definite fixed-point theorem. -/
 theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
     ρ.PosDef :=
   posDef_of_isIrreducibleMap_of_isPrimitiveMPS hP
     (isIrreducibleMap_of_isIrreducibleTensor A hIrr)

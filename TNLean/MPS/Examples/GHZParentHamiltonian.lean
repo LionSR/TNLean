@@ -55,7 +55,7 @@ private theorem ghz_groundSpaceMap_two
   · have hne :
         (fun _ : Fin 2 => (0 : Fin 2)) ≠ (fun _ : Fin 2 => (1 : Fin 2)) := by
       decide
-    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, evalWord, Matrix.trace,
+    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, Kraus.evalWord, Matrix.trace,
       Matrix.mul_apply, Matrix.diagonal_apply, Pi.single_apply, hne]
   · have hne0 :
         (fun k : Fin 2 => if k = 0 then (0 : Fin 2) else (1 : Fin 2)) ≠
@@ -65,7 +65,7 @@ private theorem ghz_groundSpaceMap_two
         (fun k : Fin 2 => if k = 0 then (0 : Fin 2) else (1 : Fin 2)) ≠
           (fun _ : Fin 2 => (1 : Fin 2)) := by
       decide
-    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, evalWord, Matrix.trace,
+    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, Kraus.evalWord, Matrix.trace,
       Matrix.mul_apply, Matrix.diagonal_apply, Pi.single_apply, hne0, hne1]
   · have hne0 :
         (fun k : Fin 2 => if k = 0 then (1 : Fin 2) else (0 : Fin 2)) ≠
@@ -75,12 +75,12 @@ private theorem ghz_groundSpaceMap_two
         (fun k : Fin 2 => if k = 0 then (1 : Fin 2) else (0 : Fin 2)) ≠
           (fun _ : Fin 2 => (1 : Fin 2)) := by
       decide
-    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, evalWord, Matrix.trace,
+    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, Kraus.evalWord, Matrix.trace,
       Matrix.mul_apply, Matrix.diagonal_apply, Pi.single_apply, hne0, hne1]
   · have hne :
         (fun _ : Fin 2 => (1 : Fin 2)) ≠ (fun _ : Fin 2 => (0 : Fin 2)) := by
       decide
-    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, evalWord, Matrix.trace,
+    simp [groundSpaceMap_apply, twoSiteKet, ghzTensor, Kraus.evalWord, Matrix.trace,
       Matrix.mul_apply, Matrix.diagonal_apply, Pi.single_apply, hne]
 
 /-- The local parent-space equation for the GHZ tensor is

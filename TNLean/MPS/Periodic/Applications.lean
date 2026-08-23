@@ -60,9 +60,9 @@ coefficients multiplying the corresponding unrotated words. -/
 theorem evalWord_rotatePhysical_ofFn
     (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) :
     ∀ (N : ℕ) (s : Fin N → Fin d),
-      evalWord (rotatePhysical M A) (List.ofFn s) =
+      Kraus.evalWord (rotatePhysical M A) (List.ofFn s) =
         ∑ t : Fin N → Fin d,
-          (∏ n : Fin N, M (s n) (t n)) • evalWord A (List.ofFn t) := by
+          (∏ n : Fin N, M (s n) (t n)) • Kraus.evalWord A (List.ofFn t) := by
   intro N
   induction N with
   | zero =>
@@ -72,7 +72,7 @@ theorem evalWord_rotatePhysical_ofFn
   | succ N ih =>
       intro s
       classical
-      rw [List.ofFn_succ, evalWord_cons, rotatePhysical_apply]
+      rw [List.ofFn_succ, Kraus.evalWord_cons, rotatePhysical_apply]
       rw [ih (fun n : Fin N => s n.succ)]
       rw [Finset.sum_mul_sum]
       let e : (Fin d × (Fin N → Fin d)) ≃ (Fin (N + 1) → Fin d) :=
@@ -80,17 +80,17 @@ theorem evalWord_rotatePhysical_ofFn
       have hreindex :
           (∑ t : Fin (N + 1) → Fin d,
               (∏ n : Fin (N + 1), M (s n) (t n)) •
-                evalWord A (List.ofFn t)) =
+                Kraus.evalWord A (List.ofFn t)) =
             ∑ p : Fin d × (Fin N → Fin d),
               (∏ n : Fin (N + 1), M (s n) (e p n)) •
-                evalWord A (List.ofFn (e p)) :=
+                Kraus.evalWord A (List.ofFn (e p)) :=
         (Fintype.sum_equiv e
           (f := fun p : Fin d × (Fin N → Fin d) =>
             (∏ n : Fin (N + 1), M (s n) (e p n)) •
-              evalWord A (List.ofFn (e p)))
+              Kraus.evalWord A (List.ofFn (e p)))
           (g := fun t : Fin (N + 1) → Fin d =>
             (∏ n : Fin (N + 1), M (s n) (t n)) •
-              evalWord A (List.ofFn t))
+              Kraus.evalWord A (List.ofFn t))
           (by intro p; rfl)).symm
       rw [hreindex, ← Fintype.sum_prod_type']
       refine Finset.sum_congr rfl ?_
@@ -102,7 +102,7 @@ theorem evalWord_rotatePhysical_ofFn
         simp [e, Fin.consEquiv]
       have hlist : List.ofFn (e (i, t)) = i :: List.ofFn t := by
         simp [e, Fin.consEquiv]
-      rw [hprod, hlist, evalWord_cons, smul_mul_smul_comm]
+      rw [hprod, hlist, Kraus.evalWord_cons, smul_mul_smul_comm]
 
 /-- The matrix product vector of a physical-index rotation is the sitewise
 matrix action on the original matrix product vector. -/
@@ -125,7 +125,7 @@ single-block Fundamental Theorem. -/
 theorem gaugeEquiv_of_sameMPV_rotatePhysical
     (M : Matrix (Fin d) (Fin d) ℂ)
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (hSym : SameMPV A (rotatePhysical M A)) :
     GaugeEquiv A (rotatePhysical M A) :=
   fundamentalTheorem_singleBlock hA hSym
@@ -164,9 +164,9 @@ This follows from unitary freedom of the Kraus representation (Theorem 2.1(4),
 Wolf *Quantum Channels & Operations*). -/
 theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1) :
-    transferMap (rotatePhysical u A) = transferMap A := by
+    Kraus.transferMap (rotatePhysical u A) = Kraus.transferMap A := by
   ext X : 1
-  simp only [transferMap_apply, rotatePhysical_apply]
+  simp only [Kraus.transferMap_apply, rotatePhysical_apply]
   exact kraus_same_map_of_unitary_combination _ A u (mul_eq_one_comm.mp hu) (fun _ => rfl) X
 
 /-- A common unitary rotation of the physical index leaves the rectangular
@@ -174,10 +174,10 @@ mixed transfer map unchanged. -/
 theorem mixedTransferMap₂_rotatePhysical {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) :
-    mixedTransferMap₂ (rotatePhysical u A) (rotatePhysical u B) =
-      mixedTransferMap₂ A B := by
+    Kraus.mixedTransferMap₂ (rotatePhysical u A) (rotatePhysical u B) =
+      Kraus.mixedTransferMap₂ A B := by
   ext X : 1
-  simp only [mixedTransferMap₂_apply, rotatePhysical_apply]
+  simp only [Kraus.mixedTransferMap₂_apply, rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
   have hU : ∀ j k : Fin d,
       ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
@@ -251,15 +251,15 @@ theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (
 
 /-! ### Irreducibility preservation under rotation -/
 
-/-- `IsIrreducibleTensor` is preserved by unitary rotation of the physical index.
+/-- `Kraus.IsIrreducibleFamily` is preserved by unitary rotation of the physical index.
 
 If `P` were a nontrivial invariant projection for `rotatePhysical u A`, then
 multiplying the invariance condition by `conj(u_{ik})` and summing over `i`
 yields `(1-P) A_k P = 0` via the orthogonality `uᴴ u = 1`, so `P` would also
 be invariant for `A`, contradicting irreducibility. -/
 theorem isIrreducibleTensor_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
-    (hu : u * uᴴ = 1) (hA : IsIrreducibleTensor A) :
-    IsIrreducibleTensor (rotatePhysical u A) := by
+    (hu : u * uᴴ = 1) (hA : Kraus.IsIrreducibleFamily A) :
+    Kraus.IsIrreducibleFamily (rotatePhysical u A) := by
   intro ⟨P, hProj, hNe0, hNe1, hInv⟩
   apply hA
   refine ⟨P, hProj, hNe0, hNe1, ?_⟩
@@ -307,7 +307,7 @@ theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin
 /-! ### SameMPV₂ preservation under rotation -/
 
 /-- Strengthened induction: for any prefix word `p`, the trace of
-`evalWord A p * evalWord (rotatePhysical M A) w` equals the corresponding
+`Kraus.evalWord A p * Kraus.evalWord (rotatePhysical M A) w` equals the corresponding
 expression with `B`. This generalises the `coeff` equality needed for
 `sameMPV₂_rotatePhysical`. -/
 private lemma trace_evalWord_rotatePhysical_prefix {D₁ D₂ : ℕ}
@@ -316,26 +316,26 @@ private lemma trace_evalWord_rotatePhysical_prefix {D₁ D₂ : ℕ}
     (h : ∀ w : List (Fin d), coeff A w = coeff B w)
     (p : List (Fin d)) :
     ∀ w : List (Fin d),
-      Matrix.trace (evalWord A p * evalWord (rotatePhysical M A) w) =
-      Matrix.trace (evalWord B p * evalWord (rotatePhysical M B) w) := by
+      Matrix.trace (Kraus.evalWord A p * Kraus.evalWord (rotatePhysical M A) w) =
+      Matrix.trace (Kraus.evalWord B p * Kraus.evalWord (rotatePhysical M B) w) := by
   intro w
   induction w generalizing p with
-  | nil => simp only [evalWord_nil, mul_one, coeff_eq] at *; exact h p
+  | nil => simp only [Kraus.evalWord_nil, mul_one, coeff_eq] at *; exact h p
   | cons i w ih =>
-    simp only [evalWord_cons, rotatePhysical_apply]
+    simp only [Kraus.evalWord_cons, rotatePhysical_apply]
     -- Auxiliary: expand trace(prefix * (∑ j, M i j • C j) * tail) as
-    -- ∑ j, M i j * trace(evalWord C (p ++ [j]) * tail)
+    -- ∑ j, M i j * trace(Kraus.evalWord C (p ++ [j]) * tail)
     have expand : ∀ {D' : ℕ} (C : MPSTensor d D'),
-        Matrix.trace (evalWord C p * ((∑ j : Fin d, M i j • C j) *
-          evalWord (rotatePhysical M C) w)) =
-        ∑ j : Fin d, M i j * Matrix.trace (evalWord C (p ++ [j]) *
-          evalWord (rotatePhysical M C) w) := by
+        Matrix.trace (Kraus.evalWord C p * ((∑ j : Fin d, M i j • C j) *
+          Kraus.evalWord (rotatePhysical M C) w)) =
+        ∑ j : Fin d, M i j * Matrix.trace (Kraus.evalWord C (p ++ [j]) *
+          Kraus.evalWord (rotatePhysical M C) w) := by
       intro D' C
       rw [← Matrix.mul_assoc, Matrix.mul_sum]
       simp_rw [mul_smul_comm, Matrix.sum_mul, smul_mul_assoc,
         Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
       congr 1; funext j; congr 1; congr 1
-      rw [evalWord_append, evalWord_cons, evalWord_nil, mul_one]
+      rw [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
     rw [expand A, expand B]
     congr 1; funext j; congr 1
     exact ih (p ++ [j])
@@ -358,7 +358,7 @@ theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (M : Matrix (Fin d) (Fin d) 
   simp only [mpv_eq, coeff_eq]
   -- Apply the prefix lemma with empty prefix
   have := trace_evalWord_rotatePhysical_prefix M A B hcoeff [] (List.ofFn σ)
-  simpa [evalWord_nil] using this
+  simpa [Kraus.evalWord_nil] using this
 
 /-! ### Irreducible form preservation under rotation -/
 

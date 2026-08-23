@@ -42,7 +42,7 @@ Source comparison: CPSV16, arXiv:1606.00608, Appendix C.4, lines 1955--1997,
 together with Wolf--Perez-Garcia, arXiv:1005.4545, Theorem 8. -/
 theorem exists_unitary_conj_of_positive_perBlockLinearExtension
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r)
     (hPos : IsPositiveMap (perBlockLinearExtension A B hA hSame k)) :

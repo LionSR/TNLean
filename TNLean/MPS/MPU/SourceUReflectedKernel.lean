@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.Word
+import QICLean.Kraus.Word
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceUContraction
 import TNLean.MPS.MPU.SuppliedWitnessReblocking
@@ -99,7 +99,7 @@ theorem normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
     [NeZero d] [NeZero D] (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρtrace : Matrix.trace ρ = 1)
     (J : ℕ)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     normalizedDiagonal (doubleLayerTensor (blockTensor U (J * (D * D)))) =
       Matrix.vecMulVec
@@ -121,7 +121,7 @@ theorem normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power
     | succ m ih => rw [pow_succ, ih, hRidem]
   have hRpow : R ^ (D * D) = R := hpowpos _ hDsq
   have hpowerR :
-      transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J = R := hpower
+      transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J = R := hpower
   rw [normalizedDiagonal_doubleLayerTensor_blockTensor, pow_mul, hpowerR, hRpow]
   rfl
 
@@ -162,10 +162,10 @@ supplied matrix. This is the raw orientation whose conjugate transpose
 has boundary order $|1)(\rho|$. -/
 theorem reflected_transfer_power_eq_vecMulVec_transpose [NeZero d]
     (U : MPOTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (J : ℕ)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     transferMatrix
-        (MPSTensor.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J =
+        (Kraus.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.transpose.vec
         (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
   let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
@@ -174,7 +174,7 @@ theorem reflected_transfer_power_eq_vecMulVec_transpose [NeZero d]
   rw [← Equiv.apply_eq_iff_eq
     (Matrix.reindex finProdFinEquiv finProdFinEquiv)]
   change (transferMatrix
-      (MPSTensor.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J).submatrix
+      (Kraus.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm = _
   rw [← normalizedDiagonal_doubleLayerTensor_blockTensor,
     ← physicalAdjointTensor_blockTensor,
@@ -205,7 +205,7 @@ theorem IsMPU.reflected_blockTensor_mul_sq_simple_contractions_of_transfer_power
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hρtrace : Matrix.trace ρ = 1) (J : ℕ) (hJ : 0 < J)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     let K := J * (D * D)
     let W := MPOTensor.blockTensor (MPOTensor.physicalAdjointTensor U) K
@@ -275,7 +275,7 @@ theorem conjTranspose_normalizedDiagonal_reflected_blockTensor_eq_vecMulVec
     [NeZero d] [NeZero D] (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hρtrace : Matrix.trace ρ = 1) (J : ℕ)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     (normalizedDiagonal (doubleLayerTensor
       (blockTensor (physicalAdjointTensor U) (J * (D * D)))))ᴴ =
@@ -293,7 +293,7 @@ theorem outputLayer_normalizedDiagonal_pow_eq_vecMulVec
     [NeZero d] [NeZero D] (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hρtrace : Matrix.trace ρ = 1) (J : ℕ)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     normalizedDiagonal (doubleLayerTensor (physicalAdjointTensor U)) ^ (J * (D * D)) =
       Matrix.vecMulVec
@@ -330,7 +330,7 @@ theorem IsMPU.reflected_blockTensor_mul_sq_add_two_simple_contractions
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hρtrace : Matrix.trace ρ = 1) (J : ℕ) (hJ : 0 < J)
-    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+    (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.vec (1 : Matrix (Fin D) (Fin D) ℂ).vec) :
     let K := J * (D * D)
     let W := MPOTensor.blockTensor (MPOTensor.physicalAdjointTensor U) (K + 2)

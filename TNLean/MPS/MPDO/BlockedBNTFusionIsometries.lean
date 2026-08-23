@@ -213,7 +213,7 @@ theorem exists_positive_block_with_injective_fusion
     ∃ L : ℕ, 0 < L ∧
       MPSTensor.WordTupleSpanTop
         (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) 1 ∧
-      (∀ γ, MPSTensor.IsInjective
+      (∀ γ, Kraus.IsInjective
         (blockTensor (Fam.tensor γ) L).toMPSTensor) ∧
       ∀ (α β : Fin g) (I J : Fin (MPSTensor.blockPhysDim p L)),
         (Fam.fusionIsometry α β *
@@ -243,7 +243,7 @@ theorem exists_positive_block_with_injective_fusion
       (fun γ ↦ MPSTensor.blockTensor (Fam.tensor γ).toMPSTensor L) 1).2 hSpan
   have hFamily :
       (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) =
-        fun γ ↦ MPSTensor.reindexPhysical (blockedDoubledIndexEquiv p L)
+        fun γ ↦ Kraus.reindexPhysical (blockedDoubledIndexEquiv p L)
           (MPSTensor.blockTensor (Fam.tensor γ).toMPSTensor L) := by
     funext γ
     exact toMPSTensor_blockTensor (Fam.tensor γ)

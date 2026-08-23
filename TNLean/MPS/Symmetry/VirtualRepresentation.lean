@@ -107,7 +107,7 @@ such that:
 2. `ρ.map_mul'` is the standard projective multiplication law. -/
 theorem virtual_rep_of_symmetric_injective
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) :
     ∃ ω : ScalarCocycle G,
@@ -145,7 +145,7 @@ theorem virtual_rep_of_symmetric_injective
 `virtual_rep_of_symmetric_injective` satisfies the 2-cocycle identity. -/
 theorem virtual_rep_of_symmetric_injective_cocycle
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U)
     (hD : 0 < D) :

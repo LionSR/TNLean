@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Spectral.PeripheralToTransferMapGap
-import QICLean.MPS.Core.InvariantProjection
+import QICLean.Kraus.InvariantProjection
 import TNLean.Wielandt.Primitivity.ToNormal
 import QICLean.Channel.Primitive
 import QICLean.Channel.Irreducible.FromSpectral
@@ -37,7 +37,7 @@ normality/canonical-form reductions.
 - [Wolf, *Quantum Channels & Operations: Guided Tour*], Sections 6.2--6.4
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix BigOperators ComplexOrder Kraus
 open Matrix Filter
 
 namespace MPSTensor
@@ -55,8 +55,8 @@ positive-definite fixed point) to the operational complementary transfer-map gap
 by the transfer-map convergence theory.
 
 The proof chains:
-1. `IsIrreducibleMap E → IsIrreducibleTensor A`
-2. `IsIrreducibleTensor + IsPeripherallyPrimitive + hNorm`
+1. `IsIrreducibleMap E → Kraus.IsIrreducibleFamily A`
+2. `Kraus.IsIrreducibleFamily + IsPeripherallyPrimitive + hNorm`
    → `HasPrimitiveFixedPoint A`
    via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
 3. every nonzero PSD fixed point of an irreducible transfer map is PosDef, via
@@ -68,8 +68,8 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
     (hSI : IsStronglyIrreduciblePaper A) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ ∧ ρ.PosDef := by
   obtain ⟨_, _, _, hPrim, hIrrMap⟩ := hSI
-  have hIrrT : IsIrreducibleTensor A :=
-    Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A hIrrMap
+  have hIrrT : Kraus.IsIrreducibleFamily A :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrMap
   obtain ⟨ρ', hPrimMPS⟩ :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   have hρ'PD : ρ'.PosDef :=
@@ -87,7 +87,7 @@ theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) :
     IsPeripherallyPrimitive A := by
-  let E := transferMap (d := d) (D := D) A
+  let E := Kraus.transferMap (d := d) (D := D) A
   let Pρ := fixedPointProj (D := D) ρ hP.trace_ne_zero
   have hcompl : ∀ ν : ℂ, Module.End.HasEigenvalue (E - Pρ) ν → ‖ν‖ < 1 := by
     intro ν hν
@@ -126,8 +126,8 @@ theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (hρ_pd : ρ.PosDef) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) A) := by
-  let E := transferMap (d := d) (D := D) A
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
+  let E := Kraus.transferMap (d := d) (D := D) A
   have huniq :
       ∀ σ : Matrix (Fin D) (Fin D) ℂ,
         σ.PosSemidef → E σ = σ → ∃ c : ℂ, σ = c • ρ := by

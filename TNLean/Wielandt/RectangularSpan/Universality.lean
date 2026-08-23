@@ -35,7 +35,7 @@ theorem rectSpan_nilpIndex_finrank_constant'
 
 /-- Normality rules out stabilization below the maximal rectangular-span dimension. -/
 theorem rectSpan_nilpIndex_strict_growth_of_isNormal
-    (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A) (n : ℕ)
+    (A : MPSTensor d D) (i₀ : Fin d) (hN : Kraus.IsNormal A) (n : ℕ)
     (hlt : finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
       D * ((A i₀) ^ D).rank) :
     finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
@@ -57,7 +57,7 @@ theorem rectSpan_nilpIndex_strict_growth_of_isNormal
 
 /-- Under normality, the sharp rank-one conclusion holds at the exact word length. -/
 theorem vecMulVec_eigenvector_exact_wordSpan [NeZero D]
-    (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A)
+    (A : MPSTensor d D) (i₀ : Fin d) (hN : Kraus.IsNormal A)
     (hNotInv : ¬ IsUnit (toLin' (A i₀))) {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
     ∀ ψ : Fin D → ℂ, vecMulVec φ ψ ∈ Kraus.wordSpan A (D ^ 2 - D + 1) := by

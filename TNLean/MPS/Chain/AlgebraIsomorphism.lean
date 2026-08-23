@@ -51,9 +51,9 @@ lemma chainCombinedTensor_apply {n : ℕ} (A : Fin n → MPSTensor d D)
 
 /-- If any site tensor is injective, the combined tensor is injective. -/
 theorem chainCombinedTensor_isInjective {n : ℕ} (A : Fin n → MPSTensor d D)
-    (k : Fin n) (hk : IsInjective (A k)) :
-    IsInjective (chainCombinedTensor A) := by
-  rw [IsInjective, eq_top_iff]
+    (k : Fin n) (hk : Kraus.IsInjective (A k)) :
+    Kraus.IsInjective (chainCombinedTensor A) := by
+  rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   have hM := hk.span_eq_top ▸ Submodule.mem_top (x := M)
   refine Submodule.span_mono ?_ hM
@@ -79,7 +79,7 @@ where the hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`
 is trace agreement for all mixed-site words of all lengths. -/
 theorem virtual_bond_gauge [NeZero D]
     (A B : Fin 3 → MPSTensor d D)
-    (hA : ∀ k, IsInjective (A k)) (_hB : ∀ k, IsInjective (B k))
+    (hA : ∀ k, Kraus.IsInjective (A k)) (_hB : ∀ k, Kraus.IsInjective (B k))
     (hEq : SameMPV (chainCombinedTensor A) (chainCombinedTensor B)) :
     ∃ Z : GL (Fin D) ℂ, ∀ (X : Matrix (Fin D) (Fin D) ℂ) (σ : Fin 3 → Fin d),
       virtualInsertCoeff (A 0) (A 1) (A 2) σ X =
@@ -87,7 +87,7 @@ theorem virtual_bond_gauge [NeZero D]
         ((↑Z⁻¹ : Matrix _ _ ℂ) * X * (↑Z : Matrix _ _ ℂ)) := by
   classical
   -- The combined tensor is injective (inherited from A 0).
-  have hCA : IsInjective (chainCombinedTensor A) :=
+  have hCA : Kraus.IsInjective (chainCombinedTensor A) :=
     chainCombinedTensor_isInjective A 0 (hA 0)
   -- Linear extension: unique T with T(CA i) = CB i for all combined indices i.
   obtain ⟨T, hT, _⟩ := linearExtension_exists_unique hCA hEq
@@ -109,7 +109,7 @@ theorem virtual_bond_gauge [NeZero D]
   obtain ⟨W, hTM⟩ := Matrix.exists_inner_of_linear_mul_endomorphism T hMul hNz
   -- trace(T(M)) = trace(M) since conjugation preserves trace.
   have hTr : ∀ M, Matrix.trace (T M) = Matrix.trace M := by
-    intro M; rw [hTM M]; exact trace_conj_eq W M
+    intro M; rw [hTM M]; exact Kraus.trace_conj_eq W M
   -- Provide Z = W⁻¹ as the gauge.
   refine ⟨W⁻¹, fun X σ => ?_⟩
   simp only [virtualInsertCoeff_eq, inv_inv]

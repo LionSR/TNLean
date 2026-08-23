@@ -169,7 +169,7 @@ is related to a CFII representative by a unitary similarity alone. -/
 theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
@@ -179,7 +179,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, (B i)ᴴ * (B i) = 1) ∧
-        transferMap (d := d) (D := D) B Λ = Λ := by
+        Kraus.transferMap (d := d) (D := D) B Λ = Λ := by
   classical
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
@@ -215,7 +215,7 @@ discarding zero blocks under the physical positive-length relation.
 theorem evalWord_eq_zero_of_all_zero (A : MPSTensor d D)
     (hzero : ∀ i : Fin d, A i = 0)
     (w : List (Fin d)) (hw : w ≠ []) :
-    evalWord A w = 0 := by
+    Kraus.evalWord A w = 0 := by
   cases w with
   | nil =>
       exact (hw rfl).elim
@@ -274,7 +274,7 @@ may occur; they vanish identically on nonempty rings and are discarded here. -/
 theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, ∃ i, blocks k i ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A

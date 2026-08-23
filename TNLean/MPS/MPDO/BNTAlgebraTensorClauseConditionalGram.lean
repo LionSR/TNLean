@@ -219,10 +219,10 @@ theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
       (w : Fin L → Fin ((d * d) * (d * d))),
       Matrix.trace
           (MPSTensor.linearMarkedTensor fGauge (blockTwo M).toMPSTensor u *
-            MPSTensor.evalWord (blockTwo M).toMPSTensor (List.ofFn w)) =
+            Kraus.evalWord (blockTwo M).toMPSTensor (List.ofFn w)) =
         Matrix.trace
           (MPSTensor.linearMarkedTensor R.fId (blockTwo M).toMPSTensor u *
-            MPSTensor.evalWord (blockTwo M).toMPSTensor (List.ofFn w)) := by
+            Kraus.evalWord (blockTwo M).toMPSTensor (List.ofFn w)) := by
     intro L hL u w
     rw [show MPSTensor.linearMarkedTensor fGauge (blockTwo M).toMPSTensor u =
         horizontalSlice

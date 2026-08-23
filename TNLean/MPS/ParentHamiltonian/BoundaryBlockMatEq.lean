@@ -75,13 +75,13 @@ theorem block_matEq_of_blocked_matEq
     (YB : Fin (blockPhysDim (blockPhysDim d L₀) Kb) → Matrix (Fin D) (Fin D) ℂ)
     (hBlk : ∀ (b : Fin (blockPhysDim d L₀))
         (cb : Fin (blockPhysDim (blockPhysDim d L₀) Kb)),
-      X * evalWord A (wordOfBlock d L₀ b)
-          * evalWord A (flattenBlockedWord d L₀ (wordOfBlock (blockPhysDim d L₀) Kb cb))
-        = evalWord A (wordOfBlock d L₀ b) * YB cb) :
+      X * Kraus.evalWord A (wordOfBlock d L₀ b)
+          * Kraus.evalWord A (flattenBlockedWord d L₀ (wordOfBlock (blockPhysDim d L₀) Kb cb))
+        = Kraus.evalWord A (wordOfBlock d L₀ b) * YB cb) :
     ∃ Y : (Fin (L₀ * Kb) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (s : Fin L₀ → Fin d) (c : Fin (L₀ * Kb) → Fin d),
-        X * evalWord A (List.ofFn s) * evalWord A (List.ofFn c)
-          = evalWord A (List.ofFn s) * Y c := by
+        X * Kraus.evalWord A (List.ofFn s) * Kraus.evalWord A (List.ofFn c)
+          = Kraus.evalWord A (List.ofFn s) * Y c := by
   refine ⟨fun c =>
     YB (directToIteratedBlockIndex d L₀ Kb
       (blockIndexOfList d (L₀ * Kb) (List.ofFn c) (by simp))), ?_⟩

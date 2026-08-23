@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.FormII
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Schwarz.KadisonSchwarz
 
@@ -32,14 +32,14 @@ If `A` is irreducible in the tensor sense (no nontrivial invariant orthogonal pr
 transfer map built from `A† : i ↦ (A i)ᴴ` is irreducible as a CP map.
 
 Proof idea:
-* an invariant projection `P` for `transferMap (A†)` implies `(1-P) (A i)† P = 0`;
+* an invariant projection `P` for `Kraus.transferMap (A†)` implies `(1-P) (A i)† P = 0`;
 * taking adjoints gives `P A i (1-P) = 0`, i.e. `(1-Q) A i Q = 0` for `Q = 1 - P`;
 * a nontrivial `P` would give a nontrivial invariant projection `Q` for `A`, contradicting
   tensor-irreducibility.
 -/
 theorem isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
-    (A : MPSTensor d D) (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
+    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
   have hIrrMap := isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
   simpa only [Kraus.mapLM_eq_transferMap] using
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
@@ -55,8 +55,8 @@ irreducibility is equivalent to tensor irreducibility. -/
 lemma isIrreducibleTensor_of_isIrreducibleMap_conjTranspose
     (A : MPSTensor d D)
     (hIrr :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ))) :
-    IsIrreducibleTensor A := by
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ))) :
+    Kraus.IsIrreducibleFamily A := by
   apply isIrreducibleTensor_of_isIrreducibleMap A
   rw [← Kraus.mapLM_eq_transferMap]
   exact (Kraus.isIrreducibleMap_mapLM_conjTranspose_iff A).mp
@@ -76,7 +76,7 @@ orientation explicit without repeating the spectral argument. -/
 theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
     (A : MPSTensor d D)
     (hUnital : ∑ i : Fin d, A i * (A i)ᴴ = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
@@ -87,17 +87,17 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
-        transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
+        Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
   classical
   let Aadj : MPSTensor d D := fun i => (A i)ᴴ
   have hTPadj : ∑ i : Fin d, (Aadj i)ᴴ * Aadj i = 1 := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hUnital
   have hIrrAdjMap :
-      IsIrreducibleMap (transferMap (d := d) (D := D) Aadj) := by
+      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) Aadj) := by
     simpa [Aadj] using
       isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
         (d := d) (D := D) A hIrr
-  have hIrrAdj : IsIrreducibleTensor (d := d) (D := D) Aadj :=
+  have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
     isIrreducibleTensor_of_isIrreducibleMap Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
@@ -113,7 +113,7 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
   have hUnitalB : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hTP_conj
-  have hΛ_fixB : transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
+  have hΛ_fixB : Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hΛ_fix
   exact ⟨hSame, hΛ_pd, hΛ_diag, hUnitalB, hΛ_fixB⟩

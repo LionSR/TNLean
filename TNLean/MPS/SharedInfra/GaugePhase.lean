@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Spectral.MPVOverlapDecay
@@ -47,22 +47,22 @@ theorem mpv_eq_pow_mul_of_gaugePhase
     funext i
     simpa [C] using hX i
   have hGauge :
-      evalWord C w =
-        (X : Matrix (Fin D) (Fin D) ℂ) * evalWord A w *
+      Kraus.evalWord C w =
+        (X : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w *
           ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
     simpa [C] using (evalWord_gauge (A := A) (B := C) X (by intro i; rfl) w)
-  have htrace : Matrix.trace (evalWord C w) = Matrix.trace (evalWord A w) := by
-    simpa [hGauge, Matrix.mul_assoc] using (trace_conj_eq (X := X) (M := evalWord A w))
+  have htrace : Matrix.trace (Kraus.evalWord C w) = Matrix.trace (Kraus.evalWord A w) := by
+    simpa [hGauge, Matrix.mul_assoc] using (Kraus.trace_conj_eq (X := X) (M := Kraus.evalWord A w))
   calc
-    mpv B σ = Matrix.trace (evalWord B w) := by
+    mpv B σ = Matrix.trace (Kraus.evalWord B w) := by
       simp [mpv, coeff, w]
-    _ = Matrix.trace (evalWord (fun i => ζ • C i) w) := by
+    _ = Matrix.trace (Kraus.evalWord (fun i => ζ • C i) w) := by
       simp [hB]
-    _ = Matrix.trace ((ζ ^ w.length) • evalWord C w) := by
-          simpa using congrArg Matrix.trace (evalWord_smul (ζ := ζ) (A := C) w)
-    _ = (ζ ^ w.length) * Matrix.trace (evalWord C w) := by
+    _ = Matrix.trace ((ζ ^ w.length) • Kraus.evalWord C w) := by
+          simpa using congrArg Matrix.trace (Kraus.evalWord_smul (ζ := ζ) (K := C) w)
+    _ = (ζ ^ w.length) * Matrix.trace (Kraus.evalWord C w) := by
           simp [Matrix.trace_smul, smul_eq_mul]
-    _ = (ζ ^ w.length) * Matrix.trace (evalWord A w) := by
+    _ = (ζ ^ w.length) * Matrix.trace (Kraus.evalWord A w) := by
           simp [htrace]
     _ = ζ ^ N * mpv A σ := by
           simp [mpv, coeff, w, hwlen]

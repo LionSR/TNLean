@@ -83,20 +83,20 @@ theorem hasUniqueGroundState_iff_proportional {V : Type*} [AddCommGroup V] [Modu
 /-- A positive block-injectivity length over nonzero virtual dimension forces the
 physical alphabet to be nonempty. -/
 private theorem neZero_d_of_isNBlkInjective [NeZero D]
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
     NeZero d := by
   by_contra h
   simp only [not_neZero] at h
   subst h
   have hempty :
-      Set.range (fun σ : Fin L₀ → Fin 0 => evalWord A (List.ofFn σ)) = ∅ := by
+      Set.range (fun σ : Fin L₀ → Fin 0 => Kraus.evalWord A (List.ofFn σ)) = ∅ := by
     ext M
     constructor
     · rintro ⟨σ, _⟩
       exact (σ ⟨0, hL₀⟩).elim0
     · intro hM
       cases hM
-  rw [IsNBlkInjective, Kraus.wordSpan, hempty, Submodule.span_empty] at hInj
+  rw [Kraus.IsNBlkInjective, Kraus.wordSpan, hempty, Submodule.span_empty] at hInj
   exact bot_ne_top hInj
 
 /-- Open-chain intersection property for block-injective tensors.
@@ -107,7 +107,7 @@ chain-level iteration of the inverting and growing-back argument in
 arXiv:2011.12127, Section IV.C. -/
 theorem contiguous_mem_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hLN : L₀ + 1 ≤ N)
     {ψ : NSiteSpace d N}
     (hwindow : ∀ (s : ℕ) (hs : s + (L₀ + 1) ≤ N) (τ : Fin N → Fin d),
       contiguousRestrictₗ s (L₀ + 1) hs τ ψ ∈ groundSpace A (L₀ + 1)) :
@@ -169,7 +169,7 @@ closure-property argument for block-injective tensors. It stops at open-chain
 membership; the scalarity step at the periodic boundary remains separate. -/
 theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 0 < N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N ≤ groundSpace A N := by
   intro ψ hψ
@@ -190,7 +190,7 @@ intertwines the two open-boundary matrices with every one-site tensor matrix.
 This is the full-ring closure-property comparison in arXiv:2011.12127,
 Section IV.C, lines 2078--2079. -/
 theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (_hL₀ : 0 < L₀) (X Y : Matrix (Fin D) (Fin D) ℂ)
     (hEq : cyclicTranslateState (⟨L₀, by omega⟩ : Fin (L₀ + 1))
         (groundSpaceMap A (L₀ + 1) X) = groundSpaceMap A (L₀ + 1) Y) :
@@ -214,13 +214,13 @@ theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
     rw [← List.ofFn_fin_append]
     exact (List.ofFn_congr (Nat.add_comm 1 L₀) (Fin.append α β)).symm
   rw [hswap, List.ofFn_fin_append] at hcoeff
-  simp_rw [evalWord_append] at hcoeff
+  simp_rw [Kraus.evalWord_append] at hcoeff
   calc
-    Matrix.trace (evalWord A (List.ofFn β) * (X * A a)) =
-        Matrix.trace (A a * (evalWord A (List.ofFn β) * X)) := by
+    Matrix.trace (Kraus.evalWord A (List.ofFn β) * (X * A a)) =
+        Matrix.trace (A a * (Kraus.evalWord A (List.ofFn β) * X)) := by
       rw [← Matrix.mul_assoc]
       exact Matrix.trace_mul_comm _ _
-    _ = Matrix.trace (evalWord A (List.ofFn β) * (A a * Y)) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn β) * (A a * Y)) := by
       simpa [α, Matrix.mul_assoc] using hcoeff
 
 /-- On the full minimal ring, the open-boundary matrix of every
@@ -234,7 +234,7 @@ This implements the full-ring closure-property alternative in arXiv:2011.12127,
 Section IV.C, lines 2078--2079. -/
 theorem full_ring_boundary_intertwines_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {ψ : NSiteSpace d (L₀ + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (L₀ + 1))
     (hψX : ψ = groundSpaceMap A (L₀ + 1) X) :
@@ -261,22 +261,22 @@ theorem full_ring_boundary_intertwines_of_chainGroundSpace
       hInj hL₀
     rw [← hY i, ← hY (s + i), cyclicTranslateState_add]
   have hPath : ∀ (w : List (Fin d)) (i : Fin (L₀ + 1)),
-      Y i * evalWord A w =
-        evalWord A w * Y (w.length • s + i) := by
+      Y i * Kraus.evalWord A w =
+        Kraus.evalWord A w * Y (w.length • s + i) := by
     intro w
     induction w with
-    | nil => intro i; simp [evalWord_nil]
+    | nil => intro i; simp [Kraus.evalWord_nil]
     | cons a w ih =>
         intro i
         calc
-          Y i * evalWord A (a :: w) = (Y i * A a) * evalWord A w := by
-            rw [evalWord_cons, Matrix.mul_assoc]
-          _ = (A a * Y (s + i)) * evalWord A w := by rw [hStep i a]
-          _ = A a * (Y (s + i) * evalWord A w) := by rw [Matrix.mul_assoc]
-          _ = A a * (evalWord A w * Y (w.length • s + (s + i))) := by
+          Y i * Kraus.evalWord A (a :: w) = (Y i * A a) * Kraus.evalWord A w := by
+            rw [Kraus.evalWord_cons, Matrix.mul_assoc]
+          _ = (A a * Y (s + i)) * Kraus.evalWord A w := by rw [hStep i a]
+          _ = A a * (Y (s + i) * Kraus.evalWord A w) := by rw [Matrix.mul_assoc]
+          _ = A a * (Kraus.evalWord A w * Y (w.length • s + (s + i))) := by
             rw [ih]
-          _ = evalWord A (a :: w) * Y ((a :: w).length • s + i) := by
-            rw [evalWord_cons]
+          _ = Kraus.evalWord A (a :: w) * Y ((a :: w).length • s + i) := by
+            rw [Kraus.evalWord_cons]
             have hindex : w.length • s + (s + i) = (a :: w).length • s + i := by
               rw [List.length_cons, add_nsmul, one_nsmul]
               abel
@@ -291,7 +291,7 @@ theorem full_ring_boundary_intertwines_of_chainGroundSpace
     funext k
     simp [cyclicTranslateCfg]
   have hCommFull : ∀ ω : Fin (L₀ + 1) → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X := by
     intro ω
     rw [← hYzero]
     let one : Fin (L₀ + 1) := ⟨1, by omega⟩
@@ -322,16 +322,16 @@ theorem full_ring_boundary_intertwines_of_chainGroundSpace
 /-- If \(X\) has the property that \(\operatorname{tr}(A^w X)=0\) for all words
 of length \(k\), with \(k \ge 1\) and \(A\) injective, then \(X=0\). -/
 private theorem eq_zero_of_trace_evalWord_mul_eq_zero {A : MPSTensor d D}
-    (hA : IsInjective A) {k : ℕ} (hk : 0 < k)
+    (hA : Kraus.IsInjective A) {k : ℕ} (hk : 0 < k)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ σ : Fin k → Fin d,
-      Matrix.trace (evalWord A (List.ofFn σ) * X) = 0) :
+      Matrix.trace (Kraus.evalWord A (List.ofFn σ) * X) = 0) :
     X = 0 := by
   have hwordK : Kraus.wordSpan A k = ⊤ := wordSpan_eq_top_of_isInjective hA hk
   have hφ :
       (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
     apply LinearMap.ext_on_range
-      (v := fun σ : Fin k → Fin d => evalWord A (List.ofFn σ))
+      (v := fun σ : Fin k → Fin d => Kraus.evalWord A (List.ofFn σ))
     · simpa [Kraus.wordSpan, Kraus.wordSpan] using hwordK
     · intro σ
       simp [Matrix.traceLinearMap_apply, h σ]
@@ -350,10 +350,10 @@ coincides with \(ℂ V^{(N)}(A)\) when the window size satisfies \(L ≥ 2\).
 For injective tensors, the open-chain intersection argument requires only
 a window of at least `2` sites. -/
 theorem chainGroundSpace_eq_mpvSubmodule {A : MPSTensor d D} [NeZero D]
-    (hA : IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
+    (hA : Kraus.IsInjective A) {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
   have hN0 : 0 < N := by omega
-  have : NeZero d := neZero_d_of_isInjective hA
+  have : NeZero d := Kraus.neZero_d_of_isInjective hA
   apply le_antisymm
   · -- ⊆ direction: chainGroundSpace ≤ mpvSubmodule
     intro ψ hψ
@@ -416,16 +416,16 @@ the local algebraic output needed for the remaining periodic-boundary coordinate
 (arXiv:2011.12127, Section IV.C, lines 2078--2079). -/
 theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
     {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X) :
     ∃ Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       (∀ (j : Fin d) (τ : Fin N → Fin d),
-        evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
           τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j) ∧
       (∀ (j : Fin d) (τ : Fin N → Fin d),
-        X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
           τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ) := by
   obtain ⟨M, rfl⟩ : ∃ M, N = M + 1 := ⟨N - 1, by omega⟩
   have hN0 : 0 < M + 1 := by omega
@@ -441,9 +441,9 @@ theorem chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
   have hGSAt : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       ∃ Y : Matrix (Fin D) (Fin D) ℂ,
         ∀ σ_w : Fin (L₀ + 1) → Fin d,
-          Matrix.trace (evalWord A (List.ofFn
+          Matrix.trace (Kraus.evalWord A (List.ofFn
             (cyclicCfg hN0 (L₀ + 1) i σ_w τ)) * X) =
-          Matrix.trace (evalWord A (List.ofFn σ_w) * Y) := by
+          Matrix.trace (Kraus.evalWord A (List.ofFn σ_w) * Y) := by
     intro i τ
     have hmem := hψred i τ
     rw [groundSpace, LinearMap.mem_range] at hmem
@@ -473,10 +473,10 @@ matrix algebra. Hence \(X\) is scalar and
 \(\Gamma_N(X)\in \mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : L₀ ≤ m)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : L₀ ≤ m)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X) :
     groundSpaceMap A N X ∈ mpvSubmodule A N := by
   have hAll : ∀ M : Matrix (Fin D) (Fin D) ℂ, X * M = M * X :=
     commutes_all_of_commutes_long_words_of_isNBlkInjective
@@ -503,13 +503,13 @@ word into blocks of length \(m\) gives commutation at the multiple \(L₀m\), wh
 is at least \(L₀\). The long-word centrality theorem then makes \(X\) scalar. -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     {A : MPSTensor d D} {L₀ m N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : 0 < m)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hm : 0 < m)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X) :
     groundSpaceMap A N X ∈ mpvSubmodule A N := by
   have hCommMul : ∀ ω : Fin (L₀ * m) → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X :=
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X :=
     commutes_words_mul_of_commutes_words (A := A) (m := m) (q := L₀) hComm
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
     (A := A) (L₀ := L₀) (m := L₀ * m) (N := N) hInj hL₀
@@ -528,16 +528,16 @@ for the same matrix \(Y_\mu\), then positive-length commutation gives
 \(\Gamma_N(X)\in \mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility
     {A : MPSTensor d D} {L₀ m N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin m → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hLeft : ∀ (j : Fin d) (μ : Fin m → Fin d),
-      evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
+      Kraus.evalWord A (List.ofFn μ) * A j * X = Y μ * A j)
     (hRight : ∀ (j : Fin d) (μ : Fin m → Fin d),
-      X * A j * evalWord A (List.ofFn μ) = A j * Y μ) :
+      X * A j * Kraus.evalWord A (List.ofFn μ) = A j * Y μ) :
     groundSpaceMap A N X ∈ mpvSubmodule A N := by
   have hComm : ∀ ω : Fin (m + 2) → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X :=
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X :=
     commutes_words_of_two_sided_middle_compatibility (A := A) (X := X) Y hLeft hRight
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes
     (A := A) (L₀ := L₀) (m := m + 2) (N := N) hInj hL₀ (by omega) hComm
@@ -551,14 +551,14 @@ The inputs are \(A^\mu A^j X=Y^+_{\tau^+_\eta(\mu)}A^j\),
 These equations put \(\Gamma_N(X)\) in \(\mathbb C\,V^{(N)}(A)\). -/
 theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} {L₀ N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (η : Fin d)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (η : Fin d)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
-      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+      Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
     (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
-      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+      X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
       Ywrap (wrappedMiddleBackground L₀ N η μ) =
@@ -586,7 +586,7 @@ word \(\mu\), then the chain state lies in
 \(\mathbb C\,V^{(N)}(A)\). -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
     (hCompare :
       ∀ {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ} (η : Fin d),
@@ -594,10 +594,10 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_c
         (hψX : ψ = groundSpaceMap A N X) →
         (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ) →
         (∀ (j : Fin d) (τ : Fin N → Fin d),
-          evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+          Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
             τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j) →
         (∀ (j : Fin d) (τ : Fin N → Fin d),
-          X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+          X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
             τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ) →
         ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
           Ywrap (wrappedMiddleBackground L₀ N η μ) =
@@ -628,7 +628,7 @@ block-injectivity gives
 \(Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\). -/
 theorem wrapped_mirror_witness_agree_of_right_products
     {A : MPSTensor d D} {L₀ N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d)
     (hProd : ∀ j : Fin d,
@@ -682,7 +682,7 @@ This is the product form of the periodic-boundary comparison in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (_hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -694,10 +694,10 @@ theorem closure_property_boundary_closing_product_eq_of_chainGroundSpace
     (η : Fin d) (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
     ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) =
+          Kraus.evalWord A (List.ofFn σ) =
         YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) := by
+          Kraus.evalWord A (List.ofFn σ) := by
   obtain ⟨ρPlus, ρMinus, hρPlus, hρMinus, hProductEq⟩ :=
     closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ
@@ -711,7 +711,7 @@ This is the first-letter product form of the periodic-boundary comparison in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -730,7 +730,7 @@ theorem closure_property_boundary_right_products_eq_of_chainGroundSpace
       (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j -
           YAt ⟨M + 1 - L₀, by omega⟩
             (mirrorMiddleBackground L₀ (M + 1) η μ) * A j) *
-        evalWord A (List.ofFn σ) = 0 :=
+        Kraus.evalWord A (List.ofFn σ) = 0 :=
     fun σ => by
       have hprod := closure_property_boundary_closing_product_eq_of_chainGroundSpace
         (A := A) hInj hL₀ hM hψ hψX YAt hYAt η μ j σ
@@ -749,7 +749,7 @@ This is the first-letter restriction form of the periodic-boundary comparison in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_fixed_boundary_letter_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -786,7 +786,7 @@ This is the restriction form of the periodic-boundary comparison in
 arXiv:2011.12127, Section IV.C, lines 2078--2079. -/
 theorem closure_property_boundary_restriction_eq_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A (L₀ + 1) (M + 1))
     (hψX : ψ = groundSpaceMap A (M + 1) X)
@@ -817,16 +817,16 @@ Y^+_{\tau^+_\eta(\mu)}=Y^-_{\tau^-_\eta(\mu)}\).
 see `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     {A : MPSTensor d D} [NeZero D] {L₀ L N : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) (hNlarge : L₀ + 1 < N)
     {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X)
     (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
-      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+      Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
     (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
-      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+      X * A j * Kraus.evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
         τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
     Ywrap (wrappedMiddleBackground L₀ N η μ) =
@@ -862,7 +862,7 @@ This is the closure-property endpoint used for the uniqueness theorem in
 arXiv:2011.12127, Section IV.C, lines 2078--2094. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
     {A : MPSTensor d D} [NeZero D] {L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
     chainGroundSpace A (L₀ + 1) (L₀ + 1) ≤ mpvSubmodule A (L₀ + 1) := by
   intro ψ hψ
   have hψGS : ψ ∈ groundSpace A (L₀ + 1) :=
@@ -872,8 +872,8 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
   have hLetters : ∀ a : Fin d, X * A a = A a * X :=
     full_ring_boundary_intertwines_of_chainGroundSpace hInj hL₀ hψ hX.symm
   have hWords : ∀ ω : Fin L₀ → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := fun ω ↦
-    commutes_evalWord_of_commutes_letters X A hLetters (List.ofFn ω)
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X := fun ω ↦
+    Kraus.commutes_evalWord_of_commutes_letters X A hLetters (List.ofFn ω)
   rw [← hX]
   exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
     hInj hL₀ (le_refl _) hWords
@@ -884,7 +884,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring
 The equality case uses the full-ring cyclic change-of-cut argument above. -/
 theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     {A : MPSTensor d D} [NeZero D]
-    (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (_hA : Kraus.IsNormal A) {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
     (hNlarge : L₀ + 1 ≤ N) :
     chainGroundSpace A L N ≤ mpvSubmodule A N := by
@@ -921,7 +921,7 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
 \(L>L₀\) and \(L₀+1\le N\), by arXiv:2011.12127, Section IV.C,
 lines 2078--2090. -/
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
-    (hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hA : Kraus.IsNormal A) {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
     (hNlarge : L₀ + 1 ≤ N) :
     chainGroundSpace A L N = mpvSubmodule A N := by
@@ -937,10 +937,10 @@ theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
 range \(L₀<L\le N\). This strengthens the finite-size assumption \(N\ge 2L₀\) printed in
 [PGVWC07], Theorem `uniqueGS`, to \(N\ge L₀+1\), together with \(N\ge2\). -/
 theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {L N : ℕ} (hL : L₀ < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
-  have hNormal : IsNormal A := ⟨L₀, hL₀, hInj⟩
+  have hNormal : Kraus.IsNormal A := ⟨L₀, hL₀, hInj⟩
   have hN : 2 ≤ N := by omega
   have hNlarge : L₀ + 1 ≤ N := by omega
   rw [HasUniqueGroundState,
@@ -951,7 +951,7 @@ theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
 
 /-- Unique periodic ground state for an injective tensor:
 \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\). -/
-theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjective A)
+theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : Kraus.IsInjective A)
     {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
     HasUniqueGroundState (chainGroundSpace A L N) := by
   rw [HasUniqueGroundState, chainGroundSpace_eq_mpvSubmodule hA hN hL hLN]
@@ -971,7 +971,7 @@ theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : IsInjec
 This includes the endpoint \(L₀=1,N=2\). This is the one-dimensional
 specialization of arXiv:2011.12127, Section IV.C, lines 2041--2048. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (hA : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
   exact parentHamiltonian_unique_gs hA hL₀ (by omega) hN
@@ -985,7 +985,7 @@ The normality hypothesis is redundant because positive-length block injectivity 
 implies normality; it is retained in this specialization. -/
 @[nolint unusedArguments]
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : IsNormal A) (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (hA : Kraus.IsNormal A) (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
   exact parentHamiltonian_unique_gs hInj hL₀ (by omega) hN

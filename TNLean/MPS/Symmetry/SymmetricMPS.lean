@@ -37,7 +37,7 @@ scalar factor; this is the form that appears in the paper
 (arXiv:0802.0447 Condition C1). -/
 theorem virtual_symmetry_eq
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hA : IsInjective A) (hSym : IsOnSiteSymmetric A U) (g : G) :
+    (hA : Kraus.IsInjective A) (hSym : IsOnSiteSymmetric A U) (g : G) :
     GaugePhaseEquiv A (twistedTensor A U g) :=
   let ⟨X, hX⟩ := gaugeEquiv_twistedTensor_of_injective A hA U hSym g
   ⟨X, 1, one_ne_zero, fun i => by rw [one_smul]; exact hX i⟩

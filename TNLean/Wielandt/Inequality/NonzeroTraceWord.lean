@@ -52,7 +52,7 @@ variable {d D : ℕ}
 /-- **Lemma 1** (existential version).
 
 If `A` is normalized and primitive under the source theorem hypotheses, then there exists a
-word `w` with `|w| ≤ D^2` such that `tr (evalWord A w) ≠ 0`.
+word `w` with `|w| ≤ D^2` such that `tr (Kraus.evalWord A w) ≠ 0`.
 
 See also `exists_nonzero_trace_word_of_isPrimitivePaper_sharp` for the
 tight bound `D^2 - krausRank A + 1`.
@@ -62,14 +62,14 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
-    ∃ w : List (Fin d), w.length ≤ D ^ 2 ∧ Matrix.trace (evalWord A w) ≠ 0 := by
+    ∃ w : List (Fin d), w.length ≤ D ^ 2 ∧ Matrix.trace (Kraus.evalWord A w) ≠ 0 := by
   obtain ⟨N, _, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
   exact Kraus.exists_nonzero_trace_word A hN
 
 /-- **Lemma 1, sharp version**.
 
 If `A` is normalized and primitive under the source theorem hypotheses, then there exists a
-word `w` with `|w| ≤ D² − krausRank(A) + 1` such that `tr (evalWord A w) ≠ 0`.
+word `w` with `|w| ≤ D² − krausRank(A) + 1` such that `tr (Kraus.evalWord A w) ≠ 0`.
 
 This is the exact quantitative bound from Lemma 1 of arXiv:0909.5347:
 "If E_A is primitive, then there exists A^(n) ∈ S_n(A) with
@@ -88,7 +88,7 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp [NeZero D]
     (hPrim : IsPrimitivePaper A) :
     ∃ w : List (Fin d),
       w.length ≤ D ^ 2 - krausRank A + 1 ∧
-      Matrix.trace (evalWord A w) ≠ 0 := by
+      Matrix.trace (Kraus.evalWord A w) ≠ 0 := by
   obtain ⟨N, _, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
   exact Kraus.exists_nonzero_trace_word_sharp A hN
 
@@ -96,7 +96,7 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp [NeZero D]
 
 For positive `D`, if `A` is normalized and primitive in the spreading sense, then
 there exists a **positive-length** word `w` with `|w| ≤ D² − krausRank(A) + 1`
-such that `tr(evalWord A w) ≠ 0`.
+such that `tr(Kraus.evalWord A w) ≠ 0`.
 
 This strengthens `exists_nonzero_trace_word_of_isPrimitivePaper_sharp` by
 additionally requiring `1 ≤ w.length`, which is needed for the blocking
@@ -114,7 +114,7 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos [NeZero D]
     ∃ w : List (Fin d),
       1 ≤ w.length ∧
       w.length ≤ D ^ 2 - krausRank A + 1 ∧
-      Matrix.trace (evalWord A w) ≠ 0 := by
+      Matrix.trace (Kraus.evalWord A w) ≠ 0 := by
   obtain ⟨N, hNpos, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
   exact Kraus.exists_nonzero_trace_word_sharp_pos A hN hNpos
 

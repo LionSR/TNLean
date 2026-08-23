@@ -40,7 +40,7 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_single
     (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A) :
     HasParentHamiltonianGroundSpaceSpanning A 2 (fun _ : Fin 1 ↦ A) := by
   intro N hN
-  have hInj : IsInjective A := rfp_nt_structural A hNT.isNormal hRFP
+  have hInj : Kraus.IsInjective A := rfp_nt_structural A hNT.isNormal hRFP
   rw [ker_parentHamiltonian_eq_chainGroundSpace A (by omega) (by omega),
     chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) (by omega),
     ← iSup_mpvSubmodule_eq_bntMPSVectorSpan (fun _ : Fin 1 ↦ A) N]

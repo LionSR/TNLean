@@ -63,7 +63,7 @@ variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 /-- Construct the per-block linear map `T_k : M_{D_k} → M_{D_k}` from per-block SameMPV. -/
 noncomputable def perBlockLinearExtension
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ]
@@ -73,7 +73,7 @@ noncomputable def perBlockLinearExtension
 omit [∀ k, NeZero (dim k)] in
 theorem perBlockLinearExtension_spec
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     ∀ i, perBlockLinearExtension A B hA hSame k (A k i) = B k i :=
@@ -83,7 +83,7 @@ omit [∀ k, NeZero (dim k)] in
 /-- Per-block multiplicativity. -/
 theorem perBlockLinearExtension_mul
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     ∀ M N, perBlockLinearExtension A B hA hSame k (M * N) =
@@ -94,7 +94,7 @@ theorem perBlockLinearExtension_mul
 /-- Per-block T ≠ 0. Uses `trace_ne_zero_of_injective` from `TracePairing`. -/
 private theorem perBlockLinearExtension_nonzero
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) : perBlockLinearExtension A B hA hSame k ≠ 0 := by
   intro h0
@@ -104,7 +104,7 @@ private theorem perBlockLinearExtension_nonzero
 /-- Per-block bijectivity. -/
 theorem perBlockLinearExtension_bijective
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     Function.Bijective (perBlockLinearExtension A B hA hSame k) :=
@@ -114,7 +114,7 @@ theorem perBlockLinearExtension_bijective
 /-- Per-block T maps 1 to 1. -/
 theorem perBlockLinearExtension_one
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (k : Fin r) :
     perBlockLinearExtension A B hA hSame k 1 = 1 := by
@@ -127,7 +127,7 @@ theorem perBlockLinearExtension_one
 /-- The assembled product algebra map: apply `T_k` on each block independently. -/
 noncomputable def piLinearExtension
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ]
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
@@ -137,7 +137,7 @@ noncomputable def piLinearExtension
 omit [∀ k, NeZero (dim k)] in
 @[simp] theorem piLinearExtension_apply
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (M : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (k : Fin r) :
     piLinearExtension A B hA hSame M k =
@@ -147,7 +147,7 @@ omit [∀ k, NeZero (dim k)] in
 /-- The product algebra map is bijective. -/
 theorem piLinearExtension_bijective
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     Function.Bijective (piLinearExtension A B hA hSame) := by
   constructor
@@ -160,7 +160,7 @@ theorem piLinearExtension_bijective
 /-- Promote to an algebra homomorphism. -/
 noncomputable def piAlgHom
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₐ[ℂ]
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) where
@@ -176,7 +176,7 @@ noncomputable def piAlgHom
 /-- Promote to an algebra equivalence. -/
 noncomputable def piAlgEquiv
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) ≃ₐ[ℂ]
     (∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
@@ -187,7 +187,7 @@ noncomputable def piAlgEquiv
 @[simp]
 theorem piAlgEquiv_apply
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k))
     (M : ∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (k : Fin r) :
     piAlgEquiv A B hA hSame M k =
@@ -205,7 +205,7 @@ variable {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
 decomposes as a block permutation + per-block inner automorphisms. -/
 theorem piAlgEquiv_decomposition
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     ∃ (σ : Fin r ≃ Fin r) (hDeq : ∀ i, dim (σ i) = dim i)
       (X : ∀ i, GL (Fin (dim i)) ℂ),
@@ -259,7 +259,7 @@ lemma piTraceMulRightPi_apply
 /-- The per-block Gram map is injective when each `A_k` is injective. -/
 theorem piTraceMulRightPi_ker_eq_bot
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k)) :
+    (hA : ∀ k, Kraus.IsInjective (A k)) :
     (piTraceMulRightPi A).ker = ⊥ := by
   classical
   rw [LinearMap.ker_eq_bot']
@@ -282,7 +282,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 lemma fundamentalTheorem_multiBlock_full
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     (∀ k, GaugeEquiv (A k) (B k)) ∧
     GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
@@ -292,7 +292,7 @@ lemma fundamentalTheorem_multiBlock_full
 /-- Extract explicit matrices `X_k` such that `B_k^i = X_k A_k^i X_k⁻¹`. -/
 lemma fundamentalTheorem_multiBlock_explicit
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
     ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
@@ -305,7 +305,7 @@ lemma fundamentalTheorem_multiBlock_explicit
 lemma fundamentalTheorem_multiBlock_decomposition
     [∀ k, NeZero (dim k)]
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k))
+    (hA : ∀ k, Kraus.IsInjective (A k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :
     ∃ (σ : Fin r ≃ Fin r) (hDeq : ∀ i, dim (σ i) = dim i)
       (X : ∀ i, GL (Fin (dim i)) ℂ),
@@ -353,7 +353,7 @@ without any separation hypothesis. -/
 theorem fundamentalTheorem_singleBlock_fromMPV₂
     (μ₀ : ℂ) (hμ : μ₀ ≠ 0)
     (A₀ B₀ : MPSTensor d dim₀)
-    (hA : IsInjective A₀)
+    (hA : Kraus.IsInjective A₀)
     (hSame₂ : SameMPV₂
       (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => A₀))
       (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => B₀))) :
@@ -375,7 +375,7 @@ the hypothesis that each block `A_k` generates the same MPV family as `B_k` is e
 the conclusion that they are related by per-block gauge transforms. -/
 lemma perBlock_sameMPV_iff_gaugeEquiv
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k, IsInjective (A k)) :
+    (hA : ∀ k, Kraus.IsInjective (A k)) :
     (∀ k, SameMPV (A k) (B k)) ↔ (∀ k, GaugeEquiv (A k) (B k)) :=
   ⟨fun hSame k => fundamentalTheorem_singleBlock (hA k) (hSame k),
    fun hGauge k => (hGauge k).sameMPV⟩

@@ -48,8 +48,8 @@ injectivity at length `L` implies block injectivity at every length `m ≥ L`. -
 theorem isNBlkInjective_of_ge_of_unital
     (A : MPSTensor d D)
     (hUnital : ∑ a : Fin d, A a * (A a)ᴴ = 1)
-    {L m : ℕ} (hL : IsNBlkInjective A L) (hm : L ≤ m) :
-    IsNBlkInjective A m := by
+    {L m : ℕ} (hL : Kraus.IsNBlkInjective A L) (hm : L ≤ m) :
+    Kraus.IsNBlkInjective A m := by
   rw [← wordSpan_eq_top_iff_isNBlkInjective] at hL ⊢
   exact Kraus.wordSpan_eq_top_of_ge_of_unital A hUnital hL hm
 
@@ -59,7 +59,7 @@ theorem isNormal_of_cumulativeSpan_eq_top_of_aperiodic
     (A : MPSTensor d D) {N : ℕ}
     (hcs : Kraus.cumulativeSpan A N = ⊤)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1) :
-    IsNormal A := by
+    Kraus.IsNormal A := by
   refine ⟨N + 1, Nat.zero_lt_succ N, ?_⟩
   rw [← wordSpan_eq_top_iff_isNBlkInjective]
   rw [← Kraus.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one A hone]
@@ -71,7 +71,7 @@ theorem isNormal_of_algSpan_eq_top_of_aperiodic
     (A : MPSTensor d D)
     (halg : Matrix.algSpan A = ⊤)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1) :
-    IsNormal A := by
+    Kraus.IsNormal A := by
   obtain ⟨N, hN⟩ := exists_cumulativeSpan_eq_top_of_algSpan_eq_top A halg
   exact isNormal_of_cumulativeSpan_eq_top_of_aperiodic A hN hone
 

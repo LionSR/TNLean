@@ -31,7 +31,7 @@ noncomputable def blockedChain (A : MPSTensor d D) (L n : ℕ) :
 /-- If `A` is `L`-block injective, then the constant chain of `L`-blocked tensors
 is injective at every site. -/
 lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
-    (hA : MPSTensor.IsNBlkInjective A L) :
+    (hA : Kraus.IsNBlkInjective A L) :
     IsInjective (blockedChain A L n) := by
   intro k
   simp only [blockedChain]
@@ -46,7 +46,7 @@ the blocked chains are gauge equivalent. -/
 theorem fundamentalTheorem_blockedChain
     (A B : MPSTensor d D) (L n : ℕ)
     (hn : 0 < n) (hD : 0 < D)
-    (hA_block : MPSTensor.IsNBlkInjective A L)
+    (hA_block : Kraus.IsNBlkInjective A L)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (blockedChain A L n))
       (MPSTensor.chainCombinedTensor (blockedChain B L n))) :

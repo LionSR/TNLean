@@ -34,14 +34,14 @@ commutation. This is the boundary-identification step in
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem boundary_eq_and_commutes_of_isNBlkInjective_of_intertwines
     {D S : ℕ} {A : MPSTensor d D}
-    (hBlk : IsNBlkInjective A S) (hS : 0 < S)
+    (hBlk : Kraus.IsNBlkInjective A S) (hS : 0 < S)
     (X Y : Matrix (Fin D) (Fin D) ℂ)
     (hIntertwine : ∀ α : Fin S → Fin d,
-      X * evalWord A (List.ofFn α) = evalWord A (List.ofFn α) * Y) :
+      X * Kraus.evalWord A (List.ofFn α) = Kraus.evalWord A (List.ofFn α) * Y) :
     X = Y ∧ ∀ a : Fin d, X * A a = A a * X := by
   have hMaps : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ Y := by
     apply LinearMap.ext_on_range
-      (v := fun α : Fin S → Fin d ↦ evalWord A (List.ofFn α))
+      (v := fun α : Fin S → Fin d ↦ Kraus.evalWord A (List.ofFn α))
     · simpa [Kraus.wordSpan, Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A S).mpr hBlk
     · intro α
@@ -90,13 +90,13 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
           (∑ j : Fin r, groundSpaceMap (A j) (K + S) (X j)) =
         ∑ j : Fin r, groundSpaceMap (A j) (K + S) (Y j)) :
     ∀ (α : Fin S → Fin d) (j : Fin r),
-      X j * evalWord (A j) (List.ofFn α) =
-        evalWord (A j) (List.ofFn α) * Y j := by
+      X j * Kraus.evalWord (A j) (List.ofFn α) =
+        Kraus.evalWord (A j) (List.ofFn α) * Y j := by
   classical
   intro α
   apply block_matrices_eq_of_wordTupleSpanTop_trace A hSpan
-    (fun j ↦ X j * evalWord (A j) (List.ofFn α))
-    (fun j ↦ evalWord (A j) (List.ofFn α) * Y j)
+    (fun j ↦ X j * Kraus.evalWord (A j) (List.ofFn α))
+    (fun j ↦ Kraus.evalWord (A j) (List.ofFn α) * Y j)
   intro β
   have hcoeff := congrFun hEq (Fin.append β α)
   change
@@ -112,16 +112,16 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
     rw [← List.ofFn_fin_append]
     exact (List.ofFn_congr (Nat.add_comm S K) (Fin.append α β)).symm
   rw [hswap, List.ofFn_fin_append] at hcoeff
-  simp_rw [evalWord_append] at hcoeff
+  simp_rw [Kraus.evalWord_append] at hcoeff
   calc
     (∑ j : Fin r,
         Matrix.trace
-          ((X j * evalWord (A j) (List.ofFn α)) *
-            evalWord (A j) (List.ofFn β))) =
+          ((X j * Kraus.evalWord (A j) (List.ofFn α)) *
+            Kraus.evalWord (A j) (List.ofFn β))) =
         ∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) (List.ofFn α) *
-                evalWord (A j) (List.ofFn β)) * X j) := by
+            ((Kraus.evalWord (A j) (List.ofFn α) *
+                Kraus.evalWord (A j) (List.ofFn β)) * X j) := by
       apply Finset.sum_congr rfl
       intro j _
       rw [Matrix.mul_assoc]
@@ -129,13 +129,13 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
     _ =
         ∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) (List.ofFn β) *
-                evalWord (A j) (List.ofFn α)) * Y j) := hcoeff
+            ((Kraus.evalWord (A j) (List.ofFn β) *
+                Kraus.evalWord (A j) (List.ofFn α)) * Y j) := hcoeff
     _ =
         ∑ j : Fin r,
           Matrix.trace
-            ((evalWord (A j) (List.ofFn α) * Y j) *
-              evalWord (A j) (List.ofFn β)) := by
+            ((Kraus.evalWord (A j) (List.ofFn α) * Y j) *
+              Kraus.evalWord (A j) (List.ofFn β)) := by
       apply Finset.sum_congr rfl
       intro j _
       rw [Matrix.mul_assoc]
@@ -155,8 +155,8 @@ theorem block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_a
           (∑ j : Fin r, groundSpaceMap (A j) N (X j)) =
         ∑ j : Fin r, groundSpaceMap (A j) N (Y j)) :
     ∀ (α : Fin S → Fin d) (j : Fin r),
-      X j * evalWord (A j) (List.ofFn α) =
-        evalWord (A j) (List.ofFn α) * Y j := by
+      X j * Kraus.evalWord (A j) (List.ofFn α) =
+        Kraus.evalWord (A j) (List.ofFn α) * Y j := by
   subst N
   exact block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq
     A hS hSpan X Y hEq
@@ -172,7 +172,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     {L₀ L N : ℕ}
-    (hBlk : ∀ j : Fin r, IsNBlkInjective (A j) L₀)
+    (hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) L₀)
     (hL₀ : 0 < L₀) [NeZero d]
     (hN : 0 < N) (hLN : L ≤ N) (hL₀N : L₀ ≤ N)
     (hOpenBoundary : ∀ {φ : NSiteSpace d N},
@@ -224,8 +224,8 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
     exact hYsum
   have hIntertwine :
       ∀ (α : Fin L₀ → Fin d) (j : Fin r),
-        ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn α) =
-          evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
+        ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn α) =
+          Kraus.evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
     apply block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
       A hSplit hL₀ hSpan
         (fun j ↦ (μ j) ^ N • X j) (fun j ↦ (μ j) ^ N • Y j)
@@ -237,13 +237,13 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoun
       (hBlk j) hL₀ ((μ j) ^ N • X j) ((μ j) ^ N • Y j)
       (fun α ↦ hIntertwine α j)).2
   have hCommWord : ∀ j : Fin r, ∀ w : List (Fin d),
-      ((μ j) ^ N • X j) * evalWord (A j) w =
-        evalWord (A j) w * ((μ j) ^ N • X j) := by
+      ((μ j) ^ N • X j) * Kraus.evalWord (A j) w =
+        Kraus.evalWord (A j) w * ((μ j) ^ N • X j) := by
     intro j w
     induction w with
-    | nil => simp [evalWord_nil]
+    | nil => simp [Kraus.evalWord_nil]
     | cons a w ih =>
-        rw [evalWord_cons, ← Matrix.mul_assoc, hComm j a, Matrix.mul_assoc, ih,
+        rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, hComm j a, Matrix.mul_assoc, ih,
           ← Matrix.mul_assoc]
   refine ⟨X, hψX, ?_⟩
   apply blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
@@ -291,7 +291,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -344,7 +344,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -393,8 +393,8 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -443,8 +443,8 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -488,8 +488,8 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -520,8 +520,8 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -559,8 +559,8 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -624,7 +624,7 @@ theorem
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (_hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -638,7 +638,7 @@ theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
       μ A hμ hr hIrr hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
         (fun j ↦ ?_) hBlk hL₀ hUnital hRange hNlarge
-  simpa [transferMap] using hLeft.leftCanonical j
+  simpa [Kraus.transferMap] using hLeft.leftCanonical j
 
 /-- At the source length bound, the normalized BNT block-diagonal periodic
 chain space is the sum of the periodic chain spaces of its blocks.
@@ -664,7 +664,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -702,7 +702,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -744,7 +744,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (_hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d]
@@ -758,7 +758,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
     ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
       μ A hμ hr hIrr hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
         (fun j ↦ ?_) hBlk hL₀ hUnital hRange hNlarge
-  simpa [transferMap] using hLeft.leftCanonical j
+  simpa [Kraus.transferMap] using hLeft.leftCanonical j
 
 /-- The normalized BNT block-diagonal periodic chain space is the sum of the
 single-block periodic chain spaces in the finite Condition C1 range, and the
@@ -783,7 +783,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -811,7 +811,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -835,7 +835,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)

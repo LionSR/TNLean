@@ -58,10 +58,10 @@ Source context: arXiv:2011.12127, lines 1815--1837; arXiv:1708.00029,
 Appendix A; Wolf Theorem 6.6. -/
 theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     [NeZero D] (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
     (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
-    _root_.IsPrimitive (transferMap (d := d) (D := D) A) ∧ IsNormal A := by
+    _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A) ∧ Kraus.IsNormal A := by
   classical
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
     conjTranspose_kraus_setup A hLeft hIrr
@@ -69,16 +69,16 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     peripheralEigenvalues_eq_range_primitiveRoot
       (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK
   let m : ℕ := (peripheralEigenvalues_finite
-    (f := transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ))).toFinset.card
+    (f := Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ))).toFinset.card
   have hm' : 0 < m := by simpa [m] using hm
   have hγroot' : IsPrimitiveRoot γ m := by simpa [m] using hγroot
   have hPeriphK' :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         Set.range (fun j : Fin m ↦ γ ^ (j : ℕ)) := by
     simpa [m] using hPeriphK
   have : NeZero m := ⟨hm'.ne'⟩
   have hKRoots :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         {z : ℂ | z ^ m = 1} := by
     rw [hPeriphK']
     ext z
@@ -98,23 +98,23 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
-      transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) =
-        (transferMap (d := d) (D := D) A).adjoint := by
+      Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) =
+        (Kraus.transferMap (d := d) (D := D) A).adjoint := by
     simpa using (transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A))
   have hPeriphA :
-      peripheralEigenvalues (transferMap (d := d) (D := D) A) =
+      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
         {z : ℂ | z ^ m = 1} := by
     ext z
     constructor
     · rintro ⟨hzEig, hzNorm⟩
       have hstarEig : Module.End.HasEigenvalue
-          (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) (star z) := by
+          (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) (star z) := by
         rw [hAdj]
         exact (Module.End.hasEigenvalue_adjoint_iff
-          (E := transferMap (d := d) (D := D) A) (μ := z)).1 hzEig
+          (E := Kraus.transferMap (d := d) (D := D) A) (μ := z)).1 hzEig
       have hstarMem : star z ∈
           peripheralEigenvalues
-            (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) := by
+            (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) := by
         exact ⟨hstarEig, by simpa using hzNorm⟩
       have hstarPow : (star z) ^ m = 1 := by
         simpa [hKRoots] using hstarMem
@@ -126,14 +126,14 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
         simpa using this
       have hstarMem : star z ∈
           peripheralEigenvalues
-            (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) := by
+            (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) := by
         rw [hKRoots]
         exact hstarPow
       rcases hstarMem with ⟨hstarEig, hstarNorm⟩
       have hzEig : Module.End.HasEigenvalue
-          (transferMap (d := d) (D := D) A) z := by
+          (Kraus.transferMap (d := d) (D := D) A) z := by
         apply (Module.End.hasEigenvalue_adjoint_iff
-          (E := transferMap (d := d) (D := D) A) (μ := z)).2
+          (E := Kraus.transferMap (d := d) (D := D) A) (μ := z)).2
         simpa [hAdj] using hstarEig
       exact ⟨hzEig, by simpa using hstarNorm⟩
   have hPeriodic : IsPeriodic m A :=
@@ -152,7 +152,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     tendsto_nhds_unique (periodicSelfOverlap_tendsto A hPeriodic) hSubsequenceOne
   have hmOne : m = 1 := by exact_mod_cast hmComplex
   rw [hmOne] at hPeriodic
-  have hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A) :=
+  have hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A) :=
     ((IsPeriodic.one_iff_primitive A).1 hPeriodic).2.2
   exact ⟨hPrim, isNormal_of_tp_primitive_irreducible A hLeft hPrim hIrr⟩
 
@@ -163,10 +163,10 @@ Source context: arXiv:2011.12127, lines 1815--1837; arXiv:1708.00029,
 Appendix A; Wolf Theorem 6.6. -/
 theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     [NeZero D] (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
     (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
-    IsNormal A :=
+    Kraus.IsNormal A :=
   (isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     A hIrr hLeft hSelf).2
 
@@ -183,7 +183,7 @@ and positive bond dimension imply eventual block injectivity.
 
 Source: CPSV21, arXiv:2011.12127, lines 1815--1830. -/
 theorem basis_isNormal (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
-    IsNormal (P.basis j) := by
+    Kraus.IsNormal (P.basis j) := by
   let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
   exact isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     (P.basis j) (hCF.basis_irreducible j) (hCF.basis_left_canonical j)
@@ -200,11 +200,11 @@ Source: arXiv:1606.00608, line 332. -/
 theorem basis_isNBlkInjective_totalDim_pow_four
     (hCF : IsBNTCanonicalForm P) :
     ∀ j : Fin P.basisCount,
-      IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
+      Kraus.IsNBlkInjective (P.basis j) (P.totalDim ^ 4) := by
   intro j
   let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  have hNormal : IsNormal (P.basis j) := hCF.basis_isNormal j
-  have hOwn : IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
+  have hNormal : Kraus.IsNormal (P.basis j) := hCF.basis_isNormal j
+  have hOwn : Kraus.IsNBlkInjective (P.basis j) ((P.basisDim j) ^ 4) :=
     isNBlkInjective_pow_four_of_isNormal_leftCanonical
       (P.basis j) (hCF.basis_left_canonical j) hNormal
   have hOwnPos : 0 < (P.basisDim j) ^ 4 :=
@@ -225,8 +225,8 @@ Source context: arXiv:1606.00608, lines 318--344; arXiv:2011.12127,
 lines 1815--1837. -/
 theorem exists_common_basis_isNBlkInjective
     (hCF : IsBNTCanonicalForm P) :
-    ∃ L : ℕ, 0 < L ∧ ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L := by
-  have hNormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) :=
+    ∃ L : ℕ, 0 < L ∧ ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) L := by
+  have hNormal : ∀ j : Fin P.basisCount, Kraus.IsNormal (P.basis j) :=
     hCF.basis_isNormal
   exact exists_common_isNBlkInjective_of_isNormal_leftCanonical
     P.basis hCF.basis_left_canonical (fun j ↦ (hCF.basis_dim_pos j).ne') hNormal

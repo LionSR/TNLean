@@ -20,7 +20,7 @@ the ambient zero-coordinate convention.
 * `MPSTensor.IsMPUCanonicalForm`: existence of such reconstruction data.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder Kraus
 
 namespace MPSTensor
 
@@ -32,12 +32,12 @@ spectral radius one. Peripheral eigenvalues other than one are allowed.
 Source: arXiv:1703.09188, lines 259--267. -/
 structure IsMPUCanonicalBlock (A : MPSTensor d D) : Prop where
   /-- The block admits no nontrivial invariant orthogonal projection. -/
-  irreducible : IsIrreducibleTensor A
+  irreducible : Kraus.IsIrreducibleFamily A
   /-- The block transfer map has spectral radius one. -/
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (transferMap (d := d) (D := D) A)) = 1
+        (Kraus.transferMap (d := d) (D := D) A)) = 1
 
 /-- Witness data for the MPU canonical form, using irreducible
 spectral-radius-one blocks and an exact coisometric retained-block

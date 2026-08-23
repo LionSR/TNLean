@@ -51,7 +51,7 @@ theorem flatBasisMPOTensor_toMPSTensor
 theorem evalWord_flatBasisMPOTensor_pairConfig
     (S : MPSTensor.SectorDecomposition (d * d)) (s : Fin S.totalCopies)
     {N : ℕ} (σ τ : Fin N → Fin d) :
-    MPSTensor.evalWord (S.flatBasis s)
+    Kraus.evalWord (S.flatBasis s)
         (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k)) =
       evalWord (flatBasisMPOTensor S s) (List.ofFn σ) (List.ofFn τ) := by
   rw [← flatBasisMPOTensor_toMPSTensor]

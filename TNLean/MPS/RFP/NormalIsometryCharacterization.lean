@@ -50,7 +50,7 @@ theorem IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm
     obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
     have hRFP' : IsTransferIdempotent (tpGauge (d := d) (D := D) A σ) :=
       hGauge.isTransferIdempotent_iff.mp hRFP
-    have hNormal' : IsNormal (tpGauge (d := d) (D := D) A σ) :=
+    have hNormal' : Kraus.IsNormal (tpGauge (d := d) (D := D) A σ) :=
       isNormal_of_gaugeEquiv hNT.isNormal hGauge
     have hIso' : IsIsometryCanonicalForm (tpGauge (d := d) (D := D) A σ) :=
       isIsometryCanonicalForm_of_rfp_nt _ hNormal' hRFP' hLeft

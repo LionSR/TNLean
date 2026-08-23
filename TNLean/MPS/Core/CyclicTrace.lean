@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import Mathlib.Data.Fin.Basic
 
 /-!
@@ -27,11 +27,11 @@ ordered product of its local matrices. This is a source-independent expansion
 of the definition of word evaluation. -/
 theorem evalWord_ofFn_eq_prod (A : MPSTensor d D) {N : ℕ}
     (σ : Fin N → Fin d) :
-    evalWord A (List.ofFn σ) = (List.ofFn fun n => A (σ n)).prod := by
+    Kraus.evalWord A (List.ofFn σ) = (List.ofFn fun n => A (σ n)).prod := by
   induction N with
-  | zero => simp only [List.ofFn_zero, evalWord_nil, List.prod_nil]
+  | zero => simp only [List.ofFn_zero, Kraus.evalWord_nil, List.prod_nil]
   | succ n ih =>
-    simp only [List.ofFn_succ, evalWord_cons, List.prod_cons]
+    simp only [List.ofFn_succ, Kraus.evalWord_cons, List.prod_cons]
     congr 1
     exact ih (σ ∘ Fin.succ)
 
@@ -51,7 +51,7 @@ of `Papers/1804.04964/paper_normal.tex`).
 `ρ 0 = a` and `ρ N = b` of `∏ j, (A^{x_j})_{ρ_j, ρ_{j+1}}`. -/
 theorem evalWord_ofFn_apply (A : MPSTensor d D) :
     ∀ (N : ℕ) (x : Fin N → Fin d) (a b : Fin D),
-      evalWord A (List.ofFn x) a b =
+      Kraus.evalWord A (List.ofFn x) a b =
         ∑ ρ : Fin (N + 1) → Fin D,
           if ρ 0 = a ∧ ρ (Fin.last N) = b then
             ∏ j : Fin N, A (x j) (ρ j.castSucc) (ρ j.succ)
@@ -60,7 +60,7 @@ theorem evalWord_ofFn_apply (A : MPSTensor d D) :
   induction N with
   | zero =>
     intro x a b
-    rw [List.ofFn_zero, evalWord_nil]
+    rw [List.ofFn_zero, Kraus.evalWord_nil]
     calc (1 : Matrix (Fin D) (Fin D) ℂ) a b
         = ∑ k : Fin D, if k = a then (if k = b then (1 : ℂ) else 0) else 0 := by
           rw [Finset.sum_ite_eq' Finset.univ a (fun k => if k = b then (1 : ℂ) else 0)]
@@ -81,13 +81,13 @@ theorem evalWord_ofFn_apply (A : MPSTensor d D) :
   | succ N IH =>
     intro x a b
     -- Both sides reduce to a sum over tail paths with the head node collapsed.
-    have hmid : evalWord A (List.ofFn x) a b =
+    have hmid : Kraus.evalWord A (List.ofFn x) a b =
         ∑ ρ' : Fin (N + 1) → Fin D,
           if ρ' (Fin.last N) = b then
             A (x 0) a (ρ' 0) * ∏ j : Fin N, A (x j.succ) (ρ' j.castSucc) (ρ' j.succ)
           else 0 := by
-      rw [List.ofFn_succ, evalWord_cons, Matrix.mul_apply]
-      calc (∑ k : Fin D, A (x 0) a k * evalWord A (List.ofFn fun i => x i.succ) k b)
+      rw [List.ofFn_succ, Kraus.evalWord_cons, Matrix.mul_apply]
+      calc (∑ k : Fin D, A (x 0) a k * Kraus.evalWord A (List.ofFn fun i => x i.succ) k b)
           = ∑ k : Fin D, ∑ ρ' : Fin (N + 1) → Fin D,
               if ρ' 0 = k ∧ ρ' (Fin.last N) = b then
                 A (x 0) a k * ∏ j : Fin N, A (x j.succ) (ρ' j.castSucc) (ρ' j.succ)
@@ -212,7 +212,7 @@ private theorem snoc_head_apply_succ {N : ℕ} (g : Fin (N + 1) → Fin D) (v : 
 configurations of the products of matrix entries around the loop. -/
 theorem trace_evalWord_eq_sum_cyclic {n : ℕ} [NeZero n] (A : MPSTensor d D)
     (σ : Fin n → Fin d) :
-    Matrix.trace (evalWord A (List.ofFn σ)) =
+    Matrix.trace (Kraus.evalWord A (List.ofFn σ)) =
       ∑ g : Fin n → Fin D, ∏ v : Fin n, A (σ v) (g v) (g (v + 1)) := by
   obtain ⟨N, rfl⟩ : ∃ N, n = N + 1 :=
     ⟨n - 1, (Nat.succ_pred_eq_of_pos (NeZero.pos n)).symm⟩
@@ -234,8 +234,8 @@ theorem trace_evalWord_eq_sum_cyclic {n : ℕ} [NeZero n] (A : MPSTensor d D)
           Fin.snoc_castSucc]]
     refine if_congr Iff.rfl (Finset.prod_congr rfl fun j _ => ?_) rfl
     rw [Fin.snoc_castSucc]
-  calc Matrix.trace (evalWord A (List.ofFn σ))
-      = ∑ a : Fin D, evalWord A (List.ofFn σ) a a := by
+  calc Matrix.trace (Kraus.evalWord A (List.ofFn σ))
+      = ∑ a : Fin D, Kraus.evalWord A (List.ofFn σ) a a := by
         simp [Matrix.trace, Matrix.diag]
     _ = ∑ a : Fin D, ∑ ρ : Fin (N + 2) → Fin D,
           if ρ 0 = a ∧ ρ (Fin.last (N + 1)) = a then

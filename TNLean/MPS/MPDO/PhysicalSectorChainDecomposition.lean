@@ -168,7 +168,7 @@ theorem mpo_submatrix_sector_eq_cyclicNeighboringProduct
     ext beta alpha
     exact F.conjugatePhysical_apply_same (k n) (x n) (y n) beta alpha
   have htrace :
-      Matrix.trace (MPSTensor.evalWord
+      Matrix.trace (Kraus.evalWord
           (fun n : Fin N ↦ Matrix.of fun beta alpha ↦
             F.leftTensor (k n) beta (x n).1 (y n).1 *
               F.rightTensor (k n) alpha (x n).2 (y n).2)
@@ -192,7 +192,7 @@ private theorem mpo_entry_eq_zero_of_sector_ne
         (fun n ↦ F.sectorEquiv.symm ⟨h n, y n⟩) = 0 := by
   obtain ⟨n, hn⟩ := Function.ne_iff.mp hne
   simp only [mpo_apply, mpoMatrixEntry, MPOTensor.evalWord_ofFn]
-  have hzero : Matrix.trace (MPSTensor.evalWord
+  have hzero : Matrix.trace (Kraus.evalWord
       (fun i : Fin N ↦
         conjugatePhysical K F.physicalIsometry
           (F.sectorEquiv.symm ⟨k i, x i⟩)

@@ -52,7 +52,7 @@ private theorem IsResidualIsometryFamily.residual_entry_gram
         star (wordEntryFamily U 1 ⟨j, (a, b)⟩ w))] at hGram
   simp only [wordEntryFamily, blockEntryValue, wordTuple,
     Equiv.funUnique_symm_apply, List.ofFn_succ, List.ofFn_zero,
-    evalWord_cons, evalWord_nil, mul_one, uniqueElim_const] at hGram
+    Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one, uniqueElim_const] at hGram
   calc
     ∑ i : Fin d, star (U j i a b) * U k i c e =
         ∑ i : Fin d, U k i c e * star (U j i a b) := by

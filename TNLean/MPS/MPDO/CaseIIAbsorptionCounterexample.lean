@@ -112,7 +112,7 @@ lemma basis_disjoint_support :
   fin_cases i <;> simp [basis, firstBasisTensor, secondBasisTensor]
 
 private lemma firstBasis_transferMap :
-    MPSTensor.transferMap firstBasisTensor = LinearMap.id := by
+    Kraus.transferMap firstBasisTensor = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext a b
@@ -126,17 +126,17 @@ private lemma firstBasis_transferMap :
       invSqrtTwo * X 0 0 * invSqrtTwo + invSqrtTwo * X 0 0 * invSqrtTwo =
           (invSqrtTwo * invSqrtTwo + invSqrtTwo * invSqrtTwo) * X 0 0 := by ring
       _ = X 0 0 := by rw [invSqrtTwo_mul_self]; ring
-  simpa [MPSTensor.transferMap_apply, firstBasisTensor, Fin.sum_univ_succ,
+  simpa [Kraus.transferMap_apply, firstBasisTensor, Fin.sum_univ_succ,
     Matrix.mul_apply] using hterm
 
 private lemma secondBasis_transferMap :
-    MPSTensor.transferMap secondBasisTensor = LinearMap.id := by
+    Kraus.transferMap secondBasisTensor = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext a b
   fin_cases a
   fin_cases b
-  simp [MPSTensor.transferMap_apply, secondBasisTensor, Matrix.mul_apply]
+  simp [Kraus.transferMap_apply, secondBasisTensor, Matrix.mul_apply]
 
 /-- Each of the two displayed bond-one representatives is a normal tensor.
 
@@ -266,9 +266,9 @@ theorem sectors_wordTupleSpanTop_one :
     funext s
     fin_cases s <;> ext a b <;> fin_cases a <;> fin_cases b
     · simp [MPSTensor.wordTuple, w₀, w₁, basis, firstBasisTensor,
-        MPSTensor.evalWord, invSqrtTwo_ne_zero]
+        evalWord, invSqrtTwo_ne_zero]
     · simp [MPSTensor.wordTuple, w₀, w₁, basis, secondBasisTensor,
-        MPSTensor.evalWord]
+        evalWord]
   rw [hEq]
   exact Submodule.add_mem _
     (Submodule.smul_mem _ _ hw₀) (Submodule.smul_mem _ _ hw₁)
@@ -295,7 +295,7 @@ Source: arXiv:1606.00608, the absorption step at lines 1646--1665. -/
 theorem spectralRadius_transferMap_firstAbsorbed :
     spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
-          (MPSTensor.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ := by
+          (Kraus.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ := by
   rw [firstAbsorbed_eq, MPSTensor.spectralRadius_transferMap_smul
     invSqrtTwo invSqrtTwo_ne_zero firstBasisTensor]
   rw [(MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
@@ -903,7 +903,7 @@ theorem printed_absorbed_normality_step_is_false :
         physTraceTransfer ambient ∧
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
-            (MPSTensor.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
+            (Kraus.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
       ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨rfl, rfl, weight_globally_normalized.1, weight_globally_normalized.2,
     basis_isNormalTensor, basis_disjoint_support,
@@ -948,7 +948,7 @@ theorem
         physTraceTransfer ambient ∧
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
-            (MPSTensor.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
+            (Kraus.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ ∧
       ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨ambient_isMPDO, fun N _hN => trace_mpo_ambient_pos N,
     ambient_isSAL, ambient_isSimpleCanonicalForm,

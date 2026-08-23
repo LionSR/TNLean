@@ -19,6 +19,8 @@ import TNLean.Spectral.PrimitiveOverlap
 
 open Matrix Filter
 
+open scoped Kraus
+
 namespace MPSTensor
 
 /-- A primitive MPS tensor has self-overlap converging to 1.

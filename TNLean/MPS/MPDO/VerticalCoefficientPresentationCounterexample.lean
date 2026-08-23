@@ -296,13 +296,13 @@ private theorem verticalTensor_rightMPO_eq :
   norm_num
 
 private theorem leftVerticalRepresentative_transferMap :
-    MPSTensor.transferMap leftVerticalRepresentative = LinearMap.id := by
+    Kraus.transferMap leftVerticalRepresentative = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext i j
   fin_cases i
   fin_cases j
-  simp only [MPSTensor.transferMap_apply]
+  simp only [Kraus.transferMap_apply]
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   norm_num [leftVerticalRepresentative,
     MPOTensor.verticalTensor_finProdFinEquiv, leftMPO, leftMatrix,
@@ -310,13 +310,13 @@ private theorem leftVerticalRepresentative_transferMap :
     Fin.sum_univ_one]
 
 private theorem rightVerticalRepresentative_transferMap :
-    MPSTensor.transferMap rightVerticalRepresentative = LinearMap.id := by
+    Kraus.transferMap rightVerticalRepresentative = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext i j
   fin_cases i
   fin_cases j
-  simp only [MPSTensor.transferMap_apply]
+  simp only [Kraus.transferMap_apply]
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   norm_num [rightVerticalRepresentative,
     MPOTensor.verticalTensor_finProdFinEquiv, rightMPO, rightMatrix,

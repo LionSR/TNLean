@@ -217,9 +217,9 @@ factor `(μ k) ^ w.length` on block `k`. -/
 theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (w : List (Fin d)) :
-    evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
+    Kraus.evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
       (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
-        (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • evalWord (A k) w) := by
+        (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • Kraus.evalWord (A k) w) := by
   classical
   let α := (k : Fin r) × Fin (dim k)
   let e : α ≃ Fin (∑ k, dim k) := finSigmaFinEquiv
@@ -229,12 +229,12 @@ theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
     funext i
     rfl
   calc
-    evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
+    Kraus.evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
         (Matrix.reindex e e) (_root_.evalWord BD w) := by
       simpa [toTensorFromBlocks, BD, e, hfun] using
         evalWord_reindex (d := d) (e := e) (A := BD) w
     _ = (Matrix.reindex e e)
-        (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • evalWord (A k) w) := by
+        (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • Kraus.evalWord (A k) w) := by
       congr 1
       simpa [BD] using evalWord_blockDiagonal'_smul (μ := μ) (A := A) w
 
@@ -251,13 +251,13 @@ theorem sameMPV₂Pos_of_coisometry_reconstruction
     SameMPV₂Pos T B := by
   mpv_ext
   have hEval : ∀ (v : Fin s) (w : List (Fin s)),
-      evalWord T (v :: w) = Uᴴ * evalWord B (v :: w) * U := by
+      Kraus.evalWord T (v :: w) = Uᴴ * Kraus.evalWord B (v :: w) * U := by
     intro v w
     induction w generalizing v with
     | nil => simp [hReconstruct]
     | cons v' w ih =>
-      change T v * evalWord T (v' :: w) =
-        Uᴴ * (B v * evalWord B (v' :: w)) * U
+      change T v * Kraus.evalWord T (v' :: w) =
+        Uᴴ * (B v * Kraus.evalWord B (v' :: w)) * U
       rw [hReconstruct v, ih v']
       simp only [Matrix.mul_assoc]
       rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul]

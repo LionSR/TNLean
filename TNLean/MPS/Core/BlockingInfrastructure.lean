@@ -499,7 +499,7 @@ theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
 theorem blockTensor_blockTensor_eq_reindex {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
     blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n =
-      reindexPhysical (iteratedBlockIndex d m n)
+      Kraus.reindexPhysical (iteratedBlockIndex d m n)
         (blockTensor (d := d) (D := D) A (m * n)) := by
   funext i
   exact blockTensor_blockTensor_apply (d := d) A m n i
@@ -511,7 +511,7 @@ theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
     SameMPV₂
       (blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n)
-      (reindexPhysical (iteratedBlockIndex d m n)
+      (Kraus.reindexPhysical (iteratedBlockIndex d m n)
         (blockTensor (d := d) (D := D) A (m * n))) := by
   rw [blockTensor_blockTensor_eq_reindex]
   mpv_ext
@@ -525,16 +525,16 @@ explicit bijection `directToIteratedBlockIndex`. It gives a direct connection be
 and direct blocking without an additional coordinate-grouping hypothesis. -/
 theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
     (A : MPSTensor d D) (m n : ℕ) :
-    reindexPhysical (directToIteratedBlockIndex d m n)
+    Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
       (blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n) =
     blockTensor (d := d) (D := D) A (m * n) := by
   calc
-    reindexPhysical (directToIteratedBlockIndex d m n)
+    Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
         (blockTensor (d := blockPhysDim d m) (D := D)
           (blockTensor (d := d) (D := D) A m) n) =
-      reindexPhysical (directToIteratedBlockIndex d m n)
-        (reindexPhysical (iteratedBlockIndex d m n)
+      Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
+        (Kraus.reindexPhysical (iteratedBlockIndex d m n)
           (blockTensor (d := d) (D := D) A (m * n))) := by
       rw [blockTensor_blockTensor_eq_reindex A m n]
     _ = blockTensor (d := d) (D := D) A (m * n) := by
@@ -551,7 +551,7 @@ noncomputable def flattenedIteratedBlockTensor
     {d p D : ℕ}
     (A : MPSTensor (blockPhysDim d p) D) (L : ℕ) :
     MPSTensor (blockPhysDim d (p * L)) D :=
-  reindexPhysical (directToIteratedBlockIndex d p L)
+  Kraus.reindexPhysical (directToIteratedBlockIndex d p L)
     (blockTensor (d := blockPhysDim d p) (D := D) A L)
 
 /-- Flattened iterated blocking of an already `p`-blocked tensor agrees with direct blocking by
@@ -573,7 +573,7 @@ theorem toTensorFromBlocks_flattenedIteratedBlockTensor
     toTensorFromBlocks (d := blockPhysDim d (p * L)) (μ := μ)
         (fun k => flattenedIteratedBlockTensor
           (d := d) (p := p) (D := dim k) (blocks k) L) =
-      reindexPhysical (directToIteratedBlockIndex d p L)
+      Kraus.reindexPhysical (directToIteratedBlockIndex d p L)
         (toTensorFromBlocks (d := blockPhysDim (blockPhysDim d p) L) (μ := μ)
           (fun k => blockTensor (d := blockPhysDim d p) (D := dim k) (blocks k) L)) := by
   funext i
@@ -650,17 +650,17 @@ theorem leftCanonical_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
 theorem isPrimitive_transferMap_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D) :
     _root_.IsPrimitive
-        (transferMap (d := d₂) (D := D)
+        (Kraus.transferMap (d := d₂) (D := D)
           (cast (congr_arg (fun d' => MPSTensor d' D) h) A)) ↔
-      _root_.IsPrimitive (transferMap (d := d₁) (D := D) A) := by
+      _root_.IsPrimitive (Kraus.transferMap (d := d₁) (D := D) A) := by
   subst h
   rfl
 
 /-- Casting the physical dimension preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D) :
-    IsIrreducibleTensor (cast (congr_arg (fun d' => MPSTensor d' D) h) A) ↔
-      IsIrreducibleTensor A := by
+    Kraus.IsIrreducibleFamily (cast (congr_arg (fun d' => MPSTensor d' D) h) A) ↔
+      Kraus.IsIrreducibleFamily A := by
   subst h
   rfl
 
@@ -715,9 +715,9 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
     [NeZero D]
     (A : MPSTensor d D) (p q : ℕ) (hpq : p ∣ q) (hq : 0 < q)
     (hPrim : _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p))) :
+      (Kraus.transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p))) :
     _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d q) (D := D) (blockTensor (d := d) (D := D) A q)) := by
+      (Kraus.transferMap (d := blockPhysDim d q) (D := D) (blockTensor (d := d) (D := D) A q)) := by
   obtain ⟨m, rfl⟩ := hpq
   -- p > 0 since p * m > 0
   have hp : 0 < p := by
@@ -725,9 +725,10 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
   -- m > 0 since p * m > 0 and p > 0
   have hm : 0 < m := Nat.pos_of_mul_pos_left hq
   -- Rewrite transfer maps as iterates of the original transfer map.
-  rw [transferMap_blockTensor]          -- goal: IsPrimitive ((transferMap A) ^ (p * m))
-  rw [pow_mul]                          -- goal: IsPrimitive (((transferMap A) ^ p) ^ m)
-  rw [← transferMap_blockTensor]        -- goal: IsPrimitive ((transferMap (blockTensor A p)) ^ m)
+  rw [transferMap_blockTensor]          -- goal: IsPrimitive ((Kraus.transferMap A) ^ (p * m))
+  rw [pow_mul]                          -- goal: IsPrimitive (((Kraus.transferMap A) ^ p) ^ m)
+  -- goal: IsPrimitive ((Kraus.transferMap (blockTensor A p)) ^ m)
+  rw [← transferMap_blockTensor]
   exact isPrimitive_pow_of_isPrimitive _ m hm hPrim
 
 end PrimitivityMultiples
@@ -763,7 +764,7 @@ theorem dvd_lcmPeriod {k : ℕ} (periods : Fin k → ℕ) (i : Fin k) :
 /-- There exists a common blocking period making all block transfer maps primitive.
 
 Given a family of blocks indexed by `Fin r`, where each block `k` has some period `p_k`
-making `transferMap (blockTensor (blocks k) p_k)` primitive, the LCM of all `p_k`
+making `Kraus.transferMap (blockTensor (blocks k) p_k)` primitive, the LCM of all `p_k`
 serves as a universal period. -/
 theorem exists_common_blocking_all_primitive
     {r : ℕ} {dim : Fin r → ℕ}
@@ -771,18 +772,18 @@ theorem exists_common_blocking_all_primitive
     (hDim : ∀ k, 0 < dim k)
     (hPer : ∀ k, ∃ p, 0 < p ∧
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dim k)
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
           (blockTensor (d := d) (D := dim k) (blocks k) p))) :
     ∃ p, 0 < p ∧ ∀ k,
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dim k)
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
           (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
   classical
   -- Choose a period for each block.
   let pk : Fin r → ℕ := fun k => (hPer k).choose
   have pk_pos : ∀ k, 0 < pk k := fun k => (hPer k).choose_spec.1
   have pk_prim : ∀ k, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d (pk k)) (D := dim k)
+      (Kraus.transferMap (d := blockPhysDim d (pk k)) (D := dim k)
         (blockTensor (d := d) (D := dim k) (blocks k) (pk k))) :=
     fun k => (hPer k).choose_spec.2
   -- Take the LCM of all periods.
@@ -801,15 +802,15 @@ theorem exists_common_blocking_all_primitive_of_TP_irr
     {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hDim : ∀ k, 0 < dim k) :
     ∃ p, 0 < p ∧ ∀ k,
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dim k)
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
           (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
   have hPer : ∀ k, ∃ p, 0 < p ∧
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dim k)
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
           (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
     intro k
     have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩

@@ -15,7 +15,7 @@ The closed-chain corollaries of the Fundamental Theorem for normal PEPS
 `Papers/1804.04964/paper_normal.tex`) hypothesize that blocking any `L`
 consecutive sites of the matrix product state gives an injective tensor.  For
 one site-independent tensor this is `L`-block injectivity in the matrix
-language of the development's MPS chapters (`MPSTensor.IsNBlkInjective`): the
+language of the development's MPS chapters (`Kraus.IsNBlkInjective`): the
 word products of length `L` span the full matrix algebra.  This file proves
 that `L`-block injectivity of the matrix tensor gives blocked-region linear
 independence of its cycle tensor on every arc of `L` consecutive sites
@@ -247,7 +247,7 @@ theorem regionBlockedWeight_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < 
     regionBlockedWeight (G := SimpleGraph.cycleGraph n) (cycleTensorOfMPS hn A)
         (cycleArcFrom s L) bdry τ =
       (D : ℂ) ^ (n - (L + 1)) *
-        MPSTensor.evalWord A (List.ofFn (arcWord hLn s τ))
+        Kraus.evalWord A (List.ofFn (arcWord hLn s τ))
           (bdry (arcLeftBoundary hn hL hLn s)) (bdry (arcRightBoundary hn hL hLn s)) := by
   have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
   have hs := s.isLt
@@ -341,7 +341,7 @@ theorem regionBlockedWeight_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < 
           hconst (if ρ 0 = a ∧ ρ (Fin.last L) = b then
             ∏ j : Fin L, A (x j) (ρ j.castSucc) (ρ j.succ) else 0)
     _ = (D : ℂ) ^ (n - (L + 1)) *
-          MPSTensor.evalWord A (List.ofFn x) a b := by
+          Kraus.evalWord A (List.ofFn x) a b := by
         rw [MPSTensor.evalWord_ofFn_apply A L x a b, Finset.mul_sum]
 
 end BlockedWeight
@@ -365,9 +365,9 @@ Source: arXiv:1804.04964, Section 3, lines 1585--1668 of
 `Papers/1804.04964/paper_normal.tex`: injectivity of the blocked tensor of
 `L` consecutive sites, read through the nondegenerate trace pairing. -/
 theorem matrix_eq_zero_of_isNBlkInjective {L : ℕ} {A : MPSTensor d D}
-    (hA : MPSTensor.IsNBlkInjective A L) (C : Matrix (Fin D) (Fin D) ℂ)
+    (hA : Kraus.IsNBlkInjective A L) (C : Matrix (Fin D) (Fin D) ℂ)
     (hC : ∀ x : Fin L → Fin d,
-      ∑ p : Fin D × Fin D, C p.1 p.2 * MPSTensor.evalWord A (List.ofFn x) p.1 p.2 = 0) :
+      ∑ p : Fin D × Fin D, C p.1 p.2 * Kraus.evalWord A (List.ofFn x) p.1 p.2 = 0) :
     C = 0 := by
   classical
   -- The pairing against `C` is the trace pairing against `Cᵀ`.
@@ -385,13 +385,13 @@ theorem matrix_eq_zero_of_isNBlkInjective {L : ℕ} {A : MPSTensor d D}
   have hker : ∀ M : Matrix (Fin D) (Fin D) ℂ, Matrix.trace (Cᵀ * M) = 0 := by
     intro M
     have hM : M ∈ Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
-        MPSTensor.evalWord A (List.ofFn x)) := by
+        Kraus.evalWord A (List.ofFn x)) := by
       rw [show Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
-        MPSTensor.evalWord A (List.ofFn x)) = ⊤ by
+        Kraus.evalWord A (List.ofFn x)) = ⊤ by
           exact hA.span_eq_top]
       exact Submodule.mem_top
     have hle : Submodule.span ℂ (Set.range fun x : Fin L → Fin d =>
-        MPSTensor.evalWord A (List.ofFn x)) ≤
+        Kraus.evalWord A (List.ofFn x)) ≤
         LinearMap.ker ((Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
           (LinearMap.mulLeft ℂ Cᵀ)) := by
       rw [Submodule.span_le]
@@ -449,7 +449,7 @@ Source: arXiv:1804.04964, Section 3, lines 1585--1668 of
 results in an injective tensor", read for one site-independent tensor. -/
 theorem regionBlockedTensorInjective_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L)
     (hLn : L < n) (hD : 0 < D) {A : MPSTensor d D}
-    (hA : MPSTensor.IsNBlkInjective A L) (s : Fin n) :
+    (hA : Kraus.IsNBlkInjective A L) (s : Fin n) :
     RegionBlockedTensorInjective (G := SimpleGraph.cycleGraph n) (cycleTensorOfMPS hn A)
       (cycleArcFrom s L) := by
   classical
@@ -473,7 +473,7 @@ theorem regionBlockedTensorInjective_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (
         arcBoundaryConfig_recon hn hL hLn A s bdry'⟩
   -- The linear relation pairs `C` to zero against every word product.
   have hzero : ∀ x : Fin L → Fin d,
-      ∑ p : Fin D × Fin D, C p.1 p.2 * MPSTensor.evalWord A (List.ofFn x) p.1 p.2 = 0 := by
+      ∑ p : Fin D × Fin D, C p.1 p.2 * Kraus.evalWord A (List.ofFn x) p.1 p.2 = 0 := by
     intro x
     set τ : RegionPhysicalConfig (V := Fin n) (d := d) (cycleArcFrom s L) :=
       fun w => x ⟨(w.1 - s).val, mem_cycleArcFrom.mp w.2⟩ with hτ
@@ -508,7 +508,7 @@ theorem regionBlockedTensorInjective_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (
           regionBlockedTensorFamily (G := SimpleGraph.cycleGraph n) (cycleTensorOfMPS hn A)
             (cycleArcFrom s L) (arcBoundaryConfig hn hL hLn A s p.1 p.2) τ =
         (D : ℂ) ^ (n - (L + 1)) *
-          (C p.1 p.2 * MPSTensor.evalWord A (List.ofFn x) p.1 p.2) := by
+          (C p.1 p.2 * Kraus.evalWord A (List.ofFn x) p.1 p.2) := by
       intro p
       have hwt := regionBlockedWeight_cycleTensorOfMPS hn hL hLn A s
         (arcBoundaryConfig hn hL hLn A s p.1 p.2) τ
@@ -517,11 +517,11 @@ theorem regionBlockedTensorInjective_cycleTensorOfMPS (hn : 3 ≤ n) {L : ℕ} (
           regionBlockedTensorFamily (G := SimpleGraph.cycleGraph n) (cycleTensorOfMPS hn A)
             (cycleArcFrom s L) (arcBoundaryConfig hn hL hLn A s p.1 p.2) τ
           = C p.1 p.2 * ((D : ℂ) ^ (n - (L + 1)) *
-              MPSTensor.evalWord A (List.ofFn x) p.1 p.2) := by rw [← hwt]; rfl
+              Kraus.evalWord A (List.ofFn x) p.1 p.2) := by rw [← hwt]; rfl
         _ = (D : ℂ) ^ (n - (L + 1)) *
-              (C p.1 p.2 * MPSTensor.evalWord A (List.ofFn x) p.1 p.2) := by ring
+              (C p.1 p.2 * Kraus.evalWord A (List.ofFn x) p.1 p.2) := by ring
     have hfactored : (D : ℂ) ^ (n - (L + 1)) *
-        ∑ p : Fin D × Fin D, C p.1 p.2 * MPSTensor.evalWord A (List.ofFn x) p.1 p.2 = 0 := by
+        ∑ p : Fin D × Fin D, C p.1 p.2 * Kraus.evalWord A (List.ofFn x) p.1 p.2 = 0 := by
       rw [Finset.mul_sum]
       rw [← Finset.sum_congr rfl fun p _ => hexp p]
       exact hpairs

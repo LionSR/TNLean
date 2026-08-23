@@ -25,7 +25,7 @@ some longer length \(n\) span the full matrix algebra, then \(Z=0\). -/
 theorem eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
     {A : MPSTensor d D} {k n : ℕ} {Z : Matrix (Fin D) (Fin D) ℂ}
     (htop : Kraus.wordSpan A n = ⊤) (hkn : k ≤ n)
-    (hzero : ∀ σ : Fin k → Fin d, evalWord A (List.ofFn σ) * Z = 0) :
+    (hzero : ∀ σ : Fin k → Fin d, Kraus.evalWord A (List.ofFn σ) * Z = 0) :
     Z = 0 := by
   have hzero_span : ∀ M ∈ Kraus.wordSpan A n, M * Z = 0 := by
     apply Submodule.span_induction
@@ -40,17 +40,17 @@ theorem eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
         (w.drop (n - k)).get ⟨i.val, by simp [hdrop_len]⟩
       have hσk : List.ofFn σk = w.drop (n - k) := by
         simpa [σk, hdrop_len] using (List.ofFn_get (w.drop (n - k)))
-      have hsuffix : evalWord A (w.drop (n - k)) * Z = 0 := by
+      have hsuffix : Kraus.evalWord A (w.drop (n - k)) * Z = 0 := by
         simpa [hσk] using hzero σk
       calc
-        evalWord A w * Z =
-            evalWord A (w.take (n - k) ++ w.drop (n - k)) * Z := by
+        Kraus.evalWord A w * Z =
+            Kraus.evalWord A (w.take (n - k) ++ w.drop (n - k)) * Z := by
           rw [List.take_append_drop (n - k) w]
-        _ = (evalWord A (w.take (n - k)) *
-              evalWord A (w.drop (n - k))) * Z := by
-          rw [evalWord_append]
-        _ = evalWord A (w.take (n - k)) *
-              (evalWord A (w.drop (n - k)) * Z) := by
+        _ = (Kraus.evalWord A (w.take (n - k)) *
+              Kraus.evalWord A (w.drop (n - k))) * Z := by
+          rw [Kraus.evalWord_append]
+        _ = Kraus.evalWord A (w.take (n - k)) *
+              (Kraus.evalWord A (w.drop (n - k)) * Z) := by
           rw [Matrix.mul_assoc]
         _ = 0 := by rw [hsuffix, mul_zero]
     · simp
@@ -68,9 +68,9 @@ If \(A\) is \(L_0\)-block-injective, then a relation \(A^wZ=0\) for every word
 \(w\) of length \(k\) already forces \(Z=0\) whenever \(k\) is bounded by a
 positive multiple of \(L_0\). -/
 theorem eq_zero_of_evalWord_mul_eq_zero_of_isNBlkInjective_of_le_mul
-    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : IsNBlkInjective A L₀)
+    {A : MPSTensor d D} {L₀ k q : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hq : 1 ≤ q) (hkq : k ≤ q * L₀) {Z : Matrix (Fin D) (Fin D) ℂ}
-    (hzero : ∀ σ : Fin k → Fin d, evalWord A (List.ofFn σ) * Z = 0) :
+    (hzero : ∀ σ : Fin k → Fin d, Kraus.evalWord A (List.ofFn σ) * Z = 0) :
     Z = 0 := by
   exact eq_zero_of_evalWord_mul_eq_zero_of_wordSpan_eq_top
     (A := A) (k := k) (n := q * L₀)

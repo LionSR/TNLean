@@ -36,7 +36,7 @@ weights, and block-injective canonical form (biCF). -/
 structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective. -/
-  block_injective : ∀ k, MPSTensor.IsInjective (A k)
+  block_injective : ∀ k, Kraus.IsInjective (A k)
   /-- Each block is left-canonical. -/
   left_canonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- No block weight vanishes. -/
@@ -69,7 +69,7 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
-        (∑ k : Fin r, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w))) = 0) →
+        (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
 /-- A per-copy horizontal decomposition of an MPO tensor.
@@ -143,16 +143,16 @@ theorem blockwise_insert_eq_of_mpv_agree
               (Fin.cons i w : Fin (L + 1) → Fin d) =
           ∑ k : Fin r, Matrix.trace
             ((μ k) ^ (L + 1) • MPSTensor.insertedTensor W (A k) s *
-              MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              Kraus.evalWord (A k) (List.ofFn w)) := by
       intro W
       -- Expand the assembled-tensor MPV block-by-block and fold
-      -- `mpv (A k) (Fin.cons i w)` into `trace (A k i * evalWord (A k) (List.ofFn w))`.
+      -- `mpv (A k) (Fin.cons i w)` into `trace (A k i * Kraus.evalWord (A k) (List.ofFn w))`.
       have hExp : ∀ i : Fin d,
           MPSTensor.mpv
               (MPSTensor.toTensorFromBlocks (d := d) (μ := μ) A)
               (Fin.cons i w : Fin (L + 1) → Fin d) =
             ∑ k : Fin r, (μ k) ^ (L + 1) *
-              Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              Matrix.trace (A k i * Kraus.evalWord (A k) (List.ofFn w)) := by
         intro i
         rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum]
         refine Finset.sum_congr rfl fun k _ => ?_
@@ -160,55 +160,55 @@ theorem blockwise_insert_eq_of_mpv_agree
             = i :: List.ofFn w := by
           simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
         simp only [smul_eq_mul, MPSTensor.mpv, MPSTensor.coeff, hof,
-          MPSTensor.evalWord_cons]
+          Kraus.evalWord_cons]
       simp_rw [hExp, Finset.mul_sum]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun k _ => ?_
       calc ∑ i : Fin d, W s i *
                 ((μ k) ^ (L + 1) *
-                  Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)))
+                  Matrix.trace (A k i * Kraus.evalWord (A k) (List.ofFn w)))
             = (μ k) ^ (L + 1) * ∑ i : Fin d, W s i *
-                Matrix.trace (A k i * MPSTensor.evalWord (A k) (List.ofFn w)) := by
+                Matrix.trace (A k i * Kraus.evalWord (A k) (List.ofFn w)) := by
               simpa only [mul_comm, mul_left_comm, mul_assoc] using
                 Fintype.sum_mul_mul_eq_mul_sum_mul ((μ k) ^ (L + 1)) (W s)
                   (fun i => Matrix.trace
-                    (A k i * MPSTensor.evalWord (A k) (List.ofFn w)))
+                    (A k i * Kraus.evalWord (A k) (List.ofFn w)))
         _   = (μ k) ^ (L + 1) * ∑ i : Fin d, Matrix.trace
-                ((W s i • A k i) * MPSTensor.evalWord (A k) (List.ofFn w)) := by
+                ((W s i • A k i) * Kraus.evalWord (A k) (List.ofFn w)) := by
               congr 1
               refine Finset.sum_congr rfl fun i _ => ?_
               rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
         _   = (μ k) ^ (L + 1) * Matrix.trace
                 (∑ i : Fin d, (W s i • A k i) *
-                    MPSTensor.evalWord (A k) (List.ofFn w)) := by
+                    Kraus.evalWord (A k) (List.ofFn w)) := by
               rw [Matrix.trace_sum]
         _   = (μ k) ^ (L + 1) * Matrix.trace
                 ((∑ i : Fin d, W s i • A k i) *
-                  MPSTensor.evalWord (A k) (List.ofFn w)) := by
+                  Kraus.evalWord (A k) (List.ofFn w)) := by
               rw [Finset.sum_mul]
         _   = (μ k) ^ (L + 1) * Matrix.trace
                 (MPSTensor.insertedTensor W (A k) s *
-                  MPSTensor.evalWord (A k) (List.ofFn w)) := rfl
+                  Kraus.evalWord (A k) (List.ofFn w)) := rfl
         _   = Matrix.trace ((μ k) ^ (L + 1) •
                 MPSTensor.insertedTensor W (A k) s *
-                MPSTensor.evalWord (A k) (List.ofFn w)) := by
+                Kraus.evalWord (A k) (List.ofFn w)) := by
               rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
     -- Apply `htrans` to both sides of `hA`.
     rw [htrans Y, htrans Z] at hA
     -- Rewrite each `Δ k * E_k` trace as the difference of the `Y` and `Z` versions.
     have hsubtr : ∀ k : Fin r,
-        Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w)) =
+        Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w)) =
           Matrix.trace ((μ k) ^ (L + 1) •
               MPSTensor.insertedTensor Y (A k) s *
-              MPSTensor.evalWord (A k) (List.ofFn w)) -
+              Kraus.evalWord (A k) (List.ofFn w)) -
             Matrix.trace ((μ k) ^ (L + 1) •
               MPSTensor.insertedTensor Z (A k) s *
-              MPSTensor.evalWord (A k) (List.ofFn w)) := by
+              Kraus.evalWord (A k) (List.ofFn w)) := by
       intro k
       change Matrix.trace
           (((μ k) ^ (L + 1) • (MPSTensor.insertedTensor Y (A k) s -
               MPSTensor.insertedTensor Z (A k) s)) *
-            MPSTensor.evalWord (A k) (List.ofFn w)) = _
+            Kraus.evalWord (A k) (List.ofFn w)) = _
       rw [smul_sub, sub_mul, Matrix.trace_sub]
     simp_rw [hsubtr]
     rw [Finset.sum_sub_distrib, sub_eq_zero]

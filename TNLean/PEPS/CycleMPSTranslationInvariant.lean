@@ -64,13 +64,13 @@ Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 1624--1661 of `Papers/1804.04964/paper_normal.tex` — the collapse of the
 per-bond gauges of the first corollary to a single gauge. -/
 theorem gaugeFamily_succ_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTensor d D}
-    (hA : MPSTensor.IsNBlkInjective A L) {Z : Fin n → GL (Fin D) ℂ}
+    (hA : Kraus.IsNBlkInjective A L) {Z : Fin n → GL (Fin D) ℂ}
     (hZ : ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ)) (v : Fin n) :
     ∃ c : ℂˣ, (Z (v + 1) : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
   have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
-      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+      Kraus.evalWord A (List.ofFn σ)) = ⊤ := hA
   -- The iterated relations at `v` and `v + 1` agree on the spanning word
   -- products, hence on every matrix.
   have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
@@ -110,7 +110,7 @@ Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 `n ≥ 2L + 1` per line 1623 and Section `normal_alt`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant {n L d D : ℕ} [NeZero n]
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) :=

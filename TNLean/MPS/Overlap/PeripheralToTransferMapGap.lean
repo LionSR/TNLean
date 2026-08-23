@@ -33,9 +33,9 @@ namespace MPSTensor
 theorem overlap_tendsto_one_of_peripheralPrimitive
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hInj : IsInjective A)
+    (hInj : Kraus.IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   have hP : MPSTensor.HasPrimitiveFixedPoint A :=
@@ -47,9 +47,9 @@ self-overlap convergence to `1`. -/
 theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   have hP : MPSTensor.HasPrimitiveFixedPoint A :=
