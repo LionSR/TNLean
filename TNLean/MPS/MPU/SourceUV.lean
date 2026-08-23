@@ -22,6 +22,64 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
 
+namespace SourceFactors
+
+/-- The paper's source tensor $u : d^2 \to \ell\times r$ associated with supplied
+source factors. The row order is `(left source, right source)` and the physical
+column order is `(first ket site, second ket site)`.
+
+Source: arXiv:1703.09188, equation `uu` and Figure `II_umatrix.png`, lines
+532--540. -/
+def sourceU {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) :
+    Matrix (Fin ℓ[U] × Fin r[U]) (Fin d × Fin d) ℂ :=
+  fun (l, r) (i₁, i₂) ↦ ∑ β : Fin D, S.Y₁ r (i₁, β) * S.X₂ (β, i₂) l
+
+/-- The paper's source tensor $v : r\times\ell \to d^2$ associated with supplied
+source factors. The physical row order is `(first bra site, second bra site)`
+and the column order is `(right source, left source)`.
+
+Source: arXiv:1703.09188, equation `vdagger` and Figure `II_vmatrix.png`, lines
+532--540. -/
+def sourceV {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) :
+    Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ :=
+  fun (j₁, j₂) (r, l) ↦ ∑ α : Fin D, S.X₁ (α, j₁) r * S.Y₂ l (j₂, α)
+
+/-- Entry formula for the source tensor $u$ associated with supplied factors.
+
+Source: arXiv:1703.09188, equation `uu`, lines 532--540. -/
+@[simp] theorem sourceU_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (S : SourceFactors U ρ) (l : Fin ℓ[U]) (r : Fin r[U]) (i₁ i₂ : Fin d) :
+    sourceU U S (l, r) (i₁, i₂) =
+      ∑ β : Fin D, S.Y₁ r (i₁, β) * S.X₂ (β, i₂) l := rfl
+
+/-- Entry formula for the source tensor $v$ associated with supplied factors.
+
+Source: arXiv:1703.09188, equation `vdagger`, lines 532--540. -/
+@[simp] theorem sourceV_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (S : SourceFactors U ρ) (j₁ j₂ : Fin d) (r : Fin r[U]) (l : Fin ℓ[U]) :
+    sourceV U S (j₁, j₂) (r, l) =
+      ∑ α : Fin D, S.X₁ (α, j₁) r * S.Y₂ l (j₂, α) := rfl
+
+/-- Entry form of the first source-cut factorization for supplied factors.
+
+Source: arXiv:1703.09188, equations `X1Y1` and `SVDforms2`, lines 508--528. -/
+@[simp] theorem X₁_mul_Y₁_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (S : SourceFactors U ρ) (α : Fin D) (j i : Fin d) (β : Fin D) :
+    (S.X₁ * S.Y₁) (α, j) (i, β) = U i j α β := by
+  rw [← S.sourceCutM₁_eq]
+  rfl
+
+/-- Entry form of the second source-cut factorization for supplied factors.
+
+Source: arXiv:1703.09188, equations `X2Y2` and `SVDforms2`, lines 508--528. -/
+@[simp] theorem X₂_mul_Y₂_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (S : SourceFactors U ρ) (α : Fin D) (i j : Fin d) (β : Fin D) :
+    (S.X₂ * S.Y₂) (α, i) (j, β) = U i j α β := by
+  rw [← S.sourceCutM₂_eq]
+  rfl
+
+end SourceFactors
+
 /-- The paper's source tensor $u : d^2 \to \ell\times r$.
 
 The row order is `(left source, right source)` and the physical column order is
@@ -45,6 +103,22 @@ noncomputable def sourceV (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ :=
   fun (j₁, j₂) (r, l) ↦ ∑ α : Fin D,
     sourceX₁ U ρ hρ (α, j₁) r * sourceY₂ U l (j₂, α)
+
+/-- The compact-SVD source factors recover the existing source tensor $u$.
+
+Source: arXiv:1703.09188, equations `eq:sf-svd` and `uu`, lines 479--540. -/
+@[simp] theorem sourceFactors_sourceU
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    SourceFactors.sourceU U (sourceFactors U ρ hρ) = sourceU U ρ hρ := by
+  rfl
+
+/-- The compact-SVD source factors recover the existing source tensor $v$.
+
+Source: arXiv:1703.09188, equations `eq:sf-svd` and `vdagger`, lines 479--540. -/
+@[simp] theorem sourceFactors_sourceV
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    SourceFactors.sourceV U (sourceFactors U ρ hρ) = sourceV U ρ hρ := by
+  rfl
 
 /-- Stable entry formula for $u$ in the exact solid/dotted leg order.
 

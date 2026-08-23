@@ -69,28 +69,27 @@ theorem sum_sourceX₁_mul_sourceU
     _ = _ := by
       rw [← Matrix.mul_apply, sourceX₁_mul_sourceY₁_apply]
 
-/-- The open two-site matrix product factors through $X_1$, $u$, and $Y_2$.
+namespace SourceFactors
 
-Source: arXiv:1703.09188, equation `SVDforms2`, lines 526--530, and equation
-`uu`, lines 536--537. -/
-theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+/-- The open two-site product factors through $X_1,u,Y_2$ for any supplied
+source factorization.
+
+Source: arXiv:1703.09188, equations `SVDforms2`, `uu`, and `StandardForm`,
+lines 526--540 and 603--617. -/
+theorem mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
     (U i₁ j₁ * U i₂ j₂) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
-        sourceX₁ U ρ hρ (α, j₁) r * sourceU U ρ hρ (l, r) (i₁, i₂) *
-          sourceY₂ U l (j₂, γ) := by
+        S.X₁ (α, j₁) r * sourceU U S (l, r) (i₁, i₂) * S.Y₂ l (j₂, γ) := by
   classical
   simp only [Matrix.mul_apply]
   have h₁ (β : Fin D) : U i₁ j₁ α β =
-      ∑ r : Fin r[U], sourceX₁ U ρ hρ (α, j₁) r *
-        sourceY₁ U ρ hρ r (i₁, β) := by
-    simpa only [Matrix.mul_apply] using
-      (sourceX₁_mul_sourceY₁_apply U ρ hρ α j₁ i₁ β).symm
+      ∑ r : Fin r[U], S.X₁ (α, j₁) r * S.Y₁ r (i₁, β) := by
+    simpa only [Matrix.mul_apply] using (X₁_mul_Y₁_apply U S α j₁ i₁ β).symm
   have h₂ (β : Fin D) : U i₂ j₂ β γ =
-      ∑ l : Fin ℓ[U], sourceX₂ U (β, i₂) l * sourceY₂ U l (j₂, γ) := by
-    simpa only [Matrix.mul_apply] using
-      (sourceX₂_mul_sourceY₂_apply U β i₂ j₂ γ).symm
+      ∑ l : Fin ℓ[U], S.X₂ (β, i₂) l * S.Y₂ l (j₂, γ) := by
+    simpa only [Matrix.mul_apply] using (X₂_mul_Y₂_apply U S β i₂ j₂ γ).symm
   simp_rw [h₁, h₂, Finset.sum_mul_sum]
   simp_rw [sourceU_apply, Finset.mul_sum, Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -102,6 +101,23 @@ theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂
   apply Finset.sum_congr rfl
   intro β _
   ring
+
+end SourceFactors
+
+/-- The open two-site matrix product factors through $X_1$, $u$, and $Y_2$.
+
+Source: arXiv:1703.09188, equation `SVDforms2`, lines 526--530, and equation
+`uu`, lines 536--537. -/
+theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
+    (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
+    (U i₁ j₁ * U i₂ j₂) α γ =
+      ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
+        sourceX₁ U ρ hρ (α, j₁) r * sourceU U ρ hρ (l, r) (i₁, i₂) *
+          sourceY₂ U l (j₂, γ) := by
+  simpa [sourceFactors, sourceFactors_sourceU] using
+    SourceFactors.mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂ U
+      (sourceFactors U ρ hρ) i₁ j₁ i₂ j₂ α γ
 
 /-- Pair-index reformulation of the open two-site factorization. The output
 pair is \(q\), while \(j\) is the input pair. The name \(p\) remains reserved for the
