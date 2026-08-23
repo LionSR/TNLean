@@ -88,6 +88,16 @@ are:
 In particular, the proofs of Proposition 4.13 and Theorem 4.14 are subsections
 of Appendix C, and the decorrelation results are in Appendix D.
 
+## Literal mixed-state ZCL definition
+
+Source Definition 4.2, label `DefinitionZCL` at line 736, is complete in
+Blueprint `def:mpo_physical_trace_idempotence` and
+`MPOTensor.IsPhysicalTraceIdempotent`, with
+`MPOTensor.isPhysicalTraceIdempotent_iff` recording the equation
+$\mathcal T_M^2=\mathcal T_M$. The source label is mapped only to this literal
+predicate. `MPOTensor.IsSourceZCL` remains a separate nonzero up-to-scalar
+relation and is not the fixed-tensor definition.
+
 ## Examples
 
 Three examples carry labels and therefore occur in the TSV ledger.  The fourth

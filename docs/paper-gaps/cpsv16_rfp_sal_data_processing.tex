@@ -99,11 +99,13 @@ $\mathcal T_M^2=\mathcal T_M$. If $\mathcal T_M=0$, then
   =\operatorname{tr}(\mathcal T_M)=0,
 \]
 contradicting the positive-length nonvanishing hypothesis. Therefore
-$\mathcal T_M\neq0$, and $M$ has source zero correlation length.
+$\mathcal T_M\neq0$. Literal physical-trace idempotence already holds, and the
+extra nonvanishing gives the separate scale-invariant relation.
 
-The literal Definition~4.2 equation is the direct theorem
-\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS} in
-\doclink{TNLean/MPS/MPDO/RFPViaTS}. Combining it with
+The literal Definition~4.2 conclusion is the direct theorem
+\leanid{MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS} in
+\doclink{TNLean/MPS/MPDO/RFPViaTS}; it packages the physical-trace-square
+equation. Combining it with
 \leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} gives exactly the
 source-facing forward implication: positive semidefinite rings, nonzero trace
 at every positive length, and the Definition~4.1 local renormalization
@@ -116,7 +118,7 @@ paper-facing statement.
 
 The declaration \leanid{MPOTensor.isSAL_of_isRFPViaTS} is the horizontal SAL
 specialization. Together with the same literal theorem
-\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}, it yields the
+\leanid{MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS}, it yields the
 paper-facing horizontal corollary. The convenience declaration
 \leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} packages the broader
 scale-invariant conclusion. The normalized BNT-refined horizontal

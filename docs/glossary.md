@@ -596,20 +596,25 @@ The following notions use different transfer objects and are not interchangeable
   in `MPOTensor.IsRFPViaTS`. They encode only the one-letter virtual-gauge
   specialization of the Appendix D diagram.
 
-### Literal physical-trace idempotence
+### `MPOTensor.IsPhysicalTraceIdempotent`
 
-- **Expression:**
+- **Declaration:**
+  `MPOTensor.IsPhysicalTraceIdempotent (M : MPOTensor d D) : Prop`.
+- **Meaning:**
   `MPOTensor.physTraceTransfer M * MPOTensor.physTraceTransfer M =
-  MPOTensor.physTraceTransfer M`.
+  MPOTensor.physTraceTransfer M`, characterized by
+  `MPOTensor.isPhysicalTraceIdempotent_iff`.
 - **Transfer object:** $\mathcal T_M=\sum_i M^{ii}$, obtained by closing the
   ket and bra physical indices of one MPO tensor.
 - **Source:** CPSV16 Definition 4.2, label `DefinitionZCL`,
-  `Papers/1606.00608/MPDO-22-12-17-2.tex:735-741`.
-- **Sanctioned bridge:** with $\mathcal T_M\ne0$, this equation implies
-  `MPOTensor.IsSourceZCL M` through
-  `MPOTensor.isSourceZCL_of_physTraceTransfer_sq`.
-- **Caveat:** no dedicated predicate abbreviates this literal equation. It is
-  not `MPOTensor.IsZCL`, which uses the doubled-index completely positive map.
+  `Papers/1606.00608/MPDO-22-12-17-2.tex:735-739`.
+- **Sanctioned bridges:** `MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS`
+  gives the predicate from Definition 4.1. With $\mathcal T_M\ne0$,
+  `MPOTensor.IsPhysicalTraceIdempotent.isSourceZCL` gives the separate
+  scale-invariant relation.
+- **Caveat:** this is neither `MPOTensor.IsSourceZCL` nor `MPOTensor.IsZCL`,
+  which use the up-to-scalar relation and doubled-index completely positive
+  map, respectively.
 
 ### `MPOTensor.IsSourceZCL`
 
