@@ -80,6 +80,31 @@
     witness supplied by the simple canonical-form predicate.
 \end{proof}
 
+\begin{theorem}[Scale-invariant copy-independence generalization]
+    \label{thm:mpdo_scale_invariant_weight_copy_independent}
+    \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    More generally, suppose the nonzero physical-trace transfer satisfies
+    \begin{align}
+        \mathcal T_M^2 & =\lambda\mathcal T_M,
+        \qquad \lambda>0.
+        \notag
+    \end{align}
+    Under the same canonical-form and non-nilpotency conditions, the weights
+    remain independent of the copy index. This scale-invariant statement is
+    distinct from the literal fixed-representative assertion of
+    Theorem~\ref{thm:mpdo_simple_weight_copy_independent}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The weighted block equation gives
+    $\mathcal T_{A_j}^2=(\lambda/\mu_{j,q})\mathcal T_{A_j}$.
+    Comparing two copy indices and using
+    $\lambda\ne0$ and $\mathcal T_{A_j}\ne0$ gives
+    $\mu_{j,q}=\mu_{j,q'}$.
+\end{proof}
+
 \begin{definition}[Common sector weight and absorbed representative]
     \label{def:mpdo_common_sector_weight_absorption}
     \lean{MPSTensor.SectorDecomposition.commonWeight}
