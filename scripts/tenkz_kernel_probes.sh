@@ -99,16 +99,33 @@ SKETCHROW
         for (i = 0; i < indent; i++) probe = probe " "
         probe = probe "```tex"
         if (fencerun(probe) != 3 || fc != "`" || frest != "tex") exit 70
+        if (atxlevel(substr(probe, 1, indent) "## Section") != 2) exit 71
       }
       if (fencerun("    ```tex") != 0) exit 70
+      if (atxlevel("    ## Section") != 0 ||
+          atxlevel("####### Section") != 0 ||
+          atxlevel("##Section") != 0 ||
+          atxlevel("#6235") != 0 || atxlevel("###") != 3) exit 71
+    }
+    # Markdown gives fences and ATX headings the same indentation allowance.
+    function markdownline(line,    indent) {
+      while (substr(line, indent + 1, 1) == " ") indent++
+      if (indent > 3) return ""
+      return substr(line, indent + 1)
+    }
+    # The level of an ATX heading, or zero when the line is not one.
+    function atxlevel(line,    copy, h, separator) {
+      copy = markdownline(line)
+      while (substr(copy, h + 1, 1) == "#") h++
+      if (h == 0 || h > 6) return 0
+      separator = substr(copy, h + 1, 1)
+      if (separator != "" && separator != " ") return 0
+      return h
     }
     # The run of fence characters opening or closing a fence on this line:
     # its length, with the character in fc and the trailing text in frest.
-    function fencerun(line,    copy, indent, i) {
-      copy = line
-      while (substr(copy, indent + 1, 1) == " ") indent++
-      if (indent > 3) return 0
-      copy = substr(copy, indent + 1)
+    function fencerun(line,    copy, i) {
+      copy = markdownline(line)
       fc = substr(copy, 1, 1)
       if (fc != "`" && fc != "~") return 0
       i = 0
@@ -130,10 +147,9 @@ SKETCHROW
         next
       }
       if (!s && index($0, heading) == 1) { s = 1; next }
-      if (s && !f && substr($0, 1, 1) == "#") {
-        h = 0
-        while (substr($0, h + 1, 1) == "#") h++
-        if (h <= level && substr($0, h + 1, 1) == " ") exit
+      if (s && !f) {
+        h = atxlevel($0)
+        if (h != 0 && h <= level) exit
       }
       n = fencerun($0)
       if (n >= 3) {
