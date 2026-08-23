@@ -82,7 +82,7 @@ declared. The generated reference prints this test beside every row.
 | `align=` | row | row number or `midline` | `midline` | picture | `TKZ-PIC-*` |
 | `size=` | small-enum | `s` `m` `l` | from math style | picture, equation | `TKZ-SIZE-*` |
 | `metrics=` | small-enum | `compact` | unset — the base metric | picture, equation | `TKZ-METRICS-*` |
-| `check=` | check-spec | `signature`, `modulo=bundles`, `off={<relation>: <reason>}` | `signature` | equation | `TKZ-EQ-*` |
+| `check=` | check-spec | `signature`, `off={<relation>: <reason>}` | `signature` | equation | `TKZ-EQ-*` |
 
 `metrics=` names the picture's metric profile, and it exists because the two
 density decisions have different owners: math style senses the surrounding
@@ -201,10 +201,8 @@ crossings answer to. A string that meets nothing needs neither.
 changes no topology, and it enters the boundary signature. On a resolved
 physical index the typed record, the port consumption and mismatch checking,
 and the physical-leg stroke all stand. In that end's exposed entry the
-orientation follows the face and precedes any strand weight — `to` when the
-index leaves the panel, `from` when it enters, so `open:e:to` and
-`open:e:to:bundle=3` — which keeps the weight the entry's last field and a
-directed bundle expandable to its own multiplicity. A space is thereby
+orientation follows the face: `to` when the index leaves the panel and
+`from` when it enters, as in `open:e:to`. A space is thereby
 distinguished from its dual, and the two sides of a relation must agree on
 orientation and not merely on count. An internal directed contraction leaves
 no boundary entry.
@@ -213,15 +211,15 @@ of the leg outside the silhouette of the glyph it springs from — so the same
 placement rule inks on every bearing, and a wide silhouette can no longer
 swallow the mark of an east leg that a tall one lets a south leg keep.
 
-`stroke=` names the pattern of the rail and nothing else: the weight, the
-colour and the topology are untouched. A dashed rail carries an index the
+`stroke=` names the pattern of the rail and nothing else: the colour and the
+topology are untouched. A dashed rail carries an index the
 picture draws but does not contract; a dotted rail carries a lattice lying
 under the sheet being drawn. The dash lengths are house metrics, so a client
 never spells a length of its own.
 
-A wire carries no waypoint list, no bend factor and no stroke weight: a route names the records it must
-clear, an arc leaves and enters along its ends' faces, and the stroke follows
-the resolved endpoint type (§5).
+A wire carries no waypoint list, no bend factor, and no stroke weight: a
+route names the records it must clear, an arc leaves and enters along its
+ends' faces, and the stroke follows the resolved endpoint type (§5).
 
 ### 2.5 Mark keys (5)
 
@@ -731,9 +729,8 @@ passed.
 
 **Stroke.** The stroke follows the type the port already carries: two named
 ratios in the theme, one virtual and one physical, selected by the index and
-never by the author. A theme may set them equal. Bundling is a claim about
-the boundary signature, which the audit already carries (§7), and it owes no
-ink of its own.
+never by the author. A theme may set them equal. Index multiplicity belongs
+to the mathematical label, not to a second stroke field.
 <!-- Zero authored consumers in the corpus: no author ever wrote a stroke
      weight, and of the six targets recorded with a wrong stroke, four are
      recorded faithful, two of them annotated better than the authors. A
@@ -862,7 +859,7 @@ sum are read from the class the mathematics already has.
    equal signatures and ends the term. A sum requires equal signatures and
    continues it. A product contracts the facing cut: every index cut on the
    left factor's east frame continues as an index cut on the right factor's
-   west frame — the same type and weight, an outgoing index continuing as an
+   west frame — the same type, an outgoing index continuing as an
    incoming one — and each such pair is one index, internal to the composite
    term, which exposes nothing; the remaining entries of both factors
    concatenate. The facing cuts must cancel completely, and an empty facing
@@ -889,9 +886,7 @@ sum are read from the class the mathematics already has.
    `check={off={<relation>: <reason>}}` names the relation and its reason,
    and the reason is written to the record stream beside the waiver, never
    lost. This is the audit's own spelling and the only configuration the
-   author has: `check=` selects the audit (`signature`), states the
-   equivalence the comparison is taken up to (`modulo=bundles`, which reads a
-   bundled index and its members as one boundary entry), and records opt-outs.
+   author has: `check=` selects the audit (`signature`) and records opt-outs.
    It cannot switch the audit off silently. An opt-out without a reason is not
    an opt-out; an opt-out naming a relation the equation does not perform is a
    mistyped one and is refused before the stream records it; a reason may not
@@ -1087,7 +1082,7 @@ row is what names where the meaning went.
 | `theme=` | the house theme binds at load; a cited palette reaches ink through `\tndeclare{species}{<name>}{hue=source:<colour>}` |
 | `via=` | `route={<side> of <selector>}` where the waypoint cleared records (§12.3); nothing where it only bent a line past cells that hold none (§12.1), and nothing on a wound string, whose class is already its path (§5, §12.2) |
 | `bend=` | nothing: an arc leaves and enters along its ends' faces |
-| `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
+| `weight=` | nothing: the port type decides the stroke, and multiplicity is mathematics carried by the index label |
 | `nudge=` (atom and mark) | a basis member `(r,c,k)`, an ordinary address, or the label station rule (§6) |
 | `inset=` | nothing: concentric order is doctrine on the hull (§5) |
 | `around=` | nothing: the key detoured no ink; a detour an author intends is `route={<side> of <selector>}` |

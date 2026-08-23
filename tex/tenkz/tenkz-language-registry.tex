@@ -58,7 +58,6 @@
 % before, which is how every retirement here has been booked since session 0.
 %
 %   kernel-wire:via        a waypoint is a side of a selection
-%   kernel-wire:weight     the port type decides the stroke
 %
 % kernel-mark:inset and kernel-wire:bend left this list when their parser
 % rows were removed (the inert-key retirement, #6194/#6249): their
@@ -84,9 +83,8 @@
 % gains the species= every other record carries, and both halves land in the
 % change that adds that parser row.
 %
-% The tombstone migrating the connection flag `fused` to `weight=double`
-% named a spelling the same batch retires; it now reads that the port type
-% decides the stroke (LANGUAGE-1.0 section 10).
+% The tombstone for the connection flag `fused` and the retired `weight=`
+% key both say that the port type decides the stroke (LANGUAGE-1.0 section 10).
 \__tenkz_language_registry_environment:nnnn {tenkzeq}{kernel}{picture}
   {Equation composition and the boundary-signature audit.}
 \__tenkz_language_registry_command:nnnnn {tnwire}{connections-closures}{connection}
@@ -198,10 +196,6 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string)}{index}{kernel}{Bond or travelling string; a declared skin's pairing arrives generated, never authored.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{route}{route-spec}{straight}{kernel}{straight, orth, arc (honours the ends' faces), or the hull route {<side> of <selector>}.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints of a string; an index bond draws its chord and reads none.}
-% The multiplicity is a claim the boundary-signature audit carries, not a
-% count the rail draws: `double` and `bundle=n` both stroke one rail and
-% expand to their own multiplicity in the exposed entry (LANGUAGE-1.0 2.4).
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{weight}{enum(single|double|bundle=n)}{single}{kernel}{Strand multiplicity in the boundary signature; every weight strokes one rail.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{wind}{pair}{zero}{kernel}{Homotopy class on traced frames.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{cross}{crossing-list}{empty}{kernel}{Declared over and under crossings.}
@@ -315,6 +309,13 @@
 \__tenkz_language_registry_tombstone:nnn {kernel-setup}{theme}
   {the house theme binds at load; a cited palette reaches ink through
     \tndeclare{species}{<name>}{hue=source:<colour>}}
+%
+% The sentenced wire weight= key retired with its zero-demand bundle audit
+% branch on 2026-08-23 (#6897).  It never changed the drawn rail; index type
+% already owns the stroke, and multiplicity belongs to the mathematical label.
+\__tenkz_language_registry_tombstone:nnn {kernel-wire}{weight}
+  {no successor: the port type decides the stroke, and multiplicity is
+    mathematics carried by the index label}
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
