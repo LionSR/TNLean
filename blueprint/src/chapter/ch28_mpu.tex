@@ -9941,3 +9941,189 @@ $\omega^{-1}$.
     exact statement, apply inverse blocking and simplify the inverse composite
     and the block hull of the expanded region.
 \end{proof}
+
+\begin{lemma}[Expansion of a translated blocked region]
+    \label{lem:qca_expanded_region_translation}
+    \lean{SpinChain.expandedRegion_translateRegion}
+    \leanok
+    \uses{def:qca_translate_region,def:qca_expanded_region}
+    Let $L>0$, let $a\in\mathbb Z$, and let $\Lambda\subset\mathbb Z$ be a
+    finite blocked region.  Then
+    \begin{align}
+        \widehat{\Lambda+a}_L
+        &=\widehat\Lambda_L+aL.
+    \end{align}
+    This is the translation rule for the site grouping used in
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:qca_expanded_region_coordinates}
+    Write each original site uniquely as $xL+r$, with $0\leq r<L$.
+    Translation of the blocked coordinate by $a$ sends this site to
+    $(x+a)L+r=xL+r+aL$.  The argument is unchanged when $x$ or $a$ is
+    negative.
+\end{proof}
+
+\begin{definition}[Carry-aware blocked neighborhood]
+    \label{def:qca_blocked_neighborhood}
+    \lean{SpinChain.blockedNeighborhood}
+    \leanok
+    \uses{def:qca_expanded_region,def:qca_block_hull,def:qca_region_sumset}
+    Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be a finite original-lattice
+    neighborhood.  Write $\widehat{\{0\}}_L=\{0,\ldots,L-1\}$ for the sites in
+    the reference block.  Define the induced blocked-lattice neighborhood by
+    \begin{align}
+        \mathcal C_L(\mathcal N)
+        &=\operatorname{Hull}_L
+          \bigl(\widehat{\{0\}}_L+\mathcal N\bigr).
+    \end{align}
+    The full reference block is included because the block reached after a
+    displacement can depend on the starting residue.  This is the finite-region
+    geometry implicit in the grouping of sites in
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Residue description of the blocked neighborhood]
+    \label{lem:qca_blocked_neighborhood_membership}
+    \lean{SpinChain.mem_blockedNeighborhood,
+        SpinChain.mem_blockedNeighborhood_iff_exists_eq}
+    \leanok
+    \uses{def:qca_blocked_neighborhood,thm:qca_expanded_region_coordinates}
+    Let $L>0$, let $\mathcal N\subset\mathbb Z$ be finite, and let
+    $b\in\mathbb Z$.  Then
+    \begin{align}
+        b\in\mathcal C_L(\mathcal N)
+        \quad\Longleftrightarrow\quad
+        &\exists r\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
+        \quad \left\lfloor\frac{r+n}{L}\right\rfloor=b,             \\
+        \quad\Longleftrightarrow\quad
+        &\exists r,s\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
+        \quad r+n=bL+s.
+    \end{align}
+    The quotient is the Euclidean quotient by the positive integer $L$.
+    Consequently these formulas include negative displacements and both
+    positive and negative block carries.  In general,
+    $\operatorname{Hull}_L(\mathcal N)$ alone omits some carries caused by the
+    starting residue.  This makes explicit the boundary geometry implicit in
+    \cite[lines~2313--2320]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_blocked_neighborhood,def:qca_block_hull,
+        thm:qca_expanded_region_coordinates}
+    An element of $\widehat{\{0\}}_L+\mathcal N$ has the form $r+n$ with
+    $0\leq r<L$ and $n\in\mathcal N$.  Taking its block coordinate gives the
+    first equivalence.  Euclidean division writes $r+n=bL+s$ with the unique
+    remainder $0\leq s<L$, which gives the second equivalence without any sign
+    restriction on $n$.
+\end{proof}
+
+\begin{lemma}[Exact block hull after adding a neighborhood]
+    \label{lem:qca_block_hull_region_sumset}
+    \lean{SpinChain.blockHull_regionSumset_expandedRegion}
+    \leanok
+    \uses{def:qca_blocked_neighborhood,def:qca_region_sumset,
+        def:qca_expanded_region,def:qca_block_hull}
+    Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
+    original-lattice neighborhood $\mathcal N$,
+    \begin{align}
+        \operatorname{Hull}_L
+        \bigl(\widehat\Lambda_L+\mathcal N\bigr)
+        &=\Lambda+\mathcal C_L(\mathcal N).
+    \end{align}
+    This is the exact finite-region carry identity associated with the site
+    grouping in \cite[lines~2313--2320]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_neighborhood_membership,
+        thm:qca_expanded_region_coordinates}
+    Write an expanded site as $xL+r$, where $x\in\Lambda$ and $0\leq r<L$.
+    For $n\in\mathcal N$, Euclidean division gives
+    \begin{align}
+        \left\lfloor\frac{xL+r+n}{L}\right\rfloor
+        &=x+\left\lfloor\frac{r+n}{L}\right\rfloor.
+    \end{align}
+    The second summand ranges over exactly $\mathcal C_L(\mathcal N)$ by
+    Lemma~\ref{lem:qca_blocked_neighborhood_membership}.  This proves both
+    inclusions, including for negative $x$ and $n$.
+\end{proof}
+
+\begin{lemma}[Carry-aware expansion containment]
+    \label{lem:qca_region_sumset_expanded_region_subset}
+    \lean{SpinChain.regionSumset_expandedRegion_subset}
+    \leanok
+    \uses{lem:qca_block_hull_region_sumset,lem:qca_block_hull_properties}
+    Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
+    original-lattice neighborhood $\mathcal N$,
+    \begin{align}
+        \widehat\Lambda_L+\mathcal N
+        &\subseteq
+        \widehat{\Lambda+\mathcal C_L(\mathcal N)}_L.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_block_hull_region_sumset,lem:qca_block_hull_properties}
+    Every finite original region is contained in the expansion of its block
+    hull.  Apply this containment to
+    $\widehat\Lambda_L+\mathcal N$ and use
+    Lemma~\ref{lem:qca_block_hull_region_sumset} to identify that hull.
+\end{proof}
+
+\begin{lemma}[Algebraic-local blocking intertwines scaled translations]
+    \label{lem:qca_algebraic_blocking_translation}
+    \lean{SpinChain.algebraicLocalBlocking_translation}
+    \leanok
+    \uses{lem:qca_expanded_region_translation,def:qca_algebraic_blocking,
+        def:qca_algebraic_local_translation}
+    Let $d,L>0$.  If $\mathcal B_L$ denotes the algebraic-local blocking
+    equivalence, then for every $a\in\mathbb Z$,
+    \begin{align}
+        \mathcal B_L\,\tau^{(d^L)}_a
+        &=\tau^{(d)}_{aL}\,\mathcal B_L.
+    \end{align}
+    This is the translation rule induced by the blocking of sites used in
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_expanded_region_translation,
+        lem:qca_algebraic_blocking_formulas,
+        def:qca_algebraic_local_translation}
+    On a representative supported in a finite blocked region $\Lambda$, both
+    sides apply the same matrix reindexing.  Their supports agree because
+    \begin{align}
+        \widehat{\Lambda+a}_L
+        &=\widehat\Lambda_L+aL.
+    \end{align}
+    Equality on all finite-region representatives proves the identity on the
+    algebraic direct limit.
+\end{proof}
+
+\begin{lemma}[Quasi-local blocking intertwines scaled translations]
+    \label{lem:qca_quasi_local_blocking_translation}
+    \lean{SpinChain.quasiLocalBlocking_translation}
+    \leanok
+    \uses{lem:qca_algebraic_blocking_translation,
+        def:qca_quasi_local_blocking,def:qca_quasi_local_translation}
+    Let $d,L>0$.  If $\overline{\mathcal B}_L$ denotes the quasi-local blocking
+    equivalence, then for every $a\in\mathbb Z$,
+    \begin{align}
+        \overline{\mathcal B}_L\,\overline\tau^{(d^L)}_a
+        &=\overline\tau^{(d)}_{aL}\,\overline{\mathcal B}_L.
+    \end{align}
+    This is the completion of the translation rule induced by the site grouping
+    in \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_algebraic_blocking_translation,
+        lem:qca_quasi_local_blocking_formulas,
+        def:qca_quasi_local_translation}
+    The two sides are continuous maps on the quasi-local algebra.  On the dense
+    algebraic-local subalgebra their values agree by
+    Lemma~\ref{lem:qca_algebraic_blocking_translation}.  They therefore agree
+    on the completion.
+\end{proof}
