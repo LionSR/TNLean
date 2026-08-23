@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.QCA.AlgebraicBlocking
 import TNLean.QCA.AlgebraicTranslation
+import TNLean.QCA.BipartiteSupportAlgebra
 import TNLean.QCA.Blocking
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.BlockingTranslation
