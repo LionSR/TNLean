@@ -251,9 +251,9 @@ def main() -> int:
         rule for rule, _ in product_display
     ], product_display
 
-    # Seeded defect: a stale stream compares modulo bundles past a source
-    # that asks for strand-for-strand, and the loose reading is not honoured.
-    loosened = audit_rules(
+    # A pre-retirement stream cannot loosen the current strand-for-strand
+    # comparison by carrying its former bundle-mode field.
+    stale_bundle_mode = audit_rules(
         group_log(
             "open:e:bundle=2",
             "open:e, open:e",
@@ -262,20 +262,7 @@ def main() -> int:
         ),
         group_source(),
     )
-    assert ("eq-check-drift", "HARD") in loosened, loosened
-    assert ("eq-boundary-mismatch", "HARD") in loosened, loosened
-
-    # The same comparison the source does ask for is honoured.
-    bundled = audit_rules(
-        group_log(
-            "open:e:bundle=2",
-            "open:e, open:e",
-            "check|scope=1|relation=1|result=equal|modulo=bundles"
-            "|signature=open:e, open:e\n",
-        ),
-        group_source("[check={signature, modulo=bundles}]"),
-    )
-    assert not bundled, bundled
+    assert ("eq-boundary-mismatch", "HARD") in stale_bundle_mode, stale_bundle_mode
 
     # A forged waiver on one relation retires nothing, and retires nothing of
     # the author's honest waiver on another relation of the same equation.
@@ -485,34 +472,17 @@ def main() -> int:
         rule for rule, _ in waived_under_failure
     ], waived_under_failure
 
-    # A waiver runs no comparison and so states no comparison mode: a scope
-    # whose every relation is waived leaves the mode unobserved, not observed
-    # to be off, and its source's `modulo=bundles` is no disagreement.
+    # A scope whose every relation is waived still records the waiver.
     all_waived = audit_rules(
         group_log(
             "open:w",
             "open:w",
             "check|scope=1|relation=1|result=off|reason=drafted\n",
         ),
-        group_source("[check={signature, modulo=bundles, off={1: drafted}}]"),
+        group_source("[check={signature, off={1: drafted}}]"),
     )
     assert ("eq-check-off", "ADV") in all_waived, all_waived
     assert "eq-check-drift" not in [rule for rule, _ in all_waived], all_waived
-
-    # Two `check=` keys state no single policy, and both halves of the policy
-    # reader say so: the waiver reader already refused such a source, and the
-    # comparison mode is refused with it rather than taken from one of them.
-    two_checks = audit_rules(
-        group_log(
-            "open:e:bundle=2",
-            "open:e, open:e",
-            "check|scope=1|relation=1|result=equal|modulo=bundles"
-            "|signature=open:e, open:e\n",
-        ),
-        group_source("[check={signature, modulo=bundles}, check={signature}]"),
-    )
-    assert ("eq-check-drift", "HARD") in two_checks, two_checks
-    assert ("eq-boundary-mismatch", "HARD") in two_checks, two_checks
 
     # Seeded defect: `A B = C` waives its one relation, which sits on the
     # second gap.  A waiver names a relation while a pairwise comparison walks

@@ -3369,7 +3369,9 @@ boundary-signature records, together with the zero-demand
 resolved endpoint type, while index multiplicity remains mathematics carried
 by the label.  The parser row, registry row, option normalizer, signature
 suffix, bundle-expansion branch, and six manufactured fixtures therefore
-leave together.  `n_wire_weight_key.tex` pins the unknown-key answer.
+leave together.  The external event audit likewise compares every surviving
+signature field literally and carries no retired bundle equivalence.
+`n_wire_weight_key.tex` pins the unknown-key answer.
 
 Meters: m1 kernel 56 → 55 (census 79 → 78), m2 parser paths 68 → 67;
 `tests/tenkz/census-baseline.json` moves in this change.
