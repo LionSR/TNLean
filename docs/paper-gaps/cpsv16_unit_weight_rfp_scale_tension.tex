@@ -47,8 +47,9 @@ gives
     \label{eq:physical-idempotent}
 \end{align}
 where $\mathcal T_M=\sum_i M^{ii}$ is the physical-trace transfer; this is the
-calculation at lines~1333--1340. The formal statement is
-\leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}.
+calculation at lines~1333--1340. The source-facing formal statement is
+\leanid{MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS}; its proof uses the
+equation theorem \leanid{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}.
 
 These requirements concern two transfer objects with different scaling laws.
 For the doubled-index MPS transfer map

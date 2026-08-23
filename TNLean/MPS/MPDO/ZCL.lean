@@ -16,6 +16,8 @@ networks, following arXiv:1606.00608, lines 736–741.
 
 * `MPOTensor.physTraceTransfer`: the physical-trace transfer
   `∑ i, M i i` obtained by closing the ket and bra physical legs of one tensor.
+* `MPOTensor.IsPhysicalTraceIdempotent`: literal Definition 4.2 physical-trace
+  idempotence.
 * `MPOTensor.IsSourceZCL`: the scale-invariant nonzero physical-trace relation.
 * `MPOTensor.IsSourceZCL.bondDim_ne_zero`: this relation forces a nonzero bond
   space.
@@ -49,10 +51,11 @@ witnessed by
 `d = dK = 2`, `D = 1`, `A = [1/√2, 0, 0, 1/√2]` satisfies the local
 purification-RFP condition, yet its transfer map is `½ • id`, so
 `E_M ∘ E_M = ¼ • id ≠ E_M`; the trace contraction in the purification has dropped
-the leading eigenvalue from `1` to `½`. The separate predicate `IsSourceZCL`
-uses the physical-trace object but allows a positive scalar; it is a broader
-scale-invariant repair, not the paper's literal fixed-tensor diagram. Recorded in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+the leading eigenvalue from `1` to `½`. The predicate
+`IsPhysicalTraceIdempotent` records the paper's literal fixed-tensor diagram.
+The separate predicate `IsSourceZCL` uses the same physical-trace object but
+allows a positive scalar, giving a broader scale-invariant relation. Recorded
+in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 See arXiv:1606.00608, lines 735–739 (and the canonical-form characterization at
 line 1248), and arXiv:2011.12127, Section II.E.2, lines 937–939. -/
@@ -76,6 +79,22 @@ from the doubled-index completely positive map `transferMap`, which sums
 instead contracts the two legs of a single tensor. -/
 noncomputable def physTraceTransfer (M : MPOTensor d D) : Matrix (Fin D) (Fin D) ℂ :=
   ∑ i : Fin d, M i i
+
+/-- **Literal physical-trace idempotence.** An MPO tensor satisfies the
+zero-correlation-length diagram of arXiv:1606.00608, Definition 4.2,
+lines 735--739, when its physical-trace transfer is idempotent. This predicate
+records the fixed-tensor equation from the source and is distinct from both the
+scale-invariant relation `IsSourceZCL` and doubled-index transfer idempotence
+`IsZCL`. -/
+def IsPhysicalTraceIdempotent (M : MPOTensor d D) : Prop :=
+  IsIdempotentElem (physTraceTransfer M)
+
+/-- Literal physical-trace idempotence is the matrix equation
+`𝒯_M * 𝒯_M = 𝒯_M` from arXiv:1606.00608, Definition 4.2, lines 735--739. -/
+theorem isPhysicalTraceIdempotent_iff (M : MPOTensor d D) :
+    IsPhysicalTraceIdempotent M ↔
+      physTraceTransfer M * physTraceTransfer M = physTraceTransfer M :=
+  isIdempotentElem_iff
 
 /-- **Scale-invariant nonzero physical-trace relation.** An MPO tensor satisfies
 this relation when its physical-trace transfer `𝒯_M = ∑_i M^{ii}` is nonzero and
@@ -115,14 +134,23 @@ theorem IsSourceZCL.bondDim_ne_zero {M : MPOTensor d D} (h : IsSourceZCL M) :
   subst D
   exact h.1 (Subsingleton.elim _ _)
 
-/-- Literal idempotence of the physical-trace transfer (the
-physical-trace-normalized `λ = 1` case) gives the scale-invariant relation,
-provided the transfer is nonzero. -/
+/-- Literal Definition 4.2 physical-trace idempotence, together with a nonzero
+physical-trace transfer, implies the broader scale-invariant relation. The
+nonzero hypothesis is not part of the literal source diagram and only excludes
+the zero transfer from `IsSourceZCL`. -/
+theorem IsPhysicalTraceIdempotent.isSourceZCL {M : MPOTensor d D}
+    (h : IsPhysicalTraceIdempotent M) (h0 : physTraceTransfer M ≠ 0) :
+    IsSourceZCL M :=
+  ⟨h0, 1, one_pos, by
+    rw [(isPhysicalTraceIdempotent_iff M).mp h, Complex.ofReal_one, one_smul]⟩
+
+/-- The equation form of literal physical-trace idempotence gives the
+scale-invariant relation, provided the transfer is nonzero. -/
 theorem isSourceZCL_of_physTraceTransfer_sq
     (M : MPOTensor d D) (h0 : physTraceTransfer M ≠ 0)
     (hidem : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M) :
     IsSourceZCL M :=
-  ⟨h0, 1, one_pos, by rw [hidem, Complex.ofReal_one, one_smul]⟩
+  (isPhysicalTraceIdempotent_iff M).2 hidem |>.isSourceZCL h0
 
 /-- **The normalized transfer is idempotent under the up-to-scalar relation.**
 If the physical-trace transfer satisfies
