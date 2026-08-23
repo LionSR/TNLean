@@ -175,13 +175,16 @@ mathematical obstruction.
 
 - Location: `TNLean/MPS/MPDO/LocalPurificationRFP.lean`
 - Main declaration:
+  `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent`
+- Stronger companion declaration:
   `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL`
-- Statement refuted: the global PRFP equation, MPDO positivity, and a nonzero
-  physical-trace transfer imply source zero correlation length.
+- Statement refuted: CPSV16 Theorem 4.4's global PRFP condition implies the
+  literal Definition 4.2 physical-trace idempotence equation, even with MPDO
+  positivity and a nonzero physical-trace transfer.
 - Witness: the one-letter tensor with sole entry
   $Q=\left(\begin{smallmatrix}1&0&0\\0&0&1\\0&0&0\end{smallmatrix}\right)$.
-  Every positive power has trace one, but $Q^2$ is not a positive scalar
-  multiple of $Q$.
+  Every positive power has trace one, but $Q^2\ne Q$; more strongly, $Q^2$ is
+  not a positive scalar multiple of $Q$.
 - Relevance: positive-length density operators do not detect a nilpotent bond
   sector. A local purification identity or a source-specified minimality or
   canonical-representative condition is therefore necessary for a
