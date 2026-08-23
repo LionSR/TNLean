@@ -38,7 +38,10 @@ namespace SpinChain
 /-- If every original displacement has absolute value strictly smaller than the block length, then
 all carry-aware blocked displacements are nearest-neighbor displacements.
 
-The statement also covers the empty neighborhood without an additional hypothesis. -/
+The statement also covers the empty neighborhood without an additional hypothesis.
+
+Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+line 2308, before the Schumacher--Werner structure theorem. -/
 lemma blockedNeighborhood_subset_Icc_one (L : ℕ) [NeZero L] (𝓝 : Finset ℤ)
     (h𝓝 : ∀ n ∈ 𝓝, Int.natAbs n < L) :
     blockedNeighborhood L 𝓝 ⊆ Finset.Icc (-1) 1 := by
@@ -68,14 +71,20 @@ lemma blockedNeighborhood_subset_Icc_one (L : ℕ) [NeZero L] (𝓝 : Finset ℤ
     omega
 
 /-- A strict bound on the supremum of the absolute displacements forces the carry-aware blocked
-neighborhood to be nearest-neighbor. -/
+neighborhood to be nearest-neighbor.
+
+Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+line 2308, before the Schumacher--Werner structure theorem. -/
 lemma blockedNeighborhood_subset_Icc_one_of_sup (L : ℕ) [NeZero L] (𝓝 : Finset ℤ)
     (h𝓝 : 𝓝.sup Int.natAbs < L) :
     blockedNeighborhood L 𝓝 ⊆ Finset.Icc (-1) 1 :=
   blockedNeighborhood_subset_Icc_one L 𝓝 fun _ hn => lt_of_le_of_lt (Finset.le_sup hn) h𝓝
 
 /-- Blocking by one more than the largest absolute displacement canonically makes the
-carry-aware neighborhood nearest-neighbor.  For the empty neighborhood this chooses length one. -/
+carry-aware neighborhood nearest-neighbor.  For the empty neighborhood this chooses length one.
+
+Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+line 2308, before the Schumacher--Werner structure theorem. -/
 lemma blockedNeighborhood_subset_Icc_one_sup_add_one (𝓝 : Finset ℤ) :
     blockedNeighborhood (𝓝.sup Int.natAbs + 1) 𝓝 ⊆ Finset.Icc (-1) 1 := by
   let _ : NeZero (𝓝.sup Int.natAbs + 1) := ⟨Nat.succ_ne_zero _⟩
@@ -84,7 +93,10 @@ lemma blockedNeighborhood_subset_Icc_one_sup_add_one (𝓝 : Finset ℤ) :
 namespace PropagatesWithin
 
 /-- A propagation bound becomes nearest-neighbor after blocking by more than every absolute
-original displacement. -/
+original displacement.
+
+Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+line 2308, before the Schumacher--Werner structure theorem. -/
 lemma blocked_nearest_neighbor {d L : ℕ} [NeZero d] [NeZero L]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d} {𝓝 : Finset ℤ}
     (hω : PropagatesWithin ω 𝓝) (h𝓝 : ∀ n ∈ 𝓝, Int.natAbs n < L) :
@@ -96,7 +108,10 @@ end PropagatesWithin
 namespace HasFinitePropagation
 
 /-- Every finite forward propagation bound becomes nearest-neighbor after some positive site
-blocking.  The witness is one more than the supremum of the absolute displacements. -/
+blocking.  The witness is one more than the supremum of the absolute displacements.
+
+Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+line 2308, before the Schumacher--Werner structure theorem. -/
 theorem exists_blocked_nearest_neighbor {d : ℕ} [NeZero d]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : HasFinitePropagation ω) :
@@ -115,7 +130,10 @@ namespace IsQCA
 /-- Every one-dimensional QCA becomes a nearest-neighbor QCA after some positive site blocking.
 
 This packages propagation normalization and preservation of the QCA axioms. It does not
-construct the Schumacher--Werner support algebras or circuit, nor an MPU standard form. -/
+construct the Schumacher--Werner support algebras or circuit, nor an MPU standard form.
+
+Source context: Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+line 2308, before the Schumacher--Werner structure theorem. -/
 theorem exists_blocked_nearest_neighbor {d : ℕ} [NeZero d]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : IsQCA ω) :
