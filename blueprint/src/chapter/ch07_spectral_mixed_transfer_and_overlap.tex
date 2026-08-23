@@ -1,7 +1,7 @@
 \section{Mixed transfer operator}
 
 \begin{definition}[Mixed transfer operator]\label{def:mixed_transfer}
-    \lean{MPSTensor.mixedTransferMap}
+    \lean{Kraus.mixedTransferMap}
     \leanok
     \uses{def:mps_tensor}
     The \emph{mixed transfer operator} (or \emph{cross transfer operator})
@@ -15,7 +15,7 @@
 \end{definition}
 
 \begin{definition}[Rectangular mixed transfer operator]\label{def:mixed_transfer_rect}
-    \lean{MPSTensor.mixedTransferMap₂}
+    \lean{Kraus.mixedTransferMap₂}
     \leanok
     \uses{def:mps_tensor}
     For MPS tensors $A$ of bond dimension $D_1$ and $B$ of bond
@@ -107,7 +107,7 @@ applies the Kadison--Schwarz equality argument
 mixed-transfer eigenvector.
 
 \begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
-    \lean{MPSTensor.eigenvalue_norm_le_one}
+    \lean{Kraus.eigenvalue_norm_le_one}
     \leanok
     \uses{def:mixed_transfer}
     Let $A$ and $B$ be normalized MPS tensors. Every eigenvalue $\mu$ of
@@ -125,7 +125,7 @@ mixed-transfer eigenvector.
 \end{proof}
 
 \begin{theorem}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
-    \lean{MPSTensor.eigenvalue_norm_le_one₂}
+    \lean{Kraus.eigenvalue_norm_le_one₂}
     \leanok
     \uses{def:mixed_transfer_rect}
     Let $A$ and $B$ be normalized MPS tensors of bond dimensions
@@ -142,7 +142,7 @@ mixed-transfer eigenvector.
 \end{proof}
 
 \begin{lemma}[Spectral radius bound]\label{thm:spectral_radius_le_one}
-    \lean{MPSTensor.spectralRadius_mixedTransfer_le_one}
+    \lean{Kraus.spectralRadius_mixedTransfer_le_one}
     \leanok
     \uses{def:mixed_transfer}
     For normalized tensors, $\rho_{\spec}(F_{AB})\leq1$.
@@ -269,7 +269,7 @@ mixed-transfer eigenvector.
 
 \begin{lemma}[Rectangular intertwining forces equal bond dimension]%
     \label{thm:rectangular_intertwining_dim_eq}
-    \lean{MPSTensor.dim_eq_of_gauged_intertwining}
+    \lean{Kraus.dim_eq_of_gauged_intertwining}
     \leanok
     \uses{def:injective}
     Let $A$ and $B$ be injective tensors of bond dimensions $D_1$ and $D_2$.
@@ -329,7 +329,7 @@ mixed-transfer eigenvector.
 
 \begin{theorem}[Rectangular transfer powers below unit spectral radius]%
     \label{thm:rectangular_transfer_pow_zero}
-    \lean{MPSTensor.mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one}
+    \lean{Kraus.mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one}
     \leanok
     \uses{def:mixed_transfer_rect}
     Let $A$ and $B$ have bond dimensions $D_1$ and $D_2$, respectively. If

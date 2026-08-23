@@ -343,9 +343,9 @@
 
 \begin{theorem}[Gram rigidity of normal tensors]
     \label{thm:normal_tensor_gram_rigidity}
-    \lean{MPSTensor.IsNormal.eq_smul_one_of_commute}
-    \lean{MPSTensor.IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute}
-    \lean{MPSTensor.IsNormal.smul_mem_unitaryGroup_of_commute}
+    \lean{Kraus.IsNormal.eq_smul_one_of_commute}
+    \lean{Kraus.IsNormal.conjTranspose_mul_self_eq_smul_one_of_commute}
+    \lean{Kraus.IsNormal.smul_mem_unitaryGroup_of_commute}
     \leanok
     \uses{def:normal, thm:normalize_scalar_gram_matrix}
     Let $M_\alpha$ be a normal tensor. Any matrix commuting with every
@@ -763,11 +763,11 @@
 
 \begin{theorem}[Gram-matrix proportionality from relative Gram conjugations]
     \label{thm:eq3_of_dressed_adjoint}
-    \lean{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq}
-    \lean{MPSTensor.IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq}
-    \lean{MPSTensor.IsNormal.exists_unitary_normalization_of_gram_conj_eq}
-    \lean{MPSTensor.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target}
-    \lean{MPSTensor.IsNormal.smul_mul_nonsing_inv_mem_unitaryGroup_of_common_dressed_target}
+    \lean{Kraus.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq}
+    \lean{Kraus.IsNormal.gram_eq_pos_smul_one_of_gram_conj_eq}
+    \lean{Kraus.IsNormal.exists_unitary_normalization_of_gram_conj_eq}
+    \lean{Kraus.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target}
+    \lean{Kraus.IsNormal.smul_mul_nonsing_inv_mem_unitaryGroup_of_common_dressed_target}
     \lean{Matrix.smul_mul_nonsing_inv_mem_unitaryGroup_of_gram_eq_smul}
     \leanok
     \uses{def:normal, thm:gram_conj_of_dressed_adjoint, thm:mpdo_pairwise_vertical_gram_conjugation, thm:mpdo_grouped_sector_gram_conjugation, thm:normal_tensor_gram_rigidity}

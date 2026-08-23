@@ -621,7 +621,7 @@ $\{A^i\}$, and its multiplicative refinement re-expresses a virtual insertion
 on the bond as a physical operation on the local index.
 
 \begin{lemma}[Existence of a right inverse]\label{lem:exists_rightInverse}
-    \lean{MPSTensor.IsInjective.exists_rightInverse}
+    \lean{Kraus.IsInjective.exists_rightInverse}
     \leanok
     \uses{def:injective}
     If $A$ is injective, then there exists a $\C$-linear map
@@ -635,7 +635,7 @@ on the bond as a physical operation on the local index.
 \end{proof}
 
 \begin{definition}[Decomposition map]\label{def:decomposition_map}
-    \lean{MPSTensor.decompositionMap}
+    \lean{Kraus.decompositionMap}
     \leanok
     \uses{def:injective, lem:exists_rightInverse}
     Let $A$ be an injective MPS tensor.
@@ -645,7 +645,7 @@ on the bond as a physical operation on the local index.
 \end{definition}
 
 \begin{lemma}[Decomposition property]\label{lem:exists_decomposition}
-    \lean{MPSTensor.IsInjective.exists_decomposition}
+    \lean{Kraus.IsInjective.exists_decomposition}
     \leanok
     \uses{def:decomposition_map}
     If $A$ is injective, then for every $X\in\MN{D}$ there exist
