@@ -242,7 +242,10 @@ lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
   simp only [Fin.sum_univ_four, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
     dotProduct, Matrix.mulVec, bondBit1, bondBit2, fixedDiag, Matrix.diagonal_apply,
     A, sVal, Matrix.single_apply, Matrix.vecMulVec]
-  fin_cases a <;> fin_cases a' <;> norm_num <;> ring
+  by_cases h : a = a'
+  · subst a'
+    fin_cases a <;> norm_num <;> ring
+  · fin_cases a <;> fin_cases a' <;> simp_all
 
 /-- The rank-one image scalar, evaluated at the fixed matrix `fixedDiag` itself, is
 exactly `337/512`: `transferMap R.toMPSTensor` is idempotent up to this scalar

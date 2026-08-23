@@ -160,15 +160,12 @@ theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
   have hInter : U ⊓ V = groundSpaceES A (K + L₀ + 1) := by
     rw [inf_comm]
     exact openChainLeft_inf_tailGroundSpaceES hInj hL₀
+  change ‖U.starProjection ∘L V.starProjection -
+    (groundSpaceES A (K + L₀ + 1)).starProjection‖ ≤ η at hDefect
   have hη : 0 ≤ η := (norm_nonneg _).trans hDefect
-  have hDefect' :
-      ‖U.starProjection ∘L V.starProjection -
-        (groundSpaceES A (K + L₀ + 1)).starProjection‖ ≤ η := by
-    simpa [U, V, openChainTailGroundProjectionES,
-      openChainLeftGroundProjectionES] using hDefect
   have hAngle : Submodule.IsFriedrichsBound U V η := by
     apply Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le
-    simpa only [hInter] using hDefect'
+    simpa only [hInter] using hDefect
   exact
     Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound
       U V hη hAngle v
