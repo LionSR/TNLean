@@ -3,15 +3,15 @@
 \begin{lemma}[Blockwise zero-correlation-length equation]
     \label{lem:mpdo_simple_blockwise_zcl_equation}
     \lean{MPOTensor.%
-        exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
+        weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
-    Suppose a tensor with zero correlation length is gauge-equivalent, through
-    block-diagonal copy gauges, to an assembled sector decomposition. There
-    is a scalar $\lambda>0$ such that every copy satisfies
+    \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    Suppose a tensor satisfying the literal zero-correlation-length equation
+    is gauge-equivalent, through block-diagonal copy gauges, to an assembled
+    sector decomposition. Every copy satisfies
     \begin{align}
         (\mu_{j,q}\mathcal T_{A_j})^2
-         & =\lambda\mu_{j,q}\mathcal T_{A_j}.
+         & =\mu_{j,q}\mathcal T_{A_j}.
         \label{eq:rfp_block_zcl}
     \end{align}
     This is the block equation in
@@ -20,19 +20,19 @@
 
 \begin{proof}\leanok
     Write $\mathcal T_M=G\mathcal T_SG^{-1}$, where $G$ is the induced
-    block-diagonal gauge. The equation
-    $\mathcal T_M^2=\lambda\mathcal T_M$ therefore becomes
-    $\mathcal T_S^2=\lambda\mathcal T_S$ after conjugation by $G^{-1}$.
+    block-diagonal gauge. The equation $\mathcal T_M^2=\mathcal T_M$ therefore
+    becomes $\mathcal T_S^2=\mathcal T_S$ after conjugation by $G^{-1}$.
     Restriction to the $(j,q)$-th diagonal block gives
     (\ref{eq:rfp_block_zcl}).
 \end{proof}
 
 \begin{theorem}[Copy independence for a non-nilpotent sector decomposition]
     \label{thm:mpdo_simple_weight_copy_independent}
-    \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
+    \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
-    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_simple_blockwise_zcl_equation}
-    Let a tensor with zero correlation length be gauge-equivalent, through
+    \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_simple_blockwise_zcl_equation}
+    Let a tensor satisfying the literal zero-correlation-length equation be
+    gauge-equivalent, through
     block-diagonal copy gauges, to an assembled sector decomposition whose
     basis elements all have non-nilpotent physical-trace transfer. Then the
     weights do not depend on the copy index: $\mu_{j,q}=\mu_{j}$
@@ -40,34 +40,35 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Zero correlation length states
-    $\mathcal T_M^{2}=\lambda\mathcal T_M$ with $\lambda>0$. If
+    Literal zero correlation length states
+    $\mathcal T_M^{2}=\mathcal T_M$. If
     $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
     transfer of the assembled sector decomposition, then cancellation of
-    $X$ and $X^{-1}$ gives $\mathcal T_S^{2}=\lambda\mathcal T_S$.
+    $X$ and $X^{-1}$ gives $\mathcal T_S^{2}=\mathcal T_S$.
     By
     Lemmas~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}
     and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise}, the identity
     descends to every copy:
     \begin{align}
         \mu_{j,q}^{2}\mathcal T_{A_j}^{2}
-         & =\lambda\mu_{j,q}\mathcal T_{A_j},
+         & =\mu_{j,q}\mathcal T_{A_j},
         \notag                                         \\
         \mathcal T_{A_j}^{2}
-         & =\frac{\lambda}{\mu_{j,q}}\mathcal T_{A_j}.
+         & =\frac{1}{\mu_{j,q}}\mathcal T_{A_j}.
         \notag
     \end{align}
     The left side does not depend on $q$, and
     $\mathcal T_{A_j}\ne0$ because it is not nilpotent, so
-    $\lambda/\mu_{j,q}$ is independent of $q$, which gives
+    $1/\mu_{j,q}$ is independent of $q$, which gives
     $\mu_{j,q}=\mu_{j,q'}$.
 \end{proof}
 
 \begin{corollary}[Simple canonical-form tensors with zero correlation length]
     \label{cor:mpdo_simple_zcl_weight_copy_independent}
-    \lean{MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL}
+    \lean{MPOTensor.IsSimpleCanonicalForm.%
+        exists_weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
-    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl, thm:mpdo_simple_weight_copy_independent}
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_physical_trace_idempotence, thm:mpdo_simple_weight_copy_independent}
     A simple canonical-form tensor
     (Definition~\ref{def:mpdo_simple_cf_tensor}) with zero correlation length
     has non-nilpotent basis transfers and weights independent of the copy
@@ -76,6 +77,69 @@
 
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
+    witness supplied by the simple canonical-form predicate.
+\end{proof}
+
+\begin{lemma}[Scale-invariant blockwise zero-correlation-length equation]
+    \label{lem:mpdo_scale_invariant_blockwise_zcl_equation}
+    \lean{MPOTensor.%
+        exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    Suppose a tensor with scale-invariant source zero correlation length is
+    gauge-equivalent, through block-diagonal copy gauges, to an assembled
+    sector decomposition. There is a scalar $\lambda>0$ such that every copy
+    satisfies
+    \begin{align}
+        (\mu_{j,q}\mathcal T_{A_j})^2
+         & =\lambda\mu_{j,q}\mathcal T_{A_j}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Conjugate the scale-invariant physical-trace equation through the induced
+    block-diagonal gauge and restrict it to the $(j,q)$-th diagonal block.
+\end{proof}
+
+\begin{theorem}[Scale-invariant copy-independence generalization]
+    \label{thm:mpdo_scale_invariant_weight_copy_independent}
+    \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_source_zcl, lem:mpdo_scale_invariant_blockwise_zcl_equation}
+    More generally, suppose that, for some $\lambda>0$, the nonzero
+    physical-trace transfer satisfies
+    \begin{align}
+        \mathcal T_M^2 & =\lambda\mathcal T_M.
+        \notag
+    \end{align}
+    Under the same canonical-form and non-nilpotency conditions, the weights
+    remain independent of the copy index. This scale-invariant statement is
+    distinct from the literal fixed-representative assertion of
+    Theorem~\ref{thm:mpdo_simple_weight_copy_independent}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The weighted block equation gives
+    $\mathcal T_{A_j}^2=(\lambda/\mu_{j,q})\mathcal T_{A_j}$.
+    Comparing two copy indices and using
+    $\lambda\ne0$ and $\mathcal T_{A_j}\ne0$ gives
+    $\mu_{j,q}=\mu_{j,q'}$.
+\end{proof}
+
+\begin{corollary}[Simple canonical-form tensors with scale-invariant zero correlation length]
+    \label{cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent}
+    \lean{MPOTensor.IsSimpleCanonicalForm.%
+        exists_weight_copy_independent_of_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl, thm:mpdo_scale_invariant_weight_copy_independent}
+    A simple canonical-form tensor with scale-invariant source zero correlation
+    length has non-nilpotent basis transfers and weights independent of the
+    copy index.
+\end{corollary}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:mpdo_scale_invariant_weight_copy_independent} to the
     witness supplied by the simple canonical-form predicate.
 \end{proof}
 

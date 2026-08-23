@@ -721,7 +721,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.%
         exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}
     \leanok
-    \uses{thm:mpdo_simple_weight_copy_independent, thm:mpdo_sal_bnt_separating_projectors_copy_independent}
+    \uses{thm:mpdo_scale_invariant_weight_copy_independent, thm:mpdo_sal_bnt_separating_projectors_copy_independent}
     Let $K$ be a simple tensor in block-injective canonical form which satisfies
     ZCL and SAL. For the representatives $\mathcal K_i$ of its BNT, there are
     orthogonal projectors $P_s$ such that
@@ -879,14 +879,11 @@ strong subadditivity for a normalized three-site reduced state.
     non-nilpotent physical-trace transfer $\mathcal B_s$, absorb the common
     weight and write $\mathcal K_s=\mu_sA_s$. Each absorbed BNT representative
     $\mathcal K_s$ has scale-invariant source zero correlation length. More
-    precisely,
+    precisely, $\mathcal T_{\mathcal K_s}=\mu_s\mathcal B_s\ne0$ and,
+    for some $\lambda>0$,
     \begin{align}
-        \mathcal T_{\mathcal K_s}
-         & =\mu_s\mathcal B_s\ne0,
-        \notag                                \\
         \mathcal T_{\mathcal K_s}^{2}
-         & =\lambda\mathcal T_{\mathcal K_s},
-        \qquad \lambda>0.
+         & =\lambda\mathcal T_{\mathcal K_s}.
         \notag
     \end{align}
     This is the final zero-correlation-length conclusion in
@@ -894,11 +891,12 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:mpdo_simple_zcl_weight_copy_independent, lem:mpdo_simple_blockwise_zcl_equation, thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
-    Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
-    common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
-    then gives the displayed quadratic identity. The common weight is nonzero,
-    and nonnilpotence of $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the
+    \uses{cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent, lem:mpdo_scale_invariant_blockwise_zcl_equation, thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+    Corollary~\ref{cor:mpdo_simple_scale_invariant_zcl_weight_copy_independent}
+    gives the common weight on every copy.
+    Lemma~\ref{lem:mpdo_scale_invariant_blockwise_zcl_equation} then gives
+    the displayed quadratic identity. The common weight is nonzero, and
+    nonnilpotence of $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the
     absorbed transfer is nonzero.
 \end{proof}
 
