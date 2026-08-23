@@ -651,7 +651,8 @@
     descends through the physical isometry.
 \end{proof}
 
-\begin{theorem}[Neighboring positivity on the canonical active restriction]
+\begin{theorem}[Neighboring positivity and trace factorization on the canonical
+        active restriction]
     \label{thm:mpdo_active_physical_sector_neighboring_positivity}
     \lean{MPOTensor.PhysicalSectorFactorization.FactorActiveSector,
         MPOTensor.PhysicalSectorFactorization.%
@@ -662,9 +663,14 @@
         activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef,
         MPOTensor.PhysicalSectorFactorization.ActivePhysicalCompressionWitness,
         MPOTensor.PhysicalSectorFactorization.%
-        ActivePhysicalCompressionWitness.factorizationForRestrictionData}
+        ActivePhysicalCompressionWitness.factorizationForRestrictionData,
+        MPOTensor.PhysicalSectorFactorization.%
+        ActivePhysicalCompressionWitness.neighboringOperator_trace,
+        MPOTensor.PhysicalSectorFactorization.%
+        ActivePhysicalCompressionWitness.neighboringTraceFactorization}
     \leanok
-    \uses{thm:mpdo_active_physical_sector_restriction}
+    \uses{thm:mpdo_active_physical_sector_restriction,
+        def:mpdo_neighboring_trace_factorization}
     In the setting of
     Theorem~\ref{thm:mpdo_active_physical_sector_restriction}, the restricted
     tensor $K_{\mathrm{act}}$ has a physical-sector factorization indexed
@@ -682,6 +688,31 @@
     In particular, every $\eta^{\mathrm{act}}_{k,h}$ is positive
     semidefinite.  If the active family is empty, the restricted
     factorization has no sectors and the assertion is vacuous.
+
+    Suppose moreover that the ambient neighboring operators admit real
+    coefficients $a_k,b_h$ such that
+    \begin{align}
+        \tr(\eta_{k,h}) & =a_kb_h,
+        \notag                     \\
+        \sum_k a_kb_k   & =1.
+        \notag
+    \end{align}
+    For the active-sector correspondence $j\mapsto k(j)$, set
+    $\widetilde a_j=a_{k(j)}$ and $\widetilde b_j=b_{k(j)}$.  Then
+    \begin{align}
+        \tr(\eta^{\mathrm{act}}_{j,l})
+         & =\widetilde a_j\widetilde b_l,
+        \notag                            \\
+        \sum_j\widetilde a_j\widetilde b_j
+         & =1.
+        \notag
+    \end{align}
+    The identities being preserved are those of CPSV16 Theorem~4.9(iv),
+    equations \texttt{tralktrrk} and \texttt{PsiPhi}, lines~864--889
+    \cite{Cirac2016MPDO_arXiv}.  Their transport through the active physical
+    support compression is an auxiliary construction, not an assertion of
+    that source theorem; see
+    \cite{gap:cpsv16_active_physical_support_compression}.
 \end{theorem}
 
 \begin{proof}
@@ -698,6 +729,12 @@
         \notag
     \end{align}
     Positive semidefiniteness is preserved by this matrix congruence.
+    The range projections of $V_k^R$ and $V_h^L$ absorb
+    $\eta_{k,h}$ on both sides.  Cyclicity of trace therefore gives
+    $\tr(\eta^{\mathrm{act}}_{k,h})=\tr(\eta_{k,h})$.  For an inactive
+    sector, $\eta_{k,k}=0$, hence $a_kb_k=0$.  Splitting the normalized sum
+    into its active and inactive parts and reindexing the active part proves
+    the final identity.
 \end{proof}
 
 % This theorem supplies the orthogonal-support step used in the completed
