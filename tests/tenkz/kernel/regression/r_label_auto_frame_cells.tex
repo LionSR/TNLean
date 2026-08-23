@@ -14,8 +14,12 @@
     \str_if_eq:nnT {#3} {tenkz-label-route-point}
       {
         \int_gincr:N \l__tenkz_test_frame_route_count_int
-        \str_if_eq:nnF {#1} {tenkz-bead-cup-1-2}
-          { \errmessage{closure~occupancy~did~not~read~the~frozen~bead~route} }
+        \str_case:nnF {#1}
+          {
+            {tenkz-bead-cup-1-2}   { }
+            {tenkz-bead-wrap-1}     { }
+          }
+          { \errmessage{closure~occupancy~did~not~read~a~frozen~bead~route} }
       }
     \__tenkz_test_frame_beadpath:nnn {#1} {#2} {#3}
   }
@@ -45,6 +49,11 @@
           {
             \str_if_eq:VnF #2 {s}
               { \errmessage{closure~bead~answered~the~wrong~face} }
+          }
+        {U}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{closure~corner~lost~one~of~its~two~faces} }
           }
       }
       { \errmessage{unexpected~label~in~frame-cell~fixture} }
@@ -88,10 +97,17 @@
     cross={over at crossing of probe and cup-1-2}]
     {1 n of T}{1 s of T}
 \end{tenkz}
+% At the first corner of a flat trace, the incoming and outgoing pieces take
+% two adjacent faces.  Reading only their common secant would call the corner
+% oblique and leave its south face falsely free.
+\begin{tenkz}[lattice={1x1}, bonds=none, west=trace, east=trace]
+  \tn[at=(1,1)]{}
+  \tn[at=on wrap-1 0.19449155, skin=dot]{U}
+\end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_frame_side_count_int } = {4}
-  { \errmessage{frame-cell~fixture~did~not~station~four~labels} }
-\int_compare:nNnF { \l__tenkz_test_frame_route_count_int } = {2}
-  { \errmessage{closure~occupancy~did~not~sample~the~frozen~route~twice} }
+\int_compare:nNnF { \l__tenkz_test_frame_side_count_int } = {5}
+  { \errmessage{frame-cell~fixture~did~not~station~five~labels} }
+\int_compare:nNnF { \l__tenkz_test_frame_route_count_int } = {6}
+  { \errmessage{closure~occupancy~did~not~sample~two~frozen~routes} }
 \ExplSyntaxOff
 \end{document}
