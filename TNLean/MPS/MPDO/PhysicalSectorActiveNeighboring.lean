@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorActiveRestriction
 
 /-!
@@ -13,13 +14,18 @@ sector and the left factor of a target sector.  Consequently its neighboring
 operator is the congruence of the ambient neighboring operator by the
 Kronecker product of those two support isometries.  Positive
 semidefiniteness then follows directly from preservation under matrix
-congruence.
+congruence. When the ambient neighboring operators satisfy
+$\operatorname{tr}(\eta_{k,h})=a_kb_h$ and $\sum_k a_kb_k=1$, rectangular
+trace cyclicity preserves the trace equation on active sectors, while every
+inactive diagonal weight vanishes. Thus the active restriction retains the
+same neighboring trace factorization.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Appendix C.2, equations `Appetakhetc`, `etarl`, and `StochT`, lines
-  1435--1471.
+  1435--1471; Theorem 4.9(iv), equations `tralktrrk` and `PsiPhi`, lines
+  864--889.
 
 **Scope restriction (active physical support compression):** the compressed
 neighboring operator as an explicit congruence by the support isometries
@@ -28,8 +34,8 @@ $\eta_{k,h}$ at lines 1441--1445 and proves positivity at lines 1447--1450;
 it defines $T_{k,h}$ at lines 1452--1455 and proves primitivity through
 line 1471.  The congruence
 $\tilde\eta_{k,h} = (V^R_k \otimes V^L_h)^\dagger \eta_{k,h}
-(V^R_k \otimes V^L_h)$ and its positive semidefiniteness are additional
-constructions.  Recorded in
+(V^R_k \otimes V^L_h)$, its positive semidefiniteness, and the restriction of
+the trace factors $a_k,b_h$ are additional constructions. Recorded in
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
@@ -70,6 +76,24 @@ theorem neighboringSupportInclusion_isometry
     (A.sector h).leftInclusion_isometry]
   exact Matrix.one_kronecker_one
 
+/-- For active sectors, the neighboring inclusion has range
+$P^R_k \otimes P^L_h$, the right factor support of the source sector tensored
+with the left factor support of the target sector.
+
+**Scope restriction (active physical support compression):** This support
+identity is an auxiliary construction absent from CPSV16. See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+theorem neighboringSupportInclusion_range
+    (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
+    {k h : Fin F.sectorCount} (hk : F.IsActiveSector k)
+    (hh : F.IsActiveSector h) :
+    F.neighboringSupportInclusion A k h *
+        (F.neighboringSupportInclusion A k h)ᴴ =
+      F.rightFactorSupportProj k ⊗ₖ F.leftFactorSupportProj h := by
+  rw [neighboringSupportInclusion, Matrix.conjTranspose_kronecker,
+    ← Matrix.mul_kronecker_mul, (A.sector k).rightInclusion_range hk,
+    (A.sector h).leftInclusion_range hh]
+
 /-- The neighboring operator formed from the compressed source-right and
 target-left factors.
 
@@ -92,6 +116,56 @@ theorem neighboringOperator_eq_sum_kronecker
   ext x y
   simp [neighboringOperator, Matrix.sum_apply]
 
+/-- The diagonal neighboring operator $\eta_{k,k}$ of an inactive sector
+vanishes.
+
+Indeed, inactivity means that either every left factor or every right factor
+in the sector vanishes, so every summand in $\eta_{k,k}$ vanishes. This is the
+zero-block case of the factorization in arXiv:1606.00608, Appendix C.2,
+equations `AppUkU=rl` and `etarl`, lines 1381--1445. -/
+theorem neighboringOperator_self_eq_zero_of_not_isActiveSector
+    (F : PhysicalSectorFactorization K) {k : Fin F.sectorCount}
+    (hk : ¬ F.IsActiveSector k) :
+    F.neighboringOperator k k = 0 := by
+  rw [F.not_isActiveSector_iff_left_or_right_eq_zero] at hk
+  rw [F.neighboringOperator_eq_sum_kronecker]
+  rcases hk with hleft | hright
+  · simp [hleft]
+  · simp [hright]
+
+/-- For active sectors, the ambient neighboring operator
+$\eta_{k,h}$ is supported on $P^R_k \otimes P^L_h$ from both sides.
+
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`etarl`, lines 1381--1445.
+
+**Scope restriction (active physical support compression):** The factor
+support projections are auxiliary to the source argument. See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+theorem neighboringOperator_factorSupport_twoSided
+    (F : PhysicalSectorFactorization K)
+    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {k h : Fin F.sectorCount} (hk : F.IsActiveSector k)
+    (hh : F.IsActiveSector h) :
+    (F.rightFactorSupportProj k ⊗ₖ F.leftFactorSupportProj h) *
+          F.neighboringOperator k h = F.neighboringOperator k h ∧
+      F.neighboringOperator k h *
+          (F.rightFactorSupportProj k ⊗ₖ F.leftFactorSupportProj h) =
+        F.neighboringOperator k h := by
+  have hkSupport := (F.activeSector_factorSupport_twoSided hK hpos hk).2
+  have hhSupport := (F.activeSector_factorSupport_twoSided hK hpos hh).1
+  rw [F.neighboringOperator_eq_sum_kronecker]
+  constructor
+  · rw [Matrix.mul_sum]
+    apply Finset.sum_congr rfl
+    intro a _
+    rw [← Matrix.mul_kronecker_mul, (hkSupport a).1, (hhSupport a).1]
+  · rw [Matrix.sum_mul]
+    apply Finset.sum_congr rfl
+    intro a _
+    rw [← Matrix.mul_kronecker_mul, (hkSupport a).2, (hhSupport a).2]
+
 /-- The restricted neighboring operator is the explicit congruence of the
 ambient neighboring operator by the source-right and target-left support
 isometries.
@@ -112,6 +186,28 @@ theorem compressedNeighboringOperator_eq_congruence
   rw [neighboringSupportInclusion, Matrix.conjTranspose_kronecker,
     ← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
   rfl
+
+/-- Active support compression preserves the trace of the neighboring
+operator: $\operatorname{tr}(\widetilde\eta_{k,h}) =
+\operatorname{tr}(\eta_{k,h})$.
+
+The equality follows by cyclicity of the rectangular trace and two-sided
+factor-support absorption.
+
+**Scope restriction (active physical support compression):** This compressed
+trace identity is an auxiliary construction absent from CPSV16. See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+theorem compressedNeighboringOperator_trace
+    (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
+    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    {k h : Fin F.sectorCount} (hk : F.IsActiveSector k)
+    (hh : F.IsActiveSector h) :
+    (F.compressedNeighboringOperator A k h).trace =
+      (F.neighboringOperator k h).trace := by
+  rw [F.compressedNeighboringOperator_eq_congruence,
+    Matrix.trace_mul_cycle, F.neighboringSupportInclusion_range A hk hh,
+    (F.neighboringOperator_factorSupport_twoSided hK hpos hk hh).1]
 
 /-- Positive semidefiniteness of an ambient neighboring operator passes to
 the compressed neighboring operator by its explicit congruence.
@@ -144,6 +240,69 @@ noncomputable def activeSectorCount (F : PhysicalSectorFactorization K) :=
 noncomputable def activeSectorFinEquiv (F : PhysicalSectorFactorization K) :
     Fin F.activeSectorCount ≃ FactorActiveSector F :=
   (Fintype.equivFin _).symm
+
+namespace NeighboringTraceFactorization
+
+variable {F : PhysicalSectorFactorization K}
+
+/-- An inactive sector has zero diagonal weight $a_k b_k$.
+
+This is the inactive zero-block consequence of
+$\operatorname{tr}(\eta_{k,k})=a_kb_k$ in arXiv:1606.00608, Theorem 4.9(iv),
+equation `tralktrrk`, lines 864--889. -/
+theorem diagonal_weight_eq_zero_of_not_isActiveSector
+    (H : NeighboringTraceFactorization F) {k : Fin F.sectorCount}
+    (hk : ¬ F.IsActiveSector k) :
+    H.a k * H.b k = 0 := by
+  have htrace := H.trace_neighboringOperator k k
+  rw [F.neighboringOperator_self_eq_zero_of_not_isActiveSector hk] at htrace
+  apply Complex.ofReal_eq_zero.mp
+  simpa only [Matrix.trace_zero] using htrace.symm
+
+/-- Restricting $a_k$ and $b_k$ to the active sectors preserves the
+normalization $\sum_k a_kb_k=1$.
+
+**Scope restriction (active physical support compression):** The finite-sum
+restriction is an auxiliary construction absent from CPSV16. It preserves the
+normalization in Theorem 4.9(iv), equation `PsiPhi`, lines 864--889. See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+theorem sum_mul_activeSectorFinEquiv
+    (H : NeighboringTraceFactorization F) :
+    ∑ j : Fin F.activeSectorCount,
+        H.a (F.activeSectorFinEquiv j).1 *
+          H.b (F.activeSectorFinEquiv j).1 = 1 := by
+  classical
+  have hinactive :
+      (∑ k : {k : Fin F.sectorCount // ¬ F.IsActiveSector k},
+        H.a k.1 * H.b k.1) = 0 := by
+    apply Finset.sum_eq_zero
+    intro k _
+    exact H.diagonal_weight_eq_zero_of_not_isActiveSector k.property
+  have hsplit := Fintype.sum_subtype_add_sum_subtype
+    (p := F.IsActiveSector) (fun k ↦ H.a k * H.b k)
+  calc
+    ∑ j : Fin F.activeSectorCount,
+        H.a (F.activeSectorFinEquiv j).1 *
+          H.b (F.activeSectorFinEquiv j).1 =
+        ∑ k : {k : Fin F.sectorCount // F.IsActiveSector k},
+          H.a k.1 * H.b k.1 := by
+            exact Fintype.sum_equiv F.activeSectorFinEquiv _ _
+              (fun _ ↦ rfl)
+    _ = (∑ k : {k : Fin F.sectorCount // F.IsActiveSector k},
+          H.a k.1 * H.b k.1) +
+          ∑ k : {k : Fin F.sectorCount // ¬ F.IsActiveSector k},
+            H.a k.1 * H.b k.1 := by rw [hinactive, add_zero]
+    _ = ∑ k : Fin F.sectorCount, H.a k * H.b k := by
+      convert hsplit using 1
+      congr 1
+      apply Finset.sum_congr
+      · ext k
+        simp
+      · intro k _
+        rfl
+    _ = 1 := H.sum_mul
+
+end NeighboringTraceFactorization
 
 /-- A retained sector fiber is inhabited precisely when its ambient sector is
 active. -/
@@ -412,6 +571,57 @@ theorem neighboringOperator_posSemidef
     (W.factorization.neighboringOperator j l).PosSemidef :=
   F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef
     W.factorSupport hpos j l
+
+/-- The trace of each restricted neighboring operator
+$\widetilde\eta_{j,l}$ equals the trace of the ambient
+$\eta_{k,h}$ at the corresponding active sectors.
+
+**Scope restriction (active physical support compression):** This trace
+transport is an auxiliary construction absent from CPSV16. It preserves the
+trace condition in Theorem 4.9(iv), equation `tralktrrk`, lines 864--889. See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+theorem neighboringOperator_trace
+    (W : ActivePhysicalCompressionWitness F)
+    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (j l : Fin W.factorization.sectorCount) :
+    (W.factorization.neighboringOperator j l).trace =
+      (F.neighboringOperator
+        (W.sectorCorrespondence j).1
+        (W.sectorCorrespondence l).1).trace := by
+  rw [F.activeRestrictedPhysicalSectorFactorization_neighboringOperator]
+  exact F.compressedNeighboringOperator_trace W.factorSupport hK hpos
+    (W.sectorCorrespondence j).2 (W.sectorCorrespondence l).2
+
+/-- Restriction to the active physical support preserves a neighboring trace
+factorization.
+
+The restricted coefficients are exactly $a_k$ and $b_k$ along the active
+sector correspondence. The preceding trace identity preserves
+$\operatorname{tr}(\eta_{k,h})=a_kb_h$, while the vanishing inactive diagonal
+weights preserve $\sum_k a_kb_k=1$.
+
+**Scope restriction (active physical support compression):** This packaged
+restriction is a project auxiliary lemma, not an assertion of CPSV16. It
+preserves the conditions printed in Theorem 4.9(iv), equations `tralktrrk`
+and `PsiPhi`, lines 864--889, under the auxiliary compression recorded in
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+noncomputable def neighboringTraceFactorization
+    (W : ActivePhysicalCompressionWitness F)
+    (hK : Kraus.IsInjective K.toMPSTensor)
+    (H : NeighboringTraceFactorization F) :
+    NeighboringTraceFactorization W.factorization where
+  neighboringOperator_pos :=
+    W.neighboringOperator_posSemidef H.neighboringOperator_pos
+  a := fun j ↦ H.a (W.sectorCorrespondence j).1
+  b := fun j ↦ H.b (W.sectorCorrespondence j).1
+  trace_neighboringOperator := by
+    intro j l
+    rw [W.neighboringOperator_trace hK H.neighboringOperator_pos]
+    exact H.trace_neighboringOperator
+      (W.sectorCorrespondence j).1 (W.sectorCorrespondence l).1
+  sum_mul := by
+    simpa only [sectorCorrespondence] using H.sum_mul_activeSectorFinEquiv
 
 end ActivePhysicalCompressionWitness
 

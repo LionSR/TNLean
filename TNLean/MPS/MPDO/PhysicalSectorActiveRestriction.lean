@@ -84,6 +84,14 @@ structure SectorActiveFactorSupportData
   leftInclusion_isometry : leftInclusionᴴ * leftInclusion = 1
   /-- The retained right columns are orthonormal. -/
   rightInclusion_isometry : rightInclusionᴴ * rightInclusion = 1
+  /-- In an active sector, the retained left inclusion has exactly the joint
+  column support of the left factor family as its range. -/
+  leftInclusion_range : F.IsActiveSector k →
+    leftInclusion * leftInclusionᴴ = F.leftFactorSupportProj k
+  /-- In an active sector, the retained right inclusion has exactly the joint
+  column support of the right factor family as its range. -/
+  rightInclusion_range : F.IsActiveSector k →
+    rightInclusion * rightInclusionᴴ = F.rightFactorSupportProj k
   /-- The product inclusion has exactly the joint product-family support as
   its range. -/
   product_range :
@@ -120,6 +128,8 @@ theorem nonempty_sectorActiveFactorSupportData
       rightInclusion := VR
       leftInclusion_isometry := hVL
       rightInclusion_isometry := hVR
+      leftInclusion_range := fun _ ↦ hRangeL
+      rightInclusion_range := fun _ ↦ hRangeR
       product_range := by
         rw [hRangeL, hRangeR, ← F.sectorProductFamily_supportProj k]
       leftDim_pos_of_isActiveSector := fun _ ↦ hl
@@ -135,6 +145,8 @@ theorem nonempty_sectorActiveFactorSupportData
       rightInclusion := VR
       leftInclusion_isometry := Subsingleton.elim _ _
       rightInclusion_isometry := Subsingleton.elim _ _
+      leftInclusion_range := fun h ↦ (hk h).elim
+      rightInclusion_range := fun h ↦ (hk h).elim
       product_range := by
         rw [F.sectorProductFamily_supportProj_eq_zero_of_not_isActiveSector hk]
         simp [VL, VR]
