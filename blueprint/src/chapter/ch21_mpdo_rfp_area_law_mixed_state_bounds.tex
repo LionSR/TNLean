@@ -1,8 +1,7 @@
 \section{Saturation of the area law}
 
 \begin{definition}[Block entropy of an MPDO]\label{def:block_entropy}
-    \lean{MPOTensor.blockEntropy,
-        MPOTensor.blockEntropy_of_charpoly_roots_eq}
+    \lean{MPOTensor.blockEntropy}
     \leanok
     \uses{def:mpo_tensor}
     For a fixed system size $N$, a block length $L\le N$, and an MPO tensor $M$
@@ -16,12 +15,28 @@
     \end{align}
     denote the normalized state and the reduced state of the first $L$ of $N$
     spins. The \emph{$L$-block entropy} is
-    $S_L^{(N)}(M)=S(\rho_L^{(N)}(M))$. If the characteristic roots of the
-    reduced state are the real multiset $\{r_j\}_j$, then
+    $S_L^{(N)}(M)=S(\rho_L^{(N)}(M))$.
+\end{definition}
+
+\begin{theorem}[Block entropy from characteristic roots]
+    \label{thm:block_entropy_of_charpoly_roots}
+    \lean{MPOTensor.blockEntropy_of_charpoly_roots_eq}
+    \leanok
+    \uses{def:block_entropy}
+    If the characteristic roots of $\rho_L^{(N)}(M)$ are the real multiset
+    $\{r_j\}_j$, then
     \begin{align}
         S_L^{(N)}(M) & =\sum_j -r_j\log r_j. \notag
     \end{align}
-\end{definition}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:block_entropy}
+    The spectral decomposition of the Hermitian reduced state identifies the
+    characteristic roots with its eigenvalues. The von Neumann entropy is the
+    sum of $-r\log r$ over these eigenvalues, counted with multiplicity.
+\end{proof}
 
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
     \lean{MPOTensor.mutualInfoChain, MPOTensor.mutualInfoChain_eq}
