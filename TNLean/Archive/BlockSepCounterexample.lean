@@ -103,7 +103,7 @@ lemma span_mat1_eq_top (a : ℂ) (ha : a ≠ 0) : (ℂ ∙ mat1 a) = ⊤ := by
   -- Now it’s a scalar identity.
   simp [mat1, div_eq_mul_inv, ha]
 
-lemma AEx_isInjective : ∀ k, IsInjective (AEx k) := by
+lemma AEx_isInjective : ∀ k, Kraus.IsInjective (AEx k) := by
   classical
   intro k
   fin_cases k
@@ -176,7 +176,7 @@ lemma not_perBlock_sameMPV : ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
 its conclusion. -/
 theorem counterexample_block_powsum_separation :
     (Function.Injective μEx) ∧ (∀ k, μEx k ≠ 0) ∧
-    (∀ k, IsInjective (AEx k)) ∧
+    (∀ k, Kraus.IsInjective (AEx k)) ∧
     (∀ N (σ : Fin N → Fin 1),
       ∑ k : Fin 2, (μEx k) ^ N • (mpv (AEx k) σ - mpv (BEx k) σ) = 0) ∧
     ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
