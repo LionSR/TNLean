@@ -1433,7 +1433,6 @@
 \keys_define:nn { tenkz-kernel-setup }
   {
     pitch .code:n  = { \pgfqkeys{/tenkz}{pitch=#1} },
-    sizes .code:n  = { \__tenkz_kernel_stage_put:nn {sizes} {#1} },
     strict .code:n =
       {
         \str_case:nnF {#1}

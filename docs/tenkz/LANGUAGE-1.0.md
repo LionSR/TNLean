@@ -242,15 +242,14 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 | Key | Type | Default |
 |---|---|---|
 | `pitch=` | length | a fixed 11mm; the metric registry owns the ratios measured against it |
-| `sizes=` | size-table | bundled table |
 | `strict` | flag | false; only five refusal fixtures enable it |
 | `theme=` | identifier | `house` |
 
-### 2.7 Value types (24)
+### 2.7 Value types (23)
 
 flag · integer · length · pair · angle · identifier · small-enum · row-list ·
 row · selector · route-spec · address · address-list · typed-port-list ·
-crossing-list · port-pair-list · trace-spec · size-table · hue-source ·
+crossing-list · port-pair-list · trace-spec · hue-source ·
 bond-policy · size-class · void-policy · frame-spec · basis-spec.
 
 These are semantic types, not aliases for TeX argument shapes. A `frame-spec`
@@ -1085,6 +1084,7 @@ row is what names where the meaning went.
 | `weight=string` | `kind=string` |
 | `trace style=racetrack` | closure depth follows the selection the closure clears (§5) |
 | `inline`, `compact` | math-style sensing + `size=`; a page-constrained picture declares `metrics=compact` (§2.2) |
+| `sizes=` | `size=` on the picture or atom; the bundled metric table is fixed |
 | `via=` | `route={<side> of <selector>}` where the waypoint cleared records (§12.3); nothing where it only bent a line past cells that hold none (§12.1), and nothing on a wound string, whose class is already its path (§5, §12.2) |
 | `bend=` | nothing: an arc leaves and enters along its ends' faces |
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
