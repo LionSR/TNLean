@@ -124,7 +124,7 @@ Indeed, inactivity means that either every left factor or every right factor
 in the sector vanishes, so every summand in $\eta_{k,k}$ vanishes.
 
 Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`etarl`, lines 1383--1450, defines the sector factorization and
+`etarl`, lines 1383--1450, define the sector factorization and
 $\eta_{k,h}$; line 1434 selects physical indices $\alpha,\beta$ for which the
 scalar $m_{\beta,\alpha}$ is nonzero, thereby obtaining the direct-sum form
 `formK` on line 1436. -/
