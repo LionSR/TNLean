@@ -135,40 +135,6 @@ noncomputable def leftShiftLeftRankEquiv (d : ℕ) :
     Fin d × Fin d ≃ Fin ℓ[leftShiftTensor d] :=
   finProdFinEquiv.trans (finCongr (leftRank_leftShiftTensor d).symm)
 
-/-- Remove the unique virtual coordinate from a source-cut row of the
-bond-one identity tensor.
-
-Formalization coordinate for equation `eq:SF_u1_u3` in arXiv:1703.09188,
-lines 2009--2016; the paper does not state this intermediate equivalence. -/
-def identitySourceRowEquiv (d : ℕ) : Fin 1 × Fin d ≃ Fin d where
-  toFun x := x.2
-  invFun i := (0, i)
-  left_inv x := by ext <;> simp
-  right_inv _ := rfl
-
-/-- Remove the unique virtual coordinate from a source-cut column of the
-bond-one identity tensor.
-
-Formalization coordinate for equation `eq:SF_u1_u3` in arXiv:1703.09188,
-lines 2009--2016; the paper does not state this intermediate equivalence. -/
-def identitySourceColumnEquiv (d : ℕ) : Fin d × Fin 1 ≃ Fin d where
-  toFun x := x.1
-  invFun i := (i, 0)
-  left_inv x := by ext <;> simp
-  right_inv _ := rfl
-
-@[simp] theorem identitySourceRowEquiv_apply (d : ℕ) (x : Fin 1 × Fin d) :
-    identitySourceRowEquiv d x = x.2 := rfl
-
-@[simp] theorem identitySourceRowEquiv_symm_apply (d : ℕ) (i : Fin d) :
-    (identitySourceRowEquiv d).symm i = (0, i) := rfl
-
-@[simp] theorem identitySourceColumnEquiv_apply (d : ℕ) (x : Fin d × Fin 1) :
-    identitySourceColumnEquiv d x = x.1 := rfl
-
-@[simp] theorem identitySourceColumnEquiv_symm_apply (d : ℕ) (i : Fin d) :
-    (identitySourceColumnEquiv d).symm i = (i, 0) := rfl
-
 /-- Both source cuts of the bond-one identity tensor are the identity after
 removing their unique virtual coordinates.
 
@@ -177,8 +143,8 @@ arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
 source-cut formula. -/
 theorem sourceCutM₁_identityMPUTensor (d : ℕ) :
     sourceCutM₁ (identityMPUTensor d) =
-      Matrix.reindex (identitySourceRowEquiv d).symm
-        (identitySourceColumnEquiv d).symm
+      Matrix.reindex (Equiv.uniqueProd (Fin d) (Fin 1)).symm
+        (Equiv.prodUnique (Fin d) (Fin 1)).symm
         (1 : Matrix (Fin d) (Fin d) ℂ) := by
   ext ⟨α, j⟩ ⟨i, β⟩
   have hαβ : α = β := Subsingleton.elim _ _
@@ -187,7 +153,7 @@ theorem sourceCutM₁_identityMPUTensor (d : ℕ) :
       Matrix.one_apply, hij, hαβ]
   · have hji : j ≠ i := Ne.symm hij
     simp [sourceCutM₁, identityMPUTensor, idTensor, Matrix.reindex_apply,
-      Matrix.one_apply, hij, hji, hαβ]
+      hij, hji, hαβ]
 
 /-- The second source cut of the bond-one identity tensor is the same
 reindexed identity as its first source cut.
@@ -197,8 +163,8 @@ arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
 source-cut formula. -/
 theorem sourceCutM₂_identityMPUTensor (d : ℕ) :
     sourceCutM₂ (identityMPUTensor d) =
-      Matrix.reindex (identitySourceRowEquiv d).symm
-        (identitySourceColumnEquiv d).symm
+      Matrix.reindex (Equiv.uniqueProd (Fin d) (Fin 1)).symm
+        (Equiv.prodUnique (Fin d) (Fin 1)).symm
         (1 : Matrix (Fin d) (Fin d) ℂ) := by
   ext ⟨α, i⟩ ⟨j, β⟩
   have hαβ : α = β := Subsingleton.elim _ _
@@ -256,8 +222,8 @@ witness realizes $u_1=v_1=\Id\otimes\Id$ in arXiv:1703.09188, equation
 factor witness itself. -/
 noncomputable def identitySourceFactors (d : ℕ) :
     SourceFactors (identityMPUTensor d) (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-  let eRow := identitySourceRowEquiv d
-  let eCol := identitySourceColumnEquiv d
+  let eRow := Equiv.uniqueProd (Fin d) (Fin 1)
+  let eCol := Equiv.prodUnique (Fin d) (Fin 1)
   let eR := identityRightRankEquiv d
   let eL := identityLeftRankEquiv d
   let X₁ : Matrix (Fin 1 × Fin d) (Fin r[identityMPUTensor d]) ℂ :=
