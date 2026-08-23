@@ -427,7 +427,11 @@ private theorem tensorProductCutShuffle_symm_apply
         (finProdFinEquiv (x.1, y.1), finProdFinEquiv (x.2, y.2)) = (x, y) :=
   (tensorProductCutShuffle a b c f).symm_apply_apply (x, y)
 
-private noncomputable def SourceFactors.independentTensorProduct
+/-- Supplied source factors are multiplicative under the independent tensor
+product when both source weights are identities.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+noncomputable def SourceFactors.independentTensorProduct
     {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
     (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
     (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ)) :
@@ -508,7 +512,11 @@ private noncomputable def SourceFactors.independentTensorProduct
   exact ⟨X₁, Y₁, Z₁, X₂, Y₂, Z₂, hcut₁, hcut₂,
     hweighted, hX₂, hY₁Z₁, hY₂Z₂⟩
 
-private theorem SourceFactors.sourceU_independentTensorProduct_apply
+/-- The supplied source $u$ of an independent tensor product is the product
+of the two constituent source entries in the product rank coordinates.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem SourceFactors.sourceU_independentTensorProduct_apply
     {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
     (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
     (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
@@ -535,7 +543,11 @@ private theorem SourceFactors.sourceU_independentTensorProduct_apply
     tensorProductCutShuffle_symm_apply D d E e (β, i₂) (γ, j₂)]
   ring
 
-private theorem SourceFactors.sourceV_independentTensorProduct_apply
+/-- The supplied source $v$ of an independent tensor product is the product
+of the two constituent source entries in the product rank coordinates.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
+theorem SourceFactors.sourceV_independentTensorProduct_apply
     {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
     (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
     (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
@@ -561,34 +573,6 @@ private theorem SourceFactors.sourceV_independentTensorProduct_apply
   rw [tensorProductCutShuffle_symm_apply D d E e (α, j₁) (γ, k₁),
     tensorProductCutShuffle_symm_apply d D e E (j₂, α) (k₂, γ)]
   ring
-
-/-- Explicit supplied source factors for the paper's identity family $U_1$.
-
-Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
-noncomputable def shiftExampleU₁SourceFactors (d : ℕ) :
-    SourceFactors (shiftExampleU₁ d) (1 : Matrix (Fin 1) (Fin 1) ℂ) :=
-  SourceFactors.independentTensorProduct (identitySourceFactors d)
-    (identitySourceFactors d)
-
-/-- Explicit supplied source factors for the paper's counter-shift family $U_2$.
-
-Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
-noncomputable def shiftExampleU₂SourceFactors (d : ℕ) [NeZero d] :
-    SourceFactors (shiftExampleU₂ d)
-      (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) :=
-  SourceFactors.independentTensorProduct (leftShiftSourceFactors d)
-    (rightShiftSourceFactors d)
-
-/-- Explicit supplied source factors for the paper's reversed counter-shift
-family $U_3$.
-
-Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
-(lines 2009--2016 and 2028--2034). -/
-noncomputable def shiftExampleU₃SourceFactors (d : ℕ) [NeZero d] :
-    SourceFactors (shiftExampleU₃ d)
-      (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) :=
-  SourceFactors.independentTensorProduct (rightShiftSourceFactors d)
-    (leftShiftSourceFactors d)
 
 /-- Entry formula for the source $u$ supplied by the bond-one identity
 factors.  The source row is written in the paper order (left, right).
