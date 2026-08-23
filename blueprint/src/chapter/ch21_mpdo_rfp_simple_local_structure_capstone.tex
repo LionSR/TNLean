@@ -2529,6 +2529,46 @@ This is the calculation in
     obstruction proved for the printed tensor to $\widehat M$.
 \end{proof}
 
+% CPSV16 Theorem 4.9 and Appendix C.2, lines 1381--1403, 1441--1450, and 1647--1782.
+\begin{theorem}[Bond-one physical-sector boundary]
+    \label{thm:mpdo_bond_one_physical_sector_factorization}
+    \lean{MPOTensor.BondOnePhysicalSectorFactorization.sectorEquiv,
+        MPOTensor.BondOnePhysicalSectorFactorization.factorization,
+        MPOTensor.BondOnePhysicalSectorFactorization.physTraceTransfer_eq_one,
+        MPOTensor.BondOnePhysicalSectorFactorization.neighboringOperator_eq_submatrix,
+        MPOTensor.BondOnePhysicalSectorFactorization.neighboringOperator_pos,
+        MPOTensor.BondOnePhysicalSectorFactorization.neighboringOperator_trace,
+        MPOTensor.BondOnePhysicalSectorFactorization.neighboringTraceFactorization,
+        MPOTensor.exists_physicalSectorFactorization_of_bondDim_one}
+    \leanok
+    \uses{def:is_sal, def:mpo_physical_trace_idempotence,
+        lem:mpdo_sal_phys_trace_transfer_nonzero,
+        def:mpdo_physical_sector_factorization,
+        def:mpdo_neighboring_trace_factorization}
+    Let $K$ be an MPO tensor of virtual bond dimension one. If $K$ satisfies
+    the strong area law and literal zero correlation length, then there is a
+    physical-sector factorization of $K$ whose neighboring operator is
+    positive semidefinite and whose trace has the normalized rank-one form
+    \begin{align}
+        \tr(\eta_{k,h})&=a_kb_h.
+        \notag
+    \end{align}
+    The factors are normalized by
+    \begin{align}
+        \sum_k a_kb_k&=1.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mpdo_sal_phys_trace_transfer_nonzero}
+    Use one physical sector, with the full physical space as its left factor
+    and a one-dimensional right factor. Its neighboring operator is the
+    one-site periodic operator, so positivity follows from the strong area
+    law. The physical-trace transfer is a nonzero scalar. Literal idempotence
+    therefore makes it equal to one, and the neighboring trace is normalized
+    by $a_0=b_0=1$.
+\end{proof}
+
 % **Missing statement; proof-path drift:** Analytic inheritance is complete
 % for every common-weight absorbed BNT representative, but the explicit
 % bond-one construction refutes preservation of normality under all conditions
