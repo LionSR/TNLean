@@ -88,8 +88,10 @@ Then the specified source-index values of the two blocked tensors agree.
 
 This composes the rank-growth and logarithmic-cancellation steps in
 arXiv:1703.09188, Proposition IV.2, lines 697--704. The endpoint product
-identities and rank positivity are explicit hypotheses; this theorem neither
-chooses a simple blocking nor asserts the public blocking-independent index.
+identities are explicit hypotheses. Their positivity consequences supply the
+rank positivity required by the specified source-index value. This theorem
+neither chooses a simple blocking nor asserts the public blocking-independent
+index.
 
 **Local fix (rank-product exponent):** Source line 703 prints $d^k$; consistently
 with Theorem III.8 and the blocked physical dimension $d^k$, the endpoint
@@ -97,12 +99,24 @@ product is $d^{2k}$. See
 `docs/paper-gaps/mpu_blocking_rank_product_exponent.tex`. -/
 theorem sourceIndexValue_blockTensor_eq_of_products (U : MPOTensor d D) {k₀ k : ℕ}
     (h : k₀ ≤ k) (hd : 0 < d)
-    (hr₀ : 0 < r[blockTensor U k₀]) (hℓ₀ : 0 < ℓ[blockTensor U k₀])
-    (hr : 0 < r[blockTensor U k]) (hℓ : 0 < ℓ[blockTensor U k])
     (hprod₀ : r[blockTensor U k₀] * ℓ[blockTensor U k₀] = d ^ (2 * k₀))
     (hprod : r[blockTensor U k] * ℓ[blockTensor U k] = d ^ (2 * k)) :
-    sourceIndexValue (blockTensor U k) hr hℓ =
-      sourceIndexValue (blockTensor U k₀) hr₀ hℓ₀ := by
+    sourceIndexValue (blockTensor U k)
+        (Nat.pos_of_mul_pos_right (hprod.symm ▸ Nat.pow_pos hd))
+        (Nat.pos_of_mul_pos_left (hprod.symm ▸ Nat.pow_pos hd)) =
+      sourceIndexValue (blockTensor U k₀)
+        (Nat.pos_of_mul_pos_right (hprod₀.symm ▸ Nat.pow_pos hd))
+        (Nat.pos_of_mul_pos_left (hprod₀.symm ▸ Nat.pow_pos hd)) := by
+  have hr : 0 < r[blockTensor U k] :=
+    Nat.pos_of_mul_pos_right (hprod.symm ▸ Nat.pow_pos hd)
+  have hℓ : 0 < ℓ[blockTensor U k] :=
+    Nat.pos_of_mul_pos_left (hprod.symm ▸ Nat.pow_pos hd)
+  have hr₀ : 0 < r[blockTensor U k₀] :=
+    Nat.pos_of_mul_pos_right (hprod₀.symm ▸ Nat.pow_pos hd)
+  have hℓ₀ : 0 < ℓ[blockTensor U k₀] :=
+    Nat.pos_of_mul_pos_left (hprod₀.symm ▸ Nat.pow_pos hd)
+  change sourceIndexValue (blockTensor U k) hr hℓ =
+    sourceIndexValue (blockTensor U k₀) hr₀ hℓ₀
   obtain ⟨hrScale, hℓScale⟩ :=
     blockingRanks_eq_pow_mul_of_products U h hd hprod₀ hprod
   exact sourceIndexValue_eq_of_common_rank_scale

@@ -4812,11 +4812,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_specified_source_index_blocking_invariance}
     \lean{MPOTensor.sourceIndexValue_blockTensor_eq_of_products}
     \leanok
-    \uses{def:mpu_specified_source_index_value, thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
-    Let $d>0$ and $k_0\leq k$. Suppose that all four endpoint source ranks
-    $r_{k_0}$, $\ell_{k_0}$, $r_k$, and $\ell_k$ are positive and satisfy
+    \uses{def:mpu_specified_source_index_value}
+    Let $d>0$ and $k_0\leq k$. Suppose that the endpoint source ranks satisfy
     \begin{align}
-        r_{k_0}\ell_{k_0} & =d^{2k_0}, &
+        r_{k_0}\ell_{k_0} & =d^{2k_0}, \\
         r_k\ell_k         & =d^{2k}.
     \end{align}
     Then the specified source-index values agree:
@@ -4833,10 +4832,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
+    \uses{thm:mpu_specified_source_index_identities,
+        thm:mpu_source_cut_rank_blocking_saturation}
     Exact blocking growth gives the common positive factor $d^{k-k_0}$:
     \begin{align}
-        r_k    & =d^{k-k_0}r_{k_0}, &
+        r_k    & =d^{k-k_0}r_{k_0}, \\
         \ell_k & =d^{k-k_0}\ell_{k_0}.
     \end{align}
     Its logarithm occurs once in each rank term and therefore cancels from
@@ -4887,7 +4887,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{index-well-defined}
     \notready
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings}
+    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking,
+        thm:mpu_source_cut_rank_blocking_saturation,
+        thm:mpu_specified_source_index_blocking_invariance,
+        thm:mpu_all_later_simple_blockings}
     The source index is independent of the chosen simple blocking. More
     precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
     are simple, then
