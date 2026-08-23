@@ -492,21 +492,23 @@ private lemma VOne_isometry : VOneᴴ * VOne = 1 := by
   apply reindex_isometry rawOne rowOneEquiv (Equiv.refl _)
   exact kron_isometry bitEmbedding bitEmbedding bitEmbedding_isometry bitEmbedding_isometry
 
+private lemma sqrt_two_sq_inv : (((↑(Real.sqrt 2) : ℂ) ^ 2)⁻¹) = 1 / 2 := by
+  rw [Complex.ofReal_sqrt_sq 2 (by norm_num)]
+  norm_num
+
 private lemma bellEmbedding_partial_right (a b : Fin 2) (u : Bool) :
     ∑ z : Fin 2, bellEmbedding (a, z) u * bellEmbedding (b, z) u =
       if a = b then 1 / 2 else 0 := by
   fin_cases a <;> fin_cases b <;> rcases u <;>
     norm_num [bellEmbedding, Fin.sum_univ_two, finTwoEquiv, ← pow_two,
-      ← Complex.ofReal_inv, ← Complex.ofReal_pow, inv_pow,
-      Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+      sqrt_two_sq_inv]
 
 private lemma bellEmbedding_partial_left (a b : Fin 2) (u : Bool) :
     ∑ z : Fin 2, bellEmbedding (z, a) u * bellEmbedding (z, b) u =
       if a = b then 1 / 2 else 0 := by
   fin_cases a <;> fin_cases b <;> rcases u <;>
     norm_num [bellEmbedding, Fin.sum_univ_two, finTwoEquiv, ← pow_two,
-      ← Complex.ofReal_inv, ← Complex.ofReal_pow, inv_pow,
-      Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+      sqrt_two_sq_inv]
 
 private lemma star_bitEmbedding (i : Fin 2) (b : Bool) :
     star (bitEmbedding i b) = bitEmbedding i b := by
@@ -605,14 +607,15 @@ private def collapseThreeEntry (σ τ : Fin 3 → Fin 4)
   (if (pairEquiv (σ 2)).2 = (pairEquiv (τ 2)).2 then 1 / 2 else 0) *
   (if (pairEquiv (σ 0)).1 = (pairEquiv (τ 0)).1 then 1 / 2 else 0)
 
-private lemma weighted_VFour_collapse_one (σ τ : Fin 3 → Fin 4)
-    (t : Bool × Bool × Bool × Bool) :
-    (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) *
-      VFour (Fin.append σ z) t * VFour (Fin.append τ z) t) =
-      (CPSVExample410CorrelatedFlip.bondWeight t : ℂ) * collapseThreeEntry σ τ t := by
-  simpa only [Finset.mul_sum, mul_assoc, collapseThreeEntry] using
-    congrArg ((CPSVExample410CorrelatedFlip.bondWeight t : ℂ) * ·)
-      (VFour_collapse_one σ τ t)
+private lemma weighted_collapse_one {n : ℕ} {β : Type*}
+    (V : Matrix (Fin (n + 1) → Fin 4) β ℂ) (w : β → ℂ)
+    (entry : (Fin n → Fin 4) → (Fin n → Fin 4) → β → ℂ)
+    (hcollapse : ∀ σ τ t,
+      ∑ z : Fin 1 → Fin 4, V (Fin.append σ z) t * V (Fin.append τ z) t = entry σ τ t)
+    (σ τ : Fin n → Fin 4) (t : β) :
+    (∑ z : Fin 1 → Fin 4, w t * V (Fin.append σ z) t * V (Fin.append τ z) t) =
+      w t * entry σ τ t := by
+  simpa only [Finset.mul_sum, mul_assoc] using congrArg (w t * ·) (hcollapse σ τ t)
 
 private lemma bitEmbedding_norm (b : Bool) :
     ∑ i : Fin 2, bitEmbedding i b * bitEmbedding i b = 1 := by
@@ -698,28 +701,9 @@ private def collapseTwoEntry (σ τ : Fin 2 → Fin 4)
     bellEmbedding ((pairEquiv (τ 0)).2, (pairEquiv (τ 1)).1) x.2.1) *
   (if (pairEquiv (σ 1)).2 = (pairEquiv (τ 1)).2 then 1 / 2 else 0)
 
-private lemma weighted_VThree_collapse_one (σ τ : Fin 2 → Fin 4)
-    (x : Bool × Bool × Bool × Bool) :
-    (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) *
-      VThree (Fin.append σ z) x * VThree (Fin.append τ z) x) =
-      (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) *
-        collapseTwoEntry σ τ x := by
-  simpa only [Finset.mul_sum, mul_assoc, collapseTwoEntry] using
-    congrArg ((CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ) * ·)
-      (VThree_collapse_one σ τ x)
-
 private def collapseOneEntry (σ τ : Fin 1 → Fin 4) (x : Bool × Bool × Bool) : ℂ :=
   (bitEmbedding (pairEquiv (σ 0)).1 x.1 * bitEmbedding (pairEquiv (τ 0)).1 x.1) *
   (if (pairEquiv (σ 0)).2 = (pairEquiv (τ 0)).2 then 1 / 2 else 0)
-
-private lemma weighted_VTwo_collapse_one (σ τ : Fin 1 → Fin 4)
-    (x : Bool × Bool × Bool) :
-    (∑ z : Fin 1 → Fin 4, (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) *
-      VTwo (Fin.append σ z) x * VTwo (Fin.append τ z) x) =
-      (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) * collapseOneEntry σ τ x := by
-  simpa only [Finset.mul_sum, mul_assoc, collapseOneEntry] using
-    congrArg ((CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ) * ·)
-      (VTwo_collapse_one σ τ x)
 
 private theorem reduced_three_eq_bellDiagonal :
     reducedBlockState M 4 3 (by omega) = singleKrausMap VThree
@@ -740,7 +724,9 @@ private theorem reduced_three_eq_bellDiagonal :
     collapseThreeEntry σ τ t
   · apply Finset.sum_congr rfl
     intro t _
-    exact weighted_VFour_collapse_one σ τ t
+    exact weighted_collapse_one VFour
+      (fun t => (CPSVExample410CorrelatedFlip.bondWeight t : ℂ))
+      collapseThreeEntry VFour_collapse_one σ τ t
   · simp_rw [CPSVExample410CorrelatedFlip.windowWeightThree,
       CPSVExample410CorrelatedFlip.twoBondWeight_eq_marginal]
     rcases hσl : finTwoEquiv (pairEquiv (σ 0)).1 with _ | _ <;>
@@ -769,7 +755,9 @@ private theorem reduced_two_eq_bellDiagonal :
     collapseTwoEntry σ τ x
   · apply Finset.sum_congr rfl
     intro x _
-    exact weighted_VThree_collapse_one σ τ x
+    exact weighted_collapse_one VThree
+      (fun x => (CPSVExample410CorrelatedFlip.windowWeightThree x : ℂ))
+      collapseTwoEntry VThree_collapse_one σ τ x
   · simp_rw [CPSVExample410CorrelatedFlip.windowWeightThree,
       CPSVExample410CorrelatedFlip.windowWeightTwo,
       CPSVExample410CorrelatedFlip.twoBondWeight_eq_marginal,
@@ -800,7 +788,9 @@ private theorem reduced_one_eq_bellDiagonal :
     collapseOneEntry σ τ x
   · apply Finset.sum_congr rfl
     intro x _
-    exact weighted_VTwo_collapse_one σ τ x
+    exact weighted_collapse_one VTwo
+      (fun x => (CPSVExample410CorrelatedFlip.windowWeightTwo x : ℂ))
+      collapseOneEntry VTwo_collapse_one σ τ x
   · rcases hσl : finTwoEquiv (pairEquiv (σ 0)).1 with _ | _ <;>
       rcases hτl : finTwoEquiv (pairEquiv (τ 0)).1 with _ | _ <;>
       rcases hσr : finTwoEquiv (pairEquiv (σ 0)).2 with _ | _ <;>

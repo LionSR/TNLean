@@ -1435,9 +1435,14 @@ This is the calculation in
     \leanok
     \uses{def:cpsv_example410_corrected_tensor,
         thm:cpsv_example410_bond_distribution}
-    Each reduced state is the isometric image of a diagonal bond-window
-    distribution.  The diagonal weights give the listed nonzero roots.  The
-    orthogonal complement contributes no zero roots for one site, eight for
+    For $1\leq L\leq4$, the proof constructs a bond-window weight family
+    $w_L$ and an isometry $V_L$ such that
+    \begin{align}
+        \rho_L & =V_L\operatorname{diag}(w_L)V_L^\dagger,
+        & V_L^\dagger V_L & =I. \notag
+    \end{align}
+    The diagonal weights give the listed nonzero roots.  The orthogonal
+    complement contributes no zero roots for one site, eight for
     two sites, and forty-eight for three sites.  For four sites it contributes
     $4^4-2^4=240$ zero roots, while the eight odd-parity bond patterns supply
     the remaining eight.
