@@ -12,7 +12,7 @@ import TNLean.MPS.MPU.PhysicalAncilla
 
 This file formalizes strict equivalence and equivalence after attaching physical
 identity ancillas and then blocking, following arXiv:1703.09188, lines 706--724.
-It also formalizes the symmetry-preserving versions from lines 1345--1364.
+It also formalizes strict equivalence under symmetry from lines 1340--1354.
 
 The virtual bond dimension is fixed along every path. The source does not specify
 a stabilization that compares tensors of different virtual bond dimensions, so
@@ -26,8 +26,6 @@ only the canonical-form condition from the paper is omitted along the path.
   attachment and a common positive blocking length.
 * `MPOTensor.FiniteChainOperatorSymmetry`: an operator action at specified chain lengths.
 * `MPOTensor.StrictlyEquivalentUnderSymmetry`: strict equivalence through invariant MPUs.
-* `MPOTensor.EquivalentUnderSymmetry`: symmetry-preserving equivalence after ancillas
-  and blocking.
 -/
 
 namespace MPOTensor
@@ -41,8 +39,8 @@ The action is defined for every physical dimension, but no continuity, linearity
 or compatibility between different chain lengths is assumed at this abstract
 level.
 
-Source: arXiv:1703.09188, Definitions `def:strictly-equivalent-symmetry` and
-`def:equivalent-symmetry`, lines 1345--1364. -/
+Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
+lines 1345--1354. -/
 structure FiniteChainOperatorSymmetry where
   applicable : Set ℕ
   action : {d N : ℕ} →
@@ -88,11 +86,13 @@ def StrictlyEquivalent (U : MPOTensor da D) (V : MPOTensor db D)
 `S` when they are joined by a continuous path of MPUs invariant under `S` at
 every applicable chain length.
 
+Lines 1340--1343 introduce this definition in full analogy with
+`def:strictly-equivalent-tensors`, whose endpoints are in canonical form.
 Canonical form is required only at the endpoints. The physical dimension is
 identified explicitly, and the virtual bond dimension remains fixed along the
 path.
 
-**Scope restriction (arXiv:1703.09188, lines 1345--1364):** the paper does not
+**Scope restriction (arXiv:1703.09188, lines 1340--1354):** the paper does not
 specify a stabilization for unequal raw virtual bond dimensions, so this
 definition only compares tensors in one fixed ambient bond dimension. See
 `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
@@ -146,40 +146,5 @@ def Equivalent (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=
             (blockTensor (tensorPhysicalId U pa) k)
             (blockTensor (tensorPhysicalId V pb) k)
             (blockedAncillaPhysicalDim_eq k hphys)
-
-/-- Two fixed-bond MPU tensors are equivalent under `S` when positive coprime
-identity ancillas equalize their physical dimensions and a common positive
-blocking makes the enlarged tensors strictly equivalent under `S`.
-
-Ancillas are attached before blocking. The virtual bond dimension is unchanged.
-
-**Scope restriction (arXiv:1703.09188, lines 1345--1364):** the bond dimension
-\(D\) is fixed. No heterogeneous raw-bond stabilization is asserted. See
-`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
-
-Source: arXiv:1703.09188, Definition `def:equivalent-symmetry`,
-lines 1356--1364. -/
-def EquivalentUnderSymmetry (S : FiniteChainOperatorSymmetry)
-    (U : MPOTensor da D) (V : MPOTensor db D) : Prop :=
-  IsMPU U ∧ IsMPU V ∧
-    ∃ k pa pb : ℕ,
-      0 < k ∧ 0 < pa ∧ 0 < pb ∧ Nat.Coprime pa pb ∧
-        ∃ hphys : pa * da = pb * db,
-          StrictlyEquivalentUnderSymmetry S
-            (blockTensor (tensorPhysicalId U pa) k)
-            (blockTensor (tensorPhysicalId V pb) k)
-            (blockedAncillaPhysicalDim_eq k hphys)
-
-/-- Forgetting symmetry invariance from a stabilized symmetry-preserving path
-gives ordinary MPU equivalence.
-
-Source: arXiv:1703.09188, Definitions `def:equivalent-tensors` and
-`def:equivalent-symmetry`, lines 716--724 and 1356--1364. -/
-theorem EquivalentUnderSymmetry.toEquivalent {S : FiniteChainOperatorSymmetry}
-    {U : MPOTensor da D} {V : MPOTensor db D}
-    (h : EquivalentUnderSymmetry S U V) : Equivalent U V := by
-  rcases h with ⟨hU, hV, k, pa, pb, hk, hpa, hpb, hcoprime, hphys, hstrict⟩
-  exact ⟨hU, hV, k, pa, pb, hk, hpa, hpb, hcoprime, hphys,
-    hstrict.toStrictlyEquivalent⟩
 
 end MPOTensor
