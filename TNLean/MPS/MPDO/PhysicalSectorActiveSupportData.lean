@@ -52,8 +52,13 @@ factor maps have the corresponding factor supports as their ranges.  For an
 inactive sector both coordinate dimensions are zero.  The product range
 identity is uniform in the sector.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
+Source context: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`,
+lines 1381--1388, supplies the factors $l_k,r_k$.
+
+**Scope restriction (active physical support compression):** CPSV16 does not
+choose isometries onto their joint column supports or state the corresponding
+range identities.  Those fields are project-derived auxiliary data; see
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 structure SectorActiveFactorSupportData
     (F : PhysicalSectorFactorization K) (k : Fin F.sectorCount) where
   /-- Dimension of the retained left factor. -/
@@ -96,8 +101,13 @@ structure SectorActiveFactorSupportData
 /-- Every physical sector admits factor-support coordinates, with
 zero-dimensional coordinates in the inactive case.
 
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
+Source context: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`,
+lines 1381--1388, supplies the factors $l_k,r_k$.
+
+**Scope restriction (active physical support compression):** the support
+isometries and their range identities are project-derived auxiliary data,
+not part of the cited source passage.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem nonempty_sectorActiveFactorSupportData
     (F : PhysicalSectorFactorization K) (k : Fin F.sectorCount) :
     Nonempty (SectorActiveFactorSupportData F k) := by
