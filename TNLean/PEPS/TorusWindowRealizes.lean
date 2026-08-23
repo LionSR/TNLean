@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusWindowMult
 
 /-!
-# The window-region witness from the single-vertex realization on the left end window
+# A conditional window-region witness from single-vertex realization
 
 The two-dimensional strengthening of the normal PEPS Fundamental Theorem
 (arXiv:1804.04964, the corollary at lines 2297--2318 of `Papers/1804.04964/paper_normal.tex`) feeds
@@ -16,8 +16,9 @@ identity on the reference edge `e`.  The reduction
 produces the witness from three separate inputs: the two cross-tensor coefficient transfers
 `htransferAB`/`htransferBA` and the forward-transfer multiplicativity `hmul`.  This file collapses
 all three of those inputs to a single block of data --- the region physical-to-virtual realization
-on the left end window, in each direction --- and records the two facts that fix the precise
-boundary of the construction.
+on the left end window, in each direction.  This is a useful conditional implication.  Its
+single-vertex hypotheses are stronger than normality and are not part of the source-faithful
+overlapping-window route.
 
 ## The injectivity engine is available from window and host injectivity
 
@@ -32,7 +33,7 @@ with no single-vertex spanning.  This is the affirmative half of the boundary: w
 injectivity *do* power the read-off side --- the inserted matrix is determined by its window
 coefficient.
 
-## The multiplicativity is the single-vertex realization residual
+## Multiplicativity supplied by the conditional realization
 
 What window and host injectivity do *not* supply is the multiplicativity `hmul`.  The forward
 transfer of a product `M * M'` on the reference edge is a single matrix product on the bond; reading
@@ -45,24 +46,24 @@ level: there is no internal sum over an intermediate bond configuration to split
 composition of two separate insertions, so the injectivity engine, although it reduces `hmul` to a
 coefficient identity, cannot produce that identity on its own.
 
-`exists_windowEdgeCoeffIdentityWitness_of_realizes` therefore takes the two-directional realization
-in place of the three transfer inputs: `regionInsertionTransfer_of_realizes`
+`exists_windowEdgeCoeffIdentityWitness_of_realizes` takes the two-directional realization in place
+of the three transfer inputs: `regionInsertionTransfer_of_realizes`
 (`TNLean/PEPS/RegionBlock/Recovery3.lean`) builds the transfer datum from it, supplying the
 coefficient transfers, the unital field, *and* the multiplicativity in one step
 (`regionTransferMatrix_mul_of_realizes`), and the datum feeds the landed witness packaging
-`exists_windowEdgeCoeffIdentityWitness_of_transfer`.  This is the precise statement of what the
-staircase must supply: the single-vertex realization on the window, in each direction, with the
-matched bond dimensions and the same state, is the irreducible core the corollary still needs.  The
-host injectivity is the single-window complement at the minimal size, in contrast to the rectangle
-red block's host, which fails there.
+`exists_windowEdgeCoeffIdentityWitness_of_transfer`.  The host injectivity is the single-window
+complement at the minimal size, in contrast to the rectangle red block's host, which fails there.
+The paper does not require the single-vertex realization used here: its proof sketch instead
+compares physical operations on the overlapping windows and recovers the fixed-edge virtual
+operation by the Lemma 5 converse (`paper_normal.tex`, lines 2368--2444).
 
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
   generating the same state*, arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Section 3, Lemma
   `inj_isomorph`, lines 254--586 of `Papers/1804.04964/paper_normal.tex`, and the corollary at lines
-  2297--2318; the filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1,
-  and the single-vertex endpoint-spanning residual in
+  2297--2318; the filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`;
+  and the conditional single-vertex endpoint-spanning construction in
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 -/
 
@@ -92,7 +93,7 @@ unconditional region injectivity `regionInsertedCoeff_injective`
 (`TNLean/PEPS/RegionBlock/Algebra.lean`), the read-off side that window and host injectivity power.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem windowRegionInsertedCoeff_injective
     {B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
@@ -130,15 +131,15 @@ theorem windowRegionInsertedCoeff_injective
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge B (by omega) (by omega)
       ha0 haw hbh⟩ M M' hMM'
 
-/-! ### The window witness from the two-directional single-vertex realization
+/-! ### A conditional window witness from two-directional single-vertex realization
 
 The region physical-to-virtual realization on the left end window, in each direction, builds the
 `RegionInsertionTransfer` datum through `regionInsertionTransfer_of_realizes` --- supplying the two
 coefficient transfers, the unital field, and the forward multiplicativity together --- and the
 datum feeds the landed witness packaging `exists_windowEdgeCoeffIdentityWitness_of_transfer`.  This
 collapses the three separate inputs of `exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer`
-(`htransferAB`, `htransferBA`, `hmul`) to one block of data, isolating the irreducible core: the
-single-vertex realization at `e`'s in-region endpoint. -/
+(`htransferAB`, `htransferBA`, `hmul`) to one block of data.  It is a conditional strengthening,
+not the statement that the source's staircase argument must supply. -/
 
 /-- **The window-region witness from the single-vertex realization.**
 
@@ -154,13 +155,13 @@ realizations --- the coefficient transfers, the unital field, and the forward mu
 one step --- and `exists_windowEdgeCoeffIdentityWitness_of_transfer` packages it into the witness.
 The host injectivity is the single-window complement at the minimal size; the region injectivity is
 the window injectivity from the arc-window hypotheses.  This collapses the three separate transfer
-inputs to a single realization datum and is the precise statement of what the staircase must supply
-for the multiplicativity: the single-vertex realization at `e`'s in-region endpoint, absent for a
-normal tensor and recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+inputs to a single realization datum under the additional single-vertex hypotheses.  The
+source-faithful route does not assume those hypotheses; it uses the overlapping-window converse at
+lines 2368--2444, as recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
 `Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem exists_windowEdgeCoeffIdentityWitness_of_realizes
     {A B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hA : NormalTorusArcWindowInjectivityHypotheses L K
