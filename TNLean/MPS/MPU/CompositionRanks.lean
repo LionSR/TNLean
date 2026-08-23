@@ -23,6 +23,13 @@ namespace MPOTensor
 
 variable {d D₁ D₂ : ℕ}
 
+/-- The left local factor in the two-site source-tensor $u$ factorization.  These
+local factors are substituted into `compositionCutLeft` and
+`compositionCutRight` to obtain the Chapter 28 factors $A_{1,4}$ and
+$B_{1,4}$.
+
+Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--543,
+and Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin r[U]) ℂ :=
@@ -30,6 +37,11 @@ private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     if j₂ = (finProdFinEquiv.symm J).2 then
       S.X₁ (a, (finProdFinEquiv.symm J).1) r else 0
 
+/-- The right local factor in the two-site source-tensor $u$ factorization used to
+construct the Chapter 28 factors $A_{1,4}$ and $B_{1,4}$.
+
+Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--543,
+and Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def rightBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin r[U]) (Fin (d * d) × Fin D₁) ℂ :=
@@ -37,6 +49,12 @@ private noncomputable def rightBlockRight (U : MPOTensor d D₁)
     SourceFactors.sourceU U S (l, r) (finProdFinEquiv.symm I) *
       S.Y₂ l (j₂, b)
 
+/-- The two-site right-cut factorization through the paper's source tensor
+$u$; it is applied to both product factors before assembling
+$M_1((\mathcal U\mathbin{\cdot}\mathcal V)_4)=A_{1,4}B_{1,4}$.
+
+Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--543,
+and Theorem `IndexTh` (ii), lines 837--845. -/
 private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₁ (blockTwo U) = rightBlockLeft U S * rightBlockRight U S := by
@@ -51,6 +69,12 @@ private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
     simp only [hx, ite_false, zero_mul, Finset.sum_const_zero]
   · simp
 
+/-- The left local factor in the reflected two-site source-tensor $v$ factorization.
+These local factors are substituted into the generic four-site cut factors to
+obtain the Chapter 28 matrices $A_{2,4}$ and $B_{2,4}$.
+
+Source: arXiv:1703.09188, equations `SVDforms2` and `vdagger`, lines 526--543,
+and Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin ℓ[U]) ℂ :=
@@ -58,6 +82,11 @@ private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     if i₂ = (finProdFinEquiv.symm I).2 then
       S.X₂ (a, (finProdFinEquiv.symm I).1) l else 0
 
+/-- The right local factor in the reflected two-site source-tensor $v$ factorization
+used to construct the Chapter 28 matrices $A_{2,4}$ and $B_{2,4}$.
+
+Source: arXiv:1703.09188, equations `SVDforms2` and `vdagger`, lines 526--543,
+and Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def leftBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin ℓ[U]) (Fin (d * d) × Fin D₁) ℂ :=
@@ -66,6 +95,12 @@ private noncomputable def leftBlockRight (U : MPOTensor d D₁)
       ((finProdFinEquiv.symm J).2, (finProdFinEquiv.symm J).1) (r, l) *
         S.Y₁ r (i₂, b)
 
+/-- The two-site left-cut factorization through the reflected source tensor
+$v$; it is applied to both product factors before assembling
+$M_2((\mathcal U\mathbin{\cdot}\mathcal V)_4)=A_{2,4}B_{2,4}$.
+
+Source: arXiv:1703.09188, equations `SVDforms2` and `vdagger`, lines 526--543,
+and Theorem `IndexTh` (ii), lines 837--845. -/
 private theorem sourceCutM₂_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₂ (blockTwo U) = leftBlockLeft U S * leftBlockRight U S := by
@@ -117,6 +152,37 @@ private theorem sum_eight_cut_shuffle
       rfl
     _ = _ := by simp only [Fintype.sum_prod_type]
 
+private theorem sum_eight_cut_factorization
+    {X Y J K T₁ T₂ S₁ S₂ : Type*}
+    [Fintype X] [Fintype Y] [Fintype J] [Fintype K]
+    [Fintype T₁] [Fintype T₂] [Fintype S₁] [Fintype S₂]
+    (a : J → T₁ → ℂ) (b : T₁ → X → ℂ)
+    (c : T₂ → ℂ) (d : T₂ → J → Y → ℂ)
+    (e : X → K → S₁ → ℂ) (f : S₁ → ℂ)
+    (g : Y → S₂ → ℂ) (h : S₂ → K → ℂ) :
+    (∑ x, ∑ y,
+      (∑ j, (∑ t₁, a j t₁ * b t₁ x) * ∑ t₂, c t₂ * d t₂ j y) *
+        ∑ k, (∑ s₁, e x k s₁ * f s₁) * ∑ s₂, g y s₂ * h s₂ k) =
+      ∑ ts : T₁ × S₂,
+        (∑ j, a j ts.1 * ∑ t₂, ∑ y, c t₂ * d t₂ j y * g y ts.2) *
+          ∑ x, ∑ k, ∑ s₁, b ts.1 x * e x k s₁ * f s₁ * h ts.2 k := by
+  simp only [Fintype.sum_prod_type, Finset.sum_mul, Finset.mul_sum]
+  rw [sum_eight_cut_shuffle]
+  refine Finset.sum_congr rfl fun t₁ _ => ?_
+  refine Finset.sum_congr rfl fun s₂ _ => ?_
+  refine Finset.sum_congr rfl fun x _ => ?_
+  refine Finset.sum_congr rfl fun k _ => ?_
+  refine Finset.sum_congr rfl fun s₁ _ => ?_
+  refine Finset.sum_congr rfl fun j _ => ?_
+  refine Finset.sum_congr rfl fun t₂ _ => ?_
+  refine Finset.sum_congr rfl fun y _ => ?_
+  ac_rfl
+
+/-- The left rectangular factor of the generic four-site product cut.  With
+the source-tensor $u$ local factors it is the Chapter 28 matrix $A_{1,4}$;
+with the reflected source-tensor $v$ local factors it is $A_{2,4}$.
+
+Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutLeft
     (L₁ : Matrix (Fin E₁ × Fin q) ι₁ ℂ)
     (R₂ : Matrix ι₂ (Fin q × Fin E₂) ℂ)
@@ -131,6 +197,11 @@ private noncomputable def compositionCutLeft
       ∑ t : ι₂, ∑ y : Fin E₂,
         L₂ (c, K₁) t * R₂ t (J, y) * L₂ (y, K₂) rs.2
 
+/-- The right rectangular factor of the generic four-site product cut.  With
+the source-tensor $u$ local factors it is the Chapter 28 matrix $B_{1,4}$;
+with the reflected source-tensor $v$ local factors it is $B_{2,4}$.
+
+Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutRight
     (R₁ : Matrix ι₁ (Fin q × Fin E₁) ℂ)
     (L₁ : Matrix (Fin E₁ × Fin q) ι₁ ℂ)
@@ -144,9 +215,6 @@ private noncomputable def compositionCutRight
     ∑ x : Fin E₁, ∑ J : Fin q, ∑ t : ι₁,
       R₁ rs.1 (I₁, x) * L₁ (x, J) t * R₁ t (I₂, e) * R₂ rs.2 (J, f)
 
-set_option maxHeartbeats 800000 in
--- Expanding the four local tensors and permuting the resulting eight finite sums
--- exceeds the project default before normalization identifies both expressions.
 private theorem sourceCutM₁_blockTwo_mulTensor_factorization
     (A : MPOTensor q E₁) (B : MPOTensor q E₂)
     (L₁ : Matrix (Fin E₁ × Fin q) ι₁ ℂ)
@@ -177,9 +245,15 @@ private theorem sourceCutM₁_blockTwo_mulTensor_factorization
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   simp only [Equiv.symm_apply_apply]
   simp_rw [hA, hB]
-  simp only [Fintype.sum_prod_type, Finset.sum_mul, Finset.mul_sum]
-  rw [sum_eight_cut_shuffle]
-  simp only [mul_assoc, mul_left_comm, mul_comm]
+  exact sum_eight_cut_factorization
+    (fun j t₁ ↦ L₁ (a, j) t₁)
+    (fun t₁ x ↦ R₁ t₁ (I₁, x))
+    (fun t₂ ↦ L₂ (c, K₁) t₂)
+    (fun t₂ j y ↦ R₂ t₂ (j, y))
+    (fun x k s₁ ↦ L₁ (x, k) s₁)
+    (fun s₁ ↦ R₁ s₁ (I₂, e))
+    (fun y s₂ ↦ L₂ (y, K₂) s₂)
+    (fun s₂ k ↦ R₂ s₂ (k, f))
 
 end GenericCut
 
@@ -221,14 +295,14 @@ private theorem leftRank_blockTwo_mulTensor_reindexPhysical {d' : ℕ}
 
 private theorem rightRank_blockTwo_eq_blockTensor_two (U : MPOTensor d D₁) :
     r[blockTwo U] = r[blockTensor U 2] := by
-  have h : blockTwo U = reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) := by
-    exact blockTwo_eq_blockTensor_reindex U
+  have h : blockTwo U = reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) :=
+    blockTwo_eq_blockTensor_reindex U
   rw [h, rightRank_reindexPhysical]
 
 private theorem leftRank_blockTwo_eq_blockTensor_two (U : MPOTensor d D₁) :
     ℓ[blockTwo U] = ℓ[blockTensor U 2] := by
-  have h : blockTwo U = reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) := by
-    exact blockTwo_eq_blockTensor_reindex U
+  have h : blockTwo U = reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) :=
+    blockTwo_eq_blockTensor_reindex U
   rw [h, leftRank_reindexPhysical]
 
 private theorem rightRank_blockTwo_mulTensor_blockTwo_le
@@ -360,10 +434,10 @@ theorem rightRank_blockTensor_mulTensor_four_le
     (mulTensor (blockTensor U 2) (blockTensor V 2))]
   rw [← rightRank_blockTwo_mulTensor_reindexPhysical (twoSiteBlockEquiv d)
     (blockTensor U 2) (blockTensor V 2)]
-  have hU : reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) = blockTwo U := by
-    exact (blockTwo_eq_blockTensor_reindex U).symm
-  have hV : reindexPhysical (twoSiteBlockEquiv d) (blockTensor V 2) = blockTwo V := by
-    exact (blockTwo_eq_blockTensor_reindex V).symm
+  have hU : reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) = blockTwo U :=
+    (blockTwo_eq_blockTensor_reindex U).symm
+  have hV : reindexPhysical (twoSiteBlockEquiv d) (blockTensor V 2) = blockTwo V :=
+    (blockTwo_eq_blockTensor_reindex V).symm
   rw [hU, hV]
   exact rightRank_blockTwo_mulTensor_blockTwo_le U V
 
@@ -388,10 +462,10 @@ theorem leftRank_blockTensor_mulTensor_four_le
     (mulTensor (blockTensor U 2) (blockTensor V 2))]
   rw [← leftRank_blockTwo_mulTensor_reindexPhysical (twoSiteBlockEquiv d)
     (blockTensor U 2) (blockTensor V 2)]
-  have hU : reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) = blockTwo U := by
-    exact (blockTwo_eq_blockTensor_reindex U).symm
-  have hV : reindexPhysical (twoSiteBlockEquiv d) (blockTensor V 2) = blockTwo V := by
-    exact (blockTwo_eq_blockTensor_reindex V).symm
+  have hU : reindexPhysical (twoSiteBlockEquiv d) (blockTensor U 2) = blockTwo U :=
+    (blockTwo_eq_blockTensor_reindex U).symm
+  have hV : reindexPhysical (twoSiteBlockEquiv d) (blockTensor V 2) = blockTwo V :=
+    (blockTwo_eq_blockTensor_reindex V).symm
   rw [hU, hV]
   exact leftRank_blockTwo_mulTensor_blockTwo_le U V
 
