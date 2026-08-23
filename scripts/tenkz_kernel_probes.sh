@@ -92,12 +92,23 @@ for sketch_row in "${sketch_rows[@]}"; do
 $sketch_row
 SKETCHROW
   awk -v heading="$heading" -v mark="$WORK/$job.fenceline" '
-    BEGIN { while (substr(heading, level + 1, 1) == "#") level++ }
+    BEGIN {
+      while (substr(heading, level + 1, 1) == "#") level++
+      for (indent = 0; indent <= 3; indent++) {
+        probe = ""
+        for (i = 0; i < indent; i++) probe = probe " "
+        probe = probe "```tex"
+        if (fencerun(probe) != 3 || fc != "`" || frest != "tex") exit 70
+      }
+      if (fencerun("    ```tex") != 0) exit 70
+    }
     # The run of fence characters opening or closing a fence on this line:
     # its length, with the character in fc and the trailing text in frest.
-    function fencerun(line,    copy, i) {
+    function fencerun(line,    copy, indent, i) {
       copy = line
-      sub(/^ {0,3}/, "", copy)
+      while (substr(copy, indent + 1, 1) == " ") indent++
+      if (indent > 3) return 0
+      copy = substr(copy, indent + 1)
       fc = substr(copy, 1, 1)
       if (fc != "`" && fc != "~") return 0
       i = 0
