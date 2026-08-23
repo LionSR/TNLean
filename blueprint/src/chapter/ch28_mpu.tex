@@ -4956,8 +4956,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.leftRank_blockTensor_mulTensor_four_le}
     \leanok
     \uses{thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site, lem:mpu_blocking,
-        def:mpu_right_rank, def:mpu_left_rank}
+        thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product,
+        thm:mpu_source_ranks_physical_reindexing,
+        def:mpdo_physical_blocking, def:mpu_right_rank, def:mpu_left_rank}
     Let $\mathcal U$ and $\mathcal V$ be arbitrary matrix product operator
     tensors of common physical dimension $d$. For their product tensor,
     four-site blocking satisfies
@@ -4973,7 +4974,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site, lem:mpu_blocking}
+        thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product,
+        thm:mpu_source_ranks_physical_reindexing,
+        def:mpdo_physical_blocking}
     For the right cut, factor the two-site block of each tensor through its
     source tensor $u$. The diagonal cut through the two blocked factors retains
     one physical leg and one right source leg from each factor. Hence the
