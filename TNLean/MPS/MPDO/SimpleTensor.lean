@@ -456,7 +456,7 @@ theorem weight_copy_independent_of_isPhysicalTraceIdempotent {M : MPOTensor d D}
     intro r
     have hμ : S.weight j r ≠ 0 := S.weight_ne_zero j r
     have hk := key j r
-    rw [smul_mul_smul_comm, smul_smul] at hk
+    rw [smul_mul_smul_comm] at hk
     have h3 := congrArg (fun Z ↦ (S.weight j r * S.weight j r)⁻¹ • Z) hk
     simp only [smul_smul] at h3
     rw [inv_mul_cancel₀ (mul_ne_zero hμ hμ), one_smul] at h3
