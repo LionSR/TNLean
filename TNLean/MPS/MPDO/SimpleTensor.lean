@@ -34,10 +34,13 @@ independent of the copy index $q$ (Appendix C.2, lines 1646--1661).
   blocked canonical-form setting of Appendix C.2.
 * `MPOTensor.IsSimple`: normalized fixed-representative simplicity after a
   positive physical blocking, including the global unit-weight convention.
-* `MPOTensor.weight_copy_independent_of_isSourceZCL`: zero correlation length
-  makes the canonical-form weights independent of the copy index.
-* `MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL`:
-  the existential form for a simple canonical-form tensor.
+* `MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent`: literal zero
+  correlation length makes the canonical-form weights independent of the copy index.
+* `MPOTensor.IsSimpleCanonicalForm.
+    exists_weight_copy_independent_of_isPhysicalTraceIdempotent`: the corresponding
+  existential form for a simple canonical-form tensor.
+* `MPOTensor.weight_copy_independent_of_isSourceZCL`: the separate scale-invariant
+  generalization.
 
 ## References
 
@@ -412,21 +415,76 @@ theorem weighted_basis_physTraceTransfer_sq_of_literal_ZCL
   rw [Equiv.symm_apply_apply] at h
   exact h
 
-/-- **Zero correlation length makes the sector weights copy independent**
-(arXiv:1606.00608, Appendix C.2, lines 1646--1661).  Let the doubled-index
+/-- **Literal zero correlation length makes the sector weights copy independent**
+(CPSV16, Lemma C.10, label `lemmus`, lines 1646--1661). Let the doubled-index
 view of $M$ be in canonical form over a basis of normal tensors with per-copy
 weights $\mu_{j,q}$, and suppose no basis element has nilpotent physical-trace
-transfer.  If $M$ has zero correlation length, then $\mu_{j,q}$ does not
-depend on $q$.
+transfer. If the literal physical-trace equation $\mathcal T_M^2=\mathcal T_M$
+holds, then $\mu_{j,q}$ does not depend on $q$.
 
-The source proof applies the zero-correlation-length equation to the
-canonical-form display: with
-$\mathcal{T}_M^2 = \lambda\,\mathcal{T}_M$, $\lambda > 0$, the block
-decomposition gives
-$\mu_{j,q}^2\,\mathcal{B}_j^2 = \lambda\,\mu_{j,q}\,\mathcal{B}_j$ on the copy
-$(j, q)$, so $\mathcal{B}_j^2 = (\lambda/\mu_{j,q})\,\mathcal{B}_j$; since
-$\mathcal{B}_j \ne 0$ ("this cannot be zero", line 1657), the scalar
-$\lambda/\mu_{j,q}$, hence $\mu_{j,q}$, is independent of $q$. -/
+The block equation gives
+$\mathcal B_j^2=\mu_{j,q}^{-1}\mathcal B_j$. Since $\mathcal B_j\ne0$, comparing
+two copy indices gives $\mu_{j,q}=\mu_{j,q'}$. The nonnilpotency and canonical-form
+data are the standing simplicity conditions of the source. -/
+theorem weight_copy_independent_of_isPhysicalTraceIdempotent {M : MPOTensor d D}
+    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hZCL : IsPhysicalTraceIdempotent M)
+    (hnonNil : ∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (j : Fin S.basisCount) (q q' : Fin (S.copies j)) :
+    S.weight j q = S.weight j q' := by
+  classical
+  have key := weighted_basis_physTraceTransfer_sq_of_literal_ZCL
+    S hTotal X hEq ((isPhysicalTraceIdempotent_iff M).mp hZCL)
+  have hTj0 : doubledPhysTraceTransfer d (S.basis j) ≠ 0 := by
+    intro h0
+    exact hnonNil j (by rw [h0]; exact IsNilpotent.zero)
+  have hdiv : ∀ r : Fin (S.copies j),
+      doubledPhysTraceTransfer d (S.basis j) * doubledPhysTraceTransfer d (S.basis j) =
+        ((1 : ℂ) / S.weight j r) • doubledPhysTraceTransfer d (S.basis j) := by
+    intro r
+    have hμ : S.weight j r ≠ 0 := S.weight_ne_zero j r
+    have hk := key j r
+    rw [smul_mul_smul_comm, smul_smul] at hk
+    have h3 := congrArg (fun Z ↦ (S.weight j r * S.weight j r)⁻¹ • Z) hk
+    simp only [smul_smul] at h3
+    rw [inv_mul_cancel₀ (mul_ne_zero hμ hμ), one_smul] at h3
+    rw [h3]
+    congr 1
+    field_simp
+  have hq := (hdiv q).symm.trans (hdiv q')
+  have hscalar : (1 : ℂ) / S.weight j q = (1 : ℂ) / S.weight j q' := by
+    by_contra hne
+    have hsub : ((1 : ℂ) / S.weight j q - (1 : ℂ) / S.weight j q') •
+        doubledPhysTraceTransfer d (S.basis j) = 0 := by
+      rw [sub_smul, hq, sub_self]
+    have h4 := congrArg (fun Z ↦
+      ((1 : ℂ) / S.weight j q - (1 : ℂ) / S.weight j q')⁻¹ • Z) hsub
+    simp only [smul_smul, smul_zero] at h4
+    rw [inv_mul_cancel₀ (sub_ne_zero.mpr hne), one_smul] at h4
+    exact hTj0 h4
+  rw [div_eq_div_iff (S.weight_ne_zero j q) (S.weight_ne_zero j q')] at hscalar
+  simpa using hscalar.symm
+
+/-- **Scale-invariant generalization of copy independence.** Let the doubled-index
+view of $M$ be in canonical form over a basis of normal tensors with per-copy
+weights $\mu_{j,q}$, and suppose no basis element has nilpotent physical-trace
+transfer. This theorem allows
+$\mathcal T_M^2=\lambda\mathcal T_M$ for an arbitrary positive $\lambda$ and proves
+that $\mu_{j,q}$ does not depend on $q$. The exact fixed-representative statement
+of CPSV16, Lemma C.10, is
+`weight_copy_independent_of_isPhysicalTraceIdempotent`. -/
 theorem weight_copy_independent_of_isSourceZCL {M : MPOTensor d D}
     (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
@@ -481,11 +539,42 @@ theorem weight_copy_independent_of_isSourceZCL {M : MPOTensor d D}
   rw [div_eq_div_iff (S.weight_ne_zero j q) (S.weight_ne_zero j q')] at hscalar
   exact (mul_left_cancel₀ hlam0 hscalar).symm
 
-/-- **Copy-independent weights for a simple canonical-form tensor with zero
-correlation length** (arXiv:1606.00608, Appendix C.2, lines 1628 and
-1646--1661). A simplicity witness supplies the chosen canonical form and the
-nilpotency exclusion; zero correlation length then makes the sector weights
-$\mu_{j,q}$ independent of the copy index $q$. -/
+/-- **Literal-ZCL copy independence for a simple canonical-form tensor**
+(CPSV16, Lemma C.10, label `lemmus`, lines 1628 and 1646--1661). A simplicity
+witness supplies the canonical form and nonnilpotency conditions; literal
+physical-trace idempotence makes every sector weight independent of its copy
+index. -/
+theorem IsSimpleCanonicalForm.exists_weight_copy_independent_of_isPhysicalTraceIdempotent
+    {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
+    (hZCL : IsPhysicalTraceIdempotent M) :
+    ∃ S : MPSTensor.SectorDecomposition (d * d),
+      MPSTensor.IsBNTCanonicalForm S ∧
+        (∃ hTotal : S.totalDim = D,
+          ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
+          ∀ i : Fin (d * d),
+            M.toMPSTensor i =
+              cast (by rw [hTotal] :
+                  Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+                    Matrix (Fin D) (Fin D) ℂ)
+                ((MPSTensor.globalGaugeOfBlocks X :
+                      Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+                  S.toTensor i *
+                  (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                      GL (Fin S.totalDim) ℂ) :
+                    Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))) ∧
+        (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j))) ∧
+        ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+          S.weight j q = S.weight j q' := by
+  obtain ⟨-, S, hCF, hnil, hTotal, X, hEq⟩ := hM
+  exact ⟨S, hCF, ⟨hTotal, X, hEq⟩, hnil, fun j q q' ↦
+    weight_copy_independent_of_isPhysicalTraceIdempotent
+      S hTotal X hEq hZCL hnil j q q'⟩
+
+/-- **Scale-invariant generalization for a simple canonical-form tensor.** A
+simplicity witness supplies the chosen canonical form and nilpotency exclusion;
+the broader `IsSourceZCL` relation then makes the sector weights independent of
+the copy index. The exact CPSV16 Lemma C.10 specialization is
+`IsSimpleCanonicalForm.exists_weight_copy_independent_of_isPhysicalTraceIdempotent`. -/
 theorem IsSimpleCanonicalForm.exists_weight_copy_independent_of_isSourceZCL
     {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsSourceZCL M) :

@@ -264,7 +264,14 @@ coefficient absorption preserves normality; this is the \emph{missing
 statement} in the (ii)$\Rightarrow$(iv) node and is analyzed in
 \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Second, the earlier Case-II
 argument at lines~1646--1665 uses literal ZCL to make repeated-copy weights
-independent of the copy label and absorb their common value. After that
+independent of the copy label and absorb their common value. Lemma~C.10 is now
+linked exactly by
+\leanid{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}, with
+its simple-canonical existential form supplied by
+\leanid{MPOTensor.IsSimpleCanonicalForm.exists_weight_copy_independent_of_isPhysicalTraceIdempotent}.
+Both are derived directly from the literal weighted-block equation. The older
+	exttt{IsSourceZCL} declarations remain separate scale-invariant
+generalizations and are no longer used as the source nodes. After that
 normalization, the Proposition~C.7 channel pairs must still be combined, using
 the mutually orthogonal outer physical supports, into a single pair of
 trace-preserving completely positive maps. This is the \emph{missing
