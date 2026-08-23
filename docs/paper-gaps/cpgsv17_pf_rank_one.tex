@@ -680,8 +680,11 @@ iteration they still prove the renormalization equations for
 $\mathcal K^{[2]}$.  They are not among the fixed-$(k,h)$ families excluded by
 the trace calculation.  Likewise, the one-sector factorization has no such
 four-sector obstruction.  Thus this calculation rules out the selected
-pair-preserving route but does not construct the general coarsened or
-label-mixing maps sought in \ghissue{6793}; that issue remains open.
+pair-preserving route.  The explicit label-coarsening maps belong to this
+example; they are not the general construction used in the source proof.
+Proposition~\texttt{3to5} instead constructs its maps from normalized rank-one
+neighboring traces, and the proof of Proposition~\texttt{prop2to5} only adds
+the projection onto the outer BNT subspaces before applying those maps.
 
 This positive result is not invariant under the normalization above. Put
 $P=\operatorname{diag}(1,0)$. The physical-trace transfer of the normalized
@@ -1108,10 +1111,9 @@ outer BNT factorization. A direct concatenation of the inner sector labels is
 not valid: cross-BNT neighboring operators vanish by support orthogonality,
 while a single global rank-one equation
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$ would generally make cross terms
-nonzero. The missing construction must instead use the outer support
-projectors to control a direct sum of channel pairs. This all-sector missing
-statement is tracked in \ghissue{6632}, retargeted from the refuted raw
-(iv)$\Rightarrow$(v) reading.
+nonzero. The construction instead uses the outer support projectors to control
+a direct sum of channel pairs. This all-sector assembly is formalized in
+\ghissue{6632}, separately from the refuted raw (iv)$\Rightarrow$(v) reading.
 
 The arbitrary-boundary part of this construction is now formalized by
 \leanid{MPSTensor.trace_evalWord_gauge_toTensorFromBlocks_mul} and
@@ -1141,10 +1143,12 @@ projector-controlled active maps are completely positive and preserve the
 trace selected by $Q$. Measuring $I-Q$ and preparing a fixed density matrix
 therefore completes each active map to a channel, while the complementary
 term vanishes on the closures. This resolves \ghissue{6807} without asserting
-that the active Markov projection is the ambient identity. Thus two routes to
-the source implication remain: the source-context factorization in
-\ghissue{6775}, or the direct construction of one blocked channel pair for
-every absorbed representative in \ghissue{6793}.
+that the active Markov projection is the ambient identity. Thus the
+outer-sector channel combination is complete. The source proof now has one
+remaining obligation: the source-context factorization in \ghissue{6775}. The
+direct sector-mixing problem formerly separated as \ghissue{6793} is a
+project-derived alternative, not another step asserted or used by
+Appendix~C.2.
 
 The composition from supplied factorization data is complete end to end.
 Given, for every absorbed representative, a physical-sector factorization
@@ -1248,12 +1252,13 @@ therefore refutes the broadened implication using that up-to-scalar predicate,
 but it is not an unqualified counterexample to Theorem~4.9 because it fails the
 paper's literal ZCL diagram. Independently, the repeated-copy theorem above
 refutes the exact printed implication (iv)$\Rightarrow$(v). The source-context
-(ii)$\Rightarrow$(iv) factorization remains \ghissue{6775}; the direct
-coarsening or sector-mixing construction of the blocked channel pair in
-\ghissue{6793} is an alternative route to (ii)$\Rightarrow$(v).
-The conditional combination through the orthogonal outer physical sectors is
-formalized in \ghissue{6632}, and its trace-preserving completion outside the
-active support resolves \ghissue{6807}.
+(ii)$\Rightarrow$(iv) factorization remains \ghissue{6775}. Once it is
+supplied, Proposition~\texttt{3to5}, its twice-applied channels, and the
+conditional combination through the orthogonal outer physical sectors give
+(ii)$\Rightarrow$(v). Those channel constructions are formalized in
+\ghissue{6632}, and their trace-preserving completion outside the active
+support resolves \ghissue{6807}. The project-derived direct sector-mixing
+alternative in \ghissue{6793} is retired in favor of this source route.
 
 \bibliographystyle{alpha}
 \bibliography{references}

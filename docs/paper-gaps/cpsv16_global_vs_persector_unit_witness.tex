@@ -225,10 +225,13 @@ distinct: ZCL first makes copy weights common. The non-Cartesian witness in
 \path{TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean} shows that
 the inherited local analytic properties do not alone imply the printed
 factorization, but it has no ambient simple-biCF witness. Thus
-\ghissue{6775} retains the source-context factorization, while \ghissue{6793}
-tracks the alternative direct construction of the blocked channel pair by
-coarsening or mixing physical-sector labels. The subsequent outer-sector
-combination is formalized in \ghissue{6632}.
+\ghissue{6775} retains the source-context factorization. The proof of
+Proposition~\texttt{prop2to5} first projects into each local subspace labelled
+by $j$ and then follows Proposition~\texttt{3to5} for that representative;
+this outer-sector combination is formalized in \ghissue{6632}. The direct
+sector-mixing problem
+formerly tracked in \ghissue{6793} is a project-derived alternative rather
+than a second missing source assertion.
 
 \section{Affected declarations}
 
