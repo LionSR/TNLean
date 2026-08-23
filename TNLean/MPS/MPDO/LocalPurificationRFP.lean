@@ -737,8 +737,9 @@ theorem exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL :
     nilpotentGlobalPRFP_not_isSourceZCL⟩
 
 /-- The positive-length global purification-RFP condition does not imply the
-literal zero-correlation-length equation printed in arXiv:1606.00608, Theorem
-4.4, lines 777--784, even for an MPDO with nonzero physical-trace transfer; see
+literal zero-correlation-length equation of arXiv:1606.00608, Definition 4.2,
+lines 735--739, contrary to the implication printed in Theorem 4.4, lines
+777--784, even for an MPDO with nonzero physical-trace transfer; see
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 theorem exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent :
     ∃ M : MPOTensor 1 3,
