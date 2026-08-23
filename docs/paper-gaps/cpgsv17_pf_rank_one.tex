@@ -1081,6 +1081,18 @@ tensors.  The orientation is the convention of
 \leanid{MPOTensor.PhysicalSectorFactorization}, rather than an identification
 with a separately drawn graphical orientation in the source.
 
+A second boundary specialization is complete without normality. For virtual
+bond dimension one,
+\leanid{MPOTensor.exists_physicalSectorFactorization_of_bondDim_one}
+constructs one physical sector with left factor $\mathbb C^d$ and
+one-dimensional right factor. Its neighboring operator is the one-site
+periodic operator, hence is positive semidefinite by SAL. The physical-trace
+transfer is a nonzero scalar by SAL and equals one by literal idempotence, so
+the neighboring trace has the normalized factorization $1=1\cdot1$. This is a
+conditional helper at the bond-one boundary. It does not derive the
+factorization for absorbed representatives of arbitrary virtual dimension,
+so \ghissue{6775} and its unrestricted Blueprint node remain open.
+
 This one-factorization result is a \emph{conditional helper}. It assumes a
 neighboring trace factorization of the whole tensor to which the channels are
 applied. Condition~(iv) instead supplies a separate physical factorization for
