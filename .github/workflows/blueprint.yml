@@ -12,8 +12,6 @@ on:
       - 'blueprint/src/**'
       - 'docs/paper-gaps/**'
       - 'texra-blueprint.toml'
-      - 'scripts/package-paper-gaps.sh'
-      - 'scripts/build-paper-gaps.sh'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
       # on merge pushes that only touch a scanned file.

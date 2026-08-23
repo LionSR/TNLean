@@ -63,7 +63,7 @@ jobs:
         run: python3 scripts/blueprint_bibtex.py
 
       - name: Build paper-gap PDFs
-        run: bash scripts/build-paper-gaps.sh
+        run: texra-blueprint --root . paper-gaps build
 
       - name: Build blueprint
         working-directory: blueprint
@@ -114,7 +114,7 @@ jobs:
             cp blueprint/print/print12.pdf site-blueprint/blueprint-ch01-12.pdf
           fi
           cp -r docbuild/.lake/build/doc site-docs/docs
-          ./scripts/package-paper-gaps.sh site-docs/paper-gaps
+          texra-blueprint --root . paper-gaps site site-docs/paper-gaps
           python3 scripts/write_badges.py site-badges
 
       # Runs in Docker and produces root-owned output; keep it after the

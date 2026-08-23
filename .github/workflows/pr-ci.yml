@@ -96,8 +96,6 @@ on:
       - 'docs/paper-gaps/**/*.tex'
       - 'docs/paper-gaps/**/*.bib'
       - 'texra-blueprint.toml'
-      - 'scripts/package-paper-gaps.sh'
-      - 'scripts/build-paper-gaps.sh'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
       # on PRs that only touch a scanned file.
@@ -275,8 +273,6 @@ jobs:
               - 'blueprint/comments/**'
               - 'docs/**/*.md'
               - 'texra-blueprint.toml'
-              - 'scripts/package-paper-gaps.sh'
-              - 'scripts/build-paper-gaps.sh'
             corpus:
               - 'tex/tenkz/**'
               - 'tests/tenkz/**'
