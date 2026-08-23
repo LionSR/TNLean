@@ -9563,7 +9563,7 @@ $\omega^{-1}$.
         \Delta\subseteq
         \widehat{\operatorname{Hull}_L(\Delta)}_L.
     \end{align}
-    Moreover, $\Delta\subseteq\Theta$ implies
+    If $\Delta\subseteq\Theta$, then
     $\operatorname{Hull}_L(\Delta)\subseteq
     \operatorname{Hull}_L(\Theta)$.
 \end{lemma}
@@ -9594,10 +9594,25 @@ $\omega^{-1}$.
 \begin{proof}\leanok
     \uses{thm:qca_local_blocking_formulas,
         thm:qca_configuration_blocking_formulas}
-    Restriction of decoded configurations commutes with blocking.  Equality on
-    the complementary blocked sites is equivalent to equality on all original
-    sites in $\widehat\Gamma_L\setminus\widehat\Lambda_L$.  Substitution into
-    the matrix-entry formula for the canonical inclusion proves the square.
+    For configurations $x,y$ on $\widehat\Gamma_L$, let $\widetilde x$ and
+    $\widetilde y$ be their block encodings on $\Gamma$.  The two matrix
+    entries in the commuting square are
+    \begin{align}
+        \bigl[\mathcal B_{L,\Gamma}
+          (\iota_{\Lambda,\Gamma}(A))\bigr]_{x,y}
+        &=A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
+          \mathbf 1_{\{\widetilde x|_{\Gamma\setminus\Lambda}
+                         =\widetilde y|_{\Gamma\setminus\Lambda}\}},\\
+        \bigl[\iota_{\widehat\Lambda_L,\widehat\Gamma_L}
+          (\mathcal B_{L,\Lambda}(A))\bigr]_{x,y}
+        &=A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
+          \mathbf 1_{\{x|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}
+                         =y|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}\}}.
+    \end{align}
+    Restriction commutes with block encoding, and decoding identifies
+    $\Gamma\setminus\Lambda$ with the original sites in
+    $\widehat\Gamma_L\setminus\widehat\Lambda_L$.  Hence the two indicator
+    conditions are equivalent and the entries agree.
 \end{proof}
 
 \begin{definition}[Forward and reverse algebraic-local blocking maps]
@@ -9605,8 +9620,8 @@ $\omega^{-1}$.
     \lean{SpinChain.algebraicLocalBlockingHom,
         SpinChain.algebraicLocalUnblockingHom}
     \leanok
-    \uses{def:qca_algebraic_local_algebra, lem:qca_block_hull_properties,
-        lem:qca_local_blocking_inclusion}
+    \uses{def:qca_algebraic_local_algebra, def:qca_local_blocking,
+        def:qca_block_hull}
     Let $L>0$.  The compatible finite blocking maps induce a star-algebra
     homomorphism
     \begin{align}
@@ -9623,6 +9638,31 @@ $\omega^{-1}$.
     blocking is inverted.  Thus the reverse construction does not require
     $\Delta$ itself to be an expanded region.
 \end{definition}
+
+\begin{proof}\leanok
+    \uses{lem:qca_block_hull_properties,
+        lem:qca_local_blocking_inclusion,
+        thm:qca_algebraic_local_algebra_universal}
+    For $\Lambda\subseteq\Gamma$, the finite commuting square gives
+    \begin{align}
+        \iota_{\widehat\Gamma_L}
+          \mathcal B_{L,\Gamma}(\iota_{\Lambda,\Gamma}(A))
+        &=\iota_{\widehat\Lambda_L}\mathcal B_{L,\Lambda}(A),
+    \end{align}
+    so the forward finite-region maps form a compatible family.  For the
+    reverse family, block-hull monotonicity sends $\Delta\subseteq\Theta$ to
+    $\operatorname{Hull}_L(\Delta)\subseteq
+    \operatorname{Hull}_L(\Theta)$.  Transitivity of the canonical inclusions
+    and the inverse commuting square then give
+    \begin{align}
+        \iota_{\operatorname{Hull}_L(\Theta)}
+          \mathcal U_{L,\Theta}(\iota_{\Delta,\Theta}(A))
+        &=\iota_{\operatorname{Hull}_L(\Delta)}
+          \mathcal U_{L,\Delta}(A).
+    \end{align}
+    The universal property of the algebraic direct limit therefore induces
+    both star-algebra homomorphisms.
+\end{proof}
 
 \begin{lemma}[Evaluation of the algebraic-local blocking maps]
     \label{lem:qca_algebraic_blocking_maps_evaluation}
@@ -9665,8 +9705,7 @@ $\omega^{-1}$.
     \label{def:qca_algebraic_blocking}
     \lean{SpinChain.algebraicLocalBlocking}
     \leanok
-    \uses{def:qca_algebraic_blocking_maps,
-        lem:qca_algebraic_blocking_maps_evaluation}
+    \uses{def:qca_algebraic_blocking_maps}
     For $d>0$ and $L>0$, forward blocking gives a star-algebra equivalence
     \begin{align}
         \mathcal A_{\mathrm{loc}}^{(d^L)}
@@ -9678,6 +9717,22 @@ $\omega^{-1}$.
     completion, intertwine translations, provide a propagation estimate or a
     circuit representation, or transport a quantum cellular automaton.
 \end{definition}
+
+\begin{proof}\leanok
+    \uses{lem:qca_algebraic_blocking_maps_evaluation,
+        thm:qca_local_observable_finite_support,
+        lem:qca_local_blocking_inclusion}
+    The identity $\mathcal B_L\mathcal U_L=\operatorname{id}$ makes
+    $\mathcal B_L$ surjective.  For injectivity, represent two blocked
+    observables on finite regions $\Lambda$ and $\Gamma$, enlarge both to
+    $\Omega=\Lambda\cup\Gamma$, and suppose their images under
+    $\mathcal B_L$ agree.  Injectivity of the canonical map from the finite
+    algebra on $\widehat\Omega_L$, followed by injectivity of
+    $\mathcal B_{L,\Omega}$ and the finite commuting square, gives equality of
+    the two representatives in the algebra on $\Omega$.  Thus
+    $\mathcal B_L$ is bijective, with inverse $\mathcal U_L$, and defines the
+    stated star-algebra equivalence.
+\end{proof}
 
 \begin{lemma}[Algebraic-local blocking formulas and norm]
     \label{lem:qca_algebraic_blocking_formulas}
@@ -9697,11 +9752,9 @@ $\omega^{-1}$.
     \uses{lem:qca_algebraic_blocking_maps_evaluation,
         thm:qca_local_blocking_formulas,
         def:qca_algebraic_local_operator_norm}
-    The reverse block-hull construction is a right inverse of forward blocking,
-    while injectivity follows after enlarging two blocked representatives to
-    the union of their finite supports and using the finite commuting square.
-    This gives the star-algebra equivalence.  On a finite representative, norm
-    preservation reduces to norm preservation by finite blocking and by the
-    canonical local inclusion; distance preservation follows by applying the
-    norm identity to differences.
+    The finite-representative formula is the defining formula for the forward
+    blocking homomorphism.  On such a representative, norm preservation
+    reduces to norm preservation by finite blocking and by the canonical local
+    inclusion; distance preservation follows by applying the norm identity to
+    differences.
 \end{proof}
