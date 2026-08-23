@@ -54,7 +54,7 @@ The source has four repeated names, each occurring twice:
 |---|---:|---|
 | `thm1` | 350, 1168 | Theorem 2.10 and its Appendix A restatement |
 | `II_cor2` | 355, 1173 | Corollary 2.11 and its Appendix A restatement |
-| `eq:II_auxcor` | 358, 1176 | The global conjugacy equation and its Appendix A restatement both inherit Corollary 2.11's not-ready inactive-block boundary |
+| `eq:II_auxcor` | 358, 1176 | The global conjugacy equation and its Appendix A restatement both carry Corollary 2.11's nonzero-coefficient local correction |
 | `eq1:proof.IV.12` | 1838, 1882 | Accidental duplicate: the first occurrence inherits Lemma C.16's complete insertion status, while the second inherits Proposition 4.13's complete rectangular-coisometry status |
 
 Definitions, equations, and figures outside theorem statements and proofs may
@@ -129,19 +129,19 @@ the printed statement.
 
 | Source result | Literal-source Blueprint node | Corrected or partial formal coverage |
 |---|---|---|
-| Proposition 2.7 | `thm:cpsv_prop27_printed_status` | `thm:cpsv_bnt_characterization` |
-| Theorem 2.10 | `thm:cpsv_theorem210_printed_status` | `thm:cpgsv_multiblock_ft_source` |
-| Corollary 2.11 | `cor:cpsv_corollary211_printed_status` | `thm:cpgsv_equal_case_source` |
+| Proposition 2.7 | none since the nonzero-coefficient convention; anchor on `thm:cpsv_bnt_characterization` | `thm:cpsv_bnt_characterization` |
+| Theorem 2.10 | none since the nonzero-coefficient convention; anchor on `thm:cpgsv_multiblock_ft_source` | `thm:cpgsv_multiblock_ft_source` |
+| Corollary 2.11 | none since the nonzero-coefficient convention; anchor on `thm:cpgsv_equal_case_source` | `thm:cpgsv_equal_case_source` |
 | Theorem 3.8 | `thm:cpsv_theorem_zcl_pure_status` | positive-gap and multiplicity-one results in Chapter 26 |
 | Theorem 3.10 | `thm:cpsv_main_mps_status` | corrected representative-level implications in Chapters 26 and 13 |
 | Theorem 3.11 | `thm:cpsv_charact_mps_status` | one-copy and direct-sum structural results in Chapter 26 |
-| Corollary 3.12 | `cor:cpsv_iii_cor3_status` | active phase-class residual-isometry results in Chapter 26 |
+| Corollary 3.12 | none since the nonzero-coefficient convention; anchor on `thm:cpsv_phase_class_residual_isometries` | phase-class residual-isometry results in Chapter 26 |
 | Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | local purification equivalences and global counterexamples in Chapter 21 |
 | Proposition 4.5 | `thm:cpsv_prop45_printed_status` | monotonicity and finite-chain bounds; parity counterexample to the limit |
 | Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; literal (iv)$\Rightarrow$(v) refuted by the exact repeated-copy capstone; the two preserved not-ready nodes record the viable source (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) routes |
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
-| Lemma A.5 | `lem:cpsv_power_sum_printed_status` | `thm:bounded_power_sum_multiset` |
-| Corollary A.6 | `cor:cpsv_corollary_a6_printed_status` | active nonzero unitary refinements in Chapter 11 |
+| Lemma A.5 | none since the nonzero-coefficient convention; anchor on `thm:bounded_power_sum_multiset` | `thm:bounded_power_sum_multiset` |
+| Corollary A.6 | none since the nonzero-coefficient convention; anchor on `cor:sector_bnt_proportional_unitary_sector_match` | unitary refinements in Chapter 11 |
 | Proposition C.14 | `thm:cpsv_prop_c14_printed_status` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
 | Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Examples 4.10 and 4.11: issues #6301 and #6302; Example 4.12: literal normalization obstruction, normalized channel equations, strict four-site SSA defect, and full GSNNCH exclusion complete; line-246 unit-weight boundary recorded |
 | Appendix D `RFP-gauge` | `thm:cpsv_rfp_gauge_printed_status` | cube-phase obstruction plus active issue #5920 |
@@ -164,11 +164,13 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
 
 ## Semantic boundaries retained
 
-- A zero-weight canonical-form block is invisible to all positive-length MPVs.
-  It obstructs the literal statements of Proposition 2.7, Theorem 2.10,
-  Corollary 2.11, and Corollary A.6.
-- Positive power sums do not detect zero entries.  Lemma A.5 requires a
-  nonzero-entry hypothesis, exponent-zero data, or a conclusion modulo zeros.
+- A zero-coefficient canonical-form block is invisible to all positive-length
+  MPVs.  The formalization reads the source's line-246 normalization as the
+  standing convention that every canonical-form coefficient is nonzero, so
+  Proposition 2.7, Theorem 2.10, Corollary 2.11, Lemma A.5, and Corollary A.6
+  are stated directly under that convention; the separate printed-status
+  nodes that recorded the zero-coefficient reading were removed
+  (`docs/audits/2026-08-23_nonzero_coefficient_convention.md`).
 - Theorem 3.8 and Theorem 3.10 retain the raw-weight and adjacent-region
   counterexamples.  Corrected positive-gap results are not classified as
   literal source coverage.

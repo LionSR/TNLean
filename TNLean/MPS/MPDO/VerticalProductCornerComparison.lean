@@ -698,10 +698,6 @@ theorem FlatBlockedBNTComparison.reference_compression
 
 /-- The active-to-blocked BNT comparisons can be chosen simultaneously.
 
-**Scope restriction (active product BNT):** The chosen label map need not be
-surjective.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 **Local fix (Figure-11 fixed-pair support):** Unused blocked labels are left
 for empty multiplicity fibers.  Documented in
 `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.

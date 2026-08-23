@@ -40,10 +40,6 @@ and renormalization fixed-point hypotheses.
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
 lines 1929--2046 of `Papers/1606.00608/MPDO-22-12-17-2.tex`.
 
-**Scope restriction (active product BNT):** Only nonzero product corners occur;
-an absent output sector has zero multiplicity. See
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 **Local fix (Figure-11 fixed-pair support):** For a fixed input pair, the active
 output family may be empty. See
 `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
@@ -71,10 +67,6 @@ decomposition on every chain of length `N + 2`.
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, Theorem 4.15,
 lines 1013--1016, and Appendix C.4, lines 1929--2046 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (active product BNT):** Only nonzero product corners occur;
-an absent output sector has zero multiplicity. See
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 **Local fix (Figure-11 fixed-pair support):** For a fixed input pair, the active
 output family may be empty. See

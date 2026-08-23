@@ -84,6 +84,32 @@ is deliberately source-faithful.
   eventual block injectivity does not recover spectral-radius-one normalization
   or peripheral-spectrum data. Do not treat the predicates as aliases.
 
+### `MPSTensor.IsBNTSectorPresentation`
+
+- **Declaration:** `MPSTensor.IsBNTSectorPresentation A P : Prop` for a
+  sector decomposition `P`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/BNTRefinement.lean`.
+- **Meaning:** `P` presents `A` by a basis of normal tensors grouped into
+  phase classes with copy weights: at least one representative occurs, the
+  presentation has the same positive-length matrix-product vectors as `A`,
+  every representative is a normal tensor, and the representative families are
+  eventually linearly independent. Copy weights are nonzero and multiplicities
+  are positive by construction of the sector decomposition, in line with the
+  nonzero-coefficient convention of
+  `docs/audits/2026-08-23_nonzero_coefficient_convention.md`.
+- **Sources:** arXiv:1606.00608, lines 217--246 (canonical-form convention),
+  eq. `II_CF1`, lines 265--301, and lines 1135--1148.
+- **Sanctioned bridges:**
+  `MPSTensor.IsBNTSectorPresentation.isCPSVBasisOfNormalTensors` forgets the
+  grouping to the literal Definition 2.4 interface; every canonical-form datum
+  with at least one block yields a presentation through
+  `MPSTensor.CPSVCanonicalFormData.isBNTSectorPresentation`, and presentations
+  of the same tensor agree up to permutation, dimension identification, gauge,
+  and phase through `MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`.
+- **Caveat:** this is the grouped presentation used by the sector fundamental
+  theorem and the MPDO simplicity predicate, not a second BNT definition; the
+  literal interface remains `MPSTensor.IsCPSVBasisOfNormalTensors`.
+
 ## Periodic irreducible blocks
 
 ### `MPSTensor.IsSpectrallyPeriodic`
@@ -502,31 +528,29 @@ model different levels of data and different sources.
   scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
 - `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
-  is the normalization-free predicate for the documented active
-  canonical-block reading of lines 217--246 and Definition 4.7 at lines
-  815--822 of arXiv:1606.00608. It existentially chooses a positive physical
-  blocking whose doubled-index tensor has an active sector presentation by a
-  basis of normal tensors with nonnilpotent physical-trace transfers. Every
-  representative has a positive number of copies and every copy has nonzero
-  weight, so dormant candidates are absent. This active qualification corrects
-  the false unrestricted BNT uniqueness claim; see
-  `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. The theorem
+  is the normalization-free predicate for the canonical-block reading of lines
+  217--246 and Definition 4.7 at lines 815--822 of arXiv:1606.00608. It
+  existentially chooses a positive physical blocking whose doubled-index tensor
+  has a BNT sector presentation (nonzero copy weights, positive multiplicities
+  by definition) by a basis of normal tensors with nonnilpotent physical-trace
+  transfers; see `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+  for the nonzero-coefficient convention. The theorem
   `MPOTensor.IsSourceSimple.exists_mpo_ne_zero` derives a nonzero closed MPO at
-  some positive length from the active presentation; this is not an additional
-  defining assumption. Nonnilpotency is independent of the chosen active
-  presentation by `MPOTensor.activeBNT_basis_not_isNilpotent_iff`.
+  some positive length from the presentation; this is not an additional
+  defining assumption. Nonnilpotency is independent of the chosen
+  presentation by `MPOTensor.bnt_basis_not_isNilpotent_iff`.
 - `MPOTensor.IsNonvanishingSourceSimple` strengthens source simplicity by
   requiring $\rho_N(M)\ne0$ for every $N>0$. Normalized simplicity implies
   source simplicity unconditionally through
   `MPOTensor.IsSimple.isSourceSimple`: the normalized sector decomposition is
-  itself an active presentation after canonical-form gauge transport. The
+  itself a BNT sector presentation after canonical-form gauge transport. The
   implication to the strengthened predicate,
   `MPOTensor.IsSimple.isNonvanishingSourceSimple`, assumes positive-length
   nonvanishing. The sign-flip tensor in
   `TNLean/MPS/MPDO/SimpleVanishingCounterexample.lean` satisfies
   $\rho_N(M)=(1+(-1)^N)I$. It is normalized-simple and source-simple, but it is
   not nonvanishing source-simple because $\rho_1(M)=0$. This does not refute
-  the documented active canonical-block reading of Definition 4.7 and is not
+  the canonical-block reading of Definition 4.7 and is not
   an RFP or BNT-coefficient-rigidity claim.
 - Scalar rescaling of a closed length-$N$ MPO obeys
   $\rho_N(cM)=c^N\rho_N(M)$ by `MPOTensor.mpo_smul`, not a

@@ -28,12 +28,9 @@ generating the same matrix product vectors.
 \section{The formal support issue}
 The literal CPSV canonical-form data used in the formalization permits a
 coisometric embedding of the retained direct sum into a larger ambient bond
-space.  It also permits displayed blocks with zero weight.  These choices are
-useful for exact reconstruction.  The paper's literal canonical-form definition
-also permits zero-weight displayed blocks, so canonical-form membership alone
-does not discard these coordinates.  The proof of the proposition is correct
-for the intended reduced representative in which zero-weight blocks and any
-ambient zero complement have been omitted, but the source does not state this
+space.  This choice is useful for exact reconstruction.  The proof of the
+proposition is correct for the intended reduced representative in which the
+ambient zero complement has been omitted, but the source does not state this
 reduction as a separate step and the formalization does not yet construct it.
 
 This distinction is necessary.  Starting with any MPU representative, adjoin a
@@ -46,9 +43,9 @@ irreducible and therefore is not normal.  Thus the bare assertion
 
 The formal support condition is
 \begin{align}
-  \sum_{k:\,\mu_k\ne 0} D_k = D,
+  \sum_{k} D_k = D,
 \end{align}
-where $D$ is the ambient bond dimension.  If there is exactly one active block,
+where $D$ is the ambient bond dimension.  If there is exactly one block,
 this equality says that the block itself has dimension $D$.  Positivity of all
 retained block dimensions and the total-dimension bound then show that no
 other retained block exists.  The ambient coisometry is square and hence
@@ -61,9 +58,9 @@ dimension $D$, and let $E$ be the transfer matrix of the normalized tensor
 $d^{-1/2}\mathcal U$. After the normal-tensor proposition, the source assumes
 without loss of generality that this normalized tensor is in canonical form II
 \cite[discussion following Proposition~III.1]{Cirac2017MPU}. Choose such data
-with full active support.
+with full support.
 % Source lines: paper_v2.tex 350--356.
-Let $\mathcal A_1$ be its unique active block, let $V$ be the inclusion
+Let $\mathcal A_1$ be its unique block, let $V$ be the inclusion
 of that block into the ambient bond space, and let $\Lambda$ be the block's
 diagonal positive right fixed point normalized to have trace one. Set
 \begin{align}
@@ -102,7 +99,7 @@ The inverse square root only requires the compressed metric
 $V_1W_\rho V_1^\dagger$ to be positive definite; it does not by itself force
 $\rho$ to be positive definite on the ambient bond space. The current TNLean
 source-factor construction assumes ambient positive definiteness, and full
-active support supplies that stronger hypothesis
+support supplies that stronger hypothesis
 \cite[Section~III, source-factor construction]{Cirac2017MPU}. The same factors
 define $u$ and $v$ in Lemma~III.7 and Theorem~III.8.
 % Source lines: paper_v2.tex 479--505 and 532--601.
@@ -121,12 +118,12 @@ bond-dimension branches. If $D=1$, the theorem
 If $D>1$, the route assumes
 \begin{align}
   \mathcal C&\in\operatorname{CFII}(d^{-1/2}\mathcal U),\\
-  \sum_{k:\,\mu_k\ne0}D_k&=D.
+  \sum_{k}D_k&=D.
 \end{align}
 Here $\mathcal C$ denotes the chosen canonical-form-II data, and the second
-identity is full active support. The theorem
+identity is full support. The theorem
 \leanid{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
-then supplies the unique active block $\mathcal A_1$, the matrices $\Lambda$
+then supplies the unique block $\mathcal A_1$, the matrices $\Lambda$
 and $\rho$, and the identities
 \begin{align}
   \rho&=V\Lambda V^\dagger,\\
@@ -139,7 +136,7 @@ and $\rho$, and the identities
 In both branches, the positive trace-one matrix $\rho$ is the source weight
 used to define the factors and the operators $u$ and $v$.
 
-The explicit reduced-CFII and full-active-support hypotheses resolve the
+The explicit reduced-CFII and full-support hypotheses resolve the
 ambient-positivity question tracked by issue~\#5855. They do not prove the two
 complete network identities needed for Theorem~III.8. The source-$u$
 range-insertion equality remains tracked by issue~\#5982
@@ -148,7 +145,7 @@ tracked by issue~\#6071 \cite[proof of Theorem~III.8]{Cirac2017MPU}.
 % Source lines: paper_v2.tex 545--557 and 577--600.
 % Source equation labels: uUnitary and vUnitary.
 
-For $D>1$, reduced canonical-form-II data with full active support are assumed
+For $D>1$, reduced canonical-form-II data with full support are assumed
 for the same tensor $\mathcal U$ whose source cuts, ranks, and source operators
 occur in the two planned results. For $D=1$, the one-dimensional stabilization
 theorem supplies the source pair directly. In either case the datum provides
@@ -469,14 +466,14 @@ the independent proof obligations in issues~\#5982 and~\#6071.
 \section{Verdict}
 \textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
 the source-isometry lemma, and Theorem~III.8 concern
-the intended reduced canonical-form-II representative, with zero-weight blocks
-and the ambient zero complement omitted. This reduction is not an explicit
+the intended reduced canonical-form-II representative, with the ambient zero
+complement omitted. This reduction is not an explicit
 hypothesis of the normal-tensor proposition, and it does not follow from
 literal canonical-form membership alone.
 
 Consequently, a source-faithful formalization must construct this reduced
 representative and transport the source constructions, or explicitly assume
-chosen canonical-form-II data with full active support. The formalization uses
+chosen canonical-form-II data with full support. The formalization uses
 the latter option when $D>1$ and the direct one-dimensional stabilization when
 $D=1$. It does not yet construct the representative reduction in the
 higher-dimensional case. The original source labels therefore remain
@@ -492,9 +489,9 @@ ancillas, tensor products, composition, transformed comparison tensors, and
 continuous paths. Chapter~28 treats all of these as explicit admissibility
 hypotheses rather than consequences of the MPU predicate.
 The full-support irreducibility implication is formalized by
-\leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport}.
+\leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}.
 The spectral-radius and primitivity conclusions are derived from the shifted
-normalized transfer traces and combined with full active support in
+normalized transfer traces and combined with full support in
 \leanid{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}.
 Bare \leanid{MPOTensor.IsMPU} is deliberately not used to infer ambient
 normality or an ambient positive definite fixed point.

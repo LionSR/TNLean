@@ -7,149 +7,98 @@
 
 \input{./command}
 
-\title{BNT Uniqueness and Zero Coefficients in CPSV16}
+\title{The Nonzero-Coefficient Convention for CPSV16 Canonical Forms}
 \author{}
-\date{2026-07-18}
+\date{2026-08-23}
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{resolved}
+\gapnote{local-correction}{resolved}
 
-\section{The source claim}
+\section{The convention}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define a basis of normal tensors
-for a tensor $A$ to be a finite family of normal tensors $(A_j)_{j=1}^g$ such
-that, at each positive length, $V^{(N)}(A)$ is a linear combination of the
-$V^{(N)}(A_j)$, and these vectors are linearly independent for all sufficiently
-large $N$ \cite[lines 271--274]{Cirac2016MPDO_arXiv}. Proposition~2.7
-characterizes such a family by coverage of the normal blocks of a canonical
-form and pairwise distinction up to a phase and an invertible gauge
-\cite[lines 278--280 and 1135--1146]{Cirac2016MPDO_arXiv}.
-
-Immediately afterwards, the source asserts that any two bases of normal
-tensors corresponding to the same canonical form coincide up to phases and
-gauge transformations \cite[line 1148]{Cirac2016MPDO_arXiv}. Read literally,
-this would in particular imply equality of the two cardinalities.
-
-\section{A two-symbol counterexample}
-
-Let the physical alphabet be $\{0,1\}$ and let the bond dimension be one.
-Define two tensors by
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete construct the canonical form by
+listing the invariant blocks of the completely positive map and normalizing
+each block separately \cite[lines 214--225]{Cirac2016MPDO_arXiv}. The blocks
+produced by the construction are therefore precisely the blocks which occur in
+the tensor. The displayed definition
+\cite[lines 238--244]{Cirac2016MPDO_arXiv},
 \begin{align}
-    A_0^0=1,\qquad A_0^1=0,
-    \qquad
-    A_1^0=0,\qquad A_1^1=1.
+    A^i=\bigoplus_{k=1}^r \mu_k A_k^i,
+    \tag{\path{eq:II_CF1}}
 \end{align}
-Both tensors are normal. Their transfer maps are the identity on the
-one-dimensional matrix algebra. Moreover,
-\begin{align}
-    V^{(N)}(A_0)&=|0\cdots0\rangle,
-    &V^{(N)}(A_1)&=|1\cdots1\rangle
-\end{align}
-for every $N\geq1$. These two vectors are orthogonal and hence linearly
-independent.
+does not repeat that every $\mu_k$ is nonzero, but the subsequent
+normalization $|\mu_k|\le1$ with at least one coefficient equal to one
+\cite[line 246]{Cirac2016MPDO_arXiv} presupposes it: a summand with
+coefficient zero contributes nothing to any positive-length matrix product
+vector and is not a block of the decomposition.
 
-The singleton family $(A_0)$ is therefore a basis of normal tensors for
-$A_0$. The two-element family $(A_0,A_1)$ is also a basis of normal tensors
-for $A_0$: take the coefficient of $A_0$ to be one and the coefficient of
-$A_1$ to be zero at every length. Both families correspond to the same
-one-block canonical-form display
-\begin{align}
-    V^{(N)}(A_0)=1^N V^{(N)}(A_0).
-\end{align}
-Their index sets have cardinalities one and two, so no bijection, and hence no
-bijective gauge-phase matching, can exist.
+The formalization reads the canonical form with every coefficient $\mu_k$
+nonzero. This is part of the definition of canonical-form data.\footnote{The
+field is \leanid{MPSTensor.CPSVCanonicalFormData.weights_ne_zero} in
+\doclink{TNLean/MPS/CanonicalForm/Definitions.lean}.} A basis of normal
+tensors in the sense of Definition~2.4 is then a family of normal tensors
+whose matrix product vectors span those of $A$ at every positive length and
+are eventually linearly independent; the blocks of a canonical form form
+such a basis after identifying gauge-phase-equivalent blocks, and every
+basis element occurs with nonzero coefficient.
 
-The formal counterexample records both bases of normal tensors and the
-cardinality obstruction explicitly.\footnote{The declaration is
-\leanid{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card} in
-\doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.}
+\section{Consequences}
 
-\section{Two restricted uniqueness statements}
+Under this convention the following source statements are formalized as
+stated, each against the blueprint node named.
 
-The obstruction is the identically zero coefficient. Coverage of the
-canonical-form blocks with nonzero coefficients gives a map from their
-gauge-phase classes into the candidate family. Pairwise distinction makes this
-map injective, but neither the literal definition nor Proposition~2.7 rules out
-a candidate that represents no such block. Thus the map need not be
-surjective.
+\begin{itemize}
+    \item Proposition~2.7 \cite[lines 278--280 and 1135--1146]
+          {Cirac2016MPDO_arXiv}: a family is a basis of normal tensors for a
+          canonical form if and only if every representative is normal, every
+          block is gauge-phase equivalent to a representative, and distinct
+          representatives are not gauge-phase equivalent. Blueprint
+          \path{thm:cpsv_bnt_characterization}.\footnote{Formal declaration:
+          \leanid{MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal}.}
+    \item The uniqueness sentence at \cite[line 1148]{Cirac2016MPDO_arXiv}:
+          two bases of normal tensors of the same positive-length matrix
+          product vector family have a bijective gauge-phase matching, proved
+          by applying Proposition~2.7 in both directions. It is formalized
+          for basis-of-normal-tensors sector presentations, in which every
+          basis element carries a nonzero coefficient. Blueprint
+          \path{thm:cpsv_bnt_presentation_uniqueness}.\footnote{Formal
+          declaration:
+          \leanid{MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos}.}
+          The literal Definition-2.4 family predicate\footnote{Formal
+          declaration: \leanid{MPSTensor.IsCPSVBasisOfNormalTensors}.} is
+          retained as an interface and carries no uniqueness claim: for a
+          one-block tensor $A_0$ with coefficient $1$, both $(A_0)$ and
+          $(A_0,A_1)$ satisfy the family predicate, the second by assigning
+          $A_1$ the coefficient zero at every length. That second family is
+          exactly a zero-coefficient member, which the convention excludes
+          from every basis presentation, so it is not a counterexample to
+          the formalized uniqueness statement.
+    \item Theorem~2.10, Corollary~2.11, and Corollary~A.6
+          \cite[lines 349--361 and 1167--1199]{Cirac2016MPDO_arXiv}: the
+          proportional and equal fundamental theorems and their unitary
+          refinements. Blueprint \path{thm:cpgsv_multiblock_ft_source},
+          \path{thm:cpgsv_equal_case_source},
+          \path{cor:sector_bnt_proportional_unitary_sector_match}, and
+          \path{cor:sector_bnt_equal_unitary_global_gauge}.
+    \item Lemma~A.5 \cite[lines 1155--1163]{Cirac2016MPDO_arXiv}: equal
+          finite-range power sums of nonzero lists give equal lengths and
+          equal multisets; it is applied to the nonzero coefficients of a
+          canonical form. Blueprint \path{thm:bounded_power_sum_multiset}.
+    \item Corollary~3.12 \cite[lines 583--590]{Cirac2016MPDO_arXiv}: every
+          block of a canonical-form renormalization fixed point has
+          unit-modulus coefficient and idempotent transfer map, and the
+          phase-class representatives have a joint residual isometry.
+          Blueprint \path{thm:cpsv_weight_norm_one_and_block_rfp} and
+          \path{thm:cpsv_phase_class_residual_isometries}.
+\end{itemize}
 
-A valid uniqueness theorem may be obtained by adding the converse coverage
-condition: every candidate must be gauge-phase equivalent to an active block
-of the displayed canonical form. Under this condition, the coverage maps are
-bijections and their composition gives the desired matching. This is a
-mathematically correct scope restriction, but it is not part of the literal
-hypotheses at lines 271--280 or 1135--1148. Accordingly, the unrestricted
-line-1148 sentence is not marked as formalized.
-
-The converse-coverage restriction has been formalized: two such bases have
-equivalent index types, and the matched tensors have equal bond dimension and
-are related by an invertible gauge and a scalar of modulus one.\footnote{The
-declaration is
-\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.equiv_of_converse_coverage} in
-\doclink{TNLean/MPS/CanonicalForm/BNTUniqueness.lean}.} This restricted result
-does not alter the counterexample above or validate the unrestricted source
-sentence.
-
-For the documented active canonical-block reading of Definition~4.7, a second
-restricted statement is used. An active BNT sector presentation consists of a
-nonempty family of normal representatives such that every representative has a
-positive number of copies, every copy weight is nonzero, the representative MPV
-states are eventually linearly independent, and the weighted direct sum has the
-same positive-length MPV family as the tensor being represented. Every
-representative is therefore an actual nonzero canonical summand of this direct
-sum.
-
-Two active presentations of the same positive-length MPV family have a
-bijective gauge-phase matching. To prove this, apply
-\cite[Proposition~2.7]{Cirac2016MPDO_arXiv} to the nonzero-weight direct-sum
-tensor of the first presentation, using the representatives of the second as a
-BNT, and then interchange the two presentations. Eventual linear independence
-excludes gauge-phase-equivalent distinct representatives. The resulting
-injections between the two finite index sets give the desired bijection.
-
-This theorem is
-\leanid{MPSTensor.IsActiveCPSVBasisOfNormalTensors.equiv_of_sameMPV₂Pos} in
-\doclink{TNLean/MPS/CanonicalForm/ActiveBNTRefinement.lean}. It is the scope
-restriction used for presentation independence of Definition~4.7. It does not
-formalize the unrestricted sentence at line~1148, and it does not impose the
-unit-modulus normalization at line~246.
-
-\section{The active-only consequence for Figure 11}
-
-The same distinction applies to the Figure~11 decomposition in Appendix~C.4.
-For a fixed ordered pair $(\alpha,\beta)$, the source writes the active normal
-corners of the product tensor in the form
-\begin{equation}
-  U_{\alpha,\beta}(M_\alpha M_\beta)^iU_{\alpha,\beta}^\dagger
-  =\bigoplus_\gamma
-    \chi_{\alpha,\beta,\gamma}\otimes
-      Z_{\alpha,\beta,\gamma}M_\gamma^i
-        Z_{\alpha,\beta,\gamma}^{-1}
-  \label{eq:figure11-active-decomposition}
-\end{equation}
-\cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.  The index
-$\gamma$ in this display ranges over the normal sectors that occur with a
-nonzero multiplicity for the chosen pair.  BNT uniqueness does not imply that
-every candidate normal tensor occurs for every pair.
-
-In particular, the fiber of $\chi_{\alpha,\beta,\gamma}$ may be empty.  Such
-a fiber has no positive diagonal entry and contributes zero to every
-positive-length power sum.  If the whole product tensor $M_\alpha M_\beta$
-vanishes, all its $\chi$ fibers are empty and the right-hand side of
-\eqref{eq:figure11-active-decomposition} is the empty direct sum.  Adding an
-unrelated normal tensor with coefficient zero would again satisfy the weak
-spanning clause, but it would not turn that tensor into an active Figure~11
-corner.
-
-Thus the corresponding consequence of BNT comparison is active-only: every
-nonzero normal corner of a fixed product pair is gauge-phase equivalent to a
-normal sector $M_\gamma$, while absent sectors are omitted rather than
-represented by zero coefficients.  Equality of the global closed-chain sums
-over all $(\alpha,\beta)$ cannot strengthen this statement to nonempty support
-for each fixed pair.  The tensor-level reason and the treatment of zero pairs
-are recorded in
-\path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+Without the convention, a normal tensor with coefficient identically zero
+could be adjoined to any basis without changing a positive-length matrix
+product vector, and the cardinality conclusions of the uniqueness sentence,
+Theorem~2.10, and Lemma~A.5 would fail. The convention is the source's own
+reading, and it is recorded here so that the formal definition can be checked
+against the displayed one.
 
 \bibliographystyle{alpha}
 \bibliography{references}

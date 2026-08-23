@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBlocks
+import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction
@@ -11,9 +11,9 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction
 /-!
 # CPSV canonical forms as SectorBNT decompositions
 
-A normalized nonzero CPSV canonical form determines a SectorBNT decomposition of its active
-blocks. Each active normal block is first put into a trace-preserving gauge, after which the
-prepared-block constructor groups phase-equivalent copies into BNT sectors.
+A normalized nonzero CPSV canonical form determines a SectorBNT decomposition of its blocks.
+Each normal block is first put into a trace-preserving gauge, after which the prepared-block
+constructor groups phase-equivalent copies into BNT sectors.
 
 Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
 1135--1146.
@@ -129,104 +129,82 @@ private theorem inv_mul_conjTranspose_equivalenceCoisometry_eq
 
 namespace CPSVCanonicalFormData
 
-/-- A normalized nonzero CPSV canonical form has an exact active BNT reconstruction through
-a coisometry.
+/-- A normalized nonzero CPSV canonical form has an exact BNT reconstruction through a
+coisometry.
 
-The sector decomposition retains exactly the nonzero-weight displayed block dimensions. The
-matrix $U$ has orientation $U U^\dagger=1$, and the equality holds at every physical letter:
+The sector decomposition retains exactly the displayed block dimensions. The matrix $U$ has
+orientation $U U^\dagger=1$, and the equality holds at every physical letter:
 $$
 A^i=U^\dagger X P^i X^{-1}U.
 $$
-Zero-weight displayed blocks and unused ambient coordinates do not contribute to the retained
-bond dimension.
+Unused ambient coordinates do not contribute to the retained bond dimension.
 
 Source: arXiv:1606.00608, lines 214--301 and 1080--1148; arXiv:2011.12127,
 lines 1831--1885. -/
-theorem exists_active_isBNTCanonicalForm_exact
+theorem exists_isBNTCanonicalForm_exact
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
     ∃ P : SectorDecomposition d,
       IsBNTCanonicalForm P ∧
-      P.totalDim = ∑ k : data.Active, data.dim k.1 ∧
+      P.totalDim = ∑ k, data.dim k ∧
       ∃ U : Matrix (Fin P.totalDim) (Fin D) ℂ, U * Uᴴ = 1 ∧
         ∃ X : GL (Fin P.totalDim) ℂ,
           ∀ i, A i = Uᴴ *
             ((X : Matrix _ _ ℂ) * P.toTensor i *
               (↑(X⁻¹) : Matrix _ _ ℂ)) * U := by
   classical
-  have : ∀ k, NeZero (data.activeDim k) :=
-    fun k => ⟨(data.dim_pos (data.activeEquiv k)).ne'⟩
+  have : ∀ k, NeZero (data.dim k) :=
+    fun k => ⟨(data.dim_pos k).ne'⟩
   choose σ hσ hσfix hTP hGauge hPrim hIrr using
-    fun k => (data.blocks_normal (data.activeEquiv k)).exists_tpGauge
-  let prepared : (k : Fin (Fintype.card data.Active)) →
-      MPSTensor d (data.activeDim k) := fun k =>
-    tpGauge (data.blocks (data.activeEquiv k)) (σ k)
-  have hDim : ∀ k, 0 < data.activeDim k := by
-    intro k
-    exact data.dim_pos (data.activeEquiv k)
-  have hWeightNe : ∀ k, data.activeWeight k ≠ 0 := fun k => (data.activeEquiv k).property
-  have hWeightLe : ∀ k, ‖data.activeWeight k‖ ≤ 1 := by
-    intro k
-    exact hNorm.weight_norm_le_one (data.activeEquiv k)
-  have hWeightUnit : ∃ k, ‖data.activeWeight k‖ = 1 := by
-    obtain ⟨k, hk⟩ := hNorm.weight_unit_exists hA
-    have hkNe : data.weights k ≠ 0 := by
-      intro hkZero
-      simp [hkZero] at hk
-    let ka : data.Active := ⟨k, hkNe⟩
-    let l := data.activeEquiv.symm ka
-    refine ⟨l, ?_⟩
-    change ‖data.weights (data.activeEquiv l)‖ = 1
-    rw [show data.activeEquiv l = ka by simp [l]]
-    exact hk
+    fun k => (data.blocks_normal k).exists_tpGauge
+  let prepared : (k : Fin data.r) → MPSTensor d (data.dim k) := fun k =>
+    tpGauge (data.blocks k) (σ k)
   have hDirectGauge : GaugeEquiv
-      (toTensorFromBlocks (d := d) data.activeWeight data.activeBlocks)
-      (toTensorFromBlocks (d := d) data.activeWeight prepared) := by
+      (toTensorFromBlocks (d := d) data.weights data.blocks)
+      (toTensorFromBlocks (d := d) data.weights prepared) := by
     apply gaugeEquiv_toTensorFromBlocks_of_blockGauge
     intro k
-    simpa only [prepared, activeBlocks, activeDim] using hGauge k
+    exact hGauge k
   obtain ⟨Y, hY⟩ := hDirectGauge
-  obtain ⟨U, hU, hActive⟩ := data.exact_active_reconstruction
   obtain ⟨P, hBNT, hTotal, e, X, hExact⟩ :=
     exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
-      data.activeWeight prepared hDim hTP hPrim hIrr hWeightNe hWeightLe hWeightUnit
-  have hTotalActive : P.totalDim = ∑ k : data.Active, data.dim k.1 := by
-    rw [hTotal]
-    exact data.activeEquiv.sum_comp (fun k : data.Active => data.dim k.1)
-  let Q : Matrix (Fin P.totalDim) (Fin (∑ k, data.activeDim k)) ℂ :=
+      data.weights prepared data.dim_pos hTP hPrim hIrr data.weights_ne_zero
+      hNorm.weight_norm_le_one (hNorm.weight_unit_exists hA)
+  let Q : Matrix (Fin P.totalDim) (Fin (∑ k, data.dim k)) ℂ :=
     equivalenceCoisometry e
   let W := transportGL e Y
   let Z : GL (Fin P.totalDim) ℂ := W⁻¹ * X
-  let U' := Q * U
+  let U' := Q * data.ambient_coisometry
   have hQ : Q * Qᴴ = 1 := equivalenceCoisometry_mul_conjTranspose e
   have hU' : U' * U'ᴴ = 1 := by
     simp only [U', Matrix.conjTranspose_mul, Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc U Uᴴ, hU, Matrix.one_mul, hQ]
+    rw [← Matrix.mul_assoc data.ambient_coisometry data.ambient_coisometryᴴ,
+      data.coisometric, Matrix.one_mul, hQ]
   have hOriginal : ∀ i,
-      toTensorFromBlocks (d := d) data.activeWeight data.activeBlocks i =
+      toTensorFromBlocks (d := d) data.weights data.blocks i =
         Qᴴ * ((Z : Matrix _ _ ℂ) * P.toTensor i *
           (↑(Z⁻¹) : Matrix _ _ ℂ)) * Q := by
     intro i
     have hp := hExact i
     rw [reindex_eq_equivalenceCoisometry_conj] at hp
-    let Qh : Matrix (Fin (∑ k, data.activeDim k)) (Fin P.totalDim) ℂ := Qᴴ
+    let Qh : Matrix (Fin (∑ k, data.dim k)) (Fin P.totalDim) ℂ := Qᴴ
     have hLeft := inv_mul_conjTranspose_equivalenceCoisometry_eq e Y
     have hRight := equivalenceCoisometry_mul_eq_transportGL_mul e Y
     change (↑(Y⁻¹) : Matrix _ _ ℂ) * Qh =
       Qh * (↑(W⁻¹) : Matrix _ _ ℂ) at hLeft
     change Q * (Y : Matrix _ _ ℂ) = (W : Matrix _ _ ℂ) * Q at hRight
     calc
-      toTensorFromBlocks (d := d) data.activeWeight data.activeBlocks i =
+      toTensorFromBlocks (d := d) data.weights data.blocks i =
           (↑(Y⁻¹) : Matrix _ _ ℂ) *
             ((Y : Matrix _ _ ℂ) *
-              toTensorFromBlocks (d := d) data.activeWeight data.activeBlocks i *
+              toTensorFromBlocks (d := d) data.weights data.blocks i *
               (↑(Y⁻¹) : Matrix _ _ ℂ)) * (Y : Matrix _ _ ℂ) := by
             simp only [← Matrix.mul_assoc]
             rw [Units.inv_mul, Matrix.one_mul]
             rw [Matrix.mul_assoc, Units.inv_mul, Matrix.mul_one]
       _ = (↑(Y⁻¹) : Matrix _ _ ℂ) *
-            toTensorFromBlocks (d := d) data.activeWeight prepared i *
+            toTensorFromBlocks (d := d) data.weights prepared i *
             (Y : Matrix _ _ ℂ) := by rw [hY]
       _ = (↑(Y⁻¹) : Matrix _ _ ℂ) *
             (Qh * ((X : Matrix _ _ ℂ) * P.toTensor i *
@@ -237,28 +215,28 @@ theorem exists_active_isBNTCanonicalForm_exact
           let M : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ :=
             (X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)
           have hAssoc :
-              (↑(Y⁻¹) : Matrix (Fin (∑ k, data.activeDim k))
-                (Fin (∑ k, data.activeDim k)) ℂ) * (Qh * M * Q) *
-                (Y : Matrix (Fin (∑ k, data.activeDim k))
-                (Fin (∑ k, data.activeDim k)) ℂ) =
-                ((↑(Y⁻¹) : Matrix (Fin (∑ k, data.activeDim k))
-                (Fin (∑ k, data.activeDim k)) ℂ) * Qh) * M *
-                  (Q * (Y : Matrix (Fin (∑ k, data.activeDim k))
-                (Fin (∑ k, data.activeDim k)) ℂ)) := by
+              (↑(Y⁻¹) : Matrix (Fin (∑ k, data.dim k))
+                (Fin (∑ k, data.dim k)) ℂ) * (Qh * M * Q) *
+                (Y : Matrix (Fin (∑ k, data.dim k))
+                (Fin (∑ k, data.dim k)) ℂ) =
+                ((↑(Y⁻¹) : Matrix (Fin (∑ k, data.dim k))
+                (Fin (∑ k, data.dim k)) ℂ) * Qh) * M *
+                  (Q * (Y : Matrix (Fin (∑ k, data.dim k))
+                (Fin (∑ k, data.dim k)) ℂ)) := by
             simp only [Matrix.mul_assoc]
           have hMid :
-              ((↑(Y⁻¹) : Matrix (Fin (∑ k, data.activeDim k))
-                  (Fin (∑ k, data.activeDim k)) ℂ) * Qh) * M *
-                  (Q * (Y : Matrix (Fin (∑ k, data.activeDim k))
-                    (Fin (∑ k, data.activeDim k)) ℂ)) =
+              ((↑(Y⁻¹) : Matrix (Fin (∑ k, data.dim k))
+                  (Fin (∑ k, data.dim k)) ℂ) * Qh) * M *
+                  (Q * (Y : Matrix (Fin (∑ k, data.dim k))
+                    (Fin (∑ k, data.dim k)) ℂ)) =
                 (Qh * (↑(W⁻¹) : Matrix (Fin P.totalDim)
                   (Fin P.totalDim) ℂ)) * M *
                   ((W : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ) * Q) :=
             congrArg₂
-              (fun (L : Matrix (Fin (∑ k, data.activeDim k))
+              (fun (L : Matrix (Fin (∑ k, data.dim k))
                   (Fin P.totalDim) ℂ)
                 (R : Matrix (Fin P.totalDim)
-                  (Fin (∑ k, data.activeDim k)) ℂ) => L * M * R)
+                  (Fin (∑ k, data.dim k)) ℂ) => L * M * R)
               hLeft hRight
           change (↑(Y⁻¹) : Matrix _ _ ℂ) * (Qh * M * Q) *
               (Y : Matrix _ _ ℂ) = _
@@ -272,29 +250,28 @@ theorem exists_active_isBNTCanonicalForm_exact
               ((↑(X⁻¹) : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ) *
                 (W : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ))) * Q
           simp only [M, Matrix.mul_assoc]
-  refine ⟨P, hBNT, hTotalActive, U', hU', Z, ?_⟩
+  refine ⟨P, hBNT, hTotal, U', hU', Z, ?_⟩
   intro i
-  rw [hActive i, hOriginal i]
+  rw [data.reconstruct i, hOriginal i]
   simp only [U', Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 /-- A normalized nonzero CPSV canonical form has a SectorBNT decomposition whose total bond
-dimension is the sum of its active block dimensions.
+dimension is the sum of its block dimensions.
 
-The conclusion concerns only the active direct sum. Zero-weight displayed blocks and unused
-ambient coordinates do not contribute to this dimension.
+Unused ambient coordinates do not contribute to this dimension.
 
 Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
 1135--1146. -/
-theorem exists_active_isBNTCanonicalForm
+theorem exists_isBNTCanonicalForm
     (data : CPSVCanonicalFormData A)
     (hNorm : data.IsWeightNormalized)
     (hA : A ≠ 0) :
     ∃ P : SectorDecomposition d,
       IsBNTCanonicalForm P ∧
       SameMPV₂Pos A P.toTensor ∧
-      P.totalDim = ∑ k : data.Active, data.dim k.1 := by
+      P.totalDim = ∑ k, data.dim k := by
   obtain ⟨P, hBNT, hTotal, U, hU, X, hReconstruct⟩ :=
-    data.exists_active_isBNTCanonicalForm_exact hNorm hA
+    data.exists_isBNTCanonicalForm_exact hNorm hA
   let B : MPSTensor d P.totalDim := fun i =>
     (X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)
   have hCoisometry : SameMPV₂Pos A B :=

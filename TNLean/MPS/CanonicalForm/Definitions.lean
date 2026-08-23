@@ -196,6 +196,15 @@ structure CPSVCanonicalFormData (A : MPSTensor d D) where
   dim_pos : ∀ k, 0 < dim k
   /-- Scalar weight of each retained block (CPSV16, eq. `II_Aiplusk1`). -/
   weights : Fin r → ℂ
+  /-- Every retained weight is nonzero.  CPSV16, line 219, locates the degenerate case in
+  the block dimensions ("there can be zero blocks", i.e. `D_k = 0`), not in the weights;
+  lines 224--225 choose each `μ_k` so that the transfer map of `μ_k A_k` has spectral
+  radius one, which forces `μ_k ≠ 0` because a vanishing weight gives spectral radius
+  zero; line 246 then normalizes `‖μ_k‖ ≤ 1` with one weight of modulus one.
+
+  **Local fix (nonzero coefficients):** the formalization reads every listed weight as
+  nonzero; documented in `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
+  weights_ne_zero : ∀ k, weights k ≠ 0
   /-- Retained normal blocks (CPSV16, eq. `II_CF1`). -/
   blocks : (k : Fin r) → MPSTensor d (dim k)
   /-- Every retained block is normal (CPSV16, lines 233--245 and eq. `II_CF1`). -/
@@ -221,12 +230,6 @@ def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
 
 namespace CPSVCanonicalFormData
 
-/-- Indices of the displayed CPSV canonical-form blocks whose weights are nonzero.
-
-Source: arXiv:1606.00608, eq. `II_CF1` and Proposition 4.13, lines 1863--1898. -/
-abbrev Active {A : MPSTensor d D} (data : CPSVCanonicalFormData A) : Type :=
-  {k : Fin data.r // data.weights k ≠ 0}
-
 /-- The weighted direct sum of positive-dimensional normal blocks is in literal
 CPSV canonical form, with the retained coordinates equal to the ambient
 coordinates.
@@ -234,6 +237,7 @@ coordinates.
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
 noncomputable def ofBlocks {r : ℕ} {dim : Fin r → ℕ}
     (dim_pos : ∀ k, 0 < dim k) (weights : Fin r → ℂ)
+    (weights_ne_zero : ∀ k, weights k ≠ 0)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (blocks_normal : ∀ k, IsNormalTensor (blocks k)) :
     CPSVCanonicalFormData (toTensorFromBlocks (d := d) weights blocks) where
@@ -241,6 +245,7 @@ noncomputable def ofBlocks {r : ℕ} {dim : Fin r → ℕ}
   dim := dim
   dim_pos := dim_pos
   weights := weights
+  weights_ne_zero := weights_ne_zero
   blocks := blocks
   blocks_normal := blocks_normal
   total_dim_le := le_rfl
@@ -272,7 +277,7 @@ theorem mpv_eq_sum_weight_pow (data : CPSVCanonicalFormData A)
 
 /-- CPSV16 line 246's weight convention, separated from literal canonical-form
 membership.  The unit weight is required exactly when the ambient tensor is
-nonzero; no retained weight is required to be nonzero.
+nonzero.
 
 Source: arXiv:1606.00608, Section 2.3, line 246. -/
 structure IsWeightNormalized (data : CPSVCanonicalFormData A) : Prop where

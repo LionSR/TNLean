@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.Overlap.CastLemmas
@@ -11,12 +11,11 @@ import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Tactic.Basic
 
 /-!
-# Lemma L for active refinements of literal CPSV canonical form
+# Lemma L for BNT refinements of literal CPSV canonical form
 
-The nonzero listed blocks of a literal CPSV canonical form are grouped over chosen normal
+The listed blocks of a literal CPSV canonical form are grouped over chosen normal
 representatives.  A copy with raw weight `ν` and phase `ζ` contributes the representative
-weight `ν * ζ`.  Zero-weight listed blocks remain in the full grouped bond coordinates, but
-are omitted from the representative sector decomposition.
+weight `ν * ζ`.
 
 The positive-length and marked-trace identities below connect these two descriptions.  The
 representative-grouped versions of Lemma L then apply with no normalization assumptions.
@@ -27,10 +26,10 @@ Proposition 4.13, lines 1874--1887 and 1909--1919.
 
 open scoped Matrix BigOperators
 
-namespace MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
+namespace MPSTensor.CPSVCanonicalFormData.BNTRefinement
 
 variable {d D e : ℕ} {A : MPSTensor d D}
-variable {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement)
+variable {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement)
 
 /-- The source-native BNT predicate supplies eventual simultaneous word span for the chosen
 representatives.
@@ -50,47 +49,32 @@ private theorem trace_cast_mul_evalWord_cast
   subst m
   rfl
 
-/-- Full listed-coordinate marked blocks.  An active copy is the chosen representative mark
-scaled by its raw weight and phase; an inactive listed coordinate is the zero block. -/
+/-- Full listed-coordinate marked blocks: each copy is the chosen representative mark
+scaled by its raw weight and phase. -/
 noncomputable def groupedMarkedBlocks
-    (C : (j : Fin data.activePhaseClasses.g) →
-      MPSTensor e (data.dim (data.activeRepresentativeIndex j))) :
+    (C : (j : Fin data.phaseClasses.g) →
+      MPSTensor e (data.dim (data.representativeIndex j))) :
     (k : Fin data.r) → MPSTensor e (data.dim k) := fun k =>
-  if hk : data.weights k ≠ 0 then
-    let ka : data.Active := ⟨k, hk⟩
-    (data.weights k * ref.copyPhase ka) •
-      cast (congr_arg (MPSTensor e) (ref.copyDimEq ka))
-        (C (data.activeClassCopy ka).1)
-  else fun _ => 0
-
-/-- On an active listed coordinate, the marked block carries the raw weight and phase. -/
-@[simp] theorem groupedMarkedBlocks_active
-    (C : (j : Fin data.activePhaseClasses.g) →
-      MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
-    (k : data.Active) :
-    ref.groupedMarkedBlocks C k =
-      (data.weights k * ref.copyPhase k) •
-        cast (congr_arg (MPSTensor e) (ref.copyDimEq k))
-          (C (data.activeClassCopy k).1) := by
-  simp [groupedMarkedBlocks, k.property]
+  (data.weights k * ref.copyPhase k) •
+    cast (congr_arg (MPSTensor e) (ref.copyDimEq k))
+      (C (data.classCopy k).1)
 
 /-- The grouped marked tensor on all retained listed coordinates.
 
-Active marks carry the factor `ν * ζ`, including the phase at the marked site.  Inactive
-listed coordinates remain present as zero blocks.  Consequently a marked chain with tail
-length `L` has active-copy coefficient `(ν * ζ)^(L+1)`.
+Marks carry the factor `ν * ζ`, including the phase at the marked site.  Consequently a marked
+chain with tail length `L` has copy coefficient `(ν * ζ)^(L+1)`.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1835--1858 and the marked application at
 lines 1909--1919. -/
 noncomputable def groupedMarkedTensor
-    (C : (j : Fin data.activePhaseClasses.g) →
-      MPSTensor e (data.dim (data.activeRepresentativeIndex j))) :
+    (C : (j : Fin data.phaseClasses.g) →
+      MPSTensor e (data.dim (data.representativeIndex j))) :
     MPSTensor e (∑ k : Fin data.r, data.dim k) :=
   toTensorFromBlocks (d := e) (fun _ : Fin data.r => (1 : ℂ)) (ref.groupedMarkedBlocks C)
 
 private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
-    (C : (j : Fin data.activePhaseClasses.g) →
-      MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
+    (C : (j : Fin data.phaseClasses.g) →
+      MPSTensor e (data.dim (data.representativeIndex j)))
     (s : Fin e) (w : List (Fin d)) :
     Matrix.trace (ref.groupedMarkedTensor C s * Kraus.evalWord ref.groupedTensor w) =
       ∑ k : Fin data.r, Matrix.trace
@@ -117,16 +101,16 @@ private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
     Matrix.trace_blockDiagonal']
   simp only [one_smul, Algebra.mul_smul_comm, Matrix.trace_smul, smul_eq_mul]
 
-/-- Exact closed-chain trace identity from the full grouped marked tensor to the active
+/-- Exact closed-chain trace identity from the full grouped marked tensor to the
 representative sector marked tensor.
 
 The mark supplies one factor `ν * ζ` and each tail site supplies another, so a copy contributes
-`(ν * ζ)^(|w|+1)`.  Inactive listed coordinates contribute zero.
+`(ν * ζ)^(|w|+1)`.
 
 Source: arXiv:1606.00608, Appendix C.3, lines 1843--1858 and 1909--1919. -/
 theorem trace_groupedMarkedTensor_eq_representative_markedTensor
-    (C : (j : Fin data.activePhaseClasses.g) →
-      MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
+    (C : (j : Fin data.phaseClasses.g) →
+      MPSTensor e (data.dim (data.representativeIndex j)))
     (s : Fin e) (w : List (Fin d)) :
     Matrix.trace (ref.groupedMarkedTensor C s * Kraus.evalWord ref.groupedTensor w) =
       Matrix.trace
@@ -139,86 +123,75 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
   let f : Fin data.r → ℂ := fun k => Matrix.trace
     (ref.groupedMarkedBlocks C k s *
       (data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w))
-  have hInactive : ∑ k : data.Inactive, f k = 0 := by
-    apply Fintype.sum_eq_zero
-    intro k
-    simp [f, groupedMarkedBlocks, not_ne_iff.mp k.property]
-  have hSplit :=
-    Fintype.sum_subtype_add_sum_subtype (fun k : Fin data.r => data.weights k ≠ 0) f
-  have hActiveSum : (∑ k : Fin data.r, f k) = ∑ k : data.Active, f k := by
-    rw [hInactive, add_zero] at hSplit
-    exact hSplit.symm
   change (∑ k : Fin data.r, f k) =
-    ∑ j : Fin data.activePhaseClasses.g,
+    ∑ j : Fin data.phaseClasses.g,
       P.coeff (w.length + 1) j *
         Matrix.trace
-          (C j s * Kraus.evalWord (data.blocks (data.activeRepresentativeIndex j)) w)
-  rw [hActiveSum]
+          (C j s * Kraus.evalWord (data.blocks (data.representativeIndex j)) w)
   calc
-    (∑ k : data.Active, f k) =
-        ∑ jq : Σ j : Fin data.activePhaseClasses.g,
-          Fin (data.activePhaseClasses.copies j),
-          f (data.activeClassCopyEquiv jq) :=
-      (data.activeClassCopyEquiv.sum_comp (fun k : data.Active => f k)).symm
-    _ = ∑ j : Fin data.activePhaseClasses.g,
-        ∑ q : Fin (data.activePhaseClasses.copies j),
-          (ref.copyWeight (activeCopy (data := data) j q) *
-            ref.copyPhase (activeCopy (data := data) j q)) ^ (w.length + 1) *
+    (∑ k : Fin data.r, f k) =
+        ∑ jq : Σ j : Fin data.phaseClasses.g,
+          Fin (data.phaseClasses.copies j),
+          f (data.classCopyEquiv jq) :=
+      (data.classCopyEquiv.sum_comp f).symm
+    _ = ∑ j : Fin data.phaseClasses.g,
+        ∑ q : Fin (data.phaseClasses.copies j),
+          (ref.copyWeight (copy (data := data) j q) *
+            ref.copyPhase (copy (data := data) j q)) ^ (w.length + 1) *
             Matrix.trace
               (C j s * Kraus.evalWord
-                (data.blocks (data.activeRepresentativeIndex j)) w) := by
+                (data.blocks (data.representativeIndex j)) w) := by
       rw [← Fintype.sum_sigma']
       apply Finset.sum_congr rfl
       intro jq _
       rcases jq with ⟨j, q⟩
-      let k : data.Active := activeCopy (data := data) j q
+      let k : Fin data.r := copy (data := data) j q
       change f k = _
-      have hkclass : data.activeClassCopy k = ⟨j, q⟩ := by
-        simpa [k, activeCopy] using data.activeClassCopy_activeClassCopyEquiv j q
-      have hkfst : (data.activeClassCopy k).1 = j := congrArg Sigma.fst hkclass
+      have hkclass : data.classCopy k = ⟨j, q⟩ := by
+        simpa [k, copy] using data.classCopy_classCopyEquiv j q
+      have hkfst : (data.classCopy k).1 = j := congrArg Sigma.fst hkclass
       have hTraceRepresentative :
           Matrix.trace
-              (C (data.activeClassCopy k).1 s *
+              (C (data.classCopy k).1 s *
                 Kraus.evalWord
                   (data.blocks
-                    (data.activeRepresentativeIndex (data.activeClassCopy k).1)) w) =
+                    (data.representativeIndex (data.classCopy k).1)) w) =
             Matrix.trace
               (C j s * Kraus.evalWord
-                (data.blocks (data.activeRepresentativeIndex j)) w) := by
+                (data.blocks (data.representativeIndex j)) w) := by
         rw [hkfst]
       change Matrix.trace
           (ref.groupedMarkedBlocks C k s *
             (data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w)) = _
-      rw [ref.groupedMarkedBlocks_active C k, ref.copyWeightEq]
-      rw [ref.regroupedBlocksActive k, Kraus.evalWord_smul]
+      rw [groupedMarkedBlocks, ref.copyWeightEq]
+      rw [ref.regroupedBlocksEq k, Kraus.evalWord_smul]
       simp only [Pi.smul_apply, Matrix.smul_mul, Matrix.mul_smul,
         Matrix.trace_smul, smul_eq_mul]
       rw [trace_cast_mul_evalWord_cast (ref.copyDimEq k), hTraceRepresentative]
       rw [pow_succ']
       ring
-    _ = ∑ j : Fin data.activePhaseClasses.g,
+    _ = ∑ j : Fin data.phaseClasses.g,
         P.coeff (w.length + 1) j *
           Matrix.trace
-            (C j s * Kraus.evalWord (data.blocks (data.activeRepresentativeIndex j)) w) := by
+            (C j s * Kraus.evalWord (data.blocks (data.representativeIndex j)) w) := by
       apply Finset.sum_congr rfl
       intro j _
       rw [← Finset.sum_mul]
       rfl
 
 
-/-- Representative-grouped marked Lemma L for a literal CPSV active refinement.
+/-- Representative-grouped marked Lemma L for a literal CPSV BNT refinement.
 
 This is the algebraic arbitrary-marked-letter extension of the source's
 physical first-site statement.  If the full-coordinate grouped marked
 closed-chain traces agree at every positive tail length, then the two marks
-agree on every chosen normal representative.  The inactive listed coordinates
-remain present in the hypothesis and vanish through their zero marked blocks.
+agree on every chosen normal representative.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858 and the marked use at
 lines 1909--1919. -/
 theorem groupedMarkedTensor_basis_eq_of_trace_agree
-    (C E : (j : Fin data.activePhaseClasses.g) →
-      MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
+    (C E : (j : Fin data.phaseClasses.g) →
+      MPSTensor e (data.dim (data.representativeIndex j)))
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
       Matrix.trace
           (ref.groupedMarkedTensor C s * Kraus.evalWord ref.groupedTensor (List.ofFn w)) =
@@ -233,11 +206,11 @@ theorem groupedMarkedTensor_basis_eq_of_trace_agree
   rw [← ref.trace_groupedMarkedTensor_eq_representative_markedTensor E s (List.ofFn w)]
   exact hTrace L hL s w
 
-/-- Physical first-site Lemma L on every chosen representative of a literal CPSV active
+/-- Physical first-site Lemma L on every chosen representative of a literal CPSV BNT
 refinement.
 
 First-site agreement on the full grouped tensor passes across its positive-length MPV equality
-with the active representative sector tensor.  Eventual representative word span then separates
+with the representative sector tensor.  Eventual representative word span then separates
 the insertion on each normal representative.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858, as used at
@@ -245,13 +218,13 @@ lines 1874--1887. -/
 theorem insertedTensor_representative_eq_of_firstSiteActionAgree
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree ref.groupedTensor Y Z) :
-    ∀ j : Fin data.activePhaseClasses.g,
-      insertedTensor Y (data.blocks (data.activeRepresentativeIndex j)) =
-        insertedTensor Z (data.blocks (data.activeRepresentativeIndex j)) := by
+    ∀ j : Fin data.phaseClasses.g,
+      insertedTensor Y (data.blocks (data.representativeIndex j)) =
+        insertedTensor Z (data.blocks (data.representativeIndex j)) := by
   exact SectorDecomposition.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
     ref.groupedTensor ref.representativeSectorDecomposition
     ref.groupedTensor_sameMPV₂Pos_representativeSectorDecomposition
     ref.eventuallyRepresentativeWordTupleSpan hAct
 
 
-end MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement
+end MPSTensor.CPSVCanonicalFormData.BNTRefinement

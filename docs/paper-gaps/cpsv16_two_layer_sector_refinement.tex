@@ -23,7 +23,7 @@ and the repeated-copy BNT decomposition in CPSV16.  The current
 \leanid{SectorDecomposition} and \leanid{IsBNTCanonicalForm} surfaces retain the
 raw copy weights, and
 \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} proves the
-corrected proportional theorem on active BNT families.  No adapter from the
+corrected proportional theorem on BNT families with nonzero copy weights.  No adapter from the
 retired specialization is a current task.
 
 \section{The source assertion}
@@ -127,7 +127,7 @@ The relevant surviving formal declarations are:
         and \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}
         in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.
   \item \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} -
-        the corrected proportional comparison for active BNT families
+        the corrected proportional comparison for BNT families
         (\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}).
 \end{itemize}
 See also \ghpr{1657} (branch \path{feat/mps-ft-path-beta-pr1-two-layer})

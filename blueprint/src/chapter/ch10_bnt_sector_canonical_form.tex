@@ -147,7 +147,7 @@ single family.
     bijection with the original block indices.
 \end{definition}
 
-\begin{theorem}[Active-block BNT existence for CPSV canonical form]
+\begin{theorem}[BNT existence for CPSV canonical form]
     \label{thm:cpsv_canonical_form_bnt_existence}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors}
     \leanok
@@ -155,48 +155,41 @@ single family.
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 271--280 and 1137--1146.
     Every tensor with literal CPSV canonical-form data admits a finite basis of
     normal tensors $(B_j)_{j=1}^{g}$, each of positive bond dimension. The
-    family is obtained from
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ by choosing one representative from
-    each matrix-product-vector phase class of the active blocks.
-
-    This statement does not cover zero-weight listed blocks: they contribute
-    nothing to any positive-length matrix product vector. It also makes no
-    unrestricted uniqueness claim about arbitrary bases of normal tensors.
+    family is obtained by choosing one representative from each
+    matrix-product-vector phase class of the blocks $A_1,\ldots,A_r$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_canonical_form_bnt_characterization, def:mpv_phase_class_data, thm:cpsv_normal_mpv_phase_gauge}
-    Discard the zero-weight blocks and partition the remaining finite family by
-    matrix-product-vector phase equivalence. Choose one representative from
-    each class. The representatives are normal and have positive bond
-    dimensions. Distinct representatives are not gauge-phase equivalent. For
-    every active block, the normal-tensor phase theorem identifies its bond
-    dimension with that of its representative and realizes their phase
-    relation by a similarity and a unit-modulus scalar.
+    Partition the finite block family by matrix-product-vector phase
+    equivalence. Choose one representative from each class. The
+    representatives are normal and have positive bond dimensions. Distinct
+    representatives are not gauge-phase equivalent. For every block, the
+    normal-tensor phase theorem identifies its bond dimension with that of
+    its representative and realizes their phase relation by a similarity and
+    a unit-modulus scalar.
     Theorem~\ref{thm:cpsv_canonical_form_bnt_characterization} now gives the
     basis-of-normal-tensors conditions.
 \end{proof}
 
 % Source anchors: CPSV16 lines 265--301, 1080--1117, and 1135--1146.
 % Proposition 4.13, lines 1863--1921, is the downstream application.
-\begin{theorem}[Structured active BNT refinement of CPSV canonical form]
-    \label{thm:cpsv_canonical_form_active_bnt_refinement}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement,
-        MPSTensor.CPSVCanonicalFormData.exists_activeBNTRefinement,
-        MPSTensor.CPSVCanonicalFormData.activeBNTRefinement}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.activeCopy}
-    \lean{MPSTensor.CPSVCanonicalFormData.activeClassCopyEquiv,
-        MPSTensor.CPSVCanonicalFormData.Inactive,
+\begin{theorem}[Structured BNT refinement of CPSV canonical form]
+    \label{thm:cpsv_canonical_form_bnt_refinement}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement,
+        MPSTensor.CPSVCanonicalFormData.exists_bntRefinement,
+        MPSTensor.CPSVCanonicalFormData.bntRefinement}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.copy}
+    \lean{MPSTensor.CPSVCanonicalFormData.classCopyEquiv,
         MPSTensor.CPSVCanonicalFormData.GroupedIndex,
-        MPSTensor.CPSVCanonicalFormData.groupedIndexEquiv,
         MPSTensor.CPSVCanonicalFormData.groupedCoordinateEquiv,
         MPSTensor.CPSVCanonicalFormData.groupedTotalDim_eq}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedWeight,
-        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedBlocks,
-        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedTensor,
-        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.regroupedTensor_eq_groupedTensor,
-        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedRegroupLetterwise,
-        MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.reconstructGrouped}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight,
+        MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks,
+        MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor,
+        MPSTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor,
+        MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise,
+        MPSTensor.CPSVCanonicalFormData.BNTRefinement.reconstructGrouped}
     \lean{MPSTensor.blockIndexCoordinateEquiv,
         MPSTensor.toTensorFromBlocks_eq_reindex_blockDiagonal_equiv}
     \leanok
@@ -210,19 +203,16 @@ single family.
         UU^\dagger & =\Id.
         \label{eq:cpsv_active_refinement_coisometry}
     \end{align}
-    be literal CPSV canonical-form data. Put
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ and
-    $K_0=\{k:\mu_k=0\}$. There are phase classes $j$, copy multiplicities
-    $r_j$, and an equivalence
+    be literal CPSV canonical-form data. There are phase classes $j$, copy
+    multiplicities $r_j$, and an equivalence
     \begin{align}
         \mathcal G
-        :=\{(j,q):1\leq q\leq r_j\}\sqcup K_0
+        :=\{(j,q):1\leq q\leq r_j\}
          & \simeq\{1,\ldots,r\}.
         \label{eq:cpsv_active_refinement_grouped_equiv}
     \end{align}
-    Its active restriction identifies the class-copy pairs with
-    $K_{\mathrm{act}}$. Each class has a representative $C_j$. If the copy
-    $(j,q)$ corresponds to $k\in K_{\mathrm{act}}$, then its bond dimension
+    Each class has a representative $C_j$. If the copy
+    $(j,q)$ corresponds to the block index $k$, then its bond dimension
     equals that of $C_j$ and there are $\zeta_k\in\C$, with $|\zeta_k|=1$,
     and $X_k\in\GL_{D_k}(\C)$ such that
     \begin{align}
@@ -241,8 +231,7 @@ single family.
     \end{align}
     For $x=(j,q)$, let $\widehat\mu_x$ be the original weight of that copy and
     let $\widehat B_x^i=\zeta_xC_j^i$, with the required dimension
-    identification. For $x\in K_0$, let $\widehat\mu_x=0$ and retain the
-    original block $\widehat B_x=A_x$. Define the grouped tensor by
+    identification. Define the grouped tensor by
     \begin{align}
         T_{\mathrm{grp}}^i
          & =\operatorname{reindex}_{\Phi}
@@ -250,8 +239,7 @@ single family.
         \widehat\mu_x\widehat B_x^i\right).
         \label{eq:cpsv_active_refinement_grouped_tensor}
     \end{align}
-    If $G=\bigoplus_kY_k$ is the block-diagonal gauge, with $Y_k=X_k$ on
-    active indices and $Y_k=\Id$ on $K_0$, then, letter by letter,
+    If $G=\bigoplus_kX_k$ is the block-diagonal gauge, then, letter by letter,
     \begin{align}
         \bigoplus_{k=1}^{r}\mu_kA_k^i
          & =GT_{\mathrm{grp}}^iG^{-1},
@@ -262,21 +250,16 @@ single family.
         A^i & =U^\dagger GT_{\mathrm{grp}}^iG^{-1}U.
         \label{eq:cpsv_active_refinement_reconstruction}
     \end{align}
-    Thus the class-copy coordinates and the inactive complement are explicit,
-    while every zero-weight listed block remains present. This refinement does
-    not delete the inactive coordinates; the active coisometric restriction is
-    stated separately below.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpv_phase_class_data, thm:cpsv_canonical_form_bnt_characterization, thm:cpsv_normal_mpv_phase_gauge, def:block_diagonal_tensor, def:global_gauge_of_blocks}
-    Enumerate the active indices by their phase classes and choose one normal
+    Enumerate the block indices by their phase classes and choose one normal
     representative in each class. The normal-tensor phase theorem gives the
     dimension equality, unit phase, and invertible gauge in
     (\ref{eq:cpsv_active_refinement_copy}). The BNT characterization proves
-    that the representatives form a basis of normal tensors. Adjoin the
-    inactive complement to the class-copy order. Reindexing the dependent block
-    coordinates gives $\Phi$ and
+    that the representatives form a basis of normal tensors. Reindexing the
+    dependent block coordinates gives $\Phi$ and
     (\ref{eq:cpsv_active_refinement_total_dim}). The exact heterogeneous
     block-diagonal reindexing identity identifies the grouped tensor with the
     representative copies in the original retained-coordinate space.
@@ -300,70 +283,21 @@ single family.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Exact coisometric restriction to nonzero-weight blocks]%
-    \label{thm:cpsv_exact_active_reconstruction}
-    \lean{MPSTensor.CPSVCanonicalFormData.activeCoordinateMap,
-        MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry,
-        MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry_mul_conjTranspose}
-    \lean{MPSTensor.CPSVCanonicalFormData.toTensorFromBlocks_active_eq_submatrix,
-        MPSTensor.CPSVCanonicalFormData.exact_active_reconstruction}
-    \leanok
-    \uses{def:cpsv_canonical_form, def:block_diagonal_tensor}
-    Suppose the literal CPSV canonical-form data are
-    \begin{align}
-        A^i        & =V^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)V,
-        \label{eq:cpsv_active_exact_listed}                                 \\
-        VV^\dagger & =\Id.
-        \label{eq:cpsv_active_exact_listed_coisometry}
-    \end{align}
-    Put $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$ and
-    $D_{\mathrm{act}}=\sum_{k\in K_{\mathrm{act}}}D_k$. There is a matrix
-    $U\in\C^{D_{\mathrm{act}}\times D}$ such that the following identities
-    hold, the second for every physical index $i$:
-    \begin{align}
-        UU^\dagger & =\Id,
-        \label{eq:cpsv_active_exact_coisometry} \\
-        A^i        & =U^\dagger
-        \left(\bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)U.
-        \label{eq:cpsv_active_exact_reconstruction}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, def:block_diagonal_tensor}
-    Let $S$ select the flattened coordinates belonging to
-    $K_{\mathrm{act}}$. Distinct selected rows are orthonormal, so
-    $SS^\dagger=\Id$. The active weighted sum is the principal submatrix
-    selected by $S$. Every omitted diagonal block is zero because its weight is
-    zero, and therefore
-    \begin{align}
-        \bigoplus_{k=1}^{r}\mu_kA_k^i
-         & =S^\dagger\left(
-        \bigoplus_{k\in K_{\mathrm{act}}}\mu_kA_k^i\right)S.
-        \label{eq:cpsv_active_exact_selector}
-    \end{align}
-    Set $U=SV$. Equations~(\ref{eq:cpsv_active_exact_listed}) and
-    (\ref{eq:cpsv_active_exact_selector}) give
-    (\ref{eq:cpsv_active_exact_reconstruction}), while
-    $UU^\dagger=S(VV^\dagger)S^\dagger=\Id$ gives
-    (\ref{eq:cpsv_active_exact_coisometry}).
-\end{proof}
-
 % Source anchors: CPSV16 lines 217--246, 265--301, and Appendix A,
 % lines 1135--1148.
-\begin{definition}[Active BNT sector presentation]
-    \label{def:cpsv_active_bnt_sector_presentation}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+\begin{definition}[BNT sector presentation]
+    \label{def:cpsv_bnt_sector_presentation}
+    \lean{MPSTensor.IsBNTSectorPresentation}
+    \lean{MPSTensor.IsBNTSectorPresentation.%
         isCPSVBasisOfNormalTensors}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+    \lean{MPSTensor.IsBNTSectorPresentation.%
         blocks_not_gaugePhaseEquiv}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.of_sameMPV₂Pos}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+    \lean{MPSTensor.IsBNTSectorPresentation.of_sameMPV₂Pos}
+    \lean{MPSTensor.IsBNTSectorPresentation.%
         exists_pos_mpvState_ne_zero}
     \leanok
     \uses{def:sector_weight_data, def:nt_cpsv, def:same_mpv2_pos}
-    An \emph{active BNT sector presentation} of a tensor $A$ is a nonempty
+    A \emph{BNT sector presentation} of a tensor $A$ is a nonempty
     sector decomposition $P$ such that every representative has a positive
     number of copies, every copy has nonzero weight, every representative
     $C_j$ is normal, the representative matrix product vectors are eventually
@@ -373,37 +307,26 @@ single family.
         \label{eq:cpsv_active_bnt_sector_presentation}
     \end{align}
     This records the nonzero canonical summands constructed at
-    \cite[lines~217--246]{Cirac2016MPDO_arXiv}: dormant candidates are absent,
-    whereas repeated nonzero copies and their weights remain explicit. The
-    condition is stronger than the literal BNT definition, which permits the
-    zero-coefficient candidate of
-    Theorem~\ref{thm:cpsv_bnt_uniqueness_counterexample}.
-    % Local fix (dormant BNT candidates): documented in
-    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
+    \cite[lines~217--246]{Cirac2016MPDO_arXiv}: repeated copies and their
+    weights remain explicit.
 \end{definition}
 
-\begin{theorem}[Uniqueness of active BNT presentations]
-    \label{thm:cpsv_active_bnt_presentation_uniqueness}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.%
+\begin{theorem}[Uniqueness of BNT presentations]
+    \label{thm:cpsv_bnt_presentation_uniqueness}
+    \lean{MPSTensor.IsBNTSectorPresentation.%
         equiv_of_sameMPV₂Pos}
     \leanok
-    \uses{def:cpsv_active_bnt_sector_presentation, def:same_mpv2_pos}
-    Two active BNT presentations of the same positive-length matrix product
+    \uses{def:cpsv_bnt_sector_presentation, def:same_mpv2_pos}
+    Two BNT presentations of the same positive-length matrix product
     vector family have equally many representatives. After a permutation,
     corresponding representatives have equal bond dimension and are related
     by an invertible gauge and a unit-modulus phase.
-
-    Only active presentations are compared. The conclusion is false for
-    arbitrary literal BNTs by
-    Theorem~\ref{thm:cpsv_bnt_uniqueness_counterexample}.
-    % Scope restriction (active presentations): documented in
-    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_bnt_characterization, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_mpv_phase_gauge}
     Apply Theorem~\ref{thm:cpsv_bnt_characterization} first to the
-    nonzero-weight direct-sum tensor of the first presentation, using the
+    direct-sum tensor of the first presentation, using the
     representatives of the second as a BNT, and then with the presentations
     interchanged. This gives a matching map in each direction. Eventual linear
     independence excludes gauge-phase-equivalent distinct representatives, so
@@ -413,78 +336,73 @@ single family.
 \end{proof}
 
 % Source anchors: CPSV16 lines 265--301, 317--345, and Appendix C.3,
-% lines 1835--1858. Inactive listed blocks remain in the full grouped tensor.
-\begin{theorem}[Active representative sector decomposition]
-    \label{thm:cpsv_active_representative_sector_decomposition}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+% lines 1835--1858.
+\begin{theorem}[Representative sector decomposition]
+    \label{thm:cpsv_representative_sector_decomposition}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_basisCount}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_basisDim}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_basis}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_copies}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         representativeSectorDecomposition_weight}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         eventuallyRepresentativeWordTupleSpan}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedTensor_sameMPV₂Pos_representativeSectorDecomposition}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
-        groupedTensor_isActiveCPSVBasisOfNormalTensors}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+        groupedTensor_isBNTSectorPresentation}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         source_sameMPV₂Pos_groupedTensor}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
-        isActiveCPSVBasisOfNormalTensors}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
+        isBNTSectorPresentation}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_bnt_blocked_simultaneous_span, def:cpsv_active_bnt_sector_presentation}
+    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_blocked_simultaneous_span, def:cpsv_bnt_sector_presentation}
     In the notation of
-    Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement}, let
-    $k(j,q)\in K_{\mathrm{act}}$ be the listed block corresponding to the
-    class-copy pair $(j,q)$. The active representatives $C_j$ define a sector
-    decomposition $P_{\mathrm{act}}$ with copy weights
+    Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}, let
+    $k(j,q)$ be the listed block corresponding to the
+    class-copy pair $(j,q)$. The representatives $C_j$ define a sector
+    decomposition $P_{\mathrm{rep}}$ with copy weights
     \begin{align}
         \lambda_{j,q}
          & =\nu_{k(j,q)}\zeta_{k(j,q)}.
         \label{eq:cpsv_active_representative_weight}
     \end{align}
-    Every copy weight in $P_{\mathrm{act}}$ is nonzero. The representatives have simultaneous
+    Every copy weight in $P_{\mathrm{rep}}$ is nonzero. The representatives have simultaneous
     word-tuple separation at every sufficiently large length.
 
-    The sector decomposition contains only the active class-copy pairs. The
-    full grouped tensor $T_{\mathrm{grp}}$ of
-    Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement} still contains
-    every inactive zero-weight listed coordinate. For every positive length
-    $N$, the grouped and active-sector tensors generate the same matrix product
-    vector. The original tensor has the same positive-length matrix product
+    For every positive length $N$, the grouped tensor $T_{\mathrm{grp}}$ of
+    Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement} and the
+    representative sector tensor generate the same matrix product vector.
+    The original tensor has the same positive-length matrix product
     vectors as both:
     \begin{align}
         V^{(N)}(T_{\mathrm{grp}})
-         & =V^{(N)}(P_{\mathrm{act}}).
+         & =V^{(N)}(P_{\mathrm{rep}}).
         \label{eq:cpsv_active_representative_positive_mpv}
         \\
         V^{(N)}(A)
-         & =V^{(N)}(P_{\mathrm{act}}).
+         & =V^{(N)}(P_{\mathrm{rep}}).
         \label{eq:cpsv_active_representative_source_mpv}
     \end{align}
-    Hence $P_{\mathrm{act}}$ is an active BNT sector presentation of $A$
-    whenever at least one active listed block occurs.
-    No equality at length zero is asserted, since deleting inactive bond
-    coordinates changes the empty-word coefficient.
+    Hence $P_{\mathrm{rep}}$ is a BNT sector presentation of $A$
+    whenever at least one listed block occurs.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_bnt_blocked_simultaneous_span, thm:coisometry_reconstruction_same_mpv_pos, thm:gauge_invariance, lem:paper_decomp_formula}
-    The active class-copy equivalence reindexes the nonzero listed blocks.
+    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_blocked_simultaneous_span, thm:coisometry_reconstruction_same_mpv_pos, thm:gauge_invariance, lem:paper_decomp_formula}
+    The class-copy equivalence reindexes the listed blocks.
     (\ref{eq:cpsv_active_representative_weight}) combines the original
     coefficient with the unit phase relating its block to $C_j$; both factors
     are nonzero. The basis-of-normal-tensors condition and
     Theorem~\ref{thm:cpsv_bnt_blocked_simultaneous_span} give eventual
-    simultaneous word-tuple separation for the representatives. At positive
-    length, every inactive contribution contains a positive power of its zero
-    coefficient and vanishes. Reindexing the remaining finite sum by $(j,q)$
+    simultaneous word-tuple separation for the representatives. Reindexing
+    the finite sum by $(j,q)$
     gives (\ref{eq:cpsv_active_representative_positive_mpv}).
     The original coisometric reconstruction and simultaneous block gauge
     preserve every positive-length closed-chain coefficient, yielding
@@ -1131,30 +1049,29 @@ give $O_{YX}(N)\to 0$, a contradiction.
     the remaining outer factors.
 \end{proof}
 
-\begin{theorem}[Active-sector BNT form of normalized CPSV canonical data]%
-    \label{thm:cpsv_active_sector_bnt}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm}
+\begin{theorem}[Sector BNT form of normalized CPSV canonical data]%
+    \label{thm:cpsv_sector_bnt}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm}
     \leanok
     \uses{def:cpsv_canonical_form, def:sector_bnt_cf, def:same_mpv2_pos}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
-    condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. Put
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. Then there is a BNT canonical-form
-    sector decomposition $P$ such that
+    condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. Then
+    there is a BNT canonical-form sector decomposition $P$ such that
     \begin{align}
         \mc{V}^+(A) & =\mc{V}^+(P),
         \notag                                          \\
         D_{\mathrm{tot}}(P)
-                    & =\sum_{k\in K_{\mathrm{act}}}D_k.
+                    & =\sum_{k=1}^{r}D_k.
         \label{eq:cpsv_active_sector_total_dim}
     \end{align}
-    Thus the dimension is the total dimension of the active blocks, not the
+    Thus the dimension is the total dimension of the blocks, not the
     ambient bond dimension $D$. This statement records positive-length MPV
     equality; the exact coisometric reconstruction is stated next.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_sector_bnt_exact, thm:coisometry_reconstruction_same_mpv_pos, thm:gauge_invariance}
-    Apply Theorem~\ref{thm:cpsv_active_sector_bnt_exact}. Its reconstruction
+    \uses{thm:cpsv_sector_bnt_exact, thm:coisometry_reconstruction_same_mpv_pos, thm:gauge_invariance}
+    Apply Theorem~\ref{thm:cpsv_sector_bnt_exact}. Its reconstruction
     writes $A^i=U^\dagger B^iU$, where $UU^\dagger=\Id$ and
     $B^i=XP^iX^{-1}$. Theorem~\ref{thm:coisometry_reconstruction_same_mpv_pos}
     shows that $A$ and $B$ generate the same matrix product vectors at every
@@ -1164,21 +1081,20 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{proof}
 
 % Source: CPSV16 lines 214--301 and 1080--1148; CPGSV21 lines 1831--1885.
-\begin{theorem}[Exact active coisometric BNT reconstruction]%
-    \label{thm:cpsv_active_sector_bnt_exact}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_isBNTCanonicalForm_exact}
+\begin{theorem}[Exact coisometric BNT reconstruction]%
+    \label{thm:cpsv_sector_bnt_exact}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact}
     \leanok
     \uses{def:cpsv_canonical_form, def:sector_bnt_cf}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
-    condition~(\ref{eq:cpsv_weight_normalization}), assume $A\ne0$, and put
-    $K_{\mathrm{act}}=\{k:\mu_k\ne0\}$. There are a BNT canonical-form sector
-    decomposition $P$, a coisometry
+    condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. There
+    are a BNT canonical-form sector decomposition $P$, a coisometry
     $U\in\C^{D_{\mathrm{tot}}(P)\times D}$, and
     $X\in\GL_{D_{\mathrm{tot}}(P)}(\C)$. The first two identities below hold,
     and the third holds for every physical index $i$:
     \begin{align}
         D_{\mathrm{tot}}(P)
-                   & =\sum_{k\in K_{\mathrm{act}}}D_k,
+                   & =\sum_{k=1}^{r}D_k,
         \label{eq:cpsv_active_exact_bnt_dim}             \\
         UU^\dagger & =\Id,
         \label{eq:cpsv_active_exact_bnt_coisometry}      \\
@@ -1188,16 +1104,15 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_exact_active_reconstruction, thm:cpsv_normal_tp_gauge, lem:gauge_equiv_from_block_gauge, thm:paperbnt_supplier_prepared_exact}
-    By Theorem~\ref{thm:cpsv_exact_active_reconstruction}, the original tensor
-    has the exact active reconstruction
+    \uses{def:cpsv_canonical_form, thm:cpsv_normal_tp_gauge, lem:gauge_equiv_from_block_gauge, thm:paperbnt_supplier_prepared_exact}
+    The canonical-form data give the exact reconstruction
     \begin{align}
-        A^i        & =V^\dagger T_{\mathrm{act}}^iV,
+        A^i        & =V^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)V,
         \label{eq:cpsv_active_exact_bnt_start}       \\
         VV^\dagger & =\Id.
         \label{eq:cpsv_active_exact_bnt_start_coisometry}
     \end{align}
-    Put every active normal block into a trace-preserving primitive irreducible
+    Put every normal block into a trace-preserving primitive irreducible
     gauge $Y$, and apply
     Theorem~\ref{thm:paperbnt_supplier_prepared_exact}. Let $Q$ be the
     permutation matrix of its flattened coordinate equivalence, so
@@ -1218,118 +1133,8 @@ give $O_{YX}(N)\to 0$, a contradiction.
          & =Q(VV^\dagger)Q^\dagger=\Id.
         \notag
     \end{align}
-    This proves (\ref{eq:cpsv_active_exact_bnt_coisometry}). The active
+    This proves (\ref{eq:cpsv_active_exact_bnt_coisometry}). The block
     enumeration gives (\ref{eq:cpsv_active_exact_bnt_dim}).
-\end{proof}
-
-% Source anchors: RMP arXiv:2011.12127v2, lines 1831--1906;
-% CPSV16 arXiv:1606.00608, lines 354--361 and 1172--1199.
-\begin{theorem}[Equal fundamental theorem for active CPSV canonical forms]%
-    \label{thm:cpsv_active_core_equal_ft}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_fundamentalTheorem_equal_canonicalForm}
-    \leanok
-    \uses{thm:cpsv_active_core_equal_ft_unitary}
-    Let $A$ and $B$ have CPSV canonical-form data with weights
-    $(\mu_k^A)_k$, $(\mu_k^B)_k$ and block dimensions
-    $(D_k^A)_k$, $(D_k^B)_k$. Assume that both data satisfy the separate
-    normalization condition~(\ref{eq:cpsv_weight_normalization}), that
-    $A\ne0$ and $B\ne0$, and that
-    $\mc{V}^+(A)=\mc{V}^+(B)$. Put
-    $K_A=\{k:\mu_k^A\ne0\}$ and $K_B=\{k:\mu_k^B\ne0\}$.
-    Then there are BNT canonical-form sector decompositions $P$ and $Q$ such
-    that
-    \begin{align}
-        \mc{V}^+(A)          & =\mc{V}^+(P),
-        \notag                                        \\
-        \mc{V}^+(B)          & =\mc{V}^+(Q),
-        \notag                                        \\
-        D_{\mathrm{tot}}(P)  & =\sum_{k\in K_A}D_k^A,
-        \notag                                        \\
-        D_{\mathrm{tot}}(Q)  & =\sum_{k\in K_B}D_k^B,
-        \notag                                        \\
-        D_{\mathrm{tot}}(P)  & =D_{\mathrm{tot}}(Q),
-        \notag                                        \\
-        \sum_{k\in K_A}D_k^A & =\sum_{k\in K_B}D_k^B.
-        \label{eq:cpsv_active_core_equal_dims}
-    \end{align}
-    After identifying the two total bond spaces by their equality, there is
-    an invertible matrix $X$ such that, for every physical index $i$,
-    \begin{align}
-        Q^i & =X P^iX^{-1}.
-        \label{eq:cpsv_active_core_equal_gauge}
-    \end{align}
-    The conclusion concerns the extracted active tensors $P$ and $Q$. It does
-    not assert equality of the ambient bond dimensions $D_A$ and $D_B$, and it
-    does not assert that $A$ and $B$ are gauge equivalent.
-    % Scope restriction (active canonical-form tensors): active-only corrected form;
-    % see docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:cpsv_active_core_equal_ft_unitary}
-    Apply Theorem~\ref{thm:cpsv_active_core_equal_ft_unitary} and retain its
-    extracted sector decompositions, dimension identities, and conjugating
-    matrix. Forget that the conjugating matrix is unitary.
-\end{proof}
-
-% The RMP unitary note is arXiv:2011.12127v2, lines 1905--1906.
-% The CPSV16 CFII refinement is arXiv:1606.00608, lines 1197--1199.
-\begin{theorem}[Unitary refinement for active CPSV canonical forms]%
-    \label{thm:cpsv_active_core_equal_ft_unitary}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_active_fundamentalTheorem_equal_canonicalForm_unitary}
-    \leanok
-    \uses{thm:cpsv_active_sector_bnt, cor:sector_bnt_equal_unitary_global_gauge}
-    Let $A$ and $B$ have CPSV canonical-form data with weights
-    $(\mu_k^A)_k$, $(\mu_k^B)_k$ and block dimensions
-    $(D_k^A)_k$, $(D_k^B)_k$. Assume that both data satisfy the separate
-    normalization condition~(\ref{eq:cpsv_weight_normalization}), that
-    $A\ne0$ and $B\ne0$, and that
-    $\mc{V}^+(A)=\mc{V}^+(B)$. Put
-    $K_A=\{k:\mu_k^A\ne0\}$ and $K_B=\{k:\mu_k^B\ne0\}$.
-    Then there are BNT canonical-form sector decompositions $P$ and $Q$ such
-    that
-    \begin{align}
-        \mc{V}^+(A)          & =\mc{V}^+(P),
-        \notag                                        \\
-        \mc{V}^+(B)          & =\mc{V}^+(Q),
-        \notag                                        \\
-        D_{\mathrm{tot}}(P)  & =\sum_{k\in K_A}D_k^A,
-        \notag                                        \\
-        D_{\mathrm{tot}}(Q)  & =\sum_{k\in K_B}D_k^B,
-        \notag                                        \\
-        D_{\mathrm{tot}}(P)  & =D_{\mathrm{tot}}(Q),
-        \notag                                        \\
-        \sum_{k\in K_A}D_k^A & =\sum_{k\in K_B}D_k^B.
-        \label{eq:cpsv_active_core_unitary_dims}
-    \end{align}
-    After identifying the two total bond spaces, there is a unitary matrix $U$
-    such that, for every physical index $i$,
-    \begin{align}
-        Q^i & =U P^iU^\dagger.
-        \label{eq:cpsv_active_core_unitary_gauge}
-    \end{align}
-    This is the unitary choice noted in
-    \cite[lines~1905--1906]{Cirac2021Matrix} and the canonical-form-II
-    refinement of \cite[Corollary~A.6, lines~1197--1199]{Cirac2016MPDO_arXiv}.
-    Again, there is no claim that $D_A=D_B$, and no gauge equivalence between
-    $A$ and $B$ is asserted.
-    % Scope restriction (active canonical-form tensors): active-only corrected form;
-    % see docs/paper-gaps/tnlean_bnt_ft_theorem_surface.tex.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:cpsv_active_sector_bnt, cor:sector_bnt_equal_unitary_global_gauge}
-    Apply Theorem~\ref{thm:cpsv_active_sector_bnt} to $A$ and $B$. This gives
-    $P$ and $Q$, their BNT canonical-form properties, the first four identities
-    in~(\ref{eq:cpsv_active_core_unitary_dims}), and
-    \begin{align}
-        \mc{V}^+(P) & =\mc{V}^+(Q).
-        \notag
-    \end{align}
-    Corollary~\ref{cor:sector_bnt_equal_unitary_global_gauge} gives the fifth
-    identity and supplies $U$. Substituting the two active
-    dimension formulas gives the last equality in
-    (\ref{eq:cpsv_active_core_unitary_dims}).
 \end{proof}
 
 % Source anchors: RMP arXiv:2011.12127v2, lines 1831--1906;
@@ -1350,18 +1155,18 @@ give $O_{YX}(N)\to 0$, a contradiction.
         B^i & =GA^iG^{-1}.
         \label{eq:cpsv_equal_ambient_gauge}
     \end{align}
-    Zero-weight listed blocks and unused ambient coordinates are allowed. The
+    Unused ambient coordinates are allowed. The
     conclusion requires the common ambient dimension $D$ and makes no claim for
     canonical forms with different ambient bond dimensions.
 \end{theorem}
 
-The cited sources supply the active canonical-form comparison. The passage back
-from the active tensors to the ambient tensors is the coisometric lifting of
+The cited sources supply the retained canonical-form comparison. The passage back
+from the retained tensors to the ambient tensors is the coisometric lifting of
 Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}.
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_sector_bnt_exact, thm:coisometry_reconstruction_same_mpv_pos, thm:cpgsv_equal_case_source, thm:coisometry_reconstruction_gauge_equiv, thm:gauge_invariance}
-    Apply Theorem~\ref{thm:cpsv_active_sector_bnt_exact} to obtain
+    \uses{thm:cpsv_sector_bnt_exact, thm:coisometry_reconstruction_same_mpv_pos, thm:cpgsv_equal_case_source, thm:coisometry_reconstruction_gauge_equiv, thm:gauge_invariance}
+    Apply Theorem~\ref{thm:cpsv_sector_bnt_exact} to obtain
     BNT canonical forms $P,Q$, coisometries $U_A,U_B$, and retained-space
     gauges $X_A,X_B$ with
     \begin{align}

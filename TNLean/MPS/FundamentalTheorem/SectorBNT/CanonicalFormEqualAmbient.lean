@@ -10,8 +10,9 @@ import TNLean.MPS.SharedInfra.CoisometryGauge
 /-!
 # Equal-ambient fundamental theorem for CPSV canonical forms
 
-This module lifts the active-core equal theorem to the original tensors when their ambient bond
-spaces have the same dimension.
+This module proves the equal fundamental theorem for two normalized CPSV canonical forms whose
+ambient bond spaces have the same dimension, by lifting the exact BNT reconstructions through
+their coisometric inclusions.
 -/
 
 open scoped Matrix BigOperators
@@ -57,13 +58,12 @@ private lemma gaugeEquiv_cast_dim {n m : ℕ} (h : n = m)
 
 Two normalized nonzero CPSV canonical-form tensors in the same ambient bond
 dimension that generate the same matrix product vectors at every positive length
-are gauge equivalent. Inactive zero-weight blocks and unused ambient coordinates
-are allowed: the exact active reconstructions retain only the nonzero-weight blocks,
-while the ambient lifting aligns their possibly different coisometric inclusions.
+are gauge equivalent. Unused ambient coordinates are allowed: the ambient lifting
+aligns the possibly different coisometric inclusions of the two exact reconstructions.
 
 This theorem is explicitly homogeneous in the ambient dimension \(D\); it makes no
 heterogeneous ambient-dimension claim. The ambient lifting is a project-derived
-corollary of the cited active fundamental theorem and the coisometry-alignment lemma.
+corollary of the cited fundamental theorem and the coisometry-alignment lemma.
 
 **Scope restriction (equal ambient dimension and nonzero tensors):** The theorem
 assumes a common ambient bond dimension and excludes zero tensors. It does not prove
@@ -81,9 +81,9 @@ theorem fundamentalTheorem_equal_ambient_canonicalForm
     (hEqual : SameMPV₂Pos A B) :
     GaugeEquiv A B := by
   obtain ⟨P, hPBNT, _hPDim, UA, hUA, XA, hRecA⟩ :=
-    dataA.exists_active_isBNTCanonicalForm_exact hNormA hA
+    dataA.exists_isBNTCanonicalForm_exact hNormA hA
   obtain ⟨Q, hQBNT, _hQDim, UB, hUB, XB, hRecB⟩ :=
-    dataB.exists_active_isBNTCanonicalForm_exact hNormB hB
+    dataB.exists_isBNTCanonicalForm_exact hNormB hB
   let C : MPSTensor d P.totalDim := fun i =>
     (XA : Matrix _ _ ℂ) * P.toTensor i * (↑(XA⁻¹) : Matrix _ _ ℂ)
   let E : MPSTensor d Q.totalDim := fun i =>

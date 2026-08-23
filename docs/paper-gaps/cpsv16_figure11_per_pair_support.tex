@@ -154,10 +154,24 @@ the elementary zero cross-products described in
 
 For the source multiplicities, an absent normal label is represented by an
 empty $\chi_{\alpha,\beta,\gamma}$ fiber, not by a spurious positive diagonal
-entry.  Its contribution to every positive-length power sum is zero.  This is
-the Figure~11 instance of the active-only principle for bases of normal
-tensors: only nonzero canonical corners are covered by the source-facing
-decomposition.
+entry.  Its contribution to every positive-length power sum is zero.  In the
+source display for a fixed ordered pair $(\alpha,\beta)$,
+\begin{equation}
+  U_{\alpha,\beta}(M_\alpha M_\beta)^iU_{\alpha,\beta}^\dagger
+  =\bigoplus_\gamma
+    \chi_{\alpha,\beta,\gamma}\otimes
+      Z_{\alpha,\beta,\gamma}M_\gamma^i
+        Z_{\alpha,\beta,\gamma}^{-1}
+  \label{eq:figure11-pair-decomposition}
+\end{equation}
+\cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}, the index
+$\gamma$ therefore ranges over the normal sectors that occur for the chosen
+pair; if the product $M_\alpha M_\beta$ vanishes, the right-hand side is the
+empty direct sum.  Every nonzero normal corner of a fixed pair is gauge-phase
+equivalent to a sector $M_\gamma$, while absent sectors are omitted rather
+than represented by zero coefficients, and equality of the global closed-chain
+sums over all $(\alpha,\beta)$ cannot strengthen this to nonempty support for
+each fixed pair.
 
 \section{Verdict}
 

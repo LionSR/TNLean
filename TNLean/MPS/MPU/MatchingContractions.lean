@@ -187,7 +187,7 @@ Source: arXiv:1703.09188, Section III.A, lines 397--427. The forced simple
 block is subsequently used in Lemma III.7, lines 550--556; Theorem III.8 uses
 that lemma at lines 589 and 592.
 
-**Scope restriction (full active support):** This uses the chosen reduced
+**Scope restriction (full support):** This uses the chosen reduced
 representative supplied by
 `IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
@@ -197,7 +197,7 @@ representative supplied by
 theorem IsMPU.exists_reduced_cfii_forced_block_simple_contractions
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D)
     (cfii : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
-    (hfull : cfii.toCPSVCanonicalFormData.HasFullActiveSupport) :
+    (hfull : cfii.toCPSVCanonicalFormData.HasFullSupport) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ.PosDef ∧ Matrix.trace ρ = 1 ∧
       Kraus.transferMap U.normalizedFlattening ρ = ρ ∧

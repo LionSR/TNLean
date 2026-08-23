@@ -145,23 +145,10 @@ multiset with multiplicity.
 
 % CPSV16 Lemma A.5 (`Lem:app_simple`), lines 1155--1163.
 % Provenance: source-label audit completed in issue #5917.
-% Gap: docs/paper-gaps/cpsv16_power_sum_alternative_route.tex.
-\begin{lemma}[Printed finite power-sum comparison]
-    \label{lem:cpsv_power_sum_printed_status}
-    \notready
-    \uses{thm:bounded_power_sum_multiset}
-    Suppose two finite lists of complex numbers have equal positive power sums
-    for every exponent up to the larger list length.  According to
-    \cite[Lemma~A.5]{Cirac2016MPDO_arXiv}, the list lengths agree and the two
-    multisets are equal.
-
-    This is false when zero entries are allowed: the lists $(1)$ and $(1,0)$
-    have equal power sums for every positive exponent.  The conclusion becomes
-    valid if every entry is nonzero, if the exponent-zero power sum is also
-    compared, or if zero entries are deleted before comparing the multisets.
-    The nonzero version is Theorem~\ref{thm:bounded_power_sum_multiset}.
-\end{lemma}
-
+% Applied to the nonzero coefficients of a canonical form; the nonzero
+% hypothesis is the nonzero-coefficient local correction recorded in
+% docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex; the
+% alternative routes are in docs/paper-gaps/cpsv16_power_sum_alternative_route.tex.
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
     \label{thm:bounded_power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
@@ -179,7 +166,9 @@ multiset with multiplicity.
     then $m=n$ and the multisets are equal. Without a nonzero hypothesis, the
     list form $\sum_{k=1}^{x_a} \lambda_{a,k}^N = \sum_{k=1}^{x_b} \lambda_{b,k}^N$
     for $1 \le N \le \max(x_a,x_b)$ gives equality of the nonzero multisets; if
-    it also holds at $N=0$ then $x_a=x_b$ and the full lists agree.
+    it also holds at $N=0$ then $x_a=x_b$ and the full lists agree. The
+    nonzero variant is the one applied to the nonzero coefficients of a
+    canonical form, which is how \cite[Lemma~A.5]{Cirac2016MPDO_arXiv} is used.
 \end{theorem}
 
 \begin{proof}

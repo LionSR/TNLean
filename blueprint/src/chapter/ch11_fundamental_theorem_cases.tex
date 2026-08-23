@@ -5,30 +5,6 @@
 % at lines 1167--1170.
 % Provenance: source-label audit completed in issue #5917.
 % Local fix (nonzero coefficients): docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
-\begin{theorem}[Printed proportional fundamental theorem]
-    \label{thm:cpsv_theorem210_printed_status}
-    \lean{MPSTensor.fundamentalTheorem_proportional_canonicalForm}
-    \leanok
-    \uses{def:bnt_cpsv, def:cpsv_canonical_form, def:gauge_phase_equiv, thm:cpgsv_multiblock_ft_source}
-    Let $A$ and $B$ be tensors in canonical form whose matrix product vectors
-    are proportional at every positive length.  According to
-    \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}, arbitrary chosen bases of normal
-    tensors for $A$ and $B$ have the same cardinality and are related by a
-    bijective family of gauge-phase equivalences.
-
-    Here the canonical-form decomposition is read with every coefficient
-    $\mu_k$ nonzero, the convention implicit in the source normalization
-    $|\mu_k|\le 1$ with at least one coefficient equal to one: a summand with
-    coefficient zero contributes nothing to any matrix product vector and is
-    not a block of the decomposition.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:cpgsv_multiblock_ft_source}
-    With nonzero coefficients the canonical forms are BNT canonical forms, and
-    the statement is Theorem~\ref{thm:cpgsv_multiblock_ft_source}.
-\end{proof}
-
 \begin{theorem}[Multi-block fundamental theorem for normal tensors]%
     \label{thm:cpgsv_multiblock_ft_source}
     \lean{MPSTensor.fundamentalTheorem_proportional_canonicalForm}
@@ -37,8 +13,7 @@
     Let $P$ and $Q$ be BNT canonical forms (Definition~\ref{def:sector_bnt_cf}),
     with bases of normal tensors $(P_j)_{j=1}^{g_a}$ and $(Q_k)_{k=1}^{g_b}$.
     Every listed sector has a positive number of copies, and every copy weight
-    is nonzero. Thus no normal tensor with identically zero coefficient is
-    included in either basis. If the total tensors $P_{\mathrm{tot}}$,
+    is nonzero. If the total tensors $P_{\mathrm{tot}}$,
     $Q_{\mathrm{tot}}$ generate eventually
     nonzero proportional MPV families --- for all sufficiently large $N$ there is
     a nonzero scalar $c_N$ with
@@ -63,14 +38,6 @@
     $X_k$, and phases $\zeta_k$ of unit modulus. Taking $Y_k=X_k$ gives exactly
     the asserted relations.
 \end{proof}
-
-% Compare \cite[Theorem~2.10]{Cirac2016MPDO_arXiv} and
-% \cite[Theorem~IV.4]{Cirac2021Matrix}.  In
-% Definition~\ref{def:sector_bnt_cf}, every basis representative occurs among the
-% canonical-form summands, has positive copy count, and has nonzero copy weights.
-% These hypotheses exclude an unrelated normal tensor whose coefficient is zero
-% at every length.  If such a tensor is admitted, it can be adjoined without
-% changing any MPV, and equality of the two basis cardinalities need not follow.
 
 \subsection{Unitary gauges on normalized sectors}
 \label{subsec:ft_unitary_sector_gauges}
@@ -121,38 +88,19 @@
     \end{align}
 \end{proof}
 
-% CPSV16 Corollary A.6 (`thm:Fundamental-CFII`), lines 1197--1199.
+% CPSV16 Corollary A.6 (`thm:Fundamental-CFII`), lines 1197--1199: the
+% proportional part is this corollary and the equal part is
+% cor:sector_bnt_equal_unitary_global_gauge below.
 % Provenance: source-label audit completed in issue #5917.
-% Local fix (nonzero coefficients): docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex and
+% Local fix (nonzero coefficients): docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex and
 % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
-\begin{corollary}[Printed Canonical Form II unitary refinement]
-    \label{cor:cpsv_corollary_a6_printed_status}
-    \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses,
-        MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary}
-    \leanok
-    \uses{def:cpsv_cfii, thm:cpsv_theorem210_printed_status, cor:cpsv_corollary211_printed_status}
-    According to \cite[Corollary~A.6]{Cirac2016MPDO_arXiv}, the gauge matrices
-    in Theorem~2.10 and Corollary~2.11 may be chosen unitary when both tensors
-    are in Canonical Form II.
-
-    With the canonical forms read with nonzero coefficients, the proportional
-    sector gauges and the equal global gauge may be chosen unitary, as stated
-    in the two corollaries below.
-\end{corollary}
-
-\begin{proof}\leanok
-    \uses{cor:sector_bnt_proportional_unitary_sector_match, cor:sector_bnt_equal_unitary_global_gauge}
-    These are the two corollaries below.
-\end{proof}
-
 \begin{corollary}[Canonical Form II unitary refinement of proportional matching]%
     \label{cor:sector_bnt_proportional_unitary_sector_match}
     \lean{MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses}
     \leanok
     \uses{def:sector_bnt_cf, thm:cpgsv_multiblock_ft_source}
     Under the hypotheses of
-    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, all sectors are active and
-    all copy weights are nonzero. There exist a bijection
+    Theorem~\ref{thm:cpgsv_multiblock_ft_source}, there exist a bijection
     $\beta:J(Q)\simeq J(P)$, unitary matrices
     $U_k\in\mathrm{U}(\dim Q_k)$, and phases $\zeta_k\in\C$ with
     $|\zeta_k|=1$, such that $\dim P_{\beta(k)}=\dim Q_k$ and, for every $k$
@@ -183,26 +131,7 @@
 % CPSV16 Corollary 2.11 (`II_cor2`), lines 354--361 and Appendix A
 % restatement at lines 1172--1179.
 % Provenance: source-label audit completed in issue #5917.
-% Local fix (nonzero coefficients): docs/paper-gaps/cpsv16_bnt_characterization_active_blocks.tex.
-\begin{corollary}[Printed equal-MPV fundamental theorem]
-    \label{cor:cpsv_corollary211_printed_status}
-    \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm}
-    \leanok
-    \uses{thm:cpsv_theorem210_printed_status, def:cpsv_canonical_form, thm:cpgsv_equal_case_source}
-    According to \cite[Corollary~2.11]{Cirac2016MPDO_arXiv}, two
-    canonical-form tensors generating the same matrix product vectors at every
-    positive length have equal bond dimensions and are conjugate by one
-    invertible matrix.
-
-    The canonical forms are read with nonzero coefficients, as in
-    Theorem~\ref{thm:cpsv_theorem210_printed_status}.
-\end{corollary}
-
-\begin{proof}\leanok
-    \uses{thm:cpgsv_equal_case_source}
-    This is Theorem~\ref{thm:cpgsv_equal_case_source}.
-\end{proof}
-
+% Local fix (nonzero coefficients): docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \begin{theorem}[Equal BNT canonical forms are globally conjugate]%
     \label{thm:cpgsv_equal_case_source}
     \lean{MPSTensor.fundamentalTheorem_equal_canonicalForm}
@@ -211,22 +140,13 @@
     Let $P$ and $Q$ be BNT canonical forms (Definition~\ref{def:sector_bnt_cf})
     whose total tensors $P_{\mathrm{tot}}$, $Q_{\mathrm{tot}}$ generate the same
     MPV family for every positive system size~$N$. Every listed sector has a
-    positive number of copies and every copy weight is nonzero, so inactive
-    zero-weight summands are excluded. Then their total bond
-    dimensions coincide; writing the common value as~$D$, there is one
+    positive number of copies and every copy weight is nonzero. Then their
+    total bond dimensions coincide; writing the common value as~$D$, there is one
     invertible matrix $X\in\GL_D(\C)$ such that, for every physical index~$i$,
     \begin{align}
         Q_{\mathrm{tot}}^i
          & =X\,P_{\mathrm{tot}}^i\,X^{-1}. \notag
     \end{align}
-
-    %    Corollary~2.11 of \cite{Cirac2016MPDO_arXiv} is stated for a convention
-    %    that permits an additional normal summand with coefficient zero at every
-    %    positive length.  Such a summand can change the ambient bond dimension
-    %    without changing any positive-length MPV.  In
-    %    \cite[Corollary~IV.5]{Cirac2021Matrix}, the canonical summands have positive
-    %    coefficients, and the dimension and conjugacy conclusions agree with those
-    %    above.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -247,8 +167,7 @@
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate the
     same MPV family at every positive length. Assume every listed sector has a
     positive number of copies and every copy weight is nonzero, as in
-    Definition~\ref{def:sector_bnt_cf}; the literal zero-weight CFII statement
-    is not included. Their total bond dimensions
+    Definition~\ref{def:sector_bnt_cf}. Their total bond dimensions
     agree; writing the common value as $D$, there is a unitary matrix
     $U\in\mathrm{U}(D)$ such that, for every physical index~$i$,
     \begin{align}
@@ -256,11 +175,6 @@
          & = U P_{\mathrm{tot}}^i U^\dagger.
         \notag
     \end{align}
-    %    Under the same hypotheses on the canonical-form summands, this is the
-    %    unitary equal case considered in
-    %    \cite[Corollary~A.6, lines~1197--1199]{Cirac2016MPDO_arXiv}.  If an
-    %    additional summand with coefficient zero at every positive length is
-    %    admitted, positive-length MPVs do not determine the ambient bond dimension.
 \end{corollary}
 
 \begin{proof}\leanok

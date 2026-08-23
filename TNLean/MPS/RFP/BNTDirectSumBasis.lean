@@ -50,7 +50,7 @@ theorem isCPSVCanonicalForm_basisDirectSum
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis]
   exact
-    (CPSVCanonicalFormData.ofBlocks hCF.basis_dim_pos (fun _ ↦ 1) P.basis
+    (CPSVCanonicalFormData.ofBlocks hCF.basis_dim_pos (fun _ ↦ 1) (fun _ ↦ one_ne_zero) P.basis
       (fun j ↦ isNormalTensor_of_isNormal_leftCanonical (P.basis j)
         (hCF.basis_isNormal j) (hCF.basis_left_canonical j))).isCPSVCanonicalForm
 

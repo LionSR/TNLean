@@ -60,11 +60,6 @@ For an MPDO in literal CPSV canonical form, the renormalization fixed-point
 condition is equivalent to the active-support BNT fusion clause.  This is the
 active-support variant rather than the unrestricted printed statement (iii).
 
-**Scope restriction (active product BNT):** Only nonzero product corners are
-retained in the fusion clause.  A label absent from a fixed product pair has
-zero fusion multiplicity.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 **Local fix (Figure-11 fixed-pair support and coisometry):** A fixed pair may
 have empty active support, and the retained-row fusion map is a coisometry.
 Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex` and

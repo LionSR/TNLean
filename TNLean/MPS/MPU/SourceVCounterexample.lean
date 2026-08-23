@@ -244,14 +244,14 @@ theorem no_posDef_fixed (sigma : Matrix (Fin 2) (Fin 2) ℂ)
   exact lt_irrefl 0 hdiag
 
 /-- Canonical-form-II data for the counterexample normalized flattening cannot
-have full active support. Such data would supply a positive-definite transfer
+have full support. Such data would supply a positive-definite transfer
 fixed point, contradicting `no_posDef_fixed`.
 
 This excludes the counterexample from the reduced-representative hypotheses
 used for arXiv:1703.09188, equations (6a)--(6b), lines 269--280 and 397--405. -/
-theorem not_hasFullActiveSupport
+theorem not_hasFullSupport
     (cfii : MPSTensor.CPSVCanonicalFormIIData tensor.normalizedFlattening) :
-    ¬ cfii.toCPSVCanonicalFormData.HasFullActiveSupport := by
+    ¬ cfii.toCPSVCanonicalFormData.HasFullSupport := by
   intro hfull
   obtain ⟨_, _, sigma, _, _, _, _, _, _, hsigma_pd, _, hsigma_fix, _, _⟩ :=
     tensor_isMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii

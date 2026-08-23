@@ -216,7 +216,7 @@ theorem baseMPO_toMPSTensor_isCPSVCanonicalForm :
   rw [baseMPO_toMPSTensor_eq_symbolBlocks]
   exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ : Fin 4 ↦ by simp)
-    (fun _ : Fin 4 ↦ (1 : ℂ)) baseSymbolBlocks
+    (fun _ : Fin 4 ↦ (1 : ℂ)) (fun _ ↦ one_ne_zero) baseSymbolBlocks
     (fun a ↦ baseSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
 
 /-! ### Raw retained cyclic-edge projections -/

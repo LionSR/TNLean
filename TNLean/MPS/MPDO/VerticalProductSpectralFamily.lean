@@ -453,12 +453,6 @@ the product of a prescribed pair, or even among the active product corners.
 The conclusion therefore chooses a blocked label for each active corner and
 makes no converse assertion.
 
-**Scope restriction (active product BNT):** Proposition 2.7 classifies the
-nonzero canonical-form coefficients.  Hence this theorem covers active
-product corners only and does not assert surjectivity onto the blocked BNT.
-Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 **Local fix (Figure-11 fixed-pair support):** A fixed product pair may have no
 corner of a given blocked label; such a label has an empty multiplicity fiber.
 Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
@@ -505,20 +499,15 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
   have hCharacterization :=
     (MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
       (retainedVerticalProductTensor dim mult weight B)
-      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal
+      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal S.flatCoefficient_ne
       S.flat_sameMPV₂Pos).mp hBNTProduct
   intro j
-  exact hCharacterization.2.1 j (S.flatCoefficient_ne j)
+  exact hCharacterization.2.1 j
 
 /-- A simultaneous choice of the blocked BNT label, dimension equality,
 gauge, and phase for every enumerated active product corner.
 
 The map `label` need not be surjective: unused blocked BNT labels are allowed.
-
-**Scope restriction (active product BNT):** This structure records only the
-one-way coverage of active product corners.  Empty fibers record unused
-blocked labels.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 
 **Local fix (Figure-11 fixed-pair support):** No nonempty multiplicity space is
 asserted for an unused blocked label.  Documented in

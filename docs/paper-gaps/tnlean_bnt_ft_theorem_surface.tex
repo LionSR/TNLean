@@ -123,10 +123,8 @@ lemma proves the $N=0$ identity from eventual equality at positive lengths.
 It is nevertheless not the route displayed in
 \cite[Lemma~\texttt{Lem:app\_simple}, lines~1155--1163]{Cirac2016MPDO_arXiv};
 the source applies the unequal-cardinality power-sum lemma after the BNT
-representatives have been matched. Without the nonzero-weight hypothesis,
-positive powers would only determine the nonzero submultiset, so any use that
-counts zero weights must record an additional $N=0$ hypothesis or a nonzero
-coefficient hypothesis.
+representatives have been matched, to the nonzero coefficients of the
+canonical forms.
 This classification follows the protocol in
 \path{docs/paper-gaps/policy.tex}; the detailed comparison is recorded in
 \path{docs/paper-gaps/cpsv16_power_sum_alternative_route.tex}.
@@ -206,11 +204,10 @@ identified with one another.
     \path{MPSTensor.ft_sector_bnt_equal_global_gauge} are the current formal
     statements closest to the BNT part of the source proof. They work with raw
     sector weights and derive the sector matching, copy-count equalities, and
-    matched copy-weight identities on the SectorBNT surface. The corrected
-    active, nonzero SectorBNT equal-MPV theorem is obtained after the
-    canonical-form supplier has put the input tensors on this surface with the
-    required unit-modulus-copy normalization. The literal ambient source
-    corollary retains the separate zero-weight-coordinate obstruction.
+    matched copy-weight identities on the SectorBNT surface. The SectorBNT
+    equal-MPV theorem is obtained after the canonical-form supplier has put
+    the input tensors on this surface with the required unit-modulus-copy
+    normalization.
   \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is now an auxiliary rectangular comparison statement: from a supplied
@@ -223,48 +220,21 @@ identified with one another.
 The current proportional theorem\footnote{Formal declaration:
   \path{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.}
 is complete on the SectorBNT surface.  Every representative there has a
-positive copy count, every stored copy weight is nonzero, and the BNT data
-includes the converse coverage needed to exclude extraneous representatives.
+positive copy count and every copy weight is nonzero, the nonzero-coefficient
+convention of
+\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
 From the proportional MPV hypothesis it obtains a bijection of sectors,
 matched bond dimensions, unit phases, and invertible block gauges.  Separate
 global-gauge declarations strengthen this sectorwise conclusion and should not
 be conflated with the source theorem.
 
-\paragraph{Literal source obstruction.}
-The BNT definition in arXiv:1606.00608, lines~271--274, requires normality,
-spanning of the total MPV, and eventual linear independence, but it does not
-require every candidate to occur with a nonzero coefficient.  Consequently an
-unrelated normal tensor may be adjoined with coefficient zero at every length.
-The same tensor then has a one-element and a two-element BNT, so the equality
-of cardinalities asserted by Theorem~II.1 is false under the printed
-hypotheses.\footnote{Formal declaration:
-  \path{MPSTensor.exists_isCPSVBasisOfNormalTensors_unequal_card}; see
-  \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.}
-
-Thus the exact missing hypothesis surface is converse coverage of the active
-canonical-form blocks, not a coefficient identity inside the proved
-SectorBNT theorem.  With this active, nonzero restriction, the proportional
-sector theorem is complete.  Without it, the printed theorem requires a
-source correction rather than another matching argument.  In CPSV16, the
-equal-MPV ambient conjugacy corollary has the additional zero-weight-coordinate
-and ambient-dimension obstruction recorded separately.
-
 The formal declaration
 \path{MPSTensor.CPSVCanonicalFormData.fundamentalTheorem_equal_ambient_canonicalForm}
-now covers the nonzero equal-ambient sub-case.  It assumes that both tensors
-have the same ambient bond dimension and that their canonical-form data satisfy
-the separate weight normalization.  Exact active reconstructions and a
-coisometry-alignment argument then give ambient gauge equivalence.  This does
-not remove the heterogeneous ambient-dimension obstruction or the zero-family
-boundary of the printed corollary.
-
-CPSV21 uses the same weak BNT definition, so the extra zero-coefficient
-representative still refutes the chosen-BNT cardinality conclusion of
-Theorem~4.4.  It does not refute Corollary~4.5.  The latter concerns the ambient
-canonical tensors, whose actual direct-sum coefficients are positive in the
-standing construction.  The current equal SectorBNT theorem is an analogue of
-that corollary; identifying it with the source statement still requires a bridge
-from CPSV21 canonical form to the SectorBNT hypotheses.
+covers the equal-ambient case.  It assumes that both tensors have the same
+ambient bond dimension and that their canonical-form data satisfy the separate
+weight normalization.  Exact reconstructions and a coisometry-alignment
+argument then give ambient gauge equivalence.  This does not remove the
+heterogeneous ambient-dimension obstruction of the printed corollary.
 
 \paragraph{Conditional after-blocking statements.}
 The after-blocking comparison theorems are useful only after the source
