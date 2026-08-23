@@ -956,9 +956,10 @@
     \__tenkz_kernel_stage_put:nn {#1} {cup}
     \__tenkz_kernel_stage_put:nn {cup-#1} {#2}
   }
-% One positive-integer parser serves every scope.  The parser family selects
-% the scope-specific diagnostic without duplicating the accepted alphabet.
-\cs_new_protected:Npn \__tenkz_kernel_positive_integer:nnn #1#2#3
+% One positive-integer parser serves every scope.  Its last three arguments
+% name the diagnostic, its \msg_error variant, and any trailing diagnostic
+% arguments, so the accepted alphabet is independent of the message arity.
+\cs_new_protected:Npn \__tenkz_kernel_positive_integer:nnnnnn #1#2#3#4#5#6
   {
     \keys_define:nn {#1}
       {
@@ -967,20 +968,7 @@
             \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {##1}
               { \__tenkz_kernel_stage_put:nn {#3} {##1} }
               {
-                \str_case:nn {#1}
-                  {
-                    {tenkz-kernel-picture}
-                      {
-                        \msg_error:nnee {tenkz}{kernel-picture-positive}
-                          {#2} {##1}
-                      }
-                    {tenkz-kernel-atom}
-                      {
-                        \msg_error:nneee {tenkz}{kernel-atom-positive}
-                          {#2} {##1}
-                          { \tl_use:N \l__tenkz_model_last_tl }
-                      }
-                  }
+                #5 {tenkz} {#4} {#2} {##1} #6
               }
           }
       }
@@ -1229,8 +1217,9 @@
 % cols= carries the row's stated type: an illegal value refuses with the
 % picture-scope positive-integer diagnostic instead of a bare TeX
 % arithmetic error (#6198 sweep).
-\__tenkz_kernel_positive_integer:nnn
+\__tenkz_kernel_positive_integer:nnnnnn
   { tenkz-kernel-picture } { cols } { cols }
+  { kernel-picture-positive } { \msg_error:nnee } { }
 \keys_define:nn {tenkz-kernel-picture}
   {
     frame .code:n = { \__tenkz_kernel_frame:n {#1} }
@@ -1311,10 +1300,14 @@
 % ---------- atom keys ------------------------------------------------------------
 
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { skin } { skin }
-\__tenkz_kernel_positive_integer:nnn
+\__tenkz_kernel_positive_integer:nnnnnn
   { tenkz-kernel-atom } { wide } { wide }
-\__tenkz_kernel_positive_integer:nnn
+  { kernel-atom-positive } { \msg_error:nneee }
+  { { \tl_use:N \l__tenkz_model_last_tl } }
+\__tenkz_kernel_positive_integer:nnnnnn
   { tenkz-kernel-atom } { wires } { wires }
+  { kernel-atom-positive } { \msg_error:nneee }
+  { { \tl_use:N \l__tenkz_model_last_tl } }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { at } { at }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { name } { name }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { ports } { ports }
