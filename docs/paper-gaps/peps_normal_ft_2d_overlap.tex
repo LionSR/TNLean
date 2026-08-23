@@ -107,10 +107,12 @@ equally be done with a virtual operation on the highlighted
 edge.''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321} and
 \path{Papers/1804.04964/paper_normal.tex:2368}.} The formalization separates
 the two directions of this correspondence.  The forward direction ---
-realizing a fixed virtual operation $X$ on every staircase window --- is now
-complete.  The converse, which must compare the two tensor families and
-recover the algebra homomorphism carried by $X$, is the remaining extraction
-problem.
+realizing a fixed virtual operation $X$ by a physical operator $O_j(X)$ on
+every staircase window --- is now complete: the open-boundary identity
+$O_j(X)T_{B,W_j}(\mu)=C_j(X)(\mu)$ is proved for every virtual boundary
+configuration~$\mu$.  The converse, which must compare the two tensor
+families and recover the algebra homomorphism carried by $X$, is the
+remaining extraction problem.
 
 The sketch supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
@@ -169,7 +171,8 @@ no such span.
 \medskip
 \noindent\textbf{Formalization verdict.} The published argument is explicitly
 a sketch.  The consecutive-window comparison, corner completion, and forward
-realization of one virtual operation on all windows are now formalized.  What
+open-boundary physical realization of one virtual operation on all windows are
+now formalized.  What
 remains is the cross-tensor converse and the homomorphism extraction
 corresponding to Lemma~5's maps $O_1\mapsto X$ and
 $O_3^{\mathsf T}\mapsto X$.  The failed single-window span above is an
@@ -227,6 +230,9 @@ and the now-uniform interior-bond rescaling
 common-state family
 (\leanid{TNLean.PEPS.interiorBondInsertedRegionInsert} and
 \leanid{TNLean.PEPS.staircaseVirtualOperationInsert}), together with its
+open-boundary physical operators
+(\leanid{TNLean.PEPS.physicalOpOfRegionInsert} and
+\leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp\_realizes}), and its
 end-window coefficient identity
 \leanid{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
 (\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean} and
@@ -242,7 +248,9 @@ remaining gate is the cross-tensor transfer and its multiplicativity.
 The same-tensor operation family is no longer missing.  For a fixed matrix
 $X$ on $e$, the first window carries $X^{\mathsf T}$, the windows
 $W_1,\ldots,W_{L-1}$ carry the interior-bond insert of $X$, and the remaining
-windows carry the boundary insert of $X$.  All have common state
+windows carry the boundary insert of $X$.  Window injectivity defines
+$O_j(X)$ and proves $O_j(X)T_{B,W_j}(\mu)=C_j(X)(\mu)$ before complementary
+contraction; all these inserts also have common closed state
 $P_B(W_0)E_B(e,\cdot,X)$.  The outstanding input is instead the cross-tensor
 coefficient transfer between $A$ and $B$ and its multiplicativity
 \leanid{hmul}, the two-dimensional counterpart of Lemma~5's algebra
@@ -306,8 +314,9 @@ corollary is false or that no source-faithful proof exists.
 \paragraph{5. Reading the source faithfully.}
 The paper keeps one highlighted edge fixed and compares physical operations
 on overlapping regions; it does not introduce a chain of different bonds or
-a single-window square-matrix span.  The forward correspondence and its
-transpose convention now follow this description literally.  The remaining
+a single-window square-matrix span.  The forward correspondence, its
+open-boundary physical operators, and its transpose convention now follow
+this description literally.  The remaining
 formal work is to expand the sketch's converse comparison far enough to obtain
 the cross-tensor homomorphism, using Lemma~5's $O_1$ and
 $O_3^{\mathsf T}$ notation and composition argument.
@@ -1332,9 +1341,15 @@ interior construction
 \leanid{TNLean.PEPS.interiorBondInsertedRegionInsert}
 (\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}) starts from the ordered left
 endpoint and adjoins the genuine tensors of the window by corner extension.  This formalizes
-the forward realization asserted at lines 2320--2321 and uses the same adjoining contraction
-that appears in the end-region comparison at lines 2415--2444.  Its assembled state is the
-window's non-boundary bond product times $\mathrm{edgeInsertedCoeff}(e,M)$.  Translation
+the virtual insert asserted at lines 2320--2321 and uses the same adjoining contraction
+that appears in the end-region comparison at lines 2415--2444.  The physical operator itself is
+\leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp}: it is the prescribed insert
+linear combination composed with a left inverse of the injective window block.  The theorem
+\leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp\_realizes} proves the source's
+open-boundary statement
+$O_j(M)T_{B,W_j}(\mu)=C_j(M)(\mu)$ for every~$\mu$, before complementary contraction.
+The insert's assembled state is the window's non-boundary bond product times
+$\mathrm{edgeInsertedCoeff}(e,M)$.  Translation
 invariance makes that product uniform over the staircase, proving one common deformed
 state for all $L+K$ inserts.
 
@@ -1342,7 +1357,9 @@ Consequently
 \leanid{TNLean.PEPS.regionInsertedCoeff\_endWindows\_eq\_staircaseVirtualOperation}
 supplies the source-faithful single-tensor identity between the first-window insertion of
 $M^{\mathsf T}$ and the last-window insertion of $M$.  This closes the common-state-family
-residual.  It does not by itself construct the cross-tensor transfer from $A$ to $B$ or
+residual.  This end-window coefficient identity follows directly from the two region-to-edge
+identities and translation invariance; it needs neither complement inversion nor a peeling
+hypothesis.  It does not by itself construct the cross-tensor transfer from $A$ to $B$ or
 prove that transfer multiplicative; those are the remaining Lemma~5-style comparison
 steps.
 

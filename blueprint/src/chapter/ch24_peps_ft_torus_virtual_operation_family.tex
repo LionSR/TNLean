@@ -1,5 +1,45 @@
 \paragraph{One virtual operation on every staircase window.}
 
+The construction below formalizes the forward virtual/physical-operation
+correspondence in the proof sketch of the two-dimensional corollary
+\cite[corollary after Lemma~5, lines~2297--2444]{Molnar2018NormalPEPS}.
+
+\begin{definition}[Physical operator of a region insert]%
+    \label{def:peps_physical_operator_of_region_insert}
+    \lean{TNLean.PEPS.physicalOpOfRegionInsert}
+    \leanok
+    \uses{def:peps_region_out_endpoint_block_inverse}
+    Let $R$ be an injective region and let
+    $C=\{C(\mu)\}_{\mu\in\partial R}$ be any family in its physical
+    space, indexed by the virtual boundary configurations.  If $L_{A,R}$
+    is a left inverse of the blocked tensor map, define
+    \begin{align}
+        O_C
+         &=\left(c\longmapsto\sum_{\mu}c_\mu C(\mu)\right)L_{A,R}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Open-boundary realization of a region insert]%
+    \label{thm:peps_physical_operator_of_region_insert_realizes}
+    \lean{TNLean.PEPS.physicalOpOfRegionInsert_realizes}
+    \leanok
+    \uses{def:peps_physical_operator_of_region_insert}
+    For every virtual boundary configuration $\mu$,
+    \begin{align}
+        O_C\bigl(T_{A,R}(\mu)\bigr)&=C(\mu).
+        \notag
+    \end{align}
+    Thus the insert is obtained from the genuine region block by one
+    physical operator before the region is contracted with its complement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The left inverse sends $T_{A,R}(\mu)$ to the standard basis vector
+    indexed by $\mu$, and the displayed linear combination sends that basis
+    vector to $C(\mu)$.
+\end{proof}
+
 \begin{definition}[Interior-bond region insert]%
     \label{def:peps_interior_bond_inserted_region_insert}
     \lean{TNLean.PEPS.interiorBondInsertedRegionInsert}
@@ -47,7 +87,7 @@
     \label{def:peps_staircase_virtual_operation_insert}
     \lean{TNLean.PEPS.staircaseVirtualOperationInsert}
     \leanok
-    \uses{def:peps_interior_bond_inserted_region_insert, lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
+    \uses{def:peps_bond_inserted_region_insert, def:peps_interior_bond_inserted_region_insert, lem:peps_reference_edge_boundary_windows, lem:peps_reference_edge_interior_windows}
     Let $e$ be the horizontal reference edge and let
     $X\in\MN{D_B(e)}$.  Define an insert $C_j(X)$ on each staircase window
     $W_j$, for $0\le j<L+K$, by
@@ -66,6 +106,29 @@
     only the ordered left endpoint.  The transpose in the first case makes
     all three boundary orientations represent the same matrix $X$.
 \end{definition}
+
+\begin{theorem}[Physical operators on the staircase windows]%
+    \label{thm:peps_staircase_virtual_operation_physical_realization}
+    \lean{TNLean.PEPS.staircaseVirtualOperationPhysicalOp}
+    \lean{TNLean.PEPS.staircaseVirtualOperationPhysicalOp_realizes}
+    \leanok
+    \uses{def:peps_staircase_virtual_operation_insert, thm:peps_physical_operator_of_region_insert_realizes}
+    Suppose every $L\times K$ window is injective.  For every
+    $0\leq j<L+K$, there is a physical operator $O_j(X)$ on the physical
+    space of $W_j$ such that
+    \begin{align}
+        O_j(X)\bigl(T_{B,W_j}(\mu)\bigr)&=C_j(X)(\mu)
+        \qquad (\mu\in\partial W_j).
+        \notag
+    \end{align}
+    Hence the virtual operation is realized locally on each window, before
+    any contraction with the complementary tensor network.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each staircase window is an $L\times K$ translate and is therefore
+    injective.  Apply the open-boundary realization theorem to $C_j(X)$.
+\end{proof}
 
 \begin{lemma}[The two end inserts of the staircase family]%
     \label{lem:peps_staircase_virtual_operation_end_inserts}
@@ -116,12 +179,10 @@
     \label{thm:peps_end_window_identity_staircase_virtual_operation}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
     \leanok
-    \uses{lem:peps_staircase_virtual_operation_end_inserts, thm:peps_staircase_virtual_operation_common_state, thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
-    Suppose the window-injectivity and union-closure hypotheses of the
-    single-bond peeling hold, the tensor is translation invariant, all bond
-    dimensions are positive, and the staircase satisfies the same size
-    bounds.  Then for every $X\in\MN{D_B(e)}$ and every global physical
-    configuration $\omega$,
+    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff, thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    Suppose the tensor is translation invariant and the staircase satisfies
+    the stated size bounds.  Then for every $X\in\MN{D_B(e)}$ and every
+    global physical configuration $\omega$,
     \begin{align}
         C_B(W_0,e,X^{\mathsf T};\omega|_{W_0},
             \omega|_{V\setminus W_0})
@@ -133,8 +194,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    Use the family $C_j(X)$.  Its end members are the required boundary
-    inserts and all members have the common state
-    $P_B(W_0)E_B(e,\cdot,X)$.  The single-bond peeling therefore gives the
-    stated coefficient identity.
+    The region-to-edge identity sends both sides to the edge coefficient
+    with $X$ on the same reference edge: the first boundary orientation
+    transposes $X^{\mathsf T}$, while the last fixes $X$.  Translation
+    invariance identifies the two non-boundary bond products.
 \end{proof}

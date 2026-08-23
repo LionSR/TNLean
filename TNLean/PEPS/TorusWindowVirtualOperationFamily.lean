@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.InteriorBondInsertion
+import TNLean.PEPS.RegionBlock.PhysicalOperation
 import TNLean.PEPS.TorusWindowBondUniform
 import TNLean.PEPS.TorusWindowFamilyCrossing
 import TNLean.PEPS.TorusWindowPeeling.SingleBond
@@ -24,10 +25,11 @@ arXiv:1804.04964:
 
 Every assembled deformed state is the non-boundary bond product of its window times the same
 closed-network coefficient `E_B(e, ω, X)`.  Translation invariance makes those products equal,
-so the entire family has one common deformed state.  Applying the existing single-bond peeling
-then equates the first-window coefficient with `Xᵀ` and the last-window coefficient with `X`.
-This transpose agrees with the ordered-endpoint convention of Lemma 5, where the right-end
-physical operation occurs in the map from `O₃ᵀ` to `X`.
+so the entire family has one common deformed state.  Independently, window injectivity gives an
+explicit physical operator `Oⱼ(X)` whose action on every open-boundary genuine block is the insert
+`Cⱼ(X)`.  The direct region-to-edge identities equate the first-window coefficient with `Xᵀ`
+and the last-window coefficient with `X`.  This transpose agrees with the ordered-endpoint
+convention of Lemma 5, where the right-end physical operation occurs in the map from `O₃ᵀ` to `X`.
 
 The construction follows the paper's actual operation: it keeps the distinguished bond `e`
 fixed and adjoins genuine tensors to a window.  No auxiliary matrix-span or different-bond
@@ -85,6 +87,69 @@ noncomputable def staircaseVirtualOperationInsert {a b : ℕ}
       (referenceEdge_endpoints_mem_staircaseWindow_of_interior hL hK haw hyh
         (Nat.one_le_iff_ne_zero.mpr hj0) (lt_of_not_ge hjL)) X
 
+/-- The physical operator `Oⱼ(X)` on the `j`-th injective staircase window that realizes the
+insert `Cⱼ(X)`.
+
+The arc-window hypotheses make `Wⱼ` injective.  The chosen left inverse of its blocked-tensor map
+therefore turns the open-boundary insert family `Cⱼ(X)` into one linear operator on the physical
+space of the window.
+
+Source: arXiv:1804.04964, the virtual/physical operation correspondence at lines 2320--2321 and
+the displayed staircase windows at lines 2323--2366 of
+`Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def staircaseVirtualOperationPhysicalOp {a b : ℕ}
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 0 < L) (hK : 0 < K) (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (X : Matrix
+      (Fin (B.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (B.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ)
+    (j : ℕ) :
+    (RegionPhysicalConfig (V := TorusVertex width height) (d := d)
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j) → ℂ) →ₗ[ℂ]
+      (RegionPhysicalConfig (V := TorusVertex width height) (d := d)
+        (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j) → ℂ) :=
+  physicalOpOfRegionInsert (G := torusGraph width height) B
+    (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
+    (by
+      have hi := h.staircaseWindow_injective ((a : ZMod width), (b : ZMod height)) j
+      rwa [regionInjectivityDataOf_isInjective] at hi)
+    (staircaseVirtualOperationInsert (B := B) hL hK haw hyh X j)
+
+/-- The operator `Oⱼ(X)` realizes `Cⱼ(X)` as an open-boundary identity.  For every virtual
+boundary configuration `μ`,
+\[
+  O_j(X)\bigl(T_{B,W_j}(\mu)\bigr)=C_j(X)(\mu).
+\]
+
+In particular, the common-state theorem below is not being used to infer a local physical
+realization after closing the complement: the physical operator is exhibited first, on the
+window's full physical space.
+
+Source: arXiv:1804.04964, the virtual/physical operation correspondence at lines 2320--2321 and
+the displayed staircase windows at lines 2323--2366 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem staircaseVirtualOperationPhysicalOp_realizes {a b : ℕ}
+    (h : NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hL : 0 < L) (hK : 0 < K) (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
+    (X : Matrix
+      (Fin (B.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K)))
+      (Fin (B.bondDim (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K))) ℂ)
+    (j : ℕ)
+    (μ : RegionBoundaryConfig (G := torusGraph width height) B
+      (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)) :
+    staircaseVirtualOperationPhysicalOp (B := B) h hL hK haw hyh X j
+        (regionBlockedWeight (G := torusGraph width height) B
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j) μ) =
+      staircaseVirtualOperationInsert (B := B) hL hK haw hyh X j μ := by
+  unfold staircaseVirtualOperationPhysicalOp
+  apply physicalOpOfRegionInsert_realizes
+
 /-- On the first staircase window the virtual-operation family is the boundary insert of
 `Xᵀ`.  Its boundary orientation transposes once more, so the closed-network operation is `X`.
 
@@ -140,7 +205,6 @@ theorem deformedRegionStateAssembled_staircaseVirtualOperationInsert {a b j : �
     (hTI : IsTorusTranslationInvariant B)
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 0 < L) (hK : 0 < K) (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
-    (_hj : j < L + K)
     (X : Matrix
       (Fin (B.bondDim (horizontalStaircaseReferenceEdge
         ((a : ZMod width), (b : ZMod height)) L K)))
@@ -182,26 +246,22 @@ theorem deformedRegionStateAssembled_staircaseVirtualOperationInsert {a b j : �
         (hpos := hpos)]
       rw [regionInteriorBondProd_staircaseWindow_eq hTI _ L K j 0]
 
-/-- The virtual-operation family supplies the common-state hypothesis of the single-bond
-peeling.  Consequently, the coefficient on the first window with `Xᵀ` inserted equals the
-coefficient on the last window with `X` inserted.
+/-- The coefficient on the first window with `Xᵀ` inserted equals the coefficient on the last
+window with `X` inserted.
 
-The hypotheses here are exactly those of the existing end-window peeling theorem together with
-translation invariance, which identifies the normalizing bond products.  This is a
-single-tensor end-window identity, not yet the cross-tensor gauge conjugation.
+This is the direct coefficient-level shadow of the virtual-operation family.  The region-to-edge
+identity sends both sides to the coefficient with `X` on the same reference edge, and translation
+invariance identifies their non-boundary bond products.  No injectivity or complement hypothesis
+is needed for this equality.  The open-boundary physical realization is the separate theorem
+`staircaseVirtualOperationPhysicalOp_realizes`.
 
 Source: arXiv:1804.04964, Lemma 5 at lines 2045--2252 and the two-dimensional proof sketch at
 lines 2320--2444 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation {a b : ℕ}
-    (h : NormalTorusArcWindowInjectivityHypotheses L K
-      (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
     (hTI : IsTorusTranslationInvariant B)
-    (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
       (Fin (B.bondDim (horizontalStaircaseReferenceEdge
         ((a : ZMod width), (b : ZMod height)) L K)))
@@ -220,19 +280,36 @@ theorem regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation {a b : ℕ}
           (by omega) (by omega) ha0 haw hbh⟩ X
         (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg)
         (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg) := by
-  apply regionInsertedCoeff_endWindows_eq_of_staircase h hUB hpos hL hK ha0 haw hbh hxw hyh
-    Xᵀ X (staircaseVirtualOperationInsert (B := B) (by omega) (by omega) haw (by omega) X)
-    (fun cfg ↦
-      regionInteriorBondProd (G := torusGraph width height) B
-          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K 0) •
-        edgeInsertedCoeff (G := torusGraph width height) B
-          (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) cfg X)
-  · intro j hj
-    funext cfg
-    exact deformedRegionStateAssembled_staircaseVirtualOperationInsert hTI hpos
-      (by omega) (by omega) haw (by omega) hj X cfg
-  · exact staircaseVirtualOperationInsert_zero (by omega) (by omega) haw (by omega) X
-  · exact staircaseVirtualOperationInsert_last (by omega) (by omega) haw (by omega) X
+  rw [regionInsertedCoeff_eq_smul_edgeInsertedCoeff,
+    regionInsertedCoeff_eq_smul_edgeInsertedCoeff]
+  have hcfg0 :
+      assembleRegionσ (V := TorusVertex width height) (d := d)
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K 0)
+          (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg)
+          (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg) = cfg :=
+    assembleRegionσ_restrict _ cfg
+  have hcfgLast :
+      assembleRegionσ (V := TorusVertex width height) (d := d)
+          (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K (L + K - 1))
+          (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg)
+          (restrictRegionσ (V := TorusVertex width height) (d := d) _ cfg) = cfg :=
+    assembleRegionσ_restrict _ cfg
+  rw [hcfg0, hcfgLast]
+  have hleft0 :
+      (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K).1.1 ∉
+        staircaseWindow ((a : ZMod width), (b : ZMod height)) L K 0 := by
+    rw [referenceEdge_leftEndpoint_mem_staircaseWindow (by omega) (by omega) haw (by omega)]
+    omega
+  have hleftLast :
+      (horizontalStaircaseReferenceEdge
+        ((a : ZMod width), (b : ZMod height)) L K).1.1 ∈
+        staircaseWindow ((a : ZMod width), (b : ZMod height)) L K (L + K - 1) := by
+    rw [referenceEdge_leftEndpoint_mem_staircaseWindow (by omega) (by omega) haw (by omega)]
+    omega
+  simp only [regionEdgeOrient, hleft0, hleftLast, ite_false, ite_true,
+    Matrix.transpose_transpose]
+  rw [regionInteriorBondProd_staircaseWindow_eq hTI _ L K 0 (L + K - 1)]
 
 end Torus
 
