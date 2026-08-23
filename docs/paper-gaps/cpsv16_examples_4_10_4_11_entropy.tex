@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{Scope}
 
@@ -242,10 +242,31 @@ root multisets
     L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},(9/128)^{[3]}\}.
 \end{align*}
 These are project-derived consequences of the corrected $p=1/4$ reading, not
-formulas printed in CPSV16.  The corresponding tensor block-entropy
-identifications have not been proved.  In particular, the established roots
-alone are not used to infer the entropy formulas or
-$\neg\mathrm{IsSAL}$.
+formulas printed in CPSV16.
+
+The module \doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives the four
+tensor block entropies from these root multisets.  The declarations
+\leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_one},
+\leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_two},
+\leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_three}, and
+\leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_four} identify them with
+the exact correlated-flip window entropies.  The declaration
+\leanid{MPOTensor.CPSVExample410Entropy.mutualInfo_two_sub_one} proves
+\[
+  I_2-I_1
+  =\frac1{16}\ln\!\left(\frac{2^{32}7^7}{3^3 5^{20}}\right),
+\]
+and \leanid{MPOTensor.CPSVExample410Entropy.mutualInfo_two_sub_one_pos}
+proves that this difference is positive.  The proof uses the established
+spectra and the exact integer comparison rather than treating the printed
+decimals as evidence.  Finally,
+\leanid{MPOTensor.CPSVExample410Entropy.M_not_isSAL} links the strict defect
+to the defining constancy of mutual information under saturation, and
+\leanid{MPOTensor.CPSVExample410Entropy.M_isSourceZCL_and_not_isSAL} gives
+\[
+  \mathrm{IsSourceZCL}(M)\mathbin{\land}\neg\mathrm{IsSAL}(M).
+\]
+All spectra and exact entropy and linking calculations are project-derived.
 
 The scalar endpoints are now certified in
 \doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
@@ -387,10 +408,11 @@ complete.  The printed independent non-zero-correlation-length clause is thus
 verified for the literal finite periodic family, while its saturation clause
 remains false.  No conclusion is made about the legacy doubled-index
 zero-correlation convention or about thermodynamic behavior.  For
-Example~4.10, the corrected tensor, its MPDO property, source zero correlation
-length, and its full one- through four-site operator spectra are complete.
-The tensor block-entropy identifications and the resulting non-SAL theorem
-remain open in \ghissue{6301}.
+Example~4.10, the corrected fixed-$p=1/4$ tensor, its MPDO property, source zero
+correlation length, full one- through four-site operator spectra, tensor block
+entropies, exact positive mutual-information defect, and non-SAL conclusion
+are complete.  This does not establish the printed universal statement in
+$p$, and $p=1$ remains an additional exception to that statement.
 
 Example~4.12 is outside the entropy correction in this note. Its statement,
 dependencies, and separate normalization question are unchanged.
@@ -399,11 +421,13 @@ dependencies, and separate normalization question are unchanged.
 
 \textbf{Verdict for Example~4.10: source typo and scope correction.}
 The repeated left-qubit label is replaced by the left--right correlated flip.
-At $p=1/4$, the corrected tensor has source zero correlation length and its
+At $p=1/4$, the corrected tensor has source zero correlation length, its
 full one- through four-site operator spectra agree with the bond-window
-calculations.  The tensor block-entropy identities and the non-SAL conclusion
-are not yet formalized.  The printed universal exception list must also
-exclude $p=1$.
+calculations, and those spectra give the exact tensor block entropies.  The
+strict positive defect $I_2-I_1$ proves that the tensor does not saturate the
+area law.  These spectra and exact entropy calculations are project-derived;
+the source prints only the channel and decimal entropies.  The printed
+universal exception list must also exclude $p=1$.
 
 \textbf{Verdict for Example~4.11: the printed separation is only half
 correct for the literal periodic state.}  The exact finite-marginal mismatch
