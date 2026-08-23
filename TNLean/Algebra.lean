@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
+import TNLean.Algebra.BipartiteSupportAlgebra
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.BurnsideTheorem
