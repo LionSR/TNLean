@@ -1,0 +1,78 @@
+% Regression: frame-readable wire records reserve the faces their ink uses.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_frame_side_count_int
+\cs_new_eq:NN
+  \__tenkz_test_frame_side_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_frame_side_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_frame_side_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l_tmpa_tl
+    \str_case:VnF \l_tmpa_tl
+      {
+        {P}
+          {
+            \str_if_eq:VnF #2 {w}
+              { \errmessage{far~port~slot~answered~the~wrong~face} }
+          }
+        {Q}
+          {
+            \str_if_eq:VnF #2 {w}
+              { \errmessage{spanning~atom~name~answered~the~wrong~face} }
+          }
+        {R}
+          {
+            \str_if_eq:VnF #2 {n}
+              { \errmessage{generated~closure~answered~the~wrong~face} }
+          }
+        {T}
+          {
+            \str_if_eq:VnF #2 {s}
+              { \errmessage{closure~bead~answered~the~wrong~face} }
+          }
+      }
+      { \errmessage{unexpected~label~in~frame-cell~fixture} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% The far port lies on the second row of a spanning atom.  The horizontal
+% wire therefore takes the labelled atom's east face.
+\begin{tenkz}[lattice={3x3}, bonds=none]
+  \tn[at=(2,1), name=P, skin=dot,
+      ports={90:virtual,270:virtual}]{P}
+  \tn[at=(1,3), name=A, wires=2,
+      ports={180@2:virtual}]{}
+  \tn[at=(1,1), name=N]{} \tn[at=(3,1), name=S]{}
+  \tnwire{P.90}{N} \tnwire{P.270}{S} \tnwire{P}{A.180@2}
+\end{tenkz}
+% The bare name denotes the middle of the three-row rectangle, not its
+% anchor cell.  Its horizontal wire therefore takes the east face.
+\begin{tenkz}[lattice={3x3}, bonds=none]
+  \tn[at=(1,2), name=Q, skin=dot, wires=3,
+      ports={90:virtual,270:virtual}]{Q}
+  \tn[at=(1,1), name=QN]{}
+  \tn[at=(3,1), name=QS]{}
+  \tn[at=(2,3), name=QE]{}
+  \tnwire{Q.90}{QN} \tnwire{Q.270}{QS} \tnwire{Q}{QE}
+\end{tenkz}
+% A one-sided south trace leaves the boundary atom through its south face.
+\begin{tenkz}[lattice={1x1}, bonds=none, south=trace]
+  \tn[at=(1,1), skin=dot]{R}
+\end{tenkz}
+% A bead a quarter of the way round an east cup sees the saved curved route,
+% not the vertical chord between the cup's boundary sites.
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+  \tn[at=(1,1)]{} \\ \tn[at=(2,1)]{}
+  \tn[at=on cup-1-2 0.25, skin=dot]{T}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_frame_side_count_int } = {4}
+  { \errmessage{frame-cell~fixture~did~not~station~four~labels} }
+\ExplSyntaxOff
+\end{document}
