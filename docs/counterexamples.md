@@ -77,9 +77,10 @@ mathematical obstruction.
 - Scope: this is proof-path drift in the printed argument. The non-Cartesian
   construction below refutes only the implication from the inherited local
   analytic properties; it has no ambient simple-biCF witness. The source-context
-  factorization remains issue #6775. The source constructs the representative
-  channels from that factorization and then projects onto the outer BNT
-  subspaces; the projector-controlled assembly is formalized in #6632. The
+  factorization remains issue #6775. The source first projects into each local
+  physical subspace labelled by $j$ and then applies the representative
+  channels supplied by that factorization. The projector-controlled assembly
+  is formalized in #6632. The
   direct sector-mixing alternative formerly tracked in #6793 is not a separate
   source obligation.
 
