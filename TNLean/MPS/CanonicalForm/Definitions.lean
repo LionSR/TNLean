@@ -196,9 +196,14 @@ structure CPSVCanonicalFormData (A : MPSTensor d D) where
   dim_pos : ∀ k, 0 < dim k
   /-- Scalar weight of each retained block (CPSV16, eq. `II_Aiplusk1`). -/
   weights : Fin r → ℂ
-  /-- Every retained weight is nonzero: the blocks of CPSV16, lines 214--225, are the
-  nonzero summands, normalized at line 246 by `‖μ_k‖ ≤ 1` with one weight of modulus
-  one. -/
+  /-- Every retained weight is nonzero.  CPSV16, line 219, locates the degenerate case in
+  the block dimensions ("there can be zero blocks", i.e. `D_k = 0`), not in the weights;
+  lines 224--225 choose each `μ_k` so that the transfer map of `μ_k A_k` has spectral
+  radius one, which forces `μ_k ≠ 0` because a vanishing weight gives spectral radius
+  zero; line 246 then normalizes `‖μ_k‖ ≤ 1` with one weight of modulus one.
+
+  **Local fix (nonzero coefficients):** the formalization reads every listed weight as
+  nonzero; documented in `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
   weights_ne_zero : ∀ k, weights k ≠ 0
   /-- Retained normal blocks (CPSV16, eq. `II_CF1`). -/
   blocks : (k : Fin r) → MPSTensor d (dim k)

@@ -59,10 +59,21 @@ stated, each against the blueprint node named.
     \item The uniqueness sentence at \cite[line 1148]{Cirac2016MPDO_arXiv}:
           two bases of normal tensors of the same positive-length matrix
           product vector family have a bijective gauge-phase matching, proved
-          by applying Proposition~2.7 in both directions. Blueprint
+          by applying Proposition~2.7 in both directions. It is formalized
+          for basis-of-normal-tensors sector presentations, in which every
+          basis element carries a nonzero coefficient. Blueprint
           \path{thm:cpsv_bnt_presentation_uniqueness}.\footnote{Formal
           declaration:
           \leanid{MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos}.}
+          The literal Definition-2.4 family predicate\footnote{Formal
+          declaration: \leanid{MPSTensor.IsCPSVBasisOfNormalTensors}.} is
+          retained as an interface and carries no uniqueness claim: for a
+          one-block tensor $A_0$ with coefficient $1$, both $(A_0)$ and
+          $(A_0,A_1)$ satisfy the family predicate, the second by assigning
+          $A_1$ the coefficient zero at every length. That second family is
+          exactly a zero-coefficient member, which the convention excludes
+          from every basis presentation, so it is not a counterexample to
+          the formalized uniqueness statement.
     \item Theorem~2.10, Corollary~2.11, and Corollary~A.6
           \cite[lines 349--361 and 1167--1199]{Cirac2016MPDO_arXiv}: the
           proportional and equal fundamental theorems and their unitary

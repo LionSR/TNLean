@@ -460,10 +460,22 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
          & \Longrightarrow\exists k,\ |\mu_k|=1.
         \label{eq:cpsv_weight_normalization}
     \end{align}
-    Every weight $\mu_k$ is nonzero by convention: a summand of
-    \eqref{eq:cpsv_canonical_form} with vanishing weight contributes nothing
-    and is dropped from the list of blocks. No ordering or separation
-    condition is imposed.
+    Every weight $\mu_k$ is nonzero. This is the reading of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv} adopted here: the remark in
+    line~219 there places the degenerate case in the block dimensions
+    ($D_k=0$), and lines~224--225 choose each $\mu_k$ so that the transfer map
+    of $\mu_kA_k$ has spectral radius one, which a vanishing weight cannot
+    satisfy. The reading loses nothing, since if $\mu_{k_0}=0$ then
+    $\mu_{k_0}A_{k_0}^i=0$ is the zero matrix of size $D_{k_0}$ and
+    \begin{align}
+        \bigoplus_{k=1}^r\mu_kA_k^i
+         & =\bigoplus_{k\ne k_0}\mu_kA_k^i\oplus0_{D_{k_0}},
+        \label{eq:cpsv_zero_weight_summand}
+    \end{align}
+    so $A^i$ is the same coisometric image of the direct sum over the
+    remaining indices, with the $D_{k_0}$ coordinates of the omitted summand
+    moved to the zero complement. No ordering or separation condition is
+    imposed.
 
     The basis-of-normal-tensors refinement is
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
