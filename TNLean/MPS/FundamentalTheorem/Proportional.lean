@@ -15,10 +15,12 @@ Theorem IV.4 (arXiv:2011.12127).
 * If `A` and `B` are related by a gauge transform up to a scalar `ζ` (`GaugePhaseEquiv A B`), then
   their Matrix Product Vectors are proportional for each system size `N`.
 
-* Conversely, if the MPV families are eventually nonzero-proportional
-  (`EventuallyNonzeroProportionalMPV₂ A B`) and both self-overlaps
-  `mpvOverlap A A N` and `mpvOverlap B B N` converge to `1`, then `A` and `B` must be
-  gauge-phase equivalent.
+* Conversely, if the MPV families are eventually proportional by some scalar
+  (`∀ᶠ N in atTop, ∃ c, ∀ σ, mpv A σ = c * mpv B σ`, with no nonvanishing condition
+  imposed on `c`) and both self-overlaps `mpvOverlap A A N` and `mpvOverlap B B N`
+  converge to `1`, then `A` and `B` must be gauge-phase equivalent. The eventual
+  nonvanishing of the scalar is not assumed; it is derived from the self-overlap
+  convergence hypotheses.
 
 The key input for the converse is the overlap decay lemma
 `MPSTensor.mpvOverlap_tendsto_zero` from `TNLean.Spectral.MPVOverlapDecay`.

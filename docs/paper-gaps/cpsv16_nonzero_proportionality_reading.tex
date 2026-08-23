@@ -82,9 +82,16 @@ asymptotic assumption to the block-selection argument.
 The nonzero condition does not change the intended conclusion of the source
 theorem. It records the conventional mathematical meaning of proportional
 nonzero vectors in the source argument. No weaker scalar-multiple predicate
-with $c_N$ allowed to vanish is kept: the relation $V=0\cdot V'$ is not a
-projective statement, and the nonzero reading is the only proportionality
-hypothesis of the formal development.
+with $c_N$ allowed to vanish is kept as a named predicate: the relation
+$V=0\cdot V'$ is not a projective statement. One inline
+eventual-proportionality hypothesis survives outside the named predicate, in
+the overlap-convergence theorem
+\leanid{mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV}\textsubscript{2}
+in \leanid{TNLean/MPS/FundamentalTheorem/Proportional.lean}: it asks only for
+a scalar $c_N$ with $V^{(N)}(A)=c_N V^{(N)}(B)$ eventually in $N$, with no
+nonvanishing condition imposed on $c_N$. The eventual nonvanishing of $c_N$
+is derived there from the self-overlap convergence hypotheses rather than
+assumed as part of the hypothesis.
 
 \section{Elimination plan}
 

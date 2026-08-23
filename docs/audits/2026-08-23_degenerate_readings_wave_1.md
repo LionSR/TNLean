@@ -1,11 +1,17 @@
 # Degenerate readings, wave 1: zero-scalar proportionality and the conditional supplier
 
 This audit records two degenerate readings retired under the rule of
-`CLAUDE.md` §Degenerate readings are conventions, not gaps, together with
-every public declaration removed and its replacement. It is the audit note
-required by `docs/project_conventions.md` §Style for removals under the
-pass-through exception. No compatibility alias is provided for any removed
-declaration.
+`CLAUDE.md` §Degenerate readings are conventions, not gaps (merged), together
+with every public declaration removed and its replacement. Of the five
+declarations below, only `NonzeroProportionalMPV₂.toProportionalMPV₂` is
+removed under `docs/project_conventions.md` §Style's pass-through exception
+(it merely forwards to the surviving predicate); `ProportionalMPV₂` is
+removed under the degenerate-readings rule above, and
+`PeripheralProportionalCaseRootFromRescaling`,
+`peripheralProportionalCase_periodicFT_of_rootFromRescaling`, and
+`exists_isBNTCanonicalForm_afterBlocking_pos` are ordinary zero-consumer
+dead-code removals, verified to have no remaining consumers. No compatibility
+alias is provided for any removed declaration.
 
 ## Readings retired
 
@@ -20,8 +26,13 @@ $V = 0 \cdot V'$ is not a projective statement, and the source argument never
 uses it; `docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex` records
 the nonzero reading as the adopted convention. The vanishing-scalar predicate
 had one consumer, the conditional periodic node below, which itself had none.
-Both are deleted; `NonzeroProportionalMPV₂` is the only proportionality
-hypothesis.
+Both are deleted; `NonzeroProportionalMPV₂` is the only named proportionality
+predicate. One inline eventual-proportionality hypothesis with no
+nonvanishing condition on the scalar still occurs, outside any named
+predicate, in `MPSTensor.mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂`
+(`TNLean/MPS/FundamentalTheorem/Proportional.lean`); the scalar's eventual
+nonvanishing is derived there from the self-overlap convergence hypotheses
+rather than assumed.
 
 ### Handing the line-246 weight normalization back to the caller
 
@@ -49,7 +60,7 @@ are removed. The hypothesis stays, unstamped.
 | `MPSTensor.ProportionalMPV₂` | `TNLean/MPS/Defs.lean` | `MPSTensor.NonzeroProportionalMPV₂` (same module). |
 | `MPSTensor.NonzeroProportionalMPV₂.toProportionalMPV₂` | `TNLean/MPS/Defs.lean` | None needed; the target predicate no longer exists. |
 | `MPSTensor.PeripheralProportionalCaseRootFromRescaling` | `TNLean/MPS/Periodic/FundamentalTheorem.lean` | None; the live proportional periodic route is `TNLean/MPS/Periodic/ProportionalOverlap.lean` with `MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`. |
-| `MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling` | `TNLean/MPS/Periodic/FundamentalTheorem.lean` | `MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos` after rescaling to equal MPV families by `NonzeroProportionalMPV₂` data. |
+| `MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling` | `TNLean/MPS/Periodic/FundamentalTheorem.lean` | None; the live proportional periodic route is `TNLean/MPS/Periodic/ProportionalOverlap.lean`, which takes `NonzeroProportionalMPV₂` hypotheses directly rather than rescaling to `SameMPV₂Pos` first. |
 | `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos` | `TNLean/MPS/FundamentalTheorem/SectorBNT/Supplier.lean` | `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` (`SupplierNormalized.lean`); the prepared-block family alone is `MPSTensor.exists_prepared_BNT_blocks_afterBlocking_pos`. |
 
 ## Removed blueprint nodes
