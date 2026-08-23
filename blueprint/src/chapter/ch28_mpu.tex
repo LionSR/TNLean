@@ -831,14 +831,29 @@ closing a chain of $N$ copies of $\mathcal U$.
     double layer.
 \end{proof}
 
+\begin{lemma}[Iterated physical blocking]
+    \label{lem:mpu_iterated_physical_blocking}
+    \lean{MPOTensor.reindexPhysical_blockTensor_blockTensor}
+    \leanok
+    \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
+    Iterating blocking at lengths $m$ and $n$, then applying the canonical
+    regrouping of the physical indices, agrees with direct blocking at length
+    $mn$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
+    Expand the two blocked words. The canonical regrouping concatenates their
+    $n$ words of length $m$ into the direct word of length $mn$.
+\end{proof}
+
 \begin{theorem}[Bounded blocking to simplicity]
     \label{thm:mpu_bounded_simple_blocking}
     \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
         MPOTensor.IsMPU.blockTensor_one_isMPUSimple_fin_one,
         MPOTensor.IsMPU.exists_blockTensor_isMPUSimple,
         MPOTensor.IsMPUSimple.blockTensor,
-        MPOTensor.IsMPUSimple.reindexPhysical,
-        MPOTensor.reindexPhysical_blockTensor_blockTensor}
+        MPOTensor.IsMPUSimple.reindexPhysical}
     \leanok
     \uses{def:mpu_physical_reindexing, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_second_block_simple}
     Every MPU of positive physical and bond dimensions has a positive blocking
@@ -4955,10 +4970,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.rightRank_blockTensor_mulTensor_four_le,
         MPOTensor.leftRank_blockTensor_mulTensor_four_le}
     \leanok
-    \uses{thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product,
-        thm:mpu_source_ranks_physical_reindexing,
-        def:mpdo_physical_blocking, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpdo_operator_product, def:mpdo_physical_blocking,
+        def:mpu_right_rank, def:mpu_left_rank}
     Let $\mathcal U$ and $\mathcal V$ be arbitrary matrix product operator
     tensors of common physical dimension $d$. For their product tensor,
     four-site blocking satisfies
@@ -4975,8 +4988,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{thm:mpu_source_u_open_two_site,
         thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product,
+        thm:mpdo_block_two_as_positive_blocking,
         thm:mpu_source_ranks_physical_reindexing,
-        def:mpdo_physical_blocking}
+        lem:mpu_iterated_physical_blocking}
     For the right cut, factor the two-site block of each tensor through its
     source tensor $u$. The diagonal cut through the two blocked factors retains
     one physical leg and one right source leg from each factor. Hence the
