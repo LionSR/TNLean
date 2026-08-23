@@ -5,8 +5,11 @@ implementation by compiling: what the key accepts, what it changes on the
 page, the stated default, the description, and the cited consumers.  Eight
 compile agents swept the sixty-seven key rows; fifty stood accurate and
 seventeen took a correction, executed in the change that adds this record.
-Source line numbers below refer to the sweep-time tree; named functions are
-the stable anchors in the current source.
+This record first appeared in commit
+`dd1790a2cae5847d561a88200e7a56a4494d0764`. The numeric source coordinates
+below were captured by eight isolated sweep worktrees while other tenkz
+changes were landing, so they do not refer to one common source revision.
+The named functions and macros are the stable anchors in the current source.
 Two agent verdicts were themselves corrected on re-review before anything
 moved: `kernel-wire:crossing` is read by the hull-route habit pass
 (`route_habit`), which the sweep's scenarios never exercised, and the
