@@ -295,7 +295,10 @@ lemma algebraicLocalUnblockingHom_comp_blockingHom (d L : ℕ) [NeZero d] [NeZer
   rfl
 
 /-- Blocking consecutive groups of `L` sites gives an equivalence between the blocked and
-original algebraic local algebras. -/
+original algebraic local algebras.
+
+This is the site-grouping operation used in Cirac--Perez-Garcia--Schuch--Verstraete,
+arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 noncomputable def algebraicLocalBlocking (d L : ℕ) [NeZero d] [NeZero L] :
     AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L) ≃⋆ₐ[ℂ]
       AlgebraicLocalAlgebra d :=
