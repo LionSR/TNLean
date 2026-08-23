@@ -229,7 +229,12 @@ theorem left_support_algebra_le_iff_le_tensor_submodule {p q : ℕ}
     (B : StarSubalgebra ℂ (Matrix (Fin p) (Fin p) ℂ)) :
     leftSupportAlgebra A ≤ B ↔ A.toSubmodule ≤ Matrix.tensorSubmodule B.toSubmodule q := by
   rw [left_support_algebra_le_iff]
-  rfl
+  constructor
+  · intro h X hX
+    rw [Matrix.mem_tensorSubmodule_iff]
+    exact h hX
+  · intro h X hX
+    exact Matrix.mem_tensorSubmodule_iff.mp (h hX)
 
 /-- The linear span of Kronecker products whose two factors belong to prescribed matrix
 submodules.
@@ -266,11 +271,10 @@ private theorem matrix_of_operatorBlock_apply_mem [Finite n]
     rw [eq_sum_smul_single (operatorBlock X p q), map_sum]
     simp only [map_sum, LinearMap.map_smul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
     congr 1
-    funext i
-    congr 1
-    funext j
+    ext i
     simp [operatorBlock, bipartiteSlice, mul_comm]
-  rw [show (fun p q ↦ g (operatorBlock X p q)) = Y from rfl, hY]
+  change Y ∈ S
+  rw [hY]
   exact Submodule.sum_mem S fun i _ ↦ Submodule.sum_mem S fun j _ ↦ S.smul_mem _ (hX i j)
 
 omit [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n] in
