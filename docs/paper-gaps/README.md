@@ -201,9 +201,11 @@ For MPDO renormalization fixed points:
 - `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
   normalization issue for mixed-state ZCL.
 - `cpsv16_exact_arithmetic_scope.tex` records the scope boundary of the
-  certified four-site arithmetic for Examples~4.10 and~4.11: the exact integer
-  comparisons and logarithmic ratios are machine-checked, while the reduced
-  spectra, entropy comparisons, and SAL conclusions remain open.
+  certified four-site arithmetic for Examples~4.10 and~4.11. The exact integer
+  comparisons and logarithmic ratios are machine-checked. For the corrected
+  fixed-$p=1/4$ Example~4.10 tensor, the reduced spectra, entropy comparison,
+  and non-SAL conclusion are also complete; the Example~4.11 source claim
+  remains tracked separately.
 
 For the non-periodic MPS Fundamental Theorem background:
 
