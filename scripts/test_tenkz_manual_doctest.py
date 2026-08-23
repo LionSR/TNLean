@@ -30,7 +30,7 @@ SPEC.loader.exec_module(DOCTEST)
 # records has been reviewed and should not be given back.  The counts taken
 # from the synthetic fixture below stay exact: that fixture is fixed, and
 # there each extra or missing example is a defect.
-DISPLAYED_FLOOR = 49
+DISPLAYED_FLOOR = 56
 REFERENCE_FLOOR = 12
 
 
