@@ -8026,17 +8026,30 @@ specialization of the coefficient construction in
 \cite[Section~4.3]{SchumacherWerner2004QCA} and of the leastness and commutant
 statements in \cite[Lemma~7]{Gross2012IndexTheory}.
 
+\textbf{Local fix (star-closed input):}
+The printed statement of Lemma~7 says only that $\mathcal A$ is a
+subalgebra, but its $C^*$-generated support and commutant clauses require
+$\mathcal A$ to be closed under the involution.  For instance, the algebra
+$\operatorname{span}\{\mathbf 1,E_{12}\}\subset M_2(\mathbb C)$ gives a
+counterexample to the printed commutant clause if involution closure is
+omitted.  Schumacher and Werner first define the ordinary algebra generated
+by the coefficient support and then derive its adjoint closure from adjoint
+closure of the observable-algebra input
+\cite[lines~1161--1171]{SchumacherWerner2004QCA}.  Accordingly, the statements
+below use a star-subalgebra.  This is a necessary correction to the printed
+hypothesis.  In the QCA application the input is the image of a local
+observable algebra under a star-automorphism
+\cite[Section~7.2]{Gross2012IndexTheory}.  The MPU application likewise takes
+the image of a local star-algebra under a star-automorphism
+\cite[lines~2300--2306]{Cirac2017MPU}.
+
 \textbf{Scope restriction (full matrix factors):}
-Lemma~7 permits arbitrary finite-dimensional $C^*$-algebras
-$\mathcal B_1$ and $\mathcal B_2$, whereas the statements below take
-$\mathcal B_1=M_I(\mathbb C)$ and $\mathcal B_2=M_J(\mathbb C)$.
-The word ``subalgebra'' in Lemma~7 is used in the $C^*$-algebra sense, so
-$\mathcal A$ is closed under the involution; this convention is explicit in
-the precursor \cite[Section~4.3]{SchumacherWerner2004QCA}.  Thus the
-star-subalgebra hypothesis below is not an additional restriction.  The
-full-matrix restriction holds for the MPU spin chain because every one-site
+After this correction, Lemma~7 permits arbitrary finite-dimensional
+$C^*$-algebras $\mathcal B_1$ and $\mathcal B_2$, whereas the statements below
+take $\mathcal B_1=M_I(\mathbb C)$ and $\mathcal B_2=M_J(\mathbb C)$.
+Full matrix factors suffice for the MPU spin chain because every one-site
 algebra is isomorphic to $M_d(\mathbb C)$
-\cite[lines~2320--2334]{Cirac2017MPU}.  The general-factor GNVW theorem is not
+\cite[lines~2320--2334]{Cirac2017MPU}.  The general-factor result is not
 claimed here; see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
 
 No full-matrix structure theorem, dimension formula, Margolus gate, depth-two
