@@ -6458,7 +6458,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \operatorname{Mat}_{d^N}(\mathbb C)
         &\longrightarrow \operatorname{Mat}_{d^N}(\mathbb C).
     \end{align}
-    An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
+    We suppress the subscripts on $\mathcal S_{d,N}$ when $d$ and $N$ are
+    understood. An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
     \begin{align}
         \mathcal S_{d,N}[W^{(N)}] & =W^{(N)}
     \end{align}
@@ -6523,37 +6524,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Equivalence under a symmetry]
     \label{def:equivalent-symmetry}
-    \lean{MPOTensor.EquivalentUnderSymmetry}
-    \leanok
-    \discussion{6948}
+    \notready
+    \discussion{6017}
     \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors}
-    Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be MPU
-    tensors with physical dimensions $d_a$ and $d_b$. They are equivalent under
-    a symmetry $\mathcal S$ if there are a positive blocking length $k$ and
-    coprime positive ancilla dimensions $p_a,p_b$ with
-    \begin{align}
-        p_a d_a & =p_b d_b
-    \end{align}
-    such that $(\mathcal U^{(p_a)})_k$ and $(\mathcal V^{(p_b)})_k$ are strictly
-    equivalent under $\mathcal S$. Identity ancillas are attached before the
-    common blocking, and the virtual bond dimension remains fixed.
+    Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
+    $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
+    positive blocking length $k$ and coprime positive ancilla dimensions
+    $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
+    $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$.
     % Source lines: paper_v2.tex 1356--1364.
 \end{definition}
-
-\begin{lemma}[Forgetting symmetry after blocking and ancillas]
-    \label{lem:mpu_symmetry_equivalence_forget}
-    \lean{MPOTensor.EquivalentUnderSymmetry.toEquivalent}
-    \leanok
-    \uses{def:equivalent-symmetry, def:equivalent-tensors,
-        lem:mpu_strict_symmetry_equivalence_forget}
-    Equivalence under a symmetry implies equivalence.
-\end{lemma}
-
-\begin{proof}\leanok
-    Keep the same blocking length, ancilla dimensions, and physical-dimension
-    equality, then forget symmetry from the strict equivalence of the enlarged
-    tensors.
-\end{proof}
 
 \begin{definition}[Admissible equivalence under a symmetry]
     \label{def:mpu_admissible_symmetry_equivalence}
