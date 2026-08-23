@@ -203,9 +203,11 @@ For MPDO renormalization fixed points:
 - `cpsv16_exact_arithmetic_scope.tex` records the scope boundary of the
   certified four-site arithmetic for Examples~4.10 and~4.11. The exact integer
   comparisons and logarithmic ratios are machine-checked. For the corrected
-  fixed-$p=1/4$ Example~4.10 tensor, the reduced spectra, entropy comparison,
-  and non-SAL conclusion are also complete; the Example~4.11 source claim
-  remains tracked separately.
+  fixed-$p=1/4$ Example~4.10 tensor and the literal four-site Example~4.11
+  family, the reduced spectra, entropy comparisons, and non-SAL conclusions
+  are complete. The finite-marginal calculation for Example~4.11 independently
+  verifies the printed non-ZCL clause. The resolved scope restriction is that
+  the arithmetic statements alone do not establish these tensor conclusions.
 
 For the non-periodic MPS Fundamental Theorem background:
 

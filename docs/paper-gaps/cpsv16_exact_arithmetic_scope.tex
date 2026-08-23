@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source statements and derived comparisons}
 
@@ -70,15 +70,27 @@ area-law conclusion.  For the corrected fixed-$p=1/4$ Example~4.10 tensor,
 four-site root multisets and
 \doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives $I_2>I_1$ and the
 source-ZCL, non-SAL conclusion.  This completes \ghissue{6301} without
-asserting the universal parameter range printed in the source.  The
-corresponding Example~4.11 source claim remains under \ghissue{6302}.
+asserting the universal parameter range printed in the source.  For the
+literal Example~4.11 family at four sites,
+\doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} derives $I_2>I_1$ and the
+failure of SAL, while
+\doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} independently proves the
+failure of source ZCL from finite-marginal instability, both for the effective
+binary model and for its ambient two-qubit realization.  This completes
+\ghissue{6302}: the printed SAL clause is refuted and the printed non-ZCL
+clause is verified.  Neither conclusion follows from the arithmetic module
+alone.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.}  The arithmetic endpoints are certified.
-For corrected Example~4.10 at $p=1/4$, separate tensor and entropy modules now
-connect those endpoints to the formal non-SAL witness.  These project-derived
-four-site results do not formalize the printed universal-in-$p$ claim, and the
-Example~4.11 source claim remains separate.
+\textbf{Verdict: scope restriction.}  The arithmetic endpoints are certified
+and connected to the corresponding tensor statements.  For corrected
+Example~4.10 at $p=1/4$, the tensor and entropy results give source ZCL without
+SAL.  For the literal four-site Example~4.11 family, the entropy result refutes
+the printed SAL clause and the finite-marginal result verifies the independent
+non-ZCL clause.  The resolved restriction is that the arithmetic statements
+alone prove neither tensor spectra nor area-law conclusions.  These
+project-derived finite-ring results do not formalize the universal-in-$p$
+claim of Example~4.10 or any thermodynamic statement for Example~4.11.
 
 \end{document}
