@@ -49,7 +49,8 @@ complement contraction.
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
   generating the same state*, arXiv:1804.04964, the corollary and proof sketch at lines
   2296--2445 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the
-  filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
+  subsection ``The common-state family is complete'' in
+  `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 -/
 
 open scoped BigOperators Matrix
@@ -84,7 +85,7 @@ interior-bond multiple of the edge-inserted coefficient; the restriction round-t
 `assembleRegionσ_restrict` reassembles `cfg` from its two restrictions.
 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) (cfg : V → Fin d) :
@@ -130,7 +131,7 @@ either window.  See `staircaseVirtualOperationPhysicalOp_realizes` for that open
 
 Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (a virtual operation on a bond is a physical operation on any
-window containing an endpoint); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+window containing an endpoint); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem bondInserted_windowIndependent (R₁ R₂ : Finset V) (e : Edge G)
     (hf : IsRegionBoundaryEdge (G := G) R₁ e) (hg : IsRegionBoundaryEdge (G := G) R₂ e)
     (M₁ M₂ : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)

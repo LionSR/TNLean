@@ -62,7 +62,7 @@ operation by the Lemma 5 converse (`paper_normal.tex`, lines 2368--2444).
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
   generating the same state*, arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Section 3, Lemma
   `inj_isomorph`, lines 254--586 of `Papers/1804.04964/paper_normal.tex`, and the corollary at lines
-  2297--2318; the filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1,
+  2297--2318; the filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`;
   and the conditional single-vertex endpoint-spanning construction in
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 -/
@@ -93,7 +93,7 @@ unconditional region injectivity `regionInsertedCoeff_injective`
 (`TNLean/PEPS/RegionBlock/Algebra.lean`), the read-off side that window and host injectivity power.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem windowRegionInsertedCoeff_injective
     {B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hB : NormalTorusArcWindowInjectivityHypotheses L K
@@ -161,7 +161,7 @@ lines 2368--2444, as recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
 `Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem exists_windowEdgeCoeffIdentityWitness_of_realizes
     {A B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hA : NormalTorusArcWindowInjectivityHypotheses L K

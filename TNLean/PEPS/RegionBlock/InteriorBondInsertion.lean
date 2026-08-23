@@ -67,6 +67,11 @@ The operation is first inserted on the singleton containing the ordered left end
 The remaining genuine tensors of `R` are then adjoined by `extendInsert`, and the result is
 rescaled from the singleton's non-boundary bond product to that of `R`.
 
+The right-endpoint membership in `hends` records the paper's interior-bond geometry.  The
+construction uses the left-endpoint membership to choose the singleton on which the operation is
+first inserted; adjoining the rest of `R` then includes the right endpoint among the genuine
+tensors.
+
 Source: arXiv:1804.04964, the virtual-operation realization at lines 2320--2321 of
 `Papers/1804.04964/paper_normal.tex`; compare the tensor adjoining at lines 2415--2444. -/
 noncomputable def interiorBondInsertedRegionInsert (A : Tensor G d) (R : Finset V)

@@ -54,14 +54,16 @@ perimeter, not a single-bond matrix-algebra span.  No per-window square-matrix f
 matrix-intertwining route does not transfer per window.  The present conditional theorem obtains
 the transfer from bond locality and takes multiplicativity as an input.  The source-faithful route
 instead compares the overlapping physical operations and recovers the fixed-edge virtual operation
-as in Lemma 5; see `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1.
+as in Lemma 5; see the subsections ``What the sketch asserts, and what remains to be extracted''
+and ``The window family around an edge'' in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
   generating the same state*, arXiv:1804.04964, the corollary and proof sketch at lines
   2296--2445 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the
-  filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1--5.2.
+  filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 -/
 
 open scoped BigOperators Matrix
@@ -85,7 +87,7 @@ coefficient.  This is `coeffTransfer_of_bondLocal` on the left window, with the 
 injectivity and host injectivity discharged from the torus arc-window hypotheses.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem windowCoeffTransferAB_of_bondLocal {A B : Tensor (torusGraph width height) d}
     {L K a b : ℕ}
     (hA : NormalTorusArcWindowInjectivityHypotheses L K
@@ -152,7 +154,7 @@ reference edge `e` of the left window for `B`, a matrix `M` for `A` with matchin
 coefficient.  This is `coeffTransfer_of_bondLocal` on the left window with the two tensors swapped.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
+`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem windowCoeffTransferBA_of_bondLocal {A B : Tensor (torusGraph width height) d}
     {L K a b : ℕ}
     (hA : NormalTorusArcWindowInjectivityHypotheses L K
@@ -234,7 +236,7 @@ block-frame predicate the cross-tensor coefficient transfer reduces to
 (`bondLocal_iff_coeffTransfer`, unconditional on the window/host injectivity available at the
 minimal size).
 
-This is a conditional §5.2 packaging with the two coefficient-transfer inputs of
+This is a conditional coefficient-transfer packaging with the two inputs of
 `exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer` replaced by the single block-frame
 predicate `IsBondLocalTransferKernel` they reduce to.  These inputs are stronger than the source
 corollary and are not marked as its remaining proof obligations.  The source-faithful residual is
@@ -242,7 +244,7 @@ the Lemma 5 converse for the overlapping physical operations at lines 2368--2444
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1572 of
 `Papers/1804.04964/paper_normal.tex`; the corollary at lines 2297--2318;
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1--5.2. -/
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem exists_windowEdgeCoeffIdentityWitness_of_bondLocal
     {A B : Tensor (torusGraph width height) d} {L K a b : ℕ}
     (hA : NormalTorusArcWindowInjectivityHypotheses L K

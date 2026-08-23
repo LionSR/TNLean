@@ -149,8 +149,8 @@ $D_{23} \times D_{23}$ object on the single bond.} and window injectivity is
 precisely the statement that these matrices span the full bond algebra, which
 is what makes the homomorphism extraction go through.
 
-In two dimensions the window straddling a bond no longer has this structure.
-An $L \times K$ window touches the reference edge $e$ with \emph{one}
+In two dimensions an end window used for the bond read-off no longer has this
+structure.  An end $L \times K$ window touches the reference edge $e$ with \emph{one}
 endpoint, so the leg of $e$ inside an end window is a single
 $\mathrm{Fin}(\mathrm{bondDim}\,e)$ index, not a pair; reading the window
 block at fixed external legs gives a \emph{vector} on
@@ -1489,7 +1489,7 @@ these products span the full matrix algebra at the single bond; the cross-bond
 pushing is then the intertwining-span read-off
 \leanid{exists\_bondOperator\_of\_intertwine\_span} (same file, line~74), and
 the homomorphism is \leanid{MPSChainTensor.exists\_insertionHom} fed by the
-same window span. The two-dimensional $L \times K$ window touches the
+same window span. The two-dimensional end $L \times K$ window touches the
 reference bond with \emph{one} endpoint, so its bond-restricted family is a
 family of \emph{vectors}, never a square-matrix span, and the window's whole
 perimeter is open. The one-dimensional mechanism that powered the precedent
@@ -1528,8 +1528,8 @@ this audit.
 This audit remains a valid obstruction to the indicated coarse-frame
 substitute, but that substitute is not needed for the common-state family.
 
-The open research content the previous subsection isolated --- whether a
-per-bond coarse frame exists at the minimal size for an intermediate bond,
+The question posed by the earlier analysis --- whether a per-bond coarse
+frame exists at the minimal size for an intermediate bond,
 where the partner block is a neighbouring window rather than the diagonally
 opposite one, or whether those crossings inherit the same
 $\mathrm{univ}\setminus S$-type non-injectivity --- is now settled, in the
