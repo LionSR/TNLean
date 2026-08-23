@@ -3615,6 +3615,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[Section~III, equation~(13)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{lemma}[Normalized flattening of a composition tensor]
+    \label{lem:mpu_normalized_flattening_composition}
+    \lean{MPOTensor.normalizedFlattening_mulTensor_apply}
+    \leanok
+    \uses{def:mpu_normalized_flattening, def:mpdo_operator_product}
+    Let $\mathcal U$ and $\mathcal V$ be MPO tensors with the same positive
+    physical dimension $d$, and let
+    \begin{align}
+        W^{ik} & =\sum_{j=0}^{d-1}U^{ij}\otimes V^{jk}
+    \end{align}
+    be their composition tensor. Under the canonical identification of its
+    auxiliary space with $\C^{D_U}\otimes\C^{D_V}$, the normalized
+    flattenings satisfy
+    \begin{align}
+        \widetilde W^{ik}
+         & =\sqrt d\sum_{j=0}^{d-1}
+            \widetilde U^{ij}\otimes\widetilde V^{jk}.
+    \end{align}
+    This identity combines the raw composition tensor used in the proof of
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU} with the normalization in
+    \cite[Section~III, equation~(13)]{Cirac2017MPU}; it is not a separately
+    stated result of that proof.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_normalized_flattening, def:mpdo_operator_product}
+    Substitute $U^{ij}=\sqrt d\,\widetilde U^{ij}$ and
+    $V^{jk}=\sqrt d\,\widetilde V^{jk}$ into the defining contraction for
+    $W^{ik}$, and then multiply the result by $d^{-1/2}$.
+\end{proof}
+
 \begin{theorem}[Normalized flattening under blocking]
     \label{thm:mpu_normalized_flattening_blocking}
     \lean{MPOTensor.normalizedFlattening_blockTensor}
