@@ -134,8 +134,8 @@ individual nonzero weights. There is no additional all-zero summand.
 than the literal CPSV canonical form; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.  This single marker covers
 every result in `TNLean/MPS/MPDO` whose hypothesis is `IsHorizontalCF`; the
-`_of_cpsvCanonicalForm` wrappers restate such results on the literal canonical
-form where it suffices.
+`_of_cpsvCanonicalForm` declarations restate such results on the literal
+canonical form where it suffices.
 
 Source: arXiv:1606.00608, canonical form at lines 237--244 and the BNT
 decomposition `eq:II_ABasicTensors` at lines 281--301. -/

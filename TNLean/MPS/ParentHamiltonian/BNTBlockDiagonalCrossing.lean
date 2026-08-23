@@ -26,8 +26,15 @@ Theorem 12. Deriving these identities
 from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
-The periodic-boundary comparison restriction shared by the block-diagonal
-parent-space modules is stated once in `BNTBlockDiagonalPGVWCComparison`.
+**Scope restriction (periodic-boundary comparison):** the theorems below whose
+hypotheses are the source \(C^j,D^j\) comparison, complementary-word matrix
+identities, or a spanning complementary segment take the periodic-boundary
+upgrade of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456 (and
+arXiv:2011.12127, Section IV.C, lines 2126--2128) as an explicit assumption
+rather than deriving it. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; the
+source-range conclusion without this assumption is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
 -/
 
 open scoped Matrix BigOperators

@@ -24,11 +24,16 @@ No complete-positivity predicate on finite products, global trace-preservation
 claim, or inverse-map conclusion is asserted here.
 
 **Local fix (zero-sector complement):** rectangular vertical coordinates may
-discard a zero-sector complement, so in the trace results of this file trace
-preservation is replaced by a trace inequality together with the support
-criterion for equality.  The obstruction and its elimination for the
-source-generated family are recorded in
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
+discard a zero-sector complement, so in the four transported-map theorems
+`transportedVerticalSectorT_trace_le`, `transportedVerticalSectorT_trace_eq_iff`,
+`transportedVerticalSectorS_trace_le`, and `transportedVerticalSectorS_trace_eq_iff`,
+trace preservation is replaced by a trace inequality together with the support
+criterion for equality. The other trace identities in this file
+(`verticalSectorTrace_retainedVerticalSectorPartialTrace`,
+`trace_verticalSectorBlockDiagonal`, `trace_verticalSectorBlockProjection`,
+and the remaining `trace_*`/`verticalSectorTrace_*` lemmas) are exact. The
+obstruction and its elimination for the source-generated family are recorded
+in `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 
 ## References
 

@@ -15,8 +15,13 @@ import TNLean.MPS.Symmetry.StringOrderAux
 This file connects the already-injective BNT block-separation product span to the
 PGVWC07 one-step block-intersection identity.
 
-The doubly normalized specialization restriction shared by the block-diagonal
-parent-space modules is stated once in `BNTBlockDiagonalPGVWCComparison`.
+**Scope restriction (doubly normalized specialization):** at the PGVWC07
+source length bound, the unital hypothesis `hUnital`
+(\(\sum_a A^j_a(A^j_a)^\dagger=1\)) is the source identity, while the
+left-canonical hypothesis `hLeft` additionally specializes the source dual
+fixed-point equation \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 
 ## References
 

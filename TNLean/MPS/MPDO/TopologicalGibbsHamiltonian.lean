@@ -28,8 +28,13 @@ projectors.  See
 
 **Scope restriction (positive chains of length at least two):** Definition 4.8
 of the source defines the local operator on two spins and fixes no length-one
-convention, so every construction in this file starts at chain length two.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
+convention. The Hamiltonian and Gibbs-decomposition declarations from
+`topologicalGibbsHamiltonianSuccSucc` through
+`topologicalGibbsDecomposition_of_isRFPViaTS` therefore act on retained chains
+of length `N + 2`, i.e. at least two; the earlier declarations in this file
+(`topologicalMultiplicityWeightFactorSucc_eq_diagonal` and the terminal
+spectral results) are stated for a general chain length and are not
+restricted. See `docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
 
 ## References
 

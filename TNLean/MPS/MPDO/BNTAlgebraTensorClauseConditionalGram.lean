@@ -24,7 +24,10 @@ under the standing canonical-form and positivity assumptions.
 
 **Scope restriction (conditional reflected target):** every declaration in
 this file takes the positive-tail equality with the raw reflected target as a
-hypothesis rather than deriving it from the tensor-attached algebra clause; the
+hypothesis rather than deriving it from the tensor-attached algebra clause,
+except `IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization`,
+whose `target` field is derived from block positivity of the same-sided
+physical realization instead (see its own scope-restriction note below). The
 mixed-prefix derivation is documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 

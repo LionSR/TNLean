@@ -22,8 +22,14 @@ They are the three word coordinates obtained by opening a boundary-crossing
 cyclic interval; the source proof uses the boundary indices \(i_1\) and
 \(i_{m+1}\) for the corresponding matrices \(C^j\) and \(D^j\).
 
-The periodic-boundary comparison restriction shared by the block-diagonal
-parent-space modules is stated once in `BNTBlockDiagonalPGVWCComparison`.
+**Scope restriction (periodic-boundary comparison):** the theorems below whose
+hypotheses are an opened-boundary \(C^j,D^j\) comparison or a boundary trace
+decomposition take the periodic-boundary upgrade of arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1446--1456 (and arXiv:2011.12127, Section IV.C, lines
+2126--2128) as an explicit assumption rather than deriving it. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; the
+source-range conclusion without this assumption is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
 -/
 
 open scoped Matrix BigOperators

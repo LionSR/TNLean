@@ -11,8 +11,14 @@ import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
 This file contains the boundary-decomposition consequence of the
 block-diagonal chain-space comparison.
 
-The periodic-boundary comparison restriction shared by the block-diagonal
-parent-space modules is stated once in `BNTBlockDiagonalPGVWCComparison`.
+**Scope restriction (periodic-boundary comparison):** the theorem below whose
+hypothesis is a blockwise periodic decomposition (`hBoundary`) takes the
+periodic-boundary upgrade of arXiv:quant-ph/0608197, Theorem 12, proof lines
+1446--1456 (and arXiv:2011.12127, Section IV.C, lines 2126--2128) as an
+explicit assumption rather than deriving it. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; the
+source-range conclusion without this assumption is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
 -/
 
 open scoped Matrix BigOperators
