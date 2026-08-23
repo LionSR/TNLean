@@ -1285,12 +1285,19 @@ This is the calculation in
     without saturation of the area law.  The displayed channel repeats the
     left-qubit label.  We interpret the second occurrence as the right-qubit
     label and fix $p=1/4$.  The resulting tensor is an MPDO and has source zero
-    correlation length.  Its normalized four-site state has nonzero spectrum
-    $(41/128)^{[1]},(15/128)^{[4]},(9/128)^{[3]}$, agreeing with the corrected
-    bond-pattern calculation.  The analogous identifications for the one-,
-    two-, and three-site reductions remain open, so the exact inequality
-    $I_2>I_1$ for the weight families does not yet prove that this tensor fails
-    saturation.  We make no claim about the printed universal statement for
+    correlation length.  The full characteristic-polynomial root multisets of
+    its normalized one-, two-, three-, and four-site reduced states are
+    \begin{align}
+        L=1: & \quad \{0^{[0]},(1/4)^{[4]}\}, \notag                 \\
+        L=2: & \quad \{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\}, \notag   \\
+        L=3: & \quad \{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\}, \notag \\
+        L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},
+                           (9/128)^{[3]}\}. \notag
+    \end{align}
+    These formulas are project-derived consequences of the corrected
+    fixed-parameter tensor; they are not printed in the source.  The tensor
+    block-entropy identities and the resulting failure of saturation remain
+    open.  We make no claim about the printed universal statement for
     $p\ne0,1/2$, whose exception list also omits $p=1$.
 
     Example~4.11 uses the bond-weight matrix
@@ -1403,37 +1410,42 @@ This is the calculation in
     Since $P^2=P$, the tensor has source zero correlation length.
 \end{proof}
 
-\begin{theorem}[Four-site spectrum of the corrected tensor]
+\begin{theorem}[One- through four-site spectra of the corrected tensor]
     \label{thm:cpsv_example410_four_site_spectrum}
-    \lean{MPOTensor.CPSVExample410Spectrum.charpoly_roots_four}
+    \lean{MPOTensor.CPSVExample410Spectrum.charpoly_roots_one,
+        MPOTensor.CPSVExample410Spectrum.charpoly_roots_two,
+        MPOTensor.CPSVExample410Spectrum.charpoly_roots_three,
+        MPOTensor.CPSVExample410Spectrum.charpoly_roots_four}
     \leanok
     \uses{def:cpsv_example410_corrected_tensor}
-    The normalized four-site reduced state has characteristic-polynomial
-    roots
+    The normalized reduced states on one, two, three, and four consecutive
+    sites have characteristic-polynomial root multisets
     \begin{align}
-        0^{[248]},\quad
-        (41/128)^{[1]},\quad
-        (15/128)^{[4]},\quad
-        (9/128)^{[3]}. \notag
+        L=1: & \quad \{0^{[0]},(1/4)^{[4]}\}, \notag                 \\
+        L=2: & \quad \{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\}, \notag   \\
+        L=3: & \quad \{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\}, \notag \\
+        L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},
+                           (9/128)^{[3]}\}. \notag
     \end{align}
+    These spectra are consequences of the corrected $p=1/4$ tensor and are
+    not formulas stated in the source.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:cpsv_example410_corrected_tensor,
         thm:cpsv_example410_bond_distribution}
-    The sixteen bond patterns define orthonormal Bell-network vectors.
-    Exactly eight have even parity and may have nonzero weight; the eight
-    odd-parity patterns have zero weight.  The normalized state is the
-    isometric image of the diagonal bond-pattern distribution.  Thus its
-    nonzero roots are precisely the nonzero bond weights, and the remaining
-    $4^4-2^4=240$ ambient directions together with the eight zero-weight
-    patterns give $248$ zero roots.
+    Each reduced state is the isometric image of a diagonal bond-window
+    distribution.  The diagonal weights give the listed nonzero roots.  The
+    orthogonal complement contributes no zero roots for one site, eight for
+    two sites, and forty-eight for three sites.  For four sites it contributes
+    $4^4-2^4=240$ zero roots, while the eight odd-parity bond patterns supply
+    the remaining eight.
 \end{proof}
 
 % Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
-% Scope restriction: the weight families are identified with the corrected
-% tensor only for the full four-site state; shorter reductions remain open.
+% Scope restriction: all four operator spectra are identified with the
+% corrected tensor, but the tensor block-entropy identities remain open.
 % See docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
 \begin{definition}[Correlated-flip weight families for Example 4.10]
     \label{def:cpsv_example410_correlated_flip_weights}
