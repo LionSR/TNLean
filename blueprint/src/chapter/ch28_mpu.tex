@@ -7290,6 +7290,55 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     its unitarity.
 \end{proof}
 
+\begin{theorem}[Source cuts and ranks of the cyclic shifts]
+    \label{thm:mpu_shift_source_cuts_ranks}
+    \lean{MPOTensor.sourceCutM₁_rightShiftTensor}
+    \lean{MPOTensor.sourceCutM₂_rightShiftTensor}
+    \lean{MPOTensor.rightRank_rightShiftTensor}
+    \lean{MPOTensor.leftRank_rightShiftTensor}
+    \lean{MPOTensor.sourceCutM₁_leftShiftTensor}
+    \lean{MPOTensor.sourceCutM₂_leftShiftTensor}
+    \lean{MPOTensor.rightRank_leftShiftTensor}
+    \lean{MPOTensor.leftRank_leftShiftTensor}
+    \leanok
+    \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank}
+    Let $A$ be the right-shift tensor and let
+    $z_{(\alpha,i)}=\delta_{\alpha i}$ be the vectorized identity. Its raw
+    source cuts are
+    \begin{align}
+        M_1(A) & =\Id, \\
+        M_2(A) & =zz^{\mathsf T}.
+    \end{align}
+    For the left-shift tensor $A^\sharp$ they are
+    \begin{align}
+        M_1(A^\sharp) & =zz^{\mathsf T}, \\
+        M_2(A^\sharp) & =\Id.
+    \end{align}
+    In every physical dimension, including $d=0$,
+    \begin{align}
+        r(A)            & =d^2, \\
+        \ell(A^\sharp) & =d^2.
+    \end{align}
+    If $d>0$, the remaining two ranks are
+    \begin{align}
+        \ell(A)       & =1, \\
+        r(A^\sharp)   & =1.
+    \end{align}
+    These are the raw source-cut quantities from
+    \cite[Section~III]{Cirac2017MPU}; no choice of source factors is involved.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
+    The entry formula $A^{ij}_{\alpha\beta}
+    =\delta_{i\alpha}\delta_{j\beta}$ gives $M_1(A)=\Id$ and
+    $M_2(A)=zz^{\mathsf T}$. Hence the first rank is $d^2$. For $d>0$, the
+    vector $z$ has a nonzero diagonal coordinate, so its outer product has
+    rank one. Physical adjunction exchanges the two cuts and their ranks,
+    which gives all four left-shift formulas without a second rank
+    calculation.
+\end{proof}
+
 \begin{definition}[Three topological-insulator shift MPUs]
     \label{threeMPU}
     \lean{MPOTensor.identityMPUTensor}

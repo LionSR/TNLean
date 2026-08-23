@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPU.Examples
 
 import TNLean.MPS.MPU.Examples.Shift
+import TNLean.MPS.MPU.Examples.ShiftSourceRanks
