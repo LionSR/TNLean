@@ -337,7 +337,23 @@ belong to \(\mathcal G_{N,L}(A_j)\).
 
 This is the finite-spanning reformulation of the trace-decomposition form of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456, after the
-block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128. -/
+block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128.
+
+**Scope restriction (periodic-boundary comparison):** the boundary trace
+decomposition `hTrace` — the boundary trace comparison with
+\(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the periodic-boundary upgrade of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456 (and
+arXiv:2011.12127, Section IV.C, lines 2126--2128), taken as an explicit
+assumption rather than derived. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. This single
+marker covers every result in this file whose remaining source input is that
+trace decomposition:
+`exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span`,
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition`,
+and
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span`.
+The source-range conclusion without this assumption is the global-cut theorem
+in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

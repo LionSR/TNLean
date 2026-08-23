@@ -314,7 +314,19 @@ For at least two blocks, the sharp direct-sum argument gives the full tuple
 span at length \(3(r-1)(L_0+1)\). Right-canonical normalization then propagates
 that span to every larger length. Thus no additional injective prefix is
 needed. The base span is arXiv:quant-ph/0608197, lines 1346--1421; the unital
-propagation is lines 893--898. -/
+propagation is lines 893--898.
+
+**Scope restriction (doubly normalized specialization):** at the PGVWC07
+source length bound, the unital hypothesis `hUnital`
+(\(\sum_a A^j_a(A^j_a)^\dagger=1\)) is the source identity, while the
+left-canonical hypothesis `hLeft` additionally specializes the source dual
+fixed-point equation \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
+\(\Lambda_j=1\). Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. This single
+marker covers every result in this file stated under the doubly normalized
+hypotheses at the PGVWC07 source length bound:
+`groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07` and
+`pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07`. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))

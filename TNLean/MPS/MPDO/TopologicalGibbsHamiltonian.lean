@@ -28,13 +28,27 @@ projectors.  See
 
 **Scope restriction (positive chains of length at least two):** Definition 4.8
 of the source defines the local operator on two spins and fixes no length-one
-convention. The Hamiltonian and Gibbs-decomposition declarations from
-`topologicalGibbsHamiltonianSuccSucc` through
-`topologicalGibbsDecomposition_of_isRFPViaTS` therefore act on retained chains
-of length `N + 2`, i.e. at least two; the earlier declarations in this file
-(`topologicalMultiplicityWeightFactorSucc_eq_diagonal` and the terminal
-spectral results) are stated for a general chain length and are not
-restricted. See `docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
+convention, so the declarations built from that two-site term on periodic
+retained chains — `topologicalGibbsHamiltonianSuccSucc`,
+`topologicalGibbsBondSuccSucc_eq_diagonal`,
+`topologicalGibbsBondSuccSucc_commute`,
+`topologicalGibbsHamiltonianSuccSucc_eq_diagonal`,
+`exp_neg_topologicalGibbsHamiltonianSuccSucc`,
+`topologicalSpectralProjectorSucc_commutes_gibbsFactor`,
+`physicalIndexedTopologicalSpectralProjectorSucc_commutes_gibbsFactor`,
+`topologicalDensityOperatorSucc_eq_sum_projector_mul_gibbsFactor`,
+`topologicalDensityOperatorSucc_eq_sum_physicalIndexedProjector_mul_gibbsFactor`,
+`singleKrausMap_gibbsDecomposition_eq_mpo`,
+`singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo`,
+`HasTopologicalGibbsDecomposition`, `hasTopologicalGibbsDecomposition`, and
+`topologicalGibbsDecomposition_of_isRFPViaTS` — act on retained chains of
+length `N + 2`, i.e. at least two. The remaining declarations are not
+restricted: `topologicalMultiplicityWeightFactorSucc_eq_diagonal` and the
+zero-padded physical-indexed families (`physicalIndexedTerminalEigenvalue`,
+`physicalIndexedTopologicalSpectralProjectorSucc`, and their lemmas) are
+stated for a general chain length, including the one-site case, or carry no
+chain length at all. See
+`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
 
 ## References
 
