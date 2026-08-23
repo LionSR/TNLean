@@ -47,8 +47,8 @@ seated.
   \tn[at=(1,3), name=c,
       ports={0:virtual, 180:virtual, 90:physical:$k$}]{}
   \tnbond[name=al]{a.0}{b.180}
-  \tnwire[name=be]{b.0}{c.180}
-  \tnwire[name=ga]{c.0}{a.180}
+  \tnbond[name=be]{b.0}{c.180}
+  \tnbond[name=ga]{c.0}{a.180}
   \tnmark[form=label, label pos=e]{on al 0.5}{$\alpha$}
   \tnmark[form=label, label pos=s]{on be 0.5}{$\beta$}
   \tnmark[form=label, label pos=w]{on ga 0.5}{$\gamma$}
@@ -94,7 +94,7 @@ themselves.
 The four side policies describe the boundary of a rectangular frame.
 Opening the transverse sides exposes the north and south indices; tracing a
 side instead joins its boundary sites through the frame.  A physical trace is
-different: it closes the two physical ports of each named site to one another.
+different: it closes the applicable pair of physical ports at each site.
 
 \begin{tnexample}[
   wide,
@@ -103,7 +103,8 @@ different: it closes the two physical ports of each named site to one another.
   caption={a physical trace and two open transverse sides},
   index={Left: the upper and lower physical ports close to one another, while
     the virtual ends remain open.  Right: the north and south frame policies
-    expose one virtual index per boundary site.},
+    expose one virtual index per boundary site.  The signature below records
+    the left panel.},
   signature={kernel-boundary|signature=open:e, open:w}]
 % Ink: trace=physical closes the two physical ports of the site;
 %   north=open and south=open expose the transverse frame boundary.
