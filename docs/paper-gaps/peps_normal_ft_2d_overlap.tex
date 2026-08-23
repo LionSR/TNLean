@@ -1363,232 +1363,68 @@ hypothesis.  It does not by itself construct the cross-tensor transfer from $A$ 
 prove that transfer multiplicative; those are the remaining Lemma~5-style comparison
 steps.
 
-\section{Normality audit and retired auxiliary routes}
+\section{Normality and discarded stronger routes}
 
-This section answers a hypothesis-faithfulness question raised against the
-campaign: the source corollary assumes \emph{normal} 2D PEPS tensors
-\emph{such that every $L \times K$ region is injective}, and a reading of the
-campaign suspected that ``normal'' is a second, stronger hypothesis the
-campaign's window-injectivity bundle dropped.  The normality audit below
-remains valid: normality is not a separate stronger hypothesis here, and the
-formalization captures the source's hypothesis set.  The subsequent
-cross-bond and per-bond-coarse-frame discussions are retained only as audits
-of discarded auxiliary routes.  They were based on the false premise that
-intermediate staircase windows contain neither endpoint of the reference
-edge, and are superseded by the common-state construction above.
+The source calls a PEPS normal when blocking suitable regions produces an
+injective tensor.\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}.}
+In the corollary under consideration, every $L\times K$ rectangle is assumed
+injective, so those rectangles themselves witness normality.  No
+single-vertex injectivity is asserted.  This distinction is essential:
+single-vertex injectivity is strictly stronger than injectivity after
+blocking, and therefore cannot be inserted into a formal statement of the
+corollary.
 
-\subsection{What ``normal'' means in the source, and why it is not stronger
-than region injectivity}
+The formal window hypothesis has exactly this content: every cyclic
+$L\times K$ window is injective as a map from its virtual boundary space to
+its physical space.\footnote{Formal declarations:
+\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses} and
+\leanid{TNLean.PEPS.RegionBlockedTensorInjective}.}  It neither assumes
+single-vertex injectivity nor omits a further normality condition from the
+source.
 
-The source defines normality as a region-blocking
-condition.\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}: ``We call
-a PEPS \emph{normal}, if blocking tensors in certain regions results in
-injective tensors.''} A tensor (or region) is injective in the source's
-sense when, ``interpreted as a map from the virtual space to the physical
-one,'' it is
-injective.\footnote{\path{Papers/1804.04964/paper_normal.tex:980}.} The
-corollary's clause ``every $L \times K$ region is injective'' names the
-``certain regions'' of the normality definition: the $L \times K$ rectangles
-are the blocking regions that witness normality. So ``normal $\dots$ such
-that every $L \times K$ region is injective'' is not normality \emph{plus} a
-region condition; the region condition \emph{is} the operative content of
-normality for this corollary, exactly as the one-dimensional companion reads
-``normal $\dots$ with the property that blocking $L$ consecutive sites results
-in an injective
-tensor''\footnote{\path{Papers/1804.04964/paper_normal.tex:2258}; the same
-phrasing recurs at the $n \geq 3L$
-corollary, \path{Papers/1804.04964/paper_normal.tex:1664}.} --- there
-``blocking $L$ sites is injective'' is the witness and nothing single-site is
-assumed.
+Two stronger mechanisms available elsewhere in the development are therefore
+only conditional alternatives.  The first reads a bond operation from a
+single vertex and requires single-vertex injectivity.  The second proves
+multiplicativity from a coherent three-region blocking frame.\footnote{Formal
+declaration:
+\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames}.}  Neither
+hypothesis occurs in the corollary, and neither is needed for the forward
+fixed-edge family proved above.
 
-Crucially, normality is by definition \emph{weaker} than single-vertex
-injectivity, not stronger. A normal tensor is precisely one that need
-\emph{not} be injective at a single site but \emph{becomes} injective after
-blocking; the canonical normal-but-not-injective examples (a single site whose
-physical dimension is below its bond dimension) have linearly dependent
-single-site components and so fail
-\leanid{TNLean.PEPS.IsVertexInjective}. Therefore normality cannot supply the
-single-vertex endpoint spanning \leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}
-(\path{TNLean/PEPS/RegionBlock/Recovery3.lean}), whose hypothesis is
-\leanid{TNLean.PEPS.IsVertexInjective}~$B$ at the in-region endpoint, derived
-from linear independence of the single-vertex complement family
-(\leanid{vertexComplementTensorInjective\_of\_isVertexInjective}). The
-hypothesised mechanism --- ``normality gives the single-vertex span region
-injectivity lacks'' --- asks normality to deliver a property strictly above
-itself.
+\subsection{Why the different-bond auxiliary route is irrelevant}
 
-\subsection{The campaign captured the source hypothesis faithfully}
+The paper keeps one highlighted edge $e$ fixed.  The first staircase window
+contains its ordered right endpoint, the next $L-1$ windows contain both
+endpoints, and the remaining windows contain its ordered left endpoint.
+Consequently, the same matrix $X$ can be represented on every window; there
+is no step in which an operation must be transported from one boundary bond
+to a different boundary bond of the same window.
 
-The campaign's bundle
-\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
-(\path{TNLean/PEPS/TorusWindowComplement.lean}, line~180) carries a single
-field, \leanid{arcWindow\_injective}: every cyclic $L \times K$ window is
-injective, where window injectivity is
-\leanid{TNLean.PEPS.RegionBlockedTensorInjective}
-(\path{TNLean/PEPS/RegionBlock/Basic.lean}, line~118), the linear independence
-of the $L \times K$-blocked tensor family read as a map from the window's
-boundary configuration to its physical configuration. This is the source's
-``$L \times K$ region is injective'' verbatim, and it is the \emph{whole} of
-the source's normality hypothesis for the corollary. The bundle adds no
-single-vertex field and drops no normality field: there is no source field to
-drop, because the source never assumes single-vertex injectivity. The
-faithfulness rule is satisfied --- the Lean hypothesis set neither exceeds nor
-falls short of the source's.
+Such a transport would in any case require information not contained in
+window injectivity.  A two-dimensional window is injective with respect to
+its whole multi-bond perimeter.  After all other boundary legs are fixed, its
+restriction to two selected bonds need not span a square matrix algebra.  The
+one-dimensional overlapping-window argument has no such difficulty because
+a chain window has exactly two virtual boundary legs, so its blocked tensors
+are already square matrices on the bond.
 
-A blocked $L \times K$ window read as one super-vertex has \emph{its} component
-map equal to \leanid{regionBlockedTensorFamily}, so window injectivity is the
-super-vertex injectivity of the coarse tensor. The coarse three-site
-machinery already exploits exactly this:
-\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames}
-(\path{TNLean/PEPS/RegionBlock/CoarseThreeSiteMul.lean}) derives the
-forward-transfer multiplicativity from three blocked-region injectivities
-\emph{with no single-vertex injectivity}, the super-vertex injectivity
-standing in for the single-vertex spanning. So the campaign does have a
-coarse multiplicativity theorem when such a frame is available.  It is not
-needed for the forward fixed-edge family; whether it participates in the
-remaining cross-tensor extraction is a separate question.
+The natural three-region substitute also lies outside the source route at the
+minimal size.  Two $L\times K$ windows with a single crossing edge form the
+diagonally offset staircase pair, whose union is not a cyclic rectangle.  On
+the shared row the complement has fewer than $L$ consecutive columns, so the
+window-union argument used elsewhere does not supply injectivity of the third
+region of a coherent frame.\footnote{Formal geometry:
+\leanid{TNLean.PEPS.horizontalStaircasePair\_ne\_arcRectangle} and
+\leanid{TNLean.PEPS.horizontalStaircasePair\_complement\_band\_lt\_window}
+in \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.}
 
-\subsection{Retired route: a coarse substitute on different boundary bonds}
-
-This subsection records an auxiliary route that is no longer part of the
-formalization plan.  The staircase family does not need to move the operation
-between the bonds denoted below by $g_{j-1}$ and $g_j$; it keeps the same
-reference edge $e$ in every window.
-
-The discarded route proposed that an intermediate window $W_j$ read the inserted
-operation off the in-region endpoint of one boundary bond $g_{j-1}$ and
-re-express it on a \emph{different} boundary bond $g_j$ of the same window.
-Blocking $W_j$ to one super-vertex does make $g_{j-1}$ and $g_j$ two legs of
-one injective super-vertex, and the super-vertex injectivity
-\leanid{RegionBlockedTensorInjective}~$W_j$ is in hand. But that injectivity
-is linear independence across the window's \emph{whole multi-bond perimeter},
-not a single-bond matrix-algebra span between $g_{j-1}$ and $g_j$. The
-operation pushed across a single bond pair is a square matrix on
-$\mathrm{Fin}(\mathrm{bondDim}\,g)$; reading it off requires the family of
-window blocks, restricted to the two bonds $g_{j-1}, g_j$ at fixed remaining
-external legs, to span the full
-$\mathrm{Mat}_{\mathrm{bondDim}\,g}$. That single-bond-pair span is
-\emph{strictly stronger} than window injectivity and does not follow from it,
-for the same dimension-count reason the per-window square-matrix family fails
-to exist (the section on the multiplicativity verdict): folding the perimeter
-into a second $\mathrm{Fin}(\mathrm{bondDim}\,g)$ index would force
-$\prod_{\text{other external legs}}\mathrm{bondDim} = \mathrm{bondDim}\,g$,
-false in general.
-
-This is exactly where the one-dimensional precedent fails to port, and the
-reason is geometric, not a missing hypothesis. The formalized
-one-dimensional overlapping-window extraction
-\leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}
-(\path{TNLean/PEPS/CycleMPSChainOverlapWindow.lean}, line~356) consumes only
-\leanid{IsWindowInjective}~$A\;L$ --- window (region) injectivity, never
-single-site injectivity --- and \emph{succeeds}. It succeeds because a
-length-$L$ one-dimensional window has exactly two virtual legs, a left bond
-and a right bond, both of dimension $D$, so the window product \emph{is} a
-$D \times D$ matrix and window injectivity is precisely the statement that
-these products span the full matrix algebra at the single bond; the cross-bond
-pushing is then the intertwining-span read-off
-\leanid{exists\_bondOperator\_of\_intertwine\_span} (same file, line~74), and
-the homomorphism is \leanid{MPSChainTensor.exists\_insertionHom} fed by the
-same window span. The two-dimensional end $L \times K$ window touches the
-reference bond with \emph{one} endpoint, so its bond-restricted family is a
-family of \emph{vectors}, never a square-matrix span, and the window's whole
-perimeter is open. The one-dimensional mechanism that powered the precedent
-\emph{is} window-injectivity-only --- the precedent never needed single-site
-injectivity --- but its enabling fact, ``window product is a square matrix on
-the pushed bond,'' is a property of the square one-dimensional window geometry
-that the non-square $L \times K$ window does not have. The campaign's analysis
-that ``the two-dimensional analogue does not exist'' is therefore correct and
-not a mis-analysis: it is the absence of the square-window geometry, not the
-absence of a normality hypothesis.
-
-\subsection{Retired verdict for the different-bond route}
-
-The verdict in this subsection concerns only the discarded construction just
-described.  It is not the current verdict on the paper's fixed-edge argument.
-
-The discarded route tried to move an operation between two different
-boundary bonds of one intermediate window.  A direct one-dimensional
-matrix-span argument does not type in that geometry, while the natural
-three-block replacement has the non-injective host described below.  These
-facts rule out that auxiliary construction under the corollary hypotheses;
-they do not identify a missing hypothesis of the paper or obstruct its
-fixed-edge comparison.
-
-The source keeps the highlighted edge $e$ fixed.  Every staircase window
-contains at least one endpoint of $e$, and the common-state family constructed
-above realizes the same $X$ on that edge throughout.  Thus no different-bond
-push or per-intermediate-bond coarse frame belongs to the remaining plan.  The
-remaining task is the converse comparison of the physical operations, with
-the corner adjoining and inversion at lines 2415--2444 and the composition
-argument of Lemma~5.  No hypothesis change to the capstone is warranted by
-this audit.
-
-\subsection{Retired audit: per-bond coarse frames at the minimal size}
-
-This audit remains a valid obstruction to the indicated coarse-frame
-substitute, but that substitute is not needed for the common-state family.
-
-The question posed by the earlier analysis --- whether a per-bond coarse
-frame exists at the minimal size for an intermediate bond,
-where the partner block is a neighbouring window rather than the diagonally
-opposite one, or whether those crossings inherit the same
-$\mathrm{univ}\setminus S$-type non-injectivity --- is now settled, in the
-negative, by the geometry of the single-crossing partition. The settlement is
-purely combinatorial and applies to \emph{every} single-crossing $L\times K$
-window pair, intermediate or end-pair.
-
-A coarse frame around a bond $e$ feeds the multiplicativity engine
-\leanid{TNLean.PEPS.coeffTransferMap\_mul\_of\_coherentFrames} only through a
-partition of the lattice into three injective regions, red, blue, and the
-complement of their union, with $e$ the single red-to-blue crossing. The third
-region is forced to be $\mathrm{univ}\setminus(\mathrm{red}\cup\mathrm{blue})$.
-The only landed source of complement injectivity at the minimal sizes
-$2L+1\le\mathrm{width}$, $2K+1\le\mathrm{height}$ is the two-band decomposition
-of the complement of a \emph{single cyclic rectangle}
-(\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowComplement%
-\_injective} and its consecutive-union counterparts): the complement of a
-$w\times h$ cyclic rectangle splits into a full-height band of $\mathrm{width}-w$
-columns and a $w\times(\mathrm{height}-h)$ leftover, both injective when
-$w\le\mathrm{width}-L$ and $h\le\mathrm{height}-K$. Injectivity of the third
-region by this machinery therefore requires
-$\mathrm{red}\cup\mathrm{blue}$ to be a single cyclic rectangle.
-
-But two $L\times K$ windows cross at a single lattice edge only when they are
-the diagonally offset staircase pair: column-adjacent across one shared row
-(\leanid{TNLean.PEPS.isCrossingEdge\_horizontalStaircase}). Their union then
-covers all $2L$ contiguous columns at the shared row
-(\leanid{TNLean.PEPS.horizontalStaircasePair\_row\_span}) while the rows above
-and below it carry only one window's $L$ columns, so the union is a staircase,
-not a rectangle. The product structure of a cyclic rectangle --- membership is a
-column condition and a row condition read independently --- forces the swapped
-corner $(a+2L-1,\,b)$ to belong whenever the three corners $(a,\,b+K-1)$,
-$(a+2L-1,\,b+K-1)$, $(a,\,b)$ do; the swapped corner lies outside the union, so
-the union is not any cyclic rectangle
-(\leanid{TNLean.PEPS.horizontalStaircasePair\_ne\_arcRectangle}). At the minimal
-width the obstruction is quantitative as well: the complement band at the shared
-row is $\mathrm{width}-2L<L$ columns wide
-(\leanid{TNLean.PEPS.horizontalStaircasePair\_complement\_band\_lt\_window}), so
-no $L\times K$ window translate passing through that row avoids the union
-(\leanid{TNLean.PEPS.horizontalStaircasePair\_window\_meets\_row}), and the
-complement is not a union of injective window translates.
-
-This is the precise conflict, and it is a joint unsatisfiability of two of the
-frame's conditions: the single-crossing requirement forces the diagonal offset,
-the diagonal offset forces the double-width row span, and the double-width row
-span forces the union out of the cyclic-rectangle class, which is the only class
-whose complement the landed machinery proves injective. Choosing a
-\emph{neighbouring} window as the partner does not escape this: a window sharing
-more than the single edge $e$ with red is not a single-crossing partner, and a
-single-crossing partner is, up to translation, the diagonal offset itself.
-Enlarging red or blue beyond a single window to make the union a rectangle does
-not help either, since a cyclic rectangle admits no bipartition into two regions
-each injective (each containing an $L\times K$ window) with a single edge between
-them: the rectangle is two-edge-connected, so any bipartition into two
-non-degenerate parts has at least two crossing edges. The per-bond coarse frame
-is therefore unbuildable at the minimal size for every bond of the chain.  This
-rules out that auxiliary frame, but it no longer redirects the formalization:
-the fixed-edge insert family is complete.  The geometry is in
-\path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.
+These observations rule out two auxiliary shortcuts; they do not challenge
+the paper's fixed-edge comparison.  The remaining source step is the converse
+at lines 2368--2444: compare the physical operations on the overlapping
+windows, adjoin and invert the two corner regions, recover the unique virtual
+operation $X$, and prove the maps $O_1\mapsto X$ and
+$O_3^{\mathsf T}\mapsto X$ multiplicative by the composition argument of
+Lemma~5.
 
 \bibliographystyle{alpha}
 \bibliography{references}
