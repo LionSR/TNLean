@@ -73,7 +73,7 @@ declared. The generated reference prints this test beside every row.
 | Key | Type | Values | Default | Scope | Diagnostic family |
 |---|---|---|---|---|---|
 | `rows=` | row-list | — | `{wire}` | picture | `TKZ-PIC-*` |
-| `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
+| `cols=` | positive-integer | — | 3 | picture | `TKZ-PIC-*` |
 | `frame=` | frame-spec | `flat` `plane` `circle`; a picture-level `flat` or `plane` may carry `basis=` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
 | `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `none` | picture | `TKZ-SIDE-*` |
 | `trace=` | trace-spec | selector or `physical` | empty | picture | `TKZ-SELECT-*` |
@@ -132,7 +132,7 @@ that contraction and retires nothing.
 | `wide=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `wires=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
-| `name=` | identifier | — | generated | `TKZ-NAME-*` |
+| `name=` | identifier | — | none; an unnamed atom answers only to its cell | `TKZ-NAME-*` |
 | `ports=` | typed-port-list | — | from skin | `TKZ-PORT-*` |
 | `frame=` | small-enum | `flat` `plane` `circle` | `flat` | `TKZ-FRAME-*` |
 | `species=` | identifier | — | empty | `TKZ-SPECIES-*` |
@@ -191,11 +191,11 @@ hole, its boundary entries — stands unchanged.
 | `stroke=` | small-enum | `solid` `dashed` `dotted` | `solid` | `TKZ-WIRE-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 
-`crossing=` is the string's habit, the order it takes at every crossing it
-makes, stated once instead of once per crossing; `cross=` remains the
-exception that overrules the habit at one named place. A string that meets
-nothing needs neither. The pair is what lets a derived crossing set carry an
-order without a declaration per member (§5).
+`crossing=` is the habit a hull route's derived crossing set carries: the
+order the string takes at every crossing the route computes, stated once
+instead of once per member (§5); `cross=` remains the declaration that
+states one crossing by name, and the only spelling a free string's
+crossings answer to. A string that meets nothing needs neither.
 
 `dir=` draws the direction mark of a directed index, virtual or physical; it
 changes no topology, and it enters the boundary signature. On a resolved
@@ -241,7 +241,7 @@ cited paper's palette reaches a contour and the string that ends in it alike.
 
 | Key | Type | Default |
 |---|---|---|
-| `pitch=` | length | em-relative; the exact ratio is a named row of the metric registry |
+| `pitch=` | length | a fixed 11mm; the metric registry owns the ratios measured against it |
 | `sizes=` | size-table | bundled table |
 | `strict` | flag | false; only five refusal fixtures enable it |
 | `theme=` | identifier | `house` |

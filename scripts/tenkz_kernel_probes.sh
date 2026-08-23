@@ -1322,6 +1322,17 @@ for false_field in closed conjugate outline; do
     exit 1
   fi
 done
+# The sugar flags: the first picture's bare sandwich populates its op
+# and bra rows (two populated atoms); the sandwich=false picture keeps
+# the default wire row; and the third picture keeps its explicit
+# rows={ket,op,bra}, whose empty ket and bra cells are populated.  Thus
+# the file holds four populated atoms and seven in all.
+false_flag_pop=$(grep -c '^atom|.*|populated=' "$WORK/r_false_flags.tnlog" || true)
+false_flag_atoms=$(grep -c '^atom|' "$WORK/r_false_flags.tnlog" || true)
+[ "$false_flag_pop" -eq 4 ] && [ "$false_flag_atoms" -eq 7 ] || {
+  echo "FAIL: a false-valued sugar flag changed the chosen rows" >&2
+  exit 1
+}
 grep -Fq '|name=wrap-west-1|origin=trace|row=1|side=west' \
   "$WORK/r_one_sided_trace.tnlog" || {
   echo "FAIL: west=trace did not materialize its first closure wire" >&2
@@ -2627,6 +2638,8 @@ for contract_negative in \
   n_wire_restyle_transform \
   n_wire_restyle_nested \
   n_leg_restyle_transform \
+  n_picture_cols_word \
+  n_picture_align_word \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -2718,6 +2731,10 @@ do
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
   [ "$contract_negative" = n_leg_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
+  [ "$contract_negative" = n_picture_cols_word ] &&
+    expected='[TKZ-PIC-POSITIVE-INTEGER]'
+  [ "$contract_negative" = n_picture_align_word ] &&
+    expected='[TKZ-LANG-CHOICE]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {

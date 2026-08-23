@@ -14,4 +14,13 @@
   \tnwire[closed=false]{w outside}{e outside}
   \tnmark[form=label, tint=false]{A}{a}
 \end{tenkz}
+% A false-valued sugar flag expands nothing: this picture keeps the
+% default wire row and holds exactly one atom.
+\begin{tenkz}[sandwich=false, cols=1, bonds=none]
+  \tn[name=B]{B}
+\end{tenkz}
+% False also leaves an explicitly chosen row policy untouched.
+\begin{tenkz}[rows={ket,op,bra}, sandwich=false, cols=1, bonds=none]
+  \tn[at=(2,1), name=C]{C}
+\end{tenkz}
 \end{document}

@@ -66,14 +66,14 @@ kernel-\allowbreak{}picture & \texttt{sandwich} & flag & false & Ket-\allowbreak
 kernel-\allowbreak{}picture & \texttt{boundary} & enum(\allowbreak{}open\textbar{}\allowbreak{}none\textbar{}\allowbreak{}periodic) & none & All-\allowbreak{}side \allowbreak{}boundary \allowbreak{}word. \\
 kernel-\allowbreak{}picture & \texttt{lattice} & pair & empty & RxC \allowbreak{}wire-\allowbreak{}row \allowbreak{}lattice \allowbreak{}preset. \\
 kernel-\allowbreak{}picture & \texttt{ring} & integer & empty & Circle-\allowbreak{}frame \allowbreak{}ring \allowbreak{}preset. \\
-kernel-\allowbreak{}picture & \texttt{surface} & identifier & empty & Torus \allowbreak{}closure \allowbreak{}preset. \\
+kernel-\allowbreak{}picture & \texttt{surface} & enum(\allowbreak{}torus) & empty & Torus \allowbreak{}closure \allowbreak{}preset. \\
 kernel-\allowbreak{}picture & \texttt{planes} & flag & false & Plane \allowbreak{}frame \allowbreak{}with \allowbreak{}ket \allowbreak{}and \allowbreak{}bra \allowbreak{}basis \allowbreak{}members. \\
 kernel-\allowbreak{}picture & \texttt{physical} & physical-\allowbreak{}policy & none & Expander: \allowbreak{}frame-\allowbreak{}owned \allowbreak{}outward \allowbreak{}physical \allowbreak{}port \allowbreak{}per \allowbreak{}frame-\allowbreak{}cell \allowbreak{}atom; \allowbreak{}geometric \allowbreak{}overlays \allowbreak{}are \allowbreak{}excluded. \\
 kernel-\allowbreak{}atom & \texttt{skin} & silhouette-\allowbreak{}name & theme \allowbreak{}default & Declared \allowbreak{}silhouette. \\
 kernel-\allowbreak{}atom & \texttt{wide} & positive-\allowbreak{}integer & 1 & Cells \allowbreak{}spanned. \\
 kernel-\allowbreak{}atom & \texttt{wires} & positive-\allowbreak{}integer & 1 & Wire \allowbreak{}rows \allowbreak{}spanned. \\
 kernel-\allowbreak{}atom & \texttt{at} & address & next \allowbreak{}chain \allowbreak{}cell & Placement \allowbreak{}address. \\
-kernel-\allowbreak{}atom & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
+kernel-\allowbreak{}atom & \texttt{name} & identifier & none & Addressable \allowbreak{}name; \allowbreak{}an \allowbreak{}unnamed \allowbreak{}atom \allowbreak{}answers \allowbreak{}only \allowbreak{}to \allowbreak{}its \allowbreak{}cell. \\
 kernel-\allowbreak{}atom & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & from \allowbreak{}skin & Typed \allowbreak{}faces \allowbreak{}and \allowbreak{}slots. \\
 kernel-\allowbreak{}atom & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 kernel-\allowbreak{}atom & \texttt{pairing~cross} & indexed-\allowbreak{}crossing-\allowbreak{}list & empty & Per-\allowbreak{}instance \allowbreak{}crossings \allowbreak{}of \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairings. \\
@@ -84,29 +84,29 @@ kernel-\allowbreak{}atom & \texttt{physical} & physical-\allowbreak{}policy & un
 kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Tombstoned; \allowbreak{}stored,\allowbreak{} \allowbreak{}read \allowbreak{}by \allowbreak{}nothing. \allowbreak{}Sunset \allowbreak{}1.0. \\
 kernel-\allowbreak{}atom & \texttt{cluster} & pair & empty & Expander: \allowbreak{}RxC \allowbreak{}addressable \allowbreak{}sub-\allowbreak{}atom \allowbreak{}group. \\
 kernel-\allowbreak{}atom & \texttt{role} & semantic-\allowbreak{}role & empty & Prelude \allowbreak{}species \allowbreak{}spelling. \\
-kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string\textbar{}\allowbreak{}pairing) & index & Bond,\allowbreak{} \allowbreak{}travelling \allowbreak{}string,\allowbreak{} \allowbreak{}or \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairing. \\
+kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string) & index & Bond \allowbreak{}or \allowbreak{}travelling \allowbreak{}string; \allowbreak{}a \allowbreak{}declared \allowbreak{}skin's \allowbreak{}pairing \allowbreak{}arrives \allowbreak{}generated,\allowbreak{} \allowbreak{}never \allowbreak{}authored. \\
 kernel-\allowbreak{}wire & \texttt{route} & route-\allowbreak{}spec & straight & straight,\allowbreak{} \allowbreak{}orth,\allowbreak{} \allowbreak{}arc \allowbreak{}(\allowbreak{}honours \allowbreak{}the \allowbreak{}ends' \allowbreak{}faces),\allowbreak{} \allowbreak{}or \allowbreak{}the \allowbreak{}hull \allowbreak{}route \allowbreak{}{<side> \allowbreak{}of \allowbreak{}<selector>}. \\
-kernel-\allowbreak{}wire & \texttt{via} & address-\allowbreak{}list & empty & Waypoints. \\
+kernel-\allowbreak{}wire & \texttt{via} & address-\allowbreak{}list & empty & Waypoints \allowbreak{}of \allowbreak{}a \allowbreak{}string; \allowbreak{}an \allowbreak{}index \allowbreak{}bond \allowbreak{}draws \allowbreak{}its \allowbreak{}chord \allowbreak{}and \allowbreak{}reads \allowbreak{}none. \\
 kernel-\allowbreak{}wire & \texttt{weight} & enum(\allowbreak{}single\textbar{}\allowbreak{}double\textbar{}\allowbreak{}bundle=n) & single & Strand \allowbreak{}multiplicity \allowbreak{}in \allowbreak{}the \allowbreak{}boundary \allowbreak{}signature; \allowbreak{}every \allowbreak{}weight \allowbreak{}strokes \allowbreak{}one \allowbreak{}rail. \\
 kernel-\allowbreak{}wire & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
 kernel-\allowbreak{}wire & \texttt{wind} & pair & zero & Homotopy \allowbreak{}class \allowbreak{}on \allowbreak{}traced \allowbreak{}frames. \\
 kernel-\allowbreak{}wire & \texttt{cross} & crossing-\allowbreak{}list & empty & Declared \allowbreak{}over \allowbreak{}and \allowbreak{}under \allowbreak{}crossings. \\
-kernel-\allowbreak{}wire & \texttt{crossing} & enum(\allowbreak{}over\textbar{}\allowbreak{}under\textbar{}\allowbreak{}alternate\textbar{}\allowbreak{}alternate=over\textbar{}\allowbreak{}alternate=under) & empty & Default \allowbreak{}crossing \allowbreak{}order \allowbreak{}at \allowbreak{}every \allowbreak{}crossing \allowbreak{}the \allowbreak{}string \allowbreak{}makes. \\
+kernel-\allowbreak{}wire & \texttt{crossing} & enum(\allowbreak{}over\textbar{}\allowbreak{}under\textbar{}\allowbreak{}alternate\textbar{}\allowbreak{}alternate=over\textbar{}\allowbreak{}alternate=under) & empty & Default \allowbreak{}order \allowbreak{}for \allowbreak{}the \allowbreak{}crossings \allowbreak{}a \allowbreak{}hull \allowbreak{}route \allowbreak{}derives. \\
 kernel-\allowbreak{}wire & \texttt{dir} & direction-\allowbreak{}policy & none & Direction \allowbreak{}mark \allowbreak{}of \allowbreak{}a \allowbreak{}directed \allowbreak{}index. \\
 kernel-\allowbreak{}wire & \texttt{stroke} & enum(\allowbreak{}solid\textbar{}\allowbreak{}dashed\textbar{}\allowbreak{}dotted) & solid & Declared \allowbreak{}stroke \allowbreak{}pattern \allowbreak{}of \allowbreak{}the \allowbreak{}rail. \\
 kernel-\allowbreak{}wire & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
 kernel-\allowbreak{}wire & \texttt{closed} & flag & false & A \allowbreak{}smooth \allowbreak{}closed \allowbreak{}cycle; \allowbreak{}takes \allowbreak{}no \allowbreak{}ends. \\
 kernel-\allowbreak{}mark & \texttt{form} & enum(\allowbreak{}bracket\textbar{}\allowbreak{}enclosure\textbar{}\allowbreak{}label\textbar{}\allowbreak{}prose) & label & Mark \allowbreak{}form; \allowbreak{}the \allowbreak{}prose \allowbreak{}form \allowbreak{}records \allowbreak{}its \allowbreak{}text \allowbreak{}and \allowbreak{}draws \allowbreak{}nothing. \\
-kernel-\allowbreak{}mark & \texttt{slot} & semantic-\allowbreak{}slot & selected & Semantic \allowbreak{}tint. \\
+kernel-\allowbreak{}mark & \texttt{slot} & semantic-\allowbreak{}slot & unset & Semantic \allowbreak{}tint \allowbreak{}of \allowbreak{}the \allowbreak{}contour; \allowbreak{}species= \allowbreak{}outranks \allowbreak{}it,\allowbreak{} \allowbreak{}and \allowbreak{}an \allowbreak{}unset \allowbreak{}slot \allowbreak{}falls \allowbreak{}back \allowbreak{}to \allowbreak{}the \allowbreak{}passive \allowbreak{}hue. \\
 kernel-\allowbreak{}mark & \texttt{species} & declared-\allowbreak{}name & empty & Semantic \allowbreak{}species. \\
-kernel-\allowbreak{}mark & \texttt{label~pos} & angle & auto & Label \allowbreak{}quadrant. \\
-kernel-\allowbreak{}mark & \texttt{name} & identifier & generated & Addressable \allowbreak{}name. \\
-kernel-\allowbreak{}mark & \texttt{tint} & flag & false & Interior \allowbreak{}tint \allowbreak{}under \allowbreak{}the \allowbreak{}contour. \\
-kernel-\allowbreak{}setup & \texttt{pitch} & length & em-\allowbreak{}relative & Base \allowbreak{}metric. \\
-kernel-\allowbreak{}setup & \texttt{sizes} & size-\allowbreak{}table & bundled \allowbreak{}table & Size-\allowbreak{}class \allowbreak{}table. \\
+kernel-\allowbreak{}mark & \texttt{label~pos} & angle & auto & Label \allowbreak{}bearing: \allowbreak{}a \allowbreak{}compass \allowbreak{}word \allowbreak{}or \allowbreak{}a \allowbreak{}degree \allowbreak{}value. \\
+kernel-\allowbreak{}mark & \texttt{name} & identifier & generated & Recorded \allowbreak{}name; \allowbreak{}no \allowbreak{}address \allowbreak{}grammar \allowbreak{}resolves \allowbreak{}a \allowbreak{}mark \allowbreak{}yet. \\
+kernel-\allowbreak{}mark & \texttt{tint} & flag & false & Interior \allowbreak{}tint \allowbreak{}under \allowbreak{}an \allowbreak{}enclosure's \allowbreak{}contour; \allowbreak{}a \allowbreak{}bracket \allowbreak{}takes \allowbreak{}none. \\
+kernel-\allowbreak{}setup & \texttt{pitch} & length & 11mm & Base \allowbreak{}metric; \allowbreak{}the \allowbreak{}default \allowbreak{}is \allowbreak{}a \allowbreak{}fixed \allowbreak{}length,\allowbreak{} \allowbreak{}not \allowbreak{}an \allowbreak{}em-\allowbreak{}relative \allowbreak{}one. \\
+kernel-\allowbreak{}setup & \texttt{sizes} & size-\allowbreak{}table & bundled \allowbreak{}table & Stored,\allowbreak{} \allowbreak{}read \allowbreak{}by \allowbreak{}nothing; \allowbreak{}size\_resolve \allowbreak{}reads \allowbreak{}the \allowbreak{}picture \allowbreak{}size \allowbreak{}key. \\
 kernel-\allowbreak{}setup & \texttt{strict} & flag & false & Rejects \allowbreak{}sugar; \allowbreak{}only \allowbreak{}five \allowbreak{}refusal \allowbreak{}fixtures \allowbreak{}enable \allowbreak{}it. \\
-kernel-\allowbreak{}setup & \texttt{theme} & identifier & house & Semantic \allowbreak{}ink \allowbreak{}theme. \\
-kernel-\allowbreak{}declare & \texttt{hue} & hue-\allowbreak{}source & house \allowbreak{}cycle & Species \allowbreak{}ink; \allowbreak{}source:* \allowbreak{}reproduces \allowbreak{}a \allowbreak{}cited \allowbreak{}palette. \\
+kernel-\allowbreak{}setup & \texttt{theme} & identifier & house & Stored,\allowbreak{} \allowbreak{}read \allowbreak{}by \allowbreak{}nothing; \allowbreak{}the \allowbreak{}house \allowbreak{}ink \allowbreak{}binds \allowbreak{}at \allowbreak{}load. \\
+kernel-\allowbreak{}declare & \texttt{hue} & hue-\allowbreak{}source & house \allowbreak{}cycle & Species \allowbreak{}ink; \allowbreak{}the \allowbreak{}source: \allowbreak{}prefix \allowbreak{}records \allowbreak{}provenance \allowbreak{}and \allowbreak{}strips \allowbreak{}to \allowbreak{}the \allowbreak{}colour \allowbreak{}it \allowbreak{}names. \\
 kernel-\allowbreak{}declare & \texttt{base} & identifier & empty & Skin \allowbreak{}the \allowbreak{}declaration \allowbreak{}extends. \\
 kernel-\allowbreak{}declare & \texttt{pairings} & port-\allowbreak{}pair-\allowbreak{}list & empty & Skin-\allowbreak{}internal \allowbreak{}wires \allowbreak{}between \allowbreak{}own \allowbreak{}ports. \\
 \bottomrule\end{longtable}
