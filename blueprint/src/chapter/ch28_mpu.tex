@@ -7329,7 +7329,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
+    \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank,
+        thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
     The entry formula $A^{ij}_{\alpha\beta}
     =\delta_{i\alpha}\delta_{j\beta}$ gives $M_1(A)=\Id$ and
     $M_2(A)=zz^{\mathsf T}$. Hence the first rank is $d^2$. For $d>0$, the
