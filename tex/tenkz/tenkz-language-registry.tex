@@ -242,7 +242,6 @@
 % instead: eleven sugar spellings pinned byte-identical to their expansions
 % in events and in pixels.
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; only five refusal fixtures enable it.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{theme}{identifier}{house}{kernel}{Stored, read by nothing; the house ink binds at load.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{hue}{hue-source}{house cycle}{kernel}{Species ink; the source: prefix records provenance and strips to the colour it names.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{base}{identifier}{empty}{kernel}{Skin the declaration extends.}
 \__tenkz_language_registry_key:nnnnnn {kernel-declare}{pairings}{port-pair-list}{empty}{kernel}{Skin-internal wires between own ports.}
@@ -309,6 +308,13 @@
 % atom whose extent it controls.
 \__tenkz_language_registry_tombstone:nnn {kernel-setup}{sizes}
   {use size= on the picture or atom; the bundled metric table is fixed}
+%
+% The inert setup theme= key retired 2026-08-23 (#6889): it stored an
+% identifier that no ink or render pass read.  The house palette is load-time
+% policy; a cited palette belongs to the species declaration it changes.
+\__tenkz_language_registry_tombstone:nnn {kernel-setup}{theme}
+  {the house theme binds at load; a cited palette reaches ink through
+    \tndeclare{species}{<name>}{hue=source:<colour>}}
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they
