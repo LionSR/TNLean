@@ -2667,7 +2667,8 @@ This is the calculation in
 
 \begin{theorem}[Counterexample to the low-level absorbed-sector implication]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}
-    \lean{MPOTensor.NonCartesianActiveSectorCandidate.transferMap_posDef_eigenvalue_le_one,
+    \lean{MPOTensor.NonCartesianActiveSectorCandidate.transferMap_posDef_eigenvalue_lt_one,
+        MPOTensor.NonCartesianActiveSectorCandidate.transferMap_posDef_eigenvalue_le_one,
         MPOTensor.NonCartesianActiveSectorCandidate.exists_normalTensor_scalar_representation,
         MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample}
     \leanok
@@ -2675,8 +2676,8 @@ This is the calculation in
         def:mpdo_physical_sector_factorization,
         def:mpdo_neighboring_trace_factorization}
     There are tensors $K,A$ of physical dimension four and virtual dimension
-    two, and a nonzero scalar $\mu$ with $|\mu|\leq 1$, such that $K=\mu A$,
-    the tensor $A$ is normal, and $K$ is injective, satisfies the strong area
+    two, and a scalar $\mu$ with $0<|\mu|<1$, such that $K=\mu A$, the tensor
+    $A$ is normal, and $K$ is injective, satisfies the strong area
     law, and obeys
     \begin{align}
         \mathcal T_K^2&=\mathcal T_K.
@@ -2715,8 +2716,15 @@ This is the calculation in
           &=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
         \notag
     \end{align}
-    Pairing this inequality with a positive-definite Perron eigenmatrix of
-    $\mathcal E_K$ shows that its Perron value $r$ is at most one. Perron
+    Pair this positive-definite gap with a positive-definite Perron
+    eigenmatrix $\rho$ of $\mathcal E_K$. The trace-adjoint identity gives
+    \begin{align}
+      0
+        &<\tr\bigl((H-\mathcal E_K^*(H))\rho\bigr)
+          =(1-r)\tr(H\rho).
+        \notag
+    \end{align}
+    Since $\tr(H\rho)>0$, the Perron value satisfies $r<1$. Perron
     normalization and a canonical gauge therefore express the tensor as
-    $K=\mu A$ with $A$ normal and $|\mu|=\sqrt r\leq1$.
+    $K=\mu A$ with $A$ normal and $0<|\mu|=\sqrt r<1$.
 \end{proof}
