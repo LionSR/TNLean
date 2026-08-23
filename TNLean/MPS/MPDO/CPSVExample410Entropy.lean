@@ -21,7 +21,8 @@ network and the entropy values printed at source line 904. See
 
 **Scope restriction (fixed parameter and finite ring):** the spectra and exact entropy identities
 below are project-derived consequences of the corrected tensor at $p=1/4$ on the four-site ring.
-They do not assert the universal-in-$p$ statement printed in CPSV16 Example 4.10.
+They do not assert the universal-in-$p$ statement printed in CPSV16 Example 4.10. See
+`docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex`.
 
 ## Main results
 
