@@ -81,8 +81,9 @@ ${#sketch_rows[@]}" >&2
 # also marks the line of the fence it consumed, and the marks are compared
 # after the loop: the count guard and pairwise-distinct marks together force
 # a bijection between the contract's fences and this table's rows.  A
-# heading is a hash run followed by a space, so a reference such as #6235
-# at the head of a prose line stops nothing; fences are tracked by their
+# heading has up to three leading spaces, one to six hashes, and then a space,
+# tab, or line end.  Thus a reference such as #6235 stops nothing; fences are
+# tracked by their
 # own delimiter — character and length, closing on a run at least as long,
 # as Markdown reads them — so a heading-shaped or backtick line inside any
 # fenced block neither arms nor stops a scan.
