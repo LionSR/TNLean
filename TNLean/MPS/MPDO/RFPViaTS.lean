@@ -45,8 +45,10 @@ the predicate.
   completely positive maps used in Definition 4.1.
 * `MPOTensor.IsRFPViaTS`: Definition 4.1, the tp-CP-map renormalization
   fixed point.
-* `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`: Definition 4.1 implies
-  idempotence of the physical-trace transfer.
+* `MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`: Definition 4.1 implies the
+  physical-trace idempotence equation.
+* `MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS`: Definition 4.1 implies
+  the literal Definition 4.2 predicate.
 * `MPOTensor.isSourceZCL_of_isRFPViaTS`: the resulting broader scale-invariant
   physical-trace corollary when the physical-trace transfer is nonzero.
 
@@ -102,6 +104,15 @@ theorem physTraceTransfer_sq_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M
   rw [Matrix.sub_mul, Matrix.trace_sub, ← trace_physClose2_eq M X,
     ← trace_physClose1_eq M X, ← hT_close X, hT.trace_map, sub_self]
 
+/-- Definition 4.1 implies the literal Definition 4.2 physical-trace
+idempotence predicate.
+
+This packages the physical-trace-square calculation from arXiv:1606.00608,
+Appendix C, lines 1333--1340, as the source definition at lines 735--739. -/
+theorem isPhysicalTraceIdempotent_of_isRFPViaTS (M : MPOTensor d D)
+    (h : IsRFPViaTS M) : IsPhysicalTraceIdempotent M :=
+  (isPhysicalTraceIdempotent_iff M).2 (physTraceTransfer_sq_of_isRFPViaTS M h)
+
 /-- Given a nonzero physical-trace transfer, Definition 4.1 implies the
 project's broader scale-invariant physical-trace relation.
 
@@ -119,7 +130,7 @@ nonzero transfer is stated explicitly. This restriction is documented in
 Source: arXiv:1606.00608, lines 1333--1340. -/
 theorem isSourceZCL_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M)
     (h0 : physTraceTransfer M ≠ 0) : IsSourceZCL M :=
-  isSourceZCL_of_physTraceTransfer_sq M h0 (physTraceTransfer_sq_of_isRFPViaTS M h)
+  (isPhysicalTraceIdempotent_of_isRFPViaTS M h).isSourceZCL h0
 
 @[deprecated _root_.finThreeArrowEquiv (since := "2026-07-13")]
 alias finThreeArrowEquiv := _root_.finThreeArrowEquiv

@@ -14,7 +14,7 @@ Cirac--Perez-Garcia--Schuch--Verstraete 2017}
 
 \begin{document}
 \maketitle
-\gapnote{open-gap}{open}
+\gapnote{definition-drift}{resolved}
 
 \section{Source statement}
 
@@ -61,12 +61,13 @@ condition; it is a condition on a different transfer object. Even after allowing
 a scalar normalization, idempotence of $\mathcal E_M$ would classify tensors by
 the doubled-index MPS transfer rather than by the MPDO ZCL diagram.
 
-\paragraph{Classification: definition drift.} The formal predicate records
-doubled-index CP-transfer idempotence, while the source definition uses the
-physical-trace transfer. The latter is now formalized as
-\texttt{MPOTensor.physTraceTransfer}. The predicate
-\texttt{MPOTensor.IsSourceZCL} records this development's scale-invariant
-up-to-scalar repair; it is distinct from the paper's literal diagram and from
+\paragraph{Classification: resolved definition drift.} The older formal
+predicate records doubled-index CP-transfer idempotence, while the source
+definition uses the physical-trace transfer. The source definition is now
+formalized by \texttt{MPOTensor.IsPhysicalTraceIdempotent}, whose equation
+characterization is $\mathcal T_M^2=\mathcal T_M$. The predicate
+\texttt{MPOTensor.IsSourceZCL} remains the separate scale-invariant
+up-to-scalar relation; it is distinct from the paper's literal diagram and from
 the doubled-index predicate.
 
 This deviation is witnessed in the development by
@@ -107,16 +108,17 @@ possible repairs are:
   fusion and algebra statements, not the source's ZCL transfer.
 \end{enumerate}
 
-The scale-invariant repair described in Option~1 is now in place. The predicate
-\texttt{IsZCL} remains documented as a doubled-index CP-transfer idempotence
-condition, while \texttt{IsSourceZCL} records the up-to-scalar physical-trace
-interpretation. It must not be identified with the paper's literal diagram for
-a fixed tensor. For the renormalization condition
+The source definition and the scale-invariant relation are now both in place.
+\texttt{IsPhysicalTraceIdempotent} records the literal fixed-tensor diagram,
+\texttt{IsSourceZCL} records the nonzero up-to-scalar relation, and
+\texttt{IsZCL} remains the doubled-index CP-transfer condition. These three
+predicates must remain distinct. For the renormalization condition
 of Definition~4.1, Proposition \texttt{propsimple} is now proved at the explicit
 normalization boundary: every positive-length ring is positive semidefinite and
 has nonzero trace. The primary source-facing declarations are
-\texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} for literal
-Definition~4.2 ZCL and
+\texttt{MPOTensor.IsPhysicalTraceIdempotent} for Definition~4.2 and
+\texttt{MPOTensor.isPhysicalTraceIdempotent\_of\_isRFPViaTS} for its RFP
+implication, together with
 \texttt{MPOTensor.isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero} for SAL. The
 conjunction
 \texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}
@@ -195,9 +197,9 @@ stated explicitly.
 
 \paragraph{Definition~4.1 now gives the forward physical-trace equation.}
 The theorem
-\texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} formalizes the
-zero-correlation-length calculation in Appendix~C, Proposition
-\texttt{propsimple}, source lines 1333--1340. This proposition proves the first
+\texttt{MPOTensor.isPhysicalTraceIdempotent\_of\_isRFPViaTS}, using the
+physical-trace-square calculation, formalizes the zero-correlation-length part
+of Appendix~C, Proposition \texttt{propsimple}, source lines 1333--1340. This proposition proves the first
 implication of Theorem~4.9 by establishing both ZCL and SAL.  The physical-trace
 theorem formalizes its ZCL calculation.  At the explicit density-family boundary,
 \texttt{MPOTensor.isSourceZCL\_and\_isSAL\_of\_isRFPViaTS\_of\_trace\_ne\_zero}
