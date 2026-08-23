@@ -136,17 +136,17 @@ private lemma normalizingCoefficientWitness_posDef :
   fin_cases i <;> norm_num
 
 /-- A positive-definite eigenmatrix of the candidate's associated completely
-positive map has eigenvalue at most one.
+positive map has eigenvalue strictly smaller than one.
 
 This is the one-sector estimate needed for the coefficient bound in
 arXiv:1606.00608, line 246. It is a counterexample helper, not the source
 theorem: the source additionally normalizes an ambient simple biCF tensor so
 that one of all its sector coefficients has modulus one. -/
-lemma transferMap_posDef_eigenvalue_le_one
+lemma transferMap_posDef_eigenvalue_lt_one
     {rho : Matrix (Fin 2) (Fin 2) ℂ} {r : ℝ}
     (hrho : rho.PosDef)
     (hEig : Kraus.transferMap tensor.toMPSTensor rho = (r : ℂ) • rho) :
-    r ≤ 1 := by
+    r < 1 := by
   have htraceNonneg :
       0 ≤ Matrix.trace (normalizingCoefficientWitness * rho) :=
     Matrix.PosSemidef.trace_mul_nonneg
@@ -169,6 +169,21 @@ lemma transferMap_posDef_eigenvalue_le_one
     Matrix.PosSemidef.trace_mul_nonneg
       normalizingCoefficientWitness_sub_adjointMap_posDef.posSemidef
       hrho.posSemidef
+  have hgapNe :
+      Matrix.trace
+        ((normalizingCoefficientWitness -
+          Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
+            rho) ≠ 0 := by
+    intro hzero
+    exact (Matrix.PosDef.isUnit hrho).ne_zero
+      (Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
+        hrho.posSemidef normalizingCoefficientWitness_sub_adjointMap_posDef hzero)
+  have hgapPos :
+      0 < Matrix.trace
+        ((normalizingCoefficientWitness -
+          Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
+            rho) :=
+    lt_of_le_of_ne hgapNonneg (by simpa only [ne_eq, eq_comm] using hgapNe)
   have hEigMap :
       Kraus.map tensor.toMPSTensor rho = (r : ℂ) • rho := by
     rw [← Kraus.mapLM_apply, Kraus.mapLM_eq_transferMap]
@@ -204,16 +219,28 @@ lemma transferMap_posDef_eigenvalue_le_one
               rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
               push_cast
               ring
-  rw [hgapTrace] at hgapNonneg
-  have hrealNonneg :
-      0 ≤ (1 - r) *
+  rw [hgapTrace] at hgapPos
+  have hrealPos :
+      0 < (1 - r) *
         (Matrix.trace (normalizingCoefficientWitness * rho)).re := by
     simpa only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
-      zero_mul, sub_zero] using (Complex.nonneg_iff.mp hgapNonneg).1
+      zero_mul, sub_zero] using (Complex.pos_iff.mp hgapPos).1
   have htraceRealPos :
       0 < (Matrix.trace (normalizingCoefficientWitness * rho)).re :=
     (Complex.pos_iff.mp htracePos).1
   nlinarith
+
+/-- A positive-definite eigenmatrix of the candidate's associated completely
+positive map has eigenvalue at most one.
+
+This records the non-strict coefficient bound in arXiv:1606.00608, line 246,
+as an immediate consequence of the candidate's strict estimate. -/
+lemma transferMap_posDef_eigenvalue_le_one
+    {rho : Matrix (Fin 2) (Fin 2) ℂ} {r : ℝ}
+    (hrho : rho.PosDef)
+    (hEig : Kraus.transferMap tensor.toMPSTensor rho = (r : ℂ) • rho) :
+    r ≤ 1 :=
+  (transferMap_posDef_eigenvalue_lt_one hrho hEig).le
 
 /-- The associated MPS tensor has a nonzero letter. -/
 lemma exists_toMPSTensor_apply_ne_zero :
@@ -232,14 +259,14 @@ completely positive map. Algebraic one-site injectivity supplies primitivity;
 after the scalar normalization, a Perron gauge gives a left-canonical
 representative, and normal-tensor status is transported back through that
 gauge. The exact test-matrix estimate above gives the one-sector bound
-`|μ| ≤ 1`.
+`0 < |μ| < 1`.
 
 This is a counterexample helper for arXiv:1606.00608, lines 224--246.  It does
 not establish the source's ambient convention that at least one coefficient
 among all simple-biCF sectors has modulus one. -/
 theorem exists_normalTensor_scalar_representation :
     ∃ (A : MPOTensor 4 2) (mu : ℂ),
-      mu ≠ 0 ∧ ‖mu‖ ≤ 1 ∧ tensor = mu • A ∧
+      mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
         A.toMPSTensor.IsNormalTensor := by
   let _ : NeZero 2 := ⟨by omega⟩
   have hNormal : Kraus.IsNormal tensor.toMPSTensor :=
@@ -251,14 +278,16 @@ theorem exists_normalTensor_scalar_representation :
   obtain ⟨rho, r, hrho, hr, hEig⟩ :=
     MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible tensor.toMPSTensor
       hIrr exists_toMPSTensor_apply_ne_zero
-  have hr_le_one : r ≤ 1 :=
-    transferMap_posDef_eigenvalue_le_one hrho hEig
+  have hr_lt_one : r < 1 :=
+    transferMap_posDef_eigenvalue_lt_one hrho hEig
   let mu : ℂ := ((Real.sqrt r : ℝ) : ℂ)
   have hmu : mu ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hr).ne'
-  have hmu_norm : ‖mu‖ ≤ 1 := by
-    simpa [mu, Complex.norm_real, abs_of_nonneg (Real.sqrt_nonneg r)] using
-      (Real.sqrt_le_one.mpr hr_le_one)
+  have hmu_norm : ‖mu‖ < 1 := by
+    change ‖((Real.sqrt r : ℝ) : ℂ)‖ < 1
+    rw [Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (Real.sqrt_nonneg r)]
+    exact (Real.sqrt_lt hr.le (by norm_num)).2 (by simpa using hr_lt_one)
   let A : MPOTensor 4 2 := mu⁻¹ • tensor
   have hrecover : tensor = mu • A := by
     ext i j beta alpha
@@ -314,8 +343,8 @@ theorem exists_normalTensor_scalar_representation :
 
 /-- Counterexample to the low-level implication asserting that injectivity,
 SAL, literal physical-trace idempotence, and being a nonzero scalar multiple
-of a normal tensor with coefficient norm at most one yield a neighboring trace
-factorization.
+of a normal tensor with coefficient norm strictly between zero and one yield a
+neighboring trace factorization.
 
 This theorem does not package the ambient simple-biCF canonical reconstruction
 or the global unit-weight convention assumed in arXiv:1606.00608, lines
@@ -324,7 +353,7 @@ implication `(ii) ⇒ (iv)`. See `docs/paper-gaps/cpgsv17_pf_rank_one.tex` and
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
 theorem full_lowLevel_counterexample :
     ∃ (K A : MPOTensor 4 2) (mu : ℂ),
-      mu ≠ 0 ∧ ‖mu‖ ≤ 1 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧
+      mu ≠ 0 ∧ ‖mu‖ < 1 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧
       K.IsInjective ∧ K.IsSAL ∧
       physTraceTransfer K * physTraceTransfer K = physTraceTransfer K ∧
       (¬∃ F : PhysicalSectorFactorization K,

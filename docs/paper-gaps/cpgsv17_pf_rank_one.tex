@@ -1199,8 +1199,8 @@ corresponding columns and rows.  Then $LR=\operatorname{diag}(1,0)$, so the
 physical trace transfer is literally idempotent, while $RL$ has rank two.
 The four slices span $M_2(\mathbb C)$, and the displayed scalar sector
 factorization has positive neighboring operators.  Hence the tensor is
-injective and satisfies SAL.  Perron normalization expresses it as a nonzero
-scalar multiple of a normal tensor.
+injective and satisfies SAL. Perron normalization expresses it as
+$\mathcal K=\mu A$, where $A$ is normal and $0<|\mu|<1$.
 
 The obstruction applies to every physical-sector factorization, not merely
 to the displayed one.  The scalar slice and the two slices with simple spectra
@@ -1215,20 +1215,19 @@ full_lowLevel_counterexample}.  Thus the local properties already inherited
 by an absorbed representative do not suffice to prove the factorization.
 Precisely, the formal theorem supplies injectivity, SAL (and hence MPDO
 generation), literal physical-trace idempotence, and an expression
-$\mathcal K=\mu A$ with $A$ normal and $\mu\ne0$. It does not package an
+$\mathcal K=\mu A$ with $A$ normal and $0<|\mu|<1$. It does not package an
 ambient simple tensor in biCF whose canonical reconstruction contains
 $\mathcal K$. Moreover, for the singleton normalization produced here,
 $|\mu|=\sqrt r$, where $r$ is the Perron value of the unnormalized transfer.
-The transfer endomorphism has trace $1353/5000$. Its nonzero eigenvalues are
-roots of
-\[
- \lambda^3-\frac{1353}{5000}\lambda^2-\frac{27}{5000}\lambda
-   +\frac{9}{20000}=0,
-\]
-whose Perron root is $r\approx0.284$. Hence $|\mu|\approx0.533<1$. Since this
-normalization has only one coefficient, the line-246 convention requires that
-coefficient to have unit modulus and therefore fails. Rescaling to unit weight
-destroys literal ZCL. This is the scale tension recorded in
+For the positive test matrix $H=\operatorname{diag}(20,1)$, the exact
+positive-definite gap $H-\mathcal E_{\mathcal K}^*(H)>0$ has determinant
+$19861/2000$. Its trace pairing with a positive-definite Perron eigenmatrix is
+strictly positive, which gives $r<1$ and hence $|\mu|<1$. This is formalized in
+\leanid{MPOTensor.NonCartesianActiveSectorCandidate.%
+transferMap_posDef_eigenvalue_lt_one}. Since this normalization has only one
+coefficient, the line-246 convention requires that coefficient to have unit
+modulus and therefore fails. Rescaling to unit weight destroys literal ZCL.
+This is the scale tension recorded in
 \path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
 Consequently the construction does not resolve \ghissue{6775} or refute the
 printed source-context assertion.
