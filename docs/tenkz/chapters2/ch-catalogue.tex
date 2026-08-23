@@ -122,8 +122,7 @@ different: it closes the applicable pair of physical ports at each site.
 
 Identifying all four sides gives a torus.  A closed string on that frame is
 then classified by its two winding numbers.  The two fundamental cycles below
-cross once; the crossing order and the explicit crossing claim are recorded on
-the vertical cycle.
+cross once; the explicit crossing claim is recorded on the vertical cycle.
 
 \begin{tnexample}[
   formula={W_{(1,0)}W_{(0,1)}},
@@ -133,12 +132,12 @@ the vertical cycle.
     marked tensor stands at their declared crossing.},
   signature={kernel-boundary|signature=}]
 % Ink: surface=torus identifies every opposite side; wind= selects
-%   a homotopy class, and crossing=/cross= settle the intersection.
+%   a homotopy class, and cross= settles the named intersection.
 \tndeclare{species}{cycle}{hue=source:red}
 \begin{tenkz}[lattice={3x3}, surface=torus]
   \tnwire[kind=string, species=cycle, name=cx, closed, wind={1,0}]
   \tnwire[kind=string, species=cycle, name=cy, closed, wind={0,1},
-    crossing=under, cross={under at crossing of cy and cx}]
+    cross={under at crossing of cy and cx}]
   \tn[skin=box, role=marked, at=crossing of cx and cy,
       label pos=e]{i}
 \end{tenkz}
