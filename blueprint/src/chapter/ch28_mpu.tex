@@ -6445,24 +6445,60 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \subsection{Equivalence under symmetries}
 
+\begin{definition}[Finite-chain operator symmetry]
+    \label{def:mpu_finite_chain_operator_symmetry}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry,
+        MPOTensor.IsInvariantUnderSymmetry}
+    \leanok
+    A finite-chain operator symmetry $\mathcal S$ specifies a set $A$ of
+    applicable chain lengths and, for every physical dimension $d$ and length
+    $N$, a map
+    \begin{align}
+        \mathcal S_{d,N}\colon
+        \operatorname{Mat}_{d^N}(\mathbb C)
+        &\longrightarrow \operatorname{Mat}_{d^N}(\mathbb C).
+    \end{align}
+    An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
+    \begin{align}
+        \mathcal S_{d,N}[W^{(N)}] & =W^{(N)}
+    \end{align}
+    for every $N\in A$.
+    % Source lines: paper_v2.tex 1345--1354.
+\end{definition}
+
 \begin{definition}[Strict equivalence under a symmetry]
     \label{def:strictly-equivalent-symmetry}
-    \notready
-    \discussion{6017}
-    \uses{def:strictly-equivalent-tensors}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry}
+    \leanok
+    \discussion{6948}
+    \uses{def:strictly-equivalent-tensors, def:mpu_finite_chain_operator_symmetry}
     % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
     % operator on the right-hand side. Invariance requires the original MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    Two tensors $\mathcal U$ and $\mathcal V$ are strictly equivalent under a
-    symmetry $\mathcal S$ if they have the same physical dimension and there is
-    a continuous path $\mathcal W(p)$ of MPU tensors from $\mathcal U$ to
-    $\mathcal V$, not necessarily in canonical form, such that
+    Fix a virtual bond dimension $D$. Two canonical-form tensors $\mathcal U$
+    and $\mathcal V$ are strictly equivalent under a symmetry $\mathcal S$ if
+    they have the same physical dimension and there is a continuous path
+    $\mathcal W(p)$ of fixed-bond MPU tensors from $\mathcal U$ to $\mathcal V$,
+    not necessarily in canonical form, such that
     \begin{align}
         \mathcal S[W^{(N)}(p)] & =W^{(N)}(p)
     \end{align}
-    for every $p\in[0,1]$ and every chain length under consideration.
+    for every $p\in[0,1]$ and every applicable chain length $N$.
     % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
+
+\begin{lemma}[Forgetting symmetry from strict equivalence]
+    \label{lem:mpu_strict_symmetry_equivalence_forget}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent}
+    \leanok
+    \uses{def:strictly-equivalent-symmetry, def:strictly-equivalent-tensors}
+    Strict equivalence under a symmetry implies strict equivalence.
+\end{lemma}
+
+\begin{proof}\leanok
+    The same path lies in the larger locus obtained by forgetting invariance
+    under $\mathcal S$.
+\end{proof}
 
 \begin{definition}[Admissible strict equivalence under a symmetry]
     \label{def:mpu_admissible_strict_symmetry_equivalence}
@@ -6487,16 +6523,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Equivalence under a symmetry]
     \label{def:equivalent-symmetry}
-    \notready
-    \discussion{6017}
+    \lean{MPOTensor.EquivalentUnderSymmetry}
+    \leanok
+    \discussion{6948}
     \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors}
-    Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
-    $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
-    positive blocking length $k$ and coprime positive ancilla dimensions
-    $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
-    $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$.
+    Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be MPU
+    tensors with physical dimensions $d_a$ and $d_b$. They are equivalent under
+    a symmetry $\mathcal S$ if there are a positive blocking length $k$ and
+    coprime positive ancilla dimensions $p_a,p_b$ with
+    \begin{align}
+        p_a d_a & =p_b d_b
+    \end{align}
+    such that $(\mathcal U^{(p_a)})_k$ and $(\mathcal V^{(p_b)})_k$ are strictly
+    equivalent under $\mathcal S$. Identity ancillas are attached before the
+    common blocking, and the virtual bond dimension remains fixed.
     % Source lines: paper_v2.tex 1356--1364.
 \end{definition}
+
+\begin{lemma}[Forgetting symmetry after blocking and ancillas]
+    \label{lem:mpu_symmetry_equivalence_forget}
+    \lean{MPOTensor.EquivalentUnderSymmetry.toEquivalent}
+    \leanok
+    \uses{def:equivalent-symmetry, def:equivalent-tensors,
+        lem:mpu_strict_symmetry_equivalence_forget}
+    Equivalence under a symmetry implies equivalence.
+\end{lemma}
+
+\begin{proof}\leanok
+    Keep the same blocking length, ancilla dimensions, and physical-dimension
+    equality, then forget symmetry from the strict equivalence of the enlarged
+    tensors.
+\end{proof}
 
 \begin{definition}[Admissible equivalence under a symmetry]
     \label{def:mpu_admissible_symmetry_equivalence}
