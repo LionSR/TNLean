@@ -27,12 +27,10 @@ because its one-site closed MPO vanishes.
 * `MPOTensor.SimpleVanishingCounterexample.mpo_one_eq_zero`: the one-site MPO vanishes.
 * `MPOTensor.SimpleVanishingCounterexample.M_isSimple`: normalized simplicity after blocking
   two sites.
-* `MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple`: the active canonical-block
-  reading of Definition 4.7.
+* `MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple`: the canonical-block reading
+  of Definition 4.7.
 * `MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple`: failure of the
   strengthened positive-length nonvanishing predicate.
-* `M_isSimple_and_isSourceSimple_and_not_isNonvanishingSourceSimple`: deprecated
-  transition theorem stating the three preceding conclusions together.
 -/
 
 open scoped Matrix BigOperators ComplexOrder

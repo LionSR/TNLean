@@ -666,8 +666,8 @@ Two BNT canonical forms generating the same MPV family at every positive
 length are globally conjugate: their total bond dimensions agree, and a single
 invertible gauge `Y` carries one total tensor to the other.
 
-**Local fix (nonzero coefficients):** every canonical-form coefficient is
-nonzero; see `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
+**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+-/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -691,8 +691,8 @@ Two BNT canonical forms generating the same MPV family at every positive
 length are related by one unitary global gauge after identifying their equal
 total bond dimensions.
 
-**Local fix (nonzero coefficients):** every canonical-form coefficient is
-nonzero; see `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
+**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+-/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -720,8 +720,8 @@ canonical forms matches the normal-tensor sectors bijectively.  For each
 (`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
 `P.basis (β k)` by a unit phase and gauge conjugation.
 
-**Local fix (nonzero coefficients):** every canonical-form coefficient is
-nonzero; see `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
+**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
+-/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

@@ -95,7 +95,7 @@ For MPDO renormalization fixed points:
   `MPOTensor.IsNonvanishingSourceSimple`, witnessed by blocking length one, but
   fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
   Normalized simplicity implies source simplicity unconditionally because its
-  normalized sector decomposition gives an active presentation after gauge
+  normalized sector decomposition gives a BNT sector presentation after gauge
   transport; the strengthened predicate still requires positive-length
   nonvanishing. The same note records the exact scalar repeated-copy
   counterexample to Theorem 4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$
