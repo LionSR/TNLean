@@ -60,7 +60,7 @@ site and the second window is restricted at its last site, the two outside
 configurations give the same restricted vector on the common overlap. -/
 theorem adjacent_cyclicRestrictₗ_witness_overlap
     {A : MPSTensor d D} {N L : ℕ}
-    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i : Fin N) (τ₁ τ₂ : Fin N → Fin d) (ψ : NSiteSpace d N)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY₁ : cyclicRestrictₗ hN (L + 1) i τ₁ ψ = groundSpaceMap A (L + 1) Y₁)
@@ -85,7 +85,7 @@ theorem adjacent_cyclicRestrictₗ_witness_overlap
 boundary matrices. -/
 theorem adjacent_cyclicRestrictₗ_witness_overlap_common_background
     {A : MPSTensor d D} {N L : ℕ}
-    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
     {Y₁ Y₂ : Matrix (Fin D) (Fin D) ℂ}
     (hY₁ : cyclicRestrictₗ hN (L + 1) i ρ ψ = groundSpaceMap A (L + 1) Y₁)
@@ -131,8 +131,8 @@ theorem boundary_witness_product_of_adjacent_overlaps
     (a b : Fin n → Fin d)
     (hStep : ∀ r : Fin n,
       Y (Fin.castSucc r) * A (a r) = A (b r) * Y (Fin.succ r)) :
-    Y 0 * evalWord A (List.ofFn a) =
-      evalWord A (List.ofFn b) * Y (Fin.last n) := by
+    Y 0 * Kraus.evalWord A (List.ofFn a) =
+      Kraus.evalWord A (List.ofFn b) * Y (Fin.last n) := by
   induction n with
   | zero =>
       simp
@@ -148,22 +148,22 @@ theorem boundary_witness_product_of_adjacent_overlaps
         have h := hStep (Fin.succ r)
         simpa [Ytail, atail, btail] using h
       have htail := ih Ytail atail btail hStepTail
-      have ea : evalWord A (List.ofFn a) = A (a 0) * evalWord A (List.ofFn (a ∘ Fin.succ)) :=
+      have ea : Kraus.evalWord A (List.ofFn a) = A (a 0) * Kraus.evalWord A (List.ofFn (a ∘ Fin.succ)) :=
         Kraus.evalWord_ofFn_succ A a
-      have eb : evalWord A (List.ofFn b) = A (b 0) * evalWord A (List.ofFn (b ∘ Fin.succ)) :=
+      have eb : Kraus.evalWord A (List.ofFn b) = A (b 0) * Kraus.evalWord A (List.ofFn (b ∘ Fin.succ)) :=
         Kraus.evalWord_ofFn_succ A b
       rw [ea, eb]
       calc
-        Y 0 * (A (a 0) * evalWord A (List.ofFn (a ∘ Fin.succ)))
-            = (Y 0 * A (a 0)) * evalWord A (List.ofFn (a ∘ Fin.succ)) := by
+        Y 0 * (A (a 0) * Kraus.evalWord A (List.ofFn (a ∘ Fin.succ)))
+            = (Y 0 * A (a 0)) * Kraus.evalWord A (List.ofFn (a ∘ Fin.succ)) := by
                 rw [Matrix.mul_assoc]
-        _ = (A (b 0) * Y 1) * evalWord A (List.ofFn (a ∘ Fin.succ)) := by
+        _ = (A (b 0) * Y 1) * Kraus.evalWord A (List.ofFn (a ∘ Fin.succ)) := by
                 rw [h0]
-        _ = A (b 0) * (Ytail 0 * evalWord A (List.ofFn atail)) := by
+        _ = A (b 0) * (Ytail 0 * Kraus.evalWord A (List.ofFn atail)) := by
                 simp [Ytail, atail, Matrix.mul_assoc]
-        _ = A (b 0) * (evalWord A (List.ofFn btail) * Ytail (Fin.last n)) := by
+        _ = A (b 0) * (Kraus.evalWord A (List.ofFn btail) * Ytail (Fin.last n)) := by
                 rw [htail]
-        _ = (A (b 0) * evalWord A (List.ofFn (b ∘ Fin.succ))) *
+        _ = (A (b 0) * Kraus.evalWord A (List.ofFn (b ∘ Fin.succ))) *
               Y (Fin.last (n + 1)) := by
                 simp [Ytail, btail, Matrix.mul_assoc]
 
@@ -171,7 +171,7 @@ theorem boundary_witness_product_of_adjacent_overlaps
 word-product identity between the endpoint matrices. -/
 theorem adjacent_cyclicRestrictₗ_witness_product
     {A : MPSTensor d D} {N L n : ℕ}
-    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i₀ : Fin N) (τ : Fin (n + 1) → Fin N → Fin d) (ψ : NSiteSpace d N)
     (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
     (a b : Fin n → Fin d)
@@ -183,8 +183,8 @@ theorem adjacent_cyclicRestrictₗ_witness_product
         then a r else τ (Fin.castSucc r) k) =
       (fun k => if (k.val + N - (cyclicForwardSite i₀ (r.val + 1)).val) % N = L
         then b r else τ (Fin.succ r) k)) :
-    Y 0 * evalWord A (List.ofFn a) =
-      evalWord A (List.ofFn b) * Y (Fin.last n) := by
+    Y 0 * Kraus.evalWord A (List.ofFn a) =
+      Kraus.evalWord A (List.ofFn b) * Y (Fin.last n) := by
   apply boundary_witness_product_of_adjacent_overlaps
   intro r
   have hY₁ := hY (Fin.castSucc r)
@@ -209,14 +209,14 @@ theorem adjacent_cyclicRestrictₗ_witness_product
 configuration gives the corresponding word-product identity. -/
 theorem adjacent_cyclicRestrictₗ_witness_product_common_background
     {A : MPSTensor d D} {N L n : ℕ}
-    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
     (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
     (hY : ∀ r : Fin (n + 1),
       cyclicRestrictₗ hN (L + 1) (cyclicForwardSite i₀ r.val) ρ ψ =
         groundSpaceMap A (L + 1) (Y r)) :
-    Y 0 * evalWord A (List.ofFn (fun r : Fin n => ρ (cyclicForwardSite i₀ r.val))) =
-      evalWord A (List.ofFn (fun r : Fin n =>
+    Y 0 * Kraus.evalWord A (List.ofFn (fun r : Fin n => ρ (cyclicForwardSite i₀ r.val))) =
+      Kraus.evalWord A (List.ofFn (fun r : Fin n =>
         ρ (cyclicForwardSite (cyclicForwardSite i₀ r.val) (L + 1)))) *
         Y (Fin.last n) := by
   apply boundary_witness_product_of_adjacent_overlaps
@@ -240,7 +240,7 @@ then the adjacent-window equations give
 \] -/
 theorem adjacent_cyclicRestrictₗ_witness_product_common_background_named
     {A : MPSTensor d D} {N L n : ℕ}
-    (hInj : IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
+    (hInj : Kraus.IsNBlkInjective A L) (hN : 0 < N) (hLN : L + 1 ≤ N)
     (i₀ : Fin N) (ρ : Fin N → Fin d) (ψ : NSiteSpace d N)
     (Y : Fin (n + 1) → Matrix (Fin D) (Fin D) ℂ)
     (a b : Fin n → Fin d)
@@ -250,8 +250,8 @@ theorem adjacent_cyclicRestrictₗ_witness_product_common_background_named
     (ha : (fun r : Fin n => ρ (cyclicForwardSite i₀ r.val)) = a)
     (hb : (fun r : Fin n =>
         ρ (cyclicForwardSite (cyclicForwardSite i₀ r.val) (L + 1))) = b) :
-    Y 0 * evalWord A (List.ofFn a) =
-      evalWord A (List.ofFn b) * Y (Fin.last n) := by
+    Y 0 * Kraus.evalWord A (List.ofFn a) =
+      Kraus.evalWord A (List.ofFn b) * Y (Fin.last n) := by
   have htransport :=
     adjacent_cyclicRestrictₗ_witness_product_common_background
       (A := A) hInj hN hLN i₀ ρ ψ Y hY

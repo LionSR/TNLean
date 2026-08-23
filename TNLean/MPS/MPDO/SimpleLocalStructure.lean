@@ -178,7 +178,7 @@ variable {d D : ℕ}
 injective. This is the exact hypothesis needed for the local inverse-map layer
 in Appendix C.2. -/
 abbrev IsInjective (K : MPOTensor d D) : Prop :=
-  MPSTensor.IsInjective K.toMPSTensor
+  Kraus.IsInjective K.toMPSTensor
 
 /-- A concrete inverse tensor `K⁻¹` obtained from a right inverse to the linear
 combination map of the doubled-index MPS tensor.
@@ -190,7 +190,7 @@ expansion of the matrix unit `|α⟩⟨β|`. -/
 noncomputable def inverseTensor (K : MPOTensor d D) (hK : K.IsInjective) :
     Fin (d * d) → Matrix (Fin D) (Fin D) ℂ :=
   fun p => Matrix.of fun α β =>
-    MPSTensor.decompositionMap (A := K.toMPSTensor) hK (Matrix.single α β (1 : ℂ)) p
+    Kraus.decompositionMap (A := K.toMPSTensor) hK (Matrix.single α β (1 : ℂ)) p
 
 /-- Contracting the chosen inverse tensor with the local MPO tensor recovers the
 matrix units on the virtual bond space. This is the Lean form of the paper's
@@ -201,10 +201,10 @@ theorem inverseTensor_spec (K : MPOTensor d D) (hK : K.IsInjective)
       Matrix.single α β (1 : ℂ) := by
   change
     ∑ p : Fin (d * d),
-      MPSTensor.decompositionMap (A := K.toMPSTensor) hK
+      Kraus.decompositionMap (A := K.toMPSTensor) hK
           (Matrix.single α β (1 : ℂ)) p • K.toMPSTensor p
         = Matrix.single α β (1 : ℂ)
-  exact MPSTensor.decompositionMap_sum (A := K.toMPSTensor) hK
+  exact Kraus.decompositionMap_sum (A := K.toMPSTensor) hK
     (Matrix.single α β (1 : ℂ))
 
 /-- The virtual matrix obtained by tracing the fourth physical site of the

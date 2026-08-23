@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 /-!
@@ -50,7 +50,7 @@ def wordTuple
     (A : (k : Fin r) → MPSTensor d (dim k))
     (L : ℕ) (w : Fin L → Fin d) :
     (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
-  fun k => evalWord (A k) (List.ofFn w)
+  fun k => Kraus.evalWord (A k) (List.ofFn w)
 
 /-- Finite-length span condition on the product algebra of block matrices. -/
 def WordTupleSpanTop
@@ -80,7 +80,7 @@ theorem pointwise_mul_mem_span_wordTuple_add
         have hEq : (fun k : Fin r => wordTuple A L u k * wordTuple A S v k) =
             wordTuple A (L + S) (Fin.append u v) := by
           funext k
-          simp [wordTuple, List.ofFn_fin_append, evalWord_append]
+          simp [wordTuple, List.ofFn_fin_append, Kraus.evalWord_append]
         rw [hEq]
         exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
     | zero =>
@@ -224,7 +224,7 @@ theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
     {L : ℕ} (hSpan : WordTupleSpanTop A L)
     (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
     (hΔ : ∀ w : Fin L → Fin d,
-      (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) :
+      (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) :
     ∀ k, Δ k = 0 := by
   classical
   have hZeroOnSpan :
@@ -264,23 +264,23 @@ This is the index transport used in the simultaneous BNT blocking of
 arXiv:1606.00608, lines 317--345. -/
 theorem wordTupleSpanTop_reindexPhysical_equiv {d' : ℕ}
     (e : Fin d' ≃ Fin d) (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) :
-    WordTupleSpanTop (fun k ↦ reindexPhysical e (A k)) L ↔
+    WordTupleSpanTop (fun k ↦ Kraus.reindexPhysical e (A k)) L ↔
       WordTupleSpanTop A L := by
   unfold WordTupleSpanTop
   have hRange :
-      Set.range (wordTuple (fun k ↦ reindexPhysical e (A k)) L) =
+      Set.range (wordTuple (fun k ↦ Kraus.reindexPhysical e (A k)) L) =
         Set.range (wordTuple A L) := by
     ext X
     constructor
     · rintro ⟨w, rfl⟩
       refine ⟨fun i ↦ e (w i), ?_⟩
       funext k
-      simp [wordTuple, evalWord_reindexPhysical, List.map_ofFn,
+      simp [wordTuple, Kraus.evalWord_reindexPhysical, List.map_ofFn,
         Function.comp_def]
     · rintro ⟨w, rfl⟩
       refine ⟨fun i ↦ e.symm (w i), ?_⟩
       funext k
-      simp [wordTuple, evalWord_reindexPhysical, List.map_ofFn,
+      simp [wordTuple, Kraus.evalWord_reindexPhysical, List.map_ofFn,
         Function.comp_def]
   rw [hRange]
 
@@ -310,19 +310,19 @@ theorem wordTupleSpanTop_of_family_gaugeEquiv
   apply (Submodule.mem_span_range_iff_exists_fun ℂ).2
   refine ⟨c, ?_⟩
   funext j
-  have hcj : (∑ w, c w • evalWord (A j) (List.ofFn w)) = M' j := by
+  have hcj : (∑ w, c w • Kraus.evalWord (A j) (List.ofFn w)) = M' j := by
     simpa [wordTuple, Fintype.linearCombination_apply] using congrFun hc j
-  have hGoal : (∑ w, c w • evalWord (B j) (List.ofFn w)) = M j := by
+  have hGoal : (∑ w, c w • Kraus.evalWord (B j) (List.ofFn w)) = M j := by
     calc
-      (∑ w, c w • evalWord (B j) (List.ofFn w)) =
+      (∑ w, c w • Kraus.evalWord (B j) (List.ofFn w)) =
           ∑ w, c w • ((X j : Matrix _ _ ℂ) *
-            evalWord (A j) (List.ofFn w) *
+            Kraus.evalWord (A j) (List.ofFn w) *
             (↑((X j)⁻¹) : Matrix _ _ ℂ)) := by
         apply Finset.sum_congr rfl
         intro w _
         rw [evalWord_gauge (X j) (hX j)]
       _ = (X j : Matrix _ _ ℂ) *
-          (∑ w, c w • evalWord (A j) (List.ofFn w)) *
+          (∑ w, c w • Kraus.evalWord (A j) (List.ofFn w)) *
           (↑((X j)⁻¹) : Matrix _ _ ℂ) := by
         rw [Matrix.mul_sum, Finset.sum_mul]
         apply Finset.sum_congr rfl

@@ -84,7 +84,7 @@ private lemma ofReal_sqrt2_mul_self :
 
 /-- The AKLT tensor is **not** injective: the span of {A⁰, A¹, A²} is the 3-dimensional
 space of traceless matrices, not the full 4-dimensional matrix algebra M₂(ℂ). -/
-theorem aklt_not_isInjective : ¬ IsInjective akltTensor := by
+theorem aklt_not_isInjective : ¬ Kraus.IsInjective akltTensor := by
   intro h
   have hmem : (1 : Matrix (Fin 2) (Fin 2) ℂ) ∈
       Submodule.span ℂ (Set.range akltTensor) := h ▸ Submodule.mem_top
@@ -123,9 +123,9 @@ lemma akltTensor_conjTranspose (k : Fin 3) :
 
 /-- The identity is a fixed point of the AKLT transfer map: `E(I) = I`. -/
 theorem aklt_transferMap_one :
-    transferMap akltTensor 1 = 1 := by
+    Kraus.transferMap akltTensor 1 = 1 := by
   ext i j
-  simp only [transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
     akltTensor_conjTranspose]
   fin_cases i <;> fin_cases j <;>
     simp only [akltTensor, one_div, Complex.ofReal_inv, smul_of, smul_cons,
@@ -142,11 +142,11 @@ theorem aklt_transferMap_one :
 /-! ### Normality (2-block injectivity) -/
 
 private abbrev Kraus.wordSpan :=
-  Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 3 => evalWord akltTensor (List.ofFn σ))
+  Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 3 => Kraus.evalWord akltTensor (List.ofFn σ))
 
 private lemma product_in_wordSpan (i j : Fin 3) :
     akltTensor i * akltTensor j ∈ Kraus.wordSpan := by
-  rw [show akltTensor i * akltTensor j = evalWord akltTensor [i, j] from by simp [evalWord]]
+  rw [show akltTensor i * akltTensor j = Kraus.evalWord akltTensor [i, j] from by simp [Kraus.evalWord]]
   have : [i, j] = List.ofFn (![i, j] : Fin 2 → Fin 3) := by
     simp [List.ofFn_succ, List.ofFn_zero]
   rw [this]
@@ -221,8 +221,8 @@ private lemma single_10_in_wordSpan :
     simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.single]
 
 /-- The AKLT tensor is 2-block injective: products of length 2 span M₂(ℂ). -/
-theorem aklt_isNBlkInjective_two : IsNBlkInjective akltTensor 2 := by
-  rw [IsNBlkInjective]
+theorem aklt_isNBlkInjective_two : Kraus.IsNBlkInjective akltTensor 2 := by
+  rw [Kraus.IsNBlkInjective]
   apply (Submodule.eq_top_iff_forall_basis_mem
     (Matrix.stdBasis ℂ (Fin 2) (Fin 2))).2
   rintro ⟨i, j⟩
@@ -234,7 +234,7 @@ theorem aklt_isNBlkInjective_two : IsNBlkInjective akltTensor 2 := by
   · exact single_11_in_wordSpan
 
 /-- The AKLT tensor is normal: it is `2`-block-injective. -/
-theorem aklt_isNormal : IsNormal akltTensor :=
+theorem aklt_isNormal : Kraus.IsNormal akltTensor :=
   ⟨2, Nat.zero_lt_succ 1, aklt_isNBlkInjective_two⟩
 
 /-! ### Z₂ on-site symmetry -/

@@ -189,12 +189,12 @@ private theorem normalizedMinimalLoopTensor_eq_rotatePhysical
 sector coordinates. -/
 private theorem normalizedMinimalLoopCoordinateTensor_mixedTransferMap₂_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight} (hlm : l ≠ m) :
-    mixedTransferMap₂ (F.normalizedMinimalLoopCoordinateTensor l)
+    Kraus.mixedTransferMap₂ (F.normalizedMinimalLoopCoordinateTensor l)
       (F.normalizedMinimalLoopCoordinateTensor m) = 0 := by
   classical
   apply LinearMap.ext
   intro Z
-  simp only [mixedTransferMap₂_apply, LinearMap.zero_apply]
+  simp only [Kraus.mixedTransferMap₂_apply, LinearMap.zero_apply]
   calc
     (∑ i : Fin d, F.normalizedMinimalLoopCoordinateTensor l i * Z *
         (F.normalizedMinimalLoopCoordinateTensor m i)ᴴ) =
@@ -242,7 +242,7 @@ unitary preserves the mixed transfer map, so disjoint loop-sector support gives
 the stated local orthogonality. -/
 theorem normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight} (hlm : l ≠ m) :
-    mixedTransferMap₂ (F.normalizedMinimalLoopTensor l)
+    Kraus.mixedTransferMap₂ (F.normalizedMinimalLoopTensor l)
       (F.normalizedMinimalLoopTensor m) = 0 := by
   have hunitary : F.unitary * F.unitaryᴴ = 1 :=
     Unitary.mul_star_self_of_mem F.unitary_mem
@@ -267,7 +267,7 @@ theorem transferMap_minimalLoopCoordinateTensor
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     (Z : Matrix (Fin (F.loopSchmidtRank l))
       (Fin (F.loopSchmidtRank l)) ℂ) :
-    transferMap (F.minimalLoopCoordinateTensor l) Z =
+    Kraus.transferMap (F.minimalLoopCoordinateTensor l) Z =
       Matrix.trace
           ((F.loopSchmidtFactorization l).rightFactorᴴ *
             (F.loopSchmidtFactorization l).rightFactor * Z) •
@@ -346,10 +346,10 @@ identity itself is the local rank-factorization calculation recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem transferMap_minimalLoopCoordinateTensor_comp_self
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    transferMap (F.minimalLoopCoordinateTensor l) ∘ₗ
-        transferMap (F.minimalLoopCoordinateTensor l) =
+    Kraus.transferMap (F.minimalLoopCoordinateTensor l) ∘ₗ
+        Kraus.transferMap (F.minimalLoopCoordinateTensor l) =
       (((F.loopBondNorm l) ^ 2 : ℝ) : ℂ) •
-        transferMap (F.minimalLoopCoordinateTensor l) := by
+        Kraus.transferMap (F.minimalLoopCoordinateTensor l) := by
   apply LinearMap.ext
   intro Z
   simp only [LinearMap.comp_apply, LinearMap.smul_apply]
@@ -359,7 +359,7 @@ theorem transferMap_minimalLoopCoordinateTensor_comp_self
     (F.loopSchmidtFactorization l).leftFactorᴴ
   have hformula (W : Matrix (Fin (F.loopSchmidtRank l))
       (Fin (F.loopSchmidtRank l)) ℂ) :
-      transferMap (F.minimalLoopCoordinateTensor l) W =
+      Kraus.transferMap (F.minimalLoopCoordinateTensor l) W =
         Matrix.trace (Q * W) • P := by
     simpa only [Q, P, Matrix.mul_assoc] using
       F.transferMap_minimalLoopCoordinateTensor l W
@@ -384,7 +384,7 @@ theorem transferMap_normalizedMinimalLoopCoordinateTensor
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     (Z : Matrix (Fin (F.loopSchmidtRank l))
       (Fin (F.loopSchmidtRank l)) ℂ) :
-    transferMap (F.normalizedMinimalLoopCoordinateTensor l) Z =
+    Kraus.transferMap (F.normalizedMinimalLoopCoordinateTensor l) Z =
       (((F.loopBondNorm l : ℂ) ^ 2)⁻¹ *
         Matrix.trace
           ((F.loopSchmidtFactorization l).rightFactorᴴ *
@@ -424,7 +424,7 @@ theorem normalizedMinimalLoopCoordinateTensor_isTransferIdempotent
   let c : ℂ := ((F.loopBondNorm l : ℂ) ^ 2)⁻¹
   have hformula (W : Matrix (Fin (F.loopSchmidtRank l))
       (Fin (F.loopSchmidtRank l)) ℂ) :
-      transferMap (F.normalizedMinimalLoopCoordinateTensor l) W =
+      Kraus.transferMap (F.normalizedMinimalLoopCoordinateTensor l) W =
         (c * Matrix.trace (Q * W)) • P := by
     simpa only [Q, P, c, Matrix.mul_assoc] using
       F.transferMap_normalizedMinimalLoopCoordinateTensor l W
@@ -457,8 +457,8 @@ theorem normalizedMinimalLoopTensor_isTransferIdempotent
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.mul_star_self_of_mem F.unitary_mem
   have htransfer :
-      transferMap (F.normalizedMinimalLoopTensor l) =
-        transferMap (F.normalizedMinimalLoopCoordinateTensor l) := by
+      Kraus.transferMap (F.normalizedMinimalLoopTensor l) =
+        Kraus.transferMap (F.normalizedMinimalLoopCoordinateTensor l) := by
     rw [F.normalizedMinimalLoopTensor_eq_rotatePhysical l,
       transferMap_rotatePhysical _ F.unitary hunitary]
   rw [IsTransferIdempotent, htransfer]
@@ -475,7 +475,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13); CPSV16,
 fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem normalizedMinimalLoopTensor_isInjective
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    IsInjective (F.normalizedMinimalLoopTensor l) := by
+    Kraus.IsInjective (F.normalizedMinimalLoopTensor l) := by
   apply (F.minimalLoopTensor_isInjective l).smul
   exact inv_ne_zero (Complex.ofReal_ne_zero.mpr (F.loopBondNorm_ne_zero l))
 
@@ -490,7 +490,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13); CPSV16,
 fixed-point normal-form derivation, source lines 1293--1300. -/
 theorem normalizedMinimalLoopTensor_isNormal
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    IsNormal (F.normalizedMinimalLoopTensor l) :=
+    Kraus.IsNormal (F.normalizedMinimalLoopTensor l) :=
   (F.normalizedMinimalLoopTensor_isInjective l).isNormal
 
 /-- At length `N`, the periodic vector of the normalized minimal loop tensor

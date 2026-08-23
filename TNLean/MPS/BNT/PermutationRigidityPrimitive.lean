@@ -85,8 +85,8 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     [∀ j, NeZero (dimA j)] [∀ j, NeZero (dimB j)]
     (A : (j : Fin g) → MPSTensor d (dimA j))
     (B : (j : Fin g) → MPSTensor d (dimB j))
-    (hA_inj : ∀ j, IsInjective (A j))
-    (hB_inj : ∀ j, IsInjective (B j))
+    (hA_inj : ∀ j, Kraus.IsInjective (A j))
+    (hB_inj : ∀ j, Kraus.IsInjective (B j))
     (hA_norm : ∀ j, (∑ i : Fin d, (A j i)ᴴ * (A j i)) = 1)
     (hB_norm : ∀ j, (∑ i : Fin d, (B j i)ᴴ * (B j i)) = 1)
     (hA_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
@@ -274,7 +274,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     intro j
     by_contra hNot
     have hdim := hf_dim j
-    have hAcst_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A (f j))) :=
+    have hAcst_inj : Kraus.IsInjective (cast (congr_arg (MPSTensor d) hdim) (A (f j))) :=
       (isInjective_cast_dim hdim (A (f j))).mpr (hA_inj (f j))
     have hAcst_norm : ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) (A (f j)) i)ᴴ *
@@ -429,8 +429,8 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     [∀ j, NeZero (dimA j)] [∀ j, NeZero (dimB j)]
     (A : (j : Fin gA) → MPSTensor d (dimA j))
     (B : (j : Fin gB) → MPSTensor d (dimB j))
-    (hA_inj : ∀ j, IsInjective (A j))
-    (hB_inj : ∀ j, IsInjective (B j))
+    (hA_inj : ∀ j, Kraus.IsInjective (A j))
+    (hB_inj : ∀ j, Kraus.IsInjective (B j))
     (hA_norm : ∀ j, (∑ i : Fin d, (A j i)ᴴ * (A j i)) = 1)
     (hB_norm : ∀ j, (∑ i : Fin d, (B j i)ᴴ * (B j i)) = 1)
     (hA_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))

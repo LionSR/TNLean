@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Tactic.Attr
+import QICLean.Kraus.Tactic.Attr
 
 /-!
 # Tactics for tensor-network proofs
@@ -14,13 +14,13 @@ channel / overlap files.
 ## Tactic macros
 
 * `mpv_ext` : introduce `N`, `σ` for `SameMPV₂` or `N`, `hN`, `σ` for `SameMPV₂Pos`
-* `transfer_simp` : unfold transfer maps using `@[mps_transfer]`
+* `transfer_simp` : unfold transfer maps using `@[kraus_transfer]`
 
 ## Design
 
 The tactics are intentionally simple. They do not search; when the normal form does
 not apply, they leave clear unsolved goals. Each macro expands to a `simp` call over
-the `mps_transfer` simp set, which is registered in `TNLean.MPS.Tactic.Attr`.
+the `kraus_transfer` simp set, which is registered in `QICLean.Kraus.Tactic.Attr`.
 -/
 
 open Lean Elab Tactic Meta
@@ -67,9 +67,9 @@ elab "mpv_ext" : tactic => do
     Term.addLocalVarInfo (mkNullNode) (mkFVar fvSId)
 
 /--
-Unfold transfer maps using `@[mps_transfer]`.
+Unfold transfer maps using `@[kraus_transfer]`.
 
-Currently the `mps_transfer` set contains `transferMap_apply`, so `transfer_simp`
+Currently the `kraus_transfer` set contains `transferMap_apply`, so `transfer_simp`
 unfolds `transferMap A X` to `∑ i, A i * X * (A i)ᴴ`.
 -/
-macro "transfer_simp" : tactic => `(tactic| simp only [mps_transfer])
+macro "transfer_simp" : tactic => `(tactic| simp only [kraus_transfer])

@@ -49,7 +49,7 @@ string-order universality theorems that use them.
   arXiv:1010.3732, Section II.F — SPT classification (not formalized here)
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
 
 namespace MPSTensor
 
@@ -66,13 +66,13 @@ transfer map `ℰ_u` has modulus at most `1`.
 The proof rewrites `ℰ_u` as a mixed transfer map, passes to a common
 positive-definite fixed point of the adjoint channels, gauges both
 Kraus families to trace-preserving form, and applies the mixed-transfer
-eigenvalue bound `eigenvalue_norm_le_one`. -/
+eigenvalue bound `Kraus.eigenvalue_norm_le_one`. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
-    (hNorm : transferMap A 1 = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
@@ -87,10 +87,10 @@ theorem twistedTransfer_spectralRadius_le_one
   have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
   have hHas : Module.End.HasEigenvalue
-      (mixedTransferMap setup.A' setup.B') ev :=
+      (Kraus.mixedTransferMap setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
       (A := A) (u := u) (setup := setup) ev V hV hEig
-  exact eigenvalue_norm_le_one
+  exact Kraus.eigenvalue_norm_le_one
     (A := setup.A') (B := setup.B') setup.hA'TP setup.hB'TP ev hHas
 
 /-- A modulus-one eigenvalue of the twisted transfer map forces the twisted
@@ -99,10 +99,10 @@ passes both families to a common trace-preserving gauge and applies the
 irreducible mixed-transfer rigidity theorem. -/
 theorem twistedTransfer_modulus_one_implies_gaugePhase
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
-    (hNorm : transferMap A 1 = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V)
@@ -117,24 +117,24 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     exact Fin.elim0 i
   have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
-  have hHas : Module.End.HasEigenvalue (mixedTransferMap setup.A' setup.B') ev :=
+  have hHas : Module.End.HasEigenvalue (Kraus.mixedTransferMap setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
       (A := A) (u := u) (setup := setup) ev V hV hEig
   let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
-  have hspec : ev ∈ spectrum ℂ (Φ (mixedTransferMap setup.A' setup.B')) := by
+  have hspec : ev ∈ spectrum ℂ (Φ (Kraus.mixedTransferMap setup.A' setup.B')) := by
     rw [AlgEquiv.spectrum_eq Φ]
     exact hHas.mem_spectrum
-  have hRadGe : mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
-    rw [mixedTransferSpectralRadius_eq]
+  have hRadGe : Kraus.mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
+    rw [Kraus.mixedTransferSpectralRadius_eq]
     have hnorm_ev_nn : (1 : NNReal) = ‖ev‖₊ := by
       apply Subtype.ext
       simpa using hev.symm
     have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
       exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
     rw [ge_iff_le, hnorm_ev]
-    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (mixedTransferMap setup.A' setup.B'))) _
+    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedTransferMap setup.A' setup.B'))) _
       (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
   have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
     modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
@@ -151,11 +151,11 @@ eigenvalue from the non-decaying boundary sequence and applies the mixed-transfe
 rigidity theorem. -/
 theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hNorm : transferMap A 1 = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
     (hSO : HasStringOrder A u Λ) :
     GaugePhaseEquiv A (twistedMixedCompanion A u) := by
   rcases eq_or_ne D 0 with hD | hD
@@ -224,7 +224,7 @@ lemma hasStringOrder_of_localSymmetry
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛtr : Matrix.trace Λ = 1)
-    (hNorm : transferMap A 1 = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
     (hLocal : IsLocalSymmetry A u Λ) :
     HasStringOrder A u Λ := by
   rcases hLocal with ⟨V, μ, hV, hV', hμ, -, hC1μ⟩
@@ -262,13 +262,13 @@ intertwiner, provided the stationary boundary state is a fixed point of the
 adjoint transfer channel. -/
 private theorem localSymmetry_of_twistedTransfer_eigen
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
-    (hΛfix : transferMap (fun i => (A i)ᴴ) Λ = Λ)
-    (hNorm : transferMap A 1 = 1)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1)
     (ev : ℂ) (X : Matrix (Fin D) (Fin D) ℂ)
     (hX : X ≠ 0)
     (hEig : twistedTransferMap A u X = ev • X)
@@ -293,16 +293,16 @@ equivalent to `spectralRadius(ℰ_u) = 1`.
 
 The theorem states the equivalence in the virtual form supplied by
 Lemma 1 of the paper, and assumes the canonical fixed-point hypothesis
-`transferMap A† Λ = Λ` needed to conclude `V† Λ V = Λ`. -/
+`Kraus.transferMap A† Λ = Λ` needed to conclude `V† Λ V = Λ`. -/
 theorem localSymmetry_iff_spectralRadius_one
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
-    (hΛfix : transferMap (fun i => (A i)ᴴ) Λ = Λ)
-    (hNorm : transferMap A 1 = 1) :
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1) :
     IsLocalSymmetry A u Λ ↔
       ∃ V : Matrix (Fin D) (Fin D) ℂ,
         V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧
@@ -336,13 +336,13 @@ stated directly at the transfer-matrix level; see the scope restriction on
 comparison with the paper's physical-endpoint form. -/
 theorem stringOrder_iff_localSymmetry
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
-    (hΛfix : transferMap (fun i => (A i)ᴴ) Λ = Λ)
-    (hNorm : transferMap A 1 = 1) :
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1) :
     HasStringOrder A u Λ ↔ IsLocalSymmetry A u Λ := by
   constructor
   · intro hSO
@@ -369,11 +369,11 @@ The phased form is the same relation that the virtual representation
 theorem produces from on-site symmetry data. -/
 theorem virtualUnitary_of_stringOrder
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hNorm : transferMap A 1 = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
     (hSO : HasStringOrder A u Λ) :
     ∃ V : Matrix (Fin D) (Fin D) ℂ, ∃ μ : ℂ,
       V * Vᴴ = 1 ∧ Vᴴ * V = 1 ∧ ‖μ‖ = 1 ∧
@@ -441,11 +441,11 @@ def IsSameSPTPhase (A B : MPSTensor d D)
 /-- For an injective symmetric MPS with canonical FCS data, the twisted transfer
 map has the virtual representation gauge matrix as a fixed point (eigenvalue 1).
 This is immediate from the virtual representation intertwining relation and the
-normalization `transferMap A 1 = 1`. -/
+normalization `Kraus.transferMap A 1 = 1`. -/
 private lemma twistedTransfer_virtual_rep_fixed
     (A : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hNorm : transferMap A 1 = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
     {ω : ScalarCocycle G}
     (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g i, twistedTensor A U g i =
@@ -485,8 +485,8 @@ private lemma twistedTransfer_virtual_rep_fixed
   -- Now: ∑_{n'} V * A n' * (A n')ᴴ = V
   simp_rw [Matrix.mul_assoc V]
   rw [← Finset.mul_sum]
-  have : ∑ n' : Fin d, A n' * (A n')ᴴ = transferMap A 1 := by
-    rw [transferMap_apply]; congr 1; funext n'; rw [Matrix.mul_one]
+  have : ∑ n' : Fin d, A n' * (A n')ᴴ = Kraus.transferMap A 1 := by
+    rw [Kraus.transferMap_apply]; congr 1; funext n'; rw [Matrix.mul_one]
   rw [this, hNorm, Matrix.mul_one]
 
 /-- For an injective symmetric MPS with canonical FCS data and unitary on-site
@@ -498,15 +498,15 @@ virtual unitary intertwining relation.  Boundary-state invariance and the
 local-symmetry-to-string-order implication complete the proof. -/
 theorem hasStringOrder_of_symmetric_injective
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U)
     (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
     (g : G)
     (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
-    (hΛfix : transferMap (fun i => (A i)ᴴ) Λ = Λ)
-    (hNorm : transferMap A 1 = 1) :
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1) :
     HasStringOrder A (U g) Λ := by
   -- Step 1: Get virtual representation
   obtain ⟨ω, ρ, hρ⟩ := virtual_rep_of_symmetric_injective A hA U hSymm
@@ -556,7 +556,7 @@ cocycle class, not string order.  The hypotheses are stated as on-site
 symmetry directly, matching what the proof uses. -/
 theorem hasStringOrder_iff_of_symmetric_injective
     (A B : MPSTensor d D)
-    (hA : IsInjective A) (hB : IsInjective B)
+    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hUnitary : ∀ g : G, U g * (U g)ᴴ = 1)
     (hSymmA : IsOnSiteSymmetric A U)
@@ -564,10 +564,10 @@ theorem hasStringOrder_iff_of_symmetric_injective
     (Λ_A Λ_B : Matrix (Fin D) (Fin D) ℂ)
     (hΛApos : Λ_A.PosDef) (hΛBpos : Λ_B.PosDef)
     (hΛAtr : Matrix.trace Λ_A = 1) (hΛBtr : Matrix.trace Λ_B = 1)
-    (hΛAfix : transferMap (fun i => (A i)ᴴ) Λ_A = Λ_A)
-    (hΛBfix : transferMap (fun i => (B i)ᴴ) Λ_B = Λ_B)
-    (hNormA : transferMap A 1 = 1)
-    (hNormB : transferMap B 1 = 1) :
+    (hΛAfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ_A = Λ_A)
+    (hΛBfix : Kraus.transferMap (fun i => (B i)ᴴ) Λ_B = Λ_B)
+    (hNormA : Kraus.transferMap A 1 = 1)
+    (hNormB : Kraus.transferMap B 1 = 1) :
     ∀ g : G, HasStringOrder A (U g) Λ_A ↔ HasStringOrder B (U g) Λ_B := by
   intro g
   exact iff_of_true

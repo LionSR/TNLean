@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import TNLean.MPS.Core.MultiBlock
 
 import Mathlib.Data.Matrix.Block
@@ -143,12 +143,12 @@ lemma mpv_upperFin_eq_mpv_diagFin
   set w : List (Fin d) := List.ofFn σ with hw
   -- Expand the MPV coefficients.
   simp only [MPSTensor.mpv, MPSTensor.coeff, hw.symm]
-  -- Commute `evalWord` with reindexing, then drop the reindexing inside `trace`.
+  -- Commute `Kraus.evalWord` with reindexing, then drop the reindexing inside `trace`.
   have hUpperEval :
-      MPSTensor.evalWord (upperFin (d := d) (n := n) (m := m) A11 A12 A22) w =
+      Kraus.evalWord (upperFin (d := d) (n := n) (m := m) A11 A12 A22) w =
         Matrix.reindex e e
           (_root_.evalWord (upperSum (d := d) (n := n) (m := m) A11 A12 A22) w) := by
-    change MPSTensor.evalWord
+    change Kraus.evalWord
         (fun i => Matrix.reindex e e
           (upperSum (d := d) (n := n) (m := m) A11 A12 A22 i)) w =
         Matrix.reindex e e
@@ -157,10 +157,10 @@ lemma mpv_upperFin_eq_mpv_diagFin
       (MPSTensor.evalWord_reindex (d := d) (D := n + m) (e := e)
         (A := upperSum (d := d) (n := n) (m := m) A11 A12 A22) w)
   have hDiagEval :
-      MPSTensor.evalWord (diagFin (d := d) (n := n) (m := m) A11 A22) w =
+      Kraus.evalWord (diagFin (d := d) (n := n) (m := m) A11 A22) w =
         Matrix.reindex e e
           (_root_.evalWord (diagSum (d := d) (n := n) (m := m) A11 A22) w) := by
-    change MPSTensor.evalWord
+    change Kraus.evalWord
         (fun i => Matrix.reindex e e
           (diagSum (d := d) (n := n) (m := m) A11 A22 i)) w =
         Matrix.reindex e e
@@ -173,7 +173,7 @@ lemma mpv_upperFin_eq_mpv_diagFin
   -- `trace (reindex e e M) = trace M`, so the reindexing from `Fin n ⊕ Fin m` to `Fin (n+m)`
   -- does not affect the coefficient.
   calc
-    Matrix.trace (MPSTensor.evalWord (upperFin (d := d) (n := n) (m := m) A11 A12 A22) w)
+    Matrix.trace (Kraus.evalWord (upperFin (d := d) (n := n) (m := m) A11 A12 A22) w)
         = Matrix.trace (Matrix.reindex e e
             (_root_.evalWord (upperSum (d := d) (n := n) (m := m) A11 A12 A22) w)) := by
           simp [hUpperEval]
@@ -190,7 +190,7 @@ lemma mpv_upperFin_eq_mpv_diagFin
           (_root_.evalWord (diagSum (d := d) (n := n) (m := m) A11 A22) w)) := by
           simpa using (Matrix.trace_reindex e
             (_root_.evalWord (diagSum (d := d) (n := n) (m := m) A11 A22) w)).symm
-    _ = Matrix.trace (MPSTensor.evalWord (diagFin (d := d) (n := n) (m := m) A11 A22) w) := by
+    _ = Matrix.trace (Kraus.evalWord (diagFin (d := d) (n := n) (m := m) A11 A22) w) := by
           simp [hDiagEval]
 
 

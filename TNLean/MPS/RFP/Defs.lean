@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
-import QICLean.MPS.Core.Transfer
+import TNLean.MPS.Defs
+import QICLean.Kraus.Transfer
 import QICLean.Channel.KrausFreedom
 
 /-!
@@ -49,7 +49,7 @@ The source defines the fixed-point property by a physical blocking isometry.
 Theorem `isTransferIdempotent_iff_hasPhysicalBlockingIsometry` proves that the two conditions
 are equivalent. -/
 def IsTransferIdempotent (A : MPSTensor d D) : Prop :=
-  transferMap A ∘ₗ transferMap A = transferMap A
+  Kraus.transferMap A ∘ₗ Kraus.transferMap A = Kraus.transferMap A
 
 /-- If the product letters of an MPS tensor are obtained from its letters by a
 rectangular isometry `V`, with `V†V = 1`, then the transfer map is idempotent.
@@ -74,9 +74,9 @@ theorem isTransferIdempotent_of_kraus_isometry (A : MPSTensor d D)
       Fintype.sum_prod_type, RCLike.star_def] at h
     simp_rw [mul_comm] at h
     exact h
-  change transferMap A ∘ₗ transferMap A = transferMap A
+  change Kraus.transferMap A ∘ₗ Kraus.transferMap A = Kraus.transferMap A
   apply LinearMap.ext; intro X
-  simp only [LinearMap.comp_apply, transferMap_apply]
+  simp only [LinearMap.comp_apply, Kraus.transferMap_apply]
   -- Step 1: Distribute the outer sum and rewrite products using conjTranspose_mul.
   -- LHS = ∑ i₁ i₂, (A i₁ * A i₂) * X * (A i₁ * A i₂)†
   have step1 : ∀ (i₁ i₂ : Fin d),
@@ -143,7 +143,7 @@ theorem isTransferIdempotent_iff_kraus_isometry (A : MPSTensor d D) :
         ∑ j : Fin d, A j * X * (A j)ᴴ := by
       intro X
       have h := congr_fun (congr_arg DFunLike.coe hRFP) X
-      simp only [LinearMap.comp_apply, transferMap_apply] at h
+      simp only [LinearMap.comp_apply, Kraus.transferMap_apply] at h
       rw [← h]
       rw [show ∑ p : Fin d × Fin d, (A p.1 * A p.2) * X * (A p.1 * A p.2)ᴴ =
           ∑ i₁ : Fin d, ∑ i₂ : Fin d,

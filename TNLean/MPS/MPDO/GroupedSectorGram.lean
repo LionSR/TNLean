@@ -129,7 +129,7 @@ theorem grouped_sector_gram_eq_pos_smul_one_of_dressing
     (μ : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (_hDimPos : ∀ k, 0 < dim k)
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
-    (hNormal : ∀ j q, MPSTensor.IsNormal
+    (hNormal : ∀ j q, Kraus.IsNormal
       (cast (congrArg (MPSTensor (D * D)) (hdim j q))
         (blocks ((C).repr j))))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
@@ -154,7 +154,7 @@ theorem grouped_sector_gram_eq_pos_smul_one_of_dressing
     ⟨(_hDimPos ((C).enum j q)).ne'⟩
   let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
     (blocks ((C).repr j))
-  have hNormalA : MPSTensor.IsNormal A := hNormal j q
+  have hNormalA : Kraus.IsNormal A := hNormal j q
   have hGramConj : ∀ v,
       (X j q : Matrix (Fin (dim ((C).enum j q)))
           (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q * A v *

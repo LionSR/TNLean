@@ -33,13 +33,13 @@ noncomputable def corollary312UnusedTensor : MPSTensor 2 1 :=
   fun _ => (Real.sqrt 2 : ℂ)⁻¹ • 1
 
 private lemma corollary312Tensor_transferMap :
-    transferMap corollary312Tensor = LinearMap.id := by
+    Kraus.transferMap corollary312Tensor = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext x y
   fin_cases x
   fin_cases y
-  simp [transferMap_apply, corollary312Tensor]
+  simp [Kraus.transferMap_apply, corollary312Tensor]
 
 private lemma invSqrtTwo_mul_self :
     ((Real.sqrt 2 : ℂ)⁻¹) * ((Real.sqrt 2 : ℂ)⁻¹) = 1 / 2 := by
@@ -52,7 +52,7 @@ private lemma invSqrtTwo_mul_self :
   simpa [pow_two] using hs.symm
 
 private lemma corollary312UnusedTensor_transferMap :
-    transferMap corollary312UnusedTensor = LinearMap.id := by
+    Kraus.transferMap corollary312UnusedTensor = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext x y
@@ -60,7 +60,7 @@ private lemma corollary312UnusedTensor_transferMap :
   fin_cases y
   suffices h : 2 * ((↑(Real.sqrt 2) : ℂ)⁻¹ *
       ((↑(Real.sqrt 2) : ℂ)⁻¹ * X 0 0)) = X 0 0 by
-    simpa [transferMap_apply, corollary312UnusedTensor] using h
+    simpa [Kraus.transferMap_apply, corollary312UnusedTensor] using h
   calc
     2 * ((↑(Real.sqrt 2) : ℂ)⁻¹ * ((↑(Real.sqrt 2) : ℂ)⁻¹ * X 0 0)) =
         2 * (((↑(Real.sqrt 2) : ℂ)⁻¹ * (↑(Real.sqrt 2) : ℂ)⁻¹) * X 0 0) := by ring

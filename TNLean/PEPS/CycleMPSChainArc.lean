@@ -119,10 +119,10 @@ lemma arcEval_mod [NeZero n] (A : MPSChainTensor d D n) (s : ℕ)
 /-- On the constant chain the arc product is the word product of the
 repeated tensor. -/
 lemma arcEval_const [NeZero n] (B : MPSTensor d D) (s : ℕ) (w : List (Fin d)) :
-    arcEval (fun _ : Fin n => B) s w = MPSTensor.evalWord B w := by
+    arcEval (fun _ : Fin n => B) s w = Kraus.evalWord B w := by
   induction w generalizing s with
   | nil => rfl
-  | cons i w ih => rw [arcEval_cons, MPSTensor.evalWord_cons, ih (s + 1)]
+  | cons i w ih => rw [arcEval_cons, Kraus.evalWord_cons, ih (s + 1)]
 
 /-- **Arc products telescope under a cyclic gauge**
 (arXiv:1804.04964, Applications section, lines 1863--1889).
@@ -189,12 +189,12 @@ def IsWindowInjective [NeZero n] (A : MPSChainTensor d D n) (L : ℕ) : Prop :=
 /-- A site-independent block-injective tensor is window injective as a
 constant chain. -/
 theorem isWindowInjective_const [NeZero n] {B : MPSTensor d D} {L : ℕ}
-    (hB : MPSTensor.IsNBlkInjective B L) :
+    (hB : Kraus.IsNBlkInjective B L) :
     IsWindowInjective (fun _ : Fin n => B) L := by
   intro s
   have hcast : (fun a : Fin L → Fin d =>
       arcEval (fun _ : Fin n => B) s (List.ofFn a)) =
-      fun a : Fin L → Fin d => MPSTensor.evalWord B (List.ofFn a) := by
+      fun a : Fin L → Fin d => Kraus.evalWord B (List.ofFn a) := by
     funext a
     exact arcEval_const B s (List.ofFn a)
   rw [hcast]
@@ -342,7 +342,7 @@ theorem GaugeEquiv.sameState [NeZero n] {A B : MPSChainTensor d D n}
   rw [coeff_eq_trace_arcEval A σ, coeff_eq_trace_arcEval B σ]
   have hEval := arcEval_eq_gauge_conj (A := A) (B := B) (Z := Z) hZ 0 (List.ofFn σ)
   rw [hEval, List.length_ofFn]
-  simpa using (MPSTensor.trace_conj_eq (Z 0) (arcEval A 0 (List.ofFn σ))).symm
+  simpa using (Kraus.trace_conj_eq (Z 0) (arcEval A 0 (List.ofFn σ))).symm
 
 /-- Rotating the closed trace one site forward: the leading letter moves to
 the end of the word, and the arc rebases one site downstream. -/

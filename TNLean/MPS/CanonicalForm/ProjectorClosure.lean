@@ -88,7 +88,7 @@ step is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
 theorem exists_reducing_projection_of_hasInvariantProj
     (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
-    (hInv : HasInvariantProj A) :
+    (hInv : Kraus.HasInvariantProj A) :
     ∃ P : Matrix (Fin D) (Fin D) ℂ,
       IsOrthogonalProjection P ∧ P ≠ 0 ∧ P ≠ 1 ∧
         (∀ i : Fin d, P * A i = A i * P) := by

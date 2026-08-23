@@ -67,10 +67,10 @@ private lemma aklt_sqrt2_sq : (↑(Real.sqrt 2) : ℂ) ^ 2 = 2 := by
 /-- `σz = diag(1, -1)` is an eigenvector of the AKLT transfer map with eigenvalue
 `-1/3`. -/
 theorem aklt_transferMap_sigmaZ :
-    transferMap akltTensor (!![(1 : ℂ), 0; 0, -1]) =
+    Kraus.transferMap akltTensor (!![(1 : ℂ), 0; 0, -1]) =
       (-1 / 3 : ℂ) • !![(1 : ℂ), 0; 0, -1] := by
   ext i j
-  simp only [transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
     akltTensor_conjTranspose, Matrix.smul_apply, smul_eq_mul]
   fin_cases i <;> fin_cases j <;>
     simp only [akltTensor, one_div, Complex.ofReal_inv, smul_of, smul_cons,
@@ -86,10 +86,10 @@ theorem aklt_transferMap_sigmaZ :
 /-- `σx = !![0, 1; 1, 0]` is an eigenvector of the AKLT transfer map with
 eigenvalue `-1/3`. -/
 theorem aklt_transferMap_sigmaX :
-    transferMap akltTensor (!![(0 : ℂ), 1; 1, 0]) =
+    Kraus.transferMap akltTensor (!![(0 : ℂ), 1; 1, 0]) =
       (-1 / 3 : ℂ) • !![(0 : ℂ), 1; 1, 0] := by
   ext i j
-  simp only [transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
     akltTensor_conjTranspose, Matrix.smul_apply, smul_eq_mul]
   fin_cases i <;> fin_cases j <;>
     simp only [akltTensor, one_div, Complex.ofReal_inv, smul_of, smul_cons,
@@ -106,10 +106,10 @@ theorem aklt_transferMap_sigmaX :
 eigenvalue `-1/3`.  The off-diagonal entries come only from `A⁰ = (1/√3) σz`,
 giving the prefactor `(1/√3)·(1/√3) = 1/3`; the diagonal entries vanish. -/
 theorem aklt_transferMap_sigmaY :
-    transferMap akltTensor (!![(0 : ℂ), -Complex.I; Complex.I, 0]) =
+    Kraus.transferMap akltTensor (!![(0 : ℂ), -Complex.I; Complex.I, 0]) =
       (-1 / 3 : ℂ) • !![(0 : ℂ), -Complex.I; Complex.I, 0] := by
   ext i j
-  simp only [transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_three, Matrix.add_apply,
     akltTensor_conjTranspose, Matrix.smul_apply, smul_eq_mul]
   fin_cases i <;> fin_cases j <;>
     simp only [akltTensor, one_div, Complex.ofReal_inv, smul_of, smul_cons,
@@ -133,7 +133,7 @@ private lemma sigmaZ_ne_zero : (!![(1 : ℂ), 0; 0, -1]) ≠ 0 := by
 /-- The subleading eigenvalue `-1/3` is a genuine eigenvalue of the AKLT transfer
 map, witnessed by the eigenvector `σz`. -/
 theorem aklt_transferMap_hasEigenvalue_neg_third :
-    Module.End.HasEigenvalue (transferMap akltTensor) (-1 / 3 : ℂ) :=
+    Module.End.HasEigenvalue (Kraus.transferMap akltTensor) (-1 / 3 : ℂ) :=
   Module.End.hasEigenvalue_of_hasEigenvector
     (Module.End.hasEigenvector_iff.mpr
       ⟨Module.End.mem_eigenspace_iff.mpr aklt_transferMap_sigmaZ, sigmaZ_ne_zero⟩)
@@ -141,7 +141,7 @@ theorem aklt_transferMap_hasEigenvalue_neg_third :
 /-- The leading eigenvalue `1` is a genuine eigenvalue of the AKLT transfer map,
 witnessed by the identity as eigenvector (`aklt_transferMap_one`). -/
 theorem aklt_transferMap_hasEigenvalue_one :
-    Module.End.HasEigenvalue (transferMap akltTensor) (1 : ℂ) :=
+    Module.End.HasEigenvalue (Kraus.transferMap akltTensor) (1 : ℂ) :=
   Module.End.hasEigenvalue_of_hasEigenvector
     (Module.End.hasEigenvector_iff.mpr
       ⟨Module.End.mem_eigenspace_iff.mpr (by rw [one_smul]; exact aklt_transferMap_one),

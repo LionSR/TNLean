@@ -261,7 +261,7 @@ theorem exists_word_verticalTensor_stackedTensor (M : MPOTensor d D) :
     ∀ (p : ℕ) (v : Fin (D ^ p * D ^ p)),
       ∃ w : List (Fin (D * D)), w.length = p ∧
         verticalTensor (stackedTensor M p) v =
-          MPSTensor.evalWord (verticalTensor M) w := by
+          Kraus.evalWord (verticalTensor M) w := by
   intro p
   induction p with
   | zero =>
@@ -274,8 +274,8 @@ theorem exists_word_verticalTensor_stackedTensor (M : MPOTensor d D) :
         (v.modNat.divNat : Fin (D ^ p))))
     refine ⟨w ++ [finProdFinEquiv ((v.divNat.modNat : Fin D),
       (v.modNat.modNat : Fin D))], by simp [hlen], ?_⟩
-    rw [MPSTensor.evalWord_append]
-    simp only [MPSTensor.evalWord_cons, MPSTensor.evalWord_nil, Matrix.mul_one]
+    rw [Kraus.evalWord_append]
+    simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
     rw [← hw]
     exact verticalTensor_layerMul (stackedTensor M p) M v
 
@@ -288,8 +288,8 @@ arXiv:1606.00608, lines 1874--1887, applied to the stacked tensor. -/
 theorem stackedTensor_ketLeftMul_invariant (M : MPOTensor d D) {p : ℕ}
     {Q : Matrix (Fin d) (Fin d) ℂ}
     (hQ : ∀ w : List (Fin (D * D)), w.length = p →
-      Q * MPSTensor.evalWord (verticalTensor M) w =
-        Q * MPSTensor.evalWord (verticalTensor M) w * Q) :
+      Q * Kraus.evalWord (verticalTensor M) w =
+        Q * Kraus.evalWord (verticalTensor M) w * Q) :
     (stackedTensor M p).ketLeftMul Q =
       ((stackedTensor M p).ketLeftMul Q).braRightMul Q := by
   refine ext_of_verticalTensor fun v => ?_
@@ -310,8 +310,8 @@ noncomputable def periodicSectorProjectorOfCyclicData (M : MPOTensor d D)
     (hM : IsMPDO M) {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin d) (Fin d) ℂ}
     (hQherm : Q.IsHermitian) (hQidem : IsIdempotentElem Q)
     (hQword : ∀ w : List (Fin (D * D)), w.length = p →
-      Q * MPSTensor.evalWord (verticalTensor M) w =
-        Q * MPSTensor.evalWord (verticalTensor M) w * Q)
+      Q * Kraus.evalWord (verticalTensor M) w =
+        Q * Kraus.evalWord (verticalTensor M) w * Q)
     (hQnc : ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))) :
     PeriodicSectorProjector M p where
   Q := Q
@@ -364,16 +364,16 @@ def PeriodicVectorYieldsCyclicProjector (M : MPOTensor d D) : Prop :=
   ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
     Vᴴ * V = 1 → (∀ v : Fin (D * D), verticalTensor M v * V = V * B v) →
-    MPSTensor.IsIrreducibleTensor B → ρ.PosDef → 0 < r →
-    MPSTensor.transferMap (d := D * D) (D := n) B ρ = (r : ℂ) • ρ →
+    Kraus.IsIrreducibleFamily B → ρ.PosDef → 0 < r →
+    Kraus.transferMap (d := D * D) (D := n) B ρ = (r : ℂ) • ρ →
     ∀ μ : ℂ,
-      Module.End.HasEigenvalue (MPSTensor.transferMap (d := D * D) (D := n) B) μ →
+      Module.End.HasEigenvalue (Kraus.transferMap (d := D * D) (D := n) B) μ →
       ‖μ‖ = r → μ ≠ (r : ℂ) →
       ∃ (p : ℕ) (Q : Matrix (Fin d) (Fin d) ℂ),
         p ≠ 0 ∧ Q.IsHermitian ∧ IsIdempotentElem Q ∧
         (∀ w : List (Fin (D * D)), w.length = p →
-          Q * MPSTensor.evalWord (verticalTensor M) w =
-            Q * MPSTensor.evalWord (verticalTensor M) w * Q) ∧
+          Q * Kraus.evalWord (verticalTensor M) w =
+            Q * Kraus.evalWord (verticalTensor M) w * Q) ∧
         ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))
 
 /-- The cyclic-projector hypothesis implies the projector-supplying

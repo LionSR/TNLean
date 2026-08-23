@@ -83,7 +83,7 @@ structure CompleteZipperFusionFamily (Λ : Type u) [Fintype Λ] [DecidableEq Λ]
 
   Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--163 and the
   injectivity argument at lines 269--277. -/
-  tensor_injective : ∀ a : Λ, MPSTensor.IsInjective (tensor a).toMPSTensor
+  tensor_injective : ∀ a : Λ, Kraus.IsInjective (tensor a).toMPSTensor
   /-- The fusion multiplicity $N_{ab}^c$.
 
   Source: arXiv:1511.08090, `AnyonsPEPS.tex`, line 161. -/

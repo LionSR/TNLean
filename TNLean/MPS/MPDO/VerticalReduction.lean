@@ -172,7 +172,7 @@ theorem IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry
       (∀ k v, verticalTensor M v * V k = V k * blocks k v) ∧
       (∀ k v, (V k)ᴴ * verticalTensor M v = blocks k v * (V k)ᴴ) ∧
       (∀ k v, blocks k v = (V k)ᴴ * verticalTensor M v * V k) ∧
-      (∀ k, MPSTensor.IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       MPSTensor.SameMPV₂Pos (verticalTensor M)
         (MPSTensor.toTensorFromBlocks
           (d := D * D) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by

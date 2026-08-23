@@ -131,13 +131,13 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     (fun τ => mpv A (replaceWindow L hLN i σ τ)) ∈ groundSpace A L := by
   rw [groundSpace, LinearMap.mem_range]
   have hN : 0 < N := Nat.lt_of_lt_of_le (Fin.pos i) le_rfl
-  refine ⟨evalWord A (List.ofFn fun (j : Fin (N - L)) =>
+  refine ⟨Kraus.evalWord A (List.ofFn fun (j : Fin (N - L)) =>
     σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by omega)⟩), ?_⟩
   ext τ
   simp only [groundSpaceMap_apply, mpv, coeff]
-  rw [← evalWord_append]
-  -- Goal: tr(evalWord A (List.ofFn τ ++ compList))
-  --     = tr(evalWord A (List.ofFn (replaceWindow L hLN i σ τ)))
+  rw [← Kraus.evalWord_append]
+  -- Goal: tr(Kraus.evalWord A (List.ofFn τ ++ compList))
+  --     = tr(Kraus.evalWord A (List.ofFn (replaceWindow L hLN i σ τ)))
   set compList := List.ofFn fun (j : Fin (N - L)) =>
     σ ⟨(i.val + L + j.val) % N, Nat.mod_lt _ (by omega)⟩
   -- Rotate the RHS by i positions using trace cyclicity
@@ -147,7 +147,7 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
     have hle : i.val ≤ (List.ofFn (replaceWindow L hLN i σ τ)).length := by
       simp [List.length_ofFn]
     rw [← hlist, List.rotate_eq_drop_append_take hle,
-        evalWord_append, Matrix.trace_mul_comm, ← evalWord_append, List.take_append_drop]
+        Kraus.evalWord_append, Matrix.trace_mul_comm, ← Kraus.evalWord_append, List.take_append_drop]
   -- Prove the rotated list equals τ ++ complement elementwise
   apply List.ext_getElem
   · have : compList.length = N - L := by simp [compList, List.length_ofFn]

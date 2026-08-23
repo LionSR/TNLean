@@ -44,32 +44,32 @@ The remaining reconstruction is documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_mirror_padded_products_of_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ))) :
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
+          (Kraus.evalWord A (List.ofFn μ) * A j * X *
+            Kraus.evalWord A (List.ofFn σ))) :
     ∀ (η j : Fin d) (σ : Fin L₀ → Fin d),
       YAt ⟨M + 1 - L₀, by omega⟩
           (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-          evalWord A (List.ofFn σ) =
-        evalWord A (List.ofFn μ) * A j * X *
-          evalWord A (List.ofFn σ) := by
+          Kraus.evalWord A (List.ofFn σ) =
+        Kraus.evalWord A (List.ofFn μ) * A j * X *
+          Kraus.evalWord A (List.ofFn σ) := by
   intro η j σ
   let Z : Matrix (Fin D) (Fin D) ℂ :=
     YAt ⟨M + 1 - L₀, by omega⟩
         (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-        evalWord A (List.ofFn σ) -
-      evalWord A (List.ofFn μ) * A j * X * evalWord A (List.ofFn σ)
-  have hzero : ∀ α : Fin L₀ → Fin d, evalWord A (List.ofFn α) * Z = 0 := by
+        Kraus.evalWord A (List.ofFn σ) -
+      Kraus.evalWord A (List.ofFn μ) * A j * X * Kraus.evalWord A (List.ofFn σ)
+  have hzero : ∀ α : Fin L₀ → Fin d, Kraus.evalWord A (List.ofFn α) * Z = 0 := by
     intro α
     have h := hLeft η j σ α
     dsimp [Z]
@@ -104,8 +104,8 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
     ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d) (j : Fin d),
         Matrix.trace
-            (A j * (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
-          Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) := by
+            (A j * (X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν))) =
+          Matrix.trace (A j * (Kraus.evalWord A (List.ofFn α) * Y ν)) := by
   classical
   have hKpos : 0 < M + 1 - (L₀ + 1) := by omega
   let τOfComplement :
@@ -131,9 +131,9 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
   intro α ν j
   have hTrace :
       Matrix.trace
-          (evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1)
+          (Kraus.evalWord A (List.ofFn (cyclicCfg (by omega : 0 < M + 1) (L₀ + 1)
             (⟨M, by omega⟩ : Fin (M + 1)) (Fin.cons j α) (τOfComplement ν))) * X) =
-        Matrix.trace (evalWord A (List.ofFn (Fin.cons j α)) * Y ν) := by
+        Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons j α)) * Y ν) := by
     simpa [cyclicRestrictₗ_apply, groundSpaceMap_apply, hψX] using
       congr_fun (hY ν) (Fin.cons j α)
   have hSnoc := evalWord_cyclicCfg_snoc (A := A) (M := M) (L := L₀ + 1)
@@ -183,15 +183,15 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
   rw [htail, hcomp] at hTrace
   rw [evalWord_ofFn_cons] at hTrace
   calc
-    Matrix.trace (A j * (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν)))
+    Matrix.trace (A j * (X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν)))
         = Matrix.trace
-            ((evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) * A j) * X) := by
+            ((Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) * A j) * X) := by
           simpa [Matrix.mul_assoc] using
             (Matrix.trace_mul_cycle'
-              (A j) X (evalWord A (List.ofFn α) * evalWord A (List.ofFn ν)))
-    _ = Matrix.trace (A j * evalWord A (List.ofFn α) * Y ν) := by
+              (A j) X (Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν)))
+    _ = Matrix.trace (A j * Kraus.evalWord A (List.ofFn α) * Y ν) := by
           simpa [Matrix.mul_assoc] using hTrace
-    _ = Matrix.trace (A j * (evalWord A (List.ofFn α) * Y ν)) := by
+    _ = Matrix.trace (A j * (Kraus.evalWord A (List.ofFn α) * Y ν)) := by
           simp [Matrix.mul_assoc]
 
 /-- One-site-injective form of the boundary block-window matrix equation.
@@ -211,7 +211,7 @@ length-\(L_0\) trace-probe reconstruction is still documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hA : IsInjective A) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hA : Kraus.IsInjective A) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -219,16 +219,16 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap_of_isI
         groundSpace A (L₀ + 1)) :
     ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d),
-        X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
-          evalWord A (List.ofFn α) * Y ν := by
+        X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) =
+          Kraus.evalWord A (List.ofFn α) * Y ν := by
   obtain ⟨Y, hTraceOne⟩ :=
     closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
       (A := A) hL₀ hM hψX hLocal
   refine ⟨Y, ?_⟩
   intro α ν
   let Z : Matrix (Fin D) (Fin D) ℂ :=
-    X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) -
-      evalWord A (List.ofFn α) * Y ν
+    X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) -
+      Kraus.evalWord A (List.ofFn α) * Y ν
   have hZzero : Z = 0 := by
     apply eq_zero_of_forall_trace_mul_right_eq_zero hA
     intro j
@@ -270,7 +270,7 @@ The outside-label uniqueness lemma identifies \(Y_M(\rho)\) with \(Y_\nu\), henc
 \] -/
 theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -279,10 +279,10 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
     ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d)
           (β : Fin L₀ → Fin d),
-        Matrix.trace (evalWord A (List.ofFn β) *
-            (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
-          Matrix.trace (evalWord A (List.ofFn β) *
-            (evalWord A (List.ofFn α) * Y ν)) := by
+        Matrix.trace (Kraus.evalWord A (List.ofFn β) *
+            (X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν))) =
+          Matrix.trace (Kraus.evalWord A (List.ofFn β) *
+            (Kraus.evalWord A (List.ofFn α) * Y ν)) := by
   classical
   have hKpos : 0 < M + 1 - (L₀ + 1) := by omega
   have hLocalWitness :
@@ -302,8 +302,8 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
   refine ⟨Y, ?_⟩
   intro α ν β
   have hMat :
-      X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
-        evalWord A (List.ofFn α) * Y ν := by
+      X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) =
+        Kraus.evalWord A (List.ofFn α) * Y ν := by
     let α₀ : Fin d := α ⟨0, hL₀⟩
     let αTail : Fin (L₀ - 1) → Fin d := fun r => α ⟨r.val + 1, by omega⟩
     let γ : Fin (M - 1) → Fin d := fun r =>
@@ -353,7 +353,7 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
       have hγ : r.val + 1 - 1 < L₀ - 1 := by omega
       simp [ρ, γ, αTail, hlt]
     have hα_eval :
-        evalWord A (List.ofFn α) = A α₀ * evalWord A (List.ofFn αTail) := by
+        Kraus.evalWord A (List.ofFn α) = A α₀ * Kraus.evalWord A (List.ofFn αTail) := by
       let α' : Fin ((L₀ - 1) + 1) → Fin d := fun i => α ⟨i.val, by omega⟩
       have hαlist : List.ofFn α = List.ofFn α' := by
         apply List.ext_getElem
@@ -366,16 +366,16 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
         ext r
         simp [α', αTail]
       have hstep :
-          evalWord A (List.ofFn α') = A (α' 0) * evalWord A (List.ofFn (α' ∘ Fin.succ)) :=
+          Kraus.evalWord A (List.ofFn α') = A (α' 0) * Kraus.evalWord A (List.ofFn (α' ∘ Fin.succ)) :=
         Kraus.evalWord_ofFn_succ A α'
       rw [hαlist, hstep, htail]
       simp [α', α₀]
     have hWord :
-        evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+        Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
             ρ ⟨k.val + 1, by omega⟩)) *
-          evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+          Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
             ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) =
-        evalWord A (List.ofFn αTail) * evalWord A (List.ofFn ν) := by
+        Kraus.evalWord A (List.ofFn αTail) * Kraus.evalWord A (List.ofFn ν) := by
       let full : Fin (M - 1) → Fin d := fun n => ρ ⟨n.val + 1, by omega⟩
       have hLeftList :
           List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
@@ -451,45 +451,45 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
               omega
             rw [hsite] at hcomp
             simpa [full, k] using hcomp.symm
-      rw [← evalWord_append, ← evalWord_append, hLeftList, hRightList]
+      rw [← Kraus.evalWord_append, ← Kraus.evalWord_append, hLeftList, hRightList]
     calc
-      X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν)
-          = X * (A α₀ * evalWord A (List.ofFn αTail)) *
-              evalWord A (List.ofFn ν) := by rw [hα_eval]
+      X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν)
+          = X * (A α₀ * Kraus.evalWord A (List.ofFn αTail)) *
+              Kraus.evalWord A (List.ofFn ν) := by rw [hα_eval]
       _ = X * A α₀ *
-              (evalWord A (List.ofFn αTail) * evalWord A (List.ofFn ν)) := by
+              (Kraus.evalWord A (List.ofFn αTail) * Kraus.evalWord A (List.ofFn ν)) := by
             simp [Matrix.mul_assoc]
       _ = X * A α₀ *
-              (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              (Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
                   ρ ⟨k.val + 1, by omega⟩)) *
-                evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
                   ρ ⟨M + 1 - L₀ + r.val, by omega⟩))) := by
             rw [hWord]
       _ = (X * A α₀ *
-              evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+              Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
                 ρ ⟨k.val + 1, by omega⟩))) *
-              evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+              Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
                 ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) := by
             simp [Matrix.mul_assoc]
       _ = (A α₀ * YAt ⟨M + 1 - L₀, by omega⟩ ρ) *
-              evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+              Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
                 ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) := by
             rw [hMirror]
       _ = A α₀ *
               (YAt ⟨M + 1 - L₀, by omega⟩ ρ *
-                evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+                Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
                   ρ ⟨M + 1 - L₀ + r.val, by omega⟩))) := by
             simp [Matrix.mul_assoc]
       _ = A α₀ *
-              (evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+              (Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
                   ρ ⟨r.val + 1, by omega⟩)) *
                 YAt ⟨M, by omega⟩ ρ) := by
             rw [hTransport]
-      _ = A α₀ * (evalWord A (List.ofFn αTail) * Y ν) := by
+      _ = A α₀ * (Kraus.evalWord A (List.ofFn αTail) * Y ν) := by
             rw [hHeadρ, hYρ]
-      _ = (A α₀ * evalWord A (List.ofFn αTail)) * Y ν := by
+      _ = (A α₀ * Kraus.evalWord A (List.ofFn αTail)) * Y ν := by
             simp [Matrix.mul_assoc]
-      _ = evalWord A (List.ofFn α) * Y ν := by rw [hα_eval]
+      _ = Kraus.evalWord A (List.ofFn α) * Y ν := by rw [hα_eval]
   rw [hMat]
 
 /-- Length-\(L_0\) trace identities imply the boundary block-window matrix equation.
@@ -509,18 +509,18 @@ This is the trace-separation step needed after the periodic-boundary
 inverting-and-growing-back argument has produced the length-\(L_0\) trace
 identities. -/
 theorem block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective
-    {A : MPSTensor d D} {L₀ K : ℕ} (hInj : IsNBlkInjective A L₀)
+    {A : MPSTensor d D} {L₀ K : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hTrace : ∀ (α : Fin L₀ → Fin d) (ν : Fin K → Fin d)
         (β : Fin L₀ → Fin d),
-      Matrix.trace (evalWord A (List.ofFn β) *
-          (X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν))) =
-        Matrix.trace (evalWord A (List.ofFn β) *
-          (evalWord A (List.ofFn α) * Y ν))) :
+      Matrix.trace (Kraus.evalWord A (List.ofFn β) *
+          (X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν))) =
+        Matrix.trace (Kraus.evalWord A (List.ofFn β) *
+          (Kraus.evalWord A (List.ofFn α) * Y ν))) :
     ∀ (α : Fin L₀ → Fin d) (ν : Fin K → Fin d),
-      X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
-        evalWord A (List.ofFn α) * Y ν := by
+      X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) =
+        Kraus.evalWord A (List.ofFn α) * Y ν := by
   intro α ν
   apply groundSpaceMap_injective_of_isNBlkInjective hInj
   ext β
@@ -546,7 +546,7 @@ boundary windows. Block injectivity then separates the resulting trace
 pairings, giving the displayed matrix identity. -/
 theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -554,8 +554,8 @@ theorem closure_property_boundary_block_window_equation_of_groundSpaceMap
         groundSpace A (L₀ + 1)) :
     ∃ Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ,
       ∀ (α : Fin L₀ → Fin d) (ν : Fin (M + 1 - (L₀ + 1)) → Fin d),
-        X * evalWord A (List.ofFn α) * evalWord A (List.ofFn ν) =
-          evalWord A (List.ofFn α) * Y ν := by
+        X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν) =
+          Kraus.evalWord A (List.ofFn α) * Y ν := by
   obtain ⟨Y, hTraceWord⟩ :=
     closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX hLocal
@@ -588,7 +588,7 @@ lines 2078--2079, and is documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_products
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -599,15 +599,15 @@ lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_product
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (hLast : ∀ (η j : Fin d),
       YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ) * A j =
-        evalWord A (List.ofFn μ) * A j * X)
+        Kraus.evalWord A (List.ofFn μ) * A j * X)
     (hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ))) :
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
+          (Kraus.evalWord A (List.ofFn μ) * A j * X *
+            Kraus.evalWord A (List.ofFn σ))) :
     ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
     ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
       (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
@@ -617,9 +617,9 @@ lemma closure_property_auxiliary_boundary_product_eq_of_mirror_left_word_product
           (k : Fin (M + 1 - (L₀ + 1))),
         ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
       ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
+            Kraus.evalWord A (List.ofFn σ) := by
   have hMirrorPadded :=
     closure_property_mirror_padded_products_of_left_word_products
       (A := A) hInj hL₀ hM YAt X μ hLeft
@@ -651,7 +651,7 @@ not display this formula; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -661,13 +661,13 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_wo
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ))) :
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
+          (Kraus.evalWord A (List.ofFn μ) * A j * X *
+            Kraus.evalWord A (List.ofFn σ))) :
     ∃ ρPlus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
     ∃ ρMinus : (j : Fin d) → (Fin L₀ → Fin d) → Fin (M + 1) → Fin d,
       (∀ (j : Fin d) (σ : Fin L₀ → Fin d)
@@ -677,9 +677,9 @@ theorem closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap_left_wo
           (k : Fin (M + 1 - (L₀ + 1))),
         ρMinus j σ ⟨k.val + 1, by omega⟩ = μ k) ∧
       ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * evalWord A (List.ofFn σ) =
+        YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
-            evalWord A (List.ofFn σ) := by
+            Kraus.evalWord A (List.ofFn σ) := by
   have hOneSided :=
     closure_property_boundary_one_sided_products_of_groundSpaceMap
       (A := A) hInj hL₀ hM hψX YAt hYAt μ
@@ -711,7 +711,7 @@ lines 2078--2079. Documented in
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -721,13 +721,13 @@ theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap_left_words
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d)
     (hLeft : ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ))) :
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
+          (Kraus.evalWord A (List.ofFn μ) * A j * X *
+            Kraus.evalWord A (List.ofFn σ))) :
     ∀ η : Fin d,
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1)
           (⟨M, by omega⟩ : Fin (M + 1))
@@ -782,7 +782,7 @@ and the first-letter restriction equality implies equality of the two cyclic
 restrictions. -/
 theorem closure_property_boundary_restrictions_eq_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
@@ -844,7 +844,7 @@ deriving it from arXiv:2011.12127, Section IV.C, lines 2078--2079. Documented
 in `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -860,14 +860,14 @@ lemma closure_property_wrapped_mirror_left_word_products_of_boundary_restriction
           (⟨M + 1 - L₀, by omega⟩ : Fin (M + 1))
           (mirrorMiddleBackground L₀ (M + 1) η μ) ψ) :
     ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M, by omega⟩
               (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) := by
+            Kraus.evalWord A (List.ofFn σ)) := by
   intro η j σ α
   have hFirst := closure_property_boundary_first_products_of_restrictions
     (A := A) hInj hL₀ hM η μ
@@ -900,7 +900,7 @@ periodic-boundary closure-property sentence in arXiv:2011.12127, Section IV.C,
 lines 2078--2079. -/
 theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -910,14 +910,14 @@ theorem closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
     ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M, by omega⟩
               (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) := by
+            Kraus.evalWord A (List.ofFn σ)) := by
   have hLocal : ∀ (i : Fin (M + 1)) (τ : Fin (M + 1) → Fin d),
       cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ ∈
         groundSpace A (L₀ + 1) := by
@@ -955,7 +955,7 @@ and the one-sided product equation
 combine to give the displayed coordinate comparison. -/
 theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ < M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -965,13 +965,13 @@ theorem closure_property_mirror_left_word_products_of_groundSpaceMap
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) :
     ∀ (η j : Fin d) (σ α : Fin L₀ → Fin d),
-      evalWord A (List.ofFn α) *
+      Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) =
-        evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ)) := by
+            Kraus.evalWord A (List.ofFn σ)) =
+        Kraus.evalWord A (List.ofFn α) *
+          (Kraus.evalWord A (List.ofFn μ) * A j * X *
+            Kraus.evalWord A (List.ofFn σ)) := by
   intro η j σ α
   have hCompare :=
     closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap
@@ -980,17 +980,17 @@ theorem closure_property_mirror_left_word_products_of_groundSpaceMap
     closure_property_boundary_one_sided_products_of_groundSpaceMap
       (A := A) hInj hL₀ (le_of_lt hM) hψX YAt hYAt μ
   calc
-    evalWord A (List.ofFn α) *
+    Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M + 1 - L₀, by omega⟩
               (mirrorMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ))
-        = evalWord A (List.ofFn α) *
+            Kraus.evalWord A (List.ofFn σ))
+        = Kraus.evalWord A (List.ofFn α) *
           (YAt ⟨M, by omega⟩
               (wrappedMiddleBackground L₀ (M + 1) η μ) * A j *
-            evalWord A (List.ofFn σ)) := hCompare η j σ α
-    _ = evalWord A (List.ofFn α) *
-          (evalWord A (List.ofFn μ) * A j * X *
-            evalWord A (List.ofFn σ)) := by
+            Kraus.evalWord A (List.ofFn σ)) := hCompare η j σ α
+    _ = Kraus.evalWord A (List.ofFn α) *
+          (Kraus.evalWord A (List.ofFn μ) * A j * X *
+            Kraus.evalWord A (List.ofFn σ)) := by
           rw [hOneSided.1 η j]
 
 end MPSTensor

@@ -275,7 +275,7 @@ theorem weightedVerticalBondContractionProduct_single
     rw [hih]
     simp only [weightedVerticalBondContraction,
       MPSTensor.contractBondMatrix_single_mod_div, MPSTensor.wordTuple]
-    rw [List.ofFn_succ, MPSTensor.evalWord_cons]
+    rw [List.ofFn_succ, Kraus.evalWord_cons]
     rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
     simp only [pow_succ]
     rw [mul_comm]

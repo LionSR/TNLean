@@ -401,9 +401,9 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
     rw [show decodeBlock 1 2 i0 = fun _ => 0 from Subsingleton.elim _ _]
     rfl
   have hblock : blockTensor A 2 i0 = A 0 * A 0 := by
-    change evalWord A (wordOfBlock 1 2 i0) = A 0 * A 0
+    change Kraus.evalWord A (wordOfBlock 1 2 i0) = A 0 * A 0
     rw [hword]
-    simp [evalWord]
+    simp [Kraus.evalWord]
   have hcast : Fin.cast hdim i0 = (0 : Fin 1) := Subsingleton.elim _ _
   have hA0 : A 0 = ζ • ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)) := by
@@ -476,14 +476,14 @@ Source: arXiv:1606.00608, Appendix D, equation `RFP-gauge` and lines 2100--2107.
 theorem cubePhaseTensor_not_isTransferIdempotent :
     ¬ IsTransferIdempotent cubePhaseTensor := by
   intro hRFP
-  have hIdem : IsIdempotentElem (transferMap cubePhaseTensor) := by
+  have hIdem : IsIdempotentElem (Kraus.transferMap cubePhaseTensor) := by
     rw [IsIdempotentElem]
     apply LinearMap.ext
     intro ρ
     simpa [Module.End.mul_apply, LinearMap.comp_apply, IsTransferIdempotent] using
       LinearMap.congr_fun hRFP ρ
   exact cubePhaseTensor_not_tendsto_dyadic_transferMap.2.2 ⟨
-    transferMap cubePhaseTensor, fun ρ =>
+    Kraus.transferMap cubePhaseTensor, fun ρ =>
       tendsto_const_nhds.congr' (Filter.Eventually.of_forall fun n => by
         dsimp
         rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩

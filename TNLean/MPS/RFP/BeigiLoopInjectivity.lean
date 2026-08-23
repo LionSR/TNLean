@@ -92,8 +92,8 @@ variable {d D : ℕ}
 injectivity. -/
 private theorem isInjective_rotatePhysical (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1)
-    (hA : IsInjective A) :
-    IsInjective (rotatePhysical u A) := by
+    (hA : Kraus.IsInjective A) :
+    Kraus.IsInjective (rotatePhysical u A) := by
   classical
   have hstar : uᴴ * u = 1 := mul_eq_one_comm.mp hu
   have hletter (j : Fin d) :
@@ -107,7 +107,7 @@ private theorem isInjective_rotatePhysical (A : MPSTensor d D)
     rw [Finset.sum_comm]
     simp_rw [← Finset.sum_smul, hentry]
     simp
-  rw [IsInjective, eq_top_iff]
+  rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   have hM : M ∈ Submodule.span ℂ (Set.range A) := hA ▸ Submodule.mem_top
   apply (Submodule.span_le.mpr ?_) hM
@@ -158,7 +158,7 @@ Schmidt-support consequence is recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem minimalLoopCoordinateTensor_isInjective
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    IsInjective (F.minimalLoopCoordinateTensor l) := by
+    Kraus.IsInjective (F.minimalLoopCoordinateTensor l) := by
   classical
   have hleft : Submodule.span ℂ
       (Set.range (F.loopSchmidtFactorization l).leftFactor.col) = ⊤ := by
@@ -175,7 +175,7 @@ theorem minimalLoopCoordinateTensor_isInjective
   have houter := Matrix.span_range_vecMulVec_eq_top
     (F.loopSchmidtFactorization l).leftFactor.col
     (F.loopSchmidtFactorization l).rightFactor.row hleft hright
-  rw [IsInjective, eq_top_iff]
+  rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   have hM : M ∈ Submodule.span ℂ
       (Set.range fun p : Fin (F.leftDim l.1) × Fin (F.rightDim l.1) ↦
@@ -201,7 +201,7 @@ and Section IV, equation (10) and the paragraph following it.  The physical
 unitary preserves the one-site spanning property. -/
 theorem minimalLoopTensor_isInjective
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    IsInjective (F.minimalLoopTensor l) := by
+    Kraus.IsInjective (F.minimalLoopTensor l) := by
   rw [minimalLoopTensor]
   apply isInjective_rotatePhysical _ F.unitary
   · simpa only [Matrix.star_eq_conjTranspose] using
@@ -216,7 +216,7 @@ one-site-injective consequence only; no normalization or transfer identity is
 asserted. -/
 theorem minimalLoopTensor_isNormal
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
-    IsNormal (F.minimalLoopTensor l) :=
+    Kraus.IsNormal (F.minimalLoopTensor l) :=
   (F.minimalLoopTensor_isInjective l).isNormal
 
 end BeigiSectorGraphData

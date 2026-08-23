@@ -83,7 +83,7 @@ lines 344--354, using equation `UisUnitary`, lines 327--335. -/
 theorem IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     {N : ℕ} (hN : 1 < N) :
-    Matrix.trace (transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ N) = 1 := by
+    Matrix.trace (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 := by
   rw [MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
   rw [mpvOverlap_normalizedFlattening_self, mpvOverlap_toMPSTensor_self,
     hU.mpo_mul_conjTranspose_mpo hN, Matrix.trace_one]
@@ -103,7 +103,7 @@ algebraic multiplicity. See `docs/paper-gaps/cpsv17_transfer_trace_power.tex`.
 The exact conclusion is `MPOTensor.IsMPU.normalizedFlattening_charpoly`. -/
 theorem IsMPU.normalizedFlattening_nonzero_spectrum
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
-    spectrum ℂ (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) \ {0} = {1} :=
+    spectrum ℂ (transferMatrix (Kraus.transferMap U.normalizedFlattening)) \ {0} = {1} :=
   Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt _
     (fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
 
@@ -115,11 +115,11 @@ Source: Cirac--Perez-Garcia--Schuch--Verstraete, Proposition
 `prop:normal-tensor`, lines 349--354. -/
 theorem IsMPU.normalizedFlattening_charpoly
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
-    (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)).charpoly =
+    (transferMatrix (Kraus.transferMap U.normalizedFlattening)).charpoly =
       X ^ (D * D - 1) * (X - 1) := by
   simpa [Fintype.card_prod, Fintype.card_fin] using
     Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening))
+      (transferMatrix (Kraus.transferMap U.normalizedFlattening))
       (fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
 
 end MPOTensor

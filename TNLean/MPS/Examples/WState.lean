@@ -85,7 +85,7 @@ lemma raising_mul_raising : raising * raising = 0 := by
 
 /-! ### The W-state amplitude
 
-We classify the ordered product `evalWord wTensor w` by the number of excitations
+We classify the ordered product `Kraus.evalWord wTensor w` by the number of excitations
 (`1` letters) in the word `w`: it is the identity with no excitations, the raising
 matrix with one excitation, and zero with two or more.  Reading off the `(0,1)`
 entry against the boundary covectors gives the W-state amplitude. -/
@@ -95,7 +95,7 @@ entry against the boundary covectors gives the W-state amplitude. -/
 * exactly one excitation gives the raising matrix `A^1`;
 * two or more excitations annihilate, giving the zero matrix. -/
 lemma evalWord_wTensor (w : List (Fin 2)) :
-    evalWord wTensor w =
+    Kraus.evalWord wTensor w =
       match w.count 1 with
       | 0 => 1
       | 1 => raising
@@ -103,7 +103,7 @@ lemma evalWord_wTensor (w : List (Fin 2)) :
   induction w with
   | nil => simp
   | cons i w ih =>
-    rw [evalWord_cons, ih, List.count_cons]
+    rw [Kraus.evalWord_cons, ih, List.count_cons]
     match i with
     | 0 =>
       -- head is `0`: `A^0 = I`, the count is unchanged.
@@ -120,7 +120,7 @@ lemma evalWord_wTensor (w : List (Fin 2)) :
 /-- The boundary contraction reads off the `(0,1)` entry: identity gives `0`,
 the raising matrix gives `1`, and the zero matrix gives `0`. -/
 private lemma openCoeff_wTensor_entry (w : List (Fin 2)) :
-    openCoeff wLeftBoundary wRightBoundary wTensor w = (evalWord wTensor w) 0 1 := by
+    openCoeff wLeftBoundary wRightBoundary wTensor w = (Kraus.evalWord wTensor w) 0 1 := by
   simp only [openCoeff, wLeftBoundary, wRightBoundary]
   rw [single_dotProduct]
   simp [Matrix.mulVec]

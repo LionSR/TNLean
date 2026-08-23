@@ -247,8 +247,8 @@ lemma complexVirtualMatrix_mem_tensor_span (k : Fin 4) :
 
 /-- The diagonal MPO tensor is injective: its four physical matrices span the
 full two-by-two virtual matrix algebra. -/
-theorem mpoTensor_isInjective : MPSTensor.IsInjective mpoTensor.toMPSTensor := by
-  unfold MPSTensor.IsInjective
+theorem mpoTensor_isInjective : Kraus.IsInjective mpoTensor.toMPSTensor := by
+  unfold Kraus.IsInjective
   rw [Submodule.eq_top_iff']
   intro X
   rw [← complexVirtualMatrix_reconstruction X]
@@ -339,7 +339,7 @@ the present formal proof of Lemma C.5.  It does not identify `pairingL` and
 `pairingQ` with the particular tensors chosen by the SAL inverse-map
 construction. -/
 theorem injective_sourceZCL_tensor_with_nilpotent_sector_pairing :
-    MPSTensor.IsInjective mpoTensor.toMPSTensor ∧
+    Kraus.IsInjective mpoTensor.toMPSTensor ∧
       MPOTensor.IsSourceZCL mpoTensor ∧
       MPOTensor.physTraceTransfer mpoTensor =
         Matrix.map pairingProjection Complex.ofReal ∧

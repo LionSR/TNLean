@@ -46,7 +46,7 @@ Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
 lines 2205--2218. -/
 theorem AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
-    (hA : IsInjective A) :
+    (hA : Kraus.IsInjective A) :
     HasAppendixD2ParentCommutingHamiltonian (d := d) (groundSpace A 3)
       hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace := by
   refine
@@ -74,7 +74,7 @@ Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
 lines 2205--2218. -/
 theorem rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical
     (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A) :
+    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A) :
     let hStruct := AppendixBStructuralData.ofRFP A hNT hRFP hLeft
     HasAppendixD2ParentCommutingHamiltonian (d := d) (groundSpace A 3)
       hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace := by
@@ -147,7 +147,7 @@ Source: arXiv:1606.00608, Theorem 3.10, source lines 534--540; structural
 characterization and basic-vector form, source lines 543--578. -/
 theorem rfp_implies_nncph_of_leftCanonical
     (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N :=
   (AppendixBStructuralData.ofRFP A hNT hRFP hLeft).isNNCPH hN
@@ -167,7 +167,7 @@ Source: arXiv:1606.00608, Definition 3.9, source lines 517--524, and
 Theorem 3.10, source lines 534--540. -/
 theorem rfp_implies_nncph_ground_state_of_leftCanonical
     (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
     (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph_of_leftCanonical A hRFP hNT hLeft N hN).isNNCPHGroundState
@@ -198,7 +198,7 @@ theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
   have hRFP' : IsTransferIdempotent (tpGauge (d := d) (D := D) A σ) :=
     hGauge.isTransferIdempotent_iff.mp hRFP
-  have hNormal' : IsNormal (tpGauge (d := d) (D := D) A σ) :=
+  have hNormal' : Kraus.IsNormal (tpGauge (d := d) (D := D) A σ) :=
     isNormal_of_gaugeEquiv hNT.isNormal hGauge
   have hNN := rfp_implies_nncph_of_leftCanonical
     (tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN

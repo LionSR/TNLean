@@ -39,7 +39,7 @@ theorem isInjective_of_eq_changePhysicalBasis
     (V : Matrix (Fin d) (Fin e) ℂ) (K : MPOTensor e D) (M : MPOTensor d D)
     (hM : M = changePhysicalBasis V K) (hInjective : M.IsInjective) :
     K.IsInjective := by
-  rw [IsInjective, MPSTensor.IsInjective, eq_top_iff]
+  rw [IsInjective, Kraus.IsInjective, eq_top_iff]
   rw [← hInjective]
   apply Submodule.span_le.mpr
   rintro X ⟨ij, rfl⟩

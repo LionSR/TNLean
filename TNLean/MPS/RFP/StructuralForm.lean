@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.CPPrimitive
+import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.RFP.Defs
 import TNLean.PiAlgebra.CanonicalFormSepAux
@@ -32,7 +32,7 @@ The full Appendix B decomposition `A i = X * Λ * U i * X⁻¹` is now formalize
 tensor is automatically injective.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder Kraus
 
 namespace MPSTensor
 
@@ -48,11 +48,11 @@ words. -/
 private theorem evalWord_mem_span_of_isTransferIdempotent
     (A : MPSTensor d D) (hRFP : IsTransferIdempotent A) :
     ∀ w : List (Fin d), w ≠ [] →
-      evalWord A w ∈ Submodule.span ℂ (Set.range A) := by
+      Kraus.evalWord A w ∈ Submodule.span ℂ (Set.range A) := by
   obtain ⟨V, _, hprod⟩ := (isTransferIdempotent_iff_kraus_isometry A).1 hRFP
   have hmain :
       ∀ n : ℕ, ∀ w : List (Fin d), w.length = n → w ≠ [] →
-        evalWord A w ∈ Submodule.span ℂ (Set.range A) := by
+        Kraus.evalWord A w ∈ Submodule.span ℂ (Set.range A) := by
     intro n
     refine Nat.strong_induction_on n ?_
     intro n ih w hlen hne
@@ -62,22 +62,22 @@ private theorem evalWord_mem_span_of_isTransferIdempotent
     | cons i w =>
         cases w with
         | nil =>
-            exact Submodule.subset_span ⟨i, by simp [evalWord]⟩
+            exact Submodule.subset_span ⟨i, by simp [Kraus.evalWord]⟩
         | cons j w =>
             have hword :
-                evalWord A (i :: j :: w) = ∑ k : Fin d, V (i, j) k • evalWord A (k :: w) := by
+                Kraus.evalWord A (i :: j :: w) = ∑ k : Fin d, V (i, j) k • Kraus.evalWord A (k :: w) := by
               calc
-                evalWord A (i :: j :: w) = (A i * A j) * evalWord A w := by
-                  simp [evalWord, Matrix.mul_assoc]
-                _ = (∑ k : Fin d, V (i, j) k • A k) * evalWord A w := by
+                Kraus.evalWord A (i :: j :: w) = (A i * A j) * Kraus.evalWord A w := by
+                  simp [Kraus.evalWord, Matrix.mul_assoc]
+                _ = (∑ k : Fin d, V (i, j) k • A k) * Kraus.evalWord A w := by
                   rw [hprod]
-                _ = ∑ k : Fin d, V (i, j) k • evalWord A (k :: w) := by
-                  simp [evalWord, Finset.sum_mul]
+                _ = ∑ k : Fin d, V (i, j) k • Kraus.evalWord A (k :: w) := by
+                  simp [Kraus.evalWord, Finset.sum_mul]
             rw [hword]
             simpa using
               (Submodule.sum_mem (Submodule.span ℂ (Set.range A))
                 (t := Finset.univ)
-                (f := fun k : Fin d => V (i, j) k • evalWord A (k :: w))
+                (f := fun k : Fin d => V (i, j) k • Kraus.evalWord A (k :: w))
                 (by
                   intro k hk
                   refine Submodule.smul_mem _ _ ?_
@@ -100,12 +100,12 @@ Source context: CPSV16, Appendix B, lines 1274--1300, proves a stronger structur
 decomposition for the paper's normal-tensor notion. The present implication is the
 project's span-collapse precursor and is not a formalization of that lemma. -/
 theorem rfp_nt_structural (A : MPSTensor d D)
-    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A) :
-    IsInjective A := by
+    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A) :
+    Kraus.IsInjective A := by
   obtain ⟨N, hNpos, hNinj⟩ := hNT
-  rw [IsInjective]
+  rw [Kraus.IsInjective]
   have htop_le : (⊤ : Submodule ℂ Mat) ≤ Submodule.span ℂ (Set.range A) := by
-    unfold IsNBlkInjective at hNinj
+    unfold Kraus.IsNBlkInjective at hNinj
     refine hNinj.ge.trans (Submodule.span_le.2 ?_)
     rintro _ ⟨σ, rfl⟩
     apply evalWord_mem_span_of_isTransferIdempotent A hRFP
@@ -120,9 +120,9 @@ arXiv:1606.00608, Appendix B. The stronger theorem `rfp_nt_structural` shows tha
 normalization is not needed for this implication. -/
 theorem rfp_nt_structural_of_leftCanonical
     (A : MPSTensor d D)
-    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
+    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
     (_hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsInjective A :=
+    Kraus.IsInjective A :=
   rfp_nt_structural A hNT hRFP
 
 /-- Appendix B / CFII reduction step:
@@ -130,19 +130,19 @@ after unitary conjugation, a left-canonical normal RFP tensor has a diagonal
 positive-definite fixed point for its transfer map. -/
 theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
     (A : MPSTensor d D)
-    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
+    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
                       * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
-        transferMap (d := d) (D := D)
+        Kraus.transferMap (d := d) (D := D)
           (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
-  have hInj : IsInjective A := rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
-  have hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    injective_implies_irreducibleCP A hInj
-  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
+  have hInj : Kraus.IsInjective A := rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+    Kraus.injective_implies_irreducibleCP A hInj
+  have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
     isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   exact exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
@@ -156,15 +156,15 @@ The proof combines exponential convergence (`E^n → P`) with idempotence (`E^n 
 for `n ≥ 1`). Since `E` is both the limit and is equal to every iterate, `E = P`. -/
 theorem transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective [NeZero D]
     (A : MPSTensor d D)
-    (hInj : IsInjective A) (hRFP : IsTransferIdempotent A)
+    (hInj : Kraus.IsInjective A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
-    (hρ_fix : transferMap A ρ = ρ) :
-    transferMap A = fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) := by
+    (hρ_fix : Kraus.transferMap A ρ = ρ) :
+    Kraus.transferMap A = fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) := by
   obtain ⟨C, δ, hC, hδ, hδ1, hbound⟩ :=
     exponential_convergence_of_primitive A hLeft hInj ρ hρ_pd hρ_fix
-  have hIdem : IsIdempotentElem (transferMap (d := d) (D := D) A) := hRFP
-  set E := transferMap (d := d) (D := D) A
+  have hIdem : IsIdempotentElem (Kraus.transferMap (d := d) (D := D) A) := hRFP
+  set E := Kraus.transferMap (d := d) (D := D) A
   set P := fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos)
   apply LinearMap.ext; intro X
   -- For all n: E^[n+1] X = E X (idempotence), so ‖E X - P X‖ ≤ C(1-δ)^{n+1} ‖X‖
@@ -196,7 +196,7 @@ theorem transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective [NeZero 
 theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalForm μ A) :
-    ∀ k, IsInjective (A k) :=
+    ∀ k, Kraus.IsInjective (A k) :=
   hCF.block_injective
 
 end MPSTensor

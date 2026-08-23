@@ -499,7 +499,7 @@ open-chain intersection property `groundSpace_intersection`; it is a structural
 predecessor to the quantitative principal-angle estimate for overlapping
 windows. -/
 theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d D}
-    (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))}
     (hleft : localTermES A L (0 : Fin (L + 1)) v = 0)
     (hright : localTermES A L (1 : Fin (L + 1)) v = 0) :
@@ -554,7 +554,7 @@ theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
 space.  This restates the open-chain intersection property in the same
 Euclidean local-projector language used by the martingale proof. -/
 theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d D}
-    (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
     localTermES A L (0 : Fin (L + 1)) v = 0 ∧
       localTermES A L (1 : Fin (L + 1)) v = 0 ↔

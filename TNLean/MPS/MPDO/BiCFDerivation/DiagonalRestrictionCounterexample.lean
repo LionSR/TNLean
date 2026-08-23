@@ -70,8 +70,8 @@ private theorem single_mem_span_diagonalRestrictionUnits (a b : Fin 2) :
     simp [Matrix.single]
 
 /-- The doubled-index tensor is injective. -/
-private theorem diagonalRestrictionUnits_isInjective : IsInjective diagonalRestrictionUnits := by
-  rw [IsInjective, eq_top_iff]
+private theorem diagonalRestrictionUnits_isInjective : Kraus.IsInjective diagonalRestrictionUnits := by
+  rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   rw [Matrix.matrix_eq_sum_single M]
   refine Submodule.sum_mem _ (fun a _ => Submodule.sum_mem _ (fun b _ => ?_))
@@ -102,26 +102,26 @@ private theorem diagBlock_diagonalRestrictionUnits_apply (i : Fin 2) :
 
 /-- Every word in the diagonal restriction has vanishing (0,1) entry. -/
 private theorem evalWord_diagBlock_diagonalRestrictionUnits_zero_one (w : List (Fin 2)) :
-    evalWord (diagBlock diagonalRestrictionUnits) w 0 1 = 0 := by
+    Kraus.evalWord (diagBlock diagonalRestrictionUnits) w 0 1 = 0 := by
   induction w with
-  | nil => simp [evalWord]
+  | nil => simp [Kraus.evalWord]
   | cons i w ih =>
       fin_cases i <;>
-        simp [evalWord, diagBlock_diagonalRestrictionUnits_apply, Matrix.mul_apply,
+        simp [Kraus.evalWord, diagBlock_diagonalRestrictionUnits_apply, Matrix.mul_apply,
           Matrix.single, ih]
 
 /-- The diagonal restriction is not normal: blocking preserves its diagonal matrix
 algebra and therefore never produces the missing off-diagonal matrix units. -/
 private theorem diagBlock_diagonalRestrictionUnits_not_isNormal :
-    ¬ IsNormal (diagBlock diagonalRestrictionUnits) := by
+    ¬ Kraus.IsNormal (diagBlock diagonalRestrictionUnits) := by
   rintro ⟨N, _hNpos, hN⟩
   have hmem : Matrix.single 0 1 (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)) :=
+        Kraus.evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)) :=
     hN.span_eq_top ▸ Submodule.mem_top
   suffices hzero : ∀ M ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)), M 0 1 = 0 by
+        Kraus.evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)), M 0 1 = 0 by
     exact absurd (hzero _ hmem) one_ne_zero
   intro M hM
   induction hM using Submodule.span_induction with
@@ -169,7 +169,7 @@ private theorem diagonalRestrictionBlock_horizontalCFData :
       intro i
       let w : Fin 1 → Fin (2 * 2) := fun _ => i
       have h := hΔ w
-      simpa [w, diagonalRestrictionBlock, List.ofFn_succ, List.ofFn_zero, evalWord] using h
+      simpa [w, diagonalRestrictionBlock, List.ofFn_succ, List.ofFn_zero, Kraus.evalWord] using h
     have hzero : Δ 0 = 0 := (Matrix.trace_mul_right_eq_zero_iff (Δ 0)).mp (by
       intro N
       have hN : N ∈ Submodule.span ℂ (Set.range diagonalRestrictionUnits) := by
@@ -195,7 +195,7 @@ comparison is documented in
 theorem horizontalCFData_diagBlock_not_isNormal :
     ∃ (weight : Fin 1 → ℂ) (block : Fin 1 → MPSTensor (2 * 2) 2),
       MPOTensor.HorizontalCFData weight block ∧
-        ¬ (∀ k, IsNormal (diagBlock (block k))) := by
+        ¬ (∀ k, Kraus.IsNormal (diagBlock (block k))) := by
   refine ⟨diagonalRestrictionWeight, diagonalRestrictionBlock,
     diagonalRestrictionBlock_horizontalCFData, ?_⟩
   intro h

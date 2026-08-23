@@ -72,8 +72,8 @@ theorem firstSiteActionAgree_iff_trace (A : MPSTensor d D)
     (Y Z : Matrix (Fin d) (Fin d) ℂ) :
     FirstSiteActionAgree A Y Z ↔
       ∀ (L : ℕ) (s : Fin d) (w : Fin L → Fin d),
-        Matrix.trace (insertedTensor Y A s * evalWord A (List.ofFn w)) =
-          Matrix.trace (insertedTensor Z A s * evalWord A (List.ofFn w)) := by
+        Matrix.trace (insertedTensor Y A s * Kraus.evalWord A (List.ofFn w)) =
+          Matrix.trace (insertedTensor Z A s * Kraus.evalWord A (List.ofFn w)) := by
   constructor
   · intro h L s w
     have h' := h L (Fin.cons s w)
@@ -91,8 +91,8 @@ word. -/
 theorem FirstSiteActionAgree.trace_evalWord {A : MPSTensor d D}
     {Y Z : Matrix (Fin d) (Fin d) ℂ} (h : FirstSiteActionAgree A Y Z)
     (s : Fin d) (w : List (Fin d)) :
-    Matrix.trace (insertedTensor Y A s * evalWord A w) =
-      Matrix.trace (insertedTensor Z A s * evalWord A w) := by
+    Matrix.trace (insertedTensor Y A s * Kraus.evalWord A w) =
+      Matrix.trace (insertedTensor Z A s * Kraus.evalWord A w) := by
   simpa using (firstSiteActionAgree_iff_trace A Y Z).mp h w.length s w.get
 
 /-- Inserting the induced first-site action into a blocked tensor inserts the
@@ -107,7 +107,7 @@ theorem insertedTensor_firstSiteActionOnBlock_blockTensor
     (I : Fin (blockPhysDim d (L + 1))) :
     insertedTensor (firstSiteActionOnBlock L Y) (blockTensor A (L + 1)) I =
       insertedTensor Y A (decodeBlock d (L + 1) I 0) *
-        evalWord A
+        Kraus.evalWord A
           (List.ofFn fun k : Fin L => decodeBlock d (L + 1) I k.succ) := by
   classical
   rw [insertedTensor]
@@ -122,7 +122,7 @@ theorem insertedTensor_firstSiteActionOnBlock_blockTensor
   rw [Fintype.sum_eq_single
     (fun k : Fin L => decodeBlock d (L + 1) I k.succ)]
   · simp [firstSiteActionOnBlock, blockTensor, wordOfBlock, List.ofFn_succ,
-      evalWord_cons]
+      Kraus.evalWord_cons]
   · intro w hw
     simp only [Fin.consEquiv_apply, firstSiteActionOnBlock,
       decodeBlock_decodeBlockEquiv_symm, Fin.cons_zero, Fin.cons_succ]
@@ -145,7 +145,7 @@ theorem FirstSiteActionAgree.blockTensor {A : MPSTensor d D}
   intro N I w
   rw [insertedTensor_firstSiteActionOnBlock_blockTensor,
     insertedTensor_firstSiteActionOnBlock_blockTensor]
-  simp only [evalWord_blockTensor, Matrix.mul_assoc, ← evalWord_append]
+  simp only [evalWord_blockTensor, Matrix.mul_assoc, ← Kraus.evalWord_append]
   exact h.trace_evalWord (decodeBlock d (L + 1) I 0)
     (List.ofFn (fun k : Fin L => decodeBlock d (L + 1) I k.succ) ++
       flattenBlockedWord d (L + 1) (List.ofFn w))
@@ -161,7 +161,7 @@ normalization or positivity hypothesis.
 Source context: arXiv:1606.00608, lines 318--345 and Appendix C.3,
 Lemma L, lines 1848--1858. -/
 theorem insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
-    (A : MPSTensor d D) (L : ℕ) (hInj : IsNBlkInjective A L)
+    (A : MPSTensor d D) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hEq :
       insertedTensor (firstSiteActionOnBlock L Y) (blockTensor A (L + 1)) =
@@ -171,7 +171,7 @@ theorem insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
   apply sub_eq_zero.mp
   let Δ := insertedTensor Y A s - insertedTensor Z A s
   change Δ = 0
-  have hzero : ∀ w : Fin L → Fin d, Δ * evalWord A (List.ofFn w) = 0 := by
+  have hzero : ∀ w : Fin L → Fin d, Δ * Kraus.evalWord A (List.ofFn w) = 0 := by
     intro w
     let I : Fin (blockPhysDim d (L + 1)) :=
       (decodeBlockEquiv d (L + 1)).symm (Fin.cons s w)
@@ -191,7 +191,7 @@ theorem insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
     dsimp [Δ]
     rw [Matrix.sub_mul, hI, sub_self]
   have hzero_span : ∀ M ∈ Submodule.span ℂ
-      (Set.range fun w : Fin L → Fin d => evalWord A (List.ofFn w)), Δ * M = 0 := by
+      (Set.range fun w : Fin L → Fin d => Kraus.evalWord A (List.ofFn w)), Δ * M = 0 := by
     apply Submodule.span_induction
     · intro M hM
       obtain ⟨w, rfl⟩ := hM
@@ -202,7 +202,7 @@ theorem insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
     · intro c M _ hM
       simp [hM]
   have hspan : Submodule.span ℂ
-      (Set.range fun w : Fin L → Fin d => evalWord A (List.ofFn w)) = ⊤ := by
+      (Set.range fun w : Fin L → Fin d => Kraus.evalWord A (List.ofFn w)) = ⊤ := by
     exact hInj.span_eq_top
   have hOne : Δ * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
     hzero_span 1 (hspan.symm ▸ Submodule.mem_top)

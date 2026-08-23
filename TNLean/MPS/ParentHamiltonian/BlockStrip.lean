@@ -49,17 +49,17 @@ variable {d D : ℕ}
 single physical letters, then block injectivity strips the letter and produces a
 common right factor already at block length \(L₀\). -/
 private theorem exists_right_factor_of_block_letter_compatibility
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Z : (Fin L₀ → Fin d) → Matrix (Fin D) (Fin D) ℂ}
     (hCompat : ∀ i : Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
       ∀ σ : Fin L₀ → Fin d,
-        Z σ * A i = evalWord A (List.ofFn σ) * Y) :
+        Z σ * A i = Kraus.evalWord A (List.ofFn σ) * Y) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ σ : Fin L₀ → Fin d, Z σ = evalWord A (List.ofFn σ) * X := by
+      ∀ σ : Fin L₀ → Fin d, Z σ = Kraus.evalWord A (List.ofFn σ) * X := by
   have hCompatBlock : ∀ τ : Fin L₀ → Fin d,
       ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
         ∀ σ : Fin L₀ → Fin d,
-          Z σ * evalWord A (List.ofFn τ) = evalWord A (List.ofFn σ) * Yτ := by
+          Z σ * Kraus.evalWord A (List.ofFn τ) = Kraus.evalWord A (List.ofFn σ) * Yτ := by
     intro τ
     have hw : List.ofFn τ ≠ [] := by
       intro hnil
@@ -67,11 +67,11 @@ private theorem exists_right_factor_of_block_letter_compatibility
         simpa [List.length_ofFn] using congrArg List.length hnil
       omega
     exact exists_evalWord_factor_of_letter_compatibility
-      (A := A) (F := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+      (A := A) (F := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
       (Z := Z) hCompat (List.ofFn τ) hw
   choose Y hY using hCompatBlock
   let gen : (Fin L₀ → Fin d) → Matrix (Fin D) (Fin D) ℂ :=
-    fun σ => evalWord A (List.ofFn σ)
+    fun σ => Kraus.evalWord A (List.ofFn σ)
   have hSurj : Function.Surjective (Fintype.linearCombination ℂ gen) := by
     apply (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ gen).mp
     simpa [gen, Kraus.wordSpan, Kraus.wordSpan] using
@@ -91,35 +91,35 @@ private theorem exists_right_factor_of_block_letter_compatibility
           intro τ _
           rw [hY τ σ]
     _ = gen σ * ∑ τ, c τ • Y τ := by simp [Finset.mul_sum]
-    _ = evalWord A (List.ofFn σ) * X := by rfl
+    _ = Kraus.evalWord A (List.ofFn σ) * X := by rfl
 
 /-- Block-word cancellation theorem: compatibility with every suffix word of a fixed
 length \(K\) implies a common right factor already at block length \(L₀\). -/
 theorem exists_right_factor_of_block_word_compatibility
-    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Z : (Fin L₀ → Fin d) → Matrix (Fin D) (Fin D) ℂ}
     (hCompat : ∀ τ : Fin K → Fin d, ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
       ∀ σ : Fin L₀ → Fin d,
-        Z σ * evalWord A (List.ofFn τ) = evalWord A (List.ofFn σ) * Yτ) :
+        Z σ * Kraus.evalWord A (List.ofFn τ) = Kraus.evalWord A (List.ofFn σ) * Yτ) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ,
-      ∀ σ : Fin L₀ → Fin d, Z σ = evalWord A (List.ofFn σ) * X := by
+      ∀ σ : Fin L₀ → Fin d, Z σ = Kraus.evalWord A (List.ofFn σ) * X := by
   induction K generalizing Z with
   | zero =>
       let τ0 : Fin 0 → Fin d := Fin.elim0
       obtain ⟨Y, hY⟩ := hCompat τ0
       refine ⟨Y, ?_⟩
       intro σ
-      simpa [τ0, evalWord] using hY σ
+      simpa [τ0, Kraus.evalWord] using hY σ
   | succ K ih =>
       have hCompat1 : ∀ i : Fin d, ∃ Xi : Matrix (Fin D) (Fin D) ℂ,
           ∀ σ : Fin L₀ → Fin d,
-            Z σ * A i = evalWord A (List.ofFn σ) * Xi := by
+            Z σ * A i = Kraus.evalWord A (List.ofFn σ) * Xi := by
         intro i
         let Zi : (Fin L₀ → Fin d) → Matrix (Fin D) (Fin D) ℂ :=
           fun σ => Z σ * A i
         have hCompatZi : ∀ τ : Fin K → Fin d, ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
             ∀ σ : Fin L₀ → Fin d,
-              Zi σ * evalWord A (List.ofFn τ) = evalWord A (List.ofFn σ) * Yτ := by
+              Zi σ * Kraus.evalWord A (List.ofFn τ) = Kraus.evalWord A (List.ofFn σ) * Yτ := by
           intro τ
           obtain ⟨Yτ, hYτ⟩ := hCompat (Fin.cons i τ)
           refine ⟨Yτ, ?_⟩
@@ -142,7 +142,7 @@ theorem exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top
     (hWord : Kraus.wordSpan A K = ⊤)
     (hCompat : ∀ τ : Fin K → Fin d,
       ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
-        ∀ a : α, Z a * evalWord A (List.ofFn τ) = F a * Yτ) :
+        ∀ a : α, Z a * Kraus.evalWord A (List.ofFn τ) = F a * Yτ) :
     ∃ Y : Matrix (Fin D) (Fin D) ℂ, ∀ a : α, Z a = F a * Y := by
   have hspan : ∀ M ∈ Kraus.wordSpan A K,
       ∃ Y : Matrix (Fin D) (Fin D) ℂ, ∀ a : α, Z a * M = F a * Y := by
@@ -172,17 +172,17 @@ theorem exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top
 /-- If a matrix commutes with all words of some length \(m ≥ L₀\), then it already
 commutes with every block word of length \(L₀\). -/
 theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective
-    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hm : L₀ ≤ m) {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X) :
     ∀ σ : Fin L₀ → Fin d,
-      X * evalWord A (List.ofFn σ) = evalWord A (List.ofFn σ) * X := by
+      X * Kraus.evalWord A (List.ofFn σ) = Kraus.evalWord A (List.ofFn σ) * X := by
   let Z : (Fin L₀ → Fin d) → Matrix (Fin D) (Fin D) ℂ :=
-    fun σ => X * evalWord A (List.ofFn σ)
+    fun σ => X * Kraus.evalWord A (List.ofFn σ)
   have hmEq : L₀ + (m - L₀) = m := by omega
   have hComm' : ∀ ω : Fin (L₀ + (m - L₀)) → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X := by
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X := by
     intro ω
     let ω' : Fin m → Fin d := fun i => ω (Fin.cast hmEq.symm i)
     have hω' := hComm ω'
@@ -195,18 +195,18 @@ theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective
   have hCompat : ∀ τ : Fin (m - L₀) → Fin d,
       ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,
         ∀ σ : Fin L₀ → Fin d,
-          Z σ * evalWord A (List.ofFn τ) = evalWord A (List.ofFn σ) * Yτ := by
+          Z σ * Kraus.evalWord A (List.ofFn τ) = Kraus.evalWord A (List.ofFn σ) * Yτ := by
     intro τ
-    refine ⟨evalWord A (List.ofFn τ) * X, ?_⟩
+    refine ⟨Kraus.evalWord A (List.ofFn τ) * X, ?_⟩
     intro σ
     have hστ := hComm' (Fin.append σ τ)
-    rw [List.ofFn_fin_append, evalWord_append, ← Matrix.mul_assoc, Matrix.mul_assoc,
+    rw [List.ofFn_fin_append, Kraus.evalWord_append, ← Matrix.mul_assoc, Matrix.mul_assoc,
       Matrix.mul_assoc] at hστ
     simpa [Z, Matrix.mul_assoc] using hστ
   obtain ⟨R, hR⟩ :=
     exists_right_factor_of_block_word_compatibility (A := A) hInj hL₀ (Z := Z) hCompat
   let gen : (Fin L₀ → Fin d) → Matrix (Fin D) (Fin D) ℂ :=
-    fun σ => evalWord A (List.ofFn σ)
+    fun σ => Kraus.evalWord A (List.ofFn σ)
   have hSurj : Function.Surjective (Fintype.linearCombination ℂ gen) := by
     apply (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ gen).mp
     simpa [gen, Kraus.wordSpan, Kraus.wordSpan] using
@@ -231,17 +231,17 @@ theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective
 /-- If a matrix commutes with all words of some length \(m ≥ L₀\), then block
 injectivity forces it to commute with every matrix in the ambient algebra. -/
 theorem commutes_all_of_commutes_long_words_of_isNBlkInjective
-    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     (hm : L₀ ≤ m) {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
-      X * evalWord A (List.ofFn ω) = evalWord A (List.ofFn ω) * X) :
+      X * Kraus.evalWord A (List.ofFn ω) = Kraus.evalWord A (List.ofFn ω) * X) :
     ∀ M : Matrix (Fin D) (Fin D) ℂ, X * M = M * X := by
   have hBlock :=
     commutes_block_words_of_commutes_long_words_of_isNBlkInjective
       (A := A) hInj hL₀ hm hComm
   have hφ : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ X := by
     apply LinearMap.ext_on_range
-      (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+      (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
     · simpa [Kraus.wordSpan, Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ

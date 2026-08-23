@@ -62,7 +62,7 @@ the connection from the cumulative Wielandt bound to a concrete word-span theore
 In the intersection property proof: the injectivity of `groundSpaceMap A L`
 (for \(L ≥ 1\)) requires the products \(A^\sigma\), with \(|\sigma| = L\), to
 span the full matrix algebra.  The Wielandt machinery
-supplies this conclusion from the injectivity hypothesis `IsInjective A`:
+supplies this conclusion from the injectivity hypothesis `Kraus.IsInjective A`:
 injectivity at length 1 implies word-span fullness at all positive lengths
 via the cumulative span chain, and `CumulativeToWordSpan` upgrades the
 cumulative conclusion to an exact-length word-span theorem.
@@ -103,18 +103,18 @@ variable {d D : ℕ}
 /-- Evaluating a word obtained by snoc: peel off the last letter. -/
 theorem evalWord_ofFn_snoc (A : MPSTensor d D) {L : ℕ}
     (σ : Fin L → Fin d) (j : Fin d) :
-    evalWord A (List.ofFn (Fin.snoc σ j)) =
-      evalWord A (List.ofFn σ) * A j := by
-  rw [List.ofFn_snoc, evalWord_append]
-  simp [evalWord]
+    Kraus.evalWord A (List.ofFn (Fin.snoc σ j)) =
+      Kraus.evalWord A (List.ofFn σ) * A j := by
+  rw [List.ofFn_snoc, Kraus.evalWord_append]
+  simp [Kraus.evalWord]
 
 /-- Evaluating a word obtained by cons: peel off the first letter. -/
 theorem evalWord_ofFn_cons (A : MPSTensor d D) {L : ℕ}
     (i : Fin d) (σ : Fin L → Fin d) :
-    evalWord A (List.ofFn (Fin.cons i σ)) =
-      A i * evalWord A (List.ofFn σ) := by
+    Kraus.evalWord A (List.ofFn (Fin.cons i σ)) =
+      A i * Kraus.evalWord A (List.ofFn σ) := by
   rw [List.ofFn_cons]
-  simp [evalWord]
+  simp [Kraus.evalWord]
 
 /-! ### Restriction maps between site spaces -/
 
@@ -223,7 +223,7 @@ theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
 If \(\operatorname{tr}(A^σ X) = 0\) for all words \(σ\) of length \(L\), and the set
 \(\{A^σ\}\) spans \(M_D(ℂ)\) (which holds for \(L ≥ 1\) by the injectivity hypothesis),
 then nondegeneracy of the trace pairing gives \(X = 0\). -/
-theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
+theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {L : ℕ} (hL : 0 < L) :
     Function.Injective (groundSpaceMap A L) := by
   have hker : (groundSpaceMap A L).ker = ⊥ := by
@@ -231,14 +231,14 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
     intro X hX
     have hword1 : Kraus.wordSpan A 1 = ⊤ := by
       have hRange :
-          Set.range (fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = Set.range A := by
+          Set.range (fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = Set.range A := by
         ext M
         constructor
         · rintro ⟨σ, rfl⟩
-          exact ⟨σ 0, by simp [evalWord]⟩
+          exact ⟨σ 0, by simp [Kraus.evalWord]⟩
         · rintro ⟨i, rfl⟩
-          exact ⟨fun _ => i, by simp [evalWord]⟩
-      change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => evalWord A (List.ofFn σ)) = ⊤
+          exact ⟨fun _ => i, by simp [Kraus.evalWord]⟩
+      change Submodule.span ℂ (Set.range fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤
       rw [hRange]
       exact hA
     have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1 := by
@@ -251,7 +251,7 @@ theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : IsInjective A)
     have hφ :
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
+        (v := fun σ : Fin L → Fin d => Kraus.evalWord A (List.ofFn σ))
       · simpa [Kraus.wordSpan, Kraus.wordSpan] using hwordL
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
@@ -276,7 +276,7 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
     have hφ :
         (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin L → Fin d => evalWord A (List.ofFn σ))
+        (v := fun σ : Fin L → Fin d => Kraus.evalWord A (List.ofFn σ))
       · simpa [Kraus.wordSpan, Kraus.wordSpan] using hWord
       · intro σ
         simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
@@ -292,7 +292,7 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
 
 /-- Block injectivity at length \(L₀\) makes the map \(Γ_{L₀}\) injective. -/
 theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D}
-    {L₀ : ℕ} (hInj : IsNBlkInjective A L₀) :
+    {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) :
     Function.Injective (groundSpaceMap A L₀) := by
   apply groundSpaceMap_injective_of_wordSpan_eq_top
   exact (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
@@ -303,7 +303,7 @@ theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D}
 This follows from injectivity of `groundSpaceMap` (which has domain \(M_D(ℂ)\) of
 dimension \(D^2\)) together with the dimension upper bound
 \(\dim G_L(A) \leq D^2\). -/
-theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : IsInjective A)
+theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {L : ℕ} (hL : 0 < L) :
     Module.finrank ℂ ↥(groundSpace A L) = D ^ 2 := by
   let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] groundSpace A L :=
@@ -338,7 +338,7 @@ This is the "inverting and growing back" step. The proof proceeds as follows:
 
 The formal overlap argument uses the \((L - 1)\)-site intersection, so we state
 the theorem with the exact hypothesis \(1 < L\). -/
-theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
+theorem groundSpace_intersection {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)}
     (hLeft : InLeftGround A L ψ) (hRight : InRightGround A L ψ) :
     ψ ∈ groundSpace A (L + 1) := by
@@ -374,9 +374,9 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
         groundSpaceMap A K (A j * Y i) σ = ψ (Fin.cons i (Fin.snoc σ j)) := by
       calc
         groundSpaceMap A K (A j * Y i) σ
-            = Matrix.trace (evalWord A (List.ofFn σ) * (A j * Y i)) := by
+            = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (A j * Y i)) := by
                 simp [groundSpaceMap_apply]
-        _ = Matrix.trace (evalWord A (List.ofFn (Fin.snoc σ j)) * Y i) := by
+        _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.snoc σ j)) * Y i) := by
               rw [evalWord_ofFn_snoc]
               simp [Matrix.mul_assoc]
         _ = ψ (Fin.cons i (Fin.snoc σ j)) := by
@@ -386,11 +386,11 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
         groundSpaceMap A K (Z j * A i) σ = ψ (Fin.snoc (Fin.cons i σ) j) := by
       calc
         groundSpaceMap A K (Z j * A i) σ
-            = Matrix.trace (evalWord A (List.ofFn σ) * (Z j * A i)) := by
+            = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Z j * A i)) := by
                 simp [groundSpaceMap_apply]
-        _ = Matrix.trace (evalWord A (List.ofFn (Fin.cons i σ)) * Z j) := by
+        _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons i σ)) * Z j) := by
               simpa [evalWord_ofFn_cons, Matrix.mul_assoc] using
-                Matrix.trace_mul_cycle' (evalWord A (List.ofFn σ)) (Z j) (A i)
+                Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn σ)) (Z j) (A i)
         _ = ψ (Fin.snoc (Fin.cons i σ) j) := by
               simpa [restrictLast_apply, groundSpaceMap_apply] using
                 (congrArg (fun φ => φ (Fin.cons i σ)) (hZ j)).symm
@@ -398,24 +398,24 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
         ψ (Fin.cons i (Fin.snoc σ j)) = ψ (Fin.snoc (Fin.cons i σ) j) := by
       rw [Fin.cons_snoc_eq_snoc_cons]
     exact hYi.trans (hψeq.trans hZj.symm)
-  let X : Matrix (Fin D) (Fin D) ℂ := ∑ j, decompositionMap hA 1 j • Z j
+  let X : Matrix (Fin D) (Fin D) ℂ := ∑ j, Kraus.decompositionMap hA 1 j • Z j
   have hY_eq : ∀ i, Y i = X * A i := by
     intro i
     calc
       Y i = (1 : Matrix (Fin D) (Fin D) ℂ) * Y i := by simp
-      _ = (∑ j, decompositionMap hA 1 j • A j) * Y i := by
-            rw [decompositionMap_sum hA 1]
-      _ = ∑ j, (decompositionMap hA 1 j • A j) * Y i := by
+      _ = (∑ j, Kraus.decompositionMap hA 1 j • A j) * Y i := by
+            rw [Kraus.decompositionMap_sum hA 1]
+      _ = ∑ j, (Kraus.decompositionMap hA 1 j • A j) * Y i := by
             rw [Finset.sum_mul]
-      _ = ∑ j, decompositionMap hA 1 j • (A j * Y i) := by
+      _ = ∑ j, Kraus.decompositionMap hA 1 j • (A j * Y i) := by
             refine Finset.sum_congr rfl ?_
             intro j hj
             rw [smul_mul_assoc]
-      _ = ∑ j, decompositionMap hA 1 j • (Z j * A i) := by
+      _ = ∑ j, Kraus.decompositionMap hA 1 j • (Z j * A i) := by
             refine Finset.sum_congr rfl ?_
             intro j hj
             rw [hCompat i j]
-      _ = (∑ j, decompositionMap hA 1 j • Z j) * A i := by
+      _ = (∑ j, Kraus.decompositionMap hA 1 j • Z j) * A i := by
             symm
             rw [Finset.sum_mul]
             refine Finset.sum_congr rfl ?_
@@ -427,20 +427,20 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
   ext τ
   have hτ :
       ψ (Fin.cons (τ 0) (Fin.tail τ)) =
-        Matrix.trace (evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
+        Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
     simpa [restrictFirst_apply, groundSpaceMap_apply] using
       congrArg (fun φ => φ (Fin.tail τ)) (hY (τ 0))
   calc
     groundSpaceMap A (K + 2) X τ
-        = Matrix.trace (evalWord A (List.ofFn (Fin.cons (τ 0) (Fin.tail τ))) * X) := by
+        = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons (τ 0) (Fin.tail τ))) * X) := by
             rw [← Fin.cons_self_tail τ]
             simp [groundSpaceMap_apply]
-    _ = Matrix.trace (A (τ 0) * evalWord A (List.ofFn (Fin.tail τ)) * X) := by
+    _ = Matrix.trace (A (τ 0) * Kraus.evalWord A (List.ofFn (Fin.tail τ)) * X) := by
           rw [evalWord_ofFn_cons, Matrix.mul_assoc]
-    _ = Matrix.trace (evalWord A (List.ofFn (Fin.tail τ)) * (X * A (τ 0))) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * (X * A (τ 0))) := by
           simpa [Matrix.mul_assoc] using
-            (Matrix.trace_mul_cycle' (evalWord A (List.ofFn (Fin.tail τ))) X (A (τ 0))).symm
-    _ = Matrix.trace (evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
+            (Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn (Fin.tail τ))) X (A (τ 0))).symm
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
           rw [hY_eq (τ 0)]
     _ = ψ (Fin.cons (τ 0) (Fin.tail τ)) := hτ.symm
     _ = ψ τ := by
@@ -448,7 +448,7 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : IsInjective A)
 
 /-- The ground space on \(L+1\) sites is characterized by the intersection property:
 \(ψ ∈ G_{L+1}(A)\) iff both the left and right \(L\)-site restrictions lie in \(G_L(A)\). -/
-theorem groundSpace_iff_left_right {A : MPSTensor d D} (hA : IsInjective A)
+theorem groundSpace_iff_left_right {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {L : ℕ} (hL : 1 < L) {ψ : NSiteSpace d (L + 1)} :
     ψ ∈ groundSpace A (L + 1) ↔ InLeftGround A L ψ ∧ InRightGround A L ψ :=
   ⟨fun h => ⟨groundSpace_inLeftGround A L h, groundSpace_inRightGround A L h⟩,

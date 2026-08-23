@@ -44,7 +44,7 @@ invariant-projection condition is likewise invariant under the relabeling.
 Source: arXiv:1606.00608, normal-tensor definition at lines 233--235. -/
 theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsNormalTensor A)
     (e : Fin d₁ ≃ Fin d₂) :
-    IsNormalTensor (MPSTensor.reindexPhysical e A) := by
+    IsNormalTensor (Kraus.reindexPhysical e A) := by
   refine ⟨(isIrreducibleTensor_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
   · rw [transferMap_reindexPhysical_equiv e A]
     exact hA.spectral_radius_one
@@ -62,12 +62,12 @@ block is relabeled.
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--245. -/
 noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     (data : CPSVCanonicalFormData A) (e : Fin d₁ ≃ Fin d₂) :
-    CPSVCanonicalFormData (MPSTensor.reindexPhysical e A) where
+    CPSVCanonicalFormData (Kraus.reindexPhysical e A) where
   r := data.r
   dim := data.dim
   dim_pos := data.dim_pos
   weights := data.weights
-  blocks := fun k ↦ MPSTensor.reindexPhysical e (data.blocks k)
+  blocks := fun k ↦ Kraus.reindexPhysical e (data.blocks k)
   blocks_normal := fun k ↦ (data.blocks_normal k).reindexPhysical e
   total_dim_le := data.total_dim_le
   ambient_coisometry := data.ambient_coisometry
@@ -88,7 +88,7 @@ transfer map unchanged. In particular, any separately supplied trace normalizati
 Source: arXiv:1703.09188, CFII definition at lines 271--281. -/
 noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     (data : CPSVCanonicalFormIIData A) (e : Fin d₁ ≃ Fin d₂) :
-    CPSVCanonicalFormIIData (MPSTensor.reindexPhysical e A) where
+    CPSVCanonicalFormIIData (Kraus.reindexPhysical e A) where
   toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.reindexPhysical e
   blocks_left_canonical := fun k ↦
     (leftCanonical_reindexPhysical_equiv e (data.blocks k)).2 (data.blocks_left_canonical k)
@@ -96,7 +96,7 @@ noncomputable def reindexPhysical {A : MPSTensor d₂ D}
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
     exact ⟨Λ, hΛpos, hΛdiag, by
-      change transferMap (MPSTensor.reindexPhysical e (data.blocks k)) Λ = Λ
+      change Kraus.transferMap (Kraus.reindexPhysical e (data.blocks k)) Λ = Λ
       rw [transferMap_reindexPhysical_equiv]
       exact hΛfix⟩
 
@@ -109,7 +109,7 @@ namespace IsCPSVCanonicalForm
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--245. -/
 theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsCPSVCanonicalForm A)
     (e : Fin d₁ ≃ Fin d₂) :
-    IsCPSVCanonicalForm (MPSTensor.reindexPhysical e A) := by
+    IsCPSVCanonicalForm (Kraus.reindexPhysical e A) := by
   obtain ⟨data⟩ := hA
   exact ⟨data.reindexPhysical e⟩
 

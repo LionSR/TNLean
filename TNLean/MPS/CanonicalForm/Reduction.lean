@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import QICLean.Algebra.PosSemidefSupport
-import QICLean.MPS.Core.InvariantProjection
+import QICLean.Kraus.InvariantProjection
 
 /-!
 # Iterated invariant-projection splitting: irreducible block decomposition
@@ -63,13 +63,13 @@ variable {d D : ℕ}
 
 /-! ## Irreducibility definitions
 
-`HasInvariantProj` and `IsIrreducibleTensor` are the MPS forms of the finite-family
+`HasInvariantProj` and `Kraus.IsIrreducibleFamily` are the MPS forms of the finite-family
 predicates in `Kraus`. -/
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_smul
-    {c : ℂ} (hc : c ≠ 0) (A : MPSTensor d D) (hIrr : IsIrreducibleTensor A) :
-    IsIrreducibleTensor (fun i => c • A i) := by
+    {c : ℂ} (hc : c ≠ 0) (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A) :
+    Kraus.IsIrreducibleFamily (fun i => c • A i) := by
   intro hHas
   apply hIrr
   rcases hHas with ⟨P, hPproj, hP0, hP1, hLower⟩
@@ -102,9 +102,9 @@ This is the normalization step of arXiv:1606.00608, lines 224--225, for the
 corner tensors: the rescaled unital gauge of an irreducible corner is again
 irreducible. -/
 theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor B) {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X)
+    (hIrr : Kraus.IsIrreducibleFamily B) {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X)
     {c : ℂ} (hc : c ≠ 0) :
-    IsIrreducibleTensor (fun v => c • (X⁻¹ * B v * X)) := by
+    Kraus.IsIrreducibleFamily (fun v => c • (X⁻¹ * B v * X)) := by
   classical
   intro hHas
   apply hIrr
@@ -204,9 +204,9 @@ private lemma mpv_cast_dim {n m : ℕ} (h : n = m) (A : MPSTensor d n)
     mpv (cast (congr_arg (MPSTensor d) h) A) σ = mpv A σ := by
   cases h; rfl
 
-/-- `IsIrreducibleTensor` is preserved by a type cast along a bond-dimension equality. -/
+/-- `Kraus.IsIrreducibleFamily` is preserved by a type cast along a bond-dimension equality. -/
 private lemma isIrreducibleTensor_cast {n m : ℕ} (h : n = m) (A : MPSTensor d n) :
-    IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
+    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔ Kraus.IsIrreducibleFamily A := by
   cases h; rfl
 
 end CastLemmas
@@ -274,14 +274,14 @@ recorded in
 theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
     ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
       ∑ k : Fin r, dim k = D := by
   -- Formulate the statement for all tensors of a given bond dimension (for strong induction).
   suffices h : ∀ (D : ℕ) (A : MPSTensor d D),
       ∃ r : ℕ, ∃ dim : Fin r → ℕ,
       ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
-        (∀ k, IsIrreducibleTensor (blocks k)) ∧
+        (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
         SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
         ∑ k : Fin r, dim k = D
     from h D A
@@ -290,14 +290,14 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
   | _ D ih =>
   intro A
   -- ── Case split: is `A` already irreducible? ──────────────────────────────────────────────────
-  by_cases hirr : IsIrreducibleTensor A
+  by_cases hirr : Kraus.IsIrreducibleFamily A
   · -- A is already irreducible: take a single block.
     refine ⟨1, fun _ => D, fun _ => A, fun _ => hirr, ?_, by simp⟩
     intro N σ
     rw [mpv_toTensorFromBlocks_eq_sum]
     simp
   · -- A has a nontrivial invariant projection; split into two strictly-smaller blocks.
-    rw [IsIrreducibleTensor, not_not] at hirr
+    rw [Kraus.IsIrreducibleFamily, not_not] at hirr
     obtain ⟨P, hP_proj, hP0, hP1, hLower⟩ := hirr
     -- Apply the strict two-block decomposition.
     obtain ⟨n, m, hnm, hn_lt, hm_lt, A₁, A₂, hSame_two⟩ :=
@@ -327,7 +327,7 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     -- ── Irreducibility of the combined blocks ─────────────────────────────────────────────────
     · intro k
       -- Split on whether k is in the left or right half.
-      refine Fin.addCases (motive := fun k => IsIrreducibleTensor (combinedBlocks k)) ?_ ?_ k
+      refine Fin.addCases (motive := fun k => Kraus.IsIrreducibleFamily (combinedBlocks k)) ?_ ?_ k
       · -- Left half: combinedBlocks (Fin.castAdd r₂ k) = cast (h_left k).symm (blocks₁ k).
         intro k
         -- After Fin.addCases_left, the block unfolds to the left branch.

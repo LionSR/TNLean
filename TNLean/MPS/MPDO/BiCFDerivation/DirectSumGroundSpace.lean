@@ -36,7 +36,7 @@ theorem groundSpaceMap_eq_leftTraceWordMap {D : ℕ} (A : MPSTensor d D) (L : �
     groundSpaceMap A L = leftTraceWordMap A L := by
   ext X t
   simpa [groundSpaceMap_apply, leftTraceWordMap_apply] using
-    Matrix.trace_mul_comm (evalWord A (List.ofFn t)) X
+    Matrix.trace_mul_comm (Kraus.evalWord A (List.ofFn t)) X
 
 /-- The finite-chain image space is the range of the trace-test map. -/
 theorem groundSpace_eq_leftTraceWordMap_range {D : ℕ} (A : MPSTensor d D) (L : ℕ) :
@@ -53,10 +53,10 @@ theorem groundSpace_le_of_three_block_trace_relation_left
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
+    (hA : Kraus.IsNBlkInjective A L) (hΔA : ΔA ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) :
     groundSpace A L ≤ groundSpace B L := by
   rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
   exact leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel
@@ -67,11 +67,11 @@ theorem groundSpace_eq_of_three_block_trace_relation
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hΔA : ΔA ≠ 0) (hΔB : ΔB ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) :
     groundSpace A L = groundSpace B L := by
   rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
   exact leftTraceWordMap_range_eq_of_three_block_trace_relation hA hB hΔA hΔB hRel
@@ -79,7 +79,7 @@ theorem groundSpace_eq_of_three_block_trace_relation
 /-- Under block injectivity, the finite-chain image space has dimension equal to
 the boundary matrix algebra. -/
 theorem groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
-    (hA : IsNBlkInjective A L) :
+    (hA : Kraus.IsNBlkInjective A L) :
     Module.finrank ℂ (groundSpace A L) = D ^ 2 := by
   rw [groundSpace_eq_leftTraceWordMap_range]
   exact leftTraceWordMap_range_finrank_eq_of_isNBlkInjective hA
@@ -91,7 +91,7 @@ This dimension step is exported separately because the direct-sum argument uses
 it before strengthening an image-space inclusion to equality. -/
 theorem bondDim_eq_of_groundSpace_eq_of_isNBlkInjective
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hG : groundSpace A L = groundSpace B L) :
     D₁ = D₂ := by
   have hfinA := groundSpace_finrank_eq_of_isNBlkInjective (A := A) hA
@@ -110,7 +110,7 @@ smaller block, and both blocks are length-`L` block-injective, then their bond
 dimensions are equal and the image spaces are equal. -/
 theorem bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hD : D₂ ≤ D₁) (hLe : groundSpace A L ≤ groundSpace B L) :
     D₁ = D₂ ∧ groundSpace A L = groundSpace B L := by
   rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
@@ -123,11 +123,11 @@ theorem bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
     {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hD : D₂ ≤ D₁) (hΔA : ΔA ≠ 0)
     (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
-      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+      Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) :
     D₁ = D₂ ∧ groundSpace A L = groundSpace B L := by
   exact bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge
     hA hB hD (groundSpace_le_of_three_block_trace_relation_left hA hΔA hRel)
@@ -141,7 +141,7 @@ intersection would give a homogeneous three-block trace relation, and the
 dimension step would force the forbidden equality. -/
 theorem groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hD : D₂ ≤ D₁)
     (hNoCollapse : ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L)) :
     groundSpace A (L + (L + L)) ⊓ groundSpace B (L + (L + L)) = ⊥ := by
@@ -160,15 +160,15 @@ theorem groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
       (ΔA := X) (ΔB := -Y)
       hA hB hD hX ?_
     intro w
-    let Aw := evalWord A (List.ofFn w)
-    let Bw := evalWord B (List.ofFn w)
+    let Aw := Kraus.evalWord A (List.ofFn w)
+    let Bw := Kraus.evalWord B (List.ofFn w)
     have hcoeff :
         Matrix.trace (Aw * X) = Matrix.trace (Bw * Y) := by
       simpa [Aw, Bw, groundSpaceMap_apply] using
         congrArg (fun f : NSiteSpace d (L + (L + L)) => f w) (hXψ.trans hYψ.symm)
     calc
-      Matrix.trace (X * evalWord A (List.ofFn w)) +
-          Matrix.trace ((-Y) * evalWord B (List.ofFn w))
+      Matrix.trace (X * Kraus.evalWord A (List.ofFn w)) +
+          Matrix.trace ((-Y) * Kraus.evalWord B (List.ofFn w))
           = Matrix.trace (Aw * X) + -Matrix.trace (Y * Bw) := by
               simp [Aw, Bw, Matrix.trace_mul_comm X Aw]
       _ = Matrix.trace (Aw * X) + -Matrix.trace (Bw * Y) := by
@@ -188,8 +188,8 @@ theorem pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpace
   have hEq :
       groundSpaceMap A S ΔA = groundSpaceMap B S (-ΔB) := by
     ext σ
-    let Aw := evalWord A (List.ofFn σ)
-    let Bw := evalWord B (List.ofFn σ)
+    let Aw := Kraus.evalWord A (List.ofFn σ)
+    let Bw := Kraus.evalWord B (List.ofFn σ)
     have hRelσ := hRel σ
     have hRelσ' :
         Matrix.trace (ΔA * Aw) + Matrix.trace (ΔB * Bw) = 0 := by
@@ -225,7 +225,7 @@ injectivity hypotheses in
 theorem pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
     {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
     (hInf : groundSpace A S ⊓ groundSpace B S = ⊥)
-    (hA : IsNBlkInjective A S) (hB : IsNBlkInjective B S) :
+    (hA : Kraus.IsNBlkInjective A S) (hB : Kraus.IsNBlkInjective B S) :
     PairTraceSeparatingAt A B S :=
   pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap
     hInf

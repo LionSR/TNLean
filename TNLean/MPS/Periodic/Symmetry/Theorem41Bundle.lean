@@ -40,7 +40,7 @@ theorem thm_4_1_p_refinement
     (p : ℕ) (hp : 0 < p)
     (hCanonical : PRefinementCanonicalization d D p)
     (hInverse : PRefinementInverseCanonicalization d D p) :
-    IsPRefinable B p ↔ IsPDivisibleChannel (transferMap B) p :=
+    IsPRefinable B p ↔ IsPDivisibleChannel (Kraus.transferMap B) p :=
   ⟨thm_4_1_p_refinement_forward B hB p hCanonical,
    thm_4_1_p_refinement_reverse B hB p hp hInverse⟩
 

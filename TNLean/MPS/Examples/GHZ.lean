@@ -63,15 +63,15 @@ def ghzTensor : MPSTensor 2 2 := fun i => Matrix.diagonal (Pi.single i 1)
 /-- The transfer map of the GHZ tensor extracts the diagonal:
 $\mathcal{E}_A(X)_{ij} = \delta_{ij} X_{ij}$. -/
 private lemma ghz_transferMap_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
-    (transferMap ghzTensor X) i j = if i = j then X i j else 0 := by
-  simp only [transferMap_apply, Fin.sum_univ_two, ghzTensor_apply, Matrix.add_apply,
+    (Kraus.transferMap ghzTensor X) i j = if i = j then X i j else 0 := by
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_two, ghzTensor_apply, Matrix.add_apply,
     Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.diagonal_apply, Pi.single_apply,
     Fin.sum_univ_two]
   fin_cases i <;> fin_cases j <;> simp
 
 /-- The transfer map of the GHZ tensor is idempotent: `E² = E`. -/
 theorem ghz_transferMap_idempotent :
-    transferMap ghzTensor ∘ₗ transferMap ghzTensor = transferMap ghzTensor := by
+    Kraus.transferMap ghzTensor ∘ₗ Kraus.transferMap ghzTensor = Kraus.transferMap ghzTensor := by
   ext X i j : 3
   simp only [LinearMap.comp_apply]
   rw [ghz_transferMap_entry, ghz_transferMap_entry]
@@ -84,7 +84,7 @@ theorem ghz_isTransferIdempotent : IsTransferIdempotent ghzTensor := ghz_transfe
 
 /-- The GHZ tensor is **not** injective: span({A⁰, A¹}) is the 2-dimensional space
 of diagonal matrices, not the full 4-dimensional matrix algebra. -/
-theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
+theorem ghz_not_isInjective : ¬ Kraus.IsInjective ghzTensor := by
   intro h
   -- Every element of the span has zero off-diagonal entries.
   suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range ghzTensor), M 0 1 = 0 by
@@ -209,10 +209,10 @@ a normalized gauge; the GHZ transfer map fixes the additional non-scalar operato
 `σz`, the extra non-decaying mode responsible for its long-range ferromagnetic
 order. -/
 theorem ghz_orderParam_fixed :
-    transferMap ghzTensor (!![(1 : ℂ), 0; 0, -1]) = !![(1 : ℂ), 0; 0, -1] := by
+    Kraus.transferMap ghzTensor (!![(1 : ℂ), 0; 0, -1]) = !![(1 : ℂ), 0; 0, -1] := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [transferMap_apply, ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
+    simp [Kraus.transferMap_apply, ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
       Pi.single_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
 end MPSTensor

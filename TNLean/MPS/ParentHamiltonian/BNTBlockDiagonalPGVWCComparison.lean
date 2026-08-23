@@ -95,9 +95,9 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
         N < i.val + L →
           ∀ ρ : Fin (N - L) → Fin d,
             ∀ β : Fin (i.val + L - N) → Fin d,
-              evalWord (A j) (List.ofFn β) * C j i ρ =
-                (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                  evalWord (A j) (List.ofFn ρ) := by
+              Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
+                (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                  Kraus.evalWord (A j) (List.ofFn ρ) := by
   classical
   obtain ⟨C, hTrace⟩ :=
     blockDiagonal_boundary_crossing_trace_decompositions_of_boundary
@@ -161,7 +161,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -180,9 +180,9 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c
             N < i.val + L →
               ∀ ρ : Fin (N - L) → Fin d,
                 ∀ β : Fin (i.val + L - N) → Fin d,
-                  evalWord (A j) (List.ofFn β) * C j i ρ =
-                    (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                      evalWord (A j) (List.ofFn ρ)) :
+                  Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
+                    (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                      Kraus.evalWord (A j) (List.ofFn ρ)) :
     ∃ X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ψ = groundSpaceMap (toTensorFromBlocks (d := d) (μ := μ) A) N
         ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv) (Matrix.blockDiagonal' X)) ∧
@@ -235,7 +235,7 @@ theorem
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
     {L₀ L N : ℕ}
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hLN : L ≤ N)
     (hNlarge : L + L₀ ≤ N)
@@ -312,7 +312,7 @@ theorem
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -401,7 +401,7 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bn
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -490,7 +490,7 @@ theorem
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -554,7 +554,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -618,7 +618,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_compa
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -637,9 +637,9 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_compa
               N < i.val + L →
                 ∀ ρ : Fin (N - L) → Fin d,
                   ∀ β : Fin (i.val + L - N) → Fin d,
-                    evalWord (A j) (List.ofFn β) * C j i ρ =
-                      (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                        evalWord (A j) (List.ofFn ρ)) :
+                    Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
+                      (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                        Kraus.evalWord (A j) (List.ofFn ρ)) :
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
@@ -692,7 +692,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -711,9 +711,9 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
               N < i.val + L →
                 ∀ ρ : Fin (N - L) → Fin d,
                   ∀ β : Fin (i.val + L - N) → Fin d,
-                    evalWord (A j) (List.ofFn β) * C j i ρ =
-                      (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                        evalWord (A j) (List.ofFn ρ)) :
+                    Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
+                      (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                        Kraus.evalWord (A j) (List.ofFn ρ)) :
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N := by
   exact
@@ -758,7 +758,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_co
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
@@ -777,9 +777,9 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_co
               N < i.val + L →
                 ∀ ρ : Fin (N - L) → Fin d,
                   ∀ β : Fin (i.val + L - N) → Fin d,
-                    evalWord (A j) (List.ofFn β) * C j i ρ =
-                      (((μ j) ^ N • X j) * evalWord (A j) (List.ofFn β)) *
-                        evalWord (A j) (List.ofFn ρ))
+                    Kraus.evalWord (A j) (List.ofFn β) * C j i ρ =
+                      (((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn β)) *
+                        Kraus.evalWord (A j) (List.ofFn ρ))
     (hBlock :
       ∀ j : Fin r, chainGroundSpace (A j) L N ≤ mpvSubmodule (A j) N) :
     LinearMap.ker (parentHamiltonian
@@ -840,7 +840,7 @@ theorem
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)

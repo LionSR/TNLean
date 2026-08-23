@@ -45,7 +45,7 @@ word-tuple span at every sufficiently large length. -/
 theorem eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
     (A : (k : Fin g) → MPSTensor d (dim k))
     {s p : ℕ} (hSel : HasBlockSelectorWords A s) (hp : 0 < p)
-    (hAtP : ∀ k, IsNBlkInjective (A k) p) :
+    (hAtP : ∀ k, Kraus.IsNBlkInjective (A k) p) :
     ∃ L₀ : ℕ, ∀ L ≥ L₀, WordTupleSpanTop A L := by
   refine ⟨s + p, ?_⟩
   intro L hL
@@ -70,19 +70,19 @@ at the lengths (1), (2), and (6).  For a total length beyond the selector
 suffix, injectivity supplies the remaining positive-length prefix.
 
 **Scope restriction (already injectively blocked representatives):** the
-hypothesis `∀ j, IsInjective (P.basis j)` is the conclusion of the blocking
+hypothesis `∀ j, Kraus.IsInjective (P.basis j)` is the conclusion of the blocking
 step in arXiv:1606.00608, line 332.  This theorem does not transport an
 unblocked first-site action through that blocking.  See
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
 theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
     (hCF : IsBNTCanonicalForm P)
-    (hInj : ∀ j, IsInjective (P.basis j)) :
+    (hInj : ∀ j, Kraus.IsInjective (P.basis j)) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   have hBlkPos : ∀ (j : Fin P.basisCount) (n : ℕ), 0 < n →
-      IsNBlkInjective (P.basis j) n := by
+      Kraus.IsNBlkInjective (P.basis j) n := by
     intro j n hn
     exact (wordSpan_eq_top_iff_isNBlkInjective (P.basis j) n).mp
       (wordSpan_eq_top_of_isInjective (hInj j) hn)
@@ -126,31 +126,31 @@ argument in arXiv:1606.00608, lines 318--344, used in Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     (hCF : IsBNTCanonicalForm P) (p : ℕ) (hp : 0 < p)
-    (hInj : ∀ j, IsInjective (MPSTensor.blockTensor (P.basis j) p)) :
+    (hInj : ∀ j, Kraus.IsInjective (MPSTensor.blockTensor (P.basis j) p)) :
     (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-  have hAtP : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) p := by
+  have hAtP : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) p := by
     intro j
     exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) p).2 (hInj j)
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
-      IsNBlkInjective (P.basis j) n := by
+      Kraus.IsNBlkInjective (P.basis j) n := by
     intro j n hpn
     exact isNBlkInjective_of_le hp (hAtP j) hpn
   let L₀ := 2 * p - 1
-  have hBlk0 : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L₀ := by
+  have hBlk0 : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) L₀ := by
     intro j
     apply hAtLeastP j
     dsimp [L₀]
     omega
-  have hBlk1 : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) (L₀ + 1) := by
+  have hBlk1 : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) (L₀ + 1) := by
     intro j
     apply hAtLeastP j
     dsimp [L₀]
     omega
   have hBlk3 : ∀ j : Fin P.basisCount,
-      IsNBlkInjective (P.basis j) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+      Kraus.IsNBlkInjective (P.basis j) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
     intro j
     apply hAtLeastP j
     dsimp [L₀]
@@ -194,9 +194,9 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     change HasBlockSelectorWords (P.blockTensor p).basis ((P.basisCount - 1) * 6)
     exact hasBlockSelectorWords_of_pairBlockSeparatingWords (P.blockTensor p).basis hPair
   have hBlkPos : ∀ (j : Fin P.basisCount) (n : ℕ), 0 < n →
-      IsNBlkInjective ((P.blockTensor p).basis j) n := by
+      Kraus.IsNBlkInjective ((P.blockTensor p).basis j) n := by
     intro j n hn
-    change IsNBlkInjective (MPSTensor.blockTensor (P.basis j) p) n
+    change Kraus.IsNBlkInjective (MPSTensor.blockTensor (P.basis j) p) n
     exact (wordSpan_eq_top_iff_isNBlkInjective
       (MPSTensor.blockTensor (P.basis j) p) n).mp
       (wordSpan_eq_top_of_isInjective (hInj j) hn)
@@ -221,23 +221,23 @@ theorem eventuallyRepresentativeWordTupleSpan
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   obtain ⟨p, hp, hAtP⟩ := hCF.exists_common_basis_isNBlkInjective
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
-      IsNBlkInjective (P.basis j) n := by
+      Kraus.IsNBlkInjective (P.basis j) n := by
     intro j n hpn
     exact isNBlkInjective_of_le hp (hAtP j) hpn
   let L₀ := 2 * p - 1
-  have hBlk0 : ∀ j : Fin P.basisCount, IsNBlkInjective (P.basis j) L₀ := by
+  have hBlk0 : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) L₀ := by
     intro j
     apply hAtLeastP j
     dsimp [L₀]
     omega
   have hBlk1 : ∀ j : Fin P.basisCount,
-      IsNBlkInjective (P.basis j) (L₀ + 1) := by
+      Kraus.IsNBlkInjective (P.basis j) (L₀ + 1) := by
     intro j
     apply hAtLeastP j
     dsimp [L₀]
     omega
   have hBlk3 : ∀ j : Fin P.basisCount,
-      IsNBlkInjective (P.basis j)
+      Kraus.IsNBlkInjective (P.basis j)
         ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
     intro j
     apply hAtLeastP j
@@ -284,7 +284,7 @@ line 332.  The grouping and power-sum argument is Appendix C.3, lines
 1835--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_basis_injective
     (hCF : IsBNTCanonicalForm P)
-    (hInj : ∀ j, IsInjective (P.basis j))
+    (hInj : ∀ j, Kraus.IsInjective (P.basis j))
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
@@ -303,7 +303,7 @@ lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective
     {D : ℕ} (A : MPSTensor d D)
     (hCF : IsBNTCanonicalForm P)
-    (hInj : ∀ j, IsInjective (P.basis j))
+    (hInj : ∀ j, Kraus.IsInjective (P.basis j))
     (hAP : SameMPV₂Pos A P.toTensor)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
@@ -328,11 +328,11 @@ derived from the BNT canonical-form hypotheses by
 `insertedTensor_basis_eq_of_firstSiteActionAgree` below. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     (hCF : IsBNTCanonicalForm P) (L : ℕ) (hL : 0 < L)
-    (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
+    (hInj : ∀ j, Kraus.IsNBlkInjective (P.basis j) L)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  have hInjSucc : ∀ j, IsInjective (blockTensor (P.basis j) (L + 1)) := by
+  have hInjSucc : ∀ j, Kraus.IsInjective (blockTensor (P.basis j) (L + 1)) := by
     intro j
     exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) (L + 1)).1
       (isNBlkInjective_succ_of_isNBlkInjective (P.basis j) hL (hInj j))
@@ -366,7 +366,7 @@ Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective
     {D : ℕ} (A : MPSTensor d D) (hCF : IsBNTCanonicalForm P)
-    (L : ℕ) (hL : 0 < L) (hInj : ∀ j, IsNBlkInjective (P.basis j) L)
+    (L : ℕ) (hL : 0 < L) (hInj : ∀ j, Kraus.IsNBlkInjective (P.basis j) L)
     (hAP : SameMPV₂Pos A P.toTensor)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :

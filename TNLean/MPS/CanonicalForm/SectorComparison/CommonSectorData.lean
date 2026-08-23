@@ -69,8 +69,8 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂Pos
       (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
     ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
       (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
-      (∀ k, IsIrreducibleTensor (blocksA k)) ∧
-      (∀ k, IsIrreducibleTensor (blocksB k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocksA k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocksB k)) ∧
       (∀ k, ∑ i : Fin d, (blocksA k i)ᴴ * blocksA k i = 1) ∧
       (∀ k, ∑ i : Fin d, (blocksB k i)ᴴ * blocksB k i = 1) ∧
       (∀ k, μA k ≠ 0) ∧
@@ -154,13 +154,13 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
       (∀ x, ∑ i : Fin (blockPhysDim d familyB.p),
         (familyB.commonFlatBlocks x i)ᴴ * familyB.commonFlatBlocks x i = 1) ∧
       (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d familyA.p) (D := familyA.commonFlatDim x)
+        (Kraus.transferMap (d := blockPhysDim d familyA.p) (D := familyA.commonFlatDim x)
           (familyA.commonFlatBlocks x))) ∧
       (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d familyB.p) (D := familyB.commonFlatDim x)
+        (Kraus.transferMap (d := blockPhysDim d familyB.p) (D := familyB.commonFlatDim x)
           (familyB.commonFlatBlocks x))) ∧
-      (∀ x, IsIrreducibleTensor (familyA.commonFlatBlocks x)) ∧
-      (∀ x, IsIrreducibleTensor (familyB.commonFlatBlocks x)) ∧
+      (∀ x, Kraus.IsIrreducibleFamily (familyA.commonFlatBlocks x)) ∧
+      (∀ x, Kraus.IsIrreducibleFamily (familyB.commonFlatBlocks x)) ∧
       (∀ x, 0 < familyA.commonFlatDim x) ∧
       (∀ x, 0 < familyB.commonFlatDim x) := by
   obtain ⟨rA, dimA, μA, blocksA,
@@ -226,22 +226,22 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
   · intro x
     let y := familyA.flatKey x
     change _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d familyA.p) (D := familyA.sectorDim y.1 y.2)
+      (Kraus.transferMap (d := blockPhysDim d familyA.p) (D := familyA.sectorDim y.1 y.2)
         (familyA.commonSectorBlock y.1 y.2))
     exact (familyA.derived_properties y.1 y.2).2.1
   · intro x
     let y := familyB.flatKey x
     change _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d familyB.p) (D := familyB.sectorDim y.1 y.2)
+      (Kraus.transferMap (d := blockPhysDim d familyB.p) (D := familyB.sectorDim y.1 y.2)
         (familyB.commonSectorBlock y.1 y.2))
     exact (familyB.derived_properties y.1 y.2).2.1
   · intro x
     let y := familyA.flatKey x
-    change IsIrreducibleTensor (familyA.commonSectorBlock y.1 y.2)
+    change Kraus.IsIrreducibleFamily (familyA.commonSectorBlock y.1 y.2)
     exact (familyA.derived_properties y.1 y.2).2.2.1
   · intro x
     let y := familyB.flatKey x
-    change IsIrreducibleTensor (familyB.commonSectorBlock y.1 y.2)
+    change Kraus.IsIrreducibleFamily (familyB.commonSectorBlock y.1 y.2)
     exact (familyB.derived_properties y.1 y.2).2.2.1
   · intro x
     let y := familyA.flatKey x

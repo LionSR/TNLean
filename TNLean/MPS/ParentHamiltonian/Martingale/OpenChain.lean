@@ -108,7 +108,7 @@ With \(n = K + L₀\) and \(l = L₀\), this identifies the common range of
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). The proof is the existing
 open-chain grow-back theorem at the block-injectivity length. -/
 theorem openChainLeft_inf_tailGroundSpaceES [NeZero D]
-    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    {A : MPSTensor d D} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hL₀ : 0 < L₀) :
     openChainLeftGroundSpaceES A (K + L₀) ⊓
       openChainTailGroundSpaceES A K (L₀ + 1) =
@@ -138,7 +138,7 @@ after identifying its common ground-space range. The later FNW transfer-mixing
 estimate supplies the numerical bound on this defect; it is not asserted here. -/
 theorem re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
     [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) {η : ℝ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) {η : ℝ}
     (hDefect :
       ‖openChainTailGroundProjectionES A K (L₀ + 1) ∘L
           openChainLeftGroundProjectionES A (K + L₀) -

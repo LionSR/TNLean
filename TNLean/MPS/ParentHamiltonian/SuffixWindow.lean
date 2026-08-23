@@ -81,12 +81,12 @@ produces the expected boundary matrix \(X A_i\). -/
   ext σ
   simp only [restrictFirst_apply, groundSpaceMap_apply, evalWord_ofFn_cons]
   calc
-    Matrix.trace ((A i * evalWord A (List.ofFn σ)) * X)
-        = Matrix.trace (X * (A i * evalWord A (List.ofFn σ))) := by
+    Matrix.trace ((A i * Kraus.evalWord A (List.ofFn σ)) * X)
+        = Matrix.trace (X * (A i * Kraus.evalWord A (List.ofFn σ))) := by
             rw [Matrix.trace_mul_comm]
-    _ = Matrix.trace ((X * A i) * evalWord A (List.ofFn σ)) := by
+    _ = Matrix.trace ((X * A i) * Kraus.evalWord A (List.ofFn σ)) := by
           rw [Matrix.mul_assoc]
-    _ = Matrix.trace (evalWord A (List.ofFn σ) * (X * A i)) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (X * A i)) := by
           rw [Matrix.trace_mul_comm]
 
 /-- Restricting a ground-space vector to a suffix slice preserves the ground-space
@@ -94,21 +94,21 @@ form, with the prefix word moved to the right boundary matrix by trace cyclicity
 @[simp] theorem tailRestrictₗ_groundSpaceMap (A : MPSTensor d D) {K L : ℕ}
     (u : Fin K → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
     tailRestrictₗ u (groundSpaceMap A (K + L) X) =
-      groundSpaceMap A L (X * evalWord A (List.ofFn u)) := by
+      groundSpaceMap A L (X * Kraus.evalWord A (List.ofFn u)) := by
   ext σ
   calc
     tailRestrictₗ u (groundSpaceMap A (K + L) X) σ
-        = Matrix.trace (evalWord A (List.ofFn (Fin.append u σ)) * X) := by
+        = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.append u σ)) * X) := by
             simp [groundSpaceMap_apply]
-    _ = Matrix.trace (evalWord A (List.ofFn σ) * (X * evalWord A (List.ofFn u))) := by
-          rw [List.ofFn_fin_append, evalWord_append]
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (X * Kraus.evalWord A (List.ofFn u))) := by
+          rw [List.ofFn_fin_append, Kraus.evalWord_append]
           symm
           simpa [Matrix.mul_assoc] using
             (Matrix.trace_mul_cycle'
-              (evalWord A (List.ofFn σ))
+              (Kraus.evalWord A (List.ofFn σ))
               X
-              (evalWord A (List.ofFn u)))
-    _ = groundSpaceMap A L (X * evalWord A (List.ofFn u)) σ := by
+              (Kraus.evalWord A (List.ofFn u)))
+    _ = groundSpaceMap A L (X * Kraus.evalWord A (List.ofFn u)) σ := by
           simp [groundSpaceMap_apply]
 
 /-- A state on \(K + L\) sites lies in the tail ground condition if every fixed
@@ -124,14 +124,14 @@ theorem groundSpace_inTailGround (A : MPSTensor d D) (K L : ℕ)
   intro u
   rw [groundSpace, LinearMap.mem_range] at hψ ⊢
   obtain ⟨X, rfl⟩ := hψ
-  refine ⟨X * evalWord A (List.ofFn u), ?_⟩
+  refine ⟨X * Kraus.evalWord A (List.ofFn u), ?_⟩
   exact (tailRestrictₗ_groundSpaceMap (A := A) u X).symm
 
 /-- From the long left-window condition and the suffix-window condition, extract
 boundary matrices satisfying the common overlap identity
 \(Z_j A^u = A_j Y_u\). -/
 theorem exists_left_tail_compatibility {A : MPSTensor d D} {K L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
+    (hInj : Kraus.IsNBlkInjective A L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
     (hLeft : InLeftGround A (K + L₀) ψ)
     (hTail : InTailGround A K (L₀ + 1) ψ) :
     ∃ Z : Fin d → Matrix (Fin D) (Fin D) ℂ,
@@ -139,7 +139,7 @@ theorem exists_left_tail_compatibility {A : MPSTensor d D} {K L₀ : ℕ}
         (∀ j : Fin d, restrictLast ψ j = groundSpaceMap A (K + L₀) (Z j)) ∧
         (∀ u : Fin K → Fin d, tailRestrictₗ u ψ = groundSpaceMap A (L₀ + 1) (Y u)) ∧
         (∀ (j : Fin d) (u : Fin K → Fin d),
-          Z j * evalWord A (List.ofFn u) = A j * Y u) := by
+          Z j * Kraus.evalWord A (List.ofFn u) = A j * Y u) := by
   have hLeft' :
       ∀ j : Fin d, ∃ Z : Matrix (Fin D) (Fin D) ℂ,
         restrictLast ψ j = groundSpaceMap A (K + L₀) Z := by
@@ -159,12 +159,12 @@ theorem exists_left_tail_compatibility {A : MPSTensor d D} {K L₀ : ℕ}
     exact ⟨Y, hY.symm⟩
   choose Y hY using hTail'
   have hCompat : ∀ (j : Fin d) (u : Fin K → Fin d),
-      Z j * evalWord A (List.ofFn u) = A j * Y u := by
+      Z j * Kraus.evalWord A (List.ofFn u) = A j * Y u := by
     intro j u
     apply groundSpaceMap_injective_of_isNBlkInjective hInj
     have hLeftSlice :
         tailRestrictₗ u (restrictLast ψ j) =
-          groundSpaceMap A L₀ (Z j * evalWord A (List.ofFn u)) := by
+          groundSpaceMap A L₀ (Z j * Kraus.evalWord A (List.ofFn u)) := by
       rw [hZ j]
       exact tailRestrictₗ_groundSpaceMap (A := A) u (Z j)
     have hTailSlice :

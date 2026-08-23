@@ -49,7 +49,7 @@ gauge uniqueness gives `X₂(g⁻¹) = f(g) · X₁(g⁻¹)` for some scalar
 `ω₂(g,h) = f(g) * f(h) * f(g*h)⁻¹ * ω₁(g,h)`. -/
 theorem cohomologousTo_of_isInjective
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hD : 0 < D)
     {ω₁ ω₂ : ScalarCocycle G}

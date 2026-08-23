@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Primitive
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Normed.Operator.CompleteCodomain
@@ -22,7 +22,7 @@ matrix product state tensors.
 * `HasPrimitiveFixedPoint`: the existential formulation `∃ ρ, IsPrimitiveMPS A ρ`.
 -/
 
-open scoped Matrix Matrix.Norms.Operator ComplexOrder BigOperators
+open scoped Matrix Matrix.Norms.Operator ComplexOrder BigOperators Kraus
 open Matrix
 
 namespace MPSTensor
@@ -48,13 +48,13 @@ structure IsPrimitiveMPS {d D : ℕ} [NeZero D]
   /-- The fixed point is positive semidefinite. -/
   fixedPoint_psd : ρ.PosSemidef
   /-- The transfer map fixes this point: `E(ρ) = ρ`. -/
-  fixedPoint_is_fixed : transferMap (d := d) (D := D) A ρ = ρ
+  fixedPoint_is_fixed : Kraus.transferMap (d := d) (D := D) A ρ = ρ
   /-- Complementary transfer-map gap: the complement of the fixed-point projection has
   spectral radius `< 1`. -/
   complementary_transfer_map_gap :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          ((transferMap (d := d) (D := D) A) -
+          ((Kraus.transferMap (d := d) (D := D) A) -
             fixedPointProj (D := D) ρ
               (by
                 intro h

@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import TNLean.Algebra.OperatorNormFrobenius
 import QICLean.Analysis.SpectralRadiusPowerDecay
 import QICLean.Channel.Primitive
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.Overlap.Basic
 
 /-!
@@ -35,7 +35,7 @@ Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 6 ("Interpretation of
 calculation at lines 970--985.  The gauge convention here places the
 trace-preserving direction on the transfer map itself, so the source's
 positive diagonal dual fixed point `Λ` appears as the fixed point of
-`transferMap A`; the source's unit fixed point corresponds to the dual
+`Kraus.transferMap A`; the source's unit fixed point corresponds to the dual
 (trace-adjoint) direction.
 
 ## Main results
@@ -71,7 +71,7 @@ positive diagonal dual fixed point `Λ` appears as the fixed point of
   \(\lambda_\alpha \lambda_\beta / \mathrm{tr}(\Lambda)^2\).
 -/
 
-open scoped Matrix Matrix.Norms.L2Operator ComplexOrder
+open scoped Matrix Matrix.Norms.L2Operator ComplexOrder Kraus
 open Polynomial
 
 namespace MPSTensor
@@ -85,12 +85,12 @@ variable {d D : ℕ}
 Source: arXiv:quant-ph/0608197, lines 970--976. -/
 noncomputable def halfChainMatrix (A : MPSTensor d D) (L : ℕ) :
     Matrix (Cfg d L) (Fin D × Fin D) ℂ :=
-  Matrix.of fun σ p => evalWord A (List.ofFn σ) p.1 p.2
+  Matrix.of fun σ p => Kraus.evalWord A (List.ofFn σ) p.1 p.2
 
 @[simp]
 theorem halfChainMatrix_apply (A : MPSTensor d D) (L : ℕ) (σ : Cfg d L)
     (p : Fin D × Fin D) :
-    halfChainMatrix A L σ p = evalWord A (List.ofFn σ) p.1 p.2 := rfl
+    halfChainMatrix A L σ p = Kraus.evalWord A (List.ofFn σ) p.1 p.2 := rfl
 
 /-- The complementary half-chain family with swapped boundary indices: the row
 at \((\alpha, \beta)\) is the vector \(|\Psi_{\beta,\alpha}\rangle\) appearing
@@ -100,12 +100,12 @@ on the second half of the ring in
 Source: arXiv:quant-ph/0608197, lines 970--976. -/
 noncomputable def halfChainSwapMatrix (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D × Fin D) (Cfg d L) ℂ :=
-  Matrix.of fun p τ => evalWord A (List.ofFn τ) p.2 p.1
+  Matrix.of fun p τ => Kraus.evalWord A (List.ofFn τ) p.2 p.1
 
 @[simp]
 theorem halfChainSwapMatrix_apply (A : MPSTensor d D) (L : ℕ)
     (p : Fin D × Fin D) (τ : Cfg d L) :
-    halfChainSwapMatrix A L p τ = evalWord A (List.ofFn τ) p.2 p.1 := rfl
+    halfChainSwapMatrix A L p τ = Kraus.evalWord A (List.ofFn τ) p.2 p.1 := rfl
 
 /-- The coefficient kernel of the ring of \(2L\) sites, read as a matrix over
 the two half-chain configuration spaces: the entry at \((\sigma, \tau)\) is
@@ -129,7 +129,7 @@ Source: arXiv:quant-ph/0608197, lines 970--976. -/
 theorem halfChainKernel_eq_mul (A : MPSTensor d D) (L : ℕ) :
     halfChainKernel A L = halfChainMatrix A L * halfChainSwapMatrix A L := by
   ext σ τ
-  rw [halfChainKernel_apply, mpv_eq, coeff_eq, List.ofFn_fin_append, evalWord_append,
+  rw [halfChainKernel_apply, mpv_eq, coeff_eq, List.ofFn_fin_append, Kraus.evalWord_append,
     Matrix.mul_apply]
   simp [Matrix.trace, Matrix.mul_apply, Fintype.sum_prod_type]
 
@@ -170,7 +170,7 @@ Source: arXiv:quant-ph/0608197, the display at lines 977--979. -/
 theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
     (p q : Fin D × Fin D) :
     halfChainGram A L p q =
-      (((transferMap (d := d) (D := D) A) ^ L) (Matrix.single q.2 p.2 1)) q.1 p.1 := by
+      (((Kraus.transferMap (d := d) (D := D) A) ^ L) (Matrix.single q.2 p.2 1)) q.1 p.1 := by
   classical
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) (a b c e : Fin D) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
@@ -187,9 +187,9 @@ theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
       _ = W e c * star (W b a) := by
         rw [Matrix.mul_apply]
         simp [Matrix.single_apply]
-  rw [halfChainGram, Matrix.mul_apply, transferMap_pow_apply' A L, Matrix.sum_apply]
+  rw [halfChainGram, Matrix.mul_apply, Kraus.transferMap_pow_apply' A L, Matrix.sum_apply]
   refine Finset.sum_congr rfl fun σ _ => ?_
-  rw [hmul (evalWord A (List.ofFn σ)) p.2 p.1 q.2 q.1]
+  rw [hmul (Kraus.evalWord A (List.ofFn σ)) p.2 p.1 q.2 q.1]
   simp [mul_comm]
 
 /-- The Gram matrix of the complementary half-chain family is the transpose of
@@ -250,21 +250,21 @@ Source: arXiv:quant-ph/0608197, lines 977--981. -/
 theorem exists_geometric_bound_halfChainGram_sub_fixedPointProj
     (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (htr : Matrix.trace Λ ≠ 0)
-    (hTP : IsTracePreservingMap (transferMap A))
-    (hΛ : transferMap A Λ = Λ)
+    (hTP : IsTracePreservingMap (Kraus.transferMap A))
+    (hΛ : Kraus.transferMap A Λ = Λ)
     (hgap : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (transferMap A - fixedPointProj Λ htr)) < 1) :
+        (Kraus.transferMap A - fixedPointProj Λ htr)) < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ L, 1 ≤ L → ∀ p q : Fin D × Fin D,
       ‖halfChainGram A L p q -
         fixedPointProj Λ htr (Matrix.single q.2 p.2 1) q.1 p.1‖ ≤ C * r ^ L := by
-  set N := transferMap (d := d) (D := D) A - fixedPointProj Λ htr with hN
+  set N := Kraus.transferMap (d := d) (D := D) A - fixedPointProj Λ htr with hN
   set T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N with hT
   obtain ⟨C, r, hC, hr0, hr1, hbound⟩ :=
     geometric_bound_of_spectralRadius_lt_one T (by simpa [hT, hN] using hgap)
   refine ⟨C, r, hC, hr0, hr1, fun L hL p q => ?_⟩
-  have hpow : (transferMap (d := d) (D := D) A) ^ L = fixedPointProj Λ htr + N ^ L :=
-    pow_eq_fixedPointProj_add_compl_pow (E := transferMap A) (ρ := Λ) htr hTP hΛ hL
+  have hpow : (Kraus.transferMap (d := d) (D := D) A) ^ L = fixedPointProj Λ htr + N ^ L :=
+    pow_eq_fixedPointProj_add_compl_pow (E := Kraus.transferMap A) (ρ := Λ) htr hTP hΛ hL
   have hentry : halfChainGram A L p q -
       fixedPointProj Λ htr (Matrix.single q.2 p.2 1) q.1 p.1 =
       ((N ^ L) (Matrix.single q.2 p.2 1)) q.1 p.1 := by
@@ -379,11 +379,11 @@ Source: arXiv:quant-ph/0608197, Theorem 6 ("Interpretation of \(\Lambda\)"),
 theorem exists_geometric_bound_halfChainComparison_sub_diagonal
     (A : MPSTensor d D) (lam : Fin D → ℂ)
     (htr : Matrix.trace (Matrix.diagonal lam) ≠ 0)
-    (hTP : IsTracePreservingMap (transferMap A))
-    (hΛ : transferMap A (Matrix.diagonal lam) = Matrix.diagonal lam)
+    (hTP : IsTracePreservingMap (Kraus.transferMap A))
+    (hΛ : Kraus.transferMap A (Matrix.diagonal lam) = Matrix.diagonal lam)
     (hgap : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (transferMap A - fixedPointProj (Matrix.diagonal lam) htr)) < 1) :
+        (Kraus.transferMap A - fixedPointProj (Matrix.diagonal lam) htr)) < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ L, 1 ≤ L → ∀ p q : Fin D × Fin D,
       ‖(((halfChainGram A L).submatrix Prod.swap Prod.swap)ᵀ * halfChainGram A L) p q -
         Matrix.diagonal (fun x : Fin D × Fin D =>

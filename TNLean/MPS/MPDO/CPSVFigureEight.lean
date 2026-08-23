@@ -71,10 +71,10 @@ theorem gramDressing_eq_of_two_grouped_corners
       (w : Fin L → Fin (d * d)),
       Matrix.trace
           (linearMarkedTensor fX M.toMPSTensor u *
-            evalWord M.toMPSTensor (List.ofFn w)) =
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
         Matrix.trace
           (linearMarkedTensor fY M.toMPSTensor u *
-            evalWord M.toMPSTensor (List.ofFn w)) := by
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) := by
     intro L _hL u w
     rw [show linearMarkedTensor fX M.toMPSTensor u =
         horizontalSlice (gramDressing X A) u.divNat u.modNat by
@@ -115,7 +115,7 @@ Source: arXiv:1606.00608, proof of Proposition 4.13, equation `eq3:proof.IV.12` 
 1909--1921. -/
 theorem gram_eq_pos_smul_gram_of_two_grouped_corners
     (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M.toMPSTensor) (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n) (hA : IsNormal A)
+    (A : MPSTensor (D * D) n) (hA : Kraus.IsNormal A)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)
     (hcornerX : ∀ v,

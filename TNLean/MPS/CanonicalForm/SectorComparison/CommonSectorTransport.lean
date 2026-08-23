@@ -69,11 +69,11 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) ∧
       (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) ∧
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) ∧
       (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) ∧
-      (∀ x, IsIrreducibleTensor (blocksA x)) ∧
-      (∀ x, IsIrreducibleTensor (blocksB x)) ∧
+        (Kraus.transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) ∧
+      (∀ x, Kraus.IsIrreducibleFamily (blocksA x)) ∧
+      (∀ x, Kraus.IsIrreducibleFamily (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
       (∀ x, 0 < dimB x) := by
   obtain ⟨p, hp, rA₀, dimA₀, μA₀, blocksA₀,
@@ -139,20 +139,20 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
     cases hFamilyB
     simpa [flatBlocksB] using hTPB x
   have hPrimA' : ∀ x, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := familyA.commonFlatDim x) (flatBlocksA x)) := by
+      (Kraus.transferMap (d := blockPhysDim d p) (D := familyA.commonFlatDim x) (flatBlocksA x)) := by
     intro x
     cases hFamilyA
     simpa [flatBlocksA] using hPrimA x
   have hPrimB' : ∀ x, _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d p) (D := familyB.commonFlatDim x) (flatBlocksB x)) := by
+      (Kraus.transferMap (d := blockPhysDim d p) (D := familyB.commonFlatDim x) (flatBlocksB x)) := by
     intro x
     cases hFamilyB
     simpa [flatBlocksB] using hPrimB x
-  have hIrrA' : ∀ x, IsIrreducibleTensor (flatBlocksA x) := by
+  have hIrrA' : ∀ x, Kraus.IsIrreducibleFamily (flatBlocksA x) := by
     intro x
     cases hFamilyA
     simpa [flatBlocksA] using hIrrA x
-  have hIrrB' : ∀ x, IsIrreducibleTensor (flatBlocksB x) := by
+  have hIrrB' : ∀ x, Kraus.IsIrreducibleFamily (flatBlocksB x) := by
     intro x
     cases hFamilyB
     simpa [flatBlocksB] using hIrrB x

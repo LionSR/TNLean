@@ -140,8 +140,8 @@ private theorem linearIndependent_ambientBlockCorners
 /-- A normal MPS block has a nonzero fixed vector for its transfer map. -/
 private theorem exists_nonzero_transferMap_fixedVector_of_normal
     {n : ℕ} {B : MPSTensor d n} (hB : IsNormalTensor B) :
-    ∃ X : Matrix (Fin n) (Fin n) ℂ, X ≠ 0 ∧ transferMap B X = X := by
-  have hone : (1 : ℂ) ∈ peripheralEigenvalues (transferMap B) := by
+    ∃ X : Matrix (Fin n) (Fin n) ℂ, X ≠ 0 ∧ Kraus.transferMap B X = X := by
+  have hone : (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap B) := by
     rw [hB.primitive_transfer]
     simp
   obtain ⟨X, hX⟩ := hone.1.exists_hasEigenvector
@@ -160,7 +160,7 @@ private theorem blockFixedVector_ne (data : CPSVCanonicalFormData A) (k : Fin da
 
 /-- The chosen normal-block vector is fixed by the unweighted block transfer map. -/
 private theorem transferMap_blockFixedVector (data : CPSVCanonicalFormData A) (k : Fin data.r) :
-    transferMap (data.blocks k) (data.blockFixedVector k) = data.blockFixedVector k :=
+    Kraus.transferMap (data.blocks k) (data.blockFixedVector k) = data.blockFixedVector k :=
   (Classical.choose_spec
     (exists_nonzero_transferMap_fixedVector_of_normal (data.blocks_normal k))).2
 
@@ -173,7 +173,7 @@ noncomputable def activeTransferEigenvalue
 `weight * star weight`. -/
 private theorem transferMap_weightedBlock_blockFixedVector
     (data : CPSVCanonicalFormData A) (k : data.Active) :
-    transferMap (fun i => data.weights k.1 • data.blocks k.1 i)
+    Kraus.transferMap (fun i => data.weights k.1 • data.blocks k.1 i)
         (data.blockFixedVector k.1) =
       data.activeTransferEigenvalue k • data.blockFixedVector k.1 := by
   rw [transferMap_smul, data.transferMap_blockFixedVector]
@@ -202,7 +202,7 @@ private theorem ambientActiveVector_ne
 block eigenvalue `weight * star weight`. -/
 private theorem transferMap_ambientActiveVector
     (data : CPSVCanonicalFormData A) (k : data.Active) :
-    transferMap A (data.ambientActiveVector k) =
+    Kraus.transferMap A (data.ambientActiveVector k) =
       data.activeTransferEigenvalue k • data.ambientActiveVector k := by
   rw [ambientActiveVector, transferMap_conj_of_intertwine A
     (fun i => data.weights k.1 • data.blocks k.1 i)
@@ -222,32 +222,32 @@ eigenvalue to one. -/
 theorem activeTransferEigenvalue_eq_one
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
-      Matrix.trace (transferMatrix (transferMap A) ^ N) = 1)
+      Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1)
     (k : data.Active) :
     data.activeTransferEigenvalue k = 1 := by
-  have hEig : Module.End.HasEigenvalue (transferMap A) (data.activeTransferEigenvalue k) :=
+  have hEig : Module.End.HasEigenvalue (Kraus.transferMap A) (data.activeTransferEigenvalue k) :=
     hasEigenvalue_of_eigenvector_eq _ _ (data.ambientActiveVector k)
       (data.transferMap_ambientActiveVector k) (data.ambientActiveVector_ne k)
   have hEigMatrix : Module.End.HasEigenvalue
-      (transferMatrix (transferMap A)).toLin' (data.activeTransferEigenvalue k) :=
-    (transferMatrix_hasEigenvalue_iff (transferMap A) _).mp hEig
+      (transferMatrix (Kraus.transferMap A)).toLin' (data.activeTransferEigenvalue k) :=
+    (transferMatrix_hasEigenvalue_iff (Kraus.transferMap A) _).mp hEig
   have hspecLin : data.activeTransferEigenvalue k ∈
-      spectrum ℂ (transferMatrix (transferMap A)).toLin' :=
+      spectrum ℂ (transferMatrix (Kraus.transferMap A)).toLin' :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mp hEigMatrix
   have hspec : data.activeTransferEigenvalue k ∈
-      spectrum ℂ (transferMatrix (transferMap A)) := by
+      spectrum ℂ (transferMatrix (Kraus.transferMap A)) := by
     simpa using hspecLin
   exact Matrix.eq_one_of_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt
-    (transferMatrix (transferMap A)) htrace hspec (data.activeTransferEigenvalue_ne k)
+    (transferMatrix (Kraus.transferMap A)) htrace hspec (data.activeTransferEigenvalue_ne k)
 
 /-- Under shifted ambient transfer traces, each transported active-block vector
 is fixed by the ambient transfer map. -/
 private theorem transferMap_ambientActiveVector_eq_self
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
-      Matrix.trace (transferMatrix (transferMap A) ^ N) = 1)
+      Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1)
     (k : data.Active) :
-    transferMap A (data.ambientActiveVector k) = data.ambientActiveVector k := by
+    Kraus.transferMap A (data.ambientActiveVector k) = data.ambientActiveVector k := by
   rw [data.transferMap_ambientActiveVector k, data.activeTransferEigenvalue_eq_one htrace k,
     one_smul]
 
@@ -255,10 +255,10 @@ private theorem transferMap_ambientActiveVector_eq_self
 transfer matrix by one dimension. -/
 private theorem finrank_eigenspace_one_transferMatrix_sq_le_one
     (htrace : ∀ N, 1 < N →
-      Matrix.trace (transferMatrix (transferMap A) ^ N) = 1) :
+      Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1) :
     Module.finrank ℂ
-      (Module.End.eigenspace ((transferMatrix (transferMap A) ^ 2).toLin') (1 : ℂ)) ≤ 1 := by
-  let M := transferMatrix (transferMap A)
+      (Module.End.eigenspace ((transferMatrix (Kraus.transferMap A) ^ 2).toLin') (1 : ℂ)) ≤ 1 := by
+  let M := transferMatrix (Kraus.transferMap A)
   have hpow2 :=
     Matrix.forall_trace_pow_pow_eq_one_of_forall_trace_pow_eq_one_of_one_lt
       M htrace 2 (by omega)
@@ -301,7 +301,7 @@ ambient tensor. -/
 theorem card_active_eq_one_of_shifted_transfer_trace
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
-      Matrix.trace (transferMatrix (transferMap A) ^ N) = 1) :
+      Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1) :
     Fintype.card data.Active = 1 := by
   classical
   have hactive : Nonempty data.Active := by
@@ -327,12 +327,12 @@ theorem card_active_eq_one_of_shifted_transfer_trace
     have htwo := htrace 2 (by omega)
     rw [hAzero] at htwo
     have htransferZero :
-        transferMatrix (transferMap (0 : MPSTensor d D)) = 0 := by
+        transferMatrix (Kraus.transferMap (0 : MPSTensor d D)) = 0 := by
       ext ⟨a, b⟩ ⟨c, e⟩
-      simp [transferMatrix, transferMap_apply]
+      simp [transferMatrix, Kraus.transferMap_apply]
     rw [htransferZero] at htwo
     simp at htwo
-  let M := transferMatrix (transferMap A)
+  let M := transferMatrix (Kraus.transferMap A)
   let f : Module.End ℂ (Fin D × Fin D → ℂ) := (M ^ 2).toLin'
   let v : data.Active → f.eigenspace (1 : ℂ) := fun k =>
     ⟨(data.ambientActiveVector k).vec, by
@@ -340,12 +340,12 @@ theorem card_active_eq_one_of_shifted_transfer_trace
       change (M ^ 2).toLin' (data.ambientActiveVector k).vec =
         (1 : ℂ) • (data.ambientActiveVector k).vec
       rw [Matrix.toLin'_apply]
-      change transferMatrix (transferMap A) ^ 2 *ᵥ (data.ambientActiveVector k).vec = _
+      change transferMatrix (Kraus.transferMap A) ^ 2 *ᵥ (data.ambientActiveVector k).vec = _
       rw [← transferMatrix_pow, transferMatrix_mulVec_eq]
       have hfix := data.transferMap_ambientActiveVector_eq_self htrace k
-      have hpow : ((transferMap A) ^ 2) (data.ambientActiveVector k) =
+      have hpow : ((Kraus.transferMap A) ^ 2) (data.ambientActiveVector k) =
           data.ambientActiveVector k := by
-        change transferMap A (transferMap A (data.ambientActiveVector k)) =
+        change Kraus.transferMap A (Kraus.transferMap A (data.ambientActiveVector k)) =
           data.ambientActiveVector k
         rw [hfix, hfix]
       rw [hpow, one_smul]⟩

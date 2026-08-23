@@ -87,7 +87,7 @@ theorem gauge_ratio_commutes {A B : MPSTensor d D}
 /-- If `X` and `Y` both conjugate an injective `A` to the same tensor `B`,
 then `Y⁻¹ · X` is a scalar matrix. -/
 theorem gauge_ratio_isScalar {A B : MPSTensor d D}
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (X Y : GL (Fin D) ℂ)
     (hX : ∀ i : Fin d,
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ))
@@ -112,7 +112,7 @@ applying physical `g` to the `h`-twisted tensor sandwiches the `g`-gauge
 *inside* the `h`-gauge. -/
 theorem gaugeMatrix_projective_mul
     (A : MPSTensor d D)
-    (hA : IsInjective A)
+    (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (X : G → GL (Fin D) ℂ)
     (hX : ∀ g : G, ∀ i : Fin d,

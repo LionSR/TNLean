@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.Word
-import QICLean.MPS.Defs
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Word
+import TNLean.MPS.Defs
+import QICLean.Kraus.Transfer
 import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
@@ -168,7 +168,7 @@ lemma evalWord_ofFn (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
 same as evaluating the ket and bra words separately. -/
 theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)
     (w : Fin N → Fin (d * d)) :
-    MPSTensor.evalWord M.toMPSTensor (List.ofFn w) =
+    Kraus.evalWord M.toMPSTensor (List.ofFn w) =
       evalWord M (List.ofFn fun k ↦ (w k).divNat)
         (List.ofFn fun k ↦ (w k).modNat) := by
   induction N with
@@ -176,7 +176,7 @@ theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)
   | succ N ih =>
       rw [List.ofFn_succ, List.ofFn_succ, List.ofFn_succ]
       change M (w 0).divNat (w 0).modNat *
-          MPSTensor.evalWord M.toMPSTensor (List.ofFn (w ∘ Fin.succ)) =
+          Kraus.evalWord M.toMPSTensor (List.ofFn (w ∘ Fin.succ)) =
         M (w 0).divNat (w 0).modNat *
           evalWord M (List.ofFn fun k ↦ (w (Fin.succ k)).divNat)
             (List.ofFn fun k ↦ (w (Fin.succ k)).modNat)
@@ -188,7 +188,7 @@ and doubled-index MPS descriptions. -/
 @[simp]
 theorem evalWord_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
     (σ τ : Fin N → Fin d) :
-    MPSTensor.evalWord M.toMPSTensor
+    Kraus.evalWord M.toMPSTensor
         (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k)) =
       evalWord M (List.ofFn σ) (List.ofFn τ) := by
   simpa using evalWord_toMPSTensor_ofFn M N
@@ -355,9 +355,9 @@ lemma transferMap_apply (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
 
 /-- The MPO transfer map equals the MPS transfer map of the doubled-index tensor. -/
 @[simp] lemma transferMap_eq_toMPSTensor (M : MPOTensor d D) :
-    transferMap M = MPSTensor.transferMap (toMPSTensor M) := by
+    transferMap M = Kraus.transferMap (toMPSTensor M) := by
   refine LinearMap.ext fun X => ?_
-  simp only [transferMap_apply, MPSTensor.transferMap_apply, toMPSTensor]
+  simp only [transferMap_apply, Kraus.transferMap_apply, toMPSTensor]
   rw [← Fintype.sum_prod_type']
   exact (finProdFinEquiv.symm.sum_comp _).symm
 
@@ -366,7 +366,7 @@ theorem transferMap_pos (M : MPOTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
     (transferMap M X).PosSemidef := by
   simpa [transferMap_eq_toMPSTensor] using
-    MPSTensor.transferMap_pos (toMPSTensor M) hX
+    Kraus.transferMap_pos (toMPSTensor M) hX
 
 /-! ### MPDO: global positivity -/
 

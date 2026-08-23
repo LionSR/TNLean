@@ -26,7 +26,7 @@ the multiplicity matrices of a block-diagonal irreducible form unchanged.
 De las Cuevas--Cirac--Schuch--Pérez-García, arXiv:1708.00029, lines 313--332.
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator Kraus
 
 namespace MPSTensor
 
@@ -44,7 +44,7 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     {A : MPSTensor d D} (hA : IsSpectrallyPeriodic m A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
-      transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) σ = σ ∧
+      Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) σ = σ ∧
       GaugeEquiv A (tpGauge (d := d) (D := D) A σ) ∧
       IsPeriodic m (tpGauge (d := d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hLeft, hGauge, hIrr⟩ :=
@@ -56,11 +56,11 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     simpa [Matrix.det_nonsing_inv] using inv_ne_zero hSdet
   have hPeripheral :
       peripheralEigenvalues
-          (transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) =
-        peripheralEigenvalues (transferMap (d := d) (D := D) A) := by
+          (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) =
+        peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
     rw [transferMap_tpGauge_eq_similarityMap A σ hσ]
     exact peripheralEigenvalues_similarityMap_eq
-      (CFC.sqrt σ)⁻¹ hSinvDet (transferMap (d := d) (D := D) A)
+      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (d := d) (D := D) A)
   refine ⟨σ, hσ, hσfix, hGauge, ?_⟩
   exact ⟨hIrr, hLeft, hA.period_pos, hPeripheral.trans hA.peripheral_eq⟩
 

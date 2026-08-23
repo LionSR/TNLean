@@ -92,7 +92,7 @@ private lemma inv_sqrt2_sq :
 /-- The cluster tensor is **not** injective: `span{A⁰, A¹}` is the `2`-dimensional
 space of matrices whose two left-column entries agree, not the full `4`-dimensional
 matrix algebra `M₂(ℂ)`. -/
-theorem cluster_not_isInjective : ¬ IsInjective clusterTensor := by
+theorem cluster_not_isInjective : ¬ Kraus.IsInjective clusterTensor := by
   intro h
   have hmem : Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈
       Submodule.span ℂ (Set.range clusterTensor) := h ▸ Submodule.mem_top
@@ -147,12 +147,12 @@ private lemma cluster_prod_11 :
 /-! ### Normality (length-2 blocked injectivity) -/
 
 private abbrev clusterWordSpan :=
-  Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 2 => evalWord clusterTensor (List.ofFn σ))
+  Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 2 => Kraus.evalWord clusterTensor (List.ofFn σ))
 
 private lemma cluster_product_in_wordSpan (i j : Fin 2) :
     clusterTensor i * clusterTensor j ∈ clusterWordSpan := by
-  rw [show clusterTensor i * clusterTensor j = evalWord clusterTensor [i, j] from by
-    simp [evalWord]]
+  rw [show clusterTensor i * clusterTensor j = Kraus.evalWord clusterTensor [i, j] from by
+    simp [Kraus.evalWord]]
   have : [i, j] = List.ofFn (![i, j] : Fin 2 → Fin 2) := by
     simp [List.ofFn_succ, List.ofFn_zero]
   rw [this]
@@ -199,8 +199,8 @@ private lemma cluster_single_11_in_wordSpan :
   exact Submodule.add_mem _ (cluster_product_in_wordSpan 0 1) (cluster_product_in_wordSpan 1 1)
 
 /-- The cluster tensor is `2`-block injective: products of length `2` span `M₂(ℂ)`. -/
-theorem cluster_isNBlkInjective_two : IsNBlkInjective clusterTensor 2 := by
-  rw [IsNBlkInjective]
+theorem cluster_isNBlkInjective_two : Kraus.IsNBlkInjective clusterTensor 2 := by
+  rw [Kraus.IsNBlkInjective]
   apply (Submodule.eq_top_iff_forall_basis_mem
     (Matrix.stdBasis ℂ (Fin 2) (Fin 2))).2
   rintro ⟨i, j⟩
@@ -212,7 +212,7 @@ theorem cluster_isNBlkInjective_two : IsNBlkInjective clusterTensor 2 := by
   · exact cluster_single_11_in_wordSpan
 
 /-- The cluster tensor is normal: it is `2`-block-injective. -/
-theorem cluster_isNormal : IsNormal clusterTensor :=
+theorem cluster_isNormal : Kraus.IsNormal clusterTensor :=
   ⟨2, Nat.zero_lt_succ 1, cluster_isNBlkInjective_two⟩
 
 /-! ### The length-2 blocked tensor
@@ -233,7 +233,7 @@ private lemma clusterBlocked_apply (i : Fin 4) :
       clusterTensor (decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i) 0) *
         clusterTensor (decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i) 1) := by
   simp only [clusterBlocked, blockTensor, wordOfBlock]
-  simp [List.ofFn_succ, List.ofFn_zero, evalWord]
+  simp [List.ofFn_succ, List.ofFn_zero, Kraus.evalWord]
 
 private lemma decodeBlock_cast_val (i : Fin 4) (j : Fin 2) :
     ((decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i)) j : ℕ) =
@@ -272,7 +272,7 @@ private lemma decode_3 : decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm 3) 
 
 /-- The length-`2` blocked cluster tensor is injective: its four matrices span
 `M₂(ℂ)`.  This is the blocked-tensor form of `cluster_isNBlkInjective_two`. -/
-theorem clusterBlocked_isInjective : IsInjective clusterBlocked := by
+theorem clusterBlocked_isInjective : Kraus.IsInjective clusterBlocked := by
   have hRange :
       Set.range clusterBlocked = Set.range (blockTensor clusterTensor 2) := by
     ext M
@@ -282,7 +282,7 @@ theorem clusterBlocked_isInjective : IsInjective clusterBlocked := by
     · rintro ⟨i, rfl⟩
       exact ⟨Fin.cast cluster_blockPhysDim i, by
         simp [clusterBlocked, Fin.cast_cast]⟩
-  rw [IsInjective, hRange]
+  rw [Kraus.IsInjective, hRange]
   exact (isNBlkInjective_iff_blockTensor_isInjective clusterTensor 2).1
     cluster_isNBlkInjective_two
 
@@ -578,8 +578,8 @@ open scoped ComplexOrder MatrixOrder
 
 /-- The blocked cluster transfer map is unital: `∑ Aᵢ Aᵢ† = 1`.  The four blocked
 matrices form a normalised Kraus family, so the cluster channel is unital. -/
-private theorem clusterBlocked_transferMap_one : transferMap clusterBlocked 1 = 1 := by
-  rw [transferMap_apply]
+private theorem clusterBlocked_transferMap_one : Kraus.transferMap clusterBlocked 1 = 1 := by
+  rw [Kraus.transferMap_apply]
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp only [Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one, clusterBlocked_two,
@@ -594,8 +594,8 @@ adjoint transfer map: `∑ Aᵢ† Λ Aᵢ = Λ`.  The four blocked matrices sat
 `∑ Aᵢ† Aᵢ = 1`, so the adjoint channel is unital, and scaling by `1/2`
 propagates through the linear map. -/
 private theorem clusterBlocked_adjoint_fixes_maximallyMixed :
-    transferMap (fun i => (clusterBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
-  rw [transferMap_apply]
+    Kraus.transferMap (fun i => (clusterBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
+  rw [Kraus.transferMap_apply]
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp only [Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one, clusterBlocked_two,
@@ -667,10 +667,10 @@ scalar `(X₀₀ + X₁₁)/2` times the identity.  In particular its image is t
 one-dimensional space of scalars, the transfer-matrix signature of a
 renormalization fixed point. -/
 theorem clusterBlocked_transferMap_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    transferMap clusterBlocked X = ((X 0 0 + X 1 1) / 2 : ℂ) • 1 := by
+    Kraus.transferMap clusterBlocked X = ((X 0 0 + X 1 1) / 2 : ℂ) • 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp only [transferMap_apply, Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one,
+    simp only [Kraus.transferMap_apply, Fin.sum_univ_four, clusterBlocked_zero, clusterBlocked_one,
       clusterBlocked_two, clusterBlocked_three, Matrix.add_apply, Matrix.mul_apply,
       Fin.sum_univ_two, Matrix.conjTranspose_apply, Matrix.smul_apply, Matrix.of_apply,
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
@@ -686,7 +686,7 @@ Using the closed form `E(X) = ((X₀₀ + X₁₁)/2)·I` (`clusterBlocked_trans
 the diagonal entries of `E(X)` are each `(X₀₀ + X₁₁)/2`, so applying `E` again
 reproduces the same scalar. -/
 theorem clusterBlocked_transferMap_idempotent :
-    transferMap clusterBlocked ∘ₗ transferMap clusterBlocked = transferMap clusterBlocked := by
+    Kraus.transferMap clusterBlocked ∘ₗ Kraus.transferMap clusterBlocked = Kraus.transferMap clusterBlocked := by
   ext X i j : 3
   rw [LinearMap.comp_apply, clusterBlocked_transferMap_apply,
     clusterBlocked_transferMap_apply]

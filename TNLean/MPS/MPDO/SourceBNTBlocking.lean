@@ -80,15 +80,15 @@ private theorem hasBlockSelectorWords_of_family_gaugeEquiv
   refine ⟨c, ?_, ?_⟩
   · obtain ⟨X, hX⟩ := hGauge k
     calc
-      (∑ w, c w • evalWord (B k) (List.ofFn w)) =
+      (∑ w, c w • Kraus.evalWord (B k) (List.ofFn w)) =
           ∑ w, c w • ((X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) *
-            evalWord (A k) (List.ofFn w) *
+            Kraus.evalWord (A k) (List.ofFn w) *
             ((X⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
         apply Finset.sum_congr rfl
         intro w _
         rw [evalWord_gauge X hX]
       _ = (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) *
-          (∑ w, c w • evalWord (A k) (List.ofFn w)) *
+          (∑ w, c w • Kraus.evalWord (A k) (List.ofFn w)) *
           ((X⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
         rw [Matrix.mul_sum, Finset.sum_mul]
         apply Finset.sum_congr rfl
@@ -100,15 +100,15 @@ private theorem hasBlockSelectorWords_of_family_gaugeEquiv
   · intro j hjk
     obtain ⟨X, hX⟩ := hGauge j
     calc
-      (∑ w, c w • evalWord (B j) (List.ofFn w)) =
+      (∑ w, c w • Kraus.evalWord (B j) (List.ofFn w)) =
           ∑ w, c w • ((X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) *
-            evalWord (A j) (List.ofFn w) *
+            Kraus.evalWord (A j) (List.ofFn w) *
             ((X⁻¹ : GL (Fin (dim j)) ℂ) : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) := by
         apply Finset.sum_congr rfl
         intro w _
         rw [evalWord_gauge X hX]
       _ = (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) *
-          (∑ w, c w • evalWord (A j) (List.ofFn w)) *
+          (∑ w, c w • Kraus.evalWord (A j) (List.ofFn w)) *
           ((X⁻¹ : GL (Fin (dim j)) ℂ) : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) := by
         rw [Matrix.mul_sum, Finset.sum_mul]
         apply Finset.sum_congr rfl
@@ -147,14 +147,14 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
     apply hBNT.blocks_not_gaugePhaseEquiv j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
       (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
-  have hPreparedNormal : ∀ j, IsNormal (prepared j) := by
+  have hPreparedNormal : ∀ j, Kraus.IsNormal (prepared j) := by
     intro j
     exact isNormal_of_tp_primitive_irreducible
       (prepared j) (hTP j) (hPrim j) (hIrr j)
   obtain ⟨p, hp, hAtP⟩ :=
     exists_common_isNBlkInjective_of_isNormal_leftCanonical
       prepared hTP (fun j => (hdimPos j).ne') hPreparedNormal
-  have hAtLeastP : ∀ j n, p ≤ n → IsNBlkInjective (prepared j) n := by
+  have hAtLeastP : ∀ j n, p ≤ n → Kraus.IsNBlkInjective (prepared j) n := by
     intro j n hpn
     exact isNBlkInjective_of_le hp (hAtP j) hpn
   have hPreparedIrr : HasIrreducibleBlocks (d := d) prepared :=
@@ -181,7 +181,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
   have hSelectors : HasBlockSelectorWords B selectorLength :=
     hasBlockSelectorWords_of_family_gaugeEquiv hPreparedSelectors
       (fun j => (hGauge j).symm)
-  have hOriginalAtP : ∀ j, IsNBlkInjective (B j) p := by
+  have hOriginalAtP : ∀ j, Kraus.IsNBlkInjective (B j) p := by
     intro j
     exact isNBlkInjective_of_gaugeEquiv (hAtP j) (hGauge j).symm
   have hSpan : WordTupleSpanTop B (p + selectorLength) :=
@@ -195,9 +195,9 @@ theorem isNBlkInjective_of_wordTupleSpanTop
     {g : ℕ} {dim : Fin g → ℕ}
     (B : (j : Fin g) → MPSTensor d (dim j)) {L : ℕ}
     (hSpan : WordTupleSpanTop B L) (j : Fin g) :
-    IsNBlkInjective (B j) L := by
+    Kraus.IsNBlkInjective (B j) L := by
   classical
-  unfold IsNBlkInjective
+  unfold Kraus.IsNBlkInjective
   apply top_unique
   intro M _
   let target : (k : Fin g) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
@@ -229,7 +229,7 @@ theorem IsCPSVBasisOfNormalTensors.eventually_wordTupleSpanTop
   obtain ⟨p, hp, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
   have hSelectors : HasBlockSelectorWords B p :=
     hasBlockSelectorWords_of_wordTupleSpanTop B hSpan
-  have hAtP : ∀ j, IsNBlkInjective (B j) p :=
+  have hAtP : ∀ j, Kraus.IsNBlkInjective (B j) p :=
     fun j => isNBlkInjective_of_wordTupleSpanTop B hSpan j
   exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
     B hSelectors hp hAtP

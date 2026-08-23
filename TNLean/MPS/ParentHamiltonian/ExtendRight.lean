@@ -41,12 +41,12 @@ variable {d D : ℕ}
 then block injectivity yields a common right factor. -/
 private theorem exists_right_factor_of_letter_compatibility [NeZero D]
     {A : MPSTensor d D} {L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hCompat : ∀ i : Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
       ∀ j : Fin d, Z j * A i = A j * Y) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ, ∀ j : Fin d, Z j = A j * X := by
-  have hBlkInj : IsInjective (blockTensor A L₀) :=
+  have hBlkInj : Kraus.IsInjective (blockTensor A L₀) :=
     (isNBlkInjective_iff_blockTensor_isInjective A L₀).mp hInj
   obtain ⟨c, hc⟩ := hBlkInj.exists_decomposition (1 : Matrix (Fin D) (Fin D) ℂ)
   have hBlockCompat : ∀ i : Fin (blockPhysDim d L₀),
@@ -85,10 +85,10 @@ of length \(K + 1\) reduces to the single-letter case by stripping the first
 letter and applying the induction hypothesis to the matrices \(Z_j A_i\). -/
 private theorem exists_right_factor_of_evalWord_compatibility_succ [NeZero D]
     {A : MPSTensor d D} {L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) :
     ∀ K : ℕ, ∀ {Z : Fin d → Matrix (Fin D) (Fin D) ℂ},
       (∀ σ : Fin (K + 1) → Fin d, ∃ Yσ : Matrix (Fin D) (Fin D) ℂ,
-        ∀ j : Fin d, Z j * evalWord A (List.ofFn σ) = A j * Yσ) →
+        ∀ j : Fin d, Z j * Kraus.evalWord A (List.ofFn σ) = A j * Yσ) →
       ∃ X : Matrix (Fin D) (Fin D) ℂ, ∀ j : Fin d, Z j = A j * X
   | 0, Z, hCompat =>
       have hCompat1 : ∀ i : Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
@@ -98,7 +98,7 @@ private theorem exists_right_factor_of_evalWord_compatibility_succ [NeZero D]
         obtain ⟨Y, hY⟩ := hCompat σ
         refine ⟨Y, ?_⟩
         intro j
-        simpa [σ, evalWord] using hY j
+        simpa [σ, Kraus.evalWord] using hY j
       exists_right_factor_of_letter_compatibility hInj hL₀ hCompat1
   | K + 1, Z, hCompat =>
       have hCompat1 : ∀ i : Fin d, ∃ X : Matrix (Fin D) (Fin D) ℂ,
@@ -107,7 +107,7 @@ private theorem exists_right_factor_of_evalWord_compatibility_succ [NeZero D]
         let Zi : Fin d → Matrix (Fin D) (Fin D) ℂ := fun j => Z j * A i
         have hCompatZi : ∀ σ : Fin (K + 1) → Fin d,
             ∃ Yσ : Matrix (Fin D) (Fin D) ℂ,
-              ∀ j : Fin d, Zi j * evalWord A (List.ofFn σ) = A j * Yσ := by
+              ∀ j : Fin d, Zi j * Kraus.evalWord A (List.ofFn σ) = A j * Yσ := by
           intro σ
           obtain ⟨Yσ, hYσ⟩ := hCompat (Fin.cons i σ)
           refine ⟨Yσ, ?_⟩
@@ -123,10 +123,10 @@ identity \(Z_j A^σ = A_j Y_σ\) for every length-\(K\) word \(σ\), then all \(
 share a common right factor. -/
 theorem exists_right_factor_of_evalWord_compatibility [NeZero D]
     {A : MPSTensor d D} {K L₀ : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hCompat : ∀ σ : Fin K → Fin d, ∃ Yσ : Matrix (Fin D) (Fin D) ℂ,
-      ∀ j : Fin d, Z j * evalWord A (List.ofFn σ) = A j * Yσ) :
+      ∀ j : Fin d, Z j * Kraus.evalWord A (List.ofFn σ) = A j * Yσ) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ, ∀ j : Fin d, Z j = A j * X := by
   cases K with
   | zero =>
@@ -134,7 +134,7 @@ theorem exists_right_factor_of_evalWord_compatibility [NeZero D]
       obtain ⟨Y, hY⟩ := hCompat σ
       refine ⟨Y, ?_⟩
       intro j
-      simpa [σ, evalWord] using hY j
+      simpa [σ, Kraus.evalWord] using hY j
   | succ K =>
       exact exists_right_factor_of_evalWord_compatibility_succ hInj hL₀ K hCompat
 
@@ -142,7 +142,7 @@ theorem exists_right_factor_of_evalWord_compatibility [NeZero D]
 injectivity length \(L₀ + 1\), then the full \((K + L₀ + 1)\)-site state is itself
 in the open-chain ground space. -/
 theorem groundSpace_extend_right_of_isNBlkInjective
-    [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
+    [NeZero D] {A : MPSTensor d D} {K L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
     (hL₀ : 0 < L₀) {ψ : NSiteSpace d (K + L₀ + 1)}
     (hLeft : InLeftGround A (K + L₀) ψ)
     (hTail : InTailGround A K (L₀ + 1) ψ) :

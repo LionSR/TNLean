@@ -45,11 +45,11 @@ theorem trace_marked_mul_evalWord_of_coisometry_reconstruction
     (hReconstruct : ∀ i, A i = Vᴴ * B i * V)
     (C : Matrix (Fin D) (Fin D) ℂ) (E : Matrix (Fin n) (Fin n) ℂ)
     (hMarked : C = Vᴴ * E * V) (w : List (Fin d)) :
-    Matrix.trace (C * evalWord A w) = Matrix.trace (E * evalWord B w) := by
+    Matrix.trace (C * Kraus.evalWord A w) = Matrix.trace (E * Kraus.evalWord B w) := by
   have hChain : ∀ (w : List (Fin d))
       (C : Matrix (Fin D) (Fin D) ℂ) (E : Matrix (Fin n) (Fin n) ℂ),
       C = Vᴴ * E * V →
-      C * evalWord A w = Vᴴ * (E * evalWord B w) * V := by
+      C * Kraus.evalWord A w = Vᴴ * (E * Kraus.evalWord B w) * V := by
     intro w
     induction w with
     | nil =>
@@ -57,7 +57,7 @@ theorem trace_marked_mul_evalWord_of_coisometry_reconstruction
         simp [hCE]
     | cons i w ih =>
         intro C E hCE
-        simp only [evalWord_cons]
+        simp only [Kraus.evalWord_cons]
         have hNext : C * A i = Vᴴ * (E * B i) * V := by
           rw [hCE, hReconstruct i]
           simp only [Matrix.mul_assoc]
@@ -87,8 +87,8 @@ theorem trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction
     (V : Matrix (Fin n) (Fin D) ℂ) (hV : V * Vᴴ = 1)
     (hReconstruct : ∀ i, A i = Vᴴ * B i * V)
     (u : Fin e) (w : List (Fin d)) :
-    Matrix.trace (linearMarkedTensor f A u * evalWord A w) =
-      Matrix.trace (linearMarkedTensor f B u * evalWord B w) :=
+    Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A w) =
+      Matrix.trace (linearMarkedTensor f B u * Kraus.evalWord B w) :=
   trace_marked_mul_evalWord_of_coisometry_reconstruction A B V hV hReconstruct
     _ _ (linearMarkedTensor_coisometry_reconstruction f A B V hReconstruct u) w
 
@@ -177,8 +177,8 @@ Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem linearMarkedTensor_eq_of_trace_agree
     (ref : data.ActiveBNTRefinement) (f g : Fin e → Fin d → ℂ)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
-      Matrix.trace (linearMarkedTensor f A u * evalWord A (List.ofFn w)) =
-        Matrix.trace (linearMarkedTensor g A u * evalWord A (List.ofFn w))) :
+      Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A (List.ofFn w)) =
+        Matrix.trace (linearMarkedTensor g A u * Kraus.evalWord A (List.ofFn w))) :
     linearMarkedTensor f A = linearMarkedTensor g A := by
   classical
   let X := globalGaugeOfBlocks ref.listedGauge
@@ -196,8 +196,8 @@ theorem linearMarkedTensor_eq_of_trace_agree
   let Cg := fun j : Fin data.activePhaseClasses.g =>
     linearMarkedTensor g (data.blocks (data.activeRepresentativeIndex j))
   have hGroupedTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
-      Matrix.trace (ref.groupedMarkedTensor Cf u * evalWord ref.groupedTensor (List.ofFn w)) =
-        Matrix.trace (ref.groupedMarkedTensor Cg u * evalWord ref.groupedTensor (List.ofFn w)) := by
+      Matrix.trace (ref.groupedMarkedTensor Cf u * Kraus.evalWord ref.groupedTensor (List.ofFn w)) =
+        Matrix.trace (ref.groupedMarkedTensor Cg u * Kraus.evalWord ref.groupedTensor (List.ofFn w)) := by
     intro L hL u w
     rw [← ref.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor f,
       ← ref.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor g]
@@ -250,8 +250,8 @@ theorem linearMarkedTensor_eq_of_trace_agree
     (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
     (f g : Fin e → Fin d → ℂ)
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
-      Matrix.trace (linearMarkedTensor f A u * evalWord A (List.ofFn w)) =
-        Matrix.trace (linearMarkedTensor g A u * evalWord A (List.ofFn w))) :
+      Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A (List.ofFn w)) =
+        Matrix.trace (linearMarkedTensor g A u * Kraus.evalWord A (List.ofFn w))) :
     linearMarkedTensor f A = linearMarkedTensor g A := by
   let data := Classical.choice hCanonical
   let ref := data.activeBNTRefinement

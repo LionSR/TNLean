@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
 
 import Mathlib.Data.Matrix.Mul
@@ -35,7 +35,7 @@ real boundary vectors, so the bilinear and sesquilinear pairings agree there.
 
 ## Main definitions
 
-* `openCoeff vL vR A w` — the boundary contraction `vL ⬝ (evalWord A w) ⬝ vR` of a
+* `openCoeff vL vR A w` — the boundary contraction `vL ⬝ (Kraus.evalWord A w) ⬝ vR` of a
   word `w`.
 * `openState vL vR A N` — the open-boundary state on `N` sites as a function on
   configurations, sending `σ` to `openCoeff vL vR A (List.ofFn σ)`.
@@ -54,16 +54,16 @@ variable {d D : ℕ}
 
 /-- The open-boundary contraction of a word `w` against a left boundary covector
 `vL` and a right boundary vector `vR`:
-\(v_L^{\mathsf T}\,(\mathrm{evalWord}\,A\,w)\,v_R\).
+\(v_L^{\mathsf T}\,(\mathrm{Kraus.evalWord}\,A\,w)\,v_R\).
 
 This is the bilinear pairing `(l| A^{w} |r)` of arXiv:2011.12127, lines
 2358--2362. -/
 noncomputable def openCoeff (vL vR : Fin D → ℂ) (A : MPSTensor d D)
     (w : List (Fin d)) : ℂ :=
-  vL ⬝ᵥ (evalWord A w).mulVec vR
+  vL ⬝ᵥ (Kraus.evalWord A w).mulVec vR
 
 @[simp] lemma openCoeff_def (vL vR : Fin D → ℂ) (A : MPSTensor d D) (w : List (Fin d)) :
-    openCoeff vL vR A w = vL ⬝ᵥ (evalWord A w).mulVec vR := rfl
+    openCoeff vL vR A w = vL ⬝ᵥ (Kraus.evalWord A w).mulVec vR := rfl
 
 /-- The empty-word contraction is the boundary overlap `vL ⬝ vR`. -/
 @[simp] lemma openCoeff_nil (vL vR : Fin D → ℂ) (A : MPSTensor d D) :

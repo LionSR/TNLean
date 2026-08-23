@@ -8,7 +8,7 @@ import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
-import QICLean.MPS.Core.CPPrimitive
+import QICLean.Kraus.CPPrimitive
 import QICLean.Channel.Basic
 import QICLean.Channel.KrausRepresentation
 import QICLean.Channel.KrausUnitaryFreedom

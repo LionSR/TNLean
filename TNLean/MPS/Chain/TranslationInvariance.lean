@@ -81,7 +81,7 @@ satisfy `SameMPV` on their combined tensors, there exists
 theorem ti_tensors_single_gauge
     (A B : MPSTensor d D)
     (hn : 0 < n)
-    (hA : MPSTensor.IsInjective A)
+    (hA : Kraus.IsInjective A)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
@@ -89,7 +89,7 @@ theorem ti_tensors_single_gauge
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
   let k0 : Fin n := ⟨0, hn⟩
   have hCombinedInj :
-      MPSTensor.IsInjective (MPSTensor.chainCombinedTensor (fun _ : Fin n => A)) :=
+      Kraus.IsInjective (MPSTensor.chainCombinedTensor (fun _ : Fin n => A)) :=
     MPSTensor.chainCombinedTensor_isInjective (A := fun _ : Fin n => A) k0 hA
   obtain ⟨X, hX⟩ :=
     MPSTensor.fundamentalTheorem_singleBlock hCombinedInj hMPV
@@ -106,7 +106,7 @@ a matrix `Z` with `IsUnit Z` and a scalar `λ : ℂ` with `λ^n = 1` such that
 theorem ti_tensors_collapse_to_single_gauge
     (A B : MPSTensor d D)
     (hn : 0 < n)
-    (hA : MPSTensor.IsInjective A)
+    (hA : Kraus.IsInjective A)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
@@ -131,13 +131,13 @@ If `A` is injective and the constant chains `(A, …, A)` and `(B, …, B)` sati
 theorem ti_reduction_corollary
     (A B : MPSTensor d D)
     (hn : 0 < n)
-    (hA : MPSTensor.IsInjective A)
+    (hA : Kraus.IsInjective A)
     (hMPV : MPSTensor.SameMPV
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => A))
       (MPSTensor.chainCombinedTensor (fun _ : Fin n => B))) :
     (∃ X : GL (Fin D) ℂ, ∀ i : Fin d,
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
-    MPSTensor.IsInjective B := by
+    Kraus.IsInjective B := by
   obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
   exact ⟨⟨X, hGauge⟩, MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
 

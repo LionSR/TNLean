@@ -47,11 +47,11 @@ theorem exists_normalTensor_scalar_representation :
     ∃ (A : MPOTensor 4 2) (mu : ℂ),
       mu ≠ 0 ∧ tensor = mu • A ∧ A.toMPSTensor.IsNormalTensor := by
   let _ : NeZero 2 := ⟨by omega⟩
-  have hNormal : MPSTensor.IsNormal tensor.toMPSTensor :=
-    MPSTensor.IsInjective.isNormal tensor_isInjective
+  have hNormal : Kraus.IsNormal tensor.toMPSTensor :=
+    Kraus.IsInjective.isNormal tensor_isInjective
   have hPrimitivePaper : tensor.toMPSTensor.IsPrimitivePaper :=
     MPSTensor.isPrimitivePaper_of_isNormal tensor.toMPSTensor hNormal
-  have hIrr : tensor.toMPSTensor.IsIrreducibleTensor :=
+  have hIrr : Kraus.IsIrreducibleFamily tensor.toMPSTensor :=
     MPSTensor.isIrreducibleTensor_of_isPrimitivePaper tensor.toMPSTensor hPrimitivePaper
   obtain ⟨rho, r, hrho, hr, hEig⟩ :=
     MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible tensor.toMPSTensor
@@ -66,11 +66,11 @@ theorem exists_normalTensor_scalar_representation :
     rw [← mul_assoc, mul_inv_cancel₀ hmu, one_mul]
   have hAinj : A.IsInjective := by
     exact tensor_isInjective.smul (inv_ne_zero hmu)
-  have hANormal : MPSTensor.IsNormal A.toMPSTensor :=
-    MPSTensor.IsInjective.isNormal hAinj
+  have hANormal : Kraus.IsNormal A.toMPSTensor :=
+    Kraus.IsInjective.isNormal hAinj
   have hAPrimitivePaper : A.toMPSTensor.IsPrimitivePaper :=
     MPSTensor.isPrimitivePaper_of_isNormal A.toMPSTensor hANormal
-  have hAIrr : A.toMPSTensor.IsIrreducibleTensor :=
+  have hAIrr : Kraus.IsIrreducibleFamily A.toMPSTensor :=
     MPSTensor.isIrreducibleTensor_of_isPrimitivePaper A.toMPSTensor hAPrimitivePaper
   have hmumu : mu⁻¹ * starRingEnd ℂ mu⁻¹ = (r : ℂ)⁻¹ := by
     change (((Real.sqrt r : ℝ) : ℂ))⁻¹ *
@@ -78,32 +78,32 @@ theorem exists_normalTensor_scalar_representation :
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
   have hmap :
-      MPSTensor.transferMap A.toMPSTensor =
-        (r : ℂ)⁻¹ • MPSTensor.transferMap tensor.toMPSTensor := by
+      Kraus.transferMap A.toMPSTensor =
+        (r : ℂ)⁻¹ • Kraus.transferMap tensor.toMPSTensor := by
     apply LinearMap.ext
     intro X
-    change MPSTensor.transferMap (fun i ↦ mu⁻¹ • tensor.toMPSTensor i) X =
-      (r : ℂ)⁻¹ • MPSTensor.transferMap tensor.toMPSTensor X
+    change Kraus.transferMap (fun i ↦ mu⁻¹ • tensor.toMPSTensor i) X =
+      (r : ℂ)⁻¹ • Kraus.transferMap tensor.toMPSTensor X
     rw [MPSTensor.transferMap_smul, hmumu]
   have hr_ne : (r : ℂ) ≠ 0 := by exact_mod_cast hr.ne'
-  have hfix : MPSTensor.transferMap A.toMPSTensor rho = rho := by
+  have hfix : Kraus.transferMap A.toMPSTensor rho = rho := by
     rw [hmap, LinearMap.smul_apply, hEig, smul_smul,
       inv_mul_cancel₀ hr_ne, one_smul]
   have hRadius :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin 2) (Fin 2) ℂ))
-            (MPSTensor.transferMap A.toMPSTensor)) = 1 := by
+            (Kraus.transferMap A.toMPSTensor)) = 1 := by
     simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-        (MPSTensor.transferMap A.toMPSTensor)
-        (MPSTensor.transferMap_isCPMap A.toMPSTensor)
+        (Kraus.transferMap A.toMPSTensor)
+        (Kraus.transferMap_isCPMap A.toMPSTensor)
         (MPSTensor.isIrreducibleCP_transferMap_of_isIrreducibleTensor
           A.toMPSTensor hAIrr)
         rho 1 hrho (by norm_num) (by simpa using hfix))
   obtain ⟨sigma, hsigma, hsigmaFix, hLeft, hGauge, hGaugeIrr⟩ :=
     MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one hAIrr hRadius
   have hGaugeNormal :
-      MPSTensor.IsNormal (MPSTensor.tpGauge A.toMPSTensor sigma) :=
+      Kraus.IsNormal (MPSTensor.tpGauge A.toMPSTensor sigma) :=
     MPSTensor.isNormal_of_gaugeEquiv hANormal hGauge
   have hGaugeNormalTensor :
       MPSTensor.IsNormalTensor (MPSTensor.tpGauge A.toMPSTensor sigma) :=

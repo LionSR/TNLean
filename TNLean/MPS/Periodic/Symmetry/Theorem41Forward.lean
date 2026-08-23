@@ -30,13 +30,13 @@ variable {d D : ℕ}
 For a (possibly rectangular) isometry `W : Fin m → Fin d` with `Wᴴ · W = 1`,
 the family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
 as `B`. This is an adapter from
-`kraus_same_map_of_isometry_combination` to the `MPSTensor.transferMap` interface. -/
+`kraus_same_map_of_isometry_combination` to the `Kraus.transferMap` interface. -/
 theorem transferMap_kraus_isometry
     {m : ℕ} (B : MPSTensor d D)
     (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
-    transferMap (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) = transferMap B := by
+    Kraus.transferMap (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) = Kraus.transferMap B := by
   ext X : 1
-  simpa [transferMap_apply] using
+  simpa [Kraus.transferMap_apply] using
     kraus_same_map_of_isometry_combination
       (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
       (K' := B) W hW (fun _ => rfl) X
@@ -47,7 +47,7 @@ of evaluations of the original tensor.
 If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor
 `B : MPSTensor d D` by `W : Matrix (Fin m) (Fin d) ℂ`, then for every `N` and
 every `τ : Fin N → Fin m`,
-`evalWord C (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) • evalWord B (List.ofFn σ)`.
+`Kraus.evalWord C (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) • Kraus.evalWord B (List.ofFn σ)`.
 
 This is the coefficient-expansion identity used in both directions of Theorem 4.1:
 in the forward direction it rewrites a refinement witness as `SameMPV` for the
@@ -56,9 +56,9 @@ produced by Wolf Theorem 2.1(4). -/
 theorem evalWord_sum_smul_ofFn
     {m : ℕ} (B : MPSTensor d D) (W : Matrix (Fin m) (Fin d) ℂ) :
     ∀ (N : ℕ) (τ : Fin N → Fin m),
-      evalWord (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
+      Kraus.evalWord (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
         ∑ σ : Fin N → Fin d,
-          (∏ k : Fin N, W (τ k) (σ k)) • evalWord B (List.ofFn σ) := by
+          (∏ k : Fin N, W (τ k) (σ k)) • Kraus.evalWord B (List.ofFn σ) := by
   classical
   intro N τ
   rw [evalWord_ofFn_eq_prod, List.prod_ofFn_sum]
@@ -107,14 +107,14 @@ theorem isLeftCanonical_kraus_isometry
     (hB : IsLeftCanonical B) :
     IsLeftCanonical (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) := by
   let C : MPSTensor m D := fun τ => ∑ σ : Fin d, W τ σ • B σ
-  have hCh : IsChannel (transferMap C) := by
-    have hEq : transferMap C = transferMap B := by
+  have hCh : IsChannel (Kraus.transferMap C) := by
+    have hEq : Kraus.transferMap C = Kraus.transferMap B := by
       simpa [C] using transferMap_kraus_isometry B W hW
-    simpa [hEq] using transferMap_isChannel B hB
+    simpa [hEq] using Kraus.isChannel_transferMap B hB
   change IsLeftCanonical C
   rw [IsLeftCanonical]
-  exact kraus_sum_conjTranspose_mul_of_tp C (transferMap C)
-    (fun X => by simp [transferMap_apply]) hCh.tp
+  exact kraus_sum_conjTranspose_mul_of_tp C (Kraus.transferMap C)
+    (fun X => by simp [Kraus.transferMap_apply]) hCh.tp
 
 /-- A physical-index isometry preserves periodicity and its period. -/
 theorem isPeriodic_kraus_isometry
@@ -123,11 +123,11 @@ theorem isPeriodic_kraus_isometry
     (hB : IsPeriodic p B) :
     IsPeriodic p (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) := by
   let C : MPSTensor m D := fun τ => ∑ σ : Fin d, W τ σ • B σ
-  have hEq : transferMap C = transferMap B := by
+  have hEq : Kraus.transferMap C = Kraus.transferMap B := by
     simpa [C] using transferMap_kraus_isometry B W hW
-  have hIrrMapB : IsIrreducibleMap (transferMap B) :=
+  have hIrrMapB : IsIrreducibleMap (Kraus.transferMap B) :=
     isIrreducibleMap_of_isIrreducibleTensor B hB.irreducible
-  have hIrrMapC : IsIrreducibleMap (transferMap C) := by
+  have hIrrMapC : IsIrreducibleMap (Kraus.transferMap C) := by
     simpa [hEq] using hIrrMapB
   refine ⟨isIrreducibleTensor_of_isIrreducibleMap C hIrrMapC,
     isLeftCanonical_kraus_isometry B W hW hB.leftCanonical,
@@ -257,8 +257,8 @@ theorem pRefinementCanonicalization_pullback
     ∃ (A : MPSTensor d D)
       (W : Matrix (Fin (blockPhysDim d p)) (Fin d) ℂ),
       Wᴴ * W = 1 ∧
-      transferMap (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ) =
-        transferMap B ∧
+      Kraus.transferMap (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ) =
+        Kraus.transferMap B ∧
       SameMPV (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ)
         (blockTensor A p) := by
   rcases hRefine with ⟨A, W, hW, hCoeff⟩
@@ -288,8 +288,8 @@ theorem pRefinementCanonicalization_pullback_of_irreducibleForm
       (_ : IsIrreducibleForm
         (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ)),
       Wᴴ * W = 1 ∧
-      transferMap (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ) =
-        transferMap B ∧
+      Kraus.transferMap (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ) =
+        Kraus.transferMap B ∧
       SameMPV (fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ)
         (blockTensor A p) := by
   obtain ⟨A, W, hW, hTransfer, hSame⟩ :=
@@ -306,16 +306,16 @@ transfer map `E_A` is a CPTP channel) *and* the channel-level matching
 
 The proof combines the channel-level blocking identity `E_{A^{[p]}} = (E_A)^p`
 (`MPSTensor.transferMap_blockTensor`) with the left-canonical channel property
-`MPSTensor.transferMap_isChannel`. The bridging from the direct coefficient-level
+`Kraus.isChannel_transferMap`. The bridging from the direct coefficient-level
 `IsPRefinable B p` hypothesis to this witness is handled in
 `thm_4_1_p_refinement_forward` below. -/
 theorem thm_4_1_p_refinement_forward_witness
     (B : MPSTensor d D) (p : ℕ)
     (A : MPSTensor d D)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hTransferEq : transferMap B = transferMap (blockTensor A p)) :
-    IsPDivisibleChannel (transferMap B) p :=
-  ⟨transferMap A, transferMap_isChannel A hA_norm, by
+    (hTransferEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
+    IsPDivisibleChannel (Kraus.transferMap B) p :=
+  ⟨Kraus.transferMap A, Kraus.isChannel_transferMap A hA_norm, by
     rw [hTransferEq, transferMap_blockTensor]⟩
 
 /-- **Blocked \(Z\)-gauge extraction for the periodic equal-case step.**
@@ -381,7 +381,7 @@ def PeripheralEqualCaseRootFromZGauge (d D p : ℕ) : Prop :=
     ZGaugeEquiv m C (blockTensor A p) →
       ∃ A' : MPSTensor d D,
         (∑ i : Fin d, (A' i)ᴴ * A' i = 1) ∧
-        transferMap C = transferMap (blockTensor A' p)
+        Kraus.transferMap C = Kraus.transferMap (blockTensor A' p)
 
 /-- **The \(\widetilde A\) construction after the blocked equal-case step.**
 
@@ -404,7 +404,7 @@ def PeripheralEqualCasePeriodicFTOfSameMPV (d D p : ℕ) : Prop :=
     SameMPV C (blockTensor A p) →
       ∃ A' : MPSTensor d D,
         (∑ i : Fin d, (A' i)ᴴ * A' i = 1) ∧
-        transferMap C = transferMap (blockTensor A' p)
+        Kraus.transferMap C = Kraus.transferMap (blockTensor A' p)
 
 /-- **From \(Z\)-gauge extraction to the \(\widetilde A\) construction.**
 
@@ -453,7 +453,7 @@ def PRefinementCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B → IsPRefinable B p →
     ∃ A : MPSTensor d D,
       (∑ i : Fin d, (A i)ᴴ * A i = 1) ∧
-      transferMap B = transferMap (blockTensor A p)
+      Kraus.transferMap B = Kraus.transferMap (blockTensor A p)
 
 /-- **Reduction of the forward construction to the blocked equal-case step.**
 
@@ -473,15 +473,15 @@ theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
     fun τ : Fin (blockPhysDim d p) => ∑ σ : Fin d, W τ σ • B σ
   have hC' : IsIrreducibleForm C := by
     simpa [C] using hC
-  have hTransfer' : transferMap C = transferMap B := by
+  have hTransfer' : Kraus.transferMap C = Kraus.transferMap B := by
     simpa [C] using hTransfer
   have hSame' : SameMPV C (blockTensor A p) := by
     simpa [C] using hSame
   obtain ⟨A', hA'_norm, hTransferA'⟩ := hPeripheralEq (A := A) (C := C) hC' hSame'
   refine ⟨A', hA'_norm, ?_⟩
   calc
-    transferMap B = transferMap C := hTransfer'.symm
-    _ = transferMap (blockTensor A' p) := hTransferA'
+    Kraus.transferMap B = Kraus.transferMap C := hTransfer'.symm
+    _ = Kraus.transferMap (blockTensor A' p) := hTransferA'
 
 /-- **Forward direction of Theorem 4.1 from the blocked equal-case step.**
 
@@ -493,7 +493,7 @@ theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMP
     (p : ℕ)
     (hPeripheralEq : PeripheralEqualCasePeriodicFTOfSameMPV d D p)
     (hRefine : IsPRefinable B p) :
-    IsPDivisibleChannel (transferMap B) p := by
+    IsPDivisibleChannel (Kraus.transferMap B) p := by
   obtain ⟨A, hA_norm, hTransferEq⟩ :=
     (pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
       hPeripheralEq) hB hRefine
@@ -504,7 +504,7 @@ theorem thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMP
 Let `B` be an MPS tensor in irreducible form II. Assume
 `PRefinementCanonicalization`, which states the remaining analytic passage from
 `IsPRefinable B p` to a left-canonical witness with matching transfer map. Then
-`IsPRefinable B p` implies `IsPDivisibleChannel (transferMap B) p`.
+`IsPRefinable B p` implies `IsPDivisibleChannel (Kraus.transferMap B) p`.
 
 This follows the same conditional pattern as
 `MPSTensor.cor_4_1_physical_symmetry_zgauge`: inputs not yet formalized are
@@ -516,7 +516,7 @@ theorem thm_4_1_p_refinement_forward
     (p : ℕ)
     (hCanonical : PRefinementCanonicalization d D p)
     (hRefine : IsPRefinable B p) :
-    IsPDivisibleChannel (transferMap B) p := by
+    IsPDivisibleChannel (Kraus.transferMap B) p := by
   obtain ⟨A, hA_norm, hTransferEq⟩ := hCanonical hB hRefine
   exact thm_4_1_p_refinement_forward_witness B p A hA_norm hTransferEq
 

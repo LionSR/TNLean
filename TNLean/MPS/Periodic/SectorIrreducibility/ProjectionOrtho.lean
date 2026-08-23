@@ -67,8 +67,8 @@ theorem preservesCorner_of_adjoint_fixed_projection
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : MatrixAlg D}
     (hP : IsOrthogonalProjection P)
-    (hFix : MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
-    PreservesCorner P (MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
+    (hFix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
+    PreservesCorner P (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
   have hComm : ∀ i : Fin d, P * A i = A i * P :=
     MPSTensor.commutes_letters_of_adjoint_fixed_projection (A := A) hTP (hP := hP) hFix
   have hCommAdj : ∀ i : Fin d, P * (A i)ᴴ = (A i)ᴴ * P := by
@@ -76,7 +76,7 @@ theorem preservesCorner_of_adjoint_fixed_projection
     have h := congrArg Matrix.conjTranspose (hComm i)
     simpa [Matrix.conjTranspose_mul, hP.1.eq] using h.symm
   intro X
-  simp only [MPSTensor.transferMap_apply, Finset.mul_sum, Finset.sum_mul,
+  simp only [Kraus.transferMap_apply, Finset.mul_sum, Finset.sum_mul,
     Matrix.conjTranspose_conjTranspose]
   refine Finset.sum_congr rfl ?_
   intro i _

@@ -36,7 +36,7 @@ theorem exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
     exact Submodule.mem_top
   rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp htarget with ⟨c, hc⟩
   let M : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ :=
-    fun l => ∑ w : Fin S → Fin d, c w • evalWord (A l) (List.ofFn w)
+    fun l => ∑ w : Fin S → Fin d, c w • Kraus.evalWord (A l) (List.ofFn w)
   refine ⟨M, ?_, ?_, ?_⟩
   · refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, ?_⟩
     ext l
@@ -145,8 +145,8 @@ theorem wordTupleSpanTop_succ_of_unital
       wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) = M := by
     funext k
     rw [Finset.sum_apply]
-    simp only [wordTuple, List.ofFn_succ, List.ofFn_zero, evalWord_cons,
-      evalWord_nil, mul_one]
+    simp only [wordTuple, List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons,
+      Kraus.evalWord_nil, mul_one]
     simp_rw [← Matrix.mul_assoc]
     rw [← Finset.sum_mul, hUnital k, one_mul]
   rw [hSumEq] at hSum
@@ -225,7 +225,7 @@ theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
 block gives the simultaneous word-tuple spanning property. -/
 theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
     (A : (k : Fin r) → MPSTensor d (dim k)) {L : ℕ}
-    (hr : r = 1) (hInj : ∀ k : Fin r, IsNBlkInjective (A k) L) :
+    (hr : r = 1) (hInj : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L) :
     WordTupleSpanTop A L := by
   classical
   let k₀ : Fin r := ⟨0, by omega⟩
@@ -233,9 +233,9 @@ theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
   apply top_unique
   intro X _
   have hX : X k₀ ∈ Submodule.span ℂ
-      (Set.range fun w : Fin L → Fin d ↦ evalWord (A k₀) (List.ofFn w)) := by
+      (Set.range fun w : Fin L → Fin d ↦ Kraus.evalWord (A k₀) (List.ofFn w)) := by
     rw [show Submodule.span ℂ
-      (Set.range fun w : Fin L → Fin d ↦ evalWord (A k₀) (List.ofFn w)) = ⊤ by
+      (Set.range fun w : Fin L → Fin d ↦ Kraus.evalWord (A k₀) (List.ofFn w)) = ⊤ by
         exact (hInj k₀).span_eq_top]
     exact Submodule.mem_top
   obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hX
@@ -469,7 +469,7 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
   ext j a b
   calc
     (Fintype.linearCombination ℂ (wordTuple A L) c) j a b
-        = (∑ w : Fin L → Fin d, c w • evalWord (A j) (List.ofFn w)) a b := by
+        = (∑ w : Fin L → Fin d, c w • Kraus.evalWord (A j) (List.ofFn w)) a b := by
             simp [Fintype.linearCombination_apply, wordTuple, Pi.smul_apply]
     _ = ∑ w : Fin L → Fin d, c w * wordEntryFamily A L ⟨j, (a, b)⟩ w := by
           simp_rw [Matrix.sum_apply, Matrix.smul_apply]
@@ -532,14 +532,14 @@ individual blocks. Concatenating an injective prefix with a selector suffix then
 spans the full product algebra. -/
 def PropBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
-  ∃ L S : ℕ, (∀ k, IsNBlkInjective (A k) L) ∧ HasBlockSelectorWords A S
+  ∃ L S : ℕ, (∀ k, Kraus.IsNBlkInjective (A k) L) ∧ HasBlockSelectorWords A S
 
 /-- Common block injectivity plus pairwise block-separating word polynomials
 produce the abstract block-injectivity selector data. -/
 theorem propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
-    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
     PropBlockInjective A :=
   ⟨L, (r - 1) * S, hInj, hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair⟩
@@ -549,7 +549,7 @@ word-tuple span condition. -/
 theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
-    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hSel : HasBlockSelectorWords A S) :
     WordTupleSpanTop A (L + S) := by
   classical
@@ -559,10 +559,10 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
   have hMk_mem :
       ∀ k : Fin r,
         M k ∈ Submodule.span ℂ
-          (Set.range fun u : Fin L → Fin d => evalWord (A k) (List.ofFn u)) := by
+          (Set.range fun u : Fin L → Fin d => Kraus.evalWord (A k) (List.ofFn u)) := by
     intro k
     rw [show Submodule.span ℂ
-      (Set.range fun u : Fin L → Fin d => evalWord (A k) (List.ofFn u)) = ⊤ by
+      (Set.range fun u : Fin L → Fin d => Kraus.evalWord (A k) (List.ofFn u)) = ⊤ by
         exact (hInj k).span_eq_top]
     exact Submodule.mem_top
   choose prefixCoeffs hprefix using
@@ -593,14 +593,14 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
               wordTuple A (L + S) (Fin.append u v)) j
           = ∑ k : Fin r, ∑ u : Fin L → Fin d, ∑ v : Fin S → Fin d,
               (prefixCoeffs k u * selectorCoeffs k v) •
-                (evalWord (A j) (List.ofFn u) *
-                  evalWord (A j) (List.ofFn v)) := by
-              simp [wordTuple, List.ofFn_fin_append, evalWord_append]
+                (Kraus.evalWord (A j) (List.ofFn u) *
+                  Kraus.evalWord (A j) (List.ofFn v)) := by
+              simp [wordTuple, List.ofFn_fin_append, Kraus.evalWord_append]
       _ = ∑ k : Fin r, ∑ u : Fin L → Fin d,
             prefixCoeffs k u •
-              (evalWord (A j) (List.ofFn u) *
+              (Kraus.evalWord (A j) (List.ofFn u) *
                 ∑ v : Fin S → Fin d,
-                  selectorCoeffs k v • evalWord (A j) (List.ofFn v)) := by
+                  selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v)) := by
             refine Finset.sum_congr rfl ?_
             intro k _
             refine Finset.sum_congr rfl ?_
@@ -608,24 +608,24 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
             calc
               ∑ v : Fin S → Fin d,
                   (prefixCoeffs k u * selectorCoeffs k v) •
-                    (evalWord (A j) (List.ofFn u) *
-                      evalWord (A j) (List.ofFn v))
+                    (Kraus.evalWord (A j) (List.ofFn u) *
+                      Kraus.evalWord (A j) (List.ofFn v))
                 = ∑ v : Fin S → Fin d,
                     prefixCoeffs k u •
-                      (evalWord (A j) (List.ofFn u) *
-                        (selectorCoeffs k v • evalWord (A j) (List.ofFn v))) := by
+                      (Kraus.evalWord (A j) (List.ofFn u) *
+                        (selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v))) := by
                     refine Finset.sum_congr rfl ?_
                     intro v _
                     rw [Matrix.mul_smul]
                     simp [smul_smul]
               _ = prefixCoeffs k u •
-                    (evalWord (A j) (List.ofFn u) *
+                    (Kraus.evalWord (A j) (List.ofFn u) *
                       ∑ v : Fin S → Fin d,
-                        selectorCoeffs k v • evalWord (A j) (List.ofFn v)) := by
+                        selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v)) := by
                     rw [Matrix.mul_sum, Finset.smul_sum]
       _ = ∑ k : Fin r, ∑ u : Fin L → Fin d,
             if h : k = j then
-              prefixCoeffs k u • evalWord (A j) (List.ofFn u)
+              prefixCoeffs k u • Kraus.evalWord (A j) (List.ofFn u)
             else 0 := by
             refine Finset.sum_congr rfl ?_
             intro k _
@@ -639,11 +639,11 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
                 exact hkj hjk.symm
               have hzero :
                   ∑ v : Fin S → Fin d,
-                    selectorCoeffs k v • evalWord (A j) (List.ofFn v) = 0 :=
+                    selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v) = 0 :=
                 hselector_off k j hjk
               simp [hkj, hzero]
       _ = ∑ u : Fin L → Fin d,
-            prefixCoeffs j u • evalWord (A j) (List.ofFn u) := by
+            prefixCoeffs j u • Kraus.evalWord (A j) (List.ofFn u) := by
             simp
       _ = M j := hprefix j
   rw [← hassembled]
@@ -654,7 +654,7 @@ yield the full word-tuple span condition. -/
 theorem wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
-    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
     WordTupleSpanTop A (L + (r - 1) * S) :=
   wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj
@@ -665,7 +665,7 @@ imply `HasBiCF`. -/
 theorem hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
-    (hInj : ∀ k, IsNBlkInjective (A k) L)
+    (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
     HasBiCF A :=
   hasBiCF_of_wordTupleSpanTop A
@@ -698,7 +698,7 @@ variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
 /-- A finite-length block-separation hypothesis yields `HorizontalCFData`. -/
 theorem horizontalCFData_of_wordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hInj : ∀ k, MPSTensor.IsInjective (A k))
+    (hInj : ∀ k, Kraus.IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     (hSpan : ∃ L : ℕ, MPSTensor.WordTupleSpanTop A L) :
@@ -717,7 +717,7 @@ route into `HorizontalCFData`: it already implies the finite-length product
 algebra span condition. -/
 theorem horizontalCFData_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hInj : ∀ k, MPSTensor.IsInjective (A k))
+    (hInj : ∀ k, Kraus.IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     {L : ℕ}
@@ -730,7 +730,7 @@ theorem horizontalCFData_of_wordEntryFamily_linearIndependent
 the finite-length span criterion. -/
 theorem horizontalCFData_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hInj : ∀ k, MPSTensor.IsInjective (A k))
+    (hInj : ∀ k, Kraus.IsInjective (A k))
     (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     (hProp : MPSTensor.PropBlockInjective A) :
@@ -757,7 +757,7 @@ any blocking length `L` there is only one word `w : Fin L → Fin 1`, and
 `evalWord (A k) (List.ofFn w) = 1` for both blocks. Choosing `Δ 0 = 1` and
 `Δ 1 = -1` makes
 
-`∑ k, Matrix.trace (Δ k * MPSTensor.evalWord (A k) (List.ofFn w)) = 0`
+`∑ k, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w)) = 0`
 
 for that unique word, while `Δ ≠ 0`. Therefore `HasBiCF A` fails.
 

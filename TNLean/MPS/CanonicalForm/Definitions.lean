@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Core.CanonicalNormalization
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.SharedInfra.BlockAssembly
 import QICLean.Channel.Peripheral.Spectrum
@@ -77,7 +77,7 @@ by `IsNormalTensor`.
 Follows the Mathlib style and naming conventions (`lean-conventions` skill).
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder Kraus
 
 namespace MPSTensor
 
@@ -94,7 +94,7 @@ arXiv:1606.00608, Definition before eq. `II_CF1` (`Papers/1606.00608/MPDO-22-12-
   eigenvalue of magnitude equal to its spectral radius which is equal to one.
 
 Clause (ii) is encoded by an explicit spectral-radius-one field together with
-`_root_.IsPrimitive (transferMap A)`, which states that the eigenvalues of norm
+`_root_.IsPrimitive (Kraus.transferMap A)`, which states that the eigenvalues of norm
 one form exactly `{1}`.  The explicit field is essential: unit-circle
 uniqueness alone does not exclude eigenvalues of norm greater than one.
 
@@ -104,15 +104,15 @@ left-canonical normalization or weight ordering).
 -/
 structure IsNormalTensor (A : MPSTensor d D) : Prop where
   /-- (i) no nontrivial invariant orthogonal projection. -/
-  no_invariant_proj : IsIrreducibleTensor A
+  no_invariant_proj : Kraus.IsIrreducibleFamily A
   /-- (ii-a) the associated CPM has spectral radius one, as required after the
   rescaling of arXiv:1606.00608, lines 224--225 and 233--235. -/
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (transferMap (d := d) (D := D) A)) = 1
+        (Kraus.transferMap (d := d) (D := D) A)) = 1
   /-- (ii-b) the associated CPM has no unit-modulus eigenvalue other than one. -/
-  primitive_transfer : _root_.IsPrimitive (transferMap (d := d) (D := D) A)
+  primitive_transfer : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
 
 /-- A normal tensor has nonzero bond dimension.
 
@@ -124,13 +124,13 @@ theorem IsNormalTensor.bondDim_ne_zero {A : MPSTensor d D} (h : IsNormalTensor A
     D ≠ 0 :=
   matrix_dim_ne_zero_of_spectralRadius_eq_one
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-      (transferMap (d := d) (D := D) A))
+      (Kraus.transferMap (d := d) (D := D) A))
     h.spectral_radius_one
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal
 projections on its one-dimensional bond space are zero and the identity. -/
 theorem isIrreducibleTensor_of_bondDim_one (A : MPSTensor d 1) :
-    IsIrreducibleTensor A := by
+    Kraus.IsIrreducibleFamily A := by
   rintro ⟨P, ⟨_, hIdem⟩, hP0, hP1, _⟩
   have h00 := congrFun (congrFun hIdem (0 : Fin 1)) (0 : Fin 1)
   simp only [Matrix.mul_apply, Finset.univ_unique, Fin.default_eq_zero,
@@ -152,7 +152,7 @@ theorem isIrreducibleTensor_of_bondDim_one (A : MPSTensor d 1) :
 /-- A bond-dimension-one tensor whose transfer map is the identity is a normal
 tensor. -/
 theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    (A : MPSTensor d 1) (hA : transferMap A = LinearMap.id) :
+    (A : MPSTensor d 1) (hA : Kraus.transferMap A = LinearMap.id) :
     IsNormalTensor A := by
   refine ⟨isIrreducibleTensor_of_bondDim_one A, ?_, ?_⟩
   · rw [hA]
@@ -311,7 +311,7 @@ structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormD
   Appendix A, eq. `Lambda`). -/
   blocks_fixed_point :
     ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-      Λ.PosDef ∧ Λ.IsDiag ∧ transferMap (blocks k) Λ = Λ
+      Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap (blocks k) Λ = Λ
 
 /-- A tensor is in literal CPSV canonical form II when it admits exactly
 reconstructed, blockwise normalized retained-block data.

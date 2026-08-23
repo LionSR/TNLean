@@ -67,9 +67,9 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coeffici
     (C Dmat : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hCoeff : ∀ a b : Fin d, ∀ w : Fin n → Fin d,
       (∑ j : Fin r,
-        Matrix.trace ((A j b * C j a) * evalWord (A j) (List.ofFn w))) =
+        Matrix.trace ((A j b * C j a) * Kraus.evalWord (A j) (List.ofFn w))) =
       (∑ j : Fin r,
-        Matrix.trace ((Dmat j b * A j a) * evalWord (A j) (List.ofFn w))))
+        Matrix.trace ((Dmat j b * A j a) * Kraus.evalWord (A j) (List.ofFn w))))
     (ψ : NSiteSpace d (n + 2))
     (hψ : ψ = ∑ j : Fin r, pgvwc07LeftBoundaryComponent (A j) (C j) n) :
     ψ ∈ ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
@@ -308,14 +308,14 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
     hOne.of_one_of_pos (by omega)
   have hIntertwine :
       ∀ (α : Fin 1 → Fin d) (j : Fin r),
-        ((μ j) ^ N • X j) * evalWord (A j) (List.ofFn α) =
-          evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
+        ((μ j) ^ N • X j) * Kraus.evalWord (A j) (List.ofFn α) =
+          Kraus.evalWord (A j) (List.ofFn α) * ((μ j) ^ N • Y j) := by
     apply block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq_of_add_eq
       A hSplit (by omega) hLongSpan
         (fun j ↦ (μ j) ^ N • X j) (fun j ↦ (μ j) ^ N • Y j)
     simpa only [s] using hSumTranslate
-  have hBlk : ∀ j : Fin r, IsNBlkInjective (A j) 1 := fun j ↦
-    isNBlkInjective_one_of_isInjective (hOne.isInjective_one j)
+  have hBlk : ∀ j : Fin r, Kraus.IsNBlkInjective (A j) 1 := fun j ↦
+    Kraus.isNBlkInjective_one_of_isInjective (hOne.isInjective_one j)
   have hComm : ∀ j : Fin r, ∀ a : Fin d,
       ((μ j) ^ N • X j) * A j a = A j a * ((μ j) ^ N • X j) := by
     intro j
@@ -323,13 +323,13 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
       (hBlk j) (by omega) ((μ j) ^ N • X j) ((μ j) ^ N • Y j)
       (fun α ↦ hIntertwine α j)).2
   have hCommWord : ∀ j : Fin r, ∀ w : List (Fin d),
-      ((μ j) ^ N • X j) * evalWord (A j) w =
-        evalWord (A j) w * ((μ j) ^ N • X j) := by
+      ((μ j) ^ N • X j) * Kraus.evalWord (A j) w =
+        Kraus.evalWord (A j) w * ((μ j) ^ N • X j) := by
     intro j w
     induction w with
-    | nil => simp [evalWord_nil]
+    | nil => simp [Kraus.evalWord_nil]
     | cons a w ih =>
-        rw [evalWord_cons, ← Matrix.mul_assoc, hComm j a, Matrix.mul_assoc, ih,
+        rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, hComm j a, Matrix.mul_assoc, ih,
           ← Matrix.mul_assoc]
   refine ⟨X, hψX, ?_⟩
   apply blockDiagonal_boundary_component_chainGroundSpace_of_boundary_identities
@@ -398,7 +398,7 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
   · let : NeZero d := ⟨hd⟩
     let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-    have hnormal : ∀ j : Fin P.basisCount, IsNormal (P.basis j) :=
+    have hnormal : ∀ j : Fin P.basisCount, Kraus.IsNormal (P.basis j) :=
       hCF.basis_isNormal
     have hOne : WordTupleSpanTop P.basis 1 :=
       wordTupleSpanTop_one_of_isTransferIdempotent_directSum P.basis
@@ -414,7 +414,7 @@ theorem rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum
       have hBlockRFP : IsTransferIdempotent (P.basis j) :=
         isTransferIdempotent_block_of_isTransferIdempotent_directSum
           P.basis hRFP j
-      have hInj : IsInjective (P.basis j) :=
+      have hInj : Kraus.IsInjective (P.basis j) :=
         rfp_nt_structural (P.basis j) (hnormal j) hBlockRFP
       exact chainGroundSpace_eq_mpvSubmodule hInj (by omega) (by omega) (by omega)
 

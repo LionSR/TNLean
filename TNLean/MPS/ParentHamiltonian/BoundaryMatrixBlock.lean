@@ -44,22 +44,22 @@ to all matrices \(M_1\), and the block annihilation lemma cancels the length-`K`
 complement.
 Thus the displayed identity implies the commutation relation \(XA^j=A^jX\). -/
 theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
-    {A : MPSTensor d D} {L₀ K : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ K : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hMatEq : ∀ (σ_tail : Fin L₀ → Fin d) (σ_comp : Fin K → Fin d),
-      X * evalWord A (List.ofFn σ_tail) * evalWord A (List.ofFn σ_comp)
-        = evalWord A (List.ofFn σ_tail) * Y σ_comp) :
+      X * Kraus.evalWord A (List.ofFn σ_tail) * Kraus.evalWord A (List.ofFn σ_comp)
+        = Kraus.evalWord A (List.ofFn σ_tail) * Y σ_comp) :
     ∀ j : Fin d, X * A j = A j * X := by
   -- Step 1: span the length-\(L_0\) head to promote the equation to all matrices \(M_1\).
   have hStep1 : ∀ (M₁ : Matrix (Fin D) (Fin D) ℂ) (σ_comp : Fin K → Fin d),
-      X * M₁ * evalWord A (List.ofFn σ_comp) = M₁ * Y σ_comp := by
+      X * M₁ * Kraus.evalWord A (List.ofFn σ_comp) = M₁ * Y σ_comp := by
     intro M₁ σ_comp
     have hfg : (LinearMap.mulLeft ℂ X).comp
-        (LinearMap.mulRight ℂ (evalWord A (List.ofFn σ_comp)))
+        (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn σ_comp)))
         = LinearMap.mulRight ℂ (Y σ_comp) := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin L₀ → Fin d => evalWord A (List.ofFn σ))
+        (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
       · simpa [Kraus.wordSpan, Kraus.wordSpan] using
           (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
       · intro σ_tail
@@ -74,7 +74,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
     exact hcong
   -- Step 2: take \(M_1 = 1\) to identify \(Y_{\sigma} = X \cdot A^{\sigma}\) on the complement.
   have hY : ∀ σ_comp : Fin K → Fin d,
-      Y σ_comp = X * evalWord A (List.ofFn σ_comp) := by
+      Y σ_comp = X * Kraus.evalWord A (List.ofFn σ_comp) := by
     intro σ_comp
     have h := hStep1 1 σ_comp
     simp only [mul_one, one_mul] at h
@@ -82,7 +82,7 @@ theorem boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq
   -- Step 3: the commutator annihilates every length-`K` complement word.
   intro j
   have hB : ∀ σ_comp : Fin K → Fin d,
-      (X * A j - A j * X) * evalWord A (List.ofFn σ_comp) = 0 := by
+      (X * A j - A j * X) * Kraus.evalWord A (List.ofFn σ_comp) = 0 := by
     intro σ_comp
     have h1 := hStep1 (A j) σ_comp
     rw [hY σ_comp, ← Matrix.mul_assoc] at h1
@@ -134,26 +134,26 @@ This is the comparison of the two boundary-crossing restrictions after the
 one-site commutation relation has been obtained; see
 `docs/paper-gaps/cpgsv21_normal_range_reduction.tex`. -/
 theorem boundary_restrictions_eq_of_commutes_and_one_sided
-    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {A : MPSTensor d D} {L₀ m : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {X : Matrix (Fin D) (Fin D) ℂ}
     (W V : Fin d → Matrix (Fin D) (Fin D) ℂ) (μ : Fin m → Fin d)
     (hComm : ∀ j : Fin d, X * A j = A j * X)
     (hWrap : ∀ η j : Fin d,
-      W η * A j = evalWord A (List.ofFn μ) * A j * X)
+      W η * A j = Kraus.evalWord A (List.ofFn μ) * A j * X)
     (hMirror : ∀ η j : Fin d,
-      X * A j * evalWord A (List.ofFn μ) = A j * V η) :
+      X * A j * Kraus.evalWord A (List.ofFn μ) = A j * V η) :
     ∀ η j : Fin d, W η * A j = V η * A j := by
   -- Single-site commutation extends to commutation with every word.
   have hCommWord : ∀ w : List (Fin d),
-      X * evalWord A w = evalWord A w * X := by
+      X * Kraus.evalWord A w = Kraus.evalWord A w * X := by
     intro w
     induction w with
-    | nil => simp [evalWord_nil]
+    | nil => simp [Kraus.evalWord_nil]
     | cons a rest ih =>
-      rw [evalWord_cons, ← Matrix.mul_assoc, hComm a, Matrix.mul_assoc, ih,
+      rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, hComm a, Matrix.mul_assoc, ih,
         ← Matrix.mul_assoc]
   intro η j
-  have hV : V η = evalWord A (List.ofFn μ) * X := by
+  have hV : V η = Kraus.evalWord A (List.ofFn μ) * X := by
     apply left_witness_unique_of_isNBlkInjective hInj hL₀
     intro k
     have h := hMirror η k

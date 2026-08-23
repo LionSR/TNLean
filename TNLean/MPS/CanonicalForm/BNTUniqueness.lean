@@ -24,13 +24,13 @@ private def symbolTensor (a : Fin 2) : MPSTensor 2 1 :=
   fun i => if i = a then 1 else 0
 
 private lemma symbolTensor_transferMap (a : Fin 2) :
-    transferMap (symbolTensor a) = LinearMap.id := by
+    Kraus.transferMap (symbolTensor a) = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext x y
   fin_cases x
   fin_cases y
-  simp [transferMap_apply, symbolTensor]
+  simp [Kraus.transferMap_apply, symbolTensor]
 
 private theorem symbolTensor_isNormalTensor (a : Fin 2) :
     IsNormalTensor (symbolTensor a) :=

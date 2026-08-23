@@ -45,8 +45,8 @@ private theorem trace_cast_mul_evalWord_cast
     (s : Fin e) (w : List (Fin d)) :
     Matrix.trace
         ((cast (congr_arg (MPSTensor e) h) C) s *
-          evalWord (cast (congr_arg (MPSTensor d) h) B) w) =
-      Matrix.trace (C s * evalWord B w) := by
+          Kraus.evalWord (cast (congr_arg (MPSTensor d) h) B) w) =
+      Matrix.trace (C s * Kraus.evalWord B w) := by
   subst m
   rfl
 
@@ -92,10 +92,10 @@ private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
     (C : (j : Fin data.activePhaseClasses.g) →
       MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
     (s : Fin e) (w : List (Fin d)) :
-    Matrix.trace (ref.groupedMarkedTensor C s * evalWord ref.groupedTensor w) =
+    Matrix.trace (ref.groupedMarkedTensor C s * Kraus.evalWord ref.groupedTensor w) =
       ∑ k : Fin data.r, Matrix.trace
         (ref.groupedMarkedBlocks C k s *
-          (data.weights k ^ w.length • evalWord (ref.regroupedBlocks k) w)) := by
+          (data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w)) := by
   classical
   have hGrouped : ref.groupedTensor =
       toTensorFromBlocks (d := d) data.weights ref.regroupedBlocks := by
@@ -109,7 +109,7 @@ private theorem trace_groupedMarkedTensor_mul_evalWord_eq_sum
             (1 : ℂ) • ref.groupedMarkedBlocks C k s) *
         (Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' fun k : Fin data.r =>
-            data.weights k ^ w.length • evalWord (ref.regroupedBlocks k) w)) = _
+            data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w)) = _
   rw [Matrix.reindexLinearEquiv_mul ℂ ℂ finSigmaFinEquiv
     finSigmaFinEquiv finSigmaFinEquiv]
   simp only [Matrix.coe_reindexLinearEquiv]
@@ -128,17 +128,17 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
     (C : (j : Fin data.activePhaseClasses.g) →
       MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
     (s : Fin e) (w : List (Fin d)) :
-    Matrix.trace (ref.groupedMarkedTensor C s * evalWord ref.groupedTensor w) =
+    Matrix.trace (ref.groupedMarkedTensor C s * Kraus.evalWord ref.groupedTensor w) =
       Matrix.trace
         (ref.representativeSectorDecomposition.markedTensor C s *
-          evalWord ref.representativeSectorDecomposition.toTensor w) := by
+          Kraus.evalWord ref.representativeSectorDecomposition.toTensor w) := by
   classical
   let P := ref.representativeSectorDecomposition
   rw [ref.trace_groupedMarkedTensor_mul_evalWord_eq_sum C s w]
   rw [P.trace_markedTensor_mul_evalWord C s w]
   let f : Fin data.r → ℂ := fun k => Matrix.trace
     (ref.groupedMarkedBlocks C k s *
-      (data.weights k ^ w.length • evalWord (ref.regroupedBlocks k) w))
+      (data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w))
   have hInactive : ∑ k : data.Inactive, f k = 0 := by
     apply Fintype.sum_eq_zero
     intro k
@@ -152,7 +152,7 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
     ∑ j : Fin data.activePhaseClasses.g,
       P.coeff (w.length + 1) j *
         Matrix.trace
-          (C j s * evalWord (data.blocks (data.activeRepresentativeIndex j)) w)
+          (C j s * Kraus.evalWord (data.blocks (data.activeRepresentativeIndex j)) w)
   rw [hActiveSum]
   calc
     (∑ k : data.Active, f k) =
@@ -165,7 +165,7 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
           (ref.copyWeight (activeCopy (data := data) j q) *
             ref.copyPhase (activeCopy (data := data) j q)) ^ (w.length + 1) *
             Matrix.trace
-              (C j s * evalWord
+              (C j s * Kraus.evalWord
                 (data.blocks (data.activeRepresentativeIndex j)) w) := by
       rw [← Fintype.sum_sigma']
       apply Finset.sum_congr rfl
@@ -179,18 +179,18 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
       have hTraceRepresentative :
           Matrix.trace
               (C (data.activeClassCopy k).1 s *
-                evalWord
+                Kraus.evalWord
                   (data.blocks
                     (data.activeRepresentativeIndex (data.activeClassCopy k).1)) w) =
             Matrix.trace
-              (C j s * evalWord
+              (C j s * Kraus.evalWord
                 (data.blocks (data.activeRepresentativeIndex j)) w) := by
         rw [hkfst]
       change Matrix.trace
           (ref.groupedMarkedBlocks C k s *
-            (data.weights k ^ w.length • evalWord (ref.regroupedBlocks k) w)) = _
+            (data.weights k ^ w.length • Kraus.evalWord (ref.regroupedBlocks k) w)) = _
       rw [ref.groupedMarkedBlocks_active C k, ref.copyWeightEq]
-      rw [ref.regroupedBlocksActive k, evalWord_smul]
+      rw [ref.regroupedBlocksActive k, Kraus.evalWord_smul]
       simp only [Pi.smul_apply, Matrix.smul_mul, Matrix.mul_smul,
         Matrix.trace_smul, smul_eq_mul]
       rw [trace_cast_mul_evalWord_cast (ref.copyDimEq k), hTraceRepresentative]
@@ -199,7 +199,7 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
     _ = ∑ j : Fin data.activePhaseClasses.g,
         P.coeff (w.length + 1) j *
           Matrix.trace
-            (C j s * evalWord (data.blocks (data.activeRepresentativeIndex j)) w) := by
+            (C j s * Kraus.evalWord (data.blocks (data.activeRepresentativeIndex j)) w) := by
       apply Finset.sum_congr rfl
       intro j _
       rw [← Finset.sum_mul]
@@ -221,9 +221,9 @@ theorem groupedMarkedTensor_basis_eq_of_trace_agree
       MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
     (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
       Matrix.trace
-          (ref.groupedMarkedTensor C s * evalWord ref.groupedTensor (List.ofFn w)) =
+          (ref.groupedMarkedTensor C s * Kraus.evalWord ref.groupedTensor (List.ofFn w)) =
         Matrix.trace
-          (ref.groupedMarkedTensor E s * evalWord ref.groupedTensor (List.ofFn w))) :
+          (ref.groupedMarkedTensor E s * Kraus.evalWord ref.groupedTensor (List.ofFn w))) :
     ∀ j, C j = E j := by
   let P := ref.representativeSectorDecomposition
   apply P.markedTensor_basis_eq_of_trace_agree C E

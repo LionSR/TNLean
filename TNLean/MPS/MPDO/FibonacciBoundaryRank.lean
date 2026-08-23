@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinTupleEquiv
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.NumberTheory.Real.GoldenRatio
 import Mathlib.Tactic.FinCases
@@ -160,12 +160,12 @@ private lemma tensor_mul_apply_ne_zero_iff (W : FusionWeights) (p : Fin 8)
     simp [Matrix.mul_apply, tensor, physicalTriple, W.zero_iff, ExactlyTwoZero]
 
 private lemma evalWord_apply_ne_zero_iff (W : FusionWeights) (w : List (Fin 8))
-    (α β : Fin 2) : evalWord (tensor W) w α β ≠ 0 ↔ isSupportedWord α β w := by
+    (α β : Fin 2) : Kraus.evalWord (tensor W) w α β ≠ 0 ↔ isSupportedWord α β w := by
   induction w generalizing α with
   | nil =>
-      fin_cases α <;> fin_cases β <;> simp [evalWord, isSupportedWord]
+      fin_cases α <;> fin_cases β <;> simp [Kraus.evalWord, isSupportedWord]
   | cons p w ih =>
-      rw [evalWord_cons, tensor_mul_apply_ne_zero_iff, ih]
+      rw [Kraus.evalWord_cons, tensor_mul_apply_ne_zero_iff, ih]
       simp only [isSupportedWord, Bool.and_eq_true, Bool.not_eq_true', decide_eq_false_iff_not,
         beq_iff_eq]
       tauto
@@ -176,7 +176,7 @@ This is the endpoint-support fact needed to split the periodic trace support int
 its two diagonal boundary sectors. -/
 lemma evalWord_closed_endpoint_support_disjoint (W : FusionWeights) (p : Fin 8)
     (w : List (Fin 8)) :
-    ¬(evalWord (tensor W) (p :: w) 0 0 ≠ 0 ∧ evalWord (tensor W) (p :: w) 1 1 ≠ 0) := by
+    ¬(Kraus.evalWord (tensor W) (p :: w) 0 0 ≠ 0 ∧ Kraus.evalWord (tensor W) (p :: w) 1 1 ≠ 0) := by
   rw [evalWord_apply_ne_zero_iff, evalWord_apply_ne_zero_iff]
   simp only [isSupportedWord, Bool.and_eq_true, Bool.not_eq_true',
     decide_eq_false_iff_not, beq_iff_eq]
@@ -200,12 +200,12 @@ Its diagonal entry at \(σ\) is the word amplitude
 Source: arXiv:1606.00608, Appendix D, lines 2127--2130. -/
 noncomputable def openBoundaryOperator (W : FusionWeights) (n : ℕ) (α β : Fin 2) :
     Matrix (Fin n → Fin 8) (Fin n → Fin 8) ℂ :=
-  Matrix.diagonal fun σ => evalWord (tensor W) (List.ofFn σ) α β
+  Matrix.diagonal fun σ => Kraus.evalWord (tensor W) (List.ofFn σ) α β
 
 @[simp] theorem openBoundaryOperator_apply (W : FusionWeights) (n : ℕ) (α β : Fin 2)
     (σ τ : Fin n → Fin 8) :
     openBoundaryOperator W n α β σ τ =
-      if σ = τ then evalWord (tensor W) (List.ofFn σ) α β else 0 := by
+      if σ = τ then Kraus.evalWord (tensor W) (List.ofFn σ) α β else 0 := by
   rw [openBoundaryOperator, Matrix.diagonal_apply]
 
 /-- The ordinary matrix rank of the source diagonal open-boundary operator is

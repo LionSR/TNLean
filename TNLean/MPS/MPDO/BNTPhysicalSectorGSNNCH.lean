@@ -101,7 +101,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     fun s ↦ S.basisMPOTensor s
   have hInjective : ∀ s, (K s).IsInjective := by
     intro s
-    change MPSTensor.IsInjective (K s).toMPSTensor
+    change Kraus.IsInjective (K s).toMPSTensor
     dsimp only [K]
     rw [S.basisMPOTensor_toMPSTensor]
     exact hSpan.isInjective_one s
@@ -129,7 +129,7 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     have hmpv : (MPSTensor.mpv (K s).toMPSTensor :
         MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective
-        (MPSTensor.isNBlkInjective_one_of_isInjective (hInjective s)) Nat.one_pos
+        (Kraus.isNBlkInjective_one_of_isInjective (hInjective s)) Nat.one_pos
       omega
     apply hmpv
     funext ρ

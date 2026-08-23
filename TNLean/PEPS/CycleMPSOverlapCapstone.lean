@@ -68,20 +68,20 @@ identity (arXiv:1804.04964, lines 2045--2255 of
 `Papers/1804.04964/paper_normal.tex`, applied to the gauge-absorbed pair). -/
 private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
     (hD : 0 < D)
-    (hAk : IsNBlkInjective A k) (hCk : IsNBlkInjective C k)
-    (hCL : IsNBlkInjective C L)
+    (hAk : Kraus.IsNBlkInjective A k) (hCk : Kraus.IsNBlkInjective C k)
+    (hCL : Kraus.IsNBlkInjective C L)
     {Λk Λk1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hΛk : ∀ τ : Fin k → Fin d,
-      Λk (evalWord A (List.ofFn τ)) = evalWord C (List.ofFn τ))
+      Λk (Kraus.evalWord A (List.ofFn τ)) = Kraus.evalWord C (List.ofFn τ))
     (hΛk1 : ∀ τ : Fin (k + 1) → Fin d,
-      Λk1 (evalWord A (List.ofFn τ)) = evalWord C (List.ofFn τ)) :
+      Λk1 (Kraus.evalWord A (List.ofFn τ)) = Kraus.evalWord C (List.ofFn τ)) :
     ∃ c : ℂ, c ≠ 0 ∧ Λk 1 = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
   -- The two one-letter extension relations.
   have hR1 : ∀ (i : Fin d) (M : Matrix (Fin D) (Fin D) ℂ),
       Λk1 (A i * M) = C i * Λk M := by
     intro i
     have hext := LinearMap.ext_on_range
-      (v := fun τ : Fin k → Fin d => evalWord A (List.ofFn τ)) (hv := hAk)
+      (v := fun τ : Fin k → Fin d => Kraus.evalWord A (List.ofFn τ)) (hv := hAk)
       (f := Λk1 ∘ₗ LinearMap.mulLeft ℂ (A i))
       (g := (LinearMap.mulLeft ℂ (C i)) ∘ₗ Λk)
       (fun τ => by
@@ -94,7 +94,7 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
       Λk1 (M * A i) = Λk M * C i := by
     intro i
     have hext := LinearMap.ext_on_range
-      (v := fun τ : Fin k → Fin d => evalWord A (List.ofFn τ)) (hv := hAk)
+      (v := fun τ : Fin k → Fin d => Kraus.evalWord A (List.ofFn τ)) (hv := hAk)
       (f := Λk1 ∘ₗ LinearMap.mulRight ℂ (A i))
       (g := (LinearMap.mulRight ℂ (C i)) ∘ₗ Λk)
       (fun τ => by
@@ -112,7 +112,7 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
       rw [← hR2 i 1, Matrix.one_mul]
     exact h1.trans h2.symm
   -- Hence with every word product, hence with the full matrix algebra.
-  have hcomm_word : ∀ w : List (Fin d), Commute (evalWord C w) (Λk 1) := by
+  have hcomm_word : ∀ w : List (Fin d), Commute (Kraus.evalWord C w) (Λk 1) := by
     intro w
     induction w with
     | nil => exact Commute.one_left (Λk 1)
@@ -120,7 +120,7 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
   have hcomm_maps :
       LinearMap.mulRight ℂ (Λk 1) = LinearMap.mulLeft ℂ (Λk 1) := by
     apply LinearMap.ext_on_range
-      (v := fun τ : Fin L → Fin d => evalWord C (List.ofFn τ)) (hv := hCL)
+      (v := fun τ : Fin L → Fin d => Kraus.evalWord C (List.ofFn τ)) (hv := hCL)
     intro τ
     simpa only [LinearMap.mulRight_apply, LinearMap.mulLeft_apply] using
       (hcomm_word (List.ofFn τ)).eq
@@ -139,11 +139,11 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
     rw [← LinearMap.range_eq_top, eq_top_iff]
     calc (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ))
         = Submodule.span ℂ (Set.range fun τ : Fin k → Fin d =>
-            evalWord C (List.ofFn τ)) := hCk.symm
+            Kraus.evalWord C (List.ofFn τ)) := hCk.symm
       _ ≤ LinearMap.range Λk := by
           rw [Submodule.span_le]
           rintro _ ⟨τ, rfl⟩
-          exact ⟨evalWord A (List.ofFn τ), hΛk τ⟩
+          exact ⟨Kraus.evalWord A (List.ofFn τ), hΛk τ⟩
   have hinj : Function.Injective Λk := LinearMap.injective_iff_surjective.mpr hsurj
   refine ⟨c, fun hc0 => ?_, hV⟩
   have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
@@ -154,18 +154,18 @@ private theorem transport_one_eq_smul_one {A C : MPSTensor d D} {L k : ℕ}
 /-- A block-injective tensor with positive bond dimension is not the zero
 family: some matrix of the family is nonzero. -/
 theorem exists_ne_zero_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
-    {B : MPSTensor d D} (hB : IsNBlkInjective B L) :
+    {B : MPSTensor d D} (hB : Kraus.IsNBlkInjective B L) :
     ∃ i : Fin d, B i ≠ 0 := by
   by_contra hall
   simp only [not_exists, not_not] at hall
   have hB' : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
-      evalWord B (List.ofFn σ)) = ⊤ := hB
+      Kraus.evalWord B (List.ofFn σ)) = ⊤ := hB
   have hran : (Set.range fun σ : Fin L → Fin d =>
-      evalWord B (List.ofFn σ)) ⊆ {0} := by
+      Kraus.evalWord B (List.ofFn σ)) ⊆ {0} := by
     rintro _ ⟨σ, rfl⟩
     obtain ⟨L', rfl⟩ : ∃ L', L = L' + 1 := ⟨L - 1, by omega⟩
-    change evalWord B (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
-    rw [Set.mem_singleton_iff, List.ofFn_succ, evalWord_cons, hall (σ 0),
+    change Kraus.evalWord B (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
+    rw [Set.mem_singleton_iff, List.ofFn_succ, Kraus.evalWord_cons, hall (σ 0),
       Matrix.zero_mul]
   have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ ⊥ := by
     rw [← hB', ← Submodule.span_zero_singleton (R := ℂ)
@@ -179,14 +179,14 @@ theorem exists_ne_zero_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
 
 /-- Some length-`n` word product of a block-injective tensor is nonzero. -/
 private theorem exists_evalWord_ne_zero {A : MPSTensor d D} {L n : ℕ}
-    (hL : 0 < L) (hD : 0 < D) (hA : IsNBlkInjective A L) (hn : L ≤ n) :
-    ∃ σ : Fin n → Fin d, evalWord A (List.ofFn σ) ≠ 0 := by
+    (hL : 0 < L) (hD : 0 < D) (hA : Kraus.IsNBlkInjective A L) (hn : L ≤ n) :
+    ∃ σ : Fin n → Fin d, Kraus.evalWord A (List.ofFn σ) ≠ 0 := by
   by_contra hall
   push Not at hall
   have hspan : Submodule.span ℂ (Set.range fun σ : Fin n → Fin d =>
-      evalWord A (List.ofFn σ)) = ⊤ := isNBlkInjective_of_le hL hA hn
+      Kraus.evalWord A (List.ofFn σ)) = ⊤ := isNBlkInjective_of_le hL hA hn
   have h1 : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Submodule.span ℂ
-      (Set.range fun σ : Fin n → Fin d => evalWord A (List.ofFn σ)) :=
+      (Set.range fun σ : Fin n → Fin d => Kraus.evalWord A (List.ofFn σ)) :=
     hspan ▸ Submodule.mem_top
   obtain ⟨c, hc⟩ := Submodule.mem_span_range_iff_exists_fun ℂ |>.mp h1
   have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
@@ -206,8 +206,8 @@ full-length equality through the two spanning windows leaves
 `C^i = (c_L c_{n-1-L})⁻¹ A^i`. -/
 theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
-    (hA : IsNBlkInjective A L) (hC : IsNBlkInjective C L)
-    (hw : ∀ w : List (Fin d), w.length = n → evalWord C w = evalWord A w) :
+    (hA : Kraus.IsNBlkInjective A L) (hC : Kraus.IsNBlkInjective C L)
+    (hw : ∀ w : List (Fin d), w.length = n → Kraus.evalWord C w = Kraus.evalWord A w) :
     ∃ lam : ℂ, lam ^ n = 1 ∧ ∀ i : Fin d, C i = lam • A i := by
   classical
   -- The window transports at length `L` and at the complementary length.
@@ -231,23 +231,23 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
     hΛk hΛk1
   -- Peel one letter off the full-length equality.
   have hc0 : ∀ (i : Fin d) (v : Fin k₁ → Fin d) (w : Fin L → Fin d),
-      C i * evalWord C (List.ofFn v) * evalWord C (List.ofFn w) =
-        A i * evalWord A (List.ofFn v) * evalWord A (List.ofFn w) := by
+      C i * Kraus.evalWord C (List.ofFn v) * Kraus.evalWord C (List.ofFn w) =
+        A i * Kraus.evalWord A (List.ofFn v) * Kraus.evalWord A (List.ofFn w) := by
     intro i v w
     have hword := hw (i :: (List.ofFn v ++ List.ofFn w)) (by simp; omega)
-    rw [evalWord_cons, evalWord_cons, evalWord_append, evalWord_append] at hword
+    rw [Kraus.evalWord_cons, Kraus.evalWord_cons, Kraus.evalWord_append, Kraus.evalWord_append] at hword
     rw [Matrix.mul_assoc, Matrix.mul_assoc]
     exact hword
   -- Linearize the trailing window through `Λ_L`.
   have hΛL_inv : ΛL (cL⁻¹ • (1 : Matrix (Fin D) (Fin D) ℂ)) = 1 := by
     rw [map_smul, hcL, smul_smul, inv_mul_cancel₀ hcL0, one_smul]
   have hc2 : ∀ (i : Fin d) (v : Fin k₁ → Fin d),
-      C i * evalWord C (List.ofFn v) = cL⁻¹ • (A i * evalWord A (List.ofFn v)) := by
+      C i * Kraus.evalWord C (List.ofFn v) = cL⁻¹ • (A i * Kraus.evalWord A (List.ofFn v)) := by
     intro i v
     have hext := LinearMap.ext_on_range
-      (v := fun w : Fin L → Fin d => evalWord A (List.ofFn w)) (hv := hA)
-      (f := (LinearMap.mulLeft ℂ (C i * evalWord C (List.ofFn v))) ∘ₗ ΛL)
-      (g := LinearMap.mulLeft ℂ (A i * evalWord A (List.ofFn v)))
+      (v := fun w : Fin L → Fin d => Kraus.evalWord A (List.ofFn w)) (hv := hA)
+      (f := (LinearMap.mulLeft ℂ (C i * Kraus.evalWord C (List.ofFn v))) ∘ₗ ΛL)
+      (g := LinearMap.mulLeft ℂ (A i * Kraus.evalWord A (List.ofFn v)))
       (fun w => by
         simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply]
         rw [hΛL w]
@@ -262,7 +262,7 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
   have hc4 : ∀ i : Fin d, C i = (cL⁻¹ * ck⁻¹) • A i := by
     intro i
     have hext := LinearMap.ext_on_range
-      (v := fun v : Fin k₁ → Fin d => evalWord A (List.ofFn v))
+      (v := fun v : Fin k₁ → Fin d => Kraus.evalWord A (List.ofFn v))
       (hv := isNBlkInjective_of_le hL hA hk₁L)
       (f := (LinearMap.mulLeft ℂ (C i)) ∘ₗ Λk)
       (g := cL⁻¹ • LinearMap.mulLeft ℂ (A i))
@@ -281,13 +281,13 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
   have hCfam : C = fun i => lam • A i := funext fun i => hc4 i
   obtain ⟨σ, hσ⟩ := exists_evalWord_ne_zero hL hD hA (by omega : L ≤ n)
   have hlamn : lam ^ n = 1 := by
-    have hCw : evalWord C (List.ofFn σ) = lam ^ n • evalWord A (List.ofFn σ) := by
+    have hCw : Kraus.evalWord C (List.ofFn σ) = lam ^ n • Kraus.evalWord A (List.ofFn σ) := by
       rw [hCfam]
-      have := evalWord_smul lam A (List.ofFn σ)
+      have := Kraus.evalWord_smul lam A (List.ofFn σ)
       simpa using this
     have heq := hw (List.ofFn σ) (by simp)
     rw [hCw] at heq
-    have hzero : (lam ^ n - 1) • evalWord A (List.ofFn σ) = 0 := by
+    have hzero : (lam ^ n - 1) • Kraus.evalWord A (List.ofFn σ) = 0 := by
       rw [sub_smul, one_smul, heq, sub_self]
     rcases smul_eq_zero.mp hzero with h | h
     · exact sub_eq_zero.mp h
@@ -296,21 +296,21 @@ theorem proportional_of_evalWord_eq {A C : MPSTensor d D} {n L : ℕ}
 
 /-- Block injectivity is preserved by conjugation. -/
 private theorem isNBlkInjective_conj {B : MPSTensor d D} {L : ℕ}
-    (hB : IsNBlkInjective B L) (Q : GL (Fin D) ℂ) :
-    IsNBlkInjective (fun i => (Q : Matrix (Fin D) (Fin D) ℂ) * B i *
+    (hB : Kraus.IsNBlkInjective B L) (Q : GL (Fin D) ℂ) :
+    Kraus.IsNBlkInjective (fun i => (Q : Matrix (Fin D) (Fin D) ℂ) * B i *
       ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) L := by
   set C : MPSTensor d D := fun i => (Q : Matrix (Fin D) (Fin D) ℂ) * B i *
     ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) with hCdef
-  have hCw : ∀ w : List (Fin d), evalWord C w =
-      (Q : Matrix (Fin D) (Fin D) ℂ) * evalWord B w *
+  have hCw : ∀ w : List (Fin d), Kraus.evalWord C w =
+      (Q : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B w *
         ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
     evalWord_gauge Q (fun i => rfl)
   have hmem : ∀ N ∈ Submodule.span ℂ (Set.range fun τ : Fin L → Fin d =>
-      evalWord B (List.ofFn τ)),
+      Kraus.evalWord B (List.ofFn τ)),
       (Q : Matrix (Fin D) (Fin D) ℂ) * N *
           ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) ∈
         Submodule.span ℂ (Set.range fun τ : Fin L → Fin d =>
-          evalWord C (List.ofFn τ)) := by
+          Kraus.evalWord C (List.ofFn τ)) := by
     intro N hN
     induction hN using Submodule.span_induction with
     | mem x hx =>
@@ -325,7 +325,7 @@ private theorem isNBlkInjective_conj {B : MPSTensor d D} {L : ℕ}
     | smul a x _ hx =>
         rw [Matrix.mul_smul, Matrix.smul_mul]
         exact Submodule.smul_mem _ a hx
-  rw [IsNBlkInjective, eq_top_iff]
+  rw [Kraus.IsNBlkInjective, eq_top_iff]
   intro M _
   have hQQ : (Q : Matrix (Fin D) (Fin D) ℂ) *
       ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = 1 := by
@@ -347,7 +347,7 @@ private theorem isNBlkInjective_conj {B : MPSTensor d D} {L : ℕ}
   rw [hMrep]
   apply hmem
   rw [show Submodule.span ℂ (Set.range fun τ : Fin L → Fin d =>
-    evalWord B (List.ofFn τ)) = ⊤ from hB]
+    Kraus.evalWord B (List.ofFn τ)) = ⊤ from hB]
   exact Submodule.mem_top
 
 /-! ### Constant-chain specialization of Lemma 5 -/
@@ -362,11 +362,11 @@ the right are equal.  This is the spanning-family uniqueness
 `MPSChainTensor.eq_of_span_mul_left` read on the word products of one
 block-injective tensor. -/
 theorem bondOperator_unique {B : MPSTensor d D} {L : ℕ}
-    (hB : IsNBlkInjective B L) {X X' : Matrix (Fin D) (Fin D) ℂ}
+    (hB : Kraus.IsNBlkInjective B L) {X X' : Matrix (Fin D) (Fin D) ℂ}
     (h : ∀ a : Fin L → Fin d,
-      evalWord B (List.ofFn a) * X = evalWord B (List.ofFn a) * X') : X = X' :=
+      Kraus.evalWord B (List.ofFn a) * X = Kraus.evalWord B (List.ofFn a) * X') : X = X' :=
   MPSChainTensor.eq_of_span_mul_left
-    (W := fun a : Fin L → Fin d => evalWord B (List.ofFn a)) hB h
+    (W := fun a : Fin L → Fin d => Kraus.evalWord B (List.ofFn a)) hB h
 
 /-- **Bond-operator extraction from an intertwining pair** (arXiv:1804.04964,
 Lemma 5, the comparison of the two ends, lines 2211--2255 of
@@ -380,16 +380,16 @@ products.  This is the spanning-family extraction
 `MPSChainTensor.exists_bondOperator_of_intertwine_span` with both spanning
 families the word products of `B`. -/
 theorem exists_bondOperator_of_intertwine {B : MPSTensor d D} {L : ℕ}
-    (hB : IsNBlkInjective B L)
+    (hB : Kraus.IsNBlkInjective B L)
     (F G : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (h : ∀ a b : Fin L → Fin d,
-      F a * evalWord B (List.ofFn b) = evalWord B (List.ofFn a) * G b) :
+      F a * Kraus.evalWord B (List.ofFn b) = Kraus.evalWord B (List.ofFn a) * G b) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ,
-      (∀ a, F a = evalWord B (List.ofFn a) * X) ∧
-        (∀ b, G b = X * evalWord B (List.ofFn b)) :=
+      (∀ a, F a = Kraus.evalWord B (List.ofFn a) * X) ∧
+        (∀ b, G b = X * Kraus.evalWord B (List.ofFn b)) :=
   MPSChainTensor.exists_bondOperator_of_intertwine_span
-    (W₁ := fun a : Fin L → Fin d => evalWord B (List.ofFn a))
-    (W₂ := fun b : Fin L → Fin d => evalWord B (List.ofFn b)) hB hB F G h
+    (W₁ := fun a : Fin L → Fin d => Kraus.evalWord B (List.ofFn a))
+    (W₂ := fun b : Fin L → Fin d => Kraus.evalWord B (List.ofFn b)) hB hB F G h
 
 /-- **Lemma 5 of arXiv:1804.04964 for matrix tensors** (lines 2045--2255 of
 `Papers/1804.04964/paper_normal.tex`, specialized to one site-independent
@@ -415,17 +415,17 @@ The proof places `B` at every site of the site-dependent form
 (`MPSChainTensor.overlapWindow_exists_bondOperator`), which is the setting
 in which the source states Lemma 5. -/
 theorem overlapWindow_exists_bondOperator {B : MPSTensor d D} {n L : ℕ}
-    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hB : IsNBlkInjective B L)
+    (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hB : Kraus.IsNBlkInjective B L)
     (C : ℕ → (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ)
     (hstate : ∀ j, j < L → ∀ {q : ℕ}, j + (L + 1) + q = n →
       ∀ (pre : Fin j → Fin d) (u : Fin (L + 1) → Fin d) (post : Fin q → Fin d),
-      Matrix.trace (evalWord B (List.ofFn pre) *
-          (C j (Fin.init u) * B (u (Fin.last L))) * evalWord B (List.ofFn post)) =
-        Matrix.trace (evalWord B (List.ofFn pre) *
-          (B (u 0) * C (j + 1) (Fin.tail u)) * evalWord B (List.ofFn post))) :
+      Matrix.trace (Kraus.evalWord B (List.ofFn pre) *
+          (C j (Fin.init u) * B (u (Fin.last L))) * Kraus.evalWord B (List.ofFn post)) =
+        Matrix.trace (Kraus.evalWord B (List.ofFn pre) *
+          (B (u 0) * C (j + 1) (Fin.tail u)) * Kraus.evalWord B (List.ofFn post))) :
     ∃ X : Matrix (Fin D) (Fin D) ℂ,
-      (∀ a, C 0 a = evalWord B (List.ofFn a) * X) ∧
-        (∀ b, C L b = X * evalWord B (List.ofFn b)) := by
+      (∀ a, C 0 a = Kraus.evalWord B (List.ofFn a) * X) ∧
+        (∀ b, C L b = X * Kraus.evalWord B (List.ofFn b)) := by
   have : NeZero n := ⟨by omega⟩
   obtain ⟨X, hX0, hXL⟩ := MPSChainTensor.overlapWindow_exists_bondOperator
     (A := fun _ : Fin n => B) hL hn
@@ -453,12 +453,12 @@ conjugation by the gauge at the starting bond. -/
 theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ Z : GL (Fin D) ℂ,
       ∀ w : List (Fin d), w.length = n →
-        MPSTensor.evalWord B w =
-          (Z : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
+        Kraus.evalWord B w =
+          (Z : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w *
             (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
   have : NeZero n := ⟨by omega⟩
   -- Build constant chains.
@@ -475,11 +475,11 @@ theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
       MPSChainTensor.coeff A' σ
           = Matrix.trace (MPSChainTensor.arcEval A' 0 (List.ofFn σ)) := by
         rw [MPSChainTensor.coeff_eq_trace_arcEval]
-      _ = Matrix.trace (MPSTensor.evalWord A (List.ofFn σ)) := by
+      _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ)) := by
         rw [hA', MPSChainTensor.arcEval_const]
       _ = MPSTensor.mpv A σ := by simp
       _ = MPSTensor.mpv B σ := hAB σ
-      _ = Matrix.trace (MPSTensor.evalWord B (List.ofFn σ)) := by simp
+      _ = Matrix.trace (Kraus.evalWord B (List.ofFn σ)) := by simp
       _ = Matrix.trace (MPSChainTensor.arcEval B' 0 (List.ofFn σ)) := by
         rw [hB', MPSChainTensor.arcEval_const]
       _ = MPSChainTensor.coeff B' σ := by
@@ -489,8 +489,8 @@ theorem exists_conjugation_of_mpv_eq {n L d D : ℕ}
     hL hn hD A' B' hAwin hBwin hsame
   -- The gauge family Z gives arc-product conjugation.
   have hconj : ∀ w : List (Fin d), w.length = n →
-      MPSTensor.evalWord B w =
-        (Z 0 : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord A w *
+      Kraus.evalWord B w =
+        (Z 0 : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w *
           ((((Z 0)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
     intro w hw
     have harc := MPSChainTensor.arcEval_eq_gauge_conj hZ 0 w
@@ -600,14 +600,14 @@ theorem evalWord_eq_smul_conj_of_gauge {d D : ℕ} {A B : MPSTensor d D} {Z : GL
     {lam : ℂ}
     (hZ : ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
     (w : List (Fin d)) :
-    MPSTensor.evalWord B w = lam ^ w.length •
-      ((Z⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w * (Z : GL (Fin D) ℂ)) := by
+    Kraus.evalWord B w = lam ^ w.length •
+      ((Z⁻¹ : GL (Fin D) ℂ) * Kraus.evalWord A w * (Z : GL (Fin D) ℂ)) := by
   induction w with
   | nil =>
-      simp only [MPSTensor.evalWord_nil, List.length_nil, pow_zero, one_smul,
+      simp only [Kraus.evalWord_nil, List.length_nil, pow_zero, one_smul,
         Matrix.mul_one, Units.inv_mul]
   | cons i w ih =>
-      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ i, ih, List.length_cons,
+      rw [Kraus.evalWord_cons, Kraus.evalWord_cons, hZ i, ih, List.length_cons,
         pow_succ']
       rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
       congr 1
@@ -629,17 +629,17 @@ theorem evalWord_eq_conj_of_gaugeFamily {n d D : ℕ} [NeZero n] {A B : MPSTenso
     (hZ : ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
     (w : List (Fin d)) (v : Fin n) :
-    MPSTensor.evalWord B w =
-      ((Z v)⁻¹ : GL (Fin D) ℂ) * MPSTensor.evalWord A w *
+    Kraus.evalWord B w =
+      ((Z v)⁻¹ : GL (Fin D) ℂ) * Kraus.evalWord A w *
         (Z (v + (w.length : Fin n)) : GL (Fin D) ℂ) := by
   induction w generalizing v with
   | nil =>
-      simp only [MPSTensor.evalWord_nil, List.length_nil, Nat.cast_zero, add_zero,
+      simp only [Kraus.evalWord_nil, List.length_nil, Nat.cast_zero, add_zero,
         Matrix.mul_one, Units.inv_mul]
   | cons i w ih =>
       have hidx : v + ((i :: w).length : Fin n) = v + 1 + (w.length : Fin n) := by
         rw [List.length_cons, Nat.cast_add, Nat.cast_one, ← add_assoc, add_right_comm]
-      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, hZ v i, ih (v + 1), hidx]
+      rw [Kraus.evalWord_cons, Kraus.evalWord_cons, hZ v i, ih (v + 1), hidx]
       simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
 /-- **Two per-bond gauge families are proportional at every bond.**  If both
@@ -655,7 +655,7 @@ Source: arXiv:1804.04964, Section 3, first corollary after the theorem
 labelled `normal`, line 1621 of `Papers/1804.04964/paper_normal.tex`: "the
 gauges `Z_i` are unique up to a multiplicative constant". -/
 theorem gaugeFamily_bond_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTensor d D}
-    (hA : MPSTensor.IsNBlkInjective A L) {Z Z' : Fin n → GL (Fin D) ℂ}
+    (hA : Kraus.IsNBlkInjective A L) {Z Z' : Fin n → GL (Fin D) ℂ}
     (hZ : ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
     (hZ' : ∀ (v : Fin n) (i : Fin d),
@@ -664,7 +664,7 @@ theorem gaugeFamily_bond_proportional {n L d D : ℕ} [NeZero n] {A B : MPSTenso
     ∃ c : ℂˣ, (Z' v : Matrix (Fin D) (Fin D) ℂ) =
       (c : ℂ) • (Z v : Matrix (Fin D) (Fin D) ℂ) := by
   have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
-      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+      Kraus.evalWord A (List.ofFn σ)) = ⊤ := hA
   -- The two iterated relations agree on the spanning word products, hence
   -- on every matrix.
   have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,
@@ -707,7 +707,7 @@ lines 2256--2295 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
     {n L d D : ℕ} (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ (Z : GL (Fin D) ℂ) (lam : ℂ), lam ^ n = 1 ∧
       ∀ i : Fin d, B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)) := by
@@ -718,19 +718,19 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_of_overlap
   set Q : GL (Fin D) ℂ := P⁻¹ with hQdef
   set C : MPSTensor d D := fun i => (Q : Matrix (Fin D) (Fin D) ℂ) * B i *
     ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) with hCdef
-  have hCw : ∀ w : List (Fin d), MPSTensor.evalWord C w =
-      (Q : Matrix (Fin D) (Fin D) ℂ) * MPSTensor.evalWord B w *
+  have hCw : ∀ w : List (Fin d), Kraus.evalWord C w =
+      (Q : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B w *
         ((Q⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
     MPSTensor.evalWord_gauge Q (fun i => rfl)
   have hCA : ∀ w : List (Fin d), w.length = n →
-      MPSTensor.evalWord C w = MPSTensor.evalWord A w := by
+      Kraus.evalWord C w = Kraus.evalWord A w := by
     intro w hwlen
     rw [hCw w, hP w hwlen, hQdef]
     rw [inv_inv]
     rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, ← Units.val_mul,
       inv_mul_cancel, Units.val_one, Matrix.one_mul, Matrix.mul_assoc,
       ← Units.val_mul, inv_mul_cancel, Units.val_one, Matrix.mul_one]
-  have hC : MPSTensor.IsNBlkInjective C L := MPSTensor.isNBlkInjective_conj hB Q
+  have hC : Kraus.IsNBlkInjective C L := MPSTensor.isNBlkInjective_conj hB Q
   -- Rigidity: the conjugated `B` is proportional to `A`.
   obtain ⟨lam, hlamn, hCi⟩ :=
     MPSTensor.proportional_of_evalWord_eq hL hn hD hA hC hCA
@@ -762,7 +762,7 @@ Source: arXiv:1804.04964, Section `normal_alt`, the corollary after Lemma 5,
 lines 2256--2295 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_of_overlap {n L d D : ℕ} [NeZero n]
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L) (hB : MPSTensor.IsNBlkInjective B L)
+    (hA : Kraus.IsNBlkInjective A L) (hB : Kraus.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) := by
@@ -826,8 +826,8 @@ Source: arXiv:1804.04964, Section 3, the corollary for TI MPS, lines
 1624--1661 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : ℕ}
     (hL : 0 < L) (hD : 0 < D) (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L)
-    (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : GL (Fin D) ℂ) (lam lam' : ℂ)
+    (hA : Kraus.IsNBlkInjective A L)
+    (hB : Kraus.IsNBlkInjective B L) (Z Z' : GL (Fin D) ℂ) (lam lam' : ℂ)
     (hZ : ∀ i : Fin d,
       B i = lam • ((Z⁻¹ : GL (Fin D) ℂ) * A i * (Z : GL (Fin D) ℂ)))
     (hZ' : ∀ i : Fin d,
@@ -840,7 +840,7 @@ theorem fundamentalTheorem_normalMPS_translationInvariant_gauge_unique {L d D : 
     apply hi₀
     rw [hZ i₀, h0, zero_smul]
   have hAspan : Submodule.span ℂ (Set.range fun σ : Fin L → Fin d =>
-      MPSTensor.evalWord A (List.ofFn σ)) = ⊤ := hA
+      Kraus.evalWord A (List.ofFn σ)) = ⊤ := hA
   -- The iterated relations agree on the spanning word products, hence
   -- everywhere.
   have hE : ∀ M : Matrix (Fin D) (Fin D) ℂ,

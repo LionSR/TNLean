@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.Irreducible.PerronFrobenius
 import TNLean.MPS.Core.CanonicalNormalization
-import QICLean.MPS.Core.CPPrimitive
+import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.Adjoint
 import QICLean.QPF.Assembly
@@ -90,7 +90,7 @@ eigenvalue to be one. -/
 theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
     (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
-    (hB_irr : IsIrreducibleTensor B)
+    (hB_irr : Kraus.IsIrreducibleFamily B)
     {X : GL (Fin D) ℂ} {ζ : ℂ} (hζ_ne : ζ ≠ 0)
     (hB :
       ∀ i : Fin d,
@@ -99,18 +99,18 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
     ‖ζ‖ = 1 := by
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    exists_posSemidef_fixedPoint A hA_left (NeZero.pos D)
+    Kraus.exists_posSemidef_fixedPoint A hA_left (NeZero.pos D)
   obtain ⟨τ, hτ_psd, hτ_ne, hτ_fix⟩ :=
-    exists_posSemidef_fixedPoint B hB_left (NeZero.pos D)
-  have hB_irrMap : IsIrreducibleMap (transferMap (d := d) (D := D) B) :=
+    Kraus.exists_posSemidef_fixedPoint B hB_left (NeZero.pos D)
+  have hB_irrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB_irr
-  have hB_cp : IsCPMap (transferMap (d := d) (D := D) B) := transferMap_isCPMap B
-  have hEB_eq : ∀ Y, transferMap (d := d) (D := D) B Y =
+  have hB_cp : IsCPMap (Kraus.transferMap (d := d) (D := D) B) := Kraus.transferMap_isCPMap B
+  have hEB_eq : ∀ Y, Kraus.transferMap (d := d) (D := D) B Y =
       (ζ * starRingEnd ℂ ζ) •
-        (X.val * transferMap (d := d) (D := D) A
+        (X.val * Kraus.transferMap (d := d) (D := D) A
           (X⁻¹.val * Y * X⁻¹.valᴴ) * X.valᴴ) := by
     intro Y
-    simp only [transferMap_apply]
+    simp only [Kraus.transferMap_apply]
     simp_rw [hB]
     simp only [Matrix.conjTranspose_smul, smul_mul_assoc, mul_smul_comm,
       smul_smul, ← Finset.smul_sum, Matrix.conjTranspose_mul,
@@ -129,7 +129,7 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
     simp only [σ, Matrix.mul_zero, Matrix.zero_mul] at hcancel
     rwa [gaugePhase_conj_cancel] at hcancel
   have hEB_σ :
-      transferMap (d := d) (D := D) B σ =
+      Kraus.transferMap (d := d) (D := D) B σ =
         (ζ * starRingEnd ℂ ζ) • σ := by
     simp only [σ, hEB_eq, gaugePhase_conj_cancel, hρ_fix]
   have hζζ_real : ζ * starRingEnd ℂ ζ = (↑(‖ζ‖ ^ 2) : ℂ) := by
@@ -139,7 +139,7 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
     exact sq_pos_of_ne_zero hnorm_ne
   have h_eig_eq : ‖ζ‖ ^ 2 = 1 :=
     (eigenvalue_unique_of_irreducible_cp
-      (transferMap (d := d) (D := D) B) hB_cp hB_irrMap
+      (Kraus.transferMap (d := d) (D := D) B) hB_cp hB_irrMap
       τ σ 1 (‖ζ‖ ^ 2) hτ_psd hτ_ne one_pos hσ_psd hσ_ne hζζ_pos
       (by simp [hτ_fix]) (by rw [hEB_σ, hζζ_real])).symm
   nlinarith [norm_nonneg ζ]
@@ -166,7 +166,7 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
     (hB : ∀ i, B i = ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
     (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B) :
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B) :
     ∃ U : Matrix.unitaryGroup (Fin D) ℂ, ‖ζ‖ = 1 ∧
       ∀ i, B i = ζ • ((U : Matrix (Fin D) (Fin D) ℂ) * A i *
         (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by
@@ -231,18 +231,18 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
     -- `key : ∑ᵢ Aᵢᴴ W Aᵢ = Xᴴ X = W`.
     rw [key, hW_def]
   -- Transfer-map phrasing of the fixed-point identity.
-  have hWfix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) W = W := by
-    rw [transferMap_apply]
+  have hWfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) W = W := by
+    rw [Kraus.transferMap_apply]
     simp only [Matrix.conjTranspose_conjTranspose]
     exact hSfix
   -- `1` is a fixed point too (left-canonicity of `A`).
-  have h1_fix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  have h1_fix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
       (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-    rw [transferMap_apply]
+    rw [Kraus.transferMap_apply]
     simp only [Matrix.conjTranspose_conjTranspose, Matrix.mul_one]
     exact hA_left
   -- Irreducibility of the conjugate-transposed transfer map.
-  have hIrrAdj : IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
+  have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hA_irr
   -- Positive-semidefiniteness facts.
   have hW_psd : W.PosSemidef := by
@@ -251,7 +251,7 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
   have h1_ne : (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := one_ne_zero
   -- Uniqueness of the PSD fixed point: `W = c • 1`.
   obtain ⟨c, hc⟩ :=
-    posSemidef_fixedPoint_unique_of_irreducible (d := d) (D := D)
+    Kraus.posSemidef_fixedPoint_unique_of_irreducible (d := d) (D := D)
       (fun i => (A i)ᴴ) hIrrAdj 1 W h1_psd h1_ne hW_psd h1_fix hWfix
   -- `X` is nonzero, hence so is `W`, hence `c ≠ 0`.
   have hXval_ne : (↑X : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
@@ -337,7 +337,7 @@ theorem exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
     (h : GaugePhaseEquiv A B)
     (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B) :
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧
       ∀ i, B i = ζ • ((U : Matrix (Fin D) (Fin D) ℂ) * A i *
         (U : Matrix (Fin D) (Fin D) ℂ)ᴴ) := by

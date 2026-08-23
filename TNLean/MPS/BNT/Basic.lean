@@ -74,13 +74,13 @@ for `A_total` in the sense of Definition 4.2 of arXiv:2011.12127, lines 1846–1
 
 Informally, `A_bnt` is a finite family of normal tensors which spans the
 positive-length MPV family of `A_total` and whose MPV states become linearly
-independent for large enough system size. Here `IsNormal` is the algebraic
+independent for large enough system size. Here `Kraus.IsNormal` is the algebraic
 normality predicate used in this project, i.e. eventual block injectivity.
 -/
 structure IsBNT {d Dtot : ℕ} (A_total : MPSTensor d Dtot)
     (g : ℕ) (dim : Fin g → ℕ) (A_bnt : (j : Fin g) → MPSTensor d (dim j)) : Prop where
   /-- Each basis tensor is normal. -/
-  normal : ∀ j, IsNormal (A_bnt j)
+  normal : ∀ j, Kraus.IsNormal (A_bnt j)
   /-- At each positive system size, `A_total`'s MPV is a linear combination of the basis MPVs. -/
   spans_mpv : ∀ N : ℕ, 0 < N → ∃ c : Fin g → ℂ, ∀ σ : Fin N → Fin d,
       mpv A_total σ = ∑ j : Fin g, c j * mpv (A_bnt j) σ

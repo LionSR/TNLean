@@ -35,7 +35,7 @@ theorem eigenvector_spreading [NeZero D]
     (A : MPSTensor d D) (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (_i₀ : Fin d) (_μ : ℂ) (_hμ : _μ ≠ 0)
     (_heig : A _i₀ *ᵥ φ = _μ • φ)
-    (hNormal : IsNormal A) :
+    (hNormal : Kraus.IsNormal A) :
     Kraus.cumulativeVectorSpan A φ (D - 1) = ⊤ := by
   obtain ⟨N, hN⟩ := cumulativeSpan_eq_top_of_isNormal A hNormal
   exact Kraus.eigenvector_spreading_of_cumulativeSpan_eq_top A φ hφ hN

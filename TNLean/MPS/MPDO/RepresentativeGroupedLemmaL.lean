@@ -86,66 +86,66 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
             (Fin.cons i w : Fin (L + 1) → Fin d) =
           ∑ j : Fin P.basisCount, Matrix.trace
             (P.coeff (L + 1) j • insertedTensor W (P.basis j) s *
-              evalWord (P.basis j) (List.ofFn w)) := by
+              Kraus.evalWord (P.basis j) (List.ofFn w)) := by
       intro W
       have hExp : ∀ i : Fin d,
           P.toTensor.mpv (Fin.cons i w : Fin (L + 1) → Fin d) =
             ∑ j : Fin P.basisCount, P.coeff (L + 1) j *
-              Matrix.trace (P.basis j i * evalWord (P.basis j) (List.ofFn w)) := by
+              Matrix.trace (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
         intro i
         rw [P.mpv_toTensor_eq_sum_coeff]
         refine Finset.sum_congr rfl fun j _ ↦ ?_
         have hof : List.ofFn (Fin.cons i w : Fin (L + 1) → Fin d) =
             i :: List.ofFn w := by
           simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
-        simp only [MPSTensor.mpv, MPSTensor.coeff, hof, MPSTensor.evalWord_cons]
+        simp only [MPSTensor.mpv, MPSTensor.coeff, hof, Kraus.evalWord_cons]
       simp_rw [hExp, Finset.mul_sum]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun j _ ↦ ?_
       calc
         ∑ i : Fin d, W s i *
               (P.coeff (L + 1) j *
-                Matrix.trace (P.basis j i * evalWord (P.basis j) (List.ofFn w))) =
+                Matrix.trace (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w))) =
             P.coeff (L + 1) j * ∑ i : Fin d, W s i *
-              Matrix.trace (P.basis j i * evalWord (P.basis j) (List.ofFn w)) := by
+              Matrix.trace (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 simpa only [mul_comm, mul_left_comm, mul_assoc] using
                   Fintype.sum_mul_mul_eq_mul_sum_mul (P.coeff (L + 1) j) (W s)
                     (fun i => Matrix.trace
-                      (P.basis j i * evalWord (P.basis j) (List.ofFn w)))
+                      (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w)))
         _ = P.coeff (L + 1) j * ∑ i : Fin d, Matrix.trace
-              ((W s i • P.basis j i) * evalWord (P.basis j) (List.ofFn w)) := by
+              ((W s i • P.basis j i) * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 congr 1
                 refine Finset.sum_congr rfl fun i _ ↦ ?_
                 rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
         _ = P.coeff (L + 1) j * Matrix.trace
               (∑ i : Fin d, (W s i • P.basis j i) *
-                evalWord (P.basis j) (List.ofFn w)) := by
+                Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 rw [Matrix.trace_sum]
         _ = P.coeff (L + 1) j * Matrix.trace
               ((∑ i : Fin d, W s i • P.basis j i) *
-                evalWord (P.basis j) (List.ofFn w)) := by
+                Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 rw [Finset.sum_mul]
         _ = P.coeff (L + 1) j * Matrix.trace
               (insertedTensor W (P.basis j) s *
-                evalWord (P.basis j) (List.ofFn w)) := rfl
+                Kraus.evalWord (P.basis j) (List.ofFn w)) := rfl
         _ = Matrix.trace
               (P.coeff (L + 1) j • insertedTensor W (P.basis j) s *
-                evalWord (P.basis j) (List.ofFn w)) := by
+                Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
     rw [htrans Y, htrans Z] at hA
     have hsubtr : ∀ j : Fin P.basisCount,
-        Matrix.trace (Δ j * evalWord (P.basis j) (List.ofFn w)) =
+        Matrix.trace (Δ j * Kraus.evalWord (P.basis j) (List.ofFn w)) =
           Matrix.trace
               (P.coeff (L + 1) j • insertedTensor Y (P.basis j) s *
-                evalWord (P.basis j) (List.ofFn w)) -
+                Kraus.evalWord (P.basis j) (List.ofFn w)) -
             Matrix.trace
               (P.coeff (L + 1) j • insertedTensor Z (P.basis j) s *
-                evalWord (P.basis j) (List.ofFn w)) := by
+                Kraus.evalWord (P.basis j) (List.ofFn w)) := by
       intro j
       change Matrix.trace
           ((P.coeff (L + 1) j •
               (insertedTensor Y (P.basis j) s - insertedTensor Z (P.basis j) s)) *
-            evalWord (P.basis j) (List.ofFn w)) = _
+            Kraus.evalWord (P.basis j) (List.ofFn w)) = _
       rw [smul_sub, sub_mul, Matrix.trace_sub]
     simp_rw [hsubtr]
     rw [Finset.sum_sub_distrib, sub_eq_zero]

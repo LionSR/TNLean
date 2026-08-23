@@ -109,13 +109,13 @@ lemma AEx_isInjective : ∀ k, IsInjective (AEx k) := by
   fin_cases k
   · -- k = 0
     -- Unfold the definition: range is a singleton containing `mat1 1`.
-    simpa [MPSTensor.IsInjective, AEx, Set.range_const] using
+    simpa [Kraus.IsInjective, AEx, Set.range_const] using
       (span_mat1_eq_top (a := (1 : ℂ)) one_ne_zero)
   · -- k = 1
     -- Here `3/2 ≠ 0`.
     have hne : ((3 : ℂ) / 2) ≠ 0 := by
       norm_num
-    simpa [MPSTensor.IsInjective, AEx, Set.range_const] using
+    simpa [Kraus.IsInjective, AEx, Set.range_const] using
       (span_mat1_eq_top (a := ((3 : ℂ) / 2)) hne)
 
 /-- The weighted MPV sum cancels for all system sizes (here `d = 1`, so there is only one σ at each

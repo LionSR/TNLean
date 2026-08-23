@@ -186,11 +186,11 @@ noncomputable def normalizedDiagonalLift (A : MPSTensor (d * d) D) (x : ℕ) :
 /-- A nonempty normalized diagonal ancilla leaves the transfer map unchanged. -/
 theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
     (x : ℕ) (hx : 0 < x) :
-    MPSTensor.transferMap (normalizedDiagonalLift A x) = MPSTensor.transferMap A := by
+    Kraus.transferMap (normalizedDiagonalLift A x) = Kraus.transferMap A := by
   classical
   apply LinearMap.ext
   intro X
-  simp only [MPSTensor.transferMap_apply]
+  simp only [Kraus.transferMap_apply]
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   apply Finset.sum_congr rfl
   intro ij _
@@ -222,8 +222,8 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
 /-- A nonempty normalized diagonal lift preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_normalizedDiagonalLift
     (A : MPSTensor (d * d) D) (x : ℕ) (hx : 0 < x)
-    (hA : MPSTensor.IsIrreducibleTensor A) :
-    MPSTensor.IsIrreducibleTensor (normalizedDiagonalLift A x) := by
+    (hA : Kraus.IsIrreducibleFamily A) :
+    Kraus.IsIrreducibleFamily (normalizedDiagonalLift A x) := by
   classical
   intro hInv
   apply hA
@@ -290,7 +290,7 @@ lines 336--340. -/
 theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
     (x : ℕ) (_hx : 0 < x) :
     (tensorPhysicalId U x).normalizedFlattening =
-      MPSTensor.reindexPhysical (doubledPhysicalAncillaShuffle d x)
+      Kraus.reindexPhysical (doubledPhysicalAncillaShuffle d x)
         (normalizedDiagonalLift U.normalizedFlattening x) := by
   funext k
   rcases finProdFinEquiv.surjective k with ⟨⟨ia, jb⟩, rfl⟩
@@ -301,7 +301,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
         ((Real.sqrt (d * x) : ℂ)⁻¹) •
           tensorPhysicalId U x (finProdFinEquiv (i, a)) (finProdFinEquiv (j, b)) by
       simp [normalizedFlattening, MPOTensor.toMPSTensor]]
-  rw [show MPSTensor.reindexPhysical (doubledPhysicalAncillaShuffle d x)
+  rw [show Kraus.reindexPhysical (doubledPhysicalAncillaShuffle d x)
       (normalizedDiagonalLift U.normalizedFlattening x)
       (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
         normalizedDiagonalLift U.normalizedFlattening x
@@ -431,8 +431,8 @@ flattening unchanged.
 Source: arXiv:1703.09188, lines 706--724 and equation `eq:transfer-op`, lines 336--340. -/
 theorem transferMap_normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
     (x : ℕ) (hx : 0 < x) :
-    MPSTensor.transferMap (tensorPhysicalId U x).normalizedFlattening =
-      MPSTensor.transferMap U.normalizedFlattening := by
+    Kraus.transferMap (tensorPhysicalId U x).normalizedFlattening =
+      Kraus.transferMap U.normalizedFlattening := by
   rw [normalizedFlattening_tensorPhysicalId U x hx,
     MPSTensor.transferMap_reindexPhysical_equiv,
     transferMap_normalizedDiagonalLift U.normalizedFlattening x hx]

@@ -43,7 +43,7 @@ theorem IsResidualIsometryFamily.wordEntryFamily_one_gram
         star (wordEntryFamily U 1 ⟨j', (α', β')⟩ w))]
   simp only [wordEntryFamily, blockEntryValue, wordTuple,
     Equiv.funUnique_symm_apply, List.ofFn_succ, List.ofFn_zero,
-    evalWord_cons, evalWord_nil, mul_one, uniqueElim_const]
+    Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one, uniqueElim_const]
   by_cases hj : j = j'
   · subst j'
     rw [hU.1]
@@ -160,8 +160,8 @@ docs/paper-gaps/cpsv16_rfp_isometry_scope.tex. -/
 theorem wordTupleSpanTop_one_of_isTransferIdempotent_directSum
     [∀ k, NeZero (dim k)]
     (B : (k : Fin r) → MPSTensor d (dim k))
-    (hnormal : ∀ k, IsNormal (B k))
-    (hirr : ∀ k, IsIrreducibleTensor (B k))
+    (hnormal : ∀ k, Kraus.IsNormal (B k))
+    (hirr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))

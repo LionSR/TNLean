@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.TransferMatrix
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 
 /-!
 # Transfer-matrix representation of MPS transfer maps
@@ -25,9 +25,9 @@ variable {d D : ℕ}
 This relates Wolf's Section 2.2 transfer matrix for quantum channels to the MPS
 transfer operator. -/
 theorem transferMatrix_eq (A : MPSTensor d D) :
-    transferMatrix (MPSTensor.transferMap A) =
+    transferMatrix (Kraus.transferMap A) =
       ∑ n : Fin d,
         (A n).map (starRingEnd ℂ) ⊗ₖ A n :=
-  transferMatrix_kraus A _ (fun X => by simp [transferMap_apply])
+  transferMatrix_kraus A _ (fun X => by simp [Kraus.transferMap_apply])
 
 end MPSTensor

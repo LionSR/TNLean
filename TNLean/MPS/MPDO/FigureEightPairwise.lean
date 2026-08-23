@@ -357,10 +357,10 @@ theorem gramDressing_eq_of_two_grouped_corners
       (w : Fin L → Fin (d * d)),
       Matrix.trace
           (MPSTensor.linearMarkedTensor fX M.toMPSTensor u *
-            MPSTensor.evalWord M.toMPSTensor (List.ofFn w)) =
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
         Matrix.trace
           (MPSTensor.linearMarkedTensor fY M.toMPSTensor u *
-            MPSTensor.evalWord M.toMPSTensor (List.ofFn w)) := by
+            Kraus.evalWord M.toMPSTensor (List.ofFn w)) := by
     intro L _hL u w
     rw [show MPSTensor.linearMarkedTensor fX M.toMPSTensor u =
         horizontalSlice (gramDressing X A) u.divNat u.modNat by

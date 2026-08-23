@@ -41,19 +41,19 @@ noncomputable def doubledTensor (A : MPSTensor d D) : MPOTensor d (D * D) :=
 MPS word products (bra) and their conjugates (ket). -/
 theorem evalWord_doubledTensor (A : MPSTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
     MPOTensor.evalWord (doubledTensor A) (List.ofFn σ) (List.ofFn τ)
-      = (((MPSTensor.evalWord A (List.ofFn σ)) ⊗ₖ
-          ((MPSTensor.evalWord A (List.ofFn τ)).map (starRingEnd ℂ))).submatrix
+      = (((Kraus.evalWord A (List.ofFn σ)) ⊗ₖ
+          ((Kraus.evalWord A (List.ofFn τ)).map (starRingEnd ℂ))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm) := by
   induction N with
   | zero =>
-    simp only [List.ofFn_zero, MPOTensor.evalWord_nil, MPSTensor.evalWord_nil]
+    simp only [List.ofFn_zero, MPOTensor.evalWord_nil, Kraus.evalWord_nil]
     have h1 : (1 : Matrix (Fin D) (Fin D) ℂ).map ⇑(starRingEnd ℂ) = 1 :=
       (starRingEnd ℂ).mapMatrix.map_one
     rw [h1, Matrix.kroneckerMap_one_one (· * ·) (fun _ => zero_mul _)
       (fun _ => mul_zero _) (one_mul 1), Matrix.submatrix_one_equiv]
   | succ n ih =>
     simp only [List.ofFn_succ]
-    rw [MPOTensor.evalWord_cons, MPSTensor.evalWord_cons, MPSTensor.evalWord_cons]
+    rw [MPOTensor.evalWord_cons, Kraus.evalWord_cons, Kraus.evalWord_cons]
     have ih_step := ih (σ ∘ Fin.succ) (τ ∘ Fin.succ)
     simp only [Function.comp_def] at ih_step
     rw [ih_step, doubledTensor, Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
@@ -120,12 +120,12 @@ theorem reducedPureBlockState_eq_gram (A : MPSTensor d D) (N L : ℕ) (hL : L �
 
 /-- Cyclicity: the closed-word MPV trace is invariant under one list rotation. -/
 theorem trace_evalWord_rotate_mps (A : MPSTensor d D) (l : List (Fin d)) :
-    Matrix.trace (MPSTensor.evalWord A (l.rotate 1)) = Matrix.trace (MPSTensor.evalWord A l) := by
+    Matrix.trace (Kraus.evalWord A (l.rotate 1)) = Matrix.trace (Kraus.evalWord A l) := by
   cases l with
   | nil => rfl
   | cons a t =>
-    rw [List.rotate_cons_succ, List.rotate_zero, MPSTensor.evalWord_append, MPSTensor.evalWord_cons,
-      MPSTensor.evalWord_cons, MPSTensor.evalWord_nil, mul_one, Matrix.trace_mul_comm]
+    rw [List.rotate_cons_succ, List.rotate_zero, Kraus.evalWord_append, Kraus.evalWord_cons,
+      Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one, Matrix.trace_mul_comm]
 
 /-- **Cyclic invariance of the MPV.** `mpv A` is invariant under a cyclic shift of
 the configuration. -/
@@ -358,17 +358,17 @@ theorem ofFn_blockReindex {N L : ℕ} (hL : L ≤ N) (u : Fin L → Fin d)
     congr 1
 
 /-- Factor the wavefunction matrix through the `D × D` bond pair: the matrix
-element `W(u, w)` is `tr(evalWord u · evalWord w)`, which decomposes as a product
+element `W(u, w)` is `tr(Kraus.evalWord u · Kraus.evalWord w)`, which decomposes as a product
 over the pair of bond indices `(a, b) ∈ Fin D × Fin D`. -/
 theorem schmidtMat_eq_mul (A : MPSTensor d D) (N L : ℕ) (hL : L ≤ N) :
     schmidtMat A N L hL
       = (Matrix.of (fun (u : Fin L → Fin d) (p : Fin D × Fin D) =>
-            (evalWord A (List.ofFn u)) p.1 p.2) : Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ)
+            (Kraus.evalWord A (List.ofFn u)) p.1 p.2) : Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ)
         * (Matrix.of (fun (p : Fin D × Fin D) (w : Fin (N - L) → Fin d) =>
-            (evalWord A (List.ofFn w)) p.2 p.1) :
+            (Kraus.evalWord A (List.ofFn w)) p.2 p.1) :
             Matrix (Fin D × Fin D) (Fin (N - L) → Fin d) ℂ) := by
   ext u w
-  simp only [schmidtMat, mpv, coeff, ofFn_blockReindex, evalWord_append, Matrix.mul_apply,
+  simp only [schmidtMat, mpv, coeff, ofFn_blockReindex, Kraus.evalWord_append, Matrix.mul_apply,
     Matrix.of_apply, Matrix.trace, Matrix.diag_apply, Fintype.sum_prod_type]
 
 /-- **Operator-Schmidt rank bound.** The reduced state of a block of an MPS pure
@@ -378,9 +378,9 @@ theorem rank_reducedPureBlockState_le (A : MPSTensor d D) (N L : ℕ) (hL : L �
     (reducedPureBlockState A N L hL).rank ≤ D * D := by
   set c := (Matrix.trace (pureState A N))⁻¹ with hc
   set Lof : Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ :=
-    Matrix.of (fun u p => (evalWord A (List.ofFn u)) p.1 p.2) with hLof
+    Matrix.of (fun u p => (Kraus.evalWord A (List.ofFn u)) p.1 p.2) with hLof
   set Rof : Matrix (Fin D × Fin D) (Fin (N - L) → Fin d) ℂ :=
-    Matrix.of (fun p w => (evalWord A (List.ofFn w)) p.2 p.1) with hRof
+    Matrix.of (fun p w => (Kraus.evalWord A (List.ofFn w)) p.2 p.1) with hRof
   have hLR : Lof * Rof = schmidtMat A N L hL := by
     rw [hLof, hRof, ← schmidtMat_eq_mul]
   have e1 : reducedPureBlockState A N L hL = (c • Lof) * (Rof * (schmidtMat A N L hL)ᴴ) := by

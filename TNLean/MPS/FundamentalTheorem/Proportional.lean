@@ -22,7 +22,7 @@ Theorem IV.4 (arXiv:2011.12127).
 The key input for the converse is the overlap decay lemma
 `MPSTensor.mpvOverlap_tendsto_zero` from `TNLean.Spectral.MPVOverlapDecay`.
 -/
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kraus
 
 namespace MPSTensor
 
@@ -54,8 +54,8 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
   classical
   let proportionalAt : ℕ → Prop := fun N =>
     ∃ c : ℂ, ∀ σ : Fin N → Fin d,
-      Matrix.trace (evalWord A (List.ofFn σ)) =
-        c * Matrix.trace (evalWord B (List.ofFn σ))
+      Matrix.trace (Kraus.evalWord A (List.ofFn σ)) =
+        c * Matrix.trace (Kraus.evalWord B (List.ofFn σ))
   let c : ℕ → ℂ := fun N =>
     if h : proportionalAt N then
       Classical.choose h
@@ -167,8 +167,8 @@ is recorded in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
 theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_irr : IsIrreducibleTensor A)
-    (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A)
+    (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hOverlap :
@@ -206,24 +206,24 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
     (hOverlap :
       Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
         (nhds (1 : ℝ))) :
-    1 ≤ mixedTransferSpectralRadius A B := by
+    1 ≤ Kraus.mixedTransferSpectralRadius A B := by
   by_contra hlt
   push Not at hlt
-  -- Unpack mixedTransferSpectralRadius and pass to the rectangular form (D₁ = D₂ = D).
+  -- Unpack Kraus.mixedTransferSpectralRadius and pass to the rectangular form (D₁ = D₂ = D).
   have hlt' :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
+            (Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
     have hsq :
         spectralRadius ℂ
             ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-              (mixedTransferMap (d := d) (D := D) A B)) < 1 := by
-      simpa [mixedTransferSpectralRadius] using hlt
-    -- `mixedTransferMap` and `mixedTransferMap₂` agree on `D × D` matrices.
+              (Kraus.mixedTransferMap (d := d) (D := D) A B)) < 1 := by
+      simpa [Kraus.mixedTransferSpectralRadius] using hlt
+    -- `Kraus.mixedTransferMap` and `Kraus.mixedTransferMap₂` agree on `D × D` matrices.
     have hagree :
-        mixedTransferMap (d := d) (D := D) A B =
-          mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B :=
-      (mixedTransferMap₂_same_dim A B).symm
+        Kraus.mixedTransferMap (d := d) (D := D) A B =
+          Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B :=
+      (Kraus.mixedTransferMap₂_same_dim A B).symm
     rw [← hagree]; exact hsq
   have hzero :
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
@@ -264,8 +264,8 @@ which is applied directly where blocks of differing dimension arise. Documented
 in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)
+    (hA_irr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hB_irr : Kraus.IsIrreducibleFamily (d := d) (D := D) B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hOverlap :
@@ -281,7 +281,7 @@ theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
 proportional MPV states at all sufficiently large lengths. -/
 theorem exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
     (A B : MPSTensor d D)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hA_self :

@@ -37,10 +37,10 @@ def toMPOTensor (A : MPSTensor d D) : MPOTensor d D :=
 /-- Word evaluation for the diagonal embedding vanishes unless the ket and
 bra words agree, and then recovers the original MPS word evaluation. -/
 theorem evalWord_toMPOTensor (A : MPSTensor d D) : ∀ l k : List (Fin d),
-    MPOTensor.evalWord A.toMPOTensor l k = if l = k then evalWord A l else 0 := by
+    MPOTensor.evalWord A.toMPOTensor l k = if l = k then Kraus.evalWord A l else 0 := by
   intro l
   induction l with
-  | nil => intro k; cases k <;> simp [MPOTensor.evalWord, evalWord]
+  | nil => intro k; cases k <;> simp [MPOTensor.evalWord, Kraus.evalWord]
   | cons i is ih =>
       intro k
       cases k with
@@ -51,7 +51,7 @@ theorem evalWord_toMPOTensor (A : MPSTensor d D) : ∀ l k : List (Fin d),
             simp only [MPOTensor.evalWord_cons, toMPOTensor_apply_same, ih]
             by_cases his : is = js
             · subst js
-              simp [evalWord]
+              simp [Kraus.evalWord]
             · simp [his]
           · simp [MPOTensor.evalWord, toMPOTensor, hij]
 
@@ -76,9 +76,9 @@ theorem rank_mpo_toMPOTensor (A : MPSTensor d D) (N : ℕ) :
 /-- The transfer map of the diagonal pure-state embedding is exactly the
 original MPS transfer map. -/
 @[simp] theorem toMPOTensor_transferMap (A : MPSTensor d D) :
-    MPOTensor.transferMap A.toMPOTensor = transferMap A := by
+    MPOTensor.transferMap A.toMPOTensor = Kraus.transferMap A := by
   ext X
-  rw [MPOTensor.transferMap_apply, transferMap_apply]
+  rw [MPOTensor.transferMap_apply, Kraus.transferMap_apply]
   simp [toMPOTensor]
 
 /-- For a pure MPS viewed as a diagonal MPO, doubled-index transfer-map

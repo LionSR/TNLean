@@ -289,7 +289,7 @@ lemma traceMatrix_not_isPrimitive : ¬ Matrix.IsPrimitive traceMatrix := by
 /-- The doubled-index transfer map of the product tensor is the identity on its
 one-dimensional bond algebra. -/
 lemma transferMap_toMPSTensor :
-    MPSTensor.transferMap tensor.toMPSTensor = LinearMap.id := by
+    Kraus.transferMap tensor.toMPSTensor = LinearMap.id := by
   rw [← transferMap_eq_toMPSTensor]
   apply LinearMap.ext
   intro X

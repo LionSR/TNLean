@@ -391,7 +391,7 @@ hypothesis includes a physical-pair coefficient factorization; the later theorem
 `rfp_implies_nncph_of_leftCanonical` obtains the commutation conclusion directly
 from the Appendix B structural datum. -/
 theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
     (N : ℕ) (hN : 2 < N) :
@@ -414,7 +414,7 @@ zero-energy equation under the Appendix B extraction hypothesis. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_nncph_ground_state_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormal A) (hLeft : IsLeftCanonical A)
+    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
     (N : ℕ) (hN : 2 < N) :
@@ -439,7 +439,7 @@ the ground-space spanning equation; this theorem assumes it via
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning
     (B : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent B) (hNT : IsNormal B) (hLeft : IsLeftCanonical B)
+    (hRFP : IsTransferIdempotent B) (hNT : Kraus.IsNormal B) (hLeft : IsLeftCanonical B)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP B hNT hRFP hLeft))
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}

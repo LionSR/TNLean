@@ -73,10 +73,10 @@ at lines 427--431. -/
 def HasFinalLabelSelectorWords (S : ℕ) : Prop :=
   ∀ ε : Λ, ∃ c : (Fin S → Fin (p * p)) → ℂ,
     (∑ w : Fin S → Fin (p * p),
-      c w • MPSTensor.evalWord (Fam.tensor ε).toMPSTensor (List.ofFn w)) = 1 ∧
+      c w • Kraus.evalWord (Fam.tensor ε).toMPSTensor (List.ofFn w)) = 1 ∧
     ∀ ε' : Λ, ε' ≠ ε →
       (∑ w : Fin S → Fin (p * p),
-        c w • MPSTensor.evalWord (Fam.tensor ε').toMPSTensor (List.ofFn w)) = 0
+        c w • Kraus.evalWord (Fam.tensor ε').toMPSTensor (List.ofFn w)) = 0
 
 /-- Simultaneous block selectors for the labelled MPO tensors are precisely
 final-label selectors for their fusion family. -/
@@ -165,7 +165,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
         exact ih (w ∘ Fin.succ)
   have hword (w : Fin (n + 1) → Fin (p * p)) :
       _root_.evalWord D (List.ofFn w) =
-        U * MPSTensor.evalWord A (List.ofFn w) * Uᴴ := by
+        U * Kraus.evalWord A (List.ofFn w) * Uᴴ := by
     rw [evalWord_ofFn_eq_prod, MPSTensor.evalWord_ofFn_eq_prod]
     have hconj := MPOTensor.listProd_conj_of_conjTranspose_mul_self U hU
       (fun l => A (w l))
@@ -174,11 +174,11 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
       _root_.evalWord D w = Matrix.blockDiagonal' fun γ =>
         (1 : Matrix (Fin (Fam.chi.dim α β γ))
           (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-          MPSTensor.evalWord (Fam.tensor γ).toMPSTensor w := by
+          Kraus.evalWord (Fam.tensor γ).toMPSTensor w := by
     intro w
     induction w with
     | nil =>
-        simp only [_root_.evalWord, MPSTensor.evalWord_nil]
+        simp only [_root_.evalWord, Kraus.evalWord_nil]
         rw [show (fun γ =>
             (1 : Matrix (Fin (Fam.chi.dim α β γ))
               (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
@@ -188,7 +188,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
           exact Matrix.one_kronecker_one]
         exact Matrix.blockDiagonal'_one.symm
     | cons ij w ih =>
-        simp only [_root_.evalWord, MPSTensor.evalWord_cons, ih, D]
+        simp only [_root_.evalWord, Kraus.evalWord_cons, ih, D]
         rw [← Matrix.blockDiagonal'_mul]
         congr 1
         funext γ
@@ -196,7 +196,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
   choose coeff hSelf hOther using hSel
   have hcoeffTotal (γ : Λ) :
       (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
-        coeff ε w • MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) = 1 := by
+        coeff ε w • Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) = 1 := by
     rw [Finset.sum_eq_single γ]
     · exact hSelf γ
     · intro ε _ hε
@@ -213,12 +213,12 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
               (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
               (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
                 coeff ε w •
-                  MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) := by
+                  Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w)) := by
         simp_rw [hDword]
         exact sum_sum_smul_blockDiagonal'_one_kronecker
           (fun γ => Fam.chi.dim α β γ) Fam.bondDim coeff
           (fun γ _ w =>
-            MPSTensor.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w))
+            Kraus.evalWord (Fam.tensor γ).toMPSTensor (List.ofFn w))
       _ = Matrix.blockDiagonal' fun γ =>
           (1 : Matrix (Fin (Fam.chi.dim α β γ))
             (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
@@ -520,30 +520,30 @@ private theorem rectangularIntertwiner_eq_zero_of_selectorWords
     (hC : ∀ i : Fin d, A i * C = C * B i)
     (c : (Fin S → Fin d) → ℂ)
     (hA : (∑ w : Fin S → Fin d,
-      c w • MPSTensor.evalWord A (List.ofFn w)) = 1)
+      c w • Kraus.evalWord A (List.ofFn w)) = 1)
     (hB : (∑ w : Fin S → Fin d,
-      c w • MPSTensor.evalWord B (List.ofFn w)) = 0) :
+      c w • Kraus.evalWord B (List.ofFn w)) = 0) :
     C = 0 := by
   have hWord : ∀ w : List (Fin d),
-      MPSTensor.evalWord A w * C = C * MPSTensor.evalWord B w := by
+      Kraus.evalWord A w * C = C * Kraus.evalWord B w := by
     intro w
     induction w with
     | nil => simp
     | cons i w ih =>
-        simp only [MPSTensor.evalWord_cons]
+        simp only [Kraus.evalWord_cons]
         calc
-          (A i * MPSTensor.evalWord A w) * C =
-              A i * (MPSTensor.evalWord A w * C) := Matrix.mul_assoc _ _ _
+          (A i * Kraus.evalWord A w) * C =
+              A i * (Kraus.evalWord A w * C) := Matrix.mul_assoc _ _ _
           _ =
-              A i * (C * MPSTensor.evalWord B w) := by rw [ih]
-          _ = (A i * C) * MPSTensor.evalWord B w := by rw [Matrix.mul_assoc]
-          _ = (C * B i) * MPSTensor.evalWord B w := by rw [hC i]
-          _ = C * (B i * MPSTensor.evalWord B w) := by rw [Matrix.mul_assoc]
+              A i * (C * Kraus.evalWord B w) := by rw [ih]
+          _ = (A i * C) * Kraus.evalWord B w := by rw [Matrix.mul_assoc]
+          _ = (C * B i) * Kraus.evalWord B w := by rw [hC i]
+          _ = C * (B i * Kraus.evalWord B w) := by rw [Matrix.mul_assoc]
   have hSum :
       (∑ w : Fin S → Fin d,
-        (c w • MPSTensor.evalWord A (List.ofFn w)) * C) =
+        (c w • Kraus.evalWord A (List.ofFn w)) * C) =
       ∑ w : Fin S → Fin d,
-        C * (c w • MPSTensor.evalWord B (List.ofFn w)) := by
+        C * (c w • Kraus.evalWord B (List.ofFn w)) := by
     refine Finset.sum_congr rfl fun w _ => ?_
     rw [Matrix.smul_mul, Matrix.mul_smul, hWord]
   rw [← Matrix.sum_mul, hA, Matrix.one_mul, ← Matrix.mul_sum, hB,
@@ -624,7 +624,7 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
     (hLI : c.LengthIndependent) {S : ℕ}
     (hSel : Fam.HasFinalLabelSelectorWords S)
     (α β γ ε : Λ)
-    (hε : MPSTensor.IsInjective (Fam.tensor ε).toMPSTensor) :
+    (hε : Kraus.IsInjective (Fam.tensor ε).toMPSTensor) :
     ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
         (Fam.RightFinalMultiplicity α β γ ε) ℂ,
       ((Fam.tripleFusionComparison α β γ).submatrix

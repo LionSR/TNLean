@@ -41,11 +41,11 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
     (hPeriodsPos : ∀ i, 0 < periods i)
     (hPrim : ∀ i,
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d (periods i)) (D := dim i)
+        (Kraus.transferMap (d := blockPhysDim d (periods i)) (D := dim i)
           (blockTensor (d := d) (D := dim i) (blocks i) (periods i)))) :
     ∀ i,
       _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d (lcmPeriod periods)) (D := dim i)
+        (Kraus.transferMap (d := blockPhysDim d (lcmPeriod periods)) (D := dim i)
           (commonPeriodBlocking (d := d) blocks periods i)) := by
   intro i
   let : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩
