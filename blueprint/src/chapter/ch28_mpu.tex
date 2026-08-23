@@ -10127,3 +10127,184 @@ $\omega^{-1}$.
     Lemma~\ref{lem:qca_algebraic_blocking_translation}.  They therefore agree
     on the completion.
 \end{proof}
+
+Line~2308 of \cite{Cirac2017MPU} invokes a converse representation theorem:
+after blocking finitely many sites, the restriction of every one-dimensional
+QCA to the local algebra is represented by a depth-two circuit of
+nearest-neighbor unitaries, and hence by an MPU in standard form.  The results
+below concern the preceding change of grouping.  A
+given QCA remains a QCA under any prescribed finite blocking.  This one-way
+transport alone does not produce the circuit or MPU representation asserted by
+the converse theorem.
+
+\begin{definition}[Blocked automorphism]
+    \label{def:qca_blocked_automorphism}
+    \lean{SpinChain.blockedAutomorphism}
+    \leanok
+    \uses{def:qca_quasi_local_blocking}
+    Let $d,L>0$, let
+    $\overline{\mathcal B}_L\colon\mathcal A^{(d^L)}\simeq\mathcal A^{(d)}$
+    be the quasi-local blocking equivalence, and let $\omega$ be a star-algebra
+    automorphism of $\mathcal A^{(d)}$.  The induced automorphism of the blocked
+    chain is
+    \begin{align}
+        \omega^{[L]}
+        &=\overline{\mathcal B}_L^{-1}\circ\omega\circ
+          \overline{\mathcal B}_L.
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Evaluation of the blocked automorphism]
+    \label{lem:qca_blocked_automorphism_apply}
+    \lean{SpinChain.blockedAutomorphism_apply}
+    \leanok
+    \uses{def:qca_blocked_automorphism}
+    For every $X\in\mathcal A^{(d^L)}$,
+    \begin{align}
+        \omega^{[L]}(X)
+        &=\overline{\mathcal B}_L^{-1}
+          \bigl(\omega(\overline{\mathcal B}_L(X))\bigr).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_blocked_automorphism}
+    This is the evaluation formula for the defining conjugation.
+\end{proof}
+
+\begin{lemma}[Inverse of the blocked automorphism]
+    \label{lem:qca_blocked_automorphism_symm}
+    \lean{SpinChain.blockedAutomorphism_symm}
+    \leanok
+    \uses{def:qca_blocked_automorphism}
+    The inverse of the blocked automorphism is the blocked inverse:
+    \begin{align}
+        (\omega^{[L]})^{-1}
+        &=(\omega^{-1})^{[L]}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_automorphism_apply}
+    Evaluate both sides on a blocked-chain observable.  The blocking equivalence
+    and its inverse cancel on the two sides of $\omega^{-1}$.
+\end{proof}
+
+\begin{lemma}[Propagation neighborhood after site blocking]
+    \label{lem:qca_propagates_within_blocked}
+    \lean{SpinChain.PropagatesWithin.blocked}
+    \leanok
+    \uses{def:qca_blocked_automorphism,def:qca_blocked_neighborhood,
+        def:qca_propagates_within}
+    Let $\mathcal N\subset\mathbb Z$ be finite.  If $\omega$ propagates within
+    $\mathcal N$, then $\omega^{[L]}$ propagates within the carry-aware blocked
+    neighborhood $\mathcal C_L(\mathcal N)$.  Explicitly, for every finite
+    blocked region $\Lambda$ and every $X\in\mathcal A^{(d^L)}$ supported in
+    $\Lambda$, the observable $\omega^{[L]}(X)$ is supported in
+    $\Lambda+\mathcal C_L(\mathcal N)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_automorphism_apply,
+        lem:qca_quasi_local_blocking_support,
+        lem:qca_block_hull_region_sumset}
+    Forward blocking sends support in $\Lambda$ to support in
+    $\widehat\Lambda_L$.  Apply the propagation bound for $\omega$, then apply
+    inverse blocking.  The resulting support is
+    \begin{align}
+        \operatorname{Hull}_L
+        \bigl(\widehat\Lambda_L+\mathcal N\bigr)
+        &=\Lambda+\mathcal C_L(\mathcal N)
+    \end{align}
+    by the exact carry-aware block-hull identity.
+\end{proof}
+
+\begin{lemma}[Finite propagation after site blocking]
+    \label{lem:qca_finite_propagation_blocked}
+    \lean{SpinChain.HasFinitePropagation.blocked}
+    \leanok
+    \uses{def:qca_blocked_automorphism,def:qca_finite_propagation,
+        lem:qca_propagates_within_blocked}
+    If $\omega$ has finite forward propagation, then $\omega^{[L]}$ has finite
+    forward propagation.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_propagates_within_blocked}
+    Choose a finite propagation neighborhood $\mathcal N$ for $\omega$.
+    Lemma~\ref{lem:qca_propagates_within_blocked} gives the finite neighborhood
+    $\mathcal C_L(\mathcal N)$ for $\omega^{[L]}$.
+\end{proof}
+
+\begin{theorem}[Translation covariance of the blocked automorphism]
+    \label{thm:qca_blocked_translation_covariant_iff}
+    \lean{SpinChain.translationCovariant_blockedAutomorphism_iff}
+    \leanok
+    \uses{def:qca_blocked_automorphism,def:qca_translation_covariant,
+        def:qca_quasi_local_translation}
+    The blocked automorphism is translation covariant if and only if the
+    original automorphism commutes with translation by one whole block:
+    \begin{align}
+        \omega^{[L]}\text{ is translation covariant}
+        \quad\Longleftrightarrow\quad
+        \omega\circ\overline\tau^{(d)}_L
+        &=\overline\tau^{(d)}_L\circ\omega.
+    \end{align}
+    Thus blocked unit-translation covariance records commutation of $\omega$
+    with translation by $L$, not necessarily commutation with original unit
+    translation.  For $L\neq1$, the latter condition can be strictly stronger.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:qca_blocked_automorphism_apply,
+        thm:qca_translation_covariant_iff_commute_one,
+        lem:qca_quasi_local_blocking_translation}
+    By Theorem~\ref{thm:qca_translation_covariant_iff_commute_one}, translation
+    covariance on the blocked chain is equivalent to commutation with blocked
+    unit translation.  Under $\overline{\mathcal B}_L$, blocked unit translation
+    corresponds to original translation by $L$.  Conjugating the commutation
+    identity by the blocking equivalence proves both implications.
+\end{proof}
+
+\begin{lemma}[Translation covariance after site blocking]
+    \label{lem:qca_translation_covariant_blocked}
+    \lean{SpinChain.TranslationCovariant.blocked}
+    \leanok
+    \uses{def:qca_blocked_automorphism,def:qca_translation_covariant,
+        thm:qca_blocked_translation_covariant_iff}
+    If $\omega$ is translation covariant, then $\omega^{[L]}$ is translation
+    covariant.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:qca_blocked_translation_covariant_iff}
+    Translation covariance of $\omega$ gives commutation with
+    $\overline\tau^{(d)}_L$.  Apply
+    Theorem~\ref{thm:qca_blocked_translation_covariant_iff}.
+\end{proof}
+
+\begin{lemma}[QCA transport through site blocking]
+    \label{lem:qca_blocked}
+    \lean{SpinChain.IsQCA.blocked}
+    \leanok
+    \uses{def:qca,def:qca_blocked_automorphism,
+        lem:qca_finite_propagation_blocked,
+        lem:qca_translation_covariant_blocked}
+    Let $d,L>0$.  If $\omega$ is a one-dimensional QCA on
+    $\mathcal A^{(d)}$, then
+    \begin{align}
+        \omega^{[L]}
+        &=\overline{\mathcal B}_L^{-1}\circ\omega\circ
+          \overline{\mathcal B}_L
+    \end{align}
+    is a one-dimensional QCA on $\mathcal A^{(d^L)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_finite_propagation_blocked,
+        lem:qca_translation_covariant_blocked}
+    The two defining properties of a one-dimensional QCA are finite forward
+    propagation and translation covariance.  They are preserved by
+    Lemma~\ref{lem:qca_finite_propagation_blocked} and
+    Lemma~\ref{lem:qca_translation_covariant_blocked}, respectively.
+\end{proof}
