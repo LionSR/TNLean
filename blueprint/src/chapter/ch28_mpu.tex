@@ -831,14 +831,33 @@ closing a chain of $N$ copies of $\mathcal U$.
     double layer.
 \end{proof}
 
+\begin{lemma}[Iterated physical blocking]
+    \label{lem:mpu_iterated_physical_blocking}
+    \lean{MPOTensor.reindexPhysical_blockTensor_blockTensor}
+    \leanok
+    \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
+    Let $e$ be the canonical bijection which groups a word of length $mn$ into
+    $n$ consecutive words of length $m$. Iterating blocking at lengths $m$ and
+    $n$, then applying this physical reindexing, agrees with direct blocking at
+    length $mn$:
+    \begin{align}
+        e^*((\mathcal U_m)_n) & =\mathcal U_{mn}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
+    Expand the two blocked words. The canonical regrouping concatenates their
+    $n$ words of length $m$ into the direct word of length $mn$.
+\end{proof}
+
 \begin{theorem}[Bounded blocking to simplicity]
     \label{thm:mpu_bounded_simple_blocking}
     \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
         MPOTensor.IsMPU.blockTensor_one_isMPUSimple_fin_one,
         MPOTensor.IsMPU.exists_blockTensor_isMPUSimple,
         MPOTensor.IsMPUSimple.blockTensor,
-        MPOTensor.IsMPUSimple.reindexPhysical,
-        MPOTensor.reindexPhysical_blockTensor_blockTensor}
+        MPOTensor.IsMPUSimple.reindexPhysical}
     \leanok
     \uses{def:mpu_physical_reindexing, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_second_block_simple}
     Every MPU of positive physical and bond dimensions has a positive blocking
@@ -854,6 +873,10 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_iterated_physical_blocking,
+        thm:mpu_normalized_transfer_stabilization,
+        thm:mpu_normalized_transfer_fin_one, thm:mpu_second_block_simple,
+        def:mpu_physical_reindexing}
     At the stabilization exponent $J$, the normalized double-layer diagonal
     is the rank-one fixed projector $|\rho)(\Phi|$.  The preceding theorem
     makes the subsequent length-$D^2$ block simple.  If $e$ is the canonical
@@ -4950,11 +4973,84 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
 
+\begin{lemma}[Four-site composition source-rank bounds]
+    \label{lem:mpu_four_site_composition_source_rank_bounds}
+    \lean{MPOTensor.rightRank_blockTensor_mulTensor_four_le,
+        MPOTensor.leftRank_blockTensor_mulTensor_four_le}
+    \leanok
+    \uses{def:mpdo_operator_product, def:mpdo_physical_blocking,
+        def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal U$ and $\mathcal V$ be arbitrary matrix product operator
+    tensors of common physical dimension $d$. For their product tensor,
+    four-site blocking satisfies
+    \begin{align}
+        r[(\mathcal U\mathcal V)_4]
+         & \leq d^2 r[\mathcal U]r[\mathcal V], \\
+        \ell[(\mathcal U\mathcal V)_4]
+         & \leq d^2 \ell[\mathcal U]\ell[\mathcal V].
+    \end{align}
+    No unitarity or simplicity assumption is required.
+    % Source lines: paper_v2.tex 837--845; issue 6999.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_u_open_two_site,
+        thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product,
+        thm:mpdo_block_two_as_positive_blocking,
+        thm:mpu_source_ranks_physical_reindexing,
+        lem:mpu_iterated_physical_blocking}
+    Use the canonical physical reindexing to identify iterated two-site
+    blocking with direct four-site blocking. For the right cut, factor the
+    two-site block of each tensor through its source tensor $u$. The diagonal
+    cut through the two blocked factors retains one physical leg and one right
+    source leg from each factor. Thus, for suitable rectangular matrices
+    $A_{1,4}$ and $B_{1,4}$,
+    \begin{align}
+        M_1((\mathcal U\mathcal V)_4) & =A_{1,4}B_{1,4},
+    \end{align}
+    where the columns of $A_{1,4}$ and the rows of $B_{1,4}$ are indexed by
+    \begin{align}
+        \mathcal K_1
+         & =(\mathbb C^d\otimes\mathbb C^{r[\mathcal U]})
+        \otimes
+        (\mathbb C^d\otimes\mathbb C^{r[\mathcal V]}).
+    \end{align}
+    Consequently,
+    \begin{align}
+        r[(\mathcal U\mathcal V)_4]
+         &=\operatorname{rank}(A_{1,4}B_{1,4})
+        \leq\dim(\mathcal K_1)
+        =d^2r[\mathcal U]r[\mathcal V].
+    \end{align}
+    For the left cut, use the reflected $v$ factorization, with its physical
+    order $(j_2,j_1)$ and source order $(r,\ell)$. For suitable rectangular
+    matrices $A_{2,4}$ and $B_{2,4}$,
+    \begin{align}
+        M_2((\mathcal U\mathcal V)_4) & =A_{2,4}B_{2,4},
+    \end{align}
+    where the intermediate space is
+    \begin{align}
+        \mathcal K_2
+         & =(\mathbb C^d\otimes\mathbb C^{\ell[\mathcal U]})
+        \otimes
+        (\mathbb C^d\otimes\mathbb C^{\ell[\mathcal V]}).
+    \end{align}
+    Hence
+    \begin{align}
+        \ell[(\mathcal U\mathcal V)_4]
+         &=\operatorname{rank}(A_{2,4}B_{2,4})
+        \leq\dim(\mathcal K_2)
+        =d^2\ell[\mathcal U]\ell[\mathcal V].
+    \end{align}
+    Both source-cut ranks are unchanged by the canonical physical relabeling.
+\end{proof}
+
 \begin{lemma}[Composition additivity]
     \label{lem:mpu_index_composition}
     \notready
     \discussion{6016}
-    \uses{SF, def:index, index-well-defined}
+    \uses{SF, def:index, index-well-defined,
+        lem:mpu_four_site_composition_source_rank_bounds}
     Let $\mathcal W$ generate the composition of the MPUs generated by
     $\mathcal U$ and $\mathcal U'$. Under the source's standing canonical-form
     convention,
@@ -4974,7 +5070,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (six admissible blocks):** every actual block used in
     % the source rank computation carries its own source datum. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_standard_form, def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_source_cut_rank_blocking, def:mpu_reduced_full_support_source_datum}
+    \uses{def:mpu_admissible_standard_form, def:mpu_admissible_index,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_source_cut_rank_blocking,
+        lem:mpu_four_site_composition_source_rank_bounds,
+        def:mpu_reduced_full_support_source_datum}
     Suppose there is a positive integer $k$ such that
     $\mathcal U_k$, $\mathcal U'_k$, and the composition tensor
     $\mathcal W_k$ are simple and each carries its own reduced full-support
