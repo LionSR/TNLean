@@ -100,12 +100,12 @@ blocking.  The witness is one more than the supremum of the absolute displacemen
 theorem exists_blocked_nearest_neighbor {d : ℕ} [NeZero d]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : HasFinitePropagation ω) :
-    ∃ (L : ℕ) (_ : NeZero L) (_ : 0 < L),
+    ∃ (L : ℕ) (_ : NeZero L),
       PropagatesWithin (blockedAutomorphism d L ω) (Finset.Icc (-1) 1) := by
   obtain ⟨𝓝, h𝓝⟩ := hω
   let L := 𝓝.sup Int.natAbs + 1
   let _ : NeZero L := ⟨Nat.succ_ne_zero _⟩
-  refine ⟨L, inferInstance, Nat.zero_lt_succ _, ?_⟩
+  refine ⟨L, inferInstance, ?_⟩
   exact h𝓝.blocked.mono (blockedNeighborhood_subset_Icc_one_sup_add_one 𝓝)
 
 end HasFinitePropagation
@@ -119,11 +119,11 @@ construct the Schumacher--Werner support algebras or circuit, nor an MPU standar
 theorem exists_blocked_nearest_neighbor {d : ℕ} [NeZero d]
     {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
     (hω : IsQCA ω) :
-    ∃ (L : ℕ) (_ : NeZero L) (_ : 0 < L),
+    ∃ (L : ℕ) (_ : NeZero L),
       IsQCA (blockedAutomorphism d L ω) ∧
         PropagatesWithin (blockedAutomorphism d L ω) (Finset.Icc (-1) 1) := by
-  obtain ⟨L, hL, hLpos, hprop⟩ := hω.hasFinitePropagation.exists_blocked_nearest_neighbor
-  exact ⟨L, hL, hLpos, hω.blocked, hprop⟩
+  obtain ⟨L, hL, hprop⟩ := hω.hasFinitePropagation.exists_blocked_nearest_neighbor
+  exact ⟨L, hL, hω.blocked, hprop⟩
 
 end IsQCA
 
