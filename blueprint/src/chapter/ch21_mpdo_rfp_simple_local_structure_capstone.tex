@@ -1441,11 +1441,16 @@ This is the calculation in
         \rho_L & =V_L\operatorname{diag}(w_L)V_L^\dagger,
         & V_L^\dagger V_L & =I. \notag
     \end{align}
-    The diagonal weights give the listed nonzero roots.  The orthogonal
-    complement contributes no zero roots for one site, eight for
-    two sites, and forty-eight for three sites.  For four sites it contributes
-    $4^4-2^4=240$ zero roots, while the eight odd-parity bond patterns supply
-    the remaining eight.
+    The diagonal weights give the listed nonzero roots.  The zero-root counts
+    from the orthogonal complements are
+    \begin{align}
+        4^1-2^2 & =0,
+        & 4^2-2^3 & =8,
+        & 4^3-2^4 & =48,
+        & 4^4-2^4 & =240. \notag
+    \end{align}
+    At four sites the eight odd-parity bond patterns have zero weight and
+    supply the remaining eight zero roots.
 \end{proof}
 
 % Project-derived weight layer for CPSV16 Example 4.10, lines 897--905.
