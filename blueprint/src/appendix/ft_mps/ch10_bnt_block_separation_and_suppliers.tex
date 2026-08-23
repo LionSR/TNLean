@@ -298,38 +298,6 @@ family.
     direct-sum dimension.
 \end{proof}
 
-\begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
-    \label{thm:paperbnt_supplier_after_blocking}
-    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
-    \leanok
-    \uses{thm:prepared_bnt_blocks_after_blocking, thm:paperbnt_supplier_prepared, def:same_mpv2_pos}
-    Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
-    nonzero weights $\mu_k$, and blocks $B_k$ over the blocked alphabet, such
-    that:
-    \begin{enumerate}
-        \item every block has positive bond dimension;
-        \item every block is TP-normalized, primitive, irreducible, and
-              injective;
-        \item $A^{[p]}$ and $\bigoplus_k \mu_k B_k$ generate the same MPV family
-              at every positive length.
-    \end{enumerate}
-    Moreover, under $|\mu_k| \le 1$ for every $k$ and $|\mu_k|=1$ for at least
-    one $k$, there exists a sector decomposition $P$ over the blocked alphabet in
-    the BNT canonical form of Definition~\ref{def:sector_bnt_cf} such that
-    $A^{[p]}$ and $P$ generate the same MPV family at every positive length.
-\end{theorem}
-
-\begin{proof}\leanok
-    The after-blocking reduction supplies the TP-normalized primitive irreducible
-    injective blocks and the positive-length MPV identity. The normalized-weight
-    hypotheses are the choice that
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv} makes;
-    Theorem~\ref{thm:paperbnt_supplier_prepared} then produces the sector
-    decomposition, following the BNT selection of
-    \cite[Appendix~A]{Cirac2016MPDO_arXiv}. The remaining rescaling step is
-    recorded in Remark~\ref{rem:arbitrary_input_reduction_gap}.
-\end{proof}
-
 \begin{theorem}[Projective weight normalization]%
     \label{thm:paperbnt_weight_normalization}
     \lean{MPSTensor.exists_weight_normalization}

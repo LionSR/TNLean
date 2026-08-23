@@ -307,54 +307,6 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
       tendsto_nhds_unique (periodicSelfOverlap_tendsto A hA) hSelfZeroMul
   · exact ⟨hdim, hRep⟩
 
-/-- **Phase-rescaling reduction for the peripheral proportional case.**
-
-This proposition isolates a fixed phase-rescaling assumption sufficient for
-`peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`: whenever a periodic tensor
-has an MPV family proportional to that of another tensor, one can rescale the
-periodic side by a unit-modulus phase so that the MPV families agree at every positive length.
-
-**Scope restriction (conditional fixed phase):** this is an additional
-assumption, not the hypothesis or conclusion of source theorem `thm:bd` at
-arXiv:1708.00029, lines 613--632. Its relation to the source phase argument is
-recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
-def PeripheralProportionalCaseRootFromRescaling (d D₁ D₂ : ℕ) : Prop :=
-  ∀ {A : MPSTensor d D₁} {B : MPSTensor d D₂} {m_a : ℕ},
-    IsPeriodic m_a A →
-    ProportionalMPV₂ A B →
-      ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂Pos (fun i => ξ • A i) B
-
-/-- **Peripheral proportional case from phase rescaling.**
-
-Assuming `PeripheralProportionalCaseRootFromRescaling`, the positive-length
-equality theorem `peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`
-upgrades proportional periodic MPVs to `HetRepeatedBlocks`.
-
-**Scope restriction (conditional fixed phase):** the fixed phase-rescaling
-property is an extra premise and this theorem is only a sufficient conditional
-route toward arXiv:1708.00029, theorem `thm:bd`, lines 613--632. The source gap
-is recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
-theorem peripheralProportionalCase_periodicFT_of_rootFromRescaling
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    (hRescale : PeripheralProportionalCaseRootFromRescaling d D₁ D₂)
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m_a m_b : ℕ}
-    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
-    (hProp : ProportionalMPV₂ A B) :
-    HetRepeatedBlocks A B := by
-  obtain ⟨ξ, hξ, hSame⟩ := hRescale hA hProp
-  let A' : MPSTensor d D₁ := fun i => ξ • A i
-  have hA' : IsPeriodic m_a A' := by
-    simpa [A'] using isPeriodic_smul_of_norm_one (c := ξ) hξ A hA
-  have hScale : HetRepeatedBlocks A A' := by
-    have hRep : RepeatedBlocks A' A := by
-      refine ⟨ξ, 1, hξ, ?_⟩
-      intro i
-      simp [A']
-    exact (HetRepeatedBlocks.of_repeatedBlocks hRep).symm
-  have hRepeated : HetRepeatedBlocks A' B :=
-    peripheralProportionalCase_periodicFT_of_sameMPV₂Pos A' B hA' hB hSame
-  exact hScale.trans hRepeated
-
 /-- **Conditional block matching from a periodic-overlap hypothesis.**
 
 If two non-repeated block families satisfy the periodic overlap dichotomy, then
@@ -376,10 +328,7 @@ sector-decomposition matching theorem:
 3. Injective maps on finite types → equal cardinalities.
 4. Bijection construction.
 
-The single-block proportional-to-equal reduction is now split explicitly.
-`PeripheralProportionalCaseRootFromRescaling` provides the missing phase-rescaling
-step, and `peripheralProportionalCase_periodicFT_of_rootFromRescaling` shows that,
-once this step is available, the exact-MPV theorem
+The single-block equal-MPV theorem
 `peripheralProportionalCase_periodicFT_of_sameMPV₂Pos` yields the repeated-block
 conclusion for different bond dimensions. The companion module
 `ProportionalOverlap` supplies the multi-block non-decaying cross-overlap

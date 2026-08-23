@@ -116,14 +116,6 @@ theorem SameMPV₂Pos.trans {d D₁ D₂ D₃ : ℕ}
     (hAB : SameMPV₂Pos A B) (hBC : SameMPV₂Pos B C) : SameMPV₂Pos A C :=
   fun N hN σ => (hAB N hN σ).trans (hBC N hN σ)
 
-/-- Weak scalar proportionality of positive-length MPVs.
-
-For each `N > 0` there exists `c_N` with `V_N(A) = c_N · V_N(B)`.  The scalar is not
-required to be nonzero.  Use `NonzeroProportionalMPV₂` for the projective proportionality
-hypothesis in arXiv:1606.00608, Theorem `thm1`, lines 1167--1170. -/
-def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
-  ∀ N : ℕ, 0 < N → ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
-
 /-- Nonzero proportionality of MPV families.
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1167--1170. This is the
@@ -155,20 +147,6 @@ def EventuallyNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
   Filter.Eventually
     (fun N : ℕ => ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ)
     Filter.atTop
-
-/-- Nonzero MPV proportionality forgets to weak MPV proportionality.
-
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1167--1170. This is the
-forgetful implication from the projective, nonzero reading of the paper's
-proportionality hypothesis to the weaker scalar-multiple predicate used by older
-single-block lemmas. -/
-theorem NonzeroProportionalMPV₂.toProportionalMPV₂ {d D₁ D₂ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : NonzeroProportionalMPV₂ A B) :
-    ProportionalMPV₂ A B := by
-  intro N hN
-  rcases h N hN with ⟨c, _hc, hEq⟩
-  exact ⟨c, hEq⟩
 
 /-- Positive-length nonzero MPV proportionality gives eventual nonzero MPV proportionality.
 

@@ -389,27 +389,6 @@
     contradicting $m_a>0$.
 \end{proof}
 
-\begin{theorem}[Peripheral proportional case from phase rescaling]
-    \label{thm:peripheral_periodic_ft_proportional_rescaling}
-    \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling}
-    \leanok
-    \uses{def:periodic_tensor, thm:peripheral_periodic_ft_proportional_same}
-    Assume a uniform rescaling principle for the prescribed bond dimensions:
-    whenever the first tensor is periodic and has an MPV family proportional to
-    that of an arbitrary second tensor, one can rescale the first tensor by a
-    unit-modulus phase so that the MPV families agree at every positive length.
-    Then proportional MPV families of two periodic tensors force the tensors to
-    be repeated blocks.
-\end{theorem}
-\begin{proof}\leanok
-    Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
-    $A'$ with the same positive-length MPV family as $B$.
-    Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
-    then yields repeated-block equivalence between $A'$ and $B$. Since $A'$
-    differs from $A$ only by a unit-modulus phase, $A$ and $A'$ are themselves
-    repeated blocks, and transitivity gives the claim.
-\end{proof}
-
 \begin{lemma}[A pure similarity is a repeated-block relation]
     \label{lem:pure_gauge_het_repeated_blocks}
     \lean{MPSTensor.GaugeEquiv.toHetRepeatedBlocks}

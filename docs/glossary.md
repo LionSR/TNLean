@@ -483,13 +483,13 @@ model different levels of data and different sources.
   `MPSTensor.SectorDecomposition.IsBNTCanonicalForm.reindexPhysical`, and the
   supplier declarations
   `MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks` and
-  `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos`.
+  `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized`.
 - **Caveat:** `IsBNTCanonicalForm.blockTensor` requires a strictly positive
   blocking length `0 < p`; it does not assert preservation at length zero.
-  `exists_isBNTCanonicalForm_afterBlocking_pos` is conditional: after
-  constructing prepared blocks it requires both `∀ k, ‖μ k‖ ≤ 1` and
-  `∃ k, ‖μ k‖ = 1` before it yields the canonical-form witness. It is not an
-  unconditional existence theorem. This is the canonical predicate when
+  `exists_isBNTCanonicalForm_afterBlocking_pos_normalized` assumes a nonzero
+  positive-length MPV family (the standing convention of arXiv:1606.00608,
+  line 246) and realizes the weight normalization itself, at the cost of a
+  per-site scalar. This is the canonical predicate when
   multiplicities and raw sector weights matter. It is not equivalent to the
   flattened `IsNormalCanonicalFormBNT`; multiplicity recovery is genuine
   mathematical content, not a change of packaging.

@@ -1191,22 +1191,9 @@ Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}.
     (\ref{eq:cpsv_equal_ambient_gauge}).
 \end{proof}
 
-Combining the after-blocking preparation with the normalized-weight construction
-gives the arbitrary-input statement, conditional on the weight normalization.
-
-\begin{remark}[Arbitrary-input reduction]%
-    \label{rem:arbitrary_input_reduction_gap}
-    The reduction is conditional on the two weight-normalization hypotheses of
-    Theorem~\ref{thm:paperbnt_supplier_after_blocking}.
-    % Local fix (cpsv16_cf_normalization_and_proportional_comparison): the
-    % preparatory blocks (thm:prepared_bnt_blocks_after_blocking) carry no weight
-    % normalization. The remaining step rescales
-    % the weights to |\mu_k| <= 1 with a unit witness, recorded in
-    % docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex.
-    The weight rescaling is carried out in
-    Theorem~\ref{thm:paperbnt_supplier_after_blocking_normalized} below, which
-    discharges both hypotheses at the price of one positive scalar per site.
-\end{remark}
+Combining the after-blocking preparation with the weight normalization of
+Theorem~\ref{thm:paperbnt_weight_normalization} gives the arbitrary-input
+statement.
 
 \begin{theorem}[Normalized BNT form after blocking for a nonzero MPV family]%
     \label{thm:paperbnt_supplier_after_blocking_normalized}
@@ -1225,15 +1212,11 @@ gives the arbitrary-input statement, conditional on the weight normalization.
         \label{eq:bnt_sector_normalized_family}
     \end{align}
     The scalar $m^{N}$ is the per-site normalization cost of the line-246
-    weight choice; the hypotheses of
-    Theorem~\ref{thm:paperbnt_supplier_after_blocking} are discharged rather
-    than assumed.
-
-    \textbf{Scope restriction (nonzero MPV family).} The source proposition
-    says ``for any tensor'', but the zero MPV family cannot supply the global
-    unit-modulus weight imposed immediately before it. The hypothesis above
-    is exactly the exclusion of this degenerate case. The normalization issue
-    and the proportional-MPV comparison are documented in
+    weight choice, which is realized rather than assumed. The nonzero-family
+    hypothesis is the standing convention of
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}: the unit-modulus weight chosen
+    there presupposes a nonempty weight family. The normalization and the
+    proportional-MPV comparison are documented in
     \cite{gap:cpsv16_cf_normalization_and_proportional_comparison}.
 \end{theorem}
 
