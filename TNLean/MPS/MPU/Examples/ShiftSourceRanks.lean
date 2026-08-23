@@ -4,28 +4,29 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Examples.Shift
+import TNLean.MPS.MPU.SourceCuts
+import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!
 # Source cuts and ranks of the cyclic shifts
 
-This module computes the raw source cuts and source ranks of the primitive
+This module computes the raw source cuts and source ranks of the cyclic
 right- and left-shift tensors from arXiv:1703.09188, lines 450--477 and
 1980--1987.
 
-For the right shift, the first source cut is the identity on the doubled
-physical index. The second is the outer product of the vectorized identity
-with itself. The left-shift formulas follow by physical adjunction.
+For the right shift, the first source cut is the identity on the source-cut
+$(\text{virtual}, \text{physical})$ product index. The second is the outer
+product of the vectorized identity with itself. The left-shift formulas follow
+by physical adjunction.
 
 No compact-SVD factors or standard-form data are chosen here.
 -/
 
 namespace MPOTensor
 
-open scoped Matrix
-
 /-- The first raw source cut of the right-shift tensor is the identity on the
-product of two physical indices.
+source-cut $(\text{virtual}, \text{physical})$ product index.
 
 Source: arXiv:1703.09188, lines 450--477 and 1980--1987. -/
 theorem sourceCutM₁_rightShiftTensor (d : ℕ) :
@@ -66,7 +67,7 @@ Source: arXiv:1703.09188, lines 450--477 and 1980--1987. -/
 theorem leftRank_rightShiftTensor (d : ℕ) [NeZero d] :
     ℓ[rightShiftTensor d] = 1 := by
   rw [leftRank, sourceCutM₂_rightShiftTensor]
-  let i : Fin d := Classical.choice (inferInstance : Nonempty (Fin d))
+  let i : Fin d := 0
   let v := (1 : Matrix (Fin d) (Fin d) ℂ).vec
   have hle : (Matrix.vecMulVec v v).rank ≤ 1 := Matrix.rank_vecMulVec_le v v
   have hminor :
@@ -95,7 +96,7 @@ theorem sourceCutM₁_leftShiftTensor (d : ℕ) :
     simp [Matrix.one_apply, hr, hc]
 
 /-- The second raw source cut of the left-shift tensor is the identity on the
-product of two physical indices.
+source-cut $(\text{virtual}, \text{physical})$ product index.
 
 Source: arXiv:1703.09188, lines 450--477 and 1980--1987. -/
 theorem sourceCutM₂_leftShiftTensor (d : ℕ) :
