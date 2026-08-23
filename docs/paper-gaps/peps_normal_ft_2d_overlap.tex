@@ -93,7 +93,7 @@ in \path{TNLean/PEPS/CycleMPSChainOverlapCapstone.lean}.} which delivers
 the one-dimensional Fundamental Theorem at $n \geq 2L+1$ in place of the
 three-block bound $n \geq 3L$.
 
-\subsection{What the sketch asserts, and where the Lemma~5 analogy fails}
+\subsection{What the sketch asserts, and what remains to be extracted}
 
 The sketch is explicitly labelled ``Sketch of
 proof''\footnote{\path{Papers/1804.04964/paper_normal.tex:2320}.} and its
@@ -105,10 +105,12 @@ conversely ``any [\,$L+K$\,] physical operators on the above regions that
 transforms the PEPS into the same state means that the transformation can
 equally be done with a virtual operation on the highlighted
 edge.''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321} and
-\path{Papers/1804.04964/paper_normal.tex:2368}.} This converse is exactly the
-cross-bond-pushing the formalization isolates as its one residual: from a
-common state on the window chain, recover a single matrix $X$ on the edge
-together with the two factorizations through the end windows.
+\path{Papers/1804.04964/paper_normal.tex:2368}.} The formalization separates
+the two directions of this correspondence.  The forward direction ---
+realizing a fixed virtual operation $X$ on every staircase window --- is now
+complete.  The converse, which must compare the two tensor families and
+recover the algebra homomorphism carried by $X$, is the remaining extraction
+problem.
 
 The sketch supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
@@ -157,24 +159,21 @@ windows, one from each; no single window supplies a square-matrix family, and
 folding a window's external perimeter into a second
 $\mathrm{Fin}(\mathrm{bondDim}\,e)$ index would require
 $\prod_{\text{external legs}}\mathrm{bondDim} = \mathrm{bondDim}\,e$, false in
-general. So the structural fact that powers the closing move of Lemma~5 --- a
-window product is a square matrix on the pushed bond --- is absent for the
-non-square $L \times K$ window, and the reduction ``similar to Lemma~5'' does
-not carry the extraction of $X$ in two dimensions. The sketch glosses this
-dimensional gap.
+general.  Thus a direct port of the one-dimensional single-window matrix-span
+proof is not available.  This rules out that particular proof path; it does
+not show that the paper's overlapping-window comparison is false.  In
+particular, it must not be conflated with the forward virtual-operation
+family, which keeps the same distinguished edge $e$ throughout and requires
+no such span.
 
 \medskip
-\noindent\textbf{Source-rigor verdict.} The published corollary proof is a
-sketch. Its consecutive-window agreement and corner-completion steps are
-rigorous and transfer to two dimensions; its final extraction of the single
-edge matrix $X$ is asserted by analogy to Lemma~5, and that analogy fails
-because the square-window geometry Lemma~5's closing read-off relies on is not
-present for a two-dimensional $L \times K$ window. The sketch therefore does
-not rigorously establish the corollary from $L \times K$-region injectivity at
-the minimal size: the cross-bond-pushing correspondence it asserts is the one
-step it does not derive. This is a faithfulness/correctness finding about the
-published sketch; it is not a defect in the formalization, which captures the
-source's hypothesis set exactly (see the faithfulness verdict below).
+\noindent\textbf{Formalization verdict.} The published argument is explicitly
+a sketch.  The consecutive-window comparison, corner completion, and forward
+realization of one virtual operation on all windows are now formalized.  What
+remains is the cross-tensor converse and the homomorphism extraction
+corresponding to Lemma~5's maps $O_1\mapsto X$ and
+$O_3^{\mathsf T}\mapsto X$.  The failed single-window span above is an
+invented auxiliary route, not a statement made or required by the paper.
 
 \section{Consolidated account}
 
@@ -224,27 +223,37 @@ the Skolem--Noether read-off
 and the now-uniform interior-bond rescaling
 \leanid{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}
 (\path{TNLean/PEPS/TorusWindowBondTransport.lean},
-\path{TorusWindowBondUniform.lean}); and the back-half assembly that re-anchors
+\path{TorusWindowBondUniform.lean}); the interior-bond insert and the complete
+common-state family
+(\leanid{TNLean.PEPS.interiorBondInsertedRegionInsert} and
+\leanid{TNLean.PEPS.staircaseVirtualOperationInsert}), together with its
+end-window coefficient identity
+\leanid{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
+(\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean} and
+\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}); and the back-half
+assembly that re-anchors
 the torus Theorem~3 layers to the $(L+1) \times (K+1)$ comparison pair. Every
 inverted region is a union of one-orientation $L \times K$ window translates,
 host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
-minimal-size-ready and gated on one input alone.
+minimal-size-ready through the single-tensor virtual-operation family.  The
+remaining gate is the cross-tensor transfer and its multiplicativity.
 
-\paragraph{3. The irreducible obstruction.}
-The one missing input is the forward-transfer multiplicativity
-\leanid{hmul} at the reference edge: the homomorphism
-$M \cdot M' \mapsto (\text{transfer of }M)\,(\text{transfer of }M')$. This is
-the cross-bond-pushing of Part~1 --- the realization of one virtual operation
-$M$ on $e$ as a coherent physical operation on every window of the chain,
-composed across the chain. Reading it off requires either single-vertex
-injectivity at the edge endpoint
-(\leanid{TNLean.PEPS.span_stateOpenCoeff_eq_top}, from
-\leanid{TNLean.PEPS.IsVertexInjective}) or a coherent three-block coarse frame
-around the bond
-(\leanid{TNLean.PEPS.coeffTransferMap_mul_of_coherentFrames}).
+\paragraph{3. The remaining cross-tensor extraction.}
+The same-tensor operation family is no longer missing.  For a fixed matrix
+$X$ on $e$, the first window carries $X^{\mathsf T}$, the windows
+$W_1,\ldots,W_{L-1}$ carry the interior-bond insert of $X$, and the remaining
+windows carry the boundary insert of $X$.  All have common state
+$P_B(W_0)E_B(e,\cdot,X)$.  The outstanding input is instead the cross-tensor
+coefficient transfer between $A$ and $B$ and its multiplicativity
+\leanid{hmul}, the two-dimensional counterpart of Lemma~5's algebra
+homomorphisms.  Existing single-window and coarse-three-site attempts do not
+derive that input at the minimal size; a source-faithful extraction must use
+the actual overlapping-window comparison rather than assume a matrix span.
 
-\paragraph{4. Every closing route is machine-checked impossible at the
-minimal size.}
+\paragraph{4. Auxiliary closing routes ruled out at the minimal size.}
+The following findings rule out particular substitutes for the paper's
+overlapping-window argument.  They do not constitute a proof that the source
+corollary is false or that no source-faithful proof exists.
 \begin{itemize}
   \item \emph{Single-vertex injectivity is unavailable.} Normality is by
     definition \emph{weaker} than single-vertex injectivity: a normal tensor
@@ -276,12 +285,12 @@ minimal size.}
     (\leanid{TNLean.PEPS.horizontalStaircasePair_ne_arcRectangle}). This is a
     joint unsatisfiability, settled combinatorially in
     \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.
-  \item \emph{Translation invariance dissolves only the rescaling
-    sub-wall.} The corollary's torus translation invariance equalizes the
-    per-step interior-bond rescalings
-    (\leanid{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}), removing
-    the sub-obstruction the plane setting could not, but it does not supply the
-    cross-bond pushing.
+  \item \emph{Translation invariance supplies the common normalization.}
+    The corollary's torus translation invariance equalizes the non-boundary
+    bond products of all staircase windows
+    (\leanid{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}).  Together
+    with the interior-bond insert, this completes the common-state family; it
+    does not by itself compare the two tensor families.
   \item \emph{The row-and-column one-dimensional reduction fails.} Treating
     each row as one coarse site and applying the one-dimensional theorem
     row-wise and column-wise cannot reach the per-edge conclusion: a
@@ -294,23 +303,20 @@ minimal size.}
     \path{TNLean/PEPS/TorusRowColumnReductionObstruction.lean}).
 \end{itemize}
 
-\paragraph{5. The source-rigor verdict.}
-The published corollary proof is a sketch that asserts the cross-bond-pushing
-correspondence by analogy to Lemma~5; that analogy fails dimensionally,
-because the square-window geometry Lemma~5's closing read-off relies on is
-absent for the non-square two-dimensional window (Part~1 above). The sketch's
-consecutive-window agreement and corner completion are rigorous; the
-extraction of the single edge matrix is the step it asserts without
-derivation.
+\paragraph{5. Reading the source faithfully.}
+The paper keeps one highlighted edge fixed and compares physical operations
+on overlapping regions; it does not introduce a chain of different bonds or
+a single-window square-matrix span.  The forward correspondence and its
+transpose convention now follow this description literally.  The remaining
+formal work is to expand the sketch's converse comparison far enough to obtain
+the cross-tensor homomorphism, using Lemma~5's $O_1$ and
+$O_3^{\mathsf T}$ notation and composition argument.
 
 \paragraph{6. Status.}
-The corollary remains \emph{unformalized}: no blueprint entry
-claims it, it carries the \texttt{notready} marker, and no \texttt{leanok}
-marks it. It is not closeable from its stated
-hypotheses by any route rigorously explored here. Closing it would require
-either a new mathematical idea evading the machine-checked impossibilities
-above, or the source supplying the missing cross-bond-pushing argument that
-its sketch only asserts.
+The corollary remains \emph{unformalized}: no blueprint entry claims it, it
+carries the \texttt{notready} marker, and no \texttt{leanok} marks it.  The
+same-tensor family requested in issue~\#2780 is complete; the remaining work
+is the cross-tensor transfer and homomorphism extraction tracked separately.
 
 \section{The filled-in derivation}
 
@@ -341,10 +347,17 @@ vertical edge the construction is transposed in the roles of the two
 axes with the same $L \times K$ window shape: $K+1$ vertical slides
 followed by $L-1$ horizontal ones.
 
-A virtual operation $M$ on the bond $e$ is realized as a deformation of
-any single window containing an endpoint of $e$: invert the injective
-window tensor and recontract with $M$ inserted on the bond. The
-two-dimensional analogue of Lemma~5 is the converse. Suppose each
+A virtual operation $X$ on the bond $e$ is represented on every window by
+keeping the same distinguished edge fixed.  The first window, which contains
+only the ordered right endpoint, carries the boundary insert of
+$X^{\mathsf T}$; the windows $W_1,\dots,W_{L-1}$ carry the interior-bond
+insert obtained by adjoining their genuine tensors to a one-endpoint insert;
+and the remaining windows carry the boundary insert of $X$.  Translation
+invariance identifies the non-boundary bond products, so all these inserts
+produce the common state $P_A(W_0)E_A(e,\cdot,X)$.  This is formalized in
+\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}.
+
+The two-dimensional analogue of Lemma~5 also has a converse. Suppose each
 window $W_j$ carries a deformed tensor $C_j$ (an arbitrary tensor with
 the boundary structure of $W_j$) and all the deformed states agree:
 replacing $T_{W_j}$ by $C_j$ in the torus contraction yields one common
@@ -1164,15 +1177,17 @@ What remains is therefore exactly the staircase \emph{coefficient transfer} on t
 window: for each inserted matrix $M$ on $A$'s edge $e$ a matching matrix $N$ on $B$ with
 equal window coefficient
 ($\text{\path{htransferAB}}$), its reverse ($\text{\path{htransferBA}}$), and the multiplicativity of
-the chosen forward transfer ($\text{\path{hmul}}$).  Two pieces feed the transfer.  First, the
-bond-inserted \emph{family} the single-bond peeling consumes: an insert on every
-staircase window all sharing one deformed state, with the two end windows carrying the
-bond-inserted inserts of $M$ and $M'$.  For the windows containing both endpoints of $e$
-the bond is interior, so the insert is the $M$-on-interior-bond deformation of the
-genuine block, and the common state is the closed torus state with $M$ inserted on $e$
---- the ``a virtual operation on a given bond is a physical operation on any window
-containing an endpoint'' correspondence of the sketch, not yet built as an insert family.
-Second, the cross-tensor multiplicative transfer: the homomorphism the rectangle route
+the chosen forward transfer ($\text{\path{hmul}}$).  The same-tensor family that feeds the
+single-bond peeling is now complete.  The first window carries the boundary insert of
+$M^{\mathsf T}$, the windows $W_1,\ldots,W_{L-1}$ carry the interior-bond insert of $M$,
+and the remaining windows carry the boundary insert of $M$.  Their common state is the
+closed torus state with $M$ inserted on the same edge $e$, with the common
+non-boundary-bond factor supplied by translation invariance.  The construction and its
+end-window identity are
+$\text{\path{staircaseVirtualOperationInsert}}$ and
+$\text{\path{regionInsertedCoeff\_endWindows\_eq\_staircaseVirtualOperation}}$.
+
+The residual is the cross-tensor multiplicative transfer: the homomorphism the rectangle route
 reads from the physical realization of the inserted operator.  The region-level recovery
 $\text{\path{regionInsertionTransfer\_of\_realizes}}$ derives all three transfer fields ---
 $\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and $\text{\path{hmul}}$ --- from one region
@@ -1270,23 +1285,13 @@ side ($\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and the whole re
 algebra) \emph{is} powered by window and single-window-complement injectivity, both
 available at the minimal size; only the homomorphism is not.
 
-The block-level construction the staircase must supply is therefore precisely a
-coarse blocking frame around $e$ whose three regions are all injective at the minimal
-size and whose red-to-blue crossing is the singleton $\{e\}$ --- equivalently, a
-coefficient transfer on the window that is \emph{independently} known to be
-multiplicative, since the multiplicativity is the homomorphism of the physical
-insertion operator and no single-window read-off makes it one. The source's sketched
-overlapping-window realization is that the same virtual operation $M$ on $e$ is a
-physical operation on \emph{every} window of the staircase chain, all sharing one
-deformed state; the chain of consecutive-window inversions (landed at the
-state-equality level as $\text{\path{staircasePair\_insert\_eq\_open}}$, never inverting
-$\mathrm{univ}\setminus S$) transports $M$ around the corner, and the homomorphism
-$M\cdot M' \mapsto$ (transfer of $M$)\,(transfer of $M'$) is read from the composition
-of two such transports across the chain, not from any one window's block. Building
-that insert-family transport --- the ``a virtual operation on a given bond is a
-physical operation on any window containing an endpoint'' correspondence as an actual
-insert family with the composition law --- is the residual, and it is a
-\emph{block-level} (insert-family-and-chain) construction, not a single-window span.
+The source's sketched overlapping-window realization keeps the same virtual operation
+$M$ on $e$ while representing it on every staircase window.  That common-state family
+is now built below.  It closes the single-operation part of this discussion but not the
+cross-tensor homomorphism: the remaining task is to compare the two tensor families and
+show that the resulting coefficient transfer respects products, following Lemma~5's
+composition of the maps from $O_1$ and $O_3^{\mathsf T}$ rather than a single-window
+span or an assumed coarse frame.
 
 \subsection{The foundation that lands}
 
@@ -1302,107 +1307,55 @@ only the coefficient transfer can obtain the multiplicativity from a frame. It m
 the verdict auditable in Lean: the window route's $\text{\path{hmul}}$ is one application of
 this theorem with $\mathrm{red}=W$, and the unmet hypothesis is exactly the frame's
 $\text{\path{complement\_injective}}$ at $\mathrm{univ}\setminus S$, the documented
-obstruction. The remaining work is the insert-family transport that produces a
-multiplicative window coefficient transfer without a single-window red-block frame.
+obstruction.  This theorem remains available for any future coherent frame, but the
+fixed-edge common-state family below does not require such a frame.  The remaining work
+is the cross-tensor multiplicativity argument.
 
-\subsection{The per-step bond-insert transport, and where the chain composition
-walls}
+\subsection{The common-state family is complete}
 
-The insert-family transport called for above factors into per-step transports between
-\emph{consecutive} windows, and the single load-bearing per-step transport is now built:
-\leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow\_bondTransport\_extend\_eq}
-(\path{TNLean/PEPS/TorusWindowBondTransport.lean}). For a sliding-arm index $j < L$, given
-the consecutive windows $W_j$ and $W_{j+1}$ sharing a bond $g$ as a boundary edge and
-inserted matrices $M_1, M_2$ on $g$ whose orientations through the two windows agree, the
-corner-extended bond inserts on the injective overlap $U_j = W_j \cup W_{j+1}$ are equal.
-The window-independence of the bond insertion
-(\leanid{TNLean.PEPS.bondInserted\_windowIndependent}) makes the two inserts'
-deformed states cross-proportional --- the interior-bond product of one window times the
-state of the other matches the swapped product --- and rescaling each by the \emph{other}
-window's interior-bond product turns that cross-proportionality into an honest equality of
-states, which the consecutive-window comparison
-(\leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow\_extend\_eq}) strips to the
-open-boundary equality on $U_j$ by inverting the injective $(L+1)\times K$ rectangle, never
-$\mathrm{univ}\setminus S$. This is the genuine per-step transport through the injective
-overlap.
+The earlier analysis incorrectly claimed that the intermediate staircase windows contain
+neither endpoint of the reference edge and therefore require transport across different
+bonds.  The machine-checked endpoint classification gives the opposite conclusion:
+$W_1,\ldots,W_{L-1}$ contain both endpoints of $e$, while
+$W_L,\ldots,W_{L+K-1}$ contain its ordered left endpoint.  Every window in the source's
+family therefore contains at least one endpoint of the same distinguished edge $e$.
 
-Two facts pin where the chain composition stops short of the multiplicativity. First, the
-\emph{telescoping engine itself exists}: the patch chaining
-\leanid{TNLean.PEPS.staircasePatch\_insert\_eq} already composes per-step equalities into
-one comparison of the two end windows on the patch, and the end-pair peeling
-\leanid{TNLean.PEPS.regionInsertedCoeff\_endWindows\_eq\_of\_staircase} reads that off as the
-single-tensor relation $\text{\path{regionInsertedCoeff}}(W_0, M) = \text{\path{regionInsertedCoeff}}
-(W_{L+K-1}, M')$. So the chain composition delivers the \emph{single-operation}
-window-independence, end to end, with the injective overlaps mediating.
+The missing family is now
+\leanid{TNLean.PEPS.staircaseVirtualOperationInsert}
+(\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}).  It uses the boundary insert
+of $M^{\mathsf T}$ on $W_0$, the interior-bond insert of $M$ on
+$W_1,\ldots,W_{L-1}$, and the boundary insert of $M$ on the remaining windows.  The
+interior construction
+\leanid{TNLean.PEPS.interiorBondInsertedRegionInsert}
+(\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}) starts from the ordered left
+endpoint and adjoins the genuine tensors of the window by corner extension.  This formalizes
+the forward realization asserted at lines 2320--2321 and uses the same adjoining contraction
+that appears in the end-region comparison at lines 2415--2444.  Its assembled state is the
+window's non-boundary bond product times $\mathrm{edgeInsertedCoeff}(e,M)$.  Translation
+invariance makes that product uniform over the staircase, proving one common deformed
+state for all $L+K$ inserts.
 
-Second, that engine consumes a family of inserts on \emph{all} $L+K$ windows
-\emph{sharing one common deformed state}, with the two end inserts the bond inserts of $M$
-and $M'$. The per-step transport does not assemble such a family. Two sub-obstructions sit
-here, and they have different status under the corollary's hypotheses.
+Consequently
+\leanid{TNLean.PEPS.regionInsertedCoeff\_endWindows\_eq\_staircaseVirtualOperation}
+supplies the source-faithful single-tensor identity between the first-window insertion of
+$M^{\mathsf T}$ and the last-window insertion of $M$.  This closes the common-state-family
+residual.  It does not by itself construct the cross-tensor transfer from $A$ to $B$ or
+prove that transfer multiplicative; those are the remaining Lemma~5-style comparison
+steps.
 
-\emph{The interior-bond rescaling is uniform under the corollary's translation invariance.}
-The per-step transport agrees the two scaled inserts only up to the
-\emph{neighbour-dependent} interior-bond rescaling: step $j$ scales by $\mathrm{ribp}(W_{j+1})$
-on the left and $\mathrm{ribp}(W_j)$ on the right, and a telescoping to one common state needs
-all the interior-bond products equal. The corollary is the strengthening of the \emph{torus}
-Theorem~3, whose tensors are translation invariant, and the two end windows are diagonally
-offset $L\times K$ translates of one another --- indeed every staircase window is a translate
-of every other. So the interior-bond products are all equal:
-\leanid{TNLean.PEPS.regionInteriorBondProd\_staircaseWindow\_eq}
-(\path{TNLean/PEPS/TorusWindowBondUniform.lean}) derives this from the bond-dimension
-invariance of a translation-invariant tensor under translation
-(\leanid{TNLean.PEPS.bondDim\_translateEdge\_of\_translationInvariant}) reindexing the
-interior-bond product (\leanid{TNLean.PEPS.regionInteriorBondProd\_map}). With the products
-uniform the per-step rescalings agree across the chain, and this sub-obstruction --- the one
-the normal-PEPS \emph{plane} setting could not dissolve --- is removed by the corollary's
-translation invariance.
-
-\emph{The cross-bond pushing on the intermediate windows is the genuine residual.} The bond
-$e$ is a boundary edge of only the two end windows; the intermediate windows touch neither
-endpoint of $e$, so a bond insert of $M$ on them is not even typed. Consecutive windows
-$W_j$, $W_{j+1}$ share a bond $g_j$ \emph{other} than $e$, and the per-step transport relates
-a bond insert on $g_j$ in $W_j$ to one on the \emph{same} $g_j$ in $W_{j+1}$. But a window
-$W_j$ shares the bond $g_{j-1}$ with its left neighbour and the \emph{different} bond $g_j$
-with its right neighbour, so chaining the two incident per-step transports through one insert
-$C_j$ requires that $C_j$ realize the operation on $g_{j-1}$ and on $g_j$ simultaneously ---
-i.e. that the closed-state deformation $\mathrm{edgeInsertedCoeff}(g_{j-1}, M)$ equals
-$\mathrm{edgeInsertedCoeff}(g_j, M')$ for a matched $M'$. That is the two-dimensional
-bond-operator pushing: inverting the injective window $W_j$ to read $M$'s physical action off
-one boundary bond and re-express it on another. The deformed window tensor realizing this is
-the residual the per-step transport does not supply.
-
-This is exactly the unbuilt construction: the two-dimensional bond-operator extraction that
-builds, from one virtual operation $M$ on $e$, the common-state family of deformed window
-tensors on all $L+K$ windows --- the matrix-tensor analogue of
-\leanid{MPSChainTensor.overlapWindow\_exists\_bondOperator}. Its missing ingredient is the
-window-inversion that pushes the operation across distinct boundary bonds, and that inversion
-reads $M$'s action off the in-region endpoint of the boundary bond, which is the endpoint
-spanning \leanid{TNLean.PEPS.span\_stateOpenCoeff\_eq\_top} --- available from
-\emph{single-vertex} injectivity, not from region injectivity. With that family the end-pair
-peeling fires and the homomorphism $M \cdot M' \mapsto (\text{transfer of } M)\,(\text{transfer
-of } M')$ would be read from composing two transports as in
-\leanid{MPSChainTensor.exists\_insertionHom}, whose multiplicativity step
-($\text{\path{eq\_of\_span\_mul\_left}}$) consumes the same window-product span. The per-step transport
-and the now-uniform rescaling are the foundation of that extraction; the extraction itself ---
-the deformed-window-tensor family on the intermediate windows, requiring the endpoint span ---
-is the unbuilt block-level construction, and it is the same endpoint-spanning residual the
-coarse three-site route hits as the non-injective $\mathrm{univ}\setminus S$ at the minimal
-size. The translation invariance of the corollary removes the rescaling sub-obstruction but
-not this one.
-
-\section{Faithfulness verdict: normality is not a dropped hypothesis, and the
-obstruction is the source's own block-level pushing}
+\section{Normality audit and retired auxiliary routes}
 
 This section answers a hypothesis-faithfulness question raised against the
 campaign: the source corollary assumes \emph{normal} 2D PEPS tensors
 \emph{such that every $L \times K$ region is injective}, and a reading of the
 campaign suspected that ``normal'' is a second, stronger hypothesis the
-campaign's window-injectivity bundle dropped --- one that would supply the
-single-vertex endpoint spanning the cross-bond pushing wants, and so unblock
-the corollary. The verdict is that this reading is incorrect on the
-mathematics. Normality is not a separate stronger hypothesis here; the
-campaign faithfully captured the source's hypothesis set; and the obstruction
-recorded above is genuine, not an artifact of a weakened hypothesis.
+campaign's window-injectivity bundle dropped.  The normality audit below
+remains valid: normality is not a separate stronger hypothesis here, and the
+formalization captures the source's hypothesis set.  The subsequent
+cross-bond and per-bond-coarse-frame discussions are retained only as audits
+of discarded auxiliary routes.  They were based on the false premise that
+intermediate staircase windows contain neither endpoint of the reference
+edge, and are superseded by the common-state construction above.
 
 \subsection{What ``normal'' means in the source, and why it is not stronger
 than region injectivity}
@@ -1471,14 +1424,18 @@ machinery already exploits exactly this:
 forward-transfer multiplicativity from three blocked-region injectivities
 \emph{with no single-vertex injectivity}, the super-vertex injectivity
 standing in for the single-vertex spanning. So the campaign does have a
-coarse substitute for the endpoint span; the question is only whether it is
-available for the regions the corollary's cross-bond pushing needs, at the
-minimal size.
+coarse multiplicativity theorem when such a frame is available.  It is not
+needed for the forward fixed-edge family; whether it participates in the
+remaining cross-tensor extraction is a separate question.
 
-\subsection{Why the coarse substitute does not reach the intermediate windows,
-and why the one-dimensional precedent does not port}
+\subsection{Retired route: a coarse substitute on different boundary bonds}
 
-The cross-bond pushing on an intermediate window $W_j$ must read the inserted
+This subsection records an auxiliary route that is no longer part of the
+formalization plan.  The staircase family does not need to move the operation
+between the bonds denoted below by $g_{j-1}$ and $g_j$; it keeps the same
+reference edge $e$ in every window.
+
+The discarded route proposed that an intermediate window $W_j$ read the inserted
 operation off the in-region endpoint of one boundary bond $g_{j-1}$ and
 re-express it on a \emph{different} boundary bond $g_j$ of the same window.
 Blocking $W_j$ to one super-vertex does make $g_{j-1}$ and $g_j$ two legs of
@@ -1524,7 +1481,10 @@ that ``the two-dimensional analogue does not exist'' is therefore correct and
 not a mis-analysis: it is the absence of the square-window geometry, not the
 absence of a normality hypothesis.
 
-\subsection{Verdict and the precise route}
+\subsection{Retired verdict for the different-bond route}
+
+The verdict in this subsection concerns only the discarded construction just
+described.  It is not the current verdict on the paper's fixed-edge argument.
 
 The verdict, sharpened by the
 hypothesis audit, is that the obstruction is not removable by adding a
@@ -1570,8 +1530,10 @@ landed foundation; the per-bond coarse frame for the simultaneous two-bond
 realization is the unbuilt block-level construction. No hypothesis change to
 the capstone is warranted by this audit.
 
-\subsection{The per-bond coarse frame does not exist at the minimal size, for
-any single-crossing window pair}
+\subsection{Retired audit: per-bond coarse frames at the minimal size}
+
+This audit remains a valid obstruction to the indicated coarse-frame
+substitute, but that substitute is not needed for the common-state family.
 
 The open research content the previous subsection isolated --- whether a
 per-bond coarse frame exists at the minimal size for an intermediate bond,
@@ -1630,10 +1592,9 @@ not help either, since a cyclic rectangle admits no bipartition into two regions
 each injective (each containing an $L\times K$ window) with a single edge between
 them: the rectangle is two-edge-connected, so any bipartition into two
 non-degenerate parts has at least two crossing edges. The per-bond coarse frame
-is therefore unbuildable at the minimal size for every bond of the chain, which
-confirms verdict \textbf{(b)} and redirects the residual to the insert-family
-chain transport of the previous subsection rather than to a per-bond coarse
-frame. The geometry is in
+is therefore unbuildable at the minimal size for every bond of the chain.  This
+rules out that auxiliary frame, but it no longer redirects the formalization:
+the fixed-edge insert family is complete.  The geometry is in
 \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.
 
 \bibliographystyle{alpha}

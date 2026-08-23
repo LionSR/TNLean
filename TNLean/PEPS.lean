@@ -132,6 +132,7 @@ import TNLean.PEPS.TorusWindowPeeling.WindowIndependence
 import TNLean.PEPS.TorusWindowRealizes
 import TNLean.PEPS.TorusWindowRegion
 import TNLean.PEPS.TorusWindowSingleCrossingObstruction
+import TNLean.PEPS.TorusWindowVirtualOperationFamily
 import TNLean.PEPS.TorusWindowWitness
 import TNLean.PEPS.TorusWitnessCapstone
 import TNLean.PEPS.TorusWitnessTranslate

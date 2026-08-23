@@ -1,0 +1,140 @@
+\paragraph{One virtual operation on every staircase window.}
+
+\begin{definition}[Interior-bond region insert]%
+    \label{def:peps_interior_bond_inserted_region_insert}
+    \lean{TNLean.PEPS.interiorBondInsertedRegionInsert}
+    \leanok
+    \uses{def:peps_bond_inserted_region_insert, def:peps_corner_extension}
+    Let $e=\{u,w\}$ be an ordered edge whose two endpoints lie in a region
+    $R$, with $u$ its ordered left endpoint, and let
+    $X\in\MN{D_A(e)}$.  Write $U=\{u\}$ and let $I_{A,U,e,X}$ be the
+    boundary-bond insert on $U$.  The interior-bond insert on $R$ is
+    \begin{align}
+        I^{\mathrm{int}}_{A,R,e,X}
+         & =
+        \frac{P_A(R)}{P_A(U)}
+        \Ext_{U\subseteq R}(I_{A,U,e,X}).
+        \notag
+    \end{align}
+    Thus the genuine tensors at the vertices of $R\setminus U$ are adjoined
+    to a boundary insertion of $X$ on $e$, with the normalization changed
+    from the non-boundary bond product of $U$ to that of $R$.
+\end{definition}
+
+\begin{theorem}[Closed state of an interior-bond insert]%
+    \label{thm:peps_interior_bond_inserted_state}
+    \lean{TNLean.PEPS.deformedRegionStateAssembled_interiorBondInserted_eq_smul_edgeInsertedCoeff}
+    \leanok
+    \uses{def:peps_interior_bond_inserted_region_insert, thm:peps_corner_extension_state_preserves, thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
+    Suppose all bond dimensions are positive.  For every global physical
+    configuration $\omega$,
+    \begin{align}
+        \Psi^{\mathrm{as}}_{A,R,I^{\mathrm{int}}_{A,R,e,X}}(\omega)
+         & =P_A(R)E_A(e,\omega,X).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Corner extension preserves the closed state.  On the singleton $U$, the
+    boundary orientation is the identity because $U$ contains the ordered
+    left endpoint of $e$.  Hence its boundary insert has assembled state
+    $P_A(U)E_A(e,\omega,X)$.  The factor $P_A(R)/P_A(U)$ cancels $P_A(U)$
+    and gives the displayed identity.
+\end{proof}
+
+\begin{definition}[Staircase family for one virtual operation]%
+    \label{def:peps_staircase_virtual_operation_insert}
+    \lean{TNLean.PEPS.staircaseVirtualOperationInsert}
+    \leanok
+    \uses{def:peps_interior_bond_inserted_region_insert, lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
+    Let $e$ be the horizontal reference edge and let
+    $X\in\MN{D_B(e)}$.  Define an insert $C_j(X)$ on each staircase window
+    $W_j$, for $0\le j<L+K$, by
+    \begin{align}
+        C_j(X)
+         & =
+        \begin{cases}
+          I_{B,W_0,e,X^{\mathsf T}}, & j=0,\\
+          I^{\mathrm{int}}_{B,W_j,e,X}, & 1\le j<L,\\
+          I_{B,W_j,e,X}, & L\le j<L+K.
+        \end{cases}
+        \notag
+    \end{align}
+    The first window contains only the ordered right endpoint of $e$, the
+    middle windows contain both endpoints, and the remaining windows contain
+    only the ordered left endpoint.  The transpose in the first case makes
+    all three boundary orientations represent the same matrix $X$.
+\end{definition}
+
+\begin{lemma}[The two end inserts of the staircase family]%
+    \label{lem:peps_staircase_virtual_operation_end_inserts}
+    \lean{TNLean.PEPS.staircaseVirtualOperationInsert_zero}
+    \lean{TNLean.PEPS.staircaseVirtualOperationInsert_last}
+    \leanok
+    \uses{def:peps_staircase_virtual_operation_insert}
+    The end members of the family are
+    \begin{align}
+        C_0(X)&=I_{B,W_0,e,X^{\mathsf T}},
+        &
+        C_{L+K-1}(X)&=I_{B,W_{L+K-1},e,X}.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first identity is the $j=0$ case of the definition.  Since $K>0$,
+    the last index satisfies $L\le L+K-1$, which gives the second identity.
+\end{proof}
+
+\begin{theorem}[Common state of the staircase virtual-operation family]%
+    \label{thm:peps_staircase_virtual_operation_common_state}
+    \lean{TNLean.PEPS.deformedRegionStateAssembled_staircaseVirtualOperationInsert}
+    \leanok
+    \uses{def:peps_staircase_virtual_operation_insert, thm:peps_interior_bond_inserted_state, thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff, thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    Let $B$ be translation invariant and suppose all its bond dimensions are
+    positive.  Then for $0\le j<L+K$ and every global physical configuration
+    $\omega$,
+    \begin{align}
+        \Psi^{\mathrm{as}}_{B,W_j,C_j(X)}(\omega)
+         & =P_B(W_0)E_B(e,\omega,X).
+        \notag
+    \end{align}
+    In particular, all $L+K$ inserts have one common deformed state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On $W_0$, the boundary orientation sends $X^{\mathsf T}$ to $X$.
+    On $W_1,\ldots,W_{L-1}$, apply the interior-bond identity.  On the
+    remaining windows the ordered left endpoint lies in the window, so the
+    boundary orientation fixes $X$.  Each case gives
+    $P_B(W_j)E_B(e,\omega,X)$.  Translation invariance identifies
+    $P_B(W_j)$ with $P_B(W_0)$.
+\end{proof}
+
+\begin{theorem}[End-window identity for one virtual operation]%
+    \label{thm:peps_end_window_identity_staircase_virtual_operation}
+    \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
+    \leanok
+    \uses{lem:peps_staircase_virtual_operation_end_inserts, thm:peps_staircase_virtual_operation_common_state, thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
+    Suppose the window-injectivity and union-closure hypotheses of the
+    single-bond peeling hold, the tensor is translation invariant, all bond
+    dimensions are positive, and the staircase satisfies the same size
+    bounds.  Then for every $X\in\MN{D_B(e)}$ and every global physical
+    configuration $\omega$,
+    \begin{align}
+        C_B(W_0,e,X^{\mathsf T};\omega|_{W_0},
+            \omega|_{V\setminus W_0})
+         & =
+        C_B(W_{L+K-1},e,X;\omega|_{W_{L+K-1}},
+            \omega|_{V\setminus W_{L+K-1}}).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use the family $C_j(X)$.  Its end members are the required boundary
+    inserts and all members have the common state
+    $P_B(W_0)E_B(e,\cdot,X)$.  The single-bond peeling therefore gives the
+    stated coefficient identity.
+\end{proof}
