@@ -37,7 +37,7 @@ variable {da db D : ℕ}
 /-- A finite-chain operator symmetry consists of an action on every finite-chain
 operator space and a set of chain lengths on which that action is imposed.
 
-The action is uniform in the physical dimension but no continuity, linearity,
+The action is defined for every physical dimension, but no continuity, linearity,
 or compatibility between different chain lengths is assumed at this abstract
 level.
 
@@ -91,6 +91,11 @@ every applicable chain length.
 Canonical form is required only at the endpoints. The physical dimension is
 identified explicitly, and the virtual bond dimension remains fixed along the
 path.
+
+**Scope restriction (arXiv:1703.09188, lines 1345--1364):** the paper does not
+specify a stabilization for unequal raw virtual bond dimensions, so this
+definition only compares tensors in one fixed ambient bond dimension. See
+`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
 Source: arXiv:1703.09188, Definition `def:strictly-equivalent-symmetry`,
 lines 1345--1354. -/
@@ -147,6 +152,10 @@ identity ancillas equalize their physical dimensions and a common positive
 blocking makes the enlarged tensors strictly equivalent under `S`.
 
 Ancillas are attached before blocking. The virtual bond dimension is unchanged.
+
+**Scope restriction (arXiv:1703.09188, lines 1345--1364):** the bond dimension
+\(D\) is fixed. No heterogeneous raw-bond stabilization is asserted. See
+`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
 Source: arXiv:1703.09188, Definition `def:equivalent-symmetry`,
 lines 1356--1364. -/
