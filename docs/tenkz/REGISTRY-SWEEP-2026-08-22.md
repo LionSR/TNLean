@@ -5,6 +5,8 @@ implementation by compiling: what the key accepts, what it changes on the
 page, the stated default, the description, and the cited consumers.  Eight
 compile agents swept the sixty-seven key rows; fifty stood accurate and
 seventeen took a correction, executed in the change that adds this record.
+Source line numbers below refer to the sweep-time tree; named functions are
+the stable anchors in the current source.
 Two agent verdicts were themselves corrected on re-review before anything
 moved: `kernel-wire:crossing` is read by the hull-route habit pass
 (`route_habit`), which the sweep's scenarios never exercised, and the
@@ -106,7 +108,7 @@ ACCEPTS: all 5 enum members parse (over, under, alternate accepted bare; alterna
 
 **Resolution:** row corrected to enum(index|string); a pairing is generated, never authored.
 
-Registry (line 198): {enum(index\|string\|pairing)}{index}{kernel}{Bond, travelling string, or generated skin pairing.} ACCEPTS: kind=index and kind=string both compile; but kind=pairing -- explicitly listed in the row's own enum -- is REFUSED: '[TKZ-LANG-CHOICE] kind=pairing is not in the alphabet index,string (record wire-3)'. Source: tex/tenkz/tenkz-kernel.code.tex:1315-1316, `\__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { kind } { index, string } { kind }` -- the actual choice-key alphabet is only two words, not three. Also grepped the whole corpus for any wire record ever assigned kind=pairing internally (auto-generated skin pairings included): zero hits -- the value is unused anywhere in the implementation, not merely gated off the public key. PAGE: kind does change the model/event stream for the accepted values (kind=index emits `wire-ink\|origin=bond`; kind=string instead emits `string\|id=...\|kind=open\|pts=2` and defers ink to the string subsystem) even though the two straight-line rasters happen to coincide for a plain 2-point wire -- so kind is a real, consumed field, just with a documented-but-nonexistent third value. DEFAULT index matches absent-key tnlog/raster exactly (diff empty). DESCRIPTION overclaims: 'generated skin pairing' names a kind value that is neither user-settable through this key nor ever produced by the kernel.
+Registry (line 198): {enum(index\|string\|pairing)}{index}{kernel}{Bond, travelling string, or generated skin pairing.} ACCEPTS: kind=index and kind=string both compile; but an author-written kind=pairing -- explicitly listed in the row's own enum -- is REFUSED: '[TKZ-LANG-CHOICE] kind=pairing is not in the alphabet index,string (record wire-3)'. Source: tex/tenkz/tenkz-kernel.code.tex:1315-1316, `\__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { kind } { index, string } { kind }` -- the authored choice-key alphabet is only two words. The kernel does generate `kind = pairing` records for a declared skin's internal pairings; this is a derived record value, not a public key value. PAGE: kind changes the model/event stream for the accepted values (kind=index emits `wire-ink\|origin=bond`; kind=string instead emits `string\|id=...\|kind=open\|pts=2` and defers ink to the string subsystem) even though the two straight-line rasters happen to coincide for a plain 2-point wire. DEFAULT index matches absent-key tnlog/raster exactly (diff empty). DESCRIPTION therefore distinguishes the author-spellable values from the generated pairing value.
 
 ### `kernel-wire:via` — reword
 

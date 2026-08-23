@@ -1323,13 +1323,14 @@ for false_field in closed conjugate outline; do
   fi
 done
 # The sugar flags: the first picture's bare sandwich populates its op
-# and bra rows (two populated atoms); the sandwich=false picture and
-# the sandwich-then-false picture populate nothing, so the file holds
-# exactly two populated atoms and five in all.
+# and bra rows (two populated atoms); the sandwich=false picture keeps
+# the default wire row; and the third picture keeps its explicit
+# rows={ket,op,bra}, whose empty ket and bra cells are populated.  Thus
+# the file holds four populated atoms and seven in all.
 false_flag_pop=$(grep -c '^atom|.*|populated=' "$WORK/r_false_flags.tnlog" || true)
 false_flag_atoms=$(grep -c '^atom|' "$WORK/r_false_flags.tnlog" || true)
-[ "$false_flag_pop" -eq 2 ] && [ "$false_flag_atoms" -eq 5 ] || {
-  echo "FAIL: a false-valued sugar flag expanded rows anyway" >&2
+[ "$false_flag_pop" -eq 4 ] && [ "$false_flag_atoms" -eq 7 ] || {
+  echo "FAIL: a false-valued sugar flag changed the chosen rows" >&2
   exit 1
 }
 grep -Fq '|name=wrap-west-1|origin=trace|row=1|side=west' \

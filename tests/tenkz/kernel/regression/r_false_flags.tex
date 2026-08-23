@@ -19,9 +19,8 @@
 \begin{tenkz}[sandwich=false, cols=1, bonds=none]
   \tn[name=B]{B}
 \end{tenkz}
-% And a later false stands an earlier flag down, the last-wins doctrine:
-% one atom again, no populated ket or bra row.
-\begin{tenkz}[sandwich, sandwich=false, cols=1, bonds=none]
-  \tn[name=C]{C}
+% False also leaves an explicitly chosen row policy untouched.
+\begin{tenkz}[rows={ket,op,bra}, sandwich=false, cols=1, bonds=none]
+  \tn[at=(2,1), name=C]{C}
 \end{tenkz}
 \end{document}

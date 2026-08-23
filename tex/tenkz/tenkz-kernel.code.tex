@@ -990,6 +990,8 @@
     \__tenkz_kernel_stage_put:nn {#1} {cup}
     \__tenkz_kernel_stage_put:nn {cup-#1} {#2}
   }
+% One positive-integer parser serves every scope.  The parser family selects
+% the scope-specific diagnostic without duplicating the accepted alphabet.
 \cs_new_protected:Npn \__tenkz_kernel_positive_integer:nnn #1#2#3
   {
     \keys_define:nn {#1}
@@ -999,8 +1001,20 @@
             \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {##1}
               { \__tenkz_kernel_stage_put:nn {#3} {##1} }
               {
-                \msg_error:nneee {tenkz}{kernel-atom-positive}
-                  {#2} {##1} { \tl_use:N \l__tenkz_model_last_tl }
+                \str_case:nn {#1}
+                  {
+                    {tenkz-kernel-picture}
+                      {
+                        \msg_error:nnee {tenkz}{kernel-picture-positive}
+                          {#2} {##1}
+                      }
+                    {tenkz-kernel-atom}
+                      {
+                        \msg_error:nneee {tenkz}{kernel-atom-positive}
+                          {#2} {##1}
+                          { \tl_use:N \l__tenkz_model_last_tl }
+                      }
+                  }
               }
           }
       }
@@ -1249,18 +1263,8 @@
 % cols= carries the row's stated type: an illegal value refuses with the
 % picture-scope positive-integer diagnostic instead of a bare TeX
 % arithmetic error (#6198 sweep).
-\keys_define:nn { tenkz-kernel-picture }
-  {
-    cols .code:n =
-      {
-        \regex_match:nnTF { \A \s* [1-9]\d* \s* \Z } {#1}
-          { \__tenkz_kernel_stage_put:nn {cols} {#1} }
-          {
-            \msg_error:nnee {tenkz}{kernel-picture-positive}
-              {cols} {#1}
-          }
-      }
-  }
+\__tenkz_kernel_positive_integer:nnn
+  { tenkz-kernel-picture } { cols } { cols }
 \keys_define:nn {tenkz-kernel-picture}
   {
     frame .code:n = { \__tenkz_kernel_frame:n {#1} }
@@ -1298,27 +1302,10 @@
     \str_case:nnF {#2}
       {
         {true}  {#3}
-        % A false-valued sugar flag is still the sugar spelling --
-        % strict mode refuses it like the bare word -- and it stands
-        % the expansion down, so a later false overrides an earlier
-        % flag under the last-wins doctrine the alphabet follows.
+        % A false-valued sugar flag is still the sugar spelling, so strict
+        % mode refuses it like the bare word, but it stages no fields.
         {false}
-          {
-            \__tenkz_kernel_sugar:n {#1}
-            \str_case:nn {#1}
-              {
-                {sandwich}
-                  {
-                    \keys_set:nn {tenkz-kernel-picture}
-                      { rows = {wire} }
-                  }
-                {planes}
-                  {
-                    \keys_set:nn {tenkz-kernel-picture}
-                      { frame = flat }
-                  }
-              }
-          }
+          { \__tenkz_kernel_sugar:n {#1} }
       }
       {
         \msg_error:nneeee {tenkz}{kernel-choice}
