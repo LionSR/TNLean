@@ -19,26 +19,12 @@ open scoped Matrix Kronecker BigOperators
 
 namespace MPOTensor
 
-private theorem shiftSourceScale_cancel (d : ℕ) [NeZero d] :
-    ((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) * (Real.sqrt d : ℂ)⁻¹ = 1 := by
-  have hsqrt : (Real.sqrt d : ℂ) ^ 2 = (d : ℂ) := by
-    exact Complex.ofReal_sqrt_sq d (by positivity)
-  have hsqrt_ne : (Real.sqrt d : ℂ) ≠ 0 := by
-    exact Complex.ofReal_ne_zero.mpr <|
-      Real.sqrt_ne_zero'.2 (by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d))
-  rw [← hsqrt]
-  field_simp [hsqrt_ne]
-
-private theorem shiftSourceScale_cancel_rev (d : ℕ) [NeZero d] :
-    (Real.sqrt d : ℂ)⁻¹ * ((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) = 1 := by
-  simpa [mul_comm, mul_left_comm, mul_assoc] using shiftSourceScale_cancel d
-
 /-- Explicit supplied source factors for the paper's identity family $U_1$.
 
 Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
 noncomputable def shiftExampleU₁SourceFactors (d : ℕ) :
     SourceFactors (shiftExampleU₁ d) (1 : Matrix (Fin 1) (Fin 1) ℂ) :=
-  SourceFactors.independentTensorProduct (identitySourceFactors d)
+  SourceFactors.independentTensorProductOfIdentityWeight (identitySourceFactors d)
     (identitySourceFactors d)
 
 /-- Explicit supplied source factors for the paper's counter-shift family $U_2$.
@@ -47,7 +33,7 @@ Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2027). -/
 noncomputable def shiftExampleU₂SourceFactors (d : ℕ) [NeZero d] :
     SourceFactors (shiftExampleU₂ d)
       (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) :=
-  SourceFactors.independentTensorProduct (leftShiftSourceFactors d)
+  SourceFactors.independentTensorProductOfIdentityWeight (leftShiftSourceFactors d)
     (rightShiftSourceFactors d)
 
 /-- Explicit supplied source factors for the paper's reversed counter-shift
@@ -58,7 +44,7 @@ Source: arXiv:1703.09188, equations `eq:SF_u1_u3` and `eq:uv2_U3`
 noncomputable def shiftExampleU₃SourceFactors (d : ℕ) [NeZero d] :
     SourceFactors (shiftExampleU₃ d)
       (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) :=
-  SourceFactors.independentTensorProduct (rightShiftSourceFactors d)
+  SourceFactors.independentTensorProductOfIdentityWeight (rightShiftSourceFactors d)
     (leftShiftSourceFactors d)
 
 /-- Decode the two physical sites of a shift-family source matrix into their
@@ -227,34 +213,64 @@ noncomputable def shiftExampleU₃RightRankEquiv (d : ℕ) [NeZero d] :
       (leftShiftRightRankEquiv d)).trans
         (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)))
 
+/-- Evaluation of the left source-rank coordinates of $U_1$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation
+`eq:SF_u1_u3` (lines 2009--2016); the paper states the resulting source
+matrix, not this intermediate equivalence. -/
 @[simp] theorem shiftExampleU₁LeftRankEquiv_apply (d : ℕ) (a b : Fin d) :
     shiftExampleU₁LeftRankEquiv d (a, b) =
       tensorProductLeftRankEquiv (identityMPUTensor d) (identityMPUTensor d)
         (identityLeftRankEquiv d a, identityLeftRankEquiv d b) := rfl
 
+/-- Evaluation of the right source-rank coordinates of $U_1$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation
+`eq:SF_u1_u3` (lines 2009--2016); the paper states the resulting source
+matrix, not this intermediate equivalence. -/
 @[simp] theorem shiftExampleU₁RightRankEquiv_apply (d : ℕ) (a b : Fin d) :
     shiftExampleU₁RightRankEquiv d (a, b) =
       tensorProductRightRankEquiv (identityMPUTensor d) (identityMPUTensor d)
         (identityRightRankEquiv d a, identityRightRankEquiv d b) := rfl
 
+/-- Evaluation of the left source-rank coordinates of $U_2$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation `eq:uv2_U2`
+(lines 2018--2027); the paper states the resulting source matrix, not this
+intermediate equivalence. -/
 @[simp] theorem shiftExampleU₂LeftRankEquiv_apply (d : ℕ) [NeZero d]
     (a b : Fin d) :
     shiftExampleU₂LeftRankEquiv d (a, b) =
       tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
         (leftShiftLeftRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) := rfl
 
+/-- Evaluation of the right source-rank coordinates of $U_2$.
+
+Formalization coordinate identity for arXiv:1703.09188, equation `eq:uv2_U2`
+(lines 2018--2027); the paper states the resulting source matrix, not this
+intermediate equivalence. -/
 @[simp] theorem shiftExampleU₂RightRankEquiv_apply (d : ℕ) [NeZero d]
     (a b : Fin d) :
     shiftExampleU₂RightRankEquiv d (a, b) =
       tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
         (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) := rfl
 
+/-- Evaluation of the left source-rank coordinates of $U_3$.
+
+Formalization coordinate identity for arXiv:1703.09188, equations
+`eq:SF_u1_u3` and `eq:uv2_U3` (lines 2009--2016 and 2028--2034); the paper
+states the resulting source matrices, not this intermediate equivalence. -/
 @[simp] theorem shiftExampleU₃LeftRankEquiv_apply (d : ℕ) [NeZero d]
     (a b : Fin d) :
     shiftExampleU₃LeftRankEquiv d (a, b) =
       tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
         (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) := rfl
 
+/-- Evaluation of the right source-rank coordinates of $U_3$.
+
+Formalization coordinate identity for arXiv:1703.09188, equations
+`eq:SF_u1_u3` and `eq:uv2_U3` (lines 2009--2016 and 2028--2034); the paper
+states the resulting source matrices, not this intermediate equivalence. -/
 @[simp] theorem shiftExampleU₃RightRankEquiv_apply (d : ℕ) [NeZero d]
     (a b : Fin d) :
     shiftExampleU₃RightRankEquiv d (a, b) =
@@ -386,6 +402,12 @@ noncomputable def shiftExampleU₃SwapSourceVColumnEquiv (d : ℕ) [NeZero d] :
       (Equiv.prodCongr (shiftExampleU₃RightRankEquiv d)
         (shiftExampleU₃LeftRankEquiv d))
 
+/-- Evaluation of the composite-site source-row coordinates exhibiting
+$u_3=\mathbb S$.
+
+Formalization coordinate identity for arXiv:1703.09188, equations `uu` and
+`eq:SF_u1_u3` (lines 532--543 and 2009--2016); the paper states the final
+swap, not this intermediate equivalence. -/
 @[simp] theorem shiftExampleU₃SwapSourceURowEquiv_apply (d : ℕ) [NeZero d]
     (a b c e : Fin d) :
     shiftExampleU₃SwapSourceURowEquiv d
@@ -395,6 +417,12 @@ noncomputable def shiftExampleU₃SwapSourceVColumnEquiv (d : ℕ) [NeZero d] :
   simp [shiftExampleU₃SwapSourceURowEquiv,
     shiftExampleU₃SourceUSwapShuffle]
 
+/-- Evaluation of the composite-site source-column coordinates exhibiting
+$v_3=\mathbb S$.
+
+Formalization coordinate identity for arXiv:1703.09188, equations `vdagger`
+and `eq:SF_u1_u3` (lines 520--543 and 2009--2016); the paper states the final
+swap, not this intermediate equivalence. -/
 @[simp] theorem shiftExampleU₃SwapSourceVColumnEquiv_apply (d : ℕ) [NeZero d]
     (a b c e : Fin d) :
     shiftExampleU₃SwapSourceVColumnEquiv d
@@ -417,7 +445,7 @@ private theorem shiftExampleU₂_sourceU_product_apply (d : ℕ) [NeZero d]
         SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
           (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (c, e)) (j, l) := by
   simpa only [shiftExampleU₂, shiftExampleU₂SourceFactors] using
-    SourceFactors.sourceU_independentTensorProduct_apply
+    SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
       (leftShiftSourceFactors d) (rightShiftSourceFactors d)
       (leftShiftLeftRankEquiv d (a, b)) (rightShiftLeftRankEquiv d 0)
       (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (c, e)) i k j l
@@ -486,7 +514,7 @@ private theorem shiftExampleU₂_sourceV_product_apply (d : ℕ) [NeZero d]
           (j, l) (rightShiftRightRankEquiv d (b, a),
             rightShiftLeftRankEquiv d 0) := by
   simpa only [shiftExampleU₂, shiftExampleU₂SourceFactors] using
-    SourceFactors.sourceV_independentTensorProduct_apply
+    SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
       (leftShiftSourceFactors d) (rightShiftSourceFactors d) i k j l
       (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (b, a))
       (leftShiftLeftRankEquiv d (e, c)) (rightShiftLeftRankEquiv d 0)
@@ -557,7 +585,7 @@ private theorem shiftExampleU₃_sourceU_product_apply (d : ℕ) [NeZero d]
         SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
           (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (j, l) := by
   simpa only [shiftExampleU₃, shiftExampleU₃SourceFactors] using
-    SourceFactors.sourceU_independentTensorProduct_apply
+    SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
       (rightShiftSourceFactors d) (leftShiftSourceFactors d)
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (a, b))
       (rightShiftRightRankEquiv d (c, e)) (leftShiftRightRankEquiv d 0) i k j l
@@ -628,7 +656,7 @@ private theorem shiftExampleU₃_sourceV_product_apply (d : ℕ) [NeZero d]
           (j, l) (leftShiftRightRankEquiv d 0,
             leftShiftLeftRankEquiv d (e, c)) := by
   simpa only [shiftExampleU₃, shiftExampleU₃SourceFactors] using
-    SourceFactors.sourceV_independentTensorProduct_apply
+    SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
       (rightShiftSourceFactors d) (leftShiftSourceFactors d) i k j l
       (rightShiftRightRankEquiv d (b, a)) (leftShiftRightRankEquiv d 0)
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (e, c))
@@ -699,7 +727,7 @@ private theorem shiftExampleU₁_sourceU_product_apply (d : ℕ)
         SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
           (identityLeftRankEquiv d e, identityRightRankEquiv d b) (j, l) := by
   simpa only [shiftExampleU₁, shiftExampleU₁SourceFactors] using
-    SourceFactors.sourceU_independentTensorProduct_apply
+    SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
       (identitySourceFactors d) (identitySourceFactors d)
       (identityLeftRankEquiv d c) (identityLeftRankEquiv d e)
       (identityRightRankEquiv d a) (identityRightRankEquiv d b) i k j l
@@ -747,7 +775,7 @@ private theorem shiftExampleU₁_sourceV_product_apply (d : ℕ)
         SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
           (j, l) (identityRightRankEquiv d b, identityLeftRankEquiv d e) := by
   simpa only [shiftExampleU₁, shiftExampleU₁SourceFactors] using
-    SourceFactors.sourceV_independentTensorProduct_apply
+    SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
       (identitySourceFactors d) (identitySourceFactors d) i k j l
       (identityRightRankEquiv d a) (identityRightRankEquiv d b)
       (identityLeftRankEquiv d c) (identityLeftRankEquiv d e)

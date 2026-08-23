@@ -7607,7 +7607,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.identitySourceFactors,
         MPOTensor.rightShiftSourceFactors,
         MPOTensor.leftShiftSourceFactors,
-        MPOTensor.SourceFactors.independentTensorProduct,
+        MPOTensor.SourceFactors.independentTensorProductOfIdentityWeight,
         MPOTensor.shiftExampleU₁SourceFactors,
         MPOTensor.shiftExampleU₂SourceFactors,
         MPOTensor.shiftExampleU₃SourceFactors}
@@ -7708,9 +7708,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
             {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
         (Y_1)_{r,(I_2,\gamma)}.
     \end{align}
-    These follow from the two exact open two-site factorizations.  Evaluating
-    the supplied sources in product-rank coordinates reduces their normalized
-    identity-vector contractions to the two displayed matrices.
+    Write $s=d^{-1/2}$, so that $d\,s^2=1$.  In the product-rank coordinates,
+    the entries of the two central gates are
+    \begin{align}
+        [u_2^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =(d\,s\delta_{a,i}\delta_{b,k})
+            (s\delta_{c,j}\delta_{e,l}) \\
+         & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}, \\
+        [v_2^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
+         & =(s\delta_{e,k}\delta_{c,i})
+            (d\,s\delta_{b,l}\delta_{a,j}) \\
+         & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}.
+    \end{align}
+    These are respectively the entries of
+    $\Id\otimes\mathbb S\otimes\Id$ and
+    $(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$;
+    substituting them into the exact open two-site factorizations gives the
+    asserted equalities.
 \end{proof}
 
 \begin{theorem}[Central gates in the supplied two-site factorizations of $U_3$]
@@ -7752,10 +7766,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
             {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
         (Y_1)_{r,(I_2,\gamma)}.
     \end{align}
-    They follow by reversing the order of the left-shift and right-shift
-    supplied factors in the preceding calculation.  The first contraction
-    exchanges the middle spins before exchanging the two pairs, whereas the
-    reflected contraction only exchanges the middle spins.
+    Again write $s=d^{-1/2}$, so that $d\,s^2=1$.  Reversing the two supplied
+    factors gives the entry identities
+    \begin{align}
+        [u_3^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =(s\delta_{c,i}\delta_{e,k})
+            (d\,s\delta_{a,j}\delta_{b,l}) \\
+         & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}, \\
+        [v_3^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
+         & =(d\,s\delta_{b,k}\delta_{a,i})
+            (s\delta_{e,l}\delta_{c,j}) \\
+         & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}.
+    \end{align}
+    The first is the entry of
+    $(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$,
+    and the second is the entry of $\Id\otimes\mathbb S\otimes\Id$.
+    Substitution into the two exact open two-site factorizations proves the
+    claim.
 \end{proof}
 
 \begin{proposition}[Standard forms of the three shift MPUs]

@@ -14,6 +14,11 @@ product from supplied identity-weight factors for its two constituents.  The
 source ranks and the entries of the paper's tensors $u$ and $v$ are
 multiplicative in the corresponding product-rank coordinates.
 
+The identity-weight restriction is explicit in the declaration names below.
+An arbitrary-weight construction would additionally require a source-weight
+shuffle relating the reindexed virtual Kronecker weight to the two constituent
+source weights; that construction is not used for the shift formulas.
+
 This is formalization infrastructure for the tensoring clause of Theorem
 `IndexTh` (ii), which arXiv:1703.09188 calls trivial in lines 824--847; the
 paper does not print these explicit supplied factors.
@@ -54,7 +59,7 @@ product when both source weights are identities.
 
 Formalization infrastructure for the tensoring clause of Theorem `IndexTh`
 (ii), which arXiv:1703.09188 calls trivial in lines 824--847. -/
-noncomputable def SourceFactors.independentTensorProduct
+noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
     {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
     (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
     (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ)) :
@@ -140,20 +145,21 @@ of the two constituent source entries in the product rank coordinates.
 
 Formalization infrastructure for the tensoring clause of Theorem `IndexTh`
 (ii), which arXiv:1703.09188 calls trivial in lines 824--847. -/
-theorem SourceFactors.sourceU_independentTensorProduct_apply
+theorem SourceFactors.sourceU_independentTensorProductOfIdentityWeight_apply
     {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
     (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
     (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
     (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) (rᵤ : Fin r[U]) (rᵥ : Fin r[V])
     (i₁ i₂ : Fin d) (j₁ j₂ : Fin e) :
     SourceFactors.sourceU (tensorProduct U V)
-        (SourceFactors.independentTensorProduct S T)
+        (SourceFactors.independentTensorProductOfIdentityWeight S T)
         (tensorProductLeftRankEquiv U V (lᵤ, lᵥ),
           tensorProductRightRankEquiv U V (rᵤ, rᵥ))
         (finProdFinEquiv (i₁, j₁), finProdFinEquiv (i₂, j₂)) =
       SourceFactors.sourceU U S (lᵤ, rᵤ) (i₁, i₂) *
         SourceFactors.sourceU V T (lᵥ, rᵥ) (j₁, j₂) := by
-  simp only [SourceFactors.sourceU, SourceFactors.independentTensorProduct]
+  simp only [SourceFactors.sourceU,
+    SourceFactors.independentTensorProductOfIdentityWeight]
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]
@@ -172,20 +178,21 @@ of the two constituent source entries in the product rank coordinates.
 
 Formalization infrastructure for the tensoring clause of Theorem `IndexTh`
 (ii), which arXiv:1703.09188 calls trivial in lines 824--847. -/
-theorem SourceFactors.sourceV_independentTensorProduct_apply
+theorem SourceFactors.sourceV_independentTensorProductOfIdentityWeight_apply
     {d D e E : ℕ} {U : MPOTensor d D} {V : MPOTensor e E}
     (S : SourceFactors U (1 : Matrix (Fin D) (Fin D) ℂ))
     (T : SourceFactors V (1 : Matrix (Fin E) (Fin E) ℂ))
     (j₁ j₂ : Fin d) (k₁ k₂ : Fin e)
     (rᵤ : Fin r[U]) (rᵥ : Fin r[V]) (lᵤ : Fin ℓ[U]) (lᵥ : Fin ℓ[V]) :
     SourceFactors.sourceV (tensorProduct U V)
-        (SourceFactors.independentTensorProduct S T)
+        (SourceFactors.independentTensorProductOfIdentityWeight S T)
         (finProdFinEquiv (j₁, k₁), finProdFinEquiv (j₂, k₂))
         (tensorProductRightRankEquiv U V (rᵤ, rᵥ),
           tensorProductLeftRankEquiv U V (lᵤ, lᵥ)) =
       SourceFactors.sourceV U S (j₁, j₂) (rᵤ, lᵤ) *
         SourceFactors.sourceV V T (k₁, k₂) (rᵥ, lᵥ) := by
-  simp only [SourceFactors.sourceV, SourceFactors.independentTensorProduct]
+  simp only [SourceFactors.sourceV,
+    SourceFactors.independentTensorProductOfIdentityWeight]
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Equiv.symm_apply_apply]

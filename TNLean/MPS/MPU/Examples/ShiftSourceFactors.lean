@@ -43,6 +43,26 @@ private theorem nat_mul_sourceSqrt_inv_mul_inv (d : ℕ) [NeZero d] :
   simpa [mul_comm, mul_left_comm, mul_assoc] using
     sourceSqrt_inv_mul_nat_mul_inv d
 
+/-- The normalization cancellation used when a left-shift source entry is
+multiplied by a right-shift source entry.
+
+Formalization identity used to derive arXiv:1703.09188, equations
+`eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034); the paper
+prints the resulting permutation matrices, not this scalar calculation. -/
+theorem shiftSourceScale_cancel (d : ℕ) [NeZero d] :
+    ((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) * (Real.sqrt d : ℂ)⁻¹ = 1 := by
+  simpa [sourceSqrt, mul_assoc] using nat_mul_sourceSqrt_inv_mul_inv d
+
+/-- The reflected normalization cancellation used when a right-shift source
+entry is multiplied by a left-shift source entry.
+
+Formalization identity used to derive arXiv:1703.09188, equations
+`eq:SF_u1_u3`, `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009--2034); the paper
+prints the resulting permutation matrices, not this scalar calculation. -/
+theorem shiftSourceScale_cancel_rev (d : ℕ) [NeZero d] :
+    (Real.sqrt d : ℂ)⁻¹ * ((d : ℂ) * (Real.sqrt d : ℂ)⁻¹) = 1 := by
+  simpa [sourceSqrt, mul_assoc] using sourceSqrt_inv_mul_nat_mul_inv d
+
 private noncomputable def normalizedIdentityVec (d : ℕ) : Fin d × Fin d → ℂ :=
   (sourceSqrt d)⁻¹ • (1 : Matrix (Fin d) (Fin d) ℂ).vec
 
