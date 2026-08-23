@@ -52,8 +52,9 @@ preceding injective result.  These are distinct source statements.
 
 \section{The compression construction}
 
-The four files
+The five files
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveFactorSupport},
+\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveSupportData},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveRestriction},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveNeighboring}, and
 \doclink{TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport}
@@ -93,6 +94,16 @@ Proposition~\texttt{prop3to4} (line~1787):
     the Kronecker product of the source right and target left support isometries.
     Positive semidefiniteness follows from preservation under matrix congruence.
 
+  \item \textbf{Neighboring trace factorization:}
+    If the ambient operators satisfy the notation and normalization of
+    CPSV16 Theorem~4.9(iv),
+    $\tr(\eta_{k,h})=a_kb_h$ and $\sum_k a_kb_k=1$, then compression preserves
+    $\tr(\eta_{k,h})$ whenever both $k$ and $h$ are active.  For an inactive
+    sector, $\eta_{k,k}=0$, so $a_kb_k=0$.  Restricting $a_k,b_k$ to the
+    active sectors therefore preserves both the trace factorization and the
+    normalized diagonal sum.  This transport is auxiliary; it is not the
+    proof of condition~(iv) in the source theorem.
+
   \item \textbf{Coordinate transport:} The
     generic operation $M \mapsto V M V^\dagger$ changes physical coordinates of
     any MPO tensor, together with its two-site and four-site closures.
@@ -109,7 +120,7 @@ exact two-sided recovery.
 
 \section{Affected declarations}
 
-The nine load-bearing declarations are the choice of support isometries for an
+The ten load-bearing declarations are the choice of support isometries for an
 active sector,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
 exists\_activeSector\_factorSupportIsometries}.}
 the simultaneous choice of factor-support
@@ -135,6 +146,9 @@ activePhysicalSupportRestriction\_isInjective}.}
 and the assembled restriction datum.\footnote{%
 \leanid{MPOTensor.PhysicalSectorFactorization.%
 activePhysicalSupportRestrictionData}.}
+The final declaration transports the neighboring trace factorization to the
+active restriction.\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+ActivePhysicalCompressionWitness.neighboringTraceFactorization}.}
 
 \section{Blueprint dependency}
 
