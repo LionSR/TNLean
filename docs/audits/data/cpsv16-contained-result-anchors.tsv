@@ -15,7 +15,7 @@ idempotent	982	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0
 Ualphabeta	988	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	fusion\-clause\s+boundary
 scprod	1086	Appendix A's overlap lemma	(?<![A-Za-z0-9])Appendix A's overlap lemma(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
 rel	1096	Appendix A's overlap lemma	(?<![A-Za-z0-9])Appendix A's overlap lemma(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary
-eq-Appendix:II:A=XAX	1139	Proposition 2.7	(?<![A-Za-z0-9])Proposition 2\.7(?![0-9]|\.[0-9])	inactive\s+zero\-weight\s+boundary
+eq-Appendix:II:A=XAX	1139	Proposition 2.7	(?<![A-Za-z0-9])Proposition 2\.7(?![0-9]|\.[0-9])	nonzero\-coefficient\s+local\s+correction
 eq:app_aux	1159	Lemma A.5	(?<![A-Za-z0-9])Lemma A\.5(?![0-9]|\.[0-9])	zero\-entry\s+boundary
 eq:II_auxcor	1176	Appendix A restatement	(?<![A-Za-z0-9])Appendix A restatement(?![A-Za-z0-9])	nonzero\-coefficient\s+local\s+correction
 eq_III_NT_RFP	1277	Appendix B's RFP characterization	(?<![A-Za-z0-9])Appendix B's RFP characterization(?![A-Za-z0-9])	normal\-tensor\s+hypothesis\s+boundary

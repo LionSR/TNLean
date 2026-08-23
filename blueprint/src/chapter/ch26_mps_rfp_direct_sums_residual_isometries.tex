@@ -641,6 +641,10 @@
     Theorem~\ref{thm:normal_scaled_rfp} gives both conclusions.
 \end{proof}
 
+% CPSV16 Corollary 3.12 (`III_cor3`), lines 583--590.
+% Under the nonzero-coefficient convention every basis element occurs with a
+% nonzero weight, so the phase-class statement below is the formalization of
+% the corollary; the square-root diagonal is a local correction.
 \begin{theorem}[Phase-class residual isometries]%
     \label{thm:cpsv_phase_class_residual_isometries}
     \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
@@ -665,6 +669,12 @@
         \notag
     \end{align}
     The conclusion also covers the case in which there are no classes.
+
+    \textbf{Local fix (square-root diagonal).} CPSV prints a bare $\Lambda_j$
+    in Corollary~3.12, whereas the reference tensor at line~1300 has
+    coefficients $\sqrt{(\rho_j)_{\alpha,\alpha}}$, which forces the factor
+    $\sqrt{\lambda_{j,\alpha}}$ used above. This repair is documented in
+    \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
@@ -692,41 +702,6 @@
     at matrix units gives the off-diagonal residual equation. Together with
     the within-block orthonormality, this is the joint isometry condition.
 \end{proof}
-
-\begin{theorem}[An arbitrary BNT need not possess a joint residual isometry]%
-    \label{thm:cpsv_cor312_arbitrary_bnt_counterexample}
-    \lean{MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample}
-    \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_residual_isometry_family}
-    There is a canonical-form renormalization fixed point $A$ and a basis of
-    normal tensors $(A_0,A_1)$ for it such that both $A_0$ and $A_1$ are
-    renormalization fixed points, but the family admits no trace-normalized
-    square-root decomposition with a joint residual isometry. One may take
-    bond dimension one and
-    \begin{align}
-        A^0=A_0^0 & =1,
-                  & A^1=A_0^1   & =0,
-                  & A_1^0=A_1^1 & =\frac{1}{\sqrt2}.
-        \notag
-    \end{align}
-    The BNT coefficients are $1$ on $A_0$ and $0$ on $A_1$ at every length.
-\end{theorem}
-\begin{proof}\leanok
-    The two matrix product vectors are linearly independent at every positive
-    length, so $(A_0,A_1)$ is a BNT for $A$ with the displayed coefficients.
-    Both transfer maps are the identity. In bond dimension one, trace
-    normalization fixes the positive diagonal factor to $1$, and scalar
-    conjugation has no effect. Any residual tensors would therefore equal
-    $A_0$ and $A_1$. Their cross inner product is
-    \begin{align}
-        \sum_{i=0}^1 A_0^i\overline{A_1^i}
-         & =\frac{1}{\sqrt2}\ne0,
-        \notag
-    \end{align}
-    contradicting the off-diagonal joint-isometry equation.
-\end{proof}
-
-
 
 % CPSV16 Theorem 3.11 (`thm:charact-MPS`), lines 543--562.
 % No Lean theorem currently derives this repeated-copy statement from literal
@@ -774,63 +749,6 @@
     used above. This repair is documented in
     \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}
-
-% CPSV16 Corollary 3.12 (`III_cor3`), lines 583--590.
-% The arbitrary-BNT statement is refuted by an inactive BNT member. The full
-% corrected conclusion for active phase-class representatives is proved above.
-\begin{corollary}[Basis tensors of a fixed point]
-    \label{cor:cpsv_iii_cor3_status}
-    \notready
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family, thm:cpsv_weight_norm_one_and_block_rfp, thm:cpsv_phase_class_residual_isometries, thm:cpsv_cor312_arbitrary_bnt_counterexample}
-    Let $A$ be a CPSV canonical-form renormalization fixed point, and let
-    $(A_j)_j$ be an arbitrary basis of normal tensors for $A$. CPSV asserts that
-    there are invertible matrices $X_j$, positive diagonal matrices $\rho_j$
-    with $\tr(\rho_j)=1$, and tensors $U_j$ such that
-    \begin{align}
-        A_j^i
-         & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
-        \notag                                                         \\
-        \sum_i(U_j^i)_{\alpha,\beta}
-        \overline{(U_{j'}^i)_{\alpha',\beta'}}
-         & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-        \notag
-    \end{align}
-    The assertion is false for an arbitrary BNT. Such a BNT may contain a
-    normal tensor whose coefficient vanishes at every positive length, and
-    Theorem~\ref{thm:cpsv_cor312_arbitrary_bnt_counterexample} shows that an
-    unused member can violate the cross-block equation.
-
-    The corrected active conclusion is complete. For the normal blocks $(A_k)_k$
-    occurring with nonzero weights $\mu_k$ in literal CPSV canonical-form data,
-    Theorem~\ref{thm:cpsv_weight_norm_one_and_block_rfp} proves
-    \begin{align}
-        |\mu_k| & =1,
-                & \E_{A_k}^2 & =\E_{A_k}.
-        \notag
-    \end{align}
-    After choosing one representative $C_j$ from each active phase class,
-    Theorem~\ref{thm:cpsv_phase_class_residual_isometries} supplies
-    invertible $X_j$, positive trace-one diagonal data $\rho_j$, and tensors
-    $U_j$ such that
-    \begin{align}
-        C_j^i & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
-        \notag                                                              \\
-        \sum_i(U_j^i)_{\alpha,\beta}
-        \overline{(U_{j'}^i)_{\alpha',\beta'}}
-              & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-        \notag
-    \end{align}
-    Thus both the diagonal square-root forms and the simultaneous off-diagonal
-    equations hold for the active representatives. The corollary remains
-    not ready as printed because its quantifier ranges over an arbitrary BNT.
-
-    \textbf{Local fix (square-root diagonal).} CPSV prints a bare $\Lambda_j$
-    in Corollary~3.12, whereas the reference tensor at line~1300 has
-    coefficients $\sqrt{(\rho_j)_{\alpha,\alpha}}$, which forces the factor
-    $\sqrt{\rho_j}$ used above. The source defect and the corrected active
-    statement are documented in
-    \cite{gap:cpsv16_rfp_isometry_scope}.
-\end{corollary}
 
 \begin{theorem}[Ambiguity of the literal repeated-phase display]%
     \label{thm:phase_flip_tensor_not_rfp}

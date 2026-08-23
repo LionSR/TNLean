@@ -112,21 +112,19 @@ complex scalars, and they do not imply that the rescaled tensor satisfies the
 same literal fixed-scale RFP equations of Definition~4.1.
 
 The declaration \leanid{MPOTensor.IsSourceSimple} records the
-normalization-free active canonical-block reading of lines~217--246 and
-Definition~4.7. It asks for some positive blocking and an active BNT sector
-presentation whose representative physical-trace transfers are all
-non-nilpotent. Every representative has a positive number of copies and every
-copy has nonzero weight, so dormant candidates are absent. This is the local
-correction documented in
-\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}, not the
-unrestricted literal-BNT reading. The theorem
+normalization-free reading of lines~217--246 and Definition~4.7. It asks for
+some positive blocking and a BNT sector presentation whose representative
+physical-trace transfers are all non-nilpotent. Every representative has a
+positive number of copies and every copy has nonzero weight, the
+nonzero-coefficient convention of
+\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}. The theorem
 \leanid{MPOTensor.IsSourceSimple.exists_mpo_ne_zero} derives a positive length
 $N$ for which
 \begin{align}
     \rho_N(M)&\ne0,
     \label{eq:some-positive-length-nonzero}
 \end{align}
-from the active presentation; this is not an additional defining assumption.
+from the presentation; this is not an additional defining assumption.
 Isolated vanishing lengths remain possible. The predicate does not impose the
 line-246 unit-weight convention. The strengthened project predicate
 \leanid{MPOTensor.IsNonvanishingSourceSimple} adds the condition

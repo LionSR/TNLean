@@ -273,11 +273,6 @@ Proposition 4.13.  The literal proposition is proved independently by
 the stronger horizontal hypothesis.  Documented in
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
-**Scope restriction (active product BNT):** Only active product corners are
-retained.  A BNT label absent from a fixed product pair has zero fusion
-multiplicity.  Documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 **Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
 active family; no unsupported corner is inserted.  Documented in
 `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
