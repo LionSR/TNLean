@@ -12,6 +12,11 @@ import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 This file selects the BNT fusion tensor clause furnished by the literal CPSV
 canonical-form theorem and applies the physical-coordinate Gibbs construction.
 
+**Scope restriction (positive chains of length at least two):** Definition 4.8
+of the source fixes no length-one two-site convention, so the main result covers
+exactly the source-defined chains of length at least two.  See
+`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
+
 ## Main definitions
 
 * `MPOTensor.cpsvRFPBNTFusionTensorClause`
@@ -80,12 +85,7 @@ reconstruction; no full-space isometry is asserted. See
 **Local fix (physical complement):** The retained energy is extended by zero
 on the orthogonal physical complement, and the retained projectors are
 transported through the adjoint sitewise coisometry. See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition 4.8
-does not specify a length-one two-site convention. This theorem covers exactly
-the source-defined lengths `N + 2`; see
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm
     (M : MPOTensor d D)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)

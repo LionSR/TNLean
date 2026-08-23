@@ -24,6 +24,18 @@ vertical reconstruction identities place those closures in the retained
 supports.  This gives the two trace-preserving completely positive maps of
 Definition 4.1, conditionally on the supplied unitary sector conjugacies.
 
+**Scope restriction (supplied unitary sector conjugacies):** the middle map of
+every physical map in this file uses the unitary conclusion of Appendix C.4,
+line 2057, as a hypothesis; its derivation from the tensor-attached algebra
+clause is the mixed-prefix argument documented in
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
+**Local fix (zero-sector complement):** the raw retractions can discard a zero
+sector, so the completed maps of this file add a measure-and-prepare term on
+the complement; it restores the trace and vanishes on every tensor-generated
+physical closure.  See
+`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
+
 ## Main definitions
 
 * `UnitarySectorConjugacy.rawPhysicalT`
@@ -134,11 +146,6 @@ variable {H : BNTAlgebraTensorClause M} {S : TwoSiteExactSectorGauge H}
 \(T_0=\widetilde R_2\widetilde T R_1\), expressed through canonical
 full-matrix extensions of the sector maps.
 
-**Scope restriction (supplied unitary sector conjugacies):** The middle map
-uses the unitary conclusion of Appendix C.4, line 2057, as a hypothesis.  Its
-unconditional derivation is documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
 Source: arXiv:1606.00608, Appendix C.4, lines 2065--2071. -/
 def UnitarySectorConjugacy.rawPhysicalT (C : UnitarySectorConjugacy S) :
     Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
@@ -150,11 +157,6 @@ def UnitarySectorConjugacy.rawPhysicalT (C : UnitarySectorConjugacy S) :
 /-- The raw coarse-graining map
 \(S_0=\widetilde R_1\widetilde S R_2\), expressed through canonical
 full-matrix extensions of the sector maps.
-
-**Scope restriction (supplied unitary sector conjugacies):** The middle map
-uses the unitary conclusion of Appendix C.4, line 2057, as a hypothesis.  Its
-unconditional derivation is documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2078--2083. -/
 def UnitarySectorConjugacy.rawPhysicalS (C : UnitarySectorConjugacy S) :
@@ -514,15 +516,6 @@ private theorem zero_isKrausCPTP_of_isEmpty
 support it measures the discarded weight and prepares a fixed faithful
 two-site density matrix.
 
-**Local fix (zero-sector complement):** The raw retraction can discard a zero
-sector.  The measure-and-prepare completion restores trace without changing
-the tensor-generated physical closures; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-
-**Scope restriction (supplied unitary sector conjugacies):** The middle map
-uses the unitary conclusion of Appendix C.4, line 2057, as a hypothesis; see
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2065--2071. -/
 def UnitarySectorConjugacy.physicalT (C : UnitarySectorConjugacy S) :
@@ -538,15 +531,6 @@ def UnitarySectorConjugacy.physicalT (C : UnitarySectorConjugacy S) :
 two-site support it measures the discarded weight and prepares a fixed
 faithful one-site density matrix.
 
-**Local fix (zero-sector complement):** The raw retraction can discard a zero
-sector.  The measure-and-prepare completion restores trace without changing
-the tensor-generated physical closures; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-
-**Scope restriction (supplied unitary sector conjugacies):** The middle map
-uses the unitary conclusion of Appendix C.4, line 2057, as a hypothesis; see
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2078--2083. -/
 def UnitarySectorConjugacy.physicalS (C : UnitarySectorConjugacy S) :
@@ -561,14 +545,6 @@ def UnitarySectorConjugacy.physicalS (C : UnitarySectorConjugacy S) :
 
 /-- The completed physical refinement map is trace-preserving and completely
 positive.
-
-**Local fix (zero-sector complement):** The complementary branch restores
-the trace discarded by the raw one-site retraction; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-
-**Scope restriction (supplied unitary sector conjugacies):** The middle map
-uses the supplied line-2057 unitary conjugacies; see
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2065--2071. -/
@@ -595,14 +571,6 @@ theorem UnitarySectorConjugacy.physicalT_isKrausCPTP
 /-- The completed physical coarse-graining map is trace-preserving and
 completely positive.
 
-**Local fix (zero-sector complement):** The complementary branch restores
-the trace discarded by the raw two-site retraction; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-
-**Scope restriction (supplied unitary sector conjugacies):** The middle map
-uses the supplied line-2057 unitary conjugacies; see
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2078--2083. -/
 theorem UnitarySectorConjugacy.physicalS_isKrausCPTP
@@ -627,10 +595,6 @@ theorem UnitarySectorConjugacy.physicalS_isKrausCPTP
 
 /-- The completed refinement map has the Definition 4.1 action on every
 one-site physical closure.
-
-**Local fix (zero-sector complement):** The added complement vanishes on the
-retained support of every physical closure; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2065--2071. -/
@@ -658,10 +622,6 @@ theorem UnitarySectorConjugacy.physicalT_physClose1
 
 /-- The completed coarse-graining map has the Definition 4.1 action on every
 two-site physical closure.
-
-**Local fix (zero-sector complement):** The added complement vanishes on the
-retained support of every physical closure; see
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2078--2083. -/
@@ -693,16 +653,6 @@ theorem UnitarySectorConjugacy.physicalS_physClose2
 /-- The BNT algebra clause gives the trace-preserving completely positive
 maps of Definition 4.1, conditionally on the unitary conjugacies between its
 matched one-site and two-site sectors.
-
-**Scope restriction (supplied unitary sector conjugacies):** This theorem
-assumes the unitary conclusion of Appendix C.4, line 2057.  Its derivation
-from the tensor-attached algebra clause is given by the mixed-prefix argument
-documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
-**Local fix (zero-sector complement):** The raw maps are completed on the
-orthogonal complements of the retained vertical sectors as documented in
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 638--660, and Appendix C.4,
 lines 2053--2085. -/

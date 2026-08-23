@@ -140,10 +140,6 @@ theorem exists_retainedProductSpectralFamily_of_blockTwo
 retained copy pair of a tensor in normalized BNT-refined horizontal form.
 Empty active families are preserved.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
 lines 2020--2029. -/
 theorem exists_retainedProductSpectralFamily

@@ -414,10 +414,6 @@ positive diagonal multiplicity matrices and coisometries onto the active
 product sectors.  The adjoint coisometries reconstruct every product letter,
 including when a common zero corner is discarded by the forward map.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 **Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
 active family; no unsupported corner is inserted.  Documented in
 `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.

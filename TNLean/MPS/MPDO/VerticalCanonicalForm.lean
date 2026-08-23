@@ -41,14 +41,6 @@ normal tensors and the normalized physical sector maps.  Their positive
 weights, orthogonal isometric ranges, intertwinings, and exact reconstruction
 then combine to give the vertical coisometry.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form assumed by Proposition 4.13.
-The source-faithful literal implication is proved independently by
-`verticalCF_of_cpsvCanonicalForm`; the theorem below retains the stronger
-horizontal hypothesis for arguments that already assume it. This scope
-restriction is documented in
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem verticalCF_of_horizontalCF (M : MPOTensor d D)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :

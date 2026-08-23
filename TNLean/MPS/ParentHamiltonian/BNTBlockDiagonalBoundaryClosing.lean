@@ -20,6 +20,9 @@ decompositions of the same periodic state, with cuts separated by \(S\) sites,
 are compared against the common complementary words of length \(K\). A
 simultaneous spanning family on the complementary segment then identifies the
 boundary matrices block by block.
+
+The doubly normalized specialization restriction shared by the block-diagonal
+parent-space modules is stated once in `BNTBlockDiagonalPGVWCComparison`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -325,16 +328,7 @@ Let \(r\ge2\), let every block be injective at length \(L_0>0\), and assume
 on the complementary segment \(N-L_0\) identifies the boundary matrices before
 and after moving the cut. Each block component therefore satisfies every
 periodic local constraint. This is arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1424--1456.
-
-**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
-length bound, `hUnital` is the source identity
-\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
-source dual fixed-point equation
-\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
--/
+lines 1424--1456. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -603,16 +597,7 @@ interaction length is
 \[
   3(r-1)(L_0+1)+1 \leq L,
 \]
-and the chain length satisfies \(L+L_0\leq N\).
-
-**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
-length bound, `hUnital` is the source identity
-\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
-source dual fixed-point equation
-\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
--/
+and the chain length satisfies \(L+L_0\leq N\). -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -644,16 +629,7 @@ theorem
 chain space is the sum of the periodic chain spaces of its blocks.
 
 This is the equality in arXiv:quant-ph/0608197, Theorem 12, proof lines
-1424--1456.
-
-**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
-length bound, `hUnital` is the source identity
-\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
-source dual fixed-point equation
-\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
--/
+1424--1456. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -682,16 +658,7 @@ of the block-diagonal parent-Hamiltonian kernel in the span of the BNT matrix
 product vectors.
 
 This is the final conditional step in arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1424--1456.
-
-**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
-length bound, `hUnital` is the source identity
-\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
-source dual fixed-point equation
-\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
--/
+lines 1424--1456. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

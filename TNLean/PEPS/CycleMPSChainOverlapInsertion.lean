@@ -370,13 +370,7 @@ insertion `X` on the bond `(r + L - 1, r + L)` of the `A`-chain to the bond
 operator extracted by Lemma 5 on the `B`-chain is a linear, unital and
 multiplicative map `Φ` of the matrix algebra; it pairs the two chains
 against every closed-chain word read from the bond.  Uniqueness is
-`MPSChainTensor.insertionHom_unique`.
-
-**Scope restriction (uniform physical and bond dimensions):** the source
-poses no restriction on the local dimensions of the site-dependent tensors,
-while here all sites share one physical dimension `d` and all bonds one
-bond dimension `D`.  Documented in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+`MPSChainTensor.insertionHom_unique`. -/
 theorem exists_insertionHom [NeZero n] {L : ℕ} (hL : 0 < L)
     (hn : 2 * L + 1 ≤ n) (A B : MPSChainTensor d D n)
     (hA : IsWindowInjective A L) (hB : IsWindowInjective B L)
@@ -551,13 +545,7 @@ every bond: for each site `p` there is an invertible `Z` with
 `p`.  The insertion correspondence at the bond is an algebra automorphism
 of the full matrix algebra, by Skolem--Noether inner; pairing insertions
 against all closed-chain words transfers the conjugation to the arc
-products.
-
-**Scope restriction (uniform physical and bond dimensions):** the source
-poses no restriction on the local dimensions of the site-dependent tensors,
-while here all sites share one physical dimension `d` and all bonds one
-bond dimension `D`.  Documented in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+products. -/
 theorem exists_conjugation_of_sameState [NeZero n] {L : ℕ} (hL : 0 < L)
     (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSChainTensor d D n)
     (hA : IsWindowInjective A L) (hB : IsWindowInjective B L)

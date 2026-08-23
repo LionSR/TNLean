@@ -473,13 +473,7 @@ The per-bond conjugations of the insertion correspondence give window
 covariance with nonzero scalars; comparing windows of lengths `L + 1` and
 `L` makes the relation letterwise, `B_v^i = μ_v • (Z_v A_v^i Z_{v+1}⁻¹)`;
 one circuit of the chain forces `∏_v μ_v = 1`, and dressing the gauges with
-the partial products absorbs the scalars, including across the seam.
-
-**Scope restriction (uniform physical and bond dimensions):** the source
-poses no restriction on the local dimensions of the site-dependent tensors,
-while here all sites share one physical dimension `d` and all bonds one
-bond dimension `D`.  Documented in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+the partial products absorbs the scalars, including across the seam. -/
 theorem fundamentalTheorem_normalMPSChain_of_overlap {n L d D : ℕ} [NeZero n]
     (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
     (A B : MPSChainTensor d D n)

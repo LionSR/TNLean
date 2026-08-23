@@ -647,10 +647,6 @@ coisometry, fusion histories, and terminal operators give the all-initial-label 
 decomposition at every positive chain length.  No caller-supplied compatibility hypothesis is
 required.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used by Proposition 4.13 and
-Theorem 4.14; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, Theorem 4.14 and the density identity at line 999.  This theorem
 stops before the commutator at line 1001 and makes no spectral or Gibbs-state assertion.
 
@@ -674,10 +670,6 @@ both the exact all-label density decomposition and
 the commutator between its multiplicity-weight and reconstructed recursive factors at every
 positive chain length.  No caller-supplied fusion clause or compatibility hypothesis is
 required.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used by Proposition 4.13 and
-Theorem 4.14; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, density decomposition and commutator at lines 999--1002.
 This theorem makes no length-independence, terminal spectral, projector, or Gibbs-state

@@ -523,39 +523,6 @@ canonical presentations, and extending
 separate statements and are not supplied by bare horizontal periodic
 equality.
 
-\section{Formalization boundary}
-
-\textbf{Verdict: three distinct formal predicates.} The documented active
-canonical-block predicate \leanid{MPOTensor.IsSourceSimple} and its nonvanishing strengthening
-\leanid{MPOTensor.IsNonvanishingSourceSimple} are true for $R$, with positive
-blocking length $L=1$. The normalized fixed-representative predicate
-\leanid{MPOTensor.IsSimple} is false for $R$: every positive blocking has
-quasi-idempotence scalar $\bigl(337/512\bigr)^L<1$, while every normalized horizontal BNT
-witness would force that scalar to be one. The latter conclusion is independent
-of the choice of normalized BNT witness.
-
-The normalized verdict remains representative-dependent. The line-246 field
-should not be deleted: it is the source's standing canonical-form convention.
-The obstruction does not produce a nilpotent BNT block, does not use the
-vertical coefficient family, and does not refute the documented active
-source-simplicity predicate. Conversely,
-the one-site source-simplicity witness does not assert that every positive
-blocking is source-simple, that arbitrary complex rescaling preserves the MPDO
-condition, that positive rescaling preserves the same fixed-scale RFP equations,
-or that the simplicity predicates are equivalent. The valid comparisons are
-the unconditional implication from normalized simplicity to source simplicity,
-whose normalized sector decomposition gives a BNT sector presentation after gauge
-transport, and the derived positive-length nontriviality theorem, proved by
-eventual linear independence, a non-eventually-zero sector coefficient, and
-unblocking, and the conditional implication to nonvanishing source simplicity
-using \eqref{eq:positive-length-nonzero}, together with strictly positive real
-rescaling invariance of the MPDO and both active simplicity
-predicates.\footnote{Deletion
-audit: the declaration-free compatibility shell
-\path{TNLean/MPS/MPDO/RescalingStableLengthDependentRFPBNTClause.lean} was
-removed; the live explicit BNT declarations remain in
-\path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean}.}
-
 \bibliographystyle{alpha}
 \bibliography{references}
 

@@ -118,13 +118,7 @@ sum is realized block-diagonally over the labels, with the block of label
 of the tensor of `γ`.
 
 Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (full-support fusion family):** This structure assumes
-$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=1$. The source permits a discarded
-common zero corner and, in the displayed orientation, gives a coisometry onto
-the retained direct sum together with reconstruction. Documented in
-`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTFusionIsometryFamily (Λ : Type*) [Fintype Λ] [DecidableEq Λ]
     (p : ℕ) where
   /-- Bond dimension of the tensor of each label.
@@ -157,12 +151,7 @@ structure BNTFusionIsometryFamily (Λ : Type*) [Fintype Λ] [DecidableEq Λ]
     Matrix ((γ : Λ) × (Fin (chi.dim α β γ) × Fin (bondDim γ)))
       (Fin (bondDim α * bondDim β)) ℂ
   /-- The additional full-support column-isometry condition on each fusion
-  map.
-
-  **Scope restriction (full-support fusion family):** The unrestricted source
-  statement permits a discarded common zero corner and does not assert this
-  identity. Documented in
-  `docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
+  map. -/
   isometry : ∀ α β : Λ, (fusionIsometry α β)ᴴ * fusionIsometry α β = 1
   /-- The fusion identity, site by site:
   `U_{α,β} (M_α M_β)^{ij} U_{α,β}† = ⊕_γ χ_{α,β,γ} ⊗ M_γ^{ij}`.

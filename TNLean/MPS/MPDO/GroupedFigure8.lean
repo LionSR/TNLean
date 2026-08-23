@@ -48,10 +48,6 @@ conjugation fixes the transported representative tensor.
 No identity between an individual dressed tensor and its raw reflected
 adjoint is used or asserted.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines
 1909--1919. -/
 theorem IsMPDO.grouped_sector_gram_conj_eq

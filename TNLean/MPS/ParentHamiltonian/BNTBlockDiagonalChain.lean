@@ -18,6 +18,9 @@ one-step identity from arXiv:quant-ph/0608197
 as used in Theorem 12 of arXiv:quant-ph/0608197. The separate periodic
 step is the comparison obtained when closing the boundaries with block-diagonal
 boundary conditions, as in arXiv:2011.12127, Section IV.C.
+
+The doubly normalized specialization restriction shared by the block-diagonal
+parent-space modules is stated once in `BNTBlockDiagonalPGVWCComparison`.
 -/
 
 open scoped Matrix BigOperators
@@ -125,16 +128,7 @@ to the sum of the open-boundary block spaces.
 For \(r\ge2\), injectivity at the common length \(L_0>0\), and
 \(L\ge3(r-1)(L_0+1)+1\), the one-step intersection identity propagates the local
 constraints to the full chain. This is arXiv:quant-ph/0608197, Theorem 12,
-proof lines 1424--1452.
-
-**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
-length bound, `hUnital` is the source identity
-\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
-source dual fixed-point equation
-\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
--/
+proof lines 1424--1452. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -337,16 +331,7 @@ For \(r\ge2\) and \(L\ge3(r-1)(L_0+1)+1\), every vector in the periodic chain
 space of \(\bigoplus_j\mu_jA_j\) is a sum of vectors in the open-boundary spaces
 \(G_N(A_j)\). Choosing boundary matrices for these summands gives a single
 block-diagonal boundary matrix, as in arXiv:quant-ph/0608197, Theorem 12,
-proof lines 1424--1452.
-
-**Scope restriction (doubly normalized specialization):** At the PGVWC07 source
-length bound, `hUnital` is the source identity
-\(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
-source dual fixed-point equation
-\(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
--/
+proof lines 1424--1452. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

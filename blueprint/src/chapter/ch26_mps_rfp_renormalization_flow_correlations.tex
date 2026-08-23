@@ -84,31 +84,6 @@
     values claimed.
 \end{proof}
 
-% CPSV16 Appendix D (`RFP-gauge`), lines 2094--2107.
-% Provenance: counterexample formalization completed in issue #5920.
-\begin{theorem}[Printed blocking-up-to-gauge equivalence]
-    \label{thm:cpsv_rfp_gauge_printed_status}
-    \notready
-    \uses{thm:cpsv_canonical_form_flow_phase_obstruction, def:mps_transfer_idempotence}
-    Let $\omega=e^{2\pi i/3}$, let
-    \begin{align}
-        A & =\begin{pmatrix}1&0\\0&\omega\end{pmatrix}, &
-        S & =\begin{pmatrix}0&1\\1&0\end{pmatrix}.
-        \notag
-    \end{align}
-    Then
-    \begin{align}
-        A & =\omega S A^2S^{-1}.
-        \notag
-    \end{align}
-    Thus blocking returns $A$ up to the swap gauge and a phase.  Nevertheless,
-    the transfer map of $A$ is not idempotent.  Hence the pure-state
-    equivalence asserted after the diagram labelled ``RFP-gauge'' in
-    \cite[Appendix~D, lines~2094--2107]{Cirac2016MPDO_arXiv} is false.  The
-    mixed-state question following the assertion therefore does not extend a
-    valid pure-state theorem.
-\end{theorem}
-
 % Source-status record for CPSV16 Appendix D, equation `RFP-gauge`,
 % lines 2100--2110. See
 % docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex.

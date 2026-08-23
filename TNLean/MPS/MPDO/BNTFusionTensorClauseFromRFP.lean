@@ -403,10 +403,6 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
 Definition 4.1 renormalization fixed-point condition has the active-support
 BNT fusion clause.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Theorem 4.14 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 The one-site vertical decomposition supplies the BNT tensors, multiplicities,
 and positive weights.
 The transported RFP maps compare it with the two-site decomposition, produce

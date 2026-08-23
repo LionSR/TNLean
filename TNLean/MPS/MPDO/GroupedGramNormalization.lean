@@ -45,10 +45,6 @@ real multiple of the identity.
 All hypotheses are clauses furnished by
 `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
 theorem IsMPDO.grouped_sector_gram_eq_pos_smul_one
     {M : MPOTensor d D} (hM : IsMPDO M)
@@ -91,10 +87,6 @@ by the square root of its positive Gram scalar.
 
 All hypotheses are clauses furnished by
 `IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
 theorem IsMPDO.grouped_sector_exists_unitary_normalization

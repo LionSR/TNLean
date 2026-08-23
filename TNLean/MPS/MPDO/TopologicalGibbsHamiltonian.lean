@@ -19,11 +19,17 @@ The two-site local term depends only on its first site.  Its periodic translates
 therefore sum to the one-site logarithms, while still giving the two-site
 presentation used in the source definition of a nearest-neighbor Hamiltonian.
 
-All Hamiltonians and spectral projectors constructed here act on the retained
-vertical coordinates.  The exact sitewise reconstruction of the physical MPDO
-does not yet give a physical-space Hamiltonian or physical-space projectors.
-See
+**Scope restriction (retained vertical coordinates):** every Hamiltonian,
+spectral projector, and Gibbs identity in this file acts on the retained
+nonzero vertical sectors; the exact sitewise reconstruction of the physical
+MPDO does not yet give a physical-space Hamiltonian or physical-space
+projectors.  See
 `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
+
+**Scope restriction (positive chains of length at least two):** Definition 4.8
+of the source defines the local operator on two spins and fixes no length-one
+convention, so every construction in this file starts at chain length two.  See
+`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
 
 ## References
 
@@ -190,11 +196,7 @@ private theorem sum_extend_smul_mul_zero
 /-- The all-label multiplicity factor is the diagonal product of its
 one-site weights.
 
-Source: arXiv:1606.00608, lines 999--1002 and 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This factor acts on
-the retained nonzero vertical sectors.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+Source: arXiv:1606.00608, lines 999--1002 and 1013--1016. -/
 theorem topologicalMultiplicityWeightFactorSucc_eq_diagonal
     (H : BNTFusionTensorClause M) (N : ℕ) :
     H.topologicalMultiplicityWeightFactorSucc N =
@@ -242,11 +244,7 @@ theorem topologicalMultiplicityWeightFactorSucc_eq_diagonal
 one-site energy on the first site and as the identity on the second.
 
 Source: arXiv:1606.00608, the nearest-neighbor Hamiltonian at
-lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This local term acts
-on the retained nonzero vertical sectors.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+lines 1013--1016. -/
 def topologicalGibbsLocalTerm (H : BNTFusionTensorClause M) :
     Matrix (Fin 2 → Fin H.verticalRetainedDim)
       (Fin 2 → Fin H.verticalRetainedDim) ℂ :=
@@ -256,11 +254,7 @@ def topologicalGibbsLocalTerm (H : BNTFusionTensorClause M) :
 /-- The translation-invariant two-site Gibbs term is Hermitian.
 
 Source: arXiv:1606.00608, the nearest-neighbor Hamiltonian at
-lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This theorem concerns
-the retained local term.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+lines 1013--1016. -/
 theorem topologicalGibbsLocalTerm_isHermitian
     (H : BNTFusionTensorClause M) :
     H.topologicalGibbsLocalTerm.IsHermitian := by
@@ -271,16 +265,7 @@ theorem topologicalGibbsLocalTerm_isHermitian
 /-- The periodic translation-invariant nearest-neighbor Hamiltonian on a
 retained chain of length `N + 2`.
 
-Source: arXiv:1606.00608, `H_N = sum_i h_{i,i+1}` at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This Hamiltonian acts
-on the retained nonzero vertical sectors.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 defines the local operator on two spins, so the present source-facing
-construction starts at length two.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+Source: arXiv:1606.00608, `H_N = sum_i h_{i,i+1}` at lines 1013--1016. -/
 def topologicalGibbsHamiltonianSuccSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
     Matrix (Fin (N + 2) → Fin H.verticalRetainedDim)
@@ -303,12 +288,7 @@ def physicalIndexedTerminalEigenvalue
 `d`-element index.
 
 Source: arXiv:1606.00608, the projectors `P_i^(N)` with
-`i = 1, ..., d` at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** The index is padded
-to the physical one-site dimension, but each projector still acts on the
-retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+`i = 1, ..., d` at lines 1013--1016. -/
 def physicalIndexedTopologicalSpectralProjectorSucc
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (N : ℕ) (i : Fin d) :
@@ -334,11 +314,7 @@ theorem physicalIndexedTerminalEigenvalue_nonneg
 
 /-- Every zero-padded physical-index retained projector is an orthogonal projection.
 
-Source: arXiv:1606.00608, lines 1010--1016.
-
-**Scope restriction (retained vertical coordinates):** These projections act
-on the retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+Source: arXiv:1606.00608, lines 1010--1016. -/
 theorem physicalIndexedTopologicalSpectralProjectorSucc_isOrthogonalProjection
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (hLI : (BNTLabelCoefficientFamily.ofChi H.chi).LengthIndependent)
@@ -361,11 +337,7 @@ theorem physicalIndexedTopologicalSpectralProjectorSucc_isOrthogonalProjection
 /-- Every translated local Hamiltonian term is diagonal in retained
 coordinates.
 
-Source: arXiv:1606.00608, the translated local terms at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** These translated
-terms act on the retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+Source: arXiv:1606.00608, the translated local terms at lines 1013--1016. -/
 theorem topologicalGibbsBondSuccSucc_eq_diagonal
     (H : BNTFusionTensorClause M) (N : ℕ) (i : Fin (N + 2)) :
     MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
@@ -382,11 +354,7 @@ theorem topologicalGibbsBondSuccSucc_eq_diagonal
 /-- Periodic translates of the local Hamiltonian term commute pairwise.
 
 Source: arXiv:1606.00608, `[h_{i-1,i},h_{i,i+1}] = 0` at
-lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** The commutation
-statement concerns translated terms on the retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+lines 1013--1016. -/
 theorem topologicalGibbsBondSuccSucc_commute
     (H : BNTFusionTensorClause M) (N : ℕ)
     (i j : Fin (N + 2)) :
@@ -402,11 +370,7 @@ theorem topologicalGibbsBondSuccSucc_commute
 /-- The retained periodic Hamiltonian is diagonal, with one logarithmic energy per
 site.
 
-Source: arXiv:1606.00608, `H_N = sum_i h_{i,i+1}` at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This diagonal formula
-is for the retained Hamiltonian.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
+Source: arXiv:1606.00608, `H_N = sum_i h_{i,i+1}` at lines 1013--1016. -/
 theorem topologicalGibbsHamiltonianSuccSucc_eq_diagonal
     (H : BNTFusionTensorClause M) (N : ℕ) :
     H.topologicalGibbsHamiltonianSuccSucc N =
@@ -425,15 +389,7 @@ theorem topologicalGibbsHamiltonianSuccSucc_eq_diagonal
 multiplicity-weight factor.
 
 Source: arXiv:1606.00608, the identification of `e^{-H_N}` in the
-decomposition at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This exponential
-identity is on the retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+decomposition at lines 1013--1016. -/
 theorem exp_neg_topologicalGibbsHamiltonianSuccSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
     NormedSpace.exp (-H.topologicalGibbsHamiltonianSuccSucc N) =
@@ -460,15 +416,7 @@ theorem exp_neg_topologicalGibbsHamiltonianSuccSucc
 /-- Every transported terminal spectral projector commutes with the retained
 Gibbs factor.
 
-Source: arXiv:1606.00608, `[P_i,e^{-H}] = 0` at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** Both factors act on
-the retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+Source: arXiv:1606.00608, `[P_i,e^{-H}] = 0` at lines 1013--1016. -/
 theorem topologicalSpectralProjectorSucc_commutes_gibbsFactor
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (N : ℕ) (s : H.TerminalSpectralIndex) :
@@ -485,15 +433,7 @@ theorem topologicalSpectralProjectorSucc_commutes_gibbsFactor
 Gibbs factor.
 
 Source: arXiv:1606.00608, `[P_i,e^{-H}] = 0` for
-`i = 1, ..., d` at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** The physical index
-pads a family of projectors that still acts on the retained chain.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`i = 1, ..., d` at lines 1013--1016. -/
 theorem physicalIndexedTopologicalSpectralProjectorSucc_commutes_gibbsFactor
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (N : ℕ) (i : Fin d) :
@@ -515,15 +455,7 @@ theorem physicalIndexedTopologicalSpectralProjectorSucc_commutes_gibbsFactor
 /-- The retained recursive density operator is the terminal-eigenvalue
 weighted sum of its topological projectors times the Gibbs factor.
 
-Source: arXiv:1606.00608, the density formula at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This equality is for
-the retained density operator.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+Source: arXiv:1606.00608, the density formula at lines 1013--1016. -/
 theorem topologicalDensityOperatorSucc_eq_sum_projector_mul_gibbsFactor
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (N : ℕ) :
     H.topologicalDensityOperatorSucc (N + 1) =
@@ -546,16 +478,7 @@ theorem topologicalDensityOperatorSucc_eq_sum_projector_mul_gibbsFactor
 zero-padding the terminal spectral family.
 
 Source: arXiv:1606.00608, the displayed density formula with
-`i = 1, ..., d` at lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This equality is for
-the retained density operator, although the spectral family is padded to
-`Fin d`.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`i = 1, ..., d` at lines 1013--1016. -/
 theorem topologicalDensityOperatorSucc_eq_sum_physicalIndexedProjector_mul_gibbsFactor
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (N : ℕ) :
     H.topologicalDensityOperatorSucc (N + 1) =
@@ -598,16 +521,7 @@ the density formula at lines 1013--1016.
 **Local fix (rectangular vertical map):** Exact physical reconstruction uses
 the adjoint of the retained-row coisometry, rather than treating that
 rectangular matrix as a square unitary.  See
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-
-**Scope restriction (retained vertical coordinates):** The Hamiltonian and
-projectors inside the sitewise map act on the retained chain.  This theorem
-does not construct a physical-space Gibbs factor.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem singleKrausMap_gibbsDecomposition_eq_mpo
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (N : ℕ) :
     singleKrausMap
@@ -633,16 +547,7 @@ the `d`-term density formula at lines 1013--1016.
 
 **Local fix (rectangular vertical map):** Exact physical reconstruction uses
 the adjoint retained-row map.  See
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-
-**Scope restriction (retained vertical coordinates):** The Hamiltonian and
-projectors inside the sitewise map act on the retained chain.  This theorem
-does not construct a physical-space Gibbs factor.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** The source
-local term is defined on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (N : ℕ) :
     singleKrausMap
@@ -669,18 +574,7 @@ translates commute, its negative exponential is the multiplicity factor, each
 terminal spectral projector commutes with that Gibbs factor, and their
 eigenvalue-weighted sum is the retained density operator.
 
-Source: arXiv:1606.00608, lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** This predicate
-describes the Gibbs formula on the retained chain together with exact
-sitewise reconstruction of the physical MPDO.  It does not assert a
-physical-space Hamiltonian or physical-space projectors.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 defines the local term on two spins, so this predicate covers lengths
-`N + 2`.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+Source: arXiv:1606.00608, lines 1013--1016. -/
 def HasTopologicalGibbsDecomposition (H : BNTFusionTensorClause M)
     (hM : IsMPDO M) : Prop :=
   Fintype.card H.TerminalSpectralIndex ≤ d ∧
@@ -732,15 +626,7 @@ def HasTopologicalGibbsDecomposition (H : BNTFusionTensorClause M)
 /-- A chosen BNT fusion clause has the retained commuting nearest-neighbor
 Gibbs decomposition.
 
-Source: arXiv:1606.00608, lines 1013--1016.
-
-**Scope restriction (retained vertical coordinates):** The conclusion is the
-retained-coordinate Gibbs formula and its exact sitewise reconstruction.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 defines the local term on two spins.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+Source: arXiv:1606.00608, lines 1013--1016. -/
 theorem hasTopologicalGibbsDecomposition
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (hLI : (BNTLabelCoefficientFamily.ofChi H.chi).LengthIndependent) :
@@ -773,24 +659,7 @@ constructed internally.  The conclusion includes the preceding all-label
 density decomposition, factor commutator, terminal spectral refinement, and
 the retained commuting nearest-neighbor Gibbs formula.
 
-**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
-`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
-Source: arXiv:1606.00608, lines 999--1016.
-
-**Scope restriction (retained vertical coordinates):** The Gibbs
-Hamiltonian and projectors in the conclusion act on the retained vertical
-chain; the physical MPDO is obtained only by exact sitewise reconstruction.
-See
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 defines its local term on two spins, while the printed theorem does not
-state a separate length-one convention.  This theorem proves the retained
-nearest-neighbor conclusion for every chain of length `N + 2`; the density
-and spectral conclusions remain available at length one.  See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+Source: arXiv:1606.00608, lines 999--1016. -/
 theorem topologicalGibbsDecomposition_of_isRFPViaTS
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M)
