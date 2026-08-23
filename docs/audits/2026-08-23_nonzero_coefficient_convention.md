@@ -84,15 +84,17 @@ tag cites an old name.
 | `MPSTensor.CPSVCanonicalFormData.sameMPV₂Pos_activeBlocks` | `data.reconstruct`. |
 | `MPSTensor.CPSVCanonicalFormData.activeCoordinateMap` | None; the coordinate map is the identity. |
 | `MPSTensor.CPSVCanonicalFormData.activeCoordinateMap_injective` | None. |
+| `MPSTensor.CPSVCanonicalFormData.activeCoordinateMap_finSigmaFinEquiv` | None; the coordinate map is the identity. |
 | `MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry` | `data.ambient_coisometry`. |
 | `MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry_mul_conjTranspose` | `data.coisometric`. |
+| `MPSTensor.CPSVCanonicalFormData.activeCoordinateCoisometry_apply` | None. |
 | `MPSTensor.CPSVCanonicalFormData.toTensorFromBlocks_active_eq_submatrix` | None; there is no proper active submatrix. |
 | `MPSTensor.CPSVCanonicalFormData.exact_active_reconstruction` | `data.reconstruct` (the exact reconstruction is the defining field). |
 | `MPSTensor.CPSVCanonicalFormData.activeEquivBlockTensor` | None; `blockTensor` already acts on `Fin data.r`. |
 | `MPSTensor.CPSVCanonicalFormData.sum_activeRepresentative_dim_le` | `MPSTensor.CPSVCanonicalFormData.sum_representative_dim_le`. |
 
 Private helpers removed with `ActiveBlocks.lean`: `Matrix.rowSelection`,
-`Matrix.rowSelection_mul_conjTranspose`,
+`Matrix.rowSelection_apply`, `Matrix.rowSelection_mul_conjTranspose`,
 `Matrix.eq_conjTranspose_rowSelection_mul_submatrix_mul_rowSelection`,
 `activeCoordinateEmbedding`, `weight_eq_zero_of_coordinate_not_active`,
 `toTensorFromBlocks_row_outside_active_eq_zero`,
@@ -197,7 +199,7 @@ following), and `activeTransferEigenvalue_ne` became `transferEigenvalue_ne`.
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent`. |
 | `MPSTensor.IsCPSVCanonicalForm.exists_activeBNT_residualIsometryFamily_of_isTransferIdempotent` | `MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent`. |
 | `MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample` | None; the refutation adjoined an unused normal tensor with zero coefficient. |
-| `MPSTensor.corollary312Tensor`, `MPSTensor.corollary312UnusedTensor`, `MPSTensor.corollary312CandidateFamily` | None (only consumed by the deleted counterexample). |
+| `MPSTensor.corollary312BondDim`, `MPSTensor.corollary312Tensor`, `MPSTensor.corollary312UnusedTensor`, `MPSTensor.corollary312CandidateFamily` | None (only consumed by the deleted counterexample). |
 
 Private helpers removed with `BNTResidualIsometryCounterexample.lean`:
 `invSqrtTwo_mul_self`, `corollary312Tensor_transferMap`,
