@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.SharedInfra.WordTupleGauge
@@ -13,7 +13,7 @@ import TNLean.MPS.SharedInfra.WordTupleGauge
 
 A CPSV basis of normal tensors whose total representative bond dimension is at most `K`
 has simultaneous product-algebra span at a positive length no greater than `3 * K ^ 5`.
-Applying this estimate to the active representatives of literal CPSV canonical-form data
+Applying this estimate to the representatives of literal CPSV canonical-form data
 proves Proposition `propblockinj` of arXiv:1606.00608.
 
 ## Main results
@@ -145,42 +145,26 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
       _ ≤ 3 * K ^ 5 :=
         three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five hK
 
-/-- The active representative dimensions in literal CPSV canonical-form data sum to at most
+/-- The representative dimensions in literal CPSV canonical-form data sum to at most
 the ambient bond dimension. -/
-theorem CPSVCanonicalFormData.sum_activeRepresentative_dim_le
+theorem CPSVCanonicalFormData.sum_representative_dim_le
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
-    ∑ j : Fin data.activePhaseClasses.g,
-      data.dim (data.activeRepresentativeIndex j) ≤ D := by
+    ∑ j : Fin data.phaseClasses.g,
+      data.dim (data.representativeIndex j) ≤ D := by
   classical
-  let firstCopyIndex : Fin data.activePhaseClasses.g → Fin data.r := fun j =>
-    (data.activeClassCopyEquiv
-      ⟨j, ⟨0, data.activePhaseClasses.copies_pos j⟩⟩ : data.Active).1
-  have hFirstCopyIndex : ∀ j, firstCopyIndex j = data.activeRepresentativeIndex j := by
+  let firstCopyIndex : Fin data.phaseClasses.g → Fin data.r := fun j =>
+    data.classCopyEquiv ⟨j, ⟨0, data.phaseClasses.copies_pos j⟩⟩
+  have hFirstCopyIndex : ∀ j, firstCopyIndex j = data.representativeIndex j := by
     intro j
-    have hEnum : data.activePhaseClasses.enum j
-        ⟨0, data.activePhaseClasses.copies_pos j⟩ =
-        data.activePhaseClasses.repr j := by
-      exact mpvPhaseClassData_enum_zero_eq_repr data.activeBlocks j
-    change ((data.activeEquiv
-      (data.activePhaseClasses.enum j
-        ⟨0, data.activePhaseClasses.copies_pos j⟩) : data.Active) : Fin data.r) =
-      ((data.activeEquiv (data.activePhaseClasses.repr j) : data.Active) : Fin data.r)
-    rw [hEnum]
+    exact mpvPhaseClassData_enum_zero_eq_repr data.blocks j
   have hInjective : Function.Injective firstCopyIndex := by
     intro j k hjk
-    have hSubtype :
-        data.activeClassCopyEquiv
-            ⟨j, ⟨0, data.activePhaseClasses.copies_pos j⟩⟩ =
-          data.activeClassCopyEquiv
-            ⟨k, ⟨0, data.activePhaseClasses.copies_pos k⟩⟩ := by
-      apply Subtype.ext
-      exact hjk
-    have hSigma := data.activeClassCopyEquiv.injective hSubtype
+    have hSigma := data.classCopyEquiv.injective hjk
     exact congrArg Sigma.fst hSigma
   calc
-    (∑ j : Fin data.activePhaseClasses.g,
-        data.dim (data.activeRepresentativeIndex j)) =
-        ∑ j : Fin data.activePhaseClasses.g, data.dim (firstCopyIndex j) := by
+    (∑ j : Fin data.phaseClasses.g,
+        data.dim (data.representativeIndex j)) =
+        ∑ j : Fin data.phaseClasses.g, data.dim (firstCopyIndex j) := by
           apply Finset.sum_congr rfl
           intro j _
           rw [hFirstCopyIndex j]
@@ -191,12 +175,11 @@ theorem CPSVCanonicalFormData.sum_activeRepresentative_dim_le
     _ = ∑ k : Fin data.r, data.dim k := rfl
     _ ≤ D := data.total_dim_le
 
-/-- **CPSV16 Proposition `propblockinj`.** A tensor in literal CPSV canonical form has an
-active basis of normal tensors that becomes simultaneously block-injective after blocking a
+/-- **CPSV16 Proposition `propblockinj`.** A tensor in literal CPSV canonical form has a
+basis of normal tensors that becomes simultaneously block-injective after blocking a
 positive number `L ≤ 3 * D ^ 5` of sites.
 
-The conclusion is the one-letter span of the full product algebra of the chosen BNT. Inactive
-zero-weight coordinates are not included among the representatives.
+The conclusion is the one-letter span of the full product algebra of the chosen BNT.
 
 Source: arXiv:1606.00608, lines 317--345. -/
 theorem IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five
@@ -207,17 +190,17 @@ theorem IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_
         ∃ L : ℕ, 0 < L ∧ L ≤ 3 * D ^ 5 ∧
           WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
   let data := Classical.choice hA
-  let ref := data.activeBNTRefinement
-  let dim : Fin data.activePhaseClasses.g → ℕ := fun j =>
-    data.dim (data.activeRepresentativeIndex j)
-  let B : (j : Fin data.activePhaseClasses.g) → MPSTensor d (dim j) := fun j =>
-    data.blocks (data.activeRepresentativeIndex j)
+  let ref := data.bntRefinement
+  let dim : Fin data.phaseClasses.g → ℕ := fun j =>
+    data.dim (data.representativeIndex j)
+  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (dim j) := fun j =>
+    data.blocks (data.representativeIndex j)
   have hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) := by
     simpa [dim, B] using ref.representativesBNT
   obtain ⟨L, hL, hLbound, hSpan⟩ :=
     hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
-      (NeZero.pos D) (by simpa [dim] using data.sum_activeRepresentative_dim_le)
-  exact ⟨data.activePhaseClasses.g, dim, B, hBNT, L, hL, hLbound,
+      (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
+  exact ⟨data.phaseClasses.g, dim, B, hBNT, L, hL, hLbound,
     wordTupleSpanTop_blockTensor_one B hSpan⟩
 
 end MPSTensor

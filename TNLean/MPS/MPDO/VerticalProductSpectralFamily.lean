@@ -505,10 +505,10 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
   have hCharacterization :=
     (MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
       (retainedVerticalProductTensor dim mult weight B)
-      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal
+      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal S.flatCoefficient_ne
       S.flat_sameMPV₂Pos).mp hBNTProduct
   intro j
-  exact hCharacterization.2.1 j (S.flatCoefficient_ne j)
+  exact hCharacterization.2.1 j
 
 /-- A simultaneous choice of the blocked BNT label, dimension equality,
 gauge, and phase for every enumerated active product corner.

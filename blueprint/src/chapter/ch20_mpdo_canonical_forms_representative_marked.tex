@@ -180,44 +180,40 @@
 % Source anchors: CPSV16 Appendix C.3, lines 1835--1858 and 1909--1919.
 \begin{theorem}[Full-coordinate marked trace identity]
     \label{thm:cpsv_full_coordinate_marked_trace_identity}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedBlocks}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedTensor}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         trace_groupedMarkedTensor_eq_representative_markedTensor}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_active_representative_sector_decomposition, def:marked_representative_direct_sum, lem:marked_representative_trace_expansion}
+    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_representative_sector_decomposition, def:marked_representative_direct_sum, lem:marked_representative_trace_expansion}
     Let $T_{\mathrm{grp}}$ be the full grouped tensor of
-    Theorem~\ref{thm:cpsv_canonical_form_active_bnt_refinement}, and let
-    $P_{\mathrm{act}}$ be its active representative sector decomposition.
+    Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}, and let
+    $P_{\mathrm{rep}}$ be its representative sector decomposition.
     For a marked family $(C_j^s)_j$, define the marked tensor
     $\widehat C_{\mathrm{grp}}$ on all grouped listed coordinates as follows.
-    The active copy $(j,q)$ carries the marked block
+    The copy $(j,q)$ carries the marked block
     $\lambda_{j,q}C_j^s$, where
-    $\lambda_{j,q}=\nu_{k(j,q)}\zeta_{k(j,q)}$, and every inactive listed
-    coordinate carries the zero block. Thus all original listed coordinates
-    remain present.
+    $\lambda_{j,q}=\nu_{k(j,q)}\zeta_{k(j,q)}$.
 
     For every marked letter $s$ and every unmarked word $w$, one has
     \begin{align}
         \tr\!\left(\widehat C_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
-         & =\tr\!\left(C_{\mathrm{act}}^sP_{\mathrm{act}}^w\right)
+         & =\tr\!\left(C_{\mathrm{rep}}^sP_{\mathrm{rep}}^w\right)
         \notag                                                     \\
          & =\sum_j\left(\sum_q\lambda_{j,q}^{|w|+1}\right)
         \tr\!\left(C_j^sC_j^w\right).
         \label{eq:cpsv_full_coordinate_marked_trace_identity}
     \end{align}
-    The exponent $|w|+1$ includes the factor at the marked site. Inactive
-    coordinates contribute zero.
+    The exponent $|w|+1$ includes the factor at the marked site.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_representative_sector_decomposition, lem:marked_representative_trace_expansion}
-    Split the finite sum over listed coordinates into active and inactive
-    parts. The inactive marked blocks vanish. Reindex the active part by the
+    \uses{thm:cpsv_representative_sector_decomposition, lem:marked_representative_trace_expansion}
+    Reindex the finite sum over listed coordinates by the
     class-copy pairs $(j,q)$ and use the bond-dimension identifications to
-    replace each active block by its unit-phase representative. The marked
+    replace each block by its unit-phase representative. The marked
     block supplies one factor $\lambda_{j,q}$ and the word supplies
     $|w|$ further factors. Summing first over $q$ gives
     (\ref{eq:cpsv_full_coordinate_marked_trace_identity}).
@@ -225,22 +221,21 @@
 
 \begin{theorem}[Retained-coordinate representative-grouped Lemma L]
     \label{thm:cpsv_retained_representative_grouped_lemma_l}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedTensor_basis_eq_of_trace_agree}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         insertedTensor_representative_eq_of_firstSiteActionAgree}
     \leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_active_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
-    Let $(C_j^s)_j$ and $(E_j^s)_j$ be two marked families on the active
-    representatives. Form their full-coordinate marked tensors by retaining
-    the inactive listed coordinates as zero blocks. If
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
+    Let $(C_j^s)_j$ and $(E_j^s)_j$ be two marked families on the
+    representatives. Form their full-coordinate marked tensors. If
     \begin{align}
         \tr\!\left(\widehat C_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
          & =\tr\!\left(\widehat E_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
         \label{eq:cpsv_retained_marked_trace_agreement}
     \end{align}
     for every $s$ and every word $w$ of positive length, then $C_j=E_j$ for
-    every active representative $j$.
+    every representative $j$.
 
     In particular, let $Y,Z\in\MN{d}$. If their first-site actions agree on
     the positive-length matrix product vectors of $T_{\mathrm{grp}}$, then
@@ -248,19 +243,19 @@
         (YC_j)^i & =(ZC_j)^i
         \label{eq:cpsv_retained_first_site_action}
     \end{align}
-    for every active representative $j$ and every physical letter $i$.
+    for every representative $j$ and every physical letter $i$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_active_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
+    \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
     Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity} rewrites
     (\ref{eq:cpsv_retained_marked_trace_agreement}) into marked-trace
-    agreement for $P_{\mathrm{act}}$. Its representatives have eventual
+    agreement for $P_{\mathrm{rep}}$. Its representatives have eventual
     word-tuple separation, and every copy weight is nonzero. Theorem~\ref{thm:representative_grouped_marked_separation}
     therefore gives $C_j=E_j$.
 
     First-site agreement for $T_{\mathrm{grp}}$ also holds for
-    $P_{\mathrm{act}}$ because their matrix product vectors agree at every
+    $P_{\mathrm{rep}}$ because their matrix product vectors agree at every
     positive length. Applying
     Theorem~\ref{thm:representative_grouped_insert_eq} gives
     (\ref{eq:cpsv_retained_first_site_action}), namely
@@ -277,24 +272,23 @@
     \lean{MPSTensor.trace_marked_mul_evalWord_of_coisometry_reconstruction}
     \lean{MPSTensor.linearMarkedTensor_coisometry_reconstruction}
     \lean{MPSTensor.trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         linearMarkedTensor_eq_of_trace_agree}
     \lean{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
+    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
     Let $A$ be in literal CPSV canonical form. For canonical-form data and
-    its active BNT refinement, write
+    its BNT refinement, write
     \begin{align}
         A^i        & =V^\dagger B^iV,
         \notag                        \\
         VV^\dagger & =\Id.
         \label{eq:cpsv_original_coisometry_reconstruction}
     \end{align}
-    where $B^i=GT_{\mathrm{grp}}^iG^{-1}$, $G$ is the listed block gauge,
-    and $T_{\mathrm{grp}}$ retains every inactive listed coordinate with
-    weight zero. If marked matrices satisfy $C=V^\dagger EV$, then for every
+    where $B^i=GT_{\mathrm{grp}}^iG^{-1}$ and $G$ is the listed block gauge.
+    If marked matrices satisfy $C=V^\dagger EV$, then for every
     word $w$, including the empty word,
     \begin{align}
         \tr(CA^w) & =\tr(EB^w).
@@ -304,11 +298,10 @@
     unmarked empty-word matrix product vectors is asserted.
 
     For a linear physical mark $f$, the linear marking of
-    $T_{\mathrm{grp}}$ is exactly its full grouped marked tensor. Each active
+    $T_{\mathrm{grp}}$ is exactly its full grouped marked tensor. Each
     copy $(j,q)$ carries
     $\lambda_{j,q}f(C_j)$, where
-    $\lambda_{j,q}=\nu_{k(j,q)}\zeta_{k(j,q)}$, while every inactive marked
-    block is zero. For two linear marks $f$ and $g$, put
+    $\lambda_{j,q}=\nu_{k(j,q)}\zeta_{k(j,q)}$. For two linear marks $f$ and $g$, put
     $F_A^u=\sum_i f_{ui}A^i$ and $G_A^u=\sum_i g_{ui}A^i$. If
     \begin{align}
         \tr\!\left(F_A^uA^w\right)
@@ -331,14 +324,13 @@
     gives
     $CA^w=V^\dagger EB^wV$. Cyclicity of trace and $VV^\dagger=\Id$ give
     (\ref{eq:cpsv_original_marked_trace}). Linearity of the physical mark
-    gives the grouped marked tensor, with inactive blocks killed by their
-    zero weights.
+    gives the grouped marked tensor.
 
     Apply (\ref{eq:cpsv_original_marked_trace}) to both sides of
     (\ref{eq:cpsv_original_linear_marked_agreement}), remove the block gauge
     by cyclicity of trace, and use
     Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} on the
-    active representatives. The resulting equality of the full grouped
+    representatives. The resulting equality of the full grouped
     marked tensors, followed by
     (\ref{eq:cpsv_original_coisometry_reconstruction}), gives $F_A=G_A$.
 \end{proof}

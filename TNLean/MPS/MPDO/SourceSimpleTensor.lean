@@ -3,28 +3,24 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.MPDO.SimpleTensor
 
 /-!
-# Active canonical-block reading of Definition 4.7 simplicity
+# Canonical-block reading of Definition 4.7 simplicity
 
-This module records the intended active canonical-block reading of
-arXiv:1606.00608, Definition 4.7. After a positive physical blocking, the
-doubled-index tensor must admit an active sector presentation by a basis of
-normal tensors, and the ket-against-bra contraction of every representative
-must be nonnilpotent. The definition does not require every positive-length
-generated MPO to be nonzero and excludes the separate line-246 unit-weight
-normalization. The active presentation implies positive-length nontriviality;
-the stronger all-length nonvanishing predicate is recorded separately.
-
-The literal BNT definition permits dormant candidates and does not support the
-unrestricted uniqueness sentence used by the paper. The active qualification is
-documented in `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+This module records the canonical-block reading of arXiv:1606.00608,
+Definition 4.7. After a positive physical blocking, the doubled-index tensor
+must have a sector presentation by a basis of normal tensors, and the
+ket-against-bra contraction of every representative must be nonnilpotent. The
+definition does not require every positive-length generated MPO to be nonzero
+and excludes the separate line-246 unit-weight normalization. The presentation
+implies positive-length nontriviality; the stronger all-length nonvanishing
+predicate is recorded separately.
 
 ## Main results
 
-* `MPOTensor.IsSourceSimple`: the active canonical-block reading of Definition 4.7.
+* `MPOTensor.IsSourceSimple`: the canonical-block reading of Definition 4.7.
 * `MPOTensor.IsNonvanishingSourceSimple`: source simplicity together with
   positive-length nonvanishing.
 * `MPOTensor.IsSimple.isSourceSimple`: normalized simplicity implies source
@@ -43,25 +39,19 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Nonnilpotency of all active BNT representatives is independent of the chosen active
-presentation.
+/-- Nonnilpotency of all BNT representatives is independent of the chosen presentation.
 
-The active BNT uniqueness theorem matches representatives by permutation, equal bond
+The BNT uniqueness theorem matches representatives by permutation, equal bond
 dimension, gauge, and phase.  Similarity, nonzero scalar multiplication, and the resulting
 dimension identification preserve nilpotency of the physical-trace transfer.
 
-**Scope restriction (active presentations):** This theorem does not compare arbitrary literal
-BNT witnesses, whose cardinalities can differ after a dormant candidate is adjoined.  It uses
-the active uniqueness theorem documented in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822, and Proposition 2.7,
 lines 1135--1148. -/
-theorem activeBNT_basis_not_isNilpotent_iff
+theorem bnt_basis_not_isNilpotent_iff
     {D' p : ℕ} {A : MPSTensor (p * p) D'}
     {P Q : MPSTensor.SectorDecomposition (p * p)}
-    (hP : MPSTensor.IsActiveCPSVBasisOfNormalTensors A P)
-    (hQ : MPSTensor.IsActiveCPSVBasisOfNormalTensors A Q) :
+    (hP : MPSTensor.IsBNTSectorPresentation A P)
+    (hQ : MPSTensor.IsBNTSectorPresentation A Q) :
     (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer p (P.basis j))) ↔
       ∀ k, ¬ IsNilpotent (doubledPhysTraceTransfer p (Q.basis k)) := by
   classical
@@ -90,22 +80,16 @@ theorem activeBNT_basis_not_isNilpotent_iff
       ((isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv
         hGauge.toGaugePhaseEquiv).mp hCastNil)
 
-/-- **Active canonical-block reading of Definition 4.7 simplicity.** A tensor is source-simple
+/-- **Canonical-block reading of Definition 4.7 simplicity.** A tensor is source-simple
 when it generates an MPDO and, after some positive physical blocking, its doubled-index
-tensor has an active sector presentation by a basis of normal tensors whose ket-against-bra
+tensor has a sector presentation by a basis of normal tensors whose ket-against-bra
 contractions are all nonnilpotent.
 
 Every representative has a positive number of copies, every copy has nonzero weight, and
-distinct representatives are eventually linearly independent.  Thus dormant candidate blocks
-are absent and positive-length nontriviality follows rather than being postulated.  The
-predicate excludes the separate line-246 unit-weight normalization and makes no claim that
-every positive blocking has such a witness.
-
-**Local fix (dormant BNT candidates):** Definition 4.7 relies on the paper's unrestricted BNT
-uniqueness sentence, but the literal BNT definition permits adjoining a normal tensor with
-coefficient identically zero.  The active sector presentation follows the intended nonzero
-canonical-block construction instead.  See
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+distinct representatives are eventually linearly independent.  Thus positive-length
+nontriviality follows rather than being postulated.  The predicate excludes the separate
+line-246 unit-weight normalization and makes no claim that every positive blocking has such
+a witness.
 
 Source: arXiv:1606.00608, canonical-block convention at lines 217--246 and
 Definition 4.7, lines 815--822. -/
@@ -114,7 +98,7 @@ def IsSourceSimple (M : MPOTensor d D) : Prop :=
     ∃ L : ℕ, 0 < L ∧
       ∃ P : MPSTensor.SectorDecomposition
           (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L),
-        MPSTensor.IsActiveCPSVBasisOfNormalTensors
+        MPSTensor.IsBNTSectorPresentation
             (blockTensor M L).toMPSTensor P ∧
           ∀ j, ¬ IsNilpotent
             (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d L) (P.basis j))
@@ -133,13 +117,13 @@ theorem IsNonvanishingSourceSimple.isSourceSimple {M : MPOTensor d D}
 
 /-- Source simplicity supplies a nonzero closed MPO at some positive length.
 
-This is derived from the active canonical-block convention preceding Definition 4.7.
+This is derived from the canonical-block convention preceding Definition 4.7.
 
 Source: arXiv:1606.00608, lines 217--246 and Definition 4.7, lines 815--822. -/
 theorem IsSourceSimple.exists_mpo_ne_zero {M : MPOTensor d D}
     (hM : IsSourceSimple M) : ∃ N : ℕ, 0 < N ∧ mpo M N ≠ 0 := by
-  obtain ⟨_, L, hL, P, hActive, _⟩ := hM
-  obtain ⟨N, hN, hStateNe⟩ := hActive.exists_pos_mpvState_ne_zero
+  obtain ⟨_, L, hL, P, hPres, _⟩ := hM
+  obtain ⟨N, hN, hStateNe⟩ := hPres.exists_pos_mpvState_ne_zero
   have hBlockedMpoNe : mpo (blockTensor M L) N ≠ 0 := by
     intro hZero
     apply hStateNe
@@ -166,7 +150,7 @@ theorem IsNonvanishingSourceSimple.mpo_ne_zero {M : MPOTensor d D}
 
 /-- Normalized simplicity implies source simplicity.
 
-The active presentation is the normalized sector decomposition itself.  Its copy weights are
+The presentation is the normalized sector decomposition itself.  Its copy weights are
 nonzero by construction, its representatives are normal and eventually linearly independent,
 and the global gauge identifies its positive-length matrix-product vectors with those of the
 blocked MPO tensor.  The nonnilpotency clause is unchanged because the representatives

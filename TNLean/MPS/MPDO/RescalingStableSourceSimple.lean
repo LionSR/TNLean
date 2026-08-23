@@ -3,24 +3,24 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
 import TNLean.MPS.MPDO.SourceSimpleTensor
 
 /-!
-# Active canonical-block simplicity of the dimer tensor
+# Canonical-block simplicity of the dimer tensor
 
-The rescaling-stable dimer tensor is simple under the active canonical-block
+The rescaling-stable dimer tensor is simple under the canonical-block
 reading of arXiv:1606.00608, Definition 4.7. The witness uses blocking length
-one and the active BNT refinement of the tensor's literal CPSV canonical form.
+one and the BNT refinement of the tensor's literal CPSV canonical form.
 Its retained block has nonnilpotent ket-against-bra contraction.
 
 ## Main results
 
 * `toMPSTensor_blockTensor_R_one`: one-site blocking is the canonical physical
   relabeling of the doubled tensor.
-* `R_isSourceSimple`: the dimer satisfies the active canonical-block reading of
+* `R_isSourceSimple`: the dimer satisfies the canonical-block reading of
   Definition 4.7.
 * `R_isNonvanishingSourceSimple`: the dimer also satisfies the strengthened
   positive-length nonvanishing predicate.
@@ -75,32 +75,24 @@ private theorem R_mpo_ne_zero (N : ℕ) (hN : 0 < N) : mpo R N ≠ 0 := by
   rw [mpo_R_entry_formula hN] at hentry
   simp [chainIndicator, ChainOK, φ, wN, wMat, bondBit1, bondBit2] at hentry
 
-/-- The rescaling-stable dimer tensor is simple under the active canonical-block reading of
+/-- The rescaling-stable dimer tensor is simple under the canonical-block reading of
 Definition 4.7.
 
 The positive blocking length is $L=1$. The BNT is the representative family
-supplied by the active refinement of `canonicalFormData`; its only retained
+supplied by the BNT refinement of `canonicalFormData`; its only retained
 normal block is `retainedBlock`, whose doubled physical-trace transfer is
 nonnilpotent.
 
 This theorem neither asserts simplicity for every positive blocking nor changes
 the normalized fixed-representative predicate `MPOTensor.IsSimple`.
 
-**Local fix (dormant BNT candidates):** The active presentation follows the nonzero
-canonical-block construction and excludes candidates with coefficient identically zero.  See
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
-  let ref := data.activeBNTRefinement
-  have hActive : Nonempty data.Active := by
-    change Nonempty { k : Fin 1 // (weight : ℂ) ≠ 0 }
-    refine ⟨⟨0, ?_⟩⟩
-    exact_mod_cast weight_ne
+  let ref := data.bntRefinement
   refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition, ?_, ?_⟩
   · rw [toMPSTensor_blockTensor_R_one]
-    exact ref.isActiveCPSVBasisOfNormalTensors hActive
+    exact ref.isBNTSectorPresentation Nat.one_pos
   · intro j
     change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
       (Kraus.reindexPhysical oneSiteDoubledEquiv retainedBlock))
@@ -117,7 +109,7 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
     rw [hTransfer]
     exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent
 
-/-- The dimer satisfies the documented active canonical-block reading of source simplicity,
+/-- The dimer satisfies the documented canonical-block reading of source simplicity,
 and its closed MPO is nonzero at every positive chain length. The latter follows by evaluating
 the entry identity at the all-zero configuration.
 

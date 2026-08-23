@@ -1474,21 +1474,6 @@ current counts and full location lists).
 - **Notes:** Below the rule-of-three promotion threshold; keep the explicit
   rewrites until another consumer fixes the common statement's useful shape.
 
-### active canonical-form block restriction — candidate
-- **Pattern:** restrict a finite canonical-form block family to indices with
-  nonzero weight, choose `Fintype.equivFin` coordinates for that subtype, and
-  pull back the dependent bond dimensions and blocks along the equivalence.
-- **Seen:** 2 occurrences, in
-  `isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal`
-  (`BNTCharacterization.lean`) and
-  `CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors`
-  (`BNTExistence.lean`). This remains below the rule-of-three threshold.
-- **Abstraction (proposed):** if a third occurrence appears, package the active
-  subtype, finite equivalence, dimensions, and dependent block family in a
-  reusable low-level construction.
-- **Notes:** Any promotion must preserve the restriction to nonzero-weight
-  blocks; it must not assert coverage of zero-weight listed blocks.
-
 ### invariant-subspace two-block fork — candidate
 - **Pattern:** the general and strict invariant-subspace decompositions repeated the
   spectral split, block construction, and MPV calculation.

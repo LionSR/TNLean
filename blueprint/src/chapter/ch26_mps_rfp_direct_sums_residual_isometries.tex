@@ -612,9 +612,9 @@
     Thus $|c|=1$, so $\E_{cB}=\E_B$ and the idempotence of $\E_B$ follows.
 \end{proof}
 
-\begin{theorem}[Active blocks of a CPSV fixed point]%
-    \label{thm:cpsv_active_weight_norm_one_and_block_rfp}
-    \lean{MPSTensor.CPSVCanonicalFormData.active_weight_norm_one_and_block_rfp}
+\begin{theorem}[Blocks of a CPSV fixed point]%
+    \label{thm:cpsv_weight_norm_one_and_block_rfp}
+    \lean{MPSTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp}
     \leanok
     \uses{def:cpsv_canonical_form, def:mps_transfer_idempotence, thm:rfp_coisometry_reconstruction_iff, thm:normal_scaled_rfp, lem:isrfp_block_of_rfp_direct_sum}
     Suppose $A$ has CPSV canonical-form data
@@ -625,7 +625,7 @@
         \notag
     \end{align}
     where every $A_k$ is normal. If $A$ is a renormalization fixed point, then
-    every active block $k$, characterized by $\mu_k\ne0$, satisfies
+    every block $k$ satisfies
     \begin{align}
         |\mu_k| & =1,
                 & \E_{A_k}^2 & =\E_{A_k}.
@@ -637,20 +637,20 @@
     Theorem~\ref{thm:rfp_coisometry_reconstruction_iff} makes the retained
     direct sum $\bigoplus_k\mu_kA_k$ a renormalization fixed point.
     Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum} then makes each scaled block
-    $\mu_kA_k$ a renormalization fixed point. For an active block,
+    $\mu_kA_k$ a renormalization fixed point. Since $\mu_k\ne0$,
     Theorem~\ref{thm:normal_scaled_rfp} gives both conclusions.
 \end{proof}
 
-\begin{theorem}[Active phase-class residual isometries]%
-    \label{thm:cpsv_active_phase_class_residual_isometries}
-    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+\begin{theorem}[Phase-class residual isometries]%
+    \label{thm:cpsv_phase_class_residual_isometries}
+    \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         exists_residualIsometryFamily_of_isTransferIdempotent}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
-        exists_activeBNT_residualIsometryFamily_of_isTransferIdempotent}
+        exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}
     \leanok
     \uses{def:cpsv_canonical_form, def:is_residual_isometry_family}
     Let $A$ be a CPSV canonical-form renormalization fixed point. Choose one
-    representative $C_j$ from each active matrix-product-vector phase class.
+    representative $C_j$ from each matrix-product-vector phase class.
     Then there are invertible matrices $X_j$, positive numbers
     $\lambda_{j,\alpha}$ with $\sum_\alpha\lambda_{j,\alpha}=1$, and tensors
     $U_j$ such that
@@ -664,12 +664,12 @@
          & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-    The conclusion also covers the case in which there are no active classes.
+    The conclusion also covers the case in which there are no classes.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_active_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
+    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
     The retained weighted direct sum is a renormalization fixed point. For each
-    representative, Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp}
+    representative, Theorem~\ref{thm:cpsv_weight_norm_one_and_block_rfp}
     gives
     \begin{align}
         |\mu_j| & =1,
@@ -781,7 +781,7 @@
 \begin{corollary}[Basis tensors of a fixed point]
     \label{cor:cpsv_iii_cor3_status}
     \notready
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family, thm:cpsv_active_weight_norm_one_and_block_rfp, thm:cpsv_active_phase_class_residual_isometries, thm:cpsv_cor312_arbitrary_bnt_counterexample}
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family, thm:cpsv_weight_norm_one_and_block_rfp, thm:cpsv_phase_class_residual_isometries, thm:cpsv_cor312_arbitrary_bnt_counterexample}
     Let $A$ be a CPSV canonical-form renormalization fixed point, and let
     $(A_j)_j$ be an arbitrary basis of normal tensors for $A$. CPSV asserts that
     there are invertible matrices $X_j$, positive diagonal matrices $\rho_j$
@@ -802,14 +802,14 @@
 
     The corrected active conclusion is complete. For the normal blocks $(A_k)_k$
     occurring with nonzero weights $\mu_k$ in literal CPSV canonical-form data,
-    Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp} proves
+    Theorem~\ref{thm:cpsv_weight_norm_one_and_block_rfp} proves
     \begin{align}
         |\mu_k| & =1,
                 & \E_{A_k}^2 & =\E_{A_k}.
         \notag
     \end{align}
     After choosing one representative $C_j$ from each active phase class,
-    Theorem~\ref{thm:cpsv_active_phase_class_residual_isometries} supplies
+    Theorem~\ref{thm:cpsv_phase_class_residual_isometries} supplies
     invertible $X_j$, positive trace-one diagonal data $\rho_j$, and tensors
     $U_j$ such that
     \begin{align}

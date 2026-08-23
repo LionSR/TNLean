@@ -28,7 +28,7 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
 * `MPOTensor.isMPDO_smul_ofReal_iff`: MPDO is invariant under strictly positive
   real rescaling.
 * `MPOTensor.isSourceSimple_smul_ofReal_iff`: source simplicity is invariant
-  under strictly positive real rescaling, with the same active representatives.
+  under strictly positive real rescaling, with the same representatives.
 * `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff`: the strengthened
   nonvanishing predicate is invariant under strictly positive real rescaling.
 
@@ -138,8 +138,8 @@ variable {d D : ℕ}
 
 /-- Strictly positive real rescaling preserves source simplicity.
 
-The blocking length, active normal representatives, and copy multiplicities are unchanged.
-The represented blocked tensor is multiplied by `(r : ℂ) ^ L`, so every active copy weight
+The blocking length, normal representatives, and copy multiplicities are unchanged.
+The represented blocked tensor is multiplied by `(r : ℂ) ^ L`, so every copy weight
 is multiplied by that same nonzero scalar.
 
 Project-derived from source simplicity in arXiv:1606.00608, Definition 4.7,
@@ -147,13 +147,13 @@ lines 815--822. -/
 theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
     {r : ℝ} (hr : 0 < r) :
     IsSourceSimple ((r : ℂ) • M) := by
-  obtain ⟨hMPDO, L, hL, P, hActive, hNonNil⟩ := hM
+  obtain ⟨hMPDO, L, hL, P, hPres, hNonNil⟩ := hM
   have hScale : ((r : ℂ) ^ L) ≠ 0 :=
     pow_ne_zero L (Complex.ofReal_ne_zero.mpr hr.ne')
   refine ⟨hMPDO.smul_ofReal (le_of_lt hr), L, hL,
     P.scaleWeights ((r : ℂ) ^ L) hScale, ?_, ?_⟩
   · rw [blockTensor_smul]
-    exact hActive.smul_left ((r : ℂ) ^ L) hScale
+    exact hPres.smul_left ((r : ℂ) ^ L) hScale
   · intro j
     exact hNonNil j
 

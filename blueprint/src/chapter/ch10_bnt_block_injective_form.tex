@@ -217,12 +217,12 @@ apply it to coefficient-form and sector BNTs.
 \end{proof}
 
 % Source anchors: CPSV16 lines 219--225 and 265--301.
-\begin{theorem}[Total dimension of the active BNT representatives]
-    \label{thm:cpsv_active_bnt_dimension_bound}
-    \lean{MPSTensor.CPSVCanonicalFormData.sum_activeRepresentative_dim_le}
+\begin{theorem}[Total dimension of the BNT representatives]
+    \label{thm:cpsv_bnt_dimension_bound}
+    \lean{MPSTensor.CPSVCanonicalFormData.sum_representative_dim_le}
     \leanok
-    \uses{def:cpsv_canonical_form, thm:cpsv_canonical_form_active_bnt_refinement}
-    Let literal canonical-form data of ambient bond dimension $D$ have active
+    \uses{def:cpsv_canonical_form, thm:cpsv_canonical_form_bnt_refinement}
+    Let literal canonical-form data of ambient bond dimension $D$ have
     phase classes $j$ and chosen representatives of dimensions $D_j$. Then
     \begin{align}
         \sum_jD_j & \leq D.
@@ -232,8 +232,8 @@ apply it to coefficient-form and sector BNTs.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement}
-    In every active phase class, choose its first copy. The class-copy
+    \uses{thm:cpsv_canonical_form_bnt_refinement}
+    In every phase class, choose its first copy. The class-copy
     equivalence sends these choices to distinct displayed block indices, and
     the first copy is the chosen representative. Thus the sum of the
     representative dimensions is bounded by the sum over all displayed
@@ -263,11 +263,11 @@ apply it to coefficient-form and sector BNTs.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_canonical_form_active_bnt_refinement, thm:cpsv_active_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap, thm:cpsv_bnt_blocked_simultaneous_span}
-    Choose one representative from every active matrix-product-vector phase
+    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap, thm:cpsv_bnt_blocked_simultaneous_span}
+    Choose one representative from every matrix-product-vector phase
     class. These representatives form a basis of normal tensors, and their
     total bond dimension is at most $D$ by
-    Theorem~\ref{thm:cpsv_active_bnt_dimension_bound}. Apply
+    Theorem~\ref{thm:cpsv_bnt_dimension_bound}. Apply
     Theorem~\ref{thm:cpsv_bnt_sharp_span_ambient_cap} with $K=D$. A word of
     length $L$ in $A_j$ is a one-letter evaluation of $A_j^{[L]}$, so the
     resulting length-$L$ span is exactly the asserted one-letter span.

@@ -87,25 +87,19 @@
 \end{proof}
 
 \begin{theorem}[Presentation independence of BNT nonnilpotency]
-    \label{thm:mpdo_active_bnt_nonnilpotency_independent}
-    \lean{MPOTensor.activeBNT_basis_not_isNilpotent_iff}
+    \label{thm:mpdo_bnt_nonnilpotency_independent}
+    \lean{MPOTensor.bnt_basis_not_isNilpotent_iff}
     \leanok
-    \uses{def:cpsv_active_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
-    Let $P$ and $Q$ be active BNT sector presentations of the same
+    \uses{def:cpsv_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
+    Let $P$ and $Q$ be BNT sector presentations of the same
     doubled-index tensor. Every representative of $P$ has non-nilpotent
     physical-trace transfer if and only if every representative of $Q$ does.
-
-    Arbitrary literal BNT witnesses need not have the same cardinality; this
-    statement applies only after excluding dormant candidates as in
-    Definition~\ref{def:cpsv_active_bnt_sector_presentation}.
-    % Scope restriction (active presentations): documented in
-    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_active_bnt_presentation_uniqueness, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
+    \uses{thm:cpsv_bnt_presentation_uniqueness, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
     Match the representatives by
-    Theorem~\ref{thm:cpsv_active_bnt_presentation_uniqueness}, then apply
+    Theorem~\ref{thm:cpsv_bnt_presentation_uniqueness}, then apply
     Theorem~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} to each
     matched pair.
 \end{proof}
@@ -114,29 +108,23 @@
     \label{def:mpdo_source_simple_tensor}
     \lean{MPOTensor.IsSourceSimple}
     \leanok
-    \uses{def:mpdo, def:mpdo_physical_blocking, def:cpsv_active_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
+    \uses{def:mpdo, def:mpdo_physical_blocking, def:cpsv_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
     A tensor generating MPDOs is \emph{source-simple} if there is a positive
     physical blocking length $L$ such that the doubled-index tensor of the
-    $L$-site blocking has an active BNT sector presentation $P$ for which every
+    $L$-site blocking has a BNT sector presentation $P$ for which every
     representative $B_j$ has non-nilpotent physical-trace transfer
-    $\mathcal T_{B_j}$. This records the standing active canonical-block
+    $\mathcal T_{B_j}$. This records the standing canonical-block
     convention of
     \cite[lines~217--246]{Cirac2016MPDO_arXiv} together with the simplicity
     condition of \cite[lines~815--822]{Cirac2016MPDO_arXiv}.
 
     Every representative in $P$ has a positive number of copies, and every
-    copy has nonzero weight, so dormant candidates are absent. The blocking
+    copy has nonzero weight. The blocking
     length is existential, and presentation independence follows from
-    Theorem~\ref{thm:mpdo_active_bnt_nonnilpotency_independent}. The definition
+    Theorem~\ref{thm:mpdo_bnt_nonnilpotency_independent}. The definition
     omits the global unit-weight normalization of
     \cite[line~246]{Cirac2016MPDO_arXiv} and does not require a normalized
     horizontal canonical-form witness.
-
-    The literal BNT definition permits adjoining a normal tensor with
-    coefficient identically zero. The active condition instead follows the
-    nonzero canonical-block construction preceding Definition~4.7.
-    % Local fix (dormant BNT candidates): documented in
-    % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex.
 \end{definition}
 
 \begin{theorem}[Source simplicity implies positive-length nontriviality]
@@ -148,7 +136,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_active_bnt_sector_presentation, lem:mpdo_three_first_site_contraction_coefficients, thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:cpsv_bnt_sector_presentation, lem:mpdo_three_first_site_contraction_coefficients, thm:mpdo_closed_chain_physical_blocking}
     Choose a representative and one of its copies. Every copy weight over that
     representative is nonzero, so its power-sum coefficient cannot vanish at
     every sufficiently large length. At a large length where this coefficient
@@ -190,9 +178,9 @@
     tensor letter.
 \end{proof}
 
-\begin{theorem}[Scaling an active BNT presentation]
+\begin{theorem}[Scaling a BNT presentation]
     \label{thm:mpdo_cpsv_bnt_scalar_scaling}
-    \lean{MPSTensor.IsActiveCPSVBasisOfNormalTensors.smul_left}
+    \lean{MPSTensor.IsBNTSectorPresentation.smul_left}
     \lean{MPSTensor.SectorDecomposition.scaleWeights}
     \lean{MPSTensor.SectorDecomposition.scaleWeights_basisCount,
         MPSTensor.SectorDecomposition.scaleWeights_basisDim,
@@ -201,10 +189,10 @@
         MPSTensor.SectorDecomposition.scaleWeights_weight,
         MPSTensor.SectorDecomposition.scaleWeights_toTensor}
     \leanok
-    \uses{def:cpsv_active_bnt_sector_presentation}
-    Let $P$ be an active BNT sector presentation of $A$ and let
+    \uses{def:cpsv_bnt_sector_presentation}
+    Let $P$ be a BNT sector presentation of $A$ and let
     $c\in\mathbb C\setminus\{0\}$. Multiplying every copy weight of $P$ by
-    $c$ gives an active BNT sector presentation of $cA$ with the same
+    $c$ gives a BNT sector presentation of $cA$ with the same
     representatives and multiplicities.
 \end{theorem}
 
@@ -366,7 +354,7 @@
     \uses{thm:mpdo_nonnegative_rescaling, thm:mpdo_block_tensor_scalar_scaling, thm:mpdo_cpsv_bnt_scalar_scaling}
     Positive rescaling preserves the MPDO condition. For a blocking length
     $L$, it multiplies the blocked tensor by the nonzero scalar $r^L$.
-    Multiply every active copy weight by $r^L$ and apply
+    Multiply every copy weight by $r^L$ and apply
     Theorem~\ref{thm:mpdo_cpsv_bnt_scalar_scaling}; the representatives and
     their non-nilpotent physical-trace transfers are unchanged.
 \end{proof}
@@ -450,13 +438,13 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal, thm:is_normal_tensor_of_is_normal_left_canonical, lem:sector_bnt_weight_unit_exists_of_struct, thm:gauge_invariance, def:cpsv_active_bnt_sector_presentation}
+    \uses{cor:sector_bnt_cf_basis_normal, thm:is_normal_tensor_of_is_normal_left_canonical, lem:sector_bnt_weight_unit_exists_of_struct, thm:gauge_invariance, def:cpsv_bnt_sector_presentation}
     Use the normalized sector decomposition itself. Its copy weights are
     nonzero, and the unit-modulus copy supplies at least one representative.
     Its representatives are normal and eventually linearly independent. The
     canonical-form gauge gives
     $\mc{V}^+(M^{[L]})=\mc{V}^+(A_{\mathrm{tot}})$, so this sector decomposition
-    is an active BNT presentation of the blocked tensor. Its representatives
+    is a BNT presentation of the blocked tensor. Its representatives
     already satisfy the required non-nilpotency condition.
 \end{proof}
 
