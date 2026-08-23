@@ -146,7 +146,7 @@ the printed statement.
 | Theorem 3.10 | `thm:cpsv_main_mps_status` | corrected representative-level implications in Chapters 26 and 13 |
 | Theorem 3.11 | `thm:cpsv_charact_mps_status` | one-copy and direct-sum structural results in Chapter 26 |
 | Corollary 3.12 | none since the nonzero-coefficient convention; anchor on `thm:cpsv_phase_class_residual_isometries` | phase-class residual-isometry results in Chapter 26 |
-| Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | local purification equivalences and global counterexamples in Chapter 21 |
+| Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | literal global implication refuted by `thm:nonzero_global_prfp_not_physical_trace_idempotence`; stronger scale-invariant counterexample and restricted local equivalences remain separate in Chapter 21 |
 | Proposition 4.5 | `thm:cpsv_prop45_printed_status` | monotonicity and finite-chain bounds; parity counterexample to the limit |
 | Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; literal (iv)$\Rightarrow$(v) refuted by the exact repeated-copy capstone; the two preserved not-ready nodes record the viable source (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) routes |
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
@@ -187,8 +187,10 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
 - Theorem 3.11 lacks the repeated-copy physical routing needed to interpret its
   displayed shared isometry.  Corollary 3.12 is false for an arbitrary BNT but
   complete for active phase-class representatives.
-- Theorem 4.4 is not recovered by local purification equivalences because
-  positive-length global equations do not detect nilpotent hidden sectors.
+- Theorem 4.4's printed global implication to literal ZCL is refuted: a nonzero
+  MPDO global PRFP can have a trace-invisible nilpotent hidden sector. The
+  local-purification equivalences remain restricted corrections, and the
+  stronger scale-invariant counterexample remains a separate result.
 - Proposition 4.5 is complete for monotonicity and finite-chain bounds, but its
   unrestricted thermodynamic-limit clause is false.
 - Lemma C.10 (`lemmus`) is linked to the exact literal-ZCL theorem. The former source node used the broader positive-up-to-scale relation; that valid generalization remains separate.
