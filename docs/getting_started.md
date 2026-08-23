@@ -119,9 +119,10 @@ aggregators by hand.
 ### Key definitions
 
 A handful of names recur throughout the library and are worth knowing before
-you start reading. The finite-family definitions live in the companion QICLean
-library under the `Kraus` namespace, while TNLean retains the
-matrix-product-state vocabulary in `TNLean/MPS/Defs.lean`:
+you start reading. The root-level `MPSTensor` abbreviation and the finite-family
+API live in the companion QICLean library; its operations and predicates use
+the `Kraus` namespace. TNLean retains the matrix-product-state vocabulary in
+`TNLean/MPS/Defs.lean`:
 
 | Name | What it is | Defined in |
 |---|---|---|
