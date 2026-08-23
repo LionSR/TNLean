@@ -21,6 +21,7 @@ import TNLean.QCA.IsQCA
 import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
 import TNLean.QCA.LocalNorm
+import TNLean.QCA.NearestNeighborBlocking
 import TNLean.QCA.QuasiLocal
 import TNLean.QCA.QuasiLocalBlocking
 import TNLean.QCA.QuasiLocalCommutant
