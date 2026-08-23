@@ -602,6 +602,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Four-site composition sum normalization
+- **Pattern:** expand a four-site product cut into eight finite indices, permute
+  those indices once, and compare only the resulting scalar summands modulo
+  associativity and commutativity of multiplication.
+- **Reuse:** the private `sum_eight_cut_factorization` lemma in
+  `TNLean/MPS/MPU/CompositionRanks.lean` performs the distributivity step on
+  abstract scalar functions.  Its proof descends through all eight sums by
+  explicit congruences and closes the scalar identity with `ac_rfl`; the
+  concrete source-tensor $u$ proof now instantiates this lemma without constructing a
+  distributed matrix-entry expression.
+- **Performance:** the cached target build before the refactor reported 25 s.
+  Profiler counts fell from 16,129,355 heartbeats in the former concrete proof
+  to 10,252,678 in the abstract helper plus 3,646,777 at its concrete call site
+  (13,899,455 total, a 13.8% reduction).  Post-refactor local wall runs
+  reported 72--89 s while unrelated checkouts were rebuilding dependencies
+  and saturating the host, so they are not comparable; the heartbeat reduction
+  projects the uncontended target below 22 s, with the isolated PR check serving
+  as the authoritative verification of the 25 s limit.
+
 ### Block entropy from real characteristic roots
 - **Pattern:** derive a block entropy from a known real multiset of characteristic roots.
 - **Reuse:** `MPOTensor.blockEntropy_of_charpoly_roots_eq` in
