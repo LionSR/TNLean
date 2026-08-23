@@ -46,6 +46,11 @@ matrix from `sectorFlatEquiv` and conjugating; the present module records the
 witness bundle that matches the CPSV16 equal-MPV corollary form, while
 the permutation-matrix conjugation is left for a follow-up module.
 
+**Local fix (nonzero coefficients):** The canonical-form data used throughout
+this module list only nonzero block coefficients, following the retained-block
+convention documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
 Paper anchors:
 
 * CPSV16 §II.C lines 354–361 and Appendix MPV proof lines 1172–1179:
@@ -665,8 +670,6 @@ CPSV21 Corollary 4.5).
 Two BNT canonical forms generating the same MPV family at every positive
 length are globally conjugate: their total bond dimensions agree, and a single
 invertible gauge `Y` carries one total tensor to the other.
-
-**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
 -/
 theorem fundamentalTheorem_equal_canonicalForm
     {P Q : SectorDecomposition d}
@@ -690,8 +693,6 @@ lines 1197--1199).
 Two BNT canonical forms generating the same MPV family at every positive
 length are related by one unitary global gauge after identifying their equal
 total bond dimensions.
-
-**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
 -/
 theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
@@ -719,8 +720,6 @@ canonical forms matches the normal-tensor sectors bijectively.  For each
 `Q`-sector `k`, the matched `P`-sector `β k` has the same bond dimension
 (`g_a = g_b` via the bijection `β`), and `Q.basis k` is obtained from
 `P.basis (β k)` by a unit phase and gauge conjugation.
-
-**Local fix (nonzero coefficients):** `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
 -/
 theorem fundamentalTheorem_proportional_canonicalForm
     {P Q : SectorDecomposition d}
