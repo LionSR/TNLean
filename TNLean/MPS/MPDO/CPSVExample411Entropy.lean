@@ -58,17 +58,11 @@ theorem M_isMPDO : IsMPDO M := by
   rw [mpo_M_eq_diagonal]
   exact Matrix.PosSemidef.diagonal cycleWeight_nonneg
 
-private lemma blockEntropy_of_roots {L : ℕ} (hL : L ≤ 4) (s : Multiset ℝ)
-    (hroots : (reducedBlockState M 4 L hL).charpoly.roots =
-      s.map (fun r : ℝ ↦ (r : ℂ))) :
-    blockEntropy M 4 L hL (M_isMPDO 4 (by omega)) = (s.map Real.negMulLog).sum := by
-  exact Matrix.vonNeumannEntropy_of_charpoly_roots_eq
-    (reducedBlockState_isHermitian M 4 L hL (M_isMPDO 4 (by omega))) s hroots
-
 /-- The one-site block entropy on the four-site ring is $\log 2$. -/
 theorem blockEntropy_one :
     blockEntropy M 4 1 (by omega) (M_isMPDO 4 (by omega)) = Real.log 2 := by
-  rw [blockEntropy_of_roots (by omega) (2 • {(1 / 2 : ℝ)})]
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
+    (2 • {(1 / 2 : ℝ)})]
   · simp only [Multiset.map_nsmul, Multiset.map_singleton, Multiset.sum_nsmul,
       Multiset.sum_singleton, Real.negMulLog]
     rw [Real.log_div (by norm_num) (by norm_num)]
@@ -82,7 +76,7 @@ theorem blockEntropy_one :
 theorem blockEntropy_two :
     blockEntropy M 4 2 (by omega) (M_isMPDO 4 (by omega)) =
       2 * Real.negMulLog (14 / 41) + 2 * Real.negMulLog (13 / 82) := by
-  rw [blockEntropy_of_roots (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
     (2 • {(14 / 41 : ℝ)} + 2 • {(13 / 82 : ℝ)})]
   · simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
       Multiset.sum_nsmul, Multiset.map_singleton, Multiset.sum_singleton]
@@ -97,7 +91,7 @@ theorem blockEntropy_three :
     blockEntropy M 4 3 (by omega) (M_isMPDO 4 (by omega)) =
       2 * Real.negMulLog (10 / 41) + 4 * Real.negMulLog (4 / 41) +
         2 * Real.negMulLog (5 / 82) := by
-  rw [blockEntropy_of_roots (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
     (2 • {(10 / 41 : ℝ)} + 4 • {(4 / 41 : ℝ)} + 2 • {(5 / 82 : ℝ)})]
   · simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
       Multiset.sum_nsmul, Multiset.map_singleton, Multiset.sum_singleton]
@@ -111,7 +105,7 @@ theorem blockEntropy_four :
     blockEntropy M 4 4 (by omega) (M_isMPDO 4 (by omega)) =
       2 * Real.negMulLog (8 / 41) + 12 * Real.negMulLog (2 / 41) +
         2 * Real.negMulLog (1 / 82) := by
-  rw [blockEntropy_of_roots (by omega)
+  rw [blockEntropy_of_charpoly_roots_eq M M_isMPDO (by omega) (by omega)
     (2 • {(8 / 41 : ℝ)} + 12 • {(2 / 41 : ℝ)} + 2 • {(1 / 82 : ℝ)})]
   · simp only [Multiset.map_add, Multiset.sum_add, Multiset.map_nsmul,
       Multiset.sum_nsmul, Multiset.map_singleton, Multiset.sum_singleton]
