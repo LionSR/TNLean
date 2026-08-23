@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The assertion}
 
@@ -705,8 +705,9 @@ formalized.
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_odd},
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.mutualInfoChain_parityTensor_of_even},
 \leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_reducedBlockState_one_zero_zero},
-and
-\leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_parityMutualInfoAfterCut}
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.not_exists_tendsto_parityMutualInfoAfterCut},
+and the source-facing conjunction
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}
 in \doclink{TNLean/MPS/MPDO/ThermodynamicLimitCounterexample}.}
 
 Accordingly, the precise unconditional result that remains from the cited
@@ -775,13 +776,15 @@ formalized by
 \leanid{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim} in
 \doclink{TNLean/MPS/MPDO/MutualInfoAreaLaw}.
 
-The thermodynamic-limit clause of Proposition~4.5 is false at its stated
-hypothesis set, while the finite-chain bound for every positive periodic
-operator of nonzero trace is formalized.  The remaining negative conclusion
-is tracked by issue
-\href{https://github.com/LionSR/TNLean/issues/4169}{\#4169} under the MPDO
-coverage audit
-\href{https://github.com/LionSR/TNLean/issues/2380}{\#2380}.
+The thermodynamic-limit clause of Proposition~4.5 is formally refuted at its
+stated hypothesis set by
+\leanid{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}.
+The finite-chain monotonicity and bond-dimension bounds remain valid separate
+results.  Primitivity, aperiodicity, or another convergence condition would
+exclude the parity obstruction, but such a condition is a genuine boundary of
+a corrected theorem and is not a hypothesis of the printed proposition.  This
+resolves the false-source limit clause tracked by
+\href{https://github.com/LionSR/TNLean/issues/7070}{\#7070}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
