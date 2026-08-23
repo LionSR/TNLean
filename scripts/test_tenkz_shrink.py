@@ -362,7 +362,7 @@ def test_setup_consumers_read_the_tnset_argument() -> None:
     path = ROOT / "synthetic.tex"
     corpus = {
         path: (
-            r"\tnset{pitch=10mm, theme=house} "
+            r"\tnset{pitch=10mm, strict=false} "
             r"\begin{tenkz}[cols=1]\tn{A}\end{tenkz}"
         )
     }
@@ -372,7 +372,7 @@ def test_setup_consumers_read_the_tnset_argument() -> None:
         for payload in scoped
         for name in tenkz_shrink._option_key_names(payload)
     }
-    for key in ("pitch", "theme"):
+    for key in ("pitch", "strict"):
         assert key in names
 
 

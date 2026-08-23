@@ -1,4 +1,4 @@
-% Regression: document setup is inherited by the resolved picture model.
+% Regression: document metric setup reaches the picture render pass.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -7,9 +7,8 @@
 \ExplSyntaxOn
 \cs_new_protected:Npn \__tenkz_test_setup_persistence:
   {
-    \__tenkz_model_picture_get:nN {theme} \l_tmpa_tl
-    \str_if_eq:VnF \l_tmpa_tl {review}
-      { \errmessage{theme setup did not reach the picture model} }
+    \dim_compare:nNnF { \tenkz@pitch } = { 17mm }
+      { \errmessage{pitch setup did not reach the picture render pass} }
   }
 % The picture body is captured under document catcodes, so the probe needs a
 % document-level name.
@@ -18,7 +17,7 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\tnset{theme=review}
+\tnset{pitch=17mm}
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
   \tenkzTestSetupPersistence
 \end{tenkz}

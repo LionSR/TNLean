@@ -15,8 +15,8 @@ Rules (findings exit 1 unless escaped):
   raw-ink  Raw TikZ ink inside any tenkz-family body (`line width=`,
            `draw=`, `fill=`, `color=`, or raw `\\draw`/`\\fill`/
            `\\filldraw`/`\\shade`/`\\node`/`\\path`/`\\tikzset`).  The
-           theme owns ink: a literal stroke or color bypasses the
-           two-layer theme/semantic split, so the picture stops
+           semantic palette owns ink: a literal stroke or color bypasses the
+           palette/semantic split, so the picture stops
            restyling under `\\tnset` and diverges between print and
            dark builds.
 
@@ -67,7 +67,7 @@ from tenkzlib.texcase import (
 DOTS_ENVS = set(ENVIRONMENT_LANGS)
 
 # Bodies scanned for the raw-ink rule: every tenkz-family body -- the
-# theme contract covers every sub-language.
+# semantic-ink contract covers every sub-language.
 INK_ENVS = set(ENVIRONMENT_LANGS)
 
 DOTS_PATTERNS = [
