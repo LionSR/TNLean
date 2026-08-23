@@ -18,6 +18,26 @@
     $S_L^{(N)}(M)=S(\rho_L^{(N)}(M))$.
 \end{definition}
 
+\begin{theorem}[Block entropy from characteristic roots]
+    \label{thm:block_entropy_of_charpoly_roots}
+    \lean{MPOTensor.blockEntropy_of_charpoly_roots_eq}
+    \leanok
+    \uses{def:block_entropy}
+    If the characteristic roots of $\rho_L^{(N)}(M)$ are the real multiset
+    $\{r_j\}_j$, then
+    \begin{align}
+        S_L^{(N)}(M) & =\sum_j -r_j\log r_j. \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:block_entropy}
+    The spectral decomposition of the Hermitian reduced state identifies the
+    characteristic roots with its eigenvalues. The von Neumann entropy is the
+    sum of $-r\log r$ over these eigenvalues, counted with multiplicity.
+\end{proof}
+
 \begin{definition}[Mutual information of an MPDO]\label{def:mutual_info_chain}
     \lean{MPOTensor.mutualInfoChain, MPOTensor.mutualInfoChain_eq}
     \leanok
