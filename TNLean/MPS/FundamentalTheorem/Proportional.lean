@@ -15,7 +15,8 @@ Theorem IV.4 (arXiv:2011.12127).
 * If `A` and `B` are related by a gauge transform up to a scalar `ζ` (`GaugePhaseEquiv A B`), then
   their Matrix Product Vectors are proportional for each system size `N`.
 
-* Conversely, if the MPV families are proportional (`ProportionalMPV₂ A B`) and both self-overlaps
+* Conversely, if the MPV families are eventually nonzero-proportional
+  (`EventuallyNonzeroProportionalMPV₂ A B`) and both self-overlaps
   `mpvOverlap A A N` and `mpvOverlap B B N` converge to `1`, then `A` and `B` must be
   gauge-phase equivalent.
 
@@ -248,7 +249,7 @@ gauge-phase equivalent.
 
 This is the **proportionality-free** version of the gauge recovery — the
 counterpart to the proportionality-based gauge recovery
-without the extra `ProportionalMPV₂` hypothesis. The proof uses the
+without the extra `NonzeroProportionalMPV₂` hypothesis. The proof uses the
 cross-transfer-matrix spectral radius (computed via
 `mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one`)
 together with the rigidity theorem

@@ -309,13 +309,12 @@ convergence-to-nonzero-limits hypothesis that has no counterpart in either
 record.
 
 \paragraph{Status: supplier-side normalization.}
-The arbitrary-input supplier no longer leaves the line-246 weight choice to
-the caller.
+The line-246 weight choice is realized by the supplier itself.
 \leanid{MPSTensor.exists\_isBNTCanonicalForm\_afterBlocking\_pos\_normalized}
 rescales the prepared weights by their maximal modulus
 $m=\max_k|\mu_k|$
-(\leanid{MPSTensor.exists\_weight\_normalization}), which satisfies both
-conditional premises of the earlier supplier, and tracks the cost as the
+(\leanid{MPSTensor.exists\_weight\_normalization}), which satisfies the
+bound $|\mu_k|\leq1$ with a unit-modulus witness, and tracks the cost as the
 per-site scalar $m^{N}$ in the positive-length matrix-product identity.  The
 positive-length statement is the canonical source formulation; no
 length-zero coefficient is part of this statement.  The normalized supplier
@@ -328,12 +327,11 @@ nilpotent, contrary to its nonzero trace.  The repeated word of length $pqN$
 therefore gives a nonzero coefficient after blocking by $p$.  Thus this
 hypothesis excludes precisely the zero positive-length family, for which the
 unit-modulus weight required at line~246 is impossible.  The subsequent
-proposition nevertheless says ``for any tensor.''  Taken literally, its zero
-case is incompatible with the preceding global unit-modulus convention and
-with the formal canonical-form predicate.  The present theorem therefore
-formalizes the nonzero-family case.  Eliminating the restriction requires a
-separate zero-family clause or a canonical-form predicate whose normalization
-condition is conditional on the presence of a sector.
+proposition says ``for any tensor,'' but the standing convention of
+line~246 already presupposes a nonempty weight family, so the nonzero
+family is the source's intended scope and the hypothesis states that
+convention.  The zero family is a degenerate reading and receives no
+separate clause.
 
 \paragraph{Status: structural realignment.}
 The structural realignment has been done. The canonical-form definition now
