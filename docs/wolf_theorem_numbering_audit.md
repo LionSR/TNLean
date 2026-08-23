@@ -9,7 +9,9 @@
 > `TNLean/Kraus/...`, `TNLean/Entropy/...`, `TNLean/Analysis/...`, and
 > parts of `TNLean/Algebra/...` and `TNLean/MPS/Core/...` — now live in
 > QICLean under the corresponding `QICLean/...` paths. The audit's verdicts
-> are unchanged; re-checking a citation requires a QICLean checkout.
+> are unchanged; re-checking a citation requires a QICLean checkout. Current
+> Wolf theorem-number coverage tracking lives in QICLean's
+> [`docs/wolf_numbering_coverage.md`](https://github.com/LionSR/QICLean/blob/main/docs/wolf_numbering_coverage.md).
 
 This table records the verification of live numbered references to theorem-like
 results in M. Wolf, *Quantum Channels & Operations: Guided Tour*. The printed
@@ -69,7 +71,6 @@ examined here.
 - `TNLean/Channel/PositiveFunctional.lean`
 - `TNLean/Channel/RightFactorConditionalExpectation.lean`
 - `TNLean/Channel/StarSubalgebraConditionalExpectation.lean`
-- `TNLean/Channel/WolfChapter6Index.lean`
 - `blueprint/src/chapter/ch05_schwarz_retractions_and_peripheral_equality.tex`
 - `blueprint/src/chapter/ch12_auxiliary_wolf_ch01_positive_maps.tex`
 - `docs/paper-gaps/cpsv16_vertical_sector_invertibility.tex`
@@ -122,7 +123,6 @@ freedom.
 ### Files corrected for Theorem 2.1(4)
 
 - `TNLean/Channel/KrausUnitaryFreedom.lean`
-- `TNLean/Channel/WolfChapter2Index.lean`
 - `TNLean/MPS/Periodic/Applications.lean`
 - `TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean`
 - `TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean`
@@ -153,7 +153,6 @@ is not the real SVD of the qubit `3 × 3` block discussed in that passage.
 ### Files corrected
 
 - `TNLean/Channel/TransferMatrix.lean`
-- `TNLean/Channel/WolfChapter2Index.lean`
 - `TNLean/Channel/NormalForm.lean`
 - `TNLean/Channel/LorentzNormalForm.lean`
 - `TNLean/Channel/LorentzNormalForm/Basic.lean`

@@ -4,7 +4,7 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Project Overview
 
-TNLean is a Lean 4 formalization of the **Fundamental Theorem of Matrix Product States**, **Quantum Wielandt theory**, and finite-dimensional **quantum-channel theory** (following Wolf's *Quantum Channels & Operations*). Built on Mathlib v4.34.0-rc1.
+TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix product states (MPS), their canonical forms and gauge structure, and the theorems that classify them — including the **Fundamental Theorem of Matrix Product States** and **Quantum Wielandt theory**. Built on Mathlib v4.34.0-rc1. The finite-dimensional quantum-channel theory this rests on (following Wolf's *Quantum Channels & Operations*) no longer lives in this repository; it is developed in the companion library [QICLean](https://github.com/LionSR/QICLean), which TNLean depends on.
 
 ## Build Commands and Mathlib Cache Policy
 
@@ -71,7 +71,7 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | **5b** | `MPS/RFP/` | Renormalization fixed-point scaffolding |
 | **6** | `Wielandt/` | Tensor-typed span-growth, primitivity, and Wielandt consequences built on QICLean |
 
-**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), and `Archive/` (legacy, excluded from root imports).
+**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
 
 ### Key Types and Definitions
 
@@ -328,14 +328,14 @@ follow-up, not against the temporary `sorry` count.
 
 | Name | Kind | Use when | Defined in |
 |---|---|---|---|
-| `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `TNLean/Kraus/Word.lean` |
+| `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `QICLean/Kraus/Word.lean` (QICLean dependency) |
 | `verticalAssembledTensor_apply_copy_same` | helper theorem | Evaluating an assembled vertical tensor at two coordinates in the same retained multiplicity copy | `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` |
 | `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary` | helper theorem | Closing block-diagonal boundaries from an open-boundary representation and a simultaneous span across the complementary global cut | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean` |
 | `BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace` | helper theorem | Assembling membership in the sum of open-boundary block spaces into one weighted block-diagonal boundary matrix | `TNLean/MPS/ParentHamiltonian/BlockSumGroundSpace.lean` |
 | `SpinChain.quasiLocalTranslation_mul` | helper theorem | Rewriting a product of quasi-local translations as translation by the reversed sum of displacements | `TNLean/QCA/QuasiLocalTranslation.lean` |
 | `SpinChain.quasiLocalTranslation_inv` | helper theorem | Rewriting the group inverse of a quasi-local translation as translation by the negative displacement | `TNLean/QCA/QuasiLocalTranslation.lean` |
 | `SpinChain.quasiLocalTranslation_one` | helper theorem | Rewriting the identity automorphism as quasi-local translation by zero | `TNLean/QCA/QuasiLocalTranslation.lean` |
-| `Kraus.map_compressed_fixedPoint` | helper theorem | Preserving a supported fixed point under finite-Kraus compression along an isometry | `TNLean/Channel/KrausCornerCompression.lean` |
+| `Kraus.map_compressed_fixedPoint` | helper theorem | Preserving a supported fixed point under finite-Kraus compression along an isometry | `QICLean/Channel/KrausCornerCompression.lean` (QICLean dependency) |
 | `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/Algebra/TracePairing.lean` |
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
