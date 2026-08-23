@@ -53,6 +53,20 @@ lemma blockHull_mono {L : ℕ} [NeZero L] {Δ Θ : Finset ℤ} (h : Δ ⊆ Θ) :
     blockHull L Δ ⊆ blockHull L Θ :=
   Finset.image_mono _ h
 
+/-- The block hull of an expanded blocked region is the original blocked region. -/
+@[simp]
+lemma blockHull_expandedRegion (L : ℕ) [NeZero L] (Λ : Finset ℤ) :
+    blockHull L (expandedRegion L Λ) = Λ := by
+  ext x
+  simp only [blockHull, Finset.mem_image, mem_expandedRegion]
+  constructor
+  · rintro ⟨a, ha, rfl⟩
+    exact ha
+  · intro hx
+    refine ⟨(Int.divModEquiv L).symm (x, 0), ?_, ?_⟩
+    · simpa only [Equiv.apply_symm_apply] using hx
+    · exact congrArg Prod.fst ((Int.divModEquiv L).apply_symm_apply (x, 0))
+
 private lemma restrict_blocking_symm {d L : ℕ} [NeZero L] {Λ Γ : Finset ℤ}
     (h : Λ ⊆ Γ) (x : Config d (expandedRegion L Γ)) :
     Config.restrict h ((Config.blocking d L Γ).symm x) =
@@ -324,6 +338,41 @@ lemma algebraicLocalBlocking_localObservable (d L : ℕ) [NeZero d] [NeZero L]
   rw [algebraicLocalBlocking_apply]
   exact algebraicLocalBlockingHom_localObservable d L Λ A
 
+/-- The inverse algebraic-local blocking equivalence is the block-hull unblocking homomorphism. -/
+@[simp]
+lemma algebraicLocalBlocking_symm_apply (d L : ℕ) [NeZero d] [NeZero L]
+    (A : AlgebraicLocalAlgebra d) :
+    (algebraicLocalBlocking d L).symm A = algebraicLocalUnblockingHom d L A := by
+  rw [StarAlgEquiv.symm_apply_eq, algebraicLocalBlocking_apply,
+    ← StarAlgHom.comp_apply, algebraicLocalBlockingHom_comp_unblockingHom]
+  rfl
+
+/-- Inverse algebraic-local blocking enlarges an arbitrary original finite region to its block hull
+and then applies inverse finite blocking. -/
+lemma algebraicLocalBlocking_symm_localObservable (d L : ℕ) [NeZero d] [NeZero L]
+    (Δ : Finset ℤ) (A : LocalAlgebra d Δ) :
+    (algebraicLocalBlocking d L).symm (localObservable d Δ A) =
+      localObservable (MPSTensor.blockPhysDim d L) (blockHull L Δ)
+        ((localBlocking d L (blockHull L Δ)).symm
+          (localInclusion (subset_expandedRegion_blockHull L Δ) A)) := by
+  rw [algebraicLocalBlocking_symm_apply,
+    algebraicLocalUnblockingHom_localObservable]
+
+/-- On an expanded region, inverse algebraic-local blocking has the exact inverse finite-blocking
+formula, with no block-hull enlargement remaining. -/
+lemma algebraicLocalBlocking_symm_localObservable_expandedRegion
+    (d L : ℕ) [NeZero d] [NeZero L] (Λ : Finset ℤ)
+    (A : LocalAlgebra d (expandedRegion L Λ)) :
+    (algebraicLocalBlocking d L).symm (localObservable d (expandedRegion L Λ) A) =
+      localObservable (MPSTensor.blockPhysDim d L) Λ ((localBlocking d L Λ).symm A) := by
+  apply (algebraicLocalBlocking d L).injective
+  change algebraicLocalBlocking d L
+      ((algebraicLocalBlocking d L).symm (localObservable d (expandedRegion L Λ) A)) =
+    algebraicLocalBlocking d L
+      (localObservable (MPSTensor.blockPhysDim d L) Λ ((localBlocking d L Λ).symm A))
+  rw [StarAlgEquiv.apply_symm_apply, algebraicLocalBlocking_localObservable,
+    StarAlgEquiv.apply_symm_apply]
+
 /-- Algebraic-local blocking preserves the operator norm. -/
 lemma algebraicLocalBlocking_norm (d L : ℕ) [NeZero d] [NeZero L]
     (A : AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L)) :
@@ -342,5 +391,11 @@ lemma algebraicLocalBlocking_isometry (d L : ℕ) [NeZero d] [NeZero L] :
   intro A B
   rw [dist_eq_norm, dist_eq_norm, ← map_sub]
   exact algebraicLocalBlocking_norm d L (A - B)
+
+/-- Inverse algebraic-local blocking is an operator-norm isometry. -/
+lemma algebraicLocalBlocking_symm_isometry (d L : ℕ) [NeZero d] [NeZero L] :
+    Isometry ((algebraicLocalBlocking d L).symm) :=
+  (algebraicLocalBlocking_isometry d L).right_inv
+    (algebraicLocalBlocking d L).apply_symm_apply
 
 end SpinChain

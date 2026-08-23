@@ -9607,7 +9607,8 @@ $\omega^{-1}$.
 
 \begin{lemma}[Block-hull containment and monotonicity]
     \label{lem:qca_block_hull_properties}
-    \lean{SpinChain.subset_expandedRegion_blockHull,SpinChain.blockHull_mono}
+    \lean{SpinChain.subset_expandedRegion_blockHull,SpinChain.blockHull_mono,
+        SpinChain.blockHull_expandedRegion}
     \leanok
     \uses{def:qca_block_hull, def:qca_expanded_region}
     Let $L>0$.  Every finite original region is contained in the expansion of
@@ -9618,14 +9619,21 @@ $\omega^{-1}$.
     \end{align}
     If $\Delta\subseteq\Theta$, then
     $\operatorname{Hull}_L(\Delta)\subseteq
-    \operatorname{Hull}_L(\Theta)$.
+    \operatorname{Hull}_L(\Theta)$.  Expansion and block hull are exact in the
+    blocked direction:
+    \begin{align}
+        \operatorname{Hull}_L(\widehat\Lambda_L)&=\Lambda.
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_block_hull, thm:qca_expanded_region_coordinates}
     The quotient coordinate of each $z\in\Delta$ belongs to the image defining
     the hull, which proves containment after expansion.  Monotonicity follows
-    by retaining the same witness $z$ in the larger region.
+    by retaining the same witness $z$ in the larger region.  Finally, every
+    expanded site has quotient in $\Lambda$, while for each $x\in\Lambda$ the
+    site $Lx$ belongs to $\widehat\Lambda_L$ and has quotient $x$.  Hence
+    $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
 \end{proof}
 
 \begin{lemma}[Blocking commutes with finite local inclusions]
@@ -9791,23 +9799,169 @@ $\omega^{-1}$.
     \label{lem:qca_algebraic_blocking_formulas}
     \lean{SpinChain.algebraicLocalBlocking_apply,
         SpinChain.algebraicLocalBlocking_localObservable,
+        SpinChain.algebraicLocalBlocking_symm_apply,
+        SpinChain.algebraicLocalBlocking_symm_localObservable,
+        SpinChain.algebraicLocalBlocking_symm_localObservable_expandedRegion,
         SpinChain.algebraicLocalBlocking_norm,
-        SpinChain.algebraicLocalBlocking_isometry}
+        SpinChain.algebraicLocalBlocking_isometry,
+        SpinChain.algebraicLocalBlocking_symm_isometry}
     \leanok
     \uses{def:qca_algebraic_blocking,
         lem:qca_algebraic_blocking_maps_evaluation}
-    Let $d>0$ and $L>0$.  The equivalence agrees with the forward lift and
-    sends every finite representative to its finite blocking on the expanded
-    region.  It preserves the algebraic-local operator norm and is an isometry.
+    Let $d>0$ and $L>0$.  The equivalence agrees with the forward lift, and
+    its inverse agrees with the block-hull unblocking map.  For
+    $A\in\mathcal A^{(d^L)}_\Lambda$ and
+    $C\in\mathcal A^{(d)}_\Delta$,
+    \begin{align}
+      \mathcal B_L\bigl(\iota_\Lambda(A)\bigr)
+        &=\iota_{\widehat\Lambda_L}
+          \bigl(\mathcal B_{L,\Lambda}(A)\bigr),\\
+      \mathcal B_L^{-1}\bigl(\iota_\Delta(C)\bigr)
+        &=\iota_{\operatorname{Hull}_L(\Delta)}
+          \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
+          \bigl(\iota_{\Delta,
+          \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
+    \end{align}
+    In particular, if $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, then
+    \begin{align}
+      \mathcal B_L^{-1}\bigl(\iota_{\widehat\Lambda_L}(C)\bigr)
+        &=\iota_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
+    \end{align}
+    The forward and inverse maps are operator-norm isometries.  In particular,
+    each preserves the norm.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_algebraic_blocking_maps_evaluation,
+        lem:qca_block_hull_properties,
         thm:qca_local_blocking_formulas,
         def:qca_algebraic_local_operator_norm}
-    The finite-representative formula is the defining formula for the forward
-    blocking homomorphism.  On such a representative, norm preservation
-    reduces to norm preservation by finite blocking and by the canonical local
-    inclusion; distance preservation follows by applying the norm identity to
-    differences.
+    The first two formulas are the evaluation identities for the forward and
+    reverse maps.  For an expanded region, the block-hull identity removes the
+    enlargement and leaves the inverse finite blocking equivalence.  On a
+    finite representative, forward norm preservation reduces to norm
+    preservation by finite blocking and by the canonical local inclusion;
+    distance preservation follows by applying the norm identity to
+    differences.  The inverse isometry follows from the forward isometry and
+    the right-inverse identity, rather than repeating the norm calculation.
+\end{proof}
+
+\begin{definition}[Quasi-local site-blocking equivalence]
+    \label{def:qca_quasi_local_blocking}
+    \lean{SpinChain.quasiLocalBlocking}
+    \leanok
+    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_blocking,
+        lem:qca_algebraic_blocking_formulas}
+    For $d>0$ and $L>0$, site blocking extends uniquely by continuity to a
+    star-algebra equivalence
+    \begin{align}
+      \overline{\mathcal B}_L:
+      \mathcal A^{(d^L)}&\simeq\mathcal A^{(d)}.
+    \end{align}
+    This is only the completion of the change of site grouping used at
+    \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.  This slice does not define
+    scaled translations or carry-aware neighborhoods, prove propagation
+    estimates, construct blocked automorphisms, transport the property of being
+    a quantum cellular automaton, realize a circuit, or reconstruct an MPU from
+    a quantum cellular automaton.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{lem:qca_algebraic_blocking_formulas, def:completion_star_alg_equiv}
+    The algebraic blocking equivalence and its inverse are isometries, hence
+    continuous.  Extending both maps to the operator-norm completions gives
+    mutually inverse star-algebra homomorphisms.
+\end{proof}
+
+\begin{lemma}[Quasi-local blocking evaluation and norm]
+    \label{lem:qca_quasi_local_blocking_formulas}
+    \lean{SpinChain.quasiLocalBlocking_apply,
+        SpinChain.quasiLocalBlocking_algebraicToQuasiLocal,
+        SpinChain.quasiLocalBlocking_symm_algebraicToQuasiLocal,
+        SpinChain.quasiLocalBlocking_quasiLocalObservable,
+        SpinChain.quasiLocalBlocking_symm_quasiLocalObservable,
+        SpinChain.quasiLocalBlocking_symm_quasiLocalObservable_expandedRegion,
+        SpinChain.norm_quasiLocalBlocking,
+        SpinChain.quasiLocalBlocking_isometry}
+    \leanok
+    \uses{def:qca_quasi_local_blocking, lem:qca_algebraic_blocking_formulas,
+        lem:qca_quasi_local_observable}
+    Let $d>0$ and $L>0$.  Write $j^{(d)}$ for the canonical map from the
+    algebraic-local algebra into its completion.  The underlying map of
+    $\overline{\mathcal B}_L$ is the continuous extension of $\mathcal B_L$,
+    and on the two dense algebraic-local subalgebras,
+    \begin{align}
+      \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
+        &=j^{(d)}\bigl(\mathcal B_L(A)\bigr),\\
+      \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
+        &=j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
+    \end{align}
+    For $A\in\mathcal A^{(d^L)}_\Lambda$ and
+    $C\in\mathcal A^{(d)}_\Delta$, these identities become
+    \begin{align}
+      \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
+        &=j^{(d)}_{\widehat\Lambda_L}
+          \bigl(\mathcal B_{L,\Lambda}(A)\bigr),\\
+      \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
+        &=j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
+          \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
+          \bigl(\iota_{\Delta,
+          \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
+    \end{align}
+    If $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, the inverse formula reduces
+    exactly to
+    \begin{align}
+      \overline{\mathcal B}_L^{-1}
+        \bigl(j^{(d)}_{\widehat\Lambda_L}(C)\bigr)
+        &=j^{(d^L)}_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
+    \end{align}
+    Finally, for all quasi-local observables $X$ and $Y$ on the blocked chain,
+    \begin{align}
+      \lVert\overline{\mathcal B}_L(X)\rVert&=\lVert X\rVert,\\
+      \lVert\overline{\mathcal B}_L(X)-
+        \overline{\mathcal B}_L(Y)\rVert&=\lVert X-Y\rVert.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable,
+        lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
+    The first identity is the defining completion map, and the two dense
+    formulas are its canonical-image formulas for the algebraic equivalence and
+    its inverse.  Composing them with the finite-region canonical maps gives the
+    two finite formulas.  The exact expanded-region formula uses
+    $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.  A star-algebra
+    equivalence of C-star algebras preserves the norm; applying this to $X-Y$
+    gives distance preservation.
+\end{proof}
+
+\begin{lemma}[Support transport under site blocking]
+    \label{lem:qca_quasi_local_blocking_support}
+    \lean{SpinChain.quasiLocalBlocking_supportedIn,
+        SpinChain.quasiLocalBlocking_symm_supportedIn,
+        SpinChain.quasiLocalBlocking_supportedIn_expandedRegion_iff}
+    \leanok
+    \uses{lem:qca_quasi_local_blocking_formulas, def:qca_quasi_local_supported_in,
+        lem:qca_block_hull_properties}
+    Let $d>0$ and $L>0$.  If a blocked-chain observable $X$ is supported in
+    $\Lambda$, then $\overline{\mathcal B}_L(X)$ is supported in
+    $\widehat\Lambda_L$.  If an original-chain observable $Y$ is supported in
+    $\Delta$, then $\overline{\mathcal B}_L^{-1}(Y)$ is supported in
+    $\operatorname{Hull}_L(\Delta)$.  In particular, support transport is exact
+    on expanded regions:
+    \begin{align}
+      \overline{\mathcal B}_L(X)
+        \text{ is supported in }\widehat\Lambda_L
+      \quad\Longleftrightarrow\quad
+      X\text{ is supported in }\Lambda.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_quasi_local_blocking_formulas,
+        lem:qca_block_hull_properties}
+    Choose a finite-region representative and apply the corresponding forward
+    or inverse finite evaluation formula.  For the reverse implication in the
+    exact statement, apply inverse blocking and simplify the inverse composite
+    and the block hull of the expanded region.
 \end{proof}
