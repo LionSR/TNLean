@@ -9516,10 +9516,10 @@ $\omega^{-1}$.
         \mathcal A^{(d^L)}_\Lambda
         &\simeq \mathcal A^{(d)}_{\widehat\Lambda_L}.
     \end{align}
-    This is only a finite-region equivalence.  No compatibility with local
-    inclusions, extension to the algebraic-local or quasi-local algebra,
-    propagation statement, or transport of quantum cellular automata is
-    asserted here.
+    This is the finite-region equivalence underlying the algebraic-local
+    blocking construction below.  No quasi-local completion, compatibility
+    with translations, propagation statement, circuit representation, or
+    transport of quantum cellular automata is asserted here.
 \end{definition}
 
 \begin{theorem}[Finite local-algebra blocking formulas]
@@ -9537,4 +9537,224 @@ $\omega^{-1}$.
     \uses{def:qca_local_blocking}
     The entry formula is matrix reindexing.  A star-algebra equivalence between
     finite matrix algebras preserves the C-star norm and hence distances.
+\end{proof}
+
+\begin{definition}[Finite block hull]
+    \label{def:qca_block_hull}
+    \lean{SpinChain.blockHull}
+    \leanok
+    For $L>0$ and a finite original region $\Delta\subset\mathbb Z$, define
+    its block hull by
+    \begin{align}
+        \operatorname{Hull}_L(\Delta)
+        &=\{\lfloor z/L\rfloor:z\in\Delta\}.
+    \end{align}
+    This is the finite set of length-$L$ blocks that meet $\Delta$.
+\end{definition}
+
+\begin{lemma}[Block-hull containment and monotonicity]
+    \label{lem:qca_block_hull_properties}
+    \lean{SpinChain.subset_expandedRegion_blockHull,SpinChain.blockHull_mono}
+    \leanok
+    \uses{def:qca_block_hull, def:qca_expanded_region}
+    Let $L>0$.  Every finite original region is contained in the expansion of
+    its block hull,
+    \begin{align}
+        \Delta\subseteq
+        \widehat{\operatorname{Hull}_L(\Delta)}_L.
+    \end{align}
+    If $\Delta\subseteq\Theta$, then
+    $\operatorname{Hull}_L(\Delta)\subseteq
+    \operatorname{Hull}_L(\Theta)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:qca_block_hull, thm:qca_expanded_region_coordinates}
+    The quotient coordinate of each $z\in\Delta$ belongs to the image defining
+    the hull, which proves containment after expansion.  Monotonicity follows
+    by retaining the same witness $z$ in the larger region.
+\end{proof}
+
+\begin{lemma}[Blocking commutes with finite local inclusions]
+    \label{lem:qca_local_blocking_inclusion}
+    \lean{SpinChain.localBlocking_localInclusion}
+    \leanok
+    \uses{def:qca_local_blocking, thm:qca_configuration_blocking_formulas,
+        def:qca_local_inclusion}
+    Let $L>0$.  For finite blocked regions $\Lambda\subseteq\Gamma$, the
+    square formed by finite blocking and the two canonical local inclusions
+    commutes:
+    \begin{align}
+        \mathcal B_{L,\Gamma}\,\iota_{\Lambda,\Gamma}
+        &=\iota_{\widehat\Lambda_L,\widehat\Gamma_L}\,
+          \mathcal B_{L,\Lambda}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:qca_local_blocking_formulas,
+        thm:qca_configuration_blocking_formulas}
+    For configurations $x,y$ on $\widehat\Gamma_L$, let $\widetilde x$ and
+    $\widetilde y$ be their block encodings on $\Gamma$.  The two matrix
+    entries in the commuting square are
+    \begin{align}
+        \bigl[\mathcal B_{L,\Gamma}
+          (\iota_{\Lambda,\Gamma}(A))\bigr]_{x,y}
+        &=A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
+          \mathbf 1_{\{\widetilde x|_{\Gamma\setminus\Lambda}
+                         =\widetilde y|_{\Gamma\setminus\Lambda}\}},\\
+        \bigl[\iota_{\widehat\Lambda_L,\widehat\Gamma_L}
+          (\mathcal B_{L,\Lambda}(A))\bigr]_{x,y}
+        &=A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
+          \mathbf 1_{\{x|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}
+                         =y|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}\}}.
+    \end{align}
+    Restriction commutes with block encoding, and decoding identifies
+    $\Gamma\setminus\Lambda$ with the original sites in
+    $\widehat\Gamma_L\setminus\widehat\Lambda_L$.  Hence the two indicator
+    conditions are equivalent and the entries agree.
+\end{proof}
+
+\begin{definition}[Forward and reverse algebraic-local blocking maps]
+    \label{def:qca_algebraic_blocking_maps}
+    \lean{SpinChain.algebraicLocalBlockingHom,
+        SpinChain.algebraicLocalUnblockingHom}
+    \leanok
+    \uses{def:qca_algebraic_local_algebra, def:qca_local_blocking,
+        def:qca_block_hull}
+    Let $L>0$.  The compatible finite blocking maps induce a star-algebra
+    homomorphism
+    \begin{align}
+        \mathcal B_L:\mathcal A_{\mathrm{loc}}^{(d^L)}
+        \longrightarrow\mathcal A_{\mathrm{loc}}^{(d)}.
+    \end{align}
+    In the reverse direction there is a star-algebra homomorphism
+    \begin{align}
+        \mathcal U_L:\mathcal A_{\mathrm{loc}}^{(d)}
+        \longrightarrow\mathcal A_{\mathrm{loc}}^{(d^L)}.
+    \end{align}
+    A representative on an arbitrary original region $\Delta$ is first
+    included into $\widehat{\operatorname{Hull}_L(\Delta)}_L$ and then finite
+    blocking is inverted.  Thus the reverse construction does not require
+    $\Delta$ itself to be an expanded region.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{lem:qca_block_hull_properties,
+        lem:qca_local_blocking_inclusion,
+        thm:qca_algebraic_local_algebra_universal}
+    For $\Lambda\subseteq\Gamma$, the finite commuting square gives
+    \begin{align}
+        \iota_{\widehat\Gamma_L}
+          \mathcal B_{L,\Gamma}(\iota_{\Lambda,\Gamma}(A))
+        &=\iota_{\widehat\Lambda_L}\mathcal B_{L,\Lambda}(A),
+    \end{align}
+    so the forward finite-region maps form a compatible family.  For the
+    reverse family, block-hull monotonicity sends $\Delta\subseteq\Theta$ to
+    $\operatorname{Hull}_L(\Delta)\subseteq
+    \operatorname{Hull}_L(\Theta)$.  Transitivity of the canonical inclusions
+    and the inverse commuting square then give
+    \begin{align}
+        \iota_{\operatorname{Hull}_L(\Theta)}
+          \mathcal U_{L,\Theta}(\iota_{\Delta,\Theta}(A))
+        &=\iota_{\operatorname{Hull}_L(\Delta)}
+          \mathcal U_{L,\Delta}(A).
+    \end{align}
+    The universal property of the algebraic direct limit therefore induces
+    both star-algebra homomorphisms.
+\end{proof}
+
+\begin{lemma}[Evaluation of the algebraic-local blocking maps]
+    \label{lem:qca_algebraic_blocking_maps_evaluation}
+    \lean{SpinChain.algebraicLocalBlockingHom_localObservable,
+        SpinChain.algebraicLocalUnblockingHom_localObservable,
+        SpinChain.algebraicLocalBlockingHom_comp_unblockingHom,
+        SpinChain.algebraicLocalUnblockingHom_comp_blockingHom}
+    \leanok
+    \uses{def:qca_algebraic_blocking_maps,
+        lem:qca_block_hull_properties}
+    Let $L>0$.  The forward map applies finite blocking to a representative on
+    $\Lambda$ and regards the result as supported on $\widehat\Lambda_L$.  The
+    reverse map enlarges a representative on $\Delta$ to the expansion of its
+    block hull, applies the inverse finite blocking equivalence, and regards
+    the result as supported on $\operatorname{Hull}_L(\Delta)$.  Their
+    composites have the orientations
+    \begin{align}
+        \mathcal B_L\mathcal U_L
+        &=\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d)}},\\
+        \mathcal U_L\mathcal B_L
+        &=\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d^L)}}.
+    \end{align}
+    The first identity holds for every on-site dimension $d$; the second also
+    assumes $d>0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_local_blocking_inclusion,
+        lem:qca_block_hull_properties}
+    These are the evaluation formulas for the two compatible-family lifts.
+    Forward compatibility is the commuting square.  Reverse compatibility
+    follows by monotonicity of block hulls, composition of local inclusions,
+    and the same square applied in the inverse direction.  Forward blocking
+    after the reverse map reduces to the canonical inclusion of $\Delta$ into
+    its expanded block hull.  The other composite is the identity by
+    injectivity of the forward map.
+\end{proof}
+
+\begin{definition}[Algebraic-local site-blocking equivalence]
+    \label{def:qca_algebraic_blocking}
+    \lean{SpinChain.algebraicLocalBlocking}
+    \leanok
+    \uses{def:qca_algebraic_blocking_maps}
+    For $d>0$ and $L>0$, forward blocking gives a star-algebra equivalence
+    \begin{align}
+        \mathcal A_{\mathrm{loc}}^{(d^L)}
+        &\simeq \mathcal A_{\mathrm{loc}}^{(d)}.
+    \end{align}
+    This formalizes only the algebraic-local change of site grouping used at
+    lines~2308 and 2313--2320 of \cite{Cirac2017MPU}.  It does not assert the
+    QCA-to-MPU converse at line~2308, extend blocking to the quasi-local
+    completion, intertwine translations, provide a propagation estimate or a
+    circuit representation, or transport a quantum cellular automaton.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{lem:qca_algebraic_blocking_maps_evaluation,
+        thm:qca_local_observable_finite_support,
+        lem:qca_local_blocking_inclusion}
+    The identity $\mathcal B_L\mathcal U_L=\operatorname{id}$ makes
+    $\mathcal B_L$ surjective.  For injectivity, represent two blocked
+    observables on finite regions $\Lambda$ and $\Gamma$, enlarge both to
+    $\Omega=\Lambda\cup\Gamma$, and suppose their images under
+    $\mathcal B_L$ agree.  Injectivity of the canonical map from the finite
+    algebra on $\widehat\Omega_L$, followed by injectivity of
+    $\mathcal B_{L,\Omega}$ and the finite commuting square, gives equality of
+    the two representatives in the algebra on $\Omega$.  Thus
+    $\mathcal B_L$ is bijective, with inverse $\mathcal U_L$, and defines the
+    stated star-algebra equivalence.
+\end{proof}
+
+\begin{lemma}[Algebraic-local blocking formulas and norm]
+    \label{lem:qca_algebraic_blocking_formulas}
+    \lean{SpinChain.algebraicLocalBlocking_apply,
+        SpinChain.algebraicLocalBlocking_localObservable,
+        SpinChain.algebraicLocalBlocking_norm,
+        SpinChain.algebraicLocalBlocking_isometry}
+    \leanok
+    \uses{def:qca_algebraic_blocking,
+        lem:qca_algebraic_blocking_maps_evaluation}
+    Let $d>0$ and $L>0$.  The equivalence agrees with the forward lift and
+    sends every finite representative to its finite blocking on the expanded
+    region.  It preserves the algebraic-local operator norm and is an isometry.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:qca_algebraic_blocking_maps_evaluation,
+        thm:qca_local_blocking_formulas,
+        def:qca_algebraic_local_operator_norm}
+    The finite-representative formula is the defining formula for the forward
+    blocking homomorphism.  On such a representative, norm preservation
+    reduces to norm preservation by finite blocking and by the canonical local
+    inclusion; distance preservation follows by applying the norm identity to
+    differences.
 \end{proof}
