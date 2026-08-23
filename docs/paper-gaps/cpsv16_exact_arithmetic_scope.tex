@@ -63,21 +63,22 @@ and the positivity of the corresponding logarithmic ratios,
 
 For the four-site states, let $S_L$ denote the entropy of $L$ neighboring
 sites and define the chain mutual information by
-$I_L=S_L+S_{4-L}-S_4$.  These are scalar arithmetic statements.  They do
-not identify the reduced-state spectra of the printed tensors, do not assert
-the entropy comparisons $I_2>I_1$ discussed in Examples~4.10 and~4.11, and
-do not assert saturation or failure of an area law.  Deriving the entropy
-comparisons requires separate formal links from the printed tensors to the
-corresponding entropy expressions.  Those links, and the resulting
-corrections to or confirmations of the printed zero-correlation-length and
-SAL claims, remain under the Example~4.10 and Example~4.11 implementation tasks
-\ghissue{6301} and \ghissue{6302}, respectively.
+$I_L=S_L+S_{4-L}-S_4$.  The declarations in the arithmetic module alone are
+scalar statements: they do not identify reduced-state spectra or prove an
+area-law conclusion.  For the corrected fixed-$p=1/4$ Example~4.10 tensor,
+\doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} supplies the one- through
+four-site root multisets and
+\doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives $I_2>I_1$ and the
+source-ZCL, non-SAL conclusion.  This completes \ghissue{6301} without
+asserting the universal parameter range printed in the source.  The
+corresponding Example~4.11 source claim remains under \ghissue{6302}.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.}  The arithmetic endpoints are certified,
-but the entropy conclusions are not.  The exact comparisons on which the
-four-site calculations rest are machine-checked, but nothing here is a
-formalization of the printed entropy or area-law claims themselves.
+\textbf{Verdict: scope restriction.}  The arithmetic endpoints are certified.
+For corrected Example~4.10 at $p=1/4$, separate tensor and entropy modules now
+connect those endpoints to the formal non-SAL witness.  These project-derived
+four-site results do not formalize the printed universal-in-$p$ claim, and the
+Example~4.11 source claim remains separate.
 
 \end{document}

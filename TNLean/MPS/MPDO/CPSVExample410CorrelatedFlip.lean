@@ -29,10 +29,10 @@ exact logarithm certified in the arithmetic module, hence is strictly positive.
 The weight families list precisely the reduced-state spectra computed in the
 paper-gap note at flip probability one quarter; the source prints only the
 channel and the four entropy decimals.  The companion modules
-`CPSVExample410Operator` and `CPSVExample410Spectrum` now prove source zero
-correlation length and identify the one- through four-site spectra with these
-window distributions. The corresponding block entropies and the final non-SAL
-theorem remain open.
+`CPSVExample410Operator`, `CPSVExample410Spectrum`, and
+`CPSVExample410Entropy` prove source zero correlation length, identify the one-
+through four-site spectra with these window distributions, derive the block
+entropies, and establish the final non-SAL theorem.
 
 **Local fix (left-right correlated flip):** the printed channel at source
 lines 901--902 applies both Pauli factors to the left qubit.  Here the second
