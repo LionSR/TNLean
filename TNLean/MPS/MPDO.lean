@@ -89,6 +89,7 @@ import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
+import TNLean.MPS.MPDO.CPSVExample410Entropy
 import TNLean.MPS.MPDO.CPSVExample410Operator
 import TNLean.MPS.MPDO.CPSVExample410Spectrum
 import TNLean.MPS.MPDO.CPSVExample411Ambient
