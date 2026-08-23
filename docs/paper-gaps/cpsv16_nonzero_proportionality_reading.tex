@@ -81,23 +81,25 @@ asymptotic assumption to the block-selection argument.
 
 The nonzero condition does not change the intended conclusion of the source
 theorem. It records the conventional mathematical meaning of proportional
-nonzero vectors in the source argument. The weaker scalar-multiple predicate
-\leanid{ProportionalMPV}\textsubscript{2}, where $c_N$ may vanish, remains available for
-older auxiliary lemmas and is likewise indexed only by positive lengths. It is
-not used as the paper-faithful hypothesis for the proportional Fundamental
-Theorem.
+nonzero vectors in the source argument. No weaker scalar-multiple predicate
+with $c_N$ allowed to vanish is kept as a named predicate: the relation
+$V=0\cdot V'$ is not a projective statement. One inline
+eventual-proportionality hypothesis survives outside the named predicate, in
+the overlap-convergence theorem
+\leanid{mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV}\textsubscript{2}
+in \leanid{TNLean/MPS/FundamentalTheorem/Proportional.lean}: it asks only for
+a scalar $c_N$ with $V^{(N)}(A)=c_N V^{(N)}(B)$ eventually in $N$, with no
+nonvanishing condition imposed on $c_N$. The eventual nonvanishing of $c_N$
+is derived there from the self-overlap convergence hypotheses rather than
+assumed as part of the hypothesis.
 
 \section{Elimination plan}
 
 No extra mathematical theorem is needed for the present projective reading of
 CPSV16 Theorem~\texttt{thm1}
-\cite[lines~1167--1170]{Cirac2016MPDO_arXiv}. If a literal weak-scalar
-reading is later required,
-it should be formalized as a separate bridge theorem: prove from the source
-canonical-form hypotheses that the relevant MPV vectors do not vanish at the
-lengths used in the argument, then derive
-\leanid{NonzeroProportionalMPV}\textsubscript{2} from the weak predicate before applying the
-block-selection proof.
+\cite[lines~1167--1170]{Cirac2016MPDO_arXiv}. The vanishing-scalar case is a
+degenerate reading outside the source's convention and is not given a
+separate predicate.
 
 \bibliographystyle{alpha}
 \bibliography{references}

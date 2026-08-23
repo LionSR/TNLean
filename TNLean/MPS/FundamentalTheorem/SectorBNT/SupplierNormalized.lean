@@ -14,8 +14,8 @@ The canonical form of arXiv:1606.00608 (eq:II_CF1,
 $A^i = \oplus_{k=1}^r \mu_k A_k^i$ with each $A_k$ a normal tensor, and line 246 fixes the
 weight normalization: since the states are not normalized, one can always choose
 $|\mu_k| \le 1$ with at least one weight of unit modulus, "something which we will assume from
-now on."  The arbitrary-input supplier of the basis of normal tensors leaves that
-normalization choice as a hypothesis on the produced weights.  This file discharges it:
+now on."  The prepared-block supplier `exists_prepared_BNT_blocks_afterBlocking_pos` produces
+nonzero weights without that normalization.  This file realizes the choice:
 dividing every weight by the largest modulus $m = \max_k |\mu_k|$ realizes the line-246
 choice, and the discarded factor reappears as the scalar $m^N$ multiplying the length-$N$
 matrix product coefficients.
@@ -179,13 +179,10 @@ $\operatorname{tr}(M) \ne 0$.  Repeating the word $pq$ times therefore gives a n
 coefficient at a length divisible by $p$, which is a coefficient of the $p$-blocked tensor.
 
 The nonzero-family condition is the precise boundary for the line-246 unit-modulus choice:
-an empty weight family cannot contain a unit-modulus weight.
-
-**Scope restriction (nonzero MPV family):** the source proposition says "for any tensor,"
-but the zero MPV family cannot satisfy the global unit-modulus condition imposed immediately
-before that proposition.  The hypothesis below is the weakest exclusion of this degenerate
-case.  This boundary and its possible resolution by a separate zero-family clause are
-recorded in `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
+an empty weight family cannot contain a unit-modulus weight.  The zero family is the one
+input the source's standing normalization excludes, so the hypothesis states the source's
+convention rather than a sub-case; see
+`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
 theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
     {d D : ℕ} (A : MPSTensor d D)
     (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
