@@ -7988,16 +7988,28 @@ right operator block are the matrices
     X^{\mathrm L}_{rs}(i,j)&=X((i,r),(j,s)), &
     X^{\mathrm R}_{ij}(r,s)&=X((i,r),(j,s)).
 \end{align}
-Thus this layer reuses the established operations
-$X\mapsto X^{\mathrm L}_{rs}$ and $X\mapsto X^{\mathrm R}_{ij}$; it does not
-introduce new notions of a slice or a block.  The construction below is the
-full complex matrix-algebra specialization of the coefficient construction in
-Schumacher--Werner, quant-ph/0405174, lines~1137--1169, and of the leastness
-and commutant statements in GNVW Lemma~\emph{lem:spp}.  Its MPU application
-is the support algebra $\mathcal R_{2x}$ discussed in
-\cite[lines~2320--2334]{Cirac2017MPU}.  No full-matrix structure theorem,
-dimension formula, Margolus gate, depth-two circuit, MPU standard form, or
-index comparison is asserted here.
+For a star-subalgebra $\mathcal D\subseteq M_K(\mathbb C)$, write
+$\mathcal D'=\{Y\in M_K(\mathbb C)\mid [Y,Z]=0\text{ for every }Z\in\mathcal D\}$
+for its commutant.  The construction below is the full complex matrix-algebra
+specialization of the coefficient construction in
+\cite[Section~4.3]{SchumacherWerner2004QCA} and of the leastness and commutant
+statements in \cite[Lemma~7]{Gross2012IndexTheory}.
+
+\textbf{Scope restriction (full matrix factors):}
+Lemma~7 permits arbitrary finite-dimensional $C^*$-algebras
+$\mathcal B_1$ and $\mathcal B_2$, whereas the statements below take
+$\mathcal B_1=M_I(\mathbb C)$ and $\mathcal B_2=M_J(\mathbb C)$.
+The word ``subalgebra'' in Lemma~7 is used in the $C^*$-algebra sense, so
+$\mathcal A$ is closed under the involution; this convention is explicit in
+the precursor \cite[Section~4.3]{SchumacherWerner2004QCA}.  Thus the
+star-subalgebra hypothesis below is not an additional restriction.  The
+full-matrix restriction holds for the MPU spin chain because every one-site
+algebra is isomorphic to $M_d(\mathbb C)$
+\cite[lines~2320--2334]{Cirac2017MPU}.  The general-factor GNVW theorem is not
+claimed here; see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
+
+No full-matrix structure theorem, dimension formula, Margolus gate, depth-two
+circuit, MPU standard form, or index comparison is asserted here.
 
 \begin{theorem}[Adjoint of a right coefficient block]
     \label{thm:qca_operator_block_adjoint}
@@ -8184,7 +8196,7 @@ index comparison is asserted here.
     \lean{Matrix.left_support_algebra_le_iff_le_tensor_submodule}
     \leanok
     \uses{def:qca_left_support_algebra}
-    Let $I=\{1,\ldots,p\}$ and $J=\{1,\ldots,q\}$.  For every
+    Let $I=\{0,\ldots,p-1\}$ and $J=\{0,\ldots,q-1\}$.  For every
     star-subalgebra $\mathcal B\subseteq M_p(\mathbb C)$,
     \begin{align}
         \operatorname{Spp}_{\mathrm L}(\mathcal A)\subseteq\mathcal B
@@ -8215,7 +8227,7 @@ index comparison is asserted here.
           \{A\otimes B\mid A\in S,\ B\in T\}
         \subseteq M_{I\times J}(\mathbb C).
     \end{align}
-    This is the honest tensor-product subspace used below, rather than a
+    This is the tensor-product subspace used below, rather than a
     conjunction of two one-sided containment conditions.
 \end{definition}
 
@@ -8238,8 +8250,12 @@ index comparison is asserted here.
 
 \begin{proof}\leanok
     \uses{def:qca_kronecker_submodule}
-    Each slice of $A\otimes B$ is a scalar multiple of $A$, and each block is
-    a scalar multiple of $B$, so the forward implication extends by linearity.
+    For $A\in S$ and $B\in T$, direct evaluation gives
+    \begin{align}
+        (A\otimes B)^{\mathrm L}_{rs}&=B_{rs}A, &
+        (A\otimes B)^{\mathrm R}_{ij}&=A_{ij}B.
+    \end{align}
+    Thus the forward implication extends by linearity.
     Conversely, expand the right blocks in a basis of $T$.  Applying the dual
     coordinate functionals to those blocks produces matrices in $S$ from the
     left-slice hypothesis, and the resulting finite sum reconstructs $X$ as a
@@ -8251,7 +8267,7 @@ index comparison is asserted here.
     \lean{Matrix.kroneckerSubmodule_top_eq_tensorSubmodule}
     \leanok
     \uses{def:qca_kronecker_submodule}
-    Let $I=\{1,\ldots,p\}$ and $J=\{1,\ldots,q\}$.  For every submodule
+    Let $I=\{0,\ldots,p-1\}$ and $J=\{0,\ldots,q-1\}$.  For every submodule
     $S\subseteq M_p(\mathbb C)$,
     \begin{align}
         S\boxtimes M_q(\mathbb C)
@@ -8304,12 +8320,13 @@ index comparison is asserted here.
         \boxtimes
         \operatorname{Spp}_{\mathrm R}(\mathcal A).
     \end{align}
-    This is the full complex matrix-algebra specialization of equation
-    \emph{a2Supp} in Schumacher--Werner, quant-ph/0405174,
-    lines~1161--1168, and of the symmetric conclusion of GNVW
-    Lemma~\emph{lem:spp}.  It is an inclusion in an actual tensor-product
-    span, not merely the conjunction of the two one-sided inclusions.  The MPU
-    appendix applies this construction to $\mathcal R_{2x}$ in
+    This is the full complex matrix-algebra specialization of the
+    support-algebra containment in Schumacher--Werner Section~4.3 and of
+    Gross--Nesme--Vogts--Werner equation~(22).  The latter follows after
+    applying Lemma~7 to both tensor factors.  The displayed assertion is an
+    inclusion in an actual tensor-product span, not merely the conjunction of
+    the two one-sided inclusions.  The MPU appendix applies this construction
+    to $\mathcal R_{2x}$ in
     \cite[lines~2320--2334]{Cirac2017MPU}.
 \end{theorem}
 
@@ -8337,9 +8354,17 @@ index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    Compare the $((i,r),(j,s))$ entries of the two products.  The identity
-    matrix removes the sum over the second tensor coordinate, leaving exactly
-    the $(i,j)$ entry of the coefficient commutator.
+    For $i,j\in I$ and $r,s\in J$, the two product entries are
+    \begin{align}
+        [(B\otimes\mathbf 1_J)X]_{(i,r),(j,s)}
+        &=\sum_{k\in I}B_{ik}X_{(k,r),(j,s)}
+          =(BX^{\mathrm L}_{rs})_{ij}, \\
+        [X(B\otimes\mathbf 1_J)]_{(i,r),(j,s)}
+        &=\sum_{k\in I}X_{(i,r),(k,s)}B_{kj}
+          =(X^{\mathrm L}_{rs}B)_{ij}.
+    \end{align}
+    Equality of the two products is therefore equivalent to
+    $[B,X^{\mathrm L}_{rs}]=0$ for every $r,s\in J$.
 \end{proof}
 
 \begin{theorem}[Right Kronecker commutation is coefficientwise]
@@ -8356,9 +8381,17 @@ index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    Compare the $((i,r),(j,s))$ entries of the two products.  The identity
-    matrix removes the sum over the first tensor coordinate, leaving exactly
-    the $(r,s)$ entry of the coefficient commutator.
+    For $i,j\in I$ and $r,s\in J$, the two product entries are
+    \begin{align}
+        [(\mathbf 1_I\otimes C)X]_{(i,r),(j,s)}
+        &=\sum_{t\in J}C_{rt}X_{(i,t),(j,s)}
+          =(CX^{\mathrm R}_{ij})_{rs}, \\
+        [X(\mathbf 1_I\otimes C)]_{(i,r),(j,s)}
+        &=\sum_{t\in J}X_{(i,r),(j,t)}C_{ts}
+          =(X^{\mathrm R}_{ij}C)_{rs}.
+    \end{align}
+    Equality of the two products is therefore equivalent to
+    $[C,X^{\mathrm R}_{ij}]=0$ for every $i,j\in I$.
 \end{proof}
 
 \begin{theorem}[Left support-algebra centralizer]
