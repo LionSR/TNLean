@@ -633,19 +633,6 @@ for bearing in e n w s; do
     exit 1
   }
 done
-# A directed bundle keeps its multiplicity: the orientation precedes the
-# strand weight, so `modulo=bundles' still expands the bundle and the
-# equation of one directed bundle against three directed singles holds.
-grep -Fq 'kernel-boundary|signature=open:e:to:bundle=3' \
-    "$WORK/r_bundle_dir_modulo.tnlog" || {
-  echo "FAIL: the directed bundle lost its expandable weight field" >&2
-  exit 1
-}
-grep -Fq 'check|scope=1|relation=1|result=equal|modulo=bundles' \
-    "$WORK/r_bundle_dir_modulo.tnlog" || {
-  echo "FAIL: a directed bundle no longer expands modulo bundles" >&2
-  exit 1
-}
 # A directed index states its orientation in the boundary signature whether
 # it is virtual or physical, normalized to the cut: the departing panel's
 # four legs leave, the arriving panel's four enter.
@@ -1707,10 +1694,6 @@ if ! grep -F '|origin=port-open|' "$affine_log" |
   echo "FAIL: affine overlay explicit port depended on inherited policy" >&2
   exit 1
 fi
-grep -Fq '|weight=bundle=3' "$WORK/r_bundle_weight.tnlog" || {
-  echo "FAIL: bundle arity was not preserved in the wire record" >&2
-  exit 1
-}
 replaced_bond_count=$(
   grep -c '|name=bond-1-2-2-2|origin=grid|' "$WORK/r_cell_policy.tnlog" ||
     true
@@ -2637,6 +2620,7 @@ for contract_negative in \
   n_mark_nudge_key \
   n_setup_sizes_key \
   n_setup_theme_key \
+  n_wire_weight_key \
   n_wire_restyle_transform \
   n_wire_restyle_nested \
   n_leg_restyle_transform \
@@ -2730,6 +2714,8 @@ do
   [ "$contract_negative" = n_setup_sizes_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_setup_theme_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_wire_weight_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_wire_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
@@ -2957,72 +2943,6 @@ fi
 grep -Fq '[TKZ-CROSS-UNDECLARED]' \
   "$WORK/n_skin_pairing_index_cross.transcript" || {
   echo "FAIL: an index/pairing crossing lacked TKZ-CROSS-UNDECLARED" >&2
-  exit 1
-}
-
-weight_negative="$KERNEL/negative/n_malformed_weight.tex"
-if ( cd "$WORK" &&
-     TEXINPUTS="$REPO/tex/tenkz//:" \
-       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
-       "$weight_negative" >"$WORK/n_malformed_weight.transcript" 2>&1 ); then
-  echo "FAIL: malformed bundle arity was accepted" >&2
-  exit 1
-fi
-grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_malformed_weight.transcript" || {
-  echo "FAIL: malformed bundle arity lacked TKZ-LANG-CHOICE" >&2
-  exit 1
-}
-grep -Fq '(record wire-1)' "$WORK/n_malformed_weight.transcript" || {
-  echo "FAIL: malformed bundle arity dropped its record context" >&2
-  exit 1
-}
-
-bundle_signature="$KERNEL/negative/n_bundle_signature.tex"
-if ( cd "$WORK" &&
-     TEXINPUTS="$REPO/tex/tenkz//:" \
-       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
-       "$bundle_signature" >"$WORK/n_bundle_signature.transcript" 2>&1 ); then
-  echo "FAIL: bundle arity was ignored by the signature audit" >&2
-  exit 1
-fi
-grep -Fq '[TKZ-EQ-SIGNATURE]' "$WORK/n_bundle_signature.transcript" || {
-  echo "FAIL: bundle signature mismatch lacked TKZ-EQ-SIGNATURE" >&2
-  exit 1
-}
-grep -Fq 'result=mismatch' "$WORK/n_bundle_signature.tnlog" || {
-  echo "FAIL: bundle signature mismatch was not recorded" >&2
-  exit 1
-}
-
-grep -Fq 'result=equal|modulo=bundles' "$WORK/r_bundle_modulo.tnlog" || {
-  echo "FAIL: bundle regrouping did not pass modulo bundles" >&2
-  exit 1
-}
-python3 "$REPO/scripts/tenkz_audit.py" \
-  "$WORK/r_bundle_modulo.tnlog" "$KERNEL/regression/r_bundle_modulo.tex" \
-  >"$WORK/r_bundle_modulo.audit" || {
-  echo "FAIL: bundle modulo regression failed the event audit" >&2
-  cat "$WORK/r_bundle_modulo.audit" >&2
-  exit 1
-}
-
-bundle_modulo_negative="$KERNEL/negative/n_bundle_modulo_mismatch.tex"
-if ( cd "$WORK" &&
-     TEXINPUTS="$REPO/tex/tenkz//:" \
-       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
-       "$bundle_modulo_negative" \
-       >"$WORK/n_bundle_modulo_mismatch.transcript" 2>&1 ); then
-  echo "FAIL: wrong bundle multiplicity passed modulo bundles" >&2
-  exit 1
-fi
-grep -Fq '[TKZ-EQ-SIGNATURE]' \
-  "$WORK/n_bundle_modulo_mismatch.transcript" || {
-  echo "FAIL: bundle modulo mismatch lacked TKZ-EQ-SIGNATURE" >&2
-  exit 1
-}
-grep -Fq 'result=mismatch|modulo=bundles' \
-  "$WORK/n_bundle_modulo_mismatch.tnlog" || {
-  echo "FAIL: bundle modulo mismatch was not recorded" >&2
   exit 1
 }
 

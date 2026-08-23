@@ -146,9 +146,8 @@
   { [TKZ-EQ-CHECK-OFF]~an~opt-out~reads~off={<relation>:~<reason>};~got~'#1'. }
 \msg_new:nnn {tenkz}{kernel-check-word}
   { [TKZ-EQ-CHECK-WORD]~the~audit~does~not~know~'#1';~check=~states~the~
-    audit~(signature),~the~equivalence~it~is~taken~up~to~
-    (modulo=bundles),~and~its~recorded~opt-outs~(off={<relation>:~
-    <reason>}). }
+    audit~(signature)~and~its~recorded~opt-outs~
+    (off={<relation>:~<reason>}). }
 \msg_new:nnn {tenkz}{kernel-check-relation}
   { [TKZ-EQ-CHECK-RELATION]~relation~#1~is~opted~out~of~the~audit,~but~the~
     equation~has~#2~relation(s);~an~opt-out~names~a~relation~the~equation~
@@ -276,7 +275,6 @@
 \bool_new:N \l__tenkz_kernel_trace_physical_bool
 \bool_new:N \l__tenkz_kernel_strict_bool
 \bool_new:N \l__tenkz_kernel_ineq_bool        % inside tenkzeq
-\bool_new:N \l__tenkz_kernel_check_bundles_bool
 \bool_new:N \l__tenkz_kernel_claim_collision_bool
 \bool_new:N \l__tenkz_kernel_basis_valid_bool
 \bool_new:N \l__tenkz_kernel_basis_member_live_bool
@@ -316,7 +314,6 @@
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \tl_new:N   \l__tenkz_kernel_child_tl
 \tl_new:N   \l__tenkz_kernel_parent_tl
-\tl_new:N   \l__tenkz_kernel_bundle_item_tl
 \tl_new:N   \l__tenkz_kernel_claim_owner_tl
 \tl_new:N   \l__tenkz_kernel_basis_live_id_tl
 \tl_new:N   \l__tenkz_kernel_basis_live_key_tl
@@ -328,8 +325,6 @@
 \tl_new:N   \l__tenkz_kernel_basis_spacing_floor_tl
 \tl_new:N   \l__tenkz_kernel_basis_spacing_margin_tl
 \seq_new:N  \l__tenkz_kernel_stack_seq        % operand stack (see shelf notes)
-\seq_new:N  \l__tenkz_kernel_bundle_seq
-\seq_new:N  \l__tenkz_kernel_bundle_match_seq
 \seq_new:N  \l__tenkz_kernel_basis_spacing_address_seq
 \seq_new:N  \g__tenkz_kernel_panel_gseq       % tenkzeq panel signatures
 \seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
@@ -383,12 +378,6 @@
     % parsers read.
     \bool_if:NT \l__tenkz_kernel_ineq_bool
       { \__tenkz_kernel_revert_rels:N \l__tenkz_kernel_opts_tl }
-    % Parameterized alphabet words remain one key value even though their
-    % canonical spelling contains `=`.
-    \regex_replace_all:nnN
-      { weight \s* = \s* bundle \s* = \s* ([A-Za-z0-9]+) }
-      { weight = \cB\{ bundle = \1 \cE\} }
-      \l__tenkz_kernel_opts_tl
     \regex_replace_all:nnN
       { \( \s* (\d+) \s* , \s* (\d+) \s* , \s* (\d+) \s* \) }
       { \cB\{ \( \1 , \2 , \3 \) \cE\} }
@@ -823,29 +812,6 @@
           {
             \__tenkz_kernel_addr:nN
               {##1} \l__tenkz_kernel_list_item_tl
-          }
-      }
-  }
-
-\cs_new_protected:Npn \__tenkz_kernel_weight:n #1
-  {
-    \tl_set:Nn \l__tenkz_kernel_list_item_tl {#1}
-    \tl_trim_spaces:N \l__tenkz_kernel_list_item_tl
-    \bool_lazy_or:nnTF
-      { \str_if_eq_p:Vn \l__tenkz_kernel_list_item_tl {single} }
-      { \str_if_eq_p:Vn \l__tenkz_kernel_list_item_tl {double} }
-      { \__tenkz_kernel_stage_put:ne {weight}
-          { \tl_use:N \l__tenkz_kernel_list_item_tl } }
-      {
-        \regex_match:nVTF
-          { \A bundle \s* = \s* [1-9]\d* \Z }
-          \l__tenkz_kernel_list_item_tl
-          { \__tenkz_kernel_stage_put:ne {weight}
-              { \tl_use:N \l__tenkz_kernel_list_item_tl } }
-          {
-            \msg_error:nneeee {tenkz}{kernel-choice}
-              {weight} {#1} {single|double|bundle=n}
-              { \tl_use:N \l__tenkz_model_last_tl }
           }
       }
   }
@@ -1384,7 +1350,6 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { via } { via }
 \keys_define:nn { tenkz-kernel-wire }
   {
-    weight .code:n   = { \__tenkz_kernel_weight:n {#1} } ,
     route .code:n    = { \__tenkz_kernel_route:n {#1} } ,
     crossing .code:n = { \__tenkz_kernel_crossing:n {#1} }
   }
@@ -1748,9 +1713,8 @@
 % cannot pass for one another and two sides of a relation must agree on
 % orientation and not merely on count.  An internal directed contraction
 % exposes nothing and leaves no entry.  The orientation follows the face and
-% precedes the strand weight, which stays the entry's last field so that a
-% bundle expands to its multiplicity whichever way it points; a port and a
-% policy leg declare no direction, so only a wire end carries one.
+% follows the face; a port and a policy leg declare no direction, so only a
+% wire end carries one.
 
 \tl_new:N \l__tenkz_kernel_sig_dir_tl
 \tl_new:N \l__tenkz_kernel_sig_dir_src_tl
@@ -1840,13 +1804,6 @@
             \__tenkz_kernel_signature_port_open:nN {##1} \l_tmpa_tl
             \seq_put_right:NV \l__tenkz_kernel_emit_seq \l_tmpa_tl
           }
-        \tl_clear:N \l_tmpb_tl
-        \__tenkz_model_get:nnN {##1} {weight} \l_tmpa_tl
-        \quark_if_no_value:NF \l_tmpa_tl
-          {
-            \str_if_eq:VnF \l_tmpa_tl {single}
-              { \tl_set:Ne \l_tmpb_tl { : \tl_use:N \l_tmpa_tl } }
-          }
         \clist_map_inline:nn { from, to }
           {
             \__tenkz_model_get:nnN {##1} {####1-open}
@@ -1912,10 +1869,7 @@
                     % exposed entry whether the index is virtual or physical:
                     % a directed virtual leg states the bond space against
                     % its dual exactly as a directed physical leg does.
-                    % The orientation follows the face and precedes any
-                    % strand weight, so a bundle stays the entry's last
-                    % field and a directed bundle still expands to its own
-                    % multiplicity.
+                    % The orientation follows the face.
                     \__tenkz_kernel_signature_dir:nnN {##1} {####1}
                       \l__tenkz_kernel_sig_dir_tl
                     \seq_put_right:Ne \l__tenkz_kernel_emit_seq
@@ -1925,9 +1879,6 @@
                           {phys}{open}
                         : \tl_use:N \l__tenkz_kernel_scratch_tl
                         \tl_use:N \l__tenkz_kernel_sig_dir_tl
-                        \str_if_eq:VnF
-                          \l__tenkz_kernel_port_type_tl {physical}
-                          { \tl_use:N \l_tmpb_tl }
                       }
                   }
               }
@@ -1947,7 +1898,6 @@
                             edge: \prop_item:Ne \l__tenkz_kernel_node_prop
                               { \l__tenkz_kernel_scratch_tl / side }
                             \tl_use:N \l__tenkz_kernel_sig_dir_tl
-                            \tl_use:N \l_tmpb_tl
                           }
                       }
                   }
@@ -1968,41 +1918,6 @@
           { \sort_return_swapped: } { \sort_return_same: }
       }
     \tl_set:Ne #1 { \seq_use:Nn \l__tenkz_kernel_emit_seq { ,~ } }
-  }
-
-\cs_new_protected:Npn \__tenkz_kernel_signature_expand_bundles:NN #1#2
-  {
-    \seq_clear:N \l__tenkz_kernel_bundle_seq
-    \exp_args:NV \clist_map_inline:nn #1
-      {
-        \tl_set:Nn \l__tenkz_kernel_bundle_item_tl {##1}
-        \tl_trim_spaces:N \l__tenkz_kernel_bundle_item_tl
-        \exp_args:NnV \regex_extract_once:nnNTF
-          { \A (.*) \s* : \s* bundle \s* = \s* ([1-9]\d*) \s* \Z }
-          \l__tenkz_kernel_bundle_item_tl
-          \l__tenkz_kernel_bundle_match_seq
-          {
-            \tl_set:Ne \l__tenkz_kernel_bundle_item_tl
-              { \seq_item:Nn \l__tenkz_kernel_bundle_match_seq {2} }
-            \tl_trim_spaces:N \l__tenkz_kernel_bundle_item_tl
-            \int_step_inline:nn
-              { \seq_item:Nn \l__tenkz_kernel_bundle_match_seq {3} }
-              {
-                \seq_put_right:NV \l__tenkz_kernel_bundle_seq
-                  \l__tenkz_kernel_bundle_item_tl
-              }
-          }
-          {
-            \seq_put_right:NV \l__tenkz_kernel_bundle_seq
-              \l__tenkz_kernel_bundle_item_tl
-          }
-      }
-    \seq_sort:Nn \l__tenkz_kernel_bundle_seq
-      {
-        \str_compare:eNeTF {##1} > {##2}
-          { \sort_return_swapped: } { \sort_return_same: }
-      }
-    \tl_set:Ne #2 { \seq_use:Nn \l__tenkz_kernel_bundle_seq { ,~ } }
   }
 
 % ---------- the label math shift ---------------------------------------------------------
@@ -21408,11 +21323,6 @@
           { \msg_error:nne {tenkz}{kernel-check-word} { signature=#1 } }
       } ,
     signature .default:n = { \q_no_value } ,
-    modulo .choice: ,
-    modulo / bundles .code:n =
-      { \bool_set_true:N \l__tenkz_kernel_check_bundles_bool } ,
-    modulo / unknown .code:n =
-      { \msg_error:nne {tenkz}{kernel-check-word} { modulo=\l_keys_value_tl } } ,
     off .code:n = { \__tenkz_kernel_check_off:n {#1} } ,
     unknown .code:n =
       { \msg_error:nne {tenkz}{kernel-check-word} { \l_keys_key_str } }
@@ -21434,12 +21344,11 @@
     \tl_clear:N \l__tenkz_kernel_eq_size_tl
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \seq_clear:N \l__tenkz_kernel_check_reason_seq
-    \bool_set_false:N \l__tenkz_kernel_check_bundles_bool
     \prop_clear:N \l__tenkz_kernel_eq_policy_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
-    % check={signature, modulo=bundles, off={k: reason}}: the specification
-    % is a key list and is read as one.  A reason is prose an author writes
+    % check={signature, off={k: reason}}: the specification is a key list and
+    % is read as one.  A reason is prose an author writes
     % about the mathematics, and prose carries commas and braces and words
     % that look like options; letting TeX's own brace matching hand the
     % reason over whole is what keeps all three out of the parser's way.
@@ -21488,8 +21397,8 @@
 % east frame continues as an index cut on the right factor's west frame.
 % The two cut ends are then one index, internal to the composite term, and
 % an internal contraction exposes nothing -- so each paired east/west entry
-% pair leaves the signature, a directed `to' continuing as a `from', weight
-% and type intact, and the remaining entries of both factors concatenate.
+% pair leaves the signature, a directed `to' continuing as a `from' with its
+% type intact, and the remaining entries of both factors concatenate.
 % The facing cuts must cancel completely: an unpaired index on either
 % facing frame is a signature error.  An empty facing cut is the plain
 % scalar or tensor juxtaposition, whose signatures concatenate whole.
@@ -21528,17 +21437,11 @@
       }
   }
 
-% One panel's signature as a sequence of detokenized entries, bundles
-% already expanded when the check runs modulo bundles.
+% One panel's signature as a sequence of detokenized entries.
 \cs_new_protected:Npn \__tenkz_kernel_eq_panel_entries:nN #1#2
   {
     \tl_set:Ne \l__tenkz_kernel_side_sig_tl
       { \seq_item:Nn \g__tenkz_kernel_panel_gseq {#1} }
-    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-      {
-        \__tenkz_kernel_signature_expand_bundles:NN
-          \l__tenkz_kernel_side_sig_tl \l__tenkz_kernel_side_sig_tl
-      }
     \seq_clear:N #2
     \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_side_sig_tl
       { \seq_put_right:Ne #2 { \tl_to_str:n {##1} } }
@@ -21556,7 +21459,7 @@
 % The west spelling an east-cut entry must continue as: the face turns from
 % e to w and a directed index keeps its arrow, so `to' (the index leaves the
 % left factor) continues as `from' (it enters the right factor); every other
-% field -- type, weight -- is the same index's and rides along unchanged.
+% field -- namely its type -- belongs to the same index and rides unchanged.
 \cs_new_protected:Npn \__tenkz_kernel_eq_entry_continue:nN #1#2
   {
     \seq_set_split:NVn \l__tenkz_kernel_entry_seq \c_colon_str {#1}
@@ -21650,8 +21553,6 @@
             check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
             |product=\int_eval:n { #1 - 1 }-\int_eval:n {#1}
             |result=contracted
-            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-              { |modulo=bundles }
             |interface=\tl_use:N \l__tenkz_kernel_iface_tl
             |signature=\seq_use:Nn \l__tenkz_kernel_fold_seq { ,~ }
           }
@@ -21662,8 +21563,6 @@
             check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
             |product=\int_eval:n { #1 - 1 }-\int_eval:n {#1}
             |result=mismatch|reason=product-interface
-            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-              { |modulo=bundles }
             |left=\tl_use:N \l__tenkz_kernel_iface_tl
             |right=\tl_use:N \l__tenkz_kernel_wface_tl
           }
@@ -21712,11 +21611,6 @@
             \tl_set:Ne \l__tenkz_kernel_side_sig_tl
               { \seq_item:Nn \g__tenkz_kernel_panel_gseq
                   { \l__tenkz_kernel_side_lo_int } }
-            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-              {
-                \__tenkz_kernel_signature_expand_bundles:NN
-                  \l__tenkz_kernel_side_sig_tl \l__tenkz_kernel_side_sig_tl
-              }
           }
           {
             \__tenkz_kernel_eq_panel_entries:nN
@@ -21734,8 +21628,7 @@
   }
 
 % The relation comparison.  #1 is the relation ordinal, #2 and #3 the two
-% side kinds; the side signatures arrive in \l_tmpa_tl and \l_tmpb_tl with
-% bundles already expanded.
+% side kinds; the side signatures arrive in \l_tmpa_tl and \l_tmpb_tl.
 \cs_new_protected:Npn \__tenkz_kernel_eq_compare_core:nnn #1#2#3
   {
     \clist_if_in:NnF \l__tenkz_kernel_check_off_clist {#1}
@@ -21763,8 +21656,6 @@
                   {
                     check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
                     |relation=#1|result=equal
-                    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-                      { |modulo=bundles }
                     |signature=\tl_use:N \l_tmpa_tl
                   }
               }
@@ -21773,8 +21664,6 @@
                   {
                     check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
                     |relation=#1|result=mismatch
-                    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-                      { |modulo=bundles }
                     |left=\tl_use:N \l_tmpa_tl
                     |right=\tl_use:N \l_tmpb_tl
                   }
@@ -21807,11 +21696,6 @@
       { \seq_item:Nn \g__tenkz_kernel_panel_gseq {#1} }
     \tl_set:Ne \l_tmpb_tl
       { \seq_item:Nn \g__tenkz_kernel_panel_gseq { #1 + 1 } }
-    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-      {
-        \__tenkz_kernel_signature_expand_bundles:NN \l_tmpa_tl \l_tmpa_tl
-        \__tenkz_kernel_signature_expand_bundles:NN \l_tmpb_tl \l_tmpb_tl
-      }
     \__tenkz_kernel_eq_compare_core:nee {#1}
       { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {#1} }
       { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq { #1 + 1 } }

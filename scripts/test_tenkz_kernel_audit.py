@@ -252,7 +252,7 @@ kernel-boundary|signature=phys:up
     ]
 
     checked_equation_source = (
-        "\\begin{tenkzeq}[check={signature, modulo=bundles}]\n"
+        "\\begin{tenkzeq}[check={signature}]\n"
         "\\begin{tenkz}\\tn{A}\\end{tenkz}\n"
         "=\n"
         "\\begin{tenkz}\\tn{B}\\end{tenkz}\n"
@@ -260,12 +260,9 @@ kernel-boundary|signature=phys:up
     )
     checked_equation_log = (
         equation_log.replace("|lang=kernel", "|lang=kernel|scope=1")
-        .replace("kernel-boundary|signature=open:w",
-                 "kernel-boundary|signature=edge:w:bundle=3")
         .replace("kernel-boundary|signature=phys:up",
-                 "kernel-boundary|signature=open:e, open:e, open:e")
-        + "check|scope=1|relation=1|result=equal|modulo=bundles"
-          "|signature=edge:e, edge:e, edge:e\n"
+                 "kernel-boundary|signature=open:e")
+        + "check|scope=1|relation=1|result=equal|signature=open:e\n"
     )
     checked_equation = audit_log(checked_equation_log, checked_equation_source)
     assert "eq-boundary-mismatch" not in [
@@ -276,7 +273,7 @@ kernel-boundary|signature=phys:up
         "check|scope=1|relation=1|result=off|reason=documented\n"
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
         checked_equation_source.replace(
-            "check={signature, modulo=bundles}",
+            "check={signature}",
             "check={signature, off={1: documented}}",
         ),
     )
@@ -287,9 +284,7 @@ kernel-boundary|signature=phys:up
     undeclared_opt_out = audit_log(
         "check|scope=1|relation=1|result=off|reason=stale\n"
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
-        checked_equation_source.replace(
-            "check={signature, modulo=bundles}", "check={signature}"
-        ),
+        checked_equation_source,
     )
     assert "eq-boundary-mismatch" in [
         finding.rule for finding in undeclared_opt_out.findings
@@ -300,7 +295,7 @@ kernel-boundary|signature=phys:up
         "check|scope=1|relation=2|result=equal|signature=\n"
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
         checked_equation_source.replace(
-            "check={signature, modulo=bundles}",
+            "check={signature}",
             "check={signature, off={1: documented}}",
         ),
     )
@@ -316,7 +311,7 @@ kernel-boundary|signature=phys:up
         "check|scope=1|relation=1|result=equal|signature=\n"
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
         checked_equation_source.replace(
-            "check={signature, modulo=bundles}",
+            "check={signature}",
             "check={signature, off={1: documented}}",
         ),
     )
@@ -330,9 +325,7 @@ kernel-boundary|signature=phys:up
     duplicate_scope = audit_log(
         "check|scope=1|scope=9|relation=1|result=equal|signature=\n"
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
-        checked_equation_source.replace(
-            "check={signature, modulo=bundles}", "check={signature}"
-        ),
+        checked_equation_source,
     )
     duplicate_scope_rules = [finding.rule for finding in duplicate_scope.findings]
     assert "malformed-event" in duplicate_scope_rules
@@ -341,9 +334,7 @@ kernel-boundary|signature=phys:up
     missing_result = audit_log(
         "check|scope=1|relation=1\n"
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
-        checked_equation_source.replace(
-            "check={signature, modulo=bundles}", "check={signature}"
-        ),
+        checked_equation_source,
     )
     missing_result_rules = [finding.rule for finding in missing_result.findings]
     assert "malformed-event" in missing_result_rules
@@ -358,7 +349,7 @@ kernel-boundary|signature=phys:up
             incomplete_check
             + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
             checked_equation_source.replace(
-                "check={signature, modulo=bundles}",
+                "check={signature}",
                 "check={signature, off={1: documented}}",
             ),
         )
@@ -385,9 +376,7 @@ kernel-boundary|signature=phys:up
             "picture|id=k2|lang=kernel|scope=1",
         )
         + "check|scope=1|relation=1|result=equal|signature=\n",
-        checked_equation_source.replace(
-            "check={signature, modulo=bundles}", "check={signature}"
-        ),
+        checked_equation_source,
     )
     invalid_picture_rules = [
         finding.rule for finding in invalid_picture_scope.findings
@@ -402,9 +391,7 @@ kernel-boundary|signature=phys:up
             f"check|picture={picture_reference}|scope=1|relation=1|"
             "result=equal|signature=\n"
             + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
-            checked_equation_source.replace(
-                "check={signature, modulo=bundles}", "check={signature}"
-            ),
+            checked_equation_source,
         )
         picture_owned_rules = [
             finding.rule for finding in picture_owned_check.findings
@@ -417,15 +404,15 @@ kernel-boundary|signature=phys:up
         + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1")
     )
     optionless_body_spoof = checked_equation_source.replace(
-        "[check={signature, modulo=bundles}]",
+        "[check={signature}]",
         "\n$check={signature, off={1:\\mathrm{note}}}$",
     )
     body_off_spoof = checked_equation_source.replace(
-        "check={signature, modulo=bundles}]",
+        "check={signature}]",
         "check={signature}]\n$off={1:\\mathrm{note}}$",
     )
     nested_option_spoof = checked_equation_source.replace(
-        "check={signature, modulo=bundles}",
+        "check={signature}",
         "frame={note={check={signature}, off={1: documented}}}",
     )
     for spoofed_source in (
@@ -457,9 +444,7 @@ kernel-boundary|signature=phys:up
         + equation_source
         + "\\end{tenkzeq}\n"
     )
-    checked_mismatch_source = checked_equation_source.replace(
-        "check={signature, modulo=bundles}", "check={signature}"
-    )
+    checked_mismatch_source = checked_equation_source
     matching_equation_log = equation_log.replace(
         "|lang=kernel", "|lang=kernel|scope=1"
     ).replace("phys:up", "open:e")
