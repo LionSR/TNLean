@@ -234,7 +234,6 @@
 % a contour, and a region that carries paper under it says so.
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under an enclosure's contour; a bracket takes none.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{11mm}{kernel}{Base metric; the default is a fixed length, not an em-relative one.}
-\__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Stored, read by nothing; size_resolve reads the picture size key.}
 % Nothing in the benchmark or in a workflow turns the flag on, and 51 of the
 % 130 benchmark cases spell physical= alone, which it refuses.  The five
 % refusal fixtures tests/tenkz/kernel/negative/n_strict_*.tex are the only
@@ -304,6 +303,12 @@
     an address, and a mark's label takes its station against measured
     ink -- label pos= names a bearing, and auto stands on the first
     free face}
+%
+% The inert setup sizes= key retired 2026-08-23 (#6888): it stored a table
+% that no metric or render pass read.  Size class belongs to the picture or
+% atom whose extent it controls.
+\__tenkz_language_registry_tombstone:nnn {kernel-setup}{sizes}
+  {use size= on the picture or atom; the bundled metric table is fixed}
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they

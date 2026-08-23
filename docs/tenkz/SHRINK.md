@@ -3318,3 +3318,23 @@ The two references to #6201 in the 2026-08-22 retirement of `bend=` should
 be read as references to #6881. Issue #6201 identified that `route=arc` drew
 no distinct curve; PR #6881 made the route leave and enter along its ends'
 faces. This correction is appended because shrink sessions are immutable.
+
+### 2026-08-23 — the inert sizes= setup key is retired
+
+The setup key `sizes=` stored an arbitrary table in each picture model, but
+no metric or rendering pass read that field. The registry sweep (#6198)
+compiled absent, bundled-table, and arbitrary-value forms to byte-identical
+events and pixels and found no reader outside the parser row. The live size
+class is `size=` on a picture or an atom; the bundled metric table remains
+fixed. The parser and registry rows therefore leave, and
+`n_setup_sizes_key.tex` pins the unknown-key answer.
+
+Meters: m1 kernel 58 → 57 (census 81 → 80), m2 parser paths 70 → 69;
+`tests/tenkz/census-baseline.json` moves in this change.
+Extension-gate: #6888 — the parser-leaf identity change is the removal
+itself; no key is added.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-setup:sizes | retired: stored a table, read by nothing; use size= on the picture or atom; permanent |
+| flag:lonely-type:size-table | departed: its sole carrier was the inert sizes= setup key; permanent |
