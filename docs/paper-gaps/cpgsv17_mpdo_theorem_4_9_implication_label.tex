@@ -95,8 +95,9 @@ derivation, lines~1646--1665 use literal zero correlation length to prove that
 repeated-copy weights are independent of the copy label and then absorb the
 common weight into the representative. The short proof of
 \texttt{prop2to5} subsequently invokes Proposition~\texttt{3to5} within each
-outer BNT sector. Projector-controlled assembly remains a genuine missing
-statement for this viable (ii)$\Rightarrow$(v) route.
+outer BNT sector. The projector-controlled assembly for this viable
+(ii)$\Rightarrow$(v) route is formalized in issue~\#6632; the source-context
+per-representative factorization remains issue~\#6775.
 
 \section{Formal treatment}
 
@@ -114,10 +115,10 @@ Files that use the concluding paragraph carry a \emph{Local fix (cyclic
 implication labels)} marker and cite this note. This records proof-path drift
 in the printed proof, including the hidden ZCL use in \texttt{prop3to4}. The
 separate restriction to one supplied factorization is recorded in
-\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Issue~\#6632 is retargeted
-conceptually to the projector-controlled assembly needed for the source
-proposition \texttt{prop2to5}, after ZCL-derived common-weight absorption; it
-is not a task to prove the refuted literal implication.
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Issue~\#6632 formalizes the
+projector-controlled assembly needed for the source proposition
+\texttt{prop2to5}, after ZCL-derived common-weight absorption; it does not
+prove the refuted literal implication.
 
 \bibliographystyle{alpha}
 \bibliography{references}
