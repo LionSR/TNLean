@@ -6,9 +6,9 @@
 
 \input{command}
 
-\title{Full-Matrix Scope of the GNVW Support-Algebra Formalization}
+\title{Full-Matrix Scope for the GNVW Support-Algebra Formalization}
 \author{}
-\date{2026-08-23}
+\date{2026-08-24}
 
 \begin{document}
 \maketitle
@@ -16,9 +16,9 @@
 
 \section{The general support-algebra statement}
 
-Let $\mathcal B_1$ and $\mathcal B_2$ be finite-dimensional $C^*$-algebras and
-let $\mathcal A\subseteq\mathcal B_1\otimes\mathcal B_2$ be a $C^*$-subalgebra.
-Gross, Nesme, Vogts, and Werner prove that there is a smallest $C^*$-subalgebra
+Let $\mathcal B_1$ and $\mathcal B_2$ be finite-dimensional $C^*$-algebras
+and let $\mathcal A\subseteq\mathcal B_1\otimes\mathcal B_2$ be a
+$C^*$-subalgebra.  There is a smallest $C^*$-subalgebra
 $\mathcal C_1\subseteq\mathcal B_1$ for which
 \begin{align}
     \mathcal A&\subseteq\mathcal C_1\otimes\mathcal B_2,
@@ -38,11 +38,14 @@ $\mathcal B_1$ is
     &=\{b\in\mathcal B_1\mid b\otimes\Id\in\mathcal A'\}.
     \label{eq:gnvw_scope_commutant}
 \end{align}
-These are the three assertions of arXiv:0910.3675v2, Section~7.1, Lemma~7
-\cite{Gross2012IndexTheory}.  In the v2 source, the statement and leastness
-argument occupy lines 1181--1191, coefficient generation is at lines
-1188--1191, and the commutant assertion is at lines 1192--1208.  The published
-DOI \href{https://doi.org/10.1007/s00220-012-1423-1}
+These are the three assertions of arXiv:0910.3675v2, Section~7.1,
+Lemma~7 \cite{Gross2012IndexTheory}, after the necessary star-closure
+correction to the commutant clause recorded separately in
+\path{docs/paper-gaps/gnvw12_support_algebra_star_closure.tex}.  In the v2
+source, the statement and leastness argument occupy lines 1181--1191,
+coefficient generation is at lines 1188--1191, and the commutant assertion is
+at lines 1192--1208.  The published DOI
+\href{https://doi.org/10.1007/s00220-012-1423-1}
 {10.1007/s00220-012-1423-1} and arXiv v2 source are the
 third-party-verifiable anchors.  The lemma has source label \path{lem:spp}.
 
@@ -60,22 +63,9 @@ two-factor containment
 This is GNVW equation~(22), which follows after Lemma~7 and is not itself one
 of the lemma's three clauses.  It appears at lines 1211--1219 of the arXiv v2
 source, with source label \path{a2Supp}. Schumacher and Werner give the
-preceding coefficient-space and generated-support-algebra constructions in Section~4.3
-\cite{SchumacherWerner2004QCA}; see
-\path{Papers/quant-ph_0405174/qca.tex}, lines 1137--1169, with source labels
-\path{a2supp} and \path{a2Supp}.
-
-Here ``subalgebra'' is understood in the finite-dimensional $C^*$-algebra
-sense, and hence includes closure under the involution.  This interpretation
-is forced by the three clauses of Lemma~7.  For example, if
-$\mathcal B_2=\mathbb C$ and
-$\mathcal A=\operatorname{span}\{\Id,N\}\subset M_2(\mathbb C)$ for a nonzero
-nilpotent matrix unit $N$, then the smallest $C^*$-subalgebra containing
-$\mathcal A$ is $M_2(\mathbb C)$, but its commutant is not
-$\mathcal A'$.  Thus the lemma would be false if ``subalgebra'' meant an
-arbitrary algebra not closed under the involution.  The precursor makes the
-same convention explicit: every observable algebra is closed under adjoints
-in \cite[lines~1161--1171]{SchumacherWerner2004QCA}.
+preceding coefficient-space and generated-support-algebra constructions in
+Section~4.3 \cite{SchumacherWerner2004QCA}; see lines 1137--1169, with source
+labels \path{a2supp} and \path{a2Supp}.
 
 \section{The full-matrix formal statement}
 
@@ -84,11 +74,11 @@ Let $I$ and $J$ be finite sets and let
     \mathcal A&\subseteq M_{I\times J}(\mathbb C)
       \cong M_I(\mathbb C)\otimes M_J(\mathbb C)
 \end{align}
-be a star-subalgebra. Thus the formal statement makes one restriction: both
-tensor factors are full complex matrix algebras.  The star-subalgebra type
-makes the source's $C^*$-subalgebra convention explicit and is not an
-additional hypothesis. For $X\in\mathcal A$, define its
-two coefficient families by
+be a star-subalgebra.  The star-subalgebra input implements the resolved local
+correction cited above.  The open formalization scope is solely the passage
+from full complex matrix factors to arbitrary finite-dimensional
+$C^*$-algebra factors. For $X\in\mathcal A$, define its two coefficient
+families by
 \begin{align}
     X^{\mathrm L}_{rs}(i,j)&=X((i,r),(j,s)), &
     X^{\mathrm R}_{ij}(r,s)&=X((i,r),(j,s)).
@@ -171,25 +161,19 @@ algebra $\mathcal R_{2x}$ is exactly an instance of
 sufficient for the support-algebra step used by the Cirac--P\'erez-Garc\'ia--
 Schuch--Verstraete spin-chain argument.
 
-The use of a star-subalgebra also agrees directly with this application.  The
-map $\omega$ preserves every operation of the local star-algebra
-\cite[lines~2300--2306]{Cirac2017MPU}, and the algebra whose support is taken
-in lines~2313--2328 is
-\begin{align}
-    \omega(\mathcal A_{2x}\otimes\mathcal A_{2x+1}).
-\end{align}
-It is the image, under the star-automorphism $\omega$, of a local full matrix
-star-algebra.  It is therefore a star-subalgebra, as the source convention
-already requires.
+The star-closed-input correction and its verification in the GNVW and MPU
+applications are recorded in
+\path{docs/paper-gaps/gnvw12_support_algebra_star_closure.tex}.  They are not
+part of the open scope recorded here.
 
-The restriction to full matrix factors is an open scope boundary in TNLean.
-It is not a mathematical gap in GNVW Lemma~7 or equation~(22).
+The restriction to full matrix factors is an open formalization boundary in
+TNLean. It is not a mathematical gap in GNVW Lemma~7 or equation~(22).
 
 \section{Elimination plan}
 
-To remove the restriction, one should formalize the same construction for
-arbitrary finite-dimensional $C^*$-algebras $\mathcal B_1$ and $\mathcal B_2$
-and a $C^*$-subalgebra
+To remove the open full-matrix restriction, one should formalize the same
+construction for arbitrary finite-dimensional $C^*$-algebras $\mathcal B_1$
+and $\mathcal B_2$ and a $C^*$-subalgebra
 $\mathcal A\subseteq\mathcal B_1\otimes\mathcal B_2$.
 Choose a basis of $\mathcal B_2$ and its dual basis, extract the coefficients
 $a_\mu$ with the maps $\operatorname{id}\otimes\omega_\mu$, and define
