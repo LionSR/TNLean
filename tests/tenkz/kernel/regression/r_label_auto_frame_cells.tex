@@ -78,10 +78,15 @@
   \tn[at=(1,1), skin=dot]{R}
 \end{tenkz}
 % A bead a quarter of the way round an east cup sees the saved curved route,
-% not the vertical chord between the cup's boundary sites.
+% not the vertical chord between the cup's boundary sites.  The transverse
+% probe puts a declared crossing at the bead and cuts the live cup route; the
+% occupancy reading must retain the frozen, unsurgered route used to place T.
 \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
   \tn[at=(1,1)]{} \\ \tn[at=(2,1)]{}
-  \tn[at=on cup-1-2 0.25, skin=dot]{T}
+  \tn[at=on cup-1-2 0.25, name=T, skin=dot]{T}
+  \tnwire[kind=string, name=probe, crossing=over,
+    cross={over at crossing of probe and cup-1-2}]
+    {1 n of T}{1 s of T}
 \end{tenkz}
 \ExplSyntaxOn
 \int_compare:nNnF { \l__tenkz_test_frame_side_count_int } = {4}

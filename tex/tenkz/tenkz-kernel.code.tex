@@ -18011,8 +18011,10 @@
   {
     \tenkz@string@beadpath {tenkz-bead-#1} {#2} {tenkz-label-route-point}
     \pgfpointanchor {tenkz-label-route-point} {center}
-    \fp_set:Nn #3 { \dim_to_fp:n { \use:c {pgf@x} } }
-    \fp_set:Nn #4 { \dim_to_fp:n { \use:c {pgf@y} } }
+    \fp_set:Nn #3
+      { \dim_to_fp:n { \use:c {pgf@x} } / \dim_to_fp:n { \tenkz@pitch } }
+    \fp_set:Nn #4
+      { \dim_to_fp:n { \use:c {pgf@y} } / \dim_to_fp:n { \tenkz@pitch } }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_label_closure_bead:nn #1#2
   {
