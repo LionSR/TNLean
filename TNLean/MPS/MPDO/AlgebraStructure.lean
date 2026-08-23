@@ -250,8 +250,8 @@ theorem stationaryOfFaithfulFixedPoint_compatible
   change X ∈ faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix ↔
     (blockedTransferMap M n).adjoint X = X
   rw [mem_faithfulFixedPointSupportAlgebra_iff (M := M) h_tp hρ hρ_fix X]
-  have hAdj : LinearMap.adjoint ((MPSTensor.transferMap M.toMPSTensor) ^ n) =
-      LinearMap.adjoint (MPSTensor.transferMap M.toMPSTensor) := by
+  have hAdj : LinearMap.adjoint ((Kraus.transferMap M.toMPSTensor) ^ n) =
+      LinearMap.adjoint (Kraus.transferMap M.toMPSTensor) := by
     simpa [blockedTransferMap_eq_pow, transferMap_eq_toMPSTensor] using
       congrArg LinearMap.adjoint
         (blockedTransferMap_eq_transferMap_of_isZCL (M := M) hZCL hn)

@@ -91,10 +91,10 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
-    (hIrrX : IsIrreducibleTensor X)
-    (hIrrY : IsIrreducibleTensor Y)
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hIrrX : Kraus.IsIrreducibleFamily X)
+    (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ‖h.choose‖ = 1 := by
   classical
@@ -143,10 +143,10 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
-    (hIrrX : IsIrreducibleTensor X)
-    (hIrrY : IsIrreducibleTensor Y)
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hIrrX : Kraus.IsIrreducibleFamily X)
+    (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     DX = DY := by
   classical
@@ -194,10 +194,10 @@ theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
-    (hIrrX : IsIrreducibleTensor X)
-    (hIrrY : IsIrreducibleTensor Y)
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hIrrX : Kraus.IsIrreducibleFamily X)
+    (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ∃ e : DX = DY,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) e) X) Y := by
@@ -239,10 +239,10 @@ lemma exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
-    (hIrrX : IsIrreducibleTensor X)
-    (hIrrY : IsIrreducibleTensor Y)
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hIrrX : Kraus.IsIrreducibleFamily X)
+    (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ∃ e : DX = DY, ∃ G : GL (Fin DY) ℂ, ∀ i,
       Y i = h.choose • ((G : Matrix _ _ ℂ) *
@@ -309,8 +309,8 @@ theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k)) :
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k)) :
     ∀ j q,
       dim ((mpvPhaseClassData blocks).enum j q) =
         dim ((mpvPhaseClassData blocks).repr j) := by
@@ -343,8 +343,8 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0) :
     (collapsedBntSectorDecomp (d := d) μ blocks hμne).totalDim =
       ∑ k : Fin r, dim k :=
@@ -370,8 +370,8 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
@@ -410,8 +410,8 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     -- `P.basisDim j` is definitionally `dim (classes.repr j)`.
     change 0 < dim (classes.repr j)
     exact hDim (classes.repr j)
-  have h_irr : ∀ j : Fin P.basisCount, IsIrreducibleTensor (P.basis j) := by
-    intro j; change IsIrreducibleTensor (blocks (classes.repr j)); exact hIrr (classes.repr j)
+  have h_irr : ∀ j : Fin P.basisCount, Kraus.IsIrreducibleFamily (P.basis j) := by
+    intro j; change Kraus.IsIrreducibleFamily (blocks (classes.repr j)); exact hIrr (classes.repr j)
   have h_lc : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j) := by
     intro j; change IsLeftCanonical (blocks (classes.repr j)); exact hTP (classes.repr j)
   have h_self_overlap : ∀ j : Fin P.basisCount,
@@ -474,8 +474,8 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
@@ -498,8 +498,8 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :
@@ -540,7 +540,7 @@ private lemma sameMPV₂Pos_reindexPhysical_aux
     {d₁ d₂ D₁ D₂ : ℕ} (f : Fin d₁ → Fin d₂)
     {A : MPSTensor d₂ D₁} {B : MPSTensor d₂ D₂}
     (hSame : SameMPV₂Pos A B) :
-    SameMPV₂Pos (reindexPhysical f A) (reindexPhysical f B) := by
+    SameMPV₂Pos (Kraus.reindexPhysical f A) (Kraus.reindexPhysical f B) := by
   intro N hN σ
   rw [mpv_reindexPhysical, mpv_reindexPhysical]
   exact hSame N hN _
@@ -583,9 +583,9 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
       (∀ k, 0 < dim k) ∧
       (∀ k, IsLeftCanonical (blocks k)) ∧
-      (∀ k, _root_.IsPrimitive (transferMap (blocks k))) ∧
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      (∀ k, IsInjective (blocks k)) ∧
+      (∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k))) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
+      (∀ k, Kraus.IsInjective (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) := by
@@ -628,7 +628,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
   · intro k
     have hPrimBlocked := (hBlocked k).2.2.1
     change _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d (p₀ * L)) (D := dimA k)
+      (Kraus.transferMap (d := blockPhysDim d (p₀ * L)) (D := dimA k)
         (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
           (blocksA k) L))
     exact (isPrimitive_transferMap_reindexPhysical_equiv
@@ -638,7 +638,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
   -- Tensor irreducibility of each flattened-iterated block.
   · intro k
     have hIrrBlocked := (hBlocked k).2.2.2
-    change IsIrreducibleTensor
+    change Kraus.IsIrreducibleFamily
       (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
         (blocksA k) L)
     exact (isIrreducibleTensor_reindexPhysical_equiv
@@ -648,7 +648,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
   -- One-site injectivity of each flattened-iterated block.
   · intro k
     have hInjBlocked := (hBlocked k).1
-    change IsInjective
+    change Kraus.IsInjective
       (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
         (blocksA k) L)
     exact (isInjective_reindexPhysical_equiv
@@ -696,10 +696,10 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     -- alphabet via `directIteratedBlockEquiv`.
     have hReindex :
         SameMPV₂Pos
-          (reindexPhysical (directIteratedBlockEquiv d p₀ L)
+          (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
             (blockTensor (d := blockPhysDim d p₀) (D := D)
               (blockTensor (d := d) (D := D) A p₀) L))
-          (reindexPhysical (directIteratedBlockEquiv d p₀ L)
+          (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
             (toTensorFromBlocks
               (d := blockPhysDim (blockPhysDim d p₀) L)
               (fun k => (μA k) ^ L)
@@ -710,13 +710,13 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     -- (v) rewrite both sides using `flattenedIteratedBlockTensor_blockTensor`
     -- and `toTensorFromBlocks_flattenedIteratedBlockTensor`.
     have hLeft :
-        reindexPhysical (directIteratedBlockEquiv d p₀ L)
+        Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
           (blockTensor (d := blockPhysDim d p₀) (D := D)
             (blockTensor (d := d) (D := D) A p₀) L) =
           blockTensor (d := d) (D := D) A (p₀ * L) :=
       flattenedIteratedBlockTensor_blockTensor (d := d) (D := D) A p₀ L
     have hRight :
-        reindexPhysical (directIteratedBlockEquiv d p₀ L)
+        Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
           (toTensorFromBlocks
             (d := blockPhysDim (blockPhysDim d p₀) L)
             (fun k => (μA k) ^ L)
@@ -779,9 +779,9 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos
     ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
       (∀ k, 0 < dim k) ∧
       (∀ k, IsLeftCanonical (blocks k)) ∧
-      (∀ k, _root_.IsPrimitive (transferMap (blocks k))) ∧
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      (∀ k, IsInjective (blocks k)) ∧
+      (∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k))) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
+      (∀ k, Kraus.IsInjective (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧

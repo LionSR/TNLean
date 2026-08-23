@@ -36,7 +36,7 @@ theorem WordTupleSpanTop.exists_simultaneous_left_inverse
       ∀ (k j : Fin r) (x y : Fin (dim k))
         (x' y' : Fin (dim j)),
         (∑ w : Fin L → Fin d,
-          C ⟨k, x, y⟩ w * evalWord (A j) (List.ofFn w) x' y') =
+          C ⟨k, x, y⟩ w * Kraus.evalWord (A j) (List.ofFn w) x' y') =
             if h : k = j then
               if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
             else 0 := by
@@ -69,8 +69,8 @@ private theorem physicalObservableTransfer_apply
     (X : Matrix (Fin D) (Fin D) ℂ) :
     physicalObservableTransfer A L O X =
       ∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-        O τ σ • (evalWord A (List.ofFn σ) * X *
-          (evalWord A (List.ofFn τ))ᴴ) := by
+        O τ σ • (Kraus.evalWord A (List.ofFn σ) * X *
+          (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
   classical
   simp only [physicalObservableTransfer, LinearMap.sum_apply, LinearMap.smul_apply,
     LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
@@ -105,9 +105,9 @@ private theorem physicalObservableTransfer_sum_smul
 words. -/
 private theorem evalWord_directSumTensor
     (A : (k : Fin r) → MPSTensor d (dim k)) (w : List (Fin d)) :
-    evalWord (directSumTensor A) w =
+    Kraus.evalWord (directSumTensor A) w =
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
-        (Matrix.blockDiagonal' fun k ↦ evalWord (A k) w) := by
+        (Matrix.blockDiagonal' fun k ↦ Kraus.evalWord (A k) w) := by
   have hDirect : directSumTensor A = toTensorFromBlocks (fun _ ↦ 1) A := by
     funext i
     simp [directSumTensor, toTensorFromBlocks]
@@ -126,9 +126,9 @@ private theorem physicalObservableTransfer_directSum_reindex
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
         (∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
           O τ σ •
-            (Matrix.blockDiagonal' (fun k ↦ evalWord (A k) (List.ofFn σ)) * Y *
+            (Matrix.blockDiagonal' (fun k ↦ Kraus.evalWord (A k) (List.ofFn σ)) * Y *
               (Matrix.blockDiagonal' (fun k ↦
-                evalWord (A k) (List.ofFn τ)))ᴴ)) := by
+                Kraus.evalWord (A k) (List.ofFn τ)))ᴴ)) := by
   classical
   rw [physicalObservableTransfer_apply]
   simp only [evalWord_directSumTensor, Matrix.reindex_apply]
@@ -166,7 +166,7 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_matrixUnit
   obtain ⟨C, hC⟩ := hSpan.exists_simultaneous_left_inverse
   let W : (Fin L → Fin d) →
       Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ :=
-    fun σ ↦ Matrix.blockDiagonal' (fun k ↦ evalWord (A k) (List.ofFn σ))
+    fun σ ↦ Matrix.blockDiagonal' (fun k ↦ Kraus.evalWord (A k) (List.ofFn σ))
   let M₁ := ∑ σ : Fin L → Fin d, C ⟨j, a, b⟩ σ • W σ
   let M₂ := ∑ τ : Fin L → Fin d, C ⟨j, c, e⟩ τ • W τ
   have hM₁ : M₁ = Matrix.single ⟨j, a⟩ ⟨j, b⟩ 1 := by

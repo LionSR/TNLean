@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.TraceReindex
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 import TNLean.MPS.Core.MultiBlockWord
 
 import Mathlib.Algebra.BigOperators.Fin
@@ -17,7 +17,7 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 This file introduces the lightweight `CanonicalForm` structure for
 block-diagonal MPS tensors with injective blocks, and constructs the
 associated tensor `CanonicalForm.toTensor`. The generic Σ-type
-`evalWord`/`blockDiagonal'`-compatibility infrastructure this used to carry
+`Kraus.evalWord`/`blockDiagonal'`-compatibility infrastructure this used to carry
 (lines 69–149 of the pre-split file) now lives in
 `TNLean/Kraus/MultiBlockWord.lean`.
 -/
@@ -40,7 +40,7 @@ structure CanonicalForm (d : ℕ) where
   /-- Scaling factor for each block -/
   μ : Fin numBlocks → ℂ
   /-- Each block tensor is injective. -/
-  block_injective : ∀ k, MPSTensor.IsInjective (blockTensor k)
+  block_injective : ∀ k, Kraus.IsInjective (blockTensor k)
 
 namespace CanonicalForm
 

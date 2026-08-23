@@ -76,13 +76,13 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
         Λ.PosDef ∧
         Λ.IsDiag ∧
         (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-        transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ
+        Kraus.transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ
   /-- The fixed points of each block transfer map are exactly the scalar
   multiples of the identity. -/
   scalar_fixed :
     ∀ k,
       ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-        transferMap (d := d) (D := dim k) (blocks k) X = X →
+        Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
           ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
   /-- Every block weight is a positive real number, embedded into `ℂ`. -/
   weight_pos : ∀ k, ∃ a : ℝ, 0 < a ∧ weights k = (a : ℂ)
@@ -134,8 +134,8 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
     (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ)
     (hσ : σ.PosDef)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    IsIrreducibleTensor (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
+    Kraus.IsIrreducibleFamily (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
   have hAction : Matrix.IsIrreducibleAction (d := d) (D := D) A :=
     isIrreducibleAction_of_isIrreducibleTensor (d := d) (D := D) A hIrr
   have hGauge : GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A σ) :=
@@ -162,7 +162,7 @@ theorem. -/
 theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B C : MPSTensor d D)
       (r : ℝ)
@@ -178,7 +178,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
           (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B ∧
         (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
         (∀ X : Matrix (Fin D) (Fin D) ℂ,
-          transferMap (d := d) (D := D) B X = X →
+          Kraus.transferMap (d := d) (D := D) B X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
         (let C' : MPSTensor d D :=
           fun i =>
@@ -189,7 +189,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
           Λ.PosDef ∧
           Λ.IsDiag ∧
           (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
-          transferMap (d := d) (D := D) (fun i => (C i)ᴴ) Λ = Λ) := by
+          Kraus.transferMap (d := d) (D := D) (fun i => (C i)ᴴ) Λ = Λ) := by
   classical
   obtain ⟨B, r, ρ, hρ, hr, hB_form, hB_unital, hGauge⟩ :=
     exists_unital_data_of_irreducible (d := d) (D := D) A hIrr hA
@@ -200,7 +200,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     dsimp [c]
     simp [hroot_ne]
   have hIrr_scaled :
-      IsIrreducibleTensor (d := d) (D := D) (fun i => c • A i) :=
+      Kraus.IsIrreducibleFamily (d := d) (D := D) (fun i => c • A i) :=
     isIrreducibleTensor_smul (d := d) (D := D) hc_ne A hIrr
   have hActionScaled :
       Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
@@ -208,14 +208,14 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
       (d := d) (D := D) (fun i => c • A i) hIrr_scaled
   have hActionB : Matrix.IsIrreducibleAction (d := d) (D := D) B :=
     isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
-  have hIrrB : IsIrreducibleTensor (d := d) (D := D) B :=
+  have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
     isIrreducibleTensor_of_isIrreducibleAction (d := d) (D := D) B hActionB
-  have hB_unital_map : transferMap (d := d) (D := D) B 1 = 1 := by
-    simpa [transferMap_apply, Matrix.mul_one] using hB_unital
+  have hB_unital_map : Kraus.transferMap (d := d) (D := D) B 1 = 1 := by
+    simpa [Kraus.transferMap_apply, Matrix.mul_one] using hB_unital
   have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
   have hScalar :
       ∀ X : Matrix (Fin D) (Fin D) ℂ,
-        transferMap (d := d) (D := D) B X = X →
+        Kraus.transferMap (d := d) (D := D) B X = X →
           ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     intro X hX
     exact fixed_eq_scalar_of_isIrreducibleTensor_unital
@@ -237,10 +237,10 @@ private theorem scalar_fixedPoints_unitaryConj
     (U : Matrix.unitaryGroup (Fin D) ℂ)
     (hScalar :
       ∀ X : Matrix (Fin D) (Fin D) ℂ,
-        transferMap (d := d) (D := D) A X = X →
+        Kraus.transferMap (d := d) (D := D) A X = X →
           ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     ∀ X : Matrix (Fin D) (Fin D) ℂ,
-      transferMap (d := d) (D := D)
+      Kraus.transferMap (d := d) (D := D)
           (fun i =>
             (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
               (↑U : Matrix (Fin D) (Fin D) ℂ)) X = X →
@@ -256,27 +256,27 @@ private theorem scalar_fixedPoints_unitaryConj
     rw [← Matrix.star_eq_conjTranspose]
     exact Unitary.mul_star_self_of_mem U.prop
   have hconj :
-      transferMap (d := d) (D := D)
+      Kraus.transferMap (d := d) (D := D)
           (fun i =>
             (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
               (↑U : Matrix (Fin D) (Fin D) ℂ)) X =
-        Vᴴ * transferMap (d := d) (D := D) A Y * V := by
+        Vᴴ * Kraus.transferMap (d := d) (D := D) A Y * V := by
     simpa [V, Y] using transferMap_unitaryConj (d := d) (D := D) A U X
   have hmiddle :
-      Vᴴ * transferMap (d := d) (D := D) A Y * V = X := by
+      Vᴴ * Kraus.transferMap (d := d) (D := D) A Y * V = X := by
     calc
-      Vᴴ * transferMap (d := d) (D := D) A Y * V
-          = transferMap (d := d) (D := D)
+      Vᴴ * Kraus.transferMap (d := d) (D := D) A Y * V
+          = Kraus.transferMap (d := d) (D := D)
               (fun i =>
                 (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
                   (↑U : Matrix (Fin D) (Fin D) ℂ)) X := hconj.symm
       _ = X := hX
-  have hYfix : transferMap (d := d) (D := D) A Y = Y := by
+  have hYfix : Kraus.transferMap (d := d) (D := D) A Y = Y := by
     calc
-      transferMap (d := d) (D := D) A Y
-          = (V * Vᴴ) * transferMap (d := d) (D := D) A Y * (V * Vᴴ) := by
+      Kraus.transferMap (d := d) (D := D) A Y
+          = (V * Vᴴ) * Kraus.transferMap (d := d) (D := D) A Y * (V * Vᴴ) := by
               simp [hVV']
-      _ = V * (Vᴴ * transferMap (d := d) (D := D) A Y * V) * Vᴴ := by
+      _ = V * (Vᴴ * Kraus.transferMap (d := d) (D := D) A Y * V) * Vᴴ := by
               simp [Matrix.mul_assoc]
       _ = V * X * Vᴴ := by rw [hmiddle]
       _ = Y := rfl
@@ -407,7 +407,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
     (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
-    (hIrr0 : ∀ k, IsIrreducibleTensor (blocks0 k))
+    (hIrr0 : ∀ k, Kraus.IsIrreducibleFamily (blocks0 k))
     (hSame0 :
       SameMPV₂ A
         (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
@@ -421,10 +421,10 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
             Λ.PosDef ∧
             Λ.IsDiag ∧
             (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
-            transferMap (d := d) (D := dim0 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ) ∧
+            Kraus.transferMap (d := d) (D := dim0 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ) ∧
         (∀ k,
           ∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
-            transferMap (d := d) (D := dim0 k) (blocks1 k) X = X →
+            Kraus.transferMap (d := d) (D := dim0 k) (blocks1 k) X = X →
               ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)) ∧
         (∀ k, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ)) ∧
         (∀ k, μ1 k ≠ 0) ∧
@@ -446,7 +446,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
               (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B ∧
             (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
             (∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
-              transferMap (d := d) (D := dim0 k) B X = X →
+              Kraus.transferMap (d := d) (D := dim0 k) B X = X →
                 ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)) ∧
             (let C' : MPSTensor d (dim0 k) :=
               fun i =>
@@ -457,7 +457,7 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
               Λ.PosDef ∧
               Λ.IsDiag ∧
               (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
-              transferMap (d := d) (D := dim0 k) (fun i => (C i)ᴴ) Λ = Λ) := by
+              Kraus.transferMap (d := d) (D := dim0 k) (fun i => (C i)ᴴ) Λ = Λ) := by
     intro k
     let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
@@ -491,14 +491,14 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
           Λ.PosDef ∧
           Λ.IsDiag ∧
           (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim0 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ := by
+          Kraus.transferMap (d := d) (D := dim0 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ := by
     intro k
     exact ⟨Λ1 k, (hFinal1 k).2.2.1, (hFinal1 k).2.2.2.1,
       (hFinal1 k).2.2.2.2.1, (hFinal1 k).2.2.2.2.2⟩
   have hScalarC :
       ∀ k : Fin r0,
         ∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
-          transferMap (d := d) (D := dim0 k) (blocks1 k) X = X →
+          Kraus.transferMap (d := d) (D := dim0 k) (blocks1 k) X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ) := by
     intro k
     have hCeq := (hFinal1 k).1
@@ -530,7 +530,7 @@ theorem exists_tp_gauge_blockwise
     (A : MPSTensor d D)
     {r0 : ℕ} {dim0 : Fin r0 → ℕ}
     (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
-    (hIrr0 : ∀ k, IsIrreducibleTensor (blocks0 k))
+    (hIrr0 : ∀ k, Kraus.IsIrreducibleFamily (blocks0 k))
     (hSame0 :
       SameMPV₂ A
         (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
@@ -539,7 +539,7 @@ theorem exists_tp_gauge_blockwise
       ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
         SameMPV₂ A
           (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
-        (∀ k, IsIrreducibleTensor (blocks1 k)) ∧
+        (∀ k, Kraus.IsIrreducibleFamily (blocks1 k)) ∧
         (∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1) ∧
         (∀ k, μ1 k ≠ 0) ∧
         (∀ k, 0 < dim0 k) := by
@@ -572,7 +572,7 @@ theorem exists_tp_gauge_blockwise
   let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
   obtain ⟨hSame1, hμne1, hDim1⟩ :=
     gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
-  have hIrr1 : ∀ k : Fin r0, IsIrreducibleTensor (blocks1 k) := by
+  have hIrr1 : ∀ k : Fin r0, Kraus.IsIrreducibleFamily (blocks1 k) := by
     intro k
     let : NeZero (dim0 k) :=
       ⟨bond_dim_ne_zero_of_exists_nonzero
@@ -584,10 +584,10 @@ theorem exists_tp_gauge_blockwise
       dsimp [c]
       simp [hroot_ne]
     have hIrr_scaled :
-        IsIrreducibleTensor (d := d) (D := dim0 k) (fun i => c • blocks0 k i) :=
+        Kraus.IsIrreducibleFamily (d := d) (D := dim0 k) (fun i => c • blocks0 k i) :=
       isIrreducibleTensor_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
     have hIrr_gauge :
-        IsIrreducibleTensor (d := d) (D := dim0 k)
+        Kraus.IsIrreducibleFamily (d := d) (D := dim0 k)
           (tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k)) :=
       isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
         (d := d) (D := dim0 k)
@@ -628,10 +628,10 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary
           Λ.PosDef ∧
           Λ.IsDiag ∧
           (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+          Kraus.transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
       (∀ k,
         ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
+          Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
       (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
       (∀ k, 0 < dim k) ∧
@@ -690,7 +690,7 @@ From any `A : MPSTensor d D`, it produces TP-gauged irreducible blocks
 `blocks k` with nonzero weights `μ k`.
 
 Every nonzero block satisfies:
-* `IsIrreducibleTensor`;
+* `Kraus.IsIrreducibleFamily`;
 * left-canonical normalization `∑ᵢ (Bᵢ)ᴴ Bᵢ = I`;
 * positive bond dimension;
 * nonzero weight.
@@ -712,7 +712,7 @@ theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧

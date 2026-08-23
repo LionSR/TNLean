@@ -57,7 +57,7 @@ operators.
 
 Source: arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
-    {A : MPSTensor d D} (hA : IsInjective A) {L : ℕ} (hL : 1 < L)
+    {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : NSiteSpace d (L + 1)} :
     localTerm A L (L + 1) (0 : Fin (L + 1)) v = 0 ∧
         localTerm A L (L + 1) (1 : Fin (L + 1)) v = 0 ↔
@@ -79,7 +79,7 @@ in the local-support notation of arXiv:1606.00608, Definition D.2.
 Source: arXiv:1606.00608, Definition D.2, lines 2205--2218;
 arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
 theorem groundSpace_three_eq_adjacent_twoSite_parent_kernels
-    {A : MPSTensor d D} (hA : IsInjective A) :
+    {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
     groundSpace A 3 =
       LinearMap.ker (leftPairLift (parentInteraction A 2)) ⊓
         LinearMap.ker (rightPairLift (parentInteraction A 2)) := by

@@ -21,7 +21,7 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 * **(a)** `IsPrimitivePaper A`: there exists `q ≥ 1` such that for all `|φ⟩ ≠ 0`,
   `H_q(A,φ) = ℂ^D`.
 * **(b)** `HasEventuallyFullKrausRank A`: there exists `i ≥ 1` with `S_i(A) = M_D(ℂ)`
-  (equivalently, `IsNormal A`).
+  (equivalently, `Kraus.IsNormal A`).
 * **(c)** `IsStronglyIrreduciblePaper A`: `E_A` is irreducible, has a
   positive-definite fixed point, and peripheral spectrum `{1}`.
 
@@ -132,17 +132,17 @@ theorem isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank [NeZero D]
     IsStronglyIrreduciblePaper A :=
   prop3_ac A hNorm (prop3_ba A hA)
 
-/-- **Proposition 3 (b)→(c)**, `IsNormal` version.
+/-- **Proposition 3 (b)→(c)**, `Kraus.IsNormal` version.
 
 If `A` is normal and normalized, then `A` is strongly irreducible.
 
-This is the `IsNormal` restatement of the composite implication `(b) → (c)`.
+This is the `Kraus.IsNormal` restatement of the composite implication `(b) → (c)`.
 Paper: arXiv:0909.5347, Proposition 3; Wolf, Chapter 6.
 -/
 theorem isNormal_implies_stronglyIrreducible [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hA : IsNormal A) :
+    (hA : Kraus.IsNormal A) :
     IsStronglyIrreduciblePaper A :=
   isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm
     ((hasEventuallyFullKrausRank_iff_isNormal A).mpr hA)
@@ -174,7 +174,7 @@ theorem isNormal_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
-    IsNormal A :=
+    Kraus.IsNormal A :=
   (hasEventuallyFullKrausRank_iff_isNormal A).mp
     (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
 
@@ -222,7 +222,7 @@ normality, and strong irreducibility.
 
 This theorem is intentionally stated as
 `IsPrimitivePaper A ↔
-  (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A)`.
+  (HasEventuallyFullKrausRank A ∧ Kraus.IsNormal A ∧ IsStronglyIrreduciblePaper A)`.
 For explicit pairwise equivalences, use:
 `primitivePaper_iff_hasEventuallyFullKrausRank`,
 `primitivePaper_iff_stronglyIrreducible`, and
@@ -231,7 +231,7 @@ theorem wolf_theorem_6_8_conjunction [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     IsPrimitivePaper A ↔
-      (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A) := by
+      (HasEventuallyFullKrausRank A ∧ Kraus.IsNormal A ∧ IsStronglyIrreduciblePaper A) := by
   constructor
   · intro hPrim
     refine ⟨?_, ?_, ?_⟩
@@ -289,9 +289,9 @@ theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)
     (hSpan : HasEventuallyFullKrausRank A) :
     ∃! ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ ∈ densityMatrices D ∧ ρ.PosDef ∧
-      transferMap (d := d) (D := D) A ρ = ρ ∧
+      Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
       ∀ σ : Matrix (Fin D) (Fin D) ℂ,
-        transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
+        Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
   have hSI := isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank A hNorm hSpan
   obtain ⟨ρ₀, hPrim, hρ₀pd⟩ := isPrimitiveMPS_of_isStronglyIrreduciblePaper A hNorm hSI
   have htr_pos : 0 < Matrix.trace ρ₀ := hρ₀pd.trace_pos
@@ -300,10 +300,10 @@ theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)
   have hρpd : ρ.PosDef := hρ₀pd.smul (inv_pos.mpr htr_pos)
   have hρ_trace : Matrix.trace ρ = 1 := by
     rw [hρ_def, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr_ne]
-  have hρ_fix : transferMap (d := d) (D := D) A ρ = ρ := by
+  have hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
     rw [hρ_def, LinearMap.map_smul, hPrim.fixedPoint_is_fixed]
   have hunique : ∀ σ : Matrix (Fin D) (Fin D) ℂ,
-      transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
+      Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
     intro σ hσ
     refine ⟨Matrix.trace σ, ?_⟩
     calc σ = (Matrix.trace σ / Matrix.trace ρ₀) • ρ₀ := hPrim.fixedPoint_unique σ hσ

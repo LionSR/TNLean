@@ -45,10 +45,10 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
-    (hAj_blk : IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L)
-    (hAk_blk : IsNBlkInjective (A k) L)
-    (hAj_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)))
-    (hAk_inj : IsInjective (A k))
+    (hAj_blk : Kraus.IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L)
+    (hAk_blk : Kraus.IsNBlkInjective (A k) L)
+    (hAj_inj : Kraus.IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)))
+    (hAk_inj : Kraus.IsInjective (A k))
     (hL : 1 < L) :
     groundSpace (cast (congr_arg (MPSTensor d) hdim) (A j)) (L + (L + L)) ⊓
         groundSpace (A k) (L + (L + L)) = ⊥ := by
@@ -76,11 +76,11 @@ theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge_c1
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
     {L₀ : ℕ}
-    (hAj_c1 : IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L₀)
-    (hAk_c1 : IsNBlkInjective (A k) L₀)
-    (hAj_blk : IsNBlkInjective
+    (hAj_c1 : Kraus.IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L₀)
+    (hAk_c1 : Kraus.IsNBlkInjective (A k) L₀)
+    (hAj_blk : Kraus.IsNBlkInjective
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (L₀ + 1))
-    (hAk_blk : IsNBlkInjective (A k) (L₀ + 1))
+    (hAk_blk : Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hL₀ : 0 < L₀) :
     groundSpace (cast (congr_arg (MPSTensor d) hdim) (A j))
         ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ⊓
@@ -110,13 +110,13 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
-    (hAj_blk : IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L)
-    (hAk_blk : IsNBlkInjective (A k) L)
-    (hAj_blk3 : IsNBlkInjective
+    (hAj_blk : Kraus.IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L)
+    (hAk_blk : Kraus.IsNBlkInjective (A k) L)
+    (hAj_blk3 : Kraus.IsNBlkInjective
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (L + (L + L)))
-    (hAk_blk3 : IsNBlkInjective (A k) (L + (L + L)))
-    (hAj_inj : IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)))
-    (hAk_inj : IsInjective (A k))
+    (hAk_blk3 : Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hAj_inj : Kraus.IsInjective (cast (congr_arg (MPSTensor d) hdim) (A j)))
+    (hAk_inj : Kraus.IsInjective (A k))
     (hL : 1 < L) :
     PairTraceSeparatingAt
     (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) (L + (L + L)) := by
@@ -137,15 +137,15 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {j k : Fin r} (hjk : j ≠ k) (hdim : dim j = dim k)
     {L₀ : ℕ}
-    (hAj_c1 : IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L₀)
-    (hAk_c1 : IsNBlkInjective (A k) L₀)
-    (hAj_blk : IsNBlkInjective
+    (hAj_c1 : Kraus.IsNBlkInjective (cast (congr_arg (MPSTensor d) hdim) (A j)) L₀)
+    (hAk_c1 : Kraus.IsNBlkInjective (A k) L₀)
+    (hAj_blk : Kraus.IsNBlkInjective
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (L₀ + 1))
-    (hAk_blk : IsNBlkInjective (A k) (L₀ + 1))
-    (hAj_blk3 : IsNBlkInjective
+    (hAk_blk : Kraus.IsNBlkInjective (A k) (L₀ + 1))
+    (hAj_blk3 : Kraus.IsNBlkInjective
       (cast (congr_arg (MPSTensor d) hdim) (A j))
       ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
-    (hAk_blk3 : IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+    (hAk_blk3 : Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     PairTraceSeparatingAt
       (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
@@ -170,9 +170,9 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L) :
     ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) (L + (L + L)) := by
   intro k j hjk
@@ -203,10 +203,10 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     ∀ k j : Fin r, j ≠ k →
       PairTraceSeparatingAt (A k) (A j)
@@ -242,10 +242,10 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) (hr : 2 ≤ r) :
     WordTupleSpanTop A
       ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) :=
@@ -266,9 +266,9 @@ theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEqu
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L) :
     ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
   ⟨L + (L + L),
@@ -288,9 +288,9 @@ theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L) :
     HasPairBlockSeparatingWords A (L + (L + L)) :=
   hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A
@@ -307,10 +307,10 @@ theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     HasPairBlockSeparatingWords A ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) :=
   hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A
@@ -326,9 +326,9 @@ theorem propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L) :
     PropBlockInjective A :=
   propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk
@@ -344,10 +344,10 @@ theorem propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     PropBlockInjective A :=
   propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk1
@@ -370,9 +370,9 @@ theorem wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L) :
     WordTupleSpanTop A (L + (r - 1) * (L + (L + L))) :=
   wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk
@@ -396,10 +396,10 @@ theorem wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     WordTupleSpanTop A
       ((L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) :=
@@ -416,9 +416,9 @@ theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L) :
     ∃ N : ℕ, WordTupleSpanTop A N :=
   ⟨L + (r - 1) * (L + (L + L)),
@@ -435,10 +435,10 @@ theorem exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     ∃ N : ℕ, WordTupleSpanTop A N :=
   ⟨(L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))),
@@ -483,7 +483,7 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
     lt_of_lt_of_le (hCF.basis_dim_pos j₀) (P.basisDim_le_totalDim j₀)
   have hD4pos : 0 < P.totalDim ^ 4 := Nat.pow_pos hDpos
   have hBlk0 : ∀ j : Fin P.basisCount,
-      IsNBlkInjective (P.basis j) (P.totalDim ^ 4) :=
+      Kraus.IsNBlkInjective (P.basis j) (P.totalDim ^ 4) :=
     hCF.basis_isNBlkInjective_totalDim_pow_four
   by_cases hCountOne : P.basisCount = 1
   · refine ⟨P.totalDim ^ 4, hD4pos, ?_, ?_⟩
@@ -501,11 +501,11 @@ theorem exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
     let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
       fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
     have hBlk1 : ∀ j : Fin P.basisCount,
-        IsNBlkInjective (P.basis j) (P.totalDim ^ 4 + 1) := by
+        Kraus.IsNBlkInjective (P.basis j) (P.totalDim ^ 4 + 1) := by
       intro j
       exact isNBlkInjective_of_le hD4pos (hBlk0 j) (by omega)
     have hBlk3 : ∀ j : Fin P.basisCount,
-        IsNBlkInjective (P.basis j)
+        Kraus.IsNBlkInjective (P.basis j)
           ((P.totalDim ^ 4 + 1) +
             ((P.totalDim ^ 4 + 1) + (P.totalDim ^ 4 + 1))) := by
       intro j

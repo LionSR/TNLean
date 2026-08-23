@@ -148,7 +148,7 @@ private noncomputable def tailVirtualFamilyMap (A : MPSTensor d D) (K : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →ₗ[ℂ]
       (Cfg d K → Matrix (Fin D) (Fin D) ℂ) where
   toFun x u := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x *
-    evalWord A (List.ofFn u)
+    Kraus.evalWord A (List.ofFn u)
   map_add' x y := by
     funext u
     simp [Matrix.add_mul]
@@ -168,7 +168,7 @@ noncomputable def tailVirtualMapES (A : MPSTensor d D) (K : ℕ) :
 private noncomputable def leftVirtualFamilyMap (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →ₗ[ℂ]
       (Cfg d L → Matrix (Fin D) (Fin D) ℂ) where
-  toFun x τ := evalWord A (List.ofFn τ) *
+  toFun x τ := Kraus.evalWord A (List.ofFn τ) *
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x
   map_add' x y := by
     funext τ
@@ -192,7 +192,7 @@ theorem boundaryFamilyEquiv_tailVirtualMapES_apply
     (u : Cfg d K) :
     boundaryFamilyEquiv (D := D) (Cfg d K) (tailVirtualMapES A K x) u =
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x *
-        evalWord A (List.ofFn u) := by
+        Kraus.evalWord A (List.ofFn u) := by
   change boundaryFamilyEquiv (D := D) (Cfg d K)
     ((boundaryFamilyEquiv (D := D) (Cfg d K)).symm (tailVirtualFamilyMap A K x)) u = _
   rw [(boundaryFamilyEquiv (D := D) (Cfg d K)).apply_symm_apply]
@@ -204,7 +204,7 @@ theorem boundaryFamilyEquiv_leftVirtualMapES_apply
     (A : MPSTensor d D) (L : ℕ) (x : EuclideanSpace ℂ (Fin D × Fin D))
     (τ : Cfg d L) :
     boundaryFamilyEquiv (D := D) (Cfg d L) (leftVirtualMapES A L x) τ =
-      evalWord A (List.ofFn τ) *
+      Kraus.evalWord A (List.ofFn τ) *
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm x := by
   change boundaryFamilyEquiv (D := D) (Cfg d L)
     ((boundaryFamilyEquiv (D := D) (Cfg d L)).symm (leftVirtualFamilyMap A L x)) τ = _
@@ -220,7 +220,7 @@ theorem tailVirtualMapES_adjoint_apply
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (∑ u : Cfg d K,
           boundaryFamilyEquiv (D := D) (Cfg d K) x u *
-            (evalWord A (List.ofFn u))ᴴ) := by
+            (Kraus.evalWord A (List.ofFn u))ᴴ) := by
   apply ext_inner_left ℂ
   intro z
   obtain ⟨Z, rfl⟩ :=
@@ -230,7 +230,7 @@ theorem tailVirtualMapES_adjoint_apply
     Fintype.sum_prod_type]
   change (∑ u : Cfg d K, inner ℂ
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (Z * evalWord A (List.ofFn u)))
+        (Z * Kraus.evalWord A (List.ofFn u)))
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (boundaryFamilyEquiv (D := D) (Cfg d K) x u))) = _
   simp only [Matrix.inner_frobeniusEquivEuclidean,
@@ -238,7 +238,7 @@ theorem tailVirtualMapES_adjoint_apply
   apply Finset.sum_congr rfl
   intro u _
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
-    (evalWord A (List.ofFn u))ᴴ
+    (Kraus.evalWord A (List.ofFn u))ᴴ
     (Zᴴ * boundaryFamilyEquiv (D := D) (Cfg d K) x u)
 
 /-- The adjoint of the left virtual word map sums left-adjointed word
@@ -249,7 +249,7 @@ theorem leftVirtualMapES_adjoint_apply
     (leftVirtualMapES A L).adjoint x =
       Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (∑ τ : Cfg d L,
-          (evalWord A (List.ofFn τ))ᴴ *
+          (Kraus.evalWord A (List.ofFn τ))ᴴ *
             boundaryFamilyEquiv (D := D) (Cfg d L) x τ) := by
   apply ext_inner_left ℂ
   intro z
@@ -260,7 +260,7 @@ theorem leftVirtualMapES_adjoint_apply
     Fintype.sum_prod_type]
   change (∑ τ : Cfg d L, inner ℂ
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (evalWord A (List.ofFn τ) * Z))
+        (Kraus.evalWord A (List.ofFn τ) * Z))
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
         (boundaryFamilyEquiv (D := D) (Cfg d L) x τ))) = _
   simp only [Matrix.inner_frobeniusEquivEuclidean,
@@ -287,9 +287,9 @@ theorem leftVirtualMapES_norm_map_of_leftCanonical
     rw [PiLp.inner_apply, Fintype.sum_prod_type]
     change (∑ τ : Cfg d L, inner ℂ
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (evalWord A (List.ofFn τ) * X))
+        (Kraus.evalWord A (List.ofFn τ) * X))
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-        (evalWord A (List.ofFn τ) * X))) = _
+        (Kraus.evalWord A (List.ofFn τ) * X))) = _
     simp_rw [Matrix.inner_frobeniusEquivEuclidean, Matrix.conjTranspose_mul,
       Matrix.mul_assoc]
     rw [← Matrix.trace_sum]
@@ -337,7 +337,7 @@ theorem tailBoundaryMapES_comp_tailVirtualMapES
       boundaryFamilyEquiv (D := D) (Cfg d K)
           (tailVirtualMapES A K
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
-        fun u => X * evalWord A (List.ofFn u) := by
+        fun u => X * Kraus.evalWord A (List.ofFn u) := by
     funext u
     rw [boundaryFamilyEquiv_tailVirtualMapES_apply,
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
@@ -365,7 +365,7 @@ theorem leftBoundaryMapES_comp_leftVirtualMapES
       boundaryFamilyEquiv (D := D) (Cfg d L)
           (leftVirtualMapES A L
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X)) =
-        fun τ => evalWord A (List.ofFn τ) * X := by
+        fun τ => Kraus.evalWord A (List.ofFn τ) * X := by
     funext τ
     rw [boundaryFamilyEquiv_leftVirtualMapES_apply,
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]

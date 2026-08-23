@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 
 /-!
 # The row-and-column reduction cannot factor the row-cut gauge
@@ -202,8 +202,8 @@ theorem single_mem_span_Aunits (a b : Fin 4) :
 
 /-- `Aunits` is injective: its range spans the whole matrix algebra, since it
 contains every matrix unit. -/
-theorem Aunits_isInjective : IsInjective Aunits := by
-  rw [IsInjective, eq_top_iff]
+theorem Aunits_isInjective : Kraus.IsInjective Aunits := by
+  rw [Kraus.IsInjective, eq_top_iff]
   intro M _
   rw [Matrix.matrix_eq_sum_single M]
   refine Submodule.sum_mem _ (fun a _ => Submodule.sum_mem _ (fun b _ => ?_))
@@ -231,7 +231,7 @@ the one-dimensional reduction can be taken to be a per-edge product matrix.  Thi
 the one-dimensional corollary's conclusion with the extra demand that the gauge
 factor over the vertical edges. -/
 def RowCutGaugeFactorizes : Prop :=
-  ∀ A B : MPSTensor 16 4, IsNBlkInjective A 1 → IsNBlkInjective B 1 → SameMPV A B →
+  ∀ A B : MPSTensor 16 4, Kraus.IsNBlkInjective A 1 → Kraus.IsNBlkInjective B 1 → SameMPV A B →
     ∃ (Z : GL (Fin 4) ℂ) (lam : ℂ),
       IsPerEdgeProduct (Z : Matrix (Fin 4) (Fin 4) ℂ) ∧
         ∀ i : Fin 16, B i =
@@ -255,10 +255,10 @@ arXiv:1804.04964.  Documented in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`
 the section "No coherence question between rows". -/
 theorem rowCutGaugeFactorizes_false : ¬ RowCutGaugeFactorizes := by
   intro hRoute
-  have hAblk : IsNBlkInjective Aunits 1 :=
-    isNBlkInjective_one_of_isInjective Aunits_isInjective
-  have hBblk : IsNBlkInjective Bunits 1 :=
-    isNBlkInjective_one_of_isInjective
+  have hAblk : Kraus.IsNBlkInjective Aunits 1 :=
+    Kraus.isNBlkInjective_one_of_isInjective Aunits_isInjective
+  have hBblk : Kraus.IsNBlkInjective Bunits 1 :=
+    Kraus.isNBlkInjective_one_of_isInjective
       (isInjective_of_gaugeEquiv Aunits_isInjective gaugeEquiv_Aunits_Bunits)
   obtain ⟨Z, lam, hprod, hrel⟩ :=
     hRoute Aunits Bunits hAblk hBblk gaugeEquiv_Aunits_Bunits.sameMPV

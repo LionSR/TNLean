@@ -90,14 +90,14 @@ theorem isPrimitivePaper_of_hasEventuallyFullKrausRank
   obtain ⟨N, hNpos, hN⟩ := hA
   exact ⟨N, hNpos, fun φ hφ => vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hN φ hφ⟩
 
-/-- **Proposition 3, direction (b)⟹(a)**, stated with `IsNormal`:
+/-- **Proposition 3, direction (b)⟹(a)**, stated with `Kraus.IsNormal`:
 If `A` is normal, then `A` is primitive in the paper's sense.
 
 This is the restatement of `isPrimitivePaper_of_hasEventuallyFullKrausRank`
-using the library's `IsNormal` predicate instead of
+using the library's `Kraus.IsNormal` predicate instead of
 `HasEventuallyFullKrausRank`. -/
 theorem isPrimitivePaper_of_isNormal
-    (A : MPSTensor d D) (hA : IsNormal A) :
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     IsPrimitivePaper A :=
   isPrimitivePaper_of_hasEventuallyFullKrausRank A
     ((hasEventuallyFullKrausRank_iff_isNormal A).mpr hA)

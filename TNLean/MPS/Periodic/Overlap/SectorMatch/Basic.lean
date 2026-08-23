@@ -38,19 +38,19 @@ lemma exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
     (hBlocks_lc :
       ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
     (hNondeg : ∀ k, dim k ≠ 0)
-    (hNormal : ∀ k, IsNormal (blocks k)) :
+    (hNormal : ∀ k, Kraus.IsNormal (blocks k)) :
     ∃ L : ℕ, 0 < L ∧
       ∃ Ω : (k : Fin m) →
           Matrix (Fin (dim k)) (Fin (dim k)) ℂ →ₗ[ℂ] ((Fin L → Fin d) → ℂ),
         ∀ (k : Fin m) (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
           ∑ σ : Fin L → Fin d,
-            (Ω k X σ) • evalWord (blocks k) (List.ofFn σ) = X := by
+            (Ω k X σ) • Kraus.evalWord (blocks k) (List.ofFn σ) = X := by
   obtain ⟨L, hL_pos, hL⟩ :=
     exists_common_isNBlkInjective_of_isNormal_leftCanonical
       blocks hBlocks_lc hNondeg hNormal
-  refine ⟨L, hL_pos, fun k => blockDecompositionMap (hL k), ?_⟩
+  refine ⟨L, hL_pos, fun k => Kraus.blockDecompositionMap (hL k), ?_⟩
   intro k X
-  exact blockDecompositionMap_sum (hL k) X
+  exact Kraus.blockDecompositionMap_sum (hL k) X
 
 /-- Nonzero scalar multiplication preserves injectivity at a fixed blocking length.
 
@@ -58,26 +58,26 @@ This is used when normalizing the matched sector tensors in arXiv:1708.00029,
 Appendix A, lines 985--1002. -/
 private lemma isNBlkInjective_smul_of_ne
     {e n N : ℕ} (C : MPSTensor e n) (z : ℂ) (hz : z ≠ 0)
-    (hC : IsNBlkInjective C N) :
-    IsNBlkInjective (fun i => z • C i) N := by
-  rw [IsNBlkInjective, Kraus.wordSpan, eq_top_iff] at hC ⊢
+    (hC : Kraus.IsNBlkInjective C N) :
+    Kraus.IsNBlkInjective (fun i => z • C i) N := by
+  rw [Kraus.IsNBlkInjective, Kraus.wordSpan, eq_top_iff] at hC ⊢
   intro X hXtop
   clear hXtop
   have hX : X ∈ Submodule.span ℂ
-      (Set.range fun σ : Fin N → Fin e => evalWord C (List.ofFn σ)) :=
+      (Set.range fun σ : Fin N → Fin e => Kraus.evalWord C (List.ofFn σ)) :=
     hC (Submodule.mem_top : X ∈ (⊤ : Submodule ℂ (MatrixAlg n)))
   induction hX using Submodule.span_induction with
   | mem X hX =>
       obtain ⟨σ, rfl⟩ := hX
-      change evalWord C (List.ofFn σ) ∈ _
+      change Kraus.evalWord C (List.ofFn σ) ∈ _
       rw [← inv_smul_smul₀ (pow_ne_zero N hz)
-        (evalWord C (List.ofFn σ))]
+        (Kraus.evalWord C (List.ofFn σ))]
       apply Submodule.smul_mem
-      have hscaled : evalWord (fun i => z • C i) (List.ofFn σ) ∈
+      have hscaled : Kraus.evalWord (fun i => z • C i) (List.ofFn σ) ∈
           Submodule.span ℂ (Set.range fun τ : Fin N → Fin e =>
-            evalWord (fun i => z • C i) (List.ofFn τ)) :=
+            Kraus.evalWord (fun i => z • C i) (List.ofFn τ)) :=
         Submodule.subset_span (Set.mem_range_self σ)
-      simpa only [evalWord_smul, List.length_ofFn] using hscaled
+      simpa only [Kraus.evalWord_smul, List.length_ofFn] using hscaled
   | zero => exact Submodule.zero_mem _
   | add X Y _ _ hX hY => exact Submodule.add_mem _ hX hY
   | smul z X _ hX => exact Submodule.smul_mem _ z hX
@@ -88,8 +88,8 @@ This is used when normalizing the matched sector tensors in arXiv:1708.00029,
 Appendix A, lines 985--1002. -/
 private lemma isNormal_smul_of_ne
     {e n : ℕ} (C : MPSTensor e n) (z : ℂ) (hz : z ≠ 0)
-    (hC : IsNormal C) :
-    IsNormal (fun i => z • C i) := by
+    (hC : Kraus.IsNormal C) :
+    Kraus.IsNormal (fun i => z • C i) := by
   obtain ⟨N, hN, hC⟩ := hC
   exact ⟨N, hN, isNBlkInjective_smul_of_ne C z hz hC⟩
 
@@ -112,7 +112,7 @@ lemma exists_ambient_corner_gauge_of_gaugePhase
     (hφP_star : ∀ X : MatrixAlg nA, (φP Xᴴ).1 = (φP X).1ᴴ)
     (hφQ_star : ∀ X : MatrixAlg nB, (φQ Xᴴ).1 = (φQ X).1ᴴ)
     (hCA_lc : IsLeftCanonical CA) (hCB_lc : IsLeftCanonical CB)
-    (hCA_normal : IsNormal CA)
+    (hCA_normal : Kraus.IsNormal CA)
     (hMatch : GaugePhaseEquiv
       (cast (congr_arg (MPSTensor e) hdim) CA) CB) :
     ∃ (U : MatrixAlg D) (c : ℂ),
@@ -130,17 +130,17 @@ lemma exists_ambient_corner_gauge_of_gaugePhase
   have hGauge : GaugeEquiv CA CB' := by
     refine ⟨X, fun i => ?_⟩
     simp only [CB', hCB i, smul_smul, inv_mul_cancel₀ hz, one_smul]
-  have hCB'_normal : IsNormal CB' :=
+  have hCB'_normal : Kraus.IsNormal CB' :=
     isNormal_of_gaugeEquiv hCA_normal hGauge
   have hCB_eq : CB = fun i => z • CB' i := by
     funext i
     simp [CB', hz]
-  have hCB_normal : IsNormal CB := by
+  have hCB_normal : Kraus.IsNormal CB := by
     rw [hCB_eq]
     exact isNormal_smul_of_ne CB' z hz hCB'_normal
-  have hCA_irr : IsIrreducibleTensor CA :=
+  have hCA_irr : Kraus.IsIrreducibleFamily CA :=
     (isNormalTensor_of_isNormal_leftCanonical CA hCA_normal hCA_lc).no_invariant_proj
-  have hCB_irr : IsIrreducibleTensor CB :=
+  have hCB_irr : Kraus.IsIrreducibleFamily CB :=
     (isNormalTensor_of_isNormal_leftCanonical CB hCB_normal hCB_lc).no_invariant_proj
   obtain ⟨W, c₀, hc₀, hW⟩ :=
     exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
-import QICLean.MPS.Core.Transfer
+import TNLean.MPS.Defs
+import QICLean.Kraus.Transfer
 
 /-!
 # Majumdar-Ghosh state as a Matrix Product State
@@ -157,10 +157,10 @@ theorem majumdarGhosh_left_canonical :
 /-- The transfer map of the Majumdar-Ghosh tensor sends the identity to
 `E(1) = A⁰ (A⁰)ᴴ + A¹ (A¹)ᴴ = diag(2, 1/2, 1/2)`. -/
 theorem majumdarGhosh_transferMap_one :
-    transferMap majumdarGhoshTensor 1 =
+    Kraus.transferMap majumdarGhoshTensor 1 =
       !![2, 0, 0; 0, 1 / 2, 0; 0, 0, 1 / 2] := by
   ext a b
-  simp only [transferMap_apply, Fin.sum_univ_two, Matrix.mul_one, Matrix.add_apply]
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_two, Matrix.mul_one, Matrix.add_apply]
   fin_cases a <;> fin_cases b <;>
     simp [majumdarGhoshTensor, Matrix.mul_apply, Matrix.conjTranspose_apply,
       Fin.sum_univ_three, Complex.conj_ofReal, inv_ofReal_sqrt2_mul_self]
@@ -171,7 +171,7 @@ theorem majumdarGhosh_transferMap_one :
 /-- The Majumdar-Ghosh tensor is **not** injective: the span of `{A⁰, A¹}` lies
 in the proper subspace of matrices whose `(2,2)` entry vanishes, so it is at most
 two-dimensional and cannot be all of `M₃(ℂ)`. -/
-theorem majumdarGhosh_not_isInjective : ¬ IsInjective majumdarGhoshTensor := by
+theorem majumdarGhosh_not_isInjective : ¬ Kraus.IsInjective majumdarGhoshTensor := by
   intro h
   have hmem : (1 : Matrix (Fin 3) (Fin 3) ℂ) ∈
       Submodule.span ℂ (Set.range majumdarGhoshTensor) := h ▸ Submodule.mem_top
@@ -207,15 +207,15 @@ using that left multiplication by a generator exchanges the two complementary
 support sets. -/
 private lemma majumdarGhosh_evalWord_grading :
     ∀ w : List (Fin 2),
-      ((Odd w.length → (evalWord majumdarGhoshTensor w) 2 2 = 0) ∧
-        (Odd w.length → (evalWord majumdarGhoshTensor w) 1 1 = 0) ∧
-        (Odd w.length → (evalWord majumdarGhoshTensor w) 1 2 = 0) ∧
-        (Odd w.length → (evalWord majumdarGhoshTensor w) 2 1 = 0) ∧
-        (Odd w.length → (evalWord majumdarGhoshTensor w) 0 0 = 0)) ∧
-      ((Even w.length → (evalWord majumdarGhoshTensor w) 0 1 = 0) ∧
-        (Even w.length → (evalWord majumdarGhoshTensor w) 0 2 = 0) ∧
-        (Even w.length → (evalWord majumdarGhoshTensor w) 1 0 = 0) ∧
-        (Even w.length → (evalWord majumdarGhoshTensor w) 2 0 = 0)) := by
+      ((Odd w.length → (Kraus.evalWord majumdarGhoshTensor w) 2 2 = 0) ∧
+        (Odd w.length → (Kraus.evalWord majumdarGhoshTensor w) 1 1 = 0) ∧
+        (Odd w.length → (Kraus.evalWord majumdarGhoshTensor w) 1 2 = 0) ∧
+        (Odd w.length → (Kraus.evalWord majumdarGhoshTensor w) 2 1 = 0) ∧
+        (Odd w.length → (Kraus.evalWord majumdarGhoshTensor w) 0 0 = 0)) ∧
+      ((Even w.length → (Kraus.evalWord majumdarGhoshTensor w) 0 1 = 0) ∧
+        (Even w.length → (Kraus.evalWord majumdarGhoshTensor w) 0 2 = 0) ∧
+        (Even w.length → (Kraus.evalWord majumdarGhoshTensor w) 1 0 = 0) ∧
+        (Even w.length → (Kraus.evalWord majumdarGhoshTensor w) 2 0 = 0)) := by
   intro w
   induction w with
   | nil =>
@@ -232,54 +232,54 @@ private lemma majumdarGhosh_evalWord_grading :
     refine ⟨⟨fun h => ?_, fun h => ?_, fun h => ?_, fun h => ?_, fun h => ?_⟩,
       fun h => ?_, fun h => ?_, fun h => ?_, fun h => ?_⟩
     · have hw := hodd_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he02 hw]
     · have hw := hodd_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he01 hw]
     · have hw := hodd_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he02 hw]
     · have hw := hodd_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he01 hw]
     · have hw := hodd_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, he10 hw, he20 hw]
     -- Even-length targets use the odd-support vanishing entries of the tail.
     · have hw := heven_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho11 hw, ho21 hw]
     · have hw := heven_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho22 hw, ho12 hw]
     · have hw := heven_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho00 hw]
     · have hw := heven_tail h
-      rw [evalWord_cons]; fin_cases i <;>
+      rw [Kraus.evalWord_cons]; fin_cases i <;>
         simp [majumdarGhoshTensor, Matrix.mul_apply, Fin.sum_univ_three, ho00 hw]
 
 /-- For odd-length words the `(2,2)` entry of the Majumdar-Ghosh product vanishes. -/
 private lemma majumdarGhosh_evalWord_22_of_odd {w : List (Fin 2)} (hw : Odd w.length) :
-    (evalWord majumdarGhoshTensor w) 2 2 = 0 :=
+    (Kraus.evalWord majumdarGhoshTensor w) 2 2 = 0 :=
   (majumdarGhosh_evalWord_grading w).1.1 hw
 
 /-- For even-length words the `(1,0)` entry of the Majumdar-Ghosh product vanishes. -/
 private lemma majumdarGhosh_evalWord_10_of_even {w : List (Fin 2)} (hw : Even w.length) :
-    (evalWord majumdarGhoshTensor w) 1 0 = 0 :=
+    (Kraus.evalWord majumdarGhoshTensor w) 1 0 = 0 :=
   (majumdarGhosh_evalWord_grading w).2.2.2.1 hw
 
 /-- The Majumdar-Ghosh tensor is not `N`-block injective for any odd `N`: the
 `(2,2)` matrix unit is not in the span of the length-`N` products. -/
 theorem majumdarGhosh_not_isNBlkInjective_of_odd {N : ℕ} (hN : Odd N) :
-    ¬ IsNBlkInjective majumdarGhoshTensor N := by
+    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor N := by
   intro h
   have hmem : Matrix.single (2 : Fin 3) (2 : Fin 3) (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
+        Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
   suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-      evalWord majumdarGhoshTensor (List.ofFn σ)), M 2 2 = 0 by
+      Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)), M 2 2 = 0 by
     have h1 := hzero _ hmem
     simp [Matrix.single] at h1
   intro M hM
@@ -294,13 +294,13 @@ theorem majumdarGhosh_not_isNBlkInjective_of_odd {N : ℕ} (hN : Odd N) :
 /-- The Majumdar-Ghosh tensor is not `N`-block injective for any even `N`: the
 `(1,0)` matrix unit is not in the span of the length-`N` products. -/
 theorem majumdarGhosh_not_isNBlkInjective_of_even {N : ℕ} (hN : Even N) :
-    ¬ IsNBlkInjective majumdarGhoshTensor N := by
+    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor N := by
   intro h
   have hmem : Matrix.single (1 : Fin 3) (0 : Fin 3) (1 : ℂ) ∈
       Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
+        Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
   suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-      evalWord majumdarGhoshTensor (List.ofFn σ)), M 1 0 = 0 by
+      Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)), M 1 0 = 0 by
     have h1 := hzero _ hmem
     simp [Matrix.single] at h1
   intro M hM
@@ -314,14 +314,14 @@ theorem majumdarGhosh_not_isNBlkInjective_of_even {N : ℕ} (hN : Even N) :
 
 /-- The Majumdar-Ghosh tensor is not `1`-block injective. -/
 theorem majumdarGhosh_not_isNBlkInjective_one :
-    ¬ IsNBlkInjective majumdarGhoshTensor 1 :=
+    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor 1 :=
   majumdarGhosh_not_isNBlkInjective_of_odd (by decide)
 
 /-- The Majumdar-Ghosh tensor is **not** normal: no blocking length `N` makes it
 `N`-block injective.  This algebraic obstruction matches the expected
 two-dimer-covering structure: the bond carries a two-periodic grading that no
 amount of blocking removes. -/
-theorem majumdarGhosh_not_isNormal : ¬ IsNormal majumdarGhoshTensor := by
+theorem majumdarGhosh_not_isNormal : ¬ Kraus.IsNormal majumdarGhoshTensor := by
   rintro ⟨N, _hNpos, hN⟩
   rcases Nat.even_or_odd N with he | ho
   · exact majumdarGhosh_not_isNBlkInjective_of_even he hN

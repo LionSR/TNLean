@@ -77,7 +77,7 @@ theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
   let leftWord : List (Fin d) := List.ofFn fun k : Fin s => τ ⟨k.val, by omega⟩
   let rightWord : List (Fin d) := List.ofFn fun k : Fin (N - (s + L)) =>
     τ ⟨s + L + k.val, by omega⟩
-  refine ⟨evalWord A rightWord * X * evalWord A leftWord, ?_⟩
+  refine ⟨Kraus.evalWord A rightWord * X * Kraus.evalWord A leftWord, ?_⟩
   ext σ
   simp only [contiguousRestrictₗ_apply, groundSpaceMap_apply]
   have hlist :
@@ -129,18 +129,18 @@ theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
               simp only [leftWord, List.length_append, List.length_ofFn]
               omega]
           · simpa only [leftWord, List.length_append, List.length_ofFn] using hkRight
-  rw [hlist, evalWord_append, evalWord_append]
+  rw [hlist, Kraus.evalWord_append, Kraus.evalWord_append]
   calc
-    Matrix.trace (evalWord A (List.ofFn σ) *
-        (evalWord A rightWord * X * evalWord A leftWord)) =
-        Matrix.trace ((evalWord A (List.ofFn σ) * (evalWord A rightWord * X)) *
-          evalWord A leftWord) := by
+    Matrix.trace (Kraus.evalWord A (List.ofFn σ) *
+        (Kraus.evalWord A rightWord * X * Kraus.evalWord A leftWord)) =
+        Matrix.trace ((Kraus.evalWord A (List.ofFn σ) * (Kraus.evalWord A rightWord * X)) *
+          Kraus.evalWord A leftWord) := by
       rw [← Matrix.mul_assoc]
-    _ = Matrix.trace (evalWord A leftWord *
-        (evalWord A (List.ofFn σ) * (evalWord A rightWord * X))) :=
+    _ = Matrix.trace (Kraus.evalWord A leftWord *
+        (Kraus.evalWord A (List.ofFn σ) * (Kraus.evalWord A rightWord * X))) :=
       Matrix.trace_mul_comm _ _
-    _ = Matrix.trace ((evalWord A leftWord * evalWord A (List.ofFn σ) *
-        evalWord A rightWord) * X) := by
+    _ = Matrix.trace ((Kraus.evalWord A leftWord * Kraus.evalWord A (List.ofFn σ) *
+        Kraus.evalWord A rightWord) * X) := by
       rw [Matrix.mul_assoc, Matrix.mul_assoc]
 
 /-- The contiguous config at position 0 with M = N covers all sites. -/
@@ -217,7 +217,7 @@ adjacent windows of size \(L + k\) at positions \(s\) and \(s + 1\) are combined
 via the intersection property to form a window of size \(L + k + 1\).
 
 **Hypotheses:** \(L ≥ 2\) (from the intersection property) and \(L ≤ N\). -/
-theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : IsInjective A)
+theorem contiguous_mem_groundSpace {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {L N : ℕ} (hL : 1 < L) (hLN : L ≤ N) [NeZero d]
     {ψ : NSiteSpace d N}
     (hwindow : ∀ (s : ℕ) (hs : s + L ≤ N)

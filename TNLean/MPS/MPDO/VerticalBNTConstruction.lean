@@ -40,12 +40,12 @@ private lemma conjTranspose_mul_evalWord_of_intertwining
     {s n : ℕ} (T : MPSTensor s d) (B : MPSTensor s n)
     (V : Matrix (Fin d) (Fin n) ℂ)
     (hinter : ∀ v, Vᴴ * T v = B v * Vᴴ) :
-    ∀ w, Vᴴ * MPSTensor.evalWord T w = MPSTensor.evalWord B w * Vᴴ := by
+    ∀ w, Vᴴ * Kraus.evalWord T w = Kraus.evalWord B w * Vᴴ := by
   intro w
   induction w with
   | nil => simp
   | cons v w ih =>
-      rw [MPSTensor.evalWord_cons, MPSTensor.evalWord_cons, ← Matrix.mul_assoc,
+      rw [Kraus.evalWord_cons, Kraus.evalWord_cons, ← Matrix.mul_assoc,
         hinter v, Matrix.mul_assoc, ih]
       exact (Matrix.mul_assoc _ _ _).symm
 
@@ -76,33 +76,33 @@ lemma sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
     simp only [List.length_ofFn, List.length_nil] at hlength
     omega
   obtain ⟨v, w, hw⟩ := List.exists_cons_of_ne_nil hword
-  rw [hw, MPSTensor.evalWord_cons, hreconstruct v, Finset.sum_mul,
+  rw [hw, Kraus.evalWord_cons, hreconstruct v, Finset.sum_mul,
     Matrix.trace_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
   have hinterWord := conjTranspose_mul_evalWord_of_intertwining
     T (fun x => μ k • blocks k x) (V k) (hinter k) w
   calc
     Matrix.trace ((V k * (μ k • blocks k v) * (V k)ᴴ) *
-        MPSTensor.evalWord T w) =
+        Kraus.evalWord T w) =
         Matrix.trace ((V k * (μ k • blocks k v)) *
-          ((V k)ᴴ * MPSTensor.evalWord T w)) := by
+          ((V k)ᴴ * Kraus.evalWord T w)) := by
             rw [Matrix.mul_assoc, Matrix.mul_assoc]
-    _ = Matrix.trace (((V k)ᴴ * MPSTensor.evalWord T w) *
+    _ = Matrix.trace (((V k)ᴴ * Kraus.evalWord T w) *
           (V k * (μ k • blocks k v))) := Matrix.trace_mul_comm _ _
-    _ = Matrix.trace ((MPSTensor.evalWord (fun x => μ k • blocks k x) w *
+    _ = Matrix.trace ((Kraus.evalWord (fun x => μ k • blocks k x) w *
           (V k)ᴴ) * (V k * (μ k • blocks k v))) := by rw [hinterWord]
-    _ = Matrix.trace (MPSTensor.evalWord (fun x => μ k • blocks k x) w *
+    _ = Matrix.trace (Kraus.evalWord (fun x => μ k • blocks k x) w *
           (μ k • blocks k v)) := by
             rw [Matrix.mul_assoc, ← Matrix.mul_assoc (V k)ᴴ (V k)
               (μ k • blocks k v), hiso k, Matrix.one_mul]
     _ = Matrix.trace ((μ k • blocks k v) *
-          MPSTensor.evalWord (fun x => μ k • blocks k x) w) :=
+          Kraus.evalWord (fun x => μ k • blocks k x) w) :=
             Matrix.trace_mul_comm _ _
     _ = Matrix.trace
-          (MPSTensor.evalWord (fun x => μ k • blocks k x) (v :: w)) := by
+          (Kraus.evalWord (fun x => μ k • blocks k x) (v :: w)) := by
             rfl
-    _ = (μ k) ^ N * Matrix.trace (MPSTensor.evalWord (blocks k) (v :: w)) := by
-      rw [MPSTensor.evalWord_smul, Matrix.trace_smul]
+    _ = (μ k) ^ N * Matrix.trace (Kraus.evalWord (blocks k) (v :: w)) := by
+      rw [Kraus.evalWord_smul, Matrix.trace_smul]
       simp only [smul_eq_mul]
       have hlength := congrArg List.length hw
       simp only [List.length_ofFn, List.length_cons] at hlength

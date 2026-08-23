@@ -27,7 +27,7 @@ normality capstone below assumes full active support and does not claim bare
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator
+open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
 
 namespace MPSTensor
 
@@ -92,8 +92,8 @@ theorem hasFullActiveSupport_reindexPhysical {d' : ℕ} (data : CPSVCanonicalFor
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem isIrreducibleTensor_reindexBond
     {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPSTensor d n)
-    (hB : IsIrreducibleTensor B) :
-    IsIrreducibleTensor (fun i => Matrix.reindex e e (B i)) := by
+    (hB : Kraus.IsIrreducibleFamily B) :
+    Kraus.IsIrreducibleFamily (fun i => Matrix.reindex e e (B i)) := by
   classical
   intro hHas
   apply hB
@@ -144,7 +144,7 @@ active block directly. See
 theorem isIrreducibleTensor_of_active_dim_eq
     (data : CPSVCanonicalFormData A) (k : Fin data.r)
     (hk : data.weights k ≠ 0) (hDim : data.dim k = D) :
-    IsIrreducibleTensor A := by
+    Kraus.IsIrreducibleFamily A := by
   classical
   have hsum : ∑ j : Fin data.r, data.dim j = D := by
     apply Nat.le_antisymm data.total_dim_le
@@ -181,7 +181,7 @@ theorem isIrreducibleTensor_of_active_dim_eq
   have hUunit : IsUnit U := by
     have hUiso : Uᴴ * U = 1 := mul_eq_one_comm.mpr hUcois
     exact ⟨⟨U, Uᴴ, hUcois, hUiso⟩, rfl⟩
-  have hB : IsIrreducibleTensor B := by
+  have hB : Kraus.IsIrreducibleFamily B := by
     exact isIrreducibleTensor_reindexBond eBlock (data.blocks k)
       (data.blocks_normal k).no_invariant_proj
   have hassembled : ∀ i,
@@ -294,7 +294,7 @@ that omits displayed zero-weight blocks is not formalized here; see
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 theorem isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport
     (data : CPSVCanonicalFormData A) (hcard : Fintype.card data.Active = 1)
-    (hfull : data.HasFullActiveSupport) : IsIrreducibleTensor A := by
+    (hfull : data.HasFullActiveSupport) : Kraus.IsIrreducibleFamily A := by
   classical
   let : Unique data.Active :=
     Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
@@ -318,8 +318,8 @@ theorem isNormalTensor_of_card_active_eq_one_of_fullActiveSupport
     (hfull : data.HasFullActiveSupport)
     (hrad : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (transferMap A)) = 1)
-    (hprim : IsPrimitive (transferMap A)) : IsNormalTensor A where
+        (Kraus.transferMap A)) = 1)
+    (hprim : IsPrimitive (Kraus.transferMap A)) : IsNormalTensor A where
   no_invariant_proj :=
     data.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport hcard hfull
   spectral_radius_one := hrad
@@ -353,15 +353,15 @@ Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, equation
 `eq:transfer-op`, and line 356. -/
 theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
     (MPOTensor.blockTensor U p).normalizedFlattening =
-      MPSTensor.reindexPhysical (blockedDoubledIndexEquiv d p)
+      Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
         (MPSTensor.blockTensor U.normalizedFlattening p) := by
   funext ij
   rw [normalizedFlattening, toMPSTensor_blockTensor]
   simp only [Kraus.reindexPhysical]
   simp only [MPSTensor.blockTensor]
-  change _ = MPSTensor.evalWord
+  change _ = Kraus.evalWord
     (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) _
-  rw [MPSTensor.evalWord_smul, MPSTensor.length_wordOfBlock]
+  rw [Kraus.evalWord_smul, MPSTensor.length_wordOfBlock]
   have hsqrtC : (Real.sqrt (MPSTensor.blockPhysDim d p) : ℂ) =
       (Real.sqrt d : ℂ) ^ p := by
     rw [sqrt_blockPhysDim]
@@ -398,13 +398,13 @@ theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
     MPSTensor.IsNormalTensor U.normalizedFlattening := by
   have htrace : ∀ N : ℕ, 1 < N →
       Matrix.trace
-        (transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ N) = 1 :=
+        (transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ N) = 1 :=
     fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
   have hcard : Fintype.card data.Active = 1 :=
     data.card_active_eq_one_of_shifted_transfer_trace htrace
   obtain ⟨hrad, hprim⟩ :=
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
-      (MPSTensor.transferMap U.normalizedFlattening) htrace
+      (Kraus.transferMap U.normalizedFlattening) htrace
   exact data.isNormalTensor_of_card_active_eq_one_of_fullActiveSupport
     hcard hfull hrad hprim
 

@@ -43,9 +43,9 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     {n : ℕ} (hn : n = L + (r - 1) * (L + (L + L)))
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
@@ -78,10 +78,10 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀)
     {n : ℕ}
     (hn : n =
@@ -117,13 +117,13 @@ theorem wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSe
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S n : ℕ}
-    (hInj : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
     (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1)
     (hPair : HasPairBlockSeparatingWords A S)
     (hn : L + (r - 1) * S ≤ n) :
     WordTupleSpanTop A n := by
   let q : ℕ := (r - 1) * S
-  have hInjTail : ∀ k : Fin r, IsNBlkInjective (A k) (n - q) := by
+  have hInjTail : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (n - q) := by
     intro k
     exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hInj k) (by omega)
   have hSpan :
@@ -138,11 +138,11 @@ private theorem isNBlkInjective_succ_and_three_mul_succ_of_unital
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1) :
-    (∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1)) ∧
+    (∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1)) ∧
       ∀ k : Fin r,
-        IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+        Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
   constructor <;> intro k
   · exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
   · exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
@@ -163,14 +163,14 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
     WordTupleSpanTop A n := by
   let S : ℕ := L + (L + L)
-  have hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) S := by
+  have hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) S := by
     intro k
     exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk k) (by omega)
   have hPair : HasPairBlockSeparatingWords A S := by
@@ -203,7 +203,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -250,12 +250,12 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
-    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
     (hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+      Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
     (hL₀ : 0 < L₀) :
     WordTupleSpanTop A
       ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) := by
@@ -273,9 +273,9 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     IsLeftCanonicalBlockFamily.ofForall fun j =>
       tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
         (A j) (Λ j) (hΛ j) (hDualFixed j)
-  have hPreparedBlk0 : ∀ k, IsNBlkInjective (prepared k) L₀ :=
+  have hPreparedBlk0 : ∀ k, Kraus.IsNBlkInjective (prepared k) L₀ :=
     fun k => isNBlkInjective_of_gaugeEquiv (hBlk0 k) (hGauge k)
-  have hPreparedNormal : ∀ j, IsNormal (prepared j) :=
+  have hPreparedNormal : ∀ j, Kraus.IsNormal (prepared j) :=
     fun j => ⟨L₀, hL₀, hPreparedBlk0 j⟩
   have hPreparedNormalTensor : ∀ j, IsNormalTensor (prepared j) :=
     fun j => isNormalTensor_of_isNormal_leftCanonical
@@ -288,10 +288,10 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     apply hBlocks j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
       (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
-  have hPreparedBlk1 : ∀ k, IsNBlkInjective (prepared k) (L₀ + 1) :=
+  have hPreparedBlk1 : ∀ k, Kraus.IsNBlkInjective (prepared k) (L₀ + 1) :=
     fun k => isNBlkInjective_of_gaugeEquiv (hBlk1 k) (hGauge k)
   have hPreparedBlk3 : ∀ k,
-      IsNBlkInjective (prepared k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) :=
+      Kraus.IsNBlkInjective (prepared k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) :=
     fun k => isNBlkInjective_of_gaugeEquiv (hBlk3 k) (hGauge k)
   have hPreparedSpan :=
     wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
@@ -325,7 +325,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -366,9 +366,9 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -397,8 +397,8 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
@@ -417,7 +417,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -450,7 +450,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -482,9 +482,9 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -517,8 +517,8 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
@@ -542,7 +542,7 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -581,7 +581,7 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_p
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -620,9 +620,9 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -664,8 +664,8 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
@@ -694,7 +694,7 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     {n : ℕ}
@@ -736,14 +736,14 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     {start period : ℕ} (hperiod_pos : 0 < period)
-    (hBlkPeriod : ∀ k : Fin r, IsNBlkInjective (A k) period)
+    (hBlkPeriod : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) period)
     (hBlkWindow : ∀ s : ℕ, s < period + (r - 1) * (L + (L + L)) →
-      ∀ k : Fin r, IsNBlkInjective (A k) (start + s))
+      ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (start + s))
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →
       ((⨅ b : Fin d,
@@ -795,8 +795,8 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hL : 1 < L)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →
@@ -820,7 +820,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     {L₀ : ℕ}
-    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →

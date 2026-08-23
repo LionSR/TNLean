@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.ComplexPhasePositivity
 import QICLean.Algebra.FinSum
 import TNLean.MPS.Core.MultiBlock
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.SharedInfra.Scaling
@@ -30,7 +30,7 @@ The diagonal `j = j'` case is `IsIsometryCanonicalForm`
 
 * `blockDiagonal'_transferSum_toBlock` — block decomposition of the direct-sum
   transfer sum: its `(j, j')` bond block acts as
-  `mixedTransferMap₂ (B j) (B j')`.  This is the reusable foundation, parallel
+  `Kraus.mixedTransferMap₂ (B j) (B j')`.  This is the reusable foundation, parallel
   to `evalWord_blockDiagonal'`.
 * `isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem`
   — exact reduction of whole-tensor transfer idempotence to every mixed block
@@ -49,7 +49,7 @@ idempotent operator with spectral radius `< 1` is `0`.  The diagonal lemma
 blocks and is not used here.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator
+open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
 open Filter Topology
 
 namespace MPSTensor
@@ -127,7 +127,7 @@ private lemma blockDiagonal'_mul_mul_toBlock
 
 /-- The `(j, j')` bond block of the block-diagonal transfer sum
 $\sum_i (\bigoplus_k B_k^i)\, X\, (\bigoplus_k B_k^i)^{\dagger}$ is the mixed
-transfer operator `mixedTransferMap₂ (B j) (B j')` applied to the `(j, j')`
+transfer operator `Kraus.mixedTransferMap₂ (B j) (B j')` applied to the `(j, j')`
 bond block of `X`.
 
 This is the transfer-operator analogue of `evalWord_blockDiagonal'`, and the
@@ -140,10 +140,10 @@ theorem blockDiagonal'_transferSum_toBlock
     (∑ i : Fin d, Matrix.blockDiagonal' (fun k => B k i) * X *
         (Matrix.blockDiagonal' (fun k => B k i))ᴴ).submatrix
         (blockIncl j dim) (blockIncl j' dim) =
-      mixedTransferMap₂ (B j) (B j')
+      Kraus.mixedTransferMap₂ (B j) (B j')
         (X.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
   classical
-  rw [mixedTransferMap₂_apply, Matrix.submatrix_sum]
+  rw [Kraus.mixedTransferMap₂_apply, Matrix.submatrix_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [Matrix.blockDiagonal'_conjTranspose, blockDiagonal'_mul_mul_toBlock]
 
@@ -173,13 +173,13 @@ sum conjugated by the `Σ ≃ Fin` reindexing. -/
 theorem transferMap_directSumTensor_reindex
     (B : (k : Fin r) → MPSTensor d (dim k))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
-    transferMap (directSumTensor B)
+    Kraus.transferMap (directSumTensor B)
         (Matrix.reindex (finSigmaFinEquiv (n := dim)) (finSigmaFinEquiv (n := dim)) Y) =
       Matrix.reindex (finSigmaFinEquiv (n := dim)) (finSigmaFinEquiv (n := dim))
         (blockTransferSum B Y) := by
   classical
   set e := finSigmaFinEquiv (m := r) (n := dim) with he
-  rw [transferMap_apply, blockTransferSum]
+  rw [Kraus.transferMap_apply, blockTransferSum]
   simp only [Matrix.reindex_apply]
   rw [Matrix.submatrix_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
@@ -191,8 +191,8 @@ theorem transferMap_directSumTensor_reindex
 the same relation for the block-diagonal transfer sum. -/
 theorem blockTransferSum_blockTransferSum_eq_smul
     (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
-    (h : transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
-      c • transferMap (directSumTensor B))
+    (h : Kraus.transferMap (directSumTensor B) ∘ₗ Kraus.transferMap (directSumTensor B) =
+      c • Kraus.transferMap (directSumTensor B))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = c • blockTransferSum B Y := by
   classical
@@ -200,12 +200,12 @@ theorem blockTransferSum_blockTransferSum_eq_smul
   apply (Matrix.reindex e e).injective
   calc
     Matrix.reindex e e (blockTransferSum B (blockTransferSum B Y))
-        = transferMap (directSumTensor B) (Matrix.reindex e e (blockTransferSum B Y)) :=
+        = Kraus.transferMap (directSumTensor B) (Matrix.reindex e e (blockTransferSum B Y)) :=
           (transferMap_directSumTensor_reindex B (blockTransferSum B Y)).symm
-    _ = transferMap (directSumTensor B)
-          (transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by
+    _ = Kraus.transferMap (directSumTensor B)
+          (Kraus.transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by
             rw [transferMap_directSumTensor_reindex B Y]
-    _ = c • transferMap (directSumTensor B) (Matrix.reindex e e Y) := by
+    _ = c • Kraus.transferMap (directSumTensor B) (Matrix.reindex e e Y) := by
           have hY := LinearMap.congr_fun h (Matrix.reindex e e Y)
           simpa only [LinearMap.comp_apply, LinearMap.smul_apply] using hY
     _ = Matrix.reindex e e (c • blockTransferSum B Y) := by
@@ -221,8 +221,8 @@ theorem blockTransferSum_blockTransferSum
     (hRFP : IsTransferIdempotent (directSumTensor B))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
-  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
-    transferMap (directSumTensor B) at hRFP
+  change Kraus.transferMap (directSumTensor B) ∘ₗ Kraus.transferMap (directSumTensor B) =
+    Kraus.transferMap (directSumTensor B) at hRFP
   simpa only [one_smul] using
     blockTransferSum_blockTransferSum_eq_smul B 1 (by simpa only [one_smul] using hRFP) Y
 
@@ -249,33 +249,33 @@ private lemma exists_toBlock_eq (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')
 block pair. In particular, the diagonal corner is the transfer map of that block. -/
 theorem mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
     (B : (k : Fin r) → MPSTensor d (dim k)) (c : ℂ)
-    (h : transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
-      c • transferMap (directSumTensor B))
+    (h : Kraus.transferMap (directSumTensor B) ∘ₗ Kraus.transferMap (directSumTensor B) =
+      c • Kraus.transferMap (directSumTensor B))
     (j j' : Fin r) [NeZero (dim j)] [NeZero (dim j')] :
-    mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
-      c • mixedTransferMap₂ (B j) (B j') := by
+    Kraus.mixedTransferMap₂ (B j) (B j') * Kraus.mixedTransferMap₂ (B j) (B j') =
+      c • Kraus.mixedTransferMap₂ (B j) (B j') := by
   classical
   have hStage1 : ∀ Y, (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) =
-      mixedTransferMap₂ (B j) (B j') (Y.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
+      Kraus.mixedTransferMap₂ (B j) (B j') (Y.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
     intro Y
     simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B Y j j'
   apply LinearMap.ext
   intro Z
   rw [Module.End.mul_apply, LinearMap.smul_apply]
   obtain ⟨Y, hY⟩ := exists_toBlock_eq j j' Z
-  have e1 : mixedTransferMap₂ (B j) (B j') Z =
+  have e1 : Kraus.mixedTransferMap₂ (B j) (B j') Z =
       (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
     rw [hStage1, hY]
   calc
-    mixedTransferMap₂ (B j) (B j') (mixedTransferMap₂ (B j) (B j') Z)
-        = mixedTransferMap₂ (B j) (B j')
+    Kraus.mixedTransferMap₂ (B j) (B j') (Kraus.mixedTransferMap₂ (B j) (B j') Z)
+        = Kraus.mixedTransferMap₂ (B j) (B j')
             ((blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim)) := by rw [e1]
     _ = (blockTransferSum B (blockTransferSum B Y)).submatrix
           (blockIncl j dim) (blockIncl j' dim) := (hStage1 (blockTransferSum B Y)).symm
     _ = (c • blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := by
           rw [blockTransferSum_blockTransferSum_eq_smul B c h]
     _ = c • (blockTransferSum B Y).submatrix (blockIncl j dim) (blockIncl j' dim) := rfl
-    _ = c • mixedTransferMap₂ (B j) (B j') Z := congrArg (c • ·) e1.symm
+    _ = c • Kraus.mixedTransferMap₂ (B j) (B j') Z := congrArg (c • ·) e1.symm
 
 /-- Whole-tensor RFP of the direct sum
 makes every (in particular off-diagonal) mixed transfer operator idempotent. -/
@@ -283,11 +283,11 @@ theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
     (B : (k : Fin r) → MPSTensor d (dim k))
     (hRFP : IsTransferIdempotent (directSumTensor B)) (j j' : Fin r)
     [NeZero (dim j)] [NeZero (dim j')] :
-    IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
-  change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
-    transferMap (directSumTensor B) at hRFP
-  change mixedTransferMap₂ (B j) (B j') * mixedTransferMap₂ (B j) (B j') =
-    mixedTransferMap₂ (B j) (B j')
+    IsIdempotentElem (Kraus.mixedTransferMap₂ (B j) (B j')) := by
+  change Kraus.transferMap (directSumTensor B) ∘ₗ Kraus.transferMap (directSumTensor B) =
+    Kraus.transferMap (directSumTensor B) at hRFP
+  change Kraus.mixedTransferMap₂ (B j) (B j') * Kraus.mixedTransferMap₂ (B j) (B j') =
+    Kraus.mixedTransferMap₂ (B j) (B j')
   simpa only [one_smul] using
     mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul B 1
       (by simpa only [one_smul] using hRFP) j j'
@@ -296,19 +296,19 @@ theorem mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
 block-diagonal transfer sum is idempotent.
 
 The transfer sum acts independently on each $(j,j')$ bond block through
-`mixedTransferMap₂ (B j) (B j')`. Thus its idempotence is checked one block pair
+`Kraus.mixedTransferMap₂ (B j) (B j')`. Thus its idempotence is checked one block pair
 at a time. This is the exact direct-sum algebra needed when interpreting the
 repeated-block display in arXiv:1606.00608, Theorem charact-MPS, lines 543--555. -/
 theorem blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂
     (B : (k : Fin r) → MPSTensor d (dim k))
-    (hidem : ∀ j j', IsIdempotentElem (mixedTransferMap₂ (B j) (B j')))
+    (hidem : ∀ j j', IsIdempotentElem (Kraus.mixedTransferMap₂ (B j) (B j')))
     (Y : Matrix ((k : Fin r) × Fin (dim k)) ((k : Fin r) × Fin (dim k)) ℂ) :
     blockTransferSum B (blockTransferSum B Y) = blockTransferSum B Y := by
   classical
   have hStage1 : ∀ (W : Matrix ((k : Fin r) × Fin (dim k))
         ((k : Fin r) × Fin (dim k)) ℂ) (j j' : Fin r),
       (blockTransferSum B W).submatrix (blockIncl j dim) (blockIncl j' dim) =
-        mixedTransferMap₂ (B j) (B j')
+        Kraus.mixedTransferMap₂ (B j) (B j')
           (W.submatrix (blockIncl j dim) (blockIncl j' dim)) := by
     intro W j j'
     simpa only [blockTransferSum] using blockDiagonal'_transferSum_toBlock B W j j'
@@ -337,7 +337,7 @@ See arXiv:1606.00608, Theorem charact-MPS, lines 543--555. -/
 theorem isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
     [∀ k, NeZero (dim k)] (B : (k : Fin r) → MPSTensor d (dim k)) :
     IsTransferIdempotent (directSumTensor B) ↔
-      ∀ j j', IsIdempotentElem (mixedTransferMap₂ (B j) (B j')) := by
+      ∀ j j', IsIdempotentElem (Kraus.mixedTransferMap₂ (B j) (B j')) := by
   constructor
   · intro hRFP j j'
     exact mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
@@ -345,23 +345,23 @@ theorem isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_is
   · intro hidem
     classical
     set e := finSigmaFinEquiv (m := r) (n := dim)
-    change transferMap (directSumTensor B) ∘ₗ transferMap (directSumTensor B) =
-      transferMap (directSumTensor B)
+    change Kraus.transferMap (directSumTensor B) ∘ₗ Kraus.transferMap (directSumTensor B) =
+      Kraus.transferMap (directSumTensor B)
     refine LinearMap.ext fun Z => ?_
     rw [LinearMap.comp_apply]
     obtain ⟨Y, rfl⟩ : ∃ Y, Matrix.reindex e e Y = Z :=
       ⟨(Matrix.reindex e e).symm Z, (Matrix.reindex e e).apply_symm_apply Z⟩
     calc
-      transferMap (directSumTensor B)
-            (transferMap (directSumTensor B) (Matrix.reindex e e Y)) =
-          transferMap (directSumTensor B)
+      Kraus.transferMap (directSumTensor B)
+            (Kraus.transferMap (directSumTensor B) (Matrix.reindex e e Y)) =
+          Kraus.transferMap (directSumTensor B)
             (Matrix.reindex e e (blockTransferSum B Y)) := by
               rw [transferMap_directSumTensor_reindex B Y]
       _ = Matrix.reindex e e (blockTransferSum B (blockTransferSum B Y)) :=
             transferMap_directSumTensor_reindex B (blockTransferSum B Y)
       _ = Matrix.reindex e e (blockTransferSum B Y) := by
             rw [blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂ B hidem Y]
-      _ = transferMap (directSumTensor B) (Matrix.reindex e e Y) :=
+      _ = Kraus.transferMap (directSumTensor B) (Matrix.reindex e e Y) :=
             (transferMap_directSumTensor_reindex B Y).symm
 
 /-- A nonzero idempotent linear map cannot remain idempotent after multiplication
@@ -399,7 +399,7 @@ corrected literal-block consequence of CPSV16, Theorem charact-MPS, lines
 physical-space construction needed to avoid these mixed copy equations. -/
 theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     {D : ℕ} [NeZero D] (A : MPSTensor d D) (hA : IsTransferIdempotent A)
-    (hA_ne : transferMap A ≠ 0) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1)
+    (hA_ne : Kraus.transferMap A ≠ 0) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1)
     (hRFP : IsTransferIdempotent
       (directSumTensor (fun q : Fin r ↦ (fun i ↦ μ q • A i : MPSTensor d D))))
     (q q' : Fin r) : μ q = μ q' := by
@@ -409,8 +409,8 @@ theorem phases_eq_of_isTransferIdempotent_directSum_scaled_self
     have hidem :=
       (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
         (B := fun s : Fin r ↦ (fun i ↦ μ s • A i : MPSTensor d D))).mp hRFP q q'
-    rw [mixedTransferMap₂_smul, mixedTransferMap₂_self] at hidem
-    apply scalar_eq_one_of_smul_idempotent (transferMap A) hA hA_ne
+    rw [Kraus.mixedTransferMap₂_smul, Kraus.mixedTransferMap₂_self] at hidem
+    apply scalar_eq_one_of_smul_idempotent (Kraus.transferMap A) hA hA_ne
       (μ q * starRingEnd ℂ (μ q'))
       (mul_ne_zero (hμ_ne q) ((map_ne_zero (starRingEnd ℂ)).2 (hμ_ne q'))) hidem
   have hnormSq : Complex.normSq (μ q') = 1 := by
@@ -446,8 +446,8 @@ Source convention: arXiv:1606.00608, line 246 (unit-weight normalization).
 The conclusion is a formal consequence of that convention and trace preservation. -/
 theorem eq_one_of_transferMap_comp_self_eq_smul
     (P : SectorDecomposition d) (hCF : IsBNTCanonicalForm P) (c : ℂ)
-    (h : transferMap P.toTensor ∘ₗ transferMap P.toTensor =
-      c • transferMap P.toTensor) :
+    (h : Kraus.transferMap P.toTensor ∘ₗ Kraus.transferMap P.toTensor =
+      c • Kraus.transferMap P.toTensor) :
     c = 1 := by
   classical
   let B : (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
@@ -464,7 +464,7 @@ theorem eq_one_of_transferMap_comp_self_eq_smul
   have hcorner :=
     mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul
       B c h s s
-  rw [mixedTransferMap₂_self] at hcorner
+  rw [Kraus.mixedTransferMap₂_self] at hcorner
   have hs : P.flatIndexEquiv.symm s = ⟨j, q⟩ :=
     P.flatIndexEquiv.symm_apply_apply ⟨j, q⟩
   have hnorm : ‖P.flatWeight s‖ = 1 := by
@@ -472,7 +472,7 @@ theorem eq_one_of_transferMap_comp_self_eq_smul
       (P.flatIndexEquiv.symm s).2‖ = 1
     rw [hs]
     exact hq
-  have hscaled : transferMap (B s) = transferMap (P.flatBasis s) := by
+  have hscaled : Kraus.transferMap (B s) = Kraus.transferMap (P.flatBasis s) := by
     apply LinearMap.ext
     intro X
     rw [show B s = (fun i ↦ P.flatWeight s • P.flatBasis s i) from rfl,
@@ -490,8 +490,8 @@ theorem eq_one_of_transferMap_comp_self_eq_smul
     rw [hs]
     exact hCF.basis_left_canonical j
   rw [Module.End.mul_apply, LinearMap.smul_apply,
-    trace_transferMap (P.flatBasis s) _ hleft, Matrix.trace_smul,
-    trace_transferMap (P.flatBasis s) _ hleft] at htr
+    Kraus.trace_transferMap (P.flatBasis s) _ hleft, Matrix.trace_smul,
+    Kraus.trace_transferMap (P.flatBasis s) _ hleft] at htr
   have ht : Matrix.trace
       (1 : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ) ≠ 0 := by
     simpa [Matrix.trace_one] using
@@ -519,12 +519,12 @@ local notation "V" => Matrix (Fin D₁) (Fin D₂) ℂ
 is the zero map. -/
 private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hidem : IsIdempotentElem (mixedTransferMap₂ A B))
-    (hsr : mixedTransferSpectralRadius₂ A B < 1) :
-    mixedTransferMap₂ A B = 0 := by
+    (hidem : IsIdempotentElem (Kraus.mixedTransferMap₂ A B))
+    (hsr : Kraus.mixedTransferSpectralRadius₂ A B < 1) :
+    Kraus.mixedTransferMap₂ A B = 0 := by
   classical
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  let F' : V →L[ℂ] V := Φ (mixedTransferMap₂ A B)
+  let F' : V →L[ℂ] V := Φ (Kraus.mixedTransferMap₂ A B)
   let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
   let : SeminormedRing (V →L[ℂ] V) := ContinuousLinearMap.toSeminormedRing
   let : NormedRing (V →L[ℂ] V) := ContinuousLinearMap.toNormedRing
@@ -533,15 +533,15 @@ private lemma mixedTransferMap₂_eq_zero_of_isIdempotentElem
   have hSpectF : spectralRadius ℂ F' < 1 := by
     change spectralRadius ℂ
       (((Module.End.toContinuousLinearMap V)
-        (mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
-    rw [mixedTransferSpectralRadius₂_eq] at hsr
+        (Kraus.mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B)) : V →L[ℂ] V) < 1
+    rw [Kraus.mixedTransferSpectralRadius₂_eq] at hsr
     exact hsr
   have hidem' : IsIdempotentElem F' := hidem.map Φ
   have hF'0 : F' = 0 :=
     @_root_.IsIdempotentElem.eq_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
       (ContinuousLinearMap.toNormedRing : NormedRing (V →L[ℂ] V))
       (ContinuousLinearMap.toNormedAlgebra : NormedAlgebra ℂ (V →L[ℂ] V)) F' hidem' hSpectF
-  have hF0 : Φ (mixedTransferMap₂ A B) = Φ 0 := by rw [map_zero]; exact hF'0
+  have hF0 : Φ (Kraus.mixedTransferMap₂ A B) = Φ 0 := by rw [map_zero]; exact hF'0
   exact Φ.injective hF0
 
 /-- **Same-dimension spectral gap (cast form).** For distinct irreducible
@@ -550,16 +550,16 @@ equivalent, the rectangular mixed transfer spectral radius is `< 1`. -/
 private lemma mixedTransferSpectralRadius₂_lt_one_of_dim_eq
     [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
     (hA_left : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_left : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hD : D₁ = D₂)
     (hgpe : ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) hD) A) B) :
-    mixedTransferSpectralRadius₂ A B < 1 := by
+    Kraus.mixedTransferSpectralRadius₂ A B < 1 := by
   subst hD
   simp only [cast_eq] at hgpe
-  rw [mixedTransferSpectralRadius₂_eq, mixedTransferMap₂_same_dim,
-    ← mixedTransferSpectralRadius_eq]
+  rw [Kraus.mixedTransferSpectralRadius₂_eq, Kraus.mixedTransferMap₂_same_dim,
+    ← Kraus.mixedTransferSpectralRadius_eq]
   exact spectralRadius_mixedTransfer_lt_one_of_irreducible_TP A B hA_irr hB_irr
     hA_left hB_left hgpe
 
@@ -577,7 +577,7 @@ For a family of distinct irreducible left-canonical blocks `B`, if the
 whole direct-sum tensor $\bigoplus_k B_k$ is a renormalization fixed point,
 then every
 off-diagonal mixed transfer operator vanishes:
-`mixedTransferMap₂ (B j) (B j') = 0` for `j ≠ j'`.
+`Kraus.mixedTransferMap₂ (B j) (B j') = 0` for `j ≠ j'`.
 
 This is the $\delta_{j,j'}$ (cross-block) content of the isometry condition
 at arXiv:1606.00608, line 551, used toward the local-orthogonality conclusion
@@ -589,7 +589,7 @@ The load-bearing hypothesis is whole-tensor RFP of the direct sum (the source's
 theorem isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum
     (B : (k : Fin r) → MPSTensor d (dim k))
     [∀ k, NeZero (dim k)]
-    (hirr : ∀ k, IsIrreducibleTensor (B k))
+    (hirr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))
@@ -597,7 +597,7 @@ theorem isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum
     IsBNTLocallyOrthogonal B := by
   intro j j' hjj'
   have hidem := mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum B hRFP j j'
-  have hsr : mixedTransferSpectralRadius₂ (B j) (B j') < 1 := by
+  have hsr : Kraus.mixedTransferSpectralRadius₂ (B j) (B j') < 1 := by
     by_cases hdim : dim j = dim j'
     · exact mixedTransferSpectralRadius₂_lt_one_of_dim_eq (B j) (B j')
         (hirr j) (hirr j') (hleft j) (hleft j') hdim (hdist j j' hjj' hdim)
@@ -633,7 +633,7 @@ theorem isPositiveGapBNTZCL_of_isTransferIdempotent_directSum
     [∀ k, NeZero (dim k)]
     (hBNT : IsCPSVBasisOfNormalTensors (directSumTensor B)
       (fun k => ⟨dim k, B k⟩))
-    (hirr : ∀ k, IsIrreducibleTensor (B k))
+    (hirr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     (hleft : ∀ k, ∑ i : Fin d, (B k i)ᴴ * B k i = 1)
     (hdist : ∀ j k : Fin r, j ≠ k → ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congrArg (MPSTensor d) h) (B j)) (B k))

@@ -33,15 +33,15 @@ product A^u. It is the left factor in the wavefunction-matrix factorization
 used by `schmidtMat_eq_mul`. -/
 noncomputable def schmidtLeft (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin L → Fin d) (Fin D × Fin D) ℂ :=
-  Matrix.of (fun u p => (evalWord A (List.ofFn u)) p.1 p.2)
+  Matrix.of (fun u p => (Kraus.evalWord A (List.ofFn u)) p.1 p.2)
 
 /-- **Left Gram = transfer-map power on a matrix unit.** The D² × D² Gram matrix
 of the operator-Schmidt left factor collects the same length-L word sum as the
 L-fold transfer map evaluated on the matrix unit e_{b₂,a₂}. -/
 theorem schmidtLeft_gram_apply (A : MPSTensor d D) (L : ℕ) (a b : Fin D × Fin D) :
     ((schmidtLeft A L)ᴴ * schmidtLeft A L) a b
-      = ((transferMap A ^ L) (Matrix.single b.2 a.2 1)) b.1 a.1 := by
-  rw [Matrix.mul_apply, transferMap_pow_apply', Matrix.sum_apply]
+      = ((Kraus.transferMap A ^ L) (Matrix.single b.2 a.2 1)) b.1 a.1 := by
+  rw [Matrix.mul_apply, Kraus.transferMap_pow_apply', Matrix.sum_apply]
   refine Finset.sum_congr rfl (fun σ _ => ?_)
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtLeft, Matrix.of_apply,
     Matrix.single_apply, RCLike.star_def, mul_ite, mul_one, mul_zero, ite_and, ite_mul,
@@ -56,7 +56,7 @@ theorem schmidtLeft_gram_eq_of_isTransferIdempotent
     (A : MPSTensor d D) (hRFP : IsTransferIdempotent A)
     {L : ℕ} (hL : 1 ≤ L) :
     (schmidtLeft A L)ᴴ * schmidtLeft A L = (schmidtLeft A 1)ᴴ * schmidtLeft A 1 := by
-  have hIdem : IsIdempotentElem (transferMap A) := hRFP
+  have hIdem : IsIdempotentElem (Kraus.transferMap A) := hRFP
   ext a b
   rw [schmidtLeft_gram_apply, schmidtLeft_gram_apply,
     hIdem.pow_eq (by omega : L ≠ 0), pow_one]
@@ -66,14 +66,14 @@ D² × (d^M) matrix recording the bond-indexed entries of A^w with the two
 bonds swapped, as in the wavefunction factorization `schmidtMat_eq_mul`. -/
 noncomputable def schmidtRight (A : MPSTensor d D) (M : ℕ) :
     Matrix (Fin D × Fin D) (Fin M → Fin d) ℂ :=
-  Matrix.of (fun p w => (evalWord A (List.ofFn w)) p.2 p.1)
+  Matrix.of (fun p w => (Kraus.evalWord A (List.ofFn w)) p.2 p.1)
 
 /-- **Right Gram = transfer-map power on a matrix unit** (complement analogue of
 `schmidtLeft_gram_apply`). -/
 theorem schmidtRight_gram_apply (A : MPSTensor d D) (M : ℕ) (p q : Fin D × Fin D) :
     (schmidtRight A M * (schmidtRight A M)ᴴ) p q
-      = ((transferMap A ^ M) (Matrix.single p.1 q.1 1)) p.2 q.2 := by
-  rw [Matrix.mul_apply, transferMap_pow_apply', Matrix.sum_apply]
+      = ((Kraus.transferMap A ^ M) (Matrix.single p.1 q.1 1)) p.2 q.2 := by
+  rw [Matrix.mul_apply, Kraus.transferMap_pow_apply', Matrix.sum_apply]
   refine Finset.sum_congr rfl (fun σ _ => ?_)
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtRight, Matrix.of_apply,
     Matrix.single_apply, RCLike.star_def, mul_ite, mul_one, mul_zero, ite_and, ite_mul,
@@ -85,7 +85,7 @@ theorem schmidtRight_gram_eq_of_isTransferIdempotent
     (A : MPSTensor d D) (hRFP : IsTransferIdempotent A)
     {M : ℕ} (hM : 1 ≤ M) :
     schmidtRight A M * (schmidtRight A M)ᴴ = schmidtRight A 1 * (schmidtRight A 1)ᴴ := by
-  have hIdem : IsIdempotentElem (transferMap A) := hRFP
+  have hIdem : IsIdempotentElem (Kraus.transferMap A) := hRFP
   ext p q
   rw [schmidtRight_gram_apply, schmidtRight_gram_apply,
     hIdem.pow_eq (by omega : M ≠ 0), pow_one]

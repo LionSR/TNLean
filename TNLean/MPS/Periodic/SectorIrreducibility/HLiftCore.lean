@@ -34,32 +34,32 @@ variable {d D m : ℕ}
 
 /-- Fixed-point upgrade for the adjoint transfer map of an irreducible trace-preserving tensor.
 
-If an orthogonal projection `Q` satisfies `PreservesCorner Q ((transferMap A†)^m)`, then
-`((transferMap A†)^m) Q = Q`. The proof uses a positive definite fixed point `ρ` of
-`transferMap A`, the weighted trace identity `tr(ρ E†(X)) = tr(ρ X)`, and the PSD gap
+If an orthogonal projection `Q` satisfies `PreservesCorner Q ((Kraus.transferMap A†)^m)`, then
+`((Kraus.transferMap A†)^m) Q = Q`. The proof uses a positive definite fixed point `ρ` of
+`Kraus.transferMap A`, the weighted trace identity `tr(ρ E†(X)) = tr(ρ X)`, and the PSD gap
 `Q - E†^[m](Q) = Q * E†^[m](1 - Q) * Q`. -/
 theorem hFixUpgrade_of_peripheral
     [NeZero D]
     {A : MPSTensor d D} {period : ℕ}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A))
     {Q : MatrixAlg D}
     (hQproj : IsOrthogonalProjection Q)
     (hQinv : PreservesCorner Q
-      ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ period)) :
-    ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ period) Q = Q := by
+      ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ period)) :
+    ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ period) Q = Q := by
   classical
-  let E : MatrixEnd D := transferMap (d := d) (D := D) A
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
+  let E : MatrixEnd D := Kraus.transferMap (d := d) (D := D) A
+  let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   let F : MatrixEnd D := T ^ period
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    exists_posSemidef_fixedPoint A hTP hDpos
+    Kraus.exists_posSemidef_fixedPoint A hTP hDpos
   have hρ_pd : ρ.PosDef :=
-    posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
+    Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible A hIrr ρ hρ_psd hρ_ne hρ_fix
   have hT_cp : IsCPMap T := by
-    simpa [T, MPSTensor.transferMap_apply, Kraus.map] using
-      transferMap_isCPMap (A := fun i => (A i)ᴴ)
+    simpa [T, Kraus.transferMap_apply, Kraus.map] using
+      Kraus.transferMap_isCPMap (A := fun i => (A i)ᴴ)
   have hF_cp : IsCPMap F := by
     simpa [F] using (IsCPMap.pow (E := T) hT_cp period)
   have hpow_one : ∀ n : ℕ, (T ^ n) (1 : MatrixAlg D) = 1 := by
@@ -69,7 +69,7 @@ theorem hFixUpgrade_of_peripheral
         simp
     | succ n ih =>
         rw [pow_succ', Module.End.mul_apply, ih]
-        simpa [T, MPSTensor.transferMap_apply] using hTP
+        simpa [T, Kraus.transferMap_apply] using hTP
   have hF_one : F (1 : MatrixAlg D) = 1 := by
     simpa [F] using hpow_one period
   have htrace_step :
@@ -78,10 +78,10 @@ theorem hFixUpgrade_of_peripheral
     calc
       Matrix.trace (ρ * T X)
           = Matrix.trace (Kraus.adjointMap (fun i => (A i)ᴴ) ρ * X) := by
-              simpa [T, MPSTensor.transferMap_apply, Kraus.map, Kraus.adjointMap] using
+              simpa [T, Kraus.transferMap_apply, Kraus.map, Kraus.adjointMap] using
                 (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := fun i => (A i)ᴴ) ρ X)
       _ = Matrix.trace (E ρ * X) := by
-            simp [E, MPSTensor.transferMap_apply, Kraus.adjointMap]
+            simp [E, Kraus.transferMap_apply, Kraus.adjointMap]
       _ = Matrix.trace (ρ * X) := by rw [hρ_fix]
   have htrace_pow :
       ∀ n : ℕ, ∀ X : MatrixAlg D,

@@ -22,7 +22,7 @@ whole periodic orbit.
   arXiv:1708.00029, Appendix A.
 -/
 
-open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
+open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct Kraus
 open Filter Matrix Module
 
 namespace MPSTensor
@@ -35,9 +35,9 @@ variable {d D : ℕ}
 tends to `1` (arXiv:1708.00029, Appendix A, first paragraph). -/
 private lemma selfOverlap_tendsto_one_of_irreducible_primitive_TP
     {D : ℕ} [NeZero D] (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, _htr, hgap⟩ :=
     spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
@@ -53,11 +53,11 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
     {DA DB : ℕ} [NeZero DA] [NeZero DB]
     (CA : MPSTensor d DA) (CB : MPSTensor d DB)
     (hdim : DA = DB)
-    (hCA_irr : IsIrreducibleTensor CA) (hCB_irr : IsIrreducibleTensor CB)
+    (hCA_irr : Kraus.IsIrreducibleFamily CA) (hCB_irr : Kraus.IsIrreducibleFamily CB)
     (hCA_norm : ∑ i : Fin d, (CA i)ᴴ * CA i = 1)
     (hCB_norm : ∑ i : Fin d, (CB i)ᴴ * CB i = 1)
-    (hCA_prim : _root_.IsPrimitive (transferMap (d := d) (D := DA) CA))
-    (hCB_prim : _root_.IsPrimitive (transferMap (d := d) (D := DB) CB))
+    (hCA_prim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DA) CA))
+    (hCB_prim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DB) CB))
     (hMatch : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) CA) CB) :
     Tendsto (fun N => ‖mpvOverlap (d := d) CA CB N‖) atTop (nhds (1 : ℝ)) := by
   classical
@@ -256,7 +256,7 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
     exact one_ne_zero (tendsto_nhds_unique hNorm_succ hZeroNorm)
   refine ⟨hdim', ?_⟩
   -- With matched dimensions, the unit-modulus overlap yields a gauge-phase equivalence.
-  have hAcast_irr : IsIrreducibleTensor (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim')
+  have hAcast_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim')
       (blocksA (u + 1))) :=
     (isIrreducibleTensor_cast_dim hdim' (blocksA (u + 1))).mpr hIrrA_su
   have hAcast_norm : ∑ i : Fin (blockPhysDim d m),

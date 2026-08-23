@@ -69,10 +69,10 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   /-- The sector transfer maps are primitive before later reblocking. -/
   sector_primitive : ∀ k s,
     _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+      (Kraus.transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
         (sectorBlocks k s))
   /-- The sector blocks are tensor-irreducible before later reblocking. -/
-  sector_irreducible : ∀ k s, IsIrreducibleTensor (sectorBlocks k s)
+  sector_irreducible : ∀ k s, Kraus.IsIrreducibleFamily (sectorBlocks k s)
   /-- The sector bond dimensions are positive before later reblocking. -/
   sector_dim_pos : ∀ k s, 0 < sectorDim k s
   /-- The iterated blocked physical alphabet is propositionally the common alphabet. -/
@@ -137,7 +137,7 @@ iterated blocking to the ambient blocked alphabet. -/
 noncomputable def commonReindexedBlock (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (dim k) :=
   cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
-    (reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
+    (Kraus.reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))
 
 /-- The derived flattened sector weights obtained from the original nonzero weights after
@@ -151,9 +151,9 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
     (∑ i : Fin (blockPhysDim d F.p),
       (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
     _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+      (Kraus.transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
         (F.commonSectorBlock k s)) ∧
-    IsIrreducibleTensor (F.commonSectorBlock k s) := by
+    Kraus.IsIrreducibleFamily (F.commonSectorBlock k s) := by
   have : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
   have hExtra := tp_primitive_irreducible_extra_blocking
     (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
@@ -191,7 +191,7 @@ theorem reindexed_sameMPV₂
   exact (sameMPV₂_cast_physDim (F.blockPhysDim_nested_eq k)
     (A := blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))
-    (B := reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
+    (B := Kraus.reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))).2 h
 
 /-- A relabeled nonzero-weight block is represented by its common-alphabet cyclic sectors. -/
@@ -489,9 +489,9 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
     (∑ i : Fin (blockPhysDim d F.p),
         (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
     _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+        (Kraus.transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
           (F.commonSectorBlock k s)) ∧
-    IsIrreducibleTensor (F.commonSectorBlock k s) ∧
+    Kraus.IsIrreducibleFamily (F.commonSectorBlock k s) ∧
     0 < F.sectorDim k s := by
   have h := commonSectorBlock_structural F k s
   exact ⟨h.1, h.2.1, h.2.2, F.sector_dim_pos k s⟩

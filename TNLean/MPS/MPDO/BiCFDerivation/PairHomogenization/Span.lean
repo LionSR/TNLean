@@ -52,7 +52,7 @@ theorem pair_mul_mem_span_pairWordTuple_add {D₁ D₂ : ℕ}
             ((pairWordTuple A B L u).1 * (pairWordTuple A B S v).1,
                 (pairWordTuple A B L u).2 * (pairWordTuple A B S v).2) =
               pairWordTuple A B (L + S) (Fin.append u v) := by
-          ext <;> simp [pairWordTuple, List.ofFn_fin_append, evalWord_append]
+          ext <;> simp [pairWordTuple, List.ofFn_fin_append, Kraus.evalWord_append]
         rw [hEq]
         exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
     | zero =>

@@ -146,7 +146,7 @@ theorem trace_sector_word_eq_prod_etaOfSectorTensors
     {N : ℕ} [NeZero N] (k : Fin N → Fin hη.m)
     (iL jL : (n : Fin N) → Fin (hη.dL (k n)))
     (iR jR : (n : Fin N) → Fin (hη.dR (k n))) :
-    Matrix.trace (MPSTensor.evalWord
+    Matrix.trace (Kraus.evalWord
         (fun n : Fin N => Matrix.of fun a b =>
           l (k n) a (iL n) (jL n) * r (k n) b (iR n) (jR n))
         (List.ofFn id)) =

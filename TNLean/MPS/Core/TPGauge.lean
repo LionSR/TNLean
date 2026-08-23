@@ -5,11 +5,12 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.MatrixSqrt
 import QICLean.Channel.KrausGauge
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+import TNLean.MPS.Defs
 
 /-!
 # TP and unital gauges from positive definite fixed points
@@ -56,21 +57,21 @@ noncomputable def tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) 
 /-- **TP normalisation from an adjoint fixed point.**
 
 Assume `ρ` is positive definite and fixed by the adjoint transfer map
-`X ↦ ∑ i, (A i)ᴴ * X * A i` (equivalently `transferMap (fun i => (A i)ᴴ) ρ = ρ`).
+`X ↦ ∑ i, (A i)ᴴ * X * A i` (equivalently `Kraus.transferMap (fun i => (A i)ᴴ) ρ = ρ`).
 Then the gauged tensor `tpGauge A ρ` satisfies the trace-preserving condition
 `∑ i, (B i)ᴴ * (B i) = I`.
 
 This is the standard “left-canonical” gauge construction for MPS, derived from
-`Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` by unfolding `transferMap`
+`Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` by unfolding `Kraus.transferMap`
 and `Kraus.mapLM` (`MPSTensor d D` is definitionally a finite matrix family,
 so the two coincide). -/
 theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef)
-    (hfix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = ρ) :
+    (hfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = ρ) :
     ∑ i : Fin d, (tpGauge (d := d) (D := D) A ρ i)ᴴ * tpGauge (d := d) (D := D) A ρ i = 1 :=
   Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A ρ hρ (by
-    simpa [Kraus.mapLM_apply, Kraus.map_apply, MPSTensor.transferMap_apply] using hfix)
+    simpa [Kraus.mapLM_apply, Kraus.map_apply, Kraus.transferMap_apply] using hfix)
 
 /-- **TP normalisation from a positive adjoint-transfer-map eigenvector.**
 
@@ -81,7 +82,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_eigenvector
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
     (hρ : ρ.PosDef)
     (hr : 0 < r)
-    (heig : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = (r : ℂ) • ρ) :
+    (heig : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = (r : ℂ) • ρ) :
     ∑ i : Fin d,
       (tpGauge (d := d) (D := D)
         (fun j => (↑((Real.sqrt r)⁻¹) : ℂ) • A j) ρ i)ᴴ *
@@ -95,14 +96,14 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_eigenvector
     rw [show c = (Real.sqrt r)⁻¹ from rfl, ← sq, inv_pow, Real.sq_sqrt hr.le]
   have hc_sq : (↑c : ℂ) * (↑c : ℂ) = (↑r : ℂ)⁻¹ := by
     rw [← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
-  have hfix : transferMap (d := d) (D := D) (fun i => (A' i)ᴴ) ρ = ρ := by
-    simp only [A', transferMap_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
+  have hfix : Kraus.transferMap (d := d) (D := D) (fun i => (A' i)ᴴ) ρ = ρ := by
+    simp only [A', Kraus.transferMap_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
       Matrix.mul_smul, smul_smul, star_star]
     simp_rw [hstar_c, hc_sq]
     rw [← Finset.smul_sum]
     have hsum : ∑ i : Fin d, (A i)ᴴ * ρ * ((A i)ᴴ)ᴴ =
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ := by
-      simp [transferMap_apply]
+        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ := by
+      simp [Kraus.transferMap_apply]
     rw [hsum, heig, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
   exact tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' ρ hρ hfix
@@ -159,7 +160,7 @@ theorem spectralUnitalGauge_isUnital_of_transferMap_eigenvector
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
     (hρ : ρ.PosDef)
     (hr : 0 < r)
-    (hfix : transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ) :
+    (hfix : Kraus.transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ) :
     ∑ i : Fin d,
       spectralUnitalGauge (d := d) (D := D) A r ρ i *
         (spectralUnitalGauge (d := d) (D := D) A r ρ i)ᴴ = 1 := by
@@ -203,7 +204,7 @@ theorem spectralUnitalGauge_isUnital_of_transferMap_eigenvector
                 Matrix.conjTranspose_nonsing_inv]
               simp [Matrix.mul_assoc, ← hSS]
   have h_sum_eq : ∑ i : Fin d, A i * ρ * (A i)ᴴ = (r : ℂ) • ρ := by
-    simpa [transferMap_apply, Matrix.mul_assoc] using hfix
+    simpa [Kraus.transferMap_apply, Matrix.mul_assoc] using hfix
   change
     (∑ i : Fin d, (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S))ᴴ) = 1
   simp_rw [h_term]
@@ -237,12 +238,12 @@ and Cirac, Theorem `Th:TIcanonical`, proof lines 767--769. -/
 theorem unitalGauge_isUnital_of_transferMap_fixedPoint
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ : ρ.PosDef)
-    (hfix : transferMap (d := d) (D := D) A ρ = ρ) :
+    (hfix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
     ∑ i : Fin d,
       unitalGauge (d := d) (D := D) A ρ i *
         (unitalGauge (d := d) (D := D) A ρ i)ᴴ = 1 := by
   classical
-  have hfix_one : transferMap (d := d) (D := D) A ρ = (1 : ℂ) • ρ := by
+  have hfix_one : Kraus.transferMap (d := d) (D := D) A ρ = (1 : ℂ) • ρ := by
     simpa using hfix
   have h :=
     spectralUnitalGauge_isUnital_of_transferMap_eigenvector

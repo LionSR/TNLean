@@ -348,7 +348,7 @@ theorem AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBounda
           (hStruct.Λ (p 0).2 : ℂ) *
             ((hStruct.Λ (p 0).1 : ℂ) * X (p 1).2 (p 0).1)
         else 0)) =
-      Matrix.trace (evalWord hStruct.coreTensor (List.ofFn σ) * X)
+      Matrix.trace (Kraus.evalWord hStruct.coreTensor (List.ofFn σ) * X)
   calc
     _ = ∑ p₀ : Fin D × Fin D, ∑ p₁ : Fin D × Fin D,
         hStruct.U (σ 0) p₀.1 p₀.2 * hStruct.U (σ 1) p₁.1 p₁.2 *
@@ -362,10 +362,10 @@ theorem AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBounda
         hStruct.U (σ 0) a b * hStruct.U (σ 1) b c *
           ((hStruct.Λ b : ℂ) * ((hStruct.Λ a : ℂ) * X c a)) := by
       simp [Fintype.sum_prod_type]
-    _ = Matrix.trace (evalWord hStruct.coreTensor (List.ofFn σ) * X) := by
-      rw [show evalWord hStruct.coreTensor (List.ofFn σ) =
+    _ = Matrix.trace (Kraus.evalWord hStruct.coreTensor (List.ofFn σ) * X) := by
+      rw [show Kraus.evalWord hStruct.coreTensor (List.ofFn σ) =
           hStruct.coreTensor (σ 0) * hStruct.coreTensor (σ 1) by
-        simp [evalWord, List.ofFn_succ, List.ofFn_zero]]
+        simp [Kraus.evalWord, List.ofFn_succ, List.ofFn_zero]]
       simp only [Matrix.trace, Matrix.diag_apply, Matrix.mul_apply]
       simp only [AppendixBStructuralData.coreTensor_apply, Matrix.diagonal_mul]
       simp_rw [Finset.sum_mul]

@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
-import TNLean.MPS.MPDO.SectorPairingTransfer
 import QICLean.Channel.MaximalOverlap
+import TNLean.Algebra.FinsetSubtypeSum
+import TNLean.MPS.MPDO.NeighboringTraceObstruction
 
 /-!
 # Zero correlation length on an active-sector trace matrix
@@ -67,33 +67,15 @@ theorem activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
   let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
     fun k alpha ↦ (F.rightTensor k alpha).trace
   have hphys : MPOTensor.physTraceTransfer K = L * Q := by
-    let U : Matrix.unitaryGroup (Fin d) ℂ := ⟨F.physicalIsometry, by
-      rw [Matrix.mem_unitaryGroup_iff', Matrix.star_eq_conjTranspose]
-      exact F.physicalIsometry_isometry⟩
-    have hfactor : ∀ beta alpha,
-        Matrix.reindex F.sectorEquiv F.sectorEquiv
-            ((U : Matrix (Fin d) (Fin d) ℂ) * MPOTensor.physicalSlice K beta alpha *
-              (U : Matrix (Fin d) (Fin d) ℂ)ᴴ) =
-          Matrix.blockDiagonal' fun q ↦
-            Matrix.kroneckerMap (· * ·) (F.leftTensor q beta) (F.rightTensor q alpha) := by
-      simpa [U] using F.factorization
-    rw [MPOTensor.physTraceTransfer_eq_sum_closedSector K F.sectorEquiv U
-      F.leftTensor F.rightTensor hfactor]
+    rw [F.physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix]
     ext beta alpha
-    simp only [MPOTensor.closedSectorPairingOperator, Matrix.sum_apply,
-      Matrix.vecMulVec_apply]
     change (∑ c : Fin F.sectorCount,
       (F.leftTensor c beta).trace * (F.rightTensor c alpha).trace) =
         ∑ a : F.ActiveSector p,
           (F.leftTensor a beta).trace * (F.rightTensor a alpha).trace
-    rw [← Finset.sum_subtype (Finset.univ.filter (fun k ↦ p k ≠ 0)) (by simp)
-      (fun k ↦ (F.leftTensor k beta).trace * (F.rightTensor k alpha).trace)]
-    rw [Finset.sum_filter]
-    apply Finset.sum_congr rfl
-    intro k _
-    by_cases hk : p k ≠ 0
-    · simp [hk]
-    · rw [ite_eq_right hk, hinactive k (not_ne_iff.mp hk) beta, Matrix.trace_zero, zero_mul]
+    apply Finset.sum_eq_sum_subtype_ne_zero p
+    intro k hk
+    rw [hinactive k hk beta, Matrix.trace_zero, zero_mul]
   have hrect : IsIdempotentElem (((lam : ℂ)⁻¹ • L) * Q) := by
     simpa only [Matrix.smul_mul, ← hphys] using hidem
   let TC : Matrix (F.ActiveSector p) (F.ActiveSector p) ℂ := Q * L

@@ -41,9 +41,9 @@ private theorem physTraceTransfer_doubledTensor (A : MPSTensor d D) :
     Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (physTraceTransfer (doubledTensor A)) =
       Matrix.reindex (Equiv.prodComm (Fin D) (Fin D))
-        (Equiv.prodComm (Fin D) (Fin D)) (transferMatrix (transferMap A)) := by
+        (Equiv.prodComm (Fin D) (Fin D)) (transferMatrix (Kraus.transferMap A)) := by
   ext ⟨i, j⟩ ⟨k, l⟩
-  simp only [physTraceTransfer, doubledTensor, transferMatrix_apply, transferMap_apply,
+  simp only [physTraceTransfer, doubledTensor, transferMatrix_apply, Kraus.transferMap_apply,
     Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, Equiv.apply_symm_apply,
     Equiv.prodComm_symm, Equiv.prodComm_apply, Prod.swap_prod_mk]
@@ -206,8 +206,8 @@ private theorem isTransferIdempotent_of_doubledTensor_isRFPViaTS
       Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (physTraceTransfer (doubledTensor A)) at hreindex
   rw [physTraceTransfer_doubledTensor] at hreindex
-  have htransfer : transferMatrix (transferMap A) * transferMatrix (transferMap A) =
-      transferMatrix (transferMap A) := by
+  have htransfer : transferMatrix (Kraus.transferMap A) * transferMatrix (Kraus.transferMap A) =
+      transferMatrix (Kraus.transferMap A) := by
     apply (Matrix.reindexAlgEquiv ℂ ℂ (Equiv.prodComm (Fin D) (Fin D))).injective
     rw [map_mul]
     exact hreindex

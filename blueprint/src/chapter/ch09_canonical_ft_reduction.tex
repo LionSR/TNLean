@@ -52,7 +52,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 
 
 \begin{definition}[Invariant projection condition]\label{def:has_inv_proj}
-    \lean{MPSTensor.HasInvariantProj}
+    \lean{Kraus.HasInvariantProj}
     \leanok
     \uses{def:mps_tensor}
     An MPS tensor $A$ \emph{has an invariant projection} if there exists an
@@ -120,7 +120,7 @@ irreducible blocks; the remaining lemmas record the spectral facts about
 irreducible unital blocks and the algebra-spanning input used later.
 
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
-    \lean{MPSTensor.IsIrreducibleTensor}
+    \lean{Kraus.IsIrreducibleFamily}
     \leanok
     \uses{def:has_inv_proj}
     An MPS tensor~$A$ is \emph{irreducible} if it has no nontrivial invariant

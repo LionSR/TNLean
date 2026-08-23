@@ -15,6 +15,7 @@ import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CommutingOverlappingDecomp
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CompactSVD
+import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantPowerSums
 import TNLean.Algebra.CornerSkolemNoether
 import TNLean.Algebra.DirectedWalkCoboundary
@@ -22,6 +23,7 @@ import TNLean.Algebra.EigenvectorProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.KramersDegeneracy

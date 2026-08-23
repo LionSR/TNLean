@@ -160,7 +160,7 @@ theorem AppendixBStructuralData.physicalIsometry_injective
 
 /-- The proved structural form gives a nonempty bundled Appendix B form. -/
 theorem AppendixBStructuralData.exists_ofRFP (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
+    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     Nonempty (AppendixBStructuralData A) := by
   classical
@@ -181,7 +181,7 @@ This is a noncomputable definition only because it chooses an element of the
 nonempty type produced by `AppendixBStructuralData.exists_ofRFP`; it introduces
 no new assumptions or trusted constants. -/
 noncomputable def AppendixBStructuralData.ofRFP (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
+    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     AppendixBStructuralData A :=
   Classical.choice (AppendixBStructuralData.exists_ofRFP A hNT hRFP hLeft)
@@ -574,7 +574,7 @@ theorem AppendixBStructuralData.twoSiteAmplitude_eq_mpv {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (σ : Cfg d 2) :
     hStruct.twoSiteAmplitude σ = mpv A σ := by
   simp [mpv, coeff, AppendixBStructuralData.twoSiteAmplitude, hStruct.hA_eq,
-    evalWord, List.ofFn_succ, List.ofFn_zero]
+    Kraus.evalWord, List.ofFn_succ, List.ofFn_zero]
 
 /-- Equivalently, the structural two-site amplitude is the two-site coefficient of
 \(\Lambda U^i\). -/
@@ -690,7 +690,7 @@ for the commutation conclusion; the extraction remains relevant only to the
 separate physical-pair coefficient factorization. -/
 theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
     (A : MPSTensor d D) [NeZero D]
-    (hNT : IsNormal A) (hRFP : IsTransferIdempotent A)
+    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hExtract : AppendixBProductPairExtraction
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))

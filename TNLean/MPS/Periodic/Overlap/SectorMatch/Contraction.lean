@@ -53,7 +53,7 @@ tensors; comparing the resulting norm identities is what forces the gauge phases
 produced by the contraction to have unit modulus.
 
 The available chain inputs are `blockDecompositionMap` /
-`IsNBlkInjective.exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean`
+`Kraus.IsNBlkInjective.exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean`
 (realizing Ω_u for a chosen injective word length) and the two-site
 proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
 The finite-cycle phase choice in lines 1093--1102 is now isolated as
@@ -108,7 +108,7 @@ lemma sectorTensor_proportional_of_blockedMatch
             (blocksA u))
           (blocksB (u + q)))
     (hNondeg : ∀ u, dimA u ≠ 0)
-    (hNormal : ∀ u, IsNormal (blocksA u)) :
+    (hNormal : ∀ u, Kraus.IsNormal (blocksA u)) :
     ∃ (ξ : ℂ) (Uglob : MatrixAlg D),
       ‖ξ‖ = 1 ∧
       Uglob * Uglobᴴ = 1 ∧
@@ -294,7 +294,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     fun u => Ω (-u)
   have hΩ' : ∀ (u : Fin m) (X : MatrixAlg (dimA' u)),
       ∑ σ : Fin L → Fin (blockPhysDim d m),
-        Ω' u X σ • evalWord (blocksA' u) (List.ofFn σ) = X :=
+        Ω' u X σ • Kraus.evalWord (blocksA' u) (List.ofFn σ) = X :=
     fun u X => hΩ (-u) X
   have hφA'_mul : ∀ (u : Fin m) (X Y : MatrixAlg (dimA' u)),
       (φA' u (X * Y)).1 = (φA' u X).1 * (φA' u Y).1 :=
@@ -492,17 +492,17 @@ lemma sectorTensor_proportional_of_blockedMatch
     have h := hPA_shift (-(k + 1))
     have hsource : -(k + 1) + 1 = -k := by abel
     change
-      transferMap (fun i => (A i)ᴴ) (PA (-(k + 1) + 1)) = PA (-(k + 1)) at h
+      Kraus.transferMap (fun i => (A i)ᴴ) (PA (-(k + 1) + 1)) = PA (-(k + 1)) at h
     rw [hsource] at h
-    simpa only [transferMap_apply, Matrix.conjTranspose_conjTranspose, P] using h
+    simpa only [Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose, P] using h
   have hQ_transfer : ∀ k, ∑ i, (B i)ᴴ * Q k * B i = Q (k + 1) := by
     intro k
     have h := hPB_shift (-(k + 1))
     have hsource : -(k + 1) + 1 = -k := by abel
     change
-      transferMap (fun i => (B i)ᴴ) (PB (-(k + 1) + 1)) = PB (-(k + 1)) at h
+      Kraus.transferMap (fun i => (B i)ᴴ) (PB (-(k + 1) + 1)) = PB (-(k + 1)) at h
     rw [hsource] at h
-    simpa only [transferMap_apply, Matrix.conjTranspose_conjTranspose, Q] using h
+    simpa only [Kraus.transferMap_apply, Matrix.conjTranspose_conjTranspose, Q] using h
   have hAcorner_norm : ∀ k,
       ∑ i, (cornerLetter P A k i)ᴴ * cornerLetter P A k i = P (k + 1) :=
     fun k => sum_cornerLetter_star_mul P A hP_proj hP_transfer k

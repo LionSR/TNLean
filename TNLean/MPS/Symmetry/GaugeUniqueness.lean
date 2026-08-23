@@ -25,7 +25,7 @@ variable {d D : ℕ}
 
 /-- If two gauges send the same injective tensor `A` to the same tensor `B`,
 then they differ by a nonzero scalar. -/
-theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
+theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : Kraus.IsInjective A)
     {X Y : GL (Fin D) ℂ}
     (hX : ∀ i, B i = X * A i * X⁻¹)
     (hY : ∀ i, B i = Y * A i * Y⁻¹) :
@@ -105,7 +105,7 @@ injectivity alone, together with the two gauge equations $B_i = X A_i X^{-1}$
 and $B_i = Y A_i Y^{-1}$ — it is retained to match the blueprint statement
 faithfully. -/
 theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
-    (hA : IsInjective A) (_hAB : SameMPV A B)
+    (hA : Kraus.IsInjective A) (_hAB : SameMPV A B)
     {X Y : GL (Fin D) ℂ}
     (hX : ∀ i, B i = X * A i * X⁻¹)
     (hY : ∀ i, B i = Y * A i * Y⁻¹) :

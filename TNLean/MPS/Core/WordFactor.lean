@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Defs
+import TNLean.MPS.Defs
 
 /-!
 # Word-factor identities for matrix product tensors
@@ -26,18 +26,18 @@ theorem exists_evalWord_factor_of_letter_compatibility
       ∀ a : α, Z a * A i = F a * Y)
     (w : List (Fin d)) (hw : w ≠ []) :
     ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-      ∀ a : α, Z a * evalWord A w = F a * Y := by
+      ∀ a : α, Z a * Kraus.evalWord A w = F a * Y := by
   cases w with
   | nil => cases hw rfl
   | cons i w =>
       obtain ⟨Y, hY⟩ := hCompat i
-      refine ⟨Y * evalWord A w, ?_⟩
+      refine ⟨Y * Kraus.evalWord A w, ?_⟩
       intro a
       calc
-        Z a * evalWord A (i :: w)
-            = Z a * (A i * evalWord A w) := by simp [evalWord]
-        _ = (Z a * A i) * evalWord A w := by rw [Matrix.mul_assoc]
-        _ = (F a * Y) * evalWord A w := by rw [hY a]
-        _ = F a * (Y * evalWord A w) := by rw [Matrix.mul_assoc]
+        Z a * Kraus.evalWord A (i :: w)
+            = Z a * (A i * Kraus.evalWord A w) := by simp [Kraus.evalWord]
+        _ = (Z a * A i) * Kraus.evalWord A w := by rw [Matrix.mul_assoc]
+        _ = (F a * Y) * Kraus.evalWord A w := by rw [hY a]
+        _ = F a * (Y * Kraus.evalWord A w) := by rw [Matrix.mul_assoc]
 
 end MPSTensor

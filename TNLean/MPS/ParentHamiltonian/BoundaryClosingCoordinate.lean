@@ -27,7 +27,7 @@ multiplication by any length-\(L_0\) word:
 \] -/
 theorem wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
@@ -41,10 +41,10 @@ theorem wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word
         (wrappedMiddleBackground L₀ (M + 1) η μ) ψ =
       groundSpaceMap A (L₀ + 1) Yτ) :
     ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-      Yρ * A j * evalWord A (List.ofFn σ) =
-        Yτ * A j * evalWord A (List.ofFn σ) := by
+      Yρ * A j * Kraus.evalWord A (List.ofFn σ) =
+        Yτ * A j * Kraus.evalWord A (List.ofFn σ) := by
   intro j σ
-  exact congrArg (fun Y => Y * evalWord A (List.ofFn σ))
+  exact congrArg (fun Y => Y * Kraus.evalWord A (List.ofFn σ))
     (wrappedMiddleBackground_first_products_eq_of_complement_eq
       (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ j)
 
@@ -56,7 +56,7 @@ true after right multiplication by any length-\(L_0\) word:
 \] -/
 theorem mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} (η : Fin d)
     (μ : Fin (M + 1 - (L₀ + 1)) → Fin d) (ρ : Fin (M + 1) → Fin d)
     {Yρ Yτ : Matrix (Fin D) (Fin D) ℂ}
@@ -70,10 +70,10 @@ theorem mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word
         (mirrorMiddleBackground L₀ (M + 1) η μ) ψ =
       groundSpaceMap A (L₀ + 1) Yτ) :
     ∀ (j : Fin d) (σ : Fin L₀ → Fin d),
-      Yρ * A j * evalWord A (List.ofFn σ) =
-        Yτ * A j * evalWord A (List.ofFn σ) := by
+      Yρ * A j * Kraus.evalWord A (List.ofFn σ) =
+        Yτ * A j * Kraus.evalWord A (List.ofFn σ) := by
   intro j σ
-  exact congrArg (fun Y => Y * evalWord A (List.ofFn σ))
+  exact congrArg (fun Y => Y * Kraus.evalWord A (List.ofFn σ))
     (mirrorMiddleBackground_first_products_eq_of_complement_eq
       (A := A) hInj hL₀ hM η μ ρ hρ hYρ hYτ j)
 
@@ -86,7 +86,7 @@ multiplication by an arbitrary matrix:
 \] -/
 theorem closure_property_boundary_condition_product_of_window_witnesses_mul_right
     {A : MPSTensor d D} {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)}
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
       Matrix (Fin D) (Fin D) ℂ)
@@ -95,9 +95,9 @@ theorem closure_property_boundary_condition_product_of_window_witnesses_mul_righ
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (ρ : Fin (M + 1) → Fin d) (R : Matrix (Fin D) (Fin D) ℂ) :
     YAt ⟨M + 1 - L₀, by omega⟩ ρ *
-        evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+        Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
           ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * R =
-      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+      Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
         YAt ⟨M, by omega⟩ ρ * R := by
   exact congrArg (fun Y => Y * R)
     (closure_property_boundary_condition_product_of_window_witnesses
@@ -121,7 +121,7 @@ transport identity supplied by the adjacent-window argument; for
 in the periodic-boundary comparison. -/
 theorem closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
-    (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
     {ψ : NSiteSpace d (M + 1)} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψX : ψ = groundSpaceMap A (M + 1) X)
     (YAt : (i : Fin (M + 1)) → (Fin (M + 1) → Fin d) →
@@ -131,10 +131,10 @@ theorem closure_property_boundary_condition_transport_wrapped_product_of_groundS
         groundSpaceMap A (L₀ + 1) (YAt i τ))
     (ρ : Fin (M + 1) → Fin d) (j : Fin d) :
     YAt ⟨M + 1 - L₀, by omega⟩ ρ *
-        evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+        Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
           ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * A j =
-      evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
-        (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+      Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) => ρ ⟨r.val + 1, by omega⟩)) *
+        (Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
           ρ ⟨k.val + L₀, by omega⟩)) * A j * X) := by
   have htransport :=
     closure_property_boundary_condition_product_of_window_witnesses_mul_right
@@ -144,16 +144,16 @@ theorem closure_property_boundary_condition_transport_wrapped_product_of_groundS
       (A := A) hInj hL₀ hM hψX YAt hYAt).1 j ρ
   calc
     YAt ⟨M + 1 - L₀, by omega⟩ ρ *
-          evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+          Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
             ρ ⟨M + 1 - L₀ + r.val, by omega⟩)) * A j
-        = evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+        = Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
             ρ ⟨r.val + 1, by omega⟩)) * YAt ⟨M, by omega⟩ ρ * A j := htransport
-    _ = evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+    _ = Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
             ρ ⟨r.val + 1, by omega⟩)) * (YAt ⟨M, by omega⟩ ρ * A j) := by
           rw [Matrix.mul_assoc]
-    _ = evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
+    _ = Kraus.evalWord A (List.ofFn (fun r : Fin (L₀ - 1) =>
             ρ ⟨r.val + 1, by omega⟩)) *
-          (evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
+          (Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
             ρ ⟨k.val + L₀, by omega⟩)) * A j * X) := by
           rw [← hwrapped]
 

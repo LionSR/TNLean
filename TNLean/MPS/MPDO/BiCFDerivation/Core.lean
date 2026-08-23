@@ -19,7 +19,7 @@ sufficient conditions for deriving that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
    length `L`, the word-evaluation tuples
-   `w ↦ (k ↦ evalWord (A k) (List.ofFn w))`
+   `w ↦ (k ↦ Kraus.evalWord (A k) (List.ofFn w))`
    span the full product algebra `∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ`,
    then the `biCF` conclusion follows from nondegeneracy of the product trace
    pairing.
@@ -73,9 +73,9 @@ injectivity statement of arXiv:1606.00608, lines 317--345. -/
 theorem WordTupleSpanTop.isInjective_one
     {A : (k : Fin r) → MPSTensor d (dim k)}
     (hSpan : WordTupleSpanTop A 1) (j : Fin r) :
-    IsInjective (A j) := by
+    Kraus.IsInjective (A j) := by
   classical
-  unfold IsInjective
+  unfold Kraus.IsInjective
   apply top_unique
   intro X _
   let Xj : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
@@ -209,7 +209,7 @@ def HasBiCF
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
   ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
-        (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) →
+        (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
 /-- A finite-length spanning hypothesis implies `HasBiCF`. -/
@@ -228,9 +228,9 @@ def HasBlockSelectorWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     (S : ℕ) : Prop :=
   ∀ k : Fin r, ∃ c : (Fin S → Fin d) → ℂ,
-    (∑ w : Fin S → Fin d, c w • evalWord (A k) (List.ofFn w)) = 1 ∧
+    (∑ w : Fin S → Fin d, c w • Kraus.evalWord (A k) (List.ofFn w)) = 1 ∧
     ∀ j : Fin r, j ≠ k →
-      (∑ w : Fin S → Fin d, c w • evalWord (A j) (List.ofFn w)) = 0
+      (∑ w : Fin S → Fin d, c w • Kraus.evalWord (A j) (List.ofFn w)) = 0
 
 /-- A length-`S` word polynomial which selects block `k` on a finite set of
 other blocks. The tuple `M` lies in the span of simultaneous length-`S` word
@@ -260,7 +260,7 @@ def pairWordTuple {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (S : ℕ) (w : Fin S → Fin d) :
     Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ :=
-  (evalWord A (List.ofFn w), evalWord B (List.ofFn w))
+  (Kraus.evalWord A (List.ofFn w), Kraus.evalWord B (List.ofFn w))
 
 /-- Finite-length product-algebra span for a single ordered pair of blocks. -/
 def PairWordTupleSpanTop {D₁ D₂ : ℕ}
@@ -279,8 +279,8 @@ def PairTraceSeparatingAt {D₁ D₂ : ℕ}
   ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
     ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
       (∀ w : Fin S → Fin d,
-        Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
-          Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) →
+        Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+          Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) →
       ΔA = 0 ∧ ΔB = 0
 
 /-- Homogeneous pair trace separation is symmetric in the two blocks. -/
@@ -307,7 +307,7 @@ def pairEvalWordTuple {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (w : List (Fin d)) :
     Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ :=
-  (evalWord A w, evalWord B w)
+  (Kraus.evalWord A w, Kraus.evalWord B w)
 
 /-- The cumulative span of pair word tuples of length at most `S`. -/
 noncomputable def pairCumulativeSpan {D₁ D₂ : ℕ}
@@ -332,8 +332,8 @@ def PairTraceSeparatingUpTo {D₁ D₂ : ℕ}
   ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
     ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
       (∀ w : List (Fin d), w.length ≤ S →
-        Matrix.trace (ΔA * evalWord A w) +
-          Matrix.trace (ΔB * evalWord B w) = 0) →
+        Matrix.trace (ΔA * Kraus.evalWord A w) +
+          Matrix.trace (ΔB * Kraus.evalWord B w) = 0) →
       ΔA = 0 ∧ ΔB = 0
 
 /-- Infinite trace-separation by pair word tuples of all finite lengths. -/
@@ -342,8 +342,8 @@ def PairTraceSeparatingAll {D₁ D₂ : ℕ}
   ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
     ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
       (∀ w : List (Fin d),
-        Matrix.trace (ΔA * evalWord A w) +
-          Matrix.trace (ΔB * evalWord B w) = 0) →
+        Matrix.trace (ΔA * Kraus.evalWord A w) +
+          Matrix.trace (ΔB * Kraus.evalWord B w) = 0) →
       ΔA = 0 ∧ ΔB = 0
 
 /-- The span of pair word tuples over all finite words. -/

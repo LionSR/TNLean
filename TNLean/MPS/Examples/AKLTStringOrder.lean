@@ -63,7 +63,7 @@ noncomputable def akltBlocked : MPSTensor (blockPhysDim 3 2) 2 :=
 
 /-- The length-`2` blocked AKLT tensor is injective: its matrices span `M₂(ℂ)`.
 This is the blocked-tensor form of `aklt_isNBlkInjective_two`. -/
-theorem akltBlocked_isInjective : IsInjective akltBlocked :=
+theorem akltBlocked_isInjective : Kraus.IsInjective akltBlocked :=
   (isNBlkInjective_iff_blockTensor_isInjective akltTensor 2).1 aklt_isNBlkInjective_two
 
 /-- The `Z₂ × Z₂` on-site representation on the blocked AKLT physical space, the
@@ -89,7 +89,7 @@ matrix-identity value of `aklt_transferMap_one`. -/
 private theorem aklt_sum_mul_conjTranspose :
     ∑ i : Fin 3, akltTensor i * (akltTensor i)ᴴ = 1 := by
   have h := aklt_transferMap_one
-  rw [transferMap_apply] at h
+  rw [Kraus.transferMap_apply] at h
   simpa only [Matrix.mul_one] using h
 
 /-- The single-site AKLT tensor is left-canonical: `∑ Aᵢ† Aᵢ = 1`.  Together with
@@ -123,14 +123,14 @@ private theorem aklt_sum_conjTranspose_mul :
 
 /-- The blocked AKLT transfer map is unital: `∑ Bᵢ Bᵢ† = 1`.  Right-canonicity of
 the single-site letters propagates to length-`2` words. -/
-private theorem akltBlocked_transferMap_one : transferMap akltBlocked 1 = 1 := by
+private theorem akltBlocked_transferMap_one : Kraus.transferMap akltBlocked 1 = 1 := by
   classical
-  rw [transferMap_apply]
+  rw [Kraus.transferMap_apply]
   simp only [Matrix.mul_one, akltBlocked, blockTensor, wordOfBlock]
   rw [Fintype.sum_equiv (decodeBlockEquiv 3 2)
-    (fun I => evalWord akltTensor (List.ofFn (decodeBlock 3 2 I)) *
-      (evalWord akltTensor (List.ofFn (decodeBlock 3 2 I)))ᴴ)
-    (fun ρ => evalWord akltTensor (List.ofFn ρ) * (evalWord akltTensor (List.ofFn ρ))ᴴ)
+    (fun I => Kraus.evalWord akltTensor (List.ofFn (decodeBlock 3 2 I)) *
+      (Kraus.evalWord akltTensor (List.ofFn (decodeBlock 3 2 I)))ᴴ)
+    (fun ρ => Kraus.evalWord akltTensor (List.ofFn ρ) * (Kraus.evalWord akltTensor (List.ofFn ρ))ᴴ)
     (fun I => by rw [decodeBlockEquiv_apply])]
   exact sum_evalWord_mul_conjTranspose_evalWord akltTensor aklt_sum_mul_conjTranspose 2
 
@@ -138,13 +138,13 @@ private theorem akltBlocked_transferMap_one : transferMap akltBlocked 1 = 1 := b
 blocked adjoint transfer map: `∑ Bᵢ† Λ Bᵢ = Λ`.  Left-canonicity of the
 single-site letters propagates to length-`2` words. -/
 private theorem akltBlocked_adjoint_fixes_maximallyMixed :
-    transferMap (fun i => (akltBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
+    Kraus.transferMap (fun i => (akltBlocked i)ᴴ) ((1 / 2 : ℂ) • 1) = (1 / 2 : ℂ) • 1 := by
   classical
   have hleft : ∑ i : Fin (blockPhysDim 3 2),
       (akltBlocked i)ᴴ * akltBlocked i = 1 := by
     simpa only [akltBlocked] using
       leftCanonical_blockTensor akltTensor 2 aklt_sum_conjTranspose_mul
-  rw [transferMap_apply]
+  rw [Kraus.transferMap_apply]
   simp only [Matrix.conjTranspose_conjTranspose, Matrix.mul_smul, Matrix.smul_mul,
     Matrix.mul_one]
   rw [← Finset.smul_sum, hleft]

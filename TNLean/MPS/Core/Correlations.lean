@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import TNLean.Spectral.TransferOperatorGap
 import QICLean.QPF.Assembly
 
@@ -49,7 +49,7 @@ single-site insertions and evaluating against `ρR`.
 Cf. CPGSV21, Sec. 2.3: `⟨X₀ Yₙ⟩ := tr(Y E_A^n (X ρ^R))`. -/
 noncomputable def twoPointExpectation (A : MPSTensor d D)
     (ρR X Y : Mat D) (n : ℕ) : ℂ :=
-  Matrix.trace (Y * ((transferMap (d := d) (D := D) A) ^ n) (X * ρR))
+  Matrix.trace (Y * ((Kraus.transferMap (d := d) (D := D) A) ^ n) (X * ρR))
 
 /-- Connected correlator `C(X,Y;n) = ⟨X₀Yₙ⟩ - ⟨X₀⟩⟨Y₀⟩`. -/
 noncomputable def connectedCorrelator (A : MPSTensor d D)
@@ -69,7 +69,7 @@ noncomputable def connectedCorrelator (A : MPSTensor d D)
 @[simp] theorem twoPointExpectation_transfer (A : MPSTensor d D)
     (ρR X Y : Mat D) (n : ℕ) :
     twoPointExpectation (d := d) (D := D) A ρR X Y n =
-      Matrix.trace (Y * ((transferMap (d := d) (D := D) A) ^ n) (X * ρR)) := rfl
+      Matrix.trace (Y * ((Kraus.transferMap (d := d) (D := D) A) ^ n) (X * ρR)) := rfl
 
 /--
 Spectral expansion of connected correlators (conditional on supplied

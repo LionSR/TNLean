@@ -52,14 +52,14 @@ theorem blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComp
         (groundSpaceMap (A j) (M + 1) ((μ j) ^ (M + 1) • X j)) =
       pgvwc07LeftBoundaryComponent (A j)
         (fun a : Fin d =>
-          evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+          Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
             ((μ j) ^ (M + 1) • X j))
         m := by
   classical
   ext σ
   let middleWord : List (Fin d) := lastCrossingComplementWord hLen τ
   let W : Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
-    evalWord (A j) (List.ofFn (Fin.tail (Fin.init σ)))
+    Kraus.evalWord (A j) (List.ofFn (Fin.tail (Fin.init σ)))
   let b : Fin d := σ (Fin.last (m + 1))
   let a : Fin d := σ 0
   let Xj : Matrix (Fin (dim j)) (Fin (dim j)) ℂ := (μ j) ^ (M + 1) • X j
@@ -76,7 +76,7 @@ theorem blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComp
         (Fin.snoc_init_self (Fin.tail σ)).symm
       _ = Fin.snoc (Fin.tail (Fin.init σ)) b := by rw [hinit, hlast]
   have hEvalTail :
-      evalWord (A j) (List.ofFn (Fin.tail σ)) = W * A j b := by
+      Kraus.evalWord (A j) (List.ofFn (Fin.tail σ)) = W * A j b := by
     rw [htail, evalWord_ofFn_snoc]
   simp only [cyclicRestrictₗ_apply, groundSpaceMap_apply,
     pgvwc07LeftBoundaryComponent]
@@ -86,25 +86,25 @@ theorem blockDiagonal_boundary_last_cyclicRestrict_component_eq_leftBoundaryComp
     (by omega : 1 ≤ M) hLen (by omega : 1 < m + 2) σ τ]
   change
     Matrix.trace
-        (((evalWord (A j) (List.ofFn (Fin.tail σ)) *
-              evalWord (A j) middleWord) *
+        (((Kraus.evalWord (A j) (List.ofFn (Fin.tail σ)) *
+              Kraus.evalWord (A j) middleWord) *
             A j a) * Xj) =
       Matrix.trace (A j b *
-        (evalWord (A j) middleWord * A j a * Xj) * W)
+        (Kraus.evalWord (A j) middleWord * A j a * Xj) * W)
   rw [hEvalTail]
   calc
     Matrix.trace
-        (((W * A j b * evalWord (A j) middleWord) * A j a) * Xj)
+        (((W * A j b * Kraus.evalWord (A j) middleWord) * A j a) * Xj)
         =
       Matrix.trace (W *
-        (((A j b * evalWord (A j) middleWord) * A j a) * Xj)) := by
+        (((A j b * Kraus.evalWord (A j) middleWord) * A j a) * Xj)) := by
           simp [Matrix.mul_assoc]
     _ =
-      Matrix.trace ((((A j b * evalWord (A j) middleWord) * A j a) * Xj) * W) :=
+      Matrix.trace ((((A j b * Kraus.evalWord (A j) middleWord) * A j a) * Xj) * W) :=
         Matrix.trace_mul_comm _ _
     _ =
       Matrix.trace (A j b *
-        (evalWord (A j) middleWord * A j a * Xj) * W) := by
+        (Kraus.evalWord (A j) middleWord * A j a * Xj) * W) := by
           simp [Matrix.mul_assoc]
 
 /-- At the cyclic window beginning at the last site, the block-diagonal local
@@ -143,7 +143,7 @@ theorem blockDiagonal_boundary_last_cyclicRestrict_sum_eq_leftBoundaryComponents
       ∑ j : Fin r,
         pgvwc07LeftBoundaryComponent (A j)
           (fun a : Fin d =>
-            evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+            Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
               ((μ j) ^ (M + 1) • X j))
           m := by
   classical
@@ -187,13 +187,13 @@ theorem blockDiagonal_boundary_last_coefficients_of_sum_mem_iSup
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ j : Fin r, ∀ a b : Fin d,
         A j b *
-            (evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+            (Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
               ((μ j) ^ (M + 1) • X j)) =
           A j b * E j * A j a := by
   classical
   let C : (j : Fin r) → Fin d → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
     fun j a =>
-      evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+      Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
         ((μ j) ^ (M + 1) • X j)
   let ψ : NSiteSpace d (m + 2) :=
     ∑ j : Fin r,
@@ -242,7 +242,7 @@ theorem
     μ A hLen X τ j]
   exact pgvwc07LeftBoundaryComponent_mem_groundSpace (A j)
     (fun a : Fin d =>
-      evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+      Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
         ((μ j) ^ (M + 1) • X j))
     (E j) m (hE j)
 
@@ -280,7 +280,7 @@ theorem blockDiagonal_boundary_last_coefficients_of_blockDiagonal_chainGroundSpa
     ∃ E : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
       ∀ j : Fin r, ∀ a b : Fin d,
         A j b *
-            (evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
+            (Kraus.evalWord (A j) (lastCrossingComplementWord hLen τ) * A j a *
               ((μ j) ^ (M + 1) • X j)) =
           A j b * E j * A j a := by
   have hmem :=

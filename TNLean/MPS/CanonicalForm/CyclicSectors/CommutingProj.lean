@@ -58,11 +58,11 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
-        mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace) ∧
+        mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := d) (D := dim k)
+        (φ k (Kraus.transferMap (d := d) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D)
+          Kraus.transferMap (d := d) (D := D)
             (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -92,9 +92,9 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
     hV_iso hV_range hEmbed using fun k =>
     exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       (fun i => P k * A i) (P k) (hPproj k) (hSectorSupp k) (hSectorTP k)
-  -- Per-sector trace relation: mpv(blocks k) σ = tr(P_k · evalWord A σ)
+  -- Per-sector trace relation: mpv(blocks k) σ = tr(P_k · Kraus.evalWord A σ)
   have hSectorTrace : ∀ k (N : ℕ) (σ : Fin N → Fin d),
-      mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace := by
+      mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace := by
     intro k N σ
     rw [hMPVblocks k N σ]
     congr 1
@@ -115,7 +115,7 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
   intro N σ
   rw [mpv_toTensorFromBlocks_eq_sum]; simp only [one_pow, one_smul]
   simp only [mpv, coeff]
-  conv_lhs => rw [show evalWord A (List.ofFn σ) = 1 * evalWord A (List.ofFn σ) from by
+  conv_lhs => rw [show Kraus.evalWord A (List.ofFn σ) = 1 * Kraus.evalWord A (List.ofFn σ) from by
     rw [Matrix.one_mul]]
   rw [show (1 : MatrixAlg D) = ∑ k : Fin m, P k from hPsum.symm]
   rw [Finset.sum_mul, Matrix.trace_sum]
@@ -143,11 +143,11 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
-        mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace) ∧
+        mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := d) (D := dim k)
+        (φ k (Kraus.transferMap (d := d) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D)
+          Kraus.transferMap (d := d) (D := D)
             (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -181,11 +181,11 @@ theorem exists_blockDecomp_of_commuting_projections
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
-        mpv (blocks k) σ = (P k * evalWord A (List.ofFn σ)).trace) ∧
+        mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := d) (D := dim k)
+        (φ k (Kraus.transferMap (d := d) (D := dim k)
             (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := d) (D := D)
+          Kraus.transferMap (d := d) (D := D)
             (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧

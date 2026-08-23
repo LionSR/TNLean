@@ -143,7 +143,7 @@ doubled-index MPS tensor, up to the canonical pairing of the blocked ket and
 bra words. -/
 theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
     (blockTensor M L).toMPSTensor =
-      MPSTensor.reindexPhysical (blockedDoubledIndexEquiv d L)
+      Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
         (MPSTensor.blockTensor M.toMPSTensor L) := by
   funext ij
   simp [toMPSTensor, blockTensor_apply, Kraus.reindexPhysical,
@@ -155,8 +155,8 @@ theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
 of its doubled-index MPS tensor. -/
 theorem isInjective_toMPSTensor_blockTensor_iff
     (M : MPOTensor d D) {L : ℕ} :
-    MPSTensor.IsInjective (blockTensor M L).toMPSTensor ↔
-      MPSTensor.IsInjective (MPSTensor.blockTensor M.toMPSTensor L) := by
+    Kraus.IsInjective (blockTensor M L).toMPSTensor ↔
+      Kraus.IsInjective (MPSTensor.blockTensor M.toMPSTensor L) := by
   rw [toMPSTensor_blockTensor M,
     MPSTensor.isInjective_reindexPhysical_equiv]
 
@@ -260,11 +260,11 @@ blocking followed by the canonical ket--bra reindexing.
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
     (blockTwo M).toMPSTensor =
-      MPSTensor.reindexPhysical (twoSiteDoubledIndexEquiv d)
+      Kraus.reindexPhysical (twoSiteDoubledIndexEquiv d)
         (MPSTensor.blockTensor M.toMPSTensor 2) := by
   funext ij
   simp [toMPSTensor, blockTwo, Kraus.reindexPhysical,
-    MPSTensor.blockTensor, Kraus.evalWord, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
+    MPSTensor.blockTensor, evalWord, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
     blockedDoubledIndexEquiv, MPSTensor.wordOfBlock, Equiv.arrowCongr]
 
 /-- The concrete two-site blocking is the general length-two blocking after

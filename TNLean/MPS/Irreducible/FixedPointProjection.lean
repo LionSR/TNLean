@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.Transfer
+import QICLean.Kraus.Transfer
 import QICLean.Algebra.HermitianHelpers
 import QICLean.Algebra.PosSemidefSupport
 import QICLean.Channel.Irreducible.Basic
@@ -55,11 +55,11 @@ theorem lowerZero_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
+    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
     let P := hρ_psd.supportProj
     IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
   have hρ_fix' : Kraus.map A ρ = ρ := by
-    simpa [Kraus.map, transferMap_apply] using hρ_fix
+    simpa [Kraus.map, Kraus.transferMap_apply] using hρ_fix
   simpa [Kraus.stationaryProj] using
     (Kraus.lowerZero_of_posSemidef_fixedPoint A ρ hρ_psd hρ_fix')
 
@@ -129,12 +129,12 @@ eigenvalue. -/
 theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
     [Nonempty (Fin D)]
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : transferMap (d := d) (D := D) A 1 = 1)
+    (h_unital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
     (hX_herm : X.IsHermitian)
-    (hX_fix : transferMap (d := d) (D := D) A X = X)
+    (hX_fix : Kraus.transferMap (d := d) (D := D) A X = X)
     (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosSemidef ∧ transferMap (d := d) (D := D) A ρ = ρ ∧
+      ρ.PosSemidef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
         ρ ≠ 0 ∧ ¬ ρ.PosDef := by
   classical
   let c : ℝ := maxEigenvalue hX_herm
@@ -143,8 +143,8 @@ theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
     simpa [ρ, c] using maxEigenvalue_smul_one_sub_posSemidef hX_herm
   have hρ_not_pd : ¬ ρ.PosDef := by
     simpa [ρ, c] using max_shift_not_posDef (D := D) hX_herm
-  have hρ_fix : transferMap (d := d) (D := D) A ρ = ρ := by
-    change transferMap (d := d) (D := D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
+  have hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
+    change Kraus.transferMap (d := d) (D := D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
     rw [map_sub, map_smul, h_unital, hX_fix]
   have hρ_ne : ρ ≠ 0 := by
     intro hρ_zero
@@ -188,7 +188,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ) :
+    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
     ∃ (n m : ℕ) (_ : n + m = D)
       (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
       SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
@@ -225,7 +225,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : transferMap (d := d) (D := D) A ρ = ρ)
+    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0)
     (hρ_not_pd : ¬ ρ.PosDef) :
     ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
@@ -254,9 +254,9 @@ every unital linear map and do not produce a nontrivial support projection. -/
 theorem exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint
     [Nonempty (Fin D)]
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : transferMap (d := d) (D := D) A 1 = 1)
+    (h_unital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
     (hX_herm : X.IsHermitian)
-    (hX_fix : transferMap (d := d) (D := D) A X = X)
+    (hX_fix : Kraus.transferMap (d := d) (D := D) A X = X)
     (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),

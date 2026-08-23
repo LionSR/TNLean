@@ -37,8 +37,8 @@ def rotateCfg {d L' : ℕ} : (Fin (L' + 1) → Fin d) ≃ (Fin (L' + 1) → Fin 
 /-- Word evaluation of the rotated configuration pulls the last letter to the front. -/
 private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPSTensor d D)
     (σ : Fin (L' + 1) → Fin d) :
-    evalWord A (List.ofFn (rotateCfg σ)) =
-      A (σ (Fin.last L')) * evalWord A (List.ofFn (Fin.init σ)) := by
+    Kraus.evalWord A (List.ofFn (rotateCfg σ)) =
+      A (σ (Fin.last L')) * Kraus.evalWord A (List.ofFn (Fin.init σ)) := by
   have hrotate : rotateCfg σ = Fin.cons (σ (Fin.last L')) (Fin.init σ) := by
     funext j
     refine Fin.cases ?_ ?_ j
@@ -50,16 +50,16 @@ private lemma evalWord_ofFn_rotateCfg {L' : ℕ} (A : MPSTensor d D)
         rw [finRotate_symm_apply]
         rw [Fin.val_sub_one_of_ne_zero (by simp)]
         simp))
-  simp only [hrotate, List.ofFn_cons, evalWord_cons]
+  simp only [hrotate, List.ofFn_cons, Kraus.evalWord_cons]
 
 /-- Word evaluation of the original configuration pulls the last letter to the right. -/
 private lemma evalWord_ofFn_eq_init_mul_last {L' : ℕ} (A : MPSTensor d D)
     (σ : Fin (L' + 1) → Fin d) :
-    evalWord A (List.ofFn σ) =
-      evalWord A (List.ofFn (Fin.init σ)) * A (σ (Fin.last L')) := by
+    Kraus.evalWord A (List.ofFn σ) =
+      Kraus.evalWord A (List.ofFn (Fin.init σ)) * A (σ (Fin.last L')) := by
   rw [List.ofFn_succ']
   rw [show (List.ofFn fun i => σ (Fin.castSucc i)) = List.ofFn (Fin.init σ) from rfl]
-  rw [List.concat_eq_append, evalWord_append]
+  rw [List.concat_eq_append, Kraus.evalWord_append]
   simp
 
 /-- **Per-configuration trace covariance** under one-site rotation (eq:Aoffdiag,
@@ -71,8 +71,8 @@ private lemma trace_proj_evalWord_rotateCfg {L' m : ℕ} [NeZero m] (A : MPSTens
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hShift : ∀ (k : Fin m) (i : Fin d), P (k + 1) * A i = A i * P k)
     (k : Fin m) (σ : Fin (L' + 1) → Fin d) :
-    (P (k + 1) * evalWord A (List.ofFn (rotateCfg σ))).trace =
-      (P k * evalWord A (List.ofFn σ)).trace := by
+    (P (k + 1) * Kraus.evalWord A (List.ofFn (rotateCfg σ))).trace =
+      (P k * Kraus.evalWord A (List.ofFn σ)).trace := by
   rw [evalWord_ofFn_rotateCfg, evalWord_ofFn_eq_init_mul_last]
   -- `tr(P(k+1) * A(last) * W)`: apply the shift, then cycle the trace.
   rw [← Matrix.mul_assoc, hShift k (σ (Fin.last L'))]
@@ -89,14 +89,14 @@ private lemma sum_trace_proj_overlap_shift {L' m : ℕ} [NeZero m]
     (hShiftB : ∀ (k : Fin m) (i : Fin d), Q (k + 1) * B i = B i * Q k)
     (u v : Fin m) :
     (∑ σ : Fin (L' + 1) → Fin d,
-        (P (u + 1) * evalWord A (List.ofFn σ)).trace *
-          star ((Q (v + 1) * evalWord B (List.ofFn σ)).trace)) =
+        (P (u + 1) * Kraus.evalWord A (List.ofFn σ)).trace *
+          star ((Q (v + 1) * Kraus.evalWord B (List.ofFn σ)).trace)) =
       ∑ σ : Fin (L' + 1) → Fin d,
-        (P u * evalWord A (List.ofFn σ)).trace *
-          star ((Q v * evalWord B (List.ofFn σ)).trace) := by
+        (P u * Kraus.evalWord A (List.ofFn σ)).trace *
+          star ((Q v * Kraus.evalWord B (List.ofFn σ)).trace) := by
   rw [← Equiv.sum_comp (rotateCfg (d := d) (L' := L'))
-    (fun σ => (P (u + 1) * evalWord A (List.ofFn σ)).trace *
-      star ((Q (v + 1) * evalWord B (List.ofFn σ)).trace))]
+    (fun σ => (P (u + 1) * Kraus.evalWord A (List.ofFn σ)).trace *
+      star ((Q (v + 1) * Kraus.evalWord B (List.ofFn σ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
   rw [trace_proj_evalWord_rotateCfg A P hShiftA u σ,
     trace_proj_evalWord_rotateCfg B Q hShiftB v σ]
@@ -111,20 +111,20 @@ private lemma sectorOverlap_eq_physical_sum {m : ℕ} [NeZero D] [NeZero m]
     (blocksB : (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
     (PA PB : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hTraceA : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksA k) σ = (PA k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+      mpv (blocksA k) σ = (PA k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksB k) σ = (PB k * evalWord (blockTensor B m) (List.ofFn σ)).trace)
+      mpv (blocksB k) σ = (PB k * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace)
     (u v : Fin m) (N : ℕ) :
     mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N =
       ∑ τ : Fin (N * m) → Fin d,
-        (PA u * evalWord A (List.ofFn τ)).trace *
-          star ((PB v * evalWord B (List.ofFn τ)).trace) := by
+        (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
+          star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace) := by
   classical
   rw [mpvOverlap]
   rw [← Equiv.sum_comp (blockedConfigEquiv d N m)
     (fun τ : Fin (N * m) → Fin d =>
-      (PA u * evalWord A (List.ofFn τ)).trace *
-        star ((PB v * evalWord B (List.ofFn τ)).trace))]
+      (PA u * Kraus.evalWord A (List.ofFn τ)).trace *
+        star ((PB v * Kraus.evalWord B (List.ofFn τ)).trace))]
   refine Finset.sum_congr rfl fun σ _ => ?_
   rw [hTraceA u N σ, hTraceB v N σ, ofFn_blockedConfigEquiv]
   change
@@ -148,12 +148,12 @@ private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero D] [NeZero m]
     (PA PB : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hPAproj : ∀ k, IsOrthogonalProjection (PA k))
     (hPBproj : ∀ k, IsOrthogonalProjection (PB k))
-    (hShiftA : ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (PA (k + 1)) = PA k)
-    (hShiftB : ∀ k, transferMap (d := d) (D := D) (fun i => (B i)ᴴ) (PB (k + 1)) = PB k)
+    (hShiftA : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (PA (k + 1)) = PA k)
+    (hShiftB : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) (PB (k + 1)) = PB k)
     (hTraceA : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksA k) σ = (PA k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+      mpv (blocksA k) σ = (PA k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blocksB k) σ = (PB k * evalWord (blockTensor B m) (List.ofFn σ)).trace)
+      mpv (blocksB k) σ = (PB k * Kraus.evalWord (blockTensor B m) (List.ofFn σ)).trace)
     (u v : Fin m) (N : ℕ) (hN : 0 < N) :
     mpvOverlap (d := blockPhysDim d m) (blocksA (u + 1)) (blocksB (v + 1)) N =
       mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by

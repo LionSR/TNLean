@@ -153,8 +153,8 @@ lemma toMPSTensor_R_apply (p q : Fin 4) :
 /-- **`R.toMPSTensor` is algebraically injective.** Its `16` letters span the full bond
 matrix algebra `Matrix (Fin 4) (Fin 4) ℂ`: they are, up to nonzero scalars by
 `R_eq_single`, exactly the standard matrix-unit basis of the bond space. -/
-lemma R_toMPSTensor_isInjective : MPSTensor.IsInjective R.toMPSTensor := by
-  unfold MPSTensor.IsInjective
+lemma R_toMPSTensor_isInjective : Kraus.IsInjective R.toMPSTensor := by
+  unfold Kraus.IsInjective
   apply le_antisymm le_top
   rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
   apply Submodule.span_le.mpr
@@ -204,9 +204,9 @@ multiple of the fixed matrix `fixedDiag`: the outer-product structure of `R p q`
 to a product of two single-letter Frobenius pairings, one contracting against
 `fixedDiag` and the other against `X`'s diagonal entries. -/
 lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
-    MPSTensor.transferMap R.toMPSTensor X =
+    Kraus.transferMap R.toMPSTensor X =
       ((25/32 : ℂ) ^ 2 * ∑ b : Fin 4, (sVal b) ^ 2 * X b b) • fixedDiag := by
-  rw [MPSTensor.transferMap_apply]
+  rw [Kraus.transferMap_apply]
   rw [← Equiv.sum_comp (finProdFinEquiv : Fin 4 × Fin 4 ≃ Fin (4 * 4))
     (fun v => R.toMPSTensor v * X * (R.toMPSTensor v)ᴴ)]
   rw [Fintype.sum_prod_type]
@@ -242,7 +242,10 @@ lemma transferMap_R_toMPSTensor_eq (X : Matrix (Fin 4) (Fin 4) ℂ) :
   simp only [Fin.sum_univ_four, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
     dotProduct, Matrix.mulVec, bondBit1, bondBit2, fixedDiag, Matrix.diagonal_apply,
     A, sVal, Matrix.single_apply, Matrix.vecMulVec]
-  fin_cases a <;> fin_cases a' <;> norm_num <;> ring
+  by_cases h : a = a'
+  · subst a'
+    fin_cases a <;> norm_num <;> ring
+  · fin_cases a <;> fin_cases a' <;> simp_all
 
 /-- The rank-one image scalar, evaluated at the fixed matrix `fixedDiag` itself, is
 exactly `337/512`: `transferMap R.toMPSTensor` is idempotent up to this scalar
@@ -257,8 +260,8 @@ twice to any `X` scales the single-application result by `337/512`, since every
 application returns a scalar multiple of `fixedDiag` and `cFun_fixedDiag` gives the
 scalar of the second application. -/
 lemma transferMap_R_toMPSTensor_idem (X : Matrix (Fin 4) (Fin 4) ℂ) :
-    MPSTensor.transferMap R.toMPSTensor (MPSTensor.transferMap R.toMPSTensor X) =
-      (337/512 : ℂ) • MPSTensor.transferMap R.toMPSTensor X := by
+    Kraus.transferMap R.toMPSTensor (Kraus.transferMap R.toMPSTensor X) =
+      (337/512 : ℂ) • Kraus.transferMap R.toMPSTensor X := by
   rw [transferMap_R_toMPSTensor_eq X, map_smul, transferMap_R_toMPSTensor_eq fixedDiag,
     cFun_fixedDiag, smul_smul, smul_smul, mul_comm]
 
@@ -331,9 +334,9 @@ theorem doubledPhysTraceTransfer_retainedBlock_not_isNilpotent :
 /-- `transferMap retainedBlock` is `(weight : ℂ)⁻¹ ^ 2` times `transferMap R.toMPSTensor`,
 since the transfer map is quadratic in the tensor and `weight⁻¹` is real. -/
 lemma retainedBlock_transferMap (X : Matrix (Fin 4) (Fin 4) ℂ) :
-    MPSTensor.transferMap retainedBlock X =
-      ((weight : ℂ)⁻¹ ^ 2) • MPSTensor.transferMap R.toMPSTensor X := by
-  rw [MPSTensor.transferMap_apply, MPSTensor.transferMap_apply, Finset.smul_sum]
+    Kraus.transferMap retainedBlock X =
+      ((weight : ℂ)⁻¹ ^ 2) • Kraus.transferMap R.toMPSTensor X := by
+  rw [Kraus.transferMap_apply, Kraus.transferMap_apply, Finset.smul_sum]
   apply Finset.sum_congr rfl
   intro i _
   change ((weight⁻¹ : ℂ) • R.toMPSTensor i) * X * ((weight⁻¹ : ℂ) • R.toMPSTensor i)ᴴ =
@@ -355,8 +358,8 @@ lemma retainedBlock_isTransferIdempotent : MPSTensor.IsTransferIdempotent retain
   apply LinearMap.ext
   intro X
   rw [LinearMap.comp_apply]
-  show MPSTensor.transferMap retainedBlock (MPSTensor.transferMap retainedBlock X) =
-    MPSTensor.transferMap retainedBlock X
+  show Kraus.transferMap retainedBlock (Kraus.transferMap retainedBlock X) =
+    Kraus.transferMap retainedBlock X
   rw [retainedBlock_transferMap, retainedBlock_transferMap, map_smul,
     transferMap_R_toMPSTensor_idem, smul_smul, smul_smul]
   congr 1
@@ -371,7 +374,7 @@ lemma retainedBlock_isTransferIdempotent : MPSTensor.IsTransferIdempotent retain
 
 /-- `retainedBlock`'s letters span the full bond matrix algebra, since they are nonzero
 scalar multiples of `R.toMPSTensor`'s letters (`R_toMPSTensor_isInjective`). -/
-lemma retainedBlock_isInjective : MPSTensor.IsInjective retainedBlock := by
+lemma retainedBlock_isInjective : Kraus.IsInjective retainedBlock := by
   have hblock : retainedBlock = fun i => (weight⁻¹ : ℂ) • R.toMPSTensor i := rfl
   rw [hblock]
   refine R_toMPSTensor_isInjective.smul (inv_ne_zero ?_)
@@ -379,7 +382,7 @@ lemma retainedBlock_isInjective : MPSTensor.IsInjective retainedBlock := by
 
 /-- Algebraic normality (eventual block injectivity) follows from `1`-block
 injectivity. -/
-lemma retainedBlock_isNormal : MPSTensor.IsNormal retainedBlock :=
+lemma retainedBlock_isNormal : Kraus.IsNormal retainedBlock :=
   retainedBlock_isInjective.isNormal
 
 /-- **`retainedBlock` is a CPSV normal tensor.** -/

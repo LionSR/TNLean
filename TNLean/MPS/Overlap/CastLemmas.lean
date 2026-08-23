@@ -39,20 +39,21 @@ lemma mpvOverlap_cast_dim_left {d D₁ D₂ D₃ : ℕ} (h : D₁ = D₂)
 
 /-- Casting the bond dimension preserves injectivity. -/
 lemma isInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ IsInjective A := by
+    Kraus.IsInjective (cast (congr_arg (MPSTensor d) h) A) ↔ Kraus.IsInjective A := by
   subst h; simp
 
 /-- Casting the bond dimension preserves fixed-length block injectivity. -/
 lemma isNBlkInjective_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂)
     (A : MPSTensor d D₁) (N : ℕ) :
-    IsNBlkInjective (cast (congr_arg (MPSTensor d) h) A) N ↔
-      IsNBlkInjective A N := by
+    Kraus.IsNBlkInjective (cast (congr_arg (MPSTensor d) h) A) N ↔
+      Kraus.IsNBlkInjective A N := by
   subst h
   simp
 
 /-- Casting the bond dimension preserves irreducibility. -/
 lemma isIrreducibleTensor_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) :
-    IsIrreducibleTensor (cast (congr_arg (MPSTensor d) h) A) ↔ IsIrreducibleTensor A := by
+    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔
+      Kraus.IsIrreducibleFamily A := by
   subst h
   rfl
 

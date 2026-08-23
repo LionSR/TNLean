@@ -151,8 +151,8 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible
     (heig : X *ᵥ φ = μ • φ) :
     Kraus.wordSpan A (D ^ 2) = ⊤ := by
   let B : MPSTensor (d + 1) D := Kraus.oneStepAugment A X
-  have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
-  have hNB : IsNormal B := by
+  have hN : Kraus.IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
+  have hNB : Kraus.IsNormal B := by
     simpa [B] using isNormal_oneStepAugment_of_mem_wordSpan_one A hX hN
   have heigB : B (0 : Fin (d + 1)) *ᵥ φ = μ • φ := by
     simpa [B, Kraus.oneStepAugment] using heig
@@ -269,8 +269,8 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
     (hInv : IsUnit X) :
     Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
   let B : MPSTensor (d + 1) D := Kraus.oneStepAugment A X
-  have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
-  have hNB : IsNormal B := by
+  have hN : Kraus.IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
+  have hNB : Kraus.IsNormal B := by
     simpa [B] using isNormal_oneStepAugment_of_mem_wordSpan_one A hX hN
   have hInvB : IsUnit (B (0 : Fin (d + 1))) := by
     simpa [B, Kraus.oneStepAugment] using hInv
@@ -356,7 +356,7 @@ Paper: arXiv:0909.5347, Theorem 1 case (1); Wolf, Theorem 6.9. -/
 
 Under paper primitivity and normalization:
 1. By sharp Lemma 1, there exists a word `w` of length
-   `n ≤ D² − krausRank(A) + 1` with `tr(evalWord A w) ≠ 0`.
+   `n ≤ D² − krausRank(A) + 1` with `tr(Kraus.evalWord A w) ≠ 0`.
 2. This matrix has a nonzero eigenvalue `μ` with eigenvector `φ`.
 3. The `n`-blocked tensor `blockTensor A n` has this matrix as a Kraus operator.
 4. In the blocked invertible case, case (2) yields
@@ -374,7 +374,7 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     iIndex A ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
-  have hN : IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
+  have hN : Kraus.IsNormal A := isNormal_of_isPrimitivePaper A hNorm hPrim
   have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   exact (show iIndex A ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 from by
     -- Get a **positive-length** sharp nonzero-trace word
@@ -386,18 +386,18 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
     have hn_pos : 0 < n := hw_pos
     -- Set up the blocked tensor
     set B := blockTensor (d := d) (D := D) A n
-    -- B is IsNormal
-    have hNB : IsNormal B := isNormal_blockTensor A n hn_pos hN
+    -- B is Kraus.IsNormal
+    have hNB : Kraus.IsNormal B := isNormal_blockTensor A n hn_pos hN
     -- B is normalized
     have hNormB : ∑ i, (B i)ᴴ * B i = 1 := leftCanonical_blockTensor A n hNorm
-    -- B is IsPrimitivePaper (from IsNormal, no normalization needed)
+    -- B is IsPrimitivePaper (from Kraus.IsNormal, no normalization needed)
     have hPrimB : IsPrimitivePaper B := isPrimitivePaper_of_isNormal B hNB
     -- Encode w as a blocked index
     set σ₀ : Fin n → Fin d := w.get with hσ₀_def
     set i₀ := encodeBlock d n σ₀ with hi₀_def
-    -- The Kraus operator B i₀ = evalWord A w
-    have hBi₀ : B i₀ = evalWord A w := by
-      have h1 : B i₀ = evalWord A (List.ofFn σ₀) :=
+    -- The Kraus operator B i₀ = Kraus.evalWord A w
+    have hBi₀ : B i₀ = Kraus.evalWord A w := by
+      have h1 : B i₀ = Kraus.evalWord A (List.ofFn σ₀) :=
         blockTensor_apply_encodeBlock A n σ₀
       have h2 : List.ofFn σ₀ = w := by simp [σ₀, List.ofFn_get]
       rw [h1, h2]
@@ -419,7 +419,7 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
           have hbot := Submodule.finrank_eq_zero.mp h0
           have hBmem : B i₀ ∈ Kraus.wordSpan B 1 := by
             have := Kraus.evalWord_mem_wordSpan B ([i₀] : List (Fin (blockPhysDim d n)))
-            simpa [evalWord] using this
+            simpa [Kraus.evalWord] using this
           rw [hbot] at hBmem
           change B i₀ = 0 at hBmem
           exact not_isUnit_zero (hBmem ▸ hInv)

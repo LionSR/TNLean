@@ -89,6 +89,8 @@ import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
+import TNLean.MPS.MPDO.CPSVExample410Operator
+import TNLean.MPS.MPDO.CPSVExample410Spectrum
 import TNLean.MPS.MPDO.CPSVExample411Ambient
 import TNLean.MPS.MPDO.CPSVExample411BinarySupport
 import TNLean.MPS.MPDO.CPSVExample411Entropy
@@ -200,6 +202,7 @@ import TNLean.MPS.MPDO.MutualInfoAreaLaw
 import TNLean.MPS.MPDO.MutualInfoBridge
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.NeighboringPreparation
+import TNLean.MPS.MPDO.NeighboringTraceObstruction
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCounterexample
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction

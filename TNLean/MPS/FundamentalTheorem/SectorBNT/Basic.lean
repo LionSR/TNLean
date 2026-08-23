@@ -111,7 +111,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   /-- **Per-block irreducibility.**  Each basis block has irreducible
   transfer map after blocking (CPSV16 lines 233–234; CPSV21 lines
   1815–1830). -/
-  basis_irreducible : ∀ j : Fin P.basisCount, IsIrreducibleTensor (P.basis j)
+  basis_irreducible : ∀ j : Fin P.basisCount, Kraus.IsIrreducibleFamily (P.basis j)
   /-- **Per-block left-canonical form** (CPSV21 lines 1815–1837). -/
   basis_left_canonical : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j)
   /-- **Per-block normalized self-overlap.**  Each basis block has

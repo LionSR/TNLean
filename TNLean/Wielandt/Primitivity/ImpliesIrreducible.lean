@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.TransferChannel
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 
 /-!
@@ -16,7 +16,7 @@ matrix family is therefore irreducible by the transfer-map comparison theorem.
 ## Main result
 
 * `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`:
-  `IsPrimitiveMPS A ρ → ρ.PosDef → IsIrreducibleTensor A`.
+  `IsPrimitiveMPS A ρ → ρ.PosDef → Kraus.IsIrreducibleFamily A`.
 
 This is the irreducibility half of the later primitive-to-normal implication.
 The complementary aperiodicity input is recovered from strong irreducibility
@@ -43,8 +43,8 @@ theorem isIrreducibleTensor_of_isPrimitiveMPS_of_posDef
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
     (hPD : ρ.PosDef) :
-    IsIrreducibleTensor A :=
-  Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A
+    Kraus.IsIrreducibleFamily A :=
+  Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
     (isIrreducibleMap_of_isPrimitiveMPS_of_posDef hPrim hPD)
 
 end MPSTensor

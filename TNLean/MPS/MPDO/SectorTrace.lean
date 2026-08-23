@@ -446,7 +446,7 @@ theorem sectorProjectorData_of_gauge_corner
               (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))) :=
         congrArg Matrix.trace (hcorner _).symm
       _ = (ω • representativeLoop A) a b := by
-        rw [Matrix.trace_smul, MPSTensor.trace_conj_eq]
+        rw [Matrix.trace_smul, Kraus.trace_conj_eq]
         rfl
 
 /-- **The sector trace identity**

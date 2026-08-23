@@ -55,8 +55,8 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, IsLeftCanonical (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k)))
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hμLe : ∀ k, ‖μ k‖ ≤ 1)
     (hμUnit : ∃ k, ‖μ k‖ = 1) :

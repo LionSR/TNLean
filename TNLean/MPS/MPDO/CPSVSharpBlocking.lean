@@ -67,13 +67,13 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
     apply hBNT.blocks_not_gaugePhaseEquiv j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
       (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
-  have hPreparedNormal : ∀ j, IsNormal (prepared j) := by
+  have hPreparedNormal : ∀ j, Kraus.IsNormal (prepared j) := by
     intro j
     exact isNormal_of_tp_primitive_irreducible
       (prepared j) (hTP j) (hPrim j) (hIrr j)
-  have hBlk0 : ∀ j, IsNBlkInjective (prepared j) (K ^ 4) := by
+  have hBlk0 : ∀ j, Kraus.IsNBlkInjective (prepared j) (K ^ 4) := by
     intro j
-    have hOwn : IsNBlkInjective (prepared j) ((dim j) ^ 4) :=
+    have hOwn : Kraus.IsNBlkInjective (prepared j) ((dim j) ^ 4) :=
       isNBlkInjective_pow_four_of_isNormal_leftCanonical
         (prepared j) (hTP j) (hPreparedNormal j)
     exact isNBlkInjective_of_le (Nat.pow_pos (hdimPos j)) hOwn
@@ -102,10 +102,10 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
           prepared hCountOne hBlk0
       exact wordTupleSpanTop_of_family_gaugeEquiv_symm hPreparedSpan hGauge
   · have hCountTwo : 2 ≤ g := by omega
-    have hBlk1 : ∀ j, IsNBlkInjective (prepared j) (K ^ 4 + 1) := by
+    have hBlk1 : ∀ j, Kraus.IsNBlkInjective (prepared j) (K ^ 4 + 1) := by
       intro j
       exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
-    have hBlk3 : ∀ j, IsNBlkInjective (prepared j)
+    have hBlk3 : ∀ j, Kraus.IsNBlkInjective (prepared j)
         ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) := by
       intro j
       exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)

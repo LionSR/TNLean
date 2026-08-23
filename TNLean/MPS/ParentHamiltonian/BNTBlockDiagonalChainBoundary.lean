@@ -58,7 +58,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boun
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
     [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)

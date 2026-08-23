@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Semigroup.Primitivity.Helpers
-import QICLean.MPS.Core.CPPrimitive
-import QICLean.MPS.Core.TransferChannel
+import QICLean.Kraus.CPPrimitive
+import QICLean.Kraus.TransferChannel
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.Spectral.TransferOperatorGap
 
@@ -22,7 +22,7 @@ The matrix-product-vector overlap consequence is stated in
 `TNLean.MPS.Overlap.PeripheralToTransferMapGap`.
 -/
 
-open scoped Matrix ComplexOrder BigOperators
+open scoped Matrix ComplexOrder BigOperators Kraus
 open Matrix
 
 namespace MPSTensor
@@ -31,22 +31,22 @@ variable {d D : ℕ}
 
 /-- The transfer map commutes with conjugate transpose: `E(Xᴴ) = (E X)ᴴ`. -/
 lemma transferMap_conjTranspose (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap (d := d) (D := D) A Xᴴ = (transferMap (d := d) (D := D) A X)ᴴ := by
-  simpa only [transferMap_apply, Kraus.map_apply] using (Kraus.map_conjTranspose A X).symm
+    Kraus.transferMap (d := d) (D := D) A Xᴴ = (Kraus.transferMap (d := d) (D := D) A X)ᴴ := by
+  simpa only [Kraus.transferMap_apply, Kraus.map_apply] using (Kraus.map_conjTranspose A X).symm
 
 /-- For the transfer map of an injective normalized tensor, any fixed point with trace
 zero is the zero matrix. -/
 theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hInj : IsInjective A)
+    (hInj : Kraus.IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (hXfix : transferMap (d := d) (D := D) A X = X)
+    (hXfix : Kraus.transferMap (d := d) (D := D) A X = X)
     (htrX : Matrix.trace X = 0) :
     X = 0 :=
   fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
-    (transferMap_isChannel (A := A) hNorm) (injective_implies_irreducibleCP A hInj)
+    (Kraus.isChannel_transferMap A hNorm) (Kraus.injective_implies_irreducibleCP A hInj)
     X hXfix htrX
 
 /-- For the transfer map of an irreducible normalized tensor, any fixed point with trace
@@ -54,35 +54,35 @@ zero is the zero matrix. -/
 theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (hXfix : transferMap (d := d) (D := D) A X = X)
+    (hXfix : Kraus.transferMap (d := d) (D := D) A X = X)
     (htrX : Matrix.trace X = 0) :
     X = 0 :=
   fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
-    (transferMap_isChannel (A := A) hNorm)
-    (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr) X hXfix htrX
+    (Kraus.isChannel_transferMap A hNorm)
+    (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr) X hXfix htrX
 
 /-- Peripheral primitivity of the transfer map of an irreducible normalized tensor implies
 a complementary transfer-map gap for `E - P`, where `P` projects onto a fixed point. -/
 theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosSemidef ∧ ρ ≠ 0 ∧ transferMap (d := d) (D := D) A ρ = ρ ∧
+      ρ.PosSemidef ∧ ρ ≠ 0 ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
         ∃ htr : Matrix.trace ρ ≠ 0,
           spectralRadius ℂ
             ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-              ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
+              ((Kraus.transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
             < 1 := by
-  let E := transferMap (d := d) (D := D) A
-  have hCh : IsChannel E := transferMap_isChannel (A := A) hNorm
+  let E := Kraus.transferMap (d := d) (D := D) A
+  have hCh : IsChannel E := Kraus.isChannel_transferMap A hNorm
   have hIrrMap : IsIrreducibleMap E :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor A hIrr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hCh.exists_posSemidef_fixedPoint (E := E) hDpos
   obtain ⟨htr, hgap⟩ :=
@@ -96,9 +96,9 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
 theorem hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor A)
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     MPSTensor.HasPrimitiveFixedPoint A := by
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
       (A := A) hIrr hNorm hPrim with
@@ -110,19 +110,19 @@ a complementary transfer-map gap for `E - P`, where `P` projects onto a fixed po
 theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hInj : IsInjective A)
+    (hInj : Kraus.IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosSemidef ∧ ρ ≠ 0 ∧ transferMap (d := d) (D := D) A ρ = ρ ∧
+      ρ.PosSemidef ∧ ρ ≠ 0 ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
         ∃ htr : Matrix.trace ρ ≠ 0,
           spectralRadius ℂ
             ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-              ((transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
+              ((Kraus.transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
             < 1 := by
-  have hIrr : IsIrreducibleTensor A :=
-    Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A
-      (injective_implies_irreducibleCP A hInj)
+  have hIrr : Kraus.IsIrreducibleFamily A :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
+      (Kraus.injective_implies_irreducibleCP A hInj)
   exact spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
     (A := A) hIrr hNorm hPrim
 
@@ -131,13 +131,13 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
 theorem hasPrimitiveFixedPoint_of_peripheralPrimitive
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
-    (hInj : IsInjective A)
+    (hInj : Kraus.IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     MPSTensor.HasPrimitiveFixedPoint A := by
-  have hIrr : IsIrreducibleTensor A :=
-    Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap A
-      (injective_implies_irreducibleCP A hInj)
+  have hIrr : Kraus.IsIrreducibleFamily A :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
+      (Kraus.injective_implies_irreducibleCP A hInj)
   exact hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible
     (A := A) hIrr hNorm hPrim
 

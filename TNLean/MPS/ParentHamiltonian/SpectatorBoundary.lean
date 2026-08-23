@@ -104,14 +104,14 @@ virtual matrix. -/
 @[simp] theorem prefixRestrictₗ_groundSpaceMap (A : MPSTensor d D) {K L : ℕ}
     (τ : Fin L → Fin d) (X : Matrix (Fin D) (Fin D) ℂ) :
     prefixRestrictₗ τ (groundSpaceMap A (K + L) X) =
-      groundSpaceMap A K (evalWord A (List.ofFn τ) * X) := by
+      groundSpaceMap A K (Kraus.evalWord A (List.ofFn τ) * X) := by
   ext σ
   simp only [prefixRestrictₗ_apply, groundSpaceMap_apply]
   calc
-    Matrix.trace (evalWord A (List.ofFn (Fin.append σ τ)) * X)
-        = Matrix.trace ((evalWord A (List.ofFn σ) * evalWord A (List.ofFn τ)) * X) := by
-          simp [List.ofFn_fin_append, evalWord_append A]
-    _ = Matrix.trace (evalWord A (List.ofFn σ) * (evalWord A (List.ofFn τ) * X)) := by
+    Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.append σ τ)) * X)
+        = Matrix.trace ((Kraus.evalWord A (List.ofFn σ) * Kraus.evalWord A (List.ofFn τ)) * X) := by
+          simp [List.ofFn_fin_append, Kraus.evalWord_append A]
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Kraus.evalWord A (List.ofFn τ) * X)) := by
           simp [Matrix.mul_assoc]
 
 /-! ### Tail (prefix-spectator) boundary map -/
@@ -128,7 +128,7 @@ where \(u\) is the prefix and \(τ\) is the suffix.
 When \(Y_u = X·A^u\) the output equals the standard \(Γ_{K+L}(X)\). -/
 noncomputable def tailBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
     ((Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace d (K + L) where
-  toFun Y σ := Matrix.trace (evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
+  toFun Y σ := Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
     Y (σ ∘ Fin.castAdd L))
   map_add' Y₁ Y₂ := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c Y := by ext σ; simp [Matrix.trace_smul, smul_eq_mul]
@@ -136,7 +136,7 @@ noncomputable def tailBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
 @[simp] theorem tailBoundaryMap_apply (A : MPSTensor d D) (K L : ℕ)
     (Y : (Fin K → Fin d) → Matrix (Fin D) (Fin D) ℂ) (σ : Cfg d (K + L)) :
     tailBoundaryMap A K L Y σ =
-      Matrix.trace (evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
+      Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.natAdd K)) *
         Y (σ ∘ Fin.castAdd L)) :=
   rfl
 
@@ -149,10 +149,10 @@ theorem tailBoundaryMap_append (A : MPSTensor d D) (K L : ℕ)
       groundSpaceMap A L (Y u) τ := by
   calc
     tailBoundaryMap A K L Y (Fin.append u τ)
-        = Matrix.trace (evalWord A
+        = Matrix.trace (Kraus.evalWord A
             (List.ofFn ((Fin.append u τ) ∘ Fin.natAdd K)) *
           Y ((Fin.append u τ) ∘ Fin.castAdd L)) := rfl
-    _ = Matrix.trace (evalWord A (List.ofFn τ) * Y u) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn τ) * Y u) := by
       have h_suffix : (Fin.append u τ) ∘ Fin.natAdd K = τ := by
         ext i; simp [Fin.append_right]
       have h_prefix : (Fin.append u τ) ∘ Fin.castAdd L = u := by
@@ -176,7 +176,7 @@ factors through the tail boundary map by \(X ↦ (λ u, X·A^u)\).
 theorem tailBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     tailBoundaryMap A K L
-      (fun u : Fin K → Fin d => X * evalWord A (List.ofFn u)) =
+      (fun u : Fin K → Fin d => X * Kraus.evalWord A (List.ofFn u)) =
         groundSpaceMap A (K + L) X := by
   ext σ
   rw [tailBoundaryMap_apply, groundSpaceMap_apply]
@@ -184,16 +184,16 @@ theorem tailBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
   set τ := σ ∘ Fin.natAdd K
   have hσ : σ = Fin.append u τ := Fin.append_castAdd_natAdd.symm
   calc
-    Matrix.trace (evalWord A (List.ofFn τ) * (X * evalWord A (List.ofFn u)))
-        = Matrix.trace (evalWord A (List.ofFn u) *
-          (evalWord A (List.ofFn τ) * X)) := by
-      rw [Matrix.trace_mul_cycle' (evalWord A (List.ofFn τ)) X
-        (evalWord A (List.ofFn u))]
-    _ = Matrix.trace ((evalWord A (List.ofFn u) * evalWord A (List.ofFn τ)) * X) := by
+    Matrix.trace (Kraus.evalWord A (List.ofFn τ) * (X * Kraus.evalWord A (List.ofFn u)))
+        = Matrix.trace (Kraus.evalWord A (List.ofFn u) *
+          (Kraus.evalWord A (List.ofFn τ) * X)) := by
+      rw [Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn τ)) X
+        (Kraus.evalWord A (List.ofFn u))]
+    _ = Matrix.trace ((Kraus.evalWord A (List.ofFn u) * Kraus.evalWord A (List.ofFn τ)) * X) := by
       simp [Matrix.mul_assoc]
-    _ = Matrix.trace (evalWord A (List.ofFn u ++ List.ofFn τ) * X) := by
-      simp [evalWord_append A]
-    _ = Matrix.trace (evalWord A (List.ofFn (Fin.append u τ)) * X) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn u ++ List.ofFn τ) * X) := by
+      simp [Kraus.evalWord_append A]
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.append u τ)) * X) := by
       simp [List.ofFn_fin_append]
     _ = groundSpaceMap A (K + L) X σ := by simp [hσ, groundSpaceMap_apply]
 
@@ -228,7 +228,7 @@ theorem tailBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
     have h_tail_eq : tailRestrictₗ u ψ τ = groundSpaceMap A L (Y u) τ := by
       rw [hY' u]
     rw [tailRestrictₗ_apply, hσ_eq, groundSpaceMap_apply] at h_tail_eq
-    -- h_tail_eq : ψ σ = trace (evalWord A (List.ofFn τ) * Y u)
+    -- h_tail_eq : ψ σ = trace (Kraus.evalWord A (List.ofFn τ) * Y u)
     simpa [groundSpaceMap_apply] using h_tail_eq.symm
 
 /-! ### Left (suffix-spectator) boundary map -/
@@ -245,7 +245,7 @@ where \(u\) is the prefix and \(τ\) is the suffix.
 When \(Z_τ = A^τ·X\) the output equals the standard \(Γ_{K+L}(X)\). -/
 noncomputable def leftBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
     ((Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ] NSiteSpace d (K + L) where
-  toFun Z σ := Matrix.trace (evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
+  toFun Z σ := Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
     Z (σ ∘ Fin.natAdd K))
   map_add' Z₁ Z₂ := by ext σ; simp [Matrix.mul_add, Matrix.trace_add]
   map_smul' c Z := by ext σ; simp [Matrix.trace_smul, smul_eq_mul]
@@ -253,7 +253,7 @@ noncomputable def leftBoundaryMap (A : MPSTensor d D) (K L : ℕ) :
 @[simp] theorem leftBoundaryMap_apply (A : MPSTensor d D) (K L : ℕ)
     (Z : (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ) (σ : Cfg d (K + L)) :
     leftBoundaryMap A K L Z σ =
-      Matrix.trace (evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
+      Matrix.trace (Kraus.evalWord A (List.ofFn (σ ∘ Fin.castAdd L)) *
         Z (σ ∘ Fin.natAdd K)) :=
   rfl
 
@@ -266,10 +266,10 @@ theorem leftBoundaryMap_append (A : MPSTensor d D) (K L : ℕ)
       groundSpaceMap A K (Z τ) u := by
   calc
     leftBoundaryMap A K L Z (Fin.append u τ)
-        = Matrix.trace (evalWord A
+        = Matrix.trace (Kraus.evalWord A
             (List.ofFn ((Fin.append u τ) ∘ Fin.castAdd L)) *
           Z ((Fin.append u τ) ∘ Fin.natAdd K)) := rfl
-    _ = Matrix.trace (evalWord A (List.ofFn u) * Z τ) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn u) * Z τ) := by
       have h_prefix : (Fin.append u τ) ∘ Fin.castAdd L = u := by
         ext i; simp [Fin.append_left]
       have h_suffix : (Fin.append u τ) ∘ Fin.natAdd K = τ := by
@@ -293,7 +293,7 @@ boundary map factors through the left boundary map by \(X ↦ (λ τ, A^τ·X)\)
 theorem leftBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     leftBoundaryMap A K L
-      (fun τ : Fin L → Fin d => evalWord A (List.ofFn τ) * X) =
+      (fun τ : Fin L → Fin d => Kraus.evalWord A (List.ofFn τ) * X) =
         groundSpaceMap A (K + L) X := by
   ext σ
   rw [leftBoundaryMap_apply, groundSpaceMap_apply]
@@ -301,13 +301,13 @@ theorem leftBoundaryMap_factorization (A : MPSTensor d D) (K L : ℕ)
   set τ := σ ∘ Fin.natAdd K
   have hσ : σ = Fin.append u τ := Fin.append_castAdd_natAdd.symm
   calc
-    Matrix.trace (evalWord A (List.ofFn u) * (evalWord A (List.ofFn τ) * X))
-        = Matrix.trace ((evalWord A (List.ofFn u) *
-          evalWord A (List.ofFn τ)) * X) := by
+    Matrix.trace (Kraus.evalWord A (List.ofFn u) * (Kraus.evalWord A (List.ofFn τ) * X))
+        = Matrix.trace ((Kraus.evalWord A (List.ofFn u) *
+          Kraus.evalWord A (List.ofFn τ)) * X) := by
       simp [Matrix.mul_assoc]
-    _ = Matrix.trace (evalWord A (List.ofFn u ++ List.ofFn τ) * X) := by
-      simp [evalWord_append A]
-    _ = Matrix.trace (evalWord A (List.ofFn (Fin.append u τ)) * X) := by
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn u ++ List.ofFn τ) * X) := by
+      simp [Kraus.evalWord_append A]
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.append u τ)) * X) := by
       simp [List.ofFn_fin_append]
     _ = groundSpaceMap A (K + L) X σ := by simp [hσ, groundSpaceMap_apply]
 
@@ -339,7 +339,7 @@ theorem leftBoundaryMap_range_eq (A : MPSTensor d D) (K L : ℕ) :
     have h_pre_eq : prefixRestrictₗ τ ψ u = groundSpaceMap A K (Z τ) u := by
       rw [hZ' τ]
     rw [prefixRestrictₗ_apply, hσ_eq, groundSpaceMap_apply] at h_pre_eq
-    -- h_pre_eq : ψ σ = trace (evalWord A (List.ofFn u) * Z τ)
+    -- h_pre_eq : ψ σ = trace (Kraus.evalWord A (List.ofFn u) * Z τ)
     simpa [groundSpaceMap_apply] using h_pre_eq.symm
 
 /-! ### Euclidean-space transport to open-chain submodules

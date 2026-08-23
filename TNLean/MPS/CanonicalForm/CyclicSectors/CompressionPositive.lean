@@ -55,24 +55,24 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
       _ = P * A i * P := by rw [hP.2]
       _ = A i := by simpa [Matrix.mul_assoc] using hSupp i
   have hword :
-      ∀ {w : List (Fin d)}, w ≠ [] → P * evalWord A w = evalWord A w := by
+      ∀ {w : List (Fin d)}, w ≠ [] → P * Kraus.evalWord A w = Kraus.evalWord A w := by
     intro w hw
     cases w with
     | nil =>
         cases hw rfl
     | cons i w =>
         calc
-          P * evalWord A (i :: w) = P * (A i * evalWord A w) := by rfl
-          _ = (P * A i) * evalWord A w := by rw [Matrix.mul_assoc]
-          _ = A i * evalWord A w := by rw [hleft i]
-          _ = evalWord A (i :: w) := by rfl
+          P * Kraus.evalWord A (i :: w) = P * (A i * Kraus.evalWord A w) := by rfl
+          _ = (P * A i) * Kraus.evalWord A w := by rw [Matrix.mul_assoc]
+          _ = A i * Kraus.evalWord A w := by rw [hleft i]
+          _ = Kraus.evalWord A (i :: w) := by rfl
   intro N hN σ
-  have hPw : P * evalWord A (List.ofFn σ) = evalWord A (List.ofFn σ) := by
+  have hPw : P * Kraus.evalWord A (List.ofFn σ) = Kraus.evalWord A (List.ofFn σ) := by
     apply hword
     exact List.ne_nil_of_length_pos (by simpa only [List.length_ofFn] using hN)
   calc
-    mpv A σ = Matrix.trace (evalWord A (List.ofFn σ)) := by rfl
-    _ = Matrix.trace (P * evalWord A (List.ofFn σ)) :=
+    mpv A σ = Matrix.trace (Kraus.evalWord A (List.ofFn σ)) := by rfl
+    _ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ)) :=
           congrArg Matrix.trace hPw.symm
     _ = mpv C σ := (hCmpv N σ).symm
 

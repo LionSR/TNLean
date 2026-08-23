@@ -221,7 +221,7 @@ theorem mpv_toMPSTensor_pairConfig (M : MPOTensor d D) {N : ℕ}
   induction N with
   | zero => simp
   | succ N ih =>
-      simp only [List.ofFn_succ, MPSTensor.evalWord_cons, MPOTensor.evalWord_cons,
+      simp only [List.ofFn_succ, Kraus.evalWord_cons, MPOTensor.evalWord_cons,
         MPOTensor.toMPSTensor]
       rw [finProdFinEquiv_divNat, finProdFinEquiv_modNat]
       congr 1
@@ -429,7 +429,7 @@ theorem mpv_diagonalTensor (M : MPOTensor d D) {N : ℕ} (σ : Fin N → Fin d) 
     MPSTensor.mpv (diagonalTensor M) σ
       = MPSTensor.mpv M.toMPSTensor (fun k => finProdFinEquiv (σ k, σ k)) := by
   have htensor : diagonalTensor M =
-      MPSTensor.reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor :=
+      Kraus.reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor :=
     funext (diagonalTensor_apply_eq M)
   rw [htensor, MPSTensor.mpv_reindexPhysical (fun i => finProdFinEquiv (i, i)) M.toMPSTensor]
 
@@ -453,11 +453,11 @@ theorem mpv_diagonalTensor_eq_blocks (M : MPOTensor d D)
 /-- Word evaluation of the diagonal MPS tensor equals the MPO word evaluation with equal
 ket and bra words. -/
 theorem evalWord_diagonalTensor (M : MPOTensor d D) (w : List (Fin d)) :
-    MPSTensor.evalWord (diagonalTensor M) w = evalWord M w w := by
+    Kraus.evalWord (diagonalTensor M) w = evalWord M w w := by
   induction w with
   | nil => rfl
   | cons i t ih =>
-    simp only [MPSTensor.evalWord_cons, evalWord_cons, diagonalTensor_apply, ih]
+    simp only [Kraus.evalWord_cons, evalWord_cons, diagonalTensor_apply, ih]
 
 /-- **The diagonal tensor evaluates the density-operator diagonal.** The matrix product
 vector of the diagonal tensor at a configuration `σ` equals the diagonal entry
@@ -523,11 +523,11 @@ theorem mpo_compress_trace_pos (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
 /-- The transfer map of the diagonal tensor of an MPO:
 $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.  It acts on the horizontal bond space;
 the transfer map of the vertically viewed tensor is
-`MPSTensor.transferMap (verticalTensor M)`, which acts on the physical
+`Kraus.transferMap (verticalTensor M)`, which acts on the physical
 space. -/
 noncomputable def diagonalTransferMap (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  MPSTensor.transferMap (diagonalTensor M)
+  Kraus.transferMap (diagonalTensor M)
 
 /-- The multiplicity-expanded block dimensions corresponding to a family of
 positive diagonal weights. -/

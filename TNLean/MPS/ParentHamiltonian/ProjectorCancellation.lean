@@ -103,12 +103,12 @@ theorem inner_limitingMixedGramIntertwining [NeZero D]
       ∑ u : Cfg d K, ∑ j : Cfg d 1,
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-            (evalWord A (List.ofFn j) *
+            (Kraus.evalWord A (List.ofFn j) *
               boundaryFamilyEquiv (D := D) (Cfg d K) x u))
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
             ((Matrix.trace ρ)⁻¹ •
               ((boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
-                evalWord A (List.ofFn u)) * ρ))) := by
+                Kraus.evalWord A (List.ofFn u)) * ρ))) := by
   dsimp only
   simp only [ContinuousLinearMap.comp_apply]
   have hKfiber (j : Cfg d 1) :
@@ -123,12 +123,12 @@ theorem inner_limitingMixedGramIntertwining [NeZero D]
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
   rw [leftVirtualMapES_adjoint_apply]
   have hsum :
-      (∑ j : Cfg d 1, (evalWord A (List.ofFn j))ᴴ *
+      (∑ j : Cfg d 1, (Kraus.evalWord A (List.ofFn j))ᴴ *
         boundaryFamilyEquiv (D := D) (Cfg d 1)
           (boundaryFiberwiseMap (D := D) (Cfg d 1)
             (Matrix.gramReshuffle
               (fixedPointProj ρ (ne_of_gt hρ.trace_pos))) y) j) =
-        ∑ j : Cfg d 1, (evalWord A (List.ofFn j))ᴴ *
+        ∑ j : Cfg d 1, (Kraus.evalWord A (List.ofFn j))ᴴ *
           ((Matrix.trace ρ)⁻¹ •
             (boundaryFamilyEquiv (D := D) (Cfg d 1) y j * ρ)) := by
     apply Finset.sum_congr rfl
@@ -174,12 +174,12 @@ theorem inner_c3_centeredVirtualResidual_eq_gramError [NeZero D]
       ∑ u : Cfg d K, ∑ j : Cfg d 1,
         inner ℂ
           (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
-            (evalWord A (List.ofFn j) *
+            (Kraus.evalWord A (List.ofFn j) *
               boundaryFamilyEquiv (D := D) (Cfg d K) x u))
           ((groundSpaceGram A l - Kinf)
             (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
               (boundaryFamilyEquiv (D := D) (Cfg d 1) y j *
-                evalWord A (List.ofFn u)))) := by
+                Kraus.evalWord A (List.ofFn u)))) := by
   dsimp only
   rw [sub_apply, inner_sub_right,
     inner_limitingMixedGramIntertwining A K ρ hρ x y]

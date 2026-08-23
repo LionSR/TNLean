@@ -280,7 +280,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450. -/
 theorem transformedPhysicalSlice_mul_dependentPhysicalSupportProj
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (β α : Fin D) :
     F.transformedPhysicalSlice β α * F.dependentPhysicalSupportProj =
@@ -519,7 +519,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450. -/
 theorem physicalSlice_mul_sectorCoordinatePhysicalSupportProj
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (β α : Fin D) :
     physicalSlice F.sectorCoordinateTensor β α *
@@ -696,7 +696,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450. -/
 theorem physicalSlice_mul_activePhysicalSupportProj
     (F : PhysicalSectorFactorization K)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (β α : Fin D) :
     physicalSlice K β α * F.activePhysicalSupportProj =
@@ -932,7 +932,7 @@ factor families, which CPSV16 does not make.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     changePhysicalBasis (F.physicalSupportInclusion A)
         (F.activePhysicalSupportRestriction A) = K := by
@@ -957,9 +957,9 @@ the key property enabling the active-support construction used after
 `propSN`. -/
 theorem activePhysicalSupportRestriction_isInjective
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    MPSTensor.IsInjective (F.activePhysicalSupportRestriction A).toMPSTensor :=
+    Kraus.IsInjective (F.activePhysicalSupportRestriction A).toMPSTensor :=
   isInjective_of_eq_changePhysicalBasis
     (F.physicalSupportInclusion A)
     (F.activePhysicalSupportRestriction A) K
@@ -980,7 +980,7 @@ neither of which CPSV16 constructs.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 noncomputable def activePhysicalSupportRestrictionData
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : MPSTensor.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     PhysicalSupportRestrictionData (physicalSupportProj K) K where
   supportDim := F.supportedPhysicalDim A

@@ -400,12 +400,12 @@ def gaugeDeformedSymbolTensor (a : Fin 4) : MPSTensor 4 1 :=
     (1 : Matrix (Fin 1) (Fin 1) ℂ)
 
 private theorem gaugeDeformedSymbolTensor_transferMap (a : Fin 4) :
-    MPSTensor.transferMap (gaugeDeformedSymbolTensor a) = LinearMap.id := by
+    Kraus.transferMap (gaugeDeformedSymbolTensor a) = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext x y
   fin_cases a <;> fin_cases x <;> fin_cases y <;>
-    norm_num [MPSTensor.transferMap_apply, gaugeDeformedSymbolTensor,
+    norm_num [Kraus.transferMap_apply, gaugeDeformedSymbolTensor,
       gaugeDeformedSymbolCoefficient, Matrix.mul_apply, Fin.sum_univ_four,
       Matrix.smul_apply, Matrix.one_apply, map_ofNat] <;>
       simp_all <;> ring

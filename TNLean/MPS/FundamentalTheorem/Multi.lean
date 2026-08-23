@@ -126,7 +126,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 `A_k` and `B_k` are gauge equivalent for every `k`. -/
 lemma fundamentalTheorem_multiBlock_blocks
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k : Fin r, IsInjective (A k))
+    (hA : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hSame : ∀ k : Fin r, SameMPV (A k) (B k)) :
     ∀ k : Fin r, GaugeEquiv (A k) (B k) :=
   fun k => fundamentalTheorem_singleBlock (hA k) (hSame k)
@@ -136,7 +136,7 @@ lemma fundamentalTheorem_multiBlock_blocks
 lemma fundamentalTheorem_multiBlock_global
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : ∀ k : Fin r, IsInjective (A k))
+    (hA : ∀ k : Fin r, Kraus.IsInjective (A k))
     (hSame : ∀ k : Fin r, SameMPV (A k) (B k)) :
     GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
       (toTensorFromBlocks (d := d) (μ := μ) B) :=
@@ -158,7 +158,7 @@ theorem CanonicalForm.toTensor_eq_toTensorFromBlocks (C : CanonicalForm d) :
 theorem fundamentalTheorem_canonicalForm_sameStructure
     (C : CanonicalForm d)
     (B : (k : Fin C.numBlocks) → MPSTensor d (C.blockDim k))
-    (hB_inj : ∀ k, IsInjective (C.blockTensor k))
+    (hB_inj : ∀ k, Kraus.IsInjective (C.blockTensor k))
     (hSame : ∀ k, SameMPV (C.blockTensor k) (B k)) :
     GaugeEquiv (C.toTensor) (toTensorFromBlocks C.μ B) := by
   rw [C.toTensor_eq_toTensorFromBlocks]

@@ -36,7 +36,7 @@ private structure CFIIBlockGaugeData {m : ℕ} (A : MPSTensor d m) where
   normal : IsNormalTensor block
   leftCanonical : IsLeftCanonical block
   fixedPoint : ∃ Λ : Matrix (Fin m) (Fin m) ℂ,
-    Λ.PosDef ∧ Λ.IsDiag ∧ transferMap block Λ = Λ
+    Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap block Λ = Λ
 
 private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ} [NeZero m]
     {A : MPSTensor d m} (hA : IsNormalTensor A) :
@@ -52,7 +52,7 @@ private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ} [NeZero m]
     refine ⟨(unitaryGL V)⁻¹, fun i => ?_⟩
     simp [B, unitaryGL]
   have hGauge : GaugeEquiv A B := hGaugeTP.trans hGaugeUnitary
-  have hNormalAlg : IsNormal B :=
+  have hNormalAlg : Kraus.IsNormal B :=
     isNormal_of_gaugeEquiv hA.isNormal hGauge
   have hNormal : IsNormalTensor B :=
     isNormalTensor_of_isNormal_leftCanonical B hNormalAlg hLeft

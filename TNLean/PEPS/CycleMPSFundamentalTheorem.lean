@@ -385,7 +385,7 @@ section Capstone
 /-- A vanishing physical dimension contradicts block injectivity at positive
 bond dimension. -/
 theorem pos_d_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
-    {A : MPSTensor d D} (hA : MPSTensor.IsNBlkInjective A L) : 0 < d := by
+    {A : MPSTensor d D} (hA : Kraus.IsNBlkInjective A L) : 0 < d := by
   rcases Nat.eq_zero_or_pos d with hd0 | hd
   · exfalso
     obtain ⟨i, _⟩ := MPSTensor.exists_ne_zero_of_isNBlkInjective hL hD hA
@@ -423,8 +423,8 @@ labelled `normal`, lines 1585--1631 of `Papers/1804.04964/paper_normal.tex`,
 strengthened to `n ≥ 2L + 1` per line 1623 and Section `normal_alt`. -/
 theorem fundamentalTheorem_normalMPS {n L d D : ℕ} [NeZero n] (hL : 0 < L)
     (hn : 2 * L + 1 ≤ n) (hD : 0 < D)
-    (A B : MPSTensor d D) (hA : MPSTensor.IsNBlkInjective A L)
-    (hB : MPSTensor.IsNBlkInjective B L)
+    (A B : MPSTensor d D) (hA : Kraus.IsNBlkInjective A L)
+    (hB : Kraus.IsNBlkInjective B L)
     (hAB : ∀ σ : Fin n → Fin d, MPSTensor.mpv A σ = MPSTensor.mpv B σ) :
     ∃ Z : Fin n → GL (Fin D) ℂ, ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ) :=
@@ -455,8 +455,8 @@ labelled `normal`, lines 1585--1631 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalMPS_gauge_unique {n L d D : ℕ} [NeZero n] (hL : 0 < L)
     (hn : 2 * L + 1 ≤ n) (hD : 0 < D) (A B : MPSTensor d D)
-    (hA : MPSTensor.IsNBlkInjective A L)
-    (hB : MPSTensor.IsNBlkInjective B L) (Z Z' : Fin n → GL (Fin D) ℂ)
+    (hA : Kraus.IsNBlkInjective A L)
+    (hB : Kraus.IsNBlkInjective B L) (Z Z' : Fin n → GL (Fin D) ℂ)
     (hZ : ∀ (v : Fin n) (i : Fin d),
       B i = ((Z v)⁻¹ : GL (Fin D) ℂ) * A i * (Z (v + 1) : GL (Fin D) ℂ))
     (hZ' : ∀ (v : Fin n) (i : Fin d),

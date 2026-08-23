@@ -95,7 +95,7 @@ On-site symmetry supplies `SameMPV A (twistedTensor A U g)`, and
 `sameMPV_iff_gaugeEquiv_of_injective` converts equal MPV families into
 gauge equivalence for injective tensors. -/
 theorem gaugeEquiv_twistedTensor_of_injective
-    (A : MPSTensor d D) (hA : IsInjective A)
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) :
     ∀ g : G, GaugeEquiv A (twistedTensor A U g) := by
@@ -124,14 +124,14 @@ noncomputable def blockKronAction (L : ℕ)
 
 /-- Word evaluation of a twisted tensor expands over the intermediate word: for a
 length-`L` index function `b`,
-`evalWord (twistedTensor A U g) (List.ofFn b) =
-  ∑ v, (∏ k, (U g) (b k) (v k)) • evalWord A (List.ofFn v)`. -/
+`Kraus.evalWord (twistedTensor A U g) (List.ofFn b) =
+  ∑ v, (∏ k, (U g) (b k) (v k)) • Kraus.evalWord A (List.ofFn v)`. -/
 lemma evalWord_twistedTensor_ofFn
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
     ∀ {L : ℕ} (b : Fin L → Fin d),
-      evalWord (twistedTensor A U g) (List.ofFn b) =
+      Kraus.evalWord (twistedTensor A U g) (List.ofFn b) =
         ∑ v : Fin L → Fin d,
-          (∏ k : Fin L, (U g) (b k) (v k)) • evalWord A (List.ofFn v) := by
+          (∏ k : Fin L, (U g) (b k) (v k)) • Kraus.evalWord A (List.ofFn v) := by
   classical
   intro L b
   rw [evalWord_ofFn_eq_prod]

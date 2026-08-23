@@ -177,23 +177,23 @@ theorem sameMPV₂_toTensorFromBlocks_of_isometry_family
   simp only [one_pow, one_smul]
   simp only [mpv, coeff]
   set w : List (Fin d) := List.ofFn σ with hw
-  calc Matrix.trace (evalWord A w)
-      = Matrix.trace ((∑ k : Fin r, V k * (V k)ᴴ) * evalWord A w) := by
+  calc Matrix.trace (Kraus.evalWord A w)
+      = Matrix.trace ((∑ k : Fin r, V k * (V k)ᴴ) * Kraus.evalWord A w) := by
         rw [hsum, Matrix.one_mul]
-    _ = ∑ k : Fin r, Matrix.trace (V k * (V k)ᴴ * evalWord A w) := by
+    _ = ∑ k : Fin r, Matrix.trace (V k * (V k)ᴴ * Kraus.evalWord A w) := by
         rw [Finset.sum_mul, Matrix.trace_sum]
-    _ = ∑ k : Fin r, Matrix.trace (evalWord (blocks k) w) := by
+    _ = ∑ k : Fin r, Matrix.trace (Kraus.evalWord (blocks k) w) := by
         refine Finset.sum_congr rfl fun k _ => ?_
-        calc Matrix.trace (V k * (V k)ᴴ * evalWord A w)
-            = Matrix.trace (V k * ((V k)ᴴ * evalWord A w)) := by
+        calc Matrix.trace (V k * (V k)ᴴ * Kraus.evalWord A w)
+            = Matrix.trace (V k * ((V k)ᴴ * Kraus.evalWord A w)) := by
               rw [Matrix.mul_assoc]
-          _ = Matrix.trace (((V k)ᴴ * evalWord A w) * V k) := Matrix.trace_mul_comm _ _
-          _ = Matrix.trace ((V k)ᴴ * (evalWord A w * V k)) := by rw [Matrix.mul_assoc]
-          _ = Matrix.trace ((V k)ᴴ * (V k * evalWord (blocks k) w)) := by
-              rw [evalWord_intertwine A (blocks k) (V k) (hint k) w]
-          _ = Matrix.trace (((V k)ᴴ * V k) * evalWord (blocks k) w) := by
+          _ = Matrix.trace (((V k)ᴴ * Kraus.evalWord A w) * V k) := Matrix.trace_mul_comm _ _
+          _ = Matrix.trace ((V k)ᴴ * (Kraus.evalWord A w * V k)) := by rw [Matrix.mul_assoc]
+          _ = Matrix.trace ((V k)ᴴ * (V k * Kraus.evalWord (blocks k) w)) := by
+              rw [Kraus.evalWord_intertwine A (blocks k) (V k) (hint k) w]
+          _ = Matrix.trace (((V k)ᴴ * V k) * Kraus.evalWord (blocks k) w) := by
               rw [Matrix.mul_assoc]
-          _ = Matrix.trace (evalWord (blocks k) w) := by rw [hiso k, Matrix.one_mul]
+          _ = Matrix.trace (Kraus.evalWord (blocks k) w) := by rw [hiso k, Matrix.one_mul]
 
 /-- Strong-induction core of the direct-sum decomposition under
 invariant-projector closure (arXiv:1606.00608, lines 253--254): every tensor with projector
@@ -210,7 +210,7 @@ private theorem exists_irreducible_isometry_family_aux :
         (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
         (∀ (k : Fin r) (i : Fin d), A i * V k = V k * blocks k i) ∧
         (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
-        (∀ k, IsIrreducibleTensor (blocks k)) := by
+        (∀ k, Kraus.IsIrreducibleFamily (blocks k)) := by
   intro D
   induction D using Nat.strong_induction_on with
   | _ D ih =>
@@ -222,7 +222,7 @@ private theorem exists_irreducible_isometry_family_aux :
       fun k => k.elim0, fun k => k.elim0,
       by ext i j; exact i.elim0,
       fun k => k.elim0, fun k => k.elim0, fun k => k.elim0, fun k => k.elim0⟩
-  by_cases hirrA : IsIrreducibleTensor A
+  by_cases hirrA : Kraus.IsIrreducibleFamily A
   · -- Base case: `A` itself is irreducible; take the single corner `V = 1`.
     refine ⟨1, fun _ => D, fun _ => A, fun _ => (1 : Matrix (Fin D) (Fin D) ℂ),
       fun _ => hDpos, fun _ => by simp, by simp, ?_, fun _ i => by simp,
@@ -230,7 +230,7 @@ private theorem exists_irreducible_isometry_family_aux :
     intro k l hkl
     exact absurd (Subsingleton.elim k l) hkl
   -- Inductive step: split along a reducing projection and recurse on the corners.
-  rw [IsIrreducibleTensor, not_not] at hirrA
+  rw [Kraus.IsIrreducibleFamily, not_not] at hirrA
   obtain ⟨P, hPproj, hP0, hP1, hLower⟩ := hirrA
   have hCommP : ∀ i : Fin d, P * A i = A i * P :=
     commutes_of_hasInvariantProjectorClosure_of_lowerZero A P hClosure hPproj hLower
@@ -436,7 +436,7 @@ private theorem exists_irreducible_isometry_family_aux :
         _ = ((W₂ a)ᴴ * B) * V₂ᴴ := (Matrix.mul_assoc _ _ _).symm
         _ = (blocks₂ a i * (W₂ a)ᴴ) * V₂ᴴ := by rw [h2]
         _ = blocks₂ a i * ((W₂ a)ᴴ * V₂ᴴ) := Matrix.mul_assoc _ _ _
-  have hirrS : ∀ s, IsIrreducibleTensor (blocksS s) := by
+  have hirrS : ∀ s, Kraus.IsIrreducibleFamily (blocksS s) := by
     rintro (a | a)
     exacts [hirr₁ a, hirr₂ a]
   -- Reindex the sum type to `Fin (r₁ + r₂)`.
@@ -485,7 +485,7 @@ theorem exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClo
       (∀ (k : Fin r) (i : Fin d), A i * V k = V k * blocks k i) ∧
       (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i = blocks k i * (V k)ᴴ) ∧
       (∀ (k : Fin r) (i : Fin d), blocks k i = (V k)ᴴ * A i * V k) ∧
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   obtain ⟨r, dim, blocks, V, hpos, hiso, hsum, horth, hint, hintstar, hirr⟩ :=
     exists_irreducible_isometry_family_aux D A hClosure

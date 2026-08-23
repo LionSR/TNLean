@@ -51,14 +51,14 @@ private noncomputable def cpsvExample34WordDiag (w : List (Fin 2)) : Fin 2 → �
   | 1 => cpsvExample34InvSqrtTwo ^ w.length
 
 private theorem cpsvExample34_evalWord (w : List (Fin 2)) :
-    evalWord cpsvExample34Tensor w = Matrix.diagonal (cpsvExample34WordDiag w) := by
+    Kraus.evalWord cpsvExample34Tensor w = Matrix.diagonal (cpsvExample34WordDiag w) := by
   induction w with
   | nil =>
       ext a b
       fin_cases a <;> fin_cases b <;>
         simp [cpsvExample34WordDiag]
   | cons i w ih =>
-      rw [evalWord_cons, ih]
+      rw [Kraus.evalWord_cons, ih]
       fin_cases i <;>
         ext a b <;> fin_cases a <;> fin_cases b <;>
         simp [cpsvExample34Tensor, cpsvExample34WordDiag, Matrix.mul_apply,
@@ -77,7 +77,7 @@ private theorem cpsvExample34_forall_ofFn_zero_iff {N : ℕ} (σ : Fin N → Fin
     simpa using h ⟨k.val, hk⟩
 
 private theorem cpsvExample34_component_evalWord (a : Fin 2) (w : List (Fin 2)) :
-    evalWord (fun i : Fin 2 => fun _ _ : Fin 1 => cpsvExample34Tensor i a a) w =
+    Kraus.evalWord (fun i : Fin 2 => fun _ _ : Fin 1 => cpsvExample34Tensor i a a) w =
       fun _ _ : Fin 1 => cpsvExample34WordDiag w a := by
   let B : MPSTensor 2 1 := fun i _ _ => cpsvExample34Tensor i a a
   let V : Matrix (Fin 2) (Fin 1) ℂ := fun b _ => if b = a then 1 else 0
@@ -87,28 +87,28 @@ private theorem cpsvExample34_component_evalWord (a : Fin 2) (w : List (Fin 2)) 
     simp only [Matrix.mul_apply, Fin.sum_univ_two, Fin.sum_univ_one]
     fin_cases a <;> fin_cases i <;> fin_cases b <;> fin_cases c <;>
       simp [B, V, cpsvExample34Tensor]
-  have hw := evalWord_intertwine cpsvExample34Tensor B V hInt w
+  have hw := Kraus.evalWord_intertwine cpsvExample34Tensor B V hInt w
   rw [cpsvExample34_evalWord] at hw
   ext x y
   fin_cases x
   fin_cases y
   have haa := congrFun (congrFun hw a) 0
   change (∑ k : Fin 2, Matrix.diagonal (cpsvExample34WordDiag w) a k * V k 0) =
-    ∑ k : Fin 1, V a k * evalWord B w k 0 at haa
+    ∑ k : Fin 1, V a k * Kraus.evalWord B w k 0 at haa
   rw [Fin.sum_univ_two, Fin.sum_univ_one] at haa
   fin_cases a <;> simpa [B, V] using haa.symm
 
 private theorem cpsvExample34ZeroTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
     mpv cpsvExample34ZeroTensor σ = if ∀ k, σ k = 0 then 1 else 0 := by
   rw [mpv, coeff]
-  change Matrix.trace (evalWord (fun i _ _ => cpsvExample34Tensor i 0 0) (List.ofFn σ)) = _
+  change Matrix.trace (Kraus.evalWord (fun i _ _ => cpsvExample34Tensor i 0 0) (List.ofFn σ)) = _
   rw [Matrix.trace_fin_one, cpsvExample34_component_evalWord]
   simp [cpsvExample34WordDiag, cpsvExample34_forall_ofFn_zero_iff]
 
 private theorem cpsvExample34PlusTensor_mpv {N : ℕ} (σ : Fin N → Fin 2) :
     mpv cpsvExample34PlusTensor σ = cpsvExample34InvSqrtTwo ^ N := by
   rw [mpv, coeff]
-  change Matrix.trace (evalWord (fun i _ _ => cpsvExample34Tensor i 1 1) (List.ofFn σ)) = _
+  change Matrix.trace (Kraus.evalWord (fun i _ _ => cpsvExample34Tensor i 1 1) (List.ofFn σ)) = _
   rw [Matrix.trace_fin_one, cpsvExample34_component_evalWord]
   simp [cpsvExample34WordDiag]
 
@@ -180,7 +180,7 @@ private theorem cpsvExample34_letter_diagonal (i : Fin 2) :
     simp [cpsvExample34Tensor, cpsvExample34WordDiag]
 
 private theorem cpsvExample34_transferMap_isEntrywiseMultiplier :
-    IsEntrywiseMultiplier (transferMap cpsvExample34Tensor) := by
+    IsEntrywiseMultiplier (Kraus.transferMap cpsvExample34Tensor) := by
   let c : Matrix (Fin 2) (Fin 2) ℂ := fun a b =>
     ∑ i : Fin 2, cpsvExample34WordDiag [i] a *
       star (cpsvExample34WordDiag [i] b)
@@ -198,7 +198,7 @@ private theorem cpsvExample34_transferMap_isEntrywiseMultiplier :
 
 private theorem cpsvExample34_transfer_commutes_physicalObservableTransfer
     (L : ℕ) (O : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :
-    Commute (transferMap cpsvExample34Tensor)
+    Commute (Kraus.transferMap cpsvExample34Tensor)
       (physicalObservableTransfer cpsvExample34Tensor L O) :=
   isEntrywiseMultiplier_commute cpsvExample34_transferMap_isEntrywiseMultiplier
     (cpsvExample34_physicalObservableTransfer_isEntrywiseMultiplier L O)
@@ -209,7 +209,7 @@ orthogonality, ZCL, or RFP predicates. -/
 theorem cpsvExample34_isPhysicalCID :
     IsPhysicalCID cpsvExample34Tensor := by
   intro L₁ L₂ O₁ O₂ n₁ n₂ m₁ m₂ _ _ hsum
-  let E := transferMap cpsvExample34Tensor
+  let E := Kraus.transferMap cpsvExample34Tensor
   let F₁ := physicalObservableTransfer cpsvExample34Tensor L₁ O₁
   let F₂ := physicalObservableTransfer cpsvExample34Tensor L₂ O₂
   have hComm₁ : Commute E F₁ :=
@@ -251,7 +251,7 @@ private def offDiagonalUnit : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(0 : ℂ), 1; 0, 0]
 
 private theorem cpsvExample34_transferMap_offDiagonalUnit :
-    transferMap cpsvExample34Tensor offDiagonalUnit =
+    Kraus.transferMap cpsvExample34Tensor offDiagonalUnit =
       cpsvExample34InvSqrtTwo • offDiagonalUnit := by
   ext a b
   transfer_simp

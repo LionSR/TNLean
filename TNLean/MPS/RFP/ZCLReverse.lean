@@ -171,8 +171,8 @@ with the transfer map of that sector. -/
 theorem directSumSectorCompression_transferMap
     (B : (k : Fin r) → MPSTensor d (dim k)) (j : Fin r)
     (X : Matrix (Fin (∑ k, dim k)) (Fin (∑ k, dim k)) ℂ) :
-    directSumSectorCompression dim j (transferMap (directSumTensor B) X) =
-      transferMap (B j) (directSumSectorCompression dim j X) := by
+    directSumSectorCompression dim j (Kraus.transferMap (directSumTensor B) X) =
+      Kraus.transferMap (B j) (directSumSectorCompression dim j X) := by
   classical
   let e := finSigmaFinEquiv (m := r) (n := dim)
   let Y := Matrix.reindex e.symm e.symm X
@@ -181,18 +181,18 @@ theorem directSumSectorCompression_transferMap
     simp [Y, e, Matrix.reindex_apply]
   have hblock := blockDiagonal'_transferSum_toBlock B Y j j
   calc
-    directSumSectorCompression dim j (transferMap (directSumTensor B) X) =
+    directSumSectorCompression dim j (Kraus.transferMap (directSumTensor B) X) =
         directSumSectorCompression dim j
-          (transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by rw [hXY]
+          (Kraus.transferMap (directSumTensor B) (Matrix.reindex e e Y)) := by rw [hXY]
     _ = directSumSectorCompression dim j
           (Matrix.reindex e e (blockTransferSum B Y)) := by
             rw [transferMap_directSumTensor_reindex]
-    _ = transferMap (B j)
+    _ = Kraus.transferMap (B j)
           (Y.submatrix (blockIncl j dim) (blockIncl j dim)) := by
             rw [directSumSectorCompression_reindex]
-            simpa only [blockTransferSum, mixedTransferMap₂_self] using hblock
-    _ = transferMap (B j) (directSumSectorCompression dim j X) := by
-            apply congrArg (transferMap (B j))
+            simpa only [blockTransferSum, Kraus.mixedTransferMap₂_self] using hblock
+    _ = Kraus.transferMap (B j) (directSumSectorCompression dim j X) := by
+            apply congrArg (Kraus.transferMap (B j))
             ext a b
             simp [directSumSectorCompression, blockIncl, Y, e, Matrix.reindex_apply]
 
@@ -200,8 +200,8 @@ theorem directSumSectorCompression_transferMap
 theorem directSumSectorCompression_transferMap_pow
     (B : (k : Fin r) → MPSTensor d (dim k)) (j : Fin r) (n : ℕ)
     (X : Matrix (Fin (∑ k, dim k)) (Fin (∑ k, dim k)) ℂ) :
-    directSumSectorCompression dim j (((transferMap (directSumTensor B)) ^ n) X) =
-      ((transferMap (B j)) ^ n) (directSumSectorCompression dim j X) := by
+    directSumSectorCompression dim j (((Kraus.transferMap (directSumTensor B)) ^ n) X) =
+      ((Kraus.transferMap (B j)) ^ n) (directSumSectorCompression dim j X) := by
   induction n generalizing X with
   | zero => simp
   | succ n ih =>
@@ -262,16 +262,16 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
     (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)
     {ν : ℂ} {r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hν_ne : ν ≠ 0) (hν_norm : ‖ν‖ < 1)
-    (_hr : Module.End.HasEigenvector (transferMap (P.basis j)) ν r)
+    (_hr : Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r)
     (hl : Module.End.HasEigenvector
-      (Matrix.traceAdjointMap (transferMap (P.basis j))) ν l)
+      (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l)
     (hlr : Matrix.trace (l * r) = 1) :
     ¬ IsPositiveGapPhysicalCID (directSumTensor P.basis) := by
   classical
   let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  let E := transferMap (P.basis j)
+  let E := Kraus.transferMap (P.basis j)
   have hCh : IsChannel E :=
-    transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
+    Kraus.isChannel_transferMap (P.basis j) (hCF.basis_left_canonical j)
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor
       (P.basis j) (hCF.basis_irreducible j)
@@ -302,20 +302,20 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
     unfold physicalTwoPointExpectation
     rw [hO₁_map, hO₂_map]
     have hcomp : directSumSectorRankOne P.basisDim j r 1 ∘ₗ
-          ((transferMap (directSumTensor P.basis)) ^ n₂) ∘ₗ
+          ((Kraus.transferMap (directSumTensor P.basis)) ^ n₂) ∘ₗ
           directSumSectorRankOne P.basisDim j ρ l ∘ₗ
-          ((transferMap (directSumTensor P.basis)) ^ n₁) =
+          ((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) =
         (ν ^ n₁) • directSumSectorRankOne P.basisDim j r l := by
       apply LinearMap.ext
       intro X
       let c := Matrix.trace (l * directSumSectorCompression P.basisDim j
-        (((transferMap (directSumTensor P.basis)) ^ n₁) X))
+        (((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) X))
       have hc : c = ν ^ n₁ * Matrix.trace
           (l * directSumSectorCompression P.basisDim j X) := by
         change Matrix.trace (l * directSumSectorCompression P.basisDim j
-          (((transferMap (directSumTensor P.basis)) ^ n₁) X)) = _
+          (((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) X)) = _
         rw [show directSumSectorCompression P.basisDim j
-            (((transferMap (directSumTensor P.basis)) ^ n₁) X) =
+            (((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) X) =
           (E ^ n₁) (directSumSectorCompression P.basisDim j X) from
             directSumSectorCompression_transferMap_pow (dim := P.basisDim)
               (B := P.basis) (j := j) n₁ X]
@@ -324,7 +324,7 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
         rw [Module.End.pow_apply]
         exact Function.IsFixedPt.iterate hρ_fixed n₂
       have hmid : directSumSectorCompression P.basisDim j
-          (((transferMap (directSumTensor P.basis)) ^ n₂)
+          (((Kraus.transferMap (directSumTensor P.basis)) ^ n₂)
             (c • directSumSectorInclusion P.basisDim j ρ)) = c • ρ := by
         calc
           _ = (E ^ n₂) (directSumSectorCompression P.basisDim j
@@ -335,7 +335,7 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
           _ = c • (E ^ n₂) ρ := by rw [map_smul]
           _ = c • ρ := by rw [hρ_pow]
       change Matrix.trace (1 * directSumSectorCompression P.basisDim j
-          (((transferMap (directSumTensor P.basis)) ^ n₂)
+          (((Kraus.transferMap (directSumTensor P.basis)) ^ n₂)
             (c • directSumSectorInclusion P.basisDim j ρ))) •
           directSumSectorInclusion P.basisDim j r =
         ν ^ n₁ • (Matrix.trace (l * directSumSectorCompression P.basisDim j X) •
@@ -367,9 +367,9 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_p
       ¬ IsTransferIdempotent (P.basis j) →
         ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
           ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (transferMap (P.basis j)) ν r ∧
+          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
           Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (transferMap (P.basis j))) ν l ∧
+            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
           Matrix.trace (l * r) = 1)
     (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) := by
@@ -380,7 +380,7 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_p
   intro j j'
   by_cases hEq : j = j'
   · subst j'
-    rw [mixedTransferMap₂_self]
+    rw [Kraus.mixedTransferMap₂_self]
     by_contra hnot
     obtain ⟨ν, r, l, hν_ne, hν_norm, hr, hl, hlr⟩ := hspectral j hnot
     exact hCF.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
@@ -402,9 +402,9 @@ theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_
       ¬ IsTransferIdempotent (P.basis j) →
         ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
           ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (transferMap (P.basis j)) ν r ∧
+          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
           Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (transferMap (P.basis j))) ν l ∧
+            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
           Matrix.trace (l * r) = 1) :
     IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis ↔
       IsTransferIdempotent (directSumTensor P.basis) := by
@@ -436,9 +436,9 @@ theorem isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL_of_spectral_pair
       ¬ IsTransferIdempotent (P.basis j) →
         ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
           ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (transferMap (P.basis j)) ν r ∧
+          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
           Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (transferMap (P.basis j))) ν l ∧
+            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
           Matrix.trace (l * r) = 1)
     (hZCL : IsPhysicalBNTZCL (directSumTensor P.basis) P.basis) :
     IsTransferIdempotent (directSumTensor P.basis) :=
@@ -468,12 +468,12 @@ theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_po
       (O₁ O₂ : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ),
       0 < L ∧ ∀ n₁ n₂ : ℕ,
         physicalTwoPointExpectation (directSumTensor P.basis) L L O₁ O₂ n₁ n₂ =
-          Matrix.trace (u * ((transferMap (P.basis j)) ^ n₁) v) := by
+          Matrix.trace (u * ((Kraus.transferMap (P.basis j)) ^ n₁) v) := by
   classical
   let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-  let E := transferMap (P.basis j)
+  let E := Kraus.transferMap (P.basis j)
   have hCh : IsChannel E :=
-    transferMap_isChannel (P.basis j) (hCF.basis_left_canonical j)
+    Kraus.isChannel_transferMap (P.basis j) (hCF.basis_left_canonical j)
   have hIrr : IsIrreducibleMap E :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor
       (P.basis j) (hCF.basis_irreducible j)
@@ -500,22 +500,22 @@ theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_po
   unfold physicalTwoPointExpectation
   rw [hO₁_map, hO₂_map]
   have hcomp : directSumSectorRankOne P.basisDim j v 1 ∘ₗ
-        ((transferMap (directSumTensor P.basis)) ^ n₂) ∘ₗ
+        ((Kraus.transferMap (directSumTensor P.basis)) ^ n₂) ∘ₗ
         directSumSectorRankOne P.basisDim j ρ u ∘ₗ
-        ((transferMap (directSumTensor P.basis)) ^ n₁) =
+        ((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) =
       directSumSectorRankOne P.basisDim j v
         (Matrix.traceAdjointMap (E ^ n₁) u) := by
     apply LinearMap.ext
     intro X
     let c := Matrix.trace (u * directSumSectorCompression P.basisDim j
-      (((transferMap (directSumTensor P.basis)) ^ n₁) X))
+      (((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) X))
     have hc : c = Matrix.trace
         (Matrix.traceAdjointMap (E ^ n₁) u *
           directSumSectorCompression P.basisDim j X) := by
       change Matrix.trace (u * directSumSectorCompression P.basisDim j
-          (((transferMap (directSumTensor P.basis)) ^ n₁) X)) = _
+          (((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) X)) = _
       rw [show directSumSectorCompression P.basisDim j
-          (((transferMap (directSumTensor P.basis)) ^ n₁) X) =
+          (((Kraus.transferMap (directSumTensor P.basis)) ^ n₁) X) =
         (E ^ n₁) (directSumSectorCompression P.basisDim j X) from
           directSumSectorCompression_transferMap_pow (dim := P.basisDim)
             (B := P.basis) (j := j) n₁ X]
@@ -524,7 +524,7 @@ theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_po
       rw [Module.End.pow_apply]
       exact Function.IsFixedPt.iterate hρ_fixed n₂
     have hmid : directSumSectorCompression P.basisDim j
-        (((transferMap (directSumTensor P.basis)) ^ n₂)
+        (((Kraus.transferMap (directSumTensor P.basis)) ^ n₂)
           (c • directSumSectorInclusion P.basisDim j ρ)) = c • ρ := by
       calc
         _ = (E ^ n₂) (directSumSectorCompression P.basisDim j
@@ -536,7 +536,7 @@ theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_po
         _ = c • (E ^ n₂) ρ := by rw [map_smul]
         _ = c • ρ := by rw [hρ_pow]
     change Matrix.trace (1 * directSumSectorCompression P.basisDim j
-        (((transferMap (directSumTensor P.basis)) ^ n₂)
+        (((Kraus.transferMap (directSumTensor P.basis)) ^ n₂)
           (c • directSumSectorInclusion P.basisDim j ρ))) •
         directSumSectorInclusion P.basisDim j v =
       Matrix.trace (Matrix.traceAdjointMap (E ^ n₁) u *
@@ -569,9 +569,9 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
   intro j j'
   by_cases hEq : j = j'
   · subst j'
-    rw [mixedTransferMap₂_self]
-    change transferMap (P.basis j) ∘ₗ transferMap (P.basis j) =
-      transferMap (P.basis j)
+    rw [Kraus.mixedTransferMap₂_self]
+    change Kraus.transferMap (P.basis j) ∘ₗ Kraus.transferMap (P.basis j) =
+      Kraus.transferMap (P.basis j)
     apply LinearMap.ext
     intro v
     apply (Matrix.ext_iff_trace_mul_left).2

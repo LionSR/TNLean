@@ -441,13 +441,13 @@ private lemma katoCFBlock_transferMap_eq_id_aux (s : ℂ) (B : MPSTensor 4 1)
     (hB2 : (B 2) 0 0 = 0) (hB3 : (B 3) 0 0 = s)
     (hs_sum : blockLetterAmplitude * star blockLetterAmplitude +
               s * star s = 1) :
-    MPSTensor.transferMap B = LinearMap.id := by
+    Kraus.transferMap B = LinearMap.id := by
   apply LinearMap.ext; intro X
   ext i j
   have hi : i = (0 : Fin 1) := Subsingleton.elim _ _
   have hj : j = (0 : Fin 1) := Subsingleton.elim _ _
   rw [hi, hj]
-  rw [MPSTensor.transferMap_apply]
+  rw [Kraus.transferMap_apply]
   calc
     (∑ p : Fin 4, (B p * X * (B p)ᴴ)) 0 0
         = ∑ p : Fin 4, ((B p * X * (B p)ᴴ) 0 0) := rfl
@@ -467,7 +467,7 @@ private lemma katoCFBlock_transferMap_eq_id_aux (s : ℂ) (B : MPSTensor 4 1)
     _ = X 0 0 := by simp
 
 private lemma katoCFBlock0_transferMap_eq_id :
-    MPSTensor.transferMap katoCFBlock0 = LinearMap.id :=
+    Kraus.transferMap katoCFBlock0 = LinearMap.id :=
   katoCFBlock_transferMap_eq_id_aux blockLetterAmplitude katoCFBlock0
     (by simp [katoCFBlock0]) (by simp [katoCFBlock0])
     (by simp [katoCFBlock0]) (by simp [katoCFBlock0])
@@ -478,7 +478,7 @@ private lemma katoCFBlock0_transferMap_eq_id :
       norm_num)
 
 private lemma katoCFBlock1_transferMap_eq_id :
-    MPSTensor.transferMap katoCFBlock1 = LinearMap.id :=
+    Kraus.transferMap katoCFBlock1 = LinearMap.id :=
   katoCFBlock_transferMap_eq_id_aux (-blockLetterAmplitude) katoCFBlock1
     (by simp [katoCFBlock1]) (by simp [katoCFBlock1])
     (by simp [katoCFBlock1]) (by simp [katoCFBlock1])

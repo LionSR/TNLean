@@ -15,7 +15,7 @@ This module collects the tensor-scaling identities that are used both by the
 canonical-form construction and by transfer-normalization arguments.
 -/
 
-open scoped Matrix ComplexOrder BigOperators Matrix.Norms.Operator
+open scoped Matrix ComplexOrder BigOperators Matrix.Norms.Operator Kraus
 
 namespace MPSTensor
 
@@ -23,8 +23,8 @@ variable {d D : ℕ}
 
 /-- Scaling an MPS tensor by `c` scales the transfer map by `c * star c`. -/
 theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    transferMap (fun i => c • A i) X = (c * starRingEnd ℂ c) • transferMap A X := by
-  simp only [transferMap_apply, Matrix.conjTranspose_smul]
+    Kraus.transferMap (fun i => c • A i) X = (c * starRingEnd ℂ c) • Kraus.transferMap A X := by
+  simp only [Kraus.transferMap_apply, Matrix.conjTranspose_smul]
   simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
   rfl
 
@@ -33,21 +33,21 @@ theorem spectralRadius_transferMap_smul [Nonempty (Fin D)]
     (c : ℂ) (hc : c ≠ 0) (A : MPSTensor d D) :
     spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (transferMap (fun i => c • A i))) =
+          (Kraus.transferMap (fun i => c • A i))) =
       (ENNReal.ofNNReal ‖c‖₊) ^ 2 *
         spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (transferMap A)) := by
+            (Kraus.transferMap A)) := by
   let E := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-    (transferMap A)
+    (Kraus.transferMap A)
   have hmap :
       (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (transferMap (fun i => c • A i)) =
+          (Kraus.transferMap (fun i => c • A i)) =
         (c * starRingEnd ℂ c) • E := by
     apply ContinuousLinearMap.ext
     intro X
-    change transferMap (fun i => c • A i) X =
-      (c * starRingEnd ℂ c) • transferMap A X
+    change Kraus.transferMap (fun i => c • A i) X =
+      (c * starRingEnd ℂ c) • Kraus.transferMap A X
     exact transferMap_smul c A X
   rw [hmap]
   change spectralRadius ℂ ((c * starRingEnd ℂ c) • E) =
@@ -130,7 +130,7 @@ theorem isPeriodic_smul_of_norm_one
     (A : MPSTensor d D) (hA : IsPeriodic m A) :
     IsPeriodic m (fun i => c • A i) := by
   have hc_ne : c ≠ 0 := Complex.ne_zero_of_norm_eq_one hc
-  have hTransfer : transferMap (fun i => c • A i) = transferMap A := by
+  have hTransfer : Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A := by
     ext X : 1
     rw [transferMap_smul]
     have hsc : c * starRingEnd ℂ c = 1 := by
@@ -145,7 +145,7 @@ theorem isPeriodic_smul_of_norm_one
 theorem mpv_smul (c : ℂ) (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
     mpv (fun i => c • A i) σ = c ^ N * mpv A σ := by
   simp only [mpv, coeff]
-  rw [evalWord_smul]
+  rw [Kraus.evalWord_smul]
   simp [List.length_ofFn, Matrix.trace_smul]
 
 /-- The phase `μ / ‖μ‖` of a nonzero scalar has unit norm. -/

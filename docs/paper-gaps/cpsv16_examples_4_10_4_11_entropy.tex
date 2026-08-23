@@ -208,6 +208,45 @@ literal diagram in
 \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv} and for its
 scale-invariant repair.
 
+\paragraph{Local fix (corrected Example 4.10 tensor).}
+The module \doclink{TNLean/MPS/MPDO/CPSVExample410Operator} defines the
+left--right correlated flip at the fixed probability $p=1/4$.  It is not a
+formalization of the repeated-left expression.  The declaration
+\leanid{MPOTensor.CPSVExample410Operator.M_isMPDO} proves positivity at every
+chain length.  Its physical-trace transfer is the nonzero projector
+\[
+  P=\frac12\begin{pmatrix}
+    1&0&0&1\\
+    0&0&0&0\\
+    0&0&0&0\\
+    1&0&0&1
+  \end{pmatrix}.
+\]
+It satisfies $P^2=P$.  Consequently,
+\leanid{MPOTensor.CPSVExample410Operator.M_isSourceZCL} proves source zero
+correlation length for the corrected tensor.
+
+\paragraph{Project derivation (corrected one- through four-site spectra).}
+The module \doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} identifies each
+normalized reduced operator as an isometric image of a diagonal bond-window
+distribution.  The declarations
+\leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_one},
+\leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_two},
+\leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_three}, and
+\leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_four} prove the full
+root multisets
+\begin{align*}
+    L=1: & \quad \{0^{[0]},(1/4)^{[4]}\},                                   \\
+    L=2: & \quad \{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\},                     \\
+    L=3: & \quad \{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\},                   \\
+    L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},(9/128)^{[3]}\}.
+\end{align*}
+These are project-derived consequences of the corrected $p=1/4$ reading, not
+formulas printed in CPSV16.  The corresponding tensor block-entropy
+identifications have not been proved.  In particular, the established roots
+alone are not used to infer the entropy formulas or
+$\neg\mathrm{IsSAL}$.
+
 The scalar endpoints are now certified in
 \doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
 \leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
@@ -347,8 +386,11 @@ source-facing zero-correlation-length obstruction for Example~4.11 are
 complete.  The printed independent non-zero-correlation-length clause is thus
 verified for the literal finite periodic family, while its saturation clause
 remains false.  No conclusion is made about the legacy doubled-index
-zero-correlation convention or about thermodynamic behavior.  Example~4.10's
-tensor and final entropy links remain open in \ghissue{6301}.
+zero-correlation convention or about thermodynamic behavior.  For
+Example~4.10, the corrected tensor, its MPDO property, source zero correlation
+length, and its full one- through four-site operator spectra are complete.
+The tensor block-entropy identifications and the resulting non-SAL theorem
+remain open in \ghissue{6301}.
 
 Example~4.12 is outside the entropy correction in this note. Its statement,
 dependencies, and separate normalization question are unchanged.
@@ -357,8 +399,11 @@ dependencies, and separate normalization question are unchanged.
 
 \textbf{Verdict for Example~4.10: source typo and scope correction.}
 The repeated left-qubit label is replaced by the left--right correlated flip.
-The corrected $p=1/4$ calculation gives the claimed separation, while the
-printed universal exception list must also exclude $p=1$.
+At $p=1/4$, the corrected tensor has source zero correlation length and its
+full one- through four-site operator spectra agree with the bond-window
+calculations.  The tensor block-entropy identities and the non-SAL conclusion
+are not yet formalized.  The printed universal exception list must also
+exclude $p=1$.
 
 \textbf{Verdict for Example~4.11: the printed separation is only half
 correct for the literal periodic state.}  The exact finite-marginal mismatch

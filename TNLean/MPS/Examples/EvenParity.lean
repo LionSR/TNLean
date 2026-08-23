@@ -71,9 +71,9 @@ private lemma inv_sqrt2_mul_self :
 `E(X)ᵢⱼ = c²(Xᵢⱼ + X₍₁₋ᵢ₎₍₁₋ⱼ₎)` where `c = 1/√2`. -/
 private lemma evenParity_transferMap_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
     let c := 1 / (↑(Real.sqrt 2) : ℂ)
-    (transferMap evenParityTensor X) i j =
+    (Kraus.transferMap evenParityTensor X) i j =
       c * c * (X i j + X (Fin.rev i) (Fin.rev j)) := by
-  simp only [transferMap_apply, Fin.sum_univ_two, evenParityTensor_zero, evenParityTensor_one]
+  simp only [Kraus.transferMap_apply, Fin.sum_univ_two, evenParityTensor_zero, evenParityTensor_one]
   fin_cases i <;> fin_cases j <;>
     simp [pauliX, Matrix.of_apply, Matrix.mul_apply, Fin.sum_univ_two,
       Fin.rev, Matrix.smul_apply, Matrix.add_apply, smul_eq_mul] <;>
@@ -81,8 +81,8 @@ private lemma evenParity_transferMap_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j
 
 /-- The transfer map of the even-parity tensor is idempotent: `E² = E`. -/
 theorem evenParity_transferMap_idempotent :
-    transferMap evenParityTensor ∘ₗ transferMap evenParityTensor =
-      transferMap evenParityTensor := by
+    Kraus.transferMap evenParityTensor ∘ₗ Kraus.transferMap evenParityTensor =
+      Kraus.transferMap evenParityTensor := by
   ext X i j : 3
   simp only [LinearMap.comp_apply]
   rw [evenParity_transferMap_entry, evenParity_transferMap_entry,
@@ -112,7 +112,7 @@ private lemma evenParity_span_diag_eq :
 /-- The even-parity tensor is **not** injective: `span{(1/√2)I, (1/√2)σx}` is the
 2-dimensional commutative subalgebra `{aI + bσx}`, not the full 4-dimensional
 matrix algebra `M₂(ℂ)`. -/
-theorem evenParity_not_isInjective : ¬ IsInjective evenParityTensor := by
+theorem evenParity_not_isInjective : ¬ Kraus.IsInjective evenParityTensor := by
   intro h
   have hmem : Matrix.diagonal (Pi.single (0 : Fin 2) (1 : ℂ)) ∈
       Submodule.span ℂ (Set.range evenParityTensor) := h ▸ Submodule.mem_top

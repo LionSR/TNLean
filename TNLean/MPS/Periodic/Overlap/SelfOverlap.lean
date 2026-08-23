@@ -26,7 +26,7 @@ non-repetition lemmas developed in `SelfOverlapSetup`.
   arXiv:1708.00029, Appendix A.
 -/
 
-open scoped Matrix BigOperators ComplexOrder InnerProductSpace
+open scoped Matrix BigOperators ComplexOrder InnerProductSpace Kraus
 open Filter Matrix
 
 namespace MPSTensor
@@ -42,7 +42,7 @@ the Lemma bdcf hypotheses: `P` are the orthogonal projectors of the off-diagonal
 decomposition (`hPproj`, `hPsum`), `hCyclic` is the adjoint-transfer shift
 𝓔_A^{*}(P_{k+1}) = P_k, `hComm` is the commutation of each P_k with the
 blocked letters, and `hTrace` realizes each compressed MPV as
-tr(P_k · evalWord …). The orthogonality P_u P_v = 0 (u ≠ v) is the
+tr(P_k · Kraus.evalWord …). The orthogonality P_u P_v = 0 (u ≠ v) is the
 off-diagonal support condition.
 
 **Paper's argument (Lemma bdcf, lines 409--423).** Since `A` is a periodic
@@ -83,19 +83,19 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclic :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
     (hTrace :
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     {φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)}
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
           (fun i => (blocks k i)ᴴ) X)).1 =
-        transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (d := blockPhysDim d m) (D := D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -117,7 +117,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   intro hGPE
   have hCyclicDecomp : IsCyclicSectorDecomp A blocks :=
     ⟨P, φ, hPproj, hPsum, hCyclic, hComm, hTrace, hIntertwine, hMul, hStar⟩
-  have hIrr_v : IsIrreducibleTensor (blocks v) :=
+  have hIrr_v : Kraus.IsIrreducibleFamily (blocks v) :=
     (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
       A hP blocks hBlocks_lc hBlocks_mpv hCyclicDecomp v (hNondeg v)).2
   have hCorner_u : ∀ i : Fin (blockPhysDim d m),
@@ -138,7 +138,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   -- period-transfer contradiction then forces it to vanish.
   obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig⟩ :
       ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧ U = P u * U * P v ∧
-        ((transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
+        ((Kraus.transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
     have : NeZero (dim u) := ⟨hNondeg u⟩
     obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig_block⟩ :=
       exists_offDiag_eigenvector_of_gaugePhase_cast_left
@@ -159,8 +159,8 @@ equivalent.
 
 Mathematically, a gauge-phase equivalence would identify the two compressed MPV traces.
 Through `IsCyclicSectorDecomp`, those traces are
-`tr(P u · evalWord(blockTensor A m) w)` and
-`tr(P v · evalWord(blockTensor A m) w)`.  The projections in a cyclic
+`tr(P u · Kraus.evalWord(blockTensor A m) w)` and
+`tr(P v · Kraus.evalWord(blockTensor A m) w)`.  The projections in a cyclic
 decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
 be related by an invertible gauge and nonzero scalar.
 
@@ -185,17 +185,17 @@ private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclicP :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
     (hTrace :
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
           (fun i => (blocks k i)ᴴ) X)).1 =
-        transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (d := blockPhysDim d m) (D := D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -247,17 +247,17 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclicP :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
     (hTrace :
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
           (fun i => (blocks k i)ᴴ) X)).1 =
-        transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (d := blockPhysDim d m) (D := D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -296,10 +296,10 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
         (blocks u) (hBlocks_lc u) ρ hρ_fix hρ_ne hρ_psd (by
           simpa using hgap)
     simpa using hSelf
-  · have hIrr_u : IsIrreducibleTensor (blocks u) :=
+  · have hIrr_u : Kraus.IsIrreducibleFamily (blocks u) :=
       (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
         A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)).2
-    have hIrr_v : IsIrreducibleTensor (blocks v) :=
+    have hIrr_v : Kraus.IsIrreducibleFamily (blocks v) :=
       (primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
         A hP blocks hBlocks_lc hBlocks_mpv hCyclic v (hNondeg v)).2
     have : NeZero (dim u) := ⟨hNondeg u⟩
@@ -356,17 +356,17 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclicP :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
     (hTrace :
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
-        mpv (blocks k) σ = (P k * evalWord (blockTensor A m) (List.ofFn σ)).trace)
+        mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
           (fun i => (blocks k i)ᴴ) X)).1 =
-        transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (d := blockPhysDim d m) (D := D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -433,7 +433,7 @@ theorem periodicSelfOverlap_tendsto
     hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP
   have hCyclicP :
-      ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclicRaw k
   have hBlocked :

@@ -19,7 +19,7 @@ Definition~\ref{def:mixed_transfer} and its rectangular form
 $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
 
 \begin{theorem}[Self-transfer]\label{thm:mixed_self}
-    \lean{MPSTensor.mixedTransferMap_self}
+    \lean{Kraus.mixedTransferMap_self}
     \leanok
     \uses{def:mixed_transfer, def:transfer_map}
     Setting $B=A$ recovers the ordinary transfer map: $F_{AA}=\E_A$.
@@ -32,7 +32,7 @@ $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
 \end{proof}
 
 \begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
-    \lean{MPSTensor.mixedTransferMap_pow_apply}
+    \lean{Kraus.mixedTransferMap_pow_apply}
     \leanok
     \uses{def:mixed_transfer, def:eval_word}
     For every $X\in\MN{D}$ and $N\geq0$,
@@ -80,7 +80,7 @@ matrix-unit indices gives
 \section{Rectangular spectral-radius formulation}
 
 \begin{lemma}[Rectangular spectral radius bound]\label{thm:spectral_radius_le_one_rect}
-    \lean{MPSTensor.spectralRadius_mixedTransfer₂_le_one}
+    \lean{Kraus.spectralRadius_mixedTransfer₂_le_one}
     \leanok
     \uses{def:mixed_transfer_rect}
     For normalized tensors of bond dimensions $D_1$ and $D_2$,
@@ -106,7 +106,7 @@ dimension once they are invertible.
 
 \begin{lemma}[Gauged peripheral eigenvector yields Kraus intertwining]%
     \label{thm:gauged_intertwining_core}
-    \lean{MPSTensor.gauged_intertwining_core}
+    \lean{Kraus.gauged_intertwining_core}
     \leanok
     \uses{def:mixed_transfer_rect, thm:qpf}
     Let $A$ be a normalized tensor of bond dimension $D_1$ and $B$ a
@@ -164,7 +164,7 @@ dimension once they are invertible.
 
 \begin{lemma}[Intertwining yields gauge-phase equivalence]%
     \label{thm:gauged_intertwining_gauge_phase}
-    \lean{MPSTensor.gaugePhaseEquiv_of_gauged_intertwining}
+    \lean{Kraus.gaugePhaseEquiv_of_gauged_intertwining}
     \leanok
     \uses{def:gauge_phase_equiv}
     Let $A$ and $B$ be tensors of the same bond dimension. Suppose invertible

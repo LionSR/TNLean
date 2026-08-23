@@ -36,11 +36,11 @@ from the adjoint shift, repairing the index mismatch so the telescoping applies.
 ## Main declarations
 
 * `MPSTensor.cornerProd_eq_conj_evalWord` — the telescoping identity
-  `cornerProd P A u w = P u * evalWord A w * P (u + w.length • 1)` under the
+  `cornerProd P A u w = P u * Kraus.evalWord A w * P (u + w.length • 1)` under the
   paper-convention shift `P k * A i = A i * P (k + 1)`.
 * `MPSTensor.cornerProd_eq_diagCorner_of_length_smul_eq_zero` — for a word whose
   length is a multiple of the period (`w.length • 1 = 0`), the product is the
-  diagonal corner `P u * evalWord A w * P u`.
+  diagonal corner `P u * Kraus.evalWord A w * P u`.
 * `MPSTensor.cornerProd_eq_blockDiagCorner` — for a single blocked letter
   `wordOfBlock d m I`, the product is `P u * (blockTensor A m) I * P u`
   (eq:Cu).
@@ -71,7 +71,7 @@ Under the *paper* off-diagonal convention `P k * A i = A i * P (k + 1)`
 (arXiv:1708.00029, the grading $A^i = \sum_u P_u A^i P_{u+1}$ underlying
 eq:Auprop), the repeated corner-transition product `cornerProd P A u w`
 collapses through its intermediate projectors:
-`cornerProd P A u w = P u * evalWord A w * P (u + w.length • 1)`.
+`cornerProd P A u w = P u * Kraus.evalWord A w * P (u + w.length • 1)`.
 
 The starting projector `P u` is kept on the left, every intermediate junction
 projector is absorbed by the shift and projector idempotency, and a single
@@ -83,10 +83,10 @@ theorem cornerProd_eq_conj_evalWord
     (hproj : ∀ k, IsOrthogonalProjection (P k))
     (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
     (u : Fin m) (w : List (Fin d)) :
-    cornerProd P A u w = P u * evalWord A w * P (u + w.length • (1 : Fin m)) := by
+    cornerProd P A u w = P u * Kraus.evalWord A w * P (u + w.length • (1 : Fin m)) := by
   induction w generalizing u with
   | nil =>
-    simp only [cornerProd_nil, evalWord_nil, List.length_nil, zero_smul, add_zero,
+    simp only [cornerProd_nil, Kraus.evalWord_nil, List.length_nil, zero_smul, add_zero,
       Matrix.mul_one]
     exact ((hproj u).2).symm
   | cons i w ih =>
@@ -96,27 +96,27 @@ theorem cornerProd_eq_conj_evalWord
     -- Realign the accumulated sector offset.
     have hlen : (u + 1) + w.length • (1 : Fin m) = u + (i :: w).length • (1 : Fin m) := by
       simp only [List.length_cons, add_smul, one_smul]; abel
-    rw [cornerProd_cons, ih (u + 1), evalWord_cons]
+    rw [cornerProd_cons, ih (u + 1), Kraus.evalWord_cons]
     calc
-      P u * A i * (P (u + 1) * evalWord A w * P ((u + 1) + w.length • (1 : Fin m)))
-          = (P u * A i * P (u + 1)) * evalWord A w *
+      P u * A i * (P (u + 1) * Kraus.evalWord A w * P ((u + 1) + w.length • (1 : Fin m)))
+          = (P u * A i * P (u + 1)) * Kraus.evalWord A w *
               P ((u + 1) + w.length • (1 : Fin m)) := by
             simp only [Matrix.mul_assoc]
-      _ = (P u * A i) * evalWord A w * P ((u + 1) + w.length • (1 : Fin m)) := by rw [key]
-      _ = P u * (A i * evalWord A w) * P (u + (i :: w).length • (1 : Fin m)) := by
-            rw [hlen, Matrix.mul_assoc (P u) (A i) (evalWord A w)]
+      _ = (P u * A i) * Kraus.evalWord A w * P ((u + 1) + w.length • (1 : Fin m)) := by rw [key]
+      _ = P u * (A i * Kraus.evalWord A w) * P (u + (i :: w).length • (1 : Fin m)) := by
+            rw [hlen, Matrix.mul_assoc (P u) (A i) (Kraus.evalWord A w)]
 
 /-- **Diagonal-corner collapse for a period-aligned word.**
 
 If the word length is a multiple of the period (`w.length • 1 = 0` in `Fin m`),
 then the accumulated sector offset vanishes and the corner-transition product is
-the diagonal corner `P u * evalWord A w * P u`. -/
+the diagonal corner `P u * Kraus.evalWord A w * P u`. -/
 theorem cornerProd_eq_diagCorner_of_length_smul_eq_zero
     (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
     (hshift : ∀ k (i : Fin d), P k * A i = A i * P (k + 1))
     (u : Fin m) (w : List (Fin d)) (hlen : w.length • (1 : Fin m) = 0) :
-    cornerProd P A u w = P u * evalWord A w * P u := by
+    cornerProd P A u w = P u * Kraus.evalWord A w * P u := by
   rw [cornerProd_eq_conj_evalWord P A hproj hshift u w, hlen, add_zero]
 
 /-- **Single blocked letter as a diagonal corner** (arXiv:1708.00029, eq:Cu).
@@ -161,7 +161,7 @@ theorem negReindex_paper_shift
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : Fin m → MatrixAlg D}
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hShift : ∀ k, transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hShift : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (k : Fin m) (i : Fin d) :
     P (-k) * A i = A i * P (-(k + 1)) := by
   have h := offDiag_shift_of_adjoint_cyclic_shift A hLeft hproj hShift (-(k + 1)) i

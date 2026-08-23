@@ -207,18 +207,18 @@ private theorem trace_reindex_cyclicBlockFinEquiv
 
 private theorem evalWord_reindex_cyclicBlockFinEquiv
     (A : Fin d → Matrix (Fin D × Fin N) (Fin D × Fin N) ℂ) (w : List (Fin d)) :
-    MPSTensor.evalWord
+    Kraus.evalWord
         (fun i => Matrix.reindex (cyclicBlockFinEquiv (D := D) (N := N))
           (cyclicBlockFinEquiv (D := D) (N := N)) (A i)) w =
       Matrix.reindex (cyclicBlockFinEquiv (D := D) (N := N))
         (cyclicBlockFinEquiv (D := D) (N := N)) (blockEvalWord A w) := by
   induction w with
   | nil =>
-      simp only [MPSTensor.evalWord_nil, blockEvalWord]
+      simp only [Kraus.evalWord_nil, blockEvalWord]
       exact (Matrix.reindexLinearEquiv_one ℂ ℂ
         (cyclicBlockFinEquiv (D := D) (N := N))).symm
   | cons i w ih =>
-      simp only [MPSTensor.evalWord_cons, blockEvalWord]
+      simp only [Kraus.evalWord_cons, blockEvalWord]
       rw [ih]
       exact Matrix.reindexLinearEquiv_mul ℂ ℂ
         (cyclicBlockFinEquiv (D := D) (N := N))
@@ -238,12 +238,12 @@ theorem mpv_cyclicBlockTensor_eq_average [NeZero N]
     MPSTensor.mpv (cyclicBlockTensor A) σ =
       (N : ℂ)⁻¹ * ∑ k : Fin N, coeff (cyclicRotation A k) σ := by
   change Matrix.trace
-      (MPSTensor.evalWord
+      (Kraus.evalWord
         (fun i => cyclicBlockNormalization N •
           Matrix.reindex (cyclicBlockFinEquiv (D := D) (N := N))
             (cyclicBlockFinEquiv (D := D) (N := N)) (cyclicBlockMatrix A i))
         (List.ofFn σ)) = _
-  rw [MPSTensor.evalWord_smul, List.length_ofFn, Matrix.trace_smul]
+  rw [Kraus.evalWord_smul, List.length_ofFn, Matrix.trace_smul]
   simp only [smul_eq_mul]
   rw [evalWord_reindex_cyclicBlockFinEquiv, blockEvalWord_cyclicBlockMatrix,
     List.length_ofFn, cyclicBlockPermMatrix_pow_length, Matrix.mul_one,

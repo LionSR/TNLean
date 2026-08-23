@@ -20,7 +20,7 @@ active normal-tensor block of a renormalization fixed point is itself a
 renormalization fixed point.
 -/
 
-open scoped Matrix BigOperators ENNReal
+open scoped Matrix BigOperators ENNReal Kraus
 
 namespace MPSTensor
 
@@ -38,9 +38,9 @@ theorem isTransferIdempotent_coisometry_reconstruction_iff
     (hReconstruct : ∀ i, A i = Uᴴ * B i * U) :
     IsTransferIdempotent A ↔ IsTransferIdempotent B := by
   have hTransfer : ∀ X,
-      transferMap A X = Uᴴ * transferMap B (U * X * Uᴴ) * U := by
+      Kraus.transferMap A X = Uᴴ * Kraus.transferMap B (U * X * Uᴴ) * U := by
     intro X
-    simp only [transferMap_apply, hReconstruct, Matrix.conjTranspose_mul,
+    simp only [Kraus.transferMap_apply, hReconstruct, Matrix.conjTranspose_mul,
       Matrix.conjTranspose_conjTranspose]
     calc
       _ = ∑ i, Uᴴ * (B i * (U * X * Uᴴ) * (B i)ᴴ) * U := by
@@ -59,7 +59,7 @@ theorem isTransferIdempotent_coisometry_reconstruction_iff
       _ = Y := by rw [hU, Matrix.one_mul, Matrix.mul_one]
   constructor
   · intro hA
-    change transferMap B ∘ₗ transferMap B = transferMap B
+    change Kraus.transferMap B ∘ₗ Kraus.transferMap B = Kraus.transferMap B
     apply LinearMap.ext
     intro Y
     have hAY := LinearMap.congr_fun hA (Uᴴ * Y * U)
@@ -67,7 +67,7 @@ theorem isTransferIdempotent_coisometry_reconstruction_iff
     have h := congrArg (fun Z => U * Z * Uᴴ) hAY
     simpa only [LinearMap.comp_apply, hCancel] using h
   · intro hB
-    change transferMap A ∘ₗ transferMap A = transferMap A
+    change Kraus.transferMap A ∘ₗ Kraus.transferMap A = Kraus.transferMap A
     apply LinearMap.ext
     intro X
     have hBX := LinearMap.congr_fun hB (U * X * Uᴴ)
@@ -86,11 +86,11 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     (hRFP : IsTransferIdempotent (fun i => c • A i)) :
     ‖c‖ = 1 ∧ IsTransferIdempotent A := by
   let : NeZero R := ⟨hA.bondDim_ne_zero⟩
-  let E := transferMap A
+  let E := Kraus.transferMap A
   let Eclm := (Module.End.toContinuousLinearMap (Matrix (Fin R) (Fin R) ℂ)) E
   let q := c * starRingEnd ℂ c
   have hq : q ≠ 0 := mul_ne_zero hc ((map_ne_zero (starRingEnd ℂ)).2 hc)
-  have hMap : transferMap (fun i => c • A i) = q • E := by
+  have hMap : Kraus.transferMap (fun i => c • A i) = q • E := by
     apply LinearMap.ext
     intro X
     rw [transferMap_smul]
@@ -103,7 +103,7 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     exact zero_ne_one hrad
   have hqEclm_ne : q • Eclm ≠ 0 := smul_ne_zero hq hEclm_ne
   have hIdem : IsIdempotentElem (q • Eclm) := by
-    have hEnd : IsIdempotentElem (transferMap (fun i => c • A i)) := hRFP
+    have hEnd : IsIdempotentElem (Kraus.transferMap (fun i => c • A i)) := hRFP
     have hMapped := hEnd.map (Module.End.toContinuousLinearMap
       (Matrix (Fin R) (Fin R) ℂ))
     simpa only [hMap, map_smul, Eclm] using hMapped
@@ -269,7 +269,7 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
     exact gaugeEquiv_toTensorFromBlocks_of_blockGauge (fun _ => 1) C P hGaugeC
   have hPRFP : IsTransferIdempotent (directSumTensor P) :=
     hGaugeDirect.isTransferIdempotent_iff.mp hCRFP
-  have hPIrr : ∀ j, IsIrreducibleTensor (P j) := fun j =>
+  have hPIrr : ∀ j, Kraus.IsIrreducibleFamily (P j) := fun j =>
     isIrreducibleTensor_smul (hμne j) _ (hIrr j)
   have hPLeft : ∀ j, IsLeftCanonical (P j) := fun j =>
     leftCanonical_smul_of_norm_one (μ j) (hμ j) _ (hTP j)
@@ -281,12 +281,12 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
   have hPZero : IsBNTLocallyOrthogonal P :=
     isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum
       P hPIrr hPLeft hPDistinct hPRFP
-  have hBZero : ∀ j k, j ≠ k → mixedTransferMap₂ (B j) (B k) = 0 := by
+  have hBZero : ∀ j k, j ≠ k → Kraus.mixedTransferMap₂ (B j) (B k) = 0 := by
     intro j k hjk
-    have hCZero : mixedTransferMap₂ (C j) (C k) = 0 :=
+    have hCZero : Kraus.mixedTransferMap₂ (C j) (C k) = 0 :=
       mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv
         (hGaugeC j).toGaugePhaseEquiv (hGaugeC k).toGaugePhaseEquiv (hPZero j k hjk)
-    rw [mixedTransferMap₂_smul] at hCZero
+    rw [Kraus.mixedTransferMap₂_smul] at hCZero
     exact (smul_eq_zero.mp hCZero).resolve_left
       (mul_ne_zero (hμne j) ((map_ne_zero (starRingEnd ℂ)).2 (hμne k)))
   simpa only [B, repDim] using

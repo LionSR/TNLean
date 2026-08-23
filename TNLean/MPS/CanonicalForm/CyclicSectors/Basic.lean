@@ -44,21 +44,21 @@ lemma left_mul_evalWord_leftSectorTensor_of_commutes
     (hPidem : P * P = P)
     (hComm : ∀ i : Fin d, P * A i = A i * P) :
     ∀ w : List (Fin d),
-      P * evalWord (leftSectorTensor P A) w = P * evalWord A w := by
+      P * Kraus.evalWord (leftSectorTensor P A) w = P * Kraus.evalWord A w := by
   intro w
   induction w with
   | nil =>
       simp only [Kraus.evalWord]
   | cons i w ih =>
       simp only [leftSectorTensor, Kraus.evalWord]
-      calc P * (P * A i * evalWord (leftSectorTensor P A) w)
-          = P * P * A i * evalWord (leftSectorTensor P A) w := by
+      calc P * (P * A i * Kraus.evalWord (leftSectorTensor P A) w)
+          = P * P * A i * Kraus.evalWord (leftSectorTensor P A) w := by
             simp only [Matrix.mul_assoc]
-        _ = P * A i * evalWord (leftSectorTensor P A) w := by rw [hPidem]
-        _ = A i * (P * evalWord (leftSectorTensor P A) w) := by
+        _ = P * A i * Kraus.evalWord (leftSectorTensor P A) w := by rw [hPidem]
+        _ = A i * (P * Kraus.evalWord (leftSectorTensor P A) w) := by
             rw [← Matrix.mul_assoc, hComm i, Matrix.mul_assoc]
-        _ = A i * (P * evalWord A w) := by rw [ih]
-        _ = P * (A i * evalWord A w) := by
+        _ = A i * (P * Kraus.evalWord A w) := by rw [ih]
+        _ = P * (A i * Kraus.evalWord A w) := by
             rw [← Matrix.mul_assoc, ← hComm i, Matrix.mul_assoc]
 
 /-- A left-sector tensor is supported on the sector projection. -/

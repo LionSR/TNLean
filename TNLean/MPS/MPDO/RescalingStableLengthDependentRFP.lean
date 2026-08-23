@@ -532,34 +532,34 @@ theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
     simpa [oneLabelChi] using wMat_mulVec_alt
 
 /-- **The per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†` is unital.**
-`φ` is `MPSTensor.transferMap A`, viewing the letter family `A` as an
+`φ` is `Kraus.transferMap A`, viewing the letter family `A` as an
 `MPSTensor 4 2`. -/
-theorem transferMap_A_one : MPSTensor.transferMap A 1 = 1 := by
+theorem transferMap_A_one : Kraus.transferMap A 1 = 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A] <;> norm_num
+    simp [Kraus.transferMap_apply, Fin.sum_univ_four, A] <;> norm_num
 
 /-- `φ` scales the traceless diagonal `diag(1, -1)` by `lambda = 7/25`. -/
 theorem transferMap_A_diag_alt :
-    MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
+    Kraus.transferMap A !![(1 : ℂ), 0; 0, -1] =
       (lambda : ℂ) • !![(1 : ℂ), 0; 0, -1] := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A, lambda] <;> norm_num
+    simp [Kraus.transferMap_apply, Fin.sum_univ_four, A, lambda] <;> norm_num
 
 /-- `φ` annihilates the off-diagonal matrix unit `E₀₁`. -/
 theorem transferMap_A_single01 :
-    MPSTensor.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) = 0 := by
+    Kraus.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) = 0 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A]
+  fin_cases i <;> fin_cases j <;> simp [Kraus.transferMap_apply, Fin.sum_univ_four, A]
 
 /-- `φ` annihilates the off-diagonal matrix unit `E₁₀`. -/
 theorem transferMap_A_single10 :
-    MPSTensor.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) = 0 := by
+    Kraus.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) = 0 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A]
+  fin_cases i <;> fin_cases j <;> simp [Kraus.transferMap_apply, Fin.sum_univ_four, A]
 
-/-- **The explicit eigenvalues of `φ` (`MPSTensor.transferMap A`).** The
+/-- **The explicit eigenvalues of `φ` (`Kraus.transferMap A`).** The
 identity is fixed (eigenvalue `1`), the traceless diagonal `diag(1, -1)` is
 scaled by `lambda = 7/25` (eigenvalue `lambda`), and the off-diagonal matrix
 units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`). Together `{1, lambda,
@@ -575,12 +575,12 @@ Kronecker-product factorization in terms of `φ`) in
 `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`
 (`R_toMPSTensor_isCPSVCanonicalForm`). -/
 theorem transferMap_A_eigen :
-    MPSTensor.transferMap A 1 = (1 : ℂ) • 1 ∧
-      MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
+    Kraus.transferMap A 1 = (1 : ℂ) • 1 ∧
+      Kraus.transferMap A !![(1 : ℂ), 0; 0, -1] =
         (lambda : ℂ) • !![(1 : ℂ), 0; 0, -1] ∧
-      MPSTensor.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) =
+      Kraus.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) =
         (0 : ℂ) • Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∧
-      MPSTensor.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) =
+      Kraus.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) =
         (0 : ℂ) • Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) :=
   ⟨by rw [transferMap_A_one, one_smul],
     transferMap_A_diag_alt,

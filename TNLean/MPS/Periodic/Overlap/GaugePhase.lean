@@ -61,7 +61,7 @@ theorem gaugePhaseEquiv_to_repeatedBlocks_of_leftCanonical_irreducible
     [NeZero D] {A B : MPSTensor d D}
     (h : GaugePhaseEquiv A B)
     (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
-    (hB_irr : IsIrreducibleTensor B) :
+    (hB_irr : Kraus.IsIrreducibleFamily B) :
     RepeatedBlocks A B := by
   obtain ⟨X, ζ, hζ_ne, hB⟩ := h
   exact repeatedBlocks_of_gaugePhaseData_norm_one X
