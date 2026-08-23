@@ -17300,6 +17300,10 @@
 \bool_new:N \l__tenkz_kernel_lab_span_bool
 \fp_new:N \l__tenkz_kernel_lab_before_x_fp
 \fp_new:N \l__tenkz_kernel_lab_before_y_fp
+\fp_new:N \l__tenkz_kernel_lab_centre_x_fp
+\fp_new:N \l__tenkz_kernel_lab_centre_y_fp
+\fp_const:Nn \c__tenkz_kernel_lab_route_sample_fp { 1 / 10000 }
+\fp_const:Nn \c__tenkz_kernel_lab_axis_tol_fp { 1 / 100 }
 % One pass over the frozen records fills the table the atom pass reads.
 \cs_new_protected:Npn \__tenkz_kernel_r_label_occupancy:
   {
@@ -18016,77 +18020,80 @@
     \fp_set:Nn #4
       { \dim_to_fp:n { \use:c {pgf@y} } / \dim_to_fp:n { \tenkz@pitch } }
   }
+% One side of the route reserves the face reached from the bead centre.
+% Testing the two sides separately retains both faces at a sharp corner.  The
+% marking decoration returns scaled-point coordinates, so the small relative
+% tolerance recognizes an axial run without depending on its physical scale.
+\cs_new_protected:Npn \__tenkz_kernel_r_label_closure_run:nnn #1#2#3
+  {
+    \fp_compare:nNnT
+      {
+        abs( #3 - \l__tenkz_kernel_lab_centre_y_fp )
+      } < {
+        abs( #2 - \l__tenkz_kernel_lab_centre_x_fp )
+          * \c__tenkz_kernel_lab_axis_tol_fp
+      }
+      {
+        \fp_compare:nNnTF {#2} > { \l__tenkz_kernel_lab_centre_x_fp }
+          { \__tenkz_kernel_r_label_mark:nn {#1} {e} }
+          { \__tenkz_kernel_r_label_mark:nn {#1} {w} }
+      }
+    \fp_compare:nNnT
+      {
+        abs( #2 - \l__tenkz_kernel_lab_centre_x_fp )
+      } < {
+        abs( #3 - \l__tenkz_kernel_lab_centre_y_fp )
+          * \c__tenkz_kernel_lab_axis_tol_fp
+      }
+      {
+        \fp_compare:nNnTF {#3} > { \l__tenkz_kernel_lab_centre_y_fp }
+          { \__tenkz_kernel_r_label_mark:nn {#1} {n} }
+          { \__tenkz_kernel_r_label_mark:nn {#1} {s} }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_label_closure_bead:nn #1#2
   {
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
     \__tenkz_string_inked:VTF \l__tenkz_kernel_r_sid_tl
       {
         \tl_set:Ne \l__tenkz_kernel_lab_via_tl
-          { \fp_eval:n { max(0,\l__tenkz_kernel_lab_t_tl - 1 / 10000) } }
+          {
+            \fp_eval:n
+              {
+                max
+                  ( 0 , \l__tenkz_kernel_lab_t_tl
+                    - \c__tenkz_kernel_lab_route_sample_fp )
+              }
+          }
         \exp_args:NVV \__tenkz_kernel_r_label_route_point:nnNN
           \l__tenkz_kernel_r_sid_tl
           \l__tenkz_kernel_lab_via_tl
           \l__tenkz_kernel_lab_before_x_fp
           \l__tenkz_kernel_lab_before_y_fp
+        \exp_args:NVV \__tenkz_kernel_r_label_route_point:nnNN
+          \l__tenkz_kernel_r_sid_tl
+          \l__tenkz_kernel_lab_t_tl
+          \l__tenkz_kernel_lab_centre_x_fp
+          \l__tenkz_kernel_lab_centre_y_fp
+        \__tenkz_kernel_r_label_closure_run:nnn {#2}
+          { \l__tenkz_kernel_lab_before_x_fp }
+          { \l__tenkz_kernel_lab_before_y_fp }
         \tl_set:Ne \l__tenkz_kernel_lab_via_tl
-          { \fp_eval:n { min(1,\l__tenkz_kernel_lab_t_tl + 1 / 10000) } }
+          {
+            \fp_eval:n
+              {
+                min
+                  ( 1 , \l__tenkz_kernel_lab_t_tl
+                    + \c__tenkz_kernel_lab_route_sample_fp )
+              }
+          }
         \exp_args:NVV \__tenkz_kernel_r_label_route_point:nnNN
           \l__tenkz_kernel_r_sid_tl
           \l__tenkz_kernel_lab_via_tl
           \l_tmpa_fp
           \l_tmpb_fp
-        \bool_lazy_and:nnT
-          {
-            \fp_compare_p:nNn
-              {
-                abs
-                  ( \l_tmpb_fp
-                    - \l__tenkz_kernel_lab_before_y_fp )
-              }
-              < { 1 / 1000 }
-          }
-          {
-            \fp_compare_p:nNn
-              {
-                abs
-                  ( \l_tmpa_fp
-                    - \l__tenkz_kernel_lab_before_x_fp )
-              }
-              > { 1 / 1000 }
-          }
-          {
-            \fp_compare:nNnTF
-              { \l_tmpa_fp }
-              > { \l__tenkz_kernel_lab_before_x_fp }
-              { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {e} {w} }
-              { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {w} {e} }
-          }
-        \bool_lazy_and:nnT
-          {
-            \fp_compare_p:nNn
-              {
-                abs
-                  ( \l_tmpa_fp
-                    - \l__tenkz_kernel_lab_before_x_fp )
-              }
-              < { 1 / 1000 }
-          }
-          {
-            \fp_compare_p:nNn
-              {
-                abs
-                  ( \l_tmpb_fp
-                    - \l__tenkz_kernel_lab_before_y_fp )
-              }
-              > { 1 / 1000 }
-          }
-          {
-            \fp_compare:nNnTF
-              { \l_tmpb_fp }
-              > { \l__tenkz_kernel_lab_before_y_fp }
-              { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {n} {s} }
-              { \__tenkz_kernel_r_label_bead_mark:nnn {#2} {s} {n} }
-          }
+        \__tenkz_kernel_r_label_closure_run:nnn {#2}
+          { \l_tmpa_fp } { \l_tmpb_fp }
       }
       { \__tenkz_kernel_r_label_blind:n {#2} }
   }
