@@ -406,11 +406,11 @@ private theorem shiftExampleU₂_sourceU_product_apply (d : ℕ) [NeZero d]
       (leftShiftLeftRankEquiv d (a, b)) (rightShiftLeftRankEquiv d 0)
       (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (c, e)) i k j l
 
-/-- Entry formula for the supplied $u_2^{(2)}$ in the paper's source and
-four-spin coordinates.
+/-- Entry formula for the supplied source $u$ of $U_2$ in the four-spin
+coordinates used by the paper's two-site standard form.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
-theorem shiftExampleU₂_sourceU_two_apply (d : ℕ) [NeZero d]
+theorem shiftExampleU₂_sourceU_fourSpin_apply (d : ℕ) [NeZero d]
     (a b c e i j k l : Fin d) :
     SourceFactors.sourceU (shiftExampleU₂ d) (shiftExampleU₂SourceFactors d)
         (shiftExampleU₂SourceURowEquiv d ((a, b), (c, e)))
@@ -437,11 +437,15 @@ theorem shiftExampleU₂_sourceU_two_apply (d : ℕ) [NeZero d]
         simp [identitySwapIdentityMatrix, ha, hb, hc, he,
           shiftSourceScale_cancel d]
 
-/-- For the supplied factors of $U_2$, the paper's two-site source gate is
-$u_2^{(2)}=\Id\otimes\mathbb S\otimes\Id$ in the displayed four-spin order.
+/-- In the four-spin coordinates used by the two-site standard form, the
+supplied source $u$ of $U_2$ is $\Id\otimes\mathbb S\otimes\Id$.
+
+Its occurrence as the central gate $u_2^{(2)}$ in the actual two-site block is
+the content of `shiftExampleU₂_blockTwo_apply_eq_sum_X₁_mul_u₂_two_mul_Y₂`.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
-theorem shiftExampleU₂_sourceU_two_eq_identitySwapIdentity (d : ℕ) [NeZero d] :
+theorem shiftExampleU₂_sourceU_reindex_eq_identitySwapIdentity
+    (d : ℕ) [NeZero d] :
     Matrix.reindex (shiftExampleU₂SourceURowEquiv d).symm
         (shiftTwoSitePhysicalEquiv d).symm
         (SourceFactors.sourceU (shiftExampleU₂ d)
@@ -450,7 +454,7 @@ theorem shiftExampleU₂_sourceU_two_eq_identitySwapIdentity (d : ℕ) [NeZero d
   ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
   simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.symm_symm] using
-    shiftExampleU₂_sourceU_two_apply d a b c e i j k l
+    shiftExampleU₂_sourceU_fourSpin_apply d a b c e i j k l
 
 private theorem shiftExampleU₂_sourceV_product_apply (d : ℕ) [NeZero d]
     (a b c e i j k l : Fin d) :
@@ -471,11 +475,11 @@ private theorem shiftExampleU₂_sourceV_product_apply (d : ℕ) [NeZero d]
       (leftShiftRightRankEquiv d 0) (rightShiftRightRankEquiv d (b, a))
       (leftShiftLeftRankEquiv d (e, c)) (rightShiftLeftRankEquiv d 0)
 
-/-- Entry formula for the supplied $v_2^{(2)}$ in the paper's source and
-four-spin coordinates.
+/-- Entry formula for the supplied source $v$ of $U_2$ in the four-spin
+coordinates used by the paper's reflected two-site standard form.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
-theorem shiftExampleU₂_sourceV_two_apply (d : ℕ) [NeZero d]
+theorem shiftExampleU₂_sourceV_fourSpin_apply (d : ℕ) [NeZero d]
     (i j k l a b c e : Fin d) :
     SourceFactors.sourceV (shiftExampleU₂ d) (shiftExampleU₂SourceFactors d)
         (shiftTwoSitePhysicalEquiv d ((i, j), (k, l)))
@@ -503,13 +507,16 @@ theorem shiftExampleU₂_sourceV_two_apply (d : ℕ) [NeZero d]
         by_cases hc : i = c <;> by_cases he : k = e <;>
         simp [ha, hb, hc, he, shiftSourceScale_cancel_rev d] <;> aesop
 
-/-- For the supplied factors of $U_2$, the paper's reflected two-site source
-gate is
-$v_2^{(2)}=(\mathbb S\otimes\mathbb S)
-(\Id\otimes\mathbb S\otimes\Id)$ in the displayed four-spin order.
+/-- In the four-spin coordinates used by the reflected two-site standard form,
+the supplied source $v$ of $U_2$ is
+$(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$.
+
+Its occurrence as the central gate $v_2^{(2)}$ in the actual two-site block is
+the content of
+`shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_v₂_two_reflected_mul_Y₁`.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
-theorem shiftExampleU₂_sourceV_two_eq_swapSwap_mul_identitySwapIdentity
+theorem shiftExampleU₂_sourceV_reindex_eq_swapSwap_mul_identitySwapIdentity
     (d : ℕ) [NeZero d] :
     Matrix.reindex (shiftTwoSitePhysicalEquiv d).symm
         (shiftExampleU₂SourceVColumnEquiv d).symm
@@ -519,7 +526,7 @@ theorem shiftExampleU₂_sourceV_two_eq_swapSwap_mul_identitySwapIdentity
   ext ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
   simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.symm_symm] using
-    shiftExampleU₂_sourceV_two_apply d i j k l a b c e
+    shiftExampleU₂_sourceV_fourSpin_apply d i j k l a b c e
 
 private theorem shiftExampleU₃_sourceU_product_apply (d : ℕ) [NeZero d]
     (a b c e i j k l : Fin d) :
@@ -539,11 +546,11 @@ private theorem shiftExampleU₃_sourceU_product_apply (d : ℕ) [NeZero d]
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (a, b))
       (rightShiftRightRankEquiv d (c, e)) (leftShiftRightRankEquiv d 0) i k j l
 
-/-- Entry formula for the supplied $u_3^{(2)}$ in the paper's source and
-four-spin coordinates.
+/-- Entry formula for the supplied source $u$ of $U_3$ in the four-spin
+coordinates used by the paper's two-site standard form.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
-theorem shiftExampleU₃_sourceU_two_apply (d : ℕ) [NeZero d]
+theorem shiftExampleU₃_sourceU_fourSpin_apply (d : ℕ) [NeZero d]
     (a b c e i j k l : Fin d) :
     SourceFactors.sourceU (shiftExampleU₃ d) (shiftExampleU₃SourceFactors d)
         (shiftExampleU₃SourceURowEquiv d ((a, b), (c, e)))
@@ -570,12 +577,15 @@ theorem shiftExampleU₃_sourceU_two_apply (d : ℕ) [NeZero d]
         by_cases hc : c = i <;> by_cases he : e = k <;>
         simp [ha, hb, hc, he, shiftSourceScale_cancel_rev d]
 
-/-- For the supplied factors of $U_3$, the paper's two-site source gate is
-$u_3^{(2)}=(\Id\otimes\mathbb S\otimes\Id)
-(\mathbb S\otimes\mathbb S)$ in the displayed four-spin order.
+/-- In the four-spin coordinates used by the two-site standard form, the
+supplied source $u$ of $U_3$ is
+$(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$.
+
+Its occurrence as the central gate $u_3^{(2)}$ in the actual two-site block is
+the content of `shiftExampleU₃_blockTwo_apply_eq_sum_X₁_mul_u₃_two_mul_Y₂`.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
-theorem shiftExampleU₃_sourceU_two_eq_identitySwapIdentity_mul_swapSwap
+theorem shiftExampleU₃_sourceU_reindex_eq_identitySwapIdentity_mul_swapSwap
     (d : ℕ) [NeZero d] :
     Matrix.reindex (shiftExampleU₃SourceURowEquiv d).symm
         (shiftTwoSitePhysicalEquiv d).symm
@@ -585,7 +595,7 @@ theorem shiftExampleU₃_sourceU_two_eq_identitySwapIdentity_mul_swapSwap
   ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
   simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.symm_symm] using
-    shiftExampleU₃_sourceU_two_apply d a b c e i j k l
+    shiftExampleU₃_sourceU_fourSpin_apply d a b c e i j k l
 
 private theorem shiftExampleU₃_sourceV_product_apply (d : ℕ) [NeZero d]
     (a b c e i j k l : Fin d) :
@@ -607,11 +617,11 @@ private theorem shiftExampleU₃_sourceV_product_apply (d : ℕ) [NeZero d]
       (rightShiftRightRankEquiv d (b, a)) (leftShiftRightRankEquiv d 0)
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (e, c))
 
-/-- Entry formula for the supplied $v_3^{(2)}$ in the paper's source and
-four-spin coordinates.
+/-- Entry formula for the supplied source $v$ of $U_3$ in the four-spin
+coordinates used by the paper's reflected two-site standard form.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
-theorem shiftExampleU₃_sourceV_two_apply (d : ℕ) [NeZero d]
+theorem shiftExampleU₃_sourceV_fourSpin_apply (d : ℕ) [NeZero d]
     (i j k l a b c e : Fin d) :
     SourceFactors.sourceV (shiftExampleU₃ d) (shiftExampleU₃SourceFactors d)
         (shiftTwoSitePhysicalEquiv d ((i, j), (k, l)))
@@ -640,12 +650,15 @@ theorem shiftExampleU₃_sourceV_two_apply (d : ℕ) [NeZero d]
         simp [identitySwapIdentityMatrix, ha, hb, hc, he,
           shiftSourceScale_cancel d] <;> aesop
 
-/-- For the supplied factors of $U_3$, the paper's reflected two-site source
-gate is $v_3^{(2)}=\Id\otimes\mathbb S\otimes\Id$ in the displayed
-four-spin order.
+/-- In the four-spin coordinates used by the reflected two-site standard form,
+the supplied source $v$ of $U_3$ is $\Id\otimes\mathbb S\otimes\Id$.
+
+Its occurrence as the central gate $v_3^{(2)}$ in the actual two-site block is
+the content of
+`shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_v₃_two_reflected_mul_Y₁`.
 
 Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
-theorem shiftExampleU₃_sourceV_two_eq_identitySwapIdentity
+theorem shiftExampleU₃_sourceV_reindex_eq_identitySwapIdentity
     (d : ℕ) [NeZero d] :
     Matrix.reindex (shiftTwoSitePhysicalEquiv d).symm
         (shiftExampleU₃SourceVColumnEquiv d).symm
@@ -655,7 +668,7 @@ theorem shiftExampleU₃_sourceV_two_eq_identitySwapIdentity
   ext ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
   simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.symm_symm] using
-    shiftExampleU₃_sourceV_two_apply d i j k l a b c e
+    shiftExampleU₃_sourceV_fourSpin_apply d i j k l a b c e
 
 private theorem shiftExampleU₁_sourceU_product_apply (d : ℕ)
     (a b c e i j k l : Fin d) :
