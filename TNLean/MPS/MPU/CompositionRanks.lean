@@ -152,6 +152,9 @@ private theorem sum_eight_cut_shuffle
       rfl
     _ = _ := by simp only [Fintype.sum_prod_type]
 
+/-- Expand the product of four two-factor finite sums over the eight indices `X`, `Y`,
+`J`, `K`, `T₁`, `T₂`, `S₁`, `S₂`, permute them by `sum_eight_cut_shuffle`, and
+reassemble the result into the `T₁ × S₂` cut factorization used below. -/
 private theorem sum_eight_cut_factorization
     {X Y J K T₁ T₂ S₁ S₂ : Type*}
     [Fintype X] [Fintype Y] [Fintype J] [Fintype K]
