@@ -213,7 +213,8 @@
 
 % Scope: the inverse-map-selected four-sector factorization of the explicit
 % witness.  Pair-preserving maps for that factorization are excluded, but the
-% coarsened channel pair exists.  This does not close #6793.
+% coarsened channel pair exists.  This is a project-derived example, not the
+% construction used in the source proof of Proposition C.15.
 % Taxonomy: proof-path drift.
 \begin{theorem}[Pair-preserving obstruction for the four-sector witness]
     \label{thm:mpdo_four_sector_pair_preserving_obstruction}
@@ -1245,12 +1246,12 @@ This is the calculation in
     1646--1665 first use zero correlation length to make all repeated-copy
     weights of each BNT representative equal and absorb their common value.
     The printed continuation still requires a suitable physical-sector
-    factorization for every absorbed representative. A direct construction of
-    the same blocked channel pairs by coarsening or mixing the sector labels
-    would also suffice for condition~(v). Once one channel pair is available
-    for each absorbed representative, those pairs must be combined through
-    the orthogonal outer physical sectors. Proposition~C.7 supplies only the
-    pair belonging to one factorization of one tensor.
+    factorization for every absorbed representative. Proposition~C.7 constructs
+    the channel pair belonging to one such factorization, and the closing proof
+    of Proposition~C.15 first projects onto the orthogonal outer physical
+    sectors before applying those pairs. Thus the remaining source step is the
+    existence of the per-representative factorizations; the outer-sector
+    combination is already complete.
 \end{theorem}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
@@ -2577,9 +2578,9 @@ This is the calculation in
 % non-Cartesian four-letter construction below shows that the resulting local
 % analytic properties do not alone imply a neighboring trace factorization.
 % It does not supply the ambient biCF witness required to refute the printed
-% implication (ii)=>(iv).  The source-context factorization remains #6775,
-% while direct per-representative blocked channels remain the alternative route
-% tracked in #6793; their outer-sector composition is formalized in #6632.
+% implication (ii)=>(iv).  The source-context factorization remains #6775.
+% Once it is supplied, the Proposition C.7 channel construction and its
+% outer-sector composition are formalized; the latter was tracked in #6632.
 % Independently,
 % thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
 % (iv)=>(v).  Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
