@@ -61,10 +61,10 @@ composes pictures with bare TeX and mentions the audit in passing prose.
 **F3. No spacing or metric chapter.** quantikz §IV (pp. 14–17) teaches
 local column/row adjustment, global `row sep`/`column sep`, `between
 origins`, and phantom-based sizing, each with a render. The tenkz metric
-vocabulary — `pitch`, size classes (`size=`, `sizes=`), `layer sep`,
+vocabulary — `pitch`, size classes (`size=`), `layer sep`,
 `align`, `nudge`, the `inline` profile — is documented only as reference
 table rows; no chapter shows what any of them does to a picture, and
-`kernel-setup pitch`, `sizes`, `layer sep`, and `align` never occur in an
+`kernel-setup pitch`, `layer sep`, and `align` never occur in an
 authored chapter at all.
 
 **F4. No styling catalogue.** quantikz §V.A (p. 18) prints the table every
