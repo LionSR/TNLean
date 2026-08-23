@@ -1309,14 +1309,42 @@ for false_field in closed conjugate outline; do
     exit 1
   fi
 done
-# The sugar flags: the first picture's bare sandwich populates its op
-# and bra rows (two populated atoms); the sandwich=false picture keeps
-# the default wire row; and the third picture keeps its explicit
-# rows={ket,op,bra}, whose empty ket and bra cells are populated.  Thus
-# the file holds four populated atoms and seven in all.
+picture_atom_count() {
+  awk -F'|' -v wanted="id=$1" '
+    $1 == "picture" { active = ($2 == wanted); next }
+    active && $1 == "atom" { count++ }
+    END { print count + 0 }
+  ' "$WORK/r_false_flags.tnlog"
+}
+# A false with no active sandwich preserves the author's rows, a false after
+# a true retracts the expansion, and retraction restores a field which the
+# author wrote before that true.  A direct field written after the true also
+# survives, because it has relinquished the sugar's ownership.
+[ "$(picture_atom_count k3)" -eq 3 ] &&
+  [ "$(picture_atom_count k4)" -eq 1 ] &&
+  [ "$(picture_atom_count k5)" -eq 3 ] &&
+  [ "$(picture_atom_count k6)" -eq 1 ] || {
+  echo "FAIL: sandwich=false violated last-wins field ownership" >&2
+  exit 1
+}
+# The four planes=false orderings leave no plane-frame event.  The final live
+# planes spelling is a positive control and contributes the unique such event.
+false_flag_frames=$(grep -c '^frame|.*|map=plane|' \
+  "$WORK/r_false_flags.tnlog" || true)
+[ "$false_flag_frames" -eq 1 ] &&
+  awk -F'|' '
+    $1 == "picture" { active = ($2 == "id=k11"); next }
+    active && $1 == "frame" && $0 ~ /\|map=plane\|/ { found = 1 }
+    END { exit !found }
+  ' "$WORK/r_false_flags.tnlog" || {
+  echo "FAIL: planes=false violated last-wins field ownership" >&2
+  exit 1
+}
+# The populated placeholders in the three sandwich pictures are retained;
+# every other picture holds its one authored atom.
 false_flag_pop=$(grep -c '^atom|.*|populated=' "$WORK/r_false_flags.tnlog" || true)
 false_flag_atoms=$(grep -c '^atom|' "$WORK/r_false_flags.tnlog" || true)
-[ "$false_flag_pop" -eq 4 ] && [ "$false_flag_atoms" -eq 7 ] || {
+[ "$false_flag_pop" -eq 6 ] && [ "$false_flag_atoms" -eq 17 ] || {
   echo "FAIL: a false-valued sugar flag changed the chosen rows" >&2
   exit 1
 }

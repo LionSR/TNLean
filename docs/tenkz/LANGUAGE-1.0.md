@@ -1014,6 +1014,12 @@ policy for the shared leg; write the ports for the lone one.
 | `role=` | `species=` (the four prelude species) |
 | `\tndeclareatom` | `\tndeclare{atom}` |
 
+The flag sugars `sandwich` and `planes` obey the order of the option list.
+A bare or true spelling applies the displayed expansion. A later false
+spelling retracts fields still owned by that expansion and restores the values
+which preceded it. A direct `rows=` or `frame=` spelling becomes authoritative,
+so a subsequent false does not disturb the author's value.
+
 S4 status (2026-08-09): the registry is the existence test, so the table
 above is the sugar ledger's *target* inventory, not a claim that every row
 is spelled today. `\tnpic` is deferred — it lands with math-style sensing

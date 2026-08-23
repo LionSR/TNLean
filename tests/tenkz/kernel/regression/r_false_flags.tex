@@ -1,4 +1,4 @@
-% Regression: explicit false disables flags instead of enabling them.
+% Regression: sugar flags are last-wins without overriding direct fields.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -22,5 +22,38 @@
 % False also leaves an explicitly chosen row policy untouched.
 \begin{tenkz}[rows={ket,op,bra}, sandwich=false, cols=1, bonds=none]
   \tn[at=(2,1), name=C]{C}
+\end{tenkz}
+% A later false retracts an earlier sugar expansion.
+\begin{tenkz}[sandwich, sandwich=false, cols=1, bonds=none]
+  \tn[name=D]{D}
+\end{tenkz}
+% Retraction restores an explicit field that preceded the true spelling.
+\begin{tenkz}
+    [rows={ket,op,bra}, sandwich, sandwich=false, cols=1, bonds=none]
+  \tn[at=(2,1), name=E]{E}
+\end{tenkz}
+% A direct field after the expansion relinquishes the sugar's ownership.
+\begin{tenkz}[sandwich, rows={wire}, sandwich=false, cols=1, bonds=none]
+  \tn[name=F]{F}
+\end{tenkz}
+% The same three orderings hold for the two-field planes expansion.
+\begin{tenkz}[frame=circle, planes=false, rows={wire}, cols=1, bonds=none]
+  \tn[name=G]{G}
+\end{tenkz}
+\begin{tenkz}[planes, planes=false, rows={wire}, cols=1, bonds=none]
+  \tn[name=H]{H}
+\end{tenkz}
+\begin{tenkz}
+    [frame=circle, planes, planes=false, rows={wire}, cols=1, bonds=none]
+  \tn[name=I]{I}
+\end{tenkz}
+\begin{tenkz}[planes, frame=circle, planes=false, rows={wire}, cols=1,
+    bonds=none]
+  \tn[name=J]{J}
+\end{tenkz}
+% A live planes spelling is the control showing that these tests can see the
+% expansion which the false-valued cases retract.
+\begin{tenkz}[planes, rows={wire}, cols=1, bonds=none]
+  \tn[name=K]{K}
 \end{tenkz}
 \end{document}
