@@ -28,37 +28,6 @@ variable {d D : ℕ} (U : MPOTensor d D)
 
 namespace SourceFactors
 
-/-- The open two-site product factors through $X_1,u,Y_2$ for any supplied
-source factorization.
-
-Source: arXiv:1703.09188, equations `SVDforms2`, `uu`, and `StandardForm`,
-lines 526--540 and 603--617. -/
-theorem mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
-    (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
-    (U i₁ j₁ * U i₂ j₂) α γ =
-      ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
-        S.X₁ (α, j₁) r * sourceU U S (l, r) (i₁, i₂) * S.Y₂ l (j₂, γ) := by
-  classical
-  simp only [Matrix.mul_apply]
-  have h₁ (β : Fin D) : U i₁ j₁ α β =
-      ∑ r : Fin r[U], S.X₁ (α, j₁) r * S.Y₁ r (i₁, β) := by
-    simpa only [Matrix.mul_apply] using (X₁_mul_Y₁_apply U S α j₁ i₁ β).symm
-  have h₂ (β : Fin D) : U i₂ j₂ β γ =
-      ∑ l : Fin ℓ[U], S.X₂ (β, i₂) l * S.Y₂ l (j₂, γ) := by
-    simpa only [Matrix.mul_apply] using (X₂_mul_Y₂_apply U S β i₂ j₂ γ).symm
-  simp_rw [h₁, h₂, Finset.sum_mul_sum]
-  simp_rw [sourceU_apply, Finset.mul_sum, Finset.sum_mul]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro r _
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro l _
-  apply Finset.sum_congr rfl
-  intro β _
-  ring
-
 /-- The concrete two-site block factors through $X_1,u,Y_2$ for any supplied
 source factorization. The decoded source row has order `(l, r)`.
 

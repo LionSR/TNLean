@@ -2395,8 +2395,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceV_conjTranspose_apply}
     \leanok
     \uses{def:mpu_weighted_source_factors}
-    Given any six source factors satisfying the two source-cut
-    factorizations and their normalization identities, define
+    Given source-cut decompositions $M_1=X_1Y_1$ and $M_2=X_2Y_2$, define
     \begin{align}
         u & : \mathbb C^d\otimes\mathbb C^d
         \longrightarrow \mathbb C^\ell\otimes\mathbb C^r, \\
@@ -2413,9 +2412,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     The source legs of $u$ have order $\ell\times r$, whereas those of $v$
     have order $r\times\ell$. These are the two source tensors introduced
     after the source-cut decompositions in \cite[Section~III]{Cirac2017MPU}.
-    The entry formulas also fix the conjugate-transpose orientation. The
-    compact singular-value decompositions above give one such choice and
-    recover the same tensors $u$ and $v$.
+    The entry formulas also fix the conjugate-transpose orientation. A
+    supplied source-factor witness provides these decompositions. The fixed
+    compact-SVD factors specialize the formulas to the previously defined
+    tensors.
 \end{definition}
 
 \begin{theorem}[Exact translated two-site source factorization]
