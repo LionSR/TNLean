@@ -161,9 +161,8 @@ normalizations.
 - **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`.
 - **Source:** Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3,
   Theorem 6.7; compare arXiv:2011.12127 §IV.
-- **Sanctioned bridges:** `_root_.isPrimitive_iff`,
-  `_root_.isPrimitive_iff_period_one`, and, for transfer maps,
-  `MPSTensor.isPeripherallyPrimitive_iff`.
+- **Sanctioned bridges:** `_root_.isPrimitive_iff` and
+  `_root_.isPrimitive_iff_period_one`.
 - **Caveat:** `_root_.isPrimitive_iff_period_one` requires a specified nonzero
   fixed point and finiteness of `peripheralEigenvalues E`; it is not an
   unconditional period-one characterization of an arbitrary linear map. By
@@ -179,8 +178,7 @@ normalizations.
 - **Meaning:** a thin MPS wrapper around
   `_root_.IsPrimitive (Kraus.transferMap A)`.
 - **Source:** Wolf §6.3, Theorem 6.7, and arXiv:0909.5347 Proposition 3(c).
-- **Sanctioned bridges:** `MPSTensor.isPeripherallyPrimitive_iff`,
-  `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive`, and
+- **Sanctioned bridges:** `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive` and
   `MPSTensor.isPeripherallyPrimitive_of_isPrimitivePaper`.
 - **Caveat:** the last bridge requires `[NeZero D]` and the left-canonical
   normalization `∑ i, (A i)ᴴ * A i = 1`.
