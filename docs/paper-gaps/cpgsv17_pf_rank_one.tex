@@ -1221,8 +1221,16 @@ $\mathcal K$. Moreover, for the singleton normalization produced here,
 $|\mu|=\sqrt r$, where $r$ is the Perron value of the unnormalized transfer.
 For the positive test matrix $H=\operatorname{diag}(20,1)$, the exact
 positive-definite gap $H-\mathcal E_{\mathcal K}^*(H)>0$ has determinant
-$19861/2000$. Its trace pairing with a positive-definite Perron eigenmatrix is
-strictly positive, which gives $r<1$ and hence $|\mu|<1$. This is formalized in
+$19861/2000$. Pairing it with a positive-definite Perron eigenmatrix $\rho$
+of $\mathcal E_{\mathcal K}$ gives the trace-adjoint identity
+\begin{align}
+  0
+    &<\operatorname{tr}\bigl((H-\mathcal E_{\mathcal K}^*(H))\rho\bigr)
+      =(1-r)\operatorname{tr}(H\rho).
+  \notag
+\end{align}
+Since $\operatorname{tr}(H\rho)>0$, this gives $r<1$ and hence
+$|\mu|<1$. This is formalized in
 \leanid{MPOTensor.NonCartesianActiveSectorCandidate.%
 transferMap_posDef_eigenvalue_lt_one}. Since this normalization has only one
 coefficient, the line-246 convention requires that coefficient to have unit

@@ -2716,9 +2716,15 @@ This is the calculation in
           &=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
         \notag
     \end{align}
-    Pairing this positive-definite gap with a positive-definite Perron
-    eigenmatrix of $\mathcal E_K$ gives a strictly positive trace pairing and
-    shows that its Perron value $r$ is strictly below one. Perron
+    Pair this positive-definite gap with a positive-definite Perron
+    eigenmatrix $\rho$ of $\mathcal E_K$. The trace-adjoint identity gives
+    \begin{align}
+      0
+        &<\tr\bigl((H-\mathcal E_K^*(H))\rho\bigr)
+          =(1-r)\tr(H\rho).
+        \notag
+    \end{align}
+    Since $\tr(H\rho)>0$, the Perron value satisfies $r<1$. Perron
     normalization and a canonical gauge therefore express the tensor as
     $K=\mu A$ with $A$ normal and $0<|\mu|=\sqrt r<1$.
 \end{proof}
