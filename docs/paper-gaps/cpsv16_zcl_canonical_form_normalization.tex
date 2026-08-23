@@ -89,10 +89,15 @@ not only a missing scalar normalization.
 \section{Consequence and elimination plan}
 
 The source's $\text{PRFP}\Rightarrow\text{ZCL}$ implication
-(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:777}) is therefore not provable
-against \texttt{IsZCL} as literally stated: the source implication controls
-$\mathcal T_M$, whereas the Lean predicate controls $\mathcal E_M$. Two
-possible repairs are:
+(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:777}) cannot be represented by
+\texttt{IsZCL}: the source implication controls $\mathcal T_M$, whereas that
+predicate controls $\mathcal E_M$. After repairing this definition drift, the
+printed implication to literal physical-trace idempotence is itself refuted by
+\texttt{MPOTensor.exists\_isPRFP\_isMPDO\_physTraceTransfer\_ne\_zero\_not\_isPhysicalTraceIdempotent}.
+Its witness satisfies global PRFP and MPDO positivity with $\mathcal T_M\ne0$,
+but $\mathcal T_M^2\ne\mathcal T_M$. The stronger failure of the scale-invariant
+relation remains a separate project result. Two normalization conventions remain
+useful for corrected restricted theorems:
 
 \begin{enumerate}
   \item \textbf{Source ZCL transfer.} Introduce the physical-trace transfer
@@ -128,7 +133,8 @@ uses \texttt{MPOTensor.physTraceTransfer\_sq\_of\_isRFPViaTS} together with
 \texttt{MPOTensor.isSAL\_of\_isRFPViaTS}. The corresponding
 \texttt{IsSourceZCL} conjunction is again convenience-only. Positivity by
 itself admits the zero tensor, so the trace condition cannot be omitted. The
-PRFP equivalence remains open. In Theorem~4.9, the literal implication
+printed global PRFP equivalence is refuted; the local-purification equivalences remain valid only under their stated tensor-level restriction. In
+Theorem~4.9, the literal implication
 (iv)$\Rightarrow$(v) is now refuted by the unequal repeated-copy example
 described below, while the source (ii)$\Rightarrow$(v) channel route remains a
 missing statement after the ZCL-derived common-weight reduction.

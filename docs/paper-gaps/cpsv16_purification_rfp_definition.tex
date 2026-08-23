@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{Source statement}
 
@@ -68,15 +68,13 @@ implying ZCL. That conclusion contradicted the source theorem above, so it was
 a counterexample to the local Lean predicate, not to Definition
 \path{def:Puri-RFP}.
 
-For this reason the file \path{TNLean/MPS/MPDO/PRFP.lean}, the corresponding
-blueprint section, and the counterexample registry entry were removed. The
-coverage audit now records the source PRFP definition as open, not as
-formalized.\footnote{This note records the divergence removed in
-\href{https://github.com/LionSR/TNLean/pull/2386}{PR \#2386}. The faithful
-replacement is tracked by
-\href{https://github.com/LionSR/TNLean/issues/2383}{issue \#2383} and the
-MPDO coverage tracker
-\href{https://github.com/LionSR/TNLean/issues/2380}{issue \#2380}.}
+The current formalization keeps the two conditions separate.
+\path{TNLean/MPS/MPDO/PRFP.lean} records the positive-length global equation
+and pure-state RFP witness of Definition~4.3, while
+\path{TNLean/MPS/MPDO/LocalPurificationRFP.lean} gives the local tensor
+condition its own name. The Blueprint and coverage audit mark the source PRFP
+definition complete, and the counterexample registry distinguishes the local
+condition from the global nilpotent-sector obstruction discussed below.
 
 \section{Global formalization and its obstruction}
 
@@ -117,17 +115,21 @@ the physical-trace transfer is $Q\ne0$. Nevertheless
   Q^2=\operatorname{diag}(1,0,0)
 \]
 is not a positive scalar multiple of $Q$, since its $(2,3)$ entry vanishes while
-the corresponding entry of $Q$ is $1$. Hence source ZCL fails. The theorem
+the corresponding entry of $Q$ is $1$. Hence the scale-invariant relation fails,
+and in particular $Q^2\ne Q$. The theorem
 \leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
-formalizes this example.
+records the stronger scale-invariant failure. The separate source-facing theorem
+\leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
+records failure of the literal Definition~4.2 equation.
 
-Consequently nondegeneracy cannot repair the printed global statement. The
-source may instead intend the local purification graphic \path{Psipuri}, or a
-minimal or canonical representative excluding trace-invisible nilpotent bond
+Consequently nondegeneracy cannot repair the printed global statement: the
+implication from global PRFP to literal ZCL in Theorem~4.4 is formally refuted.
+The source may instead intend the local purification graphic \path{Psipuri}, or
+a minimal or canonical representative excluding trace-invisible nilpotent bond
 sectors; neither condition is stated in Definition \path{def:Puri-RFP}. No such
-additional condition is introduced here. The global-to-local implication and
-the PRFP--ZCL equivalence therefore require clarification of the source
-statement rather than a proof from its present hypotheses.
+additional condition is introduced here. The corrected local-purification
+results below remain restricted statements rather than proofs of the printed
+global equivalence.
 
 \section{Status}
 
@@ -222,10 +224,13 @@ fixed point being a normalized pure-state fixed point with leading eigenvalue
 $1$, a normalization that \leanid{MPOTensor.IsLocalPurificationRFP} drops.
 The theorem \leanid{MPOTensor.exists_isPRFP_not_isSourceZCL} now records this
 zero-purifier obstruction for the bare global predicate itself.
-The stronger theorem
+The stronger scale-invariant theorem
 \leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
-shows that global MPDO positivity and $\mathcal T_M\ne0$ still do not suffice:
-positive-length traces do not see the nilpotent bond sector of $Q$.
+shows that global MPDO positivity and $\mathcal T_M\ne0$ still do not suffice.
+Its source-facing corollary
+\leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
+refutes the printed literal implication. Positive-length traces do not see the
+nilpotent bond sector of $Q$.
 
 \section{Remaining density-form obstruction}
 
