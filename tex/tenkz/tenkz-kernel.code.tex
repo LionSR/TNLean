@@ -959,6 +959,8 @@
 % One positive-integer parser serves every scope.  Its last three arguments
 % name the diagnostic, its \msg_error variant, and any trailing diagnostic
 % arguments, so the accepted alphabet is independent of the message arity.
+% Extension-gate: #6967 records this helper-signature identity change; the
+% installed parser leaves and public language census are unchanged.
 \cs_new_protected:Npn \__tenkz_kernel_positive_integer:nnnnnn #1#2#3#4#5#6
   {
     \keys_define:nn {#1}
