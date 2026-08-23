@@ -46,7 +46,7 @@ seated.
       ports={0:virtual, 180:virtual, 90:physical:$j$}]{}
   \tn[at=(1,3), name=c,
       ports={0:virtual, 180:virtual, 90:physical:$k$}]{}
-  \tnwire[name=al]{a.0}{b.180}
+  \tnbond[name=al]{a.0}{b.180}
   \tnwire[name=be]{b.0}{c.180}
   \tnwire[name=ga]{c.0}{a.180}
   \tnmark[form=label, label pos=e]{on al 0.5}{$\alpha$}
@@ -89,6 +89,107 @@ themselves.
   \tn[skin=box]{M_1} & \tn[skin=box]{M_2} &
   \tn[skin=box]{M_3} & \tn[skin=box]{M_4}
 \end{tenkz}
+\end{tnexample}
+
+The four side policies describe the boundary of a rectangular frame.
+Opening the transverse sides exposes the north and south indices; tracing a
+side instead joins its boundary sites through the frame.  A physical trace is
+different: it closes the two physical ports of each named site to one another.
+
+\begin{tnexample}[
+  wide,
+  formula={\operatorname{tr}_{\mathrm{phys}}(A)\quad\text{and}\quad
+    A\colon V_{\rm S}\longrightarrow V_{\rm N}},
+  caption={a physical trace and two open transverse sides},
+  index={Left: the upper and lower physical ports close to one another, while
+    the virtual ends remain open.  Right: the north and south frame policies
+    expose one virtual index per boundary site.},
+  signature={kernel-boundary|signature=open:e, open:w}]
+% Ink: trace=physical closes the two physical ports of the site;
+%   north=open and south=open expose the transverse frame boundary.
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, west=open, east=open,
+              physical=updown, trace=physical]
+  \tn[skin=box]{A}
+\end{tenkz}
+\qquad
+\begin{tenkz}[lattice={2x2}, bonds=none, west=none, east=none,
+              north=open, south=open]
+  \tn{} & \tn{} \\
+  \tn{} & \tn{}
+\end{tenkz}
+\end{tnexample}
+
+Identifying all four sides gives a torus.  A closed string on that frame is
+then classified by its two winding numbers.  The two fundamental cycles below
+cross once; the crossing order and the explicit crossing claim are recorded on
+the vertical cycle.
+
+\begin{tnexample}[
+  formula={W_{(1,0)}W_{(0,1)}},
+  caption={the two fundamental cycles of a torus},
+  index={The horizontal and vertical strings are closed by the identified
+    sides.  Their winding pairs distinguish the two homotopy classes, and the
+    marked tensor stands at their declared crossing.},
+  signature={kernel-boundary|signature=}]
+% Ink: surface=torus identifies every opposite side; wind= selects
+%   a homotopy class, and crossing=/cross= settle the intersection.
+\tndeclare{species}{cycle}{hue=source:red}
+\begin{tenkz}[lattice={3x3}, surface=torus]
+  \tnwire[kind=string, species=cycle, name=cx, closed, wind={1,0}]
+  \tnwire[kind=string, species=cycle, name=cy, closed, wind={0,1},
+    crossing=under, cross={under at crossing of cy and cx}]
+  \tn[skin=box, role=marked, at=crossing of cx and cy,
+      label pos=e]{i}
+\end{tenkz}
+\end{tnexample}
+
+The metric profile rescales every pitch-relative length together.  It does not
+introduce a second table of lengths: \tncmd{tnset} changes the single base
+pitch, and \tnkey{metrics=} selects the one named ratio applied to it.
+
+\begin{tnexample}[
+  wide,
+  caption={one tensor word at two metric scales},
+  index={The two panels carry the same three-site network.  The right panel
+    starts from a larger document pitch and then applies the compact profile;
+    all pitch-relative distances move together.},
+  signature={kernel-boundary|signature=open:e, open:w, phys:n}]
+% Ink: tnset changes the one base pitch; metrics=compact scales
+%   every pitch-relative metric from that base.
+\begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+  \tn{A} & \tn[ports={90:physical:$i$}]{B} & \tn{C}
+\end{tenkz}
+\qquad
+{\tnset{pitch=17mm}
+\begin{tenkz}[metrics=compact, rows={wire}, cols=3,
+              west=open, east=open]
+  \tn{A} & \tn[ports={90:physical:$i$}]{B} & \tn{C}
+\end{tenkz}}
+\end{tnexample}
+
+Within an equation, \tnkey{align=} names the row whose axis is the common
+mathematical baseline.  The policy belongs to the equation and is inherited by
+its panels, so both sides below align on their operator row.
+
+\begin{tnexample}[
+  formula={AO\overline A=AO\overline A},
+  caption={equation panels aligned on their second row},
+  index={The ket, operator, and bra rows have different silhouettes.  The
+    equation nevertheless places both panels on the operator axis because
+    \tnkey{align=2} is shared by the composition.},
+  signature={kernel-boundary|signature=}]
+% Layout: align=2 makes the operator row the equation baseline.
+\begin{tenkzeq}[align=2, check={signature}]
+  \begin{tenkz}[rows={ket,op,bra}, cols=1, bonds=none]
+    \tn[at=(1,1)]{A} \tn[at=(2,1), skin=mpo]{O}
+    \tn[at=(3,1)]{\overline A}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={ket,op,bra}, cols=1, bonds=none]
+    \tn[at=(1,1)]{A} \tn[at=(2,1), skin=mpo]{O}
+    \tn[at=(3,1)]{\overline A}
+  \end{tenkz}
+\end{tenkzeq}
 \end{tnexample}
 
 The remaining frame spelling is the explicit one.  \tnkey{basis=} lists
@@ -171,6 +272,52 @@ sub-atoms named after the host.
   \tn[at=(1,2), skin=dot, size=m]{} &
   \tn[at=(1,3), skin=dot, size=l]{} &
   \tn[at=(1,4), name=q, cluster=2x2]{}
+\end{tenkz}
+\end{tnexample}
+
+The two span counts belong to the atom rather than to the frame.
+\tnkey{wide=} counts columns and \tnkey{wires=} counts rows; together they
+place one tensor over the rectangular block of sites it represents.
+
+\begin{tnexample}[
+  formula={R\colon V^{\otimes 2}\longrightarrow V^{\otimes 2}},
+  caption={one tensor spanning two rows and two columns},
+  index={The rectangle is one atom, not four coincident sites.  Its slotted
+    west and east ports expose the two virtual indices carried by the rows.},
+  signature={kernel-boundary|signature=open:e, open:e, open:w, open:w}]
+% Ink: wide=2 and wires=2 give one atom a two-by-two host rectangle.
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, wide=2, wires=2, name=R,
+      ports={180@1:virtual, 180@2:virtual,
+             0@1:virtual, 0@2:virtual}]{R}
+  \tnwire{open w}{R.180@1} \tnwire{open w}{R.180@2}
+  \tnwire{R.0@1}{open e} \tnwire{R.0@2}{open e}
+\end{tenkz}
+\end{tnexample}
+
+A declared skin may carry more than one internal pairing.  When two such
+routes meet, \tnkey{pairing cross=} identifies the pairing instance and fixes
+its order at the crossing, just as \tnkey{cross=} does for an authored wire.
+
+\begin{tnexample}[
+  caption={two declared pairings with a chosen crossing order},
+  index={The horizontal and vertical routes belong to their skins.  The
+    horizontal host declares that its first pairing passes under the first
+    pairing of the vertical host.},
+  signature={kernel-boundary|signature=}]
+% Ink: pairing cross= orders two skin-owned routes
+%   at their intersection.
+\tndeclare{species}{warm}{hue=source:red}
+\tndeclare{species}{cool}{hue=source:blue}
+\tndeclare{skin}{crossed-horizontal}{
+  base=box, pairings={w@1 > e@1 : warm}}
+\tndeclare{skin}{crossed-vertical}{
+  base=box, pairings={n@1 > s@1 : cool}}
+\begin{tenkz}[size=l, rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=H, skin=crossed-horizontal, size=l,
+      pairing cross={
+        1: under at crossing of self and pairing 1 of V}]{}
+  \tn[at=0 e of H, name=V, skin=crossed-vertical, size=l]{}
 \end{tenkz}
 \end{tnexample}
 
@@ -411,15 +558,17 @@ indices of a region it also has to show.
   caption={a region, and an operator on its boundary},
   index={The inner contour is the retained block; the outer one, declared
     second and therefore one clearance further out, is the operator
-    acting on the indices the block leaves open.},
+    acting on the indices the block leaves open.  Their semantic slots
+    distinguish the selected block from its collar by the house palette.},
   signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n}]
-% Ink: two contours over one selection; concentric order steps
-%   the second declared clear of the first.
+% Ink: two semantically tinted contours over one selection;
+%   concentric order steps the second declared clear of the first.
 \begin{tenkz}[rows={wire}, cols=4, bonds=none, physical=up]
   \tn[at=(1,1), skin=box]{A} & \tn[at=(1,2), skin=box]{A} &
   \tn[at=(1,3), skin=box]{A} & \tn[at=(1,4), skin=box]{A}
-  \tnmark[form=enclosure]{(1,1) .. (1,4)}{}
-  \tnmark[form=enclosure, label pos=e]{(1,1) .. (1,4)}{$X$}
+  \tnmark[form=enclosure, slot=selected]{(1,1) .. (1,4)}{}
+  \tnmark[form=enclosure, slot=collar, label pos=e]
+    {(1,1) .. (1,4)}{$X$}
 \end{tenkz}
 \end{tnexample}
 
@@ -681,6 +830,28 @@ What the checks hold is the sugar itself: eleven sugar spellings compile
 beside their kernel expansions and must emit the same events and the same
 picture, so a sugar word is a shorter way to write a canonical case and
 never a second meaning.
+
+\begin{tnexample}[
+  wide,
+  formula={\langle A\rvert O\lvert A\rangle},
+  caption={the sandwich sugar and its strict kernel spelling},
+  index={Both panels draw the same ket--operator--bra stack.  The left uses
+    the \tnkey{sandwich} preset.  In the locally strict panel on the right,
+    the three rows are written explicitly and therefore need no sugar.},
+  signature={kernel-boundary|signature=}]
+% Ink: sandwich expands to rows={ket,op,bra}; strict accepts the
+%   explicit kernel spelling and would refuse the sugar word.
+\begin{tenkz}[sandwich, cols=1, bonds=none]
+  \tn[at=(1,1)]{A} \tn[at=(2,1), skin=mpo]{O}
+  \tn[at=(3,1)]{\overline A}
+\end{tenkz}
+\qquad
+{\tnset{strict}
+\begin{tenkz}[rows={ket,op,bra}, cols=1, bonds=none]
+  \tn[at=(1,1)]{A} \tn[at=(2,1), skin=mpo]{O}
+  \tn[at=(3,1)]{\overline A}
+\end{tenkz}}
+\end{tnexample}
 
 \begin{tnrefusal}[
   caption={strict setup rejects a sugar spelling},
