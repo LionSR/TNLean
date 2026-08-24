@@ -24,6 +24,12 @@ back to the original physical coordinates.
 This is the product-of-pairs state in Beigi's construction.  It is distinct
 from a product over disjoint pairs of physical sites.
 
+**Scope restriction (chain length):** the ground-space statements in this file
+treat chains of length at least two, the nondegenerate range of the two-site
+periodic parent Hamiltonian, and the ordered-cycle dimension formula treats
+length greater than two.  The short-chain conventions are recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
@@ -486,11 +492,6 @@ energy for the finite two-site parent Hamiltonian.
 This is the membership part of Beigi's ground-space description: it does not
 assert that the loop states span the ground space.
 
-**Scope restriction (chain length):** The theorem treats `N ≥ 2`, the
-nondegenerate range of the two-site periodic parent Hamiltonian used here.
-The length-one convention is recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
-
 Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem loopProductState_mem_ker_parentHamiltonian
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
@@ -506,11 +507,6 @@ belongs to the finite parent-Hamiltonian ground space.
 
 This theorem proves membership only; the assertion that these states span the
 ground space is a separate part of Beigi's argument.
-
-**Scope restriction (chain length):** The theorem treats `N ≥ 2`, the
-nondegenerate range of the two-site periodic parent Hamiltonian used here.
-The length-one convention is recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem loopProductState_mem_parentHamiltonianGroundSpaceES
@@ -547,11 +543,6 @@ private theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_fin
 length greater than two the positive-loop product states span the whole parent
 ground space.
 
-**Scope restriction (chain length):** The theorem treats $N > 2$, the range
-covered by the ordered-cycle ground-space dimension formula used here.  The
-short-chain conventions are recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
-
 Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
 theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES
     (F : BeigiSectorGraphData A)
@@ -567,11 +558,6 @@ theorem span_loopProductStateES_eq_parentHamiltonianGroundSpaceES
 
 /-- In the BNT nearest-neighbor setting, positive-loop product states span the
 whole parent ground space at every length greater than two.
-
-**Scope restriction (chain length):** The theorem treats $N > 2$, the range
-covered by the ordered-cycle ground-space dimension formula used here.  The
-short-chain conventions are recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: CPSV16, Definition 3.9 and Theorem 3.10, source lines 517--540;
 Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/

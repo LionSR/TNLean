@@ -331,10 +331,6 @@ chain of the representative.  The corner equations express the two marks as
 linear combinations of physical letters, so normalized BNT-refined horizontal
 form separates them.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines
 1909--1919. -/
 theorem gramDressing_eq_of_two_grouped_corners

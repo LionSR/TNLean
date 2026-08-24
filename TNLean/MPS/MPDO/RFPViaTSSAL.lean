@@ -442,10 +442,6 @@ Normalized BNT-refined horizontal form supplies the nonzero positive-length
 traces that are implicit in the source's density-operator language.  The SAL
 argument itself is `isSAL_of_isRFPViaTS_of_trace_ne_zero`.
 
-**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
-`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341, under the canonical-form and density-operator standing
 assumptions at lines 623--628 and 849--850. -/
@@ -494,10 +490,6 @@ Normalized BNT-refined horizontal form supplies the nonzero positive-length
 traces that are implicit in the source's density-operator language. The
 broader scale-invariant relation and SAL then follow from
 `isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero`.
-
-**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
-`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
 lines 1333--1341, under the canonical-form and density-operator standing

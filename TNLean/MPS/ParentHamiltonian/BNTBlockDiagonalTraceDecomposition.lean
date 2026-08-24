@@ -21,6 +21,15 @@ The variables \(\beta\), \(\rho\), and \(w\) are not names from the paper.
 They are the three word coordinates obtained by opening a boundary-crossing
 cyclic interval; the source proof uses the boundary indices \(i_1\) and
 \(i_{m+1}\) for the corresponding matrices \(C^j\) and \(D^j\).
+
+**Scope restriction (periodic-boundary comparison):** the theorems below whose
+hypotheses are an opened-boundary \(C^j,D^j\) comparison or a boundary trace
+decomposition take the periodic-boundary upgrade of arXiv:quant-ph/0608197,
+Theorem 12, proof lines 1446--1456 (and arXiv:2011.12127, Section IV.C, lines
+2126--2128) as an explicit assumption rather than deriving it. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; the
+source-range conclusion without this assumption is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
 -/
 
 open scoped Matrix BigOperators
@@ -330,23 +339,21 @@ This is the finite-spanning reformulation of the trace-decomposition form of
 arXiv:quant-ph/0608197, Theorem 12, proof lines 1436--1456, after the
 block-diagonal boundary conditions of arXiv:2011.12127, lines 2126--2128.
 
-**Scope restriction (periodic-boundary comparison):** The boundary trace
-decomposition `hTrace` is the explicit hypothesis here. The block-diagonal
-boundary representation supplied by
-`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
-is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12 (its
-block components lie in \(G_N(A_j)\)) and does not assume the boundary-crossing
-comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
-comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
-comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition theorem. The
-source-range conclusion without it is
-`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`.
-
-This scope restriction is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+**Scope restriction (periodic-boundary comparison):** the boundary trace
+decomposition `hTrace` — the boundary trace comparison with
+\(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the periodic-boundary upgrade of
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456 (and
+arXiv:2011.12127, Section IV.C, lines 2126--2128), taken as an explicit
+assumption rather than derived. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. This single
+marker covers every result in this file whose remaining source input is that
+trace decomposition:
+`exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span`,
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition`,
+and
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span`.
+The source-range conclusion without this assumption is the global-cut theorem
+in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -410,24 +417,7 @@ block-separation theorem gives that simultaneous product span at
   (L_0+1)+(r-1)\bigl((L_0+1)+((L_0+1)+(L_0+1))\bigr).
 \]
 The remaining hypothesis is therefore the trace-decomposition equality itself,
-with \(D^j_\beta\) specialized to \((\mu_j^NX_j)A^j_\beta\).
-
-**Scope restriction (periodic-boundary comparison):** The boundary trace
-decomposition `hTrace` is the explicit hypothesis here. The block-diagonal
-boundary representation it builds on is the boundary-comparison-free open-boundary inclusion of
-arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
-comparison; the common middle-word span is supplied by the BNT block-separation
-theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
-comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
-comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition theorem. The
-source-range conclusion without it is
-`exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`.
-
-This scope restriction is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+with \(D^j_\beta\) specialized to \((\mu_j^NX_j)A^j_\beta\). -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -495,22 +485,7 @@ length \(m\) and the trace equality at that length, for every
 boundary-crossing interval and every block-diagonal boundary representation.
 The trace equality remains the explicit input of this intermediate theorem. The
 source-range global-cut theorem proves the periodic-boundary conclusion without
-requiring this trace-decomposition hypothesis.
-
-**Scope restriction (periodic-boundary comparison):** The boundary trace
-decomposition `hTrace` is the explicit hypothesis here. The underlying
-block-diagonal boundary representation is the boundary-comparison-free open-boundary inclusion of
-arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
-comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
-comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
-comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition theorem. The
-source-range conclusion without it is
-`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
-
-This scope restriction is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+requiring this trace-decomposition hypothesis. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -569,23 +544,7 @@ This is the finite block-injective specialization of the preceding equality
 theorem. The simultaneous product span at the middle-word length used in
 arXiv:quant-ph/0608197, Theorem 12, is derived from the BNT hypotheses; the
 remaining input is the trace-decomposition equality from arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1436--1448, with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\).
-
-**Scope restriction (periodic-boundary comparison):** The boundary trace
-decomposition `hTrace` is the explicit hypothesis here. The underlying
-block-diagonal boundary representation is the boundary-comparison-free open-boundary inclusion of
-arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
-comparison; the common middle-word span is supplied by the BNT block-separation
-theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trace
-comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
-comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition theorem. The
-source-range conclusion without it is
-`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
-
-This scope restriction is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+Theorem 12, proof lines 1436--1448, with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\). -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

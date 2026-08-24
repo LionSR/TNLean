@@ -13,6 +13,11 @@ This file extends the retained-coordinate Gibbs decomposition to the ambient
 physical chain. The retained-row coisometry supplies a finite energy on the
 physical support and zero energy on its orthogonal complement.
 
+**Scope restriction (positive chains of length at least two):** Definition 4.8
+of the source fixes no length-one two-site convention, so the physical Gibbs
+decompositions in this file cover exactly the source-defined chains of length
+at least two.  See `docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -565,11 +570,7 @@ Definition 4.8, lines 831–847.
 by zero energy on the orthogonal physical complement, and the retained
 projectors are transported through the adjoint sitewise coisometry. This
 finite extension is documented in
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 does not specify a length-one two-site convention. See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 def HasPhysicalTopologicalGibbsDecomposition
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) : Prop :=
   H.physicalTopologicalGibbsLocalTerm.IsHermitian ∧
@@ -621,11 +622,7 @@ Definition 4.8, lines 831–847.
 
 **Local fix (physical complement):** The retained-row derivation is extended
 by zero energy on the orthogonal physical complement, as documented in
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 does not specify a length-one two-site convention. See
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem hasPhysicalTopologicalGibbsDecomposition
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (hLI : (BNTLabelCoefficientFamily.ofChi H.chi).LengthIndependent) :
@@ -657,10 +654,6 @@ constructed internally. For every chain of length `N + 2`, the local
 translates commute, the projectors are pairwise orthogonal and commute with
 the Gibbs factor, and their weighted Gibbs sum is the physical MPDO.
 
-**Scope restriction (BNT-refined horizontal form):** The horizontal hypothesis
-`IsHorizontalCF` is stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: CPSV16, lines 1013–1016, with the local two-site convention of
 Definition 4.8, lines 831–847.
 
@@ -668,12 +661,7 @@ Definition 4.8, lines 831–847.
 by zero energy on the orthogonal physical complement, and the retained
 projectors are transported through the adjoint sitewise coisometry. This
 finite extension is documented in
-`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`.
-
-**Scope restriction (positive chains of length at least two):** Definition
-4.8 does not specify a length-one two-site convention. This theorem covers
-exactly the source-defined chains of length `N + 2`; see
-`docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
+`docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem physicalTopologicalGibbsDecomposition_of_isRFPViaTS
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M)

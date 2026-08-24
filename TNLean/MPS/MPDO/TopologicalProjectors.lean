@@ -35,6 +35,13 @@ the bond indices of $M_\gamma$, rather than closing the bond leg to obtain a
 one-site operator.  Documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`.
 
+**Scope restriction (full-support fusion family):** the terminal-space,
+transport, and projector statements of this file use the older fusion family
+in which the active support is the whole product bond space, and they concern
+one fusion layer rather than the arbitrary sequential circuit of the source
+recursion.  Documented in
+`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`.
+
 These are the one-fusion-step projector statements in the recursive
 construction at source lines 999--1010.  The spectral decomposition of the
 terminal matrices, iteration along an arbitrary chain, and the commuting Gibbs
@@ -305,12 +312,7 @@ variable (Fam : BNTFusionIsometryFamily (Fin g) p)
 matrices $P_\gamma$ on the bond spaces of the final sectors.
 
 Source: arXiv:1606.00608, lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (full-support fusion family):** The terminal spaces agree
-with the source contraction, but this older fusion family requires the active
-support to be the whole product bond space.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def projectorQBlock
     (P : ∀ γ : Fin g,
       Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
@@ -325,12 +327,7 @@ noncomputable def projectorQBlock
 are identities.
 
 Source: arXiv:1606.00608, lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (full-support fusion family):** This identity uses the
-older fusion family in which the active support is the whole product bond
-space.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem projectorQBlock_eq_unweighted
     (c : BNTLabelCoefficientFamily (Fin g))
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
@@ -350,12 +347,7 @@ matrices are self-adjoint idempotents and the structure coefficients are
 length independent.
 
 Source: arXiv:1606.00608, lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (full-support fusion family):** This theorem uses the
-older fusion family in which the active support is the whole product bond
-space.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem projectorQBlock_isStarProjection
     (c : BNTLabelCoefficientFamily (Fin g))
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
@@ -384,14 +376,7 @@ theorem projectorQBlock_isStarProjection
 fusion map.
 
 Source: arXiv:1606.00608, lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (full-support fusion family):** This transport is defined
-only for the older family in which the active support is the whole product
-bond space.  It is one fusion layer, not the arbitrary sequential circuit.
-Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex` and
-`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def conjugatedProjectorQBlock
     (P : ∀ γ : Fin g,
       Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)
@@ -407,14 +392,7 @@ orthogonal projection on the product bond space.
 
 Source: arXiv:1606.00608, BNT separation at lines 317--345, the fusion map at
 lines 986--993, and the recursive projector at lines 999--1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`.
-
-**Scope restriction (full-support fusion family):** The BNT hypothesis and
-length independence imply the additional full-support relation needed here.
-The theorem concerns one fusion layer, not the arbitrary sequential circuit
-of the source recursion.  Documented in
-`docs/paper-gaps/cpsv16_topological_projector_recursion.tex` and
-`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`. -/
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem conjugatedProjectorQBlock_isOrthogonalProjection
     {D : ℕ} {A : MPSTensor (p * p) D}
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors A

@@ -351,13 +351,7 @@ equal to `X` times the window products starting at site `r + L`.
 spanning window starting at `r`; the algebra-homomorphism clause of the
 source lemma (its final sentence, the maps `O_1 ↦ X` and `O_3^T ↦ X`) is
 established with the site-dependent insertion correspondence in
-`TNLean/PEPS/CycleMPSChainOverlapInsertion.lean`.
-
-**Scope restriction (uniform physical and bond dimensions):** the source
-poses no restriction on the local dimensions of the site-dependent tensors,
-while here all sites share one physical dimension `d` and all bonds one
-bond dimension `D`.  Documented in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
+`TNLean/PEPS/CycleMPSChainOverlapInsertion.lean`. -/
 theorem overlapWindow_exists_bondOperator [NeZero n] {A : MPSChainTensor d D n}
     {L : ℕ} (hL : 0 < L) (hn : 2 * L + 1 ≤ n) (hA : IsWindowInjective A L)
     (r : ℕ) (C : ℕ → (Fin L → Fin d) → Matrix (Fin D) (Fin D) ℂ)

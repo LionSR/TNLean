@@ -76,22 +76,29 @@
     \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-% CPSV16 Theorem 3.8 (`TheoremZCLPure`), lines 498--503 and 1248--1268.
+% CPSV16 Theorem 3.8 (`TheoremZCLPure`), lines 498--503 and 1248--1268, and
+% Theorem 3.10 (`thm:main-MPS`), lines 532--541.
 % Adjacent-gap source-gap record:
 % docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex.
 % The raw-weight counterexample is implemented through the auxiliary BNT sector
 % data; no duplicate `CPSVCanonicalFormData` package has been added.
 \begin{theorem}[Two source gaps in the zero-correlation-length characterization]
     \label{thm:cpsv_theorem_zcl_pure_status}
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:source_bnt_zcl, def:mps_transfer_idempotence, thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid, thm:is_positive_gap_physical_cid_of_is_rfp}
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:source_bnt_zcl, def:mps_transfer_idempotence, def:has_nncph_ground_spaces, thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid, thm:is_positive_gap_physical_cid_of_is_rfp}
     \notready
     CPSV asserts that a tensor $A$ in canonical form has physical BNT zero
     correlation length if and only if
     \begin{align}
-        \E_A^2 & =\E_A.
+        \E_A^2 & =\E_A,
         \notag
     \end{align}
-    Both directions fail as printed.
+    and, more generally, that for such $A$ the following are equivalent: $A$ is
+    a renormalization fixed point; $A$ has physical zero correlation length;
+    and, for every $N>2$, the vector $|V^{(N)}(A)\rangle$ belongs to the ground
+    space of a nearest-neighbor commuting parent Hamiltonian
+    \cite[Theorems~3.8 and~3.10]{Cirac2016MPDO_arXiv}.
+    Both directions of the biconditional fail as printed, and with them the
+    three-way equivalence.
 
     For the reverse implication, let $C^0=(1)$ and form the direct sum of two
     scalar copies with weights $1$ and $1/2$. The resulting tensor is
@@ -114,69 +121,32 @@
     Independently, the Bell-pair chain of
     Theorem~\ref{thm:bell_pair_chain_not_cid} is a single normal block. Taking
     its weight to be $1$ and the ambient coisometry to be the identity gives a
-    literal CPSV canonical-form tensor. Its transfer map is idempotent, but its
-    adjacent two-region expectation is $1$, while the expectation after an
-    allowed one-site shift is $0$.
+    literal CPSV canonical-form tensor. Its transfer map is idempotent, so it is
+    a renormalization fixed point, but its adjacent two-region expectation is
+    $1$, while the expectation after an allowed one-site shift is $0$.
     Hence transfer idempotence does not imply physical zero correlation length
-    for the unrestricted quantification over disjoint regions.
+    for the unrestricted quantification over disjoint regions, regardless of
+    the commuting-parent condition.
 
     \textbf{Source gap (adjacent regions).} The printed forward argument uses
     $\E_A^n=\E_A$, which follows from idempotence only for $n\geq1$. Adjacent
     regions insert $\E_A^0=\Id$ and are included in the source definition. This
-    gap is recorded in
+    gap and its scope are recorded in
     \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}.
     Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} proves the repaired
     forward implication when both complementary gaps are positive. It does not
-    prove the unrestricted biconditional in
-    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}. The converse and equivalence results
-    below require their stated unit-weight, multiplicity-one, or spectral
-    hypotheses. The printed biconditional is recorded here as refuted, not as a
-    theorem awaiting proof.
+    prove the unrestricted biconditional of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} or the unrestricted three-way
+    equivalence of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. The converse and
+    equivalence results below require their stated unit-weight,
+    multiplicity-one, or spectral hypotheses. The printed statements are
+    recorded here as refuted, not as theorems awaiting proof.
 \end{theorem}
 \begin{proof}
     \uses{thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid}
     Theorem~\ref{thm:halved_weight_zcl_not_rfp} refutes the reverse implication.
-    Theorem~\ref{thm:bell_pair_chain_not_cid} refutes the forward implication.
-\end{proof}
-
-% CPSV16 Theorem 3.10 (`thm:main-MPS`), lines 532--541.
-% The adjacent-gap source-gap record is
-% docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex.
-\begin{theorem}[The adjacent gap refutes the printed three-way equivalence]
-    \label{thm:cpsv_main_mps_status}
-    \uses{def:cpsv_canonical_form, def:source_bnt_zcl, def:mps_transfer_idempotence, def:has_nncph_ground_spaces, thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid, thm:is_positive_gap_physical_cid_of_is_rfp}
-    \notready
-    CPSV asserts that, for a tensor $A$ in canonical form, the following are
-    equivalent: $A$ is a renormalization fixed point; $A$ has physical zero
-    correlation length; and, for every $N>2$, the vector
-    $|V^{(N)}(A)\rangle$ belongs to the ground space of a nearest-neighbor
-    commuting parent Hamiltonian
-    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
-
-    This three-way equivalence is false with the unrestricted physical
-    zero-correlation-length definition. The Bell-pair chain is a single normal
-    block and becomes a literal CPSV canonical-form tensor by taking unit weight
-    and the identity ambient coisometry. Its transfer map is idempotent, so it
-    is a renormalization fixed point, but its adjacent-region
-    correlations are not independent of distance. Thus the implication from
-    renormalization fixed points to zero correlation length fails, regardless
-    of the commuting-parent condition. The raw-weight example of
-    Theorem~\ref{thm:halved_weight_zcl_not_rfp} separately refutes the reverse
-    implication from zero correlation length to renormalization fixed points.
-
-    \textbf{Source gap (adjacent regions).} The obstruction and its scope are
-    recorded in
-    \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}.
-    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} repairs only the
-    forward correlation statement when both complementary gaps are positive;
-    it does not establish the printed unrestricted three-way equivalence. That
-    equivalence is recorded here as refuted, not as a theorem awaiting proof.
-\end{theorem}
-\begin{proof}
-    \uses{thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid}
-    The Bell-pair chain refutes the implication from fixed points to zero
-    correlation length. The halved-weight tensor refutes the reverse
-    implication.
+    Theorem~\ref{thm:bell_pair_chain_not_cid} refutes the forward implication,
+    and with it the implication from fixed points to zero correlation length.
 \end{proof}
 
 \begin{theorem}[Auxiliary weighted-sector example]%

@@ -532,7 +532,7 @@ the remaining sites unchanged.
 \end{definition}
 
 \begin{theorem}[Open-boundary Fibonacci operator ranks]
-    \label{thm:cpsv_fibonacci_open_boundary_rank_status}
+    \label{thm:cpsv_fibonacci_open_boundary_rank}
     \lean{MPSTensor.FibonacciBoundary.rank_openBoundaryOperator_eq_x}
     \leanok
     \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_boundary_counts}
@@ -578,7 +578,7 @@ the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_golden_ratio, thm:cpsv_fibonacci_open_boundary_rank_status, thm:to_mpo_diagonal_rank}
+    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_golden_ratio, thm:cpsv_fibonacci_open_boundary_rank, thm:to_mpo_diagonal_rank}
     The diagonal MPO rank counts physical words with nonzero periodic amplitude.
     For $N>0$, the supports obtained by closing the virtual endpoint at $0$ and
     at $1$ are disjoint, since the first physical bit determines the initial
