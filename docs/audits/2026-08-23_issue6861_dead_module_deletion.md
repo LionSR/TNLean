@@ -25,11 +25,21 @@ aggregator. It contains the following substantive public declarations:
 - `MPSTensor.mpv_upperFin_eq_mpv_diagFin`;
 - `MPSTensor.sameMPV_upperFin_diagFin`.
 
-These declarations have no named replacements. They therefore do not satisfy
-the immediate-removal exception in `docs/project_conventions.md`, which is
-limited to exact pass-through declarations, bundled fields, and proof-step
-names replaced at their use sites. The module and its aggregator import remain
-available until a valid compatibility transition is specified.
+These declarations are not literal pass-throughs, but their mathematical
+content is the two-block coordinate specialization of the projection-based API
+in `TNLean/Algebra/ProjectionTriangularTrace.lean`. In particular,
+`MPSTensor.sameMPV_diagPart_of_lowerZero` is the coordinate-free strict
+generalization of `MPSTensor.sameMPV_upperFin_diagFin`, with the remaining
+projection lemmas supplying the corresponding word-evaluation and trace
+statements.
+
+Issue #7135 tracks the missing compatibility transition: the ten coordinate
+names are to be rederived as thin specializations of the projection API before
+deprecation is considered. Until then they do not satisfy the
+immediate-removal exception in `docs/project_conventions.md`, which is limited
+to exact pass-through declarations, bundled fields, and proof-step names
+replaced at their use sites. The module and its aggregator import therefore
+remain available.
 
 ## Retired: `TNLean/Wielandt/RankOne/MatrixFittingRange.lean`
 
