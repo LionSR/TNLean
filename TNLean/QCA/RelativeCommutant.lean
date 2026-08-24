@@ -29,33 +29,6 @@ open scoped Kronecker
 
 namespace SpinChain
 
-namespace Config
-
-private lemma splitComplement_snd_eq_iff {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
-    (x y : Config d Γ) :
-    (splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) x).2 =
-        (splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) y).2 ↔
-      restrict h x = restrict h y := by
-  constructor
-  · intro hxy
-    funext i
-    exact congrFun hxy ⟨i, Finset.mem_sdiff.mpr ⟨h i.2, by simp [i.2]⟩⟩
-  · intro hxy
-    funext i
-    have hiΛ : (i : ℤ) ∈ Λ := by
-      by_contra hi
-      exact (Finset.mem_sdiff.mp i.2).2
-        (Finset.mem_sdiff.mpr ⟨(Finset.mem_sdiff.mp i.2).1, hi⟩)
-    exact congrFun hxy ⟨i, hiΛ⟩
-
-private lemma restrict_sdiff_splitEquiv_symm {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
-    (p : Config d Λ × Config d (Γ \ Λ)) :
-    restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) ((splitEquiv h).symm p) = p.2 := by
-  have hp := congrArg Prod.snd ((splitEquiv h).apply_symm_apply p)
-  exact hp
-
-end Config
-
 section Finite
 
 variable {d : ℕ} {Λ Γ : Finset ℤ}
@@ -82,15 +55,17 @@ private lemma reindex_localInclusion_sdiff (h : Λ ⊆ Γ)
   simp only [CStarMatrix.ofMatrix_apply, Matrix.rightKroneckerEmbed_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply]
   have hp : Config.restrict h ((Config.splitEquiv h).symm p) = p.1 :=
-    congrArg Prod.fst ((Config.splitEquiv h).apply_symm_apply p)
+    Config.restrict_splitEquiv_symm h p
   have hq : Config.restrict h ((Config.splitEquiv h).symm q) = q.1 :=
-    congrArg Prod.fst ((Config.splitEquiv h).apply_symm_apply q)
+    Config.restrict_splitEquiv_symm h q
   have heq :
       (Config.splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ)
           ((Config.splitEquiv h).symm p)).2 =
         (Config.splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ)
           ((Config.splitEquiv h).symm q)).2 ↔ p.1 = q.1 := by
-    rw [Config.splitComplement_snd_eq_iff h, hp, hq]
+    simpa only [Config.restrict_splitEquiv_symm] using
+      (Config.splitEquiv_sdiff_snd_eq_iff_restrict
+        (d := d) h ((Config.splitEquiv h).symm p) ((Config.splitEquiv h).symm q))
   by_cases hpq : p.1 = q.1
   · have hsnd := heq.mpr hpq
     simp [hpq, hsnd]
