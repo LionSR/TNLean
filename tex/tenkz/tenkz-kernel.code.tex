@@ -903,9 +903,11 @@
       { \tl_use:N \l__tenkz_kernel_list_item_tl }
   }
 
-% crossing= is the string's habit: the order it takes at every crossing it
-% makes, stated once instead of once per crossing.  `alternate' flips along
-% the order the string meets them, and `alternate=under' anchors the first.
+% crossing= orders the crossing set a hull route derives: one order for
+% every crossing the route makes, stated once instead of once per crossing.
+% A free string derives no crossing set, so its crossings answer to cross=
+% alone.  `alternate' flips along the order the string meets them, and
+% `alternate=under' anchors the first.
 \cs_new_protected:Npn \__tenkz_kernel_crossing:n #1
   {
     \tl_set:Nn \l__tenkz_kernel_list_item_tl {#1}
@@ -971,6 +973,29 @@
   {
     \keys_define:nn {#1}
       { #2 .code:n = { \__tenkz_kernel_stage_put:nn {#3} {##1} } }
+  }
+% A label bearing's registry default is the word auto -- the automatic
+% chooser -- so the word must be spellable.  Spelling the default is saying
+% nothing: auto stages no bearing and retracts one an earlier spelling
+% staged, the last-wins doctrine the alphabet already follows.  The stage
+% takes the trimmed word the comparison read, since a braced key value may
+% arrive spaced and the compass reader answers words, not spaced words.
+\cs_new_protected:Npn \__tenkz_kernel_label_pos:nn #1#2
+  {
+    \keys_define:nn {#1}
+      {
+        #2 .code:n =
+          {
+            \tl_set:Nn \l__tenkz_kernel_list_item_tl {##1}
+            \tl_trim_spaces:N \l__tenkz_kernel_list_item_tl
+            \str_if_eq:VnTF \l__tenkz_kernel_list_item_tl {auto}
+              { \prop_remove:Nn \l__tenkz_kernel_stage_prop {label-pos} }
+              {
+                \__tenkz_kernel_stage_put:ne {label-pos}
+                  { \tl_use:N \l__tenkz_kernel_list_item_tl }
+              }
+          }
+      }
   }
 % A side takes one word of the policy alphabet, and the cup word takes the
 % matrix that stands on its bend.  The matrix is a second slot on the same
@@ -1400,7 +1425,7 @@
   { tenkz-kernel-atom } { pairing~cross } { pairing-cross }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { size }
   { s, m, l } { size }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { label~pos } { label-pos }
+\__tenkz_kernel_label_pos:nn { tenkz-kernel-atom } { label~pos }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { void }
   { open, sealed } { void }
 % A site may answer the picture's physical policy for itself: the policy
@@ -1464,7 +1489,7 @@
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
   { selected, secondary, complement, collar, neutral } { slot }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
-\__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { label~pos } { label-pos }
+\__tenkz_kernel_label_pos:nn { tenkz-kernel-mark } { label~pos }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { name } { name }
 \__tenkz_kernel_flag:nnn    { tenkz-kernel-mark } { tint } { tint }
 \__tenkz_kernel_unknown:nn  { tenkz-kernel-mark } { mark }
