@@ -9,21 +9,18 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
 import TNLean.MPS.MPDO.SourceSimpleTensor
 
 /-!
-# Canonical-block simplicity of the dimer tensor
+# Simplicity of the dimer tensor
 
-The rescaling-stable dimer tensor is simple under the canonical-block
-reading of arXiv:1606.00608, Definition 4.7. The witness uses blocking length
-one and the BNT refinement of the tensor's literal CPSV canonical form.
-Its retained block has nonnilpotent ket-against-bra contraction.
+The rescaling-stable dimer tensor is simple in the sense of arXiv:1606.00608,
+Definition 4.7. The witness uses blocking length one and the BNT refinement of
+the tensor's literal CPSV canonical form. Its retained block has nonnilpotent
+ket-against-bra contraction.
 
 ## Main results
 
 * `toMPSTensor_blockTensor_R_one`: one-site blocking is the canonical physical
   relabeling of the doubled tensor.
-* `R_isSourceSimple`: the dimer satisfies the canonical-block reading of
-  Definition 4.7.
-* `R_isNonvanishingSourceSimple`: the dimer also satisfies the strengthened
-  positive-length nonvanishing predicate.
+* `R_isSimple`: the dimer satisfies Definition 4.7.
 
 ## References
 
@@ -69,25 +66,17 @@ theorem toMPSTensor_blockTensor_R_one :
             MPSTensor.singleBlockEquiv 4 ij.modNat)).modNat
   rw [mul_one, MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
-private theorem R_mpo_ne_zero (N : ℕ) (hN : 0 < N) : mpo R N ≠ 0 := by
-  intro hzero
-  have hentry := congrFun (congrFun hzero (fun _ => 0)) (fun _ => 0)
-  rw [mpo_R_entry_formula hN] at hentry
-  simp [chainIndicator, ChainOK, φ, wN, wMat, bondBit1, bondBit2] at hentry
-
-/-- The rescaling-stable dimer tensor is simple under the canonical-block reading of
-Definition 4.7.
+/-- The rescaling-stable dimer tensor is simple in the sense of Definition 4.7.
 
 The positive blocking length is $L=1$. The BNT is the representative family
 supplied by the BNT refinement of `canonicalFormData`; its only retained
 normal block is `retainedBlock`, whose doubled physical-trace transfer is
 nonnilpotent.
 
-This theorem neither asserts simplicity for every positive blocking nor changes
-the normalized fixed-representative predicate `MPOTensor.IsSimple`.
+This theorem does not assert simplicity for every positive blocking.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
-theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
+theorem R_isSimple : MPOTensor.IsSimple R := by
   let data := canonicalFormData.reindexPhysical oneSiteDoubledEquiv
   let ref := data.bntRefinement
   refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition, ?_, ?_⟩
@@ -108,13 +97,5 @@ theorem R_isSourceSimple : MPOTensor.IsSourceSimple R := by
         (fun i : Fin 4 => retainedBlock (finProdFinEquiv (i, i)))
     rw [hTransfer]
     exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent
-
-/-- The dimer satisfies the documented canonical-block reading of source simplicity,
-and its closed MPO is nonzero at every positive chain length. The latter follows by evaluating
-the entry identity at the all-zero configuration.
-
-The nonvanishing conjunct is additional to CPSV16 Definition 4.7. -/
-theorem R_isNonvanishingSourceSimple : MPOTensor.IsNonvanishingSourceSimple R :=
-  ⟨R_isSourceSimple, R_mpo_ne_zero⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP

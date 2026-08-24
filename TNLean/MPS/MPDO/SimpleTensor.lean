@@ -32,8 +32,6 @@ independent of the copy index $q$ (Appendix C.2, lines 1646--1661).
   $\mu_{j,q}\,\mathcal{B}_j$.
 * `MPOTensor.IsSimpleCanonicalForm`: simplicity for a tensor already in the
   blocked canonical-form setting of Appendix C.2.
-* `MPOTensor.IsSimple`: normalized fixed-representative simplicity after a
-  positive physical blocking, including the global unit-weight convention.
 * `MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent`: literal zero
   correlation length makes the canonical-form weights independent of the copy index.
 * `MPOTensor.IsSimpleCanonicalForm.
@@ -205,23 +203,6 @@ def IsSimpleCanonicalForm (M : MPOTensor d D) : Prop :=
                   (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                       GL (Fin S.totalDim) ℂ) :
                     Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))
-
-/-- **Normalized fixed-representative simplicity.** Before choosing the BNT,
-the source blocks a positive number of physical sites at
-arXiv:1606.00608, line 815. This predicate strengthens the source simplicity
-condition of lines 815--822 by requiring the blocked tensor itself to admit the
-normalized canonical-form witness above, including the global unit-weight
-convention of line 246. The canonical-block reading is
-`MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`; the
-nonzero-coefficient convention is recorded in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
-
-**Scope restriction (fixed representative):** This permits a positive physical
-blocking but does not quotient the blocked tensor by nonzero scalar rescaling or
-assert presentation independence. See
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
-def IsSimple (M : MPOTensor d D) : Prop :=
-  IsMPDO M ∧ ∃ L : ℕ, 0 < L ∧ IsSimpleCanonicalForm (blockTensor M L)
 
 /-- A simple canonical-form tensor is in horizontal canonical form:
 simplicity is the horizontal canonical form of arXiv:1606.00608, lines

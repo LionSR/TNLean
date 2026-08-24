@@ -201,9 +201,7 @@ idempotent: its `(0, 0)` entry is `1/2`, so nilpotency would contradict
 `physTraceTransfer_R_idempotent`.
 
 This is the non-nilpotency condition of arXiv:1606.00608, Definition 4.7,
-lines 815--822, for the unnormalized horizontal tensor of this project example.
-It does not assert `MPOTensor.IsSimple R`, whose canonical-form normalization
-has additional requirements. -/
+lines 815--822, for the unnormalized horizontal tensor of this project example. -/
 theorem physTraceTransfer_R_not_isNilpotent :
     ¬ IsNilpotent (physTraceTransfer R) := by
   intro hnil

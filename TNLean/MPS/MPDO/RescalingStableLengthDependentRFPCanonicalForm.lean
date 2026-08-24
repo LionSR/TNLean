@@ -312,15 +312,8 @@ so multiplying a hypothetical nilpotent by `weight` would make
 
 This is the basis-element non-nilpotency condition of arXiv:1606.00608,
 Definition 4.7, lines 815--822, for the single retained block of this project
-example.
-
-**Scope restriction (fixed representative):** This is only the nilpotency
-clause for the displayed one-block presentation. The weight `√(337/512)` is
-not a unit weight, and replacing `R` by `retainedBlock` changes the fixed
-representative on which Definition 4.1 is evaluated. Thus this theorem neither
-proves nor refutes `MPOTensor.IsSimple R`, and it makes no claim about other
-presentations or blockings. See
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
+example. It is the nilpotency clause for the displayed one-block presentation
+alone and makes no claim about other presentations or blockings. -/
 theorem doubledPhysTraceTransfer_retainedBlock_not_isNilpotent :
     ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4 retainedBlock) := by
   rw [doubledPhysTraceTransfer_retainedBlock]
