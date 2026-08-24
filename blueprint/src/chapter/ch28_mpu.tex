@@ -1878,9 +1878,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Homogeneous word spans of an independent tensor product]
     \label{thm:mps_word_span_tensor_product}
-    \lean{MPSTensor.wordSpan_tensorProduct,
-        MPSTensor.isNBlkInjective_tensorProduct,
-        MPSTensor.isNormal_tensorProduct}
+    \lean{MPSTensor.word_span_tensor_product,
+        MPSTensor.is_n_blk_injective_tensor_product,
+        MPSTensor.is_normal_tensor_product}
     \leanok
     \uses{def:mps_independent_tensor_product, def:word_span, def:normal}
     Let $S_N(A)=\spn_{\C}\{A^w:|w|=N\}$.  The pointwise splitting of
@@ -1913,9 +1913,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
          & =\operatorname{reind}_{\pi_{D,E}}(A^u\otimes B^v),
     \end{align}
     which proves~(\ref{eq:mpu_tensor_word_span}) after taking linear spans.
-    Pure tensors span $\MN{D}\otimes\MN{E}$, and simultaneous reindexing
-    along $\pi_{D,E}$ is an isomorphism onto $\MN{DE}$; this proves the
-    fixed-length consequence.  If
+    Pure tensors span $\MN{D}\otimes\MN{E}$.  The Kronecker linear
+    equivalence, followed by simultaneous reindexing along $\pi_{D,E}$, is an
+    isomorphism onto $\MN{DE}$; this proves the fixed-length consequence.  If
     $S_{N_A}(A)=\MN{D}$ and $S_{N_B}(B)=\MN{E}$ for positive $N_A,N_B$, then
     persistence at positive multiples gives
     \begin{align}
@@ -1928,8 +1928,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{theorem}[Left-canonical normal blocks under independent tensor products]
     \label{thm:mps_normal_block_tensor_product}
-    \lean{MPSTensor.leftCanonical_tensorProduct,
-        MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical}
+    \lean{MPSTensor.left_canonical_tensor_product,
+        MPSTensor.IsNormalTensor.tensor_product_of_left_canonical}
     \leanok
     \uses{def:mps_independent_tensor_product, def:left_canonical_tensor,
         def:nt_cpsv}

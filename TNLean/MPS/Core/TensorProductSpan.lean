@@ -26,12 +26,19 @@ arXiv:1606.00608, equation `II_CF1`, lines 214--245.
 
 ## Main statements
 
-* `MPSTensor.wordSpan_tensorProduct` identifies the product word span with the
+* `MPSTensor.word_span_tensor_product` identifies the product word span with the
   image of the paired constituent spans.
-* `MPSTensor.isNBlkInjective_tensorProduct` preserves full homogeneous word
+* `MPSTensor.is_n_blk_injective_tensor_product` preserves full homogeneous word
   spans at a common length.
-* `MPSTensor.isNormal_tensorProduct` preserves algebraic normality by using
+* `MPSTensor.is_normal_tensor_product` preserves algebraic normality by using
   the common length `N_A * N_B`.
+
+## References
+
+* Cirac--Pérez-García--Schuch--Verstraete, *Matrix Product Unitaries:
+  Structure, Symmetries, and Topological Invariants*, arXiv:1703.09188.
+* Cirac--Pérez-García--Schuch--Verstraete, *Matrix Product Density Operators:
+  Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608.
 -/
 
 open scoped Matrix Kronecker
@@ -58,7 +65,7 @@ lines 824--845, rather than a separately stated theorem of that paper.  Its
 homogeneous-word route supplies the project's algebraic-normality input for
 the retained blocks described around arXiv:1606.00608, equation `II_CF1`,
 lines 214--245. -/
-theorem wordSpan_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem word_span_tensor_product (A : MPSTensor d D) (B : MPSTensor e E)
     (N : ℕ) :
     Kraus.wordSpan (tensorProduct A B) N =
       Submodule.map
@@ -105,11 +112,11 @@ Surjectivity of the composite of `kroneckerLinearEquiv` and
 spaces onto the full product matrix algebra.  This is the fixed-length step
 in the algebraic proof associated with arXiv:1703.09188, Theorem `IndexTh`
 (ii), lines 824--845. -/
-theorem isNBlkInjective_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem is_n_blk_injective_tensor_product (A : MPSTensor d D) (B : MPSTensor e E)
     {N : ℕ} (hA : Kraus.IsNBlkInjective A N)
     (hB : Kraus.IsNBlkInjective B N) :
     Kraus.IsNBlkInjective (tensorProduct A B) N := by
-  rw [Kraus.IsNBlkInjective, wordSpan_tensorProduct]
+  rw [Kraus.IsNBlkInjective, word_span_tensor_product]
   change Kraus.wordSpan A N = ⊤ at hA
   change Kraus.wordSpan B N = ⊤ at hB
   rw [hA, hB, TensorProduct.map₂_mk_top_top_eq_top]
@@ -129,7 +136,7 @@ If `S_{N_A}(A)` and `S_{N_B}(B)` are full at positive lengths `N_A` and
 The paired-span theorem at this common length gives a full product matrix
 algebra.  This is project infrastructure for arXiv:1703.09188, proof of
 Theorem `IndexTh` (ii), lines 824--845, not a separate paper theorem. -/
-theorem isNormal_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+theorem is_normal_tensor_product (A : MPSTensor d D) (B : MPSTensor e E)
     (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B) :
     Kraus.IsNormal (tensorProduct A B) := by
   rcases hA with ⟨NA, hNA, hA⟩
@@ -144,6 +151,6 @@ theorem isNormal_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
     change Kraus.wordSpan B (NA * NB) = ⊤
     exact Kraus.wordSpan_top_of_mul B hB NA
       (Nat.one_le_iff_ne_zero.mpr hNA.ne')
-  exact isNBlkInjective_tensorProduct A B hAcommon hBcommon
+  exact is_n_blk_injective_tensor_product A B hAcommon hBcommon
 
 end MPSTensor
