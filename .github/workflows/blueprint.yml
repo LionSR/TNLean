@@ -24,7 +24,6 @@ on:
       - '.github/workflows/blueprint.yml'
       - '.github/workflows/deploy-pages.yml'
       - 'home_page/**'
-      - 'scripts/blueprint_bibtex.py'
       - 'scripts/build_blueprint_ch01_12.sh'
       - 'scripts/assemble-pages-site.sh'
       - 'scripts/fetch-latest-artifact.sh'
@@ -63,7 +62,7 @@ jobs:
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.7'
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
       - name: Check native tenkz sources and picture pipeline
         run: |
@@ -83,7 +82,7 @@ jobs:
         run: texra-blueprint paper-gaps check
 
       - name: Build blueprint bibliography
-        run: python3 scripts/blueprint_bibtex.py
+        run: texra-blueprint bbl
 
       - name: Build blueprint
         run: |

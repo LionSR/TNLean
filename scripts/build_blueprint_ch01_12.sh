@@ -2,7 +2,7 @@
 # Build the FT--MPS blueprint volume (ch01_intro through ch12_symmetry, together
 # with the auxiliary channel-theory chapter) as blueprint/print/print12.pdf.
 #
-# Run after scripts/blueprint_bibtex.py (which refreshes src/references.bib).
+# Run after `texra-blueprint bbl` (which refreshes src/references.bib).
 # The blueprint sources are copied to a temporary directory and the dedicated
 # FT--MPS entry point is built there, so the checked-out blueprint directory is
 # never modified; only the gitignored
