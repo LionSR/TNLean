@@ -116,7 +116,10 @@ before working in that area:
   `Tracking: <area>` for trackers and keep titles bracket-free
 - **Naming**: Definitions use `camelCase`, predicates use `IsPrefix`, and
   theorem names use underscore-separated components. An embedded definition
-  or predicate keeps its canonical spelling, as in `evalWord_tensorProduct`.
+  keeps its `camelCase` spelling, while an embedded predicate is
+  lower-camel-cased (`Is` becomes `is`). Internal word boundaries are never
+  split, as in `evalWord_tensorProduct` and
+  `isNormalTensor_of_isNormal_leftCanonical`.
   Files use `CamelCase.lean`.
 - **Proof integrity blockers**: `sorry`, `admit`, `native_decide`, `unsafeCast`, `axiom`, circular reasoning
 - **Blueprint prose**: Pure mathematics only — no Lean identifiers in text, no software jargon (see banned terms list in blueprint style guide)
