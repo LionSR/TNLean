@@ -47,7 +47,6 @@ import TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector
 import TNLean.MPS.RFP.NNCPHMultiSector
 import TNLean.MPS.RFP.NormalIsometryCharacterization
 import TNLean.MPS.RFP.PairLiftCoordinates
-import TNLean.MPS.RFP.PhaseMultiplicityCounterexample
 import TNLean.MPS.RFP.PhaseOscillation
 import TNLean.MPS.RFP.PhysicalObservableRealization
 import TNLean.MPS.RFP.ResidualFamilyCommutation
