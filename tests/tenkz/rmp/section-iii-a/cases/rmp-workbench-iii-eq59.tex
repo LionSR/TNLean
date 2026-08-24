@@ -62,9 +62,8 @@
       {0.5 n of (1,4)}{marked.n}
     \tnwire[kind=string, species=operator, name=oh-right-south, crossing=over]
       {marked.s}{0.5 s of (5,4)}
-    \tnwire[kind=string, species=operator, name=rail-u, route=orth,
-      via={0.3 w of (2,4), 0.3 w of 0.3 n of marked,
-           0.3 e of 0.3 n of marked, 0.3 e of (2,4)}, crossing=over,
+    \tnwire[kind=string, species=operator, name=rail-u,
+      route={n of marked}, crossing=over,
       cross={over at crossing of rail-u and oh-right-north}]
       {0.3 w of (1,4)}{0.3 e of (1,4)}
     \tn[skin=dot, role=extra, at=on rail-u 0.08,

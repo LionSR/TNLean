@@ -469,18 +469,19 @@ the path passes through.
 
 A string that returns to itself is \tnkey{closed}, and a closed wire takes
 no positional ends at all: it is a cycle, so it has none to give.  Its
-shape comes from \tnkey{via=} alone.
+shape comes from its route: a loop that rings a selection travels the
+hull, \tnkey{route=}\tnval{\{all of z\}}, and a freer shape names its
+waypoints with \tnkey{via=}.
 
 \begin{tnexample}[
   caption={a closed string around a site},
   index={The loop carries an operator index and contracts nothing.  It
     exposes no end, so it adds no entry to the signature.},
   signature={kernel-boundary|signature=}]
-% Ink: a closed string takes no ends; via= gives it its shape.
+% Ink: a closed string takes no ends; its route rings the named selection.
 \begin{tenkz}[rows={wire}, cols=2, bonds=none]
   \tn[at=(1,1), name=z, skin=box]{Z}
-  \tnwire[kind=string, closed, via={0.6 n of z, 0.6 e of z,
-    0.6 s of z, 0.6 w of z}]
+  \tnwire[kind=string, closed, route={all of z}]
 \end{tenkz}
 \end{tnexample}
 
