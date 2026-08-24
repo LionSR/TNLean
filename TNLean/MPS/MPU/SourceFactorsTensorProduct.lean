@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixIsometryKronecker
+import TNLean.Algebra.MatrixReindex
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.TensorProduct
 
@@ -85,40 +87,28 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
     rw [show sourceWeight (d := e) (1 : Matrix (Fin E) (Fin E) ℂ) = 1 by
       simp [sourceWeight]] at h
     simpa [Matrix.IsIsometry] using h
-  have hKX₁ : (S.X₁ ⊗ₖ T.X₁).IsIsometry := by
-    rw [Matrix.IsIsometry, Matrix.conjTranspose_kronecker,
-      ← Matrix.mul_kronecker_mul]
-    change (S.X₁ᴴ * S.X₁) ⊗ₖ (T.X₁ᴴ * T.X₁) = 1
-    rw [show S.X₁ᴴ * S.X₁ = 1 by exact hSX₁,
-      show T.X₁ᴴ * T.X₁ = 1 by exact hTX₁]
-    simp
-  have hKX₂ : (S.X₂ ⊗ₖ T.X₂).IsIsometry := by
-    rw [Matrix.IsIsometry, Matrix.conjTranspose_kronecker,
-      ← Matrix.mul_kronecker_mul]
-    change (S.X₂ᴴ * S.X₂) ⊗ₖ (T.X₂ᴴ * T.X₂) = 1
-    rw [show S.X₂ᴴ * S.X₂ = 1 by exact S.X₂_isometry,
-      show T.X₂ᴴ * T.X₂ = 1 by exact T.X₂_isometry]
-    simp
+  have hKX₁ : (S.X₁ ⊗ₖ T.X₁).IsIsometry :=
+    Matrix.IsIsometry.kronecker S.X₁ T.X₁ hSX₁ hTX₁
+  have hKX₂ : (S.X₂ ⊗ₖ T.X₂).IsIsometry :=
+    Matrix.IsIsometry.kronecker S.X₂ T.X₂ S.X₂_isometry T.X₂_isometry
   have hX₁ : X₁.IsIsometry :=
     Matrix.IsIsometry.reindex _ hKX₁ eRow eR
   have hX₂ : X₂.IsIsometry :=
     Matrix.IsIsometry.reindex _ hKX₂ eRow eL
   have hcut₁ : sourceCutM₁ (tensorProduct U V) = X₁ * Y₁ := by
     rw [sourceCutM₁_tensorProduct, S.sourceCutM₁_eq, T.sourceCutM₁_eq]
-    change Matrix.reindexLinearEquiv ℂ ℂ eRow eCol
+    change Matrix.reindex eRow eCol
         ((S.X₁ * S.Y₁) ⊗ₖ (T.X₁ * T.Y₁)) =
-      Matrix.reindexLinearEquiv ℂ ℂ eRow eR (S.X₁ ⊗ₖ T.X₁) *
-        Matrix.reindexLinearEquiv ℂ ℂ eR eCol (S.Y₁ ⊗ₖ T.Y₁)
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eR eCol,
-      Matrix.mul_kronecker_mul]
+      Matrix.reindex eRow eR (S.X₁ ⊗ₖ T.X₁) *
+        Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁)
+    rw [Matrix.reindex_mul_reindex, Matrix.mul_kronecker_mul]
   have hcut₂ : sourceCutM₂ (tensorProduct U V) = X₂ * Y₂ := by
     rw [sourceCutM₂_tensorProduct, S.sourceCutM₂_eq, T.sourceCutM₂_eq]
-    change Matrix.reindexLinearEquiv ℂ ℂ eRow eCol
+    change Matrix.reindex eRow eCol
         ((S.X₂ * S.Y₂) ⊗ₖ (T.X₂ * T.Y₂)) =
-      Matrix.reindexLinearEquiv ℂ ℂ eRow eL (S.X₂ ⊗ₖ T.X₂) *
-        Matrix.reindexLinearEquiv ℂ ℂ eL eCol (S.Y₂ ⊗ₖ T.Y₂)
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eL eCol,
-      Matrix.mul_kronecker_mul]
+      Matrix.reindex eRow eL (S.X₂ ⊗ₖ T.X₂) *
+        Matrix.reindex eL eCol (S.Y₂ ⊗ₖ T.Y₂)
+    rw [Matrix.reindex_mul_reindex, Matrix.mul_kronecker_mul]
   have hweighted : X₁ᴴ * sourceWeight (d := d * e)
       (1 : Matrix (Fin (D * E)) (Fin (D * E)) ℂ) * X₁ = 1 := by
     rw [show sourceWeight (d := d * e)
@@ -126,16 +116,16 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
       simp [sourceWeight]]
     simpa [Matrix.IsIsometry] using hX₁
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eR eCol (S.Y₁ ⊗ₖ T.Y₁) *
-      Matrix.reindexLinearEquiv ℂ ℂ eCol eR (S.Z₁ ⊗ₖ T.Z₁) = 1
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eR eCol eR,
-      ← Matrix.mul_kronecker_mul, S.Y₁_mul_Z₁, T.Y₁_mul_Z₁]
+    change Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁) *
+      Matrix.reindex eCol eR (S.Z₁ ⊗ₖ T.Z₁) = 1
+    rw [Matrix.reindex_mul_reindex, ← Matrix.mul_kronecker_mul,
+      S.Y₁_mul_Z₁, T.Y₁_mul_Z₁]
     simp
   have hY₂Z₂ : Y₂ * Z₂ = 1 := by
-    change Matrix.reindexLinearEquiv ℂ ℂ eL eCol (S.Y₂ ⊗ₖ T.Y₂) *
-      Matrix.reindexLinearEquiv ℂ ℂ eCol eL (S.Z₂ ⊗ₖ T.Z₂) = 1
-    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ eL eCol eL,
-      ← Matrix.mul_kronecker_mul, S.Y₂_mul_Z₂, T.Y₂_mul_Z₂]
+    change Matrix.reindex eL eCol (S.Y₂ ⊗ₖ T.Y₂) *
+      Matrix.reindex eCol eL (S.Z₂ ⊗ₖ T.Z₂) = 1
+    rw [Matrix.reindex_mul_reindex, ← Matrix.mul_kronecker_mul,
+      S.Y₂_mul_Z₂, T.Y₂_mul_Z₂]
     simp
   exact ⟨X₁, Y₁, Z₁, X₂, Y₂, Z₂, hcut₁, hcut₂,
     hweighted, hX₂, hY₁Z₁, hY₂Z₂⟩
