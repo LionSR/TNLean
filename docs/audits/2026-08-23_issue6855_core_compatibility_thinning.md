@@ -20,6 +20,14 @@ finite-family definitions:
 | `MPSTensor.blockTensor` | `Kraus.blockTensor` |
 | `MPSTensor.flattenBlockedWord` | `Kraus.flattenBlockedWord` |
 
+The public instance `MPSTensor.instNeZeroBlockPhysDim` was also an exact
+duplicate of `Kraus.instNeZeroBlockPhysDim` and has been removed. Since
+`MPSTensor.blockPhysDim` is now an abbreviation of `Kraus.blockPhysDim`, the
+canonical QICLean instance directly supplies every former
+`NeZero (MPSTensor.blockPhysDim d L)` goal.  Thus
+`Kraus.instNeZeroBlockPhysDim` is the named replacement; no second transition
+instance is required.
+
 The forwarding lemmas retain their TNLean names for compatibility, while only
 the canonical `Kraus` copies carry the simplification attributes. The three
 injectivity-predicate copies named by issue #6855 no longer occur on current
