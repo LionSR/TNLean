@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.QCA.BipartiteLocalAlgebra
 import TNLean.QCA.FinitePropagation
 
 /-!
@@ -31,77 +32,6 @@ named result of the source.
 -/
 
 namespace SpinChain
-
-namespace Config
-
-/-- A configuration on a disjoint union is determined by its restrictions to both regions.
-
-This is elementary finite tensor-factor infrastructure underlying arXiv:1703.09188, Appendix,
-lines 2292--2300. -/
-private lemma eq_of_restrict_eq_restrict {d : ℕ} {Λ Γ : Finset ℤ}
-    {x y : Config d (Λ ∪ Γ)}
-    (hΛ : restrict Finset.subset_union_left x = restrict Finset.subset_union_left y)
-    (hΓ : restrict Finset.subset_union_right x = restrict Finset.subset_union_right y) :
-    x = y := by
-  funext i
-  rcases Finset.mem_union.mp i.2 with hiΛ | hiΓ
-  · exact congrFun hΛ ⟨i, hiΛ⟩
-  · exact congrFun hΓ ⟨i, hiΓ⟩
-
-/-- Splitting configurations on a union of disjoint regions into the two restrictions. -/
-private def disjointUnionEquiv {d : ℕ} {Λ Γ : Finset ℤ} (hΛΓ : Disjoint Λ Γ) :
-    Config d (Λ ∪ Γ) ≃ Config d Λ × Config d Γ where
-  toFun x := (restrict Finset.subset_union_left x, restrict Finset.subset_union_right x)
-  invFun x i := if hiΛ : (i : ℤ) ∈ Λ then x.1 ⟨i, hiΛ⟩ else
-    x.2 ⟨i, (Finset.mem_union.mp i.2).resolve_left hiΛ⟩
-  left_inv x := by
-    apply eq_of_restrict_eq_restrict
-    · funext i
-      simp [restrict]
-    · funext i
-      simp [restrict, hΛΓ.notMem_of_mem_right_finset i.2]
-  right_inv x := by
-    apply Prod.ext
-    · funext i
-      simp [restrict]
-    · funext i
-      simp [restrict, hΛΓ.notMem_of_mem_right_finset i.2]
-
-private lemma splitEquiv_snd_eq_iff_restrict_right {d : ℕ} {Λ Γ : Finset ℤ}
-    (hΛΓ : Disjoint Λ Γ) (x y : Config d (Λ ∪ Γ)) :
-    (splitEquiv Finset.subset_union_left x).2 =
-        (splitEquiv Finset.subset_union_left y).2 ↔
-      restrict Finset.subset_union_right x = restrict Finset.subset_union_right y := by
-  constructor
-  · intro h
-    funext i
-    exact congrFun h ⟨i, Finset.mem_sdiff.mpr
-      ⟨Finset.mem_union_right Λ i.2, hΛΓ.notMem_of_mem_right_finset i.2⟩⟩
-  · intro h
-    funext i
-    have hiΓ : (i : ℤ) ∈ Γ :=
-      (Finset.mem_union.mp (Finset.mem_sdiff.mp i.2).1).resolve_left
-        (Finset.mem_sdiff.mp i.2).2
-    exact congrFun h ⟨i, hiΓ⟩
-
-private lemma splitEquiv_snd_eq_iff_restrict_left {d : ℕ} {Λ Γ : Finset ℤ}
-    (hΛΓ : Disjoint Λ Γ) (x y : Config d (Λ ∪ Γ)) :
-    (splitEquiv Finset.subset_union_right x).2 =
-        (splitEquiv Finset.subset_union_right y).2 ↔
-      restrict Finset.subset_union_left x = restrict Finset.subset_union_left y := by
-  constructor
-  · intro h
-    funext i
-    exact congrFun h ⟨i, Finset.mem_sdiff.mpr
-      ⟨Finset.mem_union_left Γ i.2, hΛΓ.notMem_of_mem_left_finset i.2⟩⟩
-  · intro h
-    funext i
-    have hiΛ : (i : ℤ) ∈ Λ :=
-      (Finset.mem_union.mp (Finset.mem_sdiff.mp i.2).1).resolve_right
-        (Finset.mem_sdiff.mp i.2).2
-    exact congrFun h ⟨i, hiΛ⟩
-
-end Config
 
 section Local
 
