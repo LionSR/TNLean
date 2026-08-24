@@ -32,6 +32,7 @@ import TNLean.QCA.QuasiLocalCommutant
 import TNLean.QCA.QuasiLocalTranslation
 import TNLean.QCA.RegionSumset
 import TNLean.QCA.RelativeCommutant
+import TNLean.QCA.SiteIndexedSupportAlgebra
 import TNLean.QCA.Translation
 import TNLean.QCA.TranslationCovariance
 import TNLean.QCA.TwoSidedPropagation
