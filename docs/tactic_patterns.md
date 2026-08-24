@@ -39,19 +39,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the theorem is rectangular and assumes only the finite row
   coordinates and decidable column coordinates required by the two complex
   matrix isometry identities. All cited copies now use the common theorem; the
-  two fusion proofs compose it with `Matrix.IsIsometry.reindex`.
+  four first- and second-stage fusion proofs compose it with
+  `Matrix.IsIsometry.reindex`.
 
 ### matrix-reindex entry wrappers — promoted
 - **Pattern:** package an entrywise formula as a `Matrix.reindex` equality by
   extensionality, or recover an original-coordinate entry by applying a
   reindexed equality twice and simplifying the inverse equivalences.
-- **Seen:** four packaging proofs in
+- **Seen:** eight packaging proofs in
   `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` and four recovery proofs
   in `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` before
   promotion (2026-08-24).
 - **Abstraction:** `Matrix.reindex_eq_of_apply_eq` and
   `Matrix.apply_eq_of_reindex_eq` in `TNLean/Algebra/MatrixReindex.lean`.
-- **Notes:** all eight source-gate call sites use the common lemmas while
+- **Notes:** all twelve source-gate call sites use the common lemmas while
   retaining the paper's four-spin coordinate order explicitly in their local
   arguments.
 

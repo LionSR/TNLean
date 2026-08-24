@@ -830,13 +830,13 @@ theorem shiftExampleU₁_sourceUV_eq_identityTensorIdentity (d : ℕ) :
         (SourceFactors.sourceV (shiftExampleU₁ d)
           (shiftExampleU₁SourceFactors d)) = identityTensorIdentityMatrix d := by
   constructor
-  · ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm] using
+  · apply Matrix.reindex_eq_of_apply_eq
+    rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+    simpa only [Equiv.symm_symm] using
       shiftExampleU₁_sourceU_apply d a b c e i j k l
-  · ext ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm] using
+  · apply Matrix.reindex_eq_of_apply_eq
+    rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+    simpa only [Equiv.symm_symm] using
       shiftExampleU₁_sourceV_apply d i j k l a b c e
 
 /-- Entry formula for the supplied $u_3=\mathbb S$ in the paper's
@@ -916,22 +916,22 @@ theorem shiftExampleU₃_sourceUV_eq_swap (d : ℕ) [NeZero d] :
         (SourceFactors.sourceV (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) = Matrix.swapMatrix (d * d) := by
   constructor
-  · ext row col
+  · apply Matrix.reindex_eq_of_apply_eq
+    intro row col
     obtain ⟨⟨⟨a, b⟩, ⟨c, e⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective row
     obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective col
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
+    simpa only [Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
       shiftTwoSitePhysicalEquiv, Equiv.prodCongr_apply, Prod.map_apply'] using
       shiftExampleU₃_sourceU_eq_swap_apply d a b c e i j k l
-  · ext row col
+  · apply Matrix.reindex_eq_of_apply_eq
+    intro row col
     obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective row
     obtain ⟨⟨⟨a, b⟩, ⟨c, e⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective col
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
+    simpa only [Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
       shiftTwoSitePhysicalEquiv, Equiv.prodCongr_apply, Prod.map_apply'] using
       shiftExampleU₃_sourceV_eq_swap_apply d i j k l a b c e
 

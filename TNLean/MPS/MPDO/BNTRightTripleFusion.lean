@@ -178,10 +178,10 @@ private noncomputable def rightBlockPiece (α β γ δ : Λ) :
 private theorem rightBlockPiece_isometry (α β γ δ : Λ) :
     (Fam.rightBlockPiece α β γ δ)ᴴ * Fam.rightBlockPiece α β γ δ = 1 := by
   unfold rightBlockPiece
-  rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ (Equiv.refl _) _,
-    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, Fam.isometry,
-    Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one,
-    Matrix.submatrix_one_equiv]
+  exact Matrix.IsIsometry.reindex _
+    (Matrix.IsIsometry.kronecker _ _
+      (by simp [Matrix.IsIsometry]) (Fam.isometry α δ))
+    (Equiv.refl _) (Fam.rightTripleMultEquiv α β γ δ)
 
 private theorem rightBlockPiece_apply (α β γ δ : Λ) (i k : Fin p) :
     Fam.rightBlockPiece α β γ δ *
