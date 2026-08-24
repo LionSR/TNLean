@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.EntropyDecomposition
 import QICLean.Channel.SingleKrausPositivity
+import TNLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
 import TNLean.MPS.MPDO.CPSVExample410Operator
 import TNLean.MPS.MPDO.SourceZCLMarginal
@@ -153,14 +154,6 @@ private lemma bellEmbedding_isometry : bellEmbeddingᴴ * bellEmbedding = 1 := b
     norm_num
 
 set_option linter.unusedFintypeInType false in
-private lemma kron_isometry {a b c d : Type*} [Fintype a] [Fintype b]
-    [Fintype c] [Fintype d] [DecidableEq b] [DecidableEq d]
-    (A : Matrix a b ℂ) (B : Matrix c d ℂ) (hA : Aᴴ * A = 1) (hB : Bᴴ * B = 1) :
-    (A ⊗ₖ B)ᴴ * (A ⊗ₖ B) = 1 := by
-  rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hA, hB,
-    Matrix.one_kronecker_one]
-
-set_option linter.unusedFintypeInType false in
 private lemma reindex_isometry {a b a' b' : Type*} [Fintype a] [Fintype b]
     [Fintype a'] [Fintype b'] [DecidableEq b] [DecidableEq b']
     (A : Matrix a b ℂ) (ha : a ≃ a') (hb : b ≃ b') (hA : Aᴴ * A = 1) :
@@ -170,9 +163,9 @@ private lemma reindex_isometry {a b a' b' : Type*} [Fintype a] [Fintype b]
   rw [Matrix.submatrix_mul_equiv, hA, Matrix.submatrix_one_equiv]
 
 private lemma rawFour_isometry : rawFourᴴ * rawFour = 1 := by
-  apply kron_isometry bellEmbedding _ bellEmbedding_isometry
-  apply kron_isometry bellEmbedding _ bellEmbedding_isometry
-  exact kron_isometry bellEmbedding bellEmbedding bellEmbedding_isometry
+  apply Matrix.IsIsometry.kronecker bellEmbedding _ bellEmbedding_isometry
+  apply Matrix.IsIsometry.kronecker bellEmbedding _ bellEmbedding_isometry
+  exact Matrix.IsIsometry.kronecker bellEmbedding bellEmbedding bellEmbedding_isometry
     bellEmbedding_isometry
 
 private theorem VFour_isometry : VFourᴴ * VFour = 1 :=
@@ -440,9 +433,10 @@ private lemma VThree_apply (σ : Fin 3 → Fin 4) (x : Bool × Bool × Bool × B
 
 private lemma VThree_isometry : VThreeᴴ * VThree = 1 := by
   apply reindex_isometry rawThree rowThreeEquiv (Equiv.refl _)
-  apply kron_isometry bitEmbedding _ bitEmbedding_isometry
-  apply kron_isometry bellEmbedding _ bellEmbedding_isometry
-  exact kron_isometry bellEmbedding bitEmbedding bellEmbedding_isometry bitEmbedding_isometry
+  apply Matrix.IsIsometry.kronecker bitEmbedding _ bitEmbedding_isometry
+  apply Matrix.IsIsometry.kronecker bellEmbedding _ bellEmbedding_isometry
+  exact Matrix.IsIsometry.kronecker bellEmbedding bitEmbedding bellEmbedding_isometry
+    bitEmbedding_isometry
 
 private def rawTwo : Matrix
     (Fin 2 × ((Fin 2 × Fin 2) × Fin 2)) (Bool × Bool × Bool) ℂ :=
@@ -468,8 +462,9 @@ private lemma VTwo_apply (σ : Fin 2 → Fin 4) (x : Bool × Bool × Bool) :
 
 private lemma VTwo_isometry : VTwoᴴ * VTwo = 1 := by
   apply reindex_isometry rawTwo rowTwoEquiv (Equiv.refl _)
-  apply kron_isometry bitEmbedding _ bitEmbedding_isometry
-  exact kron_isometry bellEmbedding bitEmbedding bellEmbedding_isometry bitEmbedding_isometry
+  apply Matrix.IsIsometry.kronecker bitEmbedding _ bitEmbedding_isometry
+  exact Matrix.IsIsometry.kronecker bellEmbedding bitEmbedding bellEmbedding_isometry
+    bitEmbedding_isometry
 
 private def rawOne : Matrix (Fin 2 × Fin 2) (Bool × Bool) ℂ :=
   bitEmbedding ⊗ₖ bitEmbedding
@@ -490,7 +485,8 @@ private lemma VOne_apply (σ : Fin 1 → Fin 4) (x : Bool × Bool) :
 
 private lemma VOne_isometry : VOneᴴ * VOne = 1 := by
   apply reindex_isometry rawOne rowOneEquiv (Equiv.refl _)
-  exact kron_isometry bitEmbedding bitEmbedding bitEmbedding_isometry bitEmbedding_isometry
+  exact Matrix.IsIsometry.kronecker bitEmbedding bitEmbedding bitEmbedding_isometry
+    bitEmbedding_isometry
 
 private lemma sqrt_two_sq_inv : (((↑(Real.sqrt 2) : ℂ) ^ 2)⁻¹) = 1 / 2 := by
   rw [Complex.ofReal_sqrt_sq 2 (by norm_num)]
