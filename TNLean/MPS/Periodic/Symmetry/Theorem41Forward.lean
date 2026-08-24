@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ListProduct
 import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 
 /-!
@@ -24,22 +25,6 @@ namespace MPSTensor
 section Theorem41Forward
 
 variable {d D : ℕ}
-
-/-- **Rectangular Kraus isometry mixing.**
-
-For a (possibly rectangular) isometry `W : Fin m → Fin d` with `Wᴴ · W = 1`,
-the family `C τ := ∑_σ W(τ, σ) · B σ` has the same transfer map
-as `B`. This is an adapter from
-`kraus_same_map_of_isometry_combination` to the `Kraus.transferMap` interface. -/
-theorem transferMap_kraus_isometry
-    {m : ℕ} (B : MPSTensor d D)
-    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) :
-    Kraus.transferMap (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) = Kraus.transferMap B := by
-  ext X : 1
-  simpa [Kraus.transferMap_apply] using
-    kraus_same_map_of_isometry_combination
-      (K := fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
-      (K' := B) W hW (fun _ => rfl) X
 
 /-- Evaluation of the tensor \(C\) defined from \(W\) on a blocked word is a \(W\)-weighted sum
 of evaluations of the original tensor.
@@ -99,22 +84,6 @@ theorem sameMPV₂_sum_smul_ofFn
     _ = mpv (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • B σ') τ := by
           symm
           exact mpv_sum_smul_ofFn B W N τ
-
-/-- A physical-index isometry preserves left-canonicality. -/
-theorem isLeftCanonical_kraus_isometry
-    {m : ℕ} (B : MPSTensor d D)
-    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1)
-    (hB : IsLeftCanonical B) :
-    IsLeftCanonical (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ) := by
-  let C : MPSTensor m D := fun τ => ∑ σ : Fin d, W τ σ • B σ
-  have hCh : IsChannel (Kraus.transferMap C) := by
-    have hEq : Kraus.transferMap C = Kraus.transferMap B := by
-      simpa [C] using transferMap_kraus_isometry B W hW
-    simpa [hEq] using Kraus.isChannel_transferMap B hB
-  change IsLeftCanonical C
-  rw [IsLeftCanonical]
-  exact kraus_sum_conjTranspose_mul_of_tp C (Kraus.transferMap C)
-    (fun X => by simp [Kraus.transferMap_apply]) hCh.tp
 
 /-- A physical-index isometry preserves periodicity and its period. -/
 theorem isPeriodic_kraus_isometry
