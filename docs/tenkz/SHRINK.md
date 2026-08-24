@@ -3381,3 +3381,18 @@ itself; no key is added.
 | flag | verdict |
 |---|---|
 | flag:consumers:key:kernel-wire:weight | retired: zero authored consumers; it changed no ink, endpoint type owns stroke, and multiplicity belongs to the mathematical label; permanent |
+
+## 2026-08-24 — the route-expressible waypoint respells
+
+Two authored `via=` waypoint spellings left the corpus for their route
+words: the eq59 workbench rail's four-waypoint orthogonal jog became the
+hull `route={n of marked}`, and the catalogue's ring-around-a-site example
+became `route={all of z}` with its prose teaching the hull idiom for rings
+(#7102, part of #6897).  No key changes hands: `via=` remains a live
+registry row, and the wave's remaining candidates were reverted with the
+per-figure render evidence booked on #6897 — the offset hull is convex and
+exterior, and the corpus's waypoint geometry is neither.
+
+Meters: m4 lines-per-case 26.48 → 26.47; `tests/tenkz/census-baseline.json`
+moves in this change.  m1/m2 unchanged — no alphabet motion, so no
+Extension-gate applies.
