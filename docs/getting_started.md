@@ -188,10 +188,12 @@ multi-block case.
 Before opening a pull request, skim the conventions below; each links to the
 document that spells it out in full.
 
-**Naming.** Definitions are `camelCase`, predicates are named `IsFoo`,
-theorems and lemmas are `snake_case`, and files are `CamelCase.lean`. The
-full capitalization rules and the symbol-to-name dictionary (how to spell
-`⊗`, `≤`, `⁻¹`, and so on in an identifier) are in the MATHLIB_naming
+**Naming.** Definitions are `camelCase`, predicates are named `IsFoo`, and
+files are `CamelCase.lean`. The component rule for theorem and lemma names,
+including the spelling of embedded definitions and predicates, is summarized
+in the repository [quick reference](../CLAUDE.md#quick-reference-from-the-docs-above).
+The canonical capitalization rules and the symbol-to-name dictionary (how to
+spell `⊗`, `≤`, `⁻¹`, and so on in an identifier) are in the MATHLIB_naming
 reference of the `lean-conventions` skill
 ([texra-ai/texra-lean-skills](https://github.com/texra-ai/texra-lean-skills)).
 
