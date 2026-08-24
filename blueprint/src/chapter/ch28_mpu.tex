@@ -1882,7 +1882,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPSTensor.isNBlkInjective_tensorProduct,
         MPSTensor.isNormal_tensorProduct}
     \leanok
-    \uses{def:mps_independent_tensor_product, def:word_span}
+    \uses{def:mps_independent_tensor_product, def:word_span, def:normal}
     Let $S_N(A)=\spn_{\C}\{A^w:|w|=N\}$ and define
     \begin{align}
         \Phi_{D,E}(X\otimes Y)
@@ -1908,7 +1908,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mps_eval_word_independent_tensor_product, def:word_span}
+    \uses{thm:mps_eval_word_independent_tensor_product, def:word_span,
+        def:normal}
     For every product word $w$, let $(u,v)$ be its pointwise component words.
     The bijection between $w$ and $(u,v)$ and
     Theorem~\ref{thm:mps_eval_word_independent_tensor_product} give

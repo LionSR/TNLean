@@ -37,7 +37,7 @@ variable {d D e E : ℕ}
 again a CPSV normal tensor.  Its left-canonicality is the conclusion of
 `MPSTensor.leftCanonical_tensorProduct`.
 
-For normal blocks `A` and `B`, algebraic normality follows at the synchronized
+For normal blocks `A` and `B`, algebraic normality follows at the common
 homogeneous word length `N_A N_B`, while the two identities
 \[
   \sum_i (A^i)^\dagger A^i=\mathbf 1_D,

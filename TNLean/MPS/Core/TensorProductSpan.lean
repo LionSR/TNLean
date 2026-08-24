@@ -15,8 +15,8 @@ import TNLean.MPS.Core.TensorProduct
 The length-`N` words of an independent tensor product are exactly the
 reindexed Kronecker products of a length-`N` word in each constituent tensor.
 Consequently, simultaneous full homogeneous word spans imply a full word span
-for the product tensor.  Two eventual full-span witnesses are synchronized at
-the common positive length `N_A * N_B`.
+for the product tensor.  Two eventual full-span witnesses meet at the common
+positive length `N_A * N_B`.
 
 This is project infrastructure for the sentence "The case of tensoring is
 trivial" in arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--845;
