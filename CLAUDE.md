@@ -114,7 +114,10 @@ before working in that area:
   `TNLean/` prefix
 - **Issue titles**: plain mathematical titles, not `type(scope): ...`; use
   `Tracking: <area>` for trackers and keep titles bracket-free
-- **Naming**: Definitions `camelCase`, predicates `IsPrefix`, theorems `snake_case`, files `CamelCase.lean`
+- **Naming**: Definitions use `camelCase`, predicates use `IsPrefix`, and
+  theorem names use underscore-separated components. An embedded definition
+  or predicate keeps its canonical spelling, as in `evalWord_tensorProduct`.
+  Files use `CamelCase.lean`.
 - **Proof integrity blockers**: `sorry`, `admit`, `native_decide`, `unsafeCast`, `axiom`, circular reasoning
 - **Blueprint prose**: Pure mathematics only — no Lean identifiers in text, no software jargon (see banned terms list in blueprint style guide)
 - **Paper references**: Cite theorem numbers in docstrings (e.g., "Wolf Thm 6.3", "arXiv:1606.00608 Appendix A")
