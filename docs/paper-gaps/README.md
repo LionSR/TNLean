@@ -156,11 +156,10 @@ For MPDO renormalization fixed points:
   the sector graph remain open.
 - `cpsv16_purification_rfp_definition.tex` records the distinction between
   the printed global PRFP predicate, formalized here at positive chain lengths,
-  and the corrected local purification condition. A nonzero MPDO with a
-  trace-invisible nilpotent bond sector formally refutes the printed global
-  implication to literal physical-trace idempotence. The stronger scale-invariant
-  counterexample is retained separately, while the local-purification equivalences remain
-  restricted results.
+  and the local purification condition. The printed Theorem 4.4 is read against
+  a canonical-form representative, a clause the bare positive-length predicate
+  does not carry, so a faithful Definition 4.1 predicate is still missing and
+  the forward implication is formalized only on the local tensor identity.
 - `cpsv16_pure_zcl_local_orthogonality_scope.tex` records that the current
   pure-MPS ZCL theorem is a single-block idempotence/CID equivalence. The
   source theorem also includes the BNT-level local-orthogonality equations
@@ -174,14 +173,13 @@ For MPDO renormalization fixed points:
 - `cpsv16_rfp_isometry_scope.tex` records the normalization and cross-block
   content of the source's equation `III_isometry`. The blockwise hypotheses are
   now derived from the single BNT canonical-form predicate for the
-  multiplicity-one basis direct sum. The note also records the ambiguity
-  between a literal virtual-block reading of the repeated-copy display
-  `III_CFI_RFP` and its accompanying physical direct-sum interpretation: the
-  one-letter phase-flip
-  tensor fails both `AA=A` and whole-tensor transfer-map idempotence. The source
-  relation `AA=A` and its unrestricted equivalence with transfer-map
-  idempotence are formalized; the physical-space meaning of the repeated-copy
-  index remains open.
+  multiplicity-one basis direct sum. The note also records why the fixed-letter
+  virtual-block reading of the repeated-copy display `III_CFI_RFP` is out of
+  scope: the source requires the copy index to contribute to the physical
+  direct sum as well, which a one-letter tensor cannot do. The source relation
+  `AA=A` and its unrestricted equivalence with transfer-map idempotence are
+  formalized; the physical-space meaning of the repeated-copy index remains
+  open.
 - `cpsv16_renormalization_flow_index_typo.tex` records the local correction of
   the malformed summation and output indices in the displayed equation of
   CPSV16 Theorem 3.1. The preceding renormalization equation, the diagrams, and

@@ -72,7 +72,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1580, 1622 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L146, 153, 173, 178, 226, 232, 342, 434 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L104, 108, 219, 227, 375, 388, 439 `tenkz` → `P-grid` | — | — |
+| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L104, 108, 219, 227, 353, 366, 417 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L738, 744 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_foundations.tex` | L17, 126, 373, 377 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
@@ -81,7 +81,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L209, 213, 286, 287, 288, 289, 291 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L541, 546 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L361, 371, 600, 609, 621, 630, 642, 647 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L43, 59, 63, 456 `tenkz` → `P-grid` | L568, 570 `tntree` → `C-tree` | — |
+| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L43, 59, 63, 428 `tenkz` → `P-grid` | L540, 542 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_renormalization.tex` | L254, 257, 260, 263 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L274, 280 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 264, 269, 274, 281, 286, 484, 702, 708, 712 `tenkz` → `P-grid` | — | — |

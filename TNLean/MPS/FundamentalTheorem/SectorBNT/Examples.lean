@@ -9,11 +9,11 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.SingleSector
 /-!
 # Concrete tensors and BNT canonical forms
 
-The scalar unit tensor and diagonal phase-flip tensor below are elementary examples
-used by several MPS constructions. The remaining examples present one-sector BNT
-canonical forms built from a normal block
-`C`. The single-copy construction is provided by `singleSectorDecomposition`;
-the remaining examples illustrate nontrivial copy weights.
+The scalar unit tensor below is an elementary example used by several MPS
+constructions. The remaining examples present one-sector BNT canonical forms
+built from a normal block `C`. The single-copy construction is provided by
+`singleSectorDecomposition`; the remaining examples illustrate nontrivial copy
+weights.
 
 * A single normal block `C`, with coefficient `1`.
 * The sign-flip GHZ pair `C ⊕ (-C)`, with length-`N` coefficient
@@ -36,8 +36,22 @@ namespace MPSTensor
 /-- The one-letter bond-dimension-one tensor whose sole matrix is `1`. -/
 def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
 
-/-- The one-letter bond-dimension-two tensor whose sole matrix is `diag(1, -1)`. -/
-def phaseFlipTensor : MPSTensor 1 2 := fun _ => !![1, 0; 0, -1]
+private theorem scalarUnitTensor_transferMap :
+    Kraus.transferMap scalarUnitTensor = LinearMap.id := by
+  apply LinearMap.ext
+  intro X
+  ext a b
+  fin_cases a
+  fin_cases b
+  simp [Kraus.transferMap_apply, scalarUnitTensor]
+
+/-- The one-dimensional scalar unit tensor is normal.
+
+Source: arXiv:1606.00608, canonical-form normal-block condition, lines 233--245. -/
+theorem scalarUnitTensor_isNormalTensor :
+    IsNormalTensor scalarUnitTensor :=
+  isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    scalarUnitTensor scalarUnitTensor_transferMap
 
 namespace SectorBNT.Examples
 

@@ -340,28 +340,6 @@
     gives the tensor-attached algebra clause.
 \end{proof}
 
-% CPSV16 Theorem 4.14 (`thm:IV.13`), lines 972--993 and Appendix C.4.
-% Gaps: docs/paper-gaps/cpsv16_figure11_per_pair_support.tex and
-% docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex.
-\begin{theorem}[Printed algebra and fusion characterization]
-    \label{thm:cpsv_theorem414_printed_status}
-    \notready
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_tensor_clause, thm:mpdo_cpsv_bnt_rfp_equivalence}
-    For a canonical-form tensor generating matrix product density operators,
-    \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} states that the fixed-point
-    condition, the tensor-attached BNT algebra clause, and the displayed fusion
-    isometry clause are equivalent.
-
-    The fixed-point condition is equivalent to the tensor-attached algebra
-    clause.  For the fusion clause, an absent product sector must have
-    multiplicity zero, and the retained-row map is a coisometry with exact
-    reconstruction.  Under this active-support interpretation, the three
-    conditions are equivalent by
-    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence}.  Without these
-    qualifications, the displayed fusion clause is not well-defined on empty
-    product sectors and has the wrong isometry orientation.
-\end{theorem}
-
 \begin{theorem}[BNT characterizations of MPDO renormalization fixed points]
     \label{thm:mpdo_cpsv_bnt_rfp_equivalence}
     \lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}
@@ -373,26 +351,20 @@
     \begin{enumerate}
         \item[(i)] $M$ is a renormalization fixed point;
         \item[(ii)] $M$ has a tensor-attached BNT algebra clause;
-        \item[(iii$_{\mathrm{act}}$)] $M$ has the active-support BNT fusion
-              clause.
+        \item[(iii)] $M$ has the BNT fusion clause.
     \end{enumerate}
     Then
     \begin{align}
         \textnormal{(i)} & \iff\textnormal{(ii)},
                          &
-        \textnormal{(i)} & \iff\textnormal{(iii}_{\mathrm{act}}\textnormal{)}.
+        \textnormal{(i)} & \iff\textnormal{(iii)}.
         \label{eq:mpdo_cpsv_bnt_rfp_equivalence}
     \end{align}
-    The first equivalence is the equivalence of (i) and (ii) in
-    \cite[Theorem~4.14, lines~972--985]{Cirac2016MPDO_arXiv}.  The second is
-    the corrected active-support form corresponding to the printed
-    conditions (i) and (iii), rather than an assertion of the unrestricted
-    printed condition (iii).
-
-    \textbf{Scope restriction (active product BNT):} Only nonzero product
-    corners occur in (iii$_{\mathrm{act}}$); a sector absent from a fixed
-    product pair has zero fusion multiplicity.  This is recorded in
-    \cite{gap:cpsv16_bnt_uniqueness_zero_coefficient}.
+    These are the two equivalences of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.  Every BNT label
+    of the fusion clause carries a nonempty multiplicity space and positive
+    weights, so the product sectors it ranges over are the ones the source's
+    basis of normal tensors supplies.
 
     \textbf{Local fix (fixed-pair support and coisometry):} A fixed pair may
     have empty active support, and the retained-row fusion map is a
