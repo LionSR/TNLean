@@ -104,74 +104,43 @@ Indeed, if $\rho_N(M)$ denotes the closed length-$N$ MPO, then the exact law is
 \end{align}
 not $|c|^{2N}\rho_N(M)$. Consequently positivity is preserved in both
 directions by a strictly positive real rescaling $rM$. The formal theorems
-\leanid{MPOTensor.isMPDO_smul_ofReal_iff},
-\leanid{MPOTensor.isSourceSimple_smul_ofReal_iff}, and
-\leanid{MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff} establish the
-corresponding invariances for the MPDO, source-simple, and nonvanishing
-source-simple predicates. They do not assert invariance under arbitrary nonzero
-complex scalars, and they do not imply that the rescaled tensor satisfies the
-same literal fixed-scale RFP equations of Definition~4.1.
+\leanid{MPOTensor.isMPDO_smul_ofReal_iff} and
+\leanid{MPOTensor.isSimple_smul_ofReal_iff} establish the corresponding
+invariances for the MPDO and simplicity predicates. They do not assert
+invariance under arbitrary nonzero complex scalars, and they do not imply that
+the rescaled tensor satisfies the same literal fixed-scale RFP equations of
+Definition~4.1.
 
-The declaration \leanid{MPOTensor.IsSourceSimple} records the
-normalization-free reading of lines~217--246 and Definition~4.7. It asks for
-some positive blocking and a BNT sector presentation whose representative
-physical-trace transfers are all non-nilpotent. Every representative has a
-positive number of copies and every copy has nonzero weight, the
-nonzero-coefficient convention of
+The declaration \leanid{MPOTensor.IsSimple} is the formalization of
+lines~217--246 and Definition~4.7. It asks for some positive blocking and a BNT
+sector presentation whose representative physical-trace transfers are all
+non-nilpotent. Every representative has a positive number of copies and every
+copy has nonzero weight, the nonzero-coefficient convention of
 \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}. The theorem
-\leanid{MPOTensor.IsSourceSimple.exists_mpo_ne_zero} derives a positive length
+\leanid{MPOTensor.IsSimple.exists_mpo_ne_zero} derives a positive length
 $N$ for which
 \begin{align}
     \rho_N(M)&\ne0,
     \label{eq:some-positive-length-nonzero}
 \end{align}
 from the presentation; this is not an additional defining assumption.
-Isolated vanishing lengths remain possible. The predicate does not impose the
-line-246 unit-weight convention. The strengthened project predicate
-\leanid{MPOTensor.IsNonvanishingSourceSimple} adds the condition
-\begin{align}
-    \rho_N(M)&\ne0 &&\text{for every }N>0.
-    \label{eq:positive-length-nonzero}
-\end{align}
+Isolated vanishing lengths remain possible.
 
-By contrast, \leanid{MPOTensor.IsSimpleCanonicalForm} and
-\leanid{MPOTensor.IsSimple} are normalized fixed-representative predicates. The
-first is a predicate on one displayed canonical-form representative. The second
-permits positive physical blocking, but still asks the resulting blocked tensor
-itself to admit such a normalized witness. Neither declaration is a quotient by
-nonzero scalar rescaling, and no equivalence with either active simplicity
-predicate is asserted. The implication
-\leanid{MPOTensor.IsSimple.isSourceSimple} is
-unconditional. Its normalized sector decomposition is itself an active
-presentation after transport through the canonical-form gauge. Positive-length
-nontriviality in \eqref{eq:some-positive-length-nonzero} then follows from the
-general source-simplicity theorem, whose proof uses eventual linear
-independence, a non-eventually-zero sector coefficient, and physical
-unblocking. The strengthened implication
-\leanid{MPOTensor.IsSimple.isNonvanishingSourceSimple} uses
-\eqref{eq:positive-length-nonzero}.
+The predicate does not impose the line-246 unit-weight convention. Requiring a
+unit-weight witness of the blocked tensor is a hyper-literal reading that the
+source's own conventions exclude: the Definition-4.1-normalized Example~4.12
+carries the canonical-form weights $1/\sqrt2,1/\sqrt2$, and the dimer $R$
+of the section below carries $\sqrt{337/512}$, so neither would be simple
+under it. The library therefore reads line~246 as a
+normalization the source may apply, not as a clause of Definition~4.7. The
+predicates it once separated, and the counterexample module that separated
+them, were removed; see
+\path{docs/audits/2026-08-24_degenerate_readings_wave_2.md}.
 
-The tensor \leanid{MPOTensor.SimpleVanishingCounterexample.M}, whose
-sole local virtual matrix is $\operatorname{diag}(1,-1)$, satisfies
-\begin{align}
-    \rho_N(M)&=\bigl(1+(-1)^N\bigr)I.
-    \label{eq:simple-vanishing-counterexample}
-\end{align}
-Since $\operatorname{diag}(1,-1)^2=I$, its two-site blocking has one sector,
-the scalar unit normal representative, two copies of unit weight, and total
-virtual dimension two. The doubled physical-trace transfer is the one-by-one
-matrix $(1)$ and is non-nilpotent. Thus
-\leanid{MPOTensor.SimpleVanishingCounterexample.M_isSimple},
-\leanid{MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple}, and
-\leanid{MPOTensor.SimpleVanishingCounterexample.M_not_isNonvanishingSourceSimple}
-prove that the tensor is normalized-simple and source-simple:
-$\rho_2(M)=2I\ne0$ exhibits the positive-length nontriviality derived from its
-BNT sector presentation. It is not nonvanishing source-simple because
-$\rho_1(M)=0$. This witness does not refute
-Definition~4.7, is not an RFP claim, and gives no rigidity statement for BNT
-structure coefficients. For a fixed tensor, a theorem may also quantify over
-every normalized BNT witness rather than rely on one chosen presentation; the
-dimer obstruction below has precisely this form.
+By contrast, \leanid{MPOTensor.IsSimpleCanonicalForm} is a predicate on one
+displayed canonical-form representative, supplying the Appendix~C.2 hypothesis
+on an already-blocked tensor. It is not a quotient by nonzero scalar rescaling,
+and no equivalence with \leanid{MPOTensor.IsSimple} is asserted.
 
 \section{The parity tensor in Example 4.12}
 
@@ -247,33 +216,21 @@ identity forces
     \left(\frac{337}{512}\right)^L&=1.
 \end{align}
 This contradicts $0<(337/512)^L<1$. Hence no positive blocking of $R$ admits a
-normalized horizontal canonical form. Since the formal simple-canonical-form
-predicate includes such a horizontal witness, the theorem
-\leanid{R_not_isSimple} in the namespace
-\leanid{MPOTensor.RescalingStableLengthDependentRFP} proves
-\begin{align}
-    \lnot\,\leanid{MPOTensor.IsSimple}\,R.
-\end{align}
-The argument quantifies over the arbitrary normalized BNT witness allowed by
-the formal predicate; it does not depend on the displayed one-block
-presentation.
+normalized horizontal canonical form: no rescaling of $R$ reconciles the
+line-246 normalization with the scale that Definition~4.1 pins.
 
-This failure is not a nilpotency result. The retained-block theorem proves
-that the displayed canonical presentation has non-nilpotent physical-trace
-transfer. Together with positivity and the active one-site BNT refinement, it
-witnesses
+This is not a nilpotency statement, and it does not bear on Definition~4.7.
+The retained-block theorem proves that the displayed canonical presentation has
+non-nilpotent physical-trace transfer. Together with positivity and the
+one-site BNT refinement, it witnesses
 \begin{align}
-    \leanid{MPOTensor.IsSourceSimple}\,R.
+    \leanid{MPOTensor.IsSimple}\,R,
 \end{align}
-The explicit nonzero closed-MPO entry at every positive length further gives
-\begin{align}
-    \leanid{MPOTensor.IsNonvanishingSourceSimple}\,R.
-\end{align}
-The source quantifier is existential and is witnessed by $L=1$; no assertion is
-made about every positive blocking. The normalized obstruction instead combines
-quasi-idempotence of the doubled-index transfer, the line-246 unit-weight copy,
-and trace preservation of its normal representative. It uses none of the
-vertical coefficient identities discussed below.
+by the theorem \leanid{R_isSimple} in the namespace
+\leanid{MPOTensor.RescalingStableLengthDependentRFP}. The source quantifier is
+existential and is witnessed by $L=1$; no assertion is made about every
+positive blocking. Reading line~246 into Definition~4.7 would instead make $R$
+non-simple, which is the reading this note rejects.
 
 \section{Coefficient absorption with all Appendix C.2 conditions}
 

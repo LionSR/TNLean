@@ -787,64 +787,6 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[The rescaling-stable dimer fails normalized simplicity]
-    \label{thm:mpdo_bnt_label_rescaling_stable_not_simple}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        transferMap_blockTensor_R_toMPSTensor_quasi_idempotent}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        blockTensor_R_not_isHorizontalCF}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_not_isSimple}
-    \leanok
-    \uses{def:mpdo_simple_tensor, def:horizontal_cf_mpdo, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    Let $R$ be the dimer tensor of
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}. For
-    every integer $L\geq0$, the transfer map of its $L$-site blocking satisfies
-    \begin{align}
-        \mathcal E_{R^{[L]}}^2
-         & =\left(\frac{337}{512}\right)^L\mathcal E_{R^{[L]}}.
-        \notag
-    \end{align}
-    For every positive integer $L$, the blocking $R^{[L]}$ admits no normalized
-    horizontal canonical form. Consequently $R$ fails normalized
-    fixed-representative simplicity in the sense of
-    Definition~\ref{def:mpdo_simple_tensor}.
-
-    % Maintainer scope: the conclusion quantifies over every normalized BNT
-    % witness admitted by the fixed-representative simplicity definition. It
-    % does not assert that a BNT element is nilpotent, use the vertical
-    % coefficient family, or concern a scale-invariant notion of simplicity.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent, thm:mpdo_blocking_doubled_index, thm:cpsv_physical_reindexing, thm:transfer_map_block_tensor_quasi_idempotent, thm:mpdo_horizontal_cf_quasi_idempotent_scalar, lem:mpdo_simple_tensor_horizontal_cf}
-    By
-    Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent},
-    the one-site transfer map satisfies
-    $\E_R^2=\frac{337}{512}\E_R$.
-    Theorems~\ref{thm:mpdo_blocking_doubled_index} and
-    \ref{thm:cpsv_physical_reindexing} identify the doubled-index MPS tensor of
-    the MPO blocking $R^{[L]}$ with the physical relabeling of the $L$-site MPS
-    blocking, without changing its transfer map. After this transport,
-    Theorem~\ref{thm:transfer_map_block_tensor_quasi_idempotent} gives, for every
-    integer $L\geq0$,
-    \begin{align}
-        \E_{R^{[L]}}^2
-         & =\left(\frac{337}{512}\right)^L\E_{R^{[L]}}.
-        \notag
-    \end{align}
-    Now fix $L>0$ and suppose that the $L$-site blocking has a normalized
-    horizontal canonical form. By
-    Theorem~\ref{thm:mpdo_horizontal_cf_quasi_idempotent_scalar}, its
-    quasi-idempotence scalar must be one. On the other hand,
-    \begin{align}
-        0<\left(\frac{337}{512}\right)^L<1,
-        \notag
-    \end{align}
-    a contradiction. Normalized fixed-representative simplicity would provide
-    such a horizontal canonical form after some positive blocking. Hence
-    $R$ fails Definition~\ref{def:mpdo_simple_tensor}.
-\end{proof}
-
 \begin{theorem}[Positivity of the rescaling-stable coefficient family]%
     \label{thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.mpo_R_entry_formula}
@@ -990,7 +932,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         doubledPhysTraceTransfer_retainedBlock_not_isNilpotent}
     \leanok
-    \uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_source_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
+    \uses{def:mpdo_doubled_phys_trace_transfer, def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
     Let $\widehat R=\mu^{-1}R^{\bullet\bullet}$ be the single retained normal
     block in the displayed canonical form, where
     $\mu=\sqrt{337/512}$. Then
@@ -1002,31 +944,11 @@
     \end{align}
     Consequently neither $\mathcal T_R$ nor
     $\mathcal T_{\widehat R}$ is nilpotent. Thus the retained basis element
-    satisfies the non-nilpotency clause in source simplicity.
+    satisfies the non-nilpotency clause in simplicity.
 
     This conclusion concerns only that clause for the displayed one-block
-    presentation. The retained decomposition has the non-unit weight
-    $\mu=\sqrt{337/512}$, whereas
-    Definition~\ref{def:mpdo_simple_tensor} also retains the global
-    unit-weight convention of \cite[line~246]{Cirac2016MPDO_arXiv}.
-    For every scalar $c$, the physical-trace transfer scales as
-    \begin{align}
-        \mathcal T_{cM} & =c\mathcal T_M.
-        \notag
-    \end{align}
-    Hence literal idempotence at two nonzero representatives pins the scale:
-    \begin{align}
-        \mathcal T_M^2=\mathcal T_M\ne0,
-        \quad
-        \mathcal T_{cM}^2=\mathcal T_{cM}\ne0
-        \quad & \Longrightarrow\quad c=1.
-        \notag
-    \end{align}
-    Replacing $R$ by the normalized block uses the nontrivial scale
-    $c=\mu^{-1}$ and therefore changes the representative on which the
-    renormalization fixed-point condition is evaluated. Consequently this
-    result by itself does not establish source simplicity, and it makes no
-    claim about other presentations or blockings.
+    presentation, and it makes no claim about other presentations or
+    blockings.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_doubled_phys_trace_transfer, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
@@ -1045,17 +967,17 @@
     multiplication by $\mu$, forcing $\mathcal T_R$ to be nilpotent.
 \end{proof}
 
-\begin{theorem}[Source simplicity of the rescaling-stable dimer]
-    \label{thm:mpdo_bnt_label_rescaling_stable_source_simple}
+\begin{theorem}[Simplicity of the rescaling-stable dimer]
+    \label{thm:mpdo_bnt_label_rescaling_stable_simple}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         oneSiteDoubledEquiv_diagonal}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         toMPSTensor_blockTensor_R_one}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isSourceSimple}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isSimple}
     \leanok
-    \uses{def:mpdo_source_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    The dimer tensor $R$ is source-simple. The positive blocking length is
+    \uses{def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The dimer tensor $R$ is simple. The positive blocking length is
     $L=1$. After the canonical relabeling of the doubled physical alphabet,
     the basis of normal tensors has one member, namely the retained
     block $\widehat R$, and its physical-trace transfer is non-nilpotent.
@@ -1070,50 +992,6 @@
     BNT sector presentation. The only retained representative is $\widehat R$, whose
     physical-trace transfer is non-nilpotent by
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
-\end{proof}
-
-\begin{theorem}[Nonvanishing source simplicity of the rescaling-stable dimer]
-    \label{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        R_isNonvanishingSourceSimple}
-    \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    The dimer tensor $R$ is nonvanishing source-simple.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_source_simple, thm:mpdo_bnt_label_rescaling_stable_ismpdo}
-    Source simplicity follows from the preceding theorem. For every positive
-    length $N$, evaluating the entry identity of
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} at the all-zero
-    configuration gives
-    \begin{align}
-        \rho^{(N)}(R)_{\vec 0,\vec 0}
-         & =\left(\frac{25}{32}\right)^N
-        \left(\frac{16}{25}\right)^N
-        =\left(\frac12\right)^N\ne0.
-        \notag
-    \end{align}
-    Hence the closed operator does not vanish.
-\end{proof}
-
-\begin{theorem}[Source and normalized simplicity give opposite verdicts]
-    \label{thm:mpdo_bnt_label_rescaling_stable_simplicity_verdicts}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        R_isNonvanishingSourceSimple,
-        MPOTensor.RescalingStableLengthDependentRFP.%
-        R_not_isSimple}
-    \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor, def:mpdo_simple_tensor, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    The dimer tensor $R$ is nonvanishing source-simple, and hence source-simple,
-    but it does not satisfy normalized fixed-representative simplicity.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple, thm:mpdo_bnt_label_rescaling_stable_not_simple}
-    Combine
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_nonvanishing_source_simple}
-    with Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_not_simple}.
 \end{proof}
 
 \begin{theorem}[The rescaling-stable tensor is a renormalization fixed

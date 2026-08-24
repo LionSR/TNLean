@@ -104,12 +104,12 @@
     matched pair.
 \end{proof}
 
-\begin{definition}[Source-simple tensor]
-    \label{def:mpdo_source_simple_tensor}
-    \lean{MPOTensor.IsSourceSimple}
+\begin{definition}[Simple tensor]
+    \label{def:mpdo_simple_tensor}
+    \lean{MPOTensor.IsSimple}
     \leanok
     \uses{def:mpdo, def:mpdo_physical_blocking, def:cpsv_bnt_sector_presentation, def:mpdo_doubled_phys_trace_transfer}
-    A tensor generating MPDOs is \emph{source-simple} if there is a positive
+    A tensor generating MPDOs is \emph{simple} if there is a positive
     physical blocking length $L$ such that the doubled-index tensor of the
     $L$-site blocking has a BNT sector presentation $P$ for which every
     representative $B_j$ has non-nilpotent physical-trace transfer
@@ -127,12 +127,12 @@
     horizontal canonical-form witness.
 \end{definition}
 
-\begin{theorem}[Source simplicity implies positive-length nontriviality]
-    \label{thm:mpdo_source_simple_exists_nonzero}
-    \lean{MPOTensor.IsSourceSimple.exists_mpo_ne_zero}
+\begin{theorem}[Simplicity implies positive-length nontriviality]
+    \label{thm:mpdo_simple_exists_nonzero}
+    \lean{MPOTensor.IsSimple.exists_mpo_ne_zero}
     \leanok
-    \uses{def:mpdo_source_simple_tensor, def:mpo_family}
-    If $M$ is source-simple, then $\rho^{(N)}(M)\ne0$ for some $N>0$.
+    \uses{def:mpdo_simple_tensor, def:mpo_family}
+    If $M$ is simple, then $\rho^{(N)}(M)\ne0$ for some $N>0$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -145,19 +145,6 @@
     product vector nonzero. The closed-chain blocking identity then gives a
     nonzero unblocked MPO at a positive length.
 \end{proof}
-
-\begin{definition}[Nonvanishing source-simple tensor]
-    \label{def:mpdo_nonvanishing_source_simple_tensor}
-    \lean{MPOTensor.IsNonvanishingSourceSimple,
-        MPOTensor.IsNonvanishingSourceSimple.isSourceSimple,
-        MPOTensor.IsNonvanishingSourceSimple.mpo_ne_zero}
-    \leanok
-    \uses{def:mpdo_source_simple_tensor, def:mpo_family}
-    A tensor is \emph{nonvanishing source-simple} if it is source-simple and,
-    for every $N>0$, $\rho^{(N)}(M)\ne0$.
-    The nonvanishing condition is an additional refinement and is not part of
-    Definition~4.7 of~\cite{Cirac2016MPDO_arXiv}.
-\end{definition}
 
 \begin{lemma}[Scaling law for MPO words]
     \label{lem:mpdo_eval_word_scalar_scaling}
@@ -342,12 +329,12 @@
     with $r^{-1}$.
 \end{proof}
 
-\begin{theorem}[Positive rescaling preserves source simplicity]
-    \label{thm:mpdo_source_simple_positive_rescaling}
-    \lean{MPOTensor.IsSourceSimple.smul_ofReal}
+\begin{theorem}[Positive rescaling preserves simplicity]
+    \label{thm:mpdo_simple_positive_rescaling}
+    \lean{MPOTensor.IsSimple.smul_ofReal}
     \leanok
-    \uses{def:mpdo_source_simple_tensor}
-    Let $M$ be source-simple and let $r>0$ be real. Then $rM$ is source-simple.
+    \uses{def:mpdo_simple_tensor}
+    Let $M$ be simple and let $r>0$ be real. Then $rM$ is simple.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -359,161 +346,19 @@
     their non-nilpotent physical-trace transfers are unchanged.
 \end{proof}
 
-\begin{theorem}[Positive rescaling invariance of source simplicity]
-    \label{thm:mpdo_source_simple_positive_rescaling_iff}
-    \lean{MPOTensor.isSourceSimple_smul_ofReal_iff}
+\begin{theorem}[Positive rescaling invariance of simplicity]
+    \label{thm:mpdo_simple_positive_rescaling_iff}
+    \lean{MPOTensor.isSimple_smul_ofReal_iff}
     \leanok
-    \uses{def:mpdo_source_simple_tensor}
-    Let $M$ be an MPO tensor and let $r>0$ be real. Then $rM$ is source-simple
-    if and only if $M$ is source-simple.
+    \uses{def:mpdo_simple_tensor}
+    Let $M$ be an MPO tensor and let $r>0$ be real. Then $rM$ is simple
+    if and only if $M$ is simple.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_source_simple_positive_rescaling}
+    \uses{thm:mpdo_simple_positive_rescaling}
     Apply the preceding implication first with $r$ and then with $r^{-1}$.
 \end{proof}
-
-\begin{theorem}[Positive rescaling preserves nonvanishing source simplicity]
-    \label{thm:mpdo_nonvanishing_source_simple_positive_rescaling}
-    \lean{MPOTensor.IsNonvanishingSourceSimple.smul_ofReal}
-    \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor}
-    Let $M$ be nonvanishing source-simple and let $r>0$ be real. Then $rM$ is
-    nonvanishing source-simple.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpdo_source_simple_positive_rescaling, thm:mpdo_mpo_scalar_scaling}
-    Source simplicity is preserved by the preceding theorem, and
-    $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$ with $r^N\ne0$ for every $N$.
-\end{proof}
-
-\begin{theorem}[Positive rescaling invariance of nonvanishing source simplicity]
-    \label{thm:mpdo_nonvanishing_source_simple_positive_rescaling_iff}
-    \lean{MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff}
-    \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor}
-    Let $M$ be an MPO tensor and let $r>0$ be real. Then $rM$ is nonvanishing
-    source-simple if and only if $M$ is nonvanishing source-simple.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpdo_nonvanishing_source_simple_positive_rescaling, thm:mpdo_source_simple_positive_rescaling_iff, thm:mpdo_mpo_scalar_scaling}
-    The reverse direction is the preceding implication. For the forward
-    direction, Theorem~\ref{thm:mpdo_source_simple_positive_rescaling_iff}
-    gives source simplicity. If $\rho^{(N)}(M)=0$, then
-    \begin{align}
-        \rho^{(N)}(rM) & =r^N\rho^{(N)}(M)=0,
-        \notag
-    \end{align}
-    contradicting nonvanishing of $rM$.
-\end{proof}
-
-\begin{definition}[Normalized fixed-representative simplicity]
-    \label{def:mpdo_simple_tensor}
-    \lean{MPOTensor.IsSimple}
-    \leanok
-    \uses{def:mpdo, def:mpdo_physical_blocking, def:mpdo_simple_cf_tensor}
-    A tensor generating MPDOs satisfies \emph{normalized
-        fixed-representative simplicity} if there is a positive physical blocking
-    length for which the blocked tensor admits the normalized canonical-form
-    witness of Definition~\ref{def:mpdo_simple_cf_tensor}.
-
-    This normalized condition includes the global unit-weight convention
-    of~\cite[line~246]{Cirac2016MPDO_arXiv} at the scale of the blocked
-    tensor.
-    It is therefore distinct from source simplicity in
-    Definition~\ref{def:mpdo_source_simple_tensor}: it does not identify
-    nonzero scalar multiples, and no equivalence between the two predicates is
-    asserted.
-\end{definition}
-
-\begin{theorem}[Normalized simplicity implies source simplicity]
-    \label{thm:mpdo_simple_implies_source_simple}
-    \lean{MPOTensor.IsSimple.isSourceSimple}
-    \leanok
-    \uses{def:mpdo_source_simple_tensor, def:mpdo_simple_tensor}
-    Every tensor satisfying normalized fixed-representative simplicity is
-    source-simple.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal, thm:is_normal_tensor_of_is_normal_left_canonical, lem:sector_bnt_weight_unit_exists_of_struct, thm:gauge_invariance, def:cpsv_bnt_sector_presentation}
-    Use the normalized sector decomposition itself. Its copy weights are
-    nonzero, and the unit-modulus copy supplies at least one representative.
-    Its representatives are normal and eventually linearly independent. The
-    canonical-form gauge gives
-    $\mc{V}^+(M^{[L]})=\mc{V}^+(A_{\mathrm{tot}})$, so this sector decomposition
-    is a BNT presentation of the blocked tensor. Its representatives
-    already satisfy the required non-nilpotency condition.
-\end{proof}
-
-\begin{theorem}[Normalized simplicity implies nonvanishing source simplicity
-        under nonvanishing]
-    \label{thm:mpdo_simple_implies_nonvanishing_source_simple_of_nonzero}
-    \lean{MPOTensor.IsSimple.isNonvanishingSourceSimple}
-    \leanok
-    \uses{def:mpdo_nonvanishing_source_simple_tensor, def:mpdo_simple_tensor}
-    Let $M$ satisfy normalized fixed-representative simplicity. If
-    $\rho^{(N)}(M)\ne0$ for every $N>0$, then $M$ is nonvanishing
-    source-simple.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpdo_simple_implies_source_simple}
-    Combine Theorem~\ref{thm:mpdo_simple_implies_source_simple} with the stated
-    positive-length nonvanishing hypothesis.
-\end{proof}
-
-\begin{theorem}[Vanishing separates source simplicity from its strengthening]
-    \label{thm:mpdo_simple_vanishing_source_simple_status}
-    \lean{MPOTensor.SimpleVanishingCounterexample.M,
-        MPOTensor.SimpleVanishingCounterexample.M_apply,
-        MPOTensor.SimpleVanishingCounterexample.mpo_eq,
-        MPOTensor.SimpleVanishingCounterexample.M_isMPDO,
-        MPOTensor.SimpleVanishingCounterexample.mpo_one_eq_zero,
-        MPOTensor.SimpleVanishingCounterexample.M_isSimple,
-        MPOTensor.SimpleVanishingCounterexample.M_isSourceSimple,
-        MPOTensor.SimpleVanishingCounterexample.%
-        M_not_isNonvanishingSourceSimple}
-    \leanok
-    \uses{def:mpdo_source_simple_tensor, def:mpdo_nonvanishing_source_simple_tensor, def:mpdo_simple_tensor}
-    There is a one-letter bond-two tensor $M$ such that, for every $N\geq0$,
-    \begin{align}
-        \rho^{(N)}(M) & =\bigl(1+(-1)^N\bigr)I.
-        \notag
-    \end{align}
-    The tensor is normalized-simple and source-simple, but it is not
-    nonvanishing source-simple.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mpdo_simple_implies_source_simple}
-    The sole local virtual matrix is $Z=\operatorname{diag}(1,-1)$, and
-    \begin{align}
-        Z^2 & =I,
-            & \tr(Z^N) & =1+(-1)^N.
-        \notag
-    \end{align}
-    Hence the closed MPO is $2I$ at even lengths and zero at odd lengths. In
-    particular $\rho^{(2)}(M)=2I\ne0$, so the source family is existentially
-    nontrivial, while $\rho^{(1)}(M)=0$. Every closed MPO is positive
-    semidefinite.
-
-    Block two sites. Since the single blocked letter is $Z^2=I$, the normalized
-    canonical form has one sector, represented
-    by the scalar unit normal tensor. It has two copies, both with unit weight,
-    so its total virtual dimension is $2$. Its doubled physical-trace transfer
-    is the one-by-one matrix $(1)$, which is non-nilpotent. Hence $M$ is
-    normalized-simple and therefore source-simple by
-    Theorem~\ref{thm:mpdo_simple_implies_source_simple}. The vanishing at length
-    one excludes only the strengthened nonvanishing source-simple predicate.
-\end{proof}
-
-The example does not refute Definition~4.7 of
-\cite{Cirac2016MPDO_arXiv}. It asserts neither an RFP property nor any rigidity
-statement for BNT structure coefficients.
-
 \begin{definition}[Normalized simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}
     \lean{MPOTensor.IsSimpleCanonicalForm}
@@ -529,9 +374,10 @@ statement for BNT structure coefficients.
     the global unit-weight convention
     of~\cite[line~246]{Cirac2016MPDO_arXiv}, whereas the non-nilpotency
     condition
-    itself is unchanged by nonzero scalar rescaling. It is an ingredient of
-    Definition~\ref{def:mpdo_simple_tensor}, not the normalization-free source
-    predicate of Definition~\ref{def:mpdo_source_simple_tensor}. No invariance
+    itself is unchanged by nonzero scalar rescaling. It supplies the
+    Appendix~C.2 hypothesis on the already-blocked tensor and is not the
+    simplicity predicate of Definition~\ref{def:mpdo_simple_tensor},
+    which quantifies over blocking lengths and presentations. No invariance
     under rescaling or replacement of the canonical presentation is asserted.
 \end{definition}
 % Note for maintainers: this predicate does not include the biCF
@@ -553,68 +399,4 @@ statement for BNT structure coefficients.
     decomposition, its basis-of-normal-tensors property, and the
     block-diagonal gauge---give a horizontal canonical form. Positivity and
     non-nilpotency are not needed for this conclusion.
-\end{proof}
-
-\begin{theorem}[Unit-weight obstruction for a BNT sector decomposition]
-    \label{thm:bnt_unit_weight_quasi_idempotent_scalar}
-    \lean{MPSTensor.IsBNTCanonicalForm.%
-        eq_one_of_transferMap_comp_self_eq_smul}
-    \leanok
-    \uses{def:sector_bnt_cf}
-    Let $P$ be a sector decomposition in normalized BNT canonical form, and let
-    $T_P$ be its assembled block-diagonal tensor. If
-    \begin{align}
-        \mathcal E_{T_P}^2 & =c\mathcal E_{T_P},
-        \notag
-    \end{align}
-    then $c=1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:mixed_transfer_quasi_idempotent_of_direct_sum, lem:transfer_map_smul, lem:trace_transfer_map_left_canonical}
-    By the normalization at \cite[line~246]{Cirac2016MPDO_arXiv}, some copy has
-    weight $\mu$ with $|\mu|=1$.
-    Theorem~\ref{thm:mixed_transfer_quasi_idempotent_of_direct_sum} restricts the
-    transfer equation of the assembled tensor to this copy's diagonal corner.
-    By Lemma~\ref{lem:transfer_map_smul},
-    \begin{align}
-        \E_{\mu A} & =\mu\overline\mu\,\E_A=\E_A.
-        \notag
-    \end{align}
-    Hence the restricted equation is $\E_A^2=c\E_A$. The normal representative
-    is left canonical, so Lemma~\ref{lem:trace_transfer_map_left_canonical}
-    gives trace preservation. Applying the equation to the identity and taking
-    the trace gives
-    \begin{align}
-        D
-         & =\tr(\E_A(\E_A(\Id)))
-        =c\tr(\E_A(\Id))
-        =cD.
-        \notag
-    \end{align}
-    Since $D>0$, it follows that $c=1$.
-\end{proof}
-
-\begin{theorem}[Unit-weight obstruction in horizontal canonical form]
-    \label{thm:mpdo_horizontal_cf_quasi_idempotent_scalar}
-    \lean{MPOTensor.IsHorizontalCF.%
-        eq_one_of_transferMap_comp_self_eq_smul}
-    \leanok
-    \uses{def:horizontal_cf_mpdo}
-    Let $M$ be a doubled-index tensor in normalized horizontal canonical form.
-    If its transfer map satisfies
-    \begin{align}
-        \mathcal E_M^2 & =c\mathcal E_M,
-        \notag
-    \end{align}
-    then $c=1$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:bnt_unit_weight_quasi_idempotent_scalar, thm:cpsv_gauge_transfer_quasi_idempotence}
-    The horizontal canonical-form witness gives a normalized BNT sector
-    decomposition whose assembled tensor is gauge equivalent to $M$. Transport
-    the transfer equation across this gauge by
-    Theorem~\ref{thm:cpsv_gauge_transfer_quasi_idempotence}, then apply
-    Theorem~\ref{thm:bnt_unit_weight_quasi_idempotent_scalar}.
 \end{proof}

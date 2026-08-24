@@ -95,25 +95,19 @@ For MPDO renormalization fixed points:
   statement (iii), including inactive product sectors, is not claimed.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices. The formal
-  predicate is `MPOTensor.IsSourceSimple`: it existentially chooses a positive
+  predicate is `MPOTensor.IsSimple`: it existentially chooses a positive
   physical blocking and a BNT sector presentation whose representative
   physical-trace transfers are all nonnilpotent. Every representative has a
   positive number of copies and every copy has nonzero weight, the
   nonzero-coefficient convention recorded in
   `cpsv16_bnt_uniqueness_zero_coefficient.tex`. Positive-length nontriviality is derived
   from this presentation, while isolated vanishing lengths remain possible.
-  The separate predicate
-  `MPOTensor.IsNonvanishingSourceSimple` adds nonvanishing of every
-  positive-length generated MPO.
 - `cpsv16_unit_weight_rfp_scale_tension.tex` records the tension between the
   source's line-246 unit-weight convention and the scale fixed by Definition
-  4.1. The dimer tensor satisfies both `MPOTensor.IsSourceSimple` and
-  `MPOTensor.IsNonvanishingSourceSimple`, witnessed by blocking length one, but
-  fails the normalized fixed-representative predicate `MPOTensor.IsSimple`.
-  Normalized simplicity implies source simplicity unconditionally because its
-  normalized sector decomposition gives a BNT sector presentation after gauge
-  transport; the strengthened predicate still requires positive-length
-  nonvanishing. The same note records the exact scalar repeated-copy
+  4.1. The dimer tensor satisfies `MPOTensor.IsSimple`, witnessed by blocking
+  length one, while its canonical-form weight $\sqrt{337/512}$ is not a unit
+  weight. The line-246 witness is therefore not part of simplicity; see
+  `docs/audits/2026-08-24_degenerate_readings_wave_2.md`. The same note records the exact scalar repeated-copy
   counterexample to Theorem 4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$
   satisfy the global convention and every condition-(iv) clause, while the
   blocked tensor fails Definition 4.1.

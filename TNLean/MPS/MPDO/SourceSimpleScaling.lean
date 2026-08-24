@@ -6,11 +6,10 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.SourceSimpleTensor
 
 /-!
-# Positive rescaling of source-simple MPO tensors
+# Positive rescaling of simple MPO tensors
 
 This module records the exact effect of a scalar rescaling on closed MPOs and
-physical blocking. It then proves that both normalization-free source simplicity
-and its positive-length nonvanishing strengthening are invariant under
+physical blocking. It then proves that simplicity is invariant under
 multiplication by a strictly positive real scalar.
 
 An arbitrary nonzero complex scalar does not preserve the MPDO condition: at
@@ -27,10 +26,8 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
   by any nonzero complex rescaling of the tensor.
 * `MPOTensor.isMPDO_smul_ofReal_iff`: MPDO is invariant under strictly positive
   real rescaling.
-* `MPOTensor.isSourceSimple_smul_ofReal_iff`: source simplicity is invariant
-  under strictly positive real rescaling, with the same representatives.
-* `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff`: the strengthened
-  nonvanishing predicate is invariant under strictly positive real rescaling.
+* `MPOTensor.isSimple_smul_ofReal_iff`: simplicity is invariant under strictly
+  positive real rescaling, with the same representatives.
 
 ## References
 
@@ -136,17 +133,17 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Strictly positive real rescaling preserves source simplicity.
+/-- Strictly positive real rescaling preserves simplicity.
 
 The blocking length, normal representatives, and copy multiplicities are unchanged.
 The represented blocked tensor is multiplied by `(r : ℂ) ^ L`, so every copy weight
 is multiplied by that same nonzero scalar.
 
-Project-derived from source simplicity in arXiv:1606.00608, Definition 4.7,
+Project-derived from simplicity in arXiv:1606.00608, Definition 4.7,
 lines 815--822. -/
-theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
+theorem IsSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSimple M)
     {r : ℝ} (hr : 0 < r) :
-    IsSourceSimple ((r : ℂ) • M) := by
+    IsSimple ((r : ℂ) • M) := by
   obtain ⟨hMPDO, L, hL, P, hPres, hNonNil⟩ := hM
   have hScale : ((r : ℂ) ^ L) ≠ 0 :=
     pow_ne_zero L (Complex.ofReal_ne_zero.mpr hr.ne')
@@ -157,50 +154,20 @@ theorem IsSourceSimple.smul_ofReal {M : MPOTensor d D} (hM : IsSourceSimple M)
   · intro j
     exact hNonNil j
 
-/-- Strictly positive real rescaling preserves source simplicity together with
-positive-length nonvanishing.
+/-- Simplicity is invariant under multiplication by a strictly positive real scalar.
 
-The nonvanishing condition is additional to arXiv:1606.00608, Definition 4.7,
-lines 815--822. -/
-theorem IsNonvanishingSourceSimple.smul_ofReal {M : MPOTensor d D}
-    (hM : IsNonvanishingSourceSimple M) {r : ℝ} (hr : 0 < r) :
-    IsNonvanishingSourceSimple ((r : ℂ) • M) := by
-  refine ⟨hM.isSourceSimple.smul_ofReal hr, ?_⟩
-  intro N hN
-  rw [mpo_smul]
-  exact smul_ne_zero (pow_ne_zero N (Complex.ofReal_ne_zero.mpr (ne_of_gt hr)))
-    (hM.mpo_ne_zero N hN)
-
-/-- Source simplicity is invariant under multiplication by a strictly positive real scalar.
-
-Project-derived from source simplicity in arXiv:1606.00608, Definition 4.7,
+Project-derived from simplicity in arXiv:1606.00608, Definition 4.7,
 lines 815--822, by applying positive rescaling in both directions. -/
-theorem isSourceSimple_smul_ofReal_iff (M : MPOTensor d D) {r : ℝ} (hr : 0 < r) :
-    IsSourceSimple ((r : ℂ) • M) ↔ IsSourceSimple M := by
+theorem isSimple_smul_ofReal_iff (M : MPOTensor d D) {r : ℝ} (hr : 0 < r) :
+    IsSimple ((r : ℂ) • M) ↔ IsSimple M := by
   constructor
   · intro hscaled
-    have hinv : IsSourceSimple (((r⁻¹ : ℝ) : ℂ) • ((r : ℂ) • M)) :=
+    have hinv : IsSimple (((r⁻¹ : ℝ) : ℂ) • ((r : ℂ) • M)) :=
       hscaled.smul_ofReal (inv_pos.mpr hr)
     have hri : (((r⁻¹ : ℝ) : ℂ) * (r : ℂ)) = 1 := by
       rw [← Complex.ofReal_mul]
       simp [ne_of_gt hr]
     simpa only [smul_smul, hri, one_smul] using hinv
-  · exact fun hM ↦ hM.smul_ofReal hr
-
-/-- Source simplicity with positive-length nonvanishing is invariant under
-multiplication by a strictly positive real scalar.
-
-The nonvanishing condition is additional to arXiv:1606.00608, Definition 4.7,
-lines 815--822. -/
-theorem isNonvanishingSourceSimple_smul_ofReal_iff (M : MPOTensor d D)
-    {r : ℝ} (hr : 0 < r) :
-    IsNonvanishingSourceSimple ((r : ℂ) • M) ↔ IsNonvanishingSourceSimple M := by
-  constructor
-  · intro hscaled
-    refine ⟨(isSourceSimple_smul_ofReal_iff M hr).mp hscaled.isSourceSimple, ?_⟩
-    intro N hN hzero
-    apply hscaled.mpo_ne_zero N hN
-    rw [mpo_smul, hzero, smul_zero]
   · exact fun hM ↦ hM.smul_ofReal hr
 
 end MPOTensor
