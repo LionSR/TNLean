@@ -18,13 +18,13 @@ established left-canonical bridge.
 The result is project infrastructure for the tensoring clause in
 arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--845; it is not a
 separately stated theorem of that paper.  The retained-normal-block terminology
-comes from arXiv:1606.00608, equation `II_CF1`, lines 224--245.  The two
+comes from arXiv:1606.00608, equation `II_CF1`, lines 214--245.  The two
 left-canonical identities are explicit project hypotheses, not an additional
 claim attributed to that passage.
 
 ## Main statement
 
-* `MPSTensor.IsNormalTensor.tensorProduct` preserves CPSV normality for two
+* `MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical` preserves CPSV normality for two
   left-canonical normal blocks; `MPSTensor.leftCanonical_tensorProduct`
   supplies the accompanying left-canonical conclusion.
 -/
@@ -51,9 +51,10 @@ This is infrastructure for arXiv:1703.09188, proof of Theorem `IndexTh` (ii),
 lines 824--845, not a separate result asserted there.  The normal-block and
 left-canonical hypotheses are the project inputs for the retained
 canonical-form blocks described around arXiv:1606.00608, equation `II_CF1`,
-lines 224--245; the passage itself is not cited as asserting left-canonicality.
+lines 214--245; the passage itself is not cited as asserting left-canonicality.
 -/
-theorem IsNormalTensor.tensorProduct {A : MPSTensor d D} (hA : IsNormalTensor A)
+theorem IsNormalTensor.tensorProduct_of_leftCanonical {A : MPSTensor d D}
+    (hA : IsNormalTensor A)
     {B : MPSTensor e E} (hB : IsNormalTensor B)
     (hLeftA : IsLeftCanonical A) (hLeftB : IsLeftCanonical B) :
     IsNormalTensor (MPSTensor.tensorProduct A B) := by

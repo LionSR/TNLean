@@ -115,7 +115,7 @@ then the Kronecker multiplication and adjoint identities give
 This is project infrastructure for the tensoring clause in arXiv:1703.09188,
 proof of Theorem `IndexTh` (ii), lines 824--845, not a result stated separately
 in that paper.  The retained-normal-block context is
-arXiv:1606.00608, equation `II_CF1`, lines 224--245; the two left-canonical
+arXiv:1606.00608, equation `II_CF1`, lines 214--245; the two left-canonical
 identities are explicit project hypotheses, not an assertion attributed to
 that passage. -/
 theorem leftCanonical_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)

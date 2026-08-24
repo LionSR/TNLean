@@ -22,7 +22,7 @@ This is project infrastructure for the sentence "The case of tensoring is
 trivial" in arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--845;
 the paper does not state a separate normality theorem here.  The tensors to
 which this infrastructure is applied are the retained normal blocks of
-arXiv:1606.00608, equation `II_CF1`, lines 224--245.
+arXiv:1606.00608, equation `II_CF1`, lines 214--245.
 
 ## Main statements
 
@@ -57,7 +57,7 @@ This is infrastructure for arXiv:1703.09188, proof of Theorem `IndexTh` (ii),
 lines 824--845, rather than a separately stated theorem of that paper.  Its
 homogeneous-word route supplies the project's algebraic-normality input for
 the retained blocks described around arXiv:1606.00608, equation `II_CF1`,
-lines 224--245. -/
+lines 214--245. -/
 theorem wordSpan_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
     (N : ℕ) :
     Kraus.wordSpan (tensorProduct A B) N =
