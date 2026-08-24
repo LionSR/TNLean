@@ -56,10 +56,10 @@ lines 224--245; the passage itself is not cited as asserting left-canonicality.
 theorem IsNormalTensor.tensorProduct {A : MPSTensor d D} (hA : IsNormalTensor A)
     {B : MPSTensor e E} (hB : IsNormalTensor B)
     (hLeftA : IsLeftCanonical A) (hLeftB : IsLeftCanonical B) :
-    IsNormalTensor (tensorProduct A B) := by
+    IsNormalTensor (MPSTensor.tensorProduct A B) := by
   let _ : NeZero (D * E) :=
     ⟨Nat.mul_ne_zero hA.bondDim_ne_zero hB.bondDim_ne_zero⟩
-  exact isNormalTensor_of_isNormal_leftCanonical (tensorProduct A B)
+  exact isNormalTensor_of_isNormal_leftCanonical (MPSTensor.tensorProduct A B)
     (isNormal_tensorProduct A B hA.isNormal hB.isNormal)
     (leftCanonical_tensorProduct A B hLeftA hLeftB)
 
