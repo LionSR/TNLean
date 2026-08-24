@@ -20,8 +20,6 @@ transport of word evaluation together with the invariance of matrix product
 vectors, `SameMPV₂`, and `GaugePhaseEquiv`.
 -/
 
-open scoped Matrix
-
 namespace MPSTensor
 
 variable {d D D₁ D₂ D₃ : ℕ}
