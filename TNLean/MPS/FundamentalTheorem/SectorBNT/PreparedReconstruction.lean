@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
 import TNLean.MPS.SharedInfra.BlockAssembly
 
@@ -31,13 +32,6 @@ private lemma cast_gl_conj_apply {n m : ℕ} (h : n = m)
     ((G : Matrix (Fin m) (Fin m) ℂ) *
       cast (congr_arg (fun t => Matrix (Fin t) (Fin t) ℂ) h) B *
       (↑(G⁻¹) : Matrix (Fin m) (Fin m) ℂ)) x y := by
-  subst h
-  rfl
-
-private lemma mpsTensor_cast_apply_matrix {n m : ℕ} (h : n = m)
-    (B : MPSTensor d n) (i : Fin d) :
-    (cast (congr_arg (MPSTensor d) h) B) i =
-      cast (congr_arg (fun t => Matrix (Fin t) (Fin t) ℂ) h) (B i) := by
   subst h
   rfl
 
@@ -220,8 +214,8 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
           (P.flatBasis (P.flatIndexEquiv jqP) i) x y]
         rw [← hCastBasisMatrix]
         dsimp [C]
-        rw [mpsTensor_cast_apply_matrix (d := d) (hEq jq.1 jq.2)
-          (blocks ((mpvPhaseClassData (d := d) blocks).repr jq.1)) i]
+        rw [cast_eq_reindex (hEq jq.1 jq.2),
+          reindex_apply_eq_cast (hEq jq.1 jq.2)]
       have hfin (z : Fin (dim ((mpvPhaseClassData (d := d) blocks).enum jq.1 jq.2))) :
           (finCongr hdLocal).symm.symm z = Fin.cast hdLocal z := by
         apply Fin.ext

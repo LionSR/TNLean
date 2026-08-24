@@ -111,7 +111,7 @@ theorem IsNormal.mapStar {A : MPSTensor d D} (hA : IsNormal A) :
   have hConj := hInj.mapStar
   convert hConj using 1
   ext σ β α
-  simp [MPSTensor.blockTensor, MPSTensor.evalWord_mapStar]
+  simp [Kraus.blockTensor, MPSTensor.evalWord_mapStar]
 
 end Kraus
 

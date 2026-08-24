@@ -37,23 +37,23 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 private noncomputable def blockHead (k : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim d (k + 1))) : Fin d :=
-  MPSTensor.decodeBlock d (k + 1) I 0
+    (I : Fin (Kraus.blockPhysDim d (k + 1))) : Fin d :=
+  Kraus.decodeBlock d (k + 1) I 0
 
 private noncomputable def blockTail (k : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-    Fin (MPSTensor.blockPhysDim d k) :=
-  (MPSTensor.decodeBlockEquiv d k).symm
-    (fun q : Fin k => MPSTensor.decodeBlock d (k + 1) I q.succ)
+    (I : Fin (Kraus.blockPhysDim d (k + 1))) :
+    Fin (Kraus.blockPhysDim d k) :=
+  (Kraus.decodeBlockEquiv d k).symm
+    (fun q : Fin k => Kraus.decodeBlock d (k + 1) I q.succ)
 
 private lemma wordOfBlock_succ (k : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-    MPSTensor.wordOfBlock d (k + 1) I =
-      blockHead k I :: MPSTensor.wordOfBlock d k (blockTail k I) := by
-  simp [MPSTensor.wordOfBlock, blockHead, blockTail, List.ofFn_succ]
+    (I : Fin (Kraus.blockPhysDim d (k + 1))) :
+    Kraus.wordOfBlock d (k + 1) I =
+      blockHead k I :: Kraus.wordOfBlock d k (blockTail k I) := by
+  simp [Kraus.wordOfBlock, blockHead, blockTail, List.ofFn_succ]
 
 private lemma blockTensor_succ_apply (U : MPOTensor d D) (k : ℕ)
-    (I J : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+    (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
     blockTensor U (k + 1) I J =
       U (blockHead k I) (blockHead k J) *
         blockTensor U k (blockTail k I) (blockTail k J) := by
@@ -69,7 +69,7 @@ private lemma sourceCutSVD_factorization_apply
   simpa only [Matrix.mul_apply] using h.symm
 
 private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
-    Matrix (Fin D × Fin (MPSTensor.blockPhysDim d (k + 1)))
+    Matrix (Fin D × Fin (Kraus.blockPhysDim d (k + 1)))
       (Fin d × Fin r[blockTensor U k]) ℂ :=
   fun (α, J) (i, q) =>
     ∑ γ : Fin D, U i (blockHead k J) α γ *
@@ -77,7 +77,7 @@ private noncomputable def rightSuccLeft (U : MPOTensor d D) (k : ℕ) :
 
 private noncomputable def rightSuccRight (U : MPOTensor d D) (k : ℕ) :
     Matrix (Fin d × Fin r[blockTensor U k])
-      (Fin (MPSTensor.blockPhysDim d (k + 1)) × Fin D) ℂ :=
+      (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D) ℂ :=
   fun (i, q) (I, β) =>
     if i = blockHead k I then
       ((sourceSVD₁ (blockTensor U k)).diagonal *
@@ -125,7 +125,7 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
     simp [hi]
 
 private noncomputable def leftSuccLeft (U : MPOTensor d D) (k : ℕ) :
-    Matrix (Fin D × Fin (MPSTensor.blockPhysDim d (k + 1)))
+    Matrix (Fin D × Fin (Kraus.blockPhysDim d (k + 1)))
       (Fin d × Fin ℓ[blockTensor U k]) ℂ :=
   fun (α, I) (j, q) =>
     ∑ γ : Fin D, U (blockHead k I) j α γ *
@@ -133,7 +133,7 @@ private noncomputable def leftSuccLeft (U : MPOTensor d D) (k : ℕ) :
 
 private noncomputable def leftSuccRight (U : MPOTensor d D) (k : ℕ) :
     Matrix (Fin d × Fin ℓ[blockTensor U k])
-      (Fin (MPSTensor.blockPhysDim d (k + 1)) × Fin D) ℂ :=
+      (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D) ℂ :=
   fun (j, q) (J, β) =>
     if j = blockHead k J then
       ((sourceSVD₂ (blockTensor U k)).diagonal *

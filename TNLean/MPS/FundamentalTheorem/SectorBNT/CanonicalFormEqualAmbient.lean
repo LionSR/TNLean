@@ -24,13 +24,6 @@ variable {A B : MPSTensor d D}
 
 namespace CPSVCanonicalFormData
 
-private lemma mpsTensor_cast_apply {n m : ℕ} (h : n = m)
-    (T : MPSTensor d n) (i : Fin d) :
-    (cast (congr_arg (MPSTensor d) h) T) i =
-      cast (congr_arg (fun r => Matrix (Fin r) (Fin r) ℂ) h) (T i) := by
-  subst h
-  rfl
-
 private lemma coisometry_cast_rows {n m : ℕ} (h : n = m)
     (U : Matrix (Fin n) (Fin D) ℂ) (hU : U * Uᴴ = 1) :
     let V := cast (congr_arg (fun r => Matrix (Fin r) (Fin D) ℂ) h) U
@@ -118,7 +111,10 @@ theorem fundamentalTheorem_equal_ambient_canonicalForm
         Subsingleton.elim _ _
       calc
         P' i = cast (congr_arg (fun r => Matrix (Fin r) (Fin r) ℂ) hTotal)
-            (P.toTensor i) := mpsTensor_cast_apply hTotal P.toTensor i
+            (P.toTensor i) := by
+              dsimp [P']
+              rw [cast_eq_reindex hTotal P.toTensor]
+              exact reindex_apply_eq_cast hTotal P.toTensor i
         _ = cast hm (P.toTensor i) := by rw [hp]
     rw [hPi]
     exact hGauge i

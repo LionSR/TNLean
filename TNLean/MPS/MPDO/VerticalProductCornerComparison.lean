@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.MPDO.VerticalProductSpectralFamily
 
 /-!
@@ -158,13 +159,6 @@ private theorem castDependentTensor_eq
     (A : (i : ι) → MPSTensor e (bondDim i))
     {i j : ι} (h : i = j) :
     cast (congrArg (MPSTensor e) (congrArg bondDim h)) (A i) = A j := by
-  cases h
-  rfl
-
-private theorem castTensor_apply
-    {e m n : ℕ} (h : m = n) (A : MPSTensor e m) (v : Fin e) :
-    (cast (congrArg (MPSTensor e) h) A) v =
-      cast (congrArg (fun k ↦ Matrix (Fin k) (Fin k) ℂ) h) (A v) := by
   cases h
   rfl
 
@@ -402,7 +396,8 @@ private theorem originalCornerInclusion_weighted_intertwining
               (Fin (S.flatDim j)) ℂ))) := by
     intro v
     rw [hVflat v, C.block_eq j v]
-    rw [castTensor_apply (C.dim_eq j) (A₂ (C.label j)) v]
+    rw [MPSTensor.cast_eq_reindex (C.dim_eq j) (A₂ (C.label j)),
+      MPSTensor.reindex_apply_eq_cast (C.dim_eq j) (A₂ (C.label j)) v]
     simp only [c, smul_smul]
   let W₂ := normalizedGroupedSectorMap (C.dim_eq j) Vflat
     (C.gauge j) (omega j)
@@ -553,8 +548,10 @@ private theorem originalCornerTerm_weighted_eq
     have hcast := castBondColumns_corner (A₂ (C.label j) ab) W₂ c
       (congrArg dim₂ hSigma).symm
     have hAcastLetter := congrFun hAcast ab
-    rw [castTensor_apply (congrArg dim₂ hSigma).symm
-      (A₂ (C.label j)) ab] at hAcastLetter
+    rw [MPSTensor.cast_eq_reindex (congrArg dim₂ hSigma.symm)
+      (A₂ (C.label j)),
+      MPSTensor.reindex_apply_eq_cast (congrArg dim₂ hSigma.symm)
+        (A₂ (C.label j)) ab] at hAcastLetter
     rw [hAcastLetter] at hcast
     simpa only [Wsigma] using hcast
   have hGaugeCorner : W₂ * (c • A₂ (C.label j) ab) * W₂ᴴ =
@@ -584,8 +581,9 @@ private theorem originalCornerTerm_weighted_eq
       (S.localInclusion p k) (S.coefficient p k)
       (localDim_eq_flatDim S p k)
     have hblockLetter := congrFun hblock ab
-    rw [castTensor_apply (localDim_eq_flatDim S p k) (S.block p k) ab]
-      at hblockLetter
+    rw [MPSTensor.cast_eq_reindex (localDim_eq_flatDim S p k) (S.block p k),
+      MPSTensor.reindex_apply_eq_cast (localDim_eq_flatDim S p k)
+        (S.block p k) ab] at hblockLetter
     rw [hblockLetter] at hcast
     simpa only [Vflat] using hcast
   have hscalar : a * ((c * t) / a) = c * t := by
@@ -616,7 +614,8 @@ private theorem originalCornerTerm_weighted_eq
             (Fin (S.flatDim j)) ℂ))) * Vflatᴴ := hGaugeCorner
     _ = Vflat * (S.coefficient p k • S.flatBlock j ab) * Vflatᴴ := by
       rw [C.block_eq j ab,
-        castTensor_apply (C.dim_eq j) (A₂ (C.label j)) ab]
+        MPSTensor.cast_eq_reindex (C.dim_eq j) (A₂ (C.label j)),
+        MPSTensor.reindex_apply_eq_cast (C.dim_eq j) (A₂ (C.label j)) ab]
       simp only [c, smul_smul]
     _ = S.localInclusion p k * (S.coefficient p k • S.block p k ab) *
         (S.localInclusion p k)ᴴ := hLocalCorner

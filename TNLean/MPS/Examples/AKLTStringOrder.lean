@@ -126,12 +126,12 @@ the single-site letters propagates to length-`2` words. -/
 private theorem akltBlocked_transferMap_one : Kraus.transferMap akltBlocked 1 = 1 := by
   classical
   rw [Kraus.transferMap_apply]
-  simp only [Matrix.mul_one, akltBlocked, blockTensor, wordOfBlock]
-  rw [Fintype.sum_equiv (decodeBlockEquiv 3 2)
-    (fun I => Kraus.evalWord akltTensor (List.ofFn (decodeBlock 3 2 I)) *
-      (Kraus.evalWord akltTensor (List.ofFn (decodeBlock 3 2 I)))ᴴ)
+  simp only [Matrix.mul_one, akltBlocked, Kraus.blockTensor, Kraus.wordOfBlock]
+  rw [Fintype.sum_equiv (Kraus.decodeBlockEquiv 3 2)
+    (fun I => Kraus.evalWord akltTensor (List.ofFn (Kraus.decodeBlock 3 2 I)) *
+      (Kraus.evalWord akltTensor (List.ofFn (Kraus.decodeBlock 3 2 I)))ᴴ)
     (fun ρ => Kraus.evalWord akltTensor (List.ofFn ρ) * (Kraus.evalWord akltTensor (List.ofFn ρ))ᴴ)
-    (fun I => by rw [decodeBlockEquiv_apply])]
+    (fun I => by rw [Kraus.decodeBlockEquiv_apply])]
   exact sum_evalWord_mul_conjTranspose_evalWord akltTensor aklt_sum_mul_conjTranspose 2
 
 /-- The maximally mixed boundary state `Λ = (1/2)·1` is a fixed point of the

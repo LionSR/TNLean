@@ -80,15 +80,15 @@ theorem normalizedDiagonal_outputLayer_pow_apply [NeZero d]
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
     one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     blockTensor_apply, Matrix.smul_apply, smul_eq_mul]
-  have hdim : (MPSTensor.blockPhysDim d K : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ K := by
-    rw [MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]
+  have hdim : (Kraus.blockPhysDim d K : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ K := by
+    rw [Kraus.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]
   rw [hdim]
   congr 1
-  have hsum := (MPSTensor.decodeBlockEquiv d K).sum_comp
+  have hsum := (Kraus.decodeBlockEquiv d K).sum_comp
     (fun τ ↦ evalWord (doubleLayerTensor (physicalAdjointTensor U))
       (List.ofFn τ) (List.ofFn τ))
-  simp only [MPSTensor.decodeBlockEquiv_apply] at hsum
-  simp only [MPSTensor.wordOfBlock]
+  simp only [Kraus.decodeBlockEquiv_apply] at hsum
+  simp only [Kraus.wordOfBlock]
   rw [hsum]
   simp only [Matrix.sum_apply]
   apply Finset.sum_congr rfl

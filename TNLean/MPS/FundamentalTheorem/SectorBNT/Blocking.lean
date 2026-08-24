@@ -207,11 +207,11 @@ theorem blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
       (fun s ↦ (P.flatWeight s) ^ p)
       (fun s ↦ MPSTensor.blockTensor (P.flatBasis s) p)
   funext i
-  rw [MPSTensor.blockTensor]
-  have h := evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
-    P.flatWeight P.flatBasis (wordOfBlock d p i)
   change Kraus.evalWord
-      (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis) (wordOfBlock d p i) = _ at h
+      (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis)
+      (Kraus.wordOfBlock d p i) = _
+  have h := evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
+    P.flatWeight P.flatBasis (Kraus.wordOfBlock d p i)
   rw [h]
   simp only [toTensorFromBlocks, length_wordOfBlock]
   rfl
