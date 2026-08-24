@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import TNLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.BNTFusionIsometries
 
 /-!
@@ -134,11 +135,10 @@ private noncomputable def fuseFirstTwoStep (α β γ : Λ) :
 private theorem fuseFirstTwoStep_isometry (α β γ : Λ) :
     (Fam.fuseFirstTwoStep α β γ)ᴴ * Fam.fuseFirstTwoStep α β γ = 1 := by
   unfold fuseFirstTwoStep
-  rw [Matrix.conjTranspose_submatrix,
-    Matrix.submatrix_mul_equiv _ _ _ (Fam.pairBondEquiv α β γ).symm _,
-    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, Fam.isometry,
-    Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one,
-    Matrix.submatrix_one_equiv]
+  exact Matrix.IsIsometry.reindex _
+    (Matrix.IsIsometry.kronecker _ _ (Fam.isometry α β)
+      (by simp [Matrix.IsIsometry]))
+    (Fam.pairBondEquiv α β γ) finProdFinEquiv
 
 private theorem fuseFirstTwoStep_apply (α β γ : Λ) (i k : Fin p) :
     Fam.fuseFirstTwoStep α β γ *
@@ -173,10 +173,10 @@ private noncomputable def blockPiece (α β γ δ : Λ) :
 private theorem blockPiece_isometry (α β γ δ : Λ) :
     (Fam.blockPiece α β γ δ)ᴴ * Fam.blockPiece α β γ δ = 1 := by
   unfold blockPiece
-  rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ (Equiv.refl _) _,
-    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, Fam.isometry,
-    Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one,
-    Matrix.submatrix_one_equiv]
+  exact Matrix.IsIsometry.reindex _
+    (Matrix.IsIsometry.kronecker _ _
+      (by simp [Matrix.IsIsometry]) (Fam.isometry δ γ))
+    (Equiv.refl _) (Fam.tripleMultEquiv α β δ γ)
 
 /-- Conjugating a fixed `δ`-block of the fused pair, summed against the third factor's physical
 index, by `blockPiece` reduces to the fusion identity of `fusionIsometry δ γ` applied to the

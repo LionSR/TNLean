@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.SingleKrausPositivity
+import TNLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 
@@ -71,16 +72,6 @@ private theorem lift_leftPairMatrix
     Matrix.singleKrausMap_kronecker]
   ext
   simp [Matrix.reindex_apply]
-
-private theorem kronecker_isometry
-    {a b c f : Type*} [Fintype a] [Fintype c]
-    [DecidableEq b] [DecidableEq f]
-    (V : Matrix a b ℂ) (W : Matrix c f ℂ)
-    (hV : Vᴴ * V = 1) (hW : Wᴴ * W = 1) :
-    (V ⊗ₖ W)ᴴ * (V ⊗ₖ W) = 1 := by
-  rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
-    hV, hW]
-  exact Matrix.one_kronecker_one
 
 private theorem lift_pair_mul_firstProjection
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
@@ -238,8 +229,10 @@ private theorem pair_product_transport
   let P := singleKrausMap V 1
   let B' := singleKrausMap W₂ B
   let C' := singleKrausMap W₂ C
-  have hW₂ : W₂ᴴ * W₂ = 1 := kronecker_isometry V V hV hV
-  have hW₃ : W₃ᴴ * W₃ = 1 := kronecker_isometry V W₂ hV hW₂
+  have hW₂ : W₂ᴴ * W₂ = 1 :=
+    Matrix.IsIsometry.kronecker V V hV hV
+  have hW₃ : W₃ᴴ * W₃ = 1 :=
+    Matrix.IsIsometry.kronecker V W₂ hV hW₂
   have hB' : B' * (P ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) = B' :=
     lift_pair_mul_firstProjection V hV B
   have hC' : ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ P) * C' = C' :=
@@ -426,7 +419,8 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
     reindex_sitewisePhysicalMatrix_two]
-  rw [Matrix.singleKrausMap_mul_of_isometry _ (kronecker_isometry V V hV hV)]
+  rw [Matrix.singleKrausMap_mul_of_isometry _
+    (Matrix.IsIsometry.kronecker V V hV hV)]
   have hswap := swapPairMatrix_singleKraus_kronecker_self Vᴴ
     (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e)) C)

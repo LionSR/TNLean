@@ -24,6 +24,52 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Kronecker product of matrix isometries — promoted
+- **Pattern:** expand `Matrix.IsIsometry`, commute conjugate transpose and
+  multiplication with the Kronecker product, and substitute the two constituent
+  isometry identities.
+- **Seen:** two source-factor proofs in
+  `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean`, private copies in
+  `TNLean/MPS/MPDO/IsometricAdjacentBondTransport.lean` and
+  `TNLean/MPS/MPDO/CPSVExample410Spectrum.lean`, and reindexed hand proofs in
+  `TNLean/MPS/MPDO/BNTRightTripleFusion.lean` and
+  `TNLean/MPS/MPDO/BNTLeftTripleFusion.lean` before promotion (2026-08-24).
+- **Abstraction:** `Matrix.IsIsometry.kronecker` in
+  `TNLean/Algebra/MatrixIsometryKronecker.lean`.
+- **Notes:** the theorem is rectangular and assumes only the finite row
+  coordinates and decidable column coordinates required by the two complex
+  matrix isometry identities. All cited copies now use the common theorem; the
+  four first- and second-stage fusion proofs compose it with
+  `Matrix.IsIsometry.reindex`.
+
+### matrix-reindex entry wrappers — promoted
+- **Pattern:** package an entrywise formula as a `Matrix.reindex` equality by
+  extensionality, or recover an original-coordinate entry by applying a
+  reindexed equality twice and simplifying the inverse equivalences.
+- **Seen:** eight packaging proofs in
+  `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` and four recovery proofs
+  in `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` before
+  promotion (2026-08-24).
+- **Abstraction:** `Matrix.reindex_eq_of_apply_eq` and
+  `Matrix.apply_eq_of_reindex_eq` in `TNLean/Algebra/MatrixReindex.lean`.
+- **Notes:** all twelve source-gate call sites use the common lemmas while
+  retaining the paper's four-spin coordinate order explicitly in their local
+  arguments.
+
+### multiplication of compatibly reindexed matrices — promoted
+- **Pattern:** replace the product of two `Matrix.reindex` operations with one
+  reindexing of the matrix product along the common middle equivalence.
+- **Seen:** eight occurrences in
+  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` and four in
+  `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean` before promotion
+  (2026-08-24).
+- **Abstraction:** `Matrix.reindex_mul_reindex` in
+  `TNLean/Algebra/MatrixReindex.lean`, a direct wrapper around Mathlib's
+  `Matrix.reindexLinearEquiv_mul`.
+- **Notes:** all twelve source-factor call sites now use the direct
+  `Matrix.reindex` identity. The three equivalences remain explicit, so the
+  source-cut orientations are still visible and no searching tactic is used.
+
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
   site by rewriting the periodic trace as the trace of the vertical loop and
@@ -1298,66 +1344,6 @@ current counts and full location lists).
   primitive proofs have only two equality tests.  Promotion should preserve
   those visible coordinate choices and remove only the repeated Boolean and
   normalization calculation.
-
-### Kronecker product of matrix isometries — candidate
-- **Pattern:** prove that $A\otimes B$ is an isometry by expanding
-  `Matrix.IsIsometry`, rewriting `Matrix.conjTranspose_kronecker` and
-  `Matrix.mul_kronecker_mul`, and substituting the two constituent isometry
-  identities.
-- **Seen:** two new occurrences in
-  `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean` (lines 88--101); the
-  private helpers `kronecker_isometry` in
-  `TNLean/MPS/MPDO/IsometricAdjacentBondTransport.lean` (lines 75--83) and
-  `kron_isometry` in `TNLean/MPS/MPDO/CPSVExample410Spectrum.lean`
-  (lines 156--161) prove exactly this statement, and hand-rolled instances
-  include `TNLean/MPS/MPDO/BNTRightTripleFusion.lean` (lines 137--144) and
-  `TNLean/MPS/MPDO/BNTLeftTripleFusion.lean` (line 139).  A 2026-08-24 grep
-  finds 47 `Matrix.conjTranspose_kronecker` and 96 `Matrix.mul_kronecker_mul`
-  occurrences across `TNLean/MPS/MPDO/*.lean`, well over the promotion
-  threshold.
-- **Abstraction (proposed):** scout Mathlib and QICLean for a suitably generic
-  `Matrix.IsIsometry.kronecker` theorem; if none exists, add that matrix lemma
-  at the lowest common algebra layer and replace all occurrences together.
-- **Notes:** the current proofs use square complex matrices, but the natural
-  statement is rectangular and should retain only the finite-index and
-  star-semiring hypotheses needed by `Matrix.IsIsometry`.  Do not promote a
-  source-factor-specific wrapper.
-
-### matrix-reindex entry wrappers — candidate
-- **Pattern:** transport an entry formula through `Matrix.reindex` in either
-  direction: use `ext; simpa only [Matrix.reindex_apply, ...]` to package a
-  pointwise formula as a reindexed matrix equality, or apply `congrFun` twice
-  and simplify the inverse equivalences to recover the original entry from
-  that equality.
-- **Seen:** four packaging proofs in
-  `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` (lines 491--716) and four
-  recovery proofs in
-  `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` (lines 23--159),
-  recorded 2026-08-24.
-- **Abstraction (proposed):** a pair of generic matrix lemmas connecting
-  `Matrix.reindex eRow eCol M = N` with the corresponding entry equality at
-  `eRow`/`eCol` coordinates; scout `Matrix.reindex_apply` and extensionality
-  helpers before adding project declarations.
-- **Notes:** this is coordinate transport, not a tensor-network argument.  A
-  promoted lemma should remove only the equivalence bookkeeping and leave the
-  source-specific four-spin order explicit at every call site.
-
-### multiplication of compatibly reindexed matrices — candidate
-- **Pattern:** expose two adjacent `Matrix.reindex` factors as
-  `Matrix.reindexLinearEquiv` applications, apply
-  `Matrix.reindexLinearEquiv_mul`, and simplify a reindexed identity matrix.
-- **Seen:** eight occurrences in
-  `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` (lines 272--408), plus
-  four more of the same multiplication step in
-  `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean` (lines 112--137), recorded
-  2026-08-24.
-- **Abstraction (proposed):** a theorem stating directly that
-  `Matrix.reindex e₁ e₂ A * Matrix.reindex e₂ e₃ B` is
-  `Matrix.reindex e₁ e₃ (A * B)`, as a thin entrywise or linear-equivalence
-  wrapper around Mathlib's `Matrix.reindexLinearEquiv_mul`.
-- **Notes:** keep the three equivalences explicit in the theorem statement;
-  they encode the source-cut orientations and should not be inferred by a
-  searching tactic.
 
 ### factor pairing under a two-index finite sum — candidate
 - **Pattern:** before collapsing a two-index finite sum, use `simp_rw` with a

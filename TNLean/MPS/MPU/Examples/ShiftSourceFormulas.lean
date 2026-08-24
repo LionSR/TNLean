@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixReindex
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import QICLean.Channel.MaximallyEntangled
@@ -496,9 +497,9 @@ theorem shiftExampleU₂_sourceU_reindex_eq_identitySwapIdentity
         (SourceFactors.sourceU (shiftExampleU₂ d)
           (shiftExampleU₂SourceFactors d)) =
       identitySwapIdentityMatrix d := by
-  ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
-  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Equiv.symm_symm] using
+  apply Matrix.reindex_eq_of_apply_eq
+  rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  simpa only [Equiv.symm_symm] using
     shiftExampleU₂_sourceU_fourSpin_apply d a b c e i j k l
 
 private theorem shiftExampleU₂_sourceV_product_apply (d : ℕ) [NeZero d]
@@ -568,9 +569,9 @@ theorem shiftExampleU₂_sourceV_reindex_eq_swapSwap_mul_identitySwapIdentity
         (SourceFactors.sourceV (shiftExampleU₂ d)
           (shiftExampleU₂SourceFactors d)) =
       swapTensorSwapMatrix d * identitySwapIdentityMatrix d := by
-  ext ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
-  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Equiv.symm_symm] using
+  apply Matrix.reindex_eq_of_apply_eq
+  rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  simpa only [Equiv.symm_symm] using
     shiftExampleU₂_sourceV_fourSpin_apply d i j k l a b c e
 
 private theorem shiftExampleU₃_sourceU_product_apply (d : ℕ) [NeZero d]
@@ -637,9 +638,9 @@ theorem shiftExampleU₃_sourceU_reindex_eq_identitySwapIdentity_mul_swapSwap
         (SourceFactors.sourceU (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) =
       identitySwapIdentityMatrix d * swapTensorSwapMatrix d := by
-  ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
-  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Equiv.symm_symm] using
+  apply Matrix.reindex_eq_of_apply_eq
+  rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  simpa only [Equiv.symm_symm] using
     shiftExampleU₃_sourceU_fourSpin_apply d a b c e i j k l
 
 private theorem shiftExampleU₃_sourceV_product_apply (d : ℕ) [NeZero d]
@@ -710,9 +711,9 @@ theorem shiftExampleU₃_sourceV_reindex_eq_identitySwapIdentity
         (SourceFactors.sourceV (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) =
       identitySwapIdentityMatrix d := by
-  ext ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
-  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Equiv.symm_symm] using
+  apply Matrix.reindex_eq_of_apply_eq
+  rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  simpa only [Equiv.symm_symm] using
     shiftExampleU₃_sourceV_fourSpin_apply d i j k l a b c e
 
 private theorem shiftExampleU₁_sourceU_product_apply (d : ℕ)
@@ -815,6 +816,9 @@ theorem shiftExampleU₁_sourceV_apply (d : ℕ)
 /-- For the supplied factors of $U_1$, both paper source gates are
 $u_1=v_1=\Id\otimes\Id$.
 
+The two matrix equalities remain paired because equation `eq:SF_u1_u3`
+presents them in a single paired display.
+
 Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
 theorem shiftExampleU₁_sourceUV_eq_identityTensorIdentity (d : ℕ) :
     Matrix.reindex (shiftExampleU₁SourceURowEquiv d).symm
@@ -826,13 +830,13 @@ theorem shiftExampleU₁_sourceUV_eq_identityTensorIdentity (d : ℕ) :
         (SourceFactors.sourceV (shiftExampleU₁ d)
           (shiftExampleU₁SourceFactors d)) = identityTensorIdentityMatrix d := by
   constructor
-  · ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm] using
+  · apply Matrix.reindex_eq_of_apply_eq
+    rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+    simpa only [Equiv.symm_symm] using
       shiftExampleU₁_sourceU_apply d a b c e i j k l
-  · ext ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm] using
+  · apply Matrix.reindex_eq_of_apply_eq
+    rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+    simpa only [Equiv.symm_symm] using
       shiftExampleU₁_sourceV_apply d i j k l a b c e
 
 /-- Entry formula for the supplied $u_3=\mathbb S$ in the paper's
@@ -898,6 +902,9 @@ theorem shiftExampleU₃_sourceV_eq_swap_apply (d : ℕ) [NeZero d]
 /-- For the supplied factors of $U_3$, both unblocked paper source gates are
 $u_3=v_3=\mathbb S$.
 
+The two matrix equalities remain paired because equation `eq:SF_u1_u3`
+presents them in a single paired display.
+
 Source: arXiv:1703.09188, equation `eq:SF_u1_u3` (lines 2009--2016). -/
 theorem shiftExampleU₃_sourceUV_eq_swap (d : ℕ) [NeZero d] :
     Matrix.reindex (shiftExampleU₃SwapSourceURowEquiv d).symm
@@ -909,22 +916,22 @@ theorem shiftExampleU₃_sourceUV_eq_swap (d : ℕ) [NeZero d] :
         (SourceFactors.sourceV (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) = Matrix.swapMatrix (d * d) := by
   constructor
-  · ext row col
+  · apply Matrix.reindex_eq_of_apply_eq
+    intro row col
     obtain ⟨⟨⟨a, b⟩, ⟨c, e⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective row
     obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective col
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
+    simpa only [Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
       shiftTwoSitePhysicalEquiv, Equiv.prodCongr_apply, Prod.map_apply'] using
       shiftExampleU₃_sourceU_eq_swap_apply d a b c e i j k l
-  · ext row col
+  · apply Matrix.reindex_eq_of_apply_eq
+    intro row col
     obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective row
     obtain ⟨⟨⟨a, b⟩, ⟨c, e⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective col
-    simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
+    simpa only [Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
       shiftTwoSitePhysicalEquiv, Equiv.prodCongr_apply, Prod.map_apply'] using
       shiftExampleU₃_sourceV_eq_swap_apply d i j k l a b c e
 

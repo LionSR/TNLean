@@ -30,9 +30,11 @@ import TNLean.Algebra.KramersDegeneracy
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixAlgEquiv
 import TNLean.Algebra.MatrixCyclicTracePower
+import TNLean.Algebra.MatrixIsometryKronecker
 import TNLean.Algebra.MatrixPosDefTransport
 import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankKronecker
+import TNLean.Algebra.MatrixReindex
 import TNLean.Algebra.MatrixStabilization
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NilMatrixSubalgebra
