@@ -1462,10 +1462,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "a25b7a175b91cbb99e2a49bf9454d5b3eadc742dad0954ecc191bdc4f2a75306"
-reviewed = "2026-07-28"
-renderer = "codex-centered-winding-ten-station-review-2026-07-28-120dpi"
-note = "the centered torus has both identified noncontractible cycles; each open 5x5 window keeps five independent O_g and O_h stations, and the two three-station g rails join above the marked tensor while O_h stays vertical"
+case_sha256 = "73f78dccd814583373d958f419fdedda423cbc683ca0510ee7e1b25cb4e31a04"
+reviewed = "2026-08-24"
+renderer = "fable-via-wave-rail-hull-2026-08-24-200dpi"
+note = "the centered torus has both identified noncontractible cycles; each open 5x5 window keeps five independent O_g and O_h stations, and the two three-station g rails join above the marked tensor while O_h stays vertical; the joining rail now travels the hull route n of marked instead of a four-waypoint orthogonal jog, so the squared rail rounds into the loop above the marked tensor with its beads and the g and g^-1 labels keeping their stations -- verified against the prior render at 200dpi"
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-mpo"
