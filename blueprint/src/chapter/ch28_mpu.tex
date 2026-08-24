@@ -7602,12 +7602,198 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unitarity, so all three tensors are matrix product unitaries.
 \end{proof}
 
+\begin{definition}[Supplied source factors for the three shift MPUs]
+    \label{def:threeMPU_supplied_source_factors}
+    \lean{MPOTensor.identitySourceFactors,
+        MPOTensor.rightShiftSourceFactors,
+        MPOTensor.leftShiftSourceFactors,
+        MPOTensor.SourceFactors.independentTensorProductOfIdentityWeight,
+        MPOTensor.shiftExampleU₁SourceFactors,
+        MPOTensor.shiftExampleU₂SourceFactors,
+        MPOTensor.shiftExampleU₃SourceFactors}
+    \leanok
+    \uses{threeMPU, def:mpu_weighted_source_factors,
+        thm:mpu_shift_source_cuts_ranks}
+    Assume $d>0$. Equip $U_1$ with the tensor product of the two bond-one
+    identity source factorizations.  Equip $U_2$ with the tensor product of the
+    left-shift and right-shift source factorizations, in that order, and equip
+    $U_3$ with the tensor product in the reverse order.  In all three cases the
+    virtual weight is the identity.  These are explicit supplied source-factor
+    witnesses; no identification with an arbitrary compact singular-value
+    decomposition is asserted.
+\end{definition}
+
+\begin{theorem}[One-site supplied source tensors for $U_1$ and $U_3$]
+    \label{thm:threeMPU_supplied_source_uv_one}
+    \lean{MPOTensor.shiftExampleU₁_sourceUV_eq_identityTensorIdentity,
+        MPOTensor.shiftExampleU₃_sourceUV_eq_swap}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    Assume $d>0$. In the source coordinates of the supplied factorizations,
+    \begin{align}
+        u_1 & =\Id\otimes\Id, & v_1 & =\Id\otimes\Id, \\
+        u_3 & =\mathbb S,      & v_3 & =\mathbb S.
+    \end{align}
+    These are the formulas in \cite[lines~2009--2016]{Cirac2017MPU}.
+    The $U_3$ equalities use the source-coordinate presentation of that
+    equation; they are distinct from the blocked four-spin presentation below.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors,
+        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
+    Write the source and physical indices as
+    $((a,b),(c,e))$ and $((i,j),(k,l))$, respectively, and set
+    $s=d^{-1/2}$.  The identity factors give
+    \begin{align}
+        [u_1]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =[v_1]_{((i,j),(k,l)),((a,b),(c,e))} \\
+         & =(\delta_{a,i}\delta_{c,k})(\delta_{b,j}\delta_{e,l}) \\
+         & =\delta_{a,i}\delta_{b,j}\delta_{c,k}\delta_{e,l}.
+    \end{align}
+    For $U_3$, the right-shift and left-shift factors instead give
+    \begin{align}
+        [u_3]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =(s\delta_{c,i}\delta_{a,k})
+            (d\,s\delta_{e,j}\delta_{b,l}) \\
+         & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j}, \\
+        [v_3]_{((i,j),(k,l)),((a,b),(c,e))}
+         & =(d\,s\delta_{a,k}\delta_{c,i})
+            (s\delta_{b,l}\delta_{e,j}) \\
+         & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j},
+    \end{align}
+    where $d\,s^2=1$.  The first display is the identity matrix, while the
+    second interchanges the two composite indices and is therefore
+    $\mathbb S$ in both orientations.
+\end{proof}
+
+\begin{theorem}[Central gates in the supplied two-site factorizations of $U_2$]
+    \label{thm:threeMPU_U2_supplied_source_uv_two}
+    \lean{MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₁_mul_u₂_two_mul_Y₂,
+        MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_v₂_two_reflected_mul_Y₁}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
+        thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    Assume $d>0$. The two open-leg factorizations of the blocked tensor have,
+    as their respective central gates,
+    \begin{align}
+        u_2^{(2)} & =\Id\otimes\mathbb S\otimes\Id, \\
+        v_2^{(2)} & =(\mathbb S\otimes\mathbb S)
+            (\Id\otimes\mathbb S\otimes\Id).
+    \end{align}
+    Here the two physical sites are decoded into the four-spin order of the
+    paper, and the factors $X_1,Y_2$ and $X_2,Y_1$ remain as the two open
+    boundaries of the respective factorizations.
+    This is \cite[lines~2018--2026]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors,
+        def:mpu_source_uv, thm:mpu_source_u_open_two_site,
+        thm:mpu_source_v_open_two_site}
+    Write $B_2=\mathcal U_{2,2}$ for the actual two-site block and decode
+    $I=(I_1,I_2)$ and $J=(J_1,J_2)$.  If $\pi$ is the four-spin physical
+    identification and $\iota_u,\iota_v$ are the two source-rank
+    identifications, the asserted open-leg equalities are
+    \begin{align}
+        (B_2)_{I,J;\alpha,\gamma}
+        & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
+        [\Id\otimes\mathbb S\otimes\Id]_
+            {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        (Y_2)_{l,(J_2,\gamma)}, \\
+        (B_2)_{I,J;\alpha,\gamma}
+        & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
+        [(\mathbb S\otimes\mathbb S)
+            (\Id\otimes\mathbb S\otimes\Id)]_
+            {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        (Y_1)_{r,(I_2,\gamma)}.
+    \end{align}
+    Write $s=d^{-1/2}$, so that $d\,s^2=1$.  In the product-rank coordinates,
+    the entries of the two central gates are
+    \begin{align}
+        [u_2^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =(d\,s\delta_{a,i}\delta_{b,k})
+            (s\delta_{c,j}\delta_{e,l}) \\
+         & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}, \\
+        [v_2^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
+         & =(s\delta_{e,k}\delta_{c,i})
+            (d\,s\delta_{b,l}\delta_{a,j}) \\
+         & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}.
+    \end{align}
+    These are respectively the entries of
+    $\Id\otimes\mathbb S\otimes\Id$ and
+    $(\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes\Id)$;
+    substituting them into the exact open two-site factorizations gives the
+    asserted equalities.
+\end{proof}
+
+\begin{theorem}[Central gates in the supplied two-site factorizations of $U_3$]
+    \label{thm:threeMPU_U3_supplied_source_uv_two}
+    \lean{MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₁_mul_u₃_two_mul_Y₂,
+        MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_v₃_two_reflected_mul_Y₁}
+    \leanok
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
+        thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    Assume $d>0$. The two open-leg factorizations of the blocked tensor have,
+    as their respective central gates,
+    \begin{align}
+        u_3^{(2)} & =(\Id\otimes\mathbb S\otimes\Id)
+            (\mathbb S\otimes\mathbb S), \\
+        v_3^{(2)} & =\Id\otimes\mathbb S\otimes\Id.
+    \end{align}
+    Again the four-spin order is the one displayed in the paper, and the
+    source factors at the two open boundaries are retained explicitly.
+    This is \cite[lines~2028--2034]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:threeMPU_supplied_source_factors,
+        def:mpu_source_uv, thm:mpu_source_u_open_two_site,
+        thm:mpu_source_v_open_two_site}
+    With $B_3=\mathcal U_{3,2}$ for the actual two-site block and the
+    corresponding identifications $\pi,\iota_u,\iota_v$, the exact equalities
+    are
+    \begin{align}
+        (B_3)_{I,J;\alpha,\gamma}
+        & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
+        [(\Id\otimes\mathbb S\otimes\Id)
+            (\mathbb S\otimes\mathbb S)]_
+            {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        (Y_2)_{l,(J_2,\gamma)}, \\
+        (B_3)_{I,J;\alpha,\gamma}
+        & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
+        [\Id\otimes\mathbb S\otimes\Id]_
+            {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        (Y_1)_{r,(I_2,\gamma)}.
+    \end{align}
+    Again write $s=d^{-1/2}$, so that $d\,s^2=1$.  Reversing the two supplied
+    factors gives the entry identities
+    \begin{align}
+        [u_3^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
+         & =(s\delta_{c,i}\delta_{e,k})
+            (d\,s\delta_{a,j}\delta_{b,l}) \\
+         & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}, \\
+        [v_3^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
+         & =(d\,s\delta_{b,k}\delta_{a,i})
+            (s\delta_{e,l}\delta_{c,j}) \\
+         & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}.
+    \end{align}
+    The first is the entry of
+    $(\Id\otimes\mathbb S\otimes\Id)(\mathbb S\otimes\mathbb S)$,
+    and the second is the entry of $\Id\otimes\mathbb S\otimes\Id$.
+    Substitution into the two exact open two-site factorizations proves the
+    claim.
+\end{proof}
+
 \begin{proposition}[Standard forms of the three shift MPUs]
     \label{prop:threeMPU_standard_forms}
     \notready
     \discussion{5715}
-    \uses{threeMPU}
-    Their standard-form unitaries satisfy
+    \uses{threeMPU, thm:threeMPU_supplied_source_uv_one,
+        thm:threeMPU_U2_supplied_source_uv_two,
+        thm:threeMPU_U3_supplied_source_uv_two}
+    Assume $d>0$. For the fixed standard-form source factors, the corresponding
+    unitaries satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
@@ -7618,6 +7804,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\mathbb S\otimes\mathbb S), &
         v_3^{(2)}                    & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
+    The preceding theorems establish these matrices for explicit supplied
+    source-factor witnesses.  It remains to identify that supplied choice with
+    the fixed standard-form choice.
     % Source lines: paper_v2.tex 2002--2042.
 \end{proposition}
 
