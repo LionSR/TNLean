@@ -1893,7 +1893,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \begin{align}
         S_N(A\boxtimes B)
          & =\spn_{\C}\{\Phi_{D,E}(A^u\otimes B^v):
-             |u|=|v|=N\}.
+        |u|=|v|=N\}.
         \label{eq:mpu_tensor_word_span}
     \end{align}
     In particular, if $S_N(A)=\MN{D}$ and $S_N(B)=\MN{E}$, then
@@ -1903,8 +1903,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     This is the homogeneous-word infrastructure for the tensoring sentence in
     the proof of the MPU Index Theorem~IV.6(ii)
     \cite[lines~824--845]{Cirac2017MPU}, not a separate theorem stated there.
-    It applies to the retained blocks around equation~\textup{II\_CF1} in
-    \cite[lines~224--245]{Cirac2016MPDO_arXiv}.
+    It applies to the retained blocks in the canonical-form decomposition
+    \cite[Section~2.3, lines~224--245]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1924,8 +1924,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $S_{N_A}(A)=\MN{D}$ and $S_{N_B}(B)=\MN{E}$ for positive $N_A,N_B$, then
     persistence at positive multiples gives
     \begin{align}
-        S_{N_A N_B}(A)&=\MN{D}, &
-        S_{N_A N_B}(B)&=\MN{E}.
+        S_{N_A N_B}(A) & =\MN{D}, &
+        S_{N_A N_B}(B) & =\MN{E}.
     \end{align}
     Applying the fixed-length consequence at $N_A N_B$ proves algebraic
     normality of $A\boxtimes B$.
@@ -1940,8 +1940,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         def:nt_cpsv}
     Let $A$ and $B$ be CPSV normal tensors, and suppose that
     \begin{align}
-        \sum_i(A^i)^\dagger A^i&=\Id_D, &
-        \sum_k(B^k)^\dagger B^k&=\Id_E.
+        \sum_i(A^i)^\dagger A^i & =\Id_D, &
+        \sum_k(B^k)^\dagger B^k & =\Id_E.
         \label{eq:mpu_tensor_left_canonical_inputs}
     \end{align}
     Then $A\boxtimes B$ is a CPSV normal tensor and is left-canonical:
@@ -1955,11 +1955,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     This is the retained-normal-block infrastructure for the tensoring
     sentence in the proof of the MPU Index Theorem~IV.6(ii)
     \cite[lines~824--845]{Cirac2017MPU}, not a separate theorem stated there.
-    The retained-normal-block terminology is that around
-    equation~\textup{II\_CF1} in
-    \cite[lines~224--245]{Cirac2016MPDO_arXiv}; the two left-canonical
-    identities are explicit infrastructure hypotheses, not an additional
-    assertion attributed to that passage.
+    The retained-normal-block terminology is that of the canonical-form
+    decomposition in
+    \cite[Section~2.3, lines~224--245]{Cirac2016MPDO_arXiv}; the two
+    left-canonical identities are explicit infrastructure hypotheses, not an
+    additional assertion attributed to that passage.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1971,8 +1971,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \sum_{i,k}
         \bigl((A^i\otimes B^k)^\dagger\bigr)(A^i\otimes B^k)
          & =\left(\sum_i(A^i)^\dagger A^i\right)
-             \otimes
-             \left(\sum_k(B^k)^\dagger B^k\right) \\
+        \otimes
+        \left(\sum_k(B^k)^\dagger B^k\right)     \\
          & =\Id_D\otimes\Id_E=\Id_{DE},
     \end{align}
     proving~(\ref{eq:mpu_tensor_left_canonical_output}).  Spectral normality
