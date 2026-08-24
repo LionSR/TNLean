@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.RingTheory.MatrixAlgebra
 import QICLean.Kraus.Injectivity
 import QICLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.Core.TensorProduct
 
 /-!
