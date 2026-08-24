@@ -23,6 +23,7 @@ import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.TensorProduct
+import TNLean.MPS.Core.TensorProductSpan
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.TransferPeripheral
 import TNLean.MPS.Core.WordFactor

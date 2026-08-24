@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import QICLean.Kraus.Word
+import TNLean.MPS.Core.CanonicalNormalization
 
 /-!
 # Independent tensor products of matrix product tensors
@@ -36,6 +37,8 @@ normality assertion is made here.
 * `MPSTensor.tensorProduct_apply` gives its exact matrix entries.
 * `MPSTensor.evalWord_tensorProduct` separates a product-indexed word into its
   two component word evaluations.
+* `MPSTensor.leftCanonical_tensorProduct` proves left-canonicality directly
+  from the two constituent normalization identities.
 -/
 
 open scoped Matrix Kronecker
@@ -94,5 +97,71 @@ theorem evalWord_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
       rw [ih]
       rw [← Matrix.coe_reindexRingEquiv ℂ finProdFinEquiv]
       rw [← map_mul, Matrix.mul_kronecker_mul]
+
+/-- Independent tensor products preserve left-canonical normalization.
+
+If `A` and `B` satisfy
+\[
+  \sum_i (A^i)^\dagger A^i=\mathbf 1_D,
+  \qquad
+  \sum_k (B^k)^\dagger B^k=\mathbf 1_E,
+\]
+then the Kronecker multiplication and adjoint identities give
+\[
+  \sum_{i,k} ((A^i\otimes B^k)^\dagger)(A^i\otimes B^k)
+  =\mathbf 1_D\otimes\mathbf 1_E=\mathbf 1_{DE}.
+\]
+
+This is project infrastructure for the tensoring clause in arXiv:1703.09188,
+proof of Theorem `IndexTh` (ii), lines 824--845, not a result stated separately
+in that paper.  The retained-normal-block context is
+arXiv:1606.00608, equation `II_CF1`, lines 214--245; the two left-canonical
+identities are explicit project hypotheses, not an assertion attributed to
+that passage. -/
+theorem leftCanonical_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
+    (hA : IsLeftCanonical A) (hB : IsLeftCanonical B) :
+    IsLeftCanonical (tensorProduct A B) := by
+  classical
+  unfold IsLeftCanonical
+  unfold IsLeftCanonical at hA hB
+  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  have hterm (i : Fin d) (k : Fin e) :
+      (tensorProduct A B (finProdFinEquiv (i, k)))ᴴ *
+          tensorProduct A B (finProdFinEquiv (i, k)) =
+        Matrix.reindex finProdFinEquiv finProdFinEquiv
+          (((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) := by
+    have hi : (finProdFinEquiv (i, k) : Fin (d * e)).divNat = i :=
+      congrArg Prod.fst (finProdFinEquiv.symm_apply_apply (i, k))
+    have hk : (finProdFinEquiv (i, k) : Fin (d * e)).modNat = k :=
+      congrArg Prod.snd (finProdFinEquiv.symm_apply_apply (i, k))
+    simp only [tensorProduct, hi, hk]
+    rw [Matrix.conjTranspose_reindex]
+    change Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv
+          ((A i ⊗ₖ B k)ᴴ) *
+        Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv
+          (A i ⊗ₖ B k) =
+      Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv
+        (((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k))
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ finProdFinEquiv finProdFinEquiv
+      finProdFinEquiv, Matrix.conjTranspose_kronecker, Matrix.mul_kronecker_mul]
+  simp_rw [hterm]
+  change ∑ i : Fin d, ∑ k : Fin e,
+      Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv
+        (((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) = 1
+  apply (Matrix.reindexLinearEquiv ℂ ℂ finProdFinEquiv finProdFinEquiv).symm.injective
+  simp only [map_sum, LinearEquiv.symm_apply_apply]
+  rw [Matrix.symm_reindexLinearEquiv, Matrix.reindexLinearEquiv_one]
+  have hsum :
+      (∑ i : Fin d, ∑ k : Fin e, ((A i)ᴴ * A i) ⊗ₖ ((B k)ᴴ * B k)) =
+        (∑ i : Fin d, (A i)ᴴ * A i) ⊗ₖ (∑ k : Fin e, (B k)ᴴ * B k) := by
+    symm
+    change Matrix.kroneckerBilinear (R := ℂ) (α := ℂ)
+      (∑ i : Fin d, (A i)ᴴ * A i) (∑ k : Fin e, (B k)ᴴ * B k) = _
+    rw [map_sum]
+    simp_rw [map_sum]
+    rw [Finset.sum_comm]
+    simp only [LinearMap.sum_apply]
+    rfl
+  rw [hsum, hA, hB, Matrix.one_kronecker_one]
 
 end MPSTensor
