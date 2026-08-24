@@ -55,8 +55,9 @@ not included in the remaining totals below.
 This wave was also completed before the present plan was preserved.
 `MPSTensor.ProportionalMPV₂`, its bridge from
 `NonzeroProportionalMPV₂`, and the zero-consumer conditional periodic route
-were removed. `NonzeroProportionalMPV₂` is now the sole named projective
-proportionality predicate, and the live periodic argument uses
+were removed. `NonzeroProportionalMPV₂` is now the pointwise positive-length
+predicate used by this route; the separate eventual predicate remains. The
+live periodic argument uses
 `peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`. The complete
 accounting is in
 [`2026-08-23_degenerate_readings_wave_1.md`](2026-08-23_degenerate_readings_wave_1.md).
@@ -149,6 +150,6 @@ as A1/A4) → B2/B3/B5/B7 (pure docstring changes) → B1 (after D1 is decided)
 B6/B10.
 
 If every remaining A wave lands, the estimated reduction is about 3,900 to
-5,300 Lean and blueprint lines. The B waves account for about 1,900 further
-lines. D1-D4 could account for another 10,000 lines, subject to the four
-listed decisions.
+5,300 Lean lines, with the listed blueprint deletions additional. The B waves
+account for about 1,900 further lines. D1-D4 could account for another 10,000
+lines, subject to the four listed decisions.
