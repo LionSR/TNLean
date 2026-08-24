@@ -1,0 +1,12 @@
+% Negative: the retired mark `slot=` semantic-tint key has no parser path;
+% species= carries the region word.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, name=a]{A}
+  \tn[at=(1,2), skin=box, name=b]{B}
+  \tnmark[form=enclosure, slot=selected]{(1,1) .. (1,2)}{$X$}
+\end{tenkz}
+\end{document}
