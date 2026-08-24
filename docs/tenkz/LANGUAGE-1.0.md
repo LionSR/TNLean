@@ -1174,7 +1174,7 @@ twenty-six there rather than here, so the one arrival is counted once.
 
 ```tex
 \[\begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
-  \tnwire[kind=string, species=left,  name=a]{(1,1)}{(2,3)}
+  \tnwire[kind=string, species=left,  name=z]{(1,1)}{(2,3)}
   \tnwire[kind=string, species=right, name=b,
           cross={under at crossing of a and b}]{(1,4)}{(2,2)}
   \tnmark[form=label, label pos=45]{crossing of a and b}{$R$}
