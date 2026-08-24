@@ -345,6 +345,24 @@ nondegenerate data (an explicit tensor with nonzero weights, a wrong
 exponent, an off-by-one chain length) keeps its counterexample and its
 **Local fix** or **false-source** record.
 
+Two limits keep the convention from swallowing real content.
+
+First, silence is not always an omission. Before reading a qualifier into
+a definition, check whether the source attaches that same qualifier
+explicitly at comparable statements. If it does, its absence here is a
+choice, the unrestricted reading is the faithful one, and supplying the
+qualifier would add a hypothesis the source does not carry. A witness
+that the unrestricted definition admits is then a genuine witness, and
+its counterexample stays.
+
+Second, the convention must actually be in the definition before the
+apparatus modeling it is deleted. Deleting a counterexample while the
+predicate still admits its witness leaves the predicate wrong and the
+gap invisible. Check what the structure forces rather than what it
+suggests: a positivity field indexed by one label does not constrain a
+family indexed by a triple, and a field that constrains entries says
+nothing about an empty index.
+
 A paper-realignment PR may:
 
 - Delete fields, hypotheses, or whole theorems that are documented as
