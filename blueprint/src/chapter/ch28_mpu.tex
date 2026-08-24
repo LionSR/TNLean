@@ -1845,20 +1845,19 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPSTensor.evalWord_tensorProduct}
     \leanok
     \uses{def:mps_independent_tensor_product}
-    If
+    If $w$ has length $n$ and
     \begin{align}
         w   & =\bigl(\pi_{d,e}(i_1,k_1),\ldots,
-        \pi_{d,e}(i_L,k_L)\bigr),               \\
-        w_d & =(i_1,\ldots,i_L),
+        \pi_{d,e}(i_n,k_n)\bigr),               \\
+        w_d & =(i_1,\ldots,i_n),
             &
-        w_e & =(k_1,\ldots,k_L),
+        w_e & =(k_1,\ldots,k_n),
     \end{align}
     then
     \begin{align}
-        \operatorname{eval}_{A\boxtimes B}(w)
+        (A\boxtimes B)^w
          & =\operatorname{reind}_{\pi_{D,E}}
-        \left(\operatorname{eval}_A(w_d)\otimes
-        \operatorname{eval}_B(w_e)\right).
+        \left(A^{w_d}\otimes B^{w_e}\right).
         \label{eq:mps_eval_word_independent_tensor_product}
     \end{align}
 \end{theorem}
