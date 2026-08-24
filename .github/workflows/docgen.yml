@@ -57,10 +57,10 @@ jobs:
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.7'
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
       - name: Build blueprint bibliography
-        run: python3 scripts/blueprint_bibtex.py
+        run: texra-blueprint bbl
 
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
