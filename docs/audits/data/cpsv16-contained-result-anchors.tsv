@@ -47,10 +47,10 @@ eq2:proof.IV.12	1890	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|
 eq3:proof.IV.12	1903	Proposition 4.13	(?<![A-Za-z0-9])Proposition 4\.13(?![0-9]|\.[0-9])	rectangular\-coisometry\s+orientation
 eq:algebra-appendix	1935	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
 idempotent-appendix	1939	Theorem 4.14	(?i)^(?!.*proof\s+of\s+Theorem 4\.14).*?(?<![A-Za-z0-9])Theorem 4\.14(?![0-9]|\.[0-9])	algebra\s+characterization\s+containing\s+this\s+clause
-Figure9	1953	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	coisometry\s+orientation
-eq1-proof-main-thm	2016	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	coisometry\s+orientation
-Figure11	2022	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	coisometry\s+orientation
-eq2-proof-main-thm	2026	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	coisometry\s+orientation
+Figure9	1953	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+eq1-proof-main-thm	2016	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+Figure11	2022	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
+eq2-proof-main-thm	2026	Appendix C.4 proof of Theorem 4.14	(?<![A-Za-z0-9])Appendix C\.4 proof of Theorem 4\.14(?![0-9]|\.[0-9])	active\-support\s+and\s+coisometry\s+corrections
 varphiPAXB	2228	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
 Propproj	2233	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary
 PAXPXB	2245	Appendix D proposition	(?<![A-Za-z0-9])Appendix D proposition(?![A-Za-z0-9])	tripartite\-subspace\s+hypothesis\s+boundary

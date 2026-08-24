@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{open-gap}{open}
+\gapnote{false-source}{resolved}
 
 \section{Source statement}
 
@@ -73,10 +73,10 @@ The current formalization keeps the two conditions separate.
 and pure-state RFP witness of Definition~4.3, while
 \path{TNLean/MPS/MPDO/LocalPurificationRFP.lean} gives the local tensor
 condition its own name. The Blueprint and coverage audit mark the source PRFP
-definition complete; what the bare global predicate still lacks is discussed
-below.
+definition complete, and the counterexample registry distinguishes the local
+condition from the global nilpotent-sector obstruction discussed below.
 
-\section{Global formalization and the missing canonical-form clause}
+\section{Global formalization and its obstruction}
 
 A literal formalization of the printed purification RFP definition states the
 positive-length global purification equation \path{eq:MPDO-Puri-1} and requires
@@ -95,17 +95,9 @@ complete positivity is
 spin-reduction condition is
 \leanid{MPOTensor.HasTracePreservingSpinReduction}.
 
-What is still missing is the source's own standing hypothesis. Throughout the
-paper a tensor is presented in canonical form: the reduction at lines
-217--246 replaces any tensor by a direct sum of normal blocks generating the
-same family, and Theorem~4.4 is read against that representative. The bare
-positive-length predicate \leanid{MPOTensor.IsPRFP} carries no such clause,
-so it does not pin the one-site tensor. Restricting it to a canonical-form
-representative, or equivalently to the local purification identity below, is
-what a faithful Definition~4.1 predicate requires, and no such predicate is
-formalized yet.
-
-The gap is easy to see on non-canonical data. Let $d=1$, $D=3$, and let the
+The positive-length global equation does not, however, determine the one-site
+MPO tensor. This prevents a global-to-local theorem even after imposing MPDO
+positivity and a nonzero physical-trace transfer. Let $d=1$, $D=3$, and let the
 only tensor entry be
 \[
   Q=
@@ -115,15 +107,29 @@ only tensor entry be
     0&0&0
   \end{pmatrix}.
 \]
-For every $N>0$, one has $\operatorname{tr}(Q^N)=1$, so the generated density
-operator is the scalar $1$ at every positive length, purified by the scalar
-pure-state RFP tensor $A=1$; nevertheless $Q^2=\operatorname{diag}(1,0,0)$ is
-not a positive scalar multiple of $Q$. The bond space of $Q$ carries an
-invariant subspace with a nilpotent complement, so $Q$ is not in canonical
-form: its canonical representative is the $1\times1$ block $(1)$, for which
-every clause of Theorem~4.4 holds. This is a property of the unrestricted
-predicate, not a counterexample to the printed theorem, and the development
-records no such counterexample.
+For every $N>0$, one has $\operatorname{tr}(Q^N)=1$. Thus the generated density
+operator is the scalar $1$, which is the purification density of the scalar
+pure-state RFP tensor $A=1$. Every generated MPO is positive semidefinite and
+the physical-trace transfer is $Q\ne0$. Nevertheless
+\[
+  Q^2=\operatorname{diag}(1,0,0)
+\]
+is not a positive scalar multiple of $Q$, since its $(2,3)$ entry vanishes while
+the corresponding entry of $Q$ is $1$. Hence the scale-invariant relation fails,
+and in particular $Q^2\ne Q$. The theorem
+\leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
+records the stronger scale-invariant failure. The separate source-facing theorem
+\leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
+records failure of the literal Definition~4.2 equation.
+
+Consequently nondegeneracy cannot repair the printed global statement: the
+implication from global PRFP to literal ZCL in Theorem~4.4 is formally refuted.
+The source may instead intend the local purification graphic \path{Psipuri}, or
+a minimal or canonical representative excluding trace-invisible nilpotent bond
+sectors; neither condition is stated in Definition \path{def:Puri-RFP}. No such
+additional condition is introduced here. The corrected local-purification
+results below remain restricted statements rather than proofs of the printed
+global equivalence.
 
 \section{Status}
 
@@ -167,9 +173,9 @@ This is an exact structural characterization of the nondegenerate local
 purification predicate. It is not the source PRFP--ZCL equivalence of
 Theorem~4.4. The forward implication from this stronger local predicate to
 source zero correlation length is proved below. The converse from source zero
-correlation length remains open, as does the passage from a tensor known only
-through the positive-length global equation to the local tensor identity; the
-missing ingredient is the canonical-form clause described above.
+correlation length remains open. The passage from a tensor known only through
+the positive-length global equation to the local tensor identity is false by
+the nilpotent example above.
 
 \section{Normalized local equivalence on the physical-trace transfer}
 
@@ -179,9 +185,9 @@ purification renormalization fixed point to zero correlation length,
 \leanid{MPOTensor.IsLocalPurificationRFP} (the one-site tensor identity
 $M^{ij}=(\sum_k A^{(i,k)}\otimes\overline{A^{(j,k)}})_e$, not the global
 Definition \path{def:Puri-RFP} at line 758) and to the physical-trace-transfer
-notion of zero correlation length, is formalized as below; the corresponding
-statement for the unrestricted global predicate awaits the canonical-form
-clause described in the preceding section. That the object
+notion of zero correlation length, is formalized as below; the unrestricted
+global implication is false for the printed hypotheses (see the preceding
+section). That the object
 $\mathcal T_M=\sum_i M^{ii}$ (Definition~4.2, lines 735--739) is the source
 zero-correlation-length object is the verdict of the companion note
 \path{cpsv16_zcl_canonical_form_normalization.tex}. The theorem
@@ -208,10 +214,23 @@ packaging the purifying data gives
 
 The corresponding local conclusion that $M$ has source zero correlation length,
 \leanid{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}, carries the extra
-hypothesis $\mathcal T_M\neq 0$. This is the source's own normalization: its
-purification renormalization fixed point is a normalized pure-state fixed point
-with leading eigenvalue $1$, whereas
-\leanid{MPOTensor.IsLocalPurificationRFP} records only the tensor identity.
+hypothesis $\mathcal T_M\neq 0$. This records a normalization restriction: the
+unconditional implication is false. The zero tensor at $D=D'=d_K=1$ with
+$A^{(i,0)}=0$ satisfies the local purification condition, since its purifying
+tensor is identically zero and $0\circ 0=0$ makes that tensor a pure-state
+renormalization fixed point, yet $\mathcal T_M=0$, so the conclusion fails. The
+hypothesis $\mathcal T_M\neq 0$ reflects the source purification renormalization
+fixed point being a normalized pure-state fixed point with leading eigenvalue
+$1$, a normalization that \leanid{MPOTensor.IsLocalPurificationRFP} drops.
+The theorem \leanid{MPOTensor.exists_isPRFP_not_isSourceZCL} now records this
+zero-purifier obstruction for the bare global predicate itself.
+The stronger scale-invariant theorem
+\leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
+shows that global MPDO positivity and $\mathcal T_M\ne0$ still do not suffice.
+Its source-facing corollary
+\leanid{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
+refutes the printed literal implication. Positive-length traces do not see the
+nilpotent bond sector of $Q$.
 
 \section{Remaining density-form obstruction}
 
@@ -222,14 +241,15 @@ currently be obtained from the printed statement without adding data. The
 underlying pure-state display \path{III_CFI_RFP} permits independent phases
 $\mu_{j,q}$, while the physical isometry equation \path{eq:III_isometry} has no
 copy index $q$ and supplies no dimension condition for a copy-dependent physical
-direct sum; the missing routing data is recorded in
-\path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}.
+direct sum; the missing routing data, and why the fixed-letter virtual-block
+reading of the display is not the source's, are recorded in
+\path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex} and closed issue~\#2598.
 
 Consequently the normalized local PRFP-to-ZCL implication is complete. The
-converse implication required for the source equivalence remains open, as does
-the passage from Definition~4.3 to the local tensor identity, which needs the
-canonical-form clause. The repeated-copy density formula remains
-source-obstructed pending an author correction or erratum. No copy-indexed physical map, minimality
+converse implication required for the source equivalence remains open, while
+the global-to-local passage from Definition~4.3 is disproved under the printed
+hypotheses. The repeated-copy density formula remains source-obstructed pending
+an author correction or erratum. No copy-indexed physical map, minimality
 condition, or additional structural hypothesis should be introduced merely to
 force either printed claim.
 

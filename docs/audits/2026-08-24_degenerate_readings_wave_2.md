@@ -163,24 +163,39 @@ removal; each is excluded by a convention the source states in its own words.
 A counterexample on nondegenerate data keeps its module and its note, and none
 of those were touched.
 
+Two of the five items, (i) and (v), were withdrawn on review and their
+material restored; the reasons are recorded with the items. Retiring a
+counterexample is admissible only once the intended reading is carried by the
+predicate itself, and in both cases it is not.
+
 ## Readings retired
 
-**(i) A bond space with a hidden nilpotent sector is not a canonical form.**
-CPSV16 reduces any tensor to a canonical form before stating results about it:
-lines 205–222 iterate the invariant-subspace projection until no non-trivial
-invariant subspace remains, giving $A^i=\bigoplus_k\mu_kA_k^i$ with normal
-blocks and $\sum_kD_k\le D$, and the proposition at line 249 records that
-after blocking every tensor has such a representative generating the same
-family.
-Two purification witnesses were built on representatives that fail this: the
-zero tensor at $d=D=1$, and the constant one-letter tensor with sole entry
+**(i) A bond space with a hidden nilpotent sector is not a canonical form —
+withdrawn.** The reading proposed here was that CPSV16 reduces any tensor to a
+canonical form before stating results about it (lines 205–222 iterate the
+invariant-subspace projection until no non-trivial invariant subspace remains,
+and the proposition at line 249 records that after blocking every tensor has
+such a representative generating the same family), so that the two purification
+witnesses — the zero tensor at $d=D=1$, and the constant one-letter tensor with
+sole entry
 $Q=\bigl(\begin{smallmatrix}1&0&0\\0&0&1\\0&0&0\end{smallmatrix}\bigr)$, whose
 closed operator is the scalar $1$ at every positive length while $Q^2$ loses
-the $(2,3)$ entry. The canonical representative of $Q$ is the $1\times1$ block
-$(1)$, for which every clause of Theorem 4.4 holds. Neither witness says
-anything about the printed theorem; what they show is that the *unrestricted*
-positive-length predicate does not pin the one-site tensor, and that is a
-missing hypothesis, recorded now as an open gap rather than as a refutation.
+the $(2,3)$ entry — lie outside the convention.
+
+This item is withdrawn and the witnesses are restored. Retiring them is
+admissible only once the intended reading is carried by the predicate itself,
+and `MPOTensor.IsPRFP` does not carry it: it is the bare positive-length global
+witness, with no canonical-form clause, so $Q$ remains a witness against the
+predicate as written. Nor can the clause simply be added: Definition 4.3 and
+the theorem at lines 777–784 state their hypothesis as the purification
+equation alone, without the "in CF" qualification the source attaches
+explicitly to Definition 4.1 (line 659) and to Theorem 3.11 (line 543); and a
+canonical-form field on `IsPRFP` would break
+`MPOTensor.isPRFP_of_isLocalPurificationRFP`, since a tensor with a local
+purification identity need not be a canonical representative. Until a
+purification predicate carrying the source's standing presentation exists, the
+witnesses and the printed-status node stay. The obligation is recorded in the
+paper-gap note, whose `false-source` verdict is likewise unchanged.
 
 **(ii) Two identical blocks are not a basis of normal tensors.** The
 duplicate-scalar example put the same $1\times1$ block in two sectors with
@@ -210,22 +225,30 @@ presentation with full support. Canonical form II
 (arXiv:1703.09188, equations (6a)–(6b)) is the standing presentation of every
 statement around Theorem III.8, and $\rho_n>0$ is one of its two clauses.
 
-**(v) Empty product sectors do not occur in the fusion clause.**
-`MPOTensor.BNTFusionTensorClause` carries `multiplicity_pos` and `weight_pos`
-as fields, both cited to Proposition 4.13. The printed-status node objected
-that the displayed fusion clause "is not well-defined on empty product
-sectors"; under the convention there are none, and
-`MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause` is the second equivalence
-of Theorem 4.14. The coisometry orientation remains a recorded local
+**(v) Empty product sectors do not occur in the fusion clause — withdrawn.**
+The reading proposed here was that the fields `multiplicity_pos` and
+`weight_pos` of `MPOTensor.BNTFusionTensorClause`, both cited to Proposition
+4.13, already exclude the empty product sectors the printed-status node
+objected to.
+
+They do not. Both fields are indexed by a single BNT label $\alpha$: they say
+that each label has a nonempty multiplicity space with positive weights. The
+fusion clause ranges over triples, and the size $\chi_{\alpha,\beta,\gamma}$ of
+the diagonal matrix attached to a triple is an unconstrained natural number;
+`chi_pos` bounds its entries from below but is vacuous when there are none. A
+target label absent from a fixed product pair therefore still has empty active
+support, exactly as the clause's own reconstruction field (the omitted corners
+are zero) and the surviving `**Local fix (fixed-pair support and coisometry)**`
+marker record. The active-support qualification of condition (iii) is a real
+scope restriction, and this item is withdrawn: the `(iii_act)` label, the
+`**Scope restriction (active product BNT)**` stamp, and the printed-status node
+are restored. The coisometry orientation remains a recorded local
 correction.
 
 ## Removed declarations
 
 | Removed declaration | Replacement |
 |---|---|
-| `MPOTensor.exists_isPRFP_not_isSourceZCL` | None; the zero tensor is not a canonical form. |
-| `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL` | None; the nilpotent bond sector is not a canonical form. |
-| `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent` | None; it was a corollary of the same witness. |
 | `MPSTensor.scalarUnitTensor_isNormalTensor` (in `RFP/PhaseMultiplicityCounterexample.lean`) | Same name, relocated to `TNLean/MPS/FundamentalTheorem/SectorBNT/Examples.lean` beside `scalarUnitTensor`. |
 | `MPSTensor.phaseFlipTensor` | None; the retired reading was its only consumer. |
 | `MPSTensor.signPhase`, `MPSTensor.norm_signPhase` | None. |
@@ -244,10 +267,10 @@ correction.
 | `MPSTensor.duplicateScalarBlocks_counterexample` (deprecated) | None. |
 | `MPOTensor.SourceVCounterexample.*` (whole namespace) | None; the module is deleted. |
 
-The private helpers of `LocalPurificationRFP.lean` that only the removed
-witnesses used (`nilpotentTransfer`, `supportProjection`,
-`nilpotentGlobalPRFP`, `scalarPurifier` and their lemmas) went with them.
-`MPOTensor.IsLocalPurificationRFP` and every theorem about it are unchanged.
+`TNLean/MPS/MPDO/LocalPurificationRFP.lean` is unchanged: the three
+purification witnesses, their private helpers (`nilpotentTransfer`,
+`supportProjection`, `nilpotentGlobalPRFP`, `scalarPurifier` and their lemmas),
+and every theorem about `MPOTensor.IsLocalPurificationRFP` are all retained.
 
 ## Deleted modules
 
@@ -259,11 +282,6 @@ witnesses used (`nilpotentTransfer`, `supportProjection`,
 
 ## Blueprint nodes deleted
 
-`thm:cpsv_theorem44_printed_status`, `thm:global_prfp_not_source_zcl`,
-`thm:nonzero_global_prfp_not_source_zcl`,
-`thm:nonzero_global_prfp_not_physical_trace_idempotence`
-(`ch21_mpdo_rfp_foundations.tex`); `thm:cpsv_theorem414_printed_status`
-(`ch21_mpdo_rfp_fusion_isometries_product_laws.tex`);
 `def:mpu_source_v_gram_counterexample_data`,
 `thm:mpu_source_v_gram_identification_counterexample` (`ch28_mpu.tex`);
 `thm:duplicate_scalar_blocks_counterexample`
@@ -271,26 +289,36 @@ witnesses used (`nilpotentTransfer`, `supportProjection`,
 `thm:phase_flip_tensor_not_rfp`
 (`ch26_mps_rfp_direct_sums_residual_isometries.tex`).
 
+`ch21_mpdo_rfp_foundations.tex` and
+`ch21_mpdo_rfp_fusion_isometries_product_laws.tex` are unchanged:
+`thm:cpsv_theorem44_printed_status`, `thm:global_prfp_not_source_zcl`,
+`thm:nonzero_global_prfp_not_source_zcl`,
+`thm:nonzero_global_prfp_not_physical_trace_idempotence`, and
+`thm:cpsv_theorem414_printed_status` are all retained, with items (i) and (v)
+withdrawn.
+
 ## Markers and prose removed
 
-`thm:mpdo_cpsv_bnt_rfp_equivalence` loses the `(iii_act)` subscript and the
-`**Scope restriction (active product BNT)**` stamp: condition (iii) is the
-printed condition, and the positivity fields of the fusion clause are the
-source's own. `thm:cpsv_charact_mps_status` loses the sentence deriving a
-false converse from the fixed-letter virtual-block reading; the rest of that
-node, which records the missing physical-routing data, is unchanged. In
-`LocalPurificationRFP.lean` the `**Scope restriction (normalization)**` stamp
-on `isSourceZCL_of_isLocalPurificationRFP` becomes plain prose: the hypothesis
-$\mathcal T_M\ne0$ is the source's normalization, and the zero tensor that
-justified the stamp is convention-excluded.
+`thm:cpsv_charact_mps_status` loses the sentence deriving a false converse
+from the fixed-letter virtual-block reading; the rest of that node, which
+records the missing physical-routing data, is unchanged.
 
-## Paper-gap note reclassified
+`thm:mpdo_cpsv_bnt_rfp_equivalence` keeps its `(iii_act)` subscript and its
+`**Scope restriction (active product BNT)**` stamp, and the
+`**Scope restriction (normalization)**` stamp on
+`isSourceZCL_of_isLocalPurificationRFP` is likewise unchanged: both belong to
+the withdrawn items.
 
-`docs/paper-gaps/cpsv16_purification_rfp_definition.tex` moves from
-`false-source` (resolved) to `open-gap` (open). The printed Theorem 4.4 is not
-refuted; what is missing is a Definition 4.1 purification-RFP predicate
-carrying the source's standing canonical-form clause. Until one exists, the
-forward implication is formalized only on the local purification identity.
+## Paper-gap notes
+
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex` keeps its
+`false-source` (resolved) verdict together with the counterexamples it cites.
+The reclassification to `open-gap` was withdrawn with item (i); it becomes
+correct only once a purification predicate carrying the source's standing
+presentation exists, which is the outstanding obligation this pass leaves
+behind. One cross-reference in it was rewritten: the sentence pointing at the
+repeated-copy witness now points at the missing routing data instead, since
+that witness belongs to item (iii).
 
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` and
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex` keep their verdicts; the
@@ -306,6 +334,9 @@ Dated audit records naming the removed declarations were not rewritten:
 `docs/audits/2026-06-18_mathlib_4_31_replacement_audit.md`, and
 `docs/audits/2026-04-24_issue822_biCF_finite_length.md`. This note supersedes
 them where they disagree. The living registries were updated:
-`docs/counterexamples.md`, `docs/audits/2026-05-08-mps-ft-paper-coverage.md`,
-`docs/audits/data/cpsv16-label-dispositions.tsv`, and the boundary patterns of
-`docs/audits/data/cpsv16-contained-result-anchors.tsv`.
+`docs/counterexamples.md` (the purification entry is retained) and
+`docs/audits/2026-05-08-mps-ft-paper-coverage.md`, whose Theorem 3.11 row
+now names the surviving structural results and the paper-gap note in place of
+the deleted module. `docs/audits/data/cpsv16-label-dispositions.tsv` and
+`docs/audits/data/cpsv16-contained-result-anchors.tsv` are unchanged: their
+Theorem 4.14 rows belong to the withdrawn item (v).

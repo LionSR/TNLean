@@ -964,3 +964,103 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Forget the nonzero condition and apply
     Theorem~\ref{thm:is_prfp_of_local_purification_rfp}.
 \end{proof}
+
+% CPSV16 Theorem 4.4, the unlabeled theorem environment at lines 777--784.
+% Gap: docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
+\begin{theorem}[Printed purification fixed-point equivalence]
+    \label{thm:cpsv_theorem44_printed_status}
+    \uses{def:mpdo_global_purification_equation, def:mpdo_is_prfp, def:mpo_physical_trace_idempotence, def:mpdo_purification_rfp_witness, thm:nonzero_global_prfp_not_physical_trace_idempotence}
+    \notready
+    Let an MPO tensor admit the global purification equation of
+    Definition~\ref{def:mpdo_global_purification_equation}.  According to
+    \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}, being a purification
+    renormalization fixed point, having zero correlation length, and admitting
+    the displayed trace-preserving purification form are equivalent.
+
+    This equivalence is false under the printed hypotheses.  Positive-length
+    equations do not detect nilpotent hidden bond sectors.
+    Theorem~\ref{thm:nonzero_global_prfp_not_physical_trace_idempotence} gives a
+    nonzero matrix product density operator that is a purification fixed point
+    but fails the literal physical-trace idempotence equation of
+    Definition~\ref{def:mpo_physical_trace_idempotence}.  The corrected local
+    purification equivalences above require a tensor-level purification identity
+    and do not recover the printed global statement.
+\end{theorem}
+
+\begin{theorem}[The bare global PRFP predicate does not imply the nonzero
+        physical-trace relation]
+    \label{thm:global_prfp_not_source_zcl}
+    \lean{MPOTensor.exists_isPRFP_not_isSourceZCL}
+    \leanok
+    \uses{def:mpdo_is_prfp, def:mpo_source_zcl, def:is_local_purification_rfp, thm:is_prfp_of_local_purification_rfp}
+    There is an MPO tensor satisfying the bare positive-length global
+    purification RFP predicate which does not satisfy the nonzero up-to-scalar
+    physical-trace relation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take the zero tensor at spin, ancillary, and bond dimensions one, purified
+    by the zero spin--ancilla tensor. Its transfer map is idempotent and every
+    positive-length density operator is zero, so the global purification
+    equation holds. Its physical-trace transfer is zero, which is excluded by
+    the nonzero up-to-scalar physical-trace relation.
+\end{proof}
+
+\begin{theorem}[A nonzero global PRFP need not satisfy the up-to-scalar
+        physical-trace relation]
+    \label{thm:nonzero_global_prfp_not_source_zcl}
+    \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
+    \leanok
+    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_source_zcl}
+    There is an MPO tensor which is an MPDO, satisfies the positive-length
+    global purification RFP predicate, and has nonzero physical-trace transfer,
+    but does not satisfy the nonzero up-to-scalar physical-trace relation.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take one physical state and bond dimension three, with the only tensor entry
+    \begin{align}
+        Q & =
+        \begin{pmatrix}
+            1 & 0 & 0 \\
+            0 & 0 & 1 \\
+            0 & 0 & 0
+        \end{pmatrix}.
+        \notag
+    \end{align}
+    Since $\tr(Q^N)=1$ for every $N>0$, all positive-length MPOs
+    equal the scalar density operator $1$ and are purified by the scalar
+    pure-state RFP tensor $A=1$. At length zero the MPO is the positive scalar
+    $3$, so the tensor is an MPDO at every length. Its physical-trace transfer
+    is the nonzero matrix $Q$. However,
+    $Q^2=\diag(1,0,0)$ is not a positive scalar multiple of $Q$,
+    because the $(2,3)$ entry is lost on squaring. Thus the up-to-scalar
+    physical-trace relation fails. The global equation cannot detect this
+    nilpotent bond sector.
+\end{proof}
+
+\begin{theorem}[A nonzero global PRFP need not satisfy literal physical-trace
+        idempotence]
+    \label{thm:nonzero_global_prfp_not_physical_trace_idempotence}
+    \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
+    \leanok
+    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_physical_trace_idempotence}
+    There is an MPO tensor which is an MPDO, satisfies the positive-length
+    global purification RFP predicate, and has nonzero physical-trace transfer,
+    but its physical-trace transfer is not idempotent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:nonzero_global_prfp_not_source_zcl, thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Use the tensor from
+    Theorem~\ref{thm:nonzero_global_prfp_not_source_zcl}.  If its nonzero
+    physical-trace transfer $\mathcal T_M$ were idempotent, then
+    \[
+        \mathcal T_M^2=\mathcal T_M=1\cdot\mathcal T_M,
+    \]
+    which is the scalar-one case of the up-to-scalar relation refuted by that
+    theorem.
+\end{proof}
