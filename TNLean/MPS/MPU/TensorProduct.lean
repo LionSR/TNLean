@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.MatrixRankKronecker
 import QICLean.Algebra.TraceReindex
 import TNLean.MPS.MPU.Basic
@@ -68,8 +69,7 @@ def tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
 /-- Split a product-valued physical configuration site by site. -/
 def tensorProductConfigEquiv (N d e : ℕ) :
     (Fin N → Fin (d * e)) ≃ (Fin N → Fin d) × (Fin N → Fin e) :=
-  (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv.symm).trans
-    (Equiv.arrowProdEquivProdArrow (Fin N) (fun _ ↦ Fin d) (fun _ ↦ Fin e))
+  finTupleProdEquiv N d e
 
 /-- Split every letter of a blocked product alphabet and re-encode the two
 component words as a pair of blocked letters.
@@ -79,8 +79,7 @@ noncomputable def tensorProductBlockEquiv (d e L : ℕ) :
     Fin (MPSTensor.blockPhysDim (d * e) L) ≃
       Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim e L) :=
   (MPSTensor.decodeBlockEquiv (d * e) L).trans
-    ((Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv.symm).trans
-      (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin e))) |>.trans
+    (finTupleProdEquiv L d e) |>.trans
     (Equiv.prodCongr (MPSTensor.decodeBlockEquiv d L).symm
       (MPSTensor.decodeBlockEquiv e L).symm) |>.trans
     finProdFinEquiv
@@ -91,8 +90,7 @@ blocked product letters. -/
     (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
     MPSTensor.decodeBlock d L ((tensorProductBlockEquiv d e L I).divNat) k =
       (MPSTensor.decodeBlock (d * e) L I k).divNat := by
-  simp [tensorProductBlockEquiv, Equiv.arrowCongr,
-    MPSTensor.decodeBlockEquiv_apply]
+  simp [tensorProductBlockEquiv, MPSTensor.decodeBlockEquiv_apply]
 
 /-- Decoding the second blocked component gives the pointwise remainder of the
 blocked product letters. -/
@@ -100,8 +98,7 @@ blocked product letters. -/
     (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
     MPSTensor.decodeBlock e L ((tensorProductBlockEquiv d e L I).modNat) k =
       (MPSTensor.decodeBlock (d * e) L I k).modNat := by
-  simp [tensorProductBlockEquiv, Equiv.arrowCongr,
-    MPSTensor.decodeBlockEquiv_apply]
+  simp [tensorProductBlockEquiv, MPSTensor.decodeBlockEquiv_apply]
 
 private theorem evalWord_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
     (is js : List (Fin (d * e))) :
@@ -161,7 +158,7 @@ theorem mpo_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) (N : ℕ) :
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
     mpo_apply, mpoMatrixEntry]
   rw [evalWord_tensorProduct, Matrix.trace_reindex, Matrix.trace_kronecker]
-  simp [tensorProductConfigEquiv, Equiv.arrowCongr, Function.comp_def]
+  simp [tensorProductConfigEquiv, Function.comp_def]
 
 /-- Independent tensor products of matrix product unitaries are matrix product
 unitaries.
