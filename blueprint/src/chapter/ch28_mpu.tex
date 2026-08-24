@@ -1809,7 +1809,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPSTensor.tensorProduct, MPSTensor.tensorProduct_apply}
     \leanok
     \uses{def:mps_tensor}
-    Let $A=(A^i)_{i\in\Fin d}$ and $B=(B^k)_{k\in\Fin e}$ have
+    Let $A=\{A^i\}_{i\in\Fin d}$ and $B=\{B^k\}_{k\in\Fin e}$ have
     auxiliary dimensions $D$ and $E$, respectively.  Write
     \begin{align}
         \pi_{m,n}:\Fin m\times\Fin n & \longrightarrow\Fin{mn}
@@ -1835,7 +1835,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     This is infrastructure for the tensoring clause in the proof of the MPU
     Index Theorem~IV.6(ii)
     \cite[lines~824--845]{Cirac2017MPU}, not a separately stated theorem of
-    that paper.  The notation $A=(A^i)_i$ agrees with the canonical-form block
+    that paper.  The notation $A=\{A^i\}_i$ agrees with the canonical-form block
     notation in \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -1874,6 +1874,118 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
          & =(A^iX)\otimes(B^kY),
     \end{align}
     after transporting multiplication through the same coordinate bijection.
+\end{proof}
+
+\begin{theorem}[Homogeneous word spans of an independent tensor product]
+    \label{thm:mps_word_span_tensor_product}
+    \lean{MPSTensor.wordSpan_tensorProduct,
+        MPSTensor.isNBlkInjective_tensorProduct,
+        MPSTensor.isNormal_tensorProduct}
+    \leanok
+    \uses{def:mps_independent_tensor_product, def:word_span, def:normal}
+    Let $S_N(A)=\spn_{\C}\{A^w:|w|=N\}$.  The pointwise splitting of
+    length-$N$ words gives
+    \begin{align}
+        S_N(A\boxtimes B)
+         & =\spn_{\C}\{\operatorname{reind}_{\pi_{D,E}}(A^u\otimes B^v):
+        |u|=|v|=N\}.
+        \label{eq:mpu_tensor_word_span}
+    \end{align}
+    In particular, if $S_N(A)=\MN{D}$ and $S_N(B)=\MN{E}$, then
+    $S_N(A\boxtimes B)=\MN{DE}$.  If $A$ and $B$ are algebraically normal,
+    then $A\boxtimes B$ is algebraically normal.
+
+    This is the homogeneous-word infrastructure for the tensoring sentence in
+    the proof of the MPU Index Theorem~IV.6(ii)
+    \cite[lines~824--845]{Cirac2017MPU}, not a separate theorem stated there.
+    It applies to the retained blocks in the canonical-form decomposition
+    \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_eval_word_independent_tensor_product, def:word_span,
+        def:normal}
+    For every product word $w$, let $(u,v)$ be its pointwise component words.
+    The bijection between $w$ and $(u,v)$ and
+    Theorem~\ref{thm:mps_eval_word_independent_tensor_product} give
+    \begin{align}
+        (A\boxtimes B)^w
+         & =\operatorname{reind}_{\pi_{D,E}}(A^u\otimes B^v),
+    \end{align}
+    which proves~(\ref{eq:mpu_tensor_word_span}) after taking linear spans.
+    Pure tensors span $\MN{D}\otimes\MN{E}$.  The Kronecker linear
+    equivalence, followed by simultaneous reindexing along $\pi_{D,E}$, is an
+    isomorphism onto $\MN{DE}$; this proves the fixed-length consequence.  If
+    $S_{N_A}(A)=\MN{D}$ and $S_{N_B}(B)=\MN{E}$ for positive $N_A,N_B$, then
+    persistence at positive multiples gives
+    \begin{align}
+        S_{N_A N_B}(A) & =\MN{D}, &
+        S_{N_A N_B}(B) & =\MN{E}.
+    \end{align}
+    Applying the fixed-length consequence at $N_A N_B$ proves algebraic
+    normality of $A\boxtimes B$.
+\end{proof}
+
+\begin{theorem}[Left-canonical normal blocks under independent tensor products]
+    \label{thm:mps_normal_block_tensor_product}
+    \lean{MPSTensor.leftCanonical_tensorProduct,
+        MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical}
+    \leanok
+    \uses{def:mps_independent_tensor_product, def:left_canonical_tensor,
+        def:nt_cpsv}
+    Let $A$ and $B$ be CPSV normal tensors, and suppose that
+    \begin{align}
+        \sum_i(A^i)^\dagger A^i & =\Id_D, &
+        \sum_k(B^k)^\dagger B^k & =\Id_E.
+        \label{eq:mpu_tensor_left_canonical_inputs}
+    \end{align}
+    Then $A\boxtimes B$ is a CPSV normal tensor and is left-canonical:
+    \begin{align}
+        \sum_{i,k}
+        \left((A\boxtimes B)^{\pi_{d,e}(i,k)}\right)^\dagger
+        (A\boxtimes B)^{\pi_{d,e}(i,k)}
+         & =\Id_{DE}.
+        \label{eq:mpu_tensor_left_canonical_output}
+    \end{align}
+
+    This is the retained-normal-block infrastructure for the tensoring
+    sentence in the proof of the MPU Index Theorem~IV.6(ii)
+    \cite[lines~824--845]{Cirac2017MPU}, not a separate theorem stated there.
+    The retained-normal-block terminology is that of the canonical-form
+    decomposition in
+    \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}; the two
+    left-canonical identities are explicit infrastructure hypotheses, not an
+    additional assertion attributed to that passage.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_word_span_tensor_product,
+        thm:cpsv_normal_eventually_injective,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    The adjoint and multiplication laws for Kronecker products, together
+    with the fact that simultaneous reindexing preserves adjoints, products,
+    and finite sums, give
+    \begin{align}
+        &\sum_{i,k}
+        \left((A\boxtimes B)^{\pi_{d,e}(i,k)}\right)^\dagger
+        (A\boxtimes B)^{\pi_{d,e}(i,k)} \\
+        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        \left(\sum_{i,k}
+        (A^i\otimes B^k)^\dagger(A^i\otimes B^k)\right) \\
+        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        \left(
+        \left(\sum_i(A^i)^\dagger A^i\right)\otimes
+        \left(\sum_k(B^k)^\dagger B^k\right)
+        \right) \\
+        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        (\Id_D\otimes\Id_E)=\Id_{DE},
+    \end{align}
+    proving~(\ref{eq:mpu_tensor_left_canonical_output}).  Spectral normality
+    gives positive lengths $N_A,N_B$ at which the two homogeneous word spans
+    are full.  Theorem~\ref{thm:mps_word_span_tensor_product} therefore makes
+    $A\boxtimes B$ algebraically normal at the common length $N_A N_B$.
+    The algebraically normal, left-canonical tensor is CPSV normal by
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}.
 \end{proof}
 
 \begin{definition}[Independent tensor product of matrix product operator tensors]
