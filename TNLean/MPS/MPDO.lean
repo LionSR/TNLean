@@ -272,6 +272,7 @@ import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 import TNLean.MPS.MPDO.PhysicalSupportProductTransport
 import TNLean.MPS.MPDO.PhysicalSupportRestriction
+import TNLean.MPS.MPDO.PhysicalSupportRestrictionComparison
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 import TNLean.MPS.MPDO.PositiveLinearExtensionCounterexample
 import TNLean.MPS.MPDO.PositiveMinimalRealizationCounterexample
