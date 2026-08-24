@@ -53,6 +53,10 @@ This isolates the missing ingredient more precisely: one still needs a proved
 finite-length block-separation theorem producing either the pairwise separators
 of item (4), the selector data of item (3), or equivalently the word-entry
 linear independence of item (2), from canonical-form/BNT data.
+
+The duplicate scalar-block obstruction showing that the remaining
+`HorizontalCFData` fields do not imply `biCF` is in
+`TNLean.MPS.MPDO.BiCFDerivation.Counterexample`.
 -/
 
 open scoped Matrix BigOperators

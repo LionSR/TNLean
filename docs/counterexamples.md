@@ -165,6 +165,14 @@ mathematical obstruction.
   transport is scale covariant; exact equality requires an additional
   normalization compatibility condition.
 
+### BiCF does not follow from the other per-copy `HorizontalCFData` fields
+
+- Location: `TNLean/MPS/MPDO/BiCFDerivation.lean`
+- Statement refuted: blockwise injectivity, left-canonicality, nonzero weights,
+  and pairwise distinct weights imply `MPSTensor.HasBiCF`.
+- Witness: two scalar blocks over one physical letter with weights `1` and `2`;
+  the trace-pairing cancellation cannot isolate the two blocks.
+
 ### Positive-length global PRFP data do not imply tensor-level ZCL
 
 - Location: `TNLean/MPS/MPDO/LocalPurificationRFP.lean`
@@ -183,6 +191,20 @@ mathematical obstruction.
   sector. A local purification identity or a source-specified minimality or
   canonical-representative condition is therefore necessary for a
   global-to-local implication.
+
+### MPU unitarity and simple contractions do not identify the source-v Gram contraction
+
+- Location: `TNLean/MPS/MPU/SourceVCounterexample.lean`
+- Main declaration:
+  `MPOTensor.SourceVCounterexample.sourceYTensor_gram_ne_inserted`
+- Statement refuted: MPU unitarity, a positive-definite source weight, and the
+  exact supplied simple contractions imply that the source-$Y$ Gram
+  contraction equals the rank-one-inserted double-layer contraction.
+- Corrected boundary: the witness has no positive-definite fixed point for its
+  normalized transfer map, so it admits no reduced canonical-form-II
+  presentation with full-active-support. The example therefore refutes only
+  the unrestricted source-$v$ Gram identification, not a statement under the
+  reduced-CFII and full-active-support hypotheses.
 
 ## Block Separation and Canonical Form
 

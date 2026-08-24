@@ -70,6 +70,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.BiCFDerivation.Basic
 import TNLean.MPS.MPDO.BiCFDerivation.Blocking
 import TNLean.MPS.MPDO.BiCFDerivation.Core
+import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
 import TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput

@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{open-gap}{open}
+\gapnote{false-source}{open}
 
 \section{Source statement}
 
@@ -426,35 +426,81 @@ It shows that repeated virtual copies necessarily impose equations between
 distinct copies of the same normal tensor; checking only the representative
 block omits part of the whole-tensor fixed-point condition.
 
-\section{Why the fixed-letter virtual-block reading is excluded}
+\section{Ambiguity of a literal repeated-phase reading}
 
 Equation~\path{III_CFI_RFP} allows a fixed normal tensor indexed by $j$ to occur
 several times, indexed by $q$, with independent coefficients
-$\mu_{j,q}$ satisfying $|\mu_{j,q}|=1$.  Read as an ordinary virtual block
-diagonal at each fixed physical letter, one physical letter and the scalar
-representative $B^0=(1)$ with copy phases $1$ and $-1$ would give
-$A^0=\operatorname{diag}(1,-1)$, a tensor satisfying neither \path{AA=A} nor
-whole-tensor transfer idempotence.
+$\mu_{j,q}$ satisfying $|\mu_{j,q}|=1$.
+Take one physical letter, one scalar representative
+\[
+  B^0=(1),
+\]
+and two copies with $\mu_{1,1}=1$ and $\mu_{1,2}=-1$.  With trivial gauges and
+$\Lambda=(1)$, a literal reading of the displayed virtual block diagonal gives
+\[
+  A^0=\operatorname{diag}(1,-1).
+\]
+The representative $B$ satisfies the trace-normalized unit-isometry form: take
+$X=(1)$, $\Lambda=(1)$, and $U^0=(1)$.  Both copy phases have unit modulus.
+For $g=1$ and a one-dimensional representative, the displayed joint equation
+\path{eq:III_isometry} also reduces to $|U^0|^2=1$ and is satisfied.  Notice,
+however, that this equation carries the index $j$ but not the copy index $q$.
+These facts are formalized by
+\leanid{MPSTensor.scalarUnitTensor_isIsometryCanonicalForm} and
+\leanid{MPSTensor.phaseFlipTensor_is_two_phase_copies} in
+\doclink{TNLean/MPS/RFP/PhaseMultiplicityCounterexample}.
 
-That reading is not the source's.  The prose immediately after the display
-states that the indices $j,q$ connect the physical and virtual indices and
-therefore give a direct sum in \emph{both} spaces, up to the physical isometry
-(local source \path{Papers/1606.00608/MPDO-22-12-17-2.tex:559--563}).  A single
-physical letter cannot carry a nontrivial physical direct sum, so
-$\operatorname{diag}(1,-1)$ is outside the class the theorem describes and is
-not evidence against it.  The development records no counterexample here.
+The prose following the display supplies additional meaning: the indices $j,q$
+connect the physical and virtual indices and therefore give a direct sum in
+both spaces, up to the physical isometry (local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:559--563}).  The one-letter tensor
+above realizes the virtual direct sum but cannot realize a nontrivial physical
+direct sum.  Indeed,
+\[
+  (A^0)^2=I,
+\]
+and there is no scalar $v$ with $I=vA^0$: the two diagonal entries would require
+$v=1$ and $v=-1$ simultaneously.  Thus this tensor fails even the unrestricted
+scalar-coefficient version of the defining relation \path{AA=A}.  This is
+formalized by \leanid{MPSTensor.phaseFlipTensor_no_blocking_coefficient}.
 
-What the source does leave open is the coordinate data for the physical routing
-of $q$.  The displayed isometry equation at lines 551--554 contains $j$ but no
-$q$.  The prose at lines 561--563 says that $j,q$ participate in physical and
-virtual direct sums, but it gives neither a $q$-indexed isometry nor an equation
-for such an isometry.  In particular, a formal construction would also require a
+Its transfer map is
+\[
+  \mathcal E_A(Y)=A^0Y(A^0)^\dagger.
+\]
+For the matrix unit $E_{01}$ one has
+\[
+  \mathcal E_A(E_{01})=-E_{01},
+  \qquad
+  \mathcal E_A^2(E_{01})=E_{01}.
+\]
+Thus $\mathcal E_A^2\ne\mathcal E_A$.  The formal theorem
+\leanid{MPSTensor.phaseFlipTensor_not_isTransferIdempotent} proves that this tensor does not
+satisfy the present predicate \leanid{MPSTensor.IsTransferIdempotent}.
+
+The calculation exposes a gap between the displayed theorem and its
+accompanying physical-space interpretation.  The source definition of a
+pure-state RFP is the physical isometry relation \path{AA=A} (local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:420--425}).  It is formalized by
+\leanid{MPSTensor.HasPhysicalBlockingIsometry}.  The unrestricted equivalence
+between this relation and transfer-map idempotence is
+\leanid{MPSTensor.isTransferIdempotent_iff_hasPhysicalBlockingIsometry}; it is the Kraus-family
+argument at source lines 1205--1209.  The source then states the repeated-copy
+form in Theorem~\path{charact-MPS}, including the independent unit phases
+(local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554}).  For the two-phase
+virtual-block reading above, neither \path{AA=A} nor literal whole-tensor
+idempotence holds.
+
+The displayed isometry equation at lines 551--554 contains $j$ but no $q$.
+The prose at lines 561--563 says that $j,q$ participate in physical and virtual
+direct sums, but it gives neither a $q$-indexed isometry nor an equation for such
+an isometry.  In particular, a formal construction would also require a
 dimension condition for embedding the resulting direct sum into the physical
 space; no such condition occurs in the theorem.  Adding these data to a Lean
 statement would therefore add hypotheses absent from the cited statement and
 would violate the faithfulness rule.  The full repeated-copy theorem cannot be
 marked as formalized without a corrected source statement.
-
 
 \section{Elimination plan}
 

@@ -715,7 +715,7 @@
 \begin{theorem}[Square-root characterization of fixed points]
     \label{thm:cpsv_charact_mps_status}
     \notready
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family}
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family, thm:phase_flip_tensor_not_rfp}
     CPSV asserts that a tensor $A$ in canonical form is a renormalization fixed
     point if and only if it can be written as
     \begin{align}
@@ -738,9 +738,10 @@
         lines~561--562]{Cirac2016MPDO_arXiv}. It does not provide a coordinate map
     for the physical routing of $q$, a corresponding dimension hypothesis, or
     a $q$-indexed isometry equation. Consequently the display does not yet
-    determine a source-faithful coordinate-level predicate. The routed
-    characterization therefore remains not ready pending a source
-    clarification or erratum.
+    determine a source-faithful coordinate-level predicate. Under the naive
+    fixed-$i$ virtual-block interpretation, the claimed converse is false by
+    Theorem~\ref{thm:phase_flip_tensor_not_rfp}. The routed characterization
+    therefore remains not ready pending a source clarification or erratum.
 
     \textbf{Local fix (square-root diagonal).} CPSV prints a bare $\Lambda_j$
     in Theorem~3.11, whereas the reference tensor at line~1300 has coefficients
@@ -748,3 +749,39 @@
     used above. This repair is documented in
     \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}
+
+\begin{theorem}[Ambiguity of the literal repeated-phase display]%
+    \label{thm:phase_flip_tensor_not_rfp}
+    \lean{MPSTensor.phaseFlipTensor_literal_display_ambiguity}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form}
+    Let $B$ be the one-letter, one-dimensional tensor $B^0=(1)$, and form two
+    block-diagonal copies with phases $1$ and $-1$:
+    \begin{align}
+        A^0 & =\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+        \notag
+    \end{align}
+    The representative $B$ is in the square-root fixed-point form, and both copy
+    coefficients have unit modulus. Thus $A$ satisfies the literal virtual
+    block-diagonal reading of the displayed repeated-copy formula in
+    \cite[Section~3]{Cirac2016MPDO_arXiv}. It does not, however, satisfy the
+    accompanying interpretation in which the copy index also belongs to the
+    physical direct sum: there is no scalar $v$ such that
+    $(A^0)^2=vA^0$. In particular, $A$ is not a renormalization fixed point
+    in the sense of Definition~\ref{def:mps_transfer_idempotence}.
+    % Source ambiguity: equation III_CFI_RFP at lines 543--554 admits this literal
+    % virtual-block substitution, while lines 559--563 require j,q to contribute
+    % to both physical and virtual direct sums; see
+    % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
+\end{theorem}
+\begin{proof}\leanok
+    Taking the witness data of
+    Definition~\ref{def:is_isometry_canonical_form} to be
+    $X=\rho=U^0=(1)$, the scalar representative is in square-root fixed-point
+    form, and $|1|=|-1|=1$.
+    Direct multiplication gives $(A^0)^2=I$. Comparing diagonal entries in
+    $I=vA^0$ would give simultaneously $v=1$ and $v=-1$, which is impossible.
+    On the off-diagonal matrix unit $E_{01}$, the transfer map is conjugation by
+    $A^0$, so $\E_A(E_{01})=-E_{01}$ and $\E_A^2(E_{01})=E_{01}$.
+    Hence $\E_A^2\ne\E_A$.
+\end{proof}

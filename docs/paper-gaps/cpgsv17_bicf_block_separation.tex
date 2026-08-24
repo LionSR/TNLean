@@ -98,26 +98,31 @@ These statements remain correct restricted results. The sharp proposition is
 now proved separately for a representative-indexed BNT sector decomposition,
 so repeated copies are grouped before the separation argument.
 
-\section{Why the fields are stated independently}
+\section{The counterexample boundary}
 
-The finite-length trace-separation witness cannot be recovered from blockwise
-injectivity, left-canonicality, and nonzero weights alone. Take two
-one-dimensional scalar blocks over a one-letter alphabet, with both block
-tensors equal to $1$ and with weights $1$ and $2$. Every word evaluation is the
-same on the two blocks, so the tuple span is the diagonal line in
-$\mathbb C\oplus\mathbb C$ rather than the whole product algebra, and
-$\Delta_1=1$, $\Delta_2=-1$ makes the trace pairing vanish at every length.
+A tempting shortcut is false. One cannot recover the finite-length
+trace-separation witness from blockwise injectivity, left-canonicality, and
+nonzero weights alone. Take
+two one-dimensional scalar blocks over a one-letter alphabet, with both block
+tensors equal to $1$ and with weights $1$ and $2$. Each block is injective and
+left-canonical, and the weights are nonzero and distinct. However every word
+evaluation is the same on the two blocks. The tuple span is the diagonal line in
+$\mathbb C\oplus\mathbb C$, not the whole product algebra. Equivalently,
+choosing $\Delta_1=1$ and $\Delta_2=-1$ makes the trace pairing vanish on every
+word while the tuple $(\Delta_1,\Delta_2)$ is nonzero.
 
-Two identical blocks are, however, related by similarity and phase, so they are
-never a basis of normal tensors in the sense of the source characterization,
-which the source's sharp block-injectivity proposition assumes throughout. The
-observation therefore explains why the finite-length witness is carried as its
-own field rather than derived from the others; it is not a counterexample to the
-source, and none is recorded for it.
+This example is formalized as \texttt{duplicateScalarBlocks} and its lemmas in
+\path{TNLean/MPS/MPDO/BiCFDerivation/Counterexample.lean}, and is recorded in
+\path{docs/counterexamples.md}, lines 29--35. It shows that the additional
+finite-length witness in the formal hypotheses is genuinely stronger than the
+other horizontal canonical-form assumptions. It does not refute
+the source's sharp block-injectivity proposition. The duplicate scalar blocks are
+related by similarity and phase, and therefore do not form a minimal basis of
+normal tensors in the sense of the source characterization.
 
 \section{Consequence for Lemma L}
 
-The same field independence marks the restriction in the older theorem
+The same counterexample marks the restriction in the older theorem
 \texttt{blockwise\_insert\_eq\_of\_mpv\_agree}, which assumes
 \texttt{biCF} on the full family of copies.  The source's Lemma L
 (Appendix~C.3, lines~1835--1858) instead writes the canonical-form tensor as
