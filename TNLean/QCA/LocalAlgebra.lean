@@ -115,6 +115,62 @@ def splitEquiv {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
 lemma splitEquiv_apply_fst {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (x : Config d Γ) :
     (splitEquiv h x).1 = restrict h x := rfl
 
+/-- Restricting a configuration reconstructed by `splitEquiv` to the retained region recovers
+the first component.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+@[simp]
+lemma restrict_splitEquiv_symm {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (p : Config d Λ × Config d (Γ \ Λ)) :
+    restrict h ((splitEquiv h).symm p) = p.1 :=
+  congrArg Prod.fst ((splitEquiv h).apply_symm_apply p)
+
+/-- Restricting a configuration reconstructed by `splitEquiv` to the complementary region
+recovers the second component.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+@[simp]
+lemma restrict_sdiff_splitEquiv_symm {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (p : Config d Λ × Config d (Γ \ Λ)) :
+    restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) ((splitEquiv h).symm p) = p.2 :=
+  congrArg Prod.snd ((splitEquiv h).apply_symm_apply p)
+
+/-- Two configurations have the same complementary coordinate under `splitEquiv` exactly when
+their restrictions to the complementary region agree.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+lemma splitEquiv_snd_eq_iff_restrict_sdiff {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (x y : Config d Γ) :
+    (splitEquiv h x).2 = (splitEquiv h y).2 ↔
+      restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) x =
+        restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) y := by
+  rfl
+
+/-- Equality of the complementary coordinates for the split retaining `Γ \ Λ` is equality after
+restriction to `Λ`.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+lemma splitEquiv_sdiff_snd_eq_iff_restrict {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (x y : Config d Γ) :
+    (splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) x).2 =
+        (splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) y).2 ↔
+      restrict h x = restrict h y := by
+  constructor
+  · intro hxy
+    funext i
+    exact congrFun hxy ⟨i, Finset.mem_sdiff.mpr ⟨h i.2, by simp [i.2]⟩⟩
+  · intro hxy
+    funext i
+    have hiΛ : (i : ℤ) ∈ Λ := by
+      by_contra hi
+      exact (Finset.mem_sdiff.mp i.2).2
+        (Finset.mem_sdiff.mpr ⟨(Finset.mem_sdiff.mp i.2).1, hi⟩)
+    exact congrFun hxy ⟨i, hiΛ⟩
+
 end Config
 
 section Inclusion

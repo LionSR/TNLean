@@ -10,12 +10,14 @@ Authors: TNLean contributors
 
 import TNLean.QCA.AlgebraicBlocking
 import TNLean.QCA.AlgebraicTranslation
+import TNLean.QCA.BipartiteLocalAlgebra
 import TNLean.QCA.BipartiteSupportAlgebra
 import TNLean.QCA.Blocking
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.BlockingTranslation
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.DisjointSupport
+import TNLean.QCA.FiniteLocalRestriction
 import TNLean.QCA.FinitePropagation
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA
