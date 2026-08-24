@@ -5340,6 +5340,7 @@
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_side_tl
+\bool_new:N \l__tenkz_kernel_r_mark_side_default_bool
 \tl_new:N   \l__tenkz_kernel_r_mark_ink_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_style_tl
 \tl_new:N   \l__tenkz_kernel_r_wire_ink_tl
@@ -19852,9 +19853,13 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
   {
     \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
-      { \tl_set_eq:NN \l__tenkz_kernel_r_c_tl
-          \l__tenkz_kernel_r_mark_side_tl }
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
+      {
+        \tl_set_eq:NN \l__tenkz_kernel_r_c_tl
+          \l__tenkz_kernel_r_mark_side_tl
+        \bool_set_true:N \l__tenkz_kernel_r_mark_side_default_bool
+      }
+      { \bool_set_false:N \l__tenkz_kernel_r_mark_side_default_bool }
     % The side a label speaks from is a side OF THE MARK, so the step out to
     % it is that side's angle carried through the mark's own turn -- the
     % caller has already put the point on the turned side, and a second step
@@ -19885,6 +19890,22 @@
               { \l__tenkz_kernel_r_c_tl } ,
             inner~sep = \__tenkz_dim:n {labelclear}
           }
+        % The claim states who chose the side, as it does at the dot
+        % chooser: a mark that names none takes the side its form speaks
+        % from -- the kernel's own word (the mark's north, the bracket's
+        % south), so a collision there is the kernel's to answer -- and an
+        % author-named bearing claims no station.  The centre of a region
+        % stays unclaimed: its occupancy is no face lane, which is the
+        % blind doctrine the dot chooser already follows.
+        \bool_if:NTF \l__tenkz_kernel_r_mark_side_default_bool
+          {
+            \use:e
+              {
+                \exp_not:c { tenkz@labelclaim } { auto }
+                  { \tl_use:N \l__tenkz_kernel_r_mark_side_tl }
+              }
+          }
+          { \use:c { tenkz@labelclaim } { explicit } { } }
         \exp_args:NV \__tenkz_render_labelnode:nnn
           \l__tenkz_kernel_r_mark_style_tl
           {

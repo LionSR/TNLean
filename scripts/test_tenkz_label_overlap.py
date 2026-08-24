@@ -556,6 +556,50 @@ ARCH_MARK_SOURCE = r"""
 \end{document}
 """
 
+# Every mark label site claims its provenance (#6362): the mark's own
+# north and the bracket's south are the kernel's words, an author-named
+# bearing claims no station, and the centre of a region stays unclaimed
+# (its occupancy is no face lane -- the blind doctrine).
+MARK_CLAIM_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={1x4}, bonds=none]
+  \tn[at=(1,1), name=A]{}
+  \tn[at=(1,2), name=B]{}
+  \tn[at=(1,3), name=C]{}
+  \tn[at=(1,4), name=D]{}
+  \tnmark[form=label]{A}{$m$}
+  \tnmark[form=label, label pos=45]{B}{$p$}
+  \tnmark[form=bracket]{(1,3) .. (1,4)}{$K$}
+  \tnmark[form=enclosure, label pos=n]{(1,1) .. (1,2)}{$E$}
+  \tnmark[form=enclosure]{(1,3) .. (1,4)}{$Z$}
+\end{tenkz}
+\end{document}
+"""
+
+# The severity split at a mark site, compiled: the same label band on the
+# same wire is HARD when the kernel's default north put it there and one
+# advisory when the author named the same word.
+MARK_ONINK_SOURCE = r"""
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), skin=dot, name=P]{}
+  \tn[at=(3,1), skin=dot, name=Q]{}
+  \tnwire[name=W]{P}{Q}
+  \tnmark[form=label]{midway (1,1) and (3,1)}{$m$}
+\end{tenkz}
+\end{document}
+"""
+
+MARK_ONINK_EXPLICIT_SOURCE = MARK_ONINK_SOURCE.replace(
+    "form=label]", "form=label, label pos=n]")
+
+
 NESTED_CLAIM_SOURCE = r"""
 \documentclass{standalone}
 \usepackage{tenkz}
@@ -2109,6 +2153,69 @@ def main() -> int:
             raise AssertionError(
                 "an explicit label pos= did not claim provenance=explicit "
                 "with no station")
+
+        # Every mark label site claims its provenance (#6362).  One
+        # compiled picture exercises all five: the mark's default north and
+        # the bracket's default south are the kernel's words (auto with a
+        # station), an author-named bearing claims no station on either the
+        # point mark or the enclosure hull, and the centred region label
+        # stays unclaimed.
+        markclaim_tex = work / "mark-claims.tex"
+        markclaim_tex.write_text(MARK_CLAIM_SOURCE, encoding="utf-8")
+        run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error",
+             markclaim_tex.name],
+            cwd=work, env=env, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if run.returncode:
+            print(run.stdout)
+            print("FAIL: mark-claims fixture did not compile")
+            return 1
+        _, markclaim_audit = audit_status(work / "mark-claims.tnlog")
+        markclaim_labels = [
+            (event.attrs.get("provenance"), event.attrs.get("station"))
+            for event in markclaim_audit.events("k1")
+            if event.kind == "bbox" and event.attrs.get("class") == "label"]
+        if markclaim_labels != [
+                ("auto", "n"), ("explicit", None), ("auto", "s"),
+                ("explicit", None), (None, None)]:
+            raise AssertionError(
+                "the mark label sites did not claim per their choosers: "
+                + repr(markclaim_labels))
+
+        # The severity split at a mark site, compiled with identical
+        # geometry: the kernel's default north on the wire is HARD, the
+        # author's same word one advisory.
+        for name, source, want_status, want_severity, want_msg in (
+                ("mark-onink-auto", MARK_ONINK_SOURCE, 1, "HARD",
+                 "station the kernel chose (n)"),
+                ("mark-onink-explicit", MARK_ONINK_EXPLICIT_SOURCE, 0,
+                 "ADV", "author's chosen station"),
+        ):
+            case_tex = work / f"{name}.tex"
+            case_tex.write_text(source, encoding="utf-8")
+            run = subprocess.run(
+                [engine, "-interaction=nonstopmode", "-halt-on-error",
+                 case_tex.name],
+                cwd=work, env=env, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                timeout=120,
+            )
+            if run.returncode:
+                print(run.stdout)
+                print(f"FAIL: {name} fixture did not compile")
+                return 1
+            case_status, case_audit = audit_status(work / f"{name}.tnlog")
+            case_found = [finding for finding in case_audit.findings
+                          if finding.rule == "label-on-ink"]
+            if (case_status != want_status or len(case_found) != 1
+                    or case_found[0].severity != want_severity
+                    or want_msg not in case_found[0].msg):
+                raise AssertionError(
+                    f"{name}: the mark severity split did not hold: "
+                    + "; ".join(f.msg for f in case_audit.findings))
 
         # The two fixtures the issue names audit clean at their fixed label
         # positions: the collision class is historical there.
