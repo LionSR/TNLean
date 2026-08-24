@@ -11,13 +11,17 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
-For GNVW support algebras, the source correction and the remaining scope
+For GNVW support algebras, the source corrections and the remaining scope
 restriction are recorded separately.
 
 - `gnvw12_support_algebra_star_closure.tex` records the necessary
   star-closed-input correction to the printed support-algebra lemma, the
   non-star-closed counterexample, and why the QCA and MPU applications supply
   the corrected hypothesis. This local correction is resolved.
+- `gnvw12_support_algebra_outer_factor_basis.tex` records the resolved
+  correction that the printed coefficient basis element $e'_\nu$ belongs to
+  the third factor, as forced by both the typed expansion and the outer-factor
+  basis argument.
 - `gnvw12_support_algebra_full_matrix_scope.tex` records the remaining open
   restriction from arbitrary finite-dimensional $C^*$-algebra factors to
   full complex matrix factors.
