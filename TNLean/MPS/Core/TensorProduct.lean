@@ -37,7 +37,7 @@ normality assertion is made here.
 * `MPSTensor.tensorProduct_apply` gives its exact matrix entries.
 * `MPSTensor.evalWord_tensorProduct` separates a product-indexed word into its
   two component word evaluations.
-* `MPSTensor.left_canonical_tensor_product` proves left-canonicality directly
+* `MPSTensor.leftCanonical_tensorProduct` proves left-canonicality directly
   from the two constituent normalization identities.
 -/
 
@@ -118,7 +118,7 @@ in that paper.  The retained-normal-block context is
 arXiv:1606.00608, equation `II_CF1`, lines 214--245; the two left-canonical
 identities are explicit project hypotheses, not an assertion attributed to
 that passage. -/
-theorem left_canonical_tensor_product (A : MPSTensor d D) (B : MPSTensor e E)
+theorem leftCanonical_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
     (hA : IsLeftCanonical A) (hB : IsLeftCanonical B) :
     IsLeftCanonical (tensorProduct A B) := by
   classical
