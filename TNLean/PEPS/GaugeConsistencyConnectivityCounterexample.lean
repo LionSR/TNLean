@@ -107,7 +107,7 @@ theorem isVertexInjective_B2 : IsVertexInjective B2 := by
 vertex scalars, and `2 * 3 = 6 = 6 * 1`. -/
 theorem sameState_A2_B2 : SameState A2 B2 := by
   intro σ
-  simp only [stateCoeff, Fintype.sum_unique]
+  simp only [mps_eval, Fintype.sum_unique]
   rw [Fintype.prod_bool, Fintype.prod_bool]
   simp only [A2, B2]
   norm_num

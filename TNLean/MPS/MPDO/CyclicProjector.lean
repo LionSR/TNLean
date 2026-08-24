@@ -105,15 +105,14 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     (B : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily B)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ) (hρ : ρ.PosDef) (hrad : 0 < rad)
     (hfix : Kraus.transferMap (d := d) (D := D) B ρ = (rad : ℂ) • ρ) :
-    KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (spectralUnitalGauge B rad ρ) ∧
+    Kraus.IsUnital (spectralUnitalGauge B rad ρ) ∧
     Kraus.IsIrreducibleFamily (spectralUnitalGauge B rad ρ) ∧
     IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (spectralUnitalGauge B rad ρ)) ∧
     ∃ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosDef ∧
       Kraus.adjointMap (spectralUnitalGauge B rad ρ) σ = σ := by
   classical
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D)
-      (spectralUnitalGauge B rad ρ) := by
-    simpa [KadisonSchwarz.IsUnitalKraus] using
+  have hUnital : Kraus.IsUnital (spectralUnitalGauge B rad ρ) := by
+    simpa [Kraus.IsUnital] using
       spectralUnitalGauge_isUnital_of_transferMap_eigenvector B ρ rad hρ hrad hfix
   have hcne : ((↑((Real.sqrt rad)⁻¹) : ℂ)) ≠ 0 := by
     have hs : Real.sqrt rad ≠ 0 := ne_of_gt (Real.sqrt_pos.mpr hrad)
@@ -131,8 +130,10 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   -- channel and has a positive semidefinite fixed point, which irreducibility
   -- upgrades to a positive definite one.
   set K : MPSTensor d D := spectralUnitalGauge B rad ρ with hK
+  have hUnitalK : Kraus.IsUnital K := by
+    simpa [hK] using hUnital
   have hTPadj : ∑ v : Fin d, ((K v)ᴴ)ᴴ * (K v)ᴴ = 1 := by
-    simpa [Matrix.conjTranspose_conjTranspose] using hUnital
+    simpa only [Kraus.IsUnital, Matrix.conjTranspose_conjTranspose] using hUnitalK
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) :=
     Kraus.isChannel_transferMap (fun v => (K v)ᴴ) hTPadj
   obtain ⟨σ, hσ_psd, hσ_ne, hσ_fix⟩ :=

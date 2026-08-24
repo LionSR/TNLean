@@ -558,8 +558,6 @@ private lemma mixedTransferSpectralRadius₂_lt_one_of_dim_eq
     Kraus.mixedTransferSpectralRadius₂ A B < 1 := by
   subst hD
   simp only [cast_eq] at hgpe
-  rw [Kraus.mixedTransferSpectralRadius₂_eq, Kraus.mixedTransferMap₂_same_dim,
-    ← Kraus.mixedTransferSpectralRadius_eq]
   exact spectralRadius_mixedTransfer_lt_one_of_irreducible_TP A B hA_irr hB_irr
     hA_left hB_left hgpe
 

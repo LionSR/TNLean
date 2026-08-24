@@ -115,7 +115,7 @@ private theorem gaugePhaseEquiv_blockTensor
           ((X : Matrix (Fin D) (Fin D) ℂ) *
             blockTensor (d := d) (D := D) A L i *
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-          simp [hGauge, blockTensor]
+          simp [hGauge, Kraus.blockTensor]
 
 /-- A periodic tensor has nonzero blocked self-overlap limit after blocking by
 its period; the limit is the period itself. This restates

@@ -161,6 +161,10 @@ not a Lean parser:
   lines, not a proof of semantic equivalence. Always confirm that the
   occurrences really are the same pattern (same goal shape, not just the
   same text) before promoting.
+- It also reports signatures longer than 20 lines and theorem or lemma bodies
+  longer than 150 lines. These advisory lists identify candidates for a
+  hypothesis structure or an intermediate mathematical lemma; neither list is
+  a reason to extract a single-use wrapper mechanically.
 - It is a reporting tool, not a lint gate: it never fails CI.
 
 ## Interaction with other rules

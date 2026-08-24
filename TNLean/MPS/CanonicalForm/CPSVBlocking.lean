@@ -54,8 +54,8 @@ theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
       (blockTensor (d := d) (D := D) B p) := by
   obtain ⟨X, hX⟩ := h
   refine ⟨X, fun i ↦ ?_⟩
-  simpa [MPSTensor.blockTensor, Matrix.GeneralLinearGroup.coe_inv] using
-    evalWord_gauge (A := A) (B := B) X hX (wordOfBlock d p i)
+  simpa [Kraus.blockTensor, Matrix.GeneralLinearGroup.coe_inv] using
+    evalWord_gauge (A := A) (B := B) X hX (Kraus.wordOfBlock d p i)
 
 end GaugeEquiv
 
@@ -132,9 +132,9 @@ theorem blockTensor_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
       toTensorFromBlocks (d := blockPhysDim d p)
         (fun k ↦ μ k ^ p)
         (fun k ↦ blockTensor (d := d) (D := dim k) (blocks k) p) i := by
-  simp [MPSTensor.blockTensor, toTensorFromBlocks,
+  simp [Kraus.blockTensor, toTensorFromBlocks,
     evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal,
-    length_wordOfBlock]
+    Kraus.length_wordOfBlock]
 
 namespace CPSVCanonicalFormData
 
@@ -161,20 +161,20 @@ noncomputable def blockTensor {A : MPSTensor d D}
   coisometric := data.coisometric
   reconstruct := by
     intro i
-    have hword_ne : wordOfBlock d p i ≠ [] := by
+    have hword_ne : Kraus.wordOfBlock d p i ≠ [] := by
       intro hnil
       have hlen := congrArg List.length hnil
-      simp [length_wordOfBlock, hp.ne'] at hlen
+      simp [Kraus.length_wordOfBlock, hp.ne'] at hlen
     calc
       MPSTensor.blockTensor (d := d) (D := D) A p i =
           data.ambient_coisometryᴴ *
             Kraus.evalWord (toTensorFromBlocks (d := d) data.weights data.blocks)
-              (wordOfBlock d p i) *
+              (Kraus.wordOfBlock d p i) *
             data.ambient_coisometry := by
-            simpa [MPSTensor.blockTensor] using
+            simpa [Kraus.blockTensor] using
               evalWord_eq_coisometry_reconstruction_of_ne_nil
                 data.ambient_coisometry data.coisometric data.reconstruct
-                (wordOfBlock d p i) hword_ne
+                (Kraus.wordOfBlock d p i) hword_ne
       _ = data.ambient_coisometryᴴ *
             toTensorFromBlocks (d := blockPhysDim d p)
               (fun k ↦ data.weights k ^ p)
@@ -207,7 +207,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
     intro k
     obtain ⟨Λ, hΛpos, hΛdiag, hΛfix⟩ := data.blocks_fixed_point k
     exact ⟨Λ, hΛpos, hΛdiag, by
-      change Kraus.transferMap (MPSTensor.blockTensor (data.blocks k) p) Λ = Λ
+      change Kraus.transferMap (Kraus.blockTensor (data.blocks k) p) Λ = Λ
       exact transferMap_blockTensor_fixedPoint (data.blocks k) p Λ hΛfix⟩
 
 end CPSVCanonicalFormIIData

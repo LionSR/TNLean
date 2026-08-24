@@ -305,7 +305,7 @@ variable {d D : ℕ}
 private theorem sqrt_blockPhysDim (d p : ℕ) :
     Real.sqrt (MPSTensor.blockPhysDim d p) = Real.sqrt d ^ p := by
   suffices Real.sqrt ((d ^ p : ℕ) : ℝ) = Real.sqrt d ^ p by
-    simpa [MPSTensor.blockPhysDim] using this
+    simpa only [Kraus.blockPhysDim_eq_pow] using this
   induction p with
   | zero => simp
   | succ p ih =>
@@ -327,11 +327,11 @@ theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
   funext ij
   rw [normalizedFlattening, toMPSTensor_blockTensor]
   simp only [Kraus.reindexPhysical]
-  simp only [MPSTensor.blockTensor]
+  simp only [Kraus.blockTensor]
   change _ = Kraus.evalWord
     (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) _
-  rw [Kraus.evalWord_smul, MPSTensor.length_wordOfBlock]
-  have hsqrtC : (Real.sqrt (MPSTensor.blockPhysDim d p) : ℂ) =
+  rw [Kraus.evalWord_smul, Kraus.length_wordOfBlock]
+  have hsqrtC : (Real.sqrt (Kraus.blockPhysDim d p) : ℂ) =
       (Real.sqrt d : ℂ) ^ p := by
     rw [sqrt_blockPhysDim]
     exact Complex.ofReal_pow _ _

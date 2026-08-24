@@ -37,6 +37,7 @@ import TNLean.PEPS.FiniteKernelDescent
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
 import TNLean.PEPS.FundamentalTheorem.GaugeAction
+import TNLean.PEPS.FundamentalTheorem.LocalGaugeExtraction
 import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
@@ -57,6 +58,7 @@ import TNLean.PEPS.NormalEdgeBlockingData
 import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.NormalEdgeBlockingTranslated
+import TNLean.PEPS.NormalEdgeBlockingTranslatedCoordinate
 import TNLean.PEPS.NormalEdgeComplementCover
 import TNLean.PEPS.NormalEdgeGauge
 import TNLean.PEPS.NormalEdgeGaugeFamily

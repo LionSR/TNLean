@@ -183,8 +183,8 @@ private theorem blockTensor_M_two_eq_one
   ext a b
   fin_cases a <;> fin_cases b <;>
     norm_num [M, MPOTensor.blockTensor, MPOTensor.toMPSTensor,
-      MPSTensor.phaseFlipTensor, MPSTensor.wordOfBlock, MPOTensor.evalWord,
-      Matrix.mul_apply]
+      MPSTensor.phaseFlipTensor, Kraus.wordOfBlock, Kraus.decodeBlock,
+      MPOTensor.evalWord, Matrix.mul_apply]
 
 private theorem S_toTensor_eq_one
     (i : Fin (MPSTensor.blockPhysDim 1 2 * MPSTensor.blockPhysDim 1 2)) :

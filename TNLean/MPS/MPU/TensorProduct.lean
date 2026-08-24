@@ -78,11 +78,11 @@ Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
 noncomputable def tensorProductBlockEquiv (d e L : ℕ) :
     Fin (MPSTensor.blockPhysDim (d * e) L) ≃
       Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim e L) :=
-  (MPSTensor.decodeBlockEquiv (d * e) L).trans
+  (Kraus.decodeBlockEquiv (d * e) L).trans
     ((Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv.symm).trans
       (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin e))) |>.trans
-    (Equiv.prodCongr (MPSTensor.decodeBlockEquiv d L).symm
-      (MPSTensor.decodeBlockEquiv e L).symm) |>.trans
+    (Equiv.prodCongr (Kraus.decodeBlockEquiv d L).symm
+      (Kraus.decodeBlockEquiv e L).symm) |>.trans
     finProdFinEquiv
 
 /-- Decoding the first blocked component gives the pointwise quotient of the
@@ -91,8 +91,7 @@ blocked product letters. -/
     (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
     MPSTensor.decodeBlock d L ((tensorProductBlockEquiv d e L I).divNat) k =
       (MPSTensor.decodeBlock (d * e) L I k).divNat := by
-  simp [tensorProductBlockEquiv, Equiv.arrowCongr,
-    MPSTensor.decodeBlockEquiv_apply]
+  simp [tensorProductBlockEquiv, Equiv.arrowCongr]
 
 /-- Decoding the second blocked component gives the pointwise remainder of the
 blocked product letters. -/
@@ -100,8 +99,7 @@ blocked product letters. -/
     (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
     MPSTensor.decodeBlock e L ((tensorProductBlockEquiv d e L I).modNat) k =
       (MPSTensor.decodeBlock (d * e) L I k).modNat := by
-  simp [tensorProductBlockEquiv, Equiv.arrowCongr,
-    MPSTensor.decodeBlockEquiv_apply]
+  simp [tensorProductBlockEquiv, Equiv.arrowCongr]
 
 private theorem evalWord_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)
     (is js : List (Fin (d * e))) :
@@ -132,7 +130,7 @@ theorem blockTensor_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) (L : �
   funext I J
   simp only [blockTensor_apply, reindexPhysical, tensorProduct]
   rw [evalWord_tensorProduct]
-  simp only [MPSTensor.wordOfBlock, List.map_ofFn]
+  simp only [Kraus.wordOfBlock, List.map_ofFn]
   congr 2
   · apply congrArg₂ (evalWord U)
     · apply congrArg List.ofFn

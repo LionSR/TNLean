@@ -228,7 +228,9 @@ lemma sectorTensor_proportional_of_blockedMatch
         subst n
         let i : Fin (blockPhysDim d m) := (decodeBlockEquiv d m).symm σ
         have hword : wordOfBlock d m i = List.ofFn σ := by
-          simp [wordOfBlock, i]
+          change List.ofFn
+              (Kraus.decodeBlock d m ((Kraus.decodeBlockEquiv d m).symm σ)) = List.ofFn σ
+          rw [Kraus.decodeBlock_decodeBlockEquiv_symm]
         rw [← hword,
           cornerProd_eq_blockDiagCorner P A hP_proj hP_shift,
           cornerProd_eq_blockDiagCorner Q B hQ_proj hQ_shift]

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 
 /-!
@@ -148,16 +149,6 @@ equation of `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` into the literal
 form `ft_sector_bnt_equal_mps_gaugeEquiv_literal`, the equal-MPV corollary
 form (CPSV16 §II.C lines 354–361). -/
 
-/-- Cast of an `MPSTensor` along a bond-dimension equality, evaluated at one
-physical site and two bond indices, equals the underlying tensor evaluated at
-the inversely-cast indices. -/
-private lemma mpsTensor_cast_apply {n m : ℕ} (h : n = m) (A : MPSTensor d n)
-    (i : Fin d) (j₁ j₂ : Fin m) :
-    (cast (congr_arg (MPSTensor d) h) A) i j₁ j₂ =
-      A i (finCongr h.symm j₁) (finCongr h.symm j₂) := by
-  subst h
-  simp [finCongr]
-
 /-- Coordinate identification of `matched_p_basis` with a cast of `P.flatBasis`
 at the matched flat sector. -/
 private lemma matched_p_basis_eq_cast_flatBasis
@@ -226,11 +217,13 @@ private lemma matched_p_basis_apply
             (P := P) (Q := Q) β hDim τ s).symm m)
         (finCongr (SectorDecomposition.flatDim_sectorFlatEquiv
             (P := P) (Q := Q) β hDim τ s).symm m') := by
+  let hFlat :
+      P.flatDim (SectorDecomposition.sectorFlatEquiv
+        (P := P) (Q := Q) β τ s) = Q.flatDim s :=
+    SectorDecomposition.flatDim_sectorFlatEquiv
+      (P := P) (Q := Q) β hDim τ s
   rw [matched_p_basis_eq_cast_flatBasis (P := P) (Q := Q) β hDim τ s,
-      mpsTensor_cast_apply
-        (SectorDecomposition.flatDim_sectorFlatEquiv (P := P) (Q := Q) β hDim τ s)
-        (P.flatBasis (SectorDecomposition.sectorFlatEquiv (P := P) (Q := Q) β τ s))
-        i m m']
+      cast_eq_reindex hFlat, reindex_apply_apply hFlat]
 
 /-- `matched_p_weight β τ s = P.flatWeight (sectorFlatEquiv β τ s)`. -/
 private lemma matched_p_weight_eq_flatWeight

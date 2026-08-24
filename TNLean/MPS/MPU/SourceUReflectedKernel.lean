@@ -37,34 +37,34 @@ It is distinct from the reversal of two blocked letters caused by conjugate
 transposition in the supplied-contraction transport below. -/
 noncomputable def blockWordReverseEquiv (d K : ℕ) :
     Fin (MPSTensor.blockPhysDim d K) ≃ Fin (MPSTensor.blockPhysDim d K) :=
-  (MPSTensor.decodeBlockEquiv d K).trans
+  (Kraus.decodeBlockEquiv d K).trans
     ((Equiv.arrowCongr Fin.revPerm (Equiv.refl (Fin d))).trans
-      (MPSTensor.decodeBlockEquiv d K).symm)
+      (Kraus.decodeBlockEquiv d K).symm)
 
 @[simp] theorem decodeBlock_blockWordReverseEquiv
     (i : Fin (MPSTensor.blockPhysDim d K)) (k : Fin K) :
     MPSTensor.decodeBlock d K (blockWordReverseEquiv d K i) k =
       MPSTensor.decodeBlock d K i (Fin.rev k) := by
-  simp [blockWordReverseEquiv, MPSTensor.decodeBlockEquiv_apply]
+  simp [blockWordReverseEquiv]
 
 @[simp] theorem wordOfBlock_blockWordReverseEquiv
     (i : Fin (MPSTensor.blockPhysDim d K)) :
     MPSTensor.wordOfBlock d K (blockWordReverseEquiv d K i) =
       (MPSTensor.wordOfBlock d K i).reverse := by
-  simp only [MPSTensor.wordOfBlock]
+  simp only [Kraus.wordOfBlock]
   calc
-    List.ofFn (MPSTensor.decodeBlock d K (blockWordReverseEquiv d K i)) =
-        List.ofFn (MPSTensor.decodeBlock d K i ∘ Fin.rev) := by
+    List.ofFn (Kraus.decodeBlock d K (blockWordReverseEquiv d K i)) =
+        List.ofFn (Kraus.decodeBlock d K i ∘ Fin.rev) := by
       congr 1
       funext k
       simp
-    _ = (List.ofFn (MPSTensor.decodeBlock d K i)).reverse :=
-      (List.ofFn_reverse (MPSTensor.decodeBlock d K i)).symm
+    _ = (List.ofFn (Kraus.decodeBlock d K i)).reverse :=
+      (List.ofFn_reverse (Kraus.decodeBlock d K i)).symm
 
 @[simp] theorem blockWordReverseEquiv_involutive
     (i : Fin (MPSTensor.blockPhysDim d K)) :
     blockWordReverseEquiv d K (blockWordReverseEquiv d K i) = i := by
-  apply (MPSTensor.decodeBlockEquiv d K).injective
+  apply (Kraus.decodeBlockEquiv d K).injective
   funext k
   simp
 
@@ -143,8 +143,8 @@ theorem conjTranspose_normalizedDiagonal_reflected_eq_vecMulVec
         (fun x : Fin (D * D) ↦
           (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))
         (fun x : Fin (D * D) ↦ ρ.vec (finProdFinEquiv.symm x)) := by
-  let : NeZero (MPSTensor.blockPhysDim d K) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  let : NeZero (Kraus.blockPhysDim d K) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero K (NeZero.ne d)⟩
   rw [← physicalAdjointTensor_blockTensor]
   rw [normalizedDiagonal_doubleLayerTensor_physicalAdjointTensor, hE]
@@ -168,8 +168,8 @@ theorem reflected_transfer_power_eq_vecMulVec_transpose [NeZero d]
         (Kraus.transferMap (physicalAdjointTensor U).normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ.transpose.vec
         (1 : Matrix (Fin D) (Fin D) ℂ).vec := by
-  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
-    simpa only [MPSTensor.blockPhysDim_eq_pow] using
+  let : NeZero (Kraus.blockPhysDim d J) := ⟨by
+    simpa only [Kraus.blockPhysDim_eq_pow] using
       pow_ne_zero J (NeZero.ne d)⟩
   rw [← Equiv.apply_eq_iff_eq
     (Matrix.reindex finProdFinEquiv finProdFinEquiv)]

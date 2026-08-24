@@ -224,11 +224,13 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
             (cfii.weights k • cfii.blocks k i)) * Vᴴ := by
         rw [Matrix.mul_sum, Matrix.sum_mul]
       _ = 1 := by rw [hweightedLeft, Matrix.mul_one, hVVstar]
+  have hTP : IsTracePreservingMap (Kraus.transferMap U.normalizedFlattening) := by
+    rw [← Kraus.mapLM_eq_transferMap]
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP U.normalizedFlattening hAleft
   have hleft : Matrix.vecMul (1 : Matrix (Fin D) (Fin D) ℂ).vec
       (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
         (1 : Matrix (Fin D) (Fin D) ℂ).vec :=
-    vecMul_vec_one_transferMatrix_eq_of_trace_preserving _
-      (fun X => Kraus.trace_transferMap U.normalizedFlattening X hAleft)
+    vecMul_vec_one_transferMatrix_eq_of_trace_preserving _ hTP
   have hright : transferMatrix (Kraus.transferMap U.normalizedFlattening) *ᵥ ρ.vec =
       ρ.vec := by
     rw [transferMatrix_mulVec_eq, hρfix]

@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Core.BondReindex
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.CorrelationReduction
 import TNLean.MPS.Core.Correlations

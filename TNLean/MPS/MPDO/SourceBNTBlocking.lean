@@ -30,7 +30,7 @@ theorem wordTupleSpanTop_blockTensor_one
     (B : (j : Fin g) → MPSTensor d (dim j)) {L : ℕ}
     (hSpan : WordTupleSpanTop B L) :
     WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
-  unfold WordTupleSpanTop at hSpan ⊢
+  simp only [mps_eval] at hSpan ⊢
   have hRange :
       Set.range (wordTuple (fun j => blockTensor (B j) L) 1) =
         Set.range (wordTuple B L) := by

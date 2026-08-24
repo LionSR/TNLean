@@ -62,7 +62,7 @@ private theorem exists_right_factor_of_letter_compatibility [NeZero D]
       exists_evalWord_factor_of_letter_compatibility (A := A) hCompat (wordOfBlock d L₀ i) hword
     refine ⟨Y, ?_⟩
     intro j
-    simpa [blockTensor] using hY j
+    simpa [Kraus.blockTensor] using hY j
   choose Y hY using hBlockCompat
   let X : Matrix (Fin D) (Fin D) ℂ := ∑ i, c i • Y i
   refine ⟨X, ?_⟩

@@ -409,7 +409,7 @@ theorem iIndex_le_general_of_isPrimitivePaper [NeZero D]
       have hInvTop := wordSpan_eq_top_of_isNormal_of_isUnit B i₀ hInv hNB
       -- Use permanence to extend to level D² (since D²-krausRank B+1 ≤ D²)
       have hD2top : Kraus.wordSpan B (D ^ 2) = ⊤ := by
-        apply wordSpan_eq_top_of_ge_of_isUnit B i₀ hInv hInvTop
+        apply Kraus.wordSpan_eq_top_of_ge_of_isUnit B i₀ hInv hInvTop
         have hkB : krausRank B ≤ D ^ 2 := by
           simpa [krausRank] using Kraus.wordSpan_finrank_le B 1
         -- krausRank B ≥ 1 since B i₀ is a unit (hence nonzero) in Kraus.wordSpan B 1

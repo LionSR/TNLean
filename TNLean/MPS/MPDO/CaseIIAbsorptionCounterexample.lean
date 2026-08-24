@@ -249,7 +249,7 @@ condition is used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
 theorem sectors_wordTupleSpanTop_one :
     MPSTensor.WordTupleSpanTop sectors.basis 1 := by
   change MPSTensor.WordTupleSpanTop basis 1
-  unfold MPSTensor.WordTupleSpanTop
+  simp only [mps_eval]
   apply top_unique
   intro Y hY
   let w₀ : Fin 1 → Fin (3 * 3) := fun _ ↦ 0
@@ -266,9 +266,8 @@ theorem sectors_wordTupleSpanTop_one :
     funext s
     fin_cases s <;> ext a b <;> fin_cases a <;> fin_cases b
     · simp [MPSTensor.wordTuple, w₀, w₁, basis, firstBasisTensor,
-        evalWord, invSqrtTwo_ne_zero]
-    · simp [MPSTensor.wordTuple, w₀, w₁, basis, secondBasisTensor,
-        evalWord]
+        invSqrtTwo_ne_zero]
+    · simp [MPSTensor.wordTuple, w₀, w₁, basis, secondBasisTensor]
   rw [hEq]
   exact Submodule.add_mem _
     (Submodule.smul_mem _ _ hw₀) (Submodule.smul_mem _ _ hw₁)

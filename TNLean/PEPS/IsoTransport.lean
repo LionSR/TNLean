@@ -232,12 +232,11 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1572 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem stateCoeff_transport (A : Tensor G d) (φ : G ≃g G') (σ : W → Fin d) :
     stateCoeff (A.transport φ) σ = stateCoeff A (fun v => σ (φ v)) := by
-  unfold stateCoeff
+  simp only [mps_eval]
   rw [← Equiv.sum_comp (vcEquiv A φ).symm
         (fun η' => ∏ w : W, (A.transport φ).component w (fun ie => η' ie.1) (σ w))]
   apply Finset.sum_congr rfl
   intro η _
-  simp only
   rw [Finset.prod_congr rfl (fun w _ => transport_component_vcEquiv A φ η σ w)]
   rw [← Equiv.prod_comp φ.toEquiv (fun w => A.component (φ.symm w) (fun ie => η ie.1) (σ w))]
   apply Finset.prod_congr rfl

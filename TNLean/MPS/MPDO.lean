@@ -105,7 +105,6 @@ import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
 import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
@@ -172,6 +171,7 @@ import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.FourCycle
+import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.OverlappingLiftAlgebra
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.PositiveOverlappingProduct
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.GSNNCHSectorRescaling
@@ -222,6 +222,7 @@ import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PhysicalClosure
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
+import TNLean.MPS.MPDO.PhysicalSectorActiveCoordinates
 import TNLean.MPS.MPDO.PhysicalSectorActiveFactorSupport
 import TNLean.MPS.MPDO.PhysicalSectorActiveNeighboring
 import TNLean.MPS.MPDO.PhysicalSectorActiveRestriction
@@ -311,6 +312,7 @@ import TNLean.MPS.MPDO.SectorPairingTransfer
 import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.SelectedFixedProductSectorVisibility
+import TNLean.MPS.MPDO.SimpleLocalInverseMaps
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.SimpleVanishingCounterexample

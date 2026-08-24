@@ -45,9 +45,8 @@ theorem commutes_letters_of_adjoint_fixed_projection
     (hFix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
     ∀ i : Fin d, P * A i = A i * P := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hTPK : IsTPKraus (d := d) (D := D) A := by simpa [IsTPKraus] using hLeft
-  have hUnitalK : IsUnitalKraus (d := d) (D := D) K :=
-    KadisonSchwarz.isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTPK
+  have hUnitalK : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hLeft
   have hKFix : krausMap K P = P := by
     simpa [K, KadisonSchwarz.krausMap, Kraus.transferMap_apply] using hFix
   have hEq : krausMap K (Pᴴ * P) = (krausMap K P)ᴴ * krausMap K P := by
@@ -209,9 +208,8 @@ theorem offDiag_shift_of_adjoint_cyclic_shift [NeZero m]
     (k : Fin m) (i : Fin d) :
     P (k + 1) * A i = A i * P k := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hTPK : IsTPKraus (d := d) (D := D) A := by simpa [IsTPKraus] using hLeft
-  have hUnitalK : IsUnitalKraus (d := d) (D := D) K :=
-    KadisonSchwarz.isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTPK
+  have hUnitalK : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hLeft
   -- The adjoint transfer map agrees with the Kraus map of `K = Aᴴ`.
   have hKshift : krausMap K (P (k + 1)) = P k := by
     simpa [K, KadisonSchwarz.krausMap, Kraus.transferMap_apply] using hShift k

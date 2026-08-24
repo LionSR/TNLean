@@ -278,7 +278,7 @@ theorem regionStateVec_eq_localTensorMap (A : Tensor G d) (R : Finset V)
   rw [regionStateVec, localTensorMap, Fintype.linearCombination_apply, Finset.sum_apply]
   simp only [Pi.smul_apply, smul_eq_mul, stateOpenCoeff, Finset.sum_mul]
   -- Expand the closed state coefficient over global configurations.
-  rw [stateCoeff]
+  simp only [mps_eval]
   -- Update at `v` then assemble equals assemble then update globally.
   rw [show assembleRegionσ (V := V) (d := d) R (Function.update σ vmem a) τ =
         Function.update (assembleRegionσ (V := V) (d := d) R σ τ) v a from

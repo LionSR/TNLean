@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.TorusRectangleRegion
+import TNLean.PEPS.TorusCoordinateSwap
 
 /-!
 # The horizontal and vertical edge-blocking regions on the discrete torus
@@ -264,10 +264,8 @@ end NormalTorusRectangleInjectivityHypotheses
 
 /-! ### Vertical edge-blocking regions
 
-The rotated picture: the red block (removed horizontal edge block) is the contiguous $3\times2$
-rectangle at `(xStart + 2, yStart)`, the blue block (removed vertical edge block) is the contiguous
-$2\times3$ rectangle at `(xStart + 1, yStart + 2)`, and the only nearest-neighbour pair with one
-endpoint in each is the edge from `(xStart + 2, yStart + 1)` to `(xStart + 2, yStart + 2)`. -/
+The rotated picture is the coordinate transpose of the horizontal blocking,
+with the offsets and torus dimensions exchanged. -/
 
 /-- The red block (removed horizontal edge block) of the vertical torus edge blocking: the
 contiguous $3\times2$ rectangle at `(xStart + 2, yStart)`.
@@ -275,7 +273,8 @@ contiguous $3\times2$ rectangle at `(xStart + 2, yStart)`.
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def torusVerticalEdgeRed (xStart yStart : ℕ) : Finset (TorusVertex width height) :=
-  torusContiguousRectangle (xStart + 2) yStart 3 2
+  torusCoordinateSwapRegion
+    (torusHorizontalEdgeRed (width := height) (height := width) yStart xStart)
 
 /-- The blue block (removed vertical edge block) of the vertical torus edge blocking: the
 contiguous $2\times3$ rectangle at `(xStart + 1, yStart + 2)`.
@@ -283,36 +282,62 @@ contiguous $2\times3$ rectangle at `(xStart + 1, yStart + 2)`.
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def torusVerticalEdgeBlue (xStart yStart : ℕ) : Finset (TorusVertex width height) :=
-  torusContiguousRectangle (xStart + 1) (yStart + 2) 2 3
+  torusCoordinateSwapRegion
+    (torusHorizontalEdgeBlue (width := height) (height := width) yStart xStart)
 
-/-- The complementary block of the vertical torus edge blocking: the complement of the two removed
-blocks.
+/-- The complementary block of the vertical torus edge blocking: the coordinate
+transpose of the horizontal complementary block.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1499 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def torusVerticalEdgeComplement (xStart yStart : ℕ) : Finset (TorusVertex width height) :=
-  Finset.univ \ (torusVerticalEdgeRed xStart yStart ∪ torusVerticalEdgeBlue xStart yStart)
+  torusCoordinateSwapRegion
+    (torusHorizontalEdgeComplement (width := height) (height := width) yStart xStart)
+
+/-! ### Coordinate-swap covariance -/
+
+/-- Coordinate swap sends the horizontal red block to the vertical red block
+with the offsets and torus dimensions exchanged. -/
+@[simp] theorem torusCoordinateSwapRegion_torusHorizontalEdgeRed
+    (xStart yStart : ℕ) :
+    torusCoordinateSwapRegion
+        (torusHorizontalEdgeRed (width := width) (height := height) xStart yStart) =
+      torusVerticalEdgeRed (width := height) (height := width) yStart xStart :=
+  rfl
+
+/-- Coordinate swap sends the horizontal blue block to the vertical blue block
+with the offsets and torus dimensions exchanged. -/
+@[simp] theorem torusCoordinateSwapRegion_torusHorizontalEdgeBlue
+    (xStart yStart : ℕ) :
+    torusCoordinateSwapRegion
+        (torusHorizontalEdgeBlue (width := width) (height := height) xStart yStart) =
+      torusVerticalEdgeBlue (width := height) (height := width) yStart xStart :=
+  rfl
+
+/-- Coordinate swap sends the horizontal complementary block to the vertical
+complementary block with the offsets and torus dimensions exchanged. -/
+@[simp] theorem torusCoordinateSwapRegion_torusHorizontalEdgeComplement
+    (xStart yStart : ℕ) :
+    torusCoordinateSwapRegion
+        (torusHorizontalEdgeComplement (width := width) (height := height) xStart yStart) =
+      torusVerticalEdgeComplement (width := height) (height := width) yStart xStart :=
+  rfl
 
 @[simp] theorem mem_torusVerticalEdgeRed (xStart yStart : ℕ) (v : TorusVertex width height) :
     v ∈ torusVerticalEdgeRed xStart yStart ↔
       xStart + 2 ≤ v.1.val ∧ v.1.val < xStart + 5 ∧
         yStart ≤ v.2.val ∧ v.2.val < yStart + 2 := by
-  simp only [torusVerticalEdgeRed, mem_torusContiguousRectangle,
-    show xStart + 2 + 3 = xStart + 5 from by omega]
+  simp only [torusVerticalEdgeRed, mem_torusCoordinateSwapRegion,
+    mem_torusHorizontalEdgeRed]
+  tauto
 
 @[simp] theorem mem_torusVerticalEdgeBlue (xStart yStart : ℕ) (v : TorusVertex width height) :
     v ∈ torusVerticalEdgeBlue xStart yStart ↔
       xStart + 1 ≤ v.1.val ∧ v.1.val < xStart + 3 ∧
         yStart + 2 ≤ v.2.val ∧ v.2.val < yStart + 5 := by
-  simp only [torusVerticalEdgeBlue, mem_torusContiguousRectangle,
-    show xStart + 1 + 2 = xStart + 3 from by omega, show yStart + 2 + 3 = yStart + 5 from by omega]
-
-@[simp] theorem mem_torusVerticalEdgeComplement (xStart yStart : ℕ)
-    (v : TorusVertex width height) :
-    v ∈ torusVerticalEdgeComplement xStart yStart ↔
-      v ∉ torusVerticalEdgeRed xStart yStart ∧ v ∉ torusVerticalEdgeBlue xStart yStart := by
-  simp only [torusVerticalEdgeComplement, Finset.mem_sdiff, Finset.mem_univ, true_and,
-    Finset.mem_union, not_or]
+  simp only [torusVerticalEdgeBlue, mem_torusCoordinateSwapRegion,
+    mem_torusHorizontalEdgeBlue]
+  tauto
 
 /-! ### Partition by the three vertical regions -/
 
@@ -323,29 +348,36 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443 of
 theorem torusVerticalEdgeRed_disjoint_blue (xStart yStart : ℕ) :
     Disjoint (torusVerticalEdgeRed (width := width) (height := height) xStart yStart)
       (torusVerticalEdgeBlue xStart yStart) := by
-  rw [Finset.disjoint_left]
-  intro v hRed hBlue
-  rw [mem_torusVerticalEdgeRed] at hRed
-  rw [mem_torusVerticalEdgeBlue] at hBlue
-  omega
+  rw [← torusCoordinateSwapRegion_torusHorizontalEdgeRed
+    (width := height) (height := width) yStart xStart,
+    ← torusCoordinateSwapRegion_torusHorizontalEdgeBlue
+      (width := height) (height := width) yStart xStart]
+  simpa only [torusCoordinateSwapRegion, Finset.disjoint_map] using
+      torusHorizontalEdgeRed_disjoint_blue (width := height) (height := width) yStart xStart
 
 /-- The vertical red block is disjoint from the complement. -/
 theorem torusVerticalEdgeRed_disjoint_complement (xStart yStart : ℕ) :
     Disjoint (torusVerticalEdgeRed (width := width) (height := height) xStart yStart)
       (torusVerticalEdgeComplement xStart yStart) := by
-  rw [Finset.disjoint_left]
-  intro v hRed hCompl
-  rw [mem_torusVerticalEdgeComplement] at hCompl
-  exact hCompl.1 hRed
+  rw [← torusCoordinateSwapRegion_torusHorizontalEdgeRed
+    (width := height) (height := width) yStart xStart,
+    ← torusCoordinateSwapRegion_torusHorizontalEdgeComplement
+      (width := height) (height := width) yStart xStart]
+  simpa only [torusCoordinateSwapRegion, Finset.disjoint_map] using
+      torusHorizontalEdgeRed_disjoint_complement
+        (width := height) (height := width) yStart xStart
 
 /-- The vertical blue block is disjoint from the complement. -/
 theorem torusVerticalEdgeBlue_disjoint_complement (xStart yStart : ℕ) :
     Disjoint (torusVerticalEdgeBlue (width := width) (height := height) xStart yStart)
       (torusVerticalEdgeComplement xStart yStart) := by
-  rw [Finset.disjoint_left]
-  intro v hBlue hCompl
-  rw [mem_torusVerticalEdgeComplement] at hCompl
-  exact hCompl.2 hBlue
+  rw [← torusCoordinateSwapRegion_torusHorizontalEdgeBlue
+    (width := height) (height := width) yStart xStart,
+    ← torusCoordinateSwapRegion_torusHorizontalEdgeComplement
+      (width := height) (height := width) yStart xStart]
+  simpa only [torusCoordinateSwapRegion, Finset.disjoint_map] using
+      torusHorizontalEdgeBlue_disjoint_complement
+        (width := height) (height := width) yStart xStart
 
 /-- The three vertical regions cover the torus.
 
@@ -355,63 +387,10 @@ theorem torusVerticalEdge_cover_univ (xStart yStart : ℕ) :
     torusVerticalEdgeRed (width := width) (height := height) xStart yStart ∪
         torusVerticalEdgeBlue xStart yStart ∪ torusVerticalEdgeComplement xStart yStart =
       Finset.univ := by
-  ext v
-  simp only [Finset.mem_union, mem_torusVerticalEdgeComplement, Finset.mem_univ, iff_true]
-  by_cases hRed : v ∈ torusVerticalEdgeRed xStart yStart
-  · exact Or.inl (Or.inl hRed)
-  · by_cases hBlue : v ∈ torusVerticalEdgeBlue xStart yStart
-    · exact Or.inl (Or.inr hBlue)
-    · exact Or.inr ⟨hRed, hBlue⟩
-
-/-! ### The vertical complementary cover -/
-
-/-- The six rectangular pieces covering the vertical edge-complement block on the torus: four
-surrounding bands and two filler $2\times3$ rectangles.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-def torusVerticalEdgeComplementPiece (xStart yStart : ℕ) :
-    Fin 6 → Finset (TorusVertex width height)
-  | 0 => torusContiguousRectangle 0 0 width yStart
-  | 1 => torusContiguousRectangle 0 (yStart + 5) width (height - (yStart + 5))
-  | 2 => torusContiguousRectangle 0 0 (xStart + 1) height
-  | 3 => torusContiguousRectangle (xStart + 5) 0 (width - (xStart + 5)) height
-  | 4 => torusContiguousRectangle xStart (yStart - 1) 2 3
-  | 5 => torusContiguousRectangle (xStart + 3) (yStart + 2) 2 3
-
-/-- The vertical edge-complement block on the torus is the union of its six covering pieces.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem torusVerticalEdgeComplement_eq_biUnion_pieces {xStart yStart : ℕ}
-    (hy0 : 1 ≤ yStart) (hxw : xStart + 5 ≤ width) (hyh : yStart + 5 ≤ height) :
-    torusVerticalEdgeComplement (width := width) (height := height) xStart yStart =
-      (Finset.univ : Finset (Fin 6)).biUnion
-        (torusVerticalEdgeComplementPiece xStart yStart) := by
-  ext v
-  have hvx : v.1.val < width := v.1.val_lt
-  have hvy : v.2.val < height := v.2.val_lt
-  simp only [mem_torusVerticalEdgeComplement, mem_torusVerticalEdgeRed,
-    mem_torusVerticalEdgeBlue, Finset.mem_biUnion, Finset.mem_univ, true_and, not_and, not_lt]
-  constructor
-  · intro hv
-    obtain ⟨hRed, hBlue⟩ := hv
-    by_cases hb : v.2.val < yStart
-    · exact ⟨0, by simp [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle]; omega⟩
-    by_cases ht : yStart + 5 ≤ v.2.val
-    · exact ⟨1, by simp [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle]; omega⟩
-    by_cases hl : v.1.val < xStart + 1
-    · exact ⟨2, by simp [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle]; omega⟩
-    by_cases hr : xStart + 5 ≤ v.1.val
-    · exact ⟨3, by simp [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle]; omega⟩
-    -- inside the bounding box of the rotated hole; the two fillers cover the non-hole cells
-    by_cases hf1 : v.2.val < yStart + 2
-    · exact ⟨4, by simp [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle]; omega⟩
-    · exact ⟨5, by simp [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle]; omega⟩
-  · rintro ⟨i, hi⟩
-    fin_cases i <;>
-      · simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle] at hi
-        refine ⟨fun _ _ _ => by omega, fun _ _ _ => by omega⟩
+  have h := congrArg torusCoordinateSwapRegion
+    (torusHorizontalEdge_cover_univ (width := height) (height := width) yStart xStart)
+  simpa only [torusVerticalEdgeRed, torusVerticalEdgeBlue, torusVerticalEdgeComplement,
+    torusCoordinateSwapRegion, Finset.map_union, Finset.map_univ_equiv] using h
 
 namespace NormalTorusRectangleInjectivityHypotheses
 
@@ -425,8 +404,11 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1405--1444 of
 theorem verticalEdgeRed_injective
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 2 ≤ height) :
-    κ.IsInjective (torusVerticalEdgeRed (width := width) (height := height) xStart yStart) :=
-  h.rect32_injective (by omega) hy
+    κ.IsInjective (torusVerticalEdgeRed (width := width) (height := height) xStart yStart) := by
+  simpa only [torusVerticalEdgeRed,
+    RegionInjectivityData.coordinateSwap_isInjective] using
+      h.coordinateSwap.horizontalEdgeRed_injective
+        (xStart := yStart) (yStart := xStart) hy hx
 
 /-- The vertical blue block (removed vertical edge block) is injective under the torus rectangular
 injectivity hypotheses.
@@ -436,13 +418,15 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1405--1444 of
 theorem verticalEdgeBlue_injective
     (h : NormalTorusRectangleInjectivityHypotheses κ)
     {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 5 ≤ height) :
-    κ.IsInjective (torusVerticalEdgeBlue (width := width) (height := height) xStart yStart) :=
-  h.rect23_injective (by omega) (by omega)
+    κ.IsInjective (torusVerticalEdgeBlue (width := width) (height := height) xStart yStart) := by
+  simpa only [torusVerticalEdgeBlue,
+    RegionInjectivityData.coordinateSwap_isInjective] using
+      h.coordinateSwap.horizontalEdgeBlue_injective
+        (xStart := yStart) (yStart := xStart) hy hx
 
 /-- **The vertical edge-complement block on the torus is injective.**
 
-The rotated counterpart of `horizontalEdgeComplement_injective`: the complementary block is the
-union of four surrounding bands and two filler rectangles, each a contiguous torus rectangle.
+This is the coordinate transpose of `horizontalEdgeComplement_injective`.
 Below and to the left the rotated removed L-shape keeps a margin of at least two rows
 (`2 ≤ yStart`) and at least two columns (`1 ≤ xStart`, counting the L-shape's own free column);
 above and to the right the margin is either zero — the blocking touches the seam, the band is
@@ -458,29 +442,10 @@ theorem verticalEdgeComplement_injective
     (hyh : yStart + 5 = height ∨ yStart + 7 ≤ height) :
     κ.IsInjective
       (torusVerticalEdgeComplement (width := width) (height := height) xStart yStart) := by
-  rw [torusVerticalEdgeComplement_eq_biUnion_pieces (by omega) (by omega) (by omega)]
-  refine hUnion.biUnion_injective_of_nonempty _
-    ⟨2, Finset.mem_univ _, ⟨((0 : ZMod width), (0 : ZMod height)), by
-      simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle, ZMod.val_zero]
-      omega⟩⟩ ?_
-  intro i _ hne
-  fin_cases i
-  · -- bottom band: width × yStart, short rectangle (width ≥ 3, yStart ≥ 2)
-    exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- top band: width × (height - (yStart + 5)), short rectangle when nonempty
-    obtain ⟨v, hv⟩ := hne
-    simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle] at hv
-    exact h.shortRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- left band: (xStart + 1) × height, wide rectangle (xStart + 1 ≥ 2, height ≥ 3)
-    exact h.wideRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- right band: (width - (xStart + 5)) × height, wide rectangle when nonempty
-    obtain ⟨v, hv⟩ := hne
-    simp only [torusVerticalEdgeComplementPiece, mem_torusContiguousRectangle] at hv
-    exact h.wideRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-  · -- first filler: 2 × 3
-    exact h.rect23_injective (by omega) (by omega)
-  · -- second filler: 2 × 3
-    exact h.rect23_injective (by omega) (by omega)
+  simpa only [torusVerticalEdgeComplement,
+    RegionInjectivityData.coordinateSwap_isInjective] using
+      h.coordinateSwap.horizontalEdgeComplement_injective hUnion.coordinateSwap
+        (xStart := yStart) (yStart := xStart) hy0 hx0 hyh hxw
 
 end NormalTorusRectangleInjectivityHypotheses
 

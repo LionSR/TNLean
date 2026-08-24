@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransport
-import TNLean.PEPS.TorusWindowComplement
+import TNLean.PEPS.TorusRectangleRegion
 
 /-!
 # Coordinate swap on the discrete torus
 
 Interchanging the two coordinates identifies the `width × height` torus with the
 `height × width` torus. This file records the graph isomorphism and the covariance
-of cyclic rectangles under that isomorphism. These lemmas let proofs for horizontal
-windows be reused for their vertical transposes.
+of finite regions and coordinate rectangles under that isomorphism. These lemmas let
+proofs for horizontal regions be reused for their vertical transposes.
 -/
 
 namespace TNLean
@@ -57,32 +57,6 @@ def torusCoordinateSwapRegion {width height : ℕ}
     v ∈ torusCoordinateSwapRegion R ↔ (v.2, v.1) ∈ R := by
   simp [torusCoordinateSwapRegion]
 
-/-- Coordinate swap preserves unions of finite regions. -/
-@[deprecated "Expand `torusCoordinateSwapRegion` and use `Finset.map_union`."
-  (since := "2026-07-30")]
-theorem torusCoordinateSwapRegion_union {width height : ℕ}
-    (R S : Finset (TorusVertex width height)) :
-    torusCoordinateSwapRegion (R ∪ S) =
-      torusCoordinateSwapRegion R ∪ torusCoordinateSwapRegion S := by
-  ext v
-  simp only [mem_torusCoordinateSwapRegion, Finset.mem_union]
-
-/-- Coordinate swap commutes with finite indexed unions. -/
-theorem torusCoordinateSwapRegion_biUnion {width height : ℕ} {ι : Type*}
-    (s : Finset ι) (R : ι → Finset (TorusVertex width height)) :
-    torusCoordinateSwapRegion (s.biUnion R) =
-      s.biUnion (fun i => torusCoordinateSwapRegion (R i)) := by
-  ext v
-  simp only [mem_torusCoordinateSwapRegion, Finset.mem_biUnion]
-
-/-- Coordinate swap preserves inclusion of finite regions. -/
-theorem torusCoordinateSwapRegion_mono {width height : ℕ}
-    {R S : Finset (TorusVertex width height)} (h : R ⊆ S) :
-    torusCoordinateSwapRegion R ⊆ torusCoordinateSwapRegion S := by
-  intro v hv
-  rw [mem_torusCoordinateSwapRegion] at hv ⊢
-  exact h hv
-
 /-- Swapping both coordinates of a finite region returns the original region. -/
 @[simp] theorem torusCoordinateSwapRegion_swap {width height : ℕ}
     (R : Finset (TorusVertex width height)) :
@@ -90,14 +64,62 @@ theorem torusCoordinateSwapRegion_mono {width height : ℕ}
   ext v
   simp only [mem_torusCoordinateSwapRegion]
 
-/-- Coordinate swap transposes a cyclic rectangle and exchanges its side lengths. -/
-theorem torusCoordinateSwapRegion_torusArcRectangle {width height : ℕ}
-    [NeZero width] [NeZero height] (s : TorusVertex width height) (xLen yLen : ℕ) :
-    torusCoordinateSwapRegion (torusArcRectangle s xLen yLen) =
-      torusArcRectangle (s.2, s.1) yLen xLen := by
+/-- Coordinate swap transposes a contiguous rectangle and exchanges its side lengths. -/
+theorem torusCoordinateSwapRegion_torusContiguousRectangle {width height : ℕ}
+    [NeZero width] [NeZero height] (xStart yStart xLen yLen : ℕ) :
+    torusCoordinateSwapRegion
+        (torusContiguousRectangle xStart yStart xLen yLen :
+          Finset (TorusVertex width height)) =
+      (torusContiguousRectangle yStart xStart yLen xLen :
+        Finset (TorusVertex height width)) := by
   ext v
-  simp only [mem_torusCoordinateSwapRegion, mem_torusArcRectangle]
-  exact and_comm
+  simp only [mem_torusCoordinateSwapRegion, mem_torusContiguousRectangle]
+  tauto
+
+/-! ### Coordinate swap of abstract region-injectivity data -/
+
+/-- Pull region-injectivity data back along coordinate swap. -/
+def RegionInjectivityData.coordinateSwap {width height : ℕ}
+    (κ : RegionInjectivityData (TorusVertex width height)) :
+    RegionInjectivityData (TorusVertex height width) where
+  IsInjective R := κ.IsInjective (torusCoordinateSwapRegion R)
+
+@[simp] theorem RegionInjectivityData.coordinateSwap_isInjective
+    {width height : ℕ} (κ : RegionInjectivityData (TorusVertex width height))
+    (R : Finset (TorusVertex height width)) :
+    κ.coordinateSwap.IsInjective R ↔
+      κ.IsInjective (torusCoordinateSwapRegion R) :=
+  Iff.rfl
+
+/-- Coordinate swap exchanges the two rectangular source shapes and hence
+preserves the rectangular-injectivity hypotheses. -/
+theorem NormalTorusRectangleInjectivityHypotheses.coordinateSwap
+    {width height : ℕ} [NeZero width] [NeZero height]
+    {κ : RegionInjectivityData (TorusVertex width height)}
+    (h : NormalTorusRectangleInjectivityHypotheses κ) :
+    NormalTorusRectangleInjectivityHypotheses κ.coordinateSwap where
+  twoByThree_injective := by
+    rintro R ⟨xStart, yStart, hx, hy, rfl⟩
+    rw [RegionInjectivityData.coordinateSwap_isInjective,
+      torusCoordinateSwapRegion_torusContiguousRectangle]
+    exact h.rect32_injective hy hx
+  threeByTwo_injective := by
+    rintro R ⟨xStart, yStart, hx, hy, rfl⟩
+    rw [RegionInjectivityData.coordinateSwap_isInjective,
+      torusCoordinateSwapRegion_torusContiguousRectangle]
+    exact h.rect23_injective hy hx
+
+/-- Coordinate swap preserves closure of abstract region injectivity under unions. -/
+theorem RegionInjectivityUnionClosure.coordinateSwap
+    {width height : ℕ}
+    {κ : RegionInjectivityData (TorusVertex width height)}
+    (h : RegionInjectivityUnionClosure κ) :
+    RegionInjectivityUnionClosure κ.coordinateSwap where
+  union_injective := by
+    intro R S hR hS
+    change κ.IsInjective (torusCoordinateSwapRegion (R ∪ S))
+    simpa only [torusCoordinateSwapRegion, Finset.map_union] using
+      h.union_injective hR hS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
@@ -121,40 +143,6 @@ def torusCoordinateSwap :
     (torusCoordinateSwap (width := width) (height := height)).symm =
       torusCoordinateSwap (width := height) (height := width) :=
   rfl
-
-/-- Coordinate swap sends horizontal edges to vertical edges. -/
-@[deprecated "Use `torusHorizontalNeighbor_coordinateSwap` together with
-`Edge.map_endpoints`." (since := "2026-07-30")]
-theorem torusCoordinateSwap_isVertical {e : Edge (torusGraph width height)}
-    (he : IsHorizontalTorusEdge e) :
-    IsVerticalTorusEdge (Edge.map torusCoordinateSwap e) := by
-  have h := (torusHorizontalNeighbor_coordinateSwap (v := e.1.1) (w := e.1.2)).mpr he
-  rcases Edge.map_endpoints torusCoordinateSwap e with hends | hends
-  · unfold IsVerticalTorusEdge
-    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.1 from hends.1,
-      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.2 from hends.2]
-    exact h
-  · unfold IsVerticalTorusEdge
-    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.2 from hends.1,
-      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.1 from hends.2]
-    exact torusVerticalNeighbor_symm h
-
-/-- Coordinate swap sends vertical edges to horizontal edges. -/
-@[deprecated "Use `torusVerticalNeighbor_coordinateSwap` together with
-`Edge.map_endpoints`." (since := "2026-07-30")]
-theorem torusCoordinateSwap_isHorizontal {e : Edge (torusGraph width height)}
-    (he : IsVerticalTorusEdge e) :
-    IsHorizontalTorusEdge (Edge.map torusCoordinateSwap e) := by
-  have h := (torusVerticalNeighbor_coordinateSwap (v := e.1.1) (w := e.1.2)).mpr he
-  rcases Edge.map_endpoints torusCoordinateSwap e with hends | hends
-  · unfold IsHorizontalTorusEdge
-    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.1 from hends.1,
-      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.2 from hends.2]
-    exact h
-  · unfold IsHorizontalTorusEdge
-    rw [show (Edge.map torusCoordinateSwap e).1.1 = torusCoordinateSwap e.1.2 from hends.1,
-      show (Edge.map torusCoordinateSwap e).1.2 = torusCoordinateSwap e.1.1 from hends.2]
-    exact torusHorizontalNeighbor_symm h
 
 end PEPS
 end TNLean

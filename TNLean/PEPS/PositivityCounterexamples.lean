@@ -152,11 +152,11 @@ instance : IsEmpty (VirtualConfig B3) := by
   exact h.elim0
 
 theorem stateCoeff_A3 (σ : V3 → Fin 2) : stateCoeff A3 σ = 0 := by
-  simp only [stateCoeff]
+  simp only [mps_eval]
   rw [Finset.univ_eq_empty, Finset.sum_empty]
 
 theorem stateCoeff_B3 (σ : V3 → Fin 2) : stateCoeff B3 σ = 0 := by
-  simp only [stateCoeff]
+  simp only [mps_eval]
   rw [Finset.univ_eq_empty, Finset.sum_empty]
 
 /-! ### The three source hypotheses hold; the conclusion fails. -/

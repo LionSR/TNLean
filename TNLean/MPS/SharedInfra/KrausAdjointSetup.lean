@@ -19,8 +19,6 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
-open KadisonSchwarz
-
 /-- From an irreducible TP tensor, derive the conjugate-transposed Kraus family `K`,
 its unitality and irreducibility, and a `PosDef` fixed point `ρ` of `Kraus.adjointMap K`.
 
@@ -31,7 +29,7 @@ theorem conjTranspose_kraus_setup
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ (K : MPSTensor d D)
-      (_ : IsUnitalKraus (d := d) (D := D) K)
+      (_ : Kraus.IsUnital K)
       (_ : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K))
       (ρ : Matrix (Fin D) (Fin D) ℂ)
       (_ : ρ.PosDef)
@@ -40,10 +38,8 @@ theorem conjTranspose_kraus_setup
   classical
   have hDpos : 0 < D := NeZero.pos D
   let K : MPSTensor d D := fun i => (A i)ᴴ
-  have hTP' : IsTPKraus (d := d) (D := D) A := by
-    simpa [IsTPKraus] using hTP
-  have h_unitalK : IsUnitalKraus (d := d) (D := D) K :=
-    isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
+  have h_unitalK : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hTP
   have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrr
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=

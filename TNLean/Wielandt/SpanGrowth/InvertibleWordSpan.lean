@@ -39,14 +39,6 @@ theorem krausRank_oneStepAugment (A : MPSTensor d D)
   unfold krausRank
   rw [Kraus.wordSpan_oneStepAugment_eq A hX 1]
 
-/-- If one word span is full and a tensor entry is invertible, every later
-word span is full. -/
-theorem wordSpan_eq_top_of_ge_of_isUnit (A : MPSTensor d D)
-    (i₀ : Fin d) (hU : IsUnit (A i₀)) {N : ℕ}
-    (hN : Kraus.wordSpan A N = ⊤) {m : ℕ} (hm : N ≤ m) :
-    Kraus.wordSpan A m = ⊤ :=
-  Kraus.wordSpan_eq_top_of_ge_of_isUnit A i₀ hU hN hm
-
 private theorem hasEventuallyFullWordSpan_of_isNormal_of_isUnit
     (A : MPSTensor d D) (i₀ : Fin d) (hU : IsUnit (A i₀))
     (hN : Kraus.IsNormal A) : Kraus.HasEventuallyFullWordSpan A := by

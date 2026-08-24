@@ -26,6 +26,7 @@ import TNLean.PEPS.RegionBlock.CoarseThreeSite8
 import TNLean.PEPS.RegionBlock.CoarseThreeSite9
 import TNLean.PEPS.RegionBlock.CoarseThreeSiteMul
 import TNLean.PEPS.RegionBlock.GaugeBridge
+import TNLean.PEPS.RegionBlock.GaugeBridgeExpansion
 import TNLean.PEPS.RegionBlock.GaugeInjectivity
 import TNLean.PEPS.RegionBlock.GaugeInjectivity2
 import TNLean.PEPS.RegionBlock.InsertResidual

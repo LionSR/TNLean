@@ -79,7 +79,7 @@ theorem prod_perVertexScalar_eq_one_of_regionInjective (A B : Tensor G d)
         = ∑ η : VirtualConfig A,
             (∏ v, c v) * ∏ v, gaugeVertex B Z v
               (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v) := by
-      unfold stateCoeff
+      simp only [mps_eval]
       refine Finset.sum_congr rfl (fun η _ => ?_)
       rw [← Finset.prod_mul_distrib]
       refine Finset.prod_congr rfl (fun v _ => ?_)
@@ -88,7 +88,7 @@ theorem prod_perVertexScalar_eq_one_of_regionInjective (A B : Tensor G d)
     have hsum : (∑ η : VirtualConfig A, ∏ v, gaugeVertex B Z v
             (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v))
         = stateCoeff (applyGauge B Z) σ := by
-      unfold stateCoeff
+      simp only [mps_eval]
       refine Fintype.sum_equiv
         (Equiv.piCongrRight (fun e => finCongr (congr_fun hbd e)))
         (fun η : VirtualConfig A => ∏ v, gaugeVertex B Z v

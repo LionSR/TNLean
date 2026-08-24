@@ -98,8 +98,8 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
     Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)) := by
   -- First derive `trace((Kraus.transferMap A)^N) → 1`.
   have hTP : IsTracePreservingMap (Kraus.transferMap (d := d) (D := D) A) := by
-    intro X
-    exact Kraus.trace_transferMap A X hNorm
+    rw [← Kraus.mapLM_eq_transferMap]
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hNorm
   have htrρ : Matrix.trace ρ ≠ 0 := by
     intro htr0
     exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)

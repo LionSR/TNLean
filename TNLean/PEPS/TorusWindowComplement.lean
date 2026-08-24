@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusWindowRegion
+import TNLean.PEPS.TorusCoordinateSwap
 
 /-!
 # Seam-wrapping window complements on the torus
@@ -107,6 +108,15 @@ def torusArcRectangle (s : TorusVertex width height) (xLen yLen : ℕ) :
     v ∈ torusArcRectangle s xLen yLen ↔
       (v.1 - s.1).val < xLen ∧ (v.2 - s.2).val < yLen := by
   simp [torusArcRectangle]
+
+/-- Coordinate swap transposes a cyclic rectangle and exchanges its side lengths. -/
+theorem torusCoordinateSwapRegion_torusArcRectangle {width height : ℕ}
+    [NeZero width] [NeZero height] (s : TorusVertex width height) (xLen yLen : ℕ) :
+    torusCoordinateSwapRegion (torusArcRectangle s xLen yLen) =
+      torusArcRectangle (s.2, s.1) yLen xLen := by
+  ext v
+  simp only [mem_torusCoordinateSwapRegion, mem_torusArcRectangle]
+  exact and_comm
 
 /-- A wraparound-free cyclic rectangle is the coordinate rectangle of
 `TNLean/PEPS/TorusRectangleRegion.lean`: when the offsets and positive lengths
@@ -286,39 +296,6 @@ theorem verticalAdjacentWindows_union {L K : ℕ} (hK : 0 < K) (hh : 1 < height)
     · exact Or.inl ⟨h1, hc⟩
     · refine Or.inr ⟨h1, ?_⟩
       rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < 1)]; omega
-
-namespace NormalTorusArcWindowInjectivityHypotheses
-
-variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
-
-/-- A horizontally consecutive-window union is injective: it is the
-`(L + 1) × K` cyclic rectangle, a width-at-least-`L`, height-at-least-`K`
-rectangle.
-
-Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 1. -/
-theorem horizontalUnion_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
-    κ.IsInjective (torusArcRectangle s (L + 1) K) :=
-  h.arcRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-    (by omega) (by omega)
-
-/-- A vertically consecutive-window union is injective: it is the `L × (K + 1)`
-cyclic rectangle.
-
-Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 1. -/
-theorem verticalUnion_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
-    κ.IsInjective (torusArcRectangle s L (K + 1)) :=
-  h.arcRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-    (by omega) (by omega)
-
-end NormalTorusArcWindowInjectivityHypotheses
 
 /-! ### The two-piece complement of a cyclic rectangle
 

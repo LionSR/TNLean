@@ -107,10 +107,8 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   classical
   -- Work with the conjugate-transposed Kraus family `K i = (A i)ᴴ`.
   let K : MPSTensor d D := fun i => (A i)ᴴ
-  have hTP' : KadisonSchwarz.IsTPKraus (d := d) (D := D) A := by
-    simpa only [KadisonSchwarz.IsTPKraus] using hTP
-  have h_unitalK : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K :=
-    KadisonSchwarz.isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
+  have h_unitalK : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hTP
   -- Irreducibility of `Kraus.transferMap K` from tensor-irreducibility of `A`.
   have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrrT
@@ -148,7 +146,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   -- `1` is a nonzero fixed point of `E` by unitality.
   have hfix_one : E (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
     simpa only [E, K, Kraus.transferMap_apply, mul_one, conjTranspose_conjTranspose,
-      KadisonSchwarz.IsUnitalKraus] using h_unitalK
+      Kraus.IsUnital] using h_unitalK
   have hone_ne : (1 : Matrix (Fin D) (Fin D) ℂ) ≠ 0 := by
     classical
     let i0 : Fin D := ⟨0, hDpos⟩

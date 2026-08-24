@@ -51,13 +51,13 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
   have : NeZero D := by
     rcases ‹Nonempty (Fin D)› with ⟨i⟩
     exact ⟨Nat.ne_of_gt (lt_of_le_of_lt (Nat.zero_le i.1) i.2)⟩
-  have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by
-    simpa [Kraus.transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
+  have hUnitalFamily : Kraus.IsUnital A := by
+    simpa [Kraus.transferMap_apply, Matrix.mul_one, Kraus.IsUnital]
       using hUnital
   have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) := by
     rw [Kraus.mapLM_eq_transferMap]
     exact isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
   have hfix_map : Kraus.mapLM A X = X := by rw [Kraus.mapLM_eq_transferMap]; exact hfix
-  exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalKraus hIrrMap X hfix_map
+  exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalFamily hIrrMap X hfix_map
 
 end MPSTensor

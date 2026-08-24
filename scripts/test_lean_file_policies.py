@@ -13,6 +13,8 @@ from pathlib import Path
 
 import check_numbered_lean_files as numbered
 import check_oversized_lean_files as oversized
+import check_orphan_lean_modules as orphan
+import check_dead_lean_declarations as dead
 
 
 class CapturedCheck(unittest.TestCase):
@@ -217,6 +219,16 @@ class OversizedLeanFilePolicyTests(CapturedCheck):
         self.assertIn("concept-named modules", output)
         self.assertIn("Foo2.lean", output)
 
+    def test_near_limit_module_warns_without_failing(self) -> None:
+        self.write(
+            "TNLean/NearLimit.lean",
+            "def x := 1\n" * oversized.EARLY_WARNING_THRESHOLD,
+        )
+        status, output = self.capture(oversized.check_files, self.root, set(), set())
+        self.assertEqual(status, 0)
+        self.assertIn("approaching size limit", output)
+        self.assertIn("1 file(s) are in the", output)
+
     def test_exact_import_only_aggregator_is_exempt(self) -> None:
         source = "/- generated\n  /- nested comment -/\n-/\n" + (
             "import TNLean.Algebra.Basic -- public import\n" * (oversized.THRESHOLD + 1)
@@ -267,6 +279,195 @@ class OversizedLeanFilePolicyTests(CapturedCheck):
         )
         self.assertEqual(status, 1)
         self.assertIn("unterminated block comment", output)
+
+
+class LeanDebtRatchetTestBase(CapturedCheck):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory()
+        self.root = Path(self.temporary.name)
+        subprocess.run(["git", "init", "-q", str(self.root)], check=True)
+
+    def tearDown(self) -> None:
+        self.temporary.cleanup()
+
+    def write(self, relative: str, source: str) -> None:
+        path = self.root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(source, encoding="utf-8")
+
+    def track(self, relative: str, source: str) -> None:
+        self.write(relative, source)
+        subprocess.run(["git", "-C", str(self.root), "add", relative], check=True)
+
+
+class OrphanLeanModulePolicyTests(LeanDebtRatchetTestBase):
+    def check(
+        self,
+        allowlist: frozenset[str] = frozenset(),
+        base_allowlist: frozenset[str] | None = None,
+    ) -> tuple[int, str]:
+        return self.capture(
+            orphan.check_orphan_modules,
+            self.root,
+            allowlist,
+            base_allowlist,
+        )
+
+    def test_new_declaration_bearing_orphan_fails(self) -> None:
+        self.track("TNLean/Lonely.lean", "def lonely : Nat := 1\n")
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("no handwritten importer", output)
+
+    def test_unignored_new_module_is_checked_before_staging(self) -> None:
+        self.write("TNLean/NewLonely.lean", "def newLonely : Nat := 1\n")
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("NewLonely.lean", output)
+
+    def test_inline_attributed_declaration_still_makes_module_nonempty(self) -> None:
+        self.track(
+            "TNLean/Attributed.lean",
+            "@[simp] theorem attributed : True := by trivial\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("Attributed.lean", output)
+
+    def test_alias_only_module_is_checked(self) -> None:
+        self.track(
+            "TNLean/AliasOnly.lean",
+            "alias lonelyAlias := Nat.succ_le_succ_iff\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("AliasOnly.lean", output)
+
+    def test_handwritten_import_and_blueprint_citation_are_consumers(self) -> None:
+        self.track("TNLean/Basic.lean", "def basicValue : Nat := 1\n")
+        self.track(
+            "TNLean/Use.lean",
+            "import TNLean.Basic\n\ndef publicUse : Nat := basicValue\n",
+        )
+        self.track(
+            "blueprint/src/chapter/test.tex",
+            "\\lean{publicUse}\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 0)
+        self.assertIn("0 current orphan", output)
+
+    def test_existing_orphan_is_allowed_but_allowlist_cannot_grow(self) -> None:
+        path = "TNLean/Lonely.lean"
+        self.track(path, "def lonely : Nat := 1\n")
+        status, _ = self.check(frozenset({path}))
+        self.assertEqual(status, 0)
+        ratchet_status, output = self.check(
+            frozenset({path}),
+            base_allowlist=frozenset(),
+        )
+        self.assertEqual(ratchet_status, 1)
+        self.assertIn("allowlist; this set may only shrink", output)
+
+    def test_stale_orphan_entry_fails(self) -> None:
+        status, output = self.check(frozenset({"TNLean/Gone.lean"}))
+        self.assertEqual(status, 1)
+        self.assertIn("stale orphan-module allowlist entry", output)
+
+
+class DeadLeanDeclarationPolicyTests(LeanDebtRatchetTestBase):
+    def check(
+        self,
+        allowlist: frozenset[str] = frozenset(),
+        base_allowlist: frozenset[str] | None = None,
+    ) -> tuple[int, str]:
+        return self.capture(
+            dead.check_dead_declarations,
+            self.root,
+            allowlist,
+            base_allowlist,
+        )
+
+    def test_new_single_occurrence_declaration_fails(self) -> None:
+        self.track("TNLean/Lonely.lean", "def lonelyValue : Nat := 1\n")
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("no second textual occurrence", output)
+
+    def test_unignored_new_declaration_is_checked_before_staging(self) -> None:
+        self.write("TNLean/NewLonely.lean", "def newLonelyValue : Nat := 1\n")
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("newLonelyValue", output)
+
+    def test_inline_attributed_declaration_is_not_name_counted(self) -> None:
+        self.track(
+            "TNLean/InlineSimp.lean",
+            "@[simp] theorem inlineSimp : True := by trivial\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 0)
+        self.assertIn("0 current single-occurrence", output)
+
+    def test_preceding_attributed_declaration_is_not_name_counted(self) -> None:
+        self.track(
+            "TNLean/PrecedingSimp.lean",
+            "@[simp]\ntheorem precedingSimp : True := by trivial\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 0)
+        self.assertIn("0 current single-occurrence", output)
+
+    def test_consumer_and_blueprint_citation_prevent_false_positive(self) -> None:
+        self.track(
+            "TNLean/Used.lean",
+            "def usedValue : Nat := 1\n\ndef publicValue : Nat := usedValue\n",
+        )
+        self.track("blueprint/src/chapter/test.tex", "\\lean{publicValue}\n")
+        status, output = self.check()
+        self.assertEqual(status, 0)
+        self.assertIn("0 current single-occurrence", output)
+
+    def test_comment_that_looks_like_declaration_is_ignored(self) -> None:
+        self.track(
+            "TNLean/Comment.lean",
+            "/- theorem proseOnly is not a declaration. -/\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 0)
+        self.assertIn("0 current single-occurrence", output)
+
+    def test_qualified_declaration_name_is_checked(self) -> None:
+        self.track(
+            "TNLean/Qualified.lean",
+            "theorem Nat.lonelyQualified : True := by trivial\n",
+        )
+        status, output = self.check()
+        self.assertEqual(status, 1)
+        self.assertIn("lonelyQualified", output)
+
+    def test_existing_candidate_is_allowed_but_allowlist_cannot_grow(self) -> None:
+        key = "TNLean/Lonely.lean::lonelyValue"
+        self.track("TNLean/Lonely.lean", "def lonelyValue : Nat := 1\n")
+        status, _ = self.check(frozenset({key}))
+        self.assertEqual(status, 0)
+        ratchet_status, output = self.check(
+            frozenset({key}),
+            base_allowlist=frozenset(),
+        )
+        self.assertEqual(ratchet_status, 1)
+        self.assertIn("allowlist; this set may only shrink", output)
+
+    def test_stale_declaration_entry_fails(self) -> None:
+        status, output = self.check(frozenset({"TNLean/Gone.lean::gone"}))
+        self.assertEqual(status, 1)
+        self.assertIn("stale dead-declaration allowlist entry", output)
+
+    def test_empty_allowlist_literal_is_parseable(self) -> None:
+        orphan_source = "ORPHAN_MODULE_ALLOWLIST: frozenset[str] = frozenset()\n"
+        dead_source = "DEAD_DECLARATION_ALLOWLIST: frozenset[str] = frozenset()\n"
+        self.assertEqual(orphan._allowlist_from_source(orphan_source), frozenset())
+        self.assertEqual(dead._allowlist_from_source(dead_source), frozenset())
 
 
 if __name__ == "__main__":

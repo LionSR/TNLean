@@ -289,7 +289,7 @@ theorem stateCoeff_cycleTensorOfMPS (hn : 3 ≤ n) (A : MPSTensor d D)
     (σ : Fin n → Fin d) :
     stateCoeff (cycleTensorOfMPS hn A) σ = MPSTensor.mpv A σ := by
   rw [MPSTensor.mpv_eq, MPSTensor.coeff_eq, MPSTensor.trace_evalWord_eq_sum_cyclic A σ]
-  simp only [stateCoeff]
+  simp only [mps_eval]
   -- Reindex the virtual configurations by the site-to-bond bijection, then
   -- shift the cyclic bond labels by one step.
   refine (Fintype.sum_equiv

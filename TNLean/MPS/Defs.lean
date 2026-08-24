@@ -74,18 +74,19 @@ theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
 def GaugeEquiv (A B : MPSTensor d D) : Prop :=
   ∃ X : GL (Fin D) ℂ, ∀ i : Fin d, B i = X * A i * X⁻¹
 
-/-- Two tensors generate the same MPV family if they produce the same coefficient for every
-system size `N` and every basis configuration `σ : Fin N → Fin d`. -/
-def SameMPV (A B : MPSTensor d D) : Prop :=
-  ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
-
 /-- MPV equality for possibly different bond dimensions.
 
-This is the version of `SameMPV` for different bond dimensions, used later
-when comparing block decompositions whose summands need not live in the same
-matrix algebra. -/
+This is used when comparing block decompositions whose summands need not live
+in the same matrix algebra. -/
 def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
+
+/-- Two tensors of the same bond dimension generate the same MPV family if they produce the
+same coefficient for every system size `N` and every basis configuration `σ : Fin N → Fin d`.
+
+This is the same-bond-dimension specialization of `SameMPV₂`. -/
+abbrev SameMPV (A B : MPSTensor d D) : Prop :=
+  SameMPV₂ A B
 
 /-- Positive-length MPV equality for possibly different bond dimensions.
 

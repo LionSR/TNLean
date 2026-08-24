@@ -5,6 +5,7 @@ name: Housekeeping
 #   standup       weekday activity summary issue (LLM)
 #   linter-sweep  Monday Lean linter-warning report (report-only build)
 #   stale-audit   Monday stale-citation report on open issues (report-only)
+#   archive-build Monday build of every Lean module excluded from TNLean.lean
 #
 # Each job is bound to its own cron entry; a manual dispatch selects the job
 # to run.
@@ -14,12 +15,13 @@ on:
     - cron: "0 8 * * 1-5"   # standup: weekdays at 08:00 UTC
     - cron: "30 8 * * 1"    # stale-audit: Mondays, aligned with the standup window
     - cron: "0 9 * * 1"     # linter-sweep: Mondays
+    - cron: "30 9 * * 1"    # archive-build: Mondays, after the linter sweep starts
   workflow_dispatch:
     inputs:
       job:
         description: "Which housekeeping job to run"
         type: choice
-        options: [standup, linter-sweep, stale-audit]
+        options: [standup, linter-sweep, stale-audit, archive-build]
         default: standup
 
 permissions:
@@ -288,6 +290,45 @@ jobs:
             ${{ runner.temp }}/lean-linter-warning-sweep.json
             ${{ runner.temp }}/lean-linter-warning-sweep.txt
           if-no-files-found: error
+
+  # ──────────────────────────────────────────────────────────────
+  # Weekly build of modules excluded from the production manifest
+  # ──────────────────────────────────────────────────────────────
+  archive-build:
+    if: |
+      github.event.schedule == '30 9 * * 1' ||
+      (github.event_name == 'workflow_dispatch' && inputs.job == 'archive-build')
+    name: Build every Archive module
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    concurrency:
+      group: lean-archive-build
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Lean toolchain and cache
+        uses: texra-ai/lean-env-action@v1
+        with:
+          use-github-cache: false
+
+      - name: Build all tracked Archive modules
+        run: |
+          set -euo pipefail
+          lake exe cache get
+          mapfile -t archive_files < <(
+            git ls-files -- 'TNLean/Archive/*.lean' 'TNLean/Archive/**/*.lean' | sort -u
+          )
+          if [ "${#archive_files[@]}" -eq 0 ]; then
+            echo "::error::No tracked TNLean/Archive modules were found"
+            exit 1
+          fi
+          for path in "${archive_files[@]}"; do
+            module="${path%.lean}"
+            module="${module//\//.}"
+            lake build "$module"
+          done
 
   # ──────────────────────────────────────────────────────────────
   # Weekly stale-citation audit (report-only)

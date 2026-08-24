@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.BurnsideTheorem
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.Wielandt.SpanGrowth.CumulativeSpan
+import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
 
 import Mathlib.Algebra.Algebra.Subalgebra.Lattice
 import Mathlib.RingTheory.Noetherian.Defs
@@ -140,14 +140,14 @@ theorem mem_cumulativeSpan_of_mem_algSpan (A : MPSTensor d D)
   | algebraMap r =>
     refine ⟨0, ?_⟩
     rw [Algebra.algebraMap_eq_smul_one]
-    exact (Kraus.cumulativeSpan A 0).smul_mem r (one_mem_cumulativeSpan A 0)
+    exact (Kraus.cumulativeSpan A 0).smul_mem r (Kraus.one_mem_cumulativeSpan A 0)
   | add x y _ _ ihx ihy =>
     rcases ihx with ⟨Nx, hNx⟩
     rcases ihy with ⟨Ny, hNy⟩
     refine ⟨max Nx Ny, ?_⟩
     exact (Kraus.cumulativeSpan A (max Nx Ny)).add_mem
-      ((cumulativeSpan_mono' A (le_max_left Nx Ny)) hNx)
-      ((cumulativeSpan_mono' A (le_max_right Nx Ny)) hNy)
+      ((Kraus.cumulativeSpan_mono' A (le_max_left Nx Ny)) hNx)
+      ((Kraus.cumulativeSpan_mono' A (le_max_right Nx Ny)) hNy)
   | mul x y _ _ ihx ihy =>
     rcases ihx with ⟨Nx, hNx⟩
     rcases ihy with ⟨Ny, hNy⟩
@@ -170,7 +170,7 @@ lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
     isNoetherian_of_isNoetherianRing_of_finite ℂ _
   -- Construct the monotone chain as an order homomorphism
   let f : ℕ →o Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    ⟨Kraus.cumulativeSpan A, fun _ _ h => cumulativeSpan_mono' A h⟩
+    ⟨Kraus.cumulativeSpan A, fun _ _ h => Kraus.cumulativeSpan_mono' A h⟩
   -- Noetherian ⟹ the ascending chain stabilizes
   obtain ⟨N₀, hstab⟩ := (monotone_stabilizes_iff_noetherian.mpr ‹_›) f
   -- Show the stable value is ⊤.
@@ -178,7 +178,7 @@ lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
   intro x _
   rcases hx x with ⟨M, hM⟩
   rcases le_total M N₀ with hMN | hNM
-  · exact (cumulativeSpan_mono' A hMN) hM
+  · exact (Kraus.cumulativeSpan_mono' A hMN) hM
   · have heq : Kraus.cumulativeSpan A M = Kraus.cumulativeSpan A N₀ := (hstab M hNM).symm
     simpa [heq] using hM
 
