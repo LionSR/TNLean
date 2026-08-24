@@ -10277,6 +10277,58 @@ support by commutation with observables on the complementary tensor factor.
     hence has closed range, and therefore $x\in\mathcal A_\Lambda$.
 \end{proof}
 
+The following theorem gives the scalar center of the homogeneous UHF algebra.  GNVW
+invoke this conclusion for the quasi-local algebra at
+\cite[lines~1276--1282]{Gross2012IndexTheory}, specifically line~1279, but do
+not prove it there.  The homogeneous construction in
+\cite[lines~2292--2298]{Cirac2017MPU} likewise defines the norm completion
+without stating this conclusion separately.  Schumacher--Werner give the
+corresponding homogeneous norm-completed construction in
+\cite[lines~263--285]{SchumacherWerner2004QCA}, again without a separate
+scalar-center theorem.
+
+\begin{theorem}[Scalar center of the homogeneous quasi-local algebra]
+    \label{thm:qca_quasi_local_center_scalar}
+    \lean{SpinChain.existsUnique_eq_smul_one_of_commute_quasiLocalObservable,
+        SpinChain.existsUnique_eq_smul_one_of_commute,
+        SpinChain.instIsCentralQuasiLocalAlgebra,
+        SpinChain.quasiLocalAlgebra_center_eq_bot}
+    \leanok
+    \uses{def:qca_quasi_local_algebra, def:qca_quasi_local_observable}
+    Let $d>0$ and let $z\in\mathcal A$.  If
+    \begin{align}
+        \forall\Gamma\subset\mathbb Z\text{ finite},\quad
+        \forall A\in\mathcal A_\Gamma,\qquad
+        z j_\Gamma(A)&=j_\Gamma(A)z,
+    \end{align}
+    then there is a unique $c\in\mathbb C$ such that
+    \begin{align}
+        z&=c\mathbf 1.
+    \end{align}
+    Consequently,
+    \begin{align}
+        \{z\in\mathcal A\mid za=az\text{ for every }a\in\mathcal A\}
+        &=\mathbb C\mathbf 1.
+    \end{align}
+    This statement concerns the fixed on-site dimension $d$; it does not assert
+    the site-dependent extension used in GNVW.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_quasi_local_supported_iff_commute_disjoint,
+        lem:qca_quasi_local_observable}
+    Apply Theorem~\ref{thm:qca_quasi_local_supported_iff_commute_disjoint}
+    with $\Lambda=\varnothing$.  The commutation hypothesis gives
+    $z\in j_\varnothing(\mathcal A_\varnothing)$.  The empty tensor product is
+    the one-dimensional algebra
+    $\mathcal A_\varnothing\cong\mathbb C$, so every element of its image has
+    the form $c\mathbf 1$.  The one-by-one equivalence makes this coefficient
+    unique in $\mathcal A_\varnothing$, and injectivity of $j_\varnothing$
+    transports that uniqueness to $\mathcal A$.  A central element satisfies
+    the finite-region commutation hypothesis, which gives the displayed
+    description of the center.
+\end{proof}
+
 The appendix requires that ``there exists a finite subset
 $\mathcal N\subset\mathbb Z$'' such that, for every finite
 $\Lambda\subset\mathbb Z$,

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.ComplementaryWeylTwirl
+import Mathlib.Algebra.Central.Basic
 import TNLean.QCA.DisjointSupport
 
 /-!
@@ -12,6 +13,8 @@ import TNLean.QCA.DisjointSupport
 A quasi-local observable belongs to the algebra of a finite region exactly when it commutes with
 all observables supported in finite regions disjoint from it. The reverse implication uses finite
 Weyl averaging on the complementary tensor factor and closedness of the finite-region image.
+At the empty region, this characterization implies that every central observable is a unique
+complex scalar multiple of the identity.
 
 This is UHF-algebra infrastructure used by the QCA development. It is not a theorem stated in the
 MPU paper or by Schumacher--Werner.
@@ -243,5 +246,86 @@ theorem quasiLocalSupportedIn_iff_commute_disjoint {d : ℕ} [NeZero d]
     exact hdist.trans_lt (by
       rw [quasiLocalObservable_localInclusion d hΓΔ A]
       exact hxz)
+
+/-- If a quasi-local observable on a homogeneous spin chain commutes with every embedded
+finite-region observable, then it is a unique complex scalar multiple of the identity.
+
+This supplies the scalar-center fact invoked in GNVW, arXiv:0910.3675v2, lines 1276--1282
+(specifically line 1279), for the homogeneous quasi-local algebra of arXiv:1703.09188,
+lines 2292--2298. Schumacher--Werner, quant-ph/0405174, lines 263--285, give the corresponding
+homogeneous norm-completed construction. The scalar-center conclusion is not stated separately in
+these sources. -/
+theorem existsUnique_eq_smul_one_of_commute_quasiLocalObservable {d : ℕ} [NeZero d]
+    (z : QuasiLocalAlgebra d)
+    (hz : ∀ (Γ : Finset ℤ) (A : LocalAlgebra d Γ),
+      Commute z (quasiLocalObservable d Γ A)) :
+    ∃! c : ℂ, z = c • 1 := by
+  have hz_empty : QuasiLocalSupportedIn z ∅ := by
+    rw [quasiLocalSupportedIn_iff_commute_disjoint]
+    intro Γ _ y hy
+    obtain ⟨A, rfl⟩ := hy
+    exact hz Γ A
+  obtain ⟨A, hA⟩ := QuasiLocalSupportedIn.iff_exists.mp hz_empty
+  let _ : Unique (Config d ∅) := by
+    change Unique ((↥(∅ : Finset ℤ)) → Fin d)
+    infer_instance
+  let _ : Fintype (Config d ∅) := Unique.fintype
+  let e : ℂ ≃⋆ₐ[ℂ] LocalAlgebra d ∅ := CStarMatrix.toOneByOne (Config d ∅) ℂ ℂ
+  let c := e.symm A
+  have hAc : A = c • (1 : LocalAlgebra d ∅) := by
+    calc
+      A = e (e.symm A) := (e.apply_symm_apply A).symm
+      _ = e (c • (1 : ℂ)) := by simp [c]
+      _ = c • (1 : LocalAlgebra d ∅) := by rw [map_smul, map_one]
+  let _ : Fintype (Config d ∅) := instFintypeConfig d ∅
+  refine ⟨c, ?_, ?_⟩
+  · rw [← hA, hAc, map_smul, map_one]
+  · intro c' hc'
+    have hlocal : c' • (1 : LocalAlgebra d ∅) = c • 1 := by
+      apply quasiLocalObservable_injective d ∅
+      simp only [map_smul, map_one]
+      rw [← hc', ← hA, hAc, map_smul, map_one]
+    have hentry := congrFun (congrFun hlocal default) default
+    simpa using hentry
+
+/-- Every central observable of the homogeneous quasi-local spin-chain algebra is a unique complex
+scalar multiple of the identity.
+
+This is the homogeneous scalar-center fact invoked at GNVW, arXiv:0910.3675v2,
+lines 1276--1282 (specifically line 1279). GNVW cites the fact as known; it is not stated in the
+homogeneous QCA appendix of arXiv:1703.09188, lines 2292--2298. -/
+theorem existsUnique_eq_smul_one_of_commute {d : ℕ} [NeZero d]
+    (z : QuasiLocalAlgebra d) (hz : ∀ a, Commute z a) :
+    ∃! c : ℂ, z = c • 1 := by
+  exact existsUnique_eq_smul_one_of_commute_quasiLocalObservable z fun Γ A ↦
+    hz (quasiLocalObservable d Γ A)
+
+/-- The homogeneous quasi-local spin-chain algebra is central over ℂ in Mathlib's sense.
+
+This is the canonical `Algebra.IsCentral` formulation of the scalar-center fact invoked at GNVW,
+arXiv:0910.3675v2, line 1279, for the homogeneous norm completion defined in arXiv:1703.09188,
+lines 2292--2298. It does not assert the site-dependent GNVW statement. -/
+instance instIsCentralQuasiLocalAlgebra (d : ℕ) [NeZero d] :
+    Algebra.IsCentral ℂ (QuasiLocalAlgebra d) where
+  out := by
+    intro z hz
+    rw [Algebra.mem_bot]
+    have hcomm : ∀ a, Commute z a := by
+      intro a
+      rw [commute_iff_eq]
+      exact (Subalgebra.mem_center_iff.mp hz a).symm
+    obtain ⟨c, hc, _⟩ := existsUnique_eq_smul_one_of_commute z hcomm
+    refine ⟨c, ?_⟩
+    simpa only [Algebra.algebraMap_eq_smul_one] using hc.symm
+
+/-- The center of the homogeneous quasi-local spin-chain algebra is its scalar subalgebra.
+
+This is the center-subalgebra formulation of the scalar-center fact invoked at GNVW,
+arXiv:0910.3675v2, line 1279, for the homogeneous norm completion defined in arXiv:1703.09188,
+lines 2292--2298. It does not assert the site-dependent GNVW statement. -/
+@[simp]
+theorem quasiLocalAlgebra_center_eq_bot (d : ℕ) [NeZero d] :
+    Subalgebra.center ℂ (QuasiLocalAlgebra d) = ⊥ :=
+  Algebra.IsCentral.center_eq_bot ℂ (QuasiLocalAlgebra d)
 
 end SpinChain
