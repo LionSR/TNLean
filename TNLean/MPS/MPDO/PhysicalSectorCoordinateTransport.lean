@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import QICLean.Algebra.MatrixUnitaryBetween
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 
 /-!
@@ -306,6 +307,28 @@ theorem exists_neighboringTraceFactorization_changePhysicalBasis_iff
   · rintro ⟨F, ⟨H⟩⟩
     exact ⟨F.ofChangePhysicalBasis V hV,
       ⟨H.ofChangePhysicalBasis V hV⟩⟩
+
+/-- Existence of neighboring trace data is invariant under a rectangular
+matrix that is unitary between its finite physical coordinate spaces.
+
+Finite-dimensional unitarity forces the two coordinate dimensions to agree,
+so this proposition reduces to the square coordinate transport above.  It
+retains the $\eta_{k,h}$, $a_k$, and $b_h$ data from arXiv:1606.00608,
+Theorem 4.9(iv) and Appendix C.2, lines 1381--1450, literally.  The rectangular
+equivalence is project-derived and is not stated in that source. -/
+theorem exists_neighboringTraceFactorization_changePhysicalBasis_iff_of_isUnitaryBetween
+    {e : ℕ} (V : Matrix (Fin e) (Fin d) ℂ)
+    (hV : V.IsUnitaryBetween) :
+    (∃ F : PhysicalSectorFactorization K,
+        Nonempty F.NeighboringTraceFactorization) ↔
+      ∃ F : PhysicalSectorFactorization (changePhysicalBasis V K),
+        Nonempty F.NeighboringTraceFactorization := by
+  have hed : e = d := by
+    apply le_antisymm
+    · simpa using Matrix.IsCoisometry.card_le V hV.2
+    · simpa using Matrix.IsIsometry.card_le V hV.1
+  subst e
+  exact exists_neighboringTraceFactorization_changePhysicalBasis_iff V hV.1
 
 theorem sectorCoordinateTensor_eq_changePhysicalBasis
     (F : PhysicalSectorFactorization K) :
