@@ -11700,6 +11700,196 @@ any part of that external structure theorem beyond this change of grouping.
     QCA property.
 \end{proof}
 
+Lines~2292--2298 of \cite{Cirac2017MPU} specify the finite local
+algebras, their canonical inclusions, translation covariance, and the locality
+inclusion
+\begin{align}
+    \omega(\mathcal A_\Lambda)
+    &\subseteq \mathcal A_{\Lambda+\mathcal N}.
+\end{align}
+The following statements record the finite-dimensional maps determined by
+this inclusion.  They are consequences and coordinate formulations of the
+cited locality relation, not separately named theorems of the paper.  The
+left/right order below agrees with the adjacent-pair convention in
+\cite{Gross2012IndexTheory}.
+
+\begin{definition}[Finite-region restriction]
+    \label{def:qca_finite_region_restriction}
+    \lean{SpinChain.PropagatesWithin.localRestriction}
+    \leanok
+    \uses{def:qca_local_algebra,def:qca_local_inclusion,
+        def:qca_region_sumset,def:qca_quasi_local_observable,
+        def:qca_propagates_within}
+    Let $d>0$, let $\omega$ be a star-algebra automorphism of
+    $\mathcal A^{(d)}$, and suppose that $\omega$ propagates within the finite
+    neighborhood $\mathcal N$.  For every finite region $\Lambda$, define
+    the finite-region restriction
+    \begin{align}
+        \omega_{\Lambda,\mathcal N}\colon\mathcal A_\Lambda
+        &\longrightarrow\mathcal A_{\Lambda+\mathcal N}
+    \end{align}
+    to be the unique star-algebra homomorphism satisfying
+    \begin{align}
+        \iota_{\Lambda+\mathcal N}
+          \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
+        &=\omega\bigl(\iota_\Lambda(A)\bigr)
+        \qquad(A\in\mathcal A_\Lambda).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Finite-region restriction is an embedding]
+    \label{thm:qca_finite_region_restriction_embedding}
+    \lean{SpinChain.PropagatesWithin.quasiLocalObservable_localRestriction,
+        SpinChain.PropagatesWithin.localRestriction_injective}
+    \leanok
+    \uses{def:qca_finite_region_restriction}
+    The finite-region restriction is injective, and for every
+    $A\in\mathcal A_\Lambda$ one has
+    \begin{align}
+        \iota_{\Lambda+\mathcal N}
+          \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
+        &=\omega\bigl(\iota_\Lambda(A)\bigr).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_finite_region_restriction}
+    The defining equality follows from the locality inclusion and the
+    injectivity of $\iota_{\Lambda+\mathcal N}$.  If two local observables
+    have the same image under $\omega_{\Lambda,\mathcal N}$, their canonical
+    images become equal after applying $\omega$.  Injectivity of $\omega$ and
+    of $\iota_\Lambda$ then gives equality of the two local observables.
+\end{proof}
+
+\begin{theorem}[Enlargement of finite-region restrictions]
+    \label{thm:qca_finite_region_restriction_enlargement}
+    \lean{SpinChain.PropagatesWithin.localRestriction_localInclusion}
+    \leanok
+    \uses{def:qca_finite_region_restriction}
+    If $\Lambda\subseteq\Gamma$, then for every
+    $A\in\mathcal A_\Lambda$,
+    \begin{align}
+        \omega_{\Gamma,\mathcal N}
+          \bigl(\iota_{\Lambda,\Gamma}(A)\bigr)
+        &=\iota_{\Lambda+\mathcal N,\Gamma+\mathcal N}
+          \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_finite_region_restriction_embedding}
+    Apply the canonical inclusion into the quasi-local algebra to both sides.
+    Both expressions become $\omega(\iota_\Lambda(A))$; injectivity of the
+    target inclusion gives the equality.
+\end{proof}
+
+\begin{theorem}[Translation of finite-region restrictions]
+    \label{thm:qca_finite_region_restriction_translation}
+    \lean{SpinChain.PropagatesWithin.localRestriction_translation}
+    \leanok
+    \uses{def:qca_translation_covariant,
+        def:qca_finite_local_translation,
+        def:qca_finite_region_restriction}
+    Suppose in addition that $\omega$ is translation covariant.  For
+    $a\in\mathbb Z$ and $A\in\mathcal A_\Lambda$,
+    \begin{align}
+        \iota_{(\Lambda+a)+\mathcal N}
+          \bigl(\omega_{\Lambda+a,\mathcal N}
+            (\tau_{a,\Lambda}(A))\bigr)
+        &=\iota_{(\Lambda+\mathcal N)+a}
+          \bigl(\tau_{a,\Lambda+\mathcal N}
+            (\omega_{\Lambda,\mathcal N}(A))\bigr).
+    \end{align}
+    Here $(\Lambda+a)+\mathcal N=(\Lambda+\mathcal N)+a$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_finite_region_restriction_embedding,
+        lem:qca_quasi_local_translation_action}
+    The left-hand side is
+    $\omega(\tau_a(\iota_\Lambda(A)))$.  Translation covariance moves
+    $\tau_a$ past $\omega$, and the finite-region translation formula gives
+    the right-hand side.
+\end{proof}
+
+\begin{definition}[Bipartite coordinates for disjoint local algebras]
+    \label{def:qca_bipartite_local_algebra_coordinates}
+    \lean{SpinChain.Config.disjointUnionEquiv,
+        SpinChain.bipartiteLocalAlgebraEquiv}
+    \leanok
+    \uses{def:qca_local_algebra}
+    Let $\Gamma,\Delta\subset\mathbb Z$ be disjoint finite regions.  Writing
+    $\mathcal C_\Gamma$ and $\mathcal C_\Delta$ for their configuration
+    spaces, restriction to the two regions gives
+    \begin{align}
+        \mathcal C_{\Gamma\cup\Delta}
+        &\simeq \mathcal C_\Gamma\times\mathcal C_\Delta,
+    \end{align}
+    with the $\Gamma$-configuration first.  Reindexing matrix rows and
+    columns gives a star-algebra equivalence
+    \begin{align}
+        \beta_{\Gamma,\Delta}\colon
+        \mathcal A_{\Gamma\cup\Delta}
+        &\simeq
+        M_{\mathcal C_\Gamma\times\mathcal C_\Delta}(\mathbb C).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Canonical inclusions in bipartite coordinates]
+    \label{thm:qca_bipartite_local_algebra_inclusions}
+    \lean{SpinChain.bipartiteLocalAlgebraEquiv_localInclusion_left,
+        SpinChain.bipartiteLocalAlgebraEquiv_localInclusion_right}
+    \leanok
+    \uses{def:qca_bipartite_local_algebra_coordinates,
+        def:qca_local_inclusion}
+    For $A\in\mathcal A_\Gamma$ and $B\in\mathcal A_\Delta$,
+    \begin{align}
+        \beta_{\Gamma,\Delta}(\iota_{\Gamma,\Gamma\cup\Delta}(A))
+        &=A\otimes\mathbf 1,\\
+        \beta_{\Gamma,\Delta}(\iota_{\Delta,\Gamma\cup\Delta}(B))
+        &=\mathbf 1\otimes B.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:qca_bipartite_local_algebra_coordinates}
+    Evaluate both matrices on pairs of configurations.  For the first local
+    inclusion, restriction to $\Gamma$ gives the matrix coefficient of $A$,
+    while equality of the complementary $\Delta$-configurations gives the
+    matrix coefficient of the identity.  This is $A\otimes\mathbf 1$.
+    Interchanging the two regions gives $\mathbf 1\otimes B$.
+\end{proof}
+
+\begin{definition}[Finite local image in bipartite coordinates]
+    \label{def:qca_bipartite_finite_local_image}
+    \lean{SpinChain.PropagatesWithin.localRestrictionRange,
+        SpinChain.PropagatesWithin.localRestrictionRangeEquiv,
+        SpinChain.StarSubalgebra.bipartiteReindex,
+        SpinChain.PropagatesWithin.bipartiteLocalRestrictionRange}
+    \leanok
+    \uses{def:qca_finite_region_restriction,
+        thm:qca_finite_region_restriction_embedding,
+        def:qca_bipartite_local_algebra_coordinates}
+    Define the finite local image by
+    \begin{align}
+        \mathcal R_{\Lambda,\mathcal N}
+        &=\omega_{\Lambda,\mathcal N}(\mathcal A_\Lambda)
+          \subseteq\mathcal A_{\Lambda+\mathcal N}.
+    \end{align}
+    It is a star-subalgebra star-isomorphic to $\mathcal A_\Lambda$.  If
+    $\Lambda+\mathcal N=\Gamma\cup\Delta$ with
+    $\Gamma\cap\Delta=\varnothing$, then
+    \begin{align}
+        \beta_{\Gamma,\Delta}
+          (\mathcal R_{\Lambda,\mathcal N})
+        &\subseteq
+        M_{\mathcal C_\Gamma\times\mathcal C_\Delta}(\mathbb C)
+    \end{align}
+    is the bipartite matrix star-subalgebra to which the left and right
+    support-algebra constructions apply.  No support algebra is defined in
+    this statement.
+\end{definition}
+
 Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
 local action associated with an MPU by eventual finite-chain conjugation.  In
 lines~2300--2306, eventual constancy is used to obtain a norm-preserving
