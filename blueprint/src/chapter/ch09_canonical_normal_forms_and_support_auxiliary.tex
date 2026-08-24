@@ -89,6 +89,7 @@
 
 \begin{theorem}[Canonical form admits a canonical-form-II gauge]
     \label{thm:cpsv_cf_to_cfii_gauge}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormIIData}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_gaugeEquiv_canonicalFormII}
     \leanok
@@ -100,8 +101,9 @@
         B^i
          & =G A^iG^{-1}.
     \end{align}
-    Moreover, $B$ is in canonical form II. This is the nonsingular gauge
-    assertion of \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
+    Moreover, $B$ is in canonical form II and the total retained block
+    dimension is unchanged. This is the nonsingular gauge assertion of
+    \cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     % Maintainer source anchor: arXiv:1606.00608, lines 1058--1077,
     % especially eq:II_TPLambda and eq:II_XAX at lines 1062--1077.
 \end{theorem}
