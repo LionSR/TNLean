@@ -38,11 +38,6 @@ noncomputable abbrev blockPhysDim (d L : ℕ) : ℕ :=
 lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
   exact Kraus.blockPhysDim_eq_pow d L
 
-/-- Blocking preserves nonzero physical dimensions. -/
-instance instNeZeroBlockPhysDim [NeZero d] : NeZero (blockPhysDim d L) := ⟨by
-  rw [blockPhysDim_eq_pow]
-  exact pow_ne_zero L (NeZero.ne d)⟩
-
 /-- The physical alphabet after blocking one site is equivalent to the original alphabet. -/
 noncomputable abbrev singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
   Kraus.singleBlockEquiv d
