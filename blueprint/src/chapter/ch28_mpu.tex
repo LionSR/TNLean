@@ -1836,15 +1836,14 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Index Theorem~IV.6(ii)
     \cite[lines~824--845]{Cirac2017MPU}, not a separately stated theorem of
     that paper.  The notation $A=(A^i)_i$ agrees with the canonical-form block
-    notation around equation~\textup{II\_CF1} in
-    \cite[lines~214--245]{Cirac2016MPDO_arXiv}.
+    notation in \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Word evaluation of an independent tensor product]
     \label{thm:mps_eval_word_independent_tensor_product}
     \lean{MPSTensor.evalWord_tensorProduct}
     \leanok
-    \uses{def:mps_independent_tensor_product}
+    \uses{def:mps_independent_tensor_product, def:eval_word}
     If $w$ has length $n$ and
     \begin{align}
         w   & =\bigl(\pi_{d,e}(i_1,k_1),\ldots,
@@ -1863,7 +1862,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mps_independent_tensor_product}
+    \uses{def:mps_independent_tensor_product, def:eval_word}
     Induct on the length of $w$.  For the empty word, use
     $\mathbf 1_D\otimes\mathbf 1_E=\mathbf 1_{DE}$ and invariance of the
     identity under the coordinate bijection.  For a leading letter
