@@ -18,6 +18,7 @@ arbitrary remaining length.
 
 ## Main definitions
 
+* `finTupleProdEquiv`: splits a tuple of encoded product indices pointwise.
 * `finThreeArrowEquiv`: identifies a function on `Fin 3` with a right-associated triple.
 * `finFourArrowEquiv`: identifies a function on `Fin 4` with a right-associated quadruple.
 * `finSuccArrowEquiv`: separates the first coordinate from a finite tuple.
@@ -25,6 +26,7 @@ arbitrary remaining length.
 
 ## Main statements
 
+* `finTupleProdEquiv_apply`: gives the two pointwise component tuples.
 * `finSuccArrowEquiv_apply`: gives the first coordinate and the remaining tuple.
 * `finSuccArrowEquiv_symm_apply`: reconstructs a tuple from its first coordinate and tail.
 * `finAddTwoArrowEquiv_apply`: gives the first two coordinates and the remaining tuple.
@@ -39,12 +41,28 @@ arbitrary remaining length.
 The fixed-length product coordinates are right-associated and are constructed
 recursively from Mathlib's `finTwoArrowEquiv` using `Fin.consEquiv`.  The
 variable-length equivalences use `Fin.consEquiv` to separate the prescribed
-initial coordinates from the remaining tuple.
+initial coordinates from the remaining tuple.  Product-valued tuples use
+Mathlib's canonical `finProdFinEquiv` at every coordinate.
 
 ## Tags
 
 finite tuples, equivalence, product coordinates
 -/
+
+/-- Split a finite tuple of canonically encoded product indices into its two
+component tuples. -/
+def finTupleProdEquiv (N d e : ℕ) :
+    (Fin N → Fin (d * e)) ≃ (Fin N → Fin d) × (Fin N → Fin e) :=
+  (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv.symm).trans
+    (Equiv.arrowProdEquivProdArrow (Fin N) (fun _ ↦ Fin d) (fun _ ↦ Fin e))
+
+/-- The product-tuple equivalence takes the quotient and remainder component
+at every coordinate. -/
+@[simp] theorem finTupleProdEquiv_apply (N d e : ℕ)
+    (σ : Fin N → Fin (d * e)) :
+    finTupleProdEquiv N d e σ =
+      (fun n ↦ (σ n).divNat, fun n ↦ (σ n).modNat) := by
+  rfl
 
 /-- The canonical right-associated identification of a three-coordinate
 function with a triple. -/
