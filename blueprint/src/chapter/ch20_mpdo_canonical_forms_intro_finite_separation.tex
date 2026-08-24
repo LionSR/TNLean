@@ -267,7 +267,6 @@
     \lean{MPSTensor.HasBlockSelectorWords}
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
-    \lean{MPSTensor.duplicateScalarBlocks_not_hasBiCF}
     \lean{MPOTensor.horizontalCFData_of_wordTupleSpanTop}
     \lean{MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent}
     \lean{MPOTensor.horizontalCFData_of_propBlockInjective}
@@ -309,17 +308,6 @@
     the spanning condition, hence the separation property, and hence the
     older per-copy trace-separation hypotheses directly.
 
-    The duplicate-scalar counterexample shows that the separation property
-    is strictly stronger than blockwise injectivity, left-canonicality, and
-    nonzero weights alone. Take $d=1$ and two blocks of bond dimension~$1$
-    with $A_0^{0}=A_1^{0}=1$ and weights $\mu_0=1$, $\mu_1=2$: both blocks
-    are injective and left-canonical, $(A_k^0)^\dagger A_k^0=1$, and the
-    weights are nonzero, but at every length $L$ there is a unique word $w$
-    and $A_0^w=A_1^w=1$, so $\Delta_0=1$, $\Delta_1=-1$ satisfies
-    $\sum_k \tr(\Delta_k A_k^w)=0$ while $\Delta\neq0$. Thus the separation
-    property fails, and no length makes the entrywise scalar family linearly
-    independent.
-
     The block-injectivity proposition of
     \cite[lines~340--345]{Cirac2016MPDO_arXiv} gives a concrete sufficient
     criterion for the spanning condition: a common length $L$ with every
@@ -339,16 +327,6 @@
     produces the spanning condition at length $L+S$, hence the separation
     property and the older per-copy trace-separation hypotheses.
 \end{remark}
-
-\begin{theorem}[Duplicate scalar blocks obstruct finite separation]%
-    \label{thm:duplicate_scalar_blocks_counterexample}
-    \lean{MPSTensor.duplicateScalarBlocks_counterexample}
-    \leanok
-    \uses{rem:word_tuple_span_top}
-    There is a two-copy scalar-block family whose blocks are injective and left
-    canonical and whose weights are nonzero, but which has neither block-injective
-    canonical form nor a length with linearly independent word-entry family.
-\end{theorem}
 
 The inverse tensor of a block-injective canonical form satisfies
 \begin{align}

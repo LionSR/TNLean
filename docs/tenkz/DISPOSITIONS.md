@@ -72,7 +72,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 1580, 1622 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L146, 153, 173, 178, 226, 232, 342, 434 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L104, 108, 219, 227, 375, 388, 439 `tenkz` → `P-grid` | — | — |
+| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L104, 108, 219, 227, 353, 366, 417 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L738, 744 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_foundations.tex` | L17, 126, 373, 377 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
