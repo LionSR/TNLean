@@ -1805,8 +1805,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Independent tensor product of matrix product tensors]
     \label{def:mps_independent_tensor_product}
-    \lean{finTupleProdEquiv, MPSTensor.tensorProduct,
-        MPSTensor.tensorProduct_apply}
+    \lean{finTupleProdEquiv, finTupleProdEquiv_apply,
+        MPSTensor.tensorProduct, MPSTensor.tensorProduct_apply}
     \leanok
     \uses{def:mps_tensor}
     Let $A=(A^i)_{i\in\Fin d}$ and $B=(B^k)_{k\in\Fin e}$ have
@@ -1864,7 +1864,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}\leanok
     \uses{def:mps_independent_tensor_product, def:eval_word}
     Induct on the length of $w$.  For the empty word, use
-    $\mathbf 1_D\otimes\mathbf 1_E=\mathbf 1_{DE}$ and invariance of the
+    $\Id_D\otimes\Id_E=\Id_{DE}$ and invariance of the
     identity under the coordinate bijection.  For a leading letter
     $\pi_{d,e}(i,k)$, equation
     (\ref{eq:mps_independent_tensor_product_entries}) and the induction
