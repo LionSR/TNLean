@@ -4,7 +4,28 @@
 > deletion program. Items marked “Owner decision” and all items in Section D
 > remain unresolved. No deletion is authorized by this document alone.
 
-Verification pass (rg, read-only, worktree `cache-qiclean`): all ten load-bearing claims below checked. Corrections to the surveys: `**Scope restriction (...)**` stamps = **594 lines in 191 files** (not 610/195); `ActiveSector` with word boundary = 108 occurrences / 8 files (the 352/21 figure counted substrings such as `IsActiveSector`, `CyclicActiveSector`, `ActiveSectorSpanning*`); `PhysicalSectorFactorization` is referenced in **101** files (not ~60). Everything else held: `IsNonvanishingSourceSimple` lives in exactly 4 Lean files (docstring line 107: "not part of CPSV16 Definition 4.7"); `IsSimple` has zero hypothesis consumers (only def, two bridges, `M_isSimple`, `R_not_isSimple`); `SimpleVanishingCounterexample` and `RescalingStableNotSimple` are imported only by `TNLean/MPS/MPDO.lean`; `exists_isBNTCanonicalForm_afterBlocking_pos` has 0 Lean consumers (1 blueprint `\lean`, 2 glossary lines); weak `ProportionalMPV₂` has 1 consumer (`PeripheralProportionalCaseRootFromRescaling`), which itself has 0 consumers; no `_status` label is ever `\ref`'d (0 hits, 14 labels); `completedBntSectorLabel` is literally `if hk : hη.p k ≠ 0 then … else s₀`; `cyclicActiveWeight` is literally `if IsCyclicActiveSector k then 1 else 0`; QICLean `EntropyMarkovForward.lean:18,237` pads with zero-weight sectors whose "density fillers" are "invisible"; source `propSN` (l.1406-1411) gives an *isometry* U and Prop 3to5 (l.1529) divides by `a_k b_h`; l.219 prints `∑D_k ≤ D (i.e., there can be zero blocks)`.
+The original read-only verification pass was run in worktree `cache-qiclean`
+at commit `db49b8610`. The numerical surveys below are measurements of that
+snapshot rather than a live inventory. Two proposed waves were completed
+before this plan was preserved: the conditional supplier and the
+vanishing-scalar proportionality predicate were removed in
+[`2026-08-23_degenerate_readings_wave_1.md`](2026-08-23_degenerate_readings_wave_1.md).
+They are recorded as completed items A2 and A3 below and are excluded from
+the execution order and remaining line estimates.
+
+At the audited commit, `**Scope restriction (...)**` stamps occupied 594
+lines in 191 files; `ActiveSector` occurred as a word 108 times in 8 files;
+and `PhysicalSectorFactorization` was referenced in 101 files. The remaining
+load-bearing findings held at that snapshot: `IsNonvanishingSourceSimple`
+lived in exactly four Lean files; `IsSimple` had no hypothesis consumers;
+`SimpleVanishingCounterexample` and `RescalingStableNotSimple` were imported
+only by `TNLean/MPS/MPDO.lean`; no `_status` label was referenced;
+`completedBntSectorLabel` and `cyclicActiveWeight` were conditional
+completions by zero-weight sectors; QICLean padded the Hayashi decomposition
+with invisible density fillers; source proposition `propSN` supplied an
+isometry; Proposition 3-to-5 divided by every product `a_k b_h`; and the
+source allowed the sum of retained bond dimensions to be smaller than the
+ambient bond dimension.
 
 ---
 
@@ -16,17 +37,31 @@ Verification pass (rg, read-only, worktree `cache-qiclean`): all ten load-bearin
 - **Convention replacing it.** `IsSourceSimple` (scale-invariant nilpotency on a BNT sector presentation; already `\leanok` as `def:mpdo_source_simple_tensor`) becomes the only predicate and is **renamed `IsSimple`** (mathematical rename, no `@[deprecated]` alias per CONTRIBUTING). Positive-length nontriviality stays a theorem (`IsSourceSimple.exists_mpo_ne_zero`). Markers in `RescalingStableLengthDependentRFP*.lean:205,321`, `RescalingStableSourceSimple.lean:87`, `MPU/Simple.lean:98` lose their "does not assert IsSimple R" sentences.
 - **Net:** about −600 Lean, −10 blueprint nodes. **Risk:** low (0 hypothesis consumers; 6 files touch `IsSourceSimple`). **Owner decision:** confirm the rename `IsSourceSimple → IsSimple` (one line: yes/no).
 
-### A2. Conditional "user supplies the line-246 normalization" supplier and the zero-family scope marker
-- **Degenerate reading retired.** Refusing to commit to l.246 ("we can always choose |μ_k| ≤ 1 and at least one equals one, something which we will assume from now on") and handing both clauses back to the caller; and treating the zero positive-length MPV family (the zero tensor) as a flagged scope restriction rather than the convention.
-- **Delete.** `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos` + docstring (`SectorBNT/Supplier.lean:740-800`); blueprint `thm:paperbnt_supplier_after_blocking` (appendix ft_mps/ch10_bnt_block_separation_and_suppliers.tex:300-303), `rem:arbitrary_input_reduction_gap` (ch10_bnt_sector_canonical_form.tex:1197) and its `\ref`s at :1200,1229; glossary.md:486-489; the `**Scope restriction (nonzero MPV family)**` stamp on `exists_isBNTCanonicalForm_afterBlocking_pos_normalized` (`SupplierNormalized.lean:184-188`), the matching blueprint paragraph (ch10_bnt_sector_canonical_form.tex:1232-1237), and the "separate zero-family clause" elimination plan in `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex` (~l.320-337; the rest of that note stays).
-- **Convention replacing it.** `exists_isBNTCanonicalForm_afterBlocking_pos_normalized` with its single hypothesis `∃ N > 0, ∃ σ, mpv A σ ≠ 0` **kept as a plain hypothesis, unstamped**: the nonzero family is the standing convention, not a sub-case. (Surveys 2 and 3 disagreed on the marker; the owner rule settles it: a hypothesis excluding the canonical degenerate input is the convention, not a scope restriction.)
-- **Net:** about −120 lines. **Risk:** none (0 consumers). **Owner decision:** none.
+### A2. Completed: conditional supplier and zero-family scope marker
 
-### A3. Weak proportionality `c_N = 0` predicate and its only consumer
-- **Degenerate reading retired.** "Proportional MPV families" with `c_N` allowed to vanish (`V = 0·V` is no projective point; `cpsv16_nonzero_proportionality_reading.tex`, resolved).
-- **Delete.** `MPSTensor.ProportionalMPV₂` (`MPS/Defs.lean:124`), bridge `NonzeroProportionalMPV₂.toProportionalMPV₂` (:165), blueprint `def:proportional_mpv` (ch02_mps.tex:329) and its `\uses` entry at :372; the two docstring mentions in `FundamentalTheorem/Proportional.lean:18,251` reworded; the stale "remains available for older auxiliary lemmas" sentence in the note. Together with it: `PeripheralProportionalCaseRootFromRescaling` + `peripheralProportionalCase_periodicFT_of_rootFromRescaling` (`Periodic/FundamentalTheorem.lean:321-342`, 0 consumers, a "assume a rescaling principle" Prop), blueprint `thm:peripheral_periodic_ft_proportional_rescaling` (ch22_periodic_ft_overlap_sector_match_and_consequences.tex:392), docstring :380-381, and the `dccsp17_periodic_overlap_route_alignment.tex:46` sentence.
-- **Convention replacing it.** `NonzeroProportionalMPV₂` (Defs.lean:139) is already the definition-level convention; the live proportional periodic route goes through `Periodic/ProportionalOverlap.lean` and `peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`.
-- **Net:** about −70 lines. **Risk:** none. **Owner decision:** delete the zero-consumer conditional periodic node, or retarget its premise to `NonzeroProportionalMPV₂` and keep (one line).
+This wave was completed before the present plan was preserved. The
+zero-consumer conditional supplier
+`MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos` and its blueprint
+nodes were removed. The normalized supplier
+`exists_isBNTCanonicalForm_afterBlocking_pos_normalized` remains, with the
+nonzero positive-length MPV family as the standing convention. The complete
+declaration, blueprint, and prose accounting is in
+[`2026-08-23_degenerate_readings_wave_1.md`](2026-08-23_degenerate_readings_wave_1.md).
+Its original estimate of about 120 removed lines is already realized and is
+not included in the remaining totals below.
+
+### A3. Completed: vanishing-scalar proportionality
+
+This wave was also completed before the present plan was preserved.
+`MPSTensor.ProportionalMPV₂`, its bridge from
+`NonzeroProportionalMPV₂`, and the zero-consumer conditional periodic route
+were removed. `NonzeroProportionalMPV₂` is now the sole named projective
+proportionality predicate, and the live periodic argument uses
+`peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`. The complete
+accounting is in
+[`2026-08-23_degenerate_readings_wave_1.md`](2026-08-23_degenerate_readings_wave_1.md).
+Its original estimate of about 70 removed lines is already realized and is
+not included in the remaining totals below.
 
 ### A4. Counterexample modules and printed-status nodes whose witness is outside the source's standing convention
 - **Degenerate reading retired.** Refuting printed claims with witnesses the authors' conventions exclude: non-canonical-form representations with hidden nilpotent bond sectors, zero tensors, identical duplicate blocks, zero-multiplicity product sectors, d = 1 readings the next sentence of the source rules out.
@@ -106,6 +141,14 @@ B total: about −1,000 Lean marker lines, −870 blueprint/note lines. Risk: lo
 ---
 
 ## Suggested execution order
-A2 → A3 → A1 → A4 → B8/B9 (blueprint/notes, same PR stream as A1/A4) → B2/B3/B5/B7 (pure docstring PRs, mechanical) → B1 (after D1 decided) → A5a (QICLean) → A5b-g → D2/D3 (after A5 settles what the sectors are) → B6/B10.
 
-Totals if every A wave lands: about −4,100 to −5,500 Lean/blueprint lines; B: about −1,900 lines; D1-D4 potentially another −10,000 pending the four decisions.
+A2 and A3 are complete; see the wave-1 audit cited above. The remaining
+candidate order is A1 → A4 → B8/B9 (blueprint and notes, in the same PR stream
+as A1/A4) → B2/B3/B5/B7 (pure docstring changes) → B1 (after D1 is decided)
+→ A5a (QICLean) → A5b-g → D2/D3 (after A5 settles what the sectors are) →
+B6/B10.
+
+If every remaining A wave lands, the estimated reduction is about 3,900 to
+5,300 Lean and blueprint lines. The B waves account for about 1,900 further
+lines. D1-D4 could account for another 10,000 lines, subject to the four
+listed decisions.
