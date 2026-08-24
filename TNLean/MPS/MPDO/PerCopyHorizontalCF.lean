@@ -65,8 +65,8 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   **Scope restriction (per-block separation):** the paper's Lemma L groups
   gauge-equivalent copies of one basis-of-normal-tensors representative before
   the trace-separation step; demanding `biCF` per block as here is strictly
-  stronger and fails on such copies (`duplicateScalarBlocks_not_hasBiCF`,
-  `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
+  stronger and fails on such copies; see
+  `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
         (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) →

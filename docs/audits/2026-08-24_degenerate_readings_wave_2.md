@@ -320,10 +320,15 @@ behind. One cross-reference in it was rewritten: the sentence pointing at the
 repeated-copy witness now points at the missing routing data instead, since
 that witness belongs to item (iii).
 
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` and
-`docs/paper-gaps/cpgsv17_bicf_block_separation.tex` keep their verdicts; the
-sections that cited the removed Lean declarations were rewritten to state why
-the witness is out of scope.
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` moves from `false-source` to
+`open-gap`, both still open: after the rewrite it records missing
+physical-routing data rather than a counterexample satisfying the source
+hypotheses, which is what the `false-source` kind is reserved for.
+`docs/paper-gaps/cpgsv17_bicf_block_separation.tex` keeps its verdict. In both,
+the sections that cited the removed Lean declarations were rewritten to state
+why the witness is out of scope, and the one docstring in
+`TNLean/MPS/MPDO/PerCopyHorizontalCF.lean` that named a removed declaration now
+cites only the note.
 
 ## Records left as historical
 

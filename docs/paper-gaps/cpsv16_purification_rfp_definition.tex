@@ -44,31 +44,22 @@ are equivalent.\footnote{Source location:
 The later warning that this definition is too weak concerns saturation of the
 area law, not the implication from PRFP to zero correlation length.
 
-\section{Deleted formalization}
+\section{What the source definition requires}
 
-The deleted predicate \leanid{MPOTensor.IsPRFP} did not formalize the source
-definition. It did require a local LPDO witness and the condition
-\[
-  \leanid{MPSTensor.IsTransferIdempotent}(\leanid{purifyingMPSTensor}(A)),
-\]
-so the pure-state RFP requirement itself was present. The missing source data
-was the stronger purification-RFP structure around
+A predicate asking only for a local purifying family together with
+transfer-map idempotence of the doubled MPS tensor does not formalize the
+source definition, even though the pure-state RFP requirement is present in
+it. What such a predicate omits is the purification-RFP structure around
 \path{eq:MPDO-Puri-1}: after tracing the ancillary index, the source obtains a
 trace-preserving completely positive map on the spin degrees of freedom and the
 decomposition displayed in \path{PuriRFP}--\path{PuriRFP-BNT}. The purifying
-tensor is also described by the canonical RFP form \path{III_CFI_RFP}, but this
-is not the condition violated by the deleted scalar witness; in bond
-dimension~$1$ the witness already has that form. The deleted predicate kept
-only the local purifying family together with generic transfer-map idempotence
-of the doubled MPS tensor. It did not encode the global purification equation or
-the trace-preserving post-ancilla map.
-
-With this weaker hypothesis the development proved a counterexample to PRFP
-implying ZCL. That conclusion contradicted the source theorem above, so it was
-a counterexample to the local Lean predicate, not to Definition
+tensor is also described by the canonical RFP form \path{III_CFI_RFP}, but that
+is not the discriminating condition; in bond dimension~$1$ a scalar witness
+already has that form. A counterexample against the purely local hypothesis is
+therefore a counterexample to that local condition, not to Definition
 \path{def:Puri-RFP}.
 
-The current formalization keeps the two conditions separate.
+The formalization keeps the two conditions separate.
 \path{TNLean/MPS/MPDO/PRFP.lean} records the positive-length global equation
 and pure-state RFP witness of Definition~4.3, while
 \path{TNLean/MPS/MPDO/LocalPurificationRFP.lean} gives the local tensor
