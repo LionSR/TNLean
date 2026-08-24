@@ -173,10 +173,10 @@ private noncomputable def blockPiece (α β γ δ : Λ) :
 private theorem blockPiece_isometry (α β γ δ : Λ) :
     (Fam.blockPiece α β γ δ)ᴴ * Fam.blockPiece α β γ δ = 1 := by
   unfold blockPiece
-  rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv _ _ _ (Equiv.refl _) _,
-    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, Fam.isometry,
-    Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one,
-    Matrix.submatrix_one_equiv]
+  exact Matrix.IsIsometry.reindex _
+    (Matrix.IsIsometry.kronecker _ _
+      (by simp [Matrix.IsIsometry]) (Fam.isometry δ γ))
+    (Equiv.refl _) (Fam.tripleMultEquiv α β δ γ)
 
 /-- Conjugating a fixed `δ`-block of the fused pair, summed against the third factor's physical
 index, by `blockPiece` reduces to the fusion identity of `fusionIsometry δ γ` applied to the
