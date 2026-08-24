@@ -19,10 +19,12 @@ representative is used as an ambient tensor.
 
 **Scope restriction (full-support irreducibility):** This module treats the
 intended reduced canonical representative in the argument for arXiv:1703.09188,
-Proposition `prop:normal-tensor`. The formalization does not construct the reduced
-representative obtained by omitting the ambient zero complement. Consequently the
-MPU normality capstone below assumes full support and does not claim bare
-`IsMPU` implies ambient normality. See
+Proposition `prop:normal-tensor`. The reduced representative obtained by
+omitting the ambient zero complement is constructed by
+`MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii`. The original
+nonminimal tensor need not be normal, so the MPU normality capstone below still
+assumes full support for that named tensor and does not claim bare `IsMPU`
+implies its ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
@@ -263,8 +265,10 @@ theorem ambientBlockInclusion_mul_conjTranspose_eq_one
 
 **Scope restriction (unique full-support block):** This is the algebraic
 irreducibility conclusion for the intended reduced representative in
-arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. The reduction
-that omits the ambient zero complement is not formalized here; see
+arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. The theorem
+`MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii` constructs the
+reduced representative; this lemma supplies its full-support irreducibility
+step and does not assert irreducibility of the original nonminimal tensor. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 theorem isIrreducibleTensor_of_r_eq_one_of_fullSupport
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)
@@ -279,8 +283,10 @@ primitivity fields.
 **Scope restriction (supplied spectral data):** The radius and primitivity fields
 are the spectral conclusions of arXiv:1703.09188, Proposition
 `prop:normal-tensor`, lines 349--354. The full-support premise describes the
-intended reduced representative after lines 319--326; the reduction that omits
-the ambient zero complement is not formalized here. See
+intended reduced representative after lines 319--326. That representative is
+constructed by `MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii`; this
+lemma combines its full-support conclusion with supplied spectral data and does
+not make the original nonminimal tensor normal. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 theorem isNormalTensor_of_r_eq_one_of_fullSupport
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)

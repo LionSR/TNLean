@@ -5,7 +5,7 @@
 \input{command}
 \title{Full Support in MPU Normality and Theorem III.8}
 \author{}
-\date{2026-08-12}
+\date{2026-08-24}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -31,7 +31,13 @@ coisometric embedding of the retained direct sum into a larger ambient bond
 space.  This choice is useful for exact reconstruction.  The proof of the
 proposition is correct for the intended reduced representative in which the
 ambient zero complement has been omitted, but the source does not state this
-reduction as a separate step and the formalization does not yet construct it.
+reduction as a separate theorem.  The formalization now constructs such a
+representative in
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative}.  It has positive
+bond dimension $D_{\mathrm{red}}\leq D$, has full-support
+canonical-form-II data, and generates the same periodic operators at every
+positive length.  It is a new representative; the theorem does not make the
+original ambient tensor normal.
 
 This distinction is necessary.  Starting with any MPU representative, adjoin a
 zero virtual direct summand.  Every periodic contraction is unchanged, hence
@@ -52,6 +58,14 @@ other retained block exists.  The ambient coisometry is square and hence
 unitary; block assembly and unitary conjugation transport irreducibility from
 the normal block to the ambient tensor.
 
+The normalized-flattening form of the construction is
+\leanid{MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii}.  Starting
+from the nonzero irreducible reduction, it transfers the shifted trace
+identities to the retained direct sum.  Every transfer eigenvalue of a retained
+block embeds into the ambient transfer spectrum.  Its positive Perron value
+and every peripheral value therefore equal one, so the retained blocks are
+normal.  The canonical-form-II gauge preserves their total bond dimension.
+
 \section{The source factors and Theorem III.8}
 Let $\mathcal U$ be an MPU tensor with physical dimension $d$ and bond
 dimension $D$, and let $E$ be the transfer matrix of the normalized tensor
@@ -60,6 +74,12 @@ without loss of generality that this normalized tensor is in canonical form II
 \cite[discussion following Proposition~III.1]{Cirac2017MPU}. Choose such data
 with full support.
 % Source lines: paper_v2.tex 350--356.
+The cited representative theorem justifies this replacement at the level
+of the positive-length periodic operator family.  It does not identify the
+compact-SVD source cuts or selected source factors of the new tensor with those
+of the original auxiliary presentation.  Consequently, results whose
+statements retain the source cuts of a named tensor still require source data
+for that same tensor, or a separate comparison theorem.
 Let $\mathcal A_1$ be its unique block, let $V$ be the inclusion
 of that block into the ambient bond space, and let $\Lambda$ be the block's
 diagonal positive right fixed point normalized to have trace one. Set
@@ -404,8 +424,11 @@ rather than only at its endpoints. The resulting non-strict conclusion compares 
 $\sigma^{(2)}$ of the two supplied witness endpoints
 $\mathcal W_{\mathrm{anc}}(0)$ and $\mathcal W_{\mathrm{anc}}(1)$. It does not
 compare $\sigma^{(2)}$ of the original MPU tensors. Promoting this witness-level
-equality to an original-tensor invariant requires preservation under adjoining
-identity ancillas, which remains open in issue~\#6138. All later time-reversal
+equality to an original-tensor invariant requires preservation of the selected
+source data under adjoining identity ancillas. The closed issue~\#6138 proves
+CFII and full-support preservation but does not identify the selected
+compact-SVD factors; that remaining boundary is tracked by issue~\#6136. All
+later time-reversal
 descendants and examples repeat the required endpoint and comparison data after
 blocking or adjoining ancillas. The swap transformation and its two dependent
 strict-phase statements require the actual source-constructed interpolation to
@@ -422,46 +445,41 @@ the coprimality condition in the blueprint definition of equivalence when
 $d>1$.
 
 For bond dimension one, the normalized transfer matrix supplies the source
-pair directly. For bond dimension greater than one, no current result
-constructs reduced full-support source data for every simple block or proves
-their preservation under blocking, adjoining ancillas, tensor products,
-composition, conjugation, adjoint, transposition, or continuous variation, or
-identifies the source data of a tensor with those of a reduced representative.
-Consequently the admissible Chapter~28 statements are restricted to the
-explicitly supplied tensors, comparison tensors, and chosen paths. The
-parallel source-labelled statements retain the hypotheses of the paper and
-remain unformalized. No restricted statement is presented under a source
-label.
+pair directly. For arbitrary positive bond dimension, the reduced
+representative theorem now supplies a full-support canonical-form-II tensor
+with the same positive-length periodic operators. It does not identify the
+source data of the original tensor with those of that representative. Nor does
+it prove preservation of such data under tensor products, composition,
+conjugation, adjoint, transposition, or continuous variation. Consequently the
+admissible Chapter~28 statements remain restricted to the explicitly supplied
+tensors, comparison tensors, and chosen paths. The parallel source-labelled
+statements retain the hypotheses of the paper and remain unformalized. No
+restricted statement is presented under a source label.
 
 \section{Elimination plan}
-The native source-data scope tracker is issue~\#6136. Its four implementation
-branches separate the logically distinct transport problems. Issue~\#6137
-constructs a reduced full-support representative and transports the source
-objects back to the tensor used in the theorem. Together with the independent
-complete-network issues~\#5982 and~\#6071, this is required before the
-admissible source-isometry and simple-tensor equivalence nodes can be merged
-into \texttt{lemuisometry} and \texttt{ThmFund1}. The admissible standard form
-can then be merged into \texttt{SF}.
+The native source-data scope tracker is issue~\#6136. The
+dimension-bounded full-support representative is constructed by issue~\#7065
+and the two theorems recorded above. This closes representative existence but
+does not transport selected compact-SVD factors across unequal bond spaces.
+The admissible source-unitary and standard-form construction is tracked by
+issue~\#7012, while issue~\#7127 owns the later unrestricted standard-form
+representative. The independent complete-network issues~\#5982 and~\#6071
+remain necessary for the source-$u$ and source-$v$ conclusions.
 
-Issue~\#6138 proves source-data preservation under physical blocking and
-adjoining identity ancillas. It removes the extra hypotheses from the
-admissible index definition, its well-definedness theorem, the blocked local
-symmetry statements, the sign-parity results, and the ancilla-dependent
-examples. Issue~\#6139 treats tensor products, composition, and conjugate,
-adjoint, transposed, and other transformed comparison tensors. It removes the
-extra endpoint and comparison-tensor assumptions from the admissible local
-symmetry and example nodes. Issue~\#6140 constructs continuous source data
-along strict-equivalence paths and their four fixed symmetry-transformed
-comparison paths. It removes the path hypotheses from the admissible
-continuity, symmetry-equivalence, phase-classification, swap, and
-MPS-comparison nodes.
+Issue~\#6139 treats tensor products, composition, and conjugate, adjoint,
+transposed, and other transformed comparison tensors. It removes the extra
+endpoint and comparison-tensor assumptions from the admissible local symmetry
+and example nodes. Issue~\#6140 constructs continuous source data along
+strict-equivalence paths and their four fixed symmetry-transformed comparison
+paths. It removes the path hypotheses from the admissible continuity,
+symmetry-equivalence, phase-classification, swap, and MPS-comparison nodes.
 
 The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
 merged only after the relevant branches above are closed. Until then, every
 source label remains an unrestricted unformalized statement, while every
 reduced-source or path-dependent statement remains under its
-\texttt{mpu\_admissible} label. Closing issues~\#6137--\#6140 does not replace
-the independent proof obligations in issues~\#5982 and~\#6071.
+\texttt{mpu\_admissible} label. Representative existence does not replace the
+independent proof obligations in issues~\#5982 and~\#6071.
 
 \section{Verdict}
 \textbf{Verdict: scope restriction.} The paper's normal-tensor proposition,
@@ -472,29 +490,31 @@ hypothesis of the normal-tensor proposition, and it does not follow from
 literal canonical-form membership alone.
 
 Consequently, a source-faithful formalization must construct this reduced
-representative and transport the source constructions, or explicitly assume
-chosen canonical-form-II data with full support. The formalization uses
-the latter option when $D>1$ and the direct one-dimensional stabilization when
-$D=1$. It does not yet construct the representative reduction in the
-higher-dimensional case. The original source labels therefore remain
-unrestricted and unformalized; the distinctly named admissible nodes record
-the current reduced full-support route.
+representative and, where a theorem retains named source cuts, separately
+justify the corresponding source constructions. The representative reduction
+is now formalized for every positive bond dimension, with equality of the
+periodic operator family at positive lengths. The admissible source statements
+still take full-support data for the same named tensor because no potentially
+unequal-dimensional source-factor identification is claimed. The original source
+labels therefore remain unrestricted and unformalized; the distinctly named
+admissible nodes record the current same-tensor source-data route.
 
-Within Theorem~III.8 itself, the two remaining proof gaps are the complete
+Within Theorem~III.8 itself, the remaining proof gaps include the complete
 source-$u$ contraction tracked by issue~\#5982 and the complete source-$v$
 equivalence tracked by issue~\#6071. Separately, the downstream standard-form,
 index, continuity, and symmetry results lack existence or preservation theorems
-for reduced source data under representative reduction, blocking, adjoining
-ancillas, tensor products, composition, transformed comparison tensors, and
-continuous paths. Chapter~28 treats all of these as explicit admissibility
-hypotheses rather than consequences of the MPU predicate.
+for reduced source data under products, transformed comparison tensors, and
+continuous paths. Chapter~28 treats these as explicit admissibility hypotheses
+rather than consequences of the MPU predicate.
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}.
 The spectral-radius and primitivity conclusions are derived from the shifted
 normalized transfer traces and combined with full support in
 \leanid{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}.
-Bare \leanid{MPOTensor.IsMPU} is deliberately not used to infer ambient
-normality or an ambient positive definite fixed point.
+Bare \leanid{MPOTensor.IsMPU} is deliberately not used to infer normality or
+an ambient positive definite fixed point for the original, possibly
+nonminimal, representative. It instead supplies the reduced representative in
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -58,14 +58,17 @@ private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ} [NeZero m]
     isNormalTensor_of_isNormal_leftCanonical B hNormalAlg hLeft
   exact ⟨⟨B, hGauge, hNormal, hLeft, Λ, hΛPos, hΛDiag, hΛFix⟩⟩
 
-/-- Literal CPSV canonical-form data admit a canonical-form-II representative
-in the same ambient bond dimension, related to the original tensor by a
-nonsingular gauge.
+/-- For literal CPSV canonical-form data, there are canonical-form-II witness
+data in the same ambient bond dimension, related to the original tensor by a
+nonsingular gauge. The returned witness records that the total retained block
+dimension is unchanged by the blockwise gauges.
 
 Source: arXiv:1606.00608, Appendix A, lines 1058--1077 and eq. `II_XAX`. -/
-theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
+theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormIIData
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
-    ∃ B : MPSTensor d D, GaugeEquiv A B ∧ IsCPSVCanonicalFormII B := by
+    ∃ (B : MPSTensor d D) (dataB : CPSVCanonicalFormIIData B),
+      GaugeEquiv A B ∧
+        ∑ k : Fin dataB.r, dataB.dim k = ∑ k : Fin data.r, data.dim k := by
   classical
   let blockData : (k : Fin data.r) → CFIIBlockGaugeData (data.blocks k) := fun k => by
     letI : NeZero (data.dim k) := NeZero.of_pos (data.dim_pos k)
@@ -129,8 +132,7 @@ theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
       _ = (Uᴴ * Xmat) * C * (Xinv * U) := by simp only [Matrix.mul_assoc]
       _ = (Gmat * Uᴴ) * C * (U * Ginv) := by rw [hGU', hUGinv']
       _ = Gmat * (Uᴴ * C * U) * Ginv := by simp only [Matrix.mul_assoc]
-  refine ⟨B, hGauge, ?_⟩
-  refine ⟨{
+  let dataB : CPSVCanonicalFormIIData B := {
       r := data.r
       dim := data.dim
       dim_pos := data.dim_pos
@@ -143,7 +145,19 @@ theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
       coisometric := data.coisometric
       reconstruct := fun _ => rfl
       blocks_left_canonical := fun k => (blockData k).leftCanonical
-      blocks_fixed_point := fun k => (blockData k).fixedPoint }⟩
+      blocks_fixed_point := fun k => (blockData k).fixedPoint }
+  exact ⟨B, dataB, hGauge, rfl⟩
+
+/-- For literal CPSV canonical-form data, there is a canonical-form-II
+representative in the same ambient bond dimension, related to the original
+tensor by a nonsingular gauge.
+
+Source: arXiv:1606.00608, Appendix A, lines 1058--1077 and eq. `II_XAX`. -/
+theorem CPSVCanonicalFormData.exists_gaugeEquiv_canonicalFormII
+    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
+    ∃ B : MPSTensor d D, GaugeEquiv A B ∧ IsCPSVCanonicalFormII B := by
+  obtain ⟨B, dataB, hGauge, _⟩ := data.exists_gaugeEquiv_canonicalFormIIData
+  exact ⟨B, hGauge, dataB.isCPSVCanonicalFormII⟩
 
 /-- Every tensor in literal CPSV canonical form is gauge-equivalent, in the
 same ambient bond dimension, to a tensor in literal canonical form II.
