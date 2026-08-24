@@ -179,8 +179,8 @@ such a representative generating the same family), so that the two purification
 witnesses — the zero tensor at $d=D=1$, and the constant one-letter tensor with
 sole entry
 $Q=\bigl(\begin{smallmatrix}1&0&0\\0&0&1\\0&0&0\end{smallmatrix}\bigr)$, whose
-closed operator is the scalar $1$ at every positive length while $Q^2$ loses
-the $(2,3)$ entry — lie outside the convention.
+generated density operator is the scalar $1$ at every positive length while
+$Q^2$ loses the $(2,3)$ entry — lie outside the convention.
 
 This item is withdrawn and the witnesses are restored. Retiring them is
 admissible only once the intended reading is carried by the predicate itself,
