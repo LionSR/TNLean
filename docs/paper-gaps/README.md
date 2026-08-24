@@ -107,10 +107,11 @@ For MPDO renormalization fixed points:
   4.1. The dimer tensor satisfies `MPOTensor.IsSimple`, witnessed by blocking
   length one, while its canonical-form weight $\sqrt{337/512}$ is not a unit
   weight. The line-246 witness is therefore not part of simplicity; see
-  `docs/audits/2026-08-24_degenerate_readings_wave_2.md`. The same note records the exact scalar repeated-copy
-  counterexample to Theorem 4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$
-  satisfy the global convention and every condition-(iv) clause, while the
-  blocked tensor fails Definition 4.1.
+  `docs/audits/2026-08-24_degenerate_readings_wave_2.md`. The exact scalar
+  repeated-copy counterexample to Theorem 4.9(iv)$\Rightarrow$(v) is recorded
+  in `cpgsv17_pf_rank_one.tex`: weights $1$ and $1/2$ satisfy the global
+  convention and every condition-(iv) clause, while the blocked tensor fails
+  Definition 4.1.
 - `cpgsv17_mpdo_mutual_information_bound.tex` is the resolved false-source
   record for Proposition 4.5.  The monotonicity and finite-chain bounds remain
   proved separately.  The parity-sensitive tensor is an MPDO, but at every

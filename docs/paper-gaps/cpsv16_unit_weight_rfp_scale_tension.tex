@@ -128,13 +128,17 @@ Isolated vanishing lengths remain possible.
 
 The predicate does not impose the line-246 unit-weight convention. Requiring a
 unit-weight witness of the blocked tensor is a hyper-literal reading that the
-source's own conventions exclude: the Definition-4.1-normalized Example~4.12
-carries the canonical-form weights $1/\sqrt2,1/\sqrt2$, and the dimer $R$
-of the section below carries $\sqrt{337/512}$, so neither would be simple
-under it. The library therefore reads line~246 as a
-normalization the source may apply, not as a clause of Definition~4.7. The
-predicates it once separated, and the counterexample module that separated
-them, were removed; see
+source's own conventions exclude: the dimer $R$ of the section below is
+simple in the source's sense (its physical-trace transfer is non-nilpotent)
+and carries the canonical-form weight $\sqrt{337/512}$, so it would not be
+simple under a unit-weight reading. (Example~4.12 is not a second such
+witness: its second BNT basis element has vanishing one-by-one
+physical-trace transfer, so it is not simple under any reading, and its
+canonical-form weight $1/\sqrt2$ is therefore beside the point; see
+\path{docs/paper-gaps/cpsv16_simple_tensor_nilpotency.tex}.) The library
+therefore reads line~246 as a normalization the source may apply, not as a
+clause of Definition~4.7. The predicates it once separated, and the
+counterexample module that separated them, were removed; see
 \path{docs/audits/2026-08-24_degenerate_readings_wave_2.md}.
 
 By contrast, \leanid{MPOTensor.IsSimpleCanonicalForm} is a predicate on one

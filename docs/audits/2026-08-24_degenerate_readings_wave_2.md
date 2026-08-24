@@ -24,13 +24,16 @@ to one." The formalization had read the two together, so that simplicity
 required the blocked tensor itself to admit a canonical-form witness with a
 unit-modulus copy weight.
 
-That reading excludes the source's own examples. Example 4.12, normalized as
-Definition 4.1 requires, has canonical-form weights $1/\sqrt2, 1/\sqrt2$; the
-dimer $R$ of `RescalingStableLengthDependentRFP` has weight $\sqrt{337/512}$.
-Both have non-nilpotent physical-trace transfers and both are simple in the
-source's sense, and neither carries a unit weight. The tension between the
-line-246 normalization and the scale that Definition 4.1 pins is real, and it
-stays recorded in
+That reading excludes the source's own examples. The dimer $R$ of
+`RescalingStableLengthDependentRFP` has canonical-form weight
+$\sqrt{337/512}$, has a non-nilpotent physical-trace transfer, and is simple
+in the source's sense; the unit-weight reading would still exclude it, since
+$\sqrt{337/512}$ is not a unit weight. (Example 4.12 is not a second such
+witness: its second BNT basis element has vanishing one-by-one
+physical-trace transfer, so it is not simple under any reading — see
+`docs/paper-gaps/cpsv16_simple_tensor_nilpotency.tex`.) The tension between
+the line-246 normalization and the scale that Definition 4.1 pins is real for
+$R$, and it stays recorded in
 `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`; what it does not
 do is refute simplicity of $R$.
 
