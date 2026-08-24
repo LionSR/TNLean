@@ -25,8 +25,7 @@ Kronecker product.
   invariants*, arXiv:1703.09188, lines 1608--1610][Cirac2017MPU]
 -/
 
-open scoped Matrix Kronecker
-open Matrix Finset BigOperators
+open scoped Matrix Kronecker BigOperators
 
 namespace Matrix
 
