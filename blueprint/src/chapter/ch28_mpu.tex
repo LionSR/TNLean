@@ -3459,6 +3459,137 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Reduced canonical representative of the normalized tensor]
+    \label{thm:mpu_reduced_normalized_flattening_cfii}
+    \lean{MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii,
+        def:mpu_full_support, def:normal, def:same_mpv2_pos}
+    Let $d,D>0$, let $U$ be an MPU tensor of physical dimension $d$ and
+    bond dimension $D$, and let $\widetilde U=d^{-1/2}U$ be its normalized
+    doubled-index tensor. There are an integer $D_{\mathrm{red}}>0$, a normal
+    tensor $A_{\mathrm{red}}$ of bond dimension $D_{\mathrm{red}}$, and
+    canonical-form-II data for $A_{\mathrm{red}}$ such that, for every
+    integer $N>0$ and every word $\sigma$ of length $N$,
+    \begin{align}
+        D_{\mathrm{red}} & \leq D, \\
+        V^{(N)}(A_{\mathrm{red}})_\sigma
+            & =V^{(N)}(\widetilde U)_\sigma, \\
+        \sum_{k=1}^{r}D_k & =D_{\mathrm{red}}.
+    \end{align}
+    This organizes the dimension-bounded canonical replacement used in
+    \cite[lines~257--294 and 319--326]{Cirac2017MPU}. Its irreducible
+    reduction and canonical-form-II gauge are those of
+    \cite[lines~195--255 and 1058--1077]{Cirac2016MPDO_arXiv}. The shifted
+    transfer argument is the one used in
+    \cite[lines~344--356]{Cirac2017MPU}.
+    % Source role: replacement infrastructure, not a separately named source theorem.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form,
+        thm:nonzero_irreducible_block_decomposition,
+        lem:overlap_eq_of_pos_mpv, thm:mpu_transfer_matrix_overlap,
+        thm:mpu_normalized_transfer_trace,
+        thm:mpu_transfer_matrix_eigenvalues,
+        thm:mpu_dependent_block_inclusion_identities,
+        lem:transfer_map_corner_intertwine,
+        lem:irreducible_transfer_perron_pair,
+        lem:irreducible_block_spectral_normalization,
+        thm:mpu_shifted_trace_power_spectrum,
+        thm:mpu_shifted_transfer_trace_single_block,
+        thm:mpu_shifted_transfer_trace_primitive,
+        thm:mpu_unique_full_support_normal,
+        thm:cpsv_cf_to_cfii_gauge, thm:gauge_invariance}
+    Remove the zero irreducible blocks of $\widetilde U$ and write
+    \begin{align}
+        A_0^i & =\bigoplus_{k=1}^{r}B_k^i,
+             & \sum_{k=1}^{r}D_k & \leq D, \\
+        V^{(N)}(A_0)_\sigma
+             & =V^{(N)}(\widetilde U)_\sigma,
+    \end{align}
+    for every $N>0$ and every word $\sigma$ of length $N$.
+    At $N=2$ the common self-overlap is one, so the retained sum is nonempty
+    and $D_0=\sum_kD_k>0$. For every integer $N>1$, overlap invariance gives
+    \begin{align}
+        \tr(E_{A_0}^{\,N})
+          & =\sum_\sigma\left|V^{(N)}(A_0)_\sigma\right|^2
+           =\sum_\sigma\left|V^{(N)}(\widetilde U)_\sigma\right|^2
+           =1.
+        \label{eq:mpu_reduced_trace}
+    \end{align}
+    Let $J_k:\mathbb C^{D_k}\to\mathbb C^{D_0}$ be the inclusion of the
+    $k$th block. Then
+    \begin{align}
+        J_k^\dagger J_k & =\Id,
+            & A_0^iJ_k & =J_kB_k^i, \\
+        \E_{A_0}(J_kXJ_k^\dagger)
+            & =J_k\E_{B_k}(X)J_k^\dagger.
+    \end{align}
+    Thus every nonzero transfer eigenvalue of $B_k$ is a nonzero eigenvalue of
+    $E_{A_0}$ and hence equals one by
+    (\ref{eq:mpu_reduced_trace}). Perron--Frobenius theory supplies
+    $\rho_k>0$ and $s_k>0$ with
+    $\E_{B_k}(\rho_k)=s_k\rho_k$. Therefore $s_k=1$, and every peripheral
+    eigenvalue of $B_k$ is also one. Each $B_k$ is consequently normal.
+
+    The direct sum now has literal canonical-form data with full support.
+    Apply the nonsingular blockwise canonical-form-II gauge. It preserves the
+    block dimensions and all periodic vectors, so the resulting tensor
+    $A_{\mathrm{red}}$ still satisfies
+    \begin{align}
+        \sum_{k=1}^{r}D_k & =D_{\mathrm{red}},
+            & \tr(E_{A_{\mathrm{red}}}^{\,N}) & =1,
+    \end{align}
+    for every integer $N>1$.
+    The shifted traces force $r=1$, spectral radius one, and primitivity.
+    Full support identifies the unique block with the ambient bond space, so
+    $A_{\mathrm{red}}$ is normal.
+\end{proof}
+
+\begin{theorem}[Reduced canonical representative of an MPU]
+    \label{thm:mpu_reduced_cfii_representative}
+    \lean{MPOTensor.IsMPU.exists_reduced_cfii_representative}
+    \leanok
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii,
+        def:mpu_full_support}
+    Let $d,D>0$ and let $U$ be an MPU tensor. There are
+    $D_{\mathrm{red}}>0$ and an MPU tensor $U_{\mathrm{red}}$ of bond
+    dimension $D_{\mathrm{red}}$ such that, for every integer $N>0$,
+    \begin{align}
+        D_{\mathrm{red}} & \leq D, \\
+        U_{\mathrm{red}}^{(N)} & =U^{(N)}.
+    \end{align}
+    The normalized doubled-index tensor of $U_{\mathrm{red}}$ has
+    canonical-form-II data whose retained block dimensions sum to
+    $D_{\mathrm{red}}$. No equality is asserted at length zero, and no
+    virtual gauge is asserted between the two potentially unequal-dimensional
+    bond spaces.
+    % Source role: MPU corollary of the canonical-replacement infrastructure.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_normalized_flattening_cfii,
+        lem:mpv_smul, lem:mpdo_three_first_site_contraction_coefficients}
+    Apply Theorem~\ref{thm:mpu_reduced_normalized_flattening_cfii} and write
+    its representative as $A_{\mathrm{red}}$. Define
+    \begin{align}
+        U_{\mathrm{red}}^{ij}
+            & =\sqrt d\,A_{\mathrm{red}}^{(i,j)}.
+    \end{align}
+    Since $d>0$, normalization recovers $A_{\mathrm{red}}$ exactly. For every
+    $N>0$ and every ket--bra pair $(\sigma,\tau)$, the doubled-index
+    coefficient identity gives
+    \begin{align}
+        (U_{\mathrm{red}}^{(N)})_{\sigma,\tau}
+          & =d^{N/2}V^{(N)}(A_{\mathrm{red}})_{(\sigma,\tau)} \\
+          & =d^{N/2}V^{(N)}(\widetilde U)_{(\sigma,\tau)} \\
+          & =(U^{(N)})_{\sigma,\tau}.
+    \end{align}
+    Hence the periodic operators agree at every positive length. For $N>1$
+    the right side is unitary, so $U_{\mathrm{red}}$ is an MPU.
+\end{proof}
+
 \begin{theorem}[Full support under physical blocking]
     \label{thm:mpu_full_support_blocking}
     \lean{MPSTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor}
