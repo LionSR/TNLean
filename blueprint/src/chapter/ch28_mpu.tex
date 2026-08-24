@@ -1942,7 +1942,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Then $A\boxtimes B$ is a CPSV normal tensor and is left-canonical:
     \begin{align}
         \sum_{i,k}
-        \bigl((A^i\otimes B^k)^\dagger\bigr)(A^i\otimes B^k)
+        \left((A\boxtimes B)^{\pi_{d,e}(i,k)}\right)^\dagger
+        (A\boxtimes B)^{\pi_{d,e}(i,k)}
          & =\Id_{DE}.
         \label{eq:mpu_tensor_left_canonical_output}
     \end{align}
@@ -1961,14 +1962,23 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \uses{thm:mps_word_span_tensor_product,
         thm:cpsv_normal_eventually_injective,
         thm:is_normal_tensor_of_is_normal_left_canonical}
-    The adjoint and multiplication laws for Kronecker products give
+    The adjoint and multiplication laws for Kronecker products, together
+    with the fact that simultaneous reindexing preserves adjoints, products,
+    and finite sums, give
     \begin{align}
-        \sum_{i,k}
-        \bigl((A^i\otimes B^k)^\dagger\bigr)(A^i\otimes B^k)
-         & =\left(\sum_i(A^i)^\dagger A^i\right)
-        \otimes
-        \left(\sum_k(B^k)^\dagger B^k\right)     \\
-         & =\Id_D\otimes\Id_E=\Id_{DE},
+        &\sum_{i,k}
+        \left((A\boxtimes B)^{\pi_{d,e}(i,k)}\right)^\dagger
+        (A\boxtimes B)^{\pi_{d,e}(i,k)} \\
+        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        \left(\sum_{i,k}
+        (A^i\otimes B^k)^\dagger(A^i\otimes B^k)\right) \\
+        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        \left(
+        \left(\sum_i(A^i)^\dagger A^i\right)\otimes
+        \left(\sum_k(B^k)^\dagger B^k\right)
+        \right) \\
+        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        (\Id_D\otimes\Id_E)=\Id_{DE},
     \end{align}
     proving~(\ref{eq:mpu_tensor_left_canonical_output}).  Spectral normality
     gives positive lengths $N_A,N_B$ at which the two homogeneous word spans
