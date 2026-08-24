@@ -24,9 +24,9 @@ the QCA and MPU applications. This correction is proved and documented in
 `docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
 
 **Local fix (outer-factor basis):** The printed coefficient proofs in both
-Schumacher--Werner and GNVW place the basis elements `e'ν` in the middle factor.
-The expansion of the second operator and the assertion that `eμ ⊗ e'ν` is a basis
-of the two outer factors force `e'ν` to belong to the third factor. The third-factor
+Schumacher--Werner and GNVW place the basis elements $e'_\nu$ in the middle factor.
+The expansion of the second operator and the assertion that $e_\mu \otimes e'_\nu$ is a basis
+of the two outer factors force $e'_\nu$ to belong to the third factor. The third-factor
 indices in this module implement that correction. It is documented in
 `docs/paper-gaps/gnvw12_support_algebra_outer_factor_basis.tex`.
 
