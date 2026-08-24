@@ -514,48 +514,34 @@ model different levels of data and different sources.
   Reconstruction still permits an omitted all-zero complement because `Uᴴ * U`
   is the retained-support projection; see
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
-- `MPOTensor.IsSimpleCanonicalForm` and `MPOTensor.IsSimple` in
-  `TNLean/MPS/MPDO/SimpleTensor.lean` are normalized fixed-representative
-  predicates. The former adds the MPDO and nonnilpotent-sector conditions to
-  horizontal canonical form; its sanctioned one-way bridge is
-  `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`. The latter permits positive
-  physical blocking, but still requires the blocked tensor itself to admit the
-  line-246 unit-weight witness. Neither predicate is a quotient by nonzero
-  scalar rescaling; see
+- `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
+  the normalized fixed-representative predicate of Appendix C.2: it adds the
+  MPDO and nonnilpotent-sector conditions to horizontal canonical form, and its
+  sanctioned one-way bridge is
+  `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`. It is not a quotient by
+  nonzero scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
-- `MPOTensor.IsSourceSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean`
-  is the normalization-free predicate for the canonical-block reading of lines
-  217--246 and Definition 4.7 at lines 815--822 of arXiv:1606.00608. It
-  existentially chooses a positive physical blocking whose doubled-index tensor
-  has a BNT sector presentation (nonzero copy weights, positive multiplicities
-  by definition) by a basis of normal tensors with nonnilpotent physical-trace
-  transfers; see `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`
-  for the nonzero-coefficient convention. The theorem
-  `MPOTensor.IsSourceSimple.exists_mpo_ne_zero` derives a nonzero closed MPO at
-  some positive length from the presentation; this is not an additional
-  defining assumption. Nonnilpotency is independent of the chosen
-  presentation by `MPOTensor.bnt_basis_not_isNilpotent_iff`.
-- `MPOTensor.IsNonvanishingSourceSimple` strengthens source simplicity by
-  requiring $\rho_N(M)\ne0$ for every $N>0$. Normalized simplicity implies
-  source simplicity unconditionally through
-  `MPOTensor.IsSimple.isSourceSimple`: the normalized sector decomposition is
-  itself a BNT sector presentation after canonical-form gauge transport. The
-  implication to the strengthened predicate,
-  `MPOTensor.IsSimple.isNonvanishingSourceSimple`, assumes positive-length
-  nonvanishing. The sign-flip tensor in
-  `TNLean/MPS/MPDO/SimpleVanishingCounterexample.lean` satisfies
-  $\rho_N(M)=(1+(-1)^N)I$. It is normalized-simple and source-simple, but it is
-  not nonvanishing source-simple because $\rho_1(M)=0$. This does not refute
-  the canonical-block reading of Definition 4.7 and is not
-  an RFP or BNT-coefficient-rigidity claim.
+- `MPOTensor.IsSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean` is the sole
+  simplicity predicate: Definition 4.7 of arXiv:1606.00608 at lines 815--822
+  read over the canonical blocks of lines 217--246. It existentially chooses a
+  positive physical blocking whose doubled-index tensor has a BNT sector
+  presentation (nonzero copy weights, positive multiplicities by definition) by
+  a basis of normal tensors with nonnilpotent physical-trace transfers; see
+  `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` for the
+  nonzero-coefficient convention. The theorem
+  `MPOTensor.IsSimple.exists_mpo_ne_zero` derives a nonzero closed MPO at some
+  positive length from the presentation; this is not an additional defining
+  assumption. Nonnilpotency is independent of the chosen presentation by
+  `MPOTensor.bnt_basis_not_isNilpotent_iff`. The line-246 unit-weight witness
+  is not part of the predicate, and there is no separate all-length
+  nonvanishing variant; see
+  `docs/audits/2026-08-24_degenerate_readings_wave_2.md`.
 - Scalar rescaling of a closed length-$N$ MPO obeys
   $\rho_N(cM)=c^N\rho_N(M)$ by `MPOTensor.mpo_smul`, not a
-  $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff`,
-  `MPOTensor.isSourceSimple_smul_ofReal_iff`, and
-  `MPOTensor.isNonvanishingSourceSimple_smul_ofReal_iff` give invariance only
-  under strictly positive real rescaling. They do not give arbitrary complex
-  invariance, an `IsSimple` equivalence, or preservation of the same fixed-scale
-  RFP equations after rescaling.
+  $|c|^{2N}$ law. Accordingly, `MPOTensor.isMPDO_smul_ofReal_iff` and
+  `MPOTensor.isSimple_smul_ofReal_iff` give invariance only under strictly
+  positive real rescaling. They do not give arbitrary complex invariance or
+  preservation of the same fixed-scale RFP equations after rescaling.
 
 The `CF` spelling in these established MPDO names is retained for compatibility
 and paper-local vocabulary. New public predicates should spell out
