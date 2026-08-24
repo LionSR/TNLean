@@ -1,0 +1,83 @@
+% Regression: the registry default of `label pos` is the word auto -- the
+% automatic chooser -- so the word must be spellable.  Spelling the default
+% is saying nothing: B spells auto and stands where A, who spelled nothing,
+% stands; C spells a bearing and then auto, and the auto retracts the
+% bearing, last wins.  D spells a braced spaced bearing, which stages its
+% trimmed word: the compass reader answers words, so an untrimmed stage
+% would crash the bearing arithmetic, and D compiling at all is the claim.
+% The chooser answers for A, B, and C and is asked nothing by D.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_pos_count_int
+\tl_new:N \l__tenkz_test_pos_label_tl
+\cs_new_eq:NN
+  \__tenkz_test_pos_auto:nN \__tenkz_kernel_r_label_auto_side:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_label_auto_side:nN #1#2
+  {
+    \__tenkz_test_pos_auto:nN {#1} #2
+    \int_gincr:N \l__tenkz_test_pos_count_int
+    \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_pos_label_tl
+    \str_case:VnF \l__tenkz_test_pos_label_tl
+      {
+        {A}
+          {
+            \str_if_eq:VnF #2 {e}
+              { \errmessage{the~unspelled~default~answered~the~wrong~face} }
+          }
+        {B}
+          {
+            \str_if_eq:VnF #2 {e}
+              { \errmessage{the~spelled~default~answered~the~wrong~face} }
+          }
+        {C}
+          {
+            \str_if_eq:VnF #2 {e}
+              { \errmessage{a~retracted~bearing~answered~the~wrong~face} }
+          }
+      }
+      { \errmessage{an~explicit~bearing~reached~the~automatic~chooser} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% Nothing spelled: the carrier runs north-south through the bead and the
+% chooser takes east, the first free face after the carried pair.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=P]{}
+  \tn[at=(3,1), name=Q]{}
+  \tnwire[name=W]{P}{Q}
+  \tn[at=on W 0.5, skin=dot]{A}
+\end{tenkz}
+% The default spelled: auto stages no bearing, and the bead stands where A
+% stands.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=P0]{}
+  \tn[at=(3,1), name=Q0]{}
+  \tnwire[name=W0]{P0}{Q0}
+  \tn[at=on W0 0.5, skin=dot, label pos=auto]{B}
+\end{tenkz}
+% A bearing retracted: the later auto removes the staged north, last wins,
+% and the chooser answers as if nothing had been spelled.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=P1]{}
+  \tn[at=(3,1), name=Q1]{}
+  \tnwire[name=W1]{P1}{Q1}
+  \tn[at=on W1 0.5, skin=dot, label pos=n, label pos=auto]{C}
+\end{tenkz}
+% A braced spaced bearing: the stage takes the trimmed word, so the compass
+% reader meets e, not a spaced word it would carry into the arithmetic.
+\begin{tenkz}[lattice={3x1}, bonds=none]
+  \tn[at=(1,1), name=P2]{}
+  \tn[at=(3,1), name=Q2]{}
+  \tnwire[name=W2]{P2}{Q2}
+  \tn[at=on W2 0.5, skin=dot, label pos={ e }]{D}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_pos_count_int } = {3}
+  { \errmessage{the~spellable~default~fixture~did~not~ask~three~answers} }
+\ExplSyntaxOff
+\end{document}
