@@ -478,12 +478,7 @@ theorem ambient_toMPSTensor_eq_sectors_toTensor :
   exact ambient_eq_weighted_basis_blocks i j
 
 /-- The ambient MPO is in normalized BNT-refined horizontal form, with the
-displayed sector decomposition and identity gauge on both bond-one blocks.
-**Scope restriction (BNT-refined horizontal form):** this is the project's
-normalized refinement of the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-Source: arXiv:1606.00608, canonical form at lines 237--246 and the BNT
-decomposition `eq:II_ABasicTensors` at lines 271--301. -/
+displayed sector decomposition and identity gauge on both bond-one blocks. -/
 theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
   refine ⟨sectors, sectors_isBNTCanonicalForm, ?_⟩
   have hTotal : sectors.totalDim = 2 := by

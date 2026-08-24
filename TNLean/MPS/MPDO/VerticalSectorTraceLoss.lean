@@ -23,8 +23,17 @@ precompression output is supported on the active sector.
 No complete-positivity predicate on finite products, global trace-preservation
 claim, or inverse-map conclusion is asserted here.
 
-The rectangular coordinate maps and their omitted zero-sector complements are
-documented in `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
+**Local fix (zero-sector complement):** rectangular vertical coordinates may
+discard a zero-sector complement, so in the four transported-map theorems
+`transportedVerticalSectorT_trace_le`, `transportedVerticalSectorT_trace_eq_iff`,
+`transportedVerticalSectorS_trace_le`, and `transportedVerticalSectorS_trace_eq_iff`,
+trace preservation is replaced by a trace inequality together with the support
+criterion for equality. The other trace identities in this file
+(`verticalSectorTrace_retainedVerticalSectorPartialTrace`,
+`trace_verticalSectorBlockDiagonal`, `trace_verticalSectorBlockProjection`,
+and the remaining `trace_*`/`verticalSectorTrace_*` lemmas) are exact. The
+obstruction and its elimination for the source-generated family are recorded
+in `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 
 ## References
 
@@ -422,13 +431,7 @@ theorem verticalSectorTrace_transportedVerticalSectorS
 families.  The only loss occurs at the final active-sector compression.
 
 Appendix C.4, lines 1955--1980 of arXiv:1606.00608 supplies the transported
-map used here.
-
-**Local fix (zero-sector complement):** Rectangular vertical coordinates may
-discard a zero-sector complement, so trace preservation is replaced by the
-inequality below.  This obstruction and its elimination on inputs whose
-precompression outputs lie in the retained sector are recorded in
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
+map used here. -/
 theorem transportedVerticalSectorT_trace_le
     {g₁ g₂ d : ℕ}
     (dim₁ mult₁ : Fin g₁ → ℕ)
@@ -467,14 +470,7 @@ theorem transportedVerticalSectorT_trace_le
 exactly when its precompression output is supported on `U₂ᴴ * U₂`.
 
 Appendix C.4, lines 1955--1980 of arXiv:1606.00608 supplies the transported
-map used here.
-
-**Local fix (zero-sector complement):** Rectangular vertical coordinates may
-discard a zero-sector complement.  The support criterion below identifies
-exactly when no trace is lost for an arbitrary positive sector family.  The
-obstruction is eliminated for the source-generated family in
-`VerticalSectorImagePreservation.lean` and is documented in
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
+map used here. -/
 theorem transportedVerticalSectorT_trace_eq_iff
     {g₁ g₂ d : ℕ}
     (dim₁ mult₁ : Fin g₁ → ℕ)
@@ -510,13 +506,7 @@ theorem transportedVerticalSectorT_trace_eq_iff
 families.  The only loss occurs at the final active-sector compression.
 
 Appendix C.4, lines 1955--1980 of arXiv:1606.00608 supplies the transported
-map used here.
-
-**Local fix (zero-sector complement):** Rectangular vertical coordinates may
-discard a zero-sector complement, so trace preservation is replaced by the
-inequality below.  This obstruction and its elimination on inputs whose
-precompression outputs lie in the retained sector are recorded in
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
+map used here. -/
 theorem transportedVerticalSectorS_trace_le
     {g₁ g₂ d : ℕ}
     (dim₁ mult₁ : Fin g₁ → ℕ)
@@ -555,14 +545,7 @@ theorem transportedVerticalSectorS_trace_le
 family exactly when its precompression output is supported on `U₁ᴴ * U₁`.
 
 Appendix C.4, lines 1955--1980 of arXiv:1606.00608 supplies the transported
-map used here.
-
-**Local fix (zero-sector complement):** Rectangular vertical coordinates may
-discard a zero-sector complement.  The support criterion below identifies
-exactly when no trace is lost for an arbitrary positive sector family.  The
-obstruction is eliminated for the source-generated family in
-`VerticalSectorImagePreservation.lean` and is documented in
-`docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
+map used here. -/
 theorem transportedVerticalSectorS_trace_eq_iff
     {g₁ g₂ d : ℕ}
     (dim₁ mult₁ : Fin g₁ → ℕ)

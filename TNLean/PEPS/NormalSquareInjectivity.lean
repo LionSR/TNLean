@@ -202,9 +202,6 @@ The union closure used to assemble `R`, `S`, and `T` is the faithful overlapping
 union provider, so the only hypotheses beyond rectangular injectivity and size
 are the positive bond dimensions and the supplied `T`-cover.
 
-**Scope restriction (T-cover):** see
-`regionBlockedTensorInjective_normalSquareRegionT`.
-
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def normalSquareBlockingRegions_of_overlap

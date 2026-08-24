@@ -25,6 +25,16 @@ block once those identities are in the boundary-crossing form used in
 Theorem 12. Deriving these identities
 from the source comparison is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+
+**Scope restriction (periodic-boundary comparison):** the theorems below whose
+hypotheses are the source \(C^j,D^j\) comparison, complementary-word matrix
+identities, or a spanning complementary segment take the periodic-boundary
+upgrade of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456 (and
+arXiv:2011.12127, Section IV.C, lines 2126--2128) as an explicit assumption
+rather than deriving it. Documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`; the
+source-range conclusion without this assumption is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
 -/
 
 open scoped Matrix BigOperators
@@ -507,23 +517,7 @@ boundary-crossing form.
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
-
-**Scope restriction (periodic-boundary comparison):** The complementary-word
-matrix identities `hIdentity` are the explicit hypothesis here. The block-diagonal
-boundary representation supplied by
-`exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1`
-is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/0608197, Theorem 12
-(its block components lie in \(G_N(A_j)\)) and does not assume the
-boundary-crossing comparison. The periodic-boundary upgrade encoded by `hIdentity`
-is the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128,
-retained as an explicit assumption in this intermediate
-complementary-word form. The source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`.
-
-This scope restriction is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -578,21 +572,7 @@ indexed by complementary words to put each single-block vector in the
 corresponding periodic-boundary block space. That matrix form is the result of
 the trace-decomposition comparison and the normalized \(E^j\)-calculation; the
 theorem assumes it for every boundary-crossing interval and does not derive the
-comparison.
-
-**Scope restriction (periodic-boundary comparison):** The complementary-word
-matrix identities `hIdentity` are the explicit hypothesis here. The underlying
-block-diagonal boundary representation is the boundary-comparison-free open-boundary inclusion of
-arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
-comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
-boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
-1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as
-an explicit hypothesis of this intermediate complementary-word form. The
-source-range conclusion without it is the global-cut theorem
-`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
-
-This scope restriction is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+comparison. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

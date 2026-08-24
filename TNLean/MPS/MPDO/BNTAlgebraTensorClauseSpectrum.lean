@@ -18,6 +18,13 @@ and positivity turns them into the multiplicity-spectrum comparison used in
 the algebra-to-RFP implication.  The constructions below use literal CPSV
 canonical form, as in the source.
 
+**Scope restriction (invertible gauge):** the structures and results of this
+file retain the bond-dimension identifications and phase-one invertible
+conjugacies of Appendix C.4, but not the line-2057 conclusion that the gauge
+may be chosen unitary.  The mixed-prefix argument deriving that conclusion
+under literal CPSV canonical form and MPDO positivity is documented in
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
 ## Main results
 
 * `MPOTensor.BNTAlgebraTensorClause.toTwoSiteMultiplicitySpectrum` derives a two-site
@@ -46,12 +53,6 @@ namespace BNTAlgebraTensorClause
 /-- A source-derived two-site vertical canonical decomposition together with the
 sector relabelling and multiplicity-spectrum equality of Appendix C.4.
 
-**Scope restriction (invertible gauge):** This structure records the matched
-sector MPVs and spectrum, but not the line-2057 unitary gauge conclusion.  The
-invertible-gauge sub-result and the subsequent mixed-prefix normalization are
-documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
@@ -64,10 +65,6 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
   relabel : Fin H.labelCount ≃ Fin decomposition.labelCount
   /-- The matched one-site and two-site tensors generate the same positive-length matrix
   product vectors.
-
-  **Scope restriction (invertible gauge):** This field does not record the
-  line-2057 unitary upgrade.  The restriction is documented in
-  `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
   sector_sameMPV : ∀ γ : Fin H.labelCount,
@@ -84,12 +81,6 @@ structure TwoSiteMultiplicitySpectrum {M : MPOTensor d D}
 /-- A source-derived two-site multiplicity spectrum together with exact invertible
 conjugacies between its paired normal tensors.
 
-**Scope restriction (invertible gauge):** This structure retains the phase-one
-invertible conjugacy from Appendix C.4, but not the line-2057 conclusion that the
-gauge may be chosen unitary.  The mixed-prefix argument deriving that conclusion
-under literal CPSV canonical form and MPDO positivity is documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure TwoSiteExactSectorGauge {M : MPOTensor d D}
@@ -100,21 +91,12 @@ structure TwoSiteExactSectorGauge {M : MPOTensor d D}
     H.bondDim γ = decomposition.bondDim (relabel γ)
   /-- The invertible gauge identifying each pair of normal tensors.
 
-  **Scope restriction (invertible gauge):** This field does not assert that the
-  gauge is unitary.  The line-2057 upgrade is documented in
-  `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
   Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
   gauge : ∀ γ : Fin H.labelCount,
     GL (Fin (decomposition.bondDim (relabel γ))) ℂ
   /-- The paired two-site tensor is the exact conjugate of the one-site tensor,
   with no residual scalar phase, as in arXiv:1606.00608, Appendix C.4,
-  lines 2053--2057.
-
-  **Scope restriction (invertible gauge):** Exactness here means phase one; the
-  field does not assert that the conjugating gauge is unitary.  The derivation
-  of the line-2057 conclusion under the standing assumptions is documented in
-  `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`. -/
+  lines 2053--2057. -/
   tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin (D * D)),
     decomposition.tensor (relabel γ) i =
       (gauge γ : Matrix (Fin (decomposition.bondDim (relabel γ)))
@@ -149,12 +131,6 @@ in `H`.  No renormalization maps or pre-existing one-site/two-site sector
 correspondence are assumed: full support of the two positive vertical
 decompositions derives the sector relabelling, and eventual BNT linear
 independence derives the power-sum equality.
-
-**Scope restriction (invertible gauge):** This result itself retains only
-bond-dimension equality and phase-one invertible conjugacy.  The mixed-prefix
-argument deriving the line-2057 unitary conclusion under the same standing
-canonical-form and positivity assumptions is documented in
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/

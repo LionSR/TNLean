@@ -13,6 +13,13 @@ conditional injectivity criteria for the local displayed \(T\)-region and the
 finite-lattice edge-complementary block \(A_3\) in the square-lattice normal
 PEPS proof.
 
+**Scope restriction (T-cover):** the injectivity criteria for the
+\(T\)-regions in this file are conditional on a supplied rectangular cover of
+the displayed region.  The source comparison, the exact-cover obstruction, and
+the elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
@@ -259,12 +266,6 @@ theorem normalSquareEdgeComplementRegion_eq_T_union_topCollar :
 /-- A rectangular cover of the local \(T\)-region extends to a rectangular
 cover of the normalized horizontal-edge \(5\times7\) complementary block by
 adding the two top-collar \(3\times2\) rectangles.
-
-**Scope restriction (T-cover):** This construction remains conditional on a
-rectangular cover of the displayed local \(T\)-region. The source comparison,
-the exact-cover obstruction, and the elimination plan are recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
-mathematical obligations".
 
 This is the rectangular-cover form of the top-collar decomposition of the
 edge-complementary block. It separates this finite-lattice collar step from
@@ -535,12 +536,6 @@ theorem normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar :
 rectangular cover of the normalized vertical-edge complementary block by adding
 the two right-collar \(2\times3\) rectangles.
 
-**Scope restriction (T-cover):** This construction remains conditional on a
-rectangular cover of the rotated local \(T\)-region. The source comparison, the
-exact-cover obstruction, and the elimination plan are recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
-mathematical obligations".
-
 This is the rotated counterpart of
 `normalSquareEdgeComplementRectangleCoverOfT`.
 
@@ -790,12 +785,6 @@ end NormalSquareLatticeRectangleInjectivityHypotheses
 /-- Rectangular injectivity, union closure, and a rectangular cover of the
 displayed \(T\)-region supply the abstract square-lattice blocking-region
 structure.
-
-**Scope restriction (T-cover):** This conditional result assumes a
-rectangular cover of the displayed \(T\)-region at the origin. The source
-comparison, the exact-cover obstruction, and the elimination plan are recorded
-in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
-mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500
 of `Papers/1804.04964/paper_normal.tex`. -/

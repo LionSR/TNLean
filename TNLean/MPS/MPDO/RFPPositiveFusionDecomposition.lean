@@ -205,13 +205,6 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
 /-- Normalized BNT-refined horizontal form and MPDO positivity furnish a
 vertical decomposition which retains the literal CPSV16 basis predicate.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form assumed by Proposition 4.13.
-The literal proposition is proved independently by
-`verticalCF_of_cpsvCanonicalForm`; the auxiliary decomposition below retains
-the stronger horizontal hypothesis.  Documented in
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
@@ -265,13 +258,6 @@ decomposition of its vertical basis of normal tensors.
 For every pair of BNT labels, the fusion map is a coisometry onto the active
 direct sum.  Both forward conjugation and exact reconstruction are asserted,
 so zero product tensors and proper active supports are permitted.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13.  The literal proposition is proved independently by
-`verticalCF_of_cpsvCanonicalForm`; the positive-fusion theorem below retains
-the stronger horizontal hypothesis.  Documented in
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 **Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
 active family; no unsupported corner is inserted.  Documented in

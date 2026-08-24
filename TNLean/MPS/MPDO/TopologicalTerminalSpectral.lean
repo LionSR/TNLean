@@ -630,10 +630,6 @@ variable {d D : ℕ}
 /-- The BNT fusion clause selected from the renormalization fixed-point
 construction under normalized BNT-refined horizontal form.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, Theorem 4.14(i),(iii), lines 972--993. -/
 noncomputable def rfpBNTFusionTensorClause (M : MPOTensor d D)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
@@ -655,10 +651,6 @@ assumption.
 The conclusion supplies the line-999 density decomposition, the line-1001
 factor commutator, and the nonnegative terminal eigenweights with compatible
 all-label orthogonal projectors and their weighted reconstruction.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used by Proposition 4.13 and
-Theorem 4.14; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
 
 Source: arXiv:1606.00608, lines 999--1012.  This theorem does not assert the
 commuting nearest-neighbor Hamiltonian or Gibbs-state conclusion beginning at

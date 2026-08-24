@@ -33,10 +33,6 @@ The proof blocks the BNT sector decomposition, transports it through the
 canonical ket--bra physical-index equivalence, and uses the same block-diagonal
 virtual gauge on every blocked word.
 
-**Scope restriction (BNT-refined horizontal form):** This theorem starts from
-`IsHorizontalCF`, not from literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
     (hHorizontal : IsHorizontalCF M) :

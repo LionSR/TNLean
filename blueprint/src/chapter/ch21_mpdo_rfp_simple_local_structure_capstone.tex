@@ -1243,160 +1243,49 @@ This is the calculation in
 \end{proof}
 
 % CPSV16 Theorem 4.9 (`thm:main-simple`), lines 851--893 and Appendix C.2.
-% Provenance: source-label audit completed in issue #5917.
 % Gap: docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Printed simple-MPDO implication chain]
+\begin{remark}[Printed simple-MPDO implication chain]
     \label{thm:cpsv_theorem49_printed_status}
-    \notready
-    \uses{def:mpdo_simple_cf_tensor, def:mpdo_two_site_blocking, def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch, def:mpo_source_zcl, thm:mpdo_sal_zcl_bnt_sector_structure, thm:mpdo_sal_zcl_blocking_channels, thm:mpdo_caseii_absorption_not_normal, thm:mpdo_theorem49_iv_to_v_counterexample}
-    Let $K$ be a simple tensor in block-injective canonical form with a basis
-    of normal tensors, and let $M=K^{[2]}$.  According to
-    \cite[Theorem~4.9]{Cirac2016MPDO_arXiv},
-    \begin{align}
-        \textnormal{(i)}   & \Longrightarrow\textnormal{(ii)},      &
-        \textnormal{(ii)}  & \Longleftrightarrow\textnormal{(iii)}, &
-        \textnormal{(iii)} & \Longrightarrow\textnormal{(iv)},      &
-        \textnormal{(iv)}  & \Longrightarrow\textnormal{(v)},
-        \notag
-    \end{align}
-    where the conditions are respectively the fixed-point condition, SAL with
-    zero correlation length, the commuting Gibbs form with zero correlation
-    length, the blockwise local structure, and the fixed-point condition for
-    $M$.
-
-    In Case II, the printed implication from SAL and zero correlation length
-    to the blockwise local structure applies the normal Case-I factorization to
-    each absorbed BNT representative. Absorbing a coefficient $\mu_s$
-    multiplies the transfer spectral radius by $|\mu_s|^2$, while the source
-    normalization does not imply $|\mu_s|=1$ for every sector.
-    Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} shows that this
-    absorbed-sector normality route is false even when all conditions used in
-    Appendix~C.2 hold at the normalized fixed-representative boundary. Thus
-    implication (ii)$\Rightarrow$(iv) remains a missing statement and the
-    printed normality argument has proof-path drift.
-
-    Independently, Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}
-    exhibits explicit component witnesses for every standing hypothesis and
-    all clauses of condition~(iv), but fails condition~(v). Hence the literal
-    implication (iv)$\Rightarrow$(v) is refuted and is an unfaithful statement. The viable
-    channel route in Appendix~C.2 is instead (ii)$\Rightarrow$(v): lines
-    1646--1665 first use zero correlation length to make all repeated-copy
-    weights of each BNT representative equal and absorb their common value.
-    The printed continuation still requires a suitable physical-sector
-    factorization for every absorbed representative. Proposition~C.7 constructs
-    the channel pair belonging to one such factorization, and the proof of
-    Proposition~C.15 first projects into each local physical subspace labelled
-    by $j$ before applying those pairs. Thus the remaining source step is the
-    existence of the per-representative factorizations; the outer-sector
-    combination is already complete.
-\end{theorem}
+    For a simple tensor $K$ in block-injective canonical form with a basis of
+    normal tensors and $M=K^{[2]}$,
+    \cite[Theorem~4.9]{Cirac2016MPDO_arXiv} prints the chain
+    (i)$\Rightarrow$(ii), (ii)$\Leftrightarrow$(iii), (iii)$\Rightarrow$(iv),
+    (iv)$\Rightarrow$(v) between the fixed-point condition, SAL with zero
+    correlation length, the commuting Gibbs form with zero correlation length,
+    the blockwise local structure, and the fixed-point condition for $M$.
+    Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} refutes the printed
+    absorbed-sector normality route for (ii)$\Rightarrow$(iv) in Case II, and
+    Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample} refutes the literal
+    implication (iv)$\Rightarrow$(v).  The viable channel route of
+    Appendix~C.2 is (ii)$\Rightarrow$(v); its remaining source step is the
+    existence of a physical-sector factorization for every absorbed
+    representative, the outer-sector combination being complete.
+\end{remark}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
-% Completion: corrected fixed-$p=1/4$ Example 4.10 under #6301, literal periodic
-% Example 4.11 under #6302, and literal and normalized Example 4.12 under #6038.
 % Entropy corrections: docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex.
-% Example 4.11's literal finite periodic family is now proved to fail both SAL
-% and source-facing ZCL. Example 4.12's normalized channel equations are proved;
-% its four-cycle Markov implication and full GSNNCH exclusion are also proved.
-\begin{theorem}[Printed mixed-state separation examples]
+\begin{remark}[Printed mixed-state separation examples]
     \label{thm:cpsv_examples410_412_status}
-    \notready
-    \uses{def:is_rfp_via_ts, def:is_sal, def:mpdo_source_gsnnch,
-        def:mpo_source_zcl,
-        def:cpsv_example410_corrected_tensor,
-        def:cpsv_example410_correlated_flip_weights,
-        thm:cpsv_example410_source_zcl,
-        thm:cpsv_example410_four_site_spectrum,
-        thm:cpsv_example410_tensor_entropy_obstruction,
-        thm:cpsv_example411_not_source_zcl,
-        thm:cpsv_example411_ambient_not_sal,
-        thm:cpsv_example412_literal_formula,
-        thm:cpsv_example412_literal_sal,
-        thm:cpsv_example412_literal_zcl_rfp_gap,
-        thm:cpsv_example412_four_cycle_ssa_defect,
-        thm:cpsv_example412_not_gsnnch,
-        thm:cpsv_example412_normalized_rfp_maps,
-        thm:cpsv_example412_normalized_not_gsnnch}
-    The three examples in
-    \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} assert the
-    following separations.  Example~4.10 applies correlated on-site bit-flip
-    noise to a four-spin ring of Bell pairs and claims zero correlation length
-    without saturation of the area law.  The displayed channel repeats the
-    left-qubit label.  We interpret the second occurrence as the right-qubit
-    label and fix $p=1/4$.  The resulting tensor is an MPDO and has source zero
-    correlation length.  The full characteristic-polynomial root multisets of
-    its normalized one-, two-, three-, and four-site reduced states are
-    \begin{align}
-        L=1: & \quad \{0^{[0]},(1/4)^{[4]}\}, \notag                 \\
-        L=2: & \quad \{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\}, \notag   \\
-        L=3: & \quad \{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\}, \notag \\
-        L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},
-                           (9/128)^{[3]}\}. \notag
-    \end{align}
-    These formulas are project-derived consequences of the corrected
-    fixed-parameter tensor; they are not printed in the source.  They give the
-    four block entropies and the exact strict inequality
-
-    \begin{align}
-        I_2-I_1
-         & =\frac1{16}\log\!\left(
-        \frac{2^{32}7^7}{3^3 5^{20}}\right)>0. \notag
-    \end{align}
-    Hence the corrected tensor has source zero correlation length and does not
-    saturate the area law.  We make no claim about the printed universal
-    statement for $p\ne0,1/2$, whose exception list also omits $p=1$.
-
-    Example~4.11 uses the bond-weight matrix
-    \begin{align}
-        W & =\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}
-        \notag
-    \end{align}
-    and claims saturation without zero correlation length.  For the literal
-    finite periodic family, both clauses are now decided.  On the four-site
-    ring, the exact entropy calculation gives $I_2>I_1$, so saturation fails.
-    Independently, the constant-zero two-site marginal has value $14/41$ when
-    computed in the four-site state and $5/14$ when computed in the three-site
-    state.  Source zero correlation length would make these entries equal, so
-    the printed non-zero-correlation-length clause holds for both the effective
-    binary model and its ambient two-qubit realization.  This conclusion uses
-    the physical-trace relation associated with the source definition; it is
-    distinct from the legacy doubled-index transfer-map convention.  Global
-    normalization does not change the finite-ring probability distribution.
-    An open or infinite stationary Markov-chain interpretation may explain the
-    failed saturation claim, but the source does not state that interpretation.
-
-    Example~4.12 uses a two-dimensional tensor generating
-    \begin{align}
-        \rho^{(N)} & =I^{\otimes N}+\sigma_z^{\otimes N}.
-        \notag
-    \end{align}
-    For the normalized four-site state, the tripartition
-    $A=\{0\}$, $B=\{1,3\}$, $C=\{2\}$ has a strict
-    strong-subadditivity inequality: the two three-site marginals have entropy
-    $3\log 2$, the middle marginal has entropy $2\log 2$, and the full state
-    has entropy $3\log 2$.  This supplies the finite entropy obstruction; the
-    implication from a simple commuting representation on the four-cycle to
-    equality for this tripartition is a separate assertion.
-    The source asserts that this tensor has saturation of the area law and zero
-    correlation length, is not of the simple commuting form, and is nevertheless
-    a renormalization fixed point.  The literal printed tensor is unnormalized:
-    its physical-trace transfer squares to twice itself, whereas trace-preserving
-    refinement would force literal idempotence. Thus the fixed-point assertion
-    is false for the literal representative. The paper's literal ZCL assertion
-    likewise fails for that representative. The tensor $(1/2)M$ is the likely
-    intended correction. Explicit parity coarse-graining and refinement maps
-    satisfy the two trace-preserving completely positive channel equations for
-    this corrected representative. Its two horizontal normal blocks have
-    weights of modulus $1/\sqrt{2}$, however, so this conclusion does not
-    supply the line-246 unit-weight canonical convention assumed by
-    Definition~4.1. The claimed exclusion from the full GSNNCH class also
-    holds. Indeed, every four-site state with the sector decomposition of
-    Definition~4.8 admits a quantum Markov decomposition for the tripartition
-    above and therefore satisfies equality in strong subadditivity. This
-    contradicts the strict entropy calculation. The argument uses only the
-    four-site member of the normalized family and so does not compare
-    commuting realizations at different chain lengths.
-\end{theorem}
+    The separations asserted in
+    \cite[Examples~4.10--4.12, lines~897--942]{Cirac2016MPDO_arXiv} are decided
+    as follows.  Example~4.10, read with one left and one right bit flip and
+    $p=1/4$ (Definition~\ref{def:cpsv_example410_corrected_tensor}), has source
+    zero correlation length and does not saturate the area law
+    (Theorems~\ref{thm:cpsv_example410_source_zcl}
+    and~\ref{thm:cpsv_example410_tensor_entropy_obstruction}); no claim is made
+    about the printed universal statement in $p$.  The literal finite periodic
+    family of Example~4.11 fails both saturation and source zero correlation
+    length (Theorems~\ref{thm:cpsv_example411_ambient_not_sal}
+    and~\ref{thm:cpsv_example411_not_source_zcl}).  The literal tensor of
+    Example~4.12 is unnormalized, so its fixed-point and zero-correlation-length
+    assertions fail for that representative
+    (Theorem~\ref{thm:cpsv_example412_literal_zcl_rfp_gap}); the halved tensor
+    satisfies the two channel equations
+    (Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps}) without supplying
+    the unit-weight convention, and both representatives lie outside the full
+    GSNNCH class (Theorems~\ref{thm:cpsv_example412_not_gsnnch}
+    and~\ref{thm:cpsv_example412_normalized_not_gsnnch}).
+\end{remark}
 
 % Local correction of CPSV16 Example 4.10, lines 897--905.
 % The source repeats the left-qubit label; this definition uses one left and

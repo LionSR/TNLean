@@ -118,7 +118,7 @@ Their dispositions are:
 
 | Source label | Source line | Disposition |
 |---|---:|---|
-| `RFP-gauge` | 2101 | The printed pure-state equivalence is false.  The cube-phase tensor blocks to itself up to swap gauge-phase but has non-idempotent transfer.  The exact source-shaped counterexample is tracked by issue #5920 and Blueprint node `thm:cpsv_rfp_gauge_printed_status`. |
+| `RFP-gauge` | 2101 | The printed pure-state equivalence is false.  The cube-phase tensor blocks to itself up to swap gauge-phase but has non-idempotent transfer.  The exact source-shaped counterexample is tracked by issue #5920 and Blueprint node `thm:cpsv_pure_rfp_gauge_status` (the former printed-status stub `thm:cpsv_rfp_gauge_printed_status` was removed; superseded by `thm:cpsv_pure_rfp_gauge_status`, which is `\leanok`). |
 | `Strong-RFP` | 2110 | The unnormalized structural predicate is `MPOTensor.IsStrongRFP`, with literal relation $M_2=U(M_1\otimes P)U^\dagger$, $P\geq0$, and physical-closure equivalence recorded in Blueprint nodes `def:mpdo_strong_rfp` and `thm:mpdo_strong_rfp_phys_close`. Its general periodic geometric-rank implication and the Fibonacci obstruction are complete. |
 | `rank-Fibonacci` | 2122 | The periodic rank formula, its non-geometricity, and the resulting $\lnot\,\mathrm{IsStrongRFP}$ theorem are complete for every positive choice of fusion weights with the prescribed Fibonacci support; see Blueprint nodes `thm:cpsv_fibonacci_periodic_rank`, `thm:cpsv_fibonacci_operator_rank_not_geometric`, and `thm:cpsv_fibonacci_not_strong_rfp`. |
 | `eq:1` | 2158 | This is the internal diagonalization calculation supporting `rank-Fibonacci`, not an independent theorem. |
@@ -143,7 +143,7 @@ the printed statement.
 | Theorem 2.10 | none since the nonzero-coefficient convention; anchor on `thm:cpgsv_multiblock_ft_source` | `thm:cpgsv_multiblock_ft_source` |
 | Corollary 2.11 | none since the nonzero-coefficient convention; anchor on `thm:cpgsv_equal_case_source` | `thm:cpgsv_equal_case_source` |
 | Theorem 3.8 | `thm:cpsv_theorem_zcl_pure_status` | positive-gap and multiplicity-one results in Chapter 26 |
-| Theorem 3.10 | `thm:cpsv_main_mps_status` | corrected representative-level implications in Chapters 26 and 13 |
+| Theorem 3.10 | `thm:cpsv_theorem_zcl_pure_status` (merged from the former `thm:cpsv_main_mps_status`, which was folded into the Theorem 3.8 node) | corrected representative-level implications in Chapters 26 and 13 |
 | Theorem 3.11 | `thm:cpsv_charact_mps_status` | one-copy and direct-sum structural results in Chapter 26 |
 | Corollary 3.12 | none since the nonzero-coefficient convention; anchor on `thm:cpsv_phase_class_residual_isometries` | phase-class residual-isometry results in Chapter 26 |
 | Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | literal global implication refuted by `thm:nonzero_global_prfp_not_physical_trace_idempotence`; stronger scale-invariant counterexample and restricted local equivalences remain separate in Chapter 21 |
@@ -152,9 +152,9 @@ the printed statement.
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
 | Lemma A.5 | none since the nonzero-coefficient convention; anchor on `thm:bounded_power_sum_multiset` | `thm:bounded_power_sum_multiset` |
 | Corollary A.6 | none since the nonzero-coefficient convention; anchor on `cor:sector_bnt_proportional_unitary_sector_match` | unitary refinements in Chapter 11 |
-| Proposition C.14 | `thm:cpsv_prop_c14_printed_status` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
+| Proposition C.14 | none since the printed-status stub `thm:cpsv_prop_c14_printed_status` was removed as redundant; anchor on `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
 | Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Example 4.10 is complete for the corrected fixed-$p=1/4$ witness under #6301; Example 4.11's printed SAL clause is refuted and its printed non-ZCL clause is verified under #6302; Example 4.12 has the literal normalization obstruction, normalized channel equations, strict four-site SSA defect, and full GSNNCH exclusion complete under #6038, with the line-246 unit-weight boundary recorded |
-| Appendix D `RFP-gauge` | `thm:cpsv_rfp_gauge_printed_status` | cube-phase obstruction plus active issue #5920 |
+| Appendix D `RFP-gauge` | none since the printed-status stub `thm:cpsv_rfp_gauge_printed_status` was removed; anchor on `thm:cpsv_pure_rfp_gauge_status` | cube-phase obstruction plus active issue #5920 |
 | Appendix D Fibonacci periodic rank formula | `thm:cpsv_fibonacci_periodic_rank`; `thm:cpsv_fibonacci_operator_rank_not_geometric`; `thm:cpsv_fibonacci_not_strong_rfp` | complete periodic rank formula, non-geometricity, and $\lnot\,\mathrm{IsStrongRFP}$ conclusion |
 
 Example 3.4 no longer needs a separate source-status node.  Chapter 15 states

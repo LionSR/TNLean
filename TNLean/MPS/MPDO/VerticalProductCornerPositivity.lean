@@ -124,10 +124,6 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
 product corner is positive for an MPDO in normalized BNT-refined horizontal
 form.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
 positivity argument from Proposition 4.13, lines 1898--1902. -/
 theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos

@@ -97,15 +97,7 @@ insertions agree blockwise.
 This is the precise blockwise statement needed in the proof of Proposition
 IV.12. The proof consumes the `biCF` field of `HorizontalCFData` directly:
 the weighted blockwise difference at the biCF blocking length pairs to zero
-against every block word, so `biCF` forces it to vanish for each block.
-
-**Scope restriction (per-block separation):** the source's Lemma L (lines
-1835--1858) groups gauge-equivalent copies of one basis-of-normal-tensors
-representative before separating, disposing of the weight sum by the
-nonvanishing power-sum step of Lemma app_simple. The `biCF` hypothesis instead
-demands trace separation per block, a strictly stronger condition that fails
-on such copies (`duplicateScalarBlocks_not_hasBiCF`,
-`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
+against every block word, so `biCF` forces it to vanish for each block. -/
 theorem blockwise_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -233,10 +225,7 @@ equals the `Ycorner` insertion.
 This is the tensor-block conclusion of the displayed equation in the proof
 of Proposition 4.13 of arXiv:1606.00608, lines 1873--1887.  The two
 hypotheses are precisely the coefficient-level equalities displayed in that
-equation; they do not posit a vertical canonical decomposition.
-
-**Scope restriction (per-block separation):** inherited from
-`blockwise_insert_eq_of_mpv_agree` (`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
+equation; they do not posit a vertical canonical decomposition. -/
 theorem blockwise_opposite_insert_eq_of_mpv_agree
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -272,11 +261,7 @@ for the vertically viewed tensor supplies the first entrywise identity.  The
 corresponding invariant-projection conclusion is proved by
 `IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor`; the complete
 horizontal-to-vertical implication is
-`MPOTensor.verticalCF_of_horizontalCF`.
-
-**Scope restriction (per-block separation):** inherited from
-`blockwise_insert_eq_of_mpv_agree` via `blockwise_opposite_insert_eq_of_mpv_agree`
-(`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
+`MPOTensor.verticalCF_of_horizontalCF`. -/
 theorem blockwise_opposite_insert_eq_of_rotated_mpo_entries
     {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (M : MPOTensor d D) (A : (k : Fin r) → MPSTensor (d * d) (dim k))

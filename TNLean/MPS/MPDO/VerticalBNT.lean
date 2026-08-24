@@ -57,11 +57,7 @@ form has a nonzero first-site sector compression at some chain length.
 
 This is the separation assertion used in the proof of Proposition 4.13 of
 arXiv:1606.00608, line 1898.  It follows from Lemma L for the BNT-refined
-horizontal form, Appendix C.3, lines 1835--1858.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+horizontal form, Appendix C.3, lines 1835--1858. -/
 theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
     (P : Matrix (Fin d) (Fin d) ℂ)
@@ -459,11 +455,7 @@ reducing isometries.
 Source: the BNT characterization at arXiv:1606.00608, lines 1135--1148, and
 the phase-class decomposition and positivity argument in Proposition 4.13,
 lines 1895--1902.  The Gram normalization and final coisometry argument at
-lines 1903--1921 are not included.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
+lines 1903--1921 are not included. -/
 theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     HasVerticalBNTGroupingWithIsometry M := by
