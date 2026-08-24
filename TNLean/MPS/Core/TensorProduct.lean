@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import QICLean.Kraus.Word
-import TNLean.Algebra.FinTupleEquiv
 
 /-!
 # Independent tensor products of matrix product tensors
