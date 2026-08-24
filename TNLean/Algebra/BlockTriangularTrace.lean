@@ -16,6 +16,12 @@ This file proves that strict upper-right blocks do not affect word traces of
 block upper-triangular tensors. It defines block-sum and reindexing maps and
 proves `sameMPV_upperFin_diagFin`, reducing an
 upper-triangular tensor to its block-diagonal part.
+
+The coordinate-free strict generalization is
+`MPSTensor.sameMPV_diagPart_of_lowerZero` in
+`TNLean.Algebra.ProjectionTriangularTrace`. The declarations here retain the
+two-block coordinate presentation as a compatibility interface; they should be
+derived from that projection formulation before deprecation.
 -/
 
 open scoped Matrix BigOperators
