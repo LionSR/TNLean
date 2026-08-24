@@ -1486,8 +1486,6 @@
 \__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { band }
   { use~form=enclosure~with~tint,~which~lays~ink~over~the~paper~its~contour~
     encloses }
-\__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
-  { selected, secondary, complement, collar, neutral } { slot }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
 \__tenkz_kernel_label_pos:nn { tenkz-kernel-mark } { label~pos }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { name } { name }
@@ -15552,12 +15550,23 @@
           }
       }
       {
+        % The last five words are the house region palette, prelude species
+        % since the mark's slot= key retired into species=: the region under
+        % discussion is red, a second region beside it shares the marked
+        % blue, the complement shares the passive grey (its dashed stroke is
+        % the contour's), a collar shares the extra violet, and a neutral
+        % window is plain ink.
         \str_case:nnF {#1}
           {
-            {operator} { \tl_set:Nn #2 {tenkzOperator} }
-            {marked}   { \tl_set:Nn #2 {tenkzMarked} }
-            {extra}    { \tl_set:Nn #2 {tenkzExtra} }
-            {passive}  { \tl_set:Nn #2 {tenkzPassive} }
+            {operator}   { \tl_set:Nn #2 {tenkzOperator} }
+            {marked}     { \tl_set:Nn #2 {tenkzMarked} }
+            {extra}      { \tl_set:Nn #2 {tenkzExtra} }
+            {passive}    { \tl_set:Nn #2 {tenkzPassive} }
+            {selected}   { \tl_set:Nn #2 {tenkzAction} }
+            {secondary}  { \tl_set:Nn #2 {tenkzMarked} }
+            {complement} { \tl_set:Nn #2 {tenkzPassive} }
+            {collar}     { \tl_set:Nn #2 {tenkzExtra} }
+            {neutral}    { \tl_set:Nn #2 {tenkzInk} }
           }
           { \__tenkz_kernel_r_cycle_hue:nN {#1} #2 }
       }
@@ -20013,36 +20022,22 @@
     \__tenkz_kernel_r_mark_recentre:
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
     \tl_clear:N \l__tenkz_kernel_r_mark_dash_tl
+    % The contour's semantic tint is its species=, the key every other
+    % record carries; the retired slot= key's five region words are prelude
+    % species now (the hue resolver holds the palette).  A contour naming
+    % none is passive -- what a paper draws around a region it is not
+    % discussing -- and the complement's dashed stroke belongs to the
+    % contour, the one place the complement word draws a contour at all.
     \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
+      { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
       {
-        % `slot` remains a compatibility spelling until the S4 surface swap.
-        % The five slots take the house region palette: what a paper marks as
-        % the region under discussion is red, a second region beside it is
-        % blue, the complement is the grey dashed rest, a collar around a
-        % region is violet, and a neutral window is plain ink.
-        \__tenkz_model_get:nnN {#1} {slot} \l__tenkz_kernel_r_hue_tl
-        \quark_if_no_value:NTF \l__tenkz_kernel_r_hue_tl
-          { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
+        \str_if_eq:VnT \l__tenkz_kernel_r_species_tl {complement}
           {
-            \str_if_eq:VnT \l__tenkz_kernel_r_hue_tl {complement}
-              {
-                \tl_set:Nn \l__tenkz_kernel_r_mark_dash_tl
-                  { , densely~dashed }
-              }
-            \tl_set:Ne \l__tenkz_kernel_r_hue_tl
-              {
-                \str_case:Vn \l__tenkz_kernel_r_hue_tl
-                  {
-                    {selected}   { tenkzAction }
-                    {secondary}  { tenkzMarked }
-                    {complement} { tenkzPassive }
-                    {collar}     { tenkzExtra }
-                    {neutral}    { tenkzInk }
-                  }
-              }
+            \tl_set:Nn \l__tenkz_kernel_r_mark_dash_tl
+              { , densely~dashed }
           }
+        \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
       }
-      { \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl }
   }
 
 % An enclosure strokes the contour of what it selects and takes its label

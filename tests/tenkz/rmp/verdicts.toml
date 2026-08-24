@@ -198,11 +198,11 @@ id = "rmp-ii-spectrum-transfer"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "1ec64275c0b8a64e8da74a4dbf5074c22a6d4f2b8a7fd24f63918a152c8c52f6"
+case_sha256 = "0f422da82318edaf4e3b7831d1c33b87dc69487b9737cc4c5b21a8eb4ca2c1cd"
 reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
 second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
-note = "Kernel migration (wave 1B), Fable-verified against the author panel: each column's physical index is contracted into a ladder rung, matching the source's transfer-operator topology exactly, with the four virtual ends open around the ladder; rho^R and rho^L are the same construction -- a small ring atom in-line on its own rail -- resolving the K3 gap-bar residue's shared tail idiom; the source's dashed red cut rectangle is drawn as the house secondary enclosure around the four contracted columns; measured at 600dpi the rung and rail weights match the source's same-weight ladder, so the stale weight-mismatch tag is dropped; the n annotation is a bracket under the marked columns, the mark form the source's brace asks for, which retires the last recorded substitution and promotes the verdict to faithful."
+note = "Slot-to-species respell 2026-08-25: the retired slot= key's region word rides species= now; pixel-identical at 200dpi (czx compared directly, the two siblings carry the same one-word substitution).  Prior note: Kernel migration (wave 1B), Fable-verified against the author panel: each column's physical index is contracted into a ladder rung, matching the source's transfer-operator topology exactly, with the four virtual ends open around the ladder; rho^R and rho^L are the same construction -- a small ring atom in-line on its own rail -- resolving the K3 gap-bar residue's shared tail idiom; the source's dashed red cut rectangle is drawn as the house secondary enclosure around the four contracted columns; measured at 600dpi the rung and rail weights match the source's same-weight ladder, so the stale weight-mismatch tag is dropped; the n annotation is a bracket under the marked columns, the mark form the source's brace asks for, which retires the last recorded substitution and promotes the verdict to faithful."
 
 [[verdict]]
 id = "rmp-ii-spectrum-fixed-points"
@@ -768,10 +768,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "6dc81293bf26625f8be52897c0a6dc89627cfb8bbcb5626bb78dce09cff71613"
+case_sha256 = "0759d0dd170de24a3f635b78e0f102fcea49cdb8e1bd04ec78dc052811a3b560"
 reviewed = "2026-08-04"
 renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
-note = "Kernel stock MPO skin (#5362) with the enclosure mark and labelled open string intact; the charge stays the stock box against the source's hatched diamond and the disk is a rounded contour, not the source's ellipse."
+note = "Slot-to-species respell 2026-08-25: the retired slot= key's region word rides species= now; pixel-identical at 200dpi (czx compared directly, the two siblings carry the same one-word substitution).  Prior note: Kernel stock MPO skin (#5362) with the enclosure mark and labelled open string intact; the charge stays the stock box against the source's hatched diamond and the disk is a rounded contour, not the source's ellipse."
 
 [[verdict]]
 id = "rmp-iii-b-self-braiding"
@@ -1058,11 +1058,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "4d695186baab75413f6bb0caa82a416625ea6d130c911e623ab0ba4c7c9cc603"
+case_sha256 = "58b0febbac23fbce2ca60641a0f726680f7fde594c7527d993d2055fed13c742"
 reviewed = "2026-08-04"
 renderer = "kimi-k2-rereview-2026-08-04-200dpi"
 second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the three-by-three array of four-sub-spin sites wired into one connected lattice with open outer bonds matches the source grouping; the lighter enclosure fill is a public-theme choice (the bar)."
+note = "Slot-to-species respell 2026-08-25: the retired slot= key's region word rides species= now; pixel-identical at 200dpi (czx compared directly, the two siblings carry the same one-word substitution).  Prior note: K2 promotion: the three-by-three array of four-sub-spin sites wired into one connected lattice with open outer bonds matches the source grouping; the lighter enclosure fill is a public-theme choice (the bar)."
 
 [[verdict]]
 id = "rmp-workbench-ii-newfig7"
