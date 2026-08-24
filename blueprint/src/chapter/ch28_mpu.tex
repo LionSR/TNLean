@@ -1803,6 +1803,81 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     fact to the two source-cut identities.
 \end{proof}
 
+\begin{definition}[Independent tensor product of matrix product tensors]
+    \label{def:mps_independent_tensor_product}
+    \lean{finTupleProdEquiv, MPSTensor.tensorProduct,
+        MPSTensor.tensorProduct_apply}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $A=(A^i)_{i\in\Fin d}$ and $B=(B^k)_{k\in\Fin e}$ have
+    auxiliary dimensions $D$ and $E$, respectively.  Write
+    \begin{align}
+        \pi_{m,n}:\Fin m\times\Fin n & \longrightarrow\Fin{mn}
+    \end{align}
+    for the standard finite-product coordinate bijection.  Their independent
+    tensor product $A\boxtimes B$ has physical dimension $de$, auxiliary
+    dimension $DE$, and local matrices determined by
+    \begin{align}
+        (A\boxtimes B)^{\pi_{d,e}(i,k)}_{
+            \pi_{D,E}(\alpha,\gamma),\pi_{D,E}(\beta,\delta)}
+         & =A^i_{\alpha,\beta}B^k_{\gamma,\delta}.
+        \label{eq:mps_independent_tensor_product_entries}
+    \end{align}
+    For every $N$, the same coordinates give the pointwise splitting
+    \begin{align}
+        (\Fin N\to\Fin{de})
+                  & \simeq(\Fin N\to\Fin d)\times(\Fin N\to\Fin e), \\
+        \sigma    & \longmapsto(\sigma_d,\sigma_e),
+                  &
+        \sigma(n) & =\pi_{d,e}(\sigma_d(n),\sigma_e(n)).
+        \label{eq:mps_tensor_product_tuple_split}
+    \end{align}
+    This is infrastructure for the tensoring clause in the proof of the MPU
+    Index Theorem~IV.6(ii)
+    \cite[lines~824--845]{Cirac2017MPU}, not a separately stated theorem of
+    that paper.  The notation $A=(A^i)_i$ agrees with the canonical-form block
+    notation around equation~\textup{II\_CF1} in
+    \cite[lines~214--245]{Cirac2016MPDO_arXiv}.
+\end{definition}
+
+\begin{theorem}[Word evaluation of an independent tensor product]
+    \label{thm:mps_eval_word_independent_tensor_product}
+    \lean{MPSTensor.evalWord_tensorProduct}
+    \leanok
+    \uses{def:mps_independent_tensor_product}
+    If
+    \begin{align}
+        w   & =\bigl(\pi_{d,e}(i_1,k_1),\ldots,
+        \pi_{d,e}(i_L,k_L)\bigr),               \\
+        w_d & =(i_1,\ldots,i_L),
+            &
+        w_e & =(k_1,\ldots,k_L),
+    \end{align}
+    then
+    \begin{align}
+        \operatorname{eval}_{A\boxtimes B}(w)
+         & =\operatorname{reind}_{\pi_{D,E}}
+        \left(\operatorname{eval}_A(w_d)\otimes
+        \operatorname{eval}_B(w_e)\right).
+        \label{eq:mps_eval_word_independent_tensor_product}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mps_independent_tensor_product}
+    Induct on the length of $w$.  For the empty word, use
+    $\mathbf 1_D\otimes\mathbf 1_E=\mathbf 1_{DE}$ and invariance of the
+    identity under the coordinate bijection.  For a leading letter
+    $\pi_{d,e}(i,k)$, equation
+    (\ref{eq:mps_independent_tensor_product_entries}) and the induction
+    hypothesis reduce the claim to
+    \begin{align}
+        (A^i\otimes B^k)(X\otimes Y)
+         & =(A^iX)\otimes(B^kY),
+    \end{align}
+    after transporting multiplication through the same coordinate bijection.
+\end{proof}
+
 \begin{definition}[Independent tensor product of matrix product operator tensors]
     \label{def:mpu_independent_tensor_product}
     \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply,
