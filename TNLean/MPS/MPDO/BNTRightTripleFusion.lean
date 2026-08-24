@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import TNLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.BNTFusionIsometries
 
 /-!
@@ -137,11 +138,10 @@ private noncomputable def fuseLastTwoStep (α β γ : Λ) :
 private theorem fuseLastTwoStep_isometry (α β γ : Λ) :
     (Fam.fuseLastTwoStep α β γ)ᴴ * Fam.fuseLastTwoStep α β γ = 1 := by
   unfold fuseLastTwoStep
-  rw [Matrix.conjTranspose_submatrix,
-    Matrix.submatrix_mul_equiv _ _ _ (Fam.lastPairBondEquiv α β γ).symm _,
-    Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, Fam.isometry,
-    Matrix.conjTranspose_one, Matrix.one_mul, Matrix.one_kronecker_one,
-    Matrix.submatrix_one_equiv]
+  exact Matrix.IsIsometry.reindex _
+    (Matrix.IsIsometry.kronecker _ _
+      (by simp [Matrix.IsIsometry]) (Fam.isometry β γ))
+    (Fam.lastPairBondEquiv α β γ) finProdFinEquiv
 
 private theorem fuseLastTwoStep_apply (α β γ : Λ) (i k : Fin p) :
     Fam.fuseLastTwoStep α β γ *

@@ -387,3 +387,7 @@ follow-up, not against the temporary `sorry` count.
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
 | `Complex.ofReal_sqrt_sq` | helper theorem | Squaring the complex coercion of a nonnegative real square root | `TNLean/Algebra/ComplexSqrt.lean` |
+| `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `TNLean/Algebra/MatrixIsometryKronecker.lean` |
+| `Matrix.reindex_mul_reindex` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences | `TNLean/Algebra/MatrixReindex.lean` |
+| `Matrix.reindex_eq_of_apply_eq` | helper theorem | Packaging an original-coordinate entry formula as an equality after matrix reindexing | `TNLean/Algebra/MatrixReindex.lean` |
+| `Matrix.apply_eq_of_reindex_eq` | helper theorem | Recovering an original-coordinate entry formula from an equality after matrix reindexing | `TNLean/Algebra/MatrixReindex.lean` |
