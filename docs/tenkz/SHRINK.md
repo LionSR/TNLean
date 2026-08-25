@@ -4418,6 +4418,9 @@ junctions, the honest line cost of retiring the waypoint list, after the
 review-limit compaction repacked the three largest cases;
 `tests/tenkz/census-baseline.json` moves in this change.  m1/m2 unchanged
 -- no alphabet motion yet, so no Extension-gate applies.
+Census-correction: #6897 -- the rise is the retirement's own spelling
+cost, every chain re-verified against its source render, not deleted or
+padded meaning.
 
 The flag table carries forward unchanged from the prior ledger section.
 
