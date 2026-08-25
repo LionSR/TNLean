@@ -133,9 +133,7 @@
 \begin{theorem}[Printed mutual-information proposition]
     \label{thm:cpsv_prop45_printed_status}
     \notready
-    \uses{prop:mutual_info_monotone,
-        thm:mpdo_finite_chain_mutual_information_four_log,
-        thm:cpsv_prop45_limit_counterexample}
+    \uses{prop:mutual_info_monotone, thm:mpdo_finite_chain_mutual_information_four_log, thm:cpsv_prop45_limit_counterexample}
     According to \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, one has
     $I_L\le I_{L+1}$ for $L<\lfloor N/2\rfloor$, the mutual information is
     bounded in terms of the bond dimension, and the indicated iterated
@@ -286,8 +284,7 @@
     \label{thm:cpsv_prop45_limit_counterexample}
     \lean{MPOTensor.ThermodynamicLimitCounterexample.proposition45_limit_counterexample}
     \leanok
-    \uses{thm:parity_mpdo_no_thermodynamic_limit,
-        thm:parity_mpdo_no_mutual_info_limit}
+    \uses{thm:parity_mpdo_no_thermodynamic_limit, thm:parity_mpdo_no_mutual_info_limit}
     The parity-sensitive tensor is an MPDO, and for every fixed $L\geq1$ the
     sequence $K\mapsto I_L^{(L+K+1)}$ has no real limit.  Thus the unrestricted
     thermodynamic-limit clause of
@@ -303,130 +300,37 @@
     nonempty cut, so no real limit exists.
 \end{proof}
 
-\begin{definition}[Map on the second tensor factor]
-    \label{def:mpdo_id_tensor_map}
-    \lean{Matrix.idTensorMap}
-    \leanok
-    For a linear map $\Psi_B$ and a bipartite matrix $\rho_{AB}$, define
-    \begin{align}
-        (\id_A\otimes\Psi_B)(\rho_{AB})
-         & =\Sigma_{B'A}\bigl((\Psi_B\otimes\id_A)
-        (\Sigma_{AB}(\rho_{AB}))\bigr),
-        \notag
-    \end{align}
-    where $\Sigma$ denotes the canonical exchange of the two tensor factors.
-\end{definition}
 
-\begin{definition}[Independent maps on both tensor factors]
-    \label{def:mpdo_tensor_map_both}
-    \lean{Matrix.tensorMapBoth}
-    \leanok
-    \uses{def:mpdo_id_tensor_map}
-    For linear maps $\Phi_A$ and $\Psi_B$, set
-    \begin{align}
-        (\Phi_A\otimes\Psi_B)(\rho)
-         & =(\id_{A'}\otimes\Psi_B)
-        ((\Phi_A\otimes\id_B)(\rho)).
-        \notag
-    \end{align}
-\end{definition}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Map on the second tensor factor'']{QICLean2026Blueprint}.
 
-\begin{lemma}[Positivity under a map on the first tensor factor]
-    \label{lem:mpdo_tensor_map_id_pos}
-    \lean{IsKrausCPTP.tensorMapId_posSemidef}
-    \leanok
-    If $\Phi_A$ is trace-preserving completely positive and
-    $\rho_{AB}\geq0$, then
-    $(\Phi_A\otimes\id_B)(\rho)\geq0$.
-\end{lemma}
 
-\begin{lemma}[Positivity under a map on the second tensor factor]
-    \label{lem:mpdo_id_tensor_map_pos}
-    \lean{IsKrausCPTP.idTensorMap_posSemidef}
-    \leanok
-    \uses{def:mpdo_id_tensor_map, lem:mpdo_tensor_map_id_pos}
-    If $\Psi_B$ is trace-preserving completely positive and
-    $\rho_{AB}\geq0$, then
-    $(\id_A\otimes\Psi_B)(\rho)\geq0$.
-\end{lemma}
 
-\begin{lemma}[Positivity under independent maps]
-    \label{lem:mpdo_tensor_map_both_pos}
-    \lean{IsKrausCPTP.tensorMapBoth_posSemidef}
-    \leanok
-    \uses{def:mpdo_tensor_map_both, lem:mpdo_tensor_map_id_pos, lem:mpdo_id_tensor_map_pos}
-    If $\Phi_A$ and $\Psi_B$ are trace-preserving completely positive and
-    $\rho_{AB}\geq0$, then $(\Phi_A\otimes\Psi_B)(\rho)\geq0$.
-\end{lemma}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Independent maps on both tensor factors'']{QICLean2026Blueprint}.
 
-\begin{theorem}[Data processing on the first tensor factor]
-    \label{thm:mpdo_mutual_information_data_processing_left}
-    \lean{IsKrausCPTP.mutualInformation_tensorMapId_le}
-    \leanok
-    Let $\rho_{AB}$ be a bipartite density operator and let $\Phi_A$ be a
-    trace-preserving completely positive map whose input and output matrix
-    algebras may have different dimensions. Then
-    $I(A':B)_{(\Phi_A\otimes\id_B)(\rho)}\leq I(A:B)_\rho$.
-\end{theorem}
 
-\begin{proof}
-    \leanok
-    \uses{lem:mpdo_tensor_map_id_pos}
-    Choose a rectangular Stinespring isometry for $\Phi_A$. Conjugating by
-    $W=V_A\otimes\id_B$ gives
-    $\omega_{A'EB}=W\rho_{AB}W^\dagger$. Since
-    $W=V_A\otimes\id_B$ and $V_A^\dagger V_A=\id_A$, its marginals satisfy
-    \begin{align}
-        \omega_{A'E} & =V_A\rho_A V_A^\dagger, \notag \\
-        \omega_B     & =\rho_B.
-        \notag
-    \end{align}
-    Entropy is preserved by the isometry $W$, and also by $V_A$ on the first
-    marginal. Therefore
-    \begin{align}
-        S(\omega_{A'EB}) & =S(\rho_{AB}), \notag \\
-        S(\omega_{A'E})  & =S(\rho_A), \notag    \\
-        S(\omega_B)      & =S(\rho_B).
-        \notag
-    \end{align}
-    Hence $I(A'E:B)_\omega=I(A:B)_\rho$. The defining Stinespring identity is
-    $\tr_E(\omega_{A'EB})=(\Phi_A\otimes\id_B)(\rho_{AB})$.
-    Strong subadditivity in the form $I(R:A')\leq I(R:A'E)$ proves the stated
-    inequality with $R=B$.
-\end{proof}
 
-\begin{theorem}[Data processing on the second tensor factor]
-    \label{thm:mpdo_mutual_information_data_processing_right}
-    \lean{IsKrausCPTP.mutualInformation_idTensorMap_le}
-    \leanok
-    \uses{def:mpdo_id_tensor_map}
-    Let $\rho_{AB}$ be a bipartite density operator and let $\Psi_B$ be a
-    trace-preserving completely positive map whose input and output matrix
-    algebras may have different dimensions. Then
-    $I(A:B')_{(\id_A\otimes\Psi_B)(\rho)}\leq I(A:B)_\rho$.
-\end{theorem}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Positivity under a map on the first tensor factor'']{QICLean2026Blueprint}.
 
-\begin{proof}\leanok
-    \uses{lem:mpdo_id_tensor_map_pos, thm:mpdo_mutual_information_data_processing_left}
-    Exchange the two tensor factors and apply
-    Theorem~\ref{thm:mpdo_mutual_information_data_processing_left}.
-\end{proof}
 
-\begin{theorem}[Data processing for bipartite mutual information]
-    \label{thm:mpdo_mutual_information_data_processing}
-    \lean{IsKrausCPTP.mutualInformation_tensorMapBoth_le}
-    \leanok
-    \uses{def:mpdo_tensor_map_both}
-    Let $\rho_{AB}$ be a bipartite density operator and let $\Phi_A$ and
-    $\Psi_B$ be trace-preserving completely positive maps whose input and
-    output matrix algebras may have different dimensions. Then
-    $I(A':B')_{(\Phi_A\otimes\Psi_B)(\rho)}\leq I(A:B)_\rho$.
-\end{theorem}
 
-\begin{proof}\leanok
-    \uses{lem:mpdo_tensor_map_both_pos, thm:mpdo_mutual_information_data_processing_left, thm:mpdo_mutual_information_data_processing_right}
-    Apply the two one-sided inequalities successively.
-\end{proof}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Positivity under a map on the second tensor factor'']{QICLean2026Blueprint}.
+
+
+
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Positivity under independent maps'']{QICLean2026Blueprint}.
+
+
+
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Data processing on the first tensor factor'']{QICLean2026Blueprint}.
+
+
+
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Data processing on the second tensor factor'']{QICLean2026Blueprint}.
+
+
+
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Data processing for bipartite mutual information'']{QICLean2026Blueprint}.
+
 
 \begin{definition}[Normalized state across a consecutive bipartition]
     \label{def:mpdo_split_normalized_mpo}
@@ -505,7 +409,7 @@
     \lean{MPOTensor.mutualInformation_bipartition_eq_of_local_transfers,
         MPOTensor.mutualInformation_bipartition_eq_of_isRFPViaTS}
     \leanok
-    \uses{lem:mpdo_rfp_transfer_across_cut, thm:mpdo_mutual_information_data_processing}
+    \uses{lem:mpdo_rfp_transfer_across_cut}
     Let $M$ be a renormalization fixed point. If its $N$-site operator is
     positive semidefinite and has nonzero trace, then
     $I(\sigma^{(N)}_{a+1:b+2})
@@ -924,7 +828,7 @@
     \label{thm:local_channel_image_mutual_info_bound}
     \lean{MPOTensor.mutualInfoChain_le_of_bipartitioned_channel_image}
     \leanok
-    \uses{def:mutual_info_chain, def:mpdo_split_normalized_mpo, def:mpdo_tensor_map_both, def:doubled_tensor}
+    \uses{def:mutual_info_chain, def:mpdo_split_normalized_mpo, def:doubled_tensor}
     Let $M$ be an MPO tensor whose generated $N$-site operator is positive
     semidefinite. Let $A$ be an MPS tensor of bond dimension $D'\geq1$ whose
     $N$-site vector is nonzero. Suppose that, across the cut $L\mid(N-L)$, the
@@ -941,7 +845,7 @@
     Then $I_L(M)\leq4\log D'$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_mutual_information_data_processing, prop:pure_mutual_info_bound}
+    \uses{prop:pure_mutual_info_bound}
     Write $\sigma_A^{(N)}$ for the normalized pure state of $A$ in the
     $L\mid(N-L)$ bipartition. Then
     \begin{align}

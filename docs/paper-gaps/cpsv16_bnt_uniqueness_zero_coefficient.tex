@@ -1,106 +1,25 @@
 \documentclass{article}
 
-\usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
-\setlength{\emergencystretch}{2em}
 
-\input{./command}
+\input{command}
 
 \title{The Nonzero-Coefficient Convention for CPSV16 Canonical Forms}
 \author{}
-\date{2026-08-23}
+\date{2026-08-25}
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{clarification}{resolved}
 
-\section{The convention}
-
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete construct the canonical form by
-listing the invariant blocks of the completely positive map and normalizing
-each block separately \cite[lines 214--225]{Cirac2016MPDO_arXiv}. The blocks
-produced by the construction are therefore precisely the blocks which occur in
-the tensor. The displayed definition
-\cite[lines 238--244]{Cirac2016MPDO_arXiv},
-\begin{align}
-    A^i=\bigoplus_{k=1}^r \mu_k A_k^i,
-    \tag{\path{eq:II_CF1}}
-\end{align}
-does not repeat that every $\mu_k$ is nonzero, but the subsequent
-normalization $|\mu_k|\le1$ with at least one coefficient equal to one
-\cite[line 246]{Cirac2016MPDO_arXiv} presupposes it: a summand with
-coefficient zero contributes nothing to any positive-length matrix product
-vector and is not a block of the decomposition.
-
-The formalization reads the canonical form with every coefficient $\mu_k$
-nonzero. This is part of the definition of canonical-form data.\footnote{The
-field is \leanid{MPSTensor.CPSVCanonicalFormData.weights_ne_zero} in
-\doclink{TNLean/MPS/CanonicalForm/Definitions.lean}.} A basis of normal
-tensors in the sense of Definition~2.4 is then a family of normal tensors
-whose matrix product vectors span those of $A$ at every positive length and
-are eventually linearly independent; the blocks of a canonical form form
-such a basis after identifying gauge-phase-equivalent blocks, and every
-basis element occurs with nonzero coefficient.
-
-\section{Consequences}
-
-Under this convention the following source statements are formalized as
-stated, each against the blueprint node named.
-
-\begin{itemize}
-    \item Proposition~2.7 \cite[lines 278--280 and 1135--1146]
-          {Cirac2016MPDO_arXiv}: a family is a basis of normal tensors for a
-          canonical form if and only if every representative is normal, every
-          block is gauge-phase equivalent to a representative, and distinct
-          representatives are not gauge-phase equivalent. Blueprint
-          \path{thm:cpsv_bnt_characterization}.\footnote{Formal declaration:
-          \leanid{MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal}.}
-    \item The uniqueness sentence at \cite[line 1148]{Cirac2016MPDO_arXiv}:
-          two bases of normal tensors of the same positive-length matrix
-          product vector family have a bijective gauge-phase matching, proved
-          by applying Proposition~2.7 in both directions. It is formalized
-          for basis-of-normal-tensors sector presentations, in which every
-          basis element carries a nonzero coefficient. Blueprint
-          \path{thm:cpsv_bnt_presentation_uniqueness}.\footnote{Formal
-          declaration:
-          \leanid{MPSTensor.IsBNTSectorPresentation.equiv_of_sameMPV₂Pos}.}
-          The literal Definition-2.4 family predicate\footnote{Formal
-          declaration: \leanid{MPSTensor.IsCPSVBasisOfNormalTensors}.} is
-          retained as an interface and carries no uniqueness claim: for a
-          one-block tensor $A_0$ with coefficient $1$, both $(A_0)$ and
-          $(A_0,A_1)$ satisfy the family predicate, the second by assigning
-          $A_1$ the coefficient zero at every length. That second family is
-          exactly a zero-coefficient member, which the convention excludes
-          from every basis presentation, so it is not a counterexample to
-          the formalized uniqueness statement.
-    \item Theorem~2.10, Corollary~2.11, and Corollary~A.6
-          \cite[lines 349--361 and 1167--1199]{Cirac2016MPDO_arXiv}: the
-          proportional and equal fundamental theorems and their unitary
-          refinements. Blueprint \path{thm:cpgsv_multiblock_ft_source},
-          \path{thm:cpgsv_equal_case_source},
-          \path{cor:sector_bnt_proportional_unitary_sector_match}, and
-          \path{cor:sector_bnt_equal_unitary_global_gauge}.
-    \item Lemma~A.5 \cite[lines 1155--1163]{Cirac2016MPDO_arXiv}: equal
-          finite-range power sums of nonzero lists give equal lengths and
-          equal multisets; it is applied to the nonzero coefficients of a
-          canonical form. Blueprint \path{thm:bounded_power_sum_multiset}.
-    \item Corollary~3.12 \cite[lines 583--590]{Cirac2016MPDO_arXiv}: every
-          block of a canonical-form renormalization fixed point has
-          unit-modulus coefficient and idempotent transfer map, and the
-          phase-class representatives have a joint residual isometry.
-          Blueprint \path{thm:cpsv_weight_norm_one_and_block_rfp} and
-          \path{thm:cpsv_phase_class_residual_isometries}.
-\end{itemize}
-
-Without the convention, a normal tensor with coefficient identically zero
-could be adjoined to any basis without changing a positive-length matrix
-product vector, and the cardinality conclusions of the uniqueness sentence,
-Theorem~2.10, and Lemma~A.5 would fail. The convention is the source's own
-reading, and it is recorded here so that the formal definition can be checked
-against the displayed one.
-
-\bibliographystyle{alpha}
-\bibliography{references}
+The canonical owner of this paper-gap note is now QICLean.  The complete note
+is available at
+\url{https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf}.
+QICLean assumed this generic quantum-information documentation together with
+the second-wave migration merged at commit
+\texttt{4aa26359094e6e2acf6a18d580758128007f7194}.  This TNLean file is retained
+only as a compatibility pointer for historical references in tensor-network
+source comments and audit records.
 
 \end{document}

@@ -5,6 +5,20 @@ point of $\E_A$ that is not full rank has a proper invariant support, which
 block-diagonalizes the Kraus operators without changing the MPV family. Iterating
 the resulting splitting decomposes any tensor into irreducible blocks.
 
+\begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
+    \label{lem:lower_zero_invariance}
+    \lean{MPSTensor.lowerZero_implies_invariance}
+    \leanok
+    Let $A$ be an MPS tensor and let $P$ be an orthogonal projection.
+    If $(\Id-P)A^iP=0$ for every physical index~$i$, then
+    $P\E_A(PXP)P=\E_A(PXP)$ for every $X\in\MN{D}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the transfer map using (\ref{eq:mps_transfer_map}) and use
+    $(\Id-P)A^iP=0$ to reduce each Kraus term to the $P$-corner.
+\end{proof}
+
 
 \begin{theorem}[Invariant projection gives a two-block decomposition]\label{thm:lowerzero_two_block}
     \lean{MPSTensor.exists_twoBlock_decomp_of_lowerZero}

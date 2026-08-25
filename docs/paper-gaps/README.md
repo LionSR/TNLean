@@ -32,7 +32,7 @@ equal-modulus comparison has these current reference points.
 - `blueprint/src/chapter/ch10_bnt.tex` records the SectorBNT canonical-form
   surface, the repeated-copy sector coefficients, and the Newton--Girard
   power-sum recovery.
-- `cpsv16_global_vs_persector_unit_witness.tex` records the earlier
+- [cpsv16_global_vs_persector_unit_witness.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_global_vs_persector_unit_witness.pdf) records the earlier
   global-versus-per-sector unit-witness gap and its elimination by the exact
   linear-independence matcher, together with the unitary equal-case assembly
   of CPSV16 Source Corollary A.6 (`thm:Fundamental-CFII`). It is now a closure
@@ -49,7 +49,7 @@ equal-modulus comparison has these current reference points.
 The global-versus-per-sector unit-witness restriction has one closed paper-gap
 note.
 
-- `cpsv16_global_vs_persector_unit_witness.tex` records that earlier
+- [cpsv16_global_vs_persector_unit_witness.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_global_vs_persector_unit_witness.pdf) records that earlier
   full-basis matching theorems assumed a unit-modulus copy in every sector,
   while CPSV16 line 246 gives only one global unit-weight witness. The current
   SectorBNT matching and global-gauge theorems use only that global witness.
@@ -93,16 +93,16 @@ For MPDO renormalization fixed points:
   `cpsv16_two_site_sector_unitary_gauge_gap.tex` and
   `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean`. The unrestricted printed
   statement (iii), including inactive product sectors, is not claimed.
-- `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
+- [cpsv16_simple_tensor_nilpotency.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_simple_tensor_nilpotency.pdf) identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices. The formal
   predicate is `MPOTensor.IsSimple`: it existentially chooses a positive
   physical blocking and a BNT sector presentation whose representative
   physical-trace transfers are all nonnilpotent. Every representative has a
   positive number of copies and every copy has nonzero weight, the
   nonzero-coefficient convention recorded in
-  `cpsv16_bnt_uniqueness_zero_coefficient.tex`. Positive-length nontriviality is derived
+  [cpsv16_bnt_uniqueness_zero_coefficient.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf). Positive-length nontriviality is derived
   from this presentation, while isolated vanishing lengths remain possible.
-- `cpsv16_unit_weight_rfp_scale_tension.tex` records the tension between the
+- [cpsv16_unit_weight_rfp_scale_tension.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf) records the tension between the
   source's line-246 unit-weight convention and the scale fixed by Definition
   4.1. The dimer tensor satisfies `MPOTensor.IsSimple`, witnessed by blocking
   length one, while its canonical-form weight $\sqrt{337/512}$ is not a unit
@@ -112,7 +112,7 @@ For MPDO renormalization fixed points:
   4.9(iv)$\Rightarrow$(v): weights $1$ and $1/2$ satisfy the global
   convention and every condition-(iv) clause, while the blocked tensor fails
   Definition 4.1.
-- `cpgsv17_mpdo_mutual_information_bound.tex` is the resolved false-source
+- [cpgsv17_mpdo_mutual_information_bound.tex](https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf) is the resolved false-source
   record for Proposition 4.5.  The monotonicity and finite-chain bounds remain
   proved separately.  The parity-sensitive tensor is an MPDO, but at every
   fixed nonempty cut its mutual information alternates between $0$ and
@@ -124,7 +124,7 @@ For MPDO renormalization fixed points:
   `lemmus` in the printed proof of `prop3to4`, and the distinction between the
   refuted literal (iv)$\Rightarrow$(v) statement and the viable source
   (ii)$\Rightarrow$(v) route.
-- `cpgsv17_pf_rank_one.tex` records the completed normal Case-I rank-one
+- [cpgsv17_pf_rank_one.tex](https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf) records the completed normal Case-I rank-one
   theorem, the false absorbed-normality route in Case II, the exact
   repeated-copy counterexample to (iv)$\Rightarrow$(v), the nonminimality of
   the selected four-sector inverse-map factorization, and the remaining
@@ -215,7 +215,7 @@ For MPDO renormalization fixed points:
 - `cpsv16_ssa_equality_hayashi_markov.tex` records the completed, axiom-free
   forward and reverse strong-subadditivity equality characterization and the
   exact normalization boundary between supported and complementary sectors.
-- `cpsv16_zcl_canonical_form_normalization.tex` records the corresponding
+- [cpsv16_zcl_canonical_form_normalization.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf) records the corresponding
   normalization issue for mixed-state ZCL.
 - `cpsv16_exact_arithmetic_scope.tex` records the scope boundary of the
   certified four-site arithmetic for Examples~4.10 and~4.11. The exact integer
@@ -228,7 +228,7 @@ For MPDO renormalization fixed points:
 
 For the non-periodic MPS Fundamental Theorem background:
 
-- `cpsv16_bnt_uniqueness_zero_coefficient.tex` records the nonzero-coefficient
+- [cpsv16_bnt_uniqueness_zero_coefficient.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf) records the nonzero-coefficient
   convention: every coefficient of a CPSV16 canonical form is nonzero, as the
   line-246 normalization presupposes. Under this convention Proposition 2.7,
   the line-1148 uniqueness sentence, Theorem 2.10, Corollaries 2.11, 3.12,

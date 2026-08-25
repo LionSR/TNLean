@@ -873,10 +873,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_iterated_physical_blocking,
-        thm:mpu_normalized_transfer_stabilization,
-        thm:mpu_normalized_transfer_fin_one, thm:mpu_second_block_simple,
-        def:mpu_physical_reindexing}
+    \uses{lem:mpu_iterated_physical_blocking, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_second_block_simple, def:mpu_physical_reindexing}
     At the stabilization exponent $J$, the normalized double-layer diagonal
     is the rank-one fixed projector $|\rho)(\Phi|$.  The preceding theorem
     makes the subsequent length-$D^2$ block simple.  If $e$ is the canonical
@@ -1903,8 +1900,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mps_eval_word_independent_tensor_product, def:word_span,
-        def:normal}
+    \uses{thm:mps_eval_word_independent_tensor_product, def:word_span, def:normal}
     For every product word $w$, let $(u,v)$ be its pointwise component words.
     The bijection between $w$ and $(u,v)$ and
     Theorem~\ref{thm:mps_eval_word_independent_tensor_product} give
@@ -1931,8 +1927,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPSTensor.leftCanonical_tensorProduct,
         MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical}
     \leanok
-    \uses{def:mps_independent_tensor_product, def:left_canonical_tensor,
-        def:nt_cpsv}
+    \uses{def:mps_independent_tensor_product, def:left_canonical_tensor, def:nt_cpsv}
     Let $A$ and $B$ be CPSV normal tensors, and suppose that
     \begin{align}
         \sum_i(A^i)^\dagger A^i & =\Id_D, &
@@ -1959,9 +1954,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mps_word_span_tensor_product,
-        thm:cpsv_normal_eventually_injective,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{thm:mps_word_span_tensor_product, thm:cpsv_normal_eventually_injective, thm:is_normal_tensor_of_is_normal_left_canonical}
     The adjoint and multiplication laws for Kronecker products, together
     with the fact that simultaneous reindexing preserves adjoints, products,
     and finite sums, give
@@ -2667,8 +2660,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂}
     \leanok
-    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking, thm:mpu_source_factorization_entries}
     For $q=(q_1,q_2)$ and $j=(j_1,j_2)$, the untraced two-site product is
     \begin{align}
         (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})_{\alpha,\gamma}
@@ -2709,8 +2701,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.mul_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceV_reflected_mul_sourceY₁}
     \leanok
-    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking, thm:mpu_source_factorization_entries}
     The reflected factorization of the same untraced two-site product is
     \begin{align}
         (\mathcal U^{i_1j_1}\mathcal U^{i_2j_2})_{\alpha,\gamma}
@@ -3575,8 +3566,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_reduced_normalized_flattening_cfii}
     \lean{MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii,
-        def:mpu_full_support, def:normal, def:same_mpv2_pos}
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, def:normal, def:same_mpv2_pos}
     Let $d,D>0$, let $U$ be an MPU tensor of physical dimension $d$ and
     bond dimension $D$, and let $\widetilde U=d^{-1/2}U$ be its normalized
     doubled-index tensor. There are an integer $D_{\mathrm{red}}>0$, a normal
@@ -3599,20 +3589,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form,
-        thm:nonzero_irreducible_block_decomposition,
-        lem:overlap_eq_of_pos_mpv, thm:mpu_transfer_matrix_overlap,
-        thm:mpu_normalized_transfer_trace,
-        thm:mpu_transfer_matrix_eigenvalues,
-        thm:mpu_dependent_block_inclusion_identities,
-        lem:transfer_map_corner_intertwine,
-        lem:irreducible_transfer_perron_pair,
-        lem:irreducible_block_spectral_normalization,
-        thm:mpu_shifted_trace_power_spectrum,
-        thm:mpu_shifted_transfer_trace_single_block,
-        thm:mpu_shifted_transfer_trace_primitive,
-        thm:mpu_unique_full_support_normal,
-        thm:cpsv_cf_to_cfii_gauge, thm:gauge_invariance}
+    \uses{def:cpsv_canonical_form, thm:nonzero_irreducible_block_decomposition, lem:overlap_eq_of_pos_mpv, thm:mpu_transfer_matrix_overlap, thm:mpu_normalized_transfer_trace, thm:mpu_transfer_matrix_eigenvalues, thm:mpu_dependent_block_inclusion_identities, lem:transfer_map_corner_intertwine, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization, thm:mpu_shifted_trace_power_spectrum, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal, thm:cpsv_cf_to_cfii_gauge, thm:gauge_invariance}
     Remove the zero irreducible blocks of $\widetilde U$ and write
     \begin{align}
         A_0^i & =\bigoplus_{k=1}^{r}B_k^i,
@@ -3663,8 +3640,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_reduced_cfii_representative}
     \lean{MPOTensor.IsMPU.exists_reduced_cfii_representative}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii,
-        def:mpu_full_support}
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
     Let $d,D>0$ and let $U$ be an MPU tensor. There are
     $D_{\mathrm{red}}>0$ and an MPU tensor $U_{\mathrm{red}}$ of bond
     dimension $D_{\mathrm{red}}$ such that, for every integer $N>0$,
@@ -3681,8 +3657,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_normalized_flattening_cfii,
-        lem:mpv_smul, lem:mpdo_three_first_site_contraction_coefficients}
+    \uses{thm:mpu_reduced_normalized_flattening_cfii, lem:mpv_smul, lem:mpdo_three_first_site_contraction_coefficients}
     Apply Theorem~\ref{thm:mpu_reduced_normalized_flattening_cfii} and write
     its representative as $A_{\mathrm{red}}$. Define
     \begin{align}
@@ -3809,68 +3784,18 @@ special case of the one-family transfer matrix of the corresponding
 definition in the companion quantum-channel
 volume~\cite[``Transfer matrix in one family'']{QICLean2026Blueprint}.
 
-\begin{theorem}[Functoriality of transfer matrices]
-    \label{thm:mpu_transfer_matrix_functoriality}
-    \lean{transferMatrix_id,transferMatrix_comp}
-    \leanok
-    For linear maps $S,T:M_D(\mathbb C)\to M_D(\mathbb C)$,
-    \begin{align}
-        \widehat{\operatorname{id}} & =\Id,                    \\
-        \widehat{S\circ T}          & =\widehat S\,\widehat T.
-    \end{align}
-\end{theorem}
 
-\begin{proof}\leanok
-    Expand both sides on matrix units.  The identity formula is immediate,
-    while the composition formula follows by summing over the intermediate
-    row and column indices.
-\end{proof}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Functoriality of transfer matrices'']{QICLean2026Blueprint}.
 
 
-\begin{theorem}[Trace preservation fixes the vectorized identity on the left]
-    \label{thm:transfer_matrix_trace_preserving_identity_left_fixed}
-    \lean{vecMul_vec_one_transferMatrix_eq_of_trace_preserving}
-    \leanok
-    If $T:M_D(\mathbb C)\to M_D(\mathbb C)$ preserves trace and
-    $(\Phi\rvert=\operatorname{vec}(\Id)^{\mathsf T}$, then
-    \begin{align}
-        (\Phi\rvert\widehat T & =(\Phi\rvert.
-    \end{align}
-\end{theorem}
 
-\begin{proof}\leanok
 
-    On the column indexed by the matrix unit $E_{k\ell}$,
-    \begin{align}
-        \bigl((\Phi\rvert\widehat T\bigr)_{(\ell,k)}
-         & =\operatorname{vec}(\Id)\mathbin{\boldsymbol\cdot}
-        \operatorname{vec}(T(E_{k\ell}))                      \\
-         & =\tr(T(E_{k\ell}))
-        =\tr(E_{k\ell})
-        =\delta_{k\ell}.
-    \end{align}
-    These are precisely the coordinates of $(\Phi\rvert$.
-\end{proof}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Trace preservation fixes the vectorized identity on the left'']{QICLean2026Blueprint}.
 
-\begin{theorem}[Powers and traces of transfer matrices]
-    \label{thm:mpu_transfer_matrix_power_trace}
-    \lean{transferMatrix_pow,trace_transferMatrix_eq_linearMap_trace}
-    \leanok
-    For every nonnegative integer $N$,
-    \begin{align}
-        \widehat{T^N}   & =(\widehat T)^N,       \\
-        \tr(\widehat T) & =\operatorname{Tr}(T),
-    \end{align}
-    where the second trace is the operator trace of the endomorphism of
-    $M_D(\mathbb C)$.
-\end{theorem}
 
-\begin{proof}\leanok
-    \uses{thm:mpu_transfer_matrix_functoriality}
-    Functoriality proves the power identity by induction.  For the trace
-    identity, expand the operator trace in the matrix-unit basis.  The two
-    diagonal sums differ only by exchanging the row and column indices.
-\end{proof}
+
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Powers and traces of transfer matrices'']{QICLean2026Blueprint}.
+
 
 \begin{theorem}[Eigenvalues of a transfer matrix]
     \label{thm:mpu_transfer_matrix_eigenvalues}
@@ -3909,7 +3834,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_transfer_matrix_power_trace, thm:overlap_trace, thm:mixed_self}
+    \uses{thm:overlap_trace, thm:mixed_self}
     Replace the matrix power by the transfer matrix of the corresponding
     operator power, identify matrix trace with operator trace, and expand the
     latter over periodic words.  For the ordinary self-transfer statement,
@@ -4313,7 +4238,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:transfer_map_corner_intertwine, thm:mpu_dependent_block_inclusion_identities, thm:mpu_shifted_trace_power_moments, thm:mpu_shifted_trace_power_spectrum, thm:mpu_trace_power_all, thm:mpu_transfer_matrix_power_trace, thm:mpu_transfer_matrix_eigenvalues}
+    \uses{lem:transfer_map_corner_intertwine, thm:mpu_dependent_block_inclusion_identities, thm:mpu_shifted_trace_power_moments, thm:mpu_shifted_trace_power_spectrum, thm:mpu_trace_power_all, thm:mpu_transfer_matrix_eigenvalues}
     Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
     Let $U$ be the reconstruction coisometry and let $J_k$ be the flattened
     inclusion of the $k$th block.  Define the ambient inclusion and transported
@@ -4521,7 +4446,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry, thm:matrix_posdef_coisometric_transport, lem:transfer_map_corner_intertwine, thm:transfer_matrix_trace_preserving_identity_left_fixed, thm:mpu_normalized_transfer_stabilization, thm:mpu_stabilized_fixed_pair_uniqueness}
+    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry, thm:matrix_posdef_coisometric_transport, lem:transfer_map_corner_intertwine, thm:mpu_normalized_transfer_stabilization, thm:mpu_stabilized_fixed_pair_uniqueness}
     The shifted trace identities satisfy $\tr(E^N)=1$ for every integer
     $N>1$ and give
     \begin{align}
@@ -4935,8 +4860,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{SF}
     \notready
     \discussion{6019}
-    \uses{ThmFund1, def:mpu_source_uv, thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site}
+    \uses{ThmFund1, def:mpu_source_uv, thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
     Let $\mathcal U$ be a simple tensor under the source's standing
     canonical-form-II convention. Its standard form is the depth-two form of
     the two-site block $\mathcal U_2$ determined by the source unitaries $u$ and
@@ -5120,8 +5044,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_specified_source_index_identities,
-        thm:mpu_source_cut_rank_blocking_saturation}
+    \uses{thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
     Exact blocking growth gives the common positive factor $d^{k-k_0}$:
     \begin{align}
         r_k    & =d^{k-k_0}r_{k_0}, \\
@@ -5175,10 +5098,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{index-well-defined}
     \notready
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking,
-        thm:mpu_source_cut_rank_blocking_saturation,
-        thm:mpu_specified_source_index_blocking_invariance,
-        thm:mpu_all_later_simple_blockings}
+    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings}
     The source index is independent of the chosen simple blocking. More
     precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
     are simple, then
@@ -5252,8 +5172,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.rightRank_blockTensor_mulTensor_four_le,
         MPOTensor.leftRank_blockTensor_mulTensor_four_le}
     \leanok
-    \uses{def:mpdo_operator_product, def:mpdo_physical_blocking,
-        def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpdo_operator_product, def:mpdo_physical_blocking, def:mpu_right_rank, def:mpu_left_rank}
     Let $\mathcal U$ and $\mathcal V$ be arbitrary matrix product operator
     tensors of common physical dimension $d$. For their product tensor,
     four-site blocking satisfies
@@ -5268,11 +5187,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product,
-        thm:mpdo_block_two_as_positive_blocking,
-        thm:mpu_source_ranks_physical_reindexing,
-        lem:mpu_iterated_physical_blocking}
+    \uses{thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site, thm:mpdo_blocking_product, thm:mpdo_block_two_as_positive_blocking, thm:mpu_source_ranks_physical_reindexing, lem:mpu_iterated_physical_blocking}
     Use the canonical physical reindexing to identify iterated two-site
     blocking with direct four-site blocking. For the right cut, factor the
     two-site block of each tensor through its source tensor $u$. The diagonal
@@ -5323,8 +5238,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_index_composition}
     \notready
     \discussion{6016}
-    \uses{SF, def:index, index-well-defined,
-        lem:mpu_four_site_composition_source_rank_bounds}
+    \uses{SF, def:index, index-well-defined, lem:mpu_four_site_composition_source_rank_bounds}
     Let $\mathcal W$ generate the composition of the MPUs generated by
     $\mathcal U$ and $\mathcal U'$. Under the source's standing canonical-form
     convention,
@@ -5344,11 +5258,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (six admissible blocks):** every actual block used in
     % the source rank computation carries its own source datum. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_standard_form, def:mpu_admissible_index,
-        prop:mpu_admissible_index_well_defined,
-        thm:mpu_source_cut_rank_blocking,
-        lem:mpu_four_site_composition_source_rank_bounds,
-        def:mpu_reduced_full_support_source_datum}
+    \uses{def:mpu_admissible_standard_form, def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_source_cut_rank_blocking, lem:mpu_four_site_composition_source_rank_bounds, def:mpu_reduced_full_support_source_datum}
     Suppose there is a positive integer $k$ such that
     $\mathcal U_k$, $\mathcal U'_k$, and the composition tensor
     $\mathcal W_k$ are simple and each carries its own reduced full-support
@@ -7787,9 +7697,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one,
-        def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank,
-        thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
+    \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank, thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
     The entry formula $A^{ij}_{\alpha\beta}
     =\delta_{i\alpha}\delta_{j\beta}$ gives $M_1(A)=\Id$ and
     $M_2(A)=zz^{\mathsf T}$. Hence the first rank is $d^2$. For $d>0$, the
@@ -7855,8 +7763,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₂SourceFactors,
         MPOTensor.shiftExampleU₃SourceFactors}
     \leanok
-    \uses{threeMPU, def:mpu_weighted_source_factors,
-        thm:mpu_shift_source_cuts_ranks}
+    \uses{threeMPU, def:mpu_weighted_source_factors, thm:mpu_shift_source_cuts_ranks}
     Assume $d>0$. Equip $U_1$ with the tensor product of the two bond-one
     identity source factorizations.  Equip $U_2$ with the tensor product of the
     left-shift and right-shift source factorizations, in that order, and equip
@@ -7883,8 +7790,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors,
-        def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv, thm:mpu_shift_source_cuts_ranks}
     Write the source and physical indices as
     $((a,b),(c,e))$ and $((i,j),(k,l))$, respectively, and set
     $s=d^{-1/2}$.  The identity factors give
@@ -7915,8 +7821,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₁_mul_u₂_two_mul_Y₂,
         MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_v₂_two_reflected_mul_Y₁}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv, thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
     Assume $d>0$. The two open-leg factorizations of the blocked tensor have,
     as their respective central gates,
     \begin{align}
@@ -7931,9 +7836,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors,
-        def:mpu_source_uv, thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv, thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
     Write $B_2=\mathcal U_{2,2}$ for the actual two-site block and decode
     $I=(I_1,I_2)$ and $J=(J_1,J_2)$.  If $\pi$ is the four-spin physical
     identification and $\iota_u,\iota_v$ are the two source-rank
@@ -7975,8 +7878,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₁_mul_u₃_two_mul_Y₂,
         MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_v₃_two_reflected_mul_Y₁}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv, thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
     Assume $d>0$. The two open-leg factorizations of the blocked tensor have,
     as their respective central gates,
     \begin{align}
@@ -7990,9 +7892,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors,
-        def:mpu_source_uv, thm:mpu_source_u_open_two_site,
-        thm:mpu_source_v_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv, thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
     With $B_3=\mathcal U_{3,2}$ for the actual two-site block and the
     corresponding identifications $\pi,\iota_u,\iota_v$, the exact equalities
     are
@@ -8032,9 +7932,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:threeMPU_standard_forms}
     \notready
     \discussion{5715}
-    \uses{threeMPU, thm:threeMPU_supplied_source_uv_one,
-        thm:threeMPU_U2_supplied_source_uv_two,
-        thm:threeMPU_U3_supplied_source_uv_two}
+    \uses{threeMPU, thm:threeMPU_supplied_source_uv_one, thm:threeMPU_U2_supplied_source_uv_two, thm:threeMPU_U3_supplied_source_uv_two}
     Assume $d>0$. For the fixed standard-form source factors, the corresponding
     unitaries satisfy
     \begin{align}
@@ -8607,7 +8505,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:qca_left_coefficient_set,def:qca_left_support_algebra}
+    \uses{def:qca_left_coefficient_set, def:qca_left_support_algebra}
     The matrix $X^{\mathrm L}_{rs}$ is one of the generators of the defining
     star-algebra closure.
 \end{proof}
@@ -8625,7 +8523,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:qca_right_coefficient_set,def:qca_right_support_algebra}
+    \uses{def:qca_right_coefficient_set, def:qca_right_support_algebra}
     The matrix $X^{\mathrm R}_{ij}$ is one of the generators of the defining
     star-algebra closure.
 \end{proof}
@@ -8675,7 +8573,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:qca_left_coefficient_set,def:qca_left_support_algebra}
+    \uses{def:qca_left_coefficient_set, def:qca_left_support_algebra}
     Use the universal property of the star-subalgebra generated by
     $\operatorname{Coeff}_{\mathrm L}(\mathcal A)$.
 \end{proof}
@@ -8695,7 +8593,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:qca_right_coefficient_set,def:qca_right_support_algebra}
+    \uses{def:qca_right_coefficient_set, def:qca_right_support_algebra}
     Use the universal property of the star-subalgebra generated by
     $\operatorname{Coeff}_{\mathrm R}(\mathcal A)$.
 \end{proof}
@@ -8798,7 +8696,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \label{thm:qca_right_support_kronecker_submodule}
     \lean{Matrix.right_support_algebra_le_iff_le_kronecker_submodule}
     \leanok
-    \uses{def:qca_right_support_algebra,def:qca_kronecker_submodule}
+    \uses{def:qca_right_support_algebra, def:qca_kronecker_submodule}
     For every star-subalgebra $\mathcal C\subseteq M_J(\mathbb C)$,
     \begin{align}
         \operatorname{Spp}_{\mathrm R}(\mathcal A)\subseteq\mathcal C
@@ -8808,8 +8706,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_right_support_minimality,
-        thm:qca_mem_kronecker_submodule_iff}
+    \uses{thm:qca_right_support_minimality, thm:qca_mem_kronecker_submodule_iff}
     The coefficient criterion reduces the right-hand containment to membership
     of every right block in $\mathcal C$.  This is equivalent to the left-hand
     inclusion by Theorem~\ref{thm:qca_right_support_minimality}.
@@ -8819,8 +8716,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \label{thm:qca_two_sided_support_containment}
     \lean{Matrix.le_support_kroneckerSubmodule}
     \leanok
-    \uses{def:qca_left_support_algebra,def:qca_right_support_algebra,
-        def:qca_kronecker_submodule}
+    \uses{def:qca_left_support_algebra, def:qca_right_support_algebra, def:qca_kronecker_submodule}
     Every bipartite star-subalgebra satisfies the literal two-sided containment
     \begin{align}
         \mathcal A
@@ -8840,9 +8736,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_mem_kronecker_submodule_iff,
-        thm:qca_left_coefficient_mem_support,
-        thm:qca_right_coefficient_mem_support}
+    \uses{thm:qca_mem_kronecker_submodule_iff, thm:qca_left_coefficient_mem_support, thm:qca_right_coefficient_mem_support}
     If $X\in\mathcal A$, every left coefficient of $X$ lies in the left support
     algebra and every right coefficient lies in the right support algebra.
     Theorem~\ref{thm:qca_mem_kronecker_submodule_iff} places $X$ in their
@@ -8922,9 +8816,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_left_coefficient_mem_support,
-        thm:qca_left_kronecker_commute_iff,def:qca_left_coefficient_set,
-        def:qca_left_support_algebra}
+    \uses{thm:qca_left_coefficient_mem_support, thm:qca_left_kronecker_commute_iff, def:qca_left_coefficient_set, def:qca_left_support_algebra}
     By Theorem~\ref{thm:qca_left_kronecker_commute_iff}, commutation of
     $B\otimes\mathbf 1_J$ with every $X\in\mathcal A$ is equivalent to
     commutation of $B$ with every left coefficient.  The coefficient set is
@@ -8954,10 +8846,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_operator_block_adjoint,
-        thm:qca_right_coefficient_mem_support,
-        thm:qca_right_kronecker_commute_iff,def:qca_right_coefficient_set,
-        def:qca_right_support_algebra}
+    \uses{thm:qca_operator_block_adjoint, thm:qca_right_coefficient_mem_support, thm:qca_right_kronecker_commute_iff, def:qca_right_coefficient_set, def:qca_right_support_algebra}
     By Theorem~\ref{thm:qca_right_kronecker_commute_iff}, commutation of
     $\mathbf 1_I\otimes C$ with every $X\in\mathcal A$ is equivalent to
     commutation of $C$ with every right coefficient.  Theorem~\ref{thm:qca_operator_block_adjoint}
@@ -8971,7 +8860,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \label{thm:qca_overlapping_support_algebras_commute}
     \lean{Matrix.supportAlgebras_commute_of_overlappingLifts_commute}
     \leanok
-    \uses{def:qca_left_support_algebra,def:qca_right_support_algebra}
+    \uses{def:qca_left_support_algebra, def:qca_right_support_algebra}
     Let $I$, $J$, and $K$ be finite sets, and let
     \begin{align}
         \mathcal A_1&\subseteq M_{I\times J}(\mathbb C), &
@@ -9015,12 +8904,10 @@ circuit, MPU standard form, or index comparison is asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:commuting_overlapping_middle_coefficients,
-        def:qca_left_coefficient_set,def:qca_right_coefficient_set,
-        def:qca_left_support_algebra,def:qca_right_support_algebra}
+    \uses{def:qca_left_coefficient_set, def:qca_right_coefficient_set, def:qca_left_support_algebra, def:qca_right_support_algebra}
     For $X\in\mathcal A_1$, $Y\in\mathcal A_2$, $i,i'\in I$, and
     $k,k'\in K$, applying
-    Theorem~\ref{thm:commuting_overlapping_middle_coefficients} to
+    Theorem~\cite[``Middle-factor coefficients of commuting overlapping operators'']{QICLean2026Blueprint} to
     (\ref{eq:qca_overlapping_support_lifts}) gives
     \begin{align}
         X^{\mathrm R}_{ii'}Y^{\mathrm L}_{kk'}
@@ -9316,8 +9203,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \lean{SpinChain.finiteChainLocalObservable,
         SpinChain.finiteChainLocalObservable_apply}
     \leanok
-    \uses{def:qca_local_inclusion, def:qca_algebraic_local_algebra,
-        def:mpu_finite_chain_conjugation}
+    \uses{def:qca_local_inclusion, def:qca_algebraic_local_algebra, def:mpu_finite_chain_conjugation}
     Let $\Lambda\subseteq I_{a,N}$ and $A\in\mathcal A_\Lambda$.  Set
     $A_L=\iota_{\Lambda,I_{a,N}}(A)$.  For $N>1$, the finite-chain term in
     \cite[lines~2300--2306]{Cirac2017MPU} is the star-algebra map
@@ -10315,8 +10201,7 @@ scalar-center theorem.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_quasi_local_supported_iff_commute_disjoint,
-        def:qca_quasi_local_supported_in, lem:qca_quasi_local_observable}
+    \uses{thm:qca_quasi_local_supported_iff_commute_disjoint, def:qca_quasi_local_supported_in, lem:qca_quasi_local_observable}
     Apply Theorem~\ref{thm:qca_quasi_local_supported_iff_commute_disjoint}
     with $\Lambda=\varnothing$.  The commutation hypothesis gives
     $z\in j_\varnothing(\mathcal A_\varnothing)$, so there is an
@@ -10964,8 +10849,7 @@ $\omega^{-1}$.
     \label{lem:qca_local_blocking_inclusion}
     \lean{SpinChain.localBlocking_localInclusion}
     \leanok
-    \uses{def:qca_local_blocking, thm:qca_configuration_blocking_formulas,
-        def:qca_local_inclusion}
+    \uses{def:qca_local_blocking, thm:qca_configuration_blocking_formulas, def:qca_local_inclusion}
     Let $L>0$.  For finite blocked regions $\Lambda\subseteq\Gamma$, the
     square formed by finite blocking and the two canonical local inclusions
     commutes:
@@ -10977,8 +10861,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:qca_local_blocking_formulas,
-        thm:qca_configuration_blocking_formulas}
+    \uses{thm:qca_local_blocking_formulas, thm:qca_configuration_blocking_formulas}
     For configurations $x,y$ on $\widehat\Gamma_L$, let $\widetilde x$ and
     $\widetilde y$ be their block encodings on $\Gamma$.  The two matrix
     entries in the commuting square are
@@ -11005,8 +10888,7 @@ $\omega^{-1}$.
     \lean{SpinChain.algebraicLocalBlockingHom,
         SpinChain.algebraicLocalUnblockingHom}
     \leanok
-    \uses{def:qca_algebraic_local_algebra, def:qca_local_blocking,
-        def:qca_block_hull}
+    \uses{def:qca_algebraic_local_algebra, def:qca_local_blocking, def:qca_block_hull}
     Let $L>0$.  The compatible finite blocking maps induce a star-algebra
     homomorphism
     \begin{align}
@@ -11025,9 +10907,7 @@ $\omega^{-1}$.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{lem:qca_block_hull_properties,
-        lem:qca_local_blocking_inclusion,
-        thm:qca_algebraic_local_algebra_universal}
+    \uses{lem:qca_block_hull_properties, lem:qca_local_blocking_inclusion, thm:qca_algebraic_local_algebra_universal}
     For $\Lambda\subseteq\Gamma$, the finite commuting square gives
     \begin{align}
         \iota_{\widehat\Gamma_L}
@@ -11056,8 +10936,7 @@ $\omega^{-1}$.
         SpinChain.algebraicLocalBlockingHom_comp_unblockingHom,
         SpinChain.algebraicLocalUnblockingHom_comp_blockingHom}
     \leanok
-    \uses{def:qca_algebraic_blocking_maps,
-        lem:qca_block_hull_properties}
+    \uses{def:qca_algebraic_blocking_maps, lem:qca_block_hull_properties}
     Let $L>0$.  The forward map applies finite blocking to a representative on
     $\Lambda$ and regards the result as supported on $\widehat\Lambda_L$.  The
     reverse map enlarges a representative on $\Delta$ to the expansion of its
@@ -11075,8 +10954,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_local_blocking_inclusion,
-        lem:qca_block_hull_properties}
+    \uses{lem:qca_local_blocking_inclusion, lem:qca_block_hull_properties}
     These are the evaluation formulas for the two compatible-family lifts.
     Forward compatibility is the commuting square.  Reverse compatibility
     follows by monotonicity of block hulls, composition of local inclusions,
@@ -11104,9 +10982,7 @@ $\omega^{-1}$.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_maps_evaluation,
-        thm:qca_local_observable_finite_support,
-        lem:qca_local_blocking_inclusion}
+    \uses{lem:qca_algebraic_blocking_maps_evaluation, thm:qca_local_observable_finite_support, lem:qca_local_blocking_inclusion}
     The identity $\mathcal B_L\mathcal U_L=\operatorname{id}$ makes
     $\mathcal B_L$ surjective.  For injectivity, represent two blocked
     observables on finite regions $\Lambda$ and $\Gamma$, enlarge both to
@@ -11130,8 +11006,7 @@ $\omega^{-1}$.
         SpinChain.algebraicLocalBlocking_isometry,
         SpinChain.algebraicLocalBlocking_symm_isometry}
     \leanok
-    \uses{def:qca_algebraic_blocking,
-        lem:qca_algebraic_blocking_maps_evaluation}
+    \uses{def:qca_algebraic_blocking, lem:qca_algebraic_blocking_maps_evaluation}
     Let $d>0$ and $L>0$.  The equivalence agrees with the forward lift, and
     its inverse agrees with the block-hull unblocking map.  For
     $A\in\mathcal A^{(d^L)}_\Lambda$ and
@@ -11156,10 +11031,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_maps_evaluation,
-        lem:qca_block_hull_properties,
-        thm:qca_local_blocking_formulas,
-        def:qca_algebraic_local_operator_norm}
+    \uses{lem:qca_algebraic_blocking_maps_evaluation, lem:qca_block_hull_properties, thm:qca_local_blocking_formulas, def:qca_algebraic_local_operator_norm}
     The first two formulas are the evaluation identities for the forward and
     reverse maps.  For an expanded region, the block-hull identity removes the
     enlargement and leaves the inverse finite blocking equivalence.  On a
@@ -11174,8 +11046,7 @@ $\omega^{-1}$.
     \label{def:qca_quasi_local_blocking}
     \lean{SpinChain.quasiLocalBlocking}
     \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_blocking,
-        lem:qca_algebraic_blocking_formulas}
+    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_blocking, lem:qca_algebraic_blocking_formulas}
     For $d>0$ and $L>0$, site blocking extends uniquely by continuity to a
     star-algebra equivalence
     \begin{align}
@@ -11208,8 +11079,7 @@ $\omega^{-1}$.
         SpinChain.norm_quasiLocalBlocking,
         SpinChain.quasiLocalBlocking_isometry}
     \leanok
-    \uses{def:qca_quasi_local_blocking, lem:qca_algebraic_blocking_formulas,
-        lem:qca_quasi_local_observable}
+    \uses{def:qca_quasi_local_blocking, lem:qca_algebraic_blocking_formulas, lem:qca_quasi_local_observable}
     Let $d>0$ and $L>0$.  Write $j^{(d)}$ for the canonical map from the
     algebraic-local algebra into its completion.  The underlying map of
     $\overline{\mathcal B}_L$ is the continuous extension of $\mathcal B_L$,
@@ -11248,8 +11118,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable,
-        lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
+    \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable, lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
     The first identity is the defining completion map, and the two dense
     formulas are its canonical-image formulas for the algebraic equivalence and
     its inverse.  Composing them with the finite-region canonical maps gives the
@@ -11265,8 +11134,7 @@ $\omega^{-1}$.
         SpinChain.quasiLocalBlocking_symm_supportedIn,
         SpinChain.quasiLocalBlocking_supportedIn_expandedRegion_iff}
     \leanok
-    \uses{lem:qca_quasi_local_blocking_formulas, def:qca_quasi_local_supported_in,
-        lem:qca_block_hull_properties}
+    \uses{lem:qca_quasi_local_blocking_formulas, def:qca_quasi_local_supported_in, lem:qca_block_hull_properties}
     Let $d>0$ and $L>0$.  If a blocked-chain observable $X$ is supported in
     $\Lambda$, then $\overline{\mathcal B}_L(X)$ is supported in
     $\widehat\Lambda_L$.  If an original-chain observable $Y$ is supported in
@@ -11282,8 +11150,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_quasi_local_blocking_formulas,
-        lem:qca_block_hull_properties}
+    \uses{lem:qca_quasi_local_blocking_formulas, lem:qca_block_hull_properties}
     Choose a finite-region representative and apply the corresponding forward
     or inverse finite evaluation formula.  For the reverse implication in the
     exact statement, apply inverse blocking and simplify the inverse composite
@@ -11294,7 +11161,7 @@ $\omega^{-1}$.
     \label{lem:qca_expanded_region_translation}
     \lean{SpinChain.expandedRegion_translateRegion}
     \leanok
-    \uses{def:qca_translate_region,def:qca_expanded_region}
+    \uses{def:qca_translate_region, def:qca_expanded_region}
     Let $L>0$, let $a\in\mathbb Z$, and let $\Lambda\subset\mathbb Z$ be a
     finite blocked region.  Then
     \begin{align}
@@ -11317,7 +11184,7 @@ $\omega^{-1}$.
     \label{def:qca_blocked_neighborhood}
     \lean{SpinChain.blockedNeighborhood}
     \leanok
-    \uses{def:qca_expanded_region,def:qca_block_hull,def:qca_region_sumset}
+    \uses{def:qca_expanded_region, def:qca_block_hull, def:qca_region_sumset}
     Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be a finite original-lattice
     neighborhood.  Write $\widehat{\{0\}}_L=\{0,\ldots,L-1\}$ for the sites in
     the reference block.  Define the induced blocked-lattice neighborhood by
@@ -11337,7 +11204,7 @@ $\omega^{-1}$.
     \lean{SpinChain.mem_blockedNeighborhood,
         SpinChain.mem_blockedNeighborhood_iff_exists_eq}
     \leanok
-    \uses{def:qca_blocked_neighborhood,thm:qca_expanded_region_coordinates}
+    \uses{def:qca_blocked_neighborhood, thm:qca_expanded_region_coordinates}
     Let $L>0$, let $\mathcal N\subset\mathbb Z$ be finite, and let
     $b\in\mathbb Z$.  Then
     \begin{align}
@@ -11358,8 +11225,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_blocked_neighborhood,def:qca_block_hull,
-        thm:qca_expanded_region_coordinates}
+    \uses{def:qca_blocked_neighborhood, def:qca_block_hull, thm:qca_expanded_region_coordinates}
     An element of $\widehat{\{0\}}_L+\mathcal N$ has the form $r+n$ with
     $0\leq r<L$ and $n\in\mathcal N$.  Taking its block coordinate gives the
     first equivalence.  Euclidean division writes $r+n=bL+s$ with the unique
@@ -11371,8 +11237,7 @@ $\omega^{-1}$.
     \label{lem:qca_block_hull_region_sumset}
     \lean{SpinChain.blockHull_regionSumset_expandedRegion}
     \leanok
-    \uses{def:qca_blocked_neighborhood,def:qca_region_sumset,
-        def:qca_expanded_region,def:qca_block_hull}
+    \uses{def:qca_blocked_neighborhood, def:qca_region_sumset, def:qca_expanded_region, def:qca_block_hull}
     Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
     original-lattice neighborhood $\mathcal N$,
     \begin{align}
@@ -11385,8 +11250,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_blocked_neighborhood_membership,
-        thm:qca_expanded_region_coordinates}
+    \uses{lem:qca_blocked_neighborhood_membership, thm:qca_expanded_region_coordinates}
     Write an expanded site as $xL+r$, where $x\in\Lambda$ and $0\leq r<L$.
     For $n\in\mathcal N$, Euclidean division gives
     \begin{align}
@@ -11402,7 +11266,7 @@ $\omega^{-1}$.
     \label{lem:qca_region_sumset_expanded_region_subset}
     \lean{SpinChain.regionSumset_expandedRegion_subset}
     \leanok
-    \uses{lem:qca_block_hull_region_sumset,lem:qca_block_hull_properties}
+    \uses{lem:qca_block_hull_region_sumset, lem:qca_block_hull_properties}
     Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
     original-lattice neighborhood $\mathcal N$,
     \begin{align}
@@ -11413,7 +11277,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_block_hull_region_sumset,lem:qca_block_hull_properties}
+    \uses{lem:qca_block_hull_region_sumset, lem:qca_block_hull_properties}
     Every finite original region is contained in the expansion of its block
     hull.  Apply this containment to
     $\widehat\Lambda_L+\mathcal N$ and use
@@ -11424,8 +11288,7 @@ $\omega^{-1}$.
     \label{lem:qca_algebraic_blocking_translation}
     \lean{SpinChain.algebraicLocalBlocking_translation}
     \leanok
-    \uses{lem:qca_expanded_region_translation,def:qca_algebraic_blocking,
-        def:qca_algebraic_local_translation}
+    \uses{lem:qca_expanded_region_translation, def:qca_algebraic_blocking, def:qca_algebraic_local_translation}
     Let $d,L>0$.  If $\mathcal B_L$ denotes the algebraic-local blocking
     equivalence, then for every $a\in\mathbb Z$,
     \begin{align}
@@ -11437,9 +11300,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_expanded_region_translation,
-        lem:qca_algebraic_blocking_formulas,
-        def:qca_algebraic_local_translation}
+    \uses{lem:qca_expanded_region_translation, lem:qca_algebraic_blocking_formulas, def:qca_algebraic_local_translation}
     On a representative supported in a finite blocked region $\Lambda$, both
     sides apply the same matrix reindexing.  Their supports agree because
     \begin{align}
@@ -11454,8 +11315,7 @@ $\omega^{-1}$.
     \label{lem:qca_quasi_local_blocking_translation}
     \lean{SpinChain.quasiLocalBlocking_translation}
     \leanok
-    \uses{lem:qca_algebraic_blocking_translation,
-        def:qca_quasi_local_blocking,def:qca_quasi_local_translation}
+    \uses{lem:qca_algebraic_blocking_translation, def:qca_quasi_local_blocking, def:qca_quasi_local_translation}
     Let $d,L>0$.  If $\overline{\mathcal B}_L$ denotes the quasi-local blocking
     equivalence, then for every $a\in\mathbb Z$,
     \begin{align}
@@ -11467,9 +11327,7 @@ $\omega^{-1}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_translation,
-        lem:qca_quasi_local_blocking_formulas,
-        def:qca_quasi_local_translation}
+    \uses{lem:qca_algebraic_blocking_translation, lem:qca_quasi_local_blocking_formulas, def:qca_quasi_local_translation}
     The two sides are continuous maps on the quasi-local algebra.  On the dense
     algebraic-local subalgebra their values agree by
     Lemma~\ref{lem:qca_algebraic_blocking_translation}.  They therefore agree
@@ -11542,8 +11400,7 @@ the converse theorem.
     \label{lem:qca_propagates_within_blocked}
     \lean{SpinChain.PropagatesWithin.blocked}
     \leanok
-    \uses{def:qca_blocked_automorphism,def:qca_blocked_neighborhood,
-        def:qca_propagates_within}
+    \uses{def:qca_blocked_automorphism, def:qca_blocked_neighborhood, def:qca_propagates_within}
     Let $\mathcal N\subset\mathbb Z$ be finite.  If $\omega$ propagates within
     $\mathcal N$, then $\omega^{[L]}$ propagates within the carry-aware blocked
     neighborhood $\mathcal C_L(\mathcal N)$.  Explicitly, for every finite
@@ -11553,9 +11410,7 @@ the converse theorem.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_blocked_automorphism_apply,
-        lem:qca_quasi_local_blocking_support,
-        lem:qca_block_hull_region_sumset}
+    \uses{lem:qca_blocked_automorphism_apply, lem:qca_quasi_local_blocking_support, lem:qca_block_hull_region_sumset}
     Forward blocking sends support in $\Lambda$ to support in
     $\widehat\Lambda_L$.  Apply the propagation bound for $\omega$, then apply
     inverse blocking.  The resulting support is
@@ -11571,8 +11426,7 @@ the converse theorem.
     \label{lem:qca_finite_propagation_blocked}
     \lean{SpinChain.HasFinitePropagation.blocked}
     \leanok
-    \uses{def:qca_blocked_automorphism,def:qca_finite_propagation,
-        lem:qca_propagates_within_blocked}
+    \uses{def:qca_blocked_automorphism, def:qca_finite_propagation, lem:qca_propagates_within_blocked}
     If $\omega$ has finite forward propagation, then $\omega^{[L]}$ has finite
     forward propagation.
 \end{lemma}
@@ -11588,8 +11442,7 @@ the converse theorem.
     \label{thm:qca_blocked_translation_covariant_iff}
     \lean{SpinChain.translationCovariant_blockedAutomorphism_iff}
     \leanok
-    \uses{def:qca_blocked_automorphism,def:qca_translation_covariant,
-        def:qca_quasi_local_translation}
+    \uses{def:qca_blocked_automorphism, def:qca_translation_covariant, def:qca_quasi_local_translation}
     The blocked automorphism is translation covariant if and only if the
     original automorphism commutes with translation by one whole block:
     \begin{align}
@@ -11604,9 +11457,7 @@ the converse theorem.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:qca_blocked_automorphism_apply,
-        thm:qca_translation_covariant_iff_commute_one,
-        lem:qca_quasi_local_blocking_translation}
+    \uses{lem:qca_blocked_automorphism_apply, thm:qca_translation_covariant_iff_commute_one, lem:qca_quasi_local_blocking_translation}
     By Theorem~\ref{thm:qca_translation_covariant_iff_commute_one}, translation
     covariance on the blocked chain is equivalent to commutation with blocked
     unit translation.  Under $\overline{\mathcal B}_L$, blocked unit translation
@@ -11618,8 +11469,7 @@ the converse theorem.
     \label{lem:qca_translation_covariant_blocked}
     \lean{SpinChain.TranslationCovariant.blocked}
     \leanok
-    \uses{def:qca_blocked_automorphism,def:qca_translation_covariant,
-        thm:qca_blocked_translation_covariant_iff}
+    \uses{def:qca_blocked_automorphism, def:qca_translation_covariant, thm:qca_blocked_translation_covariant_iff}
     If $\omega$ is translation covariant, then $\omega^{[L]}$ is translation
     covariant.
 \end{lemma}
@@ -11635,9 +11485,7 @@ the converse theorem.
     \label{lem:qca_blocked}
     \lean{SpinChain.IsQCA.blocked}
     \leanok
-    \uses{def:qca,def:qca_blocked_automorphism,
-        lem:qca_finite_propagation_blocked,
-        lem:qca_translation_covariant_blocked}
+    \uses{def:qca, def:qca_blocked_automorphism, lem:qca_finite_propagation_blocked, lem:qca_translation_covariant_blocked}
     Let $d,L>0$.  If $\omega$ is a one-dimensional QCA on
     $\mathcal A^{(d)}$, then
     \begin{align}
@@ -11649,8 +11497,7 @@ the converse theorem.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_finite_propagation_blocked,
-        lem:qca_translation_covariant_blocked}
+    \uses{lem:qca_finite_propagation_blocked, lem:qca_translation_covariant_blocked}
     The two defining properties of a one-dimensional QCA are finite forward
     propagation and translation covariance.  They are preserved by
     Lemma~\ref{lem:qca_finite_propagation_blocked} and
@@ -11751,9 +11598,7 @@ any part of that external structure theorem beyond this change of grouping.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_propagates_within_blocked,
-        lem:qca_blocked_neighborhood_subset_nearest_neighbor,
-        lem:qca_propagation_neighborhood_mono}
+    \uses{lem:qca_propagates_within_blocked, lem:qca_blocked_neighborhood_subset_nearest_neighbor, lem:qca_propagation_neighborhood_mono}
     Blocking first gives propagation within $\mathcal C_L(\mathcal N)$.
     The carry bound places this neighborhood inside
     $[-1,1]\cap\mathbb Z$, and enlargement of propagation neighborhoods gives
@@ -11764,8 +11609,7 @@ any part of that external structure theorem beyond this change of grouping.
     \label{thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
     \lean{SpinChain.HasFinitePropagation.exists_blocked_nearest_neighbor}
     \leanok
-    \uses{def:qca_finite_propagation, def:qca_propagates_within,
-        def:qca_blocked_automorphism}
+    \uses{def:qca_finite_propagation, def:qca_propagates_within, def:qca_blocked_automorphism}
     Let $d>0$.  If $\omega$ has finite forward propagation, then there exists
     a positive integer $L$ such that, for every finite blocked region
     $\Lambda$ and every observable $X\in\mathcal A^{(d^L)}$ supported in
@@ -11776,9 +11620,7 @@ any part of that external structure theorem beyond this change of grouping.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:qca_propagates_within_blocked,
-        lem:qca_blocked_neighborhood_canonical_nearest_neighbor,
-        lem:qca_propagation_neighborhood_mono}
+    \uses{lem:qca_propagates_within_blocked, lem:qca_blocked_neighborhood_canonical_nearest_neighbor, lem:qca_propagation_neighborhood_mono}
     Choose a finite propagation neighborhood $\mathcal N$ and take
     $L=1+\sup_{n\in\mathcal N}|n|$.  This $L$ is positive, including when
     $\mathcal N$ is empty.  Blocking gives propagation within
@@ -11790,8 +11632,7 @@ any part of that external structure theorem beyond this change of grouping.
     \label{thm:qca_exists_blocked_nearest_neighbor}
     \lean{SpinChain.IsQCA.exists_blocked_nearest_neighbor}
     \leanok
-    \uses{def:qca, def:qca_blocked_automorphism,
-        def:qca_propagates_within}
+    \uses{def:qca, def:qca_blocked_automorphism, def:qca_propagates_within}
     Let $d>0$ and let $\omega$ be a one-dimensional QCA on
     $\mathcal A^{(d)}$.  There exists a positive integer $L$ such that
     $\omega^{[L]}$ is a QCA on $\mathcal A^{(d^L)}$ and, for every finite
@@ -11804,8 +11645,7 @@ any part of that external structure theorem beyond this change of grouping.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:qca_blocked,
-        thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
+    \uses{lem:qca_blocked, thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
     Apply the preceding theorem to the finite propagation of $\omega$, using
     the canonical positive block length.  At the same length, site blocking
     preserves both finite propagation and translation covariance, hence the
@@ -11829,9 +11669,7 @@ left/right order below agrees with the adjacent-pair convention in
     \label{def:qca_finite_region_restriction}
     \lean{SpinChain.PropagatesWithin.localRestriction}
     \leanok
-    \uses{def:qca_local_algebra,def:qca_local_inclusion,
-        def:qca_region_sumset,def:qca_quasi_local_observable,
-        def:qca_propagates_within}
+    \uses{def:qca_local_algebra, def:qca_local_inclusion, def:qca_region_sumset, def:qca_quasi_local_observable, def:qca_propagates_within}
     Let $d>0$, let $\omega$ be a star-algebra automorphism of
     $\mathcal A^{(d)}$, and suppose that $\omega$ propagates within the finite
     neighborhood $\mathcal N$.  For every finite region $\Lambda$, define
@@ -11899,9 +11737,7 @@ left/right order below agrees with the adjacent-pair convention in
     \label{thm:qca_finite_region_restriction_translation}
     \lean{SpinChain.PropagatesWithin.localRestriction_translation}
     \leanok
-    \uses{def:qca_translation_covariant,
-        def:qca_finite_local_translation,
-        def:qca_finite_region_restriction}
+    \uses{def:qca_translation_covariant, def:qca_finite_local_translation, def:qca_finite_region_restriction}
     Suppose in addition that $\omega$ is translation covariant.  For
     $a\in\mathbb Z$ and $A\in\mathcal A_\Lambda$,
     \begin{align}
@@ -11916,8 +11752,7 @@ left/right order below agrees with the adjacent-pair convention in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_finite_region_restriction_embedding,
-        lem:qca_quasi_local_translation_action}
+    \uses{thm:qca_finite_region_restriction_embedding, lem:qca_quasi_local_translation_action}
     The left-hand side is
     $\omega(\tau_a(\iota_\Lambda(A)))$.  Translation covariance moves
     $\tau_a$ past $\omega$, and the finite-region translation formula gives
@@ -11952,8 +11787,7 @@ left/right order below agrees with the adjacent-pair convention in
     \lean{SpinChain.bipartiteLocalAlgebraEquiv_localInclusion_left,
         SpinChain.bipartiteLocalAlgebraEquiv_localInclusion_right}
     \leanok
-    \uses{def:qca_bipartite_local_algebra_coordinates,
-        def:qca_local_inclusion}
+    \uses{def:qca_bipartite_local_algebra_coordinates, def:qca_local_inclusion}
     For $A\in\mathcal A_\Gamma$ and $B\in\mathcal A_\Delta$,
     \begin{align}
         \beta_{\Gamma,\Delta}(\iota_{\Gamma,\Gamma\cup\Delta}(A))
@@ -11979,9 +11813,7 @@ left/right order below agrees with the adjacent-pair convention in
         SpinChain.StarSubalgebra.bipartiteReindex,
         SpinChain.PropagatesWithin.bipartiteLocalRestrictionRange}
     \leanok
-    \uses{def:qca_finite_region_restriction,
-        thm:qca_finite_region_restriction_embedding,
-        def:qca_bipartite_local_algebra_coordinates}
+    \uses{def:qca_finite_region_restriction, thm:qca_finite_region_restriction_embedding, def:qca_bipartite_local_algebra_coordinates}
     Define the finite local image by
     \begin{align}
         \mathcal R_{\Lambda,\mathcal N}
@@ -12060,11 +11892,7 @@ left/right order below agrees with the adjacent-pair convention in
         SpinChain.PropagatesWithin.embeddedSupportAlgebra_even,
         SpinChain.PropagatesWithin.embeddedSupportAlgebra_odd}
     \leanok
-    \uses{def:qca_bipartite_finite_local_image,
-        def:qca_quasi_local_observable,
-        def:qca_left_support_algebra,def:qca_right_support_algebra,
-        def:qca_nearest_neighbor_pair_regions,
-        lem:qca_nearest_neighbor_pair_geometry}
+    \uses{def:qca_bipartite_finite_local_image, def:qca_quasi_local_observable, def:qca_left_support_algebra, def:qca_right_support_algebra, def:qca_nearest_neighbor_pair_regions, lem:qca_nearest_neighbor_pair_geometry}
     Let $\omega$ be a star-algebra automorphism of the homogeneous
     quasi-local algebra which propagates within $\{-1,0,1\}$.  Write the
     finite image of $\mathcal A_{E_x}$ in the ordered $L_x\times P_x$
@@ -12114,8 +11942,7 @@ left/right order below agrees with the adjacent-pair convention in
     \label{thm:qca_adjacent_pair_support_containment}
     \lean{SpinChain.PropagatesWithin.evenPairLocalImage_le_support_kroneckerSubmodule}
     \leanok
-    \uses{def:qca_site_indexed_support_algebras,
-        thm:qca_two_sided_support_containment}
+    \uses{def:qca_site_indexed_support_algebras, thm:qca_two_sided_support_containment}
     For every $x\in\mathbb Z$, the finite image satisfies
     \begin{align}
         S_x
@@ -12149,8 +11976,7 @@ left/right order below agrees with the adjacent-pair convention in
         SpinChain.PropagatesWithin.embeddedSupportAlgebra_even_supportedIn,
         SpinChain.PropagatesWithin.embeddedSupportAlgebra_odd_supportedIn}
     \leanok
-    \uses{def:qca_site_indexed_support_algebras,
-        def:qca_quasi_local_supported_in}
+    \uses{def:qca_site_indexed_support_algebras, def:qca_quasi_local_supported_in}
     If $\widehat{\mathcal R}_y$ denotes the canonical quasi-local copy of
     $\mathcal R_y$, then for every $x\in\mathbb Z$,
     \begin{align}
@@ -12218,8 +12044,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \lean{SpinChain.CompatibleLocalAutomorphism.forwardHom,
         SpinChain.CompatibleLocalAutomorphism.inverseHom}
     \leanok
-    \uses{def:qca_compatible_local_automorphism,
-        thm:qca_algebraic_local_algebra_universal}
+    \uses{def:qca_compatible_local_automorphism, thm:qca_algebraic_local_algebra_universal}
     The compatible families induce star-algebra homomorphisms
     \begin{align}
         f,g\colon\mathcal A_{\mathrm{loc}}
@@ -12254,8 +12079,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{def:qca_compatible_algebraic_equiv}
     \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv}
     \leanok
-    \uses{def:qca_compatible_local_automorphism,
-        def:qca_compatible_local_homs}
+    \uses{def:qca_compatible_local_automorphism, def:qca_compatible_local_homs}
     Compatible finite-local automorphism data determine a star-algebra
     equivalence
     \begin{align}
@@ -12266,8 +12090,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:qca_compatible_local_automorphism,
-        lem:qca_compatible_local_homs_evaluation}
+    \uses{def:qca_compatible_local_automorphism, lem:qca_compatible_local_homs_evaluation}
     Induct on finite-region representatives in the algebraic direct limit.
     The two inverse assumptions give
     \begin{align}
@@ -12282,8 +12105,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_apply,
         SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_symm_apply}
     \leanok
-    \uses{def:qca_compatible_algebraic_equiv,
-        def:qca_compatible_local_homs}
+    \uses{def:qca_compatible_algebraic_equiv, def:qca_compatible_local_homs}
     For every $A\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
         F(A)&=f(A),&F^{-1}(A)&=g(A).
@@ -12299,8 +12121,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{def:qca_compatible_local_norm}
     \lean{SpinChain.CompatibleLocalAutomorphism.ForwardNormPreserving}
     \leanok
-    \uses{def:qca_compatible_local_automorphism,
-        def:qca_algebraic_local_operator_norm}
+    \uses{def:qca_compatible_local_automorphism, def:qca_algebraic_local_operator_norm}
     Assume $d>0$.  The forward local norm hypothesis is
     \begin{align}
         \lVert f_\Lambda(A)\rVert&=\lVert A\rVert
@@ -12312,9 +12133,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{lem:qca_compatible_algebraic_norm}
     \lean{SpinChain.CompatibleLocalAutomorphism.norm_algebraicEquiv}
     \leanok
-    \uses{def:qca_compatible_algebraic_equiv,
-        def:qca_compatible_local_norm,
-        def:qca_algebraic_local_operator_norm}
+    \uses{def:qca_compatible_algebraic_equiv, def:qca_compatible_local_norm, def:qca_algebraic_local_operator_norm}
     Under the forward local norm hypothesis, every
     $A\in\mathcal A_{\mathrm{loc}}$ satisfies
     \begin{align}
@@ -12323,9 +12142,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_compatible_algebraic_equiv_evaluation,
-        lem:qca_compatible_local_homs_evaluation,
-        def:qca_algebraic_local_operator_norm}
+    \uses{lem:qca_compatible_algebraic_equiv_evaluation, lem:qca_compatible_local_homs_evaluation, def:qca_algebraic_local_operator_norm}
     Induct on finite-region representatives.  For
     $A=\iota_\Lambda(A_\Lambda)$,
     \begin{align}
@@ -12341,8 +12158,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_isometry,
         SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_symm_isometry}
     \leanok
-    \uses{lem:qca_compatible_algebraic_norm,
-        def:qca_compatible_algebraic_equiv}
+    \uses{lem:qca_compatible_algebraic_norm, def:qca_compatible_algebraic_equiv}
     Under the forward local norm hypothesis, for all
     $A,B\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
@@ -12352,8 +12168,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_compatible_algebraic_norm,
-        def:qca_compatible_algebraic_equiv}
+    \uses{lem:qca_compatible_algebraic_norm, def:qca_compatible_algebraic_equiv}
     Apply the forward norm identity to $A-B$ to prove that $F$ is an isometry.
     Since $F\circ F^{-1}$ is the identity, the right-inverse law then makes
     $F^{-1}$ an isometry as well.
@@ -12381,9 +12196,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{def:qca_compatible_quasi_local_equiv}
     \lean{SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv}
     \leanok
-    \uses{def:qca_compatible_algebraic_equiv,
-        lem:qca_compatible_algebraic_isometry,
-        def:completion_star_alg_equiv}
+    \uses{def:qca_compatible_algebraic_equiv, lem:qca_compatible_algebraic_isometry, def:completion_star_alg_equiv}
     Under the forward local norm hypothesis, the algebraic equivalence extends
     to a star-algebra equivalence
     \begin{align}
@@ -12393,8 +12206,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{lem:qca_compatible_algebraic_isometry,
-        def:completion_star_alg_equiv}
+    \uses{lem:qca_compatible_algebraic_isometry, def:completion_star_alg_equiv}
     The forward norm formula makes $F$ an isometry, and the inverse law makes
     $F^{-1}$ an isometry.  Apply the completion extension for star-algebra
     equivalences to these two continuous maps.
@@ -12405,8 +12217,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \lean{SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_algebraicToQuasiLocal,
         SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_symm_algebraicToQuasiLocal}
     \leanok
-    \uses{def:qca_compatible_quasi_local_equiv,
-        def:completion_star_alg_equiv}
+    \uses{def:qca_compatible_quasi_local_equiv, def:completion_star_alg_equiv}
     Let $j\colon\mathcal A_{\mathrm{loc}}\to\mathcal A$ be the canonical
     completion map.  For every $A\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
@@ -12416,8 +12227,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_compatible_quasi_local_equiv,
-        def:completion_star_alg_equiv}
+    \uses{def:qca_compatible_quasi_local_equiv, def:completion_star_alg_equiv}
     These are the canonical-image formulas for the continuous extension of a
     star-algebra equivalence and for its inverse.
 \end{proof}
@@ -12427,10 +12237,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \lean{SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_quasiLocalObservable,
         SpinChain.CompatibleLocalAutomorphism.quasiLocalEquiv_symm_quasiLocalObservable}
     \leanok
-    \uses{lem:qca_compatible_quasi_local_dense_evaluation,
-        lem:qca_compatible_algebraic_equiv_evaluation,
-        lem:qca_compatible_local_homs_evaluation,
-        def:qca_quasi_local_observable}
+    \uses{lem:qca_compatible_quasi_local_dense_evaluation, lem:qca_compatible_algebraic_equiv_evaluation, lem:qca_compatible_local_homs_evaluation, def:qca_quasi_local_observable}
     For every finite region $\Lambda$ and $A\in\mathcal A_\Lambda$,
     \begin{align}
         \overline F(j_\Lambda(A))&=j(f_\Lambda(A)),&
@@ -12439,9 +12246,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_compatible_quasi_local_dense_evaluation,
-        lem:qca_compatible_algebraic_equiv_evaluation,
-        lem:qca_compatible_local_homs_evaluation}
+    \uses{lem:qca_compatible_quasi_local_dense_evaluation, lem:qca_compatible_algebraic_equiv_evaluation, lem:qca_compatible_local_homs_evaluation}
     Substitute $j_\Lambda=j\circ\iota_\Lambda$ into the dense evaluation
     formulas and use
     $F(\iota_\Lambda(A))=f_\Lambda(A)$ and
@@ -12452,8 +12257,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{def:qca_compatible_local_support_bound}
     \lean{SpinChain.CompatibleLocalAutomorphism.MapsSupportWithin}
     \leanok
-    \uses{def:qca_compatible_local_automorphism,
-        def:qca_supported_in,def:qca_region_sumset}
+    \uses{def:qca_compatible_local_automorphism, def:qca_supported_in, def:qca_region_sumset}
     For a finite neighborhood $\mathcal N\subset\mathbb Z$, the forward family
     has support bound $\mathcal N$ if
     \begin{align}
@@ -12468,16 +12272,13 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{thm:qca_compatible_local_propagation}
     \lean{SpinChain.CompatibleLocalAutomorphism.propagatesWithin_quasiLocalEquiv}
     \leanok
-    \uses{def:qca_compatible_local_support_bound,
-        lem:qca_compatible_quasi_local_finite_evaluation,
-        def:qca_propagates_within}
+    \uses{def:qca_compatible_local_support_bound, lem:qca_compatible_quasi_local_finite_evaluation, def:qca_propagates_within}
     If the forward family has support bound $\mathcal N$, then the completed
     automorphism $\overline F$ propagates within $\mathcal N$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:qca_compatible_local_support_bound,
-        lem:qca_compatible_quasi_local_finite_evaluation}
+    \uses{def:qca_compatible_local_support_bound, lem:qca_compatible_quasi_local_finite_evaluation}
     Let $X=j_\Lambda(A)$ be supported in $\Lambda$.  Choose
     $B\in\mathcal A_{\Lambda+\mathcal N}$ such that
     $f_\Lambda(A)=\iota_{\Lambda+\mathcal N}(B)$.  Then
@@ -12493,8 +12294,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{def:qca_compatible_local_unit_translation}
     \lean{SpinChain.CompatibleLocalAutomorphism.CommutesWithUnitTranslation}
     \leanok
-    \uses{def:qca_compatible_local_automorphism,
-        def:qca_algebraic_local_translation}
+    \uses{def:qca_compatible_local_automorphism, def:qca_algebraic_local_translation}
     The forward family commutes with unit translation if, for every finite
     region $\Lambda$ and every $A\in\mathcal A_\Lambda$,
     \begin{align}
@@ -12507,9 +12307,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{lem:qca_compatible_algebraic_unit_translation}
     \lean{SpinChain.CompatibleLocalAutomorphism.algebraicEquiv_commutes_unitTranslation}
     \leanok
-    \uses{def:qca_compatible_local_unit_translation,
-        def:qca_compatible_algebraic_equiv,
-        def:qca_algebraic_local_translation}
+    \uses{def:qca_compatible_local_unit_translation, def:qca_compatible_algebraic_equiv, def:qca_algebraic_local_translation}
     If the finite-local unit-translation formula holds, then every
     $A\in\mathcal A_{\mathrm{loc}}$ satisfies
     \begin{align}
@@ -12518,10 +12316,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_compatible_local_unit_translation,
-        lem:qca_compatible_algebraic_equiv_evaluation,
-        lem:qca_compatible_local_homs_evaluation,
-        def:qca_algebraic_local_translation}
+    \uses{def:qca_compatible_local_unit_translation, lem:qca_compatible_algebraic_equiv_evaluation, lem:qca_compatible_local_homs_evaluation, def:qca_algebraic_local_translation}
     Induct on finite-region representatives and write
     $A=\iota_\Lambda(A_\Lambda)$.  Then
     \begin{align}
@@ -12536,19 +12331,13 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{thm:qca_compatible_translation_covariant}
     \lean{SpinChain.CompatibleLocalAutomorphism.translationCovariant_quasiLocalEquiv}
     \leanok
-    \uses{lem:qca_compatible_algebraic_unit_translation,
-        lem:qca_compatible_quasi_local_dense_evaluation,
-        def:qca_quasi_local_translation,
-        thm:qca_translation_covariant_iff_commute_one}
+    \uses{lem:qca_compatible_algebraic_unit_translation, lem:qca_compatible_quasi_local_dense_evaluation, def:qca_quasi_local_translation, thm:qca_translation_covariant_iff_commute_one}
     If the finite-local unit-translation formula holds, then the completed
     automorphism $\overline F$ is translation covariant.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:qca_compatible_algebraic_unit_translation,
-        lem:qca_compatible_quasi_local_dense_evaluation,
-        def:qca_quasi_local_translation,
-        thm:qca_translation_covariant_iff_commute_one}
+    \uses{lem:qca_compatible_algebraic_unit_translation, lem:qca_compatible_quasi_local_dense_evaluation, def:qca_quasi_local_translation, thm:qca_translation_covariant_iff_commute_one}
     By Theorem~\ref{thm:qca_translation_covariant_iff_commute_one}, it suffices
     to prove that $\overline F$ commutes with translation by one site.  Induct
     on the completion.  On every $A\in\mathcal A_{\mathrm{loc}}$,
@@ -12566,9 +12355,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \label{thm:qca_compatible_local_automorphism}
     \lean{SpinChain.CompatibleLocalAutomorphism.isQCA_quasiLocalEquiv}
     \leanok
-    \uses{def:qca_compatible_quasi_local_equiv,
-        thm:qca_compatible_local_propagation,
-        thm:qca_compatible_translation_covariant,def:qca}
+    \uses{def:qca_compatible_quasi_local_equiv, thm:qca_compatible_local_propagation, thm:qca_compatible_translation_covariant, def:qca}
     Let $d>0$.  Suppose the compatible forward family preserves the local
     operator norm, has a finite support bound, and satisfies the finite-local
     unit-translation formula.  Then the completed automorphism $\overline F$ is
@@ -12576,8 +12363,7 @@ blocked circuit or MPU standard form discussed at line~2308.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_compatible_local_propagation,
-        thm:qca_compatible_translation_covariant}
+    \uses{thm:qca_compatible_local_propagation, thm:qca_compatible_translation_covariant}
     The support hypothesis supplies a finite forward propagation neighborhood,
     while the unit-translation formula supplies translation covariance.  These
     are exactly the two defining properties of a one-dimensional QCA.

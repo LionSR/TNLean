@@ -112,9 +112,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseVirtualOperationPhysicalOp}
     \lean{TNLean.PEPS.staircaseVirtualOperationPhysicalOp_realizes}
     \leanok
-    \uses{def:peps_staircase_virtual_operation_insert,
-        def:peps_physical_operator_of_region_insert,
-        thm:peps_physical_operator_of_region_insert_realizes}
+    \uses{def:peps_staircase_virtual_operation_insert, def:peps_physical_operator_of_region_insert, thm:peps_physical_operator_of_region_insert_realizes}
     Suppose every $L\times K$ window is injective.  For every
     $0\leq j<L+K$, there is a physical operator $O_j(X)$ on the physical
     space of $W_j$ such that
@@ -156,12 +154,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{thm:peps_staircase_virtual_operation_common_state}
     \lean{TNLean.PEPS.deformedRegionStateAssembled_staircaseVirtualOperationInsert}
     \leanok
-    \uses{def:peps_staircase_virtual_operation_insert,
-        lem:peps_staircase_virtual_operation_end_inserts,
-        lem:peps_reference_edge_left_endpoint_staircase_window,
-        thm:peps_interior_bond_inserted_state,
-        thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff,
-        thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    \uses{def:peps_staircase_virtual_operation_insert, lem:peps_staircase_virtual_operation_end_inserts, lem:peps_reference_edge_left_endpoint_staircase_window, thm:peps_interior_bond_inserted_state, thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff, thm:peps_regionInteriorBondProd_staircaseWindow_eq}
     Let $B$ be translation invariant and suppose all its bond dimensions are
     positive.  Then for $0\le j<L+K$ and every global physical configuration
     $\omega$,
@@ -186,10 +179,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{thm:peps_end_window_identity_staircase_virtual_operation}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
     \leanok
-    \uses{lem:peps_assembleRegionSigma_restrict,
-        lem:peps_reference_edge_left_endpoint_staircase_window,
-        thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff,
-        thm:peps_regionInteriorBondProd_staircaseWindow_eq}
+    \uses{lem:peps_assembleRegionSigma_restrict, lem:peps_reference_edge_left_endpoint_staircase_window, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff, thm:peps_regionInteriorBondProd_staircaseWindow_eq}
     Suppose the tensor is translation invariant and the staircase satisfies
     the stated size bounds.  Then for every $X\in\MN{D_B(e)}$ and every
     global physical configuration $\omega$,

@@ -1,219 +1,25 @@
 \documentclass{article}
 
-\usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
-\setlength{\emergencystretch}{2em}
 
 \input{command}
 
 \title{Normalization of the tensor printed in CPSV16 Example 4.12}
 \author{}
-\date{2026-08-10}
+\date{2026-08-25}
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{clarification}{resolved}
 
-\section{Printed representative}
-
-Example~4.12 of Cirac--Perez-Garcia--Schuch--Verstraete
-(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:932--939}) prints a tensor $M$
-with $d=D=2$ and
-\[
-  1=M_{00}^{00}=M_{00}^{11}=M_{11}^{00}=-M_{11}^{11},
-\]
-all other components being zero.  In matrix notation this says
-\[
-  M^{00}=I,
-  \qquad
-  M^{11}=\sigma_z,
-  \qquad
-  M^{01}=M^{10}=0,
-\]
-where $\sigma_z=|0\rangle\langle0|-|1\rangle\langle1|$.  Closing the virtual
-indices gives exactly the displayed family
-\[
-  \rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}
-  \qquad (N>0).
-\]
-Its trace is $2^N$, not $1$.  Thus the printed $M$ is an unnormalized tensor
-representative even though the resulting positive operator determines a
-normalized density operator after division by $2^N$.
-
-\section{The fixed-representative mismatch}
-
-The physical-trace transfer of the printed tensor is
-\[
-  \mathcal T_M=M^{00}+M^{11}=I+\sigma_z
-    =\begin{pmatrix}2&0\\0&0\end{pmatrix}.
-\]
-Consequently
-\[
-  \mathcal T_M^2=2\mathcal T_M
-  \qquad\text{but}\qquad
-  \mathcal T_M^2\ne\mathcal T_M.
-\]
-This proves the project's scale-invariant relation with scale $2$, but it does
-not prove the literal ZCL equation of Definition~4.2. Indeed, that equation
-fails. Moreover, the trace-preserving maps $\mathcal S$ and $\mathcal T$ in
-Definition~4.1 force equality of the one-site and two-site traces for every
-virtual boundary.  Equivalently, they force literal idempotence
-$\mathcal T_M^2=\mathcal T_M$.  The printed representative therefore cannot
-satisfy that fixed-tensor renormalization condition.
-
-This does not contradict the normalized density family.  Scaling the local
-tensor by $1/2$ gives the separate representative
-\[
-  \widehat M=\tfrac12 M,
-  \qquad
-  \mathcal T_{\widehat M}=\tfrac12\mathcal T_M,
-  \qquad
-  \mathcal T_{\widehat M}^2=\mathcal T_{\widehat M}.
-\]
-Moreover,
-\[
-  \rho^{(N)}(\widehat M)
-    =2^{-N}\bigl(I^{\otimes N}+\sigma_z^{\otimes N}\bigr),
-\]
-which is precisely the normalized density family.  This makes
-$\widehat M=(1/2)M$ the likely representative intended by the sentence on
-line~938 asserting the existence of trace-preserving maps.  The paper does not
-print this factor in the tensor components or explicitly change representatives
-before that sentence.
-
-\section{Formalization boundary}
-
-The current formalization keeps the two representatives separate.  For the
-literal printed $M$ it proves the exact positive-length formula, positivity,
-one-site loss of the $\sigma_z$ term, saturation of the area law, source zero
-correlation length only in the project's scale-invariant sense, explicit
-failure of literal ZCL, and hence failure of the fixed-representative
-trace-preserving renormalization condition.
-
-For $\widehat M=(1/2)M$, let $\pi(a,b)=a\oplus b$ and define Kraus operators
-\[
-  C_{a,b}=|\pi(a,b)\rangle\langle a,b|,
-  \qquad
-  R_{a,b}=2^{-1/2}|a,b\rangle\langle\pi(a,b)|.
-\]
-Each parity fibre has two elements, and hence
-\[
-  \sum_{a,b} C_{a,b}^{\dagger}C_{a,b}=I_4,
-  \qquad
-  \sum_{a,b} R_{a,b}^{\dagger}R_{a,b}=I_2.
-\]
-The corresponding completely positive maps are trace preserving.  Since
-\[
-  \widehat M^{aa}\widehat M^{bb}
-    =\tfrac12\widehat M^{\pi(a,b)\pi(a,b)}
-\]
-and the off-diagonal physical letters vanish, direct substitution proves both
-channel equations of Definition~4.1 for every virtual boundary matrix.  These
-results are recorded by
-\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat},
-\leanid{MPOTensor.CPSVExample412NormalizedRFP.mpo_Mhat_eq_normalizedMPO_M},
-\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isMPDO}, and
-\leanid{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isRFPViaTS}.
-
-This conclusion concerns precisely the two channel equations.  It does not
-settle a second normalization tension in the source.  As a doubled-index MPS,
-$M$ has two bond-one sectors with physical vectors $(1,0,0,1)$ and
-$(1,0,0,-1)$.  Their normal representatives are obtained by division by
-$\sqrt2$.  Consequently the two horizontal normal-block weights of
-$\widehat M$ are both $1/\sqrt2$.  Neither has modulus one, whereas line~246
-assumes that at least one weight does. Thus the proved bare channel predicate
-must not be presented as a proof that $\widehat M$ obeys every standing
-canonical-form convention in Definition~4.1.  This boundary is also recorded
-in
-\path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
-
-The independent four-site entropy calculation is also complete.  For the
-normalized state, regroup the sites as $A=\{0\}$, $B=\{1,3\}$, and
-$C=\{2\}$.  The $AB$ and $BC$ marginals are $I_8/8$, the $B$ marginal is
-$I_4/4$, and the full state is uniform on eight even-parity configurations.
-Thus
-\[
-  S(ABC)=3\log 2,
-  \qquad S(B)=2\log 2,
-  \qquad S(AB)=S(BC)=3\log 2,
-\]
-so equality in strong subadditivity fails by the strictly positive defect
-$\log 2$.  This proves the state-specific Markov obstruction without using the
-normalized fixed-point maps.
-
-The full GSNNCH exclusion is already a statement about the normalized family
-because \leanid{MPOTensor.IsGSNNCH} quantifies over
-\leanid{MPOTensor.normalizedMPO}. It is now proved directly for the printed
-tensor. At four sites, the sector sum in Definition~4.8 splits into positive
-factors built from the complementary adjacent-bond products
-$B_3^{(x)}B_0^{(x)}$ and $B_1^{(x)}B_2^{(x)}$, acting respectively on the
-three-site windows $(3,0,1)$ and $(1,2,3)$. Orthogonality of distinct sectors
-removes the cross terms in their product, while commutativity within one sector
-identifies the product of the two factors with the four-bond sector product.
-The resulting positive overlapping factors commute and give the
-quantum Markov decomposition
-\leanid{MPOTensor.nonempty_quantumMarkovDecomposition_fourCycle_of_isGSNNCHAt},
-hence the strong-subadditivity equality
-\leanid{MPOTensor.isSSAEquality_fourCycle_of_isGSNNCHAt}. This derivation uses
-only Definition~4.8 and the Beigi--Hayden--Jozsa--Petz--Winter structure; it
-does not assume zero correlation length, normality, injectivity, primitivity,
-a single sector, or completeness of the sector projections.
-
-The identity
-\leanid{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_eq_generic}
-shows that this general regrouping is exactly the state used in the literal
-entropy calculation. Consequently
-\leanid{MPOTensor.CPSVExample412Literal.M_not_isGSNNCH} proves
-$\neg\operatorname{IsGSNNCH}(M)$. This discharges the missing and formerly
-unlinked four-cycle task tracked in \ghissue{6072} and the missing
-Example~4.12 conclusion tracked in \ghissue{6045}. The earlier attempt to pass
-through Proposition
-\emph{prop4to2} had proof-path drift: that proposition belongs to a different
-condition-level implication and is not used here. Transport to the separately
-named $\widehat M$ is unnecessary because the GSNNCH predicate already uses
-the normalized family.
-
-\section{Verdict}
-
-\textbf{Verdict: false as printed for the literal fixed representative.}
-The tensor $M$ printed in Example~4.12 is the formal tensor
-\leanid{MPOTensor.CPSVExample412Literal.M}.  Its positive-length operator
-formula is proved by
-\leanid{MPOTensor.CPSVExample412Literal.rho_eq_finKronecker}, and its
-saturation statement by \leanid{MPOTensor.CPSVExample412Literal.M_isSAL}.
-The transfer calculation
-\leanid{MPOTensor.CPSVExample412Literal.physTraceTransfer_M_sq} has scale
-$2$, while
-\leanid{MPOTensor.CPSVExample412Literal.physTraceTransfer_M_not_idempotent}
-proves failure of literal idempotence.  Therefore
-\leanid{MPOTensor.CPSVExample412Literal.M_not_isRFPViaTS} proves that the
-fixed-representative RFP assertion is false for the tensor exactly as printed.
-
-The normalized tensor $\widehat M=(1/2)M$ is the likely local correction.  Its
-periodic family is identified with the normalized periodic family of $M$ by
-tensor-level scalar rescaling and \leanid{MPOTensor.mpo_smul}; it is not an
-independent tensor presentation.  The parity Kraus families above prove the
-bare trace-preserving channel predicate without additional hypotheses,
-discharging the mathematical task tracked in \ghissue{6044}. They do not repair
-the incompatible line-246 unit-weight convention, so the formal verdict must
-remain separated into the false literal claim, the true normalized channel
-equations, the unresolved unit-weight boundary, and the now-proved full GSNNCH
-exclusion.
-
-For the normalized four-site state,
-\leanid{MPOTensor.CPSVExample412Literal.fourCycleTripartiteState_not_isSSAEquality}
-proves the strict strong-subadditivity defect.  Its proof uses the exact
-marginals
-\leanid{MPOTensor.CPSVExample412Literal.traceC_fourCycleTripartiteState},
-\leanid{MPOTensor.CPSVExample412Literal.traceA_fourCycleTripartiteState}, and
-\leanid{MPOTensor.CPSVExample412Literal.traceAC_fourCycleTripartiteState},
-together with their entropy calculations, discharging the mathematical task
-tracked in \ghissue{6073}.
-The general four-cycle Markov implication and the exact coordinate identity
-then give
-\leanid{MPOTensor.CPSVExample412Literal.M_not_isGSNNCH}, discharging the tasks
-tracked in \ghissue{6072} and \ghissue{6045} without hypotheses beyond the
-source GSNNCH definition.
+The canonical owner of this paper-gap note is now QICLean.  The complete note
+is available at
+\url{https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf}.
+QICLean assumed this generic quantum-information documentation together with
+the second-wave migration merged at commit
+\texttt{4aa26359094e6e2acf6a18d580758128007f7194}.  This TNLean file is retained
+only as a compatibility pointer for historical references in tensor-network
+source comments and audit records.
 
 \end{document}
