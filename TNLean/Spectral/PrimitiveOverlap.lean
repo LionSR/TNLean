@@ -44,32 +44,6 @@ open Matrix Filter
 
 namespace MPSTensor
 
-section Compatibility
-
-variable {D : ℕ}
-
-local notation "V" => Matrix (Fin D) (Fin D) ℂ
-
-/-- Compatibility wrapper for `ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero`. -/
-lemma tendsto_trace_pow_of_tendsto_zero
-    (F : V →L[ℂ] V)
-    (hF : Tendsto (fun n ↦ F ^ n) atTop (nhds 0)) :
-    Tendsto (fun n ↦ LinearMap.trace ℂ V ((F ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V))
-      atTop (nhds 0) :=
-  ContinuousLinearMap.tendsto_trace_pow_of_tendsto_zero F hF
-
-/-- Compatibility wrapper for `LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one`. -/
-theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
-    [NeZero D]
-    (E : V →ₗ[ℂ] V) (ρ : V) (htr : trace ρ ≠ 0)
-    (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ)
-    (hSpect :
-      spectralRadius ℂ
-          ((Module.End.toContinuousLinearMap V) (E - fixedPointProj (D := D) ρ htr)) < 1) :
-    Tendsto (fun n ↦ (LinearMap.trace ℂ V) (E ^ n)) atTop (nhds (1 : ℂ)) :=
-  LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one E ρ htr hTP hρ hSpect
-
-end Compatibility
 
 section MPV
 
@@ -108,7 +82,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
           ((Kraus.transferMap (d := d) (D := D) A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) :=
-    linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one (D := D)
+    LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one (D := D)
       (E := Kraus.transferMap (d := d) (D := D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
   -- Rewrite the transfer-map trace as a mixed-transfer trace (self-case).
   have hTrace' :

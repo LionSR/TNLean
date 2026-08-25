@@ -223,6 +223,8 @@ Overlap remarks:
   | `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` | `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` |
   | `MPSTensor.spectralRadius_compl_lt_one_of_peripheralPrimitive` | `Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive` |
   | `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive` | `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive` |
+  | `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive` | `Kraus.HasComplementaryFixedPointGap.isPrimitive` |
+  | `MPSTensor.isIrreducibleMap_of_isPrimitiveMPS_of_posDef` | `Kraus.HasComplementaryFixedPointGap.isIrreducibleMap_of_posDef` |
 
 ## MPS/Periodic
 

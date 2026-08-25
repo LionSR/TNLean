@@ -22,12 +22,8 @@ normality/canonical-form reductions.
 
 * `isPrimitiveMPS_of_isStronglyIrreduciblePaper` — strong irreducibility gives
   complementary transfer-map gap primitivity for a positive-definite fixed point.
-* `IsPrimitiveMPS.isPeripherallyPrimitive` — complementary transfer-map gap primitivity implies
-  paper peripheral primitivity.
-* `isIrreducibleMap_of_isPrimitiveMPS_of_posDef` — primitive complementary-gap data
-  with a positive-definite fixed point gives irreducibility of the transfer map.
-* `isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef` — the previous two
-  implications stated as paper strong irreducibility.
+* `isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef` — the reverse
+  paper-vocabulary implication under a positive-definite fixed-point hypothesis.
 
 ## References
 
@@ -74,25 +70,6 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
     hPrimMPS.posDef_of_isIrreducibleMap hIrrMap
   exact ⟨ρ', hPrimMPS, hρ'PD⟩
 
-/-- A primitive MPS tensor in the complementary-gap sense is peripherally primitive in
-the transfer-map sense. This paper-vocabulary bridge delegates to the generic finite-Kraus
-result because both the hypothesis and conclusion are reducible aliases. -/
-theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
-    IsPeripherallyPrimitive A :=
-  hP.isPrimitive
-
-/-- A primitive MPS tensor with a positive-definite fixed point has an irreducible
-transfer map. This TN paper-vocabulary bridge delegates to the generic finite-Kraus
-certificate method. -/
-theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ)
-    (hρ_pd : ρ.PosDef) :
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-  hP.isIrreducibleMap_of_posDef hρ_pd
-
 /-- Primitive complementary-gap data plus a positive-definite fixed point imply
 paper strong irreducibility. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
@@ -101,7 +78,7 @@ theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
     (hρ_pd : ρ.PosDef) :
     IsStronglyIrreduciblePaper A := by
   exact isStronglyIrreduciblePaper_of ρ hρ_pd hP.fixedPoint_is_fixed
-    hP.isPeripherallyPrimitive
-    (isIrreducibleMap_of_isPrimitiveMPS_of_posDef hP hρ_pd)
+    hP.isPrimitive
+    (hP.isIrreducibleMap_of_posDef hρ_pd)
 
 end MPSTensor
