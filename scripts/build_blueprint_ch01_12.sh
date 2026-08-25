@@ -17,10 +17,15 @@ WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
 echo "==> Copying blueprint sources..."
-mkdir -p "$WORK_DIR/blueprint/src" "$WORK_DIR/tex"
+mkdir -p "$WORK_DIR/blueprint/src" "$WORK_DIR/.deps/tenkz/tex"
 rsync -a --exclude='.tenkz_svg_cache/' \
   "$REPO_ROOT/blueprint/src/" "$WORK_DIR/blueprint/src/"
-cp -R "$REPO_ROOT/tex/tenkz" "$WORK_DIR/tex/tenkz"
+if [ -z "${TENKZ_ROOT:-}" ]; then
+  python3 "$REPO_ROOT/scripts/fetch_tenkz.py"
+fi
+TENKZ_TEX="$(PYTHONPATH="$REPO_ROOT/scripts" python3 -c \
+  'from tenkz_paths import tenkz_tex; print(tenkz_tex())')"
+cp -R "$TENKZ_TEX" "$WORK_DIR/.deps/tenkz/tex/tenkz"
 
 # Verify that the dedicated router contains the exact focused-volume chapter
 # sequence, in order and without duplicates.
@@ -50,7 +55,8 @@ fi
 # an untracked artifact not present on a fresh checkout.
 echo "==> Building with latexmk (XeLaTeX)..."
 (cd "$WORK_DIR/blueprint/src" \
-  && latexmk -pdfxe -pdfxelatex='xelatex -synctex=1 %O %S' \
+  && TENKZ_ROOT="$WORK_DIR/.deps/tenkz" \
+     latexmk -pdfxe -pdfxelatex='xelatex -synctex=1 %O %S' \
        -interaction=nonstopmode print_ft_mps.tex)
 
 mkdir -p "$REPO_ROOT/blueprint/print"

@@ -261,11 +261,12 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **No label required** — this runs on all PRs automatically.
 
-The "PR CI" blueprint job and the "Blueprint" workflow validate native tenkz
-sources after the blueprint dependencies are installed. The focused source
-lint and topology tests run with the blueprint job; the dedicated corpus job
-compiles and audits the adopted regression set. Changes to visible figures also
-require rendered PDF and web inspection during review.
+The "PR CI" blueprint job and the "Blueprint" workflow fetch the pinned
+[tenkz](https://github.com/LionSR/tenkz) package (`tenkz.toml`,
+`scripts/fetch_tenkz.py`) and then lint blueprint and slide pictures. The
+package corpus, shrink ratchet, and RMP book run in the tenkz repository.
+Changes to visible figures also require rendered PDF and web inspection
+during review.
 
 ---
 

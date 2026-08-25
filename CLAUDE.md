@@ -4,7 +4,7 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Project Overview
 
-TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix product states (MPS), their canonical forms and gauge structure, and the theorems that classify them — including the **Fundamental Theorem of Matrix Product States** and **Quantum Wielandt theory**. Built on Mathlib v4.34.0-rc1. The finite-dimensional quantum-channel theory this rests on (following Wolf's *Quantum Channels & Operations*) no longer lives in this repository; it is developed in the companion library [QICLean](https://github.com/LionSR/QICLean), which TNLean depends on.
+TNLean is a Lean 4 formalization of the mathematics of tensor networks: matrix product states (MPS), their canonical forms and gauge structure, and the theorems that classify them — including the **Fundamental Theorem of Matrix Product States** and **Quantum Wielandt theory**. Built on Mathlib v4.34.0-rc1. The finite-dimensional quantum-channel theory this rests on (following Wolf's *Quantum Channels & Operations*) no longer lives in this repository; it is developed in the companion library [QICLean](https://github.com/LionSR/QICLean), which TNLean depends on. Blueprint diagrams are drawn by the companion package [tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml` and fetched with `python3 scripts/fetch_tenkz.py`.
 
 ## Build Commands and Mathlib Cache Policy
 
@@ -32,6 +32,7 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 # plasTeX plugin (blueprint/src/plastex.cfg loads it unconditionally):
 #   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 # Run after lake build succeeds.
+python3 scripts/fetch_tenkz.py
 cd blueprint && leanblueprint checkdecls
 
 # Blueprint web/PDF generation

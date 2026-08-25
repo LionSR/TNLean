@@ -59,6 +59,9 @@ jobs:
         with:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
+      - name: Fetch pinned tenkz package
+        run: python3 scripts/fetch_tenkz.py
+
       - name: Build blueprint bibliography
         run: texra-blueprint bbl
 

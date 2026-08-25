@@ -24,7 +24,9 @@ TNLean is a [Lean 4](https://lean-lang.org/) library, built on
 the mathematics of tensor networks: matrix product states (MPS), their
 canonical forms and gauge structure, and the theorems that classify them. The
 quantum-information theory this rests on lives in the companion library
-[QICLean](https://github.com/LionSR/QICLean), which TNLean builds on. Every
+[QICLean](https://github.com/LionSR/QICLean), which TNLean builds on. Blueprint
+diagrams are drawn by the companion package
+[tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml`. Every
 result is checked by Lean down to the axioms it assumes.
 
 The first released part of the library is the **fundamental theorem of matrix
@@ -233,6 +235,7 @@ mathematical language and links each one to its Lean proof. It is built with
 
 ```bash
 lake build TNLean
+python3 scripts/fetch_tenkz.py
 cd blueprint
 leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
