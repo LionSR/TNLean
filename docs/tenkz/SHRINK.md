@@ -4413,7 +4413,7 @@ smooth-curve-to-polyline routing is the accepted house form.  The two
 refusal fixtures, the registry row, the parser row, and the catalogue
 entry stay for the demolition change, which retires the key itself.
 
-Meters: m4 lines-per-case 26.39 -> 28.2 -- the chains spell their
+Meters: m4 lines-per-case 26.39 -> 28.23 -- the chains spell their
 junctions, the honest line cost of retiring the waypoint list, after the
 review-limit compaction repacked the three largest cases;
 `tests/tenkz/census-baseline.json` moves in this change.  m1/m2 unchanged
