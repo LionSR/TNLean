@@ -1281,6 +1281,9 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                      r"\file_if_exist:nF {/Users/somebody/data} {}",
                      r"\file_if_exist:oTF {/Users/somebody/data} {} {}",
                      r"\file_if_exist_p:n {/Users/somebody/data}",
+                     # A generated N wrapper consumes one brace group before
+                     # the n base, so a doubled group delivers the literal path.
+                     r"\file_if_exist:NTF {{/Users/somebody/data}} {} {}",
                      '\\font\\tenkzfont="/Users/somebody/foo.otf"',
                      # A path holding a space is written quoted, braced or not.
                      '\\input{"/Users/somebody/My Documents/f.tex"}'):
@@ -1302,7 +1305,14 @@ def test_an_unbraced_absolute_input_is_an_absolute_path() -> None:
                          # An indirect specifier names a variable whose
                          # value is the real argument: a literal there is
                          # a name, not a path.
-                         "\\file_if_exist:vTF {/Users/somebody/data} {} {}\n"):
+                         "\\file_if_exist:vTF {/Users/somebody/data} {} {}\n",
+                         # One group is removed by the generated N wrapper,
+                         # leaving the n base to read only the first path token.
+                         "\\file_if_exist:NTF {/Users/somebody/data} {} {}\n",
+                         # A direct n argument retains the inner group as part
+                         # of the name, rather than stripping a second layer.
+                         "\\file_if_exist:nTF {{/Users/somebody/data}} {} {}\n",
+                         "\\file_input:n {{/Users/somebody/data}}\n"):
             (tree / "tenkz.sty").write_text(innocent, encoding="utf-8")
             relative = tenkz_ctan.check_arxiv(tree, _loaded("tenkz.sty"))
             assert not relative.failures, (innocent, relative.failures)
