@@ -436,15 +436,15 @@ note = "Kernel migration (wave 2B): each loop is now spelled upright -- bra-A ov
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "8119de6372ea447f8d6ff752ec20abd95d48fc3614b5b8a8b2145abb63b8da76"
 reviewed = "2026-08-25"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "Straight-chord demotion 2026-08-25 (via= retirement, #6897): the four concave corner hooks lose their waypoints and draw as straight chords -- a uniform, symmetric curve-to-chord change with every crossing, label, and sector unmoved; the source draws rounded hooks, so the case demotes from faithful until an arc spelling can bow a free chord.  Reviewed at 200dpi.  Prior note: K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
+renderer = "fable-via-wave-a-chord-review-2026-08-25-200dpi"
+second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
+note = "Straight-chord respell 2026-08-25 (via= retirement, #6897): the four corner hooks lose their waypoints and draw as straight chords between the same endpoint pairs -- equivalent planar routing under the cosmetic-gap bar, with every strand, crossing, label, sector, and orientation verified unchanged at 200dpi by two independent viewers.  Prior note: K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
@@ -736,7 +736,7 @@ pairing_by = "codex-three-cycle-source-review-2026-07-26"
 defects = ["weight-mismatch"]
 case_sha256 = "d39407ace8e05d11dd623ca955b753a5959eae8289ecf29c0a15425c47850eb3"
 reviewed = "2026-08-25"
-renderer = "kimi-kernel-mpo-source-review-2026-08-04-150dpi"
+renderer = "fable-via-wave-a-thinning-review-2026-08-25-200dpi"
 note = "Waypoint thinning 2026-08-25 (via= retirement, #6897): the collinear waypoint lists of both operator strings and both passive strings delete; the drawn lines are geometrically unchanged (a hairline rasterization drift at 200dpi, verified by diff), and the pull arc, the inverse pair, and the cup keep their load-bearing waypoints for a later wave.  Prior note: Kernel string-slide with declared crossings and the stock MPO crossing tensor (#5362) under the equation audit; the pull arrow remains outside the PEPS window and the enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
@@ -1345,15 +1345,15 @@ note = "kernel respell verified against Oa rep.pdf: five unlabelled mpo atoms wi
 
 [[verdict]]
 id = "rmp-workbench-iii-f-tensor"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
 case_sha256 = "94f55730c3a1c238ac0139cb2726446decbb4104c72a8e56bb9d1922ca494219"
 reviewed = "2026-08-25"
-renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
-second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
-note = "Straight-chord demotion 2026-08-25 (via= retirement, #6897): the four concave corner hooks lose their waypoints and draw as straight chords -- a uniform, symmetric curve-to-chord change with every crossing, label, and sector unmoved; the source draws rounded hooks, so the case demotes from faithful until an arc spelling can bow a free chord.  Reviewed at 200dpi.  Prior note: Kernel redraw restores the source's boxless crossing that the explicit F box stood in for: the red a axis and black c axis cross at the centre with c declared over as painted, both directed; the four corner hooks are single quarter-turn strings and all six labels sit in their sectors; direction marks at the house station rather than the source's outer thirds."
+renderer = "fable-via-wave-a-chord-review-2026-08-25-200dpi"
+second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
+note = "Straight-chord respell 2026-08-25 (via= retirement, #6897): the four corner hooks lose their waypoints and draw as straight chords between the same endpoint pairs -- equivalent planar routing under the cosmetic-gap bar, with every strand, crossing, label, sector, and orientation verified unchanged at 200dpi by two independent viewers.  Prior note: Kernel redraw restores the source's boxless crossing that the explicit F box stood in for: the red a axis and black c axis cross at the centre with c declared over as painted, both directed; the four corner hooks are single quarter-turn strings and all six labels sit in their sectors; direction marks at the house station rather than the source's outer thirds."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59-now"
