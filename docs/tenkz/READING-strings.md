@@ -164,8 +164,8 @@ all, and the only one matching the target's declared formula and its archival
 output. Against that panel the case draws both halves: four group actions on
 four indices on the left, a closed loop threading four tensors with a corner
 mark on the right. The loop is spelt as five separate joins rather than one
-closed curve, which a closed string with the four tensors named as waypoints
-would fix today.
+closed curve, which is the junction-chain form the retired waypoint list
+resolved into.
 
 So neither recorded need survives contact with the right panel. The remaining
 amendment note counts this target in both lists: among four wrong-source
@@ -256,7 +256,7 @@ symbols named above.
 | a string from margin to margin crossing an index, order declared | draws |
 | two directed strings crossing each other, order declared | draws |
 | a wire with both ends open | draws |
-| a closed string through named waypoints | draws |
+| a closed junction chain through named atoms | draws; the retired waypoint list's successor |
 | a mark at `crossing of g and leg n of (1,2)` | draws |
 | an atom at `crossing of g and leg n of (1,2)` | draws; pinned by `k_cornercut.tex` |
 | an atom at `on g 0.25` | draws through `\__tenkz_kernel_r_onwire:n` |

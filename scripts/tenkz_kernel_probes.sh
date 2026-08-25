@@ -2393,7 +2393,7 @@ group_recovery_atoms=$(
   exit 1
 }
 
-for wind_case in n_wind_zero n_wind_via n_wind_shape; do
+for wind_case in n_wind_zero n_wind_shape; do
   wind_negative="$KERNEL/negative/$wind_case.tex"
   if ( cd "$WORK" &&
        TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -2408,17 +2408,12 @@ grep -Fq '[TKZ-WIND-ZERO]' "$WORK/n_wind_zero.transcript" || {
   tail -20 "$WORK/n_wind_zero.transcript" >&2
   exit 1
 }
-grep -Fq '[TKZ-WIND-VIA]' "$WORK/n_wind_via.transcript" || {
-  echo "FAIL: the winding-waypoint rejection lacked TKZ-WIND-VIA" >&2
-  tail -20 "$WORK/n_wind_via.transcript" >&2
-  exit 1
-}
 grep -Fq '[TKZ-WIND-SHAPE]' "$WORK/n_wind_shape.transcript" || {
   echo "FAIL: the malformed winding rejection lacked TKZ-WIND-SHAPE" >&2
   tail -20 "$WORK/n_wind_shape.transcript" >&2
   exit 1
 }
-for wind_case in n_wind_via n_wind_shape; do
+for wind_case in n_wind_shape; do
   rm -f "$WORK/$wind_case".{aux,log,pdf,tnlog}
   ( cd "$WORK" &&
     TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -2729,11 +2724,11 @@ for contract_negative in \
   n_setup_theme_key \
   n_wire_weight_key \
   n_mark_slot_key \
+  n_wire_via_key \
   n_wire_restyle_transform \
   n_wire_restyle_nested \
   n_leg_restyle_transform \
   n_picture_cols_word \
-  n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
   n_noncell_leg \
@@ -2823,6 +2818,8 @@ do
   [ "$contract_negative" = n_wire_weight_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_mark_slot_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_wire_via_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_wire_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'

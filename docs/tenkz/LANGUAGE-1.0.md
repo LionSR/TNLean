@@ -643,8 +643,7 @@ by commas, when one pairing has several declared crossings.
 **Winding.** `wind={p,q}` records the homotopy class of a closed string on a
 frame with traced sides; the rendered path realizes that class or errors.
 The contractible `{0,0}` class is rejected in favor of an ordinary `closed`
-string. `via=` belongs to waypoint-routed closed strings and is mutually
-exclusive with `wind=`.
+string.
 <!-- Consumers: rmp-iii-a-torus-one, rmp-workbench-iii-eq59. -->
 
 **Detours.** A detour is a side of a selection: `route={<side> of

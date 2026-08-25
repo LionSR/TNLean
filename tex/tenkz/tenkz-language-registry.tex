@@ -53,11 +53,8 @@
 %
 % Sentenced 2026-07-25 by the nine signed amendments, booked in
 % docs/tenkz/SHRINK.md session 1, and struck from the contract's tables.
-% Each row below stays kernel until the change that implements its amendment
-% removes the parser row; the ledger status moves with the parser and not
-% before, which is how every retirement here has been booked since session 0.
-%
-%   kernel-wire:via        a waypoint is a side of a selection
+% The list is empty: every sentenced row has retired, the last of them
+% kernel-wire:via with the junction-chain migration of 2026-08-25.
 %
 % kernel-mark:inset and kernel-wire:bend left this list when their parser
 % rows were removed (the inert-key retirement, #6194/#6249): their
@@ -191,7 +188,6 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{role}{semantic-role}{empty}{sugar(species=)}{Prelude species spelling.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string)}{index}{kernel}{Bond or travelling string; a declared skin's pairing arrives generated, never authored.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{route}{route-spec}{straight}{kernel}{straight, orth, arc (honours the ends' faces), or the hull route {<side> of <selector>}.}
-\__tenkz_language_registry_key:nnnnnn {kernel-wire}{via}{address-list}{empty}{kernel}{Waypoints of a string; an index bond draws its chord and reads none.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{wind}{pair}{zero}{kernel}{Homotopy class on traced frames.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{cross}{crossing-list}{empty}{kernel}{Declared over and under crossings.}
@@ -316,6 +312,14 @@
 \__tenkz_language_registry_tombstone:nnn {kernel-mark}{slot}
   {species= carries the region word; selected, secondary, complement,
     collar, and neutral are prelude species}
+%
+% The last sentenced key.  The corpus's waypoint lists became invisible
+% junction atoms chained by named wire segments (#6897, 2026-08-25); a
+% detour around records is a hull route, and a wound string's class is
+% its path.
+\__tenkz_language_registry_tombstone:nnn {kernel-wire}{via}
+  {a waypoint is an invisible junction atom on a chained wire; a detour
+    around records is route={<side> of <selector>}}
 %
 % The four mark forms below took a record and drew nothing.  What the sources
 % brace, the benchmark already brackets (rmp-ii-spectrum-transfer); what they

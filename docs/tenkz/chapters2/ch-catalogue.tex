@@ -446,32 +446,36 @@ addressed by a fraction along the named wire.
 \end{tenkz}
 \end{tnexample}
 
-The third route word is \tnval{orth}, which turns at right angles.  It is
-the spelling for a string that must reach around the picture rather than
-across it, and it takes its corners from \tnkey{via=}, a list of addresses
-the path passes through.
+The third route word is \tnval{orth}, which turns at right angles.  A
+string that must reach around the picture rather than across it takes its
+corners from invisible junction atoms: chain the segments through a
+\tnkey{skin=}\tnval{none} atom standing where the turn belongs, and each
+segment runs straight while the chain draws the corner.
 
 \begin{tnexample}[
   caption={a string routed around the picture},
-  index={The waypoint is an ordinary cell address.  The path leaves $A$
-    southward, turns at the named cell, and enters $B$ from the west.},
+  index={The junction is an invisible atom at an ordinary cell address.
+    The path leaves $A$ southward, turns at the junction, and enters $B$
+    from the west.},
   signature={kernel-boundary|signature=}]
-% Ink: route=orth turns at right angles; via= names the cells
-%   the path passes through.
+% Ink: two chained segments; the invisible junction atom is the corner,
+%   and the joint declares its order as any crossing does.
 \tndeclare{species}{gauge}{hue=source:blue}
 \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
   \tn[at=(1,1), name=a, skin=box]{A}
-  \tn[at=(3,4), name=b, skin=box]{B}
-  \tnwire[kind=string, species=gauge, route=orth,
-          via={(3,1)}]{a.270}{b.180}
+  \tn[at=(2,4), name=b, skin=box]{B}
+  \tn[at=(3,1), skin=none, name=j]{}
+  \tnwire[kind=string, species=gauge, name=drop]{a.270}{j}
+  \tnwire[kind=string, species=gauge, name=run,
+          cross={over at crossing of drop and run}]{j}{b.180}
 \end{tenkz}
 \end{tnexample}
 
 A string that returns to itself is \tnkey{closed}, and a closed wire takes
 no positional ends at all: it is a cycle, so it has none to give.  Its
 shape comes from its route: a loop that rings a selection travels the
-hull, \tnkey{route=}\tnval{\{all of z\}}, and a freer shape names its
-waypoints with \tnkey{via=}.
+hull, \tnkey{route=}\tnval{\{all of z\}}, and a freer shape is a closed
+junction chain, wire by wire through its invisible corner atoms.
 
 \begin{tnexample}[
   caption={a closed string around a site},
