@@ -19963,8 +19963,22 @@
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
       {
-        \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
-        \tl_set:Ne #2 { text = \tl_use:N \l__tenkz_kernel_r_hue_tl , }
+        % A region word tints the contour it names and nothing else: the
+        % label keeps the plain ink the retired slot= key always left it,
+        % while a semantic species reaches the text as it reaches every
+        % other ink the record draws.
+        \str_case:VnF \l__tenkz_kernel_r_species_tl
+          {
+            {selected}   { }
+            {secondary}  { }
+            {complement} { }
+            {collar}     { }
+            {neutral}    { }
+          }
+          {
+            \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
+            \tl_set:Ne #2 { text = \tl_use:N \l__tenkz_kernel_r_hue_tl , }
+          }
       }
   }
 
