@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 
+from tenkz_audit import Audit
 from tenkzlib.texcase import match_group, strip_comments
 
 
@@ -1041,6 +1042,22 @@ def compile_example(example: Example, engine: str, work: Path) -> None:
         raise RuntimeError(
             f"{example.source}:{example.line}: \\{example.label.removeprefix('reference-')} "
             "was not executed during standalone compilation"
+        )
+    log_path = driver.with_suffix(".tnlog")
+    if not log_path.is_file():
+        raise RuntimeError(
+            f"{example.source}:{example.line}: {example.label} produced no "
+            f"{log_path.name} after standalone compilation"
+        )
+    if not log_path.read_text(encoding="utf-8").strip():
+        raise RuntimeError(
+            f"{example.source}:{example.line}: {example.label} produced an "
+            f"empty {log_path.name} after standalone compilation"
+        )
+    if Audit(log_path, driver).run():
+        raise RuntimeError(
+            f"{example.source}:{example.line}: standalone event audit failed "
+            f"for {example.label}"
         )
 
 
