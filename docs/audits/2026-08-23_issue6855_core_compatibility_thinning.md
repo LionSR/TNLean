@@ -75,3 +75,20 @@ The remaining differently named cast helpers in
 `NormalizedGroupedSectorMaps.lean` and
 `BNTAlgebraTensorClauseDirectSumUnitary.lean` have different dependent
 contexts and are not claimed by this migration.
+
+## MPV and mixed transfer (re-audited 2026-08-25)
+
+At TNLean `c626a7a51377368b886fe919d93e5e61e7fd2c9a`, with QICLean at
+`df9ded03a81d2c02ce1962331777a7a1a87c57b4`, `MPSTensor.SameMPV` and
+`MPSTensor.SameMPV₂` have identical propositions when the two bond dimensions
+agree. The public name `SameMPV` therefore remains as the equal-dimension
+abbreviation of `SameMPV₂`; `SameMPV₂Pos` remains distinct because it omits the
+chain-length-zero condition. The Archive use and the Blueprint declarations
+naming `SameMPV` and its namespace remain unchanged.
+
+The three TNLean uses of `Kraus.mixedTransferMap₂_same_dim`, in
+`MPS/FundamentalTheorem/Proportional.lean`, `MPS/RFP/BNTOrthogonality.lean`,
+and `Spectral/TransferOperatorGapNT.lean`, are replaced by definitional
+equality. QICLean retains the bridge because its mixed-transfer iteration,
+self-transfer, and normalized spectral-radius results still use it; removing
+that upstream interface is outside this TNLean-local migration.
