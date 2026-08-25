@@ -523,11 +523,15 @@ ABSOLUTE_LOAD = re.compile(
     # the specifiers that pass their braced text through as the name are
     # read against a literal path: v and c name a variable or a command
     # whose value is the real argument, so a literal there is a name,
-    # not a path.  N passes its braced text through unexpanded, and a
-    # doubled brace group reaches the file test as the inner group.
+    # not a path.  The n form, its o/x/e/f expansion variants, and
+    # file_input:n take one braced literal; a second group stays in the
+    # file name.  A generated N wrapper consumes one group before it
+    # forwards to the n base, so only a doubled group delivers the full path.
     r"|\\(?:file_input:n"
-    r"|file_if_exist(?:_p:[Nnoxef]|:[Nnoxef](?:TF|T|F)))"
-    rf"\s*\{{\s*\{{?\s*\"?{ABSOLUTE_PATH_HEAD}"
+    r"|file_if_exist(?:_p:[noxef]|:[noxef](?:TF|T|F)))"
+    rf"\s*\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
+    r"|\\file_if_exist(?:_p:N|:N(?:TF|T|F))"
+    rf"\s*\{{\s*\{{\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\input\s*\"?{ABSOLUTE_PATH_HEAD}"
     rf"|\\open(?:in|out)\s*{STREAM_OPERAND}\"?{ABSOLUTE_PATH_HEAD}"
     r"|\\(?:ior_open|iow_open|file_get|file_get_full_name"
