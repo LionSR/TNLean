@@ -32,6 +32,7 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 # plasTeX plugin (blueprint/src/plastex.cfg loads it unconditionally):
 #   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 # Run after lake build succeeds.
+python3 scripts/fetch_tenkz.py
 cd blueprint && leanblueprint checkdecls
 
 # Blueprint web/PDF generation

@@ -25,6 +25,7 @@ Run these commands from the repository root:
 
 ```bash
 lake build
+python3 scripts/fetch_tenkz.py
 cd blueprint
 leanblueprint checkdecls
 leanblueprint pdf
