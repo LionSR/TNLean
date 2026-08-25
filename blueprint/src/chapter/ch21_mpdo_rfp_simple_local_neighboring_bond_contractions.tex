@@ -922,7 +922,7 @@
 
 % This coordinate-invariance theorem is project-derived.  It transports the
 % data in CPSV16 Theorem 4.9(iv), but is not a theorem stated in that source.
-\begin{theorem}[Unitary physical-coordinate invariance of neighboring trace factorizations]
+\begin{theorem}[Unitary-between physical-coordinate invariance of neighboring trace factorizations]
     \label{thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
     \lean{MPOTensor.PhysicalSectorFactorization.ofChangePhysicalBasis,
         MPOTensor.PhysicalSectorFactorization.toChangePhysicalBasis,
@@ -930,11 +930,13 @@
         MPOTensor.PhysicalSectorFactorization.toChangePhysicalBasis_neighboringOperator,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.ofChangePhysicalBasis,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.toChangePhysicalBasis,
-        MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_changePhysicalBasis_iff}
+        MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_changePhysicalBasis_iff,
+        MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_changePhysicalBasis_iff_of_isUnitaryBetween}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
-    Let $V$ be a square physical-space matrix with $V^\dagger V=\Id$, and
-    define ${\cal K}^V_{\beta,\alpha}
+    Let $V:\C^d\to\C^e$ satisfy
+    $V^\dagger V=\Id_d$ and $VV^\dagger=\Id_e$, and define
+    ${\cal K}^V_{\beta,\alpha}
     =V{\cal K}_{\beta,\alpha}V^\dagger$.  Then ${\cal K}$ admits a
     physical-sector factorization with
     \begin{align}
@@ -955,7 +957,8 @@
 
 \begin{proof}
     \leanok
-    Since $V$ is square, $VV^\dagger=\Id$.  If the physical isometry for
+    The two one-sided unitary identities give $d\leq e$ and $e\leq d$,
+    respectively, so $d=e$.  If the physical isometry for
     ${\cal K}$ is $U$, use $UV^\dagger$ for ${\cal K}^V$; then
     $(UV^\dagger){\cal K}^V_{\beta,\alpha}(UV^\dagger)^\dagger
     =U{\cal K}_{\beta,\alpha}U^\dagger$.  Conversely, if the isometry for
@@ -964,6 +967,99 @@
     $\eta_{k,h}=\sum_\gamma(r_k)_\gamma\otimes(l_h)_\gamma$ is unchanged.
     The positivity, trace, and normalization identities therefore remain the
     same identities.
+\end{proof}
+
+% These presentation-independence statements are project-derived.  CPSV16
+% supplies the transported data and the source settings for gauge and support
+% restriction, but does not state either equivalence below.
+\begin{theorem}[Gauge and support-coordinate independence of neighboring trace factorizations]
+    \label{thm:mpdo_neighboring_trace_factorization_presentation_invariant}
+    \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.ofGaugeEquiv,
+        MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_iff_of_gaugeEquiv,
+        MPOTensor.PhysicalSupportRestrictionData.supportCoordinateChange,
+        MPOTensor.PhysicalSupportRestrictionData.supportCoordinateChange_isUnitaryBetween,
+        MPOTensor.PhysicalSupportRestrictionData.changePhysicalBasis_supportCoordinateChange,
+        MPOTensor.PhysicalSupportRestrictionData.exists_neighboringTraceFactorization_restriction_iff}
+    \leanok
+    \uses{def:gauge_equiv, def:mpdo_neighboring_trace_factorization,
+        def:mpdo_physical_support_restriction}
+    Suppose that two MPO tensors of the same physical and virtual dimensions
+    differ by an invertible virtual gauge.  One admits a physical-sector
+    factorization with neighboring data $\eta_{k,h}$, $a_k$, and $b_h$ if and
+    only if the other does.  The same neighboring operators and the same
+    numbers $a_k,b_h$ may be used on both sides.
+
+    Let $V_F:\C^{d_F}\to\C^d$ and
+    $V_G:\C^{d_G}\to\C^d$ be two isometric inclusions with the same range
+    projection $P$:
+    \begin{align}
+        V_F^\dagger V_F &=\Id_{d_F},
+        & V_G^\dagger V_G &=\Id_{d_G},
+        \notag \\
+        V_FV_F^\dagger &=P,
+        & V_GV_G^\dagger &=P.
+        \label{eq:mpdo_support_coordinate_ranges}
+    \end{align}
+    Set $Q=V_F^\dagger V_G$.  Then
+    \begin{align}
+        Q^\dagger Q &=\Id_{d_G},
+        & QQ^\dagger &=\Id_{d_F},
+        \notag \\
+        Q\bigl(V_G^\dagger {\cal K}V_G\bigr)Q^\dagger
+          &=V_F^\dagger {\cal K}V_F.
+        \label{eq:mpdo_support_coordinate_tensor}
+    \end{align}
+    Consequently, the restrictions of ${\cal K}$ along $V_F$ and $V_G$
+    admit neighboring trace factorizations simultaneously.
+
+    Both equivalences are project-derived and are not stated in
+    \cite{Cirac2016MPDO_arXiv}.  The gauge transformation is the one discussed
+    in Section~2.3, lines~187--195; the support-restriction setting is that of
+    Appendix~C.2, lines~1680--1691 and 1733--1770.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_physical_sector_factorization_gauge,
+        thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
+    For the virtual gauge $L^i=XK^iX^{-1}$, write
+    $\eta^K_{k,h}(M)$ for the neighboring contraction with $M$ inserted
+    between the transported virtual factors.  Their composition is
+    $X^{-1}X$, and hence
+    \begin{align}
+        \eta^L_{k,h}
+        &=\eta^K_{k,h}(X^{-1}X)
+         =\eta^K_{k,h}(\Id)
+         =\eta^K_{k,h}.
+        \notag
+    \end{align}
+    The families $a_k$ and $b_h$ are retained literally, together with their
+    positivity, trace, and normalization identities.  The reverse implication
+    uses the inverse gauge.
+
+    For the support coordinates,
+    (\ref{eq:mpdo_support_coordinate_ranges}) gives
+    \begin{align}
+        Q^\dagger Q
+          &=V_G^\dagger(V_FV_F^\dagger)V_G
+           =V_G^\dagger PV_G
+           =\Id_{d_G},
+        \notag \\
+        QQ^\dagger
+          &=V_F^\dagger(V_GV_G^\dagger)V_F
+           =V_F^\dagger PV_F
+           =\Id_{d_F},
+        \notag \\
+        QV_G^\dagger
+          &=V_F^\dagger(V_GV_G^\dagger)
+           =V_F^\dagger P
+           =V_F^\dagger.
+        \notag
+    \end{align}
+    The last identity gives
+    (\ref{eq:mpdo_support_coordinate_tensor}) by composition of physical
+    coordinate changes.  The unitary-between invariance above, with the
+    resulting equivalence reversed, proves the claim.
 \end{proof}
 
 \begin{theorem}[Trace of the three-site neighboring operator]

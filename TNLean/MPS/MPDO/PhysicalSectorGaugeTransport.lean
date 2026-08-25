@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorVirtualTransport
 
 /-!
@@ -102,5 +103,48 @@ theorem ofGaugeEquiv_neighboringOperator_posSemidef
   intro k h
   rw [F.ofGaugeEquiv_neighboringOperator hGauge k h]
   exact hpos k h
+
+/-- Transport neighboring trace data through an invertible virtual gauge.
+
+The neighboring operators $\eta_{k,h}$ and the real coefficient families
+$a_k,b_h$ are retained literally, so their positivity, trace factorization,
+and normalization clauses are the supplied clauses themselves.  The data are
+those of arXiv:1606.00608, Theorem 4.9(iv) and Appendix C.2, lines 864--889 and
+1381--1450.  Their virtual-gauge transport is project-derived and is not
+stated in that source. -/
+noncomputable def NeighboringTraceFactorization.ofGaugeEquiv
+    {F : PhysicalSectorFactorization K}
+    (H : NeighboringTraceFactorization F)
+    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    NeighboringTraceFactorization (F.ofGaugeEquiv hGauge) where
+  neighboringOperator_pos :=
+    F.ofGaugeEquiv_neighboringOperator_posSemidef hGauge H.neighboringOperator_pos
+  a := H.a
+  b := H.b
+  trace_neighboringOperator := by
+    intro k h
+    rw [F.ofGaugeEquiv_neighboringOperator hGauge k h]
+    exact H.trace_neighboringOperator k h
+  sum_mul := H.sum_mul
+
+/-- Existence of neighboring trace data is invariant under an invertible
+virtual gauge.
+
+This equivalence retains $\eta_{k,h}$, $a_k$, and $b_h$ literally.  It is a
+project-derived consequence of the gauge similarity in arXiv:1606.00608,
+Section 2.3, lines 187--195, applied to the data of Theorem 4.9(iv) and
+Appendix C.2, lines 864--889 and 1381--1450; the source does not state this
+equivalence. -/
+theorem exists_neighboringTraceFactorization_iff_of_gaugeEquiv
+    (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    (∃ F : PhysicalSectorFactorization K,
+        Nonempty F.NeighboringTraceFactorization) ↔
+      ∃ F : PhysicalSectorFactorization L,
+        Nonempty F.NeighboringTraceFactorization := by
+  constructor
+  · rintro ⟨F, ⟨H⟩⟩
+    exact ⟨F.ofGaugeEquiv hGauge, ⟨H.ofGaugeEquiv hGauge⟩⟩
+  · rintro ⟨F, ⟨H⟩⟩
+    exact ⟨F.ofGaugeEquiv hGauge.symm, ⟨H.ofGaugeEquiv hGauge.symm⟩⟩
 
 end MPOTensor.PhysicalSectorFactorization
