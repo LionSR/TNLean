@@ -67,7 +67,7 @@ For a single block that is TP, has a primitive transfer map, and is irreducible
 (all three conditions), the full chain to `Kraus.IsNormal` is available:
 
 1. `_root_.IsPrimitive (Kraus.transferMap A)` + `Kraus.IsIrreducibleFamily A` + TP
-   → `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
+   → `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
    → `∃ ρ, IsPrimitiveMPS A ρ`
 2. `IsPrimitiveMPS A ρ` + `Kraus.IsIrreducibleFamily A`
    → `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily` → `ρ.PosDef`
@@ -101,7 +101,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
   -- primitive MPS data.
   have hMPSPrim : MPSTensor.HasPrimitiveFixedPoint A :=
-    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
+    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   -- Step 2: Extract the Perron fixed point.
   obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
   -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.

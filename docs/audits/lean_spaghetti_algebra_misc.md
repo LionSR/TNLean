@@ -34,7 +34,6 @@ Highest-signal findings:
 2. No audited file declares an `axiom`. Repo-wide, the only actual `axiom` declaration is `TNLean/Axioms/Entropy.lean:55`.
 3. No Lean 3 style syntax (`begin ... end`, `by { ... }`) was found in the audited scope.
 4. The main maintainability risk outside PEPS is proof size. The worst long-proof clusters are in:
-   - `TNLean/MPS/Overlap/PeripheralToSpectralGap.lean`
    - `TNLean/Algebra/ProjectionTriangularTrace.lean`
    - `TNLean/Algebra/BurnsideTheorem.lean`
    - `TNLean/Algebra/IrreducibleTensorAction.lean`
@@ -207,12 +206,13 @@ MPS core remarks:
 | `TNLean/MPS/Overlap/Basic.lean` | 82 | 0 | None | None obvious. | None obvious. | 3 hit(s) at [45, 59, 66] | No sorrys. | No. | None | None |
 | `TNLean/MPS/Overlap/CastDecay.lean` | 74 | 0 | None | None obvious. | None obvious. | 0 hit(s) | No sorrys. | No. | None | None |
 | `TNLean/MPS/Overlap/CastLemmas.lean` | 86 | 0 | None | None obvious. | None obvious. | 4 hit(s) at [30, 37, 42, 58] | No sorrys. | No. | None | None |
-| `TNLean/MPS/Overlap/PeripheralToSpectralGap.lean` | 489 | 0 | `lemma transferMap_conjTranspose` (61-198, 138 lines); `theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero` (199-256, 58 lines); `theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible` (257-347, 91 lines) | None obvious. | None obvious. | 10 hit(s); first hits [66, 109, 158, 162, 166, 170] | No sorrys. | No. | None | None |
+| `TNLean/MPS/Overlap/PeripheralToTransferMapGap.lean` | 59 | 0 | None | None obvious. | None obvious. | 0 | No sorrys. | No. | None | None |
 
 Overlap remarks:
 
-- `PeripheralToSpectralGap.lean` is a major proof-complexity hotspot.
-- Three consecutive long results from line 61 through line 347 are a strong refactor candidate.
+- `PeripheralToTransferMapGap.lean` now contains only the TN-specific overlap consequences.
+  Generic finite-Kraus fixed-point and complementary-gap results are owned by
+  `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`.
 
 ## MPS/Periodic
 
@@ -267,7 +267,6 @@ PEPS remarks:
 
 1. Treat `TNLean/PEPS/FundamentalTheorem.lean` as explicitly experimental until the scaffold is replaced or isolated from root imports.
 2. Split long proof blocks in:
-   - `TNLean/MPS/Overlap/PeripheralToSpectralGap.lean`
    - `TNLean/Algebra/ProjectionTriangularTrace.lean`
    - `TNLean/Algebra/BurnsideTheorem.lean`
    - `TNLean/Algebra/IrreducibleTensorAction.lean`

@@ -7,7 +7,7 @@ import TNLean.Spectral.TransferOperatorGapInjective
 import QICLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
-import TNLean.Spectral.PeripheralToTransferMapGap
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 
 /-!
 # Quantitative transfer-map gap bounds for MPS transfer operators
@@ -185,8 +185,8 @@ theorem correlation_length_bound [NeZero D]
     isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
-  rcases spectralRadius_compl_lt_one_of_peripheralPrimitive
-      (A := A) hA hNorm hPrim with
+  rcases Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive
+      A hA hNorm hPrim with
     ⟨ρ, _hρ_psd, _hρ_ne, hρ_fix, htrρ, hgap⟩
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ htrρ
   let N : V →ₗ[ℂ] V := E - P

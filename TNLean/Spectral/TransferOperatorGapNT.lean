@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.MixedMap.Gap
+import QICLean.Kraus.InvariantProjection
 import QICLean.Kraus.TransferChannel
 import QICLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecayRect
@@ -13,7 +14,7 @@ import QICLean.Spectral.TransferOperatorGapNormalized
 # Transfer-operator gap for normal tensor blocks
 
 The operator statements in this file are compatibility results for matrix-product tensors. Their
-finite-family forms are proved in `TNLean.Kraus.MixedMap.Gap`; only transfer-map and overlap
+finite-family forms are proved in `QICLean.Kraus.MixedMap.Gap`; only transfer-map and overlap
 notation remains here.
 -/
 

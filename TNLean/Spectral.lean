@@ -12,7 +12,6 @@ import TNLean.Spectral.CrossCorrelation
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.MPVOverlapDecayRect
 import TNLean.Spectral.MPVOverlapTrace
-import TNLean.Spectral.PeripheralToTransferMapGap
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
 import TNLean.Spectral.TransferOperatorGap

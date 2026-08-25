@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint
 import QICLean.Kraus.Transfer
+import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.Wielandt.Primitivity.Definitions
-import TNLean.Spectral.PeripheralToTransferMapGap
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 
 /-!
 # Connecting results for primitive MPS and complementary transfer-map gaps
@@ -55,7 +56,7 @@ The proof chains:
 1. `IsIrreducibleMap E → Kraus.IsIrreducibleFamily A`
 2. `Kraus.IsIrreducibleFamily + IsPeripherallyPrimitive + hNorm`
    → `HasPrimitiveFixedPoint A`
-   via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
+   via `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
 3. every nonzero PSD fixed point of an irreducible transfer map is PosDef, via
    `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleMap`
 -/
@@ -68,7 +69,7 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
   have hIrrT : Kraus.IsIrreducibleFamily A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrMap
   obtain ⟨ρ', hPrimMPS⟩ :=
-    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
+    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   have hρ'PD : ρ'.PosDef :=
     hPrimMPS.posDef_of_isIrreducibleMap hIrrMap
   exact ⟨ρ', hPrimMPS, hρ'PD⟩

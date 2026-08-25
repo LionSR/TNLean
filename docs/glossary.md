@@ -237,8 +237,8 @@ normalizations.
   consequences of arXiv:0909.5347 Proposition 3.
 - **Sanctioned bridges:**
   `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive`,
-  `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive`,
-  `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`,
+  QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive`,
+  `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`,
   `MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper`, and
   `MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef`.
 - **Caveat:** every listed bridge requires `[NeZero D]`. The two bridges from
