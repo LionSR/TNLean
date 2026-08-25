@@ -1,0 +1,40 @@
+\section{Matched block maps for product algebras}
+
+The Fundamental Theorem compares the simple matrix summands selected by a
+product-algebra equivalence.  The following tensor-network-facing statements
+record the component maps and their dimension consequence.
+
+\begin{theorem}[Paired component maps for products of matrix algebras]
+    \label{thm:mps_component_map_bijective}
+    \lean{MPSTensor.ringEquiv_maps_single_support}
+    \lean{MPSTensor.componentMap_surjective}
+    \lean{MPSTensor.componentMap_bijective}
+    \leanok
+
+    For a ring equivalence between products of full matrix algebras, the map
+    induced between each pair of matched components is bijective.
+\end{theorem}
+
+\begin{proof}\leanok
+
+    Apply Theorem~\cite[``Paired component maps are bijections'']{QICLean2026Blueprint} to the matched block
+    ideals.
+\end{proof}
+
+\begin{theorem}[Dimension preservation for matched matrix summands]
+    \label{thm:mps_dim_preserved}
+    \lean{MPSTensor.dim_preserved}
+    \leanok
+    An algebra automorphism of a product of full matrix algebras preserves
+    the dimension of every pair of summands matched by its induced
+    permutation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_component_map_bijective}
+    Restrict the automorphism to the two matched summands. The resulting
+    component map is a bijective complex-linear map by
+    Theorem~\ref{thm:mps_component_map_bijective}. Hence the two matrix
+    spaces have equal complex dimensions, so their sizes have equal squares
+    and therefore are equal.
+\end{proof}

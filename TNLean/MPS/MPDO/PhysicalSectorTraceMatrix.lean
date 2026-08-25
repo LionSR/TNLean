@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import QICLean.Algebra.HermitianHelpers
-import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
+import QICLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.MPS.MPDO.PhysicalSectorDirectedCut
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 

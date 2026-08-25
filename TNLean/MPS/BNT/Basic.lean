@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import TNLean.Algebra.GramMatrixLI
+import QICLean.Algebra.GramMatrixLI
 
 import Mathlib.Analysis.InnerProductSpace.l2Space
 import Mathlib.Topology.Algebra.Star

@@ -669,8 +669,7 @@
         MPOTensor.PhysicalSectorFactorization.%
         ActivePhysicalCompressionWitness.neighboringTraceFactorization}
     \leanok
-    \uses{thm:mpdo_active_physical_sector_restriction,
-        def:mpdo_neighboring_trace_factorization}
+    \uses{thm:mpdo_active_physical_sector_restriction, def:mpdo_neighboring_trace_factorization}
     In the setting of
     Theorem~\ref{thm:mpdo_active_physical_sector_restriction}, the restricted
     tensor $K_{\mathrm{act}}$ has a physical-sector factorization indexed
@@ -1346,9 +1345,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_example410_corrected_tensor,
-        lem:complex_ofreal_sqrt_sq,
-        thm:mpo_source_zcl_of_physical_trace_idempotent}
+    \uses{def:cpsv_example410_corrected_tensor, lem:complex_ofreal_sqrt_sq, thm:mpo_source_zcl_of_physical_trace_idempotent}
     Its physical-trace transfer is the nonzero projector
     \begin{align}
         P & =\frac12
@@ -1385,8 +1382,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_example410_corrected_tensor,
-        thm:cpsv_example410_bond_distribution}
+    \uses{def:cpsv_example410_corrected_tensor, thm:cpsv_example410_bond_distribution}
     For $1\leq L\leq4$, the proof constructs a bond-window weight family
     $w_L$ and an isometry $V_L$ such that
     \begin{align}
@@ -1584,8 +1580,7 @@ This is the calculation in
         MPOTensor.CPSVExample410Entropy.M_not_isSAL,
         MPOTensor.CPSVExample410Entropy.M_isSourceZCL_and_not_isSAL}
     \leanok
-    \uses{def:cpsv_example410_corrected_tensor, def:block_entropy,
-        def:mutual_info_chain, def:is_sal, def:mpo_source_zcl}
+    \uses{def:cpsv_example410_corrected_tensor, def:block_entropy, def:mutual_info_chain, def:is_sal, def:mpo_source_zcl}
     For the corrected tensor at $p=1/4$ on the four-site ring, let $S_L$ be
     the entropy of $L$ consecutive spins, with natural logarithms. Then
     \begin{align}
@@ -1608,12 +1603,7 @@ This is the calculation in
 
 \begin{proof}
     \leanok
-    \uses{thm:block_entropy_of_charpoly_roots,
-        thm:cpsv_example410_source_zcl,
-        thm:cpsv_example410_four_site_spectrum,
-        thm:cpsv_example410_window_entropies,
-        thm:cpsv_example410_mutual_information_defect,
-        thm:cpsv_example410_log_ratio_pos, lem:sal_const}
+    \uses{thm:block_entropy_of_charpoly_roots, thm:cpsv_example410_source_zcl, thm:cpsv_example410_four_site_spectrum, thm:cpsv_example410_window_entropies, thm:cpsv_example410_mutual_information_defect, thm:cpsv_example410_log_ratio_pos, lem:sal_const}
     The four root multisets give the displayed block entropies. Substitution
     into $I_L=S_L+S_{4-L}-S_4$ gives the exact logarithmic ratio, which is
     positive by Theorem~\ref{thm:cpsv_example410_log_ratio_pos}. If the area
@@ -2270,7 +2260,7 @@ This is the calculation in
     Then $\rho_{ABC}$ admits a quantum Markov decomposition on $B$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:commuting_overlapping_unitary_block_actions}
+
     The spatial decomposition
     \cite[Lemma~2.1]{Beigi2012Classification} gives a unitary decomposition
     $B=\bigoplus_q B_q^L\otimes B_q^R$ in which the two overlapping actions
@@ -2486,10 +2476,7 @@ This is the calculation in
         MPOTensor.BondOnePhysicalSectorFactorization.neighboringTraceFactorization,
         MPOTensor.exists_physicalSectorFactorization_of_bondDim_one}
     \leanok
-    \uses{def:is_sal, def:mpo_physical_trace_idempotence,
-        lem:mpdo_sal_phys_trace_transfer_nonzero,
-        def:mpdo_physical_sector_factorization,
-        def:mpdo_neighboring_trace_factorization}
+    \uses{def:is_sal, def:mpo_physical_trace_idempotence, lem:mpdo_sal_phys_trace_transfer_nonzero, def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
     Let $K$ be an MPO tensor of virtual bond dimension one. If $K$ satisfies
     the strong area law and literal zero correlation length, then there is a
     physical-sector factorization of $K$ whose neighboring operator is
@@ -2578,9 +2565,7 @@ This is the calculation in
         MPOTensor.NonCartesianActiveSectorCandidate.exists_normalTensor_scalar_representation,
         MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample}
     \leanok
-    \uses{def:is_sal, def:mpo_physical_trace_transfer,
-        def:mpdo_physical_sector_factorization,
-        def:mpdo_neighboring_trace_factorization}
+    \uses{def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
     There are tensors $K,A$ of physical dimension four and virtual dimension
     two, and a scalar $\mu$ with $0<|\mu|<1$, such that $K=\mu A$, the tensor
     $A$ is normal, and $K$ is injective, satisfies the strong area

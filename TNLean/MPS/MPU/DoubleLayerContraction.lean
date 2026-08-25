@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.BilinearForm.Properties
 import TNLean.Algebra.ListProduct
 import QICLean.Algebra.MatrixTracePairing
 import QICLean.Algebra.RankOneSandwich
-import TNLean.Algebra.ShiftedZeroTraceNilpotent
+import QICLean.Algebra.ShiftedZeroTraceNilpotent
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.Simple

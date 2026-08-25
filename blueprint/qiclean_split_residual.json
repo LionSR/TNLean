@@ -1,256 +1,1433 @@
 {
-  "baseline": {
-    "broad_companion_volume_placeholders": 79,
-    "qic_theorem_like_entries": 1245,
-    "same_label_same_declaration_citation_occurrences": 336,
-    "same_label_same_declaration_labeled_items_including_remarks": 259,
-    "same_label_same_declaration_theorem_like_entries": 258,
-    "tn_theorem_like_entries": 3736
-  },
-  "changes": {
-    "broad_placeholders_upgraded_to_statement_specific_citations": 79,
-    "paper_gap_citations_removed_with_their_entire_qic_owned_entries": 5,
-    "removed_dependency_targets": 216,
-    "removed_incoming_internal_reference_occurrences_replaced_by_precise_citations": 87,
-    "removed_label_only_planned_duplicate_entries": 1,
-    "removed_label_only_planned_duplicate_labels": [
-      "thm:brouwer_simplex"
+  "schema_version": 2,
+  "generated_date": "2026-08-25",
+  "issues": {
+    "TNLean": [
+      6873,
+      7168
     ],
-    "removed_qic_owned_same_label_entries": 244,
-    "removed_same_label_same_declaration_citation_occurrences": 320,
-    "removed_theorem_like_entries": 244
+    "QICLean": [
+      489,
+      490,
+      491,
+      492,
+      493,
+      494
+    ]
   },
   "comparison": {
-    "criteria": "A QIC-owned duplicate has the same active label and at least one identical Lean declaration in both blueprints. Labeled remarks are included in the residual audit. TN-facing interface statements are retained only when their formulation is explicitly in MPS/transfer-map vocabulary or is used as a named TN specialization.",
-    "qiclean_blueprint_sha256": "e494313222fafcaf0dc044dc95020c0cbb176e095e36ecf8d2cd7a5fc6413941",
-    "qiclean_read_only_commit": "822eefea698c8f2f6ac3f3da6f19156aec7afd1f",
-    "tnlean_base_commit": "8de1245b84354f45b540ae1dc476b667d907a450"
+    "qiclean_merged_commit": "4aa26359094e6e2acf6a18d580758128007f7194",
+    "qiclean_blueprint_tree_sha256": "247bc9ca575f7e78ba165255dd5858ca6a336a8f5a2e7de8da74749547f620ae",
+    "tnlean_base_commit": "258bfc5b77e1044445edc631b88308ebefb4a166",
+    "criteria": "Audit all collected definition, lemma, proposition, theorem, corollary, and remark environments, including unlabeled environments. Compare Lean declarations and labels exactly, compare normalized titles as a semantic-collision screen, then manually classify the Chapter 21/27/28 ownership scope and every unlabeled TN residue."
   },
-  "generated_date": "2026-08-22",
-  "issue": 6873,
-  "residual": {
-    "declaration_only_interface_entries": 4,
-    "declaration_only_interfaces": [
-      {
-        "file": "chapter/ch08_wielandt_cumulative_bound.tex",
-        "justification": "TN word-span notation tied to blocked MPS injectivity and the Sanz et al. convention",
-        "label": "def:word_span",
-        "shared_lean_declarations": [
-          "Kraus.wordSpan"
-        ],
-        "title": "Word span"
-      },
-      {
-        "file": "chapter/ch08_wielandt_cumulative_bound.tex",
-        "justification": "explicit MPS specialization of the finite-family vector-spread span",
-        "label": "def:mps_vector_spread_span",
-        "shared_lean_declarations": [
-          "Kraus.vectorSpreadSpan"
-        ],
-        "title": "Fixed-length vector span of an MPS tensor"
-      },
-      {
-        "file": "chapter/ch08_wielandt_cumulative_bound.tex",
-        "justification": "MPS specialization used by the TN Wielandt chain",
-        "label": "thm:mps_eigenvector_from_full_cumulative_span",
-        "shared_lean_declarations": [
-          "Kraus.exists_eigenvector_of_cumulativeSpan_eq_top"
-        ],
-        "title": "Eigenvector extraction for an MPS tensor"
-      },
-      {
-        "file": "chapter/ch08_wielandt_fixed_length_and_normality.tex",
-        "justification": "TN-facing padding lemma in the fixed-length MPS normality argument",
-        "label": "lem:eigenvector_padding",
-        "shared_lean_declarations": [
-          "Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector"
-        ],
-        "title": "Eigenvector padding"
-      }
-    ],
-    "deferred_cases": [],
-    "qic_owned_duplicate_entries": 0,
-    "same_label_interface_citation_occurrences": 16,
-    "same_label_interface_entries": 15,
-    "same_label_interfaces": [
-      {
-        "file": "chapter/ch02_mps.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "def:transfer_map",
-        "shared_lean_declarations": [
-          "MPSTensor.transferMap"
-        ],
-        "title": "Transfer map"
-      },
-      {
-        "file": "chapter/ch02_mps.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "def:injective",
-        "shared_lean_declarations": [
-          "MPSTensor.IsInjective"
-        ],
-        "title": "Injectivity"
-      },
-      {
-        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:injective_irreducible",
-        "shared_lean_declarations": [
-          "MPSTensor.injective_implies_irreducibleCP"
-        ],
-        "title": "Injectivity implies irreducibility"
-      },
-      {
-        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:transfer_cp",
-        "shared_lean_declarations": [
-          "MPSTensor.transferMap_isCPMap"
-        ],
-        "title": "Transfer map is CP"
-      },
-      {
-        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
-        "justification": "MPS transfer-map specialization of the generic Kraus trace-adjoint identity",
-        "label": "lem:trace_mul_transfer_map_adjoint",
-        "shared_lean_declarations": [
-          "trace_mul_transferMap_adjoint"
-        ],
-        "title": "Trace adjointness of a transfer map"
-      },
-      {
-        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "lem:trace_transfer_map_left_canonical",
-        "shared_lean_declarations": [
-          "MPSTensor.trace_transferMap"
-        ],
-        "title": "Left-canonical transfer maps preserve trace"
-      },
-      {
-        "file": "chapter/ch04_channels_transfer_map_foundations.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:transfer_channel",
-        "shared_lean_declarations": [
-          "MPSTensor.transferMap_isChannel"
-        ],
-        "title": "Transfer map is a channel"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:transfer_psd_fp_pd_irred",
-        "shared_lean_declarations": [
-          "MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible"
-        ],
-        "title": "Transfer-map PSD fixed point --- irreducible version"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:psd_fp_pd",
-        "shared_lean_declarations": [
-          "MPSTensor.posSemidef_fixedPoint_isPosDef"
-        ],
-        "title": "PSD fixed point is positive definite"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:psd_fp_unique_irred",
-        "shared_lean_declarations": [
-          "MPSTensor.posSemidef_fixedPoint_unique_of_irreducible"
-        ],
-        "title": "Irreducible fixed-point uniqueness"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:psd_fp_unique",
-        "shared_lean_declarations": [
-          "MPSTensor.posSemidef_fixedPoint_unique"
-        ],
-        "title": "Uniqueness of PSD fixed point"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:psd_fp_exists",
-        "shared_lean_declarations": [
-          "MPSTensor.exists_posSemidef_fixedPoint"
-        ],
-        "title": "Existence of PSD fixed point"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:qpf",
-        "shared_lean_declarations": [
-          "MPSTensor.quantum_perron_frobenius"
-        ],
-        "title": "Quantum Perron--Frobenius"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS/transfer-map interface statement whose declaration and mathematical formulation remain TN-facing",
-        "label": "thm:qpf_irreducible",
-        "shared_lean_declarations": [
-          "MPSTensor.quantum_perron_frobenius_irreducible"
-        ],
-        "title": "Quantum Perron--Frobenius for irreducible transfer maps"
-      },
-      {
-        "file": "chapter/ch06_qpf.tex",
-        "justification": "MPS left-canonical gauge interface, stated directly for the tensor matrices",
-        "label": "thm:left_canonical_gauge",
-        "shared_lean_declarations": [
-          "Kraus.gauged_isTP_of_map_conjTranspose_fixedPoint",
-          "gauged_tracePreserving"
-        ],
-        "title": "Left-canonical (trace-preserving) gauge"
-      }
-    ],
-    "shared_declaration_names": 20,
-    "shared_label_names": 15,
-    "statement_specific_qiclean_citations": 135,
-    "unqualified_broad_qiclean_citations": 0
+  "counts": {
+    "before": {
+      "tn_collected_environments": 3687,
+      "tn_labeled_environments": 3658,
+      "tn_unlabeled_environments": 29
+    },
+    "after": {
+      "tn_collected_environments": 3617,
+      "tn_labeled_environments": 3588,
+      "tn_unlabeled_environments": 29,
+      "qic_collected_environments": 1533,
+      "qic_unlabeled_environments": 25
+    },
+    "changes": {
+      "qic_owned_scoped_environments_removed": 70,
+      "chapter_21_removed": 61,
+      "chapter_27_removed": 6,
+      "chapter_28_removed": 3,
+      "chapter_27_tn_nodes_relocated": 6,
+      "paper_gap_documents_transferred_to_qic": 10
+    },
+    "residual": {
+      "shared_declaration_interface_entries": 20,
+      "shared_label_names": 16,
+      "normalized_title_collisions": 2,
+      "unlabeled_tn_environments_reviewed": 29,
+      "unlabeled_qic_owned_residue": 0,
+      "unqualified_qic_citations": 4,
+      "statement_specific_qic_citations": 197
+    }
   },
-  "schema_version": 1,
+  "moved_qic_owned_nodes": [
+    {
+      "file": "chapter/ch28_mpu.tex",
+      "kind": "theorem",
+      "title": "Functoriality of transfer matrices",
+      "label": "thm:mpu_transfer_matrix_functoriality",
+      "lean_declarations": [
+        "transferMatrix_id",
+        "transferMatrix_comp"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_transfer_matrix_identities.tex",
+      "qic_title": "Functoriality of transfer matrices"
+    },
+    {
+      "file": "chapter/ch28_mpu.tex",
+      "kind": "theorem",
+      "title": "Trace preservation fixes the vectorized identity on the left",
+      "label": "thm:transfer_matrix_trace_preserving_identity_left_fixed",
+      "lean_declarations": [
+        "vecMul_vec_one_transferMatrix_eq_of_trace_preserving"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_transfer_matrix_identities.tex",
+      "qic_title": "Trace preservation fixes the vectorized identity on the left"
+    },
+    {
+      "file": "chapter/ch28_mpu.tex",
+      "kind": "theorem",
+      "title": "Powers and traces of transfer matrices",
+      "label": "thm:mpu_transfer_matrix_power_trace",
+      "lean_declarations": [
+        "transferMatrix_pow",
+        "trace_transferMatrix_eq_linearMap_trace"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_transfer_matrix_identities.tex",
+      "qic_title": "Powers and traces of transfer matrices"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "definition",
+      "title": "Map on the second tensor factor",
+      "label": "def:mpdo_id_tensor_map",
+      "lean_declarations": [
+        "Matrix.idTensorMap"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Map on the second tensor factor"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "definition",
+      "title": "Independent maps on both tensor factors",
+      "label": "def:mpdo_tensor_map_both",
+      "lean_declarations": [
+        "Matrix.tensorMapBoth"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Independent maps on both tensor factors"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "lemma",
+      "title": "Positivity under a map on the first tensor factor",
+      "label": "lem:mpdo_tensor_map_id_pos",
+      "lean_declarations": [
+        "IsKrausCPTP.tensorMapId_posSemidef"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Positivity under a map on the first tensor factor"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "lemma",
+      "title": "Positivity under a map on the second tensor factor",
+      "label": "lem:mpdo_id_tensor_map_pos",
+      "lean_declarations": [
+        "IsKrausCPTP.idTensorMap_posSemidef"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Positivity under a map on the second tensor factor"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "lemma",
+      "title": "Positivity under independent maps",
+      "label": "lem:mpdo_tensor_map_both_pos",
+      "lean_declarations": [
+        "IsKrausCPTP.tensorMapBoth_posSemidef"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Positivity under independent maps"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Data processing on the first tensor factor",
+      "label": "thm:mpdo_mutual_information_data_processing_left",
+      "lean_declarations": [
+        "IsKrausCPTP.mutualInformation_tensorMapId_le"
+      ],
+      "qic_file": "chapter/ch12_entropy_data_processing.tex",
+      "qic_title": "Data processing on the first tensor factor"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Data processing on the second tensor factor",
+      "label": "thm:mpdo_mutual_information_data_processing_right",
+      "lean_declarations": [
+        "IsKrausCPTP.mutualInformation_idTensorMap_le"
+      ],
+      "qic_file": "chapter/ch12_entropy_data_processing.tex",
+      "qic_title": "Data processing on the second tensor factor"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_mixed_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Data processing for bipartite mutual information",
+      "label": "thm:mpdo_mutual_information_data_processing",
+      "lean_declarations": [
+        "IsKrausCPTP.mutualInformation_tensorMapBoth_le"
+      ],
+      "qic_file": "chapter/ch12_entropy_data_processing.tex",
+      "qic_title": "Data processing for bipartite mutual information"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex",
+      "kind": "definition",
+      "title": "Controlled dependent partial trace",
+      "label": "def:mpdo_controlled_dependent_partial_trace",
+      "lean_declarations": [
+        "Matrix.controlledPartialTraceRightLM"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Controlled dependent partial trace"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex",
+      "kind": "theorem",
+      "title": "Diagonal blocks of the controlled dependent partial trace",
+      "label": "thm:mpdo_controlled_dependent_partial_trace_same_block",
+      "lean_declarations": [
+        "Matrix.controlledPartialTraceRightLM_sameBlock_apply"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "Diagonal blocks of the controlled dependent partial trace"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex",
+      "kind": "theorem",
+      "title": "The controlled dependent partial trace is trace-preserving completely positive",
+      "label": "thm:mpdo_controlled_dependent_partial_trace_cptp",
+      "lean_declarations": [
+        "Matrix.controlledPartialTraceRightLM_isKrausCPTP"
+      ],
+      "qic_file": "chapter/ch02_channels_tensor_maps_and_controlled_trace.tex",
+      "qic_title": "The controlled dependent partial trace is trace-preserving completely positive"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Joint probability distribution and marginals",
+      "label": "def:finite_joint_distribution_marginals",
+      "lean_declarations": [
+        "Matrix.IsJointDistribution",
+        "Matrix.rowMarginal",
+        "Matrix.columnMarginal"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Joint probability distribution and marginals"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Entropy and classical mutual information",
+      "label": "def:finite_classical_mutual_information",
+      "lean_declarations": [
+        "Entropy.probabilityEntropy",
+        "Entropy.classicalMutualInformation"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Entropy and classical mutual information"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "lemma",
+      "title": "Entropy is bounded by the logarithm of the support cardinality",
+      "label": "lem:probability_entropy_le_log_card_support",
+      "lean_declarations": [
+        "Entropy.probabilityEntropy_le_log_card_support"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Entropy is bounded by the logarithm of the support cardinality"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Classical mutual information is bounded by ordinary rank",
+      "label": "thm:classical_mutual_information_le_log_rank",
+      "lean_declarations": [
+        "Entropy.classicalMutualInformation_le_log_rank"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Classical mutual information is bounded by ordinary rank"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Positivity of the operator-Schmidt rank",
+      "label": "thm:operator_schmidt_rank_pos",
+      "lean_declarations": [
+        "Matrix.operatorSchmidtRank_pos_of_ne_zero"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Positivity of the operator-Schmidt rank"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Coefficient-space characterization of operator-Schmidt rank",
+      "label": "thm:operator_schmidt_coefficient_space",
+      "lean_declarations": [
+        "Matrix.range_operatorSchmidtMap_eq_operatorBlockSpan",
+        "Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Coefficient-space characterization of operator-Schmidt rank"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Operator-Schmidt rank under local isometries",
+      "label": "thm:operator_schmidt_rank_local_isometry",
+      "lean_declarations": [
+        "Matrix.operatorSchmidtRank_local_mul_le",
+        "Matrix.operatorSchmidtRank_local_isometry_conj"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Operator-Schmidt rank under local isometries"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Support of a bipartite positive operator",
+      "label": "thm:product_marginals_kernel",
+      "lean_declarations": [
+        "Matrix.PosSemidef.productMarginals_kernel_le"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Support of a bipartite positive operator"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Compression to both marginal supports",
+      "label": "thm:operator_schmidt_rank_marginal_support_compression",
+      "lean_declarations": [
+        "Matrix.PosSemidef.eq_marginalSupport_expansion_compression",
+        "Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Compression to both marginal supports"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "lemma",
+      "title": "Partial traces under product isometries",
+      "label": "lem:partial_trace_product_isometry",
+      "lean_declarations": [
+        "Matrix.partialTraceRight_kronecker_conj_of_right_isometry",
+        "Matrix.partialTraceLeft_kronecker_conj_of_left_isometry"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Partial traces under product isometries"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Faithful marginals after simultaneous support compression",
+      "label": "thm:faithful_marginals_support_compression",
+      "lean_declarations": [
+        "Matrix.PosSemidef.partialTraceRight_marginalSupport_compression",
+        "Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression",
+        "Matrix.PosSemidef.marginalSupport_compression_marginals_posDef"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Faithful marginals after simultaneous support compression"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Channel of a faithful bipartite marginal",
+      "label": "thm:supported_marginal_channel",
+      "lean_declarations": [
+        "Matrix.finrank_range_supportedMarginalMap",
+        "Matrix.supportedMarginalMap_isKrausCPTP",
+        "Matrix.supportedMarginalMap_diagonal",
+        "Matrix.supportedMarginalReconstruction_eq"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Channel of a faithful bipartite marginal"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Isometric conjugation into a larger matrix algebra",
+      "label": "def:isometric_nonunital_conjugation",
+      "lean_declarations": [
+        "Matrix.isometryConjNonUnitalStarAlgHom",
+        "Matrix.isometryConjNonUnitalStarAlgHom_apply"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Isometric conjugation into a larger matrix algebra"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Functional calculus under rectangular isometric conjugation",
+      "label": "thm:cfc_rectangular_isometry_zero",
+      "lean_declarations": [
+        "Matrix.cfc_conj_isometry_of_zero"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Functional calculus under rectangular isometric conjugation"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Trace preservation under isometric inclusion",
+      "label": "thm:isometric_embedding_trace",
+      "lean_declarations": [
+        "Matrix.trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Trace preservation under isometric inclusion"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Compression cancels isometric expansion",
+      "label": "thm:isometric_compression_expansion",
+      "lean_declarations": [
+        "Matrix.conjTranspose_mul_mul_mul_conjTranspose_mul_of_isometry"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Compression cancels isometric expansion"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Reconstruction from a reference support",
+      "label": "thm:support_compression_reconstruction",
+      "lean_declarations": [
+        "Matrix.PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Reconstruction from a reference support"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Relative entropy under support compression",
+      "label": "thm:relative_entropy_support_compression",
+      "lean_declarations": [
+        "TNLean.quantumRelativeEntropy_support_compression"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Relative entropy under support compression"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Functional calculus under transpose",
+      "label": "thm:cfc_transpose_hermitian",
+      "lean_declarations": [
+        "Matrix.cfc_transpose",
+        "Matrix.IsHermitian.log_transpose",
+        "Matrix.PosSemidef.rpow_transpose",
+        "Matrix.PosSemidef.sqrt_transpose",
+        "Matrix.IsHermitian.supportProj_transpose"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Functional calculus under transpose"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Logarithm of a positive square root",
+      "label": "thm:log_sqrt_possemidef",
+      "lean_declarations": [
+        "Matrix.PosSemidef.cfc_log_sqrt"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Logarithm of a positive square root"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Logarithm of a real power",
+      "label": "thm:log_rpow_posdef",
+      "lean_declarations": [
+        "Matrix.PosDef.cfc_log_rpow"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Logarithm of a real power"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Support-aware vector-state Jensen inequality for the logarithm",
+      "label": "thm:support_log_vector_jensen",
+      "lean_declarations": [
+        "Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Support-aware vector-state Jensen inequality for the logarithm"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Order-two sandwiched trace functional",
+      "label": "def:sandwiched_renyi_two_trace",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Order-two sandwiched trace functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Nonnegativity of the order-two functional",
+      "label": "thm:sandwiched_renyi_two_nonneg",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_nonneg"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Nonnegativity of the order-two functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Faithful cyclic form of the order-two functional",
+      "label": "thm:sandwiched_renyi_two_weighted",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_eq_weighted"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Faithful cyclic form of the order-two functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Relative entropy bounded by the faithful order-two functional",
+      "label": "thm:relative_entropy_q2_posdef",
+      "lean_declarations": [
+        "TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Relative entropy bounded by the faithful order-two functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Order-two sandwiched functional under support compression",
+      "label": "thm:sandwiched_renyi_two_support_compression",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_support_compression"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Order-two sandwiched functional under support compression"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Reduction of the singular order-two comparison to the faithful case",
+      "label": "thm:relative_entropy_q2_faithful_reduction",
+      "lean_declarations": [
+        "TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Reduction of the singular order-two comparison to the faithful case"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Relative entropy bounded by the support-restricted order-two functional",
+      "label": "thm:relative_entropy_q2_support",
+      "lean_declarations": [
+        "TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Relative entropy bounded by the support-restricted order-two functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Matrix of a linear map in matrix-unit bases",
+      "label": "def:linear_map_matrix",
+      "lean_declarations": [
+        "Matrix.linearMapMatrix"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_rectangular_choi_bounds.tex",
+      "qic_title": "Matrix of a linear map in matrix-unit bases"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Unnormalized rectangular Choi matrix",
+      "label": "def:rectangular_choi",
+      "lean_declarations": [
+        "Matrix.rectangularChoi"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_rectangular_choi_bounds.tex",
+      "qic_title": "Unnormalized rectangular Choi matrix"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Frobenius norm under rectangular Choi reshaping",
+      "label": "thm:rectangular_choi_parseval",
+      "lean_declarations": [
+        "Matrix.rectangularChoi_frobenius_parseval"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_rectangular_choi_bounds.tex",
+      "qic_title": "Frobenius norm under rectangular Choi reshaping"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Matrix-unit Parseval identity for a rectangular Choi matrix",
+      "label": "thm:rectangular_choi_parseval_matrix_units",
+      "lean_declarations": [
+        "Matrix.rectangularChoi_frobenius_parseval_matrix_units"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_rectangular_choi_bounds.tex",
+      "qic_title": "Matrix-unit Parseval identity for a rectangular Choi matrix"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Hilbert--Schmidt contraction",
+      "label": "def:rectangular_hilbert_schmidt_contraction",
+      "lean_declarations": [
+        "Matrix.IsHilbertSchmidtContraction"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_rectangular_choi_bounds.tex",
+      "qic_title": "Hilbert--Schmidt contraction"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Rectangular Choi norm bounded by the range dimension",
+      "label": "thm:rectangular_choi_rank_bound",
+      "lean_declarations": [
+        "Matrix.rectangularChoi_frobenius_sq_le_finrank_range"
+      ],
+      "qic_file": "chapter/ch03_channel_representations_rectangular_choi_bounds.tex",
+      "qic_title": "Rectangular Choi norm bounded by the range dimension"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Full-support eigenbasis whitening as a Choi matrix",
+      "label": "thm:full_support_eigenbasis_whitening_choi",
+      "lean_declarations": [
+        "Matrix.rectangularChoi_singleKrausMap_comp_comp",
+        "Matrix.supportedMarginalWhitenedState_eq_rectangularChoi",
+        "Matrix.finrank_range_weightedHilbertSchmidtMap"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Full-support eigenbasis whitening as a Choi matrix"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Full-support eigenbasis whitened Choi estimate",
+      "label": "thm:full_support_eigenbasis_whitened_choi_bound",
+      "lean_declarations": [
+        "Matrix.supportedMarginalWhitenedState_posSemidef",
+        "Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank",
+        "Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Full-support eigenbasis whitened Choi estimate"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Real powers under unitary conjugation",
+      "label": "thm:rpow_conj_unitary",
+      "lean_declarations": [
+        "Matrix.rpow_conj_unitary"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Real powers under unitary conjugation"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Real powers of positive tensor products",
+      "label": "thm:rpow_kronecker_possemidef",
+      "lean_declarations": [
+        "Matrix.PosSemidef.rpow_kronecker"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Real powers of positive tensor products"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Inverse quarter-power from iterated square roots",
+      "label": "thm:rpow_neg_quarter_inv_sqrt_sqrt",
+      "lean_declarations": [
+        "Matrix.PosDef.rpow_neg_quarter_eq_inv_sqrt_sqrt"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Inverse quarter-power from iterated square roots"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Unitary invariance of the order-two functional",
+      "label": "thm:sandwiched_renyi_two_unitary_invariance",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_conj_unitary"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Unitary invariance of the order-two functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Reindexing invariance of the order-two functional",
+      "label": "thm:sandwiched_renyi_two_submatrix_equiv",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_submatrix_equiv"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Reindexing invariance of the order-two functional"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Faithful marginal whitening bound",
+      "label": "thm:sandwiched_renyi_two_osr_faithful",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Faithful marginal whitening bound"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Marginal-support whitening bound",
+      "label": "thm:sandwiched_renyi_two_osr_support",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Marginal-support whitening bound"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "definition",
+      "title": "Total sandwiched R\\'enyi trace",
+      "label": "def:sandwiched_renyi_trace",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTrace"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Total sandwiched R\\'enyi trace"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Nonnegativity on the faithful domain",
+      "label": "thm:sandwiched_renyi_trace_nonneg",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTrace_nonneg"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Nonnegativity on the faithful domain"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Order-one sandwiched trace",
+      "label": "thm:sandwiched_renyi_trace_one",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTrace_one"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Order-one sandwiched trace"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Order-two sandwiched trace",
+      "label": "thm:sandwiched_renyi_trace_two",
+      "lean_declarations": [
+        "TNLean.sandwichedRenyiTrace_two"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Order-two sandwiched trace"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "theorem",
+      "title": "Mutual information from operator-Schmidt rank",
+      "label": "thm:mutual_information_le_log_operator_schmidt_rank",
+      "lean_declarations": [
+        "Entropy.mutualInformation_le_log_operatorSchmidtRank"
+      ],
+      "qic_file": "chapter/ch12_entropy_classical_operator_schmidt_and_renyi.tex",
+      "qic_title": "Mutual information from operator-Schmidt rank"
+    },
+    {
+      "file": "chapter/ch27_channel_asymptotics_wedderburn_ii.tex",
+      "kind": "theorem",
+      "title": "Middle-factor coefficients of commuting overlapping operators",
+      "label": "thm:commuting_overlapping_middle_coefficients",
+      "lean_declarations": [
+        "Matrix.middleSlices_commute_of_overlappingLifts_commute",
+        "Matrix.leftOverlappingLift",
+        "Matrix.rightOverlappingLift",
+        "Matrix.leftMiddleSlice",
+        "Matrix.rightMiddleSlice"
+      ],
+      "qic_file": "chapter/ch09_channel_asymptotics_corner_and_overlap_decompositions.tex",
+      "qic_title": "Middle-factor coefficients of commuting overlapping operators"
+    },
+    {
+      "file": "chapter/ch27_channel_asymptotics_wedderburn_ii.tex",
+      "kind": "theorem",
+      "title": "Coefficient form of the commuting-overlap spatial decomposition",
+      "label": "thm:commuting_overlapping_coefficient_spatial_decomposition",
+      "lean_declarations": [
+        "Matrix.exists_middle_spatial_decomposition_of_overlappingLifts_commute",
+        "Matrix.star_rightMiddleSlice"
+      ],
+      "qic_file": "chapter/ch09_channel_asymptotics_corner_and_overlap_decompositions.tex",
+      "qic_title": "Coefficient form of the commuting-overlap spatial decomposition"
+    },
+    {
+      "file": "chapter/ch27_channel_asymptotics_wedderburn_ii.tex",
+      "kind": "theorem",
+      "title": "Explicit unitary block actions for commuting overlaps",
+      "label": "thm:commuting_overlapping_unitary_block_actions",
+      "lean_declarations": [
+        "Matrix.exists_unitary_blockActions_of_overlappingLifts_commute",
+        "Matrix.leftSpatialBlockEquiv",
+        "Matrix.rightSpatialBlockEquiv"
+      ],
+      "qic_file": "chapter/ch09_channel_asymptotics_corner_and_overlap_decompositions.tex",
+      "qic_title": "Explicit unitary block actions for commuting overlaps"
+    },
+    {
+      "file": "chapter/ch27_channel_asymptotics_wedderburn_ii.tex",
+      "kind": "theorem",
+      "title": "Block-sum equalities for commuting overlapping operators",
+      "label": "thm:commuting_overlapping_block_sum_equalities",
+      "lean_declarations": [
+        "Matrix.exists_unitary_blockSum_equalities_of_overlappingLifts_commute"
+      ],
+      "qic_file": "chapter/ch09_channel_asymptotics_corner_and_overlap_decompositions.tex",
+      "qic_title": "Block-sum equalities for commuting overlapping operators"
+    },
+    {
+      "file": "chapter/ch27_channel_asymptotics_direct_sum_schwarz_maps.tex",
+      "kind": "theorem",
+      "title": "Transport between spatial compressions",
+      "label": "thm:corner_compression_partial_isometry_transport",
+      "lean_declarations": [
+        "Matrix.exists_partial_isometry_transporting_compressions"
+      ],
+      "qic_file": "chapter/ch09_channel_asymptotics_corner_and_overlap_decompositions.tex",
+      "qic_title": "Transport between spatial compressions"
+    },
+    {
+      "file": "chapter/ch27_channel_asymptotics_direct_sum_schwarz_maps.tex",
+      "kind": "theorem",
+      "title": "Spatial implementation of an isomorphism between corners",
+      "label": "thm:corner_star_isomorphism_partial_isometry",
+      "lean_declarations": [
+        "Matrix.exists_partial_isometry_implementing_corner_linearEquiv"
+      ],
+      "qic_file": "chapter/ch09_channel_asymptotics_corner_and_overlap_decompositions.tex",
+      "qic_title": "Spatial implementation of an isomorphism between corners"
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex",
+      "kind": "lemma",
+      "title": "Cyclic trace identity for rectangular powers",
+      "label": "lem:matrix_trace_pow_mul_comm",
+      "lean_declarations": [
+        "Matrix.trace_pow_mul_comm"
+      ],
+      "qic_file": "chapter/ch01_cyclic_trace_power.tex",
+      "qic_title": "Cyclic trace identity for rectangular powers"
+    }
+  ],
+  "relocated_tn_nodes": [
+    {
+      "label": "lem:lower_zero_invariance",
+      "from": "chapter/ch27_channel_asymptotics_fixed_points_and_wedderburn_i.tex",
+      "to": "chapter/ch09_canonical_ft_reduction.tex"
+    },
+    {
+      "label": "thm:mps_component_map_bijective",
+      "from": "chapter/ch27_channel_asymptotics_direct_sum_schwarz_maps.tex",
+      "to": "chapter/ch11_fundamental_theorem_product_algebra_interfaces.tex"
+    },
+    {
+      "label": "thm:mps_dim_preserved",
+      "from": "chapter/ch27_channel_asymptotics_direct_sum_schwarz_maps.tex",
+      "to": "chapter/ch11_fundamental_theorem_product_algebra_interfaces.tex"
+    },
+    {
+      "label": "thm:wolf_6_8_kraus_span",
+      "from": "chapter/ch27_channel_asymptotics_fixed_point_structure_and_cycles.tex",
+      "to": "chapter/ch08_wielandt_cumulative_bound.tex"
+    },
+    {
+      "label": "thm:wolf_6_8_conjunction",
+      "from": "chapter/ch27_channel_asymptotics_fixed_point_structure_and_cycles.tex",
+      "to": "chapter/ch08_wielandt_cumulative_bound.tex"
+    },
+    {
+      "label": "rem:wolf_6_8_pairwise",
+      "from": "chapter/ch27_channel_asymptotics_fixed_point_structure_and_cycles.tex",
+      "to": "chapter/ch08_wielandt_cumulative_bound.tex"
+    }
+  ],
+  "paper_gap_ownership_transfers": [
+    {
+      "file": "docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpgsv17_pf_rank_one.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_example_4_12_normalization.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_global_vs_persector_unit_witness.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_simple_tensor_nilpotency.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_simple_tensor_nilpotency.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf",
+      "tn_disposition": "compatibility pointer only"
+    },
+    {
+      "file": "docs/paper-gaps/mpu_nil_matrix_bound.tex",
+      "canonical_url": "https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf",
+      "tn_disposition": "compatibility pointer only"
+    }
+  ],
+  "residual_shared_declaration_interfaces": [
+    {
+      "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+      "kind": "definition",
+      "title": "Word span",
+      "label": "def:word_span",
+      "shared_lean_declarations": [
+        "Kraus.wordSpan"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "MPS word-span notation used by blocked injectivity and the TN Wielandt argument."
+    },
+    {
+      "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+      "kind": "definition",
+      "title": "Fixed-length vector span of an MPS tensor",
+      "label": "def:mps_vector_spread_span",
+      "shared_lean_declarations": [
+        "Kraus.vectorSpreadSpan"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "MPS specialization of vector spreading used by the TN Wielandt chain."
+    },
+    {
+      "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+      "kind": "theorem",
+      "title": "Eigenvector extraction for an MPS tensor",
+      "label": "thm:mps_eigenvector_from_full_cumulative_span",
+      "shared_lean_declarations": [
+        "Kraus.exists_eigenvector_of_cumulativeSpan_eq_top"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "MPS specialization used in the TN cumulative-span argument."
+    },
+    {
+      "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+      "kind": "theorem",
+      "title": "Injectivity implies irreducibility",
+      "label": "thm:injective_irreducible",
+      "shared_lean_declarations": [
+        "Kraus.injective_implies_irreducibleCP"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is the MPS injectivity-to-channel-irreducibility interface."
+    },
+    {
+      "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+      "kind": "theorem",
+      "title": "Transfer map is CP",
+      "label": "thm:transfer_cp",
+      "shared_lean_declarations": [
+        "Kraus.transferMap_isCPMap"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement packages complete positivity for an MPS transfer map."
+    },
+    {
+      "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+      "kind": "lemma",
+      "title": "Trace adjointness of a transfer map",
+      "label": "lem:trace_mul_transfer_map_adjoint",
+      "shared_lean_declarations": [
+        "Kraus.trace_mul_transferMap_adjoint"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is trace adjointness in MPS transfer-map notation."
+    },
+    {
+      "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+      "kind": "lemma",
+      "title": "Left-canonical transfer maps preserve trace",
+      "label": "lem:trace_transfer_map_left_canonical",
+      "shared_lean_declarations": [
+        "Kraus.trace_transferMap"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is trace preservation for a left-canonical MPS tensor."
+    },
+    {
+      "file": "chapter/ch04_channels_transfer_map_foundations.tex",
+      "kind": "theorem",
+      "title": "Transfer map is a channel",
+      "label": "thm:transfer_channel",
+      "shared_lean_declarations": [
+        "Kraus.isChannel_transferMap"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement packages the MPS transfer map as a channel."
+    },
+    {
+      "file": "chapter/ch08_wielandt_fixed_length_and_normality.tex",
+      "kind": "lemma",
+      "title": "Eigenvector padding",
+      "label": "lem:eigenvector_padding",
+      "shared_lean_declarations": [
+        "Kraus.cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "MPS fixed-length padding lemma used in the normality argument."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Transfer-map PSD fixed point --- irreducible version",
+      "label": "thm:transfer_psd_fp_pd_irred",
+      "shared_lean_declarations": [
+        "Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement specializes fixed-point positivity to an irreducible MPS transfer map."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "PSD fixed point is positive definite",
+      "label": "thm:psd_fp_pd",
+      "shared_lean_declarations": [
+        "Kraus.posSemidef_fixedPoint_isPosDef"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is retained in the MPS Perron--Frobenius narrative."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Irreducible fixed-point uniqueness",
+      "label": "thm:psd_fp_unique_irred",
+      "shared_lean_declarations": [
+        "Kraus.posSemidef_fixedPoint_unique_of_irreducible"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is retained in the MPS Perron--Frobenius narrative."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Uniqueness of PSD fixed point",
+      "label": "thm:psd_fp_unique",
+      "shared_lean_declarations": [
+        "Kraus.posSemidef_fixedPoint_unique"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is retained in the MPS Perron--Frobenius narrative."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Existence of PSD fixed point",
+      "label": "thm:psd_fp_exists",
+      "shared_lean_declarations": [
+        "Kraus.exists_posSemidef_fixedPoint"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is retained in the MPS Perron--Frobenius narrative."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Quantum Perron--Frobenius",
+      "label": "thm:qpf",
+      "shared_lean_declarations": [
+        "Kraus.quantum_perron_frobenius"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The theorem is the TN-facing quantum Perron--Frobenius package for MPS transfer maps."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Quantum Perron--Frobenius for irreducible transfer maps",
+      "label": "thm:qpf_irreducible",
+      "shared_lean_declarations": [
+        "Kraus.quantum_perron_frobenius_irreducible"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The theorem is the irreducible MPS transfer-map specialization."
+    },
+    {
+      "file": "chapter/ch06_qpf.tex",
+      "kind": "theorem",
+      "title": "Left-canonical (trace-preserving) gauge",
+      "label": "thm:left_canonical_gauge",
+      "shared_lean_declarations": [
+        "Kraus.gauged_isTP_of_map_conjTranspose_fixedPoint",
+        "gauged_tracePreserving"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The theorem is the left-canonical gauge stated directly for tensor matrices."
+    },
+    {
+      "file": "chapter/ch02_mps.tex",
+      "kind": "definition",
+      "title": "Word evaluation",
+      "label": "def:eval_word",
+      "shared_lean_declarations": [
+        "Kraus.evalWord"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "Tensor-word evaluation is the public MPS notation used throughout TNLean."
+    },
+    {
+      "file": "chapter/ch02_mps.tex",
+      "kind": "definition",
+      "title": "Transfer map",
+      "label": "def:transfer_map",
+      "shared_lean_declarations": [
+        "Kraus.transferMap"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is the transfer map attached to an MPS tensor."
+    },
+    {
+      "file": "chapter/ch02_mps.tex",
+      "kind": "definition",
+      "title": "Injectivity",
+      "label": "def:injective",
+      "shared_lean_declarations": [
+        "Kraus.IsInjective"
+      ],
+      "disposition": "retained TN-facing interface",
+      "justification": "The statement is tensor injectivity in MPS vocabulary."
+    }
+  ],
+  "semantic_title_collisions_reviewed": [
+    {
+      "file": "chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+      "kind": "lemma",
+      "title": "Evaluation formula",
+      "label": "lem:ground_space_map_apply",
+      "qic_file": "chapter/ch09_channel_asymptotics_fixed_points_and_wedderburn_i.tex",
+      "qic_label": "lem:scalar_conditional_expectation_apply",
+      "disposition": "retained homonym; statements and declarations are unrelated"
+    },
+    {
+      "file": "chapter/ch07_spectral_mixed_transfer_and_overlap.tex",
+      "kind": "theorem",
+      "title": "Eigenvalue bound",
+      "label": "thm:eigenvalue_bound",
+      "qic_file": "chapter/ch12_entropy_von_neumann_and_relative_i.tex",
+      "qic_label": "thm:density_eigenvalues_le_one",
+      "disposition": "retained homonym; statements and declarations are unrelated"
+    }
+  ],
+  "unlabeled_residue_reviewed": [
+    {
+      "file": "chapter/ch09_canonical_forms_and_projectors_auxiliary.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch09_canonical_forms_and_projectors_auxiliary.tex",
+      "kind": "remark",
+      "title": "Scalar normalization conventions",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+      "kind": "remark",
+      "title": "Explicit blocking-length estimates",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPS-specific Wielandt exposition, explicitly excluded from migration."
+    },
+    {
+      "file": "chapter/ch08_wielandt_cumulative_bound.tex",
+      "kind": "remark",
+      "title": "Quantitative and qualitative Wielandt bounds",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPS-specific Wielandt exposition, explicitly excluded from migration."
+    },
+    {
+      "file": "chapter/ch15_examples_ghz.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch28_mpu.tex",
+      "kind": "remark",
+      "title": "Scope of the closed source-$u$ formulas",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPU application or source-scope remark."
+    },
+    {
+      "file": "chapter/ch28_mpu.tex",
+      "kind": "remark",
+      "title": "Scope of the open-tail algebra",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPU application or source-scope remark."
+    },
+    {
+      "file": "chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex",
+      "kind": "remark",
+      "title": "Word and restriction identities",
+      "lean_declarations": [
+        "List.ofFn_snoc",
+        "MPSTensor.evalWord_ofFn_snoc",
+        "MPSTensor.evalWord_ofFn_cons",
+        "MPSTensor.restrictLastₗ",
+        "MPSTensor.restrictFirstₗ",
+        "MPSTensor.restrictLast_apply",
+        "MPSTensor.restrictFirst_apply"
+      ],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_commuting_form_cyclic_active_markov.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_simple_local_normalized_preparations_completed_channels.tex",
+      "kind": "remark",
+      "title": "Scope of the completed preparation",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_bnt_coefficients.tex",
+      "kind": "remark",
+      "title": "Vertical and horizontal contractions",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch08_wielandt_fixed_length_and_normality.tex",
+      "kind": "remark",
+      "title": "Use of the quantum Wielandt theorem in the Fundamental Theorem",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPS-specific Wielandt exposition, explicitly excluded from migration."
+    },
+    {
+      "file": "chapter/ch24_peps_ft_region_transfer_covariance.tex",
+      "kind": "remark",
+      "title": "Normal-region form",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained expository remark in an intentionally preserved TN draft chapter."
+    },
+    {
+      "file": "chapter/ch26_mps_rfp_renormalization_flow_correlations.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch23_algebraic_ft_direct_sums_and_symmetry.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained expository remark in an intentionally preserved TN draft chapter."
+    },
+    {
+      "file": "chapter/ch23_algebraic_ft_direct_sums_and_symmetry.tex",
+      "kind": "remark",
+      "title": "Per-block restatement, not the multi-block paper theorem",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained expository remark in an intentionally preserved TN draft chapter."
+    },
+    {
+      "file": "chapter/ch23_algebraic_ft_direct_sums_and_symmetry.tex",
+      "kind": "remark",
+      "title": "Direct-sum congruence",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained expository remark in an intentionally preserved TN draft chapter."
+    },
+    {
+      "file": "chapter/ch23_algebraic_ft_direct_sums_and_symmetry.tex",
+      "kind": "remark",
+      "title": "Block-diagonal gauge from matched blocks",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained expository remark in an intentionally preserved TN draft chapter."
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex",
+      "kind": "remark",
+      "title": "Boundedness of the mutual information",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_commuting_form_bond_products.tex",
+      "kind": "remark",
+      "title": "An arbitrary proportional presentation need not have unit scalar",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch21_mpdo_rfp_commuting_form_bond_products.tex",
+      "kind": "remark",
+      "title": "The scalar edge formula depends on the one-site coordinates",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained expository remark in an intentionally preserved TN draft chapter."
+    },
+    {
+      "file": "chapter/ch02_mps.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch02_mps.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch02_mps.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "chapter/ch26_mps_rfp_zero_correlation_length.tex",
+      "kind": "remark",
+      "title": "Remaining obstructions in the printed converse",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPDO/MPS application or scope remark."
+    },
+    {
+      "file": "chapter/ch08_wielandt_word_span_and_block_injectivity.tex",
+      "kind": "remark",
+      "title": "",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPS-specific Wielandt exposition, explicitly excluded from migration."
+    },
+    {
+      "file": "appendix/ft_mps/ch09_canonical_blocking_and_sectors.tex",
+      "kind": "remark",
+      "title": "Scope of Theorem~\\ref{thm:exists_normal_canonical_form}",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained tensor-network exposition; no matching QIC-owned statement was found."
+    },
+    {
+      "file": "appendix/ft_mps/ch08_wielandt.tex",
+      "kind": "remark",
+      "title": "Burnside input for cumulative spanning",
+      "lean_declarations": [],
+      "disposition": "retained",
+      "justification": "Retained MPS-specific Wielandt exposition, explicitly excluded from migration."
+    }
+  ],
   "validation": {
-    "duplicate_audit": {
-      "all_residual_entries_classified_as_tn_interfaces": true,
-      "qic_owned_duplicate_entries_after": 0,
-      "qic_theorem_like_entries": 1245,
-      "same_label_shared_declaration_entries_after": 15,
-      "status": "passed",
-      "tn_theorem_like_entries_after": 3492
-    },
-    "git_diff_check": "passed",
-    "lake_build_TNLean": {
-      "latest_progress": "9710/10128",
-      "lean_errors_observed": 0,
-      "note": "The isolated full build exceeded the command wall-clock after sustained successful compilation; PR CI must complete it.",
-      "status": "timed_out",
-      "timeout_seconds": 600
-    },
-    "leanblueprint_checkdecls": {
-      "reason": "TNLean.olean was not produced before the full-build timeout; checkdecls therefore could not import the TNLean umbrella module.",
-      "status": "blocked"
-    },
-    "leanblueprint_pdf": {
-      "pages": 876,
-      "status": "passed"
-    },
-    "leanblueprint_web": "passed",
-    "reference_audit": {
-      "duplicate_label_definitions": 0,
-      "empty_uses_macros": 0,
-      "missing_uses_targets": 0,
-      "statement_specific_qiclean_citations": 135,
-      "status": "passed",
-      "unique_labels": 4405,
-      "unqualified_qiclean_citations": 0
-    },
-    "status": "partial"
+    "status": "pending",
+    "reference_audit": "pending",
+    "leanblueprint_checkdecls": "pending",
+    "leanblueprint_web": "pending",
+    "leanblueprint_pdf": "pending"
   }
 }

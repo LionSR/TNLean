@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.NeumannInverse
 import TNLean.MPS.ParentHamiltonian.GramConvergence
-import TNLean.MPS.ParentHamiltonian.LimitingGramMetric
+import QICLean.Channel.FixedPoint.LimitingGramMetric
 
 /-!
 # Convergence of inverse MPS Gram operators

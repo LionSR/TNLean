@@ -14,11 +14,11 @@ import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
 import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import QICLean.Analysis.MatrixTraceInequalities
-import TNLean.Algebra.MatrixCyclicTracePower
-import TNLean.Algebra.PerronFrobenius.Idempotent
-import TNLean.Algebra.PerronFrobenius.PerronVector
+import QICLean.Algebra.MatrixCyclicTracePower
+import QICLean.Algebra.PerronFrobenius.Idempotent
+import QICLean.Algebra.PerronFrobenius.PerronVector
 import QICLean.Algebra.PerronFrobenius.RankOne
-import TNLean.Algebra.PerronFrobenius.Substochastic
+import QICLean.Algebra.PerronFrobenius.Substochastic
 import QICLean.Algebra.TraceReindex
 
 /-!

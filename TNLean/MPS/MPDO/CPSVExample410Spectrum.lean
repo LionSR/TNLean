@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.EntropyDecomposition
 import QICLean.Channel.SingleKrausPositivity
-import TNLean.Algebra.MatrixIsometryKronecker
+import QICLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
 import TNLean.MPS.MPDO.CPSVExample410Operator
 import TNLean.MPS.MPDO.SourceZCLMarginal

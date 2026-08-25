@@ -1,58 +1,25 @@
 \documentclass{article}
 
-\usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[hidelinks]{hyperref}
 
-\input{./command}
+\input{command}
 
 \title{Global and Per-Sector Unit-Weight Witnesses in the CPSV16 BNT Argument}
 \author{}
-\date{2026-05-30}
+\date{2026-08-25}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{clarification}{resolved}
 
-\section{Closure record}
-
-Cirac--Perez-Garcia--Schuch--Verstraete 2016 normalizes the raw coefficients in
-the basis-of-normal-tensors expansion by a single global condition: Section
-II.C, line 246 requires \(|\mu_{j,q}|\le1\) for all copy weights and
-\(|\mu_{j_\ast,q_\ast}|=1\) for some copy.  The paper-level canonical form does
-not state that every BNT sector contains a copy of modulus one; a sector may
-carry only strictly subunit copy weights while another sector holds the global
-unit witness.  The formal predicate
-\leanid{MPSTensor.IsBNTCanonicalForm} records exactly this global witness
-through the field \leanid{MPSTensor.IsBNTCanonicalForm.weight_unit_exists}.
-
-Earlier full-basis matching and global-gauge theorems assumed the stronger
-per-sector condition \(\forall j,\ \exists q,\ |\mu_{j,q}|=1\), the price of an
-asymptotic matching route that projected onto single sectors through the
-Cesaro non-decay lemma.  That restriction has been eliminated.  The exact
-linear-independence matcher
-(\leanid{MPSTensor.exists_block_match_exact} for the equal case and
-\leanid{MPSTensor.exists_block_match_exact_of_eventuallyProportional} for the
-proportional case) works at one fixed sufficiently large length, and
-\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero} shows that the
-sector coefficient sum \(c^{(j)}_N=\sum_q\mu_{j,q}^N\) is nonzero infinitely
-often for any nonzero copy weights, with no modulus assumption.  The matching
-and global-gauge declarations therefore carry exactly the source hypothesis
-set.  The unitary equal-case assembly of Source Corollary A.6
-(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1197}, label
-\texttt{thm:Fundamental-CFII}) is complete on the same surface
-(\leanid{MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnesses} and
-\leanid{MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary}), again
-without a per-sector unit-weight assumption.
-
-The faithful structural normalization remains the global unit-weight field
-\path{MPSTensor.IsBNTCanonicalForm.weight_unit_exists} in
-\path{TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean}.  The interaction
-between this convention and the scale fixed by the MPDO renormalization
-equations is the separate note
-\path{docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex}.
-
-\bibliographystyle{alpha}
-\bibliography{references}
+The canonical owner of this paper-gap note is now QICLean.  The complete note
+is available at
+\url{https://sirui-lu.com/QICLean/paper-gaps/cpsv16_global_vs_persector_unit_witness.pdf}.
+QICLean assumed this generic quantum-information documentation together with
+the second-wave migration merged at commit
+\texttt{4aa26359094e6e2acf6a18d580758128007f7194}.  This TNLean file is retained
+only as a compatibility pointer for historical references in tensor-network
+source comments and audit records.
 
 \end{document}

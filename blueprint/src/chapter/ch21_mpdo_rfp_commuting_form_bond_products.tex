@@ -192,7 +192,7 @@
         exists_unitary_blockActions_of_pairBond}
     \lean{MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond}
     \leanok
-    \uses{def:mpdo_three_site_overlapping_coordinates, thm:mpdo_eta_bond_overlapping_lifts, thm:commuting_overlapping_unitary_block_actions}
+    \uses{def:mpdo_three_site_overlapping_coordinates, thm:mpdo_eta_bond_overlapping_lifts}
     Let $\widehat B$ be a pair-indexed positive two-site bond whose periodic
     translates commute. There are positive dimensions
     $d_{l,q}=\dim H_{q,l}$ and $d_{r,q}=\dim H_{q,r}$, a unitary decomposition
@@ -232,10 +232,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_eta_bond_overlapping_lifts, thm:commuting_overlapping_unitary_block_actions}
+    \uses{thm:mpdo_eta_bond_overlapping_lifts}
     The pair-indexed bond is Hermitian by positivity, and its two overlapping
     lifts commute by the common three-site identification. Apply
-    Theorem~\ref{thm:commuting_overlapping_unitary_block_actions}.
+    Theorem~\cite[``Explicit unitary block actions for commuting overlaps'']{QICLean2026Blueprint}.
 \end{proof}
 
 \begin{theorem}[Positive neighboring operators from the commuting bond]

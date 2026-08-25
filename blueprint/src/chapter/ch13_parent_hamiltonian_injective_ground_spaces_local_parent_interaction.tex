@@ -265,7 +265,7 @@ orthogonal projector is the canonical representative used here.
     \lean{Matrix.gramReshuffle}
     \lean{Matrix.gramReshuffleMatrix}
     \leanok
-    \uses{def:rectangular_choi}
+
     For a complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, let
     $R(\mathcal L)$ be the matrix with entries
     \begin{align}
@@ -479,7 +479,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{def:rectangular_choi, thm:gram_reshuffle_norm_sq_le_rectangular_choi, thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq, thm:l2_operator_norm_matrix_unit}
+    \uses{thm:gram_reshuffle_norm_sq_le_rectangular_choi, thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq, thm:l2_operator_norm_matrix_unit}
     Use Theorem~\ref{thm:gram_reshuffle_norm_sq_le_rectangular_choi} and expand
     the Choi matrix in matrix units.  For each of the $|I|^2$ input matrix
     units, Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
@@ -535,7 +535,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:ground_space_gram_choi_reshuffling}
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
     \leanok
-    \uses{def:ground_space_gram, def:transfer_map, def:rectangular_choi}
+    \uses{def:ground_space_gram, def:transfer_map}
     Let $\mathbf e_{(j,i)}:=\operatorname{single}_{(j,i)}(1)$ denote the
     standard unit vector in $\ell^2(\Fin{D}\times\Fin{D})$, and let
     $\mathcal E_A$ be the transfer map.  Then

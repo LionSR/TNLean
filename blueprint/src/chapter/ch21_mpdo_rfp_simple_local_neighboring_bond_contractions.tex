@@ -981,8 +981,7 @@
         MPOTensor.PhysicalSupportRestrictionData.changePhysicalBasis_supportCoordinateChange,
         MPOTensor.PhysicalSupportRestrictionData.exists_neighboringTraceFactorization_restriction_iff}
     \leanok
-    \uses{def:gauge_equiv, def:mpdo_neighboring_trace_factorization,
-        def:mpdo_physical_support_restriction}
+    \uses{def:gauge_equiv, def:mpdo_neighboring_trace_factorization, def:mpdo_physical_support_restriction}
     Suppose that two MPO tensors of the same physical and virtual dimensions
     differ by an invertible virtual gauge.  One admits a physical-sector
     factorization with neighboring data $\eta_{k,h}$, $a_k$, and $b_h$ if and
@@ -1020,8 +1019,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_physical_sector_factorization_gauge,
-        thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
+    \uses{thm:mpdo_physical_sector_factorization_gauge, thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
     For the virtual gauge $L^i=XK^iX^{-1}$, write
     $\eta^K_{k,h}(M)$ for the neighboring contraction with $M$ inserted
     between the transported virtual factors.  Their composition is
@@ -1114,24 +1112,9 @@
     zero-weight part vanishes by hypothesis.
 \end{proof}
 
-\begin{lemma}[Cyclic trace identity for rectangular powers]
-    \label{lem:matrix_trace_pow_mul_comm}
-    \lean{Matrix.trace_pow_mul_comm}
-    \leanok
-    For rectangular matrices $L$ and $Q$ over a commutative semiring and every
-    integer $N\geq1$,
-    \begin{align}
-        \tr\bigl((LQ)^N\bigr)&=\tr\bigl((QL)^N\bigr).
-        \notag
-    \end{align}
-\end{lemma}
 
-\begin{proof}
-    \leanok
-    Write $N=M+1$. Induction on $M$ gives
-    $(LQ)^{M+1}=L(QL)^M Q$. Moving the first factor cyclically through the
-    trace and reassociating the product gives $\tr((QL)^{M+1})$.
-\end{proof}
+The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Cyclic trace identity for rectangular powers'']{QICLean2026Blueprint}.
+
 
 \begin{theorem}[Unit closure traces from a neighboring trace factorization]
     \label{thm:mpdo_neighboring_trace_unit_closure}
@@ -1145,9 +1128,7 @@
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_eq_one,
       MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_mpo_eq_one}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization,
-      def:mpdo_neighboring_trace_factorization,
-      def:mpo_physical_trace_transfer, def:mpo_family}
+    \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization, def:mpo_physical_trace_transfer, def:mpo_family}
     Let $M$ be an MPO tensor admitting a physical-sector factorization whose
     neighboring operators satisfy the trace factorization of
     Definition~\ref{def:mpdo_neighboring_trace_factorization}. Closing the
@@ -1186,9 +1167,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_neighboring_trace_factorization,
-      def:mpo_physical_trace_transfer, thm:mpdo_closed_sector_physical_trace_transfer,
-      lem:matrix_trace_pow_mul_comm, lem:mpdo_trace_loop_chain}
+    \uses{def:mpdo_neighboring_trace_factorization, def:mpo_physical_trace_transfer, thm:mpdo_closed_sector_physical_trace_transfer, lem:mpdo_trace_loop_chain}
     Closing the physical legs of each factorized slice and using unitary
     invariance of the trace expresses each entry of the physical-trace
     transfer as $\sum_k\tr((l_k)_\beta)\tr((r_k)_\alpha)$, which is the
