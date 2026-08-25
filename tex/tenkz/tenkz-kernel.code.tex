@@ -15175,33 +15175,88 @@
           }
       }
   }
-% reach past the referencing wire's first waypoint: #1 the wire record id
+\tl_new:N \l__tenkz_kernel_leg_ref_kind_tl
+\tl_new:N \l__tenkz_kernel_leg_ref_end_tl
+\fp_new:N \l__tenkz_kernel_leg_ref_x_fp
+\fp_new:N \l__tenkz_kernel_leg_ref_y_fp
+% reach to the referencing wire's own resolved ends: #1 the wire record id
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_reach:n #1
   {
-    \__tenkz_model_get:nnN {#1} {via} \l__tenkz_kernel_r_c_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+    % Only an authored wire's ends are address nodes; a skin pairing's
+    % record spells its ends in port grammar and contributes no reach, as
+    % it contributed none when this read the waypoint field.
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_leg_ref_kind_tl
+    \bool_lazy_and:nnT
+      { ! \quark_if_no_value_p:N \l__tenkz_kernel_leg_ref_kind_tl }
       {
-        \clist_map_inline:Vn \l__tenkz_kernel_r_c_tl
+        \str_if_eq_p:Vn \l__tenkz_kernel_leg_ref_kind_tl {string}
+        || \str_if_eq_p:Vn \l__tenkz_kernel_leg_ref_kind_tl {index}
+      }
+      { \__tenkz_kernel_r_leg_reach_ends:n {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_reach_ends:n #1
+  {
+    \clist_map_inline:nn { from , to }
+      {
+        \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_leg_ref_end_tl
+        % An end that stands on another string -- an on-wire fraction, a
+        % crossing, a leg -- resolves only after routes are saved, and an
+        % open end stands at the frame boundary, past every crossing its
+        % wire makes on the way; neither bounds the crossing, so neither
+        % contributes reach, as neither did when this read the waypoint
+        % field.  Every other frame-anchored end resolves now.
+        \bool_lazy_all:nT
           {
-            \__tenkz_kernel_addr:nN {##1} \l__tenkz_kernel_r_b_tl
-            \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_b_tl
-            \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_b_tl }
-              \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
-            % how far the waypoint stands ALONG THE LEG: both ends are
-            % resolved page points, so the distance between them is the
+            { ! \quark_if_no_value_p:N \l__tenkz_kernel_leg_ref_end_tl }
+            {
+              \str_if_eq_p:ee
+                { \str_range:Nnn \l__tenkz_kernel_leg_ref_end_tl {1} {5} } {addr-}
+            }
+            {
+              ! \str_if_eq_p:ee
+                  { \__tenkz_kernel_r_item:nn
+                      { \tl_use:N \l__tenkz_kernel_leg_ref_end_tl } {kind} }
+                  {crossing}
+            }
+            {
+              ! \str_if_eq_p:ee
+                  { \__tenkz_kernel_r_item:nn
+                      { \tl_use:N \l__tenkz_kernel_leg_ref_end_tl } {kind} }
+                  {onwire}
+            }
+            {
+              ! \str_if_eq_p:ee
+                  { \__tenkz_kernel_r_item:nn
+                      { \tl_use:N \l__tenkz_kernel_leg_ref_end_tl } {kind} }
+                  {leg}
+            }
+            {
+              ! \str_if_eq_p:ee
+                  { \__tenkz_kernel_r_item:nn
+                      { \tl_use:N \l__tenkz_kernel_leg_ref_end_tl } {kind} }
+                  {outside}
+            }
+          }
+          {
+            \__tenkz_kernel_r_node:V \l__tenkz_kernel_leg_ref_end_tl
+            \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_leg_ref_end_tl }
+              \l__tenkz_kernel_leg_ref_x_fp \l__tenkz_kernel_leg_ref_y_fp
+            % how far the wire stands ALONG THE LEG: the wire's own ends
+            % are resolved page points, so each one's distance is the
             % projection onto the direction the leg leaves in.  Down the
-            % page it is the old vertical delta, and a waypoint behind the
-            % leg projects negative rather than lengthening it backwards.
+            % page it is the old vertical delta, an end behind the leg
+            % projects negative rather than lengthening it backwards, and
+            % the farther of the two ends is where the declared crossing
+            % can stand at its highest.
             \fp_set:Nn \l__tenkz_kernel_r_reach_fp
               {
                 max( \l__tenkz_kernel_r_reach_fp ,
-                     ( \l__tenkz_kernel_r_xc_fp - \l__tenkz_kernel_r_x_fp )
+                     ( \l__tenkz_kernel_leg_ref_x_fp - \l__tenkz_kernel_r_x_fp )
                        * cosd( \l__tenkz_kernel_leg_dir_tl )
-                     + ( \l__tenkz_kernel_r_yc_fp - \l__tenkz_kernel_r_y_fp )
+                     + ( \l__tenkz_kernel_leg_ref_y_fp - \l__tenkz_kernel_r_y_fp )
                        * sind( \l__tenkz_kernel_leg_dir_tl )
                      + \__tenkz_metric_ratio:n {legcrossclear} )
               }
-            \clist_map_break:
           }
       }
   }

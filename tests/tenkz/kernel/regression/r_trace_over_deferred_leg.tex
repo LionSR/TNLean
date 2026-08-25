@@ -12,9 +12,11 @@
 % closure's east-bulging return then sweeps directly over column 2, and its
 % arc peak lands exactly on column 2 when the excursion is twice the column
 % pitch.  Column 2's own north leg is deferred by a declared crossing
-% against a waypointed string well above the arc, which stretches the leg
-% far enough that its shaft actually crosses the arc instead of stopping
-% short of it.  The hook below pins that the leg really is deferred and
+% against a string running well above the arc, whose own resolved ends
+% stretch the leg far enough that its shaft actually crosses the arc
+% instead of stopping short of it (the reach reads the wire's ends since
+% the waypoint field retired from the mechanism; the string's former
+% interior waypoint went with it, so the drawn path is the chord).  The hook below pins that the leg really is deferred and
 % really is stretched past the arc's own excursion, so the fixture is not
 % vacuous; the pixel ledger pins which ink reads as the top stroke.
 \documentclass{standalone}
@@ -59,7 +61,7 @@
               trace={(physical,1)}]
   \tn[at=(1,1), name=A, skin=box]{A} & \tn[at=(1,2), name=D, skin=box]{D} \\
   \tn[at=(2,1), name=C, skin=box]{C} & \tn[at=(2,2), name=E, skin=box]{E}
-  \tnwire[kind=string, name=g, crossing=over, via={2 n of D},
+  \tnwire[kind=string, name=g, crossing=over,
     cross={over at crossing of g and leg-n-1-2}]
     {2 n of A}{2 ne of D}
 \end{tenkz}
