@@ -136,8 +136,8 @@ private theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
         h (2 : Fin 4) (by decide)
     · intro h k hk
       fin_cases k <;>
-        simp [fourCycleOverlappingEquiv, fourCycleTripartiteEquiv] at hk ⊢
-      exact h
+        convert h using 1 <;>
+          simp [fourCycleOverlappingEquiv, fourCycleTripartiteEquiv] at hk ⊢
   have hExtract (a : Fin d) (b : Fin (d * d)) (c : Fin d) :
       MPSTensor.extractWindow 3 (3 : Fin 4)
           (fourCycleOverlappingEquiv d ⟨⟨a, b⟩, c⟩) =
@@ -180,8 +180,8 @@ private theorem reindex_embedLocalOperator_three_eq_rightOverlappingLift
         h (0 : Fin 4) (by decide)
     · intro h k hk
       fin_cases k <;>
-        simp [fourCycleOverlappingEquiv, fourCycleTripartiteEquiv] at hk ⊢
-      exact h
+        convert h using 1 <;>
+          simp [fourCycleOverlappingEquiv, fourCycleTripartiteEquiv] at hk ⊢
   have hExtract (a : Fin d) (b : Fin (d * d)) (c : Fin d) :
       MPSTensor.extractWindow 3 (1 : Fin 4)
           (fourCycleOverlappingEquiv d ⟨⟨a, b⟩, c⟩) =

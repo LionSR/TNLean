@@ -41,7 +41,7 @@ theorem rectSpan_nilpIndex_strict_growth_of_isNormal
     finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) <
       finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) := by
   by_contra h
-  push_neg at h
+  push Not at h
   have hmono := Kraus.rectSpan_nilpIndex_finrank_mono A i₀ n
   have hfin : finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
       finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1)) := by omega

@@ -266,9 +266,8 @@ theorem sectors_wordTupleSpanTop_one :
     funext s
     fin_cases s <;> ext a b <;> fin_cases a <;> fin_cases b
     · simp [MPSTensor.wordTuple, w₀, w₁, basis, firstBasisTensor,
-        evalWord, invSqrtTwo_ne_zero]
-    · simp [MPSTensor.wordTuple, w₀, w₁, basis, secondBasisTensor,
-        evalWord]
+        invSqrtTwo_ne_zero]
+    · simp [MPSTensor.wordTuple, w₀, w₁, basis, secondBasisTensor]
   rw [hEq]
   exact Submodule.add_mem _
     (Submodule.smul_mem _ _ hw₀) (Submodule.smul_mem _ _ hw₁)
