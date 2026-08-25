@@ -36,13 +36,13 @@ theorem transferMap_blockTensor_apply
   -- Expand the RHS as a sum over length-`L` words.
   rw [Kraus.transferMap_pow_apply' (A := A) (N := L) X]
   -- Expand the LHS as a sum over blocked physical indices.
-  simp only [Kraus.transferMap_apply, blockTensor, wordOfBlock]
+  simp only [Kraus.transferMap_apply, Kraus.blockTensor, Kraus.wordOfBlock]
   -- Reindex the blocked sum by the equivalence `Fin (blockPhysDim d L) ≃ (Fin L → Fin d)`.
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
     decodeBlockEquiv d L
   -- After rewriting `decodeBlock` in terms of `e`, `Fintype.sum_equiv` is exactly the desired
   -- reindexing statement.
-  simpa [decodeBlockEquiv_apply, e] using
+  simpa [Kraus.decodeBlockEquiv_apply, e] using
     (Fintype.sum_equiv e
       (f := fun i =>
         Kraus.evalWord A (List.ofFn (e i)) * X * (Kraus.evalWord A (List.ofFn (e i)))ᴴ)

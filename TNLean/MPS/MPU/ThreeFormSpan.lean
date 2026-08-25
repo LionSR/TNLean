@@ -341,8 +341,8 @@ private theorem doubleLayer_entry_eq_diagonal_add_residual
     simp
 
 private theorem diagonal_coeff_prod_eq
-    {N d : ℕ} (I J : Fin (MPSTensor.blockPhysDim d N)) :
-    (∏ k : Fin N, if MPSTensor.decodeBlock d N I k = MPSTensor.decodeBlock d N J k
+    {N d : ℕ} (I J : Fin (Kraus.blockPhysDim d N)) :
+    (∏ k : Fin N, if Kraus.decodeBlock d N I k = Kraus.decodeBlock d N J k
       then (1 : ℂ) else 0) = if I = J then 1 else 0 := by
   classical
   by_cases hIJ : I = J
@@ -350,11 +350,11 @@ private theorem diagonal_coeff_prod_eq
     simp
   · rw [ite_eq_right hIJ]
     have hdiff : ∃ k : Fin N,
-        MPSTensor.decodeBlock d N I k ≠ MPSTensor.decodeBlock d N J k := by
+        Kraus.decodeBlock d N I k ≠ Kraus.decodeBlock d N J k := by
       by_contra h
       push Not at h
       apply hIJ
-      exact (MPSTensor.decodeBlockEquiv d N).injective (funext h)
+      exact (Kraus.decodeBlockEquiv d N).injective (funext h)
     obtain ⟨k, hk⟩ := hdiff
     exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right hk)
 
@@ -375,8 +375,8 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
       threeFormSubmodule (normalizedDiagonal (doubleLayerTensor U)) (residualAlgebra U) := by
   classical
   let E := normalizedDiagonal (doubleLayerTensor U)
-  let σ := MPSTensor.decodeBlock d (D * D) I
-  let τ := MPSTensor.decodeBlock d (D * D) J
+  let σ := Kraus.decodeBlock d (D * D) I
+  let τ := Kraus.decodeBlock d (D * D) J
   let c : Fin (D * D) → ℂ := fun k ↦ if σ k = τ k then 1 else 0
   let S : Fin (D * D) → residualAlgebra U := fun k ↦
     ⟨residualSlice (doubleLayerTensor U) (Matrix.single (τ k) (σ k) 1),
@@ -388,7 +388,7 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
     hN (fun l hl hlen ↦ hU.residualAlgebra_list_prod_eq_zero l hl hlen) c S
   have hentry : MPOTensor.blockTensor (doubleLayerTensor U) (D * D) I J =
       (List.ofFn (fun k ↦ c k • E + (S k : Matrix (Fin (D * D)) (Fin (D * D)) ℂ))).prod := by
-    simp only [blockTensor_apply, MPSTensor.wordOfBlock, evalWord_ofFn]
+    simp only [blockTensor_apply, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn]
     apply congrArg List.prod
     apply congrArg List.ofFn
     funext k

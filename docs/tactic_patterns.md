@@ -1110,9 +1110,11 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** four local calculations in `Martingale/BlockedGap.lean` repeated the same
   three-line construction of `NeZero (blockPhysDim d p)`, and the qualitative blocked-gap
   theorem repeated the anticommutator route already used by the preceding explicit-gap theorem.
-- **Reuse:** `TNLean/MPS/Core/Blocking.lean` now provides the instance
-  `MPSTensor.instNeZeroBlockPhysDim`, replacing exactly those four local calculations in
-  `Martingale/BlockedGap.lean`.
+- **Reuse:** QICLean's `Kraus.instNeZeroBlockPhysDim` provides the instance,
+  replacing exactly those four local calculations in `Martingale/BlockedGap.lean`.
+  The former TNLean instance `MPSTensor.instNeZeroBlockPhysDim` was an exact
+  duplicate and has been retired; `MPSTensor.blockPhysDim` is an abbreviation
+  of `Kraus.blockPhysDim`, so the canonical instance applies directly.
   `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` is now a thin
   corollary of `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth`,
   using `1 / 8` as the positive gap witness.

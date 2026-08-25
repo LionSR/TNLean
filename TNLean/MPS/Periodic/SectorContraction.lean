@@ -84,12 +84,15 @@ theorem ofFn_blockFlattenEquiv (d m L : ℕ) (σ : Fin L → Fin (blockPhysDim d
   have hword :
       wordOfBlock (blockPhysDim d m) L
           ((decodeBlockEquiv (blockPhysDim d m) L).symm σ) = List.ofFn σ := by
-    rw [wordOfBlock, decodeBlock_decodeBlockEquiv_symm]
+    change List.ofFn
+        (Kraus.decodeBlock (Kraus.blockPhysDim d m) L
+          ((Kraus.decodeBlockEquiv (Kraus.blockPhysDim d m) L).symm σ)) = List.ofFn σ
+    rw [Kraus.decodeBlock_decodeBlockEquiv_symm]
   calc List.ofFn (blockFlattenEquiv d m L σ)
       = wordOfBlock d (m * L)
           (iteratedBlockIndex d m L ((decodeBlockEquiv (blockPhysDim d m) L).symm σ)) := by
         simp only [blockFlattenEquiv, Equiv.trans_apply, decodeBlockEquiv_apply,
-          directIteratedBlockEquiv_symm_apply, wordOfBlock]
+          directIteratedBlockEquiv_symm_apply, Kraus.wordOfBlock]
     _ = flattenBlockedWord d m
           (wordOfBlock (blockPhysDim d m) L ((decodeBlockEquiv (blockPhysDim d m) L).symm σ)) :=
         wordOfBlock_iteratedBlockIndex d m L _

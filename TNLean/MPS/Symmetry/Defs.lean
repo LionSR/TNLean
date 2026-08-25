@@ -151,7 +151,8 @@ lemma twistedTensor_blockTensor_comm
   classical
   funext I
   rw [twistedTensor]
-  simp only [blockKronAction_apply, blockKron, blockTensor, wordOfBlock]
+  simp only [blockKronAction_apply, blockKron, Kraus.blockTensor,
+    Kraus.wordOfBlock]
   have hEval :
       Kraus.evalWord (twistedTensor A U g) (List.ofFn (decodeBlock d L I)) =
         ∑ v : Fin L → Fin d,
@@ -162,7 +163,7 @@ lemma twistedTensor_blockTensor_comm
   -- Reindex the sum over words by the blocked index.
   rw [← (decodeBlockEquiv d L).sum_comp]
   refine Finset.sum_congr rfl (fun J _ => ?_)
-  simp [decodeBlockEquiv_apply]
+  simp [Kraus.decodeBlockEquiv_apply]
 
 /-- On-site symmetry transfers to the blocked tensor under the Kronecker-power
 action: if `A` is on-site symmetric under `U`, then `blockTensor A L` is on-site

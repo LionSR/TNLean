@@ -136,7 +136,7 @@ lemma decodeBlock_blockedDoubledIndexEquiv (d L : ℕ)
         (MPSTensor.decodeBlock d L ij.divNat k,
           MPSTensor.decodeBlock d L ij.modNat k) := by
   simp [blockedDoubledIndexEquiv, Equiv.arrowCongr,
-    MPSTensor.decodeBlockEquiv_apply]
+    Kraus.decodeBlockEquiv_apply]
 
 /-- Physical blocking commutes with passing from an MPO tensor to its
 doubled-index MPS tensor, up to the canonical pairing of the blocked ket and
@@ -147,7 +147,7 @@ theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
         (MPSTensor.blockTensor M.toMPSTensor L) := by
   funext ij
   simp [toMPSTensor, blockTensor_apply, Kraus.reindexPhysical,
-    MPSTensor.blockTensor, MPSTensor.wordOfBlock, MPOTensor.evalWord_ofFn,
+    Kraus.blockTensor, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn,
     MPSTensor.evalWord_ofFn_eq_prod, decodeBlock_blockedDoubledIndexEquiv,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
@@ -170,12 +170,12 @@ theorem blockTensor_mulTensor {D₁ D₂ : ℕ}
   funext I K
   rw [blockTensor_apply, mulTensor_apply]
   change evalWord (mulTensor M N)
-      (List.ofFn (MPSTensor.decodeBlock d L I))
-      (List.ofFn (MPSTensor.decodeBlock d L K)) = _
+      (List.ofFn (Kraus.decodeBlock d L I))
+      (List.ofFn (Kraus.decodeBlock d L K)) = _
   rw [evalWord_mulTensor]
-  rw [← (MPSTensor.decodeBlockEquiv d L).sum_comp]
-  simp only [MPSTensor.decodeBlockEquiv_apply, blockTensor_apply,
-    MPSTensor.wordOfBlock]
+  rw [← (Kraus.decodeBlockEquiv d L).sum_comp]
+  simp only [Kraus.decodeBlockEquiv_apply, blockTensor_apply,
+    Kraus.wordOfBlock]
 
 private theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
     (s t : Fin N → Fin (MPSTensor.blockPhysDim d L)) :
@@ -184,10 +184,10 @@ private theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ
         (MPSTensor.flattenBlockedWord d L (List.ofFn t)) := by
   induction N with
   | zero =>
-      simp [MPSTensor.flattenBlockedWord]
+      simp
   | succ N ih =>
       simp only [List.ofFn_succ, evalWord_cons, blockTensor_apply,
-        MPSTensor.flattenBlockedWord_cons]
+        Kraus.flattenBlockedWord_cons]
       rw [ih]
       rw [evalWord_append M _ _ _ _ (by simp)]
 
@@ -264,8 +264,8 @@ theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
         (MPSTensor.blockTensor M.toMPSTensor 2) := by
   funext ij
   simp [toMPSTensor, blockTwo, Kraus.reindexPhysical,
-    MPSTensor.blockTensor, evalWord, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
-    blockedDoubledIndexEquiv, MPSTensor.wordOfBlock, Equiv.arrowCongr]
+    Kraus.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
+    blockedDoubledIndexEquiv, Kraus.wordOfBlock, Equiv.arrowCongr]
 
 /-- The concrete two-site blocking is the general length-two blocking after
 the canonical relabeling of each physical index.
@@ -275,7 +275,7 @@ theorem blockTwo_eq_blockTensor_reindex (M : MPOTensor d D) :
     blockTwo M = fun i j ↦
       blockTensor M 2 (twoSiteBlockEquiv d i) (twoSiteBlockEquiv d j) := by
   funext i j
-  simp [blockTwo, blockTensor, twoSiteBlockEquiv, MPSTensor.wordOfBlock]
+  simp [blockTwo, blockTensor, twoSiteBlockEquiv, Kraus.wordOfBlock]
 
 /-- Closing a chain of concrete two-site blocks is the same as closing a
 chain of general length-two blocks, after relabeling every physical index.
