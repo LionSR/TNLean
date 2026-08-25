@@ -17,7 +17,6 @@
       \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
       % Initially O_g lies above the PEPS, while O_h crosses the window.
       \tnwire[kind=string, species=operator, name=g,
-              via={(1,1), (1,2), (1,3), (1,4), (1,5)},
               cross={over at crossing of g and v1, over at crossing of g and v2,
                      over at crossing of g and v3, over at crossing of g and v4,
                      over at crossing of g and v5, over at crossing of g and h}]
@@ -28,8 +27,6 @@
       \tn[species=operator, at=crossing of g and v4]{}
       \tn[species=operator, at=crossing of g and v5, label pos=0]{O_g}
       \tnwire[kind=string, species=passive, name=h,
-              via={midway (2,3) and (2,4), midway (3,3) and (3,4),
-                   midway (4,3) and (4,4), midway (5,3) and (5,4)},
               cross={over at crossing of h and h1, over at crossing of h and h2,
                      over at crossing of h and h3, over at crossing of h and h4,
                      over at crossing of h and h5}]
@@ -51,7 +48,6 @@
       \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
       % After the pull, O_g runs below the crossing tensor.
       \tnwire[kind=string, species=operator, name=g,
-              via={midway (4,2) and (5,2), midway (4,4) and (5,4)},
               cross={over at crossing of g and v2, over at crossing of g and v3,
                      over at crossing of g and v4, over at crossing of g and h}]
         {midway (4,1) and (5,1)}{midway (4,5) and (5,5)}
@@ -62,8 +58,6 @@
       \tn[species=operator, at=midway (4,5) and (5,5), label pos=0]{O_g}
       % O_h remains vertical.  The crossing is the enlarged MPO tensor.
       \tnwire[kind=string, species=passive, name=h,
-              via={midway (2,3) and (2,4), midway (3,3) and (3,4),
-                   midway (4,3) and (4,4), midway (5,3) and (5,4)},
               cross={over at crossing of h and h1, over at crossing of h and h2,
                      over at crossing of h and h3, over at crossing of h and h4,
                      over at crossing of h and h5}]
