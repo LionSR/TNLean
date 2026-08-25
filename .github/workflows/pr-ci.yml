@@ -147,7 +147,7 @@ jobs:
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -219,7 +219,7 @@ jobs:
           fetch-depth: 0
 
       - name: Restore Lean build cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
           key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
@@ -309,7 +309,7 @@ jobs:
       # Restore only caches saved after the complete build and style checks pass.
       - name: Save Lean build cache (main only)
         if: success() && github.ref == 'refs/heads/main'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
           key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
