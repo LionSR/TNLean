@@ -29,17 +29,21 @@
     % The i string enters the resolver, which fans out to b, a, b.
     \tnwire[kind=string, species=operator, name=incoming]
       {i.315}{R.45}
-    \tnwire[kind=string, species=operator, name=sb, via={bL},
-            cross={under at crossing of sb and incoming}]
-      {R.s}{open s}
-    \tnwire[kind=string, species=operator, name=sa,
-            via={a}, cross={over at crossing of sa and sb,
-                            under at crossing of sa and incoming}]
-      {R.w}{open s}
-    \tnwire[kind=string, species=operator, name=sbr,
-            via={bR},
-            cross={over at crossing of sbr and sb,
-                   over at crossing of sbr and sa,
-                   under at crossing of sbr and incoming}]{R.e}{open s}
+    \tnwire[kind=string, species=operator, name=sb-1,
+            cross={under at crossing of sb-1 and incoming,
+                   over at crossing of sb-1 and sb-2}]
+      {R.s}{bL}
+    \tnwire[kind=string, species=operator, name=sb-2]{bL}{open s}
+    \tnwire[kind=string, species=operator, name=sa-1,
+            cross={over at crossing of sa-1 and sb-1,
+                   under at crossing of sa-1 and incoming}]
+      {R.w}{a}
+    \tnwire[kind=string, species=operator, name=sa-2]{a}{open s}
+    \tnwire[kind=string, species=operator, name=sbr-1,
+            cross={over at crossing of sbr-1 and sb-1,
+                   over at crossing of sbr-1 and sa-1,
+                   under at crossing of sbr-1 and incoming,
+                   over at crossing of sbr-1 and sbr-2}]{R.e}{bR}
+    \tnwire[kind=string, species=operator, name=sbr-2]{bR}{open s}
   \end{tenkz}
 \]

@@ -102,8 +102,12 @@
 \__tenkz_test_affine_open_rays:
 \ExplSyntaxOff
 \begin{tenkz}[rows={wire,wire,wire}, cols=5, frame=plane, bonds=none]
-  \tn[at=(2,2), skin=box]{A}
-  \tn[at=(2,4), skin=box]{B}
-  \tnwire[kind=string, route=orth, via={(2,2),(2,4)}]{open ne}{open sw}
+  \tn[at=(2,2), name=A, skin=box]{A}
+  \tn[at=(2,4), name=B, skin=box]{B}
+  \tnwire[kind=string, name=segAff1]{open ne}{A}
+  \tnwire[kind=string, name=segAff2,
+          cross={over at crossing of segAff1 and segAff2}]{A}{B}
+  \tnwire[kind=string, name=segAff3,
+          cross={over at crossing of segAff2 and segAff3}]{B}{open sw}
 \end{tenkz}
 \end{document}

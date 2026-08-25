@@ -8,20 +8,16 @@
 % Source: paper TN-Review-main.tex line 331; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 287-304
 % Capabilities: kernel, plane-frame
-\tenkzkernel
-\[
-\begin{gathered}
+\tenkzkernel \[ \begin{gathered}
   % The state sheet |psi>: every site keeps its transverse physical leg.
   \begin{tenkz}[lattice={4x4}, frame=plane, physical=up, boundary=open]
     \tn{} & \tn{} & \tn{} & \tn{} \\
     \tn{} & \tn{} & \tn{} & \tn{} \\
     \tn{} & \tn{} & \tn{} & \tn{} \\
     \tn{} & \tn{} & \tn{} & \tn{}
-  \end{tenkz}
-  \\[1em]
-  % The doubled sheet |psi><psi|: the plane frame owns both sheets through
-  % the declared bilayer basis; every bond, stub, open ket-bra leg, and
-  % traced pair below is a member-addressed declaration.
+  \end{tenkz} \\[1em]
+  % The doubled sheet |psi><psi|: the plane frame owns both sheets via the
+  % bilayer basis; every bond, stub, leg, and traced pair below is member-addressed.
   \begin{tenkz}[lattice={4x4}, planes, bonds=none]
     % ket-sheet east-west bonds
     \tnwire{(1,1,1)}{(1,2,1)} \tnwire{(1,2,1)}{(1,3,1)} \tnwire{(1,3,1)}{(1,4,1)}
@@ -44,47 +40,59 @@
     \tnwire{(1,3,2)}{(2,3,2)} \tnwire{(2,3,2)}{(3,3,2)} \tnwire{(3,3,2)}{(4,3,2)}
     \tnwire{(1,4,2)}{(2,4,2)} \tnwire{(2,4,2)}{(3,4,2)} \tnwire{(3,4,2)}{(4,4,2)}
     % ket-sheet perimeter openings
-    \tnwire{(1,1,1)}{open n} \tnwire{(1,2,1)}{open n}
-    \tnwire{(1,3,1)}{open n} \tnwire{(1,4,1)}{open n}
-    \tnwire{(4,1,1)}{open s} \tnwire{(4,2,1)}{open s}
-    \tnwire{(4,3,1)}{open s} \tnwire{(4,4,1)}{open s}
-    \tnwire{(1,1,1)}{open w} \tnwire{(2,1,1)}{open w}
-    \tnwire{(3,1,1)}{open w} \tnwire{(4,1,1)}{open w}
-    \tnwire{(1,4,1)}{open e} \tnwire{(2,4,1)}{open e}
-    \tnwire{(3,4,1)}{open e} \tnwire{(4,4,1)}{open e}
+    \tnwire{(1,1,1)}{open n} \tnwire{(1,2,1)}{open n} \tnwire{(1,3,1)}{open n}
+    \tnwire{(1,4,1)}{open n} \tnwire{(4,1,1)}{open s} \tnwire{(4,2,1)}{open s}
+    \tnwire{(4,3,1)}{open s} \tnwire{(4,4,1)}{open s} \tnwire{(1,1,1)}{open w}
+    \tnwire{(2,1,1)}{open w} \tnwire{(3,1,1)}{open w} \tnwire{(4,1,1)}{open w}
+    \tnwire{(1,4,1)}{open e} \tnwire{(2,4,1)}{open e} \tnwire{(3,4,1)}{open e}
+    \tnwire{(4,4,1)}{open e}
     % bra-sheet perimeter openings
-    \tnwire{(1,1,2)}{open n} \tnwire{(1,2,2)}{open n}
-    \tnwire{(1,3,2)}{open n} \tnwire{(1,4,2)}{open n}
-    \tnwire{(4,1,2)}{open s} \tnwire{(4,2,2)}{open s}
-    \tnwire{(4,3,2)}{open s} \tnwire{(4,4,2)}{open s}
-    \tnwire{(1,1,2)}{open w} \tnwire{(2,1,2)}{open w}
-    \tnwire{(3,1,2)}{open w} \tnwire{(4,1,2)}{open w}
-    \tnwire{(1,4,2)}{open e} \tnwire{(2,4,2)}{open e}
-    \tnwire{(3,4,2)}{open e} \tnwire{(4,4,2)}{open e}
+    \tnwire{(1,1,2)}{open n} \tnwire{(1,2,2)}{open n} \tnwire{(1,3,2)}{open n}
+    \tnwire{(1,4,2)}{open n} \tnwire{(4,1,2)}{open s} \tnwire{(4,2,2)}{open s}
+    \tnwire{(4,3,2)}{open s} \tnwire{(4,4,2)}{open s} \tnwire{(1,1,2)}{open w}
+    \tnwire{(2,1,2)}{open w} \tnwire{(3,1,2)}{open w} \tnwire{(4,1,2)}{open w}
+    \tnwire{(1,4,2)}{open e} \tnwire{(2,4,2)}{open e} \tnwire{(3,4,2)}{open e}
+    \tnwire{(4,4,2)}{open e}
     % the kept sites' 24 open ket-bra physical legs: rho's row indices up
     % from the ket sheet, its column indices down from the bra sheet
     \tnwire{(1,1,1)}{open up} \tnwire{(1,2,1)}{open up} \tnwire{(1,3,1)}{open up}
     \tnwire{(2,1,1)}{open up} \tnwire{(2,2,1)}{open up} \tnwire{(2,3,1)}{open up}
     \tnwire{(3,1,1)}{open up} \tnwire{(3,2,1)}{open up} \tnwire{(3,3,1)}{open up}
     \tnwire{(4,1,1)}{open up} \tnwire{(4,2,1)}{open up} \tnwire{(4,3,1)}{open up}
-    \tnwire{(1,1,2)}{open down} \tnwire{(1,2,2)}{open down}
-    \tnwire{(1,3,2)}{open down}
-    \tnwire{(2,1,2)}{open down} \tnwire{(2,2,2)}{open down}
-    \tnwire{(2,3,2)}{open down}
-    \tnwire{(3,1,2)}{open down} \tnwire{(3,2,2)}{open down}
-    \tnwire{(3,3,2)}{open down}
-    \tnwire{(4,1,2)}{open down} \tnwire{(4,2,2)}{open down}
-    \tnwire{(4,3,2)}{open down}
-    % the traced fourth column: each ket-bra pair closes through its own
-    % east wrap loop, as the source draws Tr over the site's physical space
-    \tnwire[kind=string, name=tr1,
-            via={0.6 e of (1,4,1), 0.6 e of (1,4,2)}]{(1,4,1)}{(1,4,2)}
-    \tnwire[kind=string, name=tr2,
-            via={0.6 e of (2,4,1), 0.6 e of (2,4,2)}]{(2,4,1)}{(2,4,2)}
-    \tnwire[kind=string, name=tr3,
-            via={0.6 e of (3,4,1), 0.6 e of (3,4,2)}]{(3,4,1)}{(3,4,2)}
-    \tnwire[kind=string, name=tr4,
-            via={0.6 e of (4,4,1), 0.6 e of (4,4,2)}]{(4,4,1)}{(4,4,2)}
-  \end{tenkz}
-\end{gathered}
-\]
+    \tnwire{(1,1,2)}{open down} \tnwire{(1,2,2)}{open down} \tnwire{(1,3,2)}{open down}
+    \tnwire{(2,1,2)}{open down} \tnwire{(2,2,2)}{open down} \tnwire{(2,3,2)}{open down}
+    \tnwire{(3,1,2)}{open down} \tnwire{(3,2,2)}{open down} \tnwire{(3,3,2)}{open down}
+    \tnwire{(4,1,2)}{open down} \tnwire{(4,2,2)}{open down} \tnwire{(4,3,2)}{open down}
+    % The traced fourth column: each ket-bra pair closes through its own
+    % east wrap loop (Tr over the site's physical space), restored here as
+    % the paper's three-sided wrap: two invisible junction atoms per loop
+    % chained by three kind=string segments (tN, tNb, tNc).  Consecutive
+    % segments meet at a shared junction, which the crossing police reads
+    % as an undeclared crossing, so each adjacent pair carries a nominal
+    % cross= declaration; the outer segments (tN, tNc) go under so the gap
+    % trim lands on them, not on the short middle jump tNb.
+    \tn[at=0.6 e of (1,4,1), skin=none, name=j11]{}
+    \tn[at=0.6 e of (1,4,2), skin=none, name=j12]{}
+    \tnwire[kind=string, name=t1, cross={under at crossing of t1 and t1b}]{(1,4,1)}{j11}
+    \tnwire[kind=string, name=t1b]{j11}{j12}
+    \tnwire[kind=string, name=t1c,
+            cross={under at crossing of t1c and t1b}]{j12}{(1,4,2)}
+    \tn[at=0.6 e of (2,4,1), skin=none, name=j21]{}
+    \tn[at=0.6 e of (2,4,2), skin=none, name=j22]{}
+    \tnwire[kind=string, name=t2, cross={under at crossing of t2 and t2b}]{(2,4,1)}{j21}
+    \tnwire[kind=string, name=t2b]{j21}{j22}
+    \tnwire[kind=string, name=t2c,
+            cross={under at crossing of t2c and t2b}]{j22}{(2,4,2)}
+    \tn[at=0.6 e of (3,4,1), skin=none, name=j31]{}
+    \tn[at=0.6 e of (3,4,2), skin=none, name=j32]{}
+    \tnwire[kind=string, name=t3, cross={under at crossing of t3 and t3b}]{(3,4,1)}{j31}
+    \tnwire[kind=string, name=t3b]{j31}{j32}
+    \tnwire[kind=string, name=t3c,
+            cross={under at crossing of t3c and t3b}]{j32}{(3,4,2)}
+    \tn[at=0.6 e of (4,4,1), skin=none, name=j41]{}
+    \tn[at=0.6 e of (4,4,2), skin=none, name=j42]{}
+    \tnwire[kind=string, name=t4, cross={under at crossing of t4 and t4b}]{(4,4,1)}{j41}
+    \tnwire[kind=string, name=t4b]{j41}{j42}
+    \tnwire[kind=string, name=t4c,
+            cross={under at crossing of t4c and t4b}]{j42}{(4,4,2)}
+  \end{tenkz} \end{gathered} \]

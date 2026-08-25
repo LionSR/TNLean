@@ -5,89 +5,95 @@
 % Source: arXiv:2011.12127, TN-Review-main.tex lines 1602-1606; author source
 %   ImagesReview Section III/ImagesReview Section III.tex lines 572-603.
 % Capabilities: kernel, peps-window, crossing-tensor, string-slide
-\[
-  \tenkzkernel
-  \begin{tenkzeq}
-    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none]
-      % The black bonds form the open 5x5 PEPS window.
-      \tnwire[name=h1]{(2,1)}{(2,5)} \tnwire[name=h2]{(3,1)}{(3,5)}
-      \tnwire[name=h3]{(4,1)}{(4,5)} \tnwire[name=h4]{(5,1)}{(5,5)}
-      \tnwire[name=h5]{(6,1)}{(6,5)} \tnwire[name=v1]{(1,1)}{(6,1)}
-      \tnwire[name=v2]{(1,2)}{(6,2)} \tnwire[name=v3]{(1,3)}{(6,3)}
-      \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
-      % Initially O_g lies above the PEPS, while O_h crosses the window.
-      \tnwire[kind=string, species=operator, name=g,
-              cross={over at crossing of g and v1, over at crossing of g and v2,
-                     over at crossing of g and v3, over at crossing of g and v4,
-                     over at crossing of g and v5, over at crossing of g and h}]
-        {0.2 w of (1,1)}{0.2 e of (1,5)}
-      \tn[species=operator, at=crossing of g and v1]{}
-      \tn[species=operator, at=crossing of g and v2]{}
-      \tn[species=operator, at=crossing of g and v3]{}
-      \tn[species=operator, at=crossing of g and v4]{}
-      \tn[species=operator, at=crossing of g and v5, label pos=0]{O_g}
-      \tnwire[kind=string, species=passive, name=h,
-              cross={over at crossing of h and h1, over at crossing of h and h2,
-                     over at crossing of h and h3, over at crossing of h and h4,
-                     over at crossing of h and h5}]
-        {midway (1,3) and (1,4)}{midway (6,3) and (6,4)}
-      \tn[species=passive, at=crossing of h and h1]{}
-      \tn[species=passive, at=crossing of h and h2]{}
-      \tn[species=passive, at=crossing of h and h3]{}
-      \tn[species=passive, at=crossing of h and h4]{}
-      \tn[species=passive, at=crossing of h and h5, label pos=270]{O_h}
-      % This arrow records the downward pull of the horizontal MPO.
-      \tnwire[kind=string, route=arc, dir=to, name=pull,
-              via={0.6 w of (2,1), 0.6 w of (3,1)}]{0.4 w of (1,1)}{0.4 w of (4,1)}
-    \end{tenkz} =
-    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none]
-      \tnwire[name=h1]{(2,1)}{(2,5)} \tnwire[name=h2]{(3,1)}{(3,5)}
-      \tnwire[name=h3]{(4,1)}{(4,5)} \tnwire[name=h4]{(5,1)}{(5,5)}
-      \tnwire[name=h5]{(6,1)}{(6,5)} \tnwire[name=v1]{(1,1)}{(6,1)}
-      \tnwire[name=v2]{(1,2)}{(6,2)} \tnwire[name=v3]{(1,3)}{(6,3)}
-      \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
-      % After the pull, O_g runs below the crossing tensor.
-      \tnwire[kind=string, species=operator, name=g,
-              cross={over at crossing of g and v2, over at crossing of g and v3,
-                     over at crossing of g and v4, over at crossing of g and h}]
-        {midway (4,1) and (5,1)}{midway (4,5) and (5,5)}
-      \tn[species=operator, at=midway (4,1) and (5,1)]{}
-      \tn[species=operator, at=crossing of g and v2]{}
-      \tn[species=operator, at=crossing of g and v3]{}
-      \tn[species=operator, at=crossing of g and v4]{}
-      \tn[species=operator, at=midway (4,5) and (5,5), label pos=0]{O_g}
-      % O_h remains vertical.  The crossing is the enlarged MPO tensor.
-      \tnwire[kind=string, species=passive, name=h,
-              cross={over at crossing of h and h1, over at crossing of h and h2,
-                     over at crossing of h and h3, over at crossing of h and h4,
-                     over at crossing of h and h5}]
-        {midway (1,3) and (1,4)}{midway (6,3) and (6,4)}
-      \tn[species=passive, at=crossing of h and h1]{}
-      \tn[species=passive, at=crossing of h and h2]{}
-      \tn[species=passive, at=crossing of h and h3]{}
-      \tn[skin=mpo, role=marked, at=crossing of g and h]{}
-      \tn[species=passive, at=crossing of h and h4]{}
-      \tn[species=passive, at=crossing of h and h5, label pos=270]{O_h}
-      % The two auxiliary rails encode the conjugation of h by g.
-      \tnwire[kind=string, species=operator, name=ginv,
-              via={0.2 e of (2,3), 0.2 e of (3,3)},
-              cross={over at crossing of ginv and h1,
-                     over at crossing of ginv and h2, over at crossing of ginv and h3}]
-        {0.2 e of (1,3)}{0.2 e of (4,3)}
-      \tnwire[kind=string, species=operator, name=gr,
-              via={0.2 w of (2,4), 0.2 w of (3,4)},
-              cross={over at crossing of gr and h1,
-                     over at crossing of gr and h2, over at crossing of gr and h3}]
-        {0.2 w of (1,4)}{0.2 w of (4,4)}
-      \tn[species=operator, at=crossing of ginv and h1, label pos=90]{g^{-1}}
-      \tn[species=operator, at=crossing of ginv and h2]{}
-      \tn[species=operator, name=l3, at=crossing of ginv and h3]{}
-      \tn[species=operator, at=crossing of gr and h1, label pos=90]{g}
-      \tn[species=operator, at=crossing of gr and h2]{}
-      \tn[species=operator, name=r3, at=crossing of gr and h3]{}
-      \tnwire[kind=string, route=arc, species=operator, name=cup,
-              via={on h 0.65}, cross={over at crossing of cup and h,
-                     over at crossing of cup and gr}] {0.2 e of (4,3)}{0.2 w of (4,4)}
-    \end{tenkz}
-  \end{tenkzeq}.
-\]
+\[ \tenkzkernel \begin{tenkzeq}
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    % The black bonds form the open 5x5 PEPS window.
+    \tnwire[name=h1]{(2,1)}{(2,5)} \tnwire[name=h2]{(3,1)}{(3,5)}
+    \tnwire[name=h3]{(4,1)}{(4,5)} \tnwire[name=h4]{(5,1)}{(5,5)}
+    \tnwire[name=h5]{(6,1)}{(6,5)} \tnwire[name=v1]{(1,1)}{(6,1)}
+    \tnwire[name=v2]{(1,2)}{(6,2)} \tnwire[name=v3]{(1,3)}{(6,3)}
+    \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
+    % Initially O_g lies above the PEPS, while O_h crosses the window.
+    \tnwire[kind=string, species=operator, name=g,
+      cross={over at crossing of g and v1, over at crossing of g and v2,
+             over at crossing of g and v3, over at crossing of g and v4,
+             over at crossing of g and v5, over at crossing of g and h}]
+      {0.2 w of (1,1)}{0.2 e of (1,5)} \tn[species=operator, at=crossing of g and v1]{}
+    \tn[species=operator, at=crossing of g and v2]{}
+    \tn[species=operator, at=crossing of g and v3]{}
+    \tn[species=operator, at=crossing of g and v4]{}
+    \tn[species=operator, at=crossing of g and v5, label pos=0]{O_g}
+    \tnwire[kind=string, species=passive, name=h,
+      cross={over at crossing of h and h1, over at crossing of h and h2,
+             over at crossing of h and h3, over at crossing of h and h4,
+             over at crossing of h and h5}]
+      {midway (1,3) and (1,4)}{midway (6,3) and (6,4)}
+    \tn[species=passive, at=crossing of h and h1]{}
+    \tn[species=passive, at=crossing of h and h2]{}
+    \tn[species=passive, at=crossing of h and h3]{}
+    \tn[species=passive, at=crossing of h and h4]{}
+    \tn[species=passive, at=crossing of h and h5, label pos=270]{O_h}
+    % Downward pull of the MPO chain; the middle leg carries the arrowhead.
+    \tn[at=0.6 w of (2,1), skin=none, name=jp1]{}
+    \tn[at=0.6 w of (3,1), skin=none, name=jp2]{}
+    \tnwire[kind=string, route=arc, name=p1]{0.4 w of (1,1)}{jp1}
+    \tnwire[kind=string, route=arc, dir=to, name=p2,
+      cross={over at crossing of p1 and p2}]{jp1}{jp2}
+    \tnwire[kind=string, route=arc, name=p3,
+      cross={over at crossing of p2 and p3}]{jp2}{0.4 w of (4,1)}
+  \end{tenkz} = \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    \tnwire[name=h1]{(2,1)}{(2,5)} \tnwire[name=h2]{(3,1)}{(3,5)}
+    \tnwire[name=h3]{(4,1)}{(4,5)} \tnwire[name=h4]{(5,1)}{(5,5)}
+    \tnwire[name=h5]{(6,1)}{(6,5)} \tnwire[name=v1]{(1,1)}{(6,1)}
+    \tnwire[name=v2]{(1,2)}{(6,2)} \tnwire[name=v3]{(1,3)}{(6,3)}
+    \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
+    % After the pull, O_g runs below the crossing tensor.
+    \tnwire[kind=string, species=operator, name=g,
+      cross={over at crossing of g and v2, over at crossing of g and v3,
+             over at crossing of g and v4, over at crossing of g and h}]
+      {midway (4,1) and (5,1)}{midway (4,5) and (5,5)}
+    \tn[species=operator, at=midway (4,1) and (5,1)]{}
+    \tn[species=operator, at=crossing of g and v2]{}
+    \tn[species=operator, at=crossing of g and v3]{}
+    \tn[species=operator, at=crossing of g and v4]{}
+    \tn[species=operator, at=midway (4,5) and (5,5), label pos=0]{O_g}
+    % O_h remains vertical.  The crossing is the enlarged MPO tensor.
+    \tnwire[kind=string, species=passive, name=h,
+      cross={over at crossing of h and h1, over at crossing of h and h2,
+             over at crossing of h and h3, over at crossing of h and h4,
+             over at crossing of h and h5}]
+      {midway (1,3) and (1,4)}{midway (6,3) and (6,4)}
+    \tn[species=passive, at=crossing of h and h1]{}
+    \tn[species=passive, at=crossing of h and h2]{}
+    \tn[species=passive, at=crossing of h and h3]{}
+    \tn[skin=mpo, role=marked, at=crossing of g and h]{}
+    \tn[species=passive, at=crossing of h and h4]{}
+    \tn[species=passive, at=crossing of h and h5, label pos=270]{O_h}
+    % The two rails conjugate h by g; each marker anchors its rail wires.
+    \tn[species=operator, at=0.2 e of (2,3), label pos=90, name=giA]{g^{-1}}
+    \tn[species=operator, at=0.2 e of (3,3), name=giB]{}
+    \tn[species=operator, name=l3, at=0.2 e of (4,3)]{}
+    \tn[species=operator, at=0.2 w of (2,4), label pos=90, name=grA]{g}
+    \tn[species=operator, at=0.2 w of (3,4), name=grB]{}
+    \tn[species=operator, name=r3, at=0.2 w of (4,4)]{}
+    \tnwire[kind=string, species=operator, name=gi1,
+      cross={over at crossing of gi1 and h1}]{0.2 e of (1,3)}{giA}
+    \tnwire[kind=string, species=operator, name=gi2,
+      cross={over at crossing of gi2 and h1, over at crossing of gi2 and h2}]{giA}{giB}
+    \tnwire[kind=string, species=operator, name=gi3,
+      cross={over at crossing of gi3 and h2, over at crossing of gi3 and h3}]{giB}{l3}
+    \tnwire[kind=string, species=operator, name=gr1,
+      cross={over at crossing of gr1 and h1}]{0.2 w of (1,4)}{grA}
+    \tnwire[kind=string, species=operator, name=gr2,
+      cross={over at crossing of gr2 and h1, over at crossing of gr2 and h2}]{grA}{grB}
+    \tnwire[kind=string, species=operator, name=gr3,
+      cross={over at crossing of gr3 and h2, over at crossing of gr3 and h3}]{grB}{r3}
+    % The cup's own via point sits exactly on h's path (deliberate), so it
+    % becomes a junction atom; its far end already is gr's endpoint r3.
+    \tn[at=on h 0.65, skin=none, name=jc1]{}
+    \tnwire[kind=string, route=arc, species=operator, name=c1,
+      cross={over at crossing of c1 and h,
+             over at crossing of c1 and gi3}]{0.2 e of (4,3)}{jc1}
+    \tnwire[kind=string, route=arc, species=operator, name=c2,
+      cross={over at crossing of c1 and c2, over at crossing of c2 and gr3}]{jc1}{r3}
+  \end{tenkz} \end{tenkzeq}. \]

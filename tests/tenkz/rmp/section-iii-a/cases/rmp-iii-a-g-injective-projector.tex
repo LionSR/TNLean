@@ -24,13 +24,23 @@
     \tn[skin=box, at=(2,3), name=e]{}
     \tn[skin=box, at=(3,2), name=s]{}
     \tn[skin=box, at=(2,1), name=w]{}
-    \tnwire[kind=string, species=projector, name=ring, closed,
-      via={
-        d, n,
-        (1,3), e,
-        (3,3), s,
-        (3,1), w
-      }]
+    % the closed projector ring, chained through the four tensor atoms and
+    % three invisible corner junctions (via= retired, #6897)
+    \tn[at=(1,3), skin=none, name=jring1]{}
+    \tn[at=(3,3), skin=none, name=jring2]{}
+    \tn[at=(3,1), skin=none, name=jring3]{}
+    \tnwire[kind=string, species=projector, name=ring]{d}{n}
+    \tnwire[kind=string, species=projector, name=r2]{n}{jring1}
+    \tnwire[kind=string, species=projector, name=r3,
+      cross={under at crossing of r2 and r3}]{jring1}{e}
+    \tnwire[kind=string, species=projector, name=r4]{e}{jring2}
+    \tnwire[kind=string, species=projector, name=r5,
+      cross={under at crossing of r4 and r5}]{jring2}{s}
+    \tnwire[kind=string, species=projector, name=r6]{s}{jring3}
+    \tnwire[kind=string, species=projector, name=r7,
+      cross={under at crossing of r6 and r7}]{jring3}{w}
+    \tnwire[kind=string, species=projector, name=ringclose,
+      cross={under at crossing of ring and ringclose}]{w}{d}
     \tnwire{n.90}{0.7 n of n} \tnwire{e.0}{0.7 e of e}
     \tnwire{s.270}{0.7 s of s} \tnwire{w.180}{0.7 w of w}
     \tnwire{n.270}{0.7 s of n} \tnwire{e.180}{0.7 w of e}

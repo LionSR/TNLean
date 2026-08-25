@@ -1,14 +1,18 @@
 %% Kernel fixture: a tensor standing at a point of a curve (the threaded loop
 %% of Section III, lines 305-327: a closed curve carrying four tensors, one at
 %% each of four of its points).
-%% Expected records: four ket atoms on row 1 with physical legs up, one closed
-%% string named L through four waypoints, four box atoms whose places are
-%% fractions along L.
-%% Expected ink: the loop is one smooth closed curve, drawn whole; each box
-%% stands ON it at the fraction its address names, so the curve enters one
+%% Expected records: four ket atoms on row 1 with physical legs up, four
+%% invisible junction atoms at the loop's four corners, a closed chain of four
+%% named strings through those junctions, and four box atoms whose places are
+%% fractions along the chain segment for their own side of the loop.
+%% Expected ink: the loop is a closed quadrilateral of four chained straight
+%% segments (no via-driven smooth Hobby cycle any more); each box stands ON
+%% its segment at the fraction its address names, so the segment enters one
 %% side of the box and leaves the other unchanged.  A box is not a junction:
 %% nothing about the loop's route or the tensors below it is decided by where
-%% the boxes stand.
+%% the boxes stand.  The four original arclength fractions (0.05, 0.3, 0.55,
+%% 0.8) were spaced a uniform quarter-turn apart, so each box keeps the same
+%% 0.2 local fraction into its own edge of the chain.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -19,11 +23,28 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[rows={ket}, cols=4, physical=up]
-  \tnwire[kind=string, species=g, name=L, closed,
-          via={1 n of (1,1), 1 n of (1,4), 1 s of (1,4), 1 s of (1,1)}]
-  \tn[skin=box, at=on L 0.05]{$1$}
-  \tn[skin=box, at=on L 0.3]{$2$}
-  \tn[skin=box, at=on L 0.55]{$3$}
-  \tn[skin=box, at=on L 0.8]{$4$}
+  \tn[at=1 n of (1,1), skin=none, name=jL1]{}
+  \tn[at=1 n of (1,4), skin=none, name=jL2]{}
+  \tn[at=1 s of (1,4), skin=none, name=jL3]{}
+  \tn[at=1 s of (1,1), skin=none, name=jL4]{}
+  \tnwire[kind=string, species=g, name=L,
+          cross={over at crossing of L and Lb}]{jL1}{jL2}
+  \tnwire[kind=string, species=g, name=Lb,
+          cross={over at crossing of Lb and Lc}]{jL2}{jL3}
+  \tnwire[kind=string, species=g, name=Lc,
+          cross={over at crossing of Lc and Ld}]{jL3}{jL4}
+  \tnwire[kind=string, species=g, name=Ld,
+          cross={over at crossing of Ld and L}]{jL4}{jL1}
+  \tn[skin=box, at=on L 0.2]{$1$}
+  \tn[skin=box, at=on Lb 0.2]{$2$}
+  \tn[skin=box, at=on Lc 0.2]{$3$}
+  \tn[skin=box, at=on Ld 0.2]{$4$}
+\end{tenkz}
+% A closed string still carries: the wound flux ring is closed by its
+% homotopy class, and the box stands on it at the fraction its address
+% names -- the pin READING-strings.md keeps on this fixture.
+\begin{tenkz}[lattice={2x2}, surface=torus]
+  \tnwire[kind=string, species=flux, name=L, closed, wind={1,0}]
+  \tn[skin=box, at=on L 0.5]{$5$}
 \end{tenkz}
 \end{document}

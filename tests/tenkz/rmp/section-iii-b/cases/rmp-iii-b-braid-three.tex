@@ -22,23 +22,49 @@
     \tn[at=(2,2), name=j, role=extra, label pos=sw]{j}
     % the resolver box stands east of the patch where the a-j crossing was
     \tn[at=0.9 e of midway i and j, skin=box, name=R]{\noexpand\mathcal R_{j,a}}
+    % string a's former via waypoints, now junctions: three coincide with the
+    % lattice-crossing marker beads (kept visible), the two bends over i are
+    % new and invisible
+    \tn[at=0.3 w of q, name=ja1]{}
+    \tn[at=midway p and q, name=ja2]{}
+    \tn[at=midway p and i, name=ja3]{}
+    \tn[at=0.3 nw of i, skin=none, name=ja4]{}
+    \tn[at=0.3 ne of i, skin=none, name=ja5]{}
+    \tn[at=0.4 e of i, name=ja6]{}
+    % string b's former via waypoints: the bends off i are new and invisible,
+    % the last one is the marker bead where b pierces past j
+    \tn[at=0.3 se of i, skin=none, name=jb1]{}
+    \tn[at=0.7 e of midway i and j, skin=none, name=jb2]{}
+    \tn[at=0.4 e of j, name=jb3]{}
     % string a winds through the patch into the resolver, lapping over the
     % lattice line that runs north out of i; every lattice crossing carries
     % its dot
-    \tnwire[kind=string, species=operator, name=a, route=arc,
-            via={0.3 w of q, midway p and q, midway p and i,
-                 0.3 nw of i, 0.3 ne of i, 0.4 e of i},
-            cross={over at crossing of a and open-north-col-2}]{open s}{R}
+    \tnwire[kind=string, species=operator, name=a1, route=arc]{open s}{ja1}
+    \tnwire[kind=string, species=operator, name=a2, route=arc,
+            cross={over at crossing of a2 and a1}]{ja1}{ja2}
+    \tnwire[kind=string, species=operator, name=a3, route=arc,
+            cross={over at crossing of a3 and a2}]{ja2}{ja3}
+    \tnwire[kind=string, species=operator, name=a4, route=arc,
+            cross={over at crossing of a4 and a3}]{ja3}{ja4}
+    \tnwire[kind=string, species=operator, name=a5, route=arc,
+            cross={over at crossing of a5 and open-north-col-2,
+                   over at crossing of a5 and a4}]{ja4}{ja5}
+    \tnwire[kind=string, species=operator, name=a6, route=arc,
+            cross={over at crossing of a6 and a5}]{ja5}{ja6}
+    \tnwire[kind=string, species=operator, name=a7, route=arc,
+            cross={over at crossing of a7 and a6}]{ja6}{R}
     % string b leaves anyon i, dives behind the resolver, and exits below
-    \tnwire[kind=string, species=operator, name=b, route=arc,
-            via={0.3 se of i, 0.7 e of midway i and j, 0.4 e of j}]{i}{open s}
+    \tnwire[kind=string, species=operator, name=b1, route=arc]{i}{jb1}
+    \tnwire[kind=string, species=operator, name=b2, route=arc,
+            cross={over at crossing of b2 and b1}]{jb1}{jb2}
+    \tnwire[kind=string, species=operator, name=b3, route=arc,
+            cross={over at crossing of b3 and b2}]{jb2}{jb3}
+    \tnwire[kind=string, species=operator, name=b4, route=arc,
+            cross={over at crossing of b4 and b3}]{jb3}{open s}
     % anyon j hands its strand to the resolver, ending under its west edge
     \tnwire[kind=string, species=operator, name=ja,
             route=arc]{j}{0.55 e of midway i and j}
-    % marker beads where the strings pierce lattice lines
-    \tn[at=0.3 w of q]{}      \tn[at=midway p and q]{}
-    \tn[at=midway p and i]{}
-    \tn[at=crossing of a and open-north-col-2]{}
-    \tn[at=0.4 e of i]{}      \tn[at=0.4 e of j]{}
+    % the marker bead where a laps over the lattice line north of i
+    \tn[at=crossing of a5 and open-north-col-2]{}
   \end{tenkz}
 \]
