@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
-import TNLean.Algebra.SpinCover
+import QICLean.Algebra.SpinCover
 
 /-!
 # On-site rotational symmetry of the AKLT state
@@ -26,7 +26,7 @@ cover, both proved here.
 The spin double cover `SU(2) → SO(3)` and the supporting Pauli-conjugation
 machinery (`SpinCover.pauliConjAd`, `SpinCover.spinHalfCover`,
 `SpinCover.spinHalfCover_surjective_onto_SO3`, `SpinCover.so3_euler_decomp`)
-are AKLT-independent and live in `TNLean.Algebra.SpinCover`; this module only
+are AKLT-independent and live in `QICLean.Algebra.SpinCover`; this module only
 adds the AKLT-specific results.
 
 ## Main definitions

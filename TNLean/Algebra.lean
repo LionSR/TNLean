@@ -26,7 +26,6 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.IrreducibleTensorAction
-import TNLean.Algebra.KramersDegeneracy
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixAlgEquiv
 import TNLean.Algebra.MatrixCyclicTracePower
@@ -44,11 +43,8 @@ import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.Algebra.ProjectiveRepresentation
-import TNLean.Algebra.SICPOVMBound
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.ShiftedZeroTraceNilpotent
 import TNLean.Algebra.SkewSymmetricMatrix
-import TNLean.Algebra.SpinCover
-import TNLean.Algebra.SpinCover.EulerAngles
 import TNLean.Algebra.SwapTrace
 import TNLean.Algebra.TracePairing
