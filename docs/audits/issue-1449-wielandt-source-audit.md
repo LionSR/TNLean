@@ -111,6 +111,11 @@ Blueprint declaration links now use the QICLean names directly.
 | `MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero` | `Kraus.HasComplementaryFixedPointGap.complement_pow_tendsto_zero` |
 | `MPSTensor.posDef_of_isIrreducibleMap_of_isPrimitiveMPS` | `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleMap` |
 | `MPSTensor.posDef_of_isIrreducibleTensor_of_isPrimitiveMPS` | `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily` |
+| `MPSTensor.IsPrimitiveMPS.norm` | `Kraus.HasComplementaryFixedPointGap.norm` |
+| `MPSTensor.IsPrimitiveMPS.fixedPoint_ne_zero` | `Kraus.HasComplementaryFixedPointGap.fixedPoint_ne_zero` |
+| `MPSTensor.IsPrimitiveMPS.fixedPoint_psd` | `Kraus.HasComplementaryFixedPointGap.fixedPoint_psd` |
+| `MPSTensor.IsPrimitiveMPS.fixedPoint_is_fixed` | `Kraus.HasComplementaryFixedPointGap.fixedPoint_is_fixed` |
+| `MPSTensor.IsPrimitiveMPS.complementary_transfer_map_gap` | `Kraus.HasComplementaryFixedPointGap.complementary_transfer_map_gap` |
 
 ### Wielandt declarations independent of the MPS development
 
