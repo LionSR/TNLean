@@ -937,14 +937,14 @@
     Let $V:\C^d\to\C^e$ satisfy
     $V^\dagger V=\Id_d$ and $VV^\dagger=\Id_e$, and define
     ${\cal K}^V_{\beta,\alpha}
-    =V{\cal K}_{\beta,\alpha}V^\dagger$.  Then ${\cal K}$ admits a
+        =V{\cal K}_{\beta,\alpha}V^\dagger$.  Then ${\cal K}$ admits a
     physical-sector factorization with
     \begin{align}
-        \eta_{k,h} & \geq 0,
-        \notag \\
+        \eta_{k,h}      & \geq 0,
+        \notag                     \\
         \tr(\eta_{k,h}) & =a_kb_h,
-        \notag \\
-        \sum_k a_kb_k & =1.
+        \notag                     \\
+        \sum_k a_kb_k   & =1.
         \notag
     \end{align}
     if and only if ${\cal K}^V$ admits one.  The same sector spaces, tensors
@@ -961,7 +961,7 @@
     respectively, so $d=e$.  If the physical isometry for
     ${\cal K}$ is $U$, use $UV^\dagger$ for ${\cal K}^V$; then
     $(UV^\dagger){\cal K}^V_{\beta,\alpha}(UV^\dagger)^\dagger
-    =U{\cal K}_{\beta,\alpha}U^\dagger$.  Conversely, if the isometry for
+        =U{\cal K}_{\beta,\alpha}U^\dagger$.  Conversely, if the isometry for
     ${\cal K}^V$ is $U'$, use $U'V$ for ${\cal K}$.  In both directions the
     tensors $l_k,r_k$ are unchanged, so
     $\eta_{k,h}=\sum_\gamma(r_k)_\gamma\otimes(l_h)_\gamma$ is unchanged.
@@ -992,20 +992,20 @@
     $V_G:\C^{d_G}\to\C^d$ be two isometric inclusions with the same range
     projection $P$:
     \begin{align}
-        V_F^\dagger V_F &=\Id_{d_F},
-        & V_G^\dagger V_G &=\Id_{d_G},
-        \notag \\
-        V_FV_F^\dagger &=P,
-        & V_GV_G^\dagger &=P.
+        V_F^\dagger V_F & =\Id_{d_F},
+                        & V_G^\dagger V_G & =\Id_{d_G},
+        \notag                                          \\
+        V_FV_F^\dagger  & =P,
+                        & V_GV_G^\dagger  & =P.
         \label{eq:mpdo_support_coordinate_ranges}
     \end{align}
     Set $Q=V_F^\dagger V_G$.  Then
     \begin{align}
-        Q^\dagger Q &=\Id_{d_G},
-        & QQ^\dagger &=\Id_{d_F},
-        \notag \\
+        Q^\dagger Q & =\Id_{d_G},
+                    & QQ^\dagger                & =\Id_{d_F},
+        \notag                                                \\
         Q\bigl(V_G^\dagger {\cal K}V_G\bigr)Q^\dagger
-          &=V_F^\dagger {\cal K}V_F.
+                    & =V_F^\dagger {\cal K}V_F.
         \label{eq:mpdo_support_coordinate_tensor}
     \end{align}
     Consequently, the restrictions of ${\cal K}$ along $V_F$ and $V_G$
@@ -1026,9 +1026,9 @@
     $X^{-1}X$, and hence
     \begin{align}
         \eta^L_{k,h}
-        &=\eta^K_{k,h}(X^{-1}X)
-         =\eta^K_{k,h}(\Id)
-         =\eta^K_{k,h}.
+         & =\eta^K_{k,h}(X^{-1}X)
+        =\eta^K_{k,h}(\Id)
+        =\eta^K_{k,h}.
         \notag
     \end{align}
     The families $a_k$ and $b_h$ are retained literally, together with their
@@ -1039,19 +1039,19 @@
     (\ref{eq:mpdo_support_coordinate_ranges}) gives
     \begin{align}
         Q^\dagger Q
-          &=V_G^\dagger(V_FV_F^\dagger)V_G
-           =V_G^\dagger PV_G
-           =\Id_{d_G},
-        \notag \\
+         & =V_G^\dagger(V_FV_F^\dagger)V_G
+        =V_G^\dagger PV_G
+        =\Id_{d_G},
+        \notag                             \\
         QQ^\dagger
-          &=V_F^\dagger(V_GV_G^\dagger)V_F
-           =V_F^\dagger PV_F
-           =\Id_{d_F},
-        \notag \\
+         & =V_F^\dagger(V_GV_G^\dagger)V_F
+        =V_F^\dagger PV_F
+        =\Id_{d_F},
+        \notag                             \\
         QV_G^\dagger
-          &=V_F^\dagger(V_GV_G^\dagger)
-           =V_F^\dagger P
-           =V_F^\dagger.
+         & =V_F^\dagger(V_GV_G^\dagger)
+        =V_F^\dagger P
+        =V_F^\dagger.
         \notag
     \end{align}
     The last identity gives
@@ -1101,7 +1101,7 @@
     take values in a commutative additive monoid. If $f_i=0$ whenever $p_i=0$,
     then
     \begin{align}
-        \sum_{i\in I}f_i&=\sum_{\substack{i\in I\\p_i\ne0}}f_i.
+        \sum_{i\in I}f_i & =\sum_{\substack{i\in I \\p_i\ne0}}f_i.
         \notag
     \end{align}
 \end{lemma}
@@ -1119,14 +1119,14 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{theorem}[Unit closure traces from a neighboring trace factorization]
     \label{thm:mpdo_neighboring_trace_unit_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.leftTraceMatrix,
-      MPOTensor.PhysicalSectorFactorization.rightTraceMatrix,
-      MPOTensor.PhysicalSectorFactorization.trace_neighboringOperator_eq_sum_trace_mul_trace,
-      MPOTensor.PhysicalSectorFactorization.physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix,
-      MPOTensor.PhysicalSectorFactorization.rightTraceMatrix_mul_leftTraceMatrix_apply,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.rightTraceMatrix_mul_leftTraceMatrix_eq_vecMulVec,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_pow_eq_one,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_eq_one,
-      MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_mpo_eq_one}
+        MPOTensor.PhysicalSectorFactorization.rightTraceMatrix,
+        MPOTensor.PhysicalSectorFactorization.trace_neighboringOperator_eq_sum_trace_mul_trace,
+        MPOTensor.PhysicalSectorFactorization.physTraceTransfer_eq_leftTraceMatrix_mul_rightTraceMatrix,
+        MPOTensor.PhysicalSectorFactorization.rightTraceMatrix_mul_leftTraceMatrix_apply,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.rightTraceMatrix_mul_leftTraceMatrix_eq_vecMulVec,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_pow_eq_one,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_eq_one,
+        MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_mpo_eq_one}
     \leanok
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization, def:mpo_physical_trace_transfer, def:mpo_family}
     Let $M$ be an MPO tensor admitting a physical-sector factorization whose
@@ -1135,22 +1135,22 @@ The corresponding generic result is proved in the companion quantum-channel volu
     physical legs of the factorized slices writes the physical-trace transfer
     as a rectangular product
     \begin{align}
-        \mathcal T_M&=LQ,
-        &L_{\beta,k}&=\tr\bigl((l_k)_\beta\bigr),
-        &Q_{k,\alpha}&=\tr\bigl((r_k)_\alpha\bigr),
+        \mathcal T_M & =LQ,
+                     & L_{\beta,k}  & =\tr\bigl((l_k)_\beta\bigr),
+                     & Q_{k,\alpha} & =\tr\bigl((r_k)_\alpha\bigr),
         \notag
     \end{align}
     whose opposite product is the rank-one coefficient matrix
     \begin{align}
-        (QL)_{k,h}&=\tr(\eta_{k,h})=a_kb_h.
+        (QL)_{k,h} & =\tr(\eta_{k,h})=a_kb_h.
         \notag
     \end{align}
     Consequently every positive power of the physical-trace transfer and
     every nonempty closed chain has unit trace:
     \begin{align}
-        \tr\bigl(\mathcal T_M^{\,N}\bigr)&=1,
-        &\tr\rho^{(N)}(M)&=1,
-        &N&\geq1.
+        \tr\bigl(\mathcal T_M^{\,N}\bigr) & =1,
+                                          & \tr\rho^{(N)}(M) & =1,
+                                          & N                & \geq1.
         \notag
     \end{align}
     In particular, a tensor whose closed chains do not all have unit trace
@@ -1175,8 +1175,8 @@ The corresponding generic result is proved in the companion quantum-channel volu
     contractions
     \begin{align}
         (QL)_{k,h}
-        &=\sum_\alpha\tr\bigl((r_k)_\alpha\bigr)\tr\bigl((l_h)_\alpha\bigr)
-         =\tr(\eta_{k,h})=a_kb_h.
+         & =\sum_\alpha\tr\bigl((r_k)_\alpha\bigr)\tr\bigl((l_h)_\alpha\bigr)
+        =\tr(\eta_{k,h})=a_kb_h.
         \notag
     \end{align}
     Cyclic invariance of the trace gives

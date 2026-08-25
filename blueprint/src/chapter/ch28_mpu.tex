@@ -1816,7 +1816,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     dimension $DE$, and local matrices determined by
     \begin{align}
         (A\boxtimes B)^{\pi_{d,e}(i,k)}_{
-            \pi_{D,E}(\alpha,\gamma),\pi_{D,E}(\beta,\delta)}
+                \pi_{D,E}(\alpha,\gamma),\pi_{D,E}(\beta,\delta)}
          & =A^i_{\alpha,\beta}B^k_{\gamma,\delta}.
         \label{eq:mps_independent_tensor_product_entries}
     \end{align}
@@ -1959,18 +1959,18 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     with the fact that simultaneous reindexing preserves adjoints, products,
     and finite sums, give
     \begin{align}
-        &\sum_{i,k}
+         & \sum_{i,k}
         \left((A\boxtimes B)^{\pi_{d,e}(i,k)}\right)^\dagger
-        (A\boxtimes B)^{\pi_{d,e}(i,k)} \\
-        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        (A\boxtimes B)^{\pi_{d,e}(i,k)}                 \\
+         & \quad=\operatorname{reind}_{\pi_{D,E}}
         \left(\sum_{i,k}
         (A^i\otimes B^k)^\dagger(A^i\otimes B^k)\right) \\
-        &\quad=\operatorname{reind}_{\pi_{D,E}}
+         & \quad=\operatorname{reind}_{\pi_{D,E}}
         \left(
         \left(\sum_i(A^i)^\dagger A^i\right)\otimes
         \left(\sum_k(B^k)^\dagger B^k\right)
-        \right) \\
-        &\quad=\operatorname{reind}_{\pi_{D,E}}
+        \right)                                         \\
+         & \quad=\operatorname{reind}_{\pi_{D,E}}
         (\Id_D\otimes\Id_E)=\Id_{DE},
     \end{align}
     proving~(\ref{eq:mpu_tensor_left_canonical_output}).  Spectral normality
@@ -3556,7 +3556,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     be CPSV canonical-form data in ambient bond dimension $D$, where every
     $A_k$ has positive bond dimension $D_k$.  The data have \emph{full
-    support} when
+        support} when
     \begin{align}
         \sum_{k=1}^rD_k=D.
     \end{align}
@@ -3574,9 +3574,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     canonical-form-II data for $A_{\mathrm{red}}$ such that, for every
     integer $N>0$ and every word $\sigma$ of length $N$,
     \begin{align}
-        D_{\mathrm{red}} & \leq D, \\
+        D_{\mathrm{red}}  & \leq D,                        \\
         V^{(N)}(A_{\mathrm{red}})_\sigma
-            & =V^{(N)}(\widetilde U)_\sigma, \\
+                          & =V^{(N)}(\widetilde U)_\sigma, \\
         \sum_{k=1}^{r}D_k & =D_{\mathrm{red}}.
     \end{align}
     This organizes the dimension-bounded canonical replacement used in
@@ -3593,27 +3593,27 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Remove the zero irreducible blocks of $\widetilde U$ and write
     \begin{align}
         A_0^i & =\bigoplus_{k=1}^{r}B_k^i,
-             & \sum_{k=1}^{r}D_k & \leq D, \\
+              & \sum_{k=1}^{r}D_k              & \leq D, \\
         V^{(N)}(A_0)_\sigma
-             & =V^{(N)}(\widetilde U)_\sigma,
+              & =V^{(N)}(\widetilde U)_\sigma,
     \end{align}
     for every $N>0$ and every word $\sigma$ of length $N$.
     At $N=2$ the common self-overlap is one, so the retained sum is nonempty
     and $D_0=\sum_kD_k>0$. For every integer $N>1$, overlap invariance gives
     \begin{align}
         \tr(E_{A_0}^{\,N})
-          & =\sum_\sigma\left|V^{(N)}(A_0)_\sigma\right|^2
-           =\sum_\sigma\left|V^{(N)}(\widetilde U)_\sigma\right|^2
-           =1.
+         & =\sum_\sigma\left|V^{(N)}(A_0)_\sigma\right|^2
+        =\sum_\sigma\left|V^{(N)}(\widetilde U)_\sigma\right|^2
+        =1.
         \label{eq:mpu_reduced_trace}
     \end{align}
     Let $J_k:\mathbb C^{D_k}\to\mathbb C^{D_0}$ be the inclusion of the
     $k$th block. Then
     \begin{align}
         J_k^\dagger J_k & =\Id,
-            & A_0^iJ_k & =J_kB_k^i, \\
+                        & A_0^iJ_k                    & =J_kB_k^i, \\
         \E_{A_0}(J_kXJ_k^\dagger)
-            & =J_k\E_{B_k}(X)J_k^\dagger.
+                        & =J_k\E_{B_k}(X)J_k^\dagger.
     \end{align}
     Thus every nonzero transfer eigenvalue of $B_k$ is a nonzero eigenvalue of
     $E_{A_0}$ and hence equals one by
@@ -3628,7 +3628,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $A_{\mathrm{red}}$ still satisfies
     \begin{align}
         \sum_{k=1}^{r}D_k & =D_{\mathrm{red}},
-            & \tr(E_{A_{\mathrm{red}}}^{\,N}) & =1,
+                          & \tr(E_{A_{\mathrm{red}}}^{\,N}) & =1,
     \end{align}
     for every integer $N>1$.
     The shifted traces force $r=1$, spectral radius one, and primitivity.
@@ -3645,7 +3645,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     $D_{\mathrm{red}}>0$ and an MPU tensor $U_{\mathrm{red}}$ of bond
     dimension $D_{\mathrm{red}}$ such that, for every integer $N>0$,
     \begin{align}
-        D_{\mathrm{red}} & \leq D, \\
+        D_{\mathrm{red}}       & \leq D,   \\
         U_{\mathrm{red}}^{(N)} & =U^{(N)}.
     \end{align}
     The normalized doubled-index tensor of $U_{\mathrm{red}}$ has
@@ -3662,16 +3662,16 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     its representative as $A_{\mathrm{red}}$. Define
     \begin{align}
         U_{\mathrm{red}}^{ij}
-            & =\sqrt d\,A_{\mathrm{red}}^{(i,j)}.
+         & =\sqrt d\,A_{\mathrm{red}}^{(i,j)}.
     \end{align}
     Since $d>0$, normalization recovers $A_{\mathrm{red}}$ exactly. For every
     $N>0$ and every ket--bra pair $(\sigma,\tau)$, the doubled-index
     coefficient identity gives
     \begin{align}
         (U_{\mathrm{red}}^{(N)})_{\sigma,\tau}
-          & =d^{N/2}V^{(N)}(A_{\mathrm{red}})_{(\sigma,\tau)} \\
-          & =d^{N/2}V^{(N)}(\widetilde U)_{(\sigma,\tau)} \\
-          & =(U^{(N)})_{\sigma,\tau}.
+         & =d^{N/2}V^{(N)}(A_{\mathrm{red}})_{(\sigma,\tau)} \\
+         & =d^{N/2}V^{(N)}(\widetilde U)_{(\sigma,\tau)}     \\
+         & =(U^{(N)})_{\sigma,\tau}.
     \end{align}
     Hence the periodic operators agree at every positive length. For $N>1$
     the right side is unitary, so $U_{\mathrm{red}}$ is an MPU.
@@ -3872,7 +3872,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \widetilde W^{ik}
          & =\sqrt d\sum_{j=0}^{d-1}
-            \widetilde U^{ij}\otimes\widetilde V^{jk}.
+        \widetilde U^{ij}\otimes\widetilde V^{jk}.
     \end{align}
     This identity combines the raw composition tensor used in the proof of
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU} with the normalization in
@@ -4584,8 +4584,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The block-multiplicity theorem and the transfer-spectrum theorem then give
     \begin{align}
         r & =1,
-            & r(T)                         & =1,
-            & \operatorname{peripheral}(T) & =\{1\}.
+          & r(T)                         & =1,
+          & \operatorname{peripheral}(T) & =\{1\}.
     \end{align}
     Full support supplies
     \begin{align}
@@ -4990,14 +4990,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Let $\mathcal U$, $\mathcal V$, and $\mathcal W$ instead have positive
     source ranks and suppose that
     \begin{align}
-        r_{\mathcal W} & =c r_{\mathcal U}r_{\mathcal V}, \\
+        r_{\mathcal W}    & =c r_{\mathcal U}r_{\mathcal V},      \\
         \ell_{\mathcal W} & =c\ell_{\mathcal U}\ell_{\mathcal V},
     \end{align}
     where $c$ is a positive integer. Then
     \begin{align}
         \operatorname{ind}_{\mathrm{src}}(\mathcal W)
          & =\operatorname{ind}_{\mathrm{src}}(\mathcal U)
-          +\operatorname{ind}_{\mathrm{src}}(\mathcal V).
+        +\operatorname{ind}_{\mathrm{src}}(\mathcal V).
     \end{align}
     If $d$, $r_{\mathcal U}$, and $\ell_{\mathcal U}$ are positive and a
     specified tensor has $r_{\mathcal U}\ell_{\mathcal U}=d^2$, then
@@ -5047,7 +5047,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
     Exact blocking growth gives the common positive factor $d^{k-k_0}$:
     \begin{align}
-        r_k    & =d^{k-k_0}r_{k_0}, \\
+        r_k    & =d^{k-k_0}r_{k_0},    \\
         \ell_k & =d^{k-k_0}\ell_{k_0}.
     \end{align}
     Its logarithm occurs once in each rank term and therefore cancels from
@@ -5178,7 +5178,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     four-site blocking satisfies
     \begin{align}
         r[(\mathcal U\mathbin{\cdot}\mathcal V)_4]
-         & \leq d^2 r[\mathcal U]r[\mathcal V], \\
+         & \leq d^2 r[\mathcal U]r[\mathcal V],       \\
         \ell[(\mathcal U\mathbin{\cdot}\mathcal V)_4]
          & \leq d^2 \ell[\mathcal U]\ell[\mathcal V].
     \end{align}
@@ -5207,7 +5207,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Consequently,
     \begin{align}
         r[(\mathcal U\mathbin{\cdot}\mathcal V)_4]
-         &=\operatorname{rank}(A_{1,4}B_{1,4})
+         & =\operatorname{rank}(A_{1,4}B_{1,4})
         \leq\dim(\mathcal K_1)
         =d^2r[\mathcal U]r[\mathcal V].
     \end{align}
@@ -5227,7 +5227,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Hence
     \begin{align}
         \ell[(\mathcal U\mathbin{\cdot}\mathcal V)_4]
-         &=\operatorname{rank}(A_{2,4}B_{2,4})
+         & =\operatorname{rank}(A_{2,4}B_{2,4})
         \leq\dim(\mathcal K_2)
         =d^2\ell[\mathcal U]\ell[\mathcal V].
     \end{align}
@@ -6553,9 +6553,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \det A
          & =\det(A^T)
-          =\det(-A)
-          =(-1)^{|I|}\det A
-          =-\det A.
+        =\det(-A)
+        =(-1)^{|I|}\det A
+        =-\det A.
     \end{align}
     Since the complex numbers have characteristic zero, $\det A=0$.
 \end{proof}
@@ -6823,7 +6823,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \mathcal S_{d,N}\colon
         \operatorname{Mat}_{d^N}(\mathbb C)
-        &\longrightarrow \operatorname{Mat}_{d^N}(\mathbb C).
+         & \longrightarrow \operatorname{Mat}_{d^N}(\mathbb C).
     \end{align}
     We suppress the subscripts on $\mathcal S_{d,N}$ when $d$ and $N$ are
     understood. An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
@@ -7182,8 +7182,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \tr\!\left[\mathbb S(A\otimes B)\right]
          & =\sum_{i,j}A_{j,i}B_{i,j}
-          =\sum_{i,j}A_{i,j}B_{j,i}
-          =\tr(AB).
+        =\sum_{i,j}A_{i,j}B_{j,i}
+        =\tr(AB).
     \end{align}
     Taking $A=U$ and $B=U^\dagger$ gives
     $\tr(UU^\dagger)=\tr(\Id)=n$.
@@ -7674,7 +7674,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $z_{(\alpha,i)}=\delta_{\alpha i}$ be the vectorized identity. Its raw
     source cuts are
     \begin{align}
-        M_1(A) & =\Id, \\
+        M_1(A) & =\Id,            \\
         M_2(A) & =zz^{\mathsf T}.
     \end{align}
     For the left-shift tensor $A^\sharp$ they are
@@ -7684,13 +7684,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     In every physical dimension, including $d=0$,
     \begin{align}
-        r(A)            & =d^2, \\
+        r(A)           & =d^2, \\
         \ell(A^\sharp) & =d^2.
     \end{align}
     If $d>0$, the remaining two ranks are
     \begin{align}
-        \ell(A)       & =1, \\
-        r(A^\sharp)   & =1.
+        \ell(A)     & =1, \\
+        r(A^\sharp) & =1.
     \end{align}
     These are the raw source-cut quantities from
     \cite[Section~III]{Cirac2017MPU}; no choice of source factors is involved.
@@ -7699,7 +7699,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank, thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
     The entry formula $A^{ij}_{\alpha\beta}
-    =\delta_{i\alpha}\delta_{j\beta}$ gives $M_1(A)=\Id$ and
+        =\delta_{i\alpha}\delta_{j\beta}$ gives $M_1(A)=\Id$ and
     $M_2(A)=zz^{\mathsf T}$. Hence the first rank is $d^2$. For $d>0$, the
     vector $z$ has a nonzero diagonal coordinate, so its outer product has
     rank one. Physical adjunction exchanges the two cuts and their ranks,
@@ -7782,7 +7782,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Assume $d>0$. In the source coordinates of the supplied factorizations,
     \begin{align}
         u_1 & =\Id\otimes\Id, & v_1 & =\Id\otimes\Id, \\
-        u_3 & =\mathbb S,      & v_3 & =\mathbb S.
+        u_3 & =\mathbb S,     & v_3 & =\mathbb S.
     \end{align}
     These are the formulas in \cite[lines~2009--2016]{Cirac2017MPU}.
     The $U_3$ equalities use the source-coordinate presentation of that
@@ -7796,7 +7796,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $s=d^{-1/2}$.  The identity factors give
     \begin{align}
         [u_1]_{((a,b),(c,e)),((i,j),(k,l))}
-         & =[v_1]_{((i,j),(k,l)),((a,b),(c,e))} \\
+         & =[v_1]_{((i,j),(k,l)),((a,b),(c,e))}                  \\
          & =(\delta_{a,i}\delta_{c,k})(\delta_{b,j}\delta_{e,l}) \\
          & =\delta_{a,i}\delta_{b,j}\delta_{c,k}\delta_{e,l}.
     \end{align}
@@ -7804,11 +7804,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         [u_3]_{((a,b),(c,e)),((i,j),(k,l))}
          & =(s\delta_{c,i}\delta_{a,k})
-            (d\,s\delta_{e,j}\delta_{b,l}) \\
+        (d\,s\delta_{e,j}\delta_{b,l})                        \\
          & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j}, \\
         [v_3]_{((i,j),(k,l)),((a,b),(c,e))}
          & =(d\,s\delta_{a,k}\delta_{c,i})
-            (s\delta_{b,l}\delta_{e,j}) \\
+        (s\delta_{b,l}\delta_{e,j})                           \\
          & =\delta_{a,k}\delta_{b,l}\delta_{c,i}\delta_{e,j},
     \end{align}
     where $d\,s^2=1$.  The first display is the identity matrix, while the
@@ -7827,7 +7827,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         u_2^{(2)} & =\Id\otimes\mathbb S\otimes\Id, \\
         v_2^{(2)} & =(\mathbb S\otimes\mathbb S)
-            (\Id\otimes\mathbb S\otimes\Id).
+        (\Id\otimes\mathbb S\otimes\Id).
     \end{align}
     Here the two physical sites are decoded into the four-spin order of the
     paper, and the factors $X_1,Y_2$ and $X_2,Y_1$ remain as the two open
@@ -7843,15 +7843,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     identifications, the asserted open-leg equalities are
     \begin{align}
         (B_2)_{I,J;\alpha,\gamma}
-        & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
+         & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
         [\Id\otimes\mathbb S\otimes\Id]_
-            {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
-        (Y_2)_{l,(J_2,\gamma)}, \\
+        {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        (Y_2)_{l,(J_2,\gamma)},              \\
         (B_2)_{I,J;\alpha,\gamma}
-        & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
+         & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
         [(\mathbb S\otimes\mathbb S)
             (\Id\otimes\mathbb S\otimes\Id)]_
-            {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
         (Y_1)_{r,(I_2,\gamma)}.
     \end{align}
     Write $s=d^{-1/2}$, so that $d\,s^2=1$.  In the product-rank coordinates,
@@ -7859,11 +7859,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         [u_2^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
          & =(d\,s\delta_{a,i}\delta_{b,k})
-            (s\delta_{c,j}\delta_{e,l}) \\
+        (s\delta_{c,j}\delta_{e,l})                           \\
          & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}, \\
         [v_2^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
          & =(s\delta_{e,k}\delta_{c,i})
-            (d\,s\delta_{b,l}\delta_{a,j}) \\
+        (d\,s\delta_{b,l}\delta_{a,j})                        \\
          & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}.
     \end{align}
     These are respectively the entries of
@@ -7883,7 +7883,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     as their respective central gates,
     \begin{align}
         u_3^{(2)} & =(\Id\otimes\mathbb S\otimes\Id)
-            (\mathbb S\otimes\mathbb S), \\
+        (\mathbb S\otimes\mathbb S),                 \\
         v_3^{(2)} & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
     Again the four-spin order is the one displayed in the paper, and the
@@ -7898,15 +7898,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     are
     \begin{align}
         (B_3)_{I,J;\alpha,\gamma}
-        & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
+         & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
         [(\Id\otimes\mathbb S\otimes\Id)
             (\mathbb S\otimes\mathbb S)]_
-            {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
-        (Y_2)_{l,(J_2,\gamma)}, \\
+        {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        (Y_2)_{l,(J_2,\gamma)},              \\
         (B_3)_{I,J;\alpha,\gamma}
-        & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
+         & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
         [\Id\otimes\mathbb S\otimes\Id]_
-            {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
         (Y_1)_{r,(I_2,\gamma)}.
     \end{align}
     Again write $s=d^{-1/2}$, so that $d\,s^2=1$.  Reversing the two supplied
@@ -7914,11 +7914,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         [u_3^{(2)}]_{((a,b),(c,e)),((i,j),(k,l))}
          & =(s\delta_{c,i}\delta_{e,k})
-            (d\,s\delta_{a,j}\delta_{b,l}) \\
+        (d\,s\delta_{a,j}\delta_{b,l})                        \\
          & =\delta_{a,j}\delta_{b,l}\delta_{c,i}\delta_{e,k}, \\
         [v_3^{(2)}]_{((i,j),(k,l)),((a,b),(c,e))}
          & =(d\,s\delta_{b,k}\delta_{a,i})
-            (s\delta_{e,l}\delta_{c,j}) \\
+        (s\delta_{e,l}\delta_{c,j})                           \\
          & =\delta_{a,i}\delta_{b,k}\delta_{c,j}\delta_{e,l}.
     \end{align}
     The first is the entry of
@@ -8376,8 +8376,8 @@ Let $I$ and $J$ be finite sets.  For
 $X\in M_{I\times J}(\mathbb C)$, the existing left coefficient slice and
 right operator block are the matrices
 \begin{align}
-    X^{\mathrm L}_{rs}(i,j)&=X((i,r),(j,s)), &
-    X^{\mathrm R}_{ij}(r,s)&=X((i,r),(j,s)).
+    X^{\mathrm L}_{rs}(i,j) & =X((i,r),(j,s)), &
+    X^{\mathrm R}_{ij}(r,s) & =X((i,r),(j,s)).
 \end{align}
 For a star-subalgebra $\mathcal D\subseteq M_K(\mathbb C)$, write
 $\mathcal D'=\{Y\in M_K(\mathbb C)\mid [Y,Z]=0\text{ for every }Z\in\mathcal D\}$
@@ -8425,7 +8425,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     For every $X\in M_{I\times J}(\mathbb C)$ and $i,j\in I$,
     \begin{align}
         (X^\dagger)^{\mathrm R}_{ij}
-        &=\bigl(X^{\mathrm R}_{ji}\bigr)^\dagger.
+         & =\bigl(X^{\mathrm R}_{ji}\bigr)^\dagger.
     \end{align}
 \end{theorem}
 
@@ -8442,8 +8442,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     Its set of left coefficients is
     \begin{align}
         \operatorname{Coeff}_{\mathrm L}(\mathcal A)
-        &=\bigl\{X^{\mathrm L}_{rs}\ \bigm|\
-          X\in\mathcal A,\ r,s\in J\bigr\}
+         & =\bigl\{X^{\mathrm L}_{rs}\ \bigm|\
+        X\in\mathcal A,\ r,s\in J\bigr\}
         \subseteq M_I(\mathbb C).
     \end{align}
 \end{definition}
@@ -8456,8 +8456,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     Its set of right coefficients is
     \begin{align}
         \operatorname{Coeff}_{\mathrm R}(\mathcal A)
-        &=\bigl\{X^{\mathrm R}_{ij}\ \bigm|\
-          X\in\mathcal A,\ i,j\in I\bigr\}
+         & =\bigl\{X^{\mathrm R}_{ij}\ \bigm|\
+        X\in\mathcal A,\ i,j\in I\bigr\}
         \subseteq M_J(\mathbb C).
     \end{align}
 \end{definition}
@@ -8470,8 +8470,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     The left support algebra of $\mathcal A$ is the star-subalgebra
     \begin{align}
         \operatorname{Spp}_{\mathrm L}(\mathcal A)
-        &=\operatorname{alg}^*
-          \bigl(\operatorname{Coeff}_{\mathrm L}(\mathcal A)\bigr)
+         & =\operatorname{alg}^*
+        \bigl(\operatorname{Coeff}_{\mathrm L}(\mathcal A)\bigr)
         \subseteq M_I(\mathbb C)
     \end{align}
     generated by all left coefficients.
@@ -8485,8 +8485,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     The right support algebra of $\mathcal A$ is the star-subalgebra
     \begin{align}
         \operatorname{Spp}_{\mathrm R}(\mathcal A)
-        &=\operatorname{alg}^*
-          \bigl(\operatorname{Coeff}_{\mathrm R}(\mathcal A)\bigr)
+         & =\operatorname{alg}^*
+        \bigl(\operatorname{Coeff}_{\mathrm R}(\mathcal A)\bigr)
         \subseteq M_J(\mathbb C)
     \end{align}
     generated by all right coefficients.
@@ -8500,7 +8500,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     If $X\in\mathcal A$ and $r,s\in J$, then
     \begin{align}
         X^{\mathrm L}_{rs}
-        &\in\operatorname{Spp}_{\mathrm L}(\mathcal A).
+         & \in\operatorname{Spp}_{\mathrm L}(\mathcal A).
     \end{align}
 \end{theorem}
 
@@ -8518,7 +8518,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     If $X\in\mathcal A$ and $i,j\in I$, then
     \begin{align}
         X^{\mathrm R}_{ij}
-        &\in\operatorname{Spp}_{\mathrm R}(\mathcal A).
+         & \in\operatorname{Spp}_{\mathrm R}(\mathcal A).
     \end{align}
 \end{theorem}
 
@@ -8534,7 +8534,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \leanok
     For every $X\in M_{I\times J}(\mathbb C)$,
     \begin{align}
-        X&=\sum_{r,s\in J}X^{\mathrm L}_{rs}\otimes E_{rs}.
+        X & =\sum_{r,s\in J}X^{\mathrm L}_{rs}\otimes E_{rs}.
     \end{align}
 \end{theorem}
 
@@ -8549,7 +8549,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \leanok
     For every $X\in M_{I\times J}(\mathbb C)$,
     \begin{align}
-        X&=\sum_{i,j\in I}E_{ij}\otimes X^{\mathrm R}_{ij}.
+        X & =\sum_{i,j\in I}E_{ij}\otimes X^{\mathrm R}_{ij}.
     \end{align}
 \end{theorem}
 
@@ -8567,7 +8567,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         \operatorname{Spp}_{\mathrm L}(\mathcal A)\subseteq\mathcal B
         \quad\Longleftrightarrow\quad
-        &X^{\mathrm L}_{rs}\in\mathcal B
+         & X^{\mathrm L}_{rs}\in\mathcal B
         \quad\text{for every }X\in\mathcal A\text{ and }r,s\in J.
     \end{align}
 \end{theorem}
@@ -8587,7 +8587,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         \operatorname{Spp}_{\mathrm R}(\mathcal A)\subseteq\mathcal C
         \quad\Longleftrightarrow\quad
-        &X^{\mathrm R}_{ij}\in\mathcal C
+         & X^{\mathrm R}_{ij}\in\mathcal C
         \quad\text{for every }X\in\mathcal A\text{ and }i,j\in I.
     \end{align}
 \end{theorem}
@@ -8608,7 +8608,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         \operatorname{Spp}_{\mathrm L}(\mathcal A)\subseteq\mathcal B
         \quad\Longleftrightarrow\quad
-        \mathcal A&\subseteq
+        \mathcal A & \subseteq
         \mathcal B\otimes M_q(\mathbb C),
     \end{align}
     where the right-hand side is the tensor-product submodule consisting of
@@ -8630,8 +8630,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     $T\subseteq M_J(\mathbb C)$, define
     \begin{align}
         S\boxtimes T
-        &=\operatorname{span}_{\mathbb C}
-          \{A\otimes B\mid A\in S,\ B\in T\}
+         & =\operatorname{span}_{\mathbb C}
+        \{A\otimes B\mid A\in S,\ B\in T\}
         \subseteq M_{I\times J}(\mathbb C).
     \end{align}
     This is the tensor-product subspace used below, rather than a
@@ -8647,11 +8647,11 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         X\in S\boxtimes T
         \quad\Longleftrightarrow\quad
-        &X^{\mathrm L}_{rs}\in S
-          \quad\text{for every }r,s\in J,                     \\
-        &\text{and}\quad
-          X^{\mathrm R}_{ij}\in T
-          \quad\text{for every }i,j\in I.
+         & X^{\mathrm L}_{rs}\in S
+        \quad\text{for every }r,s\in J, \\
+         & \text{and}\quad
+        X^{\mathrm R}_{ij}\in T
+        \quad\text{for every }i,j\in I.
     \end{align}
 \end{theorem}
 
@@ -8659,8 +8659,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     \uses{def:qca_kronecker_submodule}
     For $A\in S$ and $B\in T$, direct evaluation gives
     \begin{align}
-        (A\otimes B)^{\mathrm L}_{rs}&=B_{rs}A, &
-        (A\otimes B)^{\mathrm R}_{ij}&=A_{ij}B.
+        (A\otimes B)^{\mathrm L}_{rs} & =B_{rs}A, &
+        (A\otimes B)^{\mathrm R}_{ij} & =A_{ij}B.
     \end{align}
     Thus the forward implication extends by linearity.
     Conversely, expand the right blocks in a basis of $T$.  Applying the dual
@@ -8678,8 +8678,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     $S\subseteq M_p(\mathbb C)$,
     \begin{align}
         S\boxtimes M_q(\mathbb C)
-        &=\{X\in M_{p\times q}(\mathbb C)
-          \mid X^{\mathrm L}_{rs}\in S\text{ for all }r,s\}.
+         & =\{X\in M_{p\times q}(\mathbb C)
+        \mid X^{\mathrm L}_{rs}\in S\text{ for all }r,s\}.
     \end{align}
     Thus the two-sided Kronecker span extends the existing left-oriented
     tensor-submodule construction.
@@ -8701,7 +8701,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         \operatorname{Spp}_{\mathrm R}(\mathcal A)\subseteq\mathcal C
         \quad\Longleftrightarrow\quad
-        \mathcal A&\subseteq M_I(\mathbb C)\boxtimes\mathcal C.
+        \mathcal A & \subseteq M_I(\mathbb C)\boxtimes\mathcal C.
     \end{align}
 \end{theorem}
 
@@ -8720,7 +8720,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     Every bipartite star-subalgebra satisfies the literal two-sided containment
     \begin{align}
         \mathcal A
-        &\subseteq
+         & \subseteq
         \operatorname{Spp}_{\mathrm L}(\mathcal A)
         \boxtimes
         \operatorname{Spp}_{\mathrm R}(\mathcal A).
@@ -8751,7 +8751,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         [B\otimes\mathbf 1_J,X]=0
         \quad\Longleftrightarrow\quad
-        [B,X^{\mathrm L}_{rs}]&=0
+        [B,X^{\mathrm L}_{rs}] & =0
         \quad\text{for every }r,s\in J.
     \end{align}
 \end{theorem}
@@ -8760,11 +8760,11 @@ circuit, MPU standard form, or index comparison is asserted here.
     For $i,j\in I$ and $r,s\in J$, the two product entries are
     \begin{align}
         [(B\otimes\mathbf 1_J)X]_{(i,r),(j,s)}
-        &=\sum_{k\in I}B_{ik}X_{(k,r),(j,s)}
-          =(BX^{\mathrm L}_{rs})_{ij}, \\
+         & =\sum_{k\in I}B_{ik}X_{(k,r),(j,s)}
+        =(BX^{\mathrm L}_{rs})_{ij},           \\
         [X(B\otimes\mathbf 1_J)]_{(i,r),(j,s)}
-        &=\sum_{k\in I}X_{(i,r),(k,s)}B_{kj}
-          =(X^{\mathrm L}_{rs}B)_{ij}.
+         & =\sum_{k\in I}X_{(i,r),(k,s)}B_{kj}
+        =(X^{\mathrm L}_{rs}B)_{ij}.
     \end{align}
     Equality of the two products is therefore equivalent to
     $[B,X^{\mathrm L}_{rs}]=0$ for every $r,s\in J$.
@@ -8778,7 +8778,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         [\mathbf 1_I\otimes C,X]=0
         \quad\Longleftrightarrow\quad
-        [C,X^{\mathrm R}_{ij}]&=0
+        [C,X^{\mathrm R}_{ij}] & =0
         \quad\text{for every }i,j\in I.
     \end{align}
 \end{theorem}
@@ -8787,11 +8787,11 @@ circuit, MPU standard form, or index comparison is asserted here.
     For $i,j\in I$ and $r,s\in J$, the two product entries are
     \begin{align}
         [(\mathbf 1_I\otimes C)X]_{(i,r),(j,s)}
-        &=\sum_{t\in J}C_{rt}X_{(i,t),(j,s)}
-          =(CX^{\mathrm R}_{ij})_{rs}, \\
+         & =\sum_{t\in J}C_{rt}X_{(i,t),(j,s)}
+        =(CX^{\mathrm R}_{ij})_{rs},           \\
         [X(\mathbf 1_I\otimes C)]_{(i,r),(j,s)}
-        &=\sum_{t\in J}X_{(i,r),(j,t)}C_{ts}
-          =(X^{\mathrm R}_{ij}C)_{rs}.
+         & =\sum_{t\in J}X_{(i,r),(j,t)}C_{ts}
+        =(X^{\mathrm R}_{ij}C)_{rs}.
     \end{align}
     Equality of the two products is therefore equivalent to
     $[C,X^{\mathrm R}_{ij}]=0$ for every $i,j\in I$.
@@ -8806,12 +8806,12 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         B\otimes\mathbf 1_J\in\mathcal A'
         \quad\Longleftrightarrow\quad
-        B&\in\operatorname{Spp}_{\mathrm L}(\mathcal A)'.
+        B & \in\operatorname{Spp}_{\mathrm L}(\mathcal A)'.
     \end{align}
     Equivalently,
     \begin{align}
         \operatorname{Spp}_{\mathrm L}(\mathcal A)'
-        &=\{B\in M_I(\mathbb C)\mid B\otimes\mathbf 1_J\in\mathcal A'\}.
+         & =\{B\in M_I(\mathbb C)\mid B\otimes\mathbf 1_J\in\mathcal A'\}.
     \end{align}
 \end{theorem}
 
@@ -8836,12 +8836,12 @@ circuit, MPU standard form, or index comparison is asserted here.
     \begin{align}
         \mathbf 1_I\otimes C\in\mathcal A'
         \quad\Longleftrightarrow\quad
-        C&\in\operatorname{Spp}_{\mathrm R}(\mathcal A)'.
+        C & \in\operatorname{Spp}_{\mathrm R}(\mathcal A)'.
     \end{align}
     Equivalently,
     \begin{align}
         \operatorname{Spp}_{\mathrm R}(\mathcal A)'
-        &=\{C\in M_J(\mathbb C)\mid \mathbf 1_I\otimes C\in\mathcal A'\}.
+         & =\{C\in M_J(\mathbb C)\mid \mathbf 1_I\otimes C\in\mathcal A'\}.
     \end{align}
 \end{theorem}
 
@@ -8863,22 +8863,22 @@ circuit, MPU standard form, or index comparison is asserted here.
     \uses{def:qca_left_support_algebra, def:qca_right_support_algebra}
     Let $I$, $J$, and $K$ be finite sets, and let
     \begin{align}
-        \mathcal A_1&\subseteq M_{I\times J}(\mathbb C), &
-        \mathcal A_2&\subseteq M_{J\times K}(\mathbb C)
+        \mathcal A_1 & \subseteq M_{I\times J}(\mathbb C), &
+        \mathcal A_2 & \subseteq M_{J\times K}(\mathbb C)
     \end{align}
     be star-subalgebras.  Suppose that, for every
     $X\in\mathcal A_1$ and $Y\in\mathcal A_2$,
     \begin{align}
         (X\otimes\mathbf 1_K)(\mathbf 1_I\otimes Y)
-        &=(\mathbf 1_I\otimes Y)(X\otimes\mathbf 1_K).
+         & =(\mathbf 1_I\otimes Y)(X\otimes\mathbf 1_K).
         \label{eq:qca_overlapping_support_lifts}
     \end{align}
     Then the two support algebras on the common factor commute:
     \begin{align}
-        RL&=LR
-        &&\text{for every }
-          R\in\operatorname{Spp}_{\mathrm R}(\mathcal A_1),\quad
-          L\in\operatorname{Spp}_{\mathrm L}(\mathcal A_2).
+        RL & =LR
+           &     & \text{for every }
+        R\in\operatorname{Spp}_{\mathrm R}(\mathcal A_1),\quad
+        L\in\operatorname{Spp}_{\mathrm L}(\mathcal A_2).
         \label{eq:qca_overlapping_support_conclusion}
     \end{align}
     This is the full complex matrix-algebra specialization of
@@ -8911,7 +8911,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     (\ref{eq:qca_overlapping_support_lifts}) gives
     \begin{align}
         X^{\mathrm R}_{ii'}Y^{\mathrm L}_{kk'}
-        &=Y^{\mathrm L}_{kk'}X^{\mathrm R}_{ii'}.
+         & =Y^{\mathrm L}_{kk'}X^{\mathrm R}_{ii'}.
         \label{eq:qca_overlapping_support_coefficients}
     \end{align}
     Applying the same identity to $Y^\dagger\in\mathcal A_2$, with $k$ and
@@ -8921,8 +8921,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     star-subalgebra commuting with all left coefficients of $\mathcal A_2$.
     Passing to the generated star-subalgebra yields
     \begin{align}
-        LR&=RL, &
-        L^\dagger R&=RL^\dagger
+        LR          & =RL,        &
+        L^\dagger R & =RL^\dagger
         \label{eq:qca_overlapping_support_first_closure}
     \end{align}
     for every $R\in\operatorname{Spp}_{\mathrm R}(\mathcal A_1)$ and every
@@ -9208,8 +9208,8 @@ circuit, MPU standard form, or index comparison is asserted here.
     $A_L=\iota_{\Lambda,I_{a,N}}(A)$.  For $N>1$, the finite-chain term in
     \cite[lines~2300--2306]{Cirac2017MPU} is the star-algebra map
     \begin{align}
-        \mathcal A_\Lambda&\longrightarrow\mathcal A_{\mathrm{loc}}, \\
-        A&\longmapsto
+        \mathcal A_\Lambda & \longrightarrow\mathcal A_{\mathrm{loc}}, \\
+        A                  & \longmapsto
         \iota_{I_{a,N}}\!\left(U_a^{(N)}A_LU_a^{(N)\dagger}\right).
     \end{align}
     No stabilization in $N$ is asserted.
@@ -10185,16 +10185,16 @@ scalar-center theorem.
     \begin{align}
         \forall\Gamma\subset\mathbb Z\text{ finite},\quad
         \forall A\in\mathcal A_\Gamma,\qquad
-        z j_\Gamma(A)&=j_\Gamma(A)z,
+        z j_\Gamma(A) & =j_\Gamma(A)z,
     \end{align}
     then there is a unique $c\in\mathbb C$ such that
     \begin{align}
-        z&=c\mathbf 1.
+        z & =c\mathbf 1.
     \end{align}
     Consequently,
     \begin{align}
         \{z\in\mathcal A\mid za=az\text{ for every }a\in\mathcal A\}
-        &=\mathbb C\mathbf 1.
+         & =\mathbb C\mathbf 1.
     \end{align}
     This statement concerns the fixed on-site dimension $d$; it does not assert
     the site-dependent extension used in GNVW.
@@ -10212,7 +10212,7 @@ scalar-center theorem.
     give
     \begin{align}
         j_\varnothing(e(c))=j_\varnothing(e(c'))
-        &\Longrightarrow e(c)=e(c')
+         & \Longrightarrow e(c)=e(c')
         \Longrightarrow c=c'.
     \end{align}
     Thus $c$ is the unique scalar for which $z=c\mathbf 1$.
@@ -10221,13 +10221,13 @@ scalar-center theorem.
     $j_\Gamma(B)$ belongs to $\mathcal A$, the two inclusions are
     \begin{align}
         z\in Z(\mathcal A)
-        &\Longrightarrow
+         & \Longrightarrow
         \bigl(\forall \Gamma\subset\mathbb Z\text{ finite},\
         \forall B\in\mathcal A_\Gamma,\
         z j_\Gamma(B)=j_\Gamma(B)z\bigr)
-        \Longrightarrow z\in\mathbb C\mathbf 1,\\
+        \Longrightarrow z\in\mathbb C\mathbf 1, \\
         z=c\mathbf 1\quad(c\in\mathbb C)
-        &\Longrightarrow
+         & \Longrightarrow
         \bigl(\forall a\in\mathcal A,\
         (c\mathbf 1)a=a(c\mathbf 1)\bigr)
         \Longrightarrow z\in Z(\mathcal A).
@@ -10704,7 +10704,7 @@ $\omega^{-1}$.
     The expansion of $\Lambda$ is
     \begin{align}
         \widehat\Lambda_L
-        &=\{Lx+r:x\in\Lambda,\ 0\leq r<L\}.
+         & =\{Lx+r:x\in\Lambda,\ 0\leq r<L\}.
     \end{align}
     Every $z\in\widehat\Lambda_L$ has unique block coordinates $(x,r)$ with
     $x\in\Lambda$ and $0\leq r<L$.  Increasing $r$ gives the consecutive-site
@@ -10776,7 +10776,7 @@ $\omega^{-1}$.
     equivalence gives a star-algebra equivalence
     \begin{align}
         \mathcal A^{(d^L)}_\Lambda
-        &\simeq \mathcal A^{(d)}_{\widehat\Lambda_L}.
+         & \simeq \mathcal A^{(d)}_{\widehat\Lambda_L}.
     \end{align}
     This is the finite-region equivalence underlying the algebraic-local
     blocking construction below.  No quasi-local completion, compatibility
@@ -10809,7 +10809,7 @@ $\omega^{-1}$.
     its block hull by
     \begin{align}
         \operatorname{Hull}_L(\Delta)
-        &=\{\lfloor z/L\rfloor:z\in\Delta\}.
+         & =\{\lfloor z/L\rfloor:z\in\Delta\}.
     \end{align}
     This is the finite set of length-$L$ blocks that meet $\Delta$.
 \end{definition}
@@ -10828,10 +10828,10 @@ $\omega^{-1}$.
     \end{align}
     If $\Delta\subseteq\Theta$, then
     $\operatorname{Hull}_L(\Delta)\subseteq
-    \operatorname{Hull}_L(\Theta)$.  Expansion and block hull are exact in the
+        \operatorname{Hull}_L(\Theta)$.  Expansion and block hull are exact in the
     blocked direction:
     \begin{align}
-        \operatorname{Hull}_L(\widehat\Lambda_L)&=\Lambda.
+        \operatorname{Hull}_L(\widehat\Lambda_L) & =\Lambda.
     \end{align}
 \end{lemma}
 
@@ -10855,8 +10855,8 @@ $\omega^{-1}$.
     commutes:
     \begin{align}
         \mathcal B_{L,\Gamma}\,\iota_{\Lambda,\Gamma}
-        &=\iota_{\widehat\Lambda_L,\widehat\Gamma_L}\,
-          \mathcal B_{L,\Lambda}.
+         & =\iota_{\widehat\Lambda_L,\widehat\Gamma_L}\,
+        \mathcal B_{L,\Lambda}.
     \end{align}
 \end{lemma}
 
@@ -10867,15 +10867,15 @@ $\omega^{-1}$.
     entries in the commuting square are
     \begin{align}
         \bigl[\mathcal B_{L,\Gamma}
-          (\iota_{\Lambda,\Gamma}(A))\bigr]_{x,y}
-        &=A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
-          \mathbf 1_{\{\widetilde x|_{\Gamma\setminus\Lambda}
-                         =\widetilde y|_{\Gamma\setminus\Lambda}\}},\\
+            (\iota_{\Lambda,\Gamma}(A))\bigr]_{x,y}
+         & =A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
+        \mathbf 1_{\{\widetilde x|_{\Gamma\setminus\Lambda}
+        =\widetilde y|_{\Gamma\setminus\Lambda}\}},         \\
         \bigl[\iota_{\widehat\Lambda_L,\widehat\Gamma_L}
-          (\mathcal B_{L,\Lambda}(A))\bigr]_{x,y}
-        &=A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
-          \mathbf 1_{\{x|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}
-                         =y|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}\}}.
+        (\mathcal B_{L,\Lambda}(A))\bigr]_{x,y}
+         & =A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
+        \mathbf 1_{\{x|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}
+        =y|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}\}}.
     \end{align}
     Restriction commutes with block encoding, and decoding identifies
     $\Gamma\setminus\Lambda$ with the original sites in
@@ -10911,19 +10911,19 @@ $\omega^{-1}$.
     For $\Lambda\subseteq\Gamma$, the finite commuting square gives
     \begin{align}
         \iota_{\widehat\Gamma_L}
-          \mathcal B_{L,\Gamma}(\iota_{\Lambda,\Gamma}(A))
-        &=\iota_{\widehat\Lambda_L}\mathcal B_{L,\Lambda}(A),
+        \mathcal B_{L,\Gamma}(\iota_{\Lambda,\Gamma}(A))
+         & =\iota_{\widehat\Lambda_L}\mathcal B_{L,\Lambda}(A),
     \end{align}
     so the forward finite-region maps form a compatible family.  For the
     reverse family, block-hull monotonicity sends $\Delta\subseteq\Theta$ to
     $\operatorname{Hull}_L(\Delta)\subseteq
-    \operatorname{Hull}_L(\Theta)$.  Transitivity of the canonical inclusions
+        \operatorname{Hull}_L(\Theta)$.  Transitivity of the canonical inclusions
     and the inverse commuting square then give
     \begin{align}
         \iota_{\operatorname{Hull}_L(\Theta)}
-          \mathcal U_{L,\Theta}(\iota_{\Delta,\Theta}(A))
-        &=\iota_{\operatorname{Hull}_L(\Delta)}
-          \mathcal U_{L,\Delta}(A).
+        \mathcal U_{L,\Theta}(\iota_{\Delta,\Theta}(A))
+         & =\iota_{\operatorname{Hull}_L(\Delta)}
+        \mathcal U_{L,\Delta}(A).
     \end{align}
     The universal property of the algebraic direct limit therefore induces
     both star-algebra homomorphisms.
@@ -10945,9 +10945,9 @@ $\omega^{-1}$.
     composites have the orientations
     \begin{align}
         \mathcal B_L\mathcal U_L
-        &=\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d)}},\\
+         & =\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d)}},   \\
         \mathcal U_L\mathcal B_L
-        &=\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d^L)}}.
+         & =\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d^L)}}.
     \end{align}
     The first identity holds for every on-site dimension $d$; the second also
     assumes $d>0$.
@@ -10972,7 +10972,7 @@ $\omega^{-1}$.
     For $d>0$ and $L>0$, forward blocking gives a star-algebra equivalence
     \begin{align}
         \mathcal A_{\mathrm{loc}}^{(d^L)}
-        &\simeq \mathcal A_{\mathrm{loc}}^{(d)}.
+         & \simeq \mathcal A_{\mathrm{loc}}^{(d)}.
     \end{align}
     This formalizes only the algebraic-local change of site grouping used at
     lines~2308 and 2313--2320 of \cite{Cirac2017MPU}.  It does not assert the
@@ -11012,19 +11012,19 @@ $\omega^{-1}$.
     $A\in\mathcal A^{(d^L)}_\Lambda$ and
     $C\in\mathcal A^{(d)}_\Delta$,
     \begin{align}
-      \mathcal B_L\bigl(\iota_\Lambda(A)\bigr)
-        &=\iota_{\widehat\Lambda_L}
-          \bigl(\mathcal B_{L,\Lambda}(A)\bigr),\\
-      \mathcal B_L^{-1}\bigl(\iota_\Delta(C)\bigr)
-        &=\iota_{\operatorname{Hull}_L(\Delta)}
-          \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
-          \bigl(\iota_{\Delta,
-          \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
+        \mathcal B_L\bigl(\iota_\Lambda(A)\bigr)
+         & =\iota_{\widehat\Lambda_L}
+        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),    \\
+        \mathcal B_L^{-1}\bigl(\iota_\Delta(C)\bigr)
+         & =\iota_{\operatorname{Hull}_L(\Delta)}
+        \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
+        \bigl(\iota_{\Delta,
+                    \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
     \end{align}
     In particular, if $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, then
     \begin{align}
-      \mathcal B_L^{-1}\bigl(\iota_{\widehat\Lambda_L}(C)\bigr)
-        &=\iota_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
+        \mathcal B_L^{-1}\bigl(\iota_{\widehat\Lambda_L}(C)\bigr)
+         & =\iota_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
     \end{align}
     The forward and inverse maps are operator-norm isometries.  In particular,
     each preserves the norm.
@@ -11050,8 +11050,8 @@ $\omega^{-1}$.
     For $d>0$ and $L>0$, site blocking extends uniquely by continuity to a
     star-algebra equivalence
     \begin{align}
-      \overline{\mathcal B}_L:
-      \mathcal A^{(d^L)}&\simeq\mathcal A^{(d)}.
+        \overline{\mathcal B}_L:
+        \mathcal A^{(d^L)} & \simeq\mathcal A^{(d)}.
     \end{align}
     This is only the completion of the change of site grouping used at
     \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.  This slice does not define
@@ -11085,35 +11085,35 @@ $\omega^{-1}$.
     $\overline{\mathcal B}_L$ is the continuous extension of $\mathcal B_L$,
     and on the two dense algebraic-local subalgebras,
     \begin{align}
-      \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
-        &=j^{(d)}\bigl(\mathcal B_L(A)\bigr),\\
-      \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
-        &=j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
+        \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
+         & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),        \\
+        \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
+         & =j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
     \end{align}
     For $A\in\mathcal A^{(d^L)}_\Lambda$ and
     $C\in\mathcal A^{(d)}_\Delta$, these identities become
     \begin{align}
-      \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
-        &=j^{(d)}_{\widehat\Lambda_L}
-          \bigl(\mathcal B_{L,\Lambda}(A)\bigr),\\
-      \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
-        &=j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
-          \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
-          \bigl(\iota_{\Delta,
-          \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
+        \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
+         & =j^{(d)}_{\widehat\Lambda_L}
+        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),        \\
+        \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
+         & =j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
+        \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
+        \bigl(\iota_{\Delta,
+                    \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
     \end{align}
     If $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, the inverse formula reduces
     exactly to
     \begin{align}
-      \overline{\mathcal B}_L^{-1}
+        \overline{\mathcal B}_L^{-1}
         \bigl(j^{(d)}_{\widehat\Lambda_L}(C)\bigr)
-        &=j^{(d^L)}_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
+         & =j^{(d^L)}_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
     \end{align}
     Finally, for all quasi-local observables $X$ and $Y$ on the blocked chain,
     \begin{align}
-      \lVert\overline{\mathcal B}_L(X)\rVert&=\lVert X\rVert,\\
-      \lVert\overline{\mathcal B}_L(X)-
-        \overline{\mathcal B}_L(Y)\rVert&=\lVert X-Y\rVert.
+        \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,   \\
+        \lVert\overline{\mathcal B}_L(X)-
+        \overline{\mathcal B}_L(Y)\rVert       & =\lVert X-Y\rVert.
     \end{align}
 \end{lemma}
 
@@ -11142,10 +11142,10 @@ $\omega^{-1}$.
     $\operatorname{Hull}_L(\Delta)$.  In particular, support transport is exact
     on expanded regions:
     \begin{align}
-      \overline{\mathcal B}_L(X)
+        \overline{\mathcal B}_L(X)
         \text{ is supported in }\widehat\Lambda_L
-      \quad\Longleftrightarrow\quad
-      X\text{ is supported in }\Lambda.
+        \quad\Longleftrightarrow\quad
+        X\text{ is supported in }\Lambda.
     \end{align}
 \end{lemma}
 
@@ -11166,7 +11166,7 @@ $\omega^{-1}$.
     finite blocked region.  Then
     \begin{align}
         \widehat{\Lambda+a}_L
-        &=\widehat\Lambda_L+aL.
+         & =\widehat\Lambda_L+aL.
     \end{align}
     This is the translation rule for the site grouping used in
     \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
@@ -11190,8 +11190,8 @@ $\omega^{-1}$.
     the reference block.  Define the induced blocked-lattice neighborhood by
     \begin{align}
         \mathcal C_L(\mathcal N)
-        &=\operatorname{Hull}_L
-          \bigl(\widehat{\{0\}}_L+\mathcal N\bigr).
+         & =\operatorname{Hull}_L
+        \bigl(\widehat{\{0\}}_L+\mathcal N\bigr).
     \end{align}
     The full reference block is included because the block reached after a
     displacement can depend on the starting residue.  This is the finite-region
@@ -11210,10 +11210,10 @@ $\omega^{-1}$.
     \begin{align}
         b\in\mathcal C_L(\mathcal N)
         \quad\Longleftrightarrow\quad
-        &\exists r\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
+         & \exists r\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
         \quad \left\lfloor\frac{r+n}{L}\right\rfloor=b,             \\
         \quad\Longleftrightarrow\quad
-        &\exists r,s\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
+         & \exists r,s\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
         \quad r+n=bL+s.
     \end{align}
     The quotient is the Euclidean quotient by the positive integer $L$.
@@ -11243,7 +11243,7 @@ $\omega^{-1}$.
     \begin{align}
         \operatorname{Hull}_L
         \bigl(\widehat\Lambda_L+\mathcal N\bigr)
-        &=\Lambda+\mathcal C_L(\mathcal N).
+         & =\Lambda+\mathcal C_L(\mathcal N).
     \end{align}
     This is the exact finite-region carry identity associated with the site
     grouping in \cite[lines~2313--2320]{Cirac2017MPU}.
@@ -11255,7 +11255,7 @@ $\omega^{-1}$.
     For $n\in\mathcal N$, Euclidean division gives
     \begin{align}
         \left\lfloor\frac{xL+r+n}{L}\right\rfloor
-        &=x+\left\lfloor\frac{r+n}{L}\right\rfloor.
+         & =x+\left\lfloor\frac{r+n}{L}\right\rfloor.
     \end{align}
     The second summand ranges over exactly $\mathcal C_L(\mathcal N)$ by
     Lemma~\ref{lem:qca_blocked_neighborhood_membership}.  This proves both
@@ -11271,7 +11271,7 @@ $\omega^{-1}$.
     original-lattice neighborhood $\mathcal N$,
     \begin{align}
         \widehat\Lambda_L+\mathcal N
-        &\subseteq
+         & \subseteq
         \widehat{\Lambda+\mathcal C_L(\mathcal N)}_L.
     \end{align}
 \end{lemma}
@@ -11293,7 +11293,7 @@ $\omega^{-1}$.
     equivalence, then for every $a\in\mathbb Z$,
     \begin{align}
         \mathcal B_L\,\tau^{(d^L)}_a
-        &=\tau^{(d)}_{aL}\,\mathcal B_L.
+         & =\tau^{(d)}_{aL}\,\mathcal B_L.
     \end{align}
     This is the translation rule induced by the blocking of sites used in
     \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
@@ -11305,7 +11305,7 @@ $\omega^{-1}$.
     sides apply the same matrix reindexing.  Their supports agree because
     \begin{align}
         \widehat{\Lambda+a}_L
-        &=\widehat\Lambda_L+aL.
+         & =\widehat\Lambda_L+aL.
     \end{align}
     Equality on all finite-region representatives proves the identity on the
     algebraic direct limit.
@@ -11320,7 +11320,7 @@ $\omega^{-1}$.
     equivalence, then for every $a\in\mathbb Z$,
     \begin{align}
         \overline{\mathcal B}_L\,\overline\tau^{(d^L)}_a
-        &=\overline\tau^{(d)}_{aL}\,\overline{\mathcal B}_L.
+         & =\overline\tau^{(d)}_{aL}\,\overline{\mathcal B}_L.
     \end{align}
     This is the completion of the translation rule induced by the site grouping
     in \cite[lines~2308 and 2313--2320]{Cirac2017MPU}.
@@ -11355,8 +11355,8 @@ the converse theorem.
     chain is
     \begin{align}
         \omega^{[L]}
-        &=\overline{\mathcal B}_L^{-1}\circ\omega\circ
-          \overline{\mathcal B}_L.
+         & =\overline{\mathcal B}_L^{-1}\circ\omega\circ
+        \overline{\mathcal B}_L.
     \end{align}
 \end{definition}
 
@@ -11368,8 +11368,8 @@ the converse theorem.
     For every $X\in\mathcal A^{(d^L)}$,
     \begin{align}
         \omega^{[L]}(X)
-        &=\overline{\mathcal B}_L^{-1}
-          \bigl(\omega(\overline{\mathcal B}_L(X))\bigr).
+         & =\overline{\mathcal B}_L^{-1}
+        \bigl(\omega(\overline{\mathcal B}_L(X))\bigr).
     \end{align}
 \end{lemma}
 
@@ -11386,7 +11386,7 @@ the converse theorem.
     The inverse of the blocked automorphism is the blocked inverse:
     \begin{align}
         (\omega^{[L]})^{-1}
-        &=(\omega^{-1})^{[L]}.
+         & =(\omega^{-1})^{[L]}.
     \end{align}
 \end{lemma}
 
@@ -11417,7 +11417,7 @@ the converse theorem.
     \begin{align}
         \operatorname{Hull}_L
         \bigl(\widehat\Lambda_L+\mathcal N\bigr)
-        &=\Lambda+\mathcal C_L(\mathcal N)
+         & =\Lambda+\mathcal C_L(\mathcal N)
     \end{align}
     by the exact carry-aware block-hull identity.
 \end{proof}
@@ -11449,7 +11449,7 @@ the converse theorem.
         \omega^{[L]}\text{ is translation covariant}
         \quad\Longleftrightarrow\quad
         \omega\circ\overline\tau^{(d)}_L
-        &=\overline\tau^{(d)}_L\circ\omega.
+         & =\overline\tau^{(d)}_L\circ\omega.
     \end{align}
     Thus blocked unit-translation covariance records commutation of $\omega$
     with translation by $L$, not necessarily commutation with original unit
@@ -11490,8 +11490,8 @@ the converse theorem.
     $\mathcal A^{(d)}$, then
     \begin{align}
         \omega^{[L]}
-        &=\overline{\mathcal B}_L^{-1}\circ\omega\circ
-          \overline{\mathcal B}_L
+         & =\overline{\mathcal B}_L^{-1}\circ\omega\circ
+        \overline{\mathcal B}_L
     \end{align}
     is a one-dimensional QCA on $\mathcal A^{(d^L)}$.
 \end{lemma}
@@ -11519,7 +11519,7 @@ any part of that external structure theorem beyond this change of grouping.
     Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be finite.  If
     $|n|<L$ for every $n\in\mathcal N$, then
     \begin{align}
-        \mathcal C_L(\mathcal N)&\subseteq[-1,1]\cap\mathbb Z.
+        \mathcal C_L(\mathcal N) & \subseteq[-1,1]\cap\mathbb Z.
     \end{align}
 \end{lemma}
 
@@ -11530,7 +11530,7 @@ any part of that external structure theorem beyond this change of grouping.
     $b\in\mathcal C_L(\mathcal N)$ supplies residues $0\leq r,s<L$ and
     $n\in\mathcal N$ such that
     \begin{align}
-        r+n&=bL+s.
+        r+n & =bL+s.
     \end{align}
     Since $-L<n<L$, the equality is incompatible with $b\leq-2$ and with
     $b\geq2$.  Thus $-1\leq b\leq1$, including for negative displacements.
@@ -11543,11 +11543,11 @@ any part of that external structure theorem beyond this change of grouping.
     \uses{def:qca_blocked_neighborhood}
     Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be finite.  If
     \begin{align}
-        \sup_{n\in\mathcal N}|n|&<L,
+        \sup_{n\in\mathcal N}|n| & <L,
     \end{align}
     then
     \begin{align}
-        \mathcal C_L(\mathcal N)&\subseteq[-1,1]\cap\mathbb Z.
+        \mathcal C_L(\mathcal N) & \subseteq[-1,1]\cap\mathbb Z.
     \end{align}
 \end{lemma}
 
@@ -11566,12 +11566,12 @@ any part of that external structure theorem beyond this change of grouping.
     \uses{def:qca_blocked_neighborhood}
     For every finite $\mathcal N\subset\mathbb Z$, define
     \begin{align}
-        L_{\mathcal N}&=1+\sup_{n\in\mathcal N}|n|.
+        L_{\mathcal N} & =1+\sup_{n\in\mathcal N}|n|.
     \end{align}
     Then $L_{\mathcal N}>0$ and
     \begin{align}
         \mathcal C_{L_{\mathcal N}}(\mathcal N)
-        &\subseteq[-1,1]\cap\mathbb Z.
+         & \subseteq[-1,1]\cap\mathbb Z.
     \end{align}
     With the finite-supremum convention, $L_{\varnothing}=1$.
 \end{lemma}
@@ -11657,7 +11657,7 @@ algebras, their canonical inclusions, translation covariance, and the locality
 inclusion
 \begin{align}
     \omega(\mathcal A_\Lambda)
-    &\subseteq \mathcal A_{\Lambda+\mathcal N}.
+     & \subseteq \mathcal A_{\Lambda+\mathcal N}.
 \end{align}
 The following statements record the finite-dimensional maps determined by
 this inclusion.  They are consequences and coordinate formulations of the
@@ -11676,13 +11676,13 @@ left/right order below agrees with the adjacent-pair convention in
     the finite-region restriction
     \begin{align}
         \omega_{\Lambda,\mathcal N}\colon\mathcal A_\Lambda
-        &\longrightarrow\mathcal A_{\Lambda+\mathcal N}
+         & \longrightarrow\mathcal A_{\Lambda+\mathcal N}
     \end{align}
     to be the unique star-algebra homomorphism satisfying
     \begin{align}
         \iota_{\Lambda+\mathcal N}
-          \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
-        &=\omega\bigl(\iota_\Lambda(A)\bigr)
+        \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
+         & =\omega\bigl(\iota_\Lambda(A)\bigr)
         \qquad(A\in\mathcal A_\Lambda).
     \end{align}
 \end{definition}
@@ -11697,8 +11697,8 @@ left/right order below agrees with the adjacent-pair convention in
     $A\in\mathcal A_\Lambda$ one has
     \begin{align}
         \iota_{\Lambda+\mathcal N}
-          \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
-        &=\omega\bigl(\iota_\Lambda(A)\bigr).
+        \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
+         & =\omega\bigl(\iota_\Lambda(A)\bigr).
     \end{align}
 \end{theorem}
 
@@ -11720,9 +11720,9 @@ left/right order below agrees with the adjacent-pair convention in
     $A\in\mathcal A_\Lambda$,
     \begin{align}
         \omega_{\Gamma,\mathcal N}
-          \bigl(\iota_{\Lambda,\Gamma}(A)\bigr)
-        &=\iota_{\Lambda+\mathcal N,\Gamma+\mathcal N}
-          \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr).
+        \bigl(\iota_{\Lambda,\Gamma}(A)\bigr)
+         & =\iota_{\Lambda+\mathcal N,\Gamma+\mathcal N}
+        \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr).
     \end{align}
 \end{theorem}
 
@@ -11742,10 +11742,10 @@ left/right order below agrees with the adjacent-pair convention in
     $a\in\mathbb Z$ and $A\in\mathcal A_\Lambda$,
     \begin{align}
         \iota_{(\Lambda+a)+\mathcal N}
-          \bigl(\omega_{\Lambda+a,\mathcal N}
+        \bigl(\omega_{\Lambda+a,\mathcal N}
             (\tau_{a,\Lambda}(A))\bigr)
-        &=\iota_{(\Lambda+\mathcal N)+a}
-          \bigl(\tau_{a,\Lambda+\mathcal N}
+         & =\iota_{(\Lambda+\mathcal N)+a}
+        \bigl(\tau_{a,\Lambda+\mathcal N}
             (\omega_{\Lambda,\mathcal N}(A))\bigr).
     \end{align}
     Here $(\Lambda+a)+\mathcal N=(\Lambda+\mathcal N)+a$.
@@ -11770,14 +11770,14 @@ left/right order below agrees with the adjacent-pair convention in
     spaces, restriction to the two regions gives
     \begin{align}
         \mathcal C_{\Gamma\cup\Delta}
-        &\simeq \mathcal C_\Gamma\times\mathcal C_\Delta,
+         & \simeq \mathcal C_\Gamma\times\mathcal C_\Delta,
     \end{align}
     with the $\Gamma$-configuration first.  Reindexing matrix rows and
     columns gives a star-algebra equivalence
     \begin{align}
         \beta_{\Gamma,\Delta}\colon
         \mathcal A_{\Gamma\cup\Delta}
-        &\simeq
+         & \simeq
         M_{\mathcal C_\Gamma\times\mathcal C_\Delta}(\mathbb C).
     \end{align}
 \end{definition}
@@ -11791,9 +11791,9 @@ left/right order below agrees with the adjacent-pair convention in
     For $A\in\mathcal A_\Gamma$ and $B\in\mathcal A_\Delta$,
     \begin{align}
         \beta_{\Gamma,\Delta}(\iota_{\Gamma,\Gamma\cup\Delta}(A))
-        &=A\otimes\mathbf 1,\\
+         & =A\otimes\mathbf 1,  \\
         \beta_{\Gamma,\Delta}(\iota_{\Delta,\Gamma\cup\Delta}(B))
-        &=\mathbf 1\otimes B.
+         & =\mathbf 1\otimes B.
     \end{align}
 \end{theorem}
 
@@ -11817,16 +11817,16 @@ left/right order below agrees with the adjacent-pair convention in
     Define the finite local image by
     \begin{align}
         \mathcal R_{\Lambda,\mathcal N}
-        &=\omega_{\Lambda,\mathcal N}(\mathcal A_\Lambda)
-          \subseteq\mathcal A_{\Lambda+\mathcal N}.
+         & =\omega_{\Lambda,\mathcal N}(\mathcal A_\Lambda)
+        \subseteq\mathcal A_{\Lambda+\mathcal N}.
     \end{align}
     It is a star-subalgebra star-isomorphic to $\mathcal A_\Lambda$.  If
     $\Lambda+\mathcal N=\Gamma\cup\Delta$ with
     $\Gamma\cap\Delta=\varnothing$, then
     \begin{align}
         \beta_{\Gamma,\Delta}
-          (\mathcal R_{\Lambda,\mathcal N})
-        &\subseteq
+        (\mathcal R_{\Lambda,\mathcal N})
+         & \subseteq
         M_{\mathcal C_\Gamma\times\mathcal C_\Delta}(\mathbb C)
     \end{align}
     is the bipartite matrix star-subalgebra to which the left and right
@@ -11840,9 +11840,9 @@ left/right order below agrees with the adjacent-pair convention in
     \leanok
     For $x\in\mathbb Z$, set
     \begin{align}
-        E_x&=\{2x,2x+1\},&
-        L_x&=\{2x-1,2x\},&
-        P_x&=\{2x+1,2x+2\}.
+        E_x & =\{2x,2x+1\},   &
+        L_x & =\{2x-1,2x\},   &
+        P_x & =\{2x+1,2x+2\}.
         \label{eq:qca_pair_regions}
     \end{align}
     The order $L_x,P_x$ is the left--right factor order in equation
@@ -11861,9 +11861,9 @@ left/right order below agrees with the adjacent-pair convention in
     \uses{def:qca_nearest_neighbor_pair_regions}
     For the neighbourhood $\mathcal N=\{-1,0,1\}$,
     \begin{align}
-        E_x+\mathcal N&=L_x\cup P_x,&
-        L_x\cap P_x&=\varnothing,&
-        P_x&=L_{x+1}.
+        E_x+\mathcal N & =L_x\cup P_x, &
+        L_x\cap P_x    & =\varnothing, &
+        P_x            & =L_{x+1}.
         \label{eq:qca_pair_geometry}
     \end{align}
 \end{lemma}
@@ -11873,7 +11873,7 @@ left/right order below agrees with the adjacent-pair convention in
     points of $E_x$ gives
     \begin{align}
         E_x+\{-1,0,1\}
-        &=\{2x-1,2x,2x+1,2x+2\}=L_x\cup P_x.
+         & =\{2x-1,2x,2x+1,2x+2\}=L_x\cup P_x.
     \end{align}
     The largest point of $L_x$ is $2x$, while the smallest point of $P_x$
     is $2x+1$, so the two sets are disjoint.  Finally,
@@ -11899,19 +11899,19 @@ left/right order below agrees with the adjacent-pair convention in
     coordinates as
     \begin{align}
         S_x
-        &=\beta_{L_x,P_x}\bigl(\omega(\mathcal A_{E_x})\bigr)
-          \subseteq
-          M_{\mathcal C_{L_x}\times\mathcal C_{P_x}}(\mathbb C).
+         & =\beta_{L_x,P_x}\bigl(\omega(\mathcal A_{E_x})\bigr)
+        \subseteq
+        M_{\mathcal C_{L_x}\times\mathcal C_{P_x}}(\mathbb C).
         \label{eq:qca_site_image}
     \end{align}
     Define
     \begin{align}
         \mathcal R_{2x}
-          &=\operatorname{Spp}_{\mathrm L}(S_x)
-            \subseteq M_{\mathcal C_{L_x}}(\mathbb C),\\
+         & =\operatorname{Spp}_{\mathrm L}(S_x)
+        \subseteq M_{\mathcal C_{L_x}}(\mathbb C), \\
         \mathcal R_{2x+1}
-          &=\operatorname{Spp}_{\mathrm R}(S_x)
-            \subseteq M_{\mathcal C_{P_x}}(\mathbb C).
+         & =\operatorname{Spp}_{\mathrm R}(S_x)
+        \subseteq M_{\mathcal C_{P_x}}(\mathbb C).
         \label{eq:qca_RR2x}
     \end{align}
     After the canonical finite-region embeddings, these form one family of
@@ -11946,7 +11946,7 @@ left/right order below agrees with the adjacent-pair convention in
     For every $x\in\mathbb Z$, the finite image satisfies
     \begin{align}
         S_x
-        &\subseteq
+         & \subseteq
         \mathcal R_{2x}\boxtimes\mathcal R_{2x+1}
         \subseteq
         M_{\mathcal C_{L_x}\times\mathcal C_{P_x}}(\mathbb C).
@@ -11980,8 +11980,8 @@ left/right order below agrees with the adjacent-pair convention in
     If $\widehat{\mathcal R}_y$ denotes the canonical quasi-local copy of
     $\mathcal R_y$, then for every $x\in\mathbb Z$,
     \begin{align}
-        \widehat{\mathcal R}_{2x}&\subseteq\mathcal A_{L_x},&
-        \widehat{\mathcal R}_{2x+1}&\subseteq\mathcal A_{P_x}.
+        \widehat{\mathcal R}_{2x}   & \subseteq\mathcal A_{L_x}, &
+        \widehat{\mathcal R}_{2x+1} & \subseteq\mathcal A_{P_x}.
     \end{align}
     More generally, the canonical image of any matrix on a finite region
     $\Lambda$ is supported in $\Lambda$.
@@ -12021,20 +12021,20 @@ blocked circuit or MPU standard form discussed at line~2308.
     For each finite region $\Lambda$, let
     \begin{align}
         f_\Lambda,g_\Lambda\colon\mathcal A_\Lambda
-        &\longrightarrow\mathcal A_{\mathrm{loc}}
+         & \longrightarrow\mathcal A_{\mathrm{loc}}
     \end{align}
     be star-algebra homomorphisms such that, whenever
     $\Lambda\subseteq\Gamma$,
     \begin{align}
-        f_\Gamma\circ\iota_{\Lambda,\Gamma}&=f_\Lambda,&
-        g_\Gamma\circ\iota_{\Lambda,\Gamma}&=g_\Lambda.
+        f_\Gamma\circ\iota_{\Lambda,\Gamma} & =f_\Lambda, &
+        g_\Gamma\circ\iota_{\Lambda,\Gamma} & =g_\Lambda.
     \end{align}
     Let $f,g\colon\mathcal A_{\mathrm{loc}}\to
-    \mathcal A_{\mathrm{loc}}$ be the maps induced by these compatible
+        \mathcal A_{\mathrm{loc}}$ be the maps induced by these compatible
     families.  Compatible finite-local automorphism data require
     \begin{align}
-        g(f_\Lambda(A))&=\iota_\Lambda(A),&
-        f(g_\Lambda(A))&=\iota_\Lambda(A)
+        g(f_\Lambda(A)) & =\iota_\Lambda(A), &
+        f(g_\Lambda(A)) & =\iota_\Lambda(A)
     \end{align}
     for every $A\in\mathcal A_\Lambda$.
 \end{definition}
@@ -12048,7 +12048,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     The compatible families induce star-algebra homomorphisms
     \begin{align}
         f,g\colon\mathcal A_{\mathrm{loc}}
-        &\longrightarrow\mathcal A_{\mathrm{loc}}.
+         & \longrightarrow\mathcal A_{\mathrm{loc}}.
     \end{align}
 \end{definition}
 
@@ -12065,8 +12065,8 @@ blocked circuit or MPU standard form discussed at line~2308.
     \uses{def:qca_compatible_local_homs}
     For every finite region $\Lambda$ and $A\in\mathcal A_\Lambda$,
     \begin{align}
-        f(\iota_\Lambda(A))&=f_\Lambda(A),&
-        g(\iota_\Lambda(A))&=g_\Lambda(A).
+        f(\iota_\Lambda(A)) & =f_\Lambda(A), &
+        g(\iota_\Lambda(A)) & =g_\Lambda(A).
     \end{align}
 \end{lemma}
 
@@ -12084,7 +12084,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     equivalence
     \begin{align}
         F\colon\mathcal A_{\mathrm{loc}}
-        &\simeq\mathcal A_{\mathrm{loc}}
+         & \simeq\mathcal A_{\mathrm{loc}}
     \end{align}
     whose forward and inverse maps are $f$ and $g$, respectively.
 \end{definition}
@@ -12094,8 +12094,8 @@ blocked circuit or MPU standard form discussed at line~2308.
     Induct on finite-region representatives in the algebraic direct limit.
     The two inverse assumptions give
     \begin{align}
-        g(f(\iota_\Lambda(A)))&=g(f_\Lambda(A))=\iota_\Lambda(A),\\
-        f(g(\iota_\Lambda(A)))&=f(g_\Lambda(A))=\iota_\Lambda(A).
+        g(f(\iota_\Lambda(A))) & =g(f_\Lambda(A))=\iota_\Lambda(A), \\
+        f(g(\iota_\Lambda(A))) & =f(g_\Lambda(A))=\iota_\Lambda(A).
     \end{align}
     Thus $f$ and $g$ are mutually inverse.
 \end{proof}
@@ -12108,7 +12108,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \uses{def:qca_compatible_algebraic_equiv, def:qca_compatible_local_homs}
     For every $A\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
-        F(A)&=f(A),&F^{-1}(A)&=g(A).
+        F(A) & =f(A), & F^{-1}(A) & =g(A).
     \end{align}
 \end{lemma}
 
@@ -12124,7 +12124,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     \uses{def:qca_compatible_local_automorphism, def:qca_algebraic_local_operator_norm}
     Assume $d>0$.  The forward local norm hypothesis is
     \begin{align}
-        \lVert f_\Lambda(A)\rVert&=\lVert A\rVert
+        \lVert f_\Lambda(A)\rVert & =\lVert A\rVert
     \end{align}
     for every finite region $\Lambda$ and every $A\in\mathcal A_\Lambda$.
 \end{definition}
@@ -12137,7 +12137,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     Under the forward local norm hypothesis, every
     $A\in\mathcal A_{\mathrm{loc}}$ satisfies
     \begin{align}
-        \lVert F(A)\rVert&=\lVert A\rVert.
+        \lVert F(A)\rVert & =\lVert A\rVert.
     \end{align}
 \end{lemma}
 
@@ -12147,9 +12147,9 @@ blocked circuit or MPU standard form discussed at line~2308.
     $A=\iota_\Lambda(A_\Lambda)$,
     \begin{align}
         \lVert F(A)\rVert
-        &=\lVert f_\Lambda(A_\Lambda)\rVert
-         =\lVert A_\Lambda\rVert
-         =\lVert A\rVert.
+         & =\lVert f_\Lambda(A_\Lambda)\rVert
+        =\lVert A_\Lambda\rVert
+        =\lVert A\rVert.
     \end{align}
 \end{proof}
 
@@ -12162,8 +12162,8 @@ blocked circuit or MPU standard form discussed at line~2308.
     Under the forward local norm hypothesis, for all
     $A,B\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
-        \lVert F(A)-F(B)\rVert&=\lVert A-B\rVert,&
-        \lVert F^{-1}(A)-F^{-1}(B)\rVert&=\lVert A-B\rVert.
+        \lVert F(A)-F(B)\rVert           & =\lVert A-B\rVert, &
+        \lVert F^{-1}(A)-F^{-1}(B)\rVert & =\lVert A-B\rVert.
     \end{align}
 \end{lemma}
 
@@ -12182,7 +12182,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     Under the forward local norm hypothesis, every
     $A\in\mathcal A_{\mathrm{loc}}$ satisfies
     \begin{align}
-        \lVert F^{-1}(A)\rVert&=\lVert A\rVert.
+        \lVert F^{-1}(A)\rVert & =\lVert A\rVert.
     \end{align}
 \end{lemma}
 
@@ -12200,7 +12200,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     Under the forward local norm hypothesis, the algebraic equivalence extends
     to a star-algebra equivalence
     \begin{align}
-        \overline F\colon\mathcal A&\simeq\mathcal A
+        \overline F\colon\mathcal A & \simeq\mathcal A
     \end{align}
     of the quasi-local completion.
 \end{definition}
@@ -12221,8 +12221,8 @@ blocked circuit or MPU standard form discussed at line~2308.
     Let $j\colon\mathcal A_{\mathrm{loc}}\to\mathcal A$ be the canonical
     completion map.  For every $A\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
-        \overline F(j(A))&=j(F(A)),&
-        \overline F^{-1}(j(A))&=j(F^{-1}(A)).
+        \overline F(j(A))      & =j(F(A)),      &
+        \overline F^{-1}(j(A)) & =j(F^{-1}(A)).
     \end{align}
 \end{lemma}
 
@@ -12240,8 +12240,8 @@ blocked circuit or MPU standard form discussed at line~2308.
     \uses{lem:qca_compatible_quasi_local_dense_evaluation, lem:qca_compatible_algebraic_equiv_evaluation, lem:qca_compatible_local_homs_evaluation, def:qca_quasi_local_observable}
     For every finite region $\Lambda$ and $A\in\mathcal A_\Lambda$,
     \begin{align}
-        \overline F(j_\Lambda(A))&=j(f_\Lambda(A)),&
-        \overline F^{-1}(j_\Lambda(A))&=j(g_\Lambda(A)).
+        \overline F(j_\Lambda(A))      & =j(f_\Lambda(A)), &
+        \overline F^{-1}(j_\Lambda(A)) & =j(g_\Lambda(A)).
     \end{align}
 \end{lemma}
 
@@ -12261,7 +12261,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     For a finite neighborhood $\mathcal N\subset\mathbb Z$, the forward family
     has support bound $\mathcal N$ if
     \begin{align}
-        f_\Lambda(A)&\in
+        f_\Lambda(A) & \in
         \iota_{\Lambda+\mathcal N}
         (\mathcal A_{\Lambda+\mathcal N})
     \end{align}
@@ -12284,8 +12284,8 @@ blocked circuit or MPU standard form discussed at line~2308.
     $f_\Lambda(A)=\iota_{\Lambda+\mathcal N}(B)$.  Then
     \begin{align}
         \overline F(X)
-        &=j(f_\Lambda(A))
-         =j_{\Lambda+\mathcal N}(B),
+         & =j(f_\Lambda(A))
+        =j_{\Lambda+\mathcal N}(B),
     \end{align}
     so the image is supported in $\Lambda+\mathcal N$.
 \end{proof}
@@ -12299,7 +12299,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     region $\Lambda$ and every $A\in\mathcal A_\Lambda$,
     \begin{align}
         f_{\Lambda+1}(\tau_{1,\Lambda}(A))
-        &=\tau_1(f_\Lambda(A)).
+         & =\tau_1(f_\Lambda(A)).
     \end{align}
 \end{definition}
 
@@ -12311,7 +12311,7 @@ blocked circuit or MPU standard form discussed at line~2308.
     If the finite-local unit-translation formula holds, then every
     $A\in\mathcal A_{\mathrm{loc}}$ satisfies
     \begin{align}
-        F(\tau_1(A))&=\tau_1(F(A)).
+        F(\tau_1(A)) & =\tau_1(F(A)).
     \end{align}
 \end{lemma}
 
@@ -12321,9 +12321,9 @@ blocked circuit or MPU standard form discussed at line~2308.
     $A=\iota_\Lambda(A_\Lambda)$.  Then
     \begin{align}
         F(\tau_1(A))
-        &=f_{\Lambda+1}(\tau_{1,\Lambda}(A_\Lambda))
-         =\tau_1(f_\Lambda(A_\Lambda))
-         =\tau_1(F(A)).
+         & =f_{\Lambda+1}(\tau_{1,\Lambda}(A_\Lambda))
+        =\tau_1(f_\Lambda(A_\Lambda))
+        =\tau_1(F(A)).
     \end{align}
 \end{proof}
 
@@ -12343,9 +12343,9 @@ blocked circuit or MPU standard form discussed at line~2308.
     on the completion.  On every $A\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
         \overline F(\overline\tau_1(j(A)))
-        &=j(F(\tau_1(A)))
-         =j(\tau_1(F(A)))
-         =\overline\tau_1(\overline F(j(A))).
+         & =j(F(\tau_1(A)))
+        =j(\tau_1(F(A)))
+        =\overline\tau_1(\overline F(j(A))).
     \end{align}
     The equality set is closed because both composites are continuous, so the
     identity extends from the canonical dense subalgebra to the completion.

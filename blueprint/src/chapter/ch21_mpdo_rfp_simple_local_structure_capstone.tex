@@ -741,14 +741,14 @@
     sector, $\eta_{k,k}=0$, hence $a_kb_k=0$.  Consequently, splitting the
     normalized sum and reindexing its active part by $j\mapsto k(j)$ gives
     \begin{align}
-        1 &= \sum_k a_kb_k
-        \notag \\
-          &=\sum_{\substack{k\\ k\ \mathrm{active}}}a_kb_k
-          +\sum_{\substack{k\\ k\ \mathrm{inactive}}}a_kb_k
-        \notag \\
-          &=\sum_j\widetilde a_j\widetilde b_j+0
-        \notag \\
-          &=\sum_j\widetilde a_j\widetilde b_j.
+        1 & = \sum_k a_kb_k
+        \notag                                    \\
+          & =\sum_{\substack{k                    \\ k\ \mathrm{active}}}a_kb_k
+        +\sum_{\substack{k                        \\ k\ \mathrm{inactive}}}a_kb_k
+        \notag                                    \\
+          & =\sum_j\widetilde a_j\widetilde b_j+0
+        \notag                                    \\
+          & =\sum_j\widetilde a_j\widetilde b_j.
         \notag
     \end{align}
 \end{proof}
@@ -1350,10 +1350,10 @@ This is the calculation in
     \begin{align}
         P & =\frac12
         \begin{pmatrix}
-          1&0&0&1\\
-          0&0&0&0\\
-          0&0&0&0\\
-          1&0&0&1
+            1 & 0 & 0 & 1 \\
+            0 & 0 & 0 & 0 \\
+            0 & 0 & 0 & 0 \\
+            1 & 0 & 0 & 1
         \end{pmatrix}. \notag
     \end{align}
     Since $P^2=P$, the tensor has source zero correlation length.
@@ -1374,7 +1374,7 @@ This is the calculation in
         L=2: & \quad \{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\}, \notag   \\
         L=3: & \quad \{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\}, \notag \\
         L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},
-                           (9/128)^{[3]}\}. \notag
+        (9/128)^{[3]}\}. \notag
     \end{align}
     These spectra are consequences of the corrected $p=1/4$ tensor and are
     not formulas stated in the source.
@@ -1387,15 +1387,15 @@ This is the calculation in
     $w_L$ and an isometry $V_L$ such that
     \begin{align}
         \rho_L & =V_L\operatorname{diag}(w_L)V_L^\dagger,
-        & V_L^\dagger V_L & =I. \notag
+               & V_L^\dagger V_L                          & =I. \notag
     \end{align}
     The diagonal weights give the listed nonzero roots.  The zero-root counts
     from the orthogonal complements are
     \begin{align}
         4^1-2^2 & =0,
-        & 4^2-2^3 & =8,
-        & 4^3-2^4 & =48,
-        & 4^4-2^4 & =240. \notag
+                & 4^2-2^3 & =8,
+                & 4^3-2^4 & =48,
+                & 4^4-2^4 & =240. \notag
     \end{align}
     At four sites the eight odd-parity bond patterns have zero weight and
     supply the remaining eight zero roots.
@@ -1584,11 +1584,11 @@ This is the calculation in
     For the corrected tensor at $p=1/4$ on the four-site ring, let $S_L$ be
     the entropy of $L$ consecutive spins, with natural logarithms. Then
     \begin{align}
-        S_1 & =2\log 2,\notag\\
-        S_2 & =5\log 2-\tfrac58\log 5-\tfrac38\log 3,\notag\\
-        S_3 & =6\log 2-\tfrac7{16}\log 7-\tfrac9{16}\log 3,\notag\\
+        S_1 & =2\log 2,\notag                                     \\
+        S_2 & =5\log 2-\tfrac58\log 5-\tfrac38\log 3,\notag       \\
+        S_3 & =6\log 2-\tfrac7{16}\log 7-\tfrac9{16}\log 3,\notag \\
         S_4 & =7\log 2-\tfrac{41}{128}\log 41
-              -\tfrac{57}{64}\log 3-\tfrac{15}{32}\log 5.\notag
+        -\tfrac{57}{64}\log 3-\tfrac{15}{32}\log 5.\notag
     \end{align}
     Consequently,
     \begin{align}
@@ -2482,12 +2482,12 @@ This is the calculation in
     physical-sector factorization of $K$ whose neighboring operator is
     positive semidefinite and whose trace has the normalized rank-one form
     \begin{align}
-        \tr(\eta_{k,h})&=a_kb_h.
+        \tr(\eta_{k,h}) & =a_kb_h.
         \notag
     \end{align}
     The factors are normalized by
     \begin{align}
-        \sum_k a_kb_k&=1.
+        \sum_k a_kb_k & =1.
         \notag
     \end{align}
 \end{theorem}
@@ -2571,7 +2571,7 @@ This is the calculation in
     $A$ is normal, and $K$ is injective, satisfies the strong area
     law, and obeys
     \begin{align}
-        \mathcal T_K^2&=\mathcal T_K.
+        \mathcal T_K^2 & =\mathcal T_K.
         \notag
     \end{align}
     Nevertheless, no physical-sector factorization of $K$ has positive
@@ -2580,17 +2580,17 @@ This is the calculation in
     themselves imply the asserted factorization. This does not refute the
     all-sector assertion in
     \cite[Theorem~4.9 and Appendix~C.2, lines~1647--1782]
-      {Cirac2016MPDO_arXiv}, whose hypotheses include an ambient simple tensor
+    {Cirac2016MPDO_arXiv}, whose hypotheses include an ambient simple tensor
     in biCF and its canonical reconstruction.
 \end{theorem}
 
 \begin{proof}\leanok
     Take
     \begin{align}
-      L&=\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix}, &
-      R&=\begin{pmatrix}
-        1/4&-3/100\\1/4&-1/100\\1/4&1/100\\1/4&3/100
-      \end{pmatrix},
+        L & =\begin{pmatrix}1&1&1&1\\1&2&-7&4\end{pmatrix}, &
+        R & =\begin{pmatrix}
+                 1/4 & -3/100 \\1/4&-1/100\\1/4&1/100\\1/4&3/100
+             \end{pmatrix},
     \end{align}
     and let the four diagonal physical slices be the outer products of the
     corresponding columns of $L$ and rows of $R$. Then
@@ -2604,15 +2604,15 @@ This is the calculation in
     $H=\operatorname{diag}(20,1)$, direct calculation gives
     \begin{align}
         H-\mathcal E_K^*(H)
-          &=\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
+         & =\begin{pmatrix}85/8&-9/40\\-9/40&4697/5000\end{pmatrix}>0.
         \notag
     \end{align}
     Pair this positive-definite gap with a positive-definite Perron
     eigenmatrix $\rho$ of $\mathcal E_K$. The trace-adjoint identity gives
     \begin{align}
-      0
-        &<\tr\bigl((H-\mathcal E_K^*(H))\rho\bigr)
-          =(1-r)\tr(H\rho).
+        0
+         & <\tr\bigl((H-\mathcal E_K^*(H))\rho\bigr)
+        =(1-r)\tr(H\rho).
         \notag
     \end{align}
     Since $\tr(H\rho)>0$, the Perron value satisfies $r<1$. Perron
