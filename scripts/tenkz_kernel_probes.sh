@@ -2839,6 +2839,19 @@ do
     exit 1
   }
 done
+awk '
+  { transcript = transcript " " $0 }
+  END {
+    exit(transcript !~ /\(record[[:space:]]+(\(tenkz\)[[:space:]]+)?mark-[0-9]+\)\./)
+  }
+' "$WORK/n_mark_slot_key.transcript" || {
+  echo "FAIL: the retired mark slot rejection dropped its mark-record context" >&2
+  exit 1
+}
+if grep -Fq '(record )' "$WORK/n_mark_slot_key.transcript"; then
+  echo "FAIL: the retired mark slot rejection carried an empty record clause" >&2
+  exit 1
+fi
 grep -Eq '\(node addr-[0-9]+\)' "$WORK/n_noncell_leg.transcript" || {
   echo "FAIL: the non-cell leg rejection dropped its node context" >&2
   exit 1
