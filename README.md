@@ -12,6 +12,8 @@
 ![axioms](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/axioms.json)
 ![Lean](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json)
 ![Mathlib](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/mathlib.json)
+![blueprint: no \leanok](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/blueprint_no_leanok.json)
+![blueprint: not ready](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/blueprint_not_ready.json)
 
 <p align="center">
   <a href="https://sirui-lu.com/TNLean/blueprint/">Blueprint</a> ·
