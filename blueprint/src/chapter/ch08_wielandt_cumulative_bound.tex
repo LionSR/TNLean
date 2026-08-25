@@ -695,7 +695,8 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{lemma}[Rank-one extraction from a non-invertible eigenvector]%
     \label{lem:rank_one_noninvertible_eigenvector}
-    \lean{MPSTensor.vecMulVec_eigenvector_exact_wordSpan}
+    \lean{MPSTensor.vecMulVec_eigenvector_exact_wordSpan,
+        MPSTensor.rectSpan_nilpIndex_strict_growth_of_isNormal}
     \leanok
     \uses{def:word_span, def:normal}
     Let $A$ be a normal MPS tensor with bond dimension $D\ge1$.
