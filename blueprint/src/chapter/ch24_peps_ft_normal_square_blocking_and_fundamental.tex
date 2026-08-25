@@ -21,14 +21,14 @@
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
                 west=open, east=open, north=open, south=open]
             \tn[at=(4,4), species=marked, name=vSite, label pos=sw]{v}
-            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
             {(2,2) .. (4,4) - (4,4)}{$R$}
         \end{tenkz}
         $\qquad$
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
                 west=open, east=open, north=open, south=open]
             \tn[at=(4,4), species=marked, name=vSite, label pos=sw]{v}
-            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
             {(2,2) .. (4,4)}{$S$}
         \end{tenkz}
         $\qquad R\subset S=R\cup\{v\}$
@@ -85,13 +85,13 @@
         \tenkzkernel
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
                 west=open, east=open, north=open, south=open]
-            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
             {(2,2) .. (4,4) - (4,4)}{$R$}
         \end{tenkz}
         $\qquad\text{and}\qquad$
         \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
                 west=open, east=open, north=open, south=open]
-            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
             {(2,2) .. (4,4)}{$S$}
         \end{tenkz}
     \end{tenkzequation}
@@ -111,7 +111,7 @@
         \tenkzkernel
         \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket}, cols=5,
                 west=open, east=open, north=open, south=open]
-            \tnmark[form=enclosure, slot=selected, tint, label pos=n]
+            \tnmark[form=enclosure, species=selected, tint, label pos=n]
             {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
         \end{tenkz}
     \end{tenkzequation}
@@ -145,20 +145,20 @@
                 west=open, east=open, north=open, south=open]
             % The authored marked wire restates the (4,3)--(4,4) grid bond.
             \tnwire[species=marked]{(4,3)}{(4,4)}
-            \tnmark[form=enclosure, slot=selected, tint]
+            \tnmark[form=enclosure, species=selected, tint]
             {(4,2) .. (6,3)}{$A_1$}
-            \tnmark[form=enclosure, slot=secondary, tint]
+            \tnmark[form=enclosure, species=secondary, tint]
             {(3,4) .. (4,6)}{$A_2$}
-            \tnmark[form=enclosure, slot=complement, label pos=n]
+            \tnmark[form=enclosure, species=complement, label pos=n]
             {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
         \end{tenkz}
         $\quad\Rightarrow\quad$
         \begin{tenkz}[rows={ket}, cols=3, physical=up, boundary=periodic]
             \tn[skin=box]{A_1} & \tn[skin=box]{A_2} & \tn[skin=box]{A_3}
             \tnwire[species=marked]{(1,1)}{(1,2)}
-            \tnmark[form=enclosure, slot=selected]{(1,1)}{}
-            \tnmark[form=enclosure, slot=secondary]{(1,2)}{}
-            \tnmark[form=enclosure, slot=complement]{(1,3)}{}
+            \tnmark[form=enclosure, species=selected]{(1,1)}{}
+            \tnmark[form=enclosure, species=secondary]{(1,2)}{}
+            \tnmark[form=enclosure, species=complement]{(1,3)}{}
         \end{tenkz}
     \end{tenkzequation}
 \end{theorem}

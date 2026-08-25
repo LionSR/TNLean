@@ -559,7 +559,7 @@ indices of a region it also has to show.
   caption={a region, and an operator on its boundary},
   index={The inner contour is the retained block; the outer one, declared
     second and therefore one clearance further out, is the operator
-    acting on the indices the block leaves open.  Their semantic slots
+    acting on the indices the block leaves open.  Their region species
     distinguish the selected block from its collar by the house palette.},
   signature={kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n}]
 % Ink: two semantically tinted contours over one selection;
@@ -567,8 +567,8 @@ indices of a region it also has to show.
 \begin{tenkz}[rows={wire}, cols=4, bonds=none, physical=up]
   \tn[at=(1,1), skin=box]{A} & \tn[at=(1,2), skin=box]{A} &
   \tn[at=(1,3), skin=box]{A} & \tn[at=(1,4), skin=box]{A}
-  \tnmark[form=enclosure, slot=selected]{(1,1) .. (1,4)}{}
-  \tnmark[form=enclosure, slot=collar, label pos=e]
+  \tnmark[form=enclosure, species=selected]{(1,1) .. (1,4)}{}
+  \tnmark[form=enclosure, species=collar, label pos=e]
     {(1,1) .. (1,4)}{$X$}
 \end{tenkz}
 \end{tnexample}
@@ -587,12 +587,15 @@ retired: a document that writes it meets the unknown-key refusal, and
 the tombstone ledger names what the sources get instead, which is the
 ranking above and nothing to set.
 
-\tnkey{slot=} tints the contour of an enclosure or a bracket from the
-theme's semantic slots, and reaches no other form: a label takes its ink
-from \tnkey{species=} alone, so a slot written on a label is accepted,
-recorded, and drawn in the ordinary ink.  \tnkey{tint} lays ink over the
-paper inside a contour rather than only stroking it; the tutorial's
-blocked run shows the tinted form, and so does the band below.
+\tnkey{species=} tints the contour, as it tints every other record: the
+five region words -- \tnval{selected}, \tnval{secondary},
+\tnval{complement}, \tnval{collar}, \tnval{neutral} -- are prelude
+species carrying the house region palette, and \tnval{complement} also
+dashes the contour it names, the grey rest of a picture under
+discussion.  A contour naming no species is passive.  \tnkey{tint} lays
+ink over the paper inside a contour rather than only stroking it; the
+tutorial's blocked run shows the tinted form, and so does the band
+below.
 
 Four further words stood in the \tnkey{form=} list until the alphabet
 closed on the four above.  Each of them took a record and drew nothing,

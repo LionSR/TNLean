@@ -65,11 +65,11 @@ product states, and the square lattice.
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{}
             \tnwire[species=blocked-edge]{(4,3)}{(4,4)}
-            \tnmark[form=enclosure, slot=selected, tint]
+            \tnmark[form=enclosure, species=selected, tint]
             {(4,2) .. (6,3)}{$A_1$}
-            \tnmark[form=enclosure, slot=secondary, tint]
+            \tnmark[form=enclosure, species=secondary, tint]
             {(3,4) .. (4,6)}{$A_2$}
-            \tnmark[form=enclosure, slot=complement, label pos=n]
+            \tnmark[form=enclosure, species=complement, label pos=n]
             {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
         \end{tenkz}
         $\qquad\text{edge blocking}$
@@ -100,7 +100,7 @@ product states, and the square lattice.
             \tn[skin=dot, species=marked-site]{} & \tn[skin=dot]{} \\
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{}
-            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
             {(2,2) .. (4,4) - (4,4)}{$R$}
         \end{tenkz}
         $\qquad\subset\qquad$
@@ -116,7 +116,7 @@ product states, and the square lattice.
             \tn[skin=dot, species=marked-site]{} & \tn[skin=dot]{} \\
             \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
             \tn[skin=dot]{} & \tn[skin=dot]{}
-            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
             {(2,2) .. (4,4)}{$S$}
         \end{tenkz}
         $\qquad S=R\cup\{v\}$
