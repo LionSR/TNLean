@@ -3,6 +3,7 @@
 $pdf_mode = 1;
 $pdflatex = 'xelatex -synctex=1';
 @default_files = ('print.tex');
+my $tenkz_root = $ENV{'TENKZ_ROOT'} // '../../.deps/tenkz';
 $ENV{'TEXINPUTS'} =
-  '../../.deps/tenkz/tex/tenkz//:'
+  "$tenkz_root/tex/tenkz//:"
   . ($ENV{'TEXINPUTS'} // '');

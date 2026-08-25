@@ -1,3 +1,4 @@
 $pdf_mode = 1;
 $out_dir = '../../build';
-$ENV{'TEXINPUTS'} = '../../.deps/tenkz/tex/tenkz//:' . ($ENV{'TEXINPUTS'} // '');
+my $tenkz_root = $ENV{'TENKZ_ROOT'} // '../../.deps/tenkz';
+$ENV{'TEXINPUTS'} = "$tenkz_root/tex/tenkz//:" . ($ENV{'TEXINPUTS'} // '');

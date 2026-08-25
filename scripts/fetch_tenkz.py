@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -55,7 +56,11 @@ def fetch(git_url: str, rev: str, sha: str) -> Path:
     if not (DEST / ".git").is_dir():
         if DEST.exists():
             raise SystemExit(f"{DEST} exists and is not a git checkout")
-        git(["clone", "--filter=blob:none", git_url, str(DEST)])
+        try:
+            git(["clone", "--filter=blob:none", git_url, str(DEST)])
+        except SystemExit:
+            shutil.rmtree(DEST, ignore_errors=True)
+            raise
     else:
         git(["remote", "set-url", "origin", git_url], cwd=DEST)
         git(["fetch", "--tags", "origin"], cwd=DEST)
