@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.Reduction
 import QICLean.Algebra.MatrixAux
 import QICLean.Channel.FixedPoint.SupportInvariance
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Transfer
 import QICLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
@@ -139,13 +141,13 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
           (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
   -- Step 1: The transfer map is a channel (from TP hypothesis).
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isChannel_transferMap A (by unfold Kraus.IsTP; convert hTP)
+    Kraus.isChannel_mapLM A (by unfold Kraus.IsTP; convert hTP)
   -- Step 2: Get a PSD fixed point ρ ≠ 0 from the channel.
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hD
   -- Step 3: Convert irreducibility: tensor → CP map.
   have hIrrCP : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   -- Step 4: Upgrade PSD to PD via quantum Perron–Frobenius.
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrCP ρ hρ_psd hρ_ne hρ_fix

@@ -255,10 +255,10 @@ abstracted — record why, so it is not re-proposed).
   theorems.
 - **Seen:** the five transfer-map compatibility declarations in
   `TNLean/Channel/Peripheral/{ClosureFixedPoint,CyclicGroup}.lean` (2026-08-09).
-- **Abstraction:** `Kraus.isIrreducibleMap_mapLM_of_transferMap` in
-  `QICLean/MPS/Core/TransferChannel.lean` (QICLean dependency).
-- **Notes:** the generic theorems use `Kraus.mapLM`; each transfer-map statement
-  applies this conversion once before invoking its generic counterpart.
+- **Abstraction:** no conversion theorem is needed: `Kraus.transferMap` and
+  `Kraus.mapLM` are definitionally equal.
+- **Notes:** generic theorems use `Kraus.mapLM`; transfer-map hypotheses are
+  passed directly to them without an equality rewrite or compatibility wrapper.
 
 ### Transfer-map spectral arguments in Kraus-map notation — promoted
 - **Pattern:** prove eigenvector, fixed-point, and channel-power statements for
@@ -306,12 +306,10 @@ abstracted — record why, so it is not re-proposed).
   (2026-08-09).
 - **Abstraction:** `Kraus.trace_mul_transferMap_adjoint` in
   `QICLean/Channel/Irreducible/KrausSetup.lean` (QICLean dependency).
-- **Notes:** Channel callers use the theorem on the existing Kraus-setup import
-  boundary, while `MPS.Core.TransferChannel` provides the root-level transfer-map
-  compatibility statement without importing irreducibility theory. The declaration
-  `Kraus.isChannel_transferMap` retains its name and statement but now requires the
-  MPS compatibility import instead of `Channel.FixedPoint.MaximalSupport`; this
-  intentional import-level change removes the former Channel-to-MPS dependency.
+- **Notes:** transfer-map callers use the canonical `Kraus.isChannel_mapLM`
+  theorem from `QICLean/Channel/KrausMap.lean` directly, relying on the
+  definitional equality with `Kraus.transferMap`. The transfer-specific
+  trace-adjoint compatibility theorem remains available for its distinct result.
 
 ### matrix-family irreducibility in transfer-map notation — promoted
 - **Pattern:** convert between irreducibility of a finite matrix family and
@@ -322,12 +320,12 @@ abstracted — record why, so it is not re-proposed).
   `Wielandt/Primitivity/{PrimitiveBridge,ToNormal}.lean` before promotion
   (2026-08-20).
 - **Abstraction:**
-  `Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily` and
-  `Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap` in
-  `QICLean/Kraus/TransferChannel.lean` (QICLean dependency).
-- **Notes:** QICLean owns the equivalence directly in transfer-map notation.
-  Downstream callers no longer repeat an equality conversion or import
-  `MPS.Irreducible.FormII` solely for this equivalence.
+  `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` and
+  `Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM` in
+  `QICLean/Kraus/InvariantProjection.lean` (QICLean dependency).
+- **Notes:** QICLean owns the equivalence canonically in `mapLM` notation.
+  Transfer-map callers use it directly by definitional equality, without an
+  equality conversion or compatibility wrapper.
 
 ### pure gauge to heterogeneous repeated blocks — promoted
 - **Pattern:** convert `GaugeEquiv A B` to `HetRepeatedBlocks A B` by passing

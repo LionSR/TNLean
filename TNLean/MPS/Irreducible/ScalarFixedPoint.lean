@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Irreducible.FormII
 import QICLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
@@ -55,7 +56,7 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     simpa [Kraus.transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital
   have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) := by
-        exact Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
+        exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   have hfix_map : Kraus.mapLM A X = X := by exact hfix
   exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalKraus hIrrMap X hfix_map
 

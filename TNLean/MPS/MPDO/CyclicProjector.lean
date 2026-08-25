@@ -125,7 +125,7 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     exact h
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D)
       (spectralUnitalGauge B rad ρ)) :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily _ hIrrK
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrK
   refine ⟨hUnital, hIrrK, hIrrMap, ?_⟩
   -- The adjoint of a unital family is trace-preserving; its transfer map is a
   -- channel and has a positive semidefinite fixed point, which irreducibility
@@ -134,7 +134,7 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   have hTPadj : ∑ v : Fin d, ((K v)ᴴ)ᴴ * (K v)ᴴ = 1 := by
     simpa [Matrix.conjTranspose_conjTranspose] using hUnital
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) :=
-    Kraus.isChannel_transferMap (fun v => (K v)ᴴ) hTPadj
+    Kraus.isChannel_mapLM (fun v => (K v)ᴴ) hTPadj
   obtain ⟨σ, hσ_psd, hσ_ne, hσ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint
       (E := Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) (NeZero.pos D)

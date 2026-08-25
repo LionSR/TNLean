@@ -326,7 +326,7 @@ theorem exists_normalTensor_scalar_representation :
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         (Kraus.transferMap A.toMPSTensor)
         (Kraus.transferMap_isCPMap A.toMPSTensor)
-        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily
           A.toMPSTensor hAIrr)
         rho 1 hrho (by norm_num) (by simpa using hfix))
   obtain ⟨sigma, hsigma, hsigmaFix, hLeft, hGauge, hGaugeIrr⟩ :=

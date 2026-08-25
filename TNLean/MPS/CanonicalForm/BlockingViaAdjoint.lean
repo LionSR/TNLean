@@ -91,11 +91,11 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     exact hIrrAdj
   -- A positive definite fixed point for `Kraus.transferMap A`, hence for `Kraus.adjointMap K`.
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isChannel_transferMap (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
+    Kraus.isChannel_mapLM (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hDpos
   have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily (d := d) (D := D) A hIrrT
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) A hIrrT
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
       hIrrAmap ρ hρ_psd hρ_ne hρ_fix

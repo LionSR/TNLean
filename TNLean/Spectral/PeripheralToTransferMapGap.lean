@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.Semigroup.Primitivity.Helpers
 import QICLean.Kraus.CPPrimitive
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.Spectral.TransferOperatorGap
 
@@ -41,7 +43,7 @@ theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero
     (htrX : Matrix.trace X = 0) :
     X = 0 :=
   fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
-    (Kraus.isChannel_transferMap A hNorm) (Kraus.injective_implies_irreducibleCP A hInj)
+    (Kraus.isChannel_mapLM A hNorm) (Kraus.injective_implies_irreducibleCP A hInj)
     X hXfix htrX
 
 /-- For the transfer map of an irreducible normalized tensor, any fixed point with trace
@@ -56,8 +58,8 @@ theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible
     (htrX : Matrix.trace X = 0) :
     X = 0 :=
   fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
-    (Kraus.isChannel_transferMap A hNorm)
-    (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr) X hXfix htrX
+    (Kraus.isChannel_mapLM A hNorm)
+    (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) X hXfix htrX
 
 /-- Peripheral primitivity of the transfer map of an irreducible normalized tensor implies
 a complementary transfer-map gap for `E - P`, where `P` projects onto a fixed point. -/
@@ -75,9 +77,9 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
               ((Kraus.transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
             < 1 := by
   let E := Kraus.transferMap (d := d) (D := D) A
-  have hCh : IsChannel E := Kraus.isChannel_transferMap A hNorm
+  have hCh : IsChannel E := Kraus.isChannel_mapLM A hNorm
   have hIrrMap : IsIrreducibleMap E :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ := hCh.exists_posSemidef_fixedPoint (E := E) hDpos
   obtain ⟨htr, hgap⟩ :=
@@ -116,7 +118,7 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
               ((Kraus.transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ htr))
             < 1 := by
   have hIrr : Kraus.IsIrreducibleFamily A :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
       (Kraus.injective_implies_irreducibleCP A hInj)
   exact spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
     (A := A) hIrr hNorm hPrim
@@ -131,7 +133,7 @@ theorem hasPrimitiveFixedPoint_of_peripheralPrimitive
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     MPSTensor.HasPrimitiveFixedPoint A := by
   have hIrr : Kraus.IsIrreducibleFamily A :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
       (Kraus.injective_implies_irreducibleCP A hInj)
   exact hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible
     (A := A) hIrr hNorm hPrim
