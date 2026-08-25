@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
-import TNLean.Algebra.MatrixIsometryKronecker
+import QICLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.BNTFusionIsometries
 
 /-!

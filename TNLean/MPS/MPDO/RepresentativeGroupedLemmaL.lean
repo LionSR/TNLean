@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
-import TNLean.Algebra.ScalarPowerSumIdentity
+import QICLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.MPDO.BiCFDerivation.Core
 import TNLean.MPS.SharedInfra.SectorDecomposition
 

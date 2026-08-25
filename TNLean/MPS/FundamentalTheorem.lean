@@ -12,7 +12,6 @@ import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.PositiveLinearExtension
-import TNLean.MPS.FundamentalTheorem.PositiveSkolemNoether
 import TNLean.MPS.FundamentalTheorem.ProductAlgebra
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.SectorBNT

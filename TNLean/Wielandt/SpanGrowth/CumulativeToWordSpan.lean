@@ -7,7 +7,7 @@ import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Algebra.BurnsideMatrix
-import TNLean.Algebra.BurnsideTheorem
+import QICLean.Algebra.BurnsideTheorem
 
 /-!
 # From cumulative span to word span for MPS tensors

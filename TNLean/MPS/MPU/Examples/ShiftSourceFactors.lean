@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
-import TNLean.Algebra.MatrixReindex
+import QICLean.Algebra.MatrixReindex
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
 import TNLean.MPS.MPU.SourceUV
 

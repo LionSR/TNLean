@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
-import TNLean.Algebra.PerronFrobenius.Idempotent
+import QICLean.Algebra.PerronFrobenius.Idempotent
 import QICLean.Algebra.TraceReindex
 
 /-!

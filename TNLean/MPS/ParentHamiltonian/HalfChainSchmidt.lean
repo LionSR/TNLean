@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
-import TNLean.Algebra.OperatorNormFrobenius
+import QICLean.Algebra.OperatorNormFrobenius
 import QICLean.Analysis.SpectralRadiusPowerDecay
 import QICLean.Channel.Primitive
 import QICLean.Kraus.TransferChannel
