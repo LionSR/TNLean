@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build the FT--MPS blueprint volume (ch01_intro through ch12_symmetry, together
-# with the auxiliary channel-theory chapter) as blueprint/print/print12.pdf.
+# Build the focused FT--MPS blueprint volume (ch01_intro through ch12_symmetry)
+# as blueprint/print/print12.pdf.
 #
 # Run after `texra-blueprint bbl` (which refreshes src/references.bib).
 # The blueprint sources are copied to a temporary directory and the dedicated
@@ -29,15 +29,13 @@ expected="ch01_intro
 ch02_mps
 ch03_single
 ch04_channels
-ch05_schwarz
 ch06_qpf
 ch07_spectral
 ch08_wielandt
 ch09_canonical
 ch10_bnt
 ch11_fundamental_theorem_proof
-ch12_symmetry
-ch12_auxiliary_channel_theory"
+ch12_symmetry"
 kept="$(grep '^[[:space:]]*\\input{chapter/' \
   "$WORK_DIR/blueprint/src/content_ft_mps.tex" \
   | sed -E 's|.*chapter/([^}]+).*|\1|')"
@@ -58,4 +56,4 @@ echo "==> Building with latexmk (XeLaTeX)..."
 mkdir -p "$REPO_ROOT/blueprint/print"
 cp "$WORK_DIR/blueprint/src/print_ft_mps.pdf" \
   "$REPO_ROOT/blueprint/print/print12.pdf"
-echo "==> Wrote blueprint/print/print12.pdf (Chapters 1--12 plus auxiliary channel theory)"
+echo "==> Wrote blueprint/print/print12.pdf (focused FT--MPS volume)"

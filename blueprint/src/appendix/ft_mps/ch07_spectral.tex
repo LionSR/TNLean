@@ -267,14 +267,14 @@ This section proves the rank-one Perron limit
 convergence (Theorem~\ref{thm:primitive_overlap}). Let $E:\MN{D}\to\MN{D}$
 be trace-preserving with a fixed point $\rho\neq0$, $\tr(\rho)\neq0$. Write
 $P:=P_\rho$ for the fixed-point projection of
-the corresponding definition in the companion quantum-channel volume~\cite[``Fixed-point projection'']{QICLean2026Blueprint} (Chapter~\ref{ch:channels}),
+the corresponding definition in the companion quantum-channel volume~\cite[``Fixed-point projection'']{QICLean2026Blueprint},
 \begin{align}
     P(X)
      & =\frac{\tr(X)}{\tr(\rho)}\rho,
     \notag
 \end{align}
 and $N:=E-P$ for the complementary part. The power decomposition
-(the corresponding theorem in the companion quantum-channel volume~\cite[``Power decomposition'']{QICLean2026Blueprint}, Chapter~\ref{ch:channels}) gives
+(the corresponding theorem in the companion quantum-channel volume~\cite[``Power decomposition'']{QICLean2026Blueprint}) gives
 $E^n=P+N^n$ for $n\geq1$.
 
 
@@ -292,7 +292,7 @@ $O_{AA}(N)=\Tr(\E_A^N)$, so Theorem~\ref{thm:trace_pow_one} yields the
 primitive self-overlap limit of Theorem~\ref{thm:primitive_overlap}. The
 hypothesis $\rho_{\spec}(N)<1$ is exactly the complementary transfer-map gap
 that the complementary spectral-radius theorem for primitive maps
-(the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}, Chapter~\ref{ch:channels})
+(the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint})
 supplies: for a primitive $E$ all eigenvalues bounded by $1$ in modulus and
 no trace-zero fixed point, every eigenvalue of $N=E-P$ has modulus strictly
 less than $1$, and since $\MN{D}$ is finite-dimensional this bounds the
@@ -345,33 +345,10 @@ them.
 
 \subsection{Cyclic corners and restricted primitivity}
 
-\begin{definition}[Corner preservation]
-    \lean{PreservesCorner}
-    \leanok
-    For an orthogonal projection $P$ and linear map $E$, the corner
-    $P\MN{D}P$ is preserved if $E(PXP)=PE(PXP)P$ for every $X$.
-\end{definition}
-
-\begin{definition}[Corner subspace]
-    \lean{cornerSubmodule}
-    \leanok
-    The corner subspace associated with $P$ is
-    $\{PXP:X\in\MN{D}\}$.
-\end{definition}
-
-
-\begin{definition}[Irreducible restriction on a corner]
-    \lean{IsIrreducibleOnCorner}
-    \leanok
-    Irreducibility of the corner-restricted map.
-\end{definition}
-
-\begin{definition}[Rank of an orthogonal projection]
-    \lean{cornerRank}
-    \leanok
-    The rank of an orthogonal projection $P\in\MN{D}$, equivalently the
-    dimension of its range.
-\end{definition}
+Corner preservation, the associated corner subspace, irreducibility of the
+restricted map, and corner rank are defined in the companion quantum-channel
+volume~\cite[``Corner preservation'' and the following corner definitions]{QICLean2026Blueprint}.
+We use those definitions here in the MPS periodicity-removal argument.
 
 
 \subsection{Group structure and divisibility}
