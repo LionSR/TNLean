@@ -730,7 +730,7 @@ note = "kernel respell of the K2-promoted model: the periodic word is one closed
 
 [[verdict]]
 id = "rmp-iii-a-torus-three"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
 defects = ["weight-mismatch"]
@@ -738,7 +738,7 @@ case_sha256 = "d39407ace8e05d11dd623ca955b753a5959eae8289ecf29c0a15425c47850eb3"
 reviewed = "2026-08-25"
 renderer = "fable-via-wave-a-thinning-review-2026-08-25-200dpi"
 second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
-note = "Waypoint thinning 2026-08-25 (via= retirement, #6897): the collinear waypoint lists of both operator strings and both passive strings delete; the drawn lines are geometrically unchanged (a hairline rasterization drift at 200dpi, verified by diff), and the pull arc, the inverse pair, and the cup keep their load-bearing waypoints for a later wave.  Prior note: Kernel string-slide with declared crossings and the stock MPO crossing tensor (#5362) under the equation audit; the pull arrow remains outside the PEPS window and the enlarged crossing is blue-outlined rather than solid blue."
+note = "K2 promotion 2026-08-25: the recorded residue -- outline versus solid fill on the enlarged crossing -- is house style under the cosmetic-gap bar, and the current-hash re-review with an independent countersign resolves it to faithful.  Waypoint thinning 2026-08-25 (via= retirement, #6897): the collinear waypoint lists of both operator strings and both passive strings delete; the drawn lines are geometrically unchanged (a hairline rasterization drift at 200dpi, verified by diff), and the pull arc, the inverse pair, and the cup keep their load-bearing waypoints for a later wave.  Prior note: Kernel string-slide with declared crossings and the stock MPO crossing tensor (#5362) under the equation audit; the pull arrow remains outside the PEPS window and the enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"

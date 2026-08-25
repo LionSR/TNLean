@@ -4071,7 +4071,7 @@ are immutable.
 ## 2026-08-25 — the first waypoint wave thins the benchmark corpus
 
 The via= retirement's first corpus wave (#6897, the decided doctrine)
-deletes ten waypoint lists across three benchmark cases: the f-symbol and
+deletes twelve waypoint lists across three benchmark cases: the f-symbol and
 f-tensor corner hooks draw as straight chords -- equivalent planar routing
 under the cosmetic-gap bar, every crossing, label, and sector unmoved --
 and torus-three's four collinear lists leave with the drawn lines

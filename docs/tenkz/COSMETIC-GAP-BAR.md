@@ -89,7 +89,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-mpo-injective` | K2 | Ring topology is preserved; unrecorded hatching and hue require house-style re-review, not a renderer promise. |
 | `rmp-iii-a-torus-one` | — | Promoted to `faithful` 2026-08-04; wave-7 kernel migration reconfirmed 2026-08-05: the contract's own traced-lattice spelling carries both homotopy classes as wound strings crossing once at the outlined i, the canonical projection of the source's embedded donut. |
 | `rmp-iii-a-torus-two` | — | Kernel respell 2026-08-05: the periodic word is one closed operator string returning below the row; square return corners and the outlined marked box are house forms for the source's rounded loop and filled blue tensor. |
-| `rmp-iii-a-torus-three` | K2 | Outline versus solid fill on the enlarged crossing is house style. |
+| `rmp-iii-a-torus-three` | — | Promoted to `faithful` 2026-08-25 with the waypoint-thinning re-review: outline versus solid fill on the enlarged crossing is house style, and the current-hash render carries an independent countersign. |
 | `rmp-iii-b-anyon-pair` | K2 | New 2026-08-11: the 2026-08-03 source-topology review moved the case to `cosmetic-gap` after this table's snapshot. Nine PEPS sites, two affine beads, twelve grid bonds, twelve perimeter openings, nine physical legs, and the five-position string with two declared crossings all match; only stroke weight and endpoint styling remain, both faithful differences under this bar. Re-review the hash-pinned render and promote to `faithful`. |
 | `rmp-iii-b-dyon` | K2 | The marked region and open string are present after route migration. |
 | `rmp-iii-b-self-braiding` | K2 | Tensor counts, winding classes, tail crossing, and boundary are complete. |
