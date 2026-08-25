@@ -44,12 +44,14 @@ CHECKER_PATH = "scripts/check_orphan_lean_modules.py"
 # from this set when they cease to be orphans.
 ORPHAN_MODULE_ALLOWLIST: frozenset[str] = frozenset(
     {
+        "TNLean/Algebra/BlockTriangularTrace.lean",
         "TNLean/MPS/FundamentalTheorem/SectorBNT/CanonicalFormEqualAmbient.lean",
         "TNLean/MPS/MPDO/BNTPhysicalSectorGSNNCH.lean",
         "TNLean/MPS/MPDO/FixedBondPositivePhysicalSectorRepresentative.lean",
         "TNLean/MPS/MPDO/LengthDependentRFPExample.lean",
         "TNLean/MPS/MPDO/NormalizedMPOProportionality.lean",
         "TNLean/MPS/MPDO/RescalingStableLengthDependentRFPCapstone.lean",
+        "TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean",
         "TNLean/PEPS/GaugeConsistencyConnectivityCounterexample.lean",
         "TNLean/PEPS/PhysicalToVirtualCounterexample.lean",
         "TNLean/PEPS/PositivityCounterexamples.lean",
