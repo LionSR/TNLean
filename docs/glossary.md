@@ -225,11 +225,13 @@ normalizations.
 - **Declarations:**
   `MPSTensor.IsPrimitiveMPS A ρ` and
   `MPSTensor.HasPrimitiveFixedPoint A`.
-- **Defined in:** `TNLean/MPS/Structure/PrimitivityBridge.lean`.
-- **Meaning:** `IsPrimitiveMPS A ρ` packages left-canonical normalization, a
-  nonzero positive-semidefinite fixed point `ρ`, and spectral radius less than
-  one on the complement of the fixed-point projection.
-  `HasPrimitiveFixedPoint A` existentially quantifies `ρ`.
+- **Defined in:** `TNLean/MPS/Structure/PrimitiveFixedPoint.lean` as reducible
+  abbreviations for `Kraus.HasComplementaryFixedPointGap A ρ` and
+  `Kraus.HasPrimitiveFixedPoint A`.
+- **Meaning:** `IsPrimitiveMPS A ρ` exposes the QIC finite-Kraus certificate packaging
+  left-canonical normalization, a nonzero positive-semidefinite fixed point `ρ`, and
+  spectral radius less than one on the complement of the fixed-point projection.
+  `HasPrimitiveFixedPoint A` uses the QIC existential certificate directly.
 - **Source:** the complementary transfer-map-gap formulation used in the MPS
   convergence route; compare Wolf §6.3, Theorem 6.7, and the convergence
   consequences of arXiv:0909.5347 Proposition 3.

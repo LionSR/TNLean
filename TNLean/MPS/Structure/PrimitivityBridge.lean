@@ -40,6 +40,6 @@ theorem HasPrimitiveFixedPoint.overlap_tendsto_one {d D : ℕ} [NeZero D]
     {A : MPSTensor d D} (hP : HasPrimitiveFixedPoint A) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) :=
   let ⟨_, h⟩ := hP
-  h.overlap_tendsto_one
+  MPSTensor.IsPrimitiveMPS.overlap_tendsto_one h
 
 end MPSTensor

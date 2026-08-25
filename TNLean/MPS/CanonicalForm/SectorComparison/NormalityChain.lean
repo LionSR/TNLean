@@ -70,7 +70,7 @@ For a single block that is TP, has a primitive transfer map, and is irreducible
    → `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
    → `∃ ρ, IsPrimitiveMPS A ρ`
 2. `IsPrimitiveMPS A ρ` + `Kraus.IsIrreducibleFamily A`
-   → `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS` → `ρ.PosDef`
+   → `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily` → `ρ.PosDef`
 3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
    → `isNormal_of_isPrimitiveMPS_with_posDef` → `Kraus.IsNormal A`
 
@@ -106,7 +106,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
   -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.
   have hPD : ρ.PosDef :=
-    posDef_of_isIrreducibleTensor_of_isPrimitiveMPS hPrimMPS hIrr
+    hPrimMPS.posDef_of_isIrreducibleFamily hIrr
   -- Step 4: Kraus.IsNormal from the primitive complementary gap and a faithful fixed point.
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
 
