@@ -570,6 +570,10 @@ jobs:
             echo "::warning::Blueprint has missing file references (see WARNING lines above)"
           fi
 
+      - name: Test tenkz blueprint sweep unit selection
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_blueprint_sweep.py
+
       # Every blueprint picture compiled standalone during the web build and
       # left its event stream in the render cache; the sweep audits all of
       # them, so the boundary-signature rules reach the volume's figures and
