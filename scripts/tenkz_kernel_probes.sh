@@ -1683,8 +1683,8 @@ affine_topology_atoms=$(
     END { print count + 0 }
   ' "$affine_log"
 )
-[ "$affine_topology_atoms" -eq 11 ] || {
-  echo "FAIL: affine route topology did not contain nine cells and two beads" >&2
+[ "$affine_topology_atoms" -eq 14 ] || {
+  echo "FAIL: affine route topology did not contain nine cells, two beads, and three junctions" >&2
   exit 1
 }
 affine_policy_atoms=$(
@@ -1726,26 +1726,26 @@ affine_grid_bonds=$(grep -c '|origin=grid|' "$affine_log" || true)
   echo "FAIL: affine three-by-three topology did not retain twelve grid bonds" >&2
   exit 1
 }
+# The retired waypoint list is a junction chain now: the second segment
+# makes the vertical grid crossing, the third the horizontal one, and the
+# three junctions stand at the same three logical midway points the list
+# once spelled.
 grep -Fq \
-  'stringcross|under=bond-2-2-3-2|over=anyon|hits=1' "$affine_log" || {
-  echo "FAIL: affine route missed its vertical grid crossing" >&2
+  'stringcross|under=bond-2-2-3-2|over=anyonb|hits=1' "$affine_log" || {
+  echo "FAIL: affine chain missed its vertical grid crossing" >&2
   exit 1
 }
 grep -Fq \
-  'stringcross|under=bond-2-2-2-3|over=anyon|hits=1' "$affine_log" || {
-  echo "FAIL: affine route missed its horizontal grid crossing" >&2
+  'stringcross|under=bond-2-2-2-3|over=anyonc|hits=1' "$affine_log" || {
+  echo "FAIL: affine chain missed its horizontal grid crossing" >&2
   exit 1
 }
-if ! grep -F '|name=anyon|' "$affine_log" |
-     grep -Fq '|route=orth|'; then
-  echo "FAIL: affine route lost its source-shaped polyline" >&2
-  exit 1
-fi
-if ! grep -F '|name=anyon|' "$affine_log" |
-     grep -Fq 'midway istar and c22, midway c32 and c23, midway c22 and i'; then
-  echo "FAIL: affine route lost its three logical waypoints" >&2
-  exit 1
-fi
+for affine_segment in anyon anyonb anyonc anyond; do
+  grep -Fq "|name=$affine_segment|" "$affine_log" || {
+    echo "FAIL: the affine chain lost one of its four segments" >&2
+    exit 1
+  }
+done
 if ! grep -F '|origin=port-open|' "$affine_log" |
      grep -Fq '|port-label=m|port-slot=1|port-type=physical'; then
   echo "FAIL: affine overlay explicit port depended on inherited policy" >&2

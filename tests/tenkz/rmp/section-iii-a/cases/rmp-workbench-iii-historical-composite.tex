@@ -21,12 +21,31 @@
     \tn[at=(3,2), skin=box, name=w, ports={180:virtual}]{}
     \tn[at=(3,4), skin=box, name=e, ports={0:virtual}]{}
     \tn[at=(4,3), skin=box, name=s, ports={270:virtual}]{}
-    \tnwire[kind=string, species=operator, name=ring, closed,
-            via={lam, n, (2,4), e, (4,4), s, (4,2), w}]
+    % the closed boundary loop, chained through the four legged atoms and
+    % three invisible corner junctions (via= retired, #6897)
+    \tn[at=(2,4), skin=none, name=jring1]{}
+    \tn[at=(4,4), skin=none, name=jring2]{}
+    \tn[at=(4,2), skin=none, name=jring3]{}
+    \tnwire[kind=string, species=operator, name=ring]{lam}{n}
+    \tnwire[kind=string, species=operator, name=r2]{n}{jring1}
+    \tnwire[kind=string, species=operator, name=r3,
+      cross={under at crossing of r2 and r3}]{jring1}{e}
+    \tnwire[kind=string, species=operator, name=r4]{e}{jring2}
+    \tnwire[kind=string, species=operator, name=r5,
+      cross={under at crossing of r4 and r5}]{jring2}{s}
+    \tnwire[kind=string, species=operator, name=r6]{s}{jring3}
+    \tnwire[kind=string, species=operator, name=r7,
+      cross={under at crossing of r6 and r7}]{jring3}{w}
+    \tnwire[kind=string, species=operator, name=ringclose,
+      cross={under at crossing of ring and ringclose}]{w}{lam}
     \tnwire[dir=to]{top.270}{n.90} \tnwire{top.90}{open n}
     \tnwire[dir=to]{left.0}{w.180} \tnwire{left.180}{open w}
     \tnwire[dir=to]{s.270}{open s} \tnwire[dir=to]{e.0}{open e}
-    \tnwire[kind=string, species=operator, via={1 nw of lam}]{left}{top}
+    % the sweeping arc, chained through one invisible junction near lam
+    \tn[at=1 nw of lam, skin=none, name=jarm1]{}
+    \tnwire[kind=string, species=operator, name=arm]{left}{jarm1}
+    \tnwire[kind=string, species=operator, name=arm2,
+      cross={under at crossing of arm and arm2}]{jarm1}{top}
   \end{tenkz}
   \;=\;
   % RHS: the loop's half-edges arrive from outward and the two pendant
@@ -40,11 +59,27 @@
     \tn[at=(2,4), skin=box, name=right, ports={0:virtual, 180:virtual}]{}
     \tn[at=(3,2), skin=box, name=s, ports={270:virtual}]{}
     \tn[at=(4,2), skin=box, name=bottom, ports={90:virtual, 270:virtual}]{}
-    \tnwire[kind=string, species=operator, name=ring, closed,
-            via={lam, n, (1,3), e, (3,3), s, (3,1), w}]
+    \tn[at=(1,3), skin=none, name=jring1]{}
+    \tn[at=(3,3), skin=none, name=jring2]{}
+    \tn[at=(3,1), skin=none, name=jring3]{}
+    \tnwire[kind=string, species=operator, name=ring]{lam}{n}
+    \tnwire[kind=string, species=operator, name=r2]{n}{jring1}
+    \tnwire[kind=string, species=operator, name=r3,
+      cross={under at crossing of r2 and r3}]{jring1}{e}
+    \tnwire[kind=string, species=operator, name=r4]{e}{jring2}
+    \tnwire[kind=string, species=operator, name=r5,
+      cross={under at crossing of r4 and r5}]{jring2}{s}
+    \tnwire[kind=string, species=operator, name=r6]{s}{jring3}
+    \tnwire[kind=string, species=operator, name=r7,
+      cross={under at crossing of r6 and r7}]{jring3}{w}
+    \tnwire[kind=string, species=operator, name=ringclose,
+      cross={under at crossing of ring and ringclose}]{w}{lam}
     \tnwire[dir=to]{open n}{n.90} \tnwire[dir=to]{open w}{w.180}
     \tnwire[dir=to]{s.270}{bottom.90} \tnwire{bottom.270}{open s}
     \tnwire[dir=to]{e.0}{right.180} \tnwire{right.0}{open e}
-    \tnwire[kind=string, species=operator, via={1 se of (3,3)}]{right}{bottom}
+    \tn[at=1 se of (3,3), skin=none, name=jarm1]{}
+    \tnwire[kind=string, species=operator, name=arm]{right}{jarm1}
+    \tnwire[kind=string, species=operator, name=arm2,
+      cross={under at crossing of arm and arm2}]{jarm1}{bottom}
   \end{tenkz}
 \]

@@ -21,17 +21,40 @@
     \tn[at=(2,2), name=q]{}
     % string b leaves anyon j, laps over the lattice line that runs north out
     % of j, and exits below; the declared crossing orders string over bond, as
-    % the source paints it
-    \tnwire[kind=string, species=operator, name=b, route=arc,
-            via={0.3 ne of j, 0.3 nw of j, 0.4 w of j, 0.4 w of p},
-            cross={over at crossing of b and open-north-col-1}]{0.1 e of j}{open s}
-    % string a rises from below through the lower rail into anyon i
-    \tnwire[kind=string, species=operator, name=a, route=arc,
-            via={midway p and q, 0.4 sw of i}]{open s}{i}
-    % marker beads where the strings pierce lattice lines
-    \tn[at=crossing of b and open-north-col-1, name=bb, label pos=e]{b}
+    % the source paints it.  The wire is a junction chain (retired via=): an
+    % invisible junction at each of the two waypoints with no marker bead of
+    % its own (jb1, jb2), then the chain runs through the marker beads bt, bs
+    % that already sit at the remaining two waypoints, so no atom is
+    % duplicated there.  Segment b2 is the one that laps over the lattice
+    % line, so it carries the renamed crossing declaration; every consecutive
+    % pair of segments also needs its own declared order at the corner they
+    % share, same as the torus-two wrap chain.
+    \tn[at=0.3 ne of j, skin=none, name=jb1]{}
+    \tn[at=0.3 nw of j, skin=none, name=jb2]{}
     \tn[at=0.4 w of j, name=bt]{}
     \tn[at=0.4 w of p, name=bs]{}
+    \tnwire[kind=string, species=operator, name=b1, route=arc]{0.1 e of j}{jb1}
+    \tnwire[kind=string, species=operator, name=b2, route=arc,
+            cross={over at crossing of b1 and b2,
+                   over at crossing of b2 and open-north-col-1}]{jb1}{jb2}
+    \tnwire[kind=string, species=operator, name=b3, route=arc,
+            cross={over at crossing of b2 and b3}]{jb2}{bt}
+    \tnwire[kind=string, species=operator, name=b4, route=arc,
+            cross={over at crossing of b3 and b4}]{bt}{bs}
+    \tnwire[kind=string, species=operator, name=b5, route=arc,
+            cross={over at crossing of b4 and b5}]{bs}{open s}
+    % marker bead where string b pierces the lattice line, and label bead for
+    % string a
+    \tn[at=crossing of b2 and open-north-col-1, name=bb, label pos=e]{b}
     \tn[at=midway p and q, name=am, label pos=se]{a}
+    % string a rises from below through the lower rail into anyon i; its
+    % first waypoint is the marker bead am already declared above, its
+    % second waypoint has no bead so it gets an invisible junction (ja2)
+    \tn[at=0.4 sw of i, skin=none, name=ja2]{}
+    \tnwire[kind=string, species=operator, name=a1, route=arc]{open s}{am}
+    \tnwire[kind=string, species=operator, name=a2, route=arc,
+            cross={over at crossing of a1 and a2}]{am}{ja2}
+    \tnwire[kind=string, species=operator, name=a3, route=arc,
+            cross={over at crossing of a2 and a3}]{ja2}{i}
   \end{tenkz}
 \]

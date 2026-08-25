@@ -23,20 +23,41 @@
     \tnwire{open w}{i.w} \tnwire{i.e}{open e}
     \tnwire{open w}{j.w} \tnwire{j.e}{open e}
     \tnwire{open n}{i.n} \tnwire{i.s}{j.n} \tnwire{j.s}{open s}
-    % The i strand threads both resolvers and leaves west at the middle site.
-    \tnwire[kind=string, species=operator, name=si,
-            via={0.2 w of Rib, 0.2 w of midway Rib and Rja, 0.2 w of Rja,
-                 midway j and Rja,
-                 0.4 se of midway i and j,
-                 midway i and j}]{i.315}{1 w of midway i and j}
-    % The a strand leaves the lower resolver below the lower-rail bead.
-    \tnwire[kind=string, species=operator, name=sa]
-           {0.2 e of Rja}{0.5 s of 0.2 e of (4,3)}
-    % The j strand enters the lower resolver from the lower intersection.
-    \tnwire[kind=string, species=operator, name=sj,
-            via={0.35 s of Rja}]{j.20}{0.12 e of Rja}
     % marker beads where strings pierce lattice lines
     \tn[at=0.2 e of (4,3), role=marked, name=xa]{}
     \tn[at=midway i and j, role=extra, name=xj]{}
+    % the i strand's former via waypoints, now junctions: the last one is the
+    % existing xj bead, the rest are new and invisible
+    \tn[at=0.2 w of Rib, skin=none, name=jsi1]{}
+    \tn[at=0.2 w of midway Rib and Rja, skin=none, name=jsi2]{}
+    \tn[at=0.2 w of Rja, skin=none, name=jsi3]{}
+    \tn[at=midway j and Rja, skin=none, name=jsi4]{}
+    \tn[at=0.4 se of midway i and j, skin=none, name=jsi5]{}
+    % the j strand's former via waypoint, now a new invisible junction
+    \tn[at=0.35 s of Rja, skin=none, name=jsj1]{}
+    % The i strand threads both resolvers and leaves west at the middle site.
+    \tnwire[kind=string, species=operator, name=si1, route=arc]{i.315}{jsi1}
+    \tnwire[kind=string, species=operator, name=si2, route=arc,
+            cross={over at crossing of si2 and si1}]{jsi1}{jsi2}
+    \tnwire[kind=string, species=operator, name=si3, route=arc,
+            cross={over at crossing of si3 and si2}]{jsi2}{jsi3}
+    \tnwire[kind=string, species=operator, name=si4, route=arc,
+            cross={over at crossing of si4 and si3}]{jsi3}{jsi4}
+    \tnwire[kind=string, species=operator, name=si5, route=arc,
+            cross={over at crossing of si5 and si4}]{jsi4}{jsi5}
+    \tnwire[kind=string, species=operator, name=si6, route=arc,
+            cross={over at crossing of si6 and si5}]{jsi5}{xj}
+    \tnwire[kind=string, species=operator, name=si7, route=arc,
+            cross={over at crossing of si7 and si6}]{xj}{1 w of midway i and j}
+    % The a strand leaves the lower resolver below the lower-rail bead.
+    \tnwire[kind=string, species=operator, name=sa]
+           {0.2 e of Rja}{0.5 s of 0.2 e of (4,3)}
+    % The j strand enters the lower resolver from the lower intersection,
+    % dipping under the lower rail through its marker bead on the way.
+    \tnwire[kind=string, species=operator, name=sj1, route=arc]{j.20}{xa}
+    \tnwire[kind=string, species=operator, name=sj2, route=arc,
+            cross={over at crossing of sj2 and sj1}]{xa}{jsj1}
+    \tnwire[kind=string, species=operator, name=sj3, route=arc,
+            cross={over at crossing of sj3 and sj2}]{jsj1}{0.12 e of Rja}
   \end{tenkz}
 \]

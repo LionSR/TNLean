@@ -59,8 +59,10 @@
   \tn[at=(1,2,1), skin=dot, size=l, species=marked, name=endK]{}
   \tn[at=0.5 e of (2,1,1), skin=dot, size=s, species=marked, name=bK]{}
   \tn[at=0.5 e of (2,1,2), skin=dot, size=s, species=marked, name=bB]{}
-  \tnwire[kind=string, species=operator, name=sK, via={bK}]{(2,1,1)}{(2,2,1)}
-  \tnwire[kind=string, species=operator, name=sB, via={bB}]{(2,1,2)}{(2,2,2)}
+  \tnwire[kind=string, species=operator, name=sK]{(2,1,1)}{bK}
+  \tnwire[kind=string, species=operator, name=sKb]{bK}{(2,2,1)}
+  \tnwire[kind=string, species=operator, name=sB]{(2,1,2)}{bB}
+  \tnwire[kind=string, species=operator, name=sBb]{bB}{(2,2,2)}
   \tnwire{(1,1,1)}{(1,1,2)}
 \end{tenkz}
 \ExplSyntaxOn

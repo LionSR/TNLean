@@ -19,10 +19,20 @@
     \tnwire[kind=string, species=operator]{b2.e}{b3.w}
     \tnwire[kind=string, species=operator]{b3.e}{b4.w}
     \tnwire[kind=string, species=operator]{b4.e}{b5.w}
-    % the periodic return of the word, drawn as the source's long loop below
-    \tnwire[kind=string, species=operator, route=orth, name=wrap,
-      via={0.8 e of (1,5), 1.1 s of 0.8 e of (1,5),
-           1.1 s of 0.8 w of (1,1), 0.8 w of (1,1)}]
-      {b5.e}{b1.w}
+    % the periodic return of the word, drawn as the source's long loop below,
+    % as a junction chain of invisible corner atoms (via= retired, #6897)
+    \tn[at=0.8 e of (1,5), skin=none, name=jwrap1]{}
+    \tn[at=1.1 s of 0.8 e of (1,5), skin=none, name=jwrap2]{}
+    \tn[at=1.1 s of 0.8 w of (1,1), skin=none, name=jwrap3]{}
+    \tn[at=0.8 w of (1,1), skin=none, name=jwrap4]{}
+    \tnwire[kind=string, species=operator, name=wrap1]{b5.e}{jwrap1}
+    \tnwire[kind=string, species=operator, name=wrap2,
+            cross={over at crossing of wrap1 and wrap2}]{jwrap1}{jwrap2}
+    \tnwire[kind=string, species=operator, name=wrap3,
+            cross={over at crossing of wrap2 and wrap3}]{jwrap2}{jwrap3}
+    \tnwire[kind=string, species=operator, name=wrap4,
+            cross={over at crossing of wrap3 and wrap4}]{jwrap3}{jwrap4}
+    \tnwire[kind=string, species=operator, name=wrap5,
+            cross={over at crossing of wrap4 and wrap5}]{jwrap4}{b1.w}
   \end{tenkz}
 \]

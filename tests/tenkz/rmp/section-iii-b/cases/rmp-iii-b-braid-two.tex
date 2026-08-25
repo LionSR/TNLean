@@ -21,14 +21,41 @@
     \tnwire{open w}{j.w} \tnwire{j.e}{i.w} \tnwire{i.e}{open e}
     \tnwire{b.n}{open n} \tnwire{b.s}{j.n} \tnwire{j.s}{open s}
     \tnwire{a.n}{open n} \tnwire{a.s}{i.n} \tnwire{i.s}{open s}
-    \tnwire[kind=string, species=operator, name=sb,
-            via={0.3 w of b, midway b and j, midway j and i,
-                 0.3 s of i, 0.3 e of i, 0.3 e of midway i and a}]{open n}{a.315}
-    \tnwire[kind=string, species=operator, name=sa,
-            via={midway i and a, midway b and a, 0.3 n of a}]{i.45}{open e}
-    \tn[at=0.3 w of b]{}      \tn[at=midway b and j]{}
-    \tn[at=midway j and i]{}  \tn[at=0.3 s of i]{}
-    \tn[at=0.3 e of i]{}      \tn[at=midway i and a]{}
-    \tn[at=midway b and a]{}  \tn[at=0.3 n of a]{}
+    % Both strings are junction chains (retired via=): a named marker bead at
+    % each waypoint that used to be dotted (the same records the source
+    % marks its crossings with), plus one invisible junction at sb's sixth
+    % waypoint, which the original left undotted because it is a routing
+    % point, not a crossing.  Every consecutive pair of segments also needs
+    % its own declared order at the corner they share, same as the
+    % torus-two wrap chain (#6897).
+    \tn[at=0.3 w of b, name=m1]{}
+    \tn[at=midway b and j, name=m2]{}
+    \tn[at=midway j and i, name=m3]{}
+    \tn[at=0.3 s of i, name=m4]{}
+    \tn[at=0.3 e of i, name=m5]{}
+    \tn[at=0.3 e of midway i and a, skin=none, name=m6]{}
+    \tn[at=midway i and a, name=n1]{}
+    \tn[at=midway b and a, name=n2]{}
+    \tn[at=0.3 n of a, name=n3]{}
+    \tnwire[kind=string, species=operator, name=sb1]{open n}{m1}
+    \tnwire[kind=string, species=operator, name=sb2,
+            cross={over at crossing of sb1 and sb2}]{m1}{m2}
+    \tnwire[kind=string, species=operator, name=sb3,
+            cross={over at crossing of sb2 and sb3}]{m2}{m3}
+    \tnwire[kind=string, species=operator, name=sb4,
+            cross={over at crossing of sb3 and sb4}]{m3}{m4}
+    \tnwire[kind=string, species=operator, name=sb5,
+            cross={over at crossing of sb4 and sb5}]{m4}{m5}
+    \tnwire[kind=string, species=operator, name=sb6,
+            cross={over at crossing of sb5 and sb6}]{m5}{m6}
+    \tnwire[kind=string, species=operator, name=sb7,
+            cross={over at crossing of sb6 and sb7}]{m6}{a.315}
+    \tnwire[kind=string, species=operator, name=sa1]{i.45}{n1}
+    \tnwire[kind=string, species=operator, name=sa2,
+            cross={over at crossing of sa1 and sa2}]{n1}{n2}
+    \tnwire[kind=string, species=operator, name=sa3,
+            cross={over at crossing of sa2 and sa3}]{n2}{n3}
+    \tnwire[kind=string, species=operator, name=sa4,
+            cross={over at crossing of sa3 and sa4}]{n3}{open e}
   \end{tenkz}
 \]

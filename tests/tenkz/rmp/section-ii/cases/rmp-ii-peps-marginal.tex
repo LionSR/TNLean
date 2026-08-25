@@ -75,16 +75,25 @@
     \tnwire{(3,3,2)}{open down}
     \tnwire{(4,1,2)}{open down} \tnwire{(4,2,2)}{open down}
     \tnwire{(4,3,2)}{open down}
-    % the traced fourth column: each ket-bra pair closes through its own
-    % east wrap loop, as the source draws Tr over the site's physical space
+    % the traced fourth column: each ket-bra pair's east wrap loop -- the
+    % source's Tr over the site -- drawn as a two-segment chain through one
+    % junction east of the pair; the joint declares its order.
+    \tn[at=0.6 e of midway (1,4,1) and (1,4,2), skin=none, name=jtr1]{}
     \tnwire[kind=string, name=tr1,
-            via={0.6 e of (1,4,1), 0.6 e of (1,4,2)}]{(1,4,1)}{(1,4,2)}
+            cross={under at crossing of tr1 and tr1b}]{(1,4,1)}{jtr1}
+    \tnwire[kind=string, name=tr1b]{jtr1}{(1,4,2)}
+    \tn[at=0.6 e of midway (2,4,1) and (2,4,2), skin=none, name=jtr2]{}
     \tnwire[kind=string, name=tr2,
-            via={0.6 e of (2,4,1), 0.6 e of (2,4,2)}]{(2,4,1)}{(2,4,2)}
+            cross={under at crossing of tr2 and tr2b}]{(2,4,1)}{jtr2}
+    \tnwire[kind=string, name=tr2b]{jtr2}{(2,4,2)}
+    \tn[at=0.6 e of midway (3,4,1) and (3,4,2), skin=none, name=jtr3]{}
     \tnwire[kind=string, name=tr3,
-            via={0.6 e of (3,4,1), 0.6 e of (3,4,2)}]{(3,4,1)}{(3,4,2)}
+            cross={under at crossing of tr3 and tr3b}]{(3,4,1)}{jtr3}
+    \tnwire[kind=string, name=tr3b]{jtr3}{(3,4,2)}
+    \tn[at=0.6 e of midway (4,4,1) and (4,4,2), skin=none, name=jtr4]{}
     \tnwire[kind=string, name=tr4,
-            via={0.6 e of (4,4,1), 0.6 e of (4,4,2)}]{(4,4,1)}{(4,4,2)}
+            cross={under at crossing of tr4 and tr4b}]{(4,4,1)}{jtr4}
+    \tnwire[kind=string, name=tr4b]{jtr4}{(4,4,2)}
   \end{tenkz}
 \end{gathered}
 \]
