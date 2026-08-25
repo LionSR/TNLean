@@ -2,8 +2,7 @@
 """Locate the pinned tenkz companion checkout.
 
 Resolution order: ``TENKZ_ROOT``, then ``.deps/tenkz`` after
-``scripts/fetch_tenkz.py``, then a leftover in-tree ``tex/tenkz`` during
-the cutover.
+``scripts/fetch_tenkz.py``.
 """
 
 from __future__ import annotations
@@ -30,8 +29,6 @@ def tenkz_root() -> Path:
     deps = REPO / ".deps" / "tenkz"
     if (deps / "tex/tenkz/tenkz.sty").is_file():
         return deps
-    if (REPO / "tex/tenkz/tenkz.sty").is_file():
-        return REPO
     raise TenkzMissing(
         "tenkz is not checked out; run python3 scripts/fetch_tenkz.py"
     )

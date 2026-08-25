@@ -14,16 +14,21 @@ The freeze SHA is TNLean `origin/main` at extraction. tenkz history is a
 those blobs is `24e66c540` (#7157), with the standalone-repo commit
 `2210cfd15` (`tenkz-v0.7.1`) on top.
 
-TNLean consumes the pin through `tenkz.toml` and `scripts/fetch_tenkz.py`,
-which clones into gitignored `.deps/tenkz`. Remaining in-tree consumers:
+TNLean consumes the tag and immutable commit recorded in `tenkz.toml`
+through `scripts/fetch_tenkz.py`, which clones into gitignored
+`.deps/tenkz`. Remaining in-tree consumers:
 
 - `blueprint/src/Packages/tenkz_pic.py`
+- `scripts/audit_cpsv16_labels.py`
+- `scripts/test_audit_cpsv16_labels.py`
 - `scripts/tenkz_blueprint_sweep.py`
+- `scripts/test_tenkz_blueprint_sweep.py`
 - `scripts/test_tenkz_pic.py`
 - `scripts/test_tenkz_equation_web.py`
 - `scripts/test_tenkz_peps_torus.py`
 - `scripts/test_tenkz_index_routing.py`
-- `scripts/check_tenkz_demolition.py` (retired `tex/tn/` catalogue)
+- `scripts/check_tenkz_demolition.py` (retired tensor-network catalogue)
 
-Historical tenkz GitHub issues stay on TNLean. New package work opens on
-LionSR/tenkz.
+Package-owned GitHub issues were transferred to LionSR/tenkz. TNLean #5693
+remains here because it concerns adoption in the blueprint. New package work
+opens on LionSR/tenkz.
