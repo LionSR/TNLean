@@ -4059,3 +4059,11 @@ mark-name pin follows the renamed fixture.
 | flag:lonely-type:size-table | departed: its sole carrier was the inert sizes= setup key; permanent |
 | flag:consumers:key:kernel-setup:theme | retired: stored an identifier, read by nothing; the house palette binds at load and cited palettes enter through species hue declarations; permanent |
 | flag:consumers:key:kernel-wire:weight | retired: zero authored consumers; it changed no ink, endpoint type owns stroke, and multiplicity belongs to the mathematical label; permanent |
+
+### 2026-08-25 — correction to the slot-retirement verdict summary
+
+The preceding session's summary should be read as its verdict table states:
+the mark's `slot=` consumer row is tombstoned permanently, while the
+`semantic-slot` lonely type dies with that key. The meters and all other
+verdicts are unchanged. This correction is appended because shrink sessions
+are immutable.

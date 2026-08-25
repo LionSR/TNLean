@@ -233,13 +233,13 @@ policy-answer value `r_atom_physical_answer.tex` does not spell.
 
 **Discharged.** The glyph half blocked this fixture: `__tenkz_kernel_atom_skin:nN` defaulted every atom's skin to `dot`, so `\tn[void=open]{}` drew a site indistinguishable from a real one (recorded as issue #5609). PR #5616 defaults a void's skin to `none` — a hole draws nothing, no glyph and no label, unless the author declares a skin — and shipped `tests/tenkz/kernel/regression/r_void_open.tex` pinning the open hole's bridging bonds, its preserved physical index, the boundary contrast against the sealed variant, and the atom-scope `physical=updown` answer.
 
-### G2 — mark slot words and mark names (write before deletion)
+### G2 — region words and mark names (write before deletion)
 
-The kernel mark slot alphabet is `{selected, secondary, complement, collar,
-neutral}` (`tenkz-kernel.code.tex` line 1222), and marks accept `name=` (line
-1227). Surviving suites exercise only `selected` (13 uses) and `secondary`
-(`r_region_complement.tex`). The words `complement`, `collar`, and `neutral`
-and the mark `name=` key are exercised solely by five legacy lattice fixtures
+The former kernel mark slot alphabet was `{selected, secondary, complement,
+collar, neutral}`, and marks also accepted `name=`. Before the
+slot-for-species exchange, surviving suites exercised only `selected` and
+`secondary`; the words `complement`, `collar`, and `neutral` and the mark
+`name=` key were exercised solely by five legacy lattice fixtures
 (`lattice_test`, `notch`, `feat`, `t2_gs2d_lasso`, `t2_tcdual`).
 
 **Replacement:** `tests/tenkz/kernel/regression/r_region_words.tex`. One
@@ -248,7 +248,8 @@ grid with three enclosures carrying `species=complement`, `species=collar`,
 its own semantic ink and the named mark is accepted and recorded. The
 deferred slot-for-species exchange (`LANGUAGE-1.0.md` §14.5) has executed:
 `slot=` is retired, the fixture pins the `species=` respelling, and the
-region words stand as prelude species.
+region words stand as prelude species. `n_mark_slot_key.tex` separately pins
+the retired `slot=` key's unknown-key refusal.
 
 **Closed.** The fixture (born `r_region_slot_words.tex`, renamed with the
 exchange) hooks `\__tenkz_kernel_r_mark_enclosure:n` to capture the
