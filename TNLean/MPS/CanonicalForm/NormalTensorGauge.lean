@@ -170,13 +170,13 @@ theorem of_gaugeEquiv {A B : MPSTensor d D} (hB : IsNormalTensor B)
   obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
   refine ⟨?_, ?_, ?_⟩
   · have hIrrB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) :=
-      isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB.no_invariant_proj
+      Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily B hB.no_invariant_proj
     have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
       have hIrrSim : IsIrreducibleMap
           (similarityMap (D := D) C (Kraus.transferMap (d := d) (D := D) A)) := by
         simpa [hMap] using hIrrB
       exact (isIrreducibleMap_similarity_iff (D := D) hC).1 hIrrSim
-    exact isIrreducibleTensor_of_isIrreducibleMap A hIrrA
+    exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrA
   · have hsr := hB.spectral_radius_one
     rw [hMap] at hsr
     rw [spectralRadius_similarityMap_eq (D := D) C hC
@@ -227,7 +227,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
     rw [hmap] at hspectral
     simp at hspectral
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
   have hradius :
@@ -331,7 +331,7 @@ theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D]
     isNormal_implies_stronglyIrreducible A hLeft hNormal
   obtain ⟨ρ, hρ, hρfix⟩ := hStrong.posDef_fixedPoint
   have hIrr : Kraus.IsIrreducibleFamily A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hStrong.isIrreducibleMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hStrong.isIrreducibleMap
   have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap A) μ →
       ‖μ‖ = (1 : ℝ) → μ = (1 : ℂ) := by
     intro μ hμ hμnorm

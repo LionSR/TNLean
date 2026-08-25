@@ -217,7 +217,8 @@ theorem mem_faithfulFixedPointSupportAlgebra_iff
   rw [Kraus.mem_fixedPoints_starSubalgebra, Kraus.mem_adjointFixedPoints]
   have hAdj : Kraus.adjointMap M.toMPSTensor X = (transferMap M).adjoint X := by
     rw [transferMap_eq_toMPSTensor]
-    exact (MPSTensor.transferMap_adjoint_apply_eq_adjointMap (A := M.toMPSTensor) X).symm
+    rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
+    simp [Kraus.mapLM_apply, Kraus.adjointMap]
   rw [hAdj]
 
 namespace AlgebraStructureData

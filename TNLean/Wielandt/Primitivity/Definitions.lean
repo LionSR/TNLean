@@ -179,7 +179,7 @@ For orientation, the codebase distinguishes four related notions:
 
 Paper: "E_A is primitive" means `1` is the only eigenvalue with `|λ| = 1`.
 Wolf Chapter 6 Definition 6.2(2). -/
-def IsPeripherallyPrimitive (A : MPSTensor d D) : Prop :=
+abbrev IsPeripherallyPrimitive (A : MPSTensor d D) : Prop :=
   _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
 
 /-! ## Strong irreducibility (Proposition 3(c)) -/

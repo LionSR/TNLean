@@ -443,7 +443,7 @@ theorem bellPairChainTensor_isNormal : Kraus.IsNormal bellPairChainTensor :=
 /-- The Bell-pair chain tensor is left-canonical:
 `∑ (α,β), (A^{(α,β)})† A^{(α,β)} = 1`. -/
 theorem bellPairChainTensor_isLeftCanonical : IsLeftCanonical bellPairChainTensor := by
-  unfold IsLeftCanonical
+  unfold IsLeftCanonical Kraus.IsTP
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   have hletter : ∀ a b : Fin 2,
       (bellPairChainTensor (finProdFinEquiv (a, b)))ᴴ *

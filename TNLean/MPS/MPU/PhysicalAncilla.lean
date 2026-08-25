@@ -255,7 +255,7 @@ theorem leftCanonical_normalizedDiagonalLift
     (hA : MPSTensor.IsLeftCanonical A) :
     MPSTensor.IsLeftCanonical (normalizedDiagonalLift A x) := by
   classical
-  rw [MPSTensor.IsLeftCanonical, ← Equiv.sum_comp finProdFinEquiv,
+  rw [MPSTensor.IsLeftCanonical, Kraus.IsTP, ← Equiv.sum_comp finProdFinEquiv,
     Fintype.sum_prod_type]
   apply Eq.trans (Finset.sum_congr rfl fun ij _ ↦ ?_) hA
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]

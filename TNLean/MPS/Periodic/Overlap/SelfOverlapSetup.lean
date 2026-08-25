@@ -218,7 +218,7 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
   have hAdj :
       Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
         (Kraus.transferMap (d := d) (D := D) A).adjoint := by
-    simpa using transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A)
+    simpa using Kraus.mapLM_conjTranspose_eq_adjoint (K := A)
   have hperiph_roots :
       peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         {μ : ℂ | μ ^ m = 1} := by
@@ -402,7 +402,7 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     change ∑ i : Fin d, (A i)ᴴ * ((A i)ᴴ)ᴴ = 1
-    simpa [IsLeftCanonical] using hP.leftCanonical
+    simpa [IsLeftCanonical, Kraus.IsTP] using hP.leftCanonical
   have hK_apply : ∀ X : MatrixAlg D, T X = KadisonSchwarz.krausMap K X := by
     intro X
     simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
@@ -459,7 +459,7 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       T = (Kraus.transferMap (d := d) (D := D) A).adjoint := by
-    simpa [T] using transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A)
+    simpa [T] using Kraus.mapLM_conjTranspose_eq_adjoint (K := A)
   have hperiph_roots : peripheralEigenvalues T = {μ : ℂ | μ ^ m = 1} := by
     ext μ
     constructor
@@ -526,8 +526,8 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       hMulLeft hMulRight hPne u
   have hIrr : IsIrreducibleMap T := by
     simpa [T] using
-      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
-        (A := A) hP.irreducible
+      Kraus.isIrreducibleMap_mapLM_conjTranspose A
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hP.irreducible)
   have hLift :=
     hLift_cyclicDecomp_mps
       (A := A) (m := m) hIrr hP.leftCanonical P hPproj hPsum hCyclic hMulLeft hMulRight
@@ -676,15 +676,15 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
       Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =
         (Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint := by
     simpa only using
-      (transferMap_conjTranspose_eq_adjoint
-        (d := blockPhysDim d m) (D := dim u) (A := blocks u))
+      (Kraus.mapLM_conjTranspose_eq_adjoint (K := blocks u))
   have hPrimAdj' :
       _root_.IsPrimitive
         ((Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint) := by
     simpa only [hAdj] using hPrimAdj
   refine ⟨(IsPrimitive.adjoint_iff
     (E := Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))).1 hPrimAdj', ?_⟩
-  exact isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (blocks u) hIrrAdj
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (blocks u)
+    ((Kraus.isIrreducibleMap_mapLM_conjTranspose_iff (blocks u)).mp hIrrAdj)
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 

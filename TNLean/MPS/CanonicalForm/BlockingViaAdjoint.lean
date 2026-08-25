@@ -50,35 +50,6 @@ local instance : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
   Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1
     (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
 
-/-- The adjoint of `Kraus.transferMap A` (Frobenius inner product) is the transfer map of the
-conjugate-transposed Kraus family.
-
-This is the transfer-map specialization of `Kraus.mapLM_conjTranspose_eq_adjoint`, obtained
-by rewriting along `Kraus.mapLM_eq_transferMap` (both files install the same Frobenius
-`NormedAddCommGroup`/`InnerProductSpace` instances on `Matrix (Fin D) (Fin D) ℂ`). -/
-lemma transferMap_conjTranspose_eq_adjoint (A : MPSTensor d D) :
-    Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
-      (Kraus.transferMap (d := d) (D := D) A).adjoint := by
-  simpa only [Kraus.mapLM_eq_transferMap] using
-    Kraus.mapLM_conjTranspose_eq_adjoint (K := A)
-
-/-- The Frobenius adjoint of `Kraus.transferMap A` is the Kraus adjoint map of `A`,
-viewed as a linear map. This is the linear-map form of
-`transferMap_conjTranspose_eq_adjoint`. -/
-lemma transferMap_adjoint_eq_adjointMapLM (A : MPSTensor d D) :
-    (Kraus.transferMap A).adjoint = Kraus.adjointMapLM A := by
-  refine LinearMap.ext fun X => ?_
-  have h := congrArg (fun F => F X)
-    (transferMap_conjTranspose_eq_adjoint (A := A)).symm
-  simpa [Kraus.transferMap_apply, Kraus.adjointMapLM_apply, Kraus.adjointMap,
-    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc] using h
-
-/-- Pointwise form of `transferMap_adjoint_eq_adjointMapLM`. -/
-@[simp] lemma transferMap_adjoint_apply_eq_adjointMap (A : MPSTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (Kraus.transferMap A).adjoint X = Kraus.adjointMap A X := by
-  rw [transferMap_adjoint_eq_adjointMapLM]
-  exact Kraus.adjointMapLM_apply A X
 
 end
 
@@ -112,15 +83,19 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   have h_unitalK : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K :=
     KadisonSchwarz.isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
   -- Irreducibility of `Kraus.transferMap K` from tensor-irreducibility of `A`.
-  have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrrT
+  have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) := by
+    have hIrrAdj :=
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrT).traceAdjointMap
+        (Kraus.isPositiveMap_mapLM A)
+    rw [Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose] at hIrrAdj
+    exact hIrrAdj
   -- A positive definite fixed point for `Kraus.transferMap A`, hence for `Kraus.adjointMap K`.
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
     Kraus.isChannel_transferMap (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hDpos
   have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) A hIrrT
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily (d := d) (D := D) A hIrrT
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
       hIrrAmap ρ hρ_psd hρ_ne hρ_fix
@@ -136,7 +111,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     intro μ hμ
     have hμ' : μ ∈ peripheralEigenvalues E := hfin.mem_toFinset.mp hμ
     simpa only using
-      (peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
+      (Kraus.peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
         (K := K) (d := d) (D := D) h_unitalK ρ hρ_pd h_adjfix hIrrK μ
           (by simpa only [E] using hμ'))
   obtain ⟨p, hp_pos, hp_all⟩ :=
@@ -160,7 +135,6 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   -- Turn primitivity of the adjoint power into primitivity of `(Kraus.transferMap A)^p`.
   -- We now bring in the Frobenius inner product so that `LinearMap.adjoint` makes sense.
   -- (All the channel/peripheral-spectrum lemmas above are independent of this choice.)
-  -- We reuse `transferMap_conjTranspose_eq_adjoint` and `IsPrimitive.adjoint_iff`.
   -- Install the Frobenius inner product instances locally.
   have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
     classical
@@ -171,7 +145,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hE_adj : E = (Kraus.transferMap (d := d) (D := D) A).adjoint := by
     -- `E = Kraus.transferMap (A†)` and use the lemma.
-    simpa only using (transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A))
+    simpa only using (Kraus.mapLM_conjTranspose_eq_adjoint (K := A))
   -- Rewrite `E ^ p` as the adjoint of `(Kraus.transferMap A) ^ p`.
   have hpow_adj : E ^ p = ((Kraus.transferMap (d := d) (D := D) A) ^ p).adjoint := by
     -- First rewrite `E` using `hE_adj`.

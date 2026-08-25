@@ -70,7 +70,8 @@ private theorem phaseFlipTensor_transferMap_adjoint :
       Kraus.transferMap phaseFlipTensor := by
   apply LinearMap.ext
   intro X
-  rw [MPSTensor.transferMap_adjoint_apply_eq_adjointMap]
+  rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
+  simp only [Kraus.mapLM_apply, Kraus.adjointMap, Matrix.conjTranspose_conjTranspose]
   simp [Kraus.adjointMap, Kraus.transferMap_apply,
     phaseFlipTensor_conjTranspose]
 
@@ -143,7 +144,13 @@ private theorem phaseFlipMPO_isTP :
   suffices hAdjointOne :
       Kraus.adjointMap phaseFlipTensor.toMPOTensor.toMPSTensor 1 = 1 by
     simpa [Kraus.IsTP, Kraus.adjointMap, Matrix.mul_one] using hAdjointOne
-  rw [← MPSTensor.transferMap_adjoint_apply_eq_adjointMap]
+  have hadj :
+      (Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor).adjoint =
+        Kraus.adjointMapLM phaseFlipTensor.toMPOTensor.toMPSTensor := by
+    rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
+    ext X
+    simp [Kraus.mapLM_apply, Kraus.adjointMapLM_apply, Kraus.adjointMap]
+  rw [← Kraus.adjointMapLM_apply, ← hadj]
   have hMap : Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor =
       Kraus.transferMap phaseFlipTensor := by
     rw [← MPOTensor.transferMap_eq_toMPSTensor,

@@ -47,22 +47,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Fixed point ⇒ invariant support projection -/
-
-/-- If `ρ` is positive semidefinite and fixed by the MPS transfer map, then its
-support projection is invariant under every tensor matrix. -/
-theorem lowerZero_of_posSemidef_fixedPoint
-    (A : MPSTensor d D)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
-    let P := hρ_psd.supportProj
-    IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
-  have hρ_fix' : Kraus.map A ρ = ρ := by
-    simpa [Kraus.map, Kraus.transferMap_apply] using hρ_fix
-  simpa [Kraus.stationaryProj] using
-    (Kraus.lowerZero_of_posSemidef_fixedPoint A ρ hρ_psd hρ_fix')
-
 /-! ## Nontriviality lemmas for the support projection
 
 These lemmas connect the support projection to the nondegeneracy of the original
@@ -182,7 +166,7 @@ References:
 2-block block-diagonal tensor.
 
 This is just the composition
-`lowerZero_of_posSemidef_fixedPoint` + `exists_twoBlock_decomp_of_lowerZero`.
+`Kraus.lowerZero_of_posSemidef_fixedPoint` + `exists_twoBlock_decomp_of_lowerZero`.
 -/
 theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
@@ -194,9 +178,11 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint
       SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   classical
   let P : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
+  have hρ_fix' : Kraus.map A ρ = ρ := by
+    simpa [Kraus.map, Kraus.transferMap_apply] using hρ_fix
   have hP : IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
-    simpa [P] using
-      (lowerZero_of_posSemidef_fixedPoint (d := d) (D := D) A ρ hρ_psd hρ_fix)
+    simpa [P, Kraus.stationaryProj] using
+      (Kraus.lowerZero_of_posSemidef_fixedPoint A ρ hρ_psd hρ_fix')
   exact exists_twoBlock_decomp_of_lowerZero (d := d) (D := D) A P hP.1 hP.2
 
 /-- **Strict dimension decrease**: If `ρ` is a PSD fixed point of the transfer map,
@@ -208,7 +194,7 @@ This is the key recursion step in the canonical form existence proof:
 each iteration strictly reduces the bond dimension.
 
 The proof composes:
-1. `lowerZero_of_posSemidef_fixedPoint` — support projection is invariant,
+1. `Kraus.lowerZero_of_posSemidef_fixedPoint` — support projection is invariant,
 2. `Matrix.PosSemidef.supportProj_ne_zero_of_ne_zero` — `P ≠ 0` from `ρ ≠ 0`,
 3. `Matrix.PosSemidef.supportProj_ne_one_of_not_posDef` — `P ≠ 1` from `¬ρ.PosDef`,
 4. `exists_twoBlock_decomp_of_lowerZero_strict` — strict dimension bounds.
@@ -233,9 +219,11 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
         SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
   -- Step 1: obtain the invariant support projection
   let P : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
+  have hρ_fix' : Kraus.map A ρ = ρ := by
+    simpa [Kraus.map, Kraus.transferMap_apply] using hρ_fix
   have hP_inv : IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
-    simpa [P] using
-      (lowerZero_of_posSemidef_fixedPoint (d := d) (D := D) A ρ hρ_psd hρ_fix)
+    simpa [P, Kraus.stationaryProj] using
+      (Kraus.lowerZero_of_posSemidef_fixedPoint A ρ hρ_psd hρ_fix')
   -- Step 2: P ≠ 0 from ρ ≠ 0
   have hP0 : P ≠ 0 := hρ_psd.supportProj_ne_zero_of_ne_zero hρ_ne
   -- Step 3: P ≠ 1 from ¬ρ.PosDef

@@ -11,13 +11,8 @@ import QICLean.Channel.Schwarz.KadisonSchwarz
 /-!
 # Irreducibility and conjugate-transposed Kraus families
 
-This file transfers irreducibility between an MPS tensor and the CP map built
-from its conjugate-transposed Kraus family. The main theorem
-`isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor` is
-complemented by its converse
-`isIrreducibleTensor_of_isIrreducibleMap_conjTranspose`. The unital/TP
-conversion lemmas for conjugate-transposed Kraus families live in
-`TNLean.Channel.Schwarz.KadisonSchwarz`.
+This file develops dual fixed-point diagonalization for conjugate-transposed
+Kraus families. Generic irreducibility transport is supplied by QICLean.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -25,42 +20,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- Irreducibility is preserved under passing to the conjugate-transposed Kraus family.
-
-If `A` is irreducible in the tensor sense (no nontrivial invariant orthogonal projection), then the
-transfer map built from `A† : i ↦ (A i)ᴴ` is irreducible as a CP map.
-
-Proof idea:
-* an invariant projection `P` for `Kraus.transferMap (A†)` implies `(1-P) (A i)† P = 0`;
-* taking adjoints gives `P A i (1-P) = 0`, i.e. `(1-Q) A i Q = 0` for `Q = 1 - P`;
-* a nontrivial `P` would give a nontrivial invariant projection `Q` for `A`, contradicting
-  tensor-irreducibility.
--/
-theorem isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
-    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
-  have hIrrMap := isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
-  simpa only [Kraus.mapLM_eq_transferMap] using
-    Kraus.isIrreducibleMap_mapLM_conjTranspose A
-      (Kraus.isIrreducibleMap_mapLM_of_transferMap A hIrrMap)
-
-/-- Converse direction for conjugate-transposed transfer maps.
-
-If the CP map built from the conjugate-transposed Kraus family
-`i ↦ (A i)ᴴ` is irreducible, then the original tensor `A` is
-tensor-irreducible. Irreducibility of a finite Kraus map is equivalent to
-irreducibility of its conjugate-transposed family, and transfer-map
-irreducibility is equivalent to tensor irreducibility. -/
-lemma isIrreducibleTensor_of_isIrreducibleMap_conjTranspose
-    (A : MPSTensor d D)
-    (hIrr :
-      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ))) :
-    Kraus.IsIrreducibleFamily A := by
-  apply isIrreducibleTensor_of_isIrreducibleMap A
-  rw [← Kraus.mapLM_eq_transferMap]
-  exact (Kraus.isIrreducibleMap_mapLM_conjTranspose_iff A).mp
-    (Kraus.isIrreducibleMap_mapLM_of_transferMap _ hIrr)
 
 /-- **Dual fixed-point diagonalization in PGVWC07 unital orientation.**
 
@@ -95,10 +54,10 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
   have hIrrAdjMap :
       IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) Aadj) := by
     simpa [Aadj] using
-      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
-        (d := d) (D := D) A hIrr
+      Kraus.isIrreducibleMap_mapLM_conjTranspose A
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
-    isIrreducibleTensor_of_isIrreducibleMap Aadj hIrrAdjMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
       (d := d) (D := D) Aadj hTPadj hIrrAdj hD

@@ -487,7 +487,8 @@ theorem cubePhaseTensor_not_isTransferIdempotent :
     Kraus.transferMap cubePhaseTensor, fun ρ =>
       tendsto_const_nhds.congr' (Filter.Eventually.of_forall fun n => by
         dsimp
-        rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))])⟩
+        rw [hIdem.pow_eq (pow_ne_zero n (by norm_num : (2 : ℕ) ≠ 0))]
+        exact (Kraus.transferMap_apply cubePhaseTensor ρ).symm)⟩
 
 /-- The normalized canonical-form pure-state equivalence asserted after equation
 `RFP-gauge` in arXiv:1606.00608, lines 2100--2107, is false, already for tensors with

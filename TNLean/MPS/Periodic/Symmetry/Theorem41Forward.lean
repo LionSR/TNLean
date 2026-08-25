@@ -95,10 +95,10 @@ theorem isPeriodic_kraus_isometry
   have hEq : Kraus.transferMap C = Kraus.transferMap B := by
     simpa [C] using transferMap_kraus_isometry B W hW
   have hIrrMapB : IsIrreducibleMap (Kraus.transferMap B) :=
-    isIrreducibleMap_of_isIrreducibleTensor B hB.irreducible
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily B hB.irreducible
   have hIrrMapC : IsIrreducibleMap (Kraus.transferMap C) := by
     simpa [hEq] using hIrrMapB
-  refine ⟨isIrreducibleTensor_of_isIrreducibleMap C hIrrMapC,
+  refine ⟨Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap C hIrrMapC,
     isLeftCanonical_kraus_isometry B W hW hB.leftCanonical,
     hB.period_pos, ?_⟩
   simpa [C, hEq] using hB.peripheral_eq

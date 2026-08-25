@@ -273,7 +273,7 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
   have hCh : IsChannel E :=
     Kraus.isChannel_transferMap (P.basis j) (hCF.basis_left_canonical j)
   have hIrr : IsIrreducibleMap E :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily
       (P.basis j) (hCF.basis_irreducible j)
   let ρ := Channel.stationaryState E hCh hIrr (hCF.basis_dim_pos j)
   have hρ := Channel.stationaryState_spec hCh hIrr (hCF.basis_dim_pos j)
@@ -475,7 +475,7 @@ theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_po
   have hCh : IsChannel E :=
     Kraus.isChannel_transferMap (P.basis j) (hCF.basis_left_canonical j)
   have hIrr : IsIrreducibleMap E :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily
       (P.basis j) (hCF.basis_irreducible j)
   let ρ := Channel.stationaryState E hCh hIrr (hCF.basis_dim_pos j)
   have hρ := Channel.stationaryState_spec hCh hIrr (hCF.basis_dim_pos j)

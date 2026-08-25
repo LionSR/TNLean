@@ -20,7 +20,7 @@ variable {d D : ℕ}
 
 /-- Left-canonical, equivalently trace-preserving, normalization of an MPS
 tensor. -/
-def IsLeftCanonical (A : MPSTensor d D) : Prop :=
-  ∑ i : Fin d, (A i)ᴴ * A i = 1
+abbrev IsLeftCanonical (A : MPSTensor d D) : Prop :=
+  Kraus.IsTP A
 
 end MPSTensor

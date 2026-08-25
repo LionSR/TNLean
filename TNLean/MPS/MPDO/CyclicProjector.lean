@@ -125,7 +125,7 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     exact h
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D)
       (spectralUnitalGauge B rad ρ)) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor _ hIrrK
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily _ hIrrK
   refine ⟨hUnital, hIrrK, hIrrMap, ?_⟩
   -- The adjoint of a unital family is trace-preserving; its transfer map is a
   -- channel and has a positive semidefinite fixed point, which irreducibility
@@ -139,7 +139,8 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     hCh.exists_posSemidef_fixedPoint
       (E := Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) (NeZero.pos D)
   have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor K hIrrK
+    Kraus.isIrreducibleMap_mapLM_conjTranspose K
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily K hIrrK)
   have hσ_pd : σ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (fun v => (K v)ᴴ) hIrrAdj σ
       hσ_psd hσ_ne hσ_fix
@@ -269,10 +270,9 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   obtain ⟨hUnital, hIrrK, hIrrMap, σ, hσ, hσfix⟩ :=
     MPSTensor.spectralUnitalGauge_schwarz_setup B hirr ρ rad hρ hrad hfix
   have hIrrMapLM : IsIrreducibleMap (Kraus.mapLM K) := by
-    rw [Kraus.mapLM_eq_transferMap]; exact hIrrMap
+    exact hIrrMap
   obtain ⟨m, γ, hm_pos, hγprim, hset⟩ :=
     PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K hUnital σ hσ hσfix hIrrMapLM
-  rw [Kraus.mapLM_eq_transferMap] at hset
   have : NeZero m := ⟨hm_pos.ne'⟩
   -- `μ / r` is a peripheral eigenvalue of the gauged transfer map, and it is
   -- not `1`, so the peripheral cyclic group has order at least two.
@@ -306,12 +306,12 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     simp [Set.mem_range, eq_comm]
   have hperiphLM : peripheralEigenvalues (Kraus.mapLM K) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
-    rw [Kraus.mapLM_eq_transferMap]; exact hperiph
+    exact hperiph
   obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclicLM⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital σ hσ hσfix hIrrMapLM hγprim hperiphLM
   have hcyclic : ∀ k : Fin m, Kraus.transferMap (d := D * D) (D := n) K (P (k + 1)) = P k :=
-    fun k => by rw [← Kraus.mapLM_eq_transferMap]; exact hcyclicLM k
+    fun k => by exact hcyclicLM k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
   have hSdet : IsUnit S.det := Matrix.PosDef.isUnit_det_cfc_sqrt hρ

@@ -29,11 +29,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The transfer map commutes with conjugate transpose: `E(Xᴴ) = (E X)ᴴ`. -/
-lemma transferMap_conjTranspose (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (d := d) (D := D) A Xᴴ = (Kraus.transferMap (d := d) (D := D) A X)ᴴ := by
-  simpa only [Kraus.transferMap_apply, Kraus.map_apply] using (Kraus.map_conjTranspose A X).symm
-
 /-- For the transfer map of an injective normalized tensor, any fixed point with trace
 zero is the zero matrix. -/
 theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero

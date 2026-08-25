@@ -286,15 +286,15 @@ private theorem
       Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (fun i => (blocks u i)ᴴ) =
         (Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint := by
     simpa only using
-      (transferMap_conjTranspose_eq_adjoint
-        (d := blockPhysDim d m) (D := dim u) (A := blocks u))
+      (Kraus.mapLM_conjTranspose_eq_adjoint (K := blocks u))
   have hPrimAdj' :
       _root_.IsPrimitive
         ((Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u)).adjoint) := by
     simpa only [hAdj] using hPrimAdj
   refine ⟨(IsPrimitive.adjoint_iff
     (E := Kraus.transferMap (d := blockPhysDim d m) (D := dim u) (blocks u))).1 hPrimAdj', ?_⟩
-  exact isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (blocks u) hIrrAdj
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (blocks u)
+    ((Kraus.isIrreducibleMap_mapLM_conjTranspose_iff (blocks u)).mp hIrrAdj)
 
 /-- Unconditional: cyclic-sector blocks after period removal are primitive and
 tensor-irreducible.
@@ -342,7 +342,8 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
   let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   have hIrrAdj : IsIrreducibleMap T := by
     simpa [T] using
-      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (A := A) hIrr
+      Kraus.isIrreducibleMap_mapLM_conjTranspose A
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hcyclic
   have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hcyclic
   have hCornerIrr :
@@ -399,14 +400,14 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hTP hIrr
   have hIrrKLM : IsIrreducibleMap (Kraus.mapLM (fun i => (A i)ᴴ)) := by
-    rw [Kraus.mapLM_eq_transferMap]; exact hIrrK
+    exact hIrrK
   obtain ⟨m, γ, hm_pos, hγ_prim, hperiph_set⟩ :=
     PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure _ h_unitalK ρ hρ_pd h_adjfix
       hIrrKLM
   have hperiph_range :
       peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
         Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
-    rw [← Kraus.mapLM_eq_transferMap, hperiph_set]
+    rw [hperiph_set]
     ext x
     simp [Set.mem_range, eq_comm]
   let hne : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩

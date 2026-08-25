@@ -186,7 +186,7 @@ lemma transferMap_posDef_eigenvalue_lt_one
     lt_of_le_of_ne hgapNonneg (by simpa only [ne_eq, eq_comm] using hgapNe)
   have hEigMap :
       Kraus.map tensor.toMPSTensor rho = (r : ℂ) • rho := by
-    rw [← Kraus.mapLM_apply, Kraus.mapLM_eq_transferMap]
+    rw [← Kraus.mapLM_apply]
     exact hEig
   have hgapTrace :
       Matrix.trace
@@ -326,7 +326,7 @@ theorem exists_normalTensor_scalar_representation :
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
         (Kraus.transferMap A.toMPSTensor)
         (Kraus.transferMap_isCPMap A.toMPSTensor)
-        (MPSTensor.isIrreducibleCP_transferMap_of_isIrreducibleTensor
+        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily
           A.toMPSTensor hAIrr)
         rho 1 hrho (by norm_num) (by simpa using hfix))
   obtain ⟨sigma, hsigma, hsigmaFix, hLeft, hGauge, hGaugeIrr⟩ :=

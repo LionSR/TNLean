@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
 import QICLean.Algebra.MatrixAux
-import TNLean.MPS.Core.OrthogonalProjectionInvariance
+import QICLean.Channel.FixedPoint.SupportInvariance
 import QICLean.Kraus.TransferChannel
 import QICLean.QPF.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
@@ -23,18 +23,7 @@ to channel / QPF normalization, following:
 
 ## Main results
 
-### Part 1: Equivalence of `Kraus.IsIrreducibleFamily` and `IsIrreducibleMap (Kraus.transferMap A)`
-
-* `MPSTensor.invariance_implies_lowerZero`: the invariance condition for a projection
-  under a transfer map implies `(1 - P) * A i * P = 0` for all `i`.
-* `MPSTensor.lowerZero_implies_invariance`: the converse — the lower-zero condition
-  on Kraus operators implies the invariance condition for the transfer map.
-* `MPSTensor.isIrreducibleCP_transferMap_of_isIrreducibleTensor`: if the MPS tensor
-  has no nontrivial invariant projection, then the transfer map is irreducible as a CP map.
-* `MPSTensor.isIrreducibleTensor_of_isIrreducibleMap`: the converse — if the transfer
-  map is irreducible as a CP map, then the MPS tensor has no nontrivial invariant projection.
-
-### Part 2: CFII-style diagonal fixed point
+### Main result: CFII-style diagonal fixed point
 
 * `MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor`:
   for a trace-preserving / left-canonical irreducible MPS tensor, there exists a
@@ -52,51 +41,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ## Part 1: Kraus.IsIrreducibleFamily is equivalent to IsIrreducibleMap -/
-
-/-- The invariance condition for a projection `P` under the transfer map
-implies `(1 - P) * A i * P = 0` for every Kraus operator.
-
-This is the transfer-map form of `Kraus.invariance_implies_lowerZero`. -/
-lemma invariance_implies_lowerZero
-    (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
-    (hProj : IsOrthogonalProjection P)
-    (hInv : ∀ X, P * Kraus.transferMap (d := d) (D := D) A (P * X * P) * P =
-                  Kraus.transferMap (d := d) (D := D) A (P * X * P)) :
-    ∀ i : Fin d, (1 - P) * A i * P = 0 := by
-  refine Kraus.invariance_implies_lowerZero A P hProj fun X => ?_
-  simpa only [Kraus.transferMap_apply, Kraus.map_apply] using hInv X
-
-/-- **Irreducible tensor ⇒ irreducible CP map.**
-
-If an MPS tensor `A` has no nontrivial invariant orthogonal projection
-(i.e., is irreducible in the tensor sense), then its transfer map
-`E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` is irreducible as a CP map.
-
-**Proof.** Given any projection `P` with the invariance property, use
-`invariance_implies_lowerZero` to get `(1 - P) * Aᵢ * P = 0` for all `i`.
-If `P ≠ 0` and `P ≠ 1`, this would witness `HasInvariantProj A`, contradicting
-the irreducibility hypothesis. -/
-theorem isIrreducibleCP_transferMap_of_isIrreducibleTensor
-    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
-
-/-- **Irreducible CP map ⇒ irreducible tensor.**
-
-If the transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` is irreducible as a CP map,
-then the MPS tensor `A` has no nontrivial invariant orthogonal projection.
-
-**Proof.** By contrapositive: if `A` has a nontrivial invariant projection `P`
-(i.e., `(1 - P) * Aᵢ * P = 0` for all `i`), then `lowerZero_implies_invariance`
-shows that `P * E(PXP) * P = E(PXP)` for all `X`.  Since `P ≠ 0` and `P ≠ 1`,
-this contradicts the irreducibility of `E`. -/
-theorem isIrreducibleTensor_of_isIrreducibleMap
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A)) :
-    Kraus.IsIrreducibleFamily A :=
-  Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrr
 
 /-! ## Part 2: CFII-style diagonal positive-definite fixed point -/
 
@@ -201,7 +145,7 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hD
   -- Step 3: Convert irreducibility: tensor → CP map.
   have hIrrCP : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
   -- Step 4: Upgrade PSD to PD via quantum Perron–Frobenius.
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible A hIrrCP ρ hρ_psd hρ_ne hρ_fix

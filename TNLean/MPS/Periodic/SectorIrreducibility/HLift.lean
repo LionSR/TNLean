@@ -127,7 +127,7 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
   have hIrrAdjLM : IsIrreducibleMap (Kraus.mapLM K) := by
-    rw [Kraus.mapLM_eq_transferMap]; exact hIrrAdj
+    exact hIrrAdj
   have hOrbitFix :
       T (orbitSumProjection (D := D) (m := m) T X) =
         orbitSumProjection (D := D) (m := m) T X :=
@@ -269,9 +269,10 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
     simpa [T, Kraus.transferMap_apply, Kraus.map] using
       (Kraus.map_conjTranspose (K := fun i => (A i)ᴴ) X).symm
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (A := A) hIrrAdj
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
+      ((Kraus.isIrreducibleMap_mapLM_conjTranspose_iff A).mp hIrrAdj)
   have hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrrTensor
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrrTensor
   intro k Q hQproj hQP hPQ hQcorner
   have hQfix : (T ^ m) Q = Q := by
     simpa [T] using
@@ -459,7 +460,7 @@ multiplicativity condition `SectorFixedPointAlgebraRigidity` follows automatical
 original tensor `A` is irreducible. The proof combines three observations:
 
 1. `Kraus.IsIrreducibleFamily A` yields irreducibility of the adjoint transfer map via
-   `isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor`;
+   `Kraus.isIrreducibleMap_mapLM_conjTranspose`;
 2. Each `P k` belongs to the multiplicative domain of the Kraus family `i ↦ (A i)ᴴ`
    by a Kadison–Schwarz argument using the cyclic shift condition;
 3. The existing theorem `sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp`
@@ -480,7 +481,8 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   -- 1. Irreducibility of the adjoint transfer map
   have hIrrAdj : IsIrreducibleMap T :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrr
+    Kraus.isIrreducibleMap_mapLM_conjTranspose A
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   -- 2. Unital Kadison–Schwarz structure from trace-preserving condition
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP

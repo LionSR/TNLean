@@ -30,32 +30,6 @@ section SpectralPerturbation
 
 variable {d D : ℕ}
 
-/-! ### Step 2: Powers of eigenvectors under roots of unity -/
-
-/-- If `E(X) = μ • X`, then `E^n(X) = μ^n • X`. -/
-theorem transferMap_pow_smul_eigenvector
-    (A : MPSTensor d D)
-    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
-    (hEig : Kraus.transferMap (d := d) (D := D) A X = μ • X)
-    (n : ℕ) :
-    ((Kraus.transferMap (d := d) (D := D) A) ^ n) X = μ ^ n • X := by
-  exact Module.End.pow_apply_of_mem_eigenspace
-    (Module.End.mem_eigenspace_iff.mpr hEig) n
-
-/-! ### Step 4: Trace vanishes for non-trivial eigenvectors of trace-preserving maps -/
-
-/-- If `E` is trace-preserving and `E(X) = μ • X` with `μ ≠ 1`, then `trace(X) = 0`. -/
-theorem trace_eigenvector_eq_zero
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
-    (hEig : Kraus.transferMap (d := d) (D := D) A X = μ • X)
-    (hμ_ne : μ ≠ 1) :
-    Matrix.trace X = 0 := by
-  rw [← Kraus.mapLM_eq_transferMap] at hEig
-  exact Kraus.trace_eigenvector_eq_zero (Kraus.mapLM A)
-    (Kraus.isTracePreservingMap_mapLM_of_isTP A hNorm) hEig hμ_ne
-
 /-! ### Step 5: Hermitian, nonzero, trace-zero matrix is not PSD -/
 
 /-- A nonzero Hermitian matrix with trace zero is not positive semidefinite. -/
@@ -79,43 +53,14 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       H.IsHermitian ∧ H ≠ 0 ∧ H.trace = 0 ∧
       ((Kraus.transferMap (d := d) (D := D) A) ^ p) H = H ∧
       ¬H.PosSemidef := by
-  rw [← Kraus.mapLM_eq_transferMap] at hEig
   obtain ⟨H, hH, hH_ne, hH_tr, hH_fix⟩ :=
     Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       (Kraus.mapLM A) (Kraus.isChannel_mapLM A hNorm) hEig hX_ne hμ_ne hroot
   refine ⟨H, hH, hH_ne, hH_tr, ?_,
     not_posSemidef_of_hermitian_ne_zero_trace_eq_zero hH hH_ne hH_tr⟩
-  simpa only [Kraus.mapLM_eq_transferMap] using hH_fix
+  simpa only using hH_fix
 
 end SpectralPerturbation
-
-section Uniqueness
-
-variable {d D : ℕ}
-
-/-- **Uniqueness of PSD fixed points of `E^p` under paper-primitivity.**
-
-If `A` is paper-primitive (with witness `q`), then any two nonzero PSD fixed
-points of `(Kraus.transferMap A)^p` (with `p > 0`) are proportional.
-
-**Proof**: Upgrade both matrices, and every nonzero positive-semidefinite fixed
-point of the same power, to positive definite matrices. Fixed-point
-proportionality then gives the conclusion. -/
-theorem posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper
-    (A : MPSTensor d D)
-    {q : ℕ} (hq : ∀ φ : Fin D → ℂ, φ ≠ 0 → Kraus.vectorSpreadSpan A φ q = ⊤)
-    (ρ σ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0)
-    (hσ_psd : σ.PosSemidef) (hσ_ne : σ ≠ 0)
-    {p : ℕ} (hp : 0 < p)
-    (hρ_fix : ((Kraus.transferMap (d := d) (D := D) A) ^ p) ρ = ρ)
-    (hσ_fix : ((Kraus.transferMap (d := d) (D := D) A) ^ p) σ = σ) :
-    ∃ c : ℂ, σ = c • ρ := by
-  rw [← Kraus.mapLM_eq_transferMap] at hρ_fix hσ_fix
-  exact Kraus.posSemidef_pow_fixedPoint_unique
-    A hq ρ σ hρ_psd hρ_ne hσ_psd hσ_ne hp hρ_fix hσ_fix
-
-end Uniqueness
 
 section Construction
 
@@ -131,7 +76,7 @@ theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
     IsPeripherallyPrimitive A := by
   obtain ⟨q, _, hq⟩ := hPrim
   change IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
-  simpa only [Kraus.mapLM_eq_transferMap] using
+  simpa only using
     Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
 
 /-- Paper-primitivity and normalization imply a positive-definite fixed point,
@@ -148,9 +93,9 @@ theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
   obtain ⟨ρ, hρ_pd, hρ_fix⟩ :=
     Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
   refine isStronglyIrreduciblePaper_of ρ hρ_pd ?_ ?_ ?_
-  · simpa only [Kraus.mapLM_eq_transferMap] using hρ_fix
+  · simpa only using hρ_fix
   · exact isPeripherallyPrimitive_of_isPrimitivePaper A hNorm ⟨q, hqpos, hq⟩
-  · simpa only [Kraus.mapLM_eq_transferMap] using
+  · simpa only using
       Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq
 
 end Construction

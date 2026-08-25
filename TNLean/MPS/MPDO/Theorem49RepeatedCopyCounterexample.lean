@@ -98,7 +98,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
       MPSTensor.isIrreducibleTensor_of_bondDim_one scalarBNT.toMPSTensor
     basis_left_canonical := by
       intro j
-      simp [MPSTensor.IsLeftCanonical, repeatedCopyDecomposition,
+      simp [MPSTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
         scalarBNT, toMPSTensor]
     basis_normalized_self_overlap := by
       intro j
