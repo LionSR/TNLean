@@ -212,7 +212,17 @@ Overlap remarks:
 
 - `PeripheralToTransferMapGap.lean` now contains only the TN-specific overlap consequences.
   Generic finite-Kraus fixed-point and complementary-gap results are owned by
-  `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`.
+  `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`. The removed TNLean declarations
+  and their replacements are:
+
+  | Removed TNLean declaration | QICLean replacement |
+  |---|---|
+  | `MPSTensor.transferMap_fixedPoint_eq_zero_of_trace_eq_zero` | `Kraus.mapLM_fixedPoint_eq_zero_of_trace_eq_zero` |
+  | `MPSTensor.transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible` | `Kraus.mapLM_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible` |
+  | `MPSTensor.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible` | `Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible` |
+  | `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` | `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` |
+  | `MPSTensor.spectralRadius_compl_lt_one_of_peripheralPrimitive` | `Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive` |
+  | `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive` | `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive` |
 
 ## MPS/Periodic
 
