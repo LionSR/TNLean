@@ -49,21 +49,30 @@
 \begin{tenkz}[lattice={2x3}, bonds=none]
   \tn[at=(1,1), skin=dot]{V}
   \tn[at=(1,3)]{}
-  \tnwire[kind=string, via={(2,1)}]{(1,1)}{(1,3)}
+  \tn[at=(2,1), skin=none, name=jV1]{}
+  \tnwire[kind=string, name=segV1]{(1,1)}{jV1}
+  \tnwire[kind=string, name=segV2,
+          cross={over at crossing of segV1 and segV2}]{jV1}{(1,3)}
 \end{tenkz}
 % Two waypoints: each end turns into the one below it, so both ends give up
 % their south.  Reading the first waypoint at both ends would leave Z's.
 \begin{tenkz}[lattice={2x4}, bonds=none]
   \tn[at=(1,1), skin=dot]{Y}
   \tn[at=(1,4), skin=dot]{Z}
-  \tnwire[kind=string, via={(2,1),(2,4)}]{(1,1)}{(1,4)}
+  \tn[at=(2,1), skin=none, name=jYZ1]{}
+  \tn[at=(2,4), skin=none, name=jYZ2]{}
+  \tnwire[kind=string, name=segYZ1]{(1,1)}{jYZ1}
+  \tnwire[kind=string, name=segYZ2,
+          cross={over at crossing of segYZ1 and segYZ2}]{jYZ1}{jYZ2}
+  \tnwire[kind=string, name=segYZ3,
+          cross={over at crossing of segYZ2 and segYZ3}]{jYZ2}{(1,4)}
 \end{tenkz}
-% An index wire draws the chord between its ends whatever waypoints it
-% names, so its ends read each other and X keeps its free south.
+% An index wire draws the chord between its ends, so its ends read each
+% other and X keeps its free south.
 \begin{tenkz}[lattice={2x3}, bonds=none]
   \tn[at=(1,1)]{}
   \tn[at=(1,3), skin=dot]{X}
-  \tnwire[via={(2,1)}]{(1,1)}{(1,3)}
+  \tnwire{(1,1)}{(1,3)}
 \end{tenkz}
 \ExplSyntaxOn
 \int_compare:nNnF { \l__tenkz_test_side_count_int } = {4}

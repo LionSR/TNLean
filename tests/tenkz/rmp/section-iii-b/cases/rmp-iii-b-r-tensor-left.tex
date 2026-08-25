@@ -52,10 +52,13 @@
       {bL.60}{rS.240}
     \tnwire[kind=string, species=operator, name=s-rS-rW]
       {rS.90}{rW.270}
-    \tnwire[kind=string, species=operator, name=s-rW-rN,
-      via={midway i and rN},
-      cross={under at crossing of s-rW-rN and iphys}]
-      {rW.45}{rN.180}
+    \tn[at=midway i and rN, skin=none, name=j-s-rW-rN-1]{}
+    \tnwire[kind=string, species=operator, name=s-rW-rN-1,
+      cross={under at crossing of s-rW-rN-1 and iphys,
+             over at crossing of s-rW-rN-1 and s-rW-rN-2}]
+      {rW.45}{j-s-rW-rN-1}
+    \tnwire[kind=string, species=operator, name=s-rW-rN-2]
+      {j-s-rW-rN-1}{rN.180}
     \tnwire[kind=string, species=operator, name=s-rN-rE]
       {rN.270}{rE.90}
     \tnwire[kind=string, species=operator, name=s-rE-bR]

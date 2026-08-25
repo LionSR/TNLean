@@ -29,15 +29,25 @@
     \tnanyonsite[name=istar, species=anyon, size=l, label pos=sw]{i^{*}} &
     \tnanyonsite[name=c32]{} &
     \tnanyonsite{}
-    \tnwire[
-      kind=string, species=anyon-string, name=anyon-path,
-      via={midway istar and c22, midway c32 and c23, midway c22 and i},
-      cross={over at crossing of anyon-path and bond-2-2-3-2,
-             over at crossing of anyon-path and bond-2-2-2-3}
-    ]{istar}{i}
-    \tn[at=crossing of anyon-path and bond-2-2-3-2,
+    \tn[at=midway istar and c22, skin=none, name=j-anyon-path-1]{}
+    \tn[at=midway c32 and c23, skin=none, name=j-anyon-path-2]{}
+    \tn[at=midway c22 and i, skin=none, name=j-anyon-path-3]{}
+    \tnwire[kind=string, species=anyon-string, name=anyon-path-1,
+      cross={over at crossing of anyon-path-1 and anyon-path-2}]
+      {istar}{j-anyon-path-1}
+    \tnwire[kind=string, species=anyon-string, name=anyon-path-2,
+      cross={over at crossing of anyon-path-2 and bond-2-2-3-2,
+             over at crossing of anyon-path-2 and anyon-path-3}]
+      {j-anyon-path-1}{j-anyon-path-2}
+    \tnwire[kind=string, species=anyon-string, name=anyon-path-3,
+      cross={over at crossing of anyon-path-3 and bond-2-2-2-3,
+             over at crossing of anyon-path-3 and anyon-path-4}]
+      {j-anyon-path-2}{j-anyon-path-3}
+    \tnwire[kind=string, species=anyon-string, name=anyon-path-4]
+      {j-anyon-path-3}{i}
+    \tn[at=crossing of anyon-path-2 and bond-2-2-3-2,
         skin=dot, species=anyon, size=s]{}
-    \tn[at=crossing of anyon-path and bond-2-2-2-3,
+    \tn[at=crossing of anyon-path-3 and bond-2-2-2-3,
         skin=dot, species=anyon, size=s, label pos=nw]{a}
   \end{tenkz}
 \]

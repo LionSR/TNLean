@@ -21,7 +21,10 @@
     \tn[at=(3,2), name=gW, skin=dot, species=gauge]{}
     \tn[at=(4,3), name=gS, skin=dot, species=gauge]{}
     \tnwire[kind=string, species=gauge]{open n}{gW}
-    \tnwire[kind=string, species=gauge, route=orth, via={(4,2)}]{gW}{gS}
+    \tn[at=(4,2), skin=none, physical=none, name=jWS1]{}
+    \tnwire[kind=string, species=gauge, route=orth, name=gWS]{gW}{jWS1}
+    \tnwire[kind=string, species=gauge, route=orth, name=gWS-end,
+      cross={over at crossing of gWS-end and gWS}]{jWS1}{gS}
     \tnwire[kind=string, species=gauge]{gS}{open e}
   \end{tenkz}\;=\;
   \underset{B}{\begin{tenkz}[
@@ -36,7 +39,10 @@
     \tn[at=(3,4), name=gE, skin=dot, species=gauge]{}
     \tn[at=(2,3), name=gN, skin=dot, species=gauge]{}
     \tnwire[kind=string, species=gauge]{open s}{gE}
-    \tnwire[kind=string, species=gauge, route=orth, via={(2,4)}]{gE}{gN}
+    \tn[at=(2,4), skin=none, physical=none, name=jEN1]{}
+    \tnwire[kind=string, species=gauge, route=orth, name=gEN]{gE}{jEN1}
+    \tnwire[kind=string, species=gauge, route=orth, name=gEN-end,
+      cross={over at crossing of gEN-end and gEN}]{jEN1}{gN}
     \tnwire[kind=string, species=gauge]{gN}{open w}
   \end{tenkz}}
 \]

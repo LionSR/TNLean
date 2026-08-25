@@ -51,7 +51,7 @@
           }
         {R}
           {
-            \str_if_eq:VnF #2 {s}
+            \str_if_eq:VnF #2 {e}
               { \errmessage{interior~waypoint~answered:~update~the~pin} }
           }
         {T}
@@ -111,23 +111,35 @@
 \begin{tenkz}[lattice={2x3}, bonds=none]
   \tn[at=(1,1), name=Q, skin=dot]{Q}
   \tn[at=(1,3), name=E]{}
-  \tnwire[kind=string, via={1 s of Q}]{Q}{E}
+  \tn[at=1 s of Q, skin=none, name=jQ1]{}
+  \tnwire[kind=string, name=segQ1]{Q}{jQ1}
+  \tnwire[kind=string, name=segQ2,
+          cross={over at crossing of segQ1 and segQ2}]{jQ1}{E}
 \end{tenkz}
-% An atom named as an interior waypoint is entered and left by the route,
-% and neither of the wire's two ends names it.
+% An atom that used to be an interior waypoint of one route is now the
+% shared endpoint of two chained wires (via= retired, #6897), so it is an
+% ordinary atom the reading can answer: north and south are both taken,
+% and the station lands on the first free face, east.
 \begin{tenkz}[lattice={3x1}, bonds=none]
   \tn[at=(1,1), name=F]{}
   \tn[at=(2,1), name=R, skin=dot]{R}
   \tn[at=(3,1), name=H]{}
-  \tnwire[kind=string, via={(2,1)}]{F}{H}
+  \tnwire[kind=string, name=segR1]{F}{R}
+  \tnwire[kind=string, name=segR2]{R}{H}
 \end{tenkz}
 % A bead on a string that bends through its own waypoints: which faces the
 % carrier crosses at the bead is a property of the route at that arc length.
 \begin{tenkz}[lattice={3x3}, bonds=none]
   \tn[at=(1,1), name=J]{}
   \tn[at=(1,3), name=K]{}
-  \tnwire[kind=string, name=RS, via={(3,1),(3,3)}]{J}{K}
-  \tn[at=on RS 0.5, skin=dot]{T}
+  \tn[at=(3,1), skin=none, name=jRS1]{}
+  \tn[at=(3,3), skin=none, name=jRS2]{}
+  \tnwire[kind=string, name=segRS1]{J}{jRS1}
+  \tnwire[kind=string, name=segRS2,
+          cross={over at crossing of segRS1 and segRS2}]{jRS1}{jRS2}
+  \tnwire[kind=string, name=segRS3,
+          cross={over at crossing of segRS2 and segRS3}]{jRS2}{K}
+  \tn[at=on segRS2 0.5, skin=dot]{T}
 \end{tenkz}
 % Two basis members of one outer cell share that cell's row and column, so
 % the difference between them is zero and no direction comes out of it.

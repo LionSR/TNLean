@@ -20,10 +20,17 @@
       \tnwire[kind=index]{A.0}{(3,5)}
       \tnwire[kind=index]{A.270}{(5,3)}
       \tnwire[kind=index]{A.90}{(1,3)}
-      \tnwire[kind=string, species=g, name=g, via={(3,2), (2,3)}]
-        {(4,2)}{(2,5)}
-      \tn[skin=box, at=on g 0.24]{}
-      \tn[skin=box, at=on g 0.56]{}
+      % the g-string's two waypoints become invisible junction atoms, chained
+      % by wires named after the original single wire (via= retired, #6897)
+      \tn[at=(3,2), skin=none, name=jg1]{}
+      \tn[at=(2,3), skin=none, name=jg2]{}
+      \tnwire[kind=string, species=g, name=g]{(4,2)}{jg1}
+      \tnwire[kind=string, species=g, name=g2,
+        cross={under at crossing of g and g2}]{jg1}{jg2}
+      \tnwire[kind=string, species=g, name=g3,
+        cross={under at crossing of g2 and g3}]{jg2}{(2,5)}
+      \tn[skin=box, at=on g2 0.04]{}
+      \tn[skin=box, at=on g3 0.03]{}
       \tnmark[form=label]{(2,2)}{$g$}
     \end{tenkz}
     =
@@ -34,9 +41,14 @@
       \tnwire[kind=index]{A.0}{(3,5)}
       \tnwire[kind=index]{A.270}{(5,3)}
       \tnwire[kind=index]{A.90}{(1,3)}
-      \tnwire[kind=string, species=g, name=g, via={(3,4), (4,3)}]{(2,5)}{(4,2)}
-      \tn[skin=box, at=on g 0.37]{}
-      \tn[skin=box, at=on g 0.74]{}
+      \tn[at=(3,4), skin=none, name=jg1]{}
+      \tn[at=(4,3), skin=none, name=jg2]{}
+      \tnwire[kind=string, species=g, name=g]{(2,5)}{jg1}
+      \tnwire[kind=string, species=g, name=g2]{jg1}{jg2}
+      \tnwire[kind=string, species=g, name=g3,
+        cross={under at crossing of g2 and g3}]{jg2}{(4,2)}
+      \tn[skin=box, at=on g2 0.012]{}
+      \tn[skin=box, at=on g3 0.02]{}
       \tnmark[form=label]{(4,4)}{$g$}
     \end{tenkz}
   \end{tenkzeq}

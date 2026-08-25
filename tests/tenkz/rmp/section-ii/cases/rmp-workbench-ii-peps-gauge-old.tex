@@ -18,8 +18,10 @@
     \tnwire{A.0}{open e}
     \tnwire{A.90}{open n}
     \tnwire{A.270}{open s}
-    \tnwire[kind=string, species=gauge, name=gA, via={(3,2)}]{open n}{open s}
-    \tn[at=on gA 0.5, skin=dot, species=gauge]{}
+    \tn[at=(3,2), skin=none, physical=none, name=jgA1]{}
+    \tnwire[kind=string, species=gauge, name=gA]{open n}{jgA1}
+    \tnwire[kind=string, species=gauge, name=gA-end]{jgA1}{open s}
+    \tn[at=on gA 1, skin=dot, species=gauge]{}
   \end{tenkz}}
   \;=\;
   \underset{B}{\begin{tenkz}[
@@ -34,13 +36,25 @@
     \tn[at=(4,3), name=gS, skin=dot, species=gauge]{}
     \tn[at=(3,4), name=gE, skin=dot, species=gauge]{}
     \tn[at=(2,3), name=gN, skin=dot, species=gauge]{}
+    \tn[at=(4,1), skin=none, physical=none, name=jgInput1]{}
+    \tn[at=(4,4), skin=none, physical=none, name=jgEast1]{}
+    \tn[at=(2,4), skin=none, physical=none, name=jgNorth1]{}
     \tnwire[kind=string, species=gauge, name=gInput,
-      crossing=over, route=orth, via={(4,1)}]{open s}{gS}
+      crossing=over, route=orth]{open s}{jgInput1}
+    \tnwire[kind=string, species=gauge, name=gInput-end,
+      crossing=over, route=orth,
+      cross={over at crossing of gInput-end and gInput}]{jgInput1}{gS}
     \tnwire[kind=string, species=gauge, name=gEast,
-      crossing=over, route=orth, via={(4,4)}]{gS}{gE}
+      crossing=over, route=orth]{gS}{jgEast1}
+    \tnwire[kind=string, species=gauge, name=gEast-end,
+      crossing=over, route=orth,
+      cross={over at crossing of gEast-end and gEast}]{jgEast1}{gE}
     \tnwire[kind=string, species=gauge, name=gNorth,
-      crossing=over, route=orth, via={(2,4)}]{gE}{gN}
+      crossing=over, route=orth]{gE}{jgNorth1}
+    \tnwire[kind=string, species=gauge, name=gNorth-end,
+      crossing=over, route=orth,
+      cross={over at crossing of gNorth-end and gNorth}]{jgNorth1}{gN}
     \tnwire[kind=string, species=gauge, name=gOutput,
-      cross={over at crossing of gOutput and gNorth}]{gN}{open n}
+      cross={over at crossing of gOutput and gNorth-end}]{gN}{open n}
   \end{tenkz}}
 \]

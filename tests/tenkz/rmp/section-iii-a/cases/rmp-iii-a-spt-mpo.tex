@@ -19,14 +19,21 @@
       \tnwire[kind=index, species=lattice, name=vdsw]{(3,1)}{A.225}
       \tnwire[kind=index, species=lattice, name=vdne]{A.45}{(1,3)}
       % the g string wraps the northwest corner, crossing two legs
-      \tnwire[kind=string, species=g, name=g,
-              via={midway (1,1) and (2,2), midway (2,2) and (1,3)},
-              cross={over at crossing of g and vxw,
-                     over at crossing of g and vdne}]
-        {midway (2,1) and (3,1)}{midway (1,3) and (2,3)}
-      \tn[skin=box, at=crossing of g and vxw]{}
-      \tn[skin=box, at=crossing of g and vdne]{}
-      \tnmark[form=label, label pos=nw]{on g 0.35}{$g$}
+      \tn[at=midway (1,1) and (2,2), skin=none, name=jg1]{}
+      \tn[at=midway (2,2) and (1,3), skin=none, name=jg2]{}
+      \tnwire[kind=string, species=g, name=g1,
+              cross={over at crossing of g1 and vxw}]
+        {midway (2,1) and (3,1)}{jg1}
+      \tnwire[kind=string, species=g, name=g2,
+              cross={over at crossing of g2 and vdne,
+                     over at crossing of g1 and g2}]
+        {jg1}{jg2}
+      \tnwire[kind=string, species=g, name=g3,
+              cross={over at crossing of g3 and vdne}]
+        {jg2}{midway (1,3) and (2,3)}
+      \tn[skin=box, at=crossing of g1 and vxw]{}
+      \tn[skin=box, at=crossing of g2 and vdne]{}
+      \tnmark[form=label, label pos=nw]{on g1 0.8195}{$g$}
     \end{tenkz}
     =
     \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
@@ -39,14 +46,21 @@
       \tn[at=(1,2), name=Ug, ports={270:physical,90:physical}, label pos=w]{U_g}
       \tnwire[name=wp]{A.90}{Ug.270}
       % the same string, pulled through to the southeast corner
-      \tnwire[kind=string, species=g, name=g,
-              via={midway (2,2) and (3,3), midway (2,2) and (3,1)},
-              cross={over at crossing of g and vxe,
-                     over at crossing of g and vdsw}]
-        {midway (1,3) and (2,3)}{midway (2,1) and (3,1)}
-      \tn[skin=box, at=crossing of g and vxe]{}
-      \tn[skin=box, at=crossing of g and vdsw]{}
-      \tnmark[form=label, label pos=se]{on g 0.65}{$g$}
+      \tn[at=midway (2,2) and (3,3), skin=none, name=jg1]{}
+      \tn[at=midway (2,2) and (3,1), skin=none, name=jg2]{}
+      \tnwire[kind=string, species=g, name=g1,
+              cross={over at crossing of g1 and vxe}]
+        {midway (1,3) and (2,3)}{jg1}
+      \tnwire[kind=string, species=g, name=g2,
+              cross={over at crossing of g2 and vdsw,
+                     over at crossing of g1 and g2}]
+        {jg1}{jg2}
+      \tnwire[kind=string, species=g, name=g3,
+              cross={over at crossing of g3 and vdsw}]
+        {jg2}{midway (2,1) and (3,1)}
+      \tn[skin=box, at=crossing of g1 and vxe]{}
+      \tn[skin=box, at=crossing of g2 and vdsw]{}
+      \tnmark[form=label, label pos=se]{on g2 0.5837}{$g$}
     \end{tenkz}
   \end{tenkzeq}.
 \]

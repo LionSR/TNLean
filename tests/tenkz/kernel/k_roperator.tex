@@ -1,7 +1,8 @@
 %% Kernel fixture: LANGUAGE-1.0.md 12.7 (rmp-iv-intersection-lhs-one).
 %% Expected: three placed atoms (B, C, the wide R); two port-to-port bonds
-%% B.s->R.n@1 and C.s->R.n@2; two orth strings with open n ends and
-%% relative-address waypoints.
+%% B.s->R.n@1 and C.s->R.n@2; two orth strings with open n ends, each chained
+%% through an invisible junction atom standing at the wire's former
+%% relative-address waypoint.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -15,7 +16,13 @@
   \tn[at=(1,2), name=B]{B}   \tn[at=(1,3), name=C]{C}
   \tn[at=(2,2), skin=box, wide=2, wires=2, name=R]{R}
   \tnwire{B.s}{R.n@1}        \tnwire{C.s}{R.n@2}
-  \tnwire[kind=string, route=orth, via={1 w of R}]{open n}{R.w}
-  \tnwire[kind=string, route=orth, via={1 e of C}]{R.e}{open n}
+  \tn[at=1 w of R, skin=none, name=jwireR1]{}
+  \tn[at=1 e of C, skin=none, name=jwireC1]{}
+  \tnwire[kind=string, route=orth, name=wireR1,
+          cross={over at crossing of wireR1 and wireR2}]{open n}{jwireR1}
+  \tnwire[kind=string, route=orth, name=wireR2]{jwireR1}{R.w}
+  \tnwire[kind=string, route=orth, name=wireC1,
+          cross={over at crossing of wireC1 and wireC2}]{R.e}{jwireC1}
+  \tnwire[kind=string, route=orth, name=wireC2]{jwireC1}{open n}
 \end{tenkz}
 \end{document}

@@ -4399,3 +4399,344 @@ The flag table carries forward unchanged from the prior ledger section.
 | flag:lonely-type:size-table | departed: its sole carrier was the inert sizes= setup key; permanent |
 | flag:consumers:key:kernel-setup:theme | retired: stored an identifier, read by nothing; the house palette binds at load and cited palettes enter through species hue declarations; permanent |
 | flag:consumers:key:kernel-wire:weight | retired: zero authored consumers; it changed no ink, endpoint type owns stroke, and multiplicity belongs to the mathematical label; permanent |
+
+## 2026-08-25 — the junction-chain wave clears the author corpus of waypoints
+
+Every remaining authored `via=` spelling leaves: twenty benchmark cases,
+six kernel and regression fixtures, and the two contract fixtures respell
+their waypoint lists as invisible junction atoms chained by named wire
+segments drawing the same stations.  Strand sets, crossings, labels, and
+bead stations were verified unchanged case by case at 200dpi and
+countersigned by an independent second viewer (twenty-eight of
+twenty-eight, two after fixes the countersign itself demanded); the
+smooth-curve-to-polyline routing is the accepted house form.  The two
+refusal fixtures, the registry row, the parser row, and the catalogue
+entry stay for the demolition change, which retires the key itself.
+
+Meters: m4 lines-per-case 26.39 -> 28.23 -- the chains spell their
+junctions, the honest line cost of retiring the waypoint list, after the
+review-limit compaction repacked the three largest cases;
+`tests/tenkz/census-baseline.json` moves in this change.  m1/m2 unchanged
+-- no alphabet motion yet, so no Extension-gate applies.
+Census-correction: #6897 -- the rise is the retirement's own spelling
+cost, every chain re-verified against its source render, not deleted or
+padded meaning.
+
+The flag table carries forward unchanged from the prior ledger section.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tenkzkernel | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:command:tnbond | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:command:tncut | dies at S4: the cut form has no consumer in the benchmark or the blueprint and fails tenure outright, so the command retires with the form rather than into it; this replaces the verdict making it a mark form (`LANGUAGE-1.0` 6); expiry 0.9 |
+| flag:consumers:command:tndeclare | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:command:tndeclareatom | keep-because: the extension door is used by declarations, not figures; teaching examples are deliberately excluded from demand counting; expiry 1.0 (re-affirmed 2026-07-24) |
+| flag:consumers:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:command:tnmark | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:command:tnprose | dies at the S4 swap: mathematics in place of a diagram is a term of unknown signature, refused under strict wherever it stands and not only where an author remembered to mark it (`LANGUAGE-1.0` 7); expiry 0.9 |
+| flag:consumers:command:tnset | keep-because: document-scope policy lives in preambles, which the demand corpus excludes by design; expiry 1.0 (re-affirmed 2026-07-24) |
+| flag:consumers:command:tnwire | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:environment:tenkzeq | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:environment:tenkzplanes | sugar preset over the lattice frame; dies as an environment at S4; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:annotation:box | folds into mark form `enclosure` at the language landing, whose contour is the offset hull of the selection (`LANGUAGE-1.0` 5, 6); expiry 0.9 |
+| flag:consumers:key:annotation:brace above | folds into the one `bracket` mark form at the language landing, the side a bracket speaks from being the side its label sits on; this replaces the verdict naming `brace-above`/`brace-below` (`LANGUAGE-1.0` 6); expiry 0.9 |
+| flag:consumers:key:annotation:label pos | moves unchanged to the mark record at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:atom-declaration:ports | keep-because: declared atoms require an explicit typed-port schema at the extension door; permanent (re-affirmed 2026-07-24) |
+| flag:consumers:key:atom-declaration:skin | keep-because: rides `\tndeclareatom`, same exclusion; expiry 1.0 (re-affirmed 2026-07-24) |
+| flag:consumers:key:connection:fused | dies at the language landing: the index type decides the stroke, so a doubled bond has no spelling of its own; this replaces the verdict respelling it `weight=double`, which the retirement of `weight=` left dangling (`LANGUAGE-1.0` 5, 10); expiry 0.9 |
+| flag:consumers:key:connection:none | dies at the language landing: omit the wire record, or use atom `void=sealed`; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:connection:style | dies with the lattice edge-style pass-through at S3; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:kernel-atom:at | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:cluster | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:conjugate | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:down | dies at the S4 swap: the outward physical face is the row's own normal, an angle in the record's axes; the label rides `ports=` (`LANGUAGE-1.0` 2.3, 9); expiry 0.9 |
+| flag:consumers:key:kernel-atom:label pos | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:name | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:nudge | dies at the S4 swap: an off-cell record is a frame basis member or an ordinary address (`LANGUAGE-1.0` 3, 4); expiry 0.9 |
+| flag:consumers:key:kernel-atom:ports | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:role | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:skin | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:species | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:up | dies at the S4 swap: the outward physical face is the row's own normal, an angle in the record's axes; the label rides `ports=` (`LANGUAGE-1.0` 2.3, 9); expiry 0.9 |
+| flag:consumers:key:kernel-atom:void | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:wide | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-atom:wires | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-declare:base | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-declare:hue | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-declare:pairings | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-mark:form | keep-because: the form alphabet closes to `bracket`, `enclosure`, `label` at the S4 swap; three words, one row, and consumers arrive with the redraw campaign (`LANGUAGE-1.0` 2.8, 6); expiry 0.9 |
+| flag:consumers:key:kernel-mark:inset | dies at the S4 swap: containment between two selections is a fact the model holds, and concentric order steps the inner contour in by one clearance (`LANGUAGE-1.0` 5, 6); expiry 0.9 |
+| flag:consumers:key:kernel-mark:label pos | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-mark:name | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-mark:nudge | dies at the S4 swap: a label takes a station against measured ink (`LANGUAGE-1.0` 6); expiry 0.9 |
+| flag:consumers:key:kernel-mark:outline | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-mark:slot | tombstoned: the section 14.5 exchange executed in this session -- species= carries the region word and the parser row is gone; permanent |
+| flag:consumers:key:kernel-picture:align | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:bonds | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:boundary | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:check | dies at the S4 swap: the audit follows the joiner class and is not the author's to configure (`LANGUAGE-1.0` 7); expiry 0.9 |
+| flag:consumers:key:kernel-picture:cols | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:east | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:frame | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:lattice | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:north | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:open | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:physical | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:ring | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:rows | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:sandwich | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:size | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:south | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:surface | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:trace | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-picture:west | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-setup:pitch | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-setup:sizes | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-setup:strict | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-setup:theme | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:around | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:bend | dies at the S4 swap: an arc leaves and enters along its ends' faces, which is how every curve in the corpus is written (`LANGUAGE-1.0` 5); expiry 0.9 |
+| flag:consumers:key:kernel-wire:closed | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:cross | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:dir | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:kind | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:name | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:route | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:species | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:kernel-wire:via | dies at the S4 swap: every waypoint in the contract's own sketches is a side of a selection (`LANGUAGE-1.0` 5); expiry 0.9 |
+| flag:consumers:key:kernel-wire:weight | dies at the S4 swap: the port type decides the stroke through two theme ratios, and bundling is a claim the audit already carries; zero authored consumers in the corpus (`LANGUAGE-1.0` 5); expiry 0.9 |
+| flag:consumers:key:kernel-wire:wind | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:object:combined | folds into the ports grammar at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:east at | folds into the ports grammar; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:physical | folds into the typed-port grammar at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:removed | becomes atom `void=sealed` at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:span | folds into `ports=` and `wires=` at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:species | keep-because: semantic species is a kernel atom field; role consumers move here at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:tree style | dies with the cd dialect at S4; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:object:west at | folds into the ports grammar; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:align | keep-because: the only math-axis control until `tenkzeq` lands (#4703); expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:bond dir | tombstoned at S4 in favour of wire `dir=`; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:layer sep | folds into the metric/size classes at the equation landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:north | keep-because: the four side policies are one kernel concept and north is required by two-dimensional frames; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:open | keep-because: the cell-set boundary algebra is kernel and gains consumers as `open=` spreads; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:pairing | folds into declared skin pairings and wires at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:plane lean | folds into `frame=` subkeys at S3; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:polygon | dies with the cd dialect at S4, and its tombstone becomes permanently dead: the consumers arrived and they want angles, not corners (`LANGUAGE-1.0` 10); expiry 0.9 |
+| flag:consumers:key:picture:sheet sep | folds into `frame=` subkeys at S3; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:sheets | dies at the language landing: the keep-because is executed, not renewed. A sheet is a basis member of one frame, and the condensation and CZX redraws consume it as a basis (`LANGUAGE-1.0` 4). No new saving is booked here: this row and `sheet sep`, `pairing` and `sheet vector` were sentenced at Session 0; expiry 0.9 |
+| flag:consumers:key:picture:site | dies with the lattice dialect at S3; frame population creates ordinary atoms; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:south | keep-because: the four side policies are one kernel concept and south is required by two-dimensional frames; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:picture:trace style | dies at S2 when the default flips to the cap idiom, which is now stated: closure depth follows the selection the closure clears (`LANGUAGE-1.0` 5); expiry 0.9 |
+| flag:consumers:key:region:group | folds into address sets at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:region:name | keep-because: same addressing argument as connection:name; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:setup:inline | dies at the equation landing (math-style sensing, #4703); expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:consumers:key:setup:pitch | keep-because: the metric anchor is set in preambles, excluded from demand counting by design; expiry 1.0 (re-affirmed 2026-07-24) |
+| flag:cooccur:annotation:box+label pos | confirmed merge: enclosure geometry and label placement become one mark record at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:cooccur:connection:from+to | keep-because: source and target are distinct endpoints of one wire record, not duplicate controls; permanent (re-affirmed 2026-07-24) |
+| flag:cooccur:connection:in+out | confirmed merge: `out=`/`in=` are one concept (a hand-routed arc) and both die at S4 when declared routes land; expiry 0.9 (#4705) (re-affirmed 2026-07-24) |
+| flag:cooccur:object:east at+west at | confirmed merge: the two endpoint selectors become one ports record at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:lonely-type:bond-policy | keep-because: the picture topology has one generated-bond policy shared by every frame (#4687); expiry 1.0 |
+| flag:lonely-type:check-spec | dies at the S4 swap with `check=`, which was the condition the Session-0 verdict set (`LANGUAGE-1.0` 7); expiry 0.9 |
+| flag:lonely-type:crossing-list | keep-because: contract type of one contract key (`LANGUAGE-1.0` 2.7); collapses only if its key dies; expiry 1.0 |
+| flag:lonely-type:hue-source | keep-because: contract type of one contract key (`LANGUAGE-1.0` 2.7); collapses only if its key dies; expiry 1.0 |
+| flag:lonely-type:integer | keep-because: integer is the primitive count type of the ring expander (#4687); expiry 1.0 |
+| flag:lonely-type:math-and-range | dies with the B10 bond-label keyval at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:lonely-type:port-pair-list | keep-because: contract type of one contract key (`LANGUAGE-1.0` 2.7); collapses only if its key dies; expiry 1.0 |
+| flag:lonely-type:positive-integer\|role-list | dies at the language landing with the union type (M6); expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:lonely-type:size-class | keep-because: the equation metric owns one size-class policy across its panels (#4687); expiry 1.0 |
+| flag:lonely-type:size-table | keep-because: contract type of one contract key (`LANGUAGE-1.0` 2.7); collapses only if its key dies; expiry 1.0 |
+| flag:lonely-type:style-name | dies with the lattice edge-style pass-through at S3; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:lonely-type:void-policy | keep-because: open and sealed holes are one atom-topology policy (#4687); expiry 1.0 |
+| flag:sugar-shaped:command:tndots | folds into `\tn[skin=dots]` at the language landing; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:sugar-shaped:command:tnghost | dies at the language landing because addresses name empty cells directly; expiry 0.9 (re-affirmed 2026-07-24) |
+| flag:sugar-shaped:command:tnskip | confirmed by contract: `\tnskip` is the sugar row `\tn[void=open]` (`LANGUAGE-1.0` 9); dies into the kernel at the S4 swap; expiry 0.9 |
+| flag:sugar-shaped:command:tntree | confirmed by contract: `\tntree` is an expander sugar row (`LANGUAGE-1.0` 9); dies into the kernel at the S4 swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnarrow | tombstoned by contract: `\tnarrow` migrates to `\tnwire[dir=to]` (`LANGUAGE-1.0` 10); deleted at the S4 swap; expiry 0.9 |
+| flag:sugar-shaped:command:tngroup | keep-because: a group is the composition grammar for one transform over several atoms and wires, not atom sugar; permanent (re-affirmed 2026-07-25) |
+| flag:consumers:key:kernel-wire:crossing | keep-because: amendment two, `Extension-gate: #4779`; consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
+| flag:consumers:key:group:frame | keep-because: the rotation the anyon panels need is one transform read at three scopes, and the two here are its first demand-corpus consumers; the redraw campaign supplies the rest or the scope dies at the 0.8 close; expiry 0.8 |
+| flag:consumers:key:object:frame | keep-because: same concept at atom scope; a single turned tensor is the case a group cannot express, and it earns tenure with the campaign or dies with it; expiry 0.8 |
+| flag:consumers:command:tngroup | keep-because: the command carrying that transform, flagged for consumers for the first time now that two panels use it; its shape was already affirmed permanent against the sugar detector, and its tenure follows the same 0.8 close as the two keys above |
+| flag:consumers:key:picture:outer legs | keep-because: its one remaining consumer is a manifest-paired fixture, and losing case consumers to *more faithful* drawings is not evidence against the key — it is evidence the two departed cases never needed it; it earns new consumers with the redraw campaign or dies at the 0.8 close; expiry 0.8 |
+| flag:consumers:key:object:down at | keep-because: the reduction proof no longer spells its isometry with `down at=`, which drops the key to two consumers on the same more-faithful-drawing grounds as the row above; same tenure terms; expiry 0.8 |
+| flag:lonely-type:positive-integer|role-list | keep-because: the union type serves `sheets=` alone now that the condensation panel left the planes genre for the oblique sheet; the type is the planes genre's spelling and follows that genre's fate at the front-end consolidation; expiry 0.8 |
+| flag:consumers:command:tngroup | keep-because: the command carrying the group transform, with two demand-corpus consumers from the anyon panels; its shape was already affirmed against the sugar detector, and its consumer tenure follows the same 0.8 close as the two frame keys; expiry 0.8 |
+| flag:consumers:key:object:size | keep-because: the condensation source supplies one manifested panel with eight independent local-size uses, four small and four large; this is repeated demand within one mathematical figure rather than a speculative option, but it remains below the cross-file tenure threshold and must gain two further source-faithful benchmark consumers or be reconsidered at the 1.0 close; expiry 1.0 |
+| flag:sugar-shaped:command:tenkzkernel | keep-because: the switch is not sugar for anything -- it is the S4 swap's own handle, rebinding the environments to the kernel grammar for the group; it dies at the swap when the kernel becomes the surface and the opt-in has nothing left to opt into; expiry 1.0 |
+| flag:consumers:key:kernel-atom:size | keep-because: #4931 records the condensation source's large endpoints and small intermediate beads, while #5013 makes the existing size-class answer reachable from canonical atoms; expiry 1.0 |
+| flag:consumers:key:kernel-mark:species | keep-because: #5013 implements the LANGUAGE-1.0 semantic-ink contract at mark scope and pins it in the focused kernel regression; the cited dyon, boundary-lasso, and injectivity-ring consumers migrate in the queued redraw waves; expiry 1.0 |
+| flag:sugar-shaped:command:tndeclare | keep-because: a species declaration binds one semantic identity to a cited palette across atoms, wires, and marks; it changes the document-scope descriptor table and cannot expand into picture records; expiry 1.0 |
+| flag:consumers:key:kernel-atom:pairing cross | keep-because: #5016 consumes instance crossings in the self-braiding redraw, while the kernel pairing fixture pins repeated indexed items and external pairing operands; expiry 1.0 |
+| flag:lonely-type:indexed-crossing-list | keep-because: the leading pairing index is the instance-to-generated-wire join and therefore differs from an ordinary wire crossing-list; #5016 consumes it; expiry 1.0 |
+| flag:consumers:key:picture:column sep | dies with the `tenkzcd` chapter 21 migration in #4699, where typed-map column pitch receives its kernel spelling; expiry 0.8 |
+| flag:consumers:key:picture:row sep | dies with the `tenkzcd` chapter 21 migration in #4699, where typed-map row pitch receives its kernel spelling; expiry 0.8 |
+| flag:consumers:key:kernel-frame:basis | keep-because: the CZX fixture consumes the member table now; the GHZ, cluster-state, bilayer, and condensation consumers named by LANGUAGE-1.0 migrate through #5086; expiry 1.0 |
+| flag:lonely-type:basis-spec | keep-because: this type alone combines an ordered row-kind list with signed two-axis quarter-pitch offsets; ordinary row-list and selector grammars cannot express that frame-owned structure; expiry 1.0 |
+| flag:consumers:key:kernel-picture:planes | keep-because: `LANGUAGE-1.0` section 9 fixes the bilayer expansion; the kernel equivalence pair lands now and the named bilayer and condensation consumers migrate through #5086; expiry 1.0 |
+| flag:sugar-shaped:command:tnX | tombstoned by contract: `\tnX{m}` migrates to `\tn[skin=ring]{m}` (`LANGUAGE-1.0` 10); the kernel cases of this wave already spell the ring skin directly, and the remaining grid-tier uses die at the S4 swap; expiry 0.9 |
+| flag:consumers:key:picture:east label | keep-because: the wave-2C respell moved one consumer onto the kernel port-label spelling and the row's two remaining consumers are 0.7 grid-tier cases that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:object:no legs | dies at S4 with the 0.7 object ledger: a suppressed policy leg is port ownership, which typed `ports=` already states; wave 2B retired its intertwiner consumers; expiry 0.9 |
+| flag:consumers:key:object:tri | keep-because: wave 1C retired the canonical-form and orthogonality consumers onto the kernel triangle skin; the two remaining consumers are 0.7 grid-tier cases (the tangent projector and the workbench P_T(A)) that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnspan | keep-because: wave 1C's enclosure respell of the boundary state dropped the lone brace-above signature, folding the corpus onto two; the span sugar is a 0.7 grid-tier spelling whose remaining consumers retire at the S4 surface swap, the kernel stating ranges through mark addresses; expiry 0.9 |
+| flag:consumers:command:tnskip | keep-because: wave 4 retired the intersection break onto unbonded typed ports and invisible junctions; the two remaining consumers are blueprint MPDO staircase figures (chapters 20 and 21) that migrate with the blueprint's own kernel pass at the S4 surface swap, the kernel stating a skipped cell as `void=open`; expiry 0.9 |
+| flag:consumers:key:object:up at | keep-because: wave 4 retired the boundary-operator consumers onto typed top-face stations; the lone remaining consumer is the blueprint physical-blocking figure (chapter 26) that migrates with the blueprint's kernel pass at the S4 surface swap, the kernel stating the leg through `ports=`; expiry 0.9 |
+| flag:consumers:environment:tenkzplanes | keep-because: the lone remaining consumer is the blocked PEPS marginal, whose open transverse ket-bra legs the kernel bilayer basis cannot yet spell; the environment retires with the case's migration once a bilayer transverse-physical spelling lands; expiry 0.9 |
+| flag:consumers:environment:tenkzlattice | keep-because: wave 5 retired the Section-II sheet consumers onto plane frames; the remaining consumers are 0.7 grid-tier cases outside this family that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:cooccur:picture:north+south | keep-because: a projected sheet states its whole four-side boundary contract, so every sheet picture names both receding sides; the values differ per picture (the renormalization beads open one and seal the other), so the pair is two independent policies, not one key; expiry 1.0 |
+| flag:consumers:key:picture:bond label | dies at S4 with the 0.7 picture ledger: wave 6 retired the boundary pair's bond-label spellings onto kernel wire-point label marks, and the one remaining consumer is a blueprint chapter that respells at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:region:inset | dies at S4 with the 0.7 region ledger: wave 6 respelled the nested ground-space contours through the kernel mark's inset step (#5498), and the two remaining consumers are blueprint chapters that respell at the S4 surface swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnedge | keep-because: wave 6 retired the toric diamond and diagonal edges onto kernel wires; the four remaining uses sit in one 0.7 grid-tier case (the PEPS projection) that retires wholesale at the S4 surface swap; expiry 0.9 |
+| flag:consumers:command:tngroup | dies at S4 with the 0.7 group ledger: wave 7 retired the last rotated-frame group (Dia3) onto angle ports, orientation being a consequence of where a record sits; expiry 0.9 |
+| flag:consumers:key:group:frame | dies at S4 with the tombstoned `frame={rotate=}`: its last consumer was the Dia3 group wave 7 respelled; expiry 0.9 |
+| flag:consumers:key:connection:dir | dies at S4 with the 0.7 connection ledger: wave 7 moved every directed free-tier edge onto the kernel wire's `dir=`; expiry 0.9 |
+| flag:consumers:key:connection:fused | dies at S4 with the 0.7 connection ledger: wave 7 retired both renormalization consumers, bundle multiplicity owing no ink under the kernel contract; expiry 0.9 |
+| flag:consumers:key:object:circle | dies at S4 with the 0.7 object ledger: wave 7 retired the last `\tnput[circle]` lambda insertions onto the kernel ring-skin bead; expiry 0.9 |
+| flag:consumers:key:connection:label | keep-because: wave 7 retired the F-crossing consumer onto kernel wire-point label marks; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:connection:role | keep-because: wave 7 retired the pulling-through and torus consumers onto declared kernel species; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:picture:trace | keep-because: the marginal's migration retires the picture-level trace from the doubled sheet, and the two remaining consumers state genuine single-row traces the kernel still owes its drawn return (#5492); the key retires with that ink, expiry 0.9 |
+| flag:consumers:environment:tenkzplanes | dies at S4: its lone consumer was the PEPS marginal, which this session migrates onto the kernel bilayer basis; expiry 0.9 |
+| flag:consumers:key:kernel-atom:physical | keep-because: the key lands with the closure fix and the first rewritten word; the rest of its consumers arrive as the corpus returns to the policy spelling it was forced to abandon; expiry 0.9 |
+| flag:consumers:key:picture:west label | keep-because: this wave retires the grid consumers it touched; the five that remain all stand a tensor on a generated cup, and they respell when the kernel gains a station on that arc; expiry 0.9 |
+| flag:consumers:key:kernel-wire:stroke | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-wire row records; the leaf already carries its first benchmark consumer in rmp-app-toric-dual and its Extension-gate in #5543; expiry 0.8 |
+| flag:consumers:command:tnghost | dies at the language landing because addresses name empty cells directly; the wave retires all but one blueprint consumer and the tenure it loses is the one this row already spent; expiry 0.9 |
+| flag:consumers:key:kernel-mark:tint | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-mark row records; the leaf carries its first blueprint consumers in the two migrated PEPS chapters and its Extension-gate in #5570; expiry 0.8 |
+| flag:sugar-shaped:command:tnsite | dies at the language landing with every 0.7 lattice command; the wave that migrates the PEPS region figures retires two of its six blueprint consumers, and the narrowed option profile the flag reads is that retirement and not new uniformity; expiry 0.9 |
+| flag:consumers:command:tnedge | dies at the language landing with every 0.7 lattice command: an edge is an ordinary `\tnwire` of kind index, and a generated one is now restatable by the body; the two migrated PEPS panels retire all but one blueprint consumer, and the tenure it loses is the one this row already spent; expiry 0.9 |
+| flag:consumers:key:connection:distinguished | dies with `\tnedge` it rides: a distinguished edge is a restated bond carrying a declared `species=`, which is how the two migrated panels now say it; the single remaining blueprint consumer goes with the lattice dialect at S4; expiry 0.9 |
+| flag:consumers:environment:tenkzcd | tombstoned by contract: commutative diagrams belong to tikz-cd, outside this language (`LANGUAGE-1.0` §10); the blueprint respelling leaves only fixture consumers, which go with their own `R-cd` redraws; deleted at the S4 swap; expiry 0.9 |
+| flag:consumers:command:tnarrow | tombstoned by contract: `\tnarrow` migrates to `\tnwire[dir=to]` (`LANGUAGE-1.0` §10), and a commutative-diagram arrow is tikz-cd's own `\arrow`, outside the language; the respelling retired its last demand-corpus uses; expiry 0.9 |
+| flag:consumers:key:picture:maps | tombstoned by contract: `maps` died with `tenkzcd` (`LANGUAGE-1.0` §10); its only demand-corpus consumers were the respelled typed-map figures; expiry 0.9 |
+| flag:consumers:key:connection:from | dies with the `\tnarrow` declarations that addressed it: a tikz-cd arrow names its target cell directly, and a kernel wire names both endpoints as arguments; expiry 0.9 |
+| flag:consumers:key:connection:to | dies with the `\tnarrow` declarations that addressed it, exactly as `from=` does; expiry 0.9 |
+| flag:consumers:key:connection:species | dies at the S4 swap with the 0.7 connection tier it belongs to; the kernel wire carries its own signed `species=` row, and the respelled arrows carry their type in the preamble style; expiry 0.9 |
+| flag:consumers:key:setup:species | dies as a name-list: `\tndeclare{species}{name}{hue=...}` is the one declaration door, the blueprint already declares every species through it, and the last bare name-list rode the retired `tenkzcd` opt-in; expiry 0.9 |
+| flag:consumers:key:kernel-atom:conjugate | tombstoned: read by nothing, duality already has its one spelling in wire `dir=`, and the conjugate overline is label mathematics already spelled in the corpus; the parser row, the sixteen benchmark spellings, and the two fixture spellings leave in the corpus rewrite at the 1.0 freeze, the status moving with the parser row as booked since session 0; expiry 0.9 |
+| flag:consumers:key:annotation:brace below | dies at the S4 swap with the 0.7 annotation tier: the kernel bracket mark speaks from the south by itself, and the two remaining demand-corpus consumers are the blocked MPV-overlap ladder and a fixture booked to the grid dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:picture:sandwich | dies at the S4 swap: the 0.7 two-row preset has no consumer left, and the kernel's own `sandwich` row is the three-row preset the sugar ledger signs, so nothing remains for the grid reading to serve; expiry 0.9 |
+| flag:cooccur:picture:east label+west label | dies with the 0.7 boundary-label keys they are: the kernel tier carries no side-label row, a boundary pair is named by the mathematics beside the panel or by a port label, and the five shared invocations all ride grid-tier fixtures booked to the dialect's retirement; expiry 0.9 |
+| flag:consumers:key:object:pill | dies at S4 with the 0.7 object ledger: a kernel atom says the silhouette as the declared `skin=pill`, which is how the four migrated chapters now spell it; the one remaining blueprint consumer is the finite-separation isometry figure, which rides its own redraw row at the surface swap; expiry 0.9 |
+| flag:consumers:command:tnX | dies at S4 with the 0.7 command tier: the kernel spells the gauge capsule as `skin=ring`, which is how the migrated chapters now draw every X and X^{-1}; the one remaining blueprint consumer is the finite-separation direct-sum figure at ch20 intro L109, a grid-tier picture booked to the tier's own retirement; expiry 0.9 |
+| flag:consumers:key:connection:name | dies at S4 with the 0.7 connection ledger: the kernel wire carries its own signed `name=` row, and the lone remaining consumer is a ch24 free graph booked `R-free` for its own redraw; expiry 0.9 |
+| flag:consumers:key:region:label pos | dies at S4 with the 0.7 region ledger it belongs to: `\tnregion` is tombstoned onto `\tnmark[form=enclosure]`, whose signed `label pos=` row this key's one remaining ch24 free-graph consumer takes at its redraw; expiry 0.9 |
+| flag:consumers:key:region:outline | dies at S4 with the 0.7 region ledger: a kernel enclosure strokes its contour by default and `tint` adds the wash, so the outline flag owes no kernel spelling; both remaining consumers are ch24 free graphs booked `R-free`; expiry 0.9 |
+| flag:cooccur:connection:in+route | confirmed merge, tombstoned by contract: `out=`/`in=` migrate to `route=arc`, which leaves and enters along its ends' faces (`LANGUAGE-1.0` §10); every surviving invocation rides a ch24 free graph awaiting its `R-free` redraw, and the pair dies with the connection tier at S4; expiry 0.9 |
+| flag:cooccur:connection:out+route | confirmed merge, tombstoned by contract, exactly as `in=` above: the arc route replaces the pair and the ch24 redraws retire the invocations; expiry 0.9 |
+| flag:cooccur:region:label pos+name | dies at the S4 swap with the 0.7 region tier it belongs to; the kernel spelling is a `\tnmark[form=enclosure]` record whose label and name are ordinary mark keys, and the blueprint's last `\tnregion` consumers were respelled in this wave; expiry 0.9 |
+| flag:cooccur:region:label pos+slot | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `slot=` row and `label pos=` separately, and their 0.7 co-occurrence is an artifact of the six frozen fixture regions; expiry 0.9 |
+| flag:cooccur:region:name+slot | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:sugar-shaped:command:tnregion | dies at the S4 swap: `\tnregion` is the 0.7 spelling of `\tnmark[form=enclosure]`, every blueprint consumer now writes the mark, and the six remaining occurrences live in the frozen legacy fixtures the compatibility renderers still read; expiry 0.9 |
+| flag:consumers:command:tnregion | dies at the S4 swap: the two remaining demand-corpus consumers are frozen legacy fixtures, and every authored region is a `\tnmark[form=enclosure]` record; expiry 0.9 |
+| flag:consumers:command:tnsite | dies at the S4 swap with the `tenkzlattice` tier: its tombstone already names `\tn[at=(r,c)]`, and this wave respelled the blueprint's last `\tnsite`; expiry 0.9 |
+| flag:consumers:key:connection:name | dies at the S4 swap with the 0.7 connection tier: the kernel wire carries its own signed `name=` row, and the named `\tnjoin` consumers left with the ch24 free graphs; expiry 0.9 |
+| flag:consumers:key:object:label | dies at the S4 swap with the 0.7 object tier: a kernel label is the positional mathematics of the record, and the blueprint no longer writes the key; expiry 0.9 |
+| flag:consumers:key:object:ring | dies at the S4 swap with the 0.7 object tier: the kernel spelling is `skin=ring`, and the last blueprint `ring` flags were respelled in this wave; expiry 0.9 |
+| flag:consumers:key:region:label | dies at the S4 swap with the 0.7 region tier: a kernel enclosure takes its label positionally; expiry 0.9 |
+| flag:consumers:key:region:label pos | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `label pos=` row; expiry 0.9 |
+| flag:consumers:key:region:outline | dies at the S4 swap with the 0.7 region tier: the kernel enclosure is outline by default and `tint` opts into the fill, so the flag key has no kernel row to inherit; expiry 0.9 |
+| flag:consumers:key:region:slot | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `slot=` row until the deferred slot-for-species exchange executes; expiry 0.9 |
+| flag:cooccur:region:label+label pos | dies at the S4 swap with the 0.7 region tier, the same six frozen fixture regions as its siblings above; expiry 0.9 |
+| flag:cooccur:region:label+name | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:cooccur:region:label+slot | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:consumers:key:setup:compact | dies at S4 with the 0.7 metric tier: the kernel names no compact profile, and a page-constrained picture states its pitch in the body as the recursion figure now does; the two remaining demand-corpus consumers are grid-tier fixtures booked to the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:dot | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette as the declared `skin=dot`, which is how the migrated chapters draw it; no demand-corpus consumer remains and the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:box | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette as the declared `skin=box`, which is how the migrated chapters draw it; no demand-corpus consumer remains and the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:boundary | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette as the declared `skin=boundary`, which is how the migrated chapters draw it; no demand-corpus consumer remains and the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:connection:route | dies at S4 with the 0.7 connection tier: the kernel wire carries its own route row (registry, kernel-wire), so the grid reading serves nothing once the last grid pictures leave; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:environment:tenkzfree | dies at S4: the blueprint's last free-graph pictures left with this wave and the ch24 chapters, so the environment's demand-corpus consumers are gone; the front end and its fixtures are booked to the dialect retirement (FIXTURE-RETIREMENT.md); expiry 0.9 |
+| flag:consumers:command:tnput | dies at S4 with the 0.7 tier that reads it: the kernel carries its own row where the concept survives, and no demand-corpus consumer remains; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:command:tnjoin | dies at S4 with the 0.7 tier that reads it: the kernel carries its own row where the concept survives, and no demand-corpus consumer remains; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:up | dies at S4 with the 0.7 object ledger: `up=` is tombstoned onto `ports=` (`LANGUAGE-1.0` §10), the migrated pictures write the physical index on its typed port, and both remaining demand-corpus consumers are ch21 fusion-isometry figures booked `C-picture+C-policy+C-record+R-record` for their own redraw; expiry 0.9 |
+| flag:consumers:key:object:down | dies at S4 with the 0.7 object ledger, exactly as `up=` above: the two remaining consumers are the same ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
+| flag:consumers:key:setup:tensor style | dies at S4 with the 0.7 setup tier: the kernel names a silhouette per atom through the signed `skin=` row, which is how every migrated picture now spells it; the one remaining consumer is the ch21 refinement-channel picture-term figure, booked to its own redraw row; expiry 0.9 |
+| flag:sugar-shaped:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); the kernel tier does not yet place a fuse record — the gap this wave measured — so the migrated wedges spell the expansion as `wires=2` atoms bonded by the frame, and all eight remaining occurrences ride the ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
+| flag:lonely-type:address | keep: the address grammar is the kernel's placement language itself (`at=` on every atom), lonely only because the cd dialect's arrow endpoints left with their front end; expiry 0.9 |
+| flag:lonely-type:direction-policy | keep: `dir=` is the contract's one spelling of a space against its dual (`LANGUAGE-1.0` §2.4), lonely only because the 0.7 connection twin left with its front end; expiry 0.9 |
+| flag:lonely-type:name-list | keep: `\tnset{species={...}}` is the document's species declaration itself, lonely only because the free region's member list left with its dialect; expiry 0.9 |
+| flag:consumers:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9) whose kernel-tier reading landed with #5624; two kernel-tier blueprint wedges consume the sugar and the eight ch21 occurrences ride their figures' own redraw rows; expiry 0.9 |
+| flag:consumers:command:tndots | keep-because: a signed 1.0 sugar row (`\tndots` expands to the ellipsis atom, `LANGUAGE-1.0` §9) whose kernel-tier reading does not exist yet — the gap this wave measured — so the migrated ladder writes the expansion and the two remaining demand-corpus consumers are 0.7 pictures awaiting their own migration (`ch20_mpdo_foundations`, `ch21` product laws); tenure recounts at the S4 swap; expiry 0.9 |
+| flag:consumers:command:tnspan | keep-because: a signed 1.0 sugar row (`\tnspan[form]{k}{m}` expands to a ranged `\tnmark`, `LANGUAGE-1.0` §9) whose span form is refused undrawn on the kernel tier — the gap this wave measured — so the migrated ladder writes the `\tnmark[form=bracket]` expansion and the two remaining demand-corpus consumers are 0.7 ch21 pictures awaiting their own migration; tenure recounts at the S4 swap; expiry 0.9 |
+| flag:consumers:command:tnpic | dies at S4 with the 0.7 grid front end: the blueprint's twenty pictures are redrawn as kernel grid pictures and zero demand consumers remain; the signed §9 sugar row over the picture environment waits on the kernel binding and math-style sensing recorded on #4908; expiry 0.9 |
+| flag:consumers:key:object:mpo | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette through the prelude skin (`skin=mpo`), which every redrawn figure now writes; zero demand consumers remain; expiry 0.9 |
+| flag:consumers:command:tndots | keep-because: this wave's loops write the kernel spelling `\tn[skin=dots]`, leaving two 0.7 consumers — the ch02 blocked-overlap ladder and the tangent-projector benchmark case — that retire with their own redraw rows at the S4 surface swap; folds into `\tn[skin=dots]` at the language landing; expiry 0.9 |
+| flag:consumers:command:tnspan | keep-because: the refinement rows now state their blocked sites as range-addressed enclosure marks, leaving the ch02 blocked-overlap ladder as the one 0.7 consumer, which retires with its own redraw row at the S4 surface swap; expiry 0.9 |
+| flag:lonely-type:semantic-slot | tombstoned: the slot= key retired into species= and the semantic-slot type left with it; permanent |
+| flag:lonely-type:compass | keep-because: `plane lean=` left with its dialect and `nudge=`'s pair spelling never used it, so the kernel's one compass reading stands alone until the amendment batch retires `nudge=`; expiry 0.9 |
+| flag:lonely-type:dimension-pair | keep-because: the projected-basis escape rows that shared the type left with their dialect; the surviving carrier is the object `label shift=` escape, itself sentenced by §10, and the type dies with it; expiry 0.9 |
+| flag:lonely-type:math-and-range | keep-because: `bond label=` is the type's one carrier and already holds its S4 death sentence (SHRINK wave verdict: dies with the 0.7 picture ledger); the type leaves with the row at the swap; expiry 0.9 |
+| flag:consumers:command:tnbond | keep-because: the signed sugar row over `\tnwire` of kind index; two kernel regressions and the sugar-pair suite hold its expansion identity while benchmark demand stays with `\tnwire`; expiry 1.0 |
+| flag:consumers:command:tndeclareatom | keep-because: the atom-declaration door of the prelude contract (`r_declare_atom.tex`); benchmarks declare through `\tndeclare`, and the two doors are one review question at the freeze; expiry 0.9 |
+| flag:consumers:command:tnfuse | demoted: a prelude-declared atom by SHRINK wave verdict; its two benchmark consumers are the fusion-tree cases whose declarations land with the tree redraw; expiry 0.9 |
+| flag:consumers:command:tngroup | keep-because: the one composition scope between picture and document (`r_setup_persistence.tex` pins its scoping); zero benchmark demand is the composition sugar's normal idle state; expiry 1.0 |
+| flag:consumers:command:tnprose | keep-because: the signed sugar row for recorded prose in place of a diagram; its consumers are review documents, not benchmarks; expiry 1.0 |
+| flag:consumers:command:tnset | keep-because: the setup door of the kernel-setup ledger; one benchmark consumer plus the document-scope regressions; expiry 1.0 |
+| flag:consumers:key:atom-declaration:ports | keep-because: typed ports are the declaration contract's load-bearing half (`r_closure_typed_ports.tex`, `n_port_type.tex` family); expiry 1.0 |
+| flag:consumers:key:atom-declaration:skin | keep-because: the declaration's silhouette half, same contract as its ports row; expiry 1.0 |
+| flag:consumers:key:kernel-atom:cluster | keep-because: `cluster={RxC}` is the signed basis sugar for addressable sub-spins; one benchmark consumer and the cluster regressions carry it; expiry 1.0 |
+| flag:consumers:key:kernel-atom:nudge | dies at the amendment landing (`LANGUAGE-1.0` §10: a basis member, an ordinary address, or the label station rule replaces it); expiry 0.9 |
+| flag:consumers:key:kernel-atom:pairing cross | keep-because: the only spelling that reorders a declared skin pairing's crossing, held by the pairing regressions; expiry 0.9 |
+| flag:consumers:key:kernel-atom:void | keep-because: `void={open,sealed}` is the hole contract (`r_void_open.tex`, `r_sealed_void.tex`), with two benchmark consumers; expiry 1.0 |
+| flag:consumers:key:kernel-frame:basis | keep-because: the declared-basis door of `frame=` (`k_plane.tex`, `r_basis_plane.tex`); the counter reads top-level keys and a basis is always nested inside `frame={...}`, so its demand rides the frame row's; expiry 1.0 |
+| flag:consumers:key:kernel-mark:inset | dies by the ninth amendment: concentric order is doctrine on the hull and the key is sentenced (`LANGUAGE-1.0` §10); its two benchmark consumers respell at the amendment landing; expiry 0.9 |
+| flag:consumers:key:kernel-mark:name | keep-because: a named mark is the target of enclosure-over-selection and is pinned by `r_region_words.tex`; expiry 1.0 |
+| flag:consumers:key:kernel-mark:nudge | dies at the amendment landing with its atom twin; expiry 0.9 |
+| flag:consumers:key:kernel-picture:align | keep-because: the math-axis row choice with one benchmark consumer and the equation-policy regression; expiry 1.0 |
+| flag:consumers:key:kernel-picture:check | dies by §10: the audit follows the joiner class; the key is sentenced and its regressions move to the joiner-class audit at the amendment landing; expiry 0.9 |
+| flag:consumers:key:kernel-picture:open | keep-because: the cell-selection half of the side policy (`r_cell_policy.tex`); benchmarks state sides, probes state cells; expiry 1.0 |
+| flag:consumers:key:kernel-picture:planes | keep-because: the two-sheet preset is the signed sugar over a declared basis (`s9_sugar.tex`) with two benchmark consumers; expiry 1.0 |
+| flag:consumers:key:kernel-picture:ring | keep-because: the circle-frame population sugar (`k_ring.tex`); expiry 1.0 |
+| flag:consumers:key:kernel-picture:sandwich | keep-because: the ket-over-bra preset (`s1_sugar.tex`); benchmarks spell `rows=` explicitly, prose examples reach for the preset; expiry 1.0 |
+| flag:consumers:key:kernel-picture:surface | keep-because: the closed-surface frame sugar (`k_torus.tex`); expiry 1.0 |
+| flag:consumers:key:kernel-picture:trace | keep-because: the cell-closure half of the closure alphabet with two benchmark consumers (`r_one_sided_trace.tex`, `r_affine_physical_trace.tex`); expiry 1.0 |
+| flag:consumers:key:kernel-setup:pitch | keep-because: the one document metric (`r_basis_spacing.tex`); a benchmark that restates the default would be noise; expiry permanent |
+| flag:consumers:key:kernel-setup:sizes | keep-because: the size-class table is the metric contract's second half; expiry 1.0 |
+| flag:consumers:key:kernel-setup:strict | keep-because: the benchmark and CI sugar rejector; its consumers are drivers, not cases; expiry permanent |
+| flag:consumers:key:kernel-setup:theme | keep-because: the semantic-ink theme door; the dark-slide theme is its consumer outside the demand corpus; expiry 1.0 |
+| flag:consumers:key:kernel-wire:around | keep-because: the winding-closure spelling of the string family, pinned by the string regressions; expiry 0.9 |
+| flag:consumers:key:kernel-wire:bend | dies by §10: an arc leaves and enters along its ends' faces; the key is sentenced; expiry 0.9 |
+| flag:consumers:key:kernel-wire:stroke | keep-because: the explicit stroke-class override with one benchmark consumer; the port type decides the stroke everywhere else; expiry 0.9 |
+| flag:consumers:key:kernel-wire:weight | dies by §10: the port type decides the stroke and bundling is a claim the audit already carries; expiry 0.9 |
+| flag:consumers:key:kernel-wire:wind | keep-because: the string winding count with two benchmark consumers; expiry 1.0 |
+| flag:consumers:key:object:role | keep-because: the tree's semantic role words feed the recorded `role=` field the RMP tree cases assert; the counter reads `\tntree` options and the benchmark trees carry their roles today; expiry 0.9 |
+| flag:consumers:key:object:species | keep-because: the tree twin of the atom species row; one declaration vocabulary across records; expiry 0.9 |
+| flag:consumers:key:object:tree style | keep-because: wire and ribbon are the two tree strand semantics (`test_tenkz_tree.py` pins both); expiry 0.9 |
+| flag:cooccur:kernel-declare:base+pairings | keep-because: a declared pairing skin always names the base it decorates; the co-occurrence is the declaration's grammar, not a foldable pair; expiry 1.0 |
+| flag:cooccur:kernel-picture:north+south | keep-because: a doubled-layer picture states both transverse sides for the same reason an equation states both members; the four side keys are one alphabet; expiry 1.0 |
+| flag:lonely-type:address | keep-because: `at=` is the addressing door of the whole record grammar; the type is lonely because addressing is one concept spelled once; expiry permanent |
+| flag:lonely-type:basis-spec | keep-because: a declared basis is one concept with one owner (`frame=`'s basis member list); expiry 1.0 |
+| flag:lonely-type:bond-policy | keep-because: `bonds=` owns the generated-bond alphabet alone; expiry 1.0 |
+| flag:lonely-type:cell-set | keep-because: `open=` is the one cell-selection key left after the 0.7 `trace=`/`open=` pair collapsed onto the kernel's; expiry 1.0 |
+| flag:lonely-type:check-spec | dies with its owner `check=` at the amendment landing (§10); expiry 0.9 |
+| flag:lonely-type:crossing-list | keep-because: `cross=` owns crossing order alone; a second consumer would be a second crossing grammar; expiry 1.0 |
+| flag:lonely-type:direction-policy | keep-because: `dir=` owns duality alone (§2.4); expiry permanent |
+| flag:lonely-type:frame-spec | keep-because: `frame=` owns the three-word frame alphabet alone (§4); expiry permanent |
+| flag:lonely-type:hue-source | keep-because: `hue=` is the declaration ledger's one colour door; expiry 1.0 |
+| flag:lonely-type:indexed-crossing-list | keep-because: the pairing-cross spelling of its crossing-list sibling; dies if its owner dies; expiry 0.9 |
+| flag:lonely-type:integer | keep-because: `ring=` is the one bare-count sugar; expiry 1.0 |
+| flag:lonely-type:length | keep-because: `pitch=` is deliberately the language's only length (`LANGUAGE-1.0` §11: no millimetres appear elsewhere); expiry permanent |
+| flag:lonely-type:port-pair-list | keep-because: `pairings=` owns declared skin pairings alone; expiry 1.0 |
+| flag:lonely-type:row | keep-because: `align=` owns the math-axis row alone; expiry 1.0 |
+| flag:lonely-type:row-list | keep-because: `rows=` owns row topology alone; expiry permanent |
+| flag:lonely-type:semantic-slot | tombstoned: the slot= key retired into species= and the semantic-slot type left with it; permanent |
+| flag:lonely-type:size-table | keep-because: the size-class table is one concept with one owner; expiry 1.0 |
+| flag:lonely-type:trace-spec | keep-because: `trace=` owns cell closure alone after the swap; expiry 1.0 |
+| flag:lonely-type:void-policy | keep-because: `void=` owns the hole alphabet alone; expiry 1.0 |
+| flag:sugar-shaped:command:tnfuse | demoted: same sentence as its consumer flag above — a prelude-declared atom; the single option signature is the demotion's evidence; expiry 0.9 |
+| flag:sugar-shaped:command:tntree | keep-because: a fusion tree is one structured atom and its word argument is the whole signature; expiry 1.0 |
+| flag:sugar-shaped:command:tndeclare | keep-because: the declaration door's uniform three-argument shape is its contract, not sugar debt; expiry 1.0 |
+| flag:sugar-shaped:command:tenkzkernel | dies at the 1.0 freeze: the load-time surface makes every call inert, and the freeze's corpus rewrite deletes the spelling (registry sunset 1.0); executes at the 1.0 freeze; expiry 1.0 |
+| flag:consumers:key:kernel-frame:basis | keep-because: the declared-basis door of `frame=` (`k_plane.tex`, `r_basis_plane.tex`), with two benchmark consumers now counted from the extracted frame descriptors; expiry 1.0 |
+| flag:cooccur:atom-declaration:ports+skin | keep-because: a declared atom states its sanctioned skin and its complete typed ports — the declaration contract requires both halves, so their co-occurrence is the grammar, not a foldable pair; expiry 1.0 |
+| flag:consumers:key:kernel-picture:metrics | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-picture row records; the leaf already carries its first blueprint consumer in the ch21 structure-operator recursion and its Extension-gate in #5620; expiry 0.8 |
+| flag:consumers:key:kernel-mark:form | tombstoned in part: the four words that took a record and drew nothing leave the parser today, the alphabet standing at `bracket`, `enclosure`, `label` with the recording `prose` row the sugar ledger keeps; the key itself has consumers and stays kernel, so this executes the session-1 verdict rather than deferring it again; permanent |
+| flag:consumers:key:kernel-mark:inset | retired: recorded a number, moved no ink; both writers migrated with byte-identical rasters; permanent |
+| flag:consumers:key:kernel-wire:bend | retired: sentenced session 1, executable once route=arc drew (#6201); zero consumers; permanent |
+| flag:consumers:key:kernel-wire:around | retired: zero consumers and no render read; a detour is a side of a selection; permanent |
+| flag:lonely-type:address-list | dies with its last carrier: `via=` is sentenced (session 1, tracker #4709 item 1) and the type leaves the census when its parser row does; expiry 0.9 |
+| flag:lonely-type:number | departed: its last carriers, `bend=` and `inset=`, retire in this session, and the value type leaves the registry vocabulary with them; the contract's section 2.7 now speaks of it in the past tense; permanent |
+| flag:lonely-type:route-spec | keep-because: the route row carries the structured type the contract's own table states, one grammar with one owner, exactly as trace-spec and void-policy stand; expiry 1.0 |
+| flag:consumers:key:kernel-atom:nudge | retired: sentenced by amendment seven, read by nothing, written by nothing; permanent |
+| flag:consumers:key:kernel-mark:nudge | retired: sentenced by amendment seven, the label station rule landed in #6168; permanent |
+| flag:consumers:key:kernel-setup:sizes | retired: stored a table, read by nothing; use size= on the picture or atom; permanent |
+| flag:lonely-type:size-table | departed: its sole carrier was the inert sizes= setup key; permanent |
+| flag:consumers:key:kernel-setup:theme | retired: stored an identifier, read by nothing; the house palette binds at load and cited palettes enter through species hue declarations; permanent |
+| flag:consumers:key:kernel-wire:weight | retired: zero authored consumers; it changed no ink, endpoint type owns stroke, and multiplicity belongs to the mathematical label; permanent |
