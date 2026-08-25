@@ -15,7 +15,6 @@ import QICLean.Channel.Peripheral.GroupStructure
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.RectangularSpan.Basic
-import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -61,10 +60,6 @@ canonical-form reduction.  It imports four Wielandt modules:
 4. **`Wielandt.Primitivity.StronglyIrreducibleToFullRank`** — the hardest direction
    of the primitivity equivalence (Proposition 3(a)→(c) of arXiv:0909.5347): strong
    irreducibility of the transfer map implies `krausRank A = D`.
-
-5. **`Wielandt.Primitivity.ToNormal`** — the primitivity-to-normality implication:
-   when the peripheral spectrum condition is satisfied, the transfer map becomes normal
-   (commutes with its adjoint), which unlocks the full Wielandt chain.
 
 Together, these inputs supply the fact that a TP-primitive block (after the
 Perron-Frobenius gauge and periodicity blocking) is injective — its Kraus operators

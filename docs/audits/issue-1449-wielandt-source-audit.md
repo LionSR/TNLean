@@ -92,7 +92,6 @@ Below is the complete inventory of Wielandt imports used by the canonical-form, 
 | `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth.VectorToMatrixSpan` | vector-to-matrix lemmas |
 | | `SpanGrowth.CumulativeSpan` | `cumulativeSpan` API |
 | | `RectangularSpan.Basic` | `wielandt_lemma2b_conditional` |
-| | `Primitivity.ToNormal` | spectral-gap consequences |
 | | `Primitivity.StronglyIrreducibleToFullRank` | primitive-to-normal |
 | `ParentHamiltonian/UniqueGroundState.lean` | `SpanGrowth.CumulativeToWordSpan` | `cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one` |
 | `ParentHamiltonian/IntersectionProperty.lean` | `SpanGrowth.CumulativeToWordSpan` | same |

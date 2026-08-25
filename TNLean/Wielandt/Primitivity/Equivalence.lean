@@ -279,7 +279,7 @@ turns the span hypothesis into strong irreducibility, then
 `isPrimitiveMPS_of_isStronglyIrreduciblePaper` supplies a positive-definite
 fixed point `ρ₀` together with peripheral primitivity and irreducibility of
 `E_A`, and the complementary transfer-map gap around that fixed point
-(`IsPrimitiveMPS.fixedPoint_unique`) forces every fixed point of `E_A` to be
+(`Kraus.HasComplementaryFixedPointGap.fixedPoint_unique`) forces every fixed point of `E_A` to be
 a scalar multiple of `ρ₀`; rescaling by the inverse trace gives the unique
 density-matrix representative. Both routes are Wolf's own Chapter 6 machinery;
 this one reuses the already-formalized Proposition 3 equivalence rather than
