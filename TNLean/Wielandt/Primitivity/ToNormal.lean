@@ -21,5 +21,5 @@ QIC methods directly:
 * `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily`
 
 This module remains as a lightweight import waypoint for the TN Wielandt module graph; it
-introduces no replacement wrappers around the generic API.
+introduces no replacement forwarding declarations around the generic QIC methods.
 -/

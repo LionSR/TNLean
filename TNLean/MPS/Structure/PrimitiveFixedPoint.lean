@@ -12,7 +12,7 @@ import QICLean.Kraus.Transfer
 This module exposes the finite-Kraus complementary fixed-point-gap certificates from
 QICLean under the established matrix-product-state vocabulary. The abbreviations are
 reducible, so the QIC fields and generic methods remain available definitionally, without
-an MPS wrapper or conversion theorem.
+a separate MPS-facing forwarding declaration or conversion theorem.
 
 ## Main definitions
 

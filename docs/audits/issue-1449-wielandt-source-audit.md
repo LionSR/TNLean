@@ -98,6 +98,20 @@ Below is the complete inventory of Wielandt imports used by the canonical-form, 
 | `ParentHamiltonian/WrappingWindow.lean` | `SpanGrowth.VectorToMatrixSpan` | vector-to-matrix lemmas |
 | `Algebra/BurnsideMatrix.lean` | `SpanGrowth.CumulativeSpan` | `cumulativeSpan` API |
 
+### Generic primitive fixed-point declaration migration (2026-08-25)
+
+The MPS-facing pass-through declarations below were removed after their generic
+finite-Kraus counterparts moved to QICLean. All non-`Archive` consumers and
+Blueprint declaration links now use the QICLean names directly.
+
+| Removed TNLean declaration | QICLean replacement |
+|---|---|
+| `MPSTensor.IsPrimitiveMPS.trace_ne_zero` | `Kraus.HasComplementaryFixedPointGap.trace_ne_zero` |
+| `MPSTensor.IsPrimitiveMPS.fixedPoint_unique` | `Kraus.HasComplementaryFixedPointGap.fixedPoint_unique` |
+| `MPSTensor.IsPrimitiveMPS.complement_pow_tendsto_zero` | `Kraus.HasComplementaryFixedPointGap.complement_pow_tendsto_zero` |
+| `MPSTensor.posDef_of_isIrreducibleMap_of_isPrimitiveMPS` | `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleMap` |
+| `MPSTensor.posDef_of_isIrreducibleTensor_of_isPrimitiveMPS` | `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily` |
+
 ### Wielandt declarations independent of the MPS development
 
 These are the standalone Wielandt inequality declarations:
@@ -117,8 +131,8 @@ These are the standalone Wielandt inequality declarations:
 ### Verdict: **Correct separation.** The Theorem 1 statements live in
 `Inequality/` and are not accidentally imported by the MPS development. The MPS
 development uses a narrower set of Wielandt lemmas (`CumulativeSpan`,
-`CumulativeToWordSpan`, `VectorToMatrixSpan`, `ToNormal`,
-`ImpliesIrreducible`, `StronglyIrreducibleToFullRank`).
+`CumulativeToWordSpan`, `VectorToMatrixSpan`, `ImpliesIrreducible`, and
+`StronglyIrreducibleToFullRank`).
 
 ---
 
