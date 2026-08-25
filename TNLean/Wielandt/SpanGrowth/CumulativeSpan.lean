@@ -22,18 +22,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Word spans -/
-
-/-- Cumulative word spans are monotone in their length bound. -/
-theorem cumulativeSpan_mono' (A : MPSTensor d D) {n m : ℕ} (h : n ≤ m) :
-    Kraus.cumulativeSpan A n ≤ Kraus.cumulativeSpan A m :=
-  Kraus.cumulativeSpan_mono' A h
-
-/-- The identity matrix belongs to every cumulative word span. -/
-theorem one_mem_cumulativeSpan (A : MPSTensor d D) (n : ℕ) :
-    (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.cumulativeSpan A n :=
-  Kraus.one_mem_cumulativeSpan A n
-
 /-! ### Injectivity and normality -/
 
 /-- Block injectivity at a positive length propagates to the next length. -/
