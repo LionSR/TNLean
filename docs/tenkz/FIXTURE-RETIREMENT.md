@@ -166,9 +166,9 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 | 60 | `\tnregion` semantic enclosures | 32 | dies | §10 → `\tnmark[form=enclosure]`: `r_region_staircase.tex`, `r_region_complement.tex`, `k_czx.tex` |
 | 61 | `\tncut` connection cut | 7 | dies | §10: `form=cut` fails tenure outright, no successor owed |
 | 62 | `\tnspan` braces above/below | 16 | dies | SHRINK verdict; the kernel states ranges through mark addresses: `r_mark_bracket_range.tex` |
-| 63 | `slot=selected`, `slot=secondary` | 25 | covered | `r_region_staircase.tex`, `r_region_complement.tex`, 13 `slot=selected` uses across `k_*` and RMP |
-| 64 | `slot=complement\|collar\|neutral` | 5 (`lattice_test`, `notch`, `feat`, `t2_gs2d_lasso`, `t2_tcdual`) | covered | `r_region_slot_words.tex`, closing gap G2 |
-| 65 | region `name=` | 4 | covered | `r_region_slot_words.tex`, closing gap G2 |
+| 63 | `species=selected`, `species=secondary` (born `slot=`) | 25 | covered | `r_region_staircase.tex`, `r_region_complement.tex`, 13 region-word uses across `k_*` and RMP, respelled `species=` with the exchange |
+| 64 | `species=complement\|collar\|neutral` (born `slot=`) | 5 (`lattice_test`, `notch`, `feat`, `t2_gs2d_lasso`, `t2_tcdual`) | covered | `r_region_words.tex`, closing gap G2 |
+| 65 | region `name=` | 4 | covered | `r_region_words.tex`, closing gap G2 |
 | 66 | `outline` flag | 17 | dies | 0.7 spelling; a kernel enclosure strokes only, `tint` adds the paper: `r_region_staircase.tex` |
 | 67 | `inset=` nested regions | 6 | covered | `rmp-iv-ground-space-2d`; concentric order doctrine `r_nested_regions.tex` (the key itself is sentenced by the amendments) |
 | 68 | `label at=` | 9 | dies | alias, sunset 1.0; `label pos=` covered by `r_label_turn.tex` |
@@ -205,7 +205,7 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 Classifying the 85 ledger rows: **55 die** with their dialect, **29 are
 covered** by a named kernel or RMP case, and **1 row remains a gap** (G3,
 conditional). G2 discharged (rows 64 and 65 move from gap to covered) with
-`r_region_slot_words.tex`; G1 discharged with `r_void_open.tex` once the
+`r_region_words.tex`; G1 discharged with `r_void_open.tex` once the
 void-skin correction (#5609, PR #5616) made the hole glyph-faithful.
 Nothing else in the legacy corpus's construct inventory, key-value
 inventory, or event census falls outside these rows.
@@ -242,23 +242,23 @@ neutral}` (`tenkz-kernel.code.tex` line 1222), and marks accept `name=` (line
 and the mark `name=` key are exercised solely by five legacy lattice fixtures
 (`lattice_test`, `notch`, `feat`, `t2_gs2d_lasso`, `t2_tcdual`).
 
-**Replacement:** `tests/tenkz/kernel/regression/r_region_slot_words.tex`. One
-grid with three enclosures carrying `slot=complement`, `slot=collar`,
-`slot=neutral`, one of them `name=R`. Pin: each slot resolves to its own
-semantic ink (the theme maps `collar` to its dedicated hue,
-`tenkz-kernel.code.tex` line 15385) and the named mark is accepted and
-recorded. If the deferred slot-for-species exchange
-(`LANGUAGE-1.0.md` §14.5) lands first and retires `slot=`, the fixture pins
-the `species=` respelling instead and the three words join the tombstones.
+**Replacement:** `tests/tenkz/kernel/regression/r_region_words.tex`. One
+grid with three enclosures carrying `species=complement`, `species=collar`,
+`species=neutral`, one of them `name=R`. Pin: each region word resolves to
+its own semantic ink and the named mark is accepted and recorded. The
+deferred slot-for-species exchange (`LANGUAGE-1.0.md` §14.5) has executed:
+`slot=` is retired, the fixture pins the `species=` respelling, and the
+region words stand as prelude species.
 
-**Closed.** `r_region_slot_words.tex` lands with this document. It hooks
-`\__tenkz_kernel_r_mark_enclosure:n` to capture the resolved
-`\l__tenkz_kernel_r_hue_tl` for each of the three enclosures and asserts the
-sequence `tenkzPassive, tenkzExtra, tenkzInk` (an `\errmessage` on mismatch
-fails the compile, verified by a negative control that mutates one expected
-hue); the `.tnlog` `mark` records separately confirm `slot=complement`,
-`slot=collar`, `slot=neutral`, and `name=R` are recorded verbatim. Rows 64
-and 65 move to covered in §3.5.
+**Closed.** The fixture (born `r_region_slot_words.tex`, renamed with the
+exchange) hooks `\__tenkz_kernel_r_mark_enclosure:n` to capture the
+resolved `\l__tenkz_kernel_r_hue_tl` for each of the three enclosures and
+asserts the sequence `tenkzPassive, tenkzExtra, tenkzInk` (an
+`\errmessage` on mismatch fails the compile, verified by a negative
+control that mutates one expected hue); the `.tnlog` `mark` records
+separately confirm `species=complement`, `species=collar`,
+`species=neutral`, and `name=R` are recorded verbatim. Rows 64 and 65
+move to covered in §3.5.
 
 ### G3 — inline embedding and math-style sensing (conditional on contract work)
 
@@ -325,7 +325,7 @@ pure-kernel-grid preserves (`iso_h`, `p3_probe_opop`, `rv4061_flatonly`,
 (`fig21d_cubic`, `fig21d_cubic_v2`). Everything else — 252 fixtures — either dies or is
 respelled according to its `DISPOSITIONS.md` code, and either way leaves the
 corpus safely — G1 has landed — with G3's requirement recorded on the S4
-tracking issue. G2 has already landed (`r_region_slot_words.tex`).
+tracking issue. G2 has already landed (`r_region_words.tex`).
 
 Three corrections found by the grid deletion itself:
 

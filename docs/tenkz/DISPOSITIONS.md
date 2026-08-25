@@ -95,13 +95,13 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | L82, 102, 287, 293, 305, 317, 569, 588 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_edge_kernel_gauges_insertion_algebra_local_gauges.tex` | L47, 54 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | L167, 172, 179, 379, 386, 393 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_edge_middle.tex` | L262 `tenkz` → `P-grid` | — | L235 `tenkz` → `R-record` |
+| `ch24_peps_ft_edge_middle.tex` | L235, 262 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_foundations.tex` | L49, 377 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_normal_capstone_normal_peps.tex` | — | — | L44, 91, 107 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | L185, 191 `tenkz` → `P-grid` | — | L21, 28, 86, 92, 112, 144, 156 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_coordinate_regions.tex` | — | — | L100, 106, 126, 288 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | — | — | L191, 214 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_translated_windows_and_comparison.tex` | — | — | L367 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_capstone_normal_peps.tex` | L44, 91, 107 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | L21, 28, 86, 92, 112, 144, 156, 185, 191 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_normal_square_coordinate_regions.tex` | L100, 106, 126, 288 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | L191, 214 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_normal_square_translated_windows_and_comparison.tex` | L367 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_normal_union.tex` | L211, 260, 286, 298, 313 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_region_transfer_covariance.tex` | L342, 346, 350, 354 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | L23 `tenkz` → `P-grid` | — | — |
@@ -121,9 +121,9 @@ separate public-surface occurrence and therefore appears separately.
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 170 |
+| preserve | 188 |
 | codemod | 11 |
-| redraw | 18 |
+| redraw | 0 |
 | **Total** | **199** |
 
 The raw count is 188 environment openings plus 11 command occurrences,

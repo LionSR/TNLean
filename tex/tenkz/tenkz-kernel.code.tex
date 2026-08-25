@@ -1504,8 +1504,6 @@
 \__tenkz_kernel_tombstone:nnnn { tenkz-kernel-mark } { form } { band }
   { use~form=enclosure~with~tint,~which~lays~ink~over~the~paper~its~contour~
     encloses }
-\__tenkz_kernel_choice:nnnn { tenkz-kernel-mark } { slot }
-  { selected, secondary, complement, collar, neutral } { slot }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { species } { species }
 \__tenkz_kernel_label_pos:nn { tenkz-kernel-mark } { label~pos }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-mark } { name } { name }
@@ -2699,6 +2697,30 @@
       { \msg_error:nnn {tenkz}{kernel-declare-class} {#1} }
     \ignorespaces
   }
+% The prelude species and their fixed hues, one authority for the hue
+% resolver and the declaration door: the four semantic roles and the five
+% region words the retired slot= key left to species=.  A prelude word
+% keeps its hue however a document redeclares it, which is the standing
+% redeclaration contract; only names outside this table ride the cycle.
+\clist_const:Nn \c__tenkz_kernel_region_words_clist
+  { selected , secondary , complement , collar , neutral }
+\int_new:N \g__tenkz_kernel_species_cycle_int
+\cs_new_protected:Npn \__tenkz_kernel_prelude_hue:nN #1#2
+  {
+    \str_case:nnF {#1}
+      {
+        {operator}   { \tl_set:Nn #2 {tenkzOperator} }
+        {marked}     { \tl_set:Nn #2 {tenkzMarked} }
+        {extra}      { \tl_set:Nn #2 {tenkzExtra} }
+        {passive}    { \tl_set:Nn #2 {tenkzPassive} }
+        {selected}   { \tl_set:Nn #2 {tenkzAction} }
+        {secondary}  { \tl_set:Nn #2 {tenkzMarked} }
+        {complement} { \tl_set:Nn #2 {tenkzPassive} }
+        {collar}     { \tl_set:Nn #2 {tenkzExtra} }
+        {neutral}    { \tl_set:Nn #2 {tenkzInk} }
+      }
+      { \tl_clear:N #2 }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_declare_species:nn #1#2
   {
     \__tenkz_kernel_declare_table:Nnn
@@ -2730,17 +2752,25 @@
         % therefore cannot change the identity's ink.
         \prop_if_in:NnF \g__tenkz_kernel_species_hue_prop {#1}
           {
-            \int_set:Nn \l_tmpa_int
+            % A prelude word keeps its fixed hue across redeclarations;
+            % the cycle counts only the names it has actually served, so
+            % seeding a prelude word never shifts another name's slot.
+            \__tenkz_kernel_prelude_hue:nN {#1} \l_tmpa_tl
+            \tl_if_empty:NT \l_tmpa_tl
               {
-                \int_mod:nn
-                  { \prop_count:N \g__tenkz_kernel_species_hue_prop }
-                  { \clist_count:N \c__tenkz_speccycle_clist }
-                + 1
-              }
-            \tl_set:Nx \l_tmpa_tl
-              {
-                \clist_item:Nn \c__tenkz_speccycle_clist
-                  { \l_tmpa_int }
+                \int_set:Nn \l_tmpa_int
+                  {
+                    \int_mod:nn
+                      { \g__tenkz_kernel_species_cycle_int }
+                      { \clist_count:N \c__tenkz_speccycle_clist }
+                    + 1
+                  }
+                \tl_set:Nx \l_tmpa_tl
+                  {
+                    \clist_item:Nn \c__tenkz_speccycle_clist
+                      { \l_tmpa_int }
+                  }
+                \int_gincr:N \g__tenkz_kernel_species_cycle_int
               }
             \prop_gput:NnV \g__tenkz_kernel_species_hue_prop {#1} \l_tmpa_tl
           }
@@ -5362,6 +5392,8 @@
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_side_tl
 \bool_new:N \l__tenkz_kernel_r_mark_side_default_bool
+\bool_new:N \l__tenkz_kernel_r_mark_text_bool
+\tl_new:N   \l__tenkz_kernel_r_mark_form_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_ink_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_style_tl
 \tl_new:N   \l__tenkz_kernel_r_wire_ink_tl
@@ -15573,13 +15605,12 @@
           }
       }
       {
-        \str_case:nnF {#1}
-          {
-            {operator} { \tl_set:Nn #2 {tenkzOperator} }
-            {marked}   { \tl_set:Nn #2 {tenkzMarked} }
-            {extra}    { \tl_set:Nn #2 {tenkzExtra} }
-            {passive}  { \tl_set:Nn #2 {tenkzPassive} }
-          }
+        % The prelude words -- the four semantic roles and the five region
+        % words the retired slot= key left to species= -- keep their fixed
+        % hues from the one authority the declaration door also reads; any
+        % other undeclared name rides the cycle.
+        \__tenkz_kernel_prelude_hue:nN {#1} #2
+        \tl_if_empty:NT #2
           { \__tenkz_kernel_r_cycle_hue:nN {#1} #2 }
       }
   }
@@ -19954,8 +19985,31 @@
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
       {
-        \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
-        \tl_set:Ne #2 { text = \tl_use:N \l__tenkz_kernel_r_hue_tl , }
+        % A region word tints the contour it names and nothing else: on an
+        % enclosure or a bracket the label keeps the plain ink the retired
+        % slot= key always left it.  The same word on a label-form mark is
+        % ordinary species ink, and a document that declares the word a hue
+        % of its own is obeyed on every form.
+        \bool_set_true:N \l__tenkz_kernel_r_mark_text_bool
+        \clist_if_in:NVT \c__tenkz_kernel_region_words_clist
+          \l__tenkz_kernel_r_species_tl
+          {
+            \prop_if_in:NVF \g__tenkz_kernel_species_prop
+              \l__tenkz_kernel_r_species_tl
+              {
+                \__tenkz_model_get:nnN {#1} {form}
+                  \l__tenkz_kernel_r_mark_form_tl
+                \quark_if_no_value:NT \l__tenkz_kernel_r_mark_form_tl
+                  { \tl_set:Nn \l__tenkz_kernel_r_mark_form_tl {label} }
+                \str_if_eq:VnF \l__tenkz_kernel_r_mark_form_tl {label}
+                  { \bool_set_false:N \l__tenkz_kernel_r_mark_text_bool }
+              }
+          }
+        \bool_if:NT \l__tenkz_kernel_r_mark_text_bool
+          {
+            \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
+            \tl_set:Ne #2 { text = \tl_use:N \l__tenkz_kernel_r_hue_tl , }
+          }
       }
   }
 
@@ -20034,36 +20088,22 @@
     \__tenkz_kernel_r_mark_recentre:
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
     \tl_clear:N \l__tenkz_kernel_r_mark_dash_tl
+    % The contour's semantic tint is its species=, the key every other
+    % record carries; the retired slot= key's five region words are prelude
+    % species now (the hue resolver holds the palette).  A contour naming
+    % none is passive -- what a paper draws around a region it is not
+    % discussing -- and the complement's dashed stroke belongs to the
+    % contour, the one place the complement word draws a contour at all.
     \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
+      { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
       {
-        % `slot` remains a compatibility spelling until the S4 surface swap.
-        % The five slots take the house region palette: what a paper marks as
-        % the region under discussion is red, a second region beside it is
-        % blue, the complement is the grey dashed rest, a collar around a
-        % region is violet, and a neutral window is plain ink.
-        \__tenkz_model_get:nnN {#1} {slot} \l__tenkz_kernel_r_hue_tl
-        \quark_if_no_value:NTF \l__tenkz_kernel_r_hue_tl
-          { \tl_set:Nn \l__tenkz_kernel_r_hue_tl { tenkzPassive } }
+        \str_if_eq:VnT \l__tenkz_kernel_r_species_tl {complement}
           {
-            \str_if_eq:VnT \l__tenkz_kernel_r_hue_tl {complement}
-              {
-                \tl_set:Nn \l__tenkz_kernel_r_mark_dash_tl
-                  { , densely~dashed }
-              }
-            \tl_set:Ne \l__tenkz_kernel_r_hue_tl
-              {
-                \str_case:Vn \l__tenkz_kernel_r_hue_tl
-                  {
-                    {selected}   { tenkzAction }
-                    {secondary}  { tenkzMarked }
-                    {complement} { tenkzPassive }
-                    {collar}     { tenkzExtra }
-                    {neutral}    { tenkzInk }
-                  }
-              }
+            \tl_set:Nn \l__tenkz_kernel_r_mark_dash_tl
+              { , densely~dashed }
           }
+        \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
       }
-      { \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl }
   }
 
 % An enclosure strokes the contour of what it selects and takes its label

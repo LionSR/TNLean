@@ -303,15 +303,15 @@ for members in \
     exit 1
   }
 done
-# The three unclaimed slot words and the mark name reach the record stream
-# verbatim; the fixture's own hook separately asserts each slot's resolved
+# The three region species words and the mark name reach the record stream
+# verbatim; the fixture's own hook separately asserts each word's resolved
 # hue and fails the compile on a mismatch.
-for slot_record in \
-  '|form=enclosure|members=atom-1,atom-4,atom-7|slot=complement|' \
-  '|form=enclosure|label-pos=n|label=R|members=atom-2,atom-5,atom-8|name=R|slot=collar|' \
-  '|form=enclosure|members=atom-3,atom-6,atom-9|slot=neutral|'; do
-  grep -Fq "$slot_record" "$WORK/r_region_slot_words.tnlog" || {
-    echo "FAIL: a region slot word or mark name left the record stream" >&2
+for region_record in \
+  '|form=enclosure|members=atom-1,atom-4,atom-7|species=complement|' \
+  '|form=enclosure|label-pos=n|label=R|members=atom-2,atom-5,atom-8|name=R|species=collar|' \
+  '|form=enclosure|members=atom-3,atom-6,atom-9|species=neutral|'; do
+  grep -Fq "$region_record" "$WORK/r_region_words.tnlog" || {
+    echo "FAIL: a region species word or mark name left the record stream" >&2
     exit 1
   }
 done
@@ -2728,6 +2728,7 @@ for contract_negative in \
   n_mark_nudge_key \
   n_setup_theme_key \
   n_wire_weight_key \
+  n_mark_slot_key \
   n_wire_restyle_transform \
   n_wire_restyle_nested \
   n_leg_restyle_transform \
@@ -2820,6 +2821,8 @@ do
   [ "$contract_negative" = n_setup_theme_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_wire_weight_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
+  [ "$contract_negative" = n_mark_slot_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_wire_restyle_transform ] &&
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'

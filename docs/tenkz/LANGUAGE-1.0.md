@@ -939,7 +939,11 @@ colour used; it does not retrieve or reproduce a cited palette.
 
 The standard prelude declares — as declarations, not kernel rows — the skins
 `pill`, `mpo`, `window`, `boundary`, the fuse atom, and the species
-`operator`, `marked`, `extra`, `passive`.
+`operator`, `marked`, `extra`, `passive`, together with the five region
+words `selected`, `secondary`, `complement`, `collar`, `neutral` — the
+house region palette a contour is tinted from, `complement` also dashing
+the contour it names — which joined the prelude when the mark's `slot=`
+key retired into `species=` (§10).
 
 The extension gate is unchanged from 0.6: a new key needs three manifested
 benchmark consumers named by target id; a new command needs a new record
@@ -1011,7 +1015,7 @@ policy for the shared leg; write the ports for the lone one.
 | `\tnskip` | `\tn[void=open]{}` |
 | `\tntree[k]{word}` | expander: fuse atoms + wires from the word |
 | `up at= down at= west at= east at=`, `combined=`, `span=` | `ports=` angle/slot grammar; `span=` folds into `wires=` |
-| `role=` | `species=` (the four prelude species) |
+| `role=` | `species=` (the prelude species) |
 | `\tndeclareatom` | `\tndeclare{atom}` |
 
 The flag sugars `sandwich` and `planes` obey the order of the option list.
