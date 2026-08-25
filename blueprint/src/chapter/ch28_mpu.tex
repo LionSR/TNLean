@@ -12002,6 +12002,176 @@ left/right order below agrees with the adjacent-pair convention in
     this statement.
 \end{definition}
 
+\begin{definition}[Nearest-neighbour pair regions]
+    \label{def:qca_nearest_neighbor_pair_regions}
+    \lean{SpinChain.evenPair,SpinChain.leftPair,SpinChain.rightPair}
+    \leanok
+    For $x\in\mathbb Z$, set
+    \begin{align}
+        E_x&=\{2x,2x+1\},&
+        L_x&=\{2x-1,2x\},&
+        P_x&=\{2x+1,2x+2\}.
+        \label{eq:qca_pair_regions}
+    \end{align}
+    The order $L_x,P_x$ is the left--right factor order in equation
+    \texttt{RR2x} of
+    \cite[lines~1251--1266]{Gross2012IndexTheory}.  The same four-site
+    localization occurs in
+    \cite[lines~2313--2318]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Geometry of the nearest-neighbour pair image]
+    \label{lem:qca_nearest_neighbor_pair_geometry}
+    \lean{SpinChain.regionSumset_evenPair,
+        SpinChain.disjoint_leftPair_rightPair,
+        SpinChain.rightPair_eq_leftPair_add_one}
+    \leanok
+    \uses{def:qca_nearest_neighbor_pair_regions}
+    For the neighbourhood $\mathcal N=\{-1,0,1\}$,
+    \begin{align}
+        E_x+\mathcal N&=L_x\cup P_x,&
+        L_x\cap P_x&=\varnothing,&
+        P_x&=L_{x+1}.
+        \label{eq:qca_pair_geometry}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute (\ref{eq:qca_pair_regions}).  Adding $-1,0,1$ to the two
+    points of $E_x$ gives
+    \begin{align}
+        E_x+\{-1,0,1\}
+        &=\{2x-1,2x,2x+1,2x+2\}=L_x\cup P_x.
+    \end{align}
+    The largest point of $L_x$ is $2x$, while the smallest point of $P_x$
+    is $2x+1$, so the two sets are disjoint.  Finally,
+    $L_{x+1}=\{2x+1,2x+2\}=P_x$.
+\end{proof}
+
+\begin{definition}[Site-indexed support algebras]
+    \label{def:qca_site_indexed_support_algebras}
+    \lean{SpinChain.matrixToQuasiLocalObservable,
+        SpinChain.PropagatesWithin.evenPairLocalImage,
+        SpinChain.PropagatesWithin.evenSupportAlgebra,
+        SpinChain.PropagatesWithin.oddSupportAlgebra,
+        SpinChain.PropagatesWithin.embeddedEvenSupportAlgebra,
+        SpinChain.PropagatesWithin.embeddedOddSupportAlgebra,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_even,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_odd}
+    \leanok
+    \uses{def:qca_bipartite_finite_local_image,
+        def:qca_quasi_local_observable,
+        def:qca_left_support_algebra,def:qca_right_support_algebra,
+        def:qca_nearest_neighbor_pair_regions,
+        lem:qca_nearest_neighbor_pair_geometry}
+    Let $\omega$ be a star-algebra automorphism of the homogeneous
+    quasi-local algebra which propagates within $\{-1,0,1\}$.  Write the
+    finite image of $\mathcal A_{E_x}$ in the ordered $L_x\times P_x$
+    coordinates as
+    \begin{align}
+        S_x
+        &=\beta_{L_x,P_x}\bigl(\omega(\mathcal A_{E_x})\bigr)
+          \subseteq
+          M_{\mathcal C_{L_x}\times\mathcal C_{P_x}}(\mathbb C).
+        \label{eq:qca_site_image}
+    \end{align}
+    Define
+    \begin{align}
+        \mathcal R_{2x}
+          &=\operatorname{Spp}_{\mathrm L}(S_x)
+            \subseteq M_{\mathcal C_{L_x}}(\mathbb C),\\
+        \mathcal R_{2x+1}
+          &=\operatorname{Spp}_{\mathrm R}(S_x)
+            \subseteq M_{\mathcal C_{P_x}}(\mathbb C).
+        \label{eq:qca_RR2x}
+    \end{align}
+    After the canonical finite-region embeddings, these form one family of
+    star-subalgebras of the quasi-local algebra.  Here the matrix embedding is
+    the composition
+    \begin{align}
+        M_{\mathcal C_\Lambda}(\mathbb C)
+        \cong \mathcal A_\Lambda
+        \longrightarrow \mathcal A.
+    \end{align}
+    Under this identification, the canonical local inclusion in
+    \cite[lines~2292--2298]{Cirac2017MPU} is exactly the displayed
+    composition.
+    Formula (\ref{eq:qca_RR2x}) is equation \texttt{RR2x} in
+    \cite[lines~1261--1266]{Gross2012IndexTheory}.  Cirac et al. use the
+    homogeneous even factor in
+    \cite[lines~2322--2328]{Cirac2017MPU}; the odd factor and unified family
+    are supplied by the GNVW construction.
+
+    \textbf{Scope restriction (homogeneous chain):}
+    GNVW allow the cell size $d(y)$ to depend on $y$, whereas the present
+    definition fixes one positive size $d$.  The site-dependent statement is
+    not claimed here; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{definition}
+
+\begin{theorem}[Adjacent-pair support containment]
+    \label{thm:qca_adjacent_pair_support_containment}
+    \lean{SpinChain.PropagatesWithin.evenPairLocalImage_le_support_kroneckerSubmodule}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras,
+        thm:qca_two_sided_support_containment}
+    For every $x\in\mathbb Z$, the finite image satisfies
+    \begin{align}
+        S_x
+        &\subseteq
+        \mathcal R_{2x}\boxtimes\mathcal R_{2x+1}
+        \subseteq
+        M_{\mathcal C_{L_x}\times\mathcal C_{P_x}}(\mathbb C).
+        \label{eq:qca_adjacent_pair_containment}
+    \end{align}
+    This is the homogeneous, full-matrix instance used in the two-sided
+    containment at
+    \cite[lines~1276--1278]{Gross2012IndexTheory}; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+    Cirac et al. state only the weaker inclusion in the left support algebra
+    tensored with the unrestricted right physical factor at
+    \cite[lines~2322--2328]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:qca_two_sided_support_containment}
+    Apply Theorem~\ref{thm:qca_two_sided_support_containment} to $S_x$ in
+    the ordered coordinates of (\ref{eq:qca_site_image}).  Its left support
+    is $\mathcal R_{2x}$ and its right support is
+    $\mathcal R_{2x+1}$ by (\ref{eq:qca_RR2x}), which gives
+    (\ref{eq:qca_adjacent_pair_containment}).
+\end{proof}
+
+\begin{theorem}[Physical support of the site-indexed support algebras]
+    \label{thm:qca_site_indexed_support_regions}
+    \lean{SpinChain.matrixToQuasiLocalObservable_supportedIn,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_even_supportedIn,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_odd_supportedIn}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras,
+        def:qca_quasi_local_supported_in}
+    If $\widehat{\mathcal R}_y$ denotes the canonical quasi-local copy of
+    $\mathcal R_y$, then for every $x\in\mathbb Z$,
+    \begin{align}
+        \widehat{\mathcal R}_{2x}&\subseteq\mathcal A_{L_x},&
+        \widehat{\mathcal R}_{2x+1}&\subseteq\mathcal A_{P_x}.
+    \end{align}
+    More generally, the canonical image of any matrix on a finite region
+    $\Lambda$ is supported in $\Lambda$.
+    This is the homogeneous specialization of the localization accompanying
+    equation \texttt{RR2x} in
+    \cite[lines~1261--1274]{Gross2012IndexTheory}; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    An element of $\widehat{\mathcal R}_{2x}$ is the canonical image of a
+    matrix in $\mathcal R_{2x}\subseteq\mathcal A_{L_x}$ and is therefore
+    supported in $L_x$.  The same argument places
+    $\widehat{\mathcal R}_{2x+1}$ in $\mathcal A_{P_x}$.
+\end{proof}
+
 Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
 local action associated with an MPU by eventual finite-chain conjugation.  In
 lines~2300--2306, eventual constancy is used to obtain a norm-preserving
