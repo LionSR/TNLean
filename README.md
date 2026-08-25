@@ -235,6 +235,7 @@ mathematical language and links each one to its Lean proof. It is built with
 
 ```bash
 lake build TNLean
+python3 scripts/fetch_tenkz.py
 cd blueprint
 leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
