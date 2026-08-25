@@ -7,8 +7,9 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 1. **Blueprint ↔ Lean must match.** Every `\lean{X}` tag must correspond to an actual Lean declaration. Every proof sketch must match what the Lean proof actually does — not a hand-wavy version of it.
 2. **Standalone documents.** `blueprint/` and `docs/slides/` have separate
    preambles, prose macros, bibliographies, and build entry points. They share
-   only the repository-wide tensor-network language in `tex/tenkz/`; neither
-   document tree imports files from the other.
+   only the companion [tenkz](https://github.com/LionSR/tenkz) package,
+   pinned from `tenkz.toml`; neither document tree imports files from the
+   other.
 3. **Mathematical language only — zero Lean jargon.** See the `lean-conventions` skill's prose_style reference, Section 1, for the full rule and examples; in short, the `\lean{...}` tag is the link, the body text is standard mathematics.
 4. **No filler prose.** Only precise definitions, theorem statements, and proof sketches. No "this is important because..." or "the transfer map governs the spectral theory...".
 5. **Cite non-trivial things.** Basic definitions (MPS tensor, MPV) don't need citations. Important results and non-obvious definitions should cite the source paper.
@@ -342,12 +343,12 @@ label. Redirect genuine dependencies to the retained parent result, and keep
 all declaration links on that result so that formalization coverage remains
 visible.
 
-Tensor-network diagram conventions are recorded in the second-edition manual
-under [`docs/tenkz/`](tenkz/). The blueprint loads `tenkz` directly. Chapter
-sources write native grid, lattice, commutative-diagram, or free-placement
-bodies beside the mathematics they depict; there is no central figure
-catalogue. The generic web bridge captures those same bodies verbatim and
-compiles them against the repository package.
+Tensor-network diagram conventions are recorded in the
+[tenkz](https://github.com/LionSR/tenkz) manual. The blueprint loads `tenkz`
+directly after `python3 scripts/fetch_tenkz.py`. Chapter sources write
+native picture bodies beside the mathematics they depict; there is no
+central figure catalogue. The generic web bridge captures those same bodies
+verbatim and compiles them against the pinned package.
 
 Every diagram source must include adjacent comments stating the represented
 formula or source passage, the ink-to-index correspondence, the contracted and

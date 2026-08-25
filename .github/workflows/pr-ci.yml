@@ -30,7 +30,9 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
-      - '.github/workflows/tenkz-rmp-book.yml'
+      - 'tenkz.toml'
+      - 'scripts/fetch_tenkz.py'
+      - 'scripts/tenkz_paths.py'
       - 'blueprint/src/**'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
@@ -117,7 +119,9 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
-      - '.github/workflows/tenkz-rmp-book.yml'
+      - 'tenkz.toml'
+      - 'scripts/fetch_tenkz.py'
+      - 'scripts/tenkz_paths.py'
       - 'blueprint/src/**'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
@@ -232,8 +236,9 @@ jobs:
             blueprint:
               - 'blueprint/src/**'
               - 'texra-blueprint.toml'
-              - 'tex/tenkz/**'
-              - 'docs/tenkz/**'
+              - 'tenkz.toml'
+              - 'scripts/fetch_tenkz.py'
+              - 'scripts/tenkz_paths.py'
               - 'docs/slides/**'
               - 'blueprint/.chktexrc'
               - 'blueprint/latexindent.yaml'
@@ -323,7 +328,7 @@ jobs:
               - 'scripts/test_tenkz_shrink.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
-              - '.github/workflows/tenkz-rmp-book.yml'
+              - '.github/workflows/blueprint.yml'
 
   build:
     needs: changes
@@ -552,6 +557,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch pinned tenkz package
+        run: python3 scripts/fetch_tenkz.py
+
       - name: Validate CPSV16 every-label audit
         run: |
           python3 scripts/test_audit_cpsv16_labels.py
@@ -605,10 +613,6 @@ jobs:
         uses: texra-ai/lean-env-action/leanblueprint@v1
         with:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
-
-      - name: Fetch pinned tenkz package
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/fetch_tenkz.py
 
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'

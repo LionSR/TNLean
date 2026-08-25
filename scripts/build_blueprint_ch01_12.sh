@@ -20,7 +20,10 @@ echo "==> Copying blueprint sources..."
 mkdir -p "$WORK_DIR/blueprint/src" "$WORK_DIR/tex"
 rsync -a --exclude='.tenkz_svg_cache/' \
   "$REPO_ROOT/blueprint/src/" "$WORK_DIR/blueprint/src/"
-cp -R "$REPO_ROOT/tex/tenkz" "$WORK_DIR/tex/tenkz"
+if [ ! -f "$REPO_ROOT/.deps/tenkz/tex/tenkz/tenkz.sty" ]; then
+  python3 "$REPO_ROOT/scripts/fetch_tenkz.py"
+fi
+cp -R "$REPO_ROOT/.deps/tenkz/tex/tenkz" "$WORK_DIR/tex/tenkz"
 
 # Verify that the dedicated router contains the exact focused-volume chapter
 # sequence, in order and without duplicates.

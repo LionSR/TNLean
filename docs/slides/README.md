@@ -3,7 +3,8 @@
 Talk decks for the TNLean project. Each deck is a self-contained `.tex` file
 that shares `preamble.tex` and `references.bib`.
 
-Tensor-network figures use the native `tenkz` package in `tex/tenkz/`.
+Tensor-network figures use the companion [tenkz](https://github.com/LionSR/tenkz)
+package (`python3 scripts/fetch_tenkz.py`, then `TEXINPUTS=.deps/tenkz/tex/tenkz//:`).
 `preamble.tex` loads the package and `tn_library_dark.tex` rebinds only its
 semantic colour slots for the dark Beamer theme.  Each slide keeps its complete,
 nonempty diagram body beside the formula and source comments that determine its

@@ -7,6 +7,9 @@ import tempfile
 from pathlib import Path
 from typing import Callable
 
+from tenkz_paths import ensure_pythonpath
+
+ensure_pythonpath()
 import audit_cpsv16_labels as audit
 from tenkzlib.texcase import TeXEnvironmentNestingError
 
