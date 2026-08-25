@@ -266,18 +266,18 @@ theorem existsUnique_eq_smul_one_of_commute_quasiLocalObservable {d : ℕ} [NeZe
     obtain ⟨A, rfl⟩ := hy
     exact hz Γ A
   obtain ⟨A, hA⟩ := QuasiLocalSupportedIn.iff_exists.mp hz_empty
-  let _ : Unique (Config d ∅) := by
-    change Unique ((↥(∅ : Finset ℤ)) → Fin d)
-    infer_instance
-  let _ : Fintype (Config d ∅) := Unique.fintype
-  let e : ℂ ≃⋆ₐ[ℂ] LocalAlgebra d ∅ := CStarMatrix.toOneByOne (Config d ∅) ℂ ℂ
-  let c := e.symm A
-  have hAc : A = c • (1 : LocalAlgebra d ∅) := by
+  obtain ⟨c, hAc⟩ : ∃ c : ℂ, A = c • (1 : LocalAlgebra d ∅) := by
+    let _ : Unique (Config d ∅) := by
+      change Unique ((↥(∅ : Finset ℤ)) → Fin d)
+      infer_instance
+    let _ : Fintype (Config d ∅) := Unique.fintype
+    let e : ℂ ≃⋆ₐ[ℂ] LocalAlgebra d ∅ := CStarMatrix.toOneByOne (Config d ∅) ℂ ℂ
+    let c := e.symm A
+    refine ⟨c, ?_⟩
     calc
       A = e (e.symm A) := (e.apply_symm_apply A).symm
       _ = e (c • (1 : ℂ)) := by simp [c]
       _ = c • (1 : LocalAlgebra d ∅) := by rw [map_smul, map_one]
-  let _ : Fintype (Config d ∅) := instFintypeConfig d ∅
   refine ⟨c, ?_, ?_⟩
   · rw [← hA, hAc, map_smul, map_one]
   · intro c' hc'
@@ -285,7 +285,8 @@ theorem existsUnique_eq_smul_one_of_commute_quasiLocalObservable {d : ℕ} [NeZe
       apply quasiLocalObservable_injective d ∅
       simp only [map_smul, map_one]
       rw [← hc', ← hA, hAc, map_smul, map_one]
-    have hentry := congrFun (congrFun hlocal default) default
+    let i : Config d ∅ := Classical.choice (instNonemptyConfig d ∅)
+    have hentry := congrFun (congrFun hlocal i) i
     simpa using hentry
 
 /-- Every central observable of the homogeneous quasi-local spin-chain algebra is a unique complex

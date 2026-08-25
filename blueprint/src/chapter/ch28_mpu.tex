@@ -10316,17 +10316,38 @@ scalar-center theorem.
 
 \begin{proof}\leanok
     \uses{thm:qca_quasi_local_supported_iff_commute_disjoint,
-        lem:qca_quasi_local_observable}
+        def:qca_quasi_local_supported_in, lem:qca_quasi_local_observable}
     Apply Theorem~\ref{thm:qca_quasi_local_supported_iff_commute_disjoint}
     with $\Lambda=\varnothing$.  The commutation hypothesis gives
-    $z\in j_\varnothing(\mathcal A_\varnothing)$.  The empty tensor product is
-    the one-dimensional algebra
-    $\mathcal A_\varnothing\cong\mathbb C$, so every element of its image has
-    the form $c\mathbf 1$.  The one-by-one equivalence makes this coefficient
-    unique in $\mathcal A_\varnothing$, and injectivity of $j_\varnothing$
-    transports that uniqueness to $\mathcal A$.  A central element satisfies
-    the finite-region commutation hypothesis, which gives the displayed
-    description of the center.
+    $z\in j_\varnothing(\mathcal A_\varnothing)$, so there is an
+    $A\in\mathcal A_\varnothing$ with $z=j_\varnothing(A)$.  Let
+    $e\colon\mathbb C\xrightarrow{\ \sim\ }\mathcal A_\varnothing$ be the
+    canonical isomorphism and write $A=e(c)$.  If also
+    $z=j_\varnothing(e(c'))$, then injectivity of $j_\varnothing$ and of $e$
+    give
+    \begin{align}
+        j_\varnothing(e(c))=j_\varnothing(e(c'))
+        &\Longrightarrow e(c)=e(c')
+        \Longrightarrow c=c'.
+    \end{align}
+    Thus $c$ is the unique scalar for which $z=c\mathbf 1$.
+
+    Write $Z(\mathcal A)$ for the center.  Since every
+    $j_\Gamma(B)$ belongs to $\mathcal A$, the two inclusions are
+    \begin{align}
+        z\in Z(\mathcal A)
+        &\Longrightarrow
+        \bigl(\forall \Gamma\subset\mathbb Z\text{ finite},\
+        \forall B\in\mathcal A_\Gamma,\
+        z j_\Gamma(B)=j_\Gamma(B)z\bigr)
+        \Longrightarrow z\in\mathbb C\mathbf 1,\\
+        z=c\mathbf 1\quad(c\in\mathbb C)
+        &\Longrightarrow
+        \bigl(\forall a\in\mathcal A,\
+        (c\mathbf 1)a=a(c\mathbf 1)\bigr)
+        \Longrightarrow z\in Z(\mathcal A).
+    \end{align}
+    Hence $Z(\mathcal A)=\mathbb C\mathbf 1$.
 \end{proof}
 
 The appendix requires that ``there exists a finite subset
