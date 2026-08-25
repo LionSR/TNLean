@@ -45,7 +45,7 @@ with the PSD fixed point `ρ` of the original transfer map:
 
 1. From TP + IsPrimitive + Kraus.IsIrreducibleFamily → `IsPrimitiveMPS A ρ` with `ρ.PosDef`
    (via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` +
-    `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`)
+    `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily`)
 2. `ρ` is also fixed by `Kraus.transferMap (blockTensor A P)` (since
    `Kraus.transferMap (blockTensor A P) = E^P` and `E ρ = ρ` implies `E^P ρ = ρ`)
 3. Uniqueness of PSD fixed points of `E^P`: if `E^P σ = σ`, set `σ' = σ - c•ρ`.
@@ -81,7 +81,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
   obtain ⟨ρ, hPrimMPS⟩ :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   have hPD : ρ.PosDef :=
-    posDef_of_isIrreducibleTensor_of_isPrimitiveMPS hPrimMPS hIrr
+    hPrimMPS.posDef_of_isIrreducibleFamily hIrr
   -- Step 2: Blocked tensor is TP.
   have hTP_blocked : ∑ i : Fin (blockPhysDim d P),
       (blockTensor (d := d) (D := D) A P i)ᴴ * blockTensor (d := d) (D := D) A P i = 1 :=

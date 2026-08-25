@@ -104,7 +104,7 @@ span hypothesis into strong irreducibility, then
 `MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper` supplies a
 positive-definite fixed point together with peripheral primitivity and
 irreducibility of `E_A`; the complementary transfer-map gap around that fixed
-point (`MPSTensor.IsPrimitiveMPS.fixedPoint_unique`) then forces every fixed
+point (`Kraus.HasComplementaryFixedPointGap.fixedPoint_unique`) then forces every fixed
 point to be a scalar multiple of it. This differs from the source's own `T^n`
 / Corollary 6.5 argument but reuses only already-formalized Wolf Chapter 6
 machinery (Proposition 3).
