@@ -16,14 +16,10 @@
     \tnwire[kind=string, name=c, dir=to,
             cross={over at crossing of c and a}]{(3,2)}{(1,2)}
     % four one-strand corner hooks bound the sectors e, d, b, f
-    \tnwire[kind=string, name=hooke,
-            via={0.5 se of (1,1)}]{midway (1,1) and (1,2)}{midway (1,1) and (2,1)}
-    \tnwire[kind=string, name=hookd,
-            via={0.5 sw of (1,3)}]{midway (1,2) and (1,3)}{midway (1,3) and (2,3)}
-    \tnwire[kind=string, name=hookb,
-            via={0.5 ne of (3,1)}]{midway (3,1) and (3,2)}{midway (2,1) and (3,1)}
-    \tnwire[kind=string, name=hookf,
-            via={0.5 nw of (3,3)}]{midway (3,2) and (3,3)}{midway (2,3) and (3,3)}
+    \tnwire[kind=string, name=hooke]{midway (1,1) and (1,2)}{midway (1,1) and (2,1)}
+    \tnwire[kind=string, name=hookd]{midway (1,2) and (1,3)}{midway (1,3) and (2,3)}
+    \tnwire[kind=string, name=hookb]{midway (3,1) and (3,2)}{midway (2,1) and (3,1)}
+    \tnwire[kind=string, name=hookf]{midway (3,2) and (3,3)}{midway (2,3) and (3,3)}
     \tnmark[form=label, species=ampo, label pos=w]{on a 0.05}{$a$}
     \tnmark[form=label, label pos=n]{on c 0.95}{$c$}
     \tn[skin=none, name=LE, at=midway (1,1) and (2,2)]{}

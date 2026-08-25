@@ -440,11 +440,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "9408c52065962bc7321b91505fcc4e9be2932787fa0fc60a61395b44cf41a563"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
+case_sha256 = "8119de6372ea447f8d6ff752ec20abd95d48fc3614b5b8a8b2145abb63b8da76"
+reviewed = "2026-08-25"
+renderer = "fable-via-wave-a-chord-review-2026-08-25-200dpi"
+second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
+note = "Straight-chord respell 2026-08-25 (via= retirement, #6897): each chord bisects the cell of its sector's label mark, and the clearance is recorded evidence, not assumption -- the label-on-ink audit passes with no finding against any chord, the auto label stations standing the four glyphs clear of the diagonals; doctrinally the deletion is the section 12.1 case, since a label mark is not a selectable record (the selector grammar refuses it with TKZ-KERNEL-SELECTOR-KIND, verified in the #6897 survey), so the section 12.3 route substitute cannot name these cells and annotation does not make a cell held.  the four corner hooks lose their waypoints and draw as straight chords between the same endpoint pairs -- equivalent planar routing under the cosmetic-gap bar, with every strand, crossing, label, sector, and orientation verified unchanged at 200dpi by two independent viewers.  Prior note: K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
@@ -730,14 +730,15 @@ note = "kernel respell of the K2-promoted model: the periodic word is one closed
 
 [[verdict]]
 id = "rmp-iii-a-torus-three"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
-defects = ["weight-mismatch"]
-case_sha256 = "28bbee831c296d732e5175e042536c14a23aea180a982fc133de1810298e5a6f"
-reviewed = "2026-08-04"
-renderer = "kimi-kernel-mpo-source-review-2026-08-04-150dpi"
-note = "Kernel string-slide with declared crossings and the stock MPO crossing tensor (#5362) under the equation audit; the pull arrow remains outside the PEPS window and the enlarged crossing is blue-outlined rather than solid blue."
+defects = []
+case_sha256 = "d39407ace8e05d11dd623ca955b753a5959eae8289ecf29c0a15425c47850eb3"
+reviewed = "2026-08-25"
+renderer = "fable-via-wave-a-thinning-review-2026-08-25-200dpi"
+second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
+note = "K2 promotion 2026-08-25: the recorded residue -- outline versus solid fill on the enlarged crossing -- is house style under the cosmetic-gap bar, and the current-hash re-review with an independent countersign resolves it to faithful.  Waypoint thinning 2026-08-25 (via= retirement, #6897): the collinear waypoint lists of both operator strings and both passive strings delete; the drawn lines are geometrically unchanged (a hairline rasterization drift at 200dpi, verified by diff), and the pull arc, the inverse pair, and the cup keep their load-bearing waypoints for a later wave.  Prior note: Kernel string-slide with declared crossings and the stock MPO crossing tensor (#5362) under the equation audit; the pull arrow remains outside the PEPS window and the enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
@@ -1349,11 +1350,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "f3c0ac50644acff1330bb92d30eb6eedb2ee999d88913e464ac497a7af922ac6"
-reviewed = "2026-08-05"
-renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
-second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
-note = "Kernel redraw restores the source's boxless crossing that the explicit F box stood in for: the red a axis and black c axis cross at the centre with c declared over as painted, both directed; the four corner hooks are single quarter-turn strings and all six labels sit in their sectors; direction marks at the house station rather than the source's outer thirds."
+case_sha256 = "94f55730c3a1c238ac0139cb2726446decbb4104c72a8e56bb9d1922ca494219"
+reviewed = "2026-08-25"
+renderer = "fable-via-wave-a-chord-review-2026-08-25-200dpi"
+second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
+note = "Straight-chord respell 2026-08-25 (via= retirement, #6897): the four corner hooks lose their waypoints and draw as straight chords between the same endpoint pairs -- equivalent planar routing under the cosmetic-gap bar, with every strand, crossing, label, sector, and orientation verified unchanged at 200dpi by two independent viewers.  Prior note: Kernel redraw restores the source's boxless crossing that the explicit F box stood in for: the red a axis and black c axis cross at the centre with c declared over as painted, both directed; the four corner hooks are single quarter-turn strings and all six labels sit in their sectors; direction marks at the house station rather than the source's outer thirds."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59-now"
