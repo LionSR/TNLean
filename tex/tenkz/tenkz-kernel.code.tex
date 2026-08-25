@@ -423,6 +423,7 @@
 % list passes through this door, which braces each address before l3keys
 % reads it.  Members go first: the pair pattern must not consume their prefix.
 \tl_new:N \l__tenkz_kernel_opts_tl
+\seq_new:N \l__tenkz_kernel_diagnostic_context_seq
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_opts_tl {#2}
@@ -441,6 +442,24 @@
       { \cB\{ \( \1 , \2 \) \cE\} }
       \l__tenkz_kernel_opts_tl
     \keys_set:nV {#1} \l__tenkz_kernel_opts_tl
+  }
+% Picture, equation, setup, and declaration options are read before they own
+% a model record.  Such a parse pushes the scope it can truthfully name;
+% body and group parses leave the stack empty and name their minted record.
+% A recoverable diagnostic returns through \keys_set:nV, so the pop also
+% restores an enclosing context after a refusal.
+\cs_new:Npn \__tenkz_kernel_diagnostic_context:
+  {
+    \seq_if_empty:NTF \l__tenkz_kernel_diagnostic_context_seq
+      { \tl_use:N \l__tenkz_model_last_tl }
+      { \seq_item:Nn \l__tenkz_kernel_diagnostic_context_seq {1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_context_keys:nnn #1#2#3
+  {
+    \seq_push:Nn \l__tenkz_kernel_diagnostic_context_seq {#1}
+    \__tenkz_kernel_keys:nn {#2} {#3}
+    \seq_pop:NN \l__tenkz_kernel_diagnostic_context_seq
+      \l__tenkz_kernel_scratch_tl
   }
 
 % The package event writer, reachable whatever the catcode of @ is at load.
@@ -941,7 +960,7 @@
         #2 / unknown .code:n =
           {
             \msg_error:nneeee {tenkz}{kernel-choice} {#2} {##1} {#3}
-              { \tl_use:N \l__tenkz_model_last_tl }
+              { \__tenkz_kernel_diagnostic_context: }
           }
       }
   }
@@ -1025,7 +1044,7 @@
           {
             \msg_error:nneeee {tenkz}{kernel-choice} {#1} {#2}
               { open|none|trace|cup|cup={m} }
-              { \tl_use:N \l__tenkz_model_last_tl }
+              { \__tenkz_kernel_diagnostic_context: }
           }
       }
   }
@@ -1070,7 +1089,7 @@
           {
             \msg_error:nneeee {tenkz}{kernel-choice}
               {align} {#1} {midline|<row~number>}
-              { \tl_use:N \l__tenkz_model_last_tl }
+              { \__tenkz_kernel_diagnostic_context: }
           }
       }
   }
@@ -1102,7 +1121,7 @@
           {
             \msg_error:nneee {tenkz}{kernel-unknown-key}
               { \l_keys_key_str } {#2}
-              { \tl_use:N \l__tenkz_model_last_tl }
+              { \__tenkz_kernel_diagnostic_context: }
           }
       }
   }
@@ -1375,8 +1394,7 @@
       }
       {
         \msg_error:nneeee {tenkz}{kernel-choice}
-          {#1} {#2} {true|false}
-          { \tl_use:N \l__tenkz_model_last_tl }
+          {#1} {#2} {true|false} { \__tenkz_kernel_diagnostic_context: }
       }
   }
 % picture-scope sugar: each expansion is the sugar ledger's row, verbatim.
@@ -2655,7 +2673,8 @@
 \cs_new_protected:Npn \__tenkz_kernel_tnset:n #1
   {
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    \__tenkz_kernel_keys:nn { tenkz-kernel-setup } {#1}
+    \__tenkz_kernel_context_keys:nnn
+      {setup} { tenkz-kernel-setup } {#1}
     \__tenkz_kernel_policy_merge:NN
       \l__tenkz_kernel_stage_prop \g__tenkz_kernel_setup_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
@@ -2731,14 +2750,16 @@
   {
     % the declaration keys validate the descriptor; the table keeps it raw
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    \__tenkz_kernel_keys:nn { tenkz-kernel-declare } {#3}
+    \__tenkz_kernel_context_keys:nnn
+      {declaration} { tenkz-kernel-declare } {#3}
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \prop_gput:Nnn #1 {#2} {#3}
   }
 \cs_new_protected:Npn \__tenkz_kernel_declare_atom:nn #1#2
   {
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    \__tenkz_kernel_keys:nn { tenkz-kernel-declare-atom } {#2}
+    \__tenkz_kernel_context_keys:nnn
+      {declaration} { tenkz-kernel-declare-atom } {#2}
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \tl_set:Ne \l__tenkz_kernel_scratch_tl { \tl_to_str:n {#1} }
     \str_if_eq:eeT
@@ -21356,7 +21377,8 @@
     \int_zero:N \l__tenkz_kernel_node_int
     \int_zero:N \l__tenkz_kernel_basis_count_int
     \bool_set_false:N \l__tenkz_kernel_group_keys_bool
-    \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
+    \__tenkz_kernel_context_keys:nnn
+      {picture} { tenkz-kernel-picture } {#1}
     % check= belongs to the equation wrapper.  A valid tenkzeq consumes it
     % before any panel begins, so seeing it here always means picture scope.
     \prop_get:NnN
@@ -21662,7 +21684,8 @@
     \seq_clear:N \l__tenkz_kernel_check_reason_seq
     \prop_clear:N \l__tenkz_kernel_eq_policy_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
+    \__tenkz_kernel_context_keys:nnn
+      {equation} { tenkz-kernel-picture } {#1}
     % check={signature, off={k: reason}}: the specification is a key list and
     % is read as one.  A reason is prose an author writes
     % about the mathematics, and prose carries commas and braces and words
