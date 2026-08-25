@@ -4,11 +4,14 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import sys
 import tempfile
 from collections import Counter
+from contextlib import redirect_stdout
 from types import SimpleNamespace
 from pathlib import Path
+from unittest.mock import patch
 
 from tenkzlib.texcase import scan_environments
 
@@ -32,6 +35,25 @@ SPEC.loader.exec_module(DOCTEST)
 # there each extra or missing example is a defect.
 DISPLAYED_FLOOR = 56
 REFERENCE_FLOOR = 12
+
+QUIET_TNLOG = (
+    "picture|id=1|lang=kernel\n"
+    "atom|picture=1|cell=1-1|kind=dot\n"
+    "kernel-boundary|picture=1|signature=\n"
+)
+
+
+def _label_on_ink_tnlog(claim: str) -> str:
+    """One label band crossing one horizontal wire, with a chosen claim."""
+    return (
+        QUIET_TNLOG
+        + "wire-ink|picture=1|name=bond-1|origin=bond|stroke=18023|"
+        "points=0,0;2000000,0\n"
+        "label-use|picture=1\n"
+        "bbox|picture=1|class=label|id=1|owner=0|"
+        "xmin=400000|xmax=800000|ymin=-100000|ymax=-18022|"
+        f"shape=rect|radius=0{claim}\n"
+    )
 
 
 def _declared_refusals(
@@ -259,23 +281,153 @@ shell command % \tntree{commented}
         raise AssertionError("complete or commented Verbatim documents were mishandled")
 
     captured: dict[str, object] = {}
-    original_run = DOCTEST.subprocess.run
-
     def capture_run(*args: object, **kwargs: object) -> SimpleNamespace:
         captured.update(kwargs)
+        (Path(str(kwargs["cwd"])) / "example.tnlog").write_text(
+            QUIET_TNLOG, encoding="utf-8"
+        )
         return SimpleNamespace(returncode=0, stdout=reference[0].coverage_marker)
 
-    DOCTEST.subprocess.run = capture_run
-    try:
+    with patch.object(DOCTEST.subprocess, "run", capture_run):
         with tempfile.TemporaryDirectory(prefix="tenkz-doctest-path-") as tmp:
-            DOCTEST.compile_example(reference[0], "xelatex", Path(tmp))
-    finally:
-        DOCTEST.subprocess.run = original_run
+            with redirect_stdout(io.StringIO()):
+                DOCTEST.compile_example(reference[0], "xelatex", Path(tmp))
     texinputs = str(captured["env"]["TEXINPUTS"])
     if not texinputs.startswith(f"{reference[0].source.parent}//:"):
         raise AssertionError("a reference example cannot resolve files beside its source")
     if f":{DOCTEST.MANUAL_DIR}//:" not in texinputs:
         raise AssertionError("a manual example cannot resolve files from the manual root")
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-doctest-audit-") as tmp:
+        work = Path(tmp)
+        source = work / "manual-chapter.tex"
+        source.write_text("manual source\n", encoding="utf-8")
+        document = (
+            "\\documentclass{article}\n"
+            "\\usepackage{tenkz}\n"
+            "\\begin{document}\n"
+            "\\begin{tenkz}\\tn{A}\\end{tenkz}\n"
+            "\\end{document}\n"
+        )
+
+        def audit_example(
+            label: str,
+            expected_failure: str | None = None,
+            coverage_marker: str | None = None,
+        ) -> DOCTEST.Example:
+            return DOCTEST.Example(
+                label=label,
+                source=source,
+                line=37,
+                document=document,
+                expected_failure=expected_failure,
+                coverage_marker=coverage_marker,
+            )
+
+        def check_case(
+            label: str,
+            stream: str | None,
+            *,
+            returncode: int = 0,
+            stdout: str = "",
+            expected_failure: str | None = None,
+            coverage_marker: str | None = None,
+            expected_error: str | None = None,
+            expected_output: str = "",
+        ) -> None:
+            def fake_xelatex(
+                *args: object, **kwargs: object
+            ) -> SimpleNamespace:
+                case_dir = Path(str(kwargs["cwd"]))
+                if stream is not None:
+                    (case_dir / "example.tnlog").write_text(
+                        stream, encoding="utf-8"
+                    )
+                return SimpleNamespace(returncode=returncode, stdout=stdout)
+
+            output = io.StringIO()
+            error = None
+            with patch.object(DOCTEST.subprocess, "run", fake_xelatex):
+                with redirect_stdout(output):
+                    try:
+                        DOCTEST.compile_example(
+                            audit_example(label, expected_failure, coverage_marker),
+                            "fake-xelatex",
+                            work,
+                        )
+                    except RuntimeError as caught:
+                        error = caught
+            actual_error = None if error is None else str(error)
+            actual_output = output.getvalue()
+            if (actual_error, actual_output) != (expected_error, expected_output):
+                raise AssertionError(
+                    f"{label} produced a different audit result: "
+                    f"error={actual_error!r}; output={actual_output!r}"
+                )
+
+        header = (
+            "== tenkz audit: example.tnlog -- 1 picture(s); "
+            "tex: example.tex (linked) ==\n"
+        )
+        expected_explicit = (
+            header
+            + "  ADV  [label-on-ink] example.tnlog:6: picture 1 label bbox "
+            "id=1 intersects the bond route bond-1 on the author's chosen "
+            "station\n"
+            "  ok: no hard errors (1 advisory(ies))\n"
+        )
+        expected_automatic = (
+            header
+            + "  HARD [label-on-ink] example.tnlog:6: picture 1 label bbox "
+            "id=1 intersects the bond route bond-1 on the station the kernel "
+            "chose (s)\n"
+            "  FAIL: 1 hard error(s), 0 advisory(ies)\n"
+        )
+        source_prefix = f"{source}:37: "
+        # Command coverage is checked before the event stream. Identical
+        # geometry changes severity only through provenance, while an
+        # intentional refusal never reaches the successful-compilation audit.
+        check_case(
+            "reference-tncover",
+            _label_on_ink_tnlog("|station=s|provenance=auto"),
+            coverage_marker="[TKZ-COVER-tncover]",
+            expected_error=source_prefix
+            + "\\tncover was not executed during standalone compilation",
+        )
+        check_case(
+            "audit-explicit",
+            _label_on_ink_tnlog("|provenance=explicit"),
+            expected_output=expected_explicit,
+        )
+        check_case(
+            "audit-auto",
+            _label_on_ink_tnlog("|station=s|provenance=auto"),
+            expected_error=source_prefix
+            + "standalone event audit failed for audit-auto",
+            expected_output=expected_automatic,
+        )
+        check_case(
+            "audit-missing-stream",
+            None,
+            expected_error=source_prefix
+            + "audit-missing-stream produced no example.tnlog "
+            "after standalone compilation",
+        )
+        check_case(
+            "audit-empty-stream",
+            "",
+            expected_error=source_prefix
+            + "audit-empty-stream produced an empty example.tnlog "
+            "after standalone compilation",
+        )
+        check_case(
+            "audit-refusal",
+            None,
+            returncode=1,
+            stdout="[TKZ-TEST-REFUSAL] intended refusal",
+            expected_failure="[TKZ-TEST-REFUSAL]",
+        )
+
     if r"\tnarrow" in DOCTEST._strip_tex_comments(r"\\% \tnarrow"):
         raise AssertionError("an even-backslash percent did not start a TeX comment")
     if r"\tnarrow" not in DOCTEST._strip_tex_comments(r"\% \tnarrow"):
