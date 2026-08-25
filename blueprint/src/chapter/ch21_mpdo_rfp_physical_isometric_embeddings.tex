@@ -12,7 +12,7 @@
     ket--bra index is the matrix $W:\C^{d^2}\to\C^{e^2}$ with
     \begin{align}
         W_{(i,j),(p,q)}
-         &=V_{i,p}\,\overline{V_{j,q}}.
+         & =V_{i,p}\,\overline{V_{j,q}}.
         \label{eq:mpdo_doubled_physical_matrix}
     \end{align}
 \end{definition}
@@ -55,21 +55,21 @@
 
     Suppose now that $V^\dagger V=\Id$. Then
     \begin{align}
-        W^\dagger W &=\Id,
-        & \E_{A_V} &=\E_A,
-        \label{eq:mpdo_embedding_transfer} \\
+        W^\dagger W               & =\Id,
+                                  & \E_{A_V}                                                      & =\E_A,
+        \label{eq:mpdo_embedding_transfer}                                                                                      \\
         A_V\text{ is injective}
-          &\Longleftrightarrow A\text{ is injective},
-        & A_V\text{ is normal}
-          &\Longleftrightarrow A\text{ is normal},
-        \notag \\
+                                  & \Longleftrightarrow A\text{ is injective},
+                                  & A_V\text{ is normal}
+                                  & \Longleftrightarrow A\text{ is normal},
+        \notag                                                                                                                  \\
         \mathcal K_V\text{ is an MPDO}
-          &\Longleftrightarrow \mathcal K\text{ is an MPDO},
-        & \mathcal K_V\text{ saturates the area law}
-          &\Longleftrightarrow \mathcal K\text{ saturates the area law},
-        \notag \\
-        \mathcal T_{\mathcal K_V} &=\mathcal T_{\mathcal K},
-        & P_{\mathcal K_V} &=V P_{\mathcal K}V^\dagger.
+                                  & \Longleftrightarrow \mathcal K\text{ is an MPDO},
+                                  & \mathcal K_V\text{ saturates the area law}
+                                  & \Longleftrightarrow \mathcal K\text{ saturates the area law},
+        \notag                                                                                                                  \\
+        \mathcal T_{\mathcal K_V} & =\mathcal T_{\mathcal K},
+                                  & P_{\mathcal K_V}                                              & =V P_{\mathcal K}V^\dagger.
         \label{eq:mpdo_embedding_trace_support}
     \end{align}
     Here $P_{\mathcal K}$ is the orthogonal projection onto the joint column
@@ -113,7 +113,7 @@
     $Z_{\mathcal K_V}=VZ_{\mathcal K}R$, where $R$ is the blockwise copy of
     $V^\dagger$ and $RR^\dagger=\Id$.  Hence
     $Z_{\mathcal K_V}Z_{\mathcal K_V}^\dagger
-      =VZ_{\mathcal K}Z_{\mathcal K}^\dagger V^\dagger$,
+        =VZ_{\mathcal K}Z_{\mathcal K}^\dagger V^\dagger$,
     and taking column-support projections proves the last identity in
     (\ref{eq:mpdo_embedding_trace_support}).  A common virtual similarity
     distributes termwise through the physical sums, proving the gauge

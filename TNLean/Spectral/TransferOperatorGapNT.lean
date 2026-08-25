@@ -42,9 +42,9 @@ theorem gaugePhaseEquiv_of_krausGaugePhaseEquiv
       _ = μ • (Xinv * X * B i) := by rw [Matrix.mul_assoc]
       _ = μ • (1 * B i) := by rw [hXinvX]
       _ = μ • B i := by rw [Matrix.one_mul]
-  show B i = μ⁻¹ • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i *
+  change B i = μ⁻¹ • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i *
     ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-  show B i = μ⁻¹ • (Xinv * A i * X)
+  change B i = μ⁻¹ • (Xinv * A i * X)
   rw [hstep, smul_smul, inv_mul_cancel₀ hμ_ne0, one_smul]
 
 private theorem irreducibleMap_of_irreducibleTensor

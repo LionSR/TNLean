@@ -36,7 +36,7 @@ jobs:
           ./scripts/fetch-latest-artifact.sh site-badges components/site-badges
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Assemble site
         run: ./scripts/assemble-pages-site.sh components _site
@@ -48,4 +48,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

@@ -319,9 +319,10 @@ private theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
         (fun z : ℂ ↦ z * (1 : Matrix c c ℂ) k k') hEntry
       by_cases hr : r = r' <;> by_cases hk : k = k'
       all_goals
-        simp [E, overlappingSpatialBlockEquiv, leftSpatialBlockEquiv,
-          leftOverlappingLift, Matrix.reindex_apply, Matrix.one_apply,
-          hr, hk] at hScaled ⊢ <;> exact hScaled
+        convert hScaled using 1 <;>
+          simp [E, overlappingSpatialBlockEquiv, leftSpatialBlockEquiv,
+            leftOverlappingLift, Matrix.reindex_apply, Matrix.one_apply,
+            hr, hk]
     · have hEntry := congrFun (congrFun hR ⟨q, ((i, s), r)⟩)
         ⟨q', ((i', s'), r')⟩
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hq] at hEntry ⊢
@@ -350,9 +351,10 @@ private theorem exists_unitary_positive_blockProduct_of_overlappingLifts_commute
         (fun z : ℂ ↦ (1 : Matrix a a ℂ) i i' * z) hEntry
       by_cases hi : i = i' <;> by_cases hs : s = s'
       all_goals
-        simp [E, overlappingSpatialBlockEquiv, rightSpatialBlockEquiv,
-          rightOverlappingLift, Matrix.reindex_apply, Matrix.one_apply,
-          hi, hs] at hScaled ⊢ <;> exact hScaled
+        convert hScaled using 1 <;>
+          simp [E, overlappingSpatialBlockEquiv, rightSpatialBlockEquiv,
+            rightOverlappingLift, Matrix.reindex_apply, Matrix.one_apply,
+            hi, hs]
     · have hEntry := congrFun (congrFun hS ⟨q, (s, (r, k))⟩)
         ⟨q', (s', (r', k'))⟩
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hq] at hEntry ⊢

@@ -128,14 +128,14 @@ jobs:
           destination: site-blueprint/homepage
 
       - name: Upload blueprint component
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site-blueprint
           path: site-blueprint
           retention-days: 30
 
       - name: Upload badges component
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: site-badges
           path: site-badges

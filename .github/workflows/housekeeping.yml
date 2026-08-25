@@ -280,7 +280,7 @@ jobs:
 
       - name: Upload linter-warning report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lean-linter-warning-sweep-report
           path: |
@@ -378,7 +378,7 @@ jobs:
 
       - name: Upload flagged-citation report
         if: steps.summarize.outputs.flagged != '0'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: stale-issue-audit-report
           path: |
