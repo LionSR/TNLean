@@ -71,7 +71,7 @@ lemma transferMap_tpGauge_eq_similarityMap
     calc
       Kraus.transferMap (tpGauge (d := d) (D := D) A σ) X
           = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
-              simp [Kraus.transferMap_apply, tpGauge, Kraus.tpGauge, S]
+              simp [tpGauge, Kraus.tpGauge, S]
       _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             refine Finset.sum_congr rfl ?_
             intro x _
@@ -81,8 +81,7 @@ lemma transferMap_tpGauge_eq_similarityMap
       _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = similarityMap (D := D) S⁻¹ (Kraus.transferMap A) X := by
-            simp [similarityMap, Kraus.transferMap_apply, S, hS_inv_inv, hS_inv_herm',
-              Matrix.mul_assoc]
+            simp [similarityMap, S, hS_inv_inv, hS_inv_herm', Matrix.mul_assoc]
   exact congrFun (congrFun hcalc i) j
 
 /-- Positive-definite TP gauging preserves peripheral-spectrum primitivity. -/
@@ -216,7 +215,7 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
   have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
     simpa using
       kraus_sum_mul_conjTranspose_of_unital A (Kraus.transferMap A)
-        (fun X => by simp [Kraus.transferMap_apply]) hNorm
+        (fun X => by simp) hNorm
   have hChAdj : IsChannel (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
     Kraus.isChannel_mapLM (fun i => (A i)ᴴ) hAadjNorm
   let hσ_exists :=
@@ -671,7 +670,7 @@ theorem twistedTransfer_eigen_of_virtualUnitary
     _ = μ • (V * ∑ i : Fin d, A i * (A i)ᴴ) := by
           simp [Matrix.mul_assoc, Matrix.mul_sum]
     _ = μ • (V * Kraus.transferMap A 1) := by
-          simp [Kraus.transferMap_apply]
+          simp
     _ = μ • V := by
           simp [hNorm]
 
@@ -754,7 +753,7 @@ theorem boundaryState_invariant_of_virtualUnitary
     calc
       Kraus.transferMap (fun i => (A i)ᴴ) ρ
           = ∑ i : Fin d, (A i)ᴴ * ρ * A i := by
-              simp [Kraus.transferMap_apply]
+              simp
       _ = ∑ i : Fin d, V * ((B i)ᴴ * Λ * B i) * Vᴴ := by
             apply Finset.sum_congr rfl
             intro i _
@@ -779,7 +778,7 @@ theorem boundaryState_invariant_of_virtualUnitary
       _ = V * (∑ i : Fin d, (B i)ᴴ * Λ * B i) * Vᴴ := by
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = V * Kraus.transferMap (fun i => (B i)ᴴ) Λ * Vᴴ := by
-            simp [Kraus.transferMap_apply]
+            simp
       _ = ρ := by simp [ρ, hBfix, Matrix.mul_assoc]
   have hρ_tr : Matrix.trace ρ = 1 := by
     have hρ_unf : ρ = V * Λ * Vᴴ := rfl

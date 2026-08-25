@@ -100,7 +100,7 @@ private theorem cyclic_projection_mem_multiplicativeDomain
         Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X =
           KadisonSchwarz.krausMap K X := by
     intro X
-    simp [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
+    simp [K, KadisonSchwarz.krausMap]
   intro k
   have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
   have hTPk_eq : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by

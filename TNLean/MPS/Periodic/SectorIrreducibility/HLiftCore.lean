@@ -81,7 +81,7 @@ theorem hFixUpgrade_of_peripheral
               simpa [T, Kraus.transferMap_apply, Kraus.map, Kraus.adjointMap] using
                 (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := fun i => (A i)ᴴ) ρ X)
       _ = Matrix.trace (E ρ * X) := by
-            simp [E, Kraus.transferMap_apply, Kraus.adjointMap]
+            simp [E, Kraus.adjointMap]
       _ = Matrix.trace (ρ * X) := by rw [hρ_fix]
   have htrace_pow :
       ∀ n : ℕ, ∀ X : MatrixAlg D,

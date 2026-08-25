@@ -103,7 +103,7 @@ theorem tpGauge_isTP_of_transferMap_conjTranspose_eigenvector
     rw [← Finset.smul_sum]
     have hsum : ∑ i : Fin d, (A i)ᴴ * ρ * ((A i)ᴴ)ᴴ =
         Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ := by
-      simp [Kraus.transferMap_apply]
+      simp only [Kraus.transferMap_apply]
     rw [hsum, heig, smul_smul, inv_mul_cancel₀, one_smul]
     exact_mod_cast hr.ne'
   exact tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' ρ hρ hfix

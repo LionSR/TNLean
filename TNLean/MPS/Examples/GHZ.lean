@@ -213,7 +213,7 @@ theorem ghz_orderParam_fixed :
     Kraus.transferMap ghzTensor (!![(1 : ℂ), 0; 0, -1]) = !![(1 : ℂ), 0; 0, -1] := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [Kraus.transferMap_apply, ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
+    simp [ghzTensor, Fin.sum_univ_two, Matrix.diagonal,
       Pi.single_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
 
 end MPSTensor

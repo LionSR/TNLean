@@ -405,7 +405,7 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
     simpa [IsLeftCanonical, Kraus.IsTP] using hP.leftCanonical
   have hK_apply : ∀ X : MatrixAlg D, T X = KadisonSchwarz.krausMap K X := by
     intro X
-    simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
+    simp [T, K, KadisonSchwarz.krausMap]
   have hMulDomain : ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain K := by
     intro k
     have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
@@ -831,7 +831,7 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
     calc
       Kraus.transferMap (d := d₀) (D := D) C U =
           ∑ i : Fin d₀, C i * (Vu * Y * Vvᴴ) * (C i)ᴴ := by
-        simp [Kraus.transferMap_apply, U]
+        simp [U]
       _ = ∑ i : Fin d₀, Vu * (Au i * Y * (Av i)ᴴ) * Vvᴴ := by
         refine Finset.sum_congr rfl ?_
         intro i _

@@ -18,6 +18,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+set_option linter.style.longLine false in
 /-- Under the PGVWC07 source normalization, every block-diagonal periodic vector
 belongs to the sum of the open-boundary block spaces at the sharp source length.
 The positive dual fixed points are used only by the tuple-span/intersection layer;
@@ -62,6 +63,7 @@ theorem
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
+set_option linter.style.longLine false in
 /-- Under the source-shaped PGVWC07 hypotheses, the chain-ground-space
 containment is accompanied by independence of the open-boundary block spaces.
 
@@ -98,6 +100,7 @@ chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc
       groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
         A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
+set_option linter.style.longLine false in
 /-- Every source-shaped PGVWC07 block-diagonal chain vector has a unique sum
 decomposition into the open-boundary spaces of the blocks.
 
@@ -153,6 +156,7 @@ chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc
   have hzero := hIndep Finset.univ (fun i => φ' i - φ i) hmem hsum j (Finset.mem_univ j)
   exact sub_eq_zero.mp hzero
 
+set_option linter.style.longLine false in
 /-- Under the source-shaped PGVWC07 hypotheses, a periodic vector of the block
 sum admits one block-diagonal open-boundary matrix. Its block components belong
 to the corresponding open-boundary block spaces.

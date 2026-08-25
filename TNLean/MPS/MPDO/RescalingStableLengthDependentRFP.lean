@@ -535,7 +535,7 @@ theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
 theorem transferMap_A_one : Kraus.transferMap A 1 = 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [Kraus.transferMap_apply, Fin.sum_univ_four, A] <;> norm_num
+    simp [Fin.sum_univ_four, A] <;> norm_num
 
 /-- `φ` scales the traceless diagonal `diag(1, -1)` by `lambda = 7/25`. -/
 theorem transferMap_A_diag_alt :
@@ -543,19 +543,19 @@ theorem transferMap_A_diag_alt :
       (lambda : ℂ) • !![(1 : ℂ), 0; 0, -1] := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [Kraus.transferMap_apply, Fin.sum_univ_four, A, lambda] <;> norm_num
+    simp [Fin.sum_univ_four, A, lambda] <;> norm_num
 
 /-- `φ` annihilates the off-diagonal matrix unit `E₀₁`. -/
 theorem transferMap_A_single01 :
     Kraus.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) = 0 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [Kraus.transferMap_apply, Fin.sum_univ_four, A]
+  fin_cases i <;> fin_cases j <;> simp [Fin.sum_univ_four, A]
 
 /-- `φ` annihilates the off-diagonal matrix unit `E₁₀`. -/
 theorem transferMap_A_single10 :
     Kraus.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) = 0 := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [Kraus.transferMap_apply, Fin.sum_univ_four, A]
+  fin_cases i <;> fin_cases j <;> simp [Fin.sum_univ_four, A]
 
 /-- **The explicit eigenvalues of `φ` (`Kraus.transferMap A`).** The
 identity is fixed (eigenvalue `1`), the traceless diagonal `diag(1, -1)` is

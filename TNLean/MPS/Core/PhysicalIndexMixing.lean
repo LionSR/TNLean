@@ -51,7 +51,7 @@ theorem isLeftCanonical_kraus_isometry
   change IsLeftCanonical C
   rw [IsLeftCanonical]
   exact kraus_sum_conjTranspose_mul_of_tp C (Kraus.transferMap C)
-    (fun X ↦ by simp [Kraus.transferMap_apply]) hCh.tp
+    (fun X ↦ by simp) hCh.tp
 
 /-- An isometric physical-index mixing of an injective matrix family remains
 injective.

@@ -321,7 +321,7 @@ theorem r_eq_one_of_shifted_transfer_trace
     have htransferZero :
         transferMatrix (Kraus.transferMap (0 : MPSTensor d D)) = 0 := by
       ext ⟨a, b⟩ ⟨c, e⟩
-      simp [transferMatrix, Kraus.transferMap_apply]
+      simp [transferMatrix]
     rw [htransferZero] at htwo
     simp at htwo
   let M := transferMatrix (Kraus.transferMap A)

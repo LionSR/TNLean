@@ -470,7 +470,7 @@ theorem condC2_imp_condC1_of_injective
     calc
       Kraus.transferMap B X
           = V * Kraus.transferMap A (Vᴴ * X * V) * Vᴴ := by
-              simp [B, Kraus.transferMap_apply, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]
+              simp [B, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]
       _ = Kraus.transferMap A X := by
             have hVV : V * (Vᴴ * X * V) * Vᴴ = X := by
               calc

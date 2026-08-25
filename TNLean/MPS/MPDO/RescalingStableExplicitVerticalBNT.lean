@@ -422,8 +422,7 @@ private theorem transferMap_A_diagonal (x : Fin 2 → ℂ) :
       Matrix.diagonal (wMat.mulVec x) := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [Kraus.transferMap_apply, A, wMat,
-      dotProduct, Fin.sum_univ_four, Fin.sum_univ_two] <;> ring
+    simp [A, wMat, dotProduct, Fin.sum_univ_four, Fin.sum_univ_two] <;> ring
 
 private theorem transferMap_A_pow_single_diag (N : ℕ) (i : Fin 2) :
     (Kraus.transferMap A ^ N) (Matrix.single i i 1) =

@@ -43,7 +43,7 @@ private theorem scalarUnitTensor_transferMap :
   ext a b
   fin_cases a
   fin_cases b
-  simp [Kraus.transferMap_apply, scalarUnitTensor]
+  simp [scalarUnitTensor]
 
 /-- The one-dimensional scalar unit tensor is normal.
 
