@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.FormII
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Transfer
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Schwarz.KadisonSchwarz
 
@@ -57,7 +58,7 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap Aadj hIrrAdjMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
       (d := d) (D := D) Aadj hTPadj hIrrAdj hD

@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.PerronFrobenius.Existence
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Irreducible.FormII
@@ -61,8 +62,7 @@ theorem exists_posDef_adjoint_eigenvector
       Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     Kraus.exists_posDef_adjoint_eigenvector (K := A)
-      (Kraus.isIrreducibleMap_mapLM_of_transferMap _
-        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr)) hA
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) hA
   refine ⟨σ, r, hσ_pd, hr_pos, ?_⟩
   exact hσ_eig
 
@@ -132,7 +132,7 @@ theorem exists_unital_data_of_irreducible
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap Aadj hIrrAdjMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   have hAadj : ∃ i, Aadj i ≠ 0 := by
     rcases hA with ⟨i, hi⟩
     refine ⟨i, ?_⟩

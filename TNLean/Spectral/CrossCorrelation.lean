@@ -60,10 +60,8 @@ theorem cross_correlation_tendsto_zero
     fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
   simpa [Kraus.mixedTransferMap] using
     Kraus.cross_correlation_tendsto_zero A B
-      (Kraus.isIrreducibleMap_mapLM_of_transferMap A
-        (Kraus.injective_implies_irreducibleCP A hA))
-      (Kraus.isIrreducibleMap_mapLM_of_transferMap B
-        (Kraus.injective_implies_irreducibleCP B hB))
+      (Kraus.injective_implies_irreducibleCP A hA)
+      (Kraus.injective_implies_irreducibleCP B hB)
       hA_norm hB_norm hK X
 
 

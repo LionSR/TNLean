@@ -55,7 +55,7 @@ with the PSD fixed point `ρ` of the original transfer map:
    and `N^{Pk} σ' = σ'` (from `E^P σ' = σ'`), but `N^n → 0`, we get `σ' = 0`.
 4. Apply `isIrreducibleMap_of_channel_posDef_fixedPoint_unique` →
    `IsIrreducibleMap (Kraus.transferMap (blockTensor A P))`
-5. Apply `Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap` →
+5. Apply `Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM` →
    `Kraus.IsIrreducibleFamily (blockTensor A P)`
 -/
 
@@ -88,7 +88,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     leftCanonical_blockTensor A P hTP
   -- Step 3: Blocked transfer map is a channel.
   have hCh : IsChannel (Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P)) :=
-    Kraus.isChannel_transferMap (blockTensor A P) hTP_blocked
+    Kraus.isChannel_mapLM (blockTensor A P) hTP_blocked
   -- Step 4: ρ is fixed by the blocked transfer map.
   have hρ_fix_blocked :
       Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P) ρ = ρ :=
@@ -136,7 +136,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       -- E^{Pk} = Pρ + N^{Pk} (from pow_eq_fixedPointProj_add_compl_pow).
       have hdecomp : (E ^ (P * k)) σ' = Pρ σ' + (N ^ (P * k)) σ' := by
         have h := pow_eq_fixedPointProj_add_compl_pow E hPrimMPS.trace_ne_zero
-          (Kraus.isChannel_transferMap _ hPrimMPS.norm).tp hPrimMPS.fixedPoint_is_fixed hPk_pos
+          (Kraus.isChannel_mapLM _ hPrimMPS.norm).tp hPrimMPS.fixedPoint_is_fixed hPk_pos
         have happ := congrArg (fun T => T σ') h
         simpa [Pρ_def, N_def, LinearMap.add_apply] using happ
       -- E^{Pk} σ' = σ' (from hEPk_σ').
@@ -199,7 +199,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       (Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P))
       hCh ρ hPD hρ_fix_blocked huniq
   -- Step 7: IsIrreducibleMap → Kraus.IsIrreducibleFamily.
-  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap (blockTensor A P) hIrrMap
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (blockTensor A P) hIrrMap
 
 /-- **Extra blocking after period removal.**
 

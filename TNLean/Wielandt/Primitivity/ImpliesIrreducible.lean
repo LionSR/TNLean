@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.InvariantProjection
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 
 /-!
@@ -44,7 +44,7 @@ theorem isIrreducibleTensor_of_isPrimitiveMPS_of_posDef
     (hPrim : IsPrimitiveMPS A ρ)
     (hPD : ρ.PosDef) :
     Kraus.IsIrreducibleFamily A :=
-  Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
+  Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
     (isIrreducibleMap_of_isPrimitiveMPS_of_posDef hPrim hPD)
 
 end MPSTensor

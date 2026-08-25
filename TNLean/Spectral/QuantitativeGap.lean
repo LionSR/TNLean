@@ -98,7 +98,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   have hCh : IsChannel E := by
-    simpa only [E] using Kraus.isChannel_transferMap A hNorm
+    simpa only [E] using Kraus.isChannel_mapLM A hNorm
   have hIrr : IsIrreducibleMap E := by
     simpa only [E] using Kraus.injective_implies_irreducibleCP A hA
   have hρ_ne : ρ ≠ 0 := by
@@ -143,7 +143,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
   · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
     have hpowEq :=
       pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := ρ) htrρ
-        (Kraus.isChannel_transferMap A hNorm).tp hρ_fix hn1
+        (Kraus.isChannel_mapLM A hNorm).tp hρ_fix hn1
     calc
       ‖((E^[n]) X) - P X‖ = ‖(E ^ n) X - P X‖ := by simp [E, Module.End.pow_apply]
       _ = ‖(P + N ^ n) X - P X‖ := by rw [hpowEq]
@@ -243,7 +243,7 @@ theorem correlation_length_bound [NeZero D]
   · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
     have hpowEq :=
       pow_eq_fixedPointProj_add_compl_pow (D := D) (E := E) (ρ := ρ) htrρ
-        (Kraus.isChannel_transferMap A hNorm).tp hρ_fix hn1
+        (Kraus.isChannel_mapLM A hNorm).tp hρ_fix hn1
     calc
       ‖((E^[n]) X)‖ = ‖(E ^ n) X‖ := by simp [E, Module.End.pow_apply]
       _ = ‖(P + N ^ n) X‖ := by rw [hpowEq]

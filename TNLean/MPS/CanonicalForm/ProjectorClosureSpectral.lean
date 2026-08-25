@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import QICLean.Algebra.DependentBlockDiagonal
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.Definitions
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Transfer
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Irreducible.FormII
 import QICLean.Channel.Irreducible.PerronFrobenius
@@ -264,7 +265,7 @@ theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ} [NeZero n
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
     exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (d := d) (D := n) B)
       (Kraus.transferMap_isCPMap B)
-      (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily B hIrr) hne
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hIrr) hne
   exact ⟨ρ, r, hρ, hr, hEig⟩
 
 /-- **Spectral normalization of an irreducible block** (arXiv:1606.00608,
@@ -314,7 +315,7 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
         (Kraus.transferMap (d := d) (D := n)
           (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i))
         (Kraus.transferMap_isCPMap _)
-        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily _ hIrrScaled)
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrScaled)
         ρ 1 hρ (by norm_num) (by simpa using hfix))
   · refine isPrimitive_of_unique_norm_one _ ρ hfix hρ_ne ?_
     intro μ hμ hμnorm

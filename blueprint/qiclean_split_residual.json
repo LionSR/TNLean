@@ -1022,7 +1022,7 @@
       "title": "Transfer map is a channel",
       "label": "thm:transfer_channel",
       "shared_lean_declarations": [
-        "Kraus.isChannel_transferMap"
+        "Kraus.isChannel_mapLM"
       ],
       "disposition": "retained TN-facing interface",
       "justification": "The statement packages the MPS transfer map as a channel."

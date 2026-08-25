@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausMap
 import QICLean.Channel.KrausRepresentation
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Core.CanonicalNormalization
 
 /-!
@@ -46,7 +47,7 @@ theorem isLeftCanonical_kraus_isometry
   have hCh : IsChannel (Kraus.transferMap C) := by
     have hEq : Kraus.transferMap C = Kraus.transferMap B := by
       simpa [C] using transferMap_kraus_isometry B W hW
-    simpa [hEq] using Kraus.isChannel_transferMap B hB
+    simpa [hEq] using Kraus.isChannel_mapLM B hB
   change IsLeftCanonical C
   rw [IsLeftCanonical]
   exact kraus_sum_conjTranspose_mul_of_tp C (Kraus.transferMap C)

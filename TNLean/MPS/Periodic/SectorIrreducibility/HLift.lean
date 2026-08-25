@@ -272,7 +272,7 @@ theorem hLift_cyclicDecomp_mps_of_sectorFixedPointAlgebraRigidity
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
       ((Kraus.isIrreducibleMap_mapLM_conjTranspose_iff A).mp hIrrAdj)
   have hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrrTensor
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrTensor
   intro k Q hQproj hQP hPQ hQcorner
   have hQfix : (T ^ m) Q = Q := by
     simpa [T] using

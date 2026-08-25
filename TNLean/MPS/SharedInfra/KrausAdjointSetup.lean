@@ -48,11 +48,11 @@ theorem conjTranspose_kraus_setup
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isChannel_transferMap (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
+    Kraus.isChannel_mapLM (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hDpos
   have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily (d := d) (D := D) A hIrr
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) A hIrr
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
       hIrrAmap ρ hρ_psd hρ_ne hρ_fix

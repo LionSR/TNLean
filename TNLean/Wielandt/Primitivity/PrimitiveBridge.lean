@@ -66,7 +66,7 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ ∧ ρ.PosDef := by
   obtain ⟨_, _, _, hPrim, hIrrMap⟩ := hSI
   have hIrrT : Kraus.IsIrreducibleFamily A :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrMap
   obtain ⟨ρ', hPrimMPS⟩ :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   have hρ'PD : ρ'.PosDef :=

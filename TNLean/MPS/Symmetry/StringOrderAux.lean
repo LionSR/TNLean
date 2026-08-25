@@ -120,7 +120,7 @@ lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
   have hIrr' : IsIrreducibleMap
       (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) := by
     simpa [hEq] using hIrrSim
-  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap _ hIrr'
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _ hIrr'
 
 /-- Gauge equivalence on the left and right transports a gauge-phase
 equivalence back to the original tensors. -/
@@ -209,7 +209,7 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
   have hIrrB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) := by
     simpa [hEqBA] using hIrrA
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrA
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrTensor)
@@ -218,7 +218,7 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
       kraus_sum_mul_conjTranspose_of_unital A (Kraus.transferMap A)
         (fun X => by simp [Kraus.transferMap_apply]) hNorm
   have hChAdj : IsChannel (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    Kraus.isChannel_transferMap (fun i => (A i)ᴴ) hAadjNorm
+    Kraus.isChannel_mapLM (fun i => (A i)ᴴ) hAadjNorm
   let hσ_exists :=
     IsChannel.exists_unique_density_fixedPoint_of_irreducible
       (E := Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) hChAdj hIrrAdj (NeZero.pos D)
@@ -790,7 +790,7 @@ theorem boundaryState_invariant_of_virtualUnitary
   have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
     Kraus.injective_implies_irreducibleCP A hA
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrA
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   have hIrrAdj :
       IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A

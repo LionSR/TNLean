@@ -181,9 +181,11 @@ theorem isNormalTensor_toMPSTensor_changePhysicalBasis_iff
   constructor
   · intro hC
     refine ⟨?_, ?_, ?_⟩
-    · apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap
-      have hIrr := Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily
+    · apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM
+      have hIrr := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily
         (changePhysicalBasis V K).toMPSTensor hC.no_invariant_proj
+      change IsIrreducibleMap
+        (Kraus.transferMap (changePhysicalBasis V K).toMPSTensor) at hIrr
       rw [hTransfer] at hIrr
       exact hIrr
     · rw [← hTransfer]
@@ -192,9 +194,12 @@ theorem isNormalTensor_toMPSTensor_changePhysicalBasis_iff
       exact hC.primitive_transfer
   · intro hB
     refine ⟨?_, ?_, ?_⟩
-    · apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap
-      have hIrr := Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily
+    · apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM
+      have hIrr := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily
         K.toMPSTensor hB.no_invariant_proj
+      change IsIrreducibleMap (Kraus.transferMap K.toMPSTensor) at hIrr
+      change IsIrreducibleMap
+        (Kraus.transferMap (changePhysicalBasis V K).toMPSTensor)
       rw [hTransfer]
       exact hIrr
     · rw [hTransfer]

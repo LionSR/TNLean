@@ -95,10 +95,10 @@ theorem isPeriodic_kraus_isometry
   have hEq : Kraus.transferMap C = Kraus.transferMap B := by
     simpa [C] using transferMap_kraus_isometry B W hW
   have hIrrMapB : IsIrreducibleMap (Kraus.transferMap B) :=
-    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily B hB.irreducible
+    Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB.irreducible
   have hIrrMapC : IsIrreducibleMap (Kraus.transferMap C) := by
     simpa [hEq] using hIrrMapB
-  refine ⟨Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap C hIrrMapC,
+  refine ⟨Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM C hIrrMapC,
     isLeftCanonical_kraus_isometry B W hW hB.leftCanonical,
     hB.period_pos, ?_⟩
   simpa [C, hEq] using hB.peripheral_eq
@@ -275,7 +275,7 @@ transfer map `E_A` is a CPTP channel) *and* the channel-level matching
 
 The proof combines the channel-level blocking identity `E_{A^{[p]}} = (E_A)^p`
 (`MPSTensor.transferMap_blockTensor`) with the left-canonical channel property
-`Kraus.isChannel_transferMap`. The bridging from the direct coefficient-level
+`Kraus.isChannel_mapLM`. The bridging from the direct coefficient-level
 `IsPRefinable B p` hypothesis to this witness is handled in
 `thm_4_1_p_refinement_forward` below. -/
 theorem thm_4_1_p_refinement_forward_witness
@@ -284,7 +284,7 @@ theorem thm_4_1_p_refinement_forward_witness
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hTransferEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
     IsPDivisibleChannel (Kraus.transferMap B) p :=
-  ⟨Kraus.transferMap A, Kraus.isChannel_transferMap A hA_norm, by
+  ⟨Kraus.transferMap A, Kraus.isChannel_mapLM A hA_norm, by
     rw [hTransferEq, transferMap_blockTensor]⟩
 
 /-- **Blocked \(Z\)-gauge extraction for the periodic equal-case step.**

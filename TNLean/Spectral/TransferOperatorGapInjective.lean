@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Spectral.TransferOperatorGapNT
 import QICLean.Kraus.InvariantProjection
 import QICLean.Kraus.CPPrimitive
-import QICLean.Kraus.TransferChannel
 
 /-!
 # Injective transfer-gap corollaries
@@ -26,7 +25,7 @@ variable {d D D₁ D₂ : ℕ}
 private lemma irreducibleTensor_of_injective
     (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
     Kraus.IsIrreducibleFamily A :=
-  Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A
+  Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
     (Kraus.injective_implies_irreducibleCP A hA)
 
 /-- **Eigenvalue rigidity** for normalized injective tensors. -/
