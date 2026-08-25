@@ -57,7 +57,8 @@ fi
 # an untracked artifact not present on a fresh checkout.
 echo "==> Building with latexmk (XeLaTeX)..."
 (cd "$WORK_DIR/blueprint/src" \
-  && latexmk -pdfxe -pdfxelatex='xelatex -synctex=1 %O %S' \
+  && TENKZ_ROOT="$WORK_DIR/.deps/tenkz" \
+     latexmk -pdfxe -pdfxelatex='xelatex -synctex=1 %O %S' \
        -interaction=nonstopmode print_ft_mps.tex)
 
 mkdir -p "$REPO_ROOT/blueprint/print"

@@ -22,7 +22,7 @@ def tenkz_root() -> Path:
     """Return the tenkz repository root (contains ``tex/tenkz/tenkz.sty``)."""
     env = os.environ.get("TENKZ_ROOT")
     if env:
-        root = Path(env)
+        root = Path(env).expanduser().resolve()
         if (root / "tex/tenkz/tenkz.sty").is_file():
             return root
         raise TenkzMissing(f"TENKZ_ROOT={root} has no tex/tenkz/tenkz.sty")

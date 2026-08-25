@@ -68,10 +68,14 @@ def fetch(git_url: str, rev: str, sha: str) -> Path:
     resolved = git(["rev-parse", "FETCH_HEAD^{commit}"], cwd=DEST)
     if resolved != sha:
         raise SystemExit(f"tenkz pin {rev} resolved to {resolved}, expected {sha}")
-    git(["checkout", "--detach", sha], cwd=DEST)
+    git(["checkout", "--detach", "--force", sha], cwd=DEST)
+    git(["clean", "-fdx"], cwd=DEST)
     have = git(["rev-parse", "HEAD"], cwd=DEST)
     if have != sha:
         raise SystemExit(f"tenkz HEAD {have} does not match immutable pin {sha}")
+    dirty = git(["status", "--porcelain"], cwd=DEST)
+    if dirty:
+        raise SystemExit(f"tenkz checkout is dirty after reset to immutable pin {sha}")
     sty = DEST / "tex" / "tenkz" / "tenkz.sty"
     if not sty.is_file():
         raise SystemExit(f"checked out tenkz at {have} but {sty} is missing")
