@@ -107,7 +107,7 @@ abstracted — record why, so it is not re-proposed).
   `QICLean/Kraus/TracePairing.lean` (QICLean dependency).
 - **Notes:** the Kraus theorem owns the generic identity. The established
   `MPSTensor.sum_normSq_trace_conjTranspose_mul_evalWord` statement is a direct
-  reformulation using `Kraus.mapLM_eq_transferMap`; the primitive full-word-span
+  reformulation by definitional equality; the primitive full-word-span
   proof applies the Kraus theorem directly.
 
 ### contiguous restriction of open-boundary MPS vectors — promoted
@@ -249,7 +249,7 @@ abstracted — record why, so it is not re-proposed).
   monoid. Its four motivating calls now share the neutral matrix identity.
 
 ### transfer-map irreducibility in Kraus-map notation — promoted
-- **Pattern:** use `Kraus.mapLM_eq_transferMap` to restate
+- **Pattern:** use the definitional equality of `Kraus.transferMap` and `Kraus.mapLM` to view
   `IsIrreducibleMap (MPSTensor.transferMap F)` as
   `IsIrreducibleMap (Kraus.mapLM F)` before applying generic peripheral
   theorems.
@@ -271,10 +271,9 @@ abstracted — record why, so it is not re-proposed).
   promotion (2026-08-20).
 - **Abstraction:** the reusable channel statements are public in
   `Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive`; the established MPS
-  declarations rewrite with `Kraus.mapLM_eq_transferMap` and apply them.
+  declarations apply them directly by definitional equality.
 - **Notes:** construction details for Hermitian parts remain private to the
-  channel theorem. The MPS compatibility file retains its public statements
-  but no longer owns a second spectral proof.
+  channel theorem. Only the compound MPS conclusion remains; exact pass-through declarations were removed.
 
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
@@ -316,20 +315,18 @@ abstracted — record why, so it is not re-proposed).
 
 ### matrix-family irreducibility in transfer-map notation — promoted
 - **Pattern:** convert between irreducibility of a finite matrix family and
-  irreducibility of its MPS transfer map by passing through `Kraus.mapLM` and
-  `Kraus.mapLM_eq_transferMap`.
+  irreducibility of its MPS transfer map by passing through the definitionally equal `Kraus.mapLM`.
 - **Seen:** nine forward conversions and three converse conversions across
   `MPS/Irreducible/FormII.lean`, `Spectral/PeripheralToTransferMapGap.lean`,
   `Spectral/TransferOperatorGap{NT,Injective}.lean`, and
   `Wielandt/Primitivity/{PrimitiveBridge,ToNormal}.lean` before promotion
   (2026-08-20).
 - **Abstraction:**
-  `Kraus.isIrreducibleMap_transferMap_of_isIrreducibleTensor` and
-  `Kraus.isIrreducibleTensor_of_isIrreducibleMap_transferMap` in
-  `QICLean/MPS/Core/TransferChannel.lean` (QICLean dependency).
-- **Notes:** the compatibility module is the unique boundary between the
-  Kraus-owned irreducibility equivalence and transfer-map notation. Downstream
-  callers no longer repeat the equality conversion or import
+  `Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily` and
+  `Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap` in
+  `QICLean/Kraus/TransferChannel.lean` (QICLean dependency).
+- **Notes:** QICLean owns the equivalence directly in transfer-map notation.
+  Downstream callers no longer repeat an equality conversion or import
   `MPS.Irreducible.FormII` solely for this equivalence.
 
 ### pure gauge to heterogeneous repeated blocks — promoted
@@ -630,10 +627,9 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** three occurrences in
   `TNLean/Channel/Irreducible/FixedPointUniqueness.lean`, theorem
   `posSemidef_fixedPoint_unique_of_irreducible_cp`, and
-  `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`, lemma
-  `posSemidef_pow_fixedPoint_unique`, and
-  `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean`, theorem
-  `posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper`, before promotion
+  `QICLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`, theorem
+  `Kraus.posSemidef_pow_fixedPoint_unique`, and
+  `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean`, before direct reuse
   (2026-08-20).
 - **Abstraction:**
   `exists_smul_eq_of_posDef_fixedPoints_of_fixedPoint_posDef`
@@ -641,7 +637,7 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the shared theorem includes the load-bearing hypothesis that every
   nonzero positive-semidefinite fixed point is positive definite; without this
   hypothesis the proportionality statement is false for the identity map. The
-  The three callers establish it respectively from irreducibility or from
+  three callers establish it respectively from irreducibility or from
   fixed-length vector spreading.
 
 ---
@@ -1268,11 +1264,10 @@ abstracted — record why, so it is not re-proposed).
 ### Irreducibility transfer to the conjugate-transposed family
 - **Pattern:** the MPS transfer-map proofs repeated the invariant-projection
   argument already proved for finite Kraus maps.
-- **Reuse:** both MPS directions now combine the Form II tensor/map conversion
-  lemmas with `Kraus.isIrreducibleMap_mapLM_conjTranspose` and its `iff`
-  companion through `Kraus.mapLM_eq_transferMap`.
-- **Result:** the two public MPS declarations retain their statements while their
-  duplicated conjugate-transpose projection arguments are removed.
+- **Reuse:** callers use `Kraus.isIrreducibleMap_mapLM_conjTranspose`, its `iff`
+  companion, and `Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose` directly.
+- **Result:** the two MPS pass-through declarations and their duplicated
+  conjugate-transpose projection arguments are removed.
 
 ### Closed-sector rectangular trace factorization
 - **Pattern:** three MPDO proofs promoted a physical-sector isometry to a unitary,
@@ -1443,8 +1438,7 @@ current counts and full location lists).
   `Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint` and
   `MPSTensor.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint`.
 - **Abstraction (proposed):** retain the channel-native Kraus theorem as the
-  proof owner and make the transfer-map statement a direct reformulation via
-  `Kraus.mapLM_eq_transferMap`, adding only the positive-semidefinite
+  proof owner; the transfer-map statement is definitionally the same and adds only the positive-semidefinite
   consequence required by its established conclusion.
 - **Notes:** the generic theorem keeps the Hermitian-part construction private.
   The compatibility reduction should preserve the public MPS statement while
@@ -1945,8 +1939,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible`
   (`TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean`).
 - **Reuse:** the transfer-map theorem now applies
-  `Kraus.mapLM_ne_zero_of_exists_ne_zero B hB` and rewrites the result with
-  `Kraus.mapLM_eq_transferMap`.
+  `Kraus.mapLM_ne_zero_of_exists_ne_zero B hB` directly by definitional equality.
 - **Result:** the inline evaluation-at-identity proof is removed; no duplicate
   implementation remains.
 

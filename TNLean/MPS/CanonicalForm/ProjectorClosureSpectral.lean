@@ -259,12 +259,12 @@ theorem exists_posDef_transferMap_eigenvector_of_irreducible {n : ℕ} [NeZero n
     ∃ (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
       ρ.PosDef ∧ 0 < r ∧ Kraus.transferMap (d := d) (D := n) B ρ = (r : ℂ) • ρ := by
   have hne : Kraus.transferMap (d := d) (D := n) B ≠ 0 := by
-    simpa only [Kraus.mapLM_eq_transferMap] using
+    simpa only using
       Kraus.mapLM_ne_zero_of_exists_ne_zero B hB
   obtain ⟨ρ, r, hρ, hr, hEig⟩ :=
     exists_posDef_eigenvector_of_irreducible_cp (Kraus.transferMap (d := d) (D := n) B)
       (Kraus.transferMap_isCPMap B)
-      (isIrreducibleCP_transferMap_of_isIrreducibleTensor B hIrr) hne
+      (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily B hIrr) hne
   exact ⟨ρ, r, hρ, hr, hEig⟩
 
 /-- **Spectral normalization of an irreducible block** (arXiv:1606.00608,
@@ -314,7 +314,7 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
         (Kraus.transferMap (d := d) (D := n)
           (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i))
         (Kraus.transferMap_isCPMap _)
-        (isIrreducibleCP_transferMap_of_isIrreducibleTensor _ hIrrScaled)
+        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily _ hIrrScaled)
         ρ 1 hρ (by norm_num) (by simpa using hfix))
   · refine isPrimitive_of_unique_norm_one _ ρ hfix hρ_ne ?_
     intro μ hμ hμnorm

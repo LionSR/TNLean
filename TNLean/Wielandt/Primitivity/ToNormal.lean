@@ -30,12 +30,9 @@ basic transfer-map compatibility lemmas. It stops short of proving any
 
 ### Transfer-map compatibility
 
-* `IsPrimitiveMPS.transferMap_isChannel`
-
 ### PosDef consequences under irreducibility
 
 * `posDef_of_isIrreducibleMap_of_isPrimitiveMPS`
-* `isIrreducibleMap_of_isIrreducibleTensor`
 * `posDef_of_isIrreducibleTensor_of_isPrimitiveMPS`
 
 ## Important note on definitions
@@ -142,14 +139,6 @@ theorem IsPrimitiveMPS.complement_pow_tendsto_zero
 
 /-! ## Part 2: Transfer map structure -/
 
-/-- Preferred theorem showing that the transfer map attached to
-`IsPrimitiveMPS A ρ` is a quantum channel. -/
-theorem IsPrimitiveMPS.transferMap_isChannel
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
-    IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
-  Kraus.isChannel_transferMap A hP.norm
-
 /-- **Irreducible transfer map implies a positive-definite fixed point.**
 
 If `ρ` is the PSD fixed point in `IsPrimitiveMPS A ρ` and the transfer
@@ -167,14 +156,7 @@ theorem posDef_of_isIrreducibleMap_of_isPrimitiveMPS
     (Kraus.isIrreducibleMap_mapLM_of_transferMap A hIrr) ρ
     hP.fixedPoint_psd hP.fixedPoint_ne_zero
     (by
-      simpa only [Kraus.mapLM_eq_transferMap] using hP.fixedPoint_is_fixed)
-
-omit [NeZero D] in
-/-- Irreducibility of a tensor gives irreducibility of its transfer map. -/
-theorem isIrreducibleMap_of_isIrreducibleTensor
-    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
-  Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
+      simpa only using hP.fixedPoint_is_fixed)
 
 /-- **Kraus.IsIrreducibleFamily ⟹ PosDef** for primitive tensors.
 
@@ -186,6 +168,6 @@ theorem posDef_of_isIrreducibleTensor_of_isPrimitiveMPS
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
     ρ.PosDef :=
   posDef_of_isIrreducibleMap_of_isPrimitiveMPS hP
-    (isIrreducibleMap_of_isIrreducibleTensor A hIrr)
+    (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr)
 
 end MPSTensor

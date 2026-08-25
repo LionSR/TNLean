@@ -118,7 +118,7 @@ theorem kappa_norm_eq_one_of_leftCanonical_smul [NeZero D]
     (hAB : ∀ i : Fin d, A i = (κ * ξ) • B i) :
     ‖κ‖ = 1 := by
   have hscaled : IsLeftCanonical (fun i : Fin d => (κ * ξ) • B i) := by
-    unfold IsLeftCanonical at hA ⊢
+    unfold IsLeftCanonical Kraus.IsTP at hA ⊢
     simpa [hAB] using hA
   have hκξ : ‖κ * ξ‖ = 1 :=
     norm_eq_one_of_leftCanonical_smul (κ * ξ) B hB hscaled

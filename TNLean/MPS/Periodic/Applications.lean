@@ -223,7 +223,7 @@ channel: expand, swap sums, apply orthogonality, collapse. -/
 theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1) (hA : IsLeftCanonical A) :
     IsLeftCanonical (rotatePhysical u A) := by
-  unfold IsLeftCanonical at *
+  unfold IsLeftCanonical Kraus.IsTP at *
   simp only [rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
   have hU : ∀ j k : Fin d,

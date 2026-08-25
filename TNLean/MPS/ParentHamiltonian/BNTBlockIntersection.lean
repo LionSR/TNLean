@@ -276,7 +276,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     HasIrreducibleBlocks.ofForall fun j =>
       isIrreducibleTensor_tpGauge_of_isIrreducibleMap
         (A j) (Λ j) (hΛ j)
-        (isIrreducibleMap_of_isIrreducibleTensor (A j) (hIrr.block_irreducible j))
+        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily (A j) (hIrr.block_irreducible j))
   have hPreparedLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
     IsLeftCanonicalBlockFamily.ofForall fun j =>
       tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint

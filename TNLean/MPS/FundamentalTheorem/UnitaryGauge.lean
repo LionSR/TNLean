@@ -103,7 +103,7 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
   obtain ⟨τ, hτ_psd, hτ_ne, hτ_fix⟩ :=
     Kraus.exists_posSemidef_fixedPoint B hB_left (NeZero.pos D)
   have hB_irrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor B hB_irr
+    Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily B hB_irr
   have hB_cp : IsCPMap (Kraus.transferMap (d := d) (D := D) B) := Kraus.transferMap_isCPMap B
   have hEB_eq : ∀ Y, Kraus.transferMap (d := d) (D := D) B Y =
       (ζ * starRingEnd ℂ ζ) •
@@ -243,7 +243,8 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
     exact hA_left
   -- Irreducibility of the conjugate-transposed transfer map.
   have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hA_irr
+    Kraus.isIrreducibleMap_mapLM_conjTranspose A
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA_irr)
   -- Positive-semidefiniteness facts.
   have hW_psd : W.PosSemidef := by
     rw [hW_def]; exact Matrix.posSemidef_conjTranspose_mul_self _

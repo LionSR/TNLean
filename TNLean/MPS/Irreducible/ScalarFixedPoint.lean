@@ -55,9 +55,8 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     simpa [Kraus.transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital
   have hIrrMap : IsIrreducibleMap (Kraus.mapLM A) := by
-    rw [Kraus.mapLM_eq_transferMap]
-    exact isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
-  have hfix_map : Kraus.mapLM A X = X := by rw [Kraus.mapLM_eq_transferMap]; exact hfix
+        exact Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr
+  have hfix_map : Kraus.mapLM A X = X := by exact hfix
   exact Kraus.fixed_eq_scalar_of_irreducible_unital A hUnitalKraus hIrrMap X hfix_map
 
 end MPSTensor

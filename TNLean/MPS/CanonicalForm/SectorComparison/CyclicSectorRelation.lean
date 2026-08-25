@@ -116,13 +116,12 @@ theorem transferMap_adjoint_blocked_eq_pow
       Kraus.transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) =
         (Kraus.transferMap (d := blockPhysDim d m) (D := D) (blockTensor A m)).adjoint := by
     simpa using
-      (transferMap_conjTranspose_eq_adjoint
-        (d := blockPhysDim d m) (D := D) (A := blockTensor A m))
+      (Kraus.mapLM_conjTranspose_eq_adjoint (K := blockTensor A m))
   have hAdj :
       Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
         (Kraus.transferMap (d := d) (D := D) A).adjoint := by
     simpa using
-      (transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A))
+      (Kraus.mapLM_conjTranspose_eq_adjoint (K := A))
   have hPowAdj :
       ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) =
         (((Kraus.transferMap (d := d) (D := D) A) ^ m).adjoint) := by
@@ -204,15 +203,15 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
   have hUnital : IsUnitalKraus (d := d) (D := D) K := by
     simpa [IsUnitalKraus, K] using hTP
   have hIrrMap' : IsIrreducibleMap (Kraus.mapLM K) := by
-    rw [Kraus.mapLM_eq_transferMap]; exact hIrrMap
+    exact hIrrMap
   have hperiph' : peripheralEigenvalues (Kraus.mapLM K) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
-    rw [Kraus.mapLM_eq_transferMap]; exact hperiph
+    exact hperiph
   obtain ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic'⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital ρ hρ hρfix hIrrMap' hγprim hperiph'
   have hcyclic : ∀ k, Kraus.transferMap (d := d) (D := D) K (P (k + 1)) = P k := by
-    intro k; rw [← Kraus.mapLM_eq_transferMap]; exact hcyclic' k
+    intro k; exact hcyclic' k
   -- Step 2: (E†)^m fixes each P_k
   have hPow_fix : ∀ k : Fin m,
       ((Kraus.transferMap (d := d) (D := D) K) ^ m) (P k) = P k :=

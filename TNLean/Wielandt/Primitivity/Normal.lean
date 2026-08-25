@@ -23,7 +23,6 @@ fixed point hypothesis is assembled in
 ### From primitivity
 
 * `transferMap_pow_fixed`: if `E(ρ) = ρ`, then `E^n(ρ) = ρ`
-* `transferMap_pow_apply_eq_sum`: `E^n(X) = Σ_σ (Kraus.evalWord A σ) X (Kraus.evalWord A σ)†`
 * `exists_nonzero_evalWord_of_isPrimitiveMPS`: for every `n`, some length-`n`
   word product is nonzero
 * `transferMap_pow_ne_zero_of_isPrimitiveMPS`: every transfer-map iterate is nonzero
@@ -55,16 +54,6 @@ theorem transferMap_pow_fixed {A : MPSTensor d D}
   | succ n ih =>
     rw [pow_succ, Module.End.mul_apply, hfix, ih]
 
-/-- The iterated transfer map expands as a sum over word products.
-Re-states `Kraus.mapLM_pow_apply` in transfer-map notation. -/
-theorem transferMap_pow_apply_eq_sum (A : MPSTensor d D) (n : ℕ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    ((Kraus.transferMap (d := d) (D := D) A) ^ n) X =
-      ∑ σ : Fin n → Fin d,
-        Kraus.evalWord A (List.ofFn σ) * X * (Kraus.evalWord A (List.ofFn σ))ᴴ := by
-  rw [← Kraus.mapLM_eq_transferMap]
-  exact Kraus.mapLM_pow_apply A n X
-
 /-! ## Part 2: Nonzero word products from primitivity -/
 
 /-- **Every word length has a nonzero word product under primitivity.**
@@ -85,7 +74,7 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
   push Not at hall
   have hzero : ∀ σ : Fin n → Fin d, Kraus.evalWord A (List.ofFn σ) = 0 := hall
   have hsum : ((Kraus.transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by
-    rw [transferMap_pow_apply_eq_sum]
+    rw [Kraus.transferMap_pow_apply']
     refine Finset.sum_eq_zero ?_
     intro σ _
     rw [hzero σ, Matrix.zero_mul, Matrix.zero_mul]

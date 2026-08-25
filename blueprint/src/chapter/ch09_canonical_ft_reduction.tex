@@ -7,7 +7,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 
 \begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
     \label{lem:lower_zero_invariance}
-    \lean{MPSTensor.lowerZero_implies_invariance}
+    \lean{Kraus.lowerZero_implies_invariance}
     \leanok
     Let $A$ be an MPS tensor and let $P$ be an orthogonal projection.
     If $(\Id-P)A^iP=0$ for every physical index~$i$, then
@@ -76,7 +76,7 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 \end{definition}
 
 \begin{theorem}[PSD fixed point gives invariant projection]\label{thm:fp_inv_proj}
-    \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
+    \lean{Kraus.lowerZero_of_posSemidef_fixedPoint}
     \leanok
     \uses{def:transfer_map}
     % Source: the support-projection step in the proof of Theorem 4

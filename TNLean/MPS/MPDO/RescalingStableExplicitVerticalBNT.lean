@@ -138,7 +138,7 @@ theorem verticalComponent_isInjective : Kraus.IsInjective verticalComponent := b
 
 /-- The four matrices `A` are left-canonical. -/
 theorem A_isLeftCanonical : MPSTensor.IsLeftCanonical A := by
-  unfold MPSTensor.IsLeftCanonical
+  unfold MPSTensor.IsLeftCanonical Kraus.IsTP
   rw [Fin.sum_univ_four]
   ext i j
   fin_cases i <;> fin_cases j <;>
@@ -147,7 +147,7 @@ theorem A_isLeftCanonical : MPSTensor.IsLeftCanonical A := by
 
 /-- The normalized vertical component is left-canonical. -/
 theorem verticalComponent_isLeftCanonical : verticalComponent.IsLeftCanonical := by
-  unfold MPSTensor.IsLeftCanonical
+  unfold MPSTensor.IsLeftCanonical Kraus.IsTP
   rw [← Equiv.sum_comp (finProdFinEquiv : Fin 4 × Fin 4 ≃ Fin 16)]
   rw [Fintype.sum_prod_type]
   have hterm (a b : Fin 4) :

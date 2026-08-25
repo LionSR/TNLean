@@ -132,7 +132,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Powers of a transfer-map eigenmatrix]
     \label{thm:transfer-map-eigenmatrix-power}
-    \lean{MPSTensor.transferMap_pow_smul_eigenvector}
+    \lean{Module.End.pow_apply_of_mem_eigenspace}
     \leanok
     \uses{def:transfer_map}
     If $\E_A(X)=\mu X$, then $\E_A^n(X)=\mu^nX$ for every $n\geq0$.
@@ -172,7 +172,7 @@ matrices, and let $\E_K$ be its Kraus map.
 
 \begin{theorem}[Uniqueness of power-fixed positive matrices]
     \label{thm:mps-power-fixed-point-unique-from-spreading}
-    \lean{MPSTensor.posSemidef_pow_fixedPoint_unique_of_isPrimitivePaper}
+    \lean{Kraus.posSemidef_pow_fixedPoint_unique}
     \leanok
     \uses{def:transfer_map}
     Suppose there is a length $q\geq0$ such that

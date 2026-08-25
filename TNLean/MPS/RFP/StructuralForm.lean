@@ -144,7 +144,7 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
     Kraus.injective_implies_irreducibleCP A hInj
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrMap
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   exact exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
     (d := d) (D := D) A hLeft hIrrTensor hD

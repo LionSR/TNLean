@@ -122,8 +122,8 @@ theorem leftCanonical_tensorProduct (A : MPSTensor d D) (B : MPSTensor e E)
     (hA : IsLeftCanonical A) (hB : IsLeftCanonical B) :
     IsLeftCanonical (tensorProduct A B) := by
   classical
-  unfold IsLeftCanonical
-  unfold IsLeftCanonical at hA hB
+  unfold IsLeftCanonical Kraus.IsTP
+  unfold IsLeftCanonical Kraus.IsTP at hA hB
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
   have hterm (i : Fin d) (k : Fin e) :
       (tensorProduct A B (finProdFinEquiv (i, k)))ᴴ *

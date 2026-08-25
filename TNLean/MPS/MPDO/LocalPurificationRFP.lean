@@ -595,7 +595,9 @@ theorem exists_isPRFP_not_isSourceZCL :
     · intro i j
       simp [A]
     · rw [MPSTensor.IsTransferIdempotent]
-      simp [purificationTensor, A, Kraus.transferMap]
+      apply LinearMap.ext
+      intro X
+      simp [LinearMap.comp_apply, purificationTensor, A, Kraus.map]
   refine ⟨0, isPRFP_of_isLocalPurificationRFP hLocal, ?_⟩
   intro hZCL
   exact hZCL.1 (by simp [physTraceTransfer])

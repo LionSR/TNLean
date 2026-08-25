@@ -115,7 +115,7 @@ theorem halvedWeightTensor_isBNTCanonicalForm :
       exact isIrreducibleTensor_of_bondDim_one scalarUnitTensor
     basis_left_canonical := by
       intro j
-      simp [IsLeftCanonical, scalarUnitTensor]
+      simp [IsLeftCanonical, Kraus.IsTP, scalarUnitTensor]
     basis_normalized_self_overlap := by
       intro j
       simp [mpvOverlap, mpv, scalarUnitTensor_evalWord, Matrix.trace]

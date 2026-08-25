@@ -120,7 +120,7 @@ lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
   have hIrr' : IsIrreducibleMap
       (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) := by
     simpa [hEq] using hIrrSim
-  exact isIrreducibleTensor_of_isIrreducibleMap _ hIrr'
+  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap _ hIrr'
 
 /-- Gauge equivalence on the left and right transports a gauge-phase
 equivalence back to the original tensors. -/
@@ -209,9 +209,10 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
   have hIrrB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) := by
     simpa [hEqBA] using hIrrA
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hIrrA
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrA
   have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrrTensor
+    Kraus.isIrreducibleMap_mapLM_conjTranspose A
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrTensor)
   have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
     simpa using
       kraus_sum_mul_conjTranspose_of_unital A (Kraus.transferMap A)
@@ -789,10 +790,11 @@ theorem boundaryState_invariant_of_virtualUnitary
   have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
     Kraus.injective_implies_irreducibleCP A hA
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap A hIrrA
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap A hIrrA
   have hIrrAdj :
       IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
-    isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrrTensor
+    Kraus.isIrreducibleMap_mapLM_conjTranspose A
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrTensor)
   have hΛ_ne : Λ ≠ 0 := by
     intro hΛ0
     simp [hΛ0] at hΛtr

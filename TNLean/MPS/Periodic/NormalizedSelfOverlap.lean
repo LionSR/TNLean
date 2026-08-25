@@ -66,7 +66,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
     conjTranspose_kraus_setup A hLeft hIrr
   obtain ⟨hm, γ, hγroot, hPeriphK⟩ :=
-    peripheralEigenvalues_eq_range_primitiveRoot
+    Kraus.peripheralEigenvalues_eq_range_primitiveRoot
       (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK
   let m : ℕ := (peripheralEigenvalues_finite
     (f := Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ))).toFinset.card
@@ -100,7 +100,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   have hAdj :
       Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) =
         (Kraus.transferMap (d := d) (D := D) A).adjoint := by
-    simpa using (transferMap_conjTranspose_eq_adjoint (d := d) (D := D) (A := A))
+    simpa using (Kraus.mapLM_conjTranspose_eq_adjoint (K := A))
   have hPeriphA :
       peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
         {z : ℂ | z ^ m = 1} := by

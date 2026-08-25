@@ -16,8 +16,6 @@ cross-correlations between distinct blocks decay exponentially.
 
 * `cross_correlation_tendsto_zero`: cross-correlations between distinct
   blocks vanish as system size → ∞
-* `self_correlation_persists`: self-correlations are preserved by
-  the transfer operator
 
 ## References
 
@@ -68,17 +66,6 @@ theorem cross_correlation_tendsto_zero
         (Kraus.injective_implies_irreducibleCP B hB))
       hA_norm hB_norm hK X
 
-/-- **Self-correlation persists**: If `ρ` is a fixed point of `E_A`, then
-`tr(E_A^N(ρ)) = tr(ρ)` for all `N`. This is the diagonal counterpart to
-the off-diagonal decay: self-terms persist while cross-terms vanish. -/
-theorem self_correlation_persists
-    (A : MPSTensor d D)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hfp : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
-    ∀ N : ℕ,
-      Matrix.trace (((Kraus.transferMap (d := d) (D := D) A) ^ N) ρ) = Matrix.trace ρ := by
-  rw [← Kraus.mapLM_eq_transferMap] at hfp ⊢
-  exact Kraus.self_correlation_persists A ρ hfp
 
 
 end BlockSeparation

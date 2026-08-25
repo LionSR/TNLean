@@ -114,7 +114,7 @@ theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
     simpa using this
   exact _root_.isPrimitive_of_compl_eigenvalues_lt_one
     (E := E) (ρ := ρ) hP.fixedPoint_is_fixed hP.fixedPoint_ne_zero hP.trace_ne_zero
-    hP.transferMap_isChannel.tp hcompl
+    (Kraus.isChannel_transferMap _ hP.norm).tp hcompl
 
 /-- A primitive MPS tensor with a positive-definite fixed point has an
 irreducible transfer map.
@@ -134,7 +134,8 @@ theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
     intro σ _ hσ
     refine ⟨Matrix.trace σ / Matrix.trace ρ, ?_⟩
     simpa [E] using hP.fixedPoint_unique σ (by simpa [E] using hσ)
-  exact isIrreducibleMap_of_channel_posDef_fixedPoint_unique E hP.transferMap_isChannel ρ
+  exact isIrreducibleMap_of_channel_posDef_fixedPoint_unique E
+    (Kraus.isChannel_transferMap _ hP.norm) ρ
     hρ_pd (by simpa [E] using hP.fixedPoint_is_fixed) huniq
 
 /-- Primitive complementary-gap data plus a positive-definite fixed point imply

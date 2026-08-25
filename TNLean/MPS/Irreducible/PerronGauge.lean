@@ -62,9 +62,9 @@ theorem exists_posDef_adjoint_eigenvector
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     Kraus.exists_posDef_adjoint_eigenvector (K := A)
       (Kraus.isIrreducibleMap_mapLM_of_transferMap _
-        (isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr)) hA
+        (Kraus.isIrreducibleMap_transferMap_of_isIrreducibleFamily A hIrr)) hA
   refine ⟨σ, r, hσ_pd, hr_pos, ?_⟩
-  rwa [Kraus.mapLM_eq_transferMap] at hσ_eig
+  exact hσ_eig
 
 /-- **TP / left-canonical gauge data for an irreducible MPS tensor.**
 
@@ -129,10 +129,10 @@ theorem exists_unital_data_of_irreducible
   have hIrrAdjMap :
       IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) Aadj) := by
     simpa [Aadj] using
-      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
-        (d := d) (D := D) A hIrr
+      Kraus.isIrreducibleMap_mapLM_conjTranspose A
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
   have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
-    isIrreducibleTensor_of_isIrreducibleMap Aadj hIrrAdjMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_transferMap Aadj hIrrAdjMap
   have hAadj : ∃ i, Aadj i ≠ 0 := by
     rcases hA with ⟨i, hi⟩
     refine ⟨i, ?_⟩

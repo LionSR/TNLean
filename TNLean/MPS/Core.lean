@@ -18,7 +18,6 @@ import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.MultiBlockWord
-import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.RepeatedWord
