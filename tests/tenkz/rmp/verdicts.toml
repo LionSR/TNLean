@@ -444,7 +444,7 @@ case_sha256 = "8119de6372ea447f8d6ff752ec20abd95d48fc3614b5b8a8b2145abb63b8da76"
 reviewed = "2026-08-25"
 renderer = "fable-via-wave-a-chord-review-2026-08-25-200dpi"
 second_viewer = "fable-independent-countersign-2026-08-25-200dpi"
-note = "Straight-chord respell 2026-08-25 (via= retirement, #6897): the four corner hooks lose their waypoints and draw as straight chords between the same endpoint pairs -- equivalent planar routing under the cosmetic-gap bar, with every strand, crossing, label, sector, and orientation verified unchanged at 200dpi by two independent viewers.  Prior note: K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
+note = "Straight-chord respell 2026-08-25 (via= retirement, #6897): each chord bisects the cell of its sector's label mark, and the clearance is recorded evidence, not assumption -- the label-on-ink audit passes with no finding against any chord, the auto label stations standing the four glyphs clear of the diagonals; doctrinally the deletion is the section 12.1 case, since a label mark is not a selectable record (the selector grammar refuses it with TKZ-KERNEL-SELECTOR-KIND, verified in the #6897 survey), so the section 12.3 route substitute cannot name these cells and annotation does not make a cell held.  the four corner hooks lose their waypoints and draw as straight chords between the same endpoint pairs -- equivalent planar routing under the cosmetic-gap bar, with every strand, crossing, label, sector, and orientation verified unchanged at 200dpi by two independent viewers.  Prior note: K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
@@ -733,7 +733,7 @@ id = "rmp-iii-a-torus-three"
 status = "faithful"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
-defects = ["weight-mismatch"]
+defects = []
 case_sha256 = "d39407ace8e05d11dd623ca955b753a5959eae8289ecf29c0a15425c47850eb3"
 reviewed = "2026-08-25"
 renderer = "fable-via-wave-a-thinning-review-2026-08-25-200dpi"
