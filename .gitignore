@@ -73,11 +73,10 @@ blueprint/src/print.xdv
 Scratch/
 /tmp/
 
-# tenkz manual generated artifacts
-/docs/tenkz/*.exa
-/docs/tenkz/*.exm
-/docs/tenkz/*.tnlog
-/docs/tenkz/manual2.pdf
+# Pinned tenkz companion checkout
+/.deps/
+
+# tenkz render artifacts
 /output/pdf/tenkz-*.pdf
 
 # Nested Lake artifacts in vendored local packages

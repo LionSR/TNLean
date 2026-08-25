@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from tenkz_paths import ensure_pythonpath, tenkz_tex
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = ROOT / "blueprint/src"
@@ -78,7 +79,7 @@ def main() -> int:
         tex = work / "peps-torus.tex"
         tex.write_text(fixture, encoding="utf-8")
         env = os.environ.copy()
-        env["TEXINPUTS"] = f"{ROOT / 'tex/tenkz'}//:" + env.get(
+        env["TEXINPUTS"] = f"{tenkz_tex()}//:" + env.get(
             "TEXINPUTS", ""
         )
         run = subprocess.run(
@@ -98,7 +99,7 @@ def main() -> int:
         audit = subprocess.run(
             [
                 "python3",
-                str(ROOT / "scripts/tenkz_audit.py"),
+                str(ensure_pythonpath() / "tenkz_audit.py"),
                 "peps-torus.tnlog",
             ],
             cwd=work,

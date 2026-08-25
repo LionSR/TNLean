@@ -205,8 +205,6 @@ jobs:
       module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
-      corpus: ${{ steps.filter.outputs.corpus }}
-      shrink: ${{ steps.filter.outputs.shrink }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
       - uses: dorny/paths-filter@v3
@@ -326,170 +324,6 @@ jobs:
             workflow:
               - '.github/workflows/pr-ci.yml'
               - '.github/workflows/tenkz-rmp-book.yml'
-
-  tenkz-shrink:
-    name: Check tenkz shrink ratchets
-    needs: changes
-    if: |
-      !cancelled() && (
-        github.event_name != 'pull_request' ||
-        needs.changes.outputs.shrink == 'true' ||
-        needs.changes.outputs.workflow == 'true'
-      )
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Check language and shrink contracts
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
-        run: |
-          python3 scripts/tenkz_language.py check
-          python3 scripts/test_tenkz_shrink.py
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch --no-tags origin \
-              "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-            python3 scripts/tenkz_shrink.py gate --base-ref "$BASE_REF"
-          else
-            python3 scripts/tenkz_shrink.py gate
-          fi
-
-  tenkz-corpus:
-    name: Check tenkz regression corpus
-    needs: changes
-    if: |
-      !cancelled() && (
-        github.event_name != 'pull_request' ||
-        needs.changes.outputs.corpus == 'true' ||
-        needs.changes.outputs.workflow == 'true'
-      )
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Test tenkz provenance invariant
-        run: python3 scripts/test_tenkz_corpus_provenance.py
-
-      - name: Test exact RMP dimension inventory
-        run: python3 scripts/test_tenkz_dimension_inventory.py
-
-      - name: Test tenkz render baseline replacement
-        run: python3 scripts/test_tenkz_corpus_render.py
-
-      # The seeded equation defects: a mismatched group must fail the audit
-      # and a clean one must pass, wherever tenkz pictures compile.
-      - name: Test tenkz equation group enforcement
-        run: |
-          python3 scripts/test_tenkz_equation_audit.py
-          python3 scripts/test_tenkz_blueprint_sweep.py
-
-      - name: Test tenkz manual extraction and reference coverage
-        run: python3 scripts/test_tenkz_manual_doctest.py
-
-      - name: Install TeX dependencies
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-
-      - name: Compile tenkz manual examples standalone
-        run: python3 scripts/tenkz_manual_doctest.py
-
-      # The same check tenkz-release-policy.yml runs, here with an engine
-      # present: the archive is unpacked on its own and a picture compiled
-      # against it, so a runtime file the upload forgot fails rather than
-      # falling back to the repository copy.
-      - name: Check the CTAN archive against a clean installation
-        run: python3 scripts/tenkz_ctan.py check --require-smoke
-
-      - name: Check tenkz kernel record contracts
-        run: scripts/tenkz_kernel_probes.sh
-
-      - name: Compile and audit tenkz corpus
-        run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_corpus.sh
-      - name: Check golden event baselines
-        run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_golden.sh --check
-      - name: Check string-engine event and pixel probes
-        run: scripts/tenkz_string_probes.sh
-
-  # Compiles, audits, and typesets the 130-target RMP benchmark: tenkz's own
-  # reproduction of the diagrams in the tensor-network review paper it is
-  # modeled on. This is the book the library was actually built against, and
-  # it is where every visual defect in the campaign was found — including one
-  # regression that every other job in this file missed (issue #5824).
-  # "book" does everything "check" does (each target compiled standalone,
-  # its render event log audited) and then typesets the full book, so a break
-  # in the book's own preamble or page layout also fails here instead of
-  # waiting up to a week for tenkz-rmp-book.yml (issue #5828). The typeset
-  # adds under a minute on a ten-core development machine; the 130 target
-  # compiles that dominate either command measured six to eight minutes on
-  # GitHub's runner. Every target always runs — there is no changed-target
-  # subset, because a reachability heuristic that silently missed a target
-  # would be worse than a full corpus that costs single-digit minutes. The
-  # genuinely slower step, rasterizing every page to an image, runs weekly
-  # and on demand instead, in tenkz-rmp-book.yml, because that step is about
-  # producing the reviewable book, not about catching a regression quickly.
-  tenkz-rmp:
-    name: Check tenkz RMP benchmark corpus
-    needs: changes
-    if: |
-      !cancelled() && (
-        github.event_name != 'pull_request' ||
-        needs.changes.outputs.corpus == 'true' ||
-        needs.changes.outputs.workflow == 'true'
-      )
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Install TeX dependencies
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-
-      # Each target's XeLaTeX compile has a fixed two-minute ceiling inside
-      # the harness. GitHub's hosted runner has four shared cores, and four
-      # parallel compiles left no slack: one run timed out a target under
-      # ordinary load. Two parallel compiles leave that headroom back.
-      # The work tree is kept outside the checkout (the harness puts the
-      # whole repository on TEXINPUTS recursively) and preserved past the
-      # run, so a failing target's transcript, event log, and render can be
-      # uploaded below.
-      - name: Compile, audit, and typeset the tenkz RMP benchmark
-        env:
-          TENKZ_RMP_JOBS: "2"
-          TENKZ_RMP_WORK_ROOT: ${{ runner.temp }}/rmp-work
-        run: python3 scripts/tenkz_rmp.py book --all
-
-      # On a red run the job log carries only the tail of the failing
-      # compile; the offending render and its event log never reach the
-      # console at all. Upload the preserved work tree so the failure is
-      # diagnosable from the Actions page. Green runs upload nothing, so
-      # the common path stores no artifacts.
-      - name: Upload failure transcripts, event logs, and renders
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: tenkz-rmp-failure
-          path: |
-            ${{ runner.temp }}/rmp-work/targets/**/*.txt
-            ${{ runner.temp }}/rmp-work/targets/**/*.log
-            ${{ runner.temp }}/rmp-work/targets/**/*.tnlog
-            ${{ runner.temp }}/rmp-work/targets/**/*.pdf
-            ${{ runner.temp }}/rmp-work/*.txt
-            ${{ runner.temp }}/rmp-work/*.log
-            ${{ runner.temp }}/rmp-work/*.pdf
-          retention-days: 7
-          if-no-files-found: warn
 
   build:
     needs: changes
@@ -772,53 +606,20 @@ jobs:
         with:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
+      - name: Fetch pinned tenkz package
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/fetch_tenkz.py
+
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'
         run: |
-          python3 scripts/tenkz_lint.py \
+          python3 .deps/tenkz/scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
-            'docs/tenkz/manual2.tex' \
-            'docs/tenkz/chapters2/*.tex' \
-            'docs/slides/*.tex' \
-            'tex/tenkz/examples/*.tex'
-
-      - name: Test shared tenkz parsers
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 scripts/test_tnlog.py
-          python3 scripts/test_texcase.py
-          python3 scripts/test_tenkz_kernel_audit.py
+            'docs/slides/*.tex'
 
       - name: Check paper-gap references resolve
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         run: texra-blueprint paper-gaps check
-
-      # Build the root manual as well as its input chapters.  This is the
-      # syntax gate for manual2.tex, tenkzmanual2.sty, and the expl3 package
-      # sources; generic chktex is unsuitable for their deliberate notation.
-      - name: Compile tenkz manual
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          cd docs/tenkz
-          timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
-            xelatex -interaction=nonstopmode -halt-on-error manual2.tex
-          timeout 150 env TEXINPUTS="../../tex/tenkz//:" \
-            xelatex -interaction=nonstopmode -halt-on-error manual2.tex
-          python3 ../../scripts/tenkz_audit.py manual2.tnlog
-
-      - name: Compile tenkz acceptance examples
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          for source in "$GITHUB_WORKSPACE"/tex/tenkz/examples/*.tex; do
-            source_dir="$(dirname "$source")"
-            source_file="$(basename "$source")"
-            (
-              cd "$source_dir"
-              timeout 120 env TEXINPUTS="$GITHUB_WORKSPACE/tex/tenkz//:" \
-                xelatex -interaction=nonstopmode -halt-on-error "$source_file"
-            )
-            python3 scripts/tenkz_audit.py "${source%.tex}.tnlog"
-          done
 
       # Compile-and-cache smoke test of the tenkz picture pipeline
       # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark
@@ -828,14 +629,6 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
 
-      - name: Test tenkz equation audit
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_equation_audit.py
-
-      - name: Test measured tenkz label overlaps
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_label_overlap.py
-
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_torus.py
@@ -844,14 +637,10 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_index_routing.py
 
-      - name: Test tenkz fusion-tree topology
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_tree.py
-
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
         run: |
-          find blueprint/src tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*' -print0 \
+          find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
       # continue-on-error: the runner's latexindent 3.23.6 (TeX Live 2023,
@@ -878,7 +667,7 @@ jobs:
               echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
               status=1
             fi
-          done < <(find blueprint/src tex/tenkz/examples -name '*.tex' -not -path '*/Packages/*')
+          done < <(find blueprint/src -name '*.tex' -not -path '*/Packages/*')
           exit $status
 
       - name: Build blueprint bibliography

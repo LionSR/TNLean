@@ -27,6 +27,10 @@ import time
 from pathlib import Path
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(_REPO_ROOT / "scripts"))
+from tenkz_paths import ensure_pythonpath, tenkz_tex  # noqa: E402
+
+ensure_pythonpath()
 sys.path.insert(0, str(_REPO_ROOT / "blueprint/src/Packages"))
 
 import tenkz_pic
@@ -37,7 +41,7 @@ _PLACEHOLDER_WORKFLOWS = (
 )
 _SLIDE_PREAMBLE = _REPO_ROOT / "docs/slides/preamble.tex"
 _SLIDE_THEME = _REPO_ROOT / "docs/slides/tn_library_dark.tex"
-_TENKZ_CORE = _REPO_ROOT / "tex/tenkz/tenkz-core.code.tex"
+_TENKZ_CORE = tenkz_tex() / "tenkz-core.code.tex"
 
 _COLORLET_PATTERN = re.compile(
     r"^\s*\\colorlet\{(tenkz[A-Za-z]+)\}\{([^}]*)\}\s*$", re.MULTILINE

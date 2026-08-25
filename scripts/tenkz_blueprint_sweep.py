@@ -42,6 +42,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
+from tenkz_paths import ensure_pythonpath, tenkz_tex  # noqa: E402
+
+ensure_pythonpath()
 sys.path.insert(0, str(REPO / "blueprint/src/Packages"))
 
 from tenkz_audit import Audit  # noqa: E402

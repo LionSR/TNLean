@@ -80,7 +80,8 @@ is scoped in an issue before it is written rather than after.
 A correction that identifies a wrong statement is more useful than a patch, and
 carries none of that cost.
 
-## tenkz is closed
+## tenkz lives in a companion repository
 
-`tenkz` is an internal project under active redesign. It accepts no outside
-contributions, assigned or not, in any file that implements or integrates it.
+Tensor-network diagrams are developed in
+[LionSR/tenkz](https://github.com/LionSR/tenkz). Defects in the package belong
+there. TNLean only consumes a pinned revision via `tenkz.toml`.

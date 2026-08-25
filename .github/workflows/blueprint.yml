@@ -17,9 +17,9 @@ on:
       # on merge pushes that only touch a scanned file.
       - 'blueprint/comments/**'
       - 'docs/**/*.md'
-      - 'tex/tenkz/**'
-      - 'tests/tenkz/**'
-      - 'docs/tenkz/**'
+      - 'tenkz.toml'
+      - 'scripts/fetch_tenkz.py'
+      - 'scripts/tenkz_paths.py'
       - 'docs/slides/**'
       - '.github/workflows/blueprint.yml'
       - '.github/workflows/deploy-pages.yml'
@@ -28,15 +28,8 @@ on:
       - 'scripts/assemble-pages-site.sh'
       - 'scripts/fetch-latest-artifact.sh'
       - 'scripts/write_badges.py'
-      - 'scripts/tenkz_audit.py'
-      - 'scripts/tenkz_lint.py'
-      - 'scripts/tenkz_rmp.py'
-      - 'scripts/tenkzlib/**'
-      - 'scripts/test_tnlog.py'
-      - 'scripts/test_texcase.py'
-      - 'scripts/test_tenkz_kernel_audit.py'
+      - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
-      - 'scripts/test_tenkz_equation_audit.py'
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments
@@ -64,19 +57,15 @@ jobs:
         with:
           extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 
+      - name: Fetch pinned tenkz package
+        run: python3 scripts/fetch_tenkz.py
+
       - name: Check native tenkz sources and picture pipeline
         run: |
-          python3 scripts/tenkz_lint.py \
+          python3 .deps/tenkz/scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
-            'docs/tenkz/manual2.tex' \
-            'docs/tenkz/chapters2/*.tex' \
-            'docs/slides/*.tex' \
-            'tex/tenkz/examples/*.tex'
+            'docs/slides/*.tex'
           python3 scripts/test_tenkz_pic.py
-          python3 scripts/test_tenkz_equation_audit.py
-          python3 scripts/test_tnlog.py
-          python3 scripts/test_texcase.py
-          python3 scripts/test_tenkz_kernel_audit.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check

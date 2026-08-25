@@ -4,7 +4,8 @@ The ``tenkz`` picture environment (the kernel surface, bound at package
 load since the S4 surface swap) and the plain ``tikzcd`` environment that
 carries the blueprint's commutative diagrams are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
-captured unit is compiled **standalone** against ``TEXINPUTS=tex/tenkz//``
+captured unit is compiled **standalone** against the pinned tenkz package
+   (``scripts/fetch_tenkz.py``, then ``TEXINPUTS=<tenkz>/tex/tenkz//``)
 and converted to one SVG, cached by a per-body content hash, so editing one
 figure invalidates exactly one SVG (spec §1.5: "one edited figure
 invalidates one SVG, not 114").
@@ -13,7 +14,7 @@ Design decisions
 ----------------
 
 1. **Verbatim round trip, no Python-side grammar.**  The TeX library in
-   ``tex/tenkz/`` is the single authority on the picture grammar.  This
+   The tenkz package is the single authority on the picture grammar.  This
    module captures the raw characters between ``\begin{tenkz}[...]`` and
    ``\end{tenkz}`` (the optional key list included — with verbatim catcodes
    it is simply the first characters of the body) and re-emits them
@@ -42,7 +43,7 @@ Design decisions
    exactly the Ghostscript facility whose absence triggers the fallback.
 
 3. **Cache key.**  ``sha256(library digest ‖ standalone document)[:16]``.
-   The library digest folds in every file of ``tex/tenkz/`` plus
+   The library digest folds in every file of the pinned tenkz package plus
    ``macros/common.tex``: a library edit re-renders everything (correct —
    every picture may look different), a body edit re-renders one SVG.
 
@@ -70,6 +71,7 @@ import posixpath
 import re
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass
 from functools import lru_cache
 from html import escape
@@ -80,20 +82,29 @@ log = logging.getLogger(__name__)
 
 _SRC_DIR = Path(__file__).resolve().parents[1]
 _REPO_ROOT = _SRC_DIR.parents[1]
-_TENKZ_DIR = _REPO_ROOT / "tex/tenkz"
+sys.path.insert(0, str(_REPO_ROOT / "scripts"))
+from tenkz_paths import tenkz_tex  # noqa: E402
+
 _CACHE_DIR = _SRC_DIR / ".tenkz_svg_cache"
 _SVG_SUBDIR = "tenkz_svg"
 MISSING_SVG_SENTINEL = "tenkz SVG unavailable"
 
-# Every file that participates in rendering a unit.  All of them are folded
-# into the content hash: editing the library or the shared macros re-renders
-# every picture, editing one picture body re-renders exactly one SVG.
-_RENDER_SOURCE_FILES = (
-    _SRC_DIR / "macros/common.tex",
-    _SRC_DIR / "macros/diagrams.tex",
-    *sorted(_TENKZ_DIR.glob("*.sty")),
-    *sorted(_TENKZ_DIR.glob("*.code.tex")),
-)
+
+@lru_cache(maxsize=1)
+def _tenkz_dir() -> Path:
+    """Directory of the pinned tenkz package on TEXINPUTS."""
+    return tenkz_tex()
+
+
+@lru_cache(maxsize=1)
+def _render_source_files() -> tuple[Path, ...]:
+    tenkz = _tenkz_dir()
+    return (
+        _SRC_DIR / "macros/common.tex",
+        _SRC_DIR / "macros/diagrams.tex",
+        *sorted(tenkz.glob("*.sty")),
+        *sorted(tenkz.glob("*.code.tex")),
+    )
 
 # The .tnlog language tag of each environment (spec §5.1); reused as the
 # CSS modifier class of the emitted <img>.  Since the S4 surface swap the
@@ -135,7 +146,7 @@ def _latex_document(unit_source: str) -> str:
 @lru_cache(maxsize=1)
 def _render_source_digest() -> str:
     digest = hashlib.sha256()
-    for source_file in _RENDER_SOURCE_FILES:
+    for source_file in _render_source_files():
         if not source_file.is_file():
             raise RuntimeError(f"Missing tenkz render source: {source_file}")
         digest.update(source_file.name.encode("utf-8"))
@@ -157,10 +168,10 @@ def unit_hash(unit_source: str) -> str:
 
 @lru_cache(maxsize=1)
 def _tex_env() -> dict[str, str]:
-    """Compile environment: tex/tenkz// on TEXINPUTS (spec §1.5)."""
+    """Compile environment: pinned tenkz package on TEXINPUTS (spec §1.5)."""
 
     env = os.environ.copy()
-    env["TEXINPUTS"] = str(_TENKZ_DIR) + "//:" + env.get("TEXINPUTS", "")
+    env["TEXINPUTS"] = str(_tenkz_dir()) + "//:" + env.get("TEXINPUTS", "")
     kpsewhich = shutil.which("kpsewhich")
     if kpsewhich is None:
         return env

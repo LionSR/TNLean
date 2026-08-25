@@ -17,6 +17,9 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+from tenkz_paths import ensure_pythonpath
+
+ensure_pythonpath()
 from tenkzlib.texcase import scan_environments, strip_comments
 
 ROOT = Path(__file__).resolve().parents[1]

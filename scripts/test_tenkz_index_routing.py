@@ -11,6 +11,9 @@ import tempfile
 from collections import Counter
 from pathlib import Path
 
+from tenkz_paths import ensure_pythonpath, tenkz_tex
+
+ensure_pythonpath()
 from tenkz_audit import Audit
 
 
@@ -167,7 +170,7 @@ def main() -> int:
         tex = work / "ii-rfp-routing.tex"
         tex.write_text(source, encoding="utf-8")
         env = os.environ.copy()
-        env["TEXINPUTS"] = f"{ROOT / 'tex/tenkz'}//:" + env.get("TEXINPUTS", "")
+        env["TEXINPUTS"] = f"{tenkz_tex()}//:" + env.get("TEXINPUTS", "")
         run = subprocess.run(
             [engine, "-interaction=nonstopmode", "-halt-on-error", tex.name],
             cwd=work,
