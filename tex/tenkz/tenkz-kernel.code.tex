@@ -2699,9 +2699,9 @@
   }
 % The prelude species and their fixed hues, one authority for the hue
 % resolver and the declaration door: the four semantic roles and the five
-% region words the retired slot= key left to species=.  A prelude word
-% keeps its hue however a document redeclares it, which is the standing
-% redeclaration contract; only names outside this table ride the cycle.
+% region words the retired slot= key left to species=.  A hue-less prelude
+% redeclaration keeps its fixed hue; an explicit hue remains authoritative.
+% Only hue-less names outside this table ride the cycle.
 \clist_const:Nn \c__tenkz_kernel_region_words_clist
   { selected , secondary , complement , collar , neutral }
 \int_new:N \g__tenkz_kernel_species_cycle_int
@@ -2721,6 +2721,25 @@
       }
       { \tl_clear:N #2 }
   }
+% Read the one optional hue field from a species descriptor.  Declaration,
+% rendering, and the mark compatibility rule all use this parser, so they
+% cannot disagree about whether a document supplied an explicit hue.
+\cs_new_protected:Npn \__tenkz_kernel_species_descriptor_hue:nN #1#2
+  {
+    \tl_clear:N #2
+    \regex_extract_once:nnNT
+      {
+        (?: \A | , ) \s* hue \s* = \s*
+        (?: \{ \s* )? (?: source: )?
+        ([^,{}\s]+) (?: \s* \} )?
+      }
+      {#1}
+      \l__tenkz_kernel_r_hue_match_seq
+      {
+        \tl_set:Ne #2
+          { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_declare_species:nn #1#2
   {
     \__tenkz_kernel_declare_table:Nnn
@@ -2729,34 +2748,21 @@
     % `species <name> ...' style family (tenkz-core) that \tntree draws
     % from, so a declared species is usable on every record class.  A
     % declared hue is authoritative there exactly as it is for kernel
-    % records (\__tenkz_kernel_r_species_hue:nN); only hue-less
+    % records (\__tenkz_kernel_r_species_hue:nN); only non-prelude hue-less
     % declarations take the house cycle.
-    \regex_extract_once:nnNTF
+    \__tenkz_kernel_species_descriptor_hue:nN {#2}
+      \l__tenkz_kernel_scratch_tl
+    \tl_if_empty:NTF \l__tenkz_kernel_scratch_tl
       {
-        (?: \A | , ) \s* hue \s* = \s*
-        (?: \{ \s* )? (?: source: )?
-        ([^,{}\s]+) (?: \s* \} )?
-      }
-      {#2}
-      \l__tenkz_kernel_r_hue_match_seq
-      {
-        \tl_set:Ne \l__tenkz_kernel_scratch_tl
-          { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
-        \exp_args:NnV \tenkz_species_one_hued:nn {#1}
+        \__tenkz_kernel_prelude_hue:nN {#1}
           \l__tenkz_kernel_scratch_tl
-      }
-      {
-        \tenkz_species_one:n {#1}
-        % Hue-less declarations receive a document-scope cycle slot now, in
-        % declaration order.  Reordering first uses in later pictures
-        % therefore cannot change the identity's ink.
-        \prop_if_in:NnF \g__tenkz_kernel_species_hue_prop {#1}
+        \tl_if_empty:NTF \l__tenkz_kernel_scratch_tl
           {
-            % A prelude word keeps its fixed hue across redeclarations;
-            % the cycle counts only the names it has actually served, so
-            % seeding a prelude word never shifts another name's slot.
-            \__tenkz_kernel_prelude_hue:nN {#1} \l_tmpa_tl
-            \tl_if_empty:NT \l_tmpa_tl
+            \tenkz_species_one:n {#1}
+            % Hue-less declarations receive a document-scope cycle slot now,
+            % in declaration order.  Reordering first uses in later pictures
+            % therefore cannot change the identity's ink.
+            \prop_if_in:NnF \g__tenkz_kernel_species_hue_prop {#1}
               {
                 \int_set:Nn \l_tmpa_int
                   {
@@ -2771,9 +2777,24 @@
                       { \l_tmpa_int }
                   }
                 \int_gincr:N \g__tenkz_kernel_species_cycle_int
+                \prop_gput:NnV
+                  \g__tenkz_kernel_species_hue_prop {#1} \l_tmpa_tl
               }
-            \prop_gput:NnV \g__tenkz_kernel_species_hue_prop {#1} \l_tmpa_tl
           }
+          {
+            % Prelude declarations use their fixed hue in the shared tree
+            % styles as well as in kernel records.  They do not consume a
+            % house-cycle slot.
+            \exp_args:NnV \tenkz_species_one_hued:nn {#1}
+              \l__tenkz_kernel_scratch_tl
+            \prop_gput:NnV
+              \g__tenkz_kernel_species_hue_prop {#1}
+              \l__tenkz_kernel_scratch_tl
+          }
+      }
+      {
+        \exp_args:NnV \tenkz_species_one_hued:nn {#1}
+          \l__tenkz_kernel_scratch_tl
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_declare_table:Nnn #1#2#3
@@ -5372,6 +5393,7 @@
 \seq_new:N  \l__tenkz_kernel_r_after_atom_seq % physical traces need glyph borders
 \int_new:N  \l__tenkz_kernel_r_rows_int
 \int_new:N  \l__tenkz_kernel_r_cols_int
+\int_new:N  \l__tenkz_kernel_r_species_cycle_int
 \tl_new:N   \l__tenkz_kernel_r_tl
 \tl_new:N   \l__tenkz_kernel_r_b_tl
 \tl_new:N   \l__tenkz_kernel_r_c_tl
@@ -5390,6 +5412,7 @@
 \tl_new:N   \l__tenkz_kernel_r_hue_tl
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
+\tl_new:N   \l__tenkz_kernel_r_species_declared_hue_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_side_tl
 \bool_new:N \l__tenkz_kernel_r_mark_side_default_bool
 \bool_new:N \l__tenkz_kernel_r_mark_text_bool
@@ -15598,7 +15621,7 @@
     \quark_if_no_value:NT #2 { \tl_set:Nn #2 {#1} }
   }
 
-% Cache one undeclared or hue-less species in the house cycle.
+% Cache one undeclared non-prelude species in the picture-local house cycle.
 \cs_new_protected:Npn \__tenkz_kernel_r_cycle_hue:nN #1#2
   {
     \prop_get:NnNF \l__tenkz_kernel_r_species_prop {#1} #2
@@ -15608,18 +15631,20 @@
             \clist_item:Nn \c__tenkz_speccycle_clist
               {
                 \int_mod:nn
-                  { \prop_count:N \l__tenkz_kernel_r_species_prop }
+                  { \l__tenkz_kernel_r_species_cycle_int }
                   { \clist_count:N \c__tenkz_speccycle_clist }
                 + 1
               }
           }
         \prop_put:NnV \l__tenkz_kernel_r_species_prop {#1} #2
+        \int_incr:N \l__tenkz_kernel_r_species_cycle_int
       }
   }
 
-% Species -> hue.  An explicit hue is authoritative.  Hue-less declarations
-% and other named species take the house cycle in model-record order; the
-% undeclared prelude roles retain their fixed semantic hues.
+% Species -> hue.  An explicit hue is authoritative.  Hue-less non-prelude
+% declarations reserve document-scope cycle slots, and other non-prelude
+% names take the next picture-local slots in model-record order.  Prelude
+% names retain their fixed semantic hues unless explicitly overridden.
 \cs_new_protected:Npn \__tenkz_kernel_r_hue:nN #1#2
   {
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
@@ -15630,27 +15655,19 @@
           \l__tenkz_kernel_r_species_tl #2
       }
   }
-% Resolve a species name for every ink consumer.  Declared hues win, hue-less
-% names share the house cycle, and the undeclared prelude roles keep their
-% semantic colors; wires and skin pairings therefore cannot color one species
-% through different lookup paths.
+% Resolve a species name for every ink consumer.  Declared hues win,
+% non-prelude names share the house cycle, and prelude names keep their fixed
+% semantic colors unless explicitly overridden; wires and skin pairings
+% therefore cannot color one species through different lookup paths.
 \cs_new_protected:Npn \__tenkz_kernel_r_species_hue:nN #1#2
   {
     \prop_get:NnNTF \g__tenkz_kernel_species_prop
       {#1} \l__tenkz_kernel_r_species_descriptor_tl
       {
-        \exp_args:NnV \regex_extract_once:nnNTF
-          {
-            (?: \A | , ) \s* hue \s* = \s*
-            (?: \{ \s* )? (?: source: )?
-            ([^,{}\s]+) (?: \s* \} )?
-          }
+        \exp_args:NV \__tenkz_kernel_species_descriptor_hue:nN
           \l__tenkz_kernel_r_species_descriptor_tl
-          \l__tenkz_kernel_r_hue_match_seq
-          {
-            \tl_set:Ne #2
-              { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
-          }
+          #2
+        \tl_if_empty:NT #2
           {
             \prop_get:NnNTF \g__tenkz_kernel_species_hue_prop {#1} #2
               { }
@@ -20049,8 +20066,16 @@
         \clist_if_in:NVT \c__tenkz_kernel_region_words_clist
           \l__tenkz_kernel_r_species_tl
           {
-            \prop_if_in:NVF \g__tenkz_kernel_species_prop
+            \tl_clear:N \l__tenkz_kernel_r_species_declared_hue_tl
+            \prop_get:NVNT \g__tenkz_kernel_species_prop
               \l__tenkz_kernel_r_species_tl
+              \l__tenkz_kernel_r_species_descriptor_tl
+              {
+                \exp_args:NV \__tenkz_kernel_species_descriptor_hue:nN
+                  \l__tenkz_kernel_r_species_descriptor_tl
+                  \l__tenkz_kernel_r_species_declared_hue_tl
+              }
+            \tl_if_empty:NT \l__tenkz_kernel_r_species_declared_hue_tl
               {
                 \__tenkz_model_get:nnN {#1} {form}
                   \l__tenkz_kernel_r_mark_form_tl
@@ -20960,11 +20985,23 @@
 \cs_new:Npn \__tenkz_kernel_r_axis:
   { \l__tenkz_kernel_r_axis_tl }
 
+\cs_new_protected:Npn \__tenkz_kernel_r_species_prepare:
+  {
+    \prop_clear:N \l__tenkz_kernel_r_species_prop
+    % Document-scope hue-less non-prelude declarations reserve their cycle
+    % slots before any picture-local undeclared name is assigned.  Prelude
+    % entries share the hue cache but not the independent cycle count.
+    \int_set_eq:NN
+      \l__tenkz_kernel_r_species_cycle_int
+      \g__tenkz_kernel_species_cycle_int
+    \prop_map_inline:Nn \g__tenkz_kernel_species_hue_prop
+      { \prop_put:Nnn \l__tenkz_kernel_r_species_prop {##1} {##2} }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_render_prepare:
   {
     \prop_clear:N \l__tenkz_kernel_r_placed_prop
     \prop_clear:N \l__tenkz_kernel_r_legdrawn_prop
-    \prop_clear:N \l__tenkz_kernel_r_species_prop
+    \__tenkz_kernel_r_species_prepare:
     \prop_clear:N \l__tenkz_kernel_r_sid_record_prop
     \prop_clear:N \l__tenkz_kernel_r_index_style_prop
     \prop_clear:N \l__tenkz_kernel_r_index_sid_prop
@@ -20975,12 +21012,6 @@
     \seq_clear:N \l__tenkz_kernel_r_skin_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_after_atom_seq
     \seq_clear:N \l__tenkz_kernel_ow_run_stack_seq
-    % Document-scope hue-less declarations reserve their cycle slots before
-    % any picture-local undeclared name is assigned.  An unused declaration
-    % therefore cannot collide with an undeclared identity used earlier in
-    % this picture.
-    \prop_map_inline:Nn \g__tenkz_kernel_species_hue_prop
-      { \prop_put:Nnn \l__tenkz_kernel_r_species_prop {##1} {##2} }
     % Resolve cycle assignment once in declaration order, before renderer
     % staging separates wires from atoms.
     \seq_map_inline:Nn \l__tenkz_model_record_seq

@@ -9,6 +9,14 @@
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
 \seq_new:N \g__tenkz_test_slot_hue_seq
+\tl_new:N \g__tenkz_test_shared_species_hue_tl
+\cs_new_eq:NN \__tenkz_test_species_one_hued:nn \tenkz_species_one_hued:nn
+\cs_set_protected:Npn \tenkz_species_one_hued:nn #1#2
+  {
+    \__tenkz_test_species_one_hued:nn {#1} {#2}
+    \str_if_eq:nnT {#1} {selected}
+      { \tl_gset:Nn \g__tenkz_test_shared_species_hue_tl {#2} }
+  }
 \cs_new_eq:NN \__tenkz_test_slot_enclosure:n \__tenkz_kernel_r_mark_enclosure:n
 \cs_set_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
   {
@@ -16,10 +24,63 @@
     \seq_gput_right:Ne \g__tenkz_test_slot_hue_seq
       { \tl_use:N \l__tenkz_kernel_r_hue_tl }
   }
+% Exercise the mark text resolver without adding ink or audit records to the
+% fixture.  The temporary record is discarded before the drawn picture.
+\cs_new_protected:Npn \__tenkz_test_region_mark_ink:nnN #1#2#3
+  {
+    \__tenkz_model_reset:
+    \__tenkz_model_record_mark:n { form = #1 , species = #2 }
+    \__tenkz_kernel_r_mark_text_ink:nN {mark-1} #3
+  }
+\cs_new_protected:Npn \__tenkz_test_first_undeclared_hue:nN #1#2
+  {
+    \__tenkz_kernel_r_species_prepare:
+    \__tenkz_kernel_r_species_hue:nN {#1} #2
+  }
 \ExplSyntaxOff
 \makeatother
 \begin{document}
 \tenkzkernel
+\ExplSyntaxOn
+\__tenkz_test_first_undeclared_hue:nN {before-prelude} \l_tmpa_tl
+\str_if_eq:VnF \l_tmpa_tl {tenkzMarked}
+  { \errmessage{the~first~undeclared~species~did~not~take~cycle~slot~one} }
+\ExplSyntaxOff
+% A hue-less redeclaration preserves the prelude hue in both the shared tree
+% styles and the kernel renderer without consuming a house-cycle slot.  It
+% remains a compatibility region word: a label-form mark is coloured, while
+% contour-bearing labels stay plain.
+\tndeclare{species}{selected}{}
+\ExplSyntaxOn
+\str_if_eq:VnF \g__tenkz_test_shared_species_hue_tl {tenkzAction}
+  { \errmessage{a~hue-less~prelude~redeclaration~changed~the~shared~hue} }
+\__tenkz_kernel_r_species_hue:nN {selected} \l_tmpa_tl
+\str_if_eq:VnF \l_tmpa_tl {tenkzAction}
+  { \errmessage{a~hue-less~prelude~redeclaration~changed~the~kernel~hue} }
+\__tenkz_test_first_undeclared_hue:nN {after-prelude} \l_tmpa_tl
+\str_if_eq:VnF \l_tmpa_tl {tenkzMarked}
+  { \errmessage{a~prelude~redeclaration~consumed~a~house-cycle~slot} }
+\__tenkz_test_region_mark_ink:nnN {label} {selected} \l_tmpa_tl
+\tl_if_in:VnF \l_tmpa_tl {tenkzAction}
+  { \errmessage{a~region~word~did~not~colour~a~label-form~mark} }
+\__tenkz_test_region_mark_ink:nnN {enclosure} {selected} \l_tmpa_tl
+\tl_if_empty:NF \l_tmpa_tl
+  { \errmessage{a~hue-less~region~redeclaration~coloured~an~enclosure~label} }
+\__tenkz_test_region_mark_ink:nnN {bracket} {selected} \l_tmpa_tl
+\tl_if_empty:NF \l_tmpa_tl
+  { \errmessage{a~hue-less~region~redeclaration~coloured~a~bracket~label} }
+\ExplSyntaxOff
+% An explicit hue is an intentional species declaration, rather than the
+% retired slot compatibility spelling, and therefore colours every form.
+\tndeclare{species}{selected}{hue=source:green}
+\ExplSyntaxOn
+\str_if_eq:VnF \g__tenkz_test_shared_species_hue_tl {green}
+  { \errmessage{an~explicit~prelude~hue~did~not~reach~the~shared~styles} }
+\__tenkz_test_region_mark_ink:nnN {enclosure} {selected} \l_tmpa_tl
+\tl_if_in:VnF \l_tmpa_tl {green}
+  { \errmessage{an~explicit~region~hue~did~not~colour~the~enclosure~label} }
+\__tenkz_model_reset:
+\ExplSyntaxOff
 \begin{tenkz}[rows={wire,wire,wire}, cols=3, west=open, east=open]
   \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
   \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
