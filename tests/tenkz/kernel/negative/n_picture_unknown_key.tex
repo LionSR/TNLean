@@ -1,0 +1,11 @@
+% Negative regression: an unknown picture option is refused before the
+% picture record exists; if compilation recovers, the later atom refusal
+% must name its own record rather than retaining the picture context.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, theme=house]
+  \tn[up=1pt]{A}
+\end{tenkz}
+\end{document}

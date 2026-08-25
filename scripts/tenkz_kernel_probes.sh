@@ -2099,18 +2099,69 @@ grep -Fq '[TKZ-KERNEL-SKIN]' "$WORK/n_unknown_skin.transcript" || {
   exit 1
 }
 
-metrics_negative="$KERNEL/negative/n_picture_metrics.tex"
+# These validators run before a picture, setup act, or declaration has a
+# model record.  Their final clause names that truthful scope, never an empty
+# or stale newest-record id.  One case pins each distinct reader.
+for context_negative in \
+  n_picture_metrics:TKZ-LANG-CHOICE:picture \
+  n_picture_side_word:TKZ-LANG-CHOICE:picture \
+  n_picture_unknown_key:TKZ-LANG-UNKNOWN-KEY:picture \
+  n_picture_sugar_flag_word:TKZ-LANG-CHOICE:picture \
+  n_picture_align_word:TKZ-LANG-CHOICE:picture \
+  n_equation_align_word:TKZ-LANG-CHOICE:equation \
+  n_setup_sizes_key:TKZ-LANG-UNKNOWN-KEY:setup \
+  n_declare_unknown_key:TKZ-LANG-UNKNOWN-KEY:declaration
+do
+  context_name=${context_negative%%:*}
+  context_rest=${context_negative#*:}
+  context_code=${context_rest%%:*}
+  context_scope=${context_negative##*:}
+  context_source="$KERNEL/negative/$context_name.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$context_source" >"$WORK/$context_name.transcript" 2>&1 ); then
+    echo "FAIL: $context_name was accepted" >&2
+    exit 1
+  fi
+  grep -Fq "[$context_code]" "$WORK/$context_name.transcript" || {
+    echo "FAIL: $context_name lacked $context_code" >&2
+    exit 1
+  }
+  grep -Fq "(record $context_scope)" "$WORK/$context_name.transcript" || {
+    echo "FAIL: $context_name lacked its $context_scope context" >&2
+    exit 1
+  }
+  if grep -Fq '(record )' "$WORK/$context_name.transcript"; then
+    echo "FAIL: $context_name carried an empty record clause" >&2
+    exit 1
+  fi
+done
+
+# Recover past a picture-option error and ask a body key to fail as well.
+# The context wrapper must have restored the ordinary record diagnostic.
+context_recovery=n_picture_unknown_key
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
-       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
-       "$metrics_negative" >"$WORK/n_picture_metrics.transcript" 2>&1 ); then
-  echo "FAIL: a word outside the metric-profile alphabet was accepted" >&2
-  exit 1
+       timeout 120 xelatex -interaction=nonstopmode \
+       "$KERNEL/negative/$context_recovery.tex" \
+       >"$WORK/$context_recovery.recovery.transcript" 2>&1 ); then
+  :
 fi
-grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_picture_metrics.transcript" || {
-  echo "FAIL: unknown metric profile lacked TKZ-LANG-CHOICE" >&2
+context_recovery_log="$WORK/$context_recovery.recovery.transcript"
+[ "$(grep -Fc '[TKZ-LANG-UNKNOWN-KEY]' "$context_recovery_log")" -eq 2 ] || {
+  echo "FAIL: $context_recovery did not reach both refusals" >&2
   exit 1
 }
+grep -Fq '(record picture)' "$context_recovery_log" &&
+  grep -Eq 'atom-[0-9]+\)\.' "$context_recovery_log" || {
+  echo "FAIL: $context_recovery did not restore the atom-record context" >&2
+  exit 1
+}
+if grep -Fq '(record )' "$context_recovery_log"; then
+  echo "FAIL: $context_recovery recovery carried an empty record clause" >&2
+  exit 1
+fi
 
 # A key that would be silently inert at group scope is a key the author has
 # misplaced: the class belongs to the picture, the audit to the equation, and
@@ -2675,14 +2726,12 @@ for contract_negative in \
   n_mark_inset_key \
   n_atom_nudge_key \
   n_mark_nudge_key \
-  n_setup_sizes_key \
   n_setup_theme_key \
   n_wire_weight_key \
   n_wire_restyle_transform \
   n_wire_restyle_nested \
   n_leg_restyle_transform \
   n_picture_cols_word \
-  n_picture_align_word \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -2768,8 +2817,6 @@ do
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_mark_nudge_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
-  [ "$contract_negative" = n_setup_sizes_key ] &&
-    expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_setup_theme_key ] &&
     expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_wire_weight_key ] &&
@@ -2782,8 +2829,6 @@ do
     expected='[TKZ-WIRE-RESTYLE-TRANSFORM]'
   [ "$contract_negative" = n_picture_cols_word ] &&
     expected='[TKZ-PIC-POSITIVE-INTEGER]'
-  [ "$contract_negative" = n_picture_align_word ] &&
-    expected='[TKZ-LANG-CHOICE]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
