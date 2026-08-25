@@ -3732,16 +3732,16 @@ thirty-one across six blueprint chapters -- and render pixel-identically
 (the CZX case and k_ring compared directly at 200dpi; every sibling
 carries the same substitution).  `n_mark_slot_key.tex` pins the
 unknown-key answer, and `r_region_slot_words.tex` continues as
-`r_region_words.tex`, its assertions unchanged.
+`r_region_words.tex`, its original assertions retained.
 
 Meters: m1 kernel 55 -> 54 (census 78 -> 77), m2 parser paths 67 -> 66;
 `tests/tenkz/census-baseline.json` moves in this change.
 Extension-gate: the exchange is the contract's own section 14.5 deferral
 executing; no key is added.
 
-The flag table carries forward with three rows moved: the semantic-slot
-lonely-type and the slot consumers row die with their key, and the
-mark-name pin follows the renamed fixture.
+The flag table carries forward with three rows moved: the mark's slot row is
+tombstoned, the semantic-slot lonely type dies with it, and the mark-name pin
+follows the renamed fixture.
 
 | flag | verdict |
 |---|---|
