@@ -105,7 +105,8 @@ theorem regionBlockedWeight_univ (A : Tensor G d)
     rcases f.2 with ⟨_, h2⟩ | ⟨h1, _⟩
     · exact h2 (Finset.mem_univ _)
     · exact h1 (Finset.mem_univ _)
-  unfold regionBlockedWeight stateCoeff
+  unfold regionBlockedWeight
+  simp only [mps_eval]
   have hfilter : (Finset.univ.filter
       (fun ζ : VirtualConfig A =>
         regionBoundaryLabel (G := G) A Finset.univ ζ = μ)) = Finset.univ :=

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guard against oversized Lean files (>1000 lines).
+"""Guard against oversized Lean files and warn before they reach the cap.
 
 Every Lean file over 1000 lines must be split.  Exact import-aggregator paths
 may be exempted explicitly, but each exemption is validated: after Lean
@@ -18,7 +18,8 @@ from pathlib import Path
 from lean_import_syntax import pure_import_modules
 
 THRESHOLD: int = 1000
-EXCLUDE_DIRS: tuple[str, ...] = (".lake", "lake-packages", "tmp")
+EARLY_WARNING_THRESHOLD: int = 900
+EXCLUDE_DIRS: tuple[str, ...] = (".lake", "lake-packages", "tmp", "worktrees")
 # This guidance is intentionally size-specific.  The numbered-name checker
 # gives complementary advice about choosing mathematical module names.
 SPLIT_GUIDANCE = (
@@ -80,6 +81,7 @@ def check_files(
     import_only_aggregators = import_only_aggregators or set()
     oversized: list[tuple[int, str]] = []
     known: list[tuple[int, str]] = []
+    near_limit: list[tuple[int, str]] = []
     errors = 0
     total = 0
     valid_aggregators: set[str] = set()
@@ -109,7 +111,11 @@ def check_files(
         total += 1
         relative = path.relative_to(root).as_posix()
         lines = _count_lines(path)
-        if lines <= THRESHOLD or relative in valid_aggregators:
+        if relative in valid_aggregators:
+            continue
+        if lines <= THRESHOLD:
+            if lines >= EARLY_WARNING_THRESHOLD:
+                near_limit.append((lines, relative))
             continue
         if relative in known_oversized:
             known.append((lines, relative))
@@ -130,10 +136,21 @@ def check_files(
             f"(limit: {THRESHOLD}). {SPLIT_GUIDANCE}"
         )
 
+    for lines, relative in sorted(near_limit, reverse=True):
+        print(
+            f"::warning file={relative},line={EARLY_WARNING_THRESHOLD},"
+            f"title=Lean file approaching size limit::{relative}: {lines} lines "
+            f"(warning band: {EARLY_WARNING_THRESHOLD}-{THRESHOLD}; "
+            f"hard limit: {THRESHOLD}). Plan a concept-level split before the "
+            "next mathematical addition."
+        )
+
     total_oversized = len(known) + len(oversized)
     print(
         f"Scanned {total} .lean files, {total_oversized} nonexempt files exceed "
         f"{THRESHOLD} lines ({len(known)} known, {len(oversized)} new); "
+        f"{len(near_limit)} file(s) are in the {EARLY_WARNING_THRESHOLD}-"
+        f"{THRESHOLD} warning band; "
         f"validated {len(valid_aggregators)} of {len(import_only_aggregators)} "
         "exact aggregator exemption(s)."
     )

@@ -17,6 +17,15 @@ provided all non-`Archive` uses are migrated, no blueprint `\lean{...}` tag
 cites the old name, and the PR body plus an audit note name each removed
 declaration with its replacement.
 
+When four or more hypotheses recur as one mathematical package, introduce a
+docstringed `Prop`-valued structure and pass that structure instead of copying
+the telescope into further theorem statements. Its fields must retain the
+source citations needed for statement-faithfulness review. Likewise, replace
+large anonymous existential conjunctions by a named witness structure once
+consumers would otherwise depend on positional `.choose_spec.2...`
+projections. Bundling reorganizes the same assumptions; it must not add a
+hypothesis absent from the cited statement.
+
 ## Proof integrity (PROOF_INTEGRITY)
 
 ### Sanctioned-axiom history

@@ -201,8 +201,8 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
       (∀ k, dim k ≠ 0) := by
   -- Step 1: Get cyclic decomposition data
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : IsUnitalKraus (d := d) (D := D) K := by
-    simpa [IsUnitalKraus, K] using hTP
+  have hUnital : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hTP
   have hIrrMap' : IsIrreducibleMap (Kraus.mapLM K) := by
     rw [Kraus.mapLM_eq_transferMap]; exact hIrrMap
   have hperiph' : peripheralEigenvalues (Kraus.mapLM K) =

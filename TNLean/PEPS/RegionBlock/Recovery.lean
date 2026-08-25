@@ -368,7 +368,8 @@ theorem sum_regionMergedSummand (A : Tensor G d) (R : Finset V)
     (∑ η : VirtualConfig A, regionMergedSummand (G := G) A R σ τ η) =
       stateCoeff A (assembleRegionσ (V := V) (d := d) R σ τ) := by
   classical
-  unfold stateCoeff regionMergedSummand
+  simp only [mps_eval]
+  unfold regionMergedSummand
   refine Finset.sum_congr rfl (fun η _ => ?_)
   exact (prod_assembleRegionσ_split (G := G) A R σ τ η).symm
 

@@ -47,7 +47,7 @@ positive-definite adjoint fixed point is a unit. -/
 theorem isUnit_peripheral_eigenvector
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
+    (h_unital : Kraus.IsUnital K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K))
@@ -68,7 +68,7 @@ positive-definite adjoint fixed point are closed under powers. -/
 theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
+    (h_unital : Kraus.IsUnital K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
@@ -87,7 +87,7 @@ positive-definite adjoint fixed point are roots of unity. -/
 theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
+    (h_unital : Kraus.IsUnital K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
@@ -105,7 +105,7 @@ unital MPS transfer maps with a positive-definite adjoint fixed point. -/
 theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
+    (h_unital : Kraus.IsUnital K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
@@ -123,7 +123,7 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
 positive-definite adjoint fixed point form a cyclic group of roots of unity. -/
 theorem peripheralEigenvalues_eq_range_primitiveRoot {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
+    (h_unital : Kraus.IsUnital K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K)) :
@@ -138,17 +138,6 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot {d D : ℕ} [NeZero D]
   rw [← Kraus.mapLM_eq_transferMap K]
   exact Kraus.peripheralEigenvalues_eq_range_primitiveRoot
     K h_unital ρ hρ hfix hIrr'
-
-/-- Deprecated alias of `Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj`, restated over the
-MPS transfer map instead of the finite Kraus map. -/
-@[deprecated Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj (since := "2026-08-19")]
-theorem one_sub_mul_kraus_mul_eq_zero_of_transferMap_proj
-    {r n : ℕ} (K : Fin r → MatrixAlg n) {P P' : MatrixAlg n}
-    (hP : IsOrthogonalProjection P) (hP' : IsOrthogonalProjection P')
-    (hmap : Kraus.transferMap (d := r) (D := n) K P' = P) :
-    ∀ v, (1 - P) * K v * P' = 0 := by
-  have hmap' : Kraus.mapLM K P' = P := by rw [Kraus.mapLM_eq_transferMap]; exact hmap
-  exact Kraus.one_sub_mul_kraus_mul_eq_zero_of_mapLM_proj K hP hP' hmap'
 
 /-- Deprecated alias of `Kraus.kraus_mul_cyclicProj`, restated over the MPS transfer map instead
 of the finite Kraus map. -/

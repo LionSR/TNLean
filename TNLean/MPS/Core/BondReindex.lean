@@ -14,11 +14,13 @@ equality of bond dimensions.  The transport is expressed as an equivalence and
 implemented by reindexing both matrix coordinates along the induced equivalence
 of finite bond-index types.
 
-The accompanying lemmas identify this transport with the former raw type
+The accompanying simp lemmas identify this transport with the former raw type
 cast, describe its values at physical and bond coordinates, and record the
 transport of word evaluation together with the invariance of matrix product
 vectors, `SameMPV₂`, and `GaugePhaseEquiv`.
 -/
+
+open scoped Matrix
 
 namespace MPSTensor
 

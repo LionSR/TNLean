@@ -131,8 +131,8 @@ theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     exact hP.fixedPoint_ne_zero
       ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
   have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
-    intro X
-    exact Kraus.trace_transferMap A X hP.norm
+    rw [← Kraus.mapLM_eq_transferMap]
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm
   exact MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 
@@ -152,8 +152,8 @@ theorem IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     exact hP.fixedPoint_ne_zero
       ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
   have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
-    intro X
-    exact Kraus.trace_transferMap A X hP.norm
+    rw [← Kraus.mapLM_eq_transferMap]
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm
   exact MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 

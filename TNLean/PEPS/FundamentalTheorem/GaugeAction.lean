@@ -405,7 +405,8 @@ private lemma sum_local_with_edge_deltas (A : Tensor G d) (σ : V → Fin d) :
               (s := (Finset.univ : Finset (LocalConfig (G := G) A)))
               (f := F) (p := IsConsistent A)]
             simp
-  rw [hfilter, stateCoeff]
+  rw [hfilter]
+  simp only [mps_eval]
   symm
   calc
     (∑ η : VirtualConfig A, ∏ v : V, A.component v (fun ie => η ie.1) (σ v))
@@ -454,7 +455,8 @@ theorem applyGauge_stateCoeff (A : Tensor G d)
     (σ : V → Fin d) :
     stateCoeff (applyGauge A X) σ = stateCoeff A σ := by
   classical
-  unfold stateCoeff applyGauge
+  simp only [mps_eval]
+  unfold applyGauge
   dsimp
   simp_rw [prod_gaugeVertex_eq_sum_local]
   rw [Finset.sum_comm]
@@ -620,18 +622,6 @@ def IsConsistentOff (A : Tensor G d) (e : Edge G)
   ∀ f : Edge G, f ≠ e →
     ξ f.1.1 (edgeLeftIncident (G := G) f) = ξ f.1.2 (edgeRightIncident (G := G) f)
 
-omit [Fintype V] in
-/-- On any edge other than `e`, a configuration consistent off `e` reads the same
-index at each of its endpoints. -/
-private theorem localConfig_value_eq_left (A : Tensor G d) (e : Edge G)
-    (ξ : OpenLocalConfig (G := G) A) (hξ : IsConsistentOff (G := G) A e ξ)
-    {v : V} (ie : IncidentEdge G v) (hne : ie.1 ≠ e) :
-    ξ v ie = ξ ie.1.1.1 (edgeLeftIncident (G := G) ie.1) := by
-  obtain ⟨f, hf⟩ := ie
-  rcases hf with hL | hR
-  · subst hL; rfl
-  · subst hR; exact (hξ f hne).symm
-
 /-- Rebuild a local configuration from the two open edge indices and a free
 configuration on every other edge. -/
 noncomputable def localOfDoubled (A : Tensor G d) (e : Edge G)
@@ -643,31 +633,44 @@ noncomputable def localOfDoubled (A : Tensor G d) (e : Edge G)
     else ζ ⟨ie.1, h⟩
 
 omit [Fintype V] in
+/-- Coordinate formula for the local configuration rebuilt from doubled edge data. -/
+@[mps_eval]
+theorem localOfDoubled_apply (A : Tensor G d) (e : Edge G)
+    (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e)
+    (v : V) (ie : IncidentEdge G v) :
+    localOfDoubled (G := G) A e i k ζ v ie =
+      if h : ie.1 = e then
+        if v = e.1.1 then Fin.cast (by rw [h]) i else Fin.cast (by rw [h]) k
+      else ζ ⟨ie.1, h⟩ := rfl
+
+omit [Fintype V] in
 /-- The rebuilt configuration reads the left open index at the left incidence of
 `e`. -/
+@[mps_eval]
 theorem localOfDoubled_left_e (A : Tensor G d) (e : Edge G)
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
     localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i := by
-  unfold localOfDoubled edgeLeftIncident; simp
+  simp [mps_eval, edgeLeftIncident]
 
 omit [Fintype V] in
 /-- The rebuilt configuration reads the right open index at the right incidence of
 `e`. -/
+@[mps_eval]
 theorem localOfDoubled_right_e (A : Tensor G d) (e : Edge G)
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
     localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k := by
-  unfold localOfDoubled edgeRightIncident
   have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
-  simp [hvne]
+  simp [mps_eval, edgeRightIncident, hvne]
 
 omit [Fintype V] in
 /-- On any edge other than `e`, the rebuilt configuration reads the complement
 index at the left incidence. -/
+@[mps_eval]
 theorem localOfDoubled_left_ne (A : Tensor G d) (e : Edge G)
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e)
     (g : {g : Edge G // g ≠ e}) :
     localOfDoubled (G := G) A e i k ζ g.1.1.1 (edgeLeftIncident (G := G) g.1) = ζ g := by
-  unfold localOfDoubled
+  simp only [mps_eval]
   split
   · rename_i h
     exact (g.2 h).elim
@@ -676,11 +679,12 @@ theorem localOfDoubled_left_ne (A : Tensor G d) (e : Edge G)
 omit [Fintype V] in
 /-- On any edge other than `e`, the rebuilt configuration reads the complement
 index at the right incidence. -/
+@[mps_eval]
 theorem localOfDoubled_right_ne (A : Tensor G d) (e : Edge G)
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e)
     (g : {g : Edge G // g ≠ e}) :
     localOfDoubled (G := G) A e i k ζ g.1.1.2 (edgeRightIncident (G := G) g.1) = ζ g := by
-  unfold localOfDoubled
+  simp only [mps_eval]
   split
   · rename_i h
     exact (g.2 h).elim
@@ -700,33 +704,32 @@ noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G) :
       (localOfDoubled_right_ne (G := G) A e y.1 y.2.1 y.2.2 ⟨f, hf⟩).symm⟩
   left_inv ξ := by
     rcases ξ with ⟨ξ, hξ⟩
+    let i : Fin (A.bondDim e) := ξ e.1.1 (edgeLeftIncident (G := G) e)
+    let k : Fin (A.bondDim e) := ξ e.1.2 (edgeRightIncident (G := G) e)
+    let ζ : EdgeComplementConfig (G := G) A e :=
+      fun f => ξ f.1.1.1 (edgeLeftIncident (G := G) f.1)
     apply Subtype.ext
+    change localOfDoubled (G := G) A e i k ζ = ξ
     funext v ie
-    change localOfDoubled (G := G) A e _ _ _ v ie = ξ v ie
-    unfold localOfDoubled
-    by_cases hie : ie.1 = e
-    · rw [dite_eq_left hie]
-      obtain ⟨f, hf⟩ := ie
-      simp only at hie ⊢
-      subst hie
-      rcases hf with hL | hR
-      · subst hL
-        rw [ite_eq_left rfl]
-        simp [edgeLeftIncident]
-      · subst hR
-        have hvne : ¬ f.1.2 = f.1.1 := (edgeLeft_ne_edgeRight f).symm
-        rw [ite_eq_right hvne]
-        simp [edgeRightIncident]
-    · rw [dite_eq_right hie]
-      exact (localConfig_value_eq_left (G := G) A e ξ hξ ie hie).symm
+    obtain ⟨f, hf⟩ := ie
+    rcases hf with hL | hR
+    · subst hL
+      by_cases hfe : f = e
+      · subst hfe
+        exact localOfDoubled_left_e (G := G) A f i k ζ
+      · exact localOfDoubled_left_ne (G := G) A e i k ζ ⟨f, hfe⟩
+    · subst hR
+      by_cases hfe : f = e
+      · subst hfe
+        exact localOfDoubled_right_e (G := G) A f i k ζ
+      · exact (localOfDoubled_right_ne (G := G) A e i k ζ ⟨f, hfe⟩).trans (hξ f hfe)
   right_inv y := by
     rcases y with ⟨i, k, ζ⟩
-    have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
     · change localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i
-      unfold localOfDoubled edgeLeftIncident; simp
+      exact localOfDoubled_left_e (G := G) A e i k ζ
     · change localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k
-      unfold localOfDoubled edgeRightIncident; simp [hvne]
+      exact localOfDoubled_right_e (G := G) A e i k ζ
     · funext f
       change localOfDoubled (G := G) A e i k ζ f.1.1.1 (edgeLeftIncident (G := G) f.1) = ζ f
       have hf : f.1 ≠ e := f.2
@@ -781,12 +784,10 @@ private theorem edgeInsertedLeftLocalConfig_eq_localOfDoubled (A : Tensor G d) (
   by_cases hie : ie = edgeLeftIncident (G := G) e
   · subst hie
     rw [edgeInsertedLeftLocalConfig_edgeIndex]
-    unfold localOfDoubled edgeLeftIncident
-    simp
+    exact (localOfDoubled_left_e (G := G) A e i k ζ).symm
   · have hne : ie.1 ≠ e := fun h => hie (Subtype.ext h)
     rw [edgeInsertedLeftLocalConfig_residual (G := G) A e _ ⟨ie, hie⟩]
-    unfold localOfDoubled
-    simp [hne]
+    simp [mps_eval, hne]
 
 omit [Fintype V] in
 /-- The right endpoint local configuration of a complement-built boundary datum is
@@ -802,13 +803,11 @@ private theorem edgeInsertedRightLocalConfig_eq_localOfDoubled (A : Tensor G d) 
   by_cases hie : ie = edgeRightIncident (G := G) e
   · subst hie
     rw [edgeInsertedRightLocalConfig_edgeIndex]
-    unfold localOfDoubled edgeRightIncident
     have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
-    simp [hvne]
+    simp [mps_eval, hvne]
   · have hne : ie.1 ≠ e := fun h => hie (Subtype.ext h)
     rw [edgeInsertedRightLocalConfig_residual (G := G) A e _ ⟨ie, hie⟩]
-    unfold localOfDoubled
-    simp [hne]
+    simp [mps_eval, hne]
 
 /-- The middle complement value of a configuration agrees with the rebuilt local
 configuration at any middle vertex. -/
@@ -816,7 +815,8 @@ private theorem edgeComplementValue_eq_localOfDoubled (A : Tensor G d) (e : Edge
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e)
     (v : {v : V // v ∈ edgeMiddleVertices e}) (ie : IncidentEdge G v.1) :
     edgeComplementValue (G := G) A e ζ v.2 ie = localOfDoubled (G := G) A e i k ζ v.1 ie := by
-  unfold edgeComplementValue localOfDoubled
+  unfold edgeComplementValue
+  simp only [mps_eval]
   have hvne : v.1 ≠ e.1.1 ∧ v.1 ≠ e.1.2 := (mem_edgeMiddleVertices_iff e v.1).mp v.2
   have hie_ne : ie.1 ≠ e := by
     intro h
@@ -893,12 +893,7 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
     exact congrArg Subtype.val this.symm
   subst hξeq
   simp only [hF]
-  rw [show localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i by
-        unfold localOfDoubled edgeLeftIncident; simp]
-  rw [show localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k by
-        unfold localOfDoubled edgeRightIncident
-        have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
-        simp [hvne]]
+  rw [localOfDoubled_left_e, localOfDoubled_right_e]
   rw [prod_univ_splitAtEdge e
     (fun v => A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))]
   rw [edgeInsertedLeftLocalConfig_eq_localOfDoubled,

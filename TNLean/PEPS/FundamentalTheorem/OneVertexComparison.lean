@@ -374,7 +374,7 @@ theorem localOfDoubled_eq_global_off_left (A : Tensor G d) (e : Edge G)
     simp only [edgeRightIncident_edge, virtualConfigSplitAt_symm_edge]
   · -- je is some other edge `g ≠ e`; both sides read the complement configuration.
     rw [virtualConfigSplitAt_symm_ne A e (k, ζc) ⟨je.1, hje⟩]
-    unfold localOfDoubled
+    simp only [mps_eval]
     rw [dite_eq_right hje]
 
 omit [Fintype V] in
@@ -401,7 +401,7 @@ theorem localOfDoubled_eq_update_at_left (A : Tensor G d) (e : Edge G)
   · rw [Function.update_of_ne hje]
     have hjne : je.1 ≠ e := fun h => hje (Subtype.ext h)
     rw [vertexStarLabel_apply, virtualConfigSplitAt_symm_ne A e (k, ζc) ⟨je.1, hjne⟩]
-    unfold localOfDoubled
+    simp only [mps_eval]
     rw [dite_eq_right hjne]
 
 open scoped Classical in
@@ -532,7 +532,7 @@ theorem localOfDoubled_eq_global_off_right (A : Tensor G d) (e : Edge G)
     rw [localOfDoubled_left_e]
     simp only [edgeLeftIncident_edge, virtualConfigSplitAt_symm_edge]
   · rw [virtualConfigSplitAt_symm_ne A e (i, ζc) ⟨je.1, hje⟩]
-    unfold localOfDoubled
+    simp only [mps_eval]
     rw [dite_eq_right hje]
 
 omit [Fintype V] in
@@ -559,7 +559,7 @@ theorem localOfDoubled_eq_update_at_right (A : Tensor G d) (e : Edge G)
   · rw [Function.update_of_ne hje]
     have hjne : je.1 ≠ e := fun h => hje (Subtype.ext h)
     rw [vertexStarLabel_apply, virtualConfigSplitAt_symm_ne A e (i, ζc) ⟨je.1, hjne⟩]
-    unfold localOfDoubled
+    simp only [mps_eval]
     rw [dite_eq_right hjne]
 
 open scoped Classical in
@@ -698,13 +698,49 @@ theorem localOfDoubled_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
         (localOfDoubled (G := G) (reindexTensor (G := G) B h) e i k ζc v ie) =
       localOfDoubled (G := G) B e (Fin.cast (congr_fun h e) i) (Fin.cast (congr_fun h e) k)
         (fun f => Fin.cast (congr_fun h f.1) (ζc f)) v ie := by
-  unfold localOfDoubled
-  by_cases hie : ie.1 = e
-  · rw [dite_eq_left hie, dite_eq_left hie]
-    by_cases hv : v = e.1.1 <;>
-      simp only [hv, reindexTensor_bondDim, Fin.cast_cast] <;>
-      apply Fin.ext <;> rfl
-  · rw [dite_eq_right hie, dite_eq_right hie]
+  let i' : Fin ((reindexTensor (G := G) B h).bondDim e) := i
+  let k' : Fin ((reindexTensor (G := G) B h).bondDim e) := k
+  let x : Fin (bd ie.1) :=
+    localOfDoubled (G := G) (reindexTensor (G := G) B h) e i' k' ζc v ie
+  change Fin.cast (congr_fun h ie.1) x = _
+  obtain ⟨f, hf⟩ := ie
+  rcases hf with hL | hR
+  · subst hL
+    change Fin.cast (congr_fun h f) x =
+      localOfDoubled (G := G) B e (Fin.cast (congr_fun h e) i)
+        (Fin.cast (congr_fun h e) k) (fun g => Fin.cast (congr_fun h g.1) (ζc g))
+        f.1.1 (edgeLeftIncident (G := G) f)
+    by_cases hfe : f = e
+    · subst hfe
+      have hx : x = i := by
+        change localOfDoubled (G := G) (reindexTensor (G := G) B h) f i' k' ζc
+          f.1.1 (edgeLeftIncident (G := G) f) = i'
+        exact localOfDoubled_left_e (G := G) (reindexTensor (G := G) B h) f i' k' ζc
+      rw [hx, localOfDoubled_left_e]
+    · have hx : x = ζc ⟨f, hfe⟩ := by
+        change localOfDoubled (G := G) (reindexTensor (G := G) B h) e i' k' ζc
+          f.1.1 (edgeLeftIncident (G := G) f) = ζc ⟨f, hfe⟩
+        exact localOfDoubled_left_ne (G := G) (reindexTensor (G := G) B h)
+          e i' k' ζc ⟨f, hfe⟩
+      rw [hx, localOfDoubled_left_ne (g := ⟨f, hfe⟩)]
+  · subst hR
+    change Fin.cast (congr_fun h f) x =
+      localOfDoubled (G := G) B e (Fin.cast (congr_fun h e) i)
+        (Fin.cast (congr_fun h e) k) (fun g => Fin.cast (congr_fun h g.1) (ζc g))
+        f.1.2 (edgeRightIncident (G := G) f)
+    by_cases hfe : f = e
+    · subst hfe
+      have hx : x = k := by
+        change localOfDoubled (G := G) (reindexTensor (G := G) B h) f i' k' ζc
+          f.1.2 (edgeRightIncident (G := G) f) = k'
+        exact localOfDoubled_right_e (G := G) (reindexTensor (G := G) B h) f i' k' ζc
+      rw [hx, localOfDoubled_right_e]
+    · have hx : x = ζc ⟨f, hfe⟩ := by
+        change localOfDoubled (G := G) (reindexTensor (G := G) B h) e i' k' ζc
+          f.1.2 (edgeRightIncident (G := G) f) = ζc ⟨f, hfe⟩
+        exact localOfDoubled_right_ne (G := G) (reindexTensor (G := G) B h)
+          e i' k' ζc ⟨f, hfe⟩
+      rw [hx, localOfDoubled_right_ne (g := ⟨f, hfe⟩)]
 
 open scoped Classical in
 /-- `edgeInsertedCoeff` transports along a bond-dimension reindex by conjugating

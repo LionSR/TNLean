@@ -206,6 +206,83 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
 | Date | Total lines | Dup 10-line windows | Sequel files (lines) | Cap-riding | Degenerate sites | Sorries |
 |------|-------------|---------------------|----------------------|------------|------------------|---------|
 | 2026-07-20 | 319,850 | 1,260 | 48 (20,500) | 29 | 1,934 | 4 |
+| 2026-08-23 | 315,403 | 985 | 40 (18,131) | 17 | 1,979 | 1 |
+
+## August 2026 refresh ([#6855](https://github.com/LionSR/TNLean/issues/6855))
+
+The August review found ten structural debts.  Four refine entries from the
+July tournament; six are new and receive stable ids D13--D18.  A closed July
+entry remains an accurate record of the pull request which closed its original
+scope: a row below records only the newly measured residual problem.
+
+| Rank | Ledger entry | Impact / effort | Status on 2026-08-23 | First burn-down slice |
+|------|--------------|-----------------|----------------------|-----------------------|
+| 1 | D1 residual | 6 / 6 | first slice implemented; residual open | `BlockFamilyContext` now bundles the repeated general-length hypotheses in `BNTBlockIntersection.lean`; other long interfaces remain. |
+| 2 | D13 | 6 / 4 | TNLean slice implemented; broader thinning open | The three copied injectivity predicates disappeared in the QICLean extraction, and the seven surviving definitions in `MPS/Core/Blocking.lean` are abbreviations of their `Kraus` owners. |
+| 3 | D11 residual | 6 / 6 | first slice implemented; residual open | `MPSTensor.reindex` and its word-evaluation/comparison API now replace four private cast re-derivations. |
+| 4 | D14 | 4 / 4 | first pair collapsed; broader family open | `VerticalBNTGrouping` packages the common grouped-sector data and supports one proof for the horizontal and CPSV `GroupedGramNormalization` pair. |
+| 5 | D15 | 5 / 6 | TNLean migration implemented; upstream API follow-up | TNLean uses the canonical `Kraus.IsTP`/`Kraus.IsUnital` predicates throughout; the copied spellings and canonical TP iff are owned by QICLean. |
+| 6 | D16 | 5 / 5 | first slice implemented; residual open | The FNW inverse-Gram calculation is shared and the one-site result is a corollary of the arbitrary-suffix theorem; other long proofs remain. |
+| 7 | D5 residual | 5 / 6 | TNLean slice implemented; QICLean follow-up | `SameMPV` is an abbreviation of `SameMPV₂`, and TNLean no longer uses the same-dimension mixed-transfer bridge.  The bridge and mixed-transfer suite belong to QICLean. |
+| 8 | D17 | 4 / 3 | first slice implemented | Pull-request CI ratchets orphan modules and single-occurrence declarations, and Archive modules are built weekly. |
+| 9 | D18 | 5 / 6 | TNLean first slice implemented; upstream target open | Matchable coordinate lemmas and the opt-in `mps_eval` simp set cover the three TNLean-owned unfold targets; `transProbVec` belongs to QICLean. |
+| 10 | D9 residual | 4 / 4 | first cap slice implemented; residual open | The warning begins at 900 lines, and all files that were at or above 976 lines have been split at mathematical seams; 17 files remain in the warning band. |
+
+The corresponding mathematical and engineering evidence is as follows.
+
+- **D1 residual -- unbundled interfaces.**  Repeated telescopes still occur
+  at the Parent-Hamiltonian, MPDO, and PEPS boundaries, and large anonymous
+  existentials are still consumed through positional `choose_spec` chains.
+  `BlockFamilyContext` now removes the first repeated general-length telescope;
+  subsequent interfaces should use the same principle without strengthening a
+  cited theorem.
+- **D13 -- dual `Kraus`/`MPSTensor` API.**  `MPSTensor` is definitionally the
+  finite `Kraus` family used by the extracted channel library.  The seven
+  residual blocking bodies are now abbreviations of their `Kraus` owners, and
+  the three copied injectivity predicates disappeared during extraction.  The
+  broader compatibility layer still contains one-line delegations to audit.
+- **D11 residual -- finite-index cast economy.**  The Fin-indexed core still
+  produces many `finCongr`/`Fin.cast` sites and raw tensor casts.
+  `MPSTensor.reindex` now gives the canonical equivalence-based transport and
+  has removed four private re-derivations; broader migration remains.
+- **D14 -- parallel MPDO canonical-form regimes.**  Eleven CPSV/non-CPSV file
+  pairs repeat long hypothesis signatures.  A `VerticalBNTGrouping` witness,
+  constructed faithfully from either regime, now supports the first common
+  grouped-sector Gram and unitary-normalization proof.
+- **D15 -- duplicate spellings of core conditions.**  Same-type TP and unital
+  uses in TNLean are now expressed through `Kraus.IsTP` and `Kraus.IsUnital`;
+  notions on different carrier types remain separate.  Removing the copied
+  QICLean spellings and naming the reverse TP bridge are upstream API work.
+- **D16 -- monolithic cloned proofs.**  Several 300--700-line tactic blocks
+  repeat transport setup or estimate calculations.  In `FNWContraction.lean`,
+  the inverse-Gram calculation is now shared and the one-site result is derived
+  from the arbitrary-suffix theorem.  The remaining long proofs are still
+  candidates for mathematical decomposition.
+- **D5 residual -- MPV/mixed-transfer duplication.**  The square MPV predicate
+  is definitionally the equal-dimension instance of the rectangular one.
+  `SameMPV₂Pos` is not part of this unification: its length-zero distinction is
+  mathematically intentional.  The mixed-transfer definitions and lemma suite
+  now live in QICLean and therefore require a QICLean change plus dependency
+  update rather than a local copy.
+- **D17 -- undetected dead weight.**  Generated aggregators make every module
+  compile but do not prove that it has a mathematical consumer.  Reverse-import
+  and exact-token declaration reports are now pull-request ratchets whose seeded
+  allowlists may shrink but never grow.  Archive is built weekly because it is
+  deliberately absent from the production import graph.
+- **D18 -- missing domain simplification API.**  Frequent manual unfolding and
+  coordinate rewrites showed that three TNLean-owned public definitions lacked
+  stable application lemmas.  Those lemmas now seed the opt-in `mps_eval` set;
+  the fourth audited definition, `transProbVec`, is QICLean-owned.
+- **D9 residual -- cap-driven file splitting.**  The 1000-line hard limit has
+  accumulated a band of files at 900--999 lines and numbered continuation
+  chains.  The warning now begins at 900 lines, and the ten files formerly at
+  or above 976 lines have been split at named mathematical phases.  Seventeen
+  warning-band files and the numbered continuation debt remain.
+
+Native sub-issues under [#4529](https://github.com/LionSR/TNLean/issues/4529)
+remain the intended unit of implementation tracking.  The table above is the
+conceptual crosswalk from the August report; it does not assign GitHub sub-issue
+numbers.  Issue #6855 is the audit source, not a substitute progress tracker.
 
 ## Ranked debts (tournament order)
 

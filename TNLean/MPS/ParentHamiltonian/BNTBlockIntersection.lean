@@ -35,6 +35,39 @@ namespace MPSTensor
 
 variable {d L : ℕ}
 
+/-- The normalized, already-injective block-family data used in the PGVWC07
+direct-sum argument at a common word length \(L\).
+
+The first four fields record the canonical BNT hypotheses. The remaining
+fields record homogeneous block injectivity at length \(L\), injectivity,
+the lower bound on \(L\), and the normalization
+\[
+  \sum_a A^j_a A^{j\dagger}_a=I.
+\]
+This structure only packages the hypotheses that occur together below; it
+does not strengthen them.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, direct-sum proof lines 1346--1421
+and normalization propagation lines 893--898. -/
+structure BlockFamilyContext {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) : Prop where
+  /-- Every block is irreducible. -/
+  irreducible : HasIrreducibleBlocks (d := d) A
+  /-- Every block is left-canonical. -/
+  leftCanonical : IsLeftCanonicalBlockFamily (d := d) A
+  /-- Every block has normalized self-overlap. -/
+  normalizedSelfOverlap : HasNormalizedSelfOverlap (d := d) A
+  /-- Distinct blocks are not gauge-phase equivalent. -/
+  blocksNotGaugePhaseEquiv : BlocksNotGaugePhaseEquiv (d := d) A
+  /-- Every block is injective at the common word length \(L\). -/
+  blockInjective : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L
+  /-- Every block is injective at some word length. -/
+  injective : ∀ k : Fin r, Kraus.IsInjective (A k)
+  /-- The common word length is strictly greater than one. -/
+  length_gt_one : 1 < L
+  /-- Every block satisfies \(\sum_a A^j_a A^{j\dagger}_a=I\). -/
+  unital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1
+
 /-- Already-injective BNT block-separation conditions give the PGVWC one-step
 block-intersection identity at the resulting product-span length.
 
@@ -47,16 +80,9 @@ span required in the PGVWC07 restriction-intersection argument. -/
 theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBNT : BlockFamilyContext A L)
     (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
-    {n : ℕ} (hn : n = L + (r - 1) * (L + (L + L)))
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    {n : ℕ} (hn : n = L + (r - 1) * (L + (L + L))) :
     ((⨅ b : Fin d,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
       (⨅ a : Fin d,
@@ -65,8 +91,10 @@ theorem pgvwc07_iSup_restriction_intersection_of_bnt_directSum_selectors
   subst n
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
     (wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
-      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
-    hUnital
+      A hBNT.irreducible hBNT.leftCanonical hBNT.normalizedSelfOverlap
+        hBNT.blocksNotGaugePhaseEquiv hBNT.blockInjective hBlk3 hBNT.injective
+        hBNT.length_gt_one)
+    hBNT.unital
 
 /-- Length-\(L_0\) injectivity form of the PGVWC one-step block-intersection
 identity.
@@ -167,26 +195,22 @@ for \(n\ge L+(r-1)S\). -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hBNT : BlockFamilyContext A L)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
     WordTupleSpanTop A n := by
   let S : ℕ := L + (L + L)
   have hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) S := by
     intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk k) (by omega)
+    exact isNBlkInjective_of_ge_of_unital
+      (A k) (hBNT.unital k) (hBNT.blockInjective k) (by omega)
   have hPair : HasPairBlockSeparatingWords A S := by
     simpa [S] using
       (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
-        A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
+        A hBNT.irreducible hBNT.leftCanonical hBNT.normalizedSelfOverlap
+          hBNT.blocksNotGaugePhaseEquiv hBNT.blockInjective hBlk3 hBNT.injective
+          hBNT.length_gt_one)
   exact wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords
-    A hBlk hUnital hPair (by simpa [S] using hn)
+    A hBNT.blockInjective hBNT.unital hPair (by simpa [S] using hn)
 
 /-- Length-\(L_0\) injectivity form of the BNT product span at all sufficiently
 large lengths.
@@ -404,19 +428,11 @@ is an internal direct sum: whenever \(\phi_j\in G_n(A^j)\) and
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hBNT : BlockFamilyContext A L)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
     iSupIndep fun j : Fin r => groundSpace (A j) n :=
   groundSpace_iSupIndep_of_wordTupleSpanTop A
-    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
+    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital A hBNT hn)
 
 /-- Length-\(L_0\) injectivity form of the internal-direct-sum conclusion for
 the block local spaces. -/
@@ -515,14 +531,7 @@ one has
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hBNT : BlockFamilyContext A L)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
     ((⨅ b : Fin d,
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
@@ -530,9 +539,8 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
         (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
-    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn)
-    hUnital
+    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital A hBNT hn)
+    hBNT.unital
 
 /-- Length-\(L_0\) injectivity form of the one-step block-intersection identity
 at every length above the BNT block-separation bound. -/
@@ -653,14 +661,7 @@ with these local spaces:
 theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    (hBNT : BlockFamilyContext A L)
     {n : ℕ} (hn : L + (r - 1) * (L + (L + L)) ≤ n) :
     iSupIndep (fun j : Fin r => groundSpace (A j) (n + 1)) ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) (n + 2)) ∧
@@ -671,11 +672,11 @@ theorem pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital
           ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact ⟨
     groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital (by omega),
+      A hBNT (by omega),
     groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital (by omega),
+      A hBNT (by omega),
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn⟩
+      A hBNT hn⟩
 
 /-- Length-\(L_0\) injectivity form of the large-length block intersection as
 an internal direct sum. -/
@@ -725,19 +726,12 @@ then gives the eventual intersection identity. -/
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period_window
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
+    (hBNT : BlockFamilyContext A L)
     (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
     {start period : ℕ} (hperiod_pos : 0 < period)
     (hBlkPeriod : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) period)
     (hBlkWindow : ∀ s : ℕ, s < period + (r - 1) * (L + (L + L)) →
-      ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (start + s))
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+      ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (start + s)) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →
       ((⨅ b : Fin d,
           (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
@@ -749,7 +743,9 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
   have hPair : HasPairBlockSeparatingWords A S := by
     simpa [S] using
       (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
-        A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
+        A hBNT.irreducible hBNT.leftCanonical hBNT.normalizedSelfOverlap
+          hBNT.blocksNotGaugePhaseEquiv hBNT.blockInjective hBlk3 hBNT.injective
+          hBNT.length_gt_one)
   have hPeriodSpan : WordTupleSpanTop A (period + q) := by
     simpa [S, q] using
       (wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
@@ -764,7 +760,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_period
         A (hBlkWindow s (by simpa [q, S] using hs)) hPair
     simpa [q, S, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using hSpan
   exact pgvwc07_iSup_restriction_intersection_eventually_of_period_window
-    A hPeriodPos hPeriodSpan hWindowSpan hUnital
+    A hPeriodPos hPeriodSpan hWindowSpan hBNT.unital
 
 /-- BNT block-separation hypotheses and the PGVWC07 normalization give the eventual
 block-intersection identity without separately assuming a higher-length
@@ -784,14 +780,7 @@ hypotheses is obtained from the equations
 theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1) :
+    (hBNT : BlockFamilyContext A L) :
     ∃ N : ℕ, ∀ n : ℕ, n ≥ N →
       ((⨅ b : Fin d,
           (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
@@ -801,7 +790,7 @@ theorem pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital
   refine ⟨L + (r - 1) * (L + (L + L)), ?_⟩
   intro n hn
   exact pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
-    A hIrr hLeft hOverlap hBlocks hBlk hInj hL hUnital hn
+    A hBNT hn
 
 /-- Length-\(L_0\) injectivity form of the eventual block-intersection identity
 without a separate one-site injectivity assumption. -/

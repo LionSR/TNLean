@@ -200,7 +200,7 @@ span. This is the biCF condition used in Appendix C.2 of
 arXiv:1606.00608, lines 1628--1633, specialized to one BNT element. -/
 theorem scalarBNT_wordTupleSpanTop :
     MPSTensor.WordTupleSpanTop (fun _ : Fin 1 ↦ scalarBNT.toMPSTensor) 1 := by
-  unfold MPSTensor.WordTupleSpanTop
+  simp only [mps_eval]
   apply top_unique
   intro X hX
   let w : Fin 1 → Fin 1 := fun _ ↦ 0

@@ -318,7 +318,8 @@ theorem sum_triMergedSummand (F : CoherentCoarseBlockingFrame (G := G) (d := d) 
     (∑ η : VirtualConfig A, triMergedSummand F σr σb σc η) =
       stateCoeff A (assembleTri F hP σr σb σc) := by
   classical
-  unfold stateCoeff triMergedSummand
+  simp only [mps_eval]
+  unfold triMergedSummand
   exact Finset.sum_congr rfl (fun η _ => (prod_assembleTri_split F hP σr σb σc η).symm)
 
 /-! ### The fiber count

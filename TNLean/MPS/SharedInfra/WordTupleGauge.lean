@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
+import TNLean.MPS.Tactic.Attr
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 /-!
@@ -57,6 +58,14 @@ def WordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
     (L : ℕ) : Prop :=
   Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤
+
+/-- Explicit characterization of the fixed-length full word-tuple span. -/
+@[mps_eval]
+theorem wordTupleSpanTop_iff
+    (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) :
+    WordTupleSpanTop A L ↔
+      Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤ :=
+  Iff.rfl
 
 /-- The tuple-valued span of word evaluations is closed under pointwise matrix
 multiplication, at the cost of adding word lengths. -/
@@ -147,7 +156,7 @@ theorem wordTupleSpanTop_add_of_identity_mem_span_wordTuple
       Submodule.span ℂ (Set.range (wordTuple A S))) :
     WordTupleSpanTop A (L + S) := by
   classical
-  unfold WordTupleSpanTop at hSpan ⊢
+  simp only [mps_eval] at hSpan ⊢
   apply eq_top_iff.mpr
   intro M _
   have hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) := by
@@ -169,7 +178,7 @@ theorem wordTupleSpanTop_add_of_wordTupleSpanTop
     (hSpanS : WordTupleSpanTop A S) :
     WordTupleSpanTop A (L + S) := by
   apply wordTupleSpanTop_add_of_identity_mem_span_wordTuple A hSpanL
-  unfold WordTupleSpanTop at hSpanS
+  simp only [mps_eval] at hSpanS
   rw [hSpanS]
   exact Submodule.mem_top
 
@@ -266,7 +275,7 @@ theorem wordTupleSpanTop_reindexPhysical_equiv {d' : ℕ}
     (e : Fin d' ≃ Fin d) (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) :
     WordTupleSpanTop (fun k ↦ Kraus.reindexPhysical e (A k)) L ↔
       WordTupleSpanTop A L := by
-  unfold WordTupleSpanTop
+  simp only [mps_eval]
   have hRange :
       Set.range (wordTuple (fun k ↦ Kraus.reindexPhysical e (A k)) L) =
         Set.range (wordTuple A L) := by
@@ -298,7 +307,7 @@ theorem wordTupleSpanTop_of_family_gaugeEquiv
     WordTupleSpanTop B L := by
   classical
   choose X hX using hGauge
-  unfold WordTupleSpanTop at hSpan ⊢
+  simp only [mps_eval] at hSpan ⊢
   apply top_unique
   intro M _
   let M' : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ := fun j =>

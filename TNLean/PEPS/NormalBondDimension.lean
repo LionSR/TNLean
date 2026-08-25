@@ -91,7 +91,8 @@ omit [Fintype V] in
 constant: the contraction product picks up the factor exactly once, at `v₀`. -/
 theorem stateCoeff_scaleVertex (A : Tensor G d) (v₀ : V) (c : ℂ) (σ : V → Fin d) :
     stateCoeff (scaleVertex A v₀ c) σ = c * stateCoeff A σ := by
-  rw [stateCoeff, stateCoeff, Finset.mul_sum]
+  simp only [mps_eval]
+  rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun η _ => ?_
   change (∏ v : V, (if v = v₀ then c else 1) * A.component v (fun ie => η ie.1) (σ v)) =
     c * ∏ v : V, A.component v (fun ie => η ie.1) (σ v)

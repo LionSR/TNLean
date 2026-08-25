@@ -185,7 +185,7 @@ theorem stateCoeff_splitAtEdge (A : Tensor G d) (e : Edge G) (σ : V → Fin d) 
           (∏ v ∈ edgeMiddleVertices e,
               A.component v (fun ie => η ie.1) (σ v)) *
           A.component e.1.2 (fun ie => η ie.1) (σ e.1.2) := by
-  unfold stateCoeff
+  simp only [mps_eval]
   refine Finset.sum_congr rfl ?_
   intro η _
   exact prod_univ_splitAtEdge e (fun v : V => A.component v (fun ie => η ie.1) (σ v))

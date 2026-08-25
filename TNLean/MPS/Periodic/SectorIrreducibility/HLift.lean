@@ -124,8 +124,8 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
     ∃ c : ℂ, X = c • P k := by
   let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
-    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  have hUnital : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hTP
   have hIrrAdjLM : IsIrreducibleMap (Kraus.mapLM K) := by
     rw [Kraus.mapLM_eq_transferMap]; exact hIrrAdj
   have hOrbitFix :
@@ -482,8 +482,8 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
   have hIrrAdj : IsIrreducibleMap T :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor A hIrr
   -- 2. Unital Kadison–Schwarz structure from trace-preserving condition
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
-    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  have hUnital : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hTP
   -- 3. Each cyclic projection belongs to the multiplicative domain
   have hMulDomain : ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain K := by
     intro k

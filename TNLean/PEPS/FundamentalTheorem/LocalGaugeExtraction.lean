@@ -239,8 +239,8 @@ theorem isVertexInjective_absorbEdgeGauges (B : Tensor G d)
 /-! ### Gauge consistency across edges -/
 
 /-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
-lines 1037--1065. Assuming the separately established bond-dimension equality
-\(D_A=D_B\), the edge gauges obtained from the three-site comparison can
+lines 1037--1065. Assuming the separately tracked bond-dimension equality
+\(D_A=D_B\) (#874), the edge gauges obtained from the three-site comparison can
 be absorbed into the second tensor family so that every edge insertion in \(A\)
 agrees with the transported edge insertion in the absorbed tensor family.
 
@@ -251,7 +251,7 @@ three-site injective chain. That step needs every bond dimension positive,
 have nonzero virtual bond spaces. A vertex incident to a zero-dimensional bond
 has an empty virtual-configuration family, making linear independence vacuous.
 The same defect was corrected for the PEPS fundamental theorem, gauge
-consistency, and the edge-blocked three-site injectivity theorem; it is recorded in
+consistency, and the edge-blocked three-site injectivity (#1366); it is recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)

@@ -101,7 +101,7 @@ theorem wordTupleSpanTop_one_of_blockwise_mul
     (hSpan : WordTupleSpanTop A 1) :
     WordTupleSpanTop B 1 := by
   classical
-  unfold WordTupleSpanTop at hSpan ⊢
+  simp only [mps_eval] at hSpan ⊢
   apply top_unique
   intro M _
   let N : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=

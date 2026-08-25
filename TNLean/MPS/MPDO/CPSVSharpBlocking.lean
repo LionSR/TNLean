@@ -83,7 +83,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
     refine ⟨1, by omega, ?_, ?_⟩
     · have hK5pos : 0 < K ^ 5 := Nat.pow_pos hK
       omega
-    · unfold WordTupleSpanTop
+    · simp only [mps_eval]
       apply top_unique
       intro X _
       have hX : X = 0 := by

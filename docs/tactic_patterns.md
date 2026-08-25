@@ -70,6 +70,22 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.reindex` identity. The three equivalences remain explicit, so the
   source-cut orientations are still visible and no searching tactic is used.
 
+### tensor-network evaluation equations — promoted
+- **Pattern:** repeatedly unfold `localOfDoubled`, `stateCoeff`, or
+  `WordTupleSpanTop` inside proofs in order to expose their coordinate,
+  contraction, or span equations.
+- **Seen:** 56 direct expansion sites across 23 TNLean files before promotion
+  (2026-08-23): 19 for `localOfDoubled`, 23 for `stateCoeff`, and 14 for
+  `WordTupleSpanTop`.
+- **Abstraction:** the `mps_eval` custom simp set registered in
+  `TNLean/MPS/Tactic/Attr.lean`, populated by `localOfDoubled_apply` and its
+  endpoint/complement coordinate lemmas, `stateCoeff_apply`, and
+  `wordTupleSpanTop_iff`.
+- **Notes:** all 56 TNLean direct expansion sites now use `simp only
+  [mps_eval]` or an existing coordinate lemma. The global simp set is
+  unchanged. The 14 `transProbVec` sites named by the original audit now live
+  wholly in QICLean and were not wrapped or changed locally.
+
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
   site by rewriting the periodic trace as the trace of the vertical loop and
@@ -951,10 +967,12 @@ abstracted — record why, so it is not re-proposed).
   `grouped_sector_gram_conj_eq_of_dressing`, and
   `grouped_sector_gram_eq_pos_smul_one_of_dressing` in
   `TNLean/MPS/MPDO/GroupedSectorGram.lean` isolate the predicate-neutral Figure Eight and
-  Gram-rigidity steps.
-- **Result:** both Figure Eight and Gram-normalization theorem families keep their exact public
-  statements and independently supply their literal-CPSV or horizontal Gram-dressing theorem.
-  No implication between the two canonical-form predicates is used.
+  Gram-rigidity steps. `MPOTensor.VerticalBNTGrouping` now packages the dependent grouped data
+  and this common dressing property.
+- **Result:** the horizontal and literal-CPSV constructors independently supply their own
+  Gram-dressing theorem, while one bundled proof gives Gram rigidity and unitary normalization.
+  The four Blueprint-facing names remain available as aliases, and no implication between the
+  two canonical-form predicates is used.
 
 ### Positive-Gram provider for normalized grouped sectors
 - **Pattern:** the horizontal BNT-refined and literal CPSV grouped-sector theorems

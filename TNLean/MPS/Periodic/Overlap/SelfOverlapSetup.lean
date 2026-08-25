@@ -327,11 +327,9 @@ theorem exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic
       (∀ k, dim k ≠ 0) ∧
       ∀ k (i : Fin (blockPhysDim d m)),
         (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
-  obtain ⟨dim, blocks, P, φ, _V, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
-    hIntertwine, hMul, hStar, hNondeg, hLetter, _hV_iso, _hV_range, _hEmbed⟩ :=
-    exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP
-  exact ⟨dim, blocks, P, φ, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
-    hIntertwine, hMul, hStar, hNondeg, hLetter⟩
+  exact
+    (exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP).imp
+      fun dim ⟨blocks, P, φ, _V, h⟩ ↦ ⟨blocks, P, φ, by tauto⟩
 
 /-- A periodic tensor of period `m`, after blocking by `m`, admits a cyclic
 sector decomposition.
@@ -352,7 +350,7 @@ theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
     hIntertwine, hMul, hStar, hNondeg, _hLetter⟩ :=
     exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic A hP
   have hCyclic' :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
   exact ⟨dim, blocks, hLC, hMPV,
@@ -400,7 +398,7 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
         ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
   let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
+  have hUnital : Kraus.IsUnital K := by
     change ∑ i : Fin d, (A i)ᴴ * ((A i)ᴴ)ᴴ = 1
     simpa [IsLeftCanonical] using hP.leftCanonical
   have hK_apply : ∀ X : MatrixAlg D, T X = KadisonSchwarz.krausMap K X := by

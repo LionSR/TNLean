@@ -104,7 +104,6 @@ import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
 import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion

@@ -220,7 +220,7 @@ bond-dimension equality. -/
 theorem stateCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
     (h : bd = B.bondDim) (σ : V → Fin d) :
     stateCoeff (reindexTensor (G := G) B h) σ = stateCoeff B σ := by
-  unfold stateCoeff
+  simp only [mps_eval]
   refine Fintype.sum_equiv
     (Equiv.piCongrRight (fun e => finCongr (congr_fun h e))) _ _ (fun η => ?_)
   refine Finset.prod_congr rfl (fun v _ => ?_)
@@ -243,7 +243,7 @@ theorem stateCoeff_eq_vertexComplement (A : Tensor G d) (v : V) (σ : V → Fin 
         A.component v starCfg (σ v) *
           vertexComplementWeight (G := G) A v starCfg (fun w => σ w.1) := by
   classical
-  unfold stateCoeff
+  simp only [mps_eval]
   -- Group the global virtual configurations by their `v`-star label.
   rw [← Finset.sum_fiberwise Finset.univ
       (fun ζ : VirtualConfig A => vertexStarLabel (G := G) A v ζ)
@@ -344,7 +344,7 @@ theorem exists_stateCoeff_ne_zero (A : Tensor G d)
   · -- Empty vertex set: the contraction over no vertices is `1`.
     rw [not_nonempty_iff] at hV
     refine ⟨fun w => (hV.false w).elim, ?_⟩
-    rw [stateCoeff]
+    simp only [mps_eval]
     -- Each summand is the empty product `1`; there is at least one virtual config.
     have hone : ∀ η : VirtualConfig A,
         (∏ w : V, A.component w (fun ie => η ie.1) ((fun w => (hV.false w).elim) w)) = 1 := by
@@ -388,7 +388,7 @@ theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
         = ∑ η : VirtualConfig A,
             (∏ v, c v) * ∏ v, gaugeVertex B Z v
               (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v) := by
-      unfold stateCoeff
+      simp only [mps_eval]
       refine Finset.sum_congr rfl (fun η _ => ?_)
       rw [← Finset.prod_mul_distrib]
       refine Finset.prod_congr rfl (fun v _ => ?_)
@@ -397,7 +397,7 @@ theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
     have hsum : (∑ η : VirtualConfig A, ∏ v, gaugeVertex B Z v
             (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie.1)) (σ v))
         = stateCoeff (applyGauge B Z) σ := by
-      unfold stateCoeff
+      simp only [mps_eval]
       refine Fintype.sum_equiv
         (Equiv.piCongrRight (fun e => finCongr (congr_fun hbd e)))
         (fun η : VirtualConfig A => ∏ v, gaugeVertex B Z v
@@ -526,7 +526,7 @@ theorem gaugeConsistency (A B : Tensor G d)
         (ζ : (ie : IncidentEdge G v) → Fin (C.bondDim ie.1)) (τ : Fin d),
         stateCoeff C (fun _ => τ) = C.component v ζ τ := by
       intro C ζ τ
-      unfold stateCoeff
+      simp only [mps_eval]
       rw [Finset.sum_eq_single (fun e => hEmptyEdge.elim e)]
       · rw [Finset.prod_eq_single v]
         · congr 1

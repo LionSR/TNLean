@@ -16,6 +16,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
   - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
+  - [Archive Build](#archive-build-housekeepingyml-archive-build-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Agent Mention Handler](#agent-mention-handler-agent-mentionyml)
@@ -271,13 +272,16 @@ require rendered PDF and web inspection during review.
 
 ### Lean Module Policy (`pr-ci.yml`, `file-length` job)
 
-**What it does**: Enforces two blocking structural checks:
+**What it does**: Enforces four blocking structural checks:
 
 - Ordinary `.lean` files may not exceed 1000 lines. The exact path passed with
   `--import-only-aggregator` is exempt only after the checker removes nested Lean
   comments and verifies that every remaining command is an `import`. Missing,
   excluded, empty, malformed, or declaration-bearing exemptions fail even when
   the file is below the limit. CI currently registers only `TNLean.lean`.
+  Nonexempt files from 900 through 1000 lines receive an early warning so the
+  next split can occur at a mathematical boundary rather than during an
+  emergency cap repair.
 - New Git-tracked production modules below `TNLean/` may not end in a numeral
   (optionally followed by one letter). `TNLean/Archive/` and untracked scratch
   files are outside this production policy. Existing continuation files form a
@@ -287,6 +291,18 @@ require rendered PDF and web inspection during review.
   Exact names whose numeral
   denotes a mathematical object or source label have path-specific documented
   exceptions in `scripts/check_numbered_lean_files.py`.
+- A handwritten, declaration-bearing production module may not newly become
+  reachable only through generated import aggregators while having no
+  Blueprint citation. The existing orphan-module allowlist is a shrinking
+  ratchet; an entry must be removed when the module is deleted, cited, or
+  imported by another handwritten production module.
+- A newly named, unattributed declaration may not have only its own
+  declaration-site occurrence across production Lean, the Blueprint, and
+  repository documentation. This deliberately conservative textual check
+  ignores name collisions, instances, generated declarations, and attributed
+  declarations whose simplification, automation, or deprecation behavior may
+  be consumed without naming them. Its seeded allowlist likewise may only
+  shrink, and stale entries fail immediately.
 
 When a proof approaches the cap, split by mathematical responsibility rather
 than chronology. Put shared definitions and setup in a family `Basic.lean`
@@ -297,10 +313,11 @@ exception must explain why the numeral belongs to the mathematics or source
 citation; it is not an escape hatch for continuation files.
 
 **When it runs**: On pull requests and pushes to `main` whenever Lean sources,
-either checker, their tests, this documentation, or the workflow changes. CI
-runs the policy unit tests before both repository checks. The numbered-module
-ratchet compares a pull request with its merge base and a push with the commit
-recorded by the push event before any commit in that push was applied.
+either checker, their tests, the scanned Blueprint/documentation corpus, this
+documentation, or the workflow changes. CI runs the policy unit tests before
+the repository checks. All three shrinking ratchets compare a pull request
+with its merge base and a push with the commit recorded by the push event
+before any commit in that push was applied.
 
 ---
 
@@ -313,6 +330,19 @@ summary, and uploads the log plus JSON/text reports.
 
 **When it runs**: Weekly and by manual dispatch. It is report-only and never
 edits files or opens pull requests.
+
+---
+
+### Archive Build (`housekeeping.yml`, `archive-build` job)
+
+**What it does**: Fetches the pinned prebuilt dependency cache and builds every
+Git-tracked Lean module below `TNLean/Archive/`. These modules are deliberately
+excluded from `TNLean.lean`, so the scheduled build detects changes in the live
+API that would otherwise leave the historical developments silently broken.
+
+**When it runs**: Weekly and by manual dispatch. Pull-request CI separately
+builds each changed Archive module; the weekly job checks all of them even when
+the Archive itself has not changed.
 
 ---
 

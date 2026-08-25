@@ -225,8 +225,7 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
     -- `Kraus.mixedTransferMap` and `Kraus.mixedTransferMap₂` agree on `D × D` matrices.
     have hagree :
         Kraus.mixedTransferMap (d := d) (D := D) A B =
-          Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B :=
-      (Kraus.mixedTransferMap₂_same_dim A B).symm
+          Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B := rfl
     rw [← hagree]; exact hsq
   have hzero :
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop

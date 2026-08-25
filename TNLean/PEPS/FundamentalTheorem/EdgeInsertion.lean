@@ -376,7 +376,7 @@ theorem GaugeEquiv.sameState {A B : Tensor G d} (h : GaugeEquiv A B) :
   let φ : VirtualConfig A ≃ VirtualConfig B :=
     Equiv.piCongrRight (fun e => finCongr (congr_fun hDim e))
   have hB : stateCoeff B σ = stateCoeff (applyGauge A X) σ := by
-    unfold stateCoeff
+    simp only [mps_eval]
     rw [← φ.sum_comp (fun η : VirtualConfig B =>
       ∏ v : V, B.component v (fun ie => η ie.1) (σ v))]
     dsimp [φ, applyGauge]

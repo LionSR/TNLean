@@ -1,18 +1,14 @@
-# Issue 6861: compatibility retirement audit
+# Issue 6861: dead-module deletion audit
 
-This note records the compatibility decision for two TNLean-local modules from
-the August 2026 mass-deletion review. The audit was repeated at the branch
-point from `main`: none of the names below has a non-`Archive` Lean consumer,
-and no Blueprint `\lean{...}` tag names one of them.
+This note records the first TNLean-local orphan-module deletion from the
+August 2026 mass-deletion review. The audit was repeated at the branch point
+from `main`: none of the names below has a non-`Archive` Lean consumer, and no
+Blueprint `\lean{...}` tag names one of them.
 
-Repository-wide prose search finds only dated inventory snapshots in
-`docs/audits/`. These records describe earlier tree states; they neither
-prescribe an import nor present either module as a current public interface.
+## `TNLean/Algebra/BlockTriangularTrace.lean`
 
-## Retained: `TNLean/Algebra/BlockTriangularTrace.lean`
-
-The whole module is reachable only through the generated `TNLean.Algebra`
-aggregator. It contains the following substantive public declarations:
+The whole module was reachable only through the generated `TNLean.Algebra`
+aggregator. The following declarations are removed without replacements:
 
 - `MPSTensor.upperSum`;
 - `MPSTensor.diagSum`;
@@ -25,23 +21,11 @@ aggregator. It contains the following substantive public declarations:
 - `MPSTensor.mpv_upperFin_eq_mpv_diagFin`;
 - `MPSTensor.sameMPV_upperFin_diagFin`.
 
-These declarations are not literal pass-throughs, but their mathematical
-content is the two-block coordinate specialization of the projection-based API
-in `TNLean/Algebra/ProjectionTriangularTrace.lean`. In particular,
-`MPSTensor.sameMPV_diagPart_of_lowerZero` is the coordinate-free strict
-generalization of `MPSTensor.sameMPV_upperFin_diagFin`, with the remaining
-projection lemmas supplying the corresponding word-evaluation and trace
-statements.
+These declarations formed one abandoned upper-triangular reduction route. No
+retained theorem depends on the route, so introducing a replacement wrapper
+would preserve the dead layer rather than preserve a public mathematical API.
 
-Issue #7135 tracks the missing compatibility transition: the ten coordinate
-names are to be rederived as thin specializations of the projection API before
-deprecation is considered. Until then they do not satisfy the
-immediate-removal exception in `docs/project_conventions.md`, which is limited
-to exact pass-through declarations, bundled fields, and proof-step names
-replaced at their use sites. The module and its aggregator import therefore
-remain available.
-
-## Retired: `TNLean/Wielandt/RankOne/MatrixFittingRange.lean`
+## `TNLean/Wielandt/RankOne/MatrixFittingRange.lean`
 
 This module contained only deprecated aliases of QICLean-owned declarations.
 Each removed compatibility name and its surviving replacement are:
@@ -69,5 +53,4 @@ Each removed compatibility name and its surviving replacement are:
 | `MPSTensor.WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow` | `Matrix.eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow` |
 
 The generated `TNLean.Algebra` and `TNLean.Wielandt.RankOne` aggregators were
-regenerated. The former continues to import `BlockTriangularTrace`; the latter
-no longer imports `MatrixFittingRange`.
+regenerated after both files were removed.

@@ -363,7 +363,7 @@ theorem stateCoeff_coarseTensor_eq_threeRegionSum (s : Fin 3 → Fin (coarseDim 
             (F.legEquivBlue (fun ie => η ie.1)) (coarseProj F.blue (s 1)) *
           regionBlockedWeight (G := G) A F.complement
             (F.legEquivComplement (fun ie => η ie.1)) (coarseProj F.complement (s 2)) := by
-  rw [stateCoeff]
+  simp only [mps_eval]
   refine Finset.sum_congr rfl (fun η _ => ?_)
   rw [Fin.prod_univ_three]
   let legsRed : (ie : IncidentEdge coarseGraph 0) → Fin (F.coarseBondDim ie.1) :=

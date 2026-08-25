@@ -93,8 +93,8 @@ private theorem cyclic_projection_mem_multiplicativeDomain
         Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
     ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain (fun i : Fin d => (A i)ᴴ) := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
-    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
+  have hUnital : Kraus.IsUnital K := by
+    simpa [Kraus.IsUnital, K] using hTP
   have hK_apply :
       ∀ X : MatrixAlg D,
         Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X =

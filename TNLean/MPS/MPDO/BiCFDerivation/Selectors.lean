@@ -121,7 +121,7 @@ theorem wordTupleSpanTop_succ_of_unital
     (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1) :
     WordTupleSpanTop A (L + 1) := by
   classical
-  unfold WordTupleSpanTop at hSpan ⊢
+  simp only [mps_eval] at hSpan ⊢
   apply top_unique
   intro M _
   have hN : ∀ a : Fin d,
@@ -229,7 +229,7 @@ theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
     WordTupleSpanTop A L := by
   classical
   let k₀ : Fin r := ⟨0, by omega⟩
-  unfold WordTupleSpanTop
+  simp only [mps_eval]
   apply top_unique
   intro X _
   have hX : X k₀ ∈ Submodule.span ℂ
@@ -263,7 +263,7 @@ theorem wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
     WordTupleSpanTop A ((r - 1) * S) := by
   classical
   let : Nontrivial (Fin r) := Fin.nontrivial_iff_two_le.mpr hr
-  unfold WordTupleSpanTop
+  simp only [mps_eval]
   apply top_unique
   intro X _
   have hContribution : ∀ k : Fin r,
@@ -461,7 +461,8 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
   classical
   rcases exists_dualCoeffs_of_wordEntryFamily_linearIndependent A hLI with
     ⟨coeff, hcoeff⟩
-  rw [WordTupleSpanTop, span_range_eq_top_iff_surjective_fintypeLinearCombination]
+  simp only [mps_eval]
+  rw [span_range_eq_top_iff_surjective_fintypeLinearCombination]
   intro M
   let c : (Fin L → Fin d) → ℂ :=
     fun w => ∑ x : BlockEntryIndex dim, blockEntryValue M x * coeff x w
@@ -553,7 +554,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
     (hSel : HasBlockSelectorWords A S) :
     WordTupleSpanTop A (L + S) := by
   classical
-  unfold WordTupleSpanTop
+  simp only [mps_eval]
   apply top_unique
   intro M _
   have hMk_mem :

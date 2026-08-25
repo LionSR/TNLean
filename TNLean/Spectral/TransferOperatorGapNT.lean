@@ -42,9 +42,9 @@ theorem gaugePhaseEquiv_of_krausGaugePhaseEquiv
       _ = μ • (Xinv * X * B i) := by rw [Matrix.mul_assoc]
       _ = μ • (1 * B i) := by rw [hXinvX]
       _ = μ • B i := by rw [Matrix.one_mul]
-  show B i = μ⁻¹ • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i *
+  change B i = μ⁻¹ • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i *
     ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-  show B i = μ⁻¹ • (Xinv * A i * X)
+  change B i = μ⁻¹ • (Xinv * A i * X)
   rw [hstep, smul_smul, inv_mul_cancel₀ hμ_ne0, one_smul]
 
 private theorem irreducibleMap_of_irreducibleTensor
@@ -114,9 +114,8 @@ theorem mpvOverlap_tendsto_zero_of_irreducible_TP [NeZero D]
     (hAB : ¬ GaugePhaseEquiv A B) :
     Filter.Tendsto (fun N => mpvOverlap A B N) Filter.atTop (nhds 0) :=
   mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one (A := A) (B := B) <|
-    by simpa only [Kraus.mixedTransferMap₂_same_dim, Kraus.mixedTransferSpectralRadius] using
-      spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
-        A B hA_irr hB_irr hA_left hB_left hAB
+    spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
+      A B hA_irr hB_irr hA_left hB_left hAB
 
 /-- Rectangular strict transfer-operator gap for irreducible left-canonical blocks of different
 bond sizes. -/

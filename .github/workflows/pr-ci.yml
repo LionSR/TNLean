@@ -21,6 +21,9 @@ on:
       - 'scripts/nolints-style.txt'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/check_orphan_lean_modules.py'
+      - 'scripts/check_dead_lean_declarations.py'
+      - 'scripts/generate_import_aggregators.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
       - 'scripts/lake_build_hotspots.py'
@@ -30,13 +33,18 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
+      - '.github/workflows/housekeeping.yml'
       - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
+      - 'blueprint/**/*.md'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
       # on merge pushes that only touch a scanned file.
       - 'blueprint/comments/**'
       - 'docs/**/*.md'
+      - 'docs/**/*.tex'
+      - 'docs/**/*.txt'
+      - 'blueprint/**/*.tex'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
       - 'docs/tenkz/**'
@@ -100,6 +108,9 @@ on:
       # on PRs that only touch a scanned file.
       - 'blueprint/comments/**'
       - 'docs/**/*.md'
+      - 'docs/**/*.tex'
+      - 'docs/**/*.txt'
+      - 'blueprint/**/*.tex'
       - '**.lean'
       - 'lakefile.*'
       - 'lean-toolchain'
@@ -108,6 +119,9 @@ on:
       - 'scripts/nolints-style.txt'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/check_orphan_lean_modules.py'
+      - 'scripts/check_dead_lean_declarations.py'
+      - 'scripts/generate_import_aggregators.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
       - 'scripts/lake_build_hotspots.py'
@@ -117,8 +131,10 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
+      - '.github/workflows/housekeeping.yml'
       - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
+      - 'blueprint/**/*.md'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
       - 'docs/tenkz/**'
@@ -223,12 +239,21 @@ jobs:
             module_policy:
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
+              - 'scripts/check_orphan_lean_modules.py'
+              - 'scripts/check_dead_lean_declarations.py'
+              - 'scripts/generate_import_aggregators.py'
               - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
+              - 'blueprint/src/**'
+              - 'blueprint/**/*.tex'
+              - 'blueprint/**/*.md'
+              - 'docs/**/*.md'
+              - 'docs/**/*.tex'
+              - 'docs/**/*.txt'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -325,6 +350,7 @@ jobs:
               - 'scripts/test_tenkz_shrink.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
+              - '.github/workflows/housekeeping.yml'
               - '.github/workflows/tenkz-rmp-book.yml'
 
   tenkz-shrink:
@@ -699,6 +725,32 @@ jobs:
           python3 scripts/check_numbered_lean_files.py
           --root .
           --base-ref HEAD^
+
+      - name: Reject new orphan modules and dead declarations (pull request)
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 scripts/check_orphan_lean_modules.py \
+            --root . \
+            --base-ref "origin/${{ github.event.pull_request.base.ref }}"
+          python3 scripts/check_dead_lean_declarations.py \
+            --root . \
+            --base-ref "origin/${{ github.event.pull_request.base.ref }}"
+
+      - name: Reject new orphan modules and dead declarations (push)
+        if: github.event_name == 'push'
+        run: |
+          python3 scripts/check_orphan_lean_modules.py \
+            --root . \
+            --base-ref "${{ github.event.before }}"
+          python3 scripts/check_dead_lean_declarations.py \
+            --root . \
+            --base-ref "${{ github.event.before }}"
+
+      - name: Reject new orphan modules and dead declarations (manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python3 scripts/check_orphan_lean_modules.py --root . --base-ref HEAD^
+          python3 scripts/check_dead_lean_declarations.py --root . --base-ref HEAD^
 
   blueprint:
     name: Check blueprint compiles without errors

@@ -173,3 +173,4 @@ theorem posSemidef_of_rightOverlappingLift_posSemidef
   rw [hPrincipalEq] at hPrincipal
   exact hPrincipal
 end Matrix
+

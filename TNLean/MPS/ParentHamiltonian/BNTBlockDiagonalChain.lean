@@ -73,6 +73,15 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
       ⨆ j : Fin r, groundSpace (A j) N := by
   classical
+  let hBNT : BlockFamilyContext A L₀ :=
+    { irreducible := hIrr
+      leftCanonical := hLeft
+      normalizedSelfOverlap := hOverlap
+      blocksNotGaugePhaseEquiv := hBlocks
+      blockInjective := hBlk
+      injective := hInj
+      length_gt_one := hL₀
+      unital := hUnital }
   apply chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
     (μ := μ) (A := A) hμ hN hL hLN
   intro M hM
@@ -81,8 +90,7 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
     omega
   have hstep :=
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
-      (d := d) (L := L₀) A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀
-      hUnital (n := M - 1) hbound
+      (d := d) (L := L₀) A hBNT (n := M - 1) hbound
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
@@ -201,11 +209,20 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
         ⨆ j : Fin r, groundSpace (A j) N ∧
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
+  let hBNT : BlockFamilyContext A L₀ :=
+    { irreducible := hIrr
+      leftCanonical := hLeft
+      normalizedSelfOverlap := hOverlap
+      blocksNotGaugePhaseEquiv := hBlocks
+      blockInjective := hBlk
+      injective := hInj
+      length_gt_one := hL₀
+      unital := hUnital }
   refine ⟨?_, ?_⟩
   · exact chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
   · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
+      A hBNT (by omega)
 
 /-- Finite-length block injectivity gives the open-boundary inclusion into
 \(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces.
