@@ -982,8 +982,7 @@
         MPOTensor.PhysicalSupportRestrictionData.exists_neighboringTraceFactorization_restriction_iff}
     \leanok
     \uses{def:gauge_equiv, def:mpdo_neighboring_trace_factorization,
-        def:mpdo_physical_support_restriction,
-        thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
+        def:mpdo_physical_support_restriction}
     Suppose that two MPO tensors of the same physical and virtual dimensions
     differ by an invertible virtual gauge.  One admits a physical-sector
     factorization with neighboring data $\eta_{k,h}$, $a_k$, and $b_h$ if and
@@ -1023,7 +1022,17 @@
     \leanok
     \uses{thm:mpdo_physical_sector_factorization_gauge,
         thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
-    Under the virtual gauge, every neighboring operator is unchanged.
+    For the virtual gauge $L^i=XK^iX^{-1}$, write
+    $\eta^K_{k,h}(M)$ for the neighboring contraction with $M$ inserted
+    between the transported virtual factors.  Their composition is
+    $X^{-1}X$, and hence
+    \begin{align}
+        \eta^L_{k,h}
+        &=\eta^K_{k,h}(X^{-1}X)
+         =\eta^K_{k,h}(\Id)
+         =\eta^K_{k,h}.
+        \notag
+    \end{align}
     The families $a_k$ and $b_h$ are retained literally, together with their
     positivity, trace, and normalization identities.  The reverse implication
     uses the inverse gauge.

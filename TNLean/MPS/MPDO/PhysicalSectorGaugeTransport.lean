@@ -117,10 +117,8 @@ noncomputable def NeighboringTraceFactorization.ofGaugeEquiv
     (H : NeighboringTraceFactorization F)
     (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
     NeighboringTraceFactorization (F.ofGaugeEquiv hGauge) where
-  neighboringOperator_pos := by
-    intro k h
-    rw [F.ofGaugeEquiv_neighboringOperator hGauge k h]
-    exact H.neighboringOperator_pos k h
+  neighboringOperator_pos :=
+    F.ofGaugeEquiv_neighboringOperator_posSemidef hGauge H.neighboringOperator_pos
   a := H.a
   b := H.b
   trace_neighboringOperator := by
