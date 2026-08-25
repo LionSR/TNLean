@@ -13,11 +13,18 @@ from __future__ import annotations
 import json
 import re
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 LEAN_ROOT = ROOT / "TNLean"
+BLUEPRINT_SRC = ROOT / "blueprint" / "src"
+
+_PROOF_BEARING_ENV_TYPES: frozenset[str] = frozenset(
+    {"theorem", "lemma", "proposition", "corollary"}
+)
+_SKIP_ENV_TYPES: frozenset[str] = frozenset({"remark", "example"})
 
 
 def strip_lean_comments_and_strings(text: str) -> str:
@@ -114,12 +121,43 @@ def write_badge(name: str, label: str, message: str, color: str, badge_dir: Path
     (badge_dir / f"{name}.json").write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def count_color(count: int, *, warning_at: int = 1) -> str:
+def count_color(count: int, *, warning_at: int = 1, danger_at: int | None = None) -> str:
     if count == 0:
         return "brightgreen"
     if count <= warning_at:
         return "yellow"
+    if danger_at is not None and count >= danger_at:
+        return "red"
     return "orange"
+
+
+def blueprint_badge_counts() -> tuple[int, int]:
+    """Return (no_leanok_count, not_ready_count) for unique blueprint declarations."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from blueprint_lean_sync import collect_blueprint_entries
+
+    entries = collect_blueprint_entries(BLUEPRINT_SRC)
+    decl_entries: dict[str, list] = defaultdict(list)
+    for entry in entries:
+        decl_entries[entry.lean_decl].append(entry)
+
+    no_leanok = 0
+    not_ready = 0
+    for elist in decl_entries.values():
+        has_stmt = any(e.has_leanok for e in elist)
+        has_proof = any(e.proof_has_leanok for e in elist)
+        env_types = {e.env_type for e in elist}
+        if not has_stmt and not has_proof:
+            no_leanok += 1
+        if env_types <= _SKIP_ENV_TYPES:
+            continue
+        is_proof_bearing = bool(env_types & _PROOF_BEARING_ENV_TYPES)
+        if is_proof_bearing:
+            if not (has_stmt and has_proof):
+                not_ready += 1
+        elif not has_stmt:
+            not_ready += 1
+    return no_leanok, not_ready
 
 
 def main() -> None:
@@ -130,6 +168,21 @@ def main() -> None:
     write_badge("axioms", "axioms", str(axioms), count_color(axioms, warning_at=0), badge_dir)
     write_badge("lean", "Lean", lean_version(), "blue", badge_dir)
     write_badge("mathlib", "Mathlib", mathlib_version(), "blue", badge_dir)
+    no_leanok, not_ready = blueprint_badge_counts()
+    write_badge(
+        "blueprint_no_leanok",
+        r"blueprint: no \leanok",
+        str(no_leanok),
+        count_color(no_leanok, warning_at=100, danger_at=300),
+        badge_dir,
+    )
+    write_badge(
+        "blueprint_not_ready",
+        "blueprint: not ready",
+        str(not_ready),
+        count_color(not_ready, warning_at=100, danger_at=300),
+        badge_dir,
+    )
 
 
 if __name__ == "__main__":

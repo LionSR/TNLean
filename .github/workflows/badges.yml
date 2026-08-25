@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate badge JSON
         run: |
-          python3 scripts/generate_badges.py --output-dir badge-output
+          python3 scripts/generate_badges.py --output-dir badge-output --blueprint-src blueprint/src
           json_count=$(find badge-output -maxdepth 1 -name '*.json' | wc -l)
           if [ "$json_count" -eq 0 ]; then
             echo "::error::No badge JSON generated — refusing to publish empty badges"
