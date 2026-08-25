@@ -423,7 +423,6 @@
 % list passes through this door, which braces each address before l3keys
 % reads it.  Members go first: the pair pattern must not consume their prefix.
 \tl_new:N \l__tenkz_kernel_opts_tl
-\tl_new:N \l__tenkz_kernel_diagnostic_context_tl
 \seq_new:N \l__tenkz_kernel_diagnostic_context_seq
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
@@ -460,7 +459,7 @@
     \seq_push:Nn \l__tenkz_kernel_diagnostic_context_seq {#1}
     \__tenkz_kernel_keys:nn {#2} {#3}
     \seq_pop:NN \l__tenkz_kernel_diagnostic_context_seq
-      \l__tenkz_kernel_diagnostic_context_tl
+      \l__tenkz_kernel_scratch_tl
   }
 
 % The package event writer, reachable whatever the catcode of @ is at load.
