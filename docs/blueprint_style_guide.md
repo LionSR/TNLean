@@ -376,11 +376,12 @@ the proof sketch should name the regions or inserted tensors appearing in it.
 - **Orange**: `\notready` (needs more blueprint work)
 
 ## Bibliography Workflow
-1. Edit `blueprint/src/references.bib` (standalone, AuthorYYYYKeyword keys)
-2. Run `cd blueprint/src && latexmk -lualatex -interaction=nonstopmode print.tex` (generates `print.bbl`)
-3. Copy `blueprint/src/print.bbl` → `blueprint/src/web.bbl`  ← **must do this every time bib changes**
-4. Run `leanblueprint web` (plasTeX reads `web.bbl`)
-5. Citation key format: e.g., `Cirac2021Matrix`, `PerezGarcia2007Matrix`
+1. Run `python3 scripts/fetch_tenkz.py` from the repository root.
+2. Edit `blueprint/src/references.bib` (standalone, AuthorYYYYKeyword keys)
+3. Run `cd blueprint/src && latexmk -lualatex -interaction=nonstopmode print.tex` (generates `print.bbl`)
+4. Copy `blueprint/src/print.bbl` → `blueprint/src/web.bbl`  ← **must do this every time bib changes**
+5. Run `leanblueprint web` (plasTeX reads `web.bbl`)
+6. Citation key format: e.g., `Cirac2021Matrix`, `PerezGarcia2007Matrix`
 
 ## Stale/Corrupt Aux File Recovery
 If LaTeX reports `! File ended while scanning use of \@newl@bel` on startup:
@@ -397,10 +398,13 @@ router `blueprint/src/content_ft_mps.tex` and is built by the repository script
 shown below.
 
 ```bash
+python3 scripts/fetch_tenkz.py
+cd blueprint
 leanblueprint pdf     # PDF → blueprint/print/print.pdf
 leanblueprint web     # HTML → blueprint/web/
 leanblueprint serve   # local server at http://0.0.0.0:8000/
 leanblueprint all     # pdf + web + checkdecls
+cd ..
 ./scripts/build_blueprint_ch01_12.sh  # FT--MPS PDF → blueprint/print/print12.pdf
 ```
 

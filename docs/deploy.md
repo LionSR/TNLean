@@ -6,6 +6,9 @@ Each deploy updates only its own files — blueprint deploys preserve `/docs/` a
 ## Local Preview (no push)
 
 ```bash
+# Materialize the pinned diagram package.
+python3 scripts/fetch_tenkz.py
+
 # Build and preview blueprint locally
 cd blueprint
 leanblueprint web
