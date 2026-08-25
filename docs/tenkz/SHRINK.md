@@ -3720,26 +3720,28 @@ session, so every verdict below restates the prior session's row.
 ## 2026-08-25 — the deferred slot-for-species exchange executes
 
 The mark's `slot=` key was sentenced as one net-zero exchange with the
-`species=` row every other record carries (LANGUAGE-1.0 section 13.5); the
+`species=` row every other record carries (LANGUAGE-1.0 section 14.5); the
 species row landed long ago and the exchange's retiring half did not.  It
 does now: the parser and registry rows leave, the five region words --
 selected, secondary, complement, collar, neutral -- are prelude species
 with the hues the slot key gave them, and the complement's densely dashed
 stroke stays with the contour, the one place the word draws one.  The
-eleven corpus spellings respell one word for one word and render
-pixel-identically (the CZX case compared directly at 200dpi; every sibling
+fifty-four spellings respell one word for one word -- twenty-three across
+the three RMP cases, k_ring, the five region fixtures, and the catalogue,
+thirty-one across six blueprint chapters -- and render pixel-identically
+(the CZX case and k_ring compared directly at 200dpi; every sibling
 carries the same substitution).  `n_mark_slot_key.tex` pins the
 unknown-key answer, and `r_region_slot_words.tex` continues as
 `r_region_words.tex`, its assertions unchanged.
 
 Meters: m1 kernel 55 -> 54 (census 78 -> 77), m2 parser paths 67 -> 66;
 `tests/tenkz/census-baseline.json` moves in this change.
-Extension-gate: the exchange is the contract's own section 13.5 deferral
+Extension-gate: the exchange is the contract's own section 14.5 deferral
 executing; no key is added.
 
-The flag table carries forward with two rows moved: the semantic-slot
-lonely-type dies with its key, and the mark-name pin follows the renamed
-fixture.
+The flag table carries forward with three rows moved: the semantic-slot
+lonely-type and the slot consumers row die with their key, and the
+mark-name pin follows the renamed fixture.
 
 | flag | verdict |
 |---|---|
@@ -3787,7 +3789,7 @@ fixture.
 | flag:consumers:key:kernel-mark:name | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-mark:nudge | dies at the S4 swap: a label takes a station against measured ink (`LANGUAGE-1.0` 6); expiry 0.9 |
 | flag:consumers:key:kernel-mark:outline | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
-| flag:consumers:key:kernel-mark:slot | dies at the S4 swap as one exchange with the mark's `species=`, which every other record already carries; net zero, so both halves land together (`LANGUAGE-1.0` 2.5, 14.5); expiry 0.9 |
+| flag:consumers:key:kernel-mark:slot | tombstoned: the section 14.5 exchange executed in this session -- species= carries the region word and the parser row is gone; permanent |
 | flag:consumers:key:kernel-picture:align | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-picture:bonds | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
 | flag:consumers:key:kernel-picture:boundary | keep-because: kernel landing wave (#4687); consumers arrive with the S4 swap and the redraw campaign; expiry 0.8 |
