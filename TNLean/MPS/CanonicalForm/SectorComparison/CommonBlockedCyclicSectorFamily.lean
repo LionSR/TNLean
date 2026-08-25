@@ -337,11 +337,13 @@ private theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
       (wordOfBlock (blockPhysDim d m) n (Fin.cast h_card.symm i)) =
     wordOfBlock d p i := by
   subst hp_eq
-  simp only [flattenBlockedWord, wordOfBlock, decodeBlock, List.map_ofFn, Function.comp_apply]
+  simp only [Kraus.flattenBlockedWord, Kraus.wordOfBlock, Kraus.decodeBlock,
+    List.map_ofFn, Function.comp_apply]
   rw [List.ofFn_mul']
   apply congrArg List.flatten
   exact congrArg List.ofFn (funext fun j => by
-    simp only [wordOfBlock, decodeBlock, Fin.cast_cast, Function.comp_apply]
+    simp only [Kraus.wordOfBlock, Kraus.decodeBlock, Fin.cast_cast,
+      Function.comp_apply]
     exact congrArg List.ofFn (funext fun t => by
       apply Fin.ext
       simpa [blockPhysDim_eq_pow] using
@@ -428,7 +430,12 @@ private theorem blockTensor_eq_commonReindexedBlock_of_word_eq
     blockTensor (d := d) (D := dim k) (blocks k) F.p = F.commonReindexedBlock k := by
   funext i
   rw [commonReindexedBlock, cast_physDim_apply (F.blockPhysDim_nested_eq k)]
-  simp [Kraus.reindexPhysical, blockTensor, hWord i]
+  change Kraus.evalWord (blocks k) (Kraus.wordOfBlock d F.p i) =
+    Kraus.evalWord (blocks k)
+      (Kraus.wordOfBlock d (F.period k * F.extra k)
+        (iteratedBlockIndex d (F.period k) (F.extra k)
+          (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i)))
+  exact congrArg (Kraus.evalWord (blocks k)) (hWord i)
 
 /-- Direct blocking of one original block is the relabeled common block when the
 canonical identification with the iterated alphabet agrees with consecutive grouping of the

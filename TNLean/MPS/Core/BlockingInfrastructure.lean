@@ -324,7 +324,7 @@ theorem wordOfBlock_blockIndexOfList (d L : ℕ) (w : List (Fin d))
     (h : w.length = L) :
     wordOfBlock d L (blockIndexOfList d L w h) = w := by
   classical
-  unfold blockIndexOfList wordOfBlock decodeBlock
+  unfold blockIndexOfList
   change List.ofFn (finFunctionFinEquiv.symm
     (finFunctionFinEquiv (fun i : Fin L => w.get (Fin.cast h.symm i)))) = w
   rw [finFunctionFinEquiv.symm_apply_apply]
@@ -389,7 +389,6 @@ theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L)
   intro i j hij
   have hdecode : decodeBlock d L i = decodeBlock d L j :=
     List.ofFn_injective hij
-  unfold decodeBlock at hdecode
   exact ((finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm).injective hdecode
 
 /-- Flattening the grouped iterated index recovers the direct blocked word. -/
@@ -401,12 +400,12 @@ theorem flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex (d m n : ℕ)
   classical
   unfold directToIteratedBlockIndex
   rw [wordOfBlock_blockIndexOfList]
-  simp only [flattenBlockedWord, List.map_ofFn]
+  simp only [Kraus.flattenBlockedWord, List.map_ofFn]
   change (List.ofFn (fun j : Fin n =>
     wordOfBlock d m (blockIndexOfList d m (blockWordChunk d m n i j) _))).flatten =
       wordOfBlock d (m * n) i
   simp_rw [wordOfBlock_blockIndexOfList]
-  simpa [blockWordChunk, wordOfBlock] using
+  simpa [blockWordChunk, Kraus.wordOfBlock] using
     (List.ofFn_mul' (m := m) (n := n) (f := decodeBlock d (m * n) i)).symm
 
 /-- Direct blocking is recovered after grouping a direct blocked index and then flattening
@@ -493,7 +492,13 @@ theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
     blockTensor (d := blockPhysDim d m) (D := D)
         (blockTensor (d := d) (D := D) A m) n i =
       blockTensor (d := d) (D := D) A (m * n) (iteratedBlockIndex d m n i) := by
-  simp [blockTensor, evalWord_blockTensor, wordOfBlock_iteratedBlockIndex]
+  change Kraus.evalWord (Kraus.blockTensor (d := d) (D := D) A m)
+      (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n i) =
+    Kraus.evalWord A
+      (Kraus.wordOfBlock d (m * n) (iteratedBlockIndex d m n i))
+  rw [Kraus.evalWord_blockTensor]
+  exact congrArg (Kraus.evalWord A)
+    (wordOfBlock_iteratedBlockIndex d m n i).symm
 
 /-- Tensor form of iterated blocking versus direct blocking with physical relabeling. -/
 theorem blockTensor_blockTensor_eq_reindex {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :

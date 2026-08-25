@@ -68,20 +68,20 @@ theorem blocked_fusion_of_lengthIndependent
   obtain ⟨n, rfl⟩ : ∃ n, L = n + 1 :=
     ⟨L - 1, (Nat.succ_pred_eq_of_pos hL).symm⟩
   rw [← blockTensor_mulTensor (Fam.tensor α) (Fam.tensor β)]
-  simp only [blockTensor_apply, MPSTensor.wordOfBlock, evalWord_ofFn]
+  simp only [blockTensor_apply, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn]
   let F : Fin (n + 1) →
       Matrix (Fin (Fam.bondDim α * Fam.bondDim β))
         (Fin (Fam.bondDim α * Fam.bondDim β)) ℂ :=
     fun l ↦ mulTensor (Fam.tensor α) (Fam.tensor β)
-      (MPSTensor.decodeBlock p (n + 1) I l)
-      (MPSTensor.decodeBlock p (n + 1) J l)
+      (Kraus.decodeBlock p (n + 1) I l)
+      (Kraus.decodeBlock p (n + 1) J l)
   let G : ∀ γ : Λ, Fin (n + 1) →
       Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ :=
     fun γ l ↦ Fam.tensor γ
-      (MPSTensor.decodeBlock p (n + 1) I l)
-      (MPSTensor.decodeBlock p (n + 1) J l)
+      (Kraus.decodeBlock p (n + 1) I l)
+      (Kraus.decodeBlock p (n + 1) J l)
   unfold blockedUnweightedDirectSumLetter
-  simp only [blockTensor_apply, MPSTensor.wordOfBlock, evalWord_ofFn]
+  simp only [blockTensor_apply, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn]
   change Fam.fusionIsometry α β * (List.ofFn F).prod *
       (Fam.fusionIsometry α β)ᴴ =
     Matrix.blockDiagonal' fun γ ↦
@@ -98,8 +98,8 @@ theorem blocked_fusion_of_lengthIndependent
       rw [List.ofFn_inj]
       funext l
       exact Fam.fusion α β
-        (MPSTensor.decodeBlock p (n + 1) I l)
-        (MPSTensor.decodeBlock p (n + 1) J l)
+        (Kraus.decodeBlock p (n + 1) I l)
+        (Kraus.decodeBlock p (n + 1) J l)
     _ = Matrix.blockDiagonal' (fun γ ↦
         ((Fam.chi.matrix α β γ) ^ (n + 1)) ⊗ₖ
           (List.ofFn (G γ)).prod) := by
@@ -240,11 +240,11 @@ theorem exists_positive_block_with_injective_fusion
   have hReindexed :=
     (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv
       (blockedDoubledIndexEquiv p L)
-      (fun γ ↦ MPSTensor.blockTensor (Fam.tensor γ).toMPSTensor L) 1).2 hSpan
+      (fun γ ↦ Kraus.blockTensor (Fam.tensor γ).toMPSTensor L) 1).2 hSpan
   have hFamily :
       (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) =
         fun γ ↦ Kraus.reindexPhysical (blockedDoubledIndexEquiv p L)
-          (MPSTensor.blockTensor (Fam.tensor γ).toMPSTensor L) := by
+          (Kraus.blockTensor (Fam.tensor γ).toMPSTensor L) := by
     funext γ
     exact toMPSTensor_blockTensor (Fam.tensor γ)
   have hSpanBlocked : MPSTensor.WordTupleSpanTop

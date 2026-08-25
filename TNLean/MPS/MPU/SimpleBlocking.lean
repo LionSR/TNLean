@@ -466,11 +466,11 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
   refine ⟨a, b, ?_, ?_⟩
   · intro I J
     rw [doubleLayerTensor_blockTensor, blockTensor_apply]
-    simp only [MPSTensor.wordOfBlock]
-    rw [evalWord_ofFn]
+    simp only [Kraus.wordOfBlock]
+    rw [MPOTensor.evalWord_ofFn]
     let l := List.ofFn (fun k : Fin L ↦
-      doubleLayerTensor U (MPSTensor.decodeBlock d L I k)
-        (MPSTensor.decodeBlock d L J k))
+      doubleLayerTensor U (Kraus.decodeBlock d L I k)
+        (Kraus.decodeBlock d L J k))
     have hl : l ≠ [] := by simp [l, Nat.ne_of_gt hL]
     have hlP : ∀ A ∈ l, P A := by
       intro A hA
@@ -484,18 +484,18 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
       simp
     · rw [ite_eq_right hIJ]
       have hpoint : ∃ k : Fin L,
-          MPSTensor.decodeBlock d L I k ≠ MPSTensor.decodeBlock d L J k := by
+          Kraus.decodeBlock d L I k ≠ Kraus.decodeBlock d L J k := by
         by_contra h
         apply hIJ
-        exact (MPSTensor.decodeBlockEquiv d L).injective
+        exact (Kraus.decodeBlockEquiv d L).injective
           (funext fun k ↦ not_ne_iff.mp (not_exists.mp h k))
       obtain ⟨k, hk⟩ := hpoint
       apply Finset.prod_eq_zero (Finset.mem_univ k)
       simp [hk]
   · intro I J K M
     rw [doubleLayerTensor_blockTensor, blockTensor_apply, blockTensor_apply]
-    simp only [MPSTensor.wordOfBlock]
-    rw [evalWord_ofFn, evalWord_ofFn]
+    simp only [Kraus.wordOfBlock]
+    rw [MPOTensor.evalWord_ofFn, MPOTensor.evalWord_ofFn]
     apply listProd_mul_eq_listProd_mul_rankOne_mul a b P hpair
     · simp [Nat.ne_of_gt hL]
     · simp [Nat.ne_of_gt hL]
@@ -528,61 +528,61 @@ theorem blockTensor_succ_simple2_of_supplied
           doubleLayerTensor (blockTensor U (k + 1)) K L := by
   classical
   let W := doubleLayerTensor U
-  let suffixIndex (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-      Fin (MPSTensor.blockPhysDim d k) :=
-    (MPSTensor.decodeBlockEquiv d k).symm
-      (fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
-  let prefixIndex (I : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-      Fin (MPSTensor.blockPhysDim d k) :=
-    (MPSTensor.decodeBlockEquiv d k).symm
-      (fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.castSucc)
-  have hmiddle (I J K L : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+  let suffixIndex (I : Fin (Kraus.blockPhysDim d (k + 1))) :
+      Fin (Kraus.blockPhysDim d k) :=
+    (Kraus.decodeBlockEquiv d k).symm
+      (fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.succ)
+  let prefixIndex (I : Fin (Kraus.blockPhysDim d (k + 1))) :
+      Fin (Kraus.blockPhysDim d k) :=
+    (Kraus.decodeBlockEquiv d k).symm
+      (fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.castSucc)
+  have hmiddle (I J K L : Fin (Kraus.blockPhysDim d (k + 1))) :
       evalWord W
-          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
-          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.succ) *
+          (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.succ)
+          (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) J x.succ) *
         evalWord W
-          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) K x.castSucc)
-          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) L x.castSucc) =
+          (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) K x.castSucc)
+          (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) L x.castSucc) =
       evalWord W
-          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
-          (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.succ) *
+          (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.succ)
+          (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) J x.succ) *
         Matrix.vecMulVec b a *
           evalWord W
-            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) K x.castSucc)
-            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) L x.castSucc) := by
+            (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) K x.castSucc)
+            (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) L x.castSucc) := by
     have h := h₂ (suffixIndex I) (suffixIndex J) (prefixIndex K) (prefixIndex L)
     simpa only [doubleLayerTensor_blockTensor, blockTensor_apply,
-      MPSTensor.wordOfBlock, MPSTensor.decodeBlock_decodeBlockEquiv_symm,
+      Kraus.wordOfBlock, Kraus.decodeBlock_decodeBlockEquiv_symm,
       W, suffixIndex, prefixIndex] using h
-  have hfirst (I J : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-      evalWord W (List.ofFn (MPSTensor.decodeBlock d (k + 1) I))
-          (List.ofFn (MPSTensor.decodeBlock d (k + 1) J)) =
-        W (MPSTensor.decodeBlock d (k + 1) I 0)
-            (MPSTensor.decodeBlock d (k + 1) J 0) *
+  have hfirst (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
+      evalWord W (List.ofFn (Kraus.decodeBlock d (k + 1) I))
+          (List.ofFn (Kraus.decodeBlock d (k + 1) J)) =
+        W (Kraus.decodeBlock d (k + 1) I 0)
+            (Kraus.decodeBlock d (k + 1) J 0) *
           evalWord W
-            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.succ)
-            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.succ) := by
+            (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.succ)
+            (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) J x.succ) := by
     rw [List.ofFn_succ, List.ofFn_succ, evalWord_cons]
-  have hlast (I J : Fin (MPSTensor.blockPhysDim d (k + 1))) :
-      evalWord W (List.ofFn (MPSTensor.decodeBlock d (k + 1) I))
-          (List.ofFn (MPSTensor.decodeBlock d (k + 1) J)) =
+  have hlast (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
+      evalWord W (List.ofFn (Kraus.decodeBlock d (k + 1) I))
+          (List.ofFn (Kraus.decodeBlock d (k + 1) J)) =
         evalWord W
-            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) I x.castSucc)
-            (List.ofFn fun x : Fin k ↦ MPSTensor.decodeBlock d (k + 1) J x.castSucc) *
-          W (MPSTensor.decodeBlock d (k + 1) I (Fin.last k))
-            (MPSTensor.decodeBlock d (k + 1) J (Fin.last k)) := by
+            (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.castSucc)
+            (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) J x.castSucc) *
+          W (Kraus.decodeBlock d (k + 1) I (Fin.last k))
+            (Kraus.decodeBlock d (k + 1) J (Fin.last k)) := by
     rw [List.ofFn_succ', List.ofFn_succ', List.concat_eq_append,
       List.concat_eq_append, evalWord_append W _ _ _ _ (by simp)]
     simp
   intro I J K L
   simp only [doubleLayerTensor_blockTensor, blockTensor_apply,
-    MPSTensor.wordOfBlock]
+    Kraus.wordOfBlock]
   rw [hfirst I J, hlast K L]
   have h := congrArg
-    (fun X ↦ W (MPSTensor.decodeBlock d (k + 1) I 0)
-        (MPSTensor.decodeBlock d (k + 1) J 0) * X *
-      W (MPSTensor.decodeBlock d (k + 1) K (Fin.last k))
-        (MPSTensor.decodeBlock d (k + 1) L (Fin.last k)))
+    (fun X ↦ W (Kraus.decodeBlock d (k + 1) I 0)
+        (Kraus.decodeBlock d (k + 1) J 0) * X *
+      W (Kraus.decodeBlock d (k + 1) K (Fin.last k))
+        (Kraus.decodeBlock d (k + 1) L (Fin.last k)))
     (hmiddle I J K L)
   simpa only [Matrix.mul_assoc] using h
 
@@ -773,15 +773,15 @@ theorem IsMPUSimple.reindexPhysical {d' : ℕ} {U : MPOTensor d D}
 
 private theorem evalWord_blockTensor_ofFn_local
     (U : MPOTensor d D) (L : ℕ) {N : ℕ}
-    (s t : Fin N → Fin (MPSTensor.blockPhysDim d L)) :
+    (s t : Fin N → Fin (Kraus.blockPhysDim d L)) :
     evalWord (MPOTensor.blockTensor U L) (List.ofFn s) (List.ofFn t) =
-      evalWord U (MPSTensor.flattenBlockedWord d L (List.ofFn s))
-        (MPSTensor.flattenBlockedWord d L (List.ofFn t)) := by
+      evalWord U (Kraus.flattenBlockedWord d L (List.ofFn s))
+        (Kraus.flattenBlockedWord d L (List.ofFn t)) := by
   induction N with
-  | zero => simp [MPSTensor.flattenBlockedWord]
+  | zero => simp [Kraus.flattenBlockedWord]
   | succ N ih =>
       simp only [List.ofFn_succ, evalWord_cons, blockTensor_apply,
-        MPSTensor.flattenBlockedWord_cons]
+        Kraus.flattenBlockedWord_cons]
       rw [ih]
       rw [evalWord_append U _ _ _ _ (by simp)]
 
@@ -795,19 +795,30 @@ theorem reindexPhysical_blockTensor_blockTensor
         (MPOTensor.blockTensor (MPOTensor.blockTensor U m) n) =
       MPOTensor.blockTensor U (m * n) := by
   funext i j
-  simp only [reindexPhysical, blockTensor_apply, MPSTensor.wordOfBlock]
+  simp only [reindexPhysical, blockTensor_apply, Kraus.wordOfBlock]
   rw [evalWord_blockTensor_ofFn_local]
   change evalWord U
-      (MPSTensor.flattenBlockedWord d m
-        (MPSTensor.wordOfBlock (MPSTensor.blockPhysDim d m) n
+      (Kraus.flattenBlockedWord d m
+        (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n
           (MPSTensor.directToIteratedBlockIndex d m n i)))
-      (MPSTensor.flattenBlockedWord d m
-        (MPSTensor.wordOfBlock (MPSTensor.blockPhysDim d m) n
+      (Kraus.flattenBlockedWord d m
+        (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n
           (MPSTensor.directToIteratedBlockIndex d m n j))) =
-    evalWord U (MPSTensor.wordOfBlock d (m * n) i)
-      (MPSTensor.wordOfBlock d (m * n) j)
-  rw [MPSTensor.flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex,
-    MPSTensor.flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex]
+    evalWord U (Kraus.wordOfBlock d (m * n) i)
+      (Kraus.wordOfBlock d (m * n) j)
+  have hi :=
+    MPSTensor.flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex d m n i
+  have hj :=
+    MPSTensor.flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex d m n j
+  change Kraus.flattenBlockedWord d m
+      (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n
+        (MPSTensor.directToIteratedBlockIndex d m n i)) =
+    Kraus.wordOfBlock d (m * n) i at hi
+  change Kraus.flattenBlockedWord d m
+      (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n
+        (MPSTensor.directToIteratedBlockIndex d m n j)) =
+    Kraus.wordOfBlock d (m * n) j at hj
+  rw [hi, hj]
 
 /-- For bond dimension greater than one, an MPU has a strictly less than \(D^4\)
 positive direct blocking that is MPU-simple.
@@ -842,8 +853,8 @@ theorem IsMPU.exists_blockTensor_isMPUSimple_of_one_lt
     change normalizedDiagonal (doubleLayerTensor (MPOTensor.blockTensor U J)) = _
     rw [hU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec hD]
     rfl
-  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  let : NeZero (Kraus.blockPhysDim d J) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero J (NeZero.ne d)⟩
   have hsimpleIterated : IsMPUSimple (MPOTensor.blockTensor V (D * D)) :=
     hVmpu.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec ρ Φ hpair hVE

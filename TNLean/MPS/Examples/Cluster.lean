@@ -232,13 +232,14 @@ private lemma clusterBlocked_apply (i : Fin 4) :
     clusterBlocked i =
       clusterTensor (decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i) 0) *
         clusterTensor (decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i) 1) := by
-  simp only [clusterBlocked, blockTensor, wordOfBlock]
+  simp only [clusterBlocked, Kraus.blockTensor, Kraus.wordOfBlock]
   simp [List.ofFn_succ, List.ofFn_zero, Kraus.evalWord]
 
 private lemma decodeBlock_cast_val (i : Fin 4) (j : Fin 2) :
     ((decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i)) j : ℕ) =
       i.val / 2 ^ (j : ℕ) % 2 := by
-  unfold decodeBlock
+  change ((Kraus.decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i)) j : ℕ) = _
+  unfold Kraus.decodeBlock
   simp only [Function.comp_apply, finFunctionFinEquiv_symm_apply_val]
   rfl
 
