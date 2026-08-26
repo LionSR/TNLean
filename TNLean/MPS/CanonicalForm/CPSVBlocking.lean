@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks
 
@@ -76,7 +77,7 @@ theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 
     IsNormalTensor (MPSTensor.blockTensor (d := d) (D := D) A p) := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσpos, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B : MPSTensor d D := tpGauge (d := d) (D := D) A σ
+  let B : MPSTensor d D := Kraus.tpGauge (d := d) (D := D) A σ
   have hExtra := tp_primitive_irreducible_extra_blocking
     (d := d) (D := D) B hTP hPrim hIrr hp
   have hNormalAlg : Kraus.IsNormal (MPSTensor.blockTensor (d := d) (D := D) B p) :=

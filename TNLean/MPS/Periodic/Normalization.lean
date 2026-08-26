@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import QICLean.Analysis.MatrixSqrt
 import QICLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
@@ -45,8 +46,8 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) σ = σ ∧
-      GaugeEquiv A (tpGauge (d := d) (D := D) A σ) ∧
-      IsPeriodic m (tpGauge (d := d) (D := D) A σ) := by
+      GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
+      IsPeriodic m (Kraus.tpGauge (d := d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hLeft, hGauge, hIrr⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one
       hA.irreducible hA.spectral_radius_one
@@ -56,9 +57,11 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     simpa [Matrix.det_nonsing_inv] using inv_ne_zero hSdet
   have hPeripheral :
       peripheralEigenvalues
-          (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) =
+          (Kraus.transferMap (d := d) (D := D) (Kraus.tpGauge (d := d) (D := D) A σ)) =
         peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
-    rw [transferMap_tpGauge_eq_similarityMap A σ hσ]
+    change peripheralEigenvalues (Kraus.mapLM (Kraus.tpGauge A σ)) =
+      peripheralEigenvalues (Kraus.mapLM A)
+    rw [Kraus.mapLM_tpGauge_eq_similarityMap A σ hσ]
     exact peripheralEigenvalues_similarityMap_eq
       (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (d := d) (D := D) A)
   refine ⟨σ, hσ, hσfix, hGauge, ?_⟩

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.CanonicalForm.Reduction
@@ -10,7 +11,6 @@ import QICLean.Channel.Peripheral.CyclicDecomposition.Decomposition
 import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
 import TNLean.MPS.Core.TransferPeripheral
 import QICLean.Channel.Peripheral.GroupStructure
-import TNLean.MPS.Core.TPGauge
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.MPS.Irreducible.Adjoint
@@ -59,7 +59,7 @@ CPSV canonical-form hypothesis; see
 
 ## Main results
 
-* `MPSTensor.spectralUnitalGauge_schwarz_setup`: the rescaled unital gauge of
+* `spectralUnitalGauge_schwarz_setup`: the rescaled unital gauge of
   an irreducible corner satisfies the hypotheses of Wolf Theorem 6.6.
 * `MPOTensor.exists_displaced_invariant_projector_of_periodic_vector`: a
   nontrivial periodic vector of the vertically viewed tensor supplies an
@@ -105,32 +105,32 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     (B : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily B)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ) (hρ : ρ.PosDef) (hrad : 0 < rad)
     (hfix : Kraus.transferMap (d := d) (D := D) B ρ = (rad : ℂ) • ρ) :
-    KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (spectralUnitalGauge B rad ρ) ∧
-    Kraus.IsIrreducibleFamily (spectralUnitalGauge B rad ρ) ∧
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (spectralUnitalGauge B rad ρ)) ∧
+    KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) ∧
+    Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) ∧
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ)) ∧
     ∃ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosDef ∧
-      Kraus.adjointMap (spectralUnitalGauge B rad ρ) σ = σ := by
+      Kraus.adjointMap (Kraus.spectralUnitalGauge B rad ρ) σ = σ := by
   classical
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D)
-      (spectralUnitalGauge B rad ρ) := by
-    simpa [KadisonSchwarz.IsUnitalKraus] using
-      spectralUnitalGauge_isUnital_of_transferMap_eigenvector B ρ rad hρ hrad hfix
+      (Kraus.spectralUnitalGauge B rad ρ) := by
+    simpa [KadisonSchwarz.IsUnitalKraus, Kraus.IsUnital] using
+      Kraus.spectralUnitalGauge_isUnital_of_map_eigenvector B ρ rad hρ hrad hfix
   have hcne : ((↑((Real.sqrt rad)⁻¹) : ℂ)) ≠ 0 := by
     have hs : Real.sqrt rad ≠ 0 := ne_of_gt (Real.sqrt_pos.mpr hrad)
     exact_mod_cast inv_ne_zero hs
   have hSunit : IsUnit (CFC.sqrt ρ) :=
     (Matrix.isUnit_iff_isUnit_det _).mpr (Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
-  have hIrrK : Kraus.IsIrreducibleFamily (spectralUnitalGauge B rad ρ) := by
+  have hIrrK : Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) := by
     have h := isIrreducibleTensor_smul_conj B hIrr hSunit hcne
     exact h
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D)
-      (spectralUnitalGauge B rad ρ)) :=
+      (Kraus.spectralUnitalGauge B rad ρ)) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrK
   refine ⟨hUnital, hIrrK, hIrrMap, ?_⟩
   -- The adjoint of a unital family is trace-preserving; its transfer map is a
   -- channel and has a positive semidefinite fixed point, which irreducibility
   -- upgrades to a positive definite one.
-  set K : MPSTensor d D := spectralUnitalGauge B rad ρ with hK
+  set K : MPSTensor d D := Kraus.spectralUnitalGauge B rad ρ with hK
   have hTPadj : ∑ v : Fin d, ((K v)ᴴ)ᴴ * (K v)ᴴ = 1 := by
     simpa [Matrix.conjTranspose_conjTranspose] using hUnital
   have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) :=
@@ -160,7 +160,7 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
     (hρ : ρ.PosDef) (hrad : 0 < rad) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (Kraus.transferMap (d := d) (D := D) B) μ) :
     Module.End.HasEigenvalue
-      (Kraus.transferMap (d := d) (D := D) (spectralUnitalGauge B rad ρ)) (μ / rad) := by
+      (Kraus.transferMap (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ)) (μ / rad) := by
   classical
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
   have hXeq : Kraus.transferMap (d := d) (D := D) B X = μ • X :=
@@ -184,14 +184,14 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
           rw [Matrix.nonsing_inv_mul S hSdet, Matrix.mul_one]
       _ = S * (X' * S) := by rw [hX']; simp only [Matrix.mul_assoc]
       _ = 0 := by rw [h0, Matrix.zero_mul, Matrix.mul_zero]
-  have hmap : Kraus.transferMap (d := d) (D := D) (spectralUnitalGauge B rad ρ) X'
+  have hmap : Kraus.transferMap (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) X'
       = (μ / ↑rad) • X' := by
     have hterm : ∀ v : Fin d,
-        spectralUnitalGauge B rad ρ v * X' * (spectralUnitalGauge B rad ρ v)ᴴ
+        Kraus.spectralUnitalGauge B rad ρ v * X' * (Kraus.spectralUnitalGauge B rad ρ v)ᴴ
           = (c * c) • (S⁻¹ * (B v * X * (B v)ᴴ) * S⁻¹) := by
       intro v
-      have hKv : spectralUnitalGauge B rad ρ v = c • (S⁻¹ * B v * S) := rfl
-      have hKvH : (spectralUnitalGauge B rad ρ v)ᴴ = c • (S * (B v)ᴴ * S⁻¹) := by
+      have hKv : Kraus.spectralUnitalGauge B rad ρ v = c • (S⁻¹ * B v * S) := rfl
+      have hKvH : (Kraus.spectralUnitalGauge B rad ρ v)ᴴ = c • (S * (B v)ᴴ * S⁻¹) := by
         rw [hKv, Matrix.conjTranspose_smul, hcstar, Matrix.conjTranspose_mul,
           Matrix.conjTranspose_mul, hSH, hSinvH, Matrix.mul_assoc]
       rw [hKvH, hKv, Matrix.smul_mul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
@@ -201,7 +201,7 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
         Matrix.nonsing_inv_mul_cancel_left _ _ hSdet]
     rw [Kraus.transferMap_apply]
     calc ∑ v : Fin d,
-          spectralUnitalGauge B rad ρ v * X' * (spectralUnitalGauge B rad ρ v)ᴴ
+          Kraus.spectralUnitalGauge B rad ρ v * X' * (Kraus.spectralUnitalGauge B rad ρ v)ᴴ
         = ∑ v : Fin d, (c * c) • (S⁻¹ * (B v * X * (B v)ᴴ) * S⁻¹) :=
           Finset.sum_congr rfl fun v _ => hterm v
       _ = (c * c) • (S⁻¹ * (∑ v : Fin d, B v * X * (B v)ᴴ) * S⁻¹) := by
@@ -266,9 +266,9 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     exact hXne (Matrix.ext fun i _ => i.elim0)
   have : NeZero n := ⟨hn⟩
   -- The unital gauge of the corner and its Wolf Theorem 6.6 data.
-  set K : MPSTensor (D * D) n := MPSTensor.spectralUnitalGauge B rad ρ with hK
+  set K : MPSTensor (D * D) n := Kraus.spectralUnitalGauge B rad ρ with hK
   obtain ⟨hUnital, hIrrK, hIrrMap, σ, hσ, hσfix⟩ :=
-    MPSTensor.spectralUnitalGauge_schwarz_setup B hirr ρ rad hρ hrad hfix
+    spectralUnitalGauge_schwarz_setup B hirr ρ rad hρ hrad hfix
   have hIrrMapLM : IsIrreducibleMap (Kraus.mapLM K) := by
     exact hIrrMap
   obtain ⟨m, γ, hm_pos, hγprim, hset⟩ :=

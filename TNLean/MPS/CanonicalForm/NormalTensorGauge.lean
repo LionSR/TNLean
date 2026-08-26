@@ -13,7 +13,7 @@ import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.FundamentalTheorem.Proportional
-import TNLean.MPS.Symmetry.StringOrderAux
+import QICLean.Channel.Irreducible.KrausGauge
 
 /-!
 # Perron gauges for normal tensors
@@ -208,9 +208,9 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ ∧
-      IsLeftCanonical (tpGauge (d := d) (D := D) A σ) ∧
-      GaugeEquiv A (tpGauge (d := d) (D := D) A σ) ∧
-      Kraus.IsIrreducibleFamily (tpGauge (d := d) (D := D) A σ) := by
+      IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) ∧
+      GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
+      Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) := by
   have hD : D ≠ 0 :=
     matrix_dim_ne_zero_of_spectralRadius_eq_one
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
@@ -273,12 +273,12 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
   have ht_one : t = 1 := hrt ▸ hr_one
   have hσfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ := by
     simpa [ht_one] using hσeig
-  have hTP : IsLeftCanonical (tpGauge (d := d) (D := D) A σ) :=
-    tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A σ hσ hσfix
-  have hGauge : GaugeEquiv A (tpGauge (d := d) (D := D) A σ) :=
+  have hTP : IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) :=
+    Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A σ hσ hσfix
+  have hGauge : GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) :=
     gaugeEquiv_tpGauge A σ hσ
-  have hGaugeIrr : Kraus.IsIrreducibleFamily (tpGauge (d := d) (D := D) A σ) :=
-    isIrreducibleTensor_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
+  have hGaugeIrr : Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) :=
+    Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hGaugeIrr⟩
 
 /-- A normal tensor admits a trace-preserving gauge with no scalar rescaling.
@@ -293,17 +293,17 @@ theorem IsNormalTensor.exists_tpGauge
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ ∧
-      IsLeftCanonical (tpGauge (d := d) (D := D) A σ) ∧
-      GaugeEquiv A (tpGauge (d := d) (D := D) A σ) ∧
+      IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) ∧
+      GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) ∧
-      Kraus.IsIrreducibleFamily (tpGauge (d := d) (D := D) A σ) := by
+        (Kraus.transferMap (d := d) (D := D) (Kraus.tpGauge (d := d) (D := D) A σ)) ∧
+      Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hTP, hGauge, hIrr⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one
       h.no_invariant_proj h.spectral_radius_one
   have hPrim : _root_.IsPrimitive
-      (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) :=
-    (isPrimitive_transferMap_tpGauge_iff A σ hσ).2 h.primitive_transfer
+      (Kraus.transferMap (d := d) (D := D) (Kraus.tpGauge (d := d) (D := D) A σ)) :=
+    (Kraus.isPrimitive_mapLM_tpGauge_iff A σ hσ).2 h.primitive_transfer
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hPrim, hIrr⟩
 
 /-- A normal tensor in the spectral sense of arXiv:1606.00608 is eventually
@@ -312,7 +312,7 @@ theorem IsNormalTensor.isNormal
     {A : MPSTensor d D} (h : IsNormalTensor A) : Kraus.IsNormal A := by
   let : NeZero D := ⟨h.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := h.exists_tpGauge
-  have hNormalGauge : Kraus.IsNormal (tpGauge (d := d) (D := D) A σ) :=
+  have hNormalGauge : Kraus.IsNormal (Kraus.tpGauge (d := d) (D := D) A σ) :=
     isNormal_of_tp_primitive_irreducible _ hTP hPrim hIrr
   exact isNormal_of_gaugeEquiv hNormalGauge hGauge.symm
 
@@ -329,14 +329,14 @@ theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D]
     IsNormalTensor A := by
   have hStrong : IsStronglyIrreduciblePaper A :=
     isNormal_implies_stronglyIrreducible A hLeft hNormal
-  obtain ⟨ρ, hρ, hρfix⟩ := hStrong.posDef_fixedPoint
+  obtain ⟨ρ, hρ, hρfix, hPrim, hIrrMap⟩ := hStrong
   have hIrr : Kraus.IsIrreducibleFamily A :=
-    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hStrong.isIrreducibleMap
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrMap
   have huniq : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap A) μ →
       ‖μ‖ = (1 : ℝ) → μ = (1 : ℂ) := by
     intro μ hμ hμnorm
     have hmem : μ ∈ peripheralEigenvalues (Kraus.transferMap A) := ⟨hμ, hμnorm⟩
-    rw [hStrong.peripheralEigenvalues_eq] at hmem
+    rw [hPrim] at hmem
     simpa using hmem
   have hScaled : IsNormalTensor (fun i =>
       (((Real.sqrt (1 : ℝ) : ℝ) : ℂ))⁻¹ • A i) :=
@@ -370,7 +370,7 @@ theorem IsNormalTensor.selfOverlap_tendsto_one [NeZero D]
     {A : MPSTensor d D} (hA : IsNormalTensor A) :
     Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let A' := tpGauge (d := d) (D := D) A σ
+  let A' := Kraus.tpGauge (d := d) (D := D) A σ
   have hPrepared : Tendsto (fun N => mpvOverlap (d := d) A' A' N)
       atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A' hIrr hTP hPrim
@@ -437,8 +437,8 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
   classical
   obtain ⟨σX, _hσX, _hσXfix, hTPX, hGaugeX, hPrimX, hIrrX⟩ := hX.exists_tpGauge
   obtain ⟨σY, _hσY, _hσYfix, hTPY, hGaugeY, hPrimY, hIrrY⟩ := hY.exists_tpGauge
-  let X' := tpGauge (d := d) (D := DX) X σX
-  let Y' := tpGauge (d := d) (D := DY) Y σY
+  let X' := Kraus.tpGauge (d := d) (D := DX) X σX
+  let Y' := Kraus.tpGauge (d := d) (D := DY) Y σY
   have hPhase : MPVBlockPhaseEquiv X' Y' := by
     obtain ⟨ζ, hζ, hmpv⟩ := h
     refine ⟨ζ, hζ, ?_⟩
@@ -539,7 +539,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
   choose σ hσ hσfix hTP hGauge hPrim hIrr using
     fun k => (hNormal k).exists_tpGauge
   let prepared : (k : Fin r) → MPSTensor d (dim k) :=
-    fun k => tpGauge (d := d) (D := dim k) (A k) (σ k)
+    fun k => Kraus.tpGauge (d := d) (D := dim k) (A k) (σ k)
   have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
     intro j k hjk hdim hGPE
     apply hDistinct j k hjk hdim

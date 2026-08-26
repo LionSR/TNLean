@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.Periodic.Normalization
 import TNLean.MPS.SharedInfra.BlockGauge
 import TNLean.MPS.SharedInfra.SectorDecomposition
@@ -138,7 +139,7 @@ theorem exists_isPeriodic_replaceBasis (P : SectorDecomposition d)
   choose sigma _hsigma _hfixed hGauge hPeriodic using
     fun j ↦ (hP j).exists_isPeriodic_tpGauge
   let B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j) :=
-    fun j ↦ tpGauge (P.basis j) (sigma j)
+    fun j ↦ Kraus.tpGauge (P.basis j) (sigma j)
   have hGaugeB : ∀ j, GaugeEquiv (P.basis j) (B j) := by
     intro j
     simpa [B] using hGauge j

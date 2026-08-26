@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.StructuralFull
 
@@ -48,11 +49,11 @@ theorem IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm
   constructor
   · intro hRFP
     obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
-    have hRFP' : IsTransferIdempotent (tpGauge (d := d) (D := D) A σ) :=
+    have hRFP' : IsTransferIdempotent (Kraus.tpGauge (d := d) (D := D) A σ) :=
       hGauge.isTransferIdempotent_iff.mp hRFP
-    have hNormal' : Kraus.IsNormal (tpGauge (d := d) (D := D) A σ) :=
+    have hNormal' : Kraus.IsNormal (Kraus.tpGauge (d := d) (D := D) A σ) :=
       isNormal_of_gaugeEquiv hNT.isNormal hGauge
-    have hIso' : IsIsometryCanonicalForm (tpGauge (d := d) (D := D) A σ) :=
+    have hIso' : IsIsometryCanonicalForm (Kraus.tpGauge (d := d) (D := D) A σ) :=
       isIsometryCanonicalForm_of_rfp_nt _ hNormal' hRFP' hLeft
     exact hGauge.isIsometryCanonicalForm_iff.mpr hIso'
   · exact isTransferIdempotent_of_isIsometryCanonicalForm A

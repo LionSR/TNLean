@@ -7,12 +7,11 @@ import QICLean.Algebra.ComplexPhasePositivity
 import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
 import QICLean.Kraus.CPPrimitive
-import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Irreducible.Adjoint
 import QICLean.Channel.FixedPoint.CanonicalGauge
 import QICLean.Channel.Irreducible.Ergodicity
 import QICLean.Channel.Irreducible.PerronFrobenius
-import QICLean.Channel.Irreducible.Similarity
+import QICLean.Channel.Irreducible.KrausGauge
 import QICLean.Channel.Irreducible.SpectralRadius
 import QICLean.Channel.KrausRepresentation
 
@@ -28,11 +27,9 @@ boundary-state invariance `V† Λ V = Λ`.
 ## Contents
 
 * `TwistedTPGaugeSetup` — bundled TP-gauge data for the spectral radius bound
-* `transferMap_tpGauge_eq_similarityMap` — similarity transform of the transfer map
-* `isPrimitive_transferMap_tpGauge_iff` — invariance of primitivity under the
+* `Kraus.mapLM_tpGauge_eq_similarityMap` — similarity transform of the transfer map
+* `Kraus.isPrimitive_mapLM_tpGauge_iff` — invariance of primitivity under the
   Perron gauge
-* `gaugePhaseEquiv_of_gaugeEquiv_left_right_cast` — transport of gauge-phase
-  equivalence across two gauges and a bond-dimension identification
 * `virtualUnitary_of_gaugePhaseEquiv_twisted` — normalization of a gauge-phase
   intertwiner to a unitary
 * `boundaryState_invariant_of_virtualUnitary` — boundary-state invariance `V† Λ V = Λ`
@@ -47,121 +44,6 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- The transfer map of a TP-gauged tensor is the similarity transform of the
-original transfer map by the positive square root of the adjoint fixed point. -/
-lemma transferMap_tpGauge_eq_similarityMap
-    (A : MPSTensor d D)
-    (σ : Matrix (Fin D) (Fin D) ℂ)
-    (hσ : σ.PosDef) :
-    Kraus.transferMap (tpGauge (d := d) (D := D) A σ) =
-      similarityMap (D := D) (CFC.sqrt σ)⁻¹ (Kraus.transferMap A) := by
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
-  have hS_det : IsUnit S.det := by
-    simpa [S] using Matrix.PosDef.isUnit_det_cfc_sqrt hσ
-  have hS_herm : Sᴴ = S := by
-    simpa [S] using Matrix.conjTranspose_cfc_sqrt σ
-  have hS_inv_inv : S⁻¹⁻¹ = S := Matrix.nonsing_inv_nonsing_inv S hS_det
-  have hS_inv_herm : (S⁻¹)ᴴ = (Sᴴ)⁻¹ := Matrix.conjTranspose_nonsing_inv S
-  have hS_inv_herm' : (S⁻¹)ᴴ = S⁻¹ := by simpa [hS_herm] using hS_inv_herm
-  ext X i j
-  have hcalc :
-      Kraus.transferMap (tpGauge (d := d) (D := D) A σ) X =
-        similarityMap (D := D) S⁻¹ (Kraus.transferMap A) X := by
-    calc
-      Kraus.transferMap (tpGauge (d := d) (D := D) A σ) X
-          = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
-              simp [tpGauge, Kraus.tpGauge, S]
-      _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
-            refine Finset.sum_congr rfl ?_
-            intro x _
-            rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-              Matrix.conjTranspose_nonsing_inv]
-            simp [Matrix.mul_assoc, hS_herm]
-      _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
-            simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
-      _ = similarityMap (D := D) S⁻¹ (Kraus.transferMap A) X := by
-            simp only [Matrix.mul_assoc, similarityMap, hS_inv_inv, hS_inv_herm',
-              Kraus.mapLM_apply, Kraus.map_apply, LinearMap.coe_mk, AddHom.coe_mk, S]
-  exact congrFun (congrFun hcalc i) j
-
-/-- Positive-definite TP gauging preserves peripheral-spectrum primitivity. -/
-lemma isPrimitive_transferMap_tpGauge_iff
-    (A : MPSTensor d D)
-    (σ : Matrix (Fin D) (Fin D) ℂ)
-    (hσ : σ.PosDef) :
-    _root_.IsPrimitive (Kraus.transferMap (tpGauge (d := d) (D := D) A σ)) ↔
-      _root_.IsPrimitive (Kraus.transferMap A) := by
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
-  have hS_det : S.det ≠ 0 := by
-    exact (Matrix.PosDef.isUnit_det_cfc_sqrt hσ).ne_zero
-  rw [transferMap_tpGauge_eq_similarityMap A σ hσ]
-  exact IsPrimitive.similarityMap_iff S⁻¹ (by simpa [Matrix.det_nonsing_inv] using hS_det) _
-
-/-- TP gauging preserves irreducibility when the original transfer map is
-irreducible. -/
-lemma isIrreducibleTensor_tpGauge_of_isIrreducibleMap [NeZero D]
-    (A : MPSTensor d D)
-    (σ : Matrix (Fin D) (Fin D) ℂ)
-    (hσ : σ.PosDef)
-    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A)) :
-    Kraus.IsIrreducibleFamily (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt σ
-  have hS_det : S.det ≠ 0 := by
-    exact (Matrix.PosDef.isUnit_det_cfc_sqrt hσ).ne_zero
-  have hIrrSim :
-      IsIrreducibleMap (similarityMap (D := D) S⁻¹ (Kraus.transferMap A)) := by
-    refine isIrreducibleMap_similarity (D := D) ?_ hIrr
-    simpa [S, Matrix.det_nonsing_inv] using inv_ne_zero hS_det
-  have hEq :
-      Kraus.transferMap (tpGauge (d := d) (D := D) A σ) =
-        similarityMap (D := D) S⁻¹ (Kraus.transferMap A) := by
-    simpa [S] using transferMap_tpGauge_eq_similarityMap (A := A) (σ := σ) hσ
-  have hIrr' : IsIrreducibleMap
-      (Kraus.transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) := by
-    simpa [hEq] using hIrrSim
-  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _ hIrr'
-
-/-- Gauge equivalence on the left and right transports a gauge-phase
-equivalence back to the original tensors. -/
-lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
-    {A A' B B' : MPSTensor d D}
-    (hAA' : GaugeEquiv A A')
-    (hA'B' : GaugePhaseEquiv A' B')
-    (hBB' : GaugeEquiv B B') :
-    GaugePhaseEquiv A B := by
-  obtain ⟨X, hX⟩ := hAA'
-  obtain ⟨Y, ζ, hζ, hY⟩ := hA'B'
-  obtain ⟨Z, hZ⟩ := hBB'
-  refine ⟨Z⁻¹ * Y * X, ζ, hζ, ?_⟩
-  intro i
-  have hB' : B' i = Z * B i * Z⁻¹ := hZ i
-  calc
-    B i = Z⁻¹ * B' i * Z := by
-      rw [hB']
-      simp [Matrix.mul_assoc]
-    _ = Z⁻¹ * (ζ • (Y * A' i * Y⁻¹)) * Z := by rw [hY i]
-    _ = ζ • (Z⁻¹ * (Y * A' i * Y⁻¹) * Z) := by
-          simp [Matrix.mul_assoc]
-    _ = ζ • (Z⁻¹ * (Y * (X * A i * X⁻¹) * Y⁻¹) * Z) := by rw [hX i]
-    _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
-          (((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
-            Matrix (Fin D) (Fin D) ℂ)) := by
-      simp only [Matrix.coe_units_inv, Matrix.mul_assoc, Units.val_mul, mul_inv_rev,
-        inv_inv]
-
-/-- Gauge equivalence on both sides transports a casted gauge-phase
-equivalence back to the original tensors. -/
-lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
-    {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
-    {A A' : MPSTensor d D₁} {B B' : MPSTensor d D₂}
-    (hAA' : GaugeEquiv A A')
-    (hA'B' : GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor d) hdim) A') B')
-    (hBB' : GaugeEquiv B B') :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) A) B := by
-  subst hdim
-  simpa using gaugePhaseEquiv_of_gaugeEquiv_left_right hAA' hA'B' hBB'
 
 /-- Bundled TP-gauge data for a twisted MPS tensor, used to reduce the spectral radius
 bound to the TP-normalized setting in the string-order proofs. -/
@@ -181,9 +63,9 @@ structure TwistedTPGaugeSetup [NeZero D]
   hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1
   hS_inv_herm : (S⁻¹)ᴴ = S⁻¹
   A' : MPSTensor d D
-  hA'_def : A' = tpGauge (d := d) (D := D) A σ
+  hA'_def : A' = Kraus.tpGauge (d := d) (D := D) A σ
   B' : MPSTensor d D
-  hB'_def : B' = tpGauge (d := d) (D := D) B σ
+  hB'_def : B' = Kraus.tpGauge (d := d) (D := D) B σ
   hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1
   hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1
   hIrrA' : Kraus.IsIrreducibleFamily (d := d) (D := D) A'
@@ -247,20 +129,20 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
   have hS_hMul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hS_detT
   have hS_inv_herm : (S⁻¹)ᴴ = S⁻¹ := by
     simpa [hS_herm] using Matrix.conjTranspose_nonsing_inv S
-  let A' := tpGauge (d := d) (D := D) A σ
-  let B' := tpGauge (d := d) (D := D) B σ
+  let A' := Kraus.tpGauge (d := d) (D := D) A σ
+  let B' := Kraus.tpGauge (d := d) (D := D) B σ
   have hA'TP : ∑ i : Fin d, (A' i)ᴴ * A' i = 1 := by
-    simpa [A'] using
-      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := A) (ρ := σ) hσ_pd hσ_fixA
+    simpa [A', Kraus.IsTP] using
+      Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint (K := A) (ρ := σ) hσ_pd hσ_fixA
   have hB'TP : ∑ i : Fin d, (B' i)ᴴ * B' i = 1 := by
-    simpa [B'] using
-      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint (A := B) (ρ := σ) hσ_pd hσ_fixB
+    simpa [B', Kraus.IsTP] using
+      Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint (K := B) (ρ := σ) hσ_pd hσ_fixB
   have hIrrA' : Kraus.IsIrreducibleFamily (d := d) (D := D) A' := by
-    simpa [A'] using isIrreducibleTensor_tpGauge_of_isIrreducibleMap
-      (A := A) (σ := σ) hσ_pd hIrrA
+    simpa [A'] using Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
+      (K := A) (σ := σ) hσ_pd hIrrA
   have hIrrB' : Kraus.IsIrreducibleFamily (d := d) (D := D) B' := by
-    simpa [B'] using isIrreducibleTensor_tpGauge_of_isIrreducibleMap
-      (A := B) (σ := σ) hσ_pd hIrrB
+    simpa [B'] using Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
+      (K := B) (σ := σ) hσ_pd hIrrB
   exact
     { B := B
       hB_def := rfl
@@ -305,10 +187,10 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
             setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
       have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
-        rw [setup.hA'_def, tpGauge, Kraus.tpGauge, setup.hS_def]
+        rw [setup.hA'_def, Kraus.tpGauge, setup.hS_def]
       have hBstar : (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
         have hB'eq : setup.B' i = setup.S * setup.B i * setup.S⁻¹ := by
-          rw [setup.hB'_def, tpGauge, Kraus.tpGauge, setup.hS_def]
+          rw [setup.hB'_def, Kraus.tpGauge, setup.hS_def]
         calc (setup.B' i)ᴴ
             = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
                   rw [hB'eq]; simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
@@ -734,9 +616,9 @@ theorem boundaryState_invariant_of_virtualUnitary
     calc
       Kraus.transferMap (fun i => (B i)ᴴ) Λ
           = Kraus.transferMap (fun i => (A i)ᴴ) Λ := by
-              simpa [Kraus.transferMap_apply, Matrix.mul_assoc] using
+              simpa [Matrix.mul_assoc] using
                 kraus_dual_eq_of_map_eq B A
-                  (fun X => by simpa [Kraus.transferMap_apply] using hB_eq X) Λ
+                  (fun X => by simpa using hB_eq X) Λ
       _ = Λ := hΛfix
   let ρ : Matrix (Fin D) (Fin D) ℂ := V * Λ * Vᴴ
   have hρ_psd : ρ.PosSemidef := by

@@ -28,11 +28,8 @@ theorem hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hSI : IsStronglyIrreduciblePaper A) :
     HasEventuallyFullKrausRank A := by
+  obtain ⟨_, _, _, hPrim, hIrr⟩ := hSI
   have hTP : Kraus.IsTP A := hNorm
-  have hIrr : IsIrreducibleMap (Kraus.mapLM A) := by
-        exact hSI.isIrreducibleMap
-  have hPrim : IsPrimitive (Kraus.mapLM A) := by
-        exact hSI.peripheralEigenvalues_eq
   exact (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP A hTP).mp
     (Kraus.hasEventuallyFullWordSpan_of_isIrreducibleMap_of_isPrimitive
       A hTP hIrr hPrim)

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import QICLean.Channel.PerronFrobenius.Existence
 import QICLean.Kraus.InvariantProjection
 import QICLean.Kraus.Transfer
@@ -15,10 +16,9 @@ import TNLean.MPS.Irreducible.FormII
 
 The Perron–Frobenius eigenvector of the adjoint transfer map of an irreducible
 MPS tensor gives the standard trace-preserving and unital gauge normalizations.
-The channel-level eigenvector existence lives in
-`TNLean.Channel.PerronFrobenius.Existence`; this file states the transfer-map
-specializations and combines them with the explicit gauge constructions from
-`TNLean.MPS.Core.TPGauge`.
+The channel-level eigenvector existence and generic gauge constructions live in
+QICLean. This file states their transfer-map specializations and combines them
+with the MPS gauge-equivalence bridges from `TNLean.MPS.Core.TPGauge`.
 
 ## Main results
 
@@ -77,8 +77,8 @@ For an irreducible MPS tensor `A` with `D > 0` and some `A i ≠ 0`, there exist
 The tensor `B` is gauge-equivalent to the rescaled tensor `(1/√r) • A`, hence has
 the same MPV as `A` up to a system-size-dependent factor `(1/√r)^N`.
 
-This theorem combines `exists_posDef_adjoint_eigenvector` with the explicit `tpGauge`
-construction. -/
+This theorem combines `exists_posDef_adjoint_eigenvector` with the explicit
+`Kraus.tpGauge` construction. -/
 theorem exists_tp_data_of_irreducible
     [NeZero D]
     (A : MPSTensor d D)
@@ -86,7 +86,7 @@ theorem exists_tp_data_of_irreducible
     (hA : ∃ i, A i ≠ 0) :
     ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
       σ.PosDef ∧ 0 < r ∧
-      -- B is the tpGauge of the rescaled tensor
+      -- B is the Kraus.tpGauge of the rescaled tensor
       (∀ i : Fin d,
         B i = CFC.sqrt σ *
           ((↑((Real.sqrt r)⁻¹) : ℂ) • A i) * (CFC.sqrt σ)⁻¹) ∧
@@ -98,9 +98,9 @@ theorem exists_tp_data_of_irreducible
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
   let A' : MPSTensor d D := fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i
-  let B := tpGauge (d := d) (D := D) A' σ
+  let B := Kraus.tpGauge (d := d) (D := D) A' σ
   refine ⟨B, r, σ, hσ_pd, hr_pos, fun i => rfl, ?_, gaugeEquiv_tpGauge A' σ hσ_pd⟩
-  exact tpGauge_isTP_of_transferMap_conjTranspose_eigenvector A σ r hσ_pd hr_pos hσ_eig
+  exact Kraus.tpGauge_isTP_of_map_conjTranspose_eigenvector A σ r hσ_pd hr_pos hσ_eig
 
 /-- **Unital gauge data for an irreducible MPS tensor.**
 
@@ -142,10 +142,10 @@ theorem exists_unital_data_of_irreducible
     exists_posDef_adjoint_eigenvector (d := d) (D := D) Aadj hIrrAdj hAadj
   have hρ_eig : Kraus.transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hρ_eig_adj
-  let B : MPSTensor d D := spectralUnitalGauge (d := d) (D := D) A r ρ
+  let B : MPSTensor d D := Kraus.spectralUnitalGauge (d := d) (D := D) A r ρ
   have hB_unital : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
-    simpa [B] using
-      spectralUnitalGauge_isUnital_of_transferMap_eigenvector
+    simpa [B, Kraus.IsUnital] using
+      Kraus.spectralUnitalGauge_isUnital_of_map_eigenvector
         (d := d) (D := D) A ρ r hρ hr hρ_eig
   have hGauge : GaugeEquiv (d := d) (D := D)
       (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
@@ -153,7 +153,7 @@ theorem exists_unital_data_of_irreducible
       gaugeEquiv_unitalGauge (d := d) (D := D)
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) ρ hρ using 1
     ext i
-    simp [B, spectralUnitalGauge, unitalGauge]
+    simp [B, Kraus.spectralUnitalGauge, Kraus.unitalGauge]
   refine ⟨B, r, ρ, hρ, hr, ?_, hB_unital, hGauge⟩
   intro i
   rfl

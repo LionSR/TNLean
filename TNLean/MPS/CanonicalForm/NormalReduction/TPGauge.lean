@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.IrreducibleTensorAction
+import QICLean.Channel.Irreducible.KrausGauge
+import QICLean.Kraus.IrreducibleAction
 import TNLean.MPS.Irreducible.ScalarFixedPoint
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.SharedInfra.Scaling
@@ -128,25 +129,6 @@ private theorem isIrreducibleAction_gaugeEquiv
   · right
     exact (Submodule.map_eq_top_iff (p := W) (e := T.symm)).1 (by simpa [W'] using hW'top)
 
-/-- Positive-definite TP gauge preserves tensor irreducibility. -/
-private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
-    {D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
-    (σ : Matrix (Fin D) (Fin D) ℂ)
-    (hσ : σ.PosDef)
-    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
-    Kraus.IsIrreducibleFamily (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) := by
-  have hAction : Matrix.IsIrreducibleAction (d := d) (D := D) A :=
-    isIrreducibleAction_of_isIrreducibleTensor (d := d) (D := D) A hIrr
-  have hGauge : GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A σ) :=
-    gaugeEquiv_tpGauge (d := d) (D := D) A σ hσ
-  have hActionGauge :
-      Matrix.IsIrreducibleAction (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) :=
-    isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hAction
-  exact
-    isIrreducibleTensor_of_isIrreducibleAction
-      (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) hActionGauge
-
 /-- **Single irreducible-block PGVWC07 canonical-form data.**
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
@@ -204,12 +186,12 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     isIrreducibleTensor_smul (d := d) (D := D) hc_ne A hIrr
   have hActionScaled :
       Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
-    isIrreducibleAction_of_isIrreducibleTensor
+    Kraus.isIrreducibleAction_of_isIrreducibleFamily
       (d := d) (D := D) (fun i => c • A i) hIrr_scaled
   have hActionB : Matrix.IsIrreducibleAction (d := d) (D := D) B :=
     isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
   have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
-    isIrreducibleTensor_of_isIrreducibleAction (d := d) (D := D) B hActionB
+    Kraus.isIrreducibleFamily_of_isIrreducibleAction (d := d) (D := D) B hActionB
   have hB_unital_map : Kraus.transferMap (d := d) (D := D) B 1 = 1 := by
     simpa [Kraus.transferMap_apply, Matrix.mul_one] using hB_unital
   have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
@@ -588,15 +570,14 @@ theorem exists_tp_gauge_blockwise
       isIrreducibleTensor_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
     have hIrr_gauge :
         Kraus.IsIrreducibleFamily (d := d) (D := dim0 k)
-          (tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k)) :=
-      isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
-        (d := d) (D := dim0 k)
-        (A := fun i => c • blocks0 k i) (σ := σ1 k) (hσ := hσpd1 k) hIrr_scaled
+          (Kraus.tpGauge (fun i => c • blocks0 k i) (σ1 k)) :=
+      (Kraus.isIrreducibleFamily_tpGauge_iff
+        (fun i => c • blocks0 k i) (σ1 k) (hσpd1 k)).2 hIrr_scaled
     have hEq :
-        blocks1 k = tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k) := by
+        blocks1 k = Kraus.tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k) := by
       funext i
-      simpa [tpGauge, Kraus.tpGauge, c] using hform1 k i
-    simpa [hEq] using hIrr_gauge
+      simpa [Kraus.tpGauge, c] using hform1 k i
+    simpa [hEq, Kraus.tpGauge] using hIrr_gauge
   exact ⟨μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!

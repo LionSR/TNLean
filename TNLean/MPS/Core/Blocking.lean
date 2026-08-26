@@ -54,10 +54,6 @@ lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
     (wordOfBlock d L i).length = L := by
   exact Kraus.length_wordOfBlock d L i
 
-lemma wordOfBlock_one (d : ℕ) (i : Fin (blockPhysDim d 1)) :
-    wordOfBlock d 1 i = [singleBlockEquiv d i] := by
-  exact Kraus.wordOfBlock_one d i
-
 /-- The blocked index is equivalent to a word of length `L`. -/
 noncomputable abbrev decodeBlockEquiv (d L : ℕ) :
     Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
@@ -74,11 +70,6 @@ lemma decodeBlock_decodeBlockEquiv_symm (d L : ℕ) (w : Fin L → Fin d) :
 noncomputable abbrev blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     Fin (blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ :=
   Kraus.blockTensor A L
-
-lemma blockTensor_one_apply (A : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (i : Fin (blockPhysDim d 1)) :
-    blockTensor (d := d) (D := D) A 1 i = A (singleBlockEquiv d i) := by
-  exact Kraus.blockTensor_one_apply A i
 
 /-- Block injectivity is injectivity of the corresponding blocked family. -/
 lemma isNBlkInjective_iff_blockTensor_isInjective
@@ -98,10 +89,6 @@ lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
     (w : List (Fin (blockPhysDim d L))) :
     flattenBlockedWord d L (i :: w) = wordOfBlock d L i ++ flattenBlockedWord d L w := by
   exact Kraus.flattenBlockedWord_cons d L i w
-
-lemma flattenBlockedWord_one (d : ℕ) (w : List (Fin (blockPhysDim d 1))) :
-    flattenBlockedWord d 1 w = w.map (singleBlockEquiv d) := by
-  exact Kraus.flattenBlockedWord_one d w
 
 lemma evalWord_blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     ∀ w : List (Fin (blockPhysDim d L)),

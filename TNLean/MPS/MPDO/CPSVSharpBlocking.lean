@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.SourceBNTBlocking
@@ -61,7 +62,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap
   choose σ _hσ _hσfix hTP hGauge hPrim hIrr using
     fun j => (hBNT.blocks_normal j).exists_tpGauge
   let prepared : (j : Fin g) → MPSTensor d (dim j) :=
-    fun j => tpGauge (B j) (σ j)
+    fun j => Kraus.tpGauge (B j) (σ j)
   have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
     intro j k hjk hdim hGPE
     apply hBNT.blocks_not_gaugePhaseEquiv j k hjk hdim

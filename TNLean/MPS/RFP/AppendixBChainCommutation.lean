@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
@@ -196,12 +197,12 @@ theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N := by
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
-  have hRFP' : IsTransferIdempotent (tpGauge (d := d) (D := D) A σ) :=
+  have hRFP' : IsTransferIdempotent (Kraus.tpGauge (d := d) (D := D) A σ) :=
     hGauge.isTransferIdempotent_iff.mp hRFP
-  have hNormal' : Kraus.IsNormal (tpGauge (d := d) (D := D) A σ) :=
+  have hNormal' : Kraus.IsNormal (Kraus.tpGauge (d := d) (D := D) A σ) :=
     isNormal_of_gaugeEquiv hNT.isNormal hGauge
   have hNN := rfp_implies_nncph_of_leftCanonical
-    (tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN
+    (Kraus.tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN
   exact hGauge.symm.isNNCPH hNN
 
 /-- Ground-vector form of `rfp_implies_nncph`.

@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.MPS.Symmetry.StringOrderAux
+import QICLean.Channel.Irreducible.KrausGauge
 
 /-!
 # BNT block-separation hypotheses for PGVWC block intersections
@@ -268,18 +268,18 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     WordTupleSpanTop A
       ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) := by
   let prepared : (j : Fin r) → MPSTensor d (dim j) :=
-    fun j => tpGauge (A j) (Λ j)
+    fun j => Kraus.tpGauge (A j) (Λ j)
   have hGauge : ∀ j, GaugeEquiv (A j) (prepared j) := by
     intro j
     exact gaugeEquiv_tpGauge (A j) (Λ j) (hΛ j)
   have hPreparedIrr : HasIrreducibleBlocks (d := d) prepared :=
     HasIrreducibleBlocks.ofForall fun j =>
-      isIrreducibleTensor_tpGauge_of_isIrreducibleMap
+      Kraus.isIrreducibleFamily_tpGauge_of_isIrreducibleMap
         (A j) (Λ j) (hΛ j)
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (A j) (hIrr.block_irreducible j))
   have hPreparedLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
     IsLeftCanonicalBlockFamily.ofForall fun j =>
-      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
+      Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint
         (A j) (Λ j) (hΛ j) (hDualFixed j)
   have hPreparedBlk0 : ∀ k, Kraus.IsNBlkInjective (prepared k) L₀ :=
     fun k => isNBlkInjective_of_gaugeEquiv (hBlk0 k) (hGauge k)

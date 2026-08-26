@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Algebra
 
 import TNLean.Algebra.BlockTriangularTrace
-import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.ComplexSqrt
@@ -18,7 +17,6 @@ import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FinsetSubtypeSum
-import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.PiSigmaEquiv
