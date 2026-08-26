@@ -302,7 +302,7 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
     intro Y
     calc
       ∑ i : Fin d, B i * Y * (B i)ᴴ = Kraus.transferMap B Y := by
-        simp [Kraus.transferMap_apply]
+        simp
       _ = fixedPointProj ρ htr Y := by
         rw [hB_proj]
       _ = ∑ p : Fin D × Fin D, K p * Y * (K p)ᴴ := by

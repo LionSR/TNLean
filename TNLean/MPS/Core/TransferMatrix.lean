@@ -28,6 +28,6 @@ theorem transferMatrix_eq (A : MPSTensor d D) :
     transferMatrix (Kraus.transferMap A) =
       ∑ n : Fin d,
         (A n).map (starRingEnd ℂ) ⊗ₖ A n :=
-  transferMatrix_kraus A _ (fun X => by simp [Kraus.transferMap_apply])
+  transferMatrix_kraus A _ (fun X => by simp)
 
 end MPSTensor

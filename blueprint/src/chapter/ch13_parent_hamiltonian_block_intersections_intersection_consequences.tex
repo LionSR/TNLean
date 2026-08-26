@@ -423,11 +423,27 @@ direct.
     after gauging.
 \end{proof}
 
+\begin{lemma}[Gauge-phase equivalence is invariant under gauge replacement]
+    \label{lem:gauge_phase_equiv_transport_same_dimension}
+    \lean{MPSTensor.gaugePhaseEquiv_of_gaugeEquiv_left_right}
+    \leanok
+    \uses{def:gauge_equiv, def:gauge_phase_equiv}
+    Let $A,A',B,B'$ have the same bond dimension. If $A$ is gauge equivalent
+    to $A'$, $A'$ is gauge-phase equivalent to $B'$, and $B$ is gauge
+    equivalent to $B'$, then $A$ is gauge-phase equivalent to $B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $X,Y,Z$ are the left gauge, gauge-phase intertwiner, and right gauge,
+    respectively, then $Z^{-1}YX$ is the required intertwiner from $A$ to $B$;
+    it carries the same unit-modulus phase as $Y$.
+\end{proof}
+
 \begin{lemma}[Gauge-phase equivalence transports across two gauges]
     \label{lem:gauge_phase_equiv_transport_left_right}
     \lean{MPSTensor.gaugePhaseEquiv_of_gaugeEquiv_left_right_cast}
     \leanok
-    \uses{def:gauge_equiv, def:gauge_phase_equiv}
+    \uses{lem:gauge_phase_equiv_transport_same_dimension, def:gauge_equiv, def:gauge_phase_equiv}
     Gauge equivalent replacements on both sides preserve gauge-phase
     equivalence, including after identifying equal bond dimensions.
 \end{lemma}

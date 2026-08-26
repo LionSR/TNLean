@@ -71,7 +71,7 @@ lemma transferMap_tpGauge_eq_similarityMap
     calc
       Kraus.transferMap (tpGauge (d := d) (D := D) A σ) X
           = ∑ i : Fin d, (S * A i * S⁻¹) * X * (S * A i * S⁻¹)ᴴ := by
-              simp [Kraus.transferMap_apply, tpGauge, Kraus.tpGauge, S]
+              simp [tpGauge, Kraus.tpGauge, S]
       _ = ∑ i : Fin d, S * (A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             refine Finset.sum_congr rfl ?_
             intro x _
@@ -81,8 +81,8 @@ lemma transferMap_tpGauge_eq_similarityMap
       _ = S * (∑ i : Fin d, A i * (S⁻¹ * X * S⁻¹ * (A i)ᴴ)) * S := by
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = similarityMap (D := D) S⁻¹ (Kraus.transferMap A) X := by
-            simp [similarityMap, Kraus.transferMap_apply, S, hS_inv_inv, hS_inv_herm',
-              Matrix.mul_assoc]
+            simp only [Matrix.mul_assoc, similarityMap, hS_inv_inv, hS_inv_herm',
+              Kraus.mapLM_apply, Kraus.map_apply, LinearMap.coe_mk, AddHom.coe_mk, S]
   exact congrFun (congrFun hcalc i) j
 
 /-- Positive-definite TP gauging preserves peripheral-spectrum primitivity. -/
@@ -147,7 +147,8 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
     _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
           (((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
             Matrix (Fin D) (Fin D) ℂ)) := by
-      simp [Matrix.mul_assoc, mul_inv_rev]
+      simp only [Matrix.coe_units_inv, Matrix.mul_assoc, Units.val_mul, mul_inv_rev,
+        inv_inv]
 
 /-- Gauge equivalence on both sides transports a casted gauge-phase
 equivalence back to the original tensors. -/
@@ -216,7 +217,7 @@ noncomputable def twistedTPGaugeSetup [NeZero D]
   have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
     simpa using
       kraus_sum_mul_conjTranspose_of_unital A (Kraus.transferMap A)
-        (fun X => by simp [Kraus.transferMap_apply]) hNorm
+        (fun X => by simp) hNorm
   have hChAdj : IsChannel (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
     Kraus.isChannel_mapLM (fun i => (A i)ᴴ) hAadjNorm
   let hσ_exists :=
@@ -339,9 +340,9 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
       Kraus.mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ)
           = ∑ i : Fin d,
               setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ := by
-                  simp [Kraus.mixedTransferMap_apply]
+                  simp only [Kraus.mixedTransferMap_apply]
       _ = ∑ i : Fin d, setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
-            simp [hTerm]
+            simp only [hTerm]
       _ = setup.S * (∑ i : Fin d, A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = ev • (setup.S * V * setup.Sᴴ) := by
@@ -366,6 +367,43 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
     simpa [hBot] using hMem
   exact hGauge_ne (Submodule.mem_bot ℂ |>.mp this)
 
+/-- Unitary physical mixing can be inverted by conjugating its coefficients. -/
+private lemma unitary_mix_inverse
+    (A : MPSTensor d D)
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : uᴴ * u = 1)
+    (k : Fin d) :
+    ∑ i : Fin d, (starRingEnd ℂ) (u i k) • (∑ j : Fin d, u i j • A j) = A k := by
+  have hcoeff :
+      ∀ j : Fin d,
+        ∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j = if k = j then 1 else 0 := by
+    intro j
+    have hentry := congrFun (congrFun hu k) j
+    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
+  calc
+    ∑ i : Fin d, (starRingEnd ℂ) (u i k) • (∑ j : Fin d, u i j • A j)
+        = ∑ i : Fin d, ∑ j : Fin d,
+            ((starRingEnd ℂ) (u i k) * u i j) • A j := by
+              apply Finset.sum_congr rfl
+              intro i _
+              rw [Finset.smul_sum]
+              apply Finset.sum_congr rfl
+              intro j _
+              simp [smul_smul]
+    _ = ∑ j : Fin d, ∑ i : Fin d,
+          ((starRingEnd ℂ) (u i k) * u i j) • A j := by
+            rw [Finset.sum_comm]
+    _ = ∑ j : Fin d,
+          (∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j) • A j := by
+            apply Finset.sum_congr rfl
+            intro j _
+            rw [Finset.sum_smul]
+    _ = ∑ j : Fin d, (if k = j then (1 : ℂ) else 0) • A j := by
+          apply Finset.sum_congr rfl
+          intro j _
+          rw [hcoeff j]
+    _ = A k := by simp
+
 /-- Inverting a unitary physical action transports a virtual symmetry relation
 for the twisted companion back to the original tensor. -/
 private theorem inverse_physical_action_of_twisted_companion
@@ -383,38 +421,9 @@ private theorem inverse_physical_action_of_twisted_companion
   let B : MPSTensor d D := twistedMixedCompanion A u
   have hsum :
       ∑ j : Fin d, u i j • B j = A i := by
-    have hcoeff :
-        ∀ n' : Fin d,
-          ∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j) = if i = n' then 1 else 0 := by
-      intro n'
-      have hentry := congrFun (congrFun hu i) n'
-      simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
-    calc
-      ∑ j : Fin d, u i j • B j
-          = ∑ j : Fin d, ∑ n' : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
-              refine Finset.sum_congr rfl ?_
-              intro j _
-              have hBj :
-                  B j = ∑ n' : Fin d, (starRingEnd ℂ) (u n' j) • A n' := by
-                simp [B, twistedMixedCompanion]
-              rw [hBj]
-              simpa [smul_smul, mul_assoc] using
-                (Finset.smul_sum (s := Finset.univ)
-                  (f := fun n' : Fin d => (starRingEnd ℂ) (u n' j) • A n')
-                  (r := u i j))
-      _ = ∑ n' : Fin d, ∑ j : Fin d, (u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
-            rw [Finset.sum_comm]
-      _ = ∑ n' : Fin d, (∑ j : Fin d, u i j * (starRingEnd ℂ) (u n' j)) • A n' := by
-            refine Finset.sum_congr rfl ?_
-            intro n' _
-            simpa using
-              (Finset.sum_smul (s := Finset.univ)
-                (f := fun j : Fin d => u i j * (starRingEnd ℂ) (u n' j))
-                (x := A n')).symm
-      _ = ∑ n' : Fin d, (if i = n' then 1 else 0) • A n' := by
-            simp [hcoeff]
-      _ = A i := by
-            simp
+    simpa only [B, twistedMixedCompanion, Matrix.conjTranspose_apply,
+      starRingEnd_apply, star_star] using
+      unitary_mix_inverse A uᴴ (by simpa using hu) i
   have hsum_virtual : A i = ζ • (U * (∑ j : Fin d, u i j • A j) * Uᴴ) := by
     calc
       A i = ∑ j : Fin d, u i j • B j := hsum.symm
@@ -607,7 +616,8 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
       calc
         X * (a⁻¹ • Uᴴ) = (a • U) * (a⁻¹ • Uᴴ) := by rw [hX_eq]
         _ = (a * a⁻¹) • (U * Uᴴ) := by
-              simpa [Matrix.mul_assoc] using smul_mul_smul_comm a U a⁻¹ Uᴴ
+              simpa only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, mul_comm] using
+                smul_mul_smul_comm a U a⁻¹ Uᴴ
         _ = 1 := by simp [ha_ne0, hU_unitary_left]
     simpa [X, Xin] using hXin'
   refine ⟨Uᴴ, ζ⁻¹, ?_, ?_, ?_, ?_⟩
@@ -671,7 +681,7 @@ theorem twistedTransfer_eigen_of_virtualUnitary
     _ = μ • (V * ∑ i : Fin d, A i * (A i)ᴴ) := by
           simp [Matrix.mul_assoc, Matrix.mul_sum]
     _ = μ • (V * Kraus.transferMap A 1) := by
-          simp [Kraus.transferMap_apply]
+          simp
     _ = μ • V := by
           simp [hNorm]
 
@@ -702,39 +712,20 @@ theorem boundaryState_invariant_of_virtualUnitary
   have hμ_sq : star μ * μ = 1 := by
     rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
   have huc : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hcoeff :
-      ∀ k j : Fin d,
-        ∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j = if k = j then 1 else 0 := by
-    intro k j
-    have hentry := congrFun (congrFun huc k) j
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
   have hA_from_B :
       ∀ k : Fin d, A k = μ • (V * B k * Vᴴ) := by
     intro k
     calc
-      A k = ∑ j : Fin d, (if k = j then 1 else 0) • A j := by simp
-      _ = ∑ j : Fin d, (∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j) • A j := by
-            simp [hcoeff]
-      _ = ∑ j : Fin d, ∑ i : Fin d, ((starRingEnd ℂ) (u i k) * u i j) • A j := by
-            apply Finset.sum_congr rfl
-            intro j _
-            rw [← Finset.sum_smul]
-      _ = ∑ i : Fin d, ∑ j : Fin d, ((starRingEnd ℂ) (u i k) * u i j) • A j := by
-            rw [Finset.sum_comm]
-      _ = ∑ i : Fin d, (starRingEnd ℂ) (u i k) • (∑ j : Fin d, u i j • A j) := by
-            apply Finset.sum_congr rfl
-            intro i _
-            rw [Finset.smul_sum]
-            apply Finset.sum_congr rfl
-            intro j _
-            simp [smul_smul]
+      A k = ∑ i : Fin d, (starRingEnd ℂ) (u i k) •
+          (∑ j : Fin d, u i j • A j) := (unitary_mix_inverse A u huc k).symm
       _ = ∑ i : Fin d, (starRingEnd ℂ) (u i k) • (μ • (V * A i * Vᴴ)) := by
             apply Finset.sum_congr rfl
             intro i _
             rw [hC1μ i]
       _ = μ • (V * B k * Vᴴ) := by
-            simp [B, twistedMixedCompanion, smul_smul, mul_assoc,
-              Finset.smul_sum, Finset.mul_sum, Finset.sum_mul, mul_comm]
+            simp only [mul_assoc, smul_smul, mul_comm, twistedMixedCompanion,
+              Finset.mul_sum, Algebra.mul_smul_comm, Finset.sum_mul,
+              Algebra.smul_mul_assoc, Finset.smul_sum, B]
   have hB_eq :
       ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap B X = Kraus.transferMap A X := by
     intro X
@@ -754,7 +745,7 @@ theorem boundaryState_invariant_of_virtualUnitary
     calc
       Kraus.transferMap (fun i => (A i)ᴴ) ρ
           = ∑ i : Fin d, (A i)ᴴ * ρ * A i := by
-              simp [Kraus.transferMap_apply]
+              simp
       _ = ∑ i : Fin d, V * ((B i)ᴴ * Λ * B i) * Vᴴ := by
             apply Finset.sum_congr rfl
             intro i _
@@ -779,7 +770,7 @@ theorem boundaryState_invariant_of_virtualUnitary
       _ = V * (∑ i : Fin d, (B i)ᴴ * Λ * B i) * Vᴴ := by
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = V * Kraus.transferMap (fun i => (B i)ᴴ) Λ * Vᴴ := by
-            simp [Kraus.transferMap_apply]
+            simp
       _ = ρ := by simp [ρ, hBfix, Matrix.mul_assoc]
   have hρ_tr : Matrix.trace ρ = 1 := by
     have hρ_unf : ρ = V * Λ * Vᴴ := rfl

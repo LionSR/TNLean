@@ -104,7 +104,7 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
               (X : Matrix (Fin D) (Fin D) ℂ)⁻¹) * Y *
               (((X : Matrix (Fin D) (Fin D) ℂ) * A x *
                 (X : Matrix (Fin D) (Fin D) ℂ)⁻¹)ᴴ) := by
-            simp [Kraus.transferMap_apply, hX]
+            simp [hX]
       _ = ∑ x : Fin d,
             (X : Matrix (Fin D) (Fin D) ℂ) *
               (A x * ((X : Matrix (Fin D) (Fin D) ℂ)⁻¹ * Y *
@@ -123,7 +123,7 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
       _ = similarityMap (D := D)
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
             (Kraus.transferMap (d := d) (D := D) A) Y := by
-            simp [similarityMap, Kraus.transferMap_apply, Matrix.conjTranspose_nonsing_inv,
+            simp [similarityMap, Matrix.conjTranspose_nonsing_inv,
               hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
 
 /-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
@@ -222,7 +222,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
     push Not at hzero
     have hmap : Kraus.transferMap (d := d) (D := D) A = 0 := by
       ext X a b
-      simp [Kraus.transferMap_apply, hzero]
+      simp [hzero]
     have hspectral := hRadius
     rw [hmap] at hspectral
     simp at hspectral
@@ -355,7 +355,7 @@ theorem IsNormalTensor.exists_apply_ne_zero [NeZero D]
   push Not at hzero
   have hmap : Kraus.transferMap (d := d) (D := D) A = 0 := by
     ext X a b
-    simp [Kraus.transferMap_apply, hzero]
+    simp [hzero]
   have hspectral := h.spectral_radius_one
   rw [hmap] at hspectral
   simp at hspectral

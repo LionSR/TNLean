@@ -450,9 +450,94 @@ families are placed over a common blocked alphabet. The compression and
 common-alphabet identities are proved in
 Section~\ref{sec:app_canonical_cyclic_sectors}.
 
+\begin{theorem}[Fixed-point upgrade on an invariant corner]%
+    \label{thm:adjoint_corner_fixed_of_preserved}
+    \lean{MPSTensor.hFixUpgrade_of_peripheral}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A$ have positive bond dimension, suppose that $\E_A$ is irreducible,
+    and assume $\sum_i(A^i)^\dagger A^i=\Id$. Let $Q$ be an orthogonal
+    projection. If $(\E_{A^\dagger})^m$ preserves the corner
+    $Q\MN{D}Q$, then
+    \begin{align}
+        (\E_{A^\dagger})^m(Q) & =Q.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a positive-definite fixed point $\rho$ of $\E_A$. The weighted
+    trace $X\mapsto\tr(\rho X)$ is invariant under $\E_{A^\dagger}$ and its
+    powers. Corner preservation gives
+    \begin{align}
+        Q-(\E_{A^\dagger})^m(Q)
+         & =Q(\E_{A^\dagger})^m(\Id-Q)Q\ge0.
+        \notag
+    \end{align}
+    The invariant weighted trace of this positive semidefinite difference is
+    zero. Since $\rho>0$, the difference vanishes.
+\end{proof}
+
+\begin{theorem}[Fixed-point algebra rigidity on cyclic sectors]%
+    \label{thm:sector_fixed_point_algebra_rigidity}
+    \lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp}
+    \leanok
+    \uses{def:irreducible_tensor, def:transfer_map}
+    Let $A$ be an irreducible MPS tensor with positive bond dimension and
+    $\sum_i(A^i)^\dagger A^i=\Id$. Let $(P_k)_{k\in\Z/m\Z}$ be orthogonal
+    projections such that
+    \begin{align}
+        \sum_kP_k & =\Id,
+                  & \E_{A^\dagger}(P_{k+1}) & =P_k.
+        \notag
+    \end{align}
+    If $X,Y\in P_k\MN{D}P_k$ are fixed by $(\E_{A^\dagger})^m$, then
+    \begin{align}
+        \E_{A^\dagger}(XY)
+         & =\E_{A^\dagger}(X)\E_{A^\dagger}(Y).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:irreducible_unital_scalar_fixed_point}
+    Irreducibility passes to the adjoint transfer map. The cyclic relation
+    gives equality in both Kadison--Schwarz inequalities:
+    \begin{align}
+        \E_{A^\dagger}(P_k^\dagger P_k)
+         & =\E_{A^\dagger}(P_k)^\dagger\E_{A^\dagger}(P_k),
+        \notag                                              \\
+        \E_{A^\dagger}(P_kP_k^\dagger)
+         & =\E_{A^\dagger}(P_k)\E_{A^\dagger}(P_k)^\dagger.
+        \notag
+    \end{align}
+    Hence every $P_k$ lies in the multiplicative domain, so for every $Z$,
+    \begin{align}
+        \E_{A^\dagger}(P_kZ)
+         & =\E_{A^\dagger}(P_k)\E_{A^\dagger}(Z),
+        \notag                                    \\
+        \E_{A^\dagger}(ZP_k)
+         & =\E_{A^\dagger}(Z)\E_{A^\dagger}(P_k).
+        \notag
+    \end{align}
+    If $X\in P_k\MN{D}P_k$ is fixed by
+    $(\E_{A^\dagger})^m$, then its orbit sum
+    \begin{align}
+        R_X & =\sum_{\ell=0}^{m-1}(\E_{A^\dagger})^\ell(X)
+        \notag
+    \end{align}
+    is fixed by $\E_{A^\dagger}$. By
+    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point}, $R_X=c\Id$.
+    Orthogonality of the cyclic sectors and the multiplicative-domain
+    identities give $X=P_kR_XP_k=cP_k$. Similarly, $Y=c'P_k$. Since
+    $\E_{A^\dagger}(P_k)=P_{k-1}$, both sides of the required identity equal
+    $cc'P_{k-1}$.
+\end{proof}
+
 \begin{lemma}[Sector irreducibility for the adjoint blocked map]%
     \label{thm:sector_irred_unconditional}
-    \lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}\leanok
+    \lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}
+    \leanok
     \uses{def:irreducible_tensor}
     Let $A$ be a left-canonical irreducible MPS tensor with $D>0$, let $m$ be the
     period of its cyclic-sector decomposition, and let $(P_u)_{u=1}^m$ be the

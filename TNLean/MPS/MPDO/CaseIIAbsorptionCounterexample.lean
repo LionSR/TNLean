@@ -136,7 +136,7 @@ private lemma secondBasis_transferMap :
   ext a b
   fin_cases a
   fin_cases b
-  simp [Kraus.transferMap_apply, secondBasisTensor, Matrix.mul_apply]
+  simp [secondBasisTensor, Matrix.mul_apply]
 
 /-- Each of the two displayed bond-one representatives is a normal tensor.
 

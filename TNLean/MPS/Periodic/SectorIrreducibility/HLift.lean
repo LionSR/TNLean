@@ -500,24 +500,24 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_tp
       calc
         KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
             = T (P k * (P k)ᴴ) := by
-              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, KadisonSchwarz.krausMap]
         _ = T (P k) := by rw [hPk_star, (hPproj k).2]
         _ = T (P k) * (T (P k))ᴴ := by
               rw [hTPk_proj.1.eq, hTPk_proj.2]
         _ = KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
-              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, KadisonSchwarz.krausMap]
     have hLeft :
         KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
           (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
       calc
         KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
             = T ((P k)ᴴ * P k) := by
-              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, KadisonSchwarz.krausMap]
         _ = T (P k) := by rw [hPk_star, (hPproj k).2]
         _ = (T (P k))ᴴ * T (P k) := by
               rw [hTPk_proj.1.eq, hTPk_proj.2]
         _ = (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
-              simp [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap]
+              simp [T, K, KadisonSchwarz.krausMap]
     exact ⟨
       (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
       (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩

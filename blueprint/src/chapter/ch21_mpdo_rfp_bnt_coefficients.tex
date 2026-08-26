@@ -832,6 +832,76 @@
     the nonnegative scalar $(25/32)^N$.
 \end{proof}
 
+\begin{theorem}[Unitality of the explicit per-site transfer map]%
+    \label{thm:mpdo_rescaling_transfer_unital}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_one}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    For the explicit four-letter tensor $A$, its per-site transfer map
+    $\varphi(Y)=\sum_aA^aY(A^a)^\dagger$ satisfies
+    \begin{align}
+        \varphi(\Id) & =\Id.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate the four matrix entries of $\varphi(\Id)$ from the displayed
+    matrices $A^a$. The diagonal entries are one and the off-diagonal entries
+    vanish.
+\end{proof}
+
+\begin{theorem}[Traceless diagonal eigenvector of the explicit transfer map]%
+    \label{thm:mpdo_rescaling_transfer_diag_alt}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_diag_alt}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    For $Z=\operatorname{diag}(1,-1)$, the same transfer map satisfies
+    \begin{align}
+        \varphi(Z) & =\frac{7}{25}Z.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate $\sum_aA^aZ(A^a)^\dagger$ entrywise. Its off-diagonal entries
+    vanish, while its diagonal entries are $7/25$ and $-7/25$.
+\end{proof}
+
+\begin{theorem}[Annihilation of the first off-diagonal matrix unit]%
+    \label{thm:mpdo_rescaling_transfer_single_zero_one}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_single01}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    For the matrix unit $E_{01}$, the same transfer map satisfies
+    \begin{align}
+        \varphi(E_{01}) & =0.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitution of the four matrices $A^a$ shows that every entry of
+    $\sum_aA^aE_{01}(A^a)^\dagger$ is zero.
+\end{proof}
+
+\begin{theorem}[Annihilation of the second off-diagonal matrix unit]%
+    \label{thm:mpdo_rescaling_transfer_single_one_zero}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_single10}
+    \leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    For the matrix unit $E_{10}$, the same transfer map satisfies
+    \begin{align}
+        \varphi(E_{10}) & =0.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitution of the four matrices $A^a$ shows that every entry of
+    $\sum_aA^aE_{10}(A^a)^\dagger$ is zero.
+\end{proof}
+
 \begin{theorem}[Spectral identification of the local factor and the
         per-site transfer map]%
     \label{thm:mpdo_bnt_label_rescaling_stable_spectral}
@@ -852,6 +922,7 @@
     % eigenvalues as the diagonal entries of its chi matrix.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:mpdo_rescaling_transfer_unital, thm:mpdo_rescaling_transfer_diag_alt, thm:mpdo_rescaling_transfer_single_zero_one, thm:mpdo_rescaling_transfer_single_one_zero}
     The uniform and alternating vectors are eigenvectors of the explicit
     $2\times2$ matrix $W$,
     \begin{align}

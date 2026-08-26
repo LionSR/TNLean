@@ -71,9 +71,8 @@ private theorem phaseFlipTensor_transferMap_adjoint :
   apply LinearMap.ext
   intro X
   rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
-  simp only [Kraus.mapLM_apply, Kraus.adjointMap, Matrix.conjTranspose_conjTranspose]
-  simp [Kraus.adjointMap, Kraus.transferMap_apply,
-    phaseFlipTensor_conjTranspose]
+  simp only [Kraus.mapLM_apply]
+  simp [phaseFlipTensor_conjTranspose]
 
 private theorem phaseFlipTensor_transferMap_pow_adjoint (n : ℕ) :
     ((Kraus.transferMap phaseFlipTensor) ^ n).adjoint =

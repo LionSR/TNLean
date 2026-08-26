@@ -712,7 +712,7 @@ private lemma scalarPurifier_isTransferIdempotent :
   ext a b
   fin_cases a
   fin_cases b
-  simp [LinearMap.comp_apply, Kraus.transferMap_apply, purificationTensor,
+  simp [LinearMap.comp_apply, purificationTensor,
     scalarPurifier]
 
 private lemma nilpotentGlobalPRFP_isPRFP : IsPRFP nilpotentGlobalPRFP := by

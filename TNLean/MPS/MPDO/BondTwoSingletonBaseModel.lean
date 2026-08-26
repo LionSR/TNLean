@@ -167,7 +167,7 @@ private theorem baseSymbolTensor_transferMap (a : Fin 4) :
   ext x y
   fin_cases x
   fin_cases y
-  simp [Kraus.transferMap_apply, baseSymbolTensor]
+  simp [baseSymbolTensor]
 
 /-- Every symbol block in the four-block decomposition is a normal tensor. -/
 theorem baseSymbolTensor_isNormalTensor (a : Fin 4) :
