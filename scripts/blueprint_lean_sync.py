@@ -46,6 +46,14 @@ _LEAN_DECL_KEYWORD_ONLY_RE = re.compile(
     r"(?:(?:noncomputable|protected|private)\s+)*"
     r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s*$"
 )
+# Structure fields are declarations too: Lean generates a projection named
+# `StructureName.fieldName` for each field.  Blueprint entries may legitimately
+# cite that projection rather than the bundling structure.
+_LEAN_STRUCTURE_FIELD_RE = re.compile(
+    r"^\s+((?!where\b|extends\b|deriving\b)[\w']+)"
+    r"(?:\s*\([^)]*\))*\s*:\s*"
+)
+
 _TRACKED_REVERSE_DECL_KINDS = {"def", "theorem", "lemma"}
 _DIFF_HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
 
@@ -212,7 +220,61 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
         if idx + 1 < len(decls):
             decl.end_line = decls[idx + 1].line - 1
 
-    return decls
+    # The declaration regex above finds the structure itself, but not the
+    # projection declarations generated for its fields.  Scan only the source
+    # span of each structure and ignore block/line comments so documentation
+    # prose cannot be mistaken for a field.
+    field_decls: list[LeanDecl] = []
+    for decl in decls:
+        if decl.kind != "structure":
+            continue
+        block_comment_depth = 0
+        for line_no in range(decl.line + 1, decl.end_line + 1):
+            raw = lines[line_no - 1]
+            code_parts: list[str] = []
+            cursor = 0
+            while cursor < len(raw):
+                if block_comment_depth:
+                    nested = raw.find("/-", cursor)
+                    end = raw.find("-/", cursor)
+                    if nested >= 0 and (end < 0 or nested < end):
+                        block_comment_depth += 1
+                        cursor = nested + 2
+                    elif end >= 0:
+                        block_comment_depth -= 1
+                        cursor = end + 2
+                    else:
+                        cursor = len(raw)
+                    continue
+                block = raw.find("/-", cursor)
+                line_comment = raw.find("--", cursor)
+                stops = [x for x in (block, line_comment) if x >= 0]
+                stop = min(stops) if stops else len(raw)
+                code_parts.append(raw[cursor:stop])
+                if stop == line_comment:
+                    cursor = len(raw)
+                elif stop == block:
+                    block_comment_depth = 1
+                    cursor = stop + 2
+                else:
+                    cursor = len(raw)
+            code = "".join(code_parts)
+            match = _LEAN_STRUCTURE_FIELD_RE.match(code)
+            if not match:
+                continue
+            field_name = match.group(1)
+            field_decls.append(
+                LeanDecl(
+                    file=rel,
+                    line=line_no,
+                    fqn=f"{decl.fqn}.{field_name}",
+                    kind="field",
+                    short_name=field_name,
+                    end_line=line_no,
+                )
+            )
+
+    return decls + field_decls
 
 
 def collect_lean_decls(lean_root: Path) -> dict[str, LeanDecl]:

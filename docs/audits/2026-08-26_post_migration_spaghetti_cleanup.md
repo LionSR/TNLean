@@ -51,6 +51,11 @@ canonical reindex API. TNLean PR #7203 retired the stale documentation-only
 `Wielandt.WolfChapter6TNIndex` module, whose prose still pointed to pre-migration `TNLean.Channel`
 and `TNLean.QPF` ownership paths.
 
+The declaration-by-declaration pass-through inventory is recorded in
+`2026-08-26_issue7190_pass_through_inventory.md`. The intentional decision not to recreate the
+retired `mixedTransferMap` alias ecosystem is recorded in
+`2026-08-26_mixed_map_no_alias_exception.md`.
+
 ### Dependency direction
 
 TNLean PR #7191 repaired three lower-layer ownership inversions while preserving declaration names

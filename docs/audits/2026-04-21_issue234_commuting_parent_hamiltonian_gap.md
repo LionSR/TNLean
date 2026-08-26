@@ -93,8 +93,9 @@ After the wrappers and Appendix B structural data above, the missing internal th
 - `TNLean/MPS/RFP/AppendixBStructuralData.lean` now records this output as
   `AppendixBStructuralData` and names the remaining chain-space extraction as
   `AppendixBProductPairExtraction`.
-- `Commuting.lean` exposes both the final wrapper `ProductPairBridge.isNNCPH` and the conditional
-  theorem `rfp_implies_nncph_of_appendixBExtraction`.
+- `TNLean/MPS/ParentHamiltonian/Commuting.lean` exposes the final wrapper
+  `ProductPairBridge.isNNCPH`, while `TNLean/MPS/RFP/CommutingBridge.lean` exposes the
+  RFP-specific conditional theorem `rfp_implies_nncph_of_appendixBExtraction`.
 
 ### What is still missing
 
