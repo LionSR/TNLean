@@ -436,6 +436,49 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \end{align}
 \end{proof}
 
+\begin{lemma}[Doubly normalized block-diagonal boundary conditions at the source length]
+    \label{lem:bnt_block_diagonal_open_boundary_matrices_source_length_doubly_normalized}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}
+    \leanok
+    Let $g\ge2$. Let $A_j$ be irreducible blocks with positive bond
+    dimensions, pairwise inequivalent up to gauge and phase, and injective at
+    the common length $L_0>0$. Assume normalized self-overlap and
+    \begin{align}
+        \sum_a(A^j_a)^\dagger A^j_a & =\Id,
+        \notag                              \\
+        \sum_aA^j_a(A^j_a)^\dagger  & =\Id.
+        \notag
+    \end{align}
+    Let every weight $\mu_j$ be nonzero. If $0<L\le N$ and
+    $L\ge3(g-1)(L_0+1)+1$, then
+    \begin{align}
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+         & \subseteq\bigoplus_jG_N(A_j).
+        \notag
+    \end{align}
+    In particular, every vector $\psi$ in the left-hand side admits matrices
+    $X_j$ such that
+    \begin{align}
+        \psi
+         & =\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+        \notag                                                        \\
+        \Gamma_N^{A_j}(\mu_j^NX_j)
+         & \in G_N(A_j)
+        \notag
+    \end{align}
+    for every $j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc_direct_sum_intersection_doubly_normalized, thm:pgvwc_block_space_independence_doubly_normalized, lem:block_diagonal_boundary_of_open_boundary_sum}
+    Propagate the doubly normalized restriction-intersection identity from
+    length $L$ to length $N$. This places $\psi$ in $\sum_jG_N(A_j)$.
+    Block-space independence makes the sum internal, and
+    Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum} supplies the
+    matrices $X_j$.
+\end{proof}
+
 The lemma gives $\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)$. This is not enough for
 periodic-boundary membership when a cyclic window crosses the chosen cut. The
 boundary-cut comparison of

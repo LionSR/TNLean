@@ -461,7 +461,6 @@
     \label{thm:block_diagonal_boundary_periodic_components_doubly_normalized}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
     Let $g\ge2$, assume the physical alphabet is nonempty, and let $A_j$
     be irreducible blocks with positive bond dimensions, pairwise inequivalent
     up to gauge and phase, and injective at a common
@@ -496,7 +495,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length_doubly_normalized, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
     Obtain block-diagonal boundary matrices at the chosen cut. Move the cut
     past the final $L_0$ sites and compare the two boundary representations.
     The doubly normalized simultaneous product-span theorem separates the
@@ -589,6 +588,29 @@
     sum.
 \end{proof}
 
+\begin{theorem}[Doubly normalized periodic block decomposition and independence]
+    \label{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
+    \begin{align}
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+         & =
+        \sum_j\mathcal G_{N,L}(A_j),
+        \notag
+    \end{align}
+    and the open-boundary spaces $G_N(A_j)$ form an internal sum.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_diagonal_chain_space_global_cut_independent}
+    Apply
+    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent}
+    with $\Lambda_j=\Id$. Left canonicity gives the required dual fixed-point
+    identity, while the remaining hypotheses are unchanged.
+\end{proof}
+
 \begin{theorem}[Doubly normalized periodic block decomposition]
     \label{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}
@@ -620,18 +642,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:block_diagonal_chain_space_global_cut}
-    Apply Theorem~\ref{thm:block_diagonal_chain_space_global_cut} with
-    $\Lambda_j=\Id$. The first normalization identity gives
-    $\sum_a(A^j_a)^\dagger\Lambda_jA^j_a=\Lambda_j$, so all hypotheses of that
-    theorem hold.
+    \uses{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}
+    This is the equality component of
+    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}.
 \end{proof}
 
 \begin{theorem}[Unique decomposition into open-boundary block spaces]
     \label{thm:block_diagonal_chain_unique_decomposition_source_length}
     \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
     Let $g\ge2$, assume the physical alphabet is nonempty, and let $A_j$
     be irreducible blocks with positive bond dimensions, pairwise inequivalent
     up to gauge and phase, and injective at a common
