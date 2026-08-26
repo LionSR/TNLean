@@ -21,7 +21,7 @@ complementary sectors as exact scalar multiples of `Q`-sector states, and apply
 fixed-length linear independence to the resulting relation.  The proportionality
 scalar $c_N$ only changes the aggregated `Q`-coefficients; the chosen
 `P`-coefficient is still isolated exactly and contradicts
-`IsBNTCanonicalForm.coeff_not_eventually_zero`.
+`SectorDecomposition.coeff_not_eventually_zero`.
 
 ## References
 
@@ -159,7 +159,7 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
       (kOf := kOf) (α := fun c' => αOf c' N)
       (hComplement := fun c' => hStateOf c' N)
       (hSum := hPQsum) (hLI := hLIN) (i₀ := j₀) hj₀T
-  exact (hP.coeff_not_eventually_zero j₀) hCoeff_eventually_zero
+  exact (P.coeff_not_eventually_zero j₀) hCoeff_eventually_zero
 
 /-- Exact proportional single-block matching without any per-sector unit-modulus
 copy-weight hypothesis.  A non-decaying overlap is extracted by fixed-length
