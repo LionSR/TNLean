@@ -500,14 +500,21 @@ Section~\ref{sec:app_canonical_cyclic_sectors}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:adjoint_corner_fixed_of_preserved}
-    Irreducibility passes to the adjoint transfer map. The cyclic relation
-    sends each $P_k$ to an orthogonal projection. Equality in the
-    Kadison--Schwarz inequality therefore places every $P_k$ in the
-    multiplicative domain of $\E_{A^\dagger}$. The resulting left and right
-    multiplicativity identities, together with
-    Theorem~\ref{thm:adjoint_corner_fixed_of_preserved}, give the displayed
-    product formula for fixed elements supported on one sector.
+    \uses{thm:irreducible_unital_scalar_fixed_point}
+    Irreducibility passes to the adjoint transfer map. The cyclic relation and
+    equality in the Kadison--Schwarz inequality place every $P_k$ in its
+    multiplicative domain. If $X\in P_k\MN{D}P_k$ is fixed by
+    $(\E_{A^\dagger})^m$, then its orbit sum
+    \begin{align}
+        R_X & =\sum_{\ell=0}^{m-1}(\E_{A^\dagger})^\ell(X)
+        \notag
+    \end{align}
+    is fixed by $\E_{A^\dagger}$. By
+    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point}, $R_X=c\Id$.
+    Orthogonality of the cyclic sectors and the multiplicative-domain
+    identities give $X=P_kR_XP_k=cP_k$. Similarly, $Y=c'P_k$. Since
+    $\E_{A^\dagger}(P_k)=P_{k-1}$, both sides of the required identity equal
+    $cc'P_{k-1}$.
 \end{proof}
 
 \begin{lemma}[Sector irreducibility for the adjoint blocked map]%
