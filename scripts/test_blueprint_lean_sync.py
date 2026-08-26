@@ -24,6 +24,10 @@ structure Witness where
   -/
   value : Nat
   relation (x : Nat) : x = value
+  withLocalBinder :
+    ∀ (n : Nat),
+      letI : NeZero (n + 1) := ⟨by omega⟩
+      True
 
  theorem after : True := by trivial
 
