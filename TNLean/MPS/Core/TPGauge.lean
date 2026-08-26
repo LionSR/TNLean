@@ -31,12 +31,6 @@ theorem gaugeEquiv_tpGauge
   intro i
   simp [Kraus.tpGauge, X]
 
-/-- TP gauging preserves finite-ring MPV coefficients. -/
-theorem sameMPV_tpGauge
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    SameMPV A (Kraus.tpGauge A ρ) :=
-  GaugeEquiv.sameMPV (gaugeEquiv_tpGauge A ρ hρ)
-
 /-- The unital-gauged family is gauge-equivalent to the original tensor. -/
 theorem gaugeEquiv_unitalGauge
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :

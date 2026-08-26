@@ -213,10 +213,10 @@ theorem cross_overlap_tendsto_zero_of_separated_bnt_data
     (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) := by
   by_cases hdim : dim j = dim k
-  · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left
+  · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
       (hdim := hdim) (A := A j) (B := A k)
-      (hA_inj := hInj.block_injective j)
-      (hB_inj := hInj.block_injective k)
+      (hA_irr := irreducibleTensor_of_injective (A j) (hInj.block_injective j))
+      (hB_irr := irreducibleTensor_of_injective (A k) (hInj.block_injective k))
       (hA_norm := hLeft.leftCanonical j)
       (hB_norm := hLeft.leftCanonical k)
       (hNot := hBlocks j k hjk hdim)

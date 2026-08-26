@@ -88,28 +88,6 @@ lemma mpvState_eq_sum_of_decomp
     smul_eq_mul, mpvState_apply]
   exact hdecomp σ
 
-/-- Expand the inner product against the right side of a fixed-length MPV
-decomposition.
-
-This algebraic identity is used in the proof of arXiv:1606.00608,
-Theorem 2.10, Appendix MPV proof line 1182, when projecting the full
-proportionality relation onto one block MPV. -/
-lemma mpvInner_eq_sum_of_decomp_right
-    {d g D Dtot : ℕ} {dim : Fin g → ℕ}
-    (A_total : MPSTensor d Dtot)
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    {N : ℕ}
-    (c : Fin g → ℂ)
-    (hdecomp : ∀ σ : Fin N → Fin d,
-      mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ)
-    (X : MPSTensor d D) :
-    mpvInner (d := d) X A_total N =
-      ∑ j : Fin g, c j * mpvInner (d := d) X (A j) N := by
-  have hstate :=
-    mpvState_eq_sum_of_decomp (d := d) A_total A (N := N) c hdecomp
-  rw [mpvInner, hstate]
-  simp only [mpvInner, inner_sum, inner_smul_right]
-
 /-- Proportionality of MPVs at a fixed system size upgrades to proportionality of overlaps. -/
 lemma mpvOverlap_eq_mul_of_mpv_eq_mul
     {d : ℕ} {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)

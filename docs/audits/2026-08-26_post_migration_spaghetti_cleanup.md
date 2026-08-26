@@ -73,6 +73,11 @@ TNLean PR #7199 moved the BNT-facing direct-sum selector/separation closure to
 `ParentHamiltonian.BNTBlockIntersection -> MPDO.BiCFDerivation.BNTDirectSum` edge while
 preserving all sixteen moved theorem names, statements, proofs, and docstrings.
 
+- The cast-lemma module `MPS.Overlap.CastLemmas` no longer imports
+  `MPS.CanonicalForm.Reduction`. The dependency now runs the intended way: the reduction module
+  imports the cast lemmas and uses the public `mpv_cast_dim` and `isIrreducibleTensor_cast_dim`
+  in place of the two private copies it carried.
+
 ### Witness packaging
 
 TNLean PR #7198 introduced `PreparedBNTBlocks` and

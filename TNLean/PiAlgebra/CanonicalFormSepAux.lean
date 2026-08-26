@@ -230,8 +230,9 @@ theorem of_peripheral_primitive
   intro k
   let : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
   exact
-    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive
-      (A := A k) (hInj k) (hLeft k) (hPrim k)
+    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (A := A k) (MPSTensor.irreducibleTensor_of_injective (A k) (hInj k))
+      (hLeft k) (hPrim k)
 
 /-- The canonical-form conditions imply blockwise injectivity data. -/
 theorem toHasInjectiveBlocks (hCF : IsCanonicalForm μ A) : HasInjectiveBlocks (d := d) A :=

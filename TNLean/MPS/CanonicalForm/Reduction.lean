@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import QICLean.Algebra.PosSemidefSupport
 import QICLean.Kraus.InvariantProjection
@@ -194,24 +195,6 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
     exact Matrix.one_sub_supportProj_mul_mul_supportProj_eq_zero Y hGB
 
 
-/-! ## Auxiliary lemmas about casts and MPVs -/
-
-section CastLemmas
-
-/-- The MPV is unchanged by a type cast along a bond-dimension equality. -/
-private lemma mpv_cast_dim {n m : ℕ} (h : n = m) (A : MPSTensor d n)
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (cast (congr_arg (MPSTensor d) h) A) σ = mpv A σ := by
-  cases h; rfl
-
-/-- `Kraus.IsIrreducibleFamily` is preserved by a type cast along a bond-dimension equality. -/
-private lemma isIrreducibleTensor_cast {n m : ℕ} (h : n = m) (A : MPSTensor d n) :
-    Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) h) A) ↔
-      Kraus.IsIrreducibleFamily A := by
-  cases h; rfl
-
-end CastLemmas
-
 /-! ## Two-block MPV formula -/
 
 /-- The MPV of `twoBlockTensor A₁ A₂` equals `mpv A₁ σ + mpv A₂ σ`. -/
@@ -333,12 +316,12 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
         intro k
         -- After Fin.addCases_left, the block unfolds to the left branch.
         simp only [combinedBlocks, Fin.addCases_left]
-        exact (isIrreducibleTensor_cast (h_left k).symm (blocks₁ k)).mpr (hirr₁ k)
+        exact (isIrreducibleTensor_cast_dim (h_left k).symm (blocks₁ k)).mpr (hirr₁ k)
       · -- Right half: combinedBlocks (Fin.natAdd r₁ k) = cast (h_right k).symm (blocks₂ k).
         intro k
         -- After Fin.addCases_right, the block unfolds to the right branch.
         simp only [combinedBlocks, Fin.addCases_right]
-        exact (isIrreducibleTensor_cast (h_right k).symm (blocks₂ k)).mpr (hirr₂ k)
+        exact (isIrreducibleTensor_cast_dim (h_right k).symm (blocks₂ k)).mpr (hirr₂ k)
     -- ── SameMPV₂ for the combined decomposition ───────────────────────────────────────────────
     · intro N σ
       -- Step 1: A ~ twoBlockTensor A₁ A₂  (from the invariant-projection splitting).
@@ -381,13 +364,13 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
           intro k _
           congr 1
           simp only [combinedBlocks, Fin.addCases_left]
-          exact mpv_cast_dim (h_left k).symm (blocks₁ k) σ
+          exact mpv_cast_dim (h_left k).symm (blocks₁ k) _ σ
         · -- Right half: cast (h_right k).symm (blocks₂ k).
           apply Finset.sum_congr rfl
           intro k _
           congr 1
           simp only [combinedBlocks, Fin.addCases_right]
-          exact mpv_cast_dim (h_right k).symm (blocks₂ k) σ
+          exact mpv_cast_dim (h_right k).symm (blocks₂ k) _ σ
       -- Chain everything together.
       calc mpv A σ
           = mpv (twoBlockTensor A₁ A₂) σ := hstep1

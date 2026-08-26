@@ -22,7 +22,8 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
-private lemma irreducibleTensor_of_injective
+/-- Injectivity of a matrix family implies irreducibility. -/
+lemma irreducibleTensor_of_injective
     (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
     Kraus.IsIrreducibleFamily A :=
   Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
