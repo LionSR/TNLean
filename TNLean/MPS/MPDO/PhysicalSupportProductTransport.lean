@@ -176,14 +176,6 @@ private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
           rw [finKronecker_mul]
           simp only [List.map_cons, List.prod_cons]
 
-private theorem list_prod_eq_one_of_forall
-    (l : List (Matrix (Fin d) (Fin d) ℂ)) (h : ∀ X ∈ l, X = 1) : l.prod = 1 := by
-  induction l with
-  | nil => simp
-  | cons X l ih =>
-      rw [List.prod_cons, h X (by simp), Matrix.one_mul]
-      exact ih (fun Y hY ↦ h Y (by simp [hY]))
-
 private theorem list_prod_eq_of_mem_idempotent
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P * P = P)
     (l : List (Matrix (Fin d) (Fin d) ℂ))
@@ -192,7 +184,7 @@ private theorem list_prod_eq_of_mem_idempotent
   classical
   by_cases hPone : P = 1
   · subst P
-    apply list_prod_eq_one_of_forall l
+    apply List.prod_eq_one
     intro X hX
     rcases hvalues X hX with hX1 | hX1 <;> exact hX1
   induction l with
@@ -213,7 +205,7 @@ private theorem list_prod_eq_of_mem_idempotent
             rcases hvalues Y (by simp [hY]) with hY1 | hYP
             · exact hY1
             · exact (hPl (hYP ▸ hY)).elim
-          have hprod : l.prod = 1 := list_prod_eq_one_of_forall l hall
+          have hprod : l.prod = 1 := List.prod_eq_one hall
           rw [hprod, Matrix.mul_one]
 
 private noncomputable def openBondProjectionProduct
