@@ -3,9 +3,41 @@ name: find-simplification
 description: 'Use when working in TNLean to find non-obvious simplification candidates in the Lean development and record them as proof-debt ledger entries, `proof-debt` issues, or dated audit notes; especially for zero-reference declarations, pass-through wrappers, Mathlib shadows, hand-mirrored files, numbered-sequel scaffolding, stricter-hypothesis specializations kept beside their general theorem, degenerate-case apparatus, and parallel predicate families with bridge lemmas.'
 ---
 
-# Finding TNLean Simplifications
+# Finding Simplifications In A Lean Development
 
-This skill turns a broad "find things to simplify" request into evidence-backed candidates that remove or collapse existing Lean surface area. It is guidance, not a checklist: follow the imports, keep judgment active, and prefer a few proven candidates over a pile of thin guesses. The tournament workflows (`proof-debt-tournament`, `proof-shrink-tournament`) are the mass survey; this skill is the hand-driven version for a targeted directory, a PR review, or a weekly audit slice. `lean-simplifier` (plugin skill) executes a cleanup on a file once the candidate is chosen; this skill finds and proves the candidate.
+This skill turns a broad "find things to simplify" request into evidence-backed candidates that remove or collapse existing surface area. It is guidance, not a checklist: follow the dependencies, keep judgment active, and prefer a few proven candidates over a pile of thin guesses. The tournament workflows (`proof-debt-tournament`, `proof-shrink-tournament`) are the mass survey; this skill is the hand-driven version for a targeted directory, a PR review, or a weekly audit slice. `lean-simplifier` (plugin skill) executes a cleanup on a file once the candidate is chosen; this skill finds and proves the candidate.
+
+## What Simplification Means
+
+Simplification is the removal of structure that the problem does not demand. Every codebase accumulates two kinds of structure: the kind the subject forces (a theorem needs its hypotheses; a channel needs its Kraus operators) and the kind the *process* of building left behind — exploration branches, staging, defensive generality, copies made under deadline, seams built for a second consumer that never arrived. Only the second kind is simplifiable, and most of it hides in plain sight because each piece was reasonable when written.
+
+The recurring shapes, in any language:
+
+- **Dead weight.** Things with no consumer: unused exports, unreachable files, tests that pin retired behavior, documentation of deleted features. The cheapest wins; the only question is proving the absence of consumers.
+- **Duplication.** The same fact represented twice — copied code, mirrored modules, a value re-derived at several call sites, two APIs for one concept with bridges between them. The fix is one owner; the risk is that the two copies drifted and one drift is load-bearing.
+- **Speculative generality.** Parameters with one value, registries with one entry, abstractions with one implementation, configuration nobody sets. Generality is only free when it is used; otherwise it is a tax on every reader and every proof.
+- **Indirection that only relocates complexity.** Wrappers, facades, factories, and helper layers that add a name without adding a decision. If the wrapper's body is a single call, the caller could make that call.
+- **Scaffolding after the capstone.** Intermediate results, compatibility shims, migration paths, and staged variants kept after the thing they supported landed. These have an expiry date and rarely get one.
+- **Special cases beside the general case.** The narrow version proved first, still present after the general version subsumed it. Whether it stays is a question of consumers, not sentiment.
+- **Hand-rolled code the platform already provides.** A local reimplementation of a standard-library or well-maintained-dependency facility. The find is the exact upstream name it duplicates.
+- **Degenerate-case apparatus.** Machinery for inputs the problem never produces: empty collections, zero dimensions, the null configuration. When the intended domain excludes the case, model the exclusion once in the definition and delete the machinery.
+
+Three disciplines separate a find from a guess. **Consumers, not impressions**: classify every reference by whether it is production, test/doc, or ambiguous, and prove the count by the strongest available means (for code, by removing the thing and building). **Net, not gross**: count what the replacement adds — bridges, generalizations, migrations — against what leaves; a "simplification" that adds elements needs its justification built in. **Deletion outranks abstraction**: when a duplication can be resolved by abstracting or by deleting one side, the deletion is smaller, safer, and more honest about what is actually needed. And respect settled decisions: a design with a recorded rationale is challenged with new evidence, not re-litigated.
+
+## How Simplification Looks In Lean
+
+A proof assistant makes the shapes above unusually sharp, because a declaration's consumers are exactly the identifiers that elaborate against it, and a statement's content is exactly its hypotheses and conclusion.
+
+- **Dead weight** is a declaration referenced only by itself, or a file reachable only through an import aggregator. The compiler is the oracle: delete it and build.
+- **Duplication** is the same lemma re-proved under two names, or two developments related by a rename (left/right, row/column, one orientation of a lattice against the other) when a transport lemma would carry one to the other.
+- **Speculative generality** is a typeclass or universe parameter instantiated once, or a bundled hypothesis structure with one instance. Its opposite is also debt: a *special-case* theorem kept after the general one landed, when the special case is a one-line corollary.
+- **Indirection** is the pass-through: `exact foo`, a field projection, a `simpa using` of one lemma, exported under a second name.
+- **Scaffolding** is the numbered-sequel chain (`Foo`, `Foo2`, `FooV2`, `FooCore`+`FooBridge`) whose intermediate lemmas each have one consumer in the next file, kept after the capstone theorem was proved.
+- **Hand-rolled code** is the Mathlib shadow: a local lemma that `exact?` closes from the library alone, or a local definition the library already carries under another name. Library upgrades create new shadows silently.
+- **Degenerate cases** are the `≠ 0`/`0 <` side conditions repeated on every downstream statement, the parallel `raw`/`active` predicate pair with bridge lemmas, and the counterexample module refuting a hyper-literal reading nobody intended.
+- **Hypotheses** are their own category. A hypothesis every caller discharges by the same lemma belongs inside the theorem; a hypothesis no caller can discharge marks its whole route as superseded; a hypothesis absent from the cited source is not a simplification target at all but a faithfulness defect.
+
+Proof text is the one place where "shorter" is not automatically simpler: a proof that became opaque to save lines is worse. The proof-level find is a missing helper or simp lemma that several proofs re-derive inline, not a golfed tactic block.
 
 ## Start With Repo Context
 
@@ -26,20 +58,18 @@ Treat these as intentional by default; trimming an unused declaration *inside* o
 - Blueprint-cited declarations. Anything named by a `\lean{...}` tag under `blueprint/src/` is load-bearing until the blueprint entry is redirected to the survivor in the same PR.
 - The `lakefile.toml` lean options and the CI file policies (`scripts/check_numbered_lean_files.py`, `scripts/check_oversized_lean_files.py`, `scripts/check_forbidden_lean_tokens.py`). Proposing to make a file *pass* them is welcome; proposing to loosen them is not.
 
-## What Counts As A Strong Candidate
+## Where The Shapes Live Here
 
-A strong simplification removes, folds, or demotes something real and has evidence that the current design costs more than it buys. Lean gives sharper evidence than most languages: a declaration's consumers are exactly the identifiers that elaborate against it.
+The general shapes above, with the repo's known concentrations and the policy that makes each deletable:
 
-- A theorem, definition, or structure with zero references outside its own declaration, excluding instances and `@[simp]`/`@[grind]`/`@[ext]`-tagged lemmas, and not cited by any blueprint `\lean{}` tag. Whole files reachable only through the generated aggregator are the file-level version.
-- A pass-through: a declaration whose body is `exact foo _ _`, `foo.1`, a field projection, or a `simpa using` of one lemma, exported under a second name. `docs/project_conventions.md` makes these deletable without an alias.
-- A Mathlib shadow: a local lemma provable by `exact?`/`simp` from Mathlib v4.34 alone, or a local definition Mathlib already has (`Matrix.trace_mul_comm`, `Finset.sum_comm`, `Matrix.IsHermitian`, `LinearMap.range`, …). Check `.lake/packages/mathlib/Mathlib/` and the Mathlib-replacement audits in `docs/audits/` (`*_mathlib_*_replacement_audit.md`) for what a toolchain bump already made available.
-- A stricter-hypothesis theorem kept beside the faithful one: `foo_of_isNormal_leftCanonical` still present after `foo_of_isNormal` landed, with the special case a one-line corollary. Per the faithfulness rule the specialization is a different theorem; if nothing consumes it, it goes.
-- Degenerate-case apparatus: `raw`/`active` predicate pairs with bridge lemmas, counterexample modules for a literal reading, `∀ k, μ k ≠ 0` hypotheses repeated downstream when the definition carries them, `\notready` "printed status" blueprint nodes. `CLAUDE.md` says to delete the scaffolding, not document it — but first check that the convention is actually forced by the definition, not merely suggested.
-- Hand-mirrored developments: vertical/horizontal, left/right, red/blue files that are renames of each other (the ledger records 84 exact pairs), or a module docstring admitting "this file transposes X". One side plus a transport lemma (`PEPS/IsoTransport.lean`, `Matrix.reindex_*` in `TNLean/Algebra/MatrixReindex.lean`) is the candidate; reproving both is the debt.
-- Numbered-sequel scaffolding after the capstone: `Foo2.lean`, `Foo3.lean`, `FooV2.lean`, `FooCore.lean`+`FooBridge.lean` chains whose intermediate lemmas have a single consumer in the next file. Inline the chain into the capstone or delete the abandoned branch; `scripts/check_numbered_lean_files.py` already forbids new ones.
-- A parallel predicate or structure family (`IsFooA`/`IsFooB`, `Foo`/`Foo'`/`FooBundled`) with bridge lemmas in both directions and one member carrying all downstream traffic.
-- A wrapper structure that bundles hypotheses only so one theorem can take a single argument, when the theorem has one caller.
-- Proofs that reprove a general fact inline several times (`Matrix.mul_assoc` shuffles, `Finset.sum` reindexing, `Fin` case splits) because a helper lemma or simp lemma is missing; the candidate is the lemma, and the ledger for tactic-shaped repetition is `docs/tactic_patterns.md`.
+- Zero-reference declarations (excluding instances and `@[simp]`/`@[grind]`/`@[ext]` lemmas, and anything under a blueprint `\lean{}` tag): ledger entry S2 records ~185 across ~103 files. Files imported only by the generated aggregator are the file-level version.
+- Pass-throughs: deletable without an alias under `docs/project_conventions.md` §Style, provided the PR body and an audit note name each removal with its replacement.
+- Mathlib and QICLean shadows: check `.lake/packages/mathlib/Mathlib/`, `.lake/packages/qiclean/`, and the toolchain-bump audits `docs/audits/*_mathlib_*_replacement_audit.md`, which list what the current Mathlib newly provides.
+- Stricter-hypothesis twins (`foo_of_isNormal_leftCanonical` beside `foo_of_isNormal`): the faithfulness rule in `CLAUDE.md` already classifies the twin as a different theorem; with no consumer it goes.
+- Degenerate-case apparatus: `CLAUDE.md` §"Degenerate readings are conventions, not gaps" says delete the scaffolding, not document it — after checking that the definition actually forces the convention (a positivity field on one index says nothing about a triple).
+- Mirrors: the ledger records 84 exact vertical/horizontal rename pairs, mostly under `PEPS/`; transport lives in `PEPS/IsoTransport.lean` and `TNLean/Algebra/MatrixReindex.lean`.
+- Numbered sequels: ~50 files / ~23k lines at the last count; `scripts/check_numbered_lean_files.py` forbids new ones, so the remaining chains are the target.
+- Inline re-derivations (`Matrix.mul_assoc` shuffles, `Finset.sum` reindexing, `Fin` case splits): the candidate is the missing lemma; tactic-shaped repetition goes to `docs/tactic_patterns.md` instead.
 
 Thin candidates are not enough: a single non-terminal `simp`, a stray `set_option`, "this proof is long" without a slicker argument in hand, or reformatting. Batch those into a hygiene PR or leave them.
 
@@ -58,7 +88,7 @@ Do not let the first good candidate stop the survey. Start with the largest file
 
 ## Audit Hypotheses And Layer Boundaries
 
-For every hypothesis on a candidate theorem, name where it is discharged downstream. A hypothesis that every caller discharges by the same lemma belongs inside the theorem; a hypothesis no caller can discharge (a bridge structure with no instance anywhere in the tree — the retired ch23 route's `SameStateBridgeHyp` was the precedent, ledger entry S5) marks the whole route as superseded. A hypothesis absent from the cited paper is a faithfulness defect, never elegance — check `docs/paper-gaps/` before touching it.
+For every hypothesis on a candidate theorem, name where it is discharged downstream (the retired ch23 route's never-instantiated `SameStateBridgeHyp`, ledger entry S5, is the precedent for a hypothesis that condemns its whole route). A hypothesis absent from the cited paper is a faithfulness defect, never elegance — check `docs/paper-gaps/` before touching it.
 
 For every structure field, name a consumer that projects it. Fields read only by the structure's own constructor lemmas are staging.
 
