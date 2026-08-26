@@ -379,9 +379,9 @@ end MPSTensor
 /-! ### Channel-generic non-injectivity criteria
 
 The two theorems below quantify over a finite Kraus family and a linear
-functional, with no matrix-product-state content. Their intended home is
-QICLean's Kraus injectivity file, beside the word-span API; the migration is
-tracked in issue #7216. -/
+functional, with no matrix-product-state content. They therefore belong to the
+channel-generic Kraus layer, beside the word-span and injectivity API of the
+QICLean companion library, rather than to this matrix-product-state module. -/
 
 namespace Kraus
 
