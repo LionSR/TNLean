@@ -29,47 +29,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Period-`m` periodic-chain tensor (site-dependent tensor family on `Fin m`). -/
-abbrev PeriodicMPSTensor (m : ℕ) := MPSChainTensor d D m
-
-namespace PeriodicMPSTensor
-
-variable {m : ℕ}
-
-/-- Interpret a translation-invariant local tensor as a periodic chain of length `m`. -/
-abbrev toChain (A : MPSTensor d D) : PeriodicMPSTensor (d := d) (D := D) m :=
-  fun _ => A
-
-/-- Coefficient of a periodic chain at configuration `σ`. -/
-abbrev coeff (A : PeriodicMPSTensor (d := d) (D := D) m) (σ : Fin m → Fin d) : ℂ :=
-  MPSChainTensor.coeff A σ
-
-/-- Equality of periodic-chain states at fixed period `m`. -/
-abbrev SameState (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
-  MPSChainTensor.SameState A B
-
-/-- Cyclic gauge equivalence of periodic chains at fixed period `m`. -/
-abbrev GaugeEquiv (A B : PeriodicMPSTensor (d := d) (D := D) m) : Prop :=
-  MPSChainTensor.GaugeEquiv A B
-
-theorem instEquivalenceSameState :
-    Equivalence (SameState (d := d) (D := D) (m := m)) where
-  -- `Equivalence` is a structure (not a class): this is a convenience bundle,
-  -- not intended to be found via typeclass search.
-  refl := MPSChainTensor.SameState.refl
-  symm := MPSChainTensor.SameState.symm
-  trans := MPSChainTensor.SameState.trans
-
-theorem instEquivalenceGaugeEquiv :
-    Equivalence (GaugeEquiv (d := d) (D := D) (m := m)) where
-  -- `Equivalence` is a structure (not a class): this is a convenience bundle,
-  -- not intended to be found via typeclass search.
-  refl := MPSChainTensor.GaugeEquiv.refl
-  symm := MPSChainTensor.GaugeEquiv.symm
-  trans := MPSChainTensor.GaugeEquiv.trans
-
-end PeriodicMPSTensor
-
 /-- `IsSpectrallyPeriodic m A` records a periodic irreducible block before
 trace-preserving normalization: its transfer map is irreducible, has spectral
 radius one, and has unit-circle eigenvalues exactly the `m`-th roots of unity.
@@ -164,20 +123,6 @@ def EquivalentBlocks (A B : MPSTensor d D) : Prop :=
     ∀ i : Fin d,
       A i = (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-
-/-- Basis data for periodic tensors in irreducible form.
-
-This is a lightweight container: a family of periodic blocks indexed by `Fin r`,
-with positive periods and pairwise non-repetition. -/
-structure BasisOfPeriodicTensors (r : ℕ) where
-  /-- The periodic block family. -/
-  blocks : Fin r → MPSTensor d D
-  /-- Period of each block. -/
-  period : Fin r → ℕ
-  /-- Each block is periodic with its assigned period. -/
-  periodic : ∀ k, IsPeriodic (period k) (blocks k)
-  /-- Distinct basis blocks are not repeated versions of one another. -/
-  pairwise_nonrepeated : Pairwise fun i j => ¬ RepeatedBlocks (blocks i) (blocks j)
 
 /-- An MPV-equivalent scalar-weight representation by normalized periodic blocks.
 

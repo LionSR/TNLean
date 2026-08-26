@@ -119,18 +119,6 @@ lemma regionSumset_mono_right (Λ : Finset ℤ) {𝓝 𝓜 : Finset ℤ} (h : �
     regionSumset Λ 𝓝 ⊆ regionSumset Λ 𝓜 :=
   Finset.add_subset_add_left h
 
-/-- The sumset with an empty first region is empty.
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-lemma regionSumset_empty_left (𝓝 : Finset ℤ) : regionSumset ∅ 𝓝 = ∅ :=
-  Finset.empty_add 𝓝
-
-/-- The sumset with an empty displacement region is empty.
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-lemma regionSumset_empty_right (Λ : Finset ℤ) : regionSumset Λ ∅ = ∅ :=
-  Finset.add_empty Λ
-
 /-- The singleton zero region is a left identity for finite-region sumsets.
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
@@ -146,24 +134,6 @@ Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 lemma regionSumset_zero_right (Λ : Finset ℤ) : regionSumset Λ {0} = Λ := by
   change Λ + (0 : Finset ℤ) = Λ
   exact add_zero Λ
-
-/-- Translating the first region translates its sumset by the same displacement.
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-lemma regionSumset_translateRegion_left (a : ℤ) (Λ 𝓝 : Finset ℤ) :
-    regionSumset (translateRegion a Λ) 𝓝 = translateRegion a (regionSumset Λ 𝓝) := by
-  rw [← regionSumset_singleton_right, ← regionSumset_singleton_right]
-  change (Λ + {a}) + 𝓝 = (Λ + 𝓝) + {a}
-  ac_rfl
-
-/-- Translating the displacement region translates the sumset by the same displacement.
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-lemma regionSumset_translateRegion_right (a : ℤ) (Λ 𝓝 : Finset ℤ) :
-    regionSumset Λ (translateRegion a 𝓝) = translateRegion a (regionSumset Λ 𝓝) := by
-  rw [← regionSumset_singleton_right, ← regionSumset_singleton_right]
-  change Λ + (𝓝 + {a}) = (Λ + 𝓝) + {a}
-  ac_rfl
 
 /-- Finite-region sumsets are associative.
 

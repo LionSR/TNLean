@@ -22,9 +22,10 @@ with the source pair-index isometry condition on \(U\). The declarations constru
 the physical isometry, compare the core tensor \(\Lambda U\) with \(A\), and formulate
 the conditional Appendix B product-pair extraction.
 
-The tensor powers of \(U\), the two-site bond insertion, the equality of its physical
-image with \(G_2(\Lambda U)\), and the orthogonal support projector are constructed in
-`TNLean.MPS.RFP.AppendixBSupport`.
+The two-site bond insertion and contraction maps are constructed in
+`TNLean.MPS.RFP.AppendixBVirtualBondSupport`; the tensor powers of \(U\), the
+equality of its physical image with \(G_2(\Lambda U)\), and the orthogonal support
+projector are constructed in `TNLean.MPS.RFP.AppendixBTwoSiteBasicSupport`.
 -/
 
 open scoped Matrix BigOperators
@@ -676,28 +677,5 @@ theorem AppendixBProductPairExtraction.commuting_twoSite_localTerms
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
   hExtract.toProductPairBridge.commuting_twoSite_localTerms N hN
-
-/-- Conditional form of the forward implication in arXiv:1606.00608,
-Theorem 3.10:
-RFP plus the proved Appendix B structural theorem implies the nearest-neighbor
-commutation equation as soon as the even-chain physical-pair coefficient condition
-and the translated two-site commutation identities are supplied for the
-resulting structural form.
-
-The direct chain-transport theorem `rfp_implies_nncph_of_leftCanonical` in
-`TNLean.MPS.RFP.AppendixBChainCommutation` removes the extraction hypothesis
-for the commutation conclusion; the extraction remains relevant only to the
-separate physical-pair coefficient factorization. -/
-theorem commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
-    (A : MPSTensor d D) [NeZero D]
-    (hNT : Kraus.IsNormal A) (hRFP : IsTransferIdempotent A)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hExtract : AppendixBProductPairExtraction
-      (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
-    (N : ℕ) (hN : 2 < N) :
-    ∀ i j : Fin N,
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i :=
-  hExtract.commuting_twoSite_localTerms N hN
 
 end MPSTensor

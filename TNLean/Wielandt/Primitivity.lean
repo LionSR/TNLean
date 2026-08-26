@@ -17,4 +17,3 @@ import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
-import TNLean.Wielandt.Primitivity.ToNormal

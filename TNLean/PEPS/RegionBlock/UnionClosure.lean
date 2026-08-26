@@ -67,23 +67,6 @@ theorem regionInjectivityUnionClosure_of_isVertexInjective (A : Tensor G d)
   union_injective {R S} _ _ :=
     regionBlockedTensorInjective_of_isVertexInjective (G := G) A (R ∪ S) hA hpos
 
-/-- The conditional union of two injective regions is injective, for a
-vertex-injective PEPS tensor with positive bond dimensions.
-
-The conclusion is the source statement `inj(R) ∧ inj(S) ⟹ inj(R ∪ S)`. Under
-vertex injectivity it holds unconditionally on the two region hypotheses,
-because every finite region is injective; the hypotheses are kept so the
-statement matches the source implication.
-
-Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
-1322--1404 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem regionBlockedTensorInjective_union_of_isVertexInjective (A : Tensor G d)
-    (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) {R S : Finset V}
-    (_hR : RegionBlockedTensorInjective (G := G) A R)
-    (_hS : RegionBlockedTensorInjective (G := G) A S) :
-    RegionBlockedTensorInjective (G := G) A (R ∪ S) :=
-  regionBlockedTensorInjective_of_isVertexInjective (G := G) A (R ∪ S) hA hpos
-
 /-- The singleton comparison for the concrete region-injectivity predicate of a
 vertex-injective PEPS tensor: injectivity of a singleton blocked tensor implies
 injectivity of the corresponding singleton region.

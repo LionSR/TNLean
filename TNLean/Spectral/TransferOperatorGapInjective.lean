@@ -22,7 +22,8 @@ namespace MPSTensor
 
 variable {d D D₁ D₂ : ℕ}
 
-private lemma irreducibleTensor_of_injective
+/-- Injectivity of a matrix family implies irreducibility. -/
+lemma irreducibleTensor_of_injective
     (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
     Kraus.IsIrreducibleFamily A :=
   Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
@@ -77,18 +78,6 @@ theorem mpvOverlap_tendsto_zero [NeZero D]
   mpvOverlap_tendsto_zero_of_irreducible_TP A B
     (irreducibleTensor_of_injective A hA)
     (irreducibleTensor_of_injective B hB) hA_norm hB_norm hAB
-
-/-- **Inner-product decay** for distinct normalized injective blocks. -/
-theorem mpvInner_tendsto_zero [NeZero D]
-    (A B : MPSTensor d D)
-    (hA : Kraus.IsInjective A) (hB : Kraus.IsInjective B)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
-    (hAB : ¬ GaugePhaseEquiv A B) :
-    Filter.Tendsto (fun N => mpvInner (d := d) A B N) Filter.atTop (nhds 0) := by
-  have hOverlap :=
-    mpvOverlap_tendsto_zero (A := A) (B := B) hA hB hA_norm hB_norm hAB
-  simpa [mpvOverlap_eq_star_mpvInner] using hOverlap.star
 
 /-- **Dimension-mismatch transfer-operator gap** for normalized injective tensors. -/
 theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne

@@ -24,6 +24,31 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### non-injectivity from an annihilating linear functional — promoted
+- **Pattern:** exhibit a matrix outside the span of a finite Kraus family by
+  running `Submodule.span_induction` over an entrywise linear condition
+  (`M 0 1 = 0`, `M 0 0 = M 1 1`), discharging the `zero`, `add`, and `smul`
+  cases by `simp`/`linear_combination`, then contradicting the membership of a
+  chosen witness supplied by `span_eq_top ▸ Submodule.mem_top`.
+- **Seen:** eight occurrences before promotion (2026-08-26):
+  `TNLean/MPS/Examples/AKLT.lean` (`aklt_not_isInjective`),
+  `TNLean/MPS/Examples/GHZ.lean` (`ghz_not_isInjective`),
+  `TNLean/MPS/Examples/Cluster.lean` (`cluster_not_isInjective`),
+  `TNLean/MPS/Examples/EvenParity.lean` (`evenParity_span_diag_eq` and
+  `evenParity_not_isInjective`),
+  `TNLean/MPS/Examples/MajumdarGhosh.lean` (`majumdarGhosh_not_isInjective`,
+  `majumdarGhosh_not_isNBlkInjective_of_odd`,
+  `majumdarGhosh_not_isNBlkInjective_of_even`), and
+  `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`
+  (`diagBlock_diagonalRestrictionUnits_not_isNormal`).
+- **Abstraction:** `Kraus.not_isInjective_of_linearMap` and
+  `Kraus.not_isNBlkInjective_of_linearMap` in `TNLean/MPS/Defs.lean`.
+- **Notes:** the caller supplies the functional (typically a signed sum of
+  `Matrix.entryLinearMap`), the vanishing proof on the generators, and one
+  witness on which the functional is nonzero; the span induction disappears.
+  Both lemmas are channel-generic finite-Kraus results whose long-run home is
+  QICLean's injectivity file.
+
 ### Kronecker product of matrix isometries — promoted
 - **Pattern:** expand `Matrix.IsIsometry`, commute conjugate transpose and
   multiplication with the Kronecker product, and substitute the two constituent
@@ -381,15 +406,10 @@ abstracted — record why, so it is not re-proposed).
   The original proofs used `rw`, `simp_rw`, or `simp only` with
   `Finset.mul_sum`, a `Finset.sum_congr` binder (tactic, functional, or
   semicolon form), and `ring`.
-- **Seen:** 37 directly equivalent occurrences across 27 files:
-  `TNLean/Algebra/PerronFrobenius/PerronVector.lean`,
-  `TNLean/Analysis/MarginalSupport.lean`,
-  `TNLean/Channel/BreuerHallIndecomposable.lean`,
-  `TNLean/Channel/KoashiImoto/MarkovBipartiteBlockForm.lean`,
-  `TNLean/Channel/WolfProps.lean`,
-  `TNLean/Channel/Wigner/ProjectivePureState.lean`,
-  `TNLean/Channel/Wigner/TwoPureStateCharpoly.lean`,
-  `TNLean/Entropy/ClassicalMutualInformation.lean`,
+- **Seen:** 25 current call sites across 20 files. The promotion pass
+  recorded 37 sites across 27 files; of those, eight moved to QICLean with
+  the quantum-channel extraction and two were deleted as dead weight, while
+  three further files adopted the lemma afterwards. Current consumers:
   `TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean`,
   `TNLean/MPS/MPDO/BNTLeftTripleFusion.lean`,
   `TNLean/MPS/MPDO/BNTProjectorSelection.lean`,
@@ -404,16 +424,18 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/RepresentativeGroupedLemmaL.lean`,
   `TNLean/MPS/MPDO/TopologicalProjectorRecursion.lean`,
   `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean`,
-  `TNLean/MPS/MPDO/VerticalProductPairBlocks.lean`,
-  `TNLean/MPS/RFP/AppendixBSupport.lean`,
+  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean`,
+  `TNLean/MPS/RFP/AppendixBTwoSiteBasicSupport.lean`,
   `TNLean/MPS/RFP/BellPairCIDObstruction.lean`,
-  `TNLean/MPS/RFP/StructuralFull.lean`, and
+  `TNLean/MPS/RFP/CPSVCIDNotRFPExample.lean`,
+  `TNLean/MPS/RFP/StructuralFull.lean` and
   `TNLean/PEPS/TorusWindowChain4.lean`.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
   `QICLean/Algebra/FinSum.lean` (QICLean dependency).
-- **Result:** all 37 sites call the shared lemma, and all 27 consumer files
-  import `TNLean.Algebra.FinSum` directly. The broad final passes found 18 sites
-  in 13 new files, including functional binders, one-line semicolon proofs,
+- **Result:** every call site uses the shared lemma, and all 20 current
+  consumer files import `QICLean.Algebra.FinSum` directly. The promotion's
+  broad final passes found 18 sites in 13 then-new files, including
+  functional binders, one-line semicolon proofs,
   both levels of the nested `distribute` identity in
   `CyclicActiveFourthRegionFormula.lean`, and the two commutative-factor forms
   in `WolfProps.lean`. They replaced 47 old tactic source lines; together with
@@ -445,7 +467,7 @@ abstracted — record why, so it is not re-proposed).
   kernel-descent files); or combine subtraction, division, real-part, and
   two-sided sum transformations (the relative-entropy files). Some windows
   are deliberate false positives where the `ring` belongs to a later proof
-  step, such as `TorusWindowChain3.lean`. The indicator expansion in
+  step, such as `TorusWindowChain4.lean`. The indicator expansion in
   `UnionInjectivityOverlap3.lean` remains in this class: it is part of a sum
   expansion and permutation, and replacing its inner reassociation by the
   shared lemma increases AC-normalization cost without removing that
@@ -718,11 +740,10 @@ abstracted — record why, so it is not re-proposed).
   assembly.
 - **Reuse:** `MPOTensor.verticalAssembledTensor_apply_copy_ne` in
   `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` owns the shared unequal-copy argument.
-- **Result:** the former private implementations
-  `VerticalCopyBlocks.verticalAssembledTensor_apply_copy_ne` in
-  `TNLean/MPS/MPDO/VerticalCopyBlocks.lean` and
-  `VerticalProductRetainedBlocks.verticalAssembledTensor_apply_copy_ne` in
-  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean` now delegate to the shared owner.
+- **Result:** the call sites in `TNLean/MPS/MPDO/VerticalCopyBlocks.lean` and
+  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean` now invoke the shared owner
+  directly; the private forwarders that formerly stood between them and it have been
+  removed.
   Unlike `MPOTensor.verticalAssembledTensor_apply_copy_same`, this theorem handles distinct
   retained copy indices and proves that the assembled tensor entry vanishes.
 
@@ -1476,9 +1497,9 @@ current counts and full location lists).
   cancel the resulting normalization with
   `(x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1` for `0 < x`.
 - **Seen:** 2 occurrences in `TNLean/MPS/MPU/PhysicalAncilla.lean`:
-  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 198--220), for
+  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 188--210), for
   `A ij * X * (A ij)ᴴ`, and
-  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 262--283), for
+  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 252--273), for
   `(A ij)ᴴ * A ij`.
 - **Abstraction (proposed):** if a third occurrence appears, extract the
   lowest-sufficient helper lemma shared by both matrix-product orientations;
@@ -1626,10 +1647,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
   letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
   ```
-- **Seen:** 5 occurrences (`TNLean/MPS/RFP/BNTOrthogonality.lean:423`,
-  `TNLean/Spectral/MPVOverlapDecay.lean:174`,
-  `TNLean/Spectral/PrimitiveOverlap.lean:101`,
-  `TNLean/Spectral/TransferOperatorGap.lean:459`, +1).
+- **Seen:** 4 occurrences (`TNLean/Spectral/QuantitativeGap.lean:94`,
+  `TNLean/Spectral/MPVOverlapDecayRect.lean:48`,
+  `TNLean/MPS/RFP/BNTOrthogonality.lean:453`,
+  `TNLean/MPS/Symmetry/StringOrderDefs.lean:230`, the last with the carrier
+  spelled out instead of abbreviated).
 - **Abstraction (proposed):** not a tactic — investigate why these instances
   need `letI` at all (likely an instance-resolution gap); either fix the
   underlying instance visibility once in a shared file, or provide a

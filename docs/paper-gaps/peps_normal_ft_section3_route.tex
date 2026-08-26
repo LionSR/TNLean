@@ -987,7 +987,7 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.transferCoeff_eq_incidentKernel_iff_coeff_eq},
           \leanid{TNLean.PEPS.transferCoeff_one_eq_incidentKernel_one},
           \leanid{TNLean.PEPS.coeffTransfer_iff_transferCoeff_incidentForm}, and
-          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockCoeffTransfer}.}
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_coeffTransfer}.}
 
           The block-frame foundation is now assembled around the edge-blocking
           triple. The union of two injective blocks is injective; applied to the blue
@@ -1503,26 +1503,9 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong},
           \leanid{TNLean.PEPS.translateBlockingData}, and
           \leanid{TNLean.PEPS.isCrossingEdge_translateBlockingData}.}
-          The reference blocking datum at each class's reference edge is now constructed
-          concretely.  For a vertex-injective tensor with positive bond dimensions every
-          finite vertex region is injective, so the singleton endpoint blocks and their
-          complement form a one-edge blocking datum with no rectangular geometry: the
-          left endpoint is the red block, the right endpoint the blue block, the rest of
-          the torus the complement, and the only red-to-blue crossing is the edge itself.
-          This supplies the reference datum at the reference horizontal and vertical edges
-          directly, with no wraparound-avoiding rectangle bounds, since singleton blocks
-          need no room to be injective once the tensor is vertex injective.\footnote{
-          Formal declarations:
-          \leanid{TNLean.PEPS.singletonEdgeBlockingData},
-          \leanid{TNLean.PEPS.isCrossingEdge_singletonEdgeBlockingData},
-          \leanid{TNLean.PEPS.torusHorizontalReferenceBlockingDatum}, and
-          \leanid{TNLean.PEPS.torusVerticalReferenceBlockingDatum}.}
-          \textbf{Scope restriction (NormalTorusRectangleInjectivityHypotheses):}
-          this singleton datum is a vertex-injective specialization of
-          the normality hypothesis in Theorem~3 of arXiv:1804.04964, lines
-          1449--1452.  The source-faithful
-          torus reference datum uses the rectangular injectivity hypotheses
-          directly: the reference red and blue blocks are the two source
+          The reference blocking datum at each class's reference edge is
+          constructed from the rectangular injectivity hypotheses directly: the
+          reference red and blue blocks are the two source
           rectangles adjacent to the distinguished edge, and the complement is
           the union of the surrounding bands and fillers.\footnote{
           Formal declarations:

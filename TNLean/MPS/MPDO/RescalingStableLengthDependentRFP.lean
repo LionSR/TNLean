@@ -266,17 +266,6 @@ def oneLabelChiScaled (s : ℝ) : DiagonalChiFamily (Fin 1) where
   entry _ _ _ k :=
     if k = (0 : Fin 2) then (s : ℂ) else (s : ℂ) * (lambda : ℂ)
 
-/-- The rescaled $\chi$ block has positive entries for $s > 0$. -/
-lemma oneLabelChiScaled_posEntries {s : ℝ} (hs : 0 < s) :
-    (oneLabelChiScaled s).PosEntries := by
-  intro _ _ _ k
-  fin_cases k
-  · simp [oneLabelChiScaled, hs]
-  · have hlam : (0 : ℝ) < lambda := by norm_num [lambda]
-    change (0 : ℂ) < (s : ℂ) * (lambda : ℂ)
-    rw [show (s : ℂ) * (lambda : ℂ) = ((s * lambda : ℝ) : ℂ) by norm_cast]
-    exact_mod_cast mul_pos hs hlam
-
 /-- The coefficient family of the rescaled $\chi$ block. -/
 noncomputable def rescaledCoeffs (s : ℝ) : BNTLabelCoefficientFamily (Fin 1) :=
   BNTLabelCoefficientFamily.ofChi (oneLabelChiScaled s)

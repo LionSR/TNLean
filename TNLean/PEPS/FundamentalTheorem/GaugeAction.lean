@@ -176,10 +176,13 @@ compatibility. -/
 private abbrev LocalConfig (A : Tensor G d) : Type _ :=
   (v : V) → (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)
 
-private lemma gauge_sum_left_right {n : Type*} [Fintype n] [DecidableEq n]
+/-- Contracting a matrix with its inverse over the shared virtual index gives the
+Kronecker delta on the remaining indices. -/
+lemma gauge_sum_left_right_matrix_inv {n : Type*} [Fintype n] [DecidableEq n]
     (X : GL n ℂ) (a b : n) :
-    (∑ j, (X : Matrix n n ℂ) j a * (↑X⁻¹ : Matrix n n ℂ) b j) =
+    (∑ j, (X : Matrix n n ℂ) j a * ((X : Matrix n n ℂ)⁻¹) b j) =
       if a = b then 1 else 0 := by
+  rw [← Matrix.GeneralLinearGroup.coe_inv]
   have h := congr_fun
     (congr_fun (show (↑X⁻¹ : Matrix n n ℂ) * (↑X : Matrix n n ℂ) = 1 by simp) b) a
   calc
@@ -193,14 +196,6 @@ private lemma gauge_sum_left_right {n : Type*} [Fintype n] [DecidableEq n]
     _ = if a = b then 1 else 0 := by
           rw [h]
           simp [Matrix.one_apply, eq_comm]
-
-/-- Contracting a matrix with its inverse over the shared virtual index gives the
-Kronecker delta on the remaining indices. -/
-lemma gauge_sum_left_right_matrix_inv {n : Type*} [Fintype n] [DecidableEq n]
-    (X : GL n ℂ) (a b : n) :
-    (∑ j, (X : Matrix n n ℂ) j a * ((X : Matrix n n ℂ)⁻¹) b j) =
-      if a = b then 1 else 0 := by
-  simpa [Matrix.GeneralLinearGroup.coe_inv] using gauge_sum_left_right X a b
 
 /-- A product over all incident half-edges factors as the product, over graph
 edges, of the two endpoint contributions. -/
@@ -494,20 +489,6 @@ gauges on the open edge survive and conjugate the inserted matrix. This realizes
 the open-edge analog of the closed contraction, used in the post-absorption
 edge-insertion identity (arXiv:1804.04964, Section 3, `eq:inj_equal_edge`). -/
 
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- An incident edge other than the distinguished left incidence is not the
-distinguished edge. -/
-private theorem otherLeft_edge_ne' (e : Edge G)
-    (ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e)) :
-    ie.1.1 ≠ e := fun hie => ie.2 (Subtype.ext hie)
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- An incident edge other than the distinguished right incidence is not the
-distinguished edge. -/
-private theorem otherRight_edge_ne' (e : Edge G)
-    (ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e)) :
-    ie.1.1 ≠ e := fun hie => ie.2 (Subtype.ext hie)
-
 /-- Inserted-edge boundary data together with a compatible open-middle
 configuration are the same finite data as the two distinguished edge indices and
 a free virtual configuration on every other edge.
@@ -524,8 +505,8 @@ noncomputable def insertedOpenConfigEquiv (A : Tensor G d) (e : Edge G) :
   invFun y :=
     ⟨{ leftEdgeIndex := y.1
        rightEdgeIndex := y.2.1
-       leftResidual := fun ie => y.2.2 ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩
-       rightResidual := fun ie => y.2.2 ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ },
+       leftResidual := fun ie => y.2.2 ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩
+       rightResidual := fun ie => y.2.2 ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ },
       ⟨y.2.2, by constructor <;> intro ie <;> rfl⟩⟩
   left_inv x := by
     rcases x with ⟨β, ζ⟩
@@ -552,16 +533,16 @@ theorem edgeInsertedCoeff_eq_sum_complement (A : Tensor G d) (e : Edge G)
           A.component e.1.1
             (edgeInsertedLeftLocalConfig (G := G) A e
               { leftEdgeIndex := x.1, rightEdgeIndex := x.2.1,
-                leftResidual := fun ie => x.2.2 ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
-                rightResidual := fun ie => x.2.2 ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ })
+                leftResidual := fun ie => x.2.2 ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩,
+                rightResidual := fun ie => x.2.2 ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ })
             (σ e.1.1) *
           (∏ v : {v : V // v ∈ edgeMiddleVertices e},
             A.component v.1 (fun ie => edgeComplementValue (G := G) A e x.2.2 v.2 ie) (σ v.1)) *
           A.component e.1.2
             (edgeInsertedRightLocalConfig (G := G) A e
               { leftEdgeIndex := x.1, rightEdgeIndex := x.2.1,
-                leftResidual := fun ie => x.2.2 ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
-                rightResidual := fun ie => x.2.2 ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ })
+                leftResidual := fun ie => x.2.2 ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩,
+                rightResidual := fun ie => x.2.2 ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ })
             (σ e.1.2) := by
   classical
   rw [edgeInsertedCoeff]
@@ -598,9 +579,9 @@ theorem edgeInsertedCoeff_eq_sum_complement (A : Tensor G d) (e : Edge G)
   rcases β with ⟨li, ri, lr, rr⟩
   rcases ζ with ⟨ζ, hζ⟩
   obtain ⟨hL, hR⟩ := hζ
-  have hlr : lr = fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩ :=
+  have hlr : lr = fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩ :=
     funext fun ie => (hL ie).symm
-  have hrr : rr = fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ :=
+  have hrr : rr = fun ie => ζ ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ :=
     funext fun ie => (hR ie).symm
   subst hlr hrr
   rfl
@@ -774,8 +755,8 @@ private theorem edgeInsertedLeftLocalConfig_eq_localOfDoubled (A : Tensor G d) (
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
     edgeInsertedLeftLocalConfig (G := G) A e
       { leftEdgeIndex := i, rightEdgeIndex := k,
-        leftResidual := fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
-        rightResidual := fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ } =
+        leftResidual := fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩,
+        rightResidual := fun ie => ζ ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ } =
       localOfDoubled (G := G) A e i k ζ e.1.1 := by
   funext ie
   by_cases hie : ie = edgeLeftIncident (G := G) e
@@ -795,8 +776,8 @@ private theorem edgeInsertedRightLocalConfig_eq_localOfDoubled (A : Tensor G d) 
     (i k : Fin (A.bondDim e)) (ζ : EdgeComplementConfig (G := G) A e) :
     edgeInsertedRightLocalConfig (G := G) A e
       { leftEdgeIndex := i, rightEdgeIndex := k,
-        leftResidual := fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
-        rightResidual := fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ } =
+        leftResidual := fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩,
+        rightResidual := fun ie => ζ ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ } =
       localOfDoubled (G := G) A e i k ζ e.1.2 := by
   funext ie
   by_cases hie : ie = edgeRightIncident (G := G) e

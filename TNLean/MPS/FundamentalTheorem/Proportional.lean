@@ -23,7 +23,8 @@ Theorem IV.4 (arXiv:2011.12127).
   convergence hypotheses.
 
 The key input for the converse is the overlap decay lemma
-`MPSTensor.mpvOverlap_tendsto_zero` from `TNLean.Spectral.MPVOverlapDecay`.
+`MPSTensor.mpvOverlap_tendsto_zero` from
+`TNLean.Spectral.TransferOperatorGapInjective`.
 -/
 open scoped Matrix BigOperators Kraus
 

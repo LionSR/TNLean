@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTSectorCoefficientPositivity
-import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSectorActiveBond
@@ -30,35 +29,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPOTensor
 
 variable {d : ℕ}
-
-/-- The earlier common-copy-weight specialization of Proposition `prop3to4`.
-The unrestricted theorem below uses the raw BNT representatives instead. -/
-theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization_of_commonWeight
-    {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
-    (hWeight : ∀ (s : Fin S.basisCount) (q q' : Fin (S.copies s)),
-      S.weight s q = S.weight s q')
-    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
-    (hLayer : IsBNTLayerOrthogonal
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
-    (F : (s : Fin S.basisCount) → PhysicalSectorFactorization
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s))
-    (hTrace : ∀ s,
-      PhysicalSectorFactorization.NeighboringTraceFactorization (F s)) :
-    HasGSNNCHForm M := by
-  obtain ⟨P, hP, hPorth, hSupport⟩ :=
-    exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis
-      S hWeight hSpan F
-        (fun s k h ↦ (hTrace s).neighboringOperator_pos k h) hLayer
-  obtain ⟨family⟩ :=
-    nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)
-      P hP hPorth
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s)
-      hSupport F (fun s k h ↦ (hTrace s).neighboringOperator_pos k h)
-  exact hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
-    M S hM hWeight family
 
 /-- The five identities printed in CPSV16 Proposition `prop3to4` imply the
 GSNNCH form without copy independence.

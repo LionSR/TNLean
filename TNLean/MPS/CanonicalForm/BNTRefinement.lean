@@ -420,11 +420,6 @@ noncomputable def groupedListedEquiv (data : CPSVCanonicalFormData A) :
     Fin data.groupedCount ≃ Fin data.r :=
   data.groupedEnum.trans data.classCopyEquiv
 
-/-- Position of a class/copy block in the finite grouped enumeration. -/
-noncomputable def groupedPosition (data : CPSVCanonicalFormData A)
-    (x : data.GroupedIndex) : Fin data.groupedCount :=
-  data.groupedEnum.symm x
-
 /-- Bond dimension at a grouped block position. -/
 noncomputable def groupedDim (data : CPSVCanonicalFormData A) :
     Fin data.groupedCount → ℕ :=
@@ -469,22 +464,6 @@ noncomputable def BNTRefinement.groupedTensor
   Matrix.reindex data.groupedCoordinateEquiv data.groupedCoordinateEquiv
     (Matrix.blockDiagonal' fun l : Fin data.groupedCount =>
       ref.groupedWeight l • ref.groupedBlocks l i)
-
-/-- The finite position of a grouped coordinate maps to the same original listed block. -/
-theorem groupedListedEquiv_groupedPosition (data : CPSVCanonicalFormData A)
-    (x : data.GroupedIndex) :
-    data.groupedListedEquiv (data.groupedPosition x) = data.classCopyEquiv x := by
-  change data.classCopyEquiv (data.groupedEnum (data.groupedEnum.symm x)) =
-    data.classCopyEquiv x
-  rw [data.groupedEnum.apply_symm_apply]
-
-/-- The grouped weight at a phase-class copy is its original displayed weight. -/
-theorem BNTRefinement.groupedWeight_copy
-    {data : CPSVCanonicalFormData A} (ref : data.BNTRefinement)
-    (jq : data.GroupedIndex) :
-    ref.groupedWeight (data.groupedPosition jq) = data.weights (data.classCopyEquiv jq) := by
-  simp only [BNTRefinement.groupedWeight]
-  rw [data.groupedListedEquiv_groupedPosition]
 
 /-- Exact permutation identity between the in-place regrouped direct sum and the explicit
 class/copy grouped tensor. -/

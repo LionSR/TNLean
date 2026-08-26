@@ -163,26 +163,6 @@ theorem trace_mul_projector_eq_zero_of_mem_threeFormSubmodule
   | add x y _ _ hx hy => simp [Matrix.add_mul, Matrix.trace_add, hx, hy]
   | smul c x _ hx => simp [Matrix.trace_smul, hx]
 
-private theorem entry_eq_diagonal_add_residual
-    (W : MPOTensor d D) (i j : Fin d) :
-    W i j = (if i = j then (1 : ℂ) else 0) • normalizedDiagonal W +
-      residualSlice W (Matrix.single j i 1) := by
-  rw [residualSlice, contractPhysical_single]
-  by_cases hij : i = j
-  · subst j
-    rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
-    simp
-  · rw [ite_eq_right hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
-    simp
-
-private theorem pow_eq_self_of_pos_local {m : Type*} [Fintype m] [DecidableEq m]
-    {E : Matrix m m ℂ} (hE : E * E = E) {N : ℕ} (hN : 0 < N) : E ^ N = E := by
-  obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
-  clear hN
-  induction N with
-  | zero => simp
-  | succ N ih => rw [pow_succ, ih, hE]
-
 /-- A first-block MPU whose normalized double-layer diagonal is a normalized
 rank-one projector becomes MPU-simple after the corrected second blocking of
 exact length \(D^2\).
@@ -216,7 +196,7 @@ theorem IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMul
   have hEV : normalizedDiagonal (doubleLayerTensor V) = E := by
     dsimp [V, E]
     rw [doubleLayerTensor_blockTensor, normalizedDiagonal_blockTensor,
-      pow_eq_self_of_pos_local hEidem (Nat.mul_pos (NeZero.pos D) (NeZero.pos D))]
+      IsIdempotentElem.pow_eq hEidem (Nat.mul_pos (NeZero.pos D) (NeZero.pos D)).ne']
   constructor
   · intro i j
     let R := residualSlice (doubleLayerTensor V) (Matrix.single j i 1)
@@ -279,39 +259,6 @@ end ThreeFormInsertion
 
 section BlockingConstruction
 
-private theorem sandwich_mul_rankOne_mul_local {n : Type*} [Fintype n]
-    (a b : n → ℂ) (A X : Matrix n n ℂ) :
-    a ⬝ᵥ ((A * Matrix.vecMulVec b a * X) *ᵥ b) =
-      (a ⬝ᵥ (A *ᵥ b)) * (a ⬝ᵥ (X *ᵥ b)) := by
-  simp only [Matrix.mul_vecMulVec, Matrix.vecMulVec_mul,
-    Matrix.vecMulVec_mulVec, dotProduct_smul, Matrix.dotProduct_mulVec]
-  simp [dotProduct, Finset.mul_sum, Finset.sum_mul]
-
-private theorem sandwich_listProd_local {n : Type*} [Fintype n] [DecidableEq n]
-    (a b : n → ℂ) (P : Matrix n n ℂ → Prop)
-    (hpair : ∀ A B, P A → P B →
-      A * B = A * Matrix.vecMulVec b a * B) :
-    ∀ l : List (Matrix n n ℂ), l ≠ [] → (∀ A ∈ l, P A) →
-      a ⬝ᵥ (l.prod *ᵥ b) =
-        (l.map fun A ↦ a ⬝ᵥ (A *ᵥ b)).prod := by
-  intro l hl hP
-  induction l with
-  | nil => exact (hl rfl).elim
-  | cons A l ih =>
-      cases l with
-      | nil => simp
-      | cons B l =>
-          have hA : P A := hP A (by simp)
-          have hB : P B := hP B (by simp)
-          have htail : ∀ X ∈ B :: l, P X := by
-            intro X hX
-            exact hP X (by simp [hX])
-          rw [List.prod_cons, List.prod_cons, ← Matrix.mul_assoc,
-            hpair A B hA hB, Matrix.mul_assoc, sandwich_mul_rankOne_mul_local]
-          change (a ⬝ᵥ (A *ᵥ b)) * (a ⬝ᵥ ((B :: l).prod *ᵥ b)) = _
-          rw [ih (by simp) htail]
-          simp
-
 private theorem listProd_mul_eq_listProd_mul_rankOne_mul
     {n : Type*} [Fintype n] [DecidableEq n]
     (a b : n → ℂ) (P : Matrix n n ℂ → Prop)
@@ -337,38 +284,6 @@ private theorem listProd_mul_eq_listProd_mul_rankOne_mul
           have hih := ih (by simp) htail
           simpa only [List.prod_cons, Matrix.mul_assoc] using
             congrArg (fun X ↦ A * X) hih
-
-private theorem trace_mul_rankOne_mul_local {n : Type*} [Fintype n]
-    (a b : n → ℂ) (A X : Matrix n n ℂ) :
-    Matrix.trace (A * Matrix.vecMulVec b a * X) = a ⬝ᵥ ((X * A) *ᵥ b) := by
-  rw [Matrix.trace_mul_comm (A * Matrix.vecMulVec b a) X, ← Matrix.mul_assoc,
-    Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, ← Matrix.mulVec_mulVec]
-  simp [dotProduct, mul_comm]
-
-private theorem trace_listProd_local {n : Type*} [Fintype n] [DecidableEq n]
-    (a b : n → ℂ) (P : Matrix n n ℂ → Prop)
-    (hpair : ∀ A B, P A → P B →
-      A * B = A * Matrix.vecMulVec b a * B)
-    (l : List (Matrix n n ℂ)) (hl : 1 < l.length) (hP : ∀ A ∈ l, P A) :
-    Matrix.trace l.prod = (l.map fun A ↦ a ⬝ᵥ (A *ᵥ b)).prod := by
-  rcases l with _ | ⟨A, l⟩
-  · simp at hl
-  cases l with
-  | nil => simp at hl
-  | cons B l =>
-      have hA : P A := hP A (by simp)
-      have hB : P B := hP B (by simp)
-      have hrot : ∀ X ∈ (B :: l) ++ [A], P X := by
-        intro X hX
-        apply hP X
-        simp only [List.mem_append, List.mem_cons] at hX ⊢
-        tauto
-      rw [List.prod_cons, List.prod_cons, ← Matrix.mul_assoc,
-        hpair A B hA hB, Matrix.mul_assoc, trace_mul_rankOne_mul_local]
-      have hprod : ((B :: l) ++ [A]).prod = B * l.prod * A := by
-        simp [Matrix.mul_assoc]
-      rw [← hprod, sandwich_listProd_local a b P hpair _ (by simp) hrot]
-      simp [mul_comm, mul_left_comm]
 
 /-- For specified witnesses, MPU unitarity and `simple2` recover `simple1`
 without changing either witness.
@@ -410,7 +325,7 @@ theorem IsMPU.simple1_of_simple2_supplied {U : MPOTensor d D} (hU : IsMPU U)
       simp only [l, List.mem_ofFn] at hA
       obtain ⟨x, rfl⟩ := hA
       exact ⟨i, j, rfl⟩
-    have htrace := trace_listProd_local a b P hpair l (by simp [l, hN]) hlP
+    have htrace := trace_listProd a b P hpair l (by simp [l, hN]) hlP
     rw [htrace] at hentry
     have hστ : σ = τ ↔ i = j := by
       constructor
@@ -477,7 +392,7 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
       simp only [l, List.mem_ofFn] at hA
       obtain ⟨k, rfl⟩ := hA
       exact ⟨_, _, rfl⟩
-    rw [sandwich_listProd_local a b P hpair l hl hlP]
+    rw [sandwich_listProd a b P hpair l hl hlP]
     simp only [l, List.map_ofFn, List.prod_ofFn, Function.comp_apply, h₁]
     by_cases hIJ : I = J
     · subst J

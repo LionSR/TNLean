@@ -111,43 +111,6 @@ structure VerticalSectorHypotheses {g₁ g₂ d D : ℕ} : Type
   Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4, lines 1972--1979. -/
   hSCPTP : IsKrausCPTP S
 
-namespace VerticalSectorHypotheses
-
-/-- The transported vertical-sector refinement map determined by the strong
-Appendix C.4 hypotheses.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
-abbrev Tbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
-    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
-  h.toVerticalSectorFixedGeneratorHypotheses.Tbar
-
-/-- The transported vertical-sector coarse-graining map determined by the
-strong Appendix C.4 hypotheses.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 1972--1979. -/
-abbrev Sbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
-    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
-  h.toVerticalSectorFixedGeneratorHypotheses.Sbar
-
-/-- The coarse-graining--refinement composite determined by the strong
-Appendix C.4 hypotheses.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
-abbrev SbarTbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
-    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
-  h.toVerticalSectorFixedGeneratorHypotheses.SbarTbar
-
-/-- The refinement--coarse-graining composite determined by the strong
-Appendix C.4 hypotheses.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
-abbrev TbarSbar {g₁ g₂ d D : ℕ} (h : VerticalSectorHypotheses
-    (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :=
-  h.toVerticalSectorFixedGeneratorHypotheses.TbarSbar
-
-end VerticalSectorHypotheses
-
-
 /-- The direct-product sector operator whose `α`-th sector is the scalar
 multiple $m_α M_α(X)$ obtained by contracting the common horizontal bond
 matrix `X` into every vertical BNT representative.

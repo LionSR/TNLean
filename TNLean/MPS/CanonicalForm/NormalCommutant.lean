@@ -54,9 +54,6 @@ are proved in the matrix-product-density-operator canonical-form development.
   `Kraus.IsNormal.gram_eq_pos_smul_gram_of_common_dressed_target`:
   the relative two-gauge form of eq3, without a self-adjoint-letter
   hypothesis.
-* `Kraus.IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint` /
-  `Kraus.IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint`:
-  conditional same-letter specializations in the identity reference gauge.
 
 ## References
 
@@ -403,42 +400,5 @@ theorem IsNormal.smul_mem_unitaryGroup_of_commute
   obtain ⟨ω, hω, hXX⟩ := hA.conjTranspose_mul_self_eq_smul_one_of_commute hX hcomm
   exact ⟨ω, hω,
     Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one hω hXX⟩
-
-/-- If the gauge-dressed letters of a normal tensor equal their adjoint
-dressings and the letters themselves are self-adjoint, then
-$X^\dagger X = \omega\,\Id$ for a necessarily positive constant $\omega$.
-
-**Scope restriction (self-adjoint letters):** the reflected marked-chain
-argument of Figure 7 does not assume $(A^v)^\dagger=A^v$ and does not assert
-an individual dressed-adjoint identity.  Thus this theorem is only a
-same-letter conditional specialization.  The source-facing relative theorem
-is `Kraus.IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq`.  See
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
-theorem IsNormal.conjTranspose_mul_self_eq_smul_one_of_dressed_adjoint
-    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
-    {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hX0 : X ≠ 0)
-    (hdress : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * (A i)ᴴ * Xᴴ)
-    (hsa : ∀ i, (A i)ᴴ = A i) :
-    ∃ ω : ℝ, 0 < ω ∧ Xᴴ * X = (ω : ℂ) • 1 :=
-  hA.conjTranspose_mul_self_eq_smul_one_of_commute hX0 fun i =>
-    Matrix.commute_gram_of_dressed_adjoint_of_conjTranspose_eq hX (hdress i) (hsa i)
-
-/-- **The isometric normalization from the dressed-adjoint identities**
-(arXiv:1606.00608, proof of Proposition 4.13, lines 1906--1908 and
-1909--1919): under the hypotheses of the preceding theorem,
-$\omega^{-1/2}X$ is unitary.
-
-**Scope restriction (self-adjoint letters):** this is the normalization of the
-same-letter specialization, not the relative two-gauge conclusion of the
-source.  See `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
-theorem IsNormal.smul_mem_unitaryGroup_of_dressed_adjoint
-    {A : MPSTensor d D} (hA : Kraus.IsNormal A)
-    {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) (hX0 : X ≠ 0)
-    (hdress : ∀ i, X * A i * X⁻¹ = X⁻¹ᴴ * (A i)ᴴ * Xᴴ)
-    (hsa : ∀ i, (A i)ᴴ = A i) :
-    ∃ ω : ℝ, 0 < ω ∧
-      ((Real.sqrt ω : ℂ))⁻¹ • X ∈ Matrix.unitaryGroup (Fin D) ℂ :=
-  hA.smul_mem_unitaryGroup_of_commute hX0 fun i =>
-    Matrix.commute_gram_of_dressed_adjoint_of_conjTranspose_eq hX (hdress i) (hsa i)
 
 end Kraus

@@ -41,29 +41,6 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 /-! ### The boundary coupling factorization -/
 
 open scoped Classical in
-/-- A boundary-fibered double sum collapses to a single sum reading the boundary label:
-summing first over a boundary configuration `μ`, then over the global configurations whose
-region boundary label is `μ`, is the same as summing over all global configurations and
-reading the boundary label off each one. -/
-private theorem sum_regionBoundary_fiber (B : Tensor G d) (R : Finset V)
-    (F : RegionBoundaryConfig (G := G) B R → VirtualConfig B → ℂ) :
-    (∑ μ : RegionBoundaryConfig (G := G) B R,
-      ∑ ζ ∈ Finset.univ.filter
-          (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = μ),
-        F μ ζ) =
-      ∑ ζ : VirtualConfig B, F (regionBoundaryLabel (G := G) B R ζ) ζ := by
-  classical
-  simp only [Finset.sum_filter]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl (fun ζ _ => ?_)
-  rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) B R ζ)]
-  · rw [ite_eq_left rfl]
-  · intro μ _ hμ
-    rw [ite_eq_right (fun h => hμ h.symm)]
-  · intro h
-    exact absurd (Finset.mem_univ _) h
-
-open scoped Classical in
 /-- **Gauge factorization of the blocked-region weight.**  The blocked-region weight of
 `applyGauge B X` is the blocked-region weight of `B` mixed by the boundary coupling: the
 product, over the boundary edges of `R`, of the surviving boundary gauge entries pairing the
@@ -121,19 +98,6 @@ The coupling matrix of the boundary configurations is the tensor product, over t
 edges, of the surviving boundary gauges; its inverse is the tensor product of their matrix
 inverses.  Contracting the two over a shared boundary configuration gives the per-edge
 identity matrices, hence the Kronecker delta of boundary configurations. -/
-
-omit [Fintype V] in
-/-- The inverse boundary gauge times the surviving boundary gauge is the identity. -/
-theorem regionBoundaryGaugeInv_mul (B : Tensor G d)
-    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
-    regionBoundaryGaugeInv (G := G) B X R f * regionBoundaryGauge (G := G) B X R f = 1 := by
-  rw [regionBoundaryGauge, regionBoundaryGaugeInv]
-  by_cases h : f.1.1.1 ∈ R
-  · rw [ite_eq_left h, ite_eq_left h]
-    simp
-  · rw [ite_eq_right h, ite_eq_right h, ← Matrix.transpose_mul]
-    simp
 
 open scoped Classical in
 /-- **The boundary coupling is invertible.**  Contracting the boundary coupling with the

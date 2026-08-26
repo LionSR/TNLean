@@ -348,50 +348,9 @@ noncomputable def edgeGaugeOfCycleGauge (Z : Fin n → GL (Fin D) ℂ)
     (e : Edge (SimpleGraph.cycleGraph n)) : GL (Fin D) ℂ :=
   if e.1.1 + 1 = e.1.2 then glTranspose (Z e.1.2) else (Z e.1.1)⁻¹
 
-/-- The per-bond gauges of the per-edge family of a per-bond family are the
-original gauges. -/
-theorem cycleGaugeOfEdgeGauge_edgeGaugeOfCycleGauge (hn : 3 ≤ n)
-    (Z : Fin n → GL (Fin D) ℂ) (v : Fin n) :
-    cycleGaugeOfEdgeGauge hn (edgeGaugeOfCycleGauge Z) v = Z v := by
-  rw [cycleGaugeOfEdgeGauge]
-  by_cases hv0 : v = 0
-  · rw [ite_eq_left hv0]
-    have hpair := cycleSuccEdge_val_of_eq hn (pred_zero_wrap hn hv0)
-    have hcond : ¬ ((cycleSuccEdge hn (v - 1)).1.1 + 1 = (cycleSuccEdge hn (v - 1)).1.2) := by
-      rw [hpair]
-      change ¬ (v - 1 + 1) + 1 = v - 1
-      rw [sub_add_cancel]
-      intro h
-      have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
-      have hval := congrArg Fin.val h
-      rw [Fin.val_add_eq_ite, h1, val_sub_eq_ite, h1] at hval
-      have := v.isLt
-      split_ifs at hval <;> omega
-    rw [edgeGaugeOfCycleGauge, ite_eq_right hcond, hpair]
-    change ((Z (v - 1 + 1))⁻¹)⁻¹ = Z v
-    rw [sub_add_cancel, inv_inv]
-  · rw [ite_eq_right hv0]
-    have hpair := cycleSuccEdge_val_of_lt hn (pred_val_lt hn hv0)
-    have hcond : (cycleSuccEdge hn (v - 1)).1.1 + 1 = (cycleSuccEdge hn (v - 1)).1.2 := by
-      rw [hpair]
-    rw [edgeGaugeOfCycleGauge, ite_eq_left hcond, hpair]
-    change glTranspose (glTranspose (Z (v - 1 + 1))) = Z v
-    rw [sub_add_cancel, glTranspose_glTranspose]
-
 end GaugeConversion
 
 section Capstone
-
-/-- A vanishing physical dimension contradicts block injectivity at positive
-bond dimension. -/
-theorem pos_d_of_isNBlkInjective {L : ℕ} (hL : 0 < L) (hD : 0 < D)
-    {A : MPSTensor d D} (hA : Kraus.IsNBlkInjective A L) : 0 < d := by
-  rcases Nat.eq_zero_or_pos d with hd0 | hd
-  · exfalso
-    obtain ⟨i, _⟩ := MPSTensor.exists_ne_zero_of_isNBlkInjective hL hD hA
-    have := i.isLt
-    omega
-  · exact hd
 
 /-- **Fundamental Theorem for translation-invariant normal MPS on a closed
 chain** (arXiv:1804.04964, Section 3, first corollary after the theorem

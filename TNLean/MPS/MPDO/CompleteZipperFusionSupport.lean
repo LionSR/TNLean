@@ -232,27 +232,61 @@ private noncomputable def leftNaturalDirectSumLetter
           (1 : Matrix (Fin (Fus.fusionMultiplicity e c d))
             (Fin (Fus.fusionMultiplicity e c d)) ℂ) ⊗ₖ Fus.tensor d i l)
 
+private theorem leftIntermediateLetter_eq_sum (a b c : Λ) (i l : Fin p) :
+    Fus.leftIntermediateLetter a b c i l =
+      ∑ k : Fin p, (Matrix.blockDiagonal' fun e =>
+        (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
+          (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e i k) ⊗ₖ
+            Fus.tensor c k l := by
+  classical
+  funext ⟨⟨e, μ, z⟩, x⟩ ⟨⟨e', μ', z'⟩, x'⟩
+  by_cases he : e = e'
+  · subst e'
+    by_cases hμ : μ = μ'
+    · subst μ'
+      simp [leftIntermediateLetter, leftFirstStageEquiv,
+        Matrix.blockDiagonal'_apply, Matrix.sum_apply]
+    · simp [leftIntermediateLetter, leftFirstStageEquiv,
+        Matrix.blockDiagonal'_apply, Matrix.sum_apply, hμ]
+  · simp [leftIntermediateLetter, leftFirstStageEquiv,
+      Matrix.blockDiagonal'_apply, Matrix.sum_apply, he]
+
+private theorem leftTripleDirectSumLetter_eq_submatrix (a b c : Λ) (i l : Fin p) :
+    Fus.leftTripleDirectSumLetter a b c i l =
+      (Fus.leftNaturalDirectSumLetter a b c i l).submatrix
+        (Fus.leftFinalFlattenEquiv a b c).symm
+        (Fus.leftFinalFlattenEquiv a b c).symm := by
+  classical
+  funext ⟨d, ⟨⟨e, μ, ν⟩, z⟩⟩ ⟨d', ⟨⟨e', μ', ν'⟩, z'⟩⟩
+  by_cases hd : d = d'
+  · subst d'
+    by_cases he : e = e'
+    · subst e'
+      by_cases hμ : μ = μ'
+      · subst μ'
+        by_cases hν : ν = ν'
+        · subst ν'
+          simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
+            leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply]
+        · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
+            leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hν]
+      · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
+          leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hμ]
+    · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
+        leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, he]
+  · by_cases he : e = e'
+    · subst e'
+      simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
+        leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd]
+    · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
+        leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd, he]
+
 private theorem tripleProductLetter_mul_leftFirstSynthesis
     (a b c : Λ) (i l : Fin p) :
     Fus.tripleProductLetter a b c i l * Fus.leftFirstSynthesis a b c =
       Fus.leftFirstSynthesis a b c * Fus.leftIntermediateLetter a b c i l := by
   classical
-  have hIntermediate : Fus.leftIntermediateLetter a b c i l =
-      ∑ k : Fin p, (Matrix.blockDiagonal' fun e =>
-        (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
-          (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e i k) ⊗ₖ
-            Fus.tensor c k l := by
-    funext ⟨⟨e, μ, z⟩, x⟩ ⟨⟨e', μ', z'⟩, x'⟩
-    by_cases he : e = e'
-    · subst e'
-      by_cases hμ : μ = μ'
-      · subst μ'
-        simp [leftIntermediateLetter, leftFirstStageEquiv,
-          Matrix.blockDiagonal'_apply, Matrix.sum_apply]
-      · simp [leftIntermediateLetter, leftFirstStageEquiv,
-          Matrix.blockDiagonal'_apply, Matrix.sum_apply, hμ]
-    · simp [leftIntermediateLetter, leftFirstStageEquiv,
-        Matrix.blockDiagonal'_apply, Matrix.sum_apply, he]
+  have hIntermediate := Fus.leftIntermediateLetter_eq_sum a b c i l
   rw [tripleProductLetter, leftFirstSynthesis, hIntermediate,
     Matrix.sum_mul, Matrix.mul_sum]
   simp_rw [Matrix.sum_mul]
@@ -313,33 +347,7 @@ private theorem leftIntermediateLetter_mul_leftSecondSynthesis
     funext e
     rw [← Matrix.mul_kronecker_mul, Fus.pairLetter_mul_synthesis,
       ← Matrix.mul_kronecker_mul, Matrix.one_mul]
-  have hFinal : Fus.leftTripleDirectSumLetter a b c i l =
-      (Fus.leftNaturalDirectSumLetter a b c i l).submatrix
-        (Fus.leftFinalFlattenEquiv a b c).symm
-        (Fus.leftFinalFlattenEquiv a b c).symm := by
-    funext ⟨d, ⟨⟨e, μ, ν⟩, z⟩⟩ ⟨d', ⟨⟨e', μ', ν'⟩, z'⟩⟩
-    by_cases hd : d = d'
-    · subst d'
-      by_cases he : e = e'
-      · subst e'
-        by_cases hμ : μ = μ'
-        · subst μ'
-          by_cases hν : ν = ν'
-          · subst ν'
-            simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-              leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply]
-          · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-              leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hν]
-        · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-            leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hμ]
-      · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-          leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, he]
-    · by_cases he : e = e'
-      · subst e'
-        simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-          leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd]
-      · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-          leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd, he]
+  have hFinal := Fus.leftTripleDirectSumLetter_eq_submatrix a b c i l
   unfold leftIntermediateLetter leftSecondSynthesis
   rw [Matrix.submatrix_mul_equiv _ _ _ (Fus.leftFirstStageEquiv a b c) _, hBlock,
     hFinal, Matrix.submatrix_mul_equiv]
@@ -361,6 +369,36 @@ private noncomputable def rightNaturalDirectSumLetter
         Matrix.blockDiagonal' (fun d =>
           (1 : Matrix (Fin (Fus.fusionMultiplicity a f d))
             (Fin (Fus.fusionMultiplicity a f d)) ℂ) ⊗ₖ Fus.tensor d i l)
+
+private theorem rightTripleDirectSumLetter_eq_submatrix (a b c : Λ) (i l : Fin p) :
+    Fus.rightTripleDirectSumLetter a b c i l =
+      (Fus.rightNaturalDirectSumLetter a b c i l).submatrix
+        (Fus.rightFinalFlattenEquiv a b c).symm
+        (Fus.rightFinalFlattenEquiv a b c).symm := by
+  classical
+  funext ⟨d, ⟨⟨f, m, n⟩, z⟩⟩ ⟨d', ⟨⟨f', m', n'⟩, z'⟩⟩
+  by_cases hd : d = d'
+  · subst d'
+    by_cases hf : f = f'
+    · subst f'
+      by_cases hm : m = m'
+      · subst m'
+        by_cases hn : n = n'
+        · subst n'
+          simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
+            rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply]
+        · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
+            rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hn]
+      · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
+          rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hm]
+    · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
+        rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hf]
+  · by_cases hf : f = f'
+    · subst f'
+      simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
+        rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd]
+    · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
+        rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd, hf]
 
 private theorem rightSecondAnalysis_mul_rightIntermediateLetter
     (a b c : Λ) (i l : Fin p) :
@@ -386,33 +424,7 @@ private theorem rightSecondAnalysis_mul_rightIntermediateLetter
     funext f
     rw [← Matrix.mul_kronecker_mul, Fus.analysis_mul_pairLetter,
       ← Matrix.mul_kronecker_mul, Matrix.one_mul]
-  have hFinal : Fus.rightTripleDirectSumLetter a b c i l =
-      (Fus.rightNaturalDirectSumLetter a b c i l).submatrix
-        (Fus.rightFinalFlattenEquiv a b c).symm
-        (Fus.rightFinalFlattenEquiv a b c).symm := by
-    funext ⟨d, ⟨⟨f, m, n⟩, z⟩⟩ ⟨d', ⟨⟨f', m', n'⟩, z'⟩⟩
-    by_cases hd : d = d'
-    · subst d'
-      by_cases hf : f = f'
-      · subst f'
-        by_cases hm : m = m'
-        · subst m'
-          by_cases hn : n = n'
-          · subst n'
-            simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-              rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply]
-          · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-              rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hn]
-        · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-            rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hm]
-      · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-          rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hf]
-    · by_cases hf : f = f'
-      · subst f'
-        simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-          rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd]
-      · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-          rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd, hf]
+  have hFinal := Fus.rightTripleDirectSumLetter_eq_submatrix a b c i l
   unfold rightSecondAnalysis rightIntermediateLetter
   rw [Matrix.submatrix_mul_equiv _ _ _ (Fus.rightFirstStageEquiv a b c) _, hBlock,
     hFinal, Matrix.submatrix_mul_equiv]
@@ -661,22 +673,7 @@ theorem tripleProductLetter_eq_left_reconstruction
   have hFirst : Fus.tripleProductLetter a b c i l =
       Fus.leftFirstSynthesis a b c * Fus.leftIntermediateLetter a b c i l *
         Fus.leftFirstAnalysis a b c := by
-    have hIntermediate : Fus.leftIntermediateLetter a b c i l =
-        ∑ k : Fin p, (Matrix.blockDiagonal' fun e =>
-          (1 : Matrix (Fin (Fus.fusionMultiplicity a b e))
-            (Fin (Fus.fusionMultiplicity a b e)) ℂ) ⊗ₖ Fus.tensor e i k) ⊗ₖ
-              Fus.tensor c k l := by
-      funext ⟨⟨e, μ, z⟩, x⟩ ⟨⟨e', μ', z'⟩, x'⟩
-      by_cases he : e = e'
-      · subst e'
-        by_cases hμ : μ = μ'
-        · subst μ'
-          simp [leftIntermediateLetter, leftFirstStageEquiv,
-            Matrix.blockDiagonal'_apply, Matrix.sum_apply]
-        · simp [leftIntermediateLetter, leftFirstStageEquiv,
-            Matrix.blockDiagonal'_apply, Matrix.sum_apply, hμ]
-      · simp [leftIntermediateLetter, leftFirstStageEquiv,
-          Matrix.blockDiagonal'_apply, Matrix.sum_apply, he]
+    have hIntermediate := Fus.leftIntermediateLetter_eq_sum a b c i l
     rw [tripleProductLetter, leftFirstSynthesis, leftFirstAnalysis, hIntermediate,
       Matrix.mul_sum]
     simp_rw [Matrix.sum_mul]
@@ -716,33 +713,7 @@ theorem tripleProductLetter_eq_left_reconstruction
       rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
         Fus.pairLetter_eq_synthesis_mul_directSum_mul_analysis e c i l,
         ← Matrix.mul_kronecker_mul, Matrix.one_mul]
-    have hFinal : Fus.leftTripleDirectSumLetter a b c i l =
-        (Fus.leftNaturalDirectSumLetter a b c i l).submatrix
-          (Fus.leftFinalFlattenEquiv a b c).symm
-          (Fus.leftFinalFlattenEquiv a b c).symm := by
-      funext ⟨d, ⟨⟨e, μ, ν⟩, z⟩⟩ ⟨d', ⟨⟨e', μ', ν'⟩, z'⟩⟩
-      by_cases hd : d = d'
-      · subst d'
-        by_cases he : e = e'
-        · subst e'
-          by_cases hμ : μ = μ'
-          · subst μ'
-            by_cases hν : ν = ν'
-            · subst ν'
-              simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-                leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply]
-            · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-                leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hν]
-          · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-              leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hμ]
-        · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-            leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, he]
-      · by_cases he : e = e'
-        · subst e'
-          simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-            leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd]
-        · simp [leftTripleDirectSumLetter, leftNaturalDirectSumLetter,
-            leftFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd, he]
+    have hFinal := Fus.leftTripleDirectSumLetter_eq_submatrix a b c i l
     unfold leftIntermediateLetter leftSecondSynthesis leftSecondAnalysis
     rw [hFinal, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv, ← hBlock]
   rw [Fus.leftSynthesisFull_eq_stages, Fus.leftAnalysisFull_eq_stages,
@@ -839,33 +810,7 @@ theorem tripleProductLetter_eq_right_reconstruction
       rw [← Matrix.mul_kronecker_mul, Matrix.one_mul,
         Fus.pairLetter_eq_synthesis_mul_directSum_mul_analysis a f i l,
         ← Matrix.mul_kronecker_mul, Matrix.one_mul]
-    have hFinal : Fus.rightTripleDirectSumLetter a b c i l =
-        (Fus.rightNaturalDirectSumLetter a b c i l).submatrix
-          (Fus.rightFinalFlattenEquiv a b c).symm
-          (Fus.rightFinalFlattenEquiv a b c).symm := by
-      funext ⟨d, ⟨⟨f, m, n⟩, z⟩⟩ ⟨d', ⟨⟨f', m', n'⟩, z'⟩⟩
-      by_cases hd : d = d'
-      · subst d'
-        by_cases hf : f = f'
-        · subst f'
-          by_cases hm : m = m'
-          · subst m'
-            by_cases hn : n = n'
-            · subst n'
-              simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-                rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply]
-            · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-                rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hn]
-          · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-              rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hm]
-        · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-            rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hf]
-      · by_cases hf : f = f'
-        · subst f'
-          simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-            rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd]
-        · simp [rightTripleDirectSumLetter, rightNaturalDirectSumLetter,
-            rightFinalFlattenEquiv, Matrix.blockDiagonal'_apply, hd, hf]
+    have hFinal := Fus.rightTripleDirectSumLetter_eq_submatrix a b c i l
     unfold rightIntermediateLetter rightSecondSynthesis rightSecondAnalysis
     rw [hFinal, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv, ← hBlock]
   rw [Fus.rightSynthesisFull_eq_stages, Fus.rightAnalysisFull_eq_stages,

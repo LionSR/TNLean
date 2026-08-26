@@ -121,12 +121,12 @@ Private helpers removed with `ActiveBlocks.lean`: `Matrix.rowSelection`,
 | `MPSTensor.CPSVCanonicalFormData.groupedIndexEquiv` | None; `GroupedIndex` no longer has an inactive summand. |
 | `MPSTensor.CPSVCanonicalFormData.groupedIndexEquiv_inl` | None. |
 | `MPSTensor.CPSVCanonicalFormData.groupedIndexEquiv_inr` | None. |
-| `MPSTensor.CPSVCanonicalFormData.groupedListedEquiv_activeCopy` | `MPSTensor.CPSVCanonicalFormData.groupedListedEquiv_groupedPosition`. |
+| `MPSTensor.CPSVCanonicalFormData.groupedListedEquiv_activeCopy` | `MPSTensor.CPSVCanonicalFormData.groupedListedEquiv_groupedPosition`, itself retired unused on 2026-08-26 (see `2026-08-26_canonical_form_retirements.md`). |
 | `MPSTensor.CPSVCanonicalFormData.groupedListedEquiv_inactive` | None. |
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedWeight` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight`. |
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedBlocks` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedBlocks`. |
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedTensor` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedTensor`. |
-| `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedWeight_activeCopy` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight_copy`. |
+| `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedWeight_activeCopy` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedWeight_copy`, itself retired unused on 2026-08-26 (see `2026-08-26_canonical_form_retirements.md`). |
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedWeight_inactive` | None. |
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.regroupedTensor_eq_groupedTensor` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.regroupedTensor_eq_groupedTensor`. |
 | `MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.groupedRegroupLetterwise` | `MPSTensor.CPSVCanonicalFormData.BNTRefinement.groupedRegroupLetterwise`. |

@@ -77,11 +77,6 @@ private theorem neighborIndex_heq_of_components
   cases h₂
   rfl
 
-private theorem dependent_apply_heq {ι : Type} {α : ι → Type}
-    (f : (i : ι) → α i) {i j : ι} (h : i = j) : f i ≍ f j := by
-  subst j
-  rfl
-
 private theorem retainedLeftNeighboringEntry_eq
     (F : PhysicalSectorFactorization K) {A C : ℕ}
     (j : Fin F.sectorCount)
@@ -142,23 +137,23 @@ private theorem retainedLeftNeighboringEntry_eq
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg).symm).trans ?_
         exact (sectorIndex_snd_heq_of_heq F hq
-          ((dependent_apply_heq v he0).trans (hu (Fin.last A)))).trans
+          ((congr_arg_heq v he0).trans (hu (Fin.last A)))).trans
             (heq_of_eq (F.leftFiberOpenEdgeEquiv_symm_edge_fst
               (F.leftSectorWord j kL) zL (Fin.last A)))
       · refine (heq_of_eq (congrArg Prod.snd hg).symm).trans ?_
         exact ((sectorIndex_fst_heq_of_heq F (congrArg k he1)
-          (dependent_apply_heq v he1)).trans huM_v).trans (heq_of_eq
+          (congr_arg_heq v he1)).trans huM_v).trans (heq_of_eq
             (F.leftFiberOpenEdgeEquiv_symm_edge_snd_last
               (F.leftSectorWord j kL) zL))
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg').symm).trans ?_
         exact (sectorIndex_snd_heq_of_heq F hq
-          ((dependent_apply_heq v' he0).trans (hu' (Fin.last A)))).trans
+          ((congr_arg_heq v' he0).trans (hu' (Fin.last A)))).trans
             (heq_of_eq (F.leftFiberOpenEdgeEquiv_symm_edge_fst
               (F.leftSectorWord j kL) zL' (Fin.last A)))
       · refine (heq_of_eq (congrArg Prod.snd hg').symm).trans ?_
         exact ((sectorIndex_fst_heq_of_heq F (congrArg k he1)
-          (dependent_apply_heq v' he1)).trans huM_v').trans (heq_of_eq
+          (congr_arg_heq v' he1)).trans huM_v').trans (heq_of_eq
             (F.leftFiberOpenEdgeEquiv_symm_edge_snd_last
               (F.leftSectorWord j kL) zL'))
   · let e := Fin.castAdd C p.castSucc
@@ -188,23 +183,23 @@ private theorem retainedLeftNeighboringEntry_eq
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg).symm).trans ?_
         exact (sectorIndex_snd_heq_of_heq F hq
-          ((dependent_apply_heq v he0).trans (hu p.castSucc))).trans
+          ((congr_arg_heq v he0).trans (hu p.castSucc))).trans
             (heq_of_eq (F.leftFiberOpenEdgeEquiv_symm_edge_fst
               (F.leftSectorWord j kL) zL p.castSucc))
       · refine (heq_of_eq (congrArg Prod.snd hg).symm).trans ?_
         exact (sectorIndex_fst_heq_of_heq F hh
-          ((dependent_apply_heq v he1).trans (hu p.succ))).trans (heq_of_eq
+          ((congr_arg_heq v he1).trans (hu p.succ))).trans (heq_of_eq
             (F.leftFiberOpenEdgeEquiv_symm_edge_snd_castSucc
               (F.leftSectorWord j kL) zL p))
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg').symm).trans ?_
         exact (sectorIndex_snd_heq_of_heq F hq
-          ((dependent_apply_heq v' he0).trans (hu' p.castSucc))).trans
+          ((congr_arg_heq v' he0).trans (hu' p.castSucc))).trans
             (heq_of_eq (F.leftFiberOpenEdgeEquiv_symm_edge_fst
               (F.leftSectorWord j kL) zL' p.castSucc))
       · refine (heq_of_eq (congrArg Prod.snd hg').symm).trans ?_
         exact (sectorIndex_fst_heq_of_heq F hh
-          ((dependent_apply_heq v' he1).trans (hu' p.succ))).trans (heq_of_eq
+          ((congr_arg_heq v' he1).trans (hu' p.succ))).trans (heq_of_eq
             (F.leftFiberOpenEdgeEquiv_symm_edge_snd_castSucc
               (F.leftSectorWord j kL) zL' p))
 
@@ -278,23 +273,23 @@ private theorem retainedRightNeighboringEntry_eq
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg).symm).trans ?_
         exact ((sectorIndex_snd_heq_of_heq F (congrArg k he0)
-          (dependent_apply_heq v he0)).trans huM_v).trans (heq_of_eq
+          (congr_arg_heq v he0)).trans huM_v).trans (heq_of_eq
             (F.rightFiberOpenEdgeEquiv_symm_edge_fst_zero
               (F.rightSectorWord j kR) zR))
       · refine (heq_of_eq (congrArg Prod.snd hg).symm).trans ?_
         exact (sectorIndex_fst_heq_of_heq F hh
-          ((dependent_apply_heq v he1).trans (hu 0))).trans
+          ((congr_arg_heq v he1).trans (hu 0))).trans
             (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_edge_snd
               (F.rightSectorWord j kR) zR 0))
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg').symm).trans ?_
         exact ((sectorIndex_snd_heq_of_heq F (congrArg k he0)
-          (dependent_apply_heq v' he0)).trans huM_v').trans (heq_of_eq
+          (congr_arg_heq v' he0)).trans huM_v').trans (heq_of_eq
             (F.rightFiberOpenEdgeEquiv_symm_edge_fst_zero
               (F.rightSectorWord j kR) zR'))
       · refine (heq_of_eq (congrArg Prod.snd hg').symm).trans ?_
         exact (sectorIndex_fst_heq_of_heq F hh
-          ((dependent_apply_heq v' he1).trans (hu' 0))).trans
+          ((congr_arg_heq v' he1).trans (hu' 0))).trans
             (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_edge_snd
               (F.rightSectorWord j kR) zR' 0))
   · let e := Fin.natAdd A p.succ
@@ -344,23 +339,23 @@ private theorem retainedRightNeighboringEntry_eq
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg).symm).trans ?_
         exact (sectorIndex_snd_heq_of_heq F hq
-          ((dependent_apply_heq v he0).trans (hu p.castSucc))).trans (heq_of_eq
+          ((congr_arg_heq v he0).trans (hu p.castSucc))).trans (heq_of_eq
             (F.rightFiberOpenEdgeEquiv_symm_edge_fst_succ
               (F.rightSectorWord j kR) zR p))
       · refine (heq_of_eq (congrArg Prod.snd hg).symm).trans ?_
         exact (sectorIndex_fst_heq_of_heq F hh
-          ((dependent_apply_heq v he1).trans (hu p.succ))).trans
+          ((congr_arg_heq v he1).trans (hu p.succ))).trans
             (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_edge_snd
               (F.rightSectorWord j kR) zR p.succ))
     · apply neighborIndex_heq_of_components F hq hh
       · refine (heq_of_eq (congrArg Prod.fst hg').symm).trans ?_
         exact (sectorIndex_snd_heq_of_heq F hq
-          ((dependent_apply_heq v' he0).trans (hu' p.castSucc))).trans (heq_of_eq
+          ((congr_arg_heq v' he0).trans (hu' p.castSucc))).trans (heq_of_eq
             (F.rightFiberOpenEdgeEquiv_symm_edge_fst_succ
               (F.rightSectorWord j kR) zR' p))
       · refine (heq_of_eq (congrArg Prod.snd hg').symm).trans ?_
         exact (sectorIndex_fst_heq_of_heq F hh
-          ((dependent_apply_heq v' he1).trans (hu' p.succ))).trans
+          ((congr_arg_heq v' he1).trans (hu' p.succ))).trans
             (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_edge_snd
               (F.rightSectorWord j kR) zR' p.succ))
 
@@ -727,7 +722,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
               by_cases hA : A = 0
               · subst A
                 exact ((sectorIndex_fst_heq_of_heq F (congrArg k he)
-                  (dependent_apply_heq v he)).trans huML).trans (heq_of_eq
+                  (congr_arg_heq v he)).trans huML).trans (heq_of_eq
                   (F.leftFiberOpenEdgeEquiv_symm_boundary_zero
                     (F.leftSectorWord j kL) zL))
               · obtain ⟨A, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hA
@@ -742,7 +737,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                       exact (@Fin.lastCases_castSucc (A + 1)
                         (fun _ ↦ Fin F.sectorCount) j kL 0).symm
                 exact (sectorIndex_fst_heq_of_heq F hk0
-                  ((dependent_apply_heq v he).trans (huL 0))).trans (heq_of_eq
+                  ((congr_arg_heq v he).trans (huL 0))).trans (heq_of_eq
                     (F.leftFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.leftSectorWord j kL) zL))
             have hzLeft' : z'.2.2 ≍ zL'.1 := by
@@ -754,7 +749,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
               by_cases hA : A = 0
               · subst A
                 exact ((sectorIndex_fst_heq_of_heq F (congrArg k he)
-                  (dependent_apply_heq v' he)).trans huML').trans (heq_of_eq
+                  (congr_arg_heq v' he)).trans huML').trans (heq_of_eq
                   (F.leftFiberOpenEdgeEquiv_symm_boundary_zero
                     (F.leftSectorWord j kL) zL'))
               · obtain ⟨A, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hA
@@ -769,7 +764,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                       exact (@Fin.lastCases_castSucc (A + 1)
                         (fun _ ↦ Fin F.sectorCount) j kL 0).symm
                 exact (sectorIndex_fst_heq_of_heq F hk0
-                  ((dependent_apply_heq v' he).trans (huL' 0))).trans (heq_of_eq
+                  ((congr_arg_heq v' he).trans (huL' 0))).trans (heq_of_eq
                     (F.leftFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.leftSectorWord j kL) zL'))
             have hzRight : z.2.1 ≍ zR.2 := by
@@ -781,7 +776,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   ext
                   simp
                 exact ((sectorIndex_snd_heq_of_heq F (congrArg k he)
-                  (dependent_apply_heq v he)).trans huMR).trans (heq_of_eq
+                  (congr_arg_heq v he)).trans huMR).trans (heq_of_eq
                     (F.rightFiberOpenEdgeEquiv_symm_boundary_zero
                       (F.rightSectorWord j kR) zR))
               · obtain ⟨C, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hC
@@ -803,7 +798,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                       exact (@Fin.cases_succ (C + 1)
                         (fun _ ↦ Fin F.sectorCount) j kR (Fin.last C)).symm
                 exact (sectorIndex_snd_heq_of_heq F hkLast
-                  ((dependent_apply_heq v he).trans (huR (Fin.last C)))).trans
+                  ((congr_arg_heq v he).trans (huR (Fin.last C)))).trans
                     (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.rightSectorWord j kR) zR))
             have hzRight' : z'.2.1 ≍ zR'.2 := by
@@ -815,7 +810,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   ext
                   simp
                 exact ((sectorIndex_snd_heq_of_heq F (congrArg k he)
-                  (dependent_apply_heq v' he)).trans huMR').trans (heq_of_eq
+                  (congr_arg_heq v' he)).trans huMR').trans (heq_of_eq
                     (F.rightFiberOpenEdgeEquiv_symm_boundary_zero
                       (F.rightSectorWord j kR) zR'))
               · obtain ⟨C, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hC
@@ -837,7 +832,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                       exact (@Fin.cases_succ (C + 1)
                         (fun _ ↦ Fin F.sectorCount) j kR (Fin.last C)).symm
                 exact (sectorIndex_snd_heq_of_heq F hkLast
-                  ((dependent_apply_heq v' he).trans (huR' (Fin.last C)))).trans
+                  ((congr_arg_heq v' he).trans (huR' (Fin.last C)))).trans
                     (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.rightSectorWord j kR) zR'))
             have hboundaryLeft := cyclicActiveLeftBoundary_entry_eq_of_heq

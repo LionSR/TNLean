@@ -46,9 +46,6 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
 
 ### MPS application
 
-* `MPSTensor.bntFamilies_eventually_linearIndependent`: states the BNT Gram-matrix criterion
-  in a form suited to families with per-block bond dimension.
-
 * `MPSTensor.eventually_exists_invertible_changeBasis`: If two BNT-like families produce MPV
   states that are eventually linearly independent and eventually span the same subspace, then
   for all sufficiently large system sizes there is an invertible coefficient matrix `U_N`
@@ -150,24 +147,6 @@ lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
     ext j L i
     rfl
   exact LinearIndependent.of_comp fN hN'
-
-/--
-If the MPV overlaps of a finite family `A j` converge to an orthonormal Gram matrix,
-then the MPV states `mpvState (A j) N` are eventually linearly independent.
-
-This is a convenient `Fin g` formulation around
-`MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal`.
--/
-lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
-    {d : ℕ} {g : ℕ} {dim : Fin g → ℕ}
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    (h_self : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
-    (h_cross : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
-    ∀ᶠ N in atTop,
-      LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) :=
-  eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A h_self h_cross
 
 /-- **Eventual coefficient extraction from eventual linear independence.**
 
@@ -358,28 +337,6 @@ namespace MPSTensor
 open MPSTensor
 
 /--
-**BNT families are eventually linearly independent.**
-
-Given a finite family of MPS tensors `A j` (with possibly different bond dimensions `dim j`)
-whose pairwise overlaps converge to the Kronecker delta, the MPV states `mpvState (A j) N` are
-linearly independent for all sufficiently large `N`.
-
-This is a direct restatement of
-`MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal`
-in the exact form used by the BNT permutation-matching argument.
--/
-lemma bntFamilies_eventually_linearIndependent
-    {d g : ℕ} {dim : Fin g → ℕ}
-    (A : (j : Fin g) → MPSTensor d (dim j))
-    (h_diag : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
-    (h_off : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
-    ∀ᶠ N in atTop,
-      LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) :=
-  eventually_linearIndependent_of_overlap_tendsto_orthonormal A h_diag h_off
-
-/--
 **Eventually invertible change-of-basis matrix from equal spans.**
 
 Given two BNT-like families of MPS tensors whose pairwise overlaps converge to orthonormality
@@ -420,8 +377,8 @@ lemma eventually_exists_invertible_changeBasis
         mpvState (d := d) (B j) N =
           ∑ i : Fin g, U i j • mpvState (d := d) (A i) N := by
   -- Both families are eventually LI.
-  have hA_li := bntFamilies_eventually_linearIndependent A hA_diag hA_off
-  have hB_li := bntFamilies_eventually_linearIndependent B hB_diag hB_off
+  have hA_li := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hA_diag hA_off
+  have hB_li := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal B hB_diag hB_off
   -- Intersect the three eventual conditions.
   filter_upwards [hA_li, hB_li, hspan] with N hA_N hB_N hspanN
   -- Apply the pure linear-algebra change-of-basis lemma.

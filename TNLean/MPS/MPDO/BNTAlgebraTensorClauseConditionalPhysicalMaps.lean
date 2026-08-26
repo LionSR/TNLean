@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.SupportCompletion
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorMaps
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseDirectSumUnitary
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseOneSiteAmbientSectorMaps
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseTwoSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!

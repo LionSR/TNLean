@@ -31,22 +31,6 @@ not an MPO state of length zero.
 
 open scoped Matrix BigOperators ComplexOrder
 
-namespace Matrix
-
-/-- Tracing out the output of an isometry on the discarded factor leaves the
-retained single-Kraus action. -/
-theorem partialTraceRight_singleKraus_kronecker_isometry
-    {α β γ δ : Type*} [Fintype α]
-    [Fintype β] [DecidableEq β] [Fintype γ] [Fintype δ]
-    (A : Matrix γ α ℂ) (B : Matrix δ β ℂ) (hB : Bᴴ * B = 1)
-    (X : Matrix (α × β) (α × β) ℂ) :
-    partialTraceRight
-        (singleKrausMap (kroneckerMap (· * ·) A B) X) =
-      singleKrausMap A (partialTraceRight X) := by
-  exact partialTraceRight_kronecker_conj_of_right_isometry A B hB X
-
-end Matrix
-
 /-- Conjugating a Hermitian matrix by a rectangular isometry preserves its von
 Neumann entropy; the additional eigenvalues are zero. -/
 theorem vonNeumannEntropy_singleKraus_isometry
@@ -151,7 +135,7 @@ theorem blockReducedState_singleKraus_sitewise
   rw [Matrix.reindex_singleKrausMap
       (blockSplitEquiv d L K) (blockSplitEquiv e L K),
     reindex_sitewisePhysicalMatrix_blockSplit]
-  exact Matrix.partialTraceRight_singleKraus_kronecker_isometry
+  exact Matrix.partialTraceRight_kronecker_conj_of_right_isometry
     (sitewisePhysicalMatrix V L) (sitewisePhysicalMatrix V K)
     (sitewisePhysicalMatrix_isometry V hV K)
     (Matrix.reindex (blockSplitEquiv d L K) (blockSplitEquiv d L K) X)

@@ -115,22 +115,12 @@ private theorem edgeComplementConfigSplitAt_symm_apply_incident
 
 /-! ### Kernel-descent construction for the middle block -/
 
-omit [Fintype V] [DecidableRel G.Adj] in
-private theorem otherLeft_edge_ne' (e : Edge G)
-    (ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e)) :
-    ie.1.1 ≠ e := fun hie => ie.2 (Subtype.ext hie)
-
-omit [Fintype V] [DecidableRel G.Adj] in
-private theorem otherRight_edge_ne' (e : Edge G)
-    (ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e)) :
-    ie.1.1 ≠ e := fun hie => ie.2 (Subtype.ext hie)
-
 /-- The boundary label read off a complement configuration: its residual data at
 the two endpoints. -/
 noncomputable def boundaryLabelOfComplement (A : Tensor G d) (e : Edge G)
     (ζ : EdgeComplementConfig (G := G) A e) : EdgeMiddleBoundaryLabel (G := G) A e :=
-  (fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩,
-   fun ie => ζ ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩)
+  (fun ie => ζ ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩,
+   fun ie => ζ ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩)
 
 /-- The weight of a complement configuration under the coefficient family `c`. -/
 noncomputable def complementWeight (A : Tensor G d) (e : Edge G)
@@ -412,16 +402,16 @@ theorem boundaryLabelOfComplement_boundaryWitness (hpos : ∀ f : Edge G, 0 < A.
   apply Prod.ext
   · funext ie
     change boundaryWitness (G := G) A e hpos ρ
-      ⟨ie.1.1, otherLeft_edge_ne' (G := G) e ie⟩ = ρ.1 ie
+      ⟨ie.1.1, otherLeft_edge_ne (G := G) e ie⟩ = ρ.1 ie
     have hL : ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1 := ie.1.2
     rw [boundaryWitness, dite_eq_left hL]
   · funext ie
     change boundaryWitness (G := G) A e hpos ρ
-      ⟨ie.1.1, otherRight_edge_ne' (G := G) e ie⟩ = ρ.2 ie
+      ⟨ie.1.1, otherRight_edge_ne (G := G) e ie⟩ = ρ.2 ie
     have hR : ie.1.1.1.1 = e.1.2 ∨ ie.1.1.1.2 = e.1.2 := ie.1.2
     have hnotL : ¬ (ie.1.1.1.1 = e.1.1 ∨ ie.1.1.1.2 = e.1.1) := by
       intro hL
-      exact (otherRight_edge_ne' (G := G) e ie) (incidentBoth_eq_edge (G := G) e ie.1.1 hL hR)
+      exact (otherRight_edge_ne (G := G) e ie) (incidentBoth_eq_edge (G := G) e ie.1.1 hL hR)
     rw [boundaryWitness, dite_eq_right hnotL, dite_eq_left hR]
 
 /-- The kernel condition at the empty region forces the coefficient family to

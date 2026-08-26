@@ -224,7 +224,7 @@ boundary conditions (PBC).
 \section{Site-periodic tensor families}
 
 \begin{definition}[Site-periodic tensor family]\label{def:periodic_mps_tensor}
-    \lean{MPSTensor.PeriodicMPSTensor}
+    \lean{MPSChainTensor}
     \leanok
     For a fixed period $m$, a \emph{site-periodic tensor family} is a
     family of local tensors indexed by $\{0,\ldots,m{-}1\}$, with
@@ -232,8 +232,8 @@ boundary conditions (PBC).
 \end{definition}
 
 \begin{definition}[Periodic same-state and gauge-equivalence relations]\label{def:periodic_relations}
-    \lean{MPSTensor.PeriodicMPSTensor.SameState}
-    \lean{MPSTensor.PeriodicMPSTensor.GaugeEquiv}
+    \lean{MPSChainTensor.SameState}
+    \lean{MPSChainTensor.GaugeEquiv}
     \leanok
     \uses{def:periodic_mps_tensor}
     For site-periodic tensors $A,B$ at fixed period~$m$:
@@ -244,8 +244,8 @@ boundary conditions (PBC).
 \end{definition}
 
 \begin{lemma}[Equivalence structures for periodic relations]\label{lem:periodic_relation_equivalences}
-    \lean{MPSTensor.PeriodicMPSTensor.instEquivalenceSameState}
-    \lean{MPSTensor.PeriodicMPSTensor.instEquivalenceGaugeEquiv}
+    \lean{MPSChainTensor.instEquivalenceSameState}
+    \lean{MPSChainTensor.instEquivalenceGaugeEquiv}
     \leanok
     \uses{def:periodic_relations}
     Both periodic relations are equivalence relations (reflexive,
@@ -349,7 +349,7 @@ boundary conditions (PBC).
     sufficiently large $N$, there is a nonzero scalar $c_N \in \C$ such that
     $\ket{V^{(N)}(A)} = c_N \ket{V^{(N)}(B)}$. This auxiliary form is used with
     the eventual linear-independence statement
-    Lemma~\ref{lem:bnt_overlap_orthonormal_li}.
+    Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}.
 \end{definition}
 
 \begin{lemma}[Elementary nonzero proportionality rules]%

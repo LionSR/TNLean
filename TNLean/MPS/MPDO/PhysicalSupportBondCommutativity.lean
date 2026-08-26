@@ -30,21 +30,6 @@ variable {d D : ℕ} {P : Matrix (Fin d) (Fin d) ℂ} {K : MPOTensor d D}
 
 open MPOTensor.PhysicalSectorFactorization
 
-private theorem product_isHermitian_of_comm
-    {n : Type*} [Fintype n]
-    {A B : Matrix n n ℂ} (hA : A.IsHermitian) (hB : B.IsHermitian)
-    (hcomm : A * B = B * A) : (A * B).IsHermitian := by
-  change (A * B)ᴴ = A * B
-  rw [Matrix.conjTranspose_mul, hA.eq, hB.eq, hcomm]
-
-private theorem commute_of_product_isHermitian
-    {n : Type*} [Fintype n]
-    {A B : Matrix n n ℂ} (hA : A.IsHermitian) (hB : B.IsHermitian)
-    (hprod : (A * B).IsHermitian) : A * B = B * A := by
-  change (A * B)ᴴ = A * B at hprod
-  rw [Matrix.conjTranspose_mul, hA.eq, hB.eq] at hprod
-  exact hprod.symm
-
 /-- The two lifted neighboring bonds commute on a three-site chain.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
@@ -70,14 +55,14 @@ theorem liftedBond_three_zero_one_comm
   have hB : B.IsHermitian :=
     (embedLocalOperator_posSemidef 2 (by decide) 1 data.bond_pos).1
   have hrestricted : (A * B).IsHermitian :=
-    product_isHermitian_of_comm hA hB hcomm
+    (hA.commute_iff hB).mp hcomm
   have hambient :
       (singleKrausMap (sitewisePhysicalMatrix F.inclusion 3) (A * B)).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose
       (sitewisePhysicalMatrix F.inclusion 3) hrestricted
   rw [singleKrausMap_adjacentBondProduct
     F.inclusion F.inclusion_isometry data.bond data.bond] at hambient
-  apply commute_of_product_isHermitian
+  refine Commute.eq ((Matrix.IsHermitian.commute_iff ?_ ?_).mpr ?_)
   · exact (embedLocalOperator_posSemidef 2 (by decide) 0
       (F.liftedBond_pos data.bond_pos)).1
   · exact (embedLocalOperator_posSemidef 2 (by decide) 1
@@ -110,14 +95,14 @@ theorem liftedBond_two_zero_one_comm
   have hB : B.IsHermitian :=
     (embedLocalOperator_posSemidef 2 (by decide) 1 data.bond_pos).1
   have hrestricted : (A * B).IsHermitian :=
-    product_isHermitian_of_comm hA hB hcomm
+    (hA.commute_iff hB).mp hcomm
   have hambient :
       (singleKrausMap (sitewisePhysicalMatrix F.inclusion 2) (A * B)).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose
       (sitewisePhysicalMatrix F.inclusion 2) hrestricted
   rw [singleKrausMap_crossedTwoSiteBondProduct
     F.inclusion F.inclusion_isometry data.bond data.bond] at hambient
-  apply commute_of_product_isHermitian
+  refine Commute.eq ((Matrix.IsHermitian.commute_iff ?_ ?_).mpr ?_)
   · exact (embedLocalOperator_posSemidef 2 (by decide) 0
       (F.liftedBond_pos data.bond_pos)).1
   · exact (embedLocalOperator_posSemidef 2 (by decide) 1

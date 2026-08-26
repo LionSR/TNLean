@@ -19,7 +19,6 @@ Building on the backward direction proved in
    commuting-parent-Hamiltonian consequences below.
 2. Extends the `HasCommutingParentHam` properties with absorption, reverse-product,
    complement commutativity, and a ground-space membership characterisation.
-3. Provides `IsDecorrelated` properties — monotonicity and triviality lemmas.
 
 All results are fully proved (no `sorry`).
 
@@ -40,13 +39,6 @@ All results are fully proved (no `sorry`).
 * `reverse_product` — `P_XB ∘ P_AX = P_K`
 * `complement_comm` — `(id − P_AX) ∘ (id − P_XB) = (id − P_XB) ∘ (id − P_AX)`
 * `mem_ground_iff` — `P_K v = v ↔ P_AX v = v ∧ P_XB v = v`
-
-### `Decorrelation.IsDecorrelated` properties
-
-* `mono_obsA` / `mono_obsB` — monotone in observable sets
-* `empty_obsA` / `empty_obsB` — trivially decorrelated for empty sets
-* `of_pK_zero` — decorrelated when `P_K = 0`
-* `of_pK_id` — decorrelated when `P_K = id`
 
 ## References
 
@@ -202,82 +194,3 @@ theorem HasCommutingParentHam.mem_ground_iff {P_K : E →ₗ[ℂ] E}
 end Decorrelation
 
 end HasCommutingParentHamProperties
-
-/-!
-### `IsDecorrelated` properties
-
-Monotonicity and triviality lemmas for the decorrelation predicate.
--/
-
-section IsDecorrelatedProperties
-
-variable {E : Type*} [AddCommGroup E] [Module ℂ E]
-
-namespace Decorrelation
-
-/-- Decorrelation is monotone in the first observable set: restricting
-observables on region A preserves decorrelation. -/
-theorem IsDecorrelated.mono_obsA {P_K : E →ₗ[ℂ] E}
-    {ObsA ObsA' ObsB : Set (E →ₗ[ℂ] E)}
-    (h : IsDecorrelated P_K ObsA' ObsB) (hsub : ObsA ⊆ ObsA') :
-    IsDecorrelated P_K ObsA ObsB :=
-  fun O_A hOA O_B hOB => h O_A (hsub hOA) O_B hOB
-
-/-- Decorrelation is monotone in the second observable set: restricting
-observables on region B preserves decorrelation. -/
-theorem IsDecorrelated.mono_obsB {P_K : E →ₗ[ℂ] E}
-    {ObsA ObsB ObsB' : Set (E →ₗ[ℂ] E)}
-    (h : IsDecorrelated P_K ObsA ObsB') (hsub : ObsB ⊆ ObsB') :
-    IsDecorrelated P_K ObsA ObsB :=
-  fun O_A hOA O_B hOB => h O_A hOA O_B (hsub hOB)
-
-/-- Decorrelation holds trivially when the A-observable set is empty. -/
-theorem IsDecorrelated.empty_obsA {P_K : E →ₗ[ℂ] E}
-    (ObsB : Set (E →ₗ[ℂ] E)) :
-    IsDecorrelated P_K ∅ ObsB := by
-  intro _ hOA; exact hOA.elim
-
-/-- Decorrelation holds trivially when the B-observable set is empty. -/
-theorem IsDecorrelated.empty_obsB {P_K : E →ₗ[ℂ] E}
-    (ObsA : Set (E →ₗ[ℂ] E)) :
-    IsDecorrelated P_K ObsA ∅ := by
-  intro _ _ _ hOB; exact hOB.elim
-
-/-- Decorrelation holds trivially when `P_K = 0`. -/
-theorem IsDecorrelated.of_pK_zero
-    (ObsA ObsB : Set (E →ₗ[ℂ] E)) :
-    IsDecorrelated (0 : E →ₗ[ℂ] E) ObsA ObsB := by
-  intro O_A _ O_B _
-  simp only [LinearMap.comp_zero]
-
-/-- Decorrelation holds trivially when `P_K = id` (the full space),
-since `P_K⊥ = 0`. -/
-theorem IsDecorrelated.of_pK_id
-    (ObsA ObsB : Set (E →ₗ[ℂ] E)) :
-    IsDecorrelated (LinearMap.id : E →ₗ[ℂ] E) ObsA ObsB := by
-  intro O_A _ O_B _
-  ext x
-  simp only [LinearMap.comp_apply, LinearMap.id_apply,
-    LinearMap.zero_apply, sub_self, map_zero]
-
-/-- Restricting both observable sets simultaneously preserves
-decorrelation. -/
-theorem IsDecorrelated.mono {P_K : E →ₗ[ℂ] E}
-    {ObsA ObsA' ObsB ObsB' : Set (E →ₗ[ℂ] E)}
-    (h : IsDecorrelated P_K ObsA' ObsB')
-    (hA : ObsA ⊆ ObsA') (hB : ObsB ⊆ ObsB') :
-    IsDecorrelated P_K ObsA ObsB :=
-  (h.mono_obsA hA).mono_obsB hB
-
-/-- Decorrelation for observable singletons: it suffices to check
-`P_K ∘ O_A ∘ P_K⊥ ∘ O_B ∘ P_K = 0` for a single pair. -/
-theorem IsDecorrelated.singleton {P_K O_A O_B : E →ₗ[ℂ] E}
-    (h : P_K ∘ₗ O_A ∘ₗ (LinearMap.id - P_K) ∘ₗ O_B ∘ₗ P_K = 0) :
-    IsDecorrelated P_K {O_A} {O_B} := by
-  intro O_A' hA O_B' hB
-  rw [Set.mem_singleton_iff.mp hA, Set.mem_singleton_iff.mp hB]
-  exact h
-
-end Decorrelation
-
-end IsDecorrelatedProperties

@@ -323,52 +323,5 @@ noncomputable def normalSquareEdgeBlockingHypotheses_of_interiorData
   NormalEdgeBlockingHypotheses.ofBlockingData fun e =>
     (data e).blockingDatum h hUnion
 
-/-- The cover-free every-edge hypotheses give the three injective regions at
-every edge.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem normalSquareEdgeBlockingHypotheses_of_interiorData_injective_chain
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (data :
-      ∀ e : Edge (squareLatticeGraph width height),
-        NormalSquareInteriorEdgeDatum e)
-    (e : Edge (squareLatticeGraph width height)) :
-    κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_interiorData
-        h hUnion data).red e) ∧
-      κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_interiorData
-        h hUnion data).blue e) ∧
-      κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_interiorData
-        h hUnion data).complement e) :=
-  (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).injective_chain_at_edge e
-
-/-- The cover-free every-edge hypotheses record endpoint membership, pairwise
-disjointness, and coverage at every edge.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem normalSquareEdgeBlockingHypotheses_of_interiorData_endpoint_disjoint_cover
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (data :
-      ∀ e : Edge (squareLatticeGraph width height),
-        NormalSquareInteriorEdgeDatum e)
-    (e : Edge (squareLatticeGraph width height)) :
-    e.1.1 ∈ (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e ∧
-      e.1.2 ∈ (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e ∧
-      Disjoint ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e)
-        ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e) ∧
-      Disjoint ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e)
-        ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).complement e) ∧
-      Disjoint ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e)
-        ((normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).complement e) ∧
-      (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).red e ∪
-          (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).blue e ∪
-            (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).complement e =
-        (Finset.univ : Finset (SquareLatticeVertex width height)) :=
-  (normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).endpoint_disjoint_cover_at_edge
-    e
-
 end PEPS
 end TNLean

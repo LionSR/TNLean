@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Transfer
-import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.TransferOperatorGapInjective
 import QICLean.QPF.Assembly
 
 import Mathlib.Analysis.SpecialFunctions.Log.Basic

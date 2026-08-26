@@ -79,12 +79,6 @@ lemma cornerProd_cons (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
     (u : Fin m) (i : Fin d) (w : List (Fin d)) :
     cornerProd P A u (i :: w) = P u * A i * cornerProd P A (u + 1) w := rfl
 
-/-- A single-letter corner product is the corner-transition tensor `A_u^i`. -/
-lemma cornerProd_single (P : Fin m → MatrixAlg D) (A : MPSTensor d D)
-    (u : Fin m) (i : Fin d) :
-    cornerProd P A u [i] = cornerLetter P A u i := by
-  simp [cornerProd, cornerLetter]
-
 /-- The corner product is fixed on the left by its starting projector:
 `P u * F_u = F_u` (projector idempotency, applied to either the head letter or
 the empty-word projector). -/

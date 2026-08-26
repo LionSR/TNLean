@@ -7,7 +7,7 @@ import TNLean.MPS.Symmetry.Defs
 import QICLean.Kraus.Transfer
 import QICLean.Channel.KrausFreedom
 import QICLean.Channel.KrausRepresentation
-import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.TransferOperatorGapInjective
 import Mathlib.Analysis.Matrix.Order
 
 /-!

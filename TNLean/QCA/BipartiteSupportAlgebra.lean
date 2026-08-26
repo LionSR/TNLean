@@ -5,9 +5,10 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Star.Subalgebra
 import Mathlib.LinearAlgebra.Basis.VectorSpace
+import Mathlib.LinearAlgebra.Dimension.Free
 import QICLean.Algebra.MatrixKroneckerEmbed
 import QICLean.Algebra.OperatorBlock
-import QICLean.Channel.OperatorSystem
+import QICLean.Channel.TensorMap
 
 /-!
 # Bipartite support algebras
@@ -54,6 +55,8 @@ dimensions, constructing Margolus gates, or comparing the GNVW and MPU indices.
   `Matrix.eq_sum_single_kronecker_right_coefficient` reconstruct a bipartite matrix.
 * `Matrix.left_support_algebra_le_iff` and `Matrix.right_support_algebra_le_iff` give leastness.
 * `Matrix.mem_kroneckerSubmodule_iff` characterizes the two-factor tensor span by coefficients.
+* `Matrix.left_support_algebra_le_iff_le_kronecker_submodule` and
+  `Matrix.right_support_algebra_le_iff_le_kronecker_submodule` give the one-sided containments.
 * `Matrix.le_support_kroneckerSubmodule` proves the literal two-sided support containment.
 * `Matrix.left_kronecker_embed_mem_centralizer_iff` and
   `Matrix.right_kronecker_embed_mem_centralizer_iff` give the two commutant characterizations.
@@ -210,24 +213,6 @@ theorem right_support_algebra_le_iff
   · rintro h b ⟨X, hX, i, j, rfl⟩
     exact h hX i j
 
-/-- The `Matrix.tensorSubmodule` formulation of left-support leastness.
-
-For finite matrix factors, containment in $B \otimes M_n(\mathbb C)$ is exactly containment of all
-left coefficients in $B$. This is GNVW Lemma `lem:spp`, arXiv:0910.3675v2,
-lines 1181--1191.
--/
-theorem left_support_algebra_le_iff_le_tensor_submodule {p q : ℕ}
-    (A : StarSubalgebra ℂ (Matrix (Fin p × Fin q) (Fin p × Fin q) ℂ))
-    (B : StarSubalgebra ℂ (Matrix (Fin p) (Fin p) ℂ)) :
-    leftSupportAlgebra A ≤ B ↔ A.toSubmodule ≤ Matrix.tensorSubmodule B.toSubmodule q := by
-  rw [left_support_algebra_le_iff]
-  constructor
-  · intro h X hX
-    rw [Matrix.mem_tensorSubmodule_iff]
-    exact h hX
-  · intro h X hX
-    exact Matrix.mem_tensorSubmodule_iff.mp (h hX)
-
 /-- The linear span of Kronecker products whose two factors belong to prescribed matrix
 submodules.
 
@@ -346,25 +331,28 @@ theorem mem_kroneckerSubmodule_iff [Finite n]
     exact Submodule.sum_mem _ fun k _ ↦
       Submodule.apply_mem_map₂ Matrix.kroneckerBilinear (hA k) (b k).property
 
-/-- The Kronecker span with an unrestricted right factor is the existing one-sided
-`Matrix.tensorSubmodule`.
+/-- Left-support leastness is equivalently containment in the left-oriented Kronecker
+span $B \otimes M_n(\mathbb C)$.
 
-Thus allowing every matrix in the right factor recovers the one-sided tensor submodule. This is
-the first-factor containment in GNVW Lemma `lem:spp`, arXiv:0910.3675v2,
-lines 1181--1191. -/
-theorem kroneckerSubmodule_top_eq_tensorSubmodule {p q : ℕ}
-    (S : Submodule ℂ (Matrix (Fin p) (Fin p) ℂ)) :
-    kroneckerSubmodule S ⊤ = Matrix.tensorSubmodule S q := by
-  ext X
-  rw [mem_kroneckerSubmodule_iff, Matrix.mem_tensorSubmodule_iff]
-  simp
+This is the one-sided containment of GNVW Lemma `lem:spp`, arXiv:0910.3675v2,
+lines 1181--1191.
+-/
+theorem left_support_algebra_le_iff_le_kronecker_submodule
+    (A : StarSubalgebra ℂ (Matrix (m × n) (m × n) ℂ))
+    (B : StarSubalgebra ℂ (Matrix m m ℂ)) :
+    leftSupportAlgebra A ≤ B ↔ A.toSubmodule ≤ kroneckerSubmodule B.toSubmodule ⊤ := by
+  rw [left_support_algebra_le_iff]
+  constructor
+  · intro h X hX
+    rw [mem_kroneckerSubmodule_iff]
+    exact ⟨h hX, fun p q ↦ Submodule.mem_top⟩
+  · intro h X hX
+    exact ((mem_kroneckerSubmodule_iff _ _ _).mp (h hX)).1
 
 /-- Right-support leastness is equivalently containment in the right-oriented Kronecker
 span $M_m(\mathbb C) \otimes B$.
 
-This is the symmetric one-sided containment of GNVW, arXiv:0910.3675v2, lines 1211--1219,
-and uses the same Kronecker span whose left-oriented specialization is
-`Matrix.tensorSubmodule`.
+This is the symmetric one-sided containment of GNVW, arXiv:0910.3675v2, lines 1211--1219.
 -/
 theorem right_support_algebra_le_iff_le_kronecker_submodule
     (A : StarSubalgebra ℂ (Matrix (m × n) (m × n) ℂ))

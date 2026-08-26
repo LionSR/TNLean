@@ -40,9 +40,7 @@ Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -
 def flatBlockInclusion
     (P : SectorDecomposition d) (s : Fin P.totalCopies) :
     Matrix (Fin P.totalDim) (Fin (P.flatDim s)) ℂ :=
-  Matrix.reindex finSigmaFinEquiv (Equiv.refl _)
-    (Matrix.sigmaBlockInclusion
-      (fun t : Fin P.totalCopies ↦ Fin (P.flatDim t)) s)
+  blockInclusion P.flatDim s
 
 /-- The canonical inclusion of a flattened sector block is an isometry.
 
@@ -50,19 +48,8 @@ Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -
 @[simp]
 theorem flatBlockInclusion_isometry
     (P : SectorDecomposition d) (s : Fin P.totalCopies) :
-    (P.flatBlockInclusion s)ᴴ * P.flatBlockInclusion s = 1 := by
-  let dim := fun t : Fin P.totalCopies ↦ Fin (P.flatDim t)
-  let e : ((t : Fin P.totalCopies) × dim t) ≃ Fin P.totalDim :=
-    finSigmaFinEquiv
-  let E := Matrix.sigmaBlockInclusion dim s
-  change (Matrix.reindex e (Equiv.refl _) E)ᴴ *
-      Matrix.reindex e (Equiv.refl _) E = 1
-  rw [Matrix.conjTranspose_reindex]
-  change Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) e Eᴴ *
-      Matrix.reindexLinearEquiv ℂ ℂ e (Equiv.refl _) E = 1
-  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _) e (Equiv.refl _),
-    Matrix.sigmaBlockInclusion_isometry,
-    Matrix.reindexLinearEquiv_one]
+    (P.flatBlockInclusion s)ᴴ * P.flatBlockInclusion s = 1 :=
+  blockInclusion_conjTranspose_mul_self P.flatDim s
 
 /-- The range projection of a flattened block inclusion is the reindexed
 projection onto that block.
@@ -98,22 +85,8 @@ Source: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines 195--219. -
 theorem toTensor_mul_flatBlockInclusion
     (P : SectorDecomposition d) (s : Fin P.totalCopies) (i : Fin d) :
     P.toTensor i * P.flatBlockInclusion s =
-      P.flatBlockInclusion s * (P.flatWeight s • P.flatBasis s i) := by
-  let dim := fun t : Fin P.totalCopies ↦ Fin (P.flatDim t)
-  let e : ((t : Fin P.totalCopies) × dim t) ≃ Fin P.totalDim :=
-    finSigmaFinEquiv
-  let E := Matrix.sigmaBlockInclusion dim s
-  let B := fun t : Fin P.totalCopies ↦ P.flatWeight t • P.flatBasis t i
-  change Matrix.reindex e e (Matrix.blockDiagonal' B) *
-      Matrix.reindex e (Equiv.refl _) E =
-        Matrix.reindex e (Equiv.refl _) E * B s
-  change Matrix.reindexLinearEquiv ℂ ℂ e e (Matrix.blockDiagonal' B) *
-      Matrix.reindexLinearEquiv ℂ ℂ e (Equiv.refl _) E =
-        Matrix.reindexLinearEquiv ℂ ℂ e (Equiv.refl _) E *
-          Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) (Equiv.refl _) (B s)
-  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ e e (Equiv.refl _),
-    Matrix.reindexLinearEquiv_mul ℂ ℂ e (Equiv.refl _) (Equiv.refl _),
-    Matrix.blockDiagonal'_mul_sigmaBlockInclusion]
+      P.flatBlockInclusion s * (P.flatWeight s • P.flatBasis s i) :=
+  toTensorFromBlocks_mul_blockInclusion (d := d) P.flatWeight P.flatBasis s i
 
 /-- The adjoint flattened block inclusion intertwines the ambient tensor with
 the weighted selected block on the left.

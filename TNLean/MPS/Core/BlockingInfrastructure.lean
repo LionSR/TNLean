@@ -288,15 +288,6 @@ theorem blockWeights_ne_zero
   intro k
   exact pow_ne_zero p (hμ k)
 
-/-- Replicating a block weight over cyclic sectors preserves nonvanishing after
-any family of blocking powers. -/
-theorem replicatedWeights_pow_ne_zero
-    {m : Fin r → ℕ}
-    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (p : Fin r → ℕ) :
-    ∀ x : Σ k : Fin r, Fin (m k), (μ x.1) ^ (p x.1) ≠ 0 := by
-  intro x
-  exact pow_ne_zero (p x.1) (hμ x.1)
-
 end WeightTransport
 
 /-!
@@ -461,22 +452,6 @@ noncomputable def directIteratedBlockEquiv (d m n : ℕ) :
 @[simp] theorem directIteratedBlockEquiv_symm_apply (d m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
     (directIteratedBlockEquiv d m n).symm i = iteratedBlockIndex d m n i := rfl
-
-/-- An iterated blocked index `j` is the grouping of a direct blocked index `i`
-exactly when flattening `j` recovers `i`. -/
-theorem eq_directToIteratedBlockIndex_iff_iteratedBlockIndex_eq (d m n : ℕ)
-    (i : Fin (blockPhysDim d (m * n)))
-    (j : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    j = directToIteratedBlockIndex d m n i ↔ iteratedBlockIndex d m n j = i := by
-  constructor
-  · intro h
-    rw [h, iteratedBlockIndex_directToIteratedBlockIndex]
-  · intro h
-    calc
-      j = directToIteratedBlockIndex d m n (iteratedBlockIndex d m n j) :=
-        (directToIteratedBlockIndex_iteratedBlockIndex d m n j).symm
-      _ = directToIteratedBlockIndex d m n i := by
-        rw [h]
 
 /-- Rewriting the blocking length does not change the decoded blocked word. -/
 theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)

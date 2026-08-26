@@ -150,7 +150,7 @@ This section covers the canonical-form reduction step
 
 Concretely, if $\rho \succeq 0$ satisfies $E_A(\rho)=\rho$, then the support
 projection $P := \mathrm{supp}(\rho)$ is invariant under the Kraus operators `(A i)`, i.e.
-`(1 - P) * A i * P = 0`. Applying `exists_twoBlock_decomp_of_lowerZero`, we obtain an
+`(1 - P) * A i * P = 0`. Applying `exists_twoBlock_decomp_of_lowerZero_strict`, we obtain an
 explicit two-block block-diagonal tensor which is MPV-equivalent to `A`.
 
 References:
@@ -161,29 +161,6 @@ References:
   lines 201–217 for the corresponding
   invariant-subspace block splitting in the canonical-form construction.
 -/
-
-/-- If `ρ` is a PSD fixed point of the transfer map, then `A` is MPV-equivalent to a
-2-block block-diagonal tensor.
-
-This is just the composition
-`Kraus.lowerZero_of_posSemidef_fixedPoint` + `exists_twoBlock_decomp_of_lowerZero`.
--/
-theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint
-    (A : MPSTensor d D)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
-    ∃ (n m : ℕ) (_ : n + m = D)
-      (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
-      SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
-  classical
-  let P : Matrix (Fin D) (Fin D) ℂ := hρ_psd.supportProj
-  have hρ_fix' : Kraus.map A ρ = ρ := by
-    simpa [Kraus.map, Kraus.transferMap_apply] using hρ_fix
-  have hP : IsOrthogonalProjection P ∧ (∀ i : Fin d, (1 - P) * A i * P = 0) := by
-    simpa [P, Kraus.stationaryProj] using
-      (Kraus.lowerZero_of_posSemidef_fixedPoint A ρ hρ_psd hρ_fix')
-  exact exists_twoBlock_decomp_of_lowerZero (d := d) (D := D) A P hP.1 hP.2
 
 /-- **Strict dimension decrease**: If `ρ` is a PSD fixed point of the transfer map,
 `ρ ≠ 0`, and `ρ` is not positive definite, then `A` is MPV-equivalent to a

@@ -116,22 +116,9 @@ algebra and therefore never produces the missing off-diagonal matrix units. -/
 private theorem diagBlock_diagonalRestrictionUnits_not_isNormal :
     ¬ Kraus.IsNormal (diagBlock diagonalRestrictionUnits) := by
   rintro ⟨N, _hNpos, hN⟩
-  have hmem : Matrix.single 0 1 (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        Kraus.evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)) :=
-    hN.span_eq_top ▸ Submodule.mem_top
-  suffices hzero : ∀ M ∈
-      Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        Kraus.evalWord (diagBlock diagonalRestrictionUnits) (List.ofFn σ)), M 0 1 = 0 by
-    exact absurd (hzero _ hmem) one_ne_zero
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem M hM =>
-      obtain ⟨σ, rfl⟩ := hM
-      exact evalWord_diagBlock_diagonalRestrictionUnits_zero_one (List.ofFn σ)
-  | zero => simp
-  | add M K _ _ hM hK => simp [hM, hK]
-  | smul c M _ hM => simp [hM]
+  exact Kraus.not_isNBlkInjective_of_linearMap (Matrix.entryLinearMap ℂ ℂ 0 1)
+    (fun σ => evalWord_diagBlock_diagonalRestrictionUnits_zero_one (List.ofFn σ))
+    (Matrix.single 0 1 (1 : ℂ)) (by simp [Matrix.single]) hN
 
 /-- The single-block bond-dimension family used in the horizontal canonical form. -/
 private abbrev diagonalRestrictionDim : Fin 1 → ℕ := fun _ => 2

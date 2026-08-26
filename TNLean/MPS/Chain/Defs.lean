@@ -142,6 +142,3 @@ theorem instEquivalenceGaugeEquiv : Equivalence (GaugeEquiv (d := d) (D := D) (n
   trans := GaugeEquiv.trans
 
 end MPSChainTensor
-
-/-- Alias for chainwise injectivity. -/
-abbrev IsInjectiveChain := @MPSChainTensor.IsInjective

@@ -58,16 +58,6 @@ def tensorPhysicalId (U : MPOTensor d D) (x : ℕ) : MPOTensor (d * x) D :=
       U i j β α * if a = b then 1 else 0 := by
   by_cases h : a = b <;> simp [tensorPhysicalId, h]
 
-/-- Each fixed-virtual physical slice is the Kronecker product with the ancilla
-identity, reindexed from pairs to the standard `Fin (d * x)` product encoding. -/
-theorem physicalSlice_tensorPhysicalId (U : MPOTensor d D) (x : ℕ) (β α : Fin D) :
-    physicalSlice (tensorPhysicalId U x) β α =
-      Matrix.reindex finProdFinEquiv finProdFinEquiv
-        (physicalSlice U β α ⊗ₖ (1 : Matrix (Fin x) (Fin x) ℂ)) := by
-  ext ia jb
-  by_cases h : ia.modNat = jb.modNat <;>
-    simp [physicalSlice, tensorPhysicalId, Matrix.reindex_apply, h]
-
 /-- Split a sitewise enlarged physical configuration into its original and
 ancilla configurations. -/
 def physicalAncillaConfigEquiv (N d x : ℕ) :

@@ -697,33 +697,4 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
   rw [hl]
   exact (prod_etaEdgePartialProduct_singletons_univ dl dr η k).symm
 
-/-- The length-two specialization of cyclic transport.  The two translated windows are
-\((0,1)\) and \((1,0)\), and hence contribute the two oriented edge factors
-\(\eta_{k_0,k_1}\) and \(\eta_{k_1,k_0}\).
-
-Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1605.
-Documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem reindex_product_embedLocalOperator_two_of_etaPair_decomposition
-    {K : ℕ} (dl dr : Fin K → ℕ)
-    (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
-    (η : (q h : Fin K) →
-      Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
-    (B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (hB : Matrix.reindex (Matrix.etaPairSpatialBlockEquiv e).symm
-        (Matrix.etaPairSpatialBlockEquiv e).symm B =
-      Matrix.blockDiagonal' fun qh : Fin K × Fin K ↦
-        ((1 : Matrix (Fin (dl qh.1)) (Fin (dl qh.1)) ℂ) ⊗ₖ
-          η qh.1 qh.2) ⊗ₖ
-            (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ)) :
-    Matrix.reindex (Matrix.etaCyclicEdgeEquiv (N := 2) dl dr e)
-        (Matrix.etaCyclicEdgeEquiv (N := 2) dl dr e)
-        (List.ofFn fun i : Fin 2 ↦
-          embedLocalOperator (d := d) 2 2 (by omega) i
-            (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
-              (finTwoArrowEquiv (Fin d)).symm B)).prod =
-      Matrix.blockDiagonal' fun k : Fin 2 → Fin K ↦
-        fun x y ↦ ∏ n : Fin 2, η (k n) (k (n + 1)) (x n) (y n) := by
-  exact reindex_product_embedLocalOperator_of_etaPair_decomposition
-    (N := 2) (by omega) dl dr e η B hB
-
 end MPOTensor

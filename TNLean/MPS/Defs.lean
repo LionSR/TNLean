@@ -8,6 +8,7 @@ import Mathlib.Data.List.OfFn
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Order.Filter.AtTopBot.Basic
+import QICLean.Algebra.MatrixKernelRigidity
 import QICLean.Kraus.Word
 import QICLean.Kraus.Injectivity
 
@@ -291,75 +292,41 @@ theorem isInjective_of_gaugeEquiv {A B : MPSTensor d D}
     (hA : Kraus.IsInjective A) (hGauge : GaugeEquiv A B) :
     Kraus.IsInjective B := by
   obtain ⟨X, hX⟩ := hGauge
-  rw [Kraus.IsInjective, eq_top_iff]
-  intro M _
-  have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
-      Submodule.span ℂ (Set.range A) := hA ▸ Submodule.mem_top
-  have hConj : ∀ N ∈ Submodule.span ℂ (Set.range A),
-      (X : Matrix _ _ ℂ) * N * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ∈
-        Submodule.span ℂ (Set.range B) := by
-    intro N hN
-    induction hN using Submodule.span_induction with
-    | mem x hx =>
-      obtain ⟨i, rfl⟩ := hx
-      rw [← hX i]
-      exact Submodule.subset_span (Set.mem_range_self i)
-    | zero => simp
-    | add x y _ _ hx hy =>
-      simp only [Matrix.mul_add, Matrix.add_mul]
-      exact Submodule.add_mem _ hx hy
-    | smul c x _ hx =>
-      have : (X : Matrix _ _ ℂ) * (c • x) * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) =
-          c • ((X : Matrix _ _ ℂ) * x * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) := by
-        simp [Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
-      rw [this]
-      exact Submodule.smul_mem _ c hx
-  have key := hConj _ hM'
-  have : (X : Matrix _ _ ℂ) *
-      (((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ)) *
-      ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = M := by
-    simp [Matrix.mul_assoc]
-  rwa [this] at key
+  have hXdet : IsUnit ((X : Matrix (Fin D) (Fin D) ℂ).det) :=
+    Ne.isUnit (Matrix.GeneralLinearGroup.det_ne_zero X)
+  have hgen :
+      (fun i => (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))⁻¹ * A i *
+        ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) = B := by
+    funext i
+    rw [Matrix.GeneralLinearGroup.coe_inv,
+      Matrix.nonsing_inv_nonsing_inv (X : Matrix (Fin D) (Fin D) ℂ) hXdet, hX i,
+      Matrix.GeneralLinearGroup.coe_inv]
+  rw [Kraus.IsInjective, ← hgen]
+  exact Matrix.span_range_gauge_eq_top A hA.span_eq_top
+    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+    (Matrix.GeneralLinearGroup.det_ne_zero (X⁻¹ : GL (Fin D) ℂ))
 
 /-- Gauge equivalence preserves injectivity after any fixed blocking length. -/
 theorem isNBlkInjective_of_gaugeEquiv {A B : MPSTensor d D} {N : ℕ}
     (hA : Kraus.IsNBlkInjective A N) (hGauge : GaugeEquiv A B) :
     Kraus.IsNBlkInjective B N := by
   obtain ⟨X, hX⟩ := hGauge
-  rw [Kraus.IsNBlkInjective, eq_top_iff]
-  intro M _
-  have hA' : Submodule.span ℂ
-      (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤ := by
-    exact hA.span_eq_top
-  have hM' : ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ) ∈
-      Submodule.span ℂ
-        (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)) :=
-    hA' ▸ Submodule.mem_top
-  have hConj : ∀ Y ∈ Submodule.span ℂ
-      (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)),
-      (X : Matrix _ _ ℂ) * Y *
-          ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ∈
-        Submodule.span ℂ
-          (Set.range fun σ : Fin N → Fin d => Kraus.evalWord B (List.ofFn σ)) := by
-    intro Y hY
-    induction hY using Submodule.span_induction with
-    | mem y hy =>
-      obtain ⟨σ, rfl⟩ := hy
-      rw [← evalWord_gauge X hX]
-      exact Submodule.subset_span (Set.mem_range_self σ)
-    | zero => simp
-    | add x y _ _ hx hy =>
-      simp only [Matrix.mul_add, Matrix.add_mul]
-      exact Submodule.add_mem _ hx hy
-    | smul c y _ hy =>
-      rw [Matrix.mul_smul, Matrix.smul_mul]
-      exact Submodule.smul_mem _ c hy
-  have key := hConj _ hM'
-  have hrecover : (X : Matrix _ _ ℂ) *
-      (((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) * M * (X : Matrix _ _ ℂ)) *
-      ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = M := by
-    simp [Matrix.mul_assoc]
-  rwa [hrecover] at key
+  have hXdet : IsUnit ((X : Matrix (Fin D) (Fin D) ℂ).det) :=
+    Ne.isUnit (Matrix.GeneralLinearGroup.det_ne_zero X)
+  have hgen :
+      (fun σ : Fin N → Fin d =>
+          (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))⁻¹ *
+            Kraus.evalWord A (List.ofFn σ) *
+            ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) =
+        fun σ : Fin N → Fin d => Kraus.evalWord B (List.ofFn σ) := by
+    funext σ
+    rw [evalWord_gauge X hX (List.ofFn σ), Matrix.GeneralLinearGroup.coe_inv,
+      Matrix.nonsing_inv_nonsing_inv (X : Matrix (Fin D) (Fin D) ℂ) hXdet]
+  simp only [Kraus.IsNBlkInjective, Kraus.wordSpan]
+  rw [← hgen]
+  exact Matrix.span_range_gauge_eq_top _ hA.span_eq_top
+    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+    (Matrix.GeneralLinearGroup.det_ne_zero (X⁻¹ : GL (Fin D) ℂ))
 
 /-- Gauge equivalence preserves eventual block injectivity. -/
 theorem isNormal_of_gaugeEquiv {A B : MPSTensor d D}
@@ -408,3 +375,47 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
   simpa using gaugePhaseEquiv_of_gaugeEquiv_left_right hAA' hA'B' hBB'
 
 end MPSTensor
+
+/-! ### Channel-generic non-injectivity criteria
+
+The two theorems below quantify over a finite Kraus family and a linear
+functional, with no matrix-product-state content. They therefore belong to the
+channel-generic Kraus layer, beside the word-span and injectivity API of the
+QICLean companion library, rather than to this matrix-product-state module. -/
+
+namespace Kraus
+
+variable {d D : ℕ}
+
+/-- A finite Kraus family is not injective as soon as some linear functional
+annihilates every one of its matrices while not annihilating some matrix. -/
+theorem not_isInjective_of_linearMap
+    {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ) (hA : ∀ i, φ (A i) = 0)
+    (M : Matrix (Fin D) (Fin D) ℂ) (hM : φ M ≠ 0) :
+    ¬ Kraus.IsInjective A := by
+  intro h
+  have hmem : M ∈ Submodule.span ℂ (Set.range A) := h.span_eq_top ▸ Submodule.mem_top
+  have hle : Submodule.span ℂ (Set.range A) ≤ LinearMap.ker φ :=
+    Submodule.span_le.2 (Set.range_subset_iff.2 fun i => LinearMap.mem_ker.2 (hA i))
+  exact hM (LinearMap.mem_ker.1 (hle hmem))
+
+/-- A finite Kraus family is not `N`-block injective as soon as some linear
+functional annihilates every length-`N` word while not annihilating some matrix. -/
+theorem not_isNBlkInjective_of_linearMap
+    {A : Fin d → Matrix (Fin D) (Fin D) ℂ} {N : ℕ}
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
+    (hA : ∀ σ : Fin N → Fin d, φ (Kraus.evalWord A (List.ofFn σ)) = 0)
+    (M : Matrix (Fin D) (Fin D) ℂ) (hM : φ M ≠ 0) :
+    ¬ Kraus.IsNBlkInjective A N := by
+  intro h
+  have hmem : M ∈ Submodule.span ℂ
+      (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)) :=
+    h.span_eq_top ▸ Submodule.mem_top
+  have hle : Submodule.span ℂ
+      (Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)) ≤
+      LinearMap.ker φ :=
+    Submodule.span_le.2 (Set.range_subset_iff.2 fun σ => LinearMap.mem_ker.2 (hA σ))
+  exact hM (LinearMap.mem_ker.1 (hle hmem))
+
+end Kraus

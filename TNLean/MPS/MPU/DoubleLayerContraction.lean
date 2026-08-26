@@ -254,6 +254,23 @@ noncomputable def residualSlice (W : MPOTensor d D)
   simp [residualSlice, normalizedDiagonal, Matrix.trace_one, Fintype.card_fin,
     NeZero.ne d]
 
+/-- Every double-layer-style MPO letter splits into its normalized-diagonal
+identity term and the residual slice against the dual physical matrix
+`Matrix.single j i 1`.
+
+Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
+theorem entry_eq_diagonal_add_residual
+    (W : MPOTensor d D) (i j : Fin d) :
+    W i j = (if i = j then (1 : ℂ) else 0) • normalizedDiagonal W +
+      residualSlice W (Matrix.single j i 1) := by
+  rw [residualSlice, contractPhysical_single]
+  by_cases hij : i = j
+  · subst j
+    rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
+    simp
+  · rw [ite_eq_right hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
+    simp
+
 /-- Residual slices are exactly contractions against traceless physical matrices. -/
 theorem residualSlice_eq_contractPhysical_tracelessPart [NeZero d]
     (W : MPOTensor d D) (X : Matrix (Fin d) (Fin d) ℂ) :

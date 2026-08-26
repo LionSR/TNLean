@@ -25,7 +25,7 @@ This file records the linearity of the corner extension in its insert and that k
 reduction.  The corner extension `extendInsert hRS` and its bare companion `bareExtendInsert
 hRS` contract the insert against a fixed blue-coupling coefficient, so each is *additive* in
 the insert (on top of the homogeneity `extendInsert_const_smul` of
-`TNLean/PEPS/TorusWindowChain3.lean`); subtracting the two extensions of equal-extension
+`TNLean/PEPS/TorusWindowChain4.lean`); subtracting the two extensions of equal-extension
 inserts reduces the cancellation to the kernel of the corner extension.
 
 The fiber-gluing engine the cancellation needs — that the corner extension's kernel is

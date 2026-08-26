@@ -34,59 +34,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- The normalized BNT block-separation hypotheses imply that the periodic chain
-space of a block-diagonal tensor lies in the linear sum of the block local
-spaces.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j,\qquad S_M=\bigvee_jG_M(A_j).
-\]
-Assume the normalized BNT block-separation hypotheses give the one-step
-recursion from arXiv:quant-ph/0608197 in the range
-\[
-  M>L_0+(r-1)(L_0+(L_0+L_0)).
-\]
-Then, for every \(N\ge L\) in that range,
-\[
-  \mathcal G_{N,L}(B)\subseteq S_N.
-\]
-This is the inclusion into \(S_N\) in Theorem 12 of
-arXiv:quant-ph/0608197 (proof lines 1430--1456). The step that closes the
-boundaries with block-diagonal boundary conditions, replacing \(S_N\) by the sum
-of periodic block ground spaces, is separate. -/
-theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hμ : ∀ k : Fin r, μ k ≠ 0)
-    {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL₀ : 1 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
-    (hRange : L₀ + (r - 1) * (L₀ + (L₀ + L₀)) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
-      ⨆ j : Fin r, groundSpace (A j) N := by
-  classical
-  apply chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace
-    (μ := μ) (A := A) hμ hN hL hLN
-  intro M hM
-  have hMpos : 0 < M := lt_of_lt_of_le hL hM
-  have hbound : L₀ + (r - 1) * (L₀ + (L₀ + L₀)) ≤ M - 1 := by
-    omega
-  have hstep :=
-    pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital
-      (d := d) (L := L₀) A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀
-      hUnital (n := M - 1) hbound
-  have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
-  rw [← hM1]
-  simpa [Nat.add_assoc] using hstep
-
 /-- Finite-length block injectivity gives the inclusion into the sum of local
 block ground spaces: \(\mathcal G_{N,L}(B)\subseteq\bigvee_j G_N(A_j)\). Assumes
 each block is injective at \(L_0>0\), the blocks are separated normalized BNT
@@ -167,45 +114,6 @@ theorem
   have hM1 : M - 1 + 1 = M := Nat.sub_add_cancel (Nat.succ_le_iff.mpr hMpos)
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
-
-/-- The normalized BNT block-separation hypotheses give the periodic-boundary
-inclusion into \(S_N\), and \(S_N\) is a direct sum of local block spaces.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j,\qquad S_N=\bigvee_jG_N(A_j).
-\]
-At the lengths used in Theorem 12 of arXiv:quant-ph/0608197
-(arXiv:quant-ph/0608197, proof lines 1430--1456), one has
-\[
-  \mathcal G_{N,L}(B)\subseteq S_N,
-\]
-and the summands \(G_N(A_j)\) form an internal direct sum. This does not assert
-the separate step closing the boundaries with block-diagonal boundary
-conditions. -/
-theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hμ : ∀ k : Fin r, μ k ≠ 0)
-    {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL₀ : 1 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
-    (hRange : L₀ + (r - 1) * (L₀ + (L₀ + L₀)) + 1 ≤ L) :
-    chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
-        ⨆ j : Fin r, groundSpace (A j) N ∧
-      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
-  refine ⟨?_, ?_⟩
-  · exact chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital
-      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
-  · exact groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital
-      A hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital (by omega)
 
 /-- Finite-length block injectivity gives the open-boundary inclusion into
 \(S_N\), and \(S_N\) is an internal direct sum of local block ground spaces.
@@ -365,50 +273,6 @@ theorem
       μ A hr hμ hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hN hL hLN hRange hψ
   exact BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace
     μ A hμ hOpen
-
-/-- For normalized BNT blocks, the block-diagonal periodic chain space satisfies
-two inclusions.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j.
-\]
-Under the normalized BNT block-separation hypotheses and in the proved length
-range,
-\[
-  \bigvee_j \mathcal G_{N,L}(A_j)
-  \subseteq
-  \mathcal G_{N,L}(B)
-  \subseteq
-  \bigvee_j G_N(A_j),
-\]
-and the right-hand local block sum is internal. The periodic-boundary comparison
-from arXiv:quant-ph/0608197, with block-diagonal boundary conditions,
-replaces \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\). -/
-theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hμ : ∀ k : Fin r, μ k ≠ 0)
-    {L₀ L N : ℕ}
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL₀ : 1 < L₀)
-    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
-    [NeZero d] (hN : 0 < N) (hL : 0 < L) (hLN : L ≤ N)
-    (hRange : L₀ + (r - 1) * (L₀ + (L₀ + L₀)) + 1 ≤ L) :
-    (⨆ j : Fin r, chainGroundSpace (A j) L N) ≤
-        chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ∧
-      chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N ≤
-        ⨆ j : Fin r, groundSpace (A j) N ∧
-      iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
-  refine ⟨?_, ?_⟩
-  · exact iSup_chainGroundSpace_block_le_toTensorFromBlocks μ A hμ hN hLN
-  · exact chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
-      μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
 
 /-- Finite-length block injectivity gives the two established inclusions:
 \(\bigvee_j\mathcal G_{N,L}(A_j)\subseteq\mathcal G_{N,L}(B)\subseteq\bigvee_j G_N(A_j)\),

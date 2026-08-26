@@ -23,24 +23,6 @@ noncomputable section
 
 namespace MPOTensor
 
-namespace VerticalCopyBlocks
-
-private theorem verticalAssembledTensor_apply_copy_ne
-    {g d : ℕ} (dim mult : Fin g → ℕ)
-    (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor d (dim α))
-    {α β : Fin g} {q : Fin (mult α)} {r : Fin (mult β)}
-    (h : (⟨α, q⟩ : (α : Fin g) × Fin (mult α)) ≠ ⟨β, r⟩)
-    (v : Fin d) (i : Fin (dim α)) (j : Fin (dim β)) :
-    verticalAssembledTensor dim mult weight B v
-        (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
-        (verticalSectorFinEquiv dim mult ⟨β, (r, j)⟩) = 0 := by
-  exact MPOTensor.verticalAssembledTensor_apply_copy_ne dim mult weight B h v i j
-
-end VerticalCopyBlocks
-
-open VerticalCopyBlocks
-
 /-- In retained-copy coordinates, the assembled vertical tensor is the
 block diagonal of its weighted simple blocks.
 

@@ -15,9 +15,8 @@ shape: every contiguous `L × K` region of the torus, one orientation only, with
 the sizes `n ≥ 2L + 1` and `m ≥ 2K + 1`.  This file is the geometry layer of
 that route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`:
 
-* the one-orientation window-injectivity hypotheses
-  (`NormalTorusWindowInjectivityHypotheses`), with a larger rectangle exhibited
-  as a sliding union of windows (`contiguousRectangle_eq_biUnion_window`);
+* a larger rectangle exhibited as a sliding union of contiguous `L × K`
+  windows (`contiguousRectangle_eq_biUnion_window`);
 * the staircase end pair of the overlapping-window chain around an edge: two
   diagonally offset `L × K` windows whose only joining lattice edge is the
   distinguished edge itself (`isCrossingEdge_horizontalStaircase`,
@@ -26,9 +25,6 @@ that route, scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`:
 The single-crossing geometry of the end pair is the reason the bond operator
 extracted by the window chain lives on one edge; it is consumed by the same
 single-boundary-edge comparison machinery as the landed three-block route.
-The hypotheses are stated for wraparound-free coordinate rectangles, matching
-the convention of `TNLean/PEPS/TorusRectangleRegion.lean`; for translation-
-invariant tensors the seam-wrapping windows follow by translation.
 
 ## References
 
@@ -42,24 +38,6 @@ namespace TNLean
 namespace PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
-
-/-! ### The one-orientation window-injectivity hypotheses -/
-
-/-- The one-orientation window-injectivity hypotheses on the discrete torus:
-every contiguous `L × K` coordinate rectangle is injective.  Unlike the
-two-orientation hypotheses of Theorem 3
-(`NormalTorusRectangleInjectivityHypotheses`), no transposed `K × L` shape is
-assumed; the overlapping-window route uses only this one shape.
-
-Source: arXiv:1804.04964, the corollary at lines 2297--2318 of
-`Papers/1804.04964/paper_normal.tex` ("every $L \times K$ region is
-injective"); scoped in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
-structure NormalTorusWindowInjectivityHypotheses (L K : ℕ)
-    (κ : RegionInjectivityData (TorusVertex width height)) where
-  /-- Every contiguous `L × K` coordinate rectangle is injective. -/
-  window_injective :
-    ∀ xStart yStart : ℕ, xStart + L ≤ width → yStart + K ≤ height →
-      κ.IsInjective (torusContiguousRectangle xStart yStart L K)
 
 /-! ### Sliding-window tiling injectivity -/
 

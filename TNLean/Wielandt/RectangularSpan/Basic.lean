@@ -13,12 +13,12 @@ import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
-# Rectangular Span Foundations: Lemma 2(b) (conditional and blocked fixed-length matrix spanning)
+# Rectangular Span Foundations: Lemma 2(b) (blocked fixed-length matrix spanning)
 
 This module contains the foundational rectangular-span theory used in the Wielandt
 bound: blocking preserves normality, blocked eigenvector transfer, the basic
-one-sided rectangular span, and the conditional and blocked fixed-length matrix
-spanning theorems for Lemma 2(b).
+one-sided rectangular span, and the blocked fixed-length matrix spanning theorem
+for Lemma 2(b).
 
 The later growth, stabilization, universality, and sharp quantitative theorems
 live in `TNLean.Wielandt.RectangularSpan.Growth` and
@@ -30,7 +30,6 @@ live in `TNLean.Wielandt.RectangularSpan.Growth` and
 - `blockTensor_single_eigenvector`
 - `encodeBlock`, `blockTensor_apply_encodeBlock`
 - `Kraus.rectSpan`
-- `wielandt_lemma2b_conditional`
 - `wielandt_blocked_assembly`
 -/
 
@@ -182,25 +181,7 @@ theorem blockTensor_transpose_encodeBlock (A : MPSTensor d D) (L : ℕ)
       (Kraus.evalWord A (List.ofFn σ₀))ᵀ := by
   rw [blockTensor_apply_encodeBlock]
 
-/-! ## Section 5: Conditional fixed-length matrix spanning compatibility name -/
-
-/-- **Lemma 2(b) conditional fixed-length matrix spanning.** -/
-theorem wielandt_lemma2b_conditional [NeZero D]
-    (A : MPSTensor d D)
-    (hNormal : Kraus.IsNormal (d := d) (D := D) A)
-    (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
-    (φ : Fin D → ℂ) (hφ : φ ≠ 0)
-    (heigφ : A i₀ *ᵥ φ = μ • φ)
-    (i₁ : Fin d) (ν : ℂ) (hν : ν ≠ 0)
-    (ψ : Fin D → ℂ) (hψ : ψ ≠ 0)
-    (heigψ : (A i₁)ᵀ *ᵥ ψ = ν • ψ)
-    {m : ℕ}
-    (hRankOne : Matrix.vecMulVec φ ψ ∈ Kraus.wordSpan A m) :
-    Kraus.wordSpan A ((D - 1) + (m + (D - 1))) = ⊤ :=
-  Kraus.wielandt_lemma2b_conditional
-    A hNormal i₀ μ hμ φ hφ heigφ i₁ ν hν ψ hψ heigψ hRankOne
-
-/-! ## Section 6: Blocked fixed-length matrix spanning -/
+/-! ## Section 5: Blocked fixed-length matrix spanning -/
 
 /-- **Fixed-length matrix spanning at the blocked level.**
 
@@ -242,7 +223,7 @@ theorem wielandt_blocked_assembly [NeZero D]
   have hNormalB : Kraus.IsNormal B := isNormal_blockTensor A L hL hNormal
   -- Apply the conditional fixed-length matrix spanning lemma to B
   have hBtop : Kraus.wordSpan B ((D - 1) + (m_blocked + (D - 1))) = ⊤ :=
-    wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ
+    Kraus.wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ
       heigψ_B hRankOne
   -- Transfer back to A
   exact wordSpan_eq_top_of_blockTensor_wordSpan_eq_top A L

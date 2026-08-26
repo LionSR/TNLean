@@ -85,21 +85,11 @@ theorem ghz_isTransferIdempotent : IsTransferIdempotent ghzTensor := ghz_transfe
 
 /-- The GHZ tensor is **not** injective: span({A⁰, A¹}) is the 2-dimensional space
 of diagonal matrices, not the full 4-dimensional matrix algebra. -/
-theorem ghz_not_isInjective : ¬ Kraus.IsInjective ghzTensor := by
-  intro h
+theorem ghz_not_isInjective : ¬ Kraus.IsInjective ghzTensor :=
   -- Every element of the span has zero off-diagonal entries.
-  suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range ghzTensor), M 0 1 = 0 by
-    have hmem : (Matrix.of fun _ _ : Fin 2 => (1 : ℂ)) ∈
-        Submodule.span ℂ (Set.range ghzTensor) := h ▸ Submodule.mem_top
-    exact absurd (hzero _ hmem) one_ne_zero
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨k, rfl⟩ := hx
-    simp [ghzTensor]
-  | zero => simp
-  | add x y _ _ hx hy => simp [hx, hy]
-  | smul c x _ hx => simp [hx]
+  Kraus.not_isInjective_of_linearMap (Matrix.entryLinearMap ℂ ℂ 0 1)
+    (fun k => by simp [ghzTensor])
+    (Matrix.of fun _ _ : Fin 2 => (1 : ℂ)) (by simp)
 
 /-! ### Z₂ on-site symmetry -/
 
@@ -124,9 +114,8 @@ private noncomputable def swapGL : GL (Fin 2) ℂ :=
 
 private lemma swapGL_inv_val :
     ((swapGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = pauliX := by
-  have hsq : swapGL * swapGL = 1 := by
-    apply Units.ext; simp only [Units.val_mul, Units.val_one, swapGL_val, pauliX_sq]
-  rw [show swapGL⁻¹ = swapGL from inv_eq_of_mul_eq_one_right hsq, swapGL_val]
+  rw [Matrix.GeneralLinearGroup.coe_inv, swapGL_val]
+  exact Matrix.inv_eq_right_inv pauliX_sq
 
 /-- The Z₂ twist at the generator swaps A⁰ ↔ A¹. -/
 private lemma ghz_twisted_generator_eq (i : Fin 2) :

@@ -36,22 +36,6 @@ def cyclicRotation (A : MPSChainTensor d D N) (k : Fin N) : MPSChainTensor d D N
 @[simp] theorem cyclicRotation_apply (A : MPSChainTensor d D N) (k j : Fin N) :
     cyclicRotation A k j = A (j + k) := rfl
 
-/-- Rotating by `k` sites is the `k`-fold iterate of the one-site cyclic shift. -/
-theorem cyclicRotation_eq_iterate_cyclicShift (A : MPSChainTensor d D N) (k : Fin N) :
-    cyclicRotation A k = (cyclicShift^[k.val]) A := by
-  have hiterate : ∀ (m : ℕ) (B : MPSChainTensor d D N) (j : Fin N),
-      (cyclicShift^[m]) B j = B ((finRotate N)^[m] j) := by
-    intro m
-    induction m with
-    | zero => simp
-    | succ m ih =>
-        intro B j
-        rw [Function.iterate_succ_apply, ih, cyclicShift, cyclicSucc,
-          Function.iterate_succ_apply']
-  ext j i a b
-  rw [hiterate, ← finCycle_eq_finRotate_iterate]
-  rfl
-
 /-- The permutation of block coordinates induced by cyclic successor. -/
 def cyclicBlockPerm : Equiv.Perm (Fin D × Fin N) :=
   Equiv.prodCongr (Equiv.refl (Fin D)) (finRotate N)

@@ -24,31 +24,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Vanishing on all word products implies zero -/
-
-/-- If \(X\) has the property that \(\operatorname{tr}(A^w X)=0\) for all words
-of length \(k\), with \(k \ge 1\) and \(A\) injective, then \(X=0\). -/
-private theorem eq_zero_of_trace_evalWord_mul_eq_zero {A : MPSTensor d D}
-    (hA : Kraus.IsInjective A) {k : ℕ} (hk : 0 < k)
-    {X : Matrix (Fin D) (Fin D) ℂ}
-    (h : ∀ σ : Fin k → Fin d,
-      Matrix.trace (Kraus.evalWord A (List.ofFn σ) * X) = 0) :
-    X = 0 := by
-  have hwordK : Kraus.wordSpan A k = ⊤ := wordSpan_eq_top_of_isInjective hA hk
-  have hφ :
-      (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
-    apply LinearMap.ext_on_range
-      (v := fun σ : Fin k → Fin d => Kraus.evalWord A (List.ofFn σ))
-    · simpa [Kraus.wordSpan, Kraus.wordSpan] using hwordK
-    · intro σ
-      simp [Matrix.traceLinearMap_apply, h σ]
-  exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun N => by
-    have hNX : Matrix.trace (N * X) = 0 := by
-      simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
-    calc Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
-    _ = 0 := hNX
-    _ = Matrix.trace (0 * N) := by simp
-
 /-! ### Uniqueness theorems -/
 
 /-- On a periodic chain, the injective parent-Hamiltonian ground space

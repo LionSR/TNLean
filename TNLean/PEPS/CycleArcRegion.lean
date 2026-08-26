@@ -202,16 +202,6 @@ theorem cycleGraph_adj_iff_add_one (hn : 3 ≤ n) {u w : Fin n} :
   have hw := w.isLt
   split_ifs <;> omega
 
-/-- On a cycle of at least three vertices, no pair of vertices is each the
-cyclic successor of the other. -/
-theorem not_add_one_eq_and_add_one_eq (hn : 3 ≤ n) {u w : Fin n} :
-    ¬(u + 1 = w ∧ w + 1 = u) := by
-  have h1 := val_one_of_two_le (n := n) (by omega)
-  simp only [Fin.ext_iff, Fin.val_add_eq_ite, h1]
-  have hu := u.isLt
-  have hw := w.isLt
-  split_ifs <;> omega
-
 /-! ### Two adjacent arcs around an edge
 
 For the edge between a vertex `a` and its cyclic successor `a + 1`, the source

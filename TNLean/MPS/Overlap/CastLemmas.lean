@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.Reduction
+import QICLean.Kraus.InvariantProjection
 import TNLean.MPS.Overlap.Basic
 
 /-!
@@ -15,7 +15,8 @@ matrix product vectors, overlaps, injectivity, irreducibility, the left-canonica
 trace-preserving condition `∑ Aᵢ† Aᵢ = I`, and gauge-phase equivalence.
 
 These lemmas were previously duplicated as private auxiliary results in
-`BNT/PermutationRigidityPrimitive` and `BNT/Construction`.
+`BNT/PermutationRigidityPrimitive`, `BNT/Construction`, and
+`CanonicalForm/Reduction`.
 -/
 
 open scoped BigOperators Matrix

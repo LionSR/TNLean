@@ -51,8 +51,7 @@ theorem rfp_implies_nncph_of_appendixBExtraction (A : MPSTensor d D) [NeZero D]
       (AppendixBStructuralData.ofRFP A hNT hRFP hLeft))
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N :=
-  commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction
-    A hNT hRFP hLeft hExtract N hN
+  hExtract.commuting_twoSite_localTerms N hN
 
 /-- Conditional ground-vector form of Theorem 3.10(i)⟹(iii).
 
