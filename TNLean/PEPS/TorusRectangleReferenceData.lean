@@ -18,8 +18,7 @@ and the union-of-injective-regions lemma, they partition the torus, and their si
 crossing is the reference edge.
 
 This is the source-faithful reference blocking datum the translation-invariant gauge family
-consumes.  Unlike the vertex-injective singleton datum of
-`TNLean/PEPS/TorusReferenceBlockingData.lean`, the injectivity inputs are exactly the source's
+consumes: the injectivity inputs are exactly the source's
 rectangular-injectivity hypotheses, with no single-vertex injectivity.  The reference edge keeps a
 margin of at least two columns and rows below and to the left, while above and to the right the
 blocking either touches the seam or keeps a margin of at least two; the seam-touching anchor

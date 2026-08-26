@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
-import TNLean.PEPS.TorusWindowChain3
 import TNLean.PEPS.ConfigurationCalculus
+import TNLean.PEPS.RegionBlock.UnionInjectivityGeneralBlue
+import TNLean.PEPS.TorusWindowChain2
 
 /-!
 # Transitivity of the corner extension across nested regions
@@ -30,6 +31,11 @@ Extbar_{S⊆P}(Extbar_{R⊆S}(C))
 
 where `IB(T)` is the product of the interior bond dimensions over the region
 `T`.  The normalized identity follows by cancelling this common multiplicity.
+
+The corner extension is also linear in its insert: `bareExtendInsert_const_smul` and
+`extendInsert_const_smul` below pull a constant out of the insert, and
+`restrictSubRegionσ_restrictSubRegionσ` is the leg identity behind the composition — the
+inner extension reads the same `R`-physical leg whether through `S` or directly.
 
 ## Blue-coupling composition
 
@@ -75,6 +81,44 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
+
+/-! ### Linearity of the bare corner-extended coefficient
+
+The bare corner-extended coefficient `bareExtendInsert hRS C` is linear in the insert
+`C`: it contracts `C` against the fixed blue-coupling coefficient, so scaling `C` by a
+constant scales the bare coefficient, and adding inserts adds the bare coefficients. -/
+
+/-- The bare corner-extended coefficient scales with the insert. -/
+theorem bareExtendInsert_const_smul {R S : Finset V} (hRS : R ⊆ S) (c : ℂ)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    bareExtendInsert (G := G) hRS (fun μ σ => c * C μ σ) =
+      fun ν σ => c * bareExtendInsert (G := G) hRS C ν σ := by
+  funext ν σ
+  rw [bareExtendInsert, bareExtendInsert, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun μ _ => ?_)
+  rw [mul_assoc]
+
+/-- The corner-extended insert scales with the insert: pulling a constant out of `C`
+pulls it out of `extendInsert hRS C`.  Used to commute the bare/clean rescaling through
+the composition. -/
+theorem extendInsert_const_smul {R S : Finset V} (hRS : R ⊆ S) (c : ℂ)
+    (C : RegionInsert (G := G) (d := d) A R) :
+    extendInsert (G := G) hRS (fun μ σ => c * C μ σ) =
+      fun ν σ => c * extendInsert (G := G) hRS C ν σ := by
+  funext ν σ
+  rw [extendInsert_eq_smul_bare, extendInsert_eq_smul_bare, bareExtendInsert_const_smul]
+  ring
+
+omit [Fintype V] [LinearOrder V] in
+/-- The restriction to a sub-region composes: restricting from `S` to `R ⊆ S` after
+restricting from `P` to `S` is restricting directly from `P` to `R`.  This is the leg
+identity behind the corner-extension composition: the inner extension reads the same
+`R`-physical leg whether through `S` or directly. -/
+theorem restrictSubRegionσ_restrictSubRegionσ {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆ P)
+    (σ : RegionPhysicalConfig (V := V) (d := d) P) :
+    restrictSubRegionσ (V := V) (d := d) hRS
+        (restrictSubRegionσ (V := V) (d := d) hSP σ) =
+      restrictSubRegionσ (V := V) (d := d) (hRS.trans hSP) σ := rfl
 
 /-! ### The two-sub-block merge collapse -/
 

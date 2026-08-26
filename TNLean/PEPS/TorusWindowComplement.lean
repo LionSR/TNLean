@@ -25,12 +25,10 @@ The seam-wrapping rectangle is modelled by `torusArcRectangle`, the cyclic
 product of two arcs read through `ZMod.val` cyclic distance.  A
 wraparound-free arc rectangle coincides with the coordinate rectangle of
 `TNLean/PEPS/TorusRectangleRegion.lean`
-(`torusArcRectangle_eq_torusContiguousRectangle`), so the one-orientation window
-hypotheses transport to arc rectangles unchanged.  The translation-invariant
+(`torusArcRectangle_eq_torusContiguousRectangle`).  The translation-invariant
 hypothesis `NormalTorusArcWindowInjectivityHypotheses` asserts injectivity of
 *every* cyclic `L × K` window, the form delivered by translation invariance of
-the tensor; the wraparound-free `NormalTorusWindowInjectivityHypotheses` is its
-seam-avoiding restriction.
+the tensor and the form the seam-wrapping complement bands consume.
 
 ## References
 
@@ -166,12 +164,7 @@ theorem torusArcRectangle_eq_biUnion_window {L K : ℕ} (hL : 0 < L) (hK : 0 < K
     · split_ifs at hvx with hc <;> omega
     · split_ifs at hvy with hc <;> omega
 
-/-! ### The translation-invariant one-orientation window hypotheses
-
-The wraparound-free hypotheses `NormalTorusWindowInjectivityHypotheses` cover
-only coordinate windows clear of the seam.  Translation invariance of the
-tensor makes *every* cyclic `L × K` window injective, including the seam-wrapping
-ones the complement bands require; that is recorded here. -/
+/-! ### The translation-invariant one-orientation window hypotheses -/
 
 /-- The translation-invariant one-orientation window-injectivity hypotheses: every
 cyclic `L × K` window is injective, including the seam-wrapping ones.  This is the
@@ -191,18 +184,6 @@ structure NormalTorusArcWindowInjectivityHypotheses (L K : ℕ)
 namespace NormalTorusArcWindowInjectivityHypotheses
 
 variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
-
-/-- The translation-invariant hypotheses restrict to the seam-avoiding window
-hypotheses: every wraparound-free coordinate `L × K` window is injective.
-
-Source: arXiv:1804.04964, the corollary at lines 2297--2318 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem toWindowHypotheses (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hL : 0 < L) (hK : 0 < K) :
-    NormalTorusWindowInjectivityHypotheses L K κ where
-  window_injective xStart yStart hx hy := by
-    rw [← torusArcRectangle_eq_torusContiguousRectangle xStart yStart L K hL hK hx hy]
-    exact h.arcWindow_injective _
 
 /-- A cyclic rectangle of width at least `L` and height at least `K` is injective
 under the translation-invariant window hypotheses: it is the union of the cyclic

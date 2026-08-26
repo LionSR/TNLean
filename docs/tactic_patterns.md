@@ -445,7 +445,7 @@ abstracted — record why, so it is not re-proposed).
   kernel-descent files); or combine subtraction, division, real-part, and
   two-sided sum transformations (the relative-entropy files). Some windows
   are deliberate false positives where the `ring` belongs to a later proof
-  step, such as `TorusWindowChain3.lean`. The indicator expansion in
+  step, such as `TorusWindowChain4.lean`. The indicator expansion in
   `UnionInjectivityOverlap3.lean` remains in this class: it is part of a sum
   expansion and permutation, and replacing its inner reassociation by the
   shared lemma increases AC-normalization cost without removing that

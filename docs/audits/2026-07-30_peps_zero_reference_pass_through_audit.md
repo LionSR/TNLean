@@ -26,3 +26,23 @@ no Blueprint `\lean{...}` tag.
 All other public declarations considered by this wave contain independent
 mathematical statements or proofs. They remain available with dated
 deprecations rather than using this exception.
+
+## Supersession (2026-08-26)
+
+The replacement names in the rows for
+`Region_map_torusCoordinateSwap_torusArcRectangle`,
+`torusCoordinateSwapRegion_horizontalStaircaseRightWindow`,
+`torusCoordinateSwapRegion_horizontalStaircaseLeftWindow`,
+`torusCoordinateSwapRegion_horizontalStaircasePatch`,
+`torusCoordinateSwapRegion_staircaseWindow`,
+`torusCoordinateSwapRegion_staircaseUnion`,
+`Region_map_torusCoordinateSwap_staircaseWindow`,
+`Region_map_torusCoordinateSwap_staircaseUnion`, and
+`Region_map_torusCoordinateSwap_horizontalStaircasePatch` —
+`torusCoordinateSwapRegion_torusArcRectangle`,
+`verticalStaircaseRightWindow`, `verticalStaircaseLeftWindow`,
+`verticalStaircasePatch`, `verticalStaircaseWindow`, and
+`verticalStaircaseUnion` — were themselves removed on 2026-08-26 with
+`TNLean/PEPS/TorusWindowFamilyVertical.lean` and
+`TNLean/PEPS/TorusCoordinateSwap.lean`. See
+`docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md`.

@@ -82,7 +82,6 @@ import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData
 import TNLean.PEPS.RegionTransportInsertion
-import TNLean.PEPS.SingletonEdgeBlockingData
 import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.SquareLatticeCoordinateSwap
 import TNLean.PEPS.SquareLatticeGraph
@@ -90,7 +89,6 @@ import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.TorusAbsorbedCovariance
 import TNLean.PEPS.TorusBlockingData
 import TNLean.PEPS.TorusConjCovarianceFamily
-import TNLean.PEPS.TorusCoordinateSwap
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.TorusDeformedWindow
@@ -107,7 +105,6 @@ import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
-import TNLean.PEPS.TorusReferenceBlockingData
 import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
@@ -116,7 +113,6 @@ import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowBondUniform
 import TNLean.PEPS.TorusWindowChain
 import TNLean.PEPS.TorusWindowChain2
-import TNLean.PEPS.TorusWindowChain3
 import TNLean.PEPS.TorusWindowChain4
 import TNLean.PEPS.TorusWindowChain5
 import TNLean.PEPS.TorusWindowChain6
@@ -124,7 +120,6 @@ import TNLean.PEPS.TorusWindowComplement
 import TNLean.PEPS.TorusWindowExtraction
 import TNLean.PEPS.TorusWindowFamily
 import TNLean.PEPS.TorusWindowFamilyCrossing
-import TNLean.PEPS.TorusWindowFamilyVertical
 import TNLean.PEPS.TorusWindowMult
 import TNLean.PEPS.TorusWindowPeeling
 import TNLean.PEPS.TorusWindowPeeling.BondInsertedRegion
