@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.SharedInfra.BlockGauge
+import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.SharedInfra.Scaling
 
 /-!

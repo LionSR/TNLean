@@ -13,7 +13,7 @@ import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 import TNLean.MPS.BNT.Construction
-import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.SharedInfra.GaugePhase
 import QICLean.Channel.Irreducible.KrausGauge
 
 /-!

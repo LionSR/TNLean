@@ -22,9 +22,10 @@ after the BNT sectors have been matched, the proof compares the
 power sums of the copy weights in each matched sector
 (`Papers/1606.00608/MPDO-22-12-17-2.tex`, Appendix MPV proof,
 lines 1184--1188).  The finite power-sum rigidity input is the appendix
-power-sum lemma at lines 1155--1163.  The geometric extrapolation below is a formal
-strengthening needed because the Lean coefficient identity is often available
-eventually in the length parameter rather than at the first
+power-sum lemma at lines 1155--1163.  The geometric extrapolation in
+`TNLean.MPS.SharedInfra.SectorDecomposition` is a formal strengthening needed
+because the Lean coefficient identity is often
+available eventually in the length parameter rather than at the first
 `max{x_a,x_b}` positive exponents.
 
 The main theorem below uses the unequal-cardinality finite-range power-sum
@@ -55,75 +56,6 @@ variable {d : ℕ}
 namespace SectorWeightData
 
 variable {g : ℕ}
-
-/-! ### Extrapolation of power-sum sequences
-
-The connection between "eventually equal coefficients" (for `N > N₀`) and
-"equal coefficients for every positive `k`" rests on a **telescoping induction**
-on linear combinations of geometric sequences.
-
-For a finite sum `N ↦ ∑ᵢ cᵢ · wᵢᴺ` with every `wᵢ` nonzero, vanishing for all
-sufficiently large `N` forces vanishing for every exponent.  The proof subtracts
-`w₀` times the equation at `N` from the equation at `N+1`, eliminating the first
-base and reducing the number of terms.  The induction gives the shorter identity
-for all exponents, and the original sequence then satisfies a geometric
-recurrence whose value at the eventual-vanishing cutoff is zero.
-
-Applying this to the signed union of two weight families converts eventual
-equality of their power sums into equality at every positive exponent.
--/
-
-/-- A linear combination of geometric sequences `∑ cᵢ wᵢᵏ` with all bases `wᵢ ≠ 0` that
-vanishes for all `k ≥ M` vanishes identically.
-
-See the section documentation above for the proof idea (telescoping induction). -/
-lemma geom_sum_eventually_zero
-    {n : ℕ} (w : Fin n → ℂ) (c : Fin n → ℂ)
-    (hw : ∀ i, w i ≠ 0)
-    {M : ℕ}
-    (hEv : ∀ N, M ≤ N → ∑ i, c i * w i ^ N = 0) :
-    ∀ k, ∑ i, c i * w i ^ k = 0 := by
-  induction n with
-  | zero => intro k; simp
-  | succ n ih =>
-    have hTailEv : ∀ N, M ≤ N →
-        ∑ i : Fin n, c i.succ * (w i.succ - w 0) * w i.succ ^ N = 0 := by
-      intro N hN
-      have key : ∑ i : Fin (n + 1), c i * (w i - w 0) * w i ^ N = 0 := by
-        have eq : ∑ i : Fin (n + 1), c i * (w i - w 0) * w i ^ N =
-                  (∑ i, c i * w i ^ (N + 1)) - w 0 * (∑ i, c i * w i ^ N) := by
-          rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
-          congr 1; ext i; ring
-        rw [eq, hEv (N + 1) (by omega), hEv N hN, mul_zero, sub_zero]
-      rw [Fin.sum_univ_succ] at key
-      simpa [sub_self] using key
-    have hTailAll := ih _ _ (fun i => hw i.succ) hTailEv
-    have hRec : ∀ k, (∑ i : Fin (n + 1), c i * w i ^ (k + 1)) =
-                      w 0 * (∑ i : Fin (n + 1), c i * w i ^ k) := by
-      intro k
-      suffices h : (∑ i : Fin (n + 1), c i * w i ^ (k + 1)) -
-                    w 0 * (∑ i : Fin (n + 1), c i * w i ^ k) = 0 from
-        sub_eq_zero.mp h
-      have eq : (∑ i : Fin (n + 1), c i * w i ^ (k + 1)) -
-                 w 0 * (∑ i : Fin (n + 1), c i * w i ^ k) =
-                ∑ i : Fin (n + 1), c i * (w i - w 0) * w i ^ k := by
-        rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
-        congr 1; ext i; ring
-      rw [eq, Fin.sum_univ_succ]
-      simpa [sub_self] using hTailAll k
-    have hGeom : ∀ k, (∑ i : Fin (n + 1), c i * w i ^ k) =
-                        w 0 ^ k * (∑ i : Fin (n + 1), c i * w i ^ 0) := by
-      intro k
-      induction k with
-      | zero => simp
-      | succ k ihk => rw [hRec, ihk, pow_succ]; ring
-    have hS0 : (∑ i : Fin (n + 1), c i * w i ^ 0) = 0 := by
-      have hSM := hEv M (le_refl M)
-      have hGM := hGeom M
-      rw [hSM] at hGM
-      exact (mul_eq_zero.mp hGM.symm).resolve_left (pow_ne_zero M (hw 0))
-    intro k
-    rw [hGeom, hS0, mul_zero]
 
 /-- If two nonzero finite weight families have equal power sums for all sufficiently
 large exponents, then their power sums agree for every exponent.
@@ -170,34 +102,6 @@ lemma power_sums_eq_of_eventually_eq_hetero
 end SectorWeightData
 
 namespace SectorDecomposition
-
-/-- A sector coefficient with nonzero copy weights cannot vanish at all
-sufficiently large exponents.
-
-This is the coefficient nonvanishing used in the CPSV16 Appendix MPV argument,
-lines 1182--1188. If the coefficient vanished eventually, geometric
-extrapolation would make it vanish at exponent zero, where it equals the
-positive number of copies in the sector. -/
-lemma coeff_not_eventually_zero (P : SectorDecomposition d)
-    (j : Fin P.basisCount) :
-    ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) := by
-  classical
-  intro hEv
-  rw [Filter.eventually_atTop] at hEv
-  obtain ⟨M, hM⟩ := hEv
-  have hAll : ∀ k,
-      ∑ q : Fin (P.copies j), (1 : ℂ) * (P.weight j q) ^ k = 0 := by
-    refine SectorWeightData.geom_sum_eventually_zero
-      (w := P.weight j) (c := fun _ ↦ 1) (P.weight_ne_zero j) (M := M) ?_
-    intro N hN
-    simpa [SectorDecomposition.coeff, SectorWeightData.coeff] using hM N hN
-  have h0 := hAll 0
-  have hcard :
-      (∑ q : Fin (P.copies j), (1 : ℂ) * (P.weight j q) ^ 0) =
-        (P.copies j : ℂ) := by
-    simp
-  rw [hcard] at h0
-  exact (Nat.cast_ne_zero.mpr (P.copies_pos j).ne') h0
 
 /-- Along every positive arithmetic subsequence, a sector coefficient cannot vanish at all
 sufficiently large indices.

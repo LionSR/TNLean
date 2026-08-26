@@ -9,6 +9,7 @@ import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.SharedInfra.BlockGauge
+import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 
 /-!
