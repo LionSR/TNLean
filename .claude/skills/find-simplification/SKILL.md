@@ -179,6 +179,17 @@ Be concrete enough that an implementing PR can follow the trail: the declaration
 
 For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` before the first build in any fresh, cloned, or cache-cleared worktree, and after any toolchain or dependency change — `CLAUDE.md`'s canonical cache rule is that Mathlib is never rebuilt from source, and skipping the fetch is what triggers the hours-long rebuild; then `lake build` clean with the package lean options, `rg -n "sorry|axiom"` on touched files, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
 
+Two of the CI guards are **diff-scoped**, which makes them easy to miss and easy to misread:
+
+```bash
+python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/main --ci
+python3 scripts/check_forbidden_lean_tokens.py
+```
+
+Run them with the base ref, exactly as CI does. Both judge *added* lines, so they fail on a clean tree too — a bare run tells you nothing, and the pre-existing violations elsewhere in the tree are not yours to fix. Two consequences bite in practice. `check_reader_facing_prose.py` reads **committed** content when given `--diff-base`, so a fix in the working tree looks ineffective until it is committed. And `check_forbidden_lean_tokens.py` counts a *reworded* line as an addition: editing a sentence that happens to contain `sorry` — a docs table cell reading "sorry-free", say — trips it even though nothing new was introduced. When that happens, leave the original line untouched and put the correction in a neighbouring paragraph or a header.
+
+The prose guard also settles where a follow-up gets recorded: Lean docstrings cite the mathematics, never an issue number. A migration issue belongs in the PR description, not in the module.
+
 A PR implementing a simplification is titled `refactor(scope):` and its body states the net line delta (`docs/proof_debt.md` §shrink rhythm), the ledger entry or issue it burns down, each removed declaration with its replacement (the pass-through exception requires this plus an audit note), and any blueprint labels redirected. A removed name whose old spelling encoded banned terminology gets no deprecation alias; say so in the body. A burn-down PR that leaves "old and new side by side" is in-progress, not done, and carries the issue that removes the old side.
 
 When reporting back, summarize: how many candidates went to the ledger, to issues, into existing records, or were rejected with evidence; the directories surveyed; what was excluded as settled; which checks passed.
