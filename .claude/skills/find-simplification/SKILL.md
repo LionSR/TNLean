@@ -102,7 +102,7 @@ For every hypothesis on a candidate theorem, name where it is discharged downstr
 
 For every structure field, name a consumer that projects it. Fields read only by the structure's own constructor lemmas are staging.
 
-For every layer crossing (`Algebra` → `MPS` → `PEPS`, TNLean → QICLean), check the direction. A lemma about bare matrices living under `MPS/` is a candidate to move down or to replace by its Mathlib/QICLean form; a lemma in `Algebra/` mentioning `MPSTensor` is mis-layered.
+For every layer crossing (`Algebra` → `MPS` → `PEPS`, TNLean → QICLean), check the direction. A lemma about bare matrices living under `MPS/` is a candidate to replace by its Mathlib or QICLean form; a lemma in `Algebra/` mentioning `MPSTensor` is mis-layered. When no upstream equivalent exists yet, relocating it into TNLean's `Algebra/` is not the fix — that layer holds tensor-network-facing compatibility results, so a generic matrix lemma parked there becomes the next QICLean shadow. Either upstream it to QICLean, or leave it where it is and record why.
 
 ## Local Lemma Versus Mathlib Or QICLean
 
@@ -125,18 +125,18 @@ For every declaration, classify consumers before writing:
 Grep is the cheap filter and it is wrong by default in this codebase. Every rule below was paid for by a survey that reported live declarations as dead, or dead ones as live.
 
 - **Search the final component, not the full name.** A declaration `Ns.Pred.foo` is invoked as `h.foo` or `W.foo`; the token `Ns.Pred.foo` never appears at the call site, so `rg -w 'Ns.Pred.foo'` returns zero for a lemma used three lines below. Match the last component with an optional dotted prefix and permit a leading `.`. The over-count from homonyms elsewhere is the safe direction — resolve it by reading the hits.
-- **Beware the upstream twin.** Matching the bare final component over-counts systematically for exactly the shape you most want to find: TNLean mirrors QICLean names, so `Kraus.foo` and `MPSTensor.foo` share a suffix and the upstream calls look like local consumers. Accept a hit only when its namespace prefix is empty or a suffix of the declaring namespace.
+- **Beware the upstream twin, but not at the cost of receiver notation.** Matching the bare final component over-counts systematically for exactly the shape you most want to find: TNLean mirrors QICLean names, so `Kraus.foo` and `MPSTensor.foo` share a suffix and the upstream calls look like local consumers. Filter only *namespace qualifiers* — a capitalised dotted path such as `Kraus.` — accepting the hit when that path is empty or a suffix of the declaring namespace. A lowercase prefix is receiver notation on a local hypothesis or variable (`hA.span_eq_top`, `W.foo`) and is a genuine consumer: discarding it because `hA` is neither empty nor a namespace suffix is how the previous bullet's finds get thrown away again.
 - **Lean identifiers are not ASCII words.** Names here carry `σ`, `ₗ`, `₂`, `'`, `ᵀ`. `rg -w` and any hand-built `[A-Za-z0-9_]` class truncate them silently, turning `restrictSubRegionσ` into `restrictSubRegion` and manufacturing pages of false zeros. Use `rg -F` on the full name, and extract declaration names with a negated class such as `[^\s({\[:]+`.
 - **Never `rg -F -f namelist`.** Ripgrep's leftmost-first alternation lets a short name shadow a longer one containing it, and the shadowed names come back with zero hits and no error. Loop one name at a time, or tokenize the corpus once and join against the declaration list.
 - **Run a control.** Before trusting any counting pipeline, run it on a name you know is used, and on the declaration itself. A declaration always references itself, so **a count of zero is a bug in your matcher, never evidence.**
-- **Subtract the module docstring.** Nearly every module here lists its results as backticked bullets under `## Main contents`, so a genuinely dead declaration scores 2, not 1. Strip doc comments and backticked spans before counting, or a naive `count > 0` filter discards your best finds.
+- **Subtract the self-inventory, not every docstring.** Nearly every module here lists its results as backticked bullets under `## Main contents`, so a genuinely dead declaration scores 2, not 1, and a naive `count > 0` filter discards your best finds. Subtract exactly two things: the candidate's own declaration, and its module's `## Main contents` entry. Do **not** strip doc comments wholesale — the production corpus above counts the docstrings of *surviving* declarations, so a name referenced only from another declaration's docstring is a live reference, and deleting it leaves documentation pointing at a name that no longer exists.
 - **Dead weight is a closure, not a grep.** Zero-reference declarations are only the tips: a dead subgraph keeps itself alive by internal references. Attribute every reference to its enclosing declaration, then iterate "dead if all its references live inside declarations already marked dead" to a fixpoint. In one area this took a find from 145 to 434 lines. Apply the same step *after* each deletion — removing a lemma strands the private helpers only it used.
 
 ### Blueprint exposure comes first
 
 In a blueprint-heavy chapter the normal shape of a *finished* theorem is "no Lean consumer, one `\lean{}` tag". Ranking by reference count before intersecting with the tag set therefore wastes most of a survey — in `MPDO/Physical*`, 174 declarations have zero external Lean references and exactly two survive the intersection. Build the `\lean{}` tag set for the area first, intersect, then rank what remains.
 
-Getting that census right needs care: tags wrap across lines with a LaTeX `%` continuation **inside** the braces, as in `\lean{MPOTensor.EtaLocalStructureData.%` followed by `    exists_...}`. A per-line grep and a naive `\lean\{([^}]*)\}` scan both miss these, and more than one survey nearly deleted a tagged theorem. Strip `%\s*\n\s*` before matching, then cross-check by grepping the bare short name across `blueprint/src/`.
+Getting that census right needs care: tags wrap across lines with a LaTeX `%` continuation **inside** the braces, as in `\lean{MPOTensor.EtaLocalStructureData.%` followed by `    exists_...}`. A per-line grep and a naive `\lean\{([^}]*)\}` scan both miss these, and more than one survey nearly deleted a tagged theorem. Strip `%\s*\n\s*` before matching, then split each payload on commas — a single tag may name several declarations, and several hundred tags in `blueprint/src/` do — then cross-check by grepping the bare short name. `scripts/blueprint_lean_sync.py::_split_lean_decls` already implements both steps; reuse it rather than re-deriving the parser. Treating a payload as one set member undercounts the tagged set and can clear a still-exposed declaration for deletion, which is a failure of the skill's central safety check, not a rounding error.
 
 Measure density before choosing a lens. Above roughly two-thirds tag coverage the tag-visible shapes are exhausted, and what remains is what a tag cannot name: `private` forwarders, structure-parent aliases, carrier restatements. Likewise, if an area's zero-reference rate is under about 2%, that lens is spent — pivot rather than grinding it.
 
@@ -152,15 +152,16 @@ This is also the only honest way to clear an attribute-carrying lemma. A `@[simp
 
 When a survey is read-only and cannot build, settle a Lean semantics question — does dot notation resolve through `extends` into the parent structure? — with a five-line standalone probe file elaborated by `lake env lean` in the scratchpad, rather than by reasoning about it.
 
-For blueprint exposure run `cd blueprint && leanblueprint checkdecls` after the removal; for proof integrity keep `rg -n "sorry|axiom"` on every touched file.
+For blueprint exposure run `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` after the removal — the blueprint loads the pinned companion package, so without the fetch the check fails for missing setup and that failure reads like a clean "no tag" verdict. For proof integrity run `python3 scripts/check_forbidden_lean_tokens.py --base-ref origin/main` rather than grepping for `sorry`: the guard's token set also covers `admit`, `native_decide`, `unsafeCast`, and friends, any of which a repaired downstream proof can introduce while the build stays green.
 
 Reject or downgrade a candidate when:
 
 - A production consumer exists and removing it would change what is proved (a feature decision, not a cleanup).
 - The design is justified by a paper-gap note, a dated audit note, or a ledger entry marked retained, and the new evidence does not beat that reason. Check the same records for the *module path*, not only the declaration: an aggregator-only file is evidence of dead weight only after `docs/paper-gaps/` and `docs/audits/` come back empty for it.
-- The deletion was already made and rolled back. `git log --diff-filter=D -- <path>` and a search of merge commits for the name cost one command and save re-proposing a decision the maintainer already reversed.
+- The deletion was already made and rolled back. Search by content, not by file status: `git log -S'<declaration>' --all -- <path>` finds the commits where the name's occurrence count changed, which is what a remove-then-restore inside a surviving file actually looks like. `--diff-filter=D` matches only commits that delete the *file*, so it misses exactly the rollback this check exists to catch.
 - The declaration sits in a counterexample or witness module whose docstring advertises it as the file's claim. An uncited lemma there is the point of the file, not scaffolding.
 - It is a `@[deprecated]` declaration inside the transition window. The window is **six months** (lean-conventions, deprecation section); a deprecation dated last month has not expired, however dead it looks.
+- It is a substantive public declaration rather than a pass-through. A green root build proves only that nothing *in this repository* consumes it; the repository-local exception in `docs/project_conventions.md` covers pass-throughs, bundled-structure fields, and named proof steps, not results with independent mathematical content. Such a name enters dated deprecation first and is deleted when the window closes.
 - The removal forces unrelated churn — renames across dozens of files — without reducing the public surface or the hypothesis lists.
 - The candidate is correct but tiny; batch it with related finds in one entry or one PR.
 - The "simplification" is a net-positive-line abstraction. `docs/proof_debt.md` ranks deletion above abstraction; a net-positive refactor must name the future deletion it enables.
@@ -177,16 +178,22 @@ Be concrete enough that an implementing PR can follow the trail: the declaration
 
 ## Validation And PR Hygiene
 
-For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` before the first build in any fresh, cloned, or cache-cleared worktree, and after any toolchain or dependency change — `CLAUDE.md`'s canonical cache rule is that Mathlib is never rebuilt from source, and skipping the fetch is what triggers the hours-long rebuild; then `lake build` clean with the package lean options, `rg -n "sorry|axiom"` on touched files, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
+For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` before the first build in any fresh, cloned, or cache-cleared worktree, and after any toolchain or dependency change — `CLAUDE.md`'s canonical cache rule is that Mathlib is never rebuilt from source, and skipping the fetch is what triggers the hours-long rebuild; then `lake build` clean with the package lean options, `python3 scripts/check_forbidden_lean_tokens.py --base-ref origin/main` for proof integrity, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
 
 Two of the CI guards are **diff-scoped**, which makes them easy to miss and easy to misread:
 
 ```bash
 python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/main --ci
-python3 scripts/check_forbidden_lean_tokens.py
+python3 scripts/check_forbidden_lean_tokens.py --base-ref origin/main
 ```
 
-Run them with the base ref, exactly as CI does. Both judge *added* lines, so they fail on a clean tree too — a bare run tells you nothing, and the pre-existing violations elsewhere in the tree are not yours to fix. Two consequences bite in practice. `check_reader_facing_prose.py` reads **committed** content when given `--diff-base`, so a fix in the working tree looks ineffective until it is committed. And `check_forbidden_lean_tokens.py` counts a *reworded* line as an addition: editing a sentence that happens to contain `sorry` — a docs table cell reading "sorry-free", say — trips it even though nothing new was introduced. When that happens, leave the original line untouched and put the correction in a neighbouring paragraph or a header.
+Pass the base ref to both, exactly as CI does. They judge *added* lines, so a bare run proves nothing and the pre-existing violations elsewhere in the tree are not yours to fix. Three consequences bite in practice.
+
+`check_forbidden_lean_tokens.py` defaults `--base-ref` to `HEAD`, so running it bare **after committing** diffs `HEAD` against `HEAD`, finds nothing, and exits 0 — a green result that examined none of your work. It is also the right tool for proof integrity generally: its token set covers `admit`, `native_decide`, `unsafeCast`, `lcProof`, and more, all of which a repaired downstream proof can introduce while `lake build` stays green and an `rg` for `sorry|axiom` stays silent.
+
+`check_reader_facing_prose.py` reads **committed** content under `--diff-base`, so a fix sitting in the working tree looks ineffective until it is committed.
+
+Both guards count a *reworded* line as an addition: editing a sentence that happens to contain `sorry` — a docs table cell reading "sorry-free", say — trips the token guard even though nothing new was introduced. When that happens, leave the original line untouched and put the correction in a neighbouring paragraph or a header.
 
 The prose guard also settles where a follow-up gets recorded: Lean docstrings cite the mathematics, never an issue number. A migration issue belongs in the PR description, not in the module.
 
