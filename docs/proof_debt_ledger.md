@@ -46,6 +46,14 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   reference — staged helpers for abandoned proof attempts.
 - **First PR**: the Wielandt-module wave (~30 declarations, ~300+ lines) —
   the most isolated directory, zero blueprint exposure.
+- **Evidence update (2026-08-26)**: the
+  `MPS/ParentHamiltonian/BNTBlockIntersection.lean` concentration was the
+  pre-Condition-C1 branch of the BNT block-diagonal route. Thirteen
+  declarations across `BNTBlockIntersection.lean`,
+  `BNTBlockDiagonalChain.lean`, and `BNTBlockDiagonalBoundaryClosing.lean`
+  formed a closed subgraph referenced only by one another and were removed
+  (−507 Lean lines); see
+  `docs/audits/2026-08-26_pre_condition_c1_bnt_route_retirement.md`.
 
 ### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
 - **Status**: open (#4565)
