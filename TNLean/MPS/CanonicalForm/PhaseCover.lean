@@ -81,16 +81,6 @@ lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor 
     (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hX N σ,
     mpv_cast_dim hdim A N σ]
 
-/-- MPV phase equivalence gives a scalar-power equality of MPV state vectors. -/
-lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
-    (h : MPVBlockPhaseEquiv A B) (N : ℕ) (hN : 0 < N) :
-    ∃ ζ : ℂ, ζ ≠ 0 ∧ mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
-  rcases h with ⟨ζ, hζ, hmpv⟩
-  refine ⟨ζ, hζ, ?_⟩
-  ext σ
-  simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply]
-  exact hmpv N hN σ
-
 end MPVBlockPhaseEquiv
 
 /-- Common MPV-phase cover for two block families.
@@ -129,50 +119,14 @@ def MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) (j k : Fin r) : Prop :=
   MPVBlockPhaseEquiv (blocks j) (blocks k)
 
-/-- MPV phase equivalence is reflexive. -/
-lemma MPVPhaseEquiv.refl {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) (j : Fin r) :
-    MPVPhaseEquiv blocks j j :=
-  MPVBlockPhaseEquiv.refl (blocks j)
-
-/-- MPV phase equivalence is symmetric. -/
-lemma MPVPhaseEquiv.symm {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) {j k : Fin r}
-    (h : MPVPhaseEquiv blocks j k) : MPVPhaseEquiv blocks k j :=
-  MPVBlockPhaseEquiv.symm h
-
-/-- MPV phase equivalence is transitive. -/
-lemma MPVPhaseEquiv.trans {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) {i j k : Fin r}
-    (hij : MPVPhaseEquiv blocks i j) (hjk : MPVPhaseEquiv blocks j k) :
-    MPVPhaseEquiv blocks i k :=
-  MPVBlockPhaseEquiv.trans hij hjk
-
-/-- A gauge-phase equivalence between equal-dimension blocks gives MPV phase equivalence. -/
-lemma MPVPhaseEquiv.of_gaugePhaseEquiv_cast {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k)) {j k : Fin r}
-    (hdim : dim j = dim k)
-    (hGPE : GaugePhaseEquiv (d := d)
-      (cast (congr_arg (MPSTensor d) hdim) (blocks j)) (blocks k)) :
-    MPVPhaseEquiv blocks j k :=
-  MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (blocks j) (blocks k) hdim hGPE
-
-/-- MPV phase equivalence gives a scalar-power equality of finite-length MPV state vectors. -/
-lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)} {j k : Fin r}
-    (h : MPVPhaseEquiv blocks j k) (N : ℕ) (hN : 0 < N) :
-    ∃ ζ : ℂ, ζ ≠ 0 ∧
-      mpvState (d := d) (blocks k) N = ζ ^ N • mpvState (d := d) (blocks j) N :=
-  MPVBlockPhaseEquiv.exists_mpvState_eq_smul h N hN
-
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
   r := MPVPhaseEquiv blocks
   iseqv := {
-    refl := MPVPhaseEquiv.refl blocks
-    symm := fun {_ _} h => MPVPhaseEquiv.symm blocks h
-    trans := fun {_ _ _} h₁ h₂ => MPVPhaseEquiv.trans blocks h₁ h₂
+    refl := fun j => MPVBlockPhaseEquiv.refl (blocks j)
+    symm := fun {_ _} h => MPVBlockPhaseEquiv.symm h
+    trans := fun {_ _ _} h₁ h₂ => MPVBlockPhaseEquiv.trans h₁ h₂
   }
 
 /-- Quotient set of MPV phase equivalence classes. -/
@@ -274,37 +228,6 @@ lemma regroup_matrix (classes : MPVPhaseClassData blocks) {n : ℕ}
   simp_rw [Matrix.sum_apply]
   exact classes.regroup (fun k => f k a b)
 
-/-- The chosen MPV phase-class representatives span exactly the same finite-length MPV
-subspace as the original block family.
-
-Each representative is one of the original blocks, giving one inclusion. Conversely, every
-original block occurs in a phase class and is a nonzero scalar-power multiple of that class's
-representative at each positive length, hence lies in the representative span. -/
-theorem representative_mpv_span_eq (classes : MPVPhaseClassData blocks) (N : ℕ)
-    (hN : 0 < N) :
-    Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
-      mpvState (d := d) (blocks (classes.repr j)) N)) =
-    Submodule.span ℂ (Set.range (fun k : Fin r =>
-      mpvState (d := d) (blocks k) N)) := by
-  classical
-  apply le_antisymm
-  · refine Submodule.span_le.2 ?_
-    intro v hv
-    rcases hv with ⟨j, rfl⟩
-    exact Submodule.subset_span ⟨classes.repr j, rfl⟩
-  · refine Submodule.span_le.2 ?_
-    intro v hv
-    rcases hv with ⟨k, rfl⟩
-    obtain ⟨j, q, hq⟩ := classes.exists_enum_eq k
-    have hphase : MPVPhaseEquiv blocks (classes.repr j) k := by
-      simpa [hq] using classes.enum_phase j q
-    change mpvState (d := d) (blocks k) N ∈
-      Submodule.span ℂ (Set.range (fun j : Fin classes.g =>
-        mpvState (d := d) (blocks (classes.repr j)) N))
-    obtain ⟨ζ, _hζ, hstate⟩ := hphase.exists_mpvState_eq_smul N hN
-    rw [hstate]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
-
 end MPVPhaseClassData
 
 /-- Construct the finite MPV phase classes of a block family.
@@ -362,7 +285,7 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
   have hBlocks : BlocksNotGaugePhaseEquiv (d := d) (fun j => blocks (reprFn j)) := by
     intro j k hjk hdim hGPE
     have hphase : MPVPhaseEquiv blocks (reprFn j) (reprFn k) :=
-      MPVPhaseEquiv.of_gaugePhaseEquiv_cast blocks hdim hGPE
+      MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (blocks (reprFn j)) (blocks (reprFn k)) hdim hGPE
     have hquot : Quotient.mk (mpvPhaseSetoid blocks) (reprFn j) =
         Quotient.mk (mpvPhaseSetoid blocks) (reprFn k) :=
       Quotient.sound hphase

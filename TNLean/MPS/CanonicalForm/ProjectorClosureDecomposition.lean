@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.ProjectorClosure
-import TNLean.MPS.CanonicalForm.CyclicSectors.Compression
 
 /-!
 # Direct-sum decomposition under invariant-projector closure
@@ -46,13 +45,10 @@ theorem IsOrthogonalProjection.exists_support_isometry {D : ℕ}
     {P : Matrix (Fin D) (Fin D) ℂ} (hP : IsOrthogonalProjection P) :
     ∃ (n : ℕ) (V : Matrix (Fin D) (Fin n) ℂ),
       ((n : ℂ) = Matrix.trace P) ∧ Vᴴ * V = 1 ∧ V * Vᴴ = P := by
-  obtain ⟨n, _C, _φ, V, hdim, _hTP, _hMPV, _hInt, _hMul, _hStar, _hLetter,
-      hViso, hVrange, _hEmbed⟩ :=
-    MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry
-      (d := 1) (fun _ => P) P hP
-      (fun _ => by simp [hP.2])
-      (by simp [hP.1.eq, hP.2])
-  exact ⟨n, V, hdim, hViso, hVrange⟩
+  obtain ⟨n, V, hViso, hVrange⟩ := hP.exists_range_isometry
+  refine ⟨n, V, ?_, hViso, hVrange⟩
+  rw [← hVrange, Matrix.trace_mul_comm, hViso, Matrix.trace_one]
+  simp
 
 namespace MPSTensor
 
