@@ -18,139 +18,179 @@
 
 This note concerns the scalar power-sum step in the non-periodic Fundamental
 Theorem proof for matrix product states in canonical form. The source is
-\cite[Lemma~\texttt{Lem:app\_simple}, lines~1155--1163]{Cirac2016MPDO_arXiv}.
-It considers two finite families
-\[
+Lemma~\texttt{Lem:app\_simple} of
+Ref.~\cite[lines~1155--1163]{Cirac2016MPDO_arXiv}. It considers two finite
+families
+\begin{align}
     (\lambda_{a,k})_{k=1}^{x_a},
     \qquad
     (\lambda_{b,k})_{k=1}^{x_b},
-\]
-ordered by modulus and phase, and assumes
-\[
+    \label{eq:cpsv16_power_sum_alternative_route_source_families}
+\end{align}
+ordered by modulus and phase. Its hypothesis, printed as
+Equation~\texttt{eq:app\_aux} of Ref.~\cite{Cirac2016MPDO_arXiv}, is
+\begin{align}
     \sum_{k=1}^{x_a}\lambda_{a,k}^{N}
-    =
-    \sum_{k=1}^{x_b}\lambda_{b,k}^{N},
-    \qquad N\le \max\{x_a,x_b\}.      \tag{\texttt{eq:app\_aux}}
-\]
-The conclusion is $x_a=x_b$ and equality of the ordered lists. In the
-equal-case corollary of the Fundamental Theorem, this lemma is applied after
-the BNT representatives have been matched, to the coefficient families
-\[
+        &=\sum_{k=1}^{x_b}\lambda_{b,k}^{N},
+        \qquad
+        1\leq N\leq\max\{x_a,x_b\}.
+    \label{eq:cpsv16_power_sum_alternative_route_source_power_sums}
+\end{align}
+The conclusion is
+\begin{align}
+    x_a
+        &=x_b,
+    \label{eq:cpsv16_power_sum_alternative_route_source_cardinality}\\
+    \lambda_{a,k}
+        &=\lambda_{b,k},
+        \qquad 1\leq k\leq x_a.
+    \label{eq:cpsv16_power_sum_alternative_route_source_ordered_equality}
+\end{align}
+
+In the equal-case corollary of the Fundamental Theorem in
+Ref.~\cite{Cirac2016MPDO_arXiv}, this lemma is applied after matching the BNT
+representatives. For a fixed representative $j$, the coefficient families are
+\begin{align}
     (\mu_{j,q})_{q=1}^{r_{a,j}},
     \qquad
     (\nu_{j,q}e^{i\phi_j})_{q=1}^{r_{b,j}}.
-\]
-
-The formal statements do not use the source's ordering convention. They state
-the conclusion as equality of multisets. They do, however, keep the relevant
-nonzero-coefficient hypothesis: positive powers alone cannot count zero
-entries.
+    \label{eq:cpsv16_power_sum_alternative_route_bnt_weight_families}
+\end{align}
+The formal statements replace the source ordering convention with equality of
+multisets. They retain the nonzero-coefficient hypothesis because positive
+powers cannot count zero entries.
 
 \section{The source-facing formal route}
 
-For a fixed BNT representative $j$, the formal coefficient comparison produces
-eventual equality of the power sums
-\[
+Fix a BNT representative $j$. BNT linear independence first gives eventual
+equality of the power sums:
+\begin{align}
     \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
-    =
-    \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N
-\]
-from BNT linear independence. A finite signed sum of nonzero geometric
-sequences which vanishes eventually vanishes at every exponent, so the equality
-holds for all positive $N$. The formal proof then applies the
-unequal-cardinality finite-range power-sum theorem.\footnote{\path{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}.}
-The endpoint used by the BNT comparison is the corresponding sector-weight
-comparison lemma.\footnote{\path{MPSTensor.matched_sector_weight_multiset_eq} in
-    \path{TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean}, which composes
-    the extension to all positive exponents
-    (\path{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}) with
-    the unequal-cardinality power-sum theorem.}
+        &=\sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N.
+    \label{eq:cpsv16_power_sum_alternative_route_eventual_power_sum_equality}
+\end{align}
+A finite signed sum of nonzero geometric sequences that vanishes eventually
+vanishes at every exponent. Hence
+(\ref{eq:cpsv16_power_sum_alternative_route_eventual_power_sum_equality}) holds
+for every positive $N$.
 
-The conclusion is
-\[
-    r_j^S=r_j^T,
-    \qquad
-    \{\!\{\mu^S_{j,q}:1\le q\le r_j^S\}\!\}
-    =
-    \{\!\{\mu^T_{j,q}:1\le q\le r_j^T\}\!\}.
-\]
-This is the multiset form of the source's ordered-list conclusion.
+The formal proof then applies the unequal-cardinality finite-range power-sum
+theorem.\footnote{Formal declaration:
+\leanid{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}.}
+The BNT comparison uses the corresponding sector-weight lemma.\footnote{Formal
+declaration: \leanid{MPSTensor.matched_sector_weight_multiset_eq} in
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean}. It composes
+\leanid{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
+with the unequal-cardinality power-sum theorem.}
+Its conclusion is
+\begin{align}
+    r_j^S
+        &=r_j^T,
+    \label{eq:cpsv16_power_sum_alternative_route_formal_cardinality}\\
+    \{\!\{\mu^S_{j,q}:1\leq q\leq r_j^S\}\!\}
+        &=\{\!\{\mu^T_{j,q}:1\leq q\leq r_j^T\}\!\}.
+    \label{eq:cpsv16_power_sum_alternative_route_formal_multiset}
+\end{align}
+This is the multiset form of
+(\ref{eq:cpsv16_power_sum_alternative_route_source_ordered_equality}).
 
 \section{The alternative formal route}
 
-An earlier formal proof reached the same endpoint by using the recurrence
-behind finite sums of geometric sequences before applying Newton--Girard. The
-mathematical input is the following elementary lemma. Let
-\[
-    F(N)=\sum_{\ell=1}^{m} c_\ell w_\ell^N,
-    \qquad w_\ell\neq 0.
-\]
-If $F(N)=0$ for all $N\ge M$, then $F(k)=0$ for every $k\ge 0$. Indeed,
-subtracting $w_1F(N)$ from $F(N+1)$ gives
-\[
-    0
-    =
-    F(N+1)-w_1F(N)
-    =
-    \sum_{\ell=2}^{m} c_\ell(w_\ell-w_1)w_\ell^N
-\]
-for all $N\ge M$. This is a signed sum with one fewer term. Induction on
-$m$ shows that the displayed sum is zero for every $N\ge 0$, hence
-\[
-    F(N+1)=w_1F(N)\qquad\text{for all }N\ge 0.
-\]
-Thus $F(k)=w_1^kF(0)$. Since $F(M)=0$ and $w_1^M\neq 0$, one has
-$F(0)=0$, and therefore $F(k)=0$ for all $k\ge 0$.
-
-For the two sector-weight families, this lemma is applied to the signed union
-\[
+An earlier formal proof reached the same endpoint by using the recurrence for
+finite sums of geometric sequences before applying Newton--Girard. Let
+\begin{align}
     F(N)
-    =
+        &=\sum_{\ell=1}^{m}c_\ell w_\ell^N,
+        \qquad w_\ell\neq 0.
+    \label{eq:cpsv16_power_sum_alternative_route_geometric_sum}
+\end{align}
+Assume that $F(N)=0$ for every $N\geq M$. Subtracting $w_1F(N)$ from
+$F(N+1)$ gives
+\begin{align}
+    F(N+1)-w_1F(N)
+        &=\sum_{\ell=1}^{m}c_\ell w_\ell^{N+1}
+          -\sum_{\ell=1}^{m}c_\ell w_1w_\ell^N
+    \label{eq:cpsv16_power_sum_alternative_route_recurrence_expansion}\\
+        &=\sum_{\ell=2}^{m}
+          c_\ell(w_\ell-w_1)w_\ell^N
+    \label{eq:cpsv16_power_sum_alternative_route_reduced_sum}\\
+        &=0,
+        \qquad N\geq M.
+    \label{eq:cpsv16_power_sum_alternative_route_reduced_sum_eventual_zero}
+\end{align}
+The sum in
+(\ref{eq:cpsv16_power_sum_alternative_route_reduced_sum}) has one fewer term.
+Induction on $m$ shows that it vanishes for every $N\geq 0$. Therefore,
+\begin{align}
+    F(N+1)
+        &=w_1F(N),
+        \qquad N\geq 0.
+    \label{eq:cpsv16_power_sum_alternative_route_global_recurrence}
+\end{align}
+Iteration gives
+\begin{align}
+    F(k)
+        &=w_1^kF(0),
+        \qquad k\geq 0.
+    \label{eq:cpsv16_power_sum_alternative_route_recurrence_solution}
+\end{align}
+Since $F(M)=0$ and $w_1^M\neq 0$,
+(\ref{eq:cpsv16_power_sum_alternative_route_recurrence_solution}) implies
+$F(0)=0$. Thus $F(k)=0$ for every $k\geq 0$.
+
+For the two sector-weight families, apply this lemma to
+\begin{align}
+    F(N)
+        &=\sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
+          -\sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N.
+    \label{eq:cpsv16_power_sum_alternative_route_signed_weight_sum}
+\end{align}
+The nonzero-weight hypothesis permits the use of $w_1^M\neq 0$. Every weight
+in \leanid{SectorWeightData} is nonzero, so the exponent-zero power sum counts
+the entries:
+\begin{align}
+    \sum_{q=1}^{r_j}\mu_{j,q}^{0}
+        &=r_j.
+    \label{eq:cpsv16_power_sum_alternative_route_zero_power_count}
+\end{align}
+Hence $F(0)=0$ gives
+(\ref{eq:cpsv16_power_sum_alternative_route_formal_cardinality}). After
+transporting the right-hand index set along this equality, the extrapolation
+also gives
+\begin{align}
     \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
-    -
-    \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N.
-\]
-The nonzero-weight hypothesis is exactly what permits the step $w_1^M\neq 0$.
-Since all weights in \leanid{SectorWeightData} are nonzero, the exponent-zero
-power sum is
-\[
-    \sum_{q=1}^{r_j}\mu_{j,q}^{0}=r_j.
-\]
-Thus $F(0)=0$ gives $r_j^S=r_j^T$. After transporting the right-hand index
-set along this equality, the same extrapolation gives equality of the positive
-power sums over a common index type:
-\[
-    \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
-    =
-    \sum_{q=1}^{r_j^S}(\mu^T_{j,q})^N,
-    \qquad N\ge 1.
-\]
-The proof then applies the same-cardinality Newton--Girard theorem to recover
-the weight multiset. This route was previously present as checked Lean code
-through the corresponding copy-count, transported-positive-power-sum, and
-weight-multiset declarations.\footnote{\leanid{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq};
+        &=\sum_{q=1}^{r_j^S}(\mu^T_{j,q})^N,
+        \qquad N\geq 1.
+    \label{eq:cpsv16_power_sum_alternative_route_common_index_power_sums}
+\end{align}
+The same-cardinality Newton--Girard theorem then recovers the weight multiset.
+
+This route previously existed as checked \Lean{} code through declarations for
+the copy count, transported positive power sums, and weight-multiset
+equality.\footnote{Formal declarations:
+\leanid{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq};
 \leanid{MPSTensor.SectorWeightData.eventually_coeff_eq_implies_all_pos_eq_after_copies};
+and
 \leanid{MPSTensor.SectorWeightData.weight_multiset_eq_of_copies_eq_of_coeff_eq}.}
-Those declarations have been removed from the current source tree because the
-proportional Fundamental Theorem route no longer uses this same-cardinality
-detour. The calculation above records the removed argument for comparison
-with the paper, not a present Lean proof.
+Those declarations have been removed because the proportional Fundamental
+Theorem no longer uses this same-cardinality detour. The calculation records
+the removed route for comparison with Ref.~\cite{Cirac2016MPDO_arXiv}; it is
+not a present \Lean{} proof.
 
 \section{Conclusion}
 
-There is no mathematical gap in the removed alternative route under the
-nonzero-weight hypotheses used in the former sector-weight data: the
-extrapolation theorem proves the $N=0$ identity, so the copy count is
-justified. Nevertheless, this is no longer a present Lean route. The
-source-facing theorem surface should use the unequal-cardinality power-sum
-lemma, because that is the lemma invoked in the paper after BNT representative
-matching.
+Under the former nonzero-weight hypotheses, the removed route has no
+mathematical gap. The extrapolation argument proves the $N=0$ identity, and
+(\ref{eq:cpsv16_power_sum_alternative_route_zero_power_count}) justifies the
+copy count. The source-facing theorem surface should use the
+unequal-cardinality power-sum lemma because that is the lemma invoked after
+BNT representative matching in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-There would be a genuine gap if one tried to count zero weights from positive
-power sums alone. For example, adjoining a zero to a finite family does not
-change any positive power sum. Hence a statement without a nonzero-coefficient
-hypothesis can only recover the multiset after deleting zero entries, unless an
-additional $N=0$ identity is assumed.
+Without a nonzero-coefficient hypothesis, positive power sums cannot count
+zero weights. Adjoining a zero to a finite family leaves every positive power
+sum unchanged. A theorem without this hypothesis can therefore recover only
+the multiset obtained after deleting zero entries, unless it separately
+assumes an exponent-zero identity.
 
 \bibliographystyle{alpha}
 \bibliography{references}

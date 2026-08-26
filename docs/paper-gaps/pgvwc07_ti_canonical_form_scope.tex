@@ -17,392 +17,424 @@
 
 \section{The source theorem}
 
-The translation-invariant canonical-form theorem of
-P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac starts from an arbitrary
-translation-invariant MPS representation on a finite ring
+Let $A=(A_i)_i$ be an arbitrary translation-invariant matrix product state
+(MPS) tensor on a finite ring, with bond dimension $D$. The
+translation-invariant canonical-form theorem of P\'erez-Garc\'ia, Verstraete,
+Wolf, and Cirac applies directly to $A$
 \cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007MPSReps}.
-It states that the matrices can always be decomposed as
-\[
-    A_i =
-    \begin{pmatrix}
-        \lambda_1 A_i^1 &0               &0\\
-        0               &\lambda_2 A_i^2 &0\\
-        0               &0               &\cdots
-    \end{pmatrix},
-\]
-where $1 \geq \lambda_j > 0$ and each block satisfies:
-\[
-    \sum_i A_i^j A_i^{j\dagger} = \mathbf{1},\qquad
-    \sum_i A_i^{j\dagger}\Lambda^j A_i^j = \Lambda^j,
-\]
-for a diagonal positive full-rank matrix $\Lambda^j$, and $\mathbf{1}$ is the
-only fixed point of
-\[
-    \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}.
-\]
-If the initial representation has bond dimension $D$, the canonical
-representation has bond dimension at most $D$.
+It decomposes each matrix as
+\begin{align}
+    A_i
+        &=
+        \begin{pmatrix}
+            \lambda_1 A_i^1 & 0 & 0 \\
+            0 & \lambda_2 A_i^2 & 0 \\
+            0 & 0 & \cdots
+        \end{pmatrix},
+    \label{eq:pgvwc07_ti_canonical_form_scope_block_decomposition}\\
+    1
+        &\geq \lambda_j>0.
+    \label{eq:pgvwc07_ti_canonical_form_scope_positive_weights}
+\end{align}
+For every block $j$, the theorem gives a diagonal positive-definite matrix
+$\Lambda^j$ such that
+\begin{align}
+    \sum_i A_i^j A_i^{j\dagger}
+        &= \mathbf{1},
+    \label{eq:pgvwc07_ti_canonical_form_scope_unital_block}\\
+    \sum_i A_i^{j\dagger}\Lambda^j A_i^j
+        &= \Lambda^j.
+    \label{eq:pgvwc07_ti_canonical_form_scope_dual_fixed_point}
+\end{align}
+Define the transfer map of block $j$ by
+\begin{align}
+    \mathcal{E}_j(X)
+        &:= \sum_i A_i^j X A_i^{j\dagger}.
+    \label{eq:pgvwc07_ti_canonical_form_scope_transfer_map}
+\end{align}
+The identity is the only fixed point of $\mathcal{E}_j$ after the usual scalar
+normalization of the fixed-point line. The resulting representation has bond
+dimension at most $D$
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007MPSReps}.
 
-The statement does not assume injectivity, a condition C1, blockwise
-primitivity, a prior block decomposition, strict separation of the weights,
-or that only one block occurs in each weight class. These properties enter
-elsewhere in the paper as later hypotheses, consequences, or genericity
-conditions. For example, the injectivity statement appears only after the
-canonical form has been obtained
+The theorem does not assume injectivity, condition C1, blockwise primitivity, a
+pre-existing block decomposition, strict separation of the weights, or one
+block in each weight class. These properties appear elsewhere in the source as
+later hypotheses, consequences, or genericity conditions. Injectivity is
+established only after canonical form
 \cite[Proposition~\texttt{prop-inj}, lines~911--950]{PerezGarcia2007MPSReps},
-and the generic uniqueness discussion is a separate theorem
+and generic uniqueness is a separate result
 \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
 
 \section{Faithful proof order}
 
-The proof of Theorem~\texttt{Th:TIcanonical} is short but highly ordered, and
-the formalization should preserve that order rather than replace it by later
-canonical-form theorems. The source proof proceeds as follows.
+The proof of Theorem~\texttt{Th:TIcanonical} in
+Ref.~\cite{PerezGarcia2007MPSReps} follows a specific sequence. A faithful
+formalization must derive the block structure in that order rather than assume
+the hypotheses of later canonical-form results.
 
 \begin{enumerate}
-    \item Lines~765--770 normalize the spectral radius and, when the positive
-          fixed point is full rank, gauge the tensor by \(X^{-1/2}\) and
-          \(X^{1/2}\) to obtain the unital condition
-          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
+    \item Lines~765--770 normalize the spectral radius. If $X$ is a
+          positive-definite fixed point, the proof uses the gauge
+          \begin{align}
+              B_i
+                  &:= X^{-1/2}A_iX^{1/2},
+              \label{eq:pgvwc07_ti_canonical_form_scope_full_rank_gauge}\\
+              \sum_i B_iB_i^\dagger
+                  &= \mathbf{1}.
+              \label{eq:pgvwc07_ti_canonical_form_scope_full_rank_unitality}
+          \end{align}
 
-    \item Lines~771--783 treat a non-full-rank positive fixed point. The
-          support projection \(P_R\) is not an independent hypothesis: it is
-          derived from the spectral decomposition of the singular positive
-          fixed point, using the positivity contradiction in lines~775--783.
-          This is the point at which the invariant-subspace hypothesis is
-          proved; it is not an assumption imported from a prepared block
+    \item Lines~771--783 treat a positive fixed point that is not full rank.
+          Its support projection $P_R$ is derived from the spectral
+          decomposition and the positivity contradiction in lines~775--783.
+          The resulting invariant-subspace relation is
+          \begin{align}
+              A_iP_R
+                  &= P_RA_iP_R.
+              \label{eq:pgvwc07_ti_canonical_form_scope_support_invariance}
+          \end{align}
+          Thus $P_R$ is a conclusion, not an assumption from a prepared block
           decomposition.
 
-    \item Lines~785--815 use the derived relation
-          \(A_iP_R=P_RA_iP_R\) to split the trace over the finite ring into the
-          \(R\) and \(R^\perp\) restrictions. The cyclic trace calculation is a
-          finite-ring argument: the \(P_R\)-term passes through the product and
-          cancels against \(P_{R^\perp}\). This is the source of the recursive
-          block decomposition and of the bond-dimension non-increase.
+    \item Lines~785--815 use
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_support_invariance}) to
+          split the finite-ring trace into its restrictions to $R$ and
+          $R^\perp$. Cyclicity moves the $P_R$ term through the product and
+          eliminates the mixed contribution against $P_{R^\perp}$. This
+          calculation gives the recursive block decomposition and shows that
+          the bond dimension does not increase.
 
-    \item Lines~816--826 iterate the same splitting on each block and then use
-          a non-scalar fixed point \(X\neq\mathbf{1}\) to produce the positive
-          non-full-rank fixed point
-          \(\mathbf{1}-\lambda_1^{-1}X\). This is the step that enforces
-          uniqueness of the identity fixed point in each final block.
+    \item Lines~816--826 repeat the split within each block. If a unital block
+          has a non-scalar fixed point $X$, the proof shifts $X$ to obtain a
+          singular positive fixed point:
+          \begin{align}
+              \mathbf{1}-\lambda_1^{-1}X
+                  &\geq 0,
+              \label{eq:pgvwc07_ti_canonical_form_scope_fixed_point_shift}\\
+              \mathcal{E}(\mathbf{1}-\lambda_1^{-1}X)
+                  &= \mathbf{1}-\lambda_1^{-1}X.
+              \label{eq:pgvwc07_ti_canonical_form_scope_shifted_fixed_point}
+          \end{align}
+          This step forces each final fixed-point space to be the scalar line
+          generated by $\mathbf{1}$.
 
-    \item Lines~827--832 apply the analogous argument to the dual map and use a
-          unitary conjugation to diagonalize the resulting full-rank positive
-          fixed point, producing the matrices \(\Lambda^j\) in the theorem.
+    \item Lines~827--832 apply the analogous argument to the dual map. A
+          unitary conjugation diagonalizes the resulting positive-definite
+          fixed point and produces $\Lambda^j$ in
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_dual_fixed_point}).
 \end{enumerate}
 
-Thus the source theorem is not a primitive-block theorem, an injective-block
-theorem, or a prepared-family theorem. Nor is the invariant-projection lemma by
-itself enough: the projection must be obtained from the positive fixed-point
-argument in the cited lines, and the finite-ring trace split must then be
-carried out before the recursive decomposition is asserted. A formal proof of
-Theorem~\texttt{Th:TIcanonical} should reconstruct these steps from an
-arbitrary translation-invariant representation and use later notions only as
-lemmas after their hypotheses have been obtained in this proof order.
+The source theorem is therefore neither a primitive-block theorem, an
+injective-block theorem, nor a theorem about a prepared block family. The
+invariant-projection lemma alone is also insufficient: the proof must derive
+the support projection from a positive fixed point and then perform the
+finite-ring trace split before invoking recursion.
 
 \section{Normalization orientation}
 
-There is also a convention difference in the direction of the canonical
-normalization. In the source theorem, the block transfer map is written as
-\[
-    \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}
-\]
-and imposes the unital condition
-\[
-    \sum_i A_i^j A_i^{j\dagger} = \mathbf{1}.
-\]
-The local canonical-form chapter usually works in the dual
-trace-preserving, or left-canonical, orientation
-\[
-    \sum_i A_i^{j\dagger} A_i^j = \mathbf{1}.
-\]
-This is a convention difference when it is accompanied by the corresponding
-adjoint transfer map or conjugate-transposed Kraus family. It is nevertheless
-important to state the convention explicitly: a theorem written only in the
-left-canonical orientation should not be read literally as PGVWC07
-Theorem~\texttt{Th:TIcanonical} unless the dualization or gauge conversion
-has also been supplied.
+The source uses the transfer map
+(\ref{eq:pgvwc07_ti_canonical_form_scope_transfer_map}) and the unital
+normalization
+(\ref{eq:pgvwc07_ti_canonical_form_scope_unital_block}). The local
+canonical-form chapter often uses the dual, trace-preserving orientation
+\begin{align}
+    \sum_i A_i^{j\dagger}A_i^j
+        &= \mathbf{1}.
+    \label{eq:pgvwc07_ti_canonical_form_scope_left_canonical_orientation}
+\end{align}
+The conventions correspond after passing to the adjoint transfer map or the
+conjugate-transposed Kraus family. A theorem stated only in the left-canonical
+orientation is not literally Theorem~\texttt{Th:TIcanonical} of
+Ref.~\cite{PerezGarcia2007MPSReps} unless it also supplies this dualization or
+an equivalent gauge conversion.
 
-\section{The formal reductions}
+\section{Conditional formal reductions}
 
-The currently checked statements in the canonical-form reduction chapter
-prove conditional reductions from prior block hypotheses. In particular,
-the primitive fixed-point reduction assumes
-that the blocks are injective, trace-preserving in the chosen gauge, strictly
-ordered by weight modulus, nonzero, positive-dimensional, and primitive. The
-peripheral-spectrum variant assumes the same injectivity, normalization,
-strict weight ordering, nonzero weights, and positive block dimensions,
-together with the statement that each block transfer map has peripheral
-spectrum $\{1\}$. The normal-canonical-form reduction starts from a weighted
-block decomposition already equivalent to the original state and assumes
-irreducibility, trace-preserving normalization, primitivity, pairwise distinct
-weight moduli, nonzero weights, and positive bond dimensions.
+The checked primitive fixed-point reduction assumes injective blocks,
+trace-preserving normalization in the chosen gauge, strict ordering by weight
+modulus, nonzero blocks, positive block dimensions, and primitivity. The
+peripheral-spectrum variant retains the injectivity, normalization,
+weight-ordering, nonzero-weight, and positive-dimension assumptions and
+requires every block transfer map to have peripheral spectrum $\{1\}$. The
+normal-canonical-form reduction starts with a weighted block decomposition
+already equivalent to the original state and assumes irreducibility,
+trace-preserving normalization, primitivity, pairwise distinct weight moduli,
+nonzero weights, and positive bond dimensions.
 
-These are correct conditional consequences, but they are not formalizations
-of the full PGVWC07 translation-invariant canonical-form theorem. Their
-hypotheses are stronger and more structured than the source theorem's
-hypotheses. Treating them as the full source theorem would import extra
-assumptions into any later argument that cites canonical-form existence.
+These are valid conditional reductions, but they do not formalize the
+arbitrary-input theorem of Ref.~\cite{PerezGarcia2007MPSReps}. Their
+hypotheses already contain substantial block structure. Citing them as the
+source theorem would add assumptions to later uses of canonical-form
+existence.
 
 \section{Current proof-path audit}
-\label{sec:current-proof-path-audit}
+\label{sec:pgvwc07_ti_canonical_form_scope_current_proof_path_audit}
 
-The earlier existence path now has the following formal pieces.
+The formal development contains the following components.
 
 \begin{enumerate}
     \item
-          \path|MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector|
-          formalizes the spectral-radius normalization part of
-          Theorem~\texttt{Th:TIcanonical}, lines 765--769.  Given a positive
-          definite eigenvector \(\rho\) with
-          \(\mathcal{E}_A(\rho)=r\rho\) and \(r>0\), it proves that
-          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\) satisfies
-          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
-
-    \item \path|MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint|
-          formalizes the full-rank fixed-point gauge in
-          Theorem~\texttt{Th:TIcanonical}, lines 767--769.  Given a positive
-          definite fixed point \(\rho\) of \(\mathcal{E}_A\), it constructs the
-          right-canonical gauge \(B_i=\rho^{-1/2}A_i\rho^{1/2}\) and proves
-          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).  The companion theorem
-          \path|MPSTensor.sameMPV_unitalGauge| records preservation of the
-          finite-ring coefficients under this similarity.
+          \leanid{MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector}
+          formalizes the spectral-radius normalization in lines~765--769 of
+          Theorem~\texttt{Th:TIcanonical} in
+          Ref.~\cite{PerezGarcia2007MPSReps}. Given a positive-definite
+          eigenvector $\rho$ with $\mathcal{E}_A(\rho)=r\rho$ and $r>0$, it
+          constructs
+          \begin{align}
+              B_i
+                  &:= r^{-1/2}\rho^{-1/2}A_i\rho^{1/2},
+              \label{eq:pgvwc07_ti_canonical_form_scope_spectral_unital_gauge}\\
+              \sum_i B_iB_i^\dagger
+                  &= \mathbf{1}.
+              \label{eq:pgvwc07_ti_canonical_form_scope_spectral_unital_result}
+          \end{align}
 
     \item
-          \path|MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint|
-          formalizes the fixed-point shift in
-          Theorem~\texttt{Th:TIcanonical}, lines 819--826.  For a unital block,
-          a Hermitian fixed point which is not a scalar multiple of the identity
-          gives the singular positive fixed point
-          \(\lambda_{\max}\mathbf{1}-X\).  The companion theorem
-          \path|MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint|
-          composes this shift with the support-projection split, giving a
-          strict two-block MPV-equivalent decomposition.  The formal hypothesis
-          uses ``non-scalar'' rather than merely \(X\ne\mathbf{1}\), since every
-          scalar multiple of the identity is fixed by a unital linear map and
-          cannot force a nontrivial split.
+          \leanid{MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint}
+          formalizes the full-rank fixed-point gauge in lines~767--769. For a
+          positive-definite fixed point $\rho$, it sets
+          \begin{align}
+              B_i
+                  &:= \rho^{-1/2}A_i\rho^{1/2},
+              \label{eq:pgvwc07_ti_canonical_form_scope_unital_fixed_point_gauge}\\
+              \sum_i B_iB_i^\dagger
+                  &= \mathbf{1}.
+              \label{eq:pgvwc07_ti_canonical_form_scope_unital_fixed_point_result}
+          \end{align}
+          The companion theorem \leanid{MPSTensor.sameMPV_unitalGauge}
+          proves that this similarity preserves finite-ring coefficients.
 
     \item
-          \path|MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital|
-          formalizes the fixed-point endpoint in
-          Theorem~\texttt{Th:TIcanonical}, lines 816--826.  Once the block is
-          irreducible and unital, every fixed point of its transfer map is a
-          scalar multiple of \(\mathbf{1}\).  The proof uses the MPS
-          irreducible-tensor/irreducible-map bridge and the already formalized
-          channel theorem \path|Kraus.fixed_eq_scalar_of_irreducible_unital|
-          (Wolf Theorem 6.6).  Thus the identity is the unique fixed point
-          after the usual scalar normalization of the fixed-point line.
+          \leanid{MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint}
+          formalizes the fixed-point shift in lines~819--826. A Hermitian
+          fixed point of a unital block that is not scalar yields the singular
+          positive fixed point $\lambda_{\max}\mathbf{1}-X$. The companion
+          theorem
+          \leanid{MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint}
+          combines the shift with support-projection splitting to produce a
+          strict two-block decomposition with the same matrix-product-vector
+          (MPV) family. The hypothesis is ``non-scalar'', not merely
+          $X\neq\mathbf{1}$, because every scalar multiple of the identity is
+          fixed by a unital linear map and cannot force a nontrivial split.
 
     \item
-          \path|MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor|
-          formalizes the dual-map diagonalization in
-          Theorem~\texttt{Th:TIcanonical}, lines 827--832, conditional on having
-          already reached an irreducible unital block.  The proof applies the
-          existing trace-preserving diagonalization theorem to the
-          conjugate-transposed Kraus family \(i\mapsto A_i^\dagger\).  This is
-          not a duplicate spectral proof: unitality of \(A\) is trace
-          preservation for \(A^\dagger\), and translating back gives a unitary
-          gauge \(B_i=U^\dagger A_iU\) with
-          \[
-              \sum_i B_iB_i^\dagger=\mathbf{1},
-              \qquad
-              \sum_i B_i^\dagger\Lambda B_i=\Lambda,
-          \]
-          for diagonal positive-definite \(\Lambda\).
+          \leanid{MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital}
+          formalizes the endpoint of lines~816--826. Every fixed point of an
+          irreducible unital block is a scalar multiple of $\mathbf{1}$. The
+          proof uses the bridge between irreducible MPS tensors and irreducible
+          maps together with
+          \leanid{Kraus.fixed_eq_scalar_of_irreducible_unital}, which
+          formalizes Theorem~6.6 of Ref.~\cite{Wolf2012Quantum}.
 
     \item
-          \path|MPSTensor.exists_unital_data_of_irreducible| formalizes the
-          Perron--Frobenius unital-gauge step in
-          Theorem~\texttt{Th:TIcanonical}, lines 765--770, for a single
-          irreducible nonzero block.  It obtains a positive-definite
-          eigenvector \(\rho\) for the transfer map by applying the adjoint
+          \leanid{MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor}
+          formalizes the dual-map diagonalization in lines~827--832 for an
+          irreducible unital block. It applies the trace-preserving
+          diagonalization theorem to $i\mapsto A_i^\dagger$. Translating back
+          gives $B_i=U^\dagger A_iU$ and a diagonal positive-definite
+          $\Lambda$ satisfying
+          \begin{align}
+              \sum_i B_iB_i^\dagger
+                  &= \mathbf{1},
+              \label{eq:pgvwc07_ti_canonical_form_scope_dual_diag_unital}\\
+              \sum_i B_i^\dagger\Lambda B_i
+                  &= \Lambda.
+              \label{eq:pgvwc07_ti_canonical_form_scope_dual_diag_fixed_point}
+          \end{align}
+
+    \item
+          \leanid{MPSTensor.exists_unital_data_of_irreducible} formalizes the
+          Perron--Frobenius unital-gauge step in lines~765--770 for one
+          irreducible nonzero block. It applies the adjoint
           Perron--Frobenius theorem to the conjugate-transposed Kraus family,
-          and then forms
-          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\) with
-          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).  This is a scoped
-          single-block input, not the full recursive canonical-form theorem.
+          obtains a positive-definite eigenvector $\rho$, and constructs
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_spectral_unital_gauge}).
+          This is a single-block input, not the recursive theorem.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible|
-          composes the single-block source steps in
-          Theorem~\texttt{Th:TIcanonical}, lines 765--770 and 816--832.  Starting
-          from one irreducible nonzero block, it constructs the
-          Perron--Frobenius unital representative
-          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\), proves that the fixed
-          points of \(\mathcal{E}_B\) are scalar multiples of the identity, and
-          then applies the dual fixed-point diagonalization to a unitary
-          conjugate of \(B\).  This removes a previous composition gap for a
-          single block.  It is still not the full source theorem, because the
-          construction has not yet been threaded through the recursive
-          finite-ring block decomposition, the positive weights, and the
-          total bond-dimension bound.
+          \leanid{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
+          composes the single-block steps in lines~765--770 and 816--832. It
+          constructs the Perron--Frobenius unital representative, proves that
+          its fixed points are scalar, and diagonalizes a positive-definite
+          dual fixed point after unitary conjugation. This closes the
+          single-block composition gap, but it does not include recursive
+          finite-ring decomposition, positive weights, or the total
+          bond-dimension bound.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise|
-          applies the preceding single-block theorem to a prepared family of
-          nonzero irreducible summands with unit weights.  It constructs the
-          positive spectral-radius weights, unital block representatives,
-          scalar transfer-map fixed points, and diagonal positive-definite dual
-          fixed points block by block, while preserving the weighted MPV
-          family.  This closes the blockwise assembly step after the
-          irreducible summands have already been obtained.  It is still not
-          the full source theorem, because the statement assumes the prepared
-          nonzero irreducible decomposition.
+          \leanid{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise} applies
+          the preceding result to a prepared family of nonzero irreducible
+          summands with unit weights. It constructs positive spectral-radius
+          weights, unital representatives, scalar fixed points, and diagonal
+          positive-definite dual fixed points blockwise while preserving the
+          weighted MPV family. It assumes that the irreducible decomposition
+          has already been obtained.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary|
-          composes the positive-length nonzero-block decomposition with the
-          preceding blockwise PGVWC07 theorem. Starting from an arbitrary
-          tensor, it discards all-zero blocks, which vanish on nonempty rings,
-          and puts the retained blocks into the unital orientation, with
-          positive spectral-radius weights, scalar transfer-map fixed points,
-          and diagonal positive-definite dual fixed points. The structural
-          dimension identity for the original direct sum gives
-          \(\sum_k D_k\leq D\); no empty-word trace calculation is used.
+          \leanid{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary}
+          composes a positive-length nonzero-block decomposition with the
+          blockwise theorem. Starting from an arbitrary tensor, it removes
+          all-zero blocks, which vanish on nonempty rings, and places the
+          retained blocks in the unital orientation. It supplies positive
+          weights, scalar fixed points, diagonal positive-definite dual fixed
+          points, and
+          \begin{align}
+              \sum_k D_k
+                  &\leq D.
+              \label{eq:pgvwc07_ti_canonical_form_scope_bond_dimension_bound}
+          \end{align}
+          This bound follows from the direct-sum dimension identity, without
+          an empty-word trace calculation.
 
     \item
-          \path|MPSTensor.PGVWC07PositiveLengthWitness| and
-          \path|MPSTensor.exists_pgvwc07_positiveLengthWitness| record the
-          preceding positive-length theorem as a single package of data.  The
-          fields contain the nonzero unital blocks, positive real weights,
-          diagonal positive-definite dual fixed points, scalar transfer-map
-          fixed-point conclusions, positive block dimensions, positive-length MPV equality,
-          and the total bond-dimension bound.  Nonvanishing of the weights is
-          a direct consequence of their positive-real form, so nonvanishing is
-          not an additional field of the witness.  This is not a new proof
-          route; it is an equivalent formulation of the proved positive-length
-          theorem, intended to prevent later arguments from repeating the long
-          existential conclusion.
+          \leanid{MPSTensor.PGVWC07PositiveLengthWitness} and
+          \leanid{MPSTensor.exists_pgvwc07_positiveLengthWitness} package the
+          preceding theorem. Their fields record nonzero unital blocks,
+          positive real weights, diagonal positive-definite dual fixed points,
+          scalar transfer-map fixed points, positive block dimensions,
+          positive-length MPV equality, and
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_bond_dimension_bound}).
+          Positivity already implies nonvanishing of the weights. This witness
+          is an equivalent formulation, not a new proof route.
 
     \item
-          \path|MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization|
-          formalizes the finite-family scalar normalization corresponding to
-          Theorem~\texttt{Th:TIcanonical}, lines 765--766, for a witness with
-          at least one nonzero block.  Dividing the positive real weights by
-          their maximum gives normalized positive weights with
-          \(|\nu_k|\leq 1\) and equality for one block.  The theorem also
-          records the resulting global factor \(s^N\) in length-\(N\) MPV
-          coefficients.
+          \leanid{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
+          formalizes the finite-family normalization in lines~765--766. For a
+          nonempty witness, division by the largest positive weight produces
+          weights $\nu_k$ such that
+          \begin{align}
+              \lvert\nu_k\rvert
+                  &\leq 1,
+              \label{eq:pgvwc07_ti_canonical_form_scope_normalized_weight_bound}\\
+              \lvert\nu_{k_0}\rvert
+                  &= 1
+              \label{eq:pgvwc07_ti_canonical_form_scope_maximal_normalized_weight}
+          \end{align}
+          for some $k_0$. At length $N$, this normalization introduces a
+          global factor $s^N$ in the MPV coefficients.
 
     \item
-          \path|MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv|
-          proves that a positive-length witness is nonempty whenever the
-          original tensor has at least one nonzero positive-length MPV
-          coefficient.  If the block family were empty, the block-diagonal MPV
-          expansion would be an empty sum at every positive length, contradicting
-          the witness equality with the chosen nonzero coefficient.
+          \leanid{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
+          proves that the witness is nonempty whenever the original tensor has
+          a nonzero positive-length MPV coefficient. An empty block family
+          gives an empty sum, hence zero, at every positive length.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv|
-          composes the arbitrary-input witness theorem with the preceding
-          nonemptiness lemma and the exact weight-normalization theorem.
-          Under the nonzero positive-length MPV
-          hypothesis, it produces a positive scalar \(s\) and normalized
-          weights \(|\nu_k|\leq 1\), with equality for one block, such that the
-          globally rescaled tensor \(s^{-1}A\) has exactly the same
-          positive-length MPV coefficients as the normalized weighted block
-          tensor.  This formalizes the exact finite-ring effect of the
-          ``without loss of generality'' spectral-radius normalization in
-          Theorem~\texttt{Th:TIcanonical}, lines 765--766.
+          \leanid{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
+          combines the arbitrary-input witness, its nonemptiness, and exact
+          weight normalization. Under the nonzero positive-length MPV
+          hypothesis, it produces $s>0$ and normalized weights satisfying
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_normalized_weight_bound})
+          and
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_maximal_normalized_weight}).
+          The tensor $s^{-1}A$ has the same positive-length MPV coefficients
+          as the normalized weighted block tensor. This is the exact
+          finite-ring effect of the ``without loss of generality''
+          normalization in lines~765--766 of
+          Ref.~\cite{PerezGarcia2007MPSReps}.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero|
-          records the arbitrary-input zero/nonzero dichotomy for the exact
-          rescaled formulation.  Either all positive-length MPV coefficients of
-          the original tensor vanish, or the preceding exact rescaled normalized
-          PGVWC07 form exists. The next theorem absorbs the zero branch into an
-          empty retained block family.
+          \leanid{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
+          gives the arbitrary-input dichotomy: either every positive-length
+          MPV coefficient vanishes, or the exact rescaled normalized form
+          exists.
 
     \item
-          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty|
-          removes the disjunction in the preceding theorem by adopting the
-          positive-length convention that the zero branch has an empty
-          nonzero-block family.  Thus the positive-weight, unital,
-          scalar-fixed-point, and dual-diagonal block conditions are vacuous in
-          the branch where every positive-length MPV coefficient vanishes.  In
-          the nonzero branch the family is nonempty and still has a normalized
-          weight of norm one.  This is an exact positive-length formulation:
-          after a positive global rescaling of the original tensor, the
-          normalized weighted block tensor has the same coefficients on every
-          nonempty ring, and \(\sum_k D_k\leq D\).
+          \leanid{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
+          absorbs the zero branch into an empty retained block family. The
+          positive-weight, unital, scalar-fixed-point, and dual-diagonal
+          conditions are then vacuous. In the nonzero branch, the family is
+          nonempty and contains a normalized weight of norm one. After a
+          positive global rescaling, the block tensor agrees with the original
+          tensor on every nonempty ring and satisfies
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_bond_dimension_bound}).
 
-    \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
-          recursive invariant-projection splitting used in the proof of
-          Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
-          arbitrary tensor and gives a finite direct sum of irreducible blocks
-          with the same matrix-product-vector coefficients and the structural
-          identity \(\sum_kD_k=D\). This is a faithful partial proof step. It is
-          not the full source theorem, because it does
-          not construct the weights $\lambda_j$, the unital block orientation,
-          the diagonal full-rank matrices $\Lambda^j$, the uniqueness of the
-          identity fixed point, or the final bond-dimension bound.
+    \item
+          \leanid{MPSTensor.exists_irreducible_blockDecomp} formalizes the
+          recursive invariant-projection split in lines~765--833. It produces
+          a finite direct sum of irreducible blocks with the same MPV
+          coefficients and
+          \begin{align}
+              \sum_k D_k
+                  &= D.
+              \label{eq:pgvwc07_ti_canonical_form_scope_structural_dimension_identity}
+          \end{align}
+          This source-faithful partial result does not by itself construct the
+          weights, unital orientation, diagonal dual fixed points, scalar
+          fixed-point spaces, or final canonical-form package.
 
-    \item \path|MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks|
-          discards the all-zero irreducible summands at positive lengths and
-          retains only blocks with a nonzero Kraus operator. It proves
+    \item
+          \leanid{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
+          removes all-zero irreducible summands at positive lengths. It proves
           positive-length MPV equality, positive block dimensions, and
-          \(\sum_kD_k\leq D\) directly from the preceding structural identity.
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_bond_dimension_bound})
+          from
+          (\ref{eq:pgvwc07_ti_canonical_form_scope_structural_dimension_identity}).
 
-    \item \path|MPSTensor.exists_tp_gauge_from_arbitrary|
-          applies Perron--Frobenius normalization block by block after the
-          all-zero summands have been discarded. It produces nonzero
-          irreducible blocks in the local left-canonical orientation
-          $\sum_i (B_k^i)^\dagger B_k^i = \mathbf{1}$ and preserves the
-          bond-dimension bound. This is the dual
-          orientation of the unital condition in
-          Theorem~\texttt{Th:TIcanonical}; the conversion is a convention issue
-          only when the adjoint transfer map is carried along explicitly.
+    \item
+          \leanid{MPSTensor.exists_tp_gauge_from_arbitrary} applies
+          Perron--Frobenius normalization blockwise after removing all-zero
+          summands. It produces nonzero irreducible blocks satisfying
+          \begin{align}
+              \sum_i (B_k^i)^\dagger B_k^i
+                  &= \mathbf{1}
+              \label{eq:pgvwc07_ti_canonical_form_scope_arbitrary_tp_gauge}
+          \end{align}
+          and preserves the bond-dimension bound. This orientation is dual to
+          the source's unital orientation and is equivalent only when the
+          adjoint transfer map is carried explicitly.
 
-    \item \path|MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp|
-          is a prepared-block theorem. It assumes a weighted block decomposition,
-          irreducibility, trace-preserving normalization, primitivity, pairwise
-          distinct weight moduli, nonzero weights, and positive bond dimensions.
-          It should remain a conditional corollary, not a citation target for
-          PGVWC07 Theorem~\texttt{Th:TIcanonical}.
+    \item
+          \leanid{MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp}
+          is a prepared-block theorem. It assumes a weighted block
+          decomposition, irreducibility, trace-preserving normalization,
+          primitivity, pairwise distinct weight moduli, nonzero weights, and
+          positive bond dimensions. It remains a conditional corollary, not a
+          citation target for Theorem~\texttt{Th:TIcanonical} of
+          Ref.~\cite{PerezGarcia2007MPSReps}.
 \end{enumerate}
 
-Thus the primitive, peripheral-primitive, and normal-canonical-form reductions
-listed above should not be read as the PGVWC07 translation-invariant
-canonical-form theorem.  The blueprint instead uses the checked positive-length
-statement as the theorem statement for
-Theorem~\texttt{Th:TIcanonical}.  The finite-family part of the paper's
-convention \(1\geq \lambda_j>0\) is formalized by rescaling all positive
-weights by their maximum.  In exact coefficients this introduces the global
-factor \(s^N\) at length \(N\), so the primary exact statement rescales the
-original tensor by \(s^{-1}\).
+The primitive, peripheral-primitive, and normal-canonical-form reductions are
+not the source theorem. The blueprint instead uses the checked positive-length
+statement as its formal counterpart of Theorem~\texttt{Th:TIcanonical}.
+Dividing a finite positive family by its maximum gives the source convention
+$1\geq\lambda_j>0$. Because the division changes every length-$N$ coefficient
+by the factor $s^N$, the primary exact statement rescales the original tensor
+by $s^{-1}$.
 
 \section{Formal boundary}
 
-The currently checked primitive, peripheral-primitive, and
-normal-canonical-form reductions should therefore be read as conditional
-canonical-form theorems rather than as
-formalizations of the arbitrary-input source theorem.\footnote{The formal
-declarations are listed in Section~\ref{sec:current-proof-path-audit}.}
-They may be used after their hypotheses have been proved from earlier
-source-faithful reductions, but they should not be cited as giving canonical
-form directly from an arbitrary translation-invariant MPS representation.
+The primitive, peripheral-primitive, and normal-canonical-form reductions must
+be read as conditional canonical-form theorems, not as formalizations of the
+arbitrary-input source theorem.\footnote{Section~\ref{sec:pgvwc07_ti_canonical_form_scope_current_proof_path_audit}
+lists the formal declarations.}
+They may be applied after source-faithful reductions establish their
+hypotheses, but they may not be cited as producing canonical form directly
+from an arbitrary translation-invariant MPS representation.
 
 \section{Current conclusion}
 
-The formalization now has a theorem cited for PGVWC07
-Theorem~\texttt{Th:TIcanonical}, in the positive-length convention used by the
-blueprint:
-\path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty|.
-It starts from an arbitrary translation-invariant MPS representation.  After a
-positive global rescaling, it constructs a finite family of positive weights,
-unital blocks, diagonal full-rank dual fixed points, scalar transfer-map fixed
-points, and the bond-dimension bound.  The nonzero-block family is allowed to
-be empty exactly in the case where every positive-length MPV coefficient
-vanishes.
+The formal theorem used for Theorem~\texttt{Th:TIcanonical} of
+Ref.~\cite{PerezGarcia2007MPSReps}, under the blueprint's positive-length
+convention, is
+\leanid{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}.
+It starts from an arbitrary translation-invariant MPS representation. After a
+positive global rescaling, it constructs positive weights, unital blocks,
+diagonal full-rank dual fixed points, scalar transfer-map fixed points, and the
+bond-dimension bound
+(\ref{eq:pgvwc07_ti_canonical_form_scope_bond_dimension_bound}). The retained
+nonzero-block family is empty exactly when all positive-length MPV coefficients
+vanish.
 
 The preceding theorem
-\path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary| supplies the
-unnormalized positive-length block family and its bond-dimension bound directly,
-without a separate empty-word convention.
+\leanid{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary} directly
+supplies the unnormalized positive-length block family and its bond-dimension
+bound without a separate empty-word convention.
 
-The remaining conditional primitive, peripheral-primitive, and
-normal-canonical-form reductions are later consequences used only after their
-extra hypotheses have been established.  They are not alternate citations for
+The primitive, peripheral-primitive, and normal-canonical-form reductions
+remain later consequences available only after their additional hypotheses
+have been proved. They are not alternative citations for
 Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}

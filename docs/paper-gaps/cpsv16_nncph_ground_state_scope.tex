@@ -17,603 +17,690 @@
 
 \section{Source statement}
 
-The pure-state main theorem of \cite{Cirac2016MPDO_arXiv} states that, for a
-tensor $A$ in canonical form generating a family of MPS, the following
-conditions are equivalent:\footnote{Local source:
+The pure-state main theorem of Ref.~\cite{Cirac2016MPDO_arXiv} states that, for
+a tensor $A$ in canonical form generating a family of matrix product states
+(MPS), the following conditions are equivalent:\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:534--540}, label
 \path{thm:main-MPS}.}
 \begin{align}
-  \mathrm{RFP}(A),\qquad
-  \mathrm{ZCL}(A),\qquad
-  \forall N>2,\; |V^{(N)}(A)\rangle
-  \text{ is a ground state of a NNCPH}.
+    \mathrm{RFP}(A),\qquad
+    \mathrm{ZCL}(A),\qquad
+    \forall N>2,
+    \ket{V^{(N)}(A)}
+    \text{ is a ground state of a NNCPH}.
+    \label{eq:cpsv16_nncph_ground_state_scope_source_equivalence}
 \end{align}
-The formal implications below use the same range $N>2$.  This range is
-independent of Beigi's ordered-cycle formula.  At $N=2$, the two periodic
-length-two windows traverse the same sites in opposite orders; the sector-graph
-dimension formula below now treats this convention without extending the CPSV
-equivalence to length two.
-The preceding definition constructs
+Here RFP denotes the renormalization-fixed-point condition, ZCL denotes the
+zero-correlation-length condition, and NNCPH denotes a nearest-neighbor
+commuting parent Hamiltonian. The formal implications use the same range
+$N>2$. This range is independent of the ordered-cycle formula used in the
+source argument. At $N=2$, the two periodic length-two windows traverse the
+same sites in opposite orders. The sector-graph dimension formula discussed
+below handles this convention without extending
+(\ref{eq:cpsv16_nncph_ground_state_scope_source_equivalence}) to length two.
+
+The definition preceding the source theorem constructs
 \begin{align}
-  H_L^{(N)}=\sum_{j=0}^{N-1}\tau_j(P_L^\perp)
+    H_L^{(N)}
+        &=\sum_{j=0}^{N-1}\tau_j(P_L^\perp),
+    \label{eq:cpsv16_nncph_ground_state_scope_parent_hamiltonian}
 \end{align}
-and says that a commuting parent Hamiltonian satisfies
+where $P_L$ is the orthogonal projector onto the $L$-site MPS subspace and
+$\tau_j$ translates an $L$-site operator by $j$ sites. It requires a commuting
+parent Hamiltonian to satisfy
 \begin{align}
-  [\tau_j(P_L),P_L]=0,\qquad j=1,\ldots,L-1.
+    [\tau_j(P_L),P_L]
+        &=0,
+        \qquad j=1,\ldots,L-1.
+    \label{eq:cpsv16_nncph_ground_state_scope_source_commutation}
 \end{align}
 A nearest-neighbor parent Hamiltonian has $L=2$.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:517--524}.}
-For $L=2$, write
+Define the translated two-site interaction by
 \begin{align}
-  h_i=\tau_i(P_2^\perp)
+    h_i
+        &=\tau_i(P_2^\perp).
+    \label{eq:cpsv16_nncph_ground_state_scope_local_interaction}
 \end{align}
-for the translated two-site interaction. Under the periodic translation
-convention, the source commutation relation $[\tau_1(P_2),P_2]=0$ is the
-nearest-neighbor instance of the commutation relation for $h_i$ after passing to
-orthogonal complements; disjoint translated two-site terms commute by locality.
+Under the periodic translation convention, the $L=2$ instance of
+(\ref{eq:cpsv16_nncph_ground_state_scope_source_commutation}) gives the
+nearest-neighbor commutation relation for the operators $h_i$ after passage
+to orthogonal complements. Terms with disjoint two-site supports commute by
+locality.
 
 \section{Formal boundary}
 
-With $h_i=\tau_i(P_2^\perp)$ as above, the current predicate
-\leanid{MPSTensor.IsNNCPH} records the resulting length-two commutation equation
+For the interaction in
+(\ref{eq:cpsv16_nncph_ground_state_scope_local_interaction}), the predicate
+\leanid{MPSTensor.IsNNCPH} records
 \begin{align}
-  h_i h_j = h_j h_i
-  \qquad (i,j\in\{0,\ldots,N-1\}).
+    h_i h_j
+        &=h_j h_i,
+        \qquad i,j\in\{0,\ldots,N-1\}.
+    \label{eq:cpsv16_nncph_ground_state_scope_formal_commutation}
 \end{align}
-The predicate
-\leanid{MPSTensor.IsNNCPHGroundState} adds the following frustration-free
-ground-vector equation for the same translated length-two interaction:
+The predicate \leanid{MPSTensor.IsNNCPHGroundState} also records the
+frustration-free ground-vector equations
 \begin{align}
-  h_i\,V^{(N)}(A)=0
-  \qquad (i\in\{0,\ldots,N-1\}).
+    h_i V^{(N)}(A)
+        &=0,
+        \qquad i\in\{0,\ldots,N-1\}.
+    \label{eq:cpsv16_nncph_ground_state_scope_ground_vector}
 \end{align}
-Thus it records the annihilation part of the ground-state clause of
-Theorem~3.10(iii) for the canonical projector parent interaction used in the
-formal development. The source definition of a parent Hamiltonian also requires
-the whole ground-state subspace to be spanned by the periodic MPS vectors for
-$N>L$. That spanning condition is now named separately as
+It therefore captures the annihilation clause of Theorem~3.10(iii) of
+Ref.~\cite{Cirac2016MPDO_arXiv} for the canonical projector parent interaction
+used in the formal development.
+
+The source definition of a parent Hamiltonian also requires, for $N>L$, that
+the periodic MPS vectors span the entire ground-state subspace. The formal
+development names this condition
 \leanid{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}; it is not part of
 \leanid{MPSTensor.IsNNCPHGroundState}. The fixed-chain predicate
-\leanid{MPSTensor.HasNNCPHGroundSpace} packages the commutation equation, the
-zero-energy equation, and the spanning equation
+\leanid{MPSTensor.HasNNCPHGroundSpace} combines
+(\ref{eq:cpsv16_nncph_ground_state_scope_formal_commutation}),
+(\ref{eq:cpsv16_nncph_ground_state_scope_ground_vector}), and
 \begin{align}
-  \ker H_2^{(N)}(B)
-  =
-  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \ker H_2^{(N)}(B)
+        &=
+        \operatorname{span}
+        \{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \label{eq:cpsv16_nncph_ground_state_scope_ground_space_spanning}
 \end{align}
-The source theorem should use the all-chain predicate
+The source theorem requires the all-chain predicate
 \leanid{MPSTensor.HasNNCPHGroundSpaces}, which quantifies this fixed-chain
-condition over \(N>2\). The predicate is only a named condition; it does not
-prove that the spanning equation holds for any concrete canonical-form tensor.
-The equivalence
-\leanid{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}
-records this separation formally: the all-chain source condition is exactly the
-all-chain ground-vector equations together with the nearest-neighbor instance of
-the ground-space spanning clause.
-The easy inclusion in the spanning equation is now recorded: if each component
-vector \(V^{(N)}(A_j)\) is annihilated by the parent Hamiltonian, or more
-strongly by every local term, then
+condition over $N>2$. This predicate names a condition; it does not establish
+(\ref{eq:cpsv16_nncph_ground_state_scope_ground_space_spanning}) for a
+concrete canonical-form tensor. The declaration
+\leanid{MPSTensor.hasNNCPHGroundSpaces\_iff\_forall\_isNNCPHGroundState\_and\_groundSpaceSpanning}
+formalizes the separation: the all-chain source condition is exactly the
+all-chain ground-vector condition together with the nearest-neighbor
+ground-space spanning clause.
+
+The easy inclusion in
+(\ref{eq:cpsv16_nncph_ground_state_scope_ground_space_spanning}) is proved.
+If every component vector $V^{(N)}(A_j)$ is annihilated by the parent
+Hamiltonian, or more strongly by every local term, then
 \begin{align}
-  \operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}
-  \subseteq
-  \ker H_L^{(N)}(B).
+    \operatorname{span}
+    \{V^{(N)}(A_j):j=1,\ldots,g\}
+        &\subseteq
+        \ker H_L^{(N)}(B).
+    \label{eq:cpsv16_nncph_ground_state_scope_easy_kernel_inclusion}
 \end{align}
-\footnote{Formal locations:
-\leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
+\footnote{Formal declarations:
+\leanid{MPSTensor.bntMPSVectorSpan\_le\_ker\_parentHamiltonian\_of\_forall\_annihilates}
 and
-\leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}.}
+\leanid{MPSTensor.bntMPSVectorSpan\_le\_ker\_parentHamiltonian\_of\_forall\_frustrationFree}.}
 For a block-diagonal tensor with nonzero weights,
-\leanid{MPSTensor.hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_iff_ker_le_bntMPSVectorSpan}
-now reduces the source spanning equation to exactly the reverse containment,
-using this easy inclusion.  Its nearest-neighbor specialization,
-\leanid{MPSTensor.hasNNCPHGroundSpaces_toTensorFromBlocks_iff_forall_isNNCPH_and_ker_le_bntMPSVectorSpan},
-states the all-chain condition as translated two-site commutation together with
-the same reverse containment for every \(N>2\).  For a direct sum containing
-one copy of every distinct BNT basis tensor, whole-tensor transfer idempotence
-now implies this reverse containment.  The resulting spanning theorem is
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.
+\leanid{MPSTensor.hasParentHamiltonianGroundSpaceSpanning\_toTensorFromBlocks\_iff\_ker\_le\_bntMPSVectorSpan}
+reduces the spanning equality to the reverse containment, using
+(\ref{eq:cpsv16_nncph_ground_state_scope_easy_kernel_inclusion}). Its
+nearest-neighbor specialization,
+\leanid{MPSTensor.hasNNCPHGroundSpaces\_toTensorFromBlocks\_iff\_forall\_isNNCPH\_and\_ker\_le\_bntMPSVectorSpan},
+states the all-chain condition as translated two-site commutation together
+with the same reverse containment for every $N>2$.
+
+For the direct sum containing one copy of every distinct BNT basis tensor,
+transfer idempotence of the whole tensor implies the reverse containment. The
+resulting theorem is
+\leanid{MPSTensor.IsBNTCanonicalForm.rfp\_hasParentHamiltonianGroundSpaceSpanning\_basisDirectSum}.
 
 The commutation clause is also proved for this multiplicity-one direct sum.
-The residual matrix entries form one orthonormal family on the disjoint union
-of the within-sector matrix spaces.  The equal-sector virtual bond projector
+The residual matrix entries form an orthonormal family on the disjoint union
+of the within-sector matrix spaces. The equal-sector virtual bond projector
 is the sum of the sector bond projectors, extended by zero between unequal
-sectors.  Its two adjacent placements commute sectorwise, while every mixed
-product vanishes by orthogonality of the canonical summand inclusions.
-Transport by the common physical isometry identifies this virtual projector
-with the canonical projector onto the two-site space of the direct sum.
-Complementing
-and transporting the resulting three-site relation around the periodic chain
-proves
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{rfp_implies_nncph_basisDirectSum}.
-Combining this commutation result with the spanning theorem gives the complete
-all-chain condition at the same scope, recorded by
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.
-This implication uses only BNT canonical form and transfer idempotence of the
-whole multiplicity-one direct sum. It uses no comparison, crossing,
+sectors. Its adjacent placements commute sectorwise, and every mixed product
+vanishes by orthogonality of the canonical summand inclusions. Transport by
+the common physical isometry identifies this virtual projector with the
+canonical projector onto the direct sum's two-site space. Complementing and
+transporting the resulting three-site relation around the periodic chain gives
+\leanid{MPSTensor.IsBNTCanonicalForm.rfp\_implies\_nncph\_basisDirectSum}.
+
+Combining commutation with ground-space spanning gives
+\leanid{MPSTensor.IsBNTCanonicalForm.rfp\_implies\_hasNNCPHGroundSpaces\_basisDirectSum}.
+This implication assumes only BNT canonical form and transfer idempotence of
+the whole multiplicity-one direct sum. It uses no comparison, crossing,
 repeated-copy, raw-weight, or externally supplied commutation hypothesis.
 
-This scope-restricted implication does not prove the full source theorem.
-Together with the reverse implication and the corrected positive-gap
-zero-correlation-length equivalence, it does prove the three-way equivalence
-for the multiplicity-one, unit-weight basis direct sum.  Repeated copies,
-arbitrary raw sector weights, adjacent complementary gaps, and the complete
-unrestricted canonical-form statement remain excluded.
-For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
-are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
-Appendix~B supplies the basic-vector form.  The local projectors in
-Definition~D.2 belong to a separate Appendix~D discussion and are not invoked
-by the one-sentence proof of RFP \(\Rightarrow\) NNCPH at source lines
-1305--1307.  The coefficients in the basic-vector form now define the physical
-isometry
+This result does not prove the full source theorem. Together with the reverse
+implication and the corrected positive-gap ZCL equivalence, it proves the
+three-way equivalence for the multiplicity-one, unit-weight basis direct sum.
+Repeated copies, arbitrary raw sector weights, adjacent complementary gaps,
+and the unrestricted canonical-form statement remain excluded.
+
+\section{Forward implication and Appendix B structure}
+
+The three-site $AX/XB$ support maps used in the forward
+RFP-to-NNCPH implication are represented by
+\leanid{MPSTensor.HasOverlappingTwoSiteCommutation}. Appendix~B of
+Ref.~\cite{Cirac2016MPDO_arXiv} supplies the basic-vector form. The local
+projectors in Definition~D.2 of Ref.~\cite{Cirac2016MPDO_arXiv} belong to a
+separate Appendix~D argument and are not invoked by the one-sentence proof of
+RFP $\Rightarrow$ NNCPH at source lines 1305--1307.
+
+The basic-vector coefficients define a physical isometry $U$ by
 \begin{align}
-  (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
-  \qquad U^*U=1,
+    (Uv)_i
+        &=\sum_{\alpha,\beta}
+        U^i_{\alpha,\beta}v_{\alpha,\beta},
+    \label{eq:cpsv16_nncph_ground_state_scope_physical_isometry_action}\\
+    U^*U
+        &=1.
+    \label{eq:cpsv16_nncph_ground_state_scope_physical_isometry_left_inverse}
 \end{align}
-recorded by
+These identities are recorded by
 \leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
-\leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}.
-For every length \(L\), the tensor power \(U^{\otimes L}\) and its conjugate
-coefficient map now satisfy
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse\_comp}.
+For every length $L$, the tensor power and its conjugate coefficient map obey
 \begin{align}
-  U^{*\otimes L}U^{\otimes L}=1.
+    U^{*\otimes L}U^{\otimes L}
+        &=1.
+    \label{eq:cpsv16_nncph_ground_state_scope_tensor_power_left_inverse}
 \end{align}
-This identity is recorded by
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{physicalIsometryTensorPowerLeftInverse_comp}.
-The two-site bond insertion
+The corresponding declaration is
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse\_comp}.
+
+Define the two-site bond insertion $I_\varphi$ by
 \begin{align}
-  (I_\varphi v)_{(a,b),(b',c)}
-  =\delta_{b,b'}\lambda_bv_{a,c}
+    (I_\varphi v)_{(a,b),(b',c)}
+        &=\delta_{b,b'}\lambda_b v_{a,c}.
+    \label{eq:cpsv16_nncph_ground_state_scope_bond_insertion}
 \end{align}
-has also been transported through \(U^{\otimes2}\).  The range calculation
+Transport through $U^{\otimes2}$ gives
 \begin{align}
-  \operatorname{ran}(U^{\otimes2}I_\varphi)=G_2(A_{\mathrm{core}})
+    \operatorname{ran}(U^{\otimes2}I_\varphi)
+        &=G_2(A_{\mathrm{core}}).
+    \label{eq:cpsv16_nncph_ground_state_scope_two_site_range}
 \end{align}
-is recorded by
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicEmbedding_range}.
-The orthogonal projector \(P_2\) onto this range is
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicSupportProjection}; it
+This range equality is recorded by
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding\_range}. The
+orthogonal projector onto this range is
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection}; it
 satisfies
 \begin{align}
-  P_2=1-q_2(A_{\mathrm{core}}).
+    P_2
+        &=1-q_2(A_{\mathrm{core}}).
+    \label{eq:cpsv16_nncph_ground_state_scope_support_projection_complement}
 \end{align}
-The complement identity is
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicSupportProjection_eq_complement}.
-The coefficient-space representatives
+The declaration
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection\_eq\_complement}
+records this identity.
+
+The coefficient-space maps
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are now identified with
-the canonical two-site parent interaction \(q_2(A)\) before placement on the
-\(AX\) and \(XB\) faces.  Write these coefficient-space maps as
-\(\widehat Q_{AX}\) and \(\widehat Q_{XB}\).  Their two lifts act on the
-three-site coefficient space; they are not yet identified with the source
-projectors on \(\mathcal H_A\otimes\mathcal H_X\) and
-\(\mathcal H_X\otimes\mathcal H_B\).  The one-bond virtual projector and its
-two adjacent placements are now constructed in
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace} are
+identified with the canonical two-site parent interaction $q_2(A)$ before
+placement on the $AX$ and $XB$ faces. Denote these maps by
+$\widehat Q_{AX}$ and $\widehat Q_{XB}$. Their lifts act on the three-site
+coefficient space; they have not yet been identified with the source
+projectors on $\mathcal H_A\otimes\mathcal H_X$ and
+$\mathcal H_X\otimes\mathcal H_B$.
+
+The one-bond virtual projector and its adjacent placements are constructed in
 \leanid{MPSTensor.AppendixBStructuralData.virtualBondProjection},
 \leanid{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection}, and
-\leanid{MPSTensor.AppendixBStructuralData.rightVirtualBondProjection}. Their
-commutation is transported through \(U^{\otimes3}\) to the two adjacent physical
-support projectors, giving
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicSupportProjection_commute_lifts} and hence the
-unconditional coefficient-space relation
+\leanid{MPSTensor.AppendixBStructuralData.rightVirtualBondProjection}.
+Transporting their commutation through $U^{\otimes3}$ gives commutation of the
+adjacent physical support projectors, formalized by
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection\_commute\_lifts},
+and hence the unconditional coefficient-space relation
 \leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}.
+
 The cyclic three-site restriction transports this commutator to every adjacent
-pair on every chain with \(N>2\), as recorded by
-\leanid{MPSTensor.localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute}
+pair on every chain with $N>2$. The relevant declarations are
+\leanid{MPSTensor.localTerm\_adjacent\_twoSite\_commute\_of\_threeSite\_zero\_one\_commute}
 and
-\leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
+\leanid{MPSTensor.AppendixBStructuralData.adjacent\_twoSite\_localTerms\_commute}.
 The resulting commuting projector family is
 \leanid{MPSTensor.AppendixBStructuralData.hasProductPairLocalProjectors}.
+
 The coefficient-space analogues of the Appendix~D algebraic and
-kernel-intersection equations are also now proved locally:
-\leanid{MPSTensor.AppendixBStructuralData.}
-\hspace{0pt}\leanid{hasAppendixD2ParentCommutingHamiltonian} identifies
-\(\widehat K_{AXB}=G_3(A)\) with the intersection of the kernels of the lifts
-of \(\widehat Q_{AX}\) and \(\widehat Q_{XB}\).  Its RFP corollary derives
-injectivity from the normal left-canonical RFP hypotheses.  The concrete
-canonical parent interactions are orthogonal by construction, but the
-condition recorded by this declaration does not assert self-adjointness.  It
-remains to construct the source projectors and identify their transported
-actions with the hatted coefficient-space maps.  This local coefficient-space
-result is not used in the chain commutator proof.
-Consequently the forward commutation and zero-energy statements are proved for
-normal left-canonical RFP tensors by
-\leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and
-\leanid{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}.
-For a CPSV normal tensor, the spectral-radius-one normalization supplies a pure
-trace-preserving gauge.  Gauge invariance of the physical RFP relation and of
-the canonical parent interactions transports the preceding result to
-\leanid{MPSTensor.rfp_implies_nncph} and
-\leanid{MPSTensor.rfp_implies_nncph_ground_state}.  Hence these declarations
-prove the commutation and zero-energy equations for a single CPSV normal
-tensor without an external axiom.
-For the same single tensor, transfer idempotence and normality imply one-site
-injectivity.  The injective periodic-chain theorem therefore identifies the
-kernel of the two-site parent Hamiltonian with the line spanned by the matrix
-product vector for every \(N>2\).  This is recorded by
-\leanid{MPSTensor.rfp_hasParentHamiltonianGroundSpaceSpanning_single}.
-Combining this equality with the commutation and zero-energy equations gives
-\leanid{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_single}.  Thus the full
+kernel-intersection equations are also proved locally. The declaration
+\leanid{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}
+identifies $\widehat K_{AXB}=G_3(A)$ with the intersection of the kernels of
+the lifts of $\widehat Q_{AX}$ and $\widehat Q_{XB}$. Its RFP corollary derives
+injectivity from the normal left-canonical RFP hypotheses. The concrete
+canonical parent interactions are orthogonal by construction, but this
+declaration does not assert self-adjointness. Constructing the source
+projectors and identifying their transported actions with the hatted maps
+remains open. This local coefficient-space result is not used in the chain
+commutator proof.
+
+The declarations
+\leanid{MPSTensor.rfp\_implies\_nncph\_of\_leftCanonical} and
+\leanid{MPSTensor.rfp\_implies\_nncph\_ground\_state\_of\_leftCanonical}
+therefore prove the forward commutation and zero-energy statements for normal
+left-canonical RFP tensors. For a CPSV normal tensor, spectral-radius-one
+normalization supplies a pure trace-preserving gauge. Gauge invariance of the
+physical RFP relation and of the canonical parent interactions transports the
+result to \leanid{MPSTensor.rfp\_implies\_nncph} and
+\leanid{MPSTensor.rfp\_implies\_nncph\_ground\_state}. These declarations prove
+commutation and zero energy for a single CPSV normal tensor without an
+external axiom.
+
+For the same tensor, transfer idempotence and normality imply one-site
+injectivity. The injective periodic-chain theorem identifies the kernel of the
+two-site parent Hamiltonian with the line spanned by the MPS vector for every
+$N>2$. This result is
+\leanid{MPSTensor.rfp\_hasParentHamiltonianGroundSpaceSpanning\_single}.
+Combining this equality with commutation and zero energy gives
+\leanid{MPSTensor.rfp\_implies\_hasNNCPHGroundSpaces\_single}. Thus the complete
 forward NNCPH ground-space condition is proved for one normal sector.
 
-For a BNT canonical form with several distinct basis sectors, transfer
-idempotence of the whole direct sum gives residual tensors whose one-site entry
-vectors have identity Gram matrix.  Consequently the simultaneous one-site
-word tuples span the product
-of all block matrix algebras.  This span supplies a common one-letter
-expression for every block identity and propagates to every positive word
-length.  It replaces the right-canonical hypothesis in the local
-restriction-intersection calculation.  A global one-site change of cut then
-forces the block boundary matrices to commute with their tensors, so the
-periodic nearest-neighbor chain space splits into the sum of the single-block
-chain spaces.  Combining this splitting with the single-block injective
-periodic-chain theorem proves
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}.
-The residual-family bond-projector argument independently proves the
-commutation clause
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{rfp_implies_nncph_basisDirectSum}.
-Their conjunction is recorded by
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}.
-This is precisely the multiplicity-one distinct-sector forward case. It does
-not assert the result for repeated copies or arbitrary raw weights.
-The reverse theorem requires both the explicit BNT relation
-\leanid{MPSTensor.IsBNT} and the named all-chain condition
-\leanid{MPSTensor.HasNNCPHGroundSpaces}.  Under the additional hypotheses that
-the represented tensor is normal and left-canonical,
-\leanid{MPSTensor.nncph_implies_rfp} proves transfer idempotence without an
-axiom.  These hypotheses select a normal representative and fix its
-normalization.  They are not the full canonical-form hypothesis of
-Theorem~3.10.
+\section{Multiplicity-one basis direct sums}
 
-For the multiplicity-one, unit-weight direct sum of all distinct BNT basis
-sectors, the reverse implication is now proved without the single-sector
-normality restriction.  The theorem
-\leanid{MPSTensor.IsBNTCanonicalForm.}
-\hspace{0pt}\leanid{isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}
-matches every BNT basis tensor with a distinct normalized Beigi loop tensor.
-The disjoint loop sectors have zero mixed transfer maps, and this local
-orthogonality transports through the independent virtual gauge-phase
-relations.  The direct-sum transfer criterion then gives transfer
-idempotence.  This statement still excludes repeated copies and arbitrary raw
-weights.
+Let a BNT canonical form contain several distinct basis sectors. Transfer
+idempotence of their direct sum gives residual tensors whose one-site entry
+vectors have identity Gram matrix. The simultaneous one-site word tuples
+therefore span the product of all block matrix algebras. This span gives a
+common one-letter expression for every block identity and propagates to every
+positive word length, replacing the right-canonical hypothesis in the local
+restriction-intersection calculation.
 
-The eventual scale-invariance input to Beigi's classification is now proved
-without this axiom.  Let $P$ be a sector decomposition with representatives
-$A_1,\ldots,A_g$ and total tensor $B$. If the representative matrix product
-vectors are eventually linearly independent, the all-chain condition gives
-\[
-  \dim_{\mathbb C}\ker H_2^{(N)}(B)=g
-\]
-for all sufficiently large $N$.  This is
-\leanid{MPSTensor.HasBNTSectorData.}
-\hspace{0pt}\leanid{eventually_parentHamiltonian_groundSpace_finrank_eq}.
-The proof uses only the ground-space spanning equation and the dimension of the
-span of a finite linearly independent family.  It does not use the commuting
-interaction classification.
+A global one-site change of cut then forces the block boundary matrices to
+commute with their tensors. Consequently, the periodic nearest-neighbor chain
+space splits as the sum of the single-block chain spaces. The single-block
+injective periodic-chain theorem then proves
+\leanid{MPSTensor.IsBNTCanonicalForm.rfp\_hasParentHamiltonianGroundSpaceSpanning\_basisDirectSum}.
+The independent residual-family bond-projector argument proves
+\leanid{MPSTensor.IsBNTCanonicalForm.rfp\_implies\_nncph\_basisDirectSum}.
+Their conjunction is
+\leanid{MPSTensor.IsBNTCanonicalForm.rfp\_implies\_hasNNCPHGroundSpaces\_basisDirectSum}.
+This is exactly the multiplicity-one, distinct-sector forward case; it does
+not include repeated copies or arbitrary raw weights.
 
-The local spatial-decomposition input is also now internal.  The canonical
-two-site parent interaction, written in ordered-pair coordinates as
-\leanid{MPSTensor.twoSiteParentInteractionMatrix}, is Hermitian because it is
-the transport of an orthogonal projector.  If the nearest-neighbor parent
+The reverse theorem \leanid{MPSTensor.nncph\_implies\_rfp} assumes both the
+explicit BNT relation \leanid{MPSTensor.IsBNT} and the all-chain condition
+\leanid{MPSTensor.HasNNCPHGroundSpaces}. It also assumes that the represented
+tensor is normal and left-canonical. These hypotheses select a normal
+representative and fix its normalization; they do not reproduce the full
+canonical-form hypothesis of Theorem~3.10 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+The reverse implication is also proved for the multiplicity-one, unit-weight
+direct sum of all distinct BNT basis sectors. The declaration
+\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent\_basisDirectSum\_of\_hasNNCPHGroundSpaces}
+matches every BNT basis tensor with a distinct normalized loop tensor from the
+finite-degeneracy classification used in Ref.~\cite{Cirac2016MPDO_arXiv}. The
+disjoint loop sectors have zero mixed transfer maps, and this local
+orthogonality is preserved by the independent virtual gauge-phase relations.
+The direct-sum transfer criterion then gives transfer idempotence. This result
+still excludes repeated copies and arbitrary raw weights.
+
+\section{Sector-graph reduction}
+
+Let $P$ be a sector decomposition with representatives
+$A_1,\ldots,A_g$ and total tensor $B$. If the representative MPS vectors are
+eventually linearly independent, the all-chain condition gives
+\begin{align}
+    \dim_{\C}\ker H_2^{(N)}(B)
+        &=g
+        \qquad\text{for all sufficiently large }N.
+    \label{eq:cpsv16_nncph_ground_state_scope_eventual_ground_dimension}
+\end{align}
+This result is
+\leanid{MPSTensor.HasBNTSectorData.eventually\_parentHamiltonian\_groundSpace\_finrank\_eq}.
+Its proof uses only ground-space spanning and the dimension of the span of a
+finite linearly independent family; it does not use the commuting-interaction
+classification.
+
+The canonical two-site parent interaction
+\leanid{MPSTensor.twoSiteParentInteractionMatrix} is Hermitian because it is
+the transport of an orthogonal projector. When the nearest-neighbor parent
 terms commute on three sites, their common left-associated coordinates are
-the two natural overlapping lifts of this matrix.  Therefore
-\leanid{MPSTensor.IsNNCPH.}
-\hspace{0pt}\leanid{twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute}
-supplies exactly the hypotheses of Beigi's spatial decomposition, with no
-canonical-form or ground-space-spanning assumption.  Its direct consequence
-\leanid{MPSTensor.IsNNCPH.}
-\hspace{0pt}\leanid{exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
+the two natural overlapping lifts of this matrix. Hence
+\leanid{MPSTensor.IsNNCPH.twoSiteParentInteractionMatrix\_isHermitian\_and\_overlappingLifts\_commute}
+supplies the hypotheses of the spatial decomposition used in
+Ref.~\cite{Cirac2016MPDO_arXiv}, without any canonical-form or
+ground-space-spanning assumption. Its consequence
+\leanid{MPSTensor.IsNNCPH.exists\_unitary\_blockActions\_of\_twoSiteParentInteractionMatrix}
 decomposes the middle physical space into a finite direct sum of left and
-right tensor factors on which the two adjacent interactions act separately.
-The symmetric two-sided form is also internal.  The complementary two-site
-interaction is a positive semidefinite orthogonal projector, and its two
-overlapping lifts commute under the same three-site hypothesis.  The theorem
-\leanid{Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute}
-combines the two one-sided block actions into
-\[
-  (U\otimes U)^*(\mathbf 1-Q_A)(U\otimes U)
-  =\bigoplus_{q,h}
-    \mathbf 1_{q,l}\otimes\eta_{q,h}\otimes\mathbf 1_{h,r}.
-\]
-Idempotence of the left-hand side forces every $\eta_{q,h}$ to be idempotent;
-its positivity then makes it an orthogonal projector.  Consequently
-\leanid{MPSTensor.IsNNCPH.nonempty_beigiSectorGraphData} constructs a finite
+right tensor factors on which the adjacent interactions act separately.
+
+The symmetric two-sided form is also internal. The complementary two-site
+interaction is a positive semidefinite orthogonal projector, and its
+overlapping lifts commute under the same three-site hypothesis. The theorem
+\leanid{Matrix.exists\_positive\_etaPair\_decomposition\_of\_overlappingLifts\_commute}
+combines the one-sided block actions into
+\begin{align}
+    (U\otimes U)^*(\one-Q_A)(U\otimes U)
+        &=
+        \bigoplus_{q,h}
+        \one_{q,l}\otimes\eta_{q,h}\otimes\one_{h,r}.
+    \label{eq:cpsv16_nncph_ground_state_scope_symmetric_block_decomposition}
+\end{align}
+Idempotence of the left-hand side makes every $\eta_{q,h}$ idempotent;
+positivity then makes it an orthogonal projector. Consequently,
+\leanid{MPSTensor.IsNNCPH.nonempty\_beigiSectorGraphData} constructs a finite
 sector graph directly from the three-site commuting-parent hypothesis, and
-\leanid{MPSTensor.IsNNCPH.beigiSectorGraphData} chooses such a graph.  No
-canonical-form, all-chain ground-space, or eventual-dimension hypothesis is
-used in this construction.
+\leanid{MPSTensor.IsNNCPH.beigiSectorGraphData} selects such a graph. This
+construction uses no canonical-form, all-chain ground-space, or
+eventual-dimension hypothesis.
 
 For a finite sector graph,
-\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
-proves Beigi's ordered-cycle ground-space dimension formula for every $N\geq2$.
-Its period-two specialization
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_two}
-retains the two orientations: if $a\ne b$, then $(a,b)$ and $(b,a)$ are
-distinct ordered cycles, exactly as stated in Beigi, J. Phys. A 45 (2012) 025306,
-Section~III, equations~(2)--(4).  No chain-level
-ground-space equation, eventual degeneracy, or canonical-form datum is assumed
-in these sector-graph theorems.
+\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES\_finrank\_eq}
+proves the ordered-cycle ground-space dimension formula for every $N\geq2$.
+Its period-two specialization,
+\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES\_finrank\_eq\_two},
+retains both orientations: when $a\ne b$, the ordered cycles $(a,b)$ and
+$(b,a)$ are distinct. This is the convention used in Section~III,
+Equations~(2)--(4), of the finite-degeneracy argument cited by
+Ref.~\cite{Cirac2016MPDO_arXiv}. These sector-graph theorems assume no
+chain-level ground-space equality, eventual degeneracy, or canonical-form
+datum.
 
-At $N=1$, Beigi's two-site interaction has no specified action.  The source
-defines $P_{j,j+1}$ on sites $j,j+1$ and then separates the actions of
-$P_{j-1,j}$ and $P_{j,j+1}$ on the middle site; see
-J. Phys. A 45 (2012) 025306, Section~III.  When $N=1$, these site
-labels all coincide, and the remainder of that section does not add a rule for turning the
-two-site operator into a one-site operator.  CPSV16 does not impose such a
-rule: Theorem~3.10(iii), local source lines 534--540, only concerns $N>2$.
+At $N=1$, the cited two-site interaction has no specified action. The
+finite-degeneracy argument used by Ref.~\cite{Cirac2016MPDO_arXiv} defines
+$P_{j,j+1}$ on sites $j,j+1$ and separates the actions of $P_{j-1,j}$ and
+$P_{j,j+1}$ on the middle site. At $N=1$, all these site labels coincide, and
+the source gives no rule for converting the two-site operator into a one-site
+operator. Theorem~3.10(iii) of Ref.~\cite{Cirac2016MPDO_arXiv} likewise
+concerns only $N>2$.
 
-The present development uses the project-local convention that an $L$-site
-interaction is zero when $L>N$.  Accordingly,
-\leanid{MPSTensor.parentHamiltonian_two_one_eq_zero} proves
+The project uses the local convention that an $L$-site interaction is zero
+when $L>N$. Thus
+\leanid{MPSTensor.parentHamiltonian\_two\_one\_eq\_zero} proves
 $H_2^{(1)}=0$, and
-\leanid{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top} proves
+\leanid{MPSTensor.parentHamiltonianGroundSpaceES\_two\_one\_eq\_top} proves
 \begin{align}
-  \ker H_2^{(1)}=\mathbb C^d.
+    \ker H_2^{(1)}
+        &=\C^d.
+    \label{eq:cpsv16_nncph_ground_state_scope_one_site_kernel}
 \end{align}
-This convention does not extend Beigi's ordered-cycle equality.  An ordered
-cycle of length one is a self-loop, so the graph expression would instead be
+This convention does not extend the ordered-cycle formula. An ordered
+length-one cycle is a self-loop, so the graph expression would be
 \begin{align}
-  \sum_a \dim\operatorname{ran}P_{a,a}.
+    \sum_a\dim\operatorname{ran}P_{a,a}.
+    \label{eq:cpsv16_nncph_ground_state_scope_self_loop_dimension}
 \end{align}
-The two-site block decomposition imposes no equality between this sum and $d$.
-For example, take
-\begin{align}
-  A^0=\begin{pmatrix}0&1\\0&0\end{pmatrix},
-  \qquad
-  A^1=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
-\end{align}
-Its two-site ground space is spanned by $|01\rangle$ and $|10\rangle$.  The
-corresponding one-dimensional sectors have only the edges $0\to1$ and
-$1\to0$, so the self-loop sum is zero, whereas the project-local one-site
-ground space has dimension $d=2$.  Thus the project-local result is recorded
-separately, while Beigi's ordered-cycle theorem is proved for every
-source-defined length $N\geq2$, including the two opposite orientations at
-$N=2$.  The resolved source boundary is recorded in \ghissue{4400}: no cited
-source defines the two-site operator $H_1$ or a convention for the coincident
-periodic edge at $N=1$.  \ghissue{4655} records the separate project-local
-boundary.
+The two-site block decomposition does not equate
+(\ref{eq:cpsv16_nncph_ground_state_scope_self_loop_dimension}) with $d$.
 
-The remaining finite graph comparison in Beigi's Section~IV is now proved
-without an axiom.  For a finite directed graph with nonnegative integral edge weights,
-the declarations
-\leanid{FiniteWeightedDigraph.cyclicEdgeWeight_eq_one},
-\leanid{FiniteWeightedDigraph.cycle_eq_constant}, and
-\leanid{FiniteWeightedDigraph.cycleWeightSum_eq_card_loop}
+For example, consider the tensor
+\begin{align}
+    A^0
+        &=
+        \begin{pmatrix}
+            0&1\\
+            0&0
+        \end{pmatrix},
+    \label{eq:cpsv16_nncph_ground_state_scope_counterexample_A_zero}\\
+    A^1
+        &=
+        \begin{pmatrix}
+            0&0\\
+            1&0
+        \end{pmatrix}.
+    \label{eq:cpsv16_nncph_ground_state_scope_counterexample_A_one}
+\end{align}
+Its two-site ground space is spanned by $\ket{01}$ and $\ket{10}$. The
+corresponding one-dimensional sectors have only the edges $0\to1$ and
+$1\to0$. Hence
+(\ref{eq:cpsv16_nncph_ground_state_scope_self_loop_dimension}) is zero, while
+the project-local one-site ground space in
+(\ref{eq:cpsv16_nncph_ground_state_scope_one_site_kernel}) has dimension
+$d=2$. The formal development therefore treats the project-local result
+separately and proves the ordered-cycle theorem only in its source-defined
+range $N\geq2$, including both orientations at $N=2$. The resolved source
+boundary is recorded in \ghissue{4400}: no cited source defines a two-site
+operator $H_1$ or a coincident periodic-edge convention at $N=1$.
+\ghissue{4655} records the separate project-local boundary.
+
+The remaining finite graph comparison is also proved without an axiom. For a
+finite directed graph with nonnegative integral edge weights, the declarations
+\leanid{FiniteWeightedDigraph.cyclicEdgeWeight\_eq\_one},
+\leanid{FiniteWeightedDigraph.cycle\_eq\_constant}, and
+\leanid{FiniteWeightedDigraph.cycleWeightSum\_eq\_card\_loop}
 show that eventual constancy of the ordered-cycle sum forces every cyclic edge
-weight to be one, every directed cycle to be a repeated loop, and every
-positive-length cycle sum to equal the number of positive loops.  The proof
+weight to equal one, every directed cycle to be a repeated loop, and every
+positive-length cycle sum to equal the number of positive loops. The proof
 uses the two repetition maps from consecutive sufficiently large lengths into
-their common product, exactly as in the source.  Applied to the sector datum,
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_card_loop}
-identifies every parent-ground-space dimension with $N>2$ with the loop number
-whenever those dimensions are eventually constant.  Combining this with the
-BNT eventual-dimension theorem gives
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData}.
+their common product, as in the source argument.
+
+Applied to the sector datum,
+\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES\_finrank\_eq\_card\_loop}
+identifies every parent-ground-space dimension for $N>2$ with the loop number
+when these dimensions are eventually constant. Combining this result with
+(\ref{eq:cpsv16_nncph_ground_state_scope_eventual_ground_dimension}) gives
+\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES\_finrank\_eq\_card\_loop\_of\_hasBNTSectorData}.
 This conclusion does not identify the loop states with the original BNT
 representatives.
 
-The product-of-pairs vector carried by each positive loop is now also
-constructed explicitly.  The declaration
-\leanid{MPSTensor.BeigiSectorGraphData.loopTensor} uses the left factor of the
-loop sector as its virtual space and denotes the chosen nonzero loop-edge
-vector by $\varphi_a$.  At site $n$, write $r_n$ and $l_n$ for the right and
-left sector factors, respectively; the cyclic bond pairs $r_n$ with
-$l_{n+1}$.  For every positive length,
-\leanid{MPSTensor.BeigiSectorGraphData.mpv_loopTensor} identifies its periodic
-matrix product vector with the sitewise-unitary image of Beigi's cyclic
-product
-\[
-  \prod_n \varphi_a(r_n,l_{n+1}).
-\]
-For a positive loop $a\to a$, denote the resulting physical state on a chain
-of length $N$ by $\Psi_a^{(N)}$.
-This is the construction in Beigi, J. Phys. A 45 (2012) 025306, Section IV, equation (13).
-The ambient left factor need not be the minimal virtual space: Beigi assumes
-only that the selected bond vector is nonzero, not that its coefficient matrix
-has full rank.  Writing that matrix as
-$\Phi_a=X_aY_a$ through its positive Schmidt rank $r_a$, the declarations
+\section{Loop tensors and ground-space spanning}
+
+For each positive loop, the product-of-pairs vector is constructed explicitly.
+The declaration \leanid{MPSTensor.BeigiSectorGraphData.loopTensor} uses the
+loop sector's left factor as its virtual space and denotes the chosen nonzero
+loop-edge vector by $\varphi_a$. At site $n$, let $r_n$ and $l_n$ denote the
+right and left sector factors. The cyclic bond pairs $r_n$ with $l_{n+1}$. For
+every positive length,
+\leanid{MPSTensor.BeigiSectorGraphData.mpv\_loopTensor} identifies the periodic
+MPS vector with the sitewise-unitary image of
+\begin{align}
+    \prod_n\varphi_a(r_n,l_{n+1}).
+    \label{eq:cpsv16_nncph_ground_state_scope_loop_product_state}
+\end{align}
+This is the product-of-pairs construction in Section~IV, Equation~(13), of the
+finite-degeneracy argument cited by Ref.~\cite{Cirac2016MPDO_arXiv}. For a
+positive loop $a\to a$, denote the resulting length-$N$ physical state by
+$\Psi_a^{(N)}$.
+
+The ambient left factor need not be the minimal virtual space. The construction
+requires only that the selected bond vector be nonzero, not that its
+coefficient matrix have full rank. Factor its coefficient matrix through its
+positive Schmidt rank $r_a$ as
+\begin{align}
+    \Phi_a
+        &=X_aY_a.
+    \label{eq:cpsv16_nncph_ground_state_scope_schmidt_rank_factorization}
+\end{align}
+The declarations
 \leanid{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor} and
 \leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor} restrict the virtual
-space to $\C^{r_a}$.  Their letters are
+space to $\C^{r_a}$. Their tensor letters are
 $(Y_a)_{\alpha,l}(X_a)_{r,\beta}$, and
-\leanid{MPSTensor.BeigiSectorGraphData.mpv_minimalLoopTensor} proves that this
-restriction leaves every positive-length periodic vector equal to Beigi's
-product-of-pairs vector.  Exactness of the rank factorization shows that the
-columns of $Y_a$ and the rows of $X_a$ span $\C^{r_a}$.  Their outer products
-are the letters of the minimal tensor, and hence
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{minimalLoopCoordinateTensor_isInjective} proves one-site
-injectivity.  The one-site unitary preserves this spanning property, giving
-\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isInjective} and the
-normality conclusion
-\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor_isNormal}.
-Here $\lVert\varphi_a\rVert_2$ denotes the Euclidean norm of the bond vector,
-equivalently the Frobenius norm of its coefficient matrix; it is not the
-supremum norm on the ordinary coordinate-function space.  With
-$P=Y_aY_a^*$ and $Q=X_a^*X_a$, the transfer map of the minimal coordinate
-tensor has the rank-one form
-\[
-  \mathcal E_a(Z)=\operatorname{tr}(QZ)P,
-  \qquad
-  \mathcal E_a^2=\lVert\varphi_a\rVert_2^2\mathcal E_a.
-\]
+\leanid{MPSTensor.BeigiSectorGraphData.mpv\_minimalLoopTensor} proves that the
+restriction leaves every positive-length periodic vector equal to
+(\ref{eq:cpsv16_nncph_ground_state_scope_loop_product_state}).
+
+Exactness of
+(\ref{eq:cpsv16_nncph_ground_state_scope_schmidt_rank_factorization}) implies
+that the columns of $Y_a$ and the rows of $X_a$ span $\C^{r_a}$. Their outer
+products are the minimal tensor's letters. Hence
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopCoordinateTensor\_isInjective}
+proves one-site injectivity. The one-site unitary preserves this property,
+giving
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor\_isInjective} and
+\leanid{MPSTensor.BeigiSectorGraphData.minimalLoopTensor\_isNormal}.
+
+Here $\lVert\varphi_a\rVert_2$ is the Euclidean norm of the bond vector,
+equivalently the Frobenius norm of its coefficient matrix, rather than the
+supremum norm on the ordinary coordinate-function space. Define
+\begin{align}
+    P
+        &=Y_aY_a^*,
+    \label{eq:cpsv16_nncph_ground_state_scope_transfer_rank_one_P}\\
+    Q
+        &=X_a^*X_a.
+    \label{eq:cpsv16_nncph_ground_state_scope_transfer_rank_one_Q}
+\end{align}
+The transfer map of the minimal coordinate tensor then satisfies
+\begin{align}
+    \mathcal E_a(Z)
+        &=\tr(QZ)P,
+    \label{eq:cpsv16_nncph_ground_state_scope_transfer_rank_one}\\
+    \mathcal E_a^2
+        &=\lVert\varphi_a\rVert_2^2\mathcal E_a.
+    \label{eq:cpsv16_nncph_ground_state_scope_transfer_quasi_idempotence}
+\end{align}
 The second identity is formalized by
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{transferMap_minimalLoopCoordinateTensor_comp_self}.
+\leanid{MPSTensor.BeigiSectorGraphData.transferMap\_minimalLoopCoordinateTensor\_comp\_self}.
+
 The declaration \leanid{MPSTensor.BeigiSectorGraphData.loopBondVector}
-chooses a nonzero vector but does not normalize it.  Thus transfer
-idempotence is not asserted for the raw tensor unless
-$\lVert\varphi_a\rVert_2=1$.  The separate declaration
+chooses a nonzero vector but does not normalize it. Transfer idempotence of
+the raw tensor therefore requires $\lVert\varphi_a\rVert_2=1$. The separate
+declaration
 \leanid{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor} defines
-$\lVert\varphi_a\rVert_2^{-1}\widetilde C_a$ without changing the raw tensor
-or any of its exact state formulas.  Its transfer map is idempotent by
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{normalizedMinimalLoopTensor_isTransferIdempotent}, and its
-length-$N$ matrix product vector is
-$\lVert\varphi_a\rVert_2^{-N}$ times the original loop state by
-\leanid{MPSTensor.BeigiSectorGraphData.mpv_normalizedMinimalLoopTensor}.
-No identification with the original basis of normal tensors is asserted at
-this stage.  Consequently, the spanning statement below may equivalently be
-formulated using the periodic vectors of the minimal Schmidt-support tensors.
+$\lVert\varphi_a\rVert_2^{-1}\widetilde C_a$ without changing the raw tensor or
+its exact state formulas. Its transfer map is idempotent by
+\leanid{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor\_isTransferIdempotent},
+and \leanid{MPSTensor.BeigiSectorGraphData.mpv\_normalizedMinimalLoopTensor}
+identifies its length-$N$ MPS vector as
+$\lVert\varphi_a\rVert_2^{-N}$ times the original loop state. No identification
+with the original basis of normal tensors is asserted at this stage. The
+spanning result below may therefore be formulated using the periodic vectors
+of the minimal Schmidt-support tensors.
 
 For every $N\geq2$,
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{loopProductState_mem_ker_parentHamiltonian}
-now proves that this vector belongs to the kernel of the length-two periodic
-parent Hamiltonian.  Its Euclidean-space form is recorded by
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{loopProductState_mem_parentHamiltonianGroundSpaceES}.
-The proof uses Beigi's local edge-ground-space condition in Section~III
-and the positive-loop specialization in Section~IV.  The
-restriction $N\geq2$ is the source-defined range of the two-site periodic
-parent Hamiltonian used here.  As recorded by the resolved clarification in
-\ghissue{4400}, no source-defined coincident-edge convention extends this
-statement to $N=1$.  At every positive length the loop vectors are nonzero by
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{loopProductStateES_ne_zero}, and distinct loop vectors are
-orthogonal by
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{loopProductStateES_inner_eq_zero_of_ne}.  Consequently they
-are linearly independent, as recorded by
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{loopProductStateES_linearIndependent}.  If the parent
-ground-space dimension is eventually constant, membership and the loop-count
-dimension formula therefore give, for every $N>2$,
+\leanid{MPSTensor.BeigiSectorGraphData.loopProductState\_mem\_ker\_parentHamiltonian}
+proves that the loop product vector belongs to the kernel of the length-two
+periodic parent Hamiltonian. Its Euclidean-space form is
+\leanid{MPSTensor.BeigiSectorGraphData.loopProductState\_mem\_parentHamiltonianGroundSpaceES}.
+The proof uses the local edge-ground-space condition and its positive-loop
+specialization in the finite-degeneracy construction cited by
+Ref.~\cite{Cirac2016MPDO_arXiv}. The condition $N\geq2$ is the source-defined
+range of the two-site periodic Hamiltonian. As recorded by \ghissue{4400}, no
+source-defined coincident-edge convention extends this statement to $N=1$.
+
+At every positive length, the loop vectors are nonzero by
+\leanid{MPSTensor.BeigiSectorGraphData.loopProductStateES\_ne\_zero}. Distinct
+loop vectors are orthogonal by
+\leanid{MPSTensor.BeigiSectorGraphData.loopProductStateES\_inner\_eq\_zero\_of\_ne},
+and hence linearly independent by
+\leanid{MPSTensor.BeigiSectorGraphData.loopProductStateES\_linearIndependent}.
+If the parent-ground-space dimension is eventually constant, membership and
+the loop-count formula give, for every $N>2$,
 \begin{align}
-  \operatorname{span}\{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
-  =\ker H_2^{(N)}(A).
+    \operatorname{span}
+    \{\Psi_a^{(N)}:a\to a\text{ is a positive loop}\}
+        &=
+        \ker H_2^{(N)}(A).
+    \label{eq:cpsv16_nncph_ground_state_scope_loop_ground_space_spanning}
 \end{align}
-This is
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{span_loopProductStateES_eq_parentHamiltonianGroundSpaceES}.
+This equality is
+\leanid{MPSTensor.BeigiSectorGraphData.span\_loopProductStateES\_eq\_parentHamiltonianGroundSpaceES}.
 Its BNT and all-chain specialization is
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData}.
-These spanning results alone do not identify the loop states with the original
+\leanid{MPSTensor.BeigiSectorGraphData.span\_loopProductStateES\_eq\_parentHamiltonianGroundSpaceES\_of\_hasBNTSectorData}.
+These results do not by themselves identify the loop states with the original
 BNT representatives.
 
-For a normal left-canonical representative, that final comparison is now
-proved.  Algebraic normality implies spectral normality, while the normalized
-minimal loop tensors are both normal and transfer-idempotent.  The all-chain
-ground-space equality places the matrix product vector of the original tensor
-eventually in the span of the loop-tensor vectors.  The normal-tensor overlap
-dichotomy and the asymptotic orthogonality of distinct loops then show that the
-original tensor agrees with one loop tensor up to a unit phase and an
-invertible virtual change of basis.  Transfer idempotence is invariant under
-these transformations.  This is the proof of
-\leanid{MPSTensor.nncph_implies_rfp}.
+For a normal left-canonical representative, the final comparison is proved.
+Algebraic normality implies spectral normality, while the normalized minimal
+loop tensors are normal and transfer-idempotent. The all-chain ground-space
+equality places the original tensor's MPS vector eventually in the span of the
+loop-tensor vectors. The normal-tensor overlap dichotomy and asymptotic
+orthogonality of distinct loops then imply that the original tensor agrees
+with one loop tensor up to a unit phase and an invertible virtual change of
+basis. Transfer idempotence is invariant under both transformations. This
+proves \leanid{MPSTensor.nncph\_implies\_rfp}.
 
-The single-normal result is a scope restriction relative to CPSV16,
-Theorem~3.10, source
-lines 534--541 and its proof at line 1307: the formal theorem assumes explicitly
-that the chosen representative is normal and left-canonical, as well as an
-explicit BNT relation and the all-chain ground-space condition.  It does not
-state the unrestricted three-way equivalence for an arbitrary tensor in
-canonical form.  In the source canonical decomposition, the normality
-hypothesis selects the one-sector case \(g=1\).  The companion basis-direct-sum
-theorem now establishes the \(g>1\) reverse implication at the
-multiplicity-one, unit-weight representative, using Beigi's
-finite-degeneracy classification.  Neither statement establishes the
-unrestricted repeated-copy, raw-weight canonical-form theorem.
+\section{Comparison scope and eventual span equality}
 
-The parent-ground-space identity in CPSV16 applies for $N>2$, whereas
-the permutation-rigidity lemmas previously required equality of the two
-matrix-product-vector spans at every length.  Only eventual span equality is
-used in their proofs: one chooses a sufficiently large length at which both
-families are linearly independent, and all subsequent overlap comparisons are
-asymptotic.  The comparison is therefore now stated under eventual span
-equality.  CPSV16 supplies this hypothesis on the concrete tail $N>2$, at
-source lines 522--525 together with lines 1305--1307.  The general comparison
-lemmas assert only the existence of a finite tail: the selected length must
-also lie beyond the independent linear-independence thresholds, so no common
-numerical threshold of $2$ is asserted.  This is a local correction, replacing
-an unnecessary all-length hypothesis by the finite-tail hypothesis used in the
-proof and supplied by CPSV16.  Once normal representatives have been matched,
-the resulting gauge--phase relation determines their vectors at every positive
-length.
+The single-normal theorem is a scope restriction relative to Theorem~3.10 of
+Ref.~\cite{Cirac2016MPDO_arXiv}, source lines 534--541 and its proof at line
+1307. The formal theorem explicitly assumes that the representative is normal
+and left-canonical, together with an explicit BNT relation and the all-chain
+ground-space condition. It does not state the unrestricted three-way
+equivalence for an arbitrary canonical-form tensor. In the source canonical
+decomposition, normality selects the one-sector case $g=1$.
+
+The basis-direct-sum theorem establishes the $g>1$ reverse implication for the
+multiplicity-one, unit-weight representative by using the finite-degeneracy
+classification. Neither theorem includes repeated copies or arbitrary raw
+weights.
+
+The parent-ground-space equality in Ref.~\cite{Cirac2016MPDO_arXiv} applies
+for $N>2$, whereas the earlier permutation-rigidity lemmas assumed equality
+of the two MPS-vector spans at every length. Their proofs use only eventual
+span equality: one chooses a sufficiently large length at which both families
+are linearly independent, and every subsequent overlap comparison is
+asymptotic. The comparison is therefore now stated under eventual span
+equality. The source supplies this hypothesis on the concrete tail $N>2$ at
+lines 522--525 and 1305--1307. The general comparison lemmas assert only the
+existence of a finite tail because the chosen length must also exceed both
+linear-independence thresholds. They do not assert a common numerical
+threshold of $2$.
+
+This replacement of an unnecessary all-length hypothesis by the finite-tail
+hypothesis used in the proof is a local correction. Once the normal
+representatives are matched, their gauge-phase relation determines their
+vectors at every positive length.
 
 The auxiliary declaration
-\leanid{MPSTensor.BeigiSectorGraphData.}
-\hspace{0pt}\leanid{mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self}
-is stated under the sector-data hypothesis, which supplies commutativity of
-all translated two-site parent interactions.  Thus it is a restricted
-fixed-vector criterion rather than an unrestricted assertion for arbitrary
-parent interactions.  If the criterion is needed independently of Beigi's
-decomposition, its hypothesis should be replaced by explicit pairwise
+\leanid{MPSTensor.BeigiSectorGraphData.mem\_ker\_parentHamiltonian\_of\_groundBondProduct\_mulVec\_eq\_self}
+assumes sector data, which supplies commutativity of all translated two-site
+parent interactions. It is therefore a restricted fixed-vector criterion,
+not an unrestricted theorem for arbitrary parent interactions. Any independent
+use should replace the sector-data assumption by explicit pairwise
 commutativity of the translated interactions.
 
 \section{Completed representative equivalence and residual scope}
 
-The corrected three-way equivalence is now assembled for the
-multiplicity-one, unit-weight direct sum of the distinct BNT basis tensors:
+For the multiplicity-one, unit-weight direct sum
+$A_{\mathrm{basis}}$ of the distinct BNT basis tensors, the corrected
+three-way equivalence is
 \begin{align}
-  \mathrm{RFP}(A_{\mathrm{basis}})
-  \Longleftrightarrow
-  \text{positive-gap BNT ZCL}(A_{\mathrm{basis}})
-  \Longleftrightarrow
-  \mathrm{HasNNCPHGroundSpaces}(A_{\mathrm{basis}}).
+    \mathrm{RFP}(A_{\mathrm{basis}})
+        &\Longleftrightarrow
+        \text{positive-gap BNT ZCL}(A_{\mathrm{basis}})
+    \label{eq:cpsv16_nncph_ground_state_scope_representative_rfp_zcl}\\
+        &\Longleftrightarrow
+        \mathrm{HasNNCPHGroundSpaces}(A_{\mathrm{basis}}).
+    \label{eq:cpsv16_nncph_ground_state_scope_representative_nncph}
 \end{align}
 The reverse implication is proved both for a normal left-canonical
 representative and for the multiplicity-one, unit-weight direct sum of all
-distinct BNT basis sectors.  In the latter statement the comparison with
-Beigi's locally orthogonal product-of-pairs loop states is performed
-familywise and requires no axiom.  The pairwise equivalences are formalized by
-\leanid{MPSTensor.IsBNTCanonicalForm.%
-isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces}
+distinct BNT basis sectors. In the direct-sum theorem, the comparison with the
+locally orthogonal product-of-pairs loop states is familywise and requires no
+axiom. The pairwise equivalences are formalized by
+\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent\_basisDirectSum\_iff\_hasNNCPHGroundSpaces}
 and
-\leanid{MPSTensor.IsBNTCanonicalForm.%
-isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.
+\leanid{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL\_basisDirectSum\_iff\_hasNNCPHGroundSpaces}.
 \footnote{Tracked by \ghissue{2633}.}
 
-The current proof boundary is therefore: the reverse implication is proved for
-the corrected basis-direct-sum representative satisfying the source all-chain
-ground-space condition.  Repeated copies and arbitrary raw weights remain
-excluded by the known counterexample; they are not a pending extension of this
-representative theorem.  The printed unrestricted equivalence remains
-unformalized.  The forward commutation
-implication has the source-unit Appendix~B structural datum, its
-physical isometric embedding and all tensor powers with explicit left
-inverses, the two-site bond insertion, the equality of its physical image with
-\(G_2(A_{\mathrm{core}})\), its orthogonal support projector, the three-site
-\(AX/XB\) support maps, and the coefficient form of
-\(U^{\otimes L}\varphi_j^{\otimes L}\), the adjacent virtual and physical
-projectors, their three-site commutator, its transport to every periodic
-chain with \(N>2\), and the pure trace-preserving gauge passage for a CPSV
-normal tensor. The even-chain physical-pair factorization remains a
-separate conditional construction and is not needed for the proved chain
-commutator. Extending from one normal tensor to the full repeated-sector
-canonical form is subject to the source obstruction recorded in
+The proved reverse implication therefore covers the corrected basis-direct-sum
+representative under the source all-chain ground-space condition. Repeated
+copies and arbitrary raw weights remain excluded by the known counterexample;
+they are not pending extensions of this representative theorem. The printed
+unrestricted equivalence remains unformalized.
+
+For the forward commutation implication, the formal development contains the
+source-unit Appendix~B structural datum, its physical isometric embedding, all
+tensor powers with explicit left inverses, the two-site bond insertion, the
+identification of its physical image with $G_2(A_{\mathrm{core}})$, the
+orthogonal support projector, the three-site $AX/XB$ support maps, the
+coefficient form of $U^{\otimes L}\varphi_j^{\otimes L}$, the adjacent virtual
+and physical projectors, their three-site commutator, transport to every
+periodic chain with $N>2$, and the pure trace-preserving gauge passage for a
+CPSV normal tensor. The even-chain physical-pair factorization remains a
+separate conditional construction and is unnecessary for the proved chain
+commutator.
+
+Extension from one normal tensor to the full repeated-sector canonical form
+is obstructed as recorded in
 \path{docs/paper-gaps/cpsv16_rfp_isometry_scope.tex}. The single-normal-sector
 ground-space spanning clause and the multiplicity-one distinct-sector
 extension are proved. Repeated copies and arbitrary raw weights lie outside
-the corrected theorem.  In the reverse direction, eventual ground-space dimension
-stability, the symmetric sector-graph construction from three-site commuting
-parent terms, the ordered-cycle dimension formula, the reduction of the
-sector graph to one-dimensional loops, and the exact matrix product realization
-and parent-ground-space membership of every positive loop state are proved.
-The loop vectors are also proved to span the parent ground space for every
-$N>2$ under the eventual-dimension hypothesis supplied by BNT eventual linear
-independence together with the source all-chain ground-space condition.  Their
-comparison with the original tensor is proved for one normal left-canonical
-representative and familywise for the multiplicity-one, unit-weight BNT basis
-direct sum; the corresponding transfer-idempotence statements are proved.
-These representative-level implications are assembled by the two
-biconditionals above.  The residual gap is only the printed unrestricted
-statement, whose repeated-copy, raw-weight, and adjacent-gap boundaries are
-excluded from the corrected theorem.
+the corrected theorem.
+
+In the reverse direction, the formal development proves eventual
+ground-space-dimension stability, the symmetric sector-graph construction from
+three-site commuting parent terms, the ordered-cycle dimension formula, the
+reduction to one-dimensional loops, and the exact MPS realization and
+ground-space membership of every positive loop state. Under the
+eventual-dimension hypothesis supplied by BNT eventual linear independence and
+the source all-chain ground-space condition, the loop vectors span the parent
+ground space for every $N>2$. Their comparison with the original tensor is
+proved for one normal left-canonical representative and familywise for the
+multiplicity-one, unit-weight BNT basis direct sum; the corresponding
+transfer-idempotence results are also proved.
+
+The two biconditionals in
+(\ref{eq:cpsv16_nncph_ground_state_scope_representative_rfp_zcl}) and
+(\ref{eq:cpsv16_nncph_ground_state_scope_representative_nncph}) assemble these
+representative-level implications. The residual gap is the printed
+unrestricted statement. Its repeated-copy, raw-weight, and adjacent-gap cases
+are excluded from the corrected theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}

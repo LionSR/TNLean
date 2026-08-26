@@ -17,126 +17,177 @@ Adjacent Generation, and Index}
 
 \section{The site-dependent GNVW construction}
 
-Gross--Nesme--Vogts--Werner consider a chain whose cell algebra at
-$y\in\mathbb Z$ is
+Gross--Nesme--Vogts--Werner allow the cell algebra at each site
+$y\in\mathbb Z$ to have a site-dependent positive matrix size
+\cite[Section~7.2]{Gross2012IndexTheory}:
 \begin{align}
-    \mathcal A_y&=M_{d(y)}(\mathbb C),
+    \mathcal A_y
+    &=M_{d(y)}(\mathbb C).
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_cell_algebra}
 \end{align}
-where the positive matrix size $d(y)$ may depend on $y$
-\cite[Section~7.2]{Gross2012IndexTheory}.  For a nearest-neighbour
-automorphism $\alpha$, set
+For each $x\in\mathbb Z$, define the even pair and its left and right
+neighbouring pairs by
 \begin{align}
-    E_x&=\{2x,2x+1\},&
-    L_x&=\{2x-1,2x\},&
-    P_x&=\{2x+1,2x+2\}.
+    E_x
+    &=\{2x,2x+1\},
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_even_pair}\\
+    L_x
+    &=\{2x-1,2x\},
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_left_pair}\\
+    P_x
+    &=\{2x+1,2x+2\}.
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_right_pair}
 \end{align}
-The locality inclusion is
+For a nearest-neighbour automorphism $\alpha$, locality gives
 \begin{align}
     \alpha(\mathcal A_{E_x})
     &\subseteq
       \mathcal A_{L_x}\otimes\mathcal A_{P_x}.
-    \label{eq:site_scope_locality}
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_locality}
 \end{align}
-In the factor order displayed in (\ref{eq:site_scope_locality}), equation
-\texttt{RR2x} defines
+
+Using the factor order in
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_locality}), source
+equation \texttt{RR2x} defines the support algebras
 \begin{align}
     \mathcal R_{2x}
-      &=\operatorname{Spp}_{\mathrm L}
-        \bigl(\alpha(\mathcal A_{E_x})\bigr)
-        \subseteq\mathcal A_{L_x},\\
+    &=\operatorname{Spp}_{\mathrm L}
+      (\alpha(\mathcal A_{E_x}))
+      \subseteq\mathcal A_{L_x},
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_left_support}\\
     \mathcal R_{2x+1}
-      &=\operatorname{Spp}_{\mathrm R}
-        \bigl(\alpha(\mathcal A_{E_x})\bigr)
-        \subseteq\mathcal A_{P_x}.
-    \label{eq:site_scope_supports}
+    &=\operatorname{Spp}_{\mathrm R}
+      (\alpha(\mathcal A_{E_x}))
+      \subseteq\mathcal A_{P_x}.
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_right_support}
 \end{align}
-These formulas occur at lines 1251--1266 of the arXiv v2 source.  The
-site-dependent cell structure and causal-automorphism hypotheses occur at
-lines 557--600.  Translation covariance is not used in
-(\ref{eq:site_scope_locality}) or (\ref{eq:site_scope_supports}).
+These definitions appear at lines 1251--1266 of the arXiv v2 source for
+Ref.~\cite{Gross2012IndexTheory}. The site-dependent cell structure and the
+causal-automorphism assumptions appear at lines 557--600. Neither
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_locality}) nor
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_left_support})--%
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_right_support})
+requires translation covariance.
 
 \section{Adjacent generation and dimensions}
 
-Let $r(y)>0$ be the matrix size for which
-$\mathcal R_y\cong M_{r(y)}(\mathbb C)$.  The adjacent-generation argument
-gives the two ordered product identities
+Let $r(y)>0$ denote the matrix size of the support algebra at site $y$:
+\begin{align}
+    \mathcal R_y
+    &\cong M_{r(y)}(\mathbb C).
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_support_size}
+\end{align}
+The adjacent-generation argument yields two ordered product identities:
 \begin{align}
     d(2x)d(2x+1)
-      &=r(2x)r(2x+1),                                      \label{eq:site_scope_even}\\
+    &=r(2x)r(2x+1),
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_even_dimension}\\
     r(2x+1)r(2x+2)
-      &=d(2x+1)d(2x+2).                                    \label{eq:site_scope_odd}
+    &=d(2x+1)d(2x+2).
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_odd_dimension}
 \end{align}
-The first is the matrix-size consequence of equation \texttt{AARReven} at
-lines 1276--1287; the second is the consequence of equation
-\texttt{AARRodd} at lines 1306--1315
-\cite{Gross2012IndexTheory}.  Consequently,
+The first identity is the matrix-size consequence of source equation
+\texttt{AARReven}, lines 1276--1287, and the second follows from source
+equation \texttt{AARRodd}, lines 1306--1315, of
+Ref.~\cite{Gross2012IndexTheory}. Dividing these identities gives
 \begin{align}
     \frac{r(2x)}{d(2x)}
-      &=\frac{d(2x+1)}{r(2x+1)}
-       =\frac{r(2x+2)}{d(2x+2)}.
-    \label{eq:site_scope_ratio}
+    &=\frac{d(2x+1)}{r(2x+1)},
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_even_odd_ratio}\\
+    \frac{d(2x+1)}{r(2x+1)}
+    &=\frac{r(2x+2)}{d(2x+2)}.
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_odd_even_ratio}
 \end{align}
-Equation (\ref{eq:site_scope_ratio}) is the site-independent multiplicative
-index relation.  It is labelled \texttt{dimtransfer} at lines 1317--1329.
+Together, these equalities are the site-independent multiplicative index
+relation:
+\begin{align}
+    \frac{r(2x)}{d(2x)}
+    &=\frac{d(2x+1)}{r(2x+1)}
+     =\frac{r(2x+2)}{d(2x+2)}.
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_index_ratio}
+\end{align}
+The source labels this relation \texttt{dimtransfer}; it appears at lines
+1317--1329 of Ref.~\cite{Gross2012IndexTheory}.
 
 \section{The homogeneous specialization}
 
-The present spin-chain algebra fixes one positive on-site matrix size $d$.
-Thus
+The present spin-chain algebra uses one fixed positive on-site matrix size
+$d$. Hence
 \begin{align}
-    d(y)&=d
+    d(y)
+    &=d
+    \qquad\text{for every }y\in\mathbb Z.
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_constant_size}
 \end{align}
-for every $y$, and (\ref{eq:site_scope_even})--(\ref{eq:site_scope_ratio})
-specialize to
+Under
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_constant_size}), the
+dimension identities become
 \begin{align}
-    d^2&=r(2x)r(2x+1),\\
-    r(2x+1)r(2x+2)&=d^2,\\
+    d^2
+    &=r(2x)r(2x+1),
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_even}\\
+    r(2x+1)r(2x+2)
+    &=d^2,
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_odd}\\
     \frac{r(2x)}{d}
-      &=\frac{d}{r(2x+1)}
-       =\frac{r(2x+2)}{d}.
-    \label{eq:site_scope_homogeneous}
+    &=\frac{d}{r(2x+1)}
+     =\frac{r(2x+2)}{d}.
+    \label{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_ratio}
 \end{align}
-This is the setting used by Cirac--P\'erez-Garc\'ia--Schuch--Verstraete:
-their Appendix fixes $\mathcal A_y\cong M_d(\mathbb C)$ and forms the even
-support algebra in lines 2320--2329 \cite{Cirac2017MPU}.
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete use this homogeneous setting:
+their Appendix fixes $\mathcal A_y\cong M_d(\mathbb C)$ and constructs the
+even support algebra at lines 2320--2329
+\cite{Cirac2017MPU}.
 
-The statements presently proved for the fixed-$d$ spin chain establish only
-the homogeneous versions of (\ref{eq:site_scope_locality}) and
-(\ref{eq:site_scope_supports}), together with their two-sided support
-containment.\footnote{Formal declarations:
+The theorems currently proved for the fixed-$d$ spin chain establish only the
+homogeneous forms of
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_locality}) and
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_left_support})--%
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_right_support}),
+together with two-sided support containment.\footnote{Formal declarations:
 \leanid{SpinChain.PropagatesWithin.evenPairLocalImage},
 \leanid{SpinChain.PropagatesWithin.evenSupportAlgebra},
 \leanid{SpinChain.PropagatesWithin.oddSupportAlgebra}, and
 \leanid{SpinChain.PropagatesWithin.evenPairLocalImage_le_support_kroneckerSubmodule}
 in \doclink{TNLean/QCA/SiteIndexedSupportAlgebra}.}
-The adjacent-generation equalities, matrix-factor presentations,
-identities in (\ref{eq:site_scope_homogeneous}), and index are not part of
-these statements; any fixed-$d$ formulation of those later results remains
-subject to the same homogeneous-chain restriction.
+They do not include the adjacent-generation equalities, matrix-factor
+presentations, the identities
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_even})--%
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_ratio}),
+or the index. Any future fixed-$d$ formulation of those results remains
+restricted to homogeneous chains.
 
-This restriction is distinct from the full-matrix-factor restriction in
-\path{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}.  That note
+This restriction differs from the full-matrix-factor restriction recorded in
+\path{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}. That note
 compares full complex matrix factors with arbitrary finite-dimensional
-$C^*$-algebras.  The present note compares a fixed matrix size along the chain
-with the site-dependent full matrix sizes of GNVW.
+$C^*$-algebras. The present note compares a fixed matrix size along the chain
+with the site-dependent full matrix sizes allowed by
+Ref.~\cite{Gross2012IndexTheory}.
 
 \section{Elimination plan}
 
-Removing the restriction requires a site-dependent algebraic local observable
-system with cell algebras $M_{d(y)}(\mathbb C)$, canonical inclusions for
-arbitrary finite regions, and its norm completion.  The finite-region
-restriction of a causal automorphism must then be written in the ordered
-$L_x\times P_x$ coordinates of (\ref{eq:site_scope_locality}).  The same
-coefficient definitions give (\ref{eq:site_scope_supports}); the support
-commutation, scalar-center, and adjacent-generation arguments then yield
-(\ref{eq:site_scope_even}) and (\ref{eq:site_scope_odd}) without imposing
-constancy of $d(y)$.  Finally, (\ref{eq:site_scope_ratio}) defines the
-site-independent GNVW index.  The fixed-$d$ theorems should thereafter be
-derived by specializing the dimension function to the constant value $d$.
+Removing this restriction requires an algebraic local-observable system with
+site-dependent cell algebras
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_cell_algebra}),
+canonical inclusions for arbitrary finite regions, and a norm completion. The
+finite-region restriction of a causal automorphism must then be expressed in
+the ordered $L_x\times P_x$ coordinates of
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_locality}).
 
-Until such a site-dependent observable algebra is available, statements
-corresponding to these steps are necessarily restricted to the homogeneous
-chain.
+The same coefficient definitions yield the support algebras
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_left_support}) and
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_right_support}).
+Support commutation, the scalar-center argument, and adjacent generation then
+give
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_even_dimension}) and
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_odd_dimension})
+without assuming that $d(y)$ is constant. The ratio
+(\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_index_ratio}) then
+defines the site-independent GNVW index. The fixed-$d$ theorems should follow
+by specializing $d(y)$ to the constant value $d$.
+
+Until this site-dependent observable algebra is available, the corresponding
+formal statements remain restricted to homogeneous chains.
 
 \bibliographystyle{alpha}
 \bibliography{references}

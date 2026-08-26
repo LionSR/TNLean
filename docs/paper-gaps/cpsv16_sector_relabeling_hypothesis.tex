@@ -17,52 +17,66 @@
 
 \section{The assertion}
 
-For a blocking period $p$, the physical index set of the blocked tensor is
-canonically identified with words of length $p$:
-\[
-    \operatorname{Fin}(d^p) \simeq (\operatorname{Fin} p \to \operatorname{Fin} d).
-\]
-The cyclic-sector construction uses the canonical multi-index relabeling
-blockwise. Write $X \sim_{\mathrm{MPV}} Y$ when two tensors generate the
-same matrix product vector family at every length and every word. Write
-$R(A_k^{[p]})$ for the length-$p$ blocked tensor $A_k^{[p]}$ read
-through this canonical word relabeling.
+Fix a physical dimension $d$ and a blocking period $p$. The physical index set
+of the blocked tensor is canonically identified with the set of words of length
+$p$:
+\begin{align}
+    \operatorname{Fin}(d^p)
+        &\simeq
+        (\operatorname{Fin}p\to\operatorname{Fin}d).
+    \label{eq:cpsv16_sector_relabeling_hypothesis_blocked_word_equivalence}
+\end{align}
+The cyclic-sector construction applies this canonical multi-index relabeling
+to each block.
 
-The mathematical assertion is that assembling the weighted block-diagonal
-tensor before this relabeling gives the same MPV family as assembling after
-the relabeling:
-\[
-    \bigoplus_k \mu_k^p \cdot A_k^{[p]} \sim_{\mathrm{MPV}}
-    \bigoplus_k \mu_k^p \cdot R(A_k^{[p]}).
-\]
-Here $A_k^{[p]}$ denotes the length-$p$ blocking of the $k$-th primitive block.
+Write $X\sim_{\mathrm{MPV}}Y$ when tensors $X$ and $Y$ generate the same
+matrix product vector family at every length and for every physical word. Let
+$A_k^{[p]}$ be the length-$p$ blocking of the $k$th primitive block, and let
+$R(A_k^{[p]})$ denote the same blocked tensor expressed through the canonical
+word relabeling in
+Eq.~\ref{eq:cpsv16_sector_relabeling_hypothesis_blocked_word_equivalence}.
 
-\section{Relation to the paper}
+For scalar weights $\mu_k$, assembling the weighted block-diagonal tensor
+before relabeling produces the same MPV family as assembling it afterward:
+\begin{align}
+    \bigoplus_k \mu_k^p\cdot A_k^{[p]}
+        &\sim_{\mathrm{MPV}}
+        \bigoplus_k \mu_k^p\cdot R(A_k^{[p]}).
+    \label{eq:cpsv16_sector_relabeling_hypothesis_common_relabeling_identity}
+\end{align}
 
-The paper arXiv:1606.00608 does not state this as a separate hypothesis.
-In the source argument the blocked-word identification is an automatic consequence of the
-canonical blocking construction: blocking a tensor and then reading the result through the
-explicit multi-index grouping of $\{1,\ldots,d\}^p$ is definitionally the same operation.
-The paper therefore treats the equality as transparent and does not name it.
+\section{Relation to the source}
 
-\section{Status}
+The blocked-word identification is not a separate hypothesis in
+Ref.~\cite{Cirac2016MPDO_arXiv}. Blocking a tensor and then reading its physical
+index through the explicit grouping of length-$p$ words are two descriptions
+of the same canonical blocking operation. The source therefore uses this
+identification without naming it as an additional assumption.
 
-No deviation from the source paper is present. The relabeling assertion is the
-identity between two descriptions of the same blocked-word coordinates. The
-formalization uses the unconditional nonzero-part identity for a common
-cyclic-sector family directly, without introducing a separate hypothesis.\footnote{%
-    The family-level statement is
-    \leanid{CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}; the
-    common primitive-block theorem applies it directly on both sides. The
-    declarations are in
-    \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorFamily.lean}
-    and
-    \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
+Equation~\ref{eq:cpsv16_sector_relabeling_hypothesis_common_relabeling_identity}
+does not assert a new equivalence between independently chosen sector
+coordinates. It applies one common, canonical reindexing to every block in the
+family. The scalar weights and block-diagonal assembly are unchanged.
 
-\section{Verdict}
+\section{Formal status}
 
-The relabeling identity is therefore a formal expression of the paper's implicit
-blocked-index identification, not an additional mathematical assumption.
+The formalization uses the unconditional identity for the nonzero part of a
+common cyclic-sector family. It does not introduce a relabeling
+hypothesis.\footnote{The family-level declaration is
+\leanid{CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}; the common
+primitive-block theorem applies it directly on both sides. The declarations
+are in
+\doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorFamily.lean}
+and
+\doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
+
+\section{Conclusion}
+
+The common sector relabeling is an unconditional coordinate identity.
+Equation~\ref{eq:cpsv16_sector_relabeling_hypothesis_common_relabeling_identity}
+formalizes the blocked-index identification used implicitly in
+Ref.~\cite{Cirac2016MPDO_arXiv}; it adds no mathematical hypothesis and creates
+no deviation from the source.
 
 \bibliographystyle{alpha}
 \bibliography{references}

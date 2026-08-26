@@ -17,135 +17,246 @@
 
 \section{Source definition of the vertical direction}
 
-Proposition~4.13 (source label \path{Prop:IV.12}) of
-\cite{Cirac2016MPDO_arXiv} is a statement about the tensor viewed in the
-vertical direction.  The source defines that direction explicitly: the tensor
-is considered ``as generating MPV by concatenating it vertically, and thus by
-exchanging the notion of physical and virtual indices''
-(\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, line~943).  The vertically
-viewed tensor $\widetilde M$ therefore has its letters indexed by the
-horizontal bond pair $(a,b)$, each letter being the operator on the physical
-space with matrix elements
-\begin{equation}
-  (\widetilde M_{ab})_{ij}=M^{ij}_{ab}.
-  \label{eq:vertical-letters}
-\end{equation}
-The conclusion of Proposition~4.13 (restated at lines~1863--1870, equation
-\path{UMU-appendix}) is that for a canonical-form tensor generating matrix
-product density operators there is an isometry $U$ on the physical space with
-\begin{equation}
-  U\widetilde MU^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha,
-  \label{eq:umu}
-\end{equation}
-where the $\mu_\alpha$ are positive diagonal matrices and $\{M_\alpha\}_\alpha$
-is a basis of normal tensors for $\widetilde M$.  The multiplicity
-coefficients $m_\alpha=\tr(\mu_\alpha)$ of this decomposition are consumed by
-the renormalization fixed-point characterization (Theorem~4.14, line~1956).
+Proposition~4.13, whose source label is \path{Prop:IV.12}, concerns a tensor
+viewed in the vertical direction
+\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}. The source defines this direction
+by considering the tensor ``as generating MPV by concatenating it vertically,
+and thus by exchanging the notion of physical and virtual indices''
+\cite[line~943]{Cirac2016MPDO_arXiv}. The local source is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}.
+
+Let $M^{ij}_{ab}$ denote the original tensor entries, where $(i,j)$ is the
+physical pair and $(a,b)$ is the horizontal bond pair. The vertically viewed
+tensor $\widetilde M$ has letters indexed by $(a,b)$, and each letter acts on
+the physical space with matrix entries
+\begin{align}
+    (\widetilde M_{ab})_{ij}
+        &=M^{ij}_{ab}.
+    \label{eq:cpgsv17_vertical_tensor_definition_vertical_letters}
+\end{align}
+Thus vertical viewing exchanges the roles of the physical and horizontal
+virtual index pairs.
+
+The conclusion of Proposition~4.13, restated at source lines~1863--1870 in the
+formula labelled \path{UMU-appendix}, is
+\begin{align}
+    U\widetilde M U^\dagger
+        &=
+        \bigoplus_\alpha\mu_\alpha\otimes M_\alpha.
+    \label{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form}
+\end{align}
+Here $U$ acts on the physical space, each $\mu_\alpha$ is a positive diagonal
+matrix, and the family $\{M_\alpha\}_\alpha$ is a basis of normal tensors for
+$\widetilde M$ \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}. The
+renormalization fixed-point characterization in Theorem~4.14 uses the
+multiplicity coefficients
+\begin{align}
+    m_\alpha
+        &=\tr(\mu_\alpha).
+    \label{eq:cpgsv17_vertical_tensor_definition_multiplicity_coefficient}
+\end{align}
+This use occurs at source line~1956 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \section{The former diagonal-tensor surrogate}
 
-Until this realignment, the formal vertical canonical-form predicate stated
-the conclusion of Proposition~4.13 as a property of the \emph{diagonal} MPS
-tensor $i\mapsto M^{ii}$: the diagonal tensor was required to generate the
-same matrix product vector family as a block-diagonal tensor obtained by
-repeating basis blocks with positive scalar weights.  Both sides of that
-comparison live on the physical alphabet $\{0,\dots,d-1\}$ and have matrices
-acting on the horizontal bond space --- the opposite of
-\eqref{eq:vertical-letters}, where the letters range over bond pairs and the
-matrices act on the physical space.
+Before the realignment, the formal vertical canonical-form predicate placed
+the conclusion of Proposition~4.13 on the diagonal MPS tensor
+$i\mapsto M^{ii}$. It required that diagonal tensor to generate the same
+matrix product vector family as a block-diagonal tensor formed by repeating
+basis blocks with positive scalar weights. Both sides used the physical
+alphabet $\{0,\ldots,d-1\}$, and their matrices acted on the horizontal bond
+space. This orientation is the opposite of
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_letters}, in which
+letters are horizontal bond pairs and matrices act on the physical space.
 
-The surrogate also cannot carry the multiplicity coefficients of
-\eqref{eq:umu}.  Take $d=2$, $D=1$, and $M^{ij}=\delta_{ij}/2$, a matrix
-product density operator in canonical form.  Its vertically viewed tensor is
-the single physical-space letter $\widetilde M_{11}=\tfrac12\Id_2$, whose
-decomposition \eqref{eq:umu} has one block with
-$\mu=\operatorname{diag}(\tfrac12,\tfrac12)$: the multiplicity is $2$ and
-$m=\tr(\mu)=1$.  The diagonal tensor, by contrast, has the scalar family
-$V^{(N)}=2^{-N}$, and a two-weight flattening would require positive reals
-with
-\[
-  \omega_1^N+\omega_2^N=2^{-N}\qquad(N\geq1);
-\]
-the cases $N=1$ and $N=2$ force $\omega_1\omega_2=0$, a contradiction.  The
-surrogate is therefore satisfiable only with multiplicity $1$ for this
-tensor, so the coefficients $m_\alpha$ needed at line~1956 are lost.
-Consequently the diagonal-tensor statement is \emph{not} a corollary of
-Proposition~4.13, and a proof of the surrogate would not formalize the
+The diagonal surrogate also cannot retain the multiplicity coefficients in
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form}.
+Consider physical dimension $d=2$, horizontal bond dimension $D=1$, and
+\begin{align}
+    M^{ij}
+        &=\frac{\delta_{ij}}{2}.
+    \label{eq:cpgsv17_vertical_tensor_definition_scalar_mpdo}
+\end{align}
+This tensor is a matrix product density operator in canonical form. Its
+vertically viewed tensor has the single physical-space letter
+\begin{align}
+    \widetilde M_{11}
+        &=\frac{1}{2}I_2.
+    \label{eq:cpgsv17_vertical_tensor_definition_scalar_vertical_letter}
+\end{align}
+Its decomposition in
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form} has
+one block with
+\begin{align}
+    \mu
+        &=
+        \operatorname{diag}\left(\frac{1}{2},\frac{1}{2}\right),
+    \label{eq:cpgsv17_vertical_tensor_definition_twofold_weight}\\
+    \tr(\mu)
+        &=1.
+    \label{eq:cpgsv17_vertical_tensor_definition_twofold_multiplicity_sum}
+\end{align}
+The block occurs with multiplicity two.
+
+By contrast, the diagonal tensor generates the scalar family
+\begin{align}
+    V^{(N)}
+        &=2^{-N}.
+    \label{eq:cpgsv17_vertical_tensor_definition_diagonal_scalar_family}
+\end{align}
+A flattening with two positive weights $\omega_1$ and $\omega_2$ would require
+\begin{align}
+    \omega_1^N+\omega_2^N
+        &=2^{-N}
+        \qquad\text{for every }N\geq1.
+    \label{eq:cpgsv17_vertical_tensor_definition_two_weight_power_sum}
+\end{align}
+The cases $N=1$ and $N=2$ give
+\begin{align}
+    \omega_1+\omega_2
+        &=\frac{1}{2},
+    \label{eq:cpgsv17_vertical_tensor_definition_power_sum_first}\\
+    \omega_1^2+\omega_2^2
+        &=\frac{1}{4},
+    \label{eq:cpgsv17_vertical_tensor_definition_power_sum_second}\\
+    2\omega_1\omega_2
+        &=
+        (\omega_1+\omega_2)^2
+        -(\omega_1^2+\omega_2^2)
+        =0.
+    \label{eq:cpgsv17_vertical_tensor_definition_weight_product_zero}
+\end{align}
+Equation~\ref{eq:cpgsv17_vertical_tensor_definition_weight_product_zero}
+contradicts positivity of both weights. The surrogate can therefore represent
+this tensor only with multiplicity one, so it loses the multiplicity data
+$m_\alpha$ required at source line~1956. The diagonal-tensor statement is not
+a corollary of Proposition~4.13, and proving it would not formalize that
 proposition.
 
 \section{The realigned formal statement}
 
-The realignment (\ghissue{3712}) introduces the vertically viewed tensor
-\eqref{eq:vertical-letters} as a formal object and restates the vertical
-canonical-form predicate on it: there are a basis of normal tensors
-$\{M_\alpha\}_\alpha$ for $\widetilde M$, positive diagonal matrices
-$\mu_\alpha=\operatorname{diag}(\omega_{\alpha,0},\dots,\omega_{\alpha,r_\alpha-1})$
-with $r_\alpha\geq1$, and a coisometry $U$ onto the retained nonzero sector
-space satisfying \eqref{eq:umu} letter by letter over the horizontal bond
-pairs.  It satisfies $UU^\dagger=\Id$ on that retained space; its adjoint is
-the isometric inclusion into the original physical space.  The source's
-general canonical-form construction allows $\sum_k D_k<D$ and hence permits
-a zero orthogonal complement (lines~214--225).  Thus $U^\dagger U$ is in
-general the support projection rather than the identity.  This correction is
-documented in \path{cpgsv17_vertical_isometry_zero_sector.tex}.  The
-proposition does not display the reverse identity separately.  It
-follows from the preceding assertion that the vertical tensor is itself in
-canonical form: it reconstructs the original tensor from the displayed direct
-sum and requires the omitted complement to be a zero sector.  Since each
-$\mu_\alpha$ is diagonal,
-the summand $\mu_\alpha\otimes M_\alpha$ is the direct sum
-$\bigoplus_{k=0}^{r_\alpha-1}\omega_{\alpha,k}M_\alpha$, so the right-hand side of
-\eqref{eq:umu} is a block-diagonal tensor over the pairs $(\alpha,k)$ in
-which both the multiplicities $r_\alpha$ and the diagonal entries
-$\omega_{\alpha,k}$ remain explicit; the coefficients
-$m_\alpha=\tr(\mu_\alpha)=\sum_{k=0}^{r_\alpha-1}\omega_{\alpha,k}$ are
-recovered from them.  The one-site actions used in the
-invariant-projection step are identified with left and right multiplication
-on the letters of $\widetilde M$.
+The realignment tracked in
+\href{https://github.com/LionSR/TNLean/issues/3712}{GitHub issue \#3712}
+introduces the tensor from
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_letters} as a formal
+object and states the vertical canonical-form predicate directly on it. The
+predicate provides a basis of normal tensors $\{M_\alpha\}_\alpha$ for
+$\widetilde M$, positive diagonal matrices
+\begin{align}
+    \mu_\alpha
+        &=
+        \operatorname{diag}\bigl(        \omega_{\alpha,0},
+            \ldots,
+            \omega_{\alpha,r_\alpha-1}
+        \bigr),
+    \label{eq:cpgsv17_vertical_tensor_definition_diagonal_sector_weight}\\
+    r_\alpha
+        &\geq1,
+    \label{eq:cpgsv17_vertical_tensor_definition_positive_multiplicity}
+\end{align}
+and a coisometry $U$ onto the retained nonzero-sector space. These data satisfy
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form}
+letter by letter for every horizontal bond pair.
 
-The diagonal-tensor identities remain in the development as auxiliary
-results: the matrix product vectors of $i\mapsto M^{ii}$ are the diagonal
-entries $\langle\sigma|\rho^{(N)}(M)|\sigma\rangle$ of the density operator,
-which is the positivity input to the proof of Proposition~4.13.  They no
-longer state its conclusion.
+The coisometry satisfies
+\begin{align}
+    UU^\dagger
+        &=I
+    \label{eq:cpgsv17_vertical_tensor_definition_coisometry}
+\end{align}
+on the retained space, so $U^\dagger$ is its isometric inclusion into the
+original physical space. The general canonical-form construction in
+Ref.~\cite{Cirac2016MPDO_arXiv} allows $\sum_kD_k<D$ and therefore permits a
+zero orthogonal complement at source lines~214--225. Consequently,
+$U^\dagger U$ is generally the support projection rather than the identity.
+This correction is documented in
+\path{cpgsv17_vertical_isometry_zero_sector.tex}.
+
+Proposition~4.13 does not print a separate reverse identity. Its preceding
+assertion that the vertical tensor is itself in canonical form supplies exact
+reconstruction and requires the omitted complement to be a zero sector
+\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}. Because each $\mu_\alpha$ is
+diagonal,
+\begin{align}
+    \mu_\alpha\otimes M_\alpha
+        &=
+        \bigoplus_{k=0}^{r_\alpha-1}
+        \omega_{\alpha,k}M_\alpha.
+    \label{eq:cpgsv17_vertical_tensor_definition_weighted_sector_sum}
+\end{align}
+Hence the right-hand side of
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form} is a
+block-diagonal tensor indexed by pairs $(\alpha,k)$. It retains both the
+multiplicities $r_\alpha$ and the weights $\omega_{\alpha,k}$. In particular,
+\begin{align}
+    m_\alpha
+        &=
+        \tr(\mu_\alpha)
+        =
+        \sum_{k=0}^{r_\alpha-1}\omega_{\alpha,k}.
+    \label{eq:cpgsv17_vertical_tensor_definition_recovered_multiplicity}
+\end{align}
+The formal one-site actions used in the invariant-projection step are
+identified with left and right multiplication on the letters of
+$\widetilde M$.
+
+The diagonal-tensor identities remain as auxiliary results. The matrix product
+vectors of $i\mapsto M^{ii}$ are the diagonal entries
+\begin{align}
+    \bra{\sigma}\rho^{(N)}(M)\ket{\sigma}
+        &\geq0.
+    \label{eq:cpgsv17_vertical_tensor_definition_diagonal_density_entry}
+\end{align}
+These entries provide positivity input for the proof of Proposition~4.13, but
+they no longer state its conclusion.
 
 \section{Relation to the neighboring notes}
 
-\path{cpgsv17_vertical_cf_grouping.tex} records that the positive diagonal
-coefficients in \eqref{eq:umu} arise from the vertical canonical
-decomposition, not from flattening horizontal weights;
-\path{cpgsv17_vertical_diagonal_restriction.tex} records that diagonal
-restriction of horizontal blocks does not preserve normality.  Neither note
-documented the definitional mismatch addressed here: the former predicate
-placed the conclusion of Proposition~4.13 on the wrong tensor.  The literal
-horizontal-to-vertical implication is now proved by
+The note \path{cpgsv17_vertical_cf_grouping.tex} explains that the positive
+diagonal coefficients in
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form} arise
+from the vertical canonical decomposition rather than from flattening
+horizontal weights. The note
+\path{cpgsv17_vertical_diagonal_restriction.tex} shows that diagonal
+restriction of horizontal blocks does not preserve normality. Neither note
+addresses the definitional mismatch corrected here: the former predicate
+placed the conclusion of Proposition~4.13 on the wrong tensor.
+
+The literal horizontal-to-vertical implication is now proved by
 \path{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
-\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean}.  It assumes the literal
-CPSV canonical form and MPDO positivity of Proposition~4.13.  The earlier
-theorem \path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} remains as a separate result
-under the stronger normalized BNT-refined hypothesis
+\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean}. It assumes the literal
+CPSV canonical form and the MPDO positivity hypothesis of Proposition~4.13 in
+Ref.~\cite{Cirac2016MPDO_arXiv}. The earlier theorem
+\path{MPOTensor.verticalCF_of_horizontalCF} in
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} remains available as a
+separate result under the stronger normalized BNT-refined hypothesis
 \path{MPOTensor.IsHorizontalCF}.
 
 \paragraph{Verdict.}
-This is a corrected definitional mismatch.  The former predicate placed the
-conclusion of Proposition~4.13 on the diagonal tensor $i\mapsto M^{ii}$
-rather than on the vertically viewed tensor $\widetilde M$ defined at source
-line~943, and the $d=2$, $D=1$ example shows the diagonal surrogate cannot
-carry the multiplicity coefficients $m_\alpha=\tr(\mu_\alpha)$ of
-\eqref{eq:umu}; a proof of the surrogate would therefore not have formalized
-the proposition.  The realignment restores the source-faithful vertical tensor
-definition.  The later correction in
+The former predicate had a definitional mismatch: it placed the conclusion of
+Proposition~4.13 on the diagonal tensor $i\mapsto M^{ii}$ rather than on the
+vertically viewed tensor $\widetilde M$ defined at source line~943 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The example with $d=2$ and $D=1$ shows that
+the diagonal surrogate cannot retain the coefficients
+$m_\alpha=\tr(\mu_\alpha)$ from
+Eq.~\ref{eq:cpgsv17_vertical_tensor_definition_vertical_canonical_form}.
+A proof of that surrogate would therefore not have formalized the proposition.
+
+The realignment restores the source-faithful vertical tensor definition. The
+later correction in
 \path{cpgsv17_vertical_isometry_zero_sector.tex} expresses the source's
 one-sided condition as a coisometry onto the retained nonzero sectors and
-retains exact reconstruction.  The horizontal-to-vertical implication is
+retains exact reconstruction. The horizontal-to-vertical implication is now
 proved with this corrected definition under the literal CPSV canonical-form
-and MPDO hypotheses, and the stronger normalized BNT-refined theorem remains
-available separately.  The phase-class grouping and positive diagonal
+and MPDO hypotheses, while the stronger normalized BNT-refined theorem remains
+available separately. The phase-class grouping and positive diagonal
 coefficients used in the proof are detailed in
-\path{cpgsv17_vertical_cf_grouping.tex}.  This completes Proposition~4.13 but
-does not prove the positive-fusion statement in Appendix~C.4 or the
-renormalization fixed-point characterization in Theorem~4.14.
+\path{cpgsv17_vertical_cf_grouping.tex}.
+
+This work completes Proposition~4.13. It does not prove the positive-fusion
+statement in Appendix~C.4 or the renormalization fixed-point characterization
+in Theorem~4.14 of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

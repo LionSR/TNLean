@@ -17,232 +17,288 @@
 
 \section{Source condition}
 
-This Appendix~D condition is not the route used in the proof of the forward
-RFP-to-NNCPH implication.  The proof of Theorem~3.10 at source lines
-1305--1307 consists of one sentence saying that the implication is immediate
-from the structural characterization in Theorem~3.11.  Definition~D.2 belongs
-to the later, independent discussion of decorrelation.
+The condition in Appendix~D of Ref.~\cite{Cirac2016MPDO_arXiv} is not the route
+used to prove the forward RFP-to-NNCPH implication. The proof of
+Theorem~3.10 at source lines~1305--1307 consists of one sentence stating that
+the implication follows immediately from the structural characterization in
+Theorem~3.11 of Ref.~\cite{Cirac2016MPDO_arXiv}. Definition~D.2 belongs to the
+later, independent discussion of decorrelation.
 
-Definition~D.2 of \cite{Cirac2016MPDO_arXiv} states the parent commuting
-Hamiltonian condition for a tripartite Hilbert space
-\(\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B\).  It uses local
-projectors \(Q_{AX}\) and \(Q_{XB}\).  Let \(K_{AX}\) and \(K_{XB}\) denote
-their kernels, and write
-\[
-  \widehat Q_{AX}=Q_{AX}\otimes I_B,
-  \qquad
-  \widehat Q_{XB}=I_A\otimes Q_{XB}
-\]
-for their lifts to the tripartite space.  The source condition is\footnote{Local source:
+Definition~D.2 of Ref.~\cite{Cirac2016MPDO_arXiv} considers a tripartite
+Hilbert space $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$ and local
+projectors $Q_{AX}$ and $Q_{XB}$. Let $K_{AX}$ and $K_{XB}$ denote their
+kernels. Their lifts to the tripartite space are
+\begin{align}
+    \widehat Q_{AX}
+        &=Q_{AX}\otimes I_B,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_qax_lift}\\
+    \widehat Q_{XB}
+        &=I_A\otimes Q_{XB}.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_qxb_lift}
+\end{align}
+The source condition is\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}:2205--2218, labels
 \path{QAXQXB} and \path{KAXBKAXKXB}.}
 \begin{align}
-  [\widehat Q_{AX},\widehat Q_{XB}]&=0,\\
-  K_{AXB}&=(K_{AX}\otimes\mathcal H_B)
-    \cap(\mathcal H_A\otimes K_{XB}).
+    [\widehat Q_{AX},\widehat Q_{XB}]
+        &=0,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_source_commutation}\\
+    K_{AXB}
+        &=(K_{AX}\otimes\mathcal H_B)
+          \cap(\mathcal H_A\otimes K_{XB}).
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_source_kernel_intersection}
 \end{align}
-The proof of Proposition~D.3 then writes
-\(P_{AX}=1-Q_{AX}\) and \(P_{XB}=1-Q_{XB}\).  Their lifts
-\[
-  \widehat P_{AX}=P_{AX}\otimes I_B,
-  \qquad
-  \widehat P_{XB}=I_A\otimes P_{XB}
-\]
-satisfy the product identity
+
+The proof of Proposition~D.3 of Ref.~\cite{Cirac2016MPDO_arXiv} introduces
+complementary projectors and their lifts:
 \begin{align}
-  \widehat P_{AX}\widehat P_{XB}=P_{AXB}.
+    P_{AX}
+        &=I_{AX}-Q_{AX},
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_pax_complement}\\
+    P_{XB}
+        &=I_{XB}-Q_{XB},
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_pxb_complement}\\
+    \widehat P_{AX}
+        &=P_{AX}\otimes I_B,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_pax_lift}\\
+    \widehat P_{XB}
+        &=I_A\otimes P_{XB}.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_pxb_lift}
 \end{align}
-This is the identity obtained from commuting orthogonal projectors onto the two
-local kernels \(K_{AX}\) and \(K_{XB}\).\footnote{Local source:
+These lifted projectors satisfy
+\begin{align}
+    \widehat P_{AX}\widehat P_{XB}
+        &=P_{AXB}.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_projector_product}
+\end{align}
+This is the product identity for commuting orthogonal projectors onto the two
+local kernels.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}:2259--2289, in particular labels
 \path{PAXQAX}, \path{PXBQXB}, and \path{arrggg}.}
+
 The explicit tripartite declaration
-\leanid{TripartiteDecorrelation.CommutingParentHamiltonian} now records the
-range-intersection equality itself.  The equivalence
-\[
-  \operatorname{ran}P_{AXB}
-    =\operatorname{ran}\widehat P_{AX}\cap
-      \operatorname{ran}\widehat P_{XB}
-  \quad\Longleftrightarrow\quad
-  \widehat P_{AX}\widehat P_{XB}=P_{AXB}
-\]
-for commuting orthogonal projectors is proved by
-\leanid{TripartiteDecorrelation.}
-\hspace{0pt}\leanid{hasGroundSpaceIntersection_iff_product_eq}; the forward
-implication is exposed as
+\leanid{TripartiteDecorrelation.CommutingParentHamiltonian} records the
+range-intersection equality. For commuting orthogonal projectors,
+\begin{align}
+    \operatorname{ran}P_{AXB}
+        =\operatorname{ran}\widehat P_{AX}
+          \cap\operatorname{ran}\widehat P_{XB}
+        \quad&\Longleftrightarrow\quad
+        \widehat P_{AX}\widehat P_{XB}=P_{AXB}.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_range_product_equivalence}
+\end{align}
+This equivalence is proved by
+\leanid{TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq};
+its forward implication is exposed as
 \leanid{TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}.
 
 \section{Current boundary}
 
-The current declaration \leanid{Decorrelation.HasCommutingParentHam} records
-only the idempotent-product part of this condition.\footnote{See
-\doclink{TNLean/MPS/ParentHamiltonian/Decorrelation}.}  For a complex vector
-space \(E\), it asks for endomorphisms \(P_{AX},P_{XB}:E\to E\) such that
+The declaration \leanid{Decorrelation.HasCommutingParentHam} records only the
+idempotent-product part of the source condition.\footnote{See
+\doclink{TNLean/MPS/ParentHamiltonian/Decorrelation}.} For a complex vector
+space $E$, it asks for endomorphisms $P_{AX},P_{XB}:E\to E$ satisfying
 \begin{align}
-  P_{AX}^2=P_{AX},\qquad
-  P_{XB}^2=P_{XB},\qquad
-  P_{AX}P_{XB}=P_{XB}P_{AX},\qquad
-  P_{AX}P_{XB}=P_K.
+    P_{AX}^{2}
+        &=P_{AX},
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_pax_idempotent}\\
+    P_{XB}^{2}
+        &=P_{XB},
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_pxb_idempotent}\\
+    P_{AX}P_{XB}
+        &=P_{XB}P_{AX},
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_commutation}\\
+    P_{AX}P_{XB}
+        &=P_K.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_product}
 \end{align}
-It does not assert a tensor decomposition of \(E\), local action on the
-\(AX\) and \(XB\) tensor factors, self-adjointness, orthogonality, or the
-existence of source projectors \(Q_{AX}\) and \(Q_{XB}\).  Consequently every
-idempotent \(P_K\) has the tautological choice
-\(P_{AX}=P_{XB}=P_K\), recorded by
-\leanid{Decorrelation.HasCommutingParentHam.ofIdem}.
+It does not assert a tensor decomposition of $E$, local action on the $AX$ and
+$XB$ factors, self-adjointness, orthogonality, or the existence of source
+projectors $Q_{AX}$ and $Q_{XB}$. Every idempotent $P_K$ therefore admits the
+tautological choice
+\begin{align}
+    P_{AX}
+        &=P_K,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_tautological_pax}\\
+    P_{XB}
+        &=P_K,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_tautological_pxb}
+\end{align}
+recorded by \leanid{Decorrelation.HasCommutingParentHam.ofIdem}. Thus this
+declaration is not Definition~D.2 of Ref.~\cite{Cirac2016MPDO_arXiv}; it is
+the algebraic consequence sufficient for the proved backward decorrelation
+implication.
 
-Thus the present declaration is not Definition~D.2 itself.  It is the algebraic
-idempotent-product consequence of Definition~D.2 that is sufficient for the
-backward decorrelation implication already proved in the file.
-
-The nearest-neighbor parent-Hamiltonian development now also has a separate
-three-site support layer for the \(AX\) and \(XB\) faces:
+A separate three-site support layer records the $AX$ and $XB$ faces:
 \leanid{MPSTensor.leftPairLift}, \leanid{MPSTensor.rightPairLift}, and
-\leanid{MPSTensor.HasOverlappingTwoSiteCommutation}.  This records the local
-action and commutation equation on the common three-site space.  The source
-kernel-intersection equation
-\[
-  K_{AXB}=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB})
-\]
-is recorded by
-\leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian}, whose forgetful
+\leanid{MPSTensor.HasOverlappingTwoSiteCommutation}. The source
+kernel-intersection condition is represented by
+\begin{align}
+    K_{AXB}
+        &=\ker((Q_{AX})_{AX})\cap\ker((Q_{XB})_{XB})
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_lifted_kernel_intersection}
+\end{align}
+in \leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian}. Its forgetful
 projection gives the algebraic overlapping-commutation predicate.
-The scalar pair-index equation has now been assembled into the physical map
+
+The scalar pair-index relation has been assembled into the physical map
 \begin{align}
-  (Uv)_i=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
-  \qquad U^*U=1,
+    (Uv)_i
+        &=\sum_{\alpha,\beta}U^i_{\alpha,\beta}v_{\alpha,\beta},
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_physical_map}\\
+    U^*U
+        &=\Id.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_physical_isometry}
 \end{align}
-in \leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
+These identities are recorded in
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometry} and
 \leanid{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}.
-The tensor-power maps now satisfy
+For every $L$, the tensor-power maps satisfy
 \begin{align}
-  U^{*\otimes L}U^{\otimes L}=1
+    U^{*\otimes L}U^{\otimes L}
+        &=\Id,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_tensor_power_isometry}
 \end{align}
-for every \(L\), as recorded by
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{physicalIsometryTensorPowerLeftInverse_comp}.
-On two sites, the inserted virtual bond
+as recorded by
+\leanid{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse_comp}.
+
+On two sites, the inserted virtual bond is
 \begin{align}
-  (I_\varphi v)_{(a,b),(b',c)}
-  =\delta_{b,b'}\lambda_bv_{a,c}
+    (I_\varphi v)_{(a,b),(b',c)}
+        &=\delta_{b,b'}\lambda_bv_{a,c}.
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_virtual_bond_embedding}
 \end{align}
-has physical image
+Its physical image satisfies
 \begin{align}
-  \operatorname{ran}(U^{\otimes2}I_\varphi)=G_2(A_{\mathrm{core}}).
+    \operatorname{ran}(U^{\otimes 2}I_\varphi)
+        &=G_2(A_{\mathrm{core}}).
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_two_site_image}
 \end{align}
 This is
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicEmbedding_range}.
-The orthogonal projector onto this image is
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicSupportProjection}, and
-its complementary projector is exactly \(q_2(A_{\mathrm{core}})\), as recorded
-by
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicSupportProjection_eq_complement}.
-The elementary passage from \(Q_{AX},Q_{XB}\) to their complements
-\(1-Q_{AX},1-Q_{XB}\) is recorded by
-\leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}.  The
-three-site transport from these local projectors to translated parent terms is
-available in both conventions: directly for \(Q_{AX},Q_{XB}\) through
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}. The
+orthogonal projector onto this image is
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection}; its
+complement equals $q_2(A_{\mathrm{core}})$ by
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_eq_complement}.
+
+The passage to complementary projectors is recorded by
+\leanid{MPSTensor.HasOverlappingTwoSiteCommutation.complement}. Three-site
+transport is available directly for $Q_{AX},Q_{XB}$ through
 \leanid{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}, and for
 their complements through
 \leanid{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2_complement}.
-For the Appendix~B structural datum itself, the current coefficient-space
-representatives are
+
+For the Appendix~B structural datum, the coefficient-space representatives are
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}; both are identified
-with the canonical two-site parent interaction \(q_2(A)\) before placement on
-the \(AX\) and \(XB\) faces.  Their factor actions on the homogeneous
-three-single-site coefficient space are now explicit.  Under the canonical
-two-site and right-associated three-site reindexings,
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}. Both are
+identified with $q_2(A)$ before placement on the $AX$ and $XB$ faces. Under
+the canonical reindexings, their factor actions are
 \begin{align}
-  [\widehat Q_{AX}]_{AX}&=[\widehat Q_{AX}]\otimes I_d,\\
-  [\widehat Q_{XB}]_{XB}&=I_d\otimes[\widehat Q_{XB}].
+    [\widehat Q_{AX}]_{AX}
+        &=[\widehat Q_{AX}]\otimes I_d,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_qax_factor_action}\\
+    [\widehat Q_{XB}]_{XB}
+        &=I_d\otimes[\widehat Q_{XB}].
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_qxb_factor_action}
 \end{align}
-The generic matrix identities are
+The generic identities are
 \leanid{MPSTensor.leftPairLift_toMatrix_reindex} and
-\leanid{MPSTensor.rightPairLift_toMatrix_reindex}; their specialization to the
-hatted Appendix~B representatives is given separately by
+\leanid{MPSTensor.rightPairLift_toMatrix_reindex}; their Appendix~B
+specializations are
 \leanid{MPSTensor.AppendixBStructuralData.appendixBQAX_factor_action} and
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action}.  This
-realizes only the
-homogeneous choice
-\(\mathcal H_A=\mathcal H_X=\mathcal H_B=\mathbb C^d\) of the factor spaces
-introduced at source lines 2185--2186.  It does not supply the arbitrary
-factorization used in Definition~D.2 at lines 2205--2218.
-Since \(q_2(A)\) is the canonical orthogonal
-projector onto \(G_2(A)^\perp\), these coefficient-space maps are orthogonal.
-They are not, by themselves, constructions of the source projectors on
-\(\mathcal H_A\otimes\mathcal H_X\) and
-\(\mathcal H_X\otimes\mathcal H_B\), as stated in their defining docstrings in
-\texttt{TNLean/MPS/RFP/AppendixBStructuralData.lean}.  The additional identification,
-after transporting the source projectors to coefficient space, is the explicit
-hypothesis of
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}.
-Without that identification, the lifted commutator of the coefficient-space
-maps follows directly from the adjacent virtual-bond projectors and their
-isometric transport, as recorded by
-\leanid{MPSTensor.AppendixBStructuralData.}\hspace{0pt}
-\leanid{twoSiteBasicSupportProjection_commute_lifts} and
-\leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}.
-The corresponding adjacent parent terms commute on every periodic chain with
-\(N>2\), by
-\leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
-For an injective tensor, the general three-site MPS intersection identity is
-now recorded by
-\leanid{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}:
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action}.
+
+This construction realizes only the homogeneous choice
 \begin{align}
-  G_3(A)=
-  \ker(q_2(A)_{AX})\cap\ker(q_2(A)_{XB}).
+    \mathcal H_A
+        &=\mathbb C^d,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_homogeneous_a}\\
+    \mathcal H_X
+        &=\mathbb C^d,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_homogeneous_x}\\
+    \mathcal H_B
+        &=\mathbb C^d,
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_homogeneous_b}
 \end{align}
-Consequently the Appendix~B representatives, placed on their two faces, satisfy
-the coefficient-space analogues of the idempotence, commutation, and
-kernel-intersection equations in Definition~D.2, with
-\(\widehat K_{AXB}=G_3(A)\), as proved by
-\leanid{MPSTensor.AppendixBStructuralData.}
-\hspace{0pt}\leanid{hasAppendixD2ParentCommutingHamiltonian}.
-This theorem does not identify these hatted maps with the source projectors on
-the two explicitly factored Hilbert spaces.
-For a normal left-canonical RFP tensor, the injectivity used by the intersection
-property is derived from the RFP hypotheses in
-\leanid{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical};
-it is not an additional assumption.
+introduced at source lines~2185--2186. It does not provide the arbitrary
+factorization used in Definition~D.2 at source lines~2205--2218 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+Because $q_2(A)$ is the canonical orthogonal projector onto $G_2(A)^\perp$,
+the coefficient-space maps are orthogonal. They do not by themselves
+construct the source projectors on
+$\mathcal H_A\otimes\mathcal H_X$ and
+$\mathcal H_X\otimes\mathcal H_B$, as stated in
+\path{TNLean/MPS/RFP/AppendixBStructuralData.lean}. The required transported
+identification is an explicit hypothesis of
+\leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}.
+
+Without this identification, commutation follows from the adjacent
+virtual-bond projectors and their isometric transport, as recorded by
+\leanid{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts}
+and
+\leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}.
+The adjacent parent terms commute on every periodic chain with $N>2$ by
+\leanid{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}.
+
+For an injective tensor, the three-site intersection identity is
+\begin{align}
+    G_3(A)
+        &=\ker(q_2(A)_{AX})\cap\ker(q_2(A)_{XB}).
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_three_site_intersection}
+\end{align}
+It is recorded by
+\leanid{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}.
+Consequently, the Appendix~B representatives satisfy the coefficient-space
+analogues of the idempotence, commutation, and kernel-intersection conditions,
+with
+\begin{align}
+    \widehat K_{AXB}
+        &=G_3(A).
+    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_coefficient_ground_space}
+\end{align}
+This is proved by
+\leanid{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}.
+The theorem does not identify the hatted maps with the source projectors on
+the explicitly factored Hilbert spaces. For a normal left-canonical RFP tensor,
+the RFP hypotheses supply the required injectivity, as proved by
+\leanid{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}.
 
 \section{Elimination plan}
 
-The general finite-dimensional tripartite equivalence is now recorded by
-\leanid{TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}.  Its
-parent condition uses orthogonal projectors on the explicit factors
-\(AX\) and \(XB\), and records literally that their lifted ranges have the
-source intersection.  The theorem
-\leanid{TripartiteDecorrelation.}
-\hspace{0pt}\leanid{hasGroundSpaceIntersection_iff_product_eq} proves that this
-is equivalent to their lifted product being \(P_{AXB}\).  The forward direction
-constructs these projectors as the supports of the two marginals, and the
-reverse direction derives and uses the product identity.  The local correction
-to the marginal-support expansion at source lines 2236--2252 is documented in
+The general finite-dimensional tripartite equivalence is recorded by
+\leanid{TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}. Its parent
+condition uses orthogonal projectors on the explicit factors and states their
+lifted range intersection. The theorem
+\leanid{TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq}
+equates this condition with
+(\ref{eq:cpsv16_parent_commuting_hamiltonian_scope_projector_product}). The
+forward direction constructs the projectors as supports of the two marginals;
+the reverse direction derives and uses the product identity. The local
+correction to the marginal-support expansion at source lines~2236--2252 is
+documented in
 \path{docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex}.
 
-The coefficient-space analogue of the algebraic and kernel-intersection clauses
-is now proved: the operators are the canonical orthogonal parent interactions
-\(q_2(A)\), their lifts commute, and their kernel intersection is \(G_3(A)\).
-It remains to construct the source projectors on the two stated tensor factors
-and identify their transported actions with these coefficient-space maps.  The
-conditional comparison theorem cited above records precisely this missing
-identification.  This remaining comparison belongs to the RFP application,
-not to the general decorrelation equivalence.  In particular,
-\leanid{Decorrelation.HasCommutingParentHam} remains only its algebraic
-idempotent-product consequence, and the generic
-\leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian} structure does not
-itself record self-adjointness.  The explicit tripartite condition above does
-record self-adjointness and proves both directions of Proposition~D.3.
+The coefficient-space analogues are proved. The remaining task is to construct
+the source projectors on the stated tensor factors and identify their
+transported actions with the coefficient-space maps. The conditional theorem
+\leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}
+states precisely this missing identification.
 
-For Theorem~3.10, the remaining obligations are instead the full
-canonical-form scope and the all-chain ground-space spanning statement.  They
-are tracked by \ghissue{2633}; Definition~D.2 should not be presented as their
-missing proof route.
+This comparison belongs to the RFP application, not to the general
+decorrelation equivalence. The declaration
+\leanid{Decorrelation.HasCommutingParentHam} remains only the algebraic
+idempotent-product consequence, and
+\leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian} does not itself
+record self-adjointness. The explicit tripartite condition does record
+self-adjointness and proves both directions of Proposition~D.3 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+The remaining obligations for Theorem~3.10 of
+Ref.~\cite{Cirac2016MPDO_arXiv} are the full canonical-form scope and the
+all-chain ground-space spanning statement. They are tracked by
+\ghissue{2633}. Definition~D.2 should not be presented as their missing proof
+route.
 
 \bibliographystyle{alpha}
 \bibliography{references}

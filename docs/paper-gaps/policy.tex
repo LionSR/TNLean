@@ -7,6 +7,16 @@
 
 \input{command}
 
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\tr}{\operatorname{tr}}
+\providecommand{\braket}[2]{\langle #1\mid #2\rangle}
+
 \title{Policy for Paper-Gap Notes}
 \author{}
 \date{2026-05-12}
@@ -18,163 +28,207 @@
 
 A paper-gap note records a mathematical discrepancy between a cited source and
 the statement, proof, or route used in the formal development. The source
-itself should remain intact. If a proof seems to require a hypothesis not
-present in the article, a different scalar, a different normalization, or a
-replacement theorem from the formal library, the change should be explained in a
-separate note under \path{docs/paper-gaps/}.
+itself should remain intact. If a proof appears to require a hypothesis absent
+from the article, a different scalar, a different normalization, or a
+replacement theorem from the formal library, explain the change in a separate
+note under \path{docs/paper-gaps/}.
 
 The note is a mathematical document first. It should be readable by a
 mathematician or mathematical physicist who has not read the corresponding
 issue or pull request. Traceability data such as formal declaration names,
-source-file paths, GitHub issues, and line ranges should support the exposition,
-usually in footnotes, rather than govern the exposition.
+source-file paths, GitHub issues, and line ranges support the exposition,
+usually in footnotes; they do not govern it.
 
 \section{When a note is needed}
 
 A note is needed when the formal statement is not literally the cited
-statement. The common case is an implication in the paper,
+statement. A common case is that the paper claims
 \begin{align}
-    \mathcal H \Longrightarrow C,
-    \tag{\path{source}}
+    \mathcal H &\Longrightarrow C.
+    \label{eq:policy_source_implication}
 \end{align}
-while the formal proof establishes only
+The formal proof may instead establish only
 \begin{align}
-    \mathcal H\wedge\mathcal K \Longrightarrow C.
-    \tag{\path{formal}}
+    \mathcal H\wedge\mathcal K &\Longrightarrow C.
+    \label{eq:policy_formal_implication}
 \end{align}
-The condition $\mathcal K$ must then be accounted for. Either it is derived
-from $\mathcal H$, it is a harmless local correction, or the formal theorem is
-a restricted theorem and should be marked as such.
+The condition $\mathcal K$ must then be accounted for. Either it follows from
+$\mathcal H$, it is a harmless local correction, or
+(\ref{eq:policy_formal_implication}) is a restricted theorem relative to
+(\ref{eq:policy_source_implication}) and must be marked as such.
 
 A note is also needed when the proof is mathematically different even though
 the final conclusion is the same. For example, a source proof might identify a
-coefficient by a finite power-sum identity,
+coefficient from the following finite power-sum identity, assumed for
+$1\leq N\leq m$:
 \begin{align}
     \sum_{q=1}^{r_a}\mu_q^N
-    =\sum_{q=1}^{r_b}\nu_q^N
-    \qquad (1\leq N\leq m),
+        &= \sum_{q=1}^{r_b}\nu_q^N.
+    \label{eq:policy_power_sum}
 \end{align}
-whereas the formal route might use convergence of a sequence. These are
-different mechanisms, and the note should say which hypotheses each mechanism
-uses.
+The formal route might instead use convergence of a sequence. These are
+different mechanisms. The note must state which hypotheses each mechanism uses
+and show the intermediate equalities required by the replacement argument.
 
-A note is \emph{not} an invitation to model a degenerate reading. When a
-source definition, read to the letter, admits a case its authors do not
-intend (a direct-sum summand with coefficient zero, a basis member whose
-coefficient vanishes at every length, a sector of probability zero, an empty
-block padding a bond dimension), the intended reading is adopted as a
-convention and written into the definition. One short note of kind
-\path{local-correction} records the reading. The degenerate case receives no
-parallel definition, no counterexample, no status entry in the blueprint, and
-no hypothesis repeated on downstream statements; such apparatus is deleted
-when found. A note of kind \path{false-source} is reserved for a printed
-claim that fails on nondegenerate data.
+A note is \emph{not} an invitation to model a degenerate reading. When a source
+definition, read literally, admits a case its authors do not intend, such as a
+direct-sum summand with coefficient zero, a basis member whose coefficient
+vanishes at every length, a sector of probability zero, or an empty block
+padding a bond dimension, adopt the intended reading as a convention and write
+it into the definition. One short note of kind \path{local-correction} records
+that reading. The degenerate case receives no parallel definition,
+counterexample, status entry in the blueprint, or hypothesis repeated on
+downstream statements; delete such apparatus when it is found. Reserve a note
+of kind \path{false-source} for a printed claim that fails on nondegenerate
+data.
 
-\section{Form of the note}
+\section{Mathematical presentation}
 
-The note should introduce the relevant notation before using it. It should
-state the cited assertion in the special case under discussion, then display the
-formal or corrected statement, and finally compare the hypotheses and
-conclusions. Long quotations are usually unnecessary; a precise citation and
-the mathematical formula are better.
+Define every symbol before its first use. State the cited assertion in the
+special case under discussion, state the formal or corrected assertion, and
+compare their hypotheses and conclusions. Use precise, concise, and
+mathematically direct prose. Long quotations are usually unnecessary; a
+specific citation and the relevant formulas are more useful.
 
-Displayed equations should carry the calculation. Use \verb|align| for
-displayed formulae in these notes, especially for multi-line arguments:
+Every substantive displayed equation must use
+\verb|\begin{align}| and \verb|\end{align}|. Use multiple aligned lines when a
+derivation depends on intermediate equalities. An \verb|aligned| structure may
+occur inside \verb|align| only when a nested multi-line expression is
+mathematically necessary. Do not compress a proof gap into one implication when
+the missing step occurs within a calculation.
+
+Every substantive displayed equation must have a stable semantic label of the
+form \verb|\label{eq:<note-prefix>_<content>}|. The label must describe the
+mathematical content, not the display's position or current number. When a
+display contains several independently discussed lines, label each such line.
+For example, a comparison argument may use
 \begin{align}
-    V^{(N)}(A) &= c_N V^{(N)}(B),\\
-    \langle V^{(N)}(B_k),V^{(N)}(A_j)\rangle
-               &\xrightarrow[N\to\infty]{}0,\\
+    V^{(N)}(A)
+        &= c_N V^{(N)}(B),
+    \label{eq:policy_proportional_vectors}\\
+    \braket{V^{(N)}(B_k)}{V^{(N)}(A_j)}
+        &\xrightarrow[N\to\infty]{}0,
+    \label{eq:policy_mixed_overlap}\\
     \dim\operatorname{span}
-    \left(\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_k)\}\right)
-               &= r_A+1.
+        \left(\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_k)\}\right)
+        &= r_A+1.
+    \label{eq:policy_span_dimension}
 \end{align}
-The contradiction should then be explained in prose, for instance by saying
-which nonzero coefficient is forced to vanish.
-Source tags belong on the right-hand side of the displayed line, using
-\verb|\tag| when a tag is needed. Short definitions may remain inline when the
-sentence is clearer that way.
+The prose must identify the nonzero coefficient forced to vanish and cite the
+step that produces the contradiction, such as
+(\ref{eq:policy_mixed_overlap}) or
+(\ref{eq:policy_span_dimension}).
 
-Formal identifiers should be written with \verb|\leanid| and should usually
-appear in footnotes. For example, the prose may say that the formal theorem is
-the same-dimensional gauge-phase component of a source lemma, and the footnote
-may identify the declaration.\footnote{Formal declaration:
+Refer to a displayed equation in the local note through \verb|\ref|. Write
+\verb|(\ref{eq:<label>})| or a grammatical equivalent. Do not write ``the
+equation above'', ``the preceding display'', a raw local equation number, or an
+unlinked source equation number. A source-paper equation is not a local
+cross-reference: name the source, identify its equation, and cite it with an
+existing bibliography key, for example Equation~(5.2) of
+Ref.~\cite{Wolf2012Quantum}. Every mathematical claim attributed to a paper or
+other literature source must likewise carry a \verb|\cite{...}| citation using
+a key already present in \path{references.bib}. Do not invent citation keys.
+
+Do not use \verb|$$|\ldots\verb|$$|, \verb|\[|\ldots\verb|\]|,
+\verb|equation|, \verb|equation*|, \verb|align*|, \verb|gather|,
+\verb|gather*|, \verb|multline|, or \verb|multline*| for equations in
+paper-gap notes. In particular, an equation later discussed in prose may not
+appear in an unlabelled display. The only exceptions are non-equational
+material generated by a document package, such as a tensor-network diagram or
+table, and a short formula retained in inline math because no display is
+warranted. These exceptions do not permit an unlabelled displayed equation.
+
+Treat formulas as parts of sentences and punctuate them accordingly. Short
+definitions may remain inline when that placement makes the sentence clearer.
+
+\section{Formal traceability}
+
+Write formal identifiers with \verb|\leanid| and place them in footnotes unless
+the formal declaration itself is the mathematical object under discussion. For
+example, the prose may say that the formal theorem is the same-dimensional
+gauge-phase component of a source lemma, while a footnote identifies the
+declaration.\footnote{Formal declaration:
     \leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
     in \doclink{TNLean/MPS/FundamentalTheorem/Proportional}.}
-Do not put formal identifiers in displayed equations unless the mathematical
-object itself is a formal declaration.
+Do not put formal identifiers in displayed equations merely as traceability
+data.
+
+Explain a replacement theorem in ordinary mathematics before identifying its
+formal declaration. Verify its hypotheses in the notation of the note. A
+formal identifier or source-file link does not replace either step.
 
 \section{Shared commands}
 
-All notes in this directory should load \path{docs/paper-gaps/command.tex}.
-Shared notation belongs there. In particular,
-\begin{align}
-    \tr(X),\qquad \leanid{someDeclaration}
-\end{align}
-should be produced by the shared commands \verb|\tr| and \verb|\leanid| rather
-than by local redefinitions in each note. This keeps the documents visually
-consistent and avoids contradictory local conventions.
+All notes in this directory must load
+\path{docs/paper-gaps/command.tex}. Shared notation belongs there. In
+particular, use the shared commands \verb|\tr| and \verb|\leanid| to produce
+$\tr(X)$ and \leanid{someDeclaration}; do not redefine them in an individual
+note. This rule keeps the documents visually consistent and prevents
+contradictory local conventions.
 
 \section{Naming}
 
 A note's file name has the form \path{<key>_<topic>.tex}. The key names the
 source the note examines: the authors' initials followed by a two-digit year
 (\path{cpsv16}, \path{pgvwc07}, \path{spwc10}), or an established short name
-for the source---a book or review (\path{wolf}, \path{rmp}) or a paper known
-by its subject (\path{mpu} for matrix product unitaries, \path{peps} for
-normal PEPS). A key may also name a small fixed collection of companion
-papers examined together (\path{cpsv17}). A note that audits the formal
-development itself, with no single external source, takes the key
-\path{tnlean}. The registry of keys, each with the source it names, is
-maintained in the repository configuration (\path{texra-blueprint.toml}),
-and the index generator rejects an unregistered key.
+for the source---a book or review (\path{wolf}, \path{rmp}) or a paper known by
+its subject (\path{mpu} for matrix product unitaries, \path{peps} for normal
+PEPS). A key may also name a small fixed collection of companion papers
+examined together (\path{cpsv17}). A note that audits the formal development
+itself, with no single external source, takes the key \path{tnlean}. The
+registry of keys, with the source named by each key, is maintained in the
+repository configuration \path{texra-blueprint.toml}; the index generator
+rejects an unregistered key.
 
-The topic part states the mathematical subject, not the history of the note.
-A file name is permanent once other documents cite it; version suffixes are
-not used, since a note is revised in place (see Revision below) and its
-history is preserved by the repository.
+The topic part states the mathematical subject, not the history of the note. A
+file name is permanent once another document cites it. Version suffixes are not
+used because a note is revised in place and its history is preserved by the
+repository.
 
 Blueprint prose cites a note like any other source, with
-\verb|\cite{gap:<slug>}|; the bibliography entry carries the published URL
-of the note, whether the note lives in this repository or in another one.
-Lean docstrings and comments use the repository path form
+\verb|\cite{gap:<slug>}|; the bibliography entry carries the published URL of
+the note, whether the note lives in this repository or another one. Lean
+docstrings and comments use the repository path
 \path{docs/paper-gaps/<slug>.tex}.
 
 \section{Classification}
 
-The conclusion of a note should give a verdict. The usual classifications are:
-a notational clarification, a local correction, a scope restriction, an
-unfaithful theorem, a source claim that is false as printed, or an open gap.
-The classification should follow the mathematics, not the amount of formal
-work required. Each note declares its classification and its status
-machine-readably with \verb|\gapnote{<kind>}{<status>}| directly after
-\verb|\maketitle|: the kind in the kebab-cased vocabulary above
-(\path{clarification}, \path{local-correction}, \path{scope-restriction},
-\path{unfaithful}, \path{false-source}, \path{open-gap}) and the status
-one of \path{open}, \path{wip}, \path{resolved}, or \path{historical};
-\path{wip} marks a gap whose elimination is actively underway and still
-counts as live. Severity is derived from the kind, so it is never stated
-separately. A resolved note keeps its classification and changes only its
-status; the published index lists live notes first and dims the resolved
-ones.
+The conclusion of a note must give a verdict. The available classifications
+are a notational clarification, a local correction, a scope restriction, an
+unfaithful theorem, a source claim that is false as printed, and an open gap.
+The classification follows the mathematics, not the amount of formal work
+required.
 
-A local correction records a small adjustment whose corrected statement is still
-available in the cited argument. A scope restriction records a theorem proved
-only in a special case of the source theorem. An unfaithful theorem is more
-serious: it relies on a hypothesis or intermediate result that the cited source
-does not provide. Such a theorem must carry an in-source marker pointing to the
+Each note declares its classification and status machine-readably with
+\verb|\gapnote{<kind>}{<status>}| directly after \verb|\maketitle|. The kind
+is one of \path{clarification}, \path{local-correction},
+\path{scope-restriction}, \path{unfaithful}, \path{false-source}, and
+\path{open-gap}. The status is one of \path{open}, \path{wip},
+\path{resolved}, and \path{historical}. The status \path{wip} marks a gap whose
+elimination is actively underway and still counts as live. Severity is derived
+from the kind and is never stated separately. A resolved note keeps its
+classification and changes only its status; the published index lists live
+notes first and dims resolved notes.
+
+A local correction records a small adjustment whose corrected statement is
+still available in the cited argument. A scope restriction records a theorem
+proved only in a special case of the source theorem. An unfaithful theorem
+relies on a hypothesis or intermediate result that the cited source does not
+provide. Such a theorem must carry an in-source marker pointing to the
 paper-gap note. A source claim is false as printed when a counterexample
 satisfies the stated source hypotheses and contradicts its conclusion. This
-classification concerns the cited assertion itself, rather than a mismatch
+classification concerns the cited assertion itself rather than a mismatch
 introduced by the formal statement or proof.
 
 \section{Revision}
 
-A note may begin provisionally, but revisions should keep it as a coherent
-account of the present mathematical understanding. It should not become a
-chronological log. If later work proves that $\mathcal K$ follows from
-$\mathcal H$, the note should be rewritten to show that derivation. If later
-work confirms that the extra hypothesis is unavoidable, the note should state
-the restricted theorem explicitly.
+A note may begin provisionally, but revisions must keep it as a coherent account
+of the present mathematical understanding rather than a chronological log. If
+later work proves that $\mathcal K$ follows from $\mathcal H$, rewrite the note
+to show that derivation. If later work confirms that the extra hypothesis is
+unavoidable, state the restricted theorem explicitly. Preserve stable equation
+labels when their mathematical content is unchanged, so references from other
+documents remain valid.
 
 \bibliographystyle{alpha}
 \bibliography{references}

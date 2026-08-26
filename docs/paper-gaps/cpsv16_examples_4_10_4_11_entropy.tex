@@ -17,269 +17,343 @@
 
 \section{Scope}
 
-Examples~4.10 and~4.11 of Cirac--Perez-Garcia--Schuch--Verstraete
-\cite{Cirac2016MPDO_arXiv} are printed at lines~897--924 of
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex}. This note separates the literal
-source statements from two finite-ring corrections. The explanatory
-calculations below use base-two logarithms, as do the numerical values printed
-in Example~4.10. The formal entropy definition uses natural logarithms; conversion
-to bits divides every entropy and mutual information by $\ln 2$.
+Examples~4.10 and~4.11 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete appear
+at lines~897--924 of
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}
+\cite{Cirac2016MPDO_arXiv}. This note distinguishes the literal source
+statements from two finite-ring corrections.
 
-For a normalized four-spin state, let $S_L$ be the entropy of $L$ consecutive
-spins and set
-\[
-  I_L=S_L+S_{4-L}-S_4.
-\]
-Thus
-\[
-  I_2-I_1=2S_2-S_1-S_3.
-\]
+The calculations below use base-two logarithms, matching the numerical values
+printed in Example~4.10 of Ref.~\cite{Cirac2016MPDO_arXiv}. The formal entropy
+definition uses natural logarithms. Dividing an entropy or mutual information
+in nats by $\ln 2$ converts it to bits.
 
-\section{Example 4.10: the correlated bit flip}
+For a normalized four-spin state, let $S_L$ denote the entropy of $L$
+consecutive spins. Define
+\begin{align}
+    I_L
+        &= S_L+S_{4-L}-S_4,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_mutual_information}\\
+    I_2-I_1
+        &= 2S_2-S_1-S_3.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_mutual_information_defect}
+\end{align}
+
+\section{Example~4.10: the correlated bit flip}
 
 \subsection{Printed channel and intended correction}
 
-Each spin consists of a left and a right qubit. The source prints the
-conjugating operator with the left-qubit label in both tensor factors:
-\[
-  \sigma_x^{(n,l)}\otimes\sigma_x^{(n,l)}.
-\]
-This does not describe an operator acting once on each of the two qubits of
-spin~$n$. The network-consistent correction is
-\[
-  U_n=\sigma_x^{(n,l)}\otimes\sigma_x^{(n,r)},
-  \qquad
-  \mathcal E_n(X)=pU_nXU_n^\dagger+(1-p)X.
-\]
-This correction is evidence-backed rather than merely typographical: at
-$p=1/4$ it reproduces all four entropy values printed immediately after the
-channel. No alternative corrected channel is stated in the bundled source.
+Each physical spin contains a left qubit and a right qubit. The source prints
+the conjugating operator with the left-qubit label in both tensor factors:
+\begin{align}
+    \sigma_x^{(n,l)}\otimes\sigma_x^{(n,l)}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_printed_flip}
+\end{align}
+This expression does not act once on each qubit of spin~$n$. The
+network-consistent correction is
+\begin{align}
+    U_n
+        &= \sigma_x^{(n,l)}\otimes\sigma_x^{(n,r)},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_corrected_flip}\\
+    \mathcal E_n(X)
+        &= pU_nXU_n^\dagger+(1-p)X.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_corrected_channel}
+\end{align}
+At $p=1/4$, this correction reproduces all four entropy values printed after
+the channel in Example~4.10 of Ref.~\cite{Cirac2016MPDO_arXiv}. The bundled
+source states no alternative corrected channel.
 
-\subsection{Exact four-spin calculation at flip probability one quarter}
+\subsection{Exact four-spin calculation at $p=1/4$}
 
-Start from a periodic ring of four Bell pairs, one on each bond, and apply the
-corrected channel independently at each spin. The reduced density operators
-for one through four consecutive spins have the following nonzero spectra,
-where $a^{[m]}$ denotes an eigenvalue $a$ of multiplicity $m$:
-\begin{align*}
-  \operatorname{spec}(\rho_1)
-    &=\left\{(1/4)^{[4]}\right\},\\
-  \operatorname{spec}(\rho_2)
-    &=\left\{(5/32)^{[4]},(3/32)^{[4]}\right\},\\
-  \operatorname{spec}(\rho_3)
-    &=\left\{(7/64)^{[4]},(3/64)^{[12]}\right\},\\
-  \operatorname{spec}(\rho_4)
-    &=\left\{(41/128)^{[1]},(15/128)^{[4]},
-        (9/128)^{[3]}\right\}.
-\end{align*}
-Their sums are one. Substitution into
+Start with a periodic ring of four Bell pairs, one on each bond, and apply
+Eq.~\ref{eq:cpsv16_examples_4_10_4_11_entropy_corrected_channel}
+independently at every spin. The reduced density operators for one through four
+consecutive spins have the following nonzero spectra, where $a^{[m]}$ denotes
+an eigenvalue $a$ with multiplicity $m$:
+\begin{align}
+    \operatorname{spec}(\rho_1)
+        &= \left\{(1/4)^{[4]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_spectrum_one}\\
+    \operatorname{spec}(\rho_2)
+        &= \left\{(5/32)^{[4]},(3/32)^{[4]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_spectrum_two}\\
+    \operatorname{spec}(\rho_3)
+        &= \left\{(7/64)^{[4]},(3/64)^{[12]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_spectrum_three}\\
+    \operatorname{spec}(\rho_4)
+        &= \left\{(41/128)^{[1]},(15/128)^{[4]},
+            (9/128)^{[3]}\right\}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_spectrum_four}
+\end{align}
+Each spectrum sums to one. Substitution into
 $S(\rho)=-\sum_\lambda\lambda\log_2\lambda$ gives
-\[
-  S_1=2,
-  \qquad
-  S_2\simeq2.9544,
-  \qquad
-  S_3\simeq3.8802,
-  \qquad
-  S_4\simeq2.7839,
-\]
-which are precisely the printed decimal values.
+\begin{align}
+    S_1
+        &= 2,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_entropy_one}\\
+    S_2
+        &\simeq 2.9544,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_entropy_two}\\
+    S_3
+        &\simeq 3.8802,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_entropy_three}\\
+    S_4
+        &\simeq 2.7839.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_entropy_four}
+\end{align}
+These values agree with the printed decimals.
 
-The strict failure of saturation is exact:
-\[
-  I_2-I_1
-  =\frac{1}{16\ln 2}
-    \ln\!\left(\frac{2^{32}7^7}{3^3 5^{20}}\right).
-\]
-Since $\ln 2>0$, positivity reduces to the integer comparison
-\[
-  2^{32}7^7
-  =3537090251849728
-  >2574920654296875
-  =3^3 5^{20}.
-\]
+The failure of saturation is exact:
+\begin{align}
+    I_2-I_1
+        &= \frac{1}{16\ln 2}
+            \ln\!\left(\frac{2^{32}7^7}{3^3 5^{20}}\right).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_exact_defect}
+\end{align}
+Because $\ln 2>0$, positivity reduces to
+\begin{align}
+    2^{32}7^7
+        &= 3537090251849728,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_integer_left}\\
+    3537090251849728
+        &> 2574920654296875,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_integer_strict}\\
+    2574920654296875
+        &= 3^3 5^{20}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_integer_right}
+\end{align}
 Hence $I_2>I_1$ at $p=1/4$.
 
-The source also says that $I_2>I_1$ for every $p\ne0,1/2$. This exception
-list omits $p=1$: at $p=1$ every spin is deterministically flipped, so the
-resulting state is related to the initial Bell-pair ring by an on-site unitary
-and equality returns. The certified correction is therefore the explicit
-$p=1/4$ witness above; the printed universal sentence should not be used as a
-formal hypothesis.
+The source also claims $I_2>I_1$ for every $p\ne 0,1/2$
+\cite[Example~4.10]{Cirac2016MPDO_arXiv}. This exception list omits $p=1$.
+At $p=1$, every spin is flipped deterministically, so the resulting state is
+related to the initial Bell-pair ring by an on-site unitary and equality
+returns. The certified correction is the explicit $p=1/4$ witness; the printed
+universal statement must not be used as a formal hypothesis.
 
-\section{Example 4.11: the literal periodic state}
+\section{Example~4.11: the literal periodic state}
 
 \subsection{Exact finite-ring distribution}
 
 The source defines diagonal two-qubit bond operators with weight matrix
-\[
-  W=\begin{pmatrix}1&1/2\\1/2&1\end{pmatrix}.
-\]
+\begin{align}
+    W
+        &= \begin{pmatrix}
+            1 & 1/2\\
+            1/2 & 1
+        \end{pmatrix}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_weight_matrix}
+\end{align}
 For a periodic chain of length $N$, the normalized state is the classical
-probability distribution
-\[
-  \mathbb P_N(k_1,\ldots,k_N)
-  =\frac{\prod_{n=1}^N W_{k_n,k_{n+1}}}{Z_N},
-  \qquad
-  k_{N+1}=k_1,
-\]
-where
-\[
-  Z_N=\operatorname{tr}(W^N)=\frac{3^N+1}{2^N}.
-\]
-For $1\leq L\leq N$, summing the complementary path gives the exact reduced
-probability
-\[
-  \mu_{N,L}(k_1,\ldots,k_L)
-  =\frac{\left(\prod_{n=1}^{L-1}W_{k_n,k_{n+1}}\right)
-      (W^{N-L+1})_{k_L,k_1}}{\operatorname{tr}(W^N)}.
-\]
-This formula includes the endpoint cases $L=1$ and $L=N$ and the periodic
-closing correction; it is not the marginal of an open stationary Markov chain.
-If $t(k)$ counts the transitions among the $L-1$ internal edges, then this
-project-derived finite-ring consequence is
-\[
-  \mu_{N,L}(k)
-  =\frac{2^{L-t(k)-2}\bigl(3^{N-L+1}+(-1)^{t(k)}\bigr)}{3^N+1}.
-\]
+distribution
+\begin{align}
+    \mathbb P_N(k_1,\ldots,k_N)
+        &= \frac{\prod_{n=1}^{N}W_{k_n,k_{n+1}}}{Z_N},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_distribution}\\
+    k_{N+1}
+        &= k_1,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_periodic_boundary}\\
+    Z_N
+        &= \tr(W^N)
+         = \frac{3^N+1}{2^N}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_partition_function}
+\end{align}
+For $1\leq L\leq N$, summing the complementary path gives
+\begin{align}
+    \mu_{N,L}(k_1,\ldots,k_L)
+        &= \frac{
+            \left(\prod_{n=1}^{L-1}W_{k_n,k_{n+1}}\right)
+            (W^{N-L+1})_{k_L,k_1}}
+            {\tr(W^N)}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_reduced_probability}
+\end{align}
+This formula includes $L=1$ and $L=N$, together with the periodic closing
+factor. It is not the marginal law of an open stationary Markov chain.
+
+Let $t(k)$ count transitions among the $L-1$ internal edges of
+$k=(k_1,\ldots,k_L)$. Then
+\begin{align}
+    \mu_{N,L}(k)
+        &= \frac{
+            2^{L-t(k)-2}
+            \left(3^{N-L+1}+(-1)^{t(k)}\right)}
+            {3^N+1}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_closed_block_probability}
+\end{align}
 The formal statement uses an equivalent quotient with only nonnegative
-exponents.  Neither block formula is printed in CPSV16.
+exponents. Neither block formula is printed in
+Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 At $N=4$, the nonzero spectra are
-\begin{align*}
-  \operatorname{spec}(\rho_1)
-    &=\left\{(1/2)^{[2]}\right\},\\
-  \operatorname{spec}(\rho_2)
-    &=\left\{(14/41)^{[2]},(13/82)^{[2]}\right\},\\
-  \operatorname{spec}(\rho_3)
-    &=\left\{(10/41)^{[2]},(4/41)^{[4]},
-        (5/82)^{[2]}\right\},\\
-  \operatorname{spec}(\rho_4)
-    &=\left\{(8/41)^{[2]},(2/41)^{[12]},
-        (1/82)^{[2]}\right\}.
-\end{align*}
+\begin{align}
+    \operatorname{spec}(\rho_1)
+        &= \left\{(1/2)^{[2]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_spectrum_one}\\
+    \operatorname{spec}(\rho_2)
+        &= \left\{(14/41)^{[2]},(13/82)^{[2]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_spectrum_two}\\
+    \operatorname{spec}(\rho_3)
+        &= \left\{(10/41)^{[2]},(4/41)^{[4]},
+            (5/82)^{[2]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_spectrum_three}\\
+    \operatorname{spec}(\rho_4)
+        &= \left\{(8/41)^{[2]},(2/41)^{[12]},
+            (1/82)^{[2]}\right\}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_spectrum_four}
+\end{align}
 They give
-\[
-  I_2-I_1
-  =\frac{1}{82\ln 2}
-    \ln\!\left(\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}\right).
-\]
-The exact integer inequality
-\[
-  41^{82}5^{50}>2^{48}13^{52}7^{112}
-\]
-therefore proves $I_2>I_1$. Numerically the difference is approximately
-$0.0069396647$ bits, but the integer comparison is the proof. Thus the literal
-four-site periodic state does not saturate the area law, contrary to the
-printed claim.
+\begin{align}
+    I_2-I_1
+        &= \frac{1}{82\ln 2}
+            \ln\!\left(\frac{41^{82}5^{50}}
+            {2^{48}13^{52}7^{112}}\right).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_exact_defect}
+\end{align}
+The exact inequality
+\begin{align}
+    41^{82}5^{50}
+        &> 2^{48}13^{52}7^{112}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_integer_inequality}
+\end{align}
+proves $I_2>I_1$. The difference is approximately $0.0069396647$ bits, but
+the integer comparison is the proof. Thus the literal four-site periodic state
+does not saturate the area law, contrary to the printed claim.
 
-\subsection{Normalization and likely source of the discrepancy}
+\subsection{Normalization and the likely source of the discrepancy}
 
-A global normalization cannot repair the claim. Replacing $W$ by $cW$ for
-$c>0$ multiplies every unnormalized length-$N$ configuration weight and $Z_N$
-by the same factor $c^N$. The normalized state, all reduced spectra, and
-$I_2-I_1$ are unchanged. In particular, replacing $W$ by $(2/3)W$ does not
-restore saturation.
+Global normalization cannot repair the saturation claim. Replacing $W$ by
+$cW$ for $c>0$ multiplies every unnormalized length-$N$ configuration weight
+and $Z_N$ by $c^N$. The normalized state, all reduced spectra, and $I_2-I_1$
+remain unchanged. In particular, replacing $W$ by $(2/3)W$ does not restore
+saturation.
 
-There is no statement in the cited source identifying the reason for the
-failed finite-ring claim. A likely explanation is that the periodic state was
-confused with the open or infinite stationary Markov chain having transition
-matrix $(2/3)W$ and uniform stationary distribution. Define the binary
-entropy by
-\[
-  h_2(q)=-q\log_2 q-(1-q)\log_2(1-q).
-\]
+The source does not explain the failed finite-ring claim. One possible
+explanation is confusion with the open or infinite stationary Markov chain
+whose transition matrix is $(2/3)W$ and whose stationary distribution is
+uniform. Define the binary entropy by
+\begin{align}
+    h_2(q)
+        &= -q\log_2 q-(1-q)\log_2(1-q).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_binary_entropy}
+\end{align}
 For that different process, the entropy of an open block is
-\[
-  H_L=1+(L-1)h_2(1/3),
-\]
-so it is affine in $L$. The periodic closing factor
-$(W^{N-L+1})_{k_L,k_1}$ is absent there. This Markov-chain interpretation is an
-explanation suggested by the calculation, not a fact asserted by the paper.
+\begin{align}
+    H_L
+        &= 1+(L-1)h_2(1/3).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_open_markov_entropy}
+\end{align}
+This entropy is affine in $L$. The periodic closing factor in
+Eq.~\ref{eq:cpsv16_examples_4_10_4_11_entropy_example411_reduced_probability}
+is absent from the open process. This interpretation is suggested by the
+calculation; it is not asserted in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \section{Formalization boundary}
 
-Example~4.10 supplies an exact corrected witness at $p=1/4$, but the repeated
+Example~4.10 yields an exact corrected witness at $p=1/4$. The repeated
 left-qubit label and the incomplete universal exception list must not be
-formalized as printed.  For Example~4.11, the printed saturation clause is
-false for the literal finite periodic family, while the independent claim that
-the family does not have zero correlation length is verified both for the
-literal diagram in
-\cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv} and for its
-scale-invariant repair.
+formalized as printed. For Example~4.11, the printed saturation clause is
+false for the literal finite periodic family. The independent claim that the
+family does not have zero correlation length is verified both for the literal
+diagram in Definition~4.2 of
+Ref.~\cite[lines~735--739]{Cirac2016MPDO_arXiv} and for its scale-invariant
+repair.
 
-\paragraph{Local fix (corrected Example 4.10 tensor).}
+\paragraph{Local correction for the Example~4.10 tensor.}
+
 The module \doclink{TNLean/MPS/MPDO/CPSVExample410Operator} defines the
-left--right correlated flip at the fixed probability $p=1/4$.  It is not a
-formalization of the repeated-left expression.  The declaration
-\leanid{MPOTensor.CPSVExample410Operator.M_isMPDO} proves positivity at every
-chain length.  Its physical-trace transfer is the nonzero projector
-\[
-  P=\frac12\begin{pmatrix}
-    1&0&0&1\\
-    0&0&0&0\\
-    0&0&0&0\\
-    1&0&0&1
-  \end{pmatrix}.
-\]
-It satisfies $P^2=P$.  Consequently,
+left--right correlated flip at $p=1/4$, not the repeated-left expression. The
+declaration \leanid{MPOTensor.CPSVExample410Operator.M_isMPDO} proves
+positivity at every chain length. Its physical-trace transfer is the nonzero
+projector
+\begin{align}
+    P
+        &= \frac12
+        \begin{pmatrix}
+            1&0&0&1\\
+            0&0&0&0\\
+            0&0&0&0\\
+            1&0&0&1
+        \end{pmatrix},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_transfer_projector}\\
+    P^2
+        &= P.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_transfer_idempotence}
+\end{align}
+Consequently,
 \leanid{MPOTensor.CPSVExample410Operator.M_isSourceZCL} proves source zero
 correlation length for the corrected tensor.
 
-\paragraph{Project derivation (corrected one- through four-site spectra).}
+\paragraph{Project-derived Example~4.10 spectra and entropies.}
+
 The module \doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} identifies each
 normalized reduced operator as an isometric image of a diagonal bond-window
-distribution.  The declarations
+distribution. The declarations
 \leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_one},
 \leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_two},
 \leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_three}, and
 \leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_four} prove the full
 root multisets
-\begin{align*}
-    L=1: & \quad \{0^{[0]},(1/4)^{[4]}\},                                   \\
-    L=2: & \quad \{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\},                     \\
-    L=3: & \quad \{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\},                   \\
-    L=4: & \quad \{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},(9/128)^{[3]}\}.
-\end{align*}
-These are project-derived consequences of the corrected $p=1/4$ reading, not
-formulas printed in CPSV16.
+\begin{align}
+    L=1:\quad
+    &\left\{0^{[0]},(1/4)^{[4]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_full_roots_one}\\
+    L=2:\quad
+    &\left\{0^{[8]},(5/32)^{[4]},(3/32)^{[4]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_full_roots_two}\\
+    L=3:\quad
+    &\left\{0^{[48]},(7/64)^{[4]},(3/64)^{[12]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_full_roots_three}\\
+    L=4:\quad
+    &\left\{0^{[248]},(41/128)^{[1]},(15/128)^{[4]},
+        (9/128)^{[3]}\right\}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_full_roots_four}
+\end{align}
+These are consequences of the corrected $p=1/4$ interpretation, not formulas
+printed in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives the four
-tensor block entropies from these root multisets.  The declarations
+The module \doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives the block
+entropies from these root multisets. The declarations
 \leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_one},
 \leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_two},
 \leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_three}, and
 \leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_four} identify them with
-the exact correlated-flip window entropies.  The declaration
+the exact correlated-flip window entropies. The declaration
 \leanid{MPOTensor.CPSVExample410Entropy.mutualInfo_two_sub_one} proves
-\[
-  I_2-I_1
-  =\frac1{16}\ln\!\left(\frac{2^{32}7^7}{3^3 5^{20}}\right),
-\]
-and \leanid{MPOTensor.CPSVExample410Entropy.mutualInfo_two_sub_one_pos}
-proves that this difference is positive.  The proof uses the established
-spectra and the exact integer comparison rather than treating the printed
-decimals as evidence.  Finally,
-\leanid{MPOTensor.CPSVExample410Entropy.M_not_isSAL} links the strict defect
-to the defining constancy of mutual information under saturation, and
-\leanid{MPOTensor.CPSVExample410Entropy.M_isSourceZCL_and_not_isSAL} gives
-\[
-  \mathrm{IsSourceZCL}(M)\mathbin{\land}\neg\mathrm{IsSAL}(M).
-\]
-All spectra and exact entropy and linking calculations are project-derived.
+\begin{align}
+    I_2-I_1
+        &= \frac{1}{16}
+            \ln\!\left(\frac{2^{32}7^7}{3^3 5^{20}}\right).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_formal_defect}
+\end{align}
+The declaration
+\leanid{MPOTensor.CPSVExample410Entropy.mutualInfo_two_sub_one_pos} proves
+positivity. The proof uses the established spectra and exact integer
+comparison, not the printed decimals. Finally,
+\leanid{MPOTensor.CPSVExample410Entropy.M_not_isSAL} converts the strict defect
+into failure of saturation, and
+\leanid{MPOTensor.CPSVExample410Entropy.M_isSourceZCL_and_not_isSAL} proves
+\begin{align}
+    \mathrm{IsSourceZCL}(M)
+        &\mathbin{\land}\neg\mathrm{IsSAL}(M).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example410_zcl_not_sal}
+\end{align}
 
-The scalar endpoints are now certified in
-\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}.  The declarations
+\paragraph{Certified scalar endpoints.}
+
+The module
+\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic} certifies the scalar
+endpoints. The declarations
 \leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
 \leanid{CPSVExamples410411Arithmetic.example411_integer_inequality} prove the
-two exact natural-number comparisons.  The declarations
+exact natural-number comparisons. The declarations
 \leanid{CPSVExamples410411Arithmetic.example410_log_ratio_pos} and
-\leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos} prove positivity
-of the corresponding logarithmic ratios.  These results entered the project in
-commit \texttt{a79bfc93314f3f721abecdbc184065497672d7e5}.
+\leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos} prove
+positivity of the corresponding logarithmic ratios. These results entered the
+project in commit \texttt{a79bfc93314f3f721abecdbc184065497672d7e5}.
 
-\paragraph{Project derivation (effective-binary finite-ring blocks).}
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411BinarySupport} now proves the
+\paragraph{Project-derived effective-binary finite-ring blocks.}
+
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411BinarySupport} proves the
 exact internal edge product in
 \leanid{MPOTensor.CPSVExample411BinarySupport.internalEdgeProduct_eq}, every
 entry of $W^m$ in
@@ -288,154 +362,196 @@ complementary path-sum identity in
 \leanid{MPOTensor.CPSVExample411BinarySupport.sum_complementPathWeight_eq_weightMatrix_pow}.
 The declaration
 \leanid{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply_eq_internal_mul_pow}
-identifies the canonical reduced state with the normalized path formula, and
-\leanid{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply} gives the
-closed diagonal block formula for $1\leq L\leq N$.  These are finite-ring
-consequences of the printed neighboring operators, not claims attributed to
-CPSV16.  The result remains entirely in the effective binary model.
-
-\paragraph{Local fix (ambient support inclusion).}
-For Example~4.11, the effective binary one-site space is included in the
-source-facing two-qubit site by $k\mapsto |k,k\rangle$; it is not identified
-with the four-dimensional site by an equivalence.  The module
-\doclink{TNLean/MPS/MPDO/CPSVExample411Ambient} proves the exact supported
-one-site slice and vanishing whenever either local physical leg is unsupported.
-The declarations
-\leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_eq_singleKrausMap} and
-\leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_supported_apply} give the
-sitewise periodic-operator congruence and supported positive-length entries.
+identifies the canonical reduced state with
+Eq.~\ref{eq:cpsv16_examples_4_10_4_11_entropy_example411_reduced_probability}.
 The declaration
-\leanid{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form} gives
-the ambient trace $Z_N=(3^N+1)/2^N$.
+\leanid{MPOTensor.CPSVExample411BinarySupport.reducedBlockState_apply} proves
+the closed diagonal formula for $1\leq L\leq N$. These are finite-ring
+consequences of the printed neighboring operators, not source claims. This
+module remains within the effective binary model.
 
-\paragraph{Project derivation (source zero-correlation-length obstruction).}
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} records the exact
-two-site constant-zero entries
-\[
-  \rho^{(4)}_2(00,00)=\frac{14}{41},
-  \qquad
-  \rho^{(3)}_2(00,00)=\frac{5}{14}
-\]
-for the effective binary model.  The declaration
+\paragraph{Local correction for ambient support.}
+
+The effective binary one-site space is included in the source-facing
+two-qubit site by
+\begin{align}
+    k
+        &\longmapsto \ket{k,k}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_support_inclusion}
+\end{align}
+It is not identified with the four-dimensional site by an equivalence. The
+module \doclink{TNLean/MPS/MPDO/CPSVExample411Ambient} proves the supported
+one-site slice and vanishing on unsupported local physical legs. The
+declarations
+\leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_eq_singleKrausMap} and
+\leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_supported_apply} prove the
+periodic-operator congruence and supported positive-length entries. The
+declaration
+\leanid{MPOTensor.CPSVExample411Ambient.trace_mpo_ambientM_closed_form} proves
+\begin{align}
+    Z_N
+        &= \frac{3^N+1}{2^N}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_ambient_trace}
+\end{align}
+
+\paragraph{Project-derived source-ZCL obstruction.}
+
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} records
+\begin{align}
+    \rho^{(4)}_2(00,00)
+        &= \frac{14}{41},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_ring_four_entry}\\
+    \rho^{(3)}_2(00,00)
+        &= \frac{5}{14}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_ring_three_entry}
+\end{align}
+The declaration
 \leanid{MPOTensor.CPSVExample411Ambient.reducedBlockState_supported_apply}
-transports these values to the corresponding supported entries of the ambient
-two-qubit-site marginals.  The source-facing zero-correlation relation implies
-that the normalized two-site marginal obtained from a ring of length four must
-equal that obtained from a ring of length three.  Since $14/41\ne5/14$, the
-effective and ambient tensors both fail that relation.  Write
-\[
-  \mathcal T_M:=\sum_i M^{ii},
-  \qquad
-  \mathcal T_{\widetilde M}:=\sum_i \widetilde M^{ii}
-\]
-for their respective physical-trace transfers.  The declarations
+transports these values to the ambient two-qubit-site marginals. The
+source-facing zero-correlation relation requires equality of the normalized
+two-site marginals obtained from rings of lengths four and three. Since
+\begin{align}
+    \frac{14}{41}
+        &\ne \frac{5}{14},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_marginal_mismatch}
+\end{align}
+both the effective and ambient tensors fail that relation.
+
+Define their physical-trace transfers by
+\begin{align}
+    \mathcal T_M
+        &:= \sum_i M^{ii},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_transfer}\\
+    \mathcal T_{\widetilde M}
+        &:= \sum_i \widetilde M^{ii}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_ambient_transfer}
+\end{align}
+The declarations
 \leanid{MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_ne_zero} and
-\leanid{MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_ne_zero}
-use the exact one-site traces
-\[
-  \operatorname{tr}(\operatorname{mpo}(M,1))
-  =\operatorname{tr}(\operatorname{mpo}(\widetilde M,1))=2
-\]
-to show that both physical-trace transfers are nonzero.  The declarations
+\leanid{MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_ne_zero} use
+\begin{align}
+    \tr(\operatorname{mpo}(M,1))
+        &= 2,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_one_site_trace}\\
+    \tr(\operatorname{mpo}(\widetilde M,1))
+        &= 2
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_ambient_one_site_trace}
+\end{align}
+to prove that both transfers are nonzero. The declarations
 \leanid{MPOTensor.CPSVExample411BinarySupport.physTraceTransfer_M_not_idempotent}
 and
 \leanid{MPOTensor.CPSVExample411Ambient.physTraceTransfer_ambientM_not_idempotent}
 then prove
-\[
-  \mathcal T_M^2\ne\mathcal T_M,
-  \qquad
-  \mathcal T_{\widetilde M}^2\ne\mathcal T_{\widetilde M}.
-\]
-Thus the fixed effective and ambient tensors themselves fail the literal
-diagram in \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
-The argument does not use the
-saturation obstruction, entropy, or spectral calculations.
+\begin{align}
+    \mathcal T_M^2
+        &\ne \mathcal T_M,
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_nonidempotence}\\
+    \mathcal T_{\widetilde M}^2
+        &\ne \mathcal T_{\widetilde M}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_ambient_nonidempotence}
+\end{align}
+Thus both fixed tensors fail the literal diagram in Definition~4.2 of
+Ref.~\cite[lines~735--739]{Cirac2016MPDO_arXiv}. This argument does not use
+entropy, spectra, or the saturation obstruction.
 
-The scale-invariant statement uses the nonzero up-to-positive-scalar relation
-for the physical-trace transfer, while the literal source diagram fixes the
-scalar to one.  Both are distinct from the legacy doubled-index transfer-map
-idempotence convention.  No conclusion about that legacy convention is made.
+The scale-invariant statement uses a nonzero up-to-positive-scalar relation,
+whereas the literal source diagram fixes the scalar to one. Both differ from
+the legacy doubled-index transfer-map idempotence convention. This note makes
+no claim about that convention.
 
-\paragraph{Project derivation (exact length-four spectra).}
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411Spectrum} specializes the
-canonical block formula to $N=4$.  It proves the effective nonzero root
-multisets
-\[
- \{(1/2)^{[2]}\},\quad
- \{(14/41)^{[2]},(13/82)^{[2]}\},\quad
- \{(10/41)^{[2]},(4/41)^{[4]},(5/82)^{[2]}\},\quad
- \{(8/41)^{[2]},(2/41)^{[12]},(1/82)^{[2]}\}
-\]
-for block lengths one through four.  Here $a^{[m]}$ denotes multiplicity $m$.
-The generic isometric characteristic-polynomial identity
-\leanid{Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry}, specialized by
-\leanid{MPOTensor.CPSVExample411Spectrum.ambient_charpoly_eq_X_pow_mul_effective}, is
-\[
-  \chi_{\widetilde\rho_L}(X)
-  =X^{4^L-2^L}\chi_{\rho_L}(X).
-\]
-The ambient two-qubit block has dimension $4^L$, whereas the effective binary
-block has dimension $2^L$.  Their difference is therefore the multiplicity of
-the added zero root.  Hence the full ambient root multisets have zero
-multiplicities $2$, $12$, $56$, and $240$, respectively.
-These spectral formulas are finite-periodic project derivations, not statements
-attributed to CPSV16.
+\paragraph{Project-derived length-four spectra.}
 
-\paragraph{Project derivation (entropy and saturation obstruction).}
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} first proves that the
-effective binary tensor is an MPDO: every positive-length periodic operator is
-diagonal with non-negative cycle weights.  It then evaluates the four block
-entropies directly from the established root multisets.  These formal entropies
-use natural logarithms.  In particular,
-\[
-  I_2-I_1
-  =\frac{1}{82}
-    \ln\!\left(\frac{41^{82}5^{50}}{2^{48}13^{52}7^{112}}\right)>0.
-\]
-The bit-valued formula earlier in this note is obtained by dividing by $\ln 2$.
-The strict inequality reuses
-\leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos}; neither the
-spectra nor the integer inequality is recomputed.  Therefore the effective
-binary tensor does not satisfy SAL.  Contraposition of SAL descent through the
-physical isometry gives the same conclusion for the ambient tensor
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411Spectrum} proves the
+effective nonzero root multisets
+\begin{align}
+    L=1:\quad
+    &\left\{(1/2)^{[2]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_roots_one}\\
+    L=2:\quad
+    &\left\{(14/41)^{[2]},(13/82)^{[2]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_roots_two}\\
+    L=3:\quad
+    &\left\{(10/41)^{[2]},(4/41)^{[4]},(5/82)^{[2]}\right\},
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_roots_three}\\
+    L=4:\quad
+    &\left\{(8/41)^{[2]},(2/41)^{[12]},(1/82)^{[2]}\right\}.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_effective_roots_four}
+\end{align}
+The generic identity
+\leanid{Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry}, specialized
+by
+\leanid{MPOTensor.CPSVExample411Spectrum.ambient_charpoly_eq_X_pow_mul_effective},
+is
+\begin{align}
+    \chi_{\widetilde\rho_L}(X)
+        &= X^{4^L-2^L}\chi_{\rho_L}(X).
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_charpoly_embedding}
+\end{align}
+The ambient block has dimension $4^L$, while the effective block has dimension
+$2^L$. The added zero-root multiplicities for block lengths one through four
+are therefore
+\begin{align}
+    2,\quad 12,\quad 56,\quad 240.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_zero_multiplicities}
+\end{align}
+These finite-periodic spectra are project-derived, not source statements.
+
+\paragraph{Project-derived entropy and saturation obstruction.}
+
+The module \doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} proves that the
+effective binary tensor is an MPDO and evaluates the four block entropies from
+the root multisets. In natural-logarithm units,
+\begin{align}
+    I_2-I_1
+        &= \frac{1}{82}
+            \ln\!\left(\frac{41^{82}5^{50}}
+            {2^{48}13^{52}7^{112}}\right),
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_formal_defect}\\
+    I_2-I_1
+        &> 0.
+    \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_formal_defect_positive}
+\end{align}
+Dividing by $\ln 2$ gives the bit-valued formula. The strict inequality reuses
+\leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos}; it does not
+recompute the spectra or integer comparison. The effective binary tensor
+therefore fails SAL. Contraposition of SAL descent through the physical
+isometry gives the same conclusion for the ambient tensor
 \leanid{MPOTensor.CPSVExample411Ambient.ambientM}.
 
-\paragraph{Scope restriction (remaining consequences).}
-The ambient operator congruence, trace equality, exact $N=4$ reduced-state
-spectra, entropy identities, finite-ring saturation obstruction, and
-source-facing zero-correlation-length obstruction for Example~4.11 are
-complete.  The printed independent non-zero-correlation-length clause is thus
-verified for the literal finite periodic family, while its saturation clause
-remains false.  No conclusion is made about the legacy doubled-index
-zero-correlation convention or about thermodynamic behavior.  For
-Example~4.10, the corrected fixed-$p=1/4$ tensor, its MPDO property, source zero
-correlation length, full one- through four-site operator spectra, tensor block
-entropies, exact positive mutual-information defect, and non-SAL conclusion
-are complete.  This does not establish the printed universal statement in
-$p$, and $p=1$ remains an additional exception to that statement.
+\paragraph{Remaining scope restrictions.}
 
-Example~4.12 is outside the entropy correction in this note. Its statement,
-dependencies, and separate normalization question are unchanged.
+For Example~4.11, the ambient operator congruence, trace equality, exact
+four-site spectra, entropy identities, finite-ring saturation obstruction, and
+source-facing zero-correlation-length obstruction are complete. The printed
+non-zero-correlation-length clause is verified for the literal finite periodic
+family, while the printed saturation clause is false. No conclusion is made
+about thermodynamic behavior or the legacy doubled-index convention.
+
+For Example~4.10, the corrected fixed-$p=1/4$ tensor, its MPDO property,
+source zero correlation length, complete one- through four-site spectra, block
+entropies, positive mutual-information defect, and non-SAL conclusion are
+complete. These results do not establish the printed universal statement in
+$p$, and $p=1$ is an additional exception.
+
+Example~4.12 lies outside this entropy correction. Its statement,
+dependencies, and separate normalization question remain unchanged.
 
 \section{Verdict}
 
-\textbf{Verdict for Example~4.10: source typo and scope correction.}
-The repeated left-qubit label is replaced by the left--right correlated flip.
-At $p=1/4$, the corrected tensor has source zero correlation length, its
-full one- through four-site operator spectra agree with the bond-window
-calculations, and those spectra give the exact tensor block entropies.  The
-strict positive defect $I_2-I_1$ proves that the tensor does not saturate the
-area law.  These spectra and exact entropy calculations are project-derived;
-the source prints only the channel and decimal entropies.  The printed
-universal exception list must also exclude $p=1$.
+For Example~4.10, the repeated left-qubit label requires a local correction to
+the left--right correlated flip. At $p=1/4$, the corrected tensor has source
+zero correlation length, and its complete one- through four-site spectra give
+the exact block entropies. The positive defect $I_2-I_1$ proves failure of
+area-law saturation. These spectra and exact entropy identities are
+project-derived; the source prints only the channel and decimal entropies. The
+printed universal exception list must also include $p=1$.
 
-\textbf{Verdict for Example~4.11: the printed separation is only half
-correct for the literal periodic state.}  The exact finite-marginal mismatch
-verifies the independent claim that the state does not have source-facing zero
-correlation length.  The four-site calculation gives $I_2>I_1$, so the printed
-saturation claim fails.  Global normalization cannot repair that failure.  The
-suggested open or infinite Markov-chain explanation is not part of the source
-statement.
+For Example~4.11, the printed separation is only partly correct for the literal
+periodic state. The exact finite-marginal mismatch verifies failure of
+source-facing zero correlation length. The four-site result $I_2>I_1$ refutes
+the printed saturation claim. Global normalization cannot repair this failure.
+The open or infinite Markov-chain interpretation remains a suggested
+explanation, not a source statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -16,75 +16,108 @@
 
 \section{Source construction and present scope}
 
-Proposition~\texttt{3to5} constructs the channels $\mathcal T$ and
-$\mathcal S$ from one supplied physical-sector factorization; see
-\cite[Appendix~C.2, lines~1510--1563 and 1821--1825]
-{Cirac2016MPDO_arXiv}.  The observation at lines~1821--1825 composes each
-channel with an overlapping copy to obtain $\mathcal T^2$ and
-$\mathcal S^2$ for the two-site blocking.  These formulas are local to one
-factorization of the whole input tensor. Condition~(iv) of Theorem~4.9 instead
-supplies a factorization for each BNT representative and does not constrain
-its raw repeated-copy weights. The scalar presentation with weights $1$ and
-$1/2$ satisfies condition~(iv) but its two-site block fails Definition~4.1.
-Thus the one-factor transport theorem is a conditional helper and cannot be
-extended to the refuted literal (iv)$\Rightarrow$(v) implication merely by
-combining outer physical supports.
+Proposition~\texttt{3to5} of Ref.~\cite{Cirac2016MPDO_arXiv} constructs
+channels $\mathcal T$ and $\mathcal S$ from a supplied factorization of the
+physical sector; the relevant argument appears in Appendix~C.2,
+lines~1510--1563 and 1821--1825. At lines~1821--1825, the construction
+composes each channel with an overlapping copy to obtain the two-site-blocked
+channels $\mathcal T^2$ and $\mathcal S^2$. These formulas apply to one
+factorization of the entire input tensor.
 
-The outer-support construction remains relevant to the viable source
-proposition \texttt{prop2to5}, which starts from condition~(ii). In the earlier
-Case-II derivation, literal ZCL makes repeated-copy weights independent of the
-copy label and their common value is absorbed. Only after that normalization
-must the Proposition~\texttt{3to5} channel pairs be combined along the
-mutually orthogonal outer physical supports.
+Condition~(iv) of Theorem~4.9 of Ref.~\cite{Cirac2016MPDO_arXiv} instead
+provides a factorization for each representative in the basis of normal
+tensors (BNT) and imposes no constraint on its unnormalized repeated-copy
+weights. The scalar presentation with weights $1$ and $1/2$ satisfies
+condition~(iv), but its two-site block fails Definition~4.1 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Consequently, the single-factorization
+transport theorem is a conditional auxiliary result. Combining outer physical
+supports cannot extend it to the literal implication
+(iv)$\Rightarrow$(v), which is refuted.
 
-The sector-coordinate theorem
-\path{NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
-proves the fixed-point identities for
-\[
-  \operatorname{blockTwo}(\widehat{\mathcal K}),
-\]
-where $\widehat{\mathcal K}$ is the tensor in the sector coordinates selected
-by the physical isometry.  Its conclusion is exact in these coordinates, but
-it does not yet transport the two channels back to
-$\operatorname{blockTwo}(\mathcal K)$.  It is therefore a scope-restricted
-intermediate result for one supplied factorization.
+The outer-support construction still applies to the viable source proposition
+\texttt{prop2to5}, which begins with condition~(ii) of
+Ref.~\cite{Cirac2016MPDO_arXiv}. In the preceding Case-II derivation, zero
+correlation length (ZCL) makes the repeated-copy weights independent of the
+copy label, after which their common value is absorbed into the normalization.
+Only after this normalization can the channel pairs from
+Proposition~\texttt{3to5} be combined over mutually orthogonal outer physical
+supports.
+
+Let $\mathcal K$ denote the original tensor, let $\widehat{\mathcal K}$ denote
+the same tensor in the sector coordinates selected by the physical isometry,
+and let $\operatorname{blockTwo}$ denote two-site blocking. The
+sector-coordinate theorem proves the fixed-point identities for
+\begin{align}
+    \operatorname{blockTwo}(\widehat{\mathcal K}).
+    \label{eq:cpgsv17_mpdo_blocked_rfp_physical_transport_sector_block}
+\end{align}
+\footnote{Formal declaration:
+\leanid{NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}.}
+Its conclusion is exact in the selected sector coordinates, but it does not
+transport the two channels back to
+$\operatorname{blockTwo}(\mathcal K)$. It is therefore a scope-restricted
+intermediate result for one supplied factorization of the entire tensor.
 
 \section{Transport theorem}
 
-In the formal sector factorization, the physical isometry is a square matrix
-$U$ satisfying $U^\dagger U=I$.  Finite dimensionality then also gives
-$UU^\dagger=I$.  The transport theorem proves the closure
-relations
-\[
-  \widehat{\mathcal K}_n(X)
-  =U^{\otimes n}\mathcal K_n(X)(U^\dagger)^{\otimes n}
-  \qquad (n=2,4),
-\]
-with the tensor indices placed in the right-associated conventions used by the
-channel construction.  Transporting $\widehat{\mathcal T}^2$ and
-$\widehat{\mathcal S}^2$ through these unitary congruences then preserves
-complete positivity and trace.  The two sector-coordinate closure identities
-become the required identities for the original blocked tensor.
+For $n\in\{2,4\}$ and an admissible auxiliary input $X$, let
+$\mathcal K_n(X)$ and $\widehat{\mathcal K}_n(X)$ denote the corresponding
+$n$-site physical operators in the original and sector coordinates,
+respectively. In the formal sector factorization, the physical coordinate map
+is a square matrix $U$ satisfying
+\begin{align}
+    U^\dagger U
+        &= I.
+    \label{eq:cpgsv17_mpdo_blocked_rfp_physical_transport_isometry}
+\end{align}
+Finite dimensionality and squareness then give
+\begin{align}
+    UU^\dagger
+        &= I.
+    \label{eq:cpgsv17_mpdo_blocked_rfp_physical_transport_coisometry}
+\end{align}
+Thus $U$ is unitary.
+
+With the tensor indices arranged according to the right-associated convention
+used in the channel construction, the transport theorem establishes
+\begin{align}
+    \widehat{\mathcal K}_n(X)
+        &= U^{\otimes n}\mathcal K_n(X)(U^\dagger)^{\otimes n},
+        \qquad n\in\{2,4\}.
+    \label{eq:cpgsv17_mpdo_blocked_rfp_physical_transport_unitary_closure}
+\end{align}
+Let $\widehat{\mathcal T}^2$ and $\widehat{\mathcal S}^2$ denote the blocked
+channels in the sector coordinates. Transporting these channels through the
+unitary congruences in
+Eq.~\ref{eq:cpgsv17_mpdo_blocked_rfp_physical_transport_unitary_closure}
+preserves complete positivity and trace preservation. The two
+sector-coordinate closure identities therefore yield the required identities
+for the original blocked tensor.
 
 \section{Discharge}
 
-The theorem
-\path{NeighboringTraceFactorization.blockTwo_isRFPViaTS} formalizes the
-two- and four-site unitary closure relations, transports the two channels to
-the original physical matrix spaces, and proves
-\[
-  \operatorname{IsRFPViaTS}
-    \bigl(\operatorname{blockTwo}(\mathcal K)\bigr)
-\]
-under the same neighboring-operator trace-factorization hypothesis.  This
-discharges the physical-coordinate transport gap for one supplied
-whole-tensor factorization. It does not prove the raw
-(iv)$\Rightarrow$(v) implication, which is false. For the source
-(ii)$\Rightarrow$(v) route after ZCL-derived common-weight absorption, it
-supplies the per-factor channel pair whose projector-controlled all-BNT
-assembly is formalized in issue~\#6632. The remaining source obligation is the
-per-representative factorization documented in
-\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} and tracked in issue~\#6775.
+The transport theorem formalizes the two-site and four-site unitary closure
+relations, transports both channels to the original physical matrix spaces,
+and proves
+\begin{align}
+    \operatorname{IsRFPViaTS}
+        (\operatorname{blockTwo}(\mathcal K)).
+    \label{eq:cpgsv17_mpdo_blocked_rfp_physical_transport_original_block_rfp}
+\end{align}
+\footnote{Formal declaration:
+\leanid{NeighboringTraceFactorization.blockTwo_isRFPViaTS}.}
+This theorem discharges the physical-coordinate transport gap for one supplied
+factorization of the entire tensor. It does not prove the raw implication
+(iv)$\Rightarrow$(v) in Theorem~4.9 of
+Ref.~\cite{Cirac2016MPDO_arXiv}, which is false.
+
+For the source implication (ii)$\Rightarrow$(v), after absorption of the
+common weight derived from ZCL, the theorem supplies the channel pair for each
+factorization. The projector-controlled assembly over all BNT representatives
+is formalized in \ghissue{6632}. The remaining source obligation is the
+factorization for each representative, documented in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} and tracked in
+\ghissue{6775}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

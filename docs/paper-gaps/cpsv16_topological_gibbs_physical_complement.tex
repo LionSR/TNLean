@@ -17,148 +17,219 @@
 
 \section{Status}
 
-Resolved for the source-defined domain of chain lengths $L\geq2$.  The generic
-fusion-clause theorem is
-\begin{center}
-  \small\path{MPOTensor.BNTFusionTensorClause.hasPhysicalTopologicalGibbsDecomposition},
-\end{center}
-and the literal CPSV fixed-point capstone is
-\begin{center}
-  \small\path{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}.
-\end{center}
+The physical-coordinate construction is resolved on the source-defined domain
+of chain lengths $L\geq2$. The generic fusion-clause theorem is
+\leanid{MPOTensor.BNTFusionTensorClause.hasPhysicalTopologicalGibbsDecomposition}.
+The literal CPSV fixed-point capstone is
+\leanid{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}.
 The earlier normalized BNT-refined corollary
-\begin{center}
-  \small\path{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
-\end{center}
-remains available.  These theorems construct the finite physical-complement
-extension, transport the retained projectors, and prove the physical density
-formula.  The separate undefined length-one convention remains documented in
+\leanid{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS} remains
+available.
+
+These theorems construct a finite extension to the physical complement,
+transport the retained projectors, and prove the physical density formula. The
+separate undefined length-one convention is recorded in
 \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
 
 \section{Source statement}
 
 The theorem following Theorem~4.14 in
-\cite[lines~1013--1016]{Cirac2016MPDO_arXiv} states an equality on the
-physical chain:
-\begin{equation}
-  \rho^{(N)}(M)
-    =\sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
-  \qquad
-  [P_i^{(N)},e^{-H_N}]=0.
-  \label{eq:physical-gibbs}
-\end{equation}
-Here the $P_i^{(N)}$ are orthogonal projections on the physical Hilbert
-space, and $H_N=\sum_jh_{j,j+1}$ is a translationally invariant commuting
-nearest-neighbor Hamiltonian on that space.
+Ref.~\cite[lines~1013--1016]{Cirac2016MPDO_arXiv} states the physical-chain
+identity
+\begin{align}
+    \rho^{(N)}(M)
+        &= \sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
+    \label{eq:cpsv16_topological_gibbs_physical_complement_source_decomposition}\\
+    [P_i^{(N)},e^{-H_N}]
+        &= 0.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_source_commutation}
+\end{align}
+The operators $P_i^{(N)}$ are orthogonal projections on the physical Hilbert
+space, and
+\begin{align}
+    H_N
+        &= \sum_j h_{j,j+1}
+    \label{eq:cpsv16_topological_gibbs_physical_complement_source_hamiltonian}
+\end{align}
+is a translationally invariant commuting nearest-neighbor Hamiltonian on that
+space.
 
-The preceding derivation first applies the vertical canonical form from
-Proposition~4.13 and then suppresses the resulting local change of
-coordinates.  The formal vertical map is a retained-row coisometry
-\[
-  V:\mathbb C^d\longrightarrow\mathbb C^s,
-  \qquad
-  VV^\dagger=I_s,
-  \qquad
-  V^\dagger V=E.
-\]
-The projection $E$ need not be the identity because the original physical
-space may contain a zero sector.  This is documented in
+The derivation in Ref.~\cite{Cirac2016MPDO_arXiv} first applies the vertical
+canonical form from Proposition~4.13 and then suppresses the resulting local
+change of coordinates. Formally, this change of coordinates is a retained-row
+coisometry
+\begin{align}
+    V
+        &\colon \mathbb C^d\longrightarrow\mathbb C^s,
+    \label{eq:cpsv16_topological_gibbs_physical_complement_vertical_map}\\
+    VV^\dagger
+        &= I_s,
+    \label{eq:cpsv16_topological_gibbs_physical_complement_coisometry}\\
+    V^\dagger V
+        &= E.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_retained_projection}
+\end{align}
+The projection $E$ need not equal $I_d$, because the original physical space
+may contain a zero sector. This point is documented in
 \path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
 
-\section{Retained-coordinate theorem}
+\section{The retained-coordinate theorem}
 
-Let $k$ be the diagonal logarithmic multiplicity energy on
-$\mathbb C^s$.  For every $N\geq2$, the formalized two-site interaction on
-the retained space is
-\[
-  h=k\otimes I.
-\]
-Its periodic translates commute and satisfy
-\[
-  \exp\left(-\sum_jh_{j,j+1}\right)=\mu^{\otimes N}.
-\]
-The terminal spectral projections on the retained chain commute with this
-factor and give
-\begin{equation}
-  R_N=\sum_i\lambda_iP_{i,\mathrm{ret}}^{(N)}
-    e^{-H_{N,\mathrm{ret}}}.
-  \label{eq:retained-gibbs}
-\end{equation}
-Applying $(V^\dagger)^{\otimes N}$ and $V^{\otimes N}$ to the two sides of
-\eqref{eq:retained-gibbs} reconstructs $\rho^{(N)}(M)$ exactly.
+Let $\mu$ be the strictly positive diagonal multiplicity matrix on
+$\mathbb C^s$, and define the diagonal logarithmic multiplicity energy by
+\begin{align}
+    k
+        &= -\log\mu.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_retained_energy}
+\end{align}
+For every $N\geq2$, the retained-space interaction is
+\begin{align}
+    h
+        &= k\otimes I_s.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_retained_interaction}
+\end{align}
+Its periodic translates commute. Since each site occurs once as the first
+site of a translated term,
+\begin{align}
+    \exp\left(-\sum_j h_{j,j+1}\right)
+        &= \mu^{\otimes N}.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_retained_exponential}
+\end{align}
 
-This reconstruction is not equation~\eqref{eq:physical-gibbs}.  The
-Hamiltonian $H_{N,\mathrm{ret}}$ and the projections
+Let $R_N$ denote the retained-chain operator, let
+$P_{i,\mathrm{ret}}^{(N)}$ be its terminal spectral projections, and let
+$H_{N,\mathrm{ret}}$ be the retained Hamiltonian. The retained decomposition
+is
+\begin{align}
+    R_N
+        &= \sum_i\lambda_iP_{i,\mathrm{ret}}^{(N)}
+           e^{-H_{N,\mathrm{ret}}}.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_retained_decomposition}
+\end{align}
+The terminal projections commute with $e^{-H_{N,\mathrm{ret}}}$. Applying
+$(V^\dagger)^{\otimes N}$ on the left and $V^{\otimes N}$ on the right of
+Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_retained_decomposition}
+reconstructs $\rho^{(N)}(M)$ exactly.
+
+This reconstruction does not yet prove the physical-chain statement of
+Ref.~\cite[lines~1013--1016]{Cirac2016MPDO_arXiv}. The Hamiltonian
+$H_{N,\mathrm{ret}}$ and the projections
 $P_{i,\mathrm{ret}}^{(N)}$ act on $(\mathbb C^s)^{\otimes N}$, whereas the
-operators in equation~\eqref{eq:physical-gibbs} must act on
-$(\mathbb C^d)^{\otimes N}$.
+source theorem requires operators on $(\mathbb C^d)^{\otimes N}$.
 
-\section{Failure of direct compression and a finite physical extension}
+\section{Failure of direct compression}
 
-Direct transport of the retained Gibbs factor gives
-\[
-  V^\dagger e^{-k}V.
-\]
-This matrix vanishes on $(I-E)\mathbb C^d$ and is singular whenever
-$E\neq I$.  It therefore cannot equal the exponential of a finite matrix on
-the physical one-site space.
+Direct transport of the one-site retained Gibbs factor gives
+\begin{align}
+    G_{\mathrm{comp}}
+        &= V^\dagger e^{-k}V.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_direct_compression}
+\end{align}
+The matrix $G_{\mathrm{comp}}$ vanishes on $(I_d-E)\mathbb C^d$. If
+$E\neq I_d$, it is singular and therefore cannot equal the exponential of a
+finite matrix on the full physical one-site space.
 
-A viable physical extension begins with
-\begin{equation}
-  k_{\mathrm{phys}}=V^\dagger kV,
-  \qquad
-  e^{-k_{\mathrm{phys}}}
-    =V^\dagger e^{-k}V+(I-E).
-  \label{eq:physical-energy-extension}
-\end{equation}
-The complementary summand supplies finite Gibbs weight one.  If
-$H_{L,\mathrm{phys}}$ is the sum of the periodic translates of
-$k_{\mathrm{phys}}\otimes I$, then
-\begin{equation}
-  e^{-H_{L,\mathrm{phys}}}
-    =\bigotimes_{j=1}^{L}
-      \left(V^\dagger e^{-k}V+I-E\right).
-  \label{eq:physical-chain-extension}
-\end{equation}
-This differs from the false global equality
-\[
-  e^{-H_{L,\mathrm{phys}}}
-    =(V^\dagger)^{\otimes L}e^{-H_{L,\mathrm{ret}}}V^{\otimes L},
-\]
-whose right-hand side vanishes on every complementary or mixed sector.
+A finite extension begins with
+\begin{align}
+    k_{\mathrm{phys}}
+        &= V^\dagger kV,
+    \label{eq:cpsv16_topological_gibbs_physical_complement_physical_energy}\\
+    e^{-k_{\mathrm{phys}}}
+        &= V^\dagger e^{-k}V+(I_d-E).
+    \label{eq:cpsv16_topological_gibbs_physical_complement_physical_gibbs_factor}
+\end{align}
+The complementary term assigns finite Gibbs weight one to
+$(I_d-E)\mathbb C^d$.
 
-The physical projectors are naturally defined by
-\[
-  \widehat P_i^{(N)}
-    =(V^\dagger)^{\otimes N}
-      P_{i,\mathrm{ret}}^{(N)}V^{\otimes N}.
-\]
-They are supported on $E^{\otimes N}$ and therefore annihilate every
-complementary and mixed-sector contribution.  The coisometry identity gives
-their projection identities, while equation~\eqref{eq:physical-chain-extension}
-reduces their commutation and the physical density formula to the retained
-equalities.  The resolution below formalizes this finite physical extension.
+For $L\geq2$, let $H_{L,\mathrm{phys}}$ be the sum of the periodic translates
+of $k_{\mathrm{phys}}\otimes I_d$. Its Gibbs factor is
+\begin{align}
+    e^{-H_{L,\mathrm{phys}}}
+        &= \bigotimes_{j=1}^{L}
+           \left(V^\dagger e^{-k}V+I_d-E\right).
+    \label{eq:cpsv16_topological_gibbs_physical_complement_physical_chain_extension}
+\end{align}
+This identity differs from the false global equality
+\begin{align}
+    e^{-H_{L,\mathrm{phys}}}
+        &=
+        (V^\dagger)^{\otimes L}
+        e^{-H_{L,\mathrm{ret}}}
+        V^{\otimes L}.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_false_global_transport}
+\end{align}
+When $E\neq I_d$, the right-hand side of
+Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_false_global_transport}
+vanishes on every complementary or mixed sector, whereas the left-hand side
+has finite positive weight there. Thus the displayed equality is false in
+that case.
+
+\section{Transported physical projectors}
+
+Define the physical projectors by
+\begin{align}
+    \widehat P_i^{(N)}
+        &= (V^\dagger)^{\otimes N}
+           P_{i,\mathrm{ret}}^{(N)}
+           V^{\otimes N}.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_transported_projectors}
+\end{align}
+The coisometry relation
+$VV^\dagger=I_s$ implies their projection and orthogonality identities. Each
+$\widehat P_i^{(N)}$ is supported on $E^{\otimes N}$ and therefore annihilates
+all complementary and mixed-sector contributions in
+Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_physical_chain_extension}.
+Consequently, the retained commutation relations imply
+\begin{align}
+    [\widehat P_i^{(N)},e^{-H_{N,\mathrm{phys}}}]
+        &= 0.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_transported_commutation}
+\end{align}
+Exact vertical reconstruction and the retained decomposition then give
+\begin{align}
+    \rho^{(N)}(M)
+        &= \sum_i\lambda_i\widehat P_i^{(N)}
+           e^{-H_{N,\mathrm{phys}}}.
+    \label{eq:cpsv16_topological_gibbs_physical_complement_physical_decomposition}
+\end{align}
+Thus
+Eqs.~\ref{eq:cpsv16_topological_gibbs_physical_complement_transported_commutation}
+and
+\ref{eq:cpsv16_topological_gibbs_physical_complement_physical_decomposition}
+supply the physical Hamiltonian and physical projections required by the
+source statement.
 
 \section{Resolution}
 
-The formalization resolves the gap by the following steps.
-
+The formalization resolves the physical-complement gap through four steps:
 \begin{enumerate}
-  \item It proves equation~\eqref{eq:physical-energy-extension} from
-    $VV^\dagger=I_s$.
-  \item It defines a fixed physical two-site interaction from
-    $k_{\mathrm{phys}}$ and proves the periodic exponential identity for every
-    chain length at least two.
-  \item It transports the retained terminal projections to the physical chain
+    \item It proves
+    Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_physical_gibbs_factor}
+    from $VV^\dagger=I_s$.
+    \item It defines the fixed physical two-site interaction
+    $k_{\mathrm{phys}}\otimes I_d$ and proves
+    Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_physical_chain_extension}
+    for every chain length at least two.
+    \item It transports the retained terminal projections by
+    Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_transported_projectors}
     and proves their projection, orthogonality, and commutation identities.
-  \item It combines these identities with exact vertical reconstruction to
-    obtain equation~\eqref{eq:physical-gibbs}.
+    \item It combines these identities with exact vertical reconstruction to
+    obtain
+    Eq.~\ref{eq:cpsv16_topological_gibbs_physical_complement_physical_decomposition}.
 \end{enumerate}
 
-The separate one-site ambiguity in the two-site periodic interaction is
-recorded in
-\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}; it is not
-resolved by the physical-complement construction.
+The generic theorem
+\leanid{MPOTensor.BNTFusionTensorClause.hasPhysicalTopologicalGibbsDecomposition},
+the CPSV fixed-point theorem
+\leanid{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm},
+and the normalized BNT-refined corollary
+\leanid{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS} formalize
+this construction.
+
+The result applies on the source-defined domain $N\geq2$. The separate
+one-site ambiguity in the periodic two-site interaction remains recorded in
+\path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}; the
+physical-complement construction neither resolves nor supplies that convention.
 
 \bibliographystyle{alpha}
 \bibliography{references}

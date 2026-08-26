@@ -16,79 +16,124 @@
 
 \section{The source assertion}
 
-Around Theorem~3.1, \cite[lines~382 and 417]{Cirac2016MPDO_arXiv} asserts that
-the renormalization flow starting from a tensor in canonical form always
-converges.  Appendix~B identifies one renormalization step with
-\(\mathcal E\mapsto\mathcal E^2\) at lines~1205--1209 and gives the
-canonical-form transfer decomposition at lines~1211--1243.  The conclusion at
-line~1244 is that the normalization
-\[
-  |\mu_{j,q}|\leq 1
-\]
-implies convergence of the transfer powers.
+Around Theorem~3.1, Ref.~\cite{Cirac2016MPDO_arXiv} asserts at lines~382 and
+417 that the renormalization flow starting from a tensor in canonical form
+always converges. Appendix~B identifies one renormalization step with
+\begin{align}
+    \mathcal E
+        &\longmapsto
+    \mathcal E^2.
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_renormalization_step}
+\end{align}
+This identification appears at lines~1205--1209; the canonical-form transfer
+decomposition follows at lines~1211--1243. The conclusion at line~1244 is that
+\begin{align}
+    |\mu_{j,q}|
+        &\leq
+    1
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_weight_normalization}
+\end{align}
+implies convergence of the transfer powers
+\cite{Cirac2016MPDO_arXiv}.
 
 This conclusion overlooks relative phases between repeated copies of the same
-normal tensor.  In the decomposition at lines~1220--1226, the corresponding
+normal tensor. In the decomposition at lines~1220--1226, the corresponding
 summands carry the factors
-\[
-  \mu_{j,q}\overline{\mu_{j,q'}}\,\mathbb E_{j,j}.
-\]
-When both weights have modulus one, normalization does not force the relative
-phase to converge under repeated squaring.
+\begin{align}
+    \mu_{j,q}\overline{\mu_{j,q'}}
+    \mathbb E_{j,j}.
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_repeated_copy_factor}
+\end{align}
+When both weights have modulus one,
+Eq.~\ref{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_weight_normalization}
+does not force their relative phase to converge under repeated squaring.
 
-\section{Phase-oscillation counterexample}
+\section{A phase-oscillation counterexample}
 
-Let
-\[
-  \omega=e^{2\pi i/3}
-\]
-and consider the tensor with one physical component and bond dimension two
-given by
-\[
-  A^1=
-  \begin{pmatrix}
-    1&0\\
-    0&\omega
-  \end{pmatrix}.
-\]
-It is in the literal canonical form of
-\cite[lines~238--246]{Cirac2016MPDO_arXiv}: its two one-dimensional blocks are
-normal tensors with normalized weights \(1\) and \(\omega\).
+Define
+\begin{align}
+    \omega
+        &=
+    e^{2\pi i/3},
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_third_root}
+\end{align}
+and consider the tensor with one physical component and bond dimension two,
+\begin{align}
+    A^1
+        &=
+    \begin{pmatrix}
+        1 & 0\\
+        0 & \omega
+    \end{pmatrix}.
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_counterexample_tensor}
+\end{align}
+This tensor satisfies the literal canonical-form definition at lines~238--246
+of Ref.~\cite{Cirac2016MPDO_arXiv}: its two one-dimensional blocks are normal
+tensors with normalized weights $1$ and $\omega$.
 
-For the matrix unit \(e_{21}\), the transfer map satisfies
-\[
-  \mathcal E_A(e_{21})
-  =A^1e_{21}(A^1)^\dagger
-  =\omega e_{21}.
-\]
+Let $e_{21}$ be the matrix unit with its only nonzero entry in row $2$ and
+column $1$. The transfer map satisfies
+\begin{align}
+    \mathcal E_A(e_{21})
+        &=
+    A^1e_{21}(A^1)^*
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_transfer_action_expansion}\\
+        &=
+    \omega e_{21}.
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_transfer_eigenvalue}
+\end{align}
 Consequently,
-\[
-  \mathcal E_A^{\,2^n}(e_{21})
-  =\omega^{2^n}e_{21}.
-\]
-The residue of \(2^n\) modulo \(3\) alternates between \(1\) and \(2\).
-Hence this sequence alternates between
-\(\omega e_{21}\) and \(\omega^2 e_{21}\), and the dyadic
-renormalization flow does not converge.  The unrestricted sequence
-\(\mathcal E_A^N\) is likewise three-periodic.
+\begin{align}
+    \mathcal E_A^{\,2^n}(e_{21})
+        &=
+    \omega^{2^n}e_{21}.
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_dyadic_transfer_power}
+\end{align}
+The residue of $2^n$ modulo $3$ alternates between $1$ and $2$. Hence the
+sequence in
+Eq.~\ref{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_dyadic_transfer_power}
+alternates between
+\begin{align}
+    \omega e_{21}
+        \quad\text{and}\quad
+    \omega^2e_{21}.
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_alternating_values}
+\end{align}
+It does not converge. The unrestricted sequence $\mathcal E_A^N$ is likewise
+three-periodic.
 
 \section{Faithful boundary}
 
-Theorem~3.1 itself is unaffected: it characterizes tensor classes that
-\emph{do} appear as limits, and does not assert that every canonical-form
-initial tensor has a limit.  Primitive-transfer convergence for each individual
-normal block also remains valid.
+Theorem~3.1 of Ref.~\cite{Cirac2016MPDO_arXiv} remains valid: it characterizes
+tensor classes that occur as limits and does not assert that every
+canonical-form initial tensor has a limit. Primitive-transfer convergence for
+each individual normal block also remains valid.
 
-For the full repeated-copy canonical form, convergence requires control of the
-relative phases.  A sufficient condition is that all unit-modulus weights
-belonging to one normal tensor have the same phase.  More precisely, dyadic
-convergence requires each sequence
-\[
-  \left(\mu_{j,q}\overline{\mu_{j,q'}}\right)^{2^n}
-\]
-arising from two unit-modulus repeated-copy weights to converge.  Without such
-a condition, the universal convergence assertion at lines~1211--1244 is
-refuted rather than an unproved formalization target.
+For a canonical form with repeated copies, convergence requires control of
+their relative phases. A sufficient condition is that all unit-modulus weights
+associated with one normal tensor have the same phase. More precisely, dyadic
+convergence requires convergence of every sequence
+\begin{align}
+    \left(\mu_{j,q}\overline{\mu_{j,q'}}\right)^{2^n}
+    \label{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_relative_phase_sequence}
+\end{align}
+arising from two unit-modulus repeated-copy weights. Without such a condition,
+the universal convergence assertion at lines~1211--1244 of
+Ref.~\cite{Cirac2016MPDO_arXiv} is false rather than an unproved
+formalization target.
+
+\section{Conclusion}
+
+The normalization in
+Eq.~\ref{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_weight_normalization}
+controls the moduli of the canonical weights but not their relative phases.
+The tensor in
+Eq.~\ref{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_counterexample_tensor}
+satisfies the printed canonical-form assumptions and produces the
+nonconvergent dyadic sequence in
+Eq.~\ref{eq:cpsv16_canonical_form_renormalization_flow_phase_gap_dyadic_transfer_power}.
+Thus the universal convergence claim in Appendix~B of
+Ref.~\cite{Cirac2016MPDO_arXiv} is false as printed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

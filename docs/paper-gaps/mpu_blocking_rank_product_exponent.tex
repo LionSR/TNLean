@@ -16,52 +16,78 @@
 
 \section{The printed exponent}
 
-In the proof of Proposition~IV.2 of \cite{Cirac2017MPU}, the right and left
-source-cut ranks of the $k$-site blocked tensor are printed as
-\[
-  r_k\ell_k=d^k.
-\]
-The blocked physical dimension is $d^k$.
+Let $d$ be the one-site physical dimension, and let $r_k$ and $\ell_k$ denote
+the right and left source-cut ranks of the $k$-site blocked tensor. In the
+proof of Proposition~IV.2 of Ref.~\cite{Cirac2017MPU}, the rank product is
+printed as
+\begin{align}
+    r_k\ell_k
+        &=d^k.
+    \label{eq:mpu_blocking_rank_product_exponent_printed_identity}
+\end{align}
+The blocked physical dimension is
+\begin{align}
+    q
+        &=d^k.
+    \label{eq:mpu_blocking_rank_product_exponent_blocked_dimension}
+\end{align}
 
 \section{Consistent rank-product identity}
 
-Theorem~III.8 states that for a simple tensor of physical dimension $q$, the
-corresponding ranks obey
-\[
-  r\ell=q^2.
-\]
-Applying this statement to the $k$-site block, with $q=d^k$, gives
-\[
-  r_k\ell_k=(d^k)^2=d^{2k}.
-\]
-The same square occurs in the index discussion and in the later blocking
-argument. Thus the occurrence of $d^k$ in the proof of Proposition~IV.2 is a
-typographical exponent error; the consistent endpoint identity is $d^{2k}$.
+Theorem~III.8 of Ref.~\cite{Cirac2017MPU} states that a simple tensor of
+physical dimension $q$ has source-cut ranks satisfying
+\begin{align}
+    r\ell
+        &=q^2.
+    \label{eq:mpu_blocking_rank_product_exponent_simple_tensor_identity}
+\end{align}
+Applying
+(\ref{eq:mpu_blocking_rank_product_exponent_simple_tensor_identity}) to the
+$k$-site block and using
+(\ref{eq:mpu_blocking_rank_product_exponent_blocked_dimension}) gives
+\begin{align}
+    r_k\ell_k
+        &=q^2
+    \label{eq:mpu_blocking_rank_product_exponent_blocked_rank_product}\\
+        &=(d^k)^2
+    \label{eq:mpu_blocking_rank_product_exponent_substituted_dimension}\\
+        &=d^{2k}.
+    \label{eq:mpu_blocking_rank_product_exponent_corrected_identity}
+\end{align}
+The same square appears in the index discussion and in the later blocking
+argument of Ref.~\cite{Cirac2017MPU}. Thus
+(\ref{eq:mpu_blocking_rank_product_exponent_printed_identity}) contains a
+typographical exponent error. The consistent endpoint identity is
+(\ref{eq:mpu_blocking_rank_product_exponent_corrected_identity}).
 
 \section{Formal treatment}
 
 The simultaneous saturation theorem
-\leanid{MPOTensor.blockingRanks_eq_pow_mul_of_products} does not prove this
-rank-product identity. It takes the two endpoint identities
-\[
-  r_{k_0}\ell_{k_0}=d^{2k_0},
-  \qquad
-  r_k\ell_k=d^{2k}
-\]
-as explicit hypotheses and combines them with the independently proved
-blocking upper bounds. Its focused accessors are
+\leanid{MPOTensor.blockingRanks_eq_pow_mul_of_products} does not derive the
+rank-product identity. It assumes the endpoint identities
+\begin{align}
+    r_{k_0}\ell_{k_0}
+        &=d^{2k_0},
+    \label{eq:mpu_blocking_rank_product_exponent_initial_endpoint_identity}\\
+    r_k\ell_k
+        &=d^{2k}.
+    \label{eq:mpu_blocking_rank_product_exponent_final_endpoint_identity}
+\end{align}
+It combines these identities with independently proved blocking upper bounds.
+The focused accessors are
 \leanid{MPOTensor.rightRank_blockTensor_eq_pow_mul_of_products} and
 \leanid{MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}. A later
-application may obtain the endpoint identities from the formal counterpart of
-Theorem~III.8 under its own assumptions.
+application may derive the endpoint identities from the formal counterpart
+of Theorem~III.8 of Ref.~\cite{Cirac2017MPU}, under that theorem's own
+hypotheses.
 
 \section{Verdict}
 
-\textbf{Verdict: local correction (resolved).}  The exponent in the proof of
-Proposition~IV.2 is corrected from $d^k$ to $d^{2k}$. This does not add an
-assumption beyond the rank-product identity used by that proof, but the formal
-saturation result keeps that identity explicit rather than claiming it from
-blocking alone.
+The exponent in the proof of Proposition~IV.2 of
+Ref.~\cite{Cirac2017MPU} is corrected from $d^k$ to $d^{2k}$. This resolved
+local correction adds no hypothesis beyond the rank-product identity used by
+the proof. The formal saturation theorem nevertheless retains that identity
+as an explicit hypothesis rather than deriving it from blocking alone.
 
 \bibliographystyle{alpha}
 \bibliography{references}

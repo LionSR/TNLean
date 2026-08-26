@@ -17,89 +17,110 @@
 
 \section{Source phrase}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state Theorem~\texttt{thm1}
-in \cite[lines~1167--1170]{Cirac2016MPDO_arXiv}, for tensors whose
-matrix-product vectors are ``proportional to each other''. The displayed
-source statement does not spell out whether the proportionality scalar at a
-fixed length is required to be nonzero. The two formal readings are
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state
+Theorem~\texttt{thm1} for tensors whose matrix-product vectors are
+``proportional to each other''
+\cite[lines~1167--1170]{Cirac2016MPDO_arXiv}. The displayed source statement
+does not specify whether the proportionality scalar at each fixed length must
+be nonzero. The two possible readings are
 \begin{align}
-    \exists c_N,  V^{(N)}(A)=c_N V^{(N)}(B),\\
-    \exists c_N\ne 0,  V^{(N)}(A)=c_N V^{(N)}(B).
+    \exists c_N\in\mathbb C,\quad
+    V^{(N)}(A)
+        &=c_NV^{(N)}(B),
+    \label{eq:cpsv16_nonzero_proportionality_reading_weak_proportionality}\\
+    \exists c_N\in\mathbb C\setminus\{0\},\quad
+    V^{(N)}(A)
+        &=c_NV^{(N)}(B).
+    \label{eq:cpsv16_nonzero_proportionality_reading_projective_proportionality}
 \end{align}
+The weak relation in
+(\ref{eq:cpsv16_nonzero_proportionality_reading_weak_proportionality}) permits
 \begin{align}
-    V^{(N)}(A)=0\cdot V^{(N)}(B).
+    V^{(N)}(A)
+        &=0\cdot V^{(N)}(B)
+    \label{eq:cpsv16_nonzero_proportionality_reading_zero_scalar}
 \end{align}
-The scalar multiple with coefficient $0$ gives no projective point.
+whenever $V^{(N)}(A)=0$. A scalar multiple with coefficient zero does not
+define equality of projective points.
 
 \section{Formal reading}
 
-The formal predicate \leanid{NonzeroProportionalMPV}\textsubscript{2} requires, at each
-positive length $N\geq 1$, a scalar $c_N \neq 0$ such that
+The formal predicate
+\leanid{NonzeroProportionalMPV}\textsubscript{2} requires that, for every
+positive length $N\geq 1$, there be a scalar $c_N\neq 0$ such that
 \begin{align}
-    V^{(N)}(A) = c_N V^{(N)}(B).
+    V^{(N)}(A)
+        &=c_NV^{(N)}(B).
+    \label{eq:cpsv16_nonzero_proportionality_reading_formal_relation}
 \end{align}
-This is the projective reading of proportionality: the two vectors determine
-the same point in projective space. It is the reading used by the proof of
-Theorem~\texttt{thm1}. The empty word is excluded because it is not a physical
-chain and its coefficient records only the bond-space dimension. In the
-block-selection step, the paper assumes that all
-overlaps of a fixed block on one side with the blocks on the other side tend
-to zero, expands the two BNT decompositions, and invokes Corollary~\texttt{Lem1}
-to contradict proportionality. If $c_N$ were allowed to be zero at a
-length where the vector on the left also vanished, the identity
-$V^{(N)}(A)=0\cdot V^{(N)}(B)$ would not express equality of projective
-MPV families and would not supply the nonzero scalar used in the contradiction.
+This is the projective reading: the two nonzero vectors determine the same
+point in projective space. It is also the reading used in the proof of
+Theorem~\texttt{thm1} of Ref.~\cite{Cirac2016MPDO_arXiv}. The predicate
+excludes the empty word because it is not a physical chain and its coefficient
+records only the bond-space dimension.
 
-To make this last use explicit, write
-$a_j(N)=V^{(N)}(A_j)$ and $b_\ell(N)=V^{(N)}(B_\ell)$ for the BNT-sector
-vectors at length $N$. Let $g_A$ and $g_B$ be the numbers of sectors in the two
-decompositions, and let $\mu_j,\nu_\ell\in\mathbb C$ be the corresponding
-sector weights in the one-representative form used in the block-selection
-argument. The proportionality relation has the form
+The block-selection argument assumes that the overlaps of one fixed block with
+all blocks on the other side tend to zero. It expands both BNT decompositions
+and invokes Corollary~\texttt{Lem1} of
+Ref.~\cite{Cirac2016MPDO_arXiv} to contradict proportionality. To display the
+nonzero scalar used in that contradiction, set
+$a_j(N)=V^{(N)}(A_j)$ and $b_\ell(N)=V^{(N)}(B_\ell)$. Let $g_A$ and $g_B$ be
+the numbers of sectors, and let $\mu_j,\nu_\ell\in\mathbb C$ be their weights
+in the one-representative form used by the argument. The proportionality
+relation is
 \begin{align}
     \sum_{j=1}^{g_A}\mu_j^N a_j(N)
-    = c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N).
+        &=c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N).
+    \label{eq:cpsv16_nonzero_proportionality_reading_bnt_expansion}
 \end{align}
-Projecting this equality to a selected $B$-sector $k$ gives
+Projecting
+(\ref{eq:cpsv16_nonzero_proportionality_reading_bnt_expansion}) onto a selected
+$B$-sector $k$ gives
 \begin{align}
-    c_N\nu_k^N\langle b_k(N),b_k(N)\rangle=0.
+    c_N\nu_k^N\braket{b_k(N)}{b_k(N)}
+        &=0.
+    \label{eq:cpsv16_nonzero_proportionality_reading_projected_sector}
 \end{align}
-The contradiction is therefore the incompatibility of this equality with
+This contradicts
 \begin{align}
-    c_N\ne 0,\qquad
-    \nu_k\ne 0,\qquad
-    \langle b_k(N),b_k(N)\rangle\ne 0.
+    c_N&\neq 0,
+    \label{eq:cpsv16_nonzero_proportionality_reading_nonzero_scalar}\\
+    \nu_k&\neq 0,
+    \label{eq:cpsv16_nonzero_proportionality_reading_nonzero_weight}\\
+    \braket{b_k(N)}{b_k(N)}&\neq 0.
+    \label{eq:cpsv16_nonzero_proportionality_reading_nonzero_norm}
 \end{align}
 Under the canonical-form hypotheses used in the source argument, the selected
-BNT block states have nonzero norm on the tail of lengths used in the
-contradiction; in that range the weak scalar-multiple predicate already forces
-the proportionality scalar to be nonzero. Thus the formal predicate records
-the projective form needed at the use site, rather than adding a separate
-asymptotic assumption to the block-selection argument.
+BNT block states have nonzero norm on the tail of lengths used for the
+contradiction. On that tail, even the weak scalar-multiple relation forces
+$c_N\neq 0$. The formal predicate therefore records the projective relation
+needed at the use site; it does not add an independent asymptotic assumption.
 
 \section{Effect on the theorem}
 
-The nonzero condition does not change the intended conclusion of the source
-theorem. It records the conventional mathematical meaning of proportional
-nonzero vectors in the source argument. No weaker scalar-multiple predicate
-with $c_N$ allowed to vanish is kept as a named predicate: the relation
-$V=0\cdot V'$ is not a projective statement. One inline
-eventual-proportionality hypothesis survives outside the named predicate, in
-the overlap-convergence theorem
-\leanid{mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV}\textsubscript{2}
-in \leanid{TNLean/MPS/FundamentalTheorem/Proportional.lean}: it asks only for
-a scalar $c_N$ with $V^{(N)}(A)=c_N V^{(N)}(B)$ eventually in $N$, with no
-nonvanishing condition imposed on $c_N$. The eventual nonvanishing of $c_N$
-is derived there from the self-overlap convergence hypotheses rather than
-assumed as part of the hypothesis.
+The nonzero requirement does not change the intended conclusion of the source
+theorem. It records the conventional meaning of proportional nonzero vectors.
+No named predicate retains the weaker relation that permits $c_N=0$, because
+(\ref{eq:cpsv16_nonzero_proportionality_reading_zero_scalar}) is not a
+projective statement.
+
+One eventual-proportionality hypothesis remains outside the named predicate.
+The overlap-convergence theorem
+\leanid{mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV}%
+\textsubscript{2} in
+\leanid{TNLean/MPS/FundamentalTheorem/Proportional.lean} assumes only that,
+eventually in $N$, some scalar $c_N$ satisfies
+(\ref{eq:cpsv16_nonzero_proportionality_reading_formal_relation}); it does not
+assume $c_N\neq 0$. Its self-overlap convergence hypotheses imply the eventual
+nonvanishing of $c_N$.
 
 \section{Elimination plan}
 
-No extra mathematical theorem is needed for the present projective reading of
+No additional theorem is needed for the projective reading of
 CPSV16 Theorem~\texttt{thm1}
 \cite[lines~1167--1170]{Cirac2016MPDO_arXiv}. The vanishing-scalar case is a
-degenerate reading outside the source's convention and is not given a
-separate predicate.
+degenerate reading outside the source convention and receives no separate
+predicate.
 
 \bibliographystyle{alpha}
 \bibliography{references}

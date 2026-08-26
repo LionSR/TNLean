@@ -17,89 +17,101 @@
 \section{The printed coefficient argument}
 
 Let $\mathcal B_1$, $\mathcal B_2$, and $\mathcal B_3$ be
-finite-dimensional algebras, and suppose that
+finite-dimensional algebras, and let
 \begin{align}
-    \mathcal A_1&\subseteq\mathcal B_1\otimes\mathcal B_2,
-    &
-    \mathcal A_2&\subseteq\mathcal B_2\otimes\mathcal B_3.
+    \mathcal A_1
+        &\subseteq \mathcal B_1\otimes\mathcal B_2,
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_first_inclusion}\\
+    \mathcal A_2
+        &\subseteq \mathcal B_2\otimes\mathcal B_3.
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_second_inclusion}
 \end{align}
 The support-algebra commutation lemma assumes that
 $\mathcal A_1\otimes\operatorname{Id}_3$ commutes with
-$\operatorname{Id}_1\otimes\mathcal A_2$.  Its coefficient proof chooses
-bases and writes
+$\operatorname{Id}_1\otimes\mathcal A_2$. Its coefficient proof chooses
+bases and, for $a\in\mathcal A_1$ and $a'\in\mathcal A_2$, writes
 \begin{align}
-    a&=\sum_\mu e_\mu\otimes a_\mu,
-    &
-    a'&=\sum_\nu a'_\nu\otimes e'_\nu.
-    \label{eq:outer_basis_expansion}
+    a
+        &=\sum_\mu e_\mu\otimes a_\mu,
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_first_expansion}\\
+    a'
+        &=\sum_\nu a'_\nu\otimes e'_\nu.
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_second_expansion}
 \end{align}
-For $a\in\mathcal A_1$ and $a'\in\mathcal A_2$, commutation of the lifts
-then gives
+Commutation of the lifted elements then gives
 \begin{align}
     0
-    &=[a\otimes\operatorname{Id}_3,
-        \operatorname{Id}_1\otimes a']
-      =\sum_{\mu,\nu}
-        e_\mu\otimes[a_\mu,a'_\nu]\otimes e'_\nu.
-    \label{eq:outer_basis_commutator}
+        &=[a\otimes\operatorname{Id}_3,
+            \operatorname{Id}_1\otimes a']
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_lifted_commutator}\\
+        &=\sum_{\mu,\nu}
+            e_\mu\otimes[a_\mu,a'_\nu]\otimes e'_\nu.
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_commutator_expansion}
 \end{align}
-This is Schumacher--Werner Lemma \path{sppcomm},
-quant-ph/0405174, lines~1174--1194 \cite{SchumacherWerner2004QCA}, and
-GNVW Lemma \path{sppcomm}, arXiv:0910.3675v2, lines~1221--1246
-\cite{Gross2012IndexTheory}.  The published GNVW DOI is
+This argument appears in the Schumacher--Werner lemma labelled
+\path{sppcomm}, at lines~1174--1194 of arXiv:quant-ph/0405174
+\cite{SchumacherWerner2004QCA}, and in the GNVW lemma with the same source
+label, at lines~1221--1246 of arXiv:0910.3675v2
+\cite{Gross2012IndexTheory}. The published GNVW article has DOI
 \href{https://doi.org/10.1007/s00220-012-1423-1}
 {10.1007/s00220-012-1423-1}.
 
 \section{The outer-factor correction}
 
-Both printed proofs place the basis elements $e'_\nu$ in
-$\mathcal B_2$.  This is incompatible with
-(\ref{eq:outer_basis_expansion}): since
-$a'\in\mathcal B_2\otimes\mathcal B_3$, the coefficients $a'_\nu$ lie in
-$\mathcal B_2$ and the basis elements $e'_\nu$ lie in $\mathcal B_3$.
-It is also incompatible with the next step of the printed proof, which uses
-the tensors $e_\mu\otimes e'_\nu$ as a basis of
+Both printed proofs place the basis elements $e'_\nu$ in $\mathcal B_2$.
+That assignment is incompatible with
+(\ref{eq:gnvw12_support_algebra_outer_factor_basis_second_expansion}).
+Because $a'\in\mathcal B_2\otimes\mathcal B_3$, its coefficients
+$a'_\nu$ lie in $\mathcal B_2$, whereas its basis elements $e'_\nu$ lie in
+$\mathcal B_3$. The printed assignment is also incompatible with the next
+proof step, which treats the tensors $e_\mu\otimes e'_\nu$ as a basis of
 $\mathcal B_1\otimes\mathcal B_3$.
 
-The corrected basis assignment is therefore
+The corrected types are
 \begin{align}
-    e_\mu&\in\mathcal B_1,
-    &
-    a_\mu,a'_\nu&\in\mathcal B_2,
-    &
-    e'_\nu&\in\mathcal B_3.
-    \label{eq:outer_basis_types}
+    e_\mu
+        &\in\mathcal B_1,
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_first_basis_type}\\
+    a_\mu,\ a'_\nu
+        &\in\mathcal B_2,
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_middle_coefficient_type}\\
+    e'_\nu
+        &\in\mathcal B_3.
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_third_basis_type}
 \end{align}
-With (\ref{eq:outer_basis_types}), linear independence of the outer tensors
-in (\ref{eq:outer_basis_commutator}) gives
+With these assignments, the outer tensors in
+(\ref{eq:gnvw12_support_algebra_outer_factor_basis_commutator_expansion})
+are linearly independent. Therefore
 \begin{align}
-    [a_\mu,a'_\nu]&=0
-    &&\text{for every $\mu$ and $\nu$}.
+    [a_\mu,a'_\nu]
+        &=0
+        \qquad\text{for every $\mu$ and $\nu$}.
+    \label{eq:gnvw12_support_algebra_outer_factor_basis_coefficient_commutation}
 \end{align}
-Thus the correction changes no hypothesis or conclusion of the lemma; it
-only restores the factor type required by its proof.
+The correction changes neither the hypotheses nor the conclusion of the
+lemma. It restores the factor type required by the coefficient argument.
 
 \section{Formal resolution}
 
-The formal coefficient statement uses first-factor indices for the blocks of
-$a$, third-factor indices for the slices of $a'$, and matrices on the common
-second factor as its conclusion.  It therefore implements
-(\ref{eq:outer_basis_types}) directly.  Pairwise commutation of these
-coefficients is
+The formal coefficient statement indexes the blocks of $a$ by the first
+factor and the slices of $a'$ by the third factor. Its conclusion concerns
+matrices on the common second factor, so it directly implements the corrected
+types above. Pairwise commutation of the coefficients is formalized by
 \leanid{Matrix.middleSlices_commute_of_overlappingLifts_commute}; passage to
-the two generated support algebras is
+the generated support algebras is formalized by
 \leanid{Matrix.supportAlgebras_commute_of_overlappingLifts_commute}.
 
-The separate need for star-closed inputs is documented in
-\path{docs/paper-gaps/gnvw12_support_algebra_star_closure.tex}.  The distinct
+The separate star-closure correction is documented in
+\path{docs/paper-gaps/gnvw12_support_algebra_star_closure.tex}. The distinct
 restriction to full complex matrix factors remains open and is documented in
 \path{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}.
 
 \section{Verdict}
 
-The replacement of $\mathcal B_2$ by $\mathcal B_3$ for the basis
-$\{e'_\nu\}_\nu$ is a resolved local correction.  It is forced by both the
-typed expansion of $a'$ and the outer-factor linear-independence argument.
+Replacing $\mathcal B_2$ by $\mathcal B_3$ as the ambient algebra of the
+basis $\{e'_\nu\}_\nu$ is a resolved local correction. Both the typed
+expansion of $a'$ and the outer-factor linear-independence argument require
+this replacement.
 
 \bibliographystyle{alpha}
 \bibliography{references}

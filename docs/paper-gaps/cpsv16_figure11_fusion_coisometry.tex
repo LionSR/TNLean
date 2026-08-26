@@ -15,134 +15,157 @@
 \maketitle
 \gapnote{local-correction}{resolved}
 
-\section{The orientation of the fusion map}
+\section{Orientation of the fusion map}
 
-The canonical-form convention of
-\cite{Cirac2016MPDO_arXiv} retains only nonzero blocks.  If their dimensions
-are $D_k$ and the original dimension is $D$, the source states
-\begin{equation}
-  \sum_k D_k\leq D
-  \label{eq:dimension-bound}
-\end{equation}
-at lines~214--225.  Proposition~4.13 uses a matrix $U$ in the orientation
-\begin{equation}
-  U\widetilde M U^\dagger
-  =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha
-  \label{eq:vertical-form}
-\end{equation}
-(lines~945--951 and 1863--1870).  Thus $U$ maps the original space onto the
-retained direct sum.  In the usual terminology it is a coisometry:
-\begin{equation}
-  UU^\dagger=I,
-  \qquad
-  U^\dagger U=P_{\rm act},
-  \label{eq:vertical-coisometry}
-\end{equation}
-where $P_{\rm act}$ is the projection onto the nonzero canonical sectors.
-This convention and the necessity of exact reconstruction are established in
+The canonical-form convention of Ref.~\cite{Cirac2016MPDO_arXiv} retains only
+nonzero blocks. Let $D_k$ denote their dimensions and let $D$ denote the
+original dimension. The source states at lines~214--225 that
+\begin{align}
+    \sum_k D_k
+        &\leq D.
+    \label{eq:cpsv16_figure11_fusion_coisometry_dimension_bound}
+\end{align}
+
+Proposition~4.13 of Ref.~\cite{Cirac2016MPDO_arXiv} uses a matrix $U$ in the
+orientation
+\begin{align}
+    U\widetilde M U^\dagger
+        &= \bigoplus_\alpha \mu_\alpha\otimes M_\alpha.
+    \label{eq:cpsv16_figure11_fusion_coisometry_vertical_form}
+\end{align}
+This identity appears at lines~945--951 and~1863--1870. Thus $U$ maps the
+original space onto the retained direct sum. In standard terminology, $U$ is
+a coisometry. If $P_{\mathrm{act}}$ denotes the projection onto the nonzero
+canonical sectors, then
+\begin{align}
+    UU^\dagger
+        &= I,
+    \label{eq:cpsv16_figure11_fusion_coisometry_vertical_row_identity}\\
+    U^\dagger U
+        &= P_{\mathrm{act}}.
+    \label{eq:cpsv16_figure11_fusion_coisometry_vertical_active_projection}
+\end{align}
+This orientation and the need for exact reconstruction are established in
 \path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
 
-Theorem~4.14(iii) has precisely the same orientation.  For each pair of BNT
-labels it states
-\begin{equation}
-  U_{\alpha,\beta}P_{\alpha,\beta}^{ij}
-    U_{\alpha,\beta}^\dagger
-  =D_{\alpha,\beta}^{ij},
-  \qquad
-  D_{\alpha,\beta}^{ij}
-  =\bigoplus_\gamma
-    \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
-  \label{eq:fusion-forward}
-\end{equation}
-where $P_{\alpha,\beta}=M_\alpha M_\beta$ (lines~986--993).  Appendix~C.4
-constructs the right-hand side by taking the active canonical blocks of the
-Figure~11 tensor (lines~2020--2029).  Consequently the source-compatible
-orthogonality relation is
-\begin{equation}
-  U_{\alpha,\beta}U_{\alpha,\beta}^\dagger=I,
-  \label{eq:fusion-coisometry}
-\end{equation}
-not $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=I$ on the whole product bond
+Theorem~4.14(iii) of Ref.~\cite{Cirac2016MPDO_arXiv} has the same orientation.
+For each pair of basic normal tensor labels $\alpha,\beta$, define the product
+tensor $P_{\alpha,\beta}=M_\alpha M_\beta$. The theorem states
+\begin{align}
+    U_{\alpha,\beta}P_{\alpha,\beta}^{ij}
+        U_{\alpha,\beta}^\dagger
+        &= D_{\alpha,\beta}^{ij},
+    \label{eq:cpsv16_figure11_fusion_coisometry_fusion_forward}\\
+    D_{\alpha,\beta}^{ij}
+        &= \bigoplus_\gamma
+            \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}.
+    \label{eq:cpsv16_figure11_fusion_coisometry_active_direct_sum}
+\end{align}
+These statements occur at lines~986--993. Appendix~C.4 constructs the
+right-hand side from the active canonical blocks of the Figure~11 tensor
+\cite[lines~2020--2029]{Cirac2016MPDO_arXiv}. The source-compatible
+orthogonality relation is therefore
+\begin{align}
+    U_{\alpha,\beta}U_{\alpha,\beta}^\dagger
+        &= I,
+    \label{eq:cpsv16_figure11_fusion_coisometry_fusion_row_identity}
+\end{align}
+not $U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=I$ on the entire product bond
 space.
 
-As in Proposition~4.13, the forward equation alone is insufficient.  The
-active decomposition must also satisfy
-\begin{equation}
-  P_{\alpha,\beta}^{ij}
-  =U_{\alpha,\beta}^\dagger
-    D_{\alpha,\beta}^{ij}U_{\alpha,\beta}.
-  \label{eq:fusion-reconstruction}
-\end{equation}
-This equation asserts that the omitted common corner is zero.  Equations
-\eqref{eq:fusion-coisometry} and \eqref{eq:fusion-reconstruction} imply both
-zipper equations and preserve every nonempty closed word.
+The forward identity alone does not ensure exact recovery of the product
+tensor. The active decomposition must also satisfy
+\begin{align}
+    P_{\alpha,\beta}^{ij}
+        &= U_{\alpha,\beta}^\dagger
+            D_{\alpha,\beta}^{ij}U_{\alpha,\beta}.
+    \label{eq:cpsv16_figure11_fusion_coisometry_fusion_reconstruction}
+\end{align}
+This identity states that the omitted common corner is zero. Together,
+Eqs.~\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_row_identity}
+and~\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_reconstruction} imply
+both zipper identities and preserve every nonempty closed word.
 
 \section{A zero product sector}
 
-Let the physical index have two values, and consider two one-dimensional
-classical sectors.  The first has its only nonzero letter at $(0,0)$, while
-the second has its only nonzero letter at $(1,1)$.  Both are nonzero normal
-tensors.  Their product tensor is nevertheless zero, since
-\begin{equation}
-  P_{0,1}^{ij}
-  =\sum_{q=0}^{1}M_0^{iq}\otimes M_1^{qj}=0
-  \label{eq:zero-cross-product}
-\end{equation}
-for every $i,j$: the two factors require respectively $q=0$ and $q=1$.
-This is the cross-sector product in the elementary classical GHZ family.
+Let the physical index take the values zero and one. Consider two
+one-dimensional classical sectors. The first has its only nonzero letter at
+$(0,0)$, while the second has its only nonzero letter at $(1,1)$. Both are
+nonzero normal tensors. Their product tensor nevertheless vanishes:
+\begin{align}
+    P_{0,1}^{ij}
+        &= \sum_{q=0}^{1}M_0^{iq}\otimes M_1^{qj},
+    \label{eq:cpsv16_figure11_fusion_coisometry_cross_product_sum}\\
+    P_{0,1}^{ij}
+        &= 0
+    \label{eq:cpsv16_figure11_fusion_coisometry_zero_cross_product}
+\end{align}
+for every $i,j$, because the first factor requires $q=0$ and the second
+requires $q=1$. This is the cross-sector product in the elementary classical
+GHZ family.
 
-For this pair every retained multiplicity may have dimension zero.  The
-unique matrix from the one-dimensional product bond space to the empty
-retained space satisfies \eqref{eq:fusion-coisometry},
-\eqref{eq:fusion-forward}, and \eqref{eq:fusion-reconstruction}.  It cannot
-satisfy $U^\dagger U=I$ on the one-dimensional product space.  Hence the
-reverse orthogonality relation would impose an additional full-support
-hypothesis not present in Theorem~4.14 or Appendix~C.4.
+For this pair, every retained multiplicity space may have dimension zero. The
+unique map from the one-dimensional product bond space to the empty retained
+space satisfies
+Eqs.~\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_row_identity},
+\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_forward},
+and~\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_reconstruction}. It
+cannot satisfy
+\begin{align}
+    U^\dagger U
+        &= I.
+    \label{eq:cpsv16_figure11_fusion_coisometry_excluded_column_identity}
+\end{align}
+Requiring this identity on the one-dimensional product space would impose a
+full-support hypothesis absent from Theorem~4.14 and Appendix~C.4 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \section{Formal realignment}
 
-The existing structure
-\leanid{MPOTensor.BNTFusionIsometryFamily} assumes
-$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=I$.  It remains mathematically
-valid as a conditional full-support structure, but it is not the unrestricted
-conclusion of the source theorem.  It is retained only for results whose
-hypotheses explicitly require full support.
+The structure \leanid{MPOTensor.BNTFusionIsometryFamily} assumes
+$U_{\alpha,\beta}^\dagger U_{\alpha,\beta}=I$. It remains a valid conditional
+full-support structure, but it is not the unrestricted conclusion of the
+source theorem. It is retained only for results that assume full support
+explicitly.
 
-The source-facing construction tracked in \ghissue{4588} uses the
-active-support family \leanid{MPOTensor.BNTFusionCoisometryFamily} with the
-following data:
+The source-facing construction tracked in \ghissue{4588} uses
+\leanid{MPOTensor.BNTFusionCoisometryFamily}. Its data consist of:
 \begin{enumerate}
-  \item positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$, allowing
-    zero-dimensional multiplicity spaces;
-  \item a coisometry $U_{\alpha,\beta}$ from each product bond space onto the
-    retained nonzero direct sum;
-  \item the forward identity \eqref{eq:fusion-forward};
-  \item the exact reconstruction identity \eqref{eq:fusion-reconstruction}.
+    \item positive diagonal matrices
+        $\chi_{\alpha,\beta,\gamma}$, including zero-dimensional multiplicity
+        spaces;
+    \item a coisometry $U_{\alpha,\beta}$ from each product bond space onto
+        the retained nonzero direct sum;
+    \item the forward identity in
+        Eq.~\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_forward};
+    \item the reconstruction identity in
+        Eq.~\ref{eq:cpsv16_figure11_fusion_coisometry_fusion_reconstruction}.
 \end{enumerate}
-The projector-closure canonical decomposition supplies these data directly:
-the nonzero reducing corners give isometric inclusions into the product bond
-space, and their adjoints assemble into the required row coisometry.  No
-claim that the active projection is the identity is needed.
+The projector-closure canonical decomposition supplies these data directly.
+The nonzero reducing corners give isometric inclusions into the product bond
+space, and their adjoints form the required row coisometry. This construction
+does not require the active projection to equal the identity.
 
 The tensor-attached structure
-\leanid{MPOTensor.BNTFusionTensorClause} now uses this same active-support
-contract: it stores $UU^\dagger=I$, the forward fusion identity, and exact
-reconstruction.  The implication from the renormalization fixed-point maps is
-proved in
+\leanid{MPOTensor.BNTFusionTensorClause} now implements the same active-support
+contract. It stores $UU^\dagger=I$, the forward fusion identity, and exact
+reconstruction. The implication from the renormalization fixed-point maps is
+proved by
 \leanid{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}, completing the
-realignment tracked in \ghissue{4225}.  Conversion to the stronger
-\leanid{MPOTensor.BNTFusionIsometryFamily} remains permitted only under the
-additional identity $U^\dagger U=I$, or an equivalent assertion that the
-product tensor has no discarded zero reducing corner.
+realignment tracked in \ghissue{4225}. Conversion to the stronger structure
+\leanid{MPOTensor.BNTFusionIsometryFamily} is allowed only under the additional
+condition $U^\dagger U=I$, or an equivalent statement that the product tensor
+has no discarded zero reducing corner.
 
-\paragraph{Verdict.}
-The phrase ``isometries $U_{\alpha,\beta}$'' in the source uses the same
-retained-row orientation as Proposition~4.13.  Interpreting it as
-$U^\dagger U=I$ strengthens the theorem and excludes legitimate zero product
-sectors.  The faithful Figure~11 conclusion is coisometry onto the active
-direct sum together with exact reconstruction.  The source-facing
-tensor-attached fusion clause and its renormalization-fixed-point construction
-now implement precisely this conclusion.
+\section{Verdict}
+
+The phrase ``isometries $U_{\alpha,\beta}$'' in
+Ref.~\cite{Cirac2016MPDO_arXiv} uses the retained-row orientation already used
+in Proposition~4.13. Reading it as $U^\dagger U=I$ strengthens the theorem and
+excludes valid zero product sectors. The faithful Figure~11 conclusion is a
+coisometry onto the active direct sum together with exact reconstruction. The
+source-facing tensor-attached fusion clause and its renormalization-fixed-point
+construction now implement exactly this conclusion.
 
 \bibliographystyle{alpha}
 \bibliography{references}

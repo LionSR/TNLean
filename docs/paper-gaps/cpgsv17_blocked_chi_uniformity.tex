@@ -17,464 +17,583 @@
 
 \section{Source statement}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state in
-\cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} that there is a set of
-diagonal matrices
-\[
+Theorem~4.14(ii) of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that there are diagonal
+matrices
+\begin{align}
     \chi_{\alpha,\beta,\gamma}
-\]
-with positive entries such that, for every length $L$, the operators
-$O_L(M_\alpha)$ linearly span an algebra whose structure coefficients satisfy
-\[
+        &> 0
+\label{eq:cpgsv17_blocked_chi_uniformity_source_positive_chi}
+\end{align}
+whose entries are positive and for which, at every positive length $L$, the
+operators $O_L(M_\alpha)$ linearly span an algebra with structure
+coefficients
+\begin{align}
     c^{(L)}_{\alpha,\beta,\gamma}
-      = \tr(\chi_{\alpha,\beta,\gamma}^{L}).
-\]
-The important point for the present note is that the labels
-$\alpha,\beta,\gamma$ are BNT labels, not basis labels depending on $L$.
-Thus the same diagonal matrix $\chi_{\alpha,\beta,\gamma}$ is used for all
-positive lengths; only the exponent changes.
+        &= \tr\!\left(\chi_{\alpha,\beta,\gamma}^{L}\right).
+\label{eq:cpgsv17_blocked_chi_uniformity_source_trace_power}
+\end{align}
+Here $M_\alpha$ is the normal tensor with BNT label $\alpha$, and
+$O_L(M_\alpha)$ is its length-$L$ closed operator. The labels
+$\alpha,\beta,\gamma$ are fixed BNT labels rather than basis labels chosen
+separately at each length. Thus each matrix
+$\chi_{\alpha,\beta,\gamma}$ in
+(\ref{eq:cpgsv17_blocked_chi_uniformity_source_trace_power}) is independent
+of $L$; only its exponent varies. This is the assertion of
+Theorem~4.14(ii) in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-Here $O_L(M_\alpha)$ denotes the length-$L$ operator associated to the
-normal tensor labelled by $\alpha$ in the basis of normal tensors. The phrase
-``BNT labels'' refers to these labels $\alpha,\beta,\gamma$. The support
-algebra $\mathcal A_n$ below is the formal support algebra chosen for the
-blocked length $n$ in the Lean development.
+The formal development instead chooses, for each blocked length $n$, a support
+algebra $\mathcal A_n$. The basis of $\mathcal A_n$ may therefore depend on
+$n$.
 
 \section{Formalized blocked-basis analogue}
 
-The current blocked coefficient construction in
+The construction in
 \path{TNLean/MPS/MPDO/AlgebraStructure.lean} chooses bases of the support
 algebras $\mathcal A_n$. Its multiplication coefficients have indices
-\[
-    i,j \in \mathrm{Basis}(\mathcal A_n),
-    \qquad
-    k \in \mathrm{Basis}(\mathcal A_{2n}),
-\]
-because multiplication is represented as
-\[
-    \mathcal A_n \times \mathcal A_n \longrightarrow \mathcal A_{2n}.
-\]
+\begin{align}
+    i,j &\in \operatorname{Basis}(\mathcal A_n),
+\label{eq:cpgsv17_blocked_chi_uniformity_blocked_source_indices}\\
+    k &\in \operatorname{Basis}(\mathcal A_{2n}),
+\label{eq:cpgsv17_blocked_chi_uniformity_blocked_target_index}
+\end{align}
+because the represented product is
+\begin{align}
+    \mathcal A_n\times\mathcal A_n
+        &\longrightarrow \mathcal A_{2n}.
+\label{eq:cpgsv17_blocked_chi_uniformity_blocked_product}
+\end{align}
 The declarations
 \leanid{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily} and
 \leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
-therefore express a positive-length, length-dependent blocked-basis analogue:
-\[
+express the positive-length, length-dependent formula
+\begin{align}
     c^{(n)}_{i,j,k}
-      = \sum_r \chi_{n,i,j,k,r}^{\,n}
-      = \tr(\chi_{n,i,j,k}^{\,n}).
-\]
-Here $n$ is the source blocking length of the two factors in
-$\mathcal A_n$, while the coefficient $k$ is taken in the basis of
-$\mathcal A_{2n}$. Both the family and its trace-power predicate are indexed
-only by $0 < n$, so there is no length-zero component and no degenerate
-constraint
-$c^{(0)}_{i,j,k} = \dim(\chi_{0,i,j,k})$, which is not part of the intended
-positive-chain statement.
+        &= \sum_r \chi_{n,i,j,k,r}^{\,n},
+\label{eq:cpgsv17_blocked_chi_uniformity_blocked_power_sum}\\
+        &= \tr\!\left(\chi_{n,i,j,k}^{\,n}\right).
+\label{eq:cpgsv17_blocked_chi_uniformity_blocked_trace_power}
+\end{align}
+In
+(\ref{eq:cpgsv17_blocked_chi_uniformity_blocked_power_sum})--%
+(\ref{eq:cpgsv17_blocked_chi_uniformity_blocked_trace_power}), $n$ is the
+source blocking length of the two factors in $\mathcal A_n$, whereas $k$
+indexes a basis of $\mathcal A_{2n}$. Both the family and its trace-power
+predicate are indexed only by $n>0$. They therefore contain neither a
+length-zero component nor the unintended constraint
+\begin{align}
+    c^{(0)}_{i,j,k}
+        &= \dim\!\left(\chi_{0,i,j,k}\right).
+\label{eq:cpgsv17_blocked_chi_uniformity_excluded_zero_length}
+\end{align}
 
 \section{Gap}
 
-Verdict: scope restriction.
+The blocked-basis construction is a scope restriction, not the uniform
+BNT-label statement of Theorem~4.14(ii) in
+Ref.~\cite{Cirac2016MPDO_arXiv}. It permits the diagonal matrix to depend on
+$n$, since the available basis indices depend on $\mathcal A_n$ and
+$\mathcal A_{2n}$. By contrast, the source theorem assigns one matrix to each
+fixed triple of BNT labels and uses it at every positive length.
 
-This blocked-basis analogue is not the uniform BNT-label statement of
-Theorem~4.14(ii). It allows the diagonal matrix to depend on $n$, because
-the available indices themselves depend on the blocked bases
-$\mathcal A_n$ and $\mathcal A_{2n}$. The source theorem instead provides
-one matrix for each triple of BNT labels and uses that same matrix for every
-length $L$.
+The two constructions also represent different products. The source
+coefficients belong to the same-length operator algebra:
+\begin{align}
+    O_L(M_\alpha)O_L(M_\beta)
+        &= \sum_\gamma
+            c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma).
+\label{eq:cpgsv17_blocked_chi_uniformity_source_same_length_product}
+\end{align}
+The formal blocked product is instead
+(\ref{eq:cpgsv17_blocked_chi_uniformity_blocked_product}). Its inputs have
+source length $n$, but its output is expanded in a basis at length $2n$.
+Consequently, the exponent in
+\begin{align}
+    c^{(n)}_{i,j,k}
+        &= \tr\!\left(\chi_{n,i,j,k}^{\,n}\right)
+\label{eq:cpgsv17_blocked_chi_uniformity_source_length_exponent}
+\end{align}
+is the source length of the factors, not the codomain length. This convention
+does not replace the same-length multiplication law
+(\ref{eq:cpgsv17_blocked_chi_uniformity_source_same_length_product}).
 
-There is a second scope restriction in the operation being compared. In the
-paper, the coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ belong to the
-same-length operator algebra:
-\[
-    O_L(M_\alpha) O_L(M_\beta)
-      = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
-\]
-The current Lean coefficient family comes from the blocked support-algebra
-product
-\[
-    \mathcal A_n \times \mathcal A_n \longrightarrow \mathcal A_{2n},
-\]
-so the two input factors have source length $n$, while the result is expanded
-in a basis at length $2n$. The exponent $n$ in
-\[
-    c^{(n)}_{i,j,k}=\tr(\chi_{n,i,j,k}^{\,n})
-\]
-is therefore the source length of the two factors, not the codomain length.
-This convention is only a blocked-basis analogue; it is not a replacement for
-the same-length multiplication statement in Theorem~4.14(ii).
+Theorem~4.14(ii) also contains the length-one idempotent condition
+\begin{align}
+    m_\gamma
+        &= \sum_{\alpha,\beta}
+            c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+\label{eq:cpgsv17_blocked_chi_uniformity_source_idempotent_condition}
+\end{align}
+This condition appears at lines~981--985 of
+Ref.~\cite{Cirac2016MPDO_arXiv}; it is independent of the blocked-basis
+trace-power predicate considered here.
 
-This note isolates the chi-uniformity and same-length coefficient comparison
-part of Theorem~4.14(ii).  The idempotent condition
-\[
-    m_\gamma =
-      \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma} m_\alpha m_\beta
-\]
-from paper lines 981--985 is a separate condition in the same theorem; it is
-not represented by the blocked-basis trace-power predicate.
-
-Consequently,
+It follows that
 \leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
-should not be cited as a formalization of Theorem~4.14(ii). It is a local
-blocked-basis coefficient statement, useful only after the
-uniform BNT-label statement has been separated from the chosen blocked bases.
+must not be cited as a formalization of Theorem~4.14(ii). It is a local
+blocked-basis coefficient statement and becomes relevant only after the
+uniform BNT-label theorem has been separated from the chosen blocked bases.
 
 \section{Explicit vertical closure for the rescaling-stable example R}
 
-Verdict: example-specific explicit vertical closure; the general blocked-basis
-scope restriction and the corrected status of printed Theorem~4.14 remain.
+The example-specific vertical calculation closes the one-label case for $R$.
+It does not remove the general blocked-basis scope restriction or the
+correction required by the printed form of Theorem~4.14.
 
-Let $E_{ij}$ denote the $2\times2$ matrix unit and set
-\[
-  A^0=\frac45E_{00},\qquad A^1=\frac45E_{11},\qquad
-  A^2=\frac35E_{01},\qquad A^3=\frac35E_{10}.
-\]
-The horizontal MPO tensor $R$ is defined by
-\[
-  R^{pq}_{ab}=\frac{25}{32}
-    \left(A^a\otimes\overline{A^b}\right)_{pq}.
-\]
+Let $E_{ij}$ be the $2\times2$ matrix unit. Define
+\begin{align}
+    A^0 &= \frac45E_{00},
+&
+    A^1 &= \frac45E_{11},
+\label{eq:cpgsv17_blocked_chi_uniformity_example_diagonal_letters}\\
+    A^2 &= \frac35E_{01},
+&
+    A^3 &= \frac35E_{10}.
+\label{eq:cpgsv17_blocked_chi_uniformity_example_offdiagonal_letters}
+\end{align}
+The horizontal MPO tensor $R$ has entries
+\begin{align}
+    R^{pq}_{ab}
+        &= \frac{25}{32}
+            \left(A^a\otimes\overline{A^b}\right)_{pq}.
+\label{eq:cpgsv17_blocked_chi_uniformity_horizontal_tensor_R}
+\end{align}
 Its normalized vertical component is the $16$-letter tensor
-$M_0^{(a,b)}=A^a\otimes\overline{A^b}$, and $O_L(M_0)$ denotes the
-length-$L$ closed operator of that component.  Finally, write
-\[
-  W=\begin{pmatrix}16/25&9/25\\9/25&16/25\end{pmatrix},
-  \qquad W_L=W^{\otimes L}.
-\]
-Thus $W^L$ below is an ordinary matrix power, whereas $W_L$ is a Kronecker
-power.
+\begin{align}
+    M_0^{(a,b)}
+        &= A^a\otimes\overline{A^b},
+\label{eq:cpgsv17_blocked_chi_uniformity_vertical_component_M0}
+\end{align}
+and $O_L(M_0)$ denotes the corresponding length-$L$ closed operator. Set
+\begin{align}
+    W
+        &= \begin{pmatrix}
+            16/25 & 9/25\\
+            9/25 & 16/25
+        \end{pmatrix},
+&
+    W_L
+        &= W^{\otimes L}.
+\label{eq:cpgsv17_blocked_chi_uniformity_example_W_definitions}
+\end{align}
+The notation $W^L$ denotes an ordinary matrix power, whereas $W_L$ denotes
+the $L$-fold Kronecker power.
 
-The explicit module
+The module
 \path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean} defines the
 one-label clause
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-R_oneLabelBNTAlgebraTensorClause}.  There is one BNT label.  Its normalized
-vertical component
-has $16$ physical letters, bond dimension $4$, and
-\[
-    M_0^{(a,b)}=A^a\otimes\overline{A^b}.
-\]
-The multiplicity matrix and the distinct chi matrix are
-\[
-    \mu_0=\begin{pmatrix}25/32\end{pmatrix},
-    \qquad
-    \chi_{0,0,0}=\operatorname{diag}(1,7/25).
-\]
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.R_oneLabelBNTAlgebraTensorClause}.
+Its normalized vertical component has $16$ physical letters, bond dimension
+$4$, and satisfies
+(\ref{eq:cpgsv17_blocked_chi_uniformity_vertical_component_M0}). The
+multiplicity matrix and the distinct chi matrix are
+\begin{align}
+    \mu_0
+        &= \begin{pmatrix}25/32\end{pmatrix},
+\label{eq:cpgsv17_blocked_chi_uniformity_example_multiplicity_matrix}\\
+    \chi_{0,0,0}
+        &= \operatorname{diag}\!\left(1,\frac7{25}\right).
+\label{eq:cpgsv17_blocked_chi_uniformity_example_chi_matrix}
+\end{align}
 The vertical reconstruction is
-\[
-    \operatorname{vertical}(R)=\frac{25}{32}M_0.
-\]
-For every positive length $L$, the component operator satisfies
-\[
+\begin{align}
+    \operatorname{vertical}(R)
+        &= \frac{25}{32}M_0.
+\label{eq:cpgsv17_blocked_chi_uniformity_vertical_reconstruction}
+\end{align}
+For every positive length $L$, the component operator obeys
+\begin{align}
     O_L(M_0)^2
-      = \left(1+\left(\frac{7}{25}\right)^L\right)O_L(M_0)
-      = \tr(\chi_{0,0,0}^L)O_L(M_0).
-\]
-At length one, $m_0=\tr(\mu_0)=25/32$ and
-$c^{(1)}_{0,0,0}=\tr(\chi_{0,0,0})=32/25$, so the idempotent identity is
-\[
+        &= \left(1+\left(\frac7{25}\right)^L\right)O_L(M_0),
+\label{eq:cpgsv17_blocked_chi_uniformity_example_operator_square}\\
+        &= \tr\!\left(\chi_{0,0,0}^{L}\right)O_L(M_0).
+\label{eq:cpgsv17_blocked_chi_uniformity_example_operator_chi_trace}
+\end{align}
+At length one,
+\begin{align}
+    m_0
+        &= \tr(\mu_0)
+         = \frac{25}{32},
+\label{eq:cpgsv17_blocked_chi_uniformity_example_trace_scalar}\\
+    c^{(1)}_{0,0,0}
+        &= \tr(\chi_{0,0,0})
+         = \frac{32}{25},
+\label{eq:cpgsv17_blocked_chi_uniformity_example_length_one_coefficient}
+\end{align}
+and the idempotent identity becomes
+\begin{align}
     \frac{25}{32}
-      = \frac{32}{25}\left(\frac{25}{32}\right)^2.
-\]
-Thus the separately defined coefficient family
+        &= \frac{32}{25}
+            \left(\frac{25}{32}\right)^2.
+\label{eq:cpgsv17_blocked_chi_uniformity_example_idempotent_identity}
+\end{align}
+Thus
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelCoeffs} and
-matrix
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi} are now the
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi} are the
 actual coefficient and diagonal data of this explicit vertical clause.
 
-The contraction orientation is essential.  Let
-$\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained by
-separating the $16$-valued physical index of the vertical tensor into two
-four-valued indices.  Then
-\[
-    \operatorname{mpo}\!\left(
-      \operatorname{rot}(\operatorname{vertical}(R)),L\right)
-      =\left(\frac{25}{32}\right)^L O_L(M_0).
-\]
-This rotated vertical contraction is not the original horizontal tensor $R$,
-even though the physical and bond dimensions both equal $4$.  At length one,
-the original horizontal operator $\operatorname{mpo}(R,1)$ has rank two,
-whereas $O_1(M_0)$ is a pure-state operator of rank one.  They are therefore
-not proportional, and one must not write
-\[
+The contraction orientation matters. Let
+$\operatorname{rot}(\operatorname{vertical}(R))$ be the MPO obtained by
+splitting the $16$-valued physical index of the vertical tensor into two
+four-valued indices. Then
+\begin{align}
+    \operatorname{mpo}\!\left(\operatorname{rot}(\operatorname{vertical}(R)),L\right)
+        &= \left(\frac{25}{32}\right)^L O_L(M_0).
+\label{eq:cpgsv17_blocked_chi_uniformity_rotated_vertical_contraction}
+\end{align}
+This rotated contraction is not the original horizontal tensor $R$, although
+both its physical and bond dimensions equal $4$. At length one,
+$\operatorname{mpo}(R,1)$ has rank two, while $O_1(M_0)$ is a rank-one
+pure-state operator. Hence they are not proportional, and the identity
+\begin{align}
     \operatorname{mpo}(R,L)
-      =\left(\frac{25}{32}\right)^L O_L(M_0).
-\]
+        &= \left(\frac{25}{32}\right)^L O_L(M_0)
+\label{eq:cpgsv17_blocked_chi_uniformity_false_horizontal_vertical_identity}
+\end{align}
+must not be used.
 
-The earlier horizontal countercalculation remains the regression boundary.
-The ordinary matrix power $W^L$ is distinct from the $L$-fold Kronecker power
-$W_L$ in the factorization of the original horizontal operator.  If that
-operator satisfied the false scalar product law, then already at $L=1$ one
-would have
-\[
-    \frac{25}{32}W^2=\frac{32}{25}W.
-\]
-The $(0,0)$ entries are instead $337/800$ and $512/625$.
+The horizontal countercalculation remains the regression boundary. The
+ordinary power $W^L$ differs from the Kronecker power $W_L$ in the
+factorization of the original horizontal operator. The false scalar product
+law would imply at $L=1$ that
+\begin{align}
+    \frac{25}{32}W^2
+        &= \frac{32}{25}W.
+\label{eq:cpgsv17_blocked_chi_uniformity_false_W_scalar_law}
+\end{align}
+The $(0,0)$ entries of the two sides are instead
+\begin{align}
+    \left(\frac{25}{32}W^2\right)_{00}
+        &= \frac{337}{800},
+\label{eq:cpgsv17_blocked_chi_uniformity_left_W_entry}\\
+    \left(\frac{32}{25}W\right)_{00}
+        &= \frac{512}{625}.
+\label{eq:cpgsv17_blocked_chi_uniformity_right_W_entry}
+\end{align}
 
-This closure is specific to $R$.  It does not identify the blocked support
-algebra bases with uniform BNT labels in general, prove that every blocked-basis $\chi$ family is length independent, or attach arbitrary uniform rescalings of
-$\chi$ to tensor presentations.  The formal algebra characterization of
+This closure applies only to $R$. It neither identifies general blocked
+support-algebra bases with uniform BNT labels nor proves that every
+blocked-basis chi family is length independent. It also does not attach
+arbitrary uniform rescalings of chi matrices to tensor presentations. The
+formal algebra characterization of
 Theorem~4.14(i)$\Leftrightarrow$(ii) is complete, while the printed theorem
 remains partial because clause~(iii) requires the documented active-support
 correction.
 
 \section{Relation to the algebra-to-fusion converse}
 
-The line ranges must be kept distinct.  Lines~1830--1922 prove
-Proposition~4.13, the vertical canonical-form statement; they do not extract
-$\chi_{\alpha,\beta,\gamma}$.  The construction of $\chi$ in the forward
-direction $(\mathrm{i})\Rightarrow(\mathrm{ii})$ occurs at lines~2020--2042.
-The converse $(\mathrm{ii})\Rightarrow(\mathrm{i})$ begins at line~2046 and
-takes the positive $\chi$-coefficient formula and the idempotent identity as
-hypotheses.
+The relevant source line ranges serve different purposes. Lines~1830--1922
+prove Proposition~4.13, the vertical canonical-form statement, and do not
+extract $\chi_{\alpha,\beta,\gamma}$. The forward construction
+$(\mathrm{i})\Rightarrow(\mathrm{ii})$ constructs chi matrices at
+lines~2020--2042. The converse
+$(\mathrm{ii})\Rightarrow(\mathrm{i})$ begins at line~2046 and assumes both
+the positive chi-coefficient formula and the idempotent identity
+\cite{Cirac2016MPDO_arXiv}.
 
-Let $E=E_1$ be the one-site transfer map.  The present algebra predicate gives
-the fixed-point-space identity
-\[
-    \operatorname{Fix}\bigl((E^n)^\dagger\bigr)
-      = \operatorname{Fix}(E^\dagger),
-    \qquad n>0.
-\]
-This rules out root-of-unity peripheral eigenvalues of $E^\dagger$, but it does
-not imply the transfer-retract idempotence equation $E^2=E$.
+Let $E=E_1$ be the one-site transfer map. The present support-algebra
+predicate gives
+\begin{align}
+    \operatorname{Fix}\!\left((E^n)^\dagger\right)
+        &= \operatorname{Fix}(E^\dagger),
+&
+    n &> 0.
+\label{eq:cpgsv17_blocked_chi_uniformity_fixed_point_tower}
+\end{align}
+This identity excludes root-of-unity peripheral eigenvalues of $E^\dagger$,
+but it does not imply
+\begin{align}
+    E^2 &= E.
+\label{eq:cpgsv17_blocked_chi_uniformity_transfer_idempotence}
+\end{align}
 
-This failure is formalized by
+The failure is formalized by
 \leanid{MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL}.
 The counterexample is the phase-flip channel with Kraus operators
-$K_0=\frac35 I$ and $K_1=\frac45 Z$.  It is trace-preserving, fixes the
-positive-definite matrix $I$, and has off-diagonal eigenvalue $-\frac7{25}$.
-Thus every positive power has the same adjoint fixed-point algebra, while the
-transfer map is not idempotent.  Consequently, the requested implication from
-the present support-algebra predicate is false even under the additional
-trace-preserving and faithful-fixed-point hypotheses.
+\begin{align}
+    K_0 &= \frac35 I,
+&
+    K_1 &= \frac45 Z.
+\label{eq:cpgsv17_blocked_chi_uniformity_phase_flip_kraus}
+\end{align}
+This channel is trace preserving, fixes the positive-definite matrix $I$, and
+has off-diagonal eigenvalue
+\begin{align}
+    \lambda_{\mathrm{off}}
+        &= -\frac7{25}.
+\label{eq:cpgsv17_blocked_chi_uniformity_phase_flip_eigenvalue}
+\end{align}
+Every positive power therefore has the same adjoint fixed-point algebra, even
+though the transfer map is not idempotent. The implication from the present
+support-algebra predicate is false even after adding trace preservation and a
+faithful fixed point.
 
-The converse direction $(\mathrm{ii})\Rightarrow(\mathrm{i})$ in the proof of
-Theorem~4.14 uses a stronger coefficient argument.  In Appendix~C.4,
-lines~2046--2085, the authors compare the two BNT expansions coming from the
-one-site and two-site decompositions.  The source identity
-\texttt{eq:algebra-appendix} is stated at lines~1933--1936 and used in this
-converse at lines~2048--2050:
-\[
-    \sum_\gamma \tr(\nu_\gamma^L) O_L(A_\gamma)
-      =
-    \sum_{\alpha,\beta,\gamma}
-      \tr\bigl((\mu_\alpha\otimes\mu_\beta
-        \otimes\chi_{\alpha,\beta,\gamma})^L\bigr) O_L(M_\gamma).
-\]
-Since both $A_\gamma$ and $M_\gamma$ are BNT, the comparison first gives,
-up to relabelling (line~2053),
-\[
+The converse proof of Theorem~4.14 in
+Ref.~\cite{Cirac2016MPDO_arXiv} uses a stronger coefficient comparison. In
+Appendix~C.4, lines~2046--2085 compare the BNT expansions from the one-site
+and two-site decompositions. The source identity
+\texttt{eq:algebra-appendix}, stated at lines~1933--1936 and used at
+lines~2048--2050, is
+\begin{align}
+    \sum_\gamma \tr(\nu_\gamma^L)O_L(A_\gamma)
+        &=
+        \sum_{\alpha,\beta,\gamma}
+        \tr\!\left((\mu_\alpha\otimes\mu_\beta
+            \otimes\chi_{\alpha,\beta,\gamma})^L\right)O_L(M_\gamma).
+\label{eq:cpgsv17_blocked_chi_uniformity_source_bnt_comparison}
+\end{align}
+Because both $A_\gamma$ and $M_\gamma$ are BNT tensors, the comparison first
+gives, after relabelling,
+\begin{align}
     A_\gamma
-      = e^{i\theta_\gamma} Z_\gamma M_\gamma Z_\gamma^{-1}.
-\]
+        &= e^{i\theta_\gamma}
+            Z_\gamma M_\gamma Z_\gamma^{-1}.
+\label{eq:cpgsv17_blocked_chi_uniformity_phase_gauge_relation}
+\end{align}
 Proposition~4.13 then removes the phase and identifies $Z_\gamma$ with a
-unitary $U_\gamma$, as in line~2057, so
-\[
-    A_\gamma = U_\gamma M_\gamma U_\gamma^{-1}
-\]
-with $U_\gamma$ unitary.  Since, for all sufficiently large $L$, the operators
-$O_L(A_\gamma)=O_L(M_\gamma)$ are linearly independent, and all coefficients are
-positive, the simple-matrix lemma (lines~1155--1163, used at line~2058) gives
-the multiset identity
-\[
+unitary $U_\gamma$:
+\begin{align}
+    A_\gamma
+        &= U_\gamma M_\gamma U_\gamma^{-1}.
+\label{eq:cpgsv17_blocked_chi_uniformity_unitary_gauge_relation}
+\end{align}
+These steps occur at lines~2053--2057 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+For all sufficiently large $L$, the operators
+$O_L(A_\gamma)=O_L(M_\gamma)$ are linearly independent. Positivity and the
+simple-matrix lemma at lines~1155--1163, applied at line~2058, then give the
+multiset identity
+\begin{align}
     \{\nu_{\gamma,k}\}_k
-      =
-    \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
-      \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3}.
-\]
-Summing this identity gives
-\[
+        &=
+        \left\{\mu_{\alpha,k_1}\mu_{\beta,k_2}
+        \chi_{\alpha,\beta,\gamma,k_3}\right\}_{\alpha,\beta,k_1,k_2,k_3}.
+\label{eq:cpgsv17_blocked_chi_uniformity_multiplicity_multiset}
+\end{align}
+Summing the entries in
+(\ref{eq:cpgsv17_blocked_chi_uniformity_multiplicity_multiset}) yields
+\begin{align}
     \tr(\nu_\gamma)
-      = \sum_{\alpha,\beta}m_\alpha m_\beta
-          c^{(1)}_{\alpha,\beta,\gamma}
-      = m_\gamma .
-\]
-Only after this trace equality is obtained do the normalizing maps in
-\cite[lines~2065--2085]{Cirac2016MPDO_arXiv} have the form
-\[
-    \widetilde R_2\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
-      = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
-    \qquad
-    \widetilde R_1\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
-      = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma .
-\]
-These are the maps used in the retained-sector composites
-$T_0=\widetilde R_2\widetilde T R_1$ and
-$S_0=\widetilde R_1\widetilde S R_2$.  The first denominator is normalized by
-$\tr(\nu_\gamma)=m_\gamma$, proved above; the second by the defining equality
-$m_\gamma=\tr(\mu_\gamma)$ for the original block coefficient.  When a
-vertical canonical form has a discarded zero sector, these composites are
-trace preserving only on the retained physical supports.  Their completion
-to maps on the full physical matrix algebras is described in
+        &= \sum_{\alpha,\beta}
+            m_\alpha m_\beta c^{(1)}_{\alpha,\beta,\gamma},
+\label{eq:cpgsv17_blocked_chi_uniformity_two_site_trace_sum}\\
+        &= m_\gamma.
+\label{eq:cpgsv17_blocked_chi_uniformity_two_site_trace_normalization}
+\end{align}
+Only after
+(\ref{eq:cpgsv17_blocked_chi_uniformity_two_site_trace_normalization}) is
+proved do the normalizing maps at lines~2065--2085 of
+Ref.~\cite{Cirac2016MPDO_arXiv} take the form
+\begin{align}
+    \widetilde R_2\!\left(\bigoplus_\gamma X_\gamma\right)
+        &= \bigoplus_\gamma
+            \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
+\label{eq:cpgsv17_blocked_chi_uniformity_two_site_normalizing_map}\\
+    \widetilde R_1\!\left(\bigoplus_\gamma X_\gamma\right)
+        &= \bigoplus_\gamma
+            \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma.
+\label{eq:cpgsv17_blocked_chi_uniformity_one_site_normalizing_map}
+\end{align}
+The retained-sector composites are
+\begin{align}
+    T_0 &= \widetilde R_2\widetilde T R_1,
+\label{eq:cpgsv17_blocked_chi_uniformity_retained_T_composite}\\
+    S_0 &= \widetilde R_1\widetilde S R_2.
+\label{eq:cpgsv17_blocked_chi_uniformity_retained_S_composite}
+\end{align}
+The denominator in
+(\ref{eq:cpgsv17_blocked_chi_uniformity_two_site_normalizing_map}) is
+normalized by
+(\ref{eq:cpgsv17_blocked_chi_uniformity_two_site_trace_normalization}); the
+denominator in
+(\ref{eq:cpgsv17_blocked_chi_uniformity_one_site_normalizing_map}) is
+normalized by the defining identity $m_\gamma=\tr(\mu_\gamma)$. If a
+vertical canonical form contains a discarded zero sector, the composites in
+(\ref{eq:cpgsv17_blocked_chi_uniformity_retained_T_composite}) and
+(\ref{eq:cpgsv17_blocked_chi_uniformity_retained_S_composite}) are trace
+preserving only on the retained physical supports. Their completion to the
+full physical matrix algebras is documented in
 \path{cpgsv17_vertical_isometry_zero_sector.tex}.
 
-The present algebra predicate
-\leanid{MPOTensor.HasBlockedAdjointFixedPointAlgebraTower} does not include these BNT-label
-coefficients, the positive $\chi_{\alpha,\beta,\gamma}$, or the length-one
-idempotent trace identity.  It proves the fixed-point-space equation above, not
-the displayed BNT coefficient comparison.  Thus a source-faithful construction
-must first obtain the BNT-label theorem witness from the MPDO tensor, use the
-trace identity to construct the retained-sector composites, and complete them
-on the discarded physical complements.  The one-site transfer-retract criterion
+The predicate
+\leanid{MPOTensor.HasBlockedAdjointFixedPointAlgebraTower} contains neither
+the BNT-label coefficients nor the positive
+$\chi_{\alpha,\beta,\gamma}$-family or the length-one idempotent trace
+identity. It proves
+(\ref{eq:cpgsv17_blocked_chi_uniformity_fixed_point_tower}), not the BNT
+comparison
+(\ref{eq:cpgsv17_blocked_chi_uniformity_source_bnt_comparison}). A
+source-faithful construction must first obtain the BNT-label theorem witness,
+then use
+(\ref{eq:cpgsv17_blocked_chi_uniformity_two_site_trace_normalization}) to
+construct the retained-sector composites, and finally complete them on the
+discarded physical complements. The criterion
 \leanid{MPOTensor.transferRetractData_one_iff_isZCL} concerns the separate
-transfer-map idempotence predicate and cannot supply these physical maps.
+transfer-map idempotence predicate and cannot construct these physical maps.
 
-The scalar normalization step is now isolated independently of the still
-missing unconditional channel construction.  The structure
+The scalar normalization is isolated from the still-missing unconditional
+channel construction. The structure
 \leanid{MPOTensor.BNTMultiplicitySpectrumComparison} records the one-site
 traces and the sectorwise multiset equality obtained from the vertical BNT
-comparison at lines~2048--2058.  Given this comparison, the BNT algebra
-clause proves
-\[
-    \tr(\nu_\gamma)=m_\gamma
-\]
+comparison at lines~2048--2058 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Given this comparison, the BNT algebra clause
+proves
+\begin{align}
+    \tr(\nu_\gamma)
+        &= m_\gamma
+\label{eq:cpgsv17_blocked_chi_uniformity_formal_trace_normalization}
+\end{align}
 through
-\leanid{MPOTensor.BNTAlgebraClause.%
-twoMultiplicityTrace_eq_traceScalar}.  Thus the idempotent law now discharges
-the precise scalar obligation at lines~2058--2064; it does not construct the
-comparison from the MPDO tensor and does not yet define the maps $T$ and $S$.
+\leanid{MPOTensor.BNTAlgebraClause.twoMultiplicityTrace_eq_traceScalar}.
+The idempotent law therefore discharges the scalar obligation at
+lines~2058--2064. It neither constructs the comparison from the MPDO tensor
+nor defines the maps $T$ and $S$.
 
-The power-sum part of the preceding comparison is also isolated.  The
-constructor
-\leanid{MPOTensor.BNTMultiplicitySpectrumComparison.%
-ofEventuallyEqualPowerSums} proves that positivity and eventual sectorwise
-equality of the power sums imply the required multiset equality.  It combines
-the geometric-sequence extrapolation already used in the BNT Fundamental
-Theorem with the unequal-cardinality power-sum identity, and therefore proves
-the power-sum step used at lines~2053--2058.
+The constructor
+\leanid{MPOTensor.BNTMultiplicitySpectrumComparison.ofEventuallyEqualPowerSums}
+isolates the power-sum step. It proves that positivity and eventual sectorwise
+equality of power sums imply the required multiset equality. The proof
+combines the geometric-sequence extrapolation used in the BNT Fundamental
+Theorem with the unequal-cardinality power-sum identity and formalizes the
+argument at lines~2053--2058 of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-The tensor-level BNT comparison at lines~2048--2058 is now supplied by the
-literal two-site spectrum comparison and exact sector-gauge construction
-documented in
-\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}.  The predicate
-\leanid{MPOTensor.BNTAlgebraTensorClause} now chooses the one-site vertical
-canonical decomposition and identifies the operators and trace scalars in the
-abstract BNT algebra clause with
-$O_L(M_\alpha)$ and $m_\alpha=\sum_q\omega_{\alpha,q}$, respectively.  It does
-not itself contain a second vertical canonical decomposition.  Instead, the
-mixed-prefix argument constructs the required relabelling and simultaneous
-unitary identifications from the tensor-attached clause.  The resulting
-positive multiset equality supplies the spectrum comparison without an
-additional mathematical hypothesis; the completion is used by
-\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}.
+The tensor-level comparison is supplied by the literal two-site spectrum
+comparison and exact sector-gauge construction documented in
+\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}. The predicate
+\leanid{MPOTensor.BNTAlgebraTensorClause} chooses the one-site vertical
+canonical decomposition and identifies the abstract operators and trace
+scalars with
+\begin{align}
+    O_L(M_\alpha)
+        &\quad\text{and}\quad
+    m_\alpha=\sum_q\omega_{\alpha,q},
+\label{eq:cpgsv17_blocked_chi_uniformity_tensor_clause_identification}
+\end{align}
+respectively. It does not include a second vertical canonical decomposition.
+Instead, the mixed-prefix argument constructs the relabelling and simultaneous
+unitary identifications from the tensor-attached clause. The resulting
+positive multiset equality supplies the spectrum comparison without an extra
+mathematical hypothesis. The declaration
+\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS} uses this result.
 
 \section{BNT-label coefficient objects}
 
-The same-length coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, indexed
-by fixed BNT labels, is represented separately from the blocked-basis
-coefficients.\footnote{\leanid{MPOTensor.BNTLabelCoefficientFamily}.}  When the
-Appendix C.4 construction has already produced a diagonal
-$\chi_{\alpha,\beta,\gamma}$-family, there is also a canonical coefficient
-family
-\[
+A separate object represents the same-length coefficient family
+$c^{(L)}_{\alpha,\beta,\gamma}$ with fixed BNT labels.\footnote{Formal
+declaration: \leanid{MPOTensor.BNTLabelCoefficientFamily}.} If Appendix~C.4
+of Ref.~\cite{Cirac2016MPDO_arXiv} has produced a diagonal chi family, the
+canonical coefficients are
+\begin{align}
     c^{(L)}_{\alpha,\beta,\gamma}
-      = \sum_r \chi_{\alpha,\beta,\gamma,r}^{\,L}.
-\]
-This is recorded separately so that the $\chi$-family can serve as the single
-source of those coefficients in the source-side special case.\footnote{%
+        &= \sum_r\chi_{\alpha,\beta,\gamma,r}^{\,L}.
+\label{eq:cpgsv17_blocked_chi_uniformity_canonical_chi_coefficients}
+\end{align}
+This construction keeps the chi family as the single source of the
+coefficients.\footnote{Formal declarations:
 \leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi},
 \leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff},
-\leanid{MPOTensor.BNTLabelCoefficientFamily.%
-ofChi_coeff_eq_trace_matrix_pow},
-\leanid{MPOTensor.BNTLabelCoefficientFamily.%
-ofChi_hasPositiveLengthChiTracePowerForm}.}  A
-same-length BNT product predicate records the algebra identity
-\[
-    O_L(M_\alpha)O_L(M_\beta)
-      = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma)
-\]
-for an abstract family of length-$L$ BNT operators.\footnote{%
-\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}.}  The
-idempotent condition
-\[
-    m_\gamma =
-      \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
-\]
-is also represented as a predicate on the trace scalars
-$m_\alpha=\tr(\mu_\alpha)$.\footnote{%
-\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}.}  A
-positive BNT-label $\chi$-witness consists of a length-independent diagonal
-family $\chi_{\alpha,\beta,\gamma}$, positivity of every diagonal entry, and
-the positive-length trace-power identity.\footnote{%
-\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm}.}
-If the coefficients are chosen canonically from the same $\chi$-family, then
-positivity of the diagonal entries alone gives such a witness.\footnote{%
-\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}.}
-A blocked-basis comparison predicate records that the chosen blocked
-multiplication coefficients are the pullback of the source-length BNT-label
-coefficients along a source label map from $\mathcal A_n$ and a target label
-map from $\mathcal A_{2n}$.  The label-assignment datum is separated from
-the coefficient equality, so the Appendix C.3 construction target can be stated
-without also assuming the comparison formula.\footnote{%
-\leanid{MPOTensor.BNTBlockedBasisLabelAssignment},
-\leanid{MPOTensor.BNTBlockedBasisLabelAssignment.blockedLabel},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison}.}  This predicate
-inherits the second scope restriction above: its left hand side is expanded in
-a basis of $\mathcal A_{2n}$, while the source theorem's BNT product law is
-same-length.  It therefore records the formal blocked-basis comparison
-predicate and is not itself the same-length product statement of
-Theorem~4.14(ii).  The generic declarations in this section do not construct
-the tensor-attached objects by themselves.  That construction is now supplied
-by \leanid{MPOTensor.BNTAlgebraTensorClause} and the reflected-target argument
-in \path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseReflectedTarget.lean}.
-Once both the same-length BNT product form and a positive BNT-label
-$\chi$-witness are available, the same-length product expansion with
-coefficients written as $\tr(\chi_{\alpha,\beta,\gamma}^L)$
-is formalized as a direct corollary.\footnote{%
-\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
-eq_sum_chi_trace_pow},
-\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
-eq_sum_ofChi_trace_pow}.}
-Once both the comparison predicate and a positive BNT-label $\chi$-witness are
-available, the coefficient-level blocked trace-power formula is formalized as a
-direct corollary.\footnote{%
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-blocked_coeff_eq_ofChi_trace_pow},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-blocked_coeff_eq_pulledBlockedChi_trace_pow}.}
-The same hypotheses also give a positive blocked-basis $\chi$-witness by
-pulling back the uniform BNT-label $\chi$-family along the
-comparison maps.\footnote{%
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-pulledBlockedChiFamily_toDiagonal_of_pos},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-pulledBlockedChi_tracePowerCoeff_of_pos},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-pulledBlockedChi_dim_of_pos},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-pulledBlockedChi_trace_matrix_pow_of_pos},
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
-toPositiveBlockedStructureChiTracePowerForm}.}
-Likewise, once the idempotent coefficient condition and the positive
-BNT-label $\chi$-witness are available, the length-one idempotent identity is
-formalized with the coefficients rewritten as traces of the corresponding
-$\chi$-matrices.\footnote{%
-\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.%
-eq_sum_chi_trace},
-\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.%
-eq_sum_ofChi_trace}.}
+\leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow},
+and
+\leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}.}
 
-The BNT-label objects above are now also gathered into one theorem-data record:
-fixed coefficients, same-length operators and product law, trace scalars and
-idempotent condition, positive BNT-label $\chi$-witness, and blocked-basis
-comparison.\footnote{\leanid{MPOTensor.BNTLabelTheoremData}.}  This record is
-not an additional mathematical assumption in the source theorem; it is the
-single formal object collecting the source data supplied by the Appendix
-C.3--C.4 construction from an MPDO tensor.  There is also a construction for the
-source-side special case in which the coefficient family is the one canonically
-determined by the same $\chi$-family; it takes the product law, idempotent
-law, and blocked-basis comparison for those canonical coefficients.\footnote{%
-\leanid{MPOTensor.BNTLabelTheoremData.ofChi}.}  From such
-data, the source
-predicates themselves and the corresponding equation-level consequences are
-available: the same-length product law, the idempotent scalar law, the BNT-label
-$\chi$-positivity and trace-power predicates, the coefficient trace-power
-formula, positivity of the diagonal $\chi$-entries, the same-length chi-trace
-product law, the chi-trace idempotent law, the blocked-basis coefficient
-trace-power formula, the blocked-basis coefficient comparison, the positive
-blocked $\chi$-witness, the pulled-back blocked trace-power predicate, and the
-pulled-back blocked-basis $\chi$-family with positive entries and trace-power
-formula are immediate consequences.\footnote{%
+A same-length BNT product predicate records
+\begin{align}
+    O_L(M_\alpha)O_L(M_\beta)
+        &= \sum_\gamma
+            c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma).
+\label{eq:cpgsv17_blocked_chi_uniformity_formal_same_length_product}
+\end{align}
+\footnote{Formal declaration:
+\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}.}
+A predicate on the trace scalars $m_\alpha=\tr(\mu_\alpha)$ records
+\begin{align}
+    m_\gamma
+        &= \sum_{\alpha,\beta}
+            c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta.
+\label{eq:cpgsv17_blocked_chi_uniformity_formal_idempotent_condition}
+\end{align}
+\footnote{Formal declaration:
+\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}.}
+A positive BNT-label chi witness consists of a length-independent diagonal
+family $\chi_{\alpha,\beta,\gamma}$, positivity of every diagonal entry, and
+the positive-length trace-power identity.\footnote{Formal declaration:
+\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm}.} If the coefficients
+are canonically determined by the same chi family, positivity alone produces
+this witness.\footnote{Formal declaration:
+\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}.}
+
+A blocked-basis comparison predicate states that the chosen blocked
+multiplication coefficients are pullbacks of the source-length BNT-label
+coefficients. It uses a source label map from the basis of $\mathcal A_n$ and
+a target label map from the basis of $\mathcal A_{2n}$. The label assignment
+is separate from the coefficient equality, so the Appendix~C.3 construction
+target can be stated without assuming that equality.\footnote{Formal
+declarations:
+\leanid{MPOTensor.BNTBlockedBasisLabelAssignment},
+\leanid{MPOTensor.BNTBlockedBasisLabelAssignment.blockedLabel}, and
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison}.}
+This comparison retains the blocked-basis scope restriction: its left-hand
+side is expanded in a basis of $\mathcal A_{2n}$, while the source theorem
+uses the same-length product
+(\ref{eq:cpgsv17_blocked_chi_uniformity_source_same_length_product}). It is
+therefore not itself Theorem~4.14(ii) of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+The generic declarations do not construct tensor-attached data. That
+construction is supplied by
+\leanid{MPOTensor.BNTAlgebraTensorClause} and the reflected-target argument
+in
+\path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseReflectedTarget.lean}. Given the
+same-length product form and a positive BNT-label chi witness, one obtains
+\begin{align}
+    O_L(M_\alpha)O_L(M_\beta)
+        &= \sum_\gamma
+            \tr\!\left(\chi_{\alpha,\beta,\gamma}^{L}\right)
+            O_L(M_\gamma).
+\label{eq:cpgsv17_blocked_chi_uniformity_same_length_chi_product}
+\end{align}
+\footnote{Formal declarations:
+\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_chi_trace_pow}
+and
+\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_ofChi_trace_pow}.}
+
+The comparison predicate and a positive BNT-label chi witness similarly imply
+the blocked coefficient trace-power formula.\footnote{Formal declarations:
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_ofChi_trace_pow},
+and
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_pulledBlockedChi_trace_pow}.}
+Pulling the uniform BNT-label chi family back along the comparison maps gives a
+positive blocked-basis chi witness.\footnote{Formal declarations:
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChiFamily_toDiagonal_of_pos},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_tracePowerCoeff_of_pos},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_dim_of_pos},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_trace_matrix_pow_of_pos},
+and
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.toPositiveBlockedStructureChiTracePowerForm}.}
+The idempotent condition and the positive chi witness also rewrite the
+length-one identity using chi traces.\footnote{Formal declarations:
+\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_chi_trace}
+and
+\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_ofChi_trace}.}
+
+The record \leanid{MPOTensor.BNTLabelTheoremData} gathers the fixed
+coefficients, same-length operators and product law, trace scalars and
+idempotent law, positive BNT-label chi witness, and blocked-basis comparison.
+It is not an additional source hypothesis. It packages the data supplied by
+the Appendix~C.3--C.4 construction of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The canonical constructor
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi} covers the special case in which
+the chi family determines the coefficients, while retaining the product law,
+idempotent law, and blocked-basis comparison as inputs.
+
+The record exposes the source predicates and their equation-level
+consequences: the same-length product law, the idempotent scalar law, chi
+positivity and trace-power predicates, coefficient trace powers, the
+same-length chi-trace product law, the chi-trace idempotent law, blocked-basis
+comparison and trace powers, and the positive pulled-back blocked chi
+family.\footnote{Formal declarations:
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_form},
 \leanid{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form},
 \leanid{MPOTensor.BNTLabelTheoremData.positive_chi_pos_entries},
@@ -500,22 +619,22 @@ formula are immediate consequences.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_toDiagonal_of_pos},
-\leanid{MPOTensor.BNTLabelTheoremData.%
-positiveBlockedChi_tracePowerCoeff_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePowerCoeff_of_pos},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_dim_of_pos},
-\leanid{MPOTensor.BNTLabelTheoremData.%
-positiveBlockedChi_trace_matrix_pow_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_trace_matrix_pow_of_pos},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePower},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_posEntries},
-\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_entry_pos},
-\leanid{MPOTensor.BNTLabelTheoremData.%
-blocked_coeff_eq_positiveBlockedChi_trace_pow}.}
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_entry_pos}, and
+\leanid{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_positiveBlockedChi_trace_pow}.}
 
-The same data can be stated in the existential form closest to the paper: one
-object records the BNT-label type, the same-length operator spaces, their
-algebraic structure, and the corresponding theorem data.\footnote{%
-\leanid{MPOTensor.BNTLabelTheoremWitness},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness},
+The existential form closest to the source is
+\leanid{MPOTensor.BNTLabelTheoremWitness}. It records the BNT-label type,
+same-length operator spaces, algebraic structure, and theorem data. The
+predicate \leanid{MPOTensor.HasBNTLabelTheoremWitness} asserts that such a
+witness exists. It can be unpacked into fixed coefficients, operators, trace
+scalars, a positive chi family, blocked comparison maps, the source product
+and idempotent laws, their chi-trace forms, and the pulled-back blocked chi
+family.\footnote{Formal declarations:
 \leanid{MPOTensor.BNTLabelTheoremWitness.toTheoremData},
 \leanid{MPOTensor.BNTLabelTheoremWitness.coeffs},
 \leanid{MPOTensor.BNTLabelTheoremWitness.operators},
@@ -528,26 +647,17 @@ algebraic structure, and the corresponding theorem data.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power},
 \leanid{MPOTensor.BNTLabelTheoremWitness.labelAssignment},
 \leanid{MPOTensor.BNTLabelTheoremWitness.sourceLabel},
-\leanid{MPOTensor.BNTLabelTheoremWitness.targetLabel},
-\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}.}  The existential
-nonempty statement can be unpacked directly into a concrete witness carrying
-the source predicates, the corresponding same-length and idempotent equations
-written with $c^{(L)}_{\alpha,\beta,\gamma}$, and the same two equations with
-coefficients written as $\chi$-traces; the blocked-basis $\chi$-family is also
-identified as the pullback of the BNT-label $\chi$-family along the comparison
-maps.
-The existential
-statement has the analogous canonical construction from a positive
-$\chi$-family, again leaving the product, idempotent, and blocked-comparison
-statements as inputs rather than reconstructing them from an MPDO tensor.\footnote{%
-\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi}.}  Such a witness
-immediately gives the source predicates and their consequences: the coefficient
-trace-power formula, the same-length product law, the idempotent scalar law,
-positivity of the diagonal $\chi$-entries, the blocked-basis coefficient
-comparison, the same-length chi-trace product law, the chi-trace idempotent law,
-the blocked-basis coefficient trace-power formula, the positive blocked-basis
-$\chi$-witness, and the pulled-back blocked trace-power predicate and
-$\chi$-family for the chosen algebra-structure data.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness.targetLabel}, and
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}.}
+
+The constructor
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi} gives the analogous
+existential object from a positive chi family. It still takes the product,
+idempotent, and blocked-comparison statements as inputs; it does not derive
+them from an arbitrary MPDO tensor. The witness then yields the coefficient
+trace-power formula, product and idempotent laws, positivity, blocked
+comparison, chi-trace rewrites, and positive pulled-back blocked
+data.\footnote{Formal declarations:
 \leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_form},
 \leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries},
@@ -569,358 +679,374 @@ $\chi$-family for the chosen algebra-structure data.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_chi_trace},
 \leanid{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_trace_pow},
-\leanid{MPOTensor.BNTLabelTheoremWitness.%
-toPositiveBlockedStructureChiTracePowerForm},
-\leanid{MPOTensor.BNTLabelTheoremWitness.%
-positiveBlockedChi_toDiagonal_of_pos},
-\leanid{MPOTensor.BNTLabelTheoremWitness.%
-positiveBlockedChi_tracePowerCoeff_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremWitness.toPositiveBlockedStructureChiTracePowerForm},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_toDiagonal_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePowerCoeff_of_pos},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_dim_of_pos},
-\leanid{MPOTensor.BNTLabelTheoremWitness.%
-positiveBlockedChi_trace_matrix_pow_of_pos},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-positive_blocked_chi_witness},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_blocked_chi_trace_power_form},
-\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
-exists_blocked_coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_trace_matrix_pow_of_pos},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.positive_blocked_chi_witness},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_trace_power_form},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePower},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_posEntries},
-\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_entry_pos},
-\leanid{MPOTensor.BNTLabelTheoremWitness.%
-blocked_coeff_eq_positiveBlockedChi_trace_pow}.}
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_entry_pos}, and
+\leanid{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_positiveBlockedChi_trace_pow}.}
 
-The witness must not be constructed from an arbitrary MPDO tensor or from the
-present support-algebra predicate.  Such a construction would imply the false
-converse exhibited above.  In Theorem~4.14(ii), the BNT-label coefficients,
-their positive trace-power representation, and the length-one idempotent
-identity are the hypothesis of the converse, not consequences of the mere
-existence of stabilized adjoint fixed-point algebras.
+Neither an arbitrary MPDO tensor nor the support-algebra predicate alone can
+produce this witness. Such a construction would imply the false converse
+demonstrated by the phase-flip channel. In Theorem~4.14(ii) of
+Ref.~\cite{Cirac2016MPDO_arXiv}, the BNT-label coefficients, their positive
+trace-power representation, and the length-one idempotent law are hypotheses
+of the converse rather than consequences of stabilized adjoint fixed-point
+algebras.
 
 \section{Length-independent zipper specialization}
 
-For a fusion-isometry family already satisfying Theorem~4.14(iii), suppose
-that its positive trace-power coefficients are independent of the positive
-chain length.  The observation at line~1010 then gives
-\[
+Consider a fusion-isometry family satisfying Theorem~4.14(iii) of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Assume that its positive trace-power
+coefficients are independent of the positive chain length. The observation at
+line~1010 of that source gives
+\begin{align}
     \chi_{\alpha,\beta,\gamma}
-      = 1_{r_{\alpha,\beta,\gamma}}.
-\]
-Substitution in the weighted fusion identity gives both zipper equations and
-the completeness equation
-\[
+        &= 1_{r_{\alpha,\beta,\gamma}}.
+\label{eq:cpgsv17_blocked_chi_uniformity_length_independent_chi}
+\end{align}
+Substitution into the weighted fusion identity yields both zipper equations
+and the completeness identity
+\begin{align}
     (M_\alpha M_\beta)^{ij}
-      = U_{\alpha,\beta}^\dagger
-          \left(\bigoplus_\gamma
+        &=
+        U_{\alpha,\beta}^\dagger
+        \left(\bigoplus_\gamma
             1_{r_{\alpha,\beta,\gamma}}\otimes M_\gamma^{ij}\right)
         U_{\alpha,\beta}.
-\]
-These statements are formalized by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-fusionIsometry_mul_mulTensor_of_lengthIndependent},
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent}, and
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul_of_lengthIndependent}.
-They are the identity-weight specialization of the equations labelled
+\label{eq:cpgsv17_blocked_chi_uniformity_unweighted_fusion_identity}
+\end{align}
+These conclusions are formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.fusionIsometry_mul_mulTensor_of_lengthIndependent},
+\leanid{MPOTensor.BNTFusionIsometryFamily.mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent},
+and
+\leanid{MPOTensor.BNTFusionIsometryFamily.mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul_of_lengthIndependent}.
+They are the identity-weight specialization of
 \texttt{zippercondition2} and \texttt{inversegaugeone} in the ``Fusion
 tensors'' section of the arXiv:1511.08090 source file
 \texttt{AnyonsPEPS.tex}.
 
-This result has an explicit scope restriction: it assumes the special
-length-independent coefficient system discussed at lines~995--1010, rather
-than proving that every renormalization fixed point has such coefficients.
-For this specialization, the canonical bond reassociation and the two
-iterated fusion isometries now define the comparison of the full left- and
-right-associated direct sums.  The formalized letterwise identity states
-that this comparison intertwines the two unweighted direct sums.  The matrix
-is oriented from the right-associated sum to the left-associated sum, hence
-oppositely to the printed $F$-matrix convention in equation
-\texttt{Fmove}; it is not identified with that $F$-matrix.
+This statement is scope restricted: it assumes the length-independent
+coefficient system discussed at lines~995--1010 of
+Ref.~\cite{Cirac2016MPDO_arXiv}; it does not prove that every renormalization
+fixed point has such coefficients. In this specialization, canonical bond
+reassociation and the two iterated fusion isometries compare the complete
+left- and right-associated direct sums. The formal letterwise identity says
+that this comparison intertwines the two unweighted direct sums. The
+comparison matrix is oriented from the right-associated sum to the
+left-associated sum, opposite to the printed $F$-matrix convention in
+\texttt{Fmove}; it is not identified with that printed matrix.
 
-The two products of the full comparison with its adjoint are now identified
-exactly:
-\[
-    CC^\dagger=U^{\mathrm L}(U^{\mathrm L})^\dagger,
-    \qquad
-    C^\dagger C=U^{\mathrm R}(U^{\mathrm R})^\dagger.
-\]
-These are the range projections of the two iterated fusion isometries.  They
-are formalized by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-tripleFusionComparison_mul_conjTranspose} and
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-conjTranspose_mul_tripleFusionComparison}.  The present fusion assumptions
-give $(U^{\mathrm L})^\dagger U^{\mathrm L}=1$ and
-$(U^{\mathrm R})^\dagger U^{\mathrm R}=1$.  Without further information these
-identities make the full comparison only a partial isometry between the two
-ranges.  The invertible total fusion matrix of arXiv:1511.08090,
-lines~187--191, supplies the corresponding completeness in the source
+Let $C$ be the full comparison, and let $U^{\mathrm L}$ and
+$U^{\mathrm R}$ be the left- and right-associated iterated fusion
+isometries. Then
+\begin{align}
+    CC^\dagger
+        &= U^{\mathrm L}(U^{\mathrm L})^\dagger,
+\label{eq:cpgsv17_blocked_chi_uniformity_left_range_projection}\\
+    C^\dagger C
+        &= U^{\mathrm R}(U^{\mathrm R})^\dagger.
+\label{eq:cpgsv17_blocked_chi_uniformity_right_range_projection}
+\end{align}
+These identities are formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison_mul_conjTranspose}
+and
+\leanid{MPOTensor.BNTFusionIsometryFamily.conjTranspose_mul_tripleFusionComparison}.
+The fusion assumptions give
+\begin{align}
+    (U^{\mathrm L})^\dagger U^{\mathrm L}
+        &= 1,
+\label{eq:cpgsv17_blocked_chi_uniformity_left_isometry}\\
+    (U^{\mathrm R})^\dagger U^{\mathrm R}
+        &= 1.
+\label{eq:cpgsv17_blocked_chi_uniformity_right_isometry}
+\end{align}
+Without further information, $C$ is only a partial isometry between the two
+ranges. The invertible total fusion matrix at lines~187--191 of the
+arXiv:1511.08090 source supplies the corresponding completeness in the source
 argument.
 
-The simultaneous inverse relation at line~269 of the arXiv:1511.08090 source,
-\[
-    B_d^+ B_{d'}=\delta_{d,d'}1,
-\]
-separates all final-label blocks at once.  Its exact finite-word consequence is
-now an explicit hypothesis in
-\leanid{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}.  Under
-this hypothesis at a positive word length, the selector polynomial also
-supplies the missing completeness.  Every nonempty word in the unweighted
-direct sum lies in the range of the corresponding fusion isometry.  Summing
-the selector polynomials over the final label gives the identity on that
-direct sum.  Consequently
-\[
-    U^{\mathrm L}(U^{\mathrm L})^\dagger=1,
-    \qquad
-    U^{\mathrm R}(U^{\mathrm R})^\dagger=1,
-    \qquad
-    CC^\dagger=C^\dagger C=1.
-\]
+The simultaneous inverse relation at line~269 of that source is
+\begin{align}
+    B_d^+B_{d'}
+        &= \delta_{d,d'}1.
+\label{eq:cpgsv17_blocked_chi_uniformity_simultaneous_inverse_relation}
+\end{align}
+It separates all final-label blocks at once. The predicate
+\leanid{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}
+records its exact finite-word consequence as a hypothesis. At a positive word
+length, the selector polynomial supplies the missing completeness: every
+nonempty word in the unweighted direct sum lies in the range of the
+corresponding fusion isometry, and summing the selector polynomials over the
+final label gives the identity. Consequently,
+\begin{align}
+    U^{\mathrm L}(U^{\mathrm L})^\dagger
+        &= 1,
+\label{eq:cpgsv17_blocked_chi_uniformity_left_coisometry}\\
+    U^{\mathrm R}(U^{\mathrm R})^\dagger
+        &= 1,
+\label{eq:cpgsv17_blocked_chi_uniformity_right_coisometry}\\
+    CC^\dagger
+        &= 1,
+\label{eq:cpgsv17_blocked_chi_uniformity_comparison_left_unitarity}\\
+    C^\dagger C
+        &= 1.
+\label{eq:cpgsv17_blocked_chi_uniformity_comparison_right_unitarity}
+\end{align}
 These statements are formalized by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
+\leanid{MPOTensor.BNTFusionIsometryFamily.fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
+\leanid{MPOTensor.BNTFusionIsometryFamily.leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
+\leanid{MPOTensor.BNTFusionIsometryFamily.rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
+\leanid{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords},
 and
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords}.
-The positive-length restriction is necessary because the telescoping identity
+\leanid{MPOTensor.BNTFusionIsometryFamily.conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords}.
+The positive-length restriction is necessary because the telescoping argument
 uses at least one conjugated letter.
 
 Under the same selector hypothesis,
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-tripleFusionComparison_finalSector_submatrix_eq_zero} proves that the full
-comparison has zero corner between two distinct final labels.  The proof takes
-one rectangular bond-space corner of the letterwise intertwining identity,
-extends it to words, and applies the selector polynomial.
+\leanid{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison_finalSector_submatrix_eq_zero}
+proves that the comparison has a zero corner between distinct final labels.
+The proof takes a rectangular bond-space corner of the letterwise
+intertwining identity, extends it to words, and applies the selector
+polynomial.
 
-Under the additional assumption that the selected final tensor is injective
-at the present blocking,
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation}
-combines this separation with the amplified-commutant argument.  For every
+Assume additionally that the selected final tensor is injective at the
+current blocking. Then
+\leanid{MPOTensor.BNTFusionIsometryFamily.exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation}
+combines sector separation with the amplified-commutant argument. For every
 selected final label $\varepsilon$, it produces a rectangular multiplicity
-matrix $F_\varepsilon$ for which the reindexed diagonal corner is
-\[
+matrix $F_\varepsilon$ such that
+\begin{align}
     C^{\varepsilon,\varepsilon}_{\alpha,\beta,\gamma}
-      =F_\varepsilon\otimes 1_{D_\varepsilon},
-\]
-and retains the vanishing of
-$C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}$ when
-$\varepsilon'\ne\varepsilon$.  This is the bond-factor conclusion appearing
-at line~277 of the arXiv:1511.08090 source, but the comparison used here is
-oriented oppositely to the printed convention.
+        &= F_\varepsilon\otimes 1_{D_\varepsilon},
+\label{eq:cpgsv17_blocked_chi_uniformity_final_sector_factorization}\\
+    C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}
+        &= 0,
+&
+    \varepsilon'&\ne\varepsilon.
+\label{eq:cpgsv17_blocked_chi_uniformity_offdiagonal_final_sector}
+\end{align}
+This is the bond-factor conclusion at line~277 of the arXiv:1511.08090
+source, with the opposite comparison orientation.
 
-This remains a scope-restricted result when only the abstract
-fusion-isometry family is supplied.  Once its labelled tensors are linked to
-the source BNT witness, however, the simultaneous final-label selectors are
-derived rather than assumed, as described below.  One-letter injectivity at a
-chosen present blocking remains separate.  The factorization theorem alone
-permits a rectangular matrix $F_\varepsilon$.
+For an abstract fusion-isometry family, this remains a scope restriction. If
+the labelled tensors are linked to the source BNT witness, simultaneous
+final-label selectors are derived rather than assumed. One-letter injectivity
+at the chosen blocking remains separate, and the factorization theorem alone
+permits $F_\varepsilon$ to be rectangular.
 
-There is now a separate numerical squareness result.  Under length
-independence and eventual linear independence,
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent}
-specializes the coefficient associativity relation to
-\[
-  \sum_\delta r_{\alpha,\beta}^{\delta}
-      r_{\delta,\gamma}^{\varepsilon}
-    = \sum_\delta r_{\beta,\gamma}^{\delta}
-      r_{\alpha,\delta}^{\varepsilon}.
-\]
-This is exactly the equality of fixed-final multiplicity dimensions at
-lines~238--241 of the arXiv:1511.08090 source.  It proves that the matrix
-$F_\varepsilon$ has square shape when both the factorization theorem and the
-additional eventual-independence hypothesis apply.  It does not prove that
-$F_\varepsilon$ is invertible by itself.
+Length independence and eventual linear independence also imply the
+associativity identity
+\begin{align}
+    \sum_\delta
+        r_{\alpha,\beta}^{\delta}
+        r_{\delta,\gamma}^{\varepsilon}
+        &=
+        \sum_\delta
+        r_{\beta,\gamma}^{\delta}
+        r_{\alpha,\delta}^{\varepsilon}.
+\label{eq:cpgsv17_blocked_chi_uniformity_multiplicity_associativity}
+\end{align}
+This is formalized by
+\leanid{MPOTensor.BNTFusionIsometryFamily.card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent}.
+It is the equality of fixed-final multiplicity dimensions at lines~238--241
+of the arXiv:1511.08090 source. It proves that $F_\varepsilon$ is square when
+the factorization and eventual-independence hypotheses both hold, but it does
+not by itself prove invertibility.
 
-Under the positive-length selector hypothesis above, the range-completeness
-obstruction from lines~181--191 has now been removed.  The two-sided unitarity
-of the full comparison, together with the vanishing of its off-diagonal
-final-label corners, implies mathematically that every fixed-final bond-space
-corner is two-sided unitary.  The two identities are now formalized by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-tripleFusionComparison_finalSector_mul_conjTranspose_eq_one} and
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-conjTranspose_mul_tripleFusionComparison_finalSector_eq_one}.
+The selector hypothesis removes the range-completeness obstruction from
+lines~181--191 of that source. The two-sided unitarity of $C$, together with
+the vanishing off-diagonal final-label corners, gives two-sided unitarity on
+each fixed-final bond-space corner. The corresponding formal statements are
+\leanid{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison_finalSector_mul_conjTranspose_eq_one}
+and
+\leanid{MPOTensor.BNTFusionIsometryFamily.conjTranspose_mul_tripleFusionComparison_finalSector_eq_one}.
 
 Combining these corner identities with
-$C^{\varepsilon,\varepsilon}=F_\varepsilon\otimes 1_{D_\varepsilon}$ gives
-the two unitary identities for $F_\varepsilon$ by cancelling the identity
-factor.  This is formalized by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary}
-under the explicit assumption $0<D_\varepsilon$.  The dimensional
-qualification is necessary because injectivity is vacuous when
-$D_\varepsilon=0$.  Thus the fixed-final invertibility obstruction has been
-removed under the simultaneous-selector, present-blocking injectivity, and
+(\ref{eq:cpgsv17_blocked_chi_uniformity_final_sector_factorization}) gives
+the two unitary identities for $F_\varepsilon$ after cancelling the identity
+factor. The declaration
+\leanid{MPOTensor.BNTFusionIsometryFamily.exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary}
+formalizes this conclusion under $D_\varepsilon>0$. This qualification is
+necessary because injectivity is vacuous when $D_\varepsilon=0$. The
+fixed-final invertibility obstruction is therefore removed under the
+simultaneous-selector, present-blocking injectivity, and
 positive-bond-dimension hypotheses.
 
-For an arbitrary coefficient-form BNT, the positive dimensions, a common
-positive blocking length, and the simultaneous one-letter span of the blocked
-representatives are now derived by
-\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.%
-exists_blocked_wordTupleSpanTop_one}.  In particular, that theorem supplies
-a span containing every tuple that is the identity on one labelled block and
-zero on the others.  One-letter injectivity and selector coefficients can
-therefore be extracted after the same common blocking, without adding either
-property to the definition of a BNT.
+For a general coefficient-form BNT,
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.exists_blocked_wordTupleSpanTop_one}
+derives positive bond dimensions, a common positive blocking length, and the
+simultaneous one-letter span of the blocked representatives. The span contains
+every tuple that is the identity on one labelled block and zero on all others.
+Hence one-letter injectivity and selector coefficients can be extracted after
+the same common blocking without adding either property to the BNT definition.
 
 The pre-blocking common word span is exposed by
-\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.%
-exists_positive_wordTupleSpanTop}.  Its selector coefficients bridge directly
-to the fusion-family formulation.  Consequently
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
+\leanid{MPSTensor.IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop}.
+Its selector coefficients connect directly to the fusion-family formulation.
+Consequently,
+\leanid{MPOTensor.BNTFusionIsometryFamily.fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
 proves
-\[
-    U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=I
-\]
-from the BNT witness and the length-independent fusion data, with no selector
-or coisometry hypothesis.  The selector length supplied by the BNT argument is
-positive; the empty-chain case is not used.  This coisometry proof is a short
-derived argument from the cited source ingredients, not a proof printed
-verbatim in either paper.
+\begin{align}
+    U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
+        &= I
+\label{eq:cpgsv17_blocked_chi_uniformity_bnt_derived_coisometry}
+\end{align}
+from the BNT witness and length-independent fusion data, without a selector
+or coisometry hypothesis. The BNT argument supplies a positive selector
+length, so the empty-chain case is unused. This is a short consequence of the
+source ingredients, not a proof printed verbatim in either source.
 
-For the positive-diagonal fusion family, under the explicit hypothesis that
-identifies the labelled doubled-index tensors with a BNT witness, transport
-through the same positive block length is now formalized by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-exists_positive_block_with_injective_fusion}.  The theorem derives the common
-one-letter span and injectivity of every blocked labelled tensor, and proves
-the blocked conjugation identity, both zipper orientations, and literal
-reconstruction.  Its multiplicity is exactly the dimension of the
-specialized chi space.  The blocking length remains positive.  The empty chain
-is neither needed nor used: although its conjugation formula would reduce to
-coisometry, the equality above is instead derived from positive-length BNT
-selectors.
+For the positive-diagonal fusion family, assume explicitly that the labelled
+doubled-index tensors are identified with a BNT witness. The declaration
+\leanid{MPOTensor.BNTFusionIsometryFamily.exists_positive_block_with_injective_fusion}
+transports the construction through the same positive block length. It
+derives the common one-letter span and injectivity of every blocked labelled
+tensor and proves the blocked conjugation identity, both zipper orientations,
+and literal reconstruction. Its multiplicity is the dimension of the
+specialized chi space. The blocking length is positive; the empty-chain
+conjugation formula is not used to prove coisometry, which instead follows
+from positive-length BNT selectors.
 
-The simultaneous block-letter inverse is extracted from the same one-letter
-product-algebra span by
-\leanid{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse}.  Reindexing
-the product bond space as a pair, the adjoint of $U_{\alpha,\beta}$ is the
-synthesis map and $U_{\alpha,\beta}$ is the analysis map.  These maps and all
-the derived blocked identities are assembled by
-\leanid{MPOTensor.BNTFusionIsometryFamily.%
-exists_blocked_completeZipperFusionFamily}.  Consequently the existing
-printed $F$-matrix and pentagon theorem apply to the length-independent source
-BNT fusion family without an additional injectivity, selector, inverse, or
-coisometry hypothesis.
+The declaration
+\leanid{MPSTensor.WordTupleSpanTop.exists_mpo_block_left_inverse} extracts the
+simultaneous block-letter inverse from the same one-letter product-algebra
+span. After reindexing the product bond space as a pair,
+$U_{\alpha,\beta}^\dagger$ is the synthesis map and $U_{\alpha,\beta}$ is the
+analysis map. These maps and the blocked identities are assembled by
+\leanid{MPOTensor.BNTFusionIsometryFamily.exists_blocked_completeZipperFusionFamily}.
+Thus the existing printed $F$-matrix and pentagon theorem apply to the
+length-independent source BNT fusion family without an additional
+injectivity, selector, inverse, or coisometry hypothesis.
 
-The labelled fusion-isometry family and its identification with the BNT of the
-vertical canonical form are now obtained from the RFP tensor by
-\leanid{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}.  This closes the
-corrected active-support form of the Appendix C.3--C.4 implication.  It is
-logically separate from the complete-zipper construction below.
+The RFP tensor supplies both the labelled fusion-isometry family and its
+identification with the BNT of the vertical canonical form through
+\leanid{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}. This closes the
+corrected active-support form of the Appendix~C.3--C.4 implication in
+Ref.~\cite{Cirac2016MPDO_arXiv}. It is logically independent of the complete
+zipper construction that follows.
 
-Independently of this positive-diagonal specialization, the source-faithful
-complete zipper fusion structure is now formalized by
-\leanid{MPOTensor.CompleteZipperFusionFamily}.  Its data are the integer
-fusion multiplicities, independently specified synthesis and analysis
-tensors, their biorthogonality, the product-letter reconstruction equation
-\texttt{inversegaugeone}, the two zipper equations, injectivity of the labelled
+The source-faithful complete zipper structure is formalized separately by
+\leanid{MPOTensor.CompleteZipperFusionFamily}. Its data consist of integer
+fusion multiplicities, independent synthesis and analysis tensors, their
+biorthogonality, the product-letter reconstruction identity
+\texttt{inversegaugeone}, both zipper equations, injectivity of the labelled
 blocks, and the simultaneous one-letter inverse from lines~269--277 of
-\texttt{AnyonsPEPS.tex}.  In particular, the product-MPO projector discussed at
-lines~181--191 is not identified with the identity on the ambient product bond
-space.  Applying \texttt{inversegaugeone} to the two associative decompositions
-at lines~238--247 reconstructs every triple-product letter through either
-fusion tree.  Contracting these equal reconstructions with the simultaneous
-inverse derives equality of the two triple-product support projectors.  These
-assumptions suffice to construct the
-printed-orientation matrix
-\leanid{MPOTensor.CompleteZipperFusionFamily.printedFMatrix}, whose rows are
-right-tree multiplicities and whose columns are left-tree multiplicities.
-The exact equation \texttt{Fmove} and both inverse identities are proved by
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-rightTripleSynthesis_mul_printedFMatrix},
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-printedFMatrix_mul_inversePrintedFMatrix}, and
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-inversePrintedFMatrix_mul_printedFMatrix}.  Thus no length-independent
-coefficient system, selector words, or additional present-blocking
-injectivity hypothesis is imposed on this source-labelled result.
+\texttt{AnyonsPEPS.tex}. The product-MPO projector at lines~181--191 is not
+identified with the identity on the ambient product bond space.
 
-This complete zipper fusion structure does not close the gap for the positive-diagonal family:
-constructing its complete zipper data from the assumptions of
-arXiv:1606.00608 remains open.  Within the complete zipper family itself, the
-two-sided printed $F$-move and the genuine fourfold, entrywise pentagon
-equation of \texttt{AnyonsPEPS.tex}, lines~279--283, are now formalized.
+Applying \texttt{inversegaugeone} to the two associative decompositions at
+lines~238--247 reconstructs each triple-product letter through either fusion
+tree. Contracting these equal reconstructions with the simultaneous inverse
+gives equality of the two triple-product support projectors. These assumptions
+construct
+\leanid{MPOTensor.CompleteZipperFusionFamily.printedFMatrix}, whose rows index
+right-tree multiplicities and whose columns index left-tree multiplicities.
+The exact \texttt{Fmove} identity and both inverse identities are formalized
+by
+\leanid{MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix},
+\leanid{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mul_inversePrintedFMatrix},
+and
+\leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_mul_printedFMatrix}.
+No length-independent coefficient system, selector words, or additional
+present-blocking injectivity hypothesis is imposed on this source-labelled
+result.
+
+The complete zipper structure does not close the remaining gap for the
+positive-diagonal family: constructing complete zipper data from the
+assumptions of Ref.~\cite{Cirac2016MPDO_arXiv} remains open. Within the
+complete zipper family, however, the two-sided printed $F$-move and the
+fourfold entrywise pentagon identity from lines~279--283 of
+\texttt{AnyonsPEPS.tex} are formalized.
 
 The five categorical fourfold multiplicity spaces, their fusion maps, and the
-five lifted printed-$F$ edges are now recorded by
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-FourfoldLeftAssocMultiplicity} through
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-twoEdgePrintedFMatrix}.  These spaces use the integer fusion multiplicities
-$N_{ab}^{c}$ of the complete zipper family.  They are not identified with the
-positive-diagonal weighted coordinates of the restricted family.  The five
-elementary $F$-moves identify the three-edge and two-edge composites with the
-same expansion in the right-associated fourfold fusion map.  Its explicit
-analysis map cancels that expansion, proving the forward equality
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix}.  The inverse edge matrices
-then give both
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix} and the
-literal indexed equation~(33),
-\leanid{MPOTensor.CompleteZipperFusionFamily.%
-inversePrintedFMatrix_pentagon}.
+five lifted printed-$F$ edges are represented by
+\leanid{MPOTensor.CompleteZipperFusionFamily.FourfoldLeftAssocMultiplicity}
+through
+\leanid{MPOTensor.CompleteZipperFusionFamily.twoEdgePrintedFMatrix}. They use
+the integer fusion multiplicities $N_{ab}^{c}$ of the complete zipper family
+and are not identified with the positive-diagonal weighted coordinates of the
+restricted family. The five elementary moves identify the three-edge and
+two-edge composites with the same expansion in the right-associated fourfold
+fusion map. Its analysis map cancels this expansion, proving
+\leanid{MPOTensor.CompleteZipperFusionFamily.threeEdgePrintedFMatrix_eq_twoEdgePrintedFMatrix}.
+The inverse edge matrices then give
+\leanid{MPOTensor.CompleteZipperFusionFamily.threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix}
+and the literal indexed equation~(33) of Ref.~\cite{Cirac2016MPDO_arXiv},
+\leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}.
 
 \paragraph{Local fixes in the fusion-tensor display.}
-The prose at line~161 of \texttt{AnyonsPEPS.tex} displays the arrow for
-$X^c_{ab,\mu}$ in the direction from the product bond space to the $c$ bond
-space.  The equations at lines~163--200 and the printed $F$-move at
-lines~248--251 require the reverse direction,
-$X^c_{ab,\mu}:\mathbb C^{D_c}\to
-\mathbb C^{D_a}\otimes\mathbb C^{D_b}$, with $X^{c+}_{ab,\mu}$ as its left
-inverse.  The formalization uses this equation-compatible orientation.
-The same display writes the Kronecker factor in
-$X^{d+}_{ab,\nu}X^c_{ab,\mu}$ as $\delta_{de}$, although no label $e$ occurs
-in the relation.  Its typed form is $\delta_{dc}$ (equivalently
-$\delta_{cd}$), which is the index relation used in the formalization.
+
+The prose at line~161 of \texttt{AnyonsPEPS.tex} points the arrow for
+$X^c_{ab,\mu}$ from the product bond space to the $c$ bond space. The
+identities at lines~163--200 and the printed $F$-move at lines~248--251
+require the reverse typing:
+\begin{align}
+    X^c_{ab,\mu}
+        &\colon \mathbb C^{D_c}
+        \longrightarrow
+        \mathbb C^{D_a}\otimes\mathbb C^{D_b}.
+\label{eq:cpgsv17_blocked_chi_uniformity_fusion_tensor_orientation}
+\end{align}
+With this orientation, $X^{c+}_{ab,\mu}$ is the left inverse. The same source
+display writes the Kronecker factor in
+$X^{d+}_{ab,\nu}X^c_{ab,\mu}$ as $\delta_{de}$, although $e$ does not occur
+elsewhere in the relation. The typed factor is
+\begin{align}
+    \delta_{dc}
+        &= \delta_{cd}.
+\label{eq:cpgsv17_blocked_chi_uniformity_correct_kronecker_delta}
+\end{align}
+The formalization uses these equation-compatible conventions.
 
 \paragraph{Local fix in the pentagon index orientation.}
-Equation \texttt{Fmove} at lines~248--251 places the right-tree indices above
-and the left-tree indices below:
-$(F^{abc}_{d})^{f\lambda\sigma}_{e\mu\nu}$.  In contrast, every factor in
-equation \texttt{pentagoneq} at lines~280--283 places the left-tree indices
-above and the right-tree indices below.  With the multiplicity types fixed by
-the fusion trees at line~279, the latter entries are entries of the inverse
-$F$-matrix.  The forward edge matrices in the formalization follow
-\texttt{Fmove}; equivalently, the literal upper/lower placement in
-\texttt{pentagoneq} is read using
-\leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix}.  Both the
-forward identity and this inverse, literally indexed form are stated by the
-two matrix equalities and the entrywise theorem above.
+
+The source identity \texttt{Fmove} at lines~248--251 places right-tree indices
+above and left-tree indices below:
+\begin{align}
+    \left(F^{abc}_{d}\right)^{f\lambda\sigma}_{e\mu\nu}.
+\label{eq:cpgsv17_blocked_chi_uniformity_printed_F_index_orientation}
+\end{align}
+Each factor in \texttt{pentagoneq} at lines~280--283 reverses this placement.
+With the multiplicity spaces fixed by the fusion trees at line~279, those
+entries belong to the inverse $F$-matrix. The forward edge matrices in the
+formalization follow \texttt{Fmove}; equivalently, the literal upper and lower
+indices in \texttt{pentagoneq} are interpreted through
+\leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix}. The
+formalization states both the forward matrix identity and the literally
+indexed inverse identity.
 
 \section{Completion status for Theorem 4.14}
 
-The tensor-attached BNT route described above is complete.  The mixed
-one-site/two-site prefix argument gives the unitary relabelling and positive
-multiset identity for the $\nu_{\gamma,k}$.  The retained-sector composites
-$T_0=\widetilde R_2\widetilde T R_1$ and
-$S_0=\widetilde R_1\widetilde S R_2$, together with the zero-sector
-measure-and-prepare completion, give the two trace-preserving completely
-positive maps of Definition~4.1.  This implication is
-\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}.
+The tensor-attached BNT route is complete. The mixed one-site/two-site prefix
+argument supplies the unitary relabelling and the positive multiset identity
+for $\nu_{\gamma,k}$. The retained-sector composites
+(\ref{eq:cpgsv17_blocked_chi_uniformity_retained_T_composite}) and
+(\ref{eq:cpgsv17_blocked_chi_uniformity_retained_S_composite}), together with
+the zero-sector measure-and-prepare completion, give the two trace-preserving
+completely positive maps required by Definition~4.1 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The declaration
+\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS} formalizes this
+implication.
 
-Under the literal CPSV canonical-form and MPDO hypotheses, the two directions
-are combined in
-\leanid{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}.  The corresponding
-equivalence
+Under the literal CPSV canonical-form and MPDO hypotheses, the declaration
+\leanid{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause} combines the two
+directions. The equivalence
 \leanid{MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause} uses the documented
-active-support correction of Theorem~4.14(iii), not its unrestricted printed
-form.  These results do not identify the positive-diagonal family with a
-complete zipper fusion family and do not supply the stronger categorical
-$F$-matrix data discussed above.  The one-site criterion for
-\leanid{MPOTensor.TransferRetractData} also remains separate: it is equivalent to doubled-index transfer-map idempotence rather
-than Definition~4.1.
+active-support correction of Theorem~4.14(iii), rather than its unrestricted
+printed form. These results neither identify the positive-diagonal family with
+a complete zipper fusion family nor provide the stronger categorical
+$F$-matrix data discussed in the preceding section.
+
+The one-site criterion for \leanid{MPOTensor.TransferRetractData} remains
+separate. It is equivalent to doubled-index transfer-map idempotence, not to
+Definition~4.1 of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

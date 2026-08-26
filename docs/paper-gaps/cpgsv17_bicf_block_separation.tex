@@ -17,309 +17,407 @@
 
 \section{The assertion}
 
-The sharp block-injectivity proposition of Cirac, P\'erez-Garc\'ia, Schuch,
-and Verstraete is the point at issue
+This note concerns the sharp block-injectivity proposition of Cirac,
+P\'erez-Garc\'ia, Schuch, and Verstraete
 \cite[lines~340--345]{Cirac2016MPDO_arXiv}.\footnote{For traceability,
-    this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
+    this note corresponds to
+    \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
     Related formal work is recorded in
     \href{https://github.com/LionSR/TNLean/issues/587}{issue \#587} and
-    \href{https://github.com/LionSR/TNLean/issues/822}{issue \#822}; earlier proof attempts are
+    \href{https://github.com/LionSR/TNLean/issues/822}{issue \#822};
+    earlier proof attempts are
     \href{https://github.com/LionSR/TNLean/pull/682}{PR \#682} and
     \href{https://github.com/LionSR/TNLean/pull/813}{PR \#813}.}
 
-Let $A$ be a tensor in canonical form with bond-dimension parameter $D$, and
-let $A_1,\ldots,A_g$ be a basis of normal tensors for $A$. The paper characterizes
-such a basis by minimality: no two chosen normal tensors may be related by an
-invertible similarity together with a phase. It then defines block-injective
-canonical form as the statement that, after passing to these blocks, simultaneous
-word evaluations span the whole product algebra
-\[
-    \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
-\]
-Equivalently, for every block tuple $X=(X_j)_j$ there should be a linear
-combination of common physical words whose evaluation on block $j$ gives $X_j$
-for every $j$.
+Let $A$ be a canonical-form tensor with total bond dimension $D$. Let
+$A_1,\ldots,A_g$ be a basis of normal tensors (BNT) for $A$, where $A_j$ has
+bond dimension $D_j$. The source characterizes this basis by minimality: two
+distinct representatives cannot be related by an invertible similarity and a
+phase \cite{Cirac2016MPDO_arXiv}. For a physical word $w$, write $A_j^w$ for
+its evaluation on the $j$th representative. Define the product algebra by
+\begin{align}
+    \mathcal A_{\mathrm{prod}}
+        &= \bigoplus_{j=1}^{g} M_{D_j}(\C).
+    \label{eq:cpgsv17_bicf_block_separation_product_algebra}
+\end{align}
+The tensor is in block-injective canonical form when its simultaneous word
+evaluations span $\mathcal A_{\mathrm{prod}}$. Equivalently, for every tuple
+$X=(X_j)_{j=1}^g\in\mathcal A_{\mathrm{prod}}$, a linear combination of
+physical words evaluates to $X_j$ on every block $j$.
 
-The source first invokes the quantum Wielandt theorem: after at most $D^4$
-blockings, each normal tensor becomes injective.  It then invokes the
-cross-block argument of P\'erez-Garc\'ia--Verstraete--Wolf--Cirac
-\cite{PerezGarcia2007MPSReps}: if $L$ is a blocking length after which every
-normal block is injective, then after $3(L+1)(D-1)$ blockings the tensor is
-block injective.  The proposition records the resulting bound in the following
-form: after blocking at most $3D^5$ spins, every tensor in canonical form is in
-block-injective canonical form.  The statement is at lines~340--345 of the
-local source, immediately after the definition of block-injective canonical
-form at lines~318--322.
+The source first applies the quantum Wielandt theorem to make each normal
+representative injective after at most $D^4$ sites
+\cite{Sanz2010Quantum,Cirac2016MPDO_arXiv}. It then uses the cross-block
+argument of P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac
+\cite{PerezGarcia2007MPSReps}: if every normal block is injective at length
+$L$, then the tensor is block injective after $3(L+1)(D-1)$ sites. The sharp
+proposition therefore states that blocking at most $3D^5$ spins places every
+canonical-form tensor in block-injective canonical form
+\cite[lines~340--345]{Cirac2016MPDO_arXiv}. The relevant definition appears at
+lines~318--322 of the same source.
 
 \section{The older per-copy formulation}
 
-The older auxiliary horizontal block hypotheses make the finite-length conclusion
-explicit on every flattened copy.  They record the following trace-separation
-assumption: there is a length $N$ such that, if
-matrices $\Delta_j\in M_{D_j}(\mathbb C)$ satisfy
-\[
-    \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
-    \qquad\text{for every word } w \text{ of length } N,
-\]
-then $\Delta_j=0$ for every $j$. By nondegeneracy of the trace pairing on the
-product algebra, this is the dual form of the finite-length spanning property
-above.
+The older auxiliary hypotheses impose finite-length separation on every
+flattened copy. Let $\mathcal W_N$ denote the set of physical words of length
+$N$. The trace-separation hypothesis states that there is an $N$ such that,
+for matrices $\Delta_j\in M_{D_j}(\C)$,
+\begin{align}
+    \left(\sum_{j=1}^{g}\tr\!\left(\Delta_j A_j^w\right)=0
+        \text{ for every }w\in\mathcal W_N\right)
+    &\Longrightarrow
+    \left(\Delta_j=0\text{ for every }j\right).
+    \label{eq:cpgsv17_bicf_block_separation_trace_separation}
+\end{align}
+The trace pairing on $\mathcal A_{\mathrm{prod}}$ is nondegenerate, so
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_trace_separation} is dual to the
+finite-length spanning condition
+\begin{align}
+    \operatorname{span}
+    \left\{\left(A_1^w,\ldots,A_g^w\right)
+        : w\in\mathcal W_N\right\}
+    &= \mathcal A_{\mathrm{prod}}.
+    \label{eq:cpgsv17_bicf_block_separation_word_tuple_span}
+\end{align}
 
-Several exact sufficient hypotheses have been proved. The first is the
-finite-length product-algebra span itself: the tuples
-\[
-    w \longmapsto (A_1^w,\ldots,A_g^w)
-\]
-span $\bigoplus_j M_{D_j}(\mathbb C)$ for one common length. The second is an
-entrywise linear-independence criterion: the scalar functions
-$w\mapsto (A_j^w)_{\alpha\beta}$, indexed by the block and by a matrix entry in
-that block, are linearly independent at one common length. This implies the
-product-algebra span, hence the trace-separation property. The third is a
-selector-word formulation of the sharp block-injectivity proposition: after a
-common blocking length each block is injective, and after a further finite
-length there are word polynomials which are the identity on one chosen block
-and vanish on all the others. Concatenating an injective prefix with such a
-selector suffix gives the full product-algebra span.
+Three exact hypotheses used in the formal development imply
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_trace_separation}. The first is the
+product-algebra span in
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_word_tuple_span}. The second requires
+linear independence, at one common length, of the scalar functions
+$w\mapsto(A_j^w)_{\alpha\beta}$ indexed by the block $j$ and the matrix entry
+$(\alpha,\beta)$. This entrywise condition implies the full product-algebra
+span. The third is a selector-word version of sharp block injectivity: each
+block is injective after a common blocking length, and a further finite length
+provides word polynomials that equal the identity on one selected block and
+vanish on every other block. Concatenating an injective prefix with a selector
+suffix gives Eq.~\ref{eq:cpgsv17_bicf_block_separation_word_tuple_span}.
 
-In the formal files, these three finite-length criteria suffice to produce the
-older per-copy trace-separation conclusion.\footnote{The criteria are
-    named \texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
-    \texttt{PropBlockInjective}. The trace-separation assumption is
-    \texttt{HorizontalCFData.biCF}. The constructors from these hypotheses to
-    \texttt{HorizontalCFData} structures are in the modules under
+These criteria yield the older per-copy trace-separation conclusion in the
+formal development.\footnote{The criteria are
+    \leanid{WordTupleSpanTop}, \leanid{wordEntryFamily}, and
+    \leanid{PropBlockInjective}. The trace-separation assumption is
+    \leanid{HorizontalCFData.biCF}. The constructors from these hypotheses to
+    \leanid{HorizontalCFData} structures are in the modules under
     \path{TNLean/MPS/MPDO/BiCFDerivation/}. Relevant implications include
-    \texttt{hasBiCF\_of\_wordTupleSpanTop},
-    \texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
-    \texttt{hasBiCF\_of\_propBlockInjective}, and corresponding
-    \texttt{HorizontalCFData} constructors such as
-    \texttt{horizontalCFData\_of\_propBlockInjective}.  The blueprint records
+    \leanid{hasBiCF_of_wordTupleSpanTop},
+    \leanid{hasBiCF_of_wordEntryFamily_linearIndependent},
+    \leanid{hasBiCF_of_propBlockInjective}, and corresponding
+    \leanid{HorizontalCFData} constructors such as
+    \leanid{horizontalCFData_of_propBlockInjective}. The blueprint records
     these restricted criteria in its finite-witness remark.}
-These statements remain correct restricted results. The sharp proposition is
-now proved separately for a representative-indexed BNT sector decomposition,
-so repeated copies are grouped before the separation argument.
+They remain valid restricted results. The sharp proposition is now proved
+separately for a representative-indexed BNT sector decomposition, which groups
+repeated copies before applying the separation argument.
 
 \section{Why the fields are stated independently}
 
-The finite-length trace-separation witness cannot be recovered from blockwise
-injectivity, left-canonicality, and nonzero weights alone. Take two
-one-dimensional scalar blocks over a one-letter alphabet, with both block
-tensors equal to $1$ and with weights $1$ and $2$. Every word evaluation is the
-same on the two blocks, so the tuple span is the diagonal line in
-$\mathbb C\oplus\mathbb C$ rather than the whole product algebra, and
-$\Delta_1=1$, $\Delta_2=-1$ makes the trace pairing vanish at every length.
+Blockwise injectivity, left-canonicality, and nonzero copy weights do not by
+themselves imply the finite-length trace-separation witness. Consider two
+one-dimensional scalar blocks over a one-letter alphabet. Let both block
+tensors equal $1$, with respective weights $1$ and $2$. At every length, the
+simultaneous word tuples span only
+\begin{align}
+    \operatorname{span}\{(1,1)\}
+        &= \left\{(z,z):z\in\C\right\}
+        \subsetneq \C\oplus\C.
+    \label{eq:cpgsv17_bicf_block_separation_identical_block_diagonal_span}
+\end{align}
+Taking $\Delta_1=1$ and $\Delta_2=-1$ makes the trace pairing vanish for every
+word and every length, contrary to
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_trace_separation}.
 
-Two identical blocks are, however, related by similarity and phase, so they are
-never a basis of normal tensors in the sense of the source characterization,
-which the source's sharp block-injectivity proposition assumes throughout. The
-observation therefore explains why the finite-length witness is carried as its
-own field rather than derived from the others; it is not a counterexample to the
-source, and none is recorded for it.
+The two blocks are identical and hence related by similarity and phase. They
+therefore cannot be distinct members of a minimal basis of normal tensors in
+the source's sense \cite{Cirac2016MPDO_arXiv}. This example explains why the
+older structure stores the finite-length witness as an independent field. It
+is not a counterexample to the source proposition, and no source
+counterexample is recorded.
 
 \section{Consequence for Lemma L}
 
-The same field independence marks the restriction in the older theorem
-\texttt{blockwise\_insert\_eq\_of\_mpv\_agree}, which assumes
-\texttt{biCF} on the full family of copies.  The source's Lemma L
-(Appendix~C.3, lines~1835--1858) instead writes the canonical-form tensor as
-$\bigoplus_{j,q}\mu_{j,q}X_{j,q}A_jX_{j,q}^{-1}$, groups all copies over the
-same minimal representative $A_j$, and obtains the coefficient
-$c_j^{(N)}=\sum_q\mu_{j,q}^N$.  The nonvanishing power-sum lemma then supplies
-a length at which $c_j^{(N)}\ne0$.
+The same independence restricts the older theorem
+\leanid{blockwise_insert_eq_of_mpv_agree}, which assumes \leanid{biCF} for the
+full family of flattened copies. Lemma~L in Appendix~C.3 of the source instead
+decomposes the canonical-form tensor as
+\begin{align}
+    A
+        &= \bigoplus_{j,q}
+            \mu_{j,q}X_{j,q}A_jX_{j,q}^{-1},
+    \label{eq:cpgsv17_bicf_block_separation_sector_decomposition}
+\end{align}
+where $j$ indexes minimal representatives and $q$ indexes their copies
+\cite[lines~1835--1858]{Cirac2016MPDO_arXiv}. For each representative, the
+argument groups the copies into the coefficient
+\begin{align}
+    c_j^{(N)}
+        &= \sum_q \mu_{j,q}^{N}.
+    \label{eq:cpgsv17_bicf_block_separation_grouped_power_sum}
+\end{align}
+The nonvanishing power-sum lemma then provides a length $N$ for which
+$c_j^{(N)}\ne0$ \cite{Cirac2016MPDO_arXiv}.
 
-This representative-grouped argument is now formalized.  At a fixed length,
-simultaneous word-tuple separation of the representatives forces
-$c_j^{(N)}(YA_j-ZA_j)=0$ for every $j$; the bounded nonvanishing power-sum
-argument then gives $YA_j=ZA_j$.  A second theorem proves the required
-eventual word-tuple separation when the BNT representatives have already been
-blocked to become injective.  Thus multiplicities and unequal nonzero copy
-weights are no longer an obstruction to the formal Lemma L argument.
+This representative-grouped argument is now formalized. At a fixed length,
+simultaneous separation of the representative word tuples yields
+\begin{align}
+    c_j^{(N)}\left(YA_j-ZA_j\right)
+        &=0
+        \qquad\text{for every }j.
+    \label{eq:cpgsv17_bicf_block_separation_grouped_insertion_equality}
+\end{align}
+Choosing a length at which the bounded power sums in
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_grouped_power_sum} do not vanish
+reduces
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_grouped_insertion_equality} to
+\begin{align}
+    YA_j
+        &= ZA_j
+        \qquad\text{for every }j.
+    \label{eq:cpgsv17_bicf_block_separation_representative_insertion_equality}
+\end{align}
+A second theorem proves the required eventual simultaneous word-tuple
+separation once the BNT representatives have been blocked to become
+injective. Thus repeated copies and unequal nonzero copy weights no longer
+obstruct the formal proof of Lemma~L.
 
 The first-site action has also been transported through physical blocking.
-For a block $I=(i_0,\ldots,i_L)$, the induced matrix is
-\[
-  Y^{[L+1]}_{I,J}=Y_{i_0,j_0}\prod_{k=1}^{L}\delta_{i_k,j_k},
-\]
+Let $I=(i_0,\ldots,i_L)$ and $J=(j_0,\ldots,j_L)$ be blocked physical indices.
+The induced first-site matrix is
+\begin{align}
+    Y^{[L+1]}_{I,J}
+        &=Y_{i_0,j_0}
+          \prod_{k=1}^{L}\delta_{i_k,j_k},
+    \label{eq:cpgsv17_bicf_block_separation_blocked_first_site_matrix}
+\end{align}
 and its insertion satisfies
-\[
-  \bigl(Y^{[L+1]}A^{[L+1]}\bigr)^I
-  =(YA)^{i_0}A^{i_1}\cdots A^{i_L}.
-\]
-Consequently, an all-length first-site equality before blocking gives the
-corresponding equality after blocking.  Conversely, if the length-$L$ words
-of $A$ span the full matrix algebra, equality of the two blocked insertions
-implies $YA=ZA$.  These auxiliary statements provide the transport needed
-to combine the source's block-injectivity argument with Lemma L; they
-introduce no additional hypothesis beyond block injectivity for the
-converse.
+\begin{align}
+    \left(Y^{[L+1]}A^{[L+1]}\right)^I
+        &=(YA)^{i_0}A^{i_1}\cdots A^{i_L}.
+    \label{eq:cpgsv17_bicf_block_separation_blocked_insertion}
+\end{align}
+Therefore, an all-length first-site equality before blocking implies the
+corresponding blocked equality. Conversely, if the length-$L$ words of $A$
+span the full matrix algebra, equality of the two blocked insertions implies
+$YA=ZA$. These statements provide the transport needed to combine the source
+block-injectivity argument with Lemma~L. The converse uses only block
+injectivity and introduces no further hypothesis.
 
 \section{Classification}
 
-The original counterexample should not be read as a source erratum.  A
-small counterexample shows only that per-copy blockwise injectivity,
+The scalar example in
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_identical_block_diagonal_span} is
+not a source erratum. It shows only that per-copy blockwise injectivity,
 left-canonicality, and nonzero weights do not imply simultaneous separation.
-It does not satisfy the source's minimal-representative condition.
+It fails the source's minimal-representative condition
+\cite{Cirac2016MPDO_arXiv}.
 
-The representative-level source theorem is now composed with the canonical-form
-hypotheses.  Positive-length block injectivity
-propagates from length $L$ to length $L+1$ without a normalization hypothesis:
-the identity
-$S_{L+1}(A)=\operatorname{span}\{A_i\}_iS_L(A)$, together with the same identity at length
-$L$, gives the result.  Physical blocking of a sector decomposition has also
-been defined explicitly: it preserves the representative and copy indices,
-replaces $A_j$ by $A_j^{[p]}$, replaces $\mu_{j,q}$ by $\mu_{j,q}^p$, and gives
-the coefficient identity
-\[
-    c_{P^{[p]},j}^{(N)}=c_{P,j}^{(Np)}.
-\]
-The tensor obtained from this blocked decomposition has the same MPV family
-as the physical blocking of the original tensor.
+The representative-level source theorem is now derived from the canonical-form
+hypotheses. For a tensor $A$, let $S_L(A)$ denote the span of its words of
+length $L$. Positive-length block injectivity propagates from $L$ to $L+1$
+without a normalization assumption because
+\begin{align}
+    S_{L+1}(A)
+        &= \operatorname{span}\{A_i\}_i S_L(A).
+    \label{eq:cpgsv17_bicf_block_separation_word_span_propagation}
+\end{align}
+Applying the same identity at length $L$ proves the propagation result.
 
-The representative-separation step has now been obtained without asserting
-preservation of the full canonical-form predicate.  If $p>0$ and every
-$A_j^{[p]}$ is injective, then pair separation for the original representatives
-at length $6p$ transports through the bijection of blocked and unblocked words
-to pair separation for the blocked representatives at length $6$.  It follows
-that $P^{[p]}$ has simultaneous representative word-tuple span at every
-blocked length at least $6(g-1)+1$.
+Physical blocking has also been defined directly for a sector decomposition
+$P$. Blocking by $p$ sites preserves the representative and copy indices,
+replaces $A_j$ by $A_j^{[p]}$, and replaces $\mu_{j,q}$ by $\mu_{j,q}^p$.
+Consequently,
+\begin{align}
+    c_{P^{[p]},j}^{(N)}
+        &= c_{P,j}^{(Np)}.
+    \label{eq:cpgsv17_bicf_block_separation_blocked_power_sum}
+\end{align}
+The tensor constructed from the blocked decomposition has the same matrix
+product vector (MPV) family as the physical blocking of the original tensor.
 
-The first-site transport was first proved under an explicit common
-block-injectivity hypothesis.  Given a common positive $L$
-for which every representative is $L$-block injective, use $p=L+1$;
-positive-length propagation makes every $A_j^{[L+1]}$ injective.  Blocked
-representative separation and the representative-grouped Lemma L give equality
-of the induced insertions on every $A_j^{[L+1]}$.  The original length-$L$
-span then recovers equality of the unblocked insertions.  This length shift is
-essential: recovery from a physical block of length $L+1$ uses the span of its
-length-$L$ tail.
+The representative-separation theorem does not require preservation of the
+entire canonical-form predicate. Suppose $p>0$ and every $A_j^{[p]}$ is
+injective. Pair separation for the original representatives at length $6p$
+transports through the bijection between blocked and unblocked words to pair
+separation for the blocked representatives at length $6$. It follows that
+$P^{[p]}$ has simultaneous representative word-tuple span at every blocked
+length $N$ satisfying
+\begin{align}
+    N
+        &\geq 6(g-1)+1.
+    \label{eq:cpgsv17_bicf_block_separation_eventual_blocked_span_length}
+\end{align}
 
-The first task is now closed without adding a hypothesis.  For an irreducible
-left-canonical representative, quantum Perron--Frobenius theory gives a finite
-peripheral period $m$.  Its self-overlap along multiples of $m$ tends to $m$,
+The first-site transport was initially proved under an explicit common
+block-injectivity hypothesis. Suppose that a positive integer $L$ makes every
+representative $L$-block injective, and define
+\begin{align}
+    p
+        &= L+1.
+    \label{eq:cpgsv17_bicf_block_separation_shifted_block_length}
+\end{align}
+Positive-length propagation makes each $A_j^{[L+1]}$ injective. Blocked
+representative separation and the representative-grouped Lemma~L then give
+equality of the induced insertions on every $A_j^{[L+1]}$. The original
+length-$L$ span recovers equality of the unblocked insertions. The shift in
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_shifted_block_length} is essential:
+recovering an insertion from a physical block of length $L+1$ uses the span of
+its length-$L$ tail.
+
+The common block-injectivity hypothesis now follows from the BNT
+canonical-form predicate itself. Quantum Perron--Frobenius theory assigns a
+finite peripheral period $m$ to an irreducible left-canonical representative
+\cite{Wolf2012Quantum}. Its self-overlap along multiples of $m$ tends to $m$,
 whereas the normalized BNT hypothesis makes the same subsequence tend to $1$.
 Thus $m=1$, the transfer map is primitive, and the representative is normal.
 The finitely many normal representatives have a common positive
-block-injectivity length by taking a common multiple of their individual
-lengths.  Consequently the representative-indexed Lemma L now follows from
-the BNT canonical-form predicate itself.
+block-injectivity length, obtained by taking a common multiple of their
+individual lengths. The representative-indexed Lemma~L therefore follows
+directly from the BNT canonical-form predicate.
 
-The numerical Wielandt part has since been sharpened to the exact common
-length used in the source estimate.  If the representative dimensions are
-$D_j$ and the flattened canonical-form tensor has bond dimension $D$, then
-$D_j\leq D$.  Quantum Wielandt gives an injective length
-$L_j\leq D_j^4$ for the $j$th representative, and positive-length propagation
-therefore makes every representative injective at the single exact length
-$D^4$.  This exact common length has been formalized.\footnote{Formal
-    declarations:
+The numerical Wielandt step has been sharpened to the exact common length used
+in the source estimate. Let $D_j$ be the dimension of the $j$th representative
+and $D$ the bond dimension of the flattened canonical-form tensor. Then
+$D_j\leq D$. Quantum Wielandt gives an injective length $L_j\leq D_j^4$ for
+the $j$th normal representative \cite{Sanz2010Quantum}. Positive-length
+propagation therefore makes every representative injective at the common
+length
+\begin{align}
+    L_0
+        &= D^4.
+    \label{eq:cpgsv17_bicf_block_separation_common_wielandt_length}
+\end{align}
+This exact common length has been formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.SectorDecomposition.basisDim_le_totalDim},
     \leanid{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}, and
     \leanid{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}.}
 
-The direct-sum interpolation is now complete. Put $g$ for the number of
-minimal representatives and set $L_0=D^4$. The two-block argument gives the
-full pair span at length $S=3(L_0+1)$. For a chosen block $k$, choose an anchor
-block $j\ne k$ and use this pair span to realize an arbitrary pair $(X_k,0)$.
-Multiply that word polynomial by one identity--zero selector for each of the
-remaining $g-2$ blocks. The resulting simultaneous tuple equals $X_k$ on
-block $k$ and vanishes on every other block, at length
-\[
-    (g-1)S=3(g-1)(D^4+1).
-\]
-Summing these block-supported tuples over $k$ realizes every element of the
-full product algebra. No separate injective prefix is used. The length-zero
-identity occurs only as the neutral base of the finite product when there are
-no remaining selectors; it is not a padding hypothesis or a separate case in
-the theorem.
+The direct-sum interpolation is also complete. Let $g$ be the number of
+minimal representatives and use $L_0$ from
+Eq.~\ref{eq:cpgsv17_bicf_block_separation_common_wielandt_length}. Define the
+pair-span length by
+\begin{align}
+    S
+        &= 3(L_0+1).
+    \label{eq:cpgsv17_bicf_block_separation_pair_span_length}
+\end{align}
+The two-block argument gives full pair span at this length. Fix a block $k$,
+choose an anchor block $j\ne k$, and use the pair span to realize an arbitrary
+pair $(X_k,0)$. Multiplication by one identity--zero selector for each of the
+remaining $g-2$ blocks produces a tuple equal to $X_k$ on block $k$ and zero
+on every other block. Its length is
+\begin{align}
+    (g-1)S
+        &=3(g-1)(D^4+1).
+    \label{eq:cpgsv17_bicf_block_separation_simultaneous_interpolation_length}
+\end{align}
+Summing these block-supported tuples over $k$ realizes every element of
+$\mathcal A_{\mathrm{prod}}$. This construction uses no separate injective
+prefix. When no selectors remain, the length-zero identity is only the neutral
+element of the finite product; it is neither a padding hypothesis nor a
+separate theorem case.
 
 If $g=1$, ordinary block injectivity gives the required span at length $D^4$.
 If $g\geq2$, positivity of the representative dimensions and multiplicities
-gives $g\leq D$. The remaining arithmetic is
-\[
-  3(D^4+1)(D-1)
-  =3(D^5-D^4+D-1)
-  \leq 3D^5,
-\]
+gives $g\leq D$. Hence
+\begin{align}
+    3(D^4+1)(D-1)
+        &=3(D^5-D^4+D-1),
+    \label{eq:cpgsv17_bicf_block_separation_bound_expansion}\\
+    3(D^5-D^4+D-1)
+        &\leq 3D^5,
+    \label{eq:cpgsv17_bicf_block_separation_three_d_pow_five_bound}
+\end{align}
 because $D-1\leq D^4$.
 
 The formal proof is recorded by the following declarations:
 \begin{itemize}
-  \item
-  \leanid{MPSTensor.exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop}
-  realizes the arbitrary anchor-pair value;
-  \item
-  \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
-  and
-  \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
-  prove the direct-sum interpolation at length $(g-1)S$;
-  \item
-  \leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
-  specializes the result to the source length $3(g-1)(L_0+1)$;
-  \item
-  \leanid{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
-  proves $g\leq D$;
-  \item
-  \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
-  gives a positive simultaneous-span length at most $3D^5$.
+    \item
+    \leanid{MPSTensor.exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop}
+    realizes an arbitrary value on the selected anchor pair;
+    \item
+    \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop}
+    and
+    \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
+    establish direct-sum interpolation at length $(g-1)S$;
+    \item
+    \leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
+    specializes the interpolation result to the source length
+    $3(g-1)(L_0+1)$;
+    \item
+    \leanid{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
+    proves $g\leq D$;
+    \item
+    \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
+    gives a positive simultaneous-span length bounded by $3D^5$.
 \end{itemize}
 
-The public horizontal canonical-form predicate has now been replaced by the
-representative-indexed formulation.  It quantifies a BNT sector decomposition
-whose total bond dimension equals the original bond dimension and which is
-literally related to the doubled-index tensor by one global gauge.  Complete
-MPV equality transports the first-site identities to the BNT representatives.  The
-representative-grouped Lemma L concludes equality of the opposite-corner
-insertions on every minimal representative.  Linearity extends this equality
-to the full weighted direct sum, and gauge conjugation transports the result
-to the original MPO tensor.  The older
-per-copy \texttt{HorizontalCFData} theorems remain available only as explicitly
+The public horizontal canonical-form predicate now uses the
+representative-indexed formulation. It quantifies a BNT sector decomposition
+whose total bond dimension equals the original bond dimension and whose
+doubled-index tensor is related to the original tensor by one global gauge.
+Complete MPV equality transports first-site identities to the BNT
+representatives. The representative-grouped Lemma~L gives equality of the
+opposite-corner insertions on every minimal representative. Linearity extends
+this equality to the full weighted direct sum, and gauge conjugation transports
+it to the original matrix product operator tensor. The older per-copy
+\leanid{HorizontalCFData} theorems remain available only as explicitly
 restricted auxiliary statements.
 
 \section{The Appendix C.2 sector entropy argument}
 
 The one-letter simultaneous-span assumption in the formal sector entropy
-theorem is not an additional hypothesis absent from the cited source.  At the
-start of Case II, the source fixes a simple tensor $K$ in block-injective
-canonical form \cite[line~1628]{Cirac2016MPDO_arXiv}.  By Definition~2.6,
-block-injective canonical form says exactly that the one-letter tuples of the
-minimal normal representatives span
-\[
-    \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
-\]
-The inverse tensor used immediately afterwards, and hence the one-site
-projections in the proof of Proposition~4.13, depend on this hypothesis.  The
-formal assumption \texttt{WordTupleSpanTop S.basis 1} is therefore the direct
-algebraic form of the source's biCF assumption.
+theorem is not an extra hypothesis relative to the cited source. At the start
+of Case~II, the source fixes a simple tensor $K$ in block-injective canonical
+form \cite[line~1628]{Cirac2016MPDO_arXiv}. Definition~2.6 of the source states
+that the one-letter tuples of the minimal normal representatives span
+\begin{align}
+    \bigoplus_{j=1}^{g}M_{D_j}(\C).
+    \label{eq:cpgsv17_bicf_block_separation_one_letter_bicf_span}
+\end{align}
+The inverse tensor used immediately afterward, and hence the one-site
+projections in the proof of Proposition~4.13, depend on this hypothesis
+\cite{Cirac2016MPDO_arXiv}. The formal assumption
+\leanid{WordTupleSpanTop S.basis 1} is therefore the direct algebraic form of
+the source's block-injective canonical-form hypothesis.
 
-It would be a strictly stronger assertion to begin with an unblocked canonical
-form and remove this hypothesis by choosing a finite blocking length.  Although
-SAL passes from a tensor to any positive physical blocking, the converse does
-not follow from the periodic block identity: an $L$-blocked chain records only
-the original chain lengths $NL$ and only cuts whose lengths are multiples of
-$L$.  In particular, SAL of $K^{[L]}$ does not by itself recover the equalities
-$I_m(K)=I_{m+1}(K)$ at arbitrary chain lengths and cuts.  The proposed reverse
-transport in issue~\#4119 is therefore unavailable without a new mathematical
-argument not present in Appendix~C.2, and it is not needed for faithfulness to
-the printed proposition.
+Starting instead from an unblocked canonical form and removing the one-letter
+span by choosing a finite blocking length would be strictly stronger. Although
+the sector area law (SAL) passes from a tensor to every positive physical
+blocking, the periodic block identity does not provide the converse. An
+$L$-blocked chain records only original chain lengths of the form $NL$ and
+only cuts at multiples of $L$. In particular, SAL for $K^{[L]}$ does not by
+itself recover
+\begin{align}
+    I_m(K)
+        &= I_{m+1}(K),
+    \label{eq:cpgsv17_bicf_block_separation_unblocked_entropy_equality}
+\end{align}
+for arbitrary chain lengths and cuts. The proposed reverse transport in
+issue~\#4119 is therefore unavailable without a new argument absent from
+Appendix~C.2, and the printed proposition does not require such an argument
+\cite{Cirac2016MPDO_arXiv}.
 
-Consequently, the sector entropy theorem should retain the simultaneous
-one-letter span and identify it as the source biCF hypothesis.  The finite
-blocking theorem remains the justification that an arbitrary canonical-form
-tensor can be placed in biCF when the surrounding result is itself stated only
-up to physical blocking; it does not turn the Appendix C.2 conclusion into an
-unblocked SAL statement.
+The sector entropy theorem should consequently retain the simultaneous
+one-letter span and identify it with the source block-injective canonical-form
+hypothesis. The finite-blocking theorem shows that an arbitrary canonical-form
+tensor can be placed in block-injective canonical form when the surrounding
+result is itself stated only up to physical blocking. It does not convert the
+Appendix~C.2 conclusion into an unblocked SAL statement.
 
-This closes the multiplicity and block-separation gap in Lemma L.  It does not
-by itself complete Proposition~4.13: constructing the letterwise vertical
-decomposition from the resulting reducing projections, and proving the
-subsequent positivity and isometric normalization of its sectors, are separate
-parts of that proposition.
+The representative argument closes the multiplicity and block-separation gap
+in Lemma~L. It does not by itself complete Proposition~4.13 of the source:
+constructing the letterwise vertical decomposition from the resulting reducing
+projections, and then proving positivity and isometric normalization of the
+sectors, remain separate parts of that proposition
+\cite{Cirac2016MPDO_arXiv}.
 
-The previously open gap is now resolved: the formal theorem matches the
-source's hypothesis set and conclusion, through a different proof of the
-simultaneous-interpolation step. BNT canonical form supplies normality,
-left-canonicality, normalized self-overlap, and pairwise gauge-phase
-inequivalence; no finite separation witness is added as a hypothesis. The
-source-level Lemma L needs only existence of a suitable finite length, while
-the formal theorem also establishes the stated bound $3D^5$.
+The gap is resolved. The formal theorem now matches the source's hypotheses and
+conclusion through a different proof of simultaneous interpolation. BNT
+canonical form supplies normality, left-canonicality, normalized self-overlap,
+and pairwise gauge-phase inequivalence; no finite separation witness is added
+as a hypothesis. The source-level Lemma~L requires only the existence of a
+suitable finite length, while the formal theorem also proves the stated
+$3D^5$ bound.
 
 \bibliographystyle{alpha}
 \bibliography{references}

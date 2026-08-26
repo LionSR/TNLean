@@ -18,140 +18,217 @@ Characterization and Hayashi--Markov Decomposition}
 
 \section{The assertion and its current formal status}
 
-Equality in strong subadditivity,
+Let $\rho_{ABC}$ be a density operator on the finite-dimensional Hilbert space
+$\mathcal H_A\otimes\mathcal H_B\otimes\mathcal H_C$, and let
+$\rho_{AB}$, $\rho_{BC}$, and $\rho_B$ denote its reduced density operators.
+Equality in strong subadditivity is the identity
 \begin{align}
-  S(\rho_{ABC}) + S(\rho_{B}) = S(\rho_{AB}) + S(\rho_{BC}),
-  \tag{SSA$_{=}$}
-  \label{eq:ssa-eq}
+    S(\rho_{ABC})+S(\rho_B)
+        &=S(\rho_{AB})+S(\rho_{BC}).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_ssa_equality}
 \end{align}
-is characterized by a structural decomposition of the middle subsystem. The
-characterization states that~\eqref{eq:ssa-eq} holds if and only if, after a
-unitary change of basis on $\mathcal H_B$, the middle space decomposes as a
-finite orthogonal direct sum
+The standard structural characterization states that
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ssa_equality}) holds if and
+only if a unitary change of basis on $\mathcal H_B$ gives a finite orthogonal
+direct-sum decomposition
 \begin{align}
-  \mathcal H_B \;\cong\; \bigoplus_{j} \mathcal H_{B_j^{L}} \otimes
-  \mathcal H_{B_j^{R}},
+    \mathcal H_B
+        &\cong\bigoplus_j
+        \mathcal H_{B_j^L}\otimes\mathcal H_{B_j^R},
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_middle_decomposition}
 \end{align}
-and in this basis the state is block diagonal,
+under which
 \begin{align}
-  \rho_{ABC} \;\cong\; \bigoplus_{j} p_j \,
-  \rho_{A B_j^{L}} \otimes \rho_{B_j^{R} C},
-  \tag{QMC}
-  \label{eq:qmc}
+    \rho_{ABC}
+        &\cong\bigoplus_j
+        p_j\,\rho_{AB_j^L}\otimes\rho_{B_j^RC}.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_qmc_decomposition}
 \end{align}
-with probabilities $p_j \ge 0$, $\sum_j p_j = 1$, and density operators
-$\rho_{A B_j^{L}}$, $\rho_{B_j^{R} C}$ on the indicated factors. This is the
-quantum-Markov-chain structure of the tripartite state
-\cite{Ruskai2002, HaydenJozsaPetzWinter2004, Hayashi2006}.
+Here $p_j\geq 0$, $\sum_jp_j=1$, and $\rho_{AB_j^L}$ and
+$\rho_{B_j^RC}$ are density operators on the indicated tensor factors.
+Equation~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_qmc_decomposition}) is
+the quantum-Markov-chain structure of $\rho_{ABC}$; this characterization and
+its relation to recovery maps are reviewed in Ref.~\cite{Cirac2021Matrix}.
 
-The biconditional
-\eqref{eq:ssa-eq} $\Leftrightarrow$~\eqref{eq:qmc} is now proved in both
-directions.\footnote{The forward implication is
+Both directions of the equivalence between
+Eqs.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ssa_equality}) and
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_qmc_decomposition}) are now
+proved.\footnote{The forward implication is
 \leanid{Matrix.hayashi_ssa_equality_characterization_forward} in
 \path{TNLean/Analysis/EntropyMarkovForward.lean}, with the established root
 name \leanid{hayashi_ssa_equality_characterization_forward} in
-\doclink{TNLean/Entropy/SSAEqualityCharacterization}. The reverse implication is
-\leanid{hayashi_ssa_equality_characterization_reverse} in
-\path{TNLean/Analysis/EntropyMarkovReverse.lean};
-\leanid{hayashi_ssa_equality_characterization} combines the two. The equality
-predicate is \leanid{IsSSAEquality} in
-\doclink{TNLean/Analysis/Entropy}, and the right-hand structure is
+\doclink{TNLean/Entropy/SSAEqualityCharacterization}. The reverse implication
+is \leanid{hayashi_ssa_equality_characterization_reverse} in
+\path{TNLean/Analysis/EntropyMarkovReverse.lean}. The declaration
+\leanid{hayashi_ssa_equality_characterization} combines the two directions.
+The equality predicate is \leanid{IsSSAEquality} in
+\doclink{TNLean/Analysis/Entropy}, and the structural predicate is
 \leanid{HayashiMarkovDecomposition}.}
-There are no axiom declarations in this characterization.
+No axiom declaration occurs in this characterization.
 
-The forward proof first obtains the ambient HJPW identity
+The forward proof first derives the ambient Hayden--Jozsa--Petz--Winter block
+identity
 \begin{align}
-  W^\dagger\rho_{ABC}W
-  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
-  \qquad
-  W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C).
-  \label{eq:ambient-hjpw}
+    W^\dagger\rho_{ABC}W
+        &=0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_ambient_hjpw}\\
+    W
+        &=\Id_A\otimes(U_B\otimes\Id_C).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_ambient_unitary}
 \end{align}
-The supported matrices $\widehat\rho_j$ are the sector output states:
-they are positive, have trace one, and have the prescribed common-factor
-marginals. The complementary blocks are zero. After reversing each middle
-fibre from the recovery order $B_j^R\otimes B_j^L$ to the HJPW order
-$B_j^L\otimes B_j^R$, the Hayashi unitary is chosen with the adjoint
-orientation $V_B=U_B^\dagger$, so
-$V\rho_{ABC}V^\dagger=W^\dagger\rho_{ABC}W$.
+The matrices $\widehat\rho_j$ are the output states of the supported sectors.
+They are positive, have trace one, and have the prescribed common-factor
+marginals. Every complementary block is zero. The recovery construction orders
+the middle factors as $B_j^R\otimes B_j^L$; reversing each fibre gives the
+Hayashi order $B_j^L\otimes B_j^R$. The Hayashi unitary has the adjoint
+orientation
+\begin{align}
+    V_B
+        &=U_B^\dagger,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_hayashi_unitary}\\
+    V\rho_{ABC}V^\dagger
+        &=W^\dagger\rho_{ABC}W.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_unitary_orientation}
+\end{align}
 
-For every ambient sector, including the one-dimensional complementary sectors,
-set
+For every ambient sector, including each one-dimensional complementary sector,
+define
 \begin{align}
-  p_j=\operatorname{Re}\operatorname{tr}\omega_j.
+    p_j
+        &=\operatorname{Re}\tr(\omega_j).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_sector_weight}
 \end{align}
-Positivity gives $p_j\geq0$, and the ambient trace identity gives
-$\sum_jp_j=1$. On every supported sector, the right density operator is the
-sector output state $\widehat\rho_j$. When $p_j>0$, the left density operator is
-$\omega_j/p_j$. Total positive-semidefinite normalization is applied only when
-the final \leanid{HayashiMarkovDecomposition} is formed. If a supported sector
-has $p_j=0$, this normalization chooses a left filler while preserving
-$\widehat\rho_j$ on the right. On a complementary sector it may choose fillers
-on both sides. In either case the factor $p_j$ makes every filler invisible;
-fillers do not occur in the raw identity~\eqref{eq:ambient-hjpw}.
+Positivity and the ambient trace identity give
+\begin{align}
+    p_j
+        &\geq 0,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weight_nonnegative}\\
+    \sum_jp_j
+        &=1.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weight_normalization}
+\end{align}
+On each supported sector, the right density operator is $\widehat\rho_j$. If
+$p_j>0$, the left density operator is $\omega_j/p_j$. Total
+positive-semidefinite normalization is applied only when the final
+\leanid{HayashiMarkovDecomposition} is formed. If a supported sector has
+$p_j=0$, this normalization selects a left filler while retaining
+$\widehat\rho_j$ on the right. A complementary sector may use fillers on both
+sides. In either case, the factor $p_j$ makes the fillers invisible. No filler
+occurs in the raw identity
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ambient_hjpw}).
 
 \section{The two proved implications}
 
 \paragraph{Forward direction.}
-Equality in strong subadditivity gives the product-reference recovery identity
-on the supported input, the invariant conditional family, its common invariant
-block form, the ambient bipartite decomposition, and the pure-ancilla block
-action. Equations~(11), (14), and~(15) then give
-\eqref{eq:ambient-hjpw}. The probability and normalization argument above
-converts that identity into the quantum-Markov decomposition
-\eqref{eq:qmc}. This implication is proved by
-\leanid{Matrix.hayashi_ssa_equality_characterization_forward}.
+Equality in strong subadditivity yields, in order, the product-reference
+recovery identity on the supported input, the invariant conditional family,
+its common invariant block form, the ambient bipartite decomposition, and the
+pure-ancilla block action. Equations~(11), (14), and~(15) of the
+Hayden--Jozsa--Petz--Winter argument, whose role in the equality
+characterization is reviewed in Ref.~\cite{Cirac2021Matrix}, then give
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ambient_hjpw}). The weight and
+normalization argument in
+Eqs.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_sector_weight})--%
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_weight_normalization}) converts
+this identity into
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_qmc_decomposition}). The formal
+proof is \leanid{Matrix.hayashi_ssa_equality_characterization_forward}.
 
 \paragraph{Reverse direction.}
-For a state of the form~\eqref{eq:qmc},
+For a block-diagonal state of the form
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_qmc_decomposition}), the entropy
+identities are
 \begin{align}
-  S\!\left(\bigoplus_j p_j\omega_j\right)
-  &=H(\{p_j\})+\sum_jp_jS(\omega_j),
-  \\
-  S(\omega\otimes\tau)&=S(\omega)+S(\tau).
+    S\!\left(\bigoplus_jp_j\omega_j\right)
+        &=H(\{p_j\})+\sum_jp_jS(\omega_j),
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_direct_sum_entropy}\\
+    S(\omega\otimes\tau)
+        &=S(\omega)+S(\tau).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_tensor_entropy}
 \end{align}
-Applying these identities to the state and its three marginals makes the four
-terms in~\eqref{eq:ssa-eq} cancel. This implication is proved by
-\leanid{hayashi_ssa_equality_characterization_reverse}.
+Applying
+Eqs.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_direct_sum_entropy}) and
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_tensor_entropy}) to the state and
+its three marginals cancels the four entropy terms and proves
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ssa_equality}). The formal
+proof is \leanid{hayashi_ssa_equality_characterization_reverse}. The public
+biconditional \leanid{hayashi_ssa_equality_characterization} depends only on
+these two proved directions.
 
-The public biconditional
-\leanid{hayashi_ssa_equality_characterization} depends only on these two proved
-directions.
+\section{Trace-preserving Petz channel}
 
-\section{Trace-preserving Petz channel now available}
-
-The support formula for the Petz transpose map associated with a right partial
-trace is now formalized for every positive semidefinite reference $\sigma$.
-Writing $\tau=\operatorname{tr}_R\sigma$, the map is
+Let $\sigma$ be a positive semidefinite reference matrix on a bipartite space,
+and define its right-partial-trace marginal by
 \begin{align}
-  \mathcal R_\sigma(X)
-  =\sqrt\sigma\,
-    (\tau^{-1/2}_{\mathrm{supp}}X
-      \tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R)\sqrt\sigma.
+    \tau
+        &=\tr_R\sigma.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_reference_marginal}
 \end{align}
-It is proved completely positive in rectangular Kraus form, satisfies
-$\mathcal R_\sigma(\tau)=\sigma$, and obeys the support trace identity
-$\operatorname{tr}(\mathcal R_\sigma(X))=\operatorname{tr}(P_\tau X)$.
-\footnote{Formal declarations:
+The Petz transpose map for the right partial trace is formalized on the support
+of $\tau$ as
+\begin{align}
+    \mathcal R_\sigma(X)
+        &=
+        \sqrt{\sigma}
+        \left(\tau^{-1/2}_{\mathrm{supp}}
+            X
+            \tau^{-1/2}_{\mathrm{supp}}
+            \otimes\Id_R\right)
+        \sqrt{\sigma}.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_petz_support_map}
+\end{align}
+This map is completely positive in rectangular Kraus form, recovers the
+reference matrix, and satisfies the support trace identity
+\begin{align}
+    \mathcal R_\sigma(\tau)
+        &=\sigma,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_petz_reference_recovery}\\
+    \tr\!\left(\mathcal R_\sigma(X)\right)
+        &=\tr(P_\tau X),
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_petz_support_trace}
+\end{align}
+where $P_\tau$ is the support projection of $\tau$.\footnote{Formal
+declarations:
 \leanid{Matrix.partialTraceRightPetzMap},
 \leanid{Matrix.partialTraceRightPetzMap_isKrausCP},
 \leanid{Matrix.partialTraceRightPetzMap_trace}, and
 \leanid{Matrix.partialTraceRightPetzMap_partialTraceRight} in
 \path{TNLean/Channel/PetzRecovery.lean}.}
-This is exactly the formula stated on the support in
-\cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
+Equation~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_petz_support_map}) is the
+support formula in Theorem~3, Equation~(8), of the
+Hayden--Jozsa--Petz--Winter argument summarized in
+Ref.~\cite{Cirac2021Matrix}.
 
-For a normalized reference, let $Q_\tau=\mathbf 1-P_\tau$ and
-$\omega_R=\operatorname{tr}_L\sigma$.  The complementary term
+For normalized $\sigma$, define
 \begin{align}
-  \mathcal C_\sigma(X)=Q_\tau XQ_\tau\otimes\omega_R
+    Q_\tau
+        &=\Id-P_\tau,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_support_complement}\\
+    \omega_R
+        &=\tr_L\sigma.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_reference_right_marginal}
 \end{align}
-is completely positive and contributes trace
-$\operatorname{tr}(Q_\tau X)$.  Hence
-$\widehat{\mathcal R}_\sigma=\mathcal R_\sigma+\mathcal C_\sigma$ is a
-trace-preserving completely positive map.  It agrees with the support formula
-when $P_\tau XP_\tau=X$ and still recovers the reference matrix from its
-marginal.
+The complementary map is
+\begin{align}
+    \mathcal C_\sigma(X)
+        &=Q_\tau XQ_\tau\otimes\omega_R.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_petz_complement}
+\end{align}
+It is completely positive and contributes the trace
+\begin{align}
+    \tr\!\left(\mathcal C_\sigma(X)\right)
+        &=\tr(Q_\tau X).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_complement_trace}
+\end{align}
+Consequently,
+\begin{align}
+    \widehat{\mathcal R}_\sigma
+        &=\mathcal R_\sigma+\mathcal C_\sigma
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_completed_petz_channel}
+\end{align}
+is completely positive and trace preserving. It agrees with
+$\mathcal R_\sigma$ whenever $P_\tau XP_\tau=X$ and still satisfies
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_petz_reference_recovery}).%
 \footnote{Formal declarations:
 \leanid{Matrix.partialTraceRightPetzComplementMap},
 \leanid{Matrix.partialTraceRightPetzChannel},
@@ -160,20 +237,20 @@ marginal.
 \leanid{Matrix.partialTraceRightPetzChannel_partialTraceRight} in
 \path{TNLean/Channel/PetzRecovery.lean}.}
 
-The source support condition is also now connected to this completed channel.
-If positive semidefinite matrices $\rho$ and $\sigma$ satisfy
-$\ker\sigma\subseteq\ker\rho$, then the same inclusion holds after the right
-partial trace.  If $P_\tau$ is the support projection of
-$\tau=\operatorname{tr}_R\sigma$, this gives
+The source support condition is connected to this completed channel. If
+positive semidefinite matrices $\rho$ and $\sigma$ satisfy
+$\ker\sigma\subseteq\ker\rho$, then their right marginals satisfy the same
+kernel inclusion. With $\tau=\tr_R\sigma$, this gives
 \begin{align}
-  P_\tau(\operatorname{tr}_R\rho)P_\tau
-    =\operatorname{tr}_R\rho.
+    P_\tau(\tr_R\rho)P_\tau
+        &=\tr_R\rho.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_marginal_support}
 \end{align}
-Consequently the complementary term vanishes on
-$\operatorname{tr}_R\rho$, and
+The complementary term therefore vanishes on $\tr_R\rho$, so
 \begin{align}
-  \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)
-    =\mathcal R_\sigma(\operatorname{tr}_R\rho).
+    \widehat{\mathcal R}_\sigma(\tr_R\rho)
+        &=\mathcal R_\sigma(\tr_R\rho).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_completed_raw_agreement}
 \end{align}
 \footnote{Formal declarations:
 \leanid{Matrix.IsHermitian.supportProj_mul_mul_supportProj_of_mulVec_kernel_le}
@@ -183,114 +260,177 @@ in \path{TNLean/Channel/Schwarz/PetzRecoverySupport.lean}.}
 Thus the choice of trace-preserving extension away from the support is no
 longer part of the forward equality gap.
 
-The tensor-product identity required to identify the pre-twirl pair is also
-available without invertibility.  If $\rho$ and $\sigma$ are positive
-semidefinite, $\ker\sigma\subseteq\ker\rho$, and $\tau$ is positive
-semidefinite with $\operatorname{tr}\tau=1$, then
+\section{Relative entropy and Weyl reduction}
+
+Let $D(\rho\Vert\sigma)$ denote quantum relative entropy on its support domain.
+If $\rho$ and $\sigma$ are positive semidefinite,
+$\ker\sigma\subseteq\ker\rho$, and $\tau$ is positive semidefinite with
+$\tr\tau=1$, then
 \begin{align}
-  D(\rho\otimes\tau\Vert\sigma\otimes\tau)=D(\rho\Vert\sigma).
+    D(\rho\otimes\tau\Vert\sigma\otimes\tau)
+        &=D(\rho\Vert\sigma).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_relative_entropy_ancilla}
 \end{align}
-The proof expands the logarithm of a singular tensor product through the three
-support projections; support absorption and $\operatorname{tr}\tau=1$ remove
-the projection and ancilla terms.
-\footnote{Formal declaration:
+The proof expands the logarithm of the singular tensor product through the
+three support projections. Support absorption and $\tr\tau=1$ remove the
+projection and ancilla terms.\footnote{Formal declaration:
 \leanid{quantumRelativeEntropy_kronecker_support} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-This identity is a prerequisite for transporting equality through the
-Weyl-twirl proof of data processing.  It does not prove that equality yields
-recovery.
+This identity transports equality through the Weyl-twirl proof of data
+processing, but it does not by itself show that equality implies recovery.
 
-The scalar equality can now be transported from the partial-trace pair to every
-individual Weyl summand.  Fix a primitive $d_R$-th root of unity, put
-$U_{ab}=\mathbf 1_L\otimes W(a,b)$, and write
+Fix a primitive $d_R$-th root of unity. For the corresponding Weyl operators
+$W(a,b)$, define
 \begin{align}
-  \overline X
-    =\frac{1}{d_R^2}\sum_{c,e}U_{ce}XU_{ce}^{\dagger}
-    =(\operatorname{tr}_R X)\otimes(d_R^{-1}\mathbf 1_R).
+    U_{ab}
+        &=\Id_L\otimes W(a,b),
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weyl_unitary}\\
+    \overline X
+        &=\frac{1}{d_R^2}\sum_{c,e}U_{ce}XU_{ce}^\dagger,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weyl_average}\\
+    \overline X
+        &=(\tr_R X)\otimes(d_R^{-1}\Id_R).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weyl_partial_trace}
 \end{align}
-If $\rho$ and $\sigma$ are positive semidefinite,
-$\ker\sigma\subseteq\ker\rho$, and partial-trace data processing is saturated,
-then for every $a,b$,
+Suppose $\rho$ and $\sigma$ are positive semidefinite,
+$\ker\sigma\subseteq\ker\rho$, and data processing under the right partial
+trace is saturated. Then every $a,b$ satisfies
 \begin{align}
-  D(\overline\rho\Vert\overline\sigma)
-    =D(U_{ab}\rho U_{ab}^{\dagger}\Vert
-       U_{ab}\sigma U_{ab}^{\dagger}).
+    D(\overline\rho\Vert\overline\sigma)
+        &=
+        D(U_{ab}\rho U_{ab}^\dagger
+            \Vert U_{ab}\sigma U_{ab}^\dagger).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weyl_summand_equality}
 \end{align}
-Indeed, the twirl identity, support-domain ancilla additivity, and the inherited
-support inclusion for the marginals identify the left-hand side with
-$D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)$; unitary invariance
-identifies the right-hand side with $D(\rho\Vert\sigma)$.
-\footnote{Formal declaration:
+Equations~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_weyl_partial_trace}) and
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_relative_entropy_ancilla}),
+together with the inherited support inclusion for the marginals, identify the
+left-hand side with $D(\tr_R\rho\Vert\tr_R\sigma)$. Unitary invariance
+identifies the right-hand side with $D(\rho\Vert\sigma)$.\footnote{Formal
+declaration:
 \leanid{quantumRelativeEntropy_weyl_average_eq_summand_of_partialTraceRight_eq}
 in \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-This is only equality of the scalar relative entropies.  It neither
-characterizes equality in the joint-convexity inequality nor supplies a Petz
-intertwining or recovery identity.
+This result concerns scalar relative entropies only. It neither characterizes
+equality in joint convexity nor supplies an operator intertwining or recovery
+identity.
 
-Summing the preceding equality with the uniform Weyl weights gives the scalar
-equality associated with the finite Jensen step:
+Summing
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_weyl_summand_equality}) with
+uniform Weyl weights gives
 \begin{align}
-  D(\overline\rho\Vert\overline\sigma)
-    =\frac{1}{d_R^2}\sum_{c,e}
-      D(U_{ce}\rho U_{ce}^{\dagger}\Vert
-        U_{ce}\sigma U_{ce}^{\dagger}).
+    D(\overline\rho\Vert\overline\sigma)
+        &=
+        \frac{1}{d_R^2}\sum_{c,e}
+        D(U_{ce}\rho U_{ce}^\dagger
+            \Vert U_{ce}\sigma U_{ce}^\dagger).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weyl_jensen_equality}
 \end{align}
-Indeed, unitary invariance makes every summand equal to
-$D(\rho\Vert\sigma)$, while the preceding Weyl-summand equality gives the same
-value on the left.  The $d_R^2$ weights sum to one.
-\footnote{Formal declaration:
+Unitary invariance makes every summand equal to $D(\rho\Vert\sigma)$, and the
+$d_R^2$ weights sum to one.\footnote{Formal declaration:
 \leanid{quantumRelativeEntropy_weyl_jensen_eq_of_partialTraceRight_eq} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-This statement does not characterize equality in joint convexity and does not
-imply an operator intertwining or Petz recovery identity.
+Again, this scalar equality does not characterize equality in joint convexity
+and does not imply an operator intertwining or Petz recovery identity.
 
-For positive definite inputs, the fixed-resolvent algebra of the equality
-case is now available for the Weyl family.  With
-$A_g=d_R^{-2}U_g\rho U_g^\dagger$, $B_g=d_R^{-2}U_g\sigma U_g^\dagger$,
-and
-\[
-  T_g(X)=A_gX+tXB_g,\qquad
-  T(X)=\Bigl(\sum_gA_g\Bigr)X+tX\Bigl(\sum_gB_g\Bigr),
-\]
-put $\Lambda_t=T^{-1}(\sum_gB_g)$.  For every $t>0$, direct expansion of
-the residuals $R_g=B_g-T_g(\Lambda_t)$ gives the exact identity
+\section{Positive-definite resolvent argument}
+
+For positive definite $\rho$ and $\sigma$, define the weighted Weyl family
 \begin{align}
-  \sum_g\left\|T_g^{-1/2}(B_g)-T_g^{1/2}(\Lambda_t)\right\|_{\rm HS}^2
-  &={}
-  \sum_g\operatorname{Re}\langle B_g,T_g^{-1}(B_g)\rangle_{\rm HS}\notag\\
-  &\quad-
-  \operatorname{Re}\left\langle\sum_gB_g,
-    T^{-1}\Bigl(\sum_gB_g\Bigr)\right\rangle_{\rm HS}.
+    A_g
+        &=d_R^{-2}U_g\rho U_g^\dagger,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weighted_weyl_state}\\
+    B_g
+        &=d_R^{-2}U_g\sigma U_g^\dagger.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weighted_weyl_reference}
 \end{align}
-Consequently, if the right-hand side vanishes, then
-$T_g^{-1}(B_g)=\Lambda_t$ for every $g$, in particular for the identity Weyl
-element.  The squared-defect identity is the Appendix calculation of
-Jen\v{c}ov\'a--Ruskai, arXiv:0903.2895v4, lines 1313--1343; the resulting
-common-resolvent equality is in \S4, lines 652--674.
-\footnote{Formal declarations:
+For $t>0$, define
+\begin{align}
+    T_g(X)
+        &=A_gX+tXB_g,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_local_left_right_operator}\\
+    T(X)
+        &=\left(\sum_gA_g\right)X
+          +tX\left(\sum_gB_g\right),
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_summed_left_right_operator}\\
+    \Lambda_t
+        &=T^{-1}\!\left(\sum_gB_g\right).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_common_resolvent_candidate}
+\end{align}
+Writing $R_g=B_g-T_g(\Lambda_t)$ and using the Hilbert--Schmidt inner product
+gives the exact squared-defect identity
+\begin{align}
+    \sum_g
+    \left\|
+        T_g^{-1/2}(B_g)-T_g^{1/2}(\Lambda_t)
+    \right\|_{\mathrm{HS}}^2
+        &=
+        \sum_g\operatorname{Re}
+        \left\langle B_g,T_g^{-1}(B_g)\right\rangle_{\mathrm{HS}}
+        \notag\\
+        &\quad-
+        \operatorname{Re}
+        \left\langle
+            \sum_gB_g,
+            T^{-1}\!\left(\sum_gB_g\right)
+        \right\rangle_{\mathrm{HS}}.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_resolvent_defect_identity}
+\end{align}
+If the right-hand side vanishes, every squared norm on the left vanishes.
+Therefore,
+\begin{align}
+    T_g^{-1}(B_g)
+        &=\Lambda_t
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_common_resolvent}
+\end{align}
+for every $g$, including the identity Weyl element. This is the
+Jen\v{c}ov\'a--Ruskai Appendix calculation in arXiv:0903.2895v4,
+lines 1313--1343; the resulting common-resolvent equality occurs in
+Section~4, lines 652--674. The relative-entropy equality methods underlying
+this argument are reviewed in Ref.~\cite{Cirac2021Matrix}.\footnote{Formal
+declarations:
 \leanid{Matrix.weyl_resolvent_defect_identity} and
 \leanid{Matrix.weyl_resolvent_eq_of_defect_eq_zero} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-The positive-definite analytic connection is now available.  The scalar spectral
-identity is integrated exactly, and the finite Weyl gap is written as
-\[
-  \sum_gD(A_g\Vert B_g)-D(A\Vert B)
-  =\int_0^\infty
-    \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}{1+t}\,dt.
-\]
-There is an essential normalization point.  Saturation of the finite Weyl
-Jensen inequality gives $d_R^{-2}$ times each relative entropy, whereas the
-displayed gap uses the weighted matrices
-$A_g=d_R^{-2}U_g\rho U_g^\dagger$ and
-$B_g=d_R^{-2}U_g\sigma U_g^\dagger$.  Positive homogeneity,
-$D(cA\Vert cB)=cD(A\Vert B)$ for $c>0$, identifies these two expressions.
-Consequently equality under the partial trace makes this precise weighted gap
-vanish; no separate gap hypothesis is needed.
-Both defects are nonnegative and continuous on $(0,\infty)$, while the full
-integrand is integrable there.  Hence a zero gap first gives almost-everywhere
-vanishing and then, by continuity, pointwise vanishing for every $t>0$.
-Since $t/(1+t)>0$ on this domain, the source-$B$ defect vanishes, and the
-fixed-resolvent theorem gives $T_g^{-1}(B_g)=T^{-1}(B)$ for every Weyl index.
+
+Define
+\begin{align}
+    A
+        &=\sum_gA_g,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_summed_state}\\
+    B
+        &=\sum_gB_g.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_summed_reference}
+\end{align}
+The positive-definite scalar spectral identity integrates exactly, and the
+finite Weyl gap satisfies
+\begin{align}
+    \sum_gD(A_g\Vert B_g)-D(A\Vert B)
+        &=
+        \int_0^\infty
+        \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}
+             {1+t}\,dt.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_positive_definite_gap_integral}
+\end{align}
+The normalization is essential. Saturation of the finite Weyl Jensen
+inequality gives $d_R^{-2}$ times each relative entropy, whereas
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_positive_definite_gap_integral})
+uses the weighted matrices $A_g$ and $B_g$. Positive homogeneity,
+\begin{align}
+    D(cA\Vert cB)
+        &=cD(A\Vert B),
+        \qquad c>0,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_relative_entropy_homogeneity}
+\end{align}
+identifies the two expressions. Equality under the partial trace therefore
+makes the weighted gap vanish without an additional gap hypothesis.
+
+Both defects are nonnegative and continuous on $(0,\infty)$, and the full
+integrand in
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_positive_definite_gap_integral})
+is integrable. A zero gap gives almost-everywhere vanishing, and continuity
+then gives pointwise vanishing for every $t>0$. Since $t/(1+t)>0$, the
+source-$B$ defect vanishes, and
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_common_resolvent}) follows.%
 \footnote{Formal declarations:
 \leanid{Matrix.quantumRelativeEntropy_smul_posDef},
 \leanid{Matrix.weylRelativeEntropyGap_eq_zero_of_partialTraceRight_eq},
@@ -301,25 +441,36 @@ fixed-resolvent theorem gives $T_g^{-1}(B_g)=T^{-1}(B)$ for every Weyl index.
 \leanid{Matrix.weyl_resolvent_eq_of_partialTraceRight_eq} in
 \path{TNLean/Analysis/RelativeEntropyResolventIntegral.lean} and
 \path{TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean}.}
-The positive-definite inverse-square-root passage is now also complete.  The
-source-$B$ resolvent factors through the relative modular matrix
-$\Delta_{A,B}=A\otimes(B^{-1})^{\mathsf T}$.  Equality of its shifted
-resolvents on the vectorized identity passes through the positive square-root
-functional calculus, giving
+
+Define the relative modular matrix
 \begin{align}
-  \sqrt\rho\,\sigma^{-1/2}
-    =\sqrt{\overline\rho}\,\overline\sigma^{-1/2}.
+    \Delta_{A,B}
+        &=A\otimes(B^{-1})^{\mathsf T}.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_relative_modular_matrix}
 \end{align}
-Taking adjoint products and cancelling $\sqrt\sigma$ gives
+The source-$B$ resolvent factors through this matrix. Equality of the shifted
+resolvents on the vectorized identity passes through the positive square-root
+functional calculus and gives
 \begin{align}
-  \sqrt\sigma\,\overline\sigma^{-1/2}\,\overline\rho\,
-    \overline\sigma^{-1/2}\,\sqrt\sigma=\rho.
+    \sqrt{\rho} \sigma^{-1/2}
+        &=\sqrt{\overline\rho} \overline\sigma^{-1/2}.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_positive_sqrt_ratio}
+\end{align}
+Taking adjoint products and cancelling $\sqrt{\sigma}$ gives
+\begin{align}
+    \sqrt{\sigma}
+    \overline\sigma^{-1/2}
+    \overline\rho
+    \overline\sigma^{-1/2}
+    \sqrt{\sigma}
+        &=\rho.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_positive_petz_sandwich}
 \end{align}
 This is the positive-square-root specialization of the relative-modular
-analytic-continuation argument in Jen\v{c}ov\'a--Ruskai,
-arXiv:0903.2895v4, lines 658--680.  The formal proof uses the equivalent
-L\"owner integral representation of the power $p=1/2$.
-\footnote{Formal declarations:
+analytic-continuation argument in the Jen\v{c}ov\'a--Ruskai preprint
+arXiv:0903.2895v4, lines 658--680. The formal proof uses the equivalent
+L\"owner integral representation for the power $1/2$.\footnote{Formal
+declarations:
 \leanid{Matrix.sqrt_mulVec_eq_of_resolvent_mulVec_eq},
 \leanid{Matrix.mulVec_sqrt_mulVec_eq_of_mulVec_resolvent_mulVec_eq},
 \leanid{Matrix.sourceB_resolvent_eq_relativeModular}, and
@@ -329,188 +480,250 @@ L\"owner integral representation of the power $p=1/2$.
 \leanid{Matrix.weyl_identity_sandwich_of_partialTraceRight_eq}, and
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_posDef} in
 \path{TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean}.}
-Thus equality under the partial trace implies raw Petz recovery for positive
-definite inputs.  The support-domain argument below extends this passage to
-singular supports.
+Thus partial-trace equality implies raw Petz recovery for positive definite
+inputs. The support-domain argument below extends this result to singular
+inputs.
 
-Jen\v{c}ov\'a--Ruskai extend the
-definition and convexity argument directly to positive semidefinite pairs with
-$\ker B\subseteq\ker A$; see arXiv:0903.2895v4, lines 717--720.  Their singular
-equality argument then obtains the common relative-modular resolvent on the
-reference support and passes through functional calculus; see lines 766--793.
-The support-domain spectral integral is now also proved.  For positive
-semidefinite $A,B$ with $\ker B\subseteq\ker A$, its finite spectral integrand
-is integrable on $(0,\infty)$ and has integral $D(A\Vert B)$.  This proves the
-spectral content of $(\mathrm{J1})$, $(\mathrm{intspec})$, and
-$(\mathrm{intAB})$ together with the support convention at lines 717--720.
+\section{Singular-support resolvent argument}
+
+The Jen\v{c}ov\'a--Ruskai preprint arXiv:0903.2895v4, lines 717--720, extends
+the definition and convexity argument to positive semidefinite pairs $(A,B)$
+satisfying $\ker B\subseteq\ker A$. Its singular equality argument, at
+lines 766--793, obtains the common relative-modular resolvent on the reference
+support and then applies functional calculus. These relative-entropy equality
+methods are reviewed in Ref.~\cite{Cirac2021Matrix}.
+
+The support-domain spectral integral is now proved. For positive semidefinite
+$A,B$ with $\ker B\subseteq\ker A$, the finite spectral integrand is
+integrable on $(0,\infty)$ and satisfies
+\begin{align}
+    \int_0^\infty
+        \operatorname{Spec}_{A,B}(t)\,dt
+        &=D(A\Vert B).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_support_spectral_integral}
+\end{align}
+This proves the spectral content of the formulas denoted
+$(\mathrm{J1})$, $(\mathrm{intspec})$, and $(\mathrm{intAB})$ in that
+preprint, together with its support convention at lines 717--720.%
 \footnote{Formal declarations:
 \leanid{Matrix.quantumRelativeEntropy_spectral} and
 \leanid{Matrix.supportRelativeEntropySpectralIntegrand_integrableOn_and_integral_eq_quantumRelativeEntropy}
 in \path{TNLean/Analysis/RelativeEntropySupportIntegral.lean}, and
 \leanid{Matrix.supportRelativeEntropyLeftRightIntegrand_eq_spectral} and
 \leanid{Matrix.rawSupportSourceAQuadratic_sub_trace_add_sourceB_eq_spectral}
-in
-\path{TNLean/Analysis/RelativeEntropySupportLeftRightQuadratic.lean}.}
-The finite spectral integrand is now identified pointwise with the
-support-projected left--right quadratic form: the source in its first
-quadratic term is $A P_B$.  Under the inclusion
-$\ker B\subseteq\ker A$, one has $A P_B=A$, so this term is the corresponding
-quadratic form with the unprojected source $A$.  For a single pair, the
-source-$B$ support-generalized-inverse solution is now identified with the
-projected shifted relative-modular vector
-\[
-  (\mathbf 1\otimes P_B^{\mathsf T})
-  \bigl(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\bigr)^{-1}
-  \operatorname{vec}(\mathbf 1^{\mathsf T}).
-\]
-The corresponding source-$B$ quadratic forms are therefore equal.
+in \path{TNLean/Analysis/RelativeEntropySupportLeftRightQuadratic.lean}.}
+
+The spectral integrand agrees pointwise with the support-projected left--right
+quadratic form. Its first source term is $AP_B$, where $P_B$ is the support
+projection of $B$. The kernel inclusion implies
+\begin{align}
+    AP_B
+        &=A.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_source_support_absorption}
+\end{align}
+Hence this term equals the quadratic form with unprojected source $A$.
+
+Define the generalized inverse
+\begin{align}
+    B^+
+        &=\left(B^{-1/2}_{\mathrm{supp}}\right)^2.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_reference_generalized_inverse}
+\end{align}
+For a single pair, the support-generalized-inverse source-$B$ solution equals
+the projected shifted relative-modular vector
+\begin{align}
+    &(\Id\otimes P_B^{\mathsf T})
+    \left(t\Id+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+    \operatorname{vec}(\Id^{\mathsf T}).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_projected_modular_vector}
+\end{align}
+The corresponding source-$B$ quadratic forms are therefore equal.%
 \footnote{Formal declarations:
 \leanid{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular}
 and
 \leanid{Matrix.supportSourceBQuadratic_eq_projected_relativeModular} in
 \path{TNLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean}.}
-For a finite family $(A_i,B_i)$, both fixed-parameter quadratic defects are
-now nonnegative.  Under $\ker B_i\subseteq\ker A_i$, the source-$A$ defect is
-\[
-  \sum_i Q^A_{A_i,B_i}(t)
-    -Q^A_{\sum_iA_i,\sum_iB_i}(t)\geq0,
-\]
-where the source is the unprojected matrix $A_i$; the corresponding
-source-$B$ inequality requires no kernel inclusion:
-\[
-  \sum_i Q^B_{A_i,B_i}(t)
-    -Q^B_{\sum_iA_i,\sum_iB_i}(t)\geq0.
-\]
-The kernel inclusions for the summands imply the same inclusion for the summed
-pair.
-\footnote{Formal declarations:
-\leanid{Matrix.rawSupportSourceAQuadratic_sum_sub_nonneg} and
+
+For a finite family $(A_i,B_i)$ satisfying
+$\ker B_i\subseteq\ker A_i$, both fixed-parameter defects are nonnegative:
+\begin{align}
+    \sum_iQ^A_{A_i,B_i}(t)
+        -Q^A_{\sum_iA_i,\sum_iB_i}(t)
+        &\geq 0,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_source_a_defect_nonnegative}\\
+    \sum_iQ^B_{A_i,B_i}(t)
+        -Q^B_{\sum_iA_i,\sum_iB_i}(t)
+        &\geq 0.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_source_b_defect_nonnegative}
+\end{align}
+The source in
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_source_a_defect_nonnegative})
+is the unprojected matrix $A_i$. The source-$B$ inequality in
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_source_b_defect_nonnegative})
+requires no kernel inclusion. The local kernel inclusions imply the
+corresponding inclusion for the summed pair.\footnote{Formal declarations:
+\leanid{Matrix.rawSupportSourceAQuadratic_sum_sub_nonneg},
 \leanid{Matrix.supportSourceBQuadratic_sum_sub_nonneg},
 \leanid{Matrix.supportLeftRightSupportInv_mulVec_sourceB_eq_of_defect_eq_zero},
 and
 \leanid{Matrix.supportRightProj_mul_sumSupportRightProj_eq} in
 \path{TNLean/Channel/Schwarz/SupportSourceDefect.lean}.}
-These are fixed-$t$ algebraic inequalities.  The remaining analytic passage
-now identifies the finite-family relative-entropy gap with the integral of
-the two defects:
-\[
-  \sum_i D(A_i\Vert B_i)
-    -D\!\left(\sum_iA_i\middle\Vert\sum_iB_i\right)
-  =
-  \int_0^\infty
-    \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}{1+t}\,dt .
-\]
-The gap integrand is continuous on the positive half-line and integrable
-there.
+
+The finite-family relative-entropy gap is the integral of these two defects:
+\begin{align}
+    \sum_iD(A_i\Vert B_i)
+        -D\!\left(\sum_iA_i\middle\Vert\sum_iB_i\right)
+        &=
+        \int_0^\infty
+        \frac{\operatorname{Def}_A(t)+t\operatorname{Def}_B(t)}
+             {1+t}\,dt.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_support_family_gap}
+\end{align}
+The gap integrand is continuous and integrable on $(0,\infty)$.%
 \footnote{Formal declarations:
 \leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand},
 \leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_integrableOn_and_integral_eq},
 and
 \leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_continuousOn} in
 \path{TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean}.}
-The two defect inequalities make this integrand nonnegative.  If the
-relative entropy of the summed pair equals the sum of the individual
-relative entropies, its integral is zero.  Almost-everywhere vanishing and
-continuity then give pointwise vanishing for every $t>0$; in particular, the
-source-$B$ defect vanishes there.
+Equations~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_source_a_defect_nonnegative})
+and
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_source_b_defect_nonnegative}) make
+this integrand nonnegative. If the relative entropy of the summed pair equals
+the sum of the individual relative entropies, the integral vanishes.
+Almost-everywhere vanishing and continuity then imply pointwise vanishing for
+every $t>0$, including vanishing of the source-$B$ defect.%
 \footnote{Formal declarations:
 \leanid{Matrix.supportRelativeEntropyFamilyGapIntegrand_nonneg} and
 \leanid{Matrix.supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq} in
 \path{TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean}.}
-The residual identity now converts this real-valued defect equality into the
-common support-generalized-inverse solution.  The local right-support
-projection absorbs both the support projection of the local left--right
-operator and the right-support projection of the summed reference matrix.
-Consequently the local and summed shifted relative-modular resolvents agree
-after the local right-support projection, for every summand and every
-positive parameter.
+
+The residual identity converts the real-valued defect equality into a common
+support-generalized-inverse solution. The local right-support projection
+absorbs both the support projection of the local left--right operator and the
+right-support projection of the summed reference matrix. The local and summed
+shifted relative-modular resolvents therefore agree after the local
+right-support projection for every summand and every $t>0$.%
 \footnote{Formal declarations:
 \leanid{Matrix.supportRightProj_mul_supportLeftRightSupportProj_eq} in
 \path{TNLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean}, and
 \leanid{Matrix.supportRelativeModular_resolvent_mulVec_eq_of_relativeEntropy_sum_eq}
-in
-\path{TNLean/Channel/Schwarz/SupportRelativeEntropyEquality.lean}.}
-This generic result is now specialized to the finite Weyl family produced by
-partial-trace saturation.  For the unweighted conjugates
-$A_g=U_g\rho U_g^\dagger$ and $B_g=U_g\sigma U_g^\dagger$, positive-scalar
-homogeneity on the support domain converts the weighted Jensen equality into
+in \path{TNLean/Channel/Schwarz/SupportRelativeEntropyEquality.lean}.}
+
+For the Weyl family, now use the unweighted conjugates
 \begin{align}
-  D\Bigl(\sum_gA_g\Bigm\Vert\sum_gB_g\Bigr)
-  =\sum_gD(A_g\Vert B_g).
+    A_g
+        &=U_g\rho U_g^\dagger,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_unweighted_weyl_state}\\
+    B_g
+        &=U_g\sigma U_g^\dagger.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_unweighted_weyl_reference}
 \end{align}
-Unitary conjugation transports the local kernel inclusions, while positivity
-of the summands transports them to the summed pair.  Hence the generic theorem
+Positive-scalar homogeneity on the support domain converts weighted Jensen
+equality into
+\begin{align}
+    D\!\left(\sum_gA_g\middle\Vert\sum_gB_g\right)
+        &=\sum_gD(A_g\Vert B_g).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_unweighted_weyl_gap_zero}
+\end{align}
+Unitary conjugation transports the local kernel inclusions, and positivity
+transports them to the summed pair. The generic finite-family theorem therefore
 gives the common projected relative-modular resolvent for every Weyl summand.
-At the zero Weyl index, the local pair is exactly $(\rho,\sigma)$.
-\footnote{Formal declarations:
+At the zero Weyl index, the local pair is $(\rho,\sigma)$.\footnote{Formal
+declarations:
 \leanid{Matrix.quantumRelativeEntropy_smul_support} in
 \path{TNLean/Analysis/RelativeEntropySupportIntegral.lean}, and
 \leanid{Matrix.weyl_supportRelativeModular_resolvent_mulVec_eq_of_partialTraceRight_eq}
 in
 \path{TNLean/Channel/Schwarz/WeylSupportRelativeEntropyEquality.lean}.}
-This is the analytic specialization required before the support
-square-root-ratio step.  It does not yet assert that ratio, the Petz sandwich,
-or recovery.
-Following this step, consider two positive semidefinite pairs $(A,B)$ and
-$(C,D)$.  Let $P_B$ be the support projection of the first reference matrix
-$B$, and write
-$B^+=(B^{-1/2}_{\mathrm{supp}})^2$ and
-$D^+=(D^{-1/2}_{\mathrm{supp}})^2$.  Suppose that, for every $t>0$, their
-shifted generalized relative-modular resolvents satisfy
+This result supplies the analytic input for the support square-root-ratio step.
+It does not yet assert the square-root ratio, the Petz sandwich, or recovery.
+
+\section{Support square-root ratio and recovery}
+
+Consider positive semidefinite pairs $(A,B)$ and $(C,D)$. Let $P_B$ be the
+support projection of $B$, and define
 \begin{align}
-  &(\mathbf 1\otimes P_B^{\mathsf T})
-    \bigl(t\mathbf 1+A\otimes(B^+)^{\mathsf T}\bigr)^{-1}
-    \operatorname{vec}(\mathbf 1^{\mathsf T}) \notag\\
-  &\qquad=(\mathbf 1\otimes P_B^{\mathsf T})
-    \bigl(t\mathbf 1+C\otimes(D^+)^{\mathsf T}\bigr)^{-1}
-    \operatorname{vec}(\mathbf 1^{\mathsf T}).
+    B^+
+        &=\left(B^{-1/2}_{\mathrm{supp}}\right)^2,
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_b_generalized_inverse}\\
+    D^+
+        &=\left(D^{-1/2}_{\mathrm{supp}}\right)^2.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_d_generalized_inverse}
 \end{align}
-Then their square-root ratios agree on the same support:
+Suppose that, for every $t>0$, the projected shifted resolvents satisfy
 \begin{align}
-  \bigl(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\bigr)P_B
-    =\bigl(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\bigr)P_B.
+    &(\Id\otimes P_B^{\mathsf T})
+    \left(t\Id+A\otimes(B^+)^{\mathsf T}\right)^{-1}
+    \operatorname{vec}(\Id^{\mathsf T})
+        \notag\\
+    &\qquad=
+    (\Id\otimes P_B^{\mathsf T})
+    \left(t\Id+C\otimes(D^+)^{\mathsf T}\right)^{-1}
+    \operatorname{vec}(\Id^{\mathsf T}).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_projected_resolvent_equality}
 \end{align}
-The orientation of the vectorized restriction is fixed by
+Then the square-root ratios agree on the same support:
 \begin{align}
-  (\mathbf 1\otimes P_B^{\mathsf T})
+    \left(\sqrt A\,B^{-1/2}_{\mathrm{supp}}\right)P_B
+        &=
+        \left(\sqrt C\,D^{-1/2}_{\mathrm{supp}}\right)P_B.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_support_sqrt_ratio}
+\end{align}
+The vectorized restriction has the orientation
+\begin{align}
+    (\Id\otimes P_B^{\mathsf T})
     \operatorname{vec}(M^{\mathsf T})
-    =\operatorname{vec}\bigl((MP_B)^{\mathsf T}\bigr).
+        &=
+        \operatorname{vec}\!\left((MP_B)^{\mathsf T}\right).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_vectorized_support_orientation}
 \end{align}
-Here the generalized inverse is the square of the support inverse square root.
 \footnote{Formal declarations:
 \leanid{Matrix.one_kronecker_transpose_mulVec_vec_transpose},
 \leanid{Matrix.supportRelativeModular_sourceB_solution},
-\leanid{Matrix.supportRelativeModular_sqrt_mulVec_vec_one} and
+\leanid{Matrix.supportRelativeModular_sqrt_mulVec_vec_one}, and
 \leanid{Matrix.supportRelativeModular_sqrt_ratio_eq_of_resolvent_mulVec_eq} in
 \path{TNLean/Channel/Schwarz/SupportRelativeModular.lean}.}
-The restriction is essential.  Equality on the ambient vectorized identity
-would force equality of the two reference support projections, since each
-resolvent contributes $t^{-1}$ on the complement of its reference support.
-This is false in the intended data-processing application: if
-$\rho=\sigma$ is a rank-one maximally entangled state, equality under partial
-trace is automatic, whereas the comparison pair formed from its marginal is
-full rank.  Thus the ambient resolvent equality is not a consequence of the
-singular equality theorem.
 
-The canonical source-side projected resolvent is known to solve its singular
-left--right equation: after projection by
-$\mathbf 1\otimes P_B^{\mathsf T}$, multiplication by
-$A\otimes\mathbf 1+t(\mathbf 1\otimes B^{\mathsf T})$ gives
-$\operatorname{vec}(B^{\mathsf T})$.  This uses only the generalized-inverse
-identity $(B^{-1/2}_{\mathrm{supp}})^2B=P_B$.  The one-pair identity above
-also identifies this vector with the support-generalized-inverse solution of
-the left--right equation, and hence identifies the two source-$B$ quadratic
-forms.  Together with the integral and continuity argument above, equality
-of relative entropies now makes the real-valued source-$B$ defect vanish at
-every positive parameter.  Nonnegativity of the complex quadratic residuals
-makes their imaginary parts vanish, so the real equality yields the
-finite-family common projected resolvent theorem.  The kernel inclusion used
-for the unprojected source-$A$ inequality remains an exact hypothesis of this
-source-facing equality theorem.  The finite-Weyl specialization now supplies
-the projected resolvent hypothesis for the support functional-calculus step.
-The zero Weyl summand, the unweighted-sum normalization, and the projected
-square-root-ratio theorem now carry this conclusion through the singular
-inverse-square-root sandwich and raw Petz-recovery argument.
+The projection in
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_projected_resolvent_equality})
+is essential. Equality on the ambient vectorized identity would force equality
+of the two reference support projections because each resolvent contributes
+$t^{-1}$ on the complement of its reference support. This conclusion is false
+in the intended data-processing application. For example, if $\rho=\sigma$ is
+a rank-one maximally entangled state, partial-trace equality is automatic, but
+the comparison pair formed from its marginal is full rank. The singular
+equality theorem therefore does not imply ambient resolvent equality.
+
+The canonical source-side projected resolvent solves its singular left--right
+equation. After applying $\Id\otimes P_B^{\mathsf T}$, multiplication by the
+operator
+\begin{align}
+    A\otimes\Id+t(\Id\otimes B^{\mathsf T})
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_singular_left_right_operator}
+\end{align}
+gives $\operatorname{vec}(B^{\mathsf T})$. This uses only the
+generalized-inverse identity
+\begin{align}
+    \left(B^{-1/2}_{\mathrm{supp}}\right)^2B
+        &=P_B.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_generalized_inverse_identity}
+\end{align}
+The one-pair identity also identifies this vector with the
+support-generalized-inverse solution of the left--right equation and therefore
+identifies the two source-$B$ quadratic forms.
+
+Together with the integral and continuity argument, equality of relative
+entropies makes the real-valued source-$B$ defect vanish at every positive
+parameter. Nonnegativity of the complex quadratic residuals makes their
+imaginary parts vanish, so the real equality yields the finite-family common
+projected resolvent theorem. The kernel inclusion required for the unprojected
+source-$A$ inequality remains an exact hypothesis of this theorem. The finite
+Weyl specialization supplies the projected resolvent hypothesis for the
+support functional calculus. The zero Weyl summand, the unweighted-sum
+normalization, and
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_support_sqrt_ratio}) then give
+the singular inverse-square-root sandwich and raw Petz recovery.%
 \footnote{Formal declarations:
 \leanid{Matrix.unweightedWeylSum_eq_smul_partialTraceRight_kronecker} in
 \path{TNLean/Channel/Schwarz/WeylSupportRelativeEntropyEquality.lean};
@@ -519,150 +732,180 @@ inverse-square-root sandwich and raw Petz-recovery argument.
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq} in
 \path{TNLean/Channel/Schwarz/WeylSupportPetzRecovery.lean}.}
 
-In particular, the affine regularizations used to prove the inequality cannot
-by themselves prove its equality case.  Equality at the limiting pair implies
-only that the nonnegative regularized gaps tend to zero; it does not imply that
-any gap at positive regularization parameter is zero.  Thus the
-positive-definite equality theorem cannot be applied pointwise to those
-regularized pairs without an additional equality-preservation theorem.
+Affine regularization alone cannot prove the equality case. Equality at the
+limiting pair implies only that the nonnegative regularized gaps converge to
+zero; it does not imply that a gap at any positive regularization parameter is
+zero. The positive-definite equality theorem therefore cannot be applied
+pointwise to the regularized pairs without a separate equality-preservation
+theorem.
 
-There is nevertheless a useful algebraic reduction for the identity summand.
-Write
-\[
-  \overline X=(\operatorname{tr}_R X)\otimes d_R^{-1}\mathbf 1_R.
-\]
+For the identity Weyl summand, write
+\begin{align}
+    \overline X
+        &=(\tr_R X)\otimes d_R^{-1}\Id_R.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_identity_weyl_average}
+\end{align}
 For every positive semidefinite $\tau$ on the left factor,
 \begin{align}
-  (\tau\otimes d_R^{-1}\mathbf 1_R)^{-1/2}_{\mathrm{supp}}
-    &=\sqrt{d_R}\,
-      (\tau^{-1/2}_{\mathrm{supp}}\otimes\mathbf 1_R),\\
-  \overline\sigma^{-1/2}_{\mathrm{supp}}\,\overline\rho\,
-  \overline\sigma^{-1/2}_{\mathrm{supp}}
-    &=\bigl((\operatorname{tr}_R\sigma)^{-1/2}_{\mathrm{supp}}
-       (\operatorname{tr}_R\rho)
-       (\operatorname{tr}_R\sigma)^{-1/2}_{\mathrm{supp}}\bigr)
-       \otimes\mathbf 1_R.
+    \left(\tau\otimes d_R^{-1}\Id_R\right)^{-1/2}_{\mathrm{supp}}
+        &=
+        \sqrt{d_R}
+        \left(\tau^{-1/2}_{\mathrm{supp}}\otimes\Id_R\right),
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_mixed_support_inverse_sqrt}\\
+    \overline\sigma^{-1/2}_{\mathrm{supp}}
+    \overline\rho
+    \overline\sigma^{-1/2}_{\mathrm{supp}}
+        &=
+        \left((\tr_R\sigma)^{-1/2}_{\mathrm{supp}}
+            (\tr_R\rho)
+            (\tr_R\sigma)^{-1/2}_{\mathrm{supp}}\right)\otimes\Id_R.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_weyl_sandwich_reduction}
 \end{align}
-The second identity follows because the two factors $\sqrt{d_R}$ cancel the
-coefficient $d_R^{-1}$ in $\overline\rho$.  Hence the operator identity
-\[
-  \sqrt\sigma\,\overline\sigma^{-1/2}_{\mathrm{supp}}\,
-  \overline\rho\,\overline\sigma^{-1/2}_{\mathrm{supp}}\,
-  \sqrt\sigma=\rho
-\]
+The two factors $\sqrt{d_R}$ in the second line cancel the coefficient
+$d_R^{-1}$ in $\overline\rho$. Consequently, the operator identity
+\begin{align}
+    \sqrt{\sigma}
+    \overline\sigma^{-1/2}_{\mathrm{supp}}
+    \overline\rho
+    \overline\sigma^{-1/2}_{\mathrm{supp}}
+    \sqrt{\sigma}
+        &=\rho
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_support_petz_sandwich}
+\end{align}
 implies
-$\mathcal R_\sigma(\operatorname{tr}_R\rho)=\rho$ by the support Petz formula
-of \cite[Theorem~3, equation~(8)]{HaydenJozsaPetzWinter2004}.
-\footnote{Formal declarations:
+\begin{align}
+    \mathcal R_\sigma(\tr_R\rho)
+        &=\rho
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_raw_petz_recovery}
+\end{align}
+through the support Petz formula
+(\ref{eq:cpsv16_ssa_equality_hayashi_markov_petz_support_map}), corresponding
+to Theorem~3, Equation~(8), of the Hayden--Jozsa--Petz--Winter argument reviewed
+in Ref.~\cite{Cirac2021Matrix}.\footnote{Formal declarations:
 \leanid{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed},
 \leanid{Matrix.PosSemidef.supportInvSqrt_kronecker_maximallyMixed_mul_mul}, and
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_weyl_identity_sandwich} in
 \path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}.}
-The algebraic implication itself is conditional on the displayed operator
-identity.  The finite-Weyl argument now supplies that identity from equality
-of relative entropy under the partial trace for positive-semidefinite inputs
-satisfying $\ker\sigma\subseteq\ker\rho$.  No claim is made here for an
-arbitrary convex ensemble.
+The implication is conditional on
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_support_petz_sandwich}). The
+finite Weyl argument now proves that identity from partial-trace equality for
+positive semidefinite inputs satisfying
+$\ker\sigma\subseteq\ker\rho$. No corresponding claim is made for an arbitrary
+convex ensemble.
 
-The singular-support equality case of data processing is first formalized in
-finite Weyl coordinates:
+The singular-support equality theorem in Weyl coordinates is therefore
 \begin{align}
-  D(\rho\Vert\sigma)
-    =D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)
-  \quad\Longrightarrow\quad
-  \mathcal R_\sigma(\operatorname{tr}_R\rho)=\rho.
+    D(\rho\Vert\sigma)
+        &=D(\tr_R\rho\Vert\tr_R\sigma)
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_partial_trace_dpi_equality}\\
+    &\Longrightarrow
+    \mathcal R_\sigma(\tr_R\rho)=\rho.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_partial_trace_raw_recovery}
 \end{align}
-This is the raw support-map identity entering the forward implication of
-\cite[Theorem~3]{HaydenJozsaPetzWinter2004}.  The proof does not infer
-equality for positive affine regularizations.  Instead, the
-support-restricted finite-family equality theorem gives the common projected
-Weyl resolvent; the support functional calculus gives the projected
-square-root ratio; and the kernel inclusion reduces its Gram identity to the
-displayed Petz sandwich.
+This is the raw support-map identity used in the forward implication of
+Theorem~3 in the Hayden--Jozsa--Petz--Winter argument reviewed in
+Ref.~\cite{Cirac2021Matrix}. The proof does not infer equality for positive
+affine regularizations. Instead, the support-restricted finite-family equality
+theorem gives the common projected Weyl resolvent, support functional calculus
+gives the projected square-root ratio, and the kernel inclusion reduces its
+Gram identity to
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_support_petz_sandwich}).
 
 Product-coordinate covariance transports this identity to arbitrary finite
-tensor factors. For density operators, the support condition also makes the
-chosen trace-preserving completion agree with the raw support formula on
-$\operatorname{tr}_R\rho$. Consequently the source-facing conclusion is
+tensor factors. For density operators, the support condition and
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_completed_raw_agreement}) show
+that the completed channel agrees with the raw map on $\tr_R\rho$. Thus,
 \begin{align}
-  D(\rho\Vert\sigma)
-    =D(\operatorname{tr}_R\rho\Vert\operatorname{tr}_R\sigma)
-  \quad\Longrightarrow\quad
-  \widehat{\mathcal R}_\sigma(\operatorname{tr}_R\rho)=\rho.
+    D(\rho\Vert\sigma)
+        &=D(\tr_R\rho\Vert\tr_R\sigma)
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_general_dpi_equality}\\
+    &\Longrightarrow
+    \widehat{\mathcal R}_\sigma(\tr_R\rho)=\rho.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_completed_recovery}
 \end{align}
-The complementary preparation term in
-$\widehat{\mathcal R}_\sigma$ is the chosen trace-preserving extension and is
-not part of \cite[Equation~(8)]{HaydenJozsaPetzWinter2004}.
-\footnote{Formal declarations:
+The complementary preparation term in $\widehat{\mathcal R}_\sigma$ is the
+chosen trace-preserving extension; it is not part of Equation~(8) in the
+Hayden--Jozsa--Petz--Winter argument reviewed in
+Ref.~\cite{Cirac2021Matrix}. The corresponding formal declarations are
 \leanid{Matrix.partialTraceRightPetzMap_submatrix_prod_equiv},
 \leanid{Matrix.partialTraceRightPetzMap_eq_of_relativeEntropy_eq_general_support},
 and
-\leanid{Matrix.partialTraceRightPetzChannel_recovery_of_dpi_equality}.}
+\leanid{Matrix.partialTraceRightPetzChannel_recovery_of_dpi_equality}.
 
-For the exact strong-subadditivity pair
-$\rho=\rho_{ABC}$ and $\sigma=\rho_A\otimes\rho_{BC}$, the product-marginal
-support inclusion is automatic. The specialized declarations
-\begin{center}
-  \small
-  \leanid{Matrix.product_marginal_support}\\
-  \leanid{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality}\\
-  \leanid{Matrix.partialTraceRightPetzChannel_traceA_ABC_isKrausCPTP}\\
-  \leanid{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}
-\end{center}
-therefore give HJPW equation (11):
+\section{Application to strong subadditivity}
+
+For the strong-subadditivity pair, set
 \begin{align}
-  \rho_{ABC}
-  &=(\operatorname{id}_A\otimes
-    \widehat{\mathcal R}_{\rho_{BC}})(\rho_{AB}).
+    \rho
+        &=\rho_{ABC},
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_ssa_state}\\
+    \sigma
+        &=\rho_A\otimes\rho_{BC}.
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_ssa_reference}
 \end{align}
-The local completed Petz map is trace-preserving and completely positive.
-For singular $\rho_A$, this is a supported-input identity, not a global
+The required product-marginal support inclusion is automatic. The formal
+development therefore proves the recovery statement corresponding to
+Equation~(11) of the Hayden--Jozsa--Petz--Winter argument reviewed in
+Ref.~\cite{Cirac2021Matrix}:
+\begin{align}
+    \rho_{ABC}
+        &=
+        \left(\operatorname{id}_A\otimes
+            \widehat{\mathcal R}_{\rho_{BC}}\right)(\rho_{AB}).
+    \label{eq:cpsv16_ssa_equality_hayashi_markov_hjpw_recovery_identity}
+\end{align}
+The relevant formal declarations are
+\leanid{Matrix.product_marginal_support},
+\leanid{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality},
+\leanid{Matrix.partialTraceRightPetzChannel_traceA_ABC_isKrausCPTP}, and
+\leanid{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}.
+The completed local Petz map is completely positive and trace preserving. If
+$\rho_A$ is singular, this is a supported-input identity rather than a global
 factorization of TNLean's generic completed product-reference channel.
 
-The full-support invariant-state decomposition and preserving-operation block
-action used in \cite[Theorem~6]{HaydenJozsaPetzWinter2004} are formalized, as
-are the joint-support reduction and its application to the invariant
-conditional family. The declarations
-\begin{center}
-  \small
-  \leanid{Matrix.exists_markovBipartiteBlockForm_jointSupport}\\
-  \leanid{Matrix.exists_ambientMarkovBipartiteBlockForm}\\
-  \leanid{Matrix.exists_markovDilationBlockForm}\\
-  \leanid{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}\\
-  \leanid{Matrix.exists_markovTripartiteBlockForm}
-\end{center}
-produce the positive unnormalized factors $\omega_j$, prove that their traces
-sum to one, produce the trace-one supported sector output states
-$\widehat\rho_j$, and establish~\eqref{eq:ambient-hjpw} with zero complementary
-blocks. The theorem
+The full-support invariant-state decomposition, the preserving-operation block
+action used in Theorem~6 of the Hayden--Jozsa--Petz--Winter argument, the
+joint-support reduction, and its application to the invariant conditional
+family are formalized. The relevant declarations are
+\leanid{Matrix.exists_markovBipartiteBlockForm_jointSupport},
+\leanid{Matrix.exists_ambientMarkovBipartiteBlockForm},
+\leanid{Matrix.exists_markovDilationBlockForm},
+\leanid{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}, and
+\leanid{Matrix.exists_markovTripartiteBlockForm}. These results produce the
+positive unnormalized factors $\omega_j$, prove that their traces sum to one,
+produce the trace-one supported sector states $\widehat\rho_j$, and establish
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ambient_hjpw}) with zero
+complementary blocks.
+
+The forward characterization theorem
 \leanid{Matrix.hayashi_ssa_equality_characterization_forward} then sets
-$p_j=\operatorname{Re}\operatorname{tr}\omega_j$, reverses the fibre order,
-uses the adjoint middle-system unitary, and performs the final total
-normalization. Every supported right factor remains its sector output state,
-including in a zero-weight supported sector. A zero-weight supported
-sector may use a filler only on the left, whereas a complementary sector may
-use fillers on both sides.
+$p_j=\operatorname{Re}\tr(\omega_j)$, reverses the fibre order, uses the
+adjoint middle-system unitary, and applies total normalization. Every supported
+right factor remains the corresponding sector output state, including in a
+zero-weight supported sector. Such a sector may use a filler only on the left;
+a complementary sector may use fillers on both sides.
 
 The singular-support recovery scope is unchanged. Equality in data processing
-gives the raw support-Petz recovery identity, and on the Petz output marginal the
-chosen completed local channel agrees with that raw map. No tensor-product
-factorization is claimed for the generic completed singular product-reference
-channel away from the supported input.
+gives raw support-Petz recovery, and the chosen completed local channel agrees
+with the raw map on the Petz output marginal. No tensor-product factorization
+is claimed for the generic completed singular product-reference channel away
+from the supported input.
 
 \section{Verdict}
 
-\emph{Closed.} The forward and reverse implications of the
-strong-subadditivity equality characterization are proved, and their
-biconditional is axiom-free. The forward proof derives the ambient HJPW blocks,
-uses $p_j=\operatorname{Re}\operatorname{tr}\omega_j$ with nonnegative weights
-summing to one, preserves the trace-one sector output states on supported sectors,
-and introduces arbitrary normalized fillers only where the final weight is
-zero. The middle fibres are read in $B_j^L\otimes B_j^R$ order, and the Hayashi
-unitary has the adjoint orientation required by~\eqref{eq:ambient-hjpw}.
+\emph{Closed.} Both directions of the strong-subadditivity equality
+characterization are proved, and the resulting biconditional is axiom-free.
+The forward proof derives the ambient Hayden--Jozsa--Petz--Winter blocks,
+chooses $p_j=\operatorname{Re}\tr(\omega_j)$ with nonnegative weights summing
+to one, retains every trace-one sector output state on supported sectors, and
+introduces normalized fillers only in sectors whose final weight is zero. The
+middle fibres have the order $B_j^L\otimes B_j^R$, and the Hayashi unitary has
+the adjoint orientation required by
+Eq.~(\ref{eq:cpsv16_ssa_equality_hayashi_markov_ambient_hjpw}).
 
-The closure does not strengthen the completed Petz map off support. The proved
-source-facing claim remains the raw support-map recovery identity, together
-with agreement of the chosen completed local channel on the supported marginal.
+This closure does not strengthen the completed Petz map away from the support.
+The proved source-facing result remains raw support-map recovery together with
+agreement of the selected completed local channel on the supported marginal.
 
 \begin{thebibliography}{9}
 

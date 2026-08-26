@@ -16,60 +16,99 @@
 
 \section{Source construction}
 
-Section~II.F of arXiv:1010.3732 connects two symmetric injective matrix
-product states after passing to their isometric forms. Let their bond
-dimensions be $D_0$ and $D_1$. The two bond spaces are embedded as consecutive
-summands of a space of dimension $D_0+D_1$, and the interpolation is intended
-to move between maximally entangled vectors supported on those two summands.
+Section~II.F of arXiv:1010.3732 connects two symmetric injective matrix product
+states after replacing them by their isometric forms. Let their bond dimensions
+be $D_0$ and $D_1$. The construction embeds the two bond spaces as consecutive
+direct summands of an ambient space whose dimension is
+\begin{align}
+    D_{\mathrm{amb}}
+        &=
+        D_0+D_1.
+    \label{eq:spc11_spt_interpolation_upper_range_ambient_dimension}
+\end{align}
+It then interpolates between maximally entangled vectors supported on the two
+summands.
+
 The source display in
 \path{Papers/1010.3732/paper_v3.tex}, lines~900--903, reads
 \begin{align}
-  |\omega(\gamma)\rangle
-  &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle +\gamma\sum_{i=D_0+1}^{D_1}|i,i\rangle,
-  \tag{source display}
+    \ket{\omega_{\mathrm{src}}(\gamma)}
+        &=
+        (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
+        +
+        \gamma\sum_{i=D_0+1}^{D_1}\ket{i,i}.
+    \label{eq:spc11_spt_interpolation_upper_range_source_interpolation}
 \end{align}
-and immediately says that this state has bond dimension $D_0+D_1$.
+The source immediately states that this vector has bond dimension
+$D_0+D_1$.
 
-\section{Issue and correction}
+\section{Correction}
 
-The second summand must occupy the $D_1$ coordinates following the first
-$D_0$ coordinates. Its index set is therefore
+The second summand must occupy the $D_1$ coordinates immediately following
+the first $D_0$ coordinates. Its index set is
 \begin{align}
-  \{D_0+1,\ldots,D_0+D_1\},
+    I_1
+        &=
+        \{D_0+1,\ldots,D_0+D_1\},
+    \label{eq:spc11_spt_interpolation_upper_range_second_index_set}
 \end{align}
-not $\{D_0+1,\ldots,D_1\}$. The corrected interpolation is
+rather than $\{D_0+1,\ldots,D_1\}$. The corrected interpolation is
 \begin{align}
-  |\omega(\gamma)\rangle
-  &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
-  \tag{corrected interpolation}
+    \ket{\omega(\gamma)}
+        &=
+        (1-\gamma)\sum_{i=1}^{D_0}\ket{i,i}
+        +
+        \gamma\sum_{i=D_0+1}^{D_0+D_1}\ket{i,i}.
+    \label{eq:spc11_spt_interpolation_upper_range_corrected_interpolation}
 \end{align}
-At $\gamma=0$ this is the maximally entangled vector on the first bond
-summand, while at $\gamma=1$ it is the maximally entangled vector on the
-second bond summand. The corrected upper limit also agrees with the stated
-ambient bond dimension $D_0+D_1$. The source upper limit can otherwise make
-the second sum empty, for example when $D_0\geq D_1$.
+
+At the first endpoint,
+\begin{align}
+    \ket{\omega(0)}
+        &=
+        \sum_{i=1}^{D_0}\ket{i,i},
+    \label{eq:spc11_spt_interpolation_upper_range_first_endpoint}
+\end{align}
+which is the maximally entangled vector on the first bond summand. At the
+second endpoint,
+\begin{align}
+    \ket{\omega(1)}
+        &=
+        \sum_{i=D_0+1}^{D_0+D_1}\ket{i,i},
+    \label{eq:spc11_spt_interpolation_upper_range_second_endpoint}
+\end{align}
+which is the maximally entangled vector on the second bond summand. The upper
+limit $D_0+D_1$ agrees with the ambient dimension in
+(\ref{eq:spc11_spt_interpolation_upper_range_ambient_dimension}). By contrast,
+the source range can be empty when $D_0\geq D_1$.
 
 \section{Blueprint and formal status}
 
-The corrected display occurs in the proof of the blueprint theorem
-\path{thm:spt_classification} in
-\path{blueprint/src/chapter/ch12_symmetry_spt.tex}, where an inline
-\path{Local fix} comment points to this note. The nearby separation argument
-at source lines~929--953 is explicitly restricted to smooth MPS paths. The
-blueprint theorem is correspondingly restricted to symmetric MPS paths and
-their parent Hamiltonians; it does not claim invariance under arbitrary gapped
-Hamiltonian paths.
+The corrected formula
+(\ref{eq:spc11_spt_interpolation_upper_range_corrected_interpolation}) occurs in
+the proof of the blueprint theorem \path{thm:spt_classification} in
+\path{blueprint/src/chapter/ch12_symmetry_spt.tex}. An inline
+\path{Local fix} comment there points to this note.
+
+The separation argument at source lines~929--953 is explicitly restricted to
+smooth MPS paths. The blueprint theorem therefore concerns symmetric MPS paths
+and their parent Hamiltonians. It does not claim invariance under arbitrary
+gapped Hamiltonian paths.
 
 The formal predicate \leanid{MPSTensor.IsSameSPTPhase} records equality of the
-virtual cocycle labels, not the interpolation. The blueprint classification
-theorem is marked \path{notready}; no Lean declaration implements this path or
-relies on the corrected summation range.
+virtual cocycle labels; it does not construct the interpolation. The blueprint
+classification theorem remains marked \path{notready}. No \Lean{} declaration
+implements this path or depends on the corrected summation range.
 
 \section{Verdict}
 
-The replacement of $D_1$ by $D_0+D_1$ is a local source correction. It restores
-the intended direct-sum coordinates and is the version used in the blueprint.
-The MPS/parent-Hamiltonian path restriction is a scope clarification matching
-the source proof.
+Replacing the upper limit $D_1$ in
+(\ref{eq:spc11_spt_interpolation_upper_range_source_interpolation}) by
+$D_0+D_1$, as in
+(\ref{eq:spc11_spt_interpolation_upper_range_corrected_interpolation}), is a
+local source correction. It restores the intended direct-sum coordinates and
+is the version used in the blueprint. Restricting the classification statement
+to MPS and parent-Hamiltonian paths is a scope clarification that matches the
+source proof.
 
 \end{document}

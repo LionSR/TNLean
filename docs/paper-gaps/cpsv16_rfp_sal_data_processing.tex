@@ -18,61 +18,104 @@ renormalization fixed points}
 
 \section{Source statement and normalization boundary}
 
-Definition~4.1 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete defines a
-mixed-state renormalization fixed point by trace-preserving completely positive
-maps $\mathcal S$ and $\mathcal T$ satisfying\footnote{Source label
-\texttt{RFPMixedTS},
+Definition~4.1 of Ref.~\cite{Cirac2016MPDO_arXiv} defines a mixed-state
+renormalization fixed point using trace-preserving completely positive maps
+$\mathcal S$ and $\mathcal T$. If $M_n(X)$ denotes the $n$-site matrix product
+operator with virtual boundary operator $X$, the defining equations are
+\begin{align}
+    \mathcal S[M_2(X)]
+        &=
+        M_1(X),
+    \label{eq:cpsv16_rfp_sal_data_processing_source_coarse_graining}\\
+    \mathcal T[M_1(X)]
+        &=
+        M_2(X).
+    \label{eq:cpsv16_rfp_sal_data_processing_source_fine_graining}
+\end{align}
+These identities hold for every virtual boundary operator $X$.\footnote{Source
+label \texttt{RFPMixedTS},
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:638--660}.}
-\[
-  \mathcal S[M_2(X)]=M_1(X),
-  \qquad
-  \mathcal T[M_1(X)]=M_2(X)
-\]
-for every virtual boundary operator $X$. Proposition \texttt{propsimple} in
-Appendix~C states that this condition implies source zero correlation length
-and saturation of the area law.\footnote{Source:
+Proposition \texttt{propsimple} in Appendix~C of
+Ref.~\cite{Cirac2016MPDO_arXiv} states that these local renormalization
+equations imply source zero correlation length (ZCL) and saturation of the area
+law (SAL).\footnote{Source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1331--1341}.}
 
-The entropic convention immediately preceding Definition~4.6 divides each
-finite-chain operator by its trace.\footnote{Source:
+The entropic convention preceding Definition~4.6 in
+Ref.~\cite{Cirac2016MPDO_arXiv} normalizes each finite-chain operator by its
+trace.\footnote{Source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:792--793}.}
-The precise boundary of the proposition is therefore:
+Consequently, Proposition \texttt{propsimple} applies at the following
+normalization boundary:
 \begin{enumerate}
-  \item $\rho^{(N)}(M)$ is positive semidefinite for every $N\geq1$;
-  \item $\operatorname{tr}\rho^{(N)}(M)\neq0$ for every $N\geq1$;
-  \item $M$ satisfies the local renormalization equations of Definition~4.1.
+    \item $\rho^{(N)}(M)$ is positive semidefinite for every $N\geq 1$;
+    \item $\tr\rho^{(N)}(M)\ne 0$ for every $N\geq 1$;
+    \item $M$ satisfies the local renormalization equations in
+    Eqs.~\ref{eq:cpsv16_rfp_sal_data_processing_source_coarse_graining}
+    and~\ref{eq:cpsv16_rfp_sal_data_processing_source_fine_graining}.
 \end{enumerate}
-Positivity alone does not imply the second condition: the zero tensor generates
-zero positive semidefinite operators at every length. Thus the nonzero-trace
-clause is the normalization boundary implicit in the source's density-operator
-language, not a dispensable consequence of positivity.
+Positivity does not imply the second condition. The zero tensor generates a
+positive semidefinite zero operator at every length, but
+\begin{align}
+    \tr\rho^{(N)}(0)
+        &=
+        0.
+    \label{eq:cpsv16_rfp_sal_data_processing_zero_tensor_trace}
+\end{align}
+The nonzero-trace condition is therefore the normalization boundary implicit
+in the source's density-operator language.
 
 \section{Area-law calculation}
 
-For a bipartition of an $N$-site ring into consecutive intervals of lengths
-$a+1$ and $b+2$, the localized maps satisfy
-\[
-  (\widehat{\mathcal T}_a\otimes\widehat{\mathcal S}_b)
-  (\sigma^{(N)}_{a+1:b+2})
-  =\sigma^{(N)}_{a+2:b+1},
-\]
-and the reverse pair satisfies
-\[
-  (\widehat{\mathcal S}_a\otimes\widehat{\mathcal T}_b)
-  (\sigma^{(N)}_{a+2:b+1})
-  =\sigma^{(N)}_{a+1:b+2}.
-\]
-These are identities of normalized density operators because the corresponding
-ring trace is nonzero. Mutual-information data processing in the two directions
-gives
-\[
-  I(\sigma^{(N)}_{a+2:b+1})
-  \leq I(\sigma^{(N)}_{a+1:b+2})
-  \leq I(\sigma^{(N)}_{a+2:b+1}).
-\]
-Hence the two mutual informations are equal. The consecutive-cut
-identification turns this equality into $I_L=I_{L+1}$ for
-$1\leq L<\lfloor N/2\rfloor$.
+Let $\sigma^{(N)}_{a+1:b+2}$ denote the normalized density operator on an
+$N$-site ring partitioned into consecutive intervals of lengths $a+1$ and
+$b+2$. Localizing $\mathcal T$ and $\mathcal S$ to the two intervals gives
+channels $\widehat{\mathcal T}_a$ and $\widehat{\mathcal S}_b$ satisfying
+\begin{align}
+    (\widehat{\mathcal T}_a\otimes\widehat{\mathcal S}_b)
+    (\sigma^{(N)}_{a+1:b+2})
+        &=
+        \sigma^{(N)}_{a+2:b+1}.
+    \label{eq:cpsv16_rfp_sal_data_processing_forward_bipartition_channel}
+\end{align}
+The reverse localized channels satisfy
+\begin{align}
+    (\widehat{\mathcal S}_a\otimes\widehat{\mathcal T}_b)
+    (\sigma^{(N)}_{a+2:b+1})
+        &=
+        \sigma^{(N)}_{a+1:b+2}.
+    \label{eq:cpsv16_rfp_sal_data_processing_reverse_bipartition_channel}
+\end{align}
+Both are identities of normalized density operators because the corresponding
+ring trace is nonzero.
+
+Mutual-information data processing in the two directions gives
+\begin{align}
+    I(\sigma^{(N)}_{a+2:b+1})
+        &\leq
+        I(\sigma^{(N)}_{a+1:b+2}),
+    \label{eq:cpsv16_rfp_sal_data_processing_forward_mutual_information}\\
+    I(\sigma^{(N)}_{a+1:b+2})
+        &\leq
+        I(\sigma^{(N)}_{a+2:b+1}).
+    \label{eq:cpsv16_rfp_sal_data_processing_reverse_mutual_information}
+\end{align}
+Hence
+\begin{align}
+    I(\sigma^{(N)}_{a+1:b+2})
+        &=
+        I(\sigma^{(N)}_{a+2:b+1}).
+    \label{eq:cpsv16_rfp_sal_data_processing_mutual_information_equality}
+\end{align}
+The consecutive-cut identification turns this equality into
+\begin{align}
+    I_L
+        &=
+        I_{L+1},
+        \qquad
+        1\leq L<\left\lfloor\frac{N}{2}\right\rfloor.
+    \label{eq:cpsv16_rfp_sal_data_processing_area_law_saturation}
+\end{align}
 
 The primary formal declaration is
 \leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} in
@@ -84,70 +127,128 @@ bipartite-to-chain identification are supplied by
 
 \section{Source zero correlation length}
 
-Trace preservation in the one-to-two renormalization equation gives, for every
+Let $\mathcal T_M$ denote the physical-trace transfer operator of $M$. Trace
+preservation in the one-to-two renormalization equation gives, for every
 virtual matrix $X$,
-\[
-  \operatorname{tr}(\mathcal T_M^2X)
-  =\operatorname{tr}(M_2(X))
-  =\operatorname{tr}(M_1(X))
-  =\operatorname{tr}(\mathcal T_MX).
-\]
-Nondegeneracy of the trace pairing yields
-$\mathcal T_M^2=\mathcal T_M$. If $\mathcal T_M=0$, then
-\[
-  \operatorname{tr}\rho^{(1)}(M)
-  =\operatorname{tr}(\mathcal T_M)=0,
-\]
-contradicting the positive-length nonvanishing hypothesis. Therefore
-$\mathcal T_M\neq0$. Literal physical-trace idempotence already holds, and the
-extra nonvanishing gives the separate scale-invariant relation.
+\begin{align}
+    \tr(\mathcal T_M^2X)
+        &=
+        \tr(M_2(X)),
+    \label{eq:cpsv16_rfp_sal_data_processing_transfer_trace_length_two}\\
+    \tr(M_2(X))
+        &=
+        \tr(M_1(X)),
+    \label{eq:cpsv16_rfp_sal_data_processing_renormalization_trace_equality}\\
+    \tr(M_1(X))
+        &=
+        \tr(\mathcal T_MX).
+    \label{eq:cpsv16_rfp_sal_data_processing_transfer_trace_length_one}
+\end{align}
+Nondegeneracy of the trace pairing therefore yields
+\begin{align}
+    \mathcal T_M^2
+        &=
+        \mathcal T_M.
+    \label{eq:cpsv16_rfp_sal_data_processing_physical_trace_idempotence}
+\end{align}
+If $\mathcal T_M=0$, then
+\begin{align}
+    \tr\rho^{(1)}(M)
+        &=
+        \tr(\mathcal T_M)
+        =
+        0,
+    \label{eq:cpsv16_rfp_sal_data_processing_zero_transfer_trace}
+\end{align}
+contradicting the positive-length nonvanishing hypothesis. Thus
+\begin{align}
+    \mathcal T_M
+        &\ne
+        0.
+    \label{eq:cpsv16_rfp_sal_data_processing_nonzero_transfer}
+\end{align}
+Literal physical-trace idempotence follows directly; nonvanishing supplies the
+separate scale-invariant relation.
 
-The literal Definition~4.2 conclusion is the direct theorem
+The direct formalization of the literal Definition~4.2 conclusion from
+Ref.~\cite{Cirac2016MPDO_arXiv} is
 \leanid{MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS} in
-\doclink{TNLean/MPS/MPDO/RFPViaTS}; it packages the physical-trace-square
-equation. Combining it with
-\leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} gives exactly the
-source-facing forward implication: positive semidefinite rings, nonzero trace
-at every positive length, and the Definition~4.1 local renormalization
-equations imply literal ZCL and SAL. The convenience theorem
+\doclink{TNLean/MPS/MPDO/RFPViaTS}. Combining it with
+\leanid{MPOTensor.isSAL_of_isRFPViaTS_of_trace_ne_zero} gives the source-facing
+forward implication: positive semidefinite rings, nonzero trace at every
+positive length, and the local renormalization equations of Definition~4.1
+imply literal ZCL and SAL. The convenience theorem
 \leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero}
-records the broader scale-invariant ZCL corollary and is not used as the
-paper-facing statement.
+records the broader scale-invariant ZCL corollary and is not the paper-facing
+statement.
 
 \section{Horizontal specialization}
 
-The declaration \leanid{MPOTensor.isSAL_of_isRFPViaTS} is the horizontal SAL
-specialization. Together with the same literal theorem
+The declaration \leanid{MPOTensor.isSAL_of_isRFPViaTS} gives the horizontal
+SAL specialization. Together with
 \leanid{MPOTensor.isPhysicalTraceIdempotent_of_isRFPViaTS}, it yields the
 paper-facing horizontal corollary. The convenience declaration
 \leanid{MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS} packages the broader
-scale-invariant conclusion. The normalized BNT-refined horizontal
-hypothesis is stronger than the density-family boundary above. It supplies
-\[
-  \operatorname{tr}\rho^{(N)}(M)\neq0
-\]
-for every $N\geq1$ through
+scale-invariant conclusion.
+
+The normalized BNT-refined horizontal hypothesis is stronger than the
+density-family boundary above. It supplies
+\begin{align}
+    \tr\rho^{(N)}(M)
+        &\ne
+        0,
+        \qquad N\geq 1,
+    \label{eq:cpsv16_rfp_sal_data_processing_horizontal_nonzero_trace}
+\end{align}
+through
 \leanid{MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS}.
-No horizontal decomposition is used in the mutual-information calculation
-itself.
+The mutual-information argument itself uses no horizontal decomposition.
 
-The literal source canonical-form construction permits an additional all-zero
-virtual summand because it allows $\sum_kD_k\leq D$.\footnote{Source:
+The literal source canonical-form construction in
+Ref.~\cite{Cirac2016MPDO_arXiv} permits an additional all-zero virtual summand
+because it allows
+\begin{align}
+    \sum_k D_k
+        &\leq
+        D.
+    \label{eq:cpsv16_rfp_sal_data_processing_source_virtual_dimension_bound}
+\end{align}
+\footnote{Source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:214--219}.}
-That observation no longer leaves Proposition \texttt{propsimple} open: the
-proposition is stated and proved at its actual density-operator normalization
-boundary, while horizontal form gives a stronger sufficient condition for that
-boundary.
+This observation does not leave Proposition \texttt{propsimple} open. The
+proposition is stated and proved at its density-operator normalization
+boundary, while horizontal form provides a stronger sufficient condition for
+that boundary.
 
-\paragraph{Classification: boundary condition.}
-Proposition \texttt{propsimple} is complete at the explicit nonzero-trace
-density-family boundary. Theorem~4.9 is partial and partly refuted for
-independent reasons. The normal Case-I form of Lemma~C.5 is complete, while the
-Case-II passage after coefficient absorption remains a missing statement with
-proof-path drift. Separately, unequal raw repeated-copy weights refute the
-literal implication (iv)$\Rightarrow$(v). The viable source
-(ii)$\Rightarrow$(v) route remains open after ZCL-derived common-weight
-absorption and projector-controlled channel assembly. No simplicity hypothesis
-is used in the completed forward implication.
+\section{Classification}
+
+Proposition \texttt{propsimple} of Ref.~\cite{Cirac2016MPDO_arXiv} is complete
+under the explicit nonzero-trace density-family condition. Theorem~4.9 of
+Ref.~\cite{Cirac2017MPDO_AnnPhys} is partial and partly refuted for independent
+reasons. The normal Case-I form of Lemma~C.5 is complete. The Case-II passage
+after coefficient absorption remains a missing statement with proof-path
+drift. Separately, unequal raw repeated-copy weights refute the literal
+implication (iv)$\Rightarrow$(v). The viable source route
+(ii)$\Rightarrow$(v) remains open after ZCL-derived common-weight absorption
+and projector-controlled channel assembly. The completed forward implication
+uses no simplicity hypothesis.
+
+\section{Conclusion}
+
+The source implication from local mixed-state RFP maps to ZCL and SAL is valid
+at the normalization boundary implicit in its density-operator convention.
+Positivity and local renormalization alone do not exclude the zero family;
+nonzero trace at every positive length does. Under that condition, the two
+localized channel identities give mutual-information inequalities in opposite
+directions, and
+Eq.~\ref{eq:cpsv16_rfp_sal_data_processing_mutual_information_equality}
+establishes SAL. Trace preservation also gives the literal transfer
+idempotence in
+Eq.~\ref{eq:cpsv16_rfp_sal_data_processing_physical_trace_idempotence}.
+Accordingly, this note records a resolved clarification rather than a change to
+the source proposition.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}

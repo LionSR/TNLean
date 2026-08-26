@@ -14,42 +14,62 @@
 \maketitle
 \gapnote{local-correction}{resolved}
 
-\section{The malformed display}
+\section{Malformed source display}
 
-Theorem~3.1 of \cite{Cirac2016MPDO_arXiv} characterizes the limits of the
-pure-state renormalization flow.  Its displayed equation at lines~400--403 is
+Theorem~3.1 of Ref.~\cite{Cirac2016MPDO_arXiv} characterizes limits of the
+pure-state renormalization flow. Its equation at source lines~400--403 is
 printed as
-\[
-  A^{i_1}A^{i_2}
-  =\sum_{i_1,i_2,j}U_{(i_1,i_2),j}A^{j_1}.
-\]
-The indices \(i_1,i_2\) are free on the left but are summed on the right, and
-the index \(j_1\) has not been introduced.  Thus the display is not a
-well-formed component identity.
+\begin{align}
+    A^{i_1}A^{i_2}
+        &=
+        \sum_{i_1,i_2,j}
+        U_{(i_1,i_2),j}A^{j_1}.
+    \label{eq:cpsv16_renormalization_flow_index_typo_malformed_source}
+\end{align}
+The indices $i_1,i_2$ are free on the left-hand side of
+Eq.~\ref{eq:cpsv16_renormalization_flow_index_typo_malformed_source} but are
+summed on its right-hand side. The index $j_1$ is not introduced. The printed
+display is therefore not a well-formed component identity.
 
 \section{Intended equation}
 
-The renormalization step immediately preceding the theorem, at lines~389--394,
-blocks two physical indices and writes the resulting matrices as a physical
-isometry applied to a one-site family.  With a common physical dimension at a
-fixed point, this gives
-\[
-  A^{i_1}A^{i_2}
-  =\sum_j U_{(i_1,i_2),j}A^j
-\]
-for every \(i_1,i_2\).  The two diagrams at lines~407--410 express the same
-contraction: two fixed external physical legs enter \(U\), while only the
-one-site index \(j\) is summed.  The Appendix proof at lines~1205--1209 also
-identifies this equation through equality of the completely positive maps
-\(\mathcal E^2=\mathcal E\), followed by physical Kraus isometry.
+The renormalization step at source lines~389--394 of
+Ref.~\cite{Cirac2016MPDO_arXiv} first blocks two physical indices and then
+writes the blocked matrices as a physical isometry applied to a one-site
+family. At a fixed point with a common physical dimension, the component
+identity is
+\begin{align}
+    A^{i_1}A^{i_2}
+        &=
+        \sum_j U_{(i_1,i_2),j}A^j,
+        \qquad\text{for every }i_1,i_2.
+    \label{eq:cpsv16_renormalization_flow_index_typo_corrected_blocking}
+\end{align}
+The diagrams at source lines~407--410 of
+Ref.~\cite{Cirac2016MPDO_arXiv} express
+Eq.~\ref{eq:cpsv16_renormalization_flow_index_typo_corrected_blocking}: the two
+external physical legs $i_1,i_2$ enter $U$, and only the one-site index $j$ is
+summed.
+
+The Appendix proof at source lines~1205--1209 of
+Ref.~\cite{Cirac2016MPDO_arXiv} reaches the same identity. It first identifies
+the completely positive maps by
+\begin{align}
+    \mathcal E^2 &= \mathcal E,
+    \label{eq:cpsv16_renormalization_flow_index_typo_cp_idempotence}
+\end{align}
+and then relates the corresponding Kraus families by a physical isometry,
+which gives
+Eq.~\ref{eq:cpsv16_renormalization_flow_index_typo_corrected_blocking}.
 
 \section{Formal treatment}
 
-The formal theorem uses the well-formed equation above.  This is a local
-correction of the summation and output indices in the printed display.  It
-changes neither the hypothesis that the tensor is a limit of the
-renormalization flow nor the conclusion that the blocked tensor is related to
-the original tensor by a physical isometry.
+The formal theorem uses
+Eq.~\ref{eq:cpsv16_renormalization_flow_index_typo_corrected_blocking}. This is
+a local correction to the summation and output indices in the printed display
+of Ref.~\cite{Cirac2016MPDO_arXiv}. It changes neither the hypothesis that the
+tensor is a limit of the renormalization flow nor the conclusion that a
+physical isometry relates the blocked tensor to the original tensor.
 
 \bibliographystyle{alpha}
 \bibliography{references}

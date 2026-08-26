@@ -17,104 +17,157 @@
 
 \section{The source assertion}
 
-Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete state a sufficient condition for
+Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete give a sufficient condition for
 canonical form in Section~II of their analysis of matrix product density
-operators \cite{Cirac2016MPDO_arXiv}.  In the notation of that paper, assume
-that the tensor has no nontrivial periodic vectors and that every orthogonal
-projection $P$ satisfying
+operators \cite{Cirac2016MPDO_arXiv}. Assume that the tensor has no nontrivial
+periodic vectors. The projector-closure hypothesis states that every
+orthogonal projection $P$ satisfying
 \begin{align}
-    PA^i &= PA^iP \qquad\text{for every }i
+    PA^i
+        &=PA^iP,
+        \qquad\text{for every }i,
+    \label{eq:cpsv16_projector_closure_canonical_form_source_invariant_projection}
 \end{align}
 also satisfies
 \begin{align}
-    A^iP &= PA^iP \qquad\text{for every }i.
+    A^iP
+        &=PA^iP,
+        \qquad\text{for every }i.
+    \label{eq:cpsv16_projector_closure_canonical_form_source_coinvariant_projection}
 \end{align}
-The paper then asserts that the tensor is in canonical form.  This is the
-proposition at arXiv:1606.00608, lines 253--254.
+The paper asserts that these conditions put the tensor in canonical form
+\cite[lines~253--254]{Cirac2016MPDO_arXiv}.
 
 \section{The algebraic projection step}
 
-The projector hypothesis has a normalization-free consequence.  Suppose that
-$P$ is an orthogonal projection for which
+The projector hypothesis has a normalization-free consequence. Suppose that
+$P$ is an orthogonal projection such that
 \begin{align}
-    (1-P)A^iP=0 \qquad\text{for every }i.
+    (I-P)A^iP
+        &=0,
+        \qquad\text{for every }i.
+    \label{eq:cpsv16_projector_closure_canonical_form_lower_corner_zero}
 \end{align}
 Then
 \begin{align}
-    (1-P)A^i=(1-P)A^i(1-P).
+    (I-P)A^i
+        &=(I-P)A^iP+(I-P)A^i(I-P)
+    \label{eq:cpsv16_projector_closure_canonical_form_complement_expansion}\\
+        &=(I-P)A^i(I-P).
+    \label{eq:cpsv16_projector_closure_canonical_form_complement_invariance}
 \end{align}
-Applying the source hypothesis to $1-P$ gives
+Applying
+(\ref{eq:cpsv16_projector_closure_canonical_form_source_coinvariant_projection})
+to $I-P$ gives
 \begin{align}
-    A^i(1-P)=(1-P)A^i(1-P),
+    A^i(I-P)
+        &=(I-P)A^i(I-P).
+    \label{eq:cpsv16_projector_closure_canonical_form_complement_coinvariance}
 \end{align}
-and hence both off-diagonal corners vanish.  Consequently
+Both off-diagonal corners therefore vanish, so
 \begin{align}
-    PA^i=A^iP \qquad\text{for every }i.
+    PA^i
+        &=A^iP,
+        \qquad\text{for every }i.
+    \label{eq:cpsv16_projector_closure_canonical_form_reducing_projection}
 \end{align}
-Thus every projection used in the invariant-subspace decomposition is a
-reducing projection.  This implication is formalized directly, without a
-left-canonical or unital normalization.\footnote{Formal declarations:
+Every projection used in the invariant-subspace decomposition is reducing.
+This implication is formalized without a left-canonical or unital
+normalization.\footnote{Formal declarations:
 \leanid{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero} and
 \leanid{MPSTensor.exists_reducing_projection_of_hasInvariantProj} in
 \doclink{TNLean/MPS/CanonicalForm/ProjectorClosure}.}
 
 \section{The spectral implication}
 
-The direct-sum decomposition produces irreducible corner tensors $B_k$ along
-isometries $V_k$ satisfying $A^i V_k = V_k B_k^i$.\footnote{Formal
-declaration:
-\leanid{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
-in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureDecomposition}.}  The
-completion of the source proposition consists of two further steps, both now
-formalized without any normalization hypothesis:\footnote{Formal
-declarations:
-\leanid{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral} and
-\leanid{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
-in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral}.}
-\begin{enumerate}
-\item every nonzero irreducible corner has a Perron eigenpair
-  $\mathcal{E}_{B_k}(\rho_k)=r_k\rho_k$ with $\rho_k>0$ and $r_k>0$;
-  rescaling the corner by $r_k^{-1/2}$ moves its transfer map to spectral
-  radius one and the removed scale into the coefficient
-  $\mu_k := r_k^{1/2}$; and
-\item the absence of nontrivial $p$-periodic vectors, stated for every
-  restriction of $A$ to a minimal invariant subspace, forces the peripheral
-  eigenvalue set of every rescaled corner transfer map to be $\{1\}$, so
-  every rescaled corner is a normal tensor.
-\end{enumerate}
-No identity of the form
+The direct-sum decomposition produces irreducible corner tensors $B_k$ and
+isometries $V_k$ satisfying
 \begin{align}
-    \sum_i (A^i)^\dagger A^i=1
+    A^iV_k
+        &=V_kB_k^i.
+    \label{eq:cpsv16_projector_closure_canonical_form_corner_intertwining}
 \end{align}
-occurs among the hypotheses of the cited proposition, and none is assumed in
-the formalized completion.
+This is formalized by
+\leanid{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
+in
+\doclink{TNLean/MPS/CanonicalForm/ProjectorClosureDecomposition}.
+
+Two normalization-free spectral steps complete the source proposition. First,
+each nonzero irreducible corner has a Perron eigenpair
+\begin{align}
+    \mathcal E_{B_k}(\rho_k)
+        &=r_k\rho_k,
+    \label{eq:cpsv16_projector_closure_canonical_form_perron_eigenpair}\\
+    \rho_k
+        &>0,
+    \label{eq:cpsv16_projector_closure_canonical_form_positive_perron_vector}\\
+    r_k
+        &>0.
+    \label{eq:cpsv16_projector_closure_canonical_form_positive_spectral_radius}
+\end{align}
+Rescaling $B_k$ by $r_k^{-1/2}$ moves its transfer map to spectral radius one,
+while the removed scale becomes
+\begin{align}
+    \mu_k
+        &=r_k^{1/2}.
+    \label{eq:cpsv16_projector_closure_canonical_form_block_weight}
+\end{align}
+Second, the absence of nontrivial $p$-periodic vectors on every restriction of
+$A$ to a minimal invariant subspace forces
+\begin{align}
+    \operatorname{spec}_{\mathrm{per}}
+        (\mathcal E_{r_k^{-1/2}B_k})
+        &=\{1\}.
+    \label{eq:cpsv16_projector_closure_canonical_form_trivial_peripheral_spectrum}
+\end{align}
+Each rescaled corner is therefore normal. Both steps are formalized without a
+normalization hypothesis.\footnote{Formal declarations:
+\leanid{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral} and
+\leanid{MPSTensor.exists_normalTensor_blockDecomp_sameMPV}%
+\textsubscript{2}\leanid{Pos_of_hasInvariantProjectorClosure}
+in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral}.}
+
+The cited proposition does not assume a left-canonical identity such as
+\begin{align}
+    \sum_i(A^i)^\dagger A^i
+        &=\Id.
+    \label{eq:cpsv16_projector_closure_canonical_form_unassumed_normalization}
+\end{align}
+The formal completion does not assume this identity either.
 
 \section{Zero blocks and the length-zero coefficient}
 
-A corner of $A$ whose matrices all vanish cannot be rescaled to spectral
-radius one; these are the zero blocks the source allows through the
-convention $\sum_k D_k \le D$ stated immediately after its invariant-subspace
-decomposition (arXiv:1606.00608, line 219).  Dropping a zero block changes
-exactly one datum of the generated family: the length-zero coefficient,
-which is the bond dimension.  The formalized sufficient condition therefore
-concludes equality of the generated matrix product vectors at every positive
-length, together with the source's dimension bound $\sum_k D_k \le D$.  The
-former all-length variant added the hypothesis that no restriction of $A$ to
-a minimal invariant subspace is the zero tensor.  Since that hypothesis is not
-part of the source and served only to recover the empty-word coefficient, the
-variant has been removed.  The positive-length formulation is the
-source-faithful shape of the
-length-zero bookkeeping analyzed in
+A corner whose matrices all vanish cannot be rescaled to spectral radius one.
+These are the zero blocks allowed by the source convention
+\begin{align}
+    \sum_kD_k
+        &\leq D,
+    \label{eq:cpsv16_projector_closure_canonical_form_dimension_bound}
+\end{align}
+stated immediately after the invariant-subspace decomposition
+\cite[line~219]{Cirac2016MPDO_arXiv}. Removing a zero block changes exactly one
+datum of the generated family: the length-zero coefficient, which equals the
+bond dimension.
+
+The formal sufficient condition therefore concludes equality of the generated
+matrix product vectors at every positive length, together with
+(\ref{eq:cpsv16_projector_closure_canonical_form_dimension_bound}). A former
+all-length variant assumed that no restriction of $A$ to a minimal invariant
+subspace was the zero tensor. That assumption is absent from the source and
+served only to recover the empty-word coefficient, so the variant has been
+removed. The positive-length statement is the source-faithful treatment of
+the length-zero bookkeeping analyzed in
 \path{docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex}.
 
 \section{Conclusion}
 
-The sufficient condition for canonical form at arXiv:1606.00608,
-lines 253--254, is formalized: projector closure and the absence of
-nontrivial $p$-periodic vectors yield a decomposition of the generated
-matrix product vectors into normal-tensor blocks with nonzero weights, at
-every positive length and with $\sum_k D_k \le D$.  No separate physical
-statement is retained for the length-zero coefficient.
+The sufficient condition stated at lines~253--254 of
+Ref.~\cite{Cirac2016MPDO_arXiv} is formalized. Projector closure and the
+absence of nontrivial $p$-periodic vectors yield a decomposition of the
+generated matrix product vectors into normal-tensor blocks with nonzero
+weights, at every positive length, with the dimension bound
+(\ref{eq:cpsv16_projector_closure_canonical_form_dimension_bound}). No separate
+physical statement is retained for the length-zero coefficient.
 
 \bibliographystyle{alpha}
 \bibliography{references}

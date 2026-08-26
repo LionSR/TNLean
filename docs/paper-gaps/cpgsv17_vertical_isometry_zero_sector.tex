@@ -17,243 +17,328 @@
 
 \section{The dimension allowed by canonical form}
 
-The canonical-form construction of \cite{Cirac2016MPDO_arXiv} writes a tensor
-as a direct sum of nonzero irreducible blocks of dimensions $D_k$ and states
-explicitly that
-\begin{equation}
-  \sum_k D_k\leq D,
-  \label{eq:dimension-bound}
-\end{equation}
-because zero blocks may remain in the original space (source lines~214--225).
-Proposition~4.13 later applies this construction to the vertically viewed
-tensor and obtains
-\begin{equation}
-  U\widetilde M U^\dagger
-  =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha,
-  \label{eq:vertical-form}
-\end{equation}
-where the matrices $\mu_\alpha$ are positive and diagonal and the tensors
-$M_\alpha$ form a basis of normal tensors (source lines~943--951 and
-1863--1870).
+The canonical-form construction of
+Ref.~\cite{Cirac2016MPDO_arXiv} decomposes a tensor into nonzero irreducible
+blocks of dimensions $D_k$. It permits zero blocks in the original
+$D$-dimensional space and therefore states, at source lines~214--225, that
+\begin{align}
+    \sum_k D_k
+        &\leq D.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_dimension_bound}
+\end{align}
+Proposition~4.13 applies this construction to the vertically viewed tensor
+$\widetilde M$ and obtains, at source lines~943--951 and~1863--1870,
+\begin{align}
+    U\widetilde M U^\dagger
+        &=
+        \bigoplus_\alpha\mu_\alpha\otimes M_\alpha.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_vertical_form}
+\end{align}
+Here each $\mu_\alpha$ is positive and diagonal, and the tensors
+$M_\alpha$ form a basis of normal tensors
+\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 
-Let $d$ be the original physical dimension and let $s$ be the dimension of
-the right-hand side of \eqref{eq:vertical-form}.  When the generic
-canonical-form dimension bound \eqref{eq:dimension-bound} is applied
-vertically, it reads $s\leq d$.  In the displayed orientation,
-$U:\mathbb C^d\to\mathbb C^s$ maps the physical space onto the retained
-nonzero sector space. Consequently
-\begin{equation}
-  UU^\dagger=I_s,
-  \qquad
-  U^\dagger U=P,
-  \label{eq:coisometry}
-\end{equation}
-where $P$ is the support projection of the nonzero sectors. Equality
-$U^\dagger U=I_d$ holds only when there is no zero complement. It is not part
-of the hypotheses or conclusion of Proposition~4.13.  The source does not
-print a reverse identity separately.  Its preceding assertion that
-$\widetilde M$ is in canonical form says that the discarded complement is a
-zero sector, which is recorded explicitly by the reconstruction identity
-\begin{equation}
-  \widetilde M
-  =U^\dagger\left(\bigoplus_\alpha
-    \mu_\alpha\otimes M_\alpha\right)U.
-  \label{eq:reconstruction}
-\end{equation}
-Without \eqref{eq:reconstruction}, equation~\eqref{eq:vertical-form} alone is
-only a compression and does not exclude nonzero entries in the discarded or
-off-diagonal corners.
+Let $d$ be the original physical dimension, and let $s$ be the dimension of
+the direct sum in
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_vertical_form}. Applied in
+the vertical direction,
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_dimension_bound} gives
+$s\leq d$. In the displayed orientation, the map
+$U:\mathbb C^d\to\mathbb C^s$ sends the physical space onto the retained
+nonzero-sector space. Hence
+\begin{align}
+    UU^\dagger
+        &=I_s,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_coisometry}\\
+    U^\dagger U
+        &=P,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_support_projection}
+\end{align}
+where $P$ is the support projection of the retained sectors. The identity
+$U^\dagger U=I_d$ holds only when the zero complement is absent. It is neither
+a hypothesis nor a conclusion of Proposition~4.13 in
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+The source does not print a separate reverse identity. Its preceding statement
+that $\widetilde M$ is in canonical form requires the discarded complement to
+be a zero sector, which is recorded by
+\begin{align}
+    \widetilde M
+        &=
+        U^\dagger
+        \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)U.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_reconstruction}
+\end{align}
+Without
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_reconstruction},
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_vertical_form} is only a
+compression; it does not exclude nonzero entries in the discarded corner or
+the off-diagonal corners.
 
 \section{A zero-sector example}
 
-Take horizontal bond dimension one and physical dimension two, and define
-the local tensor by
-\begin{equation}
-  M^{00}=1,
-  \qquad
-  M^{01}=M^{10}=M^{11}=0.
-  \label{eq:rank-one-tensor}
-\end{equation}
-It is a one-block horizontal normal tensor. At every positive length it
+Take horizontal bond dimension one and physical dimension two. Define
+\begin{align}
+    M^{00}
+        &=1,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_rank_one_nonzero_entry}\\
+    M^{01}
+        &=M^{10}
+        =M^{11}
+        =0.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_rank_one_zero_entries}
+\end{align}
+This is a one-block horizontal normal tensor. At every positive length $N$, it
 generates the positive operator
-\begin{equation}
-  \rho^{(N)}(M)
-  =\lvert 0\cdots0\rangle\langle0\cdots0\rvert.
-  \label{eq:rank-one-operator}
-\end{equation}
-The vertically viewed tensor has one letter,
-\begin{equation}
-  \widetilde M=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
-  \label{eq:vertical-letter}
-\end{equation}
-Its nonzero canonical part is the one-dimensional tensor with letter $1$.
-Equation~\eqref{eq:vertical-form} holds with
-\begin{equation}
-  U=\begin{pmatrix}1&0\end{pmatrix},
-  \qquad UU^\dagger=1,
-  \qquad U^\dagger U=
-  \begin{pmatrix}1&0\\0&0\end{pmatrix}.
-  \label{eq:example-coisometry}
-\end{equation}
+\begin{align}
+    \rho^{(N)}(M)
+        &=
+        \ket{0\cdots0}\bra{0\cdots0}.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_rank_one_operator}
+\end{align}
+The vertically viewed tensor has the single letter
+\begin{align}
+    \widetilde M
+        &=
+        \begin{pmatrix}
+            1&0\\
+            0&0
+        \end{pmatrix}.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_vertical_letter}
+\end{align}
+Its nonzero canonical part is the one-dimensional tensor whose letter is $1$.
+Equation~\ref{eq:cpgsv17_vertical_isometry_zero_sector_vertical_form} holds
+with
+\begin{align}
+    U
+        &=
+        \begin{pmatrix}
+            1&0
+        \end{pmatrix},
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_example_map}\\
+    UU^\dagger
+        &=1,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_example_coisometry}\\
+    U^\dagger U
+        &=
+        \begin{pmatrix}
+            1&0\\
+            0&0
+        \end{pmatrix}.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_example_support}
+\end{align}
 
-A square unitary formulation can describe this tensor if it retains the
-explicit zero block $[0]$.  The earlier formal predicate had no such block: its
-right-hand side contained only strictly positive weights multiplying normal
-tensors. Within that positive-block-only assembly, a unitary preserves the
-two-dimensional space while the second one-dimensional corner of
-\eqref{eq:vertical-letter} necessarily has weight zero. Treating the whole
-matrix as one block would not give a normal tensor. Thus the combination of a
-two-sided unitary and the positive-block-only assembly would make
-Proposition~4.13 false even in this elementary case.
+A square unitary description can retain an explicit zero block $[0]$. The
+earlier formal predicate did not include such a block: its right-hand side
+contained only strictly positive weights multiplying normal tensors. Within
+that positive-block-only assembly, a unitary preserves the two-dimensional
+space, but the second one-dimensional corner of
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_vertical_letter} necessarily
+has weight zero. Treating the full matrix as one block does not produce a
+normal tensor. Thus a two-sided unitary combined with the positive-block-only
+assembly would make Proposition~4.13 false even in this elementary example.
 
 \section{Trace loss under transported sector maps}
 
-Appendix~C.4 transports the physical refinement and coarse-graining maps to
-the retained one-site and two-site vertical coordinates (source
-lines~1955--1980).  Let $U_1$ and $U_2$ be the corresponding coisometries and
-write
-\begin{equation}
-  P_1=U_1^\dagger U_1,
-  \qquad
-  P_2=U_2^\dagger U_2.
-  \label{eq:active-projections}
-\end{equation}
+Appendix~C.4 of Ref.~\cite{Cirac2016MPDO_arXiv} transports the physical
+refinement and coarse-graining maps to the retained one-site and two-site
+vertical coordinates at source lines~1955--1980. Let $U_1$ and $U_2$ be the
+corresponding coisometries, and define
+\begin{align}
+    P_1
+        &=U_1^\dagger U_1,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_one_site_projection}\\
+    P_2
+        &=U_2^\dagger U_2.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_two_site_projection}
+\end{align}
 The normalized diagonal embedding and the sectorwise partial trace preserve
-the sum of the sector traces.  The physical maps also preserve trace.  Thus,
-if $Z_T$ is the positive matrix immediately before the final $U_2$
-compression in the transported refinement map, then
-\begin{equation}
-  \operatorname{Tr}_{\mathrm{sec}}(\widetilde T(X))
-   =\operatorname{tr}(U_2Z_TU_2^\dagger)
-   =\operatorname{tr}(P_2Z_T)
-   \leq\operatorname{tr}(Z_T)
-   =\operatorname{Tr}_{\mathrm{sec}}(X).
-  \label{eq:refinement-trace-loss}
-\end{equation}
-For a positive matrix, equality holds if and only if
-$P_2Z_T=Z_T$.  The same argument for the transported coarse-graining map gives
-\begin{equation}
-  \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
-   \leq\operatorname{Tr}_{\mathrm{sec}}(Y),
-  \qquad
-  \operatorname{Tr}_{\mathrm{sec}}(\widetilde S(Y))
-   =\operatorname{Tr}_{\mathrm{sec}}(Y)
-   \Longleftrightarrow P_1Z_S=Z_S,
-  \label{eq:coarse-trace-loss}
-\end{equation}
-where $Z_S$ is the matrix before the final $U_1$ compression.
+the sum of sector traces, and the physical maps preserve trace. Let $Z_T\geq0$
+be the matrix immediately before the final $U_2$ compression in the
+transported refinement map $\widetilde T$. Then
+\begin{align}
+    \tr_{\mathrm{sec}}(\widetilde T(X))
+        &=
+        \tr(U_2Z_TU_2^\dagger),
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_refinement_trace_compression}\\
+        &=
+        \tr(P_2Z_T),
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_refinement_trace_projection}\\
+        &\leq
+        \tr(Z_T)
+        =
+        \tr_{\mathrm{sec}}(X).
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_refinement_trace_loss}
+\end{align}
+For positive $Z_T$, equality in
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_refinement_trace_loss}
+holds if and only if
+\begin{align}
+    P_2Z_T
+        &=Z_T.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_refinement_support}
+\end{align}
 
-Consequently the transported maps need not be trace preserving on arbitrary
-elements of the full finite products merely because the physical maps are
-trace preserving.  Such a conclusion would require the missing
-image-preservation statements
-\begin{equation}
-  P_2Z_T=Z_T,
-  \qquad
-  P_1Z_S=Z_S.
-  \label{eq:transported-image-preservation}
-\end{equation}
-The displayed identities of Appendix~C.4 establish the required action on
-the weighted sector operators arising from the canonical forms; they do not,
-by themselves, establish \eqref{eq:transported-image-preservation} for every
-element of the finite products.  For every virtual bond matrix~$X$, the
-source-generated families now satisfy
-\eqref{eq:transported-image-preservation}: the normalized embedding gives the
-contracted weighted direct sum, the two reconstruction identities identify
-the precompression matrix with $U_i^\dagger B_i(X)U_i$, and
-$U_iU_i^\dagger=1$ gives the support equation.  Cyclicity of trace then yields
-trace equality on these families.  No global trace-preserving extension,
+For the transported coarse-graining map $\widetilde S$, let $Z_S\geq0$ denote
+the matrix before the final $U_1$ compression. The same argument gives
+\begin{align}
+    \tr_{\mathrm{sec}}(\widetilde S(Y))
+        &\leq
+        \tr_{\mathrm{sec}}(Y),
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_coarse_trace_loss}\\
+    \tr_{\mathrm{sec}}(\widetilde S(Y))
+        &=
+        \tr_{\mathrm{sec}}(Y)
+        \quad\Longleftrightarrow\quad
+        P_1Z_S=Z_S.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_coarse_trace_equality}
+\end{align}
+
+Consequently, trace preservation of the physical maps does not imply that the
+transported maps preserve trace on arbitrary elements of the full finite
+products. That conclusion would require
+\begin{align}
+    P_2Z_T
+        &=Z_T,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_transport_refinement_image}\\
+    P_1Z_S
+        &=Z_S.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_transport_coarse_image}
+\end{align}
+The identities displayed in Appendix~C.4 of
+Ref.~\cite{Cirac2016MPDO_arXiv} establish the required action on the weighted
+sector operators arising from the canonical forms. By themselves, they do not
+establish
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_transport_refinement_image}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_transport_coarse_image}
+for every element of the finite products.
+
+For every virtual bond matrix $X$, the source-generated families now satisfy
+these support identities. The normalized embedding produces the contracted
+weighted direct sum; the two reconstruction identities identify the
+precompression matrix with $U_i^\dagger B_i(X)U_i$; and
+$U_iU_i^\dagger=I$ gives the support equation. Cyclicity of trace then gives
+trace equality on these families. No global trace-preserving extension,
 complete-positivity assertion for the finite products, or inverse relation is
-asserted.
+claimed.
 
 \section{Ambient completion in the converse construction}
 
-Definition~4.1 requires trace-preserving completely positive maps on the full
-one-site and two-site physical matrix algebras (source lines~638--660).  In the
-converse implication of Theorem~4.14, Appendix~C.4 instead first defines the
-retained-sector compositions
-\begin{equation}
-  T_0=\widetilde R_2\widetilde T R_1,
-  \qquad
-  S_0=\widetilde R_1\widetilde S R_2
-  \label{eq:converse-active-composites}
-\end{equation}
-at source lines~2065--2085.  Here $R_1$ and $R_2$ begin with compression by
-the one-site and two-site coisometries.  Consequently
-\begin{equation}
-  \operatorname{tr}(T_0(X))=\operatorname{tr}(P_1X),
-  \qquad
-  \operatorname{tr}(S_0(Y))=\operatorname{tr}(P_2Y),
-  \label{eq:converse-active-traces}
-\end{equation}
-where, after the canonical relabelling of the two-site indices,
-$P_i=U_i^\dagger U_i$.  These maps preserve trace on matrices supported in
-the retained sectors, but not on arbitrary ambient matrices when
-$P_i\neq I$.
+Definition~4.1 of Ref.~\cite{Cirac2016MPDO_arXiv} requires trace-preserving
+completely positive maps on the full one-site and two-site physical matrix
+algebras. In the converse implication of Theorem~4.14, Appendix~C.4 first
+defines, at source lines~2065--2085, the retained-sector compositions
+\begin{align}
+    T_0
+        &=\widetilde R_2\widetilde T R_1,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_active_refinement_composite}\\
+    S_0
+        &=\widetilde R_1\widetilde S R_2.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_active_coarse_composite}
+\end{align}
+The maps $R_1$ and $R_2$ begin by compressing with the one-site and two-site
+coisometries. After the canonical relabelling of the two-site indices, with
+$P_i=U_i^\dagger U_i$, one obtains
+\begin{align}
+    \tr(T_0(X))
+        &=\tr(P_1X),
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_active_refinement_trace}\\
+    \tr(S_0(Y))
+        &=\tr(P_2Y).
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_active_coarse_trace}
+\end{align}
+These maps preserve trace on matrices supported in the retained sectors, but
+not on arbitrary ambient matrices when $P_i\neq I$.
 
-Put $Q_i=I-P_i$.  When $d>0$, choose density matrices $\tau_1$ and $\tau_2$
-on the one-site and two-site physical spaces.  The measure-and-prepare
-completion
-\begin{equation}
-  T(X)=T_0(X)+\operatorname{tr}(Q_1XQ_1)\tau_2,
-  \qquad
-  S(Y)=S_0(Y)+\operatorname{tr}(Q_2YQ_2)\tau_1
-  \label{eq:converse-completed-channels}
-\end{equation}
-is completely positive.  Since $Q_i$ is a projection and
-$\operatorname{tr}(\tau_i)=1$, equations
-\eqref{eq:converse-active-traces} give
-\begin{equation}
-  \operatorname{tr}(T(X))=\operatorname{tr}(X),
-  \qquad
-  \operatorname{tr}(S(Y))=\operatorname{tr}(Y).
-  \label{eq:converse-completed-traces}
-\end{equation}
-When $d=0$, both ambient physical matrix algebras contain only zero; the
-uncompleted maps are already completely positive and trace preserving, and no
-density matrix is required.
-The source does not specify the states $\tau_i$ or any other trace-restoring
-modification of the literal composites on the discarded complements.  This
-choice is immaterial for its conclusion: the reconstruction identities give
-\begin{equation}
-  P_1M_1(Z)P_1=M_1(Z),
-  \qquad
-  P_2M_2(Z)P_2=M_2(Z)
-  \label{eq:converse-source-support}
-\end{equation}
-for every virtual matrix $Z$.  Hence the added terms vanish on the family to
-which the equations at source lines~2074 and~2085 are applied.
+Define the complementary projections by
+\begin{align}
+    Q_i
+        &=I-P_i.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_complement_projection}
+\end{align}
+When $d>0$, choose density matrices $\tau_1$ and $\tau_2$ on the one-site and
+two-site physical spaces. Define the measure-and-prepare completions
+\begin{align}
+    T(X)
+        &=
+        T_0(X)+\tr(Q_1XQ_1)\tau_2,
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_completed_refinement_channel}\\
+    S(Y)
+        &=
+        S_0(Y)+\tr(Q_2YQ_2)\tau_1.
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_completed_coarse_channel}
+\end{align}
+Both maps are completely positive. Since each $Q_i$ is a projection and
+$\tr(\tau_i)=1$,
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_active_refinement_trace}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_active_coarse_trace} give
+\begin{align}
+    \tr(T(X))
+        &=\tr(X),
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_completed_refinement_trace}\\
+    \tr(S(Y))
+        &=\tr(Y).
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_completed_coarse_trace}
+\end{align}
+When $d=0$, both ambient physical matrix algebras contain only zero. The
+uncompleted maps are then already completely positive and trace preserving,
+and no density matrix is needed.
 
-This completion is distinct from the transported maps discussed in the
-preceding section.  In the forward implication at source lines~1955--1980,
-the full physical channels are hypotheses and are compressed to retained
-sector coordinates; their possible trace loss is governed by
-\eqref{eq:transported-image-preservation}.  In the converse implication at
-source lines~2065--2085, the sector maps are used to construct full physical
-channels, and equation~\eqref{eq:converse-completed-channels} supplies the
-otherwise unspecified action on the orthogonal complements.
+The source does not specify $\tau_i$ or any other trace-restoring action on the
+discarded complements. This freedom does not affect its conclusion. For every
+virtual matrix $Z$, reconstruction gives
+\begin{align}
+    P_1M_1(Z)P_1
+        &=M_1(Z),
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_one_site_source_support}\\
+    P_2M_2(Z)P_2
+        &=M_2(Z).
+    \label{eq:cpgsv17_vertical_isometry_zero_sector_two_site_source_support}
+\end{align}
+The added terms in
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_completed_refinement_channel}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_completed_coarse_channel}
+therefore vanish on the source-generated family to which source
+lines~2074 and~2085 are applied.
+
+This completion differs from the transported maps of the preceding section.
+In the forward implication at source lines~1955--1980, full physical channels
+are hypotheses and are compressed to retained-sector coordinates; their
+possible trace loss is governed by
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_transport_refinement_image}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_transport_coarse_image}. In
+the converse implication at source lines~2065--2085, sector maps are used to
+construct full physical channels, and
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_completed_refinement_channel}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_completed_coarse_channel}
+supply the otherwise unspecified action on the orthogonal complements.
 
 \section{Formal correction}
 
-The vertical canonical-form predicate requires $UU^\dagger=I_s$ in the
-orientation of \eqref{eq:vertical-form}, together with
-\eqref{eq:reconstruction}. This is the source-faithful conclusion compatible
-with \eqref{eq:dimension-bound}: the displayed compression is printed in the
-proposition, while reconstruction records its preceding canonical-form claim.
-The retained part is represented
-rectangularly, while the omitted part is required to be zero. No full-support
-assumption is added to that conclusion.  Literal Proposition~4.13 now uses
-this corrected condition in
+The vertical canonical-form predicate now requires
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_coisometry} in the
+orientation of
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_vertical_form}, together
+with exact reconstruction from
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_reconstruction}. This
+conclusion is compatible with
+Eq.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_dimension_bound} and is
+faithful to Proposition~4.13 of Ref.~\cite{Cirac2016MPDO_arXiv}: the proposition
+prints the compression, while its preceding canonical-form assertion supplies
+reconstruction. The retained part is represented rectangularly, and the
+omitted part must be zero. No full-support hypothesis is added.
+
+Literal Proposition~4.13 now uses this condition in
 \path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean}.\footnote{Formal
 declaration: \leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm}.}
 The theorem under the normalized BNT-refined horizontal form remains available
 separately in
 \path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.\footnote{Formal declaration:
 \leanid{MPOTensor.verticalCF\_of\_horizontalCF}.}
-The vertical phase-class grouping and normalization that precede both
-coisometry constructions are recorded in
-\path{cpgsv17_vertical_cf_grouping.tex}.  The coisometry correction itself is
-tracked in \ghissue{3869}.
+The vertical phase-class grouping and normalization preceding both coisometry
+constructions are recorded in
+\path{cpgsv17_vertical_cf_grouping.tex}. The coisometry correction is tracked
+in \href{https://github.com/LionSR/TNLean/issues/3869}{GitHub issue \#3869}.
 
 The source-generated support identities and their trace consequences are
 proved in
@@ -265,44 +350,54 @@ trace consequences are
 \leanid{MPOTensor.transportedVerticalSectorT_trace_of_source_generated} and
 \leanid{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}.}
 
-The general measure-and-prepare completion is recorded in
+The general measure-and-prepare completion is formalized in
 \path{TNLean/Channel/SupportCompletion.lean}.\footnote{Formal declaration:
 \leanid{Matrix.supportCompletion\_isKrausCPTP}.}
 Under supplied unitary conjugacies between the paired sectors, the active
-compositions and the completed physical channels are recorded in
+compositions and completed physical channels are formalized in
 \path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalPhysicalMaps.lean}.%
 \footnote{Formal declaration:
 \leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
 UnitarySectorConjugacy.isRFPViaTS}.}
-The existence of these unitary conjugacies is treated separately in
-\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}.
-The complementary terms are choices on the discarded subspaces, not
-additional assertions of Appendix~C.4.  Their action on the source-generated
-family is fixed by \eqref{eq:converse-source-support}.
+The existence of these unitary conjugacies is treated in
+\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}. The complementary terms
+are choices on discarded subspaces, not additional claims about Appendix~C.4
+of Ref.~\cite{Cirac2016MPDO_arXiv}. Their action on the source-generated family
+is fixed by
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_one_site_source_support}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_two_site_source_support}.
 
 \paragraph{Verdict.}
-The earlier two-sided-unitary condition was absent from the source and was
-false when the vertically viewed tensor had a zero sector.  Replacing it by
+The earlier two-sided-unitary condition was absent from the source and failed
+when the vertically viewed tensor contained a zero sector. Replacing it with
 the coisometry identity $UU^\dagger=I$, while retaining exact reconstruction
-from the nonzero sectors, corrects the conclusion without adding a
-full-support hypothesis.  Literal Proposition~4.13 and the separate stronger
-horizontal theorem now prove this corrected conclusion.  This completion does
-not make the forward transported maps trace preserving on every element of the
-finite products in Appendix~C.4; the support conditions
-\eqref{eq:transported-image-preservation} remain necessary there.  It also
-does not determine a preferred action on the discarded physical complements.
+from the nonzero sectors, corrects the conclusion without adding a full-support
+hypothesis. Literal Proposition~4.13 and the separate stronger horizontal
+theorem now prove this corrected conclusion.
+
+This completion does not make the forward transported maps trace preserving on
+every element of the finite products in Appendix~C.4; the support conditions
+in
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_transport_refinement_image}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_transport_coarse_image}
+remain necessary. It also does not choose a preferred action on the discarded
+physical complements.
+
 For the converse implication, the measure-and-prepare terms in
-\eqref{eq:converse-completed-channels} give global physical channels with the
-same action on the source-generated family.  Within this note, that construction
-is conditional on the unitary sector conjugacies used in
-\eqref{eq:converse-active-composites}.  The later mixed one-site/two-site prefix
-argument proves those conjugacies from the tensor-attached BNT clause, as
-documented in
-\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}.  Consequently the
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_completed_refinement_channel}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_completed_coarse_channel}
+produce global physical channels with the same action on the source-generated
+family. Within this note, the construction is conditional on the unitary
+sector conjugacies used in
+Eqs.~\ref{eq:cpgsv17_vertical_isometry_zero_sector_active_refinement_composite}
+and~\ref{eq:cpgsv17_vertical_isometry_zero_sector_active_coarse_composite}.
+The later mixed one-site/two-site prefix argument proves these conjugacies from
+the tensor-attached BNT clause, as documented in
+\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}. Consequently, the
 zero-sector completion is used unconditionally by
 \leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}, closing
-Theorem~4.14(ii)$\Rightarrow$(i) under the source's standing canonical-form and
-MPDO hypotheses.
+Theorem~4.14(ii)$\Rightarrow$(i) under the standing canonical-form and MPDO
+hypotheses of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -18,84 +18,206 @@
 \section{Source statements}
 
 For a nearest-neighbor chain, let $m$ be the number of local interaction
-terms in each window and let $\gamma$ be the gap of the corresponding open
-window Hamiltonian. Knabe's finite-size criterion gives the threshold
-$\gamma>1/m$. This threshold originates in \cite{Knabe1988Energy}. It is
-quoted for MPS parent Hamiltonians in lines~1483--1489 of the local source for
-\cite{PerezGarcia2007Matrix} and in lines~2194--2197 of the local source for
-\cite{Cirac2021Matrix}. The quoted passages state only the threshold. The
-closed-form periodic coefficient
+terms in each open window, and let $\gamma$ be the gap of the corresponding
+open-window Hamiltonian. Knabe's finite-size criterion has threshold
 \begin{align}
-    \delta&=\frac{m\gamma-1}{m-1}
+    \gamma
+        &>\frac{1}{m}.
+    \label{eq:knabe88_finite_range_coefficient_knabe_threshold}
 \end{align}
-is obtained by the present derivation, as the range-two case of the coefficient
-below.
+This threshold originates in Ref.~\cite{Knabe1988Energy}. It is quoted for
+matrix-product-state parent Hamiltonians at lines~1483--1489 of the local
+source for Ref.~\cite{PerezGarcia2007Matrix} and at lines~2194--2197 of the
+local source for Ref.~\cite{Cirac2021Matrix}. Those passages state only the
+threshold.
+
+The closed-form periodic coefficient in the nearest-neighbor case is
+\begin{align}
+    \delta
+        &=\frac{m\gamma-1}{m-1}.
+    \label{eq:knabe88_finite_range_coefficient_nearest_neighbor_coefficient}
+\end{align}
+The derivation below obtains this expression as the range-two specialization
+of a finite-range coefficient.
 
 \section{Finite-range derivation}
 
-Let $h_i$, $i\in\mathbb Z/N\mathbb Z$, be orthogonal projections, let
-$H=\sum_i h_i$, and define
+Let $N$ and $m$ be positive integers. Let $h_i$, for
+$i\in\mathbb Z/N\mathbb Z$, be orthogonal projections, and define the
+periodic Hamiltonian $H$, the length-$m$ window operators $A_s$, and the
+separation-$q$ pair sums $Q_q$ by
 \begin{align}
-    A_s&=\sum_{a=0}^{m-1}h_{s+a},
-    &Q_q&=\sum_i\bigl(h_i h_{i+q}+h_i h_{i-q}\bigr).
+    H
+        &=\sum_i h_i,
+    \label{eq:knabe88_finite_range_coefficient_periodic_hamiltonian}\\
+    A_s
+        &=\sum_{a=0}^{m-1}h_{s+a},
+    \label{eq:knabe88_finite_range_coefficient_window_hamiltonian}\\
+    Q_q
+        &=\sum_i(h_i h_{i+q}+h_i h_{i-q}).
+    \label{eq:knabe88_finite_range_coefficient_pair_sum}
 \end{align}
-Assume $1\leq R\leq m$, $N\geq2m$, and that terms at cyclic separation at
-least $R$ commute. Cyclic double counting gives
+Assume
 \begin{align}
-    \sum_s A_s^2&=mH+\sum_{q=1}^{m-1}(m-q)Q_q.
+    1
+        &\leq R\leq m,
+    \label{eq:knabe88_finite_range_coefficient_range_bounds}\\
+    N
+        &\geq2m,
+    \label{eq:knabe88_finite_range_coefficient_cycle_size}
 \end{align}
-The projection inequality $h_i h_j+h_j h_i\leq h_i+h_j$ gives $Q_q\leq2H$.
-The separated terms satisfy $Q_q\geq0$ for $q\geq R$, and expansion of $H^2$
-gives
+and assume that terms at cyclic separation at least $R$ commute. Cyclic
+double counting gives
 \begin{align}
-    H+\sum_{q=1}^{m-1}Q_q&\leq H^2.
+    \sum_s A_s^2
+        &=mH+\sum_{q=1}^{m-1}(m-q)Q_q.
+    \label{eq:knabe88_finite_range_coefficient_window_square_sum}
 \end{align}
-Set $c=m-R+1$, so that $m-q=c+(R-1-q)$. The correction term splits as
+
+For orthogonal projections, the operator inequality
+\begin{align}
+    h_i h_j+h_j h_i
+        &\leq h_i+h_j
+    \label{eq:knabe88_finite_range_coefficient_projection_pair_bound}
+\end{align}
+implies
+\begin{align}
+    Q_q
+        &\leq2H.
+    \label{eq:knabe88_finite_range_coefficient_pair_sum_upper_bound}
+\end{align}
+If $q\geq R$, the separated projections commute, so
+\begin{align}
+    Q_q
+        &\geq0.
+    \label{eq:knabe88_finite_range_coefficient_pair_sum_nonnegative}
+\end{align}
+Expansion of $H^2$ also gives
+\begin{align}
+    H+\sum_{q=1}^{m-1}Q_q
+        &\leq H^2.
+    \label{eq:knabe88_finite_range_coefficient_hamiltonian_square_lower_bound}
+\end{align}
+
+Define
+\begin{align}
+    c
+        &=m-R+1.
+    \label{eq:knabe88_finite_range_coefficient_baseline_coefficient}
+\end{align}
+Then
+\begin{align}
+    m-q
+        &=c+(R-1-q).
+    \label{eq:knabe88_finite_range_coefficient_weight_decomposition}
+\end{align}
+The correction term splits into short-range and separated contributions:
 \begin{align}
     \sum_{q=1}^{m-1}(R-1-q)Q_q
-    &=\sum_{q=1}^{R-2}(R-1-q)Q_q
-      +\sum_{q=R}^{m-1}(R-1-q)Q_q,\\
-    \sum_{q=1}^{R-2}(R-1-q)Q_q
-    &\leq 2H\sum_{q=1}^{R-2}(R-1-q),\\
-    \sum_{q=R}^{m-1}(R-1-q)Q_q
-    &\leq0.
+        &=\sum_{q=1}^{R-2}(R-1-q)Q_q
+          +\sum_{q=R}^{m-1}(R-1-q)Q_q.
+    \label{eq:knabe88_finite_range_coefficient_correction_split}
 \end{align}
-Indeed, the first sum has positive weights and $Q_q\leq2H$ termwise. In the
-second sum, $R-1-q\leq0$ and $Q_q\geq0$: the latter estimate applies because
-$R\leq q\leq m-1\leq N-R$. The triangular sum is
+The short-range contribution satisfies
+\begin{align}
+    \sum_{q=1}^{R-2}(R-1-q)Q_q
+        &\leq
+          2H\sum_{q=1}^{R-2}(R-1-q),
+    \label{eq:knabe88_finite_range_coefficient_short_range_bound}
+\end{align}
+because its weights are positive and
+(\ref{eq:knabe88_finite_range_coefficient_pair_sum_upper_bound}) holds
+termwise. The separated contribution satisfies
+\begin{align}
+    \sum_{q=R}^{m-1}(R-1-q)Q_q
+        &\leq0,
+    \label{eq:knabe88_finite_range_coefficient_separated_bound}
+\end{align}
+because $R-1-q\leq0$ and $Q_q\geq0$. The nonnegativity applies throughout
+the required range since
+\begin{align}
+    R
+        &\leq q\leq m-1\leq N-R.
+    \label{eq:knabe88_finite_range_coefficient_separation_range}
+\end{align}
+The triangular sum is
 \begin{align}
     \sum_{q=1}^{R-2}(R-1-q)
-    &=\frac{(R-1)(R-2)}{2}.
+        &=\frac{(R-1)(R-2)}{2}.
+    \label{eq:knabe88_finite_range_coefficient_triangular_sum}
+\end{align}
+
+Substituting
+(\ref{eq:knabe88_finite_range_coefficient_weight_decomposition}) into
+(\ref{eq:knabe88_finite_range_coefficient_window_square_sum}), then applying
+(\ref{eq:knabe88_finite_range_coefficient_hamiltonian_square_lower_bound}),
+(\ref{eq:knabe88_finite_range_coefficient_short_range_bound}), and
+(\ref{eq:knabe88_finite_range_coefficient_separated_bound}), yields
+\begin{align}
+    \sum_s A_s^2
+        &\leq
+          cH^2+(m-c+(R-1)(R-2))H.
+    \label{eq:knabe88_finite_range_coefficient_preliminary_upper_bound}
+\end{align}
+The scalar coefficient simplifies as
+\begin{align}
+    m-c+(R-1)(R-2)
+        &=(R-1)^2.
+    \label{eq:knabe88_finite_range_coefficient_scalar_simplification}
 \end{align}
 Therefore
 \begin{align}
     \sum_s A_s^2
-    &\leq cH^2+\bigl(m-c+(R-1)(R-2)\bigr)H,\\
-    m-c+(R-1)(R-2)
-    &=(R-1)^2,\\
-    \sum_s A_s^2
-    &\leq cH^2+(R-1)^2H.
+        &\leq cH^2+(R-1)^2H.
+    \label{eq:knabe88_finite_range_coefficient_window_square_upper_bound}
 \end{align}
-Consequently, the local inequalities $A_s^2\geq\gamma A_s$ imply
+
+Assume that every window satisfies the local gap inequality
 \begin{align}
-    H^2&\geq\frac{m\gamma-(R-1)^2}{m-R+1}H.
+    A_s^2
+        &\geq\gamma A_s.
+    \label{eq:knabe88_finite_range_coefficient_local_gap_inequality}
 \end{align}
-The condition $(R-1)^2<m\gamma$ makes this coefficient positive. At $R=2$
-it reduces to Knabe's nearest-neighbor coefficient.
+Summing over $s$ and using
+\begin{align}
+    \sum_s A_s
+        &=mH
+    \label{eq:knabe88_finite_range_coefficient_window_sum}
+\end{align}
+gives
+\begin{align}
+    H^2
+        &\geq
+          \frac{m\gamma-(R-1)^2}{m-R+1}H.
+    \label{eq:knabe88_finite_range_coefficient_finite_range_bound}
+\end{align}
+The coefficient is positive under the condition
+\begin{align}
+    (R-1)^2
+        &<m\gamma.
+    \label{eq:knabe88_finite_range_coefficient_positive_coefficient_condition}
+\end{align}
+For $R=2$,
+(\ref{eq:knabe88_finite_range_coefficient_finite_range_bound}) reduces to
+the nearest-neighbor coefficient
+(\ref{eq:knabe88_finite_range_coefficient_nearest_neighbor_coefficient}).
 
 \section{Verdict}
 
-The nearest-neighbor threshold is source-attributed as above. The coefficient
-for arbitrary finite range is a TNLean derivation, formalized by the cyclic
-projection theorem.\footnote{Formal declaration:
-\leanid{ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe}.}
-It is not a statement attributed
-to Knabe, to the gap-from-hypotheses criterion
-\cite[Theorem~2.1(i)]{Nachtergaele1996Spectral} of Nachtergaele's martingale
-argument, or to the two MPS reviews. The abstract result concerns a cyclic family of
-projections. Applying it to every sufficiently large MPS parent Hamiltonian
-still requires a uniform gap for the corresponding nonwrapping open
-interaction.
+The nearest-neighbor threshold
+(\ref{eq:knabe88_finite_range_coefficient_knabe_threshold}) is attributed to
+Ref.~\cite{Knabe1988Energy}. The arbitrary finite-range coefficient
+(\ref{eq:knabe88_finite_range_coefficient_finite_range_bound}) is a TNLean
+derivation, formalized by
+\leanid{ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe}.
+It is not attributed to Knabe, to
+Theorem~2.1(i) of Nachtergaele's martingale argument
+\cite{Nachtergaele1996Spectral}, or to the two MPS reviews
+\cite{PerezGarcia2007Matrix,Cirac2021Matrix}.
+
+The abstract result concerns a cyclic family of projections. Applying it
+uniformly to sufficiently large MPS parent Hamiltonians still requires a
+uniform gap for the corresponding nonwrapping open interaction.
 
 \bibliographystyle{alpha}
 \bibliography{references}

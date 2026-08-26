@@ -17,306 +17,393 @@
 
 \section{The source argument}
 
-In the proof of the general mixed-state renormalization fixed-point theorem,
-CPSV16 introduces the finite-dimensional $C^*$-algebras
-\[
-    \mathcal A_1=\bigoplus_\alpha M_{d^1_\alpha}(\mathbb C),
-    \qquad
-    \mathcal A_2=\bigoplus_\beta M_{d^2_\beta}(\mathbb C)
-\]
-and the transported maps
-\[
-    \widetilde T=\widetilde R_2TR_1,
-    \qquad
-    \widetilde S=\widetilde R_1SR_2.
-\]
-For every horizontal bond matrix $X$, the source proves
-\[
-    \widetilde T\!\left(\bigoplus_\alpha
-      m_\alpha M_\alpha(X)\right)
-      =\bigoplus_\beta n_\beta A_\beta(X),
-    \qquad
-    \widetilde S\!\left(\bigoplus_\beta
-      n_\beta A_\beta(X)\right)
-      =\bigoplus_\alpha m_\alpha M_\alpha(X).
-\]
-Thus the one-site contraction family belongs to
-$\operatorname{Fix}(\widetilde S\widetilde T)$, and the two-site family
-belongs to $\operatorname{Fix}(\widetilde T\widetilde S)$
+The proof of the general mixed-state renormalization fixed-point theorem in
+CPSV16 uses the finite-dimensional $C^*$-algebras
+\begin{align}
+    \mathcal A_1
+        &= \bigoplus_\alpha M_{d^1_\alpha}(\mathbb C),
+    \label{eq:cpsv16_vertical_sector_invertibility_first_sector_algebra}\\
+    \mathcal A_2
+        &= \bigoplus_\beta M_{d^2_\beta}(\mathbb C).
+    \label{eq:cpsv16_vertical_sector_invertibility_second_sector_algebra}
+\end{align}
+Let $T$ and $S$ denote the physical maps, and let $R_1,R_2$ and
+$\widetilde R_1,\widetilde R_2$ denote the sector realization and compression
+maps used in the source. The transported maps are
+\begin{align}
+    \widetilde T
+        &= \widetilde R_2 T R_1,
+    \label{eq:cpsv16_vertical_sector_invertibility_transported_T}\\
+    \widetilde S
+        &= \widetilde R_1 S R_2.
+    \label{eq:cpsv16_vertical_sector_invertibility_transported_S}
+\end{align}
+For each horizontal bond matrix $X$, CPSV16 proves
+\begin{align}
+    \widetilde T\!\left(\bigoplus_\alpha m_\alpha M_\alpha(X)\right)
+        &= \bigoplus_\beta n_\beta A_\beta(X),
+    \label{eq:cpsv16_vertical_sector_invertibility_T_contractions}\\
+    \widetilde S\!\left(\bigoplus_\beta n_\beta A_\beta(X)\right)
+        &= \bigoplus_\alpha m_\alpha M_\alpha(X).
+    \label{eq:cpsv16_vertical_sector_invertibility_S_contractions}
+\end{align}
+Equations~\ref{eq:cpsv16_vertical_sector_invertibility_T_contractions}
+and~\ref{eq:cpsv16_vertical_sector_invertibility_S_contractions} imply that
+the one-site contraction family lies in
+$\operatorname{Fix}(\widetilde S\widetilde T)$ and the two-site contraction
+family lies in $\operatorname{Fix}(\widetilde T\widetilde S)$
 \cite[Appendix~C.4, lines~1972--1980]{Cirac2016MPDO_arXiv}.
 
-The next step is not a linear-spanning argument.  CPSV16 invokes the
-density-weighted fixed-point form of Wolf's Theorem~6.14 and writes
-\[
+The next step does not use the linear span of the contraction family. CPSV16
+invokes the density-weighted fixed-point form of Wolf's
+Theorem~6.14~\cite{Wolf2012Quantum} and writes the fixed-point space as
+\begin{align}
     \mathcal F
-      =U\left(0_r\oplus\bigoplus_k
-        \rho_k\otimes M_{h_k}(\mathbb C)\right)U^*.
-\]
-If $C_L(V)$ denotes the span of length-$L$ products of the contraction
-family, then the basis-of-normal-tensors hypothesis gives
-$C_L(V)=\mathcal A_1$ for some $L>0$.  On the other hand,
-\[
+        &= U\left(0_r\oplus\bigoplus_k
+            \rho_k\otimes M_{h_k}(\mathbb C)\right)U^*.
+    \label{eq:cpsv16_vertical_sector_invertibility_fixed_point_form}
+\end{align}
+For a contraction family $V$, let $C_L(V)$ denote the span of all length-$L$
+products from $V$. The basis-of-normal-tensors hypothesis gives some $L>0$
+such that
+\begin{align}
+    C_L(V)
+        &= \mathcal A_1.
+    \label{eq:cpsv16_vertical_sector_invertibility_contraction_product_span}
+\end{align}
+Equation~\ref{eq:cpsv16_vertical_sector_invertibility_fixed_point_form} gives
+\begin{align}
     C_L(\mathcal F)
-      =U\left(0_r\oplus\bigoplus_k
-        \rho_k^L\otimes M_{h_k}(\mathbb C)\right)U^*.
-\]
-Every $\rho_k$ is positive definite, so
-$\dim C_L(\mathcal F)=\dim\mathcal F$.  The inclusions
-\[
-    \mathcal A_1=C_L(V)\subseteq C_L(\mathcal F)\subseteq\mathcal A_1
-\]
-therefore force $\mathcal F=\mathcal A_1$.  This proves
-$\widetilde S\widetilde T=\operatorname{id}_{\mathcal A_1}$; the other
-composition is treated symmetrically
+        &= U\left(0_r\oplus\bigoplus_k
+            \rho_k^L\otimes M_{h_k}(\mathbb C)\right)U^*.
+    \label{eq:cpsv16_vertical_sector_invertibility_fixed_product_span}
+\end{align}
+Each $\rho_k$ is positive definite, so
+\begin{align}
+    \dim C_L(\mathcal F)
+        &= \dim\mathcal F.
+    \label{eq:cpsv16_vertical_sector_invertibility_fixed_product_dimension}
+\end{align}
+The inclusions
+\begin{align}
+    \mathcal A_1
+        = C_L(V)
+        \subseteq C_L(\mathcal F)
+        \subseteq \mathcal A_1
+    \label{eq:cpsv16_vertical_sector_invertibility_product_span_inclusions}
+\end{align}
+therefore imply $\mathcal F=\mathcal A_1$ and hence
+\begin{align}
+    \widetilde S\widetilde T
+        &= \operatorname{id}_{\mathcal A_1}.
+    \label{eq:cpsv16_vertical_sector_invertibility_source_first_identity}
+\end{align}
+The symmetric argument proves the other composition identity
 \cite[Appendix~C.4, lines~1980--1995]{Cirac2016MPDO_arXiv}.
 
-\section{The present formal boundary}
+\section{The formal boundary}
 
-Three source-specific ingredients preceding the fixed-point classification are
-proved:
+Three source-specific ingredients preceding the fixed-point classification
+have been proved:
 \begin{enumerate}
     \item the two transported composites fix their respective weighted bond
           contraction families;
-    \item for a basis of normal tensors with nonzero weights, length-$L$
-          products of these contractions span the full sector algebra for
-          some $L>0$;
-    \item on the source-generated contraction families, the final compression
-          preserves the active image and hence preserves total trace.
+    \item for a basis of normal tensors with nonzero weights, products of some
+          positive length $L$ from these contractions span the full sector
+          algebra;
+    \item on the contraction families generated by the source, the final
+          compression preserves the active image and therefore preserves total
+          trace.
 \end{enumerate}
-The third item alone does not establish trace preservation on the whole sector
-algebra.  The contraction family itself need not span the algebra linearly;
-only its length-$L$ products are known to span.  Since a linear map fixing
-$V(X)$ need not fix products $V(X_1)\cdots V(X_L)$, neither trace preservation
-nor the identity conclusion extends from the generators by linearity.  Whole-
-sector trace preservation is nevertheless proved by the independent
-maximal-support argument in the next section.  The identity conclusion still
-requires the fixed-point classification.
+The third result does not by itself prove trace preservation on the whole
+sector algebra. The contraction family need not span the algebra linearly;
+only products of a fixed positive length are known to span. A linear map that
+fixes each $V(X)$ need not fix
+$V(X_1)\cdots V(X_L)$. Consequently, neither trace preservation nor the
+identity conclusion follows from the generators by linearity. The independent
+maximal-support argument below proves whole-sector trace preservation, while
+the identity conclusion still uses the fixed-point classification.
 
-Two finite-dimensional final implications are formalized.  First, if a linear
-endomorphism fixes every length-$L$ contraction product and these products
-span, then it is the identity.\footnote{Formal declaration:
+Two finite-dimensional final implications are formalized. First, an
+endomorphism is the identity if it fixes every length-$L$ contraction product
+and those products span the ambient space.\footnote{Formal declaration:
 \leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
-Its fixed-product hypothesis is not a hypothesis of CPSV16.
+CPSV16 does not assume that the products themselves are fixed.
 
-Second, let $\mathcal F$ be the fixed-point space of the endomorphism and let
-$C_L(\mathcal F)$ be the span of its length-$L$ products.  If the distinguished
-contractions themselves are fixed, their length-$L$ products span the ambient
-sector algebra, and
-\[
-    \dim C_L(\mathcal F)\leq\dim\mathcal F,
-\]
+For the second implication, let $\mathcal F$ be the fixed-point space and let
+$C_L(\mathcal F)$ be the span of its length-$L$ products. If the distinguished
+contractions are fixed, their length-$L$ products span the ambient sector
+algebra, and
+\begin{align}
+    \dim C_L(\mathcal F)
+        &\leq \dim\mathcal F,
+    \label{eq:cpsv16_vertical_sector_invertibility_abstract_dimension_bound}
+\end{align}
 then the endomorphism is the identity.\footnote{Formal declarations:
 \leanid{MPOTensor.fixedPointProductSpan} and
 \leanid{MPOTensor.eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
-This second implication does not assume that products of distinguished
-contractions are fixed.  It isolates the source's dimension argument.  The
-displayed inequality is now formalized for a positive trace-preserving map on
-a finite direct sum whenever its trace adjoint satisfies the Schwarz
-inequality and it has a positive-definite fixed family.\footnote{Formal
-declaration:
+This implication does not require products of the distinguished contractions
+to be fixed. It isolates the dimension argument used in the source.
+
+The bound in
+Eq.~\ref{eq:cpsv16_vertical_sector_invertibility_abstract_dimension_bound} is
+formalized for a positive trace-preserving map on a finite direct sum when its
+trace adjoint satisfies the Schwarz inequality and it has a positive-definite
+fixed family.\footnote{Formal declaration:
 \leanid{MPOTensor.fixedPointProductSpan_finrank_le_of_densityBlocks}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorDensityBlocks}.}
-No tensor hypothesis, multiplicativity assumption, or fixedness of products
-enters this result.  It is nevertheless a full-support corollary: unlike
-Wolf's unrestricted Theorem~6.14, its statement assumes the positive-definite
-fixed family.  The tensor-attached argument must first obtain that family from
-the fixed contractions and their positive-length product span, as recorded in
-the elimination plan below.
+This result assumes no tensor hypothesis, multiplicativity, or fixedness of
+products. It is nevertheless a full-support corollary: unlike Wolf's
+unrestricted Theorem~6.14~\cite{Wolf2012Quantum}, it assumes a
+positive-definite fixed family. The tensor argument must obtain this family
+from the fixed contractions and their positive-length product span.
 
 The positive trace-preserving mean-ergodic retraction on a full matrix algebra
 and its positive unital trace-adjoint retraction onto the adjoint fixed-point
-space are formalized.  Their construction uses no bounded-orbit hypothesis on
-the adjoint map.  On full support, the adjoint retraction is now identified
-with the weighted partial-trace block form of Wolf's Proposition~1.5.  The
-trace-adjoint calculation giving the Schr\"odinger-picture density blocks and
-the support reduction producing the zero summand of Wolf's Theorem~6.14 are
-now assembled.  Their construction is recorded in the QICLean paper-gap note
-\path{https://sirui-lu.com/QICLean/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.pdf}.  For
-the transported sector maps one must also prove the channel hypotheses on the
-full direct sums, rather than only on the contraction families.  In the
-retained-coordinate construction, compression by the target coisometry is
-trace preserving precisely when the precompression output lies in its active
-image.  The established image identity is restricted to the source-generated
-contractions.
+space are also formalized. Their construction does not require a bounded-orbit
+hypothesis for the adjoint map. On full support, the adjoint retraction agrees
+with the weighted partial-trace block form of Wolf's
+Proposition~1.5~\cite{Wolf2012Quantum}. The trace-adjoint calculation giving
+the Schr\"odinger-picture density blocks and the support reduction producing
+the zero summand of Wolf's Theorem~6.14~\cite{Wolf2012Quantum} are assembled
+in the QICLean paper-gap note
+\url{https://sirui-lu.com/QICLean/paper-gaps/wolf_theorem6_14_fixed_point_projection_gap.pdf}.
 
-The passage from one full matrix algebra to the dependent direct sums is also
-complete for this dimension estimate.  One compresses to the diagonal blocks,
-applies the direct-sum map, and embeds the result block diagonally.  Positivity,
-total-trace preservation, and the Schwarz inequality pass to this extension;
-its fixed points compress injectively to the fixed points of the direct-sum
-map, while products of direct-sum fixed points embed injectively among the
-products of fixed points of the extension.  The density-block calculation on
-the extension therefore gives
-$\dim C_L(\mathcal F)\leq\dim\mathcal F$ on the original direct sum.  Positivity
-and trace preservation for the two square composites are resolved below.  The
-Schwarz hypothesis of the abstract identity criterion is also resolved.  The
-canonical full-matrix lifts of the two transported maps factor into normalized
-state preparation, retained-coordinate reindexings, the physical completely
-positive maps, single-operator conjugations, and controlled partial trace.
-Consequently the two transported maps and their square composites are
-completely positive.  Since the square composites preserve trace, their trace
-adjoints are unital completely positive maps and satisfy the Schwarz
-inequality in every simple summand.\footnote{Formal declarations:
+For the transported sector maps, the channel hypotheses must hold on the full
+direct sums, not only on the contraction families. In the retained-coordinate
+construction, compression by the target coisometry preserves trace exactly
+when the precompression output belongs to its active image. The established
+image identity is restricted to the source-generated contractions.
+
+The direct-sum version of the dimension estimate is also complete. The proof
+compresses to diagonal blocks, applies the direct-sum map, and embeds the
+result block diagonally. Positivity, total-trace preservation, and the Schwarz
+inequality pass to this extension. Its fixed points compress injectively into
+the fixed points of the direct-sum map, while products of direct-sum fixed
+points embed injectively among products of fixed points of the extension. The
+density-block calculation for the extension therefore yields
+\begin{align}
+    \dim C_L(\mathcal F)
+        &\leq \dim\mathcal F
+    \label{eq:cpsv16_vertical_sector_invertibility_direct_sum_dimension_bound}
+\end{align}
+for the original direct sum.
+
+Positivity, trace preservation, and the Schwarz hypothesis for both square
+composites are resolved below. The canonical full-matrix lifts of the
+transported maps factor through normalized state preparation,
+retained-coordinate reindexing, the physical completely positive maps,
+single-operator conjugation, and controlled partial trace. The transported
+maps and their square composites are therefore completely positive. Once the
+square composites are known to preserve trace, their trace adjoints are
+unital completely positive maps and satisfy the Schwarz inequality in every
+simple summand.\footnote{Formal declarations:
 \leanid{MPOTensor.transportedVerticalSectorT_isKrausDirectSumMap},
 \leanid{MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap}, and
 \leanid{MPOTensor.%
 transportedVerticalSector_composites_traceAdjointSchwarz}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorCompletePositivity}.}
-Alternatively, the maximal-support witness
-$T_\infty(\mathbf 1)$ is now available for an arbitrary positive
-trace-preserving map.  The construction of the supported endomorphism and its
-complementary zero summand is now completed in the full-matrix theorem recorded
-in the same QICLean paper-gap note; it
-removes the need to assume a positive-definite fixed point before applying the
-full-matrix classification.
+
+An alternative route uses the maximal-support witness
+$T_\infty(\mathbf 1)$ for an arbitrary positive trace-preserving map. The
+supported endomorphism and its complementary zero summand are constructed in
+the full-matrix theorem recorded in the same QICLean paper-gap note. This
+construction removes the need to assume a positive-definite fixed point before
+applying the full-matrix classification.
 
 \section{Resolution of the composite trace hypothesis}
 
 The range inclusions
-\[
-  T(R_1(\mathcal A_1))\subseteq R_2(\mathcal A_2),
-  \qquad
-  S(R_2(\mathcal A_2))\subseteq R_1(\mathcal A_1)
-\]
-are not consequences presently extracted from lines 1974--1980.  They are
-not needed for trace preservation: first the two square composites preserve
-trace on their full algebras, and then a trace sandwich gives the same
-conclusion for each individual transported map.
+\begin{align}
+    T(R_1(\mathcal A_1))
+        &\subseteq R_2(\mathcal A_2),
+    \label{eq:cpsv16_vertical_sector_invertibility_T_range_inclusion}\\
+    S(R_2(\mathcal A_2))
+        &\subseteq R_1(\mathcal A_1)
+    \label{eq:cpsv16_vertical_sector_invertibility_S_range_inclusion}
+\end{align}
+have not been extracted from lines~1974--1980 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. They are unnecessary for trace preservation.
+The argument first proves that both square composites preserve trace on their
+full algebras and then derives the same property for each transported map by a
+trace sandwich.
 
-Let $F$ be either square composite.  It is positive and trace nonincreasing.
-Consequently all forward orbits are bounded: a positive orbit stays positive
-with decreasing trace, and Hermitian decomposition gives the general case.
-The mean-ergodic image $\rho=P(\mathbf 1)$ is then a positive fixed point whose
-support contains every fixed point of $F$.  In particular it contains every
-distinguished vertical bond contraction.  Since positive-length products of
-these contractions span the whole sector algebra, their common support must
-contain the identity.  Hence $\rho$ is positive definite.
+Let $F$ denote either square composite. The map $F$ is positive and trace
+nonincreasing. Every forward orbit is therefore bounded: a positive orbit
+remains positive with decreasing trace, and Hermitian decomposition gives the
+general case. Let $P$ be the mean-ergodic projection and define
+\begin{align}
+    \rho
+        &= P(\mathbf 1).
+    \label{eq:cpsv16_vertical_sector_invertibility_ergodic_fixed_point}
+\end{align}
+The operator $\rho$ is positive and fixed, and its support contains every
+fixed point of $F$. In particular, it contains every distinguished vertical
+bond contraction. Since positive-length products of these contractions span
+the whole sector algebra, their common support contains the identity.
+Therefore $\rho$ is positive definite.
 
-The full-matrix statement of this intermediate conclusion is now
-formalized.\footnote{Formal declaration:
+The corresponding full-matrix statement is formalized: a positive
+trace-nonincreasing endomorphism whose fixed factors have products of one
+positive length spanning the identity has a positive-definite fixed point. No
+product is required to be fixed.\footnote{Formal declaration:
 \leanid{IsPositiveMap.%
 exists_posDef_fixedPoint_of_traceNonincreasing_of_fixed_product_span}
 in \doclink{TNLean/Channel/FixedPoint/TraceNonincreasingProductSpan}.}
-A positive trace-nonincreasing endomorphism with fixed factors for which the
-identity lies in the span of the products of one positive length has a
-positive-definite fixed point.  No product is required to be fixed.  The
-finite-product passage and its combination with the density-block dimension
-bound are now also formalized.\footnote{Formal declarations:
+The finite-product version and its combination with the density-block
+dimension bound are also formalized.\footnote{Formal declarations:
 \leanid{Matrix.IsPositiveDirectSumMap.%
 exists_posDef_fixedFamily_of_fixed_product_span}
 in \doclink{TNLean/Channel/FixedPoint/TraceNonincreasingDirectSum}, and
 \leanid{MPOTensor.%
 eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorInvertibility}.}
-A positive trace-preserving endomorphism of
-a finite product therefore has a positive-definite fixed family under the
-same product-span hypothesis; if its trace adjoint satisfies the Schwarz
-inequality, the fixed contractions and the density-block bound force the
-endomorphism to be the identity.  For the transported composites, complete
-positivity of the canonical lifts and the established trace preservation now
-give the required trace-adjoint Schwarz inequalities from the source tensor
-hypotheses.  Instantiating the criterion twice with the fixed contraction
-families and their positive-length product spans gives
-\[
-  \widetilde S\widetilde T=\operatorname{id}_{\mathcal A_1},
-  \qquad
-  \widetilde T\widetilde S=\operatorname{id}_{\mathcal A_2}.
-\]
-These are precisely the two identity compositions in
-\cite[Appendix~C.4, lines~1974--1995]{Cirac2016MPDO_arXiv}.\footnote{Formal
+
+Thus a positive trace-preserving endomorphism of a finite product has a
+positive-definite fixed family under the same product-span hypothesis. If its
+trace adjoint satisfies the Schwarz inequality, the fixed contractions and
+the density-block bound force the endomorphism to be the identity. For the
+transported composites, complete positivity of the canonical lifts and trace
+preservation supply the required trace-adjoint Schwarz inequalities from the
+source tensor hypotheses. Applying the criterion to both fixed contraction
+families gives
+\begin{align}
+    \widetilde S\widetilde T
+        &= \operatorname{id}_{\mathcal A_1},
+    \label{eq:cpsv16_vertical_sector_invertibility_first_composite_identity}\\
+    \widetilde T\widetilde S
+        &= \operatorname{id}_{\mathcal A_2}.
+    \label{eq:cpsv16_vertical_sector_invertibility_second_composite_identity}
+\end{align}
+These are exactly the two composition identities in Appendix~C.4,
+lines~1974--1995, of Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{Formal
 declaration:
 \leanid{MPOTensor.transportedVerticalSector_composites_eq_id}
 in \doclink{TNLean/MPS/MPDO/VerticalSectorIdentity}.}
 
-Let $F^*$ be the trace adjoint and define the trace-loss operator
-\[
-  \Delta=\mathbf 1-F^*(\mathbf 1).
-\]
-Trace nonincrease gives
-$\operatorname{tr}(\Delta X)=\operatorname{tr}(X)-
-\operatorname{tr}(F(X))\geq0$ for every positive $X$, and positivity of $F$
-makes $\Delta$ Hermitian.  Thus $\Delta\geq0$.  Since $\rho$ is fixed,
-$\operatorname{tr}(\rho\Delta)=0$; positive definiteness of $\rho$ forces
-$\Delta=0$, which is equivalent to trace preservation on the full algebra.
+To prove trace preservation directly, let $F^*$ denote the trace adjoint and
+define the trace-loss operator
+\begin{align}
+    \Delta
+        &= \mathbf 1-F^*(\mathbf 1).
+    \label{eq:cpsv16_vertical_sector_invertibility_trace_loss_operator}
+\end{align}
+For every positive $X$, trace nonincrease gives
+\begin{align}
+    \tr(\Delta X)
+        &= \tr(X)-\tr(F(X)),
+    \label{eq:cpsv16_vertical_sector_invertibility_trace_loss_identity}\\
+    \tr(\Delta X)
+        &\geq 0.
+    \label{eq:cpsv16_vertical_sector_invertibility_trace_loss_nonnegative}
+\end{align}
+Positivity of $F$ makes $\Delta$ Hermitian, so
+Eq.~\ref{eq:cpsv16_vertical_sector_invertibility_trace_loss_nonnegative}
+implies $\Delta\geq0$. Since $\rho$ is fixed,
+\begin{align}
+    \tr(\rho\Delta)
+        &= 0.
+    \label{eq:cpsv16_vertical_sector_invertibility_fixed_trace_loss_zero}
+\end{align}
+Positive definiteness of $\rho$ then forces $\Delta=0$, which is equivalent
+to trace preservation on the full algebra.
 
-Now let $X\geq0$ belong to the one-site sector algebra.  Positivity and trace
+Now let $X\geq0$ belong to the one-site sector algebra. Positivity and trace
 nonincrease give
-\[
-  \operatorname{tr}((\widetilde S\widetilde T)(X))
-    \leq \operatorname{tr}(\widetilde T(X))
-    \leq \operatorname{tr}(X).
-\]
-The first and last terms are equal by the composite result, hence both
-inequalities are equalities.  Thus $\widetilde T$ preserves trace on the
-positive cone, and therefore on the full algebra by linearity.  The other
-square composite gives the same conclusion for $\widetilde S$.
+\begin{align}
+    \tr((\widetilde S\widetilde T)(X))
+        &\leq \tr(\widetilde T(X)),
+    \label{eq:cpsv16_vertical_sector_invertibility_trace_sandwich_first}\\
+    \tr(\widetilde T(X))
+        &\leq \tr(X).
+    \label{eq:cpsv16_vertical_sector_invertibility_trace_sandwich_second}
+\end{align}
+The first and last quantities are equal by
+Eq.~\ref{eq:cpsv16_vertical_sector_invertibility_first_composite_identity};
+hence both inequalities are equalities. Thus $\widetilde T$ preserves trace
+on the positive cone and, by linearity, on the whole algebra. The second
+composite identity gives the same conclusion for $\widetilde S$.
 
 This argument is formalized first for full matrix algebras, then for finite
-direct sums by block-diagonal extension, and finally for the two transported
-vertical-sector composites.  It assumes neither multiplicativity nor
-fixedness of products.  The only product statement used is the
+direct sums through block-diagonal extension, and finally for the two
+transported vertical-sector composites. It assumes neither multiplicativity
+nor fixedness of products. Its only product hypothesis is the
 basis-of-normal-tensors conclusion that products of the fixed contraction
-\emph{factors} span the ambient sector algebra.  Thus the trace-preservation
-subproblem is closed for the individual maps and their square composites even
-though the active-image inclusions remain unproved.
+factors span the ambient sector algebra. Trace preservation is therefore
+closed for the individual maps and their square composites, although the
+active-image inclusions in
+Eqs.~\ref{eq:cpsv16_vertical_sector_invertibility_T_range_inclusion}
+and~\ref{eq:cpsv16_vertical_sector_invertibility_S_range_inclusion} remain
+unproved.
 
 \section{Sector relabelling from the star-algebra equivalence}
 
-After proving mutual invertibility, CPSV16 cites the argument of
+After proving mutual invertibility, CPSV16 invokes the argument of
 Wolf--P\'erez-Garc\'ia, Theorem~8
-\cite[Appendix~C.4, lines~1995--2003]{Cirac2016MPDO_arXiv}.  The cited theorem
-concerns a trace-preserving Schwarz map.  Its proof constructs a positive,
+\cite[Appendix~C.4, lines~1995--2003]{Cirac2016MPDO_arXiv}. The cited theorem
+concerns a trace-preserving Schwarz map. Its proof constructs a positive,
 trace-preserving inverse on the peripheral space and uses the extreme points
 of the density-operator sections
-\[
+\begin{align}
     \bigoplus_k M_{d_k}(\mathbb C)\otimes\rho_k.
-\]
+    \label{eq:cpsv16_vertical_sector_invertibility_density_operator_sections}
+\end{align}
 The map and its positive inverse send extreme density operators to extreme
-density operators.  Continuity and bijectivity then give a permutation of the
-simple summands and equality of the corresponding matrix dimensions.  On each
-matched summand, positivity of both directions gives either unitary
+density operators. Continuity and bijectivity then produce a permutation of
+the simple summands and equality of the corresponding matrix dimensions. On
+each matched summand, positivity in both directions permits either unitary
 conjugation or transposed unitary conjugation; the Schwarz condition excludes
 the transpose alternative
 \cite[Theorem~8 and its proof]{WolfPerezGarcia2010Inverse}.
 
-A linear equivalence between two finite products of matrix spaces does not
-determine their simple summands.  The trace adjoints of a mutually inverse
-CPTP pair have now been proved to be mutually inverse $*$-algebra
-homomorphisms, by the Schwarz-defect argument above.  The sector relabelling
-therefore reduces to the following two algebraic conclusions:
+A linear equivalence between finite products of matrix spaces does not by
+itself determine the simple summands. The trace adjoints of a mutually inverse
+CPTP pair have been proved, by the Schwarz-defect argument, to be mutually
+inverse $*$-algebra homomorphisms. Sector relabelling therefore reduces to two
+algebraic steps:
 \begin{enumerate}
-    \item apply uniqueness of the simple summands to this $*$-algebra
-          equivalence, obtaining the sector permutation and equality of the
-          corresponding matrix dimensions;
+    \item apply uniqueness of simple summands to the $*$-algebra equivalence,
+          obtaining a sector permutation and equality of the paired matrix
+          dimensions;
     \item identify each matched simple-summand isomorphism with unitary
           conjugation.
 \end{enumerate}
-The first conclusion is now proved for an arbitrary $*$-algebra isomorphism
-between two finite products of nonzero full matrix algebras.  The block ideals
-are precisely the atoms in the two-sided ideal lattices, so the induced order
-isomorphism gives an equivalence $\sigma$ of the block index sets.  Its
-defining matching relation is
-\[
-    E(I_i)=J_{\sigma(i)},
-\]
-where $E$ is the given $*$-algebra isomorphism and $I_i,J_j$ are the source
-and target block ideals.  Its
-restriction to each paired block is a bijective complex-linear map
-\[
-    M_{d_i}(\mathbb C)\longrightarrow M_{e_{\sigma(i)}}(\mathbb C),
-\]
-and comparison of dimensions gives $d_i=e_{\sigma(i)}$.
-Applying this result to the trace-adjoint $*$-algebra isomorphism proves both
-this block-ideal matching relation and the dimension equality for every
-mutually inverse CPTP pair.  The second conclusion is now proved while
-retaining these particular witnesses.  The restriction to a paired block is
-a $*$-algebra isomorphism; after reindexing by the retained dimension
-equality, Skolem--Noether gives an invertible implementer $P$.  Preservation
-of the adjoint forces $P^*P$ to be a positive scalar matrix, and normalization
-therefore gives a unitary implementer on the actual target block.\footnote{Formal
-declarations:
+
+The first step is proved for any $*$-algebra isomorphism between finite
+products of nonzero full matrix algebras. The block ideals are exactly the
+atoms of the two-sided ideal lattices, so the induced order isomorphism gives
+an equivalence $\sigma$ between the block index sets. If $E$ denotes the
+$*$-algebra isomorphism and $I_i,J_j$ are the source and target block ideals,
+the defining matching relation is
+\begin{align}
+    E(I_i)
+        &= J_{\sigma(i)}.
+    \label{eq:cpsv16_vertical_sector_invertibility_block_ideal_matching}
+\end{align}
+The restriction to a paired block is a bijective complex-linear map
+\begin{align}
+    M_{d_i}(\mathbb C)
+        &\longrightarrow M_{e_{\sigma(i)}}(\mathbb C).
+    \label{eq:cpsv16_vertical_sector_invertibility_paired_block_map}
+\end{align}
+Comparison of dimensions gives
+\begin{align}
+    d_i
+        &= e_{\sigma(i)}.
+    \label{eq:cpsv16_vertical_sector_invertibility_paired_block_dimension}
+\end{align}
+
+Applying this result to the trace-adjoint $*$-algebra isomorphism proves
+Eqs.~\ref{eq:cpsv16_vertical_sector_invertibility_block_ideal_matching}
+and~\ref{eq:cpsv16_vertical_sector_invertibility_paired_block_dimension} for
+every mutually inverse CPTP pair. The second step retains these witnesses. The
+restriction to a paired block is a $*$-algebra isomorphism; after reindexing
+with the retained dimension equality, Skolem--Noether gives an invertible
+implementer $P$. Preservation of the adjoint forces $P^*P$ to be a positive
+scalar matrix, and normalization gives a unitary implementer on the actual
+target block.\footnote{Formal declarations:
 \leanid{TwoSidedIdeal.exists_blockEquiv_of_ringEquiv_pi_simple} in
 \doclink{TNLean/Algebra/BlockPermutation};
 \leanid{Matrix.exists_unitary_conj_of_starAlgEquiv_matrix} and
@@ -327,13 +414,13 @@ exists_unitary_block_implementers_of_starAlgEquiv_pi_matrix} in
 \leanid{Matrix.%
 exists_blockEquiv_dim_eq_unitary_of_mutual_inverse_kraus_direct_sum_maps} in
 \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}.}
-The trace pairing for this unitary star-algebra isomorphism identifies it with
-the original forward map, not merely with the adjoint of the inverse.  Its
-inverse uses the same retained relabelling and the adjoints of the same
-unitaries.  Applied to the two transported vertical-sector maps, this gives
-the two full single-summand formulas for $\widetilde T$ and $\widetilde S$
-stated at line~1997.
-\footnote{Formal declarations:
+
+The trace pairing for this unitary $*$-algebra isomorphism identifies it with
+the original forward map, not only with the adjoint of the inverse. Its inverse
+uses the same relabelling and the adjoints of the same unitaries. Applied to
+the transported vertical-sector maps, this gives the two complete
+single-summand formulas for $\widetilde T$ and $\widetilde S$ stated at
+line~1997 of Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{Formal declarations:
 \leanid{Matrix.%
 exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
 in \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}, and
@@ -345,58 +432,67 @@ transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq} in
 
 \section{Elimination plan}
 
-The first two steps of the Appendix~C.4 argument are complete:
+The first two steps of the Appendix~C.4 argument in
+Ref.~\cite{Cirac2016MPDO_arXiv} are complete:
 \begin{enumerate}
     \item complete positivity of the canonical lifts of the transported maps,
-          and hence the adjoint Schwarz inequality for the two trace-preserving
-          square composites, is established without an all-input active-image
-          statement;
+          and hence the adjoint Schwarz inequality for the two
+          trace-preserving square composites, is established without an
+          all-input active-image statement;
     \item the finite-product identity criterion is applied to each square
-          composite, using the fixed contraction families and the proved
-          product-generation theorem, and gives both identity compositions;
+          composite using the fixed contraction families and the proved
+          product-generation theorem, giving both identity compositions.
 \end{enumerate}
 The inverse-UCP multiplicative-domain step is also complete: the rectangular
-trace adjoints form mutually inverse $*$-algebra equivalences.  The generic
-simple-summand correspondence and its internal unitary action are complete as
-well: they give an equivalence of the sector index sets, identify the actual
-block ideals carried into one another, prove equality of the paired matrix
-dimensions, and implement every retained paired component by unitary
-conjugation.  The specialization to both original transported maps, with the
-same relabelling and the same unitaries, is also complete.  Finally, applying
-the transported refinement map to the weighted contraction family gives
-\[
-  m_\alpha V_\alpha\iota_\alpha(M_\alpha(X))V_\alpha^*
-  =n_{\sigma(\alpha)}A_{\sigma(\alpha)}(X).
-\]
-Since the positive multiplicity matrix $\nu_{\sigma(\alpha)}$ has nonzero
-trace, cancellation proves
-\[
-  A_{\sigma(\alpha)}(X)
-  =\frac{m_\alpha}{n_{\sigma(\alpha)}}
-    V_\alpha\iota_\alpha(M_\alpha(X))V_\alpha^*,
-\]
-and evaluation on matrix units gives the tensor-letter identity at line~2008.
-This comparison concerns the traces of the multiplicity matrices.  It does
-not identify their dimensions, the matrices themselves, or their individual
-diagonal entries.
+trace adjoints form mutually inverse $*$-algebra equivalences. The generic
+simple-summand correspondence and its internal unitary action give an
+equivalence of the sector index sets, identify the block ideals carried into
+one another, prove equality of paired matrix dimensions, and implement each
+paired component by unitary conjugation. The specialization to both
+transported maps retains the same relabelling and the same unitaries.
+
+Finally, applying the transported refinement map to the weighted contraction
+family gives
+\begin{align}
+    m_\alpha V_\alpha\iota_\alpha(M_\alpha(X))V_\alpha^*
+        &= n_{\sigma(\alpha)}A_{\sigma(\alpha)}(X).
+    \label{eq:cpsv16_vertical_sector_invertibility_weighted_contraction_comparison}
+\end{align}
+The positive multiplicity matrix $\nu_{\sigma(\alpha)}$ has nonzero trace, so
+cancellation in
+Eq.~\ref{eq:cpsv16_vertical_sector_invertibility_weighted_contraction_comparison}
+gives
+\begin{align}
+    A_{\sigma(\alpha)}(X)
+        &= \frac{m_\alpha}{n_{\sigma(\alpha)}}
+           V_\alpha\iota_\alpha(M_\alpha(X))V_\alpha^*.
+    \label{eq:cpsv16_vertical_sector_invertibility_trace_ratio_formula}
+\end{align}
+Evaluation on matrix units yields the tensor-letter identity stated at
+line~2008 of Ref.~\cite{Cirac2016MPDO_arXiv}. This comparison concerns the
+traces of the multiplicity matrices. It does not identify their dimensions,
+the matrices themselves, or their individual diagonal entries.
 
 \section{Classification}
 
 \textbf{Verdict: the Appendix~C.4 argument through the coefficient identity at
-line~2008 is closed.}  The two transported maps and their
-square composites are trace preserving under the source tensor hypotheses.
-Their two compositions are identities, and the rectangular trace adjoints
-form mutually inverse $*$-algebra equivalences.  For any such pair, the simple
-summands are matched by an equivalence of the index sets, the corresponding
-block ideals are carried into one another by the star-algebra isomorphism,
-the paired matrix dimensions are equal, and the induced map on each matched
-summand is unitary conjugation.  The corresponding formulas now hold for
-$\widetilde T$ and $\widetilde S$ themselves.  Their action on the weighted
-contraction family gives the trace-ratio coefficient formula and its
-tensor-letter specialization.  The stronger active-image inclusions remain
-unproved and are not needed for this route.  No equality of multiplicities,
-multiplicity matrices, or individual weights is asserted, and no conclusion
-after Appendix~C.4, line~2008 is included.
+line~2008 of Ref.~\cite{Cirac2016MPDO_arXiv} is closed.}
+The transported maps and their square composites preserve trace under the
+source tensor hypotheses. Both compositions are identities, and the
+rectangular trace adjoints form mutually inverse $*$-algebra equivalences.
+For every such pair, an equivalence of the index sets matches the simple
+summands, the $*$-algebra isomorphism carries the corresponding block ideals
+into one another, the paired matrix dimensions agree, and the induced map on
+each matched summand is unitary conjugation. These formulas hold for
+$\widetilde T$ and $\widetilde S$ themselves. Their action on the weighted
+contraction family gives the trace-ratio coefficient formula in
+Eq.~\ref{eq:cpsv16_vertical_sector_invertibility_trace_ratio_formula} and its
+tensor-letter specialization.
+
+The stronger active-image inclusions remain unproved and are unnecessary for
+this route. No equality of multiplicities, multiplicity matrices, or
+individual weights is asserted. No conclusion after Appendix~C.4, line~2008,
+of Ref.~\cite{Cirac2016MPDO_arXiv} is included.
 
 \bibliographystyle{alpha}
 \bibliography{references}

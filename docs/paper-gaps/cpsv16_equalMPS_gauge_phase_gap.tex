@@ -17,8 +17,8 @@
 
 \section{The source statement}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016 establishes the following
-structural lemma about overlaps of normal matrix product vectors
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state the following structural
+result for overlaps of normal matrix product vectors
 \cite[Lemma~\texttt{equalMPS}, line~1081]{Cirac2016MPDO_arXiv}:
 
 \begin{quote}
@@ -32,107 +32,139 @@ structural lemma about overlaps of normal matrix product vectors
     and a phase $\phi$ such that $A_b^i = e^{i\phi} X A_a^i X^{-1}$.
 \end{quote}
 
-The hypothesis is just that the two tensors are NT. The conclusion has three
-pieces: convergence of the self-overlap, the $0/1$ dichotomy, and a
-\emph{structural gauge recovery} in the $1$ case. No proportionality
-hypothesis on the MPVs is required.
+The source assumes only that the two tensors are normal. Its conclusion has
+three parts: the self-overlaps converge to one, the absolute mixed overlap
+converges to zero or one, and the unit-overlap case yields equality of bond
+dimensions together with gauge-phase equivalence. It does not assume that the
+matrix product vector families are proportional.
 
-The proof in \cite[lines~1093--1117]{Cirac2016MPDO_arXiv} goes through the
-cross-transfer-matrix
+For tensors $A_a=(A_a^i)_{i=1}^d$ and $A_b=(A_b^i)_{i=1}^d$, define the mixed
+transfer matrix by
 \begin{align}
-    \mathbb E_{ab} = \sum_{i=1}^d A_a^i \otimes \overline{A_b^i},
+    \mathbb E_{ab}
+        &= \sum_{i=1}^{d} A_a^i\otimes\overline{A_b^i}.
+    \label{eq:cpsv16_equalMPS_gauge_phase_gap_cross_transfer}
 \end{align}
-analysing its eigenvalue equation $\sum_i (A_b^i)^\dagger X A_a^i = \lambda X$
-together with the trace-preserving relation and the strictly-positive
-spectral fixed point $\Lambda_a$. Cauchy--Schwarz applied to the resulting
-trace inequality forces $|\lambda|<1$ or $|\lambda|=1$, and the latter case
-yields $A_b^i X = \alpha X A_a^i$ with $|\alpha|=1$ and $X$ an isometry,
-which after a dimension argument gives the structural conclusion.
+The source proof analyzes the eigenvalue relation
+\begin{align}
+    \sum_{i=1}^{d}(A_b^i)^\dagger X A_a^i
+        &= \lambda X
+    \label{eq:cpsv16_equalMPS_gauge_phase_gap_eigenvalue_relation}
+\end{align}
+together with trace-preserving normalization and the strictly positive
+spectral fixed point $\Lambda_a$
+\cite[lines~1093--1117]{Cirac2016MPDO_arXiv}. Cauchy--Schwarz applied to the
+resulting trace inequality gives either $|\lambda|<1$ or $|\lambda|=1$. In the
+second case, the equality condition gives
+\begin{align}
+    A_b^iX
+        &= \alpha XA_a^i,
+    \label{eq:cpsv16_equalMPS_gauge_phase_gap_intertwining_relation}\\
+    |\alpha|
+        &= 1,
+    \label{eq:cpsv16_equalMPS_gauge_phase_gap_phase_modulus}
+\end{align}
+and $X$ is an isometry. A dimension argument then gives the structural
+conclusion.
 
 \section{The formalized same-dimension component}
 
-The formalization represents the same-bond-dimension part of the $1$ case by
-separating two mathematical steps. First, the spectral-radius theorem shows
-that asymptotically unit-modulus overlap forces the cross-transfer spectral
-radius to be at least $1$.\footnote{%
-    This theorem is
-    \leanid{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one};
-    it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean} and formalizes
-    a step in the proof of Lemma~\texttt{equalMPS},
-    \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.}
-This is the contrapositive of the already formalized decay theorem for mixed
-transfer spectral radius $<1$.
+The formalization separates the same-bond-dimension part of the unit-overlap
+case into two steps. First, asymptotically unit-modulus overlap forces the
+spectral radius of the mixed transfer matrix to be at least one.\footnote{The
+formal theorem is
+\leanid{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
+in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}. It formalizes a
+step in the proof of Lemma~\texttt{equalMPS}
+\cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.}
+This statement is the contrapositive of the formalized decay theorem for mixed
+transfer spectral radius strictly less than one.
 
-Second, the modulus-one spectral theorem turns the modulus-one spectral
-situation into gauge-phase equivalence by the Cauchy--Schwarz argument with the
-positive fixed point.\footnote{%
-    This theorem is
-    \leanid{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP};
-    it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
-The resulting same-dimension gauge-phase theorem has the source's overlap
-hypothesis and no MPV proportionality hypothesis, but it is stated for two
-tensors with the same bond dimension.\footnote{%
-    The theorem is
-    \leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP};
-    it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
-In this same-dimension component the formal theorem changes the normal-tensor
-hypothesis set in a controlled way: in CPSV16 a normal tensor has no
-non-trivial invariant projector, and its associated completely positive map
-has a unique peripheral eigenvalue, equal to its spectral radius and normalized
-to one. The spectral-radius and Cauchy--Schwarz argument used here drops this
-peripheral-simplicity assumption and takes irreducibility together with
-trace-preserving normalization as explicit hypotheses. This is a
-generalization of the same-bond-dimension gauge step, not a formalization of
-the rectangular dimension conclusion.
+Second, the modulus-one spectral theorem applies the Cauchy--Schwarz equality
+argument with the positive fixed point and obtains gauge-phase
+equivalence.\footnote{The formal theorem is
+\leanid{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}
+in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
+Combining these steps gives the same-dimensional gauge-phase theorem with the
+source overlap hypothesis and without an MPV proportionality
+hypothesis.\footnote{The formal theorem is
+\leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
+in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
 
-The proportionality-based theorem in the same file is a correct corollary for a
-stronger hypothesis. It is not a formalization of Lemma~\texttt{equalMPS},
-because the source does not assume proportional MPV families.
+This same-dimensional theorem modifies the normal-tensor hypotheses in a
+controlled way. In the source, a normal tensor has no nontrivial invariant
+projector, and its associated completely positive map has a unique peripheral
+eigenvalue, equal to its spectral radius and normalized to one
+\cite{Cirac2016MPDO_arXiv}. The formal spectral-radius and Cauchy--Schwarz
+argument does not require peripheral simplicity; it assumes irreducibility and
+trace-preserving normalization explicitly. It therefore generalizes the
+same-dimensional gauge step, but it does not prove the rectangular
+bond-dimension conclusion.
 
-\section{Formalized rectangular component}
+The proportionality-based theorem in the same formal file is a valid corollary
+under a stronger hypothesis. It is not a formalization of
+Lemma~\texttt{equalMPS}, because the source does not assume proportional
+matrix product vector families.
 
-Lemma~\texttt{equalMPS} also concludes $D_a=D_b$ in the unit-overlap case.
-This is a rectangular statement: before the conclusion is known, the two normal
-tensors may have different bond dimensions. The proof derives an isometry
-between the two bond spaces and then uses normality of the larger tensor to rule
-out a proper missing subspace, forcing equality of dimensions
+\section{The formalized rectangular component}
+
+Lemma~\texttt{equalMPS} also concludes that $D_a=D_b$ in the unit-overlap case
+\cite[Lemma~\texttt{equalMPS}]{Cirac2016MPDO_arXiv}. This conclusion is
+rectangular: the two normal tensors may have different bond dimensions before
+the conclusion is established. The source proof constructs an isometry between
+their bond spaces and uses normality of the larger tensor to exclude a proper
+missing subspace, thereby forcing equality of dimensions
 \cite[lines~1115--1117]{Cirac2016MPDO_arXiv}.
 
-This bond-dimension matching is obtained from the rectangular overlap-decay
-theorem
+The rectangular overlap-decay theorem states that unequal bond dimensions
+force the mixed overlap to converge to zero. Its contrapositive gives
+\begin{align}
+    \left|\braket{V^{(N)}(B)}{V^{(N)}(A)}\right|
+        \xrightarrow[N\to\infty]{}1
+    \quad &\Longrightarrow\quad
+    D_a=D_b.
+    \label{eq:cpsv16_equalMPS_gauge_phase_gap_dimension_recovery}
+\end{align}
+The decay theorem is
 \leanid{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
-in \path{TNLean/Spectral/TransferOperatorGapNT.lean}: if the bond dimensions
-differ, the overlap tends to zero, contradicting the unit-modulus overlap
-hypothesis, so a non-decaying overlap forces $D_a=D_b$.  The contrapositive is
+in \path{TNLean/Spectral/TransferOperatorGapNT.lean}. Its contrapositive is
 recorded as
 \leanid{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
-in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.  Its hypotheses and
-proof involve only the positive-length asymptotic overlap and do not use the
-empty-word coefficient.
+in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}. These results use
+only positive-length asymptotic overlaps and do not depend on the empty-word
+coefficient.
 
-This rectangular dimension recovery is genuinely needed in the proof of
+The rectangular conclusion is necessary in the proof of
 Theorem~\texttt{thm1}
 \cite[statement lines~1167--1170; proof line~1182]{Cirac2016MPDO_arXiv}.
-There the relevant overlaps are per-block overlaps
-$\langle V^{(N)}(B_k)\,|\,V^{(N)}(A_j)\rangle$, and the source proof applies
-Lemma~\texttt{equalMPS} before the matching of bond dimensions has been
-established. The same-dimension theorem therefore covers the gauge step only
-after the rectangular dimension conclusion has been supplied separately.
+For source blocks $A_j$ and $B_k$, the relevant quantities are
+\begin{align}
+    \braket{V^{(N)}(B_k)}{V^{(N)}(A_j)}.
+    \label{eq:cpsv16_equalMPS_gauge_phase_gap_block_overlap}
+\end{align}
+The source applies Lemma~\texttt{equalMPS} before matching bond dimensions
+have been established. Consequently, the same-dimensional theorem supplies
+the gauge step only after the rectangular theorem has supplied
+Eq.~\ref{eq:cpsv16_equalMPS_gauge_phase_gap_dimension_recovery}.
 
 \section{Verdict}
 
-The same-bond-dimension gauge component is formalized without the
-source-absent MPV proportionality hypothesis. The rectangular
-bond-dimension conclusion $D_a=D_b$ follows from the rectangular overlap-decay
-theorem through its non-decay contrapositive. The theorem
+The formal development now proves the same-bond-dimension gauge component
+without the source-absent MPV proportionality hypothesis. It obtains the
+rectangular conclusion $D_a=D_b$ from the non-decay contrapositive of the
+rectangular overlap-decay theorem.
+
+The theorem
 \leanid{MPSTensor.IsNormalTensor.overlap_dichotomy} in
-\path{TNLean/MPS/Overlap/NormalTensorDichotomy.lean} now assembles these
-components with normalized self-overlap into the full normal-tensor dichotomy
-and structural conclusion of Lemma~\texttt{equalMPS}. Its corollary
-\leanid{MPSTensor.IsNormalTensor.mpv_phase_alternative} proves the exact
-phase relation for every chain length, as stated in Corollary~\texttt{eqV}.
-Thus the gap recorded by this note is closed; the preceding sections retain the
-mathematical decomposition used in the proof.
+\path{TNLean/MPS/Overlap/NormalTensorDichotomy.lean} combines these components
+with normalized self-overlap and proves the full normal-tensor dichotomy and
+structural conclusion of Lemma~\texttt{equalMPS}
+\cite{Cirac2016MPDO_arXiv}. Its corollary
+\leanid{MPSTensor.IsNormalTensor.mpv_phase_alternative} proves the exact phase
+relation at every chain length, as stated in
+Corollary~\texttt{eqV} of Ref.~\cite{Cirac2016MPDO_arXiv}. The gap is
+resolved; the decomposition above records the mathematical structure of the
+formal proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}

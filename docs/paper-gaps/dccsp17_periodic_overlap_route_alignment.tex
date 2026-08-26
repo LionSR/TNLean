@@ -18,386 +18,598 @@
 
 \section{Scope}
 
-This note records, in mathematical terms, where the formal development of the
-periodic overlap dichotomy chooses a proof route that differs from the appendix
-argument of \cite[Appendix~A]{DeLasCuevas2017Irreducible}, and where its
-statements restrict the source.\footnote{Formal files:
+This note compares the formal proof of the periodic overlap dichotomy with the
+Appendix~A argument of Ref.~\cite{DeLasCuevas2017Irreducible}. It identifies
+the equivalent proof routes used in the formal development and the statements
+that remain restricted relative to the source.\footnote{Formal files:
 \leanid{TNLean/MPS/Periodic/Overlap/}. Local source:
 \leanid{Papers/1708.00029/main.tex}. Paper-level umbrella:
-\href{https://github.com/LionSR/TNLean/issues/619}{issue \#619}; proposition-level
-subtracking: \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81};
-the Case-3 contraction and phase construction was tracked by
+\href{https://github.com/LionSR/TNLean/issues/619}{issue \#619};
+proposition-level subtracking:
+\href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The Case-3
+contraction and phase construction was tracked by
 \href{https://github.com/LionSR/TNLean/issues/873}{issue \#873} and is now
 formalized by \leanid{sectorTensor_proportional_of_blockedMatch}.}
 
-The source proposition is \emph{equal-or-orthogonal-generalized}.\footnote{Stated
-in \cite{DeLasCuevas2017Irreducible}, lines 589--609, and proved in Appendix~A,
-lines 903--1118.} None of the deviations below is unfaithful in the
-smuggled-hypothesis sense: each formal statement is a faithful (or explicitly
-restricted) version of the source, and the route substitutions are
-mathematically equivalent.
+The source proposition is ``equal-or-orthogonal-generalized''.\footnote{The
+statement appears at lines 589--609 and its proof appears at lines 903--1118
+of Ref.~\cite{DeLasCuevas2017Irreducible}.} The differences recorded below do
+not introduce hidden hypotheses. Each formal statement is faithful to the
+source or explicitly restricts its scope, and each substituted proof route is
+mathematically equivalent to the source route.
 
 \section{Positive chain lengths}
 
-The matrix-product-vector equalities used by the periodic overlap argument are
-now stated for $N\geq 1$.  In particular,
+The formal periodic-overlap argument states its matrix-product-vector
+equalities for $N\geq 1$. In particular,
 \leanid{peripheralProportionalCase_periodicFT_of_sameMPV₂Pos} assumes equality
-at every positive length.  This is sufficient because the
-overlap argument is asymptotic and uses only a tail of positive lengths.  The
-empty word carries only a bond-dimension trace and plays no role in
-\cite[theorem \texttt{thm:bd}, lines~613--623]{DeLasCuevas2017Irreducible}.
-Likewise, propagation of nonzero cyclic-sector dimensions is derived directly
-from the corner-algebra equivalences and the cyclic projector shift, rather
-than from the empty-word trace identity.
+at every positive length. This assumption suffices because the overlap
+argument is asymptotic and uses only a tail of positive lengths. The empty word
+contains only a bond-dimension trace and does not enter theorem
+\emph{thm:bd}, lines 613--623, of
+Ref.~\cite{DeLasCuevas2017Irreducible}. The formal development also propagates
+nonzero cyclic-sector dimensions directly from the corner-algebra
+equivalences and the cyclic projector shift, without using an empty-word trace
+identity.
 
-\section{Different-period decay via the peripheral spectrum}
+\section{Different-period decay through the peripheral spectrum}
 
-\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, Appendix~A,
-lines 917--950.} For periods $m_a\neq m_b$, the paper blocks at
-$p=\operatorname{lcm}(m_a,m_b)$ and uses Lemma~\emph{bdcf}: the blocks
+\paragraph{Source route.}
+
+For periods $m_a\neq m_b$, Appendix~A, lines 917--950, of
+Ref.~\cite{DeLasCuevas2017Irreducible} blocks at
+$p=\operatorname{lcm}(m_a,m_b)$ and applies Lemma~\emph{bdcf}. The tensors
 $P_uA^{(p)}$ and $Q_vB^{(p)}$ are non-repeated normal tensors. Applying the
-one-site translation operator to $Q_vB^{(p)}$ versus $Q_{v+1}B^{(p)}$ yields a
-contradiction unless $\lim_N|\langle V_N(A)|V_N(B)\rangle|=0$.
-
-\textbf{\Lean{} route.}\footnote{Formal declaration:
-\leanid{periodicOverlap_tendsto_zero_of_ne_period} in \leanid{DifferentPeriod.lean}.}
-The same obstruction is realized spectrally. For a tensor $A$, write
-$\mathcal E_A$ and $\mathcal E_A^*$ for the transfer map and its adjoint,
-defined by
+one-site translation operator to $Q_vB^{(p)}$ and $Q_{v+1}B^{(p)}$ gives a
+contradiction unless the overlap decays:
 \begin{align}
-    \mathcal E_A(Y) &= \sum_i A^iYA^{i\dagger},&
-    \mathcal E_A^*(Y) &= \sum_i A^{i\dagger}YA^i .
+    \lim_{N\to\infty}
+    \left|\braket{V_N(A)}{V_N(B)}\right|
+    &=0.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_different_period_decay}
 \end{align}
-If $D_a=D_b$ and $B^i=\zeta\,XA^iX^{-1}$, the comparison is
+
+\paragraph{\Lean{} route.}
+
+For a tensor $A=(A^i)_i$, define its transfer map and adjoint by
+\begin{align}
+    \mathcal E_A(Y)
+    &=\sum_i A^iY(A^i)^\dagger,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_transfer_map}\\
+    \mathcal E_A^*(Y)
+    &=\sum_i (A^i)^\dagger YA^i.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_transfer_adjoint}
+\end{align}
+Suppose $D_a=D_b$ and
+\begin{align}
+    B^i
+    &=\zeta XA^iX^{-1}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_gauge_phase_relation}
+\end{align}
+Then the transfer maps satisfy
 \begin{align}
     \mathcal E_B(Y)
-        &= \zeta\bar\zeta\,
-           X\mathcal E_A(X^{-1}YX^{-\dagger})X^\dagger .
-    \tag{Case 1}
+    &=\zeta\bar\zeta
+      X\mathcal E_A\!\left(X^{-1}YX^{-\dagger}\right)X^\dagger.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_transfer_similarity}
 \end{align}
-Eigenvalue uniqueness for an irreducible completely positive map
-(\cite{Wolf2012Quantum}, Theorem~6.3) forces $|\zeta|=1$, so $\mathcal E_A$ and
-$\mathcal E_B$ have equal peripheral spectra. An $m$-periodic tensor has
-peripheral spectrum $\{e^{2\pi i r/m}:0\le r<m\}$, so equality forces $m_a=m_b$.
-Thus different periods exclude gauge-phase equivalence, and
-\emph{equal-or-orthogonal} (the irreducible trace-preserving overlap dichotomy)
-gives the decay. This substitutes the paper's lcm-blocking + translation
-argument; it is complete and proved.
+The uniqueness of the peripheral eigenvalue for an irreducible completely
+positive map, Theorem~6.3 of Ref.~\cite{Wolf2012Quantum}, forces
+$|\zeta|=1$. Hence $\mathcal E_A$ and $\mathcal E_B$ have the same peripheral
+spectrum. An $m$-periodic tensor has peripheral spectrum
+\begin{align}
+    \operatorname{spec}_{\mathrm{per}}(\mathcal E_A)
+    &=\left\{e^{2\pi ir/m}:0\leq r<m\right\}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_periodic_spectrum}
+\end{align}
+Equality of the peripheral spectra therefore implies $m_a=m_b$. Different
+periods exclude gauge-phase equivalence, so the irreducible trace-preserving
+equal-or-orthogonal dichotomy gives
+(\ref{eq:dccsp17_periodic_overlap_route_alignment_different_period_decay}).
+This spectral argument replaces the least-common-multiple blocking and
+translation argument of the source and is complete.\footnote{Formal
+declaration:
+\leanid{periodicOverlap_tendsto_zero_of_ne_period} in
+\leanid{DifferentPeriod.lean}.}
 
-\section{Sector non-repetition via the blocked fixed-point structure}
+\section{Sector non-repetition from the blocked fixed-point structure}
 
-\textbf{Source.}\footnote{Lemma~\emph{bdcf} in
-\cite{DeLasCuevas2017Irreducible}, lines 404--423.} For a periodic block,
-$\mathcal E_A$ is irreducible with peripheral spectrum $\{\omega^r\}$,
-$\omega=e^{2\pi i/m}$. The blocked map $\mathcal E_A^m$ then has $1$ as its only
-modulus-one eigenvalue (multiplicity $m$), with fixed-point set exactly
-$\{P_u\Lambda_AP_u\}_u$, while the adjoint $\mathcal E_A^{*m}$ has fixed points
-$\{P_u\}_u$. If, for $u\neq v$, a gauge-phase equivalence
-$C_u^{\mathbf i}=e^{i\xi}UC_v^{\mathbf i}U^\dagger$ held with $U=P_uUP_v$
-($UU^\dagger=P_u$, $U^\dagger U=P_v$), then
+\paragraph{Source argument.}
+
+Lemma~\emph{bdcf}, lines 404--423, of
+Ref.~\cite{DeLasCuevas2017Irreducible} considers an irreducible periodic block
+whose transfer map has peripheral spectrum
+\begin{align}
+    \operatorname{spec}_{\mathrm{per}}(\mathcal E_A)
+    &=\{\omega^r:0\leq r<m\},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_block_peripheral_spectrum}\\
+    \omega
+    &=e^{2\pi i/m}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_primitive_root}
+\end{align}
+The blocked map $\mathcal E_A^m$ has $1$ as its only modulus-one eigenvalue,
+with multiplicity $m$, and its fixed-point space is
+\begin{align}
+    \operatorname{Fix}(\mathcal E_A^m)
+    &=\operatorname{span}
+      \{P_u\Lambda_AP_u:0\leq u<m\}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_block_fixed_points}
+\end{align}
+The adjoint fixed-point space is
+\begin{align}
+    \operatorname{Fix}(\mathcal E_A^{*m})
+    &=\operatorname{span}
+      \{P_u:0\leq u<m\}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_adjoint_fixed_points}
+\end{align}
+
+Assume, for distinct sectors $u\neq v$, that there is a gauge-phase
+equivalence
+\begin{align}
+    C_u^{\mathbf i}
+    &=e^{i\xi}UC_v^{\mathbf i}U^\dagger,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_sector_gauge_phase}\\
+    U
+    &=P_uUP_v,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_off_diagonal_support}\\
+    UU^\dagger
+    &=P_u,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_left_support_isometry}\\
+    U^\dagger U
+    &=P_v.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_right_support_isometry}
+\end{align}
+Using the normalization
+$\sum_{\mathbf i}C_v^{\mathbf i}C_v^{\mathbf i\dagger}=P_v$, one obtains
 \begin{align}
     \mathcal E_A^m(U)
-        &= \sum_{\mathbf i} C_u^{\mathbf i}UC_v^{\mathbf i\dagger} \\
-        &= e^{i\xi}U
-           \sum_{\mathbf i} C_v^{\mathbf i}C_v^{\mathbf i\dagger} \\
-        &= e^{i\xi}U .
-        \tag{$\mathcal E_{C_v}(P_v)=P_v$}
+    &=\sum_{\mathbf i}
+      C_u^{\mathbf i}U C_v^{\mathbf i\dagger},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_off_diagonal_transfer}\\
+    &=e^{i\xi}U
+      \sum_{\mathbf i}
+      C_v^{\mathbf i}C_v^{\mathbf i\dagger},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_insert_sector_gauge}\\
+    &=e^{i\xi}U.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_off_diagonal_eigenvector}
 \end{align}
-so $U$ is a modulus-one eigenvector of $\mathcal E_A^m$. As the only such
-eigenvalue is $1$ with the diagonal fixed points $\{P_w\Lambda_AP_w\}$ and
-$U=P_uUP_v$ is off-diagonal for $u\neq v$, this is a contradiction.
+Thus $U$ is a modulus-one eigenvector of $\mathcal E_A^m$. However,
+(\ref{eq:dccsp17_periodic_overlap_route_alignment_block_fixed_points}) contains
+only diagonal sector elements, whereas
+(\ref{eq:dccsp17_periodic_overlap_route_alignment_off_diagonal_support}) is
+off-diagonal. Since $U\neq 0$, this is a contradiction.
 
-\textbf{\Lean{} status.}\footnote{Formal declaration:
+\paragraph{\Lean{} status.}
+
+The formal statement proves the same non-repetition result: distinct cyclic
+sectors with $P_uP_v=0$ are not gauge-phase equivalent.\footnote{Formal
+declaration:
 \leanid{not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces} in
-\leanid{SelfOverlap.lean}.} The lemma statement is the faithful non-repetition fact:
-distinct cyclic sectors (orthogonal projectors $P_uP_v=0$) are not gauge-phase
-equivalent. The formal proof now follows the spectral route above.  From a
-gauge-phase equivalence between two compressed sectors, it constructs a nonzero
-off-diagonal eigenvector of $\mathcal E_A^m$, using the sector corner-letter
-identity and the rectangular support isometries for the compressed corners.  The
-existing off-diagonal vanishing lemma then gives the contradiction.  The scalar
-normalization reuses the same Perron--Frobenius eigenvalue-uniqueness input as
-the different-period proof.\footnote{Formal declarations:
+\leanid{SelfOverlap.lean}.} The proof follows the spectral route above. From a
+gauge-phase equivalence between two compressed sectors, it constructs a
+nonzero off-diagonal eigenvector of $\mathcal E_A^m$ using the sector
+corner-letter identity and rectangular support isometries for the compressed
+corners. The existing off-diagonal vanishing lemma then gives the
+contradiction. The scalar normalization uses the same Perron--Frobenius
+eigenvalue-uniqueness input as the different-period proof.\footnote{Formal
+declarations:
 \leanid{exists_offDiag_eigenvector_of_gaugePhase_cast_left},
 \leanid{offDiag_eigenvector_eq_zero_of_isPeriodic}, and
 \leanid{period_eq_of_gaugePhaseEquiv_of_isPeriodic}.}
 
-\textbf{Signature correction (periodicity is load-bearing).} An adversarial
-proof-attempt found that the lemma was \emph{underspecified}: with only the bare
-cyclic-projection data (orthogonal $P_k$ summing to $1$, the adjoint shift
-$\mathcal E_A^{*}(P_{k+1})=P_k$, blocked-letter commutation, the trace formula,
-and orthogonality), the conclusion is \emph{false} --- a reducible $A=B\oplus B$
-(for an irreducible period-$m$ block $B$) admits the same cyclic-projection data
-yet has gauge-phase-equivalent distinct sectors. The spectral argument genuinely
-requires $A$ to be a periodic (irreducible) block: that is what makes $\mathcal
-E_A$ irreducible with the stated peripheral spectrum and the sectors primitive.
+\paragraph{Signature correction.}
+
+Periodicity is essential. The conclusion is false under only orthogonal
+projectors $P_k$ summing to the identity, the adjoint shift
+$\mathcal E_A^*(P_{k+1})=P_k$, blocked-letter commutation, the trace formula,
+and orthogonality. A reducible tensor $A=B\oplus B$, where $B$ is an
+irreducible period-$m$ block, admits these cyclic-projection data but has
+gauge-phase-equivalent distinct sectors. The spectral proof requires $A$ to
+be a periodic irreducible block, because periodicity supplies irreducibility,
+the prescribed peripheral spectrum, and primitive sectors.
+
 The hypothesis \leanid{hP : IsPeriodic m A} was therefore added to the lemma
-signature (it is supplied at the unique call site
-\leanid{sectorBlocks_not_gaugePhaseEquiv_of_ne}). With this hypothesis and the
-corner-isometry data, the spectral proof is now formalized.
+signature. It is supplied at the unique call site
+\leanid{sectorBlocks_not_gaugePhaseEquiv_of_ne}. With this hypothesis and the
+corner-isometry data, the spectral proof is formalized.
 
-\section{Sector-match case: propagation and the phase construction}
+\section{Sector matching: propagation and phase construction}
 
-\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, Appendix~A,
-lines 961--1117; the initial blocked equation \emph{eq:Nm} appears at
-lines 978--984.} Given one matched pair, applying the
-translation operator $T^l$ to the blocked equation \emph{eq:Nm}
-and invoking Theorem~2.10 of \cite{CiracPerezGarcia2017Matrix} produces, at each
-offset, a phase and a unitary $U_{\tilde v+l}=P_{\tilde u+l}U_{\tilde
-v+l}Q_{\tilde v+l}$, so the offset
-$v-u=q$ is constant. Then each blocked product
-$F_u$ becomes injective after $N_0$ repetitions, with a right
-inverse $\Omega_u$; contracting the concatenated products
-with the $\Omega_u$ recovers per-site proportionality $A_u^i=\kappa_v\,
-e^{i\eta/m}\,B_v^i$. The phase
-bookkeeping is load-bearing: $\prod_v\kappa_v=1$ (\emph{eq:prodkappaprop}) and
-$|\kappa_v|=1$ from $\|\sum_iA_u^{i\dagger}A_u^i\|=1$, so $\kappa_v=e^{i\theta_v}$
-with $\sum_v\theta_v=0$; choosing $\phi_v$ with $\theta_v=\phi_v-\phi_{v+1}$
-telescopes the per-sector phases into a single global phase $\xi=\eta/m$ and a
-single global unitary $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$, giving
-$A^i=e^{i\xi}UB^iU^\dagger$.
+\paragraph{Source route.}
 
-\textbf{\Lean{} status.}\footnote{Formal declarations:
+Appendix~A, lines 961--1117, of
+Ref.~\cite{DeLasCuevas2017Irreducible} starts from the blocked identity
+\emph{eq:Nm}, lines 978--984. Applying the translation operator $T^l$ and
+Theorem~2.10 of Ref.~\cite{Cirac2021Matrix} produces, at each offset, a phase
+and a unitary
+\begin{align}
+    U_{\widetilde v+l}
+    &=P_{\widetilde u+l}U_{\widetilde v+l}Q_{\widetilde v+l}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_offset_unitary}
+\end{align}
+The offset is therefore constant:
+\begin{align}
+    q
+    &=v-u.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_constant_offset}
+\end{align}
+
+Each blocked product $F_u$ becomes injective after $N_0$ repetitions and has a
+right inverse $\Omega_u$. Contracting the concatenated products with these
+right inverses recovers the single-site relation
+\begin{align}
+    A_u^i
+    &=\kappa_v e^{i\eta/m}B_v^i.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_site_proportionality}
+\end{align}
+The phase calculation uses the source identity \emph{eq:prodkappaprop}:
+\begin{align}
+    \prod_v\kappa_v
+    &=1,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_kappa_product}\\
+    |\kappa_v|
+    &=1,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_kappa_unit_modulus}\\
+    \kappa_v
+    &=e^{i\theta_v},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_kappa_phase}\\
+    \sum_v\theta_v
+    &=0.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_theta_sum}
+\end{align}
+Choose phases $\phi_v$ satisfying
+\begin{align}
+    \theta_v
+    &=\phi_v-\phi_{v+1}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_phase_coboundary}
+\end{align}
+The sector phases then telescope into the global phase and unitary
+\begin{align}
+    \xi
+    &=\eta/m,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_global_phase}\\
+    U
+    &=\sum_u
+      e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_global_unitary}\\
+    A^i
+    &=e^{i\xi}UB^iU^\dagger.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_global_gauge}
+\end{align}
+
+\paragraph{\Lean{} status.}
+
+The formal development follows the same two stages: the $T^l$ and
+Theorem~2.10 propagation staircase, followed by the $\Omega_u$ contraction and
+the $\kappa/\theta/\phi$ phase construction.\footnote{Formal declarations:
 \leanid{sectorMatch_propagation} in
-\leanid{SectorMatch/Propagation.lean}, and
+\leanid{SectorMatch/Propagation.lean},
 \leanid{sectorTensor_proportional_of_blockedMatch} in
 \leanid{SectorMatch/Contraction.lean}, and
 \leanid{periodicOverlap_gaugeEquiv_of_sector_match} in
-\leanid{SectorMatch/Consequences.lean}.}
-The statements track this two-stage structure: the $T^l$ + Theorem~2.10
-staircase, followed by the $\Omega_u$ contraction and the
-$\kappa/\theta/\phi$ phase construction. The top-level theorem now invokes these
-component lemmas; the contraction leaf
-\leanid{sectorTensor_proportional_of_blockedMatch} and the resulting
-unitary global gauge are proved, and the repeated-blocks theorem follows. The
-docstrings have been realigned to cite the source equation labels and line
-ranges (replacing earlier published-version labels such as ``A.8'' and
-``A.14--A.18'' that do not occur in the local source), and the
-$\kappa/\theta/\phi$ phase construction is now stated explicitly as
-load-bearing.
+\leanid{SectorMatch/Consequences.lean}.} The top-level theorem invokes these
+component lemmas. The contraction leaf
+\leanid{sectorTensor_proportional_of_blockedMatch}, the global unitary gauge,
+and the repeated-blocks theorem are proved.
 
-\textbf{Formalized single-site inputs.} The single-site off-diagonal
-decomposition is now formalized from the cyclic adjoint-shift
-relation.\footnote{The formal declarations are
+The docstrings now cite the source equation identifiers and line ranges rather
+than published-version identifiers such as ``A.8'' and ``A.14--A.18'', which
+do not occur in the local source. They also state explicitly that the
+$\kappa/\theta/\phi$ construction is essential.
+
+\subsection{Single-site inputs}
+
+The formal single-site off-diagonal decomposition follows from the cyclic
+adjoint-shift relation.\footnote{Formal declarations:
 \leanid{offDiag_shift_of_adjoint_cyclic_shift},
 \leanid{eq_sum_offDiag_of_adjoint_cyclic_shift},
 \leanid{IsCyclicSectorDecomp.offDiag_shift}, and
-\leanid{IsCyclicSectorDecomp.eq_sum_offDiag}.} It gives
-$P_{u+1}A^i=A^iP_u$ and $A^i=\sum_u P_{u+1}A^iP_u$ for a chosen cyclic
-sector decomposition. This is the inverse-indexed form of
-\emph{eq:Aoffdiag}, lines~335--339; the later \emph{eq:Auprop}, line~1014,
-defines the sector letters $A_u^i=P_uA^iP_{u+1}$.
+\leanid{IsCyclicSectorDecomp.eq_sum_offDiag}.} With the repository's inverse
+cyclic indexing convention, it gives
+\begin{align}
+    P_{u+1}A^i
+    &=A^iP_u,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_single_site_shift}\\
+    A^i
+    &=\sum_u P_{u+1}A^iP_u.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_single_site_decomposition}
+\end{align}
+These identities are the inverse-indexed form of source equation
+\emph{eq:Aoffdiag}, lines 335--339, of
+Ref.~\cite{DeLasCuevas2017Irreducible}. The later source equation
+\emph{eq:Auprop}, line 1014, defines the sector letters by
+\begin{align}
+    A_u^i
+    &=P_uA^iP_{u+1}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_sector_letter}
+\end{align}
 
-The construction of the cyclic sectors also now records the letter-level
-corner identity and a rectangular support isometry for each corner.\footnote{Formal
+The cyclic-sector construction also records a letter-level corner identity
+and a rectangular support isometry for each corner.\footnote{Formal
 declarations:
 \leanid{exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
-and its projected wrapper
+and
 \leanid{exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}.}
-If $\varphi_u$ is the compression isomorphism from the compressed sector algebra
-onto $P_uM_DP_u$, then
-\[
-    \varphi_u(C_u^{\mathbf i})=
-        P_u (A^{(m)})^{\mathbf i} P_u .
-\]
-This is the exposed formal version of the blocked corner-letter relation in
-Lemma~\emph{bdcf} and \emph{Cu}. Together with the support isometry, it transports
-the compressed mixed-transfer eigenvector to the ambient corner and supplies the
-off-diagonal modulus-one eigenvector used in the spectral contradiction.
+If $\varphi_u$ is the compression isomorphism from the compressed sector
+algebra onto $P_uM_DP_u$, then
+\begin{align}
+    \varphi_u(C_u^{\mathbf i})
+    &=P_u(A^{(m)})^{\mathbf i}P_u.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_corner_letter}
+\end{align}
+This identity formalizes the blocked corner-letter relation in Lemma
+\emph{bdcf} and source equation \emph{Cu} of
+Ref.~\cite{DeLasCuevas2017Irreducible}. Together with the support isometry, it
+moves the compressed mixed-transfer eigenvector into the ambient corner and
+supplies the off-diagonal modulus-one eigenvector used in the spectral
+contradiction.
 
-Let $O_{C,D}(N):=\langle V_N(C)\mid V_N(D)\rangle$. The one-site
-sector-overlap translation is also formalized.\footnote{Formal declaration:
-\leanid{sectorOverlap_succ_eq_of_cyclicSectorDecomp}.} It proves, for every
-$N>0$,
-\[
-    O_{A_{u+1},B_{v+1}}(N)=O_{A_u,B_v}(N).
-\]
-It is the overlap-sum form of the translation step in lines~985--1002, using
-the single-site relations inside the paired trace sum and the repository's
-inverse cyclic indexing convention.
+Define the sector overlap by
+\begin{align}
+    O_{C,D}(N)
+    &:=\braket{V_N(C)}{V_N(D)}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_sector_overlap}
+\end{align}
+The one-site sector-overlap translation is also formalized.\footnote{Formal
+declaration:
+\leanid{sectorOverlap_succ_eq_of_cyclicSectorDecomp}.} For every $N>0$, it
+proves
+\begin{align}
+    O_{A_{u+1},B_{v+1}}(N)
+    &=O_{A_u,B_v}(N).
+    \label{eq:dccsp17_periodic_overlap_route_alignment_overlap_translation}
+\end{align}
+This is the overlap-sum form of the translation step at lines 985--1002 of
+Ref.~\cite{DeLasCuevas2017Irreducible}. It applies the single-site relations
+inside the paired trace sum using the inverse cyclic indexing convention.
 
-\textbf{Formalized Case-3 contraction.} After these single-site inputs, the
-contraction and gauge construction proceeds as follows:
+\subsection{Formalized Case-3 contraction}
+
+The formal contraction and gauge construction has two parts.
 \begin{itemize}
-  \item The $m$-factor cyclic $\Omega_u$-contraction with the $\eta$ bookkeeping:
-    starting from the common right inverses for the injective tensors $F_u$,
-    contract the cyclic product in lines~1041--1068 to obtain the uniform
-    product-tensor identity \emph{eq:resultprop}. The displayed inverse list
-    in lines~1049--1052 has only $m-1$ factors, but the displayed
-    concatenation, the $(mN_0+1)$ repetition count, and the definition of
-    $\eta_v$ require one inverse for each of the $m$ inserted $F$-factors.
-  \item The final normalization and gauge construction: use the proved scalar
-    extraction theorem to obtain $\kappa_v$ with $\prod_v\kappa_v=1$, prove
-    $|\kappa_v|=1$ from the left-canonical normalization, apply the finite-cycle
-    coboundary lemma to write $\kappa_v=e^{i(\phi_v-\phi_{v+1})}$, and assemble
-    the global unitary
-    $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$.
+    \item The $m$-factor cyclic $\Omega_u$ contraction starts from common right
+    inverses for the injective tensors $F_u$ and contracts the cyclic product
+    at lines 1041--1068 of Ref.~\cite{DeLasCuevas2017Irreducible}. This yields
+    the uniform product-tensor identity \emph{eq:resultprop}, with the $\eta$
+    phases retained. The displayed inverse list at lines 1049--1052 contains
+    only $m-1$ factors, but the displayed concatenation, the $(mN_0+1)$
+    repetition count, and the definition of $\eta_v$ require one inverse for
+    each of the $m$ inserted $F$-factors.
+
+    \item The normalization and gauge step extracts scalars $\kappa_v$,
+    proves (\ref{eq:dccsp17_periodic_overlap_route_alignment_kappa_product})
+    and
+    (\ref{eq:dccsp17_periodic_overlap_route_alignment_kappa_unit_modulus}),
+    applies the finite-cycle coboundary lemma
+    (\ref{eq:dccsp17_periodic_overlap_route_alignment_phase_coboundary}), and
+    assembles the unitary
+    (\ref{eq:dccsp17_periodic_overlap_route_alignment_global_unitary}).
 \end{itemize}
 These steps discharge the contraction obligation for the repeated-blocks
 theorem.\footnote{Formal declaration:
 \leanid{sectorTensor_proportional_of_blockedMatch} in
-\leanid{SectorMatch/Contraction.lean}.} The tensor-product scalar
-extraction and product-one normalization have already been isolated in
+\leanid{SectorMatch/Contraction.lean}.} Tensor-product scalar extraction and
+product-one normalization are isolated in
 \leanid{PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul} and
-\leanid{PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul};
-the finite-cycle phase choice is isolated in
-\leanid{exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one}. The
-one-step transport theorem is closed by the single-site overlap theorem above
-together with the overlap-to-gauge theorem and the proved sector primitivity.\footnote{
-The formal declarations are
+\leanid{PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}.
+The finite-cycle phase choice is isolated in
+\leanid{exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one}.
+The one-step transport theorem follows from the single-site overlap theorem,
+the overlap-to-gauge theorem, and sector primitivity.\footnote{Formal
+declarations:
 \leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport} and
 \leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}.}
 
-\textbf{Corner-letter building blocks.} The corner-transition tensors
-$A_u^i=P_uA^iP_{u+1}$ (eq:Auprop) and their repeated products
-$F_u^{\mathbf i}=A_u^{i_1}A_{u+1}^{i_2}\cdots$ (eq:Fu) are now defined as
-\leanid{MPSTensor.cornerLetter} and \leanid{MPSTensor.cornerProd}. The cyclic
-concatenation law $F_u^{\mathbf{i}_1\mathbf{i}_2}
-=F_u^{\mathbf i_1}\,F_{u+\ell_1}^{\mathbf i_2}$, by which the appendix repeats a
-single block around the cycle to an injective length, is
-\leanid{MPSTensor.cornerProd_append}; the junction projector is absorbed by
-idempotency, so the law needs no injectivity or normality input. These are the
-$A_u^i/F_u$ building blocks that enter the first bullet above. The formal
-right-inverse contraction of $F_u$ to \emph{eq:resultprop} and the unitary
-global gauge assembly are completed in
+\subsection{Corner-letter building blocks}
+
+The formal corner-transition tensors and their repeated products are
+\begin{align}
+    A_u^i
+    &=P_uA^iP_{u+1},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_corner_transition}\\
+    F_u^{\mathbf i}
+    &=A_u^{i_1}A_{u+1}^{i_2}\cdots.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_corner_product}
+\end{align}
+They correspond to source equations \emph{eq:Auprop} and \emph{eq:Fu} of
+Ref.~\cite{DeLasCuevas2017Irreducible} and are defined as
+\leanid{MPSTensor.cornerLetter} and \leanid{MPSTensor.cornerProd}. Their cyclic
+concatenation law is
+\begin{align}
+    F_u^{\mathbf i_1\mathbf i_2}
+    &=F_u^{\mathbf i_1}
+      F_{u+\ell_1}^{\mathbf i_2}.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_corner_concatenation}
+\end{align}
+The declaration is \leanid{MPSTensor.cornerProd_append}. The junction
+projector is absorbed by idempotency, so this law requires neither injectivity
+nor normality. These are the $A_u^i$ and $F_u$ objects used in the cyclic
+contraction. The formal right-inverse contraction to source equation
+\emph{eq:resultprop} and the global unitary assembly are completed in
 \leanid{sectorTensor_proportional_of_blockedMatch}.
 
 \section{Scope restriction: independence without spanning}
 
-\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, lines 604--608
-and Lemma~\emph{Lem1t}, lines 511--519. The phrase about the name
-``basis of periodic vectors'' appears at line 611.} As a consequence of the
-proposition and Lemma~\emph{Lem1t}, for $N\ge N_0$ the non-zero members of
-$\{|V_N(A_j)\rangle\}_{j\in J}$ are linearly independent \emph{and} span
-$|V_N(A)\rangle$; the spanning half is what ``justifies the name basis of
-periodic vectors''.
+The source proposition and Lemma~\emph{Lem1t}, lines 511--519, imply that for
+$N\geq N_0$ the nonzero vectors in
+\begin{align}
+    \left\{\ket{V_N(A_j)}:j\in J\right\}
+    \label{eq:dccsp17_periodic_overlap_route_alignment_periodic_vector_family}
+\end{align}
+are linearly independent and span $\ket{V_N(A)}$; see lines 604--608 of
+Ref.~\cite{DeLasCuevas2017Irreducible}. The spanning assertion justifies the
+source phrase ``basis of periodic vectors'' at line 611.
 
-\textbf{\Lean{} statement.}\footnote{Formal declaration:
-\leanid{periodicBasis_eventuallyLinearlyIndependent} in \leanid{Dichotomy.lean};
-the matching blueprint entry is in
+The formal theorem states only eventual linear independence.\footnote{Formal
+declaration:
+\leanid{periodicBasis_eventuallyLinearlyIndependent} in
+\leanid{Dichotomy.lean}. The corresponding blueprint entry is in
 \path{blueprint/src/chapter/ch22_periodic_ft_overlap_sector_match_and_consequences.tex}.}
-Only the independence half is stated; the spanning clause is dropped. The
-basis condition is encoded directly as the pairwise non-repetition hypothesis
-\leanid{hNonrep} together with
-a common-period divisibility \leanid{hDiv}, rather than derived from a basis of
-periodic tensors, and the \emph{Lem1t} almost-orthonormal-implies-independent
-lemma is not used. Restoring the spanning clause and routing through
-\emph{Lem1t} was classified under
-\href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The independence
-half is formalized; no unrestricted spanning assertion is presently attributed
-to the source consequence.
+It encodes the basis assumptions directly as the pairwise non-repetition
+hypothesis \leanid{hNonrep} and the common-period divisibility hypothesis
+\leanid{hDiv}. It neither derives them from a basis of periodic tensors nor
+uses the almost-orthonormal-implies-independent Lemma~\emph{Lem1t}. Restoring
+the spanning clause and routing the proof through \emph{Lem1t} was classified
+under \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The
+independence clause is formalized, but no unrestricted spanning theorem is
+currently attributed to the source consequence.
 
 \section{Multiplicity-bearing overlap theorem and Perron transport}
 
-\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, equations
-\emph{bdnr} and \emph{Bbdnr}, lines 286--305 and 575--585; the normalization
-reduction, lines 313--332; and theorem \emph{thm:bd}, lines 613--632.} The
-irreducible forms used in the proportional Fundamental Theorem are
-\begin{align}
-  A^i&=\bigoplus_j (R_j\otimes A_j^i),&
-  B^i&=\bigoplus_k (S_k\otimes B_k^i),
-\end{align}
-where the diagonal matrices $R_j$ and $S_k$ retain the multiplicities and
-weights of repeated copies of each periodic basis tensor.
+\subsection{Source irreducible forms}
 
-\textbf{Multiplicity-bearing normalized theorem.} The declaration
+The proportional Fundamental Theorem uses the irreducible forms
+\emph{bdnr} and \emph{Bbdnr}, lines 286--305 and 575--585, of
+Ref.~\cite{DeLasCuevas2017Irreducible}:
+\begin{align}
+    A^i
+    &=\bigoplus_j(R_j\otimes A_j^i),
+    \label{eq:dccsp17_periodic_overlap_route_alignment_irreducible_form_A}\\
+    B^i
+    &=\bigoplus_k(S_k\otimes B_k^i).
+    \label{eq:dccsp17_periodic_overlap_route_alignment_irreducible_form_B}
+\end{align}
+The diagonal matrices $R_j$ and $S_k$ retain the multiplicities and weights of
+repeated copies of each periodic basis tensor.
+
+\subsection{Multiplicity-bearing normalized theorem}
+
+The declaration
 \path{PeriodicOverlapHypothesis.ofSectorDecompositions} uses literal sector
 decompositions
 \begin{align}
-  P^i&=\bigoplus_{j,q}(\mu_{j,q}A_j^i),&
-  Q^i&=\bigoplus_{k,r}(\nu_{k,r}B_k^i),
+    P^i
+    &=\bigoplus_{j,q}\mu_{j,q}A_j^i,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_literal_decomposition_P}\\
+    Q^i
+    &=\bigoplus_{k,r}\nu_{k,r}B_k^i.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_literal_decomposition_Q}
 \end{align}
-where every complex weight is nonzero.  This flattened presentation is the
-coordinate form of $\bigoplus_j(R_j\otimes A_j^i)$ and
-$\bigoplus_k(S_k\otimes B_k^i)$, with
+Every complex weight in these decompositions is nonzero. This flattened
+notation is the coordinate form of
+(\ref{eq:dccsp17_periodic_overlap_route_alignment_irreducible_form_A}) and
+(\ref{eq:dccsp17_periodic_overlap_route_alignment_irreducible_form_B}), with
 \begin{align}
-  \operatorname{tr}(R_j^N)&=\sum_q\mu_{j,q}^N,&
-  \operatorname{tr}(S_k^N)&=\sum_r\nu_{k,r}^N.
+    \tr(R_j^N)
+    &=\sum_q\mu_{j,q}^N,
+    \label{eq:dccsp17_periodic_overlap_route_alignment_R_power_sum}\\
+    \tr(S_k^N)
+    &=\sum_r\nu_{k,r}^N.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_S_power_sum}
 \end{align}
-It assumes proportionality only at positive lengths, permits different total
-bond dimensions, and allows the proportionality scalar to depend freely on
-the length.  Thus the multiplicity, literal-representation, and empty-word
-restrictions of the earlier scalar theorem are absent.
+The theorem assumes proportionality only at positive lengths, permits
+different total bond dimensions, and allows the proportionality scalar to
+depend on the length. It therefore removes the multiplicity,
+literal-representation, and empty-word restrictions of the earlier scalar
+theorem.
 
-The proof makes the paper's terse contradiction at line~631 explicit.  It
-partitions one basis by mixed-overlap decay, passes to a common-period
-subsequence, and compares the grouped coefficients in an eventually linearly
-independent coproduct-indexed family.  Linear independence forces
-$\operatorname{tr}(R_{j_0}^{pN})=0$ for every sufficiently large $N$.
+The proof expands the contradiction stated tersely at line 631 of
+Ref.~\cite{DeLasCuevas2017Irreducible}. It partitions one periodic basis by
+mixed-overlap decay, restricts to a common-period subsequence, and compares
+grouped coefficients in an eventually linearly independent family indexed by
+a coproduct. Linear independence yields
+\begin{align}
+    \tr(R_{j_0}^{pN})
+    &=0
+    \qquad\text{for every sufficiently large }N.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_vanishing_power_sum}
+\end{align}
 Geometric extrapolation applied to the nonzero numbers $\mu_{j_0,q}^p$ then
-forces the same power sum to vanish at exponent zero, contradicting the
-positive multiplicity of the sector.  In particular, the proof never treats
-the repeated copies of $A_{j_0}$ as independent vectors.
+forces the exponent-zero power sum to vanish:
+\begin{align}
+    \sum_q(\mu_{j_0,q}^p)^0
+    &=0.
+    \label{eq:dccsp17_periodic_overlap_route_alignment_zero_exponent_contradiction}
+\end{align}
+The left-hand side is the positive multiplicity of the sector, which is a
+contradiction. The proof never treats repeated copies of $A_{j_0}$ as
+independent vectors.
 
 The earlier declaration
-\path{PeriodicOverlapHypothesis.ofIsIrreducibleForm} remains as the
-one-weight-per-listed-block specialization.  Its hypothesis still asserts
-matrix-product-vector equality at the empty word and may describe an ambient
-tensor only through such an equality.  These are restrictions of that older
-formulation, not of the new literal multiplicity-bearing theorem.
+\path{PeriodicOverlapHypothesis.ofIsIrreducibleForm} remains the specialization
+with one weight per listed block. Its hypotheses still assert
+matrix-product-vector equality at the empty word and may specify an ambient
+tensor only through that equality. These are restrictions of the older
+formulation, not of the literal multiplicity-bearing theorem.
 
-\textbf{Pure normalization theorem.} The predicate
-\path{IsSpectrallyPeriodic} records the source assumptions on a basis block:
-irreducibility, spectral radius one, positive period, and the prescribed
-roots-of-unity peripheral spectrum.  The declaration
+\subsection{Pure normalization theorem}
+
+The predicate \path{IsSpectrallyPeriodic} records the source assumptions on a
+basis block: irreducibility, spectral radius one, positive period, and the
+prescribed roots-of-unity peripheral spectrum. The declaration
 \path{IsSpectrallyPeriodic.exists_isPeriodic_tpGauge} applies the positive
 adjoint Perron eigenmatrix to obtain a left-canonical periodic block by pure
-similarity, exactly as in
-\cite[lines~313--332]{DeLasCuevas2017Irreducible}.  The Perron eigenvalue is
-forced to equal one, so no scalar rescales the block.  The peripheral spectrum
-is preserved by similarity.  Thus this normalization leaves every
-matrix-product vector unchanged and introduces no extra power into the
+similarity, following lines 313--332 of
+Ref.~\cite{DeLasCuevas2017Irreducible}. The Perron eigenvalue equals one, so
+the construction does not rescale the block. Similarity preserves the
+peripheral spectrum. Consequently, the normalization leaves every
+matrix-product vector unchanged and introduces no additional power into the
 multiplicity coefficients.
 
-\textbf{Sectorwise normalization and return to the original blocks.} The
-declaration \path{SectorDecomposition.replaceBasis} changes only the
-representative tensors, keeping their index set, bond dimensions,
-multiplicities, and weights fixed.  If $X_j$ is the pure Perron gauge of the
-$j$th representative, then
-\path{SectorDecomposition.gaugeEquiv_toTensor_replaceBasis} assembles the
-global gauge
-\begin{align}
-  X&=\bigoplus_j(I_{r_j}\otimes X_j).
-\end{align}
-Consequently each block $\mu_{j,q}A_j^i$ is sent to
-$\mu_{j,q}X_jA_j^iX_j^{-1}$, with no change to $\mu_{j,q}$.
-The declaration \path{SectorDecomposition.exists_isPeriodic_replaceBasis}
-applies this construction simultaneously to every spectrally periodic
-representative.
+\subsection{Sectorwise normalization and return to the original blocks}
 
-Pure similarities preserve all closed-chain coefficients, so they preserve
-every mixed overlap exactly.  The declaration
+The declaration \path{SectorDecomposition.replaceBasis} replaces only the
+representative tensors. It preserves the sector index set, bond dimensions,
+multiplicities, and weights. If $X_j$ is the pure Perron gauge for the $j$th
+representative, then
+\path{SectorDecomposition.gaugeEquiv_toTensor_replaceBasis} assembles
+\begin{align}
+    X
+    &=\bigoplus_j(I_{r_j}\otimes X_j).
+    \label{eq:dccsp17_periodic_overlap_route_alignment_sectorwise_gauge}
+\end{align}
+Thus each block transforms as
+\begin{align}
+    \mu_{j,q}A_j^i
+    &\longmapsto
+      \mu_{j,q}X_jA_j^iX_j^{-1},
+    \label{eq:dccsp17_periodic_overlap_route_alignment_weight_preservation}
+\end{align}
+without changing $\mu_{j,q}$. The declaration
+\path{SectorDecomposition.exists_isPeriodic_replaceBasis} applies this
+normalization simultaneously to all spectrally periodic representatives.
+
+Pure similarities preserve every closed-chain coefficient and hence every
+mixed overlap. The declaration
 \path{PeriodicOverlapHypothesis.of_gaugeEquiv} uses this equality to preserve
-decay and non-decay, and composes the pure gauges with any repeated-block
-relation obtained after normalization.  Pairwise non-repetition is preserved
-by the same transitivity argument.  Finally,
+overlap decay and non-decay, and it composes the pure gauges with any
+repeated-block relation obtained after normalization. The same transitivity
+argument preserves pairwise non-repetition.
+
+Finally,
 \path{PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions}
 normalizes both literal multiplicity-bearing decompositions, transports their
 positive-length proportionality to the normalized tensors, applies the
 normalized multiplicity theorem, and returns the complete periodic-overlap
-hypothesis to the original spectral-radius-one blocks.  This completes the
-overlap-hypothesis step tracked by issue~\#5342.
+hypothesis to the original spectral-radius-one blocks. This completes the
+overlap-hypothesis step tracked by
+\href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}.
 
 The declarations \leanid{fundamentalTheorem_periodic_proportional} and
-\leanid{fundamentalTheorem_periodic_proportional_of_isPeriodic} begin after
-this step: they accept the periodic-overlap hypothesis, or its non-decaying
-partner fields, as premises and prove the resulting finite block matching.
-Together with the spectrally periodic multiplicity theorem they give the block
-matching for literal irreducible forms.  The exact source-labelled theorem
-remains \emph{not ready}, however, because the existing matching conclusion
-does not explicitly retain equality of the matched periods.  This is the
-remaining gap intrinsic to Theorem~3.4 at lines~613--632.  Separately,
-extending the irreducible-form theorem to arbitrary input tensors through
-Proposition~2.1 requires the positive-length, possibly lower-dimensional
-comparison at lines~266--271; that extension is not part of Theorem~3.4.
+\leanid{fundamentalTheorem_periodic_proportional_of_isPeriodic} start after
+this step. They assume the periodic-overlap hypothesis, or its non-decaying
+partner fields, and prove finite block matching. Together with the spectrally
+periodic multiplicity theorem, they yield block matching for literal
+irreducible forms.
 
-\textbf{Remaining elimination plan.} Combine the spectrally periodic overlap
-theorem with the finite matching argument in a source-labelled statement that
-retains equality of matched periods.  For the separate extension beyond
-Theorem~3.4, prove the positive-length comparison with the representative from
-Proposition~2.1.  The completed overlap-hypothesis step is tracked by
-\href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}; the subsequent
-multiplicity-power extraction is tracked by
+The exact source-labelled theorem is not ready because the existing matching
+conclusion does not explicitly preserve equality of the matched periods. This
+is the remaining gap intrinsic to Theorem~3.4, lines 613--632, of
+Ref.~\cite{DeLasCuevas2017Irreducible}. Separately, extending the
+irreducible-form theorem to arbitrary input tensors through Proposition~2.1
+requires the positive-length, possibly lower-dimensional comparison at lines
+266--271 of the same source. That extension is not part of Theorem~3.4.
+
+\subsection{Remaining elimination plan}
+
+A source-labelled theorem must combine the spectrally periodic overlap theorem
+with the finite matching argument while retaining equality of matched periods.
+The separate extension beyond Theorem~3.4 requires a positive-length
+comparison with the representative supplied by Proposition~2.1 of
+Ref.~\cite{DeLasCuevas2017Irreducible}. The completed overlap-hypothesis step
+is tracked by
+\href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}; the
+subsequent multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.
 
 \begin{thebibliography}{9}

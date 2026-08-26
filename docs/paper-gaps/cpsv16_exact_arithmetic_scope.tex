@@ -17,80 +17,122 @@
 
 \section{Source statements and derived comparisons}
 
-Example~4.10 of Cirac--Perez-Garcia--Schuch--Verstraete
-(\path{Papers/1606.00608/MPDO-22-12-17-2.tex:897--905}) prints a channel with
-a repeated left-qubit label, four decimal entropy values, and the claim that
-the mutual information does not saturate except at the stated exceptional
-probabilities.  It prints no exact ratio or integer comparison.  Replacing the
-repeated label by the network-consistent left-right correlated flip and setting
-the flip probability to $p=1/4$ reproduces the decimal entropies and gives the
-independently derived comparison
-\[
-  2^{32}7^7>3^3 5^{20}.
-\]
-The corrected channel, reduced spectra, and logarithmic reduction are recorded
-in \path{docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex}, not in the
-source paper.
+Example~4.10 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete prints a channel
+with a repeated left-qubit label, four decimal entropy values, and the claim
+that the mutual information fails to saturate except at the stated exceptional
+probabilities
+\cite[lines~897--905]{Cirac2016MPDO_arXiv}. The corresponding source file is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:897--905}. The source gives no
+exact ratio or integer comparison.
 
-Lines~907--924 print an arbitrary-length family for Example~4.11, its
-diagonal bond weights, and the claim that it satisfies saturation of the area
-law but not zero correlation length.  They contain no four-site specialization,
-reduced spectra, entropy values, or exact integer comparison.
-
-Independently specializing the printed Example~4.11 family to four sites gives
-\[
-  41^{82}5^{50}>2^{48}13^{52}7^{112}.
-\]
-The finite-ring distribution, reduced spectra, and logarithmic reduction that
-yield this comparison are recorded in
+Replace the repeated label by the network-consistent left--right correlated
+flip and set the flip probability to $p=1/4$. This correction reproduces the
+four printed entropy values. The resulting exact comparison is
+\begin{align}
+    2^{32}7^7
+        &> 3^3 5^{20}.
+    \label{eq:cpsv16_exact_arithmetic_scope_example410_integer_inequality}
+\end{align}
+The corrected channel, reduced spectra, and logarithmic reduction leading to
+Eq.~\ref{eq:cpsv16_exact_arithmetic_scope_example410_integer_inequality} are
+project-derived results recorded in
 \path{docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex}; they are not
-statements printed in the source paper.  Both sides of each comparison are
-positive integers, so each strict inequality is equivalent to positivity of
-the real logarithm of the corresponding ratio.
+printed in the source.
 
-\section{Certified statements}
+Example~4.11 gives an arbitrary-length family, its diagonal bond weights, and
+the claim that the family saturates the area law but does not have zero
+correlation length
+\cite[lines~907--924]{Cirac2016MPDO_arXiv}. The source contains no four-site
+specialization, reduced spectra, entropy values, or exact integer comparison.
+
+Specializing the printed family independently to a four-site periodic ring
+gives
+\begin{align}
+    41^{82}5^{50}
+        &> 2^{48}13^{52}7^{112}.
+    \label{eq:cpsv16_exact_arithmetic_scope_example411_integer_inequality}
+\end{align}
+The finite-ring distribution, reduced spectra, and logarithmic reduction
+leading to
+Eq.~\ref{eq:cpsv16_exact_arithmetic_scope_example411_integer_inequality} are
+also recorded in
+\path{docs/paper-gaps/cpsv16_examples_4_10_4_11_entropy.tex}. They are not
+statements from Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+Both sides of
+Eqs.~\ref{eq:cpsv16_exact_arithmetic_scope_example410_integer_inequality}
+and~\ref{eq:cpsv16_exact_arithmetic_scope_example411_integer_inequality} are
+positive integers. Each strict inequality is therefore equivalent to
+positivity of the real logarithm of the corresponding ratio.
+
+\section{Certified scalar statements}
 
 The module
-\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic}
-machine-checks the two integer inequalities,
+\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic} machine-checks
+Eq.~\ref{eq:cpsv16_exact_arithmetic_scope_example410_integer_inequality} in
 \leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
-\leanid{CPSVExamples410411Arithmetic.example411_integer_inequality},
-and the positivity of the corresponding logarithmic ratios,
+Eq.~\ref{eq:cpsv16_exact_arithmetic_scope_example411_integer_inequality} in
+\leanid{CPSVExamples410411Arithmetic.example411_integer_inequality}. It also
+proves positivity of the corresponding logarithmic ratios in
 \leanid{CPSVExamples410411Arithmetic.example410_log_ratio_pos} and
 \leanid{CPSVExamples410411Arithmetic.example411_log_ratio_pos}.
 
 \section{Scope boundary}
 
-For the four-site states, let $S_L$ denote the entropy of $L$ neighboring
-sites and define the chain mutual information by
-$I_L=S_L+S_{4-L}-S_4$.  The declarations in the arithmetic module alone are
-scalar statements: they do not identify reduced-state spectra or prove an
-area-law conclusion.  For the corrected fixed-$p=1/4$ Example~4.10 tensor,
-\doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} supplies the one- through
-four-site root multisets and
-\doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives $I_2>I_1$ and the
-source-ZCL, non-SAL conclusion.  This completes \ghissue{6301} without
-asserting the universal parameter range printed in the source.  For the
-literal Example~4.11 family at four sites,
-\doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} derives $I_2>I_1$ and the
-failure of SAL, while
-\doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} independently proves the
-failure of source ZCL from finite-marginal instability, both for the effective
-binary model and for its ambient two-qubit realization.  This completes
-\ghissue{6302}: the printed SAL clause is refuted and the printed non-ZCL
-clause is verified.  Neither conclusion follows from the arithmetic module
-alone.
+For a normalized four-site state, let $S_L$ denote the entropy of $L$
+consecutive sites. Define the chain mutual information by
+\begin{align}
+    I_L
+        &= S_L+S_{4-L}-S_4.
+    \label{eq:cpsv16_exact_arithmetic_scope_mutual_information}
+\end{align}
+The arithmetic module proves only scalar statements. It neither identifies
+reduced-state spectra nor establishes an area-law conclusion.
+
+For the corrected Example~4.10 tensor at $p=1/4$,
+\doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} supplies the root multisets
+for blocks of one through four sites. The module
+\doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} then proves
+\begin{align}
+    I_2
+        &> I_1
+    \label{eq:cpsv16_exact_arithmetic_scope_example410_mutual_information_defect}
+\end{align}
+and derives the source-zero-correlation-length, non-saturation conclusion. This
+completes \ghissue{6301} without asserting the universal parameter range
+printed in Example~4.10 of Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+For the literal four-site family in Example~4.11,
+\doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} proves
+\begin{align}
+    I_2
+        &> I_1
+    \label{eq:cpsv16_exact_arithmetic_scope_example411_mutual_information_defect}
+\end{align}
+and hence failure of saturation. Independently,
+\doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} proves failure of source zero
+correlation length through finite-marginal instability, both for the effective
+binary model and for its ambient two-qubit realization. These results complete
+\ghissue{6302}: they refute the printed saturation clause and verify the
+printed non-zero-correlation-length clause. Neither conclusion follows from
+the arithmetic module alone.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.}  The arithmetic endpoints are certified
-and connected to the corresponding tensor statements.  For corrected
-Example~4.10 at $p=1/4$, the tensor and entropy results give source ZCL without
-SAL.  For the literal four-site Example~4.11 family, the entropy result refutes
-the printed SAL clause and the finite-marginal result verifies the independent
-non-ZCL clause.  The resolved restriction is that the arithmetic statements
-alone prove neither tensor spectra nor area-law conclusions.  These
-project-derived finite-ring results do not formalize the universal-in-$p$
-claim of Example~4.10 or any thermodynamic statement for Example~4.11.
+The exact arithmetic endpoints are certified and connected to the relevant
+tensor statements. For the corrected Example~4.10 tensor at $p=1/4$, the
+tensor and entropy results establish source zero correlation length without
+area-law saturation. For the literal four-site Example~4.11 family, the
+entropy result refutes the printed saturation clause, while the finite-marginal
+result verifies the independent non-zero-correlation-length clause.
+
+The scope restriction is that the arithmetic statements alone prove neither
+the tensor spectra nor the area-law conclusions. These project-derived
+finite-ring results do not formalize the universal-in-$p$ claim in
+Example~4.10 or any thermodynamic statement for Example~4.11 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}

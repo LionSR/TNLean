@@ -19,284 +19,341 @@
 
 \section{The source assertion}
 
-The martingale-method paragraph in Cirac--Perez-Garcia--Schuch--Verstraete 2021
-can be compared with the quantitative estimate isolated in the formal
-parent-Hamiltonian proof.\footnote{For
-    traceability, the finite-row reduction is recorded in
-    \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
-    blocked MPS ground-space estimate is recorded in
-    \href{https://github.com/LionSR/TNLean/issues/5455}{issue \#5455}, and the broader
-    parent-Hamiltonian theorem in
+The martingale argument of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete can be compared directly with the
+quantitative estimate used in the formal parent-Hamiltonian
+proof~\cite[Section~IV.C]{Cirac2021Matrix}.\footnote{The finite-row reduction
+    is tracked in
+    \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}.
+    The blocked MPS ground-space estimate is tracked in
+    \href{https://github.com/LionSR/TNLean/issues/5455}{issue \#5455}, and the
+    broader parent-Hamiltonian theorem is tracked in
     \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
-The relevant source passage is the discussion of gaps for MPS parent Hamiltonians
-in \cite[Section~IV.C]{Cirac2021Matrix}, where the local paragraph
-\path{sec:4:hams-gaps} develops the inequalities labelled
-\path{eq:4:martingale-1} and \path{eq:4:martingale-2}.
+The relevant source paragraph is \path{sec:4:hams-gaps}, which contains the
+inequalities \path{eq:4:martingale-1} and
+\path{eq:4:martingale-2}~\cite[Section~IV.C]{Cirac2021Matrix}.
 
 Let
-\[
-    H=\sum_i h_i
-\]
-be a frustration-free Hamiltonian whose local terms are projections. The
-source recalls that a gap lower bound $\gamma>0$ is equivalent, at the
-quadratic-form level, to
-\[
-    H^2\ge \gamma H.
-\]
-Since $h_i^2=h_i$, the expansion of $H^2$ separates diagonal terms,
-overlapping products, and non-overlapping products. The non-overlapping
-products are treated as non-negative. Thus it is enough to control each
-overlapping pair by an anticommutator estimate
-\begin{equation}
-    h_i h_j+h_j h_i
-    \ge -c_{ij}(1-\gamma)(h_i+h_j),
-    \tag{\path{eq:4:martingale-2}}
-\end{equation}
-where the coefficients $c_{ij}$ are chosen so that the contributions in each
-row add up to one. The formal row-sum algebra uses the slightly more flexible
-condition that, for each fixed $i$, the sum of the coefficients attached to
-terms overlapping $h_i$ is at most one.
-
-The same paragraph interprets this estimate as a lower bound on the minimum
-non-zero angle between the ground spaces of overlapping regions. It then cites
-the martingale method and the MPS parent-Hamiltonian results of
-Fannes--Nachtergaele--Werner and Nachtergaele, together with the later
-Kastoryano--Lucia formulation, for the conclusion that MPS parent Hamiltonians
-have a uniform positive spectral gap after a suitable blocking
-\cite{Fannes1992Finitely,Nachtergaele1996Spectral,Kastoryano2018Martingale}.
-In the convention of this note, the Kastoryano--Lucia formulation cited there
-is the estimate for
 \begin{align}
-    \delta(\ell):=\|q_i q_j-P\|,
+    H&=\sum_i h_i
+    \label{eq:cpgsv21_martingale_overlap_hamiltonian_sum}
 \end{align}
-where $q_i$ and $q_j$ are the projectors onto the ground spaces
-$\ker h_i$ and $\ker h_j$, $P$ is the projector onto
-$\ker h_i\cap\ker h_j=\ker(h_i+h_j)$, and $\ell$ is the size of the
-overlap region. The review writes the displayed product with the symbols
-$h_i,h_j$; in the convention fixed above, those symbols must be read as the
-ground-space projectors $q_i,q_j$, not as the excitation projections $h_i$ used
-in \path{eq:4:martingale-2}. If one inserted the excitation projections into
-$\|h_ih_j-P\|$, the norm would be at least one on the common ground space. With
-the ground-space projectors, the cited result states that $\delta(\ell)$ decays
-exponentially with universal constants whenever the frustration-free
-Hamiltonian is gapped, and that this implies the martingale condition because
-both quantities depend only on the principal angles between
-$\ker h_i$ and $\ker h_j$.
-The review text does not spell out the numerical constants or the precise
-finite cyclic blocking convention needed for the formal statement below.
-In particular, the intersection identity
-\[
-    \ker h_i\cap\ker h_j=\ker(h_i+h_j)
-\]
-identifies the common local ground space, but it is not a substitute for the
-quantitative principal-angle estimate.
+be a frustration-free Hamiltonian whose local terms $h_i$ are orthogonal
+projections. At the quadratic-form level, a gap lower bound $\gamma>0$ is
+equivalent to
+\begin{align}
+    H^2&\geq\gamma H.
+    \label{eq:cpgsv21_martingale_overlap_gap_quadratic_form}
+\end{align}
+Because $h_i^2=h_i$, the expansion of $H^2$ contains diagonal terms,
+overlapping products, and non-overlapping products. The non-overlapping
+products are non-negative. It therefore suffices to prove, for every
+overlapping pair, the anticommutator estimate
+\begin{align}
+    h_i h_j+h_j h_i
+    &\geq-c_{ij}(1-\gamma)(h_i+h_j),
+    \label{eq:cpgsv21_martingale_overlap_source_anticommutator}
+\end{align}
+where the coefficients $c_{ij}$ have row sum one in
+\path{eq:4:martingale-2} of
+Ref.~\cite[Section~IV.C]{Cirac2021Matrix}. The formal row-sum argument permits
+the more general condition that every row sum is at most one.
 
-The source route that has to be matched is more precise than the review
-paragraph. Kastoryano--Lucia define, for finite regions $A$ and $B$,
-\[
+The same source paragraph interprets
+(\ref{eq:cpgsv21_martingale_overlap_source_anticommutator}) through the
+minimum nonzero angle between ground spaces of overlapping regions. It cites
+the martingale method and the MPS parent-Hamiltonian results of
+Fannes--Nachtergaele--Werner, Nachtergaele, and Kastoryano--Lucia to conclude
+that suitable blocking gives a uniform positive gap
+\cite{Fannes1992Finitely,Nachtergaele1996Spectral,Kastoryano2018Martingale}.
+
+To distinguish ground-space and excitation projections, let $q_i$ and $q_j$
+project onto $\ker h_i$ and $\ker h_j$, respectively, and let $P$ project onto
+their common ground space. For overlap length $\ell$, define
+\begin{align}
+    \delta(\ell)
+    &:=\lVert q_iq_j-P\rVert,
+    \label{eq:cpgsv21_martingale_overlap_ground_projector_defect}\\
+    \operatorname{ran}P
+    &=\ker h_i\cap\ker h_j
+      =\ker(h_i+h_j).
+    \label{eq:cpgsv21_martingale_overlap_common_ground_space}
+\end{align}
+The symbols $h_i,h_j$ in the corresponding review display must be read as the
+ground-space projectors $q_i,q_j$, not as the excitation projections in
+(\ref{eq:cpgsv21_martingale_overlap_source_anticommutator}). Substituting the
+excitation projections into
+(\ref{eq:cpgsv21_martingale_overlap_ground_projector_defect}) would make the
+norm at least one on the common ground space. For the ground-space projectors,
+the cited result gives exponential decay of $\delta(\ell)$ with universal
+constants whenever the frustration-free Hamiltonian is gapped. This decay
+implies the martingale condition because both quantities depend on the
+relevant principal angles~\cite{Kastoryano2018Martingale}. The review does not
+state the numerical constants or the finite cyclic blocking convention needed
+below. In particular,
+(\ref{eq:cpgsv21_martingale_overlap_common_ground_space}) identifies the
+common ground space but gives no quantitative angle estimate.
+
+For finite regions $A$ and $B$, Kastoryano--Lucia define
+\begin{align}
     \delta(A,B)
-      =\|(P_A-P_{A\cup B})(P_B-P_{A\cup B})\|
-      =\|P_A P_B-P_{A\cup B}\|
-\]
-under frustration-freeness, and identify this with the cosine of the first
-principal angle between the two reduced ground-space projectors
+    &:=
+      \lVert(P_A-P_{A\cup B})(P_B-P_{A\cup B})\rVert,
+    \label{eq:cpgsv21_martingale_overlap_kl_defect_definition}\\
+    \delta(A,B)
+    &=\lVert P_AP_B-P_{A\cup B}\rVert
+    \label{eq:cpgsv21_martingale_overlap_kl_defect_product}
+\end{align}
+under frustration-freeness, and identify this quantity with the cosine of the
+first principal angle between the reduced ground-space projectors
 \cite[Definition~2 and Remark~2]{Kastoryano2018Martingale}. Nachtergaele's
-martingale hypotheses C3 and C3$'$ instead use the projection estimates
-\[
-    \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\|\le\varepsilon_l,
-    \qquad
-    \|G_{\Lambda_{n+p}\setminus\Lambda_{n-l}}E_n^{(p)}\|\le\eta_l,
-\]
-with thresholds $\varepsilon_l<1/\sqrt{l+1}$ and
-$\eta_l<1/\sqrt{2}$, and Theorem~3 gives the corresponding gap lower bounds
-\cite[Equations~(2.4)--(2.5) and Theorem~3]{Nachtergaele1996Spectral}. In
-Section~6, Nachtergaele proves the GVBS/MPS gap by verifying C3$'$ using the
-projection estimates inherited from Fannes--Nachtergaele--Werner
-\cite[Section~6]{Nachtergaele1996Spectral}. The formal development instead
-obtains a sufficient range-two estimate after physical blocking.  The optimized
-FNW numerator and the identification of its source constants remain open.
+conditions C3 and C3$'$ instead require
+\begin{align}
+    \lVert G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}E_n\rVert
+    &\leq\varepsilon_l,
+    &
+    \varepsilon_l
+    &<\frac{1}{\sqrt{l+1}},
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_c3}\\
+    \lVert G_{\Lambda_{n+p}\setminus\Lambda_{n-l}}E_n^{(p)}\rVert
+    &\leq\eta_l,
+    &
+    \eta_l
+    &<\frac{1}{\sqrt{2}}.
+    \label{eq:cpgsv21_martingale_overlap_nachtergaele_c3_prime}
+\end{align}
+These are Equations~(2.4)--(2.5) of
+Ref.~\cite{Nachtergaele1996Spectral}; Theorem~3 of the same reference gives
+the corresponding gap lower bounds. Section~6 verifies C3$'$ for GVBS/MPS
+Hamiltonians using projection estimates inherited from
+Ref.~\cite{Fannes1992Finitely}. The formal development instead proves a
+sufficient range-two estimate after physical blocking. The optimized FNW
+numerator and the identification of its source constants remain open.
 
 \subsection{Unit bound at the full-window volume}
 
-Fix an MPS tensor $A$ and an interaction length $L>0$. If
-$P_{\mathcal G_L^{\mathrm{ES}}(A)}$ denotes the orthogonal projector onto the
-length-$L$ MPS ground space, define the excitation projector by
-\[
-  P_L^{\mathrm{ES}}(A):=\Id-P_{\mathcal G_L^{\mathrm{ES}}(A)}.
-\]
-For a chain of length $N$ and a start $i$ with $i+L\leq N$, let
-$h_{i,\mathrm{ES}}(A,L)$ be the copy of this excitation projector on the
-window $[i,i+L-1]$, acting as the identity outside the window. Set
-\[
-  I_{L,N}=\{i\in\{0,\ldots,N-1\}:i+L\leq N\}
-\]
-and define the compatible open Hamiltonian by
-\[
-  H^{\mathrm{open}}_{N,L}(A)
-  :=\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(A,L).
-\]
-At the full-window volume $N=L$, the compatible open Hamiltonian consists of
-one orthogonal projection.\footnote{This is the Blueprint theorem
-  ``Full-window compatible interaction,'' labelled
-  \path{thm:open_parent_hamiltonian_full_window}; the formal declaration is
-  \leanid{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}.}
-Thus
-\[
-  H^{\mathrm{open}}_{L,L}(A)=P_L^{\mathrm{ES}}(A).
-\]
-Consequently it preserves the norm on the orthogonal complement of its kernel.
-This identity verifies only the single-window case.  It gives no gap estimate
-for $N>L$.  The general-volume result instead requires the C1--C3 ingredients
-described below: the open-chain ground-space intersection, the quantitative
-projector-defect estimate, and the finite-row martingale reduction.
+Fix an MPS tensor $A$ and an interaction length $L>0$. Let
+$P_{\mathcal G_L^{\mathrm{ES}}(A)}$ be the orthogonal projector onto the
+length-$L$ MPS ground space, and define the excitation projector by
+\begin{align}
+    P_L^{\mathrm{ES}}(A)
+    &:=\Id-P_{\mathcal G_L^{\mathrm{ES}}(A)}.
+    \label{eq:cpgsv21_martingale_overlap_excitation_projector}
+\end{align}
+For a chain of length $N$ and $i+L\leq N$, let
+$h_{i,\mathrm{ES}}(A,L)$ be the copy of this projector on
+$[i,i+L-1]$, extended by the identity outside that window. Define
+\begin{align}
+    I_{L,N}
+    &:=
+      \{i\in\{0,\ldots,N-1\}:i+L\leq N\},
+    \label{eq:cpgsv21_martingale_overlap_compatible_starts}\\
+    H^{\mathrm{open}}_{N,L}(A)
+    &:=
+      \sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(A,L).
+    \label{eq:cpgsv21_martingale_overlap_open_hamiltonian}
+\end{align}
+At $N=L$, this Hamiltonian contains one orthogonal
+projection.\footnote{This is the Blueprint theorem ``Full-window compatible
+    interaction,'' labelled
+    \path{thm:open_parent_hamiltonian_full_window}; its formal declaration is
+    \leanid{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}.}
+Consequently,
+\begin{align}
+    H^{\mathrm{open}}_{L,L}(A)
+    &=P_L^{\mathrm{ES}}(A).
+    \label{eq:cpgsv21_martingale_overlap_full_window_identity}
+\end{align}
+It preserves the norm on the orthogonal complement of its kernel. This
+identity covers only the single-window case and gives no estimate for $N>L$.
+The general-volume result also needs the open-chain ground-space intersection,
+a quantitative projector-defect estimate, and the finite-row martingale
+reduction.
 
 \subsection{Open-chain projector geometry}
 
-The source-faithful open-chain geometry is now isolated before any cyclic
-specialization. In the common Hilbert space on $\Lambda_{n+1}$, the formal
-subspaces
+The open-chain geometry is independent of the later cyclic specialization.
+Inside the Hilbert space on $\Lambda_{n+1}$, the formal subspaces
 \leanid{openChainLeftGroundSpaceES} and
 \leanid{openChainTailGroundSpaceES} are the ranges of $G_{\Lambda_n}$ and
-$G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$, expressed using the existing
-last-site and fixed-prefix restriction maps. Under $L_0$-block injectivity,
-with $n=K+L_0$ and $l=L_0$, the theorem
+$G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$. They use the existing last-site
+and fixed-prefix restriction maps. Under $L_0$-block injectivity, with
+$n=K+L_0$ and $l=L_0$, the theorem
 \leanid{openChainLeft_inf_tailGroundSpaceES} proves
-\[
-  U\cap V=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A).
-\]
+\begin{align}
+    U\cap V
+    &=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A).
+    \label{eq:cpgsv21_martingale_overlap_open_chain_intersection}
+\end{align}
 
-The generic theorem
+The theorem
 \leanid{isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
-converts
-\[
-  \|P_UP_V-P_{U\cap V}\|\le\eta
-\]
-into a Friedrichs bound. Combining these two results with the complementary
-projection theorem gives the open-chain corollary
+turns
+\begin{align}
+    \lVert P_UP_V-P_{U\cap V}\rVert
+    &\leq\eta
+    \label{eq:cpgsv21_martingale_overlap_friedrichs_projector_bound}
+\end{align}
+into a Friedrichs bound. Combined with the complementary-projection theorem,
+it gives
 \leanid{re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}.
-Its hypothesis is precisely the C3 defect
-\[
-  \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
-    -G_{\Lambda_{n+1}}\|\le\eta,
-\]
-using the identity following condition C3 in
-\cite[Equation~(2.4)]{Nachtergaele1996Spectral}. Equation~(2.5) is the
-separate batched condition C3$'$ involving $E_n^{(p)}$.
+Its hypothesis is the C3 defect
+\begin{align}
+    \lVert
+      G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
+      -G_{\Lambda_{n+1}}
+    \rVert
+    &\leq\eta,
+    \label{eq:cpgsv21_martingale_overlap_open_chain_c3_defect}
+\end{align}
+using the identity following condition C3 in Equation~(2.4) of
+Ref.~\cite{Nachtergaele1996Spectral}. Equation~(2.5) of the same reference is
+the distinct batched condition C3$'$ involving $E_n^{(p)}$.
 
-The open-chain numerical step is also complete.  The geometric estimate below
-is uniform in the left length, and
+The numerical open-chain step is complete. The geometric estimate is uniform
+in the left length, and
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
-chooses one block-injective $l>1$, measured in sites of the input tensor, and
-one coefficient $\varepsilon_l\geq0$ with
-\[
-  \varepsilon_l<\frac{1}{\sqrt{l+1}}.
-\]
-The companion theorem
+chooses a block-injective $l>1$, measured in sites of the input tensor, and
+$\varepsilon_l\geq0$ such that
+\begin{align}
+    \varepsilon_l
+    &<\frac{1}{\sqrt{l+1}}.
+    \label{eq:cpgsv21_martingale_overlap_c3_threshold}
+\end{align}
+The theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 combines Nachtergaele's projector-defect identity with the two-projection
-estimate proved here to give the corresponding anticommutator inequality for
-every left length.  For the final range-two argument, exact blocked three-site
-identities now connect the three-block defect to the local terms of the blocked
-tensor.  No excitation-compression estimate is used.
+estimate and proves the corresponding anticommutator inequality for every left
+length. Exact blocked three-site identities then connect the three-block defect
+to the local terms of the blocked tensor. No excitation-compression estimate
+is used.
 
 \subsection{Three-site to cyclic transport}
 
-The independent locality step is now complete for range-two terms.  If the two
-adjacent terms $h_0,h_1$ on the three-site Hilbert space satisfy
-\[
-  h_0h_1+h_1h_0\geq-c(h_0+h_1)
-\]
-in quadratic form, then
+Let $h_0,h_1$ be adjacent two-site terms on a three-site Hilbert space. Assume
+\begin{align}
+    h_0h_1+h_1h_0
+    &\geq-c(h_0+h_1)
+    \label{eq:cpgsv21_martingale_overlap_three_site_anticommutator}
+\end{align}
+in quadratic form. The theorems
 \leanid{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
 and
 \leanid{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
-transport the same inequality, with the same coefficient $c$, to every forward
-and backward adjacent cyclic pair on every chain of length $N\geq3$.  The proof
-splits the configuration basis into a cyclic three-site window and its ordered
-complement, applies the three-site estimate fiberwise through cyclic
-restriction, and sums over the complement.  Since the window may begin at any
-site, the result includes positions crossing the periodic cut; the backward
-statement begins the forward window at the cyclic predecessor.
+transport
+(\ref{eq:cpgsv21_martingale_overlap_three_site_anticommutator}), with the same
+coefficient $c$, to every forward and backward adjacent cyclic pair on every
+chain of length $N\geq3$. The proof decomposes the configuration basis into a
+cyclic three-site window and its ordered complement, applies the three-site
+estimate fiberwise through cyclic restriction, and sums over the complement.
+Arbitrary window starts cover the periodic cut; the backward theorem starts
+the forward window at the cyclic predecessor.
 
-The exact identification is
-\leanid{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq}.  It equates
-the three-site open-chain projector defect of $B=\operatorname{block}_p(A)$
-with the whole-block defect on three consecutive $p$-site regions of $A$.
-Together with
+The exact identification
+\leanid{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq} equates the
+three-site open-chain projector defect of
+$B=\operatorname{block}_p(A)$ with the whole-block defect on three consecutive
+$p$-site regions of $A$. Together with
 \leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths},
-it supplies the coefficient $7/16$ for the adjacent three-site terms of $B$.
-The two transport theorems above then cover every overlapping off-diagonal
-cyclic pair, including the periodic cut.  This argument does not claim the
-optimized FNW coefficient and does not use an excitation-compression surrogate.
+it gives
+\begin{align}
+    c&=\frac{7}{16}
+    \label{eq:cpgsv21_martingale_overlap_three_block_coefficient}
+\end{align}
+for adjacent three-site terms of $B$. The two transport theorems cover all
+overlapping off-diagonal cyclic pairs, including pairs across the periodic cut.
+This argument neither claims the optimized FNW coefficient nor uses an
+excitation-compression surrogate.
 
 \section{Finite-row martingale reduction}
 
-The current development separates the general finite-row martingale algebra from
-the completed range-two blocked MPS specialization. Fix an interaction range
-$L>1$ and an $N$-site periodic chain with $N\ge 2L$. Let $p_i$ denote the
-Hilbert-space representative of the length-$L$ local parent-Hamiltonian
-projection at the cyclic window starting at $i$. Write $i\sim_L j$ when the two
-length-$L$ cyclic windows intersect and $i\ne j$.
-For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
-\[
-    m=2(L-1).
-\]
-The row-sum reduction specializes the source coefficients to
-\[
-    c_{ij}=\frac{1}{2(L-1)}
-\]
-for overlapping cyclic windows and to $0$ otherwise. The row-cardinality bound
-then gives $\sum_j c_{ij}\le 1$.
+The formal development separates the general finite-row algebra from the
+completed range-two blocked MPS case. Fix $L>1$ and an $N$-site periodic chain
+with $N\geq2L$. Let $p_i$ be the Hilbert-space representative of the
+length-$L$ local parent-Hamiltonian projection on the cyclic window starting at
+$i$. Write $i\sim_Lj$ when the two windows intersect and $i\neq j$. Each row
+has at most
+\begin{align}
+    m&=2(L-1)
+    \label{eq:cpgsv21_martingale_overlap_overlap_row_cardinality}
+\end{align}
+such indices. Choose
+\begin{align}
+    c_{ij}
+    &:=
+    \begin{cases}
+        \dfrac{1}{2(L-1)},& i\sim_Lj,\\
+        0,&\text{otherwise}.
+    \end{cases}
+    \label{eq:cpgsv21_martingale_overlap_uniform_row_coefficient}
+\end{align}
+Then
+\begin{align}
+    \sum_jc_{ij}
+    &\leq1.
+    \label{eq:cpgsv21_martingale_overlap_row_sum_bound}
+\end{align}
 
-With this choice, the constant in the local statement is
-\[
-    \gamma_L=\frac{1}{4L}.
-\]
-The ordered overlapping estimate sufficient for the gap bound is
-\begin{equation}
-    \operatorname{Re}\langle p_i v,p_j v\rangle
-    \ge
-    -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-    \operatorname{Re}\langle p_i v,v\rangle
-    \tag{F}
-\end{equation}
-for every $N\ge 2L$, every off-diagonal overlapping pair $i\sim_L j$, and every
-vector $v$ in the finite chain Hilbert space. Given this estimate, the already
-formalized row-sum argument proves $H_{N,L}^2\ge \gamma_L H_{N,L}$, and hence a
-norm lower bound with constant $\gamma_L$ on the orthogonal complement of the
-ground space.
+Set
+\begin{align}
+    \gamma_L
+    &:=\frac{1}{4L}.
+    \label{eq:cpgsv21_martingale_overlap_special_gap_constant}
+\end{align}
+A sufficient ordered-overlap estimate is
+\begin{align}
+    \operatorname{Re}\langle p_iv,p_jv\rangle
+    &\geq
+      -\left(1-\frac{1}{4L}\right)
+       \frac{1}{2(L-1)}
+       \operatorname{Re}\langle p_iv,v\rangle
+    \label{eq:cpgsv21_martingale_overlap_ordered_cross_term}
+\end{align}
+for every $N\geq2L$, every $i\sim_Lj$, and every vector $v$. The formal
+row-sum argument then proves
+\begin{align}
+    H_{N,L}^2
+    &\geq\gamma_LH_{N,L},
+    \label{eq:cpgsv21_martingale_overlap_finite_row_gap}
+\end{align}
+and hence gives a norm lower bound with constant $\gamma_L$ on the orthogonal
+complement of the ground space.
 
-The proof also isolates a sufficient norm-compression form of the same
-input:
-\begin{equation}
-    \|p_i p_j v\|
-    \le
-    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-    \|p_i v\|.
-    \tag{N}
-\end{equation}
-For a symmetric projection $p_i$ one has
-\[
-    \operatorname{Re}\langle p_i v,p_j v\rangle
-    =\operatorname{Re}\langle p_i v,p_i p_j v\rangle
-    \ge -\|p_i v\| \|p_i p_j v\|.
-\]
-Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
-implies (F). This is a sufficient projection-geometry comparison used in the
-proof: a norm-compression estimate for each overlapping pair is converted
-by Cauchy--Schwarz to the ordered cross-term estimate, and the finite row-sum
-argument converts those ordered estimates into the global gap bound. The Lean
-development also records the source anticommutator row-sum reduction directly,
-without passing through this stronger one-sided estimate.\footnote{The
-    current formal anchors include the anticommutator row-sum reductions
+A stronger sufficient input is the directed norm-compression estimate
+\begin{align}
+    \lVert p_ip_jv\rVert
+    &\leq
+      \left(1-\frac{1}{4L}\right)
+      \frac{1}{2(L-1)}
+      \lVert p_iv\rVert.
+    \label{eq:cpgsv21_martingale_overlap_special_norm_compression}
+\end{align}
+Because $p_i$ is an orthogonal projection,
+\begin{align}
+    \operatorname{Re}\langle p_iv,p_jv\rangle
+    &=\operatorname{Re}\langle p_iv,p_ip_jv\rangle,
+    \label{eq:cpgsv21_martingale_overlap_projected_cross_term}\\
+    \operatorname{Re}\langle p_iv,p_ip_jv\rangle
+    &\geq-\lVert p_iv\rVert\lVert p_ip_jv\rVert,
+    \label{eq:cpgsv21_martingale_overlap_cross_term_cauchy_schwarz}\\
+    \operatorname{Re}\langle p_iv,v\rangle
+    &=\lVert p_iv\rVert^2.
+    \label{eq:cpgsv21_martingale_overlap_projection_quadratic_form}
+\end{align}
+Thus
+(\ref{eq:cpgsv21_martingale_overlap_special_norm_compression}) implies
+(\ref{eq:cpgsv21_martingale_overlap_ordered_cross_term}). The formal
+development also contains the source anticommutator row-sum argument directly,
+without this stronger one-sided estimate.\footnote{The formal anchors are
     \leanid{crossTerm_sum_bound_of_anticommutator_rowCol},
     \leanid{quadraticForm_sum_projections_of_anticommutator_rowCol}, and
     \leanid{parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}.
-    The finite-overlap anticommutator reductions are
+    The finite-overlap reductions are
     \leanid{quadraticForm_sum_projections_of_finite_overlap_anticommutator},
-    \leanid{parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}, and
+    \leanid{parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator},
+    and
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
-    The corresponding final gap statements are
+    The final gap statements are
     \leanid{parentHamiltonianES_gap_bound_of_anticommutator} and
     \leanid{parentHamiltonian_gapped_of_anticommutator} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
@@ -305,536 +362,640 @@ without passing through this stronger one-sided estimate.\footnote{The
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
     and
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
-    in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}. The
-    corresponding constant-$\eta$ reductions are
+    in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}.
+    The constant-$\eta$ reductions are
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
     in the same file and
     \leanid{parentHamiltonianES_gap_bound_of_overlap_norm_constant},
     \leanid{parentHamiltonian_gapped_of_overlap_norm_constant} in
-    \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The
-    projection-geometry reductions used by these statements are in
+    \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
+    The projection-geometry results are in
     \path{TNLean/Analysis/ProjectionGeometry.lean}. The declaration names
-    identify the intermediate ordered cross-term estimate and the sufficient
-    norm-compression estimates; this note uses ``anticommutator estimate'' for
-    the source condition and ``norm compression'' for the local sufficient
-    strengthening.}
+    distinguish the ordered cross-term estimate from the sufficient
+    norm-compression estimates. This note reserves ``anticommutator estimate''
+    for the source condition and ``norm compression'' for the stronger local
+    condition.}
 
-The anticommutator row-sum formulation, including its finite-overlap
-cyclic-window specialization, is now the formal condition matching the source.
-The flexible constant formulation records a sufficient norm-compression variant:
-instead of requiring the special coefficient in (N), it assumes that for some
-$\eta\ge 0$,
-\begin{equation}
-    \eta\,2(L-1)<1
-    \tag{E}
-\end{equation}
-and that every overlapping cyclic-window pair satisfies
-\begin{equation}
-    \|p_i p_j v\|\le \eta\|p_i v\|.
-    \tag{N$_\eta$}
-\end{equation}
-The finite-row argument then gives a positive gap with lower bound
-$1-\eta\,2(L-1)$. The special displayed estimate (N) is one sufficient choice
-of $\eta$, but the source comparison need only supply a compression constant
-strictly smaller than $1/(2(L-1))$ for the blocking convention used here.
+The finite-overlap cyclic anticommutator formulation is the formal condition
+that matches the source. A flexible norm-compression variant assumes
+$\eta\geq0$ and
+\begin{align}
+    2\eta(L-1)
+    &<1,
+    \label{eq:cpgsv21_martingale_overlap_eta_smallness}\\
+    \lVert p_ip_jv\rVert
+    &\leq\eta\lVert p_iv\rVert
+    \label{eq:cpgsv21_martingale_overlap_eta_norm_compression}
+\end{align}
+for all overlapping cyclic-window pairs. The row-sum argument then gives
+\begin{align}
+    \gamma
+    &=1-2\eta(L-1)>0.
+    \label{eq:cpgsv21_martingale_overlap_eta_gap}
+\end{align}
+Equation~(\ref{eq:cpgsv21_martingale_overlap_special_norm_compression}) is one
+possible specialization. The finite-row comparison only requires a compression
+constant below $1/(2(L-1))$ in the chosen blocking convention.
 
 \section{What remains to compare}
 
-The source discussion and the formal theorem are aligned at the qualitative
-level: both use the martingale expansion, non-negativity of non-overlapping
-terms, row-sum coefficients for overlapping terms, and principal-angle estimates
-for local ground spaces. The point still requiring a mathematical check is
-quantitative and conventional.
+The source and formal arguments agree qualitatively: both expand the
+frustration-free Hamiltonian, use positivity for non-overlapping terms, assign
+row-sum coefficients to overlapping terms, and control those terms through
+principal-angle geometry. The unresolved comparison concerns constants and
+blocking conventions.
 
-First, the source-matching formal theorem asks for the cyclic-window
-anticommutator estimate
-\[
-    p_i p_j+p_jp_i
-    \ge
-    -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}(p_i+p_j)
-\]
-for overlapping off-diagonal pairs. The review text states the same martingale
-condition with general coefficients $c_{ij}$ whose rows add to one, and it
-refers to blocking and principal angles to obtain a positive gap. It does not by
-itself identify the Fannes--Nachtergaele--Werner, Nachtergaele, or
-Kastoryano--Lucia estimates with this coefficient and this fixed cyclic-window
-convention. A proof may instead derive a row-sum anticommutator estimate with
-different positive constants and then specialize the final gap constant
-accordingly.
+The source-matching formal theorem assumes
+\begin{align}
+    p_ip_j+p_jp_i
+    &\geq
+      -\left(1-\frac{1}{4L}\right)
+       \frac{1}{2(L-1)}(p_i+p_j)
+    \label{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}
+\end{align}
+for every overlapping off-diagonal pair. The review states the corresponding
+criterion with general row-sum coefficients and invokes blocking and principal
+angles to obtain a gap~\cite[Section~IV.C]{Cirac2021Matrix}. It does not
+identify the estimates of
+Refs.~\cite{Fannes1992Finitely,Nachtergaele1996Spectral,Kastoryano2018Martingale}
+with this coefficient and cyclic-window convention. A proof could instead
+derive a different row-sum anticommutator estimate and adjust the final gap
+constant.
 
-Second, the blocking parameter in the cited martingale argument must be matched
-with the formal convention. The formal statement is uniform for all $N\ge 2L$
-and for the length-$L$ cyclic windows used in the formal finite-chain
-Hilbert-space realization. A source proof that produces some positive gap after
-increasing or changing the blocking may still be mathematically sufficient for the
-existential MPS gap theorem, but it would not immediately be the displayed
-all-$L$ estimate with constant $1/(4L)$ unless the constants are converted to
-the same blocking convention.
+The formal theorem is uniform for all $N\geq2L$ and uses length-$L$ cyclic
+windows in its finite-chain Hilbert-space model. A source proof that changes
+the blocking can still establish an existential MPS gap theorem, but it does
+not immediately imply
+(\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}) for every
+$L$.
 
-The general source comparison remains open at the level of the optimized FNW
-coefficient and its source constants.  It is no longer needed for the proved
-range-two blocked theorem: the exact three-site identification gives coefficient
-$7/16$, and cyclic transport gives every overlapping pair.  In particular,
+The optimized FNW coefficient and its source constants remain unmatched. This
+comparison is unnecessary for the proved range-two blocked theorem: the exact
+three-site identification gives $7/16$, and cyclic transport covers every
+overlap. The theorem
 \leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 shows that a Friedrichs bound $\eta$ for the two ground-space ranges, after
 removing their common intersection, gives
-\[
-  h_i h_j+h_jh_i\ge -\eta(h_i+h_j)
-\]
-for the complementary excitation projections. What remains open is whether the
-cited FNW--Nachtergaele--Kastoryano estimates recover their optimized numerator
-and source constants in the present Gram and blocking conventions.
-The qualitative fact that two finite-dimensional subspaces have a well-defined
-principal-angle decomposition is not enough: the martingale reduction needs a
-uniform numerical bound after the same blocking convention has been fixed.
+\begin{align}
+    h_ih_j+h_jh_i
+    &\geq-\eta(h_i+h_j)
+    \label{eq:cpgsv21_martingale_overlap_friedrichs_anticommutator}
+\end{align}
+for the complementary excitation projections. The remaining question is
+whether the cited estimates recover the optimized numerator and source
+constants in the present Gram and blocking conventions. Existence of a
+finite-dimensional principal-angle decomposition alone does not provide the
+required uniform numerical bound.
 
-The all-vector norm-compression theorem remains available as a stronger
-conditional implication: any estimate (N$_\eta$) with
-$\eta\,2(L-1)<1$ gives a positive gap through the already formalized reduction.
-It is not the source principal-angle target. There is, however, a directional point. If
-(N$_\eta$) is imposed for all vectors
-$v$, then $p_i v=0$ implies $p_i p_j v=0$. Thus $p_j$ maps $\ker p_i$ into
-$\ker p_i$. This is stronger than merely knowing that the
-smallest non-zero principal angle between the two local ground spaces is
-positive. A proof using compression must therefore identify a principal-angle
-estimate that gives the directed compressed-product bound (N$_\eta$). A direct
-proof can instead target the anticommutator form
-\[
-    h_i h_j+h_jh_i\ge -c_{ij}(1-\gamma)(h_i+h_j)
-\]
-used in \cite[Section~IV.C]{Cirac2021Matrix}.
+The all-vector condition
+(\ref{eq:cpgsv21_martingale_overlap_eta_norm_compression}) remains a stronger
+conditional route. If it holds for every $v$, then
+\begin{align}
+    p_iv=0
+    &\Longrightarrow p_ip_jv=0,
+    \label{eq:cpgsv21_martingale_overlap_compression_kernel_implication}\\
+    p_j(\ker p_i)
+    &\subseteq\ker p_i.
+    \label{eq:cpgsv21_martingale_overlap_compression_kernel_preservation}
+\end{align}
+This is stronger than positivity of the smallest nonzero principal angle
+between the local ground spaces. A compression proof must therefore derive the
+directed estimate
+(\ref{eq:cpgsv21_martingale_overlap_eta_norm_compression}); a source-faithful
+proof may instead target
+(\ref{eq:cpgsv21_martingale_overlap_source_anticommutator}).
 
-The development now also records the symmetric operator-product route. Instead of
-the directed bound (N$_\eta$), suppose the operator-product bound
-\[
-    \|p_i (p_j v)\|\le\eta\,\|p_j v\|
-    \tag{O$_\eta$}
-\]
-holds for all $v$, that is, a bound $\|p_i p_j\|\le\eta$ on the norm of the
-product. The identity
-$\operatorname{Re}\langle p_i v,p_j v\rangle
-=\operatorname{Re}\langle p_i v,p_i p_j v\rangle$, Cauchy--Schwarz, and the
-arithmetic--geometric mean inequality give, for $0\le\eta$,
-\[
-    \operatorname{Re}\langle p_i v,p_j v\rangle
-    +\operatorname{Re}\langle p_j v,p_i v\rangle
-    \ge -\eta\bigl(\|p_i v\|^2+\|p_j v\|^2\bigr),
-\]
-which is exactly the symmetric anticommutator estimate with coefficient $\eta$.
-The difference from (N$_\eta$) is which kernel the hypothesis constrains: imposed
-for all $v$, (N$_\eta$) forces $p_j(\ker p_i)\subseteq\ker p_i$, whereas (O$_\eta$)
-imposes no such preservation of $\ker p_i$. Through this conversion any (O$_\eta$)
-with $\eta\,2(L-1)<1$ yields the same positive gap $1-\eta\,2(L-1)$.
+The formal development also records a symmetric operator-product route. Assume
+\begin{align}
+    \lVert p_i(p_jv)\rVert
+    &\leq\eta\lVert p_jv\rVert
+    \label{eq:cpgsv21_martingale_overlap_operator_product_bound}
+\end{align}
+for every $v$, equivalently $\lVert p_ip_j\rVert\leq\eta$. By
+(\ref{eq:cpgsv21_martingale_overlap_projected_cross_term}),
+Cauchy--Schwarz, and the arithmetic--geometric mean inequality,
+\begin{align}
+    \operatorname{Re}\langle p_iv,p_jv\rangle +\operatorname{Re}\langle p_jv,p_iv\rangle
+    &\geq
+      -\eta(\lVert p_iv\rVert^2+\lVert p_jv\rVert^2).
+    \label{eq:cpgsv21_martingale_overlap_operator_product_anticommutator}
+\end{align}
+Thus
+(\ref{eq:cpgsv21_martingale_overlap_operator_product_bound}) and
+(\ref{eq:cpgsv21_martingale_overlap_eta_smallness}) imply
+(\ref{eq:cpgsv21_martingale_overlap_eta_gap}). Unlike
+(\ref{eq:cpgsv21_martingale_overlap_eta_norm_compression}), this hypothesis
+does not force preservation of $\ker p_i$.
 
-This removes the kernel-preservation artefact of (N$_\eta$), but it does not make
-the hypothesis achievable for the MPS application, and (O$_\eta$) must not be
-identified with the cited principal-angle estimate. The symbols $p_i=h_i$ here are
-the \emph{excitation} projections (the local parent-Hamiltonian terms), not the
-ground-space projectors $q_i$ of \S1. The Kastoryano--Lucia quantity
-$\delta(\ell)=\|q_iq_j-P\|$ bounds the principal angle between the two local
-\emph{ground} spaces, while $\|p_ip_j\|$ is the cosine of the smallest principal
-angle between the two \emph{excitation} ranges; these are different quantities. If
-the two overlapping excitation ranges share any nonzero vector then
-$\|p_ip_j\|=1$, so (O$_\eta$) with $\eta<1$ is unsatisfiable, and the target
-$\eta<1/(2(L-1))$ cannot follow from the ground-space intersection estimate without
-an additional quotient or disjointness argument. Like (N$_\eta$), the
-operator-product bound is therefore a \emph{conditional} reduction recorded in the
-formal development, not an achievable source-faithful estimate. The abstract
-conversion is \leanid{re_inner_anticommutator_ge_neg_of_norm_apply_le}; the
-cyclic-window entry points are
+The operator-product condition is nevertheless not the source principal-angle
+estimate. Here $p_i=h_i$ are excitation projections, whereas
+(\ref{eq:cpgsv21_martingale_overlap_ground_projector_defect}) concerns
+ground-space projectors. The quantity $\lVert p_ip_j\rVert$ is the cosine of
+the smallest principal angle between the excitation ranges. If those ranges
+share a nonzero vector, then
+\begin{align}
+    \lVert p_ip_j\rVert
+    &=1.
+    \label{eq:cpgsv21_martingale_overlap_excitation_product_unit_norm}
+\end{align}
+Consequently, the target $\eta<1/(2(L-1))$ cannot follow from a ground-space
+intersection estimate without an additional quotient or disjointness
+argument. Both norm conditions are conditional formal reductions, not
+achievable source-faithful estimates in the generic overlapping case.
+
+The abstract conversion is
+\leanid{re_inner_anticommutator_ge_neg_of_norm_apply_le}. The cyclic-window
+entry points are
 \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
 and
-\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt},
-with public reformulations
+\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt};
+the public reformulations are
 \leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
 \leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. For the
-blocked range-two theorem, the exact three-site projector identity and the
-forward and backward adjacent-pair transports replace this conditional route.
-The generic theorem
+blocked range-two theorem, the exact three-site identity and the forward and
+backward transport results replace this conditional route. The theorem
 \leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
-then supplies the excitation-projection anticommutator estimate. This route uses
-the intersection identity $\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
-\leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; a uniform
-small bound on $\|p_ip_j\|$ itself is not available in the generic overlapping
-case, since that norm is $1$ whenever the two excitation ranges have a common
-nonzero vector.
+uses the intersection identity
+(\ref{eq:cpgsv21_martingale_overlap_common_ground_space}), equivalently
+\leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; it does not
+require a small bound on $\lVert p_ip_j\rVert$.
 
 \section{Relation to the blueprint}
 
-The blueprint item labelled \path{thm:martingale_mps} in
+The Blueprint item \path{thm:martingale_mps} in
 \path{blueprint/src/chapter/ch13_parent_hamiltonian_spectral_gap_martingale.tex}
-records the completed blocked range-two theorem.  For a primitive tensor with a
-positive-definite fixed point it chooses $p>0$, sets
-$B=\operatorname{block}_p(A)$, and proves a gap lower bound $1/8$ for
-$H_{N,2}(B)$ for every $N\ge4$.  Its preceding item records the exact
-three-site projector identification and the transport of the $7/16$ adjacent
-anticommutator estimate to every cyclic overlap.
+records the completed blocked range-two theorem. For a primitive tensor with a
+positive-definite fixed point, it chooses $p>0$, defines
+$B=\operatorname{block}_p(A)$, and proves
+\begin{align}
+    \operatorname{gap}(H_{N,2}(B))
+    &\geq\frac{1}{8},
+    &
+    N&\geq4.
+    \label{eq:cpgsv21_martingale_overlap_blocked_range_two_gap}
+\end{align}
+The preceding Blueprint item records the exact three-site projector identity
+and the transport of the $7/16$ adjacent anticommutator estimate to every
+cyclic overlap.
 
-The source-matching theorem entry
-\path{thm:anticommutator_gap_bound} points to
+The source-matching entry \path{thm:anticommutator_gap_bound} points to
 \leanid{parentHamiltonianES_gap_bound_of_anticommutator} in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. Its hypothesis is the
-cyclic-window anticommutator lower bound with coefficient
-\[
-    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}.
-\]
-The theorem entries
+\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}; its hypothesis is
+(\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}). The entries
 \path{thm:overlap_norm_gap_bound} and
-\path{thm:overlap_norm_gap_bound_constant} point respectively to the special
-coefficient theorem and to the constant-$\eta$ theorem in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}. The special coefficient
-theorem is the specialization of the constant-$\eta$ theorem with
-\[
-    \eta=\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
-    \qquad
-    1-\eta\,2(L-1)=\frac{1}{4L}.
-\]
-The two norm-compression theorem entries are therefore conditional on the same
-stronger input, specialized either to this displayed coefficient or to an
-arbitrary coefficient satisfying (E). Thus all finite-row, cyclic-window,
-non-overlap, anticommutator, norm-compression, and spectral-theorem reductions
-are proved, and the blocked
-range-two MPS specialization is complete.  The all-vector compression bound
-(N$_\eta$), if separately assumed, remains only a stronger conditional estimate.
-The separate open problem is to compare the blocked Hamiltonian with a parent
-interaction for the original tensor in original-site units, as recorded under
+\path{thm:overlap_norm_gap_bound_constant} point to the special and
+constant-$\eta$ norm-compression theorems in the same file. The special theorem
+uses
+\begin{align}
+    \eta
+    &=
+      \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)},
+    \label{eq:cpgsv21_martingale_overlap_special_eta}\\
+    1-2\eta(L-1)
+    &=\frac{1}{4L}.
+    \label{eq:cpgsv21_martingale_overlap_special_eta_gap}
+\end{align}
+These norm-compression theorems remain conditional on the stronger input. The
+finite-row, cyclic-window, non-overlap, anticommutator, norm-compression, and
+spectral reductions are formalized, and the blocked range-two MPS
+specialization is complete. Comparing the blocked Hamiltonian with an
+original-tensor parent interaction in original-site units is tracked under
 issue~\#5926.
 
 \section{Conclusion}
 
-The source states the martingale condition in terms of general row-sum
-coefficients and invokes principal-angle estimates to obtain a positive MPS
-parent-Hamiltonian gap. The formal proof contains the direct finite-overlap
-anticommutator reduction for cyclic windows and specializes it to the blocked
-range-two tensor with adjacent-pair coefficient $7/16$, giving gap $1/8$. It
-also records the stronger
-norm-compression route
-\[
-    \|p_i p_j v\|\le \eta\|p_i v\|,
-    \qquad
-    \eta\,2(L-1)<1.
-\]
-The earlier coefficient
-\[
-    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-\]
-is a sufficient special case for this stronger route, not the only possible way
-to use the formal martingale reduction.
+The source states the martingale condition with general row-sum coefficients
+and invokes principal-angle estimates to prove a positive MPS
+parent-Hamiltonian gap~\cite[Section~IV.C]{Cirac2021Matrix}. The formal proof
+contains the direct finite-overlap anticommutator reduction for cyclic windows.
+For a suitable blocked range-two tensor, the coefficient $7/16$ gives the gap
+$1/8$. The stronger conditional norm-compression route assumes
+\begin{align}
+    \lVert p_ip_jv\rVert
+    &\leq\eta\lVert p_iv\rVert,
+    &
+    2\eta(L-1)&<1.
+    \label{eq:cpgsv21_martingale_overlap_conclusion_compression}
+\end{align}
+The coefficient in
+(\ref{eq:cpgsv21_martingale_overlap_special_eta}) is one sufficient choice,
+not the only usable martingale coefficient.
 
-The Cirac--Perez-Garcia--Schuch--Verstraete 2021 statement is not being
-challenged.  The formal result gives a sufficient explicit constant for the
-range-two parent Hamiltonian after blocking.  Recovering the optimized FNW
-numerator and its source constants remains a separate comparison.
+The statement of Ref.~\cite{Cirac2021Matrix} is not challenged. The formal
+development proves a sufficient explicit estimate for a range-two parent
+Hamiltonian after blocking. Recovering the optimized FNW numerator and its
+source constants is a separate comparison.
 
 \section{Inverse-Gram reduction and the remaining optimized FNW comparison}
 
-For $n\ge1$, write $[n]:=\{0,\ldots,n-1\}$.  Fix an MPS tensor
-$A=\{A^s\}_{s\in[d]}$ with $A^s\in\mathbb C^{D\times D}$.  For
-$a,b\in[D]$, let $E_{ab}$ be the matrix unit with its only nonzero entry,
-equal to one, in row $a$ and column $b$.  The transfer map and its $L$-fold
-composition are
+For $n\geq1$, define
 \begin{align}
-  \mathcal E_A(X)
-    &:=\sum_{s\in[d]}A^sX(A^s)^\dagger,
-  &
-  \mathcal E_A^L
-    &:=\underbrace{\mathcal E_A\circ\cdots\circ\mathcal E_A}_{L\text{ factors}}.
+    [n]
+    &:=\{0,\ldots,n-1\}.
+    \label{eq:cpgsv21_martingale_overlap_finite_index_notation}
 \end{align}
-For a linear map $T\colon\mathbb C^{D\times D}\to
-\mathbb C^{D\times D}$, this note uses the rectangular Choi convention
+Fix an MPS tensor $A=\{A^s\}_{s\in[d]}$ with
+$A^s\in\mathbb C^{D\times D}$. For $a,b\in[D]$, let $E_{ab}$ be the matrix
+unit with its unique nonzero entry in row $a$ and column $b$. Define the
+transfer map and its $L$-fold composition by
 \begin{align}
-  J(T)_{(i,a),(j,b)}
+    \mathcal E_A(X)
+    &:=\sum_{s\in[d]}A^sX(A^s)^\dagger,
+    \label{eq:cpgsv21_martingale_overlap_transfer_map}\\
+    \mathcal E_A^L
+    &:=\underbrace{\mathcal E_A\circ\cdots\circ\mathcal E_A}
+       _{L\text{ factors}}.
+    \label{eq:cpgsv21_martingale_overlap_transfer_power}
+\end{align}
+For a linear map
+$T\colon\mathbb C^{D\times D}\to\mathbb C^{D\times D}$, use the rectangular
+Choi convention
+\begin{align}
+    J(T)_{(i,a),(j,b)}
     &:=(T(E_{ij}))_{a,b}.
+    \label{eq:cpgsv21_martingale_overlap_rectangular_choi}
 \end{align}
 
-The open-chain boundary map is
+Define the open-chain boundary map by
 \begin{align}
-  \Gamma_L(X)(\sigma)
-    &:=\operatorname{tr}(A^\sigma X).
+    \Gamma_L(X)(\sigma)
+    &:=\tr(A^\sigma X).
+    \label{eq:cpgsv21_martingale_overlap_boundary_map}
 \end{align}
 Let $U\colon\mathbb C^{D\times D}\to\ell^2([D]\times[D])$ be Frobenius
-vectorization, so that $U(E_{ab})=\mathbf e_{(b,a)}$ for the standard unit
-vector $\mathbf e_{(b,a)}$.  After the canonical physical $\ell^2$
-identification, write $\Gamma_L^{\mathrm{ES}}$ for the transported boundary
-map and
+vectorization, normalized by
 \begin{align}
-  \mathcal K_L
-    &:=(\Gamma_L^{\mathrm{ES}})^\dagger\Gamma_L^{\mathrm{ES}}.
+    U(E_{ab})
+    &=\mathbf e_{(b,a)}.
+    \label{eq:cpgsv21_martingale_overlap_frobenius_vectorization}
 \end{align}
-Its finite-dimensional Hilbert realization, exact range, and Gram operator are
-recorded by \leanid{MPSTensor.groundSpaceMapES},
+After the canonical physical $\ell^2$ identification, let
+$\Gamma_L^{\mathrm{ES}}$ denote the transported boundary map and set
+\begin{align}
+    \mathcal K_L
+    &:=
+      (\Gamma_L^{\mathrm{ES}})^\dagger\Gamma_L^{\mathrm{ES}}.
+    \label{eq:cpgsv21_martingale_overlap_ground_space_gram}
+\end{align}
+The finite-dimensional realization, range, and Gram operator are
+\leanid{MPSTensor.groundSpaceMapES},
 \leanid{MPSTensor.range_groundSpaceMapES}, and
-\leanid{MPSTensor.groundSpaceGram}.  With the coordinate order just fixed, the
-exact identity is
+\leanid{MPSTensor.groundSpaceGram}. In the chosen coordinate order,
 \begin{align}
-  \left\langle \mathbf e_{(b,a)},
-    \mathcal K_L(\mathbf e_{(e,c)})\right\rangle_{\ell^2}
-    &=J(\mathcal E_A^L)_{(c,e),(a,b)}
-      =(\mathcal E_A^L(E_{ca}))_{e,b}.
+    \left\langle
+      \mathbf e_{(b,a)},\mathcal K_L\mathbf e_{(e,c)}
+    \right\rangle_{\ell^2}
+    &=J(\mathcal E_A^L)_{(c,e),(a,b)},
+    \label{eq:cpgsv21_martingale_overlap_gram_choi_entry}\\
+    J(\mathcal E_A^L)_{(c,e),(a,b)}
+    &=(\mathcal E_A^L(E_{ca}))_{e,b}.
+    \label{eq:cpgsv21_martingale_overlap_gram_transfer_entry}
 \end{align}
-This is \leanid{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}.
-For any matrix endomorphism $\mathcal L$, let $\mathscr R(\mathcal L)$ be the
-Euclidean operator with matrix entries
+This is
+\leanid{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}.
+
+For a matrix endomorphism $\mathcal L$, define its Euclidean reshuffling by
 \begin{align}
-  \mathscr R(\mathcal L)_{(b,a),(e,c)}
-    &:=J(\mathcal L)_{(c,e),(a,b)}.
+    \mathscr R(\mathcal L)_{(b,a),(e,c)}
+    &:=
+      J(\mathcal L)_{(c,e),(a,b)}.
+    \label{eq:cpgsv21_martingale_overlap_gram_reshuffling}
 \end{align}
-The algebraic matrix $R(\mathcal L)$ with these entries is
-\leanid{Matrix.gramReshuffleMatrix}, and the operator
-$\mathscr R(\mathcal L)$ is \leanid{Matrix.gramReshuffle}.  The entrywise
-Frobenius squared sum is invariant under this reshuffling
-(\leanid{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}).
-The generic Euclidean estimate
-\leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq} proves, for every finite
-index set $I$ and every complex matrix $B\in\mathbb C^{I\times I}$,
+The corresponding algebraic matrix is
+\leanid{Matrix.gramReshuffleMatrix}, and the operator is
+\leanid{Matrix.gramReshuffle}. The theorem
+\leanid{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq} proves
+that reshuffling preserves the entrywise Frobenius squared sum.
+
+For every finite set $I$ and $B\in\mathbb C^{I\times I}$,
+\leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq} gives
 \begin{align}
-  \lVert B\rVert_{\ell^2(I)\to\ell^2(I)}^2
-  &\leq \sum_{i,j\in I}\lvert B_{ij}\rvert^2.
+    \lVert B\rVert_{\ell^2(I)\to\ell^2(I)}^2
+    &\leq\sum_{i,j\in I}\lvert B_{ij}\rvert^2.
+    \label{eq:cpgsv21_martingale_overlap_matrix_operator_frobenius_bound}
 \end{align}
-Combining these two facts gives the completed reshuffled-Choi corollary
+Together with reshuffling invariance of the entrywise sum, this gives
 \leanid{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}:
 \begin{align}
-  \lVert\mathscr R(\mathcal L)\rVert_{
-    \ell^2(I\times I)\to\ell^2(I\times I)}^2
-  &\leq \sum_{u,v\in I\times I}
-    \lvert J(\mathcal L)_{u,v}\rvert^2.
+    \lVert\mathscr R(\mathcal L)\rVert_{
+      \ell^2(I\times I)\to\ell^2(I\times I)}^2
+    &\leq
+      \sum_{u,v\in I\times I}\lvert J(\mathcal L)_{u,v}\rvert^2.
+    \label{eq:cpgsv21_martingale_overlap_reshuffled_choi_bound}
 \end{align}
-The remaining generic conversion is also complete.  Equip
-$\mathbb C^{I\times I}$ with its $L^2$ operator norm and write
-$\lVert\mathcal L\rVert_{\mathrm{op},L^2}$ for the resulting operator norm of
-$\mathcal L$.  The column estimate
-\leanid{Matrix.sum_column_norm_sq_le_norm_sq}, its entrywise consequence
-\leanid{Matrix.sum_entry_norm_sq_le_card_mul_norm_sq}, and the matrix-unit
-normalization \leanid{Matrix.l2_opNorm_single_one} give
+
+Equip $\mathbb C^{I\times I}$ with its $L^2$ operator norm and denote the
+induced norm of $\mathcal L$ by
+$\lVert\mathcal L\rVert_{\mathrm{op},L^2}$. The results
+\leanid{Matrix.sum_column_norm_sq_le_norm_sq},
+\leanid{Matrix.sum_entry_norm_sq_le_card_mul_norm_sq}, and
+\leanid{Matrix.l2_opNorm_single_one} imply
 \leanid{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}:
 \begin{align}
-  \lVert\mathscr R(\mathcal L)\rVert_{
-    \ell^2(I\times I)\to\ell^2(I\times I)}^2
-  &\leq |I|^3\,\lVert\mathcal L\rVert_{\mathrm{op},L^2}^2.
+    \lVert\mathscr R(\mathcal L)\rVert_{
+      \ell^2(I\times I)\to\ell^2(I\times I)}^2
+    &\leq
+      |I|^3\lVert\mathcal L\rVert_{\mathrm{op},L^2}^2.
+    \label{eq:cpgsv21_martingale_overlap_reshuffling_dimension_bound}
 \end{align}
-Thus for $I=\Fin D$ the corresponding norm factor is $D^{3/2}$.  This is a
-safe generic dimension conversion.  It is not claimed sharp, and it is not
-identified with the coefficient in the FNW weighted-Gram estimate.
+For $I=\Fin{D}$, this gives the norm factor $D^{3/2}$. It is a safe generic
+bound, not a sharp estimate or the coefficient in the FNW weighted-Gram
+argument.
 
-Reshuffling is still not operator-norm invariant and need not preserve singular
-values.  The identity map gives the basic boundary: its operator norm on
-$\mathbb C^{D\times D}$ is one, whereas
-$\lVert\mathscr R(\mathrm{id})\rVert=D$ for $D>0$.  Hence the preceding
-$D^{3/2}$ factor is an upper bound, not an invariance statement or a source
-constant.
-
-\leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} upgrades the coordinate
-identity to the exact operator equality
+Reshuffling does not preserve operator norms or singular values. For the
+identity map,
 \begin{align}
-  \mathcal K_L&=\mathscr R(\mathcal E_A^L).
+    \lVert\mathrm{id}\rVert_{\mathrm{op},L^2}
+    &=1,
+    \label{eq:cpgsv21_martingale_overlap_identity_map_norm}\\
+    \lVert\mathscr R(\mathrm{id})\rVert
+    &=D
+    \qquad(D>0).
+    \label{eq:cpgsv21_martingale_overlap_identity_reshuffling_norm}
 \end{align}
-The ordering is a Choi reshuffling.  It must not be replaced by the generally
+Thus the $D^{3/2}$ factor is an upper bound rather than an invariance result.
+
+The theorem
+\leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} upgrades the coordinate
+formula to
+\begin{align}
+    \mathcal K_L
+    &=\mathscr R(\mathcal E_A^L).
+    \label{eq:cpgsv21_martingale_overlap_exact_gram_reshuffling}
+\end{align}
+The ordering is a Choi reshuffling and cannot be replaced by the generally
 false Hilbert--Schmidt expression
-$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.  Reshuffling commutes with subtraction by
-\leanid{Matrix.gramReshuffle_sub}.  Physical Gram convergence in these
-coordinates is now complete under the exact complementary spectral hypothesis.
-Let $\rho\in\mathbb C^{D\times D}$ have nonzero trace, let
-$P_\rho(X)=\operatorname{tr}(X)\rho/\operatorname{tr}(\rho)$, and
-suppose that $\mathcal E_A$ is trace-preserving,
+$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$. The theorem
+\leanid{Matrix.gramReshuffle_sub} proves compatibility with subtraction.
+
+Let $\rho\in\mathbb C^{D\times D}$ have nonzero trace and define
+\begin{align}
+    P_\rho(X)
+    &:=
+      \frac{\tr(X)}{\tr(\rho)}\rho.
+    \label{eq:cpgsv21_martingale_overlap_fixed_point_projection}
+\end{align}
+Assume that $\mathcal E_A$ is trace-preserving,
 $\mathcal E_A(\rho)=\rho$, and
 \begin{align}
-  \rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)&<1.
+    \rho_{\mathrm{spec}}(\mathcal E_A-P_\rho)
+    &<1.
+    \label{eq:cpgsv21_martingale_overlap_complement_spectral_radius}
 \end{align}
-The generic prerequisite
-\leanid{geometric_bound_of_spectralRadius_lt_one} gives constants
-$C>0$ and $0<r<1$ with
-$\lVert(\mathcal E_A-P_\rho)^n\rVert\le Cr^n$ for every $n$.
-Combining the transfer-power decomposition, the exact Gram reshuffling identity,
-subtraction compatibility, and the $D^3$ squared norm conversion gives
+The theorem \leanid{geometric_bound_of_spectralRadius_lt_one} gives
+$C>0$ and $0<r<1$ such that
+\begin{align}
+    \lVert(\mathcal E_A-P_\rho)^n\rVert
+    &\leq Cr^n
+    \qquad(n\in\mathbb N).
+    \label{eq:cpgsv21_martingale_overlap_geometric_transfer_bound}
+\end{align}
+The transfer-power decomposition, exact reshuffling identity, subtraction
+compatibility, and dimension estimate give
 \leanid{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}:
 \begin{align}
-  \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
-  &\le D^3\bigl(Cr^n\bigr)^2,
-  \qquad n\ge1.
+    \lVert\mathcal K_n-\mathscr R(P_\rho)\rVert^2
+    &\leq D^3(Cr^n)^2
+    \qquad(n\geq1).
+    \label{eq:cpgsv21_martingale_overlap_gram_geometric_bound}
 \end{align}
 Consequently,
-\leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
-proves
+\leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj} proves
 \begin{align}
-  \mathcal K_n&\longrightarrow\mathscr R(P_\rho)
+    \mathcal K_n
+    &\longrightarrow\mathscr R(P_\rho)
+    \label{eq:cpgsv21_martingale_overlap_gram_limit}
 \end{align}
-in operator norm.  These theorems require exactly nonzero trace,
-trace preservation, the fixed-point equation, and complementary spectral radius
-strictly below one.  They impose no positivity, injectivity, or uniqueness
-hypothesis.
+in operator norm. These results require only nonzero trace, trace preservation,
+the fixed-point equation, and complementary spectral radius below one. They do
+not assume positivity, injectivity, or uniqueness.
 
-The limiting Gram operator is $\mathscr R(P_\rho)$, generally not the
-identity in the current unweighted Frobenius coordinates.  Its exact action is
-right multiplication in the Frobenius vectorization $U$ defined above,
+The limiting Gram is generally not the identity. Its action is right
+multiplication in the vectorization $U$:
 \begin{align}
-  \mathscr R(P_\rho)U(X)
-  &=U\!\left(\frac{X\rho}{\operatorname{tr}\rho}\right).
+    \mathscr R(P_\rho)U(X)
+    &=
+      U\left(\frac{X\rho}{\tr\rho}\right).
+    \label{eq:cpgsv21_martingale_overlap_limiting_gram_action}
 \end{align}
-This identity is
+This is
 \leanid{Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply}.
-Hence a positive-definite fixed point makes the limiting Gram invertible.  The
-correct perturbation is around $\mathscr R(P_\rho)$, not around the identity.
+A positive-definite $\rho$ makes the limiting Gram invertible, so perturbation
+must be centered at $\mathscr R(P_\rho)$ rather than at the identity.
 
-The generic identity
+For an injective finite-dimensional map $T$, the generic range-projector
+identity is
 \begin{align}
-  P_{\operatorname{ran}T}
-    &=T(T^\dagger T)^{-1}T^\dagger
+    P_{\operatorname{ran}T}
+    &=T(T^\dagger T)^{-1}T^\dagger.
+    \label{eq:cpgsv21_martingale_overlap_injective_range_projector}
 \end{align}
-for injective finite-dimensional maps is
-\leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}, and the
-denominator estimate $\|(1-t)^{-1}\|\le(1-a)^{-1}$ under
-$\|t\|\le a<1$ is \leanid{NormedRing.norm_inverse_one_sub_le}.  For an injective
-$T$, write $S_T:=(T^\dagger T)^{-1}$ for its inverse Gram operator.  The identities
+It is formalized as
+\leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}. The
+estimate
+\begin{align}
+    \lVert(1-t)^{-1}\rVert
+    &\leq\frac{1}{1-a}
+    \qquad
+    \text{if }\lVert t\rVert\leq a<1
+    \label{eq:cpgsv21_martingale_overlap_neumann_inverse_bound}
+\end{align}
+is \leanid{NormedRing.norm_inverse_one_sub_le}.
+
+Set
+\begin{align}
+    S_T
+    &:=(T^\dagger T)^{-1}.
+    \label{eq:cpgsv21_martingale_overlap_inverse_gram_definition}
+\end{align}
+The identities
 \leanid{ContinuousLinearMap.inverseGram_comp_adjoint_comp_self} and
 \leanid{ContinuousLinearMap.adjoint_comp_self_comp_inverseGram} show that
-$S_T$ is both a left and right inverse of $T^\dagger T$.
-The theorem \leanid{ContinuousLinearMap.inverseGram_eq_ringInverse} identifies
-it with the canonical ring inverse.  Consequently,
+$S_T$ is a two-sided inverse of $T^\dagger T$, and
+\leanid{ContinuousLinearMap.inverseGram_eq_ringInverse} identifies it with the
+ring inverse. Hence
 \leanid{ContinuousLinearMap.norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le}
-proves directly that
+proves
 \begin{align}
-  \lVert S_T\rVert&\le (1-a)^{-1}
+    \lVert S_T\rVert
+    &\leq\frac{1}{1-a}
+    \qquad
+    \text{if }\lVert1-T^\dagger T\rVert\leq a<1.
+    \label{eq:cpgsv21_martingale_overlap_inverse_gram_identity_bound}
 \end{align}
-whenever $\lVert 1-T^\dagger T\rVert\le a<1$.
 
-Suppose that $L_0>0$ and that $A$ is $L_0$-block injective.  Block
-injectivity then makes the Hilbert-space boundary map injective at every length
-$L\ge L_0$; this is recorded by
+Assume that $L_0>0$ and $A$ is $L_0$-block injective. The theorems
 \leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective} and
-\leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}.
-Writing $\mathcal G_L^{\mathrm{ES}}(A)$ for the physical local ground space, the
-specialization
+\leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le} show
+that $\Gamma_L^{\mathrm{ES}}$ is injective for every $L\geq L_0$. Therefore
 \leanid{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
-therefore proves, for every $L\ge L_0$, the exact physical formula
+gives
 \begin{align}
-  P_{\mathcal G_L^{\mathrm{ES}}(A)}
-    &=\Gamma_L^{\mathrm{ES}}\mathcal K_L^{-1}
-      (\Gamma_L^{\mathrm{ES}})^\dagger.
+    P_{\mathcal G_L^{\mathrm{ES}}(A)}
+    &=
+      \Gamma_L^{\mathrm{ES}}\mathcal K_L^{-1}
+      (\Gamma_L^{\mathrm{ES}})^\dagger
+    \qquad(L\geq L_0).
+    \label{eq:cpgsv21_martingale_overlap_physical_inverse_gram_projector}
 \end{align}
-This is the orthogonal projector onto
-$\operatorname{ran}\Gamma_L^{\mathrm{ES}}$.  It is not the transfer fixed-point
-projector \leanid{fixedPointProj}; the latter acts on the virtual matrix space
-and cannot substitute for the inverse-Gram formula.
+This is the projector onto
+$\operatorname{ran}\Gamma_L^{\mathrm{ES}}$. It is not
+\leanid{fixedPointProj}, which acts on the virtual matrix space.
 
-To state the source estimate, let $l\in\mathbb N$ be the overlap length and let
-$0\le\lambda<1$ be an admissible transfer-mixing rate satisfying
-$|\mu|<\lambda$ for every non-unit eigenvalue $\mu$ of the relevant transfer
-operator.  Let $c\ge0$ be its prefactor; the source allows $c=k^2$ when $k$ is
-the auxiliary, or bond, dimension.  Choose $l$ so that $c\lambda^l<1$.  These
-are parameters of the quoted FNW estimate, not bounds derived by the present
+To state the source estimate, let $l\in\mathbb N$ be the overlap length. Let
+$0\leq\lambda<1$ satisfy $|\mu|<\lambda$ for every non-unit eigenvalue $\mu$
+of the relevant transfer operator, and let $c\geq0$ be its prefactor. The
+source permits $c=k^2$, where $k$ is the bond dimension
+\cite[Section~6]{Nachtergaele1996Spectral}. Choose $l$ such that
+\begin{align}
+    c\lambda^l
+    &<1.
+    \label{eq:cpgsv21_martingale_overlap_source_transfer_smallness}
+\end{align}
+These are parameters of the quoted FNW estimate, not estimates derived by the
 formal development.
 
-What remains open is the source-specific comparison of these exact inverse-Gram
-range projectors on the two overlapping physical windows.  The completed exact
-and generic prerequisites now include:
+The source-specific comparison of the exact inverse-Gram range projectors on
+overlapping physical windows remains open. The following prerequisites and
+partial results are complete.
+
 \begin{itemize}
-  \item The Choi reshuffling is packaged as the exact operator identity
-    \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} (module
-    \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}), and subtraction
+    \item The exact Choi reshuffling is
+    \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} in
+    \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}; subtraction
     compatibility is \leanid{Matrix.gramReshuffle_sub}.
-  \item The generic geometric power estimate is
-    \leanid{geometric_bound_of_spectralRadius_lt_one}.  Under nonzero
-    trace, trace preservation, the fixed-point equation, and complementary
-    spectral radius below one, the quantitative and limiting physical Gram
-    theorems are
+
+    \item The geometric power estimate is
+    \leanid{geometric_bound_of_spectralRadius_lt_one}. Under the hypotheses
+    stated before
+    (\ref{eq:cpgsv21_martingale_overlap_complement_spectral_radius}), the
+    quantitative and limiting Gram results are
     \leanid{MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     and
     \leanid{MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}.
-    Their limit is $\mathscr R(P_\rho)$, and the quantitative squared
-    estimate has factor $D^3(Cr^n)^2$.
-  \item The reconstructed quantitative inverse infrastructure is
+    Their limit is $\mathscr R(P_\rho)$, and the squared estimate has factor
+    $D^3(Cr^n)^2$.
+
+    \item The quantitative inverse results are
     \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
     and
     \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}.
-    Assume that the bond dimension is nonzero and that the primitive fixed-point
-    witness $\rho$ is explicitly positive definite.  Set
+    Assume that the bond dimension is nonzero and that the primitive
+    fixed-point witness $\rho$ is positive definite. Define
     \begin{align}
-      \mathcal K_\infty&=\mathscr R(P_\rho),&
-      \mathcal I_\infty&=\mathcal K_\infty^{-1}.
+        \mathcal K_\infty
+        &:=\mathscr R(P_\rho),
+        \label{eq:cpgsv21_martingale_overlap_limiting_gram}\\
+        \mathcal I_\infty
+        &:=\mathcal K_\infty^{-1}.
+        \label{eq:cpgsv21_martingale_overlap_limiting_inverse_gram}
     \end{align}
     Then there are $g,c,r>0$, with $r<1$ and
-    $c=\lVert\mathcal I_\infty\rVert g$, such that for every $n\geq1$,
     \begin{align}
-      \lVert\mathcal K_n-\mathcal K_\infty\rVert&\leq gr^n.
+        c
+        &=\lVert\mathcal I_\infty\rVert g,
+        \label{eq:cpgsv21_martingale_overlap_inverse_perturbation_constant}\\
+        \lVert\mathcal K_n-\mathcal K_\infty\rVert
+        &\leq gr^n
+        \qquad(n\geq1).
+        \label{eq:cpgsv21_martingale_overlap_gram_norm_geometric_bound}
     \end{align}
     If $cr^n<1$, then $\mathcal K_n$ is invertible and
     \begin{align}
-      \lVert\mathcal K_n^{-1}\rVert
-      &\leq\frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},\\
-      \lVert\mathcal K_n^{-1}-\mathcal I_\infty\rVert
-      &\leq\frac{cr^n}{1-cr^n}\lVert\mathcal I_\infty\rVert.
+        \lVert\mathcal K_n^{-1}\rVert
+        &\leq
+          \frac{\lVert\mathcal I_\infty\rVert}{1-cr^n},
+        \label{eq:cpgsv21_martingale_overlap_inverse_gram_bound}\\
+        \lVert\mathcal K_n^{-1}-\mathcal I_\infty\rVert
+        &\leq
+          \frac{cr^n}{1-cr^n}\lVert\mathcal I_\infty\rVert.
+        \label{eq:cpgsv21_martingale_overlap_inverse_gram_difference}
     \end{align}
-    At the same lengths the physical boundary map is injective, its inverse
-    Gram is $\mathcal K_n^{-1}$, and it obeys the same two bounds.  The proof
-    retains the available squared estimate
-    $\lVert\mathcal K_n-\mathcal K_\infty\rVert^2
-      \leq D^3(Cr^n)^2$ and takes square roots directly, giving
-    $g=\sqrt{D^3}\,C$ without any additional dimension loss.  The base is the
-    generally nonidentity operator $\mathscr R(P_\rho)$, not the identity.
-  \item The elementary propagation theorem
-    \leanid{MPSTensor.geometric_smallness_at_c3_lengths} shows that
-    $cr^l<1$ implies
+    At the same lengths, the physical boundary map is injective, its inverse
+    Gram is $\mathcal K_n^{-1}$, and it satisfies the same two bounds. Taking
+    square roots in
+    (\ref{eq:cpgsv21_martingale_overlap_gram_geometric_bound}) gives
+    $g=\sqrt{D^3}\,C$ without further dimension loss.
+
+    \item The theorem
+    \leanid{MPSTensor.geometric_smallness_at_c3_lengths} proves
     \begin{align}
-      cr^{l+1}<1,\qquad cr^{K+l}<1,\qquad cr^{K+l+1}<1
+        cr^l<1
+        &\Longrightarrow cr^{l+1}<1,
+        \label{eq:cpgsv21_martingale_overlap_smallness_l_plus_one}\\
+        cr^l<1
+        &\Longrightarrow cr^{K+l}<1,
+        \label{eq:cpgsv21_martingale_overlap_smallness_k_plus_l}\\
+        cr^l<1
+        &\Longrightarrow cr^{K+l+1}<1
+        \qquad(K\in\mathbb N).
+        \label{eq:cpgsv21_martingale_overlap_smallness_k_plus_l_plus_one}
     \end{align}
-    for every $K\in\mathbb N$.  Thus one base-length smallness hypothesis
-    supplies the three inverse conditions appearing in the C3 correction
-    telescope.  This is quantitative inverse infrastructure only: these
-    results do not prove contraction of the full physical projector defect or
-    the coefficient in Nachtergaele's equation~(6.1).
-  \item The generic operator-norm--to--entrywise-Frobenius estimate, its
-    reshuffled-Choi corollary, and the safe dimension conversion are
+    This supplies the three inverse conditions in the C3 correction telescope,
+    but it does not prove contraction of the full physical projector defect or
+    the coefficient in Equation~(6.1) of
+    Ref.~\cite{Nachtergaele1996Spectral}.
+
+    \item The operator-norm--to--entrywise-Frobenius estimate, its
+    reshuffled-Choi corollary, and the dimension conversion are
     \leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq},
     \leanid{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}, and
-    \leanid{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}.
-    The last theorem gives squared factor $|I|^3$ against the squared operator
-    norm of the map when the matrix space carries its $L^2$ operator norm.
-    For $I=\Fin D$ this is norm factor $D^{3/2}$; it is not claimed sharp and
-    is not identified with the coefficient in the FNW weighted-Gram estimate.
-  \item The spectator-indexed boundary maps for the tail and left windows are
-    defined algebraically in
-    \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean}.  Their
-    finite-dimensional Hilbert realizations are
-    \leanid{MPSTensor.tailBoundaryMapES} and
+    \leanid{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}. For
+    $I=\Fin{D}$, the last theorem gives norm factor $D^{3/2}$. This factor is
+    not claimed sharp or identified with the FNW coefficient.
+
+    \item The spectator-indexed tail and left boundary maps are defined in
+    \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean}. Their Hilbert
+    realizations are \leanid{MPSTensor.tailBoundaryMapES} and
     \leanid{MPSTensor.leftBoundaryMapES} in
-    \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundaryGram.lean}.  The latter
-    module proves the exact physical ranges, the factorizations through
-    \(\Gamma_{K+L}^{\mathrm{ES}}\), and injectivity from the corresponding local
-    boundary map.  It also computes the Grams as direct sums of
-    \(\mathcal K_L\) on tail fibers and \(\mathcal K_K\) on left fibers:
+    \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundaryGram.lean}. That module
+    proves their exact ranges, factorizations through
+    $\Gamma_{K+L}^{\mathrm{ES}}$, and injectivity from the local boundary map.
+    Their Grams are direct sums of $\mathcal K_L$ on tail fibers and
+    $\mathcal K_K$ on left fibers, by
     \leanid{MPSTensor.tailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}
     and
     \leanid{MPSTensor.leftBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram}.
-    The inverse Grams are likewise fiberwise by
+    Their inverse Grams are fiberwise by
     \leanid{MPSTensor.inverseGram_tailBoundaryMapES_eq_fiberwise_inverseGram}
     and
     \leanid{MPSTensor.inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram}.
-    These are exact unweighted identities, including empty spectator types;
-    they assert no direct-sum norm estimate.  The C3 specializations are stated
-    next.
-  \item The C3$^\prime$ whole-increment algebra and a quantitative
-    prefix-uniform estimate are now complete.  For a suffix increment $Q$,
-    define the
-    left virtual map by
+    These exact unweighted identities include empty spectator types and do not
+    assert a direct-sum norm estimate.
+
+    \item The C3$'$ whole-increment algebra and a prefix-uniform estimate are
+    complete. For suffix increment $Q$, let
+    $\Omega_Q=\Fin{d^Q}$ and define
     \begin{align}
-      J_Q^{\mathrm{left}}X
-      &=\bigl(U(A^jX)\bigr)_{j\in\Omega_Q},
+        J_Q^{\mathrm{left}}X
+        &:=
+          (U(A^jX))_{j\in\Omega_Q}.
+        \label{eq:cpgsv21_martingale_overlap_left_virtual_map}
     \end{align}
-    where $\Omega_Q=\Fin(d^Q)$ is the set of length-$Q$ physical words and
-    $U$ is Frobenius vectorization.  Also set
+    In this context, set
     \begin{align}
-      \mathcal K_n&=(\Gamma_n^{\mathrm{ES}})^\dagger
-        \Gamma_n^{\mathrm{ES}},&
-      \mathcal K_\infty&=\mathscr R(P_\rho),
+        \mathcal K_n
+        &:=
+          (\Gamma_n^{\mathrm{ES}})^\dagger\Gamma_n^{\mathrm{ES}},
+        \label{eq:cpgsv21_martingale_overlap_whole_increment_finite_gram}\\
+        \mathcal K_\infty
+        &:=
+          \mathscr R(P_\rho).
+        \label{eq:cpgsv21_martingale_overlap_whole_increment_limiting_gram}
     \end{align}
-    where $P_\rho(X)=(\tr X/\tr\rho)\rho$.  The declarations
+    The declarations
     \leanid{MPSTensor.leftVirtualMapES_norm_map_of_leftCanonical} and
     \leanid{MPSTensor.leftVirtualMapES_norm_le_one_of_leftCanonical} prove
     \begin{align}
-      \lVert J_Q^{\mathrm{left}}X\rVert&=\lVert X\rVert,&
-      \lVert J_Q^{\mathrm{left}}\rVert&\leq1.
+        \lVert J_Q^{\mathrm{left}}X\rVert
+        &=\lVert X\rVert,
+        \label{eq:cpgsv21_martingale_overlap_left_virtual_isometry}\\
+        \lVert J_Q^{\mathrm{left}}\rVert
+        &\leq1.
+        \label{eq:cpgsv21_martingale_overlap_left_virtual_norm}
     \end{align}
-    The reassociation and exact common-ambient projector identity are
+
+    The common-ambient reassociation results are
     \leanid{MPSTensor.physicalReassocES},
     \leanid{MPSTensor.physicalReassocES_comp_groundSpaceMapES},
     \leanid{MPSTensor.reassocTailBoundaryMapES},
@@ -844,475 +1005,570 @@ and generic prerequisites now include:
     $K+L$ with $Q$ spectators, and the full window of length $K+L+Q$ in one
     Hilbert space.
 
-    The exact mixed-Gram and centered formulas are
-    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q}, whose named-reassociation bridge is
-    \leanid{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES}, and
+    The exact mixed-Gram formulas are
+    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES_q},
+    \leanid{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES},
+    and
     \leanid{MPSTensor.inner_reassocTailBoundaryMapES_adjoint_leftBoundaryMapES_centered}.
-    The direct-sum factors
+    The overlap factors
     \leanid{MPSTensor.wholeIncrementLeftOverlapFactorES} and
-    \leanid{MPSTensor.wholeIncrementRightOverlapFactorES}, with their exact
-    fiber formulas and norm bounds, factor
+    \leanid{MPSTensor.wholeIncrementRightOverlapFactorES} factor
     \leanid{MPSTensor.wholeIncrementCenteredResidualES} through
-    $\mathcal K_L-\mathcal K_\infty$.  This is recorded by
+    $\mathcal K_L-\mathcal K_\infty$. The corresponding declarations are
     \leanid{MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors},
     \leanid{MPSTensor.wholeIncrementCenteredResidualES_norm_le},
     \leanid{MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical},
     and
     \leanid{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}.
 
-    The whole-increment finite-Gram telescope and its three correction maps are
-    now also explicit.  The supporting Gram, inverse-Gram, cancellation, and
-    limiting-product identities are
+    The finite-Gram telescope uses
     \leanid{MPSTensor.reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram},
     \leanid{MPSTensor.inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram},
     \leanid{MPSTensor.wholeIncrementLeftFiniteGramCancellation_eq_groundSpaceMapES_adjoint},
     \leanid{MPSTensor.wholeIncrementTailFiniteGramCancellation_eq_groundSpaceMapES_adjoint},
-    and \leanid{MPSTensor.wholeIncrement_limitingOverlapProduct_eq}.
-    The declarations
+    and
+    \leanid{MPSTensor.wholeIncrement_limitingOverlapProduct_eq}.
+    Its correction maps are
     \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES},
     \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES}, and
-    \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES} package the
-    corrections.  The exact virtual and physical telescopes are
+    \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES}. The exact
+    telescopes are
     \leanid{MPSTensor.wholeIncrement_virtualResidual_eq_centered_sub_gramErrors}
     and
-    \leanid{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections};
-    the latter uses
-    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}.  The
-    reassociated tail pseudoinverse bound is
-    \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}.
-    The centered physical sandwich is controlled by
-    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}.
-    The three correction bounds are
+    \leanid{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections},
+    the latter using
+    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}. The
+    pseudoinverse and centered-sandwich estimates are
+    \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}
+    and
+    \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES_norm_le}. The
+    correction estimates are
     \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le},
     \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}, and
     \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}.
 
-    The assembled quantitative estimate is
+    The assembled theorem is
     \leanid{MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric}.
     For a primitive tensor with positive-definite fixed point and nonzero bond
-    dimension, it gives constants $C,c,r>0$, with $r<1$, such that for every
-    prefix length $K$, overlap length $L\geq1$, and suffix length $Q$ satisfying
-    $cr^L<1$.  Write
+    dimension, it gives $C,c,r>0$, with $r<1$, uniformly in the prefix length
+    $K$ and suffix length $Q$. If $L\geq1$ and $cr^L<1$, define
     \begin{align}
-      P^{\mathrm{tail}}_{K;L,Q}
-      &:=P_{\operatorname{ran}(\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})},
-      &
-      P^{\mathrm{left}}_{K+L,Q}
-      &:=P_{\operatorname{ran}(\Gamma^{\mathrm{left}}_{K+L,Q})}.
+        P^{\mathrm{tail}}_{K;L,Q}
+        &:=
+          P_{\operatorname{ran}
+          (\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q})},
+        \label{eq:cpgsv21_martingale_overlap_whole_increment_tail_projector}\\
+        P^{\mathrm{left}}_{K+L,Q}
+        &:=
+          P_{\operatorname{ran}
+          (\Gamma^{\mathrm{left}}_{K+L,Q})}.
+        \label{eq:cpgsv21_martingale_overlap_whole_increment_left_projector}
     \end{align}
-    These are the orthogonal projectors onto the ranges of the reassociated tail and
-    left boundary maps.  Then
+    Then
     \begin{align}
-      \left\lVert
-        P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
-        -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
-      \right\rVert
-      &\leq \frac{Cr^L}{1-cr^L}.
+        \left\lVert
+          P^{\mathrm{tail}}_{K;L,Q}P^{\mathrm{left}}_{K+L,Q}
+          -P_{\mathcal G_{K+L+Q}^{\mathrm{ES}}(A)}
+        \right\rVert
+        &\leq\frac{Cr^L}{1-cr^L}.
+        \label{eq:cpgsv21_martingale_overlap_whole_increment_defect}
     \end{align}
-    The constants are independent of both $K$ and $Q$.  This estimate is
-    reconstructed from the exact inverse-Gram telescope and is not attributed
-    to FNW.  It supplies the quantitative C3$^\prime$-type estimate needed here,
-    but it does not claim the optimized numerator in Nachtergaele's
-    equation~(6.1).
+    This reconstructed estimate is not attributed to FNW and does not claim
+    the optimized numerator in Equation~(6.1) of
+    Ref.~\cite{Nachtergaele1996Spectral}.
 
     The theorem
     \leanid{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
-    then chooses one integer $p>0$, measured in sites of the input tensor, such
-    that $A$ is $p$-block injective and the preceding defect with $L=Q=p$ is at
-    most $7/16$ for every prefix length $K$.  Its specialization
+    chooses $p>0$, measured in input-tensor sites, such that $A$ is
+    $p$-block injective and the defect with $L=Q=p$ is at most $7/16$ for
+    every $K$. Its specialization
     \leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
-    takes $K=p$ and gives the same bound for three consecutive blocks of $p$
-    original sites.  Thus prefix-uniform quantitative smallness and the
-    three-block coefficient $7/16$ are resolved in original-site units.
-  \item The mixed Gram of the C3 tail map at
-    \((K,l+1)\) and left map at \((K+l,1)\) is computed exactly by
-    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}.
-    Write \(\Gamma^{\mathrm{tail}}_{K,l+1}\) and
-    \(\Gamma^{\mathrm{left}}_{K+l,1}\) for these two Hilbert-space maps.
-    For boundary-family vectors \(x\) and \(y\), write \(X_u\) and \(Z_j\)
-    for their matrix fibers.  Then
-    \begin{align}
-      \left\langle x,
-        (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
-        \Gamma^{\mathrm{left}}_{K+l,1}y\right\rangle
-      &=\sum_{u\in\Fin d^K}\sum_{j\in\Fin d^1}
-        \left\langle U(A^jX_u),
-          \mathcal K_l U(Z_jA^u)\right\rangle.
-    \end{align}
-    This formula is an exact algebraic identity reconstructed from the
-    boundary-map definitions, word factorization, and trace cyclicity.  It is
-    not stated in
-    this form by FNW or Nachtergaele and is not attributed to them.  The
-    sourced target remains the projector defect in Nachtergaele's equation
-    (2.4), while the rational estimate is quoted after that equation and in
-    equation (6.1).  No mixed-Gram norm estimate follows from this identity
-    alone.
-  \item For injective maps with common factorizations
-    \(T J_1=C=L J_2\),
-    \leanid{ContinuousLinearMap.injectiveRangeProjector_comp_sub_of_factorizations}
-    factors the exact projector residual through
-    \begin{align}
-      T^\dagger L-(T^\dagger T)J_1S_CJ_2^\dagger(L^\dagger L).
-    \end{align}
-    The concrete specialization
-    \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq} uses the tail map
-    at $(K,L_0+1)$, the left map at $(K+L_0,1)$, the common map
-    $\Gamma_{K+L_0+1}^{\mathrm{ES}}$, and the corresponding virtual maps.  Its
-    three inverse-Gram range projectors have the open-chain tail, open-chain
-    left, and full ground-space ranges by the exact range theorems above.  All
-    three injectivity assumptions are explicit.  This is an algebraic identity
-    only; a source-specific estimate of the mixed-Gram residual is still
-    required.
-  \item For an injective finite-dimensional map \(T\), with
-    \(S_T=(T^\dagger T)^{-1}\), the two pseudoinverse factors in its exact
-    range projector satisfy
-    \begin{align}
-      \lVert TS_T\rVert
-        &=\sqrt{\lVert S_T\rVert},&
-      \lVert S_TT^\dagger\rVert
-        &=\sqrt{\lVert S_T\rVert}.
-    \end{align}
-    These identities are
-    \leanid{ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt} and
-    \leanid{ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt}.
-  \item If \(A\) is a primitive MPS tensor with nonzero virtual dimension,
-    write \(J^{\mathrm{tail}}_K\) for its length-\(K\) tail virtual map.  Then
-    \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform} gives a
-    constant \(C>0\), independent of \(K\), such that
-    \begin{align}
-      \lVert J^{\mathrm{tail}}_K\rVert&\le C
-    \end{align}
-    for every \(K\in\mathbb N\).  No positive-definiteness assumption on
-    \(\rho\) is used.  The proof preserves the fourth-power intermediate
-    normalization, first establishing a uniform bound for
-    \(\lVert J^{\mathrm{tail}}_K\rVert^4\), and then obtains the norm bound.
-    It reconstructs the required norm infrastructure from the exact
-    tail adjoint--self estimate, the fixed-point/complementary-power
-    decomposition, the geometric power bound, and the dimension conversion
-    from the \(L^2\) operator norm to entrywise mass.  This is not an FNW or
-    Nachtergaele contraction estimate.
-  \item Let $A$ be an MPS tensor, let $\Omega_K$ be the set of length-$K$
-    physical words, and let $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$.
-    Write $J^{\mathrm{left}}_1(X)=(A^jX)_{j\in\Omega_1}$ for the one-site
-    left virtual map and
-    $J^{\mathrm{tail}}_K(X)=(XA^u)_{u\in\Omega_K}$ for the length-$K$ tail
-    virtual map.  The two common direct-sum overlap factors
-    \leanid{MPSTensor.c3LeftOverlapFactorES} and
-    \leanid{MPSTensor.c3RightOverlapFactorES} have the exact fiber formulas
-    \begin{align}
-      (F_KX)_{u,j}&=A^jX_u,&
-      (G_KZ)_{u,j}&=Z_jA^u,
-    \end{align}
-    recorded by
-    \leanid{MPSTensor.boundaryFamilyEquiv_c3LeftOverlapFactorES_apply} and
-    \leanid{MPSTensor.boundaryFamilyEquiv_c3RightOverlapFactorES_apply}.
-    Their definitions and fiber formulas are valid for arbitrary finite,
-    possibly empty, configuration sets and require no nonzero-cardinality
-    assumption.  Moreover,
-    \leanid{MPSTensor.c3LeftOverlapFactorES_norm_le} and
-    \leanid{MPSTensor.c3RightOverlapFactorES_norm_le} give
-    \begin{align}
-      \lVert F_K\rVert&\leq\lVert J^{\mathrm{left}}_1\rVert,&
-      \lVert G_K\rVert&\leq\lVert J^{\mathrm{tail}}_K\rVert,
-    \end{align}
-    with no loss depending on the number of prefix configurations.
+    takes $K=p$. Thus the prefix-uniform estimate and the three-block
+    coefficient $7/16$ are proved in original-site units.
 
-    When $D\geq1$ and $\rho$ is explicitly positive definite, set
-    $\mathcal K_\infty=\mathscr R(P_\rho)$.  The centered residual
-    \leanid{MPSTensor.c3CenteredVirtualResidualES} factors exactly as
+    \item The mixed Gram of the C3 tail map at $(K,l+1)$ and the left map at
+    $(K+l,1)$ is computed by
+    \leanid{MPSTensor.inner_tailBoundaryMapES_adjoint_leftBoundaryMapES}.
+    Write these maps as $\Gamma^{\mathrm{tail}}_{K,l+1}$ and
+    $\Gamma^{\mathrm{left}}_{K+l,1}$. For boundary-family vectors $x,y$ with
+    matrix fibers $X_u,Z_j$,
     \begin{align}
-      R_{K,l}
-      &=F_K^\dagger
-        (\mathcal K_l-\mathcal K_\infty)^{\oplus
-          (\Omega_K\times\Omega_1)}G_K
+        \left\langle
+          x,
+          (\Gamma^{\mathrm{tail}}_{K,l+1})^\dagger
+          \Gamma^{\mathrm{left}}_{K+l,1}y
+        \right\rangle
+        &=
+          \sum_{u\in\Fin{d^K}}\sum_{j\in\Fin{d}}
+          \left\langle
+            U(A^jX_u),\mathcal K_lU(Z_jA^u)
+          \right\rangle.
+        \label{eq:cpgsv21_martingale_overlap_c3_mixed_gram}
+    \end{align}
+    This reconstructed algebraic identity follows from the boundary-map
+    definitions, word factorization, and trace cyclicity. It is not attributed
+    to FNW or Nachtergaele. The sourced target is the projector defect in
+    Equation~(2.4), with the rational estimate stated after that equation and
+    in Equation~(6.1), of
+    Ref.~\cite{Nachtergaele1996Spectral}. No mixed-Gram norm estimate follows
+    from (\ref{eq:cpgsv21_martingale_overlap_c3_mixed_gram}) alone.
+
+    \item For injective maps with common factorizations
+    \begin{align}
+        TJ_1
+        &=C,
+        \label{eq:cpgsv21_martingale_overlap_common_factorization_tail}\\
+        LJ_2
+        &=C,
+        \label{eq:cpgsv21_martingale_overlap_common_factorization_left}
+    \end{align}
+    the theorem
+    \leanid{ContinuousLinearMap.injectiveRangeProjector_comp_sub_of_factorizations}
+    factors the projector residual through
+    \begin{align}
+        T^\dagger L
+        -(T^\dagger T)J_1S_CJ_2^\dagger(L^\dagger L).
+        \label{eq:cpgsv21_martingale_overlap_projector_residual_virtual_factor}
+    \end{align}
+    The specialization
+    \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq} uses the tail
+    map at $(K,L_0+1)$, the left map at $(K+L_0,1)$, the common map
+    $\Gamma_{K+L_0+1}^{\mathrm{ES}}$, and the corresponding virtual maps. Its
+    three inverse-Gram projectors have the open-chain tail, left, and full
+    ground-space ranges. All injectivity assumptions are explicit. This is an
+    algebraic identity; a source-specific mixed-Gram estimate is still needed.
+
+    \item For injective $T$ and $S_T=(T^\dagger T)^{-1}$,
+    \leanid{ContinuousLinearMap.norm_T_comp_inverseGram_eq_sqrt} and
+    \leanid{ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt} prove
+    \begin{align}
+        \lVert TS_T\rVert
+        &=\sqrt{\lVert S_T\rVert},
+        \label{eq:cpgsv21_martingale_overlap_left_pseudoinverse_norm}\\
+        \lVert S_TT^\dagger\rVert
+        &=\sqrt{\lVert S_T\rVert}.
+        \label{eq:cpgsv21_martingale_overlap_right_pseudoinverse_norm}
+    \end{align}
+
+    \item For a primitive MPS tensor with nonzero virtual dimension, let
+    $J_K^{\mathrm{tail}}$ be its length-$K$ tail virtual map. The theorem
+    \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform} gives
+    $C>0$, independent of $K$, such that
+    \begin{align}
+        \lVert J_K^{\mathrm{tail}}\rVert
+        &\leq C
+        \qquad(K\in\mathbb N).
+        \label{eq:cpgsv21_martingale_overlap_uniform_tail_virtual_norm}
+    \end{align}
+    It does not assume positive-definiteness of $\rho$. The proof first obtains
+    a uniform fourth-power estimate and then takes fourth roots. It uses the
+    exact tail adjoint--self estimate, the fixed-point/complementary-power
+    decomposition, the geometric power estimate, and the conversion from the
+    $L^2$ operator norm to entrywise mass. This is not an FNW or Nachtergaele
+    contraction estimate.
+
+    \item Let $\Omega_K$ be the set of length-$K$ physical words and let
+    $\mathcal B_K=\bigoplus_{u\in\Omega_K}\MN{D}$. Define
+    \begin{align}
+        J_1^{\mathrm{left}}(X)
+        &:=(A^jX)_{j\in\Omega_1},
+        \label{eq:cpgsv21_martingale_overlap_one_site_left_virtual_map}\\
+        J_K^{\mathrm{tail}}(X)
+        &:=(XA^u)_{u\in\Omega_K}.
+        \label{eq:cpgsv21_martingale_overlap_k_site_tail_virtual_map}
+    \end{align}
+    The factors \leanid{MPSTensor.c3LeftOverlapFactorES} and
+    \leanid{MPSTensor.c3RightOverlapFactorES} satisfy
+    \begin{align}
+        (F_KX)_{u,j}
+        &=A^jX_u,
+        \label{eq:cpgsv21_martingale_overlap_c3_left_overlap_factor}\\
+        (G_KZ)_{u,j}
+        &=Z_jA^u,
+        \label{eq:cpgsv21_martingale_overlap_c3_right_overlap_factor}
     \end{align}
     by
-    \leanid{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors}, and
-    \leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le} gives
+    \leanid{MPSTensor.boundaryFamilyEquiv_c3LeftOverlapFactorES_apply} and
+    \leanid{MPSTensor.boundaryFamilyEquiv_c3RightOverlapFactorES_apply}.
+    These formulas allow finite, possibly empty, configuration sets. The
+    theorems \leanid{MPSTensor.c3LeftOverlapFactorES_norm_le} and
+    \leanid{MPSTensor.c3RightOverlapFactorES_norm_le} give
     \begin{align}
-      \lVert R_{K,l}\rVert
-      &\leq \lVert J^{\mathrm{left}}_1\rVert
-        \lVert\mathcal K_l-\mathcal K_\infty\rVert
-        \lVert J^{\mathrm{tail}}_K\rVert.
+        \lVert F_K\rVert
+        &\leq\lVert J_1^{\mathrm{left}}\rVert,
+        \label{eq:cpgsv21_martingale_overlap_c3_left_factor_norm}\\
+        \lVert G_K\rVert
+        &\leq\lVert J_K^{\mathrm{tail}}\rVert.
+        \label{eq:cpgsv21_martingale_overlap_c3_right_factor_norm}
     \end{align}
-    Thus, if $A$ is primitive with fixed-point witness $\rho$, if $\rho$ is
-    explicitly positive definite, and if $l\geq1$, then
+    No prefix-cardinality factor appears.
+
+    If $D\geq1$ and $\rho$ is positive definite, set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$. The centered residual
+    \leanid{MPSTensor.c3CenteredVirtualResidualES} factors as
+    \begin{align}
+        R_{K,l}
+        &=
+          F_K^\dagger
+          (\mathcal K_l-\mathcal K_\infty)^{
+             \oplus(\Omega_K\times\Omega_1)}
+          G_K.
+        \label{eq:cpgsv21_martingale_overlap_c3_centered_factorization}
+    \end{align}
+    This is
+    \leanid{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors}.
+    The theorem \leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le} gives
+    \begin{align}
+        \lVert R_{K,l}\rVert
+        &\leq
+          \lVert J_1^{\mathrm{left}}\rVert
+          \lVert\mathcal K_l-\mathcal K_\infty\rVert
+          \lVert J_K^{\mathrm{tail}}\rVert.
+        \label{eq:cpgsv21_martingale_overlap_c3_centered_norm}
+    \end{align}
+    If $A$ is primitive with positive-definite fixed-point witness $\rho$, then
     \leanid{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
-    supplies constants $C>0$ and $0<r<1$, independent of $K$, for which
+    gives $C>0$ and $0<r<1$, independent of $K$, such that
     \begin{align}
-      \lVert R_{K,l}\rVert^2
-      &\leq D^3\bigl(Cr^l\bigr)^2
+        \lVert R_{K,l}\rVert^2
+        &\leq D^3(Cr^l)^2
+        \qquad(K\in\mathbb N,\ l\geq1).
+        \label{eq:cpgsv21_martingale_overlap_c3_centered_geometric_bound}
     \end{align}
-    for every $K\in\mathbb N$.  These formulas are reconstructed algebra, not
-    formulas quoted from FNW or Nachtergaele.  They control only the centered
-    term and prove neither the full projector defect nor the rational
-    coefficient in equation~(6.1).
-  \item For each length \(n\), let \(\mathcal K_n\) be the ground-space
-    Gram, and whenever it is invertible set \(S_n=\mathcal K_n^{-1}\).  Let
-    \(\mathcal K_\infty=\mathscr R(P_\rho)\), with \(\rho\) positive
-    definite, and set \(S_\infty=\mathcal K_\infty^{-1}\).
-    The exact C3 virtual residual is telescoped by
-    \leanid{MPSTensor.c3_virtualResidual_eq_centered_sub_gramErrors} into its
-    limiting-center residual and three corrections containing, in order,
+    These reconstructed identities control only the centered term. They prove
+    neither the full defect nor the rational coefficient in Equation~(6.1) of
+    Ref.~\cite{Nachtergaele1996Spectral}.
+
+    \item Whenever $\mathcal K_n$ is invertible, set
+    $S_n=\mathcal K_n^{-1}$. For positive-definite $\rho$, set
+    $\mathcal K_\infty=\mathscr R(P_\rho)$ and
+    $S_\infty=\mathcal K_\infty^{-1}$. The theorem
+    \leanid{MPSTensor.c3_virtualResidual_eq_centered_sub_gramErrors} telescopes
+    the exact C3 residual into the centered residual and three corrections
+    containing
     \begin{align}
-      \mathcal K_{l+1}-\mathcal K_\infty,\\
-      S_{K+l+1}-S_\infty,\\
-      \mathcal K_{K+l}-\mathcal K_\infty.
+        \mathcal K_{l+1}-\mathcal K_\infty,
+        \label{eq:cpgsv21_martingale_overlap_c3_tail_gram_error}\\
+        S_{K+l+1}-S_\infty,
+        \label{eq:cpgsv21_martingale_overlap_c3_full_inverse_error}\\
+        \mathcal K_{K+l}-\mathcal K_\infty.
+        \label{eq:cpgsv21_martingale_overlap_c3_left_gram_error}
     \end{align}
     The theorem
     \leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_gramErrors}
-    places this identity between the two local pseudoinverse factors in the
-    exact tail-after-left physical projector residual.
+    places this identity between the local pseudoinverse factors.
 
-    Under the explicit hypotheses that the virtual dimension is nonzero and
-    \(\rho\) is positive definite,
+    Under nonzero virtual dimension and positive-definite $\rho$,
     \leanid{MPSTensor.inner_limitingMixedGramIntertwining} proves the limiting
-    intertwining identity.  Under the same hypotheses,
-    \leanid{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError}
-    identifies the centered residual pairing with the length-\(l\) Gram
-    error.  The cancellation uses the nonidentity limiting metric, its inverse,
-    and the virtual-map adjoints; no transfer fixed-point equation is needed.
+    intertwining identity, and
+    \leanid{MPSTensor.inner_c3_centeredVirtualResidual_eq_gramError} identifies
+    the centered residual pairing with the length-$l$ Gram error. The
+    cancellation uses the nonidentity limiting metric and its inverse; it does
+    not require a transfer fixed-point equation.
 
-  \item The three physical correction sandwiches are
+    \item The physical corrections are
     \leanid{MPSTensor.c3TailFiniteGramCorrectionES},
     \leanid{MPSTensor.c3FullInverseGramCorrectionES}, and
-    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES}.  Write
+    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES}. Write
     \begin{align}
-      T&=\Gamma^{\mathrm{tail}}_{K,l+1},\\
-      L&=\Gamma^{\mathrm{left}}_{K+l,1},\\
-      C&=\Gamma_{K+l+1}^{\mathrm{ES}}.
+        T
+        &:=\Gamma^{\mathrm{tail}}_{K,l+1},
+        \label{eq:cpgsv21_martingale_overlap_c3_tail_map}\\
+        L
+        &:=\Gamma^{\mathrm{left}}_{K+l,1},
+        \label{eq:cpgsv21_martingale_overlap_c3_left_map}\\
+        C
+        &:=\Gamma_{K+l+1}^{\mathrm{ES}}.
+        \label{eq:cpgsv21_martingale_overlap_c3_full_map}
     \end{align}
     The exact factorizations
     \leanid{MPSTensor.c3TailFiniteGramCorrectionES_eq_factored},
     \leanid{MPSTensor.c3FullInverseGramCorrectionES_eq_factored}, and
-    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES_eq_factored} give
+    \leanid{MPSTensor.c3LeftFiniteGramCorrectionES_eq_factored} are
     \begin{align}
-      Q_1={}&T S_{l+1}^{\oplus\Omega_K}
-        (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
-        J_K^{\mathrm{tail}}S_{K+l+1}C^\dagger,\\
-      Q_2={}&T S_{l+1}^{\oplus\Omega_K}
-        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
-        (\mathcal K_\infty-\mathcal K_{K+l+1})
-        S_{K+l+1}C^\dagger,\\
-      Q_3={}&T S_{l+1}^{\oplus\Omega_K}
-        \mathcal K_\infty^{\oplus\Omega_K}J_K^{\mathrm{tail}}S_\infty
-        (J_1^{\mathrm{left}})^\dagger
-        (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
-        S_{K+l}^{\oplus\Omega_1}L^\dagger.
+        Q_1
+        &=
+          TS_{l+1}^{\oplus\Omega_K}
+          (\mathcal K_{l+1}-\mathcal K_\infty)^{\oplus\Omega_K}
+          J_K^{\mathrm{tail}}S_{K+l+1}C^\dagger,
+        \label{eq:cpgsv21_martingale_overlap_c3_first_correction}\\
+        Q_2
+        &=
+          TS_{l+1}^{\oplus\Omega_K}
+          \mathcal K_\infty^{\oplus\Omega_K}
+          J_K^{\mathrm{tail}}S_\infty
+          (\mathcal K_\infty-\mathcal K_{K+l+1})
+          S_{K+l+1}C^\dagger,
+        \label{eq:cpgsv21_martingale_overlap_c3_second_correction}\\
+        Q_3
+        &=
+          TS_{l+1}^{\oplus\Omega_K}
+          \mathcal K_\infty^{\oplus\Omega_K}
+          J_K^{\mathrm{tail}}S_\infty
+          (J_1^{\mathrm{left}})^\dagger
+          (\mathcal K_{K+l}-\mathcal K_\infty)^{\oplus\Omega_1}
+          S_{K+l}^{\oplus\Omega_1}L^\dagger.
+        \label{eq:cpgsv21_martingale_overlap_c3_third_correction}
     \end{align}
-    The middle equality uses the right-oriented identity
-    \leanid{MPSTensor.inverseGram_sub_limitingInverse_eq_resolvent},
+    The second line uses
+    \leanid{MPSTensor.inverseGram_sub_limitingInverse_eq_resolvent}:
     \begin{align}
-      S_{K+l+1}-S_\infty
-      &=S_\infty(\mathcal K_\infty-\mathcal K_{K+l+1})S_{K+l+1}.
+        S_{K+l+1}-S_\infty
+        &=
+          S_\infty
+          (\mathcal K_\infty-\mathcal K_{K+l+1})
+          S_{K+l+1}.
+        \label{eq:cpgsv21_martingale_overlap_inverse_resolvent_identity}
     \end{align}
-    The fiberwise subtraction identity is
-    \leanid{MPSTensor.boundaryFiberwiseMap_sub}, and invertibility of a finite
-    Gram follows from injectivity by
-    \leanid{MPSTensor.groundSpaceGram_isUnit_of_groundSpaceMapES_injective}.
+    The fiberwise subtraction theorem is
+    \leanid{MPSTensor.boundaryFiberwiseMap_sub}, and
+    \leanid{MPSTensor.groundSpaceGram_isUnit_of_groundSpaceMapES_injective}
+    derives Gram invertibility from injectivity.
 
     The spectator pseudoinverse estimates
     \leanid{MPSTensor.norm_tailBoundaryMapES_comp_inverseGram_le_sqrt} and
     \leanid{MPSTensor.norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt},
-    together with the uniform fiberwise norm bound, yield
+    together with the fiberwise norm estimate, yield
     \leanid{MPSTensor.c3TailFiniteGramCorrectionES_norm_le},
     \leanid{MPSTensor.c3FullInverseGramCorrectionES_norm_le}, and
     \leanid{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}:
     \begin{align}
-      \lVert Q_1\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}
-        \lVert\mathcal K_{l+1}-\mathcal K_\infty\rVert
-        \lVert J_K^{\mathrm{tail}}\rVert
-        \sqrt{\lVert S_{K+l+1}\rVert},\\
-      \lVert Q_2\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}
-        \lVert\mathcal K_\infty\rVert
-        \lVert J_K^{\mathrm{tail}}\rVert
-        \lVert S_\infty\rVert
-        \lVert\mathcal K_{K+l+1}-\mathcal K_\infty\rVert
-        \sqrt{\lVert S_{K+l+1}\rVert},\\
-      \lVert Q_3\rVert
-      &\leq \sqrt{\lVert S_{l+1}\rVert}
-        \lVert\mathcal K_\infty\rVert
-        \lVert J_K^{\mathrm{tail}}\rVert
-        \lVert S_\infty\rVert
-        \lVert J_1^{\mathrm{left}}\rVert
-        \lVert\mathcal K_{K+l}-\mathcal K_\infty\rVert
-        \sqrt{\lVert S_{K+l}\rVert}.
+        \lVert Q_1\rVert
+        &\leq
+          \sqrt{\lVert S_{l+1}\rVert}
+          \lVert\mathcal K_{l+1}-\mathcal K_\infty\rVert
+          \lVert J_K^{\mathrm{tail}}\rVert
+          \sqrt{\lVert S_{K+l+1}\rVert},
+        \label{eq:cpgsv21_martingale_overlap_c3_first_correction_bound}\\
+        \lVert Q_2\rVert
+        &\leq
+          \sqrt{\lVert S_{l+1}\rVert}
+          \lVert\mathcal K_\infty\rVert
+          \lVert J_K^{\mathrm{tail}}\rVert
+          \lVert S_\infty\rVert
+          \lVert\mathcal K_{K+l+1}-\mathcal K_\infty\rVert
+          \sqrt{\lVert S_{K+l+1}\rVert},
+        \label{eq:cpgsv21_martingale_overlap_c3_second_correction_bound}\\
+        \lVert Q_3\rVert
+        &\leq
+          \sqrt{\lVert S_{l+1}\rVert}
+          \lVert\mathcal K_\infty\rVert
+          \lVert J_K^{\mathrm{tail}}\rVert
+          \lVert S_\infty\rVert
+          \lVert J_1^{\mathrm{left}}\rVert
+          \lVert\mathcal K_{K+l}-\mathcal K_\infty\rVert
+          \sqrt{\lVert S_{K+l}\rVert}.
+        \label{eq:cpgsv21_martingale_overlap_c3_third_correction_bound}
     \end{align}
-    No spectator-cardinality factor appears.  These factorizations and bounds
-    are exact consequences of the inverse-Gram formulas for the physical range
-    projectors.  FNW and Nachtergaele state overlapping-projector estimates,
-    while Cirac--Perez-Garcia--Schuch--Verstraete state the martingale
-    anticommutator criterion and its principal-angle interpretation.  None of
-    those sources gives the three displayed correction formulas.  Their uniform
-    combination is given below; comparison with the optimized coefficient in
-    Nachtergaele's equation~(6.1) remains open.
+    No spectator-cardinality factor occurs. These formulas follow from the
+    inverse-Gram representations of the physical projectors. They are not
+    formulas stated by
+    Refs.~\cite{Fannes1992Finitely,Nachtergaele1996Spectral,Cirac2021Matrix}.
 \end{itemize}
-Fix \(K,L_0\in\mathbb N\) and let
-\(\mathcal H_{K+L_0+1}\) be the \((K+L_0+1)\)-site Euclidean space
-\(\ell^2(\Fin d^{K+L_0+1})\).  Specializing the tail transport theorem to
-\((K,L_0+1)\) identifies its range with the open-chain tail subspace
-\(\mathcal V_{K,L_0+1}(A)\), while specializing the left transport theorem to
-\((K+L_0,1)\) (the only length at which the left boundary map matches the
-Nachtergaele C3 left-window convention) identifies its range with the
-open-chain left subspace \(\mathcal U_{K+L_0}(A)\), both in the common ambient
-\(\mathcal H_{K+L_0+1}\).
-The relevant projector defect is
-\begin{align}
-    \bigl\|
-        P^{\mathrm{tail}}_{K,L_0+1}(A)\,
-        P^{\mathrm{left}}_{K+L_0}(A)
-      - P_{\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)}
-    \bigr\|
-\end{align}
-in the common ambient \(\mathcal H_{K+L_0+1}\) (Nachtergaele C3,
-arXiv:cond-mat/9410110, eq.\ (2.4)).  Here
-\(\mathcal U_{K+L_0}(A)\) and \(\mathcal V_{K,L_0+1}(A)\) are the
-left and tail ground subspaces of Definition~4.2
-(\leanid{MPSTensor.openChainLeftGroundSpaceES} and
-\leanid{MPSTensor.openChainTailGroundSpaceES}), their intersection equals
-\(\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)\) under block injectivity
-with \(D\ge 1\) and \(L_0>0\)
-(\leanid{MPSTensor.openChainLeft_inf_tailGroundSpaceES}).
-The symbols \(P^{\mathrm{left}}_{K+L_0}(A)\) and
-\(P^{\mathrm{tail}}_{K,L_0+1}(A)\) denote the orthogonal projectors onto
-\(\mathcal U_{K+L_0}(A)\) and \(\mathcal V_{K,L_0+1}(A)\), respectively,
-as in Definition~4.2, while \(P_{\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)}\)
-denotes the orthogonal projector onto the full ground subspace.
 
-The two ranges are transported into this common ambient by
-\leanid{MPSTensor.tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES}
-(specialized to \((K, L_0+1)\)) and
-\leanid{MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES}
-(specialized to \((K+L_0, 1)\)).
-
-The present formal development now controls the deviation from the correct
-limiting Gram operator:
+Fix $K,L_0\in\mathbb N$ and define the common ambient Hilbert space
 \begin{align}
-  \bigl\lVert\mathcal K_n-\mathscr R(P_\rho)\bigr\rVert^2
-  &\le D^3\bigl(Cr^n\bigr)^2.
+    \mathcal H_{K+L_0+1}
+    &:=
+      \ell^2(\Fin{d^{K+L_0+1}}).
+    \label{eq:cpgsv21_martingale_overlap_c3_common_ambient}
 \end{align}
-It does not control $\lVert1-\mathcal K_n\rVert$ in these unweighted
-coordinates, because $\mathscr R(P_\rho)$ is generally not the identity.
-Under the explicit additional hypothesis that $\rho$ is positive definite,
-the limiting Gram is invertible.  The reconstructed pointwise estimates
+The tail transport theorem at $(K,L_0+1)$ identifies its range with
+$\mathcal V_{K,L_0+1}(A)$. The left transport theorem at $(K+L_0,1)$
+identifies its range with $\mathcal U_{K+L_0}(A)$; length one is the left
+boundary-map convention matching Nachtergaele's C3 condition
+\cite[Equation~(2.4)]{Nachtergaele1996Spectral}. The corresponding defect is
+\begin{align}
+    \left\lVert
+      P^{\mathrm{tail}}_{K,L_0+1}(A)
+      P^{\mathrm{left}}_{K+L_0}(A)
+      -P_{\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)}
+    \right\rVert.
+    \label{eq:cpgsv21_martingale_overlap_c3_physical_defect}
+\end{align}
+Here $\mathcal U_{K+L_0}(A)$ and $\mathcal V_{K,L_0+1}(A)$ are the left and
+tail ground spaces represented by
+\leanid{MPSTensor.openChainLeftGroundSpaceES} and
+\leanid{MPSTensor.openChainTailGroundSpaceES}. Under block injectivity,
+$D\geq1$, and $L_0>0$,
+\leanid{MPSTensor.openChainLeft_inf_tailGroundSpaceES} proves
+\begin{align}
+    \mathcal U_{K+L_0}(A)\cap\mathcal V_{K,L_0+1}(A)
+    &=
+      \mathcal G_{K+L_0+1}^{\mathrm{ES}}(A).
+    \label{eq:cpgsv21_martingale_overlap_c3_ground_space_intersection}
+\end{align}
+The projectors in
+(\ref{eq:cpgsv21_martingale_overlap_c3_physical_defect}) are the orthogonal
+projectors onto these spaces.
+
+The common-ambient range identifications are
+\leanid{MPSTensor.tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES},
+specialized to $(K,L_0+1)$, and
+\leanid{MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES},
+specialized to $(K+L_0,1)$.
+
+The formal estimate controls deviation from the nonidentity limiting Gram:
+\begin{align}
+    \lVert\mathcal K_n-\mathscr R(P_\rho)\rVert^2
+    &\leq D^3(Cr^n)^2.
+    \label{eq:cpgsv21_martingale_overlap_repeated_gram_control}
+\end{align}
+It does not control $\lVert1-\mathcal K_n\rVert$ in unweighted coordinates.
+Under positive-definiteness of $\rho$, the results
 \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds} and
 \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
-perturb around the nonidentity operator $\mathscr R(P_\rho)$ and give the
-inverse and inverse-Gram bounds with denominator $1-cr^n$ whenever
-$cr^n<1$.  The theorem
-\leanid{MPSTensor.geometric_smallness_at_c3_lengths} propagates the base
-condition $cr^l<1$ to the three correction lengths $l+1$, $K+l$, and
-$K+l+1$.  The normalization still descends from the squared estimate with
-factor $D^3$, yielding the norm constant $\sqrt{D^3}\,C$ without additional
-dimension loss; it is not replaced by an identity-centered source constant.
-Furthermore,
+perturb around $\mathscr R(P_\rho)$ and give denominator $1-cr^n$ whenever
+$cr^n<1$. The theorem
+\leanid{MPSTensor.geometric_smallness_at_c3_lengths} supplies the three
+required lengths. The square-root conversion retains the factor
+$\sqrt{D^3}\,C$ without further dimension loss. Moreover,
 \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto} proves
 \begin{align}
-  \mathcal K_n^{-1}&\longrightarrow\mathscr R(P_\rho)^{-1}.
+    \mathcal K_n^{-1}
+    &\longrightarrow\mathscr R(P_\rho)^{-1}.
+    \label{eq:cpgsv21_martingale_overlap_inverse_gram_convergence}
 \end{align}
-The uniform combination is now complete.  Put
+
+For the uniform assembly, set
 \begin{align}
-  \mathcal K_\infty&=\mathscr R(P_\rho),&
-  \mathcal I_\infty&=\mathcal K_\infty^{-1}.
+    \mathcal K_\infty
+    &:=\mathscr R(P_\rho),
+    \label{eq:cpgsv21_martingale_overlap_uniform_limiting_gram}\\
+    \mathcal I_\infty
+    &:=\mathcal K_\infty^{-1}.
+    \label{eq:cpgsv21_martingale_overlap_uniform_limiting_inverse}
 \end{align}
 Choose $g,c,r>0$ from
-\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds},
-so that $c=\lVert\mathcal I_\infty\rVert g$ and $0<r<1$, and choose $T>0$
-from \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform}.  Set
+\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
+with
 \begin{align}
-  J&=\lVert J_1^{\mathrm{left}}\rVert,&
-  M&=\lVert\mathcal K_\infty\rVert
-       \lVert\mathcal I_\infty\rVert,\\
-  C_*&=4\lVert\mathcal I_\infty\rVert T g(J+1)(M+1).
+    c
+    &=\lVert\mathcal I_\infty\rVert g,
+    &
+    0&<r<1,
+    \label{eq:cpgsv21_martingale_overlap_uniform_geometric_constants}
+\end{align}
+and choose $T>0$ from
+\leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform}. Define
+\begin{align}
+    J
+    &:=\lVert J_1^{\mathrm{left}}\rVert,
+    \label{eq:cpgsv21_martingale_overlap_uniform_left_constant}\\
+    M
+    &:=
+      \lVert\mathcal K_\infty\rVert
+      \lVert\mathcal I_\infty\rVert,
+    \label{eq:cpgsv21_martingale_overlap_uniform_condition_number}\\
+    C_*
+    &:=
+      4\lVert\mathcal I_\infty\rVert Tg(J+1)(M+1).
+    \label{eq:cpgsv21_martingale_overlap_uniform_defect_constant}
 \end{align}
 Then
 \leanid{MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric}
 proves, for every $K$ and every $l\geq1$ with $cr^l<1$,
 \begin{align}
-  \left\|
-    P^{\mathrm{tail}}_{K,l+1}P^{\mathrm{left}}_{K+l}
+    \left\lVert
+      P^{\mathrm{tail}}_{K,l+1}
+      P^{\mathrm{left}}_{K+l}
       -P_{\mathcal G_{K+l+1}^{\mathrm{ES}}(A)}
-  \right\|
-  &\leq \frac{C_*r^l}{1-cr^l}.
+    \right\rVert
+    &\leq\frac{C_*r^l}{1-cr^l}.
+    \label{eq:cpgsv21_martingale_overlap_open_chain_uniform_defect}
 \end{align}
-The proof uses the exact physical four-term assembly
-\leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_corrections}
-and the centered-sandwich estimate
-\leanid{MPSTensor.c3CenteredProjectorResidualES_norm_le}.  Its virtual input is
-bounded by \leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le}; the other
-inputs are the uniform tail bound,
-the pointwise inverse-Gram bounds and their three-length smallness theorem, and
-the three correction estimates
+The proof uses
+\leanid{MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_corrections},
+\leanid{MPSTensor.c3CenteredProjectorResidualES_norm_le}, and
+\leanid{MPSTensor.c3_centeredVirtualResidualES_norm_le}. Its other inputs are
+the uniform tail estimate, the pointwise inverse-Gram estimates, the
+three-length smallness theorem, and the correction estimates
 \leanid{MPSTensor.c3TailFiniteGramCorrectionES_norm_le},
 \leanid{MPSTensor.c3FullInverseGramCorrectionES_norm_le}, and
-\leanid{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}.  The exact range
-identities for the tail, left, and full boundary maps give the displayed
-physical projectors.  No physical projector is identified with a transfer
-fixed-point projector.
+\leanid{MPSTensor.c3LeftFiniteGramCorrectionES_norm_le}. Exact range
+identities identify the tail, left, and full projectors. No physical projector
+is identified with a transfer fixed-point projector.
 
-This coefficient is a reconstructed TNLean substitute sufficient for
-Nachtergaele's condition C3.  Indeed,
+This reconstructed coefficient suffices for Nachtergaele's C3 condition. The
+theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
 uses
 \begin{align}
-  \sqrt{n+1}\,r^n&\longrightarrow0
+    \sqrt{n+1}\,r^n
+    &\longrightarrow0
+    \label{eq:cpgsv21_martingale_overlap_c3_decay_threshold}
 \end{align}
-to choose $l>1$ above a positive block-injectivity length such that $cr^l<1$
-and
+to choose $l>1$ above a positive block-injectivity length such that
 \begin{align}
-  \frac{C_*r^l}{1-cr^l}&<\frac{1}{\sqrt{l+1}}.
+    cr^l
+    &<1,
+    \label{eq:cpgsv21_martingale_overlap_c3_chosen_smallness}\\
+    \frac{C_*r^l}{1-cr^l}
+    &<\frac{1}{\sqrt{l+1}}.
+    \label{eq:cpgsv21_martingale_overlap_c3_chosen_threshold}
 \end{align}
-The same $l$ works for every spectator length $K$, and
+The same $l$ works for every spectator length $K$. The theorem
 \leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
-then gives the open-chain anticommutator inequality by the two-projection
-argument.  The length $l$ is measured in sites of the input tensor.  If that
-tensor is already a blocked representative, one such site is one blocked-chain
-filtration step.
+then gives the open-chain anticommutator estimate through two-projection
+geometry. The length $l$ is measured in sites of the input tensor; if that
+tensor is already blocked, one such site is one blocked-chain filtration step.
 
-The coefficient is not the optimized FNW expression
+The reconstructed coefficient is not the optimized FNW expression
 \begin{align}
-  c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
-  \qquad c\lambda^l<1,
+    c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
+    \qquad
+    c\lambda^l&<1,
+    \label{eq:cpgsv21_martingale_overlap_optimized_fnw_expression}
 \end{align}
-quoted as equation \path{boundAm} in
-\cite[Section~6]{Nachtergaele1996Spectral}.  Recovering that numerator and its
-source constants still requires the weighted Gram estimates of FNW, Lemmas
-5.2, 5.3, and 6.2.  No identification of the reconstructed constant with a
-source dimension-dependent value is made; the available unweighted Gram
-conversion retains its proved $D^{3/2}$ norm factor inside $g$.
+quoted as \path{boundAm} in Section~6 of
+Ref.~\cite{Nachtergaele1996Spectral}. Recovering its numerator and source
+constants requires the weighted Gram estimates in Lemmas~5.2, 5.3, and 6.2 of
+Ref.~\cite{Fannes1992Finitely}. The reconstructed constant is not identified
+with a source dimension-dependent value; the available unweighted conversion
+retains the proved $D^{3/2}$ norm factor inside $g$.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.}  The exact whole-increment algebra, the
-reconstructed prefix-uniform geometric C3$^\prime$-type estimate, the
-three-block coefficient $7/16$, and the resulting cyclic range-two gap $1/8$
-for a suitable blocked tensor are proved.  All lengths before blocking are
-measured in sites of the input tensor, while the final chain length counts
-blocked sites.  These bounds come from the formal inverse-Gram reconstruction
-and are not attributed to FNW.  The optimized FNW numerator and its source
-constants remain open.
+\textbf{Verdict: scope restriction.} The exact whole-increment algebra, the
+reconstructed prefix-uniform geometric C3$'$-type estimate, the three-block
+coefficient $7/16$, and the resulting cyclic range-two gap $1/8$ are proved
+for a suitable blocked tensor. Before blocking, lengths are measured in sites
+of the input tensor; the final chain length counts blocked sites. These bounds
+come from the formal inverse-Gram reconstruction and are not attributed to
+FNW. The optimized FNW numerator and its source constants remain open.
 
-The blocked-to-original comparison is now proved on periodic lengths divisible
-by the chosen block length.  Under the canonical configuration isometry, every
-blocked range-two term is exactly the original range-$2p$ term beginning at a
-block boundary.  The conjugated blocked Hamiltonian is therefore the sparse sum
-over aligned starts, and the omitted original local projections give a positive
-quadratic-form remainder.  Block injectivity identifies the blocked and
-original kernels with the same periodic MPS line under this isometry.  Hence
+The blocked-to-original comparison is proved for periodic lengths divisible by
+the chosen block length. Under the canonical configuration isometry, each
+blocked range-two term equals the original range-$2p$ term beginning at a block
+boundary. The conjugated blocked Hamiltonian is therefore the sparse sum over
+aligned starts. The omitted original local projections form a non-negative
+quadratic-form remainder. Block injectivity identifies the blocked and original
+kernels with the same periodic MPS line under this isometry. Hence
 \leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul}
-retains the gap constant $1/8$ for $H_{Np,2p}(A)$, $N\ge4$.
+proves
+\begin{align}
+    \operatorname{gap}(H_{Np,2p}(A))
+    &\geq\frac{1}{8}
+    \qquad(N\geq4).
+    \label{eq:cpgsv21_martingale_overlap_original_aligned_length_gap}
+\end{align}
 
-This finite cyclic sparse-sum argument is a TNLean reconstruction.  Nachtergaele,
-\cite[equations~(3.12)--(3.16)]{Nachtergaele1996Spectral}, formulates compatible
-open intervals and the proof of Theorem~2.1(ii) uses the rescaled sequence
-$\widetilde\Lambda_n=\Lambda_{ln}$; the source does not state the finite periodic
-operator comparison above.  The precise remaining leaf for the unrestricted
-normal-MPS theorem is the remainder-length case: chains $Np+r$ with
-$0<r<p$.  It requires a boundary/remainder comparison preserving the common
-ground-space complement and a uniform positive constant.  No all-length claim
-is made here.
+This finite cyclic sparse-sum comparison is a TNLean reconstruction.
+Nachtergaele formulates compatible open intervals in
+Equations~(3.12)--(3.16), and the proof of Theorem~2.1(ii) uses the rescaled
+sequence $\widetilde\Lambda_n=\Lambda_{ln}$
+\cite{Nachtergaele1996Spectral}. That source does not state the finite periodic
+operator comparison used here. The remaining case for the unrestricted normal
+MPS theorem consists of chain lengths
+\begin{align}
+    Np+r,
+    \qquad
+    0&<r<p.
+    \label{eq:cpgsv21_martingale_overlap_remainder_lengths}
+\end{align}
+It requires a boundary or remainder comparison that preserves the common
+ground-space complement and a uniform positive constant. No all-length claim
+is made.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -6,12 +6,21 @@
 
 \input{command}
 
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
 \title{Model Note: Comparing a Cited Argument with a Formal Statement}
 \author{}
 \date{\today}
 
 \begin{document}
 \maketitle
+\gapnote{unfaithful}{open}
 
 % This file is a model for notes in docs/paper-gaps/.
 % When making a real note, replace the abstract toy assertion below by the actual
@@ -22,75 +31,102 @@
 % If a Mathlib theorem or construction replaces a step from the paper, explain
 % that theorem in ordinary mathematics before naming the formal declaration.
 % In a real note, the first paragraph should identify the cited assertion and
-% the part of the argument in which it is used.  Put issue links, pull requests,
+% the part of the argument in which it is used. Put issue links, pull requests,
 % source files, line ranges, labels, and formal declaration names in footnotes
 % when they are only traceability data.
 
 \section{The assertion}
 
-This note concerns a hypothetical proposition, of the sort one might encounter
-in a cited argument such as \cite{Cirac2021Matrix}.  The proposition is used
-later in the same argument.
-
-Let \(\mathcal H\) denote the hypotheses available at a certain point of the
-argument, and let \(C\) denote the conclusion needed there.  Suppose the cited
-source states the implication
-\begin{align}
-  \mathcal H \Longrightarrow C.
-  \tag{\path{thm:model-source}}
-\end{align}
-The notation in the displayed implication has now been fixed: \(\mathcal H\) is
-the available hypothesis set, and \(C\) is the conclusion required by the later
+This note concerns a hypothetical proposition of the kind used in
+Ref.~\cite{Cirac2021Matrix}. The proposition is used later in the same
 argument.
+
+Let $\mathcal H$ denote the hypotheses available at the relevant point of the
+argument, and let $C$ denote the conclusion needed there. Suppose the cited
+source claims
+\begin{align}
+    \mathcal H &\Longrightarrow C.
+    \label{eq:model_source_claim}
+\end{align}
+In (\ref{eq:model_source_claim}), $\mathcal H$ is the available hypothesis set
+and $C$ is the conclusion required by the later argument. A completed note must
+name the source theorem, lemma, or equation and cite the source with an existing
+bibliography key. Identify a source-paper equation as an equation of the cited
+source; do not represent it as a local \verb|\ref|.
 
 \section{The point at issue}
 
-Assume that the proof of the displayed implication invokes a lemma which, in the
-special case being used, proves
+Assume that the source proof invokes a lemma which, in the special case being
+used, proves
 \begin{align}
-  \mathcal H \wedge \mathcal K \Longrightarrow C,
-  \tag{\path{lem:model-input}}
+    \mathcal H\wedge\mathcal K &\Longrightarrow C,
+    \label{eq:model_extra_hypothesis}
 \end{align}
-where \(\mathcal K\) is an additional hypothesis.  If the surrounding argument
-does not prove \(\mathcal K\), then the displayed implication
-\(\mathcal H\Rightarrow C\) has not been justified by that proof.  The
-mathematical question is whether \(\mathcal K\) follows from \(\mathcal H\), must
-be added to the statement, or can be avoided by a different argument.
+where $\mathcal K$ is an additional hypothesis. If the surrounding argument
+does not prove $\mathcal K$, then
+(\ref{eq:model_extra_hypothesis}) does not justify
+(\ref{eq:model_source_claim}). The mathematical question is whether
+$\mathcal K$ follows from $\mathcal H$, must be added to the theorem, or can be
+avoided by a different argument.
 
-Thus the proof supplies the desired conclusion only after the additional
-hypothesis \(\mathcal K\) has been accounted for.
+A completed note must show the intermediate step at which $\mathcal K$ enters.
+For example, if the argument factors through a statement $D$, write
+\begin{align}
+    \mathcal H
+        &\Longrightarrow D,
+    \label{eq:model_first_step}\\
+    D\wedge\mathcal K
+        &\Longrightarrow C,
+    \label{eq:model_missing_step}\\
+    \mathcal H\wedge\mathcal K
+        &\Longrightarrow C.
+    \label{eq:model_derived_claim}
+\end{align}
+The gap lies between (\ref{eq:model_first_step}) and
+(\ref{eq:model_missing_step}), because the first implication does not supply
+$\mathcal K$. This calculation locates the missing hypothesis more precisely
+than a restatement of (\ref{eq:model_extra_hypothesis}) alone.
 
 \section{The corrected statement}
 
-In this model, suppose that \(\mathcal K\) is not known to follow from
-\(\mathcal H\), but that the later proof only uses the theorem in situations
-where \(\mathcal K\) is available.  The corrected statement is then
+In this model, suppose that $\mathcal K$ is not known to follow from
+$\mathcal H$, but the later proof uses the theorem only when $\mathcal K$ is
+available. The corrected statement is
 \begin{align}
-  \mathcal H \wedge \mathcal K \Longrightarrow C.
+    \mathcal H\wedge\mathcal K &\Longrightarrow C.
+    \label{eq:model_corrected_statement}
 \end{align}
-This is a strengthening of the hypotheses, not a derivation of \(\mathcal K\)
-from the original assumptions.
+The assertion in (\ref{eq:model_corrected_statement}) strengthens the
+hypotheses; it does not derive $\mathcal K$ from the original assumptions.
 
-If the formal development proves this corrected statement, the note should state
-that fact in prose and identify the exact formal declaration in a footnote.  For
-example, the declaration might be recorded as \leanid{modelCorrected} in
-\doclink{TNLean/Path/To/File}.  The formal declaration is evidence for the
-corrected mathematical statement; it is not a substitute for explaining the
-statement.
+If the formal development proves (\ref{eq:model_corrected_statement}), state
+that fact in prose and identify the exact formal declaration in a
+footnote.\footnote{Model formal declaration:
+    \leanid{modelCorrected} in \doclink{TNLean/Path/To/File}.}
+The formal declaration is evidence for the corrected mathematical statement; it
+does not replace its mathematical explanation.
 
 The same principle applies if the formal proof uses a theorem from a library
-which is not present in the cited source.  The note should first state that
-theorem as a mathematical assertion, then explain how its hypotheses are verified
-in the present notation, and only then identify the corresponding formal
-declaration.
+that is absent from the cited source. State that theorem first as a mathematical
+assertion, verify its hypotheses in the notation of the note, and then identify
+the corresponding formal declaration in a footnote.
+
+Every substantive display in the completed note must use \verb|align| and carry
+a stable semantic \verb|\label{eq:...}| identifier. Refer to local displayed
+equations only through \verb|\ref|. Do not use ``the equation above'', raw
+local equation numbers, \verb|$$|\ldots\verb|$$|,
+\verb|\[|\ldots\verb|\]|, \verb|equation|, or \verb|align*|. Use multiple
+aligned lines when an intermediate equality or implication is needed to locate
+the gap.
 
 \section{Conclusion}
 
-The verdict in this model is that the original proof uses an additional
-hypothesis \(\mathcal K\).  The corrected statement is sufficient for the
-surrounding argument only in the cases where \(\mathcal K\) is supplied.  Without
-such a derivation or a different proof of \(C\), the original implication
-\(\mathcal H\Rightarrow C\) remains unjustified.
+The verdict in this model is that the original proof uses the additional
+hypothesis $\mathcal K$. The corrected statement
+(\ref{eq:model_corrected_statement}) suffices for the surrounding argument only
+when $\mathcal K$ is supplied. Without a derivation of $\mathcal K$ or a
+different proof of $C$, the source claim
+(\ref{eq:model_source_claim}) remains unjustified by this route.
 
 \bibliographystyle{alpha}
 \bibliography{references}

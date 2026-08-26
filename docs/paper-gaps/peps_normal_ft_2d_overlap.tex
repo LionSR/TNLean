@@ -22,32 +22,36 @@ The final unformalized statement of \cite{Molnar2018NormalPEPS} is the
 two-dimensional strengthening of the torus Fundamental Theorem announced
 at the end of the overlapping-window
 section.\footnote{\path{Papers/1804.04964/paper_normal.tex:2296--2318}.}
-The source states it as a corollary:
+Ref.~\cite{Molnar2018NormalPEPS} states the corollary as follows:
 
 \begin{quote}
   Let $A$ and $B$ be two normal 2D PEPS tensors such that every
   $L \times K$ region is injective. Suppose they generate the same state
   on some region $n\times m$ with $n \geq 2L+1$ and $m\geq 2K+1$. Then
   $A$ and $B$ are related to each other with a gauge:
-  \[
-    B^i \;=\; \lambda \cdot
-      (X \otimes Y)\, A^i\, (X^{-1} \otimes Y^{-1}),
-  \]
+  \begin{align}
+    B^i
+      &= \lambda \cdot (X \otimes Y)\, A^i\,
+         (X^{-1} \otimes Y^{-1}),
+    \label{eq:peps_normal_ft_2d_overlap_source_gauge_relation}
+  \end{align}
   with $\lambda^{n\cdot m} = 1$ and $X,Y$ invertible matrices. Moreover
   these matrices $X,Y$ are unique up to a multiplicative constant.
 \end{quote}
 
-Here the displayed gauge relation abbreviates the source's diagram: $X$
-acts on the two horizontal virtual legs of the tensor and $Y$ on the two
-vertical legs, with inverses on the outgoing sides. The conclusion is
-identical to that of the source's Theorem~3;\footnote{Theorem~3 is at
+The relation (\ref{eq:peps_normal_ft_2d_overlap_source_gauge_relation})
+abbreviates the diagram in Ref.~\cite{Molnar2018NormalPEPS}: $X$ acts on the
+two horizontal virtual legs of the tensor and $Y$ on the two vertical legs,
+with inverses on the outgoing sides. Its conclusion is identical to that of
+Theorem~3 of Ref.~\cite{Molnar2018NormalPEPS};\footnote{Theorem~3 is at
 \path{Papers/1804.04964/paper_normal.tex:1451--1472}; its torus form is
 formalized as
 \leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional} in
 \path{TNLean/PEPS/TorusFundamentalTheorem2.lean}.} only the hypotheses
-differ. Theorem~3 assumes that every $2\times3$ \emph{and} every
-$3\times2$ region is injective and that $n, m \geq 7$. The corollary
-assumes injectivity of a single rectangle shape $L \times K$ --- one
+differ. Theorem~3 of Ref.~\cite{Molnar2018NormalPEPS} assumes that every
+$2\times3$ \emph{and} every $3\times2$ region is injective and that
+$n, m \geq 7$. The corollary of Ref.~\cite{Molnar2018NormalPEPS} assumes
+injectivity of a single rectangle shape $L \times K$ --- one
 orientation only --- and the sizes $n \geq 2L+1$, $m \geq 2K+1$. For
 $L = K = 2$ this reads: injectivity of every $2\times2$ region and sizes
 $n, m \geq 5$, strictly weaker hypotheses than the formalized theorem in
@@ -57,8 +61,7 @@ $K=3$ it gives $5 \times 7$ in place of $7 \times 7$).
 
 \section{The source proof sketch}
 
-The source gives only a proof
-sketch.\footnote{\path{Papers/1804.04964/paper_normal.tex:2320--2445}.}
+Ref.~\cite{Molnar2018NormalPEPS} gives only a proof sketch.\footnote{\path{Papers/1804.04964/paper_normal.tex:2320--2445}.}
 Its full text, with the diagrams described in words:
 
 \begin{quote}
@@ -83,8 +86,8 @@ Its full text, with the diagrams described in words:
   as the proof of Theorem~3.
 \end{quote}
 
-Lemma~5 is the one-dimensional overlapping-window bond-operator
-extraction,\footnote{\path{Papers/1804.04964/paper_normal.tex:2045--2255},
+Lemma~5 of Ref.~\cite{Molnar2018NormalPEPS} is the one-dimensional
+overlapping-window bond-operator extraction,\footnote{\path{Papers/1804.04964/paper_normal.tex:2045--2255},
 formalized (site-dependent form) as
 \leanid{MPSChainTensor.overlapWindow_exists_bondOperator} in
 \path{TNLean/PEPS/CycleMPSChainOverlapWindow.lean}, with the closed-chain
@@ -95,11 +98,12 @@ three-block bound $n \geq 3L$.
 
 \subsection{What the sketch asserts, and what remains to be extracted}
 
-The sketch is explicitly labelled ``Sketch of
-proof''\footnote{\path{Papers/1804.04964/paper_normal.tex:2320}.} and its
+The sketch in Ref.~\cite{Molnar2018NormalPEPS} is explicitly labelled
+``Sketch of proof''\footnote{\path{Papers/1804.04964/paper_normal.tex:2320}.} and its
 single load-bearing claim is asserted by analogy to Lemma~5 rather than
-derived. The claim is the converse correspondence between virtual and
-physical operations: ``a virtual operation on a given bond can be
+derived. The claim in Ref.~\cite{Molnar2018NormalPEPS} is the converse
+correspondence between virtual and physical operations: ``a virtual
+operation on a given bond can be
 interpreted as a physical operation on any of the [\,$L+K$\,] regions,'' and
 conversely ``any [\,$L+K$\,] physical operators on the above regions that
 transforms the PEPS into the same state means that the transformation can
@@ -114,7 +118,7 @@ configuration~$\mu$.  The converse, which must compare the two tensor
 families and recover the algebra homomorphism carried by $X$, is the
 remaining extraction problem.
 
-The sketch supplies this converse by the reduction ``we only need to prove a
+Ref.~\cite{Molnar2018NormalPEPS} supplies this converse by the reduction ``we only need to prove a
 statement similar to Lemma~5''\footnote{\path{Papers/1804.04964/paper_normal.tex:2321}.}
 and ``therefore, similar to Lemma~5, [the four operators on the patch
 agree] with open boundaries,''\footnote{\path{Papers/1804.04964/paper_normal.tex:2368}.}
@@ -130,15 +134,15 @@ formalized; see the filled-in derivation below.
 
 The step that does \emph{not} transfer is the final extraction of the single
 matrix $X$ on the edge, which the sketch obtains by analogy to the closing
-move of Lemma~5. In Lemma~5 that move is the comparison of the two ends of
-the chain, ``similar to'' the injective
-read-off,\footnote{\path{Papers/1804.04964/paper_normal.tex:2213}, invoking
-\path{Papers/1804.04964/paper_normal.tex:377}
-(\path{eq:inj_O->X_argument}).} which there yields the bond matrix $X$ and,
+move of Lemma~5. In Lemma~5 of Ref.~\cite{Molnar2018NormalPEPS}, that move compares the
+two ends of the chain, ``similar to'' the injective read-off,\footnote{\path{Papers/1804.04964/paper_normal.tex:2213}, invoking
+\path{Papers/1804.04964/paper_normal.tex:377}, source equation
+\path{eq:inj_O->X_argument} of Ref.~\cite{Molnar2018NormalPEPS}.} which there yields the bond matrix $X$ and,
 by composition, the algebra
 homomorphisms $O_1 \mapsto X$ and
-$O_3^T \mapsto X$.\footnote{\path{Papers/1804.04964/paper_normal.tex:2129}
-and \path{Papers/1804.04964/paper_normal.tex:2252}.} That read-off is valid in
+$O_3^T \mapsto X$.\footnote{\path{Papers/1804.04964/paper_normal.tex:2129} and
+\path{Papers/1804.04964/paper_normal.tex:2252} of
+Ref.~\cite{Molnar2018NormalPEPS}.} That read-off is valid in
 one dimension for a structural reason specific to a one-dimensional window:
 a length-$L$ window has exactly two virtual legs, a left bond and a right
 bond, both of dimension $D$, so inverting the injective window tensors
@@ -186,14 +190,14 @@ machine-checked refutations of each closing route; this section states the
 conclusions a reader needs without that detail.
 
 \paragraph{1. The statement and its faithful Lean hypotheses.}
-The source corollary\footnote{\path{Papers/1804.04964/paper_normal.tex:2297--2318}.}
+The corollary of Ref.~\cite{Molnar2018NormalPEPS}\footnote{\path{Papers/1804.04964/paper_normal.tex:2297--2318}.}
 asserts that two normal $2$D PEPS tensors $A$, $B$ with every $L \times K$
 region injective, generating the same state on an $n \times m$ region with
 $n \geq 2L+1$, $m \geq 2K+1$, are related by
 $B^i = \lambda\,(X \otimes Y)\,A^i\,(X^{-1} \otimes Y^{-1})$ with
 $\lambda^{nm} = 1$ and $X, Y$ unique up to a constant. ``Normal $\dots$ such
 that every $L \times K$ region is injective'' is the source's own normality
-condition\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}: ``We call
+condition in Ref.~\cite{Molnar2018NormalPEPS}\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}: ``We call
 a PEPS \emph{normal}, if blocking tensors in certain regions results in
 injective tensors.''} instantiated at the $L \times K$ blocking; it is not a
 second, stronger hypothesis. The faithful Lean hypothesis bundle is
@@ -312,7 +316,7 @@ corollary is false or that no source-faithful proof exists.
 \end{itemize}
 
 \paragraph{5. Reading the source faithfully.}
-The paper keeps one highlighted edge fixed and compares physical operations
+Ref.~\cite{Molnar2018NormalPEPS} keeps one highlighted edge fixed and compares physical operations
 on overlapping regions; it does not introduce a chain of different bonds or
 a single-window square-matrix span.  The forward correspondence, its
 open-boundary physical operators, and its transpose convention now follow
@@ -340,14 +344,20 @@ indices to its physical indices.
 
 Fix a horizontal edge $e$ with endpoints $u = (x,y)$ and $w = (x+1,y)$.
 Define $L+K$ windows, each a contiguous $L \times K$ rectangle:
-\begin{align*}
-  W_j &= [x+1-j,\, x+L-j] \times [y,\, y+K-1],
-    & j &= 0, \dots, L,\\
-  W_{L+i} &= [x-L+1,\, x] \times [y-i,\, y+K-1-i],
+\begin{align}
+  W_j
+    &= [x+1-j,\, x+L-j] \times [y,\, y+K-1],
+    & j &= 0, \dots, L,
+  \label{eq:peps_normal_ft_2d_overlap_horizontal_window_family}\\
+  W_{L+i}
+    &= [x-L+1,\, x] \times [y-i,\, y+K-1-i],
     & i &= 1, \dots, K-1.
-\end{align*}
-The first $L+1$ windows slide left across the edge one column at a time;
-the last $K-1$ windows descend one row at a time. The first window $W_0$
+  \label{eq:peps_normal_ft_2d_overlap_vertical_window_family}
+\end{align}
+The windows in (\ref{eq:peps_normal_ft_2d_overlap_horizontal_window_family})
+slide left across the edge one column at a time; those in
+(\ref{eq:peps_normal_ft_2d_overlap_vertical_window_family}) descend one row
+at a time. The first window $W_0$
 contains only the right endpoint $w$ (at its lower-left corner), the
 windows $W_1, \dots, W_{L-1}$ contain both endpoints, and the windows
 $W_L, \dots, W_{L+K-1}$ contain only the left endpoint $u$. For
@@ -370,14 +380,18 @@ The two-dimensional analogue of Lemma~5 also has a converse. Suppose each
 window $W_j$ carries a deformed tensor $C_j$ (an arbitrary tensor with
 the boundary structure of $W_j$) and all the deformed states agree:
 replacing $T_{W_j}$ by $C_j$ in the torus contraction yields one common
-state for $j = 0, \dots, L+K-1$. Then there is a single matrix $X$ on
-the bond $e$ with
-\[
-  C_0 = T_{W_0} \cdot X_e
-  \qquad\text{and}\qquad
-  C_{L+K-1} = X_e \cdot T_{W_{L+K-1}},
-\]
-where $X_e$ denotes the insertion of $X$ on the open leg of $e$, and
+state for $j = 0, \dots, L+K-1$. Then there is a single matrix $X$ on the bond $e$ satisfying
+\begin{align}
+  C_0
+    &= T_{W_0} \cdot X_e,
+  \label{eq:peps_normal_ft_2d_overlap_first_window_factorization}\\
+  C_{L+K-1}
+    &= X_e \cdot T_{W_{L+K-1}}.
+  \label{eq:peps_normal_ft_2d_overlap_last_window_factorization}
+\end{align}
+Here $X_e$ in (\ref{eq:peps_normal_ft_2d_overlap_first_window_factorization})
+and (\ref{eq:peps_normal_ft_2d_overlap_last_window_factorization}) denotes
+the insertion of $X$ on the open leg of $e$, and
 $X$ is unique.
 
 \subsection{Step 1: comparing consecutive windows}
@@ -390,38 +404,42 @@ columns and a leftover rectangle of size $(L+1)\times(K+1)$
 (respectively $L \times K$), and each piece is a union of translated
 $L \times K$ rectangles. The decomposition needs exactly $n \geq 2L+1$
 and $m \geq 2K+1$; this is the only step of the whole argument where
-the torus size enters, matching the source's parenthetical
-``$(2L+1)\times(2K+1)$''. The bands may wrap the torus seam, so the
+the torus size enters, matching the bound
+``$(2L+1)\times(2K+1)$'' in Ref.~\cite{Molnar2018NormalPEPS}. The bands may wrap the torus seam, so the
 covering rectangles are translates of coordinate rectangles;
 injectivity transports along translations.
 
 Inverting the complement strips the state equality for $j$ and $j+1$ to
-an open-boundary equality on the union:
-\[
+the open-boundary equality
+\begin{align}
   C_j \,\sqcup\, T_{W_{j+1} \setminus W_j}
-  \;=\;
-  T_{W_j \setminus W_{j+1}} \,\sqcup\, C_{j+1}
-  \qquad\text{as tensors on } U_j .
-\]
-This is the two-dimensional form of the inversions producing the
-source's displays around Lemma~5.\footnote{The one-dimensional
-inversions are at \path{Papers/1804.04964/paper_normal.tex:2133--2179}
-(\path{eq:normal_act_123} and \path{eq:normal_act_234}).}
+    &= T_{W_j \setminus W_{j+1}} \,\sqcup\, C_{j+1}
+    &&\text{as tensors on } U_j.
+  \label{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}
+\end{align}
+Equation~(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality})
+is the two-dimensional form of source equations \path{eq:normal_act_123} and
+\path{eq:normal_act_234} in the proof of Lemma~5 of
+Ref.~\cite{Molnar2018NormalPEPS}.\footnote{The one-dimensional inversions
+are at \path{Papers/1804.04964/paper_normal.tex:2133--2179}.}
 
 \subsection{Step 2: chaining to the patch}
 
 Let $P = \bigcup_j W_j$, the staircase-shaped patch. Contracting each
-consecutive-window equality with the tensors of $P \setminus U_j$
+instance of
+(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}) with
+the tensors of $P \setminus U_j$
 extends it to $P$, and transitivity chains the $L+K-1$ equalities into
-one comparison of the two end windows:
-\[
+the end-window comparison
+\begin{align}
   C_0 \,\sqcup\, T_{P \setminus W_0}
-  \;=\;
-  T_{P \setminus W_{L+K-1}} \,\sqcup\, C_{L+K-1}
-  \qquad\text{on } P
-\]
-with open boundary. This is the analogue of the source's plugging of
-$A_4$ and $A_1$ in the proof of Lemma~5.
+    &= T_{P \setminus W_{L+K-1}} \,\sqcup\, C_{L+K-1}
+    &&\text{on } P.
+  \label{eq:peps_normal_ft_2d_overlap_patch_end_window_comparison}
+\end{align}
+Equation~(\ref{eq:peps_normal_ft_2d_overlap_patch_end_window_comparison})
+has open boundary. It is the analogue of the insertion of $A_4$ and $A_1$ in
+the proof of Lemma~5 of Ref.~\cite{Molnar2018NormalPEPS}.
 
 \subsection{Step 3: stripping to the staircase pair}
 
@@ -432,25 +450,27 @@ $[x-L+1, x] \times [y+1, y+K-1]$ of size $L \times (K-1)$ (the sketch's
 bounding box, where the lower-right corner block appears as well, and
 removes both). An $L \times (K-1)$ block is not injective, so it cannot
 be inverted directly. Instead, complete it: contract both sides of the
-patch equality with one added row of network tensors above the block,
+equality (\ref{eq:peps_normal_ft_2d_overlap_patch_end_window_comparison})
+with one added row of network tensors above the block,
 forming the $L \times K$ rectangle $[x-L+1,x] \times [y+1, y+K]$. The
 completed rectangle is injective, and inverting it removes both the
 added row and the corner block. This is the sketch's ``add two-two
 tensors in the \dots corner and invert the resulting regions''. The
-result is the open-boundary equality on the staircase pair:
-\[
+result is the open-boundary equality
+\begin{align}
   C_0 \,\sqcup\, T_{W_{L+K-1}}
-  \;=\;
-  T_{W_0} \,\sqcup\, C_{L+K-1}
-  \qquad\text{on } S .
-\]
+    &= T_{W_0} \,\sqcup\, C_{L+K-1}
+    &&\text{on } S.
+  \label{eq:peps_normal_ft_2d_overlap_staircase_pair_open_equality}
+\end{align}
 
-The inversion in this step cancels a \emph{shared} injective block. Both
-sides of the patch equality carry the genuine network block on the
+The derivation of
+(\ref{eq:peps_normal_ft_2d_overlap_staircase_pair_open_equality}) cancels a
+\emph{shared} injective block. Both
+sides of (\ref{eq:peps_normal_ft_2d_overlap_patch_end_window_comparison}) carry the genuine network block on the
 completed rectangle $Q = [x-L+1,x] \times [y+1,y+K]$ once the added row
 is contracted in; they differ only on $S$. Injectivity of $Q$ then
-cancels the common $Q$-block from both sides and leaves the equality on
-$S$. This is a different inversion from the consecutive-window step of
+cancels the common $Q$-block from both sides and leaves (\ref{eq:peps_normal_ft_2d_overlap_staircase_pair_open_equality}). This is a different inversion from the consecutive-window step of
 Step~1, where the inverted region is the entire torus complement of the
 compared region and the two sides differ across that whole complement.
 
@@ -482,12 +502,14 @@ the variant $\mathrm{univ} \setminus S = (\mathrm{univ} \setminus P) \cup
 \mathrm{corner}$: the patch $P$ also occupies all columns $[0,2L)$ at row
 $K-1$, so $\mathrm{univ} \setminus P$ has the same sub-$L$ band there.
 
-The faithful step is therefore the shared-block cancellation above, which
+The faithful step is therefore the shared-block cancellation that yields
+(\ref{eq:peps_normal_ft_2d_overlap_staircase_pair_open_equality}), which
 needs only injectivity of the completed rectangle $Q$ (an $L \times K$
 window, injective by hypothesis) and never asserts injectivity of
 $\mathrm{univ} \setminus S$. The Lean stripping is the open-boundary
 shared-corner cancellation \leanid{staircasePair_insert_eq_open}: it cancels
-the shared injective completed rectangle $Q$ from the patch equality and never
+the shared injective completed rectangle $Q$ from
+(\ref{eq:peps_normal_ft_2d_overlap_patch_end_window_comparison}) and never
 inverts $\mathrm{univ} \setminus S$. An earlier closed-torus stripping
 discharged Step~3 with the full-complement engine
 \leanid{deformedRegionStateAssembled_insert_eq_of_complementInjective} and so
@@ -499,25 +521,33 @@ common completed-corner block rather than the whole complement.
 
 \subsection{Step 4: the single-crossing extraction}
 
-The two end windows are diagonally offset copies of the $L \times K$
-rectangle:
-\[
-  W_0 = [x+1, x+L] \times [y, y+K-1],
-  \qquad
-  W_{L+K-1} = [x-L+1, x] \times [y-K+1, y].
-\]
-Their column ranges are disjoint and their row ranges intersect exactly
+The two end windows are the diagonally offset $L \times K$ rectangles
+\begin{align}
+  W_0
+    &= [x+1, x+L] \times [y, y+K-1],
+  \label{eq:peps_normal_ft_2d_overlap_right_end_window}\\
+  W_{L+K-1}
+    &= [x-L+1, x] \times [y-K+1, y].
+  \label{eq:peps_normal_ft_2d_overlap_left_end_window}
+\end{align}
+The column ranges in (\ref{eq:peps_normal_ft_2d_overlap_right_end_window})
+and (\ref{eq:peps_normal_ft_2d_overlap_left_end_window}) are disjoint, and
+their row ranges intersect exactly
 in $\{y\}$, so the \emph{only} lattice edge joining them is $e$ itself:
 a horizontally adjacent pair must sit in columns $x$ and $x+1$ at a
 common row in $[y, y+K-1] \cap [y-K+1, y] = \{y\}$, and a vertically
-adjacent pair would need a common column. The staircase equality is
-therefore a pairing of two injective tensors across the single bond
-$e$, and the standard two-sided extraction --- combine one family by
-coefficients representing the identity, exactly as in the injective
-case\footnote{\path{Papers/1804.04964/paper_normal.tex:377}
-(\path{eq:inj_O->X_argument}); the matrix-level form is
+adjacent pair would need a common column. Equation
+(\ref{eq:peps_normal_ft_2d_overlap_staircase_pair_open_equality}) therefore
+pairs two injective tensors across the single bond
+$e$, and the standard two-sided extraction --- combine one family by coefficients
+representing the identity, exactly as in source equation
+\path{eq:inj_O->X_argument} of Ref.~\cite{Molnar2018NormalPEPS}\footnote{The
+source equation is at \path{Papers/1804.04964/paper_normal.tex:377}; the
+matrix-level form is
 \leanid{MPSChainTensor.exists_bondOperator_of_intertwine_span}.} ---
-produces the unique matrix $X$ on $e$ with the two factorizations. This
+produces the unique matrix $X$ on $e$ with the factorizations
+(\ref{eq:peps_normal_ft_2d_overlap_first_window_factorization}) and
+(\ref{eq:peps_normal_ft_2d_overlap_last_window_factorization}). This
 single-crossing geometry is the reason the extracted operator lives on
 one edge: no multi-edge cut is ever inverted across.
 
@@ -586,8 +616,8 @@ geometry above is the prerequisite it consumes, and is now in place.
 
 \subsection{Step 5: the rest of the proof}
 
-With the per-edge extraction in place, the remainder is, as the source
-says, the same as the proof of Theorem~3, and the torus formalization
+With the per-edge extraction in place, the remainder is the proof of
+Theorem~3 specified by Ref.~\cite{Molnar2018NormalPEPS}, and the torus formalization
 already realizes that part as a chain of layers: the insertion
 correspondence turns the extraction into an algebra isomorphism of the
 bond algebra at one reference edge per orientation, inner by
@@ -628,7 +658,7 @@ per column \emph{cut} --- an invertible matrix on the whole product of
 the bond spaces crossing the cut --- and would then face a genuine
 coherence problem: decomposing the cut gauges into one matrix per edge,
 uniformly across rows, which the one-dimensional argument does not
-provide. The source's sketch does not take this route and the question
+provide. The sketch in Ref.~\cite{Molnar2018NormalPEPS} does not take this route and the question
 never arises. The window chain is intrinsically two-dimensional and
 local to one edge: the windows turn the corner around the edge (sliding
 in both directions), and the end pair's single-crossing geometry forces
@@ -689,7 +719,7 @@ unions, all of which decompose at $(2L+1)\times(2K+1)$.
   \item \textbf{The window must straddle the edge: $L, K \geq 2$.} The
     chain around a horizontal edge passes through windows containing
     both endpoints, which requires $L \geq 2$; vertical edges require
-    $K \geq 2$. The source states the corollary for unqualified $L, K$
+    $K \geq 2$. Ref.~\cite{Molnar2018NormalPEPS} states the corollary for unqualified $L, K$
     but proves the sketch at $L = K = 2$ and never addresses $L = 1$ or
     $K = 1$, where no window straddles the relevantly oriented edge and
     the chain cannot cross it. The formalization should carry
@@ -709,8 +739,10 @@ unions, all of which decompose at $(2L+1)\times(2K+1)$.
 \section{Formalization plan}
 
 The geometry, state-equality, and forward fixed-edge-operation layers of the
-derivation above are complete.  The remaining source step is the converse at
-lines 2368--2444: from physical operations on the overlapping windows that
+derivation above are complete. The remaining source step is the converse at
+\path{Papers/1804.04964/paper_normal.tex:2368--2444} of
+Ref.~\cite{Molnar2018NormalPEPS}: from physical operations on the overlapping
+windows that
 produce one state, recover the virtual operation $X$ on the highlighted edge
 and prove the Lemma~5 maps from $O_1$ and $O_3^{\mathsf T}$ are algebra
 homomorphisms.  The layer list below records the campaign around that step:
@@ -750,7 +782,7 @@ homomorphisms.  The layer list below records the campaign around that step:
 
 Layer 1 is foundational and self-contained; layers 2--5 replace the
 landed coarse three-site witness engine; layer 6 is a re-anchoring of
-existing arguments. Until the capstone lands, the corollary at
+existing arguments. Until the capstone lands, the corollary of Ref.~\cite{Molnar2018NormalPEPS} at
 \path{Papers/1804.04964/paper_normal.tex:2297--2318} remains
 unformalized, and no blueprint entry should claim it.
 
@@ -789,7 +821,9 @@ are in \path{TNLean/PEPS/TorusDeformedWindow.lean}. The engine is
 specialized to the consecutive-window unions there as
 \path{horizontalUnion_insert_eq_of_deformedState_eq} and its vertical
 counterpart, the union complement injectivity supplied by layer~1. The
-remaining part of Step~1's display --- writing each single-window deformed
+remaining content of
+(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}) ---
+writing each single-window deformed
 state as the union deformed state of the corner-extended insert
 $C_j \sqcup T_{W_{j+1} \setminus W_j}$ --- is the contraction-extension of
 the chaining layer (item~3 of the plan).
@@ -832,8 +866,9 @@ needs no standalone $\partial R \to \partial S$ boundary-configuration
 equivalence; the three-block blue coupling supplies the split already
 packaged.
 
-With \path{deformedRegionState_extend} the consecutive-window display
-\path{horizontalConsecutiveWindow_extend_eq} writes each single-window state
+With \path{deformedRegionState_extend}, the formal version of
+(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}),
+\path{horizontalConsecutiveWindow_extend_eq}, writes each single-window state
 as the union state of its corner-extended insert and passes the equality to
 the consecutive-window engine, leaving an open-boundary equality of inserts
 on each consecutive-window union. The patch chaining
@@ -875,30 +910,40 @@ which the completed corner cancels locally by its injectivity alone.
 The open-boundary route factors into two engines, neither of which inverts
 $\mathrm{univ} \setminus S$. They are stated here with the machinery each needs.
 
-\emph{The corner-extension composition.} The open-boundary chaining needs the
-transitivity of the corner extension: for nested regions $R \subseteq S
-\subseteq P$ and an insert $C$ on $R$,
-\[
-  \text{\path{extendInsert}} (S \subseteq P)\,\bigl(\text{\path{extendInsert}} (R \subseteq
-  S)\, C\bigr) \;=\; \text{\path{extendInsert}} (R \subseteq P)\, C
-  \qquad\text{as inserts on } P.
-\]
-Each consecutive-window open-boundary equality lives on the union $U_j$;
+\emph{The corner-extension composition.} For nested regions $R \subseteq S \subseteq P$ and an insert $C$ on
+$R$, open-boundary chaining uses
+\begin{align}
+  \text{\path{extendInsert}} (S \subseteq P)\,
+  \bigl(\text{\path{extendInsert}} (R \subseteq S)\, C\bigr)
+    &= \text{\path{extendInsert}} (R \subseteq P)\, C
+    &&\text{as inserts on } P.
+  \label{eq:peps_normal_ft_2d_overlap_corner_extension_transitivity}
+\end{align}
+Each instance of
+(\ref{eq:peps_normal_ft_2d_overlap_consecutive_window_open_equality}) lives
+on the union $U_j$;
 extending both sides through $\text{\path{extendInsert}}(U_j \subseteq P)$ and
-collapsing the composition by this transitivity chains the equalities into one
-patch-level insert equality. The identity is \emph{not} reducible to the
+collapsing the composition by
+(\ref{eq:peps_normal_ft_2d_overlap_corner_extension_transitivity}) chains the equalities into one
+patch-level insert equality. Equation
+(\ref{eq:peps_normal_ft_2d_overlap_corner_extension_transitivity}) is
+\emph{not} reducible to the
 assembled-state collapse \path{deformedRegionState_extend}: both sides have the
 same assembled state on $P$, but equal assembled states determine equal inserts
 only when $\mathrm{univ} \setminus P$ is injective, which fails at the minimal
 size. Stripping the inverse interior-bond multiplicities (the lemma
 \path{extendInsert_const_smul} commutes the rescaling through), the identity
-reduces to the \emph{bare} composition law
-\[
-  \text{\path{bareExtendInsert}} (S \subseteq P)\,\bigl(\text{\path{bareExtendInsert}} (R
-  \subseteq S)\, C\bigr) \;=\; \mathrm{ribp}(\mathrm{univ} \setminus S)\cdot
-  \text{\path{bareExtendInsert}} (R \subseteq P)\, C ,
-\]
-which is the blue-coupling composition of \path{ThreeBlockGeometry.threeBlockBlueCoeff}
+(\ref{eq:peps_normal_ft_2d_overlap_corner_extension_transitivity}) reduces to
+the \emph{bare} composition law
+\begin{align}
+  \text{\path{bareExtendInsert}} (S \subseteq P)\,
+  \bigl(\text{\path{bareExtendInsert}} (R \subseteq S)\, C\bigr)
+    &= \mathrm{ribp}(\mathrm{univ} \setminus S)\cdot
+       \text{\path{bareExtendInsert}} (R \subseteq P)\, C.
+  \label{eq:peps_normal_ft_2d_overlap_bare_corner_extension_composition}
+\end{align}
+Equation~(\ref{eq:peps_normal_ft_2d_overlap_bare_corner_extension_composition})
+is the blue-coupling composition of \path{ThreeBlockGeometry.threeBlockBlueCoeff}
 across the two nested geometries, glued along the $\mathrm{univ} \setminus S$
 cut. The product $\prod_{P \setminus R}$ splits as $\prod_{S \setminus R}
 \cdot \prod_{P \setminus S}$, and the intermediate sum over
@@ -1008,19 +1053,25 @@ back-half of Theorem~3 (Step~5) actually needs.
 
 Step~3 now delivers the open-boundary equality on the end pair $S = W_0 \sqcup
 W_{L+K-1}$ without inverting $\mathrm{univ}\setminus S$: the corner-extension
-composition $\text{\path{extendInsert}}(S\subseteq P)\circ\text{\path{extendInsert}}(R\subseteq
-S) = \text{\path{extendInsert}}(R\subseteq P)$ and the shared-corner cancellation
+composition
+(\ref{eq:peps_normal_ft_2d_overlap_corner_extension_transitivity}) and the
+shared-corner cancellation
 $\text{\path{staircasePair\_cancel}}$ are landed, and the end-pair equality
-\[
-  \text{\path{extendInsert}}(W_0\subseteq S)\,C_0 \;=\;
-  \text{\path{extendInsert}}(W_{L+K-1}\subseteq S)\,C_{L+K-1}
-  \qquad\text{as inserts on } S
-\]
-is \path{staircasePair_insert_eq_open}, with no $\mathrm{univ}\setminus S$
+\begin{align}
+  \text{\path{extendInsert}}(W_0\subseteq S)\,C_0
+    &= \text{\path{extendInsert}}(W_{L+K-1}\subseteq S)\,C_{L+K-1}
+    &&\text{as inserts on } S.
+  \label{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}
+\end{align}
+is \path{staircasePair_insert_eq_open}. Equation
+(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}) has no
+$\mathrm{univ}\setminus S$
 hypothesis. The single-crossing geometry of Step~4 shows $e$ is the only lattice
 edge joining the two end windows, hence the only interior bond of $S$.
 
-The geometric peeling of this equality onto the bond $e$ rests on the complete
+The geometric peeling of
+(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}) onto the
+bond $e$ rests on the complete
 characterization of the boundary $\partial S$. The landed direction
 ($\text{\path{isRegionBoundaryEdge\_endPair\_of\_leftWindow}}$ and its right-window
 counterpart) shows a boundary edge $f\neq e$ of one window is a boundary edge of
@@ -1246,7 +1297,7 @@ single-window analogue, and the homomorphism cannot be read from one window's bl
 single-vertex injectivity, but obstructed for the single-window red block at the
 minimal size}
 
-The source supplies $\text{\path{hmul}}$ not from a single window but from the homomorphism
+Ref.~\cite{Molnar2018NormalPEPS} supplies $\text{\path{hmul}}$ not from a single window but from the homomorphism
 of the physical insertion operator, which the formalization realizes through the
 \emph{coarse three-site} route already landed for the rectangle blocking: three
 blocked regions (a red block, a blue block meeting it only at $e$, and the
@@ -1297,7 +1348,7 @@ side ($\text{\path{htransferAB}}$, $\text{\path{htransferBA}}$, and the whole re
 algebra) \emph{is} powered by window and single-window-complement injectivity, both
 available at the minimal size; only the homomorphism is not.
 
-The source's sketched overlapping-window realization keeps the same virtual operation
+The overlapping-window realization sketched in Ref.~\cite{Molnar2018NormalPEPS} keeps the same virtual operation
 $M$ on $e$ while representing it on every staircase window.  That common-state family
 is now built below.  It closes the single-operation part of this discussion but not the
 cross-tensor homomorphism: the remaining task is to compare the two tensor families and
@@ -1329,8 +1380,9 @@ The earlier analysis incorrectly claimed that the intermediate staircase windows
 neither endpoint of the reference edge and therefore require transport across different
 bonds.  The machine-checked endpoint classification gives the opposite conclusion:
 $W_1,\ldots,W_{L-1}$ contain both endpoints of $e$, while
-$W_L,\ldots,W_{L+K-1}$ contain its ordered left endpoint.  Every window in the source's
-family therefore contains at least one endpoint of the same distinguished edge $e$.
+$W_L,\ldots,W_{L+K-1}$ contain its ordered left endpoint. Every window in
+the family of Ref.~\cite{Molnar2018NormalPEPS} therefore contains at least
+one endpoint of the same distinguished edge $e$.
 
 The missing family is now
 \leanid{TNLean.PEPS.staircaseVirtualOperationInsert}
@@ -1340,13 +1392,15 @@ $W_1,\ldots,W_{L-1}$, and the boundary insert of $M$ on the remaining windows.  
 interior construction
 \leanid{TNLean.PEPS.interiorBondInsertedRegionInsert}
 (\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}) starts from the ordered left
-endpoint and adjoins the genuine tensors of the window by corner extension.  This formalizes
-the virtual insert asserted at lines 2320--2321 and uses the same adjoining contraction
-that appears in the end-region comparison at lines 2415--2444.  The physical operator itself is
+endpoint and adjoins the genuine tensors of the window by corner extension.  This formalizes the virtual insert asserted at
+\path{Papers/1804.04964/paper_normal.tex:2320--2321} of
+Ref.~\cite{Molnar2018NormalPEPS} and uses the same adjoining contraction as
+the end-region comparison at
+\path{Papers/1804.04964/paper_normal.tex:2415--2444} of that reference.  The physical operator itself is
 \leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp}: it is the prescribed insert
 linear combination composed with a left inverse of the injective window block.  The theorem
-\leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp\_realizes} proves the source's
-open-boundary statement
+\leanid{TNLean.PEPS.staircaseVirtualOperationPhysicalOp\_realizes} proves the open-boundary statement of
+Ref.~\cite{Molnar2018NormalPEPS}
 $O_j(M)T_{B,W_j}(\mu)=C_j(M)(\mu)$ for every~$\mu$, before complementary contraction.
 The insert's assembled state is the window's non-boundary bond product times
 $\mathrm{edgeInsertedCoeff}(e,M)$.  Translation
@@ -1365,8 +1419,8 @@ steps.
 
 \section{Normality and discarded stronger routes}
 
-The source calls a PEPS normal when blocking suitable regions produces an
-injective tensor.\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}.}
+Ref.~\cite{Molnar2018NormalPEPS} calls a PEPS normal when blocking
+suitable regions produces an injective tensor.\footnote{\path{Papers/1804.04964/paper_normal.tex:1318}.}
 In the corollary under consideration, every $L\times K$ rectangle is assumed
 injective, so those rectangles themselves witness normality.  No
 single-vertex injectivity is asserted.  This distinction is essential:
@@ -1393,7 +1447,7 @@ fixed-edge family proved above.
 
 \subsection{Why the different-bond auxiliary route is irrelevant}
 
-The paper keeps one highlighted edge $e$ fixed.  The first staircase window
+Ref.~\cite{Molnar2018NormalPEPS} keeps one highlighted edge $e$ fixed.  The first staircase window
 contains its ordered right endpoint, the next $L-1$ windows contain both
 endpoints, and the remaining windows contain its ordered left endpoint.
 Consequently, the same matrix $X$ can be represented on every window; there
@@ -1419,8 +1473,9 @@ region of a coherent frame.\footnote{Formal geometry:
 in \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.}
 
 These observations rule out two auxiliary shortcuts; they do not challenge
-the paper's fixed-edge comparison.  The remaining source step is the converse
-at lines 2368--2444: compare the physical operations on the overlapping
+the paper's fixed-edge comparison.  The remaining source step is the converse at
+\path{Papers/1804.04964/paper_normal.tex:2368--2444} of
+Ref.~\cite{Molnar2018NormalPEPS}: compare the physical operations on the overlapping
 windows, adjoin and invert the two corner regions, recover the unique virtual
 operation $X$, and prove the maps $O_1\mapsto X$ and
 $O_3^{\mathsf T}\mapsto X$ multiplicative by the composition argument of

@@ -15,160 +15,232 @@
 \maketitle
 \gapnote{scope-restriction}{open}
 
-\section{Source passage}
+\section{The source passage}
 
-In the standing Case~I context, $\mathcal K$ is an injective normal tensor
-generating matrix product density operators.  Lemma \texttt{propSN} of
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete\footnote{Source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1374--1471}.} assumes in addition
-that $\mathcal K$ fulfills the saturation of the area law (SAL), and concludes
-that there exist an isometry $U$ and tensors $l_k$, $r_k$ such that
+In the standing Case~I setting of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete,
+$\mathcal K$ is an injective normal tensor generating matrix product density
+operators \cite{Cirac2016MPDO_arXiv}. Lemma~\texttt{propSN} additionally
+assumes saturation of the area law and produces an isometry $U$ and factor
+families $l_k$ and $r_k$ such that
 \begin{align}
-  U\mathcal K_{\beta,\alpha}U^* = \bigoplus_k
-  (l_k)_\beta \otimes (r_k)_\alpha
-  \notag
+    U\mathcal K_{\beta,\alpha}U^*
+        &=
+    \bigoplus_k (l_k)_\beta\otimes(r_k)_\alpha.
+    \label{eq:cpsv16_active_physical_support_compression_sector_factorization}
 \end{align}
-with
+It defines
 \begin{align}
-  \eta_{k,h} = \sum_a (r_k)_a \otimes (l_h)_a \ge 0,
-  \notag
+    \eta_{k,h}
+        &=
+    \sum_a (r_k)_a\otimes(l_h)_a,
+    \label{eq:cpsv16_active_physical_support_compression_neighboring_operator}\\
+    \eta_{k,h}
+        &\geq 0,
+    \label{eq:cpsv16_active_physical_support_compression_neighboring_positivity}\\
+    T_{k,h}
+        &=
+    \tr(\eta_{k,h}).
+    \label{eq:cpsv16_active_physical_support_compression_transition_matrix}
 \end{align}
-and the non-negative matrix $T_{k,h} = \tr(\eta_{k,h})$ is
-primitive.
+The source proves that the nonnegative matrix $T$ is primitive
+\cite{Cirac2016MPDO_arXiv}.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:1374--1471. The definitions of
+$U$, $r_k$, $l_k$, and $\eta_{k,h}$ occur at lines~1436--1450. The definition
+of $T_{k,h}$ occurs at lines~1452--1455, and its primitivity is proved through
+line~1471.}
 
-The passage defines $U$, $r_k$, $l_k$, and $\eta_{k,h}$ at
-lines~1436--1450.  It defines $T_{k,h}$ at lines~1452--1455 and proves its
-primitivity through line~1471.  It does
-\textbf{not} construct the active physical support compression: choosing
-isometries onto the joint column supports of the left and right factor
-families per sector, giving inactive sectors zero-dimensional coordinate
-spaces, and assembling the compressed injective tensor.
+The cited passage does not construct the active physical support compression.
+It does not choose isometries onto the joint column supports of the left and
+right factor families, assign zero-dimensional coordinate spaces to inactive
+sectors, or assemble the compressed injective tensor.
 
-Proposition~\texttt{3to4}, at lines~1570--1594, uses the uncompressed
-neighboring operators on the full factor spaces to form commuting positive
-bonds.  The later Proposition~\texttt{prop3to4}, at lines~1786--1797,
-concerns a simple tensor with a basis of normal tensors and invokes the
-preceding injective result.  These are distinct source statements.
+Proposition~\texttt{3to4} uses the uncompressed neighboring operators on the
+full factor spaces to construct commuting positive bonds
+\cite{Cirac2016MPDO_arXiv}.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:1570--1594.}
+The later Proposition~\texttt{prop3to4} concerns a simple tensor with a basis
+of normal tensors and invokes the preceding injective result
+\cite{Cirac2016MPDO_arXiv}.\footnote{Source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}:1786--1797.}
+These are distinct source statements.
 
 \section{The compression construction}
 
-The five files
+The formal development adds an auxiliary compression after
+Lemma~\texttt{propSN} and before the argument corresponding to
+Proposition~\texttt{prop3to4} of Ref.~\cite{Cirac2016MPDO_arXiv}. The
+construction appears in
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveFactorSupport},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveSupportData},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveRestriction},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveNeighboring}, and
-\doclink{TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport}
-build the following auxiliary construction after Lemma~\texttt{propSN}
-(lines~1406--1471).  It is used in the formal argument corresponding to
-Proposition~\texttt{prop3to4} (line~1787):
+\doclink{TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport}.
 
 \begin{enumerate}
-  \item \textbf{Factor-support coordinates:} For each active sector, choose isometries
-    $V^L_k$, $V^R_k$ whose ranges are the joint column supports of the left and
-    right factor families $\{l_{k,\beta}\}_\beta$ and
-    $\{r_{k,\alpha}\}_\alpha$.  For inactive sectors, set both coordinate
-    dimensions to zero.  The product range of each pair is exactly the
-    family-support projection of the sector product family.  Injectivity of
-    the original tensor and positivity of every neighboring operator imply
-    the adjoint-closure relation used to prove two-sided absorption by these
-    support projections.
+    \item For each active sector $k$, choose isometries $V^L_k$ and $V^R_k$
+    whose ranges are the joint column supports of
+    $\{l_{k,\beta}\}_\beta$ and $\{r_{k,\alpha}\}_\alpha$. Give each inactive
+    sector zero-dimensional left and right coordinate spaces. The product
+    range is exactly the family-support projection of the sector product
+    family. Injectivity of the original tensor and positivity of every
+    neighboring operator imply the adjoint-closure relation required for
+    two-sided absorption by these support projections.
 
-  \item \textbf{Compressed factors:} Form $\tilde l_{k,\beta} =
-    (V^L_k)^\dagger l_{k,\beta} V^L_k$ and similarly for $\tilde r_{k,\alpha}$.
-    These are the factor matrices restricted to the active coordinate spaces.
+    \item Define the compressed factors by
+    \begin{align}
+        \widetilde l_{k,\beta}
+            &=
+        (V^L_k)^*l_{k,\beta}V^L_k,
+        \label{eq:cpsv16_active_physical_support_compression_left_factor}\\
+        \widetilde r_{k,\alpha}
+            &=
+        (V^R_k)^*r_{k,\alpha}V^R_k.
+        \label{eq:cpsv16_active_physical_support_compression_right_factor}
+    \end{align}
 
-  \item \textbf{Physical inclusion:}
-    Assemble a block-diagonal isometry $V$ from the sector support isometries,
-    transport it back to original physical coordinates via $U^\dagger$, and
-    obtain $V : \C^e \to \C^d$ with $VV^\dagger$ equal to the canonical joint
-    column support of the original physical slices.
+    \item Assemble the sector support isometries into a block-diagonal
+    isometry, transport it to the original physical coordinates through
+    $U^*$, and obtain
+    \begin{align}
+        V
+            &:
+        \C^e\longrightarrow\C^d.
+        \label{eq:cpsv16_active_physical_support_compression_physical_inclusion}
+    \end{align}
+    The projection $VV^*$ is the canonical joint column support of the
+    original physical slices.
 
-  \item \textbf{Compressed tensor:}
-    Define $K_{\mathrm{act}} = V^\dagger K V$.  This tensor lives on
-    $\C^e$ where $e$ is the total dimension of the retained active-factor
-    supports.  Its injectivity follows from the injectivity of $K$ together
-    with positivity of every neighboring operator.
+    \item Define the active restriction by
+    \begin{align}
+        K_{\mathrm{act}}
+            &=
+        V^*KV.
+        \label{eq:cpsv16_active_physical_support_compression_restricted_tensor}
+    \end{align}
+    It acts on $\C^e$, where $e$ is the total dimension of the retained
+    supports. Its injectivity follows from injectivity of $K$ and positivity
+    of every neighboring operator.
 
-  \item \textbf{Neighboring congruence:}
-    The compressed neighboring operator is the congruence of the ambient one by
-    the Kronecker product of the source right and target left support isometries.
-    Positive semidefiniteness follows from preservation under matrix congruence.
+    \item The compressed neighboring operator is the congruence of the
+    ambient one by the Kronecker product of the source right-support isometry
+    and target left-support isometry. Congruence preserves positive
+    semidefiniteness.
 
-  \item \textbf{Neighboring trace factorization:}
-    If the ambient operators satisfy the notation and normalization of
-    CPSV16 Theorem~4.9(iv),
-    $\tr(\eta_{k,h})=a_kb_h$ and $\sum_k a_kb_k=1$, then compression preserves
-    $\tr(\eta_{k,h})$ whenever both $k$ and $h$ are active.  For an inactive
-    sector, $\eta_{k,k}=0$, so $a_kb_k=0$.  Restricting $a_k,b_k$ to the
-    active sectors therefore preserves both the trace factorization and the
-    normalized diagonal sum.  This transport is auxiliary; it is not the
-    proof of condition~(iv) in the source theorem.
+    \item Suppose the ambient operators satisfy the notation and normalization
+    of CPSV16 Theorem~4.9(iv):
+    \begin{align}
+        \tr(\eta_{k,h})
+            &=
+        a_kb_h,
+        \label{eq:cpsv16_active_physical_support_compression_trace_factorization}\\
+        \sum_k a_kb_k
+            &=
+        1.
+        \label{eq:cpsv16_active_physical_support_compression_trace_normalization}
+    \end{align}
+    The published theorem appears in
+    Ref.~\cite{Cirac2017MPDO_AnnPhys}. Compression preserves
+    $\tr(\eta_{k,h})$ when $k$ and $h$ are active. If $k$ is inactive, then
+    \begin{align}
+        \eta_{k,k}
+            &= 0,
+        \label{eq:cpsv16_active_physical_support_compression_inactive_neighbor}\\
+        a_kb_k
+            &= 0.
+        \label{eq:cpsv16_active_physical_support_compression_inactive_weight}
+    \end{align}
+    Restricting $a_k$ and $b_k$ to active sectors therefore preserves
+    Eqs.~\ref{eq:cpsv16_active_physical_support_compression_trace_factorization}
+    and
+    \ref{eq:cpsv16_active_physical_support_compression_trace_normalization}.
+    This transport is auxiliary; it does not prove condition~(iv).
 
-  \item \textbf{Coordinate transport:} The
-    generic operation $M \mapsto V M V^\dagger$ changes physical coordinates of
-    any MPO tensor, together with its two-site and four-site closures.
+    \item The coordinate operation
+    \begin{align}
+        M
+            &\longmapsto
+        VMV^*.
+        \label{eq:cpsv16_active_physical_support_compression_coordinate_transport}
+    \end{align}
+    transports an MPO tensor together with its two-site and four-site
+    closures.
 \end{enumerate}
 
-None of these steps appears in lines~1406--1471 of CPSV16.  The source has
-the block factorization and the $\eta$ construction; the compression removes
-inactive dimensions as an auxiliary input preparation in the formal route to
-the theorem corresponding to Proposition~\texttt{prop3to4}.  Under
-injectivity of the original tensor and positivity of the neighboring
-operators, the joint column support projections absorb every physical slice
-on both sides.  Compression by their conjugate transposes therefore preserves
-exact two-sided recovery.
+None of these compression steps appears in lines~1406--1471 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The source supplies the sector factorization
+and neighboring operators. The formal route adds compression to remove
+inactive dimensions before applying the theorem corresponding to
+Proposition~\texttt{prop3to4}. Injectivity and neighboring-operator positivity
+imply that the joint column-support projections absorb every physical slice on
+both sides. Compression by their adjoints therefore preserves exact two-sided
+recovery.
 
 \section{Affected declarations}
 
-The ten load-bearing declarations are the choice of support isometries for an
-active sector,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-exists\_activeSector\_factorSupportIsometries}.}
-the simultaneous choice of factor-support
-coordinates,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-ActiveFactorSupportData}.}
-the compressed left factor,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-compressedLeftTensor}.}
-recovery of the original physical slice from sector coordinates,\footnote{%
-\leanid{MPOTensor.PhysicalSectorFactorization.%
-physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}.}
-the restricted tensor,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-activePhysicalSupportRestriction}.}
-compression of the sectorwise factorization by the joint support
-inclusion,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-dependentSupportInclusion\_compression}.}
-exact recovery after returning to the original physical
-coordinates,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-changePhysicalBasis\_physicalSupportInclusion\_%
-activePhysicalSupportRestriction}.}
-injectivity of the restricted tensor,\footnote{%
-\leanid{MPOTensor.PhysicalSectorFactorization.%
-activePhysicalSupportRestriction\_isInjective}.}
-and the assembled restriction datum.\footnote{%
-\leanid{MPOTensor.PhysicalSectorFactorization.%
-activePhysicalSupportRestrictionData}.}
-The final declaration transports the neighboring trace factorization to the
-active restriction.\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
-ActivePhysicalCompressionWitness.neighboringTraceFactorization}.}
+The ten load-bearing declarations are:
+\begin{enumerate}
+    \item the support isometries for an active sector,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.exists_activeSector_factorSupportIsometries};}
+
+    \item the simultaneous factor-support coordinates,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.ActiveFactorSupportData};}
+
+    \item the compressed left factor,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.compressedLeftTensor};}
+
+    \item recovery of an original physical slice from sector coordinates,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.physicalSlice_eq_conjTranspose_mul_sectorCoordinateTensor_mul};}
+
+    \item the restricted tensor,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.activePhysicalSupportRestriction};}
+
+    \item compression of the sectorwise factorization by the joint support
+    inclusion,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.dependentSupportInclusion_compression};}
+
+    \item exact recovery in the original physical coordinates,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction};}
+
+    \item injectivity of the restricted tensor,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.activePhysicalSupportRestriction_isInjective};}
+
+    \item the assembled restriction datum,\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.activePhysicalSupportRestrictionData};}
+
+    \item transport of the neighboring trace factorization.\footnote{
+    \leanid{MPOTensor.PhysicalSectorFactorization.ActivePhysicalCompressionWitness.neighboringTraceFactorization}.}
+\end{enumerate}
 
 \section{Blueprint dependency}
 
-The chain
-\texttt{PhysicalSectorActiveRestriction}
-$\to$ \texttt{PhysicalSectorActiveNeighboring}
-$\to$ \texttt{PhysicalSectorActiveBond}
-$\to$ \texttt{BNTPhysicalSectorGSNNCH}
-feeds the \texttt{\textbackslash leanok}-tagged capstone
-\leanid{MPOTensor.%
-hasGSNNCHForm\_of\_bntLayerOrthogonal\_of\_physicalSectorFactorization}
-labelled \texttt{thm:mpdo\_bnt\_physical\_sector\_gsnnch} in
+The dependency chain is
+\begin{align}
+    \mathtt{PhysicalSectorActiveRestriction}
+        &\longrightarrow
+    \mathtt{PhysicalSectorActiveNeighboring}
+        \longrightarrow
+    \mathtt{PhysicalSectorActiveBond}
+        \longrightarrow
+    \mathtt{BNTPhysicalSectorGSNNCH}.
+    \label{eq:cpsv16_active_physical_support_compression_blueprint_dependency}
+\end{align}
+It feeds the \verb|\leanok|-tagged capstone
+\leanid{MPOTensor.hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization},
+labelled \path{thm:mpdo_bnt_physical_sector_gsnnch} in
 \path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_structure_capstone.tex}.
-The compression is mathematically sound but the source-citation chain is
-incomplete without the markers added in this note.
+The compression is mathematically sound, but the citation chain must state
+that this auxiliary construction is absent from the cited propositions.
 
-\paragraph{Classification: scope restriction.} The compression itself is
-mathematically verified.  The local development first passes to the canonical
-active physical support and states the coordinate changes separately, while
-the source propositions do not contain these constructions.  The markers
-added by this disclosure make that distinction explicit.
+\section{Conclusion}
+
+The verdict is a scope restriction. The formal development first restricts to
+the canonical active physical support and records the coordinate changes
+separately. The source propositions in
+Ref.~\cite{Cirac2016MPDO_arXiv} do not contain these constructions. The
+compression itself is verified; this note records the distinction between the
+source argument and the route used in the formal development.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}

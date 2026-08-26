@@ -19,192 +19,249 @@
 
 \textbf{Historical proof archaeology and a forbidden route, not an active gap.}
 The corrected proportional fundamental theorem is
-\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.  It compares
+\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}. It compares
 BNT families whose copy weights are nonzero, the standing convention of
 CPSV16 line~246 recorded in
 \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}, and obtains a
-bijection of the basis sectors with gauge-phase equivalences.  The analysis below is retained
-because it explains why non-dominant per-block projection cannot prove the
-proportional theorem and must not be revived.
+bijection of the basis sectors with gauge-phase equivalences. The analysis
+below is retained because it explains why non-dominant per-block projection
+cannot prove the proportional theorem and must not be revived.
 
 \section{Notation}
 
 Fix two families of MPS site tensors $\{A_j\}_{j=1}^{r_A}$ and
 $\{B_k\}_{k=1}^{r_B}$ with nonzero scalars
-$\mu^A_j,\mu^B_k\in\mathbb C$. The assembled MPV at length~$N$ is
+$\mu^A_j,\mu^B_k\in\C$. Their assembled MPVs at length $N$ are
 \begin{align}
     V^{(N)}(A_{\mathrm{tot}})
-       &=\sum_{j=1}^{r_A}(\mu^A_j)^N\,V^{(N)}(A_j),
-    & V^{(N)}(B_{\mathrm{tot}})
-       &=\sum_{k=1}^{r_B}(\mu^B_k)^N\,V^{(N)}(B_k),
+        &=\sum_{j=1}^{r_A}(\mu^A_j)^N V^{(N)}(A_j),
+    \label{eq:nondominant_A_assembled_mpv}\\
+    V^{(N)}(B_{\mathrm{tot}})
+        &=\sum_{k=1}^{r_B}(\mu^B_k)^N V^{(N)}(B_k).
+    \label{eq:nondominant_B_assembled_mpv}
 \end{align}
-written $V^{(N)}(\mathtt{toTensorFromBlocks} \mu A)$ in the
+These expressions are written
+$V^{(N)}(\mathtt{toTensorFromBlocks} \mu\,A)$ in the
 formalization.\footnote{%
     \leanid{MPSTensor.toTensorFromBlocks};
     \leanid{MPSTensor.mpv_toTensorFromBlocks_eq_sum}.}
-A cross-overlap $\langle V^{(N)}(A_j),V^{(N)}(B_k)\rangle$ is
-\leanid{MPSTensor.mpvOverlap}. \emph{Eventual proportionality} of the
-assembled families is the hypothesis that for some scalar sequence
-$c_N\ne 0$ cofinally,
+The cross-overlap
+$\braket{V^{(N)}(A_j)}{V^{(N)}(B_k)}$ is
+\leanid{MPSTensor.mpvOverlap}.
+
+\emph{Eventual proportionality} of the assembled families means that there is
+a scalar sequence $c_N$, nonzero cofinally, such that
 \begin{align}
-    \sum_{j}(\mu^A_j)^N V^{(N)}(A_j)
-    &= c_N\sum_{k}(\mu^B_k)^N V^{(N)}(B_k)
-    \qquad(\forall^{\mathrm{cof}}N),
-    \label{eq:prop}
+    \sum_j(\mu^A_j)^N V^{(N)}(A_j)
+        &=c_N\sum_k(\mu^B_k)^N V^{(N)}(B_k)
+        \qquad\text{for cofinally many }N.
+    \label{eq:nondominant_eventual_proportionality}
 \end{align}
-formalized as
+This condition is formalized as
 \leanid{EventuallyNonzeroProportionalMPV}\textsubscript{2}.
 
 The retired one-copy normal-canonical BNT route carried a single weight
 $\mu_k$ per sector with the strict ordering
 \begin{align}
-    |\mu_1|>|\mu_2|>\cdots>|\mu_r|.
-    \tag{\texttt{mu\_strict\_anti}}
+    |\mu_1|
+        &>|\mu_2|>\cdots>|\mu_r|.
+    \label{eq:nondominant_strict_weight_order}
 \end{align}
-Together with the dominant normalization $|\mu_1|=1$, every sub-dominant
-block had modulus strictly less than~$1$.  These fields are not part of the
-current \leanid{IsNormalCanonicalFormBNT} predicate, which allows equal-modulus
-blocks.  The discussion below concerns the deleted strict-modulus variant.
-\cite[Definition~4.2 and lines~1864--1884]{Cirac2021Matrix} states the source
-structure using repeated copies and raw weights $\mu_{j,q}$ with sector
-multiplicities $r_j\ge 1$.  The current \leanid{SectorDecomposition} surface
-retains those power-sum coefficients; see
+Together with the dominant normalization $|\mu_1|=1$, this ordering made every
+sub-dominant block have modulus strictly less than $1$. These fields are not
+part of the current \leanid{IsNormalCanonicalFormBNT} predicate, which allows
+equal-modulus blocks. The discussion below concerns the deleted strict-modulus
+variant. Definition~4.2 and lines~1864--1884 of
+Ref.~\cite{Cirac2021Matrix} state the source structure using repeated copies
+and raw weights $\mu_{j,q}$ with sector multiplicities $r_j\geq 1$. The current
+\leanid{SectorDecomposition} surface retains those power-sum coefficients; see
 \path{docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex}.
 
 \section{Cited assertion}
 
-The block-selection paragraph in the proof of Theorem~\texttt{thm1}
-\cite[line~1182]{Cirac2016MPDO_arXiv}
-fixes any $B$-block $B_{k_0}$ and rules out
+The block-selection paragraph in the proof of Theorem~\texttt{thm1} of
+Ref.~\cite[line~1182]{Cirac2016MPDO_arXiv} fixes any $B$-block $B_{k_0}$ and
+rules out the hypothesis
 \begin{align}
-    \langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle
-    \xrightarrow[N\to\infty]{}0
-    \qquad(\text{all }j),
-    \tag{$\mathcal H_{k_0}$}
-    \label{eq:Hk0}
+    \braket{V^{(N)}(A_j)}{V^{(N)}(B_{k_0})}
+        &\xrightarrow[N\to\infty]{}0
+        \qquad\text{for every }j.
+    \label{eq:nondominant_fixed_block_cross_decay}
 \end{align}
-by Corollary~\texttt{Lem1} \cite[line~1131]{Cirac2016MPDO_arXiv}, which
-gives eventual linear independence of
-$\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from~\eqref{eq:Hk0}.  The
-source then treats this as contradicting the proportionality identity at
-\cite[eq.~\texttt{eq:II\_ABasicTensors}, line~286]{Cirac2016MPDO_arXiv}.
-This is the fixed-block claim made at line~1182.  The passage does not assume
-all-pairwise cross-family decay and does not establish linear independence of
-the full combined family.
+Corollary~\texttt{Lem1} of
+Ref.~\cite[line~1131]{Cirac2016MPDO_arXiv} gives eventual linear independence
+of $\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from
+(\ref{eq:nondominant_fixed_block_cross_decay}). The source then treats this
+linear independence as contradicting the proportionality identity
+\texttt{eq:II\_ABasicTensors} at line~286 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. This is the fixed-block claim made at
+line~1182. The passage does not assume all-pairwise cross-family decay and does
+not establish linear independence of the full combined family.
 
 \section{Retired formal target}
 
-The historical target was, for $k_0:\mathrm{Fin}\,r_B$ arbitrary: given the
-one-copy normal-canonical BNT hypotheses on both $\mu^A,A$ and $\mu^B,B$,
+The historical target was the following statement for arbitrary
+$k_0:\mathrm{Fin}\,r_B$: given the one-copy normal-canonical BNT hypotheses on
+both $\mu^A,A$ and $\mu^B,B$,
 \leanid{EventuallyNonzeroProportionalMPV}\textsubscript{2} between the
-assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$, and the hypothesis
-$\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$, derive
-$\bot$.
-The old one-copy fixed-block declarations for this target have been retired.
-The corrected \leanid{SectorBNT} proportional matching theorem keeps the raw
-coefficients of \leanid{SectorDecomposition} visible and uses the API lemmas in
-\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.  It does not require a
+assembled tensors, and the hypothesis
+\begin{align}
+    \braket{V^{(N)}(A_j)}{V^{(N)}(B_{k_0})}
+        &\xrightarrow[N\to\infty]{}0
+        \qquad\text{for every }j,
+    \label{eq:nondominant_retired_target_decay}
+\end{align}
+derive a contradiction. The old one-copy fixed-block declarations for this
+target have been retired. The corrected \leanid{SectorBNT} proportional
+matching theorem keeps the raw coefficients of \leanid{SectorDecomposition}
+visible and uses the API lemmas in
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}. It does not require a
 separate universally quantified fixed-block projection theorem.
 
 \section{Where the per-block projection fails for non-dominant
 \texorpdfstring{$k_0$}{k0}}
 
-Projecting \eqref{eq:prop} onto $V^{(N)}(B_{k_0})$ gives, with
-$\mathrm{LHS}_N:=\langle V^{(N)}(A_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangle$
-and $\mathrm{RHS}_N:=c_N\langle V^{(N)}(B_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangle$,
+Define the projected quantities
 \begin{align}
     \mathrm{LHS}_N
-       &=\sum_{j}(\mu^A_j)^N\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle,
-    & \mathrm{RHS}_N
-       &=c_N\sum_{k}(\mu^B_k)^N\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle.
-    \label{eq:LHSRHS}
+        &:=\braket{V^{(N)}(A_{\mathrm{tot}})}
+                    {V^{(N)}(B_{k_0})},
+    \label{eq:nondominant_projected_lhs_definition}\\
+    \mathrm{RHS}_N
+        &:=c_N\braket{V^{(N)}(B_{\mathrm{tot}})}
+                       {V^{(N)}(B_{k_0})}.
+    \label{eq:nondominant_projected_rhs_definition}
 \end{align}
-With $|\mu^A_j|\le 1$, every $(\mu^A_j)^N$ is bounded; together with
-\eqref{eq:Hk0} this forces $\mathrm{LHS}_N\to 0$. For $\mathrm{RHS}_N$,
-the surviving cross-overlap decay statement
-\leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
-gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$,
-while the diagonal block has a nonzero limiting coefficient, so
-$\mathrm{RHS}_N=c_N(\mu^B_{k_0})^N(\ell+o(1))$.
-In the dominant block, the proportionality identity and the BNT normalizations
-give the dominant-adjusted scalar limit
-$\bigl|c_N(\mu^B_0/\mu^A_0)^N\bigr|\to 1$.  Therefore
+Projecting (\ref{eq:nondominant_eventual_proportionality}) onto
+$V^{(N)}(B_{k_0})$ gives
 \begin{align}
-    \bigl|c_N(\mu^B_{k_0})^N\bigr|
-    &\sim
-    |\mu^A_0|^N
-    \bigl|\mu^B_{k_0}/\mu^B_0\bigr|^N.
-    \label{eq:decay}
+    \mathrm{LHS}_N
+        &=\sum_j(\mu^A_j)^N
+          \braket{V^{(N)}(A_j)}{V^{(N)}(B_{k_0})},
+    \label{eq:nondominant_projected_lhs_expansion}\\
+    \mathrm{RHS}_N
+        &=c_N\sum_k(\mu^B_k)^N
+          \braket{V^{(N)}(B_k)}{V^{(N)}(B_{k_0})}.
+    \label{eq:nondominant_projected_rhs_expansion}
 \end{align}
-Under $|\mu^A_0|=1$ and the retired strict ordering, the second factor
-in~\eqref{eq:decay} decays geometrically whenever $k_0\ne 0$, so
-$\mathrm{RHS}_N\to 0$ together with $\mathrm{LHS}_N$. No contradiction
-is available from the per-block projection. The dominant case
-$k_0=0$ is the unique index for which the ratio in~\eqref{eq:decay}
-is the constant~$1$ and the bound stays uniform; that is the analytic
-content that the dominant fixed-block statement captured before the
-retirement of the old one-copy layer.
+With $|\mu^A_j|\leq 1$, every sequence $(\mu^A_j)^N$ is bounded. Together
+with (\ref{eq:nondominant_fixed_block_cross_decay}), this gives
+\begin{align}
+    \mathrm{LHS}_N
+        &\xrightarrow[N\to\infty]{}0.
+    \label{eq:nondominant_projected_lhs_decay}
+\end{align}
+
+For the right-hand side, the surviving cross-overlap decay statement
+\leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
+gives
+$\braket{V^{(N)}(B_k)}{V^{(N)}(B_{k_0})}\to 0$ for $k\ne k_0$, while the
+diagonal block has a nonzero limiting coefficient. Thus, for some
+$\ell\ne 0$,
+\begin{align}
+    \mathrm{RHS}_N
+        &=c_N(\mu^B_{k_0})^N(\ell+o(1)).
+    \label{eq:nondominant_projected_rhs_asymptotic}
+\end{align}
+In the dominant block, the proportionality identity and the BNT
+normalizations give
+\begin{align}
+    \left|c_N\left(\frac{\mu^B_0}{\mu^A_0}\right)^N\right|
+        &\xrightarrow[N\to\infty]{}1.
+    \label{eq:nondominant_dominant_adjusted_scalar_limit}
+\end{align}
+Consequently,
+\begin{align}
+    \left|c_N(\mu^B_{k_0})^N\right|
+        &\sim
+        |\mu^A_0|^N
+        \left|\frac{\mu^B_{k_0}}{\mu^B_0}\right|^N.
+    \label{eq:nondominant_selected_coefficient_decay}
+\end{align}
+Under $|\mu^A_0|=1$ and the retired strict ordering
+(\ref{eq:nondominant_strict_weight_order}), the second factor in
+(\ref{eq:nondominant_selected_coefficient_decay}) decays geometrically whenever
+$k_0\ne 0$. Hence
+\begin{align}
+    \mathrm{RHS}_N
+        &\xrightarrow[N\to\infty]{}0
+        \qquad\text{for }k_0\ne 0.
+    \label{eq:nondominant_projected_rhs_decay}
+\end{align}
+Both sides of the projected identity therefore converge to zero, so the
+per-block projection gives no contradiction. The dominant case $k_0=0$ is the
+unique index for which the ratio in
+(\ref{eq:nondominant_selected_coefficient_decay}) is the constant $1$ and the
+bound stays uniform. This is the analytic content captured by the dominant
+fixed-block statement before retirement of the old one-copy layer.
 
 Two independent probes confirm the obstruction. Path~$\alpha$
 (\path{docs/audits/2026-05-13_cpsv16_ft_exact_leading_coeff.md},
-\ghpr{1654}) shows an exact eventual leading-coefficient identity
-$c_N(\mu^B_0)^N\zeta^N=(\mu^A_0)^N$ fails at $r_A=r_B=2$ with distinct
-sub-dominant moduli. Path~$\beta$ scope adjustment
+\ghpr{1654}) shows that the exact eventual leading-coefficient identity
+\begin{align}
+    c_N(\mu^B_0)^N\zeta^N
+        &=(\mu^A_0)^N
+    \label{eq:nondominant_exact_leading_coefficient_probe}
+\end{align}
+fails at $r_A=r_B=2$ with distinct sub-dominant moduli. Path~$\beta$ scope
+adjustment
 (\path{docs/audits/2026-05-13_cpsv16_ft_path_beta_scout.md},
-\ghpr{1664}) shows the lifted per-block projection on the
-\leanid{SectorDecomposition} surface inherits the same decay
-mismatch.
+\ghpr{1664}) shows that the lifted per-block projection on the
+\leanid{SectorDecomposition} surface inherits the same decay mismatch.
 
 \section{The fixed-block source claim and the formal repair}
 
-The Step~1 passage at
-\cite[line~1182]{Cirac2016MPDO_arXiv} asserts the fixed-block contradiction
-described above.  Isolating $V^{(N)}(B_{k_0})$ in~\eqref{eq:prop} gives
+The Step~1 passage at line~1182 of
+Ref.~\cite{Cirac2016MPDO_arXiv} asserts the fixed-block contradiction
+described above. Isolating $V^{(N)}(B_{k_0})$ in
+(\ref{eq:nondominant_eventual_proportionality}) gives
 \begin{align}
-    \sum_{j}(\mu^A_j)^N V^{(N)}(A_j)
-    -c_N\!\!\!\sum_{k\ne k_0}\!\!(\mu^B_k)^N V^{(N)}(B_k)
-    &=c_N(\mu^B_{k_0})^N V^{(N)}(B_{k_0}).
-    \label{eq:isolate}
+    \sum_j(\mu^A_j)^N V^{(N)}(A_j)
+    -c_N\sum_{k\ne k_0}(\mu^B_k)^N V^{(N)}(B_k)
+        &=c_N(\mu^B_{k_0})^N V^{(N)}(B_{k_0}).
+    \label{eq:nondominant_isolated_block_identity}
 \end{align}
 The single-block linear independence of
 $\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ does not control the remaining
-vectors $V^{(N)}(B_k)$ on the left of~\eqref{eq:isolate}.  Thus it does not by
-itself justify coefficient comparison in the full proportionality identity.
-The source passage supplies neither all-pairwise cross-family decay nor a
-full combined-family linear-independence statement.
+vectors $V^{(N)}(B_k)$ on the left-hand side of
+(\ref{eq:nondominant_isolated_block_identity}). It therefore does not justify
+coefficient comparison in the full proportionality identity. The source
+passage supplies neither all-pairwise cross-family decay nor a full
+combined-family linear-independence statement.
 
 The formal development replaces this step rather than formalizing it literally.
-For a chosen $P$-block it collects the $P$-blocks whose overlaps with every
-$Q$-block decay.  The complementary $P$-blocks already admit scalar relations
-with matched $Q$-blocks.  It then applies
+For a chosen $P$-block, it collects the $P$-blocks whose overlaps with every
+$Q$-block decay. The complementary $P$-blocks already admit scalar relations
+with matched $Q$-blocks. It then applies
 \leanid{MPSTensor.restricted_combined_family_eventually_li} to the decaying
 $P$-subfamily together with all $Q$-blocks and compares coefficients in that
-restricted family.  The selected coefficient is forced to vanish eventually,
+restricted family. The selected coefficient is forced to vanish eventually,
 contradicting
-\leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}.  The unrestricted
-lemma \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} is the
-full-family special case of the same repair.  This coefficient-comparison
+\leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}. The
+unrestricted lemma
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} is the
+full-family special case of the same repair. This coefficient-comparison
 argument proves the current active-sector matching theorem without using the
 retired per-block projection.
 
 \section{Classification}
 
-\emph{Historical proof archaeology and forbidden-route explanation.}  The
+\emph{Historical proof archaeology and forbidden-route explanation.} The
 retired dominant fixed-block declarations handled only the leading block on the
-old one-copy strict-modulus surface.  Extending that projection argument to an
+old one-copy strict-modulus surface. Extending that projection argument to an
 arbitrary block fails because both sides of the projected proportionality may
-decay together.  This remains a mathematical warning about the method, not an
+decay together. This remains a mathematical warning about the method, not an
 unproved theorem required by the current development.
 
 The source line~1182 fixed-block claim and the current formal repair must be
-kept distinct.  The repair uses restricted combined-family linear independence,
+kept distinct. The repair uses restricted combined-family linear independence,
 scalar relations for the complementary blocks, and the raw power sums
-$\sum_q\mu_{j,q}^N$ carried by \leanid{SectorDecomposition}.  Together with
-\leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}, this gives the
-active-sector coefficient comparison proved in the current theorem.  Collapsing
-a sector to one strictly ordered weight destroys precisely the information
-needed for that argument, so non-dominant per-block projection is a route that
-must not be reintroduced.
+$\sum_q\mu_{j,q}^N$ carried by \leanid{SectorDecomposition}. Together with
+\leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}, this gives
+the active-sector coefficient comparison proved in the current theorem.
+Collapsing a sector to one strictly ordered weight destroys precisely the
+information needed for that argument, so non-dominant per-block projection is
+a route that must not be reintroduced.
 
 \bibliographystyle{alpha}
 \bibliography{references}

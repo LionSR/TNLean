@@ -11,38 +11,43 @@
 \gapnote{scope-restriction}{open}
 
 \section{Source definition}
+
 Let $\mathcal U$ and $\mathcal V$ be matrix product unitary tensors with
-physical dimensions $d_a$ and $d_b$, respectively, and let $p_a$ and $p_b$ be
-positive coprime ancilla dimensions. Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
-define strict equivalence by a continuous path of matrix product unitary
-tensors and define equivalence by first attaching the identity ancillas and
-then applying a common blocking length \cite[lines~706--724]{Cirac2017MPU}.
-The source balances the enlarged physical dimensions through
+physical dimensions $d_a$ and $d_b$. Let $p_a$ and $p_b$ be positive coprime
+ancilla dimensions. Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define strict
+equivalence through a continuous path of MPU tensors. They define equivalence
+by first attaching identity ancillas and then applying a common blocking length
+\cite[lines~706--724]{Cirac2017MPU}. The enlarged physical dimensions satisfy
 \begin{align}
-  p_a d_a &= p_b d_b.
+    p_a d_a &= p_b d_b.
+    \label{eq:mpu_equivalence_fixed_bond_physical_dimension_balance}
 \end{align}
-It does not give a corresponding stabilization or identification for unequal
-raw virtual bond dimensions.
+The cited definition does not provide a stabilization or identification for
+unequal raw virtual bond dimensions.
 
 \section{Formal scope}
-The declarations \leanid{MPOTensor.StrictlyEquivalent} and
-\leanid{MPOTensor.Equivalent} formalize these two relations. A continuous path
-must lie in one ambient topological space, so both definitions fix a virtual
-bond dimension $D$ along the path and at both endpoints. Different physical
-dimensions are compared only through an explicit equality and the induced
-reindexing of their physical coordinates. For the weaker equivalence relation,
-identity ancillas are attached before blocking, exactly as in the source.
 
-Extending the definition to unequal raw virtual bond dimensions would require
-an additional mathematical stabilization convention not supplied in the cited
-passage.
+The declarations \leanid{MPOTensor.StrictlyEquivalent} and
+\leanid{MPOTensor.Equivalent} formalize strict equivalence and equivalence,
+respectively. A continuous path must lie in one ambient topological space.
+Both definitions therefore fix one virtual bond dimension $D$ along the path
+and at its endpoints. They compare different physical dimensions only through
+the explicit equality in
+Eq.~\ref{eq:mpu_equivalence_fixed_bond_physical_dimension_balance} and the
+induced reindexing of physical coordinates.
+
+For the weaker equivalence relation, the definitions attach identity ancillas
+before blocking, as prescribed in Ref.~\cite{Cirac2017MPU}. Extending this
+relation to unequal raw virtual bond dimensions would require an additional
+mathematical stabilization convention that the cited passage does not supply.
 
 \section{Verdict}
-\textbf{Verdict: scope restriction.}
-The formal definitions are source-faithful in one fixed ambient virtual bond
-dimension. They neither assert nor require a relation between tensors of
-unequal raw virtual bond dimensions. Any such relation must be introduced as a
-separately named stabilization convention rather than folded into the source
+
+\textbf{Verdict: scope restriction.} The formal definitions are faithful to
+the source within one fixed ambient virtual bond dimension. They do not assert
+or require a relation between tensors with unequal raw virtual bond
+dimensions. Any such relation requires a separately named stabilization
+convention and should not be incorporated silently into the source
 definitions.
 
 \bibliographystyle{alpha}

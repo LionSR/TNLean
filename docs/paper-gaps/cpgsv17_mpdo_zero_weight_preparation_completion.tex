@@ -16,56 +16,94 @@
 
 \section{The undefined source quotient}
 
-In the proof of Proposition~C.7,
-\cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}, the sectorwise
-refinement map is written as
-\[
-  \mathcal T_{k,h}(X)
-  =\frac{1}{a_kb_h}X\otimes
-    \left[\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h})\right].
-\]
-The hypotheses of Proposition~C.7 require
-\[
-  \eta_{k,h}\succeq0,
-  \qquad
-  \tr(\eta_{k,h})=a_kb_h,
-  \qquad
-  \sum_k a_kb_k=1,
-\]
-but do not state that every product $a_kb_h$ is nonzero. Consequently the
-displayed quotient is not defined on a zero-weight sector pair.
+In the proof of Proposition~C.7 of
+Ref.~\cite[Appendix~C.2, lines~1523--1535]{Cirac2016MPDO_arXiv}, the
+refinement map on the sector pair $(k,h)$ is
+\begin{align}
+    \mathcal T_{k,h}(X)
+        &=\frac{1}{a_kb_h}X\otimes
+        \left[\bigoplus_l
+        \left(\eta_{k,l}\otimes\eta_{l,h}\right)\right].
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_source_map}
+\end{align}
+Here $\eta_{k,h}$ is the neighboring-sector operator, while $a_k$ and $b_h$
+are its scalar trace factors. Proposition~C.7 assumes
+\begin{align}
+    \eta_{k,h}
+        &\succeq0,
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_eta_positive}\\
+    \tr(\eta_{k,h})
+        &=a_kb_h,
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_eta_trace}\\
+    \sum_k a_kb_k
+        &=1.
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_weight_normalization}
+\end{align}
+These hypotheses do not require every product $a_kb_h$ to be nonzero.
+Consequently,
+Eq.~\ref{eq:cpgsv17_mpdo_zero_weight_preparation_completion_source_map} is
+undefined on a sector pair with $a_kb_h=0$.
 
 \section{Trace-preserving completion}
 
-Set
-\[
-  \Omega_{k,h}
-  =\bigoplus_l(\eta_{k,l}\otimes\eta_{l,h}).
-\]
-Positivity and the source trace calculation give
-\[
-  \Omega_{k,h}\succeq0,
-  \qquad
-  \tr(\Omega_{k,h})=a_kb_h.
-\]
-Thus $a_kb_h=0$ implies $\Omega_{k,h}=0$. On an active sector pair one
-adjoins the density operator $(a_kb_h)^{-1}\Omega_{k,h}$. On a zero-weight
-pair one may adjoin any density operator on the same subspin space. This
-defines a trace-preserving completely positive map on every sector pair.
+Define the operator on the appended subspin space by
+\begin{align}
+    \Omega_{k,h}
+        &=\bigoplus_l
+        \left(\eta_{k,l}\otimes\eta_{l,h}\right).
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_omega_definition}
+\end{align}
+Positivity and the trace calculation in
+Ref.~\cite{Cirac2016MPDO_arXiv} give
+\begin{align}
+    \Omega_{k,h}
+        &\succeq0,
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_omega_positive}\\
+    \tr(\Omega_{k,h})
+        &=a_kb_h.
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_omega_trace}
+\end{align}
+If $a_kb_h=0$, then
+Eqs.~\ref{eq:cpgsv17_mpdo_zero_weight_preparation_completion_omega_positive}
+and~\ref{eq:cpgsv17_mpdo_zero_weight_preparation_completion_omega_trace}
+imply
+\begin{align}
+    \Omega_{k,h}
+        &=0.
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_zero_omega}
+\end{align}
 
-The choice on a zero-weight pair does not affect the refinement identity:
-the preceding partial trace $\mathcal T_0$ produces the factor
-$a_kb_hB_{k,h}(X)$, which is already zero on that pair. Equivalently, the
-corresponding block of the three-site closure is
-$B_{k,h}(X)\otimes\Omega_{k,h}=0$.
+For an active sector pair, $a_kb_h>0$, append the density operator
+$(a_kb_h)^{-1}\Omega_{k,h}$. For a zero-weight pair, append any density
+operator on the same subspin space. These choices define a completely positive
+trace-preserving map on every sector pair.
+
+The arbitrary density operator on a zero-weight pair does not affect the
+refinement identity. The preceding partial trace $\mathcal T_0$ produces the
+factor
+\begin{align}
+    a_kb_hB_{k,h}(X)
+        &=0
+        \qquad\text{when }a_kb_h=0,
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_zero_partial_trace}
+\end{align}
+where $B_{k,h}(X)$ denotes the corresponding sector block. Equivalently, the
+same block in the three-site closure is
+\begin{align}
+    B_{k,h}(X)\otimes\Omega_{k,h}
+        &=0.
+    \label{eq:cpgsv17_mpdo_zero_weight_preparation_completion_zero_three_site_block}
+\end{align}
+Thus every possible completion on an inactive pair gives the same
+two-site-to-three-site refinement identity.
 
 \section{Verdict}
 
-The inactive-sector density is a local completion of the map omitted from the
-source formula. It adds no hypothesis to Proposition~C.7 and leaves its two-
-site to three-site identity unchanged. Formal declarations implementing this
-completion should carry a \emph{Local fix (zero-weight quotient)} marker and
-cite this file.
+The inactive-sector density operator supplies a local completion omitted from
+the source formula. It adds no hypothesis to Proposition~C.7 of
+Ref.~\cite{Cirac2016MPDO_arXiv} and does not change its two-site-to-three-site
+identity. Formal declarations implementing this completion should carry a
+\emph{Local fix (zero-weight quotient)} marker and cite this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}
