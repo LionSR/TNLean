@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.RFP.BNTDirectSumBasis
@@ -248,7 +249,7 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
   choose σ _hσ _hσfix hTP hGauge _hPrim hIrr using
     fun j => (ref.representativeNormal j).exists_tpGauge
   let P : (j : Fin data.phaseClasses.g) → MPSTensor d (repDim j) :=
-    fun j i => μ j • tpGauge (B j) (σ j) i
+    fun j i => μ j • Kraus.tpGauge (B j) (σ j) i
   have hGaugeC : ∀ j, GaugeEquiv (C j) (P j) := by
     intro j
     obtain ⟨G, hG⟩ := hGauge j

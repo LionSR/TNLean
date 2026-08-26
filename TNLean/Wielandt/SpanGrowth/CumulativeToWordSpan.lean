@@ -6,8 +6,7 @@ Authors: TNLean contributors
 import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
-import TNLean.Algebra.BurnsideMatrix
-import QICLean.Algebra.BurnsideTheorem
+import QICLean.Kraus.Wielandt.SpanGrowth.AlgebraSpan
 
 /-!
 # From cumulative span to word span for MPS tensors
@@ -72,7 +71,7 @@ theorem isNormal_of_algSpan_eq_top_of_aperiodic
     (halg : Matrix.algSpan A = ⊤)
     (hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1) :
     Kraus.IsNormal A := by
-  obtain ⟨N, hN⟩ := exists_cumulativeSpan_eq_top_of_algSpan_eq_top A halg
+  obtain ⟨N, hN⟩ := Kraus.exists_cumulativeSpan_eq_top_of_algSpan_eq_top A halg
   exact isNormal_of_cumulativeSpan_eq_top_of_aperiodic A hN hone
 
 end MPSTensor

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Wielandt.Primitivity.Equivalence
@@ -332,10 +333,10 @@ theorem exists_normalTensor_scalar_representation :
   obtain ⟨sigma, hsigma, hsigmaFix, hLeft, hGauge, hGaugeIrr⟩ :=
     MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one hAIrr hRadius
   have hGaugeNormal :
-      Kraus.IsNormal (MPSTensor.tpGauge A.toMPSTensor sigma) :=
+      Kraus.IsNormal (Kraus.tpGauge A.toMPSTensor sigma) :=
     MPSTensor.isNormal_of_gaugeEquiv hANormal hGauge
   have hGaugeNormalTensor :
-      MPSTensor.IsNormalTensor (MPSTensor.tpGauge A.toMPSTensor sigma) :=
+      MPSTensor.IsNormalTensor (Kraus.tpGauge A.toMPSTensor sigma) :=
     MPSTensor.isNormalTensor_of_isNormal_leftCanonical _ hGaugeNormal hLeft
   have hANormalTensor : A.toMPSTensor.IsNormalTensor :=
     hGaugeNormalTensor.of_gaugeEquiv hGauge

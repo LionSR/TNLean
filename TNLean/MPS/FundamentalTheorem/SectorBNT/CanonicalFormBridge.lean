@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.Multi
@@ -159,7 +160,7 @@ theorem exists_isBNTCanonicalForm_exact
   choose σ hσ hσfix hTP hGauge hPrim hIrr using
     fun k => (data.blocks_normal k).exists_tpGauge
   let prepared : (k : Fin data.r) → MPSTensor d (data.dim k) := fun k =>
-    tpGauge (data.blocks k) (σ k)
+    Kraus.tpGauge (data.blocks k) (σ k)
   have hDirectGauge : GaugeEquiv
       (toTensorFromBlocks (d := d) data.weights data.blocks)
       (toTensorFromBlocks (d := d) data.weights prepared) := by

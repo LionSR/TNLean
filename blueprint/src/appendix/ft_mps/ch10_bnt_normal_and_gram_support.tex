@@ -51,29 +51,9 @@ arguments.
     has spectral radius one, and its only eigenvalue is one.
 \end{proof}
 
-\begin{lemma}[Transfer map of a positive Perron gauge]
-    \label{lem:perron_gauge_transfer_similarity}
-    \lean{MPSTensor.transferMap_tpGauge_eq_similarityMap}
-    \leanok
-    \uses{def:transfer_map}
-    Let $\sigma>0$, put $S=\sigma^{1/2}$, and define
-    $B^i=SA^iS^{-1}$. Then
-    \begin{align}
-        \E_B(X)
-         & =S\,\E_A(S^{-1}XS^{-1})S.
-        \notag
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    Substitute $B^i=SA^iS^{-1}$ in the Kraus sum. Since $S$ and $S^{-1}$
-    are Hermitian, the outer factors combine to $S$ and the inner factors to
-    $S^{-1}XS^{-1}$.
-\end{proof}
-
 \begin{lemma}[Perron gauges preserve primitivity]
     \label{lem:perron_gauge_primitive_iff}
-    \lean{MPSTensor.isPrimitive_transferMap_tpGauge_iff}
+    \lean{Kraus.isPrimitive_mapLM_tpGauge_iff}
     \leanok
     Let $\sigma$ be positive definite. The transfer map of the Perron gauge
     determined by $\sigma$ is primitive if and only if the original transfer
@@ -81,7 +61,6 @@ arguments.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:perron_gauge_transfer_similarity}
     The two transfer maps are similar through the invertible congruence
     $X\mapsto\sigma^{-1/2}X\sigma^{-1/2}$. Similar linear maps have the same
     spectrum, so the condition that $1$ is the only eigenvalue on the unit

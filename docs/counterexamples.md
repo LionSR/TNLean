@@ -253,7 +253,7 @@ mathematical obstruction.
 ### Cumulative spanning does not imply normality without aperiodicity
 
 - Locations: `TNLean/Wielandt/SpanGrowth/CumulativeToWordSpan.lean`,
-  `TNLean/Algebra/BurnsideMatrix.lean`,
+  `QICLean/Kraus/Wielandt/SpanGrowth/AlgebraSpan.lean`,
   `blueprint/src/chapter/ch08_wielandt.tex`
 - Statement refuted: cumulative spanning, or algebra generation, implies that a
   single word length spans the full matrix algebra.

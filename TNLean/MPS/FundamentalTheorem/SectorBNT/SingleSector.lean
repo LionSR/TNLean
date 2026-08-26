@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.Tactic.Basic
@@ -97,7 +98,7 @@ theorem IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition
       SameMPV₂Pos A (singleSectorDecomposition B).toTensor := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
-  let B := tpGauge (d := d) (D := D) A σ
+  let B := Kraus.tpGauge (d := d) (D := D) A σ
   have hSelf :
       Tendsto (fun N : ℕ => mpvOverlap (d := d) B B N) atTop (𝓝 1) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible B hIrr hLeft hPrim

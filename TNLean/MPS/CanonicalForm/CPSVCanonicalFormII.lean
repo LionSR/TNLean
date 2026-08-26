@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.SharedInfra.BlockGauge
@@ -43,7 +44,7 @@ private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ} [NeZero m]
     Nonempty (CFIIBlockGaugeData A) := by
   obtain ⟨σ, _hσ, _hσfix, hTP, hGaugeTP, _hPrimitive, hIrreducible⟩ :=
     hA.exists_tpGauge
-  let T : MPSTensor d m := tpGauge A σ
+  let T : MPSTensor d m := Kraus.tpGauge A σ
   obtain ⟨V, Λ, _hSame, hΛPos, hΛDiag, hLeft, hΛFix⟩ :=
     exists_CFII_data_of_TP_of_isIrreducibleTensor T hTP hIrreducible (NeZero.pos m)
   let B : MPSTensor d m := fun i =>

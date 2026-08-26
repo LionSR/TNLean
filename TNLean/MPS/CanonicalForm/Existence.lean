@@ -109,7 +109,7 @@ The formal statement:
 
 The Appendix A PF/TP gauge step uses the Perron-Frobenius theorem for
 completely positive maps (Wolf Chapter 6), formalized in
-`TNLean.Channel.PerronFrobenius.Existence`:
+`QICLean.Channel.PerronFrobenius.Existence`:
 
 > An irreducible CP map on `M_D(ℂ)` with spectral radius `1` has a
 > positive-definite fixed point `ρ > 0`.  This provides the TP gauge

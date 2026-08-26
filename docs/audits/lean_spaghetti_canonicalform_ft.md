@@ -228,7 +228,7 @@ Both appear removable.
 - Dead code / stale comments:
   - stale comment at `139-145`: it says `exists_tp_gauge_blockwise` is “currently unused”, but the file uses it at `667`
 - Duplicated logic:
-  - several “blocking by 1” wrappers (`blockTensor_one_apply`, `mpv_blockTensor_one`, `isIrreducibleTensor_blockTensor_one`, `leftCanonical_blockTensor_one`) look like packaging boilerplate that could be hidden in a more neutral helper module
+  - several “blocking by 1” wrappers (including the MPV, irreducibility, and left-canonical wrappers) look like packaging boilerplate that could be hidden in a more neutral helper module
 - Unnecessary imports:
   - not confirmed
 - Dependency tangle:

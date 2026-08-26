@@ -230,32 +230,5 @@ theorem isStronglyIrreduciblePaper_of
     IsStronglyIrreduciblePaper A :=
   ⟨ρ, hpd, hfix, hprim, hirr⟩
 
-/-- Extract the positive-definite fixed point from strong irreducibility. -/
-theorem IsStronglyIrreduciblePaper.posDef_fixedPoint
-    {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosDef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
-  obtain ⟨ρ, hpd, hfix, _, _⟩ := h
-  exact ⟨ρ, hpd, hfix⟩
-
-/-- Strong irreducibility implies peripheral primitivity. -/
-theorem IsStronglyIrreduciblePaper.isPeripherallyPrimitive
-    {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    IsPeripherallyPrimitive A := by
-  obtain ⟨_, _, _, hprim, _⟩ := h
-  exact hprim
-
-/-- Strong irreducibility implies irreducibility of the transfer map. -/
-theorem IsStronglyIrreduciblePaper.isIrreducibleMap
-    {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
-  obtain ⟨_, _, _, _, hirr⟩ := h
-  exact hirr
-
-/-- Strong irreducibility implies the peripheral spectrum is `{1}`. -/
-theorem IsStronglyIrreduciblePaper.peripheralEigenvalues_eq
-    {A : MPSTensor d D} (h : IsStronglyIrreduciblePaper A) :
-    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) = {1} :=
-  h.isPeripherallyPrimitive
 
 end MPSTensor

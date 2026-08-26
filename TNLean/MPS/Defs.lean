@@ -367,4 +367,44 @@ theorem isNormal_of_gaugeEquiv {A B : MPSTensor d D}
   obtain ⟨N, hNpos, hN⟩ := hA
   exact ⟨N, hNpos, isNBlkInjective_of_gaugeEquiv hN hGauge⟩
 
+/-- Gauge equivalence on the left and right transports a gauge-phase
+equivalence back to the original tensors. -/
+lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
+    {A A' B B' : MPSTensor d D}
+    (hAA' : GaugeEquiv A A')
+    (hA'B' : GaugePhaseEquiv A' B')
+    (hBB' : GaugeEquiv B B') :
+    GaugePhaseEquiv A B := by
+  obtain ⟨X, hX⟩ := hAA'
+  obtain ⟨Y, ζ, hζ, hY⟩ := hA'B'
+  obtain ⟨Z, hZ⟩ := hBB'
+  refine ⟨Z⁻¹ * Y * X, ζ, hζ, ?_⟩
+  intro i
+  have hB' : B' i = Z * B i * Z⁻¹ := hZ i
+  calc
+    B i = Z⁻¹ * B' i * Z := by
+      rw [hB']
+      simp [Matrix.mul_assoc]
+    _ = Z⁻¹ * (ζ • (Y * A' i * Y⁻¹)) * Z := by rw [hY i]
+    _ = ζ • (Z⁻¹ * (Y * A' i * Y⁻¹) * Z) := by
+          simp [Matrix.mul_assoc]
+    _ = ζ • (Z⁻¹ * (Y * (X * A i * X⁻¹) * Y⁻¹) * Z) := by rw [hX i]
+    _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
+          (((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
+            Matrix (Fin D) (Fin D) ℂ)) := by
+      simp [Matrix.mul_assoc, mul_inv_rev]
+
+/-- Gauge equivalence on both sides transports a casted gauge-phase
+equivalence back to the original tensors. -/
+lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
+    {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
+    {A A' : MPSTensor d D₁} {B B' : MPSTensor d D₂}
+    (hAA' : GaugeEquiv A A')
+    (hA'B' : GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor d) hdim) A') B')
+    (hBB' : GaugeEquiv B B') :
+    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) A) B := by
+  subst hdim
+  simpa using gaugePhaseEquiv_of_gaugeEquiv_left_right hAA' hA'B' hBB'
+
 end MPSTensor

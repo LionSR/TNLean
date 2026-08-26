@@ -3,271 +3,56 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.MatrixSqrt
 import QICLean.Channel.KrausGauge
-import QICLean.Kraus.Transfer
-
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
-import Mathlib.Analysis.Matrix.Order
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import TNLean.MPS.Defs
 
 /-!
-# TP and unital gauges from positive definite fixed points
+# MPS bridges for Kraus gauges
 
-This file constructs the standard trace-preserving and unital gauge
-normalizations from positive definite fixed points.
-
-Main declarations:
-* `tpGauge` and `tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint`:
-  the left-canonical gauge from a positive definite fixed point of the adjoint
-  transfer map.
-* `unitalGauge` and `unitalGauge_isUnital_of_transferMap_fixedPoint`:
-  the right-canonical gauge from a positive definite fixed point of the transfer
-  map.
-* `spectralUnitalGauge` and
-  `spectralUnitalGauge_isUnital_of_transferMap_eigenvector`: the same unital
-  construction with the Perron--Frobenius eigenvalue normalized by
-  `r^{-1/2}`.
-* `sameMPV_tpGauge` and `sameMPV_unitalGauge`: preservation of finite-ring MPV
-  coefficients under the corresponding similarities.
+This file records the genuine `GaugeEquiv` and `SameMPV` consequences of the
+generic TP and unital gauge constructions.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
 
 namespace MPSTensor
 
-open Matrix Finset Complex
-
 variable {d D : ℕ}
 
-/-! ## TP gauge construction -/
-
-/-- Gauge-transformed tensor `B i = ρ^{1/2} A i ρ^{-1/2}`.
-
-We implement `ρ^{1/2}` as `CFC.sqrt ρ`.
-(For `ρ` positive definite, this is invertible.)
-
-This is the transfer-map form of `Kraus.tpGauge`: since `MPSTensor d D` is
-definitionally `Fin d → Matrix (Fin D) (Fin D) ℂ`, the two are the same
-construction. -/
-noncomputable def tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
-  Kraus.tpGauge A ρ
-
-/-- **TP normalisation from an adjoint fixed point.**
-
-Assume `ρ` is positive definite and fixed by the adjoint transfer map
-`X ↦ ∑ i, (A i)ᴴ * X * A i` (equivalently `Kraus.transferMap (fun i => (A i)ᴴ) ρ = ρ`).
-Then the gauged tensor `tpGauge A ρ` satisfies the trace-preserving condition
-`∑ i, (B i)ᴴ * (B i) = I`.
-
-This is the standard “left-canonical” gauge construction for MPS, derived from
-`Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint` by unfolding `Kraus.transferMap`
-and `Kraus.mapLM` (`MPSTensor d D` is definitionally a finite matrix family,
-so the two coincide). -/
-theorem tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ : ρ.PosDef)
-    (hfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = ρ) :
-    ∑ i : Fin d, (tpGauge (d := d) (D := D) A ρ i)ᴴ * tpGauge (d := d) (D := D) A ρ i = 1 :=
-  Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A ρ hρ (by
-    simpa [Kraus.mapLM_apply, Kraus.map_apply, Kraus.transferMap_apply] using hfix)
-
-/-- **TP normalisation from a positive adjoint-transfer-map eigenvector.**
-
-Assume `ρ` is positive definite and
-`E_A†(ρ) = rρ` for a positive real number `r`. Then applying `tpGauge` after
-rescaling `A` by `r^{-1/2}` gives a trace-preserving tensor. -/
-theorem tpGauge_isTP_of_transferMap_conjTranspose_eigenvector
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
-    (hρ : ρ.PosDef)
-    (hr : 0 < r)
-    (heig : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ = (r : ℂ) • ρ) :
-    ∑ i : Fin d,
-      (tpGauge (d := d) (D := D)
-        (fun j => (↑((Real.sqrt r)⁻¹) : ℂ) • A j) ρ i)ᴴ *
-      tpGauge (d := d) (D := D)
-        (fun j => (↑((Real.sqrt r)⁻¹) : ℂ) • A j) ρ i = 1 := by
-  let c : ℝ := (Real.sqrt r)⁻¹
-  let A' : MPSTensor d D := fun i => (↑c : ℂ) • A i
-  have hstar_c : star (↑c : ℂ) = (↑c : ℂ) := by
-    rw [RCLike.star_def, Complex.conj_ofReal]
-  have hcc : c * c = r⁻¹ := by
-    rw [show c = (Real.sqrt r)⁻¹ from rfl, ← sq, inv_pow, Real.sq_sqrt hr.le]
-  have hc_sq : (↑c : ℂ) * (↑c : ℂ) = (↑r : ℂ)⁻¹ := by
-    rw [← Complex.ofReal_mul, hcc, Complex.ofReal_inv]
-  have hfix : Kraus.transferMap (d := d) (D := D) (fun i => (A' i)ᴴ) ρ = ρ := by
-    simp only [A', Kraus.transferMap_apply, Matrix.conjTranspose_smul, Matrix.smul_mul,
-      Matrix.mul_smul, smul_smul, star_star]
-    simp_rw [hstar_c, hc_sq]
-    rw [← Finset.smul_sum]
-    have hsum : ∑ i : Fin d, (A i)ᴴ * ρ * ((A i)ᴴ)ᴴ =
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ρ := by
-      simp only [Kraus.transferMap_apply]
-    rw [hsum, heig, smul_smul, inv_mul_cancel₀, one_smul]
-    exact_mod_cast hr.ne'
-  exact tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A' ρ hρ hfix
-
-/-- The gauge-transformed tensor `tpGauge A ρ` is gauge-equivalent to `A`
-(hence has the same MPV). -/
-theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    GaugeEquiv (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) := by
+/-- The TP-gauged family is gauge-equivalent to the original tensor. -/
+theorem gaugeEquiv_tpGauge
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    GaugeEquiv A (Kraus.tpGauge A ρ) := by
   classical
-  -- `X := sqrt(ρ)` as an element of `GL`.
   let X : GL (Fin D) ℂ :=
-    Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ)
-      (by
-        -- `mk''` needs `IsUnit det`.
-        simpa using Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
+    Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ) (by
+      simpa using Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
   refine ⟨X, ?_⟩
   intro i
-  -- `X⁻¹` coerces to the (nonsingular) matrix inverse.
-  simp [tpGauge, Kraus.tpGauge, X]
+  simp [Kraus.tpGauge, X]
 
-/-- **MPV invariance** under the TP gauge transform `tpGauge`.
+/-- TP gauging preserves finite-ring MPV coefficients. -/
+theorem sameMPV_tpGauge
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    SameMPV A (Kraus.tpGauge A ρ) :=
+  GaugeEquiv.sameMPV (gaugeEquiv_tpGauge A ρ hρ)
 
-This follows from gauge equivalence. -/
-theorem sameMPV_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    SameMPV (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) :=
-  GaugeEquiv.sameMPV (gaugeEquiv_tpGauge (d := d) (D := D) A ρ hρ)
-
-/-! ## Unital gauge from a transfer-map fixed point -/
-
-/-- Gauge-transformed tensor `B i = ρ^{-1/2} A i ρ^{1/2}`.
-
-This is the right-canonical, or unital, analogue of `tpGauge`. -/
-noncomputable def unitalGauge
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
-  fun i => (CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ
-
-/-- Rescaled right-canonical gauge
-`B i = r^{-1/2} ρ^{-1/2} A i ρ^{1/2}`. -/
-noncomputable def spectralUnitalGauge
-    (A : MPSTensor d D) (r : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
-  fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • unitalGauge (d := d) (D := D) A ρ i
-
-/-- **Unital normalisation from a positive transfer-map eigenvector.**
-
-Assume `ρ` is positive definite and
-`E_A(ρ) = rρ` for a positive real number `r`. Then the rescaled right-canonical
-gauge
-`B i = r^{-1/2} ρ^{-1/2} A i ρ^{1/2}` satisfies
-`∑ i, B i * (B i)ᴴ = I`.
-
-This is the spectral-radius normalization step in Pérez-García, Verstraete,
-Wolf, and Cirac, Theorem `Th:TIcanonical`, proof lines 765--769. -/
-theorem spectralUnitalGauge_isUnital_of_transferMap_eigenvector
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
-    (hρ : ρ.PosDef)
-    (hr : 0 < r)
-    (hfix : Kraus.transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ) :
-    ∑ i : Fin d,
-      spectralUnitalGauge (d := d) (D := D) A r ρ i *
-        (spectralUnitalGauge (d := d) (D := D) A r ρ i)ᴴ = 1 := by
-  classical
-  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt ρ
-  let c : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ)
-  have hc_star : star c = c := by
-    rw [show c = (↑((Real.sqrt r)⁻¹) : ℂ) from rfl, RCLike.star_def,
-      Complex.conj_ofReal]
-  have hc_sq : c * c = (r : ℂ)⁻¹ := by
-    have hcc : (Real.sqrt r)⁻¹ * (Real.sqrt r)⁻¹ = r⁻¹ := by
-      rw [← sq, inv_pow, Real.sq_sqrt hr.le]
-    rw [show c = (↑((Real.sqrt r)⁻¹) : ℂ) from rfl, ← Complex.ofReal_mul, hcc,
-      Complex.ofReal_inv]
-  have hS_mul : S * S = ρ := by
-    simpa [S] using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
-  have hS_herm : Sᴴ = S := by
-    simpa [S] using Matrix.conjTranspose_cfc_sqrt ρ
-  have hSS : S * Sᴴ = ρ := by
-    simpa [hS_herm] using hS_mul
-  have hdet : IsUnit S.det := by
-    simpa [S] using Matrix.PosDef.isUnit_det_cfc_sqrt hρ
-  have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hdet
-  have hdetT : IsUnit (Sᴴ.det) := by
-    simpa [Matrix.det_conjTranspose] using (IsUnit.star hdet)
-  have hStmul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hdetT
-  have h_term : ∀ i : Fin d,
-      (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S))ᴴ =
-        (r : ℂ)⁻¹ • (S⁻¹ * (A i * ρ * (A i)ᴴ) * (Sᴴ)⁻¹) := by
-    intro i
-    rw [Matrix.conjTranspose_smul, hc_star]
-    calc
-      (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S)ᴴ)
-          = (c * c) • ((S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ) := by
-              simp [smul_smul]
-      _ = (r : ℂ)⁻¹ • ((S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ) := by
-              rw [hc_sq]
-      _ = (r : ℂ)⁻¹ • (S⁻¹ * (A i * ρ * (A i)ᴴ) * (Sᴴ)⁻¹) := by
-              congr 1
-              rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-                Matrix.conjTranspose_nonsing_inv]
-              simp [Matrix.mul_assoc, ← hSS]
-  have h_sum_eq : ∑ i : Fin d, A i * ρ * (A i)ᴴ = (r : ℂ) • ρ := by
-    simpa [Kraus.transferMap_apply, Matrix.mul_assoc] using hfix
-  change
-    (∑ i : Fin d, (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S))ᴴ) = 1
-  simp_rw [h_term]
-  rw [← Finset.smul_sum, ← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq]
-  have hr_ne : (r : ℂ) ≠ 0 := by
-    exact_mod_cast hr.ne'
-  change (r : ℂ)⁻¹ • (S⁻¹ * ((r : ℂ) • ρ) * (Sᴴ)⁻¹) = 1
-  calc
-    (r : ℂ)⁻¹ • (S⁻¹ * ((r : ℂ) • ρ) * (Sᴴ)⁻¹)
-        = (r : ℂ)⁻¹ • ((r : ℂ) • (S⁻¹ * ρ * (Sᴴ)⁻¹)) := by
-            simp [Matrix.mul_assoc]
-    _ = ((r : ℂ)⁻¹ * (r : ℂ)) • (S⁻¹ * ρ * (Sᴴ)⁻¹) := by
-            rw [smul_smul]
-    _ = S⁻¹ * ρ * (Sᴴ)⁻¹ := by
-            rw [inv_mul_cancel₀ hr_ne, one_smul]
-    _ = 1 := by
-            rw [← hSS]
-            simp [Matrix.mul_assoc, hSinv_mul, hStmul_inv]
-
-/-- **Unital normalisation from a transfer-map fixed point.**
-
-Assume `ρ` is positive definite and fixed by the transfer map
-`X ↦ ∑ i, A i * X * (A i)ᴴ`. Then the gauged tensor
-`unitalGauge A ρ` satisfies
-`∑ i, B i * (B i)ᴴ = I`.
-
-This is the `r = 1` specialization of
-`spectralUnitalGauge_isUnital_of_transferMap_eigenvector`, and is the formal
-version of the full-rank fixed-point gauge in Pérez-García, Verstraete, Wolf,
-and Cirac, Theorem `Th:TIcanonical`, proof lines 767--769. -/
-theorem unitalGauge_isUnital_of_transferMap_fixedPoint
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hρ : ρ.PosDef)
-    (hfix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
-    ∑ i : Fin d,
-      unitalGauge (d := d) (D := D) A ρ i *
-        (unitalGauge (d := d) (D := D) A ρ i)ᴴ = 1 := by
-  classical
-  have hfix_one : Kraus.transferMap (d := d) (D := D) A ρ = (1 : ℂ) • ρ := by
-    simpa using hfix
-  have h :=
-    spectralUnitalGauge_isUnital_of_transferMap_eigenvector
-      (d := d) (D := D) A ρ 1 hρ zero_lt_one hfix_one
-  simpa [spectralUnitalGauge] using h
-
-/-- The gauge-transformed tensor `unitalGauge A ρ` is gauge-equivalent to `A`
-when `ρ` is positive definite. -/
+/-- The unital-gauged family is gauge-equivalent to the original tensor. -/
 theorem gaugeEquiv_unitalGauge
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    GaugeEquiv (d := d) (D := D) A (unitalGauge (d := d) (D := D) A ρ) := by
+    GaugeEquiv A (Kraus.unitalGauge A ρ) := by
   classical
   let X : GL (Fin D) ℂ :=
-    Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ)
-      (by
-        simpa using Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
+    Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ) (by
+      simpa using Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
   refine ⟨X⁻¹, ?_⟩
   intro i
-  simp [unitalGauge, X]
+  simp [Kraus.unitalGauge, X]
 
-/-- **MPV invariance** under the unital gauge transform `unitalGauge`. -/
+/-- Unital gauging preserves finite-ring MPV coefficients. -/
 theorem sameMPV_unitalGauge
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    SameMPV (d := d) (D := D) A (unitalGauge (d := d) (D := D) A ρ) :=
-  GaugeEquiv.sameMPV (gaugeEquiv_unitalGauge (d := d) (D := D) A ρ hρ)
+    SameMPV A (Kraus.unitalGauge A ρ) :=
+  GaugeEquiv.sameMPV (gaugeEquiv_unitalGauge A ρ hρ)
 
 end MPSTensor
