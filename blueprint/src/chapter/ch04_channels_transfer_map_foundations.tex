@@ -58,6 +58,25 @@
 \end{proof}
 
 
+\begin{theorem}[Transfer matrix of an MPS transfer map]
+    \label{thm:mps_transfer_matrix_kraus_sum}
+    \lean{MPSTensor.transferMatrix_eq}
+    \leanok
+    \uses{def:transfer_map}
+    For an MPS tensor $A=\{A^i\}_{i=0}^{d-1}$, the matrix representing
+    $\E_A$ under vectorization is
+    \begin{align}
+        K_A & =\sum_{i=0}^{d-1}\overline{A^i}\otimes A^i.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the standard vectorization identity
+    $\operatorname{vec}(AXB)=(B^{\mathsf T}\otimes A)\operatorname{vec}(X)$
+    to each summand $A^iX(A^i)^\dagger$ and sum over the physical index.
+\end{proof}
+
 \begin{lemma}[Trace adjointness of a transfer map]
     \label{lem:trace_mul_transfer_map_adjoint}
     \lean{Kraus.trace_mul_transferMap_adjoint}

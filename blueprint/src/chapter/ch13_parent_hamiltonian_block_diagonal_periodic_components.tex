@@ -382,7 +382,6 @@
 \begin{theorem}[A global change of cut gives periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
-    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_source_length, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut, lem:block_diagonal_boundary_component_right_boundary_matrices}
     With the hypotheses and notation of
@@ -458,6 +457,60 @@
         1454--1456]{PerezGarcia2007Matrix}.
 \end{proof}
 
+\begin{theorem}[Doubly normalized global-cut boundary closing]
+    \label{thm:block_diagonal_boundary_periodic_components_doubly_normalized}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
+    Let $g\ge2$, assume the physical alphabet is nonempty, and let $A_j$
+    be irreducible blocks with positive bond dimensions, pairwise inequivalent
+    up to gauge and phase, and injective at a common
+    length $L_0>0$. Assume normalized self-overlap and the two normalization
+    identities
+    \begin{align}
+        \sum_a(A^j_a)^\dagger A^j_a & =\Id,
+        \notag                              \\
+        \sum_aA^j_a(A^j_a)^\dagger  & =\Id.
+        \notag
+    \end{align}
+    Let every $\mu_j$ be nonzero, and suppose
+    \begin{align}
+        L & \ge3(g-1)(L_0+1)+1,
+        \notag                  \\
+        N & \ge L+L_0.
+        \notag
+    \end{align}
+    If $\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)$, then there are
+    matrices $X_j$ such that, for every $j$,
+    \begin{align}
+        \psi
+         & =\Gamma_N^{\oplus_j\mu_jA_j}\!\left(\bigoplus_jX_j\right),
+        \notag                                                        \\
+        \Gamma_N^{A_j}(\mu_j^NX_j)
+         & \in\mathcal G_{N,L}(A_j).
+        \notag
+    \end{align}
+    This theorem is restricted to the case in which the positive dual fixed
+    matrices of the source normalization are all the identity, with normalized
+    self-overlap imposed separately.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
+    Obtain block-diagonal boundary matrices at the chosen cut. Move the cut
+    past the final $L_0$ sites and compare the two boundary representations.
+    The doubly normalized simultaneous product-span theorem separates the
+    blocks and gives
+    \begin{align}
+        (\mu_j^NX_j)A^j_\alpha
+         & =A^j_\alpha(\mu_j^NY_j).
+        \notag
+    \end{align}
+    for every word $\alpha$ of length $L_0$. Injectivity identifies the two
+    boundary matrices and permits the cut to move across every local interval,
+    proving the periodic single-block constraints.
+\end{proof}
+
 \begin{theorem}[Periodic block decomposition from a global cut]
     \label{thm:block_diagonal_chain_space_global_cut}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
@@ -500,7 +553,6 @@
 \begin{theorem}[Periodic block decomposition and block-space independence]
     \label{thm:block_diagonal_chain_space_global_cut_independent}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
-    \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut, lem:block_diagonal_boundary_representation_inclusion, lem:block_diagonal_boundary_closing_equality, thm:pgvwc_block_space_independence_source_length}
     Under the same hypotheses,
@@ -537,10 +589,46 @@
     sum.
 \end{proof}
 
+\begin{theorem}[Unique decomposition into open-boundary block spaces]
+    \label{thm:block_diagonal_chain_unique_decomposition_source_length}
+    \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
+    \leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
+    Let $g\ge2$, assume the physical alphabet is nonempty, and let $A_j$
+    be irreducible blocks with positive bond dimensions, pairwise inequivalent
+    up to gauge and phase, and injective at a common
+    length $L_0>0$. Assume the source normalization
+    \begin{align}
+        \sum_aA^j_a(A^j_a)^\dagger          & =\Id,
+        \notag                                            \\
+        \sum_a(A^j_a)^\dagger\Lambda_jA^j_a & =\Lambda_j,
+        \notag                                            \\
+        \Lambda_j                           & >0.
+        \notag
+    \end{align}
+    Let every $\mu_j$ be nonzero. If $0<L\le N$ and
+    $L\ge3(g-1)(L_0+1)+1$, then every
+    $\psi\in\mathcal G_{N,L}(\bigoplus_j\mu_jA_j)$ has a unique decomposition
+    \begin{align}
+        \psi   & =\sum_j\phi_j,
+        \notag                  \\
+        \phi_j & \in G_N(A_j)
+        \quad\text{for every }j.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
+    The source-length open-boundary theorem places $\psi$ in
+    $\sum_jG_N(A_j)$ and proves that the spaces $G_N(A_j)$ form an internal
+    sum. Existence follows from membership in the sum, and internality makes
+    the components unique.
+\end{proof}
+
 \begin{corollary}[Kernel containment from the global cut]
     \label{cor:block_diagonal_kernel_global_cut}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
-    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Under the same hypotheses, suppose additionally that every periodic
@@ -560,6 +648,39 @@
     The parent-Hamiltonian kernel is the periodic chain space. Apply the
     preceding block decomposition and then the assumed single-block
     containments.
+\end{proof}
+
+\begin{theorem}[Doubly normalized kernel containment from a global cut]
+    \label{thm:block_diagonal_kernel_global_cut_doubly_normalized}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
+    \leanok
+    \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    Under the hypotheses of
+    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
+    suppose in addition that, for every $j$,
+    \begin{align}
+        \mathcal G_{N,L}(A_j)
+         & \subseteq\spn\{\ket{V^{(N)}(A_j)}\}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \ker H_L^{(N)}\!\left(\bigoplus_j\mu_jA_j\right)
+         & \subseteq
+        \spn\{\ket{V^{(N)}(A_j)}:1\le j\le g\}.
+        \notag
+    \end{align}
+    This theorem is restricted to the doubly normalized case in which every
+    positive dual fixed matrix is the identity and normalized self-overlap is
+    assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    The global-cut decomposition identifies the periodic chain space of the
+    block sum with the sum of the single-block chain spaces. Apply the assumed
+    containment to each summand, and use the identification of the
+    parent-Hamiltonian kernel with the periodic chain space.
 \end{proof}
 
 \begin{lemma}[Matrix identities give periodic single-block states]
