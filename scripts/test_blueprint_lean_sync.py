@@ -38,6 +38,8 @@ end Example
         assert "Example.Witness" in decls
         assert decls["Example.Witness.value"].kind == "field"
         assert decls["Example.Witness.relation"].kind == "field"
+        assert decls["Example.Witness.withLocalBinder"].kind == "field"
+        assert "Example.Witness.letI" not in decls
         assert "Example.Witness.this" not in decls
         assert "Example.Witness.fake" not in decls
         assert "Example.after" in decls
