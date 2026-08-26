@@ -15,9 +15,10 @@ import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 /-!
 # Prepared-block SectorBNT constructor
 
-Given a finite family of **already prepared** TP / primitive / irreducible
-blocks with nonzero weights satisfying the CPSV16 §II.C line-246 normalization
-(`|μ_k| ≤ 1` and at least one `|μ_k| = 1`), this file produces a
+The `PreparedBNTBlocks` structure packages a finite family of **already prepared**
+TP / primitive / irreducible blocks and their nonzero weights. Its nested
+`IsWeightNormalized` proposition records the CPSV16 §II.C line-246 normalization
+(`|μ_k| ≤ 1` and at least one `|μ_k| = 1`). The bundled supplier methods produce a
 `SectorDecomposition` `P` together with a proof that
 
 * `P.toTensor` has the same MPV at every positive length as the original
@@ -354,6 +355,39 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
 
 /-! ### Prepared-block SectorBNT constructor -/
 
+/-- A finite family of positive-dimensional, left-canonical, primitive, irreducible blocks
+with nonzero weights, ready for phase-class collapse into BNT sectors. -/
+structure PreparedBNTBlocks (d : ℕ) where
+  /-- Number of prepared blocks. -/
+  r : ℕ
+  /-- Bond dimension of each prepared block. -/
+  dim : Fin r → ℕ
+  /-- Scalar weight of each prepared block. -/
+  weight : Fin r → ℂ
+  /-- Prepared tensor blocks. -/
+  blocks : (k : Fin r) → MPSTensor d (dim k)
+  /-- Every prepared block has positive bond dimension. -/
+  dim_pos : ∀ k, 0 < dim k
+  /-- Every prepared block is left-canonical. -/
+  leftCanonical : ∀ k, IsLeftCanonical (blocks k)
+  /-- Every prepared block has primitive transfer map. -/
+  primitive : ∀ k, _root_.IsPrimitive (Kraus.transferMap (blocks k))
+  /-- Every prepared block is an irreducible Kraus family. -/
+  irreducible : ∀ k, Kraus.IsIrreducibleFamily (blocks k)
+  /-- Every prepared-block weight is nonzero. -/
+  weight_ne_zero : ∀ k, weight k ≠ 0
+
+namespace PreparedBNTBlocks
+
+/-- CPSV16 §II.C normalization of the weights of prepared blocks. -/
+structure IsWeightNormalized (data : PreparedBNTBlocks d) : Prop where
+  /-- Every prepared-block weight has norm at most one. -/
+  norm_le_one : ∀ k, ‖data.weight k‖ ≤ 1
+  /-- Some prepared-block weight has unit norm. -/
+  unit_exists : ∃ k, ‖data.weight k‖ = 1
+
+end PreparedBNTBlocks
+
 /--
 **Prepared-block SectorBNT constructor.**
 
@@ -488,6 +522,27 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
   exact isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
     μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
 
+/-- The phase-class collapse of normalized prepared blocks is in BNT canonical form. -/
+theorem PreparedBNTBlocks.isBNTCanonicalForm_collapsed
+    (data : PreparedBNTBlocks d) (hNorm : data.IsWeightNormalized) :
+    IsBNTCanonicalForm
+      (collapsedBntSectorDecomp (d := d) data.weight data.blocks data.weight_ne_zero) :=
+  isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
+    data.weight data.blocks data.dim_pos data.leftCanonical data.primitive data.irreducible
+      data.weight_ne_zero hNorm.norm_le_one hNorm.unit_exists
+
+/-- Normalized prepared blocks determine a BNT sector decomposition with the same
+positive-length matrix product vectors. -/
+theorem PreparedBNTBlocks.exists_isBNTCanonicalForm
+    (data : PreparedBNTBlocks d) (hNorm : data.IsWeightNormalized) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂Pos P.toTensor
+        (toTensorFromBlocks (d := d) (μ := data.weight) data.blocks) ∧
+      IsBNTCanonicalForm P :=
+  exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks
+    data.weight data.blocks data.dim_pos data.leftCanonical data.primitive data.irreducible
+      data.weight_ne_zero hNorm.norm_le_one hNorm.unit_exists
+
 /-- Prepared TP, primitive, irreducible blocks determine a dimension-preserving BNT
 canonical-form sector decomposition.
 
@@ -513,6 +568,17 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
       μ blocks hDim hTP hPrim hIrr hμne hμLe hμUnit
   · exact collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
       μ blocks hDim hTP hPrim hIrr hμne
+
+/-- Normalized prepared blocks determine a dimension-preserving BNT sector decomposition. -/
+theorem PreparedBNTBlocks.exists_isBNTCanonicalForm_and_totalDim
+    (data : PreparedBNTBlocks d) (hNorm : data.IsWeightNormalized) :
+    ∃ P : SectorDecomposition d,
+      SameMPV₂Pos P.toTensor
+        (toTensorFromBlocks (d := d) (μ := data.weight) data.blocks) ∧
+      IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin data.r, data.dim k :=
+  exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim
+    data.weight data.blocks data.dim_pos data.leftCanonical data.primitive data.irreducible
+      data.weight_ne_zero hNorm.norm_le_one hNorm.unit_exists
 
 /-! ### Arbitrary-input prepared-block supplier
 
