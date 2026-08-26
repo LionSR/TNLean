@@ -23,6 +23,9 @@ The process has these artifacts:
   deletable lines* (`name: 'proof-shrink-tournament'`).
 - `scripts/loc_report.py` — the deterministic size snapshot feeding the
   Metrics table.
+- `.claude/skills/find-simplification/SKILL.md` — the hand-driven audit for
+  one directory, PR, or weekly slice: candidate classes, consumer
+  classification, proof-by-build, and where each finding is recorded.
 
 ## What counts as proof debt
 
