@@ -107,6 +107,7 @@ before working in that area:
 | [`docs/lake_build_cache.md`](docs/lake_build_cache.md) | Local Lake cache reuse and changed-module compilation-time limits |
 | [`docs/tactic_development.md`](docs/tactic_development.md) | Tactic self-improvement loop: detecting repeated proof patterns, promotion criteria, design rules for custom tactics/simp sets |
 | [`docs/tactic_patterns.md`](docs/tactic_patterns.md) | Living pattern ledger: promoted tactics, candidate patterns awaiting abstraction |
+| [`docs/proof_debt.md`](docs/proof_debt.md) | Weekly proof-debt loop, ledger format, shrink rhythm; the `find-simplification` skill (`.claude/skills/`) is its hand-driven audit |
 
 ### Quick Reference (from the docs above)
 
