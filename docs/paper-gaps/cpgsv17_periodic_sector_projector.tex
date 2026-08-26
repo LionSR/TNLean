@@ -16,112 +16,158 @@
 
 \section{The printed argument}
 
-The proof of Proposition~4.13 of Cirac, P\'erez-Garc\'ia, Schuch, and
-Verstraete \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} excludes nontrivial
-periodic sectors of the vertically viewed tensor.  The local source is
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1888--1893.  It states
-that a nontrivial period supplies an orthogonal projector $Q$ such that, for
+The proof of Proposition~4.13 of
+Ref.~\cite[Proposition~4.13]{Cirac2016MPDO_arXiv} excludes nontrivial periodic
+sectors of the vertically viewed tensor. The relevant source passage is
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1888--1893. It asserts
+that a nontrivial period provides an orthogonal projector $Q$ such that, for
 every $N$,
-\[
-  Q_1H^{(N+1)}\ne H^{(N+1)}Q_1,
-  \qquad
-  Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1,
-\]
-where $Q_1=Q\otimes\Id^{\otimes N}$.  Since $H^{(N+1)}$ is positive
-semidefinite, the second equality implies
-$Q_1H^{(N+1)}=H^{(N+1)}Q_1$, contradicting the first.
+\begin{align}
+    Q_1H^{(N+1)}
+        &\ne H^{(N+1)}Q_1,
+    \label{eq:cpgsv17_periodic_sector_projector_printed_noncommutation}\\
+    Q_1[H^{(N+1)}]^p
+        &=[H^{(N+1)}]^pQ_1,
+    \label{eq:cpgsv17_periodic_sector_projector_printed_power_commutation}
+\end{align}
+where
+\begin{align}
+    Q_1
+        &=Q\otimes\Id^{\otimes N}.
+    \label{eq:cpgsv17_periodic_sector_projector_first_site_projector}
+\end{align}
+Because $H^{(N+1)}$ is positive semidefinite,
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_printed_power_commutation}
+implies
+\begin{align}
+    Q_1H^{(N+1)}
+        &=H^{(N+1)}Q_1,
+    \label{eq:cpgsv17_periodic_sector_projector_power_implies_commutation}
+\end{align}
+contradicting
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_printed_noncommutation}.
 
 \section{The quantifier correction}
 
-The cyclic decomposition of the peripheral spectrum gives a projector $Q$
-which is invariant under every word of one full period and is displaced by
-one vertical layer,
-\[
-  Q\widetilde M\ne Q\widetilde MQ.
-\]
-The representative-grouped form of Lemma~L proves the contrapositive
-statement
-\[
-  Q\widetilde M\ne Q\widetilde MQ
-  \quad\Longrightarrow\quad
-  \exists N\ge0:\
-  Q_1H^{(N+1)}\ne H^{(N+1)}Q_1.
-\]
-It does not imply the stronger inequality for every $N$ printed at source
-line~1889.  That stronger assertion is unnecessary: the positivity argument
-at lines~1890--1893 is pointwise in $N$, so the same existential witness
+Let $\widetilde M$ denote the tensor viewed in the vertical direction. The
+cyclic decomposition of its peripheral spectrum gives an orthogonal projector
+$Q$ that is invariant under every word of one full period but is displaced by
+one vertical layer:
+\begin{align}
+    Q\widetilde M
+        &\ne Q\widetilde M Q.
+    \label{eq:cpgsv17_periodic_sector_projector_vertical_displacement}
+\end{align}
+The representative-grouped form of Lemma~L in
+Ref.~\cite{Cirac2016MPDO_arXiv} proves the contrapositive implication
+\begin{align}
+    Q\widetilde M\ne Q\widetilde M Q
+        &\Longrightarrow
+        \exists N\geq0:\
+        Q_1H^{(N+1)}\ne H^{(N+1)}Q_1.
+    \label{eq:cpgsv17_periodic_sector_projector_exists_noncommuting_length}
+\end{align}
+It does not prove noncommutation for every $N$, as printed at source
+line~1889. The stronger quantifier is unnecessary. The positivity argument at
+source lines~1890--1893 is pointwise in $N$, so the witness supplied by
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_exists_noncommuting_length}
 suffices.
 
-This is a local correction of the intermediate statement.  The corrected
-periodic-sector implication is now proved both from literal CPSV canonical
-form and from the stronger normalized BNT-refined horizontal form.  It closes
-the periodic-exclusion step used in Proposition~4.13.  The later vertical
-phase-class grouping, gauge normalization, and coisometry construction are
-recorded in \path{cpgsv17_vertical_cf_grouping.tex}.
+This change is a local correction to the intermediate statement. The corrected
+periodic-sector implication is proved both from literal CPSV canonical form and
+from the stronger normalized BNT-refined horizontal form. It completes the
+periodic-exclusion step in Proposition~4.13 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The subsequent vertical phase-class grouping,
+gauge normalization, and coisometry construction are recorded in
+\path{cpgsv17_vertical_cf_grouping.tex}.
 
 \section{Formal proof}
 
-The literal proof establishes the corrected implication in
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists\_not\_commute\_of\_displaced}
-in \doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}.  Suppose, to the contrary,
-that $Q_1$ commutes with $H^{(N+1)}$ for every $N$.  Idempotence of $Q$ gives
-\[
-  Q_1H^{(N+1)}=Q_1H^{(N+1)}Q_1.
-\]
-After writing these as first-site contractions of the doubled-index tensor,
-the original-space form of Lemma~L yields
-$Q\widetilde M=Q\widetilde MQ$, contradicting displacement.  The stronger
-normalized BNT-refined horizontal-form variant is
-\leanid{MPOTensor.IsHorizontalCF.exists\_not\_commute\_of\_displaced} in
+The literal-CPSV proof of
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_exists_noncommuting_length} is
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced} in
+\doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}. Suppose, for contradiction,
+that $Q_1$ commutes with $H^{(N+1)}$ for every $N$. Idempotence of $Q$ then
+gives
+\begin{align}
+    Q_1H^{(N+1)}
+        &=Q_1H^{(N+1)}Q_1.
+    \label{eq:cpgsv17_periodic_sector_projector_sandwiched_commutation}
+\end{align}
+Write both sides of
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_sandwiched_commutation} as
+first-site contractions of the doubled-index tensor. The original-space form
+of Lemma~L then yields
+\begin{align}
+    Q\widetilde M
+        &=Q\widetilde M Q,
+    \label{eq:cpgsv17_periodic_sector_projector_lemma_l_invariance}
+\end{align}
+contradicting
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_vertical_displacement}. The
+corresponding theorem under the stronger normalized BNT-refined horizontal
+hypothesis is
+\leanid{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced} in
 \doclink{TNLean/MPS/MPDO/HorizontalBNT}.
 
-The cyclic decomposition and its letter shift are formalized in
-\path{TNLean/MPS/MPDO/CyclicProjector.lean}.  They give $p\ge1$, an
-orthogonal projector $Q$, full-period word invariance, and displacement.
-Choose the noncommuting length $N+1$ above.  Full-period invariance transfers
-to the $p$-fold vertically stacked tensor, so
-\[
-  Q_1[H^{(N+1)}]^p=[H^{(N+1)}]^pQ_1.
-\]
-The positive-semidefinite power-commutation theorem then gives commutation
-with $H^{(N+1)}$, a contradiction.  The literal conclusion is
-\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_cpsvCanonicalForm}
-in \doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}; the stronger-hypothesis
-variant is
-\leanid{MPOTensor.hasNoPeriodicVectors\_verticalTensor\_of\_horizontalCF}
-in \doclink{TNLean/MPS/MPDO/CyclicProjector}.
+The cyclic decomposition and its letter-shift property are formalized in
+\path{TNLean/MPS/MPDO/CyclicProjector.lean}. They provide a period $p\geq1$,
+an orthogonal projector $Q$, invariance under full-period words, and
+displacement by one letter. Choose the length $N+1$ supplied by
+Eq.~\ref{eq:cpgsv17_periodic_sector_projector_exists_noncommuting_length}.
+Full-period invariance transfers to the $p$-fold vertically stacked tensor and
+gives
+\begin{align}
+    Q_1[H^{(N+1)}]^p
+        &=[H^{(N+1)}]^pQ_1.
+    \label{eq:cpgsv17_periodic_sector_projector_witness_power_commutation}
+\end{align}
+The positive-semidefinite power-commutation theorem then gives
+\begin{align}
+    Q_1H^{(N+1)}
+        &=H^{(N+1)}Q_1,
+    \label{eq:cpgsv17_periodic_sector_projector_witness_commutation}
+\end{align}
+which contradicts the choice of $N$.
 
-Neither proof introduces an assumption beyond its stated canonical-form and
-MPDO hypotheses.
+The literal conclusion is
+\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm} in
+\doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}. The stronger-hypothesis
+variant is
+\leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF} in
+\doclink{TNLean/MPS/MPDO/CyclicProjector}. Neither theorem adds an assumption
+beyond its stated canonical-form and MPDO hypotheses.
 
 \section{Status}
 
 The periodic-sector step is complete under literal CPSV canonical form and
-under the stronger normalized BNT-refined hypothesis
-\path{MPOTensor.IsHorizontalCF}.  The earlier all-length condition remains
-only as a stronger conditional auxiliary statement and is not used by either
-proof.\footnote{Formal predicate:
+under the stronger normalized BNT-refined predicate
+\path{MPOTensor.IsHorizontalCF}. The earlier all-length condition remains
+available only as a stronger conditional auxiliary statement and is not used
+in either proof.\footnote{Formal predicate:
 \leanid{MPOTensor.NoninvariantProjectorNoncommuting}.}
 
 Combining literal periodic exclusion with literal invariant-projector closure
-gives the normal vertical corners with positive weights and exact letterwise
+produces normal vertical corners with positive weights and exact letterwise
 reconstruction in
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists\_normal\_verticalBlockDecomp\_with\_isometry}.
-The subsequent vertical phase-class grouping, normalization of the grouped
-representatives, and final coisometry are also complete.  Together they give
-the literal theorem
-\leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
-\doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.  The stronger theorem from
-the normalized BNT-refined horizontal form remains available separately.
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_normal_verticalBlockDecomp_with_isometry}.
+The subsequent phase-class grouping, normalization of the grouped
+representatives, and construction of the final coisometry are also complete.
+Together, these results establish the literal theorem
+\leanid{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
+\doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}. The stronger theorem from
+normalized BNT-refined horizontal form remains separate.
 
-This completion concerns Proposition~4.13 only.  It neither proves the
-positive-fusion statement in Appendix~C.4 nor the renormalization fixed-point
-characterization in Theorem~4.14.
+This completion concerns only Proposition~4.13 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. It proves neither the positive-fusion
+statement in Appendix~C.4 nor the renormalization fixed-point characterization
+in Theorem~4.14 of the same reference.
 
-\paragraph{Verdict.} The printed all-length inequality is replaced by the
-existence of one noncommuting length.  This local correction suffices for the
-periodic-sector step, and literal Proposition~4.13 is now complete by the
-independent grouping, normalization, and coisometry results.
+\paragraph{Verdict.}
+The existence of one noncommuting length replaces the printed all-length
+inequality. This local correction suffices for periodic-sector exclusion.
+Together with the independent grouping, normalization, and coisometry results,
+it completes literal Proposition~4.13.
 
 \bibliographystyle{alpha}
 \bibliography{references}

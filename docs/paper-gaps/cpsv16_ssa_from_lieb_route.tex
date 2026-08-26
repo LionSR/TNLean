@@ -16,466 +16,517 @@ Elimination Route}
 \maketitle
 \gapnote{open-gap}{resolved}
 
-\section{The assertion and its current formal status}
+\section{The assertion and its formal status}
 
-Strong subadditivity of the von Neumann entropy is the inequality
+Let $\rho_{ABC}$ be a density operator on the finite-dimensional Hilbert space
+$\mathcal H_A\otimes\mathcal H_B\otimes\mathcal H_C$, and let
+$\rho_{AB}$, $\rho_{BC}$, and $\rho_B$ denote its reduced density operators.
+The von Neumann entropy is
 \begin{align}
-  S(\rho_{ABC}) + S(\rho_{B}) \le S(\rho_{AB}) + S(\rho_{BC})
-  \tag{SSA}
-  \label{eq:ssa}
+    S(\rho)
+        &= -\tr(\rho\log\rho).
+    \label{eq:cpsv16_ssa_from_lieb_route_entropy_definition}
 \end{align}
-for every density operator $\rho_{ABC}$ on a tripartite finite-dimensional space
-$\mathcal H_A \otimes \mathcal H_B \otimes \mathcal H_C$, where
-$S(\rho) = -\tr(\rho \log \rho)$ and the reduced operators are the corresponding
-partial traces \cite{LiebRuskai1973}.
+Strong subadditivity states
+\begin{align}
+    S(\rho_{ABC})+S(\rho_B)
+        &\leq S(\rho_{AB})+S(\rho_{BC}).
+    \label{eq:cpsv16_ssa_from_lieb_route_strong_subadditivity}
+\end{align}
+Lieb and Ruskai proved this inequality in finite dimensions
+\cite{LiebRuskai1973}.
 
-The inequality~\eqref{eq:ssa} was previously asserted as a standalone axiom and
-has now been discharged: it is the theorem \leanid{strong_subadditivity_general}
-in \doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}, derived from Lieb
-concavity along the route recorded below, and the former axiom has been removed
-from \doclink{TNLean/Entropy/SSAEqualityCharacterization} with its single re-export
-\leanid{Entropy.strongSubadditivity} redirected to the derived
-theorem.\footnote{The entropy is the eigenvalue-based
-$S(\rho) = \sum_i \eta(\lambda_i)$, $\eta(x) = -x\log x$, of
-\doclink{TNLean/Analysis/Entropy}.}
-The derivation rests on the operator-concavity input that the same development
-already isolates for the Ando--Lieb theory, namely Lieb's joint concavity
-theorem.\footnote{Lieb concavity is the theorem
-\leanid{lieb_concavity_posDef} in \doclink{TNLean/Analysis/LiebConcavity}
-(\path{TNLean/Analysis/LiebConcavity.lean}), consumed by
-\leanid{lieb_concavity} in \doclink{TNLean/Channel/Schwarz/AndoLieb}.}
-The only entropy-side dependency in the closure of
-\leanid{strong_subadditivity_general}, formerly the axiom, is now the proved
-theorem \leanid{lieb_concavity_posDef}.
-This note records the mathematical route that connects the two, layer by layer.
+The formal development previously asserted
+Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_strong_subadditivity} as the standalone
+axiom \leanid{strong_subadditivity}. It now derives the result as
+\leanid{strong_subadditivity_general} in
+\doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}. The former axiom has
+been removed from \doclink{TNLean/Entropy/SSAEqualityCharacterization}, and its
+single re-export, \leanid{Entropy.strongSubadditivity}, now points to the
+derived theorem.\footnote{The formal entropy in
+\doclink{TNLean/Analysis/Entropy} is defined from the eigenvalues by
+$S(\rho)=\sum_i\eta(\lambda_i)$, where $\eta(x)=-x\log x$.}
 
-\section{The point at issue}
+The derivation uses Lieb's joint concavity theorem
+\cite{Lieb1973Convex}.\footnote{The formal input is
+\leanid{lieb_concavity_posDef} in
+\doclink{TNLean/Analysis/LiebConcavity}
+(\path{TNLean/Analysis/LiebConcavity.lean}). It is consumed through
+\leanid{lieb_concavity} in
+\doclink{TNLean/Channel/Schwarz/AndoLieb}.}
+The only entropy-side dependency of
+\leanid{strong_subadditivity_general} that replaces the former axiom is the
+proved theorem \leanid{lieb_concavity_posDef}. This note records the complete
+route from that theorem to strong subadditivity.
 
-The standard derivation of~\eqref{eq:ssa} factors through the quantum relative
-entropy and its behaviour under coarse-graining. Several of the intermediate
-objects are now formalized and several are still missing, so the gap is not a
-single missing lemma but a chain of them; the per-layer status is recorded below
-and summarized under \emph{Current formal status}. In source order the chain is
-the following.
+\section{The mathematical route}
+
+The derivation passes through quantum relative entropy and its monotonicity
+under a partial trace. Each layer below states the required mathematical fact
+and records its formal implementation.
 
 \begin{enumerate}
-  \item \emph{Entropy bridge.} The identity
-    $S(\rho) = -\tr(\rho \log \rho)$ relating the trace-of-logarithm form to the
-    eigenvalue form $\sum_i \eta(\lambda_i)$ used in the formal definition. This
-    bridge is the prerequisite that makes the trace-functional manipulations of
-    the relative entropy meaningful for the formal entropy, and it is dispatched
-    separately.\footnote{Tracked on \ghissue{784}.}
-  \item \emph{Relative entropy.} The definition
+    \item \emph{Entropy bridge.}
+
+    The eigenvalue definition of entropy agrees with
+    Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_entropy_definition}. This bridge
+    permits the trace and matrix-logarithm calculations used below.\footnote{The
+    entropy bridge is tracked on \ghissue{784}.}
+
+    \item \emph{Quantum relative entropy.}
+
+    For density operators $\rho$ and $\sigma$ satisfying
+    $\ker\sigma\subseteq\ker\rho$, define
     \begin{align}
-      D(\rho \,\|\, \sigma) = \tr\bigl(\rho(\log \rho - \log \sigma)\bigr),
+        D(\rho\,\| \sigma)
+            &= \tr(\rho(\log\rho-\log\sigma)).
+        \label{eq:cpsv16_ssa_from_lieb_route_relative_entropy_definition}
     \end{align}
-    for density operators $\rho,\sigma$ with $\ker\sigma \subseteq \ker\rho$.
-  \item \emph{Klein's inequality.} Nonnegativity $D(\rho\,\|\,\sigma) \ge 0$,
-    with equality exactly when $\rho = \sigma$. This is the order property that
-    makes $D$ a divergence. The nonnegativity half is now formalized on the full
-    support domain: \leanid{quantumRelativeEntropy_nonneg_general} in
+    The support condition ensures that the logarithm of $\sigma$ is evaluated
+    only where $\rho$ has support. This definition is formalized as
+    \leanid{quantumRelativeEntropy}.
+
+    \item \emph{Klein's inequality.}
+
+    Quantum relative entropy satisfies
+    \begin{align}
+        D(\rho\,\| \sigma)
+            &\geq 0,
+        \label{eq:cpsv16_ssa_from_lieb_route_klein_nonnegative}\\
+        D(\rho\,\| \sigma)=0
+            &\Longleftrightarrow \rho=\sigma.
+        \label{eq:cpsv16_ssa_from_lieb_route_klein_equality}
+    \end{align}
+    The nonnegativity statement on the full support domain is
+    \leanid{quantumRelativeEntropy_nonneg_general} in
     \doclink{TNLean/Analysis/KleinInequality}
-    (\path{TNLean/Analysis/KleinInequality.lean}) proves
-    $D(\rho\,\|\,\sigma)\ge 0$ for density operators $\rho,\sigma$ with
-    $\ker\sigma\subseteq\ker\rho$, exactly the source hypothesis. The full-rank
-    base case \leanid{quantumRelativeEntropy_nonneg} is proved first by the
-    eigenbasis reduction to the doubly stochastic overlap matrix and the scalar
-    Gibbs inequality $\log x\le x-1$; the support case follows by regularizing the
-    reference state to $\sigma_\varepsilon' = (1+\varepsilon N)^{-1}(\sigma +
-    \varepsilon\,\mathbf 1)$, which is positive definite for $\varepsilon>0$, and
-    passing to the limit $\varepsilon\to0^+$. Because $\sigma_\varepsilon'$ shares
-    $\sigma$'s eigenbasis, the matrix limit reduces to scalar logarithm limits on
-    the positive eigenvalues, while the support condition kills the diagonal
-    weights on the zero eigenvalues (\leanid{tendsto_re_trace_mul_log_perturb}); no
-    eigenvalue-continuity input is needed. It consumes neither Lieb concavity nor
-    operator Jensen. The equality case is now formalized for full-rank $\sigma$:
-    \leanid{quantumRelativeEntropy_eq_zero_iff} proves
-    $D(\rho\,\|\,\sigma) = 0 \iff \rho = \sigma$ by sharpening the Gibbs
-    reduction. When $D=0$ every term of the Gibbs slack is tight, so the strict
-    tangent inequality $\log x < x-1$ for $x\neq1$ forces the eigenvalues to match
-    on the overlap support; the matching makes the overlap matrix intertwine the
-    eigenvalue diagonals, and conjugating $\sigma$ into $\rho$'s eigenbasis
-    recovers $\rho$, giving $\rho=\sigma$. This argument too consumes neither Lieb
+    (\path{TNLean/Analysis/KleinInequality.lean}). Its full-rank base case,
+    \leanid{quantumRelativeEntropy_nonneg}, reduces the problem in eigenbases
+    to a doubly stochastic overlap matrix and the scalar Gibbs inequality
+    $\log x\leq x-1$.
+
+    For the singular case, the reference density operator is regularized as
+    \begin{align}
+        \sigma'_\varepsilon
+            &= \frac{\sigma+\varepsilon\Id}{1+\varepsilon N},
+        \qquad \varepsilon>0,
+        \label{eq:cpsv16_ssa_from_lieb_route_reference_regularization}
+    \end{align}
+    where $N$ is the matrix dimension. The matrix
+    $\sigma'_\varepsilon$ is positive definite and has the same eigenvectors
+    as $\sigma$. As $\varepsilon\to0^+$, the matrix limit reduces to scalar
+    logarithm limits on the positive eigenvalues. The condition
+    $\ker\sigma\subseteq\ker\rho$ eliminates the diagonal weights associated
+    with zero eigenvalues. The formal limit is
+    \leanid{tendsto_re_trace_mul_log_perturb}. This proof uses neither Lieb
     concavity nor operator Jensen.
-  \item \emph{Joint convexity.} Convexity of
-    $(\rho,\sigma) \mapsto D(\rho\,\|\,\sigma)$ in the pair of arguments. This is
-    the step that consumes Lieb's joint concavity theorem: the concavity of
-    $(A,B)\mapsto \tr\!\bigl(K^{\dagger} A^{s} K B^{1-s}\bigr)$ for
-    $s\in[0,1]$ yields, in the limit governing the derivative at $s=1$, the
-    convexity of the relative entropy. The present formal Lieb theorem is stated
-    for positive definite inputs, whereas the relative-entropy domain in layer
-    (2) allows singular reference states provided
-    $\ker\sigma\subseteq\ker\rho$. Therefore this layer also needs the standard
-    extension from the full-rank case to the support-condition case: replace the
-    pair by strictly positive regularizations, prove convexity there, and pass to
-    the limit using continuity on the common support and lower semicontinuity at
-    the boundary. Without this regularization step, the later support lemma would
-    place the singular pairs in the domain of $D$ but would not yet connect them
-    to the positive-definite Lieb input. This layer is now formalized on the full
-    support domain: the positive-definite case
-    (\leanid{convexOn_quantumRelativeEntropy}) is the base case, and the singular
-    extension under $\ker\sigma\subseteq\ker\rho$ is
-    \leanid{convexOn_quantumRelativeEntropy_support}, obtained by regularizing
-    both arguments through the affine trace-one perturbation
-    $M_\varepsilon = (1+\varepsilon N)^{-1}(M+\varepsilon\,\mathbf 1)$ and passing
-    to the limit $\varepsilon\to0^+$.
-  \item \emph{Data-processing inequality (DPI).} Monotonicity
-    $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$ under every
-    trace-preserving completely positive map $\Lambda$, in particular under the
-    partial trace. Monotonicity under the partial trace is the form of DPI used
-    below; it follows from joint convexity together with unitary invariance of
-    $D$ and the ancilla-additivity identity
-    $D(\rho \otimes \tau \,\|\, \sigma \otimes \tau) = D(\rho\,\|\,\sigma)$ for a
-    fixed ancilla state $\tau$. The standard twirling argument writes the partial
-    trace $\tr_C$ as an average of unitary conjugations on $\mathcal H_C$ applied
-    after appending the maximally mixed ancilla $\tau = \mathbf 1_C / d_C$, so all
-    three ingredients --- joint convexity, unitary invariance, and
-    ancilla-additivity --- are needed; joint convexity and unitary invariance
-    alone do not suffice.
-  \item \emph{Final assembly.} The inequality~\eqref{eq:ssa} read as a single
-    instance of DPI under the partial trace over $C$. Take the reference state
-    $\sigma_{ABC} = (\mathbf 1_A / d_A) \otimes \rho_{BC}$, the tensor product of
-    the maximally mixed state $\mathbf 1_A / d_A$ on $\mathcal H_A$
-    ($d_A = \dim \mathcal H_A$) with the reduced state $\rho_{BC}$ on
-    $\mathcal H_B \otimes \mathcal H_C$. Being a density operator is \emph{not}
-    enough to place the pair $(\rho_{ABC},\sigma_{ABC})$ in the domain fixed in
-    layer (2): that domain is the kernel-containment condition
-    $\ker\sigma_{ABC} \subseteq \ker\rho_{ABC}$, and as soon as $\rho_{BC}$ fails
-    to be full rank the reference state $\sigma_{ABC}$ is singular, so the
-    condition is a genuine hypothesis to be discharged and is also what licenses
-    the displayed logarithm. The containment is supplied by the following
-    \emph{marginal support lemma}: for any density operator $\rho_{ABC}\ge 0$ with
-    marginal $\rho_{BC} = \tr_A \rho_{ABC}$,
-    \begin{align}
-      \mathcal H_A \otimes \ker\rho_{BC} \subseteq \ker\rho_{ABC},
-      \qquad\text{equivalently}\qquad
-      \operatorname{supp}\rho_{ABC} \subseteq
-        \mathcal H_A \otimes \operatorname{supp}\rho_{BC}.
-      \label{eq:marginal-support}
-    \end{align}
-    To see~\eqref{eq:marginal-support}, let $P_{BC}$ be the projection onto
-    $\operatorname{supp}\rho_{BC}$ and $Q = \mathbf 1_A \otimes (\mathbf 1_{BC} -
-    P_{BC})$ the projection onto $\mathcal H_A \otimes \ker\rho_{BC}$. Using
-    $\tr_A \rho_{ABC} = \rho_{BC}$ and $(\mathbf 1_{BC} - P_{BC})\,\rho_{BC} = 0$,
-    \begin{align}
-      \tr\bigl(Q\,\rho_{ABC}\bigr)
-        = \tr\bigl((\mathbf 1_{BC} - P_{BC})\,\tr_A\rho_{ABC}\bigr)
-        = \tr\bigl((\mathbf 1_{BC} - P_{BC})\,\rho_{BC}\bigr) = 0 .
-    \end{align}
-    Since $\rho_{ABC}\ge 0$ and $Q$ is a projection,
-    $\tr(Q\,\rho_{ABC}) = \lVert Q\,\rho_{ABC}^{1/2}\rVert_2^2 = 0$ forces
-    $Q\,\rho_{ABC}^{1/2} = 0$, hence $Q\,\rho_{ABC} = 0$, so the range of $Q$ ---
-    namely $\mathcal H_A \otimes \ker\rho_{BC}$ --- lies in $\ker\rho_{ABC}$.
-    Because $\mathbf 1_A / d_A$ is full rank we have $\ker\sigma_{ABC} =
-    \mathcal H_A \otimes \ker\rho_{BC}$, so~\eqref{eq:marginal-support} gives
-    exactly $\ker\sigma_{ABC} \subseteq \ker\rho_{ABC}$ and places the pair in the
-    domain of layer (2). On $\operatorname{supp}\sigma_{ABC}$, where the relative
-    entropy is evaluated, the logarithm splits as
-    $\log\bigl((\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
-      = -(\log d_A)\,\mathbf 1_{ABC} + \mathbf 1_A \otimes \log\rho_{BC}$
-    (with $\log\rho_{BC}$ taken on $\operatorname{supp}\rho_{BC}$), and the
-    support condition guarantees $\rho_{ABC}$ carries no weight off this support,
-    so the relative entropy evaluates to
-    \begin{align}
-      D\bigl(\rho_{ABC} \,\|\, (\mathbf 1_A / d_A) \otimes \rho_{BC}\bigr)
-        = \log d_A + S(\rho_{BC}) - S(\rho_{ABC}).
-    \end{align}
-    Applying the partial trace $\Lambda = \tr_C$ sends
-    $\rho_{ABC} \mapsto \rho_{AB}$ and
-    $(\mathbf 1_A / d_A) \otimes \rho_{BC} \mapsto
-    (\mathbf 1_A / d_A) \otimes \rho_{B}$. The image pair inherits its own support
-    condition from~\eqref{eq:marginal-support} applied to $\rho_{AB}$ with
-    marginal $\rho_{B} = \tr_A\rho_{AB}$, so it again lies in the domain of layer
-    (2) and the image relative entropy is
-    \begin{align}
-      D\bigl(\rho_{AB} \,\|\, (\mathbf 1_A / d_A) \otimes \rho_{B}\bigr)
-        = \log d_A + S(\rho_{B}) - S(\rho_{AB}).
-    \end{align}
-    Monotonicity under $\Lambda$, namely
-    $D(\Lambda\rho \,\|\, \Lambda\sigma) \le D(\rho\,\|\,\sigma)$, then reads
-    $\log d_A + S(\rho_{B}) - S(\rho_{AB}) \le
-     \log d_A + S(\rho_{BC}) - S(\rho_{ABC})$; the common $\log d_A$ cancels,
-    leaving $S(\rho_{B}) - S(\rho_{AB}) \le S(\rho_{BC}) - S(\rho_{ABC})$, which on
-    rearrangement is exactly~\eqref{eq:ssa}; equivalently it is the
-    nonnegativity of the conditional mutual information $I(A:C\mid B)\ge 0$. The
-    discarded subsystem is $C$ and the reference state carries the maximally mixed
-    state on the \emph{retained} factor $A$; discarding $A$ instead against
-    $\rho_A \otimes \rho_{BC}$ would only yield subadditivity
-    $I(A:BC)\ge 0$, not strong subadditivity.
-\end{enumerate}
 
-The mathematical question is therefore not whether~\eqref{eq:ssa} is true --- it
-is a theorem of Lieb and Ruskai --- but which of the layers (2)--(6) must be
-built so that the standalone axiom can be deleted and replaced by a proof whose
-only entropy-side input is the Lieb-concavity theorem already present.
+    The full-rank equality case is
+    \leanid{quantumRelativeEntropy_eq_zero_iff}. If the relative entropy
+    vanishes, every term in the Gibbs slack is tight. The strict inequality
+    $\log x<x-1$ for $x\neq1$ forces the eigenvalues to agree on the overlap
+    support. The resulting relation makes the overlap matrix intertwine the
+    eigenvalue diagonals, and conjugating $\sigma$ into the eigenbasis of
+    $\rho$ gives $\rho=\sigma$. This argument also uses neither Lieb concavity
+    nor operator Jensen.
 
-\section{The elimination route}
+    \item \emph{Joint convexity.}
 
-The route deletes the axiom \leanid{strong_subadditivity} once the chain above is
-in place. Concretely:
+    For $t\in[0,1]$, joint convexity means
+    \begin{align}
+        D\bigl(t\rho_0+(1-t)\rho_1
+          \|\,t\sigma_0+(1-t)\sigma_1\bigr)
+        &\leq tD(\rho_0\,\| \sigma_0)
+          +(1-t)D(\rho_1\,\| \sigma_1).
+        \label{eq:cpsv16_ssa_from_lieb_route_joint_convexity}
+    \end{align}
+    This is the only layer that consumes Lieb's joint concavity theorem
+    \cite{Lieb1973Convex}. For $s\in[0,1)$, define the Lindblad--Uhlmann
+    approximant
+    \begin{align}
+        g_s(\rho,\sigma)
+            &= \frac{\tr\rho
+              -\operatorname{Re}\tr(\rho^s\sigma^{1-s})}{1-s}.
+        \label{eq:cpsv16_ssa_from_lieb_route_relative_entropy_approximant}
+    \end{align}
+    Lieb's concavity of
+    $(A,B)\mapsto\tr(K^\dagger A^sKB^{1-s})$ implies that each $g_s$ is jointly
+    convex. The approximants satisfy
+    \begin{align}
+        g_s(\rho,\sigma)
+            &\longrightarrow D(\rho\,\| \sigma)
+            \qquad\text{as }s\to1^-.
+        \label{eq:cpsv16_ssa_from_lieb_route_approximant_limit}
+    \end{align}
+    Their pointwise limit is therefore convex.
 
-\begin{itemize}
-  \item Layer (1) is the entropy bridge and is independent of Lieb concavity;
-    it is the lemma that lets the eigenvalue-based formal entropy be treated as a
-    trace of a matrix logarithm.
-  \item Layers (2) and (3) define the divergence and establish its
-    nonnegativity; they need only the matrix logarithm and its operator
-    monotonicity, not Lieb concavity. Layer (2) is in place
-    (\leanid{quantumRelativeEntropy}) and layer (3), Klein's inequality, is now
-    formalized on the full support domain $\ker\sigma\subseteq\ker\rho$
-    (\leanid{quantumRelativeEntropy_nonneg_general}), via the full-rank eigenbasis
-    reduction and scalar Gibbs inequality together with the support-respecting
-    regularization, rather than operator monotonicity of the logarithm.
-  \item Layer (4) is the single consumer of \leanid{lieb_concavity_posDef}: joint
-    convexity of $D$ is the entropy-theoretic content of Lieb's theorem. This
-    layer is now formalized on the positive-definite domain:
+    The positive-definite result is
     \leanid{convexOn_quantumRelativeEntropy} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyConvexity}
-    (\path{TNLean/Channel/Schwarz/RelativeEntropyConvexity.lean}) proves that
-    $(\rho,\sigma)\mapsto D(\rho\,\|\,\sigma)$ is jointly convex on pairs of
-    positive definite matrices, via the Lindblad/Uhlmann approximant
-    $g_s(\rho,\sigma) = (\tr\rho
-    - \operatorname{Re}\tr(\rho^s\sigma^{1-s}))/(1-s)$: each $g_s$ is jointly
-    convex for $s\in[0,1)$ (\leanid{convexOn_relativeEntropyApprox}, the
-    consumer of \leanid{lieb_concavity_posDef}) and converges pointwise to $D$ as
-    $s\to1^-$ (\leanid{tendsto_relativeEntropyApprox}), and the pointwise limit
-    of convex functions is convex. The two-calculus trace double-sum identity
-    \leanid{re_trace_cfc_mul_cfc_eq_double_sum} underlying the limit consumes no
-    Lieb input. The extension from the positive-definite case to singular
-    reference states under $\ker\sigma\subseteq\ker\rho$ is now formalized as
-    \leanid{convexOn_quantumRelativeEntropy_support} in the same file: both
-    arguments are regularized through the affine trace-one perturbation, the
-    positive-definite convexity applies to the four regularized endpoints and the
-    regularized mixture, and the inequality passes to the limit using the
-    both-arguments limit lemma \leanid{tendsto_relativeEntropyPerturb}. The domain
-    is convex because the kernel of a positively weighted sum of positive
-    semidefinite matrices is the intersection of the kernels
-    (\leanid{mulVec_eq_zero_of_smul_add}). This extension consumes no further Lieb
-    input beyond the positive-definite base case.
-  \item Layer (5) combines joint convexity, unitary invariance, and
-    ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau)
-    = D(\rho\,\|\,\sigma)$ into the partial-trace monotonicity statement via the
-    twirling representation of $\tr_C$. The unitary-invariance ingredient is now
-    formalized for arbitrary Hermitian arguments:
+    (\path{TNLean/Channel/Schwarz/RelativeEntropyConvexity.lean}).
+    The convexity of the approximants is
+    \leanid{convexOn_relativeEntropyApprox}, which consumes
+    \leanid{lieb_concavity_posDef}, and their convergence is
+    \leanid{tendsto_relativeEntropyApprox}. The double-sum identity
+    \leanid{re_trace_cfc_mul_cfc_eq_double_sum} used in the limit requires no
+    Lieb input.
+
+    The theorem
+    \leanid{convexOn_quantumRelativeEntropy_support} extends joint convexity to
+    the full domain $\ker\sigma\subseteq\ker\rho$. It regularizes both
+    arguments by
+    \begin{align}
+        M_\varepsilon
+            &= \frac{M+\varepsilon\Id}{1+\varepsilon N},
+        \qquad \varepsilon>0,
+        \label{eq:cpsv16_ssa_from_lieb_route_affine_trace_one_perturbation}
+    \end{align}
+    applies positive-definite convexity to the four regularized endpoints and
+    their mixture, and passes to the limit with
+    \leanid{tendsto_relativeEntropyPerturb}. The domain is convex because the
+    kernel of a positively weighted sum of positive semidefinite matrices is
+    the intersection of their kernels; this step is
+    \leanid{mulVec_eq_zero_of_smul_add}. The extension uses no additional Lieb
+    input.
+
+    \item \emph{Data processing under a partial trace.}
+
+    For a trace-preserving completely positive map $\Lambda$, data processing
+    is the inequality
+    \begin{align}
+        D(\Lambda\rho\,\| \Lambda\sigma)
+            &\leq D(\rho\,\| \sigma).
+        \label{eq:cpsv16_ssa_from_lieb_route_data_processing}
+    \end{align}
+    Only the case in which $\Lambda$ is a partial trace is required here. Its
+    proof combines joint convexity with unitary invariance and
+    ancilla-additivity:
+    \begin{align}
+        D(U\rho U^\dagger\,\|\,U\sigma U^\dagger)
+            &= D(\rho\,\| \sigma),
+        \label{eq:cpsv16_ssa_from_lieb_route_unitary_invariance}\\
+        D(\rho\otimes\tau\,\| \sigma\otimes\tau)
+            &= D(\rho\,\| \sigma),
+        \label{eq:cpsv16_ssa_from_lieb_route_ancilla_additivity}
+    \end{align}
+    where $U$ is unitary and $\tau$ is a unit-trace ancilla state. Joint
+    convexity and unitary invariance alone do not imply partial-trace
+    monotonicity; Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_ancilla_additivity} is
+    also required.
+
+    Unitary invariance is formalized for arbitrary Hermitian arguments as
     \leanid{quantumRelativeEntropy_conj_unitary} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyUnitaryInvariance}
-    (\path{TNLean/Channel/Schwarz/RelativeEntropyUnitaryInvariance.lean}) proves
-    $D(U\rho U^\dagger\,\|\,U\sigma U^\dagger) = D(\rho\,\|\,\sigma)$ for every
-    unitary $U$, by the covariance of the matrix logarithm under unitary
-    conjugation (\leanid{Matrix.log_conj_unitary}, itself the $f=\log$ case of the
-    functional-calculus covariance \leanid{Matrix.cfc_conj_unitary}) followed by
-    trace cyclicity. This ingredient needs no Lieb input. The
-    ancilla-additivity ingredient is formalized on the positive-definite domain:
+    (\path{TNLean/Channel/Schwarz/RelativeEntropyUnitaryInvariance.lean}).
+    It follows from covariance of the matrix logarithm,
+    \leanid{Matrix.log_conj_unitary}, which is the $f=\log$ case of
+    \leanid{Matrix.cfc_conj_unitary}, and from trace cyclicity. This result
+    requires no Lieb input.
+
+    On positive-definite arguments, ancilla-additivity is
     \leanid{quantumRelativeEntropy_kronecker} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyAncillaAdditivity}
-    (\path{TNLean/Channel/Schwarz/RelativeEntropyAncillaAdditivity.lean}) proves
-    $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) = D(\rho\,\|\,\sigma)$ for positive
-    definite $\rho,\sigma$ and a positive definite $\tau$ of unit trace. It
-    reduces to the logarithm of a tensor product
-    $\log(\rho\otimes\tau) = \log\rho\otimes\mathbf 1 + \mathbf 1\otimes\log\tau$
-    (\leanid{Matrix.log_kronecker}): the one-sided splits
-    $\log(A\otimes\mathbf 1) = \log A\otimes\mathbf 1$
-    (\leanid{Matrix.cfc_kronecker_one}) and
-    $\log(\mathbf 1\otimes B) = \mathbf 1\otimes\log B$
-    (\leanid{Matrix.cfc_one_kronecker}) follow from the functional calculus
-    through the unital tensor embeddings, and recombining them uses the logarithm
-    of a commuting product $\log(XY) = \log X + \log Y$ for commuting positive
-    definite $X,Y$ (\leanid{Matrix.PosDef.cfc_log_mul} in
-    \doclink{TNLean/Analysis/CfcLogAdditive},
-    \path{TNLean/Analysis/CfcLogAdditive.lean}). The difference of tensor
-    logarithms then cancels the $\mathbf 1\otimes\log\tau$ terms, the trace of the
-    Kronecker product factors as a product of traces, and the unit trace of $\tau$
-    leaves $D(\rho\,\|\,\sigma)$.  The corresponding singular-support identity
-    is \leanid{quantumRelativeEntropy_kronecker_support} in
+    (\path{TNLean/Channel/Schwarz/RelativeEntropyAncillaAdditivity.lean}). Its
+    main identity is
+    \begin{align}
+        \log(\rho\otimes\tau)
+            &= \log\rho\otimes\Id+\Id\otimes\log\tau.
+        \label{eq:cpsv16_ssa_from_lieb_route_tensor_logarithm}
+    \end{align}
+    This is \leanid{Matrix.log_kronecker}. The one-sided identities
+    \leanid{Matrix.cfc_kronecker_one} and
+    \leanid{Matrix.cfc_one_kronecker} follow from functional calculus through
+    the unital tensor embeddings. Their recombination uses the logarithm of a
+    commuting product, \leanid{Matrix.PosDef.cfc_log_mul}, in
+    \doclink{TNLean/Analysis/CfcLogAdditive}
+    (\path{TNLean/Analysis/CfcLogAdditive.lean}). The
+    $\Id\otimes\log\tau$ terms cancel in the difference of tensor logarithms,
+    the trace of a Kronecker product factors, and $\tr\tau=1$ gives
+    Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_ancilla_additivity}.
+
+    The singular-support version is
+    \leanid{quantumRelativeEntropy_kronecker_support} in
     \doclink{TNLean/Channel/Schwarz/PetzEqualityPrerequisites}
-    (\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}): it assumes
+    (\path{TNLean/Channel/Schwarz/PetzEqualityPrerequisites.lean}). It assumes
     positive semidefiniteness, $\ker\sigma\subseteq\ker\rho$, and unit trace of
-    $\tau$, but no normalization of $\rho$ or $\sigma$.  Its proof uses the
-    tensor-logarithm formula on support projections and support absorption.
-    These results depend only on the standard Lean axioms and need no Lieb
-    input. The third ingredient of layer (5) is the
-    twirling identity, which writes
-    $\tr_C\rho\otimes(\mathbf 1_C/d_C)$ as a uniform average of conjugations by a
-    unitary $1$-design on $C$. Because the current dependency carries no Haar
-    measure on the matrix unitary group, the average is taken over the finite
-    Heisenberg--Weyl $1$-design. Its design property is now formalized:
+    $\tau$, but does not require $\rho$ or $\sigma$ to be normalized. Its proof
+    uses the tensor-logarithm formula on support projections and support
+    absorption. These ancilla results use only the standard \Lean{} axioms and
+    no Lieb input.
+
+    The twirling step appends the maximally mixed state
+    $\tau=\Id_C/d_C$ and represents the partial trace by a finite unitary
+    $1$-design. Because the current dependency supplies no Haar measure on the
+    matrix unitary group, the formalization uses the Heisenberg--Weyl operators
+    $W(a,b)=X^aZ^b$. For a primitive $d$-th root of unity,
     \leanid{Matrix.sum_weyl_conj} in
     \doclink{TNLean/Channel/Schwarz/WeylTwirl}
-    (\path{TNLean/Channel/Schwarz/WeylTwirl.lean}) proves that for a primitive
-    $d$-th root of unity the uniform average of the conjugations by the $d^2$ Weyl
-    operators $W(a,b) = X^a Z^b$ equals the completely depolarizing channel
-    $M \mapsto (\tr M / d)\,\mathbf 1$, via the root-of-unity character-sum
-    orthogonality (\leanid{Matrix.sum_rootOfUnity_pow_eq}). This result depends
-    only on the standard Lean axioms and needs no Lieb input. Lifting that
-    design property to the ancilla factor presents $\tr_C$ through the average:
+    (\path{TNLean/Channel/Schwarz/WeylTwirl.lean}) proves
+    \begin{align}
+        \frac{1}{d^2}\sum_{a,b}W(a,b)MW(a,b)^\dagger
+            &= \frac{\tr M}{d}\Id.
+        \label{eq:cpsv16_ssa_from_lieb_route_weyl_twirl}
+    \end{align}
+    The proof uses root-of-unity character-sum orthogonality,
+    \leanid{Matrix.sum_rootOfUnity_pow_eq}, and no Lieb input.
+
+    The ancilla-factor lift
     \leanid{Matrix.sum_kronecker_one_weyl_conj} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing}
-    (\path{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing.lean}) proves that
-    the uniform average of the conjugations by the $d_C^2$ unitaries
-    $\mathbf 1_S \otimes W(a,b)$ equals $(\tr_C M)\otimes(\mathbf 1_C/d_C)$. With
-    all three ingredients in place, layer (5) is now formalized on the
-    positive-definite domain: \leanid{quantumRelativeEntropy_partialTraceRight_le}
-    in the same file proves
-    $D(\tr_C\rho\,\|\,\tr_C\sigma)\le D(\rho\,\|\,\sigma)$ for positive definite
-    $\rho,\sigma$, via the ancilla-additivity expansion of the reduced-state
-    relative entropy, the twirling identity, joint convexity over the $d_C^2$
-    equally weighted conjugated pairs, and unitary invariance of each term. The
-    transport of joint convexity to the product index uses the reindexing
-    invariance \leanid{quantumRelativeEntropy_submatrix_equiv}. The extension to
-    the singular support domain $\ker\sigma\subseteq\ker\rho$ is now formalized as
-    \leanid{quantumRelativeEntropy_partialTraceRight_le_support} in the same file:
-    both arguments are regularized through the affine trace-shrinking perturbation
-    $M_\varepsilon = (1+N_{SC}\varepsilon)^{-1}(M+\varepsilon\,\mathbf 1)$, which is
-    positive definite for $\varepsilon>0$, so the positive-definite case applies at
-    each $\varepsilon$. The right-hand side converges to $D(\rho\,\|\,\sigma)$ by
-    the both-arguments limit. The left-hand side is the relative entropy of the
-    marginals, which are themselves affine regularizations of $\tr_C\rho,\tr_C\sigma$
-    with the same scaling rate $N_{SC}$ but shift rate $d_C$
-    (\leanid{partialTraceRight_regPerturbAffine}); the support condition transfers to
-    the marginals (\leanid{Matrix.partialTraceRight_support}), so the same limit
-    applies once it is generalized to an arbitrary positive-affine regularization
-    $M\mapsto(1+a\varepsilon)^{-1}(M+b\varepsilon\,\mathbf 1)$
-    (\leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyPerturbAffine}).
-    Passing the inequality through both limits gives the support-domain bound. This
-    extension consumes no further Lieb input beyond the positive-definite base case.
-  \item Layer (6) instantiates layer (5) at the tripartite splitting to
-    recover~\eqref{eq:ssa}; it additionally needs the marginal support
-    lemma~\eqref{eq:marginal-support}, which puts the singular reference state
-    $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ into the domain of layer (2) and so is a
-    prerequisite of the instantiation rather than a consequence of normalization.
-    The marginal support lemma is now formalized
-    (\leanid{Matrix.marginal_support} in \doclink{TNLean/Analysis/MarginalSupport},
-    \path{TNLean/Analysis/MarginalSupport.lean}): for a positive semidefinite
-    $\rho_{ABC}$ a Hermitian idempotent on $B\otimes C$ annihilating the marginal
-    $\tr_A\rho_{ABC}$ has its identity-on-$A$ lift annihilate $\rho_{ABC}$. Its
-    operator core --- a projection of zero expectation against a positive
-    semidefinite state annihilates it
-    (\leanid{Matrix.PosSemidef.proj_mul_eq_zero_of_trace_eq_zero}) --- and the
-    partial-trace adjoint identity it uses
-    (\leanid{Matrix.traceA_ABC_lift_trace}) are independent of Lieb concavity.
-    These three results depend only on the standard Lean axioms. On the
-    positive-definite domain the instantiation is now formalized:
-    \leanid{strong_subadditivity_posDef} in
-    \doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}
-    (\path{TNLean/Channel/Schwarz/StrongSubadditivityPosDef.lean}) proves the
-    inequality~\eqref{eq:ssa} for a positive definite $\rho_{ABC}$. There the
-    reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ is itself positive
-    definite, so the marginal support lemma is not invoked and the layer-(2)
-    domain condition holds outright; the relative entropy of each pair evaluates
-    to the displayed entropy difference through the tensor logarithm split and the
-    partial-trace adjoint, and layer (5) data processing between the two pairs
-    yields~\eqref{eq:ssa}. The singular-reference extension to the general
-    density-matrix domain is now formalized as well:
-    \leanid{strong_subadditivity_general} in the same file proves the
-    inequality~\eqref{eq:ssa} for every positive semidefinite unit-trace
-    $\rho_{ABC}$. The marginal support lemma places the singular reference state
-    $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ in the domain of layer (2) through the
-    kernel projection of $\rho_{BC}$, after which the singular-domain data
-    processing of layer (5) applies. The two relative entropies evaluate to the
-    displayed entropy differences by the singular-reference evaluation
-    \leanid{rel_entropy_eval_support}, which regularizes the reduced state through
-    the affine perturbation $(1+d_R\varepsilon)^{-1}(\rho_R+\varepsilon\mathbf 1)$
-    and passes to the limit, the tensor logarithm split being unavailable for a
-    singular reference. Its only entropy-side dependency, formerly the axiom, is
-    now the proved theorem \leanid{lieb_concavity_posDef}, so this theorem
-    discharges the content of the standalone strong subadditivity axiom on the
-    full density-matrix domain.
-\end{itemize}
+    (\path{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing.lean}) proves
+    \begin{align}
+        \frac{1}{d_C^2}\sum_{a,b}
+        (\Id_S\otimes W(a,b))M(\Id_S\otimes W(a,b))^\dagger
+            &= (\tr_C M)\otimes\frac{\Id_C}{d_C}.
+        \label{eq:cpsv16_ssa_from_lieb_route_partial_trace_twirl}
+    \end{align}
+    Joint convexity applied to
+    Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_partial_trace_twirl}, together with
+    Eqs.~\ref{eq:cpsv16_ssa_from_lieb_route_unitary_invariance} and
+    \ref{eq:cpsv16_ssa_from_lieb_route_ancilla_additivity}, gives
+    \begin{align}
+        D(\tr_C\rho\,\| \tr_C\sigma)
+            &\leq D(\rho\,\| \sigma).
+        \label{eq:cpsv16_ssa_from_lieb_route_partial_trace_monotonicity}
+    \end{align}
+    The positive-definite theorem is
+    \leanid{quantumRelativeEntropy_partialTraceRight_le} in
+    \doclink{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing}. Transport
+    of joint convexity to the product index uses
+    \leanid{quantumRelativeEntropy_submatrix_equiv}.
 
-\paragraph{Current formal status.} Layers (1)--(6) are formalized, with layers
-(3), (4), (5), and the layer-(6) instantiation on the full density-matrix domain.
-Layer (4) joint convexity is formalized on the singular support domain
-$\ker\sigma\subseteq\ker\rho$ (\leanid{convexOn_quantumRelativeEntropy_support}),
-extending the positive-definite base case by regularizing both arguments and
-passing to the limit. Layer (5), data-processing (monotonicity of $D$ under the
-partial trace), combines the layer-(4) joint convexity with unitary invariance and
-ancilla-additivity $D(\rho\otimes\tau\,\|\,\sigma\otimes\tau) =
-D(\rho\,\|\,\sigma)$ via the twirling representation of $\tr_C$. Joint convexity
-(layer 4, on the singular support domain), unitary invariance
-(\leanid{quantumRelativeEntropy_conj_unitary}, for arbitrary Hermitian
-arguments), ancilla-additivity
-(\leanid{quantumRelativeEntropy_kronecker}, on the positive-definite domain), the
-finite Heisenberg--Weyl $1$-design twirl (\leanid{Matrix.sum_weyl_conj}), and its
-ancilla-factor lift presenting $\tr_C$ through the twirl
-(\leanid{Matrix.sum_kronecker_one_weyl_conj}) combine into the partial-trace
-monotonicity \leanid{quantumRelativeEntropy_partialTraceRight_le} on the
-positive-definite domain, which is then extended to the singular support domain
-$\ker\sigma\subseteq\ker\rho$ as
-\leanid{quantumRelativeEntropy_partialTraceRight_le_support} by regularizing both
-arguments, transferring the support condition to the marginals
-(\leanid{Matrix.partialTraceRight_support}), and passing to the limit through the
-arbitrary-rate affine regularization
-(\leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyPerturbAffine}).
-The layer-(6) instantiation is formalized on the full density-matrix domain. The
-positive-definite case (\leanid{strong_subadditivity_posDef}) is the base case,
-and the singular-reference extension to every positive semidefinite unit-trace
-$\rho_{ABC}$ is \leanid{strong_subadditivity_general}, whose only entropy-side
-dependency, formerly the axiom, is now the proved theorem
-\leanid{lieb_concavity_posDef}. The marginal support lemma places the singular
-reference state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ in the layer-(2) domain through
-the kernel projection of $\rho_{BC}$; the two relative entropies evaluate to the
-displayed entropy differences by the singular-reference evaluation
-\leanid{rel_entropy_eval_support} (which regularizes the reduced state and passes
-to the limit, the tensor logarithm split being unavailable for a singular
-reference); and the singular-domain data processing of layer (5) between the two
-pairs yields the inequality. Because \leanid{strong_subadditivity_general} carries
-exactly the hypotheses of the standalone axiom \leanid{strong_subadditivity}, it
-discharges the content of that axiom on the full density-matrix domain.
+    The support-domain theorem is
+    \leanid{quantumRelativeEntropy_partialTraceRight_le_support} in the same
+    file. It regularizes both arguments by
+    \begin{align}
+        M_\varepsilon
+            &= \frac{M+\varepsilon\Id}{1+N_{SC}\varepsilon},
+        \qquad \varepsilon>0.
+        \label{eq:cpsv16_ssa_from_lieb_route_data_processing_regularization}
+    \end{align}
+    The positive-definite theorem applies for every $\varepsilon>0$. The
+    right-hand side converges to $D(\rho\,\| \sigma)$ by the two-argument
+    limit. The partial traces are affine regularizations of
+    $\tr_C\rho$ and $\tr_C\sigma$ with scaling rate $N_{SC}$ and shift rate
+    $d_C$; this identity is
+    \leanid{partialTraceRight_regPerturbAffine}. The support condition passes
+    to the marginals by \leanid{Matrix.partialTraceRight_support}. The
+    arbitrary-rate affine limit
+    \leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyPerturbAffine}
+    applies to maps of the form
+    \begin{align}
+        M
+            &\longmapsto
+            \frac{M+b\varepsilon\Id}{1+a\varepsilon},
+        \qquad a,b>0.
+        \label{eq:cpsv16_ssa_from_lieb_route_arbitrary_affine_regularization}
+    \end{align}
+    Passing the inequality through both limits proves
+    Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_partial_trace_monotonicity} whenever
+    $\ker\sigma\subseteq\ker\rho$. This extension uses no Lieb input beyond the
+    positive-definite joint-convexity theorem.
 
-The inequality is now a theorem on the full density-matrix domain whose only
-entropy-side dependency on this route, formerly the axiom, is now the proved
-theorem \leanid{lieb_concavity_posDef}; the standalone axiom
-can be removed and its consumers redirected to the derived theorem.
-The downstream consumers in the stable entropy interface
-\footnote{The stable interface re-exports the inequality from
-\doclink{TNLean/Entropy/StrongSubadditivity}; consumers import it from there and
-not from the axiom module.}
-require no change because the statement they import is unchanged; only its
-justification changes from axiom to theorem.
+    \item \emph{Final assembly.}
+
+    Define
+    \begin{align}
+        \sigma_{ABC}
+            &= \frac{\Id_A}{d_A}\otimes\rho_{BC},
+        \qquad d_A=\dim\mathcal H_A.
+        \label{eq:cpsv16_ssa_from_lieb_route_reference_state}
+    \end{align}
+    If $\rho_{BC}$ is singular, normalization alone does not put
+    $(\rho_{ABC},\sigma_{ABC})$ in the domain of relative entropy. The required
+    condition is $\ker\sigma_{ABC}\subseteq\ker\rho_{ABC}$.
+
+    The marginal support lemma states
+    \begin{align}
+        \mathcal H_A\otimes\ker\rho_{BC}
+            &\subseteq\ker\rho_{ABC},
+        \label{eq:cpsv16_ssa_from_lieb_route_marginal_kernel}\\
+        \operatorname{supp}\rho_{ABC}
+            &\subseteq
+            \mathcal H_A\otimes\operatorname{supp}\rho_{BC}.
+        \label{eq:cpsv16_ssa_from_lieb_route_marginal_support}
+    \end{align}
+    Let $P_{BC}$ be the projection onto
+    $\operatorname{supp}\rho_{BC}$, and define
+    \begin{align}
+        Q
+            &= \Id_A\otimes(\Id_{BC}-P_{BC}).
+        \label{eq:cpsv16_ssa_from_lieb_route_kernel_projection}
+    \end{align}
+    Since $\tr_A\rho_{ABC}=\rho_{BC}$ and
+    $(\Id_{BC}-P_{BC})\rho_{BC}=0$, the partial-trace adjoint identity gives
+    \begin{align}
+        \tr(Q\rho_{ABC})
+            &= \tr((\Id_{BC}-P_{BC})\tr_A\rho_{ABC})
+        \label{eq:cpsv16_ssa_from_lieb_route_projection_trace_reduction}\\
+            &= \tr((\Id_{BC}-P_{BC})\rho_{BC})
+        \label{eq:cpsv16_ssa_from_lieb_route_projection_trace_marginal}\\
+            &= 0.
+        \label{eq:cpsv16_ssa_from_lieb_route_projection_trace_zero}
+    \end{align}
+    Positivity of $\rho_{ABC}$ and idempotence of $Q$ imply
+    \begin{align}
+        \tr(Q\rho_{ABC})
+            &= \lVert Q\rho_{ABC}^{1/2}\rVert_2^2,
+        \label{eq:cpsv16_ssa_from_lieb_route_projection_hilbert_schmidt}\\
+        Q\rho_{ABC}^{1/2}
+            &= 0,
+        \label{eq:cpsv16_ssa_from_lieb_route_projection_square_root_zero}\\
+        Q\rho_{ABC}
+            &= 0.
+        \label{eq:cpsv16_ssa_from_lieb_route_projection_state_zero}
+    \end{align}
+    Thus the range of $Q$, namely
+    $\mathcal H_A\otimes\ker\rho_{BC}$, lies in $\ker\rho_{ABC}$, proving
+    Eqs.~\ref{eq:cpsv16_ssa_from_lieb_route_marginal_kernel} and
+    \ref{eq:cpsv16_ssa_from_lieb_route_marginal_support}. Because
+    $\Id_A/d_A$ is full rank,
+    \begin{align}
+        \ker\sigma_{ABC}
+            &= \mathcal H_A\otimes\ker\rho_{BC}
+            \subseteq\ker\rho_{ABC}.
+        \label{eq:cpsv16_ssa_from_lieb_route_reference_kernel_condition}
+    \end{align}
+
+    The marginal support lemma is
+    \leanid{Matrix.marginal_support} in
+    \doclink{TNLean/Analysis/MarginalSupport}
+    (\path{TNLean/Analysis/MarginalSupport.lean}). It states that if a
+    Hermitian idempotent on $B\otimes C$ annihilates
+    $\tr_A\rho_{ABC}$ for positive semidefinite $\rho_{ABC}$, then its
+    identity-on-$A$ lift annihilates $\rho_{ABC}$. Its operator core is
+    \leanid{Matrix.PosSemidef.proj_mul_eq_zero_of_trace_eq_zero}, and its
+    partial-trace adjoint identity is
+    \leanid{Matrix.traceA_ABC_lift_trace}. These results use only the standard
+    \Lean{} axioms.
+
+    On $\operatorname{supp}\sigma_{ABC}$, the logarithm splits as
+    \begin{align}
+        \log\left(\frac{\Id_A}{d_A}\otimes\rho_{BC}\right)
+            &= -(\log d_A)\Id_{ABC}
+              +\Id_A\otimes\log\rho_{BC}.
+        \label{eq:cpsv16_ssa_from_lieb_route_reference_logarithm}
+    \end{align}
+    Here $\log\rho_{BC}$ is restricted to
+    $\operatorname{supp}\rho_{BC}$. The support condition ensures that
+    $\rho_{ABC}$ has no weight outside this subspace. Therefore,
+    \begin{align}
+        D\left(\rho_{ABC} \middle\|
+          \frac{\Id_A}{d_A}\otimes\rho_{BC}\right)
+            &= \log d_A+S(\rho_{BC})-S(\rho_{ABC}).
+        \label{eq:cpsv16_ssa_from_lieb_route_tripartite_relative_entropy}
+    \end{align}
+
+    Under $\Lambda=\tr_C$, the two arguments become
+    \begin{align}
+        \Lambda(\rho_{ABC})
+            &= \rho_{AB},
+        \label{eq:cpsv16_ssa_from_lieb_route_partial_trace_state}\\
+        \Lambda(\sigma_{ABC})
+            &= \frac{\Id_A}{d_A}\otimes\rho_B.
+        \label{eq:cpsv16_ssa_from_lieb_route_partial_trace_reference}
+    \end{align}
+    Applying the marginal support lemma to $\rho_{AB}$ and
+    $\rho_B=\tr_A\rho_{AB}$ puts the image pair in the same relative-entropy
+    domain. Its relative entropy is
+    \begin{align}
+        D\left(\rho_{AB} \middle\|
+          \frac{\Id_A}{d_A}\otimes\rho_B\right)
+            &= \log d_A+S(\rho_B)-S(\rho_{AB}).
+        \label{eq:cpsv16_ssa_from_lieb_route_bipartite_relative_entropy}
+    \end{align}
+    Substituting
+    Eqs.~\ref{eq:cpsv16_ssa_from_lieb_route_tripartite_relative_entropy} and
+    \ref{eq:cpsv16_ssa_from_lieb_route_bipartite_relative_entropy} into
+    partial-trace monotonicity gives
+    \begin{align}
+        \log d_A+S(\rho_B)-S(\rho_{AB})
+            &\leq
+            \log d_A+S(\rho_{BC})-S(\rho_{ABC}),
+        \label{eq:cpsv16_ssa_from_lieb_route_entropy_data_processing}\\
+        S(\rho_B)-S(\rho_{AB})
+            &\leq S(\rho_{BC})-S(\rho_{ABC}),
+        \label{eq:cpsv16_ssa_from_lieb_route_conditional_entropy_order}\\
+        S(\rho_{ABC})+S(\rho_B)
+            &\leq S(\rho_{AB})+S(\rho_{BC}).
+        \label{eq:cpsv16_ssa_from_lieb_route_ssa_assembly}
+    \end{align}
+    The final line is
+    Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_strong_subadditivity}, equivalently
+    the nonnegativity of the conditional mutual information
+    $I(A:C\mid B)\geq0$.
+
+    This construction discards $C$ and places the maximally mixed state on the
+    retained factor $A$. Discarding $A$ against
+    $\rho_A\otimes\rho_{BC}$ would prove only subadditivity,
+    $I(A:BC)\geq0$, rather than strong subadditivity.
+\end{enumerate}
+
+\section{Formal completion of the route}
+
+Layers (1)--(6) are formalized. The route begins with the entropy bridge,
+defines \leanid{quantumRelativeEntropy}, proves Klein nonnegativity on the full
+support domain, derives joint convexity from Lieb concavity, establishes
+partial-trace data processing, and instantiates that result at the reference
+state in Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_reference_state}.
+
+The positive-definite final theorem is
+\leanid{strong_subadditivity_posDef} in
+\doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}
+(\path{TNLean/Channel/Schwarz/StrongSubadditivityPosDef.lean}). In this case,
+$\rho_{BC}$ and the reference state
+$(\Id_A/d_A)\otimes\rho_{BC}$ are positive definite, so the marginal support
+lemma is unnecessary. The tensor-logarithm identity and the partial-trace
+adjoint relation evaluate both relative entropies, and the positive-definite
+data-processing theorem yields strong subadditivity.
+
+The general theorem is \leanid{strong_subadditivity_general} in the same file.
+It applies to every positive semidefinite unit-trace $\rho_{ABC}$. The theorem
+\leanid{Matrix.marginal_support} places the possibly singular reference state
+in the domain of
+\leanid{quantumRelativeEntropy_partialTraceRight_le_support}. The two relative
+entropies are evaluated by \leanid{rel_entropy_eval_support}, which regularizes
+the reduced state as
+\begin{align}
+    \rho_{R,\varepsilon}
+        &= \frac{\rho_R+\varepsilon\Id}{1+d_R\varepsilon},
+        \qquad \varepsilon>0,
+    \label{eq:cpsv16_ssa_from_lieb_route_reduced_state_regularization}
+\end{align}
+and passes to the limit. This limit argument is required because the direct
+tensor-logarithm split is unavailable for a singular reference state.
+
+The stable entropy interface re-exports the inequality from
+\doclink{TNLean/Entropy/StrongSubadditivity}. Its consumers import that theorem
+rather than the former axiom module. Their statements require no change; only
+the justification has changed from the axiom \leanid{strong_subadditivity} to
+the theorem \leanid{strong_subadditivity_general}.
 
 \section{Verdict}
 
-The strong-subadditivity inequality is now a theorem connected to the
-Lieb-concavity theorem (formerly asserted as an axiom, now proved as
-\leanid{lieb_concavity_posDef}) available in the same repository; the former
-standalone axiom has been removed. The elimination route is the classical relative-entropy
-chain: entropy bridge,
-definition of relative entropy, Klein's inequality, joint convexity (the step
-consuming Lieb concavity), data-processing under the partial trace, and final
-assembly at the tripartite splitting. Layers (2) and (3) are formalized (the
-latter on the full support domain $\ker\sigma\subseteq\ker\rho$,
-\leanid{quantumRelativeEntropy_nonneg_general}), and layer (4) is formalized on
-the same full support domain: the positive-definite base case
-(\leanid{convexOn_quantumRelativeEntropy}) is extended to
-$\ker\sigma\subseteq\ker\rho$ by \leanid{convexOn_quantumRelativeEntropy_support}
-through the both-arguments regularization, so the Lieb-concavity theorem is now
-connected to the joint convexity of the relative entropy on the full support
-domain. Layer (5), data-processing, is formalized on the full support domain: the
-positive-definite case (\leanid{quantumRelativeEntropy_partialTraceRight_le})
-combines unitary invariance (\leanid{quantumRelativeEntropy_conj_unitary}), ancilla
-additivity (\leanid{quantumRelativeEntropy_kronecker}), the finite
-Heisenberg--Weyl $1$-design twirl (\leanid{Matrix.sum_weyl_conj}), and the
-ancilla-factor lift presenting $\tr_C$ through the twirl
-(\leanid{Matrix.sum_kronecker_one_weyl_conj}) through joint convexity into the
-partial-trace monotonicity $D(\tr_C\rho\,\|\,\tr_C\sigma)\le D(\rho\,\|\,\sigma)$,
-and the singular extension under $\ker\sigma\subseteq\ker\rho$
-(\leanid{quantumRelativeEntropy_partialTraceRight_le_support}) follows by
-regularizing both arguments, transferring the support condition to the marginals
-(\leanid{Matrix.partialTraceRight_support}), and passing to the limit through the
-arbitrary-rate affine regularization. The layer-(6) instantiation is formalized on
-the full density-matrix domain. The positive-definite case
-(\leanid{strong_subadditivity_posDef}), where the positive-definite reference
-state $(\mathbf 1_A/d_A)\otimes\rho_{BC}$ sidesteps the marginal support lemma, is
-the base case; the singular-reference extension to every positive semidefinite
-unit-trace $\rho_{ABC}$ is \leanid{strong_subadditivity_general}, which places the
-singular reference state in the layer-(2) domain through the marginal support lemma
-and evaluates the two relative entropies by the singular-reference evaluation
-\leanid{rel_entropy_eval_support}. The inequality is therefore a theorem on the
-full density-matrix domain whose only entropy-side dependency, formerly the
-axiom, is now the proved theorem \leanid{lieb_concavity_posDef}, and it carries
-exactly the hypotheses of the former standalone axiom, so
-that axiom has been removed and its single re-export
-\leanid{Entropy.strongSubadditivity} redirected to the derived theorem.
+Strong subadditivity is proved on the full density-matrix domain. The route is
+the classical relative-entropy argument: the entropy bridge, quantum relative
+entropy, Klein's inequality, joint convexity from Lieb concavity, data
+processing under a partial trace, and the tripartite instantiation.
+
+The positive-definite joint-convexity theorem
+\leanid{convexOn_quantumRelativeEntropy} is extended to the support domain by
+\leanid{convexOn_quantumRelativeEntropy_support}. Unitary invariance,
+ancilla-additivity, the finite Heisenberg--Weyl twirl, and its ancilla lift give
+\leanid{quantumRelativeEntropy_partialTraceRight_le}; regularization gives
+\leanid{quantumRelativeEntropy_partialTraceRight_le_support}. The marginal
+support lemma and \leanid{rel_entropy_eval_support} then establish
+\leanid{strong_subadditivity_general} for every positive semidefinite
+unit-trace state.
+
+The only entropy-side dependency of this route that replaces the former axiom
+is the proved theorem \leanid{lieb_concavity_posDef}. The theorem
+\leanid{strong_subadditivity_general} has exactly the hypotheses of the former
+standalone axiom. Consequently, that axiom has been removed, and
+\leanid{Entropy.strongSubadditivity} now re-exports the derived theorem.
 
 \begin{thebibliography}{9}
 

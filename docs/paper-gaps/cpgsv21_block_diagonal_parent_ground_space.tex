@@ -17,326 +17,456 @@
 
 \section{Notation}
 
-For a tensor $A=(A_i)_{i=1}^d$ with bond dimension $D$, write
+Let $A=(A_i)_{i=1}^d$ be a tensor of bond dimension $D$. For $N\geq 1$ and
+$X\in M_D(\mathbb C)$, define
 \begin{align}
   \Gamma_N^A(X)(i_1,\ldots,i_N)
-    =\tr(A_{i_1}\cdots A_{i_N}X)
-    \qquad (X\in M_D(\mathbb C)).
+    &=
+    \tr(A_{i_1}\cdots A_{i_N}X).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_gamma}
 \end{align}
-Set
+The associated open-boundary space and periodic matrix product vector are
 \begin{align}
   \mathcal G_N^A
-  =
-  \{\Gamma_N^A(X):X\in M_D(\mathbb C)\},
-  \qquad
-  V^{(N)}(A)=\Gamma_N^A(I).
+    &=
+    \{\Gamma_N^A(X):X\in M_D(\mathbb C)\},
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_open_space}\\
+  V^{(N)}(A)
+    &=
+    \Gamma_N^A(\Id).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_periodic_vector}
 \end{align}
-For the ring with periodic boundary conditions, with $\operatorname{res}_{s,L}$
-denoting restriction to the length-$L$ interval beginning at
-$s\in \mathbb Z/N\mathbb Z$, the local ground-space condition is
+
+Consider a ring of length $N$ with periodic boundary conditions. Let
+$\operatorname{res}_{s,L}$ denote restriction to the length-$L$ interval
+beginning at $s\in\mathbb Z/N\mathbb Z$. The corresponding local ground-space
+condition is
 \begin{align}
   \mathcal K_{N,L}(A)
-  =
-  \bigcap_{s\in \mathbb Z/N\mathbb Z}
-  \{\psi:\operatorname{res}_{s,L}(\psi)\in\mathcal G_L^A\}.
+    &=
+    \bigcap_{s\in\mathbb Z/N\mathbb Z}
+    \{\psi:\operatorname{res}_{s,L}(\psi)\in\mathcal G_L^A\}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_chain_space}
 \end{align}
-When weights are present, write
+
+For blocks $A^1,\ldots,A^b$ and nonzero weights
+$\mu_1,\ldots,\mu_b$, define the block-diagonal tensor by
 \begin{align}
-  \widehat A_i=\bigoplus_{j=1}^b\mu_jA_i^j,
-  \qquad
-  \mu_j\ne0,
+  \widehat A_i
+    &=
+    \bigoplus_{j=1}^b\mu_jA_i^j,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_weighted_tensor}\\
+  \mu_j
+    &\neq 0
+    \qquad (1\leq j\leq b).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_nonzero_weights}
 \end{align}
-for the corresponding block-diagonal tensor.  The letters $g$ and $b$ both
-denote the number of blocks below: $g$ follows the review's block-injective
-canonical form notation, while $b$ follows
-\cite[Theorem~12]{PerezGarcia2007MPSReps}.
+The letters $g$ and $b$ both denote the number of blocks below: $g$ follows
+the block-injective canonical-form notation of
+Ref.~\cite{Cirac2021Matrix}, whereas $b$ follows Theorem~12 of
+Ref.~\cite{PerezGarcia2007MPSReps}.
 
 \section{The source assertion}
 
-Cirac et al. describe the degenerate parent-Hamiltonian ground space for a
-matrix product state with more than one block in canonical form in Section~IV.C
-of \cite{Cirac2021Matrix}.\footnote{For
-	traceability, the boundary-crossing comparison has a formal span-dependent
-	form on the main branch
-	(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean} and
-	\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
-		The short crossing-tail span hypothesis is removed by the global change-of-cut
-		comparison in
-		\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint};
-		this resolves
-		\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} at the
-		length bound of the source. The removal of the former extra $(L_0+1)$ in
-		the separation constant resolves
-		\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195} (the earlier
-		tracker \href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}, which
-		tracked proving the boundary-crossing comparison itself, is now closed). Pull
-	request~\#2724 records the earlier conditional reduction on the main branch,
-	reducing the unconditional target to boundary-crossing comparison identities.
-	Earlier reductions were tracked by
-	\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
-	\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
-	\href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
-	source lines are \path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
-The source's block-injective canonical form is a block-diagonal
-physical--virtual correspondence. If
-\begin{align}
-  \widetilde A^i=\bigoplus_{j=1}^g A_j^i,
-\end{align}
-then
-\begin{align}
-  \forall X=(X_j)_j\in\bigoplus_{j=1}^g M_{D_j}(\mathbb C),
-  \qquad
-  \exists (c_i(X))_i,\qquad
-  X=\sum_i c_i(X)\widetilde A^i.
-\end{align}
-After blocking, the corresponding word-span statement is
-\begin{align}
-  \exists m_0\quad \forall m\ge m_0,\qquad
-  \operatorname{span}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
-  =
-  \prod_{j=1}^g M_{D_j}(\mathbb C).
-\end{align}
+Section~IV.C of Ref.~\cite{Cirac2021Matrix} describes the degenerate
+parent-Hamiltonian ground space of a matrix product state with more than one
+block in canonical form.\footnote{For traceability, the boundary-crossing
+comparison has a formal span-dependent form on the main branch
+(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean} and
+\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
+The short crossing-tail span hypothesis is removed by the global change-of-cut
+comparison in
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint};
+this resolves
+\href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} at the
+length bound of the source. The removal of the former extra $(L_0+1)$ in the
+separation constant resolves
+\href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195}. The earlier
+tracker
+\href{https://github.com/LionSR/TNLean/issues/2971}{issue \#2971}, which
+tracked the boundary-crossing comparison itself, is now closed. Pull
+request~\#2724 records the earlier conditional reduction on the main branch,
+which reduced the unconditional target to boundary-crossing comparison
+identities. Earlier reductions were tracked by
+\href{https://github.com/LionSR/TNLean/issues/2641}{issue \#2641},
+\href{https://github.com/LionSR/TNLean/issues/905}{issue \#905}, and
+\href{https://github.com/LionSR/TNLean/issues/870}{issue \#870}. The relevant
+source lines are
+\path{Papers/2011.12127/TN-Review-main.tex}:2112--2128.}
 
-The Lean development separates the product-span input from
-the finite blocking hypothesis.  First, it proves the one-step intersection
-identity from \cite[Theorem~12]{PerezGarcia2007MPSReps} under the displayed
-product-span equation.  Then the
-normalized basis-of-normal-tensors (BNT) theorems derive that product span from
-the injectivity of
+The block-injective canonical form in Ref.~\cite{Cirac2021Matrix} gives a
+block-diagonal physical--virtual correspondence. Write
 \begin{align}
-  \Gamma_{L_0}^{A_j}:M_{D_j}(\mathbb C)
-    \to(\mathbb C^d)^{\otimes L_0},
+  \widetilde A^i
+    &=
+    \bigoplus_{j=1}^g A_j^i.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_canonical_tensor}
 \end{align}
-together with the separated normalized block hypotheses. For $b\ge2$, the
-simultaneous products span the product algebra at every length
-$n\ge3(b-1)(L_0+1)$. Thus the
-Lean statements no longer replace Condition C1 by a length-one span condition
-in the boundary-decomposition path. The boundary conditions are compared after
-a global change of cut, using only the simultaneous product span on the long
-complementary segment of length \(N-L_0\).
+For every block-diagonal virtual matrix $X$, the correspondence states
+\begin{align}
+  X=(X_j)_j
+    &\in
+    \bigoplus_{j=1}^g M_{D_j}(\mathbb C),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_virtual_matrix}\\
+  X
+    &=
+    \sum_i c_i(X)\widetilde A^i
+    \quad\text{for some coefficients }(c_i(X))_i.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_physical_virtual}
+\end{align}
+After blocking, this correspondence becomes the eventual word-span identity
+\begin{align}
+  \operatorname{span}
+  \{(A_1^\omega,\ldots,A_g^\omega):|\omega|=m\}
+    &=
+    \prod_{j=1}^g M_{D_j}(\mathbb C)
+    \qquad (m\geq m_0)
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_eventual_tuple_span}
+\end{align}
+for some $m_0$.
 
-The resulting parent-Hamiltonian theorem in \cite[Section~IV.C]{Cirac2021Matrix}
-is
+The formal development separates the product-span input from the finite
+blocking hypothesis. It first proves the one-step intersection identity from
+Theorem~12 of Ref.~\cite{PerezGarcia2007MPSReps} under
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_eventual_tuple_span}.
+The normalized basis-of-normal-tensors (BNT) theorems then derive this product
+span from injectivity of
 \begin{align}
-  N\ge L_0+1
-  \quad\Longrightarrow\quad
-  \ker(H_N)=\operatorname{span}\{V^{(N)}(A_j):j=1,\ldots,g\}.
+  \Gamma_{L_0}^{A_j}
+    &:M_{D_j}(\mathbb C)
+      \longrightarrow
+      (\mathbb C^d)^{\otimes L_0}
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_block_injectivity}
 \end{align}
-The sentence preceding the theorem restricts the proof to block-diagonal
-boundary conditions.  After opening the periodic boundary at the chosen cut, this
-means boundary matrices of the form
+and the separated normalized-block hypotheses. For $b\geq 2$, the simultaneous
+products span the product algebra at every length
 \begin{align}
-  X=\bigoplus_{j=1}^g X_j,
-  \qquad
-  Y=\bigoplus_{j=1}^g Y_j
-  \qquad
-  (X_j,Y_j\in M_{D_j}(\mathbb C)).
+  n
+    &\geq
+    3(b-1)(L_0+1).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_tuple_span_range}
+\end{align}
+Thus the boundary-decomposition route does not replace Condition C1 of
+Ref.~\cite{PerezGarcia2007MPSReps} by a length-one span condition. Instead, it
+compares boundary conditions after a global change of cut and uses only the
+simultaneous product span on the complementary segment of length $N-L_0$.
+
+The parent-Hamiltonian assertion in Section~IV.C of
+Ref.~\cite{Cirac2021Matrix} is
+\begin{align}
+  N\geq L_0+1
+    \quad\Longrightarrow\quad
+  \ker(H_N)
+    &=
+    \operatorname{span}
+    \{V^{(N)}(A_j):j=1,\ldots,g\}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_source_kernel}
+\end{align}
+The sentence preceding this theorem restricts the proof to block-diagonal
+boundary conditions. After opening the periodic boundary at a chosen cut,
+these boundary matrices have the form
+\begin{align}
+  X
+    &=
+    \bigoplus_{j=1}^g X_j,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_boundary_x}\\
+  Y
+    &=
+    \bigoplus_{j=1}^g Y_j,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_boundary_y}\\
+  X_j,Y_j
+    &\in
+    M_{D_j}(\mathbb C).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_boundary_blocks}
 \end{align}
 
 \section{Normalization scope}
 
-The PGVWC07 source normalization used in the block-intersection calculation is
+The normalization used in the block-intersection calculation of
+Ref.~\cite{PerezGarcia2007MPSReps} is
 \begin{align}
-  \sum_a A^j_a(A^j_a)^\dagger=I.
+  \sum_a A^j_a(A^j_a)^\dagger
+    &=
+    \Id.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_source_unital}
 \end{align}
 For the dual transfer operator, the general canonical form has a positive
 definite fixed point $\Lambda_j$ satisfying
 \begin{align}
-  \sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j.
+  \sum_a (A^j_a)^\dagger\Lambda_j A^j_a
+    &=
+    \Lambda_j.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_dual_fixed_point}
 \end{align}
-The unrestricted source-length declarations assume these source identities and
-positive dual fixed-point data; unlike the diagonal-coordinate choice made in
-PGVWC07, the proofs do not require the matrices $\Lambda_j$ to be diagonal.
-A temporary square-root
-gauge makes each block left-canonical only inside the fixed-length simultaneous
-product-span proof; gauge invariance transports that span back to the source
-representatives.  Long-word propagation, the global change-of-cut comparison,
-the block-diagonal boundary calculation, and the parent-Hamiltonian kernel
-argument all remain in the original source-unital gauge.  In particular, the
-formalization does not assert that a nonunitary gauge preserves both
-normalization identities.
+The unrestricted source-length declarations assume
+Eqs.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_source_unital}
+and~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_dual_fixed_point},
+together with positivity of the dual fixed-point data. Unlike the diagonal
+coordinate choice in Ref.~\cite{PerezGarcia2007MPSReps}, their proofs do not
+require $\Lambda_j$ to be diagonal.
+
+A temporary square-root gauge makes each block left-canonical only within the
+fixed-length simultaneous product-span proof. Gauge invariance then transports
+the span to the original source representatives. Long-word propagation, the
+global change-of-cut comparison, the block-diagonal boundary calculation, and
+the parent-Hamiltonian kernel argument all remain in the original
+source-unital gauge. In particular, the formalization does not claim that a
+nonunitary gauge preserves both normalization identities.
 
 The declarations ending in
-\texttt{\_pgvwc07\_of\_dualFixedPoint} give the unrestricted chain-space,
+\texttt{\_pgvwc07\_of\_dualFixedPoint} prove the unrestricted chain-space,
 boundary-closing, kernel-containment, and exact kernel-equality conclusions of
-Theorem~12.  The older declarations ending simply in \texttt{\_pgvwc07} remain
-available as the doubly normalized specialization $\Lambda_j=I$; their main
-chain-space capstone is proved by applying the unrestricted theorem to the
-identity dual fixed point.  This resolves the normalization restriction tracked
-by \href{https://github.com/LionSR/TNLean/issues/5751}{issue~\#5751}, with the
-source-range tuple-span layer supplied by issue~\#5764 and the global-cut/kernel
-threading by issue~\#5770.
+Theorem~12 in Ref.~\cite{PerezGarcia2007MPSReps}. The older declarations ending
+in \texttt{\_pgvwc07} remain available for the doubly normalized specialization
+$\Lambda_j=\Id$. Their main chain-space capstone follows by applying the
+unrestricted theorem to the identity dual fixed point. This resolves the
+normalization restriction tracked by
+\href{https://github.com/LionSR/TNLean/issues/5751}{issue \#5751}, with the
+source-range tuple-span layer supplied by
+\href{https://github.com/LionSR/TNLean/issues/5764}{issue \#5764} and the
+global-cut and kernel threading supplied by
+\href{https://github.com/LionSR/TNLean/issues/5770}{issue \#5770}.
 
 \section{The block-diagonal intersection identity}
 
-The older representation paper \cite[Theorem \emph{Degeneracy of the ground
-space v2}]{PerezGarcia2007MPSReps} gives the finite-chain identity used by the
-source argument.\footnote{Source
-location: \path{Papers/quant-ph_0608197/MPSarchive.tex}:1424--1456.} It fixes
-the block count and local length by
+The theorem entitled \emph{Degeneracy of the ground space v2} in
+Ref.~\cite{PerezGarcia2007MPSReps} gives the finite-chain identity used by the
+source argument.\footnote{Source location:
+\path{Papers/quant-ph_0608197/MPSarchive.tex}:1424--1456.}
+It identifies the block counts and imposes the local-length bound
 \begin{align}
-  b=g,
-  \qquad
-  L\ge 3(b-1)(L_0+1)+1.
+  b
+    &=
+    g,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_block_count}\\
+  L
+    &\geq
+    3(b-1)(L_0+1)+1.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_local_length}
 \end{align}
-Thus
+The intersection step applies in the range
 \begin{align}
-  m\ge L
+  m
+    &\geq
+    L.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_intersection_range}
 \end{align}
-is the range used in the intersection step:
+In that range, the asserted identity is
 \begin{align}
-  \mathbb C^d\otimes\left(\bigoplus_j \mathcal G_m^{A_j}\right)
+  \mathbb C^d\otimes
+  \left(\bigoplus_j\mathcal G_m^{A_j}\right)
   \cap
-  \left(\bigoplus_j \mathcal G_m^{A_j}\right)\otimes\mathbb C^d
-  =
-  \bigoplus_j \mathcal G_{m+1}^{A_j}.
+  \left(\bigoplus_j\mathcal G_m^{A_j}\right)\otimes\mathbb C^d
+    &=
+    \bigoplus_j\mathcal G_{m+1}^{A_j}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_intersection_identity}
 \end{align}
-For a vector $\psi$ in the left-hand side,
+
+Let $\psi$ belong to the left-hand side of
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_intersection_identity}.
+The two decompositions of $\psi$ are
 \begin{align}
   \psi
-  &=
-  \sum_j
-  \sum_{i_1,\ldots,i_{m+1}}
-  \tr\!\left(A^j_{i_{m+1}} C^j_{i_1} A^j_{i_2}\cdots A^j_{i_m}\right)
-  |i_1\cdots i_{m+1}\rangle \notag\\
-  &=
-  \sum_j
-  \sum_{i_1,\ldots,i_{m+1}}
-  \tr\!\left(D^j_{i_{m+1}} A^j_{i_1} A^j_{i_2}\cdots A^j_{i_m}\right)
-  |i_1\cdots i_{m+1}\rangle.
+    &=
+    \sum_j\sum_{i_1,\ldots,i_{m+1}}
+    \tr\!\left(A^j_{i_{m+1}}C^j_{i_1}
+      A^j_{i_2}\cdots A^j_{i_m}\right)
+    \ket{i_1\cdots i_{m+1}},
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_left_decomposition}\\
+  \psi
+    &=
+    \sum_j\sum_{i_1,\ldots,i_{m+1}}
+    \tr\!\left(D^j_{i_{m+1}}A^j_{i_1}
+      A^j_{i_2}\cdots A^j_{i_m}\right)
+    \ket{i_1\cdots i_{m+1}}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_right_decomposition}
 \end{align}
-The direct-sum separation lemma and the one-block injectivity condition identify,
-for every $j,i_1,i_{m+1}$,
+The direct-sum separation lemma and one-block injectivity then give, for every
+$j$, $i_1$, and $i_{m+1}$,
 \begin{align}
-  A^j_{i_{m+1}} C^j_{i_1}
-  =
-  D^j_{i_{m+1}} A^j_{i_1}.
+  A^j_{i_{m+1}}C^j_{i_1}
+    &=
+    D^j_{i_{m+1}}A^j_{i_1}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_cd_identity}
 \end{align}
-The source line writes \(E^j=\sum_k C^j_kA^j_k\), without an adjoint on the
-second factor. The normalization used in the next line is
-\(\sum_kA^j_kA^{j\dagger}_k=I\), so the calculation requires the adjointed
-matrix
+
+The corresponding source line in Ref.~\cite{PerezGarcia2007MPSReps} writes
+$E^j=\sum_k C^j_kA^j_k$ without an adjoint on the second factor. Because the
+next line uses
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_source_unital}, the
+calculation requires the adjoint-corrected definition
 \begin{align}
-  E^j=\sum_{k} C^j_{k}A^{j\dagger}_{k}.
+  E^j
+    &=
+    \sum_k C^j_kA^{j\dagger}_k.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_corrected_e}
 \end{align}
-Together with the normalization
+Using Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_cd_identity} and
+the normalization
 \begin{align}
-  \sum_{i_1} A^j_{i_1}A^{j\dagger}_{i_1}=I,
+  \sum_{i_1}A^j_{i_1}A^{j\dagger}_{i_1}
+    &=
+    \Id,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_intersection_normalization}
 \end{align}
-the displayed matrix identity gives
+one obtains
 \begin{align}
-  A^j_{i_{m+1}} E^j A^j_{i_1}
+  A^j_{i_{m+1}}E^jA^j_{i_1}
+    &=
+    \sum_k
+    A^j_{i_{m+1}}C^j_kA^{j\dagger}_kA^j_{i_1},
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_e_expand}\\
   &=
-  \sum_k
-  A^j_{i_{m+1}} C^j_k A^{j\dagger}_k A^j_{i_1} \notag\\
+    D^j_{i_{m+1}}
+    \left(\sum_k A^j_kA^{j\dagger}_k\right)A^j_{i_1},
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_e_substitute}\\
   &=
-  D^j_{i_{m+1}}
-  \left(\sum_k A^j_k A^{j\dagger}_k\right)
-  A^j_{i_1} \notag\\
+    D^j_{i_{m+1}}A^j_{i_1},
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_e_normalize}\\
   &=
-  D^j_{i_{m+1}} A^j_{i_1}
-  =
-  A^j_{i_{m+1}} C^j_{i_1},
+    A^j_{i_{m+1}}C^j_{i_1}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_e_conclude}
 \end{align}
-which puts the vector in $\bigoplus_j \mathcal G_{m+1}^{A_j}$.
+This calculation places $\psi$ in
+$\bigoplus_j\mathcal G_{m+1}^{A_j}$ and proves the nontrivial inclusion in
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_intersection_identity}.
 
 \section{The boundary condition and the global change of cut}
 
-The present Lean statements prove the one-step identity under the product-span
-hypothesis
+The formal one-step theorem assumes the simultaneous product-span identity
 \begin{align}
   \operatorname{span}
-  \{(A^1_w,\ldots,A^b_w): |w|=m\}
-  =
-  \prod_{j=1}^b M_{D_j}(\mathbb C),
+  \{(A^1_w,\ldots,A^b_w):|w|=m\}
+    &=
+    \prod_{j=1}^bM_{D_j}(\mathbb C).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_product_span}
 \end{align}
-and, in the normalized BNT case, give the internal direct sums
+In the normalized BNT case, it also gives the internal direct sums
 \begin{align}
-  \bigvee_j \mathcal G_m^{A_j}
-  =
-  \bigoplus_j \mathcal G_m^{A_j},
-  \qquad
-  \bigvee_j \mathcal G_{m+1}^{A_j}
-  =
-  \bigoplus_j \mathcal G_{m+1}^{A_j}.
+  \bigvee_j\mathcal G_m^{A_j}
+    &=
+    \bigoplus_j\mathcal G_m^{A_j},
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_internal_sum_m}\\
+  \bigvee_j\mathcal G_{m+1}^{A_j}
+    &=
+    \bigoplus_j\mathcal G_{m+1}^{A_j}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_internal_sum_succ}
 \end{align}
-The proved one-step conclusion is therefore
+Consequently, for every sufficiently large $m$ satisfying
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_product_span}, the
+one-step conclusion is
 \begin{align}
-  \mathbb C^d\otimes\left(\bigoplus_j \mathcal G_m^{A_j}\right)
+  \mathbb C^d\otimes
+  \left(\bigoplus_j\mathcal G_m^{A_j}\right)
   \cap
-  \left(\bigoplus_j \mathcal G_m^{A_j}\right)\otimes\mathbb C^d
-  =
-  \bigoplus_j \mathcal G_{m+1}^{A_j}
+  \left(\bigoplus_j\mathcal G_m^{A_j}\right)\otimes\mathbb C^d
+    &=
+    \bigoplus_j\mathcal G_{m+1}^{A_j}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_formal_intersection}
 \end{align}
-for all sufficiently large $m$ satisfying the product-span hypotheses.
-The tuple-span, internal-sum, and one-step intersection statements now hold
-under the source canonical data: for each block $j$, let $\Lambda^j$ be a
-positive definite matrix satisfying
+
+The tuple-span, internal-sum, and one-step intersection theorems hold under the
+source canonical data. For each block $j$, let $\Lambda^j$ be positive
+definite and assume
 \begin{align}
-  \sum_aA^j_aA^{j\dagger}_a&=I,
-  &\sum_aA^{j\dagger}_a\Lambda^jA^j_a&=\Lambda^j.
+  \sum_aA^j_aA^{j\dagger}_a
+    &=
+    \Id,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_block_unital}\\
+  \sum_aA^{j\dagger}_a\Lambda^jA^j_a
+    &=
+    \Lambda^j.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_block_dual_fixed}
 \end{align}
-These statements require neither diagonality of $\Lambda^j$ nor the additional
-identity $\sum_aA^{j\dagger}_aA^j_a=I$ on the same representative. The proof uses the
-positive dual fixed point only to prepare a temporary left-canonical gauge for
-the sharp base separation theorem, transports the tuple span back, and then
-propagates it with the source unital identity.\footnote{Lean declarations:
+These results require neither diagonality of $\Lambda^j$ nor the additional
+identity $\sum_aA^{j\dagger}_aA^j_a=\Id$ for the same representative. Their
+proof uses the positive dual fixed point only to construct a temporary
+left-canonical gauge for the sharp base separation theorem. It transports the
+tuple span back to the source gauge and propagates the span using
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_block_unital}.\footnote{Lean
+declarations:
 \leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint},
 \leanid{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint},
-\leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}, and
+\leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint},
+and
 \leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}.}
-The earlier doubly-normalized declarations remain available as special-purpose
-siblings.
+The earlier doubly normalized declarations remain available as
+special-purpose siblings.
 
-The normalization relaxation is now threaded through the open-boundary
-containment, unique block sum, block-diagonal boundary representation, global
-change of cut, periodic chain-space equality, kernel containment, and exact
-kernel equality.  In particular,
+The normalization relaxation extends through open-boundary containment, unique
+block decomposition, block-diagonal boundary representation, global change of
+cut, periodic chain-space equality, kernel containment, and exact kernel
+equality. Under the source-unital and positive dual fixed-point hypotheses, it
+gives
 \begin{align}
-  \mathcal K_{N,L}(\widehat A)&=
-  \bigvee_{j=1}^b\mathcal K_{N,L}(A_j),
-  &\ker H_L^{(N)}(\widehat A)&=
-  \operatorname{span}\{V^{(N)}(A_j):1\le j\le b\},
+  \mathcal K_{N,L}(\widehat A)
+    &=
+    \bigvee_{j=1}^b\mathcal K_{N,L}(A_j),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_chain_decomposition}\\
+  \ker H_L^{(N)}(\widehat A)
+    &=
+    \operatorname{span}
+    \{V^{(N)}(A_j):1\leq j\leq b\}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_kernel_span}
 \end{align}
-under the source unital and positive dual fixed-point hypotheses, with no source
-left-canonical assumption.\footnote{Lean declarations:
+No source left-canonical assumption is needed.\footnote{Lean declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint},
 \leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint},
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}, and
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint},
+and
 \leanid{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}.}
 
-Earlier conditional reductions isolated the source comparison in the coordinates
-obtained by opening the periodic boundary for boundary-crossing windows. Suppose
+Earlier conditional reductions isolated the source comparison after opening the
+periodic boundary at a cut. Suppose
 \begin{align}
   \psi
-  =
-  \Gamma_N^{\widehat A}\!\left(\bigoplus_{j=1}^b X_j\right)
-  \in \mathcal K_{N,L}(\widehat A).
+    &=
+    \Gamma_N^{\widehat A}
+    \left(\bigoplus_{j=1}^bX_j\right),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_boundary_representation}\\
+  \psi
+    &\in
+    \mathcal K_{N,L}(\widehat A).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_boundary_state}
 \end{align}
-For a cyclic interval beginning at \(i\) and crossing the boundary cut, put
-\(a=i+L-N\).  The word \(\beta\) records the part of the interval before the
-chosen cut, while \(\rho\) records the outside word of length \(N-L\).  These
-are the blocked words obtained by opening the source boundary-index comparison.
-The conditional theorem assumes that, for every block \(j\) and every such
-outside word \(\rho\), there is a matrix \(E_{j,i,\rho}\) such that for every
-word \(\beta\) of length \(a\),
+For a cyclic interval beginning at $i$ and crossing the cut, define
 \begin{align}
-  \mu_j^N X_j A^j_\beta A^j_\rho
-  =
-  A^j_\beta E_{j,i,\rho}.
+  a
+    &=
+    i+L-N.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_wrapped_length}
 \end{align}
-Under the usual block-injectivity and normalization hypotheses this assumption
+The word $\beta$ records the part of the interval before the chosen cut, and
+the word $\rho$ records the outside segment of length $N-L$. These blocked
+words arise by opening the source boundary-index comparison.
+
+The conditional theorem assumes that for every block $j$, every such outside
+word $\rho$, and every word $\beta$ of length $a$, there is a matrix
+$E_{j,i,\rho}$ such that
+\begin{align}
+  \mu_j^NX_jA^j_\beta A^j_\rho
+    &=
+    A^j_\beta E_{j,i,\rho}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_complementary_identity}
+\end{align}
+Under the usual block-injectivity and normalization hypotheses, this condition
 implies
 \begin{align}
-  \Gamma_N^{A_j}(\mu_j^N X_j)\in\mathcal K_{N,L}(A_j)
-  \qquad (1\le j\le b).
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+    &\in
+    \mathcal K_{N,L}(A_j)
+    \qquad (1\leq j\leq b).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_component_membership}
 \end{align}
-Thus the trace representation of \(\psi\) is not the obstruction. The
-periodic component theorem proves the displayed conclusion from these
-boundary-crossing coordinate identities. The global change-of-cut proof avoids
-assuming those identities separately: it translates the whole periodic state
-past the final \(L_0\) sites and compares the two open-boundary decompositions
-against the long complementary segment.\footnote{Formal declarations:
+Thus the trace representation of $\psi$ is not the obstruction. The periodic
+component theorem derives
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_component_membership}
+from
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_complementary_identity}.
+The global change-of-cut proof avoids imposing the latter identity separately:
+it translates the entire periodic state past the final $L_0$ sites and compares
+the two open-boundary decompositions on the long complementary
+segment.\footnote{Formal declarations:
 \leanid{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq},
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint},
 and
@@ -345,339 +475,476 @@ The earlier conditional declarations are
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_pgvwc_comparison_of_injective},
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1}, and
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1},
+and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
 
 The live blueprint records the block-diagonal periodic-boundary ground space,
 the forward inclusion, the block-diagonal intersection identity from
-\cite[Theorem~12]{PerezGarcia2007MPSReps}, the parent-ground-space
-containment, and the final span statement with explicit citations. It also
-separates these opened-boundary coordinates from the paper's boundary indices,
-and records the unconditional global-cut conclusion at the source length bound.
+Theorem~12 of Ref.~\cite{PerezGarcia2007MPSReps}, the parent-ground-space
+containment, and the final span statement. It distinguishes the opened-boundary
+coordinates from the source boundary indices and records the unconditional
+global-cut conclusion at the source length bound.
 % Blueprint labels: def:parent_hamiltonian_ground_space_bnt,
 % lem:isup_chain_ground_space_block_le_assembled,
 % thm:block_diagonal_ground_space_intersection,
 % thm:parent_ground_space_le_bnt_span, thm:gs_eq_bnt_span.
-With this notation,
+
+The sum of the blockwise chain spaces means
 \begin{align}
   \sum_{j=1}^b\mathcal K_{N,L}(A_j)
-  =
-  \left\{
-    \sum_{j=1}^b \psi_j:
-    \psi_j\in\mathcal K_{N,L}(A_j)
-  \right\}.
+    &=
+    \left\{\sum_{j=1}^b\psi_j:
+      \psi_j\in\mathcal K_{N,L}(A_j)\right\}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_space_sum}
 \end{align}
-The source-range conclusion now proved is
+The proved source-range statement is
 \begin{align}
-  \left[
-    b\ge2
+  &\left[b\geq2
     \ \wedge\
-    L_0\ge1
+    L_0\geq1
     \ \wedge\
-    (\forall j,\ \mu_j\ne 0)
+    (\forall j,\ \mu_j\neq0)
     \ \wedge\
     L_0<L
     \ \wedge\
-    L\ge 3(b-1)(L_0+1)+1
+    L\geq3(b-1)(L_0+1)+1
     \ \wedge\
-    N\ge L+L_0
-  \right]
-  \Longrightarrow
-  \notag\\
+    N\geq L+L_0\right]
+  \nonumber\\
+  &\qquad\Longrightarrow
   \mathcal K_{N,L}(\widehat A)
   =
-  \sum_{j=1}^b \mathcal K_{N,L}(A_j).
+  \sum_{j=1}^b\mathcal K_{N,L}(A_j).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_source_range_decomposition}
 \end{align}
 
-The following implication is not available.  The trace-form space
-$\mathcal G_N^A$ is not contained in the periodic-boundary ground space
-$\mathcal K_{N,L}(A)$ for an arbitrary boundary matrix $X$.  If the
-cyclic window crosses the chosen virtual boundary, then a vector
+An arbitrary trace-form vector need not belong to the periodic chain space:
+\begin{align}
+  \mathcal G_N^A
+    &\nsubseteq
+    \mathcal K_{N,L}(A)
+    \quad\text{in general}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_false_trace_inclusion}
+\end{align}
+If a cyclic window crosses the chosen virtual boundary, a vector
 $\Gamma_N^A(X)$ has coefficients of the form
 \begin{align}
   \tr\!\left(A^{\omega_{\mathrm{tail}}}
-    X A^{\omega_{\mathrm{head}}} A^\rho\right),
+    XA^{\omega_{\mathrm{head}}}A^\rho\right),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_crossing_trace}
 \end{align}
-where $\omega_{\mathrm{tail}}\omega_{\mathrm{head}}$ is the word seen in the
-cyclic window and $\rho$ is the outside word.  This is not, for general $X$,
-of the form
+where $\omega_{\mathrm{tail}}\omega_{\mathrm{head}}$ is the word observed in
+the cyclic window and $\rho$ is the outside word. For general $X$, this
+expression cannot be written as
 \begin{align}
   \tr\!\left(A^{\omega_{\mathrm{tail}}}
     A^{\omega_{\mathrm{head}}}Y_\rho\right)
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_local_trace}
 \end{align}
-with one matrix $Y_\rho$ independent of the window word.  The missing step is
-therefore a boundary-condition comparison, not the inclusion
-$\mathcal G_N^A\subseteq\mathcal K_{N,L}(A)$.
-The source theorem uses the multi-block hypothesis, the positive common
-injectivity length, the nonzero-weight hypothesis, and the length range of
-\cite[Theorem~12]{PerezGarcia2007MPSReps}:
+with one matrix $Y_\rho$ independent of the window word. The missing step is
+therefore a boundary-condition comparison, not the false inclusion in
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_false_trace_inclusion}.
+
+The source theorem uses the multi-block hypothesis, a positive common
+injectivity length, nonzero weights, and the length range of Theorem~12 in
+Ref.~\cite{PerezGarcia2007MPSReps}:
 \begin{align}
-  b\ge2,
-  \qquad
-  L_0\ge1,
-  \qquad
-  \forall j,\ \mu_j\ne0,
-  \qquad
-  L_0<L,
-  \qquad
-  L\ge 3(b-1)(L_0+1)+1,
-  \qquad
-  N\ge L+L_0.
+  b
+    &\geq
+    2,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_hyp_blocks}\\
+  L_0
+    &\geq
+    1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_hyp_injectivity}\\
+  \mu_j
+    &\neq
+    0
+    \qquad\text{for every }j,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_hyp_weights}\\
+  L_0
+    &<
+    L,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_hyp_local_strict}\\
+  L
+    &\geq
+    3(b-1)(L_0+1)+1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_hyp_local_bound}\\
+  N
+    &\geq
+    L+L_0.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_hyp_global_bound}
 \end{align}
-For $b\ge2$ and $L_0\ge1$, the source length bound implies
-$L\ge 3L_0+4>L_0$; the inequality $L_0<L$ is displayed separately because the
-one-block uniqueness input is used in that range.
-The one-block case is the injective parent-Hamiltonian theorem rather than the
-degenerate block-injective boundary theorem.
-The former proof required the more conservative range
-$L\ge (L_0+1)+3(b-1)(L_0+1)+1$. This extra $(L_0+1)$ is no longer present.
-Once the simultaneous tuples span at
-$q=3(b-1)(L_0+1)$, the unital normalization propagates the homogeneous tuple
-span from $q$ to every larger length: a target tuple $(M_j)_j$ is obtained at
-length $q+1$ by representing $((A^j_a)^\dagger M_j)_j$ at length $q$, prefixing
-$A^j_a$, and summing over $a$.
-The periodic-boundary comparison reductions now separate into three forms: a
-decomposition into blockwise vectors with periodic boundary conditions, a
-block-diagonal boundary representation whose components already belong to the
-corresponding blockwise periodic-boundary spaces, and the boundary-crossing
-coordinate formulation displayed above.\footnote{Lean declarations:
+For $b\geq2$ and $L_0\geq1$, the source bound implies
+\begin{align}
+  L
+    &\geq
+    3L_0+4
+    >
+    L_0.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_implied_strict_bound}
+\end{align}
+The hypothesis $L_0<L$ remains explicit because the proof uses one-block
+uniqueness in that range. The one-block case is governed by the injective
+parent-Hamiltonian theorem, not by the degenerate block-injective boundary
+theorem.
+
+The former formal proof used the more conservative range
+\begin{align}
+  L
+    &\geq
+    (L_0+1)+3(b-1)(L_0+1)+1.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_old_length_bound}
+\end{align}
+The extra $(L_0+1)$ is no longer needed. Once simultaneous tuples span at
+\begin{align}
+  q
+    &=
+    3(b-1)(L_0+1),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_base_span_length}
+\end{align}
+the unital normalization propagates the homogeneous tuple span from $q$ to
+every greater length. Given a target tuple $(M_j)_j$, represent
+$((A^j_a)^\dagger M_j)_j$ at length $q$, prefix $A^j_a$, and sum over $a$.
+
+The periodic-boundary reductions have three forms: a decomposition into
+blockwise vectors with periodic boundary conditions; a block-diagonal boundary
+representation whose components already lie in the corresponding blockwise
+periodic spaces; and the boundary-crossing coordinate formulation in
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_complementary_identity}.\footnote{Lean
+declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_boundary_decomposition},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition},
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_blockBoundary},
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities}.}
-The global change-of-cut theorem discharges the boundary-crossing comparison
-hypothesis at the source length constant.
-For
+The global change-of-cut theorem discharges the boundary-crossing hypothesis at
+the source length constant.
+
+For a block-diagonal boundary matrix
 \begin{align}
-  X=\bigoplus_j X_j,
+  X
+    &=
+    \bigoplus_jX_j,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_block_boundary}
 \end{align}
-the boundary-matrix formula is
+the boundary formula is
 \begin{align}
   \Gamma_N^{\widehat A}(X)(i_1,\ldots,i_N)
+    &=
+    \sum_j\mu_j^N
+    \tr(A^j_{i_1}\cdots A^j_{i_N}X_j),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_weighted_trace_sum}\\
   &=
-  \sum_j \mu_j^N
-  \tr(A^j_{i_1}\cdots A^j_{i_N}X_j) \notag\\
-  &=
-  \sum_j \mu_j^N\Gamma_N^{A_j}(X_j)(i_1,\ldots,i_N).
+    \sum_j\mu_j^N
+    \Gamma_N^{A_j}(X_j)(i_1,\ldots,i_N).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_weighted_gamma_sum}
 \end{align}
-For the next display, abbreviate
+For the remaining argument, abbreviate
 \begin{align}
-  \Gamma_j(X)=\Gamma_N^{A_j}(X),
-  \qquad
-  V_j=V^{(N)}(A_j).
+  \Gamma_j(X)
+    &=
+    \Gamma_N^{A_j}(X),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_gamma_abbreviation}\\
+  V_j
+    &=
+    V^{(N)}(A_j).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_vector_abbreviation}
 \end{align}
-Thus the desired proof with periodic boundary conditions is the composition of
-the two implications
+
+The periodic-boundary proof first establishes
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widehat A)
-  &\Longrightarrow
-  \exists (X_j)_{j=1}^b,\quad
-  \psi=\sum_{j=1}^b\Gamma_j(X_j),
-  \notag\\
-  &\hphantom{\Longrightarrow}
-  \forall\,1\le j\le b,\quad
-  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
-  ,
+    &\Longrightarrow
+    \exists(X_j)_{j=1}^b,\
+    \psi=\sum_{j=1}^b\Gamma_j(X_j),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_first_implication_decompose}\\
+  \psi\in\mathcal K_{N,L}(\widehat A)
+    &\Longrightarrow
+    \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
+    \quad (1\leq j\leq b).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_first_implication_components}
 \end{align}
-and, for every $X_1,\ldots,X_b$,
+For arbitrary $X_1,\ldots,X_b$, one-block uniqueness then gives
 \begin{align}
-  \forall\,1\le j\le b,\quad
-  \Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
-  &\Longrightarrow
-  \exists (c_j)_{j=1}^b,
-  \notag\\
-  &\hphantom{\Longrightarrow}
-  \forall\,1\le j\le b,\quad
-  \Gamma_j(X_j)=c_j V_j
-  .
+  \left[\Gamma_j(X_j)\in\mathcal K_{N,L}(A_j)
+    \text{ for every }j\right]
+    &\Longrightarrow
+    \exists(c_j)_{j=1}^b,\
+    \Gamma_j(X_j)=c_jV_j
+    \text{ for every }j.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_second_implication}
 \end{align}
-The composition gives
+Combining these implications yields
 \begin{align}
   \psi
+    &=
+    \sum_{j=1}^b\Gamma_j(X_j),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_span_composition_first}\\
   &=
-  \sum_{j=1}^b\Gamma_j(X_j)
-  =
-  \sum_{j=1}^b c_j V_j,
-  \notag\\
+    \sum_{j=1}^bc_jV_j,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_span_composition_second}\\
   \psi
-  &\in
-  \operatorname{span}\{V_j:j=1,\ldots,b\}.
+    &\in
+    \operatorname{span}\{V_j:j=1,\ldots,b\}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_span_conclusion}
 \end{align}
 
 \section{Conclusion}
 
-This is not a source-error claim. The formal development proves the
-block-diagonal periodic-boundary comparison without a short-tail span or an
-external boundary-comparison hypothesis in the source range
+This note does not identify a source error. The formal development proves the
+block-diagonal periodic-boundary comparison without a short-tail span
+hypothesis or an external boundary-comparison hypothesis in the source range
 \begin{align}
-  b\ge2,
-  \qquad
-  L_0\ge1,
-  \qquad
-  L\ge3(b-1)(L_0+1)+1,
-  \qquad
-  N\ge L+L_0.
+  b
+    &\geq
+    2,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_conclusion_blocks}\\
+  L_0
+    &\geq
+    1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_conclusion_injectivity}\\
+  L
+    &\geq
+    3(b-1)(L_0+1)+1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_conclusion_local_length}\\
+  N
+    &\geq
+    L+L_0.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_conclusion_global_length}
 \end{align}
-For every block $j$ one has
+For each block $j$, it proves
 \begin{align}
   \psi\in\mathcal K_{N,L}(\widehat A)
-  \quad\Longrightarrow\quad
-  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j).
+    &\Longrightarrow
+    \Gamma_N^{A_j}(\mu_j^NX_j)
+    \in
+    \mathcal K_{N,L}(A_j).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_conclusion_component}
 \end{align}
-The earlier conditional reduction recorded by pull request~\#2724 and the
-boundary-trace implication remain useful intermediate statements. The latter
-records the following assertion.
-Assume the common
-word-span property for the middle-word length \(m\). If, for every
-boundary-crossing interval, word
-$\beta$ before the cut, outside word $\rho$, and middle word $w$ of length \(m\),
-the two boundary trace expressions from \cite[Theorem~12]{PerezGarcia2007MPSReps}
-satisfy
-\begin{align}
-  \sum_j\tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
-  =
-  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_w\right),
-\end{align}
-then
-\begin{align}
-  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
-\end{align}
-for every block $j$ in the block-injective range.\footnote{Lean declaration:
-\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
-There is also an explicit-boundary version: once
-\(\psi=\Gamma_N^{\widehat A}(\bigoplus_jX_j)\) is fixed, the same equality of
-boundary trace expressions gives
-\begin{align}
-  \Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal K_{N,L}(A_j)
-\end{align}
-for every block \(j\), without using any span assumption at the short
-boundary-crossing tail length \(N-i\).\footnote{Lean declaration:
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}.}
-At the fixed wrapped-tail length supplied by a single boundary-crossing cyclic
-window, the boundary trace expressions are now derived from the local
-constraint once the block-diagonal boundary representation is fixed: for
-\(N<i+L\), outside word \(\rho\) of length \(N-L\), and wrapped tail word
-\(\alpha\) of length \(N-i\), there are matrices \(C^j_{i,\rho}\) such that
-\begin{align}
-  \sum_j\tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
-  =
-  \sum_j\tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_\alpha\right).
-\end{align}
-This fixed-tail statement is recorded as
-\leanid{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}.
-It should not be read as the middle-word trace hypothesis at a common
-product-spanning length: the fixed cyclic window gives the wrapped tail length
-\(N-i\), whereas the separating trace-decomposition implication is stated at a
-common product-span length \(m\).
 
-In the normalized BNT source range, this common middle-word span is no longer an
+The earlier conditional reduction recorded by pull request~\#2724 and the
+boundary-trace implication remain useful intermediate results. The latter has
+the following form. Assume the common word-span property at middle-word length
+$m$. For every boundary-crossing interval, let $\beta$ be the word before the
+cut, let $\rho$ be the outside word, and let $w$ be a middle word of length
+$m$. If the two boundary expressions obtained from Theorem~12 of
+Ref.~\cite{PerezGarcia2007MPSReps} satisfy
+\begin{align}
+  \sum_j
+  \tr\!\left(A^j_\beta C^j_\rho A^j_w\right)
+    &=
+    \sum_j
+    \tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_w\right),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_trace_decomposition}
+\end{align}
+then every block in the block-injective range satisfies
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+    &\in
+    \mathcal K_{N,L}(A_j).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_trace_component}
+\end{align}
+\footnote{Lean declaration:
+\leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}.}
+
+An explicit-boundary version fixes
+\begin{align}
+  \psi
+    &=
+    \Gamma_N^{\widehat A}
+    \left(\bigoplus_jX_j\right).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_explicit_boundary}
+\end{align}
+With this boundary representation, the same equality of boundary trace
+expressions implies
+\begin{align}
+  \Gamma_N^{A_j}(\mu_j^NX_j)
+    &\in
+    \mathcal K_{N,L}(A_j)
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_explicit_component}
+\end{align}
+for every block $j$, without a span assumption at the short
+boundary-crossing tail length $N-i$.\footnote{Lean declaration:
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_of_boundary}.}
+
+At the fixed wrapped-tail length supplied by one boundary-crossing cyclic
+window, the local constraint itself gives the boundary trace expressions once
+the block-diagonal boundary representation has been fixed. More precisely, let
+$N<i+L$, let $\rho$ be an outside word of length $N-L$, and let $\alpha$ be a
+wrapped-tail word of length $N-i$. There are matrices $C^j_{i,\rho}$ such that
+\begin{align}
+  \sum_j
+  \tr\!\left(A^j_\beta C^j_{i,\rho}A^j_\alpha\right)
+    &=
+    \sum_j
+    \tr\!\left((\mu_j^NX_jA^j_\beta)A^j_\rho A^j_\alpha\right).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_fixed_tail_trace}
+\end{align}
+This fixed-tail statement is distinct from the middle-word trace hypothesis at
+a common product-spanning length. The fixed cyclic window supplies the
+wrapped-tail length $N-i$, whereas the separating trace-decomposition
+implication uses a common product-span length $m$.\footnote{Formal declaration:
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_trace_decomposition_of_boundary}.}
+
+In the normalized BNT source range, the common middle-word span is no longer an
 external assumption. If
 \begin{align}
-  m=3(b-1)(L_0+1),
-  \qquad
-  L\ge m+1,
+  m
+    &=
+    3(b-1)(L_0+1),
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_middle_length}\\
+  L
+    &\geq
+    m+1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_middle_local_bound}
 \end{align}
-then the normalized block-separation theorem gives
+then normalized block separation gives
 \begin{align}
-  \operatorname{span}\{(A^1_w,\ldots,A^b_w):|w|=m\}
-  =
-  \prod_j M_{D_j}(\mathbb C).
+  \operatorname{span}
+  \{(A^1_w,\ldots,A^b_w):|w|=m\}
+    &=
+    \prod_jM_{D_j}(\mathbb C).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_middle_product_span}
 \end{align}
-Consequently the finite-range trace-decomposition implication only keeps the
-displayed trace equality as an external input once a block-diagonal boundary
-representation of the vector has been chosen.\footnote{Lean declarations:
+Consequently, after choosing a block-diagonal boundary representation, the
+finite-range trace-decomposition implication retains only
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_trace_decomposition} as
+an external input.\footnote{Lean declarations:
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span}
 and
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span}.}
 
-The \(C^j,D^j\) comparison after opening the boundary is closer to the proof of
-\cite[Theorem~12]{PerezGarcia2007MPSReps}.
-The words \(\beta\) and \(\rho\) are local word coordinates introduced after
-opening and blocking the cyclic boundary comparison; they reindex the source
-end-site comparison \(i_1,i_{m+1}\) by blocked words, and are not additional
-hypotheses or terminology from the paper.
-For a fixed boundary-crossing interval starting at site \(i\), the local
-block-sum constraint and the word-tuple span of the wrapped tail word of
-length \(N-i\) now give matrices
-\(C^j_{i,\rho}\) satisfying
+The comparison of $C^j$ and $D^j$ after opening the boundary is closer to the
+proof of Theorem~12 in Ref.~\cite{PerezGarcia2007MPSReps}. The local words
+$\beta$ and $\rho$ arise after opening and blocking the cyclic comparison.
+They reindex the source end-site comparison $i_1,i_{m+1}$ and introduce no
+additional source hypothesis or terminology.
+
+For a fixed boundary-crossing interval beginning at site $i$, the local
+block-sum constraint and the word-tuple span at wrapped-tail length $N-i$ give
+matrices $C^j_{i,\rho}$ satisfying
 \begin{align}
   A^j_\beta C^j_{i,\rho}
-  =
-  \bigl((\mu_j^NX_j)A^j_\beta\bigr)A^j_\rho .
+    &=
+    ((\mu_j^NX_j)A^j_\beta)A^j_\rho.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_compatibility}
 \end{align}
-Once this compatibility identity is available, the normalized \(E^j\)
-calculation is no longer a gap: the adjoint-corrected formula
+Once
+Eq.~\ref{eq:cpgsv21_block_diagonal_parent_ground_space_compatibility} is
+available, the normalized $E^j$ calculation is complete. Define
 \begin{align}
-  E^j_i=\sum_\rho C^j_{i,\rho}(A^j_\rho)^\dagger
+  E^j_i
+    &=
+    \sum_\rho C^j_{i,\rho}(A^j_\rho)^\dagger.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_crossing_e}
 \end{align}
-and the identities
+The resulting identities are
 \begin{align}
-  (\mu_j^NX_j)A^j_\beta=A^j_\beta E^j_i,
-  \qquad
-  A^j_\beta C^j_{i,\rho}=A^j_\beta E^j_iA^j_\rho
+  (\mu_j^NX_j)A^j_\beta
+    &=
+    A^j_\beta E^j_i,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_crossing_intertwiner}\\
+  A^j_\beta C^j_{i,\rho}
+    &=
+    A^j_\beta E^j_iA^j_\rho.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_crossing_factorization}
 \end{align}
-are formalized by
-\leanid{MPSTensor.pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition}.
-The local boundary formula with \(E_{j,i,\rho}=E^j_iA^j_\rho\) is formalized by
-\leanid{MPSTensor.pgvwc07_complementary_word_boundary_identities_formula_of_compatibility};
-its existential consequence is
-\leanid{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}.
-This is formalized as
-\leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup}
-and, once a block-diagonal boundary representation of \(\psi\) is fixed, into
-\leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace}
-and then into
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary}.
-The current BNT specialization then obtains that boundary representation through
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}.
-Thus the crossing comparison is not an independent trace-comparison assumption.
-For the earlier crossing-span route, the proof boundary was the crossing-tail
-word-span hypothesis and the choice of block-diagonal boundary representation
-for a vector
-\(\psi\in\mathcal K_{N,L}(\widehat A)\).  In the normalized BNT specialization,
-that representation is supplied by the block-diagonal boundary theorem displayed
-below.
-This crossing-tail span hypothesis should not be confused with the
-large-length BNT product-span bound: if the boundary-crossing interval begins
-at \(i=N-1\), the required tail length is \(N-i=1\), so it is not supplied by
-the lower bound on \(L\) alone.
+The local boundary formula is
+\begin{align}
+  E_{j,i,\rho}
+    &=
+    E^j_iA^j_\rho.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_local_boundary_formula}
+\end{align}
+These identities, the local formula, and its existential consequence are
+formalized by the corresponding complementary-word declarations.\footnote{Lean
+declarations:
+\leanid{MPSTensor.pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition},
+\leanid{MPSTensor.pgvwc07_complementary_word_boundary_identities_formula_of_compatibility},
+and
+\leanid{MPSTensor.pgvwc07_complementary_word_boundary_identities_of_compatibility}.}
 
-The block-diagonal boundary representation itself is not an instance of the
-boundary-crossing comparison. The Lean theorem
+The crossing comparison first treats membership in the sum of block spaces,
+then specializes to a fixed block-diagonal boundary representation, and
+finally yields the required blockwise chain-space statement. The current BNT
+specialization supplies that boundary representation, so the crossing
+comparison is not an independent trace-comparison assumption.\footnote{Lean
+declarations:
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup},
+\leanid{MPSTensor.blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary},
+and
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}.}
+
+The earlier crossing-span route required both a crossing-tail word-span
+hypothesis and a block-diagonal boundary representation for
+$\psi\in\mathcal K_{N,L}(\widehat A)$. In the normalized BNT specialization,
+the block-diagonal boundary theorem supplies the representation. The
+crossing-tail span must not be confused with the large-length BNT product-span
+bound: if the boundary-crossing interval begins at $i=N-1$, then
+\begin{align}
+  N-i
+    &=
+    1.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_short_crossing_tail}
+\end{align}
+Thus a lower bound on $L$ alone does not supply the required tail span.
+
+The block-diagonal boundary representation is not an instance of the
+boundary-crossing comparison. It follows from the source-shaped, span-based
+one-step intersection theorem. Its block components belong to the
+open-boundary spaces $\mathcal G_N^{A_j}$, and its proof does not use the
+periodic-boundary comparison at crossing windows.\footnote{Lean declarations:
 \leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
-derives it from the source-shaped span-based one-step intersection identity
-\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint};
-its block components lie in the open-boundary ground spaces $\mathcal G_N^{A_j}$,
-and its proof does not use the periodic-boundary comparison at boundary-crossing
-windows. The earlier conditional block-diagonal parent-space statements retain
-the periodic-boundary comparison as an explicit hypothesis, while the global
+and
+\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}.}
+Earlier conditional block-diagonal parent-space theorems retain the
+periodic-boundary comparison as an explicit hypothesis, whereas the global
 change-of-cut theorem discharges it. Homogeneous tuple-span propagation removes
 the former extra $(L_0+1)$ from the normalized BNT product-span range.
 
-The periodic-boundary comparison target of
+The periodic-boundary target of
 \href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} is therefore
 complete at the source range. The length-constant strengthening tracked by
 \href{https://github.com/LionSR/TNLean/issues/4195}{issue \#4195} is also
-complete: the hypotheses are exactly
+complete. Its hypotheses are exactly
 \begin{align}
-  b\ge2,
-  \qquad
-  L_0\ge1,
-  \qquad
-  L\ge 3(b-1)(L_0+1)+1,
-  \qquad
-  N\ge L+L_0.
+  b
+    &\geq
+    2,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_blocks}\\
+  L_0
+    &\geq
+    1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_injectivity}\\
+  L
+    &\geq
+    3(b-1)(L_0+1)+1,
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_local_length}\\
+  N
+    &\geq
+    L+L_0.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_global_length}
 \end{align}
-The global-cut theorem gives
+Under these hypotheses, the global-cut theorem gives
 \begin{align}
   \mathcal K_{N,L}(\widehat A)
-  =
-  \sum_{j=1}^b\mathcal K_{N,L}(A_j).
+    &=
+    \sum_{j=1}^b\mathcal K_{N,L}(A_j).
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_chain_decomposition}
 \end{align}
-The final degenerate parent-Hamiltonian ground-space equality follows by
-applying the one-block uniqueness theorem to each block.
+Applying the one-block uniqueness theorem to each block then gives the final
+degenerate parent-Hamiltonian ground-space equality
+\begin{align}
+  \ker H_L^{(N)}(\widehat A)
+    &=
+    \operatorname{span}
+    \{V^{(N)}(A_j):1\leq j\leq b\}.
+  \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_kernel}
+\end{align}
 
 \bibliographystyle{alpha}
 \bibliography{references}

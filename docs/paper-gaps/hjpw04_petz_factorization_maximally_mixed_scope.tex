@@ -17,336 +17,432 @@
 
 \section{Source statement}
 
-Let
+Let $A$, $B$, and $C$ be finite-dimensional quantum systems. Define the
+partial-trace channel $T$ and product reference state $\sigma_{ABC}$ by
 \begin{align}
-  T&=\operatorname{id}_A\otimes\operatorname{tr}_C,
-  &\sigma_{ABC}&=\rho_A\otimes\rho_{BC}.
+    T
+        &=\operatorname{id}_A\otimes\operatorname{tr}_C,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_partial_trace}\\
+    \sigma_{ABC}
+        &=\rho_A\otimes\rho_{BC}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_product_reference}
 \end{align}
-Hayden--Jozsa--Petz--Winter write the recovery operation as
+Hayden--Jozsa--Petz--Winter write the recovery operation in their
+Equation~(10) as
 \begin{align}
-  \widehat T=\operatorname{id}_A\otimes\widehat R
-  \label{eq:hjpw-general-factorization}
+    \widehat T
+        &=\operatorname{id}_A\otimes\widehat R.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_source_factorization}
 \end{align}
-in equation~(10), where $\widehat R$ is associated with $\rho_{BC}$ and
-$\operatorname{tr}_C$. Their Petz formula is specified on the support of
-$T\sigma$. Thus equation~\eqref{eq:hjpw-general-factorization} is literal on
-the reduced support spaces. On the full ambient matrix algebras it requires a
-choice of extension away from those supports.
+Here $\widehat R$ is the recovery operation associated with $\rho_{BC}$ and
+$\operatorname{tr}_C$ \cite{HJPW2004}. Their Petz formula is specified on
+the support of $T\sigma_{ABC}$. Thus
+(\ref{eq:hjpw04_petz_factorization_maximally_mixed_scope_source_factorization})
+holds literally on the reduced support spaces. On the full ambient matrix
+algebras, it requires an extension away from those supports.
 
 \section{Global raw formula}
 
-Let $P_A$ be the support projection of $\rho_A$. The product reference and its
-retained marginal satisfy
+Let $P_A$ denote the support projection of $\rho_A$, and define
+$\rho_B=\operatorname{tr}_C\rho_{BC}$. The product reference and its retained
+marginal satisfy
 \begin{align}
-  \sigma_{ABC}&=\rho_A\otimes\rho_{BC},
-  &\operatorname{tr}_C\sigma_{ABC}
-    &=\rho_A\otimes\rho_B,
-  &\rho_B&=\operatorname{tr}_C\rho_{BC}.
+    \sigma_{ABC}
+        &=\rho_A\otimes\rho_{BC},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_reference_again}\\
+    \operatorname{tr}_C\sigma_{ABC}
+        &=\rho_A\otimes\rho_B,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_reference_marginal}\\
+    \rho_B
+        &=\operatorname{tr}_C\rho_{BC}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_right_marginal}
 \end{align}
 For positive semidefinite factors, square roots, support inverse square roots,
-and support projections factor across the tensor product. Consequently the raw
-support-Petz map on the full ambient algebra is
+and support projections factor across tensor products. Therefore the raw
+support-Petz map on the full ambient algebra factors as
 \begin{align}
-  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}
-  &=\mathcal S_{P_A}\otimes
-    \mathcal R^{\mathrm{raw}}_{\rho_{BC}},
-  &\mathcal S_{P_A}(X)&=P_AXP_A.
-  \label{eq:hjpw-global-support-factorization}
+    \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}
+        &=\mathcal S_{P_A}\otimes
+          \mathcal R^{\mathrm{raw}}_{\rho_{BC}},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_global_raw_factorization}\\
+    \mathcal S_{P_A}(X)
+        &=P_AXP_A.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_support_compression}
 \end{align}
-Equivalently,
+Equivalently, for $A_0$ acting on $A$ and $X_B$ acting on $B$,
 \begin{align}
-  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(A_0\otimes X_B)
-  &=(P_AA_0P_A)\otimes
-    \mathcal R^{\mathrm{raw}}_{\rho_{BC}}(X_B).
+    \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}
+        (A_0\otimes X_B)
+        &=(P_AA_0P_A)\otimes
+          \mathcal R^{\mathrm{raw}}_{\rho_{BC}}(X_B).
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_elementary_tensor_formula}
 \end{align}
-All identities use the canonical reassociation
+These identities use the canonical reassociation
 $(A\times B)\times C\simeq A\times(B\times C)$.
 
-The corresponding declarations are
-\begin{center}
-  \small
-  \leanid{Matrix.productTensorReference}\\
-  \leanid{Matrix.productTensorReference_posSemidef}\\
-  \leanid{Matrix.partialTraceRight_productTensorReference}\\
-  \leanid{Matrix.cfcSqrt_productTensorReference}\\
-  \leanid{Matrix.supportInvSqrt_partialTraceRight_productTensorReference}\\
-  \leanid{Matrix.supportProj_partialTraceRight_productTensorReference}\\
-  \leanid{Matrix.supportCompressionMap}\\
-  \leanid{Matrix.partialTraceRightPetzMap_productTensor_kronecker}\\
-  \leanid{Matrix.partialTraceRightPetzMap_productTensor}
-\end{center}
-in \doclink{TNLean/Channel/PetzProductReference}.
+The formal development contains the corresponding declarations
+\leanid{Matrix.productTensorReference},
+\leanid{Matrix.productTensorReference_posSemidef},
+\leanid{Matrix.partialTraceRight_productTensorReference},
+\leanid{Matrix.cfcSqrt_productTensorReference},
+\leanid{Matrix.supportInvSqrt_partialTraceRight_productTensorReference},
+\leanid{Matrix.supportProj_partialTraceRight_productTensorReference},
+\leanid{Matrix.supportCompressionMap},
+\leanid{Matrix.partialTraceRightPetzMap_productTensor_kronecker}, and
+\leanid{Matrix.partialTraceRightPetzMap_productTensor} in
+\doclink{TNLean/Channel/PetzProductReference}.
 
 \section{Identity-tensored corollaries and extension boundary}
 
-If an input $X$ is supported on the first factor,
+Suppose that an input $X$ is supported on the first factor:
 \begin{align}
-  (P_A\otimes\mathbf 1_B)X(P_A\otimes\mathbf 1_B)=X,
+    (P_A\otimes\Id_B)X(P_A\otimes\Id_B)
+        &=X.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_left_supported_input}
 \end{align}
-then support compression disappears and
+Then support compression disappears, and
 \begin{align}
-  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(X)
-  &=(\operatorname{id}_A\otimes
-    \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(X).
+    \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(X)
+        &=(\operatorname{id}_A\otimes
+          \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(X).
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_supported_identity_factorization}
 \end{align}
-If $\rho_A$ is positive definite, then $P_A=\mathbf 1_A$, so this identity
+If $\rho_A$ is positive definite, then
+\begin{align}
+    P_A
+        &=\Id_A,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_full_left_support}
+\end{align}
+so
+(\ref{eq:hjpw04_petz_factorization_maximally_mixed_scope_supported_identity_factorization})
 holds globally. These conclusions are formalized by
-\begin{center}
-  \small
-  \leanid{Matrix.tensorMapId_supportCompressionMap}\\
-  \leanid{Matrix.partialTraceRightPetzMap_productTensor_apply_of_left_supported}\\
-  \leanid{Matrix.partialTraceRightPetzMap_productTensor_of_posDef_left}.
-\end{center}
+\leanid{Matrix.tensorMapId_supportCompressionMap},
+\leanid{Matrix.partialTraceRightPetzMap_productTensor_apply_of_left_supported},
+and
+\leanid{Matrix.partialTraceRightPetzMap_productTensor_of_posDef_left}.
 
-If $\rho_A$ is singular, the ambient raw map is not globally
-$\operatorname{id}_A\otimes\mathcal R^{\mathrm{raw}}_{\rho_{BC}}$. For
-example, an operator supported in the kernel of $\rho_A$ is killed by
-$X\mapsto P_AXP_A$ but not by the identity map. A global channel of the form
+If $\rho_A$ is singular, the ambient raw map does not globally equal
+$\operatorname{id}_A\otimes
+\mathcal R^{\mathrm{raw}}_{\rho_{BC}}$. An operator supported in
+$\ker\rho_A$ is annihilated by $X\mapsto P_AXP_A$ but not by the identity
+map. A global channel of the form
 $\operatorname{id}_A\otimes\widehat{\mathcal R}_{\rho_{BC}}$ is therefore a
 chosen tensor-compatible extension of the support formula.
 
-TNLean's generic completed channel uses the complementary projection
+The generic completed channel in TNLean uses the complementary projection
 \begin{align}
-  \mathbf 1_{AB}-P_A\otimes P_B.
+    \Id_{AB}-P_A\otimes P_B.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_completion_projection}
 \end{align}
-For singular $\rho_A$ this projection does not generally factor as the
+For singular $\rho_A$, this projection does not generally factor as the
 identity on $A$ tensored with a projection on $B$. No factorization of that
 generic completed channel is claimed. The existing maximally mixed completed
 factorization is valid because the first-factor support is full.
 
 \section{SSA product-reference specialization}
 
-For every positive semidefinite bipartite operator $\omega_{XY}$,
+For every positive semidefinite bipartite operator $\omega_{XY}$, its support
+is contained in the tensor product of the marginal supports. Equivalently,
 \begin{align}
-  \ker(\omega_X\otimes\omega_Y)\subseteq\ker\omega_{XY}.
+    \ker(\omega_X\otimes\omega_Y)
+        &\subseteq\ker\omega_{XY}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_product_marginal_support}
 \end{align}
 Thus the product-marginal reference automatically satisfies the support
-condition in HJPW Theorem~3. If a tripartite density matrix attains equality
-in strong subadditivity, the raw product-reference Petz map recovers it:
+condition in Theorem~3 of Hayden--Jozsa--Petz--Winter
+\cite{HJPW2004}. If a tripartite density matrix saturates strong
+subadditivity, the raw product-reference Petz map recovers it:
 \begin{align}
-  \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(\rho_{AB})
-  &=\rho_{ABC}.
+    \mathcal R^{\mathrm{raw}}_{\rho_A\otimes\rho_{BC}}(\rho_{AB})
+        &=\rho_{ABC}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_raw_ssa_recovery}
 \end{align}
-Since $\rho_{AB}$ is supported by both $P_A\otimes\mathbf 1_B$ and
-$\mathbf 1_A\otimes P_B$, the supported factorization and the local
-trace-preserving completion give
+The input $\rho_{AB}$ is supported by both
+$P_A\otimes\Id_B$ and $\Id_A\otimes P_B$. Consequently, the supported
+factorization and the local trace-preserving completion give
 \begin{align}
-  (\operatorname{id}_A\otimes
-    \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(\rho_{AB})
-  &=
-  (\operatorname{id}_A\otimes
-    \widehat{\mathcal R}_{\rho_{BC}})(\rho_{AB})
-  =\rho_{ABC}.
+    (\operatorname{id}_A\otimes
+        \mathcal R^{\mathrm{raw}}_{\rho_{BC}})(\rho_{AB})
+        &=\rho_{ABC},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_local_raw_recovery}\\
+    (\operatorname{id}_A\otimes
+        \widehat{\mathcal R}_{\rho_{BC}})(\rho_{AB})
+        &=\rho_{ABC}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_local_completed_recovery}
 \end{align}
-These are HJPW equations (10)--(11) on the supported input. They are
-formalized in \doclink{TNLean/Channel/Schwarz/SSAEqualityPetzRecovery} by
-\begin{center}
-  \small
-  \leanid{Matrix.product_marginal_support}\\
-  \leanid{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality}\\
-  \leanid{Matrix.idTensor_partialTraceRightPetzMap_traceC_ABC_eq_of_isSSAEquality}\\
-  \leanid{Matrix.partialTraceRightPetzChannel_traceA_ABC_isKrausCPTP}\\
-  \leanid{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}.
-\end{center}
+These identities are Equations~(10)--(11) of
+Hayden--Jozsa--Petz--Winter on the supported input \cite{HJPW2004}. They are
+formalized in
+\doclink{TNLean/Channel/Schwarz/SSAEqualityPetzRecovery} by
+\leanid{Matrix.product_marginal_support},
+\leanid{Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality},
+\leanid{Matrix.idTensor_partialTraceRightPetzMap_traceC_ABC_eq_of_isSSAEquality},
+\leanid{Matrix.partialTraceRightPetzChannel_traceA_ABC_isKrausCPTP}, and
+\leanid{Matrix.idTensor_partialTraceRightPetzChannel_traceC_ABC_eq_of_isSSAEquality}.
 No global identity-tensored factorization of TNLean's generic completed
 singular product-reference channel is claimed.
 
-\section{Structural implication complete}
+\section{Completed structural implication}
 
-The product-reference recovery identity, the invariant conditional family, the
-joint-support block theorem, and the ambient extension now give
+The product-reference recovery identity, the invariant conditional family,
+the joint-support block theorem, and the ambient extension give
 \begin{align}
-  H_B&\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R},
-  \\
-  W^\dagger\rho_{ABC}W
-  &=0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j,
-  \qquad
-  W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C).
+    H_B
+        &\cong\bigoplus_j H_{B_j^L}\otimes H_{B_j^R},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_middle_decomposition}\\
+    W^\dagger\rho_{ABC}W
+        &=0_\perp\oplus\bigoplus_j
+          \omega_j\otimes\widehat\rho_j,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_tripartite_blocks}\\
+    W
+        &=\Id_A\otimes(U_B\otimes\Id_C).
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_block_unitary}
 \end{align}
-The supported matrices $\widehat\rho_j$ are the trace-one sector output
-states. The complementary blocks are zero. The forward characterization sets
-$p_j=\operatorname{Re}\operatorname{tr}\omega_j$, proves $p_j\geq0$ and
-$\sum_jp_j=1$, reverses each middle fibre to the order
-$B_j^L\otimes B_j^R$, and chooses the Hayashi unitary $U_B^\dagger$. Every
-supported right factor remains its sector output state. Total positive-semidefinite
-normalization supplies the left density matrices; at zero weight it may choose
-a left filler, and on a complementary sector it may choose fillers on both
-sides. Their weighted contributions vanish.
-
-This completes the structural implication and is formalized by
-\leanid{Matrix.hayashi_ssa_equality_characterization_forward}, with the public
-root name \leanid{hayashi_ssa_equality_characterization_forward}.
-
-The singular-support scope remains unchanged. The raw support-Petz map factors
-as in~\eqref{eq:hjpw-global-support-factorization}, and the identity-tensored
-formula holds on supported inputs. For the SSA marginal, the chosen completed
-local channel agrees with the raw map on that supported input. No global
-identity-tensored factorization is claimed for TNLean's generic completed
-singular product-reference channel away from support.
-
-\section{Common invariant algebra: formalized under an explicit full-support hypothesis}
-
-A full-support specialization of a slice of the operator-algebraic
-Koashi--Imoto appendix (HJPW, Appendix A, lines 755--882) is now formalized
-independently of the product-reference recovery step above. For a finite,
-nonempty family of states $\rho_1,\dots,\rho_K$,
-the set
+The supported matrices $\widehat\rho_j$ are trace-one sector output states,
+and the complementary blocks vanish. The forward characterization defines
 \begin{align}
-  {\bf F}=\bigl\{F:\forall k\ F\rho_k=\rho_k\bigr\}
+    p_j
+        &=\operatorname{Re}\tr(\omega_j),
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_sector_weight}\\
+    p_j
+        &\geq 0,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_sector_weight_nonnegative}\\
+    \sum_jp_j
+        &=1.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_sector_weight_normalization}
 \end{align}
-of trace-preserving completely positive operations leaving every $\rho_k$
-invariant (lines 825--827) is formalized as a bundled Kraus-family type, and the
-common invariant algebra
+It reverses each middle fibre to the order
+$B_j^L\otimes B_j^R$ and chooses the Hayashi unitary $U_B^\dagger$. Every
+supported right factor remains its sector output state. Total
+positive-semidefinite normalization supplies the left density matrices. A
+zero-weight supported sector may use a left filler, while a complementary
+sector may use fillers on both factors; their weighted contributions vanish.
+
+The formal declaration
+\leanid{Matrix.hayashi_ssa_equality_characterization_forward}, with public
+root name \leanid{hayashi_ssa_equality_characterization_forward}, proves this
+structural implication.
+
+The singular-support boundary is unchanged. The raw support-Petz map factors
+as in
+(\ref{eq:hjpw04_petz_factorization_maximally_mixed_scope_global_raw_factorization}),
+and the identity-tensored formula holds on supported inputs. For the SSA
+marginal, the chosen completed local channel agrees with the raw map on that
+supported input. No global identity-tensored factorization is claimed for
+TNLean's generic completed singular product-reference channel away from
+support.
+
+\section{Common invariant algebra under full support}
+
+A full-support specialization of the operator-algebraic Koashi--Imoto
+argument in Appendix~A, lines~755--882, of
+Hayden--Jozsa--Petz--Winter \cite{HJPW2004} is formalized independently of
+the product-reference recovery step. Let
+$\rho_1,\ldots,\rho_K$ be a finite nonempty family of states. Define
 \begin{align}
-  A_0=\bigcap_{F\in{\bf F}}A_F,
-  \qquad
-  A_F=\{X:F^*(X)=X\},
+    \mathbf F
+        &=\{F:\ F\rho_k=\rho_k\ \text{for every $k$}\}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_preserving_family}
 \end{align}
-(line 843) is formalized as the intersection, over every such $F$, of the
-fixed-point $*$-subalgebra of the adjoint map -- together with its membership
-characterization and the generic block form of a star-subalgebra specialized to
-$A_0$. Because all dimensions are finite, $A_0$ is additionally realized as a
-finite intersection $A_0=A_{F_1}\cap\dots\cap A_{F_M}$, and by a single
-preserving operation $F_0=(1/M)\sum_{\mu=1}^M F_\mu$ with $A_0=A_{F_0}$
-(lines 844--849). The trace-pairing adjoint of the Schr\"odinger mean-ergodic
-projection for $F_0$ is formalized as $P_0^*$. It is positive, unital, and
-idempotent, with range exactly $A_0$. HJPW writes this projection as the
-Ces\`aro limit of the Heisenberg iterates (lines 838--851), and those adjoint
-averages converge to the trace-adjoint projection. The corresponding
-declarations are
-\begin{center}
-  \small
-  \leanid{Kraus.commonAverage}\\
-  \leanid{Kraus.IsPreserving}\\
-  \leanid{Kraus.PreservingKrausFamily}\\
-  \leanid{Kraus.map_commonAverage_of_isPreserving}\\
-  \leanid{Kraus.commonInvariantStarSubalgebra}\\
-  \leanid{Kraus.mem_commonInvariantStarSubalgebra}\\
-  \leanid{Kraus.exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra}\\
-  \leanid{Kraus.exists_finset_preservingKrausFamily_iInf_eq}\\
-  \leanid{Kraus.averagedPreservingKrausFamily}\\
-  \leanid{Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq}\\
-  \leanid{Kraus.commonInvariantMeanErgodicProjection}\\
-  \leanid{Kraus.tendsto_birkhoffAverage_commonInvariantMeanErgodicProjection}\\
-  \leanid{Kraus.commonInvariantMeanErgodicProjection_isPositiveMap}\\
-  \leanid{Kraus.commonInvariantMeanErgodicProjection_one}\\
-  \leanid{Kraus.commonInvariantMeanErgodicProjection_idempotent}\\
-  \leanid{Kraus.mem_range_commonInvariantMeanErgodicProjection_iff}\\
-  \leanid{Kraus.exists_commonInvariant_fixedPointBlockForm}\\
-  \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm}\\
-  \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction}
-\end{center}
-in \doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra},
+Each $F\in\mathbf F$ is a trace-preserving completely positive operation.
+Define its adjoint fixed-point algebra and the common invariant algebra by
+\begin{align}
+    A_F
+        &=\{X:\ F^*(X)=X\},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_fixed_point_algebra}\\
+    A_0
+        &=\bigcap_{F\in\mathbf F}A_F.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_common_invariant_algebra}
+\end{align}
+These are the constructions at lines~825--827 and 843 of
+Ref.~\cite{HJPW2004}. The formal development represents $\mathbf F$ as a
+bundled Kraus-family type and $A_0$ as the intersection of the fixed-point
+star-subalgebras. It proves the membership characterization and applies the
+generic block form of a star-subalgebra to $A_0$.
+
+Finite dimensionality gives
+\begin{align}
+    A_0
+        &=A_{F_1}\cap\cdots\cap A_{F_M},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_finite_intersection}\\
+    F_0
+        &=\frac{1}{M}\sum_{\mu=1}^M F_\mu,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_averaged_operation}\\
+    A_0
+        &=A_{F_0}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_single_witness}
+\end{align}
+This is the finite-dimensional content of lines~844--849 of
+Ref.~\cite{HJPW2004}. The trace-pairing adjoint $P_0^*$ of the
+Schr\"odinger mean-ergodic projection for $F_0$ is positive, unital, and
+idempotent, with range $A_0$. Hayden--Jozsa--Petz--Winter express this
+projection as the Ces\`aro limit of the Heisenberg iterates at lines~838--851
+\cite{HJPW2004}; the formal adjoint averages converge to the trace-adjoint
+projection.
+
+The corresponding declarations are
+\leanid{Kraus.commonAverage},
+\leanid{Kraus.IsPreserving},
+\leanid{Kraus.PreservingKrausFamily},
+\leanid{Kraus.map_commonAverage_of_isPreserving},
+\leanid{Kraus.commonInvariantStarSubalgebra},
+\leanid{Kraus.mem_commonInvariantStarSubalgebra},
+\leanid{Kraus.exists_unitary_conj_blockDiagonal_iff_commonInvariantStarSubalgebra},
+\leanid{Kraus.exists_finset_preservingKrausFamily_iInf_eq},
+\leanid{Kraus.averagedPreservingKrausFamily},
+\leanid{Kraus.exists_preservingKrausFamily_adjointFixedPointsStarSubalgebra_eq},
+\leanid{Kraus.commonInvariantMeanErgodicProjection},
+\leanid{Kraus.tendsto_birkhoffAverage_commonInvariantMeanErgodicProjection},
+\leanid{Kraus.commonInvariantMeanErgodicProjection_isPositiveMap},
+\leanid{Kraus.commonInvariantMeanErgodicProjection_one},
+\leanid{Kraus.commonInvariantMeanErgodicProjection_idempotent},
+\leanid{Kraus.mem_range_commonInvariantMeanErgodicProjection_iff},
+\leanid{Kraus.exists_commonInvariant_fixedPointBlockForm},
+\leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm}, and
+\leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction}.
+They appear in
+\doclink{TNLean/Channel/KoashiImoto/CommonInvariantAlgebra},
 \doclink{TNLean/Channel/KoashiImoto/FiniteRealization},
 \doclink{TNLean/Channel/KoashiImoto/PooledKrausFamily},
 \doclink{TNLean/Channel/KoashiImoto/SingleWitness},
 \doclink{TNLean/Channel/KoashiImoto/MeanErgodicProjection}, and
-\doclink{TNLean/Channel/KoashiImoto/PreservingBlockAction}. The fixed-point
-block-form declaration, in
-\doclink{TNLean/Channel/KoashiImoto/FamilyFixedPointBlockForm}, specializes
-the full-support density-block classification to $F_0$: one unitary
-direct-sum tensor decomposition and one family of density factors
-$\sigma_j$ work simultaneously for all $\rho_k$,
+\doclink{TNLean/Channel/KoashiImoto/PreservingBlockAction}.
+
+The fixed-point block-form declaration in
+\doclink{TNLean/Channel/KoashiImoto/FamilyFixedPointBlockForm} specializes
+the full-support density-block classification to $F_0$. One unitary
+direct-sum tensor decomposition and one family of density factors $\sigma_j$
+work simultaneously for every $\rho_k$:
 \begin{align}
-  U^\dagger\rho_kU=\bigoplus_j\sigma_j\otimes X_{j,k}.
+    U^\dagger\rho_kU
+        &=\bigoplus_j\sigma_j\otimes X_{j,k}.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_family_block_form}
 \end{align}
 The declaration in
 \doclink{TNLean/Channel/KoashiImoto/NormalizedFamilyBlockForm} assumes that
 the family members are density matrices, proves that the $X_{j,k}$ are
 positive semidefinite, and normalizes them as
 \begin{align}
-  X_{j,k}=q_{j|k}\tau_{j|k},
-  \qquad
-  q_{j|k}\geq 0,
-  \qquad
-  \sum_jq_{j|k}=1,
+    X_{j,k}
+        &=q_{j|k}\tau_{j|k},
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_normalized_right_factor}\\
+    q_{j|k}
+        &\geq0,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_conditional_weight_nonnegative}\\
+    \sum_jq_{j|k}
+        &=1.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_conditional_weight_normalization}
 \end{align}
-where each $\tau_{j|k}$ is a density matrix. Thus the full-support
-specialization of HJPW Property~1, lines 785--789 and 857--858, is formalized,
-with the two tensor factors written in the reverse order. Its unrestricted
-joint-support form is supplied by the joint-support declaration below.
+Each $\tau_{j|k}$ is a density matrix. This formalizes the full-support
+specialization of Property~1 at lines~785--789 and 857--858 of
+Ref.~\cite{HJPW2004}, with the two tensor factors reversed. The unrestricted
+joint-support form is supplied below.
 
-The preserving-block-action declaration proves the full-support specialization
-of HJPW Property~$2'$, lines 808--816 and 860--882, in the same coordinates.
-For every preserving operation $F$ and every block $j$, it produces a local
-trace-preserving completely positive operation $F_j$ such that
+The preserving-block-action declaration proves the full-support
+specialization of Property~$2'$ at lines~808--816 and 860--882 of
+Ref.~\cite{HJPW2004}. For every preserving operation $F$ and block $j$, it
+produces a local trace-preserving completely positive operation $F_j$ such
+that
 \begin{align}
-  F_j(\sigma_j)&=\sigma_j,\\
-  \widetilde F\bigl(\iota_j(A\otimes B)\bigr)
-    &=\iota_j\bigl(F_j(A)\otimes B\bigr).
+    F_j(\sigma_j)
+        &=\sigma_j,
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_local_state_invariance}\\
+    \widetilde F(\iota_j(A\otimes B))
+        &=\iota_j(F_j(A)\otimes B).
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_diagonal_block_action}
 \end{align}
-Here the factor order is reversed from HJPW, so the local operation acts on
-the first factor. This statement concerns diagonal summands; it does not claim
-the Stinespring form of Property~2 or an action on off-diagonal coherences.
+Because the factor order is reversed from that of
+Ref.~\cite{HJPW2004}, the local operation acts on the first factor. This
+statement concerns diagonal summands. It does not claim the Stinespring form
+of Property~2 or describe the action on off-diagonal coherences.
 
-HJPW's argument reduces to the case where the common average
-$(1/K)\sum_k\rho_k$ has full support, by shrinking the working Hilbert space to
-the joint support of the $\rho_k$ (lines 761--763). The declaration
-\leanid{Kraus.exists_commonAverageSupportCompression} now constructs this
-support coordinate space, proves that the compressed average is positive
+\section{Joint-support and ambient forms}
+
+Hayden--Jozsa--Petz--Winter reduce to the case in which
+$K^{-1}\sum_k\rho_k$ has full support by restricting the Hilbert space to
+the joint support of the family \cite[lines~761--763]{HJPW2004}. The
+declaration \leanid{Kraus.exists_commonAverageSupportCompression} constructs
+this support coordinate space, proves that the compressed average is positive
 definite, reconstructs every family member, and restricts every preserving
 operation to a trace-preserving operation on the support. It also proves the
-intertwining identity that transports the compressed channel action back
-through the support isometry. The declaration
+intertwining identity that transports the compressed channel action through
+the support isometry.
+
+The declaration
 \leanid{Kraus.exists_commonInvariant_normalizedStateBlockForm_preservingBlockAction_jointSupport}
-then packages the normalized state blocks and the action of every preserving
-operation on that minimum joint support; ambient preserving operations inherit
-this action by restriction and intertwining. The finite invariant conditional
-family and one preserving Kraus realization are now constructed from SSA
-equality. The declaration
+packages the normalized state blocks and the action of every preserving
+operation on the minimum joint support. Ambient preserving operations inherit
+this action by restriction and intertwining.
+
+The finite invariant conditional family and one preserving Kraus realization
+are constructed from SSA equality. The declaration
 \leanid{Matrix.exists_normalizedConditionalSliceBlockForm_preservingBlockAction_jointSupport}
 applies the block theorem to this family and retains the Petz middle-system
-channel together with the support intertwining and diagonal
-block action. The declaration
-\leanid{Matrix.exists_markovBipartiteBlockForm_jointSupport}
-uses the same support isometry and block coordinates to reconstruct the
-bipartite marginal. It produces positive unnormalized factors $\omega_j$,
-proves that their traces sum to one, and establishes
-$\bigoplus_j\sigma_j\otimes\omega_j$ on the minimum joint support, with the
-tensor order reversed from HJPW. This is a scope-restricted joint-support
-variant toward HJPW equation~(14), not its ambient equivalence on $H_B$.
+channel, the support intertwining, and the diagonal block action.
+
 The declaration
-\leanid{Matrix.exists_ambientMarkovBipartiteBlockForm}
-completes the support isometry to an ambient middle-system unitary and splits
-its orthogonal complement into one-dimensional zero-weight tensor sectors.
-It retains the supported positive factors, proves positivity on every ambient
-sector, and proves the total conditional trace is one. Thus HJPW
-equations~(13)--(14), lines 493--502, now hold on the ambient $H_B$ without an
-extra source hypothesis. The declaration
-\leanid{Matrix.exists_markovDilationBlockForm} proves equation~(15)
-for one chosen pure-ancilla unitary, together with supported Petz agreement,
-the exact recovery identity, and normalized sector output states on the supported
-common-factor sectors. The declaration
-\leanid{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}
-then combines equations~(11), (14), and~(15). With
-$W=\mathbf 1_A\otimes(U_B\otimes\mathbf 1_C)$, it proves
+\leanid{Matrix.exists_markovBipartiteBlockForm_jointSupport} uses the same
+support isometry and block coordinates to reconstruct the bipartite marginal.
+It produces positive unnormalized factors $\omega_j$, proves that their traces
+sum to one, and establishes
 \begin{align}
-  W^\dagger\rho_{ABC}W
-  =0_\perp\oplus\bigoplus_j\omega_j\otimes\widehat\rho_j.
+    \rho_{\mathrm{joint}}
+        &=\bigoplus_j\sigma_j\otimes\omega_j.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_joint_support_bipartite_form}
 \end{align}
-The theorem \leanid{Matrix.hayashi_ssa_equality_characterization_forward}
-normalizes these blocks into the quantum-Markov decomposition. Every supported
-right factor remains its sector output state, even when its weight is zero. A
-zero-weight supported sector may use a filler only on the left; a complementary
-sector may use fillers on both sides.
+The tensor order is reversed from that of
+Ref.~\cite{HJPW2004}. This is a scope-restricted joint-support variant of
+Equation~(14) of Ref.~\cite{HJPW2004}, not an ambient equivalence on $H_B$.
+
+The declaration
+\leanid{Matrix.exists_ambientMarkovBipartiteBlockForm} completes the support
+isometry to an ambient middle-system unitary and splits the orthogonal
+complement into one-dimensional zero-weight tensor sectors. It retains the
+supported positive factors, proves positivity on every ambient sector, and
+proves that the total conditional trace is one. Consequently,
+Equations~(13)--(14), lines~493--502, of Ref.~\cite{HJPW2004} hold on the
+ambient $H_B$ without an additional source hypothesis.
+
+The declaration \leanid{Matrix.exists_markovDilationBlockForm} proves
+Equation~(15) of Ref.~\cite{HJPW2004} for one chosen pure-ancilla unitary,
+together with supported Petz agreement, the exact recovery identity, and
+normalized sector output states on the supported common-factor sectors. The
+declaration
+\leanid{Matrix.MarkovDilationBlockForm.ambient_tripartite_block_form}
+combines Equations~(11), (14), and (15) of Ref.~\cite{HJPW2004} and proves
+\begin{align}
+    W
+        &=\Id_A\otimes(U_B\otimes\Id_C),
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_ambient_unitary}\\
+    W^\dagger\rho_{ABC}W
+        &=0_\perp\oplus\bigoplus_j
+          \omega_j\otimes\widehat\rho_j.
+    \label{eq:hjpw04_petz_factorization_maximally_mixed_scope_ambient_tripartite_form}
+\end{align}
+The theorem
+\leanid{Matrix.hayashi_ssa_equality_characterization_forward} normalizes these
+blocks into the quantum-Markov decomposition. Every supported right factor
+remains its sector output state, including at zero weight. A zero-weight
+supported sector may use a filler only on the left, while a complementary
+sector may use fillers on both factors.
 
 \section{Classification}
 
-\emph{Product-reference recovery and the structural implication are complete.}
-The general positive-semidefinite product reference, its marginal and support
-calculus, the global support-compressed raw formula, and the supported-input
-and positive-definite-left corollaries are formalized. The exact SSA
-specialization proves HJPW equation~(11). The invariant-family decomposition,
-joint-support reduction, ambient equation~(14), and recovery-dilation action of
-equation~(15) give the ambient tripartite blocks. Their probability
-normalization and fibre reordering prove the Hayashi forward implication, so
-the SSA-equality characterization is axiom-free.
+The product-reference recovery and the structural implication are complete.
+The formal development covers the general positive-semidefinite product
+reference, its marginal and support calculus, the global support-compressed
+raw formula, and the supported-input and positive-definite-left corollaries.
+The exact SSA specialization proves Equation~(11) of Ref.~\cite{HJPW2004}.
+The invariant-family decomposition, joint-support reduction, ambient form of
+Equation~(14), and recovery-dilation action of Equation~(15) give the ambient
+tripartite blocks. Probability normalization and fibre reordering prove the
+Hayashi forward implication without axioms.
 
-The raw/completed singular boundary is preserved. The generic completed
-singular product-reference channel is not asserted to factor as an identity on
-the first subsystem tensored with a local channel. The completed local channel
-is used only through its proved agreement with the raw support map on the
-supported marginal.
+The raw/completed singular boundary remains explicit. The generic completed
+singular product-reference channel is not claimed to factor as the identity
+on the first subsystem tensored with a local channel. The completed local
+channel is used only through its proved agreement with the raw support map on
+the supported marginal.
 
 \begin{thebibliography}{9}
 

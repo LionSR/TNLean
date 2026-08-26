@@ -16,47 +16,66 @@
 
 \section{The source sentence}
 
-In the proof of Proposition~C.7, Appendix~C.2 of
-\cite{Cirac2016MPDO_arXiv}, the map $\mathcal S_0$ reduces three physical
-sites to the two outer subspins.  The prose at line~1547 of
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex} says that it traces the subspins
-$1r,2l,2r,2l$.  The factor $2l$ therefore appears twice, while no subspin of
-the third site is listed.
+In the proof of Proposition~C.7 in Appendix~C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv}, the map $\mathcal S_0$ reduces three physical
+sites to their two outer subspins. The prose at line~1547 of
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex} states that $\mathcal S_0$ traces
+the subspins $1r,2l,2r,2l$. The label $2l$ occurs twice, and the list contains
+no subspin from the third site.
 
 \section{Correction forced by the diagram}
 
-The diagram \path{Papers/1606.00608/MPDO_TMatrix2.png} shows three consecutive
-sector factors
-\[
-  (L_k\otimes R_k)\otimes(L_l\otimes R_l)\otimes(L_h\otimes R_h)
-\]
-before $\mathcal S_0$, and retains only $L_k\otimes R_h$.  Hence the traced
-space is
-\[
-  (R_k\otimes L_l)\otimes(R_l\otimes L_h),
-\]
-corresponding to subspins $1r,2l,2r,3l$.  The displayed formula for
-$\mathcal S_2$ at lines~1557--1559 confirms the same two retained outer
-factors.  Thus the final occurrence of $2l$ in line~1547 is a typographical
+For each site label $j$, let $L_j$ and $R_j$ denote its left and right subspin
+spaces. In the diagram
+\path{Papers/1606.00608/MPDO_TMatrix2.png} associated with
+Ref.~\cite{Cirac2016MPDO_arXiv}, the three consecutive physical sector factors
+before applying $\mathcal S_0$ are
+\begin{align}
+    (L_k\otimes R_k)
+        \otimes(L_l\otimes R_l)
+        \otimes(L_h\otimes R_h).
+    \label{eq:cpgsv17_mpdo_s0_trace_subspin_typo_three_site_factors}
+\end{align}
+The site labels $k$, $l$, and $h$ correspond to the first, second, and third
+sites, respectively. The map retains only the outer factors,
+\begin{align}
+    L_k\otimes R_h.
+    \label{eq:cpgsv17_mpdo_s0_trace_subspin_typo_retained_outer_factors}
+\end{align}
+It therefore traces over
+\begin{align}
+    (R_k\otimes L_l)
+        \otimes(R_l\otimes L_h).
+    \label{eq:cpgsv17_mpdo_s0_trace_subspin_typo_traced_factors}
+\end{align}
+In site notation, the four factors in
+Eq.~\ref{eq:cpgsv17_mpdo_s0_trace_subspin_typo_traced_factors} are the
+subspins $1r,2l,2r,3l$. The displayed formula for $\mathcal S_2$ at
+lines~1557--1559 of Ref.~\cite{Cirac2016MPDO_arXiv} retains the same two outer
+factors. Hence the final occurrence of $2l$ at line~1547 is a typographical
 error for $3l$.
 
-The formal regrouping uses the corrected equivalence
-\[
-  ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
-  \longmapsto ((l_k,r_h),((r_k,l_l),(r_l,l_h))).
-\]
+For elements $l_j\in L_j$ and $r_j\in R_j$, the formal regrouping uses the
+corrected equivalence
+\begin{align}
+    ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
+        &\longmapsto
+        ((l_k,r_h),((r_k,l_l),(r_l,l_h))).
+    \label{eq:cpgsv17_mpdo_s0_trace_subspin_typo_corrected_regrouping}
+\end{align}
 The corresponding formal declarations are recorded in
 \doclink{TNLean/MPS/MPDO/RFPSubspinMaps}.\footnote{In particular,
 \leanid{MPOTensor.ExplicitEtaOperators.s0RegroupEquiv},
 \leanid{MPOTensor.ExplicitEtaOperators.s0Map}, and
 \leanid{MPOTensor.ExplicitEtaOperators.s0SectorMap}.}
-This correction changes no hypothesis and is local to the ordering of tensor
-factors.
+This correction changes no hypothesis and affects only the ordering of the
+tensor factors.
 
 \section{Verdict}
 
-This is a local correction of a repeated subspin label in the source prose.
-It does not alter the statement or hypotheses of Proposition~C.7.
+The repeated subspin label in the proof of Proposition~C.7 of
+Ref.~\cite{Cirac2016MPDO_arXiv} requires a local correction. Replacing the
+final $2l$ by $3l$ does not alter the proposition's statement or hypotheses.
 
 \bibliographystyle{alpha}
 \bibliography{references}

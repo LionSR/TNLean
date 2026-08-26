@@ -18,149 +18,208 @@
 
 \textbf{Historical proof archaeology, not an active gap.}
 The corrected proportional fundamental theorem is
-\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}.  It compares
-BNT families whose copy weights are nonzero, the standing convention of
-CPSV16 line~246 recorded in
-\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}, and obtains a
-bijection of the basis sectors with gauge-phase equivalences.  The fixed-block cancellation
-sentence therefore belongs only to the history of the superseded proof route.
-The analysis below records why that route was abandoned.
+\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}. It compares
+BNT families whose copy weights are nonzero, following the standing convention
+at line~246 of Ref.~\cite{Cirac2016MPDO_arXiv} recorded in
+\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}. The theorem
+constructs a bijection between the basis sectors and gives gauge-phase
+equivalences for matched sectors. The fixed-block cancellation sentence
+therefore records only the history of a superseded proof route. This note
+explains why that route was abandoned.
 
 \section{Source passage}
 
-This note concerns the proof of CPSV16 Theorem~\texttt{thm1},
-Appendix MPV proof line~1182 of \cite{Cirac2016MPDO_arXiv}. The paper fixes a block
-$k_0\in\{1,\ldots,r_B\}$ and writes
+The source passage occurs in the proof of CPSV16
+Theorem~\texttt{thm1}, Appendix MPV proof, line~1182 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Let
+$\{A_j\}_{j=1}^{r_A}$ and $\{B_k\}_{k=1}^{r_B}$ be the two BNT block
+families, and fix $k_0\in\{1,\ldots,r_B\}$. The source obtains
 \begin{align}
-    \forall j, 
-    \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle
-    \xrightarrow[N\to\infty]{} 0
+    \left\langle
+        V^{(N)}(B_{k_0}),V^{(N)}(A_j)
+    \right\rangle
+        &\xrightarrow[N\to\infty]{}0
+        \qquad (1\leq j\leq r_A).
+    \label{eq:cpsv16_fixed_block_cancellation_fixed_block_overlap_decay}
 \end{align}
-as a contradiction to eventual proportionality of the two full MPV families.
-Under the BNT decomposition, the proportionality hypothesis is
-projective proportionality: the scalar $c_N$ is nonzero at the lengths used in
-the comparison, as recorded in
+It treats this decay as contradictory to eventual proportionality of the two
+full MPV families.
+
+Under the BNT decomposition, the hypothesis is projective proportionality:
+the scalar $c_N$ is nonzero at each length used in the comparison, as recorded
+in
 \path{docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex}. Thus
 \begin{align}
-    \sum_j \mu_j^N\,V^{(N)}(A_j)=c_N\sum_k \nu_k^N\,V^{(N)}(B_k),
-    \qquad c_N\neq 0,
+    \sum_j\mu_j^NV^{(N)}(A_j)
+        &= c_N\sum_k\nu_k^NV^{(N)}(B_k),
+    \label{eq:cpsv16_fixed_block_cancellation_full_projective_proportionality}\\
+    c_N
+        &\neq 0.
+    \label{eq:cpsv16_fixed_block_cancellation_nonzero_projective_scalar}
 \end{align}
-and isolating the selected block gives
+Isolating the selected block gives
 \begin{align}
-    \sum_j \mu_j^N\,V^{(N)}(A_j)-c_N\nu_{k_0}^N\,V^{(N)}(B_{k_0})
-    =c_N\sum_{k\neq k_0}\nu_k^N\,V^{(N)}(B_k).
+    \sum_j\mu_j^NV^{(N)}(A_j)
+        -c_N\nu_{k_0}^NV^{(N)}(B_{k_0})
+        &= c_N\sum_{k\neq k_0}\nu_k^NV^{(N)}(B_k).
+    \label{eq:cpsv16_fixed_block_cancellation_selected_block_isolation}
 \end{align}
-Corollary~\texttt{Lem1} in \cite{Cirac2016MPDO_arXiv} says that, from the left-hand
-decay, the family
+
+Corollary~\texttt{Lem1} of Ref.~\cite{Cirac2016MPDO_arXiv} implies from
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_fixed_block_overlap_decay}) that,
+for all sufficiently large $N$,
 \begin{align}
     \dim\operatorname{span}
-    \left(
-      \left\{V^{(N)}(A_j)\right\}_{j=1}^{r_A}
-      \cup
-      \left\{V^{(N)}(B_{k_0})\right\}
-    \right)
-    =r_A+1
+        \left(\left\{V^{(N)}(A_j)\right\}_{j=1}^{r_A}
+            \cup
+            \left\{V^{(N)}(B_{k_0})\right\}\right)
+        &= r_A+1.
+    \label{eq:cpsv16_fixed_block_cancellation_fixed_block_span_dimension}
 \end{align}
-for all sufficiently large $N$. Equivalently, this fixed-block family is
-linearly independent.  Line~1182 treats that conclusion as a contradiction to
-the full proportionality identity.  However, the identity also contains the
-vectors $V^{(N)}(B_k)$ for $k\ne k_0$, which are not controlled by this
-single-block linear-independence statement.  The source passage does not assert
-full combined-family independence. \cite[Appendix MPV proof,
-line~1182]{Cirac2016MPDO_arXiv}
+Equivalently, the fixed-block family in
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_fixed_block_span_dimension}) is
+linearly independent.
+
+Line~1182 of Ref.~\cite{Cirac2016MPDO_arXiv} treats this conclusion as a
+contradiction to the full proportionality identity
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_full_projective_proportionality}).
+The inference is insufficient because
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_selected_block_isolation}) also
+contains the vectors $V^{(N)}(B_k)$ for $k\neq k_0$. The single-block
+linear-independence statement does not control those vectors, and the source
+passage does not assert linear independence of the full combined family; see
+Appendix MPV proof, line~1182 of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \section{Formal boundary}
 
-The formal boundary in \cite{Cirac2016MPDO_arXiv} is narrower:
+The formal consequence corresponding to Corollary~\texttt{Lem1} of
+Ref.~\cite{Cirac2016MPDO_arXiv} is narrower:
 \begin{align}
-    \forall^\mathrm{cof} N, 
+    \forall^\mathrm{cof}N,\quad
     \dim\operatorname{span}
-    \left(
-      \left\{V^{(N)}(A_j)\right\}_{j=1}^{r_A}
-      \cup
-      \left\{V^{(N)}(B_{k_0})\right\}
-    \right)
-    =r_A+1.
+        \left(\left\{V^{(N)}(A_j)\right\}_{j=1}^{r_A}
+            \cup
+            \left\{V^{(N)}(B_{k_0})\right\}\right)
+        &= r_A+1.
+    \label{eq:cpsv16_fixed_block_cancellation_formal_fixed_block_boundary}
 \end{align}
 The surviving \leanid{SectorBNT} API does not formalize the source sentence as
-a standalone fixed-block contradiction.  Instead, the corrected theorem uses a
-restricted coefficient-comparison argument.  It separates the $P$-blocks whose
-overlaps with every $Q$-block decay, represents the complementary blocks by
+a standalone fixed-block contradiction. The corrected theorem instead uses a
+restricted coefficient-comparison argument. It separates the $P$-blocks whose
+overlaps with every $Q$-block decay, represents the remaining $P$-blocks by
 scalar multiples of matched $Q$-blocks, and applies
 \leanid{MPSTensor.restricted_combined_family_eventually_li} to the decaying
-subfamily together with all $Q$-blocks.  The full-family lemma
+subfamily together with all $Q$-blocks. The full-family lemma
 \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} is the
-special case in which every cross-family overlap decays.  This is a formal
-repair and replacement for the insufficient fixed-block inference, not a claim
-about what the source proves at line~1182.
-The historical target was
+special case in which every cross-family overlap decays.
+
+This argument repairs and replaces the insufficient fixed-block inference; it
+does not claim that line~1182 of Ref.~\cite{Cirac2016MPDO_arXiv} proves the
+replacement. The historical target was
 \begin{align}
-    (\forall j,  \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle\to 0)
-    \Longrightarrow
-    \neg\left(
-      \sum_j \mu_j^N\,V^{(N)}(A_j)
-      =
-      c_N\sum_k \nu_k^N\,V^{(N)}(B_k)
-    \right).
+    \biggl(    \forall j,\
+        \left\langle
+            V^{(N)}(B_{k_0}),V^{(N)}(A_j)
+        \right\rangle
+        \xrightarrow[N\to\infty]{}0
+    \biggr)
+        &\Longrightarrow
+        \neg\biggl(        \sum_j\mu_j^NV^{(N)}(A_j)
+            =
+            c_N\sum_k\nu_k^NV^{(N)}(B_k)
+        \biggr).
+    \label{eq:cpsv16_fixed_block_cancellation_retired_fixed_block_target}
 \end{align}
-No current Lean declaration carries the retired fixed-right or fixed-left
-one-copy fixed-block names.  Reintroducing this target would reconstruct an
-abandoned proof architecture rather than close a current theorem.
+No current \Lean{} declaration carries the retired fixed-right or fixed-left
+one-copy fixed-block names. Reintroducing
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_retired_fixed_block_target})
+would reconstruct an abandoned proof architecture rather than close a current
+theorem.
 
-The earlier conditional helpers requiring combined-family linear independence
-(\path{_phase_sum_li}) and the residual-span variants have been retired in
-the 2026-05-13 audit; see
-\path{docs/audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}.
-Those helpers should not be presented as consequences of the fixed-block
-sentence at Appendix MPV proof line~1182: Corollary~\texttt{Lem1} supplies only
-the displayed single-block family.  The current restricted-family proof is a
-separate repair.  This mismatch explains why the fixed-block route was retired;
-it is not a pending obligation on the corrected proportional theorem.
+The earlier conditional helpers requiring combined-family linear independence,
+whose names ended in \path{_phase_sum_li}, and the residual-span variants were
+retired in the 2026-05-13 audit; see
+\path{docs/audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}. They
+must not be presented as consequences of the fixed-block sentence in Appendix
+MPV proof, line~1182 of Ref.~\cite{Cirac2016MPDO_arXiv}. Corollary
+\texttt{Lem1} supplies only the single-block family in
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_fixed_block_span_dimension}).
+The current restricted-family argument is a separate repair. This mismatch
+explains why the fixed-block route was retired and is not a pending obligation
+for the corrected proportional theorem.
 
-Retirement note: this note intentionally no longer lists the retired no-tail,
-leading-only, partner-identification, leading-tail, residual-span, or
-\path{_phase_sum_li} declarations.  They were deleted as wrong-direction or
+This note intentionally omits the retired no-tail, leading-only,
+partner-identification, leading-tail, residual-span, and
+\path{_phase_sum_li} declarations. They were deleted as wrong-direction or
 orphan scaffolding in the same audit.
 
 \section{Retired discharge plan}
 
-The plan recorded in
-\path{docs/audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md} proposed proving
-an exact eventual leading-coefficient identity
+The plan in
+\path{docs/audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md} proposed an
+exact eventual identity for the leading coefficients:
 \begin{align}
-    c_N\,\mu^B_{0}{}^N\,\zeta^N=(\mu^A_{0})^N
+    c_N(\mu^B_0)^N\zeta^N
+        &= (\mu^A_0)^N
+        \qquad\text{for all sufficiently large }N.
+    \label{eq:cpsv16_fixed_block_cancellation_retired_leading_coefficient_identity}
 \end{align}
-for all sufficiently large $N$ from the proportionality identity and the BNT
-linear independence on the CPSV fixed-block family.  The proposal would then
-have cloned the equal-MPV tail subtraction and induction architecture without
-assuming linear independence of all residual blocks on both sides.  This plan
-was superseded by direct coefficient comparison on BNT families.
+The proposed derivation used the proportionality identity and BNT linear
+independence on the CPSV fixed-block family. It would then have copied the
+equal-MPV tail-subtraction and induction architecture without assuming linear
+independence of all residual blocks on both sides. Direct coefficient
+comparison on BNT families superseded this plan.
 
 \subsection{Factored analytic discharge and its lower-bound obstruction}
 
 \textit{Classification: historical analytic obstruction.}
 
-The proposed factored analytic discharge used four explicit analytic
-hypotheses:
+The proposed factored analytic discharge required the following hypotheses:
 \begin{enumerate}
-  \item every sector weight in both families has unit modulus;
-  \item off-diagonal cross-overlap decay on the fixed-block family, i.e.,
-        $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_k)\rangle \to 0$ for $k \neq k_0$;
-  \item a nonzero limit of the self-overlap at the fixed block,
-        $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_{k_0})\rangle \to \ell \neq 0$; and
-  \item an eventual positive lower bound $\|c_N\| \geq \delta > 0$.
+    \item Every sector weight in both families has unit modulus.
+    \item Off-diagonal cross-overlaps at the fixed block decay:
+    \begin{align}
+        \left\langle
+            V^{(N)}(B_{k_0}),V^{(N)}(B_k)
+        \right\rangle
+            &\xrightarrow[N\to\infty]{}0
+            \qquad (k\neq k_0).
+        \label{eq:cpsv16_fixed_block_cancellation_fixed_block_off_diagonal_decay}
+    \end{align}
+    \item The fixed-block self-overlap has a nonzero limit:
+    \begin{align}
+        \left\langle
+            V^{(N)}(B_{k_0}),V^{(N)}(B_{k_0})
+        \right\rangle
+            &\xrightarrow[N\to\infty]{}\ell,
+    \label{eq:cpsv16_fixed_block_cancellation_fixed_block_self_overlap_limit}\\
+        \ell
+            &\neq 0.
+    \label{eq:cpsv16_fixed_block_cancellation_nonzero_self_overlap_limit}
+    \end{align}
+    \item The projective scalar has an eventual positive lower bound:
+    \begin{align}
+        \lVert c_N\rVert
+            &\geq\delta>0
+            \qquad\text{for all sufficiently large }N.
+        \label{eq:cpsv16_fixed_block_cancellation_projective_scalar_lower_bound}
+    \end{align}
 \end{enumerate}
-Hypothesis~(1) was an extra assumption of the retired plan.  CPSV16 line~246
-states only that every weight has modulus at most one and that at least one
-weight has unit modulus globally; it does not make every sector weight unitary.
-The fixed-block overlap and self-overlap inputs in hypotheses~(2)--(3) come from
-the normal-block comparison at the selected block.  Hypothesis~(4) is also not
-directly supplied: the cited argument appeals to a dominant-adjusted scalar
-limit, but the retired plan did not derive the explicit lower bound
-$\|c_N\|\geq\delta$ from the canonical-form data.  The earlier non-cancellation
-helpers carrying these extra hypotheses belonged to the retired Tier~3 route
-and should not be cited as present declarations.  No current theorem depends on
-this lower-bound argument.
+
+The first hypothesis was an extra assumption of the retired plan. Line~246 of
+Ref.~\cite{Cirac2016MPDO_arXiv} states only that every weight has modulus at
+most one and that at least one weight has unit modulus globally; it does not
+assert unit modulus for every sector weight. The second and third hypotheses
+come from the normal-block comparison at the selected block. The fourth
+hypothesis is not supplied directly. The cited argument appeals to a
+dominant-adjusted scalar limit, but the retired plan did not derive the
+explicit lower bound in
+Eq.~(\ref{eq:cpsv16_fixed_block_cancellation_projective_scalar_lower_bound})
+from the canonical-form data.
+
+The earlier non-cancellation helpers carrying these extra hypotheses belonged
+to the retired Tier~3 route and must not be cited as current declarations. No
+current theorem depends on this lower-bound argument.
 
 \bibliographystyle{alpha}
 \bibliography{references}

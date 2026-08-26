@@ -19,250 +19,295 @@ Cirac--P\'erez-Garc\'ia--Schuch--Verstraete}
 
 \section{Source definition}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define a density operator on a
-periodic chain to be a Gibbs state of a nearest-neighbor commuting Hamiltonian
-when
-\[
-  \rho^{(N)}
-  \propto
-  \bigoplus_x n_x
-  \exp\!\left(-\sum_{j=1}^N\tau_j(h^{(x)})\right),
-  \qquad n_x\in\mathbb N,
-\]
-where the one-site spaces belonging to distinct labels $x$ are orthogonal and
-$[h^{(x)},\tau_1(h^{(x)})]=0$
-in arXiv:1606.00608, Definition~4.8, lines~829--842. With the
-projector-limit convention stated immediately afterward, this is equivalently
-\[
-  \rho^{(N)}
-  \propto
-  \bigoplus_x n_x
-  \prod_{j=1}^N\tau_j(B^{(x)}),
-  \qquad B^{(x)}\geq0.
-\]
-The neighboring translates commute; see arXiv:1606.00608, lines~843--850.
+Definition~4.8 of Ref.~\cite{Cirac2016MPDO_arXiv} defines a density operator
+on a periodic chain to be a Gibbs state of a nearest-neighbor commuting
+Hamiltonian when
+\begin{align}
+    \rho^{(N)}
+        &\propto
+        \bigoplus_x n_x
+        \exp\left(-\sum_{j=1}^N\tau_j(h^{(x)})\right),
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_exponential_form}\\
+    n_x
+        &\in\mathbb N,
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_natural_multiplicity}\\
+    [h^{(x)},\tau_1(h^{(x)})]
+        &=0.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_local_commutation}
+\end{align}
+The one-site spaces associated with distinct outer labels $x$ are orthogonal;
+see Definition~4.8, lines~829--842 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-The direct sum and the multiplicities are part of the definition.  Passing
-from the exponential form to positive semidefinite bonds does not remove
-them.
+Using the projector-limit convention stated immediately after that definition,
+the same class can be written with positive semidefinite two-site bonds
+$B^{(x)}$:
+\begin{align}
+    \rho^{(N)}
+        &\propto
+        \bigoplus_x n_x
+        \prod_{j=1}^N\tau_j(B^{(x)}),
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_bond_product_form}\\
+    B^{(x)}
+        &\geq0.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_positive_bond}
+\end{align}
+The neighboring translates commute; see lines~843--850 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The outer direct sum and the natural
+multiplicities are part of the source definition. Replacing the exponential
+presentation by positive semidefinite bonds does not remove them.
 
 \section{Present formal boundary}
 
-The formalized sector decomposition now records the finite outer sector type,
-its orthogonal one-site sector projections, the natural multiplicities, and
-one positive commuting bond in every sector.  The finite-chain and
-tensor-level predicates therefore retain the direct sum and multiplicities of
-Definition~4.8.  The finite-chain predicate requires positivity and unit
-trace, while the tensor-level predicate applies it to the normalized operator at each length
-$N\geq2$.\footnote{\raggedright Formal structure: \leanid{MPOTensor.GSNNCHData}.
-Formal declarations: \leanid{MPOTensor.IsGSNNCHAt},
-\leanid{MPOTensor.IsGSNNCH}, and \leanid{MPOTensor.normalizedMPO}.}
+The formal sector decomposition records a finite outer sector type, orthogonal
+one-site sector projections, the natural multiplicities, and one positive
+commuting bond in every sector. The finite-chain and tensor-level predicates
+therefore retain the direct sum and multiplicities of Definition~4.8 in
+Ref.~\cite{Cirac2016MPDO_arXiv}. The finite-chain predicate requires positivity
+and unit trace. The tensor-level predicate applies it to the normalized
+operator at every length $N\geq2$.\footnote{\raggedright Formal structure:
+\leanid{MPOTensor.GSNNCHData}. Formal declarations:
+\leanid{MPOTensor.IsGSNNCHAt}, \leanid{MPOTensor.IsGSNNCH}, and
+\leanid{MPOTensor.normalizedMPO}.}
 
-The auxiliary single-bond presentation is recorded separately:
-\footnote{\raggedright Formal structure:
-\leanid{MPOTensor.CommutingBondProductData}.}
-\[
-  \rho^{(N)}=c_N\prod_{j=1}^N\tau_j(B_N),
-  \qquad c_N>0,
-\]
-without explicit outer sectors.  A theorem embeds this presentation as the
-one-sector case of the source definition.  No converse theorem extracting a
-single bond from arbitrary source sector data is claimed.
+The auxiliary single-bond presentation is stored separately.\footnote{\raggedright
+Formal structure: \leanid{MPOTensor.CommutingBondProductData}.} It has the
+form
+\begin{align}
+    \rho^{(N)}
+        &=c_N\prod_{j=1}^N\tau_j(B_N),
+    \label{eq:cpsv16_gsnnch_sector_decomposition_single_bond_presentation}\\
+    c_N
+        &>0.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_single_bond_positive_scalar}
+\end{align}
+A theorem embeds this presentation as the one-sector case of the source
+definition. No converse theorem is claimed that extracts a single bond from
+arbitrary source sector data.
 
-The represented finite-chain sector sum now carries its asserted analytic
-properties: all cyclic translates of one sector bond commute pairwise, the
-represented operator is positive semidefinite and invariant under the
-cyclic shift, and a tensor whose finite-chain operators have the sector form
-with nonzero traces satisfies the full density-operator predicate.  In particular,
-every injective tensor satisfying the saturated area law is now proved GSNNCH
-through a one-sector witness.\footnote{\raggedright Formal declarations:
-{\scriptsize\leanid{MPOTensor.GSNNCHData.bondAt_comm}},
-{\scriptsize\leanid{MPOTensor.GSNNCHData.unnormalizedState_posSemidef}},
-{\scriptsize\leanid{MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig}},
-{\scriptsize\leanid{MPOTensor.isGSNNCH_of_hasGSNNCHForm}}, and
-{\scriptsize\leanid{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}}.}  The
-one-sector form is the commuting product form in which Proposition~C.8 states
-its conclusion for an injective tensor.
+The represented finite-chain sector sum has the asserted analytic properties:
+all cyclic translates of each sector bond commute pairwise, the represented
+operator is positive semidefinite and cyclic-shift invariant, and a tensor
+whose finite-chain operators have the sector form with nonzero traces satisfies
+the full density-operator predicate. In particular, every injective tensor
+satisfying the saturated area law is proved GSNNCH through a one-sector
+witness.\footnote{\raggedright Formal declarations:
+\leanid{MPOTensor.GSNNCHData.bondAt_comm},
+\leanid{MPOTensor.GSNNCHData.unnormalizedState_posSemidef},
+\leanid{MPOTensor.GSNNCHData.unnormalizedState_submatrix_rotateConfig},
+\leanid{MPOTensor.isGSNNCH_of_hasGSNNCHForm}, and
+\leanid{MPOTensor.isGSNNCH_of_isInjective_of_isSAL}.}
+This one-sector form is the commuting-product conclusion of
+Proposition~C.8 in Ref.~\cite{Cirac2016MPDO_arXiv} for an injective tensor.
 
 \section{Elimination plan}
 
-The first part of the original plan---positivity and translation invariance
-of the represented finite-chain sector sum from the stored sector data---is
-complete.  Appendix C.2 has also been followed through the BNT projector
-selection formula: the natural multiplicities are retained, positive-length
-compression proves that each absorbed BNT representative generates MPDOs,
-the direct-sum entropy identity proves SAL for each representative, and the
-canonical block equation proves ZCL for each representative.
-\footnote{\raggedright Formal declarations:
-{\scriptsize\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}},
-{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL}},
-{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}},
-and
-{\scriptsize\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}}.}
-The general outer-sector construction is also complete: pairwise orthogonal
-one-site projections, supported positive commuting bonds, and the exact
-sector product identities give the source GSNNCH form with the prescribed
-natural multiplicities.
-\footnote{\raggedright Formal declaration:
-{\scriptsize\leanid{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}}.}
-The support-preserving sector argument is also complete.
-Every absorbed BNT representative has an exact isometric restriction to the
-range of its matching projector, the restricted tensor is injective, SAL
-passes from the ambient representative to this restriction through the
-sitewise support isometry, and the positive Proposition~C.8 bond lifts to a
-positive two-site operator supported on the tensor square of that projector.
-The cyclic translates of this lifted bond commute pairwise on every periodic
-chain of length at least two, and their full periodic product gives the
-ambient finite-chain operator exactly, with normalization scalar one as in the
-restricted product.
-\footnote{\raggedright Formal declarations:
-{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData}},
-{\scriptsize\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}},
-{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}},
-and
-{\scriptsize\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}}.}
-Choosing supported products over all absorbed BNT representatives gives
-an orthogonal commuting sector family once the required one-site supports are
-available.  A source-context corollary now derives pairwise two-sided supports
-from common copy weights, one-site spanning, the positive neighboring-operator
-factorizations, and the unstarred layer identity.  The local identity is the
-ordered product
-\[
-  {\cal K}_y[\beta_y,\alpha_y]\,
-  {\cal K}_x[\beta_x,\alpha_x]=0
-  \qquad (x\ne y),
-\]
-not an adjoint product.  Under the standing biCF hypothesis, each BNT tensor
-is injective.  Equations~\texttt{AppUkU=rl} and
-\texttt{Appetakhetc} supply positive neighboring operators and hence an MPDO
-in every sector.  Hermiticity then identifies each sector tensor with its
-physical adjoint through the injective fundamental theorem, so the span of its
-physical slices is closed under conjugate transpose.  The unstarred ordered
-annihilation identities consequently make the slice-column spaces orthogonal,
-and their support projections fix every sector slice on both sides.
-\footnote{\raggedright Formal declarations:
-{\scriptsize\leanid{MPOTensor.IsBNTLayerOrthogonal}},
-{\scriptsize\leanid{MPOTensor.PhysicalSectorFactorization.isMPDO_of_neighboringOperator_pos}},
-{\scriptsize\leanid{MPOTensor.exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO}},
-{\scriptsize\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport}},
-and
-{\scriptsize\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis}}.}
+The first part of the original plan is complete: positivity and translation
+invariance of the represented finite-chain sector sum follow from the stored
+sector data. Appendix~C.2 of Ref.~\cite{Cirac2016MPDO_arXiv} has also been
+formalized through the BNT projector-selection formula. The natural
+multiplicities are retained; positive-length compression proves that every
+absorbed BNT representative generates MPDOs; the direct-sum entropy identity
+proves SAL for each representative; and the canonical block equation proves
+ZCL for each representative.\footnote{\raggedright Formal declarations:
+\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL},
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}, and
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
 
-This formalizes the pairwise support consequence of the earlier Case~II data.
-The ambient factorization \texttt{AppUkU=rl}, together with
-\texttt{Appetakhetc}, now supplies the canonical injective active restriction
-and its positive physical-sector factorization.  Its positive commuting bond
-lifts to a bond $B_x$ on the original one-site space satisfying
-\[
-  (P_x\otimes P_x)B_x(P_x\otimes P_x)=B_x.
-\]
+The general outer-sector construction is also complete. Pairwise orthogonal
+one-site projections, supported positive commuting bonds, and exact sector
+product identities produce the source GSNNCH form with the prescribed natural
+multiplicities.\footnote{\raggedright Formal declaration:
+\leanid{MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily}.}
+
+The support-preserving sector argument is complete as well. Every absorbed BNT
+representative has an exact isometric restriction to the range of its matching
+projector. The restricted tensor is injective, SAL passes from the ambient
+representative to the restriction through the sitewise support isometry, and
+the positive Proposition~C.8 bond of
+Ref.~\cite{Cirac2016MPDO_arXiv} lifts to a positive two-site operator supported
+on the tensor square of the projector. Its cyclic translates commute pairwise
+on every periodic chain of length at least two, and their full periodic product
+equals the ambient finite-chain operator exactly, with normalization scalar
+one as in the restricted product.\footnote{\raggedright Formal declarations:
+\leanid{MPOTensor.PhysicalSupportRestrictionData},
+\leanid{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis},
+\leanid{MPOTensor.PhysicalSupportRestrictionData.restricted_isSAL}, and
+\leanid{MPOTensor.PhysicalSupportRestrictionData.exists_etaLocalStructureData_lifted_supported}.}
+
+Choosing supported products for all absorbed BNT representatives gives an
+orthogonal commuting sector family once the required one-site supports are
+available. A source-context corollary derives pairwise two-sided supports from
+common copy weights, one-site spanning, positive neighboring-operator
+factorizations, and the unstarred layer identity. For distinct sectors $x$ and
+$y$, that local identity is
+\begin{align}
+    \mathcal{K}_y[\beta_y,\alpha_y]
+    \mathcal{K}_x[\beta_x,\alpha_x]
+        &=0
+        \qquad (x\neq y).
+    \label{eq:cpsv16_gsnnch_sector_decomposition_unstarred_layer_annihilation}
+\end{align}
+This is an ordered product, not an adjoint product.
+
+Under the standing biCF hypothesis, each BNT tensor is injective. The source
+identities \texttt{AppUkU=rl} and \texttt{Appetakhetc} in Appendix~C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv} supply positive neighboring operators and
+therefore an MPDO in each sector. Hermiticity identifies every sector tensor
+with its physical adjoint through the injective fundamental theorem. The span
+of the physical slices is consequently closed under conjugate transpose. The
+unstarred ordered annihilation identities then make the slice-column spaces
+orthogonal, and their support projections fix every sector slice on both
+sides.\footnote{\raggedright Formal declarations:
+\leanid{MPOTensor.IsBNTLayerOrthogonal},
+\leanid{MPOTensor.PhysicalSectorFactorization.isMPDO_of_neighboringOperator_pos},
+\leanid{MPOTensor.exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO},
+\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport}, and
+\leanid{MPOTensor.exists_pairwise_orthogonal_twoSided_physicalSupport_commonWeightAbsorbedBasis}.}
+
+This result formalizes the pairwise support consequence of the earlier
+Case~II data. The ambient factorization \texttt{AppUkU=rl}, together with
+\texttt{Appetakhetc}, supplies the canonical injective active restriction and
+its positive physical-sector factorization. Its positive commuting bond lifts
+to a bond $B_x$ on the original one-site space satisfying
+\begin{align}
+    (P_x\otimes P_x)B_x(P_x\otimes P_x)
+        &=B_x.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_supported_lifted_bond}
+\end{align}
 All periodic translates of $B_x$ commute, and their product equals
-$\rho^{(N)}(\mathcal K_x)$ exactly for every $N\geq2$.  Applying this
-construction to pairwise orthogonal projections gives the orthogonal commuting
-sector family required for the outer GSNNCH sum.
-\footnote{\raggedright Formal declarations:
-{\scriptsize\leanid{MPOTensor.PhysicalSectorFactorization.exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice}},
+$\rho^{(N)}(\mathcal K_x)$ exactly for every $N\geq2$. Applying the construction
+to pairwise orthogonal projections gives the orthogonal commuting sector family
+required for the outer GSNNCH sum.\footnote{\raggedright Formal declarations:
+\leanid{MPOTensor.PhysicalSectorFactorization.exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice}
 and
-{\scriptsize\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}}.}
+\leanid{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization}.}
 
-The active factor supports in the displayed ambient factorization
-\texttt{AppUkU=rl} have now been assembled into the canonical physical
-restriction.  In each active sector the left and right joint column supports
-are retained; an inactive sector contributes a zero-dimensional coordinate
-space.  The resulting direct-sum inclusion has orthonormal columns, its range
-is exactly $P_x$, compression has the corresponding sectorwise left--right
-factorization, and re-embedding recovers $\mathcal K_x$ exactly.  Thus no
-identity factor in an unused direction and no complementary zero summand is
-introduced.  This includes the case in which the active family is empty.
+The active factor supports in the ambient factorization
+\texttt{AppUkU=rl} have been assembled into the canonical physical
+restriction. Each active sector retains its left and right joint column
+supports, while an inactive sector contributes a zero-dimensional coordinate
+space. The direct-sum inclusion has orthonormal columns and range exactly
+$P_x$. Compression has the corresponding sectorwise left--right factorization,
+and re-embedding recovers $\mathcal K_x$ exactly. No identity factor in an
+unused direction or complementary zero summand is introduced. This statement
+includes the case of an empty active family.
 
-Every neighboring operator of this compressed factorization is now identified
-with the explicit congruence of the corresponding ambient operator from
-\texttt{Appetakhetc}.  Positive semidefiniteness follows from congruence.
-Consequently the canonical restriction has a positive physical-sector
+Every neighboring operator of the compressed factorization is identified with
+the explicit congruence of the corresponding ambient operator in
+\texttt{Appetakhetc}. Positive semidefiniteness follows from congruence.
+Therefore the canonical restriction has a positive physical-sector
 factorization indexed precisely by the active ambient sectors, including the
 vacuous empty-family case.
 
 The canonical joint physical support is contained in every orthogonal
-projection satisfying the two-sided equations \texttt{PjKiPj}.  Two-site
-support monotonicity therefore transports the positive commuting bond from
-the canonical support to the printed projection $P_x$.  Thus the local
-compatibility obligation between \texttt{AppUkU=rl},
-\texttt{Appetakhetc}, and \texttt{PjKiPj} is complete, both for one sector
-and for a pairwise orthogonal family of sectors.
+projection satisfying the two-sided source equations \texttt{PjKiPj}.
+Two-site support monotonicity transports the positive commuting bond from the
+canonical support to the printed projection $P_x$. The local compatibility
+obligation among \texttt{AppUkU=rl}, \texttt{Appetakhetc}, and
+\texttt{PjKiPj} is therefore complete for both one sector and a pairwise
+orthogonal family of sectors.
 
-The source-facing theorem retains the joint five-identity package
-\[
-  \texttt{AppKxKy=0},\quad
-  \texttt{AppUkU=rl},\quad
-  \texttt{Appetakhetc},\quad
-  \texttt{Apptralktrrk},\quad
-  \texttt{AppPsiPhi}.
-\]
-It also states the standing Case~II assumptions that the full tensor generates
-positive semidefinite operators and that the simultaneous one-site tuples of
-its BNT representatives span the product of their virtual matrix algebras.
-Every BNT bond dimension is positive.  This positivity is not stored by the
-bare sector-decomposition type and is necessary because algebraic injectivity
-is vacuous in dimension zero.
+The source-facing theorem retains the five source identities
+\begin{align}
+    &\texttt{AppKxKy=0},
+    \qquad
+    \texttt{AppUkU=rl},
+    \qquad
+    \texttt{Appetakhetc},
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_identity_package_first}\\
+    &\texttt{Apptralktrrk},
+    \qquad
+    \texttt{AppPsiPhi}.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_source_identity_package_second}
+\end{align}
+These identifiers refer to the five-identity package used in Appendix~C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The theorem also states the standing Case~II
+assumptions: the full tensor generates positive semidefinite operators, and
+the simultaneous one-site tuples of its BNT representatives span the product
+of their virtual matrix algebras. Every BNT bond dimension is positive. The
+bare sector-decomposition type does not store this positivity, which is
+necessary because algebraic injectivity is vacuous in dimension zero.
 
-The five displayed identities do not imply common copy weights.  Appendix~C.2
-invokes \texttt{lemmus} to obtain that equality from zero correlation length,
-but zero correlation length is absent from Proposition~\texttt{prop3to4}.
-The formal proof therefore does not use \texttt{lemmus}.  At each fixed length
-$N\geq2$, sitewise compression by the pairwise orthogonal physical supports
-isolates
-\[
-  q_s(N)\rho^{(N)}(A_s),
-  \qquad
-  q_s(N)=\sum_q\mu_{s,q}^N.
-\]
-Global positivity makes this compression positive.  The sector operator is
-positive and nonzero, so uniqueness of its positive scalar phase shows that
-$q_s(N)$ is a nonnegative real number.  Rescaling the supported commuting bond
-by
-\[
-  \left(\frac{q_s(N)}{n_s}\right)^{1/N}
-\]
-then preserves the natural copy multiplicity $n_s$ and reproduces the exact
-unnormalized sector term.  Since Definition~4.8 chooses its data separately at
-each length, this proves the proposition without copy independence.
+The five identities in
+Eqs.~(\ref{eq:cpsv16_gsnnch_sector_decomposition_source_identity_package_first})
+and~(\ref{eq:cpsv16_gsnnch_sector_decomposition_source_identity_package_second})
+do not imply common copy weights. Appendix~C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv} invokes \texttt{lemmus} to obtain this equality
+from zero correlation length, but Proposition~\texttt{prop3to4} of the same
+source does not assume zero correlation length. The formal proof therefore
+does not use \texttt{lemmus}.
 
-The local Markov labels in Appendix C.2 belong inside one injective BNT
-component.  They are not the outer labels $x$ of Definition~4.8 and must not
-be substituted for those outer sectors.
+At each fixed length $N\geq2$, sitewise compression by the pairwise orthogonal
+physical supports isolates
+\begin{align}
+    q_s(N)\rho^{(N)}(A_s),
+    \label{eq:cpsv16_gsnnch_sector_decomposition_compressed_sector_term}\\
+    q_s(N)
+        &=\sum_q\mu_{s,q}^N.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_sector_power_sum_coefficient}
+\end{align}
+Global positivity makes the compressed operator in
+Eq.~(\ref{eq:cpsv16_gsnnch_sector_decomposition_compressed_sector_term})
+positive. The sector operator is positive and nonzero, so uniqueness of its
+positive scalar phase implies that $q_s(N)$ is a nonnegative real number.
+Define the bond-rescaling factor by
+\begin{align}
+    r_s(N)
+        &=\left(\frac{q_s(N)}{n_s}\right)^{1/N}.
+    \label{eq:cpsv16_gsnnch_sector_decomposition_positive_root_bond_rescaling}
+\end{align}
+Rescaling the supported commuting bond by $r_s(N)$ preserves the natural copy
+multiplicity $n_s$ and reproduces the exact unnormalized sector term.
+Definition~4.8 of Ref.~\cite{Cirac2016MPDO_arXiv} chooses its data separately
+at every length, so this construction proves the proposition without copy
+independence.
+
+The local Markov labels in Appendix~C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv} belong within one injective BNT component.
+They are not the outer labels $x$ of Definition~4.8 and must not replace those
+outer sectors.
 
 \section{Classification}
 
-Verdict: the source GSNNCH data and predicate are formalized, the represented
-sector sum is proved positive semidefinite and translation invariant with
-pairwise commuting translates, and the single-bond presentation gives the
-one-sector case.  The exact unstarred BNT layer identity is formalized.  Under
-the standing biCF injectivity and the per-sector MPDO positivity supplied by
-the positive neighboring-operator factorization, it yields pairwise
-orthogonal one-site projections supporting every BNT tensor on both sides.
-This theorem does not assert that the projections sum to the identity.
-A square-zero family shows that this conclusion would be false for arbitrary
-MPO tensors without those hypotheses.
+The source GSNNCH data and predicate are formalized. The represented sector
+sum is positive semidefinite and translation invariant, and the translates
+of each sector bond commute pairwise. The single-bond presentation gives the
+one-sector case.
 
-The construction from an already supplied orthogonal commuting sector family
-to the GSNNCH form is available, together with the natural BNT multiplicities.
-The canonical restriction, its exact sectorwise factorization, and its
-positive neighboring operators have now been derived from
-\texttt{AppUkU=rl} and \texttt{Appetakhetc}, with inactive factor
-directions removed without a minimality hypothesis.  Together with the
-two-sided supports obtained from \texttt{AppKxKy=0}, this gives supported
-positive commuting bonds with exact periodic products on the printed
-projections.  Fixed-length orthogonal compression proves that the actual BNT
-power-sum coefficients are nonnegative real numbers, and positive-root bond
-rescaling absorbs each coefficient while retaining the natural BNT copy
-number.  The source-facing theorem keeps \texttt{Apptralktrrk} and
-\texttt{AppPsiPhi} in its statement.
+The exact unstarred BNT layer identity in
+Eq.~(\ref{eq:cpsv16_gsnnch_sector_decomposition_unstarred_layer_annihilation})
+is formalized. Under the standing biCF injectivity hypothesis and the
+per-sector MPDO positivity supplied by the positive neighboring-operator
+factorization, it gives pairwise orthogonal one-site projections supporting
+every BNT tensor on both sides. This theorem does not assert that the
+projections sum to the identity. A square-zero family shows that such a
+conclusion is false for arbitrary MPO tensors without these hypotheses.
 
-Proposition~\texttt{prop3to4} is therefore complete under its printed five
-identities together with the standing Case~II assumptions: MPDO positivity,
-simultaneous one-site spanning of the product of the BNT virtual matrix
-algebras, and positive BNT bond dimensions.  This repairs the proposition by a
-chainwise argument; it does not validate the printed invocation of
-Lemma~\texttt{lemmus} and does not prove copy independence.
+The construction from an orthogonal commuting sector family to the GSNNCH
+form is available with the natural BNT multiplicities. The canonical
+restriction, its exact sectorwise factorization, and its positive neighboring
+operators follow from \texttt{AppUkU=rl} and \texttt{Appetakhetc}; inactive
+factor directions are removed without a minimality assumption. Together with
+the two-sided supports obtained from \texttt{AppKxKy=0}, this gives supported
+positive commuting bonds whose periodic products are exact on the printed
+projections.
+
+Fixed-length orthogonal compression proves that the actual BNT power-sum
+coefficients are nonnegative real numbers. Positive-root bond rescaling then
+absorbs each coefficient while preserving the natural BNT copy number. The
+source-facing theorem retains \texttt{Apptralktrrk} and \texttt{AppPsiPhi} in
+its statement.
+
+Proposition~\texttt{prop3to4} of Ref.~\cite{Cirac2016MPDO_arXiv} is therefore
+complete under its printed five identities together with the standing Case~II
+assumptions: MPDO positivity, simultaneous one-site spanning of the product of
+the BNT virtual matrix algebras, and positive BNT bond dimensions. This
+chainwise argument repairs the proposition. It does not validate the printed
+invocation of Lemma~\texttt{lemmus} and does not prove copy independence.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}

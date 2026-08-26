@@ -18,111 +18,185 @@ Cirac--Perez-Garcia--Schuch--Verstraete 2017}
 
 \section{Source statement and the adjacent gap}
 
-Definition~3.3 of \cite{Cirac2016MPDO_arXiv} defines correlations independent
-of the distance by quantifying over observables on any two disjoint
-regions.\footnote{Local source:
+Definition~3.3 of Ref.~\cite{Cirac2016MPDO_arXiv} defines correlations
+independent of the distance by quantifying over observables on any two
+disjoint regions.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:437--448}, label \path{ZCL}.}
-Disjointness permits \emph{adjacent} regions: with $n_{2}=n_{1}'+1$ there is no
-free site between the two observables, and the allowed shifts
-$n_{1}'-n_{2}+1<\Delta<N-n_{2}'$ are exactly $\Delta\ge 1$, each leaving at
-least one free site on each complementary arc.
+Disjoint regions may be adjacent. If $n_2=n_1'+1$, no free site lies between
+the observables. The allowed shifts satisfy
+\begin{align}
+    n_1'-n_2+1
+        &<\Delta<N-n_2',
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_allowed_shift_interval}
+\end{align}
+which in the adjacent case means $\Delta\geq 1$ and leaves at least one free
+site on each complementary arc.
 
-Expectation values are computed by the two-observable trace
-formula\footnote{Local source:
+For single-site observables at positions $n_1<n_2$, the source computes the
+two-observable expectation by\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:490--496}, label \path{Corr}.}
 \begin{align}
-  \langle V|O_{1}O_{2}|V\rangle
-  =\tr\!\left(\mathbb E_{O_{1}} \mathbb E^{\,n_{2}-n_{1}-1}
-  \mathbb E_{O_{2}} \mathbb E^{\,N+n_{1}-n_{2}-1}\right),
+    \bra{V}O_1O_2\ket{V}
+        &=\tr\!\left(\mathbb E_{O_1}
+          \mathbb E^{\,n_2-n_1-1}
+          \mathbb E_{O_2}
+          \mathbb E^{\,N+n_1-n_2-1}\right).
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_single_site_trace_formula}
 \end{align}
-printed for single-site observables at positions $n_{1}<n_{2}$. Generalized
-to block observables on the regions $[n_{1},n_{1}']$ and $[n_{2},n_{2}']$ of
-Definition~3.3, the exponents read $n_{2}-n_{1}'-1$ and $N+n_{1}-n_{2}'-1$.
-The forward implication ``if $\mathbb E^{2}=\mathbb E$, then one will have
-CID'' (line~498) substitutes $\mathbb E^{n}=\mathbb E$ into this formula.
-Idempotence justifies that substitution only for $n\ge 1$. Between adjacent
-observables the middle exponent is $n_{2}-n_{1}'-1=0$, so the corresponding
-transfer block is $\mathbb E^{0}=1$, which idempotence does not identify with
-$\mathbb E$. The printed argument therefore covers only configurations with
-at least one free site between the observables, while the definition also
-quantifies over adjacent regions.
+For block observables on $[n_1,n_1']$ and $[n_2,n_2']$, the transfer exponents
+are
+\begin{align}
+    g_{\mathrm{mid}}
+        &=n_2-n_1'-1,
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_middle_gap}\\
+    g_{\mathrm{wrap}}
+        &=N+n_1-n_2'-1.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_wrapping_gap}
+\end{align}
+
+The forward claim at line~498 of Ref.~\cite{Cirac2016MPDO_arXiv} states that
+$\mathbb E^2=\mathbb E$ implies CID. Its argument substitutes
+$\mathbb E^n=\mathbb E$ into the trace formula. Idempotence justifies
+\begin{align}
+    \mathbb E^n
+        &=\mathbb E,
+        \qquad n\geq 1,
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_positive_power_idempotence}
+\end{align}
+but not the corresponding identity at exponent zero. For adjacent regions,
+\begin{align}
+    g_{\mathrm{mid}}
+        &=0,
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_adjacent_zero_gap}\\
+    \mathbb E^{g_{\mathrm{mid}}}
+        &=\mathbb E^0
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_zero_power_transfer}\\
+        &=\Id.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_zero_power_identity}
+\end{align}
+Idempotence does not identify $\Id$ with $\mathbb E$. The printed argument
+therefore covers only configurations with at least one free site between the
+observables, whereas Definition~3.3 also includes adjacent regions.
 
 \section{Counterexample: the Bell-pair chain}
 
 Take the canonical normal-tensor renormalization fixed point of
-\path{lem:charact-NT-pure-RFP} (line~1300) with trivial gauge $X=\one$,
-trivial isometry $U=\one$, and maximally mixed spectrum
-$\Lambda=(1/2,1/2)$:
+\path{lem:charact-NT-pure-RFP} at line~1300 of
+Ref.~\cite{Cirac2016MPDO_arXiv}, with trivial gauge $X=\one$, trivial isometry
+$U=\one$, and maximally mixed spectrum
 \begin{align}
-  A^{(\alpha,\beta)}_{\gamma,\delta}
-  =\delta_{\gamma,\alpha} \delta_{\delta,\beta} \sqrt{\tfrac12},
-  \qquad (\alpha,\beta)\in\{0,1\}^{2}.
+    \Lambda
+        &=\left(\tfrac12,\tfrac12\right).
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_maximally_mixed_spectrum}
 \end{align}
-The physical index is the pair of spins at one node. The generated states are
-the chains of \path{eq:III_MPSRFP}--\path{eq:III_varphi}
-(lines~564--578): each node $n$ carries two spins $a_{n},b_{n}$, and the
-maximally entangled pair
-$\ket{\varphi}=(\ket{00}+\ket{11})/\sqrt 2$ is shared between $b_{n}$ and
-$a_{n+1}$.
+The tensor is
+\begin{align}
+    A^{(\alpha,\beta)}_{\gamma,\delta}
+        &=\delta_{\gamma,\alpha}
+          \delta_{\delta,\beta}\sqrt{\tfrac12},
+        \qquad
+        (\alpha,\beta)\in\{0,1\}^2.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_bell_pair_tensor}
+\end{align}
+The physical index consists of two spins at each node. The generated states
+are the chains described by source equations
+\path{eq:III_MPSRFP}--\path{eq:III_varphi} at lines~564--578 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Each node $n$ carries spins $a_n,b_n$, and
+\begin{align}
+    \ket{\varphi}
+        &=\frac{\ket{00}+\ket{11}}{\sqrt2}
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_bell_state}
+\end{align}
+is shared between $b_n$ and $a_{n+1}$.
 
 The transfer map is
 \begin{align}
-  \mathbb E(X)=\tr(X)\operatorname{diag}(\Lambda)
-  =\tfrac12\tr(X) \one,
+    \mathbb E(X)
+        &=\tr(X)\operatorname{diag}(\Lambda)
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_transfer_trace_form}\\
+        &=\tfrac12\tr(X)\one.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_transfer_depolarizing_form}
 \end{align}
-which is idempotent because $\tr\operatorname{diag}(\Lambda)=1$. The tensor
-is a single normal tensor---it is already $1$-block injective and
-left-canonical---so no repeated copies or copy weights are involved.
+Since
+\begin{align}
+    \tr(\operatorname{diag}(\Lambda))
+        &=1,
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_spectrum_normalization}
+\end{align}
+the transfer map is idempotent:
+\begin{align}
+    \mathbb E^2
+        &=\mathbb E.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_transfer_idempotence}
+\end{align}
+The tensor is a single normal tensor: it is already one-block injective and
+left-canonical. No repeated copies or copy weights occur.
 
-Now put the Pauli matrix $Z$ on spin $b_{1}$ and $Z$ on spin $a_{2}$. These
-are adjacent regions with zero gap, and the two-region expectation is the
-Bell-pair value
+Let $Z$ be the Pauli matrix. Place $Z$ on spin $b_1$ and another $Z$ on spin
+$a_2$. These observables occupy adjacent regions with zero gap. Their
+expectation is
 \begin{align}
-  \tr\!\left(\mathbb E_{I\otimes Z} \mathbb E^{0}
-  \mathbb E_{Z\otimes I} \mathbb E^{2}\right)
-  =\bra{\varphi}Z\otimes Z\ket{\varphi}=1.
+    \tr\!\left(\mathbb E_{I\otimes Z}
+      \mathbb E^0
+      \mathbb E_{Z\otimes I}
+      \mathbb E^2\right)
+        &=\bra{\varphi}Z\otimes Z\ket{\varphi}
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_adjacent_bell_expectation}\\
+        &=1.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_adjacent_value}
 \end{align}
-After the allowed shift $\Delta=1$, which places one free site on each
-complementary arc, the expectation factorizes through the trace-form fixed
-point:
+After the allowed shift $\Delta=1$, one free site lies on each complementary
+arc. The expectation factorizes:
 \begin{align}
-  \tr\!\left(\mathbb E_{I\otimes Z} \mathbb E^{1}
-  \mathbb E_{Z\otimes I} \mathbb E^{1}\right)
-  =\bra{\varphi}Z\otimes\one\ket{\varphi}^{2}=0.
+    \tr\!\left(\mathbb E_{I\otimes Z}
+      \mathbb E^1
+      \mathbb E_{Z\otimes I}
+      \mathbb E^1\right)
+        &=\bra{\varphi}Z\otimes\one\ket{\varphi}^{2}
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_shifted_factorization}\\
+        &=0.
+    \label{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_shifted_value}
 \end{align}
-The two values differ, so the tensor does not have CID in the unrestricted
-sense of the source definition, even though $\mathbb E^{2}=\mathbb E$. All
-four assertions---idempotence, normality, the adjacent value $1$, and the
-shifted value $0$---have kernel-checked proofs.\footnote{Formal conjunction:
+The two values differ. Thus the tensor does not satisfy CID in the unrestricted
+sense of Definition~3.3 of Ref.~\cite{Cirac2016MPDO_arXiv}, although its
+transfer map is idempotent.
+
+Idempotence, normality, the adjacent value one, and the shifted value zero all
+have kernel-checked proofs.\footnote{Formal conjunction:
 \leanid{MPSTensor.bellPairChain_isNormalTensor_isTransferIdempotent_and_not_isPhysicalCID}
 in \doclink{TNLean/MPS/RFP/BellPairCIDObstruction}.}
 
 \section{Consequence for the theorem surface}
 
-The unrestricted forward implication of line~498 is false as stated, and the
-counterexample is a single normal renormalization fixed point: unlike the
-raw-weight counterexample of
+The unrestricted forward implication at line~498 of
+Ref.~\cite{Cirac2016MPDO_arXiv} is false as printed. The counterexample is a
+single normal renormalization fixed point. Unlike the raw-weight
+counterexample in
 \path{cpsv16_pure_zcl_raw_weight_counterexample.tex}, which refutes the
-converse direction of Theorem~3.8 (labelled \path{TheoremZCLPure}) using copy
-weights, no repeated copies are involved here. A repair that only normalizes
-copy weights therefore cannot save the forward direction; the quantification
-over adjacent regions must be removed instead.
+converse direction of Theorem~3.8, labelled \path{TheoremZCLPure}, by using
+copy weights, this counterexample has no repeated copies. Normalizing copy
+weights therefore cannot repair the forward implication; the quantification
+over adjacent regions must be restricted.
 
-The faithful repair is the positive-gap restriction, requiring at least one
-free site on each complementary arc. That restricted statement is proved:
-transfer idempotence implies physical CID when both complementary gaps are
-positive, formalized as
+The faithful repair requires a positive gap: each complementary arc must
+contain at least one free site. Under this restriction, transfer idempotence
+implies physical CID. The formal theorem is
 \leanid{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}. The
-Bell-pair chain is consistent with the repair: its gap-positive configurations
-do factorize, as the shifted value above shows. The source-faithful
-unrestricted predicate \leanid{MPSTensor.IsPhysicalCID} is retained with a
-docstring pointer to this note, and the gap recorded here closes the question
-left open in the raw-weight note, whose converse-direction counterexample did
-not settle the forward implication for adjacent physical regions.
+Bell-pair chain satisfies the repaired statement because its positive-gap
+configurations factorize, as
+(\ref{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_shifted_factorization})
+demonstrates.
 
-The verdict is a source gap with a proved repair: the printed forward argument
-has an adjacent-region hole at $\mathbb E^{0}=1$, and the positive-gap
-statement is the correct replacement target for \ghissue{4772}.
+The source-faithful unrestricted predicate
+\leanid{MPSTensor.IsPhysicalCID} remains in the formal development with a
+docstring pointer to this note. The present counterexample closes the question
+left open by the raw-weight note, whose converse-direction counterexample did
+not decide the forward implication for adjacent physical regions.
+
+The verdict is a source claim that is false as printed, with a proved repair.
+The printed argument fails at
+(\ref{eq:cpsv16_pure_zcl_adjacent_gap_cid_scope_zero_power_identity}), and the
+positive-gap statement is the correct replacement target for \ghissue{4772}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

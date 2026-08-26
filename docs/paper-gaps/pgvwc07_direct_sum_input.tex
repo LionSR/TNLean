@@ -20,127 +20,210 @@
 The finite-length direct-sum input used behind the block-injective
 canonical-form route is not proved in the 2016 MPDO source. The 2016 paper
 cites the older representation paper for the block-injective-after-blocking
-step \cite[lines~340--345]{Cirac2016MPDO_arXiv}. The local source for the
-older argument is \path{Papers/quant-ph_0608197/MPSarchive.tex}.
+step at lines~340--345 of Ref.~\cite{Cirac2016MPDO_arXiv}. The local source for
+the older argument is \path{Papers/quant-ph_0608197/MPSarchive.tex}.
 
-That source first introduces the injectivity condition $C1$: for some
-$L_0$, the map
-\[
-  \Gamma_{L_0}(X) = \sum_{i_1,\ldots,i_{L_0}}
-      \operatorname{tr}(X A_{i_1}\cdots A_{i_{L_0}})
-      |i_1,\ldots,i_{L_0}\rangle
-\]
-is injective. It immediately identifies this with the exact-length word
-products of length $L_0$ spanning the full matrix algebra
-\cite[lines~888--908]{PerezGarcia2007MPSReps}.
+That source first introduces the injectivity condition $C1$. For matrices
+$A_i\in M_D(\C)$, the condition requires a length $L_0$ for which the map
+\begin{align}
+    \Gamma_{L_0}(X)
+        &:=
+        \sum_{i_1,\ldots,i_{L_0}}
+        \tr(XA_{i_1}\cdots A_{i_{L_0}})
+        \ket{i_1,\ldots,i_{L_0}}
+    \label{eq:direct-sum_gamma_map}
+\end{align}
+is injective. The source immediately identifies this condition with the
+exact-length word products of length $L_0$ spanning the full matrix algebra
+at lines~888--908 of Ref.~\cite{PerezGarcia2007MPSReps}.
 
-The technical algebraic lemma then says that, for nonzero $D\times D$
-matrices $C$, every matrix $X$ is a finite sum
-\[
-  X = \sum_i R_i C S_i.
-\]
+The technical algebraic lemma states that, for every nonzero
+$D\times D$ matrix $C$ and every $X\in M_D(\C)$, there are finitely many
+matrices $R_i,S_i\in M_D(\C)$ such that
+\begin{align}
+    X
+        &=\sum_i R_iCS_i.
+    \label{eq:direct-sum_matrix_factorization}
+\end{align}
 The proof reduces $C$ to a matrix unit by elementary matrix operations and
-then reconstructs $X$ from permuted copies of that matrix unit
-\cite[lines~1333--1344]{PerezGarcia2007MPSReps}.
+then reconstructs $X$ from permuted copies of that matrix unit; see
+lines~1333--1344 of Ref.~\cite{PerezGarcia2007MPSReps}.
 
 The next lemma is the direct-sum statement. Its local hypotheses are important:
-the tensor has $b \ge 2$ canonical blocks $A^1,\ldots,A^b$, each block
-satisfies $C1$, the common length is
-$L_0=\max_j L_0^{A^j}$, the block sizes are ordered, and the block states are
-assumed pairwise different
-\cite[lines~1321--1330]{PerezGarcia2007MPSReps}. Under these hypotheses, if
-$L \ge 3(b-1)(L_0+1)$, then
-\[
-  \sum_{j=1}^b \mathcal G_L^{A^j}
-\]
-is a direct sum \cite[lines~1346--1408]{PerezGarcia2007MPSReps}. The proof is
-by induction on the number of blocks. The base case uses $C1$ and the
-matrix-factorization lemma to show that a nontrivial linear dependence would
-force inclusion, then equality, of the two length-$L_0+1$ MPS subspaces,
-contradicting uniqueness of the associated injective parent-space
+the tensor has $b\geq 2$ canonical blocks
+$A^1,\ldots,A^b$, each block satisfies $C1$, the common length is
+\begin{align}
+    L_0
+        &=\max_j L_0^{A^j},
+    \label{eq:direct-sum_common_injectivity_length}
+\end{align}
+the block sizes are ordered, and the block states are pairwise different; see
+lines~1321--1330 of Ref.~\cite{PerezGarcia2007MPSReps}. Under these
+hypotheses, the length bound
+\begin{align}
+    L
+        &\geq 3(b-1)(L_0+1)
+    \label{eq:direct-sum_source_length_bound}
+\end{align}
+implies
+\begin{align}
+    \sum_{j=1}^b\mathcal G_L^{A^j}
+        &=\bigoplus_{j=1}^b\mathcal G_L^{A^j}.
+    \label{eq:direct-sum_source_image_space_directness}
+\end{align}
+This is the direct-sum assertion proved at lines~1346--1408 of
+Ref.~\cite{PerezGarcia2007MPSReps}.
+
+The proof proceeds by induction on the number of blocks. The base case uses
+$C1$ and the matrix-factorization lemma to show that a nontrivial linear
+dependence would force inclusion, then equality, of the two length-$L_0+1$ MPS
+subspaces, contradicting uniqueness of the associated injective parent-space
 characterization. The induction step isolates one block with a local
 projector, applies the induction hypothesis to the remaining blocks, and then
-uses $C1$ plus the factorization lemma to force the remaining coefficient to
-vanish.
+uses $C1$ together with the factorization lemma to force the remaining
+coefficient to vanish.
 
 \section{MPS translation}
 
 For the non-periodic Fundamental Theorem route, the mathematical consequence is
 homogeneous and positive-length. After the canonical-form and
-basis-of-normal-tensors reduction, the selected representatives should admit one
-length at which their simultaneous word evaluations separate the direct-sum
-blocks. In trace-dual form, if
-\[
-  \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
-  \qquad\text{for every word } w \text{ of length } L,
-\]
-then each $\Delta_j$ is zero. This is the finite-length direct-sum span input
-needed by the BNT pair-separation route.
+basis-of-normal-tensors reduction, the selected representatives should admit
+one length at which their simultaneous word evaluations separate the
+direct-sum blocks. In trace-dual form, the required implication is
+\begin{align}
+    \left[\sum_{j=1}^g\tr(\Delta_jA_j^w)=0
+        \quad\text{for every word }w\text{ of length }L\right]
+        &\Longrightarrow
+        \Delta_j=0
+        \quad\text{for every }j.
+    \label{eq:direct-sum_trace_dual_separation}
+\end{align}
+This is the finite-length direct-sum span input needed by the BNT
+pair-separation route.
 
-This statement is not a consequence of the empty word and is not a cumulative
-span statement. The exact length $L$ is part of the content. Therefore the
-formal proof should not replace the source input by a hypothesis that only says
-the cumulative pair algebra is full, nor by a theorem that uses the length-zero
-identity as padding.
+The implication
+(\ref{eq:direct-sum_trace_dual_separation}) is not a consequence of the empty
+word and is not a cumulative-span statement. The exact length $L$ is part of
+the content. Therefore the formal proof should not replace the source input by
+a hypothesis that only says the cumulative pair algebra is full, nor by a
+theorem that uses the length-zero identity as padding.
 
 \section{Formal boundary}
 
 The matrix-factorization content of Lemma~\texttt{lem1} from the source paper
 is now formalized in two steps.\footnote{%
 \leanid{Matrix.span_range_mul_nonzero_mul_eq_top} for the abstract
-matrix-algebra form; \leanid{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
+matrix-algebra form;
+\leanid{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
 for the word-product translation.}
-The first says that, for any nonzero matrix $C$, the set of products
-$\{RCS : R,S\in M_D(\mathbb C)\}$ spans $M_D(\mathbb C)$. The second
-translates this into the relevant word-product form: if a tensor is $L$-block
-injective and $X\ne0$, then
-$\operatorname{span}\{A_u X A_v : |u|=|v|=L\}=M_D(\mathbb C)$.
+The first says that, for every nonzero matrix $C$,
+\begin{align}
+    \operatorname{span}
+    \{RCS:R,S\in M_D(\C)\}
+        &=M_D(\C).
+    \label{eq:direct-sum_nonzero_matrix_product_span}
+\end{align}
+The second translates this assertion into the relevant word-product form. If a
+tensor is $L$-block injective and $X\ne 0$, then
+\begin{align}
+    \operatorname{span}
+    \{A_uXA_v:|u|=|v|=L\}
+        &=M_D(\C).
+    \label{eq:direct-sum_word_product_factorization_span}
+\end{align}
 
-The next part of the two-block direct-sum argument is also formalized. The
-three-block trace relation forces, in the size-ordering convention $D_B\le D_A$,
-an inclusion $\mathcal G_L^A\subseteq\mathcal G_L^B$ of length-$L$ image
-spaces. Since block injectivity identifies $\dim\mathcal G_L^A=D_A^2$ and
-$\dim\mathcal G_L^B=D_B^2$, the inclusion and the size ordering together
-force $D_A=D_B$ and $\mathcal G_L^A=\mathcal G_L^B$.\footnote{%
-\leanid{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}.}
-The strict-size branch - if $D_B<D_A$, no nonzero coefficient on the larger
-block can satisfy the homogeneous three-block trace relation - is formalized
-separately,\footnote{%
+The next part of the two-block direct-sum argument is also formalized. In the
+size-ordering convention $D_B\leq D_A$, the three-block trace relation gives
+\begin{align}
+    \mathcal G_L^A
+        &\subseteq\mathcal G_L^B.
+    \label{eq:direct-sum_ground_space_inclusion}
+\end{align}
+Block injectivity identifies the dimensions as
+\begin{align}
+    \dim\mathcal G_L^A
+        &=D_A^2,
+    \label{eq:direct-sum_A_ground_space_dimension}\\
+    \dim\mathcal G_L^B
+        &=D_B^2.
+    \label{eq:direct-sum_B_ground_space_dimension}
+\end{align}
+The inclusion
+(\ref{eq:direct-sum_ground_space_inclusion}), the dimension identities
+(\ref{eq:direct-sum_A_ground_space_dimension}) and
+(\ref{eq:direct-sum_B_ground_space_dimension}), and the size ordering together
+force
+\begin{align}
+    D_A
+        &=D_B,
+    \label{eq:direct-sum_forced_equal_bond_dimension}\\
+    \mathcal G_L^A
+        &=\mathcal G_L^B.
+    \label{eq:direct-sum_forced_equal_ground_spaces}
+\end{align}
+This implication is formalized by
+\leanid{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}.
+
+The strict-size branch states that, if $D_B<D_A$, no nonzero coefficient on
+the larger block can satisfy the homogeneous three-block trace
+relation.\footnote{%
 \leanid{MPSTensor.not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt};
 \leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt}
-for the trace-separation form; \leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
+for the trace-separation form;
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
 for the convention-free version.}
-as is the conditional directness result: any external proof of the
-contradiction $\neg(D_A=D_B\wedge\mathcal G_L^A=\mathcal G_L^B)$ gives
-$\mathcal G_{3L}^A\cap\mathcal G_{3L}^B=\{0\}$.\footnote{%
-\leanid{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}.}
+The conditional directness result is also formalized: an external proof of
+\begin{align}
+    \neg\left(D_A=D_B
+        \mathbin{\wedge}
+        \mathcal G_L^A=\mathcal G_L^B\right)
+    \label{eq:direct-sum_excluded_equal_size_collapse}
+\end{align}
+implies
+\begin{align}
+    \mathcal G_{3L}^A\cap\mathcal G_{3L}^B
+        &=\{0\}.
+    \label{eq:direct-sum_three_block_zero_intersection}
+\end{align}
+The corresponding declaration is
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}.
 
 The equal-size uniqueness branch is isolated as well. For injective tensors,
-equal length-$L$ image spaces force equality of the periodic MPV lines. A
-supplied distinct-MPV-line hypothesis therefore rules out the equal-size
-collapse.\footnote{\leanid{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}.}
+equality of the length-$L$ image spaces forces equality of the periodic MPV
+lines. A supplied distinct-MPV-line hypothesis therefore rules out the
+equal-size collapse.\footnote{%
+\leanid{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne}.}
 The analytic source of distinct-MPV witnesses is formalized for irreducible
 trace-preserving blocks with normalized self-overlaps: if two blocks are not
-gauge-phase equivalent, then at arbitrarily large chain length their MPV states
-are not pointwise proportional.\footnote{%
+gauge-phase equivalent, then at arbitrarily large chain lengths their MPV
+states are not pointwise proportional.\footnote{%
 \leanid{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP};
 \leanid{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP}
 for the BNT-family form.}
+
 Combining the uniqueness argument with the finite-dimensional image-space step
-gives: if any chain length $N\ge\max\{2,L\}$ witnesses non-proportionality,
-then $\mathcal G_{3L}^A\cap\mathcal G_{3L}^B=\{0\}$.\footnote{%
+gives the following implication: if some chain length
+\begin{align}
+    N
+        &\geq\max\{2,L\}
+    \label{eq:direct-sum_nonproportionality_witness_length}
+\end{align}
+witnesses nonproportionality, then
+(\ref{eq:direct-sum_three_block_zero_intersection})
+holds.\footnote{%
 \leanid{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge};
 \leanid{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
 for the BNT-separation packaging.}
 Zero intersection of image spaces at a fixed length, together with injectivity
 of the boundary-to-chain maps at that length, implies homogeneous pair trace
-separation.\footnote{\leanid{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective};
+separation.\footnote{%
+\leanid{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective};
 and the combined forms
 \leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge},
 \leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}.}
 The two branches are combined for all ordered pairs of distinct blocks of a
-BNT family at the common length $3L$, and the result is fed into the
-selector and product-span construction.\footnote{%
+BNT family at the common length $3L$, and the result is fed into the selector
+and product-span construction.\footnote{%
 \leanid{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv};
 \leanid{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}.}
 
@@ -160,23 +243,39 @@ The sharp direct-sum interpolation does not concatenate a separate injective
 prefix. Full pair span at a common length $S$ realizes an arbitrary value
 $(X,0)$ on a chosen block and one anchor block. Multiplication by $b-2$
 identity--zero selectors removes the remaining blocks. Hence the full
-simultaneous span holds at length $(b-1)S$. For
-$S=3(L_0+1)$ this is exactly the source length
-$3(b-1)(L_0+1)$.\footnote{%
+simultaneous span holds at length
+\begin{align}
+    (b-1)S.
+    \label{eq:direct-sum_selector_interpolation_length}
+\end{align}
+For
+\begin{align}
+    S
+        &=3(L_0+1),
+    \label{eq:direct-sum_three_block_pair_length}
+\end{align}
+the resulting length is
+\begin{align}
+    (b-1)S
+        &=3(b-1)(L_0+1),
+    \label{eq:direct-sum_recovered_source_length}
+\end{align}
+which is exactly the source length in
+(\ref{eq:direct-sum_source_length_bound}).\footnote{%
 \leanid{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop};
 \leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}.}
 
-The downstream consumers of the direct-sum input are threefold. The exact-length
-span of a direct-sum block family and its two-block trace-dual form are expressed
-as predicates used throughout the pair route.\footnote{%
+The downstream consumers of the direct-sum input are threefold. The
+exact-length span of a direct-sum block family and its two-block trace-dual
+form are expressed as predicates used throughout the pair route.\footnote{%
 \leanid{WordTupleSpanTop}, \leanid{PairWordTupleSpanTop},
 \leanid{PairTraceSeparatingAt}.}
-Theorems in the period-window module turn a positive homogeneous window of
-the pair-span predicate into homogeneous trace separation.\footnote{%
+Theorems in the period-window module turn a positive homogeneous window of the
+pair-span predicate into homogeneous trace separation.\footnote{%
 \path{TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean}.}
-The BNT direct-sum theorems first turn pairwise non-equivalence into
-homogeneous three-block trace separation, and then construct selectors and a
-common exact-length simultaneous span.\footnote{%
+The BNT direct-sum theorems first turn pairwise non-equivalence into homogeneous
+three-block trace separation, and then construct selectors and a common
+exact-length simultaneous span.\footnote{%
 \leanid{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv};
 \leanid{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv};
 \leanid{MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors}
@@ -204,18 +303,31 @@ The current gap is not closed.
 
 Under gauge-phase separation, the arbitrary-$L_0$ direct-sum interpolation
 needed for the BNT specialization is formalized at the exact source length
-$3(b-1)(L_0+1)$. The resulting
-span is homogeneous and positive-length, not cumulative. The length-zero
-identity is only the neutral base of a finite product over no remaining
-selectors. The case $b=1$ is treated separately by ordinary block injectivity.
+\begin{align}
+    3(b-1)(L_0+1).
+    \label{eq:direct-sum_exact_formalized_length}
+\end{align}
+The resulting span is homogeneous and positive-length, not cumulative. The
+length-zero identity is only the neutral base of a finite product over no
+remaining selectors. The case $b=1$ is treated separately by ordinary block
+injectivity.
 
 For a BNT canonical form of total bond dimension $D$, the common quantum
-Wielandt length is $L_0=D^4$. Every representative has positive dimension and
-occurs at least once, so $b\leq D$. The formal theorem consequently gives a
-positive simultaneous-span length at most
-\[
-  3(b-1)(D^4+1)\leq3(D-1)(D^4+1)\leq3D^5.
-\]
+Wielandt length is
+\begin{align}
+    L_0
+        &=D^4.
+    \label{eq:direct-sum_quantum_wielandt_length}
+\end{align}
+Every representative has positive dimension and occurs at least once, so
+$b\leq D$. The formal theorem consequently gives
+\begin{align}
+    3(b-1)(D^4+1)
+        &\leq 3(D-1)(D^4+1)
+    \label{eq:direct-sum_basis_count_dimension_bound}\\
+        &\leq 3D^5.
+    \label{eq:direct-sum_total_dimension_length_bound}
+\end{align}
 This proves the sharp block-separation input cited by the 2016 MPDO source
 under the additional gauge-phase separation premise. It does not close the
 input at the source's literal pairwise-inequality hypothesis.\footnote{%

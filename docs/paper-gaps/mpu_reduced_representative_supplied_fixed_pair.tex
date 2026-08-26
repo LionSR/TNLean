@@ -11,112 +11,189 @@
 \gapnote{scope-restriction}{open}
 
 \section{Source statement and derivation of the fixed pair}
-Proposition IV.5 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that
-for a continuous map of tensors $[0,1]\ni x\mapsto\mathcal W(x)$, each
-generating MPUs but not necessarily in canonical form, the ranks $r(x)$ and
-$\ell(x)$ of the associated simple tensors are constant
-\cite[Proposition~IV.5]{Cirac2017MPU}. The proof begins with a single tensor
-$\mathcal W$ generating an MPU and derives, from the MPU property alone and
-after blocking $D^4$ sites, that the blocked canonical form is simple and
-that its transfer operator is rank one: as a completely positive map it is
+
+Proposition~IV.5 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete considers a
+continuous tensor-valued map
+$[0,1]\ni x\mapsto\mathcal W(x)$. Each tensor generates an MPU but need not be
+in canonical form. The proposition states that the ranks $r(x)$ and $\ell(x)$
+of the associated simple tensors are constant
+\cite[Proposition~IV.5]{Cirac2017MPU}.
+
+The proof first fixes one tensor $\mathcal W$ generating an MPU. From the MPU
+property alone, after blocking $D^4$ sites, it concludes that the blocked
+canonical form is simple and that its transfer operator has rank one. As a
+completely positive map, this transfer operator has the form
 \begin{align}
-  X&\longmapsto\tr(LX)\,R,
+    X &\longmapsto \tr(LX)\,R.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_rank_one_transfer}
 \end{align}
-with positive semidefinite left and right fixed points $L\succeq0$ and
-$R\succeq0$ normalized by $\tr(LR)=1$. The proof then reads off, from the
-displayed factorization through an isometry $V$, that the tensor absorbs the
-support projections on both sides,
+Here $L\succeq0$ and $R\succeq0$ are positive semidefinite left and right fixed
+points normalized by
 \begin{align}
-  \mathcal WP&=\mathcal W=Q\mathcal W,
+    \tr(LR) &= 1.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_trace_normalization}
 \end{align}
-where $P$ and $Q$ are the orthogonal projections onto the supports of $L$ and
-$R$, respectively. The source treats all four ingredients---the rank-one
-transfer formula, the positive semidefiniteness, the normalization, and the
-two-sided support absorption---as derived consequences of blocking an
-arbitrary MPU tensor.
+
+The source then reads from the displayed factorization through an isometry
+$V$ that the tensor absorbs the support projections on both sides. If $P$ and
+$Q$ are the orthogonal projections onto the supports of $L$ and $R$,
+respectively, then
+\begin{align}
+    \mathcal WP
+        &=\mathcal W,
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_right_absorption}\\
+    Q\mathcal W
+        &=\mathcal W.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_left_absorption}
+\end{align}
+The argument in Ref.~\cite{Cirac2017MPU} treats the rank-one transfer formula,
+positive semidefiniteness, trace normalization, and two-sided support
+absorption as consequences of blocking an arbitrary MPU tensor.
 % Source lines: paper_v2.tex 747--756. The isometry $V$ is the one displayed in
 % the figure IV_index1.png referenced at paper line 754.
 
 \section{The formal scope issue}
-The formal reduced-representative calculation reverses the direction of this
-part of the argument: it takes the fixed pair and its consequences as explicit
-hypotheses rather than deriving them. The letterwise absorptions
-$W^{ij}P=W^{ij}$ and $QW^{ij}=W^{ij}$, the rank-one transfer formula
-$E_W(X)=\tr(LX)R$, the positivity $L,R\succeq0$, and the normalization
-$\tr(LR)=1$ are all assumptions of the formal statements. No hypothesis is
-inferred from the bare MPU predicate; the module docstring records this
-candor in the sentence that all fixed-point and support hypotheses are
-explicit.
 
-What the formal results prove is the remainder of the source argument,
-starting from the supplied pair. With $T=\widetilde P$ the reduced projection
-of $P$ and $Q$, the reduced tensor $\widetilde W^{ij}=TW^{ij}T$ generates the
-same periodic MPO at every system size, its transfer operator has the
-compressed rank-one formula with left and right fixed points $TLT$ and $TRT$,
-the compression preserves the trace normalization
-$\tr((TLT)(TRT))=1$, and in isometric coordinates $V^\dagger V=I$
-with $VV^\dagger=T$, both compressed fixed matrices $V^\dagger LV$ and
-$V^\dagger RV$ are positive definite.
+The formal reduced-representative calculation starts after this source
+derivation. It assumes the fixed pair and its consequences explicitly rather
+than deriving them. In letterwise notation, it assumes
+\begin{align}
+    W^{ij}P
+        &=W^{ij},
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_letterwise_right_absorption}\\
+    QW^{ij}
+        &=W^{ij},
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_letterwise_left_absorption}
+\end{align}
+together with the rank-one transfer identity
+\begin{align}
+    E_W(X) &= \tr(LX)\,R,
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_assumed_transfer}
+\end{align}
+the inequalities $L,R\succeq0$, and the normalization in
+Eq.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_trace_normalization}.
+The formal statements do not infer any of these assumptions from the bare MPU
+predicate. The module docstring states this limitation directly: all
+fixed-point and support hypotheses are explicit.
 
-The restriction is not vacuous. The source derivation of the fixed pair uses
-the blocking to $D^4$ sites and the simple canonical-form structure of the
-blocked tensor; the unblocked tensor, or an arbitrary representative of it,
-carries no such pair without that construction. Until the supplier is
+Starting from the supplied pair, the formal results prove the remainder of the
+source argument. Let $T=\widetilde P$ be the reduced projection constructed
+from $P$ and $Q$, and define the reduced tensor by
+\begin{align}
+    \widetilde W^{ij} &= TW^{ij}T.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_reduced_tensor}
+\end{align}
+This reduced tensor generates the same periodic MPO at every system size. Its
+transfer operator has the compressed rank-one formula with left and right
+fixed matrices $TLT$ and $TRT$. Compression preserves the normalization:
+\begin{align}
+    \tr\!\left((TLT)(TRT)\right) &= 1.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_compressed_normalization}
+\end{align}
+
+Choose isometric coordinates $V$ satisfying
+\begin{align}
+    V^\dagger V &= I,
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_isometry}\\
+    VV^\dagger &= T.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_isometry_range}
+\end{align}
+In these coordinates, both $V^\dagger LV$ and $V^\dagger RV$ are positive
+definite.
+
+The restriction is substantive. The source obtains the fixed pair by blocking
+$D^4$ sites and using the simple canonical-form structure of the blocked
+tensor. The unblocked tensor, or an arbitrary representative of it, does not
+carry such a pair without this construction. Until that supplier is
 formalized, the formal statements apply only to tensors already equipped with
-the fixed pair, whereas the source claims the conclusions for every MPU
-tensor after blocking.
+the fixed pair. The source conclusion, by contrast, applies to every MPU tensor
+after blocking.
 
 \section{Affected declarations}
+
 The declaration
-\leanid{MPOTensor.mpo_virtualSandwich_reducedProjection_eq} assumes the
-orthogonal-projection property of $P$ and the letterwise absorptions
-$W^{ij}P=W^{ij}$ and $QW^{ij}=W^{ij}$.
+\leanid{MPOTensor.mpo_virtualSandwich_reducedProjection_eq} assumes that $P$ is
+an orthogonal projection and assumes the letterwise absorptions in
+Eqs.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_letterwise_right_absorption}
+and
+\ref{eq:mpu_reduced_representative_supplied_fixed_pair_letterwise_left_absorption}.
+The declaration
 \leanid{MPOTensor.transferMap_virtualSandwich_reducedProjection} assumes the
-rank-one transfer formula. The declarations
+rank-one transfer formula in
+Eq.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_assumed_transfer}.
+
+The declarations
 \leanid{MPOTensor.trace_compressed_fixed_pair_reducedProjection} and
 \leanid{MPOTensor.compressed_fixed_pair_posDef_reducedProjection} assume,
-respectively, that $P$ and $Q$ are orthogonal projections, the two-sided
-support absorptions of $L$ and $R$, and $\tr(LR)=1$; and that
-$L,R\succeq0$ have support projections $P,Q$. The latter also assumes an
-isometry $V$ onto the range of $T$.
+respectively, that $P$ and $Q$ are orthogonal projections, that $L$ and $R$
+satisfy the two-sided support absorptions, and that $\tr(LR)=1$; and that
+$L,R\succeq0$ have support projections $P,Q$. The latter declaration also
+assumes an isometry $V$ onto the range of $T$.
 
 The comparison declaration
-\leanid{MPOTensor.virtualSandwich_hat_eq_reducedProjection} assumes the
-orthogonal-projection property of $P$, the factor equations $XL=P$, $RZ=Q$,
-and $PQY=T$, and the letterwise absorptions. The rank equalities
+\leanid{MPOTensor.virtualSandwich_hat_eq_reducedProjection} assumes that $P$ is
+an orthogonal projection, that the factor equations
+\begin{align}
+    XL &= P,
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_left_factor}\\
+    RZ &= Q,
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_right_factor}\\
+    PQY &= T.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_reduced_right_factor}
+\end{align}
+hold, and that the tensor satisfies the letterwise absorptions. The rank
+equalities
 \leanid{MPOTensor.rightRank_hat_eq_reducedProjection} and
 \leanid{MPOTensor.leftRank_hat_eq_reducedProjection} use the same supplied
-data and additionally assume that $X$, $Z$, and $Y$ are invertible. Finally,
+data and additionally assume that $X$, $Z$, and $Y$ are invertible.
+
+Finally,
 \leanid{MPOTensor.exists_units_for_hat_reducedProjection} assumes only
-$L,R\succeq0$ and supplies the invertible ambient support-inverse extensions
-$X$ and $Z$, together with an invertible right factor $Y$ satisfying
-$PQY=T$. Its matrix theorem,
+$L,R\succeq0$. It supplies invertible ambient support-inverse extensions $X$
+and $Z$, together with an invertible right factor $Y$ satisfying
+Eq.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_reduced_right_factor}.
+Its matrix-level theorem,
 \leanid{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor},
-has the same positive-semidefinite hypotheses and assumes no fixed-point,
-normalization, or absorption identity.
+has the same positive-semidefinite assumptions and does not assume a
+fixed-point identity, trace normalization, or support absorption.
 
 \section{Elimination plan}
-The restriction is removed by formalizing the missing supplier: the blocking
-to $D^4$ sites of an arbitrary MPU tensor, the two-projection Jordan
-decomposition of the resulting support projections, and the isometric
-factorization that yields the letterwise absorptions and the rank-one
-transfer formula with positive semidefinite normalized fixed points. This is
-tracked by issues~\#6137 and~\#6022: the former constructs and transports the
-reduced representative and supplies the positive fixed pair with the
-letterwise absorptions for the common blocked tensor, and the latter carries
-the full continuity-index route of which Proposition~IV.5 is a part. Until
-these are closed, no formal statement may infer the fixed pair or the
-absorptions from the bare MPU predicate.
+
+Removing the restriction requires formalizing the missing supplier. This
+supplier must block an arbitrary MPU tensor to $D^4$ sites, construct the
+two-projection Jordan decomposition of the resulting support projections, and
+prove the isometric factorization that yields both the letterwise absorptions
+and the rank-one transfer formula with positive semidefinite normalized fixed
+points.
+
+This work is tracked by \ghissue{6137} and \ghissue{6022}.
+The former constructs and transports the reduced representative and supplies
+the positive fixed pair with letterwise absorptions for the common blocked
+tensor. The latter covers the full continuity-index route containing
+Proposition~IV.5 of Ref.~\cite{Cirac2017MPU}. Until both obligations are
+resolved, no formal statement may infer the fixed pair or the absorption
+identities from the bare MPU predicate.
 
 \section{Verdict}
-\textbf{Verdict: scope restriction.} The paper derives the fixed pair
-$L,R\succeq0$ with $\tr(LR)=1$, the rank-one transfer formula, and the
-two-sided support absorption $\mathcal WP=\mathcal W=Q\mathcal W$ from the
-MPU property after blocking $D^4$ sites. The present formalization states the
-reduced-representative conclusions under these ingredients as explicit
-hypotheses and does not construct the supplier. The results are correct as
-stated, but narrower than the source argument; the hypotheses become
-theorems only after issues~\#6137 and~\#6022 are resolved.
+
+\textbf{Verdict: scope restriction.} The paper derives $L,R\succeq0$ with
+$\tr(LR)=1$, the rank-one transfer formula, and the two-sided support
+absorption
+\begin{align}
+    \mathcal WP
+        &=\mathcal W,
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_verdict_right_absorption}\\
+    Q\mathcal W
+        &=\mathcal W.
+    \label{eq:mpu_reduced_representative_supplied_fixed_pair_verdict_left_absorption}
+\end{align}
+from the MPU property after blocking $D^4$ sites. The current formalization
+takes these ingredients as explicit hypotheses and proves only the subsequent
+reduced-representative conclusions. It does not construct the supplier.
+
+The formal results are correct as stated but have narrower scope than the
+argument in Ref.~\cite{Cirac2017MPU}. Their assumptions become derived
+theorems only after \ghissue{6137} and \ghissue{6022} are resolved.
 
 \bibliographystyle{alpha}
 \bibliography{references}

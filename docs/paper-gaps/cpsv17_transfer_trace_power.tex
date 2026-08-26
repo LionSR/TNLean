@@ -15,111 +15,188 @@
 \maketitle
 \gapnote{open-gap}{resolved}
 
-\section{Source statement}
+\section{The source statement}
 
 Let $U$ be a matrix-product unitary of physical dimension $d$ and bond
-dimension $D$.  Combine its two physical indices into
-$a=(p,q)\in\{1,\ldots,d\}^2$ and define its normalized flattening by
-$\widetilde U^{(p,q)}=d^{-1/2}U^{p,q}$.  Its transfer map is the linear
-endomorphism $T:M_D(\mathbb C)\to M_D(\mathbb C)$ given by
+dimension $D$. Combine its two physical indices into
+$a=(p,q)\in\{1,\ldots,d\}^2$, and define the normalized flattening by
 \begin{align}
-  T(X)&=\sum_{a\in\{1,\ldots,d\}^2}
-    \widetilde U^a X(\widetilde U^a)^\dagger.
+    \widetilde U^{(p,q)}
+        &= d^{-1/2}U^{p,q}.
+    \label{eq:cpsv17_transfer_trace_power_normalized_flattening}
+\end{align}
+The associated transfer map is the linear endomorphism
+$T:M_D(\mathbb C)\to M_D(\mathbb C)$ defined by
+\begin{align}
+    T(X)
+        &= \sum_{a\in\{1,\ldots,d\}^2}
+           \widetilde U^a X(\widetilde U^a)^\dagger.
+    \label{eq:cpsv17_transfer_trace_power_transfer_map}
 \end{align}
 This is \leanid{MPSTensor.transferMap} applied to
 \leanid{MPOTensor.normalizedFlattening}.
-For matrix units $F_{k\ell}$, let $E=\widehat T$ be the column-stacked
-transfer-matrix representation of $T$.  Explicitly, column stacking means
-$\operatorname{vec}(X)_{(j,i)}=X_{ij}$, and $E$ is characterized by
+
+Let $F_{k\ell}$ denote the matrix units in $M_D(\mathbb C)$, and let
+$E=\widehat T$ be the column-stacked matrix representation of $T$. The
+column-stacking convention is
 \begin{align}
-  E_{(j,i),(\ell,k)}&=\bigl(T(F_{k\ell})\bigr)_{ij},\\
-  E\,\operatorname{vec}(X)&=\operatorname{vec}(T(X)).
+    \operatorname{vec}(X)_{(j,i)}
+        &= X_{ij}.
+    \label{eq:cpsv17_transfer_trace_power_column_stacking}
 \end{align}
-These identities are the defining convention of
-\leanid{transferMatrix} and its application lemma
-\leanid{transferMatrix_mulVec_eq}.
-Thus $E$ is indexed by pairs of bond indices and has matrix dimension
-$n=D^2$. For any $n\times n$ matrix $B$, write
+With this convention, $E$ is characterized by
 \begin{align}
-  \chi_B(X)&=\det(X\Id_n-B)
+    E_{(j,i),(\ell,k)}
+        &= (T(F_{k\ell}))_{ij},
+    \label{eq:cpsv17_transfer_trace_power_transfer_matrix_entries}\\
+    E\,\operatorname{vec}(X)
+        &= \operatorname{vec}(T(X)).
+    \label{eq:cpsv17_transfer_trace_power_transfer_matrix_action}
 \end{align}
-for its characteristic polynomial; in particular, $\chi_E$ denotes the
-characteristic polynomial of the transfer matrix.
+These identities give the defining convention of \leanid{transferMatrix} and
+its application lemma \leanid{transferMatrix_mulVec_eq}.
+
+The transfer matrix is indexed by pairs of bond indices and therefore has
+matrix dimension
+\begin{align}
+    n
+        &= D^2.
+    \label{eq:cpsv17_transfer_trace_power_transfer_dimension}
+\end{align}
+For any $n\times n$ matrix $B$, define its characteristic polynomial by
+\begin{align}
+    \chi_B(X)
+        &= \det(X\mathbf 1_n-B).
+    \label{eq:cpsv17_transfer_trace_power_characteristic_polynomial}
+\end{align}
+In particular, $\chi_E$ is the characteristic polynomial of the transfer
+matrix.
 
 For every integer $N>1$, Proposition~III.1 of
-\cite{Cirac2017MPU} derives the shifted moment identity
+Ref.~\cite{Cirac2017MPU} derives the shifted moment identity
 \begin{align}
-  \tr(E^N)&=1.
-  \tag{shifted moments}
+    \tr(E^N)
+        &= 1,
+        \qquad N>1.
+    \label{eq:cpsv17_transfer_trace_power_shifted_moments}
 \end{align}
-It concludes that the sole nonzero eigenvalue of $E$ is $1$, with algebraic
-multiplicity one. Equivalently,
+The source concludes that $1$ is the only nonzero eigenvalue of $E$ and has
+algebraic multiplicity one. Equivalently,
 \begin{align}
-  \chi_E(X)&=X^{n-1}(X-1).
-  \tag{source conclusion}
+    \chi_E(X)
+        &= X^{n-1}(X-1).
+    \label{eq:cpsv17_transfer_trace_power_source_characteristic_polynomial}
 \end{align}
-The cited Lemma~A.5 of \cite{Cirac2016MPDO_arXiv} is naturally stated with
-all positive moments, including the first moment. The MPU hypothesis above
-does not supply $\tr(E)=1$.
+The cited Lemma~A.5 of Ref.~\cite{Cirac2016MPDO_arXiv} is naturally stated
+using all positive moments, including the first. The MPU hypothesis supplies
+Eq.~\ref{eq:cpsv17_transfer_trace_power_shifted_moments}, but it does not
+supply $\tr(E)=1$.
 
-\section{Exact shifted-moment argument}
+\section{The shifted-moment argument}
 
 Fix the transfer matrix $E$, its dimension $n$, and its characteristic
-polynomial $\chi_E$ as defined above. The missing first moment is
-unnecessary. For every $m\ge1$, the shifted moments imply
+polynomial $\chi_E$. For every integer $m\geq1$,
+Eq.~\ref{eq:cpsv17_transfer_trace_power_shifted_moments} gives
 \begin{align}
-  \tr((E^2)^m)&=\tr(E^{2m})=1,
-  &\tr((E^3)^m)&=\tr(E^{3m})=1.
+    \tr((E^2)^m)
+        &= \tr(E^{2m}),
+    \label{eq:cpsv17_transfer_trace_power_square_moment_reduction}\\
+    \tr(E^{2m})
+        &= 1,
+    \label{eq:cpsv17_transfer_trace_power_square_moments}\\
+    \tr((E^3)^m)
+        &= \tr(E^{3m}),
+    \label{eq:cpsv17_transfer_trace_power_cube_moment_reduction}\\
+    \tr(E^{3m})
+        &= 1.
+    \label{eq:cpsv17_transfer_trace_power_cube_moments}
 \end{align}
-The all-positive-moment characteristic-polynomial theorem therefore gives
+The all-positive-moment characteristic-polynomial theorem applies separately
+to $E^2$ and $E^3$, yielding
 \begin{align}
-  \chi_{E^2}(X)&=\chi_{E^3}(X)=X^{n-1}(X-1).
+    \chi_{E^2}(X)
+        &= X^{n-1}(X-1),
+    \label{eq:cpsv17_transfer_trace_power_square_characteristic_polynomial}\\
+    \chi_{E^3}(X)
+        &= X^{n-1}(X-1).
+    \label{eq:cpsv17_transfer_trace_power_cube_characteristic_polynomial}
 \end{align}
-If $\lambda\ne0$ is a spectral value of $E$, spectral mapping gives
-\begin{align}
-  \lambda^2&=1,
-  &\lambda^3&=1,
-  &\lambda&=1.
-\end{align}
-Conversely, spectral mapping from $1\in\sigma(E^2)$ supplies a nonzero
-spectral value of $E$, so
-\begin{align}
-  \sigma(E)\setminus\{0\}&=\{1\}.
-\end{align}
-This set equality alone does not determine algebraic multiplicity.
 
-For multiplicity, use the commuting factorization
+Let $\lambda\neq0$ be a spectral value of $E$. Spectral mapping and
+Eqs.~\ref{eq:cpsv17_transfer_trace_power_square_characteristic_polynomial}
+and~\ref{eq:cpsv17_transfer_trace_power_cube_characteristic_polynomial} give
 \begin{align}
-  E^2-\Id&=(E+\Id)(E-\Id).
+    \lambda^2
+        &= 1,
+    \label{eq:cpsv17_transfer_trace_power_square_spectral_constraint}\\
+    \lambda^3
+        &= 1,
+    \label{eq:cpsv17_transfer_trace_power_cube_spectral_constraint}\\
+    \lambda
+        &= 1.
+    \label{eq:cpsv17_transfer_trace_power_nonzero_spectral_value}
 \end{align}
-Every generalized $1$-eigenvector of $E$ is consequently a generalized
-$1$-eigenvector of $E^2$.  Hence
+Conversely, the eigenvalue $1$ belongs to the spectrum of $E^2$ by
+Eq.~\ref{eq:cpsv17_transfer_trace_power_square_characteristic_polynomial}.
+Spectral mapping therefore supplies a nonzero spectral value of $E$. Hence
 \begin{align}
-  \operatorname{mult}_{1}(\chi_E)
-  &\le \operatorname{mult}_{1}(\chi_{E^2})
-   =1.
+    \sigma(E)\setminus\{0\}
+        &= \{1\}.
+    \label{eq:cpsv17_transfer_trace_power_nonzero_spectrum}
 \end{align}
-Since $1\in\sigma(E)$, the left-hand side is positive and therefore equals
-one.  All other nonzero roots have already been excluded.  Splitting the
-monic characteristic polynomial over $\mathbb C$ yields
+This set equality does not by itself determine algebraic multiplicity.
+
+To control multiplicity, use the commuting factorization
 \begin{align}
-  \operatorname{mult}_{1}(\chi_E)&=1,
-  &\chi_E(X)&=X^{n-1}(X-1).
+    E^2-\mathbf 1
+        &= (E+\mathbf 1)(E-\mathbf 1).
+    \label{eq:cpsv17_transfer_trace_power_square_factorization}
 \end{align}
-No identity for $\tr(E)$, positivity, normality, or diagonalizability is used.
+Every generalized $1$-eigenvector of $E$ is therefore a generalized
+$1$-eigenvector of $E^2$. It follows that
+\begin{align}
+    \operatorname{mult}_1(\chi_E)
+        &\leq \operatorname{mult}_1(\chi_{E^2}),
+    \label{eq:cpsv17_transfer_trace_power_multiplicity_comparison}\\
+    \operatorname{mult}_1(\chi_{E^2})
+        &= 1.
+    \label{eq:cpsv17_transfer_trace_power_square_multiplicity}
+\end{align}
+Because $1\in\sigma(E)$ by
+Eq.~\ref{eq:cpsv17_transfer_trace_power_nonzero_spectrum}, its multiplicity is
+positive. Equations~\ref{eq:cpsv17_transfer_trace_power_multiplicity_comparison}
+and~\ref{eq:cpsv17_transfer_trace_power_square_multiplicity} therefore give
+\begin{align}
+    \operatorname{mult}_1(\chi_E)
+        &= 1.
+    \label{eq:cpsv17_transfer_trace_power_unit_multiplicity}
+\end{align}
+All other nonzero roots were excluded in
+Eq.~\ref{eq:cpsv17_transfer_trace_power_nonzero_spectrum}. Since the monic
+characteristic polynomial splits over $\mathbb C$, one obtains
+\begin{align}
+    \chi_E(X)
+        &= X^{n-1}(X-1).
+    \label{eq:cpsv17_transfer_trace_power_derived_characteristic_polynomial}
+\end{align}
+The argument uses no identity for $\tr(E)$ and requires no positivity,
+normality, or diagonalizability assumption.
 
 \section{Verdict and formalization status}
 
 \textbf{Verdict: the shifted-moment multiplicity gap is closed.}
-The set-spectrum statement remains available as a deliberately narrower
-consequence, but the exact source conclusion is now formalized directly from
-moments with exponent greater than one.\footnote{Formal declarations:
+The set-spectrum result in
+Eq.~\ref{eq:cpsv17_transfer_trace_power_nonzero_spectrum} remains available
+as a deliberately narrower consequence. The exact source conclusion in
+Eq.~\ref{eq:cpsv17_transfer_trace_power_derived_characteristic_polynomial} is
+now formalized directly from moments with exponent greater than
+one.\footnote{Formal declarations:
 \leanid{Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt},
 \leanid{Matrix.charpoly_rootMultiplicity_one_eq_one_of_forall_trace_pow_eq_one_of_one_lt},
 and
 \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt}
 in \doclink{TNLean/Algebra/ShiftedTracePowerSpectrum}.}
-For the normalized flattening of an MPU of bond dimension $D$, the
+For the normalized flattening of an MPU with bond dimension $D$, the
 specialization gives the exponent $D^2-1$.\footnote{Formal declaration:
 \leanid{MPOTensor.IsMPU.normalizedFlattening_charpoly} in
 \doclink{TNLean/MPS/MPU/TransferMatrix}.}

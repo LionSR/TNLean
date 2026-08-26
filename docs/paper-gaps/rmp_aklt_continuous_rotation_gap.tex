@@ -17,90 +17,140 @@ Its Cohomological Classification Is Not}
 
 \section{The assertion}
 
-The review \cite{Cirac2021Matrix} records that the AKLT matrix product state lies
-in a non-trivial symmetry-protected topological phase, and that this phase ``can
-be protected by multiple distinct physical symmetries: on-site $\mathrm{SO}(3)$
-(with virtual symmetry given by a spin-$\tfrac12$ representation), on-site
-$\mathbb{Z}_2\times\mathbb{Z}_2$ (the smallest subgroup of $\mathrm{SO}(3)$ still
-exhibiting a non-trivial 2-cocycle), time-reversal, or reflection
-symmetry.''\footnote{\cite{Cirac2021Matrix}, around line 1159 of the source.}
-In each case the physical symmetry acts on the spin-$1$ site, while the
-entanglement (virtual) degrees of freedom carry a projective representation whose
-cohomology class is the order-two generator of $H^2$ of the symmetry group with
-$\mathrm{U}(1)$ coefficients.
+The matrix-product-state review of Cirac, P\'erez-Garc\'ia, Schuch, and
+Verstraete states that the Affleck--Kennedy--Lieb--Tasaki (AKLT) MPS lies in a
+nontrivial symmetry-protected topological phase
+\cite{Cirac2021Matrix}. It says that this phase ``can be protected by multiple
+distinct physical symmetries: on-site $\mathrm{SO}(3)$ (with virtual symmetry
+given by a spin-$\tfrac{1}{2}$ representation), on-site
+$\mathbb{Z}_2\times\mathbb{Z}_2$ (the smallest subgroup of $\mathrm{SO}(3)$
+still exhibiting a non-trivial 2-cocycle), time-reversal, or reflection
+symmetry.''\footnote{See Ref.~\cite{Cirac2021Matrix}, around line~1159 of the
+source.}
 
-The strongest such statement is on-site $\mathrm{SO}(3)$: the spin-$1$
-representation acts on the physical index, and the virtual index transforms in
-the projective spin-$\tfrac12$ representation, whose class generates
-$H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong\mathbb{Z}_2$.
+In each case, the physical symmetry acts on a spin-$1$ site, while the virtual
+degrees of freedom carry a projective representation. The review identifies
+the corresponding cohomology class with the order-two generator of the second
+cohomology group of the symmetry group with $\mathrm{U}(1)$ coefficients
+\cite{Cirac2021Matrix}.
+
+The strongest statement in this list concerns the on-site $\mathrm{SO}(3)$
+action. The physical index carries the spin-$1$ representation, while the
+virtual index carries the projective spin-$\tfrac{1}{2}$ representation. Its
+class is asserted to generate
+\begin{align}
+    H^2\!\left(\mathrm{SO}(3),\mathrm{U}(1)\right)
+        &\cong \mathbb{Z}_2.
+    \label{eq:rmp_aklt_continuous_rotation_gap_so3_cohomology}
+\end{align}
 
 \section{The point at issue}
 
-Two different statements must be separated: the on-site $\mathrm{SO}(3)$
-\emph{symmetry}, and the cohomological \emph{classification} of the phase it
-protects. They have very different formalization costs.
+The on-site $\mathrm{SO}(3)$ symmetry and the cohomological classification of
+the protected phase are distinct mathematical statements. The first is
+formalized; the second requires infrastructure that is not currently
+available.
 
-\paragraph{The symmetry.}
-This statement is now formalized. For every rotation $R\in\mathrm{SO}(3)$ the
-Cartesian AKLT tensor $A^i=\sigma^i$ twisted by $R$ is gauge equivalent to the
-original, the gauge being an $\mathrm{SU}(2)$ preimage of $R$.\footnote{%
-\leanid{aklt\_isOnSiteSymmetric\_SO3} in \doclink{TNLean/MPS/Examples/AKLTRotation}.}
-The one substantive input is the surjectivity of the adjoint double cover
-$\mathrm{SU}(2)\to\mathrm{SO}(3)$, that every rotation is realized by conjugating
-the Pauli vector $(\sigma_x,\sigma_y,\sigma_z)$ by an $\mathrm{SU}(2)$ element.
-It is proved by an explicit $ZXZ$ Euler-angle construction: each coordinate
-rotation is the image of an explicit $\mathrm{SU}(2)$ generator, and an arbitrary
-rotation is factored into coordinate rotations.\footnote{%
-\leanid{spinHalfCover\_surjective\_onto\_SO3}.} The physical spin-$1$
-representation is just the defining action of $\mathrm{SO}(3)$ on the three
-Cartesian components, and the adjoint map $U\mapsto R(U)$ is a monoid
-homomorphism, so its image is automatically a subgroup; hitting the Euler
-generators therefore yields surjectivity with no appeal to Lie-group topology, to
-the Clifford spin group, or to a quaternion bridge (none of which the library
-provides).
+\paragraph{On-site symmetry.}
 
-\paragraph{The classification.}
-The claim that the resulting projective phase is the order-two generator of
-$H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong\mathbb{Z}_2$ is a different matter
-entirely. It requires the continuous (Borel, or Lie-group) cohomology of
-$\mathrm{SO}(3)$, equivalently its Schur multiplier. The group cohomology in the
-library is purely algebraic and treats $\mathrm{SO}(3)$ as a discrete group, so
-it computes the wrong object; as of this writing there is no Schur multiplier and
-no projective-representation interface, and the nascent continuous-cohomology
-framework has no computations and is not yet reconciled with the discrete theory.
-This piece is
-a substantial development on its own.
+Let the Cartesian AKLT tensor be $A=(A^i)_{i=1}^3$, with
+$A^i=\sigma^i$ given by the Pauli matrices. For each
+$R\in\mathrm{SO}(3)$, applying $R$ to the physical index gives a tensor gauge
+equivalent to $A$. The gauge is an $\mathrm{SU}(2)$ preimage $U$ of $R$ under
+the adjoint double cover.\footnote{Formal declaration:
+\leanid{aklt\_isOnSiteSymmetric\_SO3} in
+\doclink{TNLean/MPS/Examples/AKLTRotation}.}
+
+The substantive group-theoretic input is the surjectivity of the adjoint map
+from $\mathrm{SU}(2)$ to $\mathrm{SO}(3)$. Conjugation by
+$U\in\mathrm{SU}(2)$ rotates the Pauli vector:
+\begin{align}
+    U\sigma^iU^\dagger
+        &= \sum_{j=1}^3 R(U)_{ij}\sigma^j.
+    \label{eq:rmp_aklt_continuous_rotation_gap_pauli_adjoint_action}
+\end{align}
+Every rotation has a preimage:
+\begin{align}
+    \forall R\in\mathrm{SO}(3)\ \exists U\in\mathrm{SU}(2),
+    \qquad
+    R(U)
+        &=R.
+    \label{eq:rmp_aklt_continuous_rotation_gap_spin_half_cover_surjective}
+\end{align}
+The proof uses an explicit $ZXZ$ Euler-angle construction. Each coordinate
+rotation is the image of an explicit $\mathrm{SU}(2)$ generator, and every
+rotation factors into coordinate rotations.\footnote{Formal declaration:
+\leanid{spinHalfCover\_surjective\_onto\_SO3}.}
+
+The physical spin-$1$ representation is the defining action of
+$\mathrm{SO}(3)$ on the three Cartesian components. The map
+$U\mapsto R(U)$ is a monoid homomorphism, so its image is a subgroup. Showing
+that the image contains the Euler generators proves
+(\ref{eq:rmp_aklt_continuous_rotation_gap_spin_half_cover_surjective}) without
+using Lie-group topology, a Clifford spin group, or a quaternion
+identification; the library supplies none of those alternatives.
+
+\paragraph{Cohomological classification.}
+
+The assertion that the virtual projective representation realizes the
+nontrivial element of
+(\ref{eq:rmp_aklt_continuous_rotation_gap_so3_cohomology}) is separate from
+the symmetry theorem. It requires continuous group cohomology in a Borel or
+Lie-group formulation, or equivalently the Schur multiplier of
+$\mathrm{SO}(3)$.
+
+The group-cohomology library currently treats $\mathrm{SO}(3)$ as a discrete
+group. That algebraic theory computes a different object from the continuous
+cohomology needed here. The library also lacks a Schur-multiplier computation
+and a projective-representation interface. Its developing
+continuous-cohomology framework has no relevant computations and has not been
+reconciled with the discrete theory. Formalizing this classification is
+therefore a substantial independent development.
 
 \section{The formalized statement}
 
-The formalization establishes the full on-site $\mathrm{SO}(3)$ symmetry of the
-Cartesian AKLT tensor $A^i=\sigma^i$: the physical site carries the spin-$1$
-(defining) representation, and for each rotation the bond index is conjugated by
-a spin-$\tfrac12$ $\mathrm{SU}(2)$ preimage. The finite
-$\mathbb{Z}_2\times\mathbb{Z}_2$ subgroup, which the review singles out as the
-smallest subgroup of $\mathrm{SO}(3)$ carrying a non-trivial $2$-cocycle, is
-formalized separately on the $|m\rangle$-basis tensor with the explicit
-anticommuting gauges $i\sigma_y$ and
-$\sigma_z$.\footnote{\leanid{aklt\_isOnSiteSymmetric\_Z2Z2} in
-\doclink{TNLean/MPS/Examples/AKLT}.}
+The formalization proves the full on-site $\mathrm{SO}(3)$ symmetry of the
+Cartesian AKLT tensor. The physical site carries the defining spin-$1$
+representation, and the bond index is conjugated by a spin-$\tfrac{1}{2}$
+$\mathrm{SU}(2)$ preimage of each rotation. This proves the symmetry statement
+in Ref.~\cite{Cirac2021Matrix}, including the required cover surjectivity.
 
-In both cases the bond representation is projective: rotations that commute have
-$\mathrm{SU}(2)$ preimages that need not commute, and that sign obstruction is the
-content of the symmetry-protected phase. For $\mathbb{Z}_2\times\mathbb{Z}_2$ the
-obstruction is the explicit anticommutator $i\sigma_y\,\sigma_z=-\sigma_z\,i\sigma_y$;
-for the full $\mathrm{SO}(3)$ it is the non-triviality of the double cover.
+The finite subgroup $\mathbb{Z}_2\times\mathbb{Z}_2$, which the review
+identifies as the smallest subgroup of $\mathrm{SO}(3)$ with a nontrivial
+$2$-cocycle, is formalized separately on the $\ket{m}$-basis AKLT tensor
+\cite{Cirac2021Matrix}. Its two gauges are $i\sigma_y$ and $\sigma_z$, and
+they anticommute.\footnote{Formal declaration:
+\leanid{aklt\_isOnSiteSymmetric\_Z2Z2} in
+\doclink{TNLean/MPS/Examples/AKLT}.} Explicitly,
+\begin{align}
+    (i\sigma_y)\sigma_z
+        &=-\sigma_z(i\sigma_y).
+    \label{eq:rmp_aklt_continuous_rotation_gap_z2z2_anticommutator}
+\end{align}
+
+In both symmetry realizations, the bond action is projective. For
+$\mathbb{Z}_2\times\mathbb{Z}_2$, the sign in
+(\ref{eq:rmp_aklt_continuous_rotation_gap_z2z2_anticommutator}) is the explicit
+obstruction. For the full $\mathrm{SO}(3)$ action, commuting rotations may
+have $\mathrm{SU}(2)$ preimages that do not commute; the sign obstruction is
+the nontriviality of the double cover. This obstruction is the physical
+content associated with the symmetry-protected phase, but identifying its
+continuous cohomology class remains outside the present formalization.
 
 \section{Conclusion}
 
-The on-site $\mathrm{SO}(3)$ symmetry asserted by \cite{Cirac2021Matrix},
-together with the surjectivity of the spin-$\tfrac12$ cover that it rests on, is
-now formalized. What remains unformalized is the \emph{cohomological
-classification} of the resulting projective phase as the order-two generator of
-$H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong\mathbb{Z}_2$: this needs the continuous
-group cohomology of $\mathrm{SO}(3)$ (equivalently its Schur multiplier), which
-the library does not provide. The blueprint therefore tags the symmetry and the
-cover-surjectivity against their formal declarations, and records the
-cohomological classification as an untagged remark.
+The on-site $\mathrm{SO}(3)$ symmetry of the AKLT tensor asserted in
+Ref.~\cite{Cirac2021Matrix} is formalized, together with the surjectivity of
+the spin-$\tfrac{1}{2}$ cover on which the proof depends. The unformalized
+claim is the classification of the resulting projective phase as the
+order-two generator of
+$H^2(\mathrm{SO}(3),\mathrm{U}(1))\cong\mathbb{Z}_2$. Proving that statement
+requires continuous group cohomology for $\mathrm{SO}(3)$, or an equivalent
+Schur-multiplier theory, neither of which the current library provides.
+
+The blueprint therefore links the symmetry and cover-surjectivity statements
+to their formal declarations. It retains the cohomological classification as
+an untagged remark.
 
 \bibliographystyle{alpha}
 \bibliography{references}

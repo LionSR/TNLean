@@ -17,88 +17,131 @@
 
 \section{Source theorem}
 
-P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac prove the periodic decomposition
-theorem for translation-invariant MPS with periodic boundary conditions
-\cite[Theorem~5, lines~849--858]{PerezGarcia2007MPSReps}.
-The theorem starts with a TI state $\psi \in (\mathbb C^d)^{\otimes N}$ whose
-canonical TI MPS representation has a single block with $D\times D$ matrices
-$A_i$. Let
-\[
-  \mathcal E(X)=\sum_i A_i X A_i^\dagger.
-\]
-If $\mathcal E$ has $p$ eigenvalues of modulus $1$, then:
+Theorem~5 of Ref.~\cite[lines~849--858]{PerezGarcia2007MPSReps} gives a
+periodic decomposition for translation-invariant matrix product states with
+periodic boundary conditions. Let
+$\psi\in(\C^d)^{\otimes N}$ be a translation-invariant state whose canonical
+translation-invariant MPS representation consists of one block
+$A=(A_i)_{i=0}^{d-1}$ with $A_i\in M_D(\C)$. The associated completely
+positive transfer map is
+\begin{align}
+    \mathcal E(X)
+        &= \sum_{i=0}^{d-1} A_i X A_i^\dagger.
+    \label{eq:pgvwc07_periodic_decomposition_scope_transfer_map}
+\end{align}
+Suppose $\mathcal E$ has exactly $p$ eigenvalues of modulus one. The source
+concludes:
 \begin{enumerate}
-  \item if $p$ divides $N$, the state $\psi$ is a superposition of $p$
-    $p$-periodic states, each with an MPS representation of bond dimension $D$;
-  \item if $p$ does not divide $N$, then $\psi=0$.
+    \item If $p$ divides $N$, then $\psi$ is a superposition of $p$
+    $p$-periodic states, each admitting an MPS representation of bond
+    dimension $D$.
+    \item If $p$ does not divide $N$, then $\psi=0$.
 \end{enumerate}
-The proof uses the peripheral spectral structure of the CP map from
-Fannes--Nachtergaele--Werner: there are orthogonal projectors $P_k$ cyclically
-permuted by the matrices $A_i$, and inserting $\sum_k P_k$ into the trace
-splits $\psi$ into the claimed $p$-periodic summands
+
+The proof invokes the peripheral spectral structure of the completely positive
+map: there are orthogonal projectors $P_k$ that the matrices $A_i$ permute
+cyclically. Inserting their resolution of the identity,
+\begin{align}
+    \sum_{k=0}^{p-1}P_k
+        &= \Id,
+    \label{eq:pgvwc07_periodic_decomposition_scope_source_projector_resolution}
+\end{align}
+into the periodic trace separates $\psi$ into the claimed $p$-periodic
+summands
 \cite[lines~860--880]{PerezGarcia2007MPSReps}.
 
 \section{Formal boundary}
 
-TNLean proves the boundary-aware divisible-length decomposition in
-\leanid{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd},
-the positive-length explicit component-chain form in
-\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd}, and the
-vanishing branch in
-\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}. All three
-declarations use \leanid{MPSTensor.IsPeriodic}, which assumes left-canonical
-orientation, irreducibility, positive period, and an exact $p$-th-root
-peripheral spectrum. The printed theorem instead starts from its one-block
-unital canonical representation and counts the peripheral eigenvalues of the
-associated transfer map. This normalized-orientation restriction remains
-tracked by issue~\#6232.
+TNLean proves three parts of the decomposition:
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd}
+is the boundary-aware divisible-length theorem;
+\leanid{MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd} is the
+positive-length explicit component-chain theorem; and
+\leanid{MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd} proves the vanishing
+branch. All three use \leanid{MPSTensor.IsPeriodic}. This predicate assumes a
+left-canonical orientation, irreducibility, positive period, and an exact
+$p$-th-root peripheral spectrum.
 
-Let $A=(A^i)_{i=0}^{d-1}$ be the MPS matrix family. Let
-$(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be its cyclic projections and, for a word
-$\sigma=(i_0,\ldots,i_{N-1})$, let
-\[
-  F_u(\sigma)
-  =Q_uA^{i_0}Q_{u+1}A^{i_1}\cdots
-    Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
-\]
-At every length, including $N=0$, the formal decomposition is
-\[
-  \tr(A^{i_0}\cdots A^{i_{N-1}})
-  =\sum_{u\in\mathbb Z/p\mathbb Z}\tr F_u(\sigma).
-\]
-For positive $N$, \leanid{MPSTensor.projectorComponentChain_coeff_eq_trace_cornerProd}
-identifies each boundary trace with the coefficient of the explicit periodic
-component chain. At $N=0$, the boundary product is $F_u(\varnothing)=Q_u$, so
-the formula reads
-\[
-  \tr(\Id)=
-  \sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
-\]
-This must be distinguished from ordinary empty component-chain coefficients.
-An empty chain evaluates to $\Id$ independently of $u$ and therefore
-does not retain the boundary projector. The boundary-aware theorem closes the
-length-zero part of issue~\#6233 without changing the positive-length explicit
-component-chain statement.
+The printed theorem instead begins with a one-block unital canonical
+representation and counts the peripheral eigenvalues of its transfer map
+\cite[Theorem~5]{PerezGarcia2007MPSReps}. The difference in normalized
+orientation remains tracked by issue~\#6232.
+
+Let $A=(A^i)_{i=0}^{d-1}$ be the formal MPS matrix family, and let
+$(Q_u)_{u\in\mathbb Z/p\mathbb Z}$ be its cyclic projections. For a physical
+word
+\begin{align}
+    \sigma
+        &= (i_0,\ldots,i_{N-1}),
+    \label{eq:pgvwc07_periodic_decomposition_scope_physical_word}
+\end{align}
+define the boundary component product
+\begin{align}
+    F_u(\sigma)
+        &=
+        Q_u A^{i_0}Q_{u+1}A^{i_1}\cdots
+        Q_{u+N-1}A^{i_{N-1}}Q_{u+N}.
+    \label{eq:pgvwc07_periodic_decomposition_scope_boundary_component_product}
+\end{align}
+At every length $N\geq0$, the boundary-aware theorem gives
+\begin{align}
+    \tr\!\left(A^{i_0}\cdots A^{i_{N-1}}\right)
+        &=
+        \sum_{u\in\mathbb Z/p\mathbb Z}
+        \tr\!\left(F_u(\sigma)\right).
+    \label{eq:pgvwc07_periodic_decomposition_scope_boundary_trace_decomposition}
+\end{align}
+
+For $N>0$,
+\leanid{MPSTensor.projectorComponentChain_coeff_eq_trace_cornerProd}
+identifies each term on the right-hand side of
+(\ref{eq:pgvwc07_periodic_decomposition_scope_boundary_trace_decomposition})
+with the corresponding coefficient of the explicit periodic component chain.
+At $N=0$, the word is empty and the boundary product retains its projector:
+\begin{align}
+    F_u(\varnothing)
+        &= Q_u.
+    \label{eq:pgvwc07_periodic_decomposition_scope_empty_boundary_product}
+\end{align}
+Consequently, the length-zero instance of
+(\ref{eq:pgvwc07_periodic_decomposition_scope_boundary_trace_decomposition})
+is
+\begin{align}
+    \tr(\Id)
+        &=
+        \sum_{u\in\mathbb Z/p\mathbb Z}\tr(Q_u).
+    \label{eq:pgvwc07_periodic_decomposition_scope_empty_trace_decomposition}
+\end{align}
+
+This boundary-aware coefficient differs from the coefficient of an ordinary
+empty component chain. An empty chain evaluates to $\Id$ for every $u$ and
+therefore forgets the boundary projector $Q_u$. The boundary-aware theorem
+closes the length-zero part of issue~\#6233 while leaving the positive-length
+explicit component-chain statement unchanged.
 
 \section{Remaining scope restriction}
 
-To obtain a theorem with the printed hypotheses, prove that the paper's
-one-block unital canonical assumptions and peripheral-eigenvalue count imply
-the maintained periodicity hypotheses, after accounting for the adjoint change
-between unital and left-canonical orientations. Composing that result with the
-three declarations above would give the printed periodic decomposition and
-vanishing dichotomy. No further fixed-length coefficient calculation is
-required.
+A source-facing theorem still requires a proof that the one-block unital
+canonical assumptions and peripheral-eigenvalue count in Theorem~5 of
+Ref.~\cite{PerezGarcia2007MPSReps} imply the hypotheses of
+\leanid{MPSTensor.IsPeriodic}. This proof must also account for the adjoint
+change between unital and left-canonical orientations.
+
+Composing that normalization result with the three formal declarations listed
+in the preceding section would establish the printed periodic decomposition
+and vanishing dichotomy. No additional fixed-length coefficient calculation is
+needed.
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The positive-length restriction from
-issue~\#6233 is closed: the divisible-period branch now has a boundary-aware
+\textbf{Verdict: scope restriction.} The positive-length restriction tracked
+by issue~\#6233 is closed. The divisible-period branch now has a boundary-aware
 coefficient decomposition for every $N\geq0$, while the explicit periodic
-component-chain theorem remains stated for $N>0$, where its coefficients equal
-the boundary traces. The separate normalized-orientation restriction remains
-open under issue~\#6232, so the formal declarations are still normalized
-specializations of PGVWC07 Theorem~5 rather than a theorem from its literal
+component-chain theorem remains restricted to $N>0$, where its coefficients
+equal the boundary traces. The normalized-orientation restriction tracked by
+issue~\#6232 remains open. The current formal declarations are therefore
+normalized specializations of Theorem~5 of
+Ref.~\cite{PerezGarcia2007MPSReps}, not a derivation from its literal
 one-block unital hypotheses.
 
 \bibliographystyle{alpha}

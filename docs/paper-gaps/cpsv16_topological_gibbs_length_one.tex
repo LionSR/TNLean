@@ -17,75 +17,101 @@
 
 \section{Source range}
 
-Theorem~4.15 in \cite[lines~999--1016]{Cirac2016MPDO_arXiv} writes
-\[
-  \rho^{(N)}(M)
-    =\sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
-  \qquad
-  [P_i^{(N)},e^{-H_N}]=0,
-\]
-where $H_N=\sum_i h_{i,i+1}$ is a translationally invariant commuting
-nearest-neighbor Hamiltonian.  Definition~4.8
-\cite[lines~829--847]{Cirac2016MPDO_arXiv} defines the local interaction by
-letting a matrix $h$ act on the first two spins and translating that
-two-spin operator around the chain.  This construction has domain $N\geq2$:
-the periodic identification $N+1=1$ identifies site labels, but does not
+Theorem~4.15 of Ref.~\cite[lines~999--1016]{Cirac2016MPDO_arXiv} states that
+the length-$N$ matrix product density operator has a decomposition
+\begin{align}
+    \rho^{(N)}(M)
+        &= \sum_{i=1}^{d}\lambda_iP_i^{(N)}e^{-H_N},
+    \label{eq:cpsv16_topological_gibbs_length_one_source_decomposition}\\
+    [P_i^{(N)},e^{-H_N}]
+        &= 0.
+    \label{eq:cpsv16_topological_gibbs_length_one_source_commutation}
+\end{align}
+Here
+\begin{align}
+    H_N
+        &= \sum_i h_{i,i+1}
+    \label{eq:cpsv16_topological_gibbs_length_one_source_hamiltonian}
+\end{align}
+is a translationally invariant commuting nearest-neighbor Hamiltonian.
+
+Definition~4.8 of Ref.~\cite[lines~829--847]{Cirac2016MPDO_arXiv} constructs
+each local term by placing a two-spin matrix $h$ on the first two sites and
+translating it around the periodic chain. This construction is defined for
+$N\geq2$. The periodic relation $N+1=1$ identifies site labels; it does not
 identify the two tensor factors on which $h$ acts.
 
-\section{The retained-coordinate range}
+\section{The retained-coordinate construction}
 
 Let $\mu$ be the strictly positive diagonal one-site multiplicity matrix in
-the retained coordinates.  Define the two-site matrix
-\[
-  h=\operatorname{diag}(-\log\mu)\otimes I.
-\]
-For every chain length $N\geq2$, its periodic translates are well-defined,
-diagonal, Hermitian, and pairwise commuting.  Every site occurs once as the
-first site of a translated term, hence
-\[
-  \exp\left(-\sum_i h_{i,i+1}\right)=\mu^{\otimes N}.
-\]
-Combining this equality with the terminal spectral refinement proves the
-retained-coordinate Gibbs decomposition for every $N\geq2$.  Applying the
-adjoint retained-row map reconstructs the physical density operator, but
-does not yet supply a physical-space Hamiltonian and physical-space
-projectors.  That independent gap is recorded in
+the retained coordinates. Define the two-site interaction by
+\begin{align}
+    h
+        &= \operatorname{diag}(-\log\mu)\otimes I.
+    \label{eq:cpsv16_topological_gibbs_length_one_retained_interaction}
+\end{align}
+For every $N\geq2$, the periodic translates of $h$ are well-defined,
+diagonal, Hermitian, and pairwise commuting. Every site appears exactly once
+as the first site of a translated term. Consequently,
+\begin{align}
+    \exp\left(-\sum_i h_{i,i+1}\right)
+        &= \mu^{\otimes N}.
+    \label{eq:cpsv16_topological_gibbs_length_one_retained_gibbs_factor}
+\end{align}
+Combining
+Eq.~\ref{eq:cpsv16_topological_gibbs_length_one_retained_gibbs_factor} with
+the terminal spectral refinement proves the retained-coordinate Gibbs
+decomposition for every $N\geq2$.
+
+Applying the adjoint retained-row map reconstructs the physical density
+operator. This reconstruction alone does not provide a physical-space
+Hamiltonian or physical-space projectors. The independent physical-coordinate
+gap is recorded in
 \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
 
-The terminal spectral sectors are naturally indexed by pairs
-$(\gamma,k)$.  Positivity of every multiplicity shows that one such sector
-embeds into each retained copy, and the coisometry rank bound gives
-\[
-  \#\{(\gamma,k)\}\leq d.
-\]
-Choose the resulting injection into $\{1,\ldots,d\}$ and extend both the
-terminal eigenvalues and projectors by zero.  The added zero matrices are
-self-adjoint idempotents and commute with the Gibbs factor, so this gives
-exactly $d$ summands without asserting that the number of nonzero terminal
-sectors equals~$d$.
+The terminal spectral sectors are indexed by pairs $(\gamma,k)$. Positivity of
+every multiplicity embeds one such sector into each retained copy, and the
+coisometry rank bound gives
+\begin{align}
+    \#\{(\gamma,k)\}
+        &\leq d.
+    \label{eq:cpsv16_topological_gibbs_length_one_sector_bound}
+\end{align}
+Choose an injection of the terminal sectors into
+$\{1,\ldots,d\}$, and extend the terminal eigenvalues and projectors by zero.
+The added zero matrices are self-adjoint idempotents and commute with the
+Gibbs factor. This construction produces exactly $d$ summands without claiming
+that there are $d$ nonzero terminal sectors.
 
-\section{Printed domain boundary}
+\section{The printed domain boundary}
 
-At $N=1$, Definition~4.8 supplies neither an operator on the one-site Hilbert
-space nor a convention for the coincident periodic bond $h_{1,1}$.  In
-particular, it gives no map from two-site operators to one-site operators and
-no multiplicity for the self-edge.  Replacing $h$ by
-$\operatorname{diag}(-\log\mu)$, tracing out a tensor factor, restricting to a
-diagonal subspace, or otherwise collapsing the two tensor factors would add a
-convention absent from the cited passage.
+For $N=1$, Definition~4.8 of
+Ref.~\cite[lines~829--847]{Cirac2016MPDO_arXiv} defines neither an operator on
+the one-site Hilbert space nor a convention for a coincident periodic bond
+$h_{1,1}$. In particular, it supplies no map from two-site operators to
+one-site operators and no multiplicity for the self-edge.
 
-The source construction therefore determines the theorem on the domain
-\[
-  N\geq2.
-\]
-Theorem~4.15 is printed without stating this lower bound, but its $N=1$
-instance is undefined unless an author or erratum specifies both $H_1$ and
-the coincident-edge convention.  The formal retained- and physical-coordinate
-theorems therefore assert no length-one case.  The physical-coordinate
-complement is now complete on $N\geq2$; see
-\path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
-That completion is independent of, and does not supply, the missing
-length-one convention.
+Several possible extensions would add new data: one could replace $h$ by
+$\operatorname{diag}(-\log\mu)$, trace out one tensor factor, restrict to a
+diagonal subspace, or otherwise collapse the two tensor factors. None of these
+conventions appears in the cited definition.
+
+The source construction therefore determines the theorem only on the domain
+\begin{align}
+    N
+        &\geq 2.
+    \label{eq:cpsv16_topological_gibbs_length_one_defined_domain}
+\end{align}
+Theorem~4.15 of Ref.~\cite[lines~999--1016]{Cirac2016MPDO_arXiv} does not print
+this lower bound. Its length-one instance is undefined unless the authors or
+an erratum specify both $H_1$ and the coincident-edge convention.
+
+The formal retained- and physical-coordinate theorems therefore make no
+length-one assertion. The physical-coordinate complement is complete for
+$N\geq2$; see
+\path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}. That
+completion is independent of the absent length-one convention and does not
+supply it.
 
 \bibliographystyle{alpha}
 \bibliography{references}

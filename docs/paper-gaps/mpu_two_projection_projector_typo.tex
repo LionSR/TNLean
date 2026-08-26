@@ -17,55 +17,90 @@
 
 \section{Source passage}
 
-In the proof of Proposition~IV.5 of \cite{Cirac2017MPU}, the two-projection
-lemma is used to decompose two projectors on $\mathbb C^D$. The source writes
+The proof of Proposition~IV.5 in Ref.~\cite{Cirac2017MPU} applies the
+two-projection lemma to projectors $P$ and $Q$ on $\mathbb{C}^D$. At
+lines~760--763 of the local source file, the printed decomposition is
 \begin{align}
-  P&=\bigoplus_i |0\rangle\langle 0|_i\oplus R,
-  &P&=\bigoplus_i |v_i\rangle\langle v_i|_i\oplus S
+    P
+        &= \bigoplus_i \ketbra{0}{0}_i\oplus R,
+    \label{eq:mpu_two_projection_projector_typo_printed_first_projector}\\
+    P
+        &= \bigoplus_i \ketbra{v_i}{v_i}_i\oplus S.
+    \label{eq:mpu_two_projection_projector_typo_printed_repeated_projector}
 \end{align}
-at lines 760--763 of the local source file. The second projector must be $Q$,
-not $P$. This follows from the preceding sentence, which introduces projectors
-$P$ and $Q$, and from the subsequent identities involving $PQ$ and $QP$.
+The second occurrence of $P$ in
+Eq.~\ref{eq:mpu_two_projection_projector_typo_printed_repeated_projector} is a
+typographical error. The corrected decomposition is
+\begin{align}
+    P
+        &= \bigoplus_i \ketbra{0}{0}_i\oplus R,
+    \label{eq:mpu_two_projection_projector_typo_corrected_first_projector}\\
+    Q
+        &= \bigoplus_i \ketbra{v_i}{v_i}_i\oplus S.
+    \label{eq:mpu_two_projection_projector_typo_corrected_second_projector}
+\end{align}
+The preceding sentence in Ref.~\cite{Cirac2017MPU} introduces the two
+projectors as $P$ and $Q$, and the subsequent calculation uses $PQ$ and $QP$.
+These surrounding statements determine the correction in
+Eq.~\ref{eq:mpu_two_projection_projector_typo_corrected_second_projector}.
 
 \section{Formalized interpretation}
 
-The generic angle-block declarations
+The declarations
 \leanid{LinearMap.IsSymmetricProjection.angleDefect_block} and
-\leanid{LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block}
-therefore use symmetric projections $P$ and $Q$. They prove the exact local
-action of both operators on a generic two-dimensional block. The declarations
+\leanid{LinearMap.IsSymmetricProjection.exists_orthonormal_angle_block} use the
+two symmetric projections $P$ and $Q$. They establish the exact action of both
+operators on a generic two-dimensional angle block.
+
+The declarations
 \leanid{LinearMap.IsSymmetricProjection.angleDefectSum} and
 \leanid{LinearMap.IsSymmetricProjection.angleDefectComplement} assemble the
-compression-indexed blocks into an orthogonal internal sum and its invariant
-orthogonal complement. On that complement, the restricted projections commute.
-This is a local correction of a typographical error and does not add a
-hypothesis or alter the mathematical claim.
+compression-indexed angle blocks into an orthogonal internal sum and its
+invariant orthogonal complement. The restricted projections commute on that
+complement. This construction includes the endpoint coordinates and implements
+the corrected two-projector interpretation without adding a hypothesis or
+altering the mathematical claim.
 
 The declaration
-\leanid{LinearMap.IsSymmetricProjection.reducedProjection} defines the reduced
-projector as the orthogonal projector onto $\operatorname{ran}(PQ)$. The source
-defines its projector blockwise; identifying that projector with the canonical
-construction remains part of issue~\#6294. The associated theorems prove the
-three absorption identities in lines 767--769, the range identities
+\leanid{LinearMap.IsSymmetricProjection.reducedProjection} defines
+$\widetilde P$ as the orthogonal projector onto $\operatorname{ran}(PQ)$. The
+source defines this projector blockwise. Identifying its blockwise projector
+with the canonical coordinate-free construction remains part of
+\ghissue{6294}. No such identification is required for the formalized
+absorption and range identities.
+
+The associated theorems prove the three absorption identities from
+lines~767--769 of Ref.~\cite{Cirac2017MPU}. They also prove
 \begin{align}
-  \operatorname{ran}(\widetilde P)&=\operatorname{ran}(PQ),\\
-  \operatorname{ran}(PQP)&=\operatorname{ran}(PQ),\\
-  \operatorname{ran}(\widetilde P Q)&=\operatorname{ran}(\widetilde P).
+    \operatorname{ran}(\widetilde P)
+        &= \operatorname{ran}(PQ),
+    \label{eq:mpu_two_projection_projector_typo_first_range_identity}\\
+    \operatorname{ran}(PQP)
+        &= \operatorname{ran}(PQ),
+    \label{eq:mpu_two_projection_projector_typo_second_range_identity}\\
+    \operatorname{ran}(\widetilde P Q)
+        &= \operatorname{ran}(\widetilde P).
+    \label{eq:mpu_two_projection_projector_typo_third_range_identity}
 \end{align}
-The final range identity is the derived input to the equal-range right-factor
-theorem, which gives the invertible map from line 770.
+The final identity,
+Eq.~\ref{eq:mpu_two_projection_projector_typo_third_range_identity}, supplies
+the derived hypothesis for the equal-range right-factor theorem, which gives
+the invertible map used at line~770 of Ref.~\cite{Cirac2017MPU}.
 
 \section{Verdict}
 
 \textbf{Verdict: resolved local fix.}
-The formalized angle block uses $Q$ as the second projector, which resolves the
-source's repeated $P$ label without changing the mathematical statement. The
-compression-indexed blocks, including endpoint coordinates, are assembled into
-an orthogonal internal sum with a commuting complementary remainder. The
-reduced projector and its identities from lines 764--770 are also formalized.
-The coordinate-free reduced projector has not been identified with the source's
-particular blockwise projector; no such identification is needed for its proved
-absorption and range identities.
+The repeated $P$ in the second decomposition is a resolved local
+typographical error. Replacing it by $Q$ gives the intended angle-block
+decomposition and leaves the mathematical statement unchanged.
+
+The formal development uses $Q$ as the second projector, assembles all
+compression-indexed blocks into an orthogonal internal sum, and supplies a
+commuting invariant complement. It also formalizes the reduced projector and
+the absorption and range identities used at lines~764--770 of
+Ref.~\cite{Cirac2017MPU}. The canonical coordinate-free reduced projector has
+not been identified with the source's particular blockwise projector, but that
+identification is unnecessary for the proved identities.
 
 \bibliographystyle{alpha}
 \bibliography{references}

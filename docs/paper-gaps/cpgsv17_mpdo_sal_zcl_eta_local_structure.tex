@@ -18,159 +18,207 @@ Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
 
 \section{Source statement}
 
-Appendix C.2 of Cirac--P\'erez-Garcia--Schuch--Verstraete proves that a simple
-MPDO satisfying the strong area law has the commuting nearest-neighbor product
-form
-\[
-  \sigma^{(N)}({\cal K})\propto \prod_{n=1}^N B_{n,n+1},
-\]
-where $B_{n,n+1}\geq 0$ and the translated two-site operators commute
-\cite[Appendix~C.2, Proposition~C.8]{Cirac2016MPDO_arXiv}. In the local
-source file this is Proposition \texttt{3to4},
+Appendix C.2 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete proves that a
+simple matrix product density operator (MPDO) satisfying the strong area law
+(SAL) has the commuting nearest-neighbor product form
+\begin{align}
+    \sigma^{(N)}(\mathcal K)
+        &\propto \prod_{n=1}^{N} B_{n,n+1},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_source_product_form}
+\end{align}
+where each $B_{n,n+1}$ is positive semidefinite and all translated two-site
+operators commute \cite[Appendix~C.2, Proposition~C.8]{Cirac2016MPDO_arXiv}.
+In the local source file, this assertion is Proposition \texttt{3to4} at
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1571--1593}.
 
-Let
-$\tilde\sigma^{(N)}({\cal K})
-=U^{\dagger\otimes N}\sigma^{(N)}({\cal K})U^{\otimes N}$
-denote the density operator after the local unitary from Lemma
-\texttt{propSN}. The proof uses the sector decomposition obtained earlier in
-Appendix C.2:
-\[
-  \tilde\sigma^{(N)}({\cal K})
-  =
-  \bigoplus_{k_1,\ldots,k_N}
-  \bigotimes_{n=1}^N \eta_{k_n,k_{n+1}},
-\]
-with $\eta_{k_n,k_{n+1}}\geq 0$ acting between the right subspace of site $n$
-and the left subspace of site $n+1$. It then defines
-\[
-  B_{n,n+1}
-  =
-  \sum_{k_n,k_{n+1}}
-  \operatorname{Id}_{H_{L,n}^{(k_n)}}\otimes
-  \eta_{k_n,k_{n+1}}\otimes
-  \operatorname{Id}_{H_{R,n+1}^{(k_{n+1})}},
-\]
-regarded as the identity away from sites $n,n+1$. With this definition,
-$\tilde\sigma^{(N)}({\cal K})=\prod_n B_{n,n+1}$ and the commutation of the translated
-$B$-operators follows from their sector-local action.
+Let $U$ be the local unitary from Lemma \texttt{propSN} of
+Ref.~\cite{Cirac2016MPDO_arXiv}, and define
+\begin{align}
+    \widetilde{\sigma}^{(N)}(\mathcal K)
+        &=
+        U^{\dagger\otimes N}
+        \sigma^{(N)}(\mathcal K)
+        U^{\otimes N}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_transformed_density}
+\end{align}
+The proof uses the sector decomposition obtained earlier in Appendix C.2:
+\begin{align}
+    \widetilde{\sigma}^{(N)}(\mathcal K)
+        &=
+        \bigoplus_{k_1,\ldots,k_N}
+        \bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_decomposition}
+\end{align}
+where $\eta_{k_n,k_{n+1}}\geq 0$ acts between the right subspace of site $n$
+and the left subspace of site $n+1$
+\cite[Appendix~C.2]{Cirac2016MPDO_arXiv}. The source defines
+\begin{align}
+    B_{n,n+1}
+        &=
+        \sum_{k_n,k_{n+1}}
+        \operatorname{Id}_{H_{L,n}^{(k_n)}}
+        \otimes \eta_{k_n,k_{n+1}}
+        \otimes
+        \operatorname{Id}_{H_{R,n+1}^{(k_{n+1})}},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_bond_definition}
+\end{align}
+with the operator acting as the identity away from sites $n$ and $n+1$.
+Equation~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_decomposition}
+then becomes the ordered product of the bonds in
+Eq.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_bond_definition}, and
+their sector-local action gives commutativity of the translates.
 
 \section{Current formalization}
 
-The entropy implication at the beginning of Lemma~C.2 is formalized.  For
-$N\geq 4$, saturation gives $I_1=I_2$, and hence
-\[
-  S_{N-1}+S_1=S_2+S_{N-2}.
-\]
+The entropy implication at the beginning of Lemma C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv} is formalized. For $N\geq 4$, SAL saturation
+gives $I_1=I_2$, hence
+\begin{align}
+    S_{N-1}+S_1
+        &=S_2+S_{N-2}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_entropy_equality}
+\end{align}
 This is equality in strong subadditivity for the normalized $(N-1)$-site
-marginal divided into three consecutive regions of lengths $1$, $1$, and
-$N-3$.  The Hayashi characterization gives a direct-sum tensor-product
-decomposition on the middle site.  Splitting the third region into its first
-site and its remaining $N-4$ sites and tracing the latter preserves this
-decomposition.  Consequently the first-three-site marginal has the form
-asserted in Lemma~\texttt{Lsigma3} for every $N\geq4$; the decomposition is
-chosen separately for each $N$.
-\footnote{The formal statements are
+marginal partitioned into three consecutive regions of lengths $1$, $1$, and
+$N-3$. The Hayashi characterization used in Appendix C.2 gives a direct-sum
+tensor-product decomposition on the middle site
+\cite{Cirac2016MPDO_arXiv}. Splitting the third region into its first site and
+its remaining $N-4$ sites, then tracing out the latter, preserves the
+decomposition. The first-three-site marginal therefore has the form asserted
+in Lemma \texttt{Lsigma3} for every $N\geq 4$. The decomposition may be chosen
+separately for each $N$.\footnote{The formal statements are
 \leanid{MPOTensor.isSSAEquality_tripartite_of_isSAL} and
 \leanid{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL};
 the partial-trace preservation result is
 \leanid{Entropy.exists_quantumMarkovDecomposition_rightMarginalAlong}.}
 
-The desired commuting product form is currently recorded as an eta-local
-structure for $K$.\footnote{The formal structure is
-\leanid{MPOTensor.EtaLocalStructureData}.} It contains the assembled positive
+The desired commuting product form is recorded as an eta-local structure for
+$\mathcal K$.\footnote{The formal structure is
+\leanid{MPOTensor.EtaLocalStructureData}.} This structure contains a positive,
 translation-invariant two-site bond and its realization of the finite-chain
-MPO. From this structure, the development proves the commuting-form property
-and, after ZCL is assumed separately, the GSNNCH--ZCL consequence.
+MPO. The development derives the commuting-form property from this structure
+and, after assuming zero correlation length (ZCL) separately, proves the
+GSNNCH--ZCL consequence.
 
-Earlier versions also introduced a structure combining unrelated local,
-commuting-form, and doubled-index hypotheses, followed by deductions from the
-doubled-index condition to a fusion formulation of the RFP condition. These
-declarations did not express the source's structural fixed-point condition and
-have been removed. In particular, they no longer obscure the missing
-construction of the operators $B_{n,n+1}$ from SAL.
+Earlier versions introduced a structure that combined unrelated local,
+commuting-form, and doubled-index hypotheses. They then used the doubled-index
+condition to derive a fusion formulation of the renormalization fixed-point
+condition. Those declarations did not express the source's structural
+fixed-point condition and have been removed. The remaining task was to
+construct the operators $B_{n,n+1}$ from SAL.
 
-\section{Missing step}
+\section{The SAL-to-positive-bond construction}
 
-After the entropy equality above, the source applies the inverse tensor
-${\cal K}^{-1}$ to the Hayashi decomposition and proves Lemma
-\texttt{propSN}.  The algebraic part of this passage is now formalized: the
-concrete tensor ${\cal K}$ has a sector factorization by tensors $r_k$ and
-$l_k$, the neighboring operators $\eta_{k,h}=r_k l_h$ are defined without a
-positivity assertion, and the resulting cyclic contraction satisfies
-\[
-  \tilde\sigma^{(N)}({\cal K})
-  =
-  \bigoplus_{k_1,\ldots,k_N}
-  \bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}
-\]
-in sector-adapted coordinates for every nonempty chain length.
+\subsection{Inverse-map contraction and sector factorization}
+
+After deriving
+Eq.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_entropy_equality}, the
+source applies the inverse tensor $\mathcal K^{-1}$ to the Hayashi
+decomposition and proves Lemma \texttt{propSN}
+\cite[Appendix~C.2]{Cirac2016MPDO_arXiv}. The algebraic part is formalized.
+The concrete tensor $\mathcal K$ factors into sector tensors $r_k$ and $l_k$,
+and the neighboring operators are initially defined, without a positivity
+claim, by
+\begin{align}
+    \eta_{k,h}
+        &=r_k l_h.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_raw_neighbor_operator}
+\end{align}
+For every nonempty chain length, their cyclic contraction gives
+\begin{align}
+    \widetilde{\sigma}^{(N)}(\mathcal K)
+        &=
+        \bigoplus_{k_1,\ldots,k_N}
+        \bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_raw_cyclic_factorization}
+\end{align}
 
 For the four-site chain, the virtual contraction of the traced fourth site is
-now identified before applying the inverse tensor.  Writing
-\[
-  R_4=
-  \tr\!\left[\rho^{(4)}({\cal K})\right]^{-1}
-  \sum_i {\cal K}^{i,i},
-\]
-the normalized three-site marginal satisfies
-\[
-  \sigma_3^{(4)}({\cal K})_{u,v}
-  =\tr\!\left({\cal K}^{u,v}R_4\right).
-\]
-If the four-site trace is nonzero, then $R_4\ne0$, and hence some entry
-$(R_4)_{\beta,\alpha}$ is nonzero.  Thus the boundary matrix and the nonzero
-entry selected before equation \texttt{formK} are available without adding
-SAL or injectivity as separate hypotheses.\footnote{The formal declarations
-are \leanid{MPOTensor.normalizedFourSiteTail},
+identified before applying the inverse tensor. Define
+\begin{align}
+    R_4
+        &=
+        \tr\!\left(\rho^{(4)}(\mathcal K)\right)^{-1}
+        \sum_i \mathcal K^{i,i}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_normalized_four_site_tail}
+\end{align}
+The normalized three-site marginal satisfies
+\begin{align}
+    \sigma_3^{(4)}(\mathcal K)_{u,v}
+        &=
+        \tr\!\left(\mathcal K^{u,v}R_4\right).
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_four_site_marginal_closure}
+\end{align}
+If the four-site trace is nonzero, then $R_4\neq 0$, so there are indices
+$\alpha,\beta$ for which
+\begin{align}
+    (R_4)_{\beta,\alpha}
+        &\neq 0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_nonzero_tail_entry}
+\end{align}
+Thus the boundary matrix and nonzero entry selected before Equation
+\texttt{formK} of Ref.~\cite{Cirac2016MPDO_arXiv} require neither SAL nor
+injectivity as separate hypotheses.\footnote{The formal declarations are
+\leanid{MPOTensor.normalizedFourSiteTail},
 \leanid{MPOTensor.reducedBlockState_four_three_apply},
 \leanid{MPOTensor.normalizedFourSiteTail_ne_zero}, and
 \leanid{MPOTensor.exists_normalizedFourSiteTail_entry_ne_zero}.}
 
 The double inverse-map contraction preceding the sector factorization is also
-formalized.  If $R$ denotes the virtual contraction of the remaining sites,
+formalized. If $R$ denotes the virtual contraction of the remaining sites,
 then
-\[
-  \sum_{p_1,p_3}
-  ({\cal K}^{-1})^{\alpha_1,\beta_1}_{p_1}
-  ({\cal K}^{-1})^{\alpha_3,\beta_3}_{p_3}
-  \tr({\cal K}^{p_1}{\cal K}^{p_2}{\cal K}^{p_3}R)
-  = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1}.
-\]
-This is the calculation at lines 1415--1438 of Appendix C.2 in
-arXiv:1606.00608.\footnote{The formal
-declarations are \leanid{MPOTensor.inverseMapThreeSiteContraction} and
+\begin{align}
+    &\sum_{p_1,p_3}
+        (\mathcal K^{-1})^{\alpha_1,\beta_1}_{p_1}
+        (\mathcal K^{-1})^{\alpha_3,\beta_3}_{p_3}
+        \tr\!\left(\mathcal K^{p_1}\mathcal K^{p_2}\mathcal K^{p_3}R\right)
+    \notag\\
+    &\qquad =
+        \mathcal K^{p_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_double_inverse_contraction}
+\end{align}
+This is the calculation at lines 1415--1438 of Appendix C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{The formal declarations are
+\leanid{MPOTensor.inverseMapThreeSiteContraction} and
 \leanid{MPOTensor.inverseMapThreeSiteContraction_eq}.}
 
-The source display at line~1427 writes the remaining scalar as
-$m_{\beta_3,\alpha_3}$.  This repeats the third-site left index and loses the
-first-site left index.  Contracting the two matrix units gives
-\[
-  \tr(E_{\alpha_1,\beta_1}{\cal K}^{p_2}
-    E_{\alpha_3,\beta_3}R)
-  = {\cal K}^{p_2}_{\beta_1,\alpha_3}R_{\beta_3,\alpha_1},
-\]
-so the scalar is $m_{\beta_3,\alpha_1}$.  The diagram defining
-$m_{\beta,\alpha}$ and the subsequent choice of a nonzero pair $(\alpha,\beta)$
-are consistent with this correction.  Thus the repeated $\alpha_3$ is a local
-index typo, not a different mathematical hypothesis.
+The source display at line 1427 writes the remaining scalar as
+$m_{\beta_3,\alpha_3}$. Direct contraction of the matrix units gives
+\begin{align}
+    \tr\!\left(E_{\alpha_1,\beta_1}
+        \mathcal K^{p_2}
+        E_{\alpha_3,\beta_3}R\right)
+        &=
+        \mathcal K^{p_2}_{\beta_1,\alpha_3}
+        R_{\beta_3,\alpha_1}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_matrix_unit_contraction}
+\end{align}
+The scalar is therefore $m_{\beta_3,\alpha_1}$. The diagram defining
+$m_{\beta,\alpha}$ and the subsequent choice of a nonzero pair
+$(\alpha,\beta)$ agree with this correction. The repeated $\alpha_3$ is a
+local index typo, not an additional mathematical hypothesis.
 
-The comparison with the Hayashi factors is now formalized.  For a three-site
-closure against $R$, let $A^{(k)}_{\alpha_1,\beta_1}$ and
-$B^{(k)}_{\alpha_3,\beta_3}$ be obtained by contracting the inverse tensor
-against $\rho_{A b_1}^{(k)}$ and $\rho_{b_2 c}^{(k)}$, respectively.  In the
-basis selected by the middle-site unitary, every diagonal sector satisfies
-\[
-  R_{\beta_3,\alpha_1}\,
-  \widetilde{\cal K}^{(k)}_{\beta_1,\alpha_3}
-    ((l,r),(l',r'))
-  =p_k A^{(k)}_{\alpha_1,\beta_1}(l,l')
-    B^{(k)}_{\alpha_3,\beta_3}(r,r').
-\]
+For a three-site closure against $R$, let
+$A^{(k)}_{\alpha_1,\beta_1}$ and
+$B^{(k)}_{\alpha_3,\beta_3}$ be the contractions of the inverse tensor
+against $\rho_{A b_1}^{(k)}$ and $\rho_{b_2 c}^{(k)}$, respectively. In the
+basis selected by the middle-site unitary, each diagonal sector satisfies
+\begin{align}
+    &R_{\beta_3,\alpha_1}
+        \widetilde{\mathcal K}^{(k)}_{\beta_1,\alpha_3}
+        ((l,r),(l',r'))
+    \notag\\
+    &\qquad =
+        p_k
+        A^{(k)}_{\alpha_1,\beta_1}(l,l')
+        B^{(k)}_{\alpha_3,\beta_3}(r,r').
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_hayashi_sector_comparison}
+\end{align}
 The factor $p_k$ is explicit because the formal Hayashi decomposition stores
-normalized left and right density operators.  The proof commutes the two outer
-contractions through the unitary change of basis and applies the double
-inverse-map contraction above.
+normalized left and right density operators. The proof commutes the outer
+contractions through the unitary basis change and applies
+Eq.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_double_inverse_contraction}.
 \footnote{The formal declarations are
 \leanid{MPOTensor.IsThreeSiteClosure},
 \leanid{MPOTensor.physicalSlice},
@@ -178,19 +226,25 @@ inverse-map contraction above.
 \leanid{MPOTensor.hayashiInverseRight}, and
 \leanid{MPOTensor.inverseMap_hayashi_sector_comparison}.}
 
-The tensor factorization is now formalized.  The three-site marginal of the
-normalized four-site chain is a three-site closure against $R_4$, the
-off-diagonal Hayashi sectors of the transformed physical slice vanish, and
-dividing the diagonal comparison by a chosen nonzero entry
-$R_{\beta_3,\alpha_1}$ produces sector tensors $l_k$ and $r_k$ with
-\[
-  U_B\,{\cal K}^{\,\cdot,\cdot}_{\beta_1,\alpha_3}\,U_B^\dagger
-  =\bigoplus_k\,(l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}
-\]
-for all virtual indices $\beta_1,\alpha_3$.  The nonzero entry exists whenever
-the four-site trace is nonzero.  This is the factorization displayed at
-lines 1434--1438.
-\footnote{The formal declarations are
+The three-site marginal of the normalized four-site chain is a three-site
+closure against $R_4$. The off-diagonal Hayashi sectors of the transformed
+physical slice vanish. Dividing
+Eq.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_hayashi_sector_comparison}
+by a selected nonzero entry $R_{\beta_3,\alpha_1}$ produces tensors $l_k$ and
+$r_k$ such that
+\begin{align}
+    U_B
+    \mathcal K^{\,\cdot,\cdot}_{\beta_1,\alpha_3}
+    U_B^\dagger
+        &=
+        \bigoplus_k
+        (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_physical_slice_factorization}
+\end{align}
+This holds for all virtual indices $\beta_1,\alpha_3$. The required nonzero
+entry exists whenever the four-site trace is nonzero. This is the
+factorization at lines 1434--1438 of Appendix C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{The formal declarations are
 \leanid{MPOTensor.isThreeSiteClosure_reducedBlockState},
 \leanid{MPOTensor.inverseMap_hayashi_sector_offdiagonal},
 \leanid{MPOTensor.sectorTensorL},
@@ -198,27 +252,34 @@ lines 1434--1438.
 \leanid{MPOTensor.physicalSlice_sector_factorization}, and
 \leanid{MPOTensor.exists_physicalSlice_sector_factorization}.}
 
-For a finite family of normal sectors, the diagonal blocks used in equation
-\texttt{QkKjs} are now defined by
-\[
-  O_s^{(k)}(\beta,\alpha)
-  =\bigl[U_B\kappa^{(s)}_{\beta,\alpha}U_B^\dagger\bigr]_{k,k}.
-\]
-Every sector of nonzero Hayashi weight occurs in at least one normal sector.
-Indeed, nonzero diagonal entries of the two trace-one Hayashi states give a
-nonzero diagonal entry of the three-site state, and the normal-sector family
-closure then has a nonzero summand.  This existence argument requires no
-closing-matrix assumption.
+For a finite family of normal sectors, define the diagonal blocks used in
+Equation \texttt{QkKjs} of Ref.~\cite{Cirac2016MPDO_arXiv} by
+\begin{align}
+    O_s^{(k)}(\beta,\alpha)
+        &=
+        \left[U_B\kappa^{(s)}_{\beta,\alpha}U_B^\dagger\right]_{k,k}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_normal_sector_block}
+\end{align}
+Every sector with nonzero Hayashi weight occurs in at least one normal sector.
+Nonzero diagonal entries of the two trace-one Hayashi states give a nonzero
+diagonal entry of the three-site state, and the normal-sector family closure
+then has a nonzero summand. This argument does not require a closing-matrix
+hypothesis.
 
-The uniqueness cancellation is also formalized with its load-bearing
-hypothesis stated explicitly.  If every closing matrix $R_s$ is nonzero, the
-principal BNT--Markov identity shows that two distinct normal sectors cannot
-both have nonzero $k$-blocks.  It therefore gives the label $j_k$ and the
-projections
-\[
-  P_s=\sum_{\substack{k:p_k\ne0\\j_k=s}}Q_k,
-  \qquad \sum_s P_s=\sum_{k:p_k\ne0}Q_k.
-\]
+The uniqueness cancellation is formalized with its essential hypothesis made
+explicit. If every closing matrix $R_s$ is nonzero, the principal
+BNT--Markov identity implies that two distinct normal sectors cannot both have
+nonzero $k$-blocks. It therefore defines a unique label $j_k$ and projections
+\begin{align}
+    P_s
+        &=
+        \sum_{\substack{k:p_k\neq 0j_k=s}}Q_k,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_bnt_projection}\\
+    \sum_s P_s
+        &=
+        \sum_{k:p_k\neq 0}Q_k.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_active_projection_resolution}
+\end{align}
 These projections are mutually orthogonal.\footnote{The relevant declarations
 are
 \leanid{MPOTensor.exists_bntMarkovBlockNonzero_of_probability_ne_zero},
@@ -226,224 +287,297 @@ are
 \leanid{MPOTensor.bntSectorProjection}, and
 \leanid{MPOTensor.sum_bntSectorProjection}.}
 
-Both factors in the closing-scalar choice are now selected.  Once the copy
-weights agree, the distinguished common weight is nonzero and
-\[
-  q_j=\sum_q\mu_{j,q}^{N}=r_j\mu_j^N\ne0
-\]
-for every chain length $N$.
-\footnote{The relevant declarations are
+\subsection{Closing matrices and BNT sector selection}
+
+Once the copy weights agree, the distinguished common weight is nonzero and
+\begin{align}
+    q_j
+        &=
+        \sum_q\mu_{j,q}^{N},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_weight_sum}\\
+    q_j
+        &=
+        r_j\mu_j^N
+        \neq 0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_weight_nonzero}
+\end{align}
+These identities hold for every chain length $N$.\footnote{The relevant
+declarations are
 \leanid{MPSTensor.SectorDecomposition.commonWeight_ne_zero} and
 \leanid{MPSTensor.SectorDecomposition.coeff_ne_zero_of_weight_copy_independent}.}
-Simplicity says that the physical-trace transfer
-$\mathcal B_j=\sum_iA_j^{ii}$ is not nilpotent.  Hence one positive tail
-length $L$ has, for every representative, a nonzero entry
-$\widetilde m_j=(\mathcal B_j^L)_{\alpha_j,\beta_j}$.  Taking the coefficient
-at total chain length $L+3$ gives the closing matrix
-\[
-  R_j=q_j\mathcal B_j^L
-\]
-with nonzero entry
-$(R_j)_{\alpha_j,\beta_j}=q_j\widetilde m_j\ne0$, as in Appendix~C.2,
-lines 1714--1718.
-\footnote{The relevant declarations are
+
+Simplicity implies that the physical-trace transfer
+$\mathcal B_j=\sum_i A_j^{ii}$ is not nilpotent. Hence there is a positive tail
+length $L$ and, for every representative, indices $\alpha_j,\beta_j$ such that
+\begin{align}
+    \widetilde m_j
+        &=
+        (\mathcal B_j^L)_{\alpha_j,\beta_j}
+        \neq 0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_nonzero_trace_tail}
+\end{align}
+Taking the coefficient at total chain length $L+3$ gives
+\begin{align}
+    R_j
+        &=
+        q_j\mathcal B_j^L,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_closing_matrix}\\
+    (R_j)_{\alpha_j,\beta_j}
+        &=
+        q_j\widetilde m_j
+        \neq 0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_closing_matrix_entry}
+\end{align}
+This is the construction at lines 1714--1718 of Appendix C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{The relevant declarations are
 \leanid{MPSTensor.SectorDecomposition.exists_common_nonzero_physicalTraceTail_entry}
 and
 \leanid{MPSTensor.SectorDecomposition.exists_common_nonzero_threeSiteClosingMatrix_entry};
 the matrix form is
 \leanid{MPSTensor.SectorDecomposition.exists_common_threeSiteClosingMatrix_ne_zero}.}
-This closing-matrix bridge is now formalized with the normalization included.
-Equality of the complete matrix-product-vector families transports the
-original tensor to its horizontal BNT representation, and the normalized
-three-site reduced state has closing matrices
-\[
-  \widehat R_j=\tr(\rho^{(L+3)})^{-1}q_j\mathcal B_j^L.
-\]
-At the four-site specialization used by the subsequent closing-matrix
-argument, one takes $L=1$.  SAL makes the normalization scalar nonzero, so every
-$\widehat R_j$ is nonzero.
+
+The closing-matrix bridge includes the normalization. Equality of the complete
+matrix-product-vector families transports the original tensor to its
+horizontal BNT representation, and the normalized three-site reduced state
+has closing matrices
+\begin{align}
+    \widehat R_j
+        &=
+        \tr\!\left(\rho^{(L+3)}\right)^{-1}
+        q_j\mathcal B_j^L.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_normalized_closing_matrix}
+\end{align}
+The four-site specialization used by the later argument takes $L=1$. SAL makes
+the normalization scalar nonzero, so every $\widehat R_j$ is nonzero.
 \footnote{The relevant declarations are
 \leanid{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix},
 \leanid{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂},
 and
 \leanid{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
-Thus the explicit nonzero-closing hypothesis of the generic cancellation
-theorem is derived for the family closure used by the source.  The simultaneous
-specialization is now formalized as well.  After the common blocking has made
-the BNT representatives simultaneously one-letter spanning, biCF supplies the
-inverse and SAL supplies the four-site Hayashi decomposition.  Every active
-Markov sector then has a unique BNT label, and the resulting BNT-labelled sums
-of Hayashi projections are orthogonal, mutually disjoint, and resolve the
-active Markov support.
+
+Thus the generic cancellation theorem's nonzero-closing hypothesis is derived
+for the family closure used by the source. The simultaneous specialization is
+also formalized. After common blocking makes the BNT representatives
+simultaneously one-letter spanning, biCF supplies the inverse and SAL supplies
+the four-site Hayashi decomposition. Every active Markov sector then has a
+unique BNT label, and the BNT-labelled sums of Hayashi projections are
+orthogonal, mutually disjoint, and resolve the active Markov support.
 \footnote{The relevant declaration is
 \leanid{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}.}
-No further closing-matrix assumption is needed for this specialization.
+This specialization needs no further closing-matrix hypothesis.
 
-The remaining projector passage is now formalized as well.  For every physical
-slice of the $i$-th normal representative, $P_s A_i P_t=0$ unless $s=t=i$.
-For the matching label,
-\[
-  P_iA_iP_i=A_i.
-\]
+For every physical slice of the $i$-th normal representative,
+\begin{align}
+    P_sA_iP_t
+        &=0
+        \qquad\text{unless }s=t=i,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_projector_slice_vanishing}\\
+    P_iA_iP_i
+        &=A_i.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_matching_projector_slice}
+\end{align}
 The zero-weight Markov summands retained by the formal decomposition annihilate
-all these physical slices, so this conclusion does not require replacing the
-active-support resolution by an ambient resolution of the identity.  Acting
-sitewise on every nonempty periodic chain then gives
-\[
-  P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}
-  =n_s\sigma^{(N)}(\mathcal K_s),
-  \qquad N\geq1,
-\]
-with the common copy weight absorbed into $\mathcal K_s$.
-\footnote{The relevant declarations are
+all physical slices. Therefore
+Eq.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_matching_projector_slice}
+does not require an ambient resolution of the identity. Applying the
+projections sitewise to every nonempty periodic chain gives
+\begin{align}
+    P_s^{\otimes N}
+    \sigma^{(N)}(K)
+    P_s^{\otimes N}
+        &=
+        n_s\sigma^{(N)}(\mathcal K_s),
+        \qquad N\geq 1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sitewise_sector_compression}
+\end{align}
+where the common copy weight is absorbed into $\mathcal K_s$.\footnote{The
+relevant declarations are
 \leanid{MPOTensor.bntSectorProjection_mul_physicalSlice_mul_eq_zero},
 \leanid{MPOTensor.sum_bntSectorProjection_mul_physicalSlice_mul_self},
 \leanid{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
 \leanid{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
 \leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
 
-The literal identity resolution in equation \emph{Pis} is recovered in the
-ambient physical space by choosing a BNT label $s_0$ from a copy with
-unit-modulus weight.  Assign every zero-weight Markov summand to $s_0$, while
-retaining the unique source label on each positive-weight summand.  The
-completed projections
-\[
-  \widehat P_s=\sum_{k:\widehat j_k=s}Q_k
-\]
-then satisfy
-\[
-  \sum_s\widehat P_s=\Id,
-  \qquad
-  \widehat P_s\widehat P_t=0\quad(s\ne t).
-\]
-Since a zero-weight $Q_k$ annihilates every physical slice, this reassignment
-preserves, whenever $s\ne t$ or $i\ne s$,
-\[
-  \widehat P_s K_i^{\beta\alpha}\widehat P_t=0.
-\]
-Thus the retained zero-weight summands account exactly for the difference
-between the active-support resolution and the source's equation \emph{Pis}.
-The construction and its SAL specialization are
+The literal identity resolution in Equation \emph{Pis} of
+Ref.~\cite{Cirac2016MPDO_arXiv} is recovered in the ambient physical space.
+Choose a BNT label $s_0$ from a copy with unit-modulus weight. Assign every
+zero-weight Markov summand to $s_0$, while retaining the unique source label on
+each positive-weight summand. Define
+\begin{align}
+    \widehat P_s
+        &=
+        \sum_{k:\widehat j_k=s}Q_k.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_completed_projection}
+\end{align}
+The completed projections satisfy
+\begin{align}
+    \sum_s\widehat P_s
+        &=\Id,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_completed_identity_resolution}\\
+    \widehat P_s\widehat P_t
+        &=0,
+        \qquad s\neq t.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_completed_projection_orthogonality}
+\end{align}
+Because every zero-weight $Q_k$ annihilates all physical slices, the
+reassignment preserves
+\begin{align}
+    \widehat P_s K_i^{\beta\alpha}\widehat P_t
+        &=0
+        \qquad
+        \text{whenever }s\neq t\text{ or }i\neq s.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_completed_slice_vanishing}
+\end{align}
+The retained zero-weight summands account exactly for the difference between
+the active-support resolution and Equation \emph{Pis} of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The construction and its SAL specialization
+are
 \leanid{MPOTensor.completedBntSectorProjection} and
-\leanid{MPOTensor.%
-exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}.
+\leanid{MPOTensor.exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}.
 
-The source standing context is recovered by
-\leanid{MPOTensor.%
-exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}.
-It applies the ZCL equation to the horizontal canonical-form gauge identity,
-uses simplicity to exclude a zero physical-trace transfer, and thereby derives
-the equality of the copy weights proved at lines 1646--1665.  It then invokes
-the copy-independent specialization above.  Consequently the final theorem
-assumes only the simple biCF, ZCL, and SAL context of Appendix~C.2, rather than
-assuming copy independence separately.
+The source's standing assumptions are recovered by
+\leanid{MPOTensor.exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}.
+This declaration applies the ZCL equation to the horizontal canonical-form
+gauge identity, uses simplicity to exclude a zero physical-trace transfer, and
+derives the equality of copy weights proved at lines 1646--1665 of Appendix
+C.2 of Ref.~\cite{Cirac2016MPDO_arXiv}. It then invokes the copy-independent
+specialization. The final theorem therefore assumes only the simple biCF, ZCL,
+and SAL context of Appendix C.2, not copy independence separately.
 
 The empty-word value $N=0$ is excluded because its closed virtual trace records
-the bond dimension and is not a physical chain.  Positivity and ZCL of every
-selected absorbed BNT representative are now formalized.  Positivity follows
-by compressing the positive full-chain operator and dividing by the positive
-integer $n_s$.  ZCL follows by restricting the full transfer equation to the
+the bond dimension rather than a physical chain. Positivity and ZCL of every
+selected absorbed BNT representative are formalized. Positivity follows by
+compressing the positive full-chain operator and dividing by the positive
+integer $n_s$. ZCL follows by restricting the full transfer equation to the
 $s$-th canonical block and using nonnilpotence to exclude the zero transfer.
 \footnote{The relevant declarations are
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
 and
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
-The strict normalization needed in the sector entropy identity is now
-formalized: an MPDO tensor with source ZCL has positive trace at every
-nonempty chain length, since its normalized physical-trace transfer is a
-nonzero idempotent.  Applied to the absorbed BNT sectors above, this proves
-$p_j^{(N)}>0$ rather than silently inferring it from the weaker displayed
-inequality $p_j\geq0$.
-\footnote{The general declarations are
+
+The strict normalization required in the sector entropy identity is also
+formalized. An MPDO tensor with source ZCL has positive trace at every
+nonempty chain length because its normalized physical-trace transfer is a
+nonzero idempotent. For the absorbed BNT sectors this proves
+\begin{align}
+    p_j^{(N)}
+        &>0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_probability_positive}
+\end{align}
+rather than merely $p_j\geq 0$.\footnote{The general declarations are
 \leanid{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL} and
-\leanid{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization to
-the absorbed BNT representative is
+\leanid{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization is
 \leanid{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
-The weighted orthogonal-direct-sum entropy formula used in Appendix~C.2,
-lines~1760--1770, is also formalized as
-\leanid{vonNeumannEntropy_blockDiagonal_smul}, together with the form for
-pairwise-annihilating support operators
-\leanid{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}.  The remaining source
-step after the sector-compression identity is now formalized: the same sector
-probabilities occur in all four marginals, the Shannon terms cancel, and
-strict positivity together with strong subadditivity forces equality in every
-sector.  Thus every absorbed BNT representative satisfies SAL under the biCF
-hypothesis imposed at the start of Case II in the source.
+
+The weighted orthogonal-direct-sum entropy formula used at lines 1760--1770 of
+Appendix C.2 of Ref.~\cite{Cirac2016MPDO_arXiv} is formalized as
+\leanid{vonNeumannEntropy_blockDiagonal_smul}, together with the
+pairwise-annihilating-support form
+\leanid{vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports}.
+The same sector probabilities occur in all four marginals, the Shannon terms
+cancel, and strict positivity together with strong subadditivity forces
+equality in each sector. Thus every absorbed BNT representative satisfies SAL
+under the biCF hypothesis imposed at the beginning of Case II in the source.
 \footnote{The principal declarations are
 \leanid{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
 \leanid{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
-This completes the entropy argument of
-\cite[Appendix~C.2, lines~1748--1781]{Cirac2016MPDO_arXiv} with the source's
-stated biCF hypothesis.
-There is a local endpoint typo in this passage.  Line~1771 writes
-$m<\lfloor N/2\rfloor$, but Definition~4.6 gives the equality chain through
-$I_{\lfloor N/2\rfloor}$, and the conclusion at lines~1781--1783 compares
-$m=L$ with $m=L+1$.  When $L+1=\lfloor N/2\rfloor$, that comparison requires
-the endpoint $m=\lfloor N/2\rfloor$.  The formal entropy equivalence therefore
-uses $1\leq m\leq\lfloor N/2\rfloor$.
+This completes the entropy argument at lines 1748--1781 of Appendix C.2 of
+Ref.~\cite{Cirac2016MPDO_arXiv} under its stated biCF hypothesis.
 
-The neighboring operators are now assembled from these sector tensors.  The
-operator
-\[
-  \eta_{k,h}=\sum_{\gamma}(r_k)_{\gamma}\otimes(l_h)_{\gamma}
-\]
-acts on the neighboring bond space, the bond contraction of two neighboring
-factorized slices exhibits $\eta_{k,h}$ between the outer sector tensors, and
-its trace is the pairing $T_{k,h}=\tr(\eta_{k,h})=(r_k|l_h)$ of the closed
-sector tensors obtained by tracing the physical legs.\footnote{The formal
-declarations are \leanid{MPOTensor.sectorEta},
+That passage contains a local endpoint typo. Line 1771 writes
+$m<\lfloor N/2\rfloor$, but Definition 4.6 of
+Ref.~\cite{Cirac2016MPDO_arXiv} gives the equality chain through
+$I_{\lfloor N/2\rfloor}$, and lines 1781--1783 compare $m=L$ with $m=L+1$.
+When $L+1=\lfloor N/2\rfloor$, the comparison requires the endpoint. The
+formal entropy equivalence therefore uses
+\begin{align}
+    1
+        &\leq m
+        \leq \lfloor N/2\rfloor.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_entropy_endpoint_range}
+\end{align}
+
+\subsection{Neighboring operators and the Hayashi decomposition}
+
+The neighboring operators are assembled from the sector tensors as
+\begin{align}
+    \eta_{k,h}
+        &=
+        \sum_{\gamma}
+        (r_k)_{\gamma}\otimes(l_h)_{\gamma}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_eta_definition}
+\end{align}
+The contraction of two neighboring factorized slices places $\eta_{k,h}$
+between the outer sector tensors. Its trace is
+\begin{align}
+    T_{k,h}
+        &=
+        \tr(\eta_{k,h}),
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_trace_matrix_entry}\\
+    T_{k,h}
+        &=
+        (r_k\mid l_h),
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_closed_sector_pairing}
+\end{align}
+where $(r_k\mid l_h)$ denotes the pairing of the closed sector tensors obtained
+by tracing the physical legs.\footnote{The formal declarations are
+\leanid{MPOTensor.sectorEta},
 \leanid{MPOTensor.physicalSlice_neighboring_contraction},
-\leanid{MPOTensor.closedSectorL}, \leanid{MPOTensor.closedSectorR},
+\leanid{MPOTensor.closedSectorL},
+\leanid{MPOTensor.closedSectorR},
 \leanid{MPOTensor.trace_sectorEta}, and
-\leanid{MPOTensor.ExplicitEtaOperators.ofSectorTensors}.}  The source derives
-positivity of the $\eta_{k,h}$ from the all-length projected chain identity at
-lines 1446--1450, choosing the sector tensors so that each factor is positive
-semidefinite.  That all-length algebraic identity is now formalized, but it
-does not by itself choose coherent positive representatives for all
-neighboring pairs.  Positive semidefiniteness of the chosen representatives
-therefore still enters the construction of the explicit $\eta$-data as a
-hypothesis.
+\leanid{MPOTensor.ExplicitEtaOperators.ofSectorTensors}.}
 
-The earlier summary figure \path{MPDO_etahk=RhLk.png} at source line 1391
-draws $r_h$ next to $l_k$ while naming the operator $\eta_{k,h}$.  The later
-definition \texttt{etarl}, the identity $T_{k,h}=(r_k|l_h)$, and the products
-$\eta_{k,l}\otimes\eta_{l,h}$ in Proposition \texttt{3to5} consistently fix
-the intended convention as $\eta_{k,h}=r_k l_h$.  The formalization follows
-this later consistent convention; the earlier figure is an index-swap typo.
+At lines 1446--1450 of Appendix C.2, the source derives positivity of
+$\eta_{k,h}$ from the all-length projected chain identity and chooses the
+sector tensors so that each factor is positive semidefinite
+\cite{Cirac2016MPDO_arXiv}. The all-length algebraic identity is formalized,
+but by itself it does not choose coherent positive representatives for all
+neighboring pairs. Positive semidefiniteness of the selected representatives
+therefore initially remained a hypothesis of the explicit eta-data
+construction.
 
-The Hayashi decomposition of the concrete three-site marginal is now
-formalized for every $N\geq4$.  Independent bijections on the first two tensor
-factors preserve equality in strong subadditivity: each marginal is carried to
-the corresponding reindexed marginal, and the four entropies are unchanged.
-The canonical bijection between a singleton block and one physical-site index
-therefore carries the SAL equality from flattened block coordinates to the
-tripartite coordinates of the $(N-1)$-site state.  Applying the forward Hayashi
-characterization gives a decomposition before the last $N-4$ sites of the
-third region are traced out.  Partial trace preserves the same middle-site
-direct sum, and the contiguous-block reduction identity gives
-\[
-  \sigma_3^{(N)}({\cal K})
-  =\tr_{4,\ldots,N-1}\!\left[\sigma_{N-1}^{(N)}({\cal K})\right].
-\]
-This proves Lemma~\texttt{Lsigma3} at every admissible chain length, with no
-claim that the decomposition is common to different values of $N$.
-\footnote{The formal declarations are
+The summary figure \path{MPDO_etahk=RhLk.png} at source line 1391 draws $r_h$
+next to $l_k$ while naming the operator $\eta_{k,h}$. The later definition
+\texttt{etarl}, the identity in
+Eq.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_closed_sector_pairing},
+and the products $\eta_{k,l}\otimes\eta_{l,h}$ in Proposition \texttt{3to5}
+of Ref.~\cite{Cirac2016MPDO_arXiv} consistently establish the convention
+$\eta_{k,h}=r_k l_h$. The earlier figure contains an index-swap typo.
+
+The Hayashi decomposition of the concrete three-site marginal is formalized
+for every $N\geq 4$. Independent bijections on the first two tensor factors
+preserve equality in strong subadditivity because they carry each marginal to
+the corresponding reindexed marginal without changing its entropy. The
+canonical bijection between a singleton block and one physical-site index
+therefore transports SAL equality from flattened block coordinates to the
+tripartite coordinates of the $(N-1)$-site state. The forward Hayashi
+characterization gives a decomposition before the final $N-4$ sites of the
+third region are traced out. Partial trace preserves the middle-site direct
+sum, and the contiguous-block reduction identity gives
+\begin{align}
+    \sigma_3^{(N)}(\mathcal K)
+        &=
+        \tr_{4,\ldots,N-1}\!\left[\sigma_{N-1}^{(N)}(\mathcal K)\right].
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_three_site_reduction}
+\end{align}
+This proves Lemma \texttt{Lsigma3} of Ref.~\cite{Cirac2016MPDO_arXiv} at every
+admissible chain length without asserting that the decomposition is common to
+different values of $N$.\footnote{The formal declarations are
 \leanid{isSSAEquality_submatrix_prodEquiv} and
 \leanid{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL}.}
 
-The neighboring operators and their all-length algebraic identity are now
-formalized.  The inverse-map tensors also determine a source-minimal
-physical-sector factorization.  The nonzero dimensions of its left and right
-factors are derived from the trace-one Hayashi density matrices, rather than
-assumed.  For an injective tensor satisfying SAL, the four-site Hayashi
-decomposition and a nonzero entry of the normalized tail therefore produce
-this raw factorization without ZCL or positivity hypotheses.
-For one such factorization, every complete nonempty cyclic neighboring
-product is positive semidefinite as a diagonal sector compression of the
-corresponding finite-chain operator.
-\footnote{The formal declarations are
+The inverse-map tensors also determine a source-minimal physical-sector
+factorization. The nonzero dimensions of its left and right factors follow
+from the trace-one Hayashi density matrices and are not separate assumptions.
+For an injective tensor satisfying SAL, the four-site Hayashi decomposition
+and a nonzero entry of the normalized tail produce this raw factorization
+without ZCL or positivity hypotheses. For any such factorization, every
+complete nonempty cyclic product of neighboring operators is positive
+semidefinite because it is a diagonal sector compression of the corresponding
+finite-chain operator.\footnote{The formal declarations are
 \leanid{MPOTensor.inverseMapPhysicalSectorFactorization},
 \leanid{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta},
 \leanid{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL},
@@ -458,32 +592,57 @@ statements are
 \leanid{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct}
 and
 \leanid{MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}.}
-The positive choice of the individual $\eta_{k,h}$ and primitivity of the
-active sector trace matrix are now obtained from this factorization.
-Positivity of a complete cyclic product alone would not supply coherent
-positive representatives for all neighboring pairs: recurrence, injective
-spanning, and the directed-cut argument control the choices simultaneously
-across the sector graph.
 
-The positivity half of the projected chain identity is now formalized: for
-an MPDO, the chain of the physically conjugated tensor is a congruence of
-the original chain, so every cyclic tensor product of neighboring operators
-is a diagonal sector block of a positive operator,
-\[
-  0\le\bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]\,\tilde\sigma\,
-  \bigl[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\bigr]
-  =\bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}} .
-\]
-The length-one and length-two specializations give $\eta_{k,k}\ge0$ and
-$\eta_{k,h}\otimes\eta_{h,k}\ge0$ unconditionally.  A rescaling lemma for
-the factors of a nonzero positive semidefinite Kronecker product then
-yields, for every pair with $\eta_{k,h}\ne0$ and $\eta_{h,k}\ne0$, a scalar
-$c\ne0$ with $c\,\eta_{k,h}\ge0$ and $c^{-1}\eta_{h,k}\ge0$.  Under the
-additional hypothesis of \emph{symmetric support} ($\eta_{k,h}=0$ forces
-$\eta_{h,k}=0$), choosing one scalar per unordered pair produces a positive
-semidefinite family which agrees with the raw family on the diagonal and
-preserves every two-site block
-$\eta_{k,h}\otimes\eta_{h,k}$.\footnote{The formal declarations are
+The positive choice of the individual $\eta_{k,h}$ and primitivity of the
+active-sector trace matrix are obtained from this factorization. Positivity of
+complete cyclic products alone does not select coherent positive
+representatives for all neighboring pairs. Recurrence, injective spanning, and
+a directed-cut argument control the choices across the entire sector graph.
+
+\subsection{Pairwise positivity and its limitations}
+
+For an MPDO, the chain of the physically conjugated tensor is a congruence of
+the original chain. Every cyclic tensor product of neighboring operators is
+therefore a diagonal sector block of a positive operator:
+\begin{align}
+    0
+        &\leq
+        \left[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\right]
+        \widetilde{\sigma}
+        \left[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\right],
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_projected_chain_positive}\\
+    \left[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\right]
+    \widetilde{\sigma}
+    \left[Q_{k_1}\otimes\cdots\otimes Q_{k_N}\right]
+        &=
+        \bigotimes_{n=1}^{N}\eta_{k_n,k_{n+1}}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_projected_chain_tensor_product}
+\end{align}
+The length-one and length-two cases imply
+\begin{align}
+    \eta_{k,k}
+        &\geq 0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_diagonal_eta_positive}\\
+    \eta_{k,h}\otimes\eta_{h,k}
+        &\geq 0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_two_cycle_positive}
+\end{align}
+A rescaling lemma for a nonzero positive semidefinite Kronecker product then
+shows that, whenever both $\eta_{k,h}$ and $\eta_{h,k}$ are nonzero, there is
+a scalar $c\neq 0$ such that
+\begin{align}
+    c\,\eta_{k,h}
+        &\geq 0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_forward_pair_rescaling}\\
+    c^{-1}\eta_{h,k}
+        &\geq 0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_reverse_pair_rescaling}
+\end{align}
+Under the additional symmetric-support condition that $\eta_{k,h}=0$ implies
+$\eta_{h,k}=0$, one scalar per unordered pair gives a positive semidefinite
+family that agrees with the raw family on the diagonal and preserves every
+two-site block $\eta_{k,h}\otimes\eta_{h,k}$.\footnote{The formal declarations
+are
 \leanid{Matrix.exists_smul_posSemidef_of_kronecker_posSemidef},
 \leanid{MPOTensor.mpo_conjugatePhysical_eq},
 \leanid{MPOTensor.cyclicEtaTensorProduct_posSemidef},
@@ -492,399 +651,514 @@ $\eta_{k,h}\otimes\eta_{h,k}$.\footnote{The formal declarations are
 \leanid{MPOTensor.exists_smul_posSemidef_sectorEta}, and
 \leanid{MPOTensor.exists_explicitEtaOperators_sectorEta}.}
 
-The pairwise construction has two limitations.  Its symmetric-support
-hypothesis is not stated in the source, and it preserves only the chain blocks
-of length at most two.  The source instead rescales the sector tensors and
-therefore preserves every length simultaneously.  These limitations are
-overcome below by reparameterizing zero-weight sectors, proving recurrence of the
-remaining support, and applying a vertex rephasing across the whole sector
-graph.
+This pairwise construction has two limitations. Symmetric support is not a
+source hypothesis, and the construction preserves only chain blocks of length
+at most two. The source instead rescales the sector tensors, which preserves
+all lengths simultaneously. The formal argument removes these limitations by
+reparameterizing zero-weight sectors, proving recurrence on the remaining
+support, and applying one vertex rephasing to the whole sector graph.
 
-The obstruction is already present when every neighboring bond space is
-one-dimensional.  Take four sectors $0,1,2,3$ and set
-\[
-  \eta_{k,k}=1,\qquad
-  \eta_{0,1}=\eta_{0,2}=\eta_{1,3}=1,\qquad
-  \eta_{2,3}=i,
-\]
-with all other off-diagonal entries equal to zero.  Every directed cyclic
-product is either zero or one, and is therefore positive semidefinite.  The
-sector rephasing which preserves each same-sector product has the form
-\[
-  \eta_{k,h}\longmapsto z_k^{-1}z_h\eta_{k,h},
-  \qquad |z_k|=1.
-\]
-Positivity on the edges $0\to1$, $0\to2$, and $1\to3$ forces
-$z_1=z_0$, $z_2=z_0$, and $z_3=z_1$, respectively.  The transformed edge
-$2\to3$ then still has phase $i$.  Hence no coherent choice of sector phases
-makes all four nonzero neighboring operators positive.
+The obstruction already occurs when every neighboring bond space is
+one-dimensional. Take sectors $0,1,2,3$ and define
+\begin{align}
+    \eta_{k,k}
+        &=1,
+        \qquad k\in\{0,1,2,3\},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_obstruction_diagonal}\\
+    \eta_{0,1}
+        &=\eta_{0,2}
+        =\eta_{1,3}
+        =1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_obstruction_real_edges}\\
+    \eta_{2,3}
+        &=i,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_obstruction_imaginary_edge}
+\end{align}
+with every other off-diagonal entry zero. Every directed cyclic product is
+zero or one and is therefore positive semidefinite. A sector rephasing that
+preserves each same-sector product has the form
+\begin{align}
+    \eta_{k,h}
+        &\longmapsto
+        z_k^{-1}z_h\eta_{k,h},
+        \qquad |z_k|=1.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_sector_rephasing}
+\end{align}
+Positivity on the edges $0\to 1$, $0\to 2$, and $1\to 3$ forces
+\begin{align}
+    z_1
+        &=z_0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_constraint_one}\\
+    z_2
+        &=z_0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_constraint_two}\\
+    z_3
+        &=z_1.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_constraint_three}
+\end{align}
+The transformed edge $2\to 3$ therefore retains phase $i$. No coherent choice
+of sector phases makes all four nonzero neighboring operators positive.
 
-A sufficient condition for the graph-theoretic rephasing step is recurrence
-of the nonzero support:
-every nonzero directed edge lies on a nonzero directed cycle.  Under this
-hypothesis, positivity of all cyclic tensor products would first show that
-each edge is a phase times a positive operator, then force trivial phase
-around every cycle, and finally permit a coherent choice of vertex phases.
-The source does not state recurrence as a hypothesis.  It is derived below
-from injectivity after zero-weight sectors are reparameterized.  This derivation
-does not use the later primitivity argument, and hence avoids circularity.
+A sufficient condition for coherent rephasing is recurrence of the nonzero
+support: every nonzero directed edge lies on a nonzero directed cycle.
+Positivity of all cyclic tensor products then shows that each edge is a phase
+times a positive operator, forces trivial phase around every cycle, and permits
+a coherent choice of vertex phases. The source does not state recurrence as a
+hypothesis. The formal development derives it from injectivity after
+reparameterizing zero-weight sectors, without using the later primitivity
+argument.
 
-For the present formal notion of a Hayashi decomposition, recurrence is false
-even for the concrete inverse-map neighboring operators.  The reason is that
-the structure permits zero sector weights.  Consider the scalar-bond tensor
-on a two-dimensional physical space given by
-\[
-  K^{00}=1,\qquad K^{01}=K^{10}=K^{11}=0.
-\]
-It is injective and generates the rank-one projector onto the constant-zero
-word at every length.  Decompose the middle physical space into its two
-one-dimensional coordinate sectors, with weights $p_0=1$ and $p_1=0$, and
-choose the normalized left and right states in both sectors to be supported
-on the zero coordinate.  For the scalar tail $R=1$, the inverse-map sector
-tensors satisfy
-\[
-  r_0=r_1=1,\qquad l_0=1,\qquad l_1=0,
-  \qquad \eta_{k,h}=p_h.
-\]
-Thus $1\to0$ is a nonzero support edge, whereas no edge enters sector $1$.
-This edge is not recurrent.  Hence no theorem deriving recurrence may
-quantify over an arbitrary decomposition satisfying only $p_k\geq0$.
+For the formal notion of a Hayashi decomposition, recurrence can fail before
+this reparameterization because zero sector weights are permitted. Consider
+the scalar-bond tensor on a two-dimensional physical space given by
+\begin{align}
+    K^{00}
+        &=1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_nonzero_slice}\\
+    K^{01}
+        &=K^{10}
+        =K^{11}
+        =0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_zero_slices}
+\end{align}
+This tensor is injective and generates the rank-one projector onto the
+constant-zero word at every length. Decompose the middle physical space into
+its two one-dimensional coordinate sectors, assign weights
+\begin{align}
+    p_0
+        &=1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_active_weight}\\
+    p_1
+        &=0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_inactive_weight}
+\end{align}
+and choose normalized left and right states in both sectors supported on the
+zero coordinate. For the scalar tail $R=1$, the inverse-map sector tensors
+satisfy
+\begin{align}
+    r_0
+        &=r_1
+        =1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_right_tensors}\\
+    l_0
+        &=1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_active_left_tensor}\\
+    l_1
+        &=0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_inactive_left_tensor}\\
+    \eta_{k,h}
+        &=p_h.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_zero_weight_example_neighbor_operator}
+\end{align}
+Thus $1\to 0$ is a nonzero support edge, but no edge enters sector $1$. This
+edge is not recurrent. Consequently recurrence cannot be derived for an
+arbitrary decomposition satisfying only $p_k\geq 0$.
 
-The source-faithful repair retains the full physical direct sum, since a
-zero-weight summand can have nonzero left and right factor dimensions.  In the
-chosen inverse-map factorization, $p_k=0$ already implies $l_k=0$.  Replacing
-$r_k$ by zero on precisely those sectors therefore leaves every product
-$l_k\otimes r_k$ unchanged and kills the spurious outgoing edges of the
-zero-weight sectors.  Incoming edges were already zero because their target
-left tensor vanishes.  This reparameterization and its neighboring-operator
-formula are now formalized by
+The source-faithful correction retains the full physical direct sum because a
+zero-weight summand may have nonzero left and right factor dimensions. In the
+selected inverse-map factorization, $p_k=0$ already implies $l_k=0$. Replacing
+$r_k$ by zero on exactly those sectors leaves every product
+$l_k\otimes r_k$ unchanged and removes the spurious outgoing edges. Incoming
+edges already vanish because the target left tensor is zero. This
+reparameterization and its neighboring-operator formula are formalized by
 \leanid{MPOTensor.PhysicalSectorFactorization.zeroRightTensorOnInactive},
 \leanid{MPOTensor.sectorTensorL_eq_zero_of_weight_eq_zero},
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization},
 and
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}.
-Every neighboring operator incident to an inactive sector therefore
-vanishes, while active--active operators are unchanged.  On the active
-support, recurrence follows from an algebraic triangle-closing argument once
-the virtual matrices furnished by all sector entries span the full matrix
-algebra and every active sector furnishes a nonzero matrix.  This argument is
-now formalized: a nonzero edge $k\to h$ can be closed through one further
-sector $j$, giving $h\to j\to k$, by nondegeneracy and cyclicity of the matrix
-trace pairing.\footnote{The formal declarations are
+
+Every neighboring operator incident to an inactive sector then vanishes, while
+active--active operators remain unchanged. On the active support, recurrence
+follows from an algebraic triangle-closing argument once the virtual matrices
+provided by all sector entries span the full matrix algebra and every active
+sector provides a nonzero matrix. Nondegeneracy and cyclicity of the matrix
+trace pairing close each nonzero edge $k\to h$ through a third sector $j$,
+producing $h\to j\to k$.\footnote{The formal declarations are
 \leanid{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrix},
 \leanid{MPOTensor.PhysicalSectorFactorization.exists_two_edge_return_of_neighboringOperator_ne_zero},
 and
 \leanid{MPOTensor.PhysicalSectorFactorization.neighboringOperator_reaches_of_ne_zero}.}
-Injectivity now supplies the spanning hypothesis for every physical-sector
+Injectivity supplies the spanning hypothesis for every physical-sector
 factorization.\footnote{This is
 \leanid{MPOTensor.PhysicalSectorFactorization.sectorVirtualMatrixFamily_span_eq_top}.}
-Positive-weight endpoint nonvanishing is now proved directly from the
-three-site closure and the Hayashi state decomposition.\footnote{The formal
-declaration is
-\leanid{MPOTensor.exists_active_sectorVirtualMatrix_ne_zero}.}
-Consequently the zero-weight reparameterized inverse-map support is recurrent,
-by injective spanning and triangle closure.\footnote{This is
+Positive-weight endpoint nonvanishing follows directly from the three-site
+closure and the Hayashi state decomposition.\footnote{The formal declaration
+is \leanid{MPOTensor.exists_active_sectorVirtualMatrix_ne_zero}.}
+Therefore the zero-weight-reparameterized inverse-map support is recurrent.
+\footnote{This is
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport}.}
 
-\subsection{Recurrence of the sector support graph: definitions and the
-per-cycle rescaling}
+\subsection{Recurrence and per-cycle rescaling}
 
-The directed graph on sector indices with an edge $k\to h$ whenever
-$\eta_{k,h}\ne0$, reachability along its nonzero edges, and recurrence of
-this graph (every nonzero edge lies on a nonzero directed cycle) are now
-formalized without further hypothesis.\footnote{The formal declarations are
-\leanid{MPOTensor.IsSectorEdge}, \leanid{MPOTensor.SectorReaches}, and
+The sector graph has an edge $k\to h$ exactly when $\eta_{k,h}\neq 0$.
+Reachability follows nonzero directed edges, and recurrence means that every
+nonzero edge lies on a nonzero directed cycle.\footnote{The formal declarations
+are \leanid{MPOTensor.IsSectorEdge},
+\leanid{MPOTensor.SectorReaches}, and
 \leanid{MPOTensor.IsRecurrentSupport}, in
-\texttt{TNLean/MPS/MPDO/SectorRecurrence.lean}.} The edge is on $\eta$, not
-on the trace matrix $T$: this matches the phase-mismatch mechanism of the
-four-sector counterexample above, which is already visible at the level of
-the individual neighboring operators.
+\texttt{TNLean/MPS/MPDO/SectorRecurrence.lean}.}
+The graph is defined from $\eta$, not from its trace matrix $T$. This choice
+captures the phase obstruction in
+Eqs.~\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_obstruction_real_edges}
+and
+\ref{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_phase_obstruction_imaginary_edge},
+which is visible at the level of the neighboring operators.
 
-Reachability defined by reflexive transitive closure is equivalent to the
-existence of a finite directed walk.  Consequently, recurrence of the sector
-support is exactly the return-walk hypothesis in the closed-walk coboundary
-theorem.\footnote{The formal declarations are
+Reachability by reflexive transitive closure is equivalent to the existence of
+a finite directed walk. Recurrence is therefore exactly the return-walk
+hypothesis used by the closed-walk coboundary theorem.\footnote{The formal
+declarations are
 \leanid{TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen},
 \leanid{MPOTensor.sectorReaches_iff_directedWalkReaches}, and
 \leanid{MPOTensor.isRecurrentSupport_iff_directedWalkReturns}.}
 
-Every nonempty closed directed walk is also represented by a finite cyclic
-family of its source vertices.  Consecutive vertices are connected by the
-corresponding edge, including the final return to the initial vertex, and the
+Every nonempty closed directed walk can be represented by the finite cyclic
+family of its source vertices. Consecutive vertices are connected by the
+corresponding edges, including the final return to the initial vertex, and the
 cyclic product of edge weights equals the walk weight.\footnote{The formal
 declarations are
 \leanid{TNLean.Algebra.DirectedWalk.closedConsVertices},
 \leanid{TNLean.Algebra.DirectedWalk.closedConsVertices_edge}, and
 \leanid{TNLean.Algebra.DirectedWalk.weight_closedCons_eq_fin_prod}.}
 
-The finite-factor rescaling used implicitly by the four-sector
-counterexample is now a general lemma about complex matrices, independent of
-the MPDO setting.  If a finite Kronecker product $A_0\otimes\cdots\otimes
-A_{N-1}$ of nonzero matrices is positive semidefinite, then there are
-nonzero scalars $c_0,\ldots,c_{N-1}$ with $\prod_n c_n=1$ and every
-$c_nA_n\geq0$; the proof peels off one factor at a time using the two-factor
-rescaling already available.  A companion lemma shows that the rescaling
-scalar of a single nonzero matrix is unique up to a positive real factor:
-if $c_1M$ and $c_2M$ are both positive semidefinite for a nonzero $M$, then
-$c_1/c_2$ is a positive real number.\footnote{The formal declarations are
+The required finite-factor rescaling is a general matrix lemma. If a finite
+Kronecker product
+\begin{align}
+    A_0\otimes\cdots\otimes A_{N-1}
+        &\geq 0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_positive_finite_kronecker}
+\end{align}
+has only nonzero factors, then there are nonzero scalars
+$c_0,\ldots,c_{N-1}$ such that
+\begin{align}
+    \prod_{n=0}^{N-1}c_n
+        &=1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_rescaling_product_one}\\
+    c_nA_n
+        &\geq 0
+        \qquad\text{for every }n.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_rescaled_factors_positive}
+\end{align}
+The proof removes one factor at a time using the two-factor rescaling lemma.
+A companion uniqueness lemma states that if $M\neq 0$ and both $c_1M$ and
+$c_2M$ are positive semidefinite, then $c_1/c_2$ is a positive real number.
+\footnote{The formal declarations are
 \leanid{Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef} and
 \leanid{Matrix.exists_pos_real_smul_eq_of_smul_posSemidef}, in
 \texttt{TNLean/Algebra/KroneckerFactorPositivity.lean}.}
 
-Reindexing the cyclic tensor product $\Omega_k=\bigotimes_n\eta_{k_n,k_{n+1}}$
-along the shared horizontal-bond indices identifies it, entrywise, with the
-finite Kronecker product of the consecutive neighboring operators around the
-cycle.\footnote{The formal declaration is
+For a cyclic sector word $(k_n)_n$, define
+\begin{align}
+    \Omega_k
+        &=
+        \bigotimes_n\eta_{k_n,k_{n+1}}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_cyclic_neighbor_product}
+\end{align}
+Reindexing along the shared horizontal-bond indices identifies $\Omega_k$
+entrywise with the finite Kronecker product of the consecutive neighboring
+operators around the cycle.\footnote{The formal declaration is
 \leanid{MPOTensor.cyclicEtaTensorProduct_submatrix_eq_finKronecker}.}
-Combined with the finite-factor rescaling lemma and with positivity of
-$\Omega_k$ at every length
-(\leanid{MPOTensor.cyclicEtaTensorProduct_posSemidef}), this gives a coherent
-choice of phases around any \emph{one fixed} nonzero cycle: nonzero scalars
-$c_n$ with $\prod_n c_n=1$ and every $c_n\eta_{k_n,k_{n+1}}\geq0$, both for
-an abstract neighboring-operator family and for the concrete
-inverse-map-constructed
-\leanid{MPOTensor.sectorEta}.\footnote{The formal declarations are
+Combining the finite-factor lemma with positivity of $\Omega_k$ at every
+length, formalized by
+\leanid{MPOTensor.cyclicEtaTensorProduct_posSemidef}, gives a coherent choice
+on any one fixed nonzero cycle: there are nonzero scalars $c_n$ such that
+\begin{align}
+    \prod_n c_n
+        &=1,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_cycle_scalar_product}\\
+    c_n\eta_{k_n,k_{n+1}}
+        &\geq 0
+        \qquad\text{for every }n.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_cycle_edges_positive}
+\end{align}
+This holds both for an abstract neighboring-operator family and for the
+inverse-map-constructed \leanid{MPOTensor.sectorEta}.\footnote{The formal
+declarations are
 \leanid{MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef}
 and
-\leanid{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}.} This
-theorem concerns one fixed cycle: it does not by itself assert that the
-choices made on two different cycles agree on a shared edge, which is the
-remaining content of the coherent vertex-rephasing step.
+\leanid{MPOTensor.exists_pi_smul_posSemidef_of_sectorEta_cycle}.}
+The result concerns one cycle and does not yet prove that choices from
+different cycles agree on a shared edge.
 
-\subsection{The source's one-sided directed-cut obstruction}
+\subsection{The one-sided directed-cut obstruction}
 
-The source's local-orthogonality contradiction uses the decomposition
-$\mathcal A=\mathcal A_1+\mathcal A_2$ together with the one-sided product
-vanishing $\mathcal A_1\mathcal A_2=0$ at Appendix~C.2, lines 1465--1470.
-It does not require $\mathcal A_2\mathcal A_1=0$.  The underlying
-matrix-algebra statement is now formalized as
-\leanid{Matrix.submodule_sup_ne_top_of_mul_eq_zero}: two nonzero linear
-subspaces of a full complex matrix algebra cannot both span the algebra and
-have all products vanish in one order.
+The local-orthogonality contradiction at lines 1465--1470 of Appendix C.2
+uses
+\begin{align}
+    \mathcal A
+        &=
+        \mathcal A_1+\mathcal A_2,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_subspace_decomposition}\\
+    \mathcal A_1\mathcal A_2
+        &=0.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_one_sided_product_zero}
+\end{align}
+It does not require $\mathcal A_2\mathcal A_1=0$
+\cite{Cirac2016MPDO_arXiv}. The underlying matrix-algebra statement is
+formalized as \leanid{Matrix.submodule_sup_ne_top_of_mul_eq_zero}: two nonzero
+linear subspaces of a full complex matrix algebra cannot jointly span the
+algebra if every product vanishes in one order.
 
-The zero-weight reparameterization is now formalized: it retains every
-physical summand, sets the right sector tensor to zero when its Hayashi weight
-vanishes, and thereby isolates every zero-weight sector without changing the
-physical slices.  The concrete inverse-map construction gives a short proof
-of recurrence.  Positive-weight sectors contain nonzero virtual matrices,
-injectivity makes the full sector family span $M_D(\mathbb C)$, and the
-trace-pairing argument closes every nonzero edge through a third sector.
-Thus recurrence is a conclusion, not an additional hypothesis.
+The zero-weight reparameterization retains every physical summand, sets its
+right sector tensor to zero when its Hayashi weight vanishes, and leaves all
+physical slices unchanged. For the concrete inverse-map factorization,
+positive-weight sectors contain nonzero virtual matrices, injectivity makes the
+full sector family span $M_D(\mathbb C)$, and the trace-pairing argument closes
+every nonzero edge through a third sector. Recurrence is therefore a
+conclusion, not an additional hypothesis.
 
-For the stronger one-component assertion used in trace-matrix primitivity,
-let $S$ be a nonempty proper forward-closed set of positive-weight sectors and
-let $C$ be its complement.  The source argument obtains
-$\mathcal A_S\mathcal A_C=0$ from the absence of edges from $S$ to $C$; this
-directed-cut implication is formalized by
+For the stronger one-component assertion used to prove trace-matrix
+primitivity, let $S$ be a nonempty proper forward-closed set of positive-weight
+sectors and let $C$ be its complement. The source obtains
+$\mathcal A_S\mathcal A_C=0$ from the absence of edges from $S$ to $C$
+\cite[Appendix~C.2]{Cirac2016MPDO_arXiv}. This implication is formalized by
 \leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}.
-The one-site matrices in this directed-cut space are now identified with the
-sector virtual matrices used in the spanning theorem.  On the nonzero-weight
-subtype, the spaces belonging to $S$ and $C$ are both nonzero, their sum is the
-full matrix algebra, and their products in the order
-$\mathcal A_S\mathcal A_C$ vanish.  The one-sided product obstruction therefore
-proves that the nonzero neighboring support is strongly connected; no absence
-of edges from $C$ to $S$ is needed.  Positivity identifies this support with
-the positive entries of the restricted real trace matrix, so the latter is
-irreducible.  The relevant declarations are
+The one-site matrices in the directed-cut space are identified with the sector
+virtual matrices used by the spanning theorem. On the nonzero-weight subtype,
+the spaces associated with $S$ and $C$ are both nonzero, their sum is the full
+matrix algebra, and their products in the order
+$\mathcal A_S\mathcal A_C$ vanish. The one-sided obstruction proves that the
+nonzero neighboring support is strongly connected; no absence of edges from
+$C$ to $S$ is needed. Positivity identifies this support with the positive
+entries of the restricted real trace matrix, which is therefore irreducible.
+The relevant declarations are
 \leanid{MPOTensor.PhysicalSectorFactorization.oneSiteSectorMatrix_eq_sectorVirtualMatrix},
 \leanid{MPOTensor.PhysicalSectorFactorization.activeSector_reflTransGen_neighboringOperator_ne_zero},
 and
 \leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_isIrreducible}.
 
-The periodicity step is treated differently from the source.  At lines
-1457--1462 the source passes to a power $T^n$, invokes blocking to remove
-periodic components, and then reduces to primitive diagonal components.  The
-present argument does not formalize that reduction.  Instead, nondegeneracy
-and cyclicity of the trace pairing give a closed support walk of length two
-through every nonzero-weight sector.  Triangle closure, applied to an outgoing
-edge, gives a closed support walk of length three through the same sector.
-These two coprime return lengths are an auxiliary replacement for the source's
-blocking step.  The length-two result and positivity of the corresponding
-diagonal entry of $T^2$ are formalized by
+The periodicity argument differs from the source. At lines 1457--1462,
+Ref.~\cite{Cirac2016MPDO_arXiv} passes to a power $T^n$, uses blocking to
+remove periodic components, and reduces to primitive diagonal components. The
+formal proof does not implement that reduction. Instead, nondegeneracy and
+cyclicity of the trace pairing give a closed support walk of length two through
+every positive-weight sector. Applying triangle closure to an outgoing edge
+gives a closed support walk of length three through the same sector. These
+coprime return lengths replace the blocking step.
+
+The length-two statement and positivity of the corresponding diagonal entry
+of $T^2$ are formalized by
 \leanid{MPOTensor.PhysicalSectorFactorization.exists_active_two_cycle} and
 \leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_pow_two_diag_pos}.
 The length-three return is
 \leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_pow_three_diag_pos}.
-The elementary theorem
+The theorem
 \leanid{Matrix.IsIrreducible.isPrimitive_of_pow_two_diagonal_pos_of_pow_three_diagonal_pos}
-combines irreducibility with these two coprime returns to exhibit one common
-exponent $N$ for which every entry of $T^N$ is positive. Thus
+combines irreducibility with these two coprime returns and gives a common
+exponent $N$ such that
+\begin{align}
+    (T^N)_{k,h}
+        &>0
+        \qquad\text{for all active }k,h.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_trace_matrix_primitive_power}
+\end{align}
+Thus
 \leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix_isPrimitive}
-completes the active-sector primitivity argument. This replacement of the
-source's blocking step is a local fix, not an additional hypothesis.
+completes the active-sector primitivity proof. This replacement of the source's
+blocking argument is a local correction, not an additional hypothesis.
 
-\subsection{Coherent vertex rephasing under recurrence}
+\subsection{Coherent vertex rephasing}
 
-Granting recurrence, propagating the per-cycle phase choice above into a
-single vertex-indexed rescaling requires a coboundary argument, for which
-the uniqueness lemma above supplies the key input.  Fix a nonzero edge
-$k\to h$: by uniqueness, \emph{every} valid rescaling scalar of the single
-matrix $\eta_{k,h}$ (whichever cycle through the edge was used to produce
-it) agrees with every other one up to a positive real factor.  Consequently,
-for any nonzero cycle through several edges, the finite-factor rescaling
-scalars obtained from that one cycle are, edge by edge, the unique
-per-edge scalars up to a positive real factor, so the product of the
-per-edge scalars around \emph{any} nonzero cycle is a positive real number
-(apply the finite-factor lemma to that cycle and compare via uniqueness to
-the per-edge scalars). This is the statement that the phase assignment has
-trivial holonomy, which is the standard sufficient condition for a
-cocycle on a graph to be a coboundary: fixing a base sector in a recurrent
-component and defining its vertex phase by accumulating the per-edge
-scalars along any nonzero directed path from the base sector is then
-independent of the path chosen, because any two paths between the same
-pair of sectors close into a nonzero cycle (using recurrence to supply the
-return path) whose holonomy is trivial.
+Assume recurrence. Fix a nonzero edge $k\to h$. By the uniqueness lemma, every
+scalar that makes $\eta_{k,h}$ positive semidefinite agrees with every other
+such scalar up to a positive real factor, irrespective of the cycle used to
+construct it. For any nonzero cycle, compare the edgewise scalars with the
+finite-factor rescaling of that cycle. Their product around the cycle is a
+positive real number. The associated phase assignment therefore has trivial
+holonomy.
 
-The graph-theoretic coboundary step is now formalized: for a recurrent
-directed relation, any group-valued edge assignment with trivial
-product around every closed directed walk is a vertex coboundary.
-\footnote{The formal declaration is
+Trivial holonomy makes the edge phases a graph coboundary. Fix a base sector in
+each recurrent component and define the phase of a vertex by multiplying edge
+phases along a directed path from the base. A return path supplied by
+recurrence closes any two candidate paths into a nonzero cycle, so the
+definition is path-independent.
+
+The graph-theoretic statement is formalized for a recurrent directed relation:
+any group-valued edge assignment whose product is one around every closed
+directed walk is a vertex coboundary.\footnote{The formal declaration is
 \leanid{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}.}
-The proof chooses one representative of each reachability component and
-defines the vertex weight by multiplication along a path from that
-representative; a common return path proves independence of the chosen path.
+The proof chooses one representative in each reachability component and
+defines vertex weights by path multiplication; a common return path proves
+independence of the selected path.
 
-The general MPDO-specific bridge is formalized under a recurrence hypothesis.
-For every nonzero neighboring operator, a directed return path closes the
-edge into a nonzero cycle.  Positive rescaling of that cyclic tensor product
-therefore supplies a unit phase that makes the edge operator positive
-semidefinite.  Positive rescaling of an arbitrary closed walk, together with
-uniqueness of the unit phase, shows that these chosen edge phases have product
-one around the walk.  The coboundary theorem then gives unit vertex phases
-$z_k$ with edge phase $z_k^{-1}z_h$.  The declarations
+The MPDO-specific bridge is formalized under recurrence. A return path closes
+each nonzero neighboring operator into a nonzero cycle. Positive rescaling of
+the associated cyclic tensor product supplies a unit phase that makes the edge
+operator positive semidefinite. Applying the uniqueness lemma to arbitrary
+closed walks shows that the selected edge phases multiply to one around each
+walk. The coboundary theorem then gives unit vertex phases $z_k$ satisfying
+\begin{align}
+    z_k^{-1}z_h\,\eta_{k,h}
+        &\geq 0
+        \qquad\text{for every }k,h.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_vertex_rephased_eta_positive}
+\end{align}
+The declarations
 \leanid{MPOTensor.exists_vertexPhase_smul_posSemidef} and
 \leanid{MPOTensor.exists_rephased_inverseMapPhysicalSectorFactorization}
-carry out this argument, including the dependent sector bond spaces and the
-reciprocal rephasing of the physical-sector tensors.
-The latter leaves every complete cyclic neighboring product unchanged by
+implement the argument, including dependent sector bond spaces and reciprocal
+rephasing of the physical-sector tensors. The latter leaves every complete
+cyclic neighboring product unchanged by
 \leanid{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}.
-Composing the positive rephased factorization with the conditional bond
+Combining the positive rephased factorization with the conditional bond
 construction gives
 \leanid{MPOTensor.nonempty_etaLocalStructureData_of_recurrentSupport}.
 
-This general result is explicitly scope-restricted: recurrence is an
-additional hypothesis not present in Lemma~C.4. For the concrete inverse-map
-factorization, that restriction is now eliminated. The declarations
+This general theorem is explicitly scope-restricted because recurrence is not
+a hypothesis of Lemma C.4 of Ref.~\cite{Cirac2016MPDO_arXiv}. The restriction
+is eliminated for the concrete inverse-map factorization. The declarations
 \leanid{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_isRecurrentSupport},
 \leanid{MPOTensor.exists_positive_inverseMapPhysicalSectorFactorization}, and
 \leanid{MPOTensor.exists_positive_physicalSectorFactorization_of_isSAL}
-retain and reparameterize the zero-weight sectors, derive recurrence from the
-source hypotheses, and produce the coherently positive factorization.
+retain and reparameterize zero-weight sectors, derive recurrence from the
+source hypotheses, and construct a coherently positive factorization.
 
 The canonical family
-\leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not supply this
-missing result.  Its operators are partial traces of normalized sector states,
-and hence its trace matrix is identically one.  In the source inverse-map
-construction the trace matrix
-\[
-  T_{k,h}=\tr(\eta_{k,h})
-\]
-is a generally nonconstant nonnegative matrix whose positive-weight
-restriction is asserted to be primitive.  Thus the two families cannot be
-identified without an additional theorem; in general they are not equal.
+\leanid{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov} does not prove this
+result. Its operators are partial traces of normalized sector states, so its
+trace matrix is identically one. By contrast, the source inverse-map
+construction has
+\begin{align}
+    T_{k,h}
+        &=
+        \tr(\eta_{k,h}),
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_inverse_map_trace_matrix}
+\end{align}
+which is generally nonconstant and whose positive-weight restriction is
+primitive. The two families cannot be identified without an additional
+theorem and are unequal in general.
 
-The translation-invariant bond $B_{n,n+1}$ is now defined in the original
-physical coordinates and proved positive.  Adjacent translates commute on
-every periodic chain of length at least three, including the pair crossing
-the periodic boundary.  The exceptional chain of length two is also covered:
-the translates beginning at sites zero and one read the sites in the opposite
-cyclic orders.  On the $(k,h)$ sector block they act,
-respectively, as
-\[
-  I_{L_k\otimes R_h}\otimes\eta_{k,h},
-  \qquad
-  \eta_{h,k}^{\mathrm{op}}\otimes I_{R_k\otimes L_h},
-\]
-and therefore commute on complementary tensor factors.  Proposition~C.8 does
-not discuss this crossed finite-size ordering separately, although it is an
-instance of its translated-bond conclusion.\footnote{The formal declarations
-are
+\subsection{Commuting physical bonds and exact realization}
+
+The translation-invariant bond $B_{n,n+1}$ is defined in the original physical
+coordinates and proved positive. Adjacent translates commute on every
+periodic chain of length at least three, including the pair crossing the
+periodic boundary. Length two requires a separate ordering check because the
+translates beginning at sites zero and one read the sites in opposite cyclic
+orders. On the $(k,h)$ sector block, they act as
+\begin{align}
+    B_{0,1}\big|_{(k,h)}
+        &=
+        I_{L_k\otimes R_h}\otimes\eta_{k,h},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_two_site_forward_bond}\\
+    B_{1,0}\big|_{(k,h)}
+        &=
+        \eta_{h,k}^{\mathrm{op}}
+        \otimes I_{R_k\otimes L_h}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_two_site_reverse_bond}
+\end{align}
+These operators commute because they act on complementary tensor factors.
+Proposition C.8 of Ref.~\cite{Cirac2016MPDO_arXiv} does not discuss this
+crossed finite-size ordering separately, although it is an instance of the
+translated-bond conclusion.\footnote{The formal declarations are
 \leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_adjacent_comm} and
 \leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_two_zero_one_comm}.}
 
 Translates with disjoint cyclic two-site supports commute by locality, without
-any further physical hypothesis.\footnote{The formal declaration is
+additional physical hypotheses.\footnote{The formal declaration is
 \leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_disjoint_comm}.}
-Thus the adjacent, crossed two-site, and disjoint local commutators are all
-formalized.  Their finite case distinction is also assembled into pairwise
-commutativity of all translates on every periodic chain of length $N\geq2$.
+The adjacent, crossed two-site, and disjoint cases combine to prove pairwise
+commutativity of all translates on every periodic chain of length $N\geq 2$.
 \footnote{The formal declaration is
 \leanid{MPOTensor.PhysicalSectorFactorization.physicalBond_pairwise_comm}.}
 
-The cyclic sector identity is now identified with the ordered bond product
-and transported through the local unitary, giving the exact finite-chain
+The cyclic sector identity is identified with the ordered bond product and
+transported through the local unitary. This gives the exact finite-chain
 realization
-\[
-  \sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}
-\]
-with $c_N=1$ for the canonical bond determined by the physical-sector
-factorization.\footnote{The formal declaration is
+\begin{align}
+    \sigma^{(N)}(K)
+        &=
+        c_N\prod_{n=1}^{N}B_{n,n+1},
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_exact_bond_realization}\\
+    c_N
+        &=1.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_canonical_bond_scalar}
+\end{align}
+Here the canonical bond is determined by the physical-sector factorization.
+\footnote{The formal declaration is
 \leanid{MPOTensor.PhysicalSectorFactorization.mpo_eq_product_physicalBond}.}
-Together with positivity of the neighboring operators, this supplies the
-mathematical data needed to construct
-\leanid{MPOTensor.EtaLocalStructureData}.  The conditional construction is
-\leanid{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}; its
+Together with positivity of the neighboring operators, this gives the data
+required to construct \leanid{MPOTensor.EtaLocalStructureData}. The
+conditional construction is
+\leanid{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}, and its
 normalization scalar is one. The raw inverse-map physical-sector factorization
-and its coherently positive normalization are now constructed for an injective
-tensor satisfying SAL.  ZCL is not a hypothesis of this construction.
+and its coherently positive normalization are constructed for every injective
+tensor satisfying SAL; ZCL is not needed.
 
-The source Proposition \texttt{3to4} assumes SAL, not ZCL.  ZCL enters only
-after this commuting product form has been obtained, in the later step that
-derives the GSNNCH--ZCL and RFP conclusions.  Accordingly, adding ZCL to a
-conditional theorem would not be relevant to the coherent positive choice.
+Proposition \texttt{3to4} assumes SAL, not ZCL
+\cite{Cirac2016MPDO_arXiv}. ZCL enters only after the commuting product form,
+in the later derivation of the GSNNCH--ZCL and renormalization fixed-point
+conclusions. Adding ZCL to the conditional theorem would therefore not address
+the coherent positive choice.
 
-The coherent positive choice and the active-sector trace-matrix primitivity in
-Lemma \texttt{propSN} are now complete.  The latter is
+The coherent positive choice and active-sector trace-matrix primitivity in
+Lemma \texttt{propSN} are complete. The latter is formalized by
 \leanid{MPOTensor.exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}.
-The positive commuting bond, its exact all-length product realization, and
-the resulting eta-local structure of Proposition \texttt{3to4} are available
-from a coherently positive physical-sector factorization.  Their composition
-with the SAL theorem is
-\leanid{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}, so the
-$\eta$-local conclusion of Proposition~C.8 is now formalized from its source
-hypotheses.
+The positive commuting bond, its exact all-length product realization, and the
+eta-local structure asserted by Proposition \texttt{3to4} follow from the
+coherently positive physical-sector factorization. Their composition with the
+SAL theorem is
+\leanid{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}. Thus the eta-local
+conclusion of Proposition C.8 of Ref.~\cite{Cirac2016MPDO_arXiv} is formalized
+from its source hypotheses.
 
-There is a necessary distinction between the physical sector decomposition
-and the effective index set of the trace matrix.  The former must retain every
-summand of the middle Hilbert space, including a summand with $p_k=0$.  After
-the zero-weight reparameterization above, however,
-$\eta_{k,h}=\eta_{h,k}=0$ for every $h$ whenever $p_k=0$.  Thus the trace
-matrix on the full ambient sector set has a zero row and a zero column and is
-not primitive.  The primitive matrix in Lemma \texttt{propSN} must therefore
-be read on the effective sector set $\{k:p_k>0\}$, as is customary when zero
-probability terms in a direct-sum state decomposition are omitted.  The Lean
-definition \leanid{PhysicalSectorFactorization.activeSectorTraceMatrix}
-restricts the trace matrix to this subtype while leaving the physical sector
-equivalence, and hence the full Hilbert space, unchanged.
+The physical sector decomposition and the effective trace-matrix index set
+must be distinguished. The physical decomposition retains every summand of the
+middle Hilbert space, including those with $p_k=0$. After zero-weight
+reparameterization,
+\begin{align}
+    \eta_{k,h}
+        &=0,
+        \qquad p_k=0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_inactive_outgoing_eta_zero}\\
+    \eta_{h,k}
+        &=0,
+        \qquad p_k=0,
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_inactive_incoming_eta_zero}
+\end{align}
+for every $h$. The trace matrix on the ambient sector set therefore has a zero
+row and zero column and cannot be primitive. The primitive matrix in Lemma
+\texttt{propSN} must be read on the effective sector set
+\begin{align}
+    \{k:p_k>0\}.
+    \label{eq:cpgsv17_mpdo_sal_zcl_eta_local_structure_active_sector_set}
+\end{align}
+This is the customary convention when zero-probability terms are omitted from
+a direct-sum state decomposition. The Lean definition
+\leanid{PhysicalSectorFactorization.activeSectorTraceMatrix} restricts the
+trace matrix to this subtype while preserving the full physical sector
+equivalence and hence the complete Hilbert space.
 
 \section{Classification}
 
-This note now records a closed coherent-positive-choice and primitivity gap in
+This note records a resolved coherent-positive-choice and primitivity gap in
 the SAL-to-positive-bond construction of
 \leanid{MPOTensor.EtaLocalStructureData}. Zero-weight sectors are
-reparameterized without changing the physical decomposition, recurrence is
-derived from injectivity, and the inverse-map sector tensors are coherently
-rephased so that every neighboring operator is positive semidefinite. The
-earlier scope-restricted recurrence theorem remains useful as the general
-graph-theoretic component, but recurrence is a conclusion for the
-reparameterized inverse-map factorization.  The trace matrix restricted to
-positive-weight sectors is primitive.  The unrestricted ambient trace matrix
-is not primitive when a zero-weight sector is present.
+reparameterized without changing the physical decomposition. Injectivity then
+implies recurrence, and a coherent vertex rephasing makes every neighboring
+operator positive semidefinite. The general recurrence theorem remains useful
+as a scope-restricted graph-theoretic component, but recurrence is a conclusion
+for the reparameterized inverse-map factorization.
 
-For the conditional bond construction, all translates commute pairwise at
-every length $N\geq2$.  The finite-chain MPO is the ordered product of those
+The trace matrix restricted to positive-weight sectors is primitive. The
+ambient trace matrix is not primitive when a zero-weight sector is present.
+This distinction preserves all physical summands while identifying the
+effective matrix to which the source's primitivity claim applies.
+
+For the conditional bond construction, every pair of translates commutes at
+each length $N\geq 2$. The finite-chain MPO is the ordered product of these
 bonds, first in cyclic sector coordinates and then in the original physical
-coordinates.  If the neighboring operators are positive semidefinite, these
-results provide the positive commuting bond and its exact realization with
-scalar one, and they determine the eta-local structure data. The raw
-physical-sector factorization already follows for an injective tensor
-satisfying SAL, and the coherent positive choice is now obtained by
-normalizing the inactive sectors and deriving recurrence from injectivity.
-The active-sector trace-matrix primitivity step is also complete.  The
-projector form of the local-orthogonality contraction remains a separate
-source presentation, but it is no longer an obstruction to Lemma
-\texttt{propSN} because the directed-cut product identity is proved directly
-for the sector virtual matrix spaces.
+coordinates. Positive semidefiniteness of the neighboring operators supplies a
+positive commuting bond and an exact realization with scalar one, thereby
+determining the eta-local structure data.
+
+An injective tensor satisfying SAL already has the raw physical-sector
+factorization. Normalizing inactive sectors and deriving recurrence from
+injectivity now provide the coherent positive choice, and the active-sector
+trace-matrix primitivity proof is complete. The projector presentation of the
+source's local-orthogonality contraction remains a separate presentation, but
+it no longer obstructs Lemma \texttt{propSN}: the directed-cut product identity
+is proved directly for the sector virtual matrix spaces.
 
 \bibliographystyle{alpha}
 \bibliography{references}

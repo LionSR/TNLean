@@ -16,109 +16,142 @@
 
 \section{The cyclic mismatch}
 
-The statement of Theorem~4.9 in
-\cite[lines~851--893]{Cirac2016MPDO_arXiv} numbers SAL together with literal
-ZCL as condition~(ii), Gibbs form together with literal ZCL as condition~(iii),
-the BNT physical-sector structure as condition~(iv), and the
-renormalization fixed-point property as condition~(v). The propositions in
-the Appendix have the following literal component conclusions:
-\begin{align*}
-  \mathtt{prop2to3}&:\quad (ii)\Longrightarrow(iv),\\
-  \mathtt{prop3to4}&:\quad (iv)\Longrightarrow
-      \text{the GSNNCH-form clause of (iii)},\\
-  \mathtt{prop4to2}&:\quad \text{the GSNNCH-form clause of (iii)}
-      \Longrightarrow\text{the SAL clause of (ii)},\\
-  \mathtt{prop2to5}&:\quad (ii)\Longrightarrow
-      \text{a channel pair between the two- and three-site tensors}.
-\end{align*}
-These are the displayed statements at source lines~1740--1817. In particular,
-\texttt{prop3to4} does not conclude the ZCL conjunct of condition~(iii), and
-\texttt{prop4to2} does not conclude that conjunct of condition~(ii). More
-seriously, the proof of \texttt{prop3to4} invokes \texttt{lemmus} from
-lines~1646--1658 to make the repeated-copy weights independent of the copy
-label, but \texttt{lemmus} assumes ZCL whereas the displayed statement of
-\texttt{prop3to4} assumes only condition~(iv). Thus the printed component
-signature is not itself validated by the following proof; this is a
-load-bearing instance of proof-path drift. Likewise, \texttt{prop2to5} does
-not itself conclude condition~(v). The concluding proof at lines~1819--1825
-nevertheless assigns the propositions successively to
-$(ii)\Rightarrow(iii)$, $(iii)\Rightarrow(iv)$,
-$(iv)\Rightarrow(ii)$, and $(iii)\Rightarrow(v)$. Thus the discrepancy concerns
-the proof path and the component conclusions, and is not repaired by changing
-only the last occurrence from ``(iii)'' to ``(iv)''.
+Theorem~4.9 of Ref.~\cite[lines~851--893]{Cirac2016MPDO_arXiv} assigns the
+following labels: condition~(ii) consists of SAL and literal ZCL;
+condition~(iii) consists of Gibbs form and literal ZCL; condition~(iv) is the
+BNT physical-sector structure; and condition~(v) is the renormalization
+fixed-point property. The propositions at source lines~1740--1817 have the
+literal component conclusions
+\begin{align}
+    \mathtt{prop2to3}
+        &:\quad (ii)\Longrightarrow(iv),
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop2to3}\\
+    \mathtt{prop3to4}
+        &:\quad (iv)\Longrightarrow
+        \text{the GSNNCH-form clause of (iii)},
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop3to4}\\
+    \mathtt{prop4to2}
+        &:\quad \text{the GSNNCH-form clause of (iii)}
+        \Longrightarrow\text{the SAL clause of (ii)},
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop4to2}\\
+    \mathtt{prop2to5}
+        &:\quad (ii)\Longrightarrow
+        \text{a channel pair between the two- and three-site tensors}.
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop2to5}
+\end{align}
+In particular,
+Eq.~\ref{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop3to4} does not
+include the ZCL conjunct of condition~(iii), and
+Eq.~\ref{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop4to2} does not
+include the ZCL conjunct of condition~(ii). The proof of
+\texttt{prop3to4} also invokes \texttt{lemmus}, at source
+lines~1646--1658, to show that the repeated-copy weights do not depend on the
+copy label. That lemma assumes ZCL, whereas the displayed statement of
+\texttt{prop3to4} assumes only condition~(iv). The printed signature is
+therefore not established by its proof; the proof path uses a load-bearing
+hypothesis absent from that signature.
 
-Proposition~\texttt{3to5} at lines~1510--1563 constructs a pair of channels
-from one supplied physical-sector factorization.  Proposition
-\texttt{prop2to5} then says that the same construction is first performed in
-each locally orthogonal BNT subspace. Its assertion that the corresponding
-maps can be combined is the additional all-BNT step. Lines~1821--1825 then
-apply the two-to-three-site channels twice to obtain the one-to-two-site maps
-for the blocked tensor in condition~(v).
+Equation~\ref{eq:cpgsv17_mpdo_theorem_4_9_implication_label_prop2to5} likewise
+does not conclude condition~(v). Nevertheless, the concluding proof at source
+lines~1819--1825 successively identifies the propositions with
+\begin{align}
+    (ii)&\Longrightarrow(iii),
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_concluding_ii_iii}\\
+    (iii)&\Longrightarrow(iv),
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_concluding_iii_iv}\\
+    (iv)&\Longrightarrow(ii),
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_concluding_iv_ii}\\
+    (iii)&\Longrightarrow(v).
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_concluding_iii_v}
+\end{align}
+The discrepancy affects both the proof path and the component conclusions. It
+cannot be repaired merely by replacing the last occurrence of ``(iii)'' with
+``(iv)''.
+
+Proposition~\texttt{3to5} of
+Ref.~\cite[lines~1510--1563]{Cirac2016MPDO_arXiv} constructs a pair of
+channels from one supplied physical-sector factorization.
+Proposition~\texttt{prop2to5} applies that construction separately in each
+locally orthogonal BNT subspace and adds the step that combines the resulting
+maps over all BNT sectors. Source lines~1821--1825 then apply the
+two-to-three-site channels twice to obtain the one-to-two-site maps for the
+blocked tensor in condition~(v).
 
 \section{The literal implication (iv)$\Rightarrow$(v) is false}
 
-Condition~(iv) constrains each normal BNT representative but places no
-restriction on the raw weights of its repeated copies. This omission is
-load-bearing. Let the sole scalar representative be $A=1$, with two copies of
-weights $1$ and $1/2$. The resulting one-letter tensor has local virtual
-matrix
-\[
-  K^{00}=\operatorname{diag}(1,1/2).
-\]
-It is exactly a BNT canonical presentation with a global unit-weight copy,
+Condition~(iv) constrains each normal BNT representative but does not constrain
+the raw weights of its repeated copies. This omission is essential. Let the
+only scalar representative be $A=1$, and take two copies with weights $1$ and
+$1/2$. The resulting one-letter tensor has the local virtual matrix
+\begin{align}
+    K^{00}
+        &=\operatorname{diag}(1,1/2).
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_counterexample_tensor}
+\end{align}
+This tensor is a BNT canonical presentation with a global unit-weight copy. It
 generates positive semidefinite periodic operators at every positive length,
-and its sole BNT representative has nonnilpotent physical-trace transfer. The
-singleton BNT family has simultaneous one-letter span. The representative
-itself generates MPDOs, satisfies the distinct-layer equation vacuously, and
-has the scalar physical-sector factorization with positive neighboring
-operator and normalized rank-one trace coefficients. Thus all standing
-hypotheses and every clause of condition~(iv) have explicit component
-witnesses; the two-site block also generates MPDOs.
+and its only BNT representative has a nonnilpotent physical-trace transfer.
+The singleton BNT family has simultaneous one-letter span. The representative
+generates MPDOs, satisfies the distinct-layer equation vacuously, and admits
+the scalar physical-sector factorization with a positive neighboring operator
+and normalized rank-one trace coefficients. Thus every standing hypothesis
+and every clause of condition~(iv) has an explicit component witness. The
+two-site block also generates MPDOs.
 
-The two-site block has sole local matrix $(K^{00})^2$. If it satisfied
-Definition~4.1, trace preservation would make its physical-trace transfer
-idempotent, hence $(K^{00})^4=(K^{00})^2$. Taking traces would give
-\[
-  1+2^{-4}=1+2^{-2},
-\]
-a contradiction. The kernel-checked capstone is
-\leanid{MPOTensor.CaseIIAbsorptionCounterexample.%
-printed_theorem49_iv_to_v_is_false}. Consequently the literal implication
-(iv)$\Rightarrow$(v) is refuted. Its classification is \emph{unfaithful
-statement}; treating projector-controlled outer-BNT assembly as its only
-missing step is \emph{proof-path drift}. No channel assembly can prove this
-raw-weight assertion.
+The only local matrix of the two-site block is $(K^{00})^2$. If this block
+satisfied Definition~4.1 of Ref.~\cite{Cirac2016MPDO_arXiv}, trace preservation
+would make its physical-trace transfer idempotent. Hence
+\begin{align}
+    (K^{00})^4
+        &=(K^{00})^2,
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_idempotence}\\
+    \tr\!\left((K^{00})^4\right)
+        &=\tr\!\left((K^{00})^2\right),
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_trace_idempotence}\\
+    1+2^{-4}
+        &=1+2^{-2},
+    \label{eq:cpgsv17_mpdo_theorem_4_9_implication_label_trace_contradiction}
+\end{align}
+which is false. The kernel-checked capstone is
+\leanid{MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false}.
+Consequently, the literal implication $(iv)\Rightarrow(v)$ is refuted. Its
+mathematical status is an \emph{unfaithful statement}; presenting
+projector-controlled outer-BNT assembly as its sole missing step would instead
+be \emph{proof-path drift}. No channel-assembly argument can establish the
+assertion with unrestricted raw copy weights.
 
-This does not refute the source proposition \texttt{prop2to5}. That proposition
-starts from condition~(ii), not condition~(iv). In the earlier Case-II
-derivation, lines~1646--1665 use literal zero correlation length to prove that
-repeated-copy weights are independent of the copy label and then absorb the
-common weight into the representative. The short proof of
-\texttt{prop2to5} subsequently invokes Proposition~\texttt{3to5} within each
-outer BNT sector. The projector-controlled assembly for this viable
-(ii)$\Rightarrow$(v) route is formalized in issue~\#6632; the source-context
-per-representative factorization remains issue~\#6775.
+This counterexample does not refute the source proposition
+\texttt{prop2to5}, because that proposition starts from condition~(ii), not
+condition~(iv). In the preceding Case-II derivation, source lines~1646--1665
+use literal zero correlation length to show that repeated-copy weights are
+independent of the copy label and then absorb their common value into the
+representative. Proposition~\texttt{prop2to5} subsequently invokes
+Proposition~\texttt{3to5} inside each outer BNT sector. The
+projector-controlled assembly required by this viable
+$(ii)\Rightarrow(v)$ route is formalized in \ghissue{6632}; the
+source-context factorization for each representative remains tracked by
+\ghissue{6775}.
 
 \section{Formal treatment}
 
-The formal development therefore does not attach the one-factorization
-construction to any of the incorrect labels in the concluding paragraph.  It
-cites Proposition~\texttt{3to5} and the twice-applied channel observation at
-lines~1821--1825 directly.  The resulting theorem is conditional on one
-supplied factorization of its whole input tensor. It is a \emph{conditional
-helper}; condition~(iv), which supplies data only for each representative,
-does not meet that hypothesis for a raw repeated-copy tensor. The literal
-(iv)$\Rightarrow$(v) claim is therefore not presented as an unfinished
+The formal development does not attach the one-factorization construction to
+any incorrect implication label in the concluding paragraph. It instead cites
+Proposition~\texttt{3to5} and the twice-applied channel observation at source
+lines~1821--1825 directly. The resulting theorem assumes one factorization of
+its entire input tensor. It is therefore a conditional helper. Condition~(iv)
+provides data only for each representative and does not supply this hypothesis
+for a raw repeated-copy tensor. The formal development accordingly does not
+present the false implication $(iv)\Rightarrow(v)$ as an unfinished
 direct-sum construction.
 
-Files that use the concluding paragraph carry a \emph{Local fix (cyclic
-implication labels)} marker and cite this note. This records proof-path drift
-in the printed proof, including the hidden ZCL use in \texttt{prop3to4}. The
-separate restriction to one supplied factorization is recorded in
-\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. Issue~\#6632 formalizes the
-projector-controlled assembly needed for the source proposition
-\texttt{prop2to5}, after ZCL-derived common-weight absorption; it does not
-prove the refuted literal implication.
+Files that rely on the concluding paragraph carry a \emph{Local fix (cyclic
+implication labels)} marker and cite this note. The marker records the printed
+proof-path drift, including the hidden use of ZCL in \texttt{prop3to4}. The
+restriction to one supplied factorization is recorded separately in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The projector-controlled
+assembly needed for the source proposition \texttt{prop2to5}, after
+common-weight absorption derived from ZCL, is formalized in \ghissue{6632};
+it does not prove the refuted literal implication.
 
 \bibliographystyle{alpha}
 \bibliography{references}

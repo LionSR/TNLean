@@ -15,633 +15,659 @@
 \maketitle
 \gapnote{open-gap}{open}
 
-\section{Source passages and mathematical content}
+\section{Source theorem and comparison standard}
 
-The non-periodic matrix product vector Fundamental Theorem in
-\cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys,Cirac2021Matrix} is a theorem
-about tensors already put in canonical form. The comparison is not stated as a
-theorem about arbitrary block-diagonal data plus unrelated finite-length
-hypotheses. The finite-length hypotheses now isolated in the formalization are
-not separate assumptions in the paper theorem. They are names for the
-mathematical ingredients supplied by the source argument: canonical-form
-reduction, BNT selection, fixed-length block-injective span after blocking,
-phase-gauge matching, and power-sum comparison.
+The nonperiodic matrix product vector Fundamental Theorem concerns tensors in
+canonical form
+\cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys,Cirac2021Matrix}. It is not a
+theorem about arbitrary block-diagonal tensors supplemented by unrelated
+finite-length assumptions. The finite-length hypotheses isolated in the
+formalization name ingredients of the source proof: canonical-form reduction,
+selection of a basis of normal tensors (BNT), fixed-length block-injective span
+after blocking, phase-gauge matching, and comparison of power sums.
 
-This note uses the paper source, not issue numbers, as the comparison standard.
-The formal issue trackers are useful for scheduling work, but the mathematical
-boundary is the following one. A conditional formal theorem matches the source
-only when its extra hypotheses are exactly one of the source ingredients listed
-below, or when the text states that the source ingredient has not yet been
-proved.
+This note uses the cited sources, rather than issue numbers, as the comparison
+standard. Issue trackers may schedule the formal work, but they do not determine
+the mathematical boundary. A conditional formal theorem matches the source
+only if each additional hypothesis is one of the source ingredients identified
+here, or if the theorem explicitly records that the corresponding source
+ingredient has not yet been proved.
 
-\begin{description}
-  \item[Positive-length MPVs.]
-  The paper works with
-  \[
-    \langle i_1,\ldots,i_N|V^{(N)}(A)\rangle
-      = \operatorname{tr}(A^{i_1}\cdots A^{i_N}),
-    \qquad N=1,2,\ldots.
-  \]
-  A formal theorem should not use the empty word as a CPSV hypothesis or
-  conclusion.
+For a tensor $A=(A^i)_i$, define its matrix product vector at positive length
+$N$ by the amplitudes
+\begin{align}
+    \bra{i_1,\ldots,i_N}V^{(N)}(A)
+        &=
+        \tr\left(A^{i_1}\cdots A^{i_N}\right),
+        \qquad N\geq 1.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_positive_length_mpv}
+\end{align}
+The source uses only positive lengths
+\cite[Definition~\texttt{MPV}, lines~130--151]{Cirac2016MPDO_arXiv}. A formal
+theorem should therefore not use the empty word as a source hypothesis or
+conclusion.
 
-  \item[Canonical form.]
-  The source first reaches
-  \[
-    A^i=\bigoplus_k \mu_k A_k^i,\qquad \sum_k D_k\le D,
-  \]
-  and then removes periods by blocking. The formal route should therefore keep
-  zero blocks and period-removal data separate from later injectivity blocking.
+Canonical-form reduction gives
+\begin{align}
+    A^i
+        &=
+        \bigoplus_k \mu_k A_k^i,
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_canonical_blocks}\\
+    \sum_k D_k
+        &\leq D,
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_canonical_dimensions}
+\end{align}
+where $D$ is the original bond dimension and $D_k$ is the dimension of the
+$k$th nonzero invariant block
+\cite[lines~214--225]{Cirac2016MPDO_arXiv}. Periods are then removed by
+blocking. Zero blocks and period-removal data must remain separate from the
+later injectivity blocking.
 
-  \item[BNT decomposition.]
-  The source writes
-  \[
-    A^i=X\left[\bigoplus_j(M_j\otimes A_j^i)\right]X^{-1},
-  \]
-  and
-  \[
-    |V^{(N)}(A)\rangle
-      =\sum_j\left(\sum_q\mu_{j,q}^N\right)|V^{(N)}(A_j)\rangle.
-  \]
-  The comparison is between the selected BNT representatives, not the raw
-  cyclic-sector or repeated-copy lists produced on the way to them.
+After selecting BNT representatives $A_1,\ldots,A_g$, the source writes
+\begin{align}
+    A^i
+        &=
+        X\left[\bigoplus_{j=1}^{g}\left(M_j\otimes A_j^i\right)\right]X^{-1},
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_bnt_tensor_decomposition}\\
+    \ket{V^{(N)}(A)}
+        &=
+        \sum_{j=1}^{g}
+        \left(\sum_{q=1}^{r_j}\mu_{j,q}^{N}\right)
+        \ket{V^{(N)}(A_j)}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_bnt_mpv_decomposition}
+\end{align}
+The comparison concerns these selected representatives, not the raw
+cyclic-sector or repeated-copy lists produced during canonical-form reduction.
 
-  \item[Block-injective span.]
-  After the cited blocking step, every matrix in
-  \[
-    \bigoplus_jM_{D_j}(\mathbb C)
-  \]
-  is a linear combination of the block-evaluations $\tilde A^i$. The formal
-  proof must prove this homogeneous fixed-length direct-sum span, or keep it
-  explicitly as a hypothesis.
+After the block-injectivity step, the blocked evaluations $\widetilde A^i$
+satisfy
+\begin{align}
+    \operatorname{span}\{\widetilde A^i\}_i
+        &=
+        \bigoplus_{j=1}^{g} M_{D_j}(\C).
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_block_injective_span}
+\end{align}
+The formal proof must establish the homogeneous fixed-length direct-sum span in
+(\ref{eq:rmp_nonperiodic_bnt_comparison_inputs_block_injective_span}), or retain
+it explicitly as a hypothesis.
 
-  \item[Equal-case weights.]
-  Once the BNT representatives have been matched, the source compares
-  \[
-    \sum_q\mu_{j,q}^N
-      =
-    \sum_q(\nu_{j,q}e^{i\phi_j})^N
-  \]
-  for all matched $j$ and $N$, and only then applies the finite power-sum
-  lemma.
-\end{description}
+Once the BNT representatives of two tensors have been matched, the equal case
+compares their weights through
+\begin{align}
+    \sum_q \mu_{j,q}^{N}
+        &=
+        \sum_q \left(\nu_{j,q}e^{\mathrm{i}\phi_j}\right)^{N},
+        \qquad\text{for every matched $j$ and every $N\geq 1$}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_equal_case_power_sums}
+\end{align}
+The finite power-sum lemma is applied only after this representative-level
+matching.
 
-\subsection{Verdict}
+\section{Source labels and their formal meaning}
 
-There is no mathematical discrepancy with the source theorem if the conditional
-formal hypotheses are read as names for source inputs that still have to be
-produced from the canonical-form proof. The source theorem assumes two tensors
-already in canonical form and then compares their bases of normal tensors. It
-does not assume arbitrary phase covers, raw cyclic-sector lists, cumulative
-pair-span fullness, or length-zero matrix product vector equality.
+The local 2016 source labels the canonical-form reduction
+\texttt{eq:II\_Aiplusk1}:
+\begin{align}
+    A^i
+        &=
+        \sum_{k=1}^{r}P_k B^iP_k
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_invariant_reduction}\\
+        &=
+        \bigoplus_{k=1}^{r}\mu_k A_k^i.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_canonical_reduction}
+\end{align}
+The sentence following that source display states
+$\sum_k D_k\leq D$, allowing an all-zero leftover block
+\cite[lines~214--219]{Cirac2016MPDO_arXiv}. The source display
+\texttt{eq:II\_CF1} restates the canonical tensor as
+\begin{align}
+    A^i
+        &=
+        \bigoplus_{k=1}^{r}\mu_k A_k^i.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_canonical_form}
+\end{align}
 
-The present formal boundary is therefore a proof gap, not a different theorem.
-The remaining inputs are the representative-family BNT cover, the exact-length
-direct-sum span supplied by block-injective canonical form, and the transport of
-those data through the common blocking and word-reindexing steps. Until these
-inputs are proved, the downstream after-blocking theorem should stay visibly
-conditional.
-
-The phrase ``zero tail'' is formalization terminology. The 2016 source says
-only that, after extracting the nonzero invariant blocks,
-$\sum_k D_k \le D$, and explains this as the possible presence of zero blocks
-\cite[lines~214--219]{Cirac2016MPDO_arXiv}. Thus a zero tail in the formal
-text means the unused all-zero block summand of dimension
-$D - \sum_k D_k$. It is not a paper term and should not be used without this
+The phrase ``zero tail'' is formalization terminology. It denotes the unused
+all-zero summand of dimension
+\begin{align}
+    D_{\mathrm{zero}}
+        &=
+        D-\sum_k D_k.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_zero_tail_dimension}
+\end{align}
+It is not terminology from the source and should not appear without this
 definition.
 
-\subsection{Source label map}
+The source phase-gauge relation \texttt{eq:II:A=XAX} is
+\begin{align}
+    \widetilde A_k
+        &=
+        e^{\mathrm{i}\phi_k}X_kA_jX_k^{-1}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_phase_gauge}
+\end{align}
+Together with the BNT characterization \texttt{prop:char-BNT}, this relation
+identifies normal blocks modulo phase and invertible gauge
+\cite[lines~264--280 and 1135--1148]{Cirac2016MPDO_arXiv}. The source BNT is
+therefore a list of representatives of phase-gauge equivalence classes. A
+common phase cover on raw cyclic sectors is not yet the source matching
+statement; it must first descend to the selected representatives.
 
-The comparison below uses the labels in the local 2016 source wherever the
-paper gives one:
-\[
-  A^i = \sum_{k=1}^r P_k B^i P_k
-      = \bigoplus_{k=1}^r \mu_k A_k^i
-  \tag{\texttt{eq:II\_Aiplusk1}}
-\]
-is the canonical-form reduction; the following source sentence adds
-$\sum_k D_k \le D$, explaining the possible all-zero leftover block. The
-canonical-form display is the equation labelled \texttt{eq:II\_CF1}:
-\[
-  A^i = \bigoplus_{k=1}^r \mu_k A_k^i
-  \tag{\texttt{eq:II\_CF1}}
-\]
-The phase-gauge relation used in the BNT characterization is labelled
-\texttt{eq:II:A=XAX}:
-\[
-  \tilde A_k = e^{i\phi_k} X_k A_j X_k^{-1}
-  \tag{\texttt{eq:II:A=XAX}}
-\]
-The BNT characterization is \texttt{prop:char-BNT}
-\cite[lines~278--280 and 1135--1148]{Cirac2016MPDO_arXiv}, and the BNT
-decomposition is
-the subequation labelled \texttt{eq:II\_ABasicTensors}:
-\[
-  A^i =
-  X\left[\bigoplus_{j=1}^g(M_j\otimes A_j^i)\right]X^{-1}
-  =
-  \bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
-    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}
-  \tag{\texttt{eq:II\_ABasicTensors}}
-\]
-Its matrix product vector expansion is the displayed formula labelled
-\texttt{decBSV}. The block-injective definition and bound are labelled
-\texttt{defnbi} and \texttt{propblockinj}. The proportional Fundamental
-Theorem is \texttt{thm1}; the equal-MPV corollary is \texttt{II\_cor2}.
+The source subequation \texttt{eq:II\_ABasicTensors} expands the BNT data as
+\begin{align}
+    A^i
+        &=
+        X\left[\bigoplus_{j=1}^{g}\left(M_j\otimes A_j^i\right)\right]X^{-1}
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_bnt_first_form}\\
+        &=
+        \bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+        \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_bnt_copy_form}
+\end{align}
+Its matrix product vector expansion is the source display
+\texttt{decBSV}. The representative index $j$ and copy index $q$ have
+different roles: repeated blocks contribute through the power sums attached to
+one representative, as in
+(\ref{eq:rmp_nonperiodic_bnt_comparison_inputs_bnt_mpv_decomposition}). They
+should not become theorem-level sector-matching data unless the theorem
+specifically recovers their multiplicities or weights.
 
-In the proof appendix, the normal-block overlap and phase-gauge criterion is
-\texttt{equalMPS}, the phase equality corollary is \texttt{eqV}, and the finite
-power-sum lemma is \texttt{Lem:app\_simple}. These labels are the source
-objects that the formal BNT comparison should match. Statements about raw
-flattened cyclic sectors, common phase covers, or cumulative pair algebras are
-formal intermediates; they follow CPSV only insofar as they are proved
-to imply the labelled BNT comparison objects above.
+The source labels the block-injective definition and its bound
+\texttt{defnbi} and \texttt{propblockinj}. These statements give an exact
+physical-length span after blocking, namely
+(\ref{eq:rmp_nonperiodic_bnt_comparison_inputs_block_injective_span}).
+Cumulative algebra fullness and length-zero membership of the identity do not
+give this conclusion.
 
-\subsection{Formula-by-formula translation}
+The proportional Fundamental Theorem is \texttt{thm1}, and the equal-MPV
+corollary is \texttt{II\_cor2}
+\cite{Cirac2016MPDO_arXiv}. In the proof appendix,
+\texttt{equalMPS} gives the normal-block overlap and phase-gauge criterion,
+\texttt{eqV} gives the phase-equality corollary, and
+\texttt{Lem:app\_simple} is the finite power-sum lemma
+\cite[lines~1155--1163]{Cirac2016MPDO_arXiv}. These are the source objects that
+the formal BNT comparison must reproduce. Raw flattened cyclic sectors, common
+phase covers, and cumulative pair algebras are formal intermediates. They
+support the source theorem only after they are proved to yield the labelled BNT
+objects.
 
-Reading the labelled source formulas literally gives the following translation
-rules for the formal theorem surface.
+These observations impose five translation rules.
 
 \begin{enumerate}
-  \item The displays \texttt{eq:II\_Aiplusk1} and \texttt{eq:II\_CF1} give a
-  block diagonal tensor
-  \[
-    A^i=\bigoplus_k \mu_k A_k^i
-  \]
-  whose displayed blocks have dimensions summing to at most the original bond
-  dimension. The formal zero-tail parameter is therefore only the dimension of
-  the omitted all-zero summand. It is not an additional normal tensor, a BNT
-  representative, or a separate scalar weight in the paper decomposition.
+    \item The source displays \texttt{eq:II\_Aiplusk1} and
+    \texttt{eq:II\_CF1} give nonzero blocks whose dimensions sum to at most the
+    original bond dimension. The formal zero tail is only the omitted all-zero
+    summand. It is not a normal tensor, a BNT representative, or an additional
+    scalar weight.
 
-  \item The phase-gauge relation \texttt{eq:II:A=XAX}
-  \cite[lines~264--268]{Cirac2016MPDO_arXiv} and the characterization
-  \texttt{prop:char-BNT}
-  \cite[lines~278--280 and 1135--1148]{Cirac2016MPDO_arXiv} quotient the
-  canonical-form blocks by phase and gauge.
-  Thus the paper's BNT is a list of representatives of equivalence classes.
-  A formal common phase cover on raw cyclic sectors is not yet the paper's BNT
-  matching statement until it has been pushed down to these representatives.
+    \item The source relation \texttt{eq:II:A=XAX} and characterization
+    \texttt{prop:char-BNT} quotient canonical blocks by phase and gauge
+    \cite[lines~264--280 and 1135--1148]{Cirac2016MPDO_arXiv}. A matching
+    statement for raw cyclic sectors must descend to these equivalence classes
+    before it matches the source BNT theorem.
 
-  \item The BNT expansion \texttt{eq:II\_ABasicTensors} and \texttt{decBSV}
-  separate the representative index $j$ from the copy index $q$:
-  \[
-    |V^{(N)}(A)\rangle
-      =
-    \sum_j\left(\sum_q\mu_{j,q}^N\right)|V^{(N)}(A_j)\rangle.
-  \]
-  Repeated blocks therefore appear in the paper through the power sums of the
-  weights attached to one representative. They should not be exposed as a new
-  family of theorem-level sector-matching statements unless the statement is
-  exactly about recovering those multiplicities or weights.
+    \item The source formulas \texttt{eq:II\_ABasicTensors} and
+    \texttt{decBSV} separate representatives from their repeated copies.
+    Repetitions enter through coefficient power sums, not through an additional
+    family of unmatched source sectors.
 
-  \item The source definitions \texttt{defnbi} and \texttt{propblockinj} give
-  exact physical-length span after blocking:
-  \[
-    \operatorname{span}\{\tilde A^i\}_i
-      =
-    \bigoplus_j M_{D_j}(\mathbb C)
-  \]
-  for the blocked physical alphabet. Cumulative algebra fullness, or
-  membership of the identity at length zero, is not this assertion.
+    \item The source statements \texttt{defnbi} and
+    \texttt{propblockinj} require exact-length direct-sum span. They do not
+    follow from cumulative fullness or from the empty word.
 
-  \item The Fundamental Theorem \texttt{thm1} compares the BNT representatives
-  of two tensors in canonical form. The equal-case corollary \texttt{II\_cor2}
-  then uses \texttt{Lem:app\_simple} on the already matched coefficient power
-  sums. Hence the formal equal-case route should first establish the
-  representative matching and only then recover multiplicities and weights.
+    \item The source theorem \texttt{thm1} first matches BNT representatives.
+    The equal-case corollary \texttt{II\_cor2} then applies
+    \texttt{Lem:app\_simple} to their coefficient power sums
+    \cite{Cirac2016MPDO_arXiv}. The formal equal-case proof must preserve this
+    order.
 \end{enumerate}
 
-These translation rules are also the naming rule for this part of the
-formalization. Results that merely package raw cyclic-sector data into one of
-these hypotheses are supporting lemmas. Theorems should be reserved for the
-source-level milestones above, or for final statements that explicitly include
-the remaining CPSV hypotheses.
+These rules also determine theorem naming in this part of the formalization.
+Results that only package raw cyclic-sector data into source hypotheses are
+supporting lemmas. Theorems should describe the source-level milestones or
+state the remaining source hypotheses explicitly.
 
-\subsection{Positive-length matrix product vectors}
+\section{Canonical form, period removal, and BNT selection}
 
-The 2016 paper defines the matrix product vector family only for positive chain
-lengths $N=1,2,\ldots$
-\cite[Definition~\texttt{MPV}, source lines~130--151]{Cirac2016MPDO_arXiv}.
-Thus the source comparison is
-\[
-  \operatorname{tr}(A^{i_1}\cdots A^{i_N})
-  =
-  \operatorname{tr}(B^{i_1}\cdots B^{i_N})
-  \qquad (N \ge 1),
-\]
-or its proportional analog. A formal relation that also includes the empty
-word is a stronger auxiliary convention. It is useful for algebraic closure, but
-the source theorem does not get a positive-length conclusion from the
-length-zero trace.
+The source starts with a tensor $B$, removes invariant subspaces, and replaces
+it by the block-diagonal tensor in
+(\ref{eq:rmp_nonperiodic_bnt_comparison_inputs_canonical_blocks}), which gives
+the same positive-length matrix product vectors
+\cite[lines~214--225]{Cirac2016MPDO_arXiv}. It then studies the completely
+positive map of each block. Blocking a common multiple of the periods removes
+periodic peripheral eigenvalues
+\cite[lines~227--231]{Cirac2016MPDO_arXiv}. The resulting blocks are normal in
+the source sense, and the tensor is in canonical form
+\cite[lines~233--255]{Cirac2016MPDO_arXiv}. The review gives the same sequence:
+block diagonalization, period-removing blocking, primitive transfer maps, and
+canonical form \cite[lines~1793--1839]{Cirac2021Matrix}.
 
-\subsection{Canonical form and period removal}
+Period removal and finite-length injectivity are distinct operations. The first
+makes the peripheral spectrum primitive. The second supplies injective or
+block-injective span after normality is available.
 
-The first source step removes invariant subspaces. Starting from a tensor
-$B$, the 2016 paper replaces it by block-diagonal matrices
-\[
-  A^i=\bigoplus_{k=1}^r \mu_k A_k^i,\qquad \sum_kD_k\le D
-\]
-which generate the same positive-length matrix product vectors
-\cite[lines~214--225]{Cirac2016MPDO_arXiv}. Each block is then treated through
-its completely positive map. Periodic peripheral eigenvalues are removed by
-blocking a common multiple of their periods
-\cite[lines~227--231]{Cirac2016MPDO_arXiv}. After that blocking, the blocks are
-normal in the sense used in the paper, and the tensor is in canonical form
-\cite[lines~233--255]{Cirac2016MPDO_arXiv}. The review gives the same
-description: block diagonalization, period-removing blocking, primitive
-transfer maps, and the resulting canonical form
-\cite[lines~1793--1839]{Cirac2021Matrix}.
+For a canonical tensor, a BNT is a family of normal tensors
+$A_1,\ldots,A_g$ whose matrix product vectors span those of $A$ at every
+length and are eventually linearly independent
+\cite[lines~271--274]{Cirac2016MPDO_arXiv}. Every canonical normal block is a
+phase times an invertible conjugate of one selected tensor, and no two selected
+tensors are phase-gauge equivalent
+\cite[lines~278--280]{Cirac2016MPDO_arXiv}. The review uses the same definition
+and characterization \cite[lines~1846--1859]{Cirac2021Matrix}.
 
-This is the first important separation of tasks. Period removal is a blocking
-step used to make the peripheral spectrum primitive. It is not the later
-finite-length injectivity or block-injectivity step.
-
-\subsection{Basis of normal tensors}
-
-The next source step chooses a basis of normal tensors. In the 2016 paper, such
-a basis $A_1,\ldots,A_g$ is a family of normal tensors whose matrix product
-vectors span the matrix product vectors of $A$ at each length and are
-eventually linearly independent
-\cite[lines~271--274]{Cirac2016MPDO_arXiv}. The subsequent characterization
-identifies the basis tensors with representatives of the phase-gauge
-equivalence classes of normal blocks: every normal block in the canonical form
-is a phase times an invertible conjugate of one selected basis tensor, and no
-two selected basis tensors are related in that way
-\cite[lines~278--280]{Cirac2016MPDO_arXiv}. The review repeats the same
-definition and characterization
-\cite[lines~1846--1859]{Cirac2021Matrix}.
-
-For a tensor in canonical form, the source then writes the matrix product vector
-family through the basis of normal tensors as
-\[
-  |V^{(N)}(A)\rangle
-    = \sum_{j=1}^g
-        \left(\sum_{q=1}^{r_j}\mu_{j,q}^N\right)
-        |V^{(N)}(A_j)\rangle.
-\]
-These are the data compared between two tensors in the equal or proportional
-case
+The BNT decomposition is
+(\ref{eq:rmp_nonperiodic_bnt_comparison_inputs_bnt_mpv_decomposition})
 \cite[lines~283--302]{Cirac2016MPDO_arXiv};
-\cite[lines~1864--1885]{Cirac2021Matrix}.
+\cite[lines~1864--1885]{Cirac2021Matrix}. Hence the source compares selected
+representatives. Repeated copies and cyclic representatives contribute through
+the power sums of their weights.
 
-Consequently, the comparison data belong to the selected BNT representatives,
-not to every raw block that appears before quotienting by phase-gauge
-equivalence. Repeated copies and cyclic representatives contribute through the
-power sums of their weights.
-
-\subsection{The Fundamental Theorem and the equal case}
-
-The Fundamental Theorem itself says that, for two tensors $A$ and $B$ in
-canonical form, proportionality of all matrix product vector families matches
-their bases of normal tensors up to a permutation, phases, and invertible gauge
-matrices
+For two canonical tensors $A$ and $B$, the source Fundamental Theorem states
+that proportional matrix product vector families have BNTs related by a
+permutation, phases, and invertible gauge matrices
 \cite[lines~347--352]{Cirac2016MPDO_arXiv};
-\cite[lines~1890--1900]{Cirac2021Matrix}. In the equal case, the source then
-compares the coefficients in the BNT decompositions by the power-sum identity
-\[
-  \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
-  =
-  \sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N
-\]
-for each matched basis tensor and all lengths $N$. The elementary power-sum
-lemma \texttt{Lem:app\_simple}
-\cite[lines~1155--1163]{Cirac2016MPDO_arXiv} recovers the multiplicities and
-weights, and the blockwise gauges assemble into the global conjugating matrix in
-the proof of Corollary~\texttt{II\_cor2}
-\cite[lines~1184--1192]{Cirac2016MPDO_arXiv}.
+\cite[lines~1890--1900]{Cirac2021Matrix}. In the equal case, the source obtains
+(\ref{eq:rmp_nonperiodic_bnt_comparison_inputs_equal_case_power_sums}) for each
+matched representative. The finite power-sum lemma
+\texttt{Lem:app\_simple} recovers the multiplicities and weights
+\cite[lines~1155--1163]{Cirac2016MPDO_arXiv}. The proof of
+\texttt{II\_cor2} then assembles the blockwise gauges into one global
+conjugating matrix \cite[lines~1184--1192]{Cirac2016MPDO_arXiv}.
 
 \section{Fixed-length span after blocking}
 
-There are two different blocking operations in the source account. The
-period-removing blocking makes the transfer maps primitive. The Wielandt
-blocking supplies finite-length injectivity after normality is available. These
-steps should not be merged.
+The source uses two blocking operations. Period-removing blocking produces
+primitive normal blocks. A later quantum Wielandt step produces finite-length
+injectivity \cite{Sanz2010Quantum}. These operations should not be merged.
 
-For one normal tensor, the quantum Wielandt theorem is cited as saying that
-after at most $D^4$ blockings the tensor becomes injective
-\cite[line~332]{Cirac2016MPDO_arXiv}. The older canonical-form paper defines
-injectivity by the map
-\[
-  \Gamma_L(X) = \sum_{i_1,\ldots,i_L}
-      \operatorname{tr}(X A_{i_1}\cdots A_{i_L})
-      |i_1,\ldots,i_L\rangle,
-\]
-and observes that injectivity of $\Gamma_L$ is equivalent to the length-$L$
-word products spanning the whole matrix algebra
-\cite[lines~888--908]{PerezGarcia2007MPSReps}. Thus the relevant conclusion is
-a homogeneous fixed-length span statement after a positive blocking length, not
-mere membership in a cumulative span. The 2021 review records a sharper
-MPS-specific Wielandt bound for normal tensors
-\cite[lines~1942--1945]{Cirac2021Matrix}; the point here is the nature of the
-conclusion, not which numerical bound is ultimately used.
+For one normal tensor of bond dimension $D$, the 2016 source states that at
+most $D^4$ blockings make the tensor injective
+\cite[line~332]{Cirac2016MPDO_arXiv}. The earlier representation paper defines
+the length-$L$ map
+\begin{align}
+    \Gamma_L(X)
+        &=
+        \sum_{i_1,\ldots,i_L}
+        \tr\left(XA_{i_1}\cdots A_{i_L}\right)
+        \ket{i_1,\ldots,i_L}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_gamma_length_map}
+\end{align}
+Injectivity of $\Gamma_L$ is equivalent to the length-$L$ word products
+spanning the entire matrix algebra
+\cite[lines~888--908]{PerezGarcia2007MPSReps}. This is a homogeneous
+fixed-length statement at a positive blocking length, not membership in a
+cumulative span. The review records a sharper MPS-specific bound
+\cite[lines~1942--1945]{Cirac2021Matrix}; the comparison here concerns the form
+of the conclusion, not the optimal numerical bound.
 
-For several basis blocks, the paper needs block-injective canonical form. In the
-2016 source this is the assertion that one common physical tensor spans every
-block matrix simultaneously:
-\[
-  (A_1^i,\ldots,A_g^i)_i
-  \quad\text{spans}\quad
-  \bigoplus_{j=1}^g M_{D_j}(\mathbb C)
-\]
-after the appropriate blocking
-\cite[lines~317--332]{Cirac2016MPDO_arXiv}. The source then cites the
-P\'erez-Garc\'ia--Verstraete--Wolf--Cirac bound: if $L$ is a length at which
-each normal tensor is injective, then after $3(L+1)(D-1)$ blockings the
-canonical-form tensor is block-injective; together with $L\le D^4$, this gives
-the $3D^5$ bound
-\cite[lines~340--345]{Cirac2016MPDO_arXiv}. The review states the same
-block-injective conclusion and bound
-\cite[lines~2114--2124]{Cirac2021Matrix}.
+For several BNT blocks, block injectivity means that one physical tensor spans
+all matrix blocks simultaneously:
+\begin{align}
+    \operatorname{span}
+        \left\{\left(A_1^i,\ldots,A_g^i\right)\right\}_i
+        &=
+        \bigoplus_{j=1}^{g}M_{D_j}(\C)
+        \qquad\text{after a common blocking}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_common_block_span}
+\end{align}
+The 2016 source cites the P\'erez-Garc\'ia--Verstraete--Wolf--Cirac bound: if
+each normal tensor is injective at length $L$, then
+$3(L+1)(D-1)$ blockings make the canonical tensor block-injective
+\cite[lines~317--345]{Cirac2016MPDO_arXiv,PerezGarcia2007MPSReps}. Combining
+this with $L\leq D^4$ gives the stated $3D^5$ bound. The review records the
+same conclusion and bound \cite[lines~2114--2124]{Cirac2021Matrix}.
 
-The older representation paper contains the direct-sum input behind this cited
-step. Its condition $C1$ is exact-length injectivity of $\Gamma_{L_0}$, or
-equivalently length-$L_0$ word products spanning the full matrix algebra
-\cite[lines~888--908]{PerezGarcia2007MPSReps}. It then fixes canonical blocks
-which each satisfy $C1$, sets $L_0=\max_j L_0^{A^j}$, orders their bond
-dimensions, and assumes the block states are pairwise different
-\cite[lines~1321--1330]{PerezGarcia2007MPSReps}. Under those hypotheses, a
-matrix factorization lemma and a direct-sum lemma show that the sum of the
-corresponding length-$L$ MPS subspaces is direct once
-$L \ge 3(b-1)(L_0+1)$
-\cite[lines~1333--1408]{PerezGarcia2007MPSReps}. The formal proof boundary is
-therefore a homogeneous fixed-length direct-sum span or its trace-dual
-separation form. The note
-\path{docs/paper-gaps/pgvwc07_direct_sum_input.tex} records this source input
-separately because it is a cited proof component, not a named theorem in the
-2016 source.
+The earlier representation paper supplies the direct-sum input
+\cite{PerezGarcia2007MPSReps}. Its condition $C1$ is exact-length
+injectivity of $\Gamma_{L_0}$, equivalently the span of all length-$L_0$
+word products
+\cite[lines~888--908]{PerezGarcia2007MPSReps}. It fixes canonical blocks
+satisfying $C1$, defines
+\begin{align}
+    L_0
+        &=
+        \max_j L_0^{A^j},
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_common_injectivity_length}
+\end{align}
+orders their bond dimensions, and assumes that the corresponding block states
+are pairwise different
+\cite[lines~1321--1330]{PerezGarcia2007MPSReps}. A matrix factorization lemma
+and direct-sum lemma then make the sum of the length-$L$ MPS subspaces direct
+whenever
+\begin{align}
+    L
+        &\geq
+        3(b-1)(L_0+1).
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_direct_sum_length_bound}
+\end{align}
+This argument appears at
+\cite[lines~1333--1408]{PerezGarcia2007MPSReps}. The source input is therefore
+a homogeneous fixed-length direct-sum span, or its trace-dual separation form.
+The note
+\path{docs/paper-gaps/pgvwc07_direct_sum_input.tex} records it separately
+because it is a cited proof component rather than a named theorem of the 2016
+source.
 
-This block-injective conclusion is stronger than separate injectivity of the
-individual blocks. It includes the cross-block separation needed to prescribe
-different matrices in different basis components at one common length. In dual
-form, one fixed word length $L$, after the prescribed blocking, gives the
-following implication. If, for every word $w$ with $|w|=L$,
-\[
-  \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
-\]
-then every test matrix $\Delta_j$ is zero. Equivalently, the homogeneous
-length-$L$ word evaluations span the direct sum
-\[
-  \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
-\]
-This fixed-length trace-dual statement is the mathematical content behind the
-pair trace-separation predicates used in the non-periodic proof. It is not a
-separate theorem in the papers; it is the dual form of block-injective
-direct-sum span. In the later MPDO argument the same source explicitly writes
-$C_L(V)=\operatorname{span}(V^L)$ and invokes the block-injective proposition
-to obtain $C_L(V)=\mathcal A_1$ for some fixed $L$
-\cite[lines~1984--1988]{Cirac2016MPDO_arXiv}. This is again an exact-length
-span statement.
+Block injectivity is stronger than separate injectivity of the blocks. It
+provides the cross-block separation needed to prescribe distinct matrices in
+different BNT components at one common length. In trace-dual form, for one
+fixed positive length $L$,
+\begin{align}
+    &\left[\forall w,\ |w|=L,\quad
+        \sum_{j=1}^{g}\tr\left(\Delta_jA_j^w\right)=0\right]
+    \notag\\
+    &\qquad\Longrightarrow
+        \Delta_j=0
+        \quad\text{for every $j$}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_trace_dual_separation}
+\end{align}
+Equivalently,
+\begin{align}
+    \operatorname{span}
+        \left\{\left(A_1^w,\ldots,A_g^w\right): |w|=L\right\}
+        &=
+        \bigoplus_{j=1}^{g}M_{D_j}(\C).
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_exact_length_direct_sum}
+\end{align}
+The pair trace-separation predicates in the nonperiodic proof express this dual
+form. They are not separate paper theorems. In the later MPDO argument, the
+source defines
+\begin{align}
+    C_L(V)
+        &=
+        \operatorname{span}(V^L)
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_exact_length_space}\\
+        &=
+        \mathcal A_1
+        \qquad\text{for a suitable fixed $L$}.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_source_exact_length_algebra}
+\end{align}
+The block-injective proposition supplies the second equality
+\cite[lines~1984--1988]{Cirac2016MPDO_arXiv}.
 
-\section{The homogeneous padding point}
+\section{Homogeneous padding}
 
-The CPSV injectivity and block-injectivity conclusions are homogeneous.
-They concern words of a specified positive length after blocking. They are not
-consequences of the empty word lying in a cumulative word span.
+The injectivity and block-injectivity conclusions are homogeneous statements at
+a specified positive length. They do not follow from the empty word belonging
+to a cumulative word span.
 
-This distinction matters for the pair representation used in the comparison
-proof. A cumulative span includes the empty word. Therefore the identity pair
-belongs to a cumulative span at length zero for every pair of tensors. That fact
-gives no positive-length padding. For example, over a one-letter alphabet with
-$A_0=B_0=0$ in bond dimension one, the length-one pair span is generated by
-the zero pair, while the identity pair appears at length zero. Hence the
-implication from cumulative identity membership to identity membership in all
-later homogeneous spans is false.
+For a one-letter alphabet in bond dimension one, let
+\begin{align}
+    A_0
+        &=
+        0,
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_zero_pair_first_tensor}\\
+    B_0
+        &=
+        0.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_zero_pair_second_tensor}
+\end{align}
+The length-one pair span is generated by the zero pair, whereas the identity
+pair occurs at length zero. Thus cumulative identity membership does not imply
+identity membership in later homogeneous spans.
 
-Cumulative fullness alone is still too weak. In bond dimension one with one
-letter and pair word values $(2^n,3^n)$, the cumulative span through length
-one is all of $\mathbb C\oplus\mathbb C$, since $(1,1)$ and $(2,3)$ are
-linearly independent. At each positive homogeneous length $n$, however, the
-span is only the line through $(2^n,3^n)$, so it does not contain $(1,1)$.
-Thus the source hypotheses must not be discarded down to cumulative pair-span
-fullness.
+Cumulative fullness is also insufficient. In bond dimension one, consider the
+one-letter pair word values
+\begin{align}
+    \left(A^n,B^n\right)
+        &=
+        \left(2^n,3^n\right).
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_scalar_pair_words}
+\end{align}
+The cumulative span through length one is all of $\C\oplus\C$, because
+$(1,1)$ and $(2,3)$ are linearly independent. At every positive
+homogeneous length $n$, however, the span is only
+\begin{align}
+    \operatorname{span}
+        \left\{\left(2^n,3^n\right)\right\},
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_scalar_homogeneous_line}
+\end{align}
+which does not contain $(1,1)$. The source hypotheses therefore cannot be
+weakened to cumulative pair-span fullness.
 
-The source target is fixed-length block-injective direct-sum span after the
-prescribed blocking. A Burnside--Jacobson homogeneous-padding argument would be
-an alternative proof of the same kind of exact-length trace separation; it must
-retain the BNT, non-gauge-equivalence, and normalization data that make the
-fixed-length conclusion true. It is not a standalone consequence of full
-cumulative pair-span, and it is not a restatement of the empty-word observation.
+The required conclusion is fixed-length block-injective direct-sum span after
+the prescribed blocking. A homogeneous-padding argument based on irreducibility
+could prove an equivalent exact-length separation statement, but it would have
+to retain the BNT selection, non-phase-gauge-equivalence, and normalization
+data. Full cumulative pair span and empty-word membership alone do not suffice.
 
 \section{Comparison after common blocking}
 
-The equal-case source proof compares BNT decompositions after the canonical form
-has been chosen. The after-blocking theorem reaches this situation through a
-longer route: discard the formal zero-tail summand just defined, choose one
-common physical blocking length for both tensors, reindex nested blocked words
-against flat words, separate period removal from later injectivity blocking, and
-then compare the resulting nonzero sector families.
+The equal-case source proof begins after canonical form and BNT selection. The
+formal after-blocking route must additionally discard the all-zero tail, choose
+one common positive physical blocking length, identify nested blocked words
+with flat words, distinguish period removal from injectivity blocking, and
+compare the resulting nonzero sector families.
 
-The common-blocking question is mathematical rather than clerical. If a block has
-period-removal length $m_k$ and the final common length is $p=m_ke_k$, the
-tensor obtained by blocking first by $m_k$ and then by $e_k$ has nested
-physical labels, whereas the tensor obtained by blocking once by $p$ has flat
-word labels. Paper notation treats these identifications silently; the
-theorem must prove the reindexing statements.
+Suppose a block has period-removal length $m_k$, and let the final common
+length be
+\begin{align}
+    p
+        &=
+        m_ke_k.
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_common_blocking_factorization}
+\end{align}
+Blocking first by $m_k$ and then by $e_k$ gives nested physical labels,
+whereas blocking once by $p$ gives flat word labels. Source notation
+identifies these alphabets silently. The formal theorem must prove the required
+reindexing.
 
-The BNT comparison data should therefore be produced for the final nonzero
-sector families after all chosen blockings and reindexings. In source terms,
-this means the proof must construct the matched basis tensors, the phase-gauge
-equivalences, and the power-sum comparison for exactly those families. The
-common primitive sectors should first be grouped into representative BNT
-classes, with repeated cyclic representatives and transported weights accounted
-for by the power-sum comparison. Common phase covers and proportional
-decomposition data match the source theorem only for those representative or
-grouped BNT families, not for the raw flattened cyclic-sector list. The raw list
-can contain several cyclic representatives of the same original block with the
-same transported weight, so it is not the basis of normal tensors used in the
-paper comparison.
+The BNT comparison data must be constructed for the final nonzero sector
+families after all blockings and reindexings. The proof must group common
+primitive sectors into representative BNT classes and account for repeated
+cyclic representatives and transported weights through the power-sum
+comparison. Common phase covers and proportional decompositions match the
+source only after this grouping. A raw flattened cyclic-sector list may contain
+several cyclic representatives of one original block with the same transported
+weight, so it is not the BNT used by the source theorem.
 
 \section{Formal translation}
 
-The source comparison above translates into the following formal targets.
+The source comparison gives the following formal requirements.
 
 \begin{itemize}
-  \item The comparison relation should distinguish positive-length MPV equality
-  from any auxiliary length-zero convention. If a theorem uses the empty word,
-  the statement must say how that convention is removed before applying the
-  paper theorem.
+    \item The formal comparison must distinguish positive-length matrix product
+    vector equality from any auxiliary length-zero convention. If a proof uses
+    the empty word, it must remove that convention before invoking the source
+    theorem.
 
-  \item The canonical-form reduction has two different blocking roles:
-  period-removal blocking produces primitive normal blocks, while later
-  Wielandt or block-injectivity blocking produces exact finite-length span.
+    \item Canonical-form reduction has two blocking roles. Period-removal
+    blocking produces primitive normal blocks; later quantum Wielandt or
+    block-injectivity blocking produces exact finite-length span
+    \cite{Sanz2010Quantum}.
 
-  \item The BNT trace-separation theorem is the dual form of the fixed-length
-  direct-sum span supplied by block-injective canonical form. The formal proof
-  should therefore prove direct-sum span for the selected BNT representatives,
-  or explicitly keep that fixed-length span as a hypothesis.
+    \item BNT trace separation is the dual of the fixed-length direct-sum span
+    supplied by block-injective canonical form. The formal proof must establish
+    this span for selected BNT representatives or retain it explicitly as a
+    hypothesis.
 
-  \item Phase-cover and block-matching data must be obtained from the
-  source's BNT comparison and the equal-case power-sum comparison. They should not be
-  passed as unrelated assumptions on the raw flattened cyclic-sector list.
+    \item Phase-cover and block-matching data must follow from representative
+    BNT matching and the equal-case power-sum comparison. They must not enter
+    as unrelated assumptions on raw flattened cyclic sectors.
 
-  \item The after-blocking comparison needs the CPSV inputs for the
-  representative BNT families: positive dimensions, injectivity, normalization,
-  self-overlap limits, off-overlap decay for inequivalent representatives, and
-  equality of finite-length matrix product vector spans. The auxiliary structure
-  used to collect these inputs is only a formal device; the mathematical
-  obligation is to derive the listed assertions for the representatives selected
-  by the canonical-form and BNT construction.
+    \item The after-blocking proof needs positive dimensions, injectivity,
+    normalization, self-overlap limits, off-overlap decay for inequivalent
+    representatives, and equality of finite-length matrix product vector spans.
+    Auxiliary structures that package these facts are formal devices; the
+    mathematical obligation is to prove them for the representatives selected
+    by canonical-form reduction and BNT construction.
 \end{itemize}
 
 \section{Current formal anchors}
 
-The present formalization already separates the source theorem into the same
-mathematical layers.
-
-The surviving one-copy normal-canonical BNT formulation is encoded by
-\leanid{IsNormalCanonicalFormBNT}, together with the explicit separated-block
+The one-copy normal-canonical BNT surface is represented by
+\leanid{IsNormalCanonicalFormBNT}, together with explicit separated-block
 hypotheses used by the BNT comparison lemmas.\footnote{%
 \path{TNLean/MPS/BNT/Construction.lean}.}
-This is a restricted already-grouped formulation: it suppresses the
-repeated-copy data $r_j,\mu_{j,q}$ that appear in the BNT expansion and
-Appendix BNT characterization of \cite{Cirac2016MPDO_arXiv}.
+This already-grouped formulation is restricted: it suppresses the repeated-copy
+data $r_j$ and $\mu_{j,q}$ appearing in the source BNT expansion and appendix
+characterization \cite{Cirac2016MPDO_arXiv}.
+
 The former coefficient-array structures and conditional proportional comparison
-theorems have been deleted. Their one-shot bounded coefficient hypotheses did
-not encode the residual peeling or power-sum comparison in the source paper.
-The former after-blocking conditional matching layer has been removed. Its
-hypotheses collected comparison data for the common primitive nonzero-sector
-families produced from the two original tensors, and its conclusion stated BNT
-sector matching after one positive common blocking length. The former named
-blocked-normal-form records and common-primitive block-matching boundary have
-also been removed from the formal development; this note now records only the
-mathematical boundary. The live anchors are the common-sector transport
-construction and the BNT sector-data comparison theorem.\footnote{%
+theorems have been deleted. Their one-shot bounded coefficient assumptions did
+not encode the source residual peeling or power-sum comparison. The former
+conditional after-blocking matching layer has also been removed. It had
+collected comparison data for common primitive nonzero-sector families and
+concluded BNT sector matching after one positive common blocking length.
+
+The named blocked-normal-form records and common-primitive block-matching
+boundary have likewise been removed. The live anchors are the common-sector
+transport construction and the BNT sector-data comparison theorem.\footnote{%
 \path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean};
 \path{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean}.}
 
 \section{Named formal gaps}
 
-The current non-periodic proof route still has three CPSV obligations
-which should not be hidden behind similarly shaped auxiliary hypotheses.
+The nonperiodic proof route retains three obligations from the source argument.
 
 \begin{enumerate}
-  \item Produce the common representative BNT cover data for the collapsed
-  nonzero-sector families selected by canonical-form reduction and the BNT
-  characterization. This is the representative-family version of the paper's
-  phase-gauge matching theorem, not a condition on every raw block produced by
-  an intermediate cyclic decomposition.
+    \item Construct common representative-level BNT cover data for the
+    collapsed nonzero-sector families selected by canonical-form reduction and
+    the BNT characterization. This is the representative version of the source
+    phase-gauge matching theorem, not a condition on every raw block in an
+    intermediate cyclic decomposition
+    \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}.
 
-  \item Prove the homogeneous trace-separation statement for distinct ordered
-  BNT block pairs. In paper notation this is the trace-dual form of the
-  block-injective span of $\oplus_jM_{D_j}(\mathbb C)$ at one common positive
-  length.
-  It is not the weaker statement that the cumulative algebra generated by a
-  pair representation is full.
+    \item Prove homogeneous trace separation for distinct ordered pairs of BNT
+    blocks. In source notation, this is the trace-dual form of the
+    block-injective span
+    \begin{align}
+        \operatorname{span}
+            \left\{\left(A_1^w,\ldots,A_g^w\right): |w|=L\right\}
+            &=
+            \bigoplus_j M_{D_j}(\C)
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_named_gap_direct_sum}
+    \end{align}
+    at one common positive length $L$. It is stronger than fullness of the
+    cumulative algebra generated by a pair representation.
 
-  \item Thread that fixed-length separation through the after-blocking
-  comparison. The blocking used to remove periods, the blocking used to obtain
-  injectivity, and the reindexing from nested words to flat words must be
-  accounted for before applying the BNT-level Fundamental Theorem.
+    \item Transport this fixed-length separation through the after-blocking
+    comparison. Period-removal blocking, injectivity blocking, and the
+    nested-to-flat word reindexing must all be accounted for before the
+    BNT-level Fundamental Theorem is applied
+    \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}.
 \end{enumerate}
 
 \section{Source files checked}
 
-The comparison above is based on the LaTeX sources in the repository, not only
-on published theorem names.
+The comparison uses the repository's \LaTeX{} sources, not only published
+theorem names.
 
 \begin{itemize}
-  \item \path{Papers/1606.00608/MPDO-22-12-17-2.tex}: lines~130--151 define
-  positive-length MPVs; lines~214--255 give canonical form and period removal;
-  lines~271--302 define and use BNTs; lines~317--345 define injectivity,
-  block-injective canonical form, and the $3D^5$ bound; lines~347--360 state
-  the Fundamental Theorem and equal-case corollary; lines~1155--1163 state
-  \texttt{Lem:app\_simple}; lines~1184--1192 contain the power-sum comparison
-  and global gauge assembly in the equal case; lines~1984--1988 use
-  $C_L(V)=\operatorname{span}(V^L)$ as an exact-length span.
+    \item \path{Papers/1606.00608/MPDO-22-12-17-2.tex}: lines~130--151 define
+    positive-length matrix product vectors; lines~214--255 give canonical form
+    and period removal; lines~271--302 define and use BNTs; lines~317--345
+    define injectivity and block injectivity and give the $3D^5$ bound;
+    lines~347--360 state the Fundamental Theorem and equal-case corollary;
+    lines~1155--1163 state \texttt{Lem:app\_simple}; lines~1184--1192 compare
+    the power sums and assemble the global gauge; lines~1984--1988 use
+    $C_L(V)=\operatorname{span}(V^L)$ as an exact-length span
+    \cite{Cirac2016MPDO_arXiv}.
 
-  \item \path{Papers/quant-ph_0608197/MPSarchive.tex}: lines~742--763 state the
-  translationally invariant canonical form; lines~888--908 define
-  $\Gamma_L$ and identify its injectivity with length-$L$ word products
-  spanning the matrix algebra.
+    \item \path{Papers/quant-ph_0608197/MPSarchive.tex}: lines~742--763 state
+    the translation-invariant canonical form; lines~888--908 define
+    $\Gamma_L$ and identify injectivity with the span of length-$L$ word
+    products \cite{PerezGarcia2007MPSReps}.
 
-  \item \path{Papers/1210.6613/UncleHMPS.tex}: lines~247--278 record the
-  standard form after blocking, including the block-diagonal span condition and
-  its injective/block-injective special cases.
+    \item \path{Papers/1210.6613/UncleHMPS.tex}: lines~247--278 record the
+    standard form after blocking, including the block-diagonal span condition
+    and its injective and block-injective special cases.
 
-  \item \path{Papers/2011.12127/TN-Review-main.tex}: lines~1793--1900 review
-  canonical form, BNTs, and the Fundamental Theorem; lines~1942--1945 record the
-  normal-tensor Wielandt bound; lines~2114--2124 state the block-injective
-  canonical-form bound.
+    \item \path{Papers/2011.12127/TN-Review-main.tex}: lines~1793--1900 review
+    canonical form, BNTs, and the Fundamental Theorem; lines~1942--1945 give
+    the normal-tensor Wielandt bound; lines~2114--2124 state the
+    block-injective canonical-form bound \cite{Cirac2021Matrix}.
 \end{itemize}
-
-
 
 \section{Present formal boundary}
 
-The comparison with CPSV16 should be read by separating the mathematical layers
-of the paper proof, rather than by following implementation history. The present formalization has closed the exact-length
-span input for the already-injective BNT surface, and it has also formalized the
-Wielandt blocking input needed to make normal blocks injective after a further
-blocking. What remains is the transport of the final reblocked BNT cover and
-the coefficient comparison that CPSV16 carries out by power sums.
+The comparison with the 2016 source separates the mathematical layers of its
+proof from the history of the implementation. The formalization has established
+the exact-length span input for an already-injective BNT surface. It has also
+formalized the quantum Wielandt blocking input needed to make normal blocks
+injective after further blocking. The remaining work is to transport the final
+reblocked BNT cover and formalize the coefficient comparison performed through
+power sums in the source \cite{Cirac2016MPDO_arXiv}.
 
-For an already-injective canonical BNT family, the identity-padding and pairwise
-trace-separation input is no longer a separate paper assumption. The formal
-result specializes the three-block direct-sum argument to the case in which the
-selected BNT blocks are one-site injective: one-site injectivity supplies the
-fixed length-two and length-six span inputs used by the selector construction.
-Thus the theorem proves the exact-length direct-sum span needed in this
-specialized surface, but it should not be read as the general statement with an
-arbitrary pre-existing injectivity length $L_0$. Passing from normal
-canonical blocks to such an injective surface is a distinct Wielandt-type
-blocking step.
+For an already-injective canonical BNT family, identity padding and pairwise
+trace separation are no longer separate paper assumptions. The formal result
+specializes the three-block direct-sum argument to selected BNT blocks that are
+one-site injective. One-site injectivity supplies the fixed length-two and
+length-six span inputs used by the selector construction. This theorem proves
+the required exact-length direct-sum span on that restricted surface; it does
+not prove the general result for an arbitrary pre-existing injectivity length
+$L_0$. Passing from normal canonical blocks to this injective surface remains
+a separate quantum Wielandt blocking step \cite{Sanz2010Quantum}.
 
-That Wielandt step is now formalized in the canonical-form context. A
+That blocking step is now formalized in the canonical-form setting. A
 left-canonical normal tensor has a positive injective blocking length bounded by
 $D^4$, and a finite normal-CF-BNT family has one common positive blocking
-length for all of its blocks. These theorems remove the injectivity hypothesis
-as a mathematical gap, but they do not by themselves identify the iterated
-blocked alphabet with the direct alphabet used by the after-blocking comparison.
-The remaining transport problem is to carry the BNT separation and zero-tail
-bookkeeping through this refinement of the blocking length.
+length for all blocks. These results remove injectivity as a mathematical gap.
+They do not identify the iterated blocked alphabet with the direct alphabet used
+by the after-blocking comparison. The remaining transport must carry BNT
+separation and zero-tail bookkeeping through the refinement of the blocking
+length.
 
-The former proportional-decomposition coefficient-limit surface has been
-deleted rather than treated as a source theorem. CPSV16 compares the weights by
-the power-sum argument in the BNT proof; this step remains a genuine proof
-obligation. It is not a harmless coordinate convention: the block-diagonal
-expansion involves the powers $(\mu_j)^N$, and nonzero weights alone do not
-give nonzero full-sequence limits. A CPSV proof must formalize the
-relevant power-sum and phase comparison before feeding the result into the
-\leanid{BlockPermutationGaugePhaseConclusion} data and the BNT sector-data
-comparison.
+The former proportional-decomposition coefficient-limit surface was deleted
+rather than treated as a source theorem. The source compares BNT weights by
+power sums \cite{Cirac2016MPDO_arXiv}. This remains a genuine proof obligation:
+the block-diagonal expansion contains the length-dependent coefficients
+\begin{align}
+    c_j(N)
+        &=
+        \mu_j^N,
+    \label{eq:rmp_nonperiodic_bnt_comparison_inputs_weight_length_power}
+\end{align}
+and nonzero weights alone do not imply nonzero full-sequence limits. A faithful
+proof must formalize the relevant power-sum and phase comparison before
+constructing the \leanid{BlockPermutationGaugePhaseConclusion} data and
+applying the BNT sector-data comparison.
 
-By contrast, zero-tail equality and common-sector relabeling are mostly formal
-bookkeeping. CPSV16 works at positive lengths and treats zero blocks as unused
-bond dimension. Lean's $N=0$ convention for \leanid{SameMPV}\textsubscript{2} forces an
-explicit zero-tail identity, and the common-sector construction must also track
-casts between grouped and flat blocked words. These conventions are not extra
-paper hypotheses, but the final after-blocking theorem still has to transport
-these identities through the same reblocking coordinates used for the nonzero
-BNT sectors.
+Zero-tail equality and common-sector relabelling are primarily formal
+bookkeeping. The source uses positive lengths and treats zero blocks as unused
+bond dimension \cite{Cirac2016MPDO_arXiv}. The $N=0$ convention in
+\leanid{SameMPV}\textsubscript{2} forces an explicit zero-tail identity, and the
+common-sector construction must track casts between grouped and flat blocked
+words. These are not additional paper hypotheses, but the final after-blocking
+theorem must transport the identities through the same reblocking coordinates
+as the nonzero BNT sectors.
 
-The remaining main boundary is therefore the following. Starting from the
-normal-CF-BNT sectors produced by canonical-form reduction, one must transport
-blocked not-gauge-phase equivalence, zero-tail identities, and the common
-injective blocking length through the nested-to-flat reblocking map, and then
-feed the resulting families into the BNT sector-data comparison.\footnote{%
-The live target side is the sector-data theorem
-\leanid{MPSTensor.ft_sector_bnt_equal_sector_data}; the now-available inputs are
+The remaining main boundary is therefore precise. Starting from normal-CF-BNT
+sectors produced by canonical-form reduction, the proof must transport blocked
+non-phase-gauge equivalence, zero-tail identities, and the common injective
+blocking length through the nested-to-flat reblocking map. It must then apply
+the BNT sector-data comparison.\footnote{The live target is
+\leanid{MPSTensor.ft_sector_bnt_equal_sector_data}. The available inputs are
 the bounded and common injective-blocking theorems for normal-CF-BNT blocks and
-the already-injective direct-sum trace-separation theorems.}  The
-paper suppresses this bookkeeping in notation; Lean must make it explicit.
+the already-injective direct-sum trace-separation theorems.}
+The source suppresses this bookkeeping in its notation; the formal proof must
+make it explicit.
 
-\section{Closing criterion}
+\section{Verdict and closing criterion}
 
-A formal proof obligation in this part of the theorem is discharged only when the
-following three assertions agree.
+The conditional formal hypotheses do not create a mathematical discrepancy
+when they name source inputs still to be derived from canonical form. The
+source assumes canonical tensors and compares their BNTs; it does not assume
+arbitrary phase covers, raw cyclic-sector matching, cumulative pair-span
+fullness, or length-zero matrix product vector equality
+\cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}.
 
-First, the source assertion has been identified at the level of the mathematical
-objects above: canonical form, basis of normal tensors, block-injective
-fixed-length span, phase-gauge BNT matching, or power-sum comparison. Second,
-the formal theorem states the same assertion for the same blocked and reindexed
-families, or explicitly records the extra hypothesis that remains. Third, the
-final comparison theorem uses that assertion rather than an unrelated assumption
-with a similar shape.
+The present boundary is therefore a proof gap rather than a different theorem.
+The remaining inputs are the representative-level BNT cover, transport of the
+exact-length direct-sum span through common blocking and word reindexing, and
+the coefficient comparison by power sums. Until these are proved, the
+downstream after-blocking theorem should remain visibly conditional.
 
-Conditional theorems are useful because they expose the missing mathematical
-inputs precisely. They should not be described as closing the source theorem
-until the corresponding assertion has been proved or the final theorem is
-deliberately restated with that hypothesis.
+A proof obligation is discharged only when three statements agree. The source
+assertion must be identified as canonical form, BNT selection,
+block-injective fixed-length span, phase-gauge matching, or power-sum
+comparison. The formal theorem must state that assertion for the same blocked
+and reindexed families, or retain the unresolved hypothesis explicitly. The
+final comparison theorem must use that assertion rather than an unrelated
+assumption of similar shape.
+
+Conditional theorems usefully expose missing inputs. They do not close the
+source theorem until those inputs have been proved or the final result has been
+deliberately restricted.
 
 \bibliographystyle{alpha}
 \bibliography{references}

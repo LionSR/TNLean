@@ -17,136 +17,223 @@
 
 \section{Purpose}
 
-This note records the source scope for the example-level parent-Hamiltonian
+This note records the source scope of the example-level parent-Hamiltonian
 targets in \href{https://github.com/LionSR/TNLean/issues/2315}{issue \#2315}.
 The issue concerns the GHZ, cluster, and AKLT tensors already present in the
-formal development.  Its mathematical aim is natural: connect these tensors to
-their parent Hamiltonians and to the corresponding ground-space statements.
-The point of this note is only to separate what is stated in the local review
-source from standard example formulas which need an additional citation or an
-explicit derivation.
+formal development. Its mathematical objective is to connect these tensors to
+their parent Hamiltonians and corresponding ground spaces. The review does not,
+however, state every standard example formula used by that objective. Such
+formulas require either another citation or an explicit derivation.
 
 \section{Statements present in the review}
 
-The review gives the GHZ MPS tensor by
-\[
-  A^i_{\alpha\beta}=\delta_{i=\alpha=\beta},
-\]
-and writes the corresponding state as
-\[
-  |\mathrm{GHZ}\rangle=\sum_{i=0}^{d-1}|i,i,\ldots,i\rangle
-\]
-\cite[lines~2341--2345]{Cirac2021Matrix}.  Earlier, in the discussion of
-symmetry breaking, it identifies the ferromagnetic Ising Hamiltonian
-\[
-  H=-\sum_i Z_iZ_{i+1}
-\]
-as the paradigmatic model whose symmetric ground state is the superposition of
-all spins up and all spins down, and writes the same MPS tensor as
-$A^\uparrow=|0\rangle\langle 0|$ and
-$A^\downarrow=|1\rangle\langle 1|$
-\cite[lines~1194--1196]{Cirac2021Matrix}.  In the stability discussion it also
-says that the parent Hamiltonian of a GHZ state is a ferromagnetic Ising
-Hamiltonian with a two-fold degenerate ground space
-\cite[line~2205]{Cirac2021Matrix}.  The two-dimensional GHZ PEPS tensor is
-recorded separately in the examples appendix
-\cite[lines~2417--2421]{Cirac2021Matrix}.
-Another local source writes the two-site parent interaction explicitly as the
-projector complement of
-\[
-  \operatorname{span}\{|00\rangle,|11\rangle\},
-\]
-namely, up to an additive constant,
-\[
-  \tfrac12 I-\big(|00\rangle\langle 00|+|11\rangle\langle 11|\big).
-\]
-\footnote{See \path{Papers/1210.6613/UncleHMPS.tex}:432--455.}
+For physical index $i$ and auxiliary indices $\alpha,\beta$, the review defines
+the GHZ tensor by
+\begin{align}
+    A^i_{\alpha\beta}
+        &=
+        \delta_{i=\alpha=\beta}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_ghz_tensor}
+\end{align}
+Its periodic matrix product state is
+\begin{align}
+    \ket{\mathrm{GHZ}}
+        &=
+        \sum_{i=0}^{d-1}\ket{i,i,\ldots,i}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_ghz_state}
+\end{align}
+Both formulas appear in Ref.~\cite[lines~2341--2345]{Cirac2021Matrix}.
 
-For the one-dimensional cluster state, the review gives the MPS tensor
-\[
-  A^0=|0\rangle\langle +|,\qquad A^1=|1\rangle\langle -|,
-\]
-and explains its controlled-$Z$ preparation from $|+\rangle^{\otimes N}$
-\cite[lines~2364--2369]{Cirac2021Matrix}.  The two-dimensional cluster PEPS is
-also displayed in the examples appendix
-\cite[lines~2424--2429]{Cirac2021Matrix}.  In the local review source, however,
-the one-dimensional stabilizer Hamiltonian
-\[
-  -\sum_i Z_{i-1}X_iZ_{i+1}
-\]
-is not stated in the one-dimensional cluster example passage.  The older MPS
-review says instead that cluster states are unique ground states of the
-three-body interactions
-\[
-  \sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2},
-\]
-with an explicit two-matrix MPS representation
-\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}.  Thus the issue should
-use the $ZXZ$ convention for the controlled-$Z$ cluster state unless a
-local-basis variant is explicitly introduced and proved equivalent.  The
-general parent-Hamiltonian theorem for normal MPS does imply a unique ground
-state for a suitable parent Hamiltonian once the normal-tensor hypotheses and
-the range-reduction theorem have been formalized
-\cite[lines~2087--2090]{Cirac2021Matrix}; it is not, by itself, the explicit
-cluster stabilizer formula.
+In its discussion of symmetry breaking, the review uses the ferromagnetic Ising
+Hamiltonian
+\begin{align}
+    H_{\mathrm{Ising}}
+        &=
+        -\sum_i Z_iZ_{i+1}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_ising_hamiltonian}
+\end{align}
+It identifies the symmetric ground state as the superposition of the all-up and
+all-down configurations and gives the two physical tensor matrices
+\begin{align}
+    A^\uparrow
+        &=
+        \ketbra{0}{0},
+    \label{eq:rmp_example_parent_hamiltonian_scope_ghz_up_matrix}\\
+    A^\downarrow
+        &=
+        \ketbra{1}{1}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_ghz_down_matrix}
+\end{align}
+These statements appear in Ref.~\cite[lines~1194--1196]{Cirac2021Matrix}. The
+review later states that a GHZ parent Hamiltonian is a ferromagnetic Ising
+Hamiltonian with a twofold-degenerate ground space
+\cite[line~2205]{Cirac2021Matrix}. It records the two-dimensional GHZ PEPS
+tensor separately \cite[lines~2417--2421]{Cirac2021Matrix}.
+
+A local source gives the two-site GHZ support and an equivalent local
+interaction:
+\begin{align}
+    \mathcal G_2
+        &=
+        \operatorname{span}
+        \left\{\ket{00},\ket{11}\right\},
+    \label{eq:rmp_example_parent_hamiltonian_scope_ghz_two_site_support}\\
+    h_{\mathrm{GHZ}}
+        &=
+        \frac{1}{2}I
+        -
+        \left(\ketbra{00}{00}
+            +
+            \ketbra{11}{11}\right).
+    \label{eq:rmp_example_parent_hamiltonian_scope_ghz_local_interaction}
+\end{align}
+Here $I$ denotes the identity on the two-site Hilbert space, and the second
+expression is stated up to an additive constant.\footnote{See
+\path{Papers/1210.6613/UncleHMPS.tex}:432--455.}
+
+For the one-dimensional cluster state, the review gives the MPS matrices
+\begin{align}
+    A^0
+        &=
+        \ketbra{0}{+},
+    \label{eq:rmp_example_parent_hamiltonian_scope_cluster_matrix_zero}\\
+    A^1
+        &=
+        \ketbra{1}{-}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_cluster_matrix_one}
+\end{align}
+It also describes preparation by controlled-$Z$ gates from
+$\ket{+}^{\otimes N}$ \cite[lines~2364--2369]{Cirac2021Matrix}. The
+two-dimensional cluster PEPS appears separately in the examples appendix
+\cite[lines~2424--2429]{Cirac2021Matrix}.
+
+The review's one-dimensional cluster passage does not state the standard
+stabilizer Hamiltonian
+\begin{align}
+    H_{\mathrm{cluster}}
+        &=
+        -\sum_i Z_{i-1}X_iZ_{i+1}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_cluster_stabilizer}
+\end{align}
+The older MPS review instead states that cluster states are unique ground states
+of the three-body interactions
+\begin{align}
+    H_{ZXZ}
+        &=
+        \sum_i
+        \sigma_i^z
+        \sigma_{i+1}^x
+        \sigma_{i+2}^z,
+    \label{eq:rmp_example_parent_hamiltonian_scope_cluster_three_body}
+\end{align}
+and supplies an explicit two-matrix MPS representation
+\cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}. The formal target
+should therefore use the $ZXZ$ convention for the controlled-$Z$ cluster state
+unless it explicitly introduces a local-basis variant and proves the
+equivalence. The general normal-MPS parent-Hamiltonian theorem gives a unique
+ground state for a suitable parent Hamiltonian once normality and range
+reduction have been formalized
+\cite[lines~2087--2090]{Cirac2021Matrix}; it does not by itself identify the
+explicit cluster stabilizer interaction.
 
 For the one-dimensional AKLT state, the review constructs the tensor from
-spin-$\tfrac12$ singlets and projection onto the joint spin-$1$ subspace, and
-then gives the matrices in two bases
-\cite[lines~2372--2393]{Cirac2021Matrix}.  In the parent-Hamiltonian section it
-states that the AKLT model has injectivity length $L_0=2$, while a two-site
-parent Hamiltonian is already sufficient for a unique ground state; the cited
-check is
-\[
-  \mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}
-\]
-\cite[line~2095]{Cirac2021Matrix}.  In the SPT discussion it also records the
-dangling spin-$\tfrac12$ edge modes: for open boundary conditions the parent
-Hamiltonian has at least the square of the virtual irrep dimension as ground
-state degeneracy, and for AKLT this gives a four-dimensional ground space with
-only one spin-$0$ state
-\cite[lines~1169--1174]{Cirac2021Matrix}.  The standard description of the
-AKLT Hamiltonian as a sum of spin-$2$ projectors is not displayed in these local
-review passages; it should be cited to the AKLT source or derived from the
-spin-addition calculation before it is made a source-faithful target here.
-What is displayed in the local sources is the polynomial spin Hamiltonian
-\[
-  H=\sum_i \vec S_i\cdot\vec S_{i+1}
-      +\frac13\big(\vec S_i\cdot\vec S_{i+1}\big)^2,
-\]
+spin-$\tfrac12$ singlets followed by projection onto the joint spin-$1$
+subspace, and gives its matrices in two bases
+\cite[lines~2372--2393]{Cirac2021Matrix}. It states that the AKLT tensor has
+injectivity length $L_0=2$ and that a two-site parent interaction already
+suffices for a unique ground state. The stated local check is
+\begin{align}
+    \mathcal G_{1,2}\cap\mathcal G_{2,3}
+        &=
+        \mathcal G_{1,2,3}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_aklt_intersection}
+\end{align}
+This criterion appears in Ref.~\cite[line~2095]{Cirac2021Matrix}.
+
+For open boundaries, the review also describes dangling spin-$\tfrac12$ edge
+modes. It states that the parent-Hamiltonian ground-space degeneracy is at least
+the square of the virtual irreducible-representation dimension and that the
+AKLT case has a four-dimensional ground space containing only one spin-$0$
+state \cite[lines~1169--1174]{Cirac2021Matrix}.
+
+The local review passages do not display the standard description of the AKLT
+Hamiltonian as a sum of spin-$2$ projectors. That description requires a
+citation to the AKLT source or a derivation from spin addition before it can be
+treated as a source-faithful target here. The local sources instead display the
+polynomial Hamiltonian
+\begin{align}
+    H_{\mathrm{AKLT}}
+        &=
+        \sum_i
+        \left[\vec S_i\cdot\vec S_{i+1}
+            +
+            \frac{1}{3}
+            \left(\vec S_i\cdot\vec S_{i+1}\right)^2\right],
+    \label{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}
+\end{align}
 together with the unnormalised matrices
-$\{\sigma^z,\sqrt2\sigma^+,-\sqrt2\sigma^-\}$
-\cite[local TeX lines~340--349]{PerezGarcia2007MPSReps}.  The same polynomial
-form, with an additive constant, appears in the local Schuch--P\'erez-Garc\'ia--Cirac
-source.\footnote{See \path{Papers/1010.3732/paper_v3.tex}:2126--2130.}
+\begin{align}
+    \left\{A^{-1},A^0,A^{+1}\right\}
+        &=
+        \left\{\sigma^z,\sqrt{2}\sigma^+,-\sqrt{2}\sigma^-\right\}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_aklt_matrices}
+\end{align}
+These formulas appear in
+Ref.~\cite[local TeX lines~340--349]{PerezGarcia2007MPSReps}. The same
+polynomial Hamiltonian, with an additive constant, appears in the local
+Schuch--P\'erez-Garc\'ia--Cirac source.\footnote{See
+\path{Papers/1010.3732/paper_v3.tex}:2126--2130.}
 
 \section{Current formal boundary}
 
-The formal example files already contain the tensors and their elementary
-structure.  The GHZ tensor is defined as
-$A^0=|0\rangle\langle 0|$ and $A^1=|1\rangle\langle 1|$, and the file proves
-that it is an RFP, is not injective, and has the expected $\mathbb Z_2$
-symmetry.\footnote{See \path{TNLean/MPS/Examples/GHZ.lean}:54--86 and the
-module summary at \path{TNLean/MPS/Examples/GHZ.lean}:21--29.}
-The cluster file defines the reflected one-dimensional convention
-$A^0=|+\rangle\langle 0|$ and $A^1=|-\rangle\langle 1|$, proves
-non-injectivity at one site, and proves two-block injectivity.\footnote{See
-\path{TNLean/MPS/Examples/Cluster.lean}:62--78 and
+The formal example modules already define the tensors and prove elementary
+structural properties. The GHZ tensor has matrices
+\begin{align}
+    A^0
+        &=
+        \ketbra{0}{0},
+    \label{eq:rmp_example_parent_hamiltonian_scope_formal_ghz_zero}\\
+    A^1
+        &=
+        \ketbra{1}{1}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_formal_ghz_one}
+\end{align}
+The corresponding file proves that this tensor is an RFP, is not injective, and
+has the expected $\mathbb Z_2$ symmetry.\footnote{See
+\path{TNLean/MPS/Examples/GHZ.lean}:54--86 and the module summary at
+\path{TNLean/MPS/Examples/GHZ.lean}:21--29.}
+
+The cluster module uses the reflected one-dimensional convention
+\begin{align}
+    A^0
+        &=
+        \ketbra{+}{0},
+    \label{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero}\\
+    A^1
+        &=
+        \ketbra{-}{1}.
+    \label{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one}
+\end{align}
+It proves non-injectivity at one site and injectivity after blocking two
+sites.\footnote{See \path{TNLean/MPS/Examples/Cluster.lean}:62--78 and
 \path{TNLean/MPS/Examples/Cluster.lean}:200--215.}
-The AKLT file defines the spin-$1$ tensor and proves two-block injectivity, hence
-normality.\footnote{See \path{TNLean/MPS/Examples/AKLT.lean}:49--58 and
+
+The AKLT module defines the spin-$1$ tensor and proves two-block injectivity,
+hence normality.\footnote{See \path{TNLean/MPS/Examples/AKLT.lean}:49--58 and
 \path{TNLean/MPS/Examples/AKLT.lean}:222--237.}
 
-The general parent-Hamiltonian API is also present.  The local interaction is the
-orthogonal projector onto $\mathcal G_L(A)^\perp$, and the finite-chain parent
-Hamiltonian is the sum of translated local terms.\footnote{See
+The general parent-Hamiltonian API is also available. For a block length $L$,
+the local interaction is the orthogonal projector onto
+$\mathcal G_L(A)^\perp$, and the finite-chain parent Hamiltonian is the sum of
+its translates.\footnote{See
 \path{TNLean/MPS/ParentHamiltonian/Defs.lean}:66--75 and
 \path{TNLean/MPS/ParentHamiltonian/Defs.lean}:23--27.}
-The theorem that the parent Hamiltonian annihilates the MPS vector is already
-available.\footnote{See
+The formal library already proves that this parent Hamiltonian annihilates the
+MPS vector.\footnote{See
 \path{TNLean/MPS/ParentHamiltonian/Basic.lean}:118--128.}
+
 The normal-MPS range-reduction theorem still depends on the periodic-boundary
-comparison, which is the remaining formal gap for the general unique-ground-state
+comparison. This is the remaining formal gap in the general unique-ground-state
 statement.\footnote{Formal declaration:
 \leanid{wrapped_mirror_witness_agree_of_chainGroundSpace}. See
 \path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:822--846 and
@@ -154,34 +241,39 @@ statement.\footnote{Formal declaration:
 
 \section{Source-faithful order of work}
 
-A source-faithful formalization of issue \#2315 should proceed in the following
-order.
-
+A source-faithful formalization of issue \#2315 should proceed as follows.
 \begin{enumerate}
-  \item For GHZ, first state the Ising parent-Hamiltonian comparison using the
-        review terminology: the ferromagnetic Ising Hamiltonian and its
-        two-dimensional ground space.  The two-site projector description can be
-        taken from the local uncle-Hamiltonian source.
-  \item For cluster, first connect the existing normality proof to the general
-        parent-Hamiltonian construction, or prove the three-body $ZXZ$
-        interaction stated in the older MPS review.  Any other convention should
-        be stated only after recording the local-basis or index-shift equivalence.
-  \item For AKLT, first use the source's stated two-site criterion
-        $\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}$ and the
-        already formalized two-block injectivity.  The polynomial AKLT
-        Hamiltonian is locally sourced; the spin-$2$ projector wording should be
-        introduced only after citing or proving its equivalence with that
-        polynomial form.  The open-boundary fourfold degeneracy should be treated
-        separately from the periodic unique-ground-state statement.
+    \item For GHZ, first compare the parent Hamiltonian with the ferromagnetic
+          Ising Hamiltonian and prove the two-dimensional ground-space
+          statement used by the review
+          \cite[line~2205]{Cirac2021Matrix}. The two-site projector formula
+          may be taken from the local uncle-Hamiltonian source.
+
+    \item For the cluster state, first connect the existing normality proof to
+          the general parent-Hamiltonian construction, or prove the three-body
+          $ZXZ$ interaction stated in the older MPS review
+          \cite[local TeX lines~374--387]{PerezGarcia2007MPSReps}. State any
+          other convention only after proving the required local-basis or
+          index-shift equivalence.
+
+    \item For AKLT, first use the two-site criterion
+          (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_intersection}) and
+          the existing two-block injectivity proof. The polynomial Hamiltonian
+          in
+          (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) is
+          locally sourced. Introduce the spin-$2$ projector formulation only
+          after citing or proving its equivalence with the polynomial form.
+          Treat the fourfold open-boundary degeneracy separately from the
+          periodic unique-ground-state theorem.
 \end{enumerate}
 
 \section{Verdict}
 
-This is a scope restriction.  Issue \#2315 is source-faithful only when split
-into separate targets: the review-stated parent-Hamiltonian consequences, the
-explicit stabilizer or spin-projector formulas, and the open-boundary edge-mode
-ground spaces are distinct mathematical statements with distinct source
-obligations.
+This is a scope restriction. Issue \#2315 is source-faithful only when it
+separates three types of targets: parent-Hamiltonian consequences explicitly
+stated in the review, explicit stabilizer or spin-projector formulas, and
+open-boundary edge-mode ground spaces. These are distinct mathematical
+statements with distinct source obligations.
 
 \bibliographystyle{alpha}
 \bibliography{references}

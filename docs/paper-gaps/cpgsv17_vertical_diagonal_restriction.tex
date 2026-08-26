@@ -18,225 +18,296 @@
 \section{The source argument}
 
 Proposition~4.13 of Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete concerns a
-tensor in horizontal canonical form that generates positive semidefinite
-density operators at every system size. Its conclusion is that the same
-tensor, now viewed in the vertical direction, admits a vertical canonical form
-\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.  The local source is
+tensor in horizontal canonical form whose matrix product operators are positive
+semidefinite at every system size. It concludes that the same tensor, viewed
+vertically, admits a vertical canonical form
+\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}. The local source is
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~1863--1921.
 
-The proof does not restrict each horizontal normal tensor from physical pairs
-$(i,j)$ to diagonal pairs $(i,i)$ and then assert that the restricted tensor is
-normal.  Instead, it constructs a new canonical form in the vertical direction.
-Positivity and the first-site insertion lemma rule out a one-sided invariant
-projection at lines~1873--1887.  Positivity then excludes nontrivial periodic
-sectors at lines~1889--1893.  Only after these two steps does the proof invoke a
-canonical-form decomposition in the vertical direction.  The remainder of the
-argument, lines~1895--1921, proves positivity of its multiplicity weights and
-reduces the corresponding similarities to unitary changes of basis.
+The source does not restrict each horizontal normal tensor from physical pairs
+$(i,j)$ to diagonal pairs $(i,i)$ and assert that the restriction remains
+normal. Instead, it constructs a new canonical form in the vertical direction.
+Positivity and the first-site insertion lemma exclude one-sided invariant
+projections at lines~1873--1887 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Positivity then excludes nontrivial periodic
+sectors at lines~1889--1893. Only after these steps does the proof invoke a
+canonical-form decomposition in the vertical direction. Lines~1895--1921 prove
+that the resulting multiplicity weights are positive and that the associated
+similarities reduce to unitary changes of basis.
 
-The block-injectivity proposition at lines~340--345 has a different role.  It
-separates the normal blocks belonging to one fixed canonical-form decomposition.
-It does not compare horizontal blocks with their diagonal restrictions, and it
-does not imply that injectivity survives deletion of all off-diagonal physical
-matrices.
+The block-injectivity proposition at lines~340--345 of
+Ref.~\cite{Cirac2016MPDO_arXiv} serves a different purpose: it separates the
+normal blocks within one fixed canonical-form decomposition. It neither
+compares horizontal blocks with their diagonal restrictions nor shows that
+injectivity survives deletion of every off-diagonal physical matrix.
 
 \section{A finite-dimensional obstruction}
 
-The stronger assertion is false under the stated horizontal canonical-form
-hypotheses.\footnote{The correction is tracked in
+The stronger diagonal-restriction assertion is false under the stated
+horizontal canonical-form hypotheses.\footnote{The correction is tracked in
 \href{https://github.com/LionSR/TNLean/issues/2537}{issue 2537}.}
-On bond space $\mathbb C^2$, let
-\[
-    A^{(a,b)}=c_aE_{ab},
-    \qquad c_0=\frac35,
-    \qquad c_1=\frac45,
-    \qquad a,b\in\{0,1\}.
-\]
-The four matrices are nonzero scalar multiples of the matrix units, hence span
-$M_2(\mathbb C)$.  They also satisfy
-\[
-    \sum_{a,b}\bigl(A^{(a,b)}\bigr)^*A^{(a,b)}
-      =\bigl(c_0^2+c_1^2\bigr)I=I.
-\]
-Taking a single horizontal block makes the simultaneous block-separation
-condition identical to ordinary injectivity.  Thus this example satisfies the
-injectivity, left-canonicality, nonzero-weight, and finite-length block-separation
-assumptions in the older per-copy \texttt{HorizontalCFData} structure.
+Let $E_{ab}\in M_2(\mathbb C)$ denote the matrix units for
+$a,b\in\{0,1\}$. Define
+\begin{align}
+    A^{(a,b)}
+        &=c_aE_{ab},
+    &
+    c_0&=\frac{3}{5},
+    &
+    c_1&=\frac{4}{5},
+    &
+    a,b&\in\{0,1\}.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_matrix_units}
+\end{align}
+The four matrices in
+Eq.~\ref{eq:cpgsv17_vertical_diagonal_restriction_matrix_units} are nonzero
+scalar multiples of the matrix units and therefore span $M_2(\mathbb C)$.
+They also satisfy
+\begin{align}
+    \sum_{a,b}
+        (A^{(a,b)})^*A^{(a,b)}
+        &=
+        (c_0^2+c_1^2)I
+        =I.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_left_canonical}
+\end{align}
+With one horizontal block, simultaneous block separation is ordinary
+injectivity. Hence this example satisfies the injectivity, left-canonicality,
+nonzero-weight, and finite-length block-separation assumptions of the older
+per-copy \texttt{HorizontalCFData} structure.
 
 Its diagonal restriction is
-\[
-    A^{\mathrm{diag}}(0)=\frac35E_{00},
-    \qquad
-    A^{\mathrm{diag}}(1)=\frac45E_{11}.
-\]
-Every word in these two matrices is diagonal.  Consequently, no blocking length
-can span $M_2(\mathbb C)$, so the restricted tensor is not normal.  This example
-is formalized in
+\begin{align}
+    A^{\mathrm{diag}}(0)
+        &=\frac{3}{5}E_{00},
+    \label{eq:cpgsv17_vertical_diagonal_restriction_diag_zero}\\
+    A^{\mathrm{diag}}(1)
+        &=\frac{4}{5}E_{11}.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_diag_one}
+\end{align}
+Every word in the matrices from
+Eqs.~\ref{eq:cpgsv17_vertical_diagonal_restriction_diag_zero}
+and~\ref{eq:cpgsv17_vertical_diagonal_restriction_diag_one} is diagonal.
+No blocking length can therefore span $M_2(\mathbb C)$, so the restricted
+tensor is not normal. This example is formalized in
 \path{TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean}.
 
-The example is not presented as a counterexample to Proposition~4.13.  The
-formal horizontal structure records properties of a block decomposition but does
-not assume that the associated tensor generates positive semidefinite operators
-at every length.  That positivity hypothesis is essential in the source proof.
-More importantly, even with positivity available, the proposition constructs a
-new vertical basis of normal tensors rather than reusing the diagonal
-restrictions of the horizontal basis.
+This construction is not a counterexample to Proposition~4.13 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The formal horizontal structure records
+properties of a block decomposition but does not assume that its tensor
+generates positive semidefinite operators at every length. That positivity
+hypothesis is essential to the source proof. More importantly, even when
+positivity holds, Proposition~4.13 constructs a new vertical basis of normal
+tensors rather than reusing diagonal restrictions of the horizontal basis.
 
 \section{The corrected formal theorem}
 
-The literal theorem now proved assumes the CPSV canonical form of
-Proposition~4.13 together with the MPDO positivity hypothesis and concludes
-vertical canonical form.\footnote{Formal declaration:
+The literal theorem now assumes the CPSV canonical form of Proposition~4.13
+together with the MPDO positivity hypothesis, and it concludes vertical
+canonical form.\footnote{Formal declaration:
 \leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
 \doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.}
 A separate theorem retains the normalized BNT-refined horizontal hypothesis
-\path{MPOTensor.IsHorizontalCF} for arguments that already use that stronger
+\path{MPOTensor.IsHorizontalCF} for arguments that already use this stronger
 form.\footnote{Formal declaration:
 \leanid{MPOTensor.verticalCF\_of\_horizontalCF} in
 \doclink{TNLean/MPS/MPDO/VerticalCanonicalForm}.}
 
-The proof follows the three stages visible in the source:
+The proof follows the three stages of Proposition~4.13 in
+Ref.~\cite{Cirac2016MPDO_arXiv}:
 \begin{enumerate}
-    \item use positivity and the first-site insertion lemma to rule out one-sided
-      invariant projections in the vertical direction;
-    \item use positivity to rule out nontrivial vertical periods;
-    \item obtain the vertical canonical-form blocks independently, and prove the
-      positivity and unitary normalization of their multiplicity coefficients.
+    \item positivity and the first-site insertion lemma exclude one-sided
+    invariant projections in the vertical direction;
+    \item positivity excludes nontrivial vertical periods;
+    \item an independent vertical canonical-form decomposition supplies the
+    vertical blocks, after which the proof establishes positivity of the
+    multiplicity coefficients and unitary normalization of the sector gauges.
 \end{enumerate}
-The target statement is now in place: the vertical canonical form is stated
-on the vertically viewed tensor, whose letters are indexed by the horizontal
-bond pair and whose matrices act on the physical space, in the rectangular
-orientation of the source.  In that orientation the displayed map is a
-coisometry onto the retained sectors; an earlier statement on the diagonal
-tensor $i\mapsto M^{ii}$
-has been removed.  The definitional realignment is recorded in
-\path{cpgsv17_vertical_tensor_definition.tex}.
 
-The already formalized equality of matrix product vectors after diagonal
-restriction remains useful as an auxiliary identity.  It cannot supply the
-normal blocks of the vertical canonical form.  In particular, Newton--Girard
-identities for scalar weights address only the multiplicity coefficients; they
-cannot restore matrix directions discarded by the restriction $(i,j)\mapsto(i,i)$.
-The vertical phase-class grouping and the resulting positive diagonal
-coefficients are described in
+The target is the vertically viewed tensor. Its letters are indexed by
+horizontal bond pairs, and its matrices act on the physical space. In the
+rectangular orientation used by the source, the displayed map is a coisometry
+onto the retained sectors. The earlier statement about the diagonal tensor
+$i\mapsto M^{ii}$ has been removed. The definitional realignment is documented
+in \path{cpgsv17_vertical_tensor_definition.tex}.
+
+The formal equality of matrix product vectors after diagonal restriction
+remains useful as an auxiliary identity, but it cannot produce the normal
+blocks of the vertical canonical form. Newton--Girard identities for scalar
+weights concern only multiplicity coefficients; they cannot recover matrix
+directions removed by $(i,j)\mapsto(i,i)$. The phase-class grouping of vertical
+blocks and the resulting positive diagonal coefficients are described in
 \path{cpgsv17_vertical_cf_grouping.tex}; they do not arise from diagonal
 restriction.
 
-The first operator identity at lines~1873--1887 is now formalized: if $H\geq0$,
-$P=P^*$, and $PH=PHP$, then
-\[
-    HP=(PH)^*=(PHP)^*=PHP,
-    \qquad
-    (I-P)HP=0.
-\]
-The doubled-index forms of the three first-site contractions are now explicit.
-For doubled indices $p=(a,b)$ and $q=(c,e)$ they are
-\[
-  (Y_L)_{p,q}=P_{a,c}\delta_{b,e},\qquad
-  (Y_R)_{p,q}=\delta_{a,c}P_{e,b},\qquad
-  (Y_C)_{p,q}=P_{a,c}P_{e,b}.
-\]
-Their contractions with the horizontal matrix product vector are proved to be
-the entries of $PH^{(N)}$, $H^{(N)}P$, and $PH^{(N)}P$, respectively.
-Consequently, the corresponding two applications of the first-site insertion
-lemma are formalized without abstract placeholder matrices: the two entrywise
-operator identities force equality of the opposite-corner insertions on every
-horizontal canonical-form block.
+The first operator identity from lines~1873--1887 of
+Ref.~\cite{Cirac2016MPDO_arXiv} is formalized. If $H\geq0$, $P=P^*$, and
+$PH=PHP$, then
+\begin{align}
+    HP
+        &=(PH)^*
+        =(PHP)^*
+        =PHP,
+    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_corner_adjoint}\\
+    (I-P)HP
+        &=0.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_corner_vanishes}
+\end{align}
+For doubled indices $p=(a,b)$ and $q=(c,e)$, define the three first-site
+contractions by
+\begin{align}
+    (Y_L)_{p,q}
+        &=P_{a,c}\delta_{b,e},
+    \label{eq:cpgsv17_vertical_diagonal_restriction_left_insertion}\\
+    (Y_R)_{p,q}
+        &=\delta_{a,c}P_{e,b},
+    \label{eq:cpgsv17_vertical_diagonal_restriction_right_insertion}\\
+    (Y_C)_{p,q}
+        &=P_{a,c}P_{e,b}.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_corner_insertion}
+\end{align}
+Their contractions with the horizontal matrix product vector are respectively
+the entries of $PH^{(N)}$, $H^{(N)}P$, and $PH^{(N)}P$. The two applications
+of the first-site insertion lemma are therefore formalized without abstract
+placeholder matrices: the two entrywise operator identities force equality of
+the opposite-corner insertions on every horizontal canonical-form block.
 
-The first stage is now complete.  Writing
-$P_1=P\otimes I^{\otimes(N-1)}$, the vertically viewed relation $PM=PMP$
-gives
-\[
-  P_1H^{(N)}=P_1H^{(N)}P_1=H^{(N)}P_1,
-\]
-and the representative-grouped Lemma~L transfers this equality through every
-repeated weighted sector and the direct sum of the copy gauges.  Thus the
-original tensor satisfies the literal equality $MP=PMP$, equivalently
-$(I-P)MP=0$.  The formal theorem assumes only $P=P^*$; the source specializes
-to an orthogonal projector.
+The first stage is complete. Let $P_1$ act as $P$ on the first site and as the
+identity on all remaining sites:
+\begin{align}
+    P_1
+        &=P\otimes I^{\otimes(N-1)}.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_first_site_projection}
+\end{align}
+The vertically viewed relation $PM=PMP$ gives
+\begin{align}
+    P_1H^{(N)}
+        &=P_1H^{(N)}P_1
+        =H^{(N)}P_1.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_first_site_reduction}
+\end{align}
+The representative-grouped Lemma~L transfers
+Eq.~\ref{eq:cpgsv17_vertical_diagonal_restriction_first_site_reduction}
+through every repeated weighted sector and through the direct sum of the copy
+gauges. Thus the original tensor satisfies
+\begin{align}
+    MP
+        &=PMP,
+    \label{eq:cpgsv17_vertical_diagonal_restriction_opposite_corner_identity}\\
+    (I-P)MP
+        &=0.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_opposite_corner_vanishes}
+\end{align}
+The formal theorem assumes only $P=P^*$; the source specializes $P$ to an
+orthogonal projector.
 
-For the periodic-sector stage, the final positive-operator implication is also
-formalized:
-\[
-  Q[H^{(N)}]^p=[H^{(N)}]^pQ
-  \quad\Longrightarrow\quad
-  QH^{(N)}=H^{(N)}Q.
-\]
-A nontrivial vertical period now yields the displaced cyclic projector and its
-word invariance. The horizontal canonical-form version of Lemma~L supplies a
-chain length at which the displaced projector fails to commute; positivity at
-that length gives the contradiction. Thus nontrivial vertical periods are
-excluded without the stronger all-length inequality printed in the source.
+The final positive-operator implication needed for the periodic-sector stage
+is also formalized:
+\begin{align}
+    Q[H^{(N)}]^p
+        &=[H^{(N)}]^pQ
+    \quad\Longrightarrow\quad
+    QH^{(N)}=H^{(N)}Q.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_power_commutation}
+\end{align}
+A nontrivial vertical period produces a displaced cyclic projector and its word
+invariance. The horizontal canonical-form version of Lemma~L supplies a chain
+length at which this projector does not commute with the operator. Positivity
+at that length and
+Eq.~\ref{eq:cpgsv17_vertical_diagonal_restriction_power_commutation} yield the
+contradiction. This excludes nontrivial vertical periods without the stronger
+all-length inequality printed in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-Invariant-projector closure is also established for the vertically viewed
-tensor, and it gives a complete orthogonal family of irreducible reducing
-corners with exact physical isometries
-(\path{TNLean/MPS/MPDO/VerticalReduction.lean}).
-After discarding precisely the zero corners, the remaining corners are
-spectrally normalized to normal tensors while retaining those isometries,
-both intertwining identities, exact compression, and literal reconstruction
-of every vertical letter
-(\path{TNLean/MPS/MPDO/VerticalSpectral.lean}).
+Invariant-projector closure is established for the vertically viewed tensor.
+It produces a complete orthogonal family of irreducible reducing corners with
+exact physical isometries in
+\path{TNLean/MPS/MPDO/VerticalReduction.lean}. After exactly the zero corners
+are discarded, the retained corners are spectrally normalized to normal
+tensors. This construction preserves the isometries, both intertwining
+identities, exact compression, and literal reconstruction of every vertical
+letter; it is implemented in
+\path{TNLean/MPS/MPDO/VerticalSpectral.lean}.
 
-The positive-weight part of the third stage is complete.  The physical range
-projector of every grouped sector has the required loop identity, with
-$(E_\alpha)_{ab}=\operatorname{tr}(M_\alpha^{(a,b)})$, and horizontal
-separation supplies a nonzero compression.  Its trace is the sector weight
-$\mu_{\alpha,k}$ times a sector trace $d_\alpha$, so MPDO positivity forces
-$d_\alpha>0$ and $\mu_{\alpha,k}>0$ under the normalization
-$\mu_{\alpha,1}>0$ (\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}). The pairwise Gram-conjugation
-identity of the second displayed diagram at lines~1914--1919 is proved in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}, and its dependent transport
-to the actual grouped sectors is proved in
-\path{TNLean/MPS/MPDO/GroupedFigure8.lean}.  Normal-tensor rigidity then shows
-that the Gram matrix of each sector gauge $X_{\alpha,k}$ is a positive real
-multiple of the reference Gram matrix,
-\[
-X_{\alpha,k}^\dagger X_{\alpha,k}
-=\omega_{\alpha,k}X_{\alpha,1}^\dagger X_{\alpha,1}.
-\]
-The relative gauge $X_{\alpha,k}X_{\alpha,1}^{-1}$ is therefore proportional
-to a unitary; the grouping chooses $X_{\alpha,1}=\Id$.  The positive scalar
-identity and the unitary normalization of the actual grouped gauge are proved
-in \path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}, with the source
-passage at lines~1903--1921 recorded in both theorem docstrings.  Projector
-closure and
-the absence of periodic vectors already give an abstract positive-length
-normal-block decomposition
-(\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}). The literal
-isometry-preserving refinement is now supplied by
-\path{TNLean/MPS/MPDO/VerticalSpectral.lean}. The normal blocks are now
-grouped into pairwise gauge-phase-distinct BNT representatives in
-\path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is expressed by a positive
-coefficient, a unit-modulus phase, and an invertible bond-space gauge, while
-the physical isometries and the literal vertical reconstruction are retained.
+The positive-weight part of the third stage is also complete. For each grouped
+sector $\alpha$, define
+\begin{align}
+    (E_\alpha)_{ab}
+        &=\tr(M_\alpha^{(a,b)}).
+    \label{eq:cpgsv17_vertical_diagonal_restriction_sector_trace_matrix}
+\end{align}
+The physical range projector of each grouped sector satisfies the required
+loop identity, and horizontal separation supplies a nonzero compression. Its
+trace is the sector weight $\mu_{\alpha,k}$ multiplied by a sector trace
+$d_\alpha$. Under the normalization $\mu_{\alpha,1}>0$, MPDO positivity forces
+\begin{align}
+    d_\alpha
+        &>0,
+    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_sector_trace}\\
+    \mu_{\alpha,k}
+        &>0.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_positive_sector_weight}
+\end{align}
+These results are contained in
+\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
+\path{TNLean/MPS/MPDO/SectorTrace.lean}.
+
+The pairwise Gram-conjugation identity represented by the second diagram at
+lines~1914--1919 of Ref.~\cite{Cirac2016MPDO_arXiv} is proved in
+\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}. Its dependent transport to
+the grouped sectors is proved in
+\path{TNLean/MPS/MPDO/GroupedFigure8.lean}. Normal-tensor rigidity then gives
+\begin{align}
+    X_{\alpha,k}^\dagger X_{\alpha,k}
+        &=
+        \omega_{\alpha,k}
+        X_{\alpha,1}^\dagger X_{\alpha,1}.
+    \label{eq:cpgsv17_vertical_diagonal_restriction_sector_gram_scaling}
+\end{align}
+Here $\omega_{\alpha,k}>0$. Hence the relative gauge
+$X_{\alpha,k}X_{\alpha,1}^{-1}$ is proportional to a unitary. The grouping
+chooses $X_{\alpha,1}=I$. The positive scalar identity and unitary
+normalization of the grouped gauge are proved in
+\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}; the theorem docstrings
+record the corresponding source passage at lines~1903--1921 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+Projector closure and the absence of periodic vectors already yield an abstract
+positive-length normal-block decomposition in
+\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}. The
+isometry-preserving refinement is supplied by
+\path{TNLean/MPS/MPDO/VerticalSpectral.lean}. The normal blocks are grouped
+into pairwise gauge-phase-distinct BNT representatives in
+\path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is represented by a
+positive coefficient, a unit-modulus phase, and an invertible bond-space gauge,
+while the physical isometries and literal vertical reconstruction are
+preserved.
+
 The unitary gauge normalizations are transported to the representative bond
 spaces and composed with the physical sector isometries in
-\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}.  The algebraic
+\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}. The
 basis-of-normal-tensors property is established in
 \path{TNLean/MPS/MPDO/VerticalBNTConstruction.lean}, using exact
 reconstruction at positive lengths and a retained positive-dimensional
-representative at length zero.  The resulting orthogonal sector maps are
+representative at length zero. The resulting orthogonal sector maps are
 assembled into the final coisometry in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.  Together with the MPDO
-positivity hypothesis, the normalized BNT-refined horizontal form therefore
-gives the displayed vertical identity and exact reconstruction.  The source
-prints the former; the latter is implicit in its assertion that the vertical
-tensor is itself in canonical form and is not displayed as a separate formula.
+\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}. Together with MPDO
+positivity, the normalized BNT-refined horizontal form therefore gives both
+the displayed vertical identity and exact reconstruction. Proposition~4.13
+prints the former; its statement that the vertical tensor is itself in
+canonical form implies the latter
+\cite[Proposition~4.13]{Cirac2016MPDO_arXiv}.
 
-The corresponding constructions under literal CPSV canonical form are
-summarized in \path{cpgsv17_vertical_cf_grouping.tex}.  They give
-\path{MPOTensor.verticalCF_of_cpsvCanonicalForm} without using diagonal
-restriction.
+The corresponding constructions under the literal CPSV canonical form are
+summarized in \path{cpgsv17_vertical_cf_grouping.tex}. They establish
+\path{MPOTensor.verticalCF_of_cpsvCanonicalForm} without diagonal restriction.
 
 \paragraph{Verdict.}
 Literal Proposition~4.13 is complete, and the stronger theorem under
-\path{MPOTensor.IsHorizontalCF} remains available separately.  Neither proof
-uses diagonal restriction to obtain the normal vertical representatives; that
-route remains false.  Proposition~4.13 does not settle the positive-fusion
+\path{MPOTensor.IsHorizontalCF} remains available separately. Neither proof
+uses diagonal restriction to construct the normal vertical representatives;
+that route remains false. Proposition~4.13 does not settle the positive-fusion
 problem of Appendix~C.4 or the renormalization fixed-point characterization of
-Theorem~4.14.
+Theorem~4.14 in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

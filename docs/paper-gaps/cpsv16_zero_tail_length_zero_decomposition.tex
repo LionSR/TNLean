@@ -19,128 +19,168 @@
 \gapnote{clarification}{resolved}
 
 \noindent
-This note explains why carrying the blocked canonical-form decomposition as an
-\emph{all-length} matrix-product-vector identity is the wrong formal shape, and
-records its removal from the physical canonical-form statements.\footnote{%
+This note explains why an all-length matrix-product-vector identity is not the
+appropriate formal statement of the blocked canonical-form decomposition. It
+also records the removal of that formulation from the physical canonical-form
+statements.\footnote{%
   Context: PRs \ghpr{2153}, \ghpr{2156}, and \ghpr{2167} removed roughly a
   thousand lines of ``zero-tail'' plumbing built on the all-length form
   discussed here. This note records why that form is a non-source-faithful
   overcomplication and why it has now been removed.}
 
-\section{The assertion}
+\section{The decomposition}
 
-Let $A$ be a translation-invariant matrix-product tensor of bond
-dimension~$D$, with one-site matrices $A^i\in M_D(\mathbb C)$. For a length
-$N$ and a word $\sigma=(i_1,\dots,i_N)$ write the matrix-product-vector
-coefficient
+Let $A$ be a translation-invariant matrix-product tensor of bond dimension
+$D$, with one-site matrices $A^i\in M_D(\mathbb C)$. For a length $N\geq0$
+and a word $\sigma=(i_1,\ldots,i_N)$, define the corresponding
+matrix-product-vector coefficient by
 \begin{align}
-  \MPV{N}{A}_\sigma = \tr\!\left(A^{i_1}\cdots A^{i_N}\right).
+    \MPV{N}{A}_\sigma
+        &= \tr\!\left(A^{i_1}\cdots A^{i_N}\right).
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_mpv_coefficient}
 \end{align}
-The blocked canonical-form reduction of
-\cite[Section~2.3]{Cirac2016MPDO_arXiv}, following
-\cite[Theorem~3]{PerezGarcia2007MPSReps}, states that after blocking by some
-period $p\ge 1$ the tensor is, up to a gauge, the direct sum of an all-zero
-block and a weighted family of normal blocks,
-\begin{align}
-  A^{[p]} \cong  \mathbf 0_{z}\ \oplus\ \bigoplus_{k} \mu_k\,B_k,\label{eq:zero-block}
-\end{align}
-where $\mathbf 0_{z}$ is the zero tensor on a bond space of dimension~$z$,
-the $B_k$ are normal (primitive, trace-preserving, irreducible) blocks of
-bond dimension $D_k$, the weights satisfy $\mu_k\neq 0$, and
-$z+\sum_k D_k = D$ is the bond dimension of $A^{[p]}$.
+For $N=0$, the word is empty and the product in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_mpv_coefficient} is the
+identity on the bond space.
 
-\section{The point at issue}
+The blocked canonical-form reduction in Section~2.3 of
+Ref.~\cite{Cirac2016MPDO_arXiv}, following Theorem~3 of
+Ref.~\cite{PerezGarcia2007MPSReps}, states that after blocking by some period
+$p\geq1$, the tensor is gauge equivalent to the direct sum of an all-zero
+block and a weighted family of normal blocks:
+\begin{align}
+    A^{[p]}
+        &\cong \mathbf 0_z\oplus\bigoplus_k\mu_k B_k.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_block_decomposition}
+\end{align}
+Here $\mathbf 0_z$ is the zero tensor on a bond space of dimension $z$; each
+$B_k$ is a normal block of bond dimension $D_k$, meaning primitive,
+trace-preserving, and irreducible; and each weight satisfies $\mu_k\neq0$.
+The bond dimensions obey
+\begin{align}
+    z+\sum_k D_k
+        &= D.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_bond_dimension}
+\end{align}
 
-The direct sum~\eqref{eq:zero-block} gives, at every length $N$ and word
-$\sigma$,
-\begin{align}
-  \MPV{N}{A^{[p]}}_\sigma
-  = \MPV{N}{\mathbf 0_{z}}_\sigma
-  + \MPV{N}{\textstyle\bigoplus_k \mu_k B_k}_\sigma.\label{eq:all-length}
-\end{align}
-The zero block contributes nothing except at the empty word: for $N\ge 1$ a
-product of $A^i$-blocks that passes through the zero summand vanishes, so
-\begin{align}
-  \MPV{N}{\mathbf 0_{z}}_\sigma = 0 \qquad (N\ge 1),
-\end{align}
-whereas at $N=0$ the only coefficient is the trace of the identity on the
-bond space,
-\begin{align}
-  \MPV{0}{C}_{\varnothing} = \tr(\mathbf 1_{D_C}) = D_C.
-\end{align}
-Hence the \emph{entire} content of the length-zero instance
-of~\eqref{eq:all-length} is the dimension count
-\begin{align}
-  z + \sum_k D_k = D,\label{eq:dim}
-\end{align}
-which is already part of~\eqref{eq:zero-block}. Every length $N\ge 1$ carries
-the genuine mathematical content: the weighted normal-block comparison
-$\MPV{N}{A^{[p]}}_\sigma = \MPV{N}{\bigoplus_k \mu_k B_k}_\sigma$.
+\section{The length-zero issue}
 
-\noindent\emph{Why the all-length form is the wrong shape.}
-Stating the reduction as the all-length identity~\eqref{eq:all-length}
-attaches the trivial dimension fact~\eqref{eq:dim} to the substantive
-positive-length comparison and forces both to travel together through blocking,
-reindexing, and sector grouping. In the formal development this produced a
-family of transport lemmas whose only purpose was to move the empty-word
-instance of~\eqref{eq:all-length} across each such step.\footnote{%
+The direct sum in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_block_decomposition}
+gives, for every length $N$ and word $\sigma$,
+\begin{align}
+    \MPV{N}{A^{[p]}}_\sigma
+        &= \MPV{N}{\mathbf 0_z}_\sigma
+           +\MPV{N}{\textstyle\bigoplus_k\mu_k B_k}_\sigma.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_all_length_identity}
+\end{align}
+The zero block contributes nothing at positive length. Indeed, every product
+of one or more tensor matrices restricted to the zero summand vanishes, so
+\begin{align}
+    \MPV{N}{\mathbf 0_z}_\sigma
+        &= 0,
+        \qquad N\geq1.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_zero_block_positive_length}
+\end{align}
+At length zero, the unique coefficient is the trace of the identity on the
+bond space. For any tensor $C$ with bond dimension $D_C$,
+\begin{align}
+    \MPV{0}{C}_{\varnothing}
+        &= \tr(\mathbf 1_{D_C}),
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_empty_word_trace}\\
+    \MPV{0}{C}_{\varnothing}
+        &= D_C.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_empty_word_dimension}
+\end{align}
+Consequently, the length-zero instance of
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_all_length_identity}
+contains only the bond-dimension equality in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_bond_dimension}.
+Every positive length instead carries the substantive weighted normal-block
+comparison.
+
+The all-length formulation couples this elementary dimension identity to the
+physical positive-length comparison. It then forces both statements to pass
+together through blocking, reindexing, and sector grouping. In the formal
+development, this coupling produced transport lemmas used only to move the
+empty-word instance of
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_all_length_identity}
+through those operations.\footnote{%
   These were the \leanid{zeroTail_*} lemmas in
   \path{TNLean/MPS/CanonicalForm/SectorComparison/}; they are removed in
   PRs \ghpr{2156} and \ghpr{2167} once the comparison is stated at positive
   length.}
-This is also not source-faithful: the article introduces the zero block once,
-to account for the bond dimension, and then discards it, comparing only the
-nonzero normal blocks in the thermodynamic limit. The zero summand
-$\mathbf 0_z$ is an artifact of keeping a common bond space in the formal
-statement; it carries no state and no normal-block structure.
 
-\section{The clean statement}
+The all-length formulation is also not source-faithful. The article introduces
+the zero block once to account for the bond dimension and then discards it,
+comparing only the nonzero normal blocks in the thermodynamic limit
+\cite[Section~2.3]{Cirac2016MPDO_arXiv}. The summand $\mathbf 0_z$ preserves a
+common bond space in the formal decomposition, but it represents no state and
+has no normal-block structure.
 
-Separate the two facts. The positive-length comparison
+\section{The positive-length statement}
+
+The dimension statement and the physical comparison should be separated. For
+every $N\geq1$, the physical comparison is
 \begin{align}
-  \MPV{N}{A^{[p]}}_\sigma
-  = \MPV{N}{\textstyle\bigoplus_k \mu_k B_k}_\sigma
-  \qquad (N\ge 1)\label{eq:pos}
+    \MPV{N}{A^{[p]}}_\sigma
+        &= \MPV{N}{\textstyle\bigoplus_k\mu_k B_k}_\sigma,
+        \qquad N\geq1.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison}
 \end{align}
-carries all of the physical mathematics. The direct-sum induction independently
-gives the structural identity for the unfiltered irreducible blocks. After the
-all-zero blocks are discarded, this implies only the bound needed downstream,
+Equation~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison}
+contains all physical content of the matrix-product-vector comparison.
+
+Direct-sum induction independently gives the structural bond-dimension
+identity for the unfiltered irreducible blocks. After discarding the all-zero
+blocks, the downstream argument needs only
 \begin{align}
-  \sum_kD_k\leq D.\label{eq:bound}
+    \sum_k D_k
+        &\leq D.
+    \label{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}
 \end{align}
-Thus no physical theorem needs an empty-word coefficient or a scalar recording
-the discarded bond-space dimension. Formally, positive-length equality is
-\leanid{SameMPV₂Pos}; the canonical-form reduction carries
-\eqref{eq:pos} and~\eqref{eq:bound}.
+No physical theorem therefore needs an empty-word coefficient or a scalar
+recording the dimension of the discarded bond space. Formally, positive-length
+equality is \leanid{SameMPV₂Pos}; the canonical-form reduction carries
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison}
+and the bound in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
 
 \section{Formal status}
 
-\leanid{exists_tp_primitive_blockDecomp_after_blocking}, blueprint
-\path{thm:tp_primitive_blockdecomp} in
-\path{blueprint/src/chapter/ch09_canonical.tex}, now uses the
-source-faithful shape: its MPV clause is the positive-length comparison
-in~\eqref{eq:pos}, and its dimension clause is the bound~\eqref{eq:bound}.
-The intermediate declarations carrying \texttt{zeroTailDim}, as well as the
-former support lemma
-\leanid{zeroTail_toTensorFromBlocks_blockPower}, have therefore been removed.
-The subsequent common-sector theorems now also take
-\leanid{SameMPV₂Pos} directly; no all-length hypothesis is converted back to
-positive length inside their proofs.  The former bridge from positive-length
-equality plus equal bond dimensions to an all-length statement has been
-removed from the public comparison surface.  The empty-word coefficient lemma
+The declaration
+\leanid{exists_tp_primitive_blockDecomp_after_blocking}, corresponding to
+blueprint item \path{thm:tp_primitive_blockdecomp} in
+\path{blueprint/src/chapter/ch09_canonical.tex}, now has the source-faithful
+shape. Its matrix-product-vector clause is the positive-length comparison in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison},
+and its dimension clause is
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
+
+The intermediate declarations carrying \texttt{zeroTailDim} and the former
+support lemma \leanid{zeroTail_toTensorFromBlocks_blockPower} have been
+removed. The subsequent common-sector theorems now assume
+\leanid{SameMPV₂Pos} directly; their proofs no longer convert an all-length
+hypothesis back to positive length. The former bridge from positive-length
+equality plus equal bond dimensions to an all-length statement has also been
+removed from the public comparison surface. The empty-word coefficient lemma
 remains only as an algebraic identity in the Lean source and is not presented
-as a physical chain statement in the blueprint.
+in the blueprint as a physical chain statement.
 
 \section{Conclusion}
 
-The block decomposition~\eqref{eq:zero-block} is correct as an intermediate
-linear-algebra statement. The former formal defect was one of shape:
-stating the reduction as the all-length matrix-product-vector
-identity~\eqref{eq:all-length} fused a trivial empty-word dimension count with
-the substantive positive-length comparison. The physical statement is the
-positive-length comparison~\eqref{eq:pos} together with the structural
-bound~\eqref{eq:bound}. The development now uses this shape throughout the
-after-blocking primitive decomposition and its downstream consumers.
+The block decomposition in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_block_decomposition}
+is correct as an intermediate linear-algebra statement. The former formal
+defect concerned its shape:
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_all_length_identity}
+combined a trivial empty-word dimension count with the substantive
+positive-length comparison. The physical statement consists of
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison}
+and the structural bound in
+Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
+The after-blocking primitive decomposition and all downstream consumers now
+use this formulation.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -19,14 +19,16 @@
 
 \section{The source argument}
 
-The normal-PEPS part of \cite{Molnar2018NormalPEPS} begins after the injective
-PEPS theorem. Its purpose is not to replace the injective proof, but to make
+The normal-PEPS part of Ref.~\cite{Molnar2018NormalPEPS} begins after the
+injective PEPS theorem. Its purpose is not to replace the injective proof, but
+to make
 the injective proof applicable after a controlled blocking. A normal PEPS is
 one for which sufficiently large regions can be blocked into injective tensors.
 Once such injective regions are available, the proof again applies the
 three-site injective-chain argument around a chosen edge.
 
-The source proof has three layers. First, Lemma \path{injective_union} proves
+The proof in Ref.~\cite{Molnar2018NormalPEPS} has three layers. First, Lemma
+\path{injective_union} proves
 that the union of two injective regions is injective. The proof blocks the
 network into the four regions $A\setminus B$, $A\cap B$,
 $B\setminus A$, and $(A\cup B)^c$. If a boundary tensor kills the
@@ -34,10 +36,11 @@ contraction over $A\cup B$, injectivity of $A$ first removes the
 $A\setminus B$ and $A\cap B$ part, and injectivity of $B$ then removes
 the remaining $A\cap B$ and $B\setminus A$ part.
 \footnote{The source is
-    \path{Papers/1804.04964/paper_normal.tex:1324--1400}.}
+    \path{Papers/1804.04964/paper_normal.tex:1324--1400}, Ref.~\cite{Molnar2018NormalPEPS}.}
 
-Second, for the translationally invariant square-lattice theorem, the paper
-assumes that every $2\times 3$ and $3\times 2$ region is injective. By
+Second, the translationally invariant square-lattice theorem of
+Ref.~\cite{Molnar2018NormalPEPS} assumes that every $2\times 3$ and
+$3\times 2$ region is injective. By
 repeatedly applying the union lemma, the regions denoted $R$, $S$, and $T$
 in the paper are injective. The finite-lattice block denoted $A_3$ in the proof
 of Theorem~\path{3} has the same complementary shape as $T$ but lives in the
@@ -46,9 +49,10 @@ records only the displayed local-window complement. The regions $R$ and $S$
 differ by one site, and their complements are injective when the system is
 large enough. These are the regions used in the last comparison step.
 \footnote{The regions $R$, $S$, and $T$ are drawn at
-    \path{Papers/1804.04964/paper_normal.tex:1407--1443}.}
+    \path{Papers/1804.04964/paper_normal.tex:1407--1443}, Ref.~\cite{Molnar2018NormalPEPS}.}
 
-Third, the proof of Theorem \path{3} blocks a neighborhood of each edge into
+Third, the proof of Theorem \path{3} in
+Ref.~\cite{Molnar2018NormalPEPS} blocks a neighborhood of each edge into
 three injective pieces. The red region is $A_1$, the blue region is $A_2$,
 and the complement is $A_3$. This produces the same three-site injective MPS
 configuration used in the injective PEPS proof. Lemma \path{inj_isomorph}
@@ -57,14 +61,15 @@ edge gauges to one horizontal matrix $X$ and one vertical matrix $Y$. After
 absorbing them into the second tensor, the final comparison of the $R$ and
 $S$ regions gives $A\propto \widetilde B$.
 \footnote{The proof of Theorem \path{3} is
-    \path{Papers/1804.04964/paper_normal.tex:1449--1572}.}
+    \path{Papers/1804.04964/paper_normal.tex:1449--1572}, Ref.~\cite{Molnar2018NormalPEPS}.}
 
-The general theorem \path{normal} removes the square-lattice specialization.
+The general theorem \path{normal} of Ref.~\cite{Molnar2018NormalPEPS}
+removes the square-lattice specialization.
 It assumes precisely the blockings needed above: every edge can be blocked into
 a three-site injective chain, and every site admits two injective regions with
 injective complements that differ exactly in that site.
 \footnote{The general theorem is
-    \path{Papers/1804.04964/paper_normal.tex:1574--1585}.}
+    \path{Papers/1804.04964/paper_normal.tex:1574--1585}, Ref.~\cite{Molnar2018NormalPEPS}.}
 
 \section{Current formal representation}
 
@@ -175,31 +180,38 @@ The obstruction is a point-forcing argument. For the local-window target
 $T_{\mathrm{loc}}$ at the origin, let $R^{a\times b}_{x,y}$ denote the
 contiguous $a\times b$ rectangle with lower-left corner $(x,y)$. Then
 \begin{align}
-    p &:= (0,0) \in T_{\mathrm{loc}},                                    \\
+    p &:= (0,0) \in T_{\mathrm{loc}},
+    \label{eq:peps_normal_ft_section3_route_local_target_point}\\
     p \in R^{2\times3}_{x,y}
         &\Longrightarrow q_{23}:=(0,2)\in R^{2\times3}_{x,y},
-        \qquad q_{23}\notin T_{\mathrm{loc}},                             \\
+        \qquad q_{23}\notin T_{\mathrm{loc}},
+    \label{eq:peps_normal_ft_section3_route_two_by_three_forced_point}\\
     p \in R^{3\times2}_{x,y}
         &\Longrightarrow q_{32}:=(2,1)\in R^{3\times2}_{x,y},
         \qquad q_{32}\notin T_{\mathrm{loc}}.
+    \label{eq:peps_normal_ft_section3_route_three_by_two_forced_point}
 \end{align}
-Thus any exact cover of $T_{\mathrm{loc}}$ by $2\times3$ and $3\times2$
-rectangles would cover $p$ by one of its pieces and would therefore also cover
-a point outside $T_{\mathrm{loc}}$. The same calculation applies to the
-rotated local-window model for vertical edges in a $6\times5$ window, to the
-origin-based horizontal edge-complement model in the $5\times7$ frame, and to
-the origin-based vertical edge-complement model in the $7\times5$ frame. The
-forced points are
-\[
-\begin{array}{c|c|c|c}
-    \text{target} & p & q_{23} & q_{32} \\
-    \hline
-    T_{\mathrm{loc}} & (0,0) & (0,2) & (2,1) \\
-    T_{\mathrm{loc}}^{\mathrm{rot}} & (0,0) & (1,2) & (2,1) \\
-    A_{3,\mathrm{hor}} & (0,0) & (0,2) & (2,1) \\
-    A_{3,\mathrm{ver}} & (0,0) & (1,2) & (2,1)
-\end{array}
-\]
+By (\ref{eq:peps_normal_ft_section3_route_local_target_point}), any exact cover
+of $T_{\mathrm{loc}}$ contains a rectangle covering $p$. Equations
+(\ref{eq:peps_normal_ft_section3_route_two_by_three_forced_point}) and
+(\ref{eq:peps_normal_ft_section3_route_three_by_two_forced_point}) show that
+such a rectangle also covers a point outside $T_{\mathrm{loc}}$. The same
+calculation applies to the rotated local-window model for vertical edges in a
+$6\times5$ window, the origin-based horizontal edge-complement model in the
+$5\times7$ frame, and the origin-based vertical edge-complement model in the
+$7\times5$ frame. The forced-point data are summarized in
+(\ref{eq:peps_normal_ft_section3_route_forced_point_table}):
+\begin{align}
+    \begin{array}{c|c|c|c}
+        \text{target} & p & q_{23} & q_{32} \\
+        \hline
+        T_{\mathrm{loc}} & (0,0) & (0,2) & (2,1) \\
+        T_{\mathrm{loc}}^{\mathrm{rot}} & (0,0) & (1,2) & (2,1) \\
+        A_{3,\mathrm{hor}} & (0,0) & (0,2) & (2,1) \\
+        A_{3,\mathrm{ver}} & (0,0) & (1,2) & (2,1)
+    \end{array}
+    \label{eq:peps_normal_ft_section3_route_forced_point_table}
+\end{align}
 The formal point-forcing lemma is
 \leanid{TNLean.PEPS.not_squareLatticeRectangleCover_of_forced_points}. Its
 four present applications are the corresponding no-cover theorems for the
@@ -349,15 +361,26 @@ The following part of the formalization is already present.
           \leanid{TNLean.PEPS.InjectiveUnionContractionMaps}.
     \item The abstract contraction-chain criterion for Lemma
           \path{injective_union} is formalized by
-          \leanid{TNLean.PEPS.InjectiveUnionContractionChain}: if the three
-          implications
-          \[
+          \leanid{TNLean.PEPS.InjectiveUnionContractionChain}. For a boundary
+          tensor $X$, write $\mathcal C_I(X)$ for the contraction over the
+          indexed subfamily $I$. The criterion assumes
+          \begin{align}
               \mathcal C_{\{0,1,2\}}(X)=0
-              \Longrightarrow \mathcal C_{\{2\}}(X)=0
-              \Longrightarrow \mathcal C_{\{1,2\}}(X)=0
-              \Longrightarrow X=0
-          \]
-          are supplied, then the union contraction has trivial kernel.
+                  &\Longrightarrow \mathcal C_{\{2\}}(X)=0,
+              \label{eq:peps_normal_ft_section3_route_union_contraction_first_step}\\
+              \mathcal C_{\{2\}}(X)=0
+                  &\Longrightarrow \mathcal C_{\{1,2\}}(X)=0,
+              \label{eq:peps_normal_ft_section3_route_union_contraction_second_step}\\
+              \mathcal C_{\{1,2\}}(X)=0
+                  &\Longrightarrow X=0.
+              \label{eq:peps_normal_ft_section3_route_union_contraction_third_step}
+          \end{align}
+          The implications
+          (\ref{eq:peps_normal_ft_section3_route_union_contraction_first_step}),
+          (\ref{eq:peps_normal_ft_section3_route_union_contraction_second_step}),
+          and
+          (\ref{eq:peps_normal_ft_section3_route_union_contraction_third_step})
+          imply that the union contraction has trivial kernel.
     \item The square-lattice coordinate model, contiguous \(2\times3\) and
           \(3\times2\) rectangles, and the coordinate rectangular-injectivity
           hypotheses are present.
@@ -622,28 +645,31 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}, and
           \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}.}
 
-          The identity-insertion bridge is the following equation. Here
-          \(C_A(R,f,X;\sigma,\tau)\) denotes the region-inserted coefficient for
-          the tensor \(A\), the region \(R\), the boundary edge \(f\), the boundary
-          matrix \(X\), the region physical configuration \(\sigma\), and the
-          complement physical configuration \(\tau\). The symbol \(D_A(e)\)
-          denotes the bond dimension of the edge \(e\), \(\partial R\) denotes the
-          set of boundary edges of \(R\), and
-          \(\langle\sigma,\tau\mid\Psi_A\rangle\) denotes the closed-state
+          The identity-insertion bridge is
+          (\ref{eq:peps_normal_ft_section3_route_identity_insertion_bridge}).
+          Here $C_A(R,f,X;\sigma,\tau)$ denotes the region-inserted coefficient
+          for the tensor $A$, the region $R$, the boundary edge $f$, the boundary
+          matrix $X$, the region physical configuration $\sigma$, and the
+          complement physical configuration $\tau$. The symbol $D_A(e)$ denotes
+          the bond dimension of the edge $e$, $\partial R$ denotes the set of
+          boundary edges of $R$, and
+          $\langle\sigma,\tau\mid\Psi_A\rangle$ denotes the closed-state
           coefficient of the assembled physical configuration:
-          \[
+          \begin{align}
               C_A(R,f,1;\sigma,\tau)
-              =
-              \Bigl(\prod_{e\notin \partial R} D_A(e)\Bigr)
-              \langle \sigma,\tau \mid \Psi_A\rangle
-          \tag{4.1}
-          \]
-          The proof decomposes the closed coefficient into region and complement
+                  &= \Bigl(\prod_{e\notin \partial R} D_A(e)\Bigr)
+                     \langle \sigma,\tau \mid \Psi_A\rangle.
+              \label{eq:peps_normal_ft_section3_route_identity_insertion_bridge}
+          \end{align}
+          The proof of
+          (\ref{eq:peps_normal_ft_section3_route_identity_insertion_bridge})
+          decomposes the closed coefficient into region and complement
           contractions, rewrites identity insertion as a double sum over
           boundary-agreeing virtual configurations, and collapses that double sum
           by merging the two virtual configurations. The factor
-          \(\prod_{e\notin\partial R}D_A(e)\) is therefore part of the formula,
-          not a normalization that can be discarded.\footnote{
+          $\prod_{e\notin\partial R}D_A(e)$ is therefore part of
+          (\ref{eq:peps_normal_ft_section3_route_identity_insertion_bridge}), not
+          a normalization that can be discarded.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.prod_assembleRegionσ_split},
           \leanid{TNLean.PEPS.regionInsertedCoeff_identity_eq_doubleSum},
@@ -2045,6 +2071,7 @@ uniqueness clause is the per-edge conjugator determinacy: two families
 realizing the scalar-free relation are proportional at every edge.
 
 The four comparison points with the source statement (lines 1576--1583 of
+Ref.~\cite{Molnar2018NormalPEPS}; source file
 \path{Papers/1804.04964/paper_normal.tex}) are the following.
 
 \begin{enumerate}
@@ -2076,10 +2103,11 @@ The four comparison points with the source statement (lines 1576--1583 of
           one super-site of each chain by the other chain's constant restores an
           exact state equality while preserving the super-site injectivities and
           the bond dimensions.  The blocked insertion-algebra equivalence on the
-          distinguished coarse bond then forces equal sizes (lines 560--583 of
-          \path{Papers/1804.04964/paper_normal.tex}, the remark that the algebra
-          isomorphism makes the bond dimensions on the two sides agree), and
-          under the single-crossing hypothesis the coarse bond carries the
+          distinguished coarse bond then forces equal sizes; see the remark at
+          lines 560--583 of Ref.~\cite{Molnar2018NormalPEPS} in
+          \path{Papers/1804.04964/paper_normal.tex}, which states that the
+          algebra isomorphism makes the bond dimensions on the two sides agree.
+          Under the single-crossing hypothesis, the coarse bond carries the
           original bond dimension of the distinguished edge for each tensor.
           The per-edge uniqueness clause keeps the equality among its
           hypotheses, since the families of gauges it compares are typed by the
@@ -2097,7 +2125,7 @@ The four comparison points with the source statement (lines 1576--1583 of
 The second point is resolved by reading the source: the single-crossing
 hypothesis is the chain structure of the source's hypothesis ``blocked into
 three partite injective MPS around every edge'' (line 1579 of
-\path{Papers/1804.04964/paper_normal.tex}), not a narrowing.  The source's
+\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}), not a narrowing.  The source's
 blocking around an edge takes the two endpoints of the chosen edge as the
 first two parties of the chain, so the chosen edge is the bond between them:
 ``Choose one edge of the PEPS and group together all vertices except the
@@ -2132,7 +2160,7 @@ are the source's hypothesis, not a narrowing.  The theorem blocks both
 states by one blocking: ``Suppose two normal PEPS generating the same state
 satisfy the following: \emph{they} can be blocked into three partite
 injective MPS around every edge'' (lines 1577--1579 of
-\path{Papers/1804.04964/paper_normal.tex}).  The proof it generalizes
+\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}).  The proof it generalizes
 chooses the regions once, geometrically: ``Let us block the TN into three
 injective parts around an edge.  This can be done with e.g.\ the following
 choice of regions'' (line 1475), and feeds the two blocked chains to the
@@ -2158,7 +2186,7 @@ the counterexample-backed positivity and connectivity corrections shared
 with the injective theorem.
 
 The source's remark after the theorem (line 1584 of
-\path{Papers/1804.04964/paper_normal.tex}) states that for a translationally
+\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}) states that for a translationally
 invariant system the gauges are also translationally invariant, provided the
 proportionality constants are not absorbed into the gauges.  On the torus,
 the only translation-invariant geometry the formal development carries, this
@@ -2393,7 +2421,8 @@ crossing uniqueness survives. This packs both reference blockings and the $3\tim
 corner comparison into every torus with $n,m\geq 7$, the source's sizes.
 
 The source's own packing is different: the example regions in the proof of
-Theorem~3 (lines 1475--1498 of \texttt{paper\_normal.tex}) sit on a $7\times7$
+Theorem~3 (lines 1475--1498 of Ref.~\cite{Molnar2018NormalPEPS}) sit on a
+$7\times7$
 patch with margins of width one on three sides, and the complementary region is
 read as connected through the torus seam --- its injectivity uses $2\times3$ and
 $3\times2$ regions that wrap. That reading is licensed by the source's hypothesis,
@@ -2422,13 +2451,13 @@ orientation-uniform carrier on the open lattice
 (\path{SquareLatticeUniformBondDim}, \path{orientationUniformGauge},
 \path{IsOrientationUniformGaugeFamily},
 \path{IsOrientationUniformGaugeFamilyModScalar}, their selection lemmas, and
-\path{NormalSquareTI.lean}); and the translation-invariant absorption datum and its
+\path{TNLean/PEPS/NormalSquareTI.lean}); and the translation-invariant absorption datum and its
 feeders (\path{tiAbsorb}, \path{TINormalGaugeAbsorptionData},
 \path{tiNormalGaugeAbsorption}, \path{tiNormalGaugeAbsorptionData_of_modScalar},
 \path{exists_postAbsorption_of_vertexInjective},
 \path{gaugeEquivModEdgeScalars_of_matrixScalar},
 \path{absorbEdgeGauges_eq_of_matrixScalar}, and
-\path{NormalSquareTIAbsorption.lean}). The vertex-injective product identity
+\path{TNLean/PEPS/NormalSquareTIAbsorption.lean}). The vertex-injective product identity
 \path{prod_perVertexScalar_eq_one} itself remains: it serves the injective theorem
 (Theorem~2), where single-site injectivity is the source hypothesis. A
 source-exact translationally invariant square-lattice statement awaits a
@@ -2437,7 +2466,8 @@ record.
 
 \section*{The closed-chain MPS corollary}
 
-The first corollary after the theorem \path{normal} (lines 1585--1622 of
+The first corollary after the theorem \path{normal} in
+Ref.~\cite{Molnar2018NormalPEPS} (lines 1585--1622; source file
 \path{Papers/1804.04964/paper_normal.tex}) specializes it to one dimension:
 two normal MPS $\{A_i\}$, $\{B_i\}$ on $n\geq 3L$ sites such that blocking
 any $L$ consecutive sites gives an injective tensor, generating the same
@@ -2482,7 +2512,8 @@ its repetition around the cycle and matching the trace coefficients with the
 closed-state coefficients) would let the two settings be compared; it is not
 small, because the cycle-graph tensor indexes its virtual legs by incident
 edges through the linear order on the vertices, and remains a follow-up.
-Second, the source's translationally invariant corollary (lines 1624--1661,
+Second, the translationally invariant corollary of
+Ref.~\cite{Molnar2018NormalPEPS} (lines 1624--1661,
 single gauge $Z$ and a root of unity $\lambda$ with $\lambda^n=1$) is not
 delivered by this instantiation: it needs a translation apparatus on the
 cycle mirroring the torus one (\path{TNLean/PEPS/TorusTranslation.lean}), and
@@ -2561,7 +2592,8 @@ $n \ge 2L + 1$ (line 1623, proved in the source's Section
 
 \section*{The translation-invariant corollary in single-gauge form}
 
-The translation-invariant corollary (lines 1624--1661: a single gauge $Z$
+The translation-invariant corollary of Ref.~\cite{Molnar2018NormalPEPS}
+(lines 1624--1661: a single gauge $Z$
 and a constant $\lambda$ with $\lambda^n = 1$ such that
 $B = \lambda \cdot Z^{-1} A Z$, with $Z$ unique up to a multiplicative
 constant) is now delivered
@@ -2590,26 +2622,28 @@ of states nor the root-of-unity conditions enter.
 
 The Applications section contains a different translation-invariance
 corollary (lines 1801--1890 of
-\path{Papers/1804.04964/paper_normal.tex}), tracked by \ghissue{2920}. Its
+\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}), tracked by \ghissue{2920}. Its
 input is a single site-dependent injective MPS whose resulting closed-chain
 state is invariant under the cyclic shift. Its conclusion is not a gauge
 between two given tensor families: the proof applies the non-translation
 invariant closed-chain theorem to the family and its cyclic shift, obtains
 per-bond gauges \(Z_i\), and then telescopes them to construct a repeated
 injective tensor \(B=A_1Z_1^{-1}\) that gives the same state.
-Writing \(T\) for the cyclic shift, the source assertion is the implication
-\[
-    \begin{gathered}
-    T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n) \\
-    \Longrightarrow \\
-    D_1=\cdots=D_n
-    \quad\text{and}\quad
-    \exists B,\ B\text{ is injective and }
-    \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B),
-    \end{gathered}
-\]
-with \(B=A_1Z_1^{-1}\) after the gauges from the comparison with the shifted
-chain are telescoped.
+Writing $T$ for the cyclic shift, the Applications corollary in
+lines 1801--1890 of Ref.~\cite{Molnar2018NormalPEPS} asserts
+\begin{align}
+    T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n)
+        &\Longrightarrow D_1=\cdots=D_n,
+    \label{eq:peps_normal_ft_section3_route_cyclic_shift_equal_bond_dimensions}\\
+    T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n)
+        &\Longrightarrow
+        \exists B,\ B\text{ is injective and }
+        \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B).
+    \label{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}
+\end{align}
+After telescoping the gauges obtained by comparing the family with its cyclic
+shift, the source chooses $B=A_1Z_1^{-1}$ in
+(\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}).
 
 This corollary is not covered by the two-tensor results above. The already
 formalized statements compare two supplied tensors, or two supplied repeated
@@ -2623,15 +2657,20 @@ faithful statement therefore requires a per-bond, rectangular matrix model in
 which the adjacent invertible gauges first imply equality of the bond
 dimensions. Until that vocabulary exists, the intended first theorem is the
 uniform-\(D\) existence statement, carrying this scope restriction explicitly;
-the per-bond-dimension theorem remains a separate follow-up. In symbols, the
-initial restricted statement is only
-\[
+the per-bond-dimension theorem remains a separate follow-up. Under a prior
+uniform bond-dimension hypothesis on the family $A_i$, the initial restricted
+statement is
+\begin{align}
     T\Psi(A_1,\ldots,A_n)=\Psi(A_1,\ldots,A_n)
-    \quad\Longrightarrow\quad
-    \exists B,\ B\text{ is injective and }
-    \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B),
-\]
-under a prior uniform bond-dimension hypothesis on the family \(A_i\).
+        &\Longrightarrow
+        \exists B,\ B\text{ is injective and }
+        \Psi(A_1,\ldots,A_n)=\Psi(B,\ldots,B).
+    \label{eq:peps_normal_ft_section3_route_uniform_bond_repeated_tensor}
+\end{align}
+Thus (\ref{eq:peps_normal_ft_section3_route_uniform_bond_repeated_tensor})
+omits the equal-bond-dimension conclusion in
+(\ref{eq:peps_normal_ft_section3_route_cyclic_shift_equal_bond_dimensions})
+because the formal type assumes it.
 The blueprint records this restricted target as
 \path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}, now
 formalized as
@@ -2657,7 +2696,7 @@ imply equality of the bond dimensions, remains the follow-up.
 
 The Applications section states the same corollary in two dimensions
 immediately after the one-dimensional version (lines 1892--1894 of
-\path{Papers/1804.04964/paper_normal.tex}), tracked by \ghissue{2921}. Its
+\path{Papers/1804.04964/paper_normal.tex}, Ref.~\cite{Molnar2018NormalPEPS}), tracked by \ghissue{2921}. Its
 input is an injective 2D PEPS whose generated state is invariant under the
 lattice translations; its conclusion is that all vertical bond dimensions
 agree, all horizontal bond dimensions agree, and the state has a
@@ -2679,36 +2718,52 @@ The load-bearing dependency, the injective PEPS Fundamental Theorem
 repeated-tensor construction discussed above is also formalized as
 \leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState}.
 The remaining work is the PEPS-specific two-directional closure: the horizontal
-and vertical gauge telescopings must be made compatible around plaquettes and
+and vertical gauge telescopings must be compatible around plaquettes and
 periodic seams, and their residual virtual operations must be absorbed into one
-site-independent 2D tensor. In the notation of the blueprint proof sketch,
-writing
-\[
-    H_{j,k}=R^{(j,k)}_h\bigl(L^{(j+1,k)}_h\bigr)^{-1},
-    \qquad
-    V_{j,k}=R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1},
-\]
-the residual \(H_{j,k}\) acts on the horizontal virtual leg
-\(\mathbb C^{D_h}\), while \(V_{j,k}\) acts on the vertical virtual leg
-\(\mathbb C^{D_v}\).  Thus the plaquette condition is not an ordinary product
-of a \(D_h\times D_h\) matrix with a \(D_v\times D_v\) matrix.  It must be
-stated on the corner virtual space
-\(\mathbb C^{D_h}\otimes\mathbb C^{D_v}\): after the row and column
-telescopings make \(H_{j,k}=H_k\) and \(V_{j,k}=V_j\), the missing scalar
-plaquette flatness relation is
-\[
+site-independent 2D tensor. Let $L_h^{(j,k)}$ and $R_h^{(j,k)}$ denote the
+left and right horizontal gauges at site $(j,k)$, and let $L_v^{(j,k)}$ and
+$R_v^{(j,k)}$ denote the corresponding vertical gauges. Define the residual
+horizontal and vertical gauges by
+\begin{align}
+    H_{j,k}
+        &:= R^{(j,k)}_h\bigl(L^{(j+1,k)}_h\bigr)^{-1},
+    \label{eq:peps_normal_ft_section3_route_horizontal_residual_gauge}\\
+    V_{j,k}
+        &:= R^{(j,k)}_v\bigl(L^{(j,k+1)}_v\bigr)^{-1}.
+    \label{eq:peps_normal_ft_section3_route_vertical_residual_gauge}
+\end{align}
+The residual gauge in
+(\ref{eq:peps_normal_ft_section3_route_horizontal_residual_gauge}) acts on the
+horizontal virtual leg $\mathbb C^{D_h}$, whereas the residual gauge in
+(\ref{eq:peps_normal_ft_section3_route_vertical_residual_gauge}) acts on the
+vertical virtual leg $\mathbb C^{D_v}$. Thus the plaquette condition is not an
+ordinary product of a $D_h\times D_h$ matrix with a $D_v\times D_v$ matrix. It
+must be stated on the corner virtual space
+$\mathbb C^{D_h}\otimes\mathbb C^{D_v}$. After the row and column telescopings
+make $H_{j,k}=H_k$ and $V_{j,k}=V_j$, the missing scalar plaquette flatness
+relation is
+\begin{align}
     (H_k\otimes I_{D_v})(I_{D_h}\otimes V_{j+1})
-    =
-    \lambda_{j,k}\,(I_{D_h}\otimes V_j)(H_{k+1}\otimes I_{D_v})
-\]
-for nonzero scalars \(\lambda_{j,k}\).  These scalars must also satisfy the
-periodic seam closures
-\[
-    \prod_{k\in\mathbb Z/N_v\mathbb Z}\lambda_{j,k}=1,
-    \qquad
-    \prod_{j\in\mathbb Z/N_h\mathbb Z}\lambda_{j,k}=1.
-\]
-The blueprint records the restricted target as
+        &= \lambda_{j,k}\,(I_{D_h}\otimes V_j)
+           (H_{k+1}\otimes I_{D_v}),
+    \qquad \lambda_{j,k}\ne 0.
+    \label{eq:peps_normal_ft_section3_route_plaquette_flatness}
+\end{align}
+The scalars in (\ref{eq:peps_normal_ft_section3_route_plaquette_flatness}) must
+also satisfy the periodic seam conditions
+\begin{align}
+    \prod_{k\in\mathbb Z/N_v\mathbb Z}\lambda_{j,k}
+        &= 1,
+    \label{eq:peps_normal_ft_section3_route_vertical_seam_closure}\\
+    \prod_{j\in\mathbb Z/N_h\mathbb Z}\lambda_{j,k}
+        &= 1.
+    \label{eq:peps_normal_ft_section3_route_horizontal_seam_closure}
+\end{align}
+Conditions
+(\ref{eq:peps_normal_ft_section3_route_vertical_seam_closure}) and
+(\ref{eq:peps_normal_ft_section3_route_horizontal_seam_closure}) close the
+vertical and horizontal periodic seams, respectively. The blueprint records
+the restricted target as
 \path{cor:exists_constant_injectivePEPS_of_translationInvariantState}, marked
 not ready.
 
@@ -2724,8 +2779,9 @@ one-dimensional corollary and remains a separate follow-up.
 
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 
-The plan recorded in the previous section is carried out: the source's
-Lemma~5 (lines 2045--2255) is formalized for matrix tensors, and the
+The plan recorded in the previous section is carried out: Lemma~5 of
+Ref.~\cite{Molnar2018NormalPEPS} (lines 2045--2255) is formalized for matrix
+tensors, and the
 closed-chain corollaries now hold at the source's bound $n \ge 2L + 1$.
 The development stays at the matrix-tensor level throughout; no graph-level
 input beyond Skolem--Noether enters.
@@ -2915,7 +2971,8 @@ lines 2297--2318) remains open.
 
 \section*{The $2L+1$ strengthening for two-dimensional tensor networks}
 
-The corollary at lines 2297--2318 --- the torus theorem with one
+The corollary at lines 2297--2318 of Ref.~\cite{Molnar2018NormalPEPS} ---
+the torus theorem with one
 rectangle shape $L \times K$ assumed injective and the sizes
 $n \geq 2L+1$, $m \geq 2K+1$ --- is the last open item of the section,
 and the source gives only a proof sketch for it. The sketch is now

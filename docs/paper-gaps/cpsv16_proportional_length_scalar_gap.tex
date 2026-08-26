@@ -17,113 +17,134 @@ Proportional BNT Theorem}
 
 \section{The source statement}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state in
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state that proportional
+matrix-product-vector families in canonical form have bijectively matched
+bases of normal tensors
 \cite[Theorem~2.10 and Appendix~A, lines~1167--1183]
-{Cirac2016MPDO_arXiv} that proportional matrix-product-vector families in
-canonical form have bijectively matched bases of normal tensors. For each
-matched pair there are a phase $\zeta_k$ and an invertible matrix $X_k$ such
-that
+{Cirac2016MPDO_arXiv}. For each matched pair, there are a phase $\zeta_k$ and
+an invertible matrix $X_k$ such that
 \begin{align}
     Q_k^i
-     & =\zeta_kX_kP_{\beta(k)}^iX_k^{-1}.
-    \label{eq:sector-match}
+        &=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}.
+    \label{eq:cpsv16_proportional_length_scalar_gap_sector_match}
 \end{align}
-The theorem does not assert that the two total tensors are conjugate, even up
-to a common phase. Copy-weight recovery and the block-diagonal global gauge
-occur in the equal-MPV Corollary~2.11, not in the proportional theorem.
+The theorem does not claim that the two total tensors are conjugate, even up
+to one common phase. Copy-weight recovery and the block-diagonal global gauge
+belong to the equal-MPV Corollary~2.11 of
+Ref.~\cite{Cirac2016MPDO_arXiv}, not to the proportional theorem.
 
-The formal proportional theorem uses eventual nonzero projective
-proportionality: for all sufficiently large $N$, one nonzero scalar $c_N$
-satisfies
+The formal proportional theorem assumes eventual nonzero projective
+proportionality. Thus, for every sufficiently large $N$, one scalar
+$c_N\neq 0$ satisfies
 \begin{align}
     V^{(N)}(P_{\mathrm{tot}})
-     & =c_NV^{(N)}(Q_{\mathrm{tot}}).
-    \label{eq:proportional-total}
+        &=c_NV^{(N)}(Q_{\mathrm{tot}}).
+    \label{eq:cpsv16_proportional_length_scalar_gap_total_proportionality}
 \end{align}
 The source assumption at every positive length is a special case.\footnote{The
-    formal proportional theorem is
-    \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} in
-    \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}.}
+formal proportional theorem is
+\leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} in
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}.}
 
 \section{The coefficient identity retaining the global scalar}
 
-Write
+For each sector, define
 \begin{align}
     c_N^{(j)}(P)
-     & =\sum_q\mu_{j,q}^N,
-     &
+        &=\sum_q\mu_{j,q}^N,
+    \label{eq:cpsv16_proportional_length_scalar_gap_p_coefficient}\\
     c_N^{(k)}(Q)
-     & =\sum_q\nu_{k,q}^N.
+        &=\sum_q\nu_{k,q}^N.
+    \label{eq:cpsv16_proportional_length_scalar_gap_q_coefficient}
 \end{align}
-Substituting the matched-sector relation (\ref{eq:sector-match}) into
-(\ref{eq:proportional-total}), reindexing by $\beta$, and applying eventual
-linear independence of the $P$-basis gives
+Substitute
+(\ref{eq:cpsv16_proportional_length_scalar_gap_sector_match}) into
+(\ref{eq:cpsv16_proportional_length_scalar_gap_total_proportionality}),
+reindex by $\beta$, and apply eventual linear independence of the $P$-basis.
+For every sector $k$ and all sufficiently large $N$, this gives
 \begin{align}
     c_N^{(\beta(k))}(P)
-     & =c_N\zeta_k^N c_N^{(k)}(Q)
-    \label{eq:threaded}
+        &=c_N\zeta_k^Nc_N^{(k)}(Q).
+    \label{eq:cpsv16_proportional_length_scalar_gap_threaded_coefficient_identity}
 \end{align}
-for every sector $k$ and all sufficiently large $N$.\footnote{The formal
-    coefficient identity that retains the global scalar is
-    \leanid{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional} in
-    \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity}.}
-The same $c_N$ occurs in every sector because it is the scalar relating the two
-total vectors.
+The same $c_N$ appears in every sector because it relates the two total
+vectors.\footnote{The formal coefficient identity retaining the global scalar
+is
+\leanid{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional} in
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/CoeffIdentity}.}
 
-The equal-MPV argument has $c_N=1$. It then compares the two finite power sums
+In the equal-MPV case, $c_N=1$, and the identity becomes
 \begin{align}
     \sum_q\mu_{\beta(k),q}^N
-     & =\sum_q(\zeta_k\nu_{k,q})^N
+        &=\sum_q(\zeta_k\nu_{k,q})^N.
+    \label{eq:cpsv16_proportional_length_scalar_gap_scalar_free_power_sums}
 \end{align}
-and recovers the copy-weight multiset. For a general proportional family,
-(\ref{eq:threaded}) does not supply this scalar-free identity.
+This scalar-free identity determines the copy-weight multiset. For a general
+proportional family,
+(\ref{eq:cpsv16_proportional_length_scalar_gap_threaded_coefficient_identity})
+does not imply
+(\ref{eq:cpsv16_proportional_length_scalar_gap_scalar_free_power_sums}).
 
 \section{Counterexample}
 
-Let $C$ be a normalized normal tensor and consider the one-sector BNT forms
+Let $C$ be a normalized normal tensor. Consider the one-sector BNT forms
 \begin{align}
     P
-     & =C\oplus\tfrac12C,
-     &
+        &=C\oplus\tfrac12C,
+    \label{eq:cpsv16_proportional_length_scalar_gap_counterexample_p}\\
     Q
-     & =C\oplus\tfrac13C.
+        &=C\oplus\tfrac13C.
+    \label{eq:cpsv16_proportional_length_scalar_gap_counterexample_q}
 \end{align}
-Both forms obey the canonical weight normalization: every weight has modulus at
-most $1$, and each form has a unit-modulus weight. Their MPV families are
+Both satisfy the canonical weight normalization: every weight has modulus at
+most one, and each form has a unit-modulus weight. Their MPV families are
 \begin{align}
     V^{(N)}(P)
-     & =(1+2^{-N})V^{(N)}(C),
-     &
+        &=(1+2^{-N})V^{(N)}(C),
+    \label{eq:cpsv16_proportional_length_scalar_gap_counterexample_p_mpv}\\
     V^{(N)}(Q)
-     & =(1+3^{-N})V^{(N)}(C).
+        &=(1+3^{-N})V^{(N)}(C).
+    \label{eq:cpsv16_proportional_length_scalar_gap_counterexample_q_mpv}
 \end{align}
-Thus they are nonzero and proportional at every positive length with
+They are nonzero and proportional at every positive length, with
 \begin{align}
     c_N
-     & =\frac{1+2^{-N}}{1+3^{-N}}.
+        &=\frac{1+2^{-N}}{1+3^{-N}}.
+    \label{eq:cpsv16_proportional_length_scalar_gap_counterexample_scalar}
 \end{align}
-This sequence is not of the form $\xi^N$ for a fixed phase $\xi$.
+This sequence is not of the form
+\begin{align}
+    c_N
+        &=\xi^N
+    \label{eq:cpsv16_proportional_length_scalar_gap_geometric_phase_form}
+\end{align}
+for a fixed phase $\xi$.
 
-For a one-dimensional choice of $C$, the two total matrices have eigenvalue
+For a one-dimensional choice of $C$, the total matrices have eigenvalue
 multisets
 \begin{align}
-    \left\{1,\tfrac12\right\}
-    \quad\text{and}\quad
-    \left\{1,\tfrac13\right\}.
+    \operatorname{spec}(P)
+        &=\left\{1,\tfrac12\right\},
+    \label{eq:cpsv16_proportional_length_scalar_gap_p_spectrum}\\
+    \operatorname{spec}(Q)
+        &=\left\{1,\tfrac13\right\}.
+    \label{eq:cpsv16_proportional_length_scalar_gap_q_spectrum}
 \end{align}
-Similarity preserves eigenvalues, and multiplication by a common phase merely
-multiplies both eigenvalues by that phase. Consequently the two total tensors
-are not conjugate, even up to a common phase.
+Similarity preserves eigenvalues, while multiplication by a common phase
+multiplies every eigenvalue by that phase. The total tensors are therefore not
+conjugate, even up to a common phase.
 
 \section{Conclusion}
 
-\textbf{Verdict: correction of a prior mathematical assessment; there is no
-    mathematical gap.} The source proportional theorem never requires copy-weight
-recovery or a global gauge, and the counterexample proves that this stronger
-claim is false under the proportional theorem's hypotheses. In particular,
-there is no missing theorem asserting that the proportionality scalar of two
-BNT canonical forms must be a geometric phase sequence. The valid conclusions
-are:
+The prior mathematical assessment required correction; there is no
+mathematical gap in the source proportional theorem. That theorem does not
+require copy-weight recovery or a global gauge, and the counterexample proves
+that this stronger claim is false under its hypotheses. In particular, no
+missing theorem should assert that the proportionality scalar between two BNT
+canonical forms has the geometric phase form
+(\ref{eq:cpsv16_proportional_length_scalar_gap_geometric_phase_form}).
+
+The valid conclusions are:
 \begin{itemize}
     \item proportional total MPVs determine a bijection and gauge-phase
           equivalence of the normal sectors;
@@ -135,13 +156,13 @@ are:
           global gauge follow.
 \end{itemize}
 
-The conditional implications from scalar-free coefficient identities to a
-global gauge remain correct.\footnote{The formal conditional global-gauge
-    construction is
-    \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
-    in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental}.}
-They are additional consequences, not unfinished parts of CPSV16
-Theorem~2.10.
+Conditional implications from scalar-free coefficient identities to a global
+gauge remain valid.\footnote{The formal conditional global-gauge construction
+is
+\leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
+in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental}.}
+They are additional consequences, not unfinished parts of Theorem~2.10 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

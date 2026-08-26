@@ -17,361 +17,514 @@
 
 \section{The source argument}
 
-Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016 builds the multi-block route to
-the Fundamental Theorem on top of the canonical form
-\cite[Section~II]{Cirac2016MPDO_arXiv}. A tensor $A=(A^i)_{i=1}^d$ is in
-canonical form when, after a basis change of the bond, it decomposes as
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete build their multi-block proof of
+the Fundamental Theorem on a canonical form
+\cite[Section~II]{Cirac2016MPDO_arXiv}. Let
+$A=(A^i)_{i=1}^d$ be a tensor with physical dimension $d$. In the source
+canonical form, a change of basis on the bond space gives
 \begin{align}
-    A^i=\bigoplus_{k=1}^r \mu_k\,A_k^i,
-    \tag{\path{eq:II_CF1}}
+    A^i
+        &= \bigoplus_{k=1}^r \mu_k A_k^i,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_source_canonical_form}
 \end{align}
-where each block tensor $A_k$ is normal and the scalars $\mu_k$ are nonzero.
-The text immediately fixes a normalization on the weights:
+where each block tensor $A_k$ is normal and each scalar $\mu_k$ is nonzero.
+This is Equation~\path{eq:II_CF1} of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Immediately after that equation, the source
+imposes the convention
 \begin{quote}
-    ``we can always choose $|\mu_k|\le 1$ and at least one of them equals one,
+    ``we can always choose $|\mu_k|\leq 1$ and at least one of them equals one,
     something which we will assume from now on.''
     \cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}
 \end{quote}
-This is a definitional convention applied throughout the rest of the paper; it
-is not derived later. Combined with the strict modulus ordering used by the BNT
-arrangement, it implies that the dominant block has $|\mu_1|=1$ and every
-sub-dominant block has $|\mu_k|<1$.
+This normalization is part of the definition used throughout the paper; it is
+not a later consequence. Under the strict modulus ordering of the
+basis-of-normal-tensors arrangement, the dominant block therefore satisfies
+$|\mu_1|=1$, while every sub-dominant block satisfies $|\mu_k|<1$.
 
 The same paper proves the proportional Fundamental Theorem and its equal-MPV
-corollary \cite[Section~II]{Cirac2016MPDO_arXiv}.
-Suppose two tensors $A$ and $B$ are presented in their basis-of-normal-tensor
-expansions, with representative families $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$
-and BNT coefficients $\mu_{j,q_a}$ and $\nu_{j,q_b}$ for
-$q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. After the proportional
-Fundamental Theorem identifies the representatives,
-$B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$, the trace-pair argument in the proof of the
-equal-MPV corollary reduces to the unlabeled scalar identity
+corollary \cite[Section~II]{Cirac2016MPDO_arXiv}. Consider tensors $A$ and $B$
+written in basis-of-normal-tensors form. Let
+$(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be their representative families, and let
+$\mu_{j,q_a}$ and $\nu_{j,q_b}$ be the corresponding coefficients, where
+$q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. The proportional
+Fundamental Theorem identifies the representatives by
+\begin{align}
+    B_j
+        &= e^{i\phi_j}Y_j A_j Y_j^{-1},
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_representative_gauge}
+\end{align}
+for phases $\phi_j$ and invertible matrices $Y_j$. The trace-pair argument in
+the proof of the equal-MPV corollary then gives the scalar identity
 \begin{align}
     \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
-    =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
+        &= \sum_{q=1}^{r_{b,j}}
+            (\nu_{j,q}e^{i\phi_j})^N.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_source_power_sum}
 \end{align}
-The cited elementary power-sum lemma then concludes that
-$r_{a,j}=r_{b,j}=:r_j$ and that the multisets of weights coincide,
-$\mu_{j,q}=\nu_{j,q}e^{i\phi_j}$. The matching dimensions and the global gauge
-formula follow.
+This is the unlabeled identity used in the source proof
+\cite[Section~II]{Cirac2016MPDO_arXiv}. The elementary power-sum lemma cited
+there implies
+\begin{align}
+    r_{a,j}
+        &= r_{b,j}
+        =: r_j,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_equal_multiplicities}\\
+    \{\mu_{j,q}:1\leq q\leq r_j\}
+        &= \{\nu_{j,q}e^{i\phi_j}:1\leq q\leq r_j\},
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_weight_multiset}
+\end{align}
+where the second equality is an equality of multisets. The matching bond
+dimensions and the global gauge formula follow.
 
-The mathematical structure of this proof is that the coefficient information
-is read off at the level of power sums, using all $N$ simultaneously as input
-to a separation lemma for sums of $N$th powers. No convergence of any
-$N$-indexed quantity is invoked.
+The source extracts the coefficient data from the power sums in
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_source_power_sum}.
+It uses a finite family of values of $N$ as input to a separation lemma for
+sums of $N$th powers. It does not invoke convergence of any quantity indexed
+by $N$.
 
 \section{The formal canonical form}
 
-The formal counterpart of the canonical form for the BNT route is the structure
+The formal counterpart of the canonical form used by the
+basis-of-normal-tensors route is
 \leanid{IsNormalCanonicalFormBNT}.\footnote{%
     \path{TNLean/MPS/BNT/Construction.lean}, lines 181--189.}
-Its mathematical content is: a strict-modulus ordering on the weight family
-$\mu : \mathrm{Fin}\,r\to\mathbb C$, the nonvanishing $\mu_k\ne 0$ for every
-$k$, and the per-block normality data inherited from the underlying canonical
-form. The dominant weight is unconstrained in modulus.
+Its mathematical data consist of a weight family
+$\mu:\mathrm{Fin}\,r\to\C$ with strict modulus ordering, nonvanishing
+$\mu_k\neq 0$ for every $k$, and the blockwise normality inherited from the
+underlying canonical form. In the version examined here, the modulus of the
+dominant weight was unconstrained.
 
-Comparing this with the source definition, the field
-$|\mu_1|=1$ (in source enumeration; index $0$ in the formal one) is missing.
-The blueprint BNT chapter records the strict-modulus ordering in the
-BNT-separated canonical-form definitions. Separately, the canonical-form
-chapter records the decomposition $\mu_k=\eta_k|\mu_k|$ with $\eta_k$ on the
-unit circle. Neither place imposes $|\mu_1|=1$.\footnote{%
-    The BNT-separated definitions are
+The source definition additionally requires
+\begin{align}
+    |\mu_1|
+        &= 1,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_missing_dominant_normalization}
+\end{align}
+where the source uses index $1$ and the formal development uses index $0$.
+The blueprint chapter on basis-of-normal-tensors form records the strict
+modulus ordering in its separated canonical-form definitions. The
+canonical-form chapter separately records a phase--modulus decomposition
+\begin{align}
+    \mu_k
+        &= \eta_k|\mu_k|,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_phase_modulus_decomposition}
+\end{align}
+with $\eta_k$ on the unit circle. Neither location originally imposed
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_missing_dominant_normalization}.\footnote{%
+    The basis-of-normal-tensors definitions are
     \texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt} in
     \path{blueprint/src/chapter/ch10_bnt.tex}, lines 70--100 and 119--141,
     respectively. The phase--modulus decomposition is recorded in
     \path{blueprint/src/chapter/ch09_canonical.tex}, lines 125--139.}
 
-The omission is mathematically meaningful, because the source definition is
-used in two ways downstream: it fixes the dominant block on the unit circle,
-which is what the spectral and irreducibility arguments need, and it forces
-every sub-dominant block strictly inside the unit disk. The latter is the
-conventional content used by the proportional MPV comparison below.
+This omission affects downstream arguments. The source normalization places
+the dominant block on the unit circle, as required by the spectral and
+irreducibility arguments, and places every sub-dominant block strictly inside
+the unit disk. The latter property is central to the comparison with the
+discarded formal limit hypothesis.
 
 \section{The discarded formal proportional comparison}
 
-The discarded formal route to the proportional Fundamental Theorem replaced the
-source's unlabeled power-sum identity by a different mathematical object:
-two coefficient sequences indexed by chain length, together with the assumption
-that they converge to nonzero limits. In that route, each block index $j$ had a
-function $N\mapsto a_{N,j}\in\mathbb C$ and a designated limit
-$a_j^\infty\in\mathbb C$ satisfying
+The discarded formal route to the proportional Fundamental Theorem replaced
+the source power-sum identity in
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_source_power_sum}
+with coefficient sequences indexed by chain length. For every block index
+$j$, it introduced a sequence $N\mapsto a_{N,j}\in\C$ and a designated limit
+$a_j^\infty\in\C$ satisfying
 \begin{align}
-    a_{N,j}\to a_j^\infty, \qquad a_j^\infty\ne 0
+    a_{N,j}
+        &\xrightarrow[N\to\infty]{} a_j^\infty,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_formal_coefficient_limit}\\
+    a_j^\infty
+        &\neq 0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_formal_nonzero_limit}
 \end{align}
-as $N\to\infty$, together with the analogous data on the $B$-side and a sequence of
-proportionality scalars $c_N$ converging to a nonzero limit $c$. The
-identification of the scalars is then derived from these convergence
-hypotheses by a comparison of limits, rather than from the source
-power-sum identity.
+It imposed analogous data $b_{N,k}\to b_k^\infty\neq 0$ on the $B$-side. It
+also introduced proportionality scalars $c_N$ with a nonzero limit $c$:
+\begin{align}
+    c_N
+        &\xrightarrow[N\to\infty]{} c,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_scalar_limit}\\
+    c
+        &\neq 0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_nonzero_scalar_limit}
+\end{align}
+This route identified the scalars by comparing limits rather than by applying
+the source power-sum lemma.
 
-For the natural realization in which the $j$th source sector has one selected
-representative, or one copy in the coefficient multiplicity notation
-($r_j=1$), and the coefficient is the source weight itself, the formal choice
-of array\footnote{The corresponding blueprint passage is the remark
-    \texttt{rem:cf\_coeff\_arrays} following \texttt{lem:ft\_proportional} in
-    \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex},
-    lines 172--202.} is
+Consider the natural specialization in which the $j$th source sector contains
+one selected representative, equivalently one copy in the coefficient
+multiplicity notation, so that $r_j=1$. If $\mu_j^A$ denotes the corresponding
+source weight, the formal coefficient array was chosen as
 \begin{align}
-    a_{N,j}=(\mu_j^A)^N.
+    a_{N,j}
+        &= (\mu_j^A)^N.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_natural_coefficient_array}
 \end{align}
-With this choice, the convergence requirement $a_{N,j}\to a_j^\infty\ne 0$
-becomes a condition on the powers $(\mu_j^A)^N$.
+The associated blueprint passage is the remark
+\texttt{rem:cf\_coeff\_arrays} following
+\texttt{lem:ft\_proportional} in
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex},
+lines 172--202. Under
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_natural_coefficient_array},
+the requirements in
+Eqs.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_formal_coefficient_limit}
+and
+\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_formal_nonzero_limit}
+become conditions on the powers $(\mu_j^A)^N$.
 
 \section{The design history of the limit hypothesis}
 
-The convergence-to-nonzero-limits hypothesis is not present in
-\cite{Cirac2016MPDO_arXiv}. It is also not present in the formalization's
-own planning record. A proof-plan memo committed on 2026-02-22 sets out the
-intended route for the proportional Fundamental Theorem and its equal-MPV
-corollary in \cite{Cirac2016MPDO_arXiv}.\footnote{%
+The convergence-to-nonzero-limit hypothesis does not appear in
+Ref.~\cite{Cirac2016MPDO_arXiv}. It also does not appear in the formalization's
+initial proof plan. A memo committed on 2026-02-22 describes the intended proof
+of the proportional Fundamental Theorem and its equal-MPV corollary from that
+source.\footnote{%
     \path{docs/audits/2026-02-22_thm4_4_proof_plan_ref1606.txt}, committed in
     \texttt{64c018ab} earlier the same day as the introducing implementation
-    \texttt{dd54b79e}.} Its concrete recommendation is a span-equality bridge,
-together with a finite-length scalar power-sum identity for the
-$\mu$-coefficient matching.
+    \texttt{dd54b79e}.}
+The memo proposes a span-equality bridge and a finite-length scalar power-sum
+identity for matching the $\mu$-coefficients.
 
-The memo records the source identity in the form
+Using its notation, the memo records the scalar identity
 \begin{align}
     \sum_{k=1}^{x_a}\lambda_{a,k}^N
-    =\sum_{k=1}^{x_b}\lambda_{b,k}^N
+        &= \sum_{k=1}^{x_b}\lambda_{b,k}^N.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_memo_scalar_power_sum}
 \end{align}
-and proposes formalizing it as a fixed-length theorem requiring only finitely
-many values of $N$. The planned application to the BNT
-$\mu$-coefficients reads, in the memo's own notation,
+It proposes formalizing
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_memo_scalar_power_sum}
+as a fixed-length theorem requiring only finitely many values of $N$. Its
+planned basis-of-normal-tensors application is
 \begin{align}
     \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
-    =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
+        &= \sum_{q=1}^{r_{b,j}}
+            (\nu_{j,q}e^{i\phi_j})^N.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_memo_bnt_power_sum}
 \end{align}
-to be applied via this fixed-length scalar identity to obtain
-$r_{a,j}=r_{b,j}$ and the multiset equality. No convergence statement appears
-in the memo's plan, and no nonzero-limit hypothesis is contemplated.
+The proposed scalar theorem would then give
+Eqs.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_equal_multiplicities}
+and
+\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_weight_multiset}.
+The memo contains neither a convergence statement nor a nonzero-limit
+hypothesis.
 
-The memo also identifies an apparent circularity in the span-equality route:
-to deduce span equality from proportionality, one wants linear independence
-at the witness length, while the surrounding BNT permutation step uses span
-equality to extract the linear independence it needs. The memo's own
-resolution is to weaken the global span-equality hypothesis to its eventual
-form,
+The memo also identifies an apparent circularity in the span-equality route.
+Let $V^{(N)}(A_j)$ denote the length-$N$ periodic matrix-product vector
+generated by $A_j$, and define $V^{(N)}(B_k)$ analogously. Deducing span
+equality from proportionality appears to require linear independence at a
+witness length, while the surrounding basis-of-normal-tensors permutation step
+uses span equality to obtain the required linear independence. The memo
+proposes replacing global span equality with eventual span equality:
 \begin{align}
-    \operatorname{span}\{\,V^{(N)}(A_j) \}_j
-    =\operatorname{span}\{\,V^{(N)}(B_k) \}_k,
+    \operatorname{span}\{V^{(N)}(A_j)\}_j
+        &= \operatorname{span}\{V^{(N)}(B_k)\}_k
+        \qquad\text{for all sufficiently large }N.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_eventual_span_equality}
 \end{align}
-and to observe that the surrounding step already only consumes the eventual
-form. The memo records this as a backward-compatible weakening that
-discharges the circularity at the type level.
+The surrounding argument already uses only this eventual form, so the proposed
+weakening resolves the circularity at the type level.
 
-The implementation committed later the same day departs from both directions
-of the memo. It does not formalize the fixed-length scalar power-sum identity
-proposed for the $\mu$-coefficient step. It also does not adopt the eventual
-span-equality form proposed for the bridge. Instead it introduced, on the
-BNT bridge theorems and later in a single formal data structure, a global
-convergence hypothesis on the coefficient sequences and a separate hypothesis
-that those limits are nonzero. The mathematical object packaged by these fields is not the
-power-sum identity from the source proof of the equal-MPV corollary, and
-it is not the eventual span equality from the memo's bridge plan. It is a
-third object, introduced without a corresponding written rationale. A later
-commit on 2026-05-09 describes the structure as ``MPV-level Newton--Girard
-convergence data, not a §II 283--302 Wedderburn-style similarity,'' but this
-description records what the structure became, not why the change from the
-memo's plan was made.\footnote{%
+The implementation committed later that day followed neither proposal. It did
+not formalize the fixed-length scalar identity planned for the
+$\mu$-coefficient comparison, and it did not adopt
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_eventual_span_equality}
+as the bridge. Instead, it added global convergence and nonzero-limit
+hypotheses to the basis-of-normal-tensors bridge theorems and later bundled
+them into one formal data structure. These fields encode neither the source
+power-sum identity nor the memo's eventual span equality.
+
+The project record gives no contemporaneous mathematical reason for this third
+route. A commit on 2026-05-09 describes the resulting structure as
+``MPV-level Newton--Girard convergence data, not a \S II 283--302
+Wedderburn-style similarity.'' This statement describes the final structure
+but does not explain the departure from the memo.\footnote{%
     The introducing commit is \texttt{dd54b79e}, ``Add ScalarPowerSumIdentity,
     BNTConstruction, BNTPermutationThm44.'' Despite the name, the
     \leanid{ScalarPowerSumIdentity} module added by that commit does not
-    correspond to the memo's planned fixed-length scalar identity from the
-    elementary power-sum lemma in \cite{Cirac2016MPDO_arXiv}. The
-    structure refactor that bundled the limit fields is \texttt{9e096a14}
-    (2026-03-22), and the post-hoc Newton--Girard description is in the message
-    of \texttt{8ab1a5db} (2026-05-09).}
+    implement the fixed-length scalar identity planned from the elementary
+    power-sum lemma in Ref.~\cite{Cirac2016MPDO_arXiv}. The structure refactor
+    that bundled the limit fields is \texttt{9e096a14} (2026-03-22), and the
+    later Newton--Girard description appears in the message of
+    \texttt{8ab1a5db} (2026-05-09).}
 
-The recorded design history therefore shows that the limit hypothesis was
-not chosen to follow the source argument and was not the route the
-formalization itself planned for. It is a third route whose introduction is
-not explained in the project record.
+The design history therefore shows that the limit hypothesis follows neither
+the cited source nor the formalization's recorded proof plan.
 
 \section{The mathematical incompatibility}
 
-Throughout this section, the comparison is restricted to the strict-weight,
-one-representative-per-block specialization just described, namely
-$a_{N,j}=(\mu_j^A)^N$ and $b_{N,k}=(\mu_k^B)^N$. It is not a claim about the
-more general sector coefficient arrays
-$c_{S,j}^{(N)}=\sum_q \mu_{j,q}^N$ that retain repeated copies within a BNT
-sector.
-
-Under the source normalization $|\mu_1^A|=1$ and $|\mu_j^A|<1$ for $j\ge 2$,
-the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
+This section concerns only the strict-weight,
+one-representative-per-block specialization
 \begin{align}
-    |(\mu_j^A)^N|=|\mu_j^A|^N\to 0
+    a_{N,j}
+        &= (\mu_j^A)^N,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_specialized_a_array}\\
+    b_{N,k}
+        &= (\mu_k^B)^N.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_specialized_b_array}
 \end{align}
-as $N\to\infty$,
-so the only candidate limit is $a_j^\infty=0$, contradicting the formal
-hypothesis $a_j^\infty\ne 0$. For the dominant block, the modulus stays on
-the unit circle, and the sequence $(\mu_1^A)^N$ converges only in the special
-case $\mu_1^A=1$; nontrivial roots of unity are periodic rather than
-convergent, and a generic phase has no limit.
+It does not concern the more general sector coefficient arrays
+\begin{align}
+    c_{S,j}^{(N)}
+        &= \sum_q \mu_{j,q}^N,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_sector_coefficient_array}
+\end{align}
+which retain repeated copies within a basis-of-normal-tensors sector.
 
-The conclusion is a structural mismatch. With the source normalization in
-force, the discarded formal data cannot be instantiated for a multi-block
-($r>1$) family using $a_{N,j}=(\mu_j^A)^N$, because the limit hypothesis fails
-on every sub-dominant block. Without the source normalization, the formal
-hypothesis is sometimes satisfiable, but the resulting object is no longer the
-canonical-form datum from \cite{Cirac2016MPDO_arXiv}.
+The source normalization gives
+\begin{align}
+    |\mu_1^A|
+        &= 1,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_source_dominant_modulus}\\
+    |\mu_j^A|
+        &< 1
+        \qquad (j\geq 2).
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_source_subdominant_modulus}
+\end{align}
+For every sub-dominant block,
+\begin{align}
+    |(\mu_j^A)^N|
+        &= |\mu_j^A|^N,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_power_modulus}\\
+    |\mu_j^A|^N
+        &\xrightarrow[N\to\infty]{} 0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_subdominant_decay}
+\end{align}
+Consequently, the only possible limit of $a_{N,j}$ is
+\begin{align}
+    a_j^\infty
+        &= 0
+        \qquad (j\geq 2),
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_subdominant_zero_limit}
+\end{align}
+which contradicts
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_formal_nonzero_limit}.
 
-The paper does not face this difficulty, because it never asks for the
-$N\to\infty$ limit of $(\mu_j^A)^N$. The proof reads off the multiset of
-weights from a finite family of polynomial identities in $N$, rather
-than from an $N\to\infty$ limit. In the strict one-representative
-specialization isolated here, once the BNT linear-independence input supplies
-a witness length, the comparison can be made at a single chosen length
-$N=N_0$ up to the expected phase/root-of-unity ambiguity. The general
-multi-multiplicity case remains the fixed finite family of values
-$N\le\max(r_{a,j},r_{b,j})$ used by the source separation lemma and by the
-2026-02-22 memo.
+For the dominant block, the modulus of $(\mu_1^A)^N$ remains one. The sequence
+converges only when $\mu_1^A=1$. A nontrivial root of unity produces a periodic,
+nonconvergent sequence, while a generic phase also has no limit.
+
+The mismatch is structural. Under the source normalization, a multi-block
+family with $r>1$ cannot instantiate the discarded data using
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_specialized_a_array},
+because every sub-dominant block violates the nonzero-limit requirement.
+Without the source normalization, the formal limit hypothesis may be
+satisfiable, but the resulting object no longer carries the canonical-form
+data required by Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+The source proof avoids this obstruction because it never takes the
+$N\to\infty$ limit of $(\mu_j^A)^N$. It recovers the multiset of weights from a
+finite family of polynomial identities in $N$. In the strict,
+one-representative specialization, once basis-of-normal-tensors linear
+independence provides a witness length $N_0$, one comparison at $N_0$ determines
+the coefficients up to the expected phase or root-of-unity ambiguity. In the
+general case with multiplicities, the source separation lemma and the
+2026-02-22 memo use the finite range
+$N=1,\ldots,\max(r_{a,j},r_{b,j})$.
 
 \section{Cross-check with the blueprint}
 
-The blueprint entries that formerly paralleled this convergence-and-nonzero-limit
-surface have been demoted or removed from the source-labelled theorem route.
-They must not be marked as formalizations of the source proportional
-Fundamental Theorem or its equal-MPV corollary. The active blueprint now treats
-the source comparison as an open block-matching step whose proof must come from
-the BNT power-sum argument, not from external coefficient limits.
+The blueprint entries that formerly paralleled the convergence and
+nonzero-limit interface have been demoted or removed from the source-labeled
+theorem route. They must not be identified as formalizations of the
+proportional Fundamental Theorem or its equal-MPV corollary in
+Ref.~\cite{Cirac2016MPDO_arXiv}. The active blueprint instead records the
+source comparison as an open block-matching step whose proof must use the
+basis-of-normal-tensors power-sum argument rather than external coefficient
+limits.
 
-The blueprint BNT definitions are symmetric with the formal definition: the
-strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
+The blueprint and the former formal definition agree on one point: both record
+strict modulus ordering but originally omitted
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_missing_dominant_normalization}.
 
 \section{What a corrected formalization would say}
 
-Two changes are needed to bring the formal development into agreement with the
-source.
+A source-faithful formalization requires two changes.
 
-The first change is to record the source convention $|\mu_1|=1$. Once this
-normalization is present, the implicit bounds $|\mu_k|\le 1$ on the remaining
-blocks follow from the strict modulus ordering.\footnote{%
-    The formal field carrying this ordering is \leanid{mu_strict_anti} in
+First, the canonical-form data must include
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_missing_dominant_normalization}.
+Strict modulus ordering then gives
+\begin{align}
+    |\mu_k|
+        &\leq 1
+        \qquad (1\leq k\leq r),
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_all_weight_bound}
+\end{align}
+with strict inequality for every sub-dominant block.\footnote{%
+    The formal field carrying the strict ordering is
+    \leanid{mu_strict_anti} in
     \leanid{IsNormalCanonicalFormBNT}; see
-    \path{TNLean/MPS/BNT/Construction.lean}, lines 184--185.} This should be a
-field of \leanid{IsNormalCanonicalFormBNT} and of the corresponding blueprint
-definition. It is a transcription of the source definition, not an additional
+    \path{TNLean/MPS/BNT/Construction.lean}, lines 184--185.}
+The dominant normalization belongs in
+\leanid{IsNormalCanonicalFormBNT} and in the corresponding blueprint
+definition. It transcribes the source convention rather than adding a new
 assumption.
 
-The second change is to reformulate the proportional comparison around finite
-power-sum data rather than limits. In the general coefficient-multiplicity
-setting of the source proof, the blockwise input should be the finite family
+Second, the proportional comparison must use finite power-sum data. In the
+general coefficient-multiplicity setting, its blockwise hypothesis should be
 \begin{align}
     \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
-    =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
-    \qquad N=1,\ldots,\max(r_{a,j},r_{b,j}),
+        &= \sum_{q=1}^{r_{b,j}}
+            (\nu_{j,q}e^{i\phi_j})^N,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_corrected_finite_power_sum}\\
+    1
+        &\leq N
+        \leq \max(r_{a,j},r_{b,j}).
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_finite_power_sum_range}
 \end{align}
-or the corresponding finite collection of witness lengths produced after the
-BNT span and linear-independence input has been made available. The source
-separation lemma then gives $r_{a,j}=r_{b,j}$ and the multiset equality of the
-weights. This finite-family route is what the 2026-02-22 proof-plan memo
-planned for the general multi-multiplicity case; it is not a single-witness
-argument in that generality.
+An equivalent formulation may use the finite set of witness lengths produced
+after the span and linear-independence inputs become available. The source
+separation lemma then yields
+Eqs.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_equal_multiplicities}
+and
+\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_weight_multiset}.
+This is the route proposed by the 2026-02-22 memo for the general
+multi-multiplicity case; it is not a single-witness argument in that
+generality.
 
-In the strict-weight, one-representative specialization discussed above, the
-same finite-data recipe collapses to comparing one chosen witness length
-$N_0$. The mathematical input is the BNT linear independence at that length,
-supplied by the direct-sum span theorem on a basis of normal tensors, and the
-blockwise output is
+In the strict-weight, one-representative specialization, the finite comparison
+reduces to one witness length $N_0$. Basis-of-normal-tensors linear independence
+at that length is supplied by the direct-sum span theorem on a basis of normal
+tensors. If $c$ is the proportionality scalar, the blockwise relation is
 \begin{align}
-    (\mu_j^A)^{N_0}=c^{N_0}\,(\mu_j^B)^{N_0},\qquad j=1,\ldots,g,
+    (\mu_j^A)^{N_0}
+        &= c^{N_0}(\mu_j^B)^{N_0},
+        \qquad j=1,\ldots,g.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_single_witness_weights}
 \end{align}
-which fixes $\mu_j^A$ in terms of $\mu_j^B$ and $c$ up to an $N_0$th root of
-unity. The phase ambiguity is then absorbed into the per-block phase $\phi_j$
-already present in the source statement
-$B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$. No convergence statement is needed; in
-particular no nonzero limit hypothesis on $(\mu_j^A)^N$ is required.
+This identity determines $\mu_j^A$ from $\mu_j^B$ and $c$ up to an $N_0$th
+root of unity. That ambiguity is absorbed by the phase $\phi_j$ in
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_representative_gauge}.
+No convergence statement or nonzero limit for $(\mu_j^A)^N$ is required.
 
-Thus the corrected route is source-faithful at finite length: the
-multi-multiplicity version follows the finite power-sum identities from the
-proof of the equal-MPV corollary \cite{Cirac2016MPDO_arXiv}, while the
-single-witness discussion is only the
-strict-weight specialization of that route. The circularity worry that the memo
-flagged in connection with the span-equality bridge does not arise for this
-finite-length route once the BNT linear-independence input is supplied from
-the direct-sum span theorem rather than extracted from the proportional
-comparison itself.
+The corrected route is therefore finite and source-faithful. The
+multi-multiplicity case uses the finite power-sum identities from the proof of
+the equal-MPV corollary
+\cite[Section~II]{Cirac2016MPDO_arXiv}; the single-witness argument is only its
+strict-weight specialization. Once the direct-sum span theorem supplies
+linear independence, this route also avoids the circularity that the memo
+identified in the span-equality bridge.
 
 \section{Conclusion}
 
-The verdict is that the canonical-form definition and the proportional MPV
-comparison originally differed from
-\cite{Cirac2016MPDO_arXiv} in two coupled ways. The canonical-form definition
-omitted the source convention $|\mu_1|=1$. The proportional comparison
-replaced the source's fixed-length power-sum identity by a limit hypothesis on
-$(\mu_j^A)^N$ that fails on the sub-dominant blocks under the very
-normalization the source imposes. The proof-plan memo of 2026-02-22 already
-proposed the source-faithful route; the implementation diverged from both
-the memo and the source in a single direction, by introducing a
-convergence-to-nonzero-limits hypothesis that has no counterpart in either
-record.
+The canonical-form definition and the discarded proportional MPV comparison
+differed from Ref.~\cite{Cirac2016MPDO_arXiv} in two coupled respects. The
+canonical-form definition omitted the convention $|\mu_1|=1$. The proportional
+comparison replaced the source's finite power-sum identities with a convergence
+hypothesis on $(\mu_j^A)^N$. Under the source normalization, that convergence
+hypothesis fails on every sub-dominant block because its only possible limit is
+zero.
+
+The proof-plan memo of 2026-02-22 already proposed a source-faithful finite
+power-sum route. The implementation instead introduced a
+convergence-to-nonzero-limit hypothesis that appears in neither the source nor
+the memo.
 
 \paragraph{Status: supplier-side normalization.}
-The line-246 weight choice is realized by the supplier itself.
-\leanid{MPSTensor.exists\_isBNTCanonicalForm\_afterBlocking\_pos\_normalized}
+
+The supplier now realizes the weight normalization used at line~246. The
+declaration
+\leanid{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized}
 rescales the prepared weights by their maximal modulus
-$m=\max_k|\mu_k|$
-(\leanid{MPSTensor.exists\_weight\_normalization}), which satisfies the
-bound $|\mu_k|\leq1$ with a unit-modulus witness, and tracks the cost as the
-per-site scalar $m^{N}$ in the positive-length matrix-product identity.  The
-positive-length statement is the canonical source formulation; no
-length-zero coefficient is part of this statement.  The normalized supplier
-assumes exactly that the positive-length matrix-product
-family is nonzero: there are $N\geq1$ and a word $w$ of length $N$ for which
-$\tr(A^w)\neq0$.  This condition persists under every blocking.  For each
-$p\geq1$, some $q\geq1$ satisfies $\tr((A^w)^{pq})\neq0$; otherwise the
-Newton--Girard trace identities would make $(A^w)^p$, and hence $A^w$,
-nilpotent, contrary to its nonzero trace.  The repeated word of length $pqN$
-therefore gives a nonzero coefficient after blocking by $p$.  Thus this
-hypothesis excludes precisely the zero positive-length family, for which the
-unit-modulus weight required at line~246 is impossible.  The subsequent
-proposition says ``for any tensor,'' but the standing convention of
-line~246 already presupposes a nonempty weight family, so the nonzero
-family is the source's intended scope and the hypothesis states that
-convention.  The zero family is a degenerate reading and receives no
-separate clause.
+\begin{align}
+    m
+        &= \max_k |\mu_k|,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_supplier_maximal_modulus}
+\end{align}
+using \leanid{MPSTensor.exists_weight_normalization}. The rescaled weights
+satisfy
+\begin{align}
+    |\mu_k|
+        &\leq 1
+        \qquad\text{for every }k,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_supplier_weight_bound}\\
+    |\mu_{k_0}|
+        &= 1
+        \qquad\text{for some }k_0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_supplier_unit_witness}
+\end{align}
+The construction records the rescaling cost as the per-site scalar $m^N$ in
+the positive-length matrix-product identity. This positive-length identity is
+the canonical source formulation; it contains no length-zero coefficient.
+
+The normalized supplier assumes exactly that the positive-length
+matrix-product family is nonzero. Thus there exist $N\geq 1$ and a word $w$ of
+length $N$ such that
+\begin{align}
+    \tr(A^w)
+        &\neq 0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_nonzero_positive_length_trace}
+\end{align}
+This condition persists under every blocking. For each $p\geq 1$, some
+$q\geq 1$ satisfies
+\begin{align}
+    \tr((A^w)^{pq})
+        &\neq 0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_nonzero_blocked_trace}
+\end{align}
+Otherwise, the Newton--Girard trace identities would imply that $(A^w)^p$,
+and hence $A^w$, is nilpotent, contrary to
+Eq.~\ref{eq:cpsv16_cf_normalization_and_proportional_comparison_nonzero_positive_length_trace}.
+Repeating $w$ to length $pqN$ therefore gives a nonzero coefficient after
+blocking by $p$.
+
+This hypothesis excludes precisely the zero positive-length family, for which
+the unit-modulus weight required at line~246 is impossible. The subsequent
+proposition says ``for any tensor'', but the standing convention at line~246
+already presupposes a nonempty weight family. The nonzero family is therefore
+the source's intended scope, and the supplier hypothesis makes that convention
+explicit. The zero family is a degenerate reading and receives no separate
+clause.
 
 \paragraph{Status: structural realignment.}
-The structural realignment has been done. The canonical-form definition now
-carries the source convention $|\mu_1|=1$ as a field
-of \leanid{IsNormalCanonicalFormBNT}, propagated through every constructor.
-The convergence-to-nonzero-limit fields and the later per-$N$ coefficient
-package have been removed from the formal development. The surviving boundary
-keeps the block-permutation and gauge-phase comparison as an explicit input
-until the source-faithful residual comparison theorem is available.
 
-The earlier one-shot nonzero-overlap theorems and the matching wrappers built
-on them have now been deleted. Their statements asserted a full
-``for every block'' nondecay conclusion from arbitrary bounded coefficient
-arrays, but that conclusion is stronger than the exposed hypotheses: a
-non-dominant coefficient can vanish identically unless the source's residual
+The structural realignment is complete. The canonical-form definition now
+includes the source convention $|\mu_1|=1$ as a field of
+\leanid{IsNormalCanonicalFormBNT}, and every constructor propagates it. The
+convergence-to-nonzero-limit fields and the later per-$N$ coefficient package
+have been removed from the formal development. Until a source-faithful residual
+comparison theorem is available, the surviving boundary retains the
+block-permutation and gauge-phase comparison as an explicit input.
+
+The earlier one-shot nonzero-overlap theorems and their matching wrappers have
+also been deleted. They claimed nondecay for every block from arbitrary bounded
+coefficient arrays, but their hypotheses did not support that conclusion: a
+non-dominant coefficient may vanish identically unless the source residual
 peeling argument or the power-sum sector structure has already been encoded.
-The remaining Lean interfaces keep the proportional matching conclusion as an
-explicit input until the source-faithful residual comparison theorem is
-available.
+The remaining \Lean{} interfaces therefore retain the proportional matching
+conclusion as an explicit input until the residual comparison theorem is
+proved.
 
-What remains is the proof itself. The paper-faithful proof follows the
+The remaining task is the proof. The paper-faithful route first applies the
 block-selection step of the proportional Fundamental Theorem
-\cite[line~1182]{Cirac2016MPDO_arXiv}, followed in the equal-MPV corollary by
-the finite power-sum comparison and global gauge assembly
-\cite[lines~1184--1192]{Cirac2016MPDO_arXiv}. It will consume the per-$N$
-hypothesis set together with the missing residual comparison data: the
-lower-bound argument uses $\|b_{N,1}\|=1$ together with
-$\|b_{N,k}\|\le 1$ and $c_N\ne 0$ for the currently dominant surviving
-sector, and the finite power-sum identification of weights either at one
-witness length (the strict-weight specialization) or at finitely many witness
-lengths (the multi-multiplicity case). That work is tracked as Stage~C of
+\cite[line~1182]{Cirac2016MPDO_arXiv}. The equal-MPV corollary then uses the
+finite power-sum comparison and global gauge assembly
+\cite[lines~1184--1192]{Cirac2016MPDO_arXiv}. The proof will consume the
+per-$N$ hypotheses and the missing residual comparison data. For the currently
+dominant surviving sector, the lower-bound argument uses
+\begin{align}
+    \lVert b_{N,1}\rVert
+        &= 1,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_dominant_coefficient_norm}\\
+    \lVert b_{N,k}\rVert
+        &\leq 1,
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_bounded_coefficient_norm}\\
+    c_N
+        &\neq 0.
+    \label{eq:cpsv16_cf_normalization_and_proportional_comparison_nonzero_per_length_scalar}
+\end{align}
+The weight comparison then uses one witness length in the strict-weight
+specialization or finitely many witness lengths in the multi-multiplicity case.
+This work is tracked as Stage~C of
 \href{https://github.com/LionSR/TNLean/issues/1559}{issue~\#1559}.
 
 The corresponding tracked items are
 \href{https://github.com/LionSR/TNLean/issues/1554}{issue~\#1554} for the
-canonical-form normalization (structurally addressed by the paper-realignment
-PR; closes when the proofs land) and
+canonical-form normalization, which the paper-realignment pull request has
+addressed structurally and which closes when the proofs land, and
 \href{https://github.com/LionSR/TNLean/issues/1555}{issue~\#1555} for the
-fixed-length reformulation of the proportional comparison (structurally
-addressed; closes with Stage~C).
+fixed-length proportional comparison, which is structurally addressed and
+closes with Stage~C.
 
 \bibliographystyle{alpha}
 \bibliography{references}

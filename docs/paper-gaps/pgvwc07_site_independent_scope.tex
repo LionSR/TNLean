@@ -17,43 +17,51 @@
 
 \section{Source theorem}
 
-P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac prove that every
+Theorem~3 of Ref.~\cite{PerezGarcia2007MPSReps} states that every
 translation-invariant pure state on a finite periodic chain has an MPS
-representation with site-independent matrices
-\cite[Theorem~3]{PerezGarcia2007MPSReps}. Their proof first obtains a
-varying-bond open-boundary representation by successive Schmidt or singular
-value decompositions. It then pads the rectangular virtual spaces to one
-square space and averages the resulting chain over cyclic translations. If
-$N$ is the ring length and $D$ bounds the intermediate bond dimensions, the
-site-independent tensor has bond dimension $ND$.
+representation with site-independent matrices. Let $N>0$ be the ring length.
+The source first applies successive Schmidt or singular value decompositions
+to obtain a varying-bond open-boundary representation. It then embeds the
+rectangular virtual spaces into a common square virtual space and averages the
+padded chain over cyclic translations. If $D$ bounds the intermediate bond
+dimensions, the resulting site-independent tensor has bond dimension
+\begin{align}
+    D_{\mathrm{site}}
+        &= ND.
+    \label{eq:pgvwc07_site_independent_scope_site_independent_bond_dimension}
+\end{align}
 
 \section{Formal boundary}
 
 The structure \leanid{OBCChainTensor} records a supplied varying-bond
-open-boundary representation. The theorem
-\leanid{OBCChainTensor.pgvwc07_site_independent_matrices} proves that, for a
-positive fixed length $N$, cyclic averaging of its zero-padding has the same
-coefficients whenever those coefficients are translation invariant. Its
-existence form is
+open-boundary representation. For a fixed positive length $N$, the theorem
+\leanid{OBCChainTensor.pgvwc07_site_independent_matrices} proves that cyclic
+averaging of the zero-padded representation preserves its coefficients when
+those coefficients are translation invariant. Its existential form is
 \leanid{OBCChainTensor.exists_pgvwc07_site_independent_tensor}.
 
-Thus the formal theorem proves the square-padding and cyclic-averaging part of
-PGVWC07 Theorem~3. It does not construct an \leanid{OBCChainTensor} from an
-arbitrary pure state. In particular, purity is not a hypothesis of the formal
-theorem because the representation whose existence purity supplies in the
-source is already an input.
+These declarations formalize the square-padding and cyclic-averaging part of
+Theorem~3 of Ref.~\cite{PerezGarcia2007MPSReps}. They do not construct an
+\leanid{OBCChainTensor} from an arbitrary pure state. Purity is therefore not
+a hypothesis of the formal theorem: the varying-bond representation whose
+existence purity supplies in the source is already an input.
 
 \section{Elimination plan}
 
-Formalize the finite-chain Schmidt decomposition that expresses an arbitrary
-pure state as a varying-bond open-boundary MPS with endpoint bond dimensions
-one. Bound every intermediate bond dimension by a common $D$, instantiate
-\leanid{OBCChainTensor}, and prove that translation invariance of the state
-gives \leanid{OBCChainTensor.IsTranslationInvariantState}. Composing that
-existence theorem with
-\leanid{OBCChainTensor.exists_pgvwc07_site_independent_tensor} will yield the
-source-facing statement for arbitrary translation-invariant pure states.
-Issue \href{https://github.com/LionSR/TNLean/issues/6086}{\#6086} tracks this
+Closing the scope restriction requires a finite-chain Schmidt-decomposition
+theorem. Given an arbitrary pure state, that theorem must construct a
+varying-bond open-boundary MPS whose endpoint bond dimensions are one. It must
+also bound every intermediate bond dimension by a common value $D$, instantiate
+\leanid{OBCChainTensor}, and show that translation invariance of the state
+implies
+\leanid{OBCChainTensor.IsTranslationInvariantState}.
+
+Composing this missing existence theorem with the formal cyclic-averaging
+existence theorem identified in the preceding section would give the
+source-facing statement for every translation-invariant pure state, including
+the bond-dimension bound
+(\ref{eq:pgvwc07_site_independent_scope_site_independent_bond_dimension}).
+Issue \href{https://github.com/LionSR/TNLean/issues/6086}{\#6086} tracks the
 missing existence theorem.
 
 \section{Verdict}
@@ -61,8 +69,9 @@ missing existence theorem.
 \textbf{Verdict: scope restriction.} The formal declarations prove the
 fixed-length zero-padding and cyclic-averaging construction conditional on a
 supplied varying-bond open-boundary representation. The Schmidt-decomposition
-argument producing that representation from an arbitrary pure state remains
-open, so the current result is not the full source theorem.
+argument that produces this representation from an arbitrary pure state
+remains open. The current result is therefore not the full statement of
+Theorem~3 of Ref.~\cite{PerezGarcia2007MPSReps}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
