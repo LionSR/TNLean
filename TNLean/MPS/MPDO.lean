@@ -18,7 +18,6 @@ import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalGram
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalRFP
@@ -60,7 +59,6 @@ import TNLean.MPS.MPDO.BNTSeparatingProjectors
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
 import TNLean.MPS.MPDO.BNTTheoremData
 import TNLean.MPS.MPDO.BNTTheoremWitness
-import TNLean.MPS.MPDO.BNTTheoremWitnessConsequences
 import TNLean.MPS.MPDO.BNTThreeSiteCollapse
 import TNLean.MPS.MPDO.BNTThreeSiteReducedClosure
 import TNLean.MPS.MPDO.BNTTripleFusionComparison
@@ -140,12 +138,9 @@ import TNLean.MPS.MPDO.CyclicActiveAreaLaw
 import TNLean.MPS.MPDO.CyclicActiveCutCoordinates
 import TNLean.MPS.MPDO.CyclicActiveCutRegrouping
 import TNLean.MPS.MPDO.CyclicActiveCutStates
-import TNLean.MPS.MPDO.CyclicActiveFourthRegion
 import TNLean.MPS.MPDO.CyclicActiveFourthRegionContraction
 import TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula
-import TNLean.MPS.MPDO.CyclicActiveMarkov
 import TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition
-import TNLean.MPS.MPDO.CyclicActiveMarkovNormalization
 import TNLean.MPS.MPDO.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.CyclicActiveSectorRestriction
 import TNLean.MPS.MPDO.CyclicActiveSuffixMarginal

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CyclicActiveFourthRegion
+import TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula
 
 /-!
 # Coordinates for cyclic-active one-site cuts
@@ -97,24 +97,6 @@ theorem cyclicActiveRightBoundary_posSemidef
   intro q hq
   exact (hpos kLast q).partialTraceRight.smul
     (a := (a q : ℂ)) (by exact_mod_cast ha q)
-
-/-- The separated cyclic-active boundary is the Kronecker product of its
-right and left factors.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1614--1617.
-
-**Scope restriction (cyclic-active restriction):** Both factors come from the
-restricted two-step coefficient. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem cyclicActiveSeparatedBoundary_eq_right_kronecker_left
-    (F : PhysicalSectorFactorization K)
-    (a b : F.CyclicActiveSector → ℝ)
-    (kFirst kLast : F.CyclicActiveSector) :
-    F.cyclicActiveSeparatedBoundary a b kFirst kLast =
-      F.cyclicActiveRightBoundary a kLast ⊗ₖ
-        F.cyclicActiveLeftBoundary b kFirst := by
-  rfl
 
 /-- Open-edge indices to the left of a distinguished final site.
 
@@ -464,69 +446,6 @@ right retained-sector word. See
     (F.rightSectorOpenEdgeEquiv C j r).1 =
       (F.sectorCoordinateChainEquiv C (finFunctionFinEquiv.symm r.2)).1 := by
   rfl
-
-/-- The inverse left open-edge identification recovers the left chain fiber
-and the middle-left boundary coordinate.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1614--1617.
-
-**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
-is used in the retained cut decomposition. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem leftSectorOpenEdgeEquiv_symm_fiber_heq
-    (F : PhysicalSectorFactorization K) (A : ℕ) (j : Fin F.sectorCount)
-    (l : Fin (Fintype.card (SectorSiteIndex F) ^ A) × Fin (F.leftDim j)) :
-    let s := F.leftSectorOpenEdgeEquiv A j l
-    (F.leftFixedFiberOpenEdgeEquiv j s.1).symm s.2 ≍
-      ((F.sectorCoordinateChainEquiv A (finFunctionFinEquiv.symm l.1)).2,
-        l.2) := by
-  let sL := F.sectorCoordinateChainEquiv A (finFunctionFinEquiv.symm l.1)
-  let tL : Σ k : Fin A → Fin F.sectorCount,
-      F.SectorChainFiber k × Fin (F.leftDim j) := ⟨sL.1, (sL.2, l.2)⟩
-  let eL : (Σ k : Fin A → Fin F.sectorCount,
-      F.SectorChainFiber k × Fin (F.leftDim j)) ≃
-      (Σ k : Fin A → Fin F.sectorCount,
-        F.LeftOpenEdgeIndex (F.leftSectorWord j k)) :=
-    Equiv.sigmaCongrRight fun k ↦ F.leftFixedFiberOpenEdgeEquiv j k
-  have hL0 := eL.symm_apply_apply tL
-  have hL1 :
-      (F.leftFixedFiberOpenEdgeEquiv j (eL tL).1).symm (eL tL).2 ≍
-        tL.2 := (Sigma.mk.inj_iff.mp hL0).2
-  convert hL1 using 1;
-    simp [leftSectorOpenEdgeEquiv, sL, tL, eL]; rfl
-
-/-- The inverse right open-edge identification recovers the middle-right
-boundary coordinate and the right chain fiber.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1614--1617.
-
-**Scope restriction (cyclic-active restriction):** This dependent-coordinate identity
-is used in the retained cut decomposition. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem rightSectorOpenEdgeEquiv_symm_fiber_heq
-    (F : PhysicalSectorFactorization K) (C : ℕ) (j : Fin F.sectorCount)
-    (r : Fin (F.rightDim j) ×
-      Fin (Fintype.card (SectorSiteIndex F) ^ C)) :
-    let s := F.rightSectorOpenEdgeEquiv C j r
-    (F.rightFixedFiberOpenEdgeEquiv j s.1).symm s.2 ≍
-      (r.1, (F.sectorCoordinateChainEquiv C
-        (finFunctionFinEquiv.symm r.2)).2) := by
-  let sR := F.sectorCoordinateChainEquiv C (finFunctionFinEquiv.symm r.2)
-  let tR : Σ k : Fin C → Fin F.sectorCount,
-      Fin (F.rightDim j) × F.SectorChainFiber k := ⟨sR.1, (r.1, sR.2)⟩
-  let eR : (Σ k : Fin C → Fin F.sectorCount,
-      Fin (F.rightDim j) × F.SectorChainFiber k) ≃
-      (Σ k : Fin C → Fin F.sectorCount,
-        F.RightOpenEdgeIndex (F.rightSectorWord j k)) :=
-    Equiv.sigmaCongrRight fun k ↦ F.rightFixedFiberOpenEdgeEquiv j k
-  have hR0 := eR.symm_apply_apply tR
-  have hR1 :
-      (F.rightFixedFiberOpenEdgeEquiv j (eR tR).1).symm (eR tR).2 ≍
-        tR.2 := (Sigma.mk.inj_iff.mp hR0).2
-  convert hR1 using 1;
-    simp [rightSectorOpenEdgeEquiv, sR, tR, eR]; rfl
 
 /-- The inverse left open-edge identification recovers the prescribed
 middle-left boundary coordinate.
