@@ -43,6 +43,7 @@ on:
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_lean_sync.py'
+      - 'scripts/test_blueprint_lean_sync.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/audit_cpsv16_labels.py'
@@ -95,6 +96,7 @@ on:
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/blueprint_lean_sync.py'
+      - 'scripts/test_blueprint_lean_sync.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/audit_cpsv16_labels.py'
@@ -594,6 +596,9 @@ jobs:
       - name: Test generated blueprint pages
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
+      - name: Test Blueprint declaration scanner
+        run: python3 scripts/test_blueprint_lean_sync.py
 
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls

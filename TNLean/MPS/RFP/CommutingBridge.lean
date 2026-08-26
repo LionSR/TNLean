@@ -13,6 +13,17 @@ This module connects Appendix B structural extraction data to the generic
 parent-Hamiltonian interfaces. It contains the RFP-specific conditional bridge
 theorems, while `TNLean.MPS.ParentHamiltonian.Commuting` remains independent of
 the RFP layer.
+
+## Main statements
+
+* `rfp_implies_nncph_of_appendixBExtraction`
+* `rfp_implies_nncph_ground_state_of_appendixBExtraction`
+* `rfp_implies_hasNNCPHGroundSpaces_of_appendixBExtraction_of_groundSpaceSpanning`
+
+## References
+
+The statements implement the conditional Appendix B route for Theorem 3.10(i)⇒(iii)
+of Cirac, Pérez-García, Schuch, and Verstraete, arXiv:1606.00608.
 -/
 
 open scoped Matrix BigOperators
