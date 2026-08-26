@@ -438,30 +438,6 @@ recovery `physical_to_virtual_insertion`; the conditional recovery
 transferred endpoint operator preserves the second tensor's image at the
 in-region vertex and that its virtual pullback is of incident-matrix form. -/
 
-/-- The matched-coefficient identity supplied by a realized matrix transfer: with
-both the bond-product equality and the realization `hreal`, the region-inserted
-coefficient of `M` in the first tensor equals that of `N` in the second. This is
-the `RegionInsertionTransfer.fwd_coeff` ingredient, abbreviating
-`regionInsertedCoeff_transfer_of_realizes`. -/
-theorem regionInsertedCoeff_eq_of_realizes (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
-    (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
-    (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
-    (hAB : SameState A B)
-    (hbond : regionInteriorBondProd (G := G) A R = regionInteriorBondProd (G := G) B R)
-    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-    (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
-    (hreal : ∀ c : LocalVirtualConfig B (regionBoundaryEdgeInVertex (G := G) R f) → ℂ,
-      regionInsertionOp (G := G) A R f hvA M.transpose
-          (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f) c) =
-        localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)
-          (localIncidentMatrixOp B (regionBoundaryEdgeInIncident (G := G) R f) N.transpose c))
-    (σ : RegionPhysicalConfig (V := V) (d := d) R)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
-    regionInsertedCoeff (G := G) A R f M σ τ =
-      regionInsertedCoeff (G := G) B R f N σ τ :=
-  regionInsertedCoeff_transfer_of_realizes A B R f hvA hvB hAB hbond M N hreal σ τ
-
 /-- The realization hypothesis bundle: the region physical-to-virtual realization
 of `regionTransferMatrix … M` for every inserted matrix `M`. This is exactly the
 per-matrix conclusion of `regionTransferMatrix_realizes_of_image`, the region

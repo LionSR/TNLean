@@ -106,12 +106,6 @@ omit [Fintype V] in
   simp [overrideEdge, hf]
 
 omit [Fintype V] in
-/-- The override agrees with `ζL` off `e`. -/
-theorem agreeOffEdge_overrideEdge (A : Tensor G d) (e : Edge G) (ζL : VirtualConfig A)
-    (y : Fin (A.bondDim e)) : AgreeOffEdge (G := G) A e ζL (overrideEdge (G := G) A e ζL y) :=
-  fun _ hf => (overrideEdge_ne (G := G) A e ζL y hf).symm
-
-omit [Fintype V] in
 /-- The right endpoint local configuration reconstructed from the right index `y` and
 a full configuration's right residual is the right-incident reading of the override of
 that configuration with `y` on `e`. -/
@@ -319,23 +313,6 @@ Overriding a coarse virtual configuration on the `r-b` super-edge changes only t
 `r-b` super-bond value; every other super-bond is untouched. The blue super-site's
 leg identification reads the `r-b` crossings through the overridden value and the
 `b-c` crossings unchanged. -/
-
-/-- The override of a coarse configuration agrees with it on the `r-c` and `b-c`
-super-edges. -/
-theorem overrideEdge_coarse_rc (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
-    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
-    overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeRC =
-      ηL coarseEdgeRC :=
-  overrideEdge_ne (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
-    (by decide)
-
-/-- The override of a coarse configuration agrees with it on the `b-c` super-edge. -/
-theorem overrideEdge_coarse_bc (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
-    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
-    overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeBC =
-      ηL coarseEdgeBC :=
-  overrideEdge_ne (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
-    (by decide)
 
 /-- The override of a coarse configuration reads the alternate value on the `r-b`
 super-edge. -/

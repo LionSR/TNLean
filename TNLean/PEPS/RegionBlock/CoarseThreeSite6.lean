@@ -69,12 +69,6 @@ instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (ζr ζb ζc : Vi
     Decidable (CrossTripleAgreesAwayRB F ζr ζb ζc) := by
   unfold CrossTripleAgreesAwayRB; infer_instance
 
-/-- A fully agreeing triple agrees away from the `r-b` super-bond. -/
-theorem CrossTripleAgreesAwayRB.of_tripleAgrees
-    {F : CoherentCoarseBlockingFrame (G := G) (d := d) A} {ζr ζb ζc : VirtualConfig A}
-    (h : TripleAgrees F ζr ζb ζc) : CrossTripleAgreesAwayRB F ζr ζb ζc :=
-  ⟨h.2.1, h.2.2⟩
-
 /-! ### The red-to-blue crossing label of a region boundary configuration
 
 The red region's boundary edges split, under the partition, into red-to-blue crossings

@@ -269,36 +269,6 @@ theorem legEquivRed_eq_legEquivBlue_on_rb
   have hfB := F.factor_blue_rb legsB ⟨g, hf.2⟩ hf ieB hieB
   rw [hfR, hfB, hval]
 
-omit [DecidableEq V] in
-/-- **Red and complement agree on the `r-c` crossings.** -/
-theorem legEquivRed_eq_legEquivComplement_on_rc
-    (legsR : (ie : IncidentEdge coarseGraph 0) → Fin (F.frame.coarseBondDim ie.1))
-    (legsC : (ie : IncidentEdge coarseGraph 2) → Fin (F.frame.coarseBondDim ie.1))
-    (ieR : IncidentEdge coarseGraph 0) (hieR : ieR.1 = coarseEdgeRC)
-    (ieC : IncidentEdge coarseGraph 2) (hieC : ieC.1 = coarseEdgeRC)
-    (hval : (hieR ▸ legsR ieR : Fin (F.frame.coarseBondDim coarseEdgeRC)) = hieC ▸ legsC ieC)
-    (g : Edge G) (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
-    (F.frame.legEquivRed legsR ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
-      (F.frame.legEquivComplement legsC ⟨g, hf.2⟩ : Fin (A.bondDim g)) := by
-  have hfR := F.factor_red_rc legsR ⟨g, hf.1⟩ hf ieR hieR
-  have hfC := F.factor_compl_rc legsC ⟨g, hf.2⟩ hf ieC hieC
-  rw [hfR, hfC, hval]
-
-omit [DecidableEq V] in
-/-- **Blue and complement agree on the `b-c` crossings.** -/
-theorem legEquivBlue_eq_legEquivComplement_on_bc
-    (legsB : (ie : IncidentEdge coarseGraph 1) → Fin (F.frame.coarseBondDim ie.1))
-    (legsC : (ie : IncidentEdge coarseGraph 2) → Fin (F.frame.coarseBondDim ie.1))
-    (ieB : IncidentEdge coarseGraph 1) (hieB : ieB.1 = coarseEdgeBC)
-    (ieC : IncidentEdge coarseGraph 2) (hieC : ieC.1 = coarseEdgeBC)
-    (hval : (hieB ▸ legsB ieB : Fin (F.frame.coarseBondDim coarseEdgeBC)) = hieC ▸ legsC ieC)
-    (g : Edge G) (hf : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
-    (F.frame.legEquivBlue legsB ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
-      (F.frame.legEquivComplement legsC ⟨g, hf.2⟩ : Fin (A.bondDim g)) := by
-  have hfB := F.factor_blue_bc legsB ⟨g, hf.1⟩ hf ieB hieB
-  have hfC := F.factor_compl_bc legsC ⟨g, hf.2⟩ hf ieC hieC
-  rw [hfB, hfC, hval]
-
 end CoherentCoarseBlockingFrame
 
 /-! ### The coarse state coefficient as a product of three region weights

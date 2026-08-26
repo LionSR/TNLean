@@ -46,3 +46,11 @@ The replacement names in the rows for
 `TNLean/PEPS/TorusWindowFamilyVertical.lean` and
 `TNLean/PEPS/TorusCoordinateSwap.lean`. See
 `docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md`.
+
+The replacement names in the rows for
+`legEquivRed_eq_legEquivComplement_on_rc_single` and
+`legEquivBlue_eq_legEquivComplement_on_bc_single` —
+`legEquivRed_eq_legEquivComplement_on_rc` and
+`legEquivBlue_eq_legEquivComplement_on_bc` — were themselves removed on
+2026-08-26 as zero-reference. See
+`docs/audits/2026-08-26_peps_regionblock_zero_reference_deletion.md`.
