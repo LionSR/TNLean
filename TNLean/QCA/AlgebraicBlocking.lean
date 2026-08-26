@@ -292,22 +292,6 @@ lemma algebraicLocalBlockingHom_comp_unblockingHom (d L : ℕ) [NeZero L] :
     _ = localObservable d Δ A :=
       localObservable_localInclusion d (subset_expandedRegion_blockHull L Δ) A
 
-/-- Block-hull unblocking after forward blocking is the identity on blocked algebraic-local
-observables. -/
-lemma algebraicLocalUnblockingHom_comp_blockingHom (d L : ℕ) [NeZero d] [NeZero L] :
-    (algebraicLocalUnblockingHom d L).comp (algebraicLocalBlockingHom d L) =
-      StarAlgHom.id ℂ (AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L)) := by
-  apply algebraicLocalAlgebra_starAlgHom_ext
-  intro Λ
-  ext A
-  apply algebraicLocalBlockingHom_injective d L
-  change algebraicLocalBlockingHom d L
-      (algebraicLocalUnblockingHom d L
-        (algebraicLocalBlockingHom d L (localObservable _ Λ A))) =
-    algebraicLocalBlockingHom d L (localObservable _ Λ A)
-  rw [← StarAlgHom.comp_apply, algebraicLocalBlockingHom_comp_unblockingHom]
-  rfl
-
 /-- Blocking consecutive groups of `L` sites gives an equivalence between the blocked and
 original algebraic local algebras.
 

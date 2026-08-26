@@ -8598,30 +8598,6 @@ circuit, MPU standard form, or index comparison is asserted here.
     $\operatorname{Coeff}_{\mathrm R}(\mathcal A)$.
 \end{proof}
 
-\begin{theorem}[Tensor-submodule criterion for left support]
-    \label{thm:qca_left_support_tensor_submodule}
-    \lean{Matrix.left_support_algebra_le_iff_le_tensor_submodule}
-    \leanok
-    \uses{def:qca_left_support_algebra}
-    Let $I=\{0,\ldots,p-1\}$ and $J=\{0,\ldots,q-1\}$.  For every
-    star-subalgebra $\mathcal B\subseteq M_p(\mathbb C)$,
-    \begin{align}
-        \operatorname{Spp}_{\mathrm L}(\mathcal A)\subseteq\mathcal B
-        \quad\Longleftrightarrow\quad
-        \mathcal A & \subseteq
-        \mathcal B\otimes M_q(\mathbb C),
-    \end{align}
-    where the right-hand side is the tensor-product submodule consisting of
-    matrices whose left coefficient slices lie in $\mathcal B$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:qca_left_support_minimality}
-    Membership in the tensor-product submodule is equivalent to membership of
-    every left coefficient in $\mathcal B$.  Apply
-    Theorem~\ref{thm:qca_left_support_minimality}.
-\end{proof}
-
 \begin{definition}[Kronecker-product submodule]
     \label{def:qca_kronecker_submodule}
     \lean{Matrix.kroneckerSubmodule}
@@ -8669,27 +8645,26 @@ circuit, MPU standard form, or index comparison is asserted here.
     sum of Kronecker products from $S$ and $T$.
 \end{proof}
 
-\begin{theorem}[The one-sided tensor submodule as a Kronecker span]
-    \label{thm:qca_kronecker_submodule_top}
-    \lean{Matrix.kroneckerSubmodule_top_eq_tensorSubmodule}
+\begin{theorem}[Kronecker-submodule criterion for left support]
+    \label{thm:qca_left_support_tensor_submodule}
+    \lean{Matrix.left_support_algebra_le_iff_le_kronecker_submodule}
     \leanok
-    \uses{def:qca_kronecker_submodule}
-    Let $I=\{0,\ldots,p-1\}$ and $J=\{0,\ldots,q-1\}$.  For every submodule
-    $S\subseteq M_p(\mathbb C)$,
+    \uses{def:qca_left_support_algebra, def:qca_kronecker_submodule}
+    For every star-subalgebra $\mathcal B\subseteq M_I(\mathbb C)$,
     \begin{align}
-        S\boxtimes M_q(\mathbb C)
-         & =\{X\in M_{p\times q}(\mathbb C)
-        \mid X^{\mathrm L}_{rs}\in S\text{ for all }r,s\}.
+        \operatorname{Spp}_{\mathrm L}(\mathcal A)\subseteq\mathcal B
+        \quad\Longleftrightarrow\quad
+        \mathcal A & \subseteq
+        \mathcal B\boxtimes M_J(\mathbb C).
     \end{align}
-    Thus the two-sided Kronecker span extends the existing left-oriented
-    tensor-submodule construction.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:qca_mem_kronecker_submodule_iff}
-    In Theorem~\ref{thm:qca_mem_kronecker_submodule_iff}, take the right
-    submodule to be the full matrix space.  The right-block condition is then
-    automatic, leaving precisely the left-slice criterion.
+    \uses{thm:qca_left_support_minimality, thm:qca_mem_kronecker_submodule_iff}
+    By Theorem~\ref{thm:qca_mem_kronecker_submodule_iff} with the right
+    submodule the full matrix space, membership in the Kronecker span is
+    exactly membership of every left coefficient in $\mathcal B$.  Apply
+    Theorem~\ref{thm:qca_left_support_minimality}.
 \end{proof}
 
 \begin{theorem}[Kronecker-submodule criterion for right support]
@@ -8940,7 +8915,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \label{def:qca_translate_region}
     \lean{SpinChain.translateRegion,SpinChain.mem_translateRegion,
         SpinChain.mem_translateRegion_add,SpinChain.translateRegion_zero,
-        SpinChain.translateRegion_add,SpinChain.translateRegion_injective,
+        SpinChain.translateRegion_add,
         SpinChain.translateRegion_mono}
     \leanok
     For a finite region $\Lambda\subset\mathbb Z$ and $a\in\mathbb Z$, define
@@ -8953,8 +8928,7 @@ circuit, MPU standard form, or index comparison is asserted here.
         \Lambda+0     & =\Lambda,           \\
         (\Lambda+a)+b & =\Lambda+(a+b).
     \end{align}
-    The map $\Lambda\mapsto\Lambda+a$ is injective. If
-    $\Lambda\subseteq\Gamma$, then $\Lambda+a\subseteq\Gamma+a$.
+    If $\Lambda\subseteq\Gamma$, then $\Lambda+a\subseteq\Gamma+a$.
 \end{definition}
 
 \begin{definition}[Sumset of finite regions]
@@ -8962,10 +8936,7 @@ circuit, MPU standard form, or index comparison is asserted here.
     \lean{SpinChain.regionSumset,SpinChain.mem_regionSumset,
         SpinChain.regionSumset_singleton_right,SpinChain.regionSumset_mono,
         SpinChain.regionSumset_mono_left,SpinChain.regionSumset_mono_right,
-        SpinChain.regionSumset_empty_left,SpinChain.regionSumset_empty_right,
         SpinChain.regionSumset_zero_left,SpinChain.regionSumset_zero_right,
-        SpinChain.regionSumset_translateRegion_left,
-        SpinChain.regionSumset_translateRegion_right,
         SpinChain.regionSumset_assoc}
     \leanok
     \uses{def:qca_translate_region}
@@ -8977,15 +8948,13 @@ circuit, MPU standard form, or index comparison is asserted here.
     \end{align}
     Hence $j\in\Lambda+\mathcal N$ exactly when $j=i+a$ for some
     $i\in\Lambda$ and $a\in\mathcal N$. The sumset is monotone in both
-    arguments, either empty argument gives the empty region, and the singleton
-    $\{0\}$ is an identity. A singleton displacement recovers translation,
+    arguments, and the singleton $\{0\}$ is an identity. A singleton
+    displacement recovers translation,
     \begin{align}
         \Lambda+\{a\} & =\Lambda+a.
     \end{align}
-    Translation commutes with either argument, and sumsets are associative:
+    Sumsets are associative:
     \begin{align}
-        (\Lambda+a)+\mathcal N          & =(\Lambda+\mathcal N)+a,          \\
-        \Lambda+(\mathcal N+a)          & =(\Lambda+\mathcal N)+a,          \\
         (\Lambda+\mathcal N)+\mathcal M & =\Lambda+(\mathcal N+\mathcal M).
     \end{align}
     These identities support composition of propagation bounds. This is the
@@ -9109,8 +9078,7 @@ circuit, MPU standard form, or index comparison is asserted here.
 
 \begin{lemma}[Naturality of finite-region translation]
     \label{lem:qca_finite_local_translation_naturality}
-    \lean{SpinChain.localTranslation_localInclusion,
-        SpinChain.localTranslation_comp_localInclusion}
+    \lean{SpinChain.localTranslation_localInclusion}
     \leanok
     \uses{def:qca_local_inclusion, def:qca_translate_region, def:qca_finite_local_translation}
     If $\Lambda\subseteq\Gamma$, then for every
@@ -10419,85 +10387,6 @@ $\omega^{-1}$.
     interval.
 \end{proof}
 
-\begin{definition}[Two-sided finite-propagation predicates]
-    \label{def:qca_two_sided_finite_propagation}
-    \lean{SpinChain.PropagatesWithinTwoSided,
-        SpinChain.HasTwoSidedFinitePropagation}
-    \leanok
-    \uses{def:qca_propagates_within, def:qca_finite_propagation}
-    Let $d>0$, and let $\omega$ be a star-algebra automorphism of $\mathcal A$.
-    A finite set $\mathcal N\subset\mathbb Z$ is a two-sided propagation
-    neighborhood when
-    \begin{align}
-        \omega(\mathcal A_\Lambda) & \subseteq
-        \mathcal A_{\Lambda+\mathcal N}
-    \end{align}
-    and
-    \begin{align}
-        \omega^{-1}(\mathcal A_\Lambda) & \subseteq
-        \mathcal A_{\Lambda+\mathcal N}
-    \end{align}
-    for every finite $\Lambda\subset\mathbb Z$.  The automorphism has two-sided
-    finite propagation when $\omega$ and $\omega^{-1}$ each have a finite forward
-    propagation neighborhood; the two neighborhoods need not initially agree.
-
-    These are derived convenience predicates.  The definition in
-    \cite[line~2298]{Cirac2017MPU} and Schumacher--Werner,
-    quant-ph/0405174, Definition~1, both define locality by the forward inclusion
-    for $\omega$ alone.  In particular, these predicates do not assert that
-    forward locality implies locality of the inverse.
-\end{definition}
-
-\begin{lemma}[Common neighborhoods for two-sided propagation]
-    \label{lem:qca_two_sided_common_neighborhood}
-    \lean{SpinChain.neg_symmetric_Icc,
-        SpinChain.PropagatesWithinTwoSided.mono,
-        SpinChain.PropagatesWithinTwoSided.of_reflected,
-        SpinChain.PropagatesWithinTwoSided.exists_symmetric_Icc,
-        SpinChain.HasTwoSidedFinitePropagation.exists_common_neighborhood,
-        SpinChain.HasTwoSidedFinitePropagation.exists_symmetric_Icc}
-    \leanok
-    \uses{def:qca_two_sided_finite_propagation}
-    For a finite set $\mathcal N\subset\mathbb Z$, write
-    \begin{align}
-        -\mathcal N & =\{-a\mid a\in\mathcal N\}.
-    \end{align}
-    Reflection fixes every symmetric interval:
-    \begin{align}
-        -\bigl([-R,R]\cap\mathbb Z\bigr) & =[-R,R]\cap\mathbb Z.
-    \end{align}
-    If $\mathcal N\subseteq\mathcal M$, then every common two-sided bound by
-    $\mathcal N$ is also a common bound by $\mathcal M$.  More generally, if
-    $\omega$ propagates within $\mathcal N$ and $\omega^{-1}$ propagates within
-    $-\mathcal N$, then both propagate within
-    \begin{align}
-        \mathcal N\cup(-\mathcal N).
-    \end{align}
-    Finally, any two-sided finite-propagation pair admits a common finite
-    neighborhood and therefore a common symmetric-interval neighborhood.  Thus
-    there is an $R\in\mathbb N$ such that
-    \begin{align}
-        \omega(\mathcal A_\Lambda) & \subseteq
-        \mathcal A_{\Lambda+([-R,R]\cap\mathbb Z)}
-    \end{align}
-    and
-    \begin{align}
-        \omega^{-1}(\mathcal A_\Lambda) & \subseteq
-        \mathcal A_{\Lambda+([-R,R]\cap\mathbb Z)}
-    \end{align}
-    for every finite $\Lambda\subset\mathbb Z$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_two_sided_finite_propagation, lem:qca_propagation_neighborhood_mono, lem:qca_finite_propagation_symmetric_interval}
-    Negation reverses the two endpoint inequalities, so it preserves
-    $[-R,R]\cap\mathbb Z$.  Enlarge each supplied neighborhood using monotonicity.
-    For reflected bounds, both inclusions into $\mathcal N\cup(-\mathcal N)$ are
-    immediate.  For arbitrary finite forward and inverse neighborhoods, first
-    take their union and then enlarge that common neighborhood to a symmetric
-    interval.
-\end{proof}
-
 \begin{lemma}[Disjointness for reflected neighborhoods]
     \label{lem:qca_disjoint_region_sumset_neg_iff}
     \lean{SpinChain.disjoint_regionSumset_neg_iff}
@@ -10561,48 +10450,6 @@ $\omega^{-1}$.
          & \implies
         \omega^{-1}\circ\tau_a=\tau_a\circ\omega^{-1}.
     \end{align}
-\end{proof}
-
-\begin{theorem}[Forward and two-sided finite propagation]
-    \label{thm:qca_forward_iff_two_sided_propagation}
-    \lean{SpinChain.PropagatesWithinTwoSided.of_forward,
-        SpinChain.hasFinitePropagation_iff_hasTwoSidedFinitePropagation,
-        SpinChain.HasFinitePropagation.exists_common_twoSided_neighborhood,
-        SpinChain.HasFinitePropagation.exists_twoSided_symmetric_Icc}
-    \leanok
-    \uses{def:qca_finite_propagation, def:qca_two_sided_finite_propagation}
-    Let $d>0$ and let $\omega$ be a star-algebra automorphism of $\mathcal A$.
-    Then
-    \begin{align}
-        \omega\text{ has finite forward propagation}
-         & \iff
-        \omega\text{ has two-sided finite propagation}.
-    \end{align}
-    More precisely, a forward bound by a finite set $\mathcal N$ gives an inverse
-    bound by $-\mathcal N$, so both maps propagate within the enlarged common
-    neighborhood
-    \begin{align}
-        \mathcal N\cup(-\mathcal N).
-    \end{align}
-    This statement remains valid when $\mathcal N=\varnothing$.  For an arbitrary
-    finite forward-propagation witness, there is therefore a common finite
-    neighborhood for $\omega$ and $\omega^{-1}$, and it may be enlarged to a
-    symmetric interval $[-R,R]\cap\mathbb Z$.
-
-    This equivalence is a derived convenience theorem.  It does not change the
-    forward-only locality definition at line~2298 of \cite{Cirac2017MPU} or in
-    Schumacher--Werner, Definition~1.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:qca_two_sided_common_neighborhood, thm:qca_inverse_propagation}
-    Derived inverse locality sends a forward bound by $\mathcal N$ to an inverse
-    bound by $-\mathcal N$.  Enlarging both bounds to
-    $\mathcal N\cup(-\mathcal N)$ gives the fixed-neighborhood statement.  At the
-    existential level, forward finite propagation gives finite propagation of
-    the inverse, hence the two-sided predicate.  The converse is its first
-    conjunct.  Finally, apply the common-neighborhood and symmetric-interval
-    enlargement results to the resulting two-sided pair.
 \end{proof}
 
 \begin{definition}[One-dimensional quantum cellular automaton]
@@ -10933,24 +10780,20 @@ $\omega^{-1}$.
     \label{lem:qca_algebraic_blocking_maps_evaluation}
     \lean{SpinChain.algebraicLocalBlockingHom_localObservable,
         SpinChain.algebraicLocalUnblockingHom_localObservable,
-        SpinChain.algebraicLocalBlockingHom_comp_unblockingHom,
-        SpinChain.algebraicLocalUnblockingHom_comp_blockingHom}
+        SpinChain.algebraicLocalBlockingHom_comp_unblockingHom}
     \leanok
     \uses{def:qca_algebraic_blocking_maps, lem:qca_block_hull_properties}
     Let $L>0$.  The forward map applies finite blocking to a representative on
     $\Lambda$ and regards the result as supported on $\widehat\Lambda_L$.  The
     reverse map enlarges a representative on $\Delta$ to the expansion of its
     block hull, applies the inverse finite blocking equivalence, and regards
-    the result as supported on $\operatorname{Hull}_L(\Delta)$.  Their
-    composites have the orientations
+    the result as supported on $\operatorname{Hull}_L(\Delta)$.  The forward
+    composite is the identity,
     \begin{align}
         \mathcal B_L\mathcal U_L
-         & =\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d)}},   \\
-        \mathcal U_L\mathcal B_L
-         & =\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d^L)}}.
+         & =\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d)}}.
     \end{align}
-    The first identity holds for every on-site dimension $d$; the second also
-    assumes $d>0$.
+    This holds for every on-site dimension $d$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -10960,8 +10803,7 @@ $\omega^{-1}$.
     follows by monotonicity of block hulls, composition of local inclusions,
     and the same square applied in the inverse direction.  Forward blocking
     after the reverse map reduces to the canonical inclusion of $\Delta$ into
-    its expanded block hull.  The other composite is the identity by
-    injectivity of the forward map.
+    its expanded block hull.
 \end{proof}
 
 \begin{definition}[Algebraic-local site-blocking equivalence]

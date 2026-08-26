@@ -88,12 +88,6 @@ lemma translateRegion_add (a b : ℤ) (Λ : Finset ℤ) :
   simp only [mem_translateRegion]
   ring_nf
 
-/-- Translation by a fixed displacement is injective on finite lattice regions.
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-lemma translateRegion_injective (a : ℤ) : Function.Injective (translateRegion a) := by
-  exact Finset.map_injective (Equiv.addRight a).toEmbedding
-
 /-- Translation preserves inclusion of finite lattice regions.
 
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
@@ -318,17 +312,5 @@ lemma localTranslation_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
       simpa only [Config.translation_symm_apply, hsite] using eq
   · rfl
   · rfl
-
-/-- The star-algebra homomorphism square for finite-region translation and canonical inclusion
-commutes.
-
-Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
-lemma localTranslation_comp_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
-    (h : Λ ⊆ Γ) :
-    (localTranslation d a Γ).toStarAlgHom.comp (localInclusion h) =
-      (localInclusion (translateRegion_mono a h)).comp
-        (localTranslation d a Λ).toStarAlgHom := by
-  ext A : 1
-  exact localTranslation_localInclusion a h A
 
 end SpinChain
