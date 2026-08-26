@@ -77,7 +77,7 @@ The general shapes above, with the repo's known concentrations and the policy th
 - Mathlib and QICLean shadows: check `.lake/packages/mathlib/Mathlib/`, `.lake/packages/qiclean/`, and the toolchain-bump audits `docs/audits/*_mathlib_*_replacement_audit.md`, which list what the current Mathlib newly provides.
 - Stricter-hypothesis twins (`foo_of_isNormal_leftCanonical` beside `foo_of_isNormal`): the faithfulness rule in `CLAUDE.md` already classifies the twin as a different theorem; with no consumer it goes.
 - Degenerate-case apparatus: `CLAUDE.md` §"Degenerate readings are conventions, not gaps" says delete the scaffolding, not document it — after checking that the definition actually forces the convention (a positivity field on one index says nothing about a triple).
-- Mirrors: the ledger records 84 exact vertical/horizontal rename pairs, mostly under `PEPS/`; transport lives in `PEPS/IsoTransport.lean` and `TNLean/Algebra/MatrixReindex.lean`.
+- Mirrors: ledger entry D10 records 84 exact vertical↔horizontal rename pairs among PEPS top-level declarations; the left/right and blue/complement families are separate, uncounted. TNLean-local transport lives in `PEPS/IsoTransport.lean`. Matrix-level transport (`Matrix.reindex_mul_reindex` and friends) is QICLean's, so a TNLean copy of it is a deletion candidate rather than machinery to reuse locally.
 - Numbered sequels: ~50 files / ~23k lines at the last count; `scripts/check_numbered_lean_files.py` forbids new ones, so the remaining chains are the target.
 - Inline re-derivations (`Matrix.mul_assoc` shuffles, `Finset.sum` reindexing, `Fin` case splits): the candidate is the missing lemma; tactic-shaped repetition goes to `docs/tactic_patterns.md` instead.
 
@@ -94,7 +94,7 @@ Use parallel subagents when the user asks for breadth. Give each agent one direc
 - `MPS/MPDO`, `MPS/RFP`, `MPS/ParentHamiltonian`, `QCA/`: staged developments where the capstone landed and the staging did not leave.
 - `blueprint/src/chapter/`: `\lean{}` tags pointing at a wrapper rather than the theorem, and `\notready` nodes beside a `\leanok` twin.
 
-Do not let the first good candidate stop the survey. Start with the largest files and the files with the most importers: `python3 scripts/loc_report.py` and `python3 scripts/lake_build_hotspots.py` give the size and build-cost ranking; `rg -l "^import TNLean.X.Y" TNLean` gives the importer count of a module.
+Do not let the first good candidate stop the survey. Start with the largest files and the files with the most importers: `python3 scripts/loc_report.py` gives the size ranking, and `lake build 2>&1 | tee /tmp/build.log` followed by `python3 scripts/lake_build_hotspots.py /tmp/build.log` gives the build-cost ranking (the script ranks jobs from a saved log and needs that path). `rg -l "^import TNLean.X.Y$" TNLean` gives the importer count of a module.
 
 ## Audit Hypotheses And Layer Boundaries
 
@@ -142,7 +142,11 @@ Measure density before choosing a lens. Above roughly two-thirds tag coverage th
 
 ### Then let the compiler answer
 
-Grep proposes; elaboration decides. Confirm by deleting the declaration and running `lake build TNLean.Path.To.Module` — the consumer count is the elaboration result. Use `lake build`, not `lake env lean`, whenever the answer depends on linter output (unused-variable, unused-simp-args, `docBlame`): `lake env lean` drops the lakefile `leanOptions` and runs no linters.
+Grep proposes; elaboration decides. Confirm by deleting the declaration and rebuilding — the consumer count is the elaboration result.
+
+Rebuild the right thing, though. `lake build TNLean.Path.To.Module` builds that module's *dependencies*, not its *importers*, so a declaration whose only consumer is downstream still elaborates cleanly and looks dead. The module target is the fast inner loop; the verdict needs a root `lake build` (or an explicit build of the reverse dependents, which `rg -l "^import TNLean.Path.To.Module$" TNLean` lists). A candidate proved dead only by a module-target build has not been proved dead.
+
+Use `lake build`, not `lake env lean`, whenever the answer depends on linter output (unused-variable, unused-simp-args, `docBlame`): `lake env lean` drops the lakefile `leanOptions` and runs no linters.
 
 This is also the only honest way to clear an attribute-carrying lemma. A `@[simp]`/`@[grind]`/`@[ext]` lemma with no named call site is not thereby alive — it may be firing inside a bare `simp`, or it may be unfireable (a `rfl` projection of a nine-argument constructor that never occurs fully applied). Grep cannot separate these, so do not silently exclude them: collect them into a build-checked batch, delete the attribute, and let the build rule. One area lost 240 deletable lines to treating the exclusion as a verdict.
 
@@ -173,7 +177,7 @@ Be concrete enough that an implementing PR can follow the trail: the declaration
 
 ## Validation And PR Hygiene
 
-For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` if the toolchain or a dependency moved, `lake build` clean with the package lean options, `rg -n "sorry|axiom"` on touched files, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
+For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` before the first build in any fresh, cloned, or cache-cleared worktree, and after any toolchain or dependency change — `CLAUDE.md`'s canonical cache rule is that Mathlib is never rebuilt from source, and skipping the fetch is what triggers the hours-long rebuild; then `lake build` clean with the package lean options, `rg -n "sorry|axiom"` on touched files, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
 
 A PR implementing a simplification is titled `refactor(scope):` and its body states the net line delta (`docs/proof_debt.md` §shrink rhythm), the ledger entry or issue it burns down, each removed declaration with its replacement (the pass-through exception requires this plus an audit note), and any blueprint labels redirected. A removed name whose old spelling encoded banned terminology gets no deprecation alias; say so in the body. A burn-down PR that leaves "old and new side by side" is in-progress, not done, and carries the issue that removes the old side.
 
