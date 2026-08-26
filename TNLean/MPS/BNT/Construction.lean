@@ -179,7 +179,7 @@ private theorem spans_mpv_toTensorFromBlocks
 If the self-overlaps of a finite block family tend to `1` and the cross-overlaps
 of distinct blocks tend to `0`, then the MPV states are linearly independent for
 every sufficiently large system size.  This is the threshold form of
-`bntFamilies_eventually_linearIndependent`. -/
+`eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal`. -/
 lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -189,7 +189,7 @@ lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
       Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N) := by
-  have hOrtho := bntFamilies_eventually_linearIndependent A hSelf hOff
+  have hOrtho := eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hSelf hOff
   rw [Filter.Eventually] at hOrtho
   obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
   exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩

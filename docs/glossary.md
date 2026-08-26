@@ -319,10 +319,7 @@ normalizations.
 - **Sanctioned bridges:**
   `MPSChainTensor.isWindowInjective_one_of_isInjective` and
   `MPSChainTensor.isWindowInjective_const`.
-- **Caveat:** window injectivity requires `[NeZero n]`. The compatibility alias
-  the root compatibility alias `IsInjectiveChain` names
-  `MPSChainTensor.IsInjective`; new code should use the namespace-qualified
-  predicate.
+- **Caveat:** window injectivity requires `[NeZero n]`.
 
 #### `MPOTensor.IsInjective`
 

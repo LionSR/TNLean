@@ -131,15 +131,15 @@ than the eventual quantifier.
     \label{thm:bnt_li_from_overlap_limits_exists}
     \lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
     \leanok
-    \uses{lem:bnt_overlap_orthonormal_li}
+    \uses{lem:bnt_finite_index_overlap_orthonormal_li}
     If the self-overlaps of a finite block family tend to $1$ and the
     cross-overlaps of distinct blocks tend to $0$, then the MPV states are
     linearly independent for all sufficiently large system sizes.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:bnt_overlap_orthonormal_li}
-    This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
+    \uses{lem:bnt_finite_index_overlap_orthonormal_li}
+    This is Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, restated with an
     explicit threshold $N_0$.
 \end{proof}
 
@@ -168,26 +168,8 @@ than the eventual quantifier.
     the off-diagonal limits between the two blocks.
 \end{proof}
 
-The following two linear-algebra consequences package the eventual Gram-matrix
-criterion and its coefficient-extraction corollary.
-
-\begin{lemma}[Eventual linear independence from overlap orthonormality]
-    \label{lem:bnt_overlap_orthonormal_li}
-    \lean{MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal}
-    \lean{MPSTensor.bntFamilies_eventually_linearIndependent}
-    \leanok
-    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
-    Let $(A_j)_{j=1}^g$ be a finite family of tensors such that
-    $O_{A_jA_j}(N) \to 1$ for each $j$ and $O_{A_iA_j}(N) \to 0$
-    for $i \neq j$. Then the MPV states
-    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
-    sufficiently large~$N$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
-    $I = \{1,\ldots,g\}$.
-\end{proof}
+The eventual Gram-matrix criterion also yields a coefficient-extraction
+corollary.
 
 Eventual linear independence is also what converts an equality of two finite
 linear combinations into equality of their coefficients; this is the mechanism

@@ -454,9 +454,9 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
   -- Step 1: Both families are eventually linearly independent.
   -- ═══════════════════════════════════════════════════════════════════════════
   have hA_li :=
-    eventually_linearIndependent_of_overlap_tendsto_orthonormal A hA_self hA_off
+    eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A hA_self hA_off
   have hB_li :=
-    eventually_linearIndependent_of_overlap_tendsto_orthonormal B hB_self hB_off
+    eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal B hB_self hB_off
   -- ═══════════════════════════════════════════════════════════════════════════
   -- Step 2: Pick N where both are linearly independent and their spans agree.
   -- ═══════════════════════════════════════════════════════════════════════════
