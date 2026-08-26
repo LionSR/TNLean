@@ -203,7 +203,7 @@ focused blueprint route (commit 8df4822) actually cites — code off-route is ca
 general theorem in the repo already gives in a few lines. Start from the verified fork list
 (ExactMatch vs ProportionalMatch with unused bridges at MPS/Defs.lean:244,294;
 InvariantSubspaceDecomp.lean:484's strict fork; TransferOperatorGap.lean vs
-mixedTransferMap₂_self; Corner vs WeightedCorner; Lieb Concave vs Integral) and extend the
+mixedMapLM_self; Corner vs WeightedCorner; Lieb Concave vs Integral) and extend the
 hunt using duplicated-window analysis: for the biggest twin pairs, determine which side is
 derivable from the other and how many lines the derivation costs vs deletes. Also hunt
 dimension-specific or lattice-specific theorems whose general version exists. Report net

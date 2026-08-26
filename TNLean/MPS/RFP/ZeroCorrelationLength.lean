@@ -7,7 +7,7 @@ import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.Core.Correlations
 import QICLean.Kraus.Transfer
 import TNLean.MPS.RFP.Defs
-import QICLean.Spectral.MixedTransfer
+import QICLean.Kraus.MixedMap
 
 /-!
 # Zero correlation length (ZCL) for MPS tensors
@@ -199,7 +199,7 @@ theorem. The rectangular mixed transfer operator is the corresponding linear
 map form of the displayed mixed-sector matrix. -/
 def IsBNTLocallyOrthogonal
     (blocks : (j : Fin g) → MPSTensor d (dim j)) : Prop :=
-  ∀ j j' : Fin g, j ≠ j' → Kraus.mixedTransferMap₂ (blocks j) (blocks j') = 0
+  ∀ j j' : Fin g, j ≠ j' → Kraus.mixedMapLM (blocks j) (blocks j') = 0
 
 /-- BNT zero correlation length in the source sense of arXiv:1606.00608,
 Definition 3.6 (lines 476--478): `blocks` is a basis of normal tensors for

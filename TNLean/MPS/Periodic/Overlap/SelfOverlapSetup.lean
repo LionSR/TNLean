@@ -695,11 +695,11 @@ theorem mpvOverlap_blockTensor_self_eq
     mpvOverlap (d := blockPhysDim d L) (blockTensor (d := d) (D := D) A L)
         (blockTensor (d := d) (D := D) A L) N =
       mpvOverlap (d := d) A A (N * L) := by
-  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap
+  rw [← trace_mixedMapLM_pow_eq_mpvOverlap
       (A := blockTensor (d := d) (D := D) A L)
       (B := blockTensor (d := d) (D := D) A L) N]
-  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
-  simp [Kraus.mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
+  rw [← trace_mixedMapLM_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
+  simp [Kraus.mixedMapLM_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
 
 /-- A same-dimension gauge-phase equivalence between two compressed sector blocks
 produces a nonzero off-diagonal eigenvector of the ambient blocked transfer map.
@@ -753,11 +753,11 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
     simpa [Units.val_inv_eq_inv_val] using hright_unit
   have hρ_sum : (∑ i : Fin d₀, Au i * ρ * (Au i)ᴴ) = ρ := by
     simpa [Kraus.transferMap_apply] using hρ_fix
-  have hMixed : Kraus.mixedTransferMap Au Av Y = (star η) • Y := by
+  have hMixed : Kraus.mixedMapLM Au Av Y = (star η) • Y := by
     calc
-      Kraus.mixedTransferMap Au Av Y =
+      Kraus.mixedMapLM Au Av Y =
           ∑ i : Fin d₀, Au i * (ρ * X.valᴴ) * (Av i)ᴴ := by
-        simp [Kraus.mixedTransferMap_apply, Y]
+        simp [Kraus.mixedMapLM_apply, Y]
       _ = ∑ i : Fin d₀, (star η) • (Au i * ρ * (Au i)ᴴ * X.valᴴ) := by
         refine Finset.sum_congr rfl ?_
         intro i _
@@ -848,8 +848,8 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
             simp [Matrix.mul_assoc]
       _ = Vu * (∑ i : Fin d₀, Au i * Y * (Av i)ᴴ) * Vvᴴ := by
         rw [← Matrix.sum_mul, ← Matrix.mul_sum]
-      _ = Vu * Kraus.mixedTransferMap Au Av Y * Vvᴴ := by
-        simp [Kraus.mixedTransferMap_apply]
+      _ = Vu * Kraus.mixedMapLM Au Av Y * Vvᴴ := by
+        simp [Kraus.mixedMapLM_apply]
       _ = (star η) • U := by
         rw [hMixed]
         simp [U, Matrix.mul_assoc]

@@ -60,7 +60,7 @@ theorem mixedTransfer_pow_tendsto_zero
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hAB : ¬ GaugePhaseEquiv A B)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Filter.Tendsto (fun n => ((Kraus.mixedTransferMap A B) ^ n) X)
+    Filter.Tendsto (fun n => ((Kraus.mixedMapLM A B) ^ n) X)
       Filter.atTop (nhds 0) :=
   mixedTransfer_pow_tendsto_zero_of_irreducible_TP A B
     (irreducibleTensor_of_injective A hA)

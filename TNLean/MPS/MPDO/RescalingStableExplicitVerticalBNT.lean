@@ -460,8 +460,8 @@ private theorem transferMap_A_pow_single_offdiag
 /-- The self-overlap of `A` is the trace of the explicit two-dimensional local factor. -/
 theorem mpvOverlap_A_eq_wMat_pow_trace (L : ℕ) (hL : 0 < L) :
     MPSTensor.mpvOverlap A A L = (wMat ^ L).trace := by
-  rw [← MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap A A L,
-    Kraus.mixedTransferMap_self]
+  rw [← MPSTensor.trace_mixedMapLM_pow_eq_mpvOverlap A A L,
+    Kraus.mixedMapLM_self]
   rw [Matrix.linearMap_trace_eq_sum_apply_single]
   simp only [Matrix.trace]
   apply Finset.sum_congr rfl

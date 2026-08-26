@@ -175,11 +175,11 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
-    Module.End.HasEigenvalue (Kraus.mixedTransferMap setup.A' setup.B') ev := by
-  have hEigMixed : Kraus.mixedTransferMap A setup.B V = ev • V := by
+    Module.End.HasEigenvalue (Kraus.mixedMapLM setup.A' setup.B') ev := by
+  have hEigMixed : Kraus.mixedMapLM A setup.B V = ev • V := by
     simpa [setup.hB_def, twistedTransferMap_eq_mixedTransfer] using hEig
   have hEigGauge :
-      Kraus.mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ) =
+      Kraus.mixedMapLM setup.A' setup.B' (setup.S * V * setup.Sᴴ) =
         ev • (setup.S * V * setup.Sᴴ) := by
     have hTerm :
         ∀ i : Fin d,
@@ -219,16 +219,16 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
         _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
               simp [Matrix.mul_assoc, setup.hS_herm]
     calc
-      Kraus.mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ)
+      Kraus.mixedMapLM setup.A' setup.B' (setup.S * V * setup.Sᴴ)
           = ∑ i : Fin d,
               setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ := by
-                  simp only [Kraus.mixedTransferMap_apply]
+                  simp only [Kraus.mixedMapLM_apply]
       _ = ∑ i : Fin d, setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simp only [hTerm]
       _ = setup.S * (∑ i : Fin d, A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
             simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
       _ = ev • (setup.S * V * setup.Sᴴ) := by
-            simpa [Kraus.mixedTransferMap_apply, Matrix.mul_assoc] using
+            simpa [Kraus.mixedMapLM_apply, Matrix.mul_assoc] using
               congrArg (fun M => setup.S * M * setup.Sᴴ) hEigMixed
   have hGauge_ne : setup.S * V * setup.Sᴴ ≠ 0 := by
     intro hZero
@@ -243,7 +243,7 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
   intro hBot
   have hMem :
       setup.S * V * setup.Sᴴ ∈ Module.End.eigenspace
-        (Kraus.mixedTransferMap setup.A' setup.B') ev :=
+        (Kraus.mixedMapLM setup.A' setup.B') ev :=
     Module.End.mem_eigenspace_iff.mpr hEigGauge
   have : setup.S * V * setup.Sᴴ ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
     simpa [hBot] using hMem

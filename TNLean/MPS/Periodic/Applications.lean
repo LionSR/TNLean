@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
 import QICLean.Channel.KrausRepresentation
-import QICLean.Spectral.MixedTransfer
+import QICLean.Kraus.MixedMap
+import QICLean.Kraus.Transfer
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.
@@ -171,13 +172,13 @@ theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin 
 
 /-- A common unitary rotation of the physical index leaves the rectangular
 mixed transfer map unchanged. -/
-theorem mixedTransferMap₂_rotatePhysical {D₁ D₂ : ℕ}
+theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) :
-    Kraus.mixedTransferMap₂ (rotatePhysical u A) (rotatePhysical u B) =
-      Kraus.mixedTransferMap₂ A B := by
+    Kraus.mixedMapLM (rotatePhysical u A) (rotatePhysical u B) =
+      Kraus.mixedMapLM A B := by
   ext X : 1
-  simp only [Kraus.mixedTransferMap₂_apply, rotatePhysical_apply]
+  simp only [Kraus.mixedMapLM_apply, rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
   have hU : ∀ j k : Fin d,
       ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by

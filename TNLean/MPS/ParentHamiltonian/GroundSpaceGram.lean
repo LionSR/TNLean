@@ -9,7 +9,8 @@ import QICLean.Analysis.InjectiveRangeProjector
 import QICLean.Kraus.MapIterate
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
-import QICLean.Spectral.MixedTransfer
+import QICLean.Kraus.MixedMap
+import QICLean.Kraus.Transfer
 
 /-!
 # Gram operators for MPS ground-space maps

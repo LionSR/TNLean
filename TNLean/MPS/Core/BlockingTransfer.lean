@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Core.Blocking
 import QICLean.Kraus.Transfer
 import QICLean.Kraus.MapIterate
-import QICLean.Spectral.MixedTransfer
+import QICLean.Kraus.MixedMap
 
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 

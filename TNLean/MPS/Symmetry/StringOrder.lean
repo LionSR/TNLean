@@ -88,7 +88,7 @@ theorem twistedTransfer_spectralRadius_le_one
   have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
   have hHas : Module.End.HasEigenvalue
-      (Kraus.mixedTransferMap setup.A' setup.B') ev :=
+      (Kraus.mixedMapLM setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
       (A := A) (u := u) (setup := setup) ev V hV hEig
   exact Kraus.eigenvalue_norm_le_one
@@ -118,13 +118,13 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     exact Fin.elim0 i
   have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
   let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
-  have hHas : Module.End.HasEigenvalue (Kraus.mixedTransferMap setup.A' setup.B') ev :=
+  have hHas : Module.End.HasEigenvalue (Kraus.mixedMapLM setup.A' setup.B') ev :=
     twistedTPGaugeSetup_hasEigenvalue
       (A := A) (u := u) (setup := setup) ev V hV hEig
   let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
     Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
-  have hspec : ev ∈ spectrum ℂ (Φ (Kraus.mixedTransferMap setup.A' setup.B')) := by
+  have hspec : ev ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B')) := by
     rw [AlgEquiv.spectrum_eq Φ]
     exact hHas.mem_spectrum
   have hRadGe : Kraus.mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
@@ -135,7 +135,7 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
       exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
     rw [ge_iff_le, hnorm_ev]
-    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedTransferMap setup.A' setup.B'))) _
+    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B'))) _
       (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
   have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
     modulus_one_eigenvalue_implies_gauge_of_irreducible_TP

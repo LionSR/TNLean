@@ -88,7 +88,7 @@
 \begin{theorem}[Direct-sum quasi-idempotence on every mixed corner]%
     \label{thm:mixed_transfer_quasi_idempotent_of_direct_sum}
     \lean{MPSTensor.%
-        mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul}
+        mixedMapLM_comp_self_eq_smul_of_transferMap_comp_self_eq_smul}
     \leanok
     \uses{def:mixed_transfer_rect, def:transfer_map}
     Let $(B_k)_k$ be a family of tensors and let $c\in\C$. If
@@ -123,7 +123,7 @@
 
 \begin{lemma}[Pairwise idempotence of the block transfer sum]%
     \label{lem:block_transfer_sum_idempotent_of_pairwise_mixed}
-    \lean{MPSTensor.blockTransferSum_idempotent_of_pairwise_mixedTransferMap₂}
+    \lean{MPSTensor.blockTransferSum_idempotent_of_pairwise_mixedMapLM}
     \leanok
     \uses{def:mixed_transfer_rect, lem:block_diagonal_transfer_sum_to_block}
     Let $(B_k)_k$ be a family of tensors. If every mixed transfer operator
@@ -146,7 +146,7 @@
 
 \begin{theorem}[Pairwise mixed-transfer criterion for a direct sum]%
     \label{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
-    \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem}
+    \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem}
     \leanok
     \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect, lem:block_diagonal_transfer_sum_to_block, lem:block_transfer_sum_idempotent_of_pairwise_mixed}
     Suppose every bond dimension is positive. The transfer map of
@@ -189,7 +189,7 @@
 
 \begin{lemma}[Scaling of a rectangular mixed transfer operator]%
     \label{lem:mixed_transfer_rect_smul}
-    \lean{Kraus.mixedTransferMap₂_smul}
+    \lean{Kraus.mixedMapLM_smul}
     \leanok
     \uses{def:mixed_transfer_rect}
     For complex scalars $c,e$ and tensors $A,B$ of possibly different bond
@@ -319,7 +319,7 @@
 
 \begin{lemma}[Covariance of the mixed transfer operator]%
     \label{lem:mixed_transfer_conj_apply}
-    \lean{MPSTensor.mixedTransferMap₂_conj_apply}
+    \lean{MPSTensor.mixedMapLM_conj_apply}
     \leanok
     \uses{def:mixed_transfer_rect}
     For decompositions $A^i=X_AD_AU^iX_A^{-1}$ and
@@ -340,7 +340,7 @@
 
 \begin{lemma}[Vanishing after removing the diagonal factors]%
     \label{lem:mixed_transfer_eq_zero_of_conj}
-    \lean{MPSTensor.mixedTransferMap₂_eq_zero_of_conj}
+    \lean{MPSTensor.mixedMapLM_eq_zero_of_conj}
     \leanok
     \uses{def:mixed_transfer_rect}
     With decompositions $A^i=X_AD_AU^iX_A^{-1}$ and
@@ -356,7 +356,7 @@
 
 \begin{lemma}[Entrywise cross-block isometry sum]%
     \label{lem:residual_isometry_entry}
-    \lean{MPSTensor.residual_isometry_entry_of_mixedTransferMap₂_eq_zero}
+    \lean{MPSTensor.residual_isometry_entry_of_mixedMapLM_eq_zero}
     \leanok
     \uses{def:mixed_transfer_rect}
     If $\E_{U,V}=0$, then, for all virtual indices,

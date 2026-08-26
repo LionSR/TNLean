@@ -187,14 +187,14 @@ private theorem normalizedMinimalLoopTensor_eq_rotatePhysical
 
 /-- Distinct normalized minimal loop tensors have zero mixed transfer map in
 sector coordinates. -/
-private theorem normalizedMinimalLoopCoordinateTensor_mixedTransferMap₂_eq_zero_of_ne
+private theorem normalizedMinimalLoopCoordinateTensor_mixedMapLM_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight} (hlm : l ≠ m) :
-    Kraus.mixedTransferMap₂ (F.normalizedMinimalLoopCoordinateTensor l)
+    Kraus.mixedMapLM (F.normalizedMinimalLoopCoordinateTensor l)
       (F.normalizedMinimalLoopCoordinateTensor m) = 0 := by
   classical
   apply LinearMap.ext
   intro Z
-  simp only [Kraus.mixedTransferMap₂_apply, LinearMap.zero_apply]
+  simp only [Kraus.mixedMapLM_apply, LinearMap.zero_apply]
   calc
     (∑ i : Fin d, F.normalizedMinimalLoopCoordinateTensor l i * Z *
         (F.normalizedMinimalLoopCoordinateTensor m i)ᴴ) =
@@ -240,16 +240,16 @@ their Schmidt supports and the fixed-point normalization documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. The common physical
 unitary preserves the mixed transfer map, so disjoint loop-sector support gives
 the stated local orthogonality. -/
-theorem normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne
+theorem normalizedMinimalLoopTensor_mixedMapLM_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight} (hlm : l ≠ m) :
-    Kraus.mixedTransferMap₂ (F.normalizedMinimalLoopTensor l)
+    Kraus.mixedMapLM (F.normalizedMinimalLoopTensor l)
       (F.normalizedMinimalLoopTensor m) = 0 := by
   have hunitary : F.unitary * F.unitaryᴴ = 1 :=
     Unitary.mul_star_self_of_mem F.unitary_mem
   rw [F.normalizedMinimalLoopTensor_eq_rotatePhysical l,
     F.normalizedMinimalLoopTensor_eq_rotatePhysical m,
-    mixedTransferMap₂_rotatePhysical _ _ F.unitary hunitary]
-  exact F.normalizedMinimalLoopCoordinateTensor_mixedTransferMap₂_eq_zero_of_ne hlm
+    mixedMapLM_rotatePhysical _ _ F.unitary hunitary]
+  exact F.normalizedMinimalLoopCoordinateTensor_mixedMapLM_eq_zero_of_ne hlm
 
 /-- The transfer map of the minimal loop tensor in sector coordinates is a
 rank-one map on the virtual matrix algebra.

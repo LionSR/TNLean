@@ -600,12 +600,12 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
         (F.normalizedMinimalLoopTensor_isTransferIdempotent (loopOf j))
     exact (isTransferIdempotent_cast_iff hdim (P.basis j)).1 hCastRFP
   apply
-    (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+    (isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem
       P.basis).2
   intro j k
   by_cases hjk : j = k
   · subst k
-    rw [Kraus.mixedTransferMap₂_self]
+    rw [Kraus.mixedMapLM_self]
     change IsTransferIdempotent (P.basis j)
     exact hBlockRFP j
   · obtain ⟨hdimJ, hGaugeJ⟩ :=
@@ -615,17 +615,17 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
       (hPhase k).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
         (hBasisNormal k) (hLoopNormal (loopOf k))
     have hLoopZero :
-        Kraus.mixedTransferMap₂
+        Kraus.mixedMapLM
             (F.normalizedMinimalLoopTensor (loopOf j))
             (F.normalizedMinimalLoopTensor (loopOf k)) = 0 :=
-      F.normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne (hLoopOf_ne hjk)
+      F.normalizedMinimalLoopTensor_mixedMapLM_eq_zero_of_ne (hLoopOf_ne hjk)
     have hCastZero :
-        Kraus.mixedTransferMap₂
+        Kraus.mixedMapLM
             (cast (congr_arg (MPSTensor d) hdimJ) (P.basis j))
             (cast (congr_arg (MPSTensor d) hdimK) (P.basis k)) = 0 :=
-      mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv hGaugeJ hGaugeK hLoopZero
-    have hZero : Kraus.mixedTransferMap₂ (P.basis j) (P.basis k) = 0 :=
-      (mixedTransferMap₂_cast_eq_zero_iff
+      mixedMapLM_eq_zero_of_gaugePhaseEquiv hGaugeJ hGaugeK hLoopZero
+    have hZero : Kraus.mixedMapLM (P.basis j) (P.basis k) = 0 :=
+      (mixedMapLM_cast_eq_zero_iff
         hdimJ hdimK (P.basis j) (P.basis k)).1 hCastZero
     rw [hZero]
     exact IsIdempotentElem.zero
