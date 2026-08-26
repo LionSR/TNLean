@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.Peripheral.ClosureFixedPointKraus
 import QICLean.Channel.Peripheral.CyclicGroupKraus
 import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.Transfer
 
 /-!
 # Transfer-map forms of the peripheral fixed-point and cyclic-group results

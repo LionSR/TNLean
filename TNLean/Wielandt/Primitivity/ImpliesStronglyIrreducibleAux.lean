@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.EigenspaceMap
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.Transfer
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 
 /-!

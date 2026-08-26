@@ -7,7 +7,8 @@ import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import QICLean.Algebra.OperatorNormFrobenius
 import QICLean.Analysis.SpectralRadiusPowerDecay
 import QICLean.Channel.Primitive
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.MapIterate
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Overlap.Basic
 
 /-!
@@ -187,7 +188,7 @@ theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
       _ = W e c * star (W b a) := by
         rw [Matrix.mul_apply]
         simp [Matrix.single_apply]
-  rw [halfChainGram, Matrix.mul_apply, Kraus.transferMap_pow_apply' A L, Matrix.sum_apply]
+  rw [halfChainGram, Matrix.mul_apply, Kraus.mapLM_pow_apply A L, Matrix.sum_apply]
   refine Finset.sum_congr rfl fun σ _ => ?_
   rw [hmul (Kraus.evalWord A (List.ofFn σ)) p.2 p.1 q.2 q.1]
   simp [mul_comm]

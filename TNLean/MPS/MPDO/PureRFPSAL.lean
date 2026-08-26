@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PureAreaLaw
 import QICLean.Spectral.MixedTransfer
+import QICLean.Kraus.MapIterate
 import TNLean.MPS.RFP.Defs
 
 /-!
@@ -41,7 +42,7 @@ L-fold transfer map evaluated on the matrix unit e_{b₂,a₂}. -/
 theorem schmidtLeft_gram_apply (A : MPSTensor d D) (L : ℕ) (a b : Fin D × Fin D) :
     ((schmidtLeft A L)ᴴ * schmidtLeft A L) a b
       = ((Kraus.transferMap A ^ L) (Matrix.single b.2 a.2 1)) b.1 a.1 := by
-  rw [Matrix.mul_apply, Kraus.transferMap_pow_apply', Matrix.sum_apply]
+  rw [Matrix.mul_apply, Kraus.mapLM_pow_apply, Matrix.sum_apply]
   refine Finset.sum_congr rfl (fun σ _ => ?_)
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtLeft, Matrix.of_apply,
     Matrix.single_apply, RCLike.star_def, mul_ite, mul_one, mul_zero, ite_and, ite_mul,
@@ -73,7 +74,7 @@ noncomputable def schmidtRight (A : MPSTensor d D) (M : ℕ) :
 theorem schmidtRight_gram_apply (A : MPSTensor d D) (M : ℕ) (p q : Fin D × Fin D) :
     (schmidtRight A M * (schmidtRight A M)ᴴ) p q
       = ((Kraus.transferMap A ^ M) (Matrix.single p.1 q.1 1)) p.2 q.2 := by
-  rw [Matrix.mul_apply, Kraus.transferMap_pow_apply', Matrix.sum_apply]
+  rw [Matrix.mul_apply, Kraus.mapLM_pow_apply, Matrix.sum_apply]
   refine Finset.sum_congr rfl (fun σ _ => ?_)
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, schmidtRight, Matrix.of_apply,
     Matrix.single_apply, RCLike.star_def, mul_ite, mul_one, mul_zero, ite_and, ite_mul,

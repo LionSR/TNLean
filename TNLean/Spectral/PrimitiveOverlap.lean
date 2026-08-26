@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Primitive
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.Transfer
 import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.MPVOverlapTrace
 
@@ -72,7 +73,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
   -- First derive `trace((Kraus.transferMap A)^N) → 1`.
   have hTP : IsTracePreservingMap (Kraus.transferMap (d := d) (D := D) A) := by
     intro X
-    exact Kraus.trace_transferMap A X hNorm
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hNorm X
   have htrρ : Matrix.trace ρ ≠ 0 := by
     intro htr0
     exact hρ_ne ((Matrix.PosSemidef.trace_eq_zero_iff hρ_psd).1 htr0)

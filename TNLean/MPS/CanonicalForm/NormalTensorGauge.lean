@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import QICLean.Algebra.ComplexPhasePositivity
 import QICLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.Definitions
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
@@ -249,7 +250,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
   have htrace : Matrix.trace (σ * Kraus.transferMap (d := d) (D := D) A ρ) =
       Matrix.trace
         (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ * ρ) :=
-    Kraus.trace_mul_transferMap_adjoint A rfl σ ρ
+    Kraus.trace_mul_mapLM_adjoint A rfl σ ρ
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     intro htr
     exact (Matrix.PosDef.isUnit hρ).ne_zero

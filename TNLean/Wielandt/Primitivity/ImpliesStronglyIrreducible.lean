@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity
 import QICLean.Kraus.InvariantProjection
-import QICLean.Kraus.TransferChannel
 import TNLean.Wielandt.Primitivity.Definitions
 
 /-!

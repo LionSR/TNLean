@@ -1000,7 +1000,7 @@
       "title": "Trace adjointness of a transfer map",
       "label": "lem:trace_mul_transfer_map_adjoint",
       "shared_lean_declarations": [
-        "Kraus.trace_mul_transferMap_adjoint"
+        "Kraus.trace_mul_mapLM_adjoint"
       ],
       "disposition": "retained TN-facing interface",
       "justification": "The statement is trace adjointness in MPS transfer-map notation."
@@ -1011,7 +1011,7 @@
       "title": "Left-canonical transfer maps preserve trace",
       "label": "lem:trace_transfer_map_left_canonical",
       "shared_lean_declarations": [
-        "Kraus.trace_transferMap"
+        "Kraus.isTracePreservingMap_mapLM_of_isTP"
       ],
       "disposition": "retained TN-facing interface",
       "justification": "The statement is trace preservation for a left-canonical MPS tensor."

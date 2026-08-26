@@ -79,7 +79,7 @@
 
 \begin{lemma}[Trace adjointness of a transfer map]
     \label{lem:trace_mul_transfer_map_adjoint}
-    \lean{Kraus.trace_mul_transferMap_adjoint}
+    \lean{Kraus.trace_mul_mapLM_adjoint}
     \leanok
     \uses{def:transfer_map}
     The trace-adjoint identity of
@@ -112,7 +112,7 @@
 
 \begin{lemma}[Left-canonical transfer maps preserve trace]
     \label{lem:trace_transfer_map_left_canonical}
-    \lean{Kraus.trace_transferMap}
+    \lean{Kraus.isTracePreservingMap_mapLM_of_isTP}
     \leanok
     \uses{def:transfer_map, def:left_canonical_tensor}
     If $A$ is left canonical, then, for every bond matrix $X$,

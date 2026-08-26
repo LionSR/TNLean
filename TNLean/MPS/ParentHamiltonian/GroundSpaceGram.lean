@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.FrobeniusHilbert
 import QICLean.Algebra.RectangularChoi
 import QICLean.Analysis.InjectiveRangeProjector
+import QICLean.Kraus.MapIterate
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
 import QICLean.Spectral.MixedTransfer
@@ -156,7 +157,7 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
     (WithLp.toLp 2 (groundSpaceMap A L (Matrix.single a b 1)))
     (WithLp.toLp 2 (groundSpaceMap A L (Matrix.single c e 1))) = _
   rw [EuclideanSpace.inner_toLp_toLp, Matrix.rectangularChoi_apply,
-    Kraus.transferMap_pow_apply']
+    Kraus.mapLM_pow_apply]
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
         W e c * star (W b a) := by

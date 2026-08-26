@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
 import QICLean.Kraus.Transfer
+import QICLean.Kraus.MapIterate
 import QICLean.Spectral.MixedTransfer
 
 import Mathlib.LinearAlgebra.Eigenspace.Basic
@@ -34,7 +35,7 @@ theorem transferMap_blockTensor_apply
       ((Kraus.transferMap (d := d) (D := D) A) ^ L) X := by
   classical
   -- Expand the RHS as a sum over length-`L` words.
-  rw [Kraus.transferMap_pow_apply' (A := A) (N := L) X]
+  rw [Kraus.mapLM_pow_apply (K := A) (N := L) X]
   -- Expand the LHS as a sum over blocked physical indices.
   simp only [Kraus.transferMap_apply, Kraus.blockTensor, Kraus.wordOfBlock]
   -- Reindex the blocked sum by the equivalence `Fin (blockPhysDim d L) ≃ (Fin L → Fin d)`.
