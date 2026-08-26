@@ -54,6 +54,13 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   formed a closed subgraph referenced only by one another and were removed
   (−507 Lean lines); see
   `docs/audits/2026-08-26_pre_condition_c1_bnt_route_retirement.md`.
+- **Evidence update (2026-08-26)**: the `MPS/MPU` slice contributed a
+  further three zero-reference declarations — the canonical-form bridge
+  from the stronger normal-block data to the weaker MPU predicate, and one
+  orphan physical-slice identity for identity-ancilla attachment. The
+  bridge's target predicate is already used directly downstream, so it has
+  no replacement; see
+  `docs/audits/2026-08-26_mpu_duplicate_and_dead_surface.md`.
 
 ### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
 - **Status**: open (#4565)

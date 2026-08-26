@@ -106,16 +106,6 @@ private theorem HasThreeForm.residual_mul
   · right; right
     exact ⟨⟨(a : B) * b, A.mul_mem a.property b.property⟩, c, by simp [mul_assoc]⟩
 
-private theorem pow_eq_self_of_pos {E : B} (hE : E * E = E)
-    {N : ℕ} (hN : 0 < N) : E ^ N = E := by
-  obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
-  clear hN
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      rw [pow_succ, ih, hE]
-
-
 private theorem list_prod_mem_of_ne_nil
     (A : NonUnitalSubalgebra R B) (l : List B) (hne : l ≠ [])
     (hl : ∀ x ∈ l, x ∈ A) : l.prod ∈ A := by
@@ -171,7 +161,7 @@ private theorem ordered_option_word_classification
             exact ⟨[a], by simp, by simp⟩
           · right; right
             have hpos : 0 < l.length := List.length_pos_iff.mpr hl
-            have hpow : E ^ l.length = E := pow_eq_self_of_pos hE hpos
+            have hpow : E ^ l.length = E := IsIdempotentElem.pow_eq hE hpos.ne'
             rw [List.map_cons, List.prod_cons, hprod, hpow]
             right; left
             exact ⟨a, rfl⟩
@@ -209,7 +199,7 @@ theorem ordered_prod_smul_projector_add_sub_mem_threeFormSubmodule
       _ = (∏ k, c k) • (List.ofFn fun _ : Fin N ↦ E).prod :=
         List.prod_ofFn_smul c (fun _ ↦ E)
       _ = (∏ k, c k) • E := by
-        rw [List.ofFn_const, List.prod_replicate, pow_eq_self_of_pos hE hN]
+        rw [List.ofFn_const, List.prod_replicate, IsIdempotentElem.pow_eq hE hN.ne']
   rw [heword, add_sub_cancel_left]
   apply Submodule.sum_mem
   intro choice hchoice
@@ -327,19 +317,6 @@ theorem IsMPU.normalizedDiagonal_mul_mem_residualAlgebra_mul_normalizedDiagonal_
     | smul c x _ hx => simp [hx]
   exact hspan _ hA
 
-private theorem doubleLayer_entry_eq_diagonal_add_residual
-    [NeZero d] (U : MPOTensor d D) (i j : Fin d) :
-    doubleLayerTensor U i j =
-      (if i = j then (1 : ℂ) else 0) • normalizedDiagonal (doubleLayerTensor U) +
-        residualSlice (doubleLayerTensor U) (Matrix.single j i 1) := by
-  rw [residualSlice, contractPhysical_single]
-  by_cases hij : i = j
-  · subst j
-    rw [ite_eq_left rfl, Matrix.trace_single_eq_same]
-    simp
-  · rw [ite_eq_right hij, Matrix.trace_single_eq_of_ne j i (1 : ℂ) (Ne.symm hij)]
-    simp
-
 private theorem diagonal_coeff_prod_eq
     {N d : ℕ} (I J : Fin (Kraus.blockPhysDim d N)) :
     (∏ k : Fin N, if Kraus.decodeBlock d N I k = Kraus.decodeBlock d N J k
@@ -393,7 +370,7 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
     apply congrArg List.ofFn
     funext k
     simpa [E, c, S, σ, τ] using
-      doubleLayer_entry_eq_diagonal_add_residual U (σ k) (τ k)
+      entry_eq_diagonal_add_residual (doubleLayerTensor U) (σ k) (τ k)
   have hc : (∏ k, c k) = if I = J then 1 else 0 :=
     diagonal_coeff_prod_eq I J
   have htrace : Matrix.trace (Matrix.single J I (1 : ℂ)) =
@@ -406,7 +383,7 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
   rw [doubleLayerTensor_blockTensor, residualSlice, contractPhysical_single,
     normalizedDiagonal_blockTensor, hentry, htrace, ← hc]
   change _ - (∏ k, c k) • E ^ (D * D) ∈ _
-  rw [pow_eq_self_of_pos hEidem hN]
+  rw [IsIdempotentElem.pow_eq hEidem hN.ne']
   exact hword
 
 /-- Residual slicing is linear in the physical argument.

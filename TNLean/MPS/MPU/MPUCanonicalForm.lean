@@ -75,42 +75,4 @@ Source: arXiv:1703.09188, lines 259--267. -/
 def IsMPUCanonicalForm (A : MPSTensor d D) : Prop :=
   Nonempty (MPUCanonicalFormData A)
 
-namespace CPSVCanonicalFormData
-
-/-- The stronger CPSV normal-block data gives MPU canonical-form data by
-forgetting peripheral-spectrum uniqueness and retaining the reconstruction.
-
-There is intentionally no converse: MPU canonical blocks may be periodic.
-
-Source: arXiv:1703.09188, lines 259--267. -/
-def toMPUCanonicalFormData {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
-    MPUCanonicalFormData A where
-  r := data.r
-  dim := data.dim
-  dim_pos := data.dim_pos
-  weights := data.weights
-  blocks := data.blocks
-  blocks_canonical := fun k ↦
-    ⟨(data.blocks_normal k).no_invariant_proj,
-      (data.blocks_normal k).spectral_radius_one⟩
-  total_dim_le := data.total_dim_le
-  ambient_coisometry := data.ambient_coisometry
-  coisometric := data.coisometric
-  reconstruct := data.reconstruct
-
-end CPSVCanonicalFormData
-
-namespace IsCPSVCanonicalForm
-
-/-- The CPSV normal-block canonical form implies the weaker MPU canonical form.
-No converse is asserted because the MPU predicate permits periodic blocks.
-
-Source: arXiv:1703.09188, lines 259--267. -/
-theorem toIsMPUCanonicalForm {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
-    IsMPUCanonicalForm A := by
-  obtain ⟨data⟩ := hA
-  exact ⟨data.toMPUCanonicalFormData⟩
-
-end IsCPSVCanonicalForm
-
 end MPSTensor
