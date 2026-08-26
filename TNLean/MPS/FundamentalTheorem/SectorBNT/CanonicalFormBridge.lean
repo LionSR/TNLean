@@ -168,10 +168,20 @@ theorem exists_isBNTCanonicalForm_exact
     intro k
     exact hGauge k
   obtain ⟨Y, hY⟩ := hDirectGauge
+  let preparedData : PreparedBNTBlocks d :=
+    { r := data.r
+      dim := data.dim
+      weight := data.weights
+      blocks := prepared
+      dim_pos := data.dim_pos
+      leftCanonical := hTP
+      primitive := hPrim
+      irreducible := hIrr
+      weight_ne_zero := data.weights_ne_zero }
   obtain ⟨P, hBNT, hTotal, e, X, hExact⟩ :=
-    exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
-      data.weights prepared data.dim_pos hTP hPrim hIrr data.weights_ne_zero
-      hNorm.weight_norm_le_one (hNorm.weight_unit_exists hA)
+    preparedData.exists_isBNTCanonicalForm_exact
+      { norm_le_one := hNorm.weight_norm_le_one
+        unit_exists := hNorm.weight_unit_exists hA }
   let Q : Matrix (Fin P.totalDim) (Fin (∑ k, data.dim k)) ℂ :=
     equivalenceCoisometry e
   let W := transportGL e Y

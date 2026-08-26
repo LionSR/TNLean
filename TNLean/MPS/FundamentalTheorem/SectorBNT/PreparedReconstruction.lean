@@ -13,7 +13,9 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 This module strengthens the prepared-block SectorBNT supplier from positive-length
 matrix-product-vector equality to a letterwise reconstruction. It retains the precise
 phase-class scalar, assembles the resulting block gauges, and reindexes the heterogeneous
-block sum by an equivalence of flattened bond coordinates.
+block sum by an equivalence of flattened bond coordinates. The bundled
+`PreparedBNTBlocks.exists_isBNTCanonicalForm_exact` method exposes this reconstruction
+without repeating the prepared family and its invariants.
 -/
 
 open scoped Matrix BigOperators
@@ -250,5 +252,19 @@ theorem exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
   rw [hX]
   exact toTensorFromBlocks_eq_reindex_of_equiv μ blocks P.flatWeight gaugedFlat
     blockEquiv hBlockDim hBlock i
+
+/-- Normalized prepared blocks have an exact, dimension-preserving BNT reconstruction. -/
+theorem PreparedBNTBlocks.exists_isBNTCanonicalForm_exact
+    (data : PreparedBNTBlocks d) (hNorm : data.IsWeightNormalized) :
+    ∃ P : SectorDecomposition d,
+      IsBNTCanonicalForm P ∧ P.totalDim = ∑ k : Fin data.r, data.dim k ∧
+      ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin data.r, data.dim k),
+      ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
+        toTensorFromBlocks (d := d) data.weight data.blocks i =
+          Matrix.reindex e e
+            ((X : Matrix _ _ ℂ) * P.toTensor i * (↑(X⁻¹) : Matrix _ _ ℂ)) :=
+  exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks
+    data.weight data.blocks data.dim_pos data.leftCanonical data.primitive data.irreducible
+      data.weight_ne_zero hNorm.norm_le_one hNorm.unit_exists
 
 end MPSTensor
