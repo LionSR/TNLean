@@ -304,12 +304,10 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** three occurrences across `Channel/Irreducible/FromSpectral.lean`,
   `PerronFrobenius.lean`, and `SpectralRadius.lean` before promotion
   (2026-08-09).
-- **Abstraction:** `Kraus.trace_mul_transferMap_adjoint` in
-  `QICLean/Channel/Irreducible/KrausSetup.lean` (QICLean dependency).
-- **Notes:** transfer-map callers use the canonical `Kraus.isChannel_mapLM`
-  theorem from `QICLean/Channel/KrausMap.lean` directly, relying on the
-  definitional equality with `Kraus.transferMap`. The transfer-specific
-  trace-adjoint compatibility theorem remains available for its distinct result.
+- **Abstraction:** `Kraus.trace_mul_mapLM_adjoint` in
+  `QICLean/Channel/KrausMap.lean` (QICLean dependency).
+- **Notes:** transfer-map callers use this canonical finite-Kraus theorem directly,
+  relying on the definitional equality of `Kraus.mapLM` and `Kraus.transferMap`.
 
 ### matrix-family irreducibility in transfer-map notation — promoted
 - **Pattern:** convert between irreducibility of a finite matrix family and

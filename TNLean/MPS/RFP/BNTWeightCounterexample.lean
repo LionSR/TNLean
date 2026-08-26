@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
+import QICLean.Kraus.MapIterate
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
 /-!
@@ -84,7 +85,7 @@ private theorem physicalObservableTransfer_one
   intro X
   change physicalObservableTransfer A L O X =
     O (0 : Fin L → Fin 1) (0 : Fin L → Fin 1) • ((Kraus.transferMap A) ^ L) X
-  rw [Kraus.transferMap_pow_apply']
+  rw [Kraus.mapLM_pow_apply]
   simp only [physicalObservableTransfer, Finset.univ_unique, Pi.default_def,
     Fin.default_eq_zero, Fin.isValue, Finset.sum_singleton, List.ofFn_const]
   rw [Matrix.mul_assoc]

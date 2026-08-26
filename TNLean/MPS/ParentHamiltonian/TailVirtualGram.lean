@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.MapIterate
+import QICLean.Kraus.Transfer
 import TNLean.MPS.ParentHamiltonian.GramConvergence
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 
@@ -46,7 +48,7 @@ theorem tailVirtualMapES_adjoint_comp_self_apply (A : MPSTensor d D) (K : ℕ)
   have hsum : (∑ u : Cfg d K, Kraus.evalWord A (List.ofFn u) * (Kraus.evalWord A (List.ofFn u))ᴴ) =
       ((Kraus.transferMap (d := d) (D := D) A) ^ K) 1 := by
     symm
-    simpa only [Matrix.mul_one] using Kraus.transferMap_pow_apply' A K 1
+    simpa only [Matrix.mul_one] using Kraus.mapLM_pow_apply A K 1
   simpa only [Matrix.mul_assoc, Matrix.mul_sum] using
     congrArg (fun M => Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (X * M)) hsum
 
@@ -142,7 +144,7 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
   let T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N
   have hTP : IsTracePreservingMap E := by
     intro X
-    exact Kraus.trace_transferMap A X hP.norm
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm X
   have hgap : spectralRadius ℂ T < 1 := by
     dsimp only [T, N, E, P]
     convert hP.complementary_transfer_map_gap using 1

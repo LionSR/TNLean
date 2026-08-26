@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.OperatorNormFrobenius
 import QICLean.Analysis.SpectralRadiusPowerDecay
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.Transfer
 import TNLean.MPS.ParentHamiltonian.GroundSpaceGram
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 
@@ -132,7 +133,7 @@ theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
       ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
   have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
     intro X
-    exact Kraus.trace_transferMap A X hP.norm
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm X
   exact MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 
@@ -153,7 +154,7 @@ theorem IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
       ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
   have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
     intro X
-    exact Kraus.trace_transferMap A X hP.norm
+    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm X
   exact MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
 

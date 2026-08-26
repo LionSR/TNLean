@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.MapIterate
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.Transfer
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 
 /-!
@@ -74,7 +74,7 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
   push Not at hall
   have hzero : ∀ σ : Fin n → Fin d, Kraus.evalWord A (List.ofFn σ) = 0 := hall
   have hsum : ((Kraus.transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by
-    rw [Kraus.transferMap_pow_apply']
+    rw [Kraus.mapLM_pow_apply]
     refine Finset.sum_eq_zero ?_
     intro σ _
     rw [hzero σ, Matrix.zero_mul, Matrix.zero_mul]

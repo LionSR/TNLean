@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.ComplexPhasePositivity
 import QICLean.Algebra.FinSum
 import TNLean.MPS.Core.MultiBlock
-import QICLean.Kraus.TransferChannel
+import QICLean.Kraus.Transfer
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.SharedInfra.Scaling

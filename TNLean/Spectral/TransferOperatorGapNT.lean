@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.MixedMap.Gap
 import QICLean.Kraus.InvariantProjection
-import QICLean.Kraus.TransferChannel
 import QICLean.Spectral.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecayRect
 import QICLean.Spectral.TransferOperatorGapNormalized

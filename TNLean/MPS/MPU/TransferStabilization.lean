@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixStabilization
 import QICLean.Algebra.MatrixPosDefTransport
-import QICLean.Kraus.TransferChannel
+import QICLean.Channel.KrausMap
+import QICLean.Kraus.Transfer
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.TransferMatrix
 
@@ -228,7 +229,7 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
       (transferMatrix (Kraus.transferMap U.normalizedFlattening)) =
         (1 : Matrix (Fin D) (Fin D) ℂ).vec :=
     vecMul_vec_one_transferMatrix_eq_of_trace_preserving _
-      (fun X => Kraus.trace_transferMap U.normalizedFlattening X hAleft)
+      (fun X => Kraus.isTracePreservingMap_mapLM_of_isTP U.normalizedFlattening hAleft X)
   have hright : transferMatrix (Kraus.transferMap U.normalizedFlattening) *ᵥ ρ.vec =
       ρ.vec := by
     rw [transferMatrix_mulVec_eq, hρfix]
