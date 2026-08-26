@@ -11,5 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.BNT.Construction
+import TNLean.MPS.BNT.DirectSumSelectors
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
 import TNLean.MPS.BNT.Separation
