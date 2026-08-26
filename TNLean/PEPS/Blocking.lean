@@ -647,14 +647,18 @@ private theorem edge_ne_of_middle_incident (e : Edge G) {v : V}
   · exact hvne.2 (hright.symm.trans (congrArg (fun f : Edge G => f.1.2) hie))
 
 omit [Fintype V] [DecidableRel G.Adj] in
-private theorem otherLeft_edge_ne (e : Edge G)
+/-- An incident edge other than the distinguished left incidence is not the
+distinguished edge. -/
+theorem otherLeft_edge_ne (e : Edge G)
     (ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e)) :
     ie.1.1 ≠ e := by
   intro hie
   exact ie.2 (Subtype.ext hie)
 
 omit [Fintype V] [DecidableRel G.Adj] in
-private theorem otherRight_edge_ne (e : Edge G)
+/-- An incident edge other than the distinguished right incidence is not the
+distinguished edge. -/
+theorem otherRight_edge_ne (e : Edge G)
     (ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e)) :
     ie.1.1 ≠ e := by
   intro hie

@@ -61,6 +61,13 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   bridge's target predicate is already used directly downstream, so it has
   no replacement; see
   `docs/audits/2026-08-26_mpu_duplicate_and_dead_surface.md`.
+- **Evidence update (2026-08-26)**: the PEPS subdirectories contributed two
+  more zero-reference declarations — the complement-vertex distinctness
+  restatement of an existing `@[simp]` iff, and the local tensor evaluation
+  whose only occurrence was its own definition. The latter also owned a
+  blueprint definition node that nothing cited, so the node was deleted
+  rather than redirected; see
+  `docs/audits/2026-08-26_peps_forwarders_and_mirrors.md`.
 
 ### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
 - **Status**: open (#4565)

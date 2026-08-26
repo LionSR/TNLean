@@ -54,11 +54,6 @@ omit [DecidableRel G.Adj] in
     v ∉ vertexComplementVertices (V := V) v := by
   simp [vertexComplementVertices]
 
-omit [DecidableRel G.Adj] in
-/-- A complement vertex of `v` is distinct from `v`. -/
-theorem complementVertex_ne (v : V) {w : V} (hw : w ∈ vertexComplementVertices (V := V) v) :
-    w ≠ v := (mem_vertexComplementVertices_iff (V := V) v w).mp hw
-
 /-! ### The vertex-complement tensor family
 
 The complement region $V\setminus\{v\}$ is contracted over a global virtual
@@ -108,26 +103,6 @@ noncomputable def vertexComplementTensorFamily (A : Tensor G d) (v : V) :
 /-- Injectivity of the vertex-complement tensor family. -/
 def VertexComplementTensorInjective (A : Tensor G d) (v : V) : Prop :=
   LinearIndependent ℂ (vertexComplementTensorFamily (G := G) A v)
-
-/-- The one-sided inverse of an injective tensor at a single vertex: a
-coefficient family on the local virtual configurations at `v` that contracts to
-the zero physical vector vanishes.
-
-This is the explicit-summation form of injectivity of the local tensor map at
-`v`. It is the per-vertex one-sided-inverse fact of the source (the diagram at
-`Papers/1804.04964/paper_normal.tex` line 203, equivalent to the existence of
-the one-sided inverse at lines 205--250). -/
-theorem IsVertexInjective.localCoeff_eq_zero_of_contract_zero {A : Tensor G d}
-    (hA : IsVertexInjective A) (v : V) (R : LocalVirtualConfig A v → ℂ)
-    (hR : ∀ τ : Fin d, ∑ η : LocalVirtualConfig A v, R η • A.component v η τ = 0) :
-    R = 0 := by
-  have hzero : localTensorMap A v R = 0 := by
-    funext τ
-    simpa [localTensorMap, Fintype.linearCombination_apply, Finset.sum_apply,
-      Pi.smul_apply, smul_eq_mul] using hR τ
-  have hinj := hA.localTensorMap_injective v
-  have h0 : localTensorMap A v R = localTensorMap A v 0 := by rw [hzero, map_zero]
-  exact hinj h0
 
 end PEPS
 end TNLean

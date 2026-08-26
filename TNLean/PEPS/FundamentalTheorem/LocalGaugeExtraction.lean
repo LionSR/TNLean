@@ -39,17 +39,6 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 /-! ### Local gauge extraction -/
 
-/-- The local tensor evaluated at vertex `v` with virtual-index weighting `f`.
-
-This computes `∑_η (∏_{ie} f(ie)(η(ie))) · A_v(η, σ)`. The map is
-*multilinear* in the components of `f` (one factor per incident edge), not
-linear in the full tuple — hence this is a plain function, not a `LinearMap`. -/
-noncomputable def localTensorEval (A : Tensor G d) (v : V)
-    (f : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1) → ℂ)
-    (σ : Fin d) : ℂ :=
-  ∑ η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
-    (∏ ie : IncidentEdge G v, f ie (η ie)) * A.component v η σ
-
 /-- Under the sharper local hypothesis `HasFactorizedLocalGauge`, one obtains a
 factorized local gauge relation at `v`.
 
