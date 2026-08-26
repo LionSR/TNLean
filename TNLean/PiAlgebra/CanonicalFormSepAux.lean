@@ -4,9 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.RepeatedWord
-import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
-import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
 import QICLean.QPF.Assembly
 import TNLean.MPS.CanonicalForm.Reduction

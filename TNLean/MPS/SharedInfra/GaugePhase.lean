@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
-import TNLean.Spectral.MPVOverlapDecay
+import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
 
 import Mathlib.Analysis.Real.Sqrt

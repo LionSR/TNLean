@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.Primitive
 import QICLean.Channel.KrausMap
 import QICLean.Kraus.Transfer
-import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.MPVOverlapTrace
 
 import Mathlib.Analysis.Matrix.PosDef

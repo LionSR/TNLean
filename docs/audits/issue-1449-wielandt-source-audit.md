@@ -117,6 +117,21 @@ Blueprint declaration links now use the QICLean names directly.
 | `MPSTensor.IsPrimitiveMPS.fixedPoint_is_fixed` | `Kraus.HasComplementaryFixedPointGap.fixedPoint_is_fixed` |
 | `MPSTensor.IsPrimitiveMPS.complementary_transfer_map_gap` | `Kraus.HasComplementaryFixedPointGap.complementary_transfer_map_gap` |
 
+### Rectangular-span and primitivity forward migration (2026-08-26)
+
+Three further MPS-facing forwards were retired in favor of their QICLean owners.
+The inventory row above naming `RectangularSpan.Basic` as the home of
+`wielandt_lemma2b_conditional` is superseded by this table.
+
+| Removed TNLean declaration | QICLean replacement |
+|---|---|
+| `MPSTensor.rectSpan_nilpIndex_finrank_constant'` | `Kraus.rectSpan_nilpIndex_finrank_constant'` |
+| `MPSTensor.vectorSpreadSpan_eq_top_of_wordSpan_eq_top` | `Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top` |
+| `MPSTensor.wielandt_lemma2b_conditional` | `Kraus.wielandt_lemma2b_conditional` |
+
+The consumer migration and the retained-module rationale are recorded in
+`docs/audits/2026-08-26_wielandt_qiclean_forwards.md`.
+
 ### Wielandt declarations independent of the MPS development
 
 These are the standalone Wielandt inequality declarations:

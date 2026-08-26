@@ -1651,10 +1651,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   letI : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
   letI : NormedAlgebra ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedAlgebra
   ```
-- **Seen:** 5 occurrences (`TNLean/MPS/RFP/BNTOrthogonality.lean:423`,
-  `TNLean/Spectral/MPVOverlapDecay.lean:174`,
-  `TNLean/Spectral/PrimitiveOverlap.lean:101`,
-  `TNLean/Spectral/TransferOperatorGap.lean:459`, +1).
+- **Seen:** 4 occurrences (`TNLean/Spectral/QuantitativeGap.lean:94`,
+  `TNLean/Spectral/MPVOverlapDecayRect.lean:48`,
+  `TNLean/MPS/RFP/BNTOrthogonality.lean:453`,
+  `TNLean/MPS/Symmetry/StringOrderDefs.lean:230`, the last with the carrier
+  spelled out instead of abbreviated).
 - **Abstraction (proposed):** not a tactic — investigate why these instances
   need `letI` at all (likely an instance-resolution gap); either fix the
   underlying instance visibility once in a shared file, or provide a

@@ -23,16 +23,6 @@ namespace MPSTensor
 open Module Matrix Wielandt
 variable {d D : ℕ}
 
-/-- Compatibility restatement of generic eventual finrank constancy. -/
-theorem rectSpan_nilpIndex_finrank_constant'
-    (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)
-    (hfin : finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) =
-      finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A (n + 1))) :
-    ∀ m, n ≤ m →
-      finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A m) =
-        finrank ℂ (Kraus.rectSpan ((A i₀) ^ nilpIndex (toLin' (A i₀))) A n) :=
-  Kraus.rectSpan_nilpIndex_finrank_constant' A i₀ n hfin
-
 /-- Normality rules out stabilization below the maximal rectangular-span dimension. -/
 theorem rectSpan_nilpIndex_strict_growth_of_isNormal
     (A : MPSTensor d D) (i₀ : Fin d) (hN : Kraus.IsNormal A) (n : ℕ)
