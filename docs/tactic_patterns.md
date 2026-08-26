@@ -315,9 +315,8 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** convert between irreducibility of a finite matrix family and
   irreducibility of its MPS transfer map by passing through the definitionally equal `Kraus.mapLM`.
 - **Seen:** nine forward conversions and three converse conversions across
-  `MPS/Irreducible/FormII.lean`, `Spectral/PeripheralToTransferMapGap.lean`,
-  `Spectral/TransferOperatorGap{NT,Injective}.lean`, and
-  `Wielandt/Primitivity/{PrimitiveBridge,ToNormal}.lean` before promotion
+  `MPS/Irreducible/FormII.lean`, `Spectral/TransferOperatorGap{NT,Injective}.lean`,
+  and `Wielandt/Primitivity/{PrimitiveBridge,ToNormal}.lean` before promotion
   (2026-08-20).
 - **Abstraction:**
   `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` and

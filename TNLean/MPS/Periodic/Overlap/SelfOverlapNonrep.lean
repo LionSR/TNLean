@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.CanonicalForm.CyclicSectors.FixedAdjoint
-import TNLean.MPS.Overlap.PeripheralToTransferMapGap
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho
 import QICLean.Channel.Peripheral.PeriodicityRemoval
 import QICLean.QPF.Assembly
@@ -221,7 +221,7 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     rw [hW_def, Matrix.trace_sum]
     exact Finset.sum_eq_zero fun t _ => htrEt (t : ℕ)
   have hW_zero : W = 0 :=
-    transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible A hP.irreducible
+    Kraus.mapLM_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible A hP.irreducible
       hNorm W hW_fix hW_tr
   -- Step 3d: `U = P u * W * P v`, because only the `t = 0` term survives the
   -- compression to the `(u, v)` block.

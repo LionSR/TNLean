@@ -45,6 +45,6 @@ theorem isIrreducibleTensor_of_isPrimitiveMPS_of_posDef
     (hPD : ρ.PosDef) :
     Kraus.IsIrreducibleFamily A :=
   Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
-    (isIrreducibleMap_of_isPrimitiveMPS_of_posDef hPrim hPD)
+    (hPrim.isIrreducibleMap_of_posDef hPD)
 
 end MPSTensor

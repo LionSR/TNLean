@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.PrimitivityBridge
-import TNLean.Spectral.PeripheralToTransferMapGap
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 
 /-!
 # Peripheral primitivity → matrix-product-vector overlap convergence
 
 This file draws the state-level consequence of the channel-level connection built in
-`TNLean.Spectral.PeripheralToTransferMapGap`: peripheral primitivity of the transfer map of
-an injective (or irreducible) normalized tensor `A` implies that the self-overlap
-`mpvOverlap A A N` converges to `1` as `N → ∞`.
+`QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`: peripheral primitivity of the
+finite Kraus map of an injective (or irreducible) normalized tensor `A` implies that the
+self-overlap `mpvOverlap A A N` converges to `1` as `N → ∞`.
 
 ## Main results
 
@@ -21,7 +21,7 @@ an injective (or irreducible) normalized tensor `A` implies that the self-overla
 
 Both are immediate corollaries of `MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one`
 (`TNLean.MPS.Structure.PrimitivityBridge`) applied to the complementary transfer-map gap
-established in `TNLean.Spectral.PeripheralToTransferMapGap`.
+established in `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`.
 -/
 
 open scoped Matrix BigOperators
@@ -39,7 +39,7 @@ theorem overlap_tendsto_one_of_peripheralPrimitive
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   have hP : MPSTensor.HasPrimitiveFixedPoint A :=
-    hasPrimitiveFixedPoint_of_peripheralPrimitive (A := A) hInj hNorm hPrim
+    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive A hInj hNorm hPrim
   simpa only using (MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one (A := A) hP)
 
 /-- As a corollary, peripheral primitivity plus irreducibility implies
@@ -53,7 +53,7 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   have hP : MPSTensor.HasPrimitiveFixedPoint A :=
-    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible (A := A) hIrr hNorm hPrim
+    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hNorm hPrim
   simpa only using (MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one (A := A) hP)
 
 end MPSTensor

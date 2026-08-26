@@ -44,7 +44,7 @@ The proof strategy avoids the "blocked period" issue entirely by working directl
 with the PSD fixed point `ρ` of the original transfer map:
 
 1. From TP + IsPrimitive + Kraus.IsIrreducibleFamily → `IsPrimitiveMPS A ρ` with `ρ.PosDef`
-   (via `hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` +
+   (via `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` +
     `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily`)
 2. `ρ` is also fixed by `Kraus.transferMap (blockTensor A P)` (since
    `Kraus.transferMap (blockTensor A P) = E^P` and `E ρ = ρ` implies `E^P ρ = ρ`)
@@ -79,7 +79,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     Kraus.IsIrreducibleFamily (blockTensor A P) := by
   -- Step 1: Obtain IsPrimitiveMPS A ρ with ρ.PosDef.
   obtain ⟨ρ, hPrimMPS⟩ :=
-    hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
+    Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   have hPD : ρ.PosDef :=
     hPrimMPS.posDef_of_isIrreducibleFamily hIrr
   -- Step 2: Blocked tensor is TP.

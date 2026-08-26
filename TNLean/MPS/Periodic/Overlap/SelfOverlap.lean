@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Periodic.Overlap.SelfOverlapSetup
 import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
 
@@ -285,8 +286,8 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
       primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
         A hP blocks hBlocks_lc hBlocks_mpv hCyclic u (hNondeg u)
     obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htr, hgap⟩ :=
-      spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
-        (A := blocks u) hIrr (hBlocks_lc u) hPrim
+      Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
+        (blocks u) hIrr (hBlocks_lc u) hPrim
     have hSelf :
         Tendsto
           (fun k =>

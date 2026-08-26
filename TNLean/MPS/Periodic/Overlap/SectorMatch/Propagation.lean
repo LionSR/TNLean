@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 
 /-!
@@ -40,8 +41,8 @@ private lemma selfOverlap_tendsto_one_of_irreducible_primitive_TP
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, _htr, hgap⟩ :=
-    spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
-      (A := A) hIrr hNorm hPrim
+    Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
+      A hIrr hNorm hPrim
   exact mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
     A hNorm ρ hρ_fix hρ_ne hρ_psd (by simpa using hgap)
 

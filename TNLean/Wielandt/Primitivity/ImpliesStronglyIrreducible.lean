@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity
+import QICLean.Kraus.InvariantProjection
 import QICLean.Kraus.TransferChannel
 import TNLean.Wielandt.Primitivity.Definitions
 
@@ -12,7 +13,7 @@ import TNLean.Wielandt.Primitivity.Definitions
 
 This file states the positivity and irreducibility consequences of fixed-length
 vector spreading in transfer-map notation. Their finite-Kraus proofs are provided
-by `TNLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity`.
+by `QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity`.
 
 These results form the first part of Proposition 3, direction (a) to (c), of
 Sanz, Pérez-García, Wolf, and Cirac, arXiv:0909.5347.

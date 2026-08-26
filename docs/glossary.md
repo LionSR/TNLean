@@ -175,10 +175,10 @@ normalizations.
 - **Declaration:**
   `MPSTensor.IsPeripherallyPrimitive (A : MPSTensor d D) : Prop`.
 - **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** a thin MPS wrapper around
+- **Meaning:** a reducible MPS terminology alias for
   `_root_.IsPrimitive (Kraus.transferMap A)`.
 - **Source:** Wolf §6.3, Theorem 6.7, and arXiv:0909.5347 Proposition 3(c).
-- **Sanctioned bridges:** `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive` and
+- **Sanctioned bridge:**
   `MPSTensor.isPeripherallyPrimitive_of_isPrimitivePaper`.
 - **Caveat:** the last bridge requires `[NeZero D]` and the left-canonical
   normalization `∑ i, (A i)ᴴ * A i = 1`.
@@ -236,9 +236,8 @@ normalizations.
   convergence route; compare Wolf §6.3, Theorem 6.7, and the convergence
   consequences of arXiv:0909.5347 Proposition 3.
 - **Sanctioned bridges:**
-  `MPSTensor.IsPrimitiveMPS.isPeripherallyPrimitive`,
-  `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive`,
-  `MPSTensor.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`,
+  QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive`,
+  `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`,
   `MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper`, and
   `MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef`.
 - **Caveat:** every listed bridge requires `[NeZero D]`. The two bridges from
