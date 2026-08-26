@@ -229,6 +229,7 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
         if decl.kind != "structure":
             continue
         block_comment_depth = 0
+        field_indent: int | None = None
         for line_no in range(decl.line + 1, decl.end_line + 1):
             raw = lines[line_no - 1]
             code_parts: list[str] = []
@@ -261,6 +262,14 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
             code = "".join(code_parts)
             match = _LEAN_STRUCTURE_FIELD_RE.match(code)
             if not match:
+                continue
+            indent = len(code) - len(code.lstrip())
+            if field_indent is None:
+                field_indent = indent
+            elif indent != field_indent:
+                # Continuations of a field type may contain local binders such
+                # as `letI : NeZero N`; only declarations aligned with the
+                # structure's first field generate projections.
                 continue
             field_name = match.group(1)
             field_decls.append(
