@@ -376,6 +376,13 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
 
 end MPSTensor
 
+/-! ### Channel-generic non-injectivity criteria
+
+The two theorems below quantify over a finite Kraus family and a linear
+functional, with no matrix-product-state content. Their intended home is
+QICLean's Kraus injectivity file, beside the word-span API; the migration is
+tracked in issue #7216. -/
+
 namespace Kraus
 
 variable {d D : ℕ}

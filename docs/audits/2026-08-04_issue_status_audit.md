@@ -1,5 +1,12 @@
 # Issue status audit — 2026-08-04
 
+**Partially superseded 2026-08-26.** The #2616 row below states that
+`torusHorizontalReferenceBlockingDatum` feeds the unconditional normal-torus
+fundamental theorem. That is false: the datum reached no such consumer, and
+the module defining it has since been deleted. See
+`2026-08-26_peps_torus_singleton_blocking_deletion.md`, section "Correction to
+an earlier audit". The rest of this note stands as a dated snapshot.
+
 Scope: all 145 open GitHub issues. Method: per-issue dossiers (body +
 stale-citation findings from `scripts/audit_stale_issues.py` against current
 main), then a per-issue repo-state deep dive (sorry sites, declaration

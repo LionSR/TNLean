@@ -406,15 +406,10 @@ abstracted — record why, so it is not re-proposed).
   The original proofs used `rw`, `simp_rw`, or `simp only` with
   `Finset.mul_sum`, a `Finset.sum_congr` binder (tactic, functional, or
   semicolon form), and `ring`.
-- **Seen:** 37 directly equivalent occurrences across 27 files:
-  `TNLean/Algebra/PerronFrobenius/PerronVector.lean`,
-  `TNLean/Analysis/MarginalSupport.lean`,
-  `TNLean/Channel/BreuerHallIndecomposable.lean`,
-  `TNLean/Channel/KoashiImoto/MarkovBipartiteBlockForm.lean`,
-  `TNLean/Channel/WolfProps.lean`,
-  `TNLean/Channel/Wigner/ProjectivePureState.lean`,
-  `TNLean/Channel/Wigner/TwoPureStateCharpoly.lean`,
-  `TNLean/Entropy/ClassicalMutualInformation.lean`,
+- **Seen:** 25 current call sites across 20 files. The promotion pass
+  recorded 37 sites across 27 files; of those, eight moved to QICLean with
+  the quantum-channel extraction and two were deleted as dead weight, while
+  three further files adopted the lemma afterwards. Current consumers:
   `TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean`,
   `TNLean/MPS/MPDO/BNTLeftTripleFusion.lean`,
   `TNLean/MPS/MPDO/BNTProjectorSelection.lean`,
@@ -429,16 +424,18 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/RepresentativeGroupedLemmaL.lean`,
   `TNLean/MPS/MPDO/TopologicalProjectorRecursion.lean`,
   `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean`,
-  `TNLean/MPS/MPDO/VerticalProductPairBlocks.lean`,
-  `TNLean/MPS/RFP/AppendixBSupport.lean`,
+  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean`,
+  `TNLean/MPS/RFP/AppendixBTwoSiteBasicSupport.lean`,
   `TNLean/MPS/RFP/BellPairCIDObstruction.lean`,
-  `TNLean/MPS/RFP/StructuralFull.lean`, and
+  `TNLean/MPS/RFP/CPSVCIDNotRFPExample.lean`,
+  `TNLean/MPS/RFP/StructuralFull.lean` and
   `TNLean/PEPS/TorusWindowChain4.lean`.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
   `QICLean/Algebra/FinSum.lean` (QICLean dependency).
-- **Result:** all 37 sites call the shared lemma, and all 27 consumer files
-  import `TNLean.Algebra.FinSum` directly. The broad final passes found 18 sites
-  in 13 new files, including functional binders, one-line semicolon proofs,
+- **Result:** every call site uses the shared lemma, and all 20 current
+  consumer files import `QICLean.Algebra.FinSum` directly. The promotion's
+  broad final passes found 18 sites in 13 then-new files, including
+  functional binders, one-line semicolon proofs,
   both levels of the nested `distribute` identity in
   `CyclicActiveFourthRegionFormula.lean`, and the two commutative-factor forms
   in `WolfProps.lean`. They replaced 47 old tactic source lines; together with
