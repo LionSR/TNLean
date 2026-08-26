@@ -95,9 +95,9 @@ unitary-mixed companion family. In symbols, `ℰ_u = F_{A,B}` with
 `B := twistedMixedCompanion A u`. -/
 lemma twistedTransferMap_eq_mixedTransfer (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) :
-    twistedTransferMap A u = Kraus.mixedTransferMap A (twistedMixedCompanion A u) := by
+    twistedTransferMap A u = Kraus.mixedMapLM A (twistedMixedCompanion A u) := by
   ext X i j
-  simp only [twistedTransferMap_apply, Kraus.mixedTransferMap_apply, twistedMixedCompanion,
+  simp only [twistedTransferMap_apply, Kraus.mixedMapLM_apply, twistedMixedCompanion,
     Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, Matrix.mul_sum, Matrix.mul_smul,
     starRingEnd_apply, star_star, Matrix.mul_assoc]
 

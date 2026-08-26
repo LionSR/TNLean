@@ -321,7 +321,7 @@ description of current `main`.
   call sites. `InvariantSubspaceDecomp.lean:484` comments "same as
   exists_twoBlock_decomp_of_lowerZero" above a 129-line identical fork;
   `TransferOperatorGap.lean` rebuilds the square case despite
-  `mixedTransferMap₂_self` having 3 consumers. Repo-wide: 1,575 distinct
+  `mixedMapLM_self` having 3 consumers. Repo-wide: 1,575 distinct
   cross-file duplicated 10-line windows.
 - **Remediation**: derive each special case as a corollary of its general
   version through the existing bridges; extract shared setup runs into

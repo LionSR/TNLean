@@ -241,9 +241,9 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
       (toTensorFromBlocks data.weights data.blocks)
       data.ambient_coisometry data.coisometric data.reconstruct).mp hRFP
   have hCRFP : IsTransferIdempotent (directSumTensor C) :=
-    (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+    (isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem
       C).2 fun j k =>
-        mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
+        mixedMapLM_isIdempotentElem_of_isTransferIdempotent_directSum
           allScaled hRetained (data.representativeIndex j)
             (data.representativeIndex k)
   choose σ _hσ _hσfix hTP hGauge _hPrim hIrr using
@@ -275,12 +275,12 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
   have hPZero : IsBNTLocallyOrthogonal P :=
     isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum
       P hPIrr hPLeft hPDistinct hPRFP
-  have hBZero : ∀ j k, j ≠ k → Kraus.mixedTransferMap₂ (B j) (B k) = 0 := by
+  have hBZero : ∀ j k, j ≠ k → Kraus.mixedMapLM (B j) (B k) = 0 := by
     intro j k hjk
-    have hCZero : Kraus.mixedTransferMap₂ (C j) (C k) = 0 :=
-      mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv
+    have hCZero : Kraus.mixedMapLM (C j) (C k) = 0 :=
+      mixedMapLM_eq_zero_of_gaugePhaseEquiv
         (hGaugeC j).toGaugePhaseEquiv (hGaugeC k).toGaugePhaseEquiv (hPZero j k hjk)
-    rw [Kraus.mixedTransferMap₂_smul] at hCZero
+    rw [Kraus.mixedMapLM_smul] at hCZero
     exact (smul_eq_zero.mp hCZero).resolve_left
       (mul_ne_zero (hμne j) ((map_ne_zero (starRingEnd ℂ)).2 (hμne k)))
   simpa only [B, repDim] using

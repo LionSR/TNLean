@@ -316,22 +316,12 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
     1 ≤ Kraus.mixedTransferSpectralRadius A B := by
   by_contra hlt
   push Not at hlt
-  -- Unpack Kraus.mixedTransferSpectralRadius and pass to the rectangular form (D₁ = D₂ = D).
+  -- Unpack `Kraus.mixedTransferSpectralRadius` in the equal-dimension rectangular form.
   have hlt' :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
-    have hsq :
-        spectralRadius ℂ
-            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-              (Kraus.mixedTransferMap (d := d) (D := D) A B)) < 1 := by
-      simpa [Kraus.mixedTransferSpectralRadius] using hlt
-    -- `Kraus.mixedTransferMap` and `Kraus.mixedTransferMap₂` agree on `D × D` matrices.
-    have hagree :
-        Kraus.mixedTransferMap (d := d) (D := D) A B =
-          Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B :=
-      (Kraus.mixedTransferMap₂_same_dim A B).symm
-    rw [← hagree]; exact hsq
+            (Kraus.mixedMapLM (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
+    simpa [Kraus.mixedTransferSpectralRadius] using hlt
   have hzero :
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
         (nhds (0 : ℂ)) :=

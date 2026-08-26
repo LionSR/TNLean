@@ -302,7 +302,7 @@ two-sided change of variables,
       \mathcal{E}_{U_j,U_{j'}}\!\bigl(X_j^{-1}Y(X_{j'}^{-1})^\dagger\bigr)\,
       (X_{j'}\sqrt{\Lambda_{j'}})^\dagger,
 \]
-formalized by \leanid{MPSTensor.mixedTransferMap₂_conj_apply}.  Cancelling the
+formalized by \leanid{MPSTensor.mixedMapLM_conj_apply}.  Cancelling the
 invertible outer factors converts $\mathcal{E}_{A_j,A_{j'}}=0$ into
 $\mathcal{E}_{U_j,U_{j'}}=0$, and reading the matrix entry at a matrix unit yields
 the residual-isometry equation
@@ -421,7 +421,7 @@ idempotence has now been reduced exactly to the mixed block equations
   \quad\text{for every }j,j'.
 \]
 This is formalized by
-\leanid{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem}.
+\leanid{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem}.
 It shows that repeated virtual copies necessarily impose equations between
 distinct copies of the same normal tensor; checking only the representative
 block omits part of the whole-tensor fixed-point condition.
@@ -465,7 +465,7 @@ block sum, the scaling law is
   \mathcal E_{\mu B,\nu C}
     = \mu\overline\nu\,\mathcal E_{B,C}.
 \]
-It is formalized by \leanid{MPSTensor.mixedTransferMap₂_smul}.  Combining it
+It is formalized by \leanid{Kraus.mixedMapLM_smul}.  Combining it
 with the pairwise mixed-transfer criterion proves that, for repeated copies of
 a nonzero transfer-idempotent block, whole-tensor idempotence forces
 $\mu_q\overline{\mu_{q'}}=1$ and hence equality of all unit-modulus phases.

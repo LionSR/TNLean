@@ -213,7 +213,7 @@ theorem injective_implies_irreducibleCP (A : MPSTensor d D) (hA : IsInjective A)
 \column{0.50\textwidth}
 \textbf{The mixed transfer operator:}
 \begin{lstlisting}[basicstyle=\ttfamily\fontsize{5.5}{7}\selectfont\color{white}]
-noncomputable def mixedTransferMap
+noncomputable def mixedMapLM
     (A B : MPSTensor d D) :
     M_D(*@$\mathbb{C}$@*) (*@$\to_\ell$@*) M_D(*@$\mathbb{C}$@*) :=
   (*@$\sum$@*) i, (mulLeft (A i)).comp
@@ -224,7 +224,7 @@ noncomputable def mixedTransferMap
 \vspace{0.2em}
 \textbf{Key properties:}
 \begin{itemize}\itemsep0.05em
-  \item {\small \proved{mixedTransferMap\_self:\\$F_{AA} = E_A$}}
+  \item {\small \proved{mixedMapLM\_self:\\$F_{AA} = E_A$}}
   \item {\small \proved{Linearity in both arguments\\(with conjugation for $B$)}}
 \end{itemize}
 
@@ -281,7 +281,7 @@ theorem pow_tendsto_zero_of_spectralRadius_lt_one
 theorem mixedTransfer_pow_tendsto_zero (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (hAB : (*@$\neg$@*) GaugePhaseEquiv A B) (X : Matrix (Fin D) (Fin D) (*@$\mathbb{C}$@*)) :
-    Filter.Tendsto (fun n => ((mixedTransferMap A B) ^ n) X) atTop (nhds 0) := by
+    Filter.Tendsto (fun n => ((mixedMapLM A B) ^ n) X) atTop (nhds 0) := by
   -- Lift to ContinuousLinearMap via Module.End.toContinuousLinearMap
   -- Apply pow_tendsto_zero_of_spectralRadius_lt_one
   -- ContinuousLinearMap.apply gives pointwise convergence
@@ -329,7 +329,7 @@ noncomputable def
     (A B : MPSTensor d D) : ENNReal :=
   spectralRadius (*@$\mathbb{C}$@*)
     (Module.End.toContinuousLinearMap
-      (mixedTransferMap A B))
+      (mixedMapLM A B))
 \end{lstlisting}
 
 \vspace{0.2em}
@@ -476,7 +476,7 @@ Induction with Fin.cons decomposition.}
 Gelfand formula + ENNReal + squeeze.}
 
 \vspace{0.3em}
-\proved{mixedTransferMap\_pow\_apply}\\
+\proved{mixedMapLM\_pow\_apply}\\
 {\scriptsize $F_{AB}^N(X) = \sum_\sigma A_\sigma X B_\sigma^\dagger$.\\
 Same Fin.cons induction pattern.}
 
@@ -507,8 +507,8 @@ $\tr(I) = D = 0$, contradicting $D \geq 1$.\\
 theorem block_separation_principle (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
     (hAB : (*@$\neg$@*) GaugePhaseEquiv A B)
-    (h_cross : (*@$\forall$@*) N, Matrix.trace (((mixedTransferMap A B) ^ N) 1) = 0) :
-    mixedTransferMap A B 1 = 0 := by
+    (h_cross : (*@$\forall$@*) N, Matrix.trace (((mixedMapLM A B) ^ N) 1) = 0) :
+    mixedMapLM A B 1 = 0 := by
   by_cases hD : D = 0
   (*@$\cdot$@*) subst hD; ext i; exact i.elim0      -- D = 0: trivial
   (*@$\cdot$@*) exfalso                               -- D (*@$\ge$@*) 1: CONTRADICTION
@@ -1025,13 +1025,13 @@ theorem pow_tendsto_zero_of_spectralRadius_lt_one
 \end{frame}
 
 %======================================================================
-% BACKUP 3 - mixedTransferMap_pow_apply
+% BACKUP 3 - mixedMapLM_pow_apply
 %======================================================================
-\begin{frame}[fragile]{Backup: \texttt{mixedTransferMap\_pow\_apply} (Iterated Transfer)}
+\begin{frame}[fragile]{Backup: \texttt{mixedMapLM\_pow\_apply} (Iterated Transfer)}
 \vspace{-0.7em}
 \begin{lstlisting}[basicstyle=\ttfamily\fontsize{4.5}{5.5}\selectfont\color{white}]
-theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : (*@$\mathbb{N}$@*)) :
-    (*@$\forall$@*) X, ((mixedTransferMap A B) ^ N) X =
+theorem mixedMapLM_pow_apply (A B : MPSTensor d D) (N : (*@$\mathbb{N}$@*)) :
+    (*@$\forall$@*) X, ((mixedMapLM A B) ^ N) X =
       (*@$\sum$@*) (*@$\sigma$@*) : Fin N (*@$\to$@*) Fin d,
         evalWord A (List.ofFn (*@$\sigma$@*)) * X * (evalWord B (List.ofFn (*@$\sigma$@*)))(*@$^\dagger$@*) := by
   induction N with
@@ -1039,9 +1039,9 @@ theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : (*@$\mathbb{N}$@*)
   | succ n ih =>
     intro X
     rw [pow_succ']
-    change mixedTransferMap A B (((mixedTransferMap A B) ^ n) X) = _
+    change mixedMapLM A B (((mixedMapLM A B) ^ n) X) = _
     rw [ih]
-    simp only [mixedTransferMap_apply, map_sum]
+    simp only [mixedMapLM_apply, map_sum]
     rw [Finset.sum_comm]
     rw [sum_fin_succ_eq]    -- Fin.cons decomposition
     congr 1; funext i
@@ -1050,7 +1050,7 @@ theorem mixedTransferMap_pow_apply (A B : MPSTensor d D) (N : (*@$\mathbb{N}$@*)
                Matrix.conjTranspose_mul, Matrix.mul_assoc]
 \end{lstlisting}
 \vspace{0.1em}
-{\small\textbf{Pattern:} Same Fin.cons induction used for both \texttt{transferMap\_pow\_eq\_blocked} and \texttt{mixedTransferMap\_pow\_apply}. The decomposition
+{\small\textbf{Pattern:} Same Fin.cons induction used for both \texttt{transferMap\_pow\_eq\_blocked} and \texttt{mixedMapLM\_pow\_apply}. The decomposition
 $\mathrm{Fin}(n+1) \to \mathrm{Fin}\,d \simeq  \mathrm{Fin}\,d \times (\mathrm{Fin}\,n \to \mathrm{Fin}\,d)$
 splits each sum into head $i$ + tail $\tau$.}
 \end{frame}

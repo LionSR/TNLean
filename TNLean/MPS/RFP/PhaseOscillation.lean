@@ -75,7 +75,7 @@ private lemma blockTransferSum_lowerMatrixUnit :
   rw [show
     (blockTransferSum cubePhaseBlock lowerMatrixUnit).submatrix
         (blockIncl i cubePhaseBondDim) (blockIncl j cubePhaseBondDim) =
-      Kraus.mixedTransferMap₂ (cubePhaseBlock i) (cubePhaseBlock j)
+      Kraus.mixedMapLM (cubePhaseBlock i) (cubePhaseBlock j)
         (lowerMatrixUnit.submatrix
           (blockIncl i cubePhaseBondDim) (blockIncl j cubePhaseBondDim)) by
     simpa only [blockTransferSum] using

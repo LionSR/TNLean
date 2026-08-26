@@ -54,11 +54,11 @@ theorem cross_correlation_tendsto_zero
     (hAB : ¬ GaugePhaseEquiv A B)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Filter.Tendsto
-      (fun N => Matrix.trace (((Kraus.mixedTransferMap A B) ^ N) X))
+      (fun N => Matrix.trace (((Kraus.mixedMapLM A B) ^ N) X))
       Filter.atTop (nhds 0) := by
   have hK : ¬ Kraus.GaugePhaseEquiv A B :=
     fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
-  simpa [Kraus.mixedTransferMap] using
+  simpa [Kraus.mixedMapLM] using
     Kraus.cross_correlation_tendsto_zero A B
       (Kraus.injective_implies_irreducibleCP A hA)
       (Kraus.injective_implies_irreducibleCP B hB)

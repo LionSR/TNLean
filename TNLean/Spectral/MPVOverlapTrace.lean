@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import QICLean.Algebra.MatrixTracePairing
 import QICLean.Channel.TransferMatrix
 import TNLean.MPS.Overlap.Basic
-import QICLean.Spectral.MixedTransfer
+import QICLean.Kraus.MixedMap
+import QICLean.Kraus.Transfer
 
 import Mathlib.LinearAlgebra.Trace
 import Mathlib.LinearAlgebra.StdBasis
@@ -29,7 +30,7 @@ $(M E_{pq} N)_{pq}=M_{pp}N_{qq}$ to evaluate each summand.
 
 ## Rectangular overlaps for different bond dimensions
 
-`trace_mixedTransferMap₂_pow_eq_mpvOverlap` is the rectangular analogue, where
+`trace_mixedMapLM_rect_pow_eq_mpvOverlap` is the rectangular analogue, where
 `A : MPSTensor d D₁` and `B : MPSTensor d D₂` may have different bond dimensions and the
 mixed transfer map acts on `Matrix (Fin D₁) (Fin D₂) ℂ`.
 
@@ -46,15 +47,15 @@ section Main
 This is the identity
 $$\mathrm{Tr}(F_{AB}^N) = \sum_{\sigma} \mathrm{mpv}(A,\sigma)\,\overline{\mathrm{mpv}(B,\sigma)}.$$
 -/
-theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
+theorem trace_mixedMapLM_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D) (N : ℕ) :
-    (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) ((Kraus.mixedTransferMap A B) ^ N)
+    (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) ((Kraus.mixedMapLM A B) ^ N)
       = mpvOverlap (d := d) A B N := by
   classical
   -- Expand the operator trace as a sum over matrix units.
-  rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((Kraus.mixedTransferMap A B) ^ N))]
+  rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((Kraus.mixedMapLM A B) ^ N))]
   -- Expand the iterated mixed transfer map on each matrix unit.
-  simp only [Kraus.mixedTransferMap_pow_apply (A := A) (B := B) (N := N)]
+  simp only [Kraus.mixedMapLM_pow_apply (A := A) (B := B) (N := N)]
   -- Push the `(p,q)` entry inside the σ-sum, then use the matrix-unit identity
   -- `(M E_pq N)_{pq} = M_{pp} N_{qq}` on each summand.
   have h1 :
@@ -101,36 +102,37 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
 end Main
 
 /-- The matrix trace of a power of the mixed transfer matrix is the MPV overlap. -/
-theorem trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap
+theorem trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap
     {d D : ℕ} [NeZero D] (A B : MPSTensor d D) (N : ℕ) :
-    Matrix.trace (transferMatrix (Kraus.mixedTransferMap A B) ^ N) =
+    Matrix.trace (transferMatrix (Kraus.mixedMapLM A B) ^ N) =
       mpvOverlap (d := d) A B N := by
   rw [← transferMatrix_pow, trace_transferMatrix_eq_linearMap_trace]
-  exact trace_mixedTransferMap_pow_eq_mpvOverlap A B N
+  exact trace_mixedMapLM_pow_eq_mpvOverlap A B N
 
 /-- The matrix trace of a power of an MPS transfer matrix is its self-overlap. -/
 theorem trace_transferMatrix_transferMap_pow_eq_mpvOverlap
     {d D : ℕ} [NeZero D] (A : MPSTensor d D) (N : ℕ) :
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) =
       mpvOverlap (d := d) A A N := by
-  rw [← Kraus.mixedTransferMap_self]
-  exact trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap A A N
+  change Matrix.trace (transferMatrix (Kraus.mapLM A) ^ N) = mpvOverlap (d := d) A A N
+  rw [← Kraus.mixedMapLM_self]
+  exact trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap A A N
 
 /-! ## Rectangular overlaps for different bond dimensions -/
 
 section MainRect
 
 /-- The operator trace of the rectangular mixed transfer operator power encodes the MPV overlap. -/
-theorem trace_mixedTransferMap₂_pow_eq_mpvOverlap
+theorem trace_mixedMapLM_rect_pow_eq_mpvOverlap
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
-    (LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)) ((Kraus.mixedTransferMap₂ A B) ^ N)
+    (LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)) ((Kraus.mixedMapLM A B) ^ N)
       = mpvOverlap (d := d) A B N := by
   classical
   -- Expand the operator trace as a sum over matrix units.
-  rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((Kraus.mixedTransferMap₂ A B) ^ N))]
+  rw [Matrix.linearMap_trace_eq_sum_apply_single (T := ((Kraus.mixedMapLM A B) ^ N))]
   -- Expand the iterated mixed transfer map on each matrix unit.
-  simp only [Kraus.mixedTransferMap₂_pow_apply (A := A) (B := B) (N := N)]
+  simp only [Kraus.mixedMapLM_pow_apply (A := A) (B := B) (N := N)]
   -- Push the `(p,q)` entry inside the σ-sum, then use the matrix-unit identity
   -- `(M E_pq N)_{pq} = M_{pp} N_{qq}` on each summand.
   have h1 :

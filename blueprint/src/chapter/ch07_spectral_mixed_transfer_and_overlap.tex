@@ -1,7 +1,7 @@
 \section{Mixed transfer operator}
 
 \begin{definition}[Mixed transfer operator]\label{def:mixed_transfer}
-    \lean{Kraus.mixedTransferMap}
+    \lean{Kraus.mixedMapLM}
     \leanok
     \uses{def:mps_tensor}
     The \emph{mixed transfer operator} (or \emph{cross transfer operator})
@@ -15,7 +15,7 @@
 \end{definition}
 
 \begin{definition}[Rectangular mixed transfer operator]\label{def:mixed_transfer_rect}
-    \lean{Kraus.mixedTransferMap₂}
+    \lean{Kraus.mixedMapLM}
     \leanok
     \uses{def:mps_tensor}
     For MPS tensors $A$ of bond dimension $D_1$ and $B$ of bond
@@ -43,7 +43,7 @@ This section rewrites that scalar as the operator trace of the mixed
 transfer power.
 
 \begin{lemma}[Overlap equals transfer trace]\label{thm:overlap_trace}
-    \lean{MPSTensor.trace_mixedTransferMap_pow_eq_mpvOverlap}
+    \lean{MPSTensor.trace_mixedMapLM_pow_eq_mpvOverlap}
     \leanok
     \uses{def:mixed_transfer, def:mpv_overlap}
     For tensors $A$ and $B$ of bond dimension $D\geq1$,
@@ -75,7 +75,7 @@ transfer power.
 \end{proof}
 
 \begin{lemma}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
-    \lean{MPSTensor.trace_mixedTransferMap₂_pow_eq_mpvOverlap}
+    \lean{MPSTensor.trace_mixedMapLM_rect_pow_eq_mpvOverlap}
     \leanok
     \uses{def:mixed_transfer_rect, def:mpv_overlap}
     For tensors $A$ of bond dimension $D_1\geq1$ and $B$ of bond
@@ -329,7 +329,7 @@ mixed-transfer eigenvector.
 
 \begin{theorem}[Rectangular transfer powers below unit spectral radius]%
     \label{thm:rectangular_transfer_pow_zero}
-    \lean{Kraus.mixedTransferMap₂_pow_tendsto_zero_of_spectralRadius_lt_one}
+    \lean{Kraus.mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one}
     \leanok
     \uses{def:mixed_transfer_rect}
     Let $A$ and $B$ have bond dimensions $D_1$ and $D_2$, respectively. If

@@ -190,7 +190,7 @@ theorem directSumSectorCompression_transferMap
     _ = Kraus.transferMap (B j)
           (Y.submatrix (blockIncl j dim) (blockIncl j dim)) := by
             rw [directSumSectorCompression_reindex]
-            simpa only [blockTransferSum, Kraus.mixedTransferMap₂_self] using hblock
+            simpa only [blockTransferSum, Kraus.mixedMapLM_self] using hblock
     _ = Kraus.transferMap (B j) (directSumSectorCompression dim j X) := by
             apply congrArg (Kraus.transferMap (B j))
             ext a b
@@ -375,12 +375,12 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_p
     IsTransferIdempotent (directSumTensor P.basis) := by
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-  apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+  apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem
     P.basis).2
   intro j j'
   by_cases hEq : j = j'
   · subst j'
-    rw [Kraus.mixedTransferMap₂_self]
+    rw [Kraus.mixedMapLM_self]
     by_contra hnot
     obtain ⟨ν, r, l, hν_ne, hν_norm, hr, hl, hlr⟩ := hspectral j hnot
     exact hCF.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
@@ -564,12 +564,12 @@ theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-  apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+  apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem
     P.basis).2
   intro j j'
   by_cases hEq : j = j'
   · subst j'
-    rw [Kraus.mixedTransferMap₂_self]
+    rw [Kraus.mixedMapLM_self]
     change Kraus.transferMap (P.basis j) ∘ₗ Kraus.transferMap (P.basis j) =
       Kraus.transferMap (P.basis j)
     apply LinearMap.ext

@@ -19,7 +19,7 @@ Definition~\ref{def:mixed_transfer} and its rectangular form
 $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
 
 \begin{theorem}[Self-transfer]\label{thm:mixed_self}
-    \lean{Kraus.mixedTransferMap_self}
+    \lean{Kraus.mixedMapLM_self}
     \leanok
     \uses{def:mixed_transfer, def:transfer_map}
     Setting $B=A$ recovers the ordinary transfer map: $F_{AA}=\E_A$.
@@ -32,7 +32,7 @@ $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
 \end{proof}
 
 \begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
-    \lean{Kraus.mixedTransferMap_pow_apply}
+    \lean{Kraus.mixedMapLM_pow_apply}
     \leanok
     \uses{def:mixed_transfer, def:eval_word}
     For every $X\in\MN{D}$ and $N\geq0$,

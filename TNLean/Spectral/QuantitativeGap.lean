@@ -280,7 +280,7 @@ theorem transfer_map_gap_of_injective [NeZero D]
       (isPrimitivePaper_of_hasEventuallyFullKrausRank A
         ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
   -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
-  have hE_eq : E = Kraus.mixedTransferMap A A := (Kraus.mixedTransferMap_self A).symm
+  have hE_eq : E = Kraus.mixedMapLM A A := (Kraus.mixedMapLM_self A).symm
   have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by
     intro μ hμ
     exact Kraus.eigenvalue_norm_le_one A A hNorm hNorm μ (hE_eq ▸ hμ)
