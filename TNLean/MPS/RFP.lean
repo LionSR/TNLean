@@ -9,10 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.RFP
 
 import TNLean.MPS.RFP.AppendixBChainCommutation
-import TNLean.MPS.RFP.AppendixBCommutation
 import TNLean.MPS.RFP.AppendixBFactorAction
 import TNLean.MPS.RFP.AppendixBStructuralData
-import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.AppendixBSupportProjectionCommutation
 import TNLean.MPS.RFP.AppendixBTwoSiteBasicSupport
 import TNLean.MPS.RFP.AppendixBVirtualBondSupport
