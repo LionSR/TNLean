@@ -122,21 +122,6 @@ noncomputable example
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
     simp
 
-/-- **Per-block unit-modulus witness for `signFlipDecomp`.**
-
-For each (unique) BNT basis sector, the copy `q = 0` carries weight
-`μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
-explicit per-block hypothesis (paper-implicit in CPSV16 Appendix MPV proof,
-line 1182's projection argument). -/
-lemma signFlipDecomp_weight_unit_per_block (C : MPSTensor d D) :
-    ∀ j : Fin (signFlipDecomp C).basisCount,
-      ∃ q : Fin ((signFlipDecomp C).copies j),
-        ‖(signFlipDecomp C).weight j q‖ = 1 := by
-  intro _
-  refine ⟨0, ?_⟩
-  change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
-  simp
-
 /-! ## Example 3 — `C ⊕ e^{iθ} C` -/
 
 /-- The single-sector two-copy decomposition of `C` with raw weights
@@ -314,21 +299,6 @@ noncomputable example
     refine ⟨0, 0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
     simp
-
-/-- **Per-block unit-modulus witness for `halvedDecomp`.**
-
-For each (unique) BNT basis sector, the copy `q = 0` carries the unit
-weight `μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
-explicit per-block hypothesis (paper-implicit in CPSV16 Appendix MPV proof,
-line 1182's projection argument). -/
-lemma halvedDecomp_weight_unit_per_block (C : MPSTensor d D) :
-    ∀ j : Fin (halvedDecomp C).basisCount,
-      ∃ q : Fin ((halvedDecomp C).copies j),
-        ‖(halvedDecomp C).weight j q‖ = 1 := by
-  intro _
-  refine ⟨0, ?_⟩
-  change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
-  simp
 
 end SectorBNT.Examples
 end MPSTensor

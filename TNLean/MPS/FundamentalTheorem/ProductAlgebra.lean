@@ -318,50 +318,6 @@ lemma fundamentalTheorem_multiBlock_decomposition
 
 end FullMultiBlock
 
-/-! ### Single-block separation from `SameMPV₂`
-
-When there is only **one** block (`r = 1`), the `SameMPV₂` condition on block-diagonal tensors
-immediately yields per-block `SameMPV`, provided the scaling factor `μ₀` is nonzero.  This is
-because the weighted sum `∑_k μ_k^N · mpv(A_k, σ) = ∑_k μ_k^N · mpv(B_k, σ)` degenerates to
-`μ₀^N · mpv(A₀, σ) = μ₀^N · mpv(B₀, σ)`, and dividing by `μ₀^N ≠ 0` gives the result.
-
-This lets us close the gap completely for single-block canonical forms, avoiding the need for
-quantum Perron–Frobenius theory in this special case.
--/
-section SingleBlockSeparation
-
-variable {dim₀ : ℕ}
-
-/-- For a single block, `SameMPV₂` on the block-diagonal tensor gives `SameMPV` on the block
-    tensor, provided the scaling factor is nonzero. -/
-lemma sameMPV₂_single_block
-    (μ₀ : ℂ) (hμ : μ₀ ≠ 0)
-    (A₀ B₀ : MPSTensor d dim₀)
-    (hSame₂ : SameMPV₂
-      (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => A₀))
-      (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => B₀))) :
-    SameMPV A₀ B₀ := by
-  intro N σ
-  have := sameMPV₂_summed_blocks (fun _ : Fin 1 => μ₀) (fun _ => A₀) (fun _ => B₀) hSame₂ N σ
-  simp only [Fin.sum_univ_one] at this
-  exact mul_left_cancel₀ (pow_ne_zero N hμ) this
-
-/-- **Single-block Fundamental Theorem from `SameMPV₂`.**
-
-For canonical forms with one block, `SameMPV₂` (with `μ₀ ≠ 0`) gives full gauge equivalence
-without any separation hypothesis. -/
-theorem fundamentalTheorem_singleBlock_fromMPV₂
-    (μ₀ : ℂ) (hμ : μ₀ ≠ 0)
-    (A₀ B₀ : MPSTensor d dim₀)
-    (hA : Kraus.IsInjective A₀)
-    (hSame₂ : SameMPV₂
-      (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => A₀))
-      (toTensorFromBlocks (fun _ : Fin 1 => μ₀) (fun _ : Fin 1 => B₀))) :
-    GaugeEquiv A₀ B₀ :=
-  fundamentalTheorem_singleBlock hA (sameMPV₂_single_block μ₀ hμ A₀ B₀ hSame₂)
-
-end SingleBlockSeparation
-
 /-! ### Equivalence: per-block SameMPV ↔ per-block GaugeEquiv (under injectivity) -/
 section Equivalence
 

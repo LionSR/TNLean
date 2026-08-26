@@ -373,55 +373,14 @@ private theorem permGL_mem_unitaryGroup {n : Type*} [DecidableEq n] [Fintype n]
   rw [inv_mul_cancel]
   exact Matrix.permMatrix_one
 
-/-- Entrywise expansion of `Equiv.Perm.permMatrix`. -/
-private lemma permMatrix_apply' {n : Type*} [DecidableEq n] (σ : Equiv.Perm n)
-    (i j : n) :
-    Equiv.Perm.permMatrix ℂ σ i j = if j = σ i then (1 : ℂ) else 0 := by
-  rw [Equiv.Perm.permMatrix]
-  by_cases h : j = σ i
-  · subst h
-    rw [ite_eq_left rfl, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
-    simp
-  · rw [ite_eq_right h, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
-    simp only [Option.mem_def, Option.some.injEq, ite_eq_right_iff,
-      one_ne_zero, imp_false]
-    exact fun heq => h heq.symm
-
-/-- Multiplying a matrix on the left by `permMatrix σ` reindexes its rows by `σ`. -/
-private lemma permMatrix_mul_eq_submatrix {n : Type*}
-    [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
-    Equiv.Perm.permMatrix ℂ σ * M = M.submatrix σ id := by
-  ext i j
-  rw [Matrix.mul_apply, Matrix.submatrix_apply, id]
-  simp_rw [permMatrix_apply', ite_mul, one_mul, zero_mul]
-  rw [Finset.sum_ite_eq' Finset.univ (σ i)]
-  simp
-
-/-- Multiplying a matrix on the right by `permMatrix σ` reindexes its columns by
-`σ.symm`. -/
-private lemma mul_permMatrix_eq_submatrix {n : Type*}
-    [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
-    M * Equiv.Perm.permMatrix ℂ σ = M.submatrix id σ.symm := by
-  ext i j
-  rw [Matrix.mul_apply, Matrix.submatrix_apply, id]
-  simp_rw [permMatrix_apply', mul_ite, mul_one, mul_zero]
-  -- Rewrite the condition `j = σ x` to `σ.symm j = x` so `sum_ite_eq` applies.
-  have hcond : ∀ x : n, (j = σ x) ↔ (σ.symm j = x) := by
-    intro x
-    constructor
-    · intro h; rw [h]; exact σ.symm_apply_apply x
-    · intro h; rw [← h]; exact (σ.apply_symm_apply j).symm
-  simp_rw [hcond]
-  rw [Finset.sum_ite_eq Finset.univ (σ.symm j)]
-  simp
-
 /-- Conjugating a square matrix by a permutation matrix gives a `submatrix` of
 the original by the permutation index map. -/
 lemma permMatrix_conj_eq_submatrix {n : Type*}
     [DecidableEq n] [Fintype n] (σ : Equiv.Perm n) (M : Matrix n n ℂ) :
     Equiv.Perm.permMatrix ℂ σ * M * Equiv.Perm.permMatrix ℂ σ.symm =
       M.submatrix σ σ := by
-  rw [permMatrix_mul_eq_submatrix, mul_permMatrix_eq_submatrix,
+  rw [Equiv.Perm.permMatrix, Equiv.Perm.permMatrix,
+    PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv,
     Matrix.submatrix_submatrix]
   simp
 

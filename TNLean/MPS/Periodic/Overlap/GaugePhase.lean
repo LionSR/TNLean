@@ -52,21 +52,4 @@ theorem repeatedBlocks_of_gaugePhaseData_norm_one
       _ = A i := by simp
   rw [hconj, smul_smul, inv_mul_cancel₀ hζ_ne, one_smul]
 
-/-- A gauge-phase equivalence between left-canonical irreducible blocks is a
-repeated-block relation.
-
-The scalar has unit modulus by the Perron--Frobenius normalization theorem; the
-remaining conversion is purely algebraic. -/
-theorem gaugePhaseEquiv_to_repeatedBlocks_of_leftCanonical_irreducible
-    [NeZero D] {A B : MPSTensor d D}
-    (h : GaugePhaseEquiv A B)
-    (hA_left : IsLeftCanonical A) (hB_left : IsLeftCanonical B)
-    (hB_irr : Kraus.IsIrreducibleFamily B) :
-    RepeatedBlocks A B := by
-  obtain ⟨X, ζ, hζ_ne, hB⟩ := h
-  exact repeatedBlocks_of_gaugePhaseData_norm_one X
-    (gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
-      hA_left hB_left hB_irr hζ_ne hB)
-    hB
-
 end MPSTensor
