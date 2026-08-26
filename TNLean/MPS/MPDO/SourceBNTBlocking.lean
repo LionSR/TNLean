@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausGauge
 import TNLean.MPS.BNT.Bridge
+import TNLean.MPS.BNT.DirectSumSelectors
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 

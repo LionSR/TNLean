@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
-import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
+import TNLean.MPS.BNT.DirectSumSelectors
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import QICLean.Channel.Irreducible.KrausGauge
