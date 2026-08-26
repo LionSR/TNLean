@@ -152,7 +152,7 @@ This is also the only honest way to clear an attribute-carrying lemma. A `@[simp
 
 When a survey is read-only and cannot build, settle a Lean semantics question — does dot notation resolve through `extends` into the parent structure? — with a five-line standalone probe file elaborated by `lake env lean` in the scratchpad, rather than by reasoning about it.
 
-For blueprint exposure run `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` after the removal — the blueprint loads the pinned companion package, so without the fetch the check fails for missing setup and that failure reads like a clean "no tag" verdict. For proof integrity run `python3 scripts/check_forbidden_lean_tokens.py --base-ref origin/main` rather than grepping for `sorry`: the guard's token set also covers `admit`, `native_decide`, `unsafeCast`, and friends, any of which a repaired downstream proof can introduce while the build stays green.
+For blueprint exposure run `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` after the removal — the blueprint loads the pinned companion package, so without the fetch the check fails for missing setup and that failure reads like a clean "no tag" verdict. For proof integrity run a bare `python3 scripts/check_forbidden_lean_tokens.py` before each commit rather than grepping for `sorry`: its default base is `HEAD`, so it checks the working tree, and its token set also covers `admit`, `native_decide`, `unsafeCast`, and friends, any of which a repaired downstream proof can introduce while the build stays green.
 
 Reject or downgrade a candidate when:
 
@@ -178,24 +178,27 @@ Be concrete enough that an implementing PR can follow the trail: the declaration
 
 ## Validation And PR Hygiene
 
-For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` before the first build in any fresh, cloned, or cache-cleared worktree, and after any toolchain or dependency change — `CLAUDE.md`'s canonical cache rule is that Mathlib is never rebuilt from source, and skipping the fetch is what triggers the hours-long rebuild; then `lake build` clean with the package lean options, `python3 scripts/check_forbidden_lean_tokens.py --base-ref origin/main` for proof integrity, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
+For record-only work (ledger, issue, audit note): `git diff --check` and the prose rules in the lean-conventions skill (no Lean identifiers in blueprint prose). For a deletion PR: `lake exe cache get` before the first build in any fresh, cloned, or cache-cleared worktree, and after any toolchain or dependency change — `CLAUDE.md`'s canonical cache rule is that Mathlib is never rebuilt from source, and skipping the fetch is what triggers the hours-long rebuild; then `lake build` clean with the package lean options, a bare `python3 scripts/check_forbidden_lean_tokens.py` before each commit for proof integrity, `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls` when a `\lean{}` tag was redirected, and `python3 scripts/loc_report.py` for the net line delta.
 
-Two of the CI guards are **diff-scoped**, which makes them easy to miss and easy to misread:
+Two repo guards catch what `lake build` cannot, and they work differently from each other. Neither ever "fails on a clean tree" — both exit 0 when they find nothing, so a green exit is only as meaningful as what the invocation actually examined.
+
+**`check_reader_facing_prose.py` is the PR gate.** `pr-ci.yml` runs it as
 
 ```bash
-python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/main --ci
-python3 scripts/check_forbidden_lean_tokens.py --base-ref origin/main
+python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/<base> --ci
 ```
 
-Pass the base ref to both, exactly as CI does. They judge *added* lines, so a bare run proves nothing and the pre-existing violations elsewhere in the tree are not yours to fix. Three consequences bite in practice.
+and it judges only lines your branch adds. Two traps: run bare, with no `--diff-base`, it scans the whole tree and exits 1 on pre-existing violations elsewhere that are not yours to fix; and under `--diff-base` it reads **committed** content, so a fix sitting in the working tree looks ineffective until you commit it. Its rule that bites a deletion PR is that a Lean docstring cites the mathematics, never an issue number — a migration issue belongs in the pull-request description, not in the module.
 
-`check_forbidden_lean_tokens.py` defaults `--base-ref` to `HEAD`, so running it bare **after committing** diffs `HEAD` against `HEAD`, finds nothing, and exits 0 — a green result that examined none of your work. It is also the right tool for proof integrity generally: its token set covers `admit`, `native_decide`, `unsafeCast`, `lcProof`, and more, all of which a repaired downstream proof can introduce while `lake build` stays green and an `rg` for `sorry|axiom` stays silent.
+**`check_forbidden_lean_tokens.py` is a pre-commit check, not a branch gate.** It appears only in the auto-fix workflow, never in `pr-ci.yml`, and its `--base-ref` defaults to `HEAD` precisely so that a bare run compares the *working tree* against the last commit:
 
-`check_reader_facing_prose.py` reads **committed** content under `--diff-base`, so a fix sitting in the working tree looks ineffective until it is committed.
+```bash
+python3 scripts/check_forbidden_lean_tokens.py      # before you commit
+```
+
+Run it that way and it earns its keep: the token set covers `admit`, `native_decide`, `unsafeCast`, `lcProof` and more, any of which a repaired downstream proof can introduce while the build stays green and an `rg` for `sorry|axiom` stays silent. Do **not** point it at a branch base. Its match is textual, so over a whole branch it fires on ordinary English — a docstring reading "adjacent factors admit the rank-one insertion", an audit note quoting `rg -n "sorry|axiom"` — and the noise buries any real hit. Run it bare, before each commit, and it stays useful.
 
 Both guards count a *reworded* line as an addition: editing a sentence that happens to contain `sorry` — a docs table cell reading "sorry-free", say — trips the token guard even though nothing new was introduced. When that happens, leave the original line untouched and put the correction in a neighbouring paragraph or a header.
-
-The prose guard also settles where a follow-up gets recorded: Lean docstrings cite the mathematics, never an issue number. A migration issue belongs in the PR description, not in the module.
 
 A PR implementing a simplification is titled `refactor(scope):` and its body states the net line delta (`docs/proof_debt.md` §shrink rhythm), the ledger entry or issue it burns down, each removed declaration with its replacement (the pass-through exception requires this plus an audit note), and any blueprint labels redirected. A removed name whose old spelling encoded banned terminology gets no deprecation alias; say so in the body. A burn-down PR that leaves "old and new side by side" is in-progress, not done, and carries the issue that removes the old side.
 
