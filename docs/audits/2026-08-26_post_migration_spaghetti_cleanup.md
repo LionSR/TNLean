@@ -46,6 +46,11 @@ compatibility surfaces:
 Repository-wide live-source searches now find no `TransferChannel`, `Spectral.MixedTransfer`,
 `mixedTransferMap`, or `mixedTransferMap₂` production/Blueprint consumers.
 
+QICLean PR #506 retired the unused `Algebra.MatrixReindex` wrapper module in favor of Mathlib's
+canonical reindex API. TNLean PR #7203 retired the stale documentation-only
+`Wielandt.WolfChapter6TNIndex` module, whose prose still pointed to pre-migration `TNLean.Channel`
+and `TNLean.QPF` ownership paths.
+
 ### Dependency direction
 
 TNLean PR #7191 repaired three lower-layer ownership inversions while preserving declaration names
