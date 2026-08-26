@@ -374,7 +374,7 @@
     \label{lem:block_diagonal_boundary_component_trace_decomposition_injective}
     \lean{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_trace_decomposition_of_injective}
     \leanok
-    \uses{lem:block_boundary_cde_identities_from_trace_decompositions, lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    \uses{lem:pgvwc_cde_identities_from_trace_decompositions, lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     Assume $0<N$, $L\le N$, and $L+L_0\le N$. Suppose each block $A_j$
     is $L_0$-block-injective and satisfies
     $\sum_a A^j_aA^{j\dagger}_a=\Id$. Assume also that the simultaneous tuples
@@ -397,10 +397,10 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:block_boundary_cde_identities_from_trace_decompositions, lem:block_diagonal_boundary_component_complementary_word_identities_injective}
+    \uses{lem:pgvwc_cde_identities_from_trace_decompositions, lem:block_diagonal_boundary_component_complementary_word_identities_injective}
     Applying
-    Lemma~\ref{lem:block_boundary_cde_identities_from_trace_decompositions}
-    with the same scalars $\mu_j$ and boundary matrices $X_j$, for every
+    Lemma~\ref{lem:pgvwc_cde_identities_from_trace_decompositions}
+    with the boundary matrix $D^j_\beta=(\mu_j^NX_j)A^j_\beta$, for every
     block $j$ and every boundary-crossing interval $i$, gives a matrix
     $E^j_i$ such that, for every word $\beta$ before the cut,
     $(\mu_j^NX_j)A^j_\beta = A^j_\beta E^j_i$.

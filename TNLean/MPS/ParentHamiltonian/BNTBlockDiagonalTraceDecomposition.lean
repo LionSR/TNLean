@@ -155,9 +155,9 @@ theorem
       μ A hN hLN X hBlk hUnital hNlarge ?_
   intro j i hi ρ
   obtain ⟨E, _hE, hBoundary, _hCDE⟩ :=
-    pgvwc07_complementary_word_cde_identities_of_block_boundary_trace_decomposition
-      (μ := μ) (A := A) (m := m) (K := i.val + L - N) (M := N - L) (N := N)
-      hTraceSpan X (fun k => C k i) hUnital (hCoeff i hi) j
+    pgvwc07_complementary_word_cde_identities_of_trace_decomposition
+      (A := A) (m := m) (K := i.val + L - N) (M := N - L)
+      hTraceSpan (fun k => (μ k) ^ N • X k) (fun k => C k i) hUnital (hCoeff i hi) j
   refine ⟨E * Kraus.evalWord (A j) (List.ofFn ρ), ?_⟩
   intro β
   calc

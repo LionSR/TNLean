@@ -97,13 +97,6 @@ structure HasProductPairLocalProjectors (A : MPSTensor d D) (N : ℕ) where
   hlocal : ∀ i, localTerm A 2 N i = proj i
   hcomm : ∀ i j, proj i * proj j = proj j * proj i
 
-/-- Each local term supplied by `HasProductPairLocalProjectors` is idempotent. -/
-theorem HasProductPairLocalProjectors.localTerm_idempotent
-    {A : MPSTensor d D} {N : ℕ}
-    (hPair : HasProductPairLocalProjectors A N) (i : Fin N) :
-    localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i := by
-  rw [hPair.hlocal i, hPair.hidem i]
-
 /-- The stated local projector hypotheses imply commutativity of the
 nearest-neighbor parent-Hamiltonian local terms.
 
@@ -155,12 +148,5 @@ theorem ProductPairBridge.commuting_twoSite_localTerms
       localTerm A 2 N i * localTerm A 2 N j =
         localTerm A 2 N j * localTerm A 2 N i :=
   (hBridge.localProjectors N hN).commuting_twoSite_localTerms
-
-/-- Every local term supplied by a product-pair bridge is idempotent. -/
-theorem ProductPairBridge.localTerm_idempotent
-    {A : MPSTensor d D} (hBridge : ProductPairBridge A) (N : ℕ) (hN : 2 < N)
-    (i : Fin N) :
-    localTerm A 2 N i * localTerm A 2 N i = localTerm A 2 N i :=
-  (hBridge.localProjectors N hN).localTerm_idempotent i
 
 end MPSTensor
