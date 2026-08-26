@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
+import TNLean.MPS.RFP.AppendixBStructuralData
 
 /-!
 # Overlap reduction for commuting parent-Hamiltonian local terms

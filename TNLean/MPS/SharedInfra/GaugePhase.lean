@@ -15,11 +15,12 @@ import Mathlib.Topology.Algebra.GroupWithZero
 /-!
 # Shared gauge-phase lemmas for MPS tensors
 
-This module collects the generic gauge-phase identities used by both the
-single-block proportional FT and the canonical-form equal-norm argument.
+This module collects generic gauge-phase identities and overlap-to-gauge
+recovery results used by both the single-block proportional FT and the
+canonical-form equal-norm argument.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kraus
 
 namespace MPSTensor
 
@@ -253,6 +254,137 @@ theorem norm_eq_one_of_selfOverlap_scale_pos
         (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
     ‖ζ‖ = 1 :=
   norm_eq_one_of_selfOverlap_scale_at_nonzero_limit_pos_aux one_ne_zero hAA hBB hSelf
+
+section OverlapGauge
+
+variable [NeZero D]
+
+/-! ## Gauge-phase equivalence from unit-modulus overlap -/
+
+/-- **Bond-dimension equality from a non-decaying rectangular overlap.**
+
+Source: arXiv:1606.00608, Lemma `equalMPS`, statement lines 1080--1091 and
+proof lines 1093--1117.  Two irreducible trace-preserving tensors whose
+rectangular MPV overlap has norm tending to one have equal bond dimensions.
+Indeed, distinct bond dimensions would force the same overlap to tend to zero.
+
+This is the bond-dimension part of the source lemma, separated from the
+same-dimension gauge recovery below.  The relation to the full source statement
+is recorded in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_irr : Kraus.IsIrreducibleFamily A)
+    (hB_irr : Kraus.IsIrreducibleFamily B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    D₁ = D₂ := by
+  by_contra hdim
+  have hzero :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+        (nhds (0 : ℂ)) :=
+    mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+      A B hA_irr hB_irr hA_norm hB_norm hdim
+  have hnorm_zero :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (0 : ℝ)) := by
+    simpa using hzero.norm
+  exact one_ne_zero (tendsto_nhds_unique hOverlap hnorm_zero)
+
+/-- **Spectral radius lower bound from unit-modulus overlap.**
+
+Source: arXiv:1606.00608, proof of Lemma equalMPS, lines 1093-1117.
+This is the spectral-radius step inside the proof: if the modulus of the
+overlap tends to `1`, the cross-transfer spectral radius is at least `1`.
+
+The proof is the contrapositive of
+`mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one`: if the
+spectral radius were strictly less than `1`, the overlap (and hence its
+modulus) would tend to `0`, contradicting the hypothesis.
+
+The proof uses the rectangular overlap-decay theorem
+`mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one`, whose proof rests on the
+mixed-transfer trace identity, with no proportionality hypothesis required. -/
+theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
+    (A B : MPSTensor d D)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    1 ≤ Kraus.mixedTransferSpectralRadius A B := by
+  by_contra hlt
+  push Not at hlt
+  -- Unpack Kraus.mixedTransferSpectralRadius and pass to the rectangular form (D₁ = D₂ = D).
+  have hlt' :
+      spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            (Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
+    have hsq :
+        spectralRadius ℂ
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (Kraus.mixedTransferMap (d := d) (D := D) A B)) < 1 := by
+      simpa [Kraus.mixedTransferSpectralRadius] using hlt
+    -- `Kraus.mixedTransferMap` and `Kraus.mixedTransferMap₂` agree on `D × D` matrices.
+    have hagree :
+        Kraus.mixedTransferMap (d := d) (D := D) A B =
+          Kraus.mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B :=
+      (Kraus.mixedTransferMap₂_same_dim A B).symm
+    rw [← hagree]; exact hsq
+  have hzero :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+        (nhds (0 : ℂ)) :=
+    mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
+      (A := A) (B := B) hlt'
+  have hnorm_zero :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (0 : ℝ)) := by
+    simpa using hzero.norm
+  have h01 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
+  exact one_ne_zero h01
+
+
+/-- **Gauge-phase equivalence from unit-modulus overlap.**
+
+Source: arXiv:1606.00608, Lemma equalMPS, statement lines 1080-1091 and
+proof lines 1093-1117. If two
+irreducible trace-preserving (left-canonical) blocks of the same bond
+dimension have asymptotically unit-modulus overlap, then they are
+gauge-phase equivalent.
+
+This is the **proportionality-free** version of the gauge recovery — the
+counterpart to the proportionality-based gauge recovery
+without the extra `NonzeroProportionalMPV₂` hypothesis. The proof uses the
+cross-transfer-matrix spectral radius (computed via
+`mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one`)
+together with the rigidity theorem
+`modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`.
+
+**Scope restriction (same bond dimension):** this theorem proves the gauge
+recovery for two tensors of a common bond dimension `D`. The source Lemma
+equalMPS additionally concludes `D_a = D_b` in the unit-overlap case; that
+bond-dimension matching follows from the rectangular overlap-decay theorem
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (distinct bond dimensions
+force the overlap to decay, so a non-decaying overlap forces equal dimensions),
+which is applied directly where blocks of differing dimension arise. Documented
+in `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
+    (A B : MPSTensor d D)
+    (hA_irr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hB_irr : Kraus.IsIrreducibleFamily (d := d) (D := D) B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    GaugePhaseEquiv A B :=
+  modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
+    A B hA_irr hB_irr hA_norm hB_norm
+    (mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
+      (A := A) (B := B) hOverlap)
+
+end OverlapGauge
 
 /-! ### Symmetry, transitivity, and cast-composition of `GaugePhaseEquiv`
 

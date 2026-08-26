@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.FinSum
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
-import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
+import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.Overlap.NormalTensorDichotomy
 
 /-!

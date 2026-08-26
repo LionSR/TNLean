@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
 import TNLean.MPS.FundamentalTheorem.SectorBNT.MatchAux
+import TNLean.MPS.SharedInfra.SectorDecomposition
 
 /-!
 # Analytic core for proportional sector matching

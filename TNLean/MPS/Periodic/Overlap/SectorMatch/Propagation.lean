@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
+import TNLean.MPS.SharedInfra.GaugePhase
 
 /-!
 # Periodic sector-match propagation
