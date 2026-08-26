@@ -743,11 +743,10 @@ abstracted — record why, so it is not re-proposed).
   assembly.
 - **Reuse:** `MPOTensor.verticalAssembledTensor_apply_copy_ne` in
   `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` owns the shared unequal-copy argument.
-- **Result:** the former private implementations
-  `VerticalCopyBlocks.verticalAssembledTensor_apply_copy_ne` in
-  `TNLean/MPS/MPDO/VerticalCopyBlocks.lean` and
-  `VerticalProductRetainedBlocks.verticalAssembledTensor_apply_copy_ne` in
-  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean` now delegate to the shared owner.
+- **Result:** the call sites in `TNLean/MPS/MPDO/VerticalCopyBlocks.lean` and
+  `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean` now invoke the shared owner
+  directly; the private forwarders that formerly stood between them and it have been
+  removed.
   Unlike `MPOTensor.verticalAssembledTensor_apply_copy_same`, this theorem handles distinct
   retained copy indices and proves that the assembled tensor entry vanishes.
 

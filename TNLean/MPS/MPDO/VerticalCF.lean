@@ -44,9 +44,6 @@ construction (arXiv:1606.00608, lines 214--225).
   the MPS tensor `i ↦ M i i` extracted from the diagonal MPO entries; its
   coefficients are the diagonal entries $\langle\sigma|\rho^{(N)}(M)|\sigma\rangle$ of the
   generated operator.
-* `diagonalTransferMap`:
-  the transfer map of `diagonalTensor`, i.e.
-  $E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.
 * `IsVerticalCF`:
   the vertical canonical form of arXiv:1606.00608, Proposition 4.13: an
   isometry after restriction to the nonzero physical sectors, represented by
@@ -519,15 +516,6 @@ theorem mpo_compress_trace_pos (M : MPOTensor d D) (hM : IsMPDO M) (N : ℕ)
     0 < Matrix.trace (P * mpo M N * P) :=
   Matrix.PosSemidef.trace_pos_of_ne_zero
     (mpo_compress_posSemidef M hM N hN P hP) hne
-
-/-- The transfer map of the diagonal tensor of an MPO:
-$E_{\mathrm{diag}}(X) = \sum_i M^{ii} X (M^{ii})^\dagger$.  It acts on the horizontal bond space;
-the transfer map of the vertically viewed tensor is
-`Kraus.transferMap (verticalTensor M)`, which acts on the physical
-space. -/
-noncomputable def diagonalTransferMap (M : MPOTensor d D) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  Kraus.transferMap (diagonalTensor M)
 
 /-- The multiplicity-expanded block dimensions corresponding to a family of
 positive diagonal weights. -/

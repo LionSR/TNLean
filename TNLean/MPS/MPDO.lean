@@ -345,7 +345,6 @@ import TNLean.MPS.MPDO.VerticalMapTransport
 import TNLean.MPS.MPDO.VerticalProductCornerComparison
 import TNLean.MPS.MPDO.VerticalProductCornerPositivity
 import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
-import TNLean.MPS.MPDO.VerticalProductPairBlocks
 import TNLean.MPS.MPDO.VerticalProductReconstruction
 import TNLean.MPS.MPDO.VerticalProductRetainedBlocks
 import TNLean.MPS.MPDO.VerticalProductSpectralFamily
