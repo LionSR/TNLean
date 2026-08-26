@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.BNTRefinement
+import TNLean.MPS.BNT.DirectSumSelectors
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.SourceBNTBlocking
 import TNLean.MPS.SharedInfra.WordTupleGauge

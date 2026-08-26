@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
-import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
+import TNLean.MPS.BNT.DirectSumSelectors
 import TNLean.MPS.MPDO.BiCFDerivation.Blocking
 import TNLean.MPS.MPDO.FirstSiteBlocking
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
