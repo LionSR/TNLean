@@ -159,56 +159,5 @@ theorem isCrossingEdge_normalSquareVerticalTranslatedEdge
   · rintro rfl
     exact Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy
 
-/-! ### The single-crossing hypothesis for the interior blocking data
-
-The cover-free interior blocking data of `NormalEdgeBlockingInterior` carry the same
-red, blue, and complement regions as the translated edge blockings (the interior
-datum is the translated datum with the complementary-block injectivity discharged by
-the interior cover).  Hence the red-to-blue crossings of the interior data are the
-single distinguished edge, the single-crossing hypothesis the coarse three-site route
-consumes. -/
-
-variable {κ : RegionInjectivityData (SquareLatticeVertex width height)}
-
-/-- The translated horizontal interior blocking data have the distinguished edge as
-their only red-to-blue crossing.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem isCrossingEdge_horizontalTranslatedEdge_blockingDatum_interior
-    (A : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
-    (g : Edge (squareLatticeGraph width height)) :
-    IsCrossingEdge (G := squareLatticeGraph width height) A
-        (normalSquareHorizontalTranslatedEdge_blockingDatum_interior
-          h hUnion hx0 hy0 hxw hyh).red
-        (normalSquareHorizontalTranslatedEdge_blockingDatum_interior
-          h hUnion hx0 hy0 hxw hyh).blue g ↔
-      g = normalSquareHorizontalTranslatedEdge xStart yStart (by omega) (by omega) :=
-  isCrossingEdge_normalSquareHorizontalTranslatedEdge A (by omega) (by omega) g
-
-/-- The translated vertical interior blocking data have the distinguished edge as
-their only red-to-blue crossing.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem isCrossingEdge_verticalTranslatedEdge_blockingDatum_interior
-    (A : Tensor (squareLatticeGraph width height) d) {xStart yStart : ℕ}
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
-    (hUnion : RegionInjectivityUnionClosure κ)
-    (hx0 : 2 ≤ xStart) (hy0 : 2 ≤ yStart)
-    (hxw : xStart + 8 ≤ width) (hyh : yStart + 8 ≤ height)
-    (g : Edge (squareLatticeGraph width height)) :
-    IsCrossingEdge (G := squareLatticeGraph width height) A
-        (normalSquareVerticalTranslatedEdge_blockingDatum_interior
-          h hUnion hx0 hy0 hxw hyh).red
-        (normalSquareVerticalTranslatedEdge_blockingDatum_interior
-          h hUnion hx0 hy0 hxw hyh).blue g ↔
-      g = normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega) :=
-  isCrossingEdge_normalSquareVerticalTranslatedEdge A (by omega) (by omega) g
-
 end PEPS
 end TNLean

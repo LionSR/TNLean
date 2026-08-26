@@ -191,28 +191,5 @@ theorem regionBlockedTensorInjective_normalSquareRegionT
       (normalSquareRegionT xStart yStart) :=
   h.regionT_injective_of_cover (regionInjectivityUnionClosure_of_overlap A hpos) cover
 
-/-- **The full square-lattice blocking-region structure from rectangular
-injectivity and a supplied `T`-cover.** If a normal square-lattice PEPS tensor
-of size at least `7×7` has positive bond dimensions, every contiguous `2×3` and
-`3×2` rectangle is blocked-tensor injective, and the displayed region `T` at the
-origin has a rectangular cover, then the abstract blocking-region structure of
-Theorem 3 holds for the concrete region-injectivity predicate.
-
-The union closure used to assemble `R`, `S`, and `T` is the faithful overlapping
-union provider, so the only hypotheses beyond rectangular injectivity and size
-are the positive bond dimensions and the supplied `T`-cover.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500 of
-`Papers/1804.04964/paper_normal.tex`. -/
-def normalSquareBlockingRegions_of_overlap
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := G) A))
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hWidth : 7 ≤ width) (hHeight : 7 ≤ height)
-    (cover : NormalSquareRegionTRectangleCover (width := width) (height := height) 0 0) :
-    NormalSquareBlockingRegions (regionInjectivityDataOf (G := G) A) :=
-  normalSquareBlockingRegions_of_TCover h (regionInjectivityUnionClosure_of_overlap A hpos)
-    hWidth hHeight cover
-
 end PEPS
 end TNLean

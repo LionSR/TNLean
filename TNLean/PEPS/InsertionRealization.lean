@@ -317,41 +317,6 @@ theorem edgePhysicalToVirtualInsertion_of_projected_realization_eq
     rw [hRight] at hrealize
     exact hrealize.symm
 
-/-- Projected endpoint physical realizations recover the corresponding virtual
-matrix insertion on both endpoints, under linear independence at the two
-endpoints only.
-
-This is the endpoint-injective form of
-`edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq`: it takes
-the two endpoint linear-independence facts (the pair supplied by
-`EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`) instead of the global
-`IsVertexInjective` hypothesis, so it applies directly under the edge-blocked
-three-site injectivity hypothesis of `physical_to_virtual_insertion`.
-
-Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
-of the local paper source. -/
-theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eqAt
-    (A : Tensor G d) (e : Edge G)
-    (hu : LinearIndependent ℂ (A.component e.1.1))
-    (hv : LinearIndependent ℂ (A.component e.1.2))
-    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
-    (hO₁ : (localProjectorAt A hu).comp (O₁.comp (localProjectorAt A hu)) =
-      physRealizeLocalOpAt A hu
-        (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose))
-    (hO₂ : (localProjectorAt A hv).comp (O₂.comp (localProjectorAt A hv)) =
-      physRealizeLocalOpAt A hv
-        (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)) :
-    localVirtualOpOfPhysicalOpAt A hu O₁ =
-        localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose ∧
-      localVirtualOpOfPhysicalOpAt A hv O₂ =
-        localIncidentMatrixOp A (edgeRightIncident (G := G) e) M := by
-  constructor
-  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
-      A e hu O₁ M).2 hO₁
-  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
-      A e hv O₂ M).2 hO₂
-
 /-! ### Decoupling the three physical legs and inverting the middle block
 
 The two endpoints `e.1.1`, `e.1.2` and the middle region `V \ {u, v}` are
