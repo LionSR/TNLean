@@ -452,7 +452,10 @@ Section~\ref{sec:app_canonical_cyclic_sectors}.
 
 \begin{lemma}[Sector irreducibility for the adjoint blocked map]%
     \label{thm:sector_irred_unconditional}
-    \lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}\leanok
+    \lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}
+    \lean{MPSTensor.hFixUpgrade_of_peripheral}
+    \lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp}
+    \leanok
     \uses{def:irreducible_tensor}
     Let $A$ be a left-canonical irreducible MPS tensor with $D>0$, let $m$ be the
     period of its cyclic-sector decomposition, and let $(P_u)_{u=1}^m$ be the

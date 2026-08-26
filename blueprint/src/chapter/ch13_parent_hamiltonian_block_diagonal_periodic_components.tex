@@ -382,6 +382,7 @@
 \begin{theorem}[A global change of cut gives periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length, thm:pgvwc_product_span_source_length, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut, lem:block_diagonal_boundary_component_right_boundary_matrices}
     With the hypotheses and notation of
@@ -499,6 +500,7 @@
 \begin{theorem}[Periodic block decomposition and block-space independence]
     \label{thm:block_diagonal_chain_space_global_cut_independent}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
+    \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut, lem:block_diagonal_boundary_representation_inclusion, lem:block_diagonal_boundary_closing_equality, thm:pgvwc_block_space_independence_source_length}
     Under the same hypotheses,
@@ -538,6 +540,7 @@
 \begin{corollary}[Kernel containment from the global cut]
     \label{cor:block_diagonal_kernel_global_cut}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Under the same hypotheses, suppose additionally that every periodic
