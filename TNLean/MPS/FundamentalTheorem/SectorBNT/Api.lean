@@ -29,9 +29,6 @@ not imported here.
   eventual linear independence for two BNT canonical forms
   with mutually vanishing cross-overlaps (CPSV16 corollary Lem1,
   lines 1121–1132; CPSV21 line 1850 BNT linear-independence input).
-* `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the global
-  unit-modulus witness re-stated for direct access by downstream callers
-  (CPSV16 line 246).
 
 ## References
 
@@ -137,15 +134,6 @@ lemma combined_family_eventually_li
     (hB_self := hQ.basis_normalized_self_overlap)
     (hB_off := fun _ _ hk => hQ.cross_overlap_basis_tendsto_zero hk)
     (hAB := hAB)
-
-/-- **Global unit-modulus weight witness from the canonical-form normalization.**
-
-Re-states the structural field `weight_unit_exists` (CPSV16 §II.C
-line 246) for direct access by downstream callers that want to extract a
-global unit-modulus weight without depending on the structure layout. -/
-lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
-    ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
-      ‖P.weight j q‖ = 1 := h.weight_unit_exists
 
 end IsBNTCanonicalForm
 

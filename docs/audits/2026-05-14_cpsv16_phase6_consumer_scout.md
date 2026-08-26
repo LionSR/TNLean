@@ -40,7 +40,7 @@ Short summary:
 | `hCF.toHasNormalizedSelfOverlap.overlap_tendsto_one j` or `hCF.overlap_tendsto_one j` | `hP.basis_normalized_self_overlap j` | Exact replacement; `basis_dim_pos` can avoid some old zero-dimension detours. |
 | `hCF.blocks_not_equiv j k ...` | `hP.basis_distinct j k ...` | Exact cast-compatible replacement. |
 | external `hIrr.block_irreducible j` | `hP.basis_irreducible j` | New surface often makes the external argument unnecessary. |
-| `hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j` | no direct basis-level scalar; use `P.weight_ne_zero j q` for a selected copy, or `hP.coeff_not_eventually_zero j` for eventual coefficient nonvanishing | This is the main issue. Fixed-length proofs that invert `(mu j)^m` are one-copy artifacts. |
+| `hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j` | no direct basis-level scalar; use `P.weight_ne_zero j q` for a selected copy, or `P.coeff_not_eventually_zero j` for eventual coefficient nonvanishing | This is the main issue. Fixed-length proofs that invert `(mu j)^m` are one-copy artifacts. |
 | `hCF.mu_strict_anti` | no core replacement | This strict order is intentionally absent. It belongs only to a separate special subcase if ever needed. |
 | `IsCanonicalFormBNT.cross_overlap_tendsto_zero` | `hP.cross_overlap_basis_tendsto_zero` from `SectorBNT/Api.lean` | Exact same BNT-basis conclusion. |
 | old LI via `toHasNormalizedSelfOverlap` plus cross decay | `hP.combined_family_eventually_li hQ hAB` or `hP.bnt_data` | Use `bnt_data` for one family; use the API lemma for two families. |

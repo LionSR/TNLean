@@ -35,8 +35,9 @@ Section IV.A, lines 1846–1884 (which normalizes the spectral radius of the BNT
 `IsBNTCanonicalForm`.
 The sector matching instead compares coefficients at a fixed sufficiently large
 length by exact linear independence (`exists_block_match_exact` and its
-proportional variant) together with the modulus-free `coeff_not_eventually_zero`
-lemma below, so it requires no per-sector unit-modulus witness.
+proportional variant) together with the modulus-free
+`SectorDecomposition.coeff_not_eventually_zero`, so it requires no per-sector
+unit-modulus witness.
 
 The structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
@@ -159,34 +160,5 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
-
-namespace IsBNTCanonicalForm
-
-variable {P : SectorDecomposition d}
-
-/-- **Sector coefficient is not eventually zero.**
-
-For any sector `j`, the power-sum coefficient
-`P.coeff N j = ∑_q (P.weight j q)^N` is not eventually zero in `N`.  This
-rules out the pathological cancellation that would obstruct the CPSV16 §II
-Step 1 coefficient-comparison argument: once combined-family LI isolates
-the `j`-th sector coefficient (CPSV16 lines 1121–1132), the surviving
-relation cannot be `0 = 0` for large `N`, so the multiplicity-recovery
-argument of CPSV16 Appendix MPV proof, lines 1184–1188, has a nonvanishing
-left-hand side to compare against after the line 1182 matching step.
-
-The proof feeds nonzero weights `P.weight j q ≠ 0` (from
-`P.weight_ne_zero`) into `geom_sum_eventually_zero`
-(`TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean`): if the
-power-sum were eventually zero, the geometric-extrapolation lemma would
-force it to vanish at every exponent including `0`, contradicting the
-positivity of `P.copies j` (i.e. `∑_q 1 = P.copies j ≠ 0`).
--/
-lemma coeff_not_eventually_zero
-    (_h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
-    ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) :=
-  P.coeff_not_eventually_zero j
-
-end IsBNTCanonicalForm
 
 end MPSTensor

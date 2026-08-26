@@ -181,7 +181,7 @@ with matched $Q$-blocks.  It then applies
 $P$-subfamily together with all $Q$-blocks and compares coefficients in that
 restricted family.  The selected coefficient is forced to vanish eventually,
 contradicting
-\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.  The unrestricted
+\leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}.  The unrestricted
 lemma \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li} is the
 full-family special case of the same repair.  This coefficient-comparison
 argument proves the current active-sector matching theorem without using the
@@ -200,7 +200,7 @@ The source line~1182 fixed-block claim and the current formal repair must be
 kept distinct.  The repair uses restricted combined-family linear independence,
 scalar relations for the complementary blocks, and the raw power sums
 $\sum_q\mu_{j,q}^N$ carried by \leanid{SectorDecomposition}.  Together with
-\leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}, this gives the
+\leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}, this gives the
 active-sector coefficient comparison proved in the current theorem.  Collapsing
 a sector to one strictly ordered weight destroys precisely the information
 needed for that argument, so non-dominant per-block projection is a route that

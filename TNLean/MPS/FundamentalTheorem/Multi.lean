@@ -172,12 +172,6 @@ section Converse
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-theorem gaugeEquiv_toTensorFromBlocks_implies_sameMPV
-    (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hGauge : GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    SameMPV (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  GaugeEquiv.sameMPV hGauge
-
 theorem sameMPV_toTensorFromBlocks_of_blockSameMPV
     (μ : Fin r → ℂ) (A B : (k : Fin r) → MPSTensor d (dim k))
     (hSame : ∀ k, SameMPV (A k) (B k)) :

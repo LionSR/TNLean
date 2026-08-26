@@ -71,15 +71,6 @@ are consumed by the downstream canonical-form proof chain.
 
 open KadisonSchwarz
 
-/-- If cyclic projections sum to `1`, then none of the summands can vanish. -/
-private theorem cyclic_projection_nonzero_of_sum_one
-    {m D : ℕ} [NeZero m] [NeZero D]
-    {T : MatrixEnd D} {P : Fin m → MatrixAlg D}
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hCyclic : ∀ k : Fin m, T (P (k + 1)) = P k) :
-    ∀ k, P k ≠ 0 :=
-  cyclic_projection_ne_zero_of_sum_one hPsum hCyclic
-
 /-- Each cyclic projection lies in the multiplicative domain of the one-step
 adjoint transfer map. -/
 private theorem cyclic_projection_mem_multiplicativeDomain
@@ -256,7 +247,8 @@ private theorem
   let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
   have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hcyclic
   have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hcyclic
-  have hPne : ∀ k : Fin m, P k ≠ 0 := cyclic_projection_nonzero_of_sum_one hPsum hcyclic
+  have hPne : ∀ k : Fin m, P k ≠ 0 :=
+    cyclic_projection_ne_zero_of_sum_one hPsum hcyclic
   intro u
   have : NeZero (dim u) := ⟨hNondeg u⟩
   let hInv : PreservesCorner (P u) (T ^ m) :=
