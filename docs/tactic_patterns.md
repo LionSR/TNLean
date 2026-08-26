@@ -24,6 +24,31 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### non-injectivity from an annihilating linear functional — promoted
+- **Pattern:** exhibit a matrix outside the span of a finite Kraus family by
+  running `Submodule.span_induction` over an entrywise linear condition
+  (`M 0 1 = 0`, `M 0 0 = M 1 1`), discharging the `zero`, `add`, and `smul`
+  cases by `simp`/`linear_combination`, then contradicting the membership of a
+  chosen witness supplied by `span_eq_top ▸ Submodule.mem_top`.
+- **Seen:** eight occurrences before promotion (2026-08-26):
+  `TNLean/MPS/Examples/AKLT.lean` (`aklt_not_isInjective`),
+  `TNLean/MPS/Examples/GHZ.lean` (`ghz_not_isInjective`),
+  `TNLean/MPS/Examples/Cluster.lean` (`cluster_not_isInjective`),
+  `TNLean/MPS/Examples/EvenParity.lean` (`evenParity_span_diag_eq` and
+  `evenParity_not_isInjective`),
+  `TNLean/MPS/Examples/MajumdarGhosh.lean` (`majumdarGhosh_not_isInjective`,
+  `majumdarGhosh_not_isNBlkInjective_of_odd`,
+  `majumdarGhosh_not_isNBlkInjective_of_even`), and
+  `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`
+  (`diagBlock_diagonalRestrictionUnits_not_isNormal`).
+- **Abstraction:** `Kraus.not_isInjective_of_linearMap` and
+  `Kraus.not_isNBlkInjective_of_linearMap` in `TNLean/MPS/Defs.lean`.
+- **Notes:** the caller supplies the functional (typically a signed sum of
+  `Matrix.entryLinearMap`), the vanishing proof on the generators, and one
+  witness on which the functional is nonzero; the span induction disappears.
+  Both lemmas are channel-generic finite-Kraus results whose long-run home is
+  QICLean's injectivity file.
+
 ### Kronecker product of matrix isometries — promoted
 - **Pattern:** expand `Matrix.IsIsometry`, commute conjugate transpose and
   multiplication with the Kronecker product, and substitute the two constituent

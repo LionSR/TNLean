@@ -96,28 +96,16 @@ theorem evenParity_isTransferIdempotent : IsTransferIdempotent evenParityTensor 
 
 /-! ### Non-injectivity -/
 
-/-- Every element of `span{A⁰, A¹}` satisfies `M 0 0 = M 1 1`, since both
-`I` and `σx` have equal diagonal entries. -/
-private lemma evenParity_span_diag_eq :
-    ∀ M ∈ Submodule.span ℂ (Set.range evenParityTensor), M 0 0 = M 1 1 := by
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨k, rfl⟩ := hx
-    fin_cases k <;> simp [evenParityTensor, pauliX, Matrix.of_apply]
-  | zero => simp
-  | add x y _ _ hx hy => simp [hx, hy]
-  | smul c x _ hx => simp [hx]
-
 /-- The even-parity tensor is **not** injective: `span{(1/√2)I, (1/√2)σx}` is the
 2-dimensional commutative subalgebra `{aI + bσx}`, not the full 4-dimensional
-matrix algebra `M₂(ℂ)`. -/
-theorem evenParity_not_isInjective : ¬ Kraus.IsInjective evenParityTensor := by
-  intro h
-  have hmem : Matrix.diagonal (Pi.single (0 : Fin 2) (1 : ℂ)) ∈
-      Submodule.span ℂ (Set.range evenParityTensor) := h ▸ Submodule.mem_top
-  have heq := evenParity_span_diag_eq _ hmem
-  simp at heq
+matrix algebra `M₂(ℂ)`.  Every element of the span has equal diagonal entries,
+since both `I` and `σx` do. -/
+theorem evenParity_not_isInjective : ¬ Kraus.IsInjective evenParityTensor :=
+  Kraus.not_isInjective_of_linearMap
+    (Matrix.entryLinearMap ℂ ℂ 0 0 - Matrix.entryLinearMap ℂ ℂ 1 1)
+    (fun k => by
+      fin_cases k <;> simp [evenParityTensor, pauliX, Matrix.of_apply])
+    (Matrix.diagonal (Pi.single (0 : Fin 2) (1 : ℂ))) (by simp)
 
 /-! ### Z₂ on-site symmetry via σz -/
 
@@ -151,9 +139,8 @@ private noncomputable def pauliZGL : GL (Fin 2) ℂ :=
 
 private lemma pauliZGL_inv_val :
     ((pauliZGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = pauliZ := by
-  have hsq : pauliZGL * pauliZGL = 1 := by
-    apply Units.ext; simp only [Units.val_mul, Units.val_one, pauliZGL_val, pauliZ_sq]
-  rw [show pauliZGL⁻¹ = pauliZGL from inv_eq_of_mul_eq_one_right hsq, pauliZGL_val]
+  rw [Matrix.GeneralLinearGroup.coe_inv, pauliZGL_val]
+  exact Matrix.inv_eq_right_inv pauliZ_sq
 
 /-- σz conjugation flips the sign of σx: `σz σx σz = -σx`. -/
 private lemma pauliZ_pauliX_pauliZ : pauliZ * pauliX * pauliZ = -pauliX := by

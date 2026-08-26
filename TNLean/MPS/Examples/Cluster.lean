@@ -92,24 +92,12 @@ private lemma inv_sqrt2_sq :
 /-- The cluster tensor is **not** injective: `span{A⁰, A¹}` is the `2`-dimensional
 space of matrices whose two left-column entries agree, not the full `4`-dimensional
 matrix algebra `M₂(ℂ)`. -/
-theorem cluster_not_isInjective : ¬ Kraus.IsInjective clusterTensor := by
-  intro h
-  have hmem : Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range clusterTensor) := h ▸ Submodule.mem_top
+theorem cluster_not_isInjective : ¬ Kraus.IsInjective clusterTensor :=
   -- Every element of the span has equal left-column entries `M 0 0 = M 1 0`.
-  suffices hcol : ∀ M ∈ Submodule.span ℂ (Set.range clusterTensor), M 0 0 = M 1 0 by
-    have hcontra := hcol _ hmem
-    simp [Matrix.single] at hcontra
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨k, rfl⟩ := hx
-    fin_cases k <;> simp [clusterTensor, Matrix.smul_apply]
-  | zero => simp
-  | add x y _ _ hx hy =>
-    simp only [Matrix.add_apply]; rw [hx, hy]
-  | smul c x _ hx =>
-    simp only [Matrix.smul_apply, smul_eq_mul]; rw [hx]
+  Kraus.not_isInjective_of_linearMap
+    (Matrix.entryLinearMap ℂ ℂ 0 0 - Matrix.entryLinearMap ℂ ℂ 1 0)
+    (fun k => by fin_cases k <;> simp [clusterTensor])
+    (Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ)) (by simp [Matrix.single])
 
 /-! ### Length-2 products
 
@@ -146,20 +134,12 @@ private lemma cluster_prod_11 :
 
 /-! ### Normality (length-2 blocked injectivity) -/
 
-private abbrev clusterWordSpan :=
-  Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 2 => Kraus.evalWord clusterTensor (List.ofFn σ))
-
 private lemma cluster_product_in_wordSpan (i j : Fin 2) :
-    clusterTensor i * clusterTensor j ∈ clusterWordSpan := by
-  rw [show clusterTensor i * clusterTensor j = Kraus.evalWord clusterTensor [i, j] from by
-    simp [Kraus.evalWord]]
-  have : [i, j] = List.ofFn (![i, j] : Fin 2 → Fin 2) := by
-    simp [List.ofFn_succ, List.ofFn_zero]
-  rw [this]
-  exact Submodule.subset_span ⟨_, rfl⟩
+    clusterTensor i * clusterTensor j ∈ Kraus.wordSpan clusterTensor 2 := by
+  simpa [Kraus.evalWord] using Kraus.evalWord_mem_wordSpan clusterTensor [i, j]
 
 private lemma cluster_single_00_in_wordSpan :
-    Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ clusterWordSpan := by
+    Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan clusterTensor 2 := by
   have h : Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) =
       clusterTensor 0 * clusterTensor 0 + clusterTensor 1 * clusterTensor 0 := by
     rw [cluster_prod_00, cluster_prod_10]
@@ -169,7 +149,7 @@ private lemma cluster_single_00_in_wordSpan :
   exact Submodule.add_mem _ (cluster_product_in_wordSpan 0 0) (cluster_product_in_wordSpan 1 0)
 
 private lemma cluster_single_10_in_wordSpan :
-    Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ clusterWordSpan := by
+    Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan clusterTensor 2 := by
   have h : Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) =
       clusterTensor 0 * clusterTensor 0 - clusterTensor 1 * clusterTensor 0 := by
     rw [cluster_prod_00, cluster_prod_10]
@@ -179,7 +159,7 @@ private lemma cluster_single_10_in_wordSpan :
   exact Submodule.sub_mem _ (cluster_product_in_wordSpan 0 0) (cluster_product_in_wordSpan 1 0)
 
 private lemma cluster_single_01_in_wordSpan :
-    Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ clusterWordSpan := by
+    Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan clusterTensor 2 := by
   have h : Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) =
       clusterTensor 0 * clusterTensor 1 - clusterTensor 1 * clusterTensor 1 := by
     rw [cluster_prod_01, cluster_prod_11]
@@ -189,7 +169,7 @@ private lemma cluster_single_01_in_wordSpan :
   exact Submodule.sub_mem _ (cluster_product_in_wordSpan 0 1) (cluster_product_in_wordSpan 1 1)
 
 private lemma cluster_single_11_in_wordSpan :
-    Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ clusterWordSpan := by
+    Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan clusterTensor 2 := by
   have h : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) =
       clusterTensor 0 * clusterTensor 1 + clusterTensor 1 * clusterTensor 1 := by
     rw [cluster_prod_01, cluster_prod_11]
@@ -368,12 +348,8 @@ private lemma clusterGaugeZ_sq :
 
 private lemma clusterGaugeZ_inv_val :
     ((clusterGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] := by
-  have hsq : clusterGaugeZ * clusterGaugeZ = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, Units.val_one, clusterGaugeZ_val]
-    exact clusterGaugeZ_sq
-  rw [show clusterGaugeZ⁻¹ = clusterGaugeZ from inv_eq_of_mul_eq_one_right hsq,
-    clusterGaugeZ_val]
+  rw [Matrix.GeneralLinearGroup.coe_inv, clusterGaugeZ_val]
+  exact Matrix.inv_eq_right_inv clusterGaugeZ_sq
 
 private def clusterGaugeX : GL (Fin 2) ℂ :=
   Matrix.GeneralLinearGroup.mkOfDetNeZero pauliX (by
@@ -385,11 +361,8 @@ private def clusterGaugeX : GL (Fin 2) ℂ :=
 
 private lemma clusterGaugeX_inv_val :
     ((clusterGaugeX⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = pauliX := by
-  have hsq : clusterGaugeX * clusterGaugeX = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, Units.val_one, clusterGaugeX_val, pauliX_sq]
-  rw [show clusterGaugeX⁻¹ = clusterGaugeX from inv_eq_of_mul_eq_one_right hsq,
-    clusterGaugeX_val]
+  rw [Matrix.GeneralLinearGroup.coe_inv, clusterGaugeX_val]
+  exact Matrix.inv_eq_right_inv pauliX_sq
 
 private def clusterGaugeZX : GL (Fin 2) ℂ :=
   Matrix.GeneralLinearGroup.mkOfDetNeZero !![0, 1; -1, 0] (by norm_num [Matrix.det_fin_two])
@@ -400,17 +373,10 @@ private def clusterGaugeZX : GL (Fin 2) ℂ :=
 
 private lemma clusterGaugeZX_inv_val :
     ((clusterGaugeZX⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![0, -1; 1, 0] := by
-  have h : clusterGaugeZX * Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![0, -1; 1, 0] : Matrix (Fin 2) (Fin 2) ℂ) (by norm_num [Matrix.det_fin_two]) = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, Units.val_one, clusterGaugeZX_val,
-      Matrix.GeneralLinearGroup.val_mkOfDetNeZero]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [Matrix.mul_apply, Fin.sum_univ_two]
-  rw [show clusterGaugeZX⁻¹ = Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![0, -1; 1, 0] : Matrix (Fin 2) (Fin 2) ℂ) (by norm_num [Matrix.det_fin_two]) from
-    inv_eq_of_mul_eq_one_right h]
-  exact Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
+  rw [Matrix.GeneralLinearGroup.coe_inv, clusterGaugeZX_val]
+  refine Matrix.inv_eq_right_inv ?_
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The two virtual gauges `σz` and `σx` anticommute.  This is the projective
 phase that witnesses the non-trivial SPT order: the group elements commute on

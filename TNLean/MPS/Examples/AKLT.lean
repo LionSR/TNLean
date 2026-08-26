@@ -7,6 +7,7 @@ import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.ZMod2
 import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.ComplexSqrt
 
 /-!
 # AKLT state as a Matrix Product State
@@ -70,39 +71,15 @@ lemma akltTensor_one :
 lemma akltTensor_two :
     akltTensor 2 = -(↑(Real.sqrt 2 / Real.sqrt 3) : ℂ) • !![0, 0; 1, 0] := rfl
 
-/-! ### Scalar arithmetic lemmas -/
-
-private lemma ofReal_sqrt3_mul_self :
-    (↑(Real.sqrt 3) : ℂ) * (↑(Real.sqrt 3) : ℂ) = 3 := by
-  rw [← Complex.ofReal_mul, ← sq, Real.sq_sqrt (by positivity), Complex.ofReal_ofNat]
-
-private lemma ofReal_sqrt2_mul_self :
-    (↑(Real.sqrt 2) : ℂ) * (↑(Real.sqrt 2) : ℂ) = 2 := by
-  rw [← Complex.ofReal_mul, ← sq, Real.sq_sqrt (by positivity), Complex.ofReal_ofNat]
-
 /-! ### Non-injectivity -/
 
 /-- The AKLT tensor is **not** injective: the span of {A⁰, A¹, A²} is the 3-dimensional
 space of traceless matrices, not the full 4-dimensional matrix algebra M₂(ℂ). -/
-theorem aklt_not_isInjective : ¬ Kraus.IsInjective akltTensor := by
-  intro h
-  have hmem : (1 : Matrix (Fin 2) (Fin 2) ℂ) ∈
-      Submodule.span ℂ (Set.range akltTensor) := h ▸ Submodule.mem_top
-  suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range akltTensor), M 0 0 + M 1 1 = 0 by
-    have h1 := hzero _ hmem
-    norm_num at h1
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨k, rfl⟩ := hx
-    fin_cases k <;> simp [akltTensor, Matrix.smul_apply]
-  | zero => simp
-  | add x y _ _ hx hy =>
-    simp only [Matrix.add_apply]
-    linear_combination hx + hy
-  | smul c x _ hx =>
-    simp only [Matrix.smul_apply, smul_eq_mul]
-    linear_combination c * hx
+theorem aklt_not_isInjective : ¬ Kraus.IsInjective akltTensor :=
+  Kraus.not_isInjective_of_linearMap
+    (Matrix.entryLinearMap ℂ ℂ 0 0 + Matrix.entryLinearMap ℂ ℂ 1 1)
+    (fun k => by fin_cases k <;> simp [akltTensor])
+    (1 : Matrix (Fin 2) (Fin 2) ℂ) (by norm_num [Matrix.one_apply])
 
 /-! ### Transfer map -/
 
@@ -135,23 +112,16 @@ theorem aklt_transferMap_one :
       zero_mul, add_zero, zero_add, Complex.ofReal_div, neg_smul, neg_of,
       neg_cons, neg_zero, Matrix.neg_empty, ne_eq, zero_ne_one, one_ne_zero,
       not_false_eq_true, one_apply_eq, one_apply_ne, neg_mul, neg_neg] <;> (
-      rw [div_mul_div_comm, ← _root_.mul_inv_rev, ofReal_sqrt3_mul_self,
-        ofReal_sqrt2_mul_self]
+      rw [div_mul_div_comm, ← _root_.mul_inv_rev, ← sq, ← sq,
+        Complex.ofReal_sqrt_sq 3 (by positivity),
+        Complex.ofReal_sqrt_sq 2 (by positivity)]
       norm_num)
 
 /-! ### Normality (2-block injectivity) -/
 
-private abbrev Kraus.wordSpan :=
-  Submodule.span ℂ (Set.range fun σ : Fin 2 → Fin 3 => Kraus.evalWord akltTensor (List.ofFn σ))
-
 private lemma product_in_wordSpan (i j : Fin 3) :
-    akltTensor i * akltTensor j ∈ Kraus.wordSpan := by
-  rw [show akltTensor i * akltTensor j = Kraus.evalWord akltTensor [i, j] from by
-        simp [Kraus.evalWord]]
-  have : [i, j] = List.ofFn (![i, j] : Fin 2 → Fin 3) := by
-    simp [List.ofFn_succ, List.ofFn_zero]
-  rw [this]
-  exact Submodule.subset_span ⟨_, rfl⟩
+    akltTensor i * akltTensor j ∈ Kraus.wordSpan akltTensor 2 := by
+  simpa [Kraus.evalWord] using Kraus.evalWord_mem_wordSpan akltTensor [i, j]
 
 /-- Nonzero coefficient for the off-diagonal products. -/
 private lemma aklt_coeff_ne_zero :
@@ -160,7 +130,7 @@ private lemma aklt_coeff_ne_zero :
     (Complex.ofReal_ne_zero.mpr (by positivity))
 
 private lemma single_00_in_wordSpan :
-    Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan := by
+    Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan akltTensor 2 := by
   -- A¹ * A² = -(c₁²) e₀₀ for c₁ = √2/√3
   have hne : (↑(Real.sqrt 2 / Real.sqrt 3) : ℂ) * ↑(Real.sqrt 2 / Real.sqrt 3) ≠ 0 :=
     mul_ne_zero (Complex.ofReal_ne_zero.mpr (by positivity))
@@ -172,12 +142,12 @@ private lemma single_00_in_wordSpan :
       simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.single]
   have hmem := product_in_wordSpan 1 2
   rw [h] at hmem
-  have hmem' := Submodule.smul_mem Kraus.wordSpan
+  have hmem' := Submodule.smul_mem (Kraus.wordSpan akltTensor 2)
     (-(↑(Real.sqrt 2 / Real.sqrt 3) * ↑(Real.sqrt 2 / Real.sqrt 3) : ℂ))⁻¹ hmem
   rwa [smul_smul, inv_mul_cancel₀ (neg_ne_zero.mpr hne), one_smul] at hmem'
 
 private lemma single_11_in_wordSpan :
-    Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan := by
+    Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan akltTensor 2 := by
   -- A² * A¹ = -(c₁²) e₁₁
   have hne : (↑(Real.sqrt 2 / Real.sqrt 3) : ℂ) * ↑(Real.sqrt 2 / Real.sqrt 3) ≠ 0 :=
     mul_ne_zero (Complex.ofReal_ne_zero.mpr (by positivity))
@@ -189,12 +159,12 @@ private lemma single_11_in_wordSpan :
       simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.single]
   have hmem := product_in_wordSpan 2 1
   rw [h] at hmem
-  have hmem' := Submodule.smul_mem Kraus.wordSpan
+  have hmem' := Submodule.smul_mem (Kraus.wordSpan akltTensor 2)
     (-(↑(Real.sqrt 2 / Real.sqrt 3) * ↑(Real.sqrt 2 / Real.sqrt 3) : ℂ))⁻¹ hmem
   rwa [smul_smul, inv_mul_cancel₀ (neg_ne_zero.mpr hne), one_smul] at hmem'
 
 private lemma single_01_in_wordSpan :
-    Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan := by
+    Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan akltTensor 2 := by
   -- A⁰ * A¹ = (c₀ c₁) e₀₁
   suffices h : akltTensor 0 * akltTensor 1 =
       (↑(1 / Real.sqrt 3) * ↑(Real.sqrt 2 / Real.sqrt 3) : ℂ) •
@@ -208,7 +178,7 @@ private lemma single_01_in_wordSpan :
     simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.single]
 
 private lemma single_10_in_wordSpan :
-    Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan := by
+    Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan akltTensor 2 := by
   -- A⁰ * A² = (c₀ c₁) e₁₀ (the double negation gives positive)
   suffices h : akltTensor 0 * akltTensor 2 =
       (↑(1 / Real.sqrt 3) * ↑(Real.sqrt 2 / Real.sqrt 3) : ℂ) •
@@ -277,18 +247,10 @@ private lemma akltGaugeMat_sq : akltGaugeMat * akltGaugeMat = -1 := by
 
 private lemma akltGaugeGL_inv_val :
     ((akltGaugeGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![0, -1; 1, 0] := by
-  have : akltGaugeGL * (Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![0, -1; 1, 0] : Matrix (Fin 2) (Fin 2) ℂ) (by
-        simp [Matrix.det_fin_two])) = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, akltGaugeGL_val, akltGaugeMat, Units.val_one]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [Matrix.mul_apply, Fin.sum_univ_two]
-  rw [show akltGaugeGL⁻¹ = Matrix.GeneralLinearGroup.mkOfDetNeZero
-      (!![0, -1; 1, 0] : Matrix (Fin 2) (Fin 2) ℂ) (by
-        simp [Matrix.det_fin_two]) from
-    inv_eq_of_mul_eq_one_right this]
-  exact Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
+  rw [Matrix.GeneralLinearGroup.coe_inv, akltGaugeGL_val]
+  refine Matrix.inv_eq_right_inv ?_
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [akltGaugeMat, Matrix.mul_apply, Fin.sum_univ_two]
 
 private lemma aklt_twisted_generator_eq (i : Fin 3) :
     twistedTensor akltTensor akltZ2Action (Multiplicative.ofAdd 1) i =
@@ -409,11 +371,8 @@ private lemma akltGaugeZ_sq :
 
 private lemma akltGaugeZ_inv_val :
     ((akltGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] := by
-  have hsq : akltGaugeZ * akltGaugeZ = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, Units.val_one, akltGaugeZ_val]
-    exact akltGaugeZ_sq
-  rw [show akltGaugeZ⁻¹ = akltGaugeZ from inv_eq_of_mul_eq_one_right hsq, akltGaugeZ_val]
+  rw [Matrix.GeneralLinearGroup.coe_inv, akltGaugeZ_val]
+  exact Matrix.inv_eq_right_inv akltGaugeZ_sq
 
 /-- The virtual gauge for the combined element, `iσy · σz = [[0, -1], [-1, 0]]`. -/
 private def akltGaugeYZ : GL (Fin 2) ℂ :=
@@ -425,12 +384,10 @@ private def akltGaugeYZ : GL (Fin 2) ℂ :=
 
 private lemma akltGaugeYZ_inv_val :
     ((akltGaugeYZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) = !![0, -1; -1, 0] := by
-  have hsq : akltGaugeYZ * akltGaugeYZ = 1 := by
-    apply Units.ext
-    simp only [Units.val_mul, Units.val_one, akltGaugeYZ_val]
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [Matrix.mul_apply, Fin.sum_univ_two]
-  rw [show akltGaugeYZ⁻¹ = akltGaugeYZ from inv_eq_of_mul_eq_one_right hsq, akltGaugeYZ_val]
+  rw [Matrix.GeneralLinearGroup.coe_inv, akltGaugeYZ_val]
+  refine Matrix.inv_eq_right_inv ?_
+  ext i j; fin_cases i <;> fin_cases j <;>
+    simp [Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The two virtual gauges `iσy = [[0, 1], [-1, 0]]` and `σz = diag(1, -1)`
 implementing the `Z₂ × Z₂` symmetry anticommute: the physical generators commute,

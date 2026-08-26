@@ -171,21 +171,10 @@ theorem majumdarGhosh_transferMap_one :
 /-- The Majumdar-Ghosh tensor is **not** injective: the span of `{A⁰, A¹}` lies
 in the proper subspace of matrices whose `(2,2)` entry vanishes, so it is at most
 two-dimensional and cannot be all of `M₃(ℂ)`. -/
-theorem majumdarGhosh_not_isInjective : ¬ Kraus.IsInjective majumdarGhoshTensor := by
-  intro h
-  have hmem : (1 : Matrix (Fin 3) (Fin 3) ℂ) ∈
-      Submodule.span ℂ (Set.range majumdarGhoshTensor) := h ▸ Submodule.mem_top
-  suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range majumdarGhoshTensor), M 2 2 = 0 by
-    have h1 := hzero _ hmem
-    simp at h1
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨k, rfl⟩ := hx
-    fin_cases k <;> simp [majumdarGhoshTensor]
-  | zero => simp
-  | add x y _ _ hx hy => simp [Matrix.add_apply, hx, hy]
-  | smul c x _ hx => simp [Matrix.smul_apply, hx]
+theorem majumdarGhosh_not_isInjective : ¬ Kraus.IsInjective majumdarGhoshTensor :=
+  Kraus.not_isInjective_of_linearMap (Matrix.entryLinearMap ℂ ℂ 2 2)
+    (fun k => by fin_cases k <;> simp [majumdarGhoshTensor])
+    (1 : Matrix (Fin 3) (Fin 3) ℂ) (by simp)
 
 /-! ### Non-normality
 
@@ -273,44 +262,18 @@ private lemma majumdarGhosh_evalWord_10_of_even {w : List (Fin 2)} (hw : Even w.
 /-- The Majumdar-Ghosh tensor is not `N`-block injective for any odd `N`: the
 `(2,2)` matrix unit is not in the span of the length-`N` products. -/
 theorem majumdarGhosh_not_isNBlkInjective_of_odd {N : ℕ} (hN : Odd N) :
-    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor N := by
-  intro h
-  have hmem : Matrix.single (2 : Fin 3) (2 : Fin 3) (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
-  suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-      Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)), M 2 2 = 0 by
-    have h1 := hzero _ hmem
-    simp [Matrix.single] at h1
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨σ, rfl⟩ := hx
-    exact majumdarGhosh_evalWord_22_of_odd (by simpa [List.length_ofFn] using hN)
-  | zero => simp
-  | add x y _ _ hx hy => simp [Matrix.add_apply, hx, hy]
-  | smul c x _ hx => simp [Matrix.smul_apply, hx]
+    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor N :=
+  Kraus.not_isNBlkInjective_of_linearMap (Matrix.entryLinearMap ℂ ℂ 2 2)
+    (fun _ => majumdarGhosh_evalWord_22_of_odd (by simpa [List.length_ofFn] using hN))
+    (Matrix.single (2 : Fin 3) (2 : Fin 3) (1 : ℂ)) (by simp [Matrix.single])
 
 /-- The Majumdar-Ghosh tensor is not `N`-block injective for any even `N`: the
 `(1,0)` matrix unit is not in the span of the length-`N` products. -/
 theorem majumdarGhosh_not_isNBlkInjective_of_even {N : ℕ} (hN : Even N) :
-    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor N := by
-  intro h
-  have hmem : Matrix.single (1 : Fin 3) (0 : Fin 3) (1 : ℂ) ∈
-      Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-        Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)) := h.span_eq_top ▸ Submodule.mem_top
-  suffices hzero : ∀ M ∈ Submodule.span ℂ (Set.range fun σ : Fin N → Fin 2 =>
-      Kraus.evalWord majumdarGhoshTensor (List.ofFn σ)), M 1 0 = 0 by
-    have h1 := hzero _ hmem
-    simp [Matrix.single] at h1
-  intro M hM
-  induction hM using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨σ, rfl⟩ := hx
-    exact majumdarGhosh_evalWord_10_of_even (by simpa [List.length_ofFn] using hN)
-  | zero => simp
-  | add x y _ _ hx hy => simp [Matrix.add_apply, hx, hy]
-  | smul c x _ hx => simp [Matrix.smul_apply, hx]
+    ¬ Kraus.IsNBlkInjective majumdarGhoshTensor N :=
+  Kraus.not_isNBlkInjective_of_linearMap (Matrix.entryLinearMap ℂ ℂ 1 0)
+    (fun _ => majumdarGhosh_evalWord_10_of_even (by simpa [List.length_ofFn] using hN))
+    (Matrix.single (1 : Fin 3) (0 : Fin 3) (1 : ℂ)) (by simp [Matrix.single])
 
 /-- The Majumdar-Ghosh tensor is not `1`-block injective. -/
 theorem majumdarGhosh_not_isNBlkInjective_one :
