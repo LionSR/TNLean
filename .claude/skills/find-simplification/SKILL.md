@@ -72,7 +72,7 @@ Read the newest note in `docs/audits/` for your area **before** using this list.
 
 The general shapes above, with the repo's known concentrations and the policy that makes each deletable:
 
-- Zero-reference declarations (instances and attribute-carrying lemmas go to the build-checked batch rather than the candidate list; blueprint-tagged names are out): ledger entry S2 recorded ~185 across ~103 files as of 2026-07-20, since heavily swept. Files imported only by the generated aggregator are the file-level version.
+- Zero-reference declarations (instances and attribute-carrying lemmas go to the build-checked batch rather than the candidate list; blueprint-tagged names are out): ledger entry S2 recorded ~185 across ~103 files as of 2026-07-20, since heavily swept. Files imported only by the generated aggregator are the file-level version. Zero references make a declaration a *candidate*, not yet a deletion: a staging helper or forwarder goes immediately, while a name with independent mathematical content takes the deprecation route in the rejection list below.
 - Pass-throughs: deletable without an alias under `docs/project_conventions.md` §Style, provided the PR body and an audit note name each removal with its replacement.
 - Mathlib and QICLean shadows: check `.lake/packages/mathlib/Mathlib/`, `.lake/packages/qiclean/`, and the toolchain-bump audits `docs/audits/*_mathlib_*_replacement_audit.md`, which list what the current Mathlib newly provides.
 - Stricter-hypothesis twins (`foo_of_isNormal_leftCanonical` beside `foo_of_isNormal`): the faithfulness rule in `CLAUDE.md` already classifies the twin as a different theorem; with no consumer it goes.
@@ -117,7 +117,7 @@ A genuinely new Mathlib-shaped lemma can be the right answer when it deletes sev
 For every declaration, classify consumers before writing:
 
 - Production corpus: `TNLean/` (excluding `Archive/`), `blueprint/src/` (`\lean{...}` tags), `scripts/*.lean`, and the docstrings of surviving declarations.
-- Non-production corpus: `Archive/`, `docs/audits/` snapshots, `Notes/`, `Papers/`, comments.
+- Non-production corpus: `Archive/`, `docs/audits/` snapshots, `Notes/`, `Papers/`, and non-docstring comments. A `/-- … -/` docstring is production by the line above; a `--` or `/- … -/` comment is not.
 - Ambiguous corpus: `docs/glossary.md` and `docs/paper-gaps/` — a declaration named there is a public predicate or a documented restriction; migrate the reference rather than counting it as a blocker.
 
 ### Counting consumers without fooling yourself
