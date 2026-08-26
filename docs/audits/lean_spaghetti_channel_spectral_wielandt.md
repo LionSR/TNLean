@@ -156,7 +156,7 @@ Date: 2026-04-08
 | `TNLean/Spectral/MPVOverlapDecay.lean` | 198 | 0 | 1 | `mpvOverlap_tendsto_zero` 56-112 (57l) | 0 | 4 |  |
 | `TNLean/Spectral/MPVOverlapTrace.lean` | 165 | 0 | 2 | `trace_mixedTransferMap_pow_eq_mpvOverlap` 51-109 (59l) | 0 | 2 |  |
 | `TNLean/Spectral/MixedTransfer.lean` | 216 | 0 | 0 | - | 0 | 11 |  |
-| `TNLean/Spectral/PrimitiveOverlap.lean` | 102 | 0 | 0 | - | 0 | 4 | Generic trace-convergence pass-through declarations retired; the remaining theorem is MPS overlap-specific. |
+| `TNLean/Spectral/PrimitiveOverlap.lean` | 101 | 0 | 0 | - | 0 | 4 | Generic trace-convergence pass-through declarations retired; the remaining theorem is MPS overlap-specific. |
 | `TNLean/Spectral/QuantitativeGap.lean` | 438 | 0 | 4 | `correlation_length_bound` 316-414 (99l) | 0 | 12 |  |
 | `TNLean/Spectral/SpectralGap.lean` | 1113 | 0 | 2 | `eigenvector_gives_gauge` 394-978 (585l) | 0 | 71 | split candidate Contains a 585-line private lemma (`eigenvector_gives_gauge`). Split HS contraction, gauge rigidity, and convergence into separate files. Copy-paste cluster: same core gauge-rigidity proof pattern is repeated in `SpectralGapRect` and `SpectralGapNT`. |
 | `TNLean/Spectral/SpectralGapNT.lean` | 1275 | 0 | 3 | `eigenvector_gives_gauge_of_irreducible_TP` 87-609 (523l) | 0 | 156 | split candidate Very large and heavily duplicated with `SpectralGap`/`SpectralGapRect`; split same-dimension and different-dimension arguments into separate files. Copy-paste cluster: same-/different-dimension gauge proofs mirror `SpectralGap` and `SpectralGapRect`. |
