@@ -44,7 +44,6 @@ open Matrix Filter
 
 namespace MPSTensor
 
-
 section MPV
 
 variable {d D : ℕ} [NeZero D]
