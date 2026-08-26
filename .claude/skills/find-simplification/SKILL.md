@@ -37,6 +37,14 @@ A proof assistant makes the shapes above unusually sharp, because a declaration'
 - **Degenerate cases** are the `≠ 0`/`0 <` side conditions repeated on every downstream statement, the parallel `raw`/`active` predicate pair with bridge lemmas, and the counterexample module refuting a hyper-literal reading nobody intended.
 - **Hypotheses** are their own category. A hypothesis every caller discharges by the same lemma belongs inside the theorem; a hypothesis no caller can discharge marks its whole route as superseded; a hypothesis absent from the cited source is not a simplification target at all but a faithfulness defect.
 
+Three shapes are invisible to consumer counting, because counting starts from a declaration and asks who uses it. These start somewhere else:
+
+- **Name collisions.** The same fully-qualified name declared in two modules that are both in the root import closure. Start from a *name* and count its **definitions**: walk `namespace`/`end`, prefix each declaration head, and report every name with more than one site. It is a thirty-line script and it finds duplications no reference table shows.
+- **`private` re-declaration.** A `private` helper has no cross-module consumers by construction, so consumer counting can never judge it — and privacy is exactly what provokes a downstream file to re-declare the same helper. Compare private bodies across files in the same directory instead of counting them.
+- **Unused imports.** The cheapest dead weight in a Lean repo and wholly invisible to a declaration survey: one import line can drag a multi-thousand-line compile cone into a module. For every import, name an identifier it supplies.
+
+Two dialect notes on the shapes above. The sequel chain here is usually not `Foo2.lean` but a **hypothesis-strength suffix ladder** — `foo`, `foo_c1`, `foo_c1_pgvwc07`, `foo_c1_pgvwc07_of_dualFixedPoint` — where each suffix weakens a hypothesis and the unsuffixed root is the abandoned strict version; look for suffix ladders, not for digits. And a systematic name-pair is a **mirror only when a transport map exists** that carries one side to the other. Without one, the pair is content: the left/right families in `MPS/MPU` are the two source cuts of a single tensor, both stated by the source paper, and collapsing them would delete mathematics.
+
 Proof text is the one place where "shorter" is not automatically simpler: a proof that became opaque to save lines is worse. The proof-level find is a missing helper or simp lemma that several proofs re-derive inline, not a golfed tactic block.
 
 ## Start With Repo Context
@@ -60,9 +68,11 @@ Treat these as intentional by default; trimming an unused declaration *inside* o
 
 ## Where The Shapes Live Here
 
+Read the newest note in `docs/audits/` for your area **before** using this list. The counts below are snapshots from past tournaments, and the tree is swept often: a post-cleanup note names both the classes just removed and the ones deliberately deferred, which is the difference between an hour of dead-end grepping and two lines of rejection text. Treat every concentration named here as historical until that note confirms it.
+
 The general shapes above, with the repo's known concentrations and the policy that makes each deletable:
 
-- Zero-reference declarations (excluding instances and `@[simp]`/`@[grind]`/`@[ext]` lemmas, and anything under a blueprint `\lean{}` tag): ledger entry S2 records ~185 across ~103 files. Files imported only by the generated aggregator are the file-level version.
+- Zero-reference declarations (instances and attribute-carrying lemmas go to the build-checked batch rather than the candidate list; blueprint-tagged names are out): ledger entry S2 recorded ~185 across ~103 files as of 2026-07-20, since heavily swept. Files imported only by the generated aggregator are the file-level version.
 - Pass-throughs: deletable without an alias under `docs/project_conventions.md` §Style, provided the PR body and an audit note name each removal with its replacement.
 - Mathlib and QICLean shadows: check `.lake/packages/mathlib/Mathlib/`, `.lake/packages/qiclean/`, and the toolchain-bump audits `docs/audits/*_mathlib_*_replacement_audit.md`, which list what the current Mathlib newly provides.
 - Stricter-hypothesis twins (`foo_of_isNormal_leftCanonical` beside `foo_of_isNormal`): the faithfulness rule in `CLAUDE.md` already classifies the twin as a different theorem; with no consumer it goes.
@@ -96,7 +106,9 @@ For every layer crossing (`Algebra` → `MPS` → `PEPS`, TNLean → QICLean), c
 
 ## Local Lemma Versus Mathlib Or QICLean
 
-The default runs toward the upstream library: the project reuses Mathlib and QICLean lemmas rather than reproving them. For each local lemma that smells standard, try, in order: `exact?` on the statement with the local proof deleted; `rg` of the conclusion's head symbol under `.lake/packages/mathlib/Mathlib/` and `.lake/packages/qiclean/`; the Mathlib-replacement audits for the current toolchain. A local lemma that is a *strict* generalization of the Mathlib one, or that Mathlib states for a different carrier, stays — record why in its docstring if it is not already there.
+The default runs toward the upstream library: the project reuses Mathlib and QICLean lemmas rather than reproving them. For each local lemma that smells standard, try, in order: `exact?` on the statement with the local proof deleted; `rg` of the conclusion's head symbol under `.lake/packages/mathlib/Mathlib/` and `.lake/packages/qiclean/`; the Mathlib-replacement audits for the current toolchain.
+
+Search by the shape of the statement, not by the name. The two hardest shadows to find share no token with their upstream twin — `IsOrthogonalProjection.exists_support_isometry` against QICLean's `exists_range_isometry` is invisible to any name grep, and what found it was reading a bare-matrix lemma sitting in an MPS file and then grepping the conclusion's form (`Vᴴ * V = 1 ∧ V * Vᴴ`). Mathlib has a replacement-audit index per toolchain bump; QICLean has none, so its shadows must be hunted this way. A local lemma that is a *strict* generalization of the Mathlib one, or that Mathlib states for a different carrier, stays — record why in its docstring if it is not already there.
 
 A genuinely new Mathlib-shaped lemma can be the right answer when it deletes several local variants; state which variants it retires and whether it is upstreamable.
 
@@ -108,12 +120,43 @@ For every declaration, classify consumers before writing:
 - Non-production corpus: `Archive/`, `docs/audits/` snapshots, `Notes/`, `Papers/`, comments.
 - Ambiguous corpus: `docs/glossary.md` and `docs/paper-gaps/` — a declaration named there is a public predicate or a documented restriction; migrate the reference rather than counting it as a blocker.
 
-Use `rg -w` on the exact name first, including the dot-suffixed forms callers use (`.foo`, `foo.symm`, `foo.mp`), then confirm by deleting the declaration and running `lake build TNLean.Path.To.Module` — Lean's consumer count is the elaboration result, not the grep. Use `lake build`, not `lake env lean`, when the answer depends on linter output (unused-variable, unused-simp-args, `docBlame`). For blueprint exposure run `cd blueprint && leanblueprint checkdecls` after the removal; for `#print axioms`-style integrity keep `rg -n "sorry|axiom"` on every touched file.
+### Counting consumers without fooling yourself
+
+Grep is the cheap filter and it is wrong by default in this codebase. Every rule below was paid for by a survey that reported live declarations as dead, or dead ones as live.
+
+- **Search the final component, not the full name.** A declaration `Ns.Pred.foo` is invoked as `h.foo` or `W.foo`; the token `Ns.Pred.foo` never appears at the call site, so `rg -w 'Ns.Pred.foo'` returns zero for a lemma used three lines below. Match the last component with an optional dotted prefix and permit a leading `.`. The over-count from homonyms elsewhere is the safe direction — resolve it by reading the hits.
+- **Beware the upstream twin.** Matching the bare final component over-counts systematically for exactly the shape you most want to find: TNLean mirrors QICLean names, so `Kraus.foo` and `MPSTensor.foo` share a suffix and the upstream calls look like local consumers. Accept a hit only when its namespace prefix is empty or a suffix of the declaring namespace.
+- **Lean identifiers are not ASCII words.** Names here carry `σ`, `ₗ`, `₂`, `'`, `ᵀ`. `rg -w` and any hand-built `[A-Za-z0-9_]` class truncate them silently, turning `restrictSubRegionσ` into `restrictSubRegion` and manufacturing pages of false zeros. Use `rg -F` on the full name, and extract declaration names with a negated class such as `[^\s({\[:]+`.
+- **Never `rg -F -f namelist`.** Ripgrep's leftmost-first alternation lets a short name shadow a longer one containing it, and the shadowed names come back with zero hits and no error. Loop one name at a time, or tokenize the corpus once and join against the declaration list.
+- **Run a control.** Before trusting any counting pipeline, run it on a name you know is used, and on the declaration itself. A declaration always references itself, so **a count of zero is a bug in your matcher, never evidence.**
+- **Subtract the module docstring.** Nearly every module here lists its results as backticked bullets under `## Main contents`, so a genuinely dead declaration scores 2, not 1. Strip doc comments and backticked spans before counting, or a naive `count > 0` filter discards your best finds.
+- **Dead weight is a closure, not a grep.** Zero-reference declarations are only the tips: a dead subgraph keeps itself alive by internal references. Attribute every reference to its enclosing declaration, then iterate "dead if all its references live inside declarations already marked dead" to a fixpoint. In one area this took a find from 145 to 434 lines. Apply the same step *after* each deletion — removing a lemma strands the private helpers only it used.
+
+### Blueprint exposure comes first
+
+In a blueprint-heavy chapter the normal shape of a *finished* theorem is "no Lean consumer, one `\lean{}` tag". Ranking by reference count before intersecting with the tag set therefore wastes most of a survey — in `MPDO/Physical*`, 174 declarations have zero external Lean references and exactly two survive the intersection. Build the `\lean{}` tag set for the area first, intersect, then rank what remains.
+
+Getting that census right needs care: tags wrap across lines with a LaTeX `%` continuation **inside** the braces, as in `\lean{MPOTensor.EtaLocalStructureData.%` followed by `    exists_...}`. A per-line grep and a naive `\lean\{([^}]*)\}` scan both miss these, and more than one survey nearly deleted a tagged theorem. Strip `%\s*\n\s*` before matching, then cross-check by grepping the bare short name across `blueprint/src/`.
+
+Measure density before choosing a lens. Above roughly two-thirds tag coverage the tag-visible shapes are exhausted, and what remains is what a tag cannot name: `private` forwarders, structure-parent aliases, carrier restatements. Likewise, if an area's zero-reference rate is under about 2%, that lens is spent — pivot rather than grinding it.
+
+### Then let the compiler answer
+
+Grep proposes; elaboration decides. Confirm by deleting the declaration and running `lake build TNLean.Path.To.Module` — the consumer count is the elaboration result. Use `lake build`, not `lake env lean`, whenever the answer depends on linter output (unused-variable, unused-simp-args, `docBlame`): `lake env lean` drops the lakefile `leanOptions` and runs no linters.
+
+This is also the only honest way to clear an attribute-carrying lemma. A `@[simp]`/`@[grind]`/`@[ext]` lemma with no named call site is not thereby alive — it may be firing inside a bare `simp`, or it may be unfireable (a `rfl` projection of a nine-argument constructor that never occurs fully applied). Grep cannot separate these, so do not silently exclude them: collect them into a build-checked batch, delete the attribute, and let the build rule. One area lost 240 deletable lines to treating the exclusion as a verdict.
+
+When a survey is read-only and cannot build, settle a Lean semantics question — does dot notation resolve through `extends` into the parent structure? — with a five-line standalone probe file elaborated by `lake env lean` in the scratchpad, rather than by reasoning about it.
+
+For blueprint exposure run `cd blueprint && leanblueprint checkdecls` after the removal; for proof integrity keep `rg -n "sorry|axiom"` on every touched file.
 
 Reject or downgrade a candidate when:
 
 - A production consumer exists and removing it would change what is proved (a feature decision, not a cleanup).
-- The design is justified by a paper-gap note, a dated audit note, or a ledger entry marked retained, and the new evidence does not beat that reason.
+- The design is justified by a paper-gap note, a dated audit note, or a ledger entry marked retained, and the new evidence does not beat that reason. Check the same records for the *module path*, not only the declaration: an aggregator-only file is evidence of dead weight only after `docs/paper-gaps/` and `docs/audits/` come back empty for it.
+- The deletion was already made and rolled back. `git log --diff-filter=D -- <path>` and a search of merge commits for the name cost one command and save re-proposing a decision the maintainer already reversed.
+- The declaration sits in a counterexample or witness module whose docstring advertises it as the file's claim. An uncited lemma there is the point of the file, not scaffolding.
+- It is a `@[deprecated]` declaration inside the transition window. The window is **six months** (lean-conventions, deprecation section); a deprecation dated last month has not expired, however dead it looks.
 - The removal forces unrelated churn — renames across dozens of files — without reducing the public surface or the hypothesis lists.
 - The candidate is correct but tiny; batch it with related finds in one entry or one PR.
 - The "simplification" is a net-positive-line abstraction. `docs/proof_debt.md` ranks deletion above abstraction; a net-positive refactor must name the future deletion it enables.
