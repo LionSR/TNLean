@@ -501,9 +501,26 @@ Section~\ref{sec:app_canonical_cyclic_sectors}.
 
 \begin{proof}\leanok
     \uses{thm:irreducible_unital_scalar_fixed_point}
-    Irreducibility passes to the adjoint transfer map. The cyclic relation and
-    equality in the Kadison--Schwarz inequality place every $P_k$ in its
-    multiplicative domain. If $X\in P_k\MN{D}P_k$ is fixed by
+    Irreducibility passes to the adjoint transfer map. The cyclic relation
+    gives equality in both Kadison--Schwarz inequalities:
+    \begin{align}
+        \E_{A^\dagger}(P_k^\dagger P_k)
+         & =\E_{A^\dagger}(P_k)^\dagger\E_{A^\dagger}(P_k),
+        \notag                                              \\
+        \E_{A^\dagger}(P_kP_k^\dagger)
+         & =\E_{A^\dagger}(P_k)\E_{A^\dagger}(P_k)^\dagger.
+        \notag
+    \end{align}
+    Hence every $P_k$ lies in the multiplicative domain, so for every $Z$,
+    \begin{align}
+        \E_{A^\dagger}(P_kZ)
+         & =\E_{A^\dagger}(P_k)\E_{A^\dagger}(Z),
+        \notag                                    \\
+        \E_{A^\dagger}(ZP_k)
+         & =\E_{A^\dagger}(Z)\E_{A^\dagger}(P_k).
+        \notag
+    \end{align}
+    If $X\in P_k\MN{D}P_k$ is fixed by
     $(\E_{A^\dagger})^m$, then its orbit sum
     \begin{align}
         R_X & =\sum_{\ell=0}^{m-1}(\E_{A^\dagger})^\ell(X)

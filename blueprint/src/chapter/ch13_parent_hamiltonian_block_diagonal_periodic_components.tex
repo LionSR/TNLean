@@ -589,6 +589,44 @@
     sum.
 \end{proof}
 
+\begin{theorem}[Doubly normalized periodic block decomposition]
+    \label{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}
+    \leanok
+    Let $g\ge2$, assume the physical alphabet is nonempty, and let $A_j$
+    be irreducible blocks with positive bond dimensions, pairwise inequivalent
+    up to gauge and phase, and injective at a common length $L_0>0$. Assume
+    normalized self-overlap and the two normalization identities
+    \begin{align}
+        \sum_a(A^j_a)^\dagger A^j_a & =\Id,
+        \notag                              \\
+        \sum_aA^j_a(A^j_a)^\dagger  & =\Id.
+        \notag
+    \end{align}
+    Let every $\mu_j$ be nonzero, and suppose
+    \begin{align}
+        L & \ge3(g-1)(L_0+1)+1,
+        \notag                  \\
+        N & \ge L+L_0.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
+         & =
+        \sum_j\mathcal G_{N,L}(A_j).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:block_diagonal_chain_space_global_cut}
+    Apply Theorem~\ref{thm:block_diagonal_chain_space_global_cut} with
+    $\Lambda_j=\Id$. The first normalization identity gives
+    $\sum_a(A^j_a)^\dagger\Lambda_jA^j_a=\Lambda_j$, so all hypotheses of that
+    theorem hold.
+\end{proof}
+
 \begin{theorem}[Unique decomposition into open-boundary block spaces]
     \label{thm:block_diagonal_chain_unique_decomposition_source_length}
     \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
@@ -654,7 +692,7 @@
     \label{thm:block_diagonal_kernel_global_cut_doubly_normalized}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    \uses{thm:block_diagonal_chain_space_global_cut_doubly_normalized, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Under the hypotheses of
     Theorem~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
     suppose in addition that, for every $j$,
@@ -676,9 +714,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:block_diagonal_chain_space_global_cut, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
-    The global-cut decomposition identifies the periodic chain space of the
-    block sum with the sum of the single-block chain spaces. Apply the assumed
+    \uses{thm:block_diagonal_chain_space_global_cut_doubly_normalized, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
+    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
+    identifies the periodic chain space of the block sum with the sum of the
+    single-block chain spaces. Apply the assumed
     containment to each summand, and use the identification of the
     parent-Hamiltonian kernel with the periodic chain space.
 \end{proof}
