@@ -580,36 +580,6 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     tensor-level predicate is Definition~\ref{def:is_nondegenerate_prfp}.
 \end{definition}
 
-\begin{definition}[Trace-preserving spin reduction for a purification RFP]
-    \label{def:mpdo_prfp_trace_preserving_spin_reduction}
-    \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction}
-    \leanok
-    \uses{def:mpdo_is_prfp, cor:mpdo_has_trace_preserving_spin_reduction}
-    A purification RFP is viewed together with trace-preserving spin reduction
-    by applying Corollary~\ref{cor:mpdo_has_trace_preserving_spin_reduction} to
-    the ancillary trace map appearing in its purification equation. This records
-    the structure obtained after tracing the ancillary indices in
-    \cite[lines~761--764]{Cirac2016MPDO_arXiv}, without adding a separate
-    hypothesis to Definition~4.3.
-\end{definition}
-
-\begin{lemma}[Forgetting the recorded spin reduction]
-    \label{lem:mpdo_prfp_trace_preserving_spin_reduction_iff}
-    \lean{MPOTensor.IsPRFPWithTracePreservingSpinReduction.isPRFP,
-        MPOTensor.IsPRFP.withTracePreservingSpinReduction}
-    \leanok
-    \uses{def:mpdo_prfp_trace_preserving_spin_reduction}
-    Recording the trace-preserving ancillary reduction does not change the
-    purification RFP condition:
-    $\mathrm{PRFP}_{\mathrm{tp}}(M)\Longleftrightarrow\mathrm{PRFP}(M)$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Immediate from the equivalence in
-    Definition~\ref{def:mpdo_prfp_trace_preserving_spin_reduction}.
-\end{proof}
-
 \begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
     \lean{MPOTensor.IsLocalPurificationRFP}
     \leanok

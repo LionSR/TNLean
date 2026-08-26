@@ -47,8 +47,6 @@ zero correlation length are in `TNLean.MPS.MPDO.LocalPurificationRFP`.
 * `MPOTensor.HasPurificationRFPWitness`: the source purification-RFP witness.
 * `MPOTensor.IsPRFP`: the bare positive-length global purification-RFP
   predicate.
-* `MPOTensor.IsPRFPWithTracePreservingSpinReduction`: the PRFP predicate
-  viewed together with the proved trace-preserving spin reduction.
 
 ## References
 
@@ -153,35 +151,5 @@ is forced by the zero-purifier obstruction documented in
 `docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
   HasPurificationRFPWitness M
-
-/-- Purification RFP viewed together with the trace-preserving spin structure
-recorded after Definition 4.3 in arXiv:1606.00608, lines 761--764.
-
-The trace-preserving completely positive map is the ancillary trace map, and
-`hasTracePreservingSpinReduction` proves this structure for every ancillary
-dimension. Thus this predicate is the source purification-RFP predicate, not
-the two-map mixed-state RFP condition of Definition 4.1. -/
-def IsPRFPWithTracePreservingSpinReduction (M : MPOTensor d D) : Prop :=
-  IsPRFP M
-
-/-- A purification RFP with trace-preserving spin reduction carries the
-purification-RFP predicate. -/
-theorem IsPRFPWithTracePreservingSpinReduction.isPRFP {M : MPOTensor d D}
-    (h : IsPRFPWithTracePreservingSpinReduction M) : IsPRFP M :=
-  h
-
-/-- A purification RFP has the trace-preserving spin reduction recorded after
-arXiv:1606.00608, Definition 4.3, lines 761--764. -/
-theorem IsPRFP.withTracePreservingSpinReduction {M : MPOTensor d D}
-    (h : IsPRFP M) : IsPRFPWithTracePreservingSpinReduction M :=
-  h
-
-/-- A purification RFP with trace-preserving spin reduction carries the
-post-ancilla tpCPM structure on the spin degrees of freedom. -/
-theorem IsPRFPWithTracePreservingSpinReduction.hasTracePreservingSpinReduction
-    {M : MPOTensor d D} (h : IsPRFPWithTracePreservingSpinReduction M) :
-  ∃ dK : ℕ, HasTracePreservingSpinReduction d dK := by
-  rcases h with ⟨dK, _D', _A, _hglobal, _hRFP⟩
-  exact ⟨dK, MPOTensor.hasTracePreservingSpinReduction d dK⟩
 
 end MPOTensor

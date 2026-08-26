@@ -502,11 +502,6 @@ model different levels of data and different sources.
   is stronger than the literal CPSV canonical form from arXiv:1606.00608,
   lines 237--244; see
   `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-- `MPOTensor.IsPerCopyHorizontalCF` in
-  `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean` is an older, stronger flattened
-  per-copy separation condition. Its gap from the source is recorded in
-  `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`; there is no sanctioned
-  equivalence with `IsHorizontalCF`.
 - `MPOTensor.IsVerticalCF` in `TNLean/MPS/MPDO/VerticalCF.lean` is the vertical
   basis decomposition with positive multiplicities, positive diagonal weights,
   and a coisometry `U` satisfying `U * Uᴴ = 1` (equivalently, `Uᴴ` is an

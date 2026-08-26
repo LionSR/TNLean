@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
-import TNLean.MPS.MPDO.PerCopyHorizontalCF
 
 /-!
 # One-sided invariant matrices for matrix product density operators
@@ -330,35 +329,6 @@ theorem basis_braRight_eq_ketLeftBraRight_of_invariant
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (S.basis k) := by
   exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree M.toMPSTensor hM
     (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hP hPM)
-
-/-- Let the doubled-index tensor of an MPDO have a horizontal block-injective
-canonical-form decomposition, and let $P$ be Hermitian with
-$P\widetilde M=P\widetilde M P$.  On every canonical-form block, the
-insertions of $\widetilde M P$ and $P\widetilde M P$ agree.  Equivalently,
-$(\Id-P)MP=0$ blockwise.
-
-This is the algebraic conclusion of the invariant-projection step in the proof
-of Proposition 4.13 of arXiv:1606.00608, lines 1874--1887.  The source takes
-$P$ to be an orthogonal projector and writes $P^\perp MP=0$; under the weaker
-Hermiticity hypothesis used here, the precise expression is $(\Id-P)MP=0$.
-
-**Scope restriction (per-block separation):** inherited from
-`MPOTensor.blockwise_opposite_insert_eq_of_rotated_mpo_entries`
-(`docs/paper-gaps/cpgsv17_bicf_block_separation.tex`). -/
-theorem blockwise_braRight_eq_ketLeftBraRight_of_invariant
-    {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
-    (M : MPOTensor d D) (hMpdo : IsMPDO M)
-    (A : (k : Fin r) → MPSTensor (d * d) (dim k))
-    (hCF : HorizontalCFData (d := d * d) μ A)
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor
-      (MPSTensor.toTensorFromBlocks (d := d * d) (μ := μ) A))
-    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian)
-    (hPM : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P) :
-    ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (A k) =
-      MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (A k) := by
-  apply blockwise_insert_eq_of_mpv_agree A hCF
-  exact (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hP hPM).of_sameMPVPos
-    hM
 
 /-- **Commutation at a two-site chain forces letter-level invariance, for a
 single-letter injective tensor.**
