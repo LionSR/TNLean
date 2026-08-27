@@ -77,6 +77,19 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   root `lake build` as the oracle, and the **What** bullet above is widened
   accordingly; see
   `docs/audits/2026-08-27_peps_attribute_carrying_dead_weight.md`.
+- **Evidence update (2026-08-27)**: the `MPS/MPU` transport module contributed
+  one further declaration of a kind this entry's original scope missed — a
+  forwarder whose body is a bare `exact` of an identically stated QICLean
+  theorem. A name search does clear it, but only once the search is run against
+  the companion library as well as this repository; see
+  `docs/audits/2026-08-27_mpu_reduced_to_hat_qiclean_forwarder.md`.
+- **Evidence update (2026-08-27)**: the BNT refinement record in
+  `MPS/CanonicalForm/BNTRefinement.lean` contributed three structure fields that
+  a name search cannot clear at all, because a field's spelling is shared with
+  the local name that populates it. Two restated the copy-gauge relation that
+  the regrouped carrier already states, and the third pinned a field to the
+  parent record by `rfl` with nothing reading the pin; see
+  `docs/audits/2026-08-26_canonical_form_retirements.md`.
 
 ### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
 - **Status**: open (#4565)

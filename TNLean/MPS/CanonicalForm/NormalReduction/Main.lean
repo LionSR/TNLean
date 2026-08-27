@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.CanonicalForm.Existence
 import TNLean.PiAlgebra.CanonicalFormSepAux
 
 import Mathlib.Data.Fin.Tuple.Sort

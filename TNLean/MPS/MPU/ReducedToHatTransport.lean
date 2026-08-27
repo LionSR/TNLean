@@ -109,21 +109,4 @@ theorem leftRank_hat_eq_reducedProjection
   exact (leftRank_virtualSandwich X (virtualSandwich L W R) (Z * Y)
     hX (hZ.mul hY)).symm
 
-/-- Positive semidefinite fixed matrices supply invertible outer factors $X,Z,Y$
-with
-$$
-  XL=P,\qquad RZ=Q,\qquad PQY=\widetilde P,
-$$
-where $P$ and $Q$ are their support projections.
-
-Source: `Papers/1703.09188/paper_v2.tex:786-804`. -/
-theorem exists_units_for_hat_reducedProjection
-    {L R : Matrix (Fin D) (Fin D) ℂ} (hL : L.PosSemidef) (hR : R.PosSemidef) :
-    ∃ X Z Y : Matrix (Fin D) (Fin D) ℂ,
-      IsUnit X ∧ IsUnit Z ∧ IsUnit Y ∧
-      X * L = hL.supportProj ∧ R * Z = hR.supportProj ∧
-      hL.supportProj * hR.supportProj * Y =
-        Matrix.reducedProjection hL.supportProj hR.supportProj := by
-  exact Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor hL hR
-
 end MPOTensor

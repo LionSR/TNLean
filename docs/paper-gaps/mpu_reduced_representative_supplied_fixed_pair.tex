@@ -147,15 +147,13 @@ equalities
 \leanid{MPOTensor.leftRank_hat_eq_reducedProjection} use the same supplied
 data and additionally assume that $X$, $Z$, and $Y$ are invertible.
 
-Finally,
-\leanid{MPOTensor.exists_units_for_hat_reducedProjection} assumes only
-$L,R\succeq0$. It supplies invertible ambient support-inverse extensions $X$
-and $Z$, together with an invertible right factor $Y$ satisfying
-Eq.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_reduced_right_factor}.
-Its matrix-level theorem,
-\leanid{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor},
-has the same positive-semidefinite assumptions and does not assume a
-fixed-point identity, trace normalization, or support absorption.
+Finally, the matrix-level theorem
+\leanid{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
+assumes only $L,R\succeq0$. It supplies invertible ambient support-inverse
+extensions $X$ and $Z$, together with an invertible right factor $Y$ satisfying
+Eq.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_reduced_right_factor};
+it does not assume a fixed-point identity, trace normalization, or support
+absorption.
 
 \section{Elimination plan}
 

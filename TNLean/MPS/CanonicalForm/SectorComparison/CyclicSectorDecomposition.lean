@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 import QICLean.Channel.Peripheral.Conjugation
-import QICLean.Channel.Schwarz.MultiplicativeDomainFull
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
@@ -68,110 +67,6 @@ is reached.  Only the unconditional form and the top-level existence theorem
 `exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
 are consumed by the downstream canonical-form proof chain.
 -/
-
-open KadisonSchwarz
-
-/-- Each cyclic projection lies in the multiplicative domain of the one-step
-adjoint transfer map. -/
-private theorem cyclic_projection_mem_multiplicativeDomain
-    {d D m : ℕ} [NeZero D] [NeZero m]
-    {A : MPSTensor d D}
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hcyclic :
-      ∀ k : Fin m,
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
-    ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain (fun i : Fin d => (A i)ᴴ) := by
-  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
-    simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
-  have hK_apply :
-      ∀ X : MatrixAlg D,
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X =
-          KadisonSchwarz.krausMap K X := by
-    intro X
-    simp [K, KadisonSchwarz.krausMap]
-  intro k
-  have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
-  have hTPk_eq : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
-    simpa [show k - 1 + 1 = k by abel] using hcyclic (k - 1)
-  have hTPk_proj :
-      IsOrthogonalProjection (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k)) := by
-    simpa [hTPk_eq] using hPproj (k - 1)
-  have hRight :
-      KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =
-        KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
-    calc
-      KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
-          = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * (P k)ᴴ) := by
-              rw [hK_apply]
-      _ = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
-            rw [hPk_star, (hPproj k).2]
-      _ = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ := by
-              rw [hTPk_proj.1.eq, hTPk_proj.2]
-      _ = KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
-            rw [hK_apply]
-  have hLeft :
-      KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
-        (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
-    calc
-      KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
-          = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((P k)ᴴ * P k) := by
-              rw [hK_apply]
-      _ = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
-            rw [hPk_star, (hPproj k).2]
-      _ = (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))ᴴ *
-            Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
-              rw [hTPk_proj.1.eq, hTPk_proj.2]
-      _ = (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
-            rw [hK_apply]
-  exact ⟨
-    (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
-    (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
-
-/-- The adjoint transfer map is multiplicative on the left of a cyclic
-projection. -/
-private theorem cyclic_projection_mul_left
-    {d D m : ℕ} [NeZero D] [NeZero m]
-    {A : MPSTensor d D}
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hcyclic :
-      ∀ k : Fin m,
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
-    ∀ k : Fin m, ∀ X : MatrixAlg D,
-      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X := by
-  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hMulDomain := cyclic_projection_mem_multiplicativeDomain (A := A) hTP P hPproj hcyclic
-  intro k X
-  simpa [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
-    KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
-
-/-- The adjoint transfer map is multiplicative on the right of a cyclic
-projection. -/
-private theorem cyclic_projection_mul_right
-    {d D m : ℕ} [NeZero D] [NeZero m]
-    {A : MPSTensor d D}
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hcyclic :
-      ∀ k : Fin m,
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) :
-    ∀ k : Fin m, ∀ X : MatrixAlg D,
-      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-        Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) := by
-  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hMulDomain := cyclic_projection_mem_multiplicativeDomain (A := A) hTP P hPproj hcyclic
-  intro k X
-  simpa [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
-    KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
 
 /-- Transport corner primitivity and corner irreducibility of the blocked adjoint
 transfer map to the compressed cyclic-sector tensors.

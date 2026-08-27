@@ -18,6 +18,9 @@ terminology.
 | `MPOTensor.CPSVExample412Literal.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/CPSVExample412Literal.lean`) | `Real.mul_negMulLog_inv` in `TNLean/Algebra/NegMulLog.lean` |
 | `MPSTensor.compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.compressedTensor_adjointTransferMap_cornerBridge` (`TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`), which the removed wrapper forwarded to with an identical argument list |
 | `MPSTensor.mpv_twoBlockTensor_eq` (private, `TNLean/MPS/CanonicalForm/Reduction.lean`) | `MPSTensor.mpv_twoBlockTensor_eq` in `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`, now public — the module that owns `twoBlockTensor` and `twoBlockBlocks` |
+| `MPSTensor.cyclic_projection_mem_multiplicativeDomain` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.cyclic_projection_mem_multiplicativeDomain`, the same statement now public in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
+| `MPSTensor.cyclic_projection_mul_left` (private, same file) | `MPSTensor.cyclic_projection_mul_left` in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
+| `MPSTensor.cyclic_projection_mul_right` (private, same file) | `MPSTensor.cyclic_projection_mul_right` in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 
 ## What was checked
 
@@ -65,6 +68,40 @@ the statement, with the `private` modifier dropped; its existing docstring means
 making it public raises no documentation-linter complaint. Both call sites, one in
 each file, resolve unchanged — the survivor's binders `n`, `m`, `N` are implicit and
 the named arguments used at the second site remain valid.
+
+**Multiplicativity on cyclic-sector projections.** Three statements about a
+cyclic-sector decomposition of the adjoint transfer map — that each sector
+projection lies in the multiplicative domain of the Kraus family of adjoint
+letters, and that the map is therefore multiplicative against that projection on
+the left and on the right — existed in three places at once. Two were the
+`private` theorems of `CyclicSectorDecomposition.lean`; the other two were
+inline re-derivations of the same Kadison–Schwarz argument, one inside
+`MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp` in
+`TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` and one inside
+`MPSTensor.cornerRestriction_primitive_and_irreducible_of_cyclicDecomp` in
+`TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean`. The two inline copies
+differed from the named ones only in spelling the transfer map through a local
+abbreviation.
+
+The survivors are stated in `HLift.lean`, the module that owns the two theorems
+consuming this multiplicativity as a hypothesis pair, and the two other holders
+reach it through `TNLean.MPS.Periodic.SectorIrreducibility`, which they already
+import. Both inline re-derivations are replaced by two `have`s naming the
+survivors; because the survivors are stated directly in terms of the transfer
+map rather than a local abbreviation, the replacement is a tighter match for the
+call sites that consume them than the locals it replaces. Dropping the
+Kadison–Schwarz argument from `CyclicSectorDecomposition.lean` left no
+multiplicative-domain name in that file, so its `open KadisonSchwarz` line and
+its `QICLean.Channel.Schwarz.MultiplicativeDomainFull` import were removed too.
+
+This is the second time these three statements have been given a single owner.
+`docs/audits/2026-04-23_issue448_self_overlap_cases.md` records an earlier round
+in which the duplicated copies were removed from the self-overlap module in
+favour of shared declarations exported from the assembly module that has since
+become `CyclicSectorDecomposition.lean`; the duplication returned as inline
+re-derivations rather than as re-declared names, which is why a name search did
+not catch it. Keeping the survivors public, in the module whose theorems take
+them as hypotheses, is what makes the regression visible next time.
 
 ## Verification
 

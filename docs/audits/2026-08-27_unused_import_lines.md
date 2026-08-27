@@ -169,6 +169,25 @@ and `TNLean/PEPS/RegionScalarCondition.lean` entries.
 only: it names `CyclicSectors.lean`, which is now the generated per-directory
 aggregator rather than the module it described.
 
+## Two further lines, from the cross-cutting duplication pass
+
+Two more import lines were cleared by the cross-cutting duplication pass of the
+same day and are folded in here rather than given a note of their own.
+
+| File | Module dropped | Why it went dead |
+|---|---|---|
+| `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean` | `QICLean.Channel.Schwarz.MultiplicativeDomainFull` | the Kadison–Schwarz argument moved to `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean`, leaving no multiplicative-domain name in the file; the `open KadisonSchwarz` line went with it (see `docs/audits/2026-08-27_cross_cutting_private_duplication.md`) |
+| `TNLean/MPS/CanonicalForm/NormalReduction/Main.lean` | `TNLean.MPS.CanonicalForm.Existence` | no identifier the file elaborates comes from that import's exclusive cone |
+
+The second row is import hygiene plus a shorter critical path for that one
+module — it no longer waits on a thirty-module, 6,879-line upstream cone — and
+**not** a reduction in total build work. `NormalReduction.lean` still reaches
+`Existence.lean` through `NormalReduction/TPGauge.lean`, and `CanonicalForm.lean`
+imports it directly, so the cone is still compiled for every consumer of the
+aggregator. No declaration moved:
+`MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp` keeps its
+Blueprint tag and its paper-gap reference.
+
 ## Verification
 
 - `lake build` completes successfully at the repository root with the package

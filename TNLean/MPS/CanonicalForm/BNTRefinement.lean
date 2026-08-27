@@ -306,19 +306,6 @@ structure BNTRefinement (data : CPSVCanonicalFormData A) where
 
   Source: the normal-tensor gauge theorem in arXiv:1606.00608, lines 1080--1117. -/
   copyPhaseNorm : ∀ k : Fin data.r, ‖copyPhase k‖ = 1
-  /-- The invertible gauge from the representative coordinates to this copy's coordinates.
-
-  Source: the normal-tensor gauge theorem in arXiv:1606.00608, lines 1080--1117. -/
-  copyGauge : ∀ k : Fin data.r, GL (Fin (data.dim k)) ℂ
-  /-- Exact letterwise gauge-phase relation for every copy.
-
-  Source: the normal-tensor gauge theorem in arXiv:1606.00608, lines 1080--1117. -/
-  copyRelation : ∀ (k : Fin data.r) i,
-    data.blocks k i = copyPhase k •
-      ((copyGauge k : Matrix _ _ ℂ) *
-        (cast (congr_arg (MPSTensor d) (copyDimEq k))
-          (data.blocks (data.representativeIndex (data.classCopy k).1))) i *
-        (↑((copyGauge k)⁻¹) : Matrix _ _ ℂ))
   /-- The original scalar weight of each copy.
 
   Source: arXiv:1606.00608, lines 265--301. -/
@@ -381,11 +368,6 @@ structure BNTRefinement (data : CPSVCanonicalFormData A) where
 
   Source: arXiv:1606.00608, Section II.A, lines 214--245 and eq. `II_CF1`. -/
   ambientCoisometry : Matrix (Fin (∑ k : Fin data.r, data.dim k)) (Fin D) ℂ
-  /-- The retained rectangular map is exactly the original ambient coisometry in the literal
-  canonical-form witness.
-
-  Source: arXiv:1606.00608, Section II.A, lines 214--245 and eq. `II_CF1`. -/
-  ambientCoisometryEq : ambientCoisometry = data.ambient_coisometry
   /-- The ambient rectangular map is a coisometry, in the orientation `U * Uᴴ = 1`.
 
   Source: arXiv:1606.00608, Section II.A, lines 214--245 and eq. `II_CF1`. -/
@@ -587,8 +569,6 @@ theorem exists_bntRefinement (data : CPSVCanonicalFormData A) :
     copyDimEq := copyDimEq
     copyPhase := copyPhase
     copyPhaseNorm := copyPhaseNorm
-    copyGauge := copyGauge
-    copyRelation := copyRelation
     copyWeight := data.weights
     copyWeightEq := fun _ => rfl
     representativeNormal := hRepresentativeNormal
@@ -600,7 +580,6 @@ theorem exists_bntRefinement (data : CPSVCanonicalFormData A) :
     blocksEqListedGaugeConj := hBlocksGauge
     regroupLetterwise := hRegroup
     ambientCoisometry := data.ambient_coisometry
-    ambientCoisometryEq := rfl
     ambientCoisometric := data.coisometric
     reconstructRegrouped := ?_
   }⟩

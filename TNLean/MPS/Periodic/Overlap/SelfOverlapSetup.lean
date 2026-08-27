@@ -399,56 +399,9 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       IsIrreducibleOnCorner (P u)
         ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) := by
   let T : MatrixEnd D := Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
-  let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
-  have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
-    change ∑ i : Fin d, (A i)ᴴ * ((A i)ᴴ)ᴴ = 1
-    simpa [IsLeftCanonical, Kraus.IsTP] using hP.leftCanonical
-  have hK_apply : ∀ X : MatrixAlg D, T X = KadisonSchwarz.krausMap K X := by
-    intro X
-    simp [T, K, KadisonSchwarz.krausMap]
-  have hMulDomain : ∀ k : Fin m, P k ∈ KadisonSchwarz.multiplicativeDomain K := by
-    intro k
-    have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
-    have hTPk_eq : T (P k) = P (k - 1) := by
-      change Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P (k - 1)
-      simpa [show k - 1 + 1 = k by abel] using hCyclic (k - 1)
-    have hTPk_proj : IsOrthogonalProjection (T (P k)) := by
-      simpa [hTPk_eq] using hPproj (k - 1)
-    have hRight :
-        KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =
-          KadisonSchwarz.krausMap K (P k) * (KadisonSchwarz.krausMap K (P k))ᴴ := by
-      calc
-        KadisonSchwarz.krausMap K (P k * (P k)ᴴ)
-            = T (P k * (P k)ᴴ) := by rw [hK_apply]
-        _ = T (P k) := by rw [hPk_star, (hPproj k).2]
-        _ = T (P k) * (T (P k))ᴴ := by
-              rw [hTPk_proj.1.eq, hTPk_proj.2]
-        _ = KadisonSchwarz.krausMap K (P k) *
-              (KadisonSchwarz.krausMap K (P k))ᴴ := by rw [hK_apply]
-    have hLeft :
-        KadisonSchwarz.krausMap K ((P k)ᴴ * P k) =
-          (KadisonSchwarz.krausMap K (P k))ᴴ * KadisonSchwarz.krausMap K (P k) := by
-      calc
-        KadisonSchwarz.krausMap K ((P k)ᴴ * P k)
-            = T ((P k)ᴴ * P k) := by rw [hK_apply]
-        _ = T (P k) := by rw [hPk_star, (hPproj k).2]
-        _ = (T (P k))ᴴ * T (P k) := by
-              rw [hTPk_proj.1.eq, hTPk_proj.2]
-        _ = (KadisonSchwarz.krausMap K (P k))ᴴ *
-              KadisonSchwarz.krausMap K (P k) := by rw [hK_apply]
-    exact ⟨
-      (KadisonSchwarz.mem_rightMultiplicativeDomain_iff K hUnital (P k)).2 hRight,
-      (KadisonSchwarz.mem_leftMultiplicativeDomain_iff K hUnital (P k)).2 hLeft⟩
-  have hMulLeft : ∀ k : Fin m, ∀ X : MatrixAlg D, T (P k * X) = T (P k) * T X := by
-    intro k X
-    simpa [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
-      KadisonSchwarz.krausMap_mul_right_of_mem_multiplicativeDomain
-        (K := K) (hMulDomain k) X
-  have hMulRight : ∀ k : Fin m, ∀ X : MatrixAlg D, T (X * P k) = T X * T (P k) := by
-    intro k X
-    simpa [T, K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
-      KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain
-        (K := K) (hMulDomain k) X
+  have hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1 := hP.leftCanonical
+  have hMulLeft := cyclic_projection_mul_left (A := A) (m := m) hTP P hPproj hCyclic
+  have hMulRight := cyclic_projection_mul_right (A := A) (m := m) hTP P hPproj hCyclic
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
   have hM : (1 : MatrixAlg D).PosDef := Matrix.PosDef.one
   let : NormedAddCommGroup (MatrixAlg D) :=
