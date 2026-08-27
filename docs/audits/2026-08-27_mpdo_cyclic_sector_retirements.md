@@ -75,7 +75,8 @@ the `Fin 3` decomposition directly through `Fin.cons` and `Fin.addCases`.
 instantiations of the general suffix-sector contraction at suffix lengths one
 and two. The module is deleted and the generated aggregator
 `TNLean/MPS/MPDO.lean` regenerated. The two public contraction abbreviations
-and the two theorem wrappers are all deleted directly; no deprecated compatibility declarations are restored.
+and the two theorem wrappers are all deleted directly; no deprecated
+compatibility declarations are restored.
 
 | Audited declaration | Disposition / replacement |
 |---|---|
@@ -83,6 +84,8 @@ and the two theorem wrappers are all deleted directly; no deprecated compatibili
 | `MPOTensor.PhysicalSectorFactorization.twoSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 2` |
 | `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 1` |
 | `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 2` |
+| `MPOTensor.PhysicalSectorFactorization.trace_oneSuffixSectorContraction_eq` (private) | renamed to `MPOTensor.PhysicalSectorFactorization.trace_suffixSectorContraction_one_eq` |
+| `MPOTensor.PhysicalSectorFactorization.trace_twoSuffixSectorContraction_eq` (private) | renamed to `MPOTensor.PhysicalSectorFactorization.trace_suffixSectorContraction_two_eq` |
 
 The sole consumer,
 `TNLean/MPS/MPDO/CyclicActiveAdjacentCoefficientExtraction.lean`, now imports
