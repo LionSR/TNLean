@@ -107,7 +107,7 @@ section Main
 This is the identity
 $$\mathrm{Tr}(F_{AB}^N) = \sum_{\sigma} \mathrm{mpv}(A,\sigma)\,\overline{\mathrm{mpv}(B,\sigma)}.$$
 
-This is the square case `D₁ = D₂ = D` of `trace_mixedMapLM_rect_pow_eq_mpvOverlap`.
+This is the square case \(D_1 = D_2 = D\) of `trace_mixedMapLM_rect_pow_eq_mpvOverlap`.
 -/
 theorem trace_mixedMapLM_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D) (N : ℕ) :
