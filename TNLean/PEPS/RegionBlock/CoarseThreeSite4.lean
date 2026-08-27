@@ -480,13 +480,6 @@ vertex products. The coarse super-bond sum collapses to the crossing-agreement
 indicator (`coarseConfig_constraint_set`), reindexing the coarse state sum onto the
 original crossing data the merge collapse contracts. -/
 
-/-- A product of three scalar selectors is the selector of their conjunction. -/
-theorem mul_three_ite {α : Type*} [MulZeroClass α] (P Q R : Prop)
-    [Decidable P] [Decidable Q] [Decidable R] (a b c : α) :
-    (if P then a else 0) * (if Q then b else 0) * (if R then c else 0) =
-      if P ∧ Q ∧ R then a * b * c else 0 := by
-  by_cases hP : P <;> by_cases hQ : Q <;> by_cases hR : R <;> simp [hP, hQ, hR]
-
 /-- The boundary-coupled product of the three region weights at a fixed coarse
 configuration `η`, expanded as a triple sum over global configurations with the three
 region boundary labels matched to `η`'s induced boundary configurations. -/
@@ -541,11 +534,11 @@ theorem perEta_threeRegionProduct_eq (F : CoherentCoarseBlockingFrame (G := G) (
   refine Finset.sum_congr rfl (fun ζb _ => ?_)
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl (fun ζc _ => ?_)
-  rw [← mul_assoc, mul_three_ite]
+  rw [← mul_assoc, ite_zero_mul_ite_zero, ite_zero_mul_ite_zero]
   refine if_congr ?_ rfl rfl
   rw [eq_comm (a := F.frame.legEquivRed fun ie => η ↑ie),
     eq_comm (a := F.frame.legEquivBlue fun ie => η ↑ie),
-    eq_comm (a := F.frame.legEquivComplement fun ie => η ↑ie)]
+    eq_comm (a := F.frame.legEquivComplement fun ie => η ↑ie), and_assoc]
 
 /-- **The crossing-triple reindexing of the coarse state sum.** The triple sum over
 coarse virtual configurations of the boundary-coupled product of the three region

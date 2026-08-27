@@ -103,10 +103,6 @@ instance instFintypeRegionBoundaryConfig (A : Tensor G d) (R : Finset V) :
 abbrev RegionPhysicalConfig (R : Finset V) : Type _ :=
   (w : {w : V // w ∈ R}) → Fin d
 
-instance instFintypeRegionPhysicalConfig (R : Finset V) :
-    Fintype (RegionPhysicalConfig (V := V) (d := d) R) :=
-  inferInstance
-
 omit [Fintype V] in
 /-- The vertex product over `R` reads a virtual configuration only through edges incident to
 `R`: two configurations agreeing on every `R`-incident edge give the same product. -/

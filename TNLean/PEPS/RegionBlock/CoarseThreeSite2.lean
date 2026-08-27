@@ -31,8 +31,10 @@ super-edges incident to the red super-site carry exactly those two crossing
 bundles.
 
 The coherence fields make the state gluing well posed: the two leg identifications
-incident to a super-edge agree on the shared crossing bonds
-(`legEquiv_agree_on_crossing`), so the three blocked-region weights are read at a
+incident to a super-edge agree on the shared crossing bonds, since the coherence
+fields (`factor_red` and `factor_blue_rb` on the red-to-blue super-edge, and their
+red-to-complement and blue-to-complement siblings) route both readings through the
+same bond model, so the three blocked-region weights are read at a
 single consistent assignment of the original crossing bonds. This is the
 well-posedness layer flagged as the first remaining obligation of the coarse
 three-site route in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
@@ -91,10 +93,6 @@ original bonds carried by the coarse super-edge between `R` and `R'`. -/
 abbrev CrossingConfig (A : Tensor G d) (R R' : Finset V) : Type _ :=
   (g : {g : Edge G // IsCrossingEdge (G := G) A R R' g}) → Fin (A.bondDim g.1)
 
-instance instFintypeCrossingConfig (A : Tensor G d) (R R' : Finset V) :
-    Fintype (CrossingConfig (G := G) A R R') :=
-  inferInstance
-
 /-! ### The partner region of a coarse super-edge
 
 The coarse super-edge `r-b` (`coarseEdgeRB`) bundles the red-to-blue crossings,
@@ -112,13 +110,6 @@ graph is the complete graph on `Fin 3`, so the endpoints of an edge are its two
 coordinate entries. -/
 def edgeRegions (f : Edge coarseGraph) : Finset V × Finset V :=
   (F.regionOf f.1.1, F.regionOf f.1.2)
-
-omit [DecidableEq V] in
-@[simp] theorem edgeRegions_rb : F.edgeRegions coarseEdgeRB = (F.red, F.blue) := rfl
-omit [DecidableEq V] in
-@[simp] theorem edgeRegions_rc : F.edgeRegions coarseEdgeRC = (F.red, F.complement) := rfl
-omit [DecidableEq V] in
-@[simp] theorem edgeRegions_bc : F.edgeRegions coarseEdgeBC = (F.blue, F.complement) := rfl
 
 end CoarseBlockingFrame
 
@@ -142,7 +133,8 @@ region across an incident super-edge `f`, the region boundary configuration assi
 by `legEquiv v legs` equals the bond model of `f` applied to the coarse leg
 `legs ⟨f, _⟩` read at `g`. Two super-sites incident to `f` therefore read the shared
 super-bond value through the *same* bond model, so they agree on the shared crossing
-bonds (`legEquiv_agree_on_crossing`).
+bonds (`factor_red` against `factor_blue_rb` on the red-to-blue super-edge, and
+likewise for the red-to-complement and blue-to-complement pairs).
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1500 and
 1205--1210 of `Papers/1804.04964/paper_normal.tex`. -/
@@ -239,35 +231,6 @@ variable {A : Tensor G d} (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
 
 /-- The underlying coarse blocking frame. -/
 abbrev frame : CoarseBlockingFrame (G := G) (d := d) A := F.toCoarseBlockingFrame
-
-/-! ### The shared-super-bond agreement
-
-The factoring fields express each super-site's leg identification through the shared
-bond models. Their payoff is that two super-sites incident to the same super-edge,
-fed leg assignments agreeing on the shared super-bond, read every shared crossing
-edge to the same original virtual leg. These are the well-posedness lemmas the state
-gluing consumes: the red and blue blocked-region weights are evaluated at boundary
-configurations agreeing on every red-to-blue crossing edge, and likewise for the
-other two super-edges. -/
-
-omit [DecidableEq V] in
-/-- **Red and blue agree on the `r-b` crossings.** If the red and blue leg
-assignments carry the same value on the shared `r-b` super-bond, the red and blue
-boundary configurations they induce agree on every red-to-blue crossing edge. The
-crossing edge is presented once, with its red and blue boundary memberships read off
-the crossing hypothesis. -/
-theorem legEquivRed_eq_legEquivBlue_on_rb
-    (legsR : (ie : IncidentEdge coarseGraph 0) → Fin (F.frame.coarseBondDim ie.1))
-    (legsB : (ie : IncidentEdge coarseGraph 1) → Fin (F.frame.coarseBondDim ie.1))
-    (ieR : IncidentEdge coarseGraph 0) (hieR : ieR.1 = coarseEdgeRB)
-    (ieB : IncidentEdge coarseGraph 1) (hieB : ieB.1 = coarseEdgeRB)
-    (hval : (hieR ▸ legsR ieR : Fin (F.frame.coarseBondDim coarseEdgeRB)) = hieB ▸ legsB ieB)
-    (g : Edge G) (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
-    (F.frame.legEquivRed legsR ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
-      (F.frame.legEquivBlue legsB ⟨g, hf.2⟩ : Fin (A.bondDim g)) := by
-  have hfR := F.factor_red legsR ⟨g, hf.1⟩ hf ieR hieR
-  have hfB := F.factor_blue_rb legsB ⟨g, hf.2⟩ hf ieB hieB
-  rw [hfR, hfB, hval]
 
 end CoherentCoarseBlockingFrame
 

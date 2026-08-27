@@ -300,18 +300,10 @@ instance (R : Finset V) (f : Edge G) : Decidable (IsTouchingEdge (G := G) R f) :
 abbrev TouchConfig (A : Tensor G d) (R : Finset V) : Type _ :=
   (f : {f : Edge G // IsTouchingEdge (G := G) R f}) → Fin (A.bondDim f.1)
 
-instance instFintypeTouchConfig (A : Tensor G d) (R : Finset V) :
-    Fintype (TouchConfig (G := G) A R) :=
-  inferInstance
-
 /-- Labels on the edges entirely outside `R` (neither endpoint in `R`). The
 terminal kernel condition leaves these free. -/
 abbrev ExteriorConfig (A : Tensor G d) (R : Finset V) : Type _ :=
   (f : {f : Edge G // ¬ IsTouchingEdge (G := G) R f}) → Fin (A.bondDim f.1)
-
-instance instFintypeExteriorConfig (A : Tensor G d) (R : Finset V) :
-    Fintype (ExteriorConfig (G := G) A R) :=
-  inferInstance
 
 /-- A global virtual configuration is the labels on the edges touching `R`
 together with the labels on the edges entirely outside `R`. -/

@@ -304,13 +304,6 @@ Overriding a coarse virtual configuration on the `r-b` super-edge changes only t
 leg identification reads the `r-b` crossings through the overridden value and the
 `b-c` crossings unchanged. -/
 
-/-- The override of a coarse configuration reads the alternate value on the `r-b`
-super-edge. -/
-@[simp] theorem overrideEdge_coarse_rb (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
-    (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB)) :
-    overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y coarseEdgeRB = y :=
-  overrideEdge_edge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y
-
 /-! ### The blue boundary configuration of the override
 
 The blue super-site's leg identification of the override reads the `r-b` crossings
