@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import QICLean.Algebra.PerronFrobenius.Idempotent
-import QICLean.Algebra.TraceReindex
 
 /-!
 # Cyclic-active physical sectors

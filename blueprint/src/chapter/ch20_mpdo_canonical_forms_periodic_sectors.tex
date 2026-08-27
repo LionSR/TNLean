@@ -425,55 +425,6 @@
     stronger all-length inequality printed there is unnecessary.
 \end{proof}
 
-\begin{definition}[Displaced projectors never commute]
-    \label{def:mpdo_noninvariant_projector_noncommuting}
-    \lean{MPOTensor.NoninvariantProjectorNoncommuting}
-    \leanok
-    \uses{def:mpo_tensor, def:mpo_family, def:mpdo_vertical_one_site_actions}
-    Say that \emph{displaced projectors of $M$ never commute} if every
-    orthogonal projector $Q$ on the physical space with
-    $Q\widetilde M\ne Q\widetilde MQ$ satisfies
-    $Q_1H^{(N)}\ne H^{(N)}Q_1$ at every length. This is the
-    canonical-form step of the periodic-sector argument: the proof of
-    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv} assumes the tensor is in
-    canonical form in the horizontal direction, and the argument of
-    lines~1874--1887 turns all-length commutation of $Q_1$ with $H^{(N)}$
-    into the letter-level invariance $Q\widetilde M=Q\widetilde MQ$. This
-    argument uses the normalized BNT-refined horizontal hypothesis. The
-    all-length condition is stronger than is needed for either
-    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv} or
-    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors_horizontal_cf}; each
-    uses a single noncommuting length supplied by the contrapositive of
-    Lemma~L.
-\end{definition}
-
-\begin{theorem}[Reduction of the periodic-sector step to the
-        non-commutation family]
-    \label{thm:mpdo_cyclic_projector_of_noncommutation}
-    \lean{MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation}
-    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation}
-    \leanok
-    \uses{def:mpdo, def:mpdo_noninvariant_projector_noncommuting, def:mpdo_periodic_vector_yields_cyclic_projector, def:vertical_tensor_mpdo, def:no_periodic_vectors}
-    Let $M$ generate matrix product density operators. If displaced
-    projectors of $M$ never commute, then periodic vectors of $M$ supply
-    cyclic projectors, and the vertically viewed tensor $\widetilde M$ has
-    no nontrivial $p$-periodic vectors. This narrows the hypothesis of the
-    periodic-sector step in the proof of
-    \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
-    canonical-form implication of lines~1874--1887: every other ingredient
-    of the step is proved.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpdo_displaced_invariant_projector, thm:mpdo_cyclic_projector_reduction}
-    A nontrivial $p$-periodic vector supplies the invariant, displaced
-    projector of Theorem~\ref{thm:mpdo_displaced_invariant_projector}; the
-    non-commutation hypothesis upgrades the displacement to the all-length
-    non-commutation family, so periodic vectors supply cyclic projectors
-    and Theorem~\ref{thm:mpdo_cyclic_projector_reduction} applies.
-\end{proof}
-
 \begin{theorem}[Commutation at chain length two forces letter invariance, for
         an injective tensor]
     \label{thm:mpdo_commute_of_isInjective}

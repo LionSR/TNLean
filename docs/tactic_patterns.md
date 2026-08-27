@@ -512,12 +512,12 @@ abstracted — record why, so it is not re-proposed).
   identify equal retained-sector words with a dependent block-diagonal entry.
 - **Seen:** three suffix lengths in
   `CyclicActiveFourthRegionContraction.lean` and
-  `CyclicActiveSuffixMarginal.lean` before promotion.
+  `CyclicActiveAdjacentCoefficientExtraction.lean` before promotion.
 - **Abstraction:**
   `PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction`
   in `TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean`.
 - **Notes:** the arbitrary suffix length is the mathematical parameter; the
-  source-facing one-, two-, and three-suffix theorems are specializations.
+  source-facing three-suffix theorem is a specialization.
 
 ### partial trace under product reindexing — promoted
 - **Pattern:** split a simultaneous relabelling of both tensor factors into
@@ -827,6 +827,17 @@ abstracted — record why, so it is not re-proposed).
   wrappers in `LocalPurificationAreaLaw.lean` and `RFPViaTSSAL.lean` were removed, and the
   pre-existing third wrapper in `MutualInformationDataProcessing.lean` now also uses
   `Entropy.mutualInformation_congr`.
+- **Further evidence (2026-08-27):** four more copies of the same matrix-entry
+  congruence — `cyclicActiveLeftBoundary_entry_eq_of_heq` and
+  `cyclicActiveRightBoundary_entry_eq_of_heq` in `CyclicActiveCutRegrouping.lean`,
+  `rightTensor_eq_of_heq` and `leftTensor_eq_of_heq` in
+  `CyclicActiveFourthRegionContraction.lean` — were replaced by the single
+  index-family lemma `Matrix.entry_eq_of_heq` in
+  `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`. The family goes in as an
+  explicit lambda, so the per-boundary weight or virtual-index argument is
+  captured rather than threaded through the lemma signature.
+  `neighboringOperator_entry_eq_of_heq` stays: its conclusion is indexed by a
+  sector pair, not a single index family.
 
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,

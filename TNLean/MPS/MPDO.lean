@@ -143,7 +143,6 @@ import TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula
 import TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition
 import TNLean.MPS.MPDO.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.CyclicActiveSectorRestriction
-import TNLean.MPS.MPDO.CyclicActiveSuffixMarginal
 import TNLean.MPS.MPDO.CyclicActiveThreeBoundaryTrace
 import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
 import TNLean.MPS.MPDO.CyclicEdgeWeightTensor

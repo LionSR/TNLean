@@ -417,3 +417,4 @@ follow-up, not against the temporary `sorry` count.
 | `Matrix.reindex_mul_reindex` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences | `TNLean/Algebra/MatrixReindex.lean` |
 | `Matrix.reindex_eq_of_apply_eq` | helper theorem | Packaging an original-coordinate entry formula as an equality after matrix reindexing | `TNLean/Algebra/MatrixReindex.lean` |
 | `Matrix.apply_eq_of_reindex_eq` | helper theorem | Recovering an original-coordinate entry formula from an equality after matrix reindexing | `TNLean/Algebra/MatrixReindex.lean` |
+| `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean` |

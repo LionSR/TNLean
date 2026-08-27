@@ -31,8 +31,7 @@ is the hypothesis `PeriodicVectorYieldsCyclicProjector`; granted it, the
 vertically viewed tensor of a matrix product density operator has no
 nontrivial $p$-periodic vectors.  The invariant projector itself, together
 with its single-letter displacement, is constructed from the cyclic
-decomposition in `TNLean/MPS/MPDO/CyclicProjector.lean`, which reduces this
-hypothesis to the non-commutation family alone.
+decomposition in `TNLean/MPS/MPDO/CyclicProjector.lean`.
 
 ## Main definitions
 
@@ -349,10 +348,8 @@ invariance through the stacked-layers identity
 The projector, its word invariance, and its single-letter displacement are
 constructed unconditionally in
 `exists_displaced_invariant_projector_of_periodic_vector`
-(`TNLean/MPS/MPDO/CyclicProjector.lean`); this hypothesis follows from the
-non-commutation hypothesis `NoninvariantProjectorNoncommuting` through
-`periodicVectorYieldsCyclicProjector_of_noncommutation`.  For a tensor in
-normalized BNT-refined horizontal form, the direct theorem
+(`TNLean/MPS/MPDO/CyclicProjector.lean`).  For a tensor in normalized
+BNT-refined horizontal form, the direct theorem
 `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` avoids this stronger
 all-length hypothesis by using one noncommuting length.
 
