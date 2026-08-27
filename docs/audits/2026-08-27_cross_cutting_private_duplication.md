@@ -16,7 +16,6 @@ terminology.
 | `MPOTensor.equivReindexMap_symm_apply_self` (private, `TNLean/MPS/MPDO/RFPViaTSBlocking.lean`) | `MPOTensor.equivReindexMap_symm_apply_self`, moved from `TNLean/MPS/MPDO/BNTChannelComposition.lean` to their common ancestor `TNLean/MPS/MPDO/PhysicalBlocking.lean` under the same fully qualified name |
 | `MPOTensor.KatoDeformedRFPObstruction.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean`) | `Real.mul_negMulLog_inv`, new public theorem at root level of `TNLean/MPS/MPDO/AreaLaw.lean` |
 | `MPOTensor.CPSVExample412Literal.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/CPSVExample412Literal.lean`) | `Real.mul_negMulLog_inv` in `TNLean/MPS/MPDO/AreaLaw.lean` |
-| `MPSTensor.groundSpaceESHasOrthogonalProjection` (private, `TNLean/MPS/ParentHamiltonian/Martingale/C3Threshold.lean`) | `MPSTensor.groundSpaceESHasOrthogonalProjection` in `TNLean/MPS/ParentHamiltonian/FNWContraction.lean`, now public and carrying a docstring |
 | `MPSTensor.compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.compressedTensor_adjointTransferMap_cornerBridge` (`TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`), which the removed wrapper forwarded to with an identical argument list |
 | `MPSTensor.mpv_twoBlockTensor_eq` (private, `TNLean/MPS/CanonicalForm/Reduction.lean`) | `MPSTensor.mpv_twoBlockTensor_eq` in `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`, now public — the module that owns `twoBlockTensor` and `twoBlockBlocks` |
 
@@ -50,14 +49,6 @@ the real itself was proved twice, in two modules that both import
 level, in the `Real` namespace where the Mathlib lemmas it composes live; it is
 upstreamable, since Mathlib's `Analysis/SpecialFunctions/Log/NegMulLog.lean` has
 no lemma of this shape. The two call sites now name it.
-
-**Ground-space orthogonal projection.** The finite-dimensional ground space of an
-excited-state chain admits an orthogonal projection because it is a submodule of a
-finite-dimensional space. `C3Threshold.lean` imports `FNWContraction.lean`, so its
-private copy was redundant; the copy in `FNWContraction.lean` is now public with a
-docstring. The `attribute [local instance]` line in `C3Threshold.lean` stays: that
-attribute is file-scoped and is not inherited across the import, so it must be
-re-issued, and it now attaches to the imported public theorem.
 
 **Corner-bridge wrapper.** The private theorem in `CyclicSectorDecomposition.lean`
 restated the signature of `compressedTensor_adjointTransferMap_cornerBridge` and
