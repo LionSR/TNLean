@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.ScalarCommutant
+import TNLean.Algebra.FinCyclicInduction
 import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.PEPS.CycleMPSChainOverlapInsertion
 
@@ -439,24 +440,6 @@ open MPSChainTensor
 
 /-! ### The site-dependent closed-chain corollary -/
 
-private lemma fin_cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
-    (h0 : P 0) (hstep : ∀ i : Fin m, P i → P (i + 1)) (i : Fin m) : P i := by
-  induction hi : i.val generalizing i with
-  | zero => obtain rfl : i = 0 := Fin.ext (by simpa using hi); exact h0
-  | succ k ih =>
-      have hk : k < m := by have := i.isLt; omega
-      have e : (⟨k, hk⟩ : Fin m) + 1 = i := by
-        apply Fin.ext
-        have hmod_one : 1 < m := by omega
-        have hone : (1 : Fin m).val = 1 := by
-          have : (1 : Fin m).val = 1 % m := Fin.val_one' m
-          rw [this]
-          exact Nat.mod_eq_of_lt hmod_one
-        rw [Fin.val_add, Fin.val_mk, hone, hi]
-        exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
-      rw [← e]
-      exact hstep _ (ih ⟨k, hk⟩ rfl)
-
 /-- **Fundamental Theorem for site-dependent normal closed chains at
 `n ≥ 2L + 1`** (arXiv:1804.04964, Section `normal_alt`, lines 1915--2295 of
 `Papers/1804.04964/paper_normal.tex`: the closed-chain corollary after
@@ -794,7 +777,7 @@ theorem fundamentalTheorem_injectiveMPSChain_gauge_unique {n d D : ℕ} [NeZero 
   have hC_eq_zero : ∀ k : Fin n,
       (C k : Matrix (Fin D) (Fin D) ℂ) =
         (C 0 : Matrix (Fin D) (Fin D) ℂ) :=
-    fin_cyclic_induction rfl (fun k hk => by
+    Fin.cyclic_induction rfl (fun k hk => by
       calc
         (C (k + 1) : Matrix (Fin D) (Fin D) ℂ)
             = (C k : Matrix (Fin D) (Fin D) ℂ) :=

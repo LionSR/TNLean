@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
+import TNLean.Algebra.FinCyclicInduction
 import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 import TNLean.MPS.SharedInfra.GaugePhase
 
@@ -33,20 +34,6 @@ variable {d D : ℕ}
 
 /-! ## Case 3: Same period, sector match → gauge-equivalent (Appendix A, main case) -/
 
-/-- Self-overlap of an irreducible, transfer-primitive, trace-preserving tensor
-tends to `1` (arXiv:1708.00029, Appendix A, first paragraph). -/
-private lemma selfOverlap_tendsto_one_of_irreducible_primitive_TP
-    {D : ℕ} [NeZero D] (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily A)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
-    Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
-  obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix, _htr, hgap⟩ :=
-    Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
-      A hIrr hNorm hPrim
-  exact mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
-    A hNorm ρ hρ_fix hρ_ne hρ_psd (by simpa using hgap)
-
 /-- From a gauge-phase match between two irreducible, transfer-primitive,
 trace-preserving sectors of the same bond dimension, the cross overlap has norm
 tending to `1`.  The unit modulus of the gauge phase follows from the matching
@@ -66,9 +53,9 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
   subst hdim
   simp only [cast_eq] at hMatch
   have hCA_self : Tendsto (fun N => mpvOverlap (d := d) CA CA N) atTop (nhds (1 : ℂ)) :=
-    selfOverlap_tendsto_one_of_irreducible_primitive_TP CA hCA_irr hCA_norm hCA_prim
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible CA hCA_irr hCA_norm hCA_prim
   have hCB_self : Tendsto (fun N => mpvOverlap (d := d) CB CB N) atTop (nhds (1 : ℂ)) :=
-    selfOverlap_tendsto_one_of_irreducible_primitive_TP CB hCB_irr hCB_norm hCB_prim
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible CB hCB_irr hCB_norm hCB_prim
   obtain ⟨X, ζ, _hζ, hX⟩ := hMatch
   have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv CB σ = ζ ^ N * mpv CA σ :=
     mpv_eq_pow_mul_of_gaugePhase CA CB X ζ hX
@@ -347,27 +334,6 @@ private lemma gaugePhaseEquiv_cast_indices {d gA gB : ℕ}
   subst hj
   exact hg
 
-/-- **Cyclic induction on `Fin m`.** A predicate that holds at `0` and is closed
-under `· + 1` holds at every index, because `+1` generates the cyclic group from
-`0`. Proved by induction on `i.val`: the predecessor of a nonzero `i` is
-`⟨i.val - 1, _⟩`, whose successor is `i`. -/
-private lemma fin_cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
-    (h0 : P 0) (hstep : ∀ i : Fin m, P i → P (i + 1)) (i : Fin m) : P i := by
-  induction hi : i.val generalizing i with
-  | zero => obtain rfl : i = 0 := Fin.ext (by simpa using hi); exact h0
-  | succ k ih =>
-    have hk : k < m := by have := i.isLt; omega
-    have e : (⟨k, hk⟩ : Fin m) + 1 = i := by
-      apply Fin.ext
-      have hmod_one : 1 < m := by omega
-      have hone : (1 : Fin m).val = 1 := by
-        have : (1 : Fin m).val = 1 % m := Fin.val_one' m
-        rw [this]; exact Nat.mod_eq_of_lt hmod_one
-      rw [Fin.val_add, Fin.val_mk, hone, hi]
-      exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
-    rw [← e]
-    exact hstep _ (ih ⟨k, hk⟩ rfl)
-
 /-- **Translation propagation** (eq:blockedABprop, arXiv:1708.00029 lines
 998--1008):
 Given one matching compressed sector pair at `(u₀, v₀)`, applying the
@@ -443,7 +409,7 @@ lemma sectorMatch_propagation
         (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocksA (u₀ + l)))
         (blocksB (v₀ + l)) := by
     intro l
-    refine fin_cyclic_induction
+    refine Fin.cyclic_induction
       (P := fun l => ∃ (hdim : dimA (u₀ + l) = dimB (v₀ + l)),
         dimA (u₀ + l) ≠ 0 ∧
         GaugePhaseEquiv

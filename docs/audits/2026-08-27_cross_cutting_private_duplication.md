@@ -21,6 +21,9 @@ terminology.
 | `MPSTensor.cyclic_projection_mem_multiplicativeDomain` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.cyclic_projection_mem_multiplicativeDomain`, the same statement now public in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 | `MPSTensor.cyclic_projection_mul_left` (private, same file) | `MPSTensor.cyclic_projection_mul_left` in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 | `MPSTensor.cyclic_projection_mul_right` (private, same file) | `MPSTensor.cyclic_projection_mul_right` in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
+| `MPSTensor.fin_cyclic_induction` (private, `TNLean/MPS/Periodic/Overlap/SectorMatch/Propagation.lean`) | `Fin.cyclic_induction`, new public theorem in `TNLean/Algebra/FinCyclicInduction.lean` |
+| `PEPS.fin_cyclic_induction` (private, `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`) | the same `Fin.cyclic_induction` in `TNLean/Algebra/FinCyclicInduction.lean` |
+| `MPSTensor.selfOverlap_tendsto_one_of_irreducible_primitive_TP` (private, `TNLean/MPS/Periodic/Overlap/SectorMatch/Propagation.lean`) | `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` in `TNLean/MPS/Overlap/PeripheralToTransferMapGap.lean` |
 
 ## What was checked
 
@@ -102,6 +105,30 @@ become `CyclicSectorDecomposition.lean`; the duplication returned as inline
 re-derivations rather than as re-declared names, which is why a name search did
 not catch it. Keeping the survivors public, in the module whose theorems take
 them as hypotheses, is what makes the regression visible next time.
+
+**Cyclic induction on a finite index.** The induction principle stating that a
+predicate on a nonempty finite cyclic index set which holds at zero and passes
+from each index to its successor holds everywhere was proved twice, once in the
+periodic sector-match propagation module and once in the site-dependent
+closed-chain capstone of the two-dimensional development. The two proofs agree
+line for line up to indentation. The holders sit in unrelated import closures
+whose only shared ancestor under `TNLean/Algebra` is the trace-pairing module,
+so neither could own the survivor and a new lightweight module was the right
+home; it imports only the basic finite-index file of Mathlib, which supplies the
+one non-core lemma the proof needs. The statement is upstreamable: Mathlib
+carries only the successor-shaped induction on an index set of positive size and
+no cyclic principle. The survivor is named in the `Fin` namespace with the
+underscore-separated spelling the two local copies already used.
+
+**Self-overlap limit under peripheral primitivity.** The propagation module
+re-proved privately, from the spectral-gap corollary, that the self-overlap of an
+irreducible trace-preserving tensor with primitive peripheral spectrum tends to
+one. The public statement of exactly that fact already lives in the overlap
+directory, with the same binders, the same hypothesis order and the same
+conclusion, and reaches the propagation module through the gauge-phase module it
+already imports, so no import change was needed. Its two call sites take the
+same argument lists unchanged. The blueprint tag for the surviving public
+theorem in the Wielandt appendix is untouched.
 
 ## Verification
 
