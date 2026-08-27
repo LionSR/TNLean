@@ -40,7 +40,7 @@ The source defines local orthogonality by
 and defines zero correlation length (ZCL) as the conjunction of CID and local
 orthogonality.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:467--479},
-Definitions~\cpsvref{DefLO} and~\cpsvref{DefZCL}.}
+Definitions~\cpsvref{DefLO} and~3.6.}
 
 For a single tensor $A=\{A^i\}_i$, write
 \begin{align}
@@ -116,7 +116,7 @@ when the gaps are redistributed at fixed total length. Physical BNT
 ZCL\footnote{Formal predicate: \leanid{MPSTensor.IsPhysicalBNTZCL}.} is the
 conjunction of the BNT relation, unrestricted physical CID, and BNT local
 orthogonality. While these definitions encode the source CID property and
-Definition~\cpsvref{DefZCL} of Ref.~\cite{Cirac2016MPDO_arXiv}, they do not
+Definition~3.6 of Ref.~\cite{Cirac2016MPDO_arXiv}, they do not
 yield the equivalence stated in Theorem~\cpsvref{TheoremZCLPure}. In particular,
 the idempotence equivalence\footnote{Formal theorem:
 \leanid{MPSTensor.zcl_iff_idempotent_transfer}.} applies only to the
@@ -345,7 +345,7 @@ Accordingly, the virtual-insertion predicate\footnote{Formal predicate:
 \leanid{MPSTensor.IsBNTZCL}.} serves as the surrogate, while the positive-gap
 predicate\footnote{Formal predicate: \leanid{MPSTensor.IsPositiveGapBNTZCL}.}
 encodes the physical positive-gap condition. Neither matches
-Definition~\cpsvref{DefZCL} of Ref.~\cite{Cirac2016MPDO_arXiv},\footnote{Represented
+Definition~3.6 of Ref.~\cite{Cirac2016MPDO_arXiv},\footnote{Represented
 in the library by \leanid{MPSTensor.IsPhysicalBNTZCL}.} and the raw-weight
 counterexample refutes the unrestricted equivalence between that definition and
 transfer-matrix idempotence.

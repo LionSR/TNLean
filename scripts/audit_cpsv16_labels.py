@@ -29,15 +29,15 @@ CLASSIFICATION_SNAPSHOT = ROOT / "docs/audits/data/cpsv16-label-classifications.
 CONTAINED_RESULT_ANCHORS = (
     ROOT / "docs/audits/data/cpsv16-contained-result-anchors.tsv"
 )
-EXPECTED_LEXICAL_OCCURRENCES = 188
-EXPECTED_LEXICAL_NAMES = 184
-EXPECTED_ACTIVE_OCCURRENCES = 187
-EXPECTED_ACTIVE_NAMES = 183
+EXPECTED_LEXICAL_OCCURRENCES = 187
+EXPECTED_LEXICAL_NAMES = 183
+EXPECTED_ACTIVE_OCCURRENCES = 186
+EXPECTED_ACTIVE_NAMES = 182
 EXPECTED_THEOREM_CONTAINED_OCCURRENCES = 60
 EXPECTED_THEOREM_CONTAINED_NAMES = 58
 EXPECTED_LEXICAL_CLASSIFICATIONS = {
     "section": 10,
-    "definition": 11,
+    "definition": 10,
     "equation": 81,
     "figure": 45,
     "example": 3,
@@ -45,7 +45,7 @@ EXPECTED_LEXICAL_CLASSIFICATIONS = {
 }
 EXPECTED_ACTIVE_CLASSIFICATIONS = {
     "section": 10,
-    "definition": 11,
+    "definition": 10,
     "equation": 81,
     "figure": 44,
     "example": 3,
