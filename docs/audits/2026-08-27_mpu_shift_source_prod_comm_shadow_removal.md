@@ -1,7 +1,7 @@
 # MPU shift-source four-way product shadow and single-use restatements
 
-This audit records the repository-local pass-through exception of
-`docs/project_conventions.md` §Style for one public reindexing equivalence that
+This audit applies the direct-removal policy of
+`docs/project_conventions.md` §Style to one public reindexing equivalence that
 duplicated a Mathlib equivalence, together with four `private` entry-formula
 restatements that were inlined into their sole consumers. All five removals are
 in `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean`.

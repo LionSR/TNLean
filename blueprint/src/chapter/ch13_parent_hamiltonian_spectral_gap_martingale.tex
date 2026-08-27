@@ -2950,9 +2950,10 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 \begin{proof}
     \leanok
     The finite-overlap martingale reduction applies with the cyclic overlap
-    relation: at most $2(L-1)$ off-diagonal neighbours per row, non-overlapping
-    pairs handled by disjoint-window positivity, and the anticommutator
-    inequality retained as an explicit hypothesis.
+    relation: at most $2(L-1)$ off-diagonal neighbours per row; for
+    non-overlapping pairs the disjoint-window estimate
+    $\re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle\ge 0$ holds;
+    and the anticommutator inequality is retained as an explicit hypothesis.
 \end{proof}
 
 \begin{theorem}[Gap bound from a strict cyclic compression constant]
@@ -3023,11 +3024,17 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    The symmetric anticommutator reduction turns the displayed
-    operator-product hypothesis into the row-summable anticommutator estimate
-    with coefficient $\eta$; the cyclic-window martingale reduction with
-    $\gamma=1-\eta m$ then gives $0<1-\eta m$ together with the stated norm
-    lower bound.
+    For every overlapping pair, the symmetric anticommutator reduction turns
+    the operator-product norm bound into
+    \begin{align}
+        &\re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle \\
+        &\qquad\ge -\eta\bigl(
+          \re\langle h_{i,\mathrm{ES}}v,v\rangle
+         +\re\langle h_{j,\mathrm{ES}}v,v\rangle\bigr).
+    \end{align}
+    The assumption $\eta m<1$ makes $\gamma=1-\eta m$ positive, and the
+    cyclic-window row-sum bounds then give the stated norm lower bound.
 \end{proof}
 
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]

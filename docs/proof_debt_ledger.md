@@ -135,8 +135,9 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — net 750 lines, risk 4/10
 - **Status**: open (#4567)
-- **What**: `PEPS/RegionBlock/UnionInjectivityOverlap4.lean` (238 ln, 100%
-  dead) plus scattered dead spans in files 1/2/3/6 (~123 ln).
+- **What**: scattered dead spans in files 1/2/3/6 (~123 ln).
+  `PEPS/RegionBlock/UnionInjectivityOverlap4.lean` (238 ln, formerly 100%
+  dead) had already been removed before this audit.
   **Correction**: the original candidate
   wrongly proposed also collapsing files 1-2 (`overlapLeftGeometry`/
   `overlapRightGeometry`) — those are live, called directly by the
@@ -144,14 +145,15 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   `overlapHostGeometry` sub-chain in file 5 (211 ln) is already gone, and
   file 5 itself was dissolved into `RegionBlock/Basic.lean` and
   `RegionBlock/UnionInjectivityGeneral.lean`
-  (`docs/audits/2026-08-27_peps_regionblock_overlap_chain_retirement.md`),
-  so the entry's remaining target is file 4 plus the scattered spans.
+  (`docs/audits/2026-08-27_peps_regionblock_overlap_chain_retirement.md`).
+  File 4 was already absent before this PR, so the entry's remaining target is
+  only the scattered spans in files 1, 2, 3, and 6.
 - **Why it's excess**: the project's own paper-gap note
   (`docs/paper-gaps/peps_normal_ft_section3_route.tex`) documents this
   exact sub-route as an abandoned dead end that forced a switch to the
   surviving P0-outer parametrization.
-- **First PR**: delete `UnionInjectivityOverlap4.lean` in full. Net -238
-  lines, zero consumers, zero proof changes to the live capstone.
+- **First PR**: delete the confirmed-dead spans in files 1, 2, 3, and 6,
+  without changing the live capstone.
 
 ### S8. Derive injective-tensor Perron-Frobenius as a corollary of the irreducible-CP-map theory — completed
 - **Status**: closed 2026-07-23 (#4568; #4594 and #4628)
