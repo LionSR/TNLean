@@ -6,20 +6,8 @@
 \DeclareUnicodeCharacter{2099}{\ifmmode{}_{n}\else\textsubscript{n}\fi}
 
 \newcommand{\Lean}{\textsc{Lean}}
-\ExplSyntaxOn
-\NewDocumentCommand{\leanid}{m}{
-  \ifmmode
-    \textsf{\detokenize{#1}}
-  \else
-    \group_begin:
-    \urlstyle{sf}
-    \tl_set:Nn \l_tmpa_tl {#1}
-    \tl_replace_all:Nnn \l_tmpa_tl {\_} {_}
-    \exp_args:NV \path \l_tmpa_tl
-    \group_end:
-  \fi
-}
-\ExplSyntaxOff
+\newcommand{\leanid}[1]{\ifmmode\textsf{\detokenize{#1}}\else{\urlstyle{sf}\nolinkurl{#1}}\fi}
+
 \providecommand{\tr}{\operatorname{tr}}
 \newcommand{\tnleanIssueBase}{https://github.com/LionSR/TNLean/issues/}
 \newcommand{\tnleanPrBase}{https://github.com/LionSR/TNLean/pull/}
@@ -40,6 +28,34 @@
 \providecommand{\C}{\mathbb{C}}
 \providecommand{\MN}[1]{M_{#1}(\C)}
 \providecommand{\MD}{M_D(\C)}
+
+% External referencing for paper sources under Papers/
+\usepackage{xr}
+
+% General helper to import an external paper's aux file with a given prefix.
+% Tries relative paths from docs/paper-gaps/, from repo root, and local directory.
+\newcommand{\importpaperaux}[2]{%
+  \IfFileExists{../../Papers/#2.aux}{%
+    \externaldocument[#1]{../../Papers/#2}%
+  }{%
+    \IfFileExists{Papers/#2.aux}{%
+      \externaldocument[#1]{Papers/#2}%
+    }{%
+      \IfFileExists{#2.aux}{%
+        \externaldocument[#1]{#2}%
+      }{}%
+    }%
+  }%
+}
+
+% General external reference macros
+\newcommand{\paperref}[2]{\ref{#1-#2}}
+\newcommand{\papereqref}[2]{(\ref{#1-#2})}
+
+% CPSV16 source (1606.00608 / MPDO-22-12-17-2.tex) external document & shortcuts
+\importpaperaux{cpsv16-}{1606.00608/MPDO-22-12-17-2}
+\newcommand{\cpsvref}[1]{\paperref{cpsv16}{#1}}
+\newcommand{\cpsveqref}[1]{\papereqref{cpsv16}{#1}}
 
 % Verdict marker: \gapnote{<kind>}{<status>}. Kind is the policy
 % classification (clarification, local-correction, scope-restriction,

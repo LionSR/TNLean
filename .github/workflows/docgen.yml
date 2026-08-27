@@ -65,6 +65,9 @@ jobs:
       - name: Build blueprint bibliography
         run: texra-blueprint bbl
 
+      - name: Generate paper source aux for paper-gap references
+        run: ./scripts/generate_paper_aux.sh 1606.00608
+
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
 
