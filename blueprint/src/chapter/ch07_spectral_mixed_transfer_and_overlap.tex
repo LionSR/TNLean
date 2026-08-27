@@ -56,22 +56,9 @@ transfer power.
 
 \begin{proof}
     \leanok
-    \uses{thm:mixed_pow}
-    Section~\ref{sec:app_spectral_mixed_trace} expands the
-    operator trace over matrix units (Lemma~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint}) and
-    the transfer power by words (Lemma~\ref{thm:mixed_pow}); reassembling
-    the sums over matrix-unit indices gives
-    \begin{align}
-        \Tr(F_{AB}^N)
-         & =\sum_\sigma
-        \tr(A^\sigma)\overline{\tr(B^\sigma)}
-        =\sum_\sigma
-        V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
-        =O_{AB}(N).
-        \notag
-    \end{align}
-    The rectangular case, Lemma~\ref{thm:overlap_trace_rect}, is the same
-    argument over the rectangular matrix-unit basis.
+    \uses{thm:overlap_trace_rect}
+    Setting $D_1=D_2=D$ in Lemma~\ref{thm:overlap_trace_rect} gives
+    $\Tr(F_{AB}^N)=O_{AB}(N)$, the square case verbatim.
 \end{proof}
 
 \begin{lemma}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
@@ -88,10 +75,21 @@ transfer power.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:overlap_trace}
-    The detailed word-index calculation is the same as the proof of
-    Theorem~\ref{thm:overlap_trace}, over the rectangular matrix-unit basis;
-    see Section~\ref{sec:app_spectral_mixed_trace}.
+    \uses{thm:mixed_pow}
+    Section~\ref{sec:app_spectral_mixed_trace} expands the operator trace
+    over the rectangular matrix-unit basis $E_{pq}$, $1\leq p\leq D_1$,
+    $1\leq q\leq D_2$ (Lemma~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint}), and
+    the transfer power by words (Lemma~\ref{thm:mixed_pow}); reassembling
+    the sums over matrix-unit indices gives
+    \begin{align}
+        \Tr((F_{AB}^{\mathrm{rect}})^N)
+         & =\sum_\sigma
+        \tr(A^\sigma)\overline{\tr(B^\sigma)}
+        =\sum_\sigma
+        V^{(N)}(A)_\sigma\overline{V^{(N)}(B)_\sigma}
+        =O_{AB}(N).
+        \notag
+    \end{align}
 \end{proof}
 
 \section{Eigenvalue bound and transfer-operator gap}

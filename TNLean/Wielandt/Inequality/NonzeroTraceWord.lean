@@ -16,10 +16,6 @@ in the `IsPrimitivePaper` language of the paper.
 
 ## Main results
 
-* `exists_nonzero_trace_word_of_isPrimitivePaper`:
-  (coarse) if `A` is normalized and primitive in the paper's sense, then there
-  exists a word product of length ≤ D² with nonzero trace.
-
 * `exists_nonzero_trace_word_of_isPrimitivePaper_sharp`:
   (sharp) if `A` is normalized and primitive in the paper's sense, then there
   exists a word product of length ≤ D² − krausRank(A) + 1 with nonzero trace.
@@ -48,23 +44,6 @@ open Matrix MPSTensor
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- **Lemma 1** (existential version).
-
-If `A` is normalized and primitive under the source theorem hypotheses, then there exists a
-word `w` with `|w| ≤ D^2` such that `tr (Kraus.evalWord A w) ≠ 0`.
-
-See also `exists_nonzero_trace_word_of_isPrimitivePaper_sharp` for the
-tight bound `D^2 - krausRank A + 1`.
-Paper: arXiv:0909.5347, Lemma 1; Wolf, Chapter 6.
--/
-theorem exists_nonzero_trace_word_of_isPrimitivePaper [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitivePaper A) :
-    ∃ w : List (Fin d), w.length ≤ D ^ 2 ∧ Matrix.trace (Kraus.evalWord A w) ≠ 0 := by
-  obtain ⟨N, _, hN⟩ := isNormal_of_isPrimitivePaper A hNorm hPrim
-  exact Kraus.exists_nonzero_trace_word A hN
 
 /-- **Lemma 1, sharp version**.
 

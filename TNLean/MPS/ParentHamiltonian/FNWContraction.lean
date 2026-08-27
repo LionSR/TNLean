@@ -529,12 +529,14 @@ theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
   simpa only [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
     range_groundSpaceMapES, q] using hInjectiveDefect
 
-private theorem groundSpaceESHasOrthogonalProjection
+/-- The local ground space \(G_N(A)\) is finite-dimensional, hence admits an orthogonal
+projection. -/
+theorem groundSpaceES_hasOrthogonalProjection
     (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
   let : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
-attribute [local instance] groundSpaceESHasOrthogonalProjection
+attribute [local instance] groundSpaceES_hasOrthogonalProjection
 
 set_option maxHeartbeats 800000 in
 -- The four-term C3 operator-norm assembly requires extra elaboration budget.
