@@ -1,20 +1,19 @@
 # Retirement of the pre-Condition-C1 BNT direct-sum selector span
 
-This audit records the removal of the unsuffixed root of the BNT direct-sum
-selector ladder in `TNLean/MPS/BNT/DirectSumSelectors.lean`. It is the audit
-note required by `docs/project_conventions.md` §Style for removals under the
-pass-through exception: the removed declaration is named below together with
-the surviving declaration that supersedes it. No compatibility alias is
-provided.
+This audit records the retirement from active use of the unsuffixed root of the
+BNT direct-sum selector ladder in `TNLean/MPS/BNT/DirectSumSelectors.lean`. The
+declaration is retained, with its exact original statement and proof, as a
+deprecated compatibility theorem; new code should use the surviving
+Condition-C1 declaration named below.
 
-## Removed declaration and its replacement
+## Deprecated declaration and its replacement
 
-| Removed | Replacement |
+| Deprecated compatibility theorem | Replacement |
 |---|---|
 | `MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors` | `MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1` |
 
-Net Lean line delta: −25 lines, all in
-`TNLean/MPS/BNT/DirectSumSelectors.lean`.
+The original 25-line theorem body is retained in
+`TNLean/MPS/BNT/DirectSumSelectors.lean` with a deprecation attribute.
 
 ## Why it was stranded
 
@@ -36,20 +35,23 @@ rung.
 
 ## What the replacement does not cover
 
-The `_c1` rung is not a strict generalization of the removed root. The root
+The `_c1` rung is not a strict generalization of the deprecated root. The root
 takes `hBlk : ∀ k, Kraus.IsNBlkInjective (A k) L` together with `hL : 1 < L`;
 the `_c1` rung takes block injectivity at `L₀`, at `L₀ + 1`, and at
 `3 (L₀ + 1)`, with `hL₀ : 0 < L₀`. Block injectivity at length `L` does not
 supply block injectivity at `L - 1`, so instantiating `L₀ := L - 1` is not
-available and the length-`L` branch is dropped rather than subsumed.
+available, so the length-`L` branch is retained for compatibility rather than
+subsumed by the preferred theorem.
 
-The branch is safe to drop: it had no consumer, carried no blueprint `\lean{}`
-tag, and its two paper-gap citations were repointed to the `_c1` rung (see
-below).
+The branch has no current consumer and carries no blueprint `\lean{}` tag, but
+it is retained for source compatibility. Its two paper-gap citations remain
+repointed to the `_c1` rung so current documentation directs new code to the
+preferred theorem (see below).
 
-## Deletion closure
+## Retention and dependency closure
 
-The closure stops at the root. Its callee
+No deletion closure is taken because the root remains as a deprecated
+compatibility theorem. Its callee
 `MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv`
 (`TNLean/MPS/BNT/DirectSumSelectors.lean`) stays live: it is used by
 `TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean:569` and is cited at
@@ -59,7 +61,7 @@ The closure stops at the root. Its callee
 ## Repointed citations
 
 Two `\leanid` citations in `docs/paper-gaps/pgvwc07_direct_sum_input.tex` named
-the removed root and now name the `_c1` rung:
+the unsuffixed root and now name the preferred `_c1` rung:
 
 - line 238, in the footnote on the selector datum and the finite direct-sum
   span. The following line, which read "and their Condition-C1 variants in",
@@ -74,17 +76,15 @@ so these edits are documentation accuracy rather than a build gate.
 ## A historical note left unedited
 
 `docs/audits/2026-08-26_mps_chain_bnt_zero_reference_and_pass_through_cleanup.md:22`
-now names a declaration that no longer exists. That line is a historical
-record of what the earlier pass did, and it is left unedited; this note is the
-record that its named replacement has since been retired in turn.
+names the compatibility theorem retained here. That line remains a historical
+record of what the earlier pass did; this note records that the named replacement
+is now deprecated rather than deleted.
 
 ## Verification
 
-- `lake build` completes successfully at the repository root with the package
-  lean options; no new error or linter warning on any touched file.
-- `python3 scripts/check_forbidden_lean_tokens.py` is clean.
-- `leanblueprint checkdecls` passes; no blueprint `\lean{...}` tag cited the
-  removed declaration.
+- The affected Lean module compiles with the package lean options; no new error
+  or linter warning is introduced.
+- No blueprint `\lean{...}` tag requires the deprecated declaration.
 
 ## Ledger
 

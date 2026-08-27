@@ -285,6 +285,22 @@ The transfer is recorded as the data of a `RegionInsertionTransfer`, and the
 headline theorem assembles the algebra isomorphism from that data using the
 unconditional injectivity and linearity above. -/
 
+/-- Deprecated compatibility predicate packaging a region insertion-algebra equivalence
+and its coefficient identity. Use `RegionInsertionTransfer.fwdAlgEquiv` together with
+`RegionInsertionTransfer.fwd_coeff` in new code. -/
+@[deprecated "Use `RegionInsertionTransfer.fwdAlgEquiv` and `.fwd_coeff`."
+  (since := "2026-08-27")]
+def IsRegionBlockedInsertionAlgebraIsomorphism (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : Prop :=
+  ∃ Φ :
+    Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ ≃ₐ[ℂ]
+      Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
+    ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
+      (σ : RegionPhysicalConfig (V := V) (d := d) R)
+      (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
+      regionInsertedCoeff (G := G) A R f M σ τ =
+        regionInsertedCoeff (G := G) B R f (Φ M) σ τ
+
 /-- A region-insertion transfer datum on a boundary edge `f` of `R`: an explicit
 per-edge matrix map `fwd` and its inverse-candidate `bwd`, each matching the
 region-inserted coefficients of the two tensors, with `fwd` multiplicative and
@@ -421,6 +437,25 @@ noncomputable def fwdAlgEquiv (T : RegionInsertionTransfer (G := G) A B R f)
   commutes' z := (T.fwdAlgHom hRB hCB hposB).commutes z
 
 end RegionInsertionTransfer
+
+/-- Deprecated compatibility constructor for
+`IsRegionBlockedInsertionAlgebraIsomorphism`. New code should use the algebra equivalence and
+coefficient field of the transfer datum directly. -/
+@[deprecated "Use `RegionInsertionTransfer.fwdAlgEquiv` and `.fwd_coeff`."
+  (since := "2026-08-27")]
+theorem isRegionBlockedInsertionAlgebraIsomorphism_of_transfer
+    (A B : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (T : RegionInsertionTransfer (G := G) A B R f)
+    (hRA : RegionBlockedTensorInjective (G := G) A R)
+    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
+    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
+    (hRB : RegionBlockedTensorInjective (G := G) B R)
+    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
+    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+    IsRegionBlockedInsertionAlgebraIsomorphism (G := G) A B R f :=
+  ⟨T.fwdAlgEquiv hRA hCA hposA hRB hCB hposB,
+    fun M σ τ => T.fwd_coeff M σ τ⟩
 
 /-- **Per-edge gauge matrix from a region-insertion transfer datum.**
 

@@ -5,8 +5,9 @@ swept for duplicated helper lemmas, local reimplementations of Mathlib facts,
 and zero-reference declarations. It is the audit note required by
 `docs/project_conventions.md` §Style for removals under the pass-through
 exception: every removed declaration is named below together with the surviving
-declaration that supersedes it. No compatibility alias is provided; every
-removed name was `private` or had no consumer at all.
+declaration that supersedes it. The two configuration-splitting names called out
+below are retained as deprecated compatibility aliases; the other retired names
+were `private` or had no consumer at all.
 
 Each removal was checked by name across `TNLean/` (excluding `Archive/`),
 `blueprint/src/`, and `docs/`, and confirmed by a full `lake build`. Through the
@@ -93,18 +94,18 @@ The sitewise splitting of a product-valued physical configuration into its two
 component configurations was declared three times: once in the algebra layer and
 twice more under `TNLean/MPS/MPU/`, one of the two an alias whose body is a
 single call and the other a character-for-character copy of the algebra-layer
-body. Both MPU copies were removed and their four use sites retargeted at the
-algebra-layer declaration.
+body. Their four use sites were retargeted at the algebra-layer declaration,
+while the MPU names are retained as deprecated compatibility aliases.
 
-| Removed | Replacement |
+| Deprecated compatibility alias | Replacement |
 | --- | --- |
 | `MPOTensor.tensorProductConfigEquiv` (`TNLean/MPS/MPU/TensorProduct.lean`) | `finTupleProdEquiv` (`TNLean/Algebra/FinTupleEquiv.lean`) |
 | `MPOTensor.physicalAncillaConfigEquiv` (`TNLean/MPS/MPU/PhysicalAncilla.lean`) | `finTupleProdEquiv` (`TNLean/Algebra/FinTupleEquiv.lean`) |
 
 One blueprint payload was shortened rather than redirected. The definition node
 for the independent tensor product of matrix product operator tensors named
-three declarations, the third of which was the removed alias; the name it
-forwarded to is already tagged, with its own proof marked complete, at the node
+three declarations, the third of which is now a deprecated compatibility alias;
+the name it forwards to is already tagged, with its own proof marked complete, at the node
 for the independent tensor product of matrix product state tensors, so
 repeating it here would double-tag one declaration across two nodes. The prose
 of the shortened node is unchanged, including its closing sentence about

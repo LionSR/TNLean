@@ -4,8 +4,9 @@ This note records the declaration removals made in the cyclic-sector slice of
 `TNLean/MPS/MPDO` on 2026-08-27, taken under the pass-through exception of
 `docs/project_conventions.md` §Style. Every removal below has zero non-`Archive`
 Lean consumers after migration, and every blueprint `\lean{...}` tag that named
-a removed declaration was redirected in the same change. The retirement of the
-all-length non-commutation route is recorded separately in
+a removed declaration was redirected in the same change. The four three-site
+fiber declarations called out below are instead retained as deprecated
+compatibility declarations. The retirement of the all-length non-commutation route is recorded separately in
 `docs/audits/2026-08-27_mpdo_all_length_noncommutation_retirement.md`.
 
 ## Four library facts restated locally
@@ -55,13 +56,13 @@ single-index-family helper does not apply.
 
 ## The dead three-site fiber split
 
-Four declarations in `TNLean/MPS/MPDO/CyclicActiveRetainedCoordinates.lean` had
+Four declarations in `TNLean/MPS/MPDO/CyclicActiveRetainedCoordinates.lean` have
 no consumer anywhere in the production corpus and no blueprint tag:
 `threeSectorFiberEquiv` and its three `@[simp]` inverse-coordinate lemmas
 `threeSectorFiberEquiv_symm_apply_zero`, `..._one`, and `..._two`, all in the
-`MPOTensor.PhysicalSectorFactorization` namespace. Replacement: none needed;
-the three-site fiber split had no consumer, and the `Fin 3` decomposition is
-available inline from `Fin.cons` and `Fin.addCases`.
+`MPOTensor.PhysicalSectorFactorization` namespace. They are retained as
+deprecated compatibility declarations rather than deleted. New code should use
+the `Fin 3` decomposition directly through `Fin.cons` and `Fin.addCases`.
 
 `sectorCoordinateChainEquiv_apply_fst` in `CyclicActiveCutCoordinates.lean` was
 *not* removed: it has plausible default-simp-set consumers in
