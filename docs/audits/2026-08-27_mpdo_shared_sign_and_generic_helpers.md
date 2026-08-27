@@ -1,11 +1,12 @@
 # MPDO shared sign calculus and generic private helpers (2026-08-27)
 
 Three cleanups in `TNLean/MPS/MPDO`. The private helper removals follow the
-direct-removal policy of `docs/project_conventions.md` §Style. Every non-`Archive` use is migrated, and the two blueprint `\lean{}`
-tags affected are redirected in the same change. Under TNLean's explicit
-no-public-API-compatibility policy, the four old qualified sign-definition names
-are deleted directly rather than retained as deprecated aliases. No private removed name needs an alias, and no removed name
-encoded misleading terminology.
+direct-removal policy in `docs/project_conventions.md`. Every non-`Archive` use
+is migrated, and the two blueprint `\lean{}` tags affected are redirected in
+the same change. Under TNLean's explicit no-public-API-compatibility policy, the
+four old qualified sign-definition names are deleted directly rather than
+retained as deprecated aliases. No private removed name needs an alias, and no
+removed name encoded misleading terminology.
 
 ## 1. Generic helpers replaced by their owned equivalents
 

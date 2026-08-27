@@ -3024,7 +3024,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    For every overlapping pair, the operator-product bound gives
+    For every overlapping pair, applying the directional compression bound
+    in both orientations and adding gives
     \begin{align}
         &\re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
          +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle \\
@@ -3032,8 +3033,8 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
           \re\langle h_{i,\mathrm{ES}}v,v\rangle
          +\re\langle h_{j,\mathrm{ES}}v,v\rangle\bigr).
     \end{align}
-    The cyclic-window row-sum bounds with $\gamma=1-\eta m$ then give
-    $0<1-\eta m$ together with the stated norm lower bound.
+    The assumption $\eta m<1$ makes $\gamma=1-\eta m$ positive, and the
+    cyclic-window row-sum bounds then give the stated norm lower bound.
 \end{proof}
 
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
