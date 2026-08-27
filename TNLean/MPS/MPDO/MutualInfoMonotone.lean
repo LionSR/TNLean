@@ -126,22 +126,9 @@ theorem append_glue {d N m k k' : ℕ} (u : Fin m → Fin d) (w : Fin k → Fin 
     (h1 : k' = k) (h2 : N = m + k') (h3 : N = m + k) :
     (Fin.append u (w ∘ Fin.cast h1)) ∘ Fin.cast h2
       = (Fin.append u w) ∘ Fin.cast h3 := by
-  funext j
-  simp only [Function.comp_apply]
-  rcases lt_or_ge j.val m with hj | hj
-  · have hL : Fin.cast h2 j = Fin.castAdd k' ⟨j.val, hj⟩ := by apply Fin.ext; simp
-    have hR : Fin.cast h3 j = Fin.castAdd k ⟨j.val, hj⟩ := by apply Fin.ext; simp
-    rw [hL, hR, Fin.append_left, Fin.append_left]
-  · have hL : Fin.cast h2 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by
-      apply Fin.ext
-      simp
-      omega
-    have hR : Fin.cast h3 j = Fin.natAdd m ⟨j.val - m, by omega⟩ := by
-      apply Fin.ext
-      simp
-      omega
-    rw [hL, hR, Fin.append_right, Fin.append_right]
-    rfl
+  rw [Fin.append_cast_right]
+  funext i
+  simp only [Function.comp_apply, Fin.cast_cast]
 
 /-- **Translation invariance of the block reduced state (windowed form).** The
 reduced state keeping an `m`-block with `p` spins traced out before it and `s`

@@ -307,45 +307,6 @@ theorem
   exact EtaLocalStructureData.isSAL_of_isSourceZCL
     (hMPDO s) (hK s) data (hZCL s)
 
-/-- An exact positive-multiplicity sum of orthogonally supported fixed-bond
-sectors satisfies the saturated area law when every sector is an injective
-MPDO tensor with source zero correlation length.
-
-Source: CPSV16, Appendix C.2, Proposition `prop4to2`, lines 1801--1808.
-
-**Scope restriction (sectorwise hypotheses and exact realization):** The
-printed proposition assumes the proportional `ApprhoNComm` sector form, but
-omits the sectorwise source-ZCL hypothesis used by its proof. This theorem
-assumes separately that every sector generates MPDOs, is one-site injective,
-and has source ZCL. In the canonical Case II application, the standing biCF
-one-letter span and nonzero absorbed weight supply injectivity directly, while
-ambient source ZCL descends to the absorbed sectors. Sector MPDO positivity
-remains an explicit input. The supplied orthogonal commuting sector family
-realizes every sector with scalar one, which is stronger than the proportional
-source form, and the full tensor is assumed to be its exact
-positive-multiplicity sum. Thus this theorem does not formalize the printed
-proposition verbatim. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
-    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
-    (multiplicity : Fin g → ℕ) [Nonempty (Fin g)]
-    (hmultiplicity : ∀ s, 0 < multiplicity s)
-    (F : OrthogonalCommutingSectorFamily K)
-    (hM : ∀ (N : ℕ), 0 < N →
-      mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
-    (hMPDO : ∀ s, IsMPDO (K s))
-    (hK : ∀ s, (K s).IsInjective)
-    (hZCL : ∀ s, (K s).IsSourceZCL) :
-    IsSAL M := by
-  apply
-    isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
-      M K multiplicity hmultiplicity F.toProportional
-  · intro N hN
-    exact ⟨1, zero_lt_one, by simpa using hM N hN⟩
-  · exact hMPDO
-  · exact hK
-  · exact hZCL
-
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
 when its absorbed representatives do and an independently constructed
 orthogonal commuting sector family realizes those representatives.
