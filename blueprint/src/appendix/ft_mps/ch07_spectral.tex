@@ -56,14 +56,13 @@ $F_{AB}^{\mathrm{rect}}$ of Definition~\ref{def:mixed_transfer_rect}.
 \end{proof}
 
 
-Theorem~\ref{thm:overlap_trace} and Theorem~\ref{thm:overlap_trace_rect}
-combine Lemma~\ref{thm:mixed_pow} and Lemma~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint} the
-same way, over the square and rectangular matrix-unit bases respectively:
-expanding $\Tr(T)$ by the trace-expansion formula
+Theorem~\ref{thm:overlap_trace_rect} combines Lemma~\ref{thm:mixed_pow} with
+Lemma~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint} over the
+rectangular matrix-unit basis: expanding $\Tr(T)$ for
+$T=(F_{AB}^{\mathrm{rect}})^N$ by the trace-expansion formula
 of~\cite[``Trace expansion over matrix units'']{QICLean2026Blueprint}, applying
-(\ref{eq:spectral_mixed_power}) to each $T(E_{pq})$ for $T=F_{AB}^N$ or
-$T=(F_{AB}^{\mathrm{rect}})^N$, and reassembling the sums over
-matrix-unit indices gives
+(\ref{eq:spectral_mixed_power}) to each $T(E_{pq})$, and reassembling the sums
+over matrix-unit indices gives
 \begin{align}
     \Tr(T)
      & =\sum_\sigma
@@ -73,6 +72,8 @@ matrix-unit indices gives
     =O_{AB}(N).
     \notag
 \end{align}
+Theorem~\ref{thm:overlap_trace} is the square case $D_1=D_2=D$ of this
+statement, so it needs no separate expansion.
 
 \section{Auxiliary trace positivity}
 
