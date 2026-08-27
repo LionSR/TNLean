@@ -99,5 +99,6 @@ the same document are untouched.
 
 Ledger entry S7 (issue #4567) plans further deletions in this chain and cites a
 line range inside the deleted waypoint that no longer existed at the audited
-head. That entry's remaining targets — `UnionInjectivityOverlap4.lean` and the
-dead spans in files 1, 2, 3, and 6 — are unaffected by this slice.
+head. `UnionInjectivityOverlap4.lean` was already absent before this PR. That
+entry's remaining targets are only the dead spans in files 1, 2, 3, and 6;
+they are unaffected by this slice.
