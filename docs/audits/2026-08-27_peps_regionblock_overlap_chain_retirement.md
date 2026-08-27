@@ -1,36 +1,34 @@
-# Retaining the superseded overlap bridge compatibility API and dissolving the transport waypoint
+# Deleting the superseded overlap bridge and dissolving the transport waypoint
 
-Three compatibility/cleanup decisions in the `PEPS/RegionBlock` overlapping-union
-chain, audited at the head of 2026-08-27: retain the non-fiber bridge capstone as
-deprecated public API together with the private helper required by its proof;
-remove the separate fiber carrier restatement; and dissolve the transport
-waypoint module parked between the bridge and the closure.
+Three cleanup decisions in the `PEPS/RegionBlock` overlapping-union chain,
+audited at the head of 2026-08-27: delete the superseded non-fiber bridge
+capstone together with the private helper restored solely for its proof; remove
+the separate fiber carrier restatement; and dissolve the transport waypoint
+module parked between the bridge and the closure.
 
-## Compatibility retention and removal
+## Direct deletion
 
 | Declaration | Disposition |
 |---|---|
-| `TNLean.PEPS.overlap_bridge_rightCoupling_eq_zero` (`TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean`) | retained as deprecated compatibility API; new code should use `TNLean.PEPS.overlapFiber_bridge_rightCoupling_eq_zero` (`TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean`) |
-| `TNLean.PEPS.overlapLeft_firstStrip_weightCombination_eq_zero_rightGeometry` (private, same file) | retained because it is required by the compatibility theorem's original proof |
+| `TNLean.PEPS.overlap_bridge_rightCoupling_eq_zero` (`TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean`) | deleted; live code uses `TNLean.PEPS.overlapFiber_bridge_rightCoupling_eq_zero` (`TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean`) |
+| `TNLean.PEPS.overlapLeft_firstStrip_weightCombination_eq_zero_rightGeometry` (private, same file) | deleted with its sole consumer |
 | `TNLean.PEPS.overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry` (private, `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean`) | removed in favor of `TNLean.PEPS.overlapLeft_firstStrip_fiber_weightCombination_eq_zero`, applied at the call site through `smul_eq_zero_of_right` |
 
 The non-fiber bridge is superseded for the live proof route. A bridge row indexed
 by the `R₂` boundary alone cannot separate the `P₀`-outer host indices, which is
 obligation 1 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`; the live
 closure restricts the coefficient family to each `P₀`-outer fiber first, and the
-fiber bridge is what the rebuild step consumes. Nevertheless, review determined
-that the public non-fiber theorem must remain source-compatible, so it is retained
-with a deprecation attribute and its private carrier helper is restored.
+fiber bridge is what the rebuild step consumes.
 
-Both private restatements are convert-plus-`rfl` carrier translations of their
+Both private restatements were convert-plus-`rfl` carrier translations of their
 base lemmas with `R₂ \ R₁` spelled as
-`(overlapRightGeometry R₁ R₂).complement`. The non-fiber helper remains only to
-support the deprecated public theorem; the fiber helper is still removed because
-the surviving live call site accepts the base lemma directly.
+`(overlapRightGeometry R₁ R₂).complement`. The non-fiber helper disappears with
+its sole consumer, while the surviving live fiber call site accepts the base
+lemma directly.
 
-No blueprint `\lean{...}` tag cites the compatibility theorem. Deprecation, rather
-than deletion under the pass-through exception, preserves downstream source
-compatibility while directing new developments to the fiber bridge.
+No blueprint `\lean{...}` tag cites the deleted theorem. No compatibility
+declaration is retained under the maintainer's explicit confirmation that TNLean
+does not promise public API compatibility.
 
 ## The transport waypoint
 
@@ -81,19 +79,19 @@ them.
 
 ## Prose repairs
 
-The module docstring of `UnionInjectivityOverlap3b.lean` now emphasizes the bridge
-host-coefficient identity used by the live route. The older capstone remains in
-the module only as deprecated compatibility API. The chain summary in
+The module docstring of `UnionInjectivityOverlap3b.lean` emphasizes the bridge
+host-coefficient identity used by the live route; the superseded capstone has
+been deleted. The chain summary in
 `UnionInjectivityOverlap6.lean` described the same file's contribution and named
 the waypoint as a supplier; both sentences were rewritten to the surviving
 modules. The docstring of `overlapFiber_bridge_rightCoupling_eq_zero` states the rebuild
-hypothesis it discharges directly rather than relying on the deprecated theorem
+hypothesis it discharges directly rather than relying on the deleted theorem
 as its primary description.
 
 In `docs/paper-gaps/peps_normal_ft_section3_route.tex`, the paragraph reciting
-the abandoned unrestricted route no longer cites the compatibility capstone: the
-paragraph records why that route does not close, while the retained theorem is
-preserved solely for downstream source compatibility. The surviving reference to `TNLean.PEPS.overlapBridgeRow` and the
+the abandoned unrestricted route no longer cites the deleted capstone: the
+paragraph records why that route does not close. The surviving reference to
+`TNLean.PEPS.overlapBridgeRow` and the
 citation of `TNLean.PEPS.overlapFiber_bridge_rightCoupling_eq_zero` elsewhere in
 the same document are untouched.
 

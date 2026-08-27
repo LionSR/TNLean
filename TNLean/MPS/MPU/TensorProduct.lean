@@ -64,12 +64,6 @@ def tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
       U i j α β * V k l γ δ := by
   simp [tensorProduct, Matrix.reindex_apply]
 
-/-- Split a product-valued physical configuration site by site. -/
-@[deprecated _root_.finTupleProdEquiv (since := "2026-08-27")]
-def tensorProductConfigEquiv (N d e : ℕ) :
-    (Fin N → Fin (d * e)) ≃ (Fin N → Fin d) × (Fin N → Fin e) :=
-  finTupleProdEquiv N d e
-
 /-- Split every letter of a blocked product alphabet and re-encode the two
 component words as a pair of blocked letters.
 

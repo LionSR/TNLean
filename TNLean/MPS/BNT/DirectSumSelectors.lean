@@ -312,35 +312,6 @@ theorem hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
     (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
       A hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀)
 
-/-- Common block injectivity and the BNT direct-sum separation input give a
-finite simultaneous block-word span.
-
-Explicitly, the length is
-\[
-  L+(r-1)(L+(L+L)),
-\]
-because the length-\(L\) block-injective prefix supplies the target matrix in a
-chosen block, and the \(r-1\) three-block selectors kill the other blocks. -/
-@[deprecated
-  "Use `wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1` \
-  when Condition C1 data is available."
-  (since := "2026-08-27")]
-theorem wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L)
-    (hBlk3 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L + (L + L)))
-    (hInj : ∀ k : Fin r, Kraus.IsInjective (A k))
-    (hL : 1 < L) :
-    WordTupleSpanTop A (L + (r - 1) * (L + (L + L))) :=
-  wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk
-    (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv
-      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)
-
 /-- Finite-C1 version of the BNT direct-sum product span.
 
 The simultaneous block-word tuples span the full product algebra at

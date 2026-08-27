@@ -57,13 +57,6 @@ def tensorPhysicalId (U : MPOTensor d D) (x : ℕ) : MPOTensor (d * x) D :=
       U i j β α * if a = b then 1 else 0 := by
   by_cases h : a = b <;> simp [tensorPhysicalId, h]
 
-/-- Split a sitewise enlarged physical configuration into its original and
-ancilla configurations. -/
-@[deprecated _root_.finTupleProdEquiv (since := "2026-08-27")]
-def physicalAncillaConfigEquiv (N d x : ℕ) :
-    (Fin N → Fin (d * x)) ≃ (Fin N → Fin d) × (Fin N → Fin x) :=
-  finTupleProdEquiv N d x
-
 private theorem evalWord_tensorPhysicalId (U : MPOTensor d D) (x : ℕ)
     (is js : List (Fin (d * x))) :
     evalWord (tensorPhysicalId U x) is js =

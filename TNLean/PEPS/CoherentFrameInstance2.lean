@@ -40,54 +40,6 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 variable {A : Tensor G d}
 
-/-! ### Decidable-equality transport of a one-edge blocking datum -/
-
-/-- Transport a one-edge blocking datum across two decidable-equality instances on the
-vertex set. Decidable equality is a subsingleton, so this compatibility declaration only
-casts the datum between propositionally equal instance-indexed types. -/
-@[deprecated "Use this only to bridge legacy instance-indexed blocking data."
-  (since := "2026-08-27")]
-def transportBlockingData (inst₁ inst₂ : DecidableEq V)
-    {ι : RegionInjectivityData V} {e : Edge G}
-    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
-    @NormalEdgeBlockingData V _ inst₂ _ ι G e := by
-  have h : inst₁ = inst₂ := Subsingleton.elim _ _
-  subst h
-  exact D
-
-omit [DecidableRel G.Adj] in
-@[deprecated "Use this only to bridge legacy instance-indexed blocking data."
-  (since := "2026-08-27"), simp]
-theorem transportBlockingData_red (inst₁ inst₂ : DecidableEq V)
-    {ι : RegionInjectivityData V} {e : Edge G}
-    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
-    (transportBlockingData inst₁ inst₂ D).red =
-      (@NormalEdgeBlockingData.red V _ inst₁ _ ι G e D) := by
-  obtain rfl : inst₁ = inst₂ := Subsingleton.elim _ _
-  rfl
-
-omit [DecidableRel G.Adj] in
-@[deprecated "Use this only to bridge legacy instance-indexed blocking data."
-  (since := "2026-08-27"), simp]
-theorem transportBlockingData_blue (inst₁ inst₂ : DecidableEq V)
-    {ι : RegionInjectivityData V} {e : Edge G}
-    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
-    (transportBlockingData inst₁ inst₂ D).blue =
-      (@NormalEdgeBlockingData.blue V _ inst₁ _ ι G e D) := by
-  obtain rfl : inst₁ = inst₂ := Subsingleton.elim _ _
-  rfl
-
-omit [DecidableRel G.Adj] in
-@[deprecated "Use this only to bridge legacy instance-indexed blocking data."
-  (since := "2026-08-27"), simp]
-theorem transportBlockingData_complement (inst₁ inst₂ : DecidableEq V)
-    {ι : RegionInjectivityData V} {e : Edge G}
-    (D : @NormalEdgeBlockingData V _ inst₁ _ ι G e) :
-    (transportBlockingData inst₁ inst₂ D).complement =
-      (@NormalEdgeBlockingData.complement V _ inst₁ _ ι G e D) := by
-  obtain rfl : inst₁ = inst₂ := Subsingleton.elim _ _
-  rfl
-
 /-! ### The coherent frame of a one-edge blocking datum
 
 A one-edge blocking datum over the concrete region-injectivity predicate of a tensor

@@ -1,19 +1,19 @@
-# Retirement of the pre-Condition-C1 BNT direct-sum selector span
+# Deletion of the pre-Condition-C1 BNT direct-sum selector span
 
-This audit records the retirement from active use of the unsuffixed root of the
-BNT direct-sum selector ladder in `TNLean/MPS/BNT/DirectSumSelectors.lean`. The
-declaration is retained, with its exact original statement and proof, as a
-deprecated compatibility theorem; new code should use the surviving
+This audit records the direct deletion of the unsuffixed root of the BNT
+direct-sum selector ladder from
+`TNLean/MPS/BNT/DirectSumSelectors.lean`. Current code uses the surviving
 Condition-C1 declaration named below.
 
-## Deprecated declaration and its replacement
+## Removed declaration and its replacement
 
-| Deprecated compatibility theorem | Replacement |
+| Removed | Replacement |
 |---|---|
 | `MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors` | `MPSTensor.wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1` |
 
-The original 25-line theorem body is retained in
-`TNLean/MPS/BNT/DirectSumSelectors.lean` with a deprecation attribute.
+The theorem and its deprecation attribute were removed. TNLean does not promise
+public Lean API compatibility, so a declaration with no current consumer is not
+retained solely as a deprecated compatibility theorem.
 
 ## Why it was stranded
 
@@ -33,30 +33,27 @@ The single surviving consumer of the ladder,
 `TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean:79`, calls the `_c1`
 rung.
 
-## What the replacement does not cover
+## Scope of the replacement
 
-The `_c1` rung is not a strict generalization of the deprecated root. The root
-takes `hBlk : ∀ k, Kraus.IsNBlkInjective (A k) L` together with `hL : 1 < L`;
-the `_c1` rung takes block injectivity at `L₀`, at `L₀ + 1`, and at
+The `_c1` rung is not a strict generalization of the removed root. The root took
+`hBlk : ∀ k, Kraus.IsNBlkInjective (A k) L` together with `hL : 1 < L`; the
+`_c1` rung takes block injectivity at `L₀`, at `L₀ + 1`, and at
 `3 (L₀ + 1)`, with `hL₀ : 0 < L₀`. Block injectivity at length `L` does not
 supply block injectivity at `L - 1`, so instantiating `L₀ := L - 1` is not
-available, so the length-`L` branch is retained for compatibility rather than
-subsumed by the preferred theorem.
+available.
 
-The branch has no current consumer and carries no blueprint `\lean{}` tag, but
-it is retained for source compatibility. Its two paper-gap citations remain
-repointed to the `_c1` rung so current documentation directs new code to the
-preferred theorem (see below).
+That distinction does not justify retaining a zero-reference theorem under the
+maintainer's no-public-API-compatibility policy. The removed branch had no
+current consumer and carried no blueprint `\lean{}` tag.
 
-## Retention and dependency closure
+## Dependency closure
 
-No deletion closure is taken because the root remains as a deprecated
-compatibility theorem. Its callee
+Only the zero-reference root is deleted. Its callee
 `MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv`
 (`TNLean/MPS/BNT/DirectSumSelectors.lean`) stays live: it is used by
 `TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean:569` and is cited at
-`docs/paper-gaps/pgvwc07_direct_sum_input.tex:236,280`. The file-level
-`variable {d L : ℕ}` is retained for the same reason.
+`docs/paper-gaps/pgvwc07_direct_sum_input.tex:236,280`. Other declarations in
+the file also use the file-level parameter `L`, so that parameter remains.
 
 ## Repointed citations
 
@@ -76,15 +73,16 @@ so these edits are documentation accuracy rather than a build gate.
 ## A historical note left unedited
 
 `docs/audits/2026-08-26_mps_chain_bnt_zero_reference_and_pass_through_cleanup.md:22`
-names the compatibility theorem retained here. That line remains a historical
-record of what the earlier pass did; this note records that the named replacement
-is now deprecated rather than deleted.
+names the theorem removed here. That line remains a historical record of what
+the earlier pass did; this note records its subsequent deletion.
 
 ## Verification
 
-- The affected Lean module compiles with the package lean options; no new error
+- The affected Lean module compiles with the package Lean options; no new error
   or linter warning is introduced.
-- No blueprint `\lean{...}` tag requires the deprecated declaration.
+- No blueprint `\lean{...}` tag requires the removed declaration.
+- Repository searches find no remaining Lean declaration or consumer under the
+  removed name; only historical audit references remain.
 
 ## Ledger
 

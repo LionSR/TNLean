@@ -383,12 +383,5 @@ theorem M_not_isRFPViaTS : ¬ IsRFPViaTS M := by
   exact physTraceTransfer_M_not_idempotent
     (physTraceTransfer_sq_of_isRFPViaTS M h)
 
-/-- Deprecated compatibility name for the shared binary site sign. -/
-@[deprecated MPOTensor.siteSign (since := "2026-08-27")]
-alias siteSign := MPOTensor.siteSign
-
-/-- Deprecated compatibility name for the shared binary configuration sign. -/
-@[deprecated MPOTensor.configurationSign (since := "2026-08-27")]
-alias configurationSign := MPOTensor.configurationSign
 
 end MPOTensor.CPSVExample412Literal

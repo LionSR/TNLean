@@ -20,7 +20,7 @@ definition.
 | `TNLean.PEPS.edge_ne_of_middle_incident_for_physical` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`) and `TNLean.PEPS.incidentMiddle_ne` (`TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean`) | `TNLean.PEPS.edge_ne_of_middle_incident` in `TNLean/PEPS/Blocking.lean`, now public and carrying the `incidentMiddle_ne` docstring |
 | `TNLean.PEPS.LocalConfig` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`) | `TNLean.PEPS.OpenLocalConfig` in the same file — the two abbreviations unfolded to the same product type, and the public one keeps the fuller docstring |
 | `TNLean.PEPS.edgeFinEqDelta` (private, `TNLean/PEPS/FundamentalTheorem/EdgeInsertion.lean`) | `TNLean.PEPS.finEqDelta (leftIncidentValue A ξ f) (rightIncidentValue A ξ f)`, the composition of three `GaugeAction.lean` helpers that are now public |
-| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/TwoInjectiveComparison/Basic.lean`) | retained as a deprecated compatibility declaration; new code uses `Matrix.single i j (1 : ℂ)` from Mathlib directly |
+| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/TwoInjectiveComparison/Basic.lean`) | deleted; use `Matrix.single i j (1 : ℂ)` from Mathlib directly |
 
 ## What was checked
 
@@ -100,8 +100,9 @@ had to be restated. Neither spelling occurs under `blueprint/src` or `docs`.
 now name Mathlib's spelling directly, and the six argument lists shed the
 redundant leading entry. Only `twoBlockInsertedCoeff_singletonBond_single`
 needed the classical-instance opener that the wrapper had been supplying
-implicitly. The old fully qualified name remains available as a deprecated
-compatibility declaration for downstream users. The blueprint node
+implicitly. The old fully qualified wrapper is deleted under the maintainer's
+explicit confirmation that TNLean does not promise public API compatibility. The
+blueprint node
 `def:peps_matrixUnit` is not a leaf — the one-shared-bond extraction theorem
 cites it — so the label and the `\uses` edge stay and the tag is `\mathlibok`,
 this repository's documented idiom for a statement discharged upstream. The
@@ -111,12 +112,11 @@ compatibility wrapper.
 
 ## Transition declarations
 
-Every removed name is either `private`, zero-referenced, or a byte-level mirror
-of a surviving declaration with the same fully qualified name. The distinct
-public wrapper `matrixUnit` is instead retained under its exact former name and
-signature with a deprecation pointing new code to `Matrix.single`. No surviving
-blueprint `\lean{...}` tag cites a removed spelling; the compatibility retention
-protects downstream Lean imports independently of the blueprint surface.
+Every removed name is either `private`, zero-referenced, a byte-level mirror
+of a surviving declaration with the same fully qualified name, or the
+`matrixUnit` wrapper around `Matrix.single`. The maintainer explicitly confirmed
+that TNLean does not promise public API compatibility, so no deprecated wrapper
+is retained. No surviving blueprint `\lean{...}` tag cites a removed spelling.
 
 ## Ledger
 

@@ -2,8 +2,8 @@
 
 This audit records the repository-local pass-through exception of
 `docs/project_conventions.md` §Style for the PEPS cycle, edge, and coherent-frame
-modules. Two cleanups are covered: one decidable-equality transport API that was
-initially classified as obsolete, and a batch of projection and application
+modules. Two cleanups are covered: one obsolete decidable-equality transport API,
+and a batch of projection and application
 lemmas that no proof in the repository consumed.
 
 The batch was grep-proposed and build-decided. Every candidate was first checked
@@ -17,10 +17,10 @@ because a root build named the proof it had been silently carrying.
 
 | Audited declaration | Disposition |
 |---|---|
-| `TNLean.PEPS.transportBlockingData` (`TNLean/PEPS/CoherentFrameInstance2.lean`) | retained with its exact former signature as deprecated compatibility |
-| `TNLean.PEPS.transportBlockingData_red` (same file) | retained with its exact former signature as a deprecated compatibility projection lemma |
-| `TNLean.PEPS.transportBlockingData_blue` (same file) | retained with its exact former signature as a deprecated compatibility projection lemma |
-| `TNLean.PEPS.transportBlockingData_complement` (same file) | retained with its exact former signature as a deprecated compatibility projection lemma |
+| `TNLean.PEPS.transportBlockingData` (`TNLean/PEPS/CoherentFrameInstance2.lean`) | deleted; no in-tree call site needs an instance cast |
+| `TNLean.PEPS.transportBlockingData_red` (same file) | deleted with the transport definition |
+| `TNLean.PEPS.transportBlockingData_blue` (same file) | deleted with the transport definition |
+| `TNLean.PEPS.transportBlockingData_complement` (same file) | deleted with the transport definition |
 
 The transport moved a one-edge blocking datum between two decidable-equality
 instances on the vertex set, on the grounds that a square-lattice geometry layer
@@ -35,18 +35,15 @@ interface with no subsingleton transport") and again at
 `TNLean/PEPS/TorusLatticeGraph.lean` lines 95–99. Thus no current in-tree call
 site needs the transport.
 
-The public API is still a genuine compatibility seam: external code can hold a
-`NormalEdgeBlockingData` whose type was elaborated under one `DecidableEq V`
-instance while a consumer expects another. The instances are propositionally
-equal by `Subsingleton.elim`, but the dependent structure types still require the
-cast performed by `transportBlockingData`. The definition and its three
-projection lemmas therefore remain under their exact former names and signatures
-with dated deprecations.
+Although external code could have used this cast, the maintainer explicitly
+confirmed that TNLean does not promise public API compatibility. The definition
+and its three projection lemmas are therefore deleted outright, with no
+deprecation layer retained.
 
 `TNLean.PEPS.transportBlockingDataAlong` and its lemmas in
-`TNLean/PEPS/RegionTransportData.lean` and `TNLean/PEPS/TorusBlockingData.lean`
-are a different declaration — transport along a graph isomorphism, with many
-live consumers — and were not touched.
+`TNLean/PEPS/RegionTransportData.lean` are different declarations: they
+transport along a graph isomorphism and have live consumers, so they are
+untouched.
 
 ## Zero-consumer projection and application lemmas
 

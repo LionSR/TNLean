@@ -497,47 +497,6 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
       rwa [sub_add_cancel, hmap0, eq_comm] at this
     exact Kraus.cyclicProj_ne_zero K P hPsum hcyclicLM (0 - 1) hP1
 
-/-- **Compatibility hypothesis** for the all-length noncommutation route:
-every displaced Hermitian idempotent fails to commute with the density operator
-at every length.
-
-This interface is incomparable with the newer existential-length interface:
-it restricts to Hermitian idempotents but requires noncommutation at every
-length. -/
-@[deprecated
-  "Prefer the existential-length displaced-idempotent interface when available."
-  (since := "2026-08-27")]
-def NoninvariantProjectorNoncommuting {d D : ℕ} (M : MPOTensor d D) : Prop :=
-  ∀ Q : Matrix (Fin d) (Fin d) ℂ, Q.IsHermitian → IsIdempotentElem Q →
-    M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q →
-    ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))
-
-/-- Compatibility route from the all-length Hermitian-projector hypothesis to
-the cyclic-projector interface. -/
-@[deprecated
-  "Prefer the unconditional projector constructor and a problem-specific noncommutation theorem."
-  (since := "2026-08-27")]
-theorem periodicVectorYieldsCyclicProjector_of_noncommutation
-    {d D : ℕ} (M : MPOTensor d D)
-    (hNC : NoninvariantProjectorNoncommuting M) :
-    PeriodicVectorYieldsCyclicProjector M := by
-  intro n V B ρ rad hV hint hirr hρ hrad hfix μ hμ hnorm hne
-  obtain ⟨p, Q, hp, hherm, hidem, hword, hdisp⟩ :=
-    exists_displaced_invariant_projector_of_periodic_vector M V B ρ rad hV hint
-      hirr hρ hrad hfix μ hμ hnorm hne
-  exact ⟨p, Q, hp, hherm, hidem, hword, hNC Q hherm hidem hdisp⟩
-
-/-- Compatibility theorem excluding vertical periodic vectors under the
-all-length Hermitian-projector noncommutation hypothesis. -/
-@[deprecated
-  "Prefer the existential-length noncommutation theorem when its hypothesis is available."
-  (since := "2026-08-27")]
-theorem hasNoPeriodicVectors_verticalTensor_of_noncommutation
-    {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
-    (hNC : NoninvariantProjectorNoncommuting M) :
-    MPSTensor.HasNoPeriodicVectors (verticalTensor M) :=
-  hasNoPeriodicVectors_verticalTensor_of_cyclicProjector M hM
-    (periodicVectorYieldsCyclicProjector_of_noncommutation M hNC)
 
 /-- **The periodic-sector step for a single-letter injective matrix product
 density operator, unconditionally.**

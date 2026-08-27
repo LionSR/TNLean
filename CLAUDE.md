@@ -92,7 +92,9 @@ Shared conventions (Mathlib style, naming, documentation, PR review, proof
 integrity, prose style) live in the `lean-conventions` skill of
 texra-ai/texra-lean-skills, auto-installed via `.claude/settings.json` —
 consult the skill, and `docs/project_conventions.md` for TNLean-local
-addenda. Repo-specific conventions live in `docs/`; read the relevant file
+addenda. In particular, TNLean does not promise a stable public Lean API and
+does not retain otherwise dead declarations solely as deprecated compatibility
+aliases. Repo-specific conventions live in `docs/`; read the relevant file
 before working in that area:
 
 | File | Covers |

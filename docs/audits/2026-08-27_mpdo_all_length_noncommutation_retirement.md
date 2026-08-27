@@ -1,45 +1,36 @@
-# Transition of the all-length non-commutation route (2026-08-27)
+# Deletion of the all-length non-commutation route (2026-08-27)
 
 This note records the simplification of the active periodic-sector proof route
 in `TNLean/MPS/MPDO/CyclicProjector.lean`. The old all-length interface has no
-non-`Archive` Lean consumers, but it is public and incomparable with the new
-existential-length interface. Its three declarations therefore remain as
-deprecated compatibility API rather than being deleted. The two obsolete
-blueprint leaf entries are removed because production exposition uses the
+non-`Archive` Lean consumers. Under TNLean's explicit no-public-API-
+compatibility policy, its predicate and two wrapper theorems are deleted
+directly rather than retained as deprecated declarations. The two obsolete
+blueprint leaf entries remain removed because production exposition uses the
 newer route.
 
-## Transitioned declarations
+## Deleted declarations
 
-| Deprecated declaration | Preferred route |
+| Deleted declaration | Surviving route |
 |---|---|
-| `MPOTensor.NoninvariantProjectorNoncommuting` | supply the single-length existential hypothesis of `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced` when it is available |
+| `MPOTensor.NoninvariantProjectorNoncommuting` | supply the single-length existential hypothesis of `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced` when available |
 | `MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation` | use `MPOTensor.exists_displaced_invariant_projector_of_periodic_vector` and a problem-specific noncommutation theorem |
 | `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation` | `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced`, or `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF` under normalized BNT-refined horizontal form |
 
-## Compatibility retention is required despite absent consumers
-
-Neither the deprecated nor the preferred hypothesis implies the other.
-`NoninvariantProjectorNoncommuting` quantified over Hermitian idempotents `Q`
-only, and demanded non-commutation with the density operator at *every* chain
-length. The surviving
-`hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced`
-quantifies over *every* idempotent `Q` and demands only that *some* chain
-length be noncommuting. Weakening the length quantifier and strengthening the
-projector quantifier move in opposite directions, so the two hypotheses are
-incomparable. Nothing in the production corpus cites the deprecated
-statements, but external clients may satisfy only the Hermitian all-length
-hypothesis. Keeping
-the exact declarations preserves that API during the transition window.
+The former and surviving hypotheses are incomparable: the deleted predicate
+quantified only over Hermitian idempotents but required non-commutation at every
+chain length, whereas the surviving existential-length theorem quantifies over
+every idempotent and requires one noncommuting length. That distinction remains
+part of the audit record, but it does not justify restoring a compatibility
+surface in a project that promises none.
 
 ## Blueprint
 
-Two obsolete entries in
+Two obsolete leaf entries in
 `blueprint/src/chapter/ch20_mpdo_canonical_forms_periodic_sectors.tex` were
-deleted with their proofs, both leaves in the dependency graph:
+already deleted with their proofs:
 
-* `def:mpdo_noninvariant_projector_noncommuting` — referenced only by the
-  `\uses` list of the entry below;
-* `thm:mpdo_cyclic_projector_of_noncommutation` — referenced by nothing.
+* `def:mpdo_noninvariant_projector_noncommuting`;
+* `thm:mpdo_cyclic_projector_of_noncommutation`.
 
 `thm:mpdo_vertical_no_periodic_vectors_injective` and
 `thm:mpdo_cyclic_projector_reduction` are unaffected and keep their tags. The
@@ -49,19 +40,19 @@ leaves the exposition.
 
 ## Paper-gap note
 
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex` now distinguishes the
+`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex` distinguishes the
 source projector's surviving all-length field
-`MPOTensor.PeriodicSectorProjector.not_commute` from the stronger uniform
-predicate retained here for compatibility. The active proofs use neither the
-uniform predicate nor an all-length hypothesis.
+`MPOTensor.PeriodicSectorProjector.not_commute` from the deleted stronger
+uniform predicate. The active proofs use neither a uniform predicate nor an
+all-length hypothesis.
 
 ## Deferred follow-on
 
-The `StackedLayers` closure is left for a separate change. After this
-retirement the only Lean call site of
+The `StackedLayers` closure is left for a separate change. After this deletion
+the only Lean call site of
 `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector` is gone, but
 that theorem is still tagged inside `thm:mpdo_cyclic_projector_reduction`,
 which also tags the live `MPOTensor.periodicVectorYieldsProjector_of_cyclic`;
 and `MPOTensor.PeriodicVectorYieldsCyclicProjector` is tagged by its own
-blueprint definition and is referenced from `PeriodicExclusion.lean`. Unwinding
+blueprint definition and referenced from `PeriodicExclusion.lean`. Unwinding
 those requires redirecting or deleting two further blueprint entries.

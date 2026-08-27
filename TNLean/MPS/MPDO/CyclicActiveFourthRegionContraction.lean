@@ -364,21 +364,6 @@ noncomputable def suffixSectorContraction
         F.cyclicNeighboringProduct (Fin.append k t)
           (F.appendSectorFiber x z) (F.appendSectorFiber y z)
 
-/-- Deprecated compatibility specialization tracing one suffix site. -/
-@[deprecated "Use `suffixSectorContraction 1` directly." (since := "2026-08-27")]
-noncomputable abbrev oneSuffixSectorContraction
-    (F : PhysicalSectorFactorization K) {L : ℕ}
-    (k : Fin L → Fin F.sectorCount) :
-    Matrix (F.SectorChainFiber k) (F.SectorChainFiber k) ℂ :=
-  F.suffixSectorContraction 1 k
-
-/-- Deprecated compatibility specialization tracing two suffix sites. -/
-@[deprecated "Use `suffixSectorContraction 2` directly." (since := "2026-08-27")]
-noncomputable abbrev twoSuffixSectorContraction
-    (F : PhysicalSectorFactorization K) {L : ℕ}
-    (k : Fin L → Fin F.sectorCount) :
-    Matrix (F.SectorChainFiber k) (F.SectorChainFiber k) ℂ :=
-  F.suffixSectorContraction 2 k
 
 /-- Trace the last three site fibers of a fixed retained sector block of the
 cyclic neighboring product, summing over all three discarded sector labels.

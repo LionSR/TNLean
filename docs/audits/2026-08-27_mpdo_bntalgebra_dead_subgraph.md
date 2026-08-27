@@ -1,11 +1,10 @@
 # MPDO BNT algebra-clause dead subgraph and attribute-carrying batch
 
 Two zero-reference passes over `TNLean/MPS/MPDO/` were applied in one commit.
-The first audited a closed subgraph of six declarations whose only occurrence
+The first audited a closed subgraph of seven declarations whose only occurrence
 anywhere in `TNLean/`, `blueprint/`, or `docs/` was the definition site plus a
-module-docstring bullet. Four were removed; the distinct public weighted-sector
-abbreviation and multiplicity-spectrum constructor are retained as deprecated
-compatibility. The second removed six
+module-docstring bullet. All seven are deleted directly under TNLean's explicit
+no-public-API-compatibility policy. The second removed six
 attribute-carrying declarations
 in the same directory, which a name-level grep cannot settle on its own — a
 `@[simp]` lemma can be consumed by a name-free tactic invocation — so both sets
@@ -24,20 +23,22 @@ paired with its replacement below.
 | `MPOTensor.BNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | build `IsVerticalCF M` from the clause fields at the use site: `⟨H.labelCount, H.bondDim, H.multiplicity, H.weight, H.tensor, H.verticalCoisometry, H.multiplicity_pos, H.weight_pos, H.coisometry, H.isBNT, H.forward, H.reconstruction⟩` |
 | `MPOTensor.HasBNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | destructure the `Nonempty` and use the anonymous constructor above |
 | `MPOTensor.BNTFusionTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTFusionTensorClause.lean` | the same, after `BNTFusionTensorClause.toBNTAlgebraTensorClause` |
-| `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | retained with its exact former signature as deprecated compatibility; new code uses `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity` directly |
+| `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | removed; use `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity` directly |
 | `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalUnitary.lean` | `gauge_gram_eq_pos_smul_one_of_identityMarkedRealization` followed by `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`, both retained |
-| `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` | retained with its exact former signature as a deprecated wrapper around `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
+| `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` | removed; use `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
+| `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalGram.lean` | removed; the live constructor is `IdentityMarkedRealization.ofPositiveTailReflectedTarget`, with its distinct hypothesis set |
 
 The first three are one restatement carried through three carriers: the clause
 structure already exposes every field of the vertical canonical form, so the
 theorem was the anonymous constructor written out with a name attached, and each
 downstream carrier re-forwarded it. Nothing consumed any of the three.
 
-The subgraph remains closed after removing four strands. Two distinct public APIs
-remain under their exact former names and signatures with deprecations:
-`RelabeledTwoSiteWeightedSectorSpace` and
-`toMultiplicitySpectrumComparison`. Their module-docstring bullets are retained
-accordingly. The bullet naming
+The subgraph remains closed after deleting all seven audited strands. No
+aliases, wrappers, or deprecated declarations restore the former compatibility
+surface. The bullets naming `RelabeledTwoSiteWeightedSectorSpace`,
+`toMultiplicitySpectrumComparison`, and
+`IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization` are removed
+with those declarations. The bullet naming
 `exists_unitary_sector_conjugacy_of_identityMarkedRealization` was removed with
 that declaration; the sibling bullets around it (`RelabeledTwoSiteSectorAlgebra`,
 `relabeledTwoSiteRetainedEquiv`,
@@ -72,19 +73,15 @@ through `traceScalars_traceScalar`'s neighbourhood in the clause API.
 `sigmaZ_apply_ne` and `complementPathWeight_zero` are attribute-carrying
 siblings of removed lemmas but are both used by name, and are untouched.
 
-## Restored set: two compatibility declarations
+## Direct deletion: no compatibility restoration
 
-The root `lake build` was clean on the first attempt across all 10,365 jobs,
-with every reverse dependent of the seven edited modules rebuilt. That build did
-not expose a name-free in-tree consumer, so there is no "fires inside a bare
-tactic call" retention or tactic pattern to promote into
-`docs/tactic_patterns.md` from this batch. API review nevertheless restored
-`RelabeledTwoSiteWeightedSectorSpace` and
-`toMultiplicitySpectrumComparison`: the former names a public weighted-sector
-type, while the latter is a distinct data-producing constructor rather than a
-theorem forwarder or structure-field projection. They remain with their exact
-former signatures as dated deprecated compatibility
-declarations.
+The earlier root build was clean across all reverse dependents and exposed no
+name-free in-tree consumers. API review initially restored two declarations and
+marked the alternative identity-realization constructor deprecated. The
+maintainer then clarified that TNLean promises no public API compatibility.
+Accordingly, all three are now deleted, their module-docstring bullets are
+removed, and no alias or wrapper is retained. This batch adds no tactic pattern
+to `docs/tactic_patterns.md`.
 
 ## Refuted candidate
 
@@ -94,20 +91,15 @@ and is retained. It is name-level zero-reference, but it is an implicit `@[simp]
 consumer at `TNLean/MPS/MPDO/BNTLayerOrthogonality.lean:152`, where the
 surrounding rewrite depends on it firing. The file is untouched.
 
-## Deprecated rather than removed
+## Alternative identity-marked constructor
 
 `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization`
-(`TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalGram.lean`) is also
-zero-reference, but it is not a restatement of anything retained: it is a
-substantive alternative constructor that reaches `IdentityMarkedRealization`
-from a positive-coefficient same-sided physical realization, deriving the
-`target` field from block positivity of the blocked tensor instead of taking the
-positive-tail reflected target as a hypothesis. Its hypothesis set is therefore
-incomparable with the retained
-`IdentityMarkedRealization.ofPositiveTailReflectedTarget`, and the pass-through
-exception does not cover it. It carries a dated `@[deprecated]` attribute
-instead, and its module-docstring bullet and scope-restriction marker are
-retained unchanged while the declaration is still present.
+was initially deprecated because its hypotheses are incomparable with
+`IdentityMarkedRealization.ofPositiveTailReflectedTarget`: it derives the
+`target` field from block positivity of a same-sided physical realization.
+Under the clarified no-compatibility policy, that distinction remains recorded
+here but does not justify retaining an unused compatibility constructor. The
+declaration and its module-docstring exception are deleted directly.
 
 ## Blueprint
 

@@ -5,8 +5,9 @@ This note records the declaration removals made in the cyclic-sector slice of
 `docs/project_conventions.md` §Style. Every removal below has zero non-`Archive`
 Lean consumers after migration, and every blueprint `\lean{...}` tag that named
 a removed declaration was redirected in the same change. The four three-site
-fiber declarations called out below are instead retained as deprecated
-compatibility declarations. The retirement of the all-length non-commutation route is recorded separately in
+fiber declarations called out below are deleted directly, with no compatibility
+surface restored. The retirement of the all-length non-commutation route is
+recorded separately in
 `docs/audits/2026-08-27_mpdo_all_length_noncommutation_retirement.md`.
 
 ## Four library facts restated locally
@@ -60,8 +61,8 @@ Four declarations in `TNLean/MPS/MPDO/CyclicActiveRetainedCoordinates.lean` have
 no consumer anywhere in the production corpus and no blueprint tag:
 `threeSectorFiberEquiv` and its three `@[simp]` inverse-coordinate lemmas
 `threeSectorFiberEquiv_symm_apply_zero`, `..._one`, and `..._two`, all in the
-`MPOTensor.PhysicalSectorFactorization` namespace. They are retained as
-deprecated compatibility declarations rather than deleted. New code should use
+`MPOTensor.PhysicalSectorFactorization` namespace. They are deleted directly
+under TNLean's explicit no-public-API-compatibility policy. No deprecated aliases or wrappers restore those names; new code uses
 the `Fin 3` decomposition directly through `Fin.cons` and `Fin.addCases`.
 
 `sectorCoordinateChainEquiv_apply_fst` in `CyclicActiveCutCoordinates.lean` was
@@ -74,14 +75,12 @@ the `Fin 3` decomposition directly through `Fin.cons` and `Fin.addCases`.
 instantiations of the general suffix-sector contraction at suffix lengths one
 and two. The module is deleted and the generated aggregator
 `TNLean/MPS/MPDO.lean` regenerated. The two public contraction abbreviations
-move to the surviving `CyclicActiveFourthRegionContraction.lean` import surface
-and remain available as deprecated compatibility declarations; only the two
-theorem wrappers are removed.
+and the two theorem wrappers are all deleted directly; no deprecated compatibility declarations are restored.
 
 | Audited declaration | Disposition / replacement |
 |---|---|
-| `MPOTensor.PhysicalSectorFactorization.oneSuffixSectorContraction` | retained with its exact former signature as deprecated compatibility for `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 1` |
-| `MPOTensor.PhysicalSectorFactorization.twoSuffixSectorContraction` | retained with its exact former signature as deprecated compatibility for `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 2` |
+| `MPOTensor.PhysicalSectorFactorization.oneSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 1` |
+| `MPOTensor.PhysicalSectorFactorization.twoSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 2` |
 | `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 1` |
 | `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 2` |
 
@@ -90,7 +89,7 @@ The sole consumer,
 `CyclicActiveFourthRegionContraction` directly, and its two private helpers were
 renamed `trace_suffixSectorContraction_one_eq` and
 `trace_suffixSectorContraction_two_eq` so production code points directly at
-the general declaration rather than the deprecated compatibility names.
+the general declaration rather than the deleted specialization names.
 
 In the blueprint, `def:mpdo_suffix_sector_contraction` and
 `thm:mpdo_suffix_marginal_block_expansion` in
