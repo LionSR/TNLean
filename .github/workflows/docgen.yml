@@ -52,7 +52,7 @@ jobs:
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: docgen-v2
-          extra-packages: latexmk texlive-science texlive-xetex texlive-fonts-extra
+          extra-packages: latexmk texlive-science texlive-xetex texlive-fonts-extra texlive-publishers
 
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1

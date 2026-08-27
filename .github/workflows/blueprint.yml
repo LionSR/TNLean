@@ -57,7 +57,7 @@ jobs:
           # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
           # keep this cache separate from the extra-package-free web cache.
           cache-suffix: web-v2
-          extra-packages: texlive-fonts-extra
+          extra-packages: texlive-fonts-extra texlive-publishers
 
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
