@@ -1,19 +1,5 @@
 \section{Renormalization flow and physical correlations}
 
-\begin{theorem}[Injectivity in the auxiliary block family]\label{thm:rfp_cf_structural}
-    \lean{MPSTensor.rfp_cf_structural}
-    \leanok
-    \uses{def:is_canonical_form, def:injective}
-    Every block satisfying the auxiliary hypotheses of
-    Definition~\ref{def:is_canonical_form} is injective. This is an immediate
-    projection of that auxiliary predicate, not a theorem about literal CPSV
-    canonical form.
-\end{theorem}
-\begin{proof}\leanok
-    Injectivity is one of the defining auxiliary hypotheses.
-\end{proof}
-
-
 \begin{theorem}[Primitive-transfer convergence for each auxiliary block]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
@@ -429,22 +415,4 @@
     \end{align}
     Thus the connected correlator is independent of every positive
     separation.
-\end{proof}
-
-\begin{theorem}[Per-block auxiliary equivalence]%
-    \label{thm:rfp_iff_zcl}
-    \lean{MPSTensor.rfp_iff_zcl}
-    \leanok
-    \uses{def:is_canonical_form, def:mps_transfer_idempotence, def:is_zcl, thm:zcl_iff_idempotent_transfer}
-    Let $(A_k)_k$ satisfy the auxiliary block-family hypotheses of
-    Definition~\ref{def:is_canonical_form}. For each $k$, the transfer map of
-    $A_k$ is idempotent if and only if $A_k$ satisfies the one-block auxiliary
-    conjunction of Definition~\ref{def:is_zcl}. The block-family hypothesis is
-    unused; this is Theorem~\ref{thm:zcl_iff_idempotent_transfer} applied to one
-    block. It should not be read as the BNT-family ZCL assertion in
-    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:zcl_iff_idempotent_transfer}
-    Apply Theorem~\ref{thm:zcl_iff_idempotent_transfer} to the chosen block.
 \end{proof}

@@ -26,10 +26,11 @@ non-overlap positivity, and row cardinality) and leave only the
 source anticommutator estimate, or a sufficient norm-compression estimate, as a
 remaining hypothesis.
 
-The abstract spectral-theorem step (`FrustrationFree.spectralGap_of_martingale`)
-and the projection-geometry lemmas (`ProjectionGeometry.quadraticForm_sum_*`)
-supply the reusable algebra, while the MPS-specific definitions and
-structural theorems live in `Martingale.Transport`.
+The abstract spectral-theorem step
+(`FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`) and the
+projection-geometry lemmas (`ProjectionGeometry.quadraticForm_sum_*`) supply the
+reusable algebra, while the MPS-specific definitions and structural theorems
+live in `Martingale.Transport`.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -54,7 +55,8 @@ martingale estimate
 to be supplied later from the finite-overlap projection geometry. The proof
 uses the established positivity of `parentHamiltonianES`, the kernel
 identification `parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES`, and
-the abstract spectral-theorem step `FrustrationFree.spectralGap_of_martingale`. -/
+the abstract spectral-theorem step
+`FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`. -/
 theorem parentHamiltonianES_norm_bound_of_quadratic_form
     (A : MPSTensor d D) (L : ℕ) {γ : ℝ} (hγ : 0 < γ)
     (hQuad : ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
@@ -69,12 +71,12 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
   intro N hLN v hv
   have hvKer : v ∈ (LinearMap.ker (parentHamiltonianES A L N))ᗮ := by
     simpa [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES A L N] using hv
-  exact FrustrationFree.spectralGap_of_martingale (ι := Cfg d N) hγ
+  exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hγ
     (parentHamiltonianES_isPositive A L N) (hQuad N hLN) v hvKer
 
 /-- The exact explicit gap-bound reduction needed by
-`parentHamiltonianES_gap_bound_of_overlap_norm_bound` follows from the corresponding
-uniform quadratic-form estimate with constant \(1 / (4 * L)\).
+`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound` follows from
+the corresponding uniform quadratic-form estimate with constant \(1 / (4 * L)\).
 
 Thus the remaining MPS-specific content is precisely to prove the hypothesis
 `hQuad` from the source anticommutator estimate, or from a sufficient
@@ -506,30 +508,6 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term
       localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v)
     hCrossTerm
 
-/-- Uniform explicit gap-bound reduction from an ordered overlapping-window
-cross-term estimate.
-
-The concrete cyclic-window row-cardinality bound, local symmetric-projection
-structure, and non-overlap positivity are already proved.  Consequently it is
-enough to assume the displayed ordered lower bound only for pairs whose cyclic
-supports overlap. -/
-theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term
-    (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
-    (hCrossTerm : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
-        ∀ v : EuclideanSpace ℂ (Cfg d N),
-          - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
-              (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
-                (⟪localTermES A L i v, v⟫_ℂ).re ≤
-            (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re) :
-    0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
-    ∀ (N : ℕ) (_hLN : 2 * L ≤ N)
-      (v : EuclideanSpace ℂ (Cfg d N)),
-      v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
-        ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
-          ‖parentHamiltonianES A L N v‖ := by
-  exact parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term A L hL hCrossTerm
-
 /-- Uniform explicit gap-bound reduction from the cyclic-window anticommutator
 martingale estimate.
 
@@ -607,7 +585,7 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound
       v ∈ (parentHamiltonianGroundSpaceES A L N)ᗮ →
         ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤
           ‖parentHamiltonianES A L N v‖ := by
-  refine parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term A L hL ?_
+  refine parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term A L hL ?_
   intro N hLN i j hij hoverlap v
   have hCross :
       -((1 - ((1 : ℝ) / (4 * (L : ℝ)))) *
@@ -875,39 +853,5 @@ theorem spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional
   exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hγpos
     (LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive)
     hQuad v hv
-
-/-- Coordinate-space specialization of the combined martingale criterion. -/
-theorem spectralGap_of_martingale_anticommutator_rowCol
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {ι' : Type*} [Fintype ι']
-    {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
-    (P : ι → EuclideanSpace ℂ ι' →ₗ[ℂ] EuclideanSpace ℂ ι')
-    (hP : ∀ i, (P i).IsSymmetricProjection)
-    (c : ι → ι → ℝ)
-    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
-    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
-    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → ∀ v,
-      -(1 - γ) * c i j *
-          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
-        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
-    (∀ v, γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re) ∧
-    ∀ v ∈ (LinearMap.ker (∑ i, P i))ᗮ, γ * ‖v‖ ≤ ‖(∑ i, P i) v‖ := by
-  let oldDecEq : DecidableEq ι := inferInstance
-  let : DecidableEq ι := Classical.decEq ι
-  have erase_eq (i : ι) :
-      @Finset.erase ι oldDecEq Finset.univ i = Finset.univ.erase i := by
-    ext j
-    simp
-  apply spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional
-    hγpos hγle P hP c
-  · intro i
-    rw [← erase_eq i]
-    exact hRow i
-  · intro j
-    rw [← erase_eq j]
-    exact hCol j
-  · intro i j hj v
-    apply hAnti i j
-    rw [erase_eq i]
-    exact hj
 
 end MPSTensor

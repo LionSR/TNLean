@@ -225,13 +225,6 @@ theorem twoBlockReciprocalScalarProportional_of_pointwise_mul_eq
 
 /-! ### The one-shared-bond case -/
 
-/-- The usual elementary matrix with a single nonzero entry equal to `1` at
-position `(i, j)`. -/
-noncomputable def matrixUnit {ι κ : Type*} (i : ι) (j : κ) :
-    Matrix ι κ ℂ := by
-  classical
-  exact Matrix.single i j (1 : ℂ)
-
 open scoped Classical in
 /-- Inserting the matrix unit `E_{p,q}` on the shared bond `b` extracts the
 open-bond contraction: every other shared bond is contracted by the identity,
@@ -249,7 +242,7 @@ theorem twoBlockInsertedCoeff_matrixUnit
     (A₂ : TwoBlockTensor bondDim External₂ Physical₂)
     (b : Bond) (p q : bondDim b)
     (η₁ : External₁) (η₂ : External₂) (σ₁ : Physical₁) (σ₂ : Physical₂) :
-    twoBlockInsertedCoeff A₁ A₂ b (matrixUnit p q) η₁ η₂ σ₁ σ₂ =
+    twoBlockInsertedCoeff A₁ A₂ b (Matrix.single p q (1 : ℂ)) η₁ η₂ σ₁ σ₂ =
       ∑ μ : SharedBondConfig bondDim,
         (if μ b = p then
           A₁ η₁ μ σ₁ * A₂ η₂ (Function.update μ b q) σ₂ else 0) := by
@@ -264,7 +257,7 @@ theorem twoBlockInsertedCoeff_matrixUnit
         intro c hc
         rw [Function.update_of_ne hc]
       rw [ite_eq_left hsame]
-      simp [matrixUnit, Matrix.single, hμ, Function.update_self]
+      simp [Matrix.single, hμ, Function.update_self]
     · intro ν' _ hν'
       by_cases hsame : SameAwayFromBond b μ ν'
       · rw [ite_eq_left hsame]
@@ -275,8 +268,8 @@ theorem twoBlockInsertedCoeff_matrixUnit
           by_cases hcb : c = b
           · subst hcb; rw [Function.update_self, hb]
           · rw [Function.update_of_ne hcb]; exact (hsame c hcb).symm
-        have hz : matrixUnit p q (μ b) (ν' b) = 0 := by
-          simp only [matrixUnit, Matrix.single]
+        have hz : Matrix.single p q (1 : ℂ) (μ b) (ν' b) = 0 := by
+          simp only [Matrix.single]
           rw [Matrix.of_apply, ite_eq_right]
           rintro ⟨-, hq⟩; exact hνb hq.symm
         rw [hz]; ring
@@ -287,13 +280,14 @@ theorem twoBlockInsertedCoeff_matrixUnit
     intro ν' _
     by_cases hsame : SameAwayFromBond b μ ν'
     · rw [ite_eq_left hsame]
-      have hz : matrixUnit p q (μ b) (ν' b) = 0 := by
-        simp only [matrixUnit, Matrix.single]
+      have hz : Matrix.single p q (1 : ℂ) (μ b) (ν' b) = 0 := by
+        simp only [Matrix.single]
         rw [Matrix.of_apply, ite_eq_right]
         rintro ⟨hp, -⟩; exact hμ hp.symm
       rw [hz]; ring
     · rw [ite_eq_right hsame]; ring
 
+open scoped Classical in
 /-- If there is only one shared bond, then a matrix insertion supported at one
 matrix entry extracts the corresponding pointwise product.
 
@@ -306,7 +300,7 @@ theorem twoBlockInsertedCoeff_singletonBond_single
     (A₂ : TwoBlockTensor bondDim External₂ Physical₂)
     (η₁ : External₁) (η₂ : External₂)
     (μ ν : SharedBondConfig bondDim) (σ₁ : Physical₁) (σ₂ : Physical₂) :
-    twoBlockInsertedCoeff A₁ A₂ b (matrixUnit (μ b) (ν b))
+    twoBlockInsertedCoeff A₁ A₂ b (Matrix.single (μ b) (ν b) (1 : ℂ))
         η₁ η₂ σ₁ σ₂ =
       A₁ η₁ μ σ₁ * A₂ η₂ ν σ₂ := by
   classical
@@ -316,7 +310,7 @@ theorem twoBlockInsertedCoeff_singletonBond_single
     · have hsame : SameAwayFromBond b μ ν := by
         intro c hc
         exact (hc (Subsingleton.elim c b)).elim
-      simp [matrixUnit, Matrix.single, hsame]
+      simp [Matrix.single, hsame]
     · intro ν' _ hν'
       have hν'_ne : ν' b ≠ ν b := by
         intro hb
@@ -326,7 +320,7 @@ theorem twoBlockInsertedCoeff_singletonBond_single
         rw [hc]
         exact hb
       have hν_ne' : ν b ≠ ν' b := hν'_ne.symm
-      simp [matrixUnit, Matrix.single, hν_ne']
+      simp [Matrix.single, hν_ne']
     · intro hν
       simp at hν
   · intro μ' _ hμ'
@@ -340,7 +334,7 @@ theorem twoBlockInsertedCoeff_singletonBond_single
     have hμ_ne' : μ b ≠ μ' b := hμ'_ne.symm
     apply Finset.sum_eq_zero
     intro ν' _
-    simp [matrixUnit, Matrix.single, hμ_ne']
+    simp [Matrix.single, hμ_ne']
   · intro hμ
     simp at hμ
 
@@ -366,7 +360,7 @@ theorem two_injective_tensor_insertion_comparison_singletonBond
       twoBlockReciprocalScalarProportional_of_pointwise_mul_eq A₁ B₁ A₂ B₂ hA₁ hA₂ ?_
     intro η₁ η₂ μ ν σ₁ σ₂
     let b : Bond := Classical.choice ‹Nonempty Bond›
-    have hcoeff := hinsert b (matrixUnit (μ b) (ν b)) η₁ η₂ σ₁ σ₂
+    have hcoeff := hinsert b (Matrix.single (μ b) (ν b) (1 : ℂ)) η₁ η₂ σ₁ σ₂
     rw [twoBlockInsertedCoeff_singletonBond_single b A₁ A₂,
       twoBlockInsertedCoeff_singletonBond_single b B₁ B₂] at hcoeff
     exact hcoeff
@@ -420,7 +414,7 @@ theorem openBondContraction_of_sameInsertions
         (if μ b = p then A₁ η₁ μ σ₁ * A₂ η₂ (Function.update μ b q) σ₂ else 0)) =
       ∑ μ : SharedBondConfig bondDim,
         (if μ b = p then B₁ η₁ μ σ₁ * B₂ η₂ (Function.update μ b q) σ₂ else 0) := by
-  have h := hinsert b (matrixUnit p q) η₁ η₂ σ₁ σ₂
+  have h := hinsert b (Matrix.single p q (1 : ℂ)) η₁ η₂ σ₁ σ₂
   rwa [twoBlockInsertedCoeff_matrixUnit A₁ A₂, twoBlockInsertedCoeff_matrixUnit B₁ B₂] at h
 
 /-! ### Identity insertion and the fully contracted identity -/

@@ -94,16 +94,16 @@ noncomputable def fourCycleWeight (x : Fin 2 × Fin 4 × Fin 2) : ℝ :=
     siteSignReal x.2.2 * siteSignReal (fourCycleMiddleBits x.2.1).2) / 16
 
 private lemma siteSign_eq_siteSignReal (i : Fin 2) :
-    siteSign i = (siteSignReal i : ℂ) := by
-  fin_cases i <;> norm_num [siteSign, siteSignReal, sigmaZ, SpinCover.pauli]
+    MPOTensor.siteSign i = (siteSignReal i : ℂ) := by
+  fin_cases i <;> simp [MPOTensor.siteSign, SpinCover.pauli]
 
 private lemma configurationSign_fourCycle (x : Fin 2 × Fin 4 × Fin 2) :
-    configurationSign (fourCycleTripartiteEquiv x) =
+    MPOTensor.configurationSign (fourCycleTripartiteEquiv x) =
       (siteSignReal x.1 * siteSignReal (fourCycleMiddleBits x.2.1).1 *
         siteSignReal x.2.2 * siteSignReal (fourCycleMiddleBits x.2.1).2 : ℝ) := by
-  rw [configurationSign, Fin.prod_univ_four]
-  change siteSign x.1 * siteSign (fourCycleMiddleBits x.2.1).1 *
-      siteSign x.2.2 * siteSign (fourCycleMiddleBits x.2.1).2 = _
+  rw [MPOTensor.configurationSign, Fin.prod_univ_four]
+  change MPOTensor.siteSign x.1 * MPOTensor.siteSign (fourCycleMiddleBits x.2.1).1 *
+      MPOTensor.siteSign x.2.2 * MPOTensor.siteSign (fourCycleMiddleBits x.2.1).2 = _
   simp only [siteSign_eq_siteSignReal]
   push_cast
   ring

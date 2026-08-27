@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.KrausGauge
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
@@ -20,6 +19,10 @@ of commuting parent interactions used in the RFP-to-NNCPH direction.
 The chain length is restricted to (N>2), exactly as in arXiv:1606.00608,
 Theorem 3.10.  The case (N=2) is not part of the source statement: its two
 cyclic windows traverse the same pair of sites in opposite orders.
+
+This file also carries the two conditional Appendix~B extraction constructors
+that reduce the all-pairs commutation input to overlapping or adjacent
+length-two cyclic windows.
 -/
 
 namespace MPSTensor
@@ -224,5 +227,45 @@ theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
     (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=
   (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
+
+/-- Construct the conditional Appendix B extraction from the coefficient
+factorization and the overlapping length-two cyclic-window commutation
+equations on every chain.
+
+This is only the locality reduction from overlapping pairs to all pairs; the
+source \(Q_{AX},Q_{XB}\) projectors and their lifted commutator remain separate
+inputs to the proof of the overlap hypotheses. -/
+noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation
+    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
+    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
+      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
+    (hOverlap : ∀ N, 2 < N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
+      localTerm A 2 N i * localTerm A 2 N j =
+        localTerm A 2 N j * localTerm A 2 N i) :
+    AppendixBProductPairExtraction hStruct :=
+  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
+    (fun N hN =>
+      HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
+        (A := A) (by omega) (hOverlap N hN))
+
+/-- Construct the conditional Appendix B extraction from the coefficient
+factorization and the adjacent length-two cyclic-window commutation equations on
+every chain.
+
+This is the finite-chain reduction from the source nearest-neighbor commutator
+\([\tau_1(P_2),P_2]=0\) to full pairwise commutation of all translated two-site
+local terms. It does not prove the Appendix B source-projector commutator. -/
+noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdjacentCommutation
+    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
+    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
+      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
+    (hAdjacent : ∀ N, 2 < N → ∀ i : Fin N,
+      localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
+        localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
+    AppendixBProductPairExtraction hStruct :=
+  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
+    (fun N hN =>
+      HasProductPairLocalProjectors.of_adjacent_twoSite_commute
+        (A := A) (by omega) (hAdjacent N hN))
 
 end MPSTensor

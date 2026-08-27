@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransportInsertion
 import TNLean.PEPS.RegionBlock.Algebra
-import TNLean.PEPS.TorusBlockingData
+import TNLean.PEPS.TorusTranslationInvariant
 
 /-!
 # Covariance of the region-insertion transfer map under translation

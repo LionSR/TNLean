@@ -144,15 +144,6 @@ private theorem reindex_directSumDiagonalEmbedding_list_prod
         exact (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e _ _).symm]
       rw [ih]
 
-private theorem pi_list_prod_apply
-    {ι : Type*} {M : ι → Type*} [∀ k, Monoid (M k)]
-    (A : List (∀ k, M k)) (k : ι) :
-    A.prod k = (A.map fun X ↦ X k).prod := by
-  induction A with
-  | nil => rfl
-  | cons A l ih =>
-      rw [List.prod_cons, List.map_cons, List.prod_cons, Pi.mul_apply, ih]
-
 /-- Full-matrix density-block argument underlying the public direct-sum
 theorem below.  This is the dimension implication of Wolf, Theorem 6.14 and
 Equation (6.63); see the public wrapper for the source and scope discussion. -/
@@ -348,7 +339,7 @@ theorem fixedPointProductSpan_finrank_le_of_densityBlocks
         (List.ofFn fun t ↦ (X t : VerticalSectorAlgebra dim) α).prod) =
         (List.ofFn fun t ↦ (X t : VerticalSectorAlgebra dim)).prod := by
       funext α
-      rw [pi_list_prod_apply, List.map_ofFn]
+      rw [Pi.list_prod_apply, List.map_ofFn]
       rfl
     rw [hsector]
     apply Submodule.subset_span

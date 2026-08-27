@@ -23,7 +23,6 @@ canonical-form and positivity assumptions.
 ## Main results
 
 * `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`
-* `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization`
 * `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target`
 
 ## References
@@ -77,39 +76,6 @@ theorem exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
     (Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one
       ((cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
         (H.tensor γ)) i) (S.gauge γ) hω hGram).symm
-
-/-- A complete identity-dressed marked realization makes every exact two-site
-sector unitarily conjugate to its matched one-site tensor.
-
-**Scope restriction (packaged conditional form):** This form accepts all three
-parts of the marked realization.  The physical-letter part follows from the
-oblique compression, while the target-only theorem below gives the sharper
-hypothesis.  The mixed-prefix theorem derives the reflected target from the
-algebra clause under the standing assumptions; see
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
-
-Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,
-applied at Appendix C.4, lines 2048--2057. -/
-theorem exists_unitary_sector_conjugacy_of_identityMarkedRealization
-    (S : TwoSiteExactSectorGauge H)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
-    (hM : IsMPDO M) (γ : Fin H.labelCount)
-    (R : IdentityMarkedRealization S γ) :
-    ∃ U : Matrix.unitaryGroup
-        (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
-      ∀ i : Fin (D * D),
-        S.decomposition.tensor (S.relabel γ) i =
-          (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-            (H.tensor γ)) i *
-          (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
-  obtain ⟨ω, hω, hGram⟩ :=
-    S.gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
-      hCanonical hM γ R
-  exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
-    γ ω hω hGram
 
 /-- Under the conditional positive-tail reflected target, every exact two-site
 sector is unitarily conjugate to its matched one-site tensor.  The

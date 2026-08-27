@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionBlock.Insertion
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 
 /-!
 # Covariance of the region-inserted coefficient under a graph isomorphism

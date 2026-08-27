@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleArcRegion
 import TNLean.PEPS.Defs
-import TNLean.MPS.Defs
 import TNLean.MPS.Core.CyclicTrace
 
 /-!
@@ -150,9 +149,6 @@ a site on its cyclic-successor side. -/
 noncomputable def cycleEdgeEquiv (hn : 3 ≤ n) : Fin n ≃ Edge (SimpleGraph.cycleGraph n) :=
   Equiv.ofBijective _ ⟨cycleSuccEdge_injective hn, cycleSuccEdge_surjective hn⟩
 
-@[simp] theorem cycleEdgeEquiv_apply (hn : 3 ≤ n) (u : Fin n) :
-    cycleEdgeEquiv hn u = cycleSuccEdge hn u := rfl
-
 /-!
 ### The two bonds at a site
 
@@ -177,12 +173,6 @@ def cycleLeftIncident (hn : 3 ≤ n) (v : Fin n) :
     rcases Edge.ofAdj_endpoints (cycleGraph_adj_succ hn (v - 1)) with ⟨_, h⟩ | ⟨h, _⟩
     · exact Or.inr (h.trans (sub_add_cancel v 1))
     · exact Or.inl (h.trans (sub_add_cancel v 1))⟩
-
-@[simp] theorem cycleLeftIncident_fst (hn : 3 ≤ n) (v : Fin n) :
-    (cycleLeftIncident hn v).1 = cycleSuccEdge hn (v - 1) := rfl
-
-@[simp] theorem cycleRightIncident_fst (hn : 3 ≤ n) (v : Fin n) :
-    (cycleRightIncident hn v).1 = cycleSuccEdge hn v := rfl
 
 /-- The two incident bonds of a site are distinct. -/
 theorem cycleLeftIncident_ne_cycleRightIncident (hn : 3 ≤ n) (v : Fin n) :
@@ -267,10 +257,6 @@ def cycleTensorOfMPS (hn : 3 ≤ n) (A : MPSTensor d D) :
     Tensor (SimpleGraph.cycleGraph n) d where
   bondDim _ := D
   component v η σ := A σ (η (cycleLeftIncident hn v)) (η (cycleRightIncident hn v))
-
-@[simp] theorem cycleTensorOfMPS_bondDim (hn : 3 ≤ n) (A : MPSTensor d D)
-    (e : Edge (SimpleGraph.cycleGraph n)) :
-    (cycleTensorOfMPS hn A).bondDim e = D := rfl
 
 theorem cycleTensorOfMPS_component (hn : 3 ≤ n) (A : MPSTensor d D) (v : Fin n)
     (η : (ie : IncidentEdge (SimpleGraph.cycleGraph n) v) → Fin D) (σ : Fin d) :

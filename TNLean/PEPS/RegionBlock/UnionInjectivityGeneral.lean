@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.Recovery11
-import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
 import TNLean.PEPS.ConfigurationCalculus
 
 /-!
@@ -647,6 +646,46 @@ theorem ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq
     g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical bdry σblue σcompl]
   refine Finset.sum_congr rfl (fun bc' _ => ?_)
   rw [Pi.smul_apply]
+
+/-! ### Surjectivity of the fused complement physical leg
+
+The fused leg `complPhysical σblue σcompl` ranges over every physical configuration of the host
+`univ \ red` as the blue and complement legs vary: a host vertex lies in exactly one of the blue
+and complement blocks (the red block is disjoint from the host), so reading the prescribed leg on
+the blue block and on the complement block recovers it. -/
+
+omit [LinearOrder V] in
+/-- The fused complement physical leg is surjective: every physical configuration of the host
+`univ \ g.red` is `g.complPhysical σblue σcompl` for some blue and complement legs. -/
+theorem ThreeBlockGeometry.complPhysical_surjective (g : ThreeBlockGeometry V) :
+    Function.Surjective
+      (fun p : RegionPhysicalConfig (V := V) (d := d) g.blue ×
+          RegionPhysicalConfig (V := V) (d := d) g.complement =>
+        g.complPhysical (d := d) p.1 p.2) := by
+  classical
+  intro τ
+  refine ⟨⟨fun w => τ ⟨w.1, ?_⟩, fun w => τ ⟨w.1, ?_⟩⟩, ?_⟩
+  · -- A blue vertex lies in the host `univ \ red`.
+    rw [Finset.mem_sdiff]
+    exact ⟨Finset.mem_univ _, fun hr => (Finset.disjoint_left.mp g.red_disjoint_blue) hr w.2⟩
+  · -- A complement vertex lies in the host `univ \ red`.
+    rw [Finset.mem_sdiff]
+    exact ⟨Finset.mem_univ _, fun hr => (Finset.disjoint_left.mp g.red_disjoint_complement) hr w.2⟩
+  · funext w
+    simp only
+    by_cases hb : w.1 ∈ g.blue
+    · rw [g.complPhysical_apply_blue _ _ w hb]
+    · -- A host vertex outside the blue block lies in the complement block.
+      have hwnotred : w.1 ∉ g.red := (Finset.mem_sdiff.mp w.2).2
+      have hc : w.1 ∈ g.complement := by
+        have hcover : w.1 ∈ g.red ∪ g.blue ∪ g.complement := by
+          rw [g.cover_univ]; exact Finset.mem_univ _
+        rcases Finset.mem_union.mp hcover with hrb | hc
+        · rcases Finset.mem_union.mp hrb with hr | hbl
+          · exact absurd hr hwnotred
+          · exact absurd hbl hb
+        · exact hc
+      rw [g.complPhysical_apply_not_blue _ _ w hb hc]
 
 end PEPS
 end TNLean

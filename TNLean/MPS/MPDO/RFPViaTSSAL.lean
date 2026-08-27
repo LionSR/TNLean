@@ -477,28 +477,4 @@ theorem isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero
   have hSAL := isSAL_of_isRFPViaTS_of_trace_ne_zero M hM hTrace hRFP
   exact ⟨isSourceZCL_of_isRFPViaTS M hRFP hSAL.physTraceTransfer_ne_zero, hSAL⟩
 
-/-- A matrix product density operator in normalized BNT-refined horizontal
-form satisfying the local renormalization fixed-point equations obeys the
-broader scale-invariant physical-trace relation and saturates the area law.
-
-**Scope restriction (scale-invariant corollary):** the source-facing ZCL
-conclusion is the literal identity `physTraceTransfer_sq_of_isRFPViaTS`. This
-theorem packages the broader `IsSourceZCL` consequence with SAL for later uses. See
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
-
-Normalized BNT-refined horizontal form supplies the nonzero positive-length
-traces that are implicit in the source's density-operator language. The
-broader scale-invariant relation and SAL then follow from
-`isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero`.
-
-Source: arXiv:1606.00608, Proposition `propsimple`, Appendix C,
-lines 1333--1341, under the canonical-form and density-operator standing
-assumptions at lines 623--628 and 849--850. -/
-theorem isSourceZCL_and_isSAL_of_isRFPViaTS (M : MPOTensor d D)
-    (hHorizontal : MPOTensor.IsHorizontalCF M) (hM : IsMPDO M)
-    (hRFP : IsRFPViaTS M) : IsSourceZCL M ∧ IsSAL M := by
-  exact isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero M hM
-    (trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
-      M hHorizontal hM hRFP) hRFP
-
 end MPOTensor

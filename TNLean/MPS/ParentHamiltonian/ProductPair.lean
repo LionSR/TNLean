@@ -26,14 +26,6 @@ def productPairWindow (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N) : Cfg d 2 :=
     have hj : j.val < 2 := j.isLt
     omega⟩
 
-/-- Evaluating a physical pair window selects sites \(2p\) and \(2p+1\). -/
-@[simp] lemma productPairWindow_apply (N : ℕ) (σ : Cfg d (2 * N)) (p : Fin N)
-    (j : Fin 2) :
-    productPairWindow N σ p j = σ ⟨2 * p.val + j.val, by
-      have hp : p.val < N := p.isLt
-      have hj : j.val < 2 := j.isLt
-      omega⟩ := rfl
-
 /-- For one physical pair, the extracted window is the whole two-site configuration. -/
 @[simp] theorem productPairWindow_one (σ : Cfg d (2 * 1)) :
     productPairWindow 1 σ 0 = σ := by
@@ -51,12 +43,6 @@ of arXiv:1606.00608, lines 570--578, by itself: the source formula first puts
 therefore has to be justified separately from the source formula. -/
 def productPairState (ψ₂ : NSiteSpace d 2) (N : ℕ) : NSiteSpace d (2 * N) :=
   fun σ => ∏ p : Fin N, ψ₂ (productPairWindow N σ p)
-
-/-- The zero-fold physical pair product is the constant-one state. -/
-@[simp] lemma productPairState_zero (ψ₂ : NSiteSpace d 2) :
-    productPairState ψ₂ 0 = fun _ => (1 : ℂ) := by
-  funext σ
-  simp [productPairState]
 
 /-- For one physical pair, the product state is the original two-site amplitude. -/
 @[simp] theorem productPairState_one (ψ₂ : NSiteSpace d 2) (σ : Cfg d (2 * 1)) :

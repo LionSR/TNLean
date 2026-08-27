@@ -35,9 +35,9 @@ The imported modules provide the original declarations at their historical
 names, including
 `exists_compressedTensor_of_supported_projection`,
 `exists_compressedTensor_of_supported_projection_pos_mpv`,
-`exists_blockDecomp_of_commuting_projections`,
+`exists_blockDecomp_of_commuting_projections_with_letter_and_isometry`,
 `commutes_letters_of_adjoint_fixed_projection`, and
-`exists_blockDecomp_of_adjoint_fixed_projections`.
+`exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry`.
 
 ## References
 

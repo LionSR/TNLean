@@ -1983,8 +1983,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Independent tensor product of matrix product operator tensors]
     \label{def:mpu_independent_tensor_product}
-    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply,
-        MPOTensor.tensorProductConfigEquiv}
+    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply}
     \leanok
     \uses{def:mpo_tensor}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
@@ -5948,8 +5947,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_reduced_to_hat_source_ranks}
     \lean{MPOTensor.virtualSandwich_hat_eq_reducedProjection,
         MPOTensor.rightRank_hat_eq_reducedProjection,
-        MPOTensor.leftRank_hat_eq_reducedProjection,
-        MPOTensor.exists_units_for_hat_reducedProjection}
+        MPOTensor.leftRank_hat_eq_reducedProjection}
     \leanok
     \uses{def:mpo_family, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, def:mpu_right_rank, def:mpu_left_rank, def:mpu_ambient_support_inverse_extension, thm:reduced_projection_invertible_factor}
     Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleMPSChainOverlapCapstone
 import TNLean.PEPS.CycleArcRegion
-import TNLean.PEPS.NormalEdgeGaugeFamily
 import TNLean.PEPS.TorusGaugeUniqueness
 
 /-!

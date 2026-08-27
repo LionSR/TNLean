@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.Kraus.Transfer
 import QICLean.Algebra.HermitianHelpers
 import QICLean.Algebra.PosSemidefSupport
-import QICLean.Channel.Irreducible.Basic
 import QICLean.Channel.FixedPoint.SupportInvariance
 
 import Mathlib.Analysis.Matrix.Spectrum

@@ -93,11 +93,6 @@ def regionBoundaryEdgeDoubleComplEquiv (R : Finset V) :
       {e : Edge G // IsRegionBoundaryEdge (G := G) R e} :=
   Equiv.subtypeEquivRight (fun e => isRegionBoundaryEdge_compl_compl_iff (G := G) R e)
 
-omit [DecidableRel G.Adj] in
-@[simp] theorem regionBoundaryEdgeDoubleComplEquiv_apply_coe (R : Finset V)
-    (e : {e : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ \ (Finset.univ \ R)) e}) :
-    ((regionBoundaryEdgeDoubleComplEquiv (G := G) R e) : Edge G) = e.1 := rfl
-
 /-- Transport of a boundary configuration on `R` to one on `univ \ (univ \ R)`
 along the double-complement boundary-edge equivalence. -/
 def regionDoubleComplBoundaryConfig (A : Tensor G d) (R : Finset V)

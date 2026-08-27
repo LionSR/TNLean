@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
-import TNLean.Algebra.TracePairing
+import TNLean.MPS.Core.TracePairing
 
 /-!
 # Fundamental Theorem with finite-length MPV agreement

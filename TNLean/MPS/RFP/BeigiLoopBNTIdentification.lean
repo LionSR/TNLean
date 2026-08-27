@@ -3,14 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.NormalTensorDichotomy
 import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.ResidualIsometry
-import TNLean.MPS.RFP.StructuralForm
 
 /-!
 # Identification of Beigi loop sectors with normal tensors
@@ -119,23 +116,6 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
     isNormalTensor_invSqrt_smul_of_unique_peripheral A hIrr ρ 1 hρ (by norm_num)
       (by simpa using hρeig) huniq
   simpa using hScaled
-
-/-- Two normal tensors which are not MPV-phase equivalent have asymptotically vanishing
-overlap. -/
-private lemma overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNormalTensor A) (hB : IsNormalTensor B)
-    (hNot : ¬ MPVBlockPhaseEquiv A B) :
-    Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) := by
-  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
-  · exact hZero
-  · exfalso
-    apply hNot
-    refine ⟨ζ, Complex.ne_zero_of_norm_eq_one hζ, ?_⟩
-    intro N _hN σ
-    have hEq := congrArg (fun v : MPVSpace d N => v σ) (hState N)
-    simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq
 
 /-- Eventual containment in a finite asymptotically orthonormal family of normal MPV states
 forces phase equivalence with one member of the family.

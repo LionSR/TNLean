@@ -28,21 +28,6 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Physical blocking commutes with the physical adjoint. The equality is
-literal: both operations preserve the order of the virtual word.
-
-Source: arXiv:1703.09188, lines 390--405. -/
-theorem physicalAdjointTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
-    physicalAdjointTensor (blockTensor U L) =
-      blockTensor (physicalAdjointTensor U) L := by
-  funext I K
-  ext β α
-  rw [blockTensor_apply]
-  have h := evalWord_physicalAdjointTensor U
-    (MPSTensor.wordOfBlock d L I) (MPSTensor.wordOfBlock d L K) (by simp)
-  rw [h]
-  rfl
-
 /-- Physical blocking commutes with formation of the physical-adjoint double
 layer. This is the local compatibility used when applying `WIsom` after
 blocking.

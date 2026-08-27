@@ -60,13 +60,6 @@ def reindexSites {d : ℕ} {M N : ℕ} (h : M = N) :
     (ψ : NSiteSpace d M) (σ : Fin N → Fin d) :
     reindexSites h ψ σ = ψ (σ ∘ Fin.cast h) := rfl
 
-@[simp] theorem reindexSites_symm_apply {M N : ℕ} (h : M = N)
-    (ψ : NSiteSpace d N) (σ : Fin M → Fin d) :
-    (reindexSites (d := d) h).symm ψ σ = ψ (σ ∘ Fin.cast h.symm) := rfl
-
-@[simp] theorem reindexSites_rfl (M : ℕ) (ψ : NSiteSpace d M) :
-    reindexSites (rfl : M = M) ψ = ψ := rfl
-
 /-! ### Interaction with `groundSpaceMap` -/
 
 /-- Reindexing a ground-space image produces the ground-space image at the new

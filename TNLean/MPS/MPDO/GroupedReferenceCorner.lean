@@ -43,17 +43,6 @@ private theorem vertical_corner_cast (M : MPOTensor d D)
   cases h
   simpa using hcorner v
 
-/-- Two successive transports from a common dimension agree with the direct
-transport. -/
-private theorem cast_via_common_dimension {k : ℕ} (F : ℕ → Type)
-    (hmk : m = k) (hmn : m = n) (x : F m) :
-    cast (congrArg F (hmk.symm.trans hmn))
-        (cast (congrArg F hmk) x) =
-      cast (congrArg F hmn) x := by
-  subst k
-  subst n
-  rfl
-
 section GroupedSectors
 
 variable {r : ℕ} {dim : Fin r → ℕ}
@@ -124,8 +113,7 @@ theorem exists_distinguished_grouped_reference_corner
     simpa [A0, q0] using h
   have hAtransport :
       cast (congrArg (MPSTensor (D * D)) h0q) A0 = A := by
-    exact cast_via_common_dimension (MPSTensor (D * D))
-      (hdim j q0) (hdim j q) (blocks ((C).repr j))
+    exact cast_cast _ _ _
   refine ⟨W, c0, hc0, ?_⟩
   intro w
   have h := vertical_corner_cast M A0 (V ((C).enum j q0))

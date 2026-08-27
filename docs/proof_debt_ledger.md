@@ -37,8 +37,9 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
 - **What**: top-level declarations whose name appears exactly once
-  repo-wide (their own definition), excluding instances and
-  `@[simp]`/`@[grind]`-tagged lemmas. Largest concentrations:
+  repo-wide (their own definition), including attribute-carrying
+  declarations and instances cleared by a root build. Largest
+  concentrations:
   `Wielandt/RectangularSpan/Universality.lean` (144 ln),
   `Wielandt/RankOne/ExtractionFull.lean` (123 ln),
   `MPS/ParentHamiltonian/BNTBlockIntersection.lean` (117 ln).
@@ -68,6 +69,27 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   blueprint definition node that nothing cited, so the node was deleted
   rather than redirected; see
   `docs/audits/2026-08-26_peps_forwarders_and_mirrors.md`.
+- **Evidence update (2026-08-27)**: the PEPS subdirectories contributed a
+  further three zero-reference declarations that fall outside this entry's
+  original scope, which excluded instances and `@[simp]`-tagged lemmas
+  because a name search cannot clear them. Two `@[simp]` lemmas and one
+  `Fintype` instance whose body was `inferInstance` were retired with a
+  root `lake build` as the oracle, and the **What** bullet above is widened
+  accordingly; see
+  `docs/audits/2026-08-27_peps_attribute_carrying_dead_weight.md`.
+- **Evidence update (2026-08-27)**: the `MPS/MPU` transport module contributed
+  one further declaration of a kind this entry's original scope missed — a
+  forwarder whose body is a bare `exact` of an identically stated QICLean
+  theorem. A name search does clear it, but only once the search is run against
+  the companion library as well as this repository; see
+  `docs/audits/2026-08-27_mpu_reduced_to_hat_qiclean_forwarder.md`.
+- **Evidence update (2026-08-27)**: the BNT refinement record in
+  `MPS/CanonicalForm/BNTRefinement.lean` contributed three structure fields that
+  a name search cannot clear at all, because a field's spelling is shared with
+  the local name that populates it. Two restated the copy-gauge relation that
+  the regrouped carrier already states, and the third pinned a field to the
+  parent record by `rfl` with nothing reading the pin; see
+  `docs/audits/2026-08-26_canonical_form_retirements.md`.
 
 ### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
 - **Status**: open (#4565)
@@ -114,19 +136,22 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — net 750 lines, risk 4/10
 - **Status**: open (#4567)
 - **What**: `PEPS/RegionBlock/UnionInjectivityOverlap4.lean` (238 ln, 100%
-  dead) plus the `overlapHostGeometry` sub-chain in
-  `UnionInjectivityOverlap5.lean:139-349` (211 ln) plus scattered dead
-  spans in files 1/2/3/6 (~123 ln). **Correction**: the original candidate
+  dead) plus scattered dead spans in files 1/2/3/6 (~123 ln).
+  **Correction**: the original candidate
   wrongly proposed also collapsing files 1-2 (`overlapLeftGeometry`/
   `overlapRightGeometry`) — those are live, called directly by the
-  chain's capstone proof, and must be kept.
+  chain's capstone proof, and must be kept. **Update 2026-08-27**: the
+  `overlapHostGeometry` sub-chain in file 5 (211 ln) is already gone, and
+  file 5 itself was dissolved into `RegionBlock/Basic.lean` and
+  `RegionBlock/UnionInjectivityGeneral.lean`
+  (`docs/audits/2026-08-27_peps_regionblock_overlap_chain_retirement.md`),
+  so the entry's remaining target is file 4 plus the scattered spans.
 - **Why it's excess**: the project's own paper-gap note
   (`docs/paper-gaps/peps_normal_ft_section3_route.tex`) documents this
   exact sub-route as an abandoned dead end that forced a switch to the
   surviving P0-outer parametrization.
-- **First PR**: delete `UnionInjectivityOverlap4.lean` in full plus the
-  211-line dead block in file 5. Net -449 lines, zero consumers, zero
-  proof changes to the live capstone.
+- **First PR**: delete `UnionInjectivityOverlap4.lean` in full. Net -238
+  lines, zero consumers, zero proof changes to the live capstone.
 
 ### S8. Derive injective-tensor Perron-Frobenius as a corollary of the irreducible-CP-map theory — completed
 - **Status**: closed 2026-07-23 (#4568; #4594 and #4628)

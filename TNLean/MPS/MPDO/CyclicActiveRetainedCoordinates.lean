@@ -414,77 +414,7 @@ def appendSectorFiber (F : PhysicalSectorFactorization K)
     (motive := fun i ↦ F.SectorIndex ((Fin.append k t) i))
     (fun j ↦ by simpa using x j) (fun j ↦ by simpa using z j) i
 
-/-- Separate the three entries of a dependent three-site sector fiber.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1606--1617.
-
-**Scope restriction (cyclic-active restriction):** These are the three boundary sites
-traced after the cyclic-active restriction. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-def threeSectorFiberEquiv (F : PhysicalSectorFactorization K)
-    (t : Fin 3 → Fin F.sectorCount) :
-    F.SectorChainFiber t ≃
-      F.SectorIndex (t 0) ×
-        (F.SectorIndex (t 1) × F.SectorIndex (t 2)) where
-  toFun z := (z 0, z 1, z 2)
-  invFun z := Fin.cons z.1 <| Fin.cons z.2.1 <|
-    Fin.cons z.2.2 finZeroElim
-  left_inv z := by
-    funext i
-    fin_cases i <;> rfl
-  right_inv z := rfl
-
-/-- The first coordinate of the inverse three-site identification is its
-first sector coordinate.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1606--1617.
-
-**Scope restriction (cyclic-active restriction):** This projection identifies the
-first traced boundary site. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-@[simp] theorem threeSectorFiberEquiv_symm_apply_zero
-    (F : PhysicalSectorFactorization K)
-    (t : Fin 3 → Fin F.sectorCount)
-    (z : F.SectorIndex (t 0) ×
-      (F.SectorIndex (t 1) × F.SectorIndex (t 2))) :
-    (F.threeSectorFiberEquiv t).symm z 0 = z.1 := by
-  rfl
-
-/-- The second coordinate of the inverse three-site identification is its
-second sector coordinate.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1606--1617.
-
-**Scope restriction (cyclic-active restriction):** This projection identifies the
-second traced boundary site. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-@[simp] theorem threeSectorFiberEquiv_symm_apply_one
-    (F : PhysicalSectorFactorization K)
-    (t : Fin 3 → Fin F.sectorCount)
-    (z : F.SectorIndex (t 0) ×
-      (F.SectorIndex (t 1) × F.SectorIndex (t 2))) :
-    (F.threeSectorFiberEquiv t).symm z 1 = z.2.1 := by
-  rfl
-
-/-- The third coordinate of the inverse three-site identification is its
-third sector coordinate.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-1606--1617.
-
-**Scope restriction (cyclic-active restriction):** This projection identifies the
-third traced boundary site. See
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-@[simp] theorem threeSectorFiberEquiv_symm_apply_two
-    (F : PhysicalSectorFactorization K)
-    (t : Fin 3 → Fin F.sectorCount)
-    (z : F.SectorIndex (t 0) ×
-      (F.SectorIndex (t 1) × F.SectorIndex (t 2))) :
-    (F.threeSectorFiberEquiv t).symm z 2 = z.2.2 := by
-  rfl
 
 
 end MPOTensor.PhysicalSectorFactorization

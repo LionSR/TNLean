@@ -64,12 +64,6 @@ omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
   rfl
 
 omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
-@[simp] theorem translateEquiv_symm_apply (a : ZMod width) (b : ZMod height)
-    (v : TorusVertex width height) :
-    (translateEquiv a b).symm v = (v.1 - a, v.2 - b) :=
-  rfl
-
-omit [NeZero width] [NeZero height] [Fact (1 < width)] [Fact (1 < height)] in
 /-- The translation bijection preserves the horizontal cyclic-neighbour relation:
 adding the same offset to both endpoints preserves a horizontal step. -/
 theorem torusHorizontalNeighbor_translate (a : ZMod width) (b : ZMod height)
@@ -206,11 +200,6 @@ def translateIncidentEdge (a : ZMod width) (b : ZMod height) (v : TorusVertex wi
     · rcases ie.2 with hv | hv
       · exact Or.inr (by rw [h2, hv])
       · exact Or.inl (by rw [h1, hv])⟩
-
-@[simp] theorem translateIncidentEdge_coe (a : ZMod width) (b : ZMod height)
-    (v : TorusVertex width height) (ie : IncidentEdge (torusGraph width height) v) :
-    (translateIncidentEdge a b v ie).1 = translateEdge a b ie.1 :=
-  rfl
 
 end PEPS
 end TNLean

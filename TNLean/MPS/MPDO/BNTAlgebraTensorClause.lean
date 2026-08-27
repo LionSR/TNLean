@@ -180,14 +180,6 @@ theorem isBNT {M : MPOTensor d D} (H : BNTAlgebraTensorClause M) :
     MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
   H.isCPSVBNT.isBNT
 
-/-- The chosen decomposition in a tensor-attached BNT algebra clause is a
-vertical canonical form of the underlying MPO tensor. -/
-theorem isVerticalCF {M : MPOTensor d D} (H : BNTAlgebraTensorClause M) :
-    IsVerticalCF M :=
-  ⟨H.labelCount, H.bondDim, H.multiplicity, H.weight, H.tensor,
-    H.verticalCoisometry, H.multiplicity_pos, H.weight_pos, H.coisometry,
-    H.isBNT, H.forward, H.reconstruction⟩
-
 variable {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
 
 /-- The concrete BNT-label operator family carried by the tensor-attached
@@ -199,11 +191,6 @@ def operators : BNTLabelOperatorFamily (Fin H.labelCount)
 /-- The concrete trace scalars carried by the tensor-attached clause. -/
 def traceScalars : BNTLabelTraceScalarFamily (Fin H.labelCount) :=
   verticalBNTTraceScalarFamily H.weight
-
-@[simp]
-theorem operators_operator (L : ℕ) (α : Fin H.labelCount) :
-    H.operators.operator L α = mpo (verticalBNTMPO (H.tensor α)) L :=
-  rfl
 
 @[simp]
 theorem traceScalars_traceScalar (α : Fin H.labelCount) :
@@ -223,15 +210,5 @@ Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--993, and Appendix C.4,
 lines 2046--2064. -/
 def HasBNTAlgebraTensorClause (M : MPOTensor d D) : Prop :=
   Nonempty (BNTAlgebraTensorClause M)
-
-namespace HasBNTAlgebraTensorClause
-
-/-- A tensor-attached BNT algebra clause supplies a vertical canonical form. -/
-theorem isVerticalCF {M : MPOTensor d D} (h : HasBNTAlgebraTensorClause M) :
-    IsVerticalCF M := by
-  obtain ⟨H⟩ := h
-  exact H.isVerticalCF
-
-end HasBNTAlgebraTensorClause
 
 end MPOTensor

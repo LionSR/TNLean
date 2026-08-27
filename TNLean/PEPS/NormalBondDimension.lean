@@ -83,10 +83,6 @@ noncomputable def scaleVertex (A : Tensor G d) (v₀ : V) (c : ℂ) : Tensor G d
   bondDim := A.bondDim
   component v η σ := (if v = v₀ then c else 1) * A.component v η σ
 
-omit [Fintype V] in
-@[simp] theorem scaleVertex_bondDim (A : Tensor G d) (v₀ : V) (c : ℂ) :
-    (scaleVertex A v₀ c).bondDim = A.bondDim := rfl
-
 /-- Scaling one vertex component multiplies every state coefficient by the
 constant: the contraction product picks up the factor exactly once, at `v₀`. -/
 theorem stateCoeff_scaleVertex (A : Tensor G d) (v₀ : V) (c : ℂ) (σ : V → Fin d) :

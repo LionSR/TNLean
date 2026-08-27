@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Matrix.Normed
 import TNLean.MPS.MPDO.TopologicalGibbsHamiltonian
 
 /-!
@@ -37,18 +36,10 @@ def oneSiteOperator (k : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin 1 → Fin d) (Fin 1 → Fin d) ℂ :=
   fun x y ↦ k (x ⟨0, by omega⟩) (y ⟨0, by omega⟩)
 
-private def finOneArrowEquiv (d : ℕ) : (Fin 1 → Fin d) ≃ Fin d where
-  toFun x := x ⟨0, by omega⟩
-  invFun a := fun _ ↦ a
-  left_inv x := by
-    funext i
-    exact congrArg x (Subsingleton.elim _ _)
-  right_inv _ := rfl
-
 private theorem oneSiteOperator_eq_reindexAlgEquiv_symm
     (A : Matrix (Fin d) (Fin d) ℂ) :
     oneSiteOperator A =
-      (Matrix.reindexAlgEquiv ℂ ℂ (finOneArrowEquiv d)).symm A := by
+      (Matrix.reindexAlgEquiv ℂ ℂ (Equiv.funUnique (Fin 1) (Fin d))).symm A := by
   ext x y
   rfl
 
@@ -61,10 +52,10 @@ private theorem exp_oneSiteOperator
     oneSiteOperator_eq_reindexAlgEquiv_symm]
   symm
   exact NormedSpace.map_exp
-    (Matrix.reindexAlgEquiv ℂ ℂ (finOneArrowEquiv d)).symm
+    (Matrix.reindexAlgEquiv ℂ ℂ (Equiv.funUnique (Fin 1) (Fin d))).symm
     (LinearMap.continuous_of_finiteDimensional
       (Matrix.reindexAlgEquiv ℂ ℂ
-        (finOneArrowEquiv d)).symm.toLinearMap) A
+        (Equiv.funUnique (Fin 1) (Fin d))).symm.toLinearMap) A
 
 /-- A two-site operator which acts by `k` on the first site and by the
 identity on the second.

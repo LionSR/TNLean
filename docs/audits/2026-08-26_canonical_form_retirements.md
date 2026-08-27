@@ -77,3 +77,41 @@ rows for `groupedListedEquiv_activeCopy` and
 replacement was itself retired here, unused.
 
 Every removal above burns down a slice of open ledger entry S2 (#4564).
+
+## The duplicated copy-gauge carrier in the BNT refinement record (2026-08-27)
+
+`MPSTensor.CPSVCanonicalFormData.BNTRefinement` carried the same gauge-phase
+relation twice. The per-copy carrier `copyGauge` / `copyRelation` states, for
+each displayed index $k$ and each letter $i$,
+$$
+  A_k^{\,i}=\zeta_k\,X_k\,C_{j(k)}^{\,i}\,X_k^{-1},
+$$
+where $C_{j(k)}$ is the chosen representative of the class of $k$ and $\zeta_k$
+is the unit phase. The regrouped carrier states the same equation in two steps:
+`regroupedBlocksEq` names the phase multiple $\zeta_k C_{j(k)}$ as the regrouped
+block, and `blocksEqListedGaugeConj` conjugates it by `listedGauge`. In the sole
+constructor of the record, `listedGauge` is assigned the very same gauge family
+that `copyGauge` receives, and `regroupedBlocksEq` is `rfl`, so the two carriers
+are populated from one witness. Every downstream projection reads the regrouped
+carrier.
+
+Separately, `ambientCoisometryEq` pinned the record's own `ambientCoisometry`
+field to the parent record's `data.ambient_coisometry` by `rfl`, and nothing
+read the pin. The coisometry property that downstream code does use is carried
+by `ambientCoisometric`.
+
+| Removed field | Surviving carrier |
+|---|---|
+| `MPSTensor.CPSVCanonicalFormData.BNTRefinement.copyGauge` | `listedGauge` |
+| `MPSTensor.CPSVCanonicalFormData.BNTRefinement.copyRelation` | `regroupedBlocksEq` together with `blocksEqListedGaugeConj` |
+| `MPSTensor.CPSVCanonicalFormData.BNTRefinement.ambientCoisometryEq` | `ambientCoisometric`, the property actually consumed |
+
+None of the three names is cited by a Blueprint `\lean{...}` tag, and none had
+a projection anywhere in `TNLean/` outside `Archive/`; the surviving occurrences
+of the spellings `copyGauge` and `copyRelation` are the local names bound by the
+`choose` in `exists_bntRefinement`, whose arity is fixed by the witness it
+destructures. The structure docstring needed no edit: its clause about realizing
+each copy as a gauged phase multiple of its representative remains true through
+the regrouped carrier, and its ambient clause remains true through
+`ambientCoisometric`. Net −21 Lean lines. This burns down a further slice of
+open ledger entry S2 (#4564).

@@ -3,12 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Topology.Instances.Matrix
-import TNLean.Algebra.FinTupleEquiv
-import QICLean.Channel.KrausCPTP
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalClosure
 
 /-!
@@ -23,6 +21,8 @@ arXiv:1606.00608.
 
 * `MPOTensor.blockTensor`: the tensor obtained by blocking an arbitrary number
   of adjacent sites.
+* `MPOTensor.physicalAdjointTensor_blockTensor`: physical blocking commutes with
+  the physical adjoint.
 * `MPOTensor.continuous_blockTensor` and `Continuous.blockTensor`: fixed-length
   blocking is continuous, including along continuous tensor families.
 * `MPOTensor.mpo_blockTensor_eq_reindex`: closing a blocked chain gives the
@@ -32,6 +32,10 @@ arXiv:1606.00608.
 * `MPOTensor.physClose4`: the right-associated four-site physical closure.
 * `MPOTensor.physClose1_blockTwo_eq_physClose2`: one blocked site is two original sites.
 * `MPOTensor.physClose2_blockTwo_eq_physClose4`: two blocked sites are four original sites.
+* `MPOTensor.physClose1_blockTwo_reindex_eq_physClose2`: the one-site statement in
+  index-relabelling form.
+* `MPOTensor.physClose2_blockTwo_reindex_eq_physClose4`: the two-site statement in
+  index-relabelling form.
 
 ## References
 
@@ -46,6 +50,14 @@ open scoped Matrix ComplexOrder
 namespace MPOTensor
 
 variable {d D : ℕ}
+
+/-- Reindexing a matrix by an equivalence and then by its inverse returns the
+original matrix. -/
+theorem equivReindexMap_symm_apply_self
+    {α β : Type*} (e : α ≃ β) (X : Matrix α α ℂ) :
+    Matrix.equivReindexMap e.symm (Matrix.equivReindexMap e X) = X := by
+  ext i j
+  simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv]
 
 /-! ### Arbitrary physical blocking -/
 
@@ -68,6 +80,21 @@ lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
     (i j : Fin (MPSTensor.blockPhysDim d L)) :
     blockTensor M L i j =
       evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j) :=
+  rfl
+
+/-- Physical blocking commutes with the physical adjoint. The equality is
+literal: both operations preserve the order of the virtual word.
+
+Source: arXiv:1703.09188, lines 390--405. -/
+theorem physicalAdjointTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
+    physicalAdjointTensor (blockTensor U L) =
+      blockTensor (physicalAdjointTensor U) L := by
+  funext I K
+  ext β α
+  rw [blockTensor_apply]
+  have h := evalWord_physicalAdjointTensor U
+    (MPSTensor.wordOfBlock d L I) (MPSTensor.wordOfBlock d L K) (by simp)
+  rw [h]
   rfl
 
 /-- Word evaluation at fixed ket and bra words depends continuously on the MPO tensor.
@@ -177,7 +204,9 @@ theorem blockTensor_mulTensor {D₁ D₂ : ℕ}
   simp only [Kraus.decodeBlockEquiv_apply, blockTensor_apply,
     Kraus.wordOfBlock]
 
-private theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
+/-- Evaluating a blocked MPO tensor on finite-index ket and bra words is
+evaluating the original tensor on the flattened words. -/
+theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
     (s t : Fin N → Fin (MPSTensor.blockPhysDim d L)) :
     evalWord (blockTensor M L) (List.ofFn s) (List.ofFn t) =
       evalWord M (MPSTensor.flattenBlockedWord d L (List.ofFn s))
@@ -404,6 +433,28 @@ theorem physClose2_blockTwo_eq_physClose4 (M : MPOTensor d D) :
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, blockedPairEquiv, blockedIndexEquiv,
     blockTwo, Matrix.mul_assoc]
+
+/-- Evaluating the one-site closure of the two-site blocking at a virtual
+matrix gives the two-site closure, in the index-relabelling spelling used
+where the blocked coordinates appear explicitly.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+theorem physClose1_blockTwo_reindex_eq_physClose2
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
+        (physClose1 (blockTwo M) X) = physClose2 M X :=
+  LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X
+
+/-- Evaluating the two-site closure of the two-site blocking at a virtual
+matrix gives the right-associated four-site closure, in the index-relabelling
+spelling used where the blocked coordinates appear explicitly.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+theorem physClose2_blockTwo_reindex_eq_physClose4
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
+        (physClose2 (blockTwo M) X) = physClose4 M X :=
+  LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X
 
 @[deprecated _root_.finFourArrowEquiv (since := "2026-07-13")]
 alias finFourArrowEquiv := _root_.finFourArrowEquiv

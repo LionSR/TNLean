@@ -52,14 +52,6 @@ def blockedTwoChainEquiv (d : ℕ) :
     (Fin 4 → Fin d) ≃ Fin (d * d) × Fin (d * d) :=
   (_root_.finFourArrowEquiv (Fin d)).trans (blockedPairEquiv d).symm
 
-/-- Reindexing a matrix by an equivalence and then by its inverse returns the
-original matrix. -/
-theorem equivReindexMap_symm_apply_self
-    {α β : Type*} (e : α ≃ β) (X : Matrix α α ℂ) :
-    Matrix.equivReindexMap e.symm (Matrix.equivReindexMap e X) = X := by
-  ext i j
-  simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv]
-
 /-- The one-site closure of a two-site blocking is the two-site chain closure
 in blocked physical coordinates.
 

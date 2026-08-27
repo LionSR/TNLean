@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.PerronFrobenius.SupportStabilization
-import TNLean.MPS.MPDO.CyclicActiveSuffixMarginal
+import TNLean.MPS.MPDO.CyclicActiveFourthRegionContraction
 import TNLean.MPS.MPDO.SelectedFixedProductSectorVisibility
 import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
 
@@ -114,16 +114,15 @@ private noncomputable def retainedTraceProduct
   ∏ i : Fin n,
     Matrix.trace (F.neighboringOperator (k i.castSucc) (k i.succ))
 
-private theorem trace_oneSuffixSectorContraction_eq
+private theorem trace_suffixSectorContraction_one_eq
     (F : PhysicalSectorFactorization K) {n : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount) :
-    Matrix.trace (F.oneSuffixSectorContraction k) =
+    Matrix.trace (F.suffixSectorContraction 1 k) =
       F.retainedTraceProduct k *
         ∑ r : Fin F.sectorCount,
           Matrix.trace (F.neighboringOperator (k (Fin.last n)) r) *
             Matrix.trace (F.neighboringOperator r (k 0)) := by
-  rw [oneSuffixSectorContraction,
-    F.trace_suffixSectorContraction_eq_sum_prod_trace]
+  rw [F.trace_suffixSectorContraction_eq_sum_prod_trace]
   simp_rw [Fin.prod_univ_add]
   simp only [Fin.prod_univ_one]
   have hinternal (t : Fin 1 → Fin F.sectorCount) (i : Fin n) :
@@ -186,17 +185,16 @@ private theorem trace_oneSuffixSectorContraction_eq
         Matrix.trace (F.neighboringOperator (t 0) (k 0)))
   ring
 
-private theorem trace_twoSuffixSectorContraction_eq
+private theorem trace_suffixSectorContraction_two_eq
     (F : PhysicalSectorFactorization K) {n : ℕ}
     (k : Fin (n + 1) → Fin F.sectorCount) :
-    Matrix.trace (F.twoSuffixSectorContraction k) =
+    Matrix.trace (F.suffixSectorContraction 2 k) =
       F.retainedTraceProduct k *
         ∑ q : Fin F.sectorCount, ∑ r : Fin F.sectorCount,
           Matrix.trace (F.neighboringOperator (k (Fin.last n)) q) *
             Matrix.trace (F.neighboringOperator q r) *
               Matrix.trace (F.neighboringOperator r (k 0)) := by
-  rw [twoSuffixSectorContraction,
-    F.trace_suffixSectorContraction_eq_sum_prod_trace]
+  rw [F.trace_suffixSectorContraction_eq_sum_prod_trace]
   simp_rw [Fin.prod_univ_add]
   simp only [Fin.prod_univ_one, Fin.prod_univ_two]
   have hinternal (t : Fin 2 → Fin F.sectorCount) (i : Fin n) :
@@ -428,27 +426,27 @@ private theorem normalized_trace_twoSuffix_eq_oneSuffix_of_reducedBlockState_eq
         F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega))
     (k : Fin L → Fin F.sectorCount) :
     ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 2)))⁻¹ : ℂ) *
-        Matrix.trace (F.twoSuffixSectorContraction k) =
+        Matrix.trace (F.suffixSectorContraction 2 k) =
       ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 1)))⁻¹ : ℂ) *
-        Matrix.trace (F.oneSuffixSectorContraction k) := by
+        Matrix.trace (F.suffixSectorContraction 1 k) := by
   classical
   have hblocks :
       ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 2)))⁻¹ : ℂ) •
           Matrix.blockDiagonal'
-            (fun k : Fin L → Fin F.sectorCount ↦ F.twoSuffixSectorContraction k) =
+            (fun k : Fin L → Fin F.sectorCount ↦ F.suffixSectorContraction 2 k) =
         ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 1)))⁻¹ : ℂ) •
           Matrix.blockDiagonal'
-            (fun k : Fin L → Fin F.sectorCount ↦ F.oneSuffixSectorContraction k) := by
-    rw [← F.reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction,
-      ← F.reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction]
+            (fun k : Fin L → Fin F.sectorCount ↦ F.suffixSectorContraction 1 k) := by
+    rw [← F.reindex_reducedBlockState_add_eq_suffixSectorContraction L 2,
+      ← F.reindex_reducedBlockState_add_eq_suffixSectorContraction L 1]
     exact congrArg
       (Matrix.reindex (F.sectorCoordinateChainEquiv L)
         (F.sectorCoordinateChainEquiv L)) hmarg
   have hk :
       ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 2)))⁻¹ : ℂ) •
-          F.twoSuffixSectorContraction k =
+          F.suffixSectorContraction 2 k =
         ((Matrix.trace (mpo F.sectorCoordinateTensor (L + 1)))⁻¹ : ℂ) •
-          F.oneSuffixSectorContraction k := by
+          F.suffixSectorContraction 1 k := by
     ext x y
     have hxy := congrFun (congrFun hblocks ⟨k, x⟩) ⟨k, y⟩
     simpa [Matrix.blockDiagonal'_apply_eq] using hxy
@@ -585,8 +583,8 @@ theorem cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals
   have hnorm :=
     F.normalized_trace_twoSuffix_eq_oneSuffix_of_reducedBlockState_eq
       (n + 1) (hmarg (n + 1) (by omega)) k
-  rw [F.trace_twoSuffixSectorContraction_eq,
-    F.trace_oneSuffixSectorContraction_eq, hklast, hk0,
+  rw [F.trace_suffixSectorContraction_two_eq,
+    F.trace_suffixSectorContraction_one_eq, hklast, hk0,
     F.sum_sector_trace_three_eq_cyclicActive_pow_three hpos q h (hreach h q),
     F.sum_sector_trace_two_eq_cyclicActive_pow_two hpos q h (hreach h q)] at hnorm
   have htrace₂ne :
@@ -716,8 +714,8 @@ theorem exists_normalized_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three_of_
     have hnorm :=
       F.normalized_trace_twoSuffix_eq_oneSuffix_of_reducedBlockState_eq
         3 (hmarg 3 (by omega)) k
-    rw [F.trace_twoSuffixSectorContraction_eq,
-      F.trace_oneSuffixSectorContraction_eq, hklast, hk0,
+    rw [F.trace_suffixSectorContraction_two_eq,
+      F.trace_suffixSectorContraction_one_eq, hklast, hk0,
       F.sum_sector_trace_three_eq_cyclicActive_pow_three hpos q h (hreach h q),
       F.sum_sector_trace_two_eq_cyclicActive_pow_two hpos q h (hreach h q),
       htrace₅, htrace₄] at hnorm

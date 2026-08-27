@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleArcRegion
-import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.RegionBlock.CoarseThreeSite2
 
 /-!
@@ -337,20 +336,6 @@ def cycleNormalPEPSBlockingHypotheses {L : ℕ} (h : NormalCycleArcInjectivityHy
   edgeBlocking :=
     NormalEdgeBlockingHypotheses.ofBlockingData fun e => cycleEdgeBlockingData h hUnion hL hn e
   oneSiteSeparation := cycleOneSiteSeparation h hUnion hL hn
-
-@[simp] theorem cycleNormalPEPSBlockingHypotheses_red {L : ℕ}
-    (h : NormalCycleArcInjectivityHypotheses L κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 0 < L) (hn : 3 * L ≤ n)
-    (e : Edge (SimpleGraph.cycleGraph n)) :
-    (cycleNormalPEPSBlockingHypotheses h hUnion hL hn).edgeBlocking.red e =
-      cycleEdgeRed L e := rfl
-
-@[simp] theorem cycleNormalPEPSBlockingHypotheses_blue {L : ℕ}
-    (h : NormalCycleArcInjectivityHypotheses L κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 0 < L) (hn : 3 * L ≤ n)
-    (e : Edge (SimpleGraph.cycleGraph n)) :
-    (cycleNormalPEPSBlockingHypotheses h hUnion hL hn).edgeBlocking.blue e =
-      cycleEdgeBlue L e := rfl
 
 end NeZero
 

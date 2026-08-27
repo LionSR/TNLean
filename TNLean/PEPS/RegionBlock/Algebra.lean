@@ -43,9 +43,9 @@ physical realization supplies at the edge level. This recovery is the one
 genuinely edge-specific step of the edge construction (it rests on the blocked
 middle inverse of `EdgeBlockedThreeSiteInjective`) and is not yet available at
 the region level. It is isolated here as the data of a `RegionInsertionTransfer`,
-and the headline `isRegionBlockedInsertionAlgebraIsomorphism_of_transfer` then
-assembles the algebra isomorphism from that data using the unconditional
-injectivity and linearity proved in this file.
+whose algebra read-off `RegionInsertionTransfer.fwdAlgEquiv` uses the
+unconditional injectivity and linearity proved in this file, and feeds the
+headline `exists_regionEdgeGauge_of_transfer`.
 
 The remaining obligation toward the unconditional region recovery is recorded as
 remaining obligation 4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
@@ -285,28 +285,6 @@ The transfer is recorded as the data of a `RegionInsertionTransfer`, and the
 headline theorem assembles the algebra isomorphism from that data using the
 unconditional injectivity and linearity above. -/
 
-/-- The headline predicate: an algebra isomorphism between the bond matrix
-algebras on a boundary edge `f` of `R`, matching the region-inserted
-coefficients of the two tensors.
-
-This is the region analogue of `IsEdgeBlockedInsertionAlgebraIsomorphism`. The
-isomorphism is the per-edge gauge input to the Skolem--Noether step
-`edgeGaugeFromInsertionAlgebraIsomorphism`, which reads off the explicit edge
-gauge matrix.
-
-Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
-`Papers/1804.04964/paper_normal.tex`. -/
-def IsRegionBlockedInsertionAlgebraIsomorphism (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : Prop :=
-  ∃ Φ :
-    Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ ≃ₐ[ℂ]
-      Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
-    ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-      (σ : RegionPhysicalConfig (V := V) (d := d) R)
-      (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
-      regionInsertedCoeff (G := G) A R f M σ τ =
-        regionInsertedCoeff (G := G) B R f (Φ M) σ τ
-
 /-- A region-insertion transfer datum on a boundary edge `f` of `R`: an explicit
 per-edge matrix map `fwd` and its inverse-candidate `bwd`, each matching the
 region-inserted coefficients of the two tensors, with `fwd` multiplicative and
@@ -419,13 +397,6 @@ noncomputable def fwdAlgHom (T : RegionInsertionTransfer (G := G) A B R f)
       Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ :=
   AlgHom.ofLinearMap (T.fwdLinearMap hR hC hpos) T.fwd_one T.fwd_mul
 
-@[simp] theorem fwdAlgHom_apply (T : RegionInsertionTransfer (G := G) A B R f)
-    (hR : RegionBlockedTensorInjective (G := G) B R)
-    (hC : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (hpos : ∀ e : Edge G, 0 < B.bondDim e)
-    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
-    T.fwdAlgHom hR hC hpos M = T.fwd M := rfl
-
 /-- The forward transfer as a `ℂ`-algebra equivalence between the bond matrix
 algebras, with the backward transfer as two-sided inverse.
 
@@ -449,56 +420,7 @@ noncomputable def fwdAlgEquiv (T : RegionInsertionTransfer (G := G) A B R f)
   map_add' := T.fwd_add hRB hCB hposB
   commutes' z := (T.fwdAlgHom hRB hCB hposB).commutes z
 
-@[simp] theorem fwdAlgEquiv_apply (T : RegionInsertionTransfer (G := G) A B R f)
-    (hRA : RegionBlockedTensorInjective (G := G) A R)
-    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
-    T.fwdAlgEquiv hRA hCA hposA hRB hCB hposB M = T.fwd M := rfl
-
 end RegionInsertionTransfer
-
-/-- **Region-blocked insertion algebra isomorphism from a transfer datum.**
-
-Given a region-insertion transfer datum on a boundary edge `f` of `R`, together
-with blocked-tensor injectivity of both tensors on `R` and on its set complement
-and positivity of every bond dimension, the per-edge matrix transfer is an
-algebra isomorphism matching the region-inserted coefficients.
-
-The algebra structure is supplied entirely by the unconditional region-level
-injectivity (`regionInsertedCoeff_injective`) and linearity
-(`regionInsertedCoeff_add`, `regionInsertedCoeff_smul`); the transfer datum
-supplies only the explicit per-edge map, the matched coefficients, and the
-multiplicativity that physical realization provides at the edge level.
-
-**Scope restriction (transfer datum, positive bond dimensions):** the explicit
-transfer datum stands in for the region analogue of the physical-to-virtual
-recovery `physical_to_virtual_insertion`, which is not yet formalized (remaining
-obligation 4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`); the
-positivity hypotheses are the region analogue of the positive-bond restriction of
-`isEdgeBlockedInsertionAlgebraIsomorphism`
-(`docs/paper-gaps/peps_injective_ft_section3_route.tex`). The resulting algebra
-isomorphism feeds `edgeGaugeFromInsertionAlgebraIsomorphism` to read off the
-per-edge gauge matrix.
-
-Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
-`Papers/1804.04964/paper_normal.tex`. -/
-theorem isRegionBlockedInsertionAlgebraIsomorphism_of_transfer
-    (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
-    (T : RegionInsertionTransfer (G := G) A B R f)
-    (hRA : RegionBlockedTensorInjective (G := G) A R)
-    (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
-    IsRegionBlockedInsertionAlgebraIsomorphism (G := G) A B R f :=
-  ⟨T.fwdAlgEquiv hRA hCA hposA hRB hCB hposB,
-    fun M σ τ => T.fwd_coeff M σ τ⟩
 
 /-- **Per-edge gauge matrix from a region-insertion transfer datum.**
 
@@ -508,8 +430,15 @@ gauge matrix `Z` realizing the transfer as conjugation, and identifies the two
 bond dimensions on the edge `f`. This is the region-level production of the
 per-edge gauge matrix that the two-injective comparison cannot give directly.
 
-**Scope restriction (transfer datum, positive bond dimensions):** see
-`isRegionBlockedInsertionAlgebraIsomorphism_of_transfer`.
+**Scope restriction (transfer datum, positive bond dimensions):** the explicit
+transfer datum stands in for the region analogue of the physical-to-virtual
+recovery `physical_to_virtual_insertion`, which is not yet formalized (remaining
+obligation 4 of `docs/paper-gaps/peps_normal_ft_section3_route.tex`); the
+positivity hypotheses are the region analogue of the positive-bond restriction of
+`isEdgeBlockedInsertionAlgebraIsomorphism`
+(`docs/paper-gaps/peps_injective_ft_section3_route.tex`). The algebra isomorphism
+`RegionInsertionTransfer.fwdAlgEquiv` assembled from the transfer datum feeds
+`edgeGaugeFromInsertionAlgebraIsomorphism` to read off the per-edge gauge matrix.
 
 Source: arXiv:1804.04964, Section 3, lines 560--586 of
 `Papers/1804.04964/paper_normal.tex`. -/

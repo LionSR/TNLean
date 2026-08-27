@@ -68,16 +68,6 @@ theorem verticalSectorFinEquiv_outer_symm {g : ℕ} (dim mult : Fin g → ℕ)
   apply Fin.ext
   simp [finSigmaFinEquiv_apply, verticalCopyFinEquiv, finCongr_apply]
 
-@[simp]
-theorem verticalSectorFinEquiv_copy {g : ℕ} (dim mult : Fin g → ℕ)
-    (α : Fin g) (a : Fin (mult α)) (i : Fin (dim α)) :
-    finSigmaFinEquiv.symm
-        (finSigmaFinEquiv.symm
-          (verticalSectorFinEquiv dim mult ⟨α, (a, i)⟩)).1 =
-      ⟨α, a⟩ := by
-  rw [verticalSectorFinEquiv_outer_symm]
-  exact finSigmaFinEquiv.symm_apply_apply ⟨α, a⟩
-
 /-- Evaluating an assembled vertical tensor within one retained copy recovers
 that copy's weighted simple-block entry.
 

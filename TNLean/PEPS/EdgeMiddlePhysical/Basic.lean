@@ -37,15 +37,6 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-omit [DecidableRel G.Adj] in
-theorem edge_ne_of_middle_incident_for_physical (e : Edge G) {v : V}
-    (hv : v ∈ edgeMiddleVertices e) (ie : IncidentEdge G v) : ie.1 ≠ e := by
-  intro hie
-  have hvne := (mem_edgeMiddleVertices_iff e v).mp hv
-  rcases ie.2 with hleft | hright
-  · exact hvne.1 (hleft.symm.trans (congrArg (fun f : Edge G => f.1.1) hie))
-  · exact hvne.2 (hright.symm.trans (congrArg (fun f : Edge G => f.1.2) hie))
-
 /-- Physical configurations on the middle block $V\setminus\{u,v\}$ in the
 edge-centered three-site decomposition at the edge $e=(u,v)$.
 
@@ -154,7 +145,7 @@ theorem edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn (A : Tensor G d) (e : Edge 
         intro v
         apply congrArg (fun cfg => A.component v.1 cfg (τ v))
         funext ie
-        have hne := edge_ne_of_middle_incident_for_physical (G := G) e v.2 ie
+        have hne := edge_ne_of_middle_incident (G := G) e v.2 ie
         simpa [φ, edgeComplementValue, edgeMiddleConfigEquivOpenMiddleConfig] using
           edgeOpenMiddleConfigToMiddleConfig_apply_ne (G := G) A e β ζ ⟨ie.1, hne⟩
 

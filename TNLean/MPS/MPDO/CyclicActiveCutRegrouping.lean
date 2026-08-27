@@ -40,30 +40,6 @@ private theorem neighboringOperator_entry_eq_of_heq
   cases hy
   rfl
 
-private theorem cyclicActiveLeftBoundary_entry_eq_of_heq
-    (F : PhysicalSectorFactorization K)
-    (b : F.CyclicActiveSector → ℝ) {k h : F.CyclicActiveSector}
-    (hkh : k = h) {x y : Fin (F.leftDim k)}
-    {x' y' : Fin (F.leftDim h)} (hx : x ≍ x') (hy : y ≍ y') :
-    F.cyclicActiveLeftBoundary b k x y =
-      F.cyclicActiveLeftBoundary b h x' y' := by
-  subst h
-  cases hx
-  cases hy
-  rfl
-
-private theorem cyclicActiveRightBoundary_entry_eq_of_heq
-    (F : PhysicalSectorFactorization K)
-    (a : F.CyclicActiveSector → ℝ) {k h : F.CyclicActiveSector}
-    (hkh : k = h) {x y : Fin (F.rightDim k)}
-    {x' y' : Fin (F.rightDim h)} (hx : x ≍ x') (hy : y ≍ y') :
-    F.cyclicActiveRightBoundary a k x y =
-      F.cyclicActiveRightBoundary a h x' y' := by
-  subst h
-  cases hx
-  cases hy
-  rfl
-
 private theorem neighborIndex_heq_of_components
     (F : PhysicalSectorFactorization K)
     {k k' h h' : Fin F.sectorCount} (hk : k = k') (hh : h = h')
@@ -835,10 +811,10 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
                   ((congr_arg_heq v' he).trans (huR' (Fin.last C)))).trans
                     (heq_of_eq (F.rightFiberOpenEdgeEquiv_symm_boundary_succ
                       (F.rightSectorWord j kR) zR'))
-            have hboundaryLeft := cyclicActiveLeftBoundary_entry_eq_of_heq
-              F b hfirst hzLeft hzLeft'
-            have hboundaryRight := cyclicActiveRightBoundary_entry_eq_of_heq
-              F a hlast hzRight hzRight'
+            have hboundaryLeft := Matrix.entry_eq_of_heq
+              (fun s ↦ F.cyclicActiveLeftBoundary b s) hfirst hzLeft hzLeft'
+            have hboundaryRight := Matrix.entry_eq_of_heq
+              (fun s ↦ F.cyclicActiveRightBoundary a s) hlast hzRight hzRight'
             rw [hboundaryLeft, hboundaryRight]
             ring
           · simp [cyclicActiveFourthRegionBlock, cyclicActiveLeftOpenBlock,

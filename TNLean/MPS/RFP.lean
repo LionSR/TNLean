@@ -15,7 +15,6 @@ import TNLean.MPS.RFP.AppendixBSupportProjectionCommutation
 import TNLean.MPS.RFP.AppendixBTwoSiteBasicSupport
 import TNLean.MPS.RFP.AppendixBVirtualBondSupport
 import TNLean.MPS.RFP.AppendixBVirtualPairCommutation
-import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.RFP.BNTWeightCounterexample

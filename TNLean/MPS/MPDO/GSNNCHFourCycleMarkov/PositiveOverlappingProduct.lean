@@ -112,7 +112,7 @@ private theorem reindex_abcEquiv_eq_reindex_sigmaAssoc_of_reindex_tripartite
 
 omit [DecidableEq a] [DecidableEq b] in
 /-- The natural lift on the first two factors preserves multiplication. -/
-private theorem leftOverlappingLift_mul (X Y : Matrix (a × b) (a × b) ℂ) :
+theorem leftOverlappingLift_mul (X Y : Matrix (a × b) (a × b) ℂ) :
     leftOverlappingLift (c := c) (X * Y) =
       leftOverlappingLift X * leftOverlappingLift Y := by
   ext p q
@@ -136,7 +136,7 @@ private theorem leftOverlappingLift_star (X : Matrix (a × b) (a × b) ℂ) :
 
 omit [DecidableEq b] [DecidableEq c] in
 /-- The natural lift on the last two factors preserves multiplication. -/
-private theorem rightOverlappingLift_mul (X Y : Matrix (b × c) (b × c) ℂ) :
+theorem rightOverlappingLift_mul (X Y : Matrix (b × c) (b × c) ℂ) :
     rightOverlappingLift (a := a) (X * Y) =
       rightOverlappingLift X * rightOverlappingLift Y := by
   ext p q
@@ -164,7 +164,7 @@ private theorem rightOverlappingLift_star (X : Matrix (b × c) (b × c) ℂ) :
 omit [Fintype a] [Fintype b] [Fintype c] [DecidableEq b] in
 /-- The right overlapping lift of a middle-system operator is its three-factor
 Kronecker lift. -/
-private theorem rightOverlappingLift_kronecker_one (U : Matrix b b ℂ) :
+theorem rightOverlappingLift_kronecker_one (U : Matrix b b ℂ) :
     rightOverlappingLift (a := a) (U ⊗ₖ (1 : Matrix c c ℂ)) =
       ((1 : Matrix a a ℂ) ⊗ₖ U) ⊗ₖ (1 : Matrix c c ℂ) := by
   ext p q

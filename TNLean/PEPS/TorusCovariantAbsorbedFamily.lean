@@ -44,24 +44,6 @@ namespace PEPS
 variable {width height d : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
-/-- Transport across matching translation parameters collapses: if `a' = a` and `b' = b`, the
-reindexed absorbing gauge of the `(a', b')`-translate is the absorbing gauge of the
-`(a, b)`-translate. -/
-theorem glReindex_transportedAbsorbedGauge_eq (B : Tensor (torusGraph width height) d)
-    (hB : IsTorusTranslationInvariant B)
-    (R : Finset (TorusVertex width height))
-    (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
-    (Z : GL (Fin (B.bondDim f.1)) ℂ) {a a' : ZMod width} {b b' : ZMod height}
-    (ha : a' = a) (hb : b' = b)
-    (hcast : B.bondDim (boundaryEdgeMap (translate a' b') R f).1 =
-      B.bondDim (boundaryEdgeMap (translate a b) R f).1) :
-    glReindex hcast (transportedAbsorbedGauge B hB R f Z a' b') =
-      transportedAbsorbedGauge B hB R f Z a b := by
-  subst ha
-  subst hb
-  exact glReindex_self hcast _
-
 /-- The translated coefficient witness when its edge gauge is the transported reference gauge. -/
 private noncomputable def transportedEdgeCoeffIdentityWitness
     {A B : Tensor (torusGraph width height) d}

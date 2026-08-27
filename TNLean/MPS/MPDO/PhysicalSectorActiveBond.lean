@@ -58,13 +58,16 @@ theorem exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
           twoSiteSectorProjection P = data.bondData.bond ∧
       ∀ N (hN : 2 ≤ N),
         mpo K N = (data.bondData.toCommutingFormData hN).product := by
-  let W :=
-    PhysicalSectorFactorization.ActivePhysicalCompressionWitness.canonical F
-  let restriction := W.restrictionData hK hη
-  let G := W.factorizationForRestrictionData hK hη
+  let A := F.activeFactorSupportData
+  let restriction := F.activePhysicalSupportRestrictionData A hK hη
+  let G : PhysicalSectorFactorization
+      (changePhysicalBasis restriction.inclusionᴴ K) :=
+    F.activeRestrictedPhysicalSectorFactorization A
   obtain ⟨data, hdata, hrealizes⟩ :=
     restriction.exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
-      G (fun k h ↦ W.neighboringOperator_posSemidef hη k h)
+      G (fun k h ↦
+        F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef
+          A hη k h)
   refine ⟨data, ?_, hrealizes⟩
   let Q := physicalSupportProj K
   have hPQ : P * Q = Q :=

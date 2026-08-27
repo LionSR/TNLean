@@ -20,8 +20,7 @@ Section 4, that depend on the periodic fundamental theorem. The refinement and
 divisibility material belongs to Section 4.1, while the symmetry-to-`Z`-gauge
 corollary belongs to Section 4.2. It contains:
 
-1. A **single-block** symmetry theorem (`rotatePhysical` +
-   `gaugeEquiv_of_sameMPV_rotatePhysical`).
+1. The physical-index rotation `rotatePhysical` and its matrix-product-vector expansion.
 2. A **periodic-form theorem** that isolates the periodic equal-case FT input
    for the symmetry corollary of arXiv:1708.00029, Section 4.2.
 3. **Preservation lemmas** showing that unitary rotation of the physical index
@@ -113,23 +112,6 @@ theorem mpv_rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ)
       ∑ t : Fin N → Fin d, (∏ n : Fin N, M (s n) (t n)) * mpv A t := by
   rw [mpv, coeff, evalWord_rotatePhysical_ofFn, Matrix.trace_sum]
   simp only [Matrix.trace_smul, smul_eq_mul, mpv, coeff]
-
-/-- Symmetry-to-virtual-gauge theorem.
-
-If `A` is injective and has the same MPV family as its physical-leg rotation
-`B = rotatePhysical M A`, then `B` is gauge equivalent to `A`.
-
-This is the formal statement used in Corollary-4.1 style arguments: the
-analytic and group-theoretic content is in the hypothesis
-`SameMPV A (rotatePhysical M A)`, and the conclusion is provided by the
-single-block Fundamental Theorem. -/
-theorem gaugeEquiv_of_sameMPV_rotatePhysical
-    (M : Matrix (Fin d) (Fin d) ℂ)
-    (A : MPSTensor d D)
-    (hA : Kraus.IsInjective A)
-    (hSym : SameMPV A (rotatePhysical M A)) :
-    GaugeEquiv A (rotatePhysical M A) :=
-  fundamentalTheorem_singleBlock hA hSym
 
 /-- Corollary 4.1 (periodic form).
 

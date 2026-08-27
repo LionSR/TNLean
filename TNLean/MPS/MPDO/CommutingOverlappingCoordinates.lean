@@ -28,9 +28,8 @@ commutation through the common equivalence gives the remaining hypothesis of
 * `MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift`
 * `MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift`
 * `MPOTensor.TranslationInvariantBondData.overlappingLifts_pairBond_comm`
-* `MPOTensor.EtaLocalStructureData.reindex_bondAt_zero_eq_leftOverlappingLift`
-* `MPOTensor.EtaLocalStructureData.reindex_bondAt_one_eq_rightOverlappingLift`
-* `MPOTensor.EtaLocalStructureData.overlappingLifts_pairBond_comm`
+* `MPOTensor.TranslationInvariantBondData.reindex_bondAt_zero_eq_leftOverlappingLift`
+* `MPOTensor.TranslationInvariantBondData.reindex_bondAt_one_eq_rightOverlappingLift`
 
 ## References
 
@@ -276,52 +275,6 @@ Source: arXiv:1606.00608, Appendix C.2, equation `expression` and Proposition
 def pairBond (data : EtaLocalStructureData M) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
   data.bondData.pairBond
-
-/-- The pair-indexed bond is Hermitian because the source bond is positive semidefinite.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `expression`, lines 1571--1576. -/
-theorem pairBond_isHermitian (data : EtaLocalStructureData M) :
-    data.pairBond.IsHermitian := by
-  exact data.bondData.pairBond_isHermitian
-
-/-- The first adjacent translate of the eta-local bond is the left overlapping lift under
-the common three-site equivalence.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
-theorem reindex_bondAt_zero_eq_leftOverlappingLift
-    (data : EtaLocalStructureData M) :
-    Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
-        (threeSiteOverlappingEquiv (Fin d))
-        ((data.formAt 3 two_le_three).bondAt (0 : Fin 3)) =
-      Matrix.leftOverlappingLift data.pairBond := by
-  exact data.bondData.reindex_bondAt_zero_eq_leftOverlappingLift
-
-/-- The second adjacent translate of the eta-local bond is the right overlapping lift
-under the same three-site equivalence.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
-theorem reindex_bondAt_one_eq_rightOverlappingLift
-    (data : EtaLocalStructureData M) :
-    Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
-        (threeSiteOverlappingEquiv (Fin d))
-        ((data.formAt 3 two_le_three).bondAt (1 : Fin 3)) =
-      Matrix.rightOverlappingLift data.pairBond := by
-  exact data.bondData.reindex_bondAt_one_eq_rightOverlappingLift
-
-/-- The two abstract overlapping lifts of the pair-indexed eta-local bond commute.  Thus,
-together with `pairBond_isHermitian`, they satisfy exactly the hypotheses of
-`Matrix.exists_unitary_blockActions_of_overlappingLifts_commute`.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
-Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
-theorem overlappingLifts_pairBond_comm (data : EtaLocalStructureData M) :
-    Matrix.leftOverlappingLift data.pairBond *
-        Matrix.rightOverlappingLift data.pairBond =
-      Matrix.rightOverlappingLift data.pairBond *
-        Matrix.leftOverlappingLift data.pairBond := by
-  exact data.bondData.overlappingLifts_pairBond_comm
 
 end EtaLocalStructureData
 end MPOTensor

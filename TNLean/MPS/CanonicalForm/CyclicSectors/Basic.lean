@@ -3,8 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.Peripheral.CyclicDecomposition
-import QICLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.Core.BlockingInfrastructure

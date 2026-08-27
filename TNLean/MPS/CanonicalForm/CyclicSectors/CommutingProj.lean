@@ -15,8 +15,8 @@ orthogonal projections.
 
 ## Main declarations
 
+* `exists_blockDecomp_of_commuting_projections_with_letter_and_isometry`
 * `exists_blockDecomp_of_commuting_projections_with_letter`
-* `exists_blockDecomp_of_commuting_projections`
 
 ## References
 
@@ -160,40 +160,6 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter
       A P hPproj hPsum hLeft hComm
   exact ⟨dim, blocks, φ, hTPblocks, hMPV, hSectorTrace, hIntertwine, hMul, hStar,
     hLetter⟩
-
-/-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
-then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
-original tensor.
-
-This is the projection of
-`exists_blockDecomp_of_commuting_projections_with_letter` that forgets the
-letter-expansion identity. -/
-theorem exists_blockDecomp_of_commuting_projections
-    (A : MPSTensor d D)
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k) :
-    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
-      (φ : (k : Fin m) →
-        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
-      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
-      (∀ k (N : ℕ) (σ : Fin N → Fin d),
-        mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
-      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (d := d) (D := dim k)
-            (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D)
-            (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
-      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
-      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) := by
-  obtain ⟨dim, blocks, φ, hLC, hMPV, hTrace, hIntertwine, hMul, hStar, _hLetter⟩ :=
-    exists_blockDecomp_of_commuting_projections_with_letter A P hPproj hPsum hLeft hComm
-  exact ⟨dim, blocks, φ, hLC, hMPV, hTrace, hIntertwine, hMul, hStar⟩
 
 end CommutingProjectionDecomposition
 

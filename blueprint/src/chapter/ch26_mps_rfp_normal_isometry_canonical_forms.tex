@@ -256,81 +256,6 @@ ambient bond space.
     positive; the decomposition and the pair-index condition are immediate.
 \end{proof}
 
-\begin{theorem}[Per-block diagonal Kraus form]%
-    \label{thm:rfp_nt_structural_full_blocks}
-    \lean{MPSTensor.rfp_nt_structural_full_blocks}
-    \leanok
-    \uses{thm:rfp_nt_structural_full}
-    When each block $A_k$ of a multi-block tensor is a normal, left-canonical
-    renormalization fixed point, that block admits the isometry decomposition
-    $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$, with $X_k$ invertible, $\Lambda_k$
-    diagonal positive, and $U_k = (U_k^i)$ satisfies
-    $\sum_i (U_k^i)^\dagger U_k^i = I$ and the pair-index orthonormality
-    condition
-    \begin{align}
-        \sum_i \overline{(U_k^i)_{\alpha,\beta}}
-        (U_k^i)_{\alpha',\beta'}
-         & =
-        D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-        \notag
-    \end{align}
-    This is the blockwise form of the diagonal Kraus decomposition
-    (Theorem~\ref{thm:rfp_nt_structural_full}); see
-    \cite[Section~3]{Cirac2016MPDO_arXiv}. The source additionally imposes the
-    normalization $\tr(\Lambda_k) = 1$; the statement here gives positive
-    $\Lambda_k$ without it. That normalization is genuine rather than a
-    conjugation gauge, since rescaling $\Lambda_k \mapsto \Lambda_k/\tr(\Lambda_k)$
-    factors out as an overall scalar on $A_k^i$ (conjugation by $X_k$ preserves
-    the scale); the statement is thus the unnormalized diagonal Kraus form.
-    \emph{Scope restriction (source isometry).} Corollary~3.12 also
-    invokes the joint isometry condition
-    \begin{align}
-        \sum_i (U_k^i)_{\alpha,\beta}
-        \overline{(U_\ell^i)_{\alpha',\beta'}}
-         & =
-        \delta_{k,\ell}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-        \notag
-    \end{align}
-    The theorem above records the contracted per-block condition
-    $\sum_i (U_k^i)^\dagger U_k^i=I$ and the diagonal pair-index equation with
-    right-hand side
-    $D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$. It does not impose
-    the trace-normalization
-    $\tr(\Lambda_k)=1$, and it does not include the cross-block equations for
-    $k\ne\ell$.
-\end{theorem}
-% Scope restriction (source isometry) recorded in
-% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
-\begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_full}
-    Apply Theorem~\ref{thm:rfp_nt_structural_full} to each block.
-\end{proof}
-
-\begin{theorem}[Per-block unit pair-index decomposition]%
-    \label{thm:rfp_nt_structural_full_blocks_unit_pair}
-    \lean{MPSTensor.rfp_nt_structural_full_blocks_unit_pair}
-    \leanok
-    \uses{thm:rfp_nt_structural_full_blocks, thm:rfp_nt_structural_full_unit_pair}
-    Under the hypotheses of
-    Theorem~\ref{thm:rfp_nt_structural_full_blocks}, each block admits a
-    decomposition $A_k^i = X_k \Lambda_k U_k^i X_k^{-1}$ with
-    $\Lambda_k$ diagonal positive and
-    \begin{align}
-        \sum_i \overline{(U_k^i)_{\alpha,\beta}}
-        (U_k^i)_{\alpha',\beta'}
-         & =
-        \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
-        \notag
-    \end{align}
-    This is a blockwise unit pair-index decomposition. It still does not impose
-    the source trace-normalization of $\Lambda_k$ or the cross-block
-    orthogonality equations for distinct blocks.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_full_unit_pair}
-    Apply Theorem~\ref{thm:rfp_nt_structural_full_unit_pair} to each block.
-\end{proof}
-
 \begin{definition}[Square-root fixed-point form]%
     \label{def:is_isometry_canonical_form}
     \lean{MPSTensor.IsIsometryCanonicalForm}
@@ -539,24 +464,6 @@ ambient bond space.
     Theorem~\ref{thm:is_rfp_of_isometry_canonical_form}.
 \end{proof}
 
-\begin{theorem}[Per-block trace-normalized square-root form]%
-    \label{thm:isometry_canonical_form_of_rfp_nt_blocks}
-    \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks}
-    \leanok
-    \uses{def:is_isometry_canonical_form, thm:isometry_canonical_form_of_rfp_nt}
-    Each block of a multi-block tensor whose blocks are normal, left-canonical
-    renormalization fixed points has the square-root fixed-point form, with a
-    trace-normalized diagonal weight and a unit pair-index isometry. This is
-    the single-block trace-normalized form applied to each block; it omits the
-    cross-block orthogonality between distinct normal-tensor blocks.
-\end{theorem}
-% Scope restriction (cross-block orthogonality) recorded in
-% docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
-\begin{proof}\leanok
-    \uses{thm:isometry_canonical_form_of_rfp_nt}
-    Apply Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} to each block.
-\end{proof}
-
 Across all blocks, the repaired trace-normalized decomposition has the following
 representation.
 \begin{figure}[ht]
@@ -653,7 +560,9 @@ representation.
 Here $j$ labels the normal-tensor block and $q$ its repeated representation;
 the isometries in
 \cite[Section~3.4, lines~543--561]{Cirac2016MPDO_arXiv} also satisfy
-cross-block physical orthogonality. Those additional equations are not part
-of the per-block theorem above.
+cross-block physical orthogonality. Those additional equations are not part of
+the single-block square-root form of
+Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}, which is what applies to
+each block here.
 % Scope restriction: cross-block orthogonality omitted here; see
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.

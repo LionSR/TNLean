@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransportData
-import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.NormalEdgeBlockingTranslated
 
 /-!
@@ -22,11 +21,6 @@ namespace PEPS
 def squareLatticeCoordinateSwapEquiv (width height : ℕ) :
     SquareLatticeVertex width height ≃ SquareLatticeVertex height width :=
   Equiv.prodComm (Fin width) (Fin height)
-
-@[simp] theorem squareLatticeCoordinateSwapEquiv_apply {width height : ℕ}
-    (v : SquareLatticeVertex width height) :
-    squareLatticeCoordinateSwapEquiv width height v = (v.2, v.1) :=
-  rfl
 
 /-- Coordinate swap exchanges horizontal and vertical square-lattice neighbours. -/
 theorem squareLatticeHorizontalNeighbor_coordinateSwap {width height : ℕ}

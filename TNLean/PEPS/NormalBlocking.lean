@@ -807,20 +807,6 @@ def toRectangular
   twoByThree_injective := h.twoByThree_injective
   threeByTwo_injective := h.threeByTwo_injective
 
-@[simp] theorem toRectangular_twoByThreeRegion
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
-    (R : Finset (SquareLatticeVertex width height)) :
-    h.toRectangular.IsTwoByThreeRegion R ↔
-      IsTwoByThreeContiguousSquareLatticeRectangle R :=
-  Iff.rfl
-
-@[simp] theorem toRectangular_threeByTwoRegion
-    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
-    (R : Finset (SquareLatticeVertex width height)) :
-    h.toRectangular.IsThreeByTwoRegion R ↔
-      IsThreeByTwoContiguousSquareLatticeRectangle R :=
-  Iff.rfl
-
 /-- A bounded contiguous \(2\times3\) coordinate rectangle is injective under
 the square-lattice rectangular injectivity hypotheses.
 

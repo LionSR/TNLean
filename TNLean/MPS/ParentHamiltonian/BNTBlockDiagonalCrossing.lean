@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalChain
-import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalLastCrossing
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.WrappingWindow

@@ -545,10 +545,9 @@ The remaining obligations are the following.
           (\leanid{TNLean.PEPS.regionBoundaryConfigCongr}), the first strip read
           through the crossing collapse vanishes
           (\leanid{TNLean.PEPS.overlapLeft_firstStrip_weightCombination_eq_zero}),
-          and the bridge produces the rebuild hypothesis:
-          \leanid{TNLean.PEPS.overlap_bridge_rightCoupling_eq_zero} discharges
+          and the bridge produced the rebuild hypothesis
           $\sum_{b_2}\mathrm{row}(b_2)\cdot\mathrm{cc}_R(b_2,\sigma_{P_2},
-          \beta_{P_1})=0$ for the bridge row
+          \beta_{P_1})=0$ for the unrestricted bridge row
           \leanid{TNLean.PEPS.overlapBridgeRow}.
 
           Feeding the summed bridge row to the rebuild and inverting $B$
@@ -642,7 +641,7 @@ The remaining obligations are the following.
           per-edge gauge matrix.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.RegionInsertionTransfer},
-          \leanid{TNLean.PEPS.isRegionBlockedInsertionAlgebraIsomorphism_of_transfer}, and
+          \leanid{TNLean.PEPS.RegionInsertionTransfer.fwdAlgEquiv}, and
           \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_transfer}.}
 
           The identity-insertion bridge is
@@ -1171,9 +1170,8 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.CoarseBlockingFrame.isCrossingEdge_red_blue_or_blue_complement},
           \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_apply_eq},
           \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivBlue_apply_eq},
-          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivComplement_apply_eq},
           and
-          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_eq_legEquivBlue_on_rb_single}.}
+          \leanid{TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivComplement_apply_eq}.}
 
           With this layer in place, the residual content of both obligations is the
           purely combinatorial three-region merge collapse: the triple sum over coarse
@@ -1492,17 +1490,12 @@ The remaining obligations are the following.
           reindexed by the edge action and the vertex bijection, so blocked-region
           injectivity transports, and a one-edge blocking datum transports to a datum
           for the transported tensor at the image edge with the single red-to-blue
-          crossing carried across. Specialized to a translation-invariant tensor,
-          this carries one reference blocking datum at the reference edge of an
-          orientation class to a datum at every translate of that edge, for the same
-          tensor.\footnote{
+          crossing carried across.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.regionBlockedWeight_transport},
           \leanid{TNLean.PEPS.regionBlockedTensorInjective_transport},
-          \leanid{TNLean.PEPS.transportBlockingDataAlong},
-          \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong},
-          \leanid{TNLean.PEPS.translateBlockingData}, and
-          \leanid{TNLean.PEPS.isCrossingEdge_translateBlockingData}.}
+          \leanid{TNLean.PEPS.transportBlockingDataAlong}, and
+          \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong}.}
           The reference blocking datum at each class's reference edge is
           constructed from the rectangular injectivity hypotheses directly: the
           reference red and blue blocks are the two source
@@ -1861,9 +1854,10 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}); the proportionality scalar is
           unique once the comparison block is injective
           (\leanid{TNLean.PEPS.twoBlockScalarProportional_unique}). The torus scalar condition is then
-          assembled directly from the bare-edge absorbed equality plus the per-vertex two-block
-          proportionalities with a common ratio
-          (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_edgeAbsorbed}).
+          assembled from the bare-edge absorbed equality at the two one-site-different comparison
+          regions together with the per-vertex two-block proportionalities of common ratio, as the
+          unconditional torus theorem does
+          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}).
 
           What remains for an unconditional \path{hPV}, and hence for an unconditional torus
           Fundamental Theorem, are three pieces, all consuming the landed \(X\) above. First, the

@@ -8,6 +8,7 @@ import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.Adjoint
+import TNLean.MPS.SharedInfra.Scaling
 import QICLean.Channel.FixedPoint.CanonicalGauge
 import QICLean.Channel.Irreducible.Ergodicity
 import QICLean.Channel.Irreducible.PerronFrobenius
@@ -336,17 +337,6 @@ private theorem inverse_physical_action_of_twisted_companion
     _ = ζ⁻¹ • (Uᴴ * A i * Uᴴᴴ) := by
           simp
 
-/-- Scaling every Kraus matrix scales the transfer map by the squared scalar. -/
-private lemma transferMap_smul_apply
-    (c : ℂ)
-    (A : MPSTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (fun i => c • A i) X =
-      (c * starRingEnd ℂ c) • Kraus.transferMap A X := by
-  simp only [Kraus.transferMap_apply, Matrix.conjTranspose_smul]
-  simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
-  rfl
-
 /-- If the twisted companion family is gauge-phase equivalent to `A`, the gauge
 matrix can be normalized to a unitary and converted into the phased virtual
 symmetry relation from the string-order paper. -/
@@ -402,7 +392,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
       _ = X * Kraus.transferMap A 1 * Xᴴ := by rw [hXinQ]
       _ = Q := by rw [hNorm, Matrix.mul_one]
   have hQ_eigB : Kraus.transferMap B Q = (Complex.normSq ζ : ℂ) • Q := by
-    rw [hB_C, transferMap_smul_apply, hQ_eigC]
+    rw [hB_C, transferMap_smul, hQ_eigC]
     congr 1
     simpa [Complex.normSq_eq_conj_mul_self] using mul_comm ζ (starRingEnd ℂ ζ)
   have hQ_eigA : Kraus.transferMap A Q = (Complex.normSq ζ : ℂ) • Q := by

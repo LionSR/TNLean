@@ -321,23 +321,10 @@ theorem edgeInsertedCoeff_eq_doubled (A : Tensor G d) (e : Edge G)
       ∏ v : V, A.component v (ξ v) (σ v) with hF
   have hcollapse :
       edgeInsertedCoeff (G := G) A e σ N =
-        ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, F ξ.1 := by
-    rw [edgeInsertedCoeff_eq_sum_local]
-    calc
-      _ = ∑ ξ : OpenLocalConfig (G := G) A,
-              if IsConsistentOff (G := G) A e ξ then F ξ else 0 := by
-            refine Finset.sum_congr rfl ?_
-            intro ξ _
-            rw [prod_off_delta_eq]
-            by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hF]
-      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
-            F ξ.1 := by
-            rw [Finset.sum_ite]
-            simp only [Finset.sum_const_zero, add_zero]
-            rw [← Finset.sum_subtype_eq_sum_filter
-              (s := (Finset.univ : Finset (OpenLocalConfig (G := G) A)))
-              (f := F) (p := IsConsistentOff (G := G) A e)]
-            simp
+        ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, F ξ.1 :=
+    (edgeInsertedCoeff_eq_sum_local A e σ N).trans
+      (sum_off_delta_eq_sum_consistentOff A e N
+        (fun ξ => ∏ v : V, A.component v (ξ v) (σ v)))
   rw [hcollapse]
   refine Fintype.sum_equiv (consistentOffEquivDoubled (G := G) A e) (fun ξ => F ξ.1) _ ?_
   rintro ⟨ξ, hξ⟩

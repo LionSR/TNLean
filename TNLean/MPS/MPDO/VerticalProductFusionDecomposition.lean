@@ -11,6 +11,20 @@ import TNLean.MPS.MPDO.VerticalProductCornerPositivity
 This file assembles positive original-label corners into the fixed-pair
 fusion coisometries of CPSV16, Appendix C.4.
 
+**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
+active family; the construction uses the distinguished retained copy of each
+label and inserts no unsupported corner.  This applies to
+`OriginalCornerFamily.toBNTFusionCoisometryFamily`,
+`exists_bntFusionCoisometryFamily`, and
+`transportedVerticalSector_exists_positiveFusionDecomposition`.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** For the same three declarations
+the fusion map has retained-row orientation and is a coisometry onto the
+active direct sum; its adjoint reconstructs the raw product exactly, including
+a possible common zero corner.  Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -216,16 +230,6 @@ private theorem groupedFusionCoisometry_reconstruction
 /-- The positive original-label corners determine the fusion coisometries of
 the BNT family.
 
-**Local fix (Figure-11 fixed-pair support):** The construction uses the
-distinguished retained copy of each label and permits an empty active family
-for its product pair.  Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
-
-**Local fix (Figure-11 fusion coisometry):** The row map is a coisometry onto
-the active direct sum; its adjoint reconstructs the raw product, including a
-possible common zero corner.  Documented in
-`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
-
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 noncomputable def toBNTFusionCoisometryFamily
     (hMult : ∀ α, 0 < mult α) : BNTFusionCoisometryFamily (Fin g) D where
@@ -253,15 +257,6 @@ end OriginalCornerFamily
 
 /-- Positive normalized product corners determine a family of fusion
 coisometries for the original one-site BNT labels.
-
-**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
-active family; no unsupported corner is inserted. Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
-
-**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
-orientation and is a coisometry onto the active direct sum. Its adjoint gives
-the exact reconstruction. Documented in
-`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_bntFusionCoisometryFamily
@@ -413,15 +408,6 @@ theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv
 positive diagonal multiplicity matrices and coisometries onto the active
 product sectors.  The adjoint coisometries reconstruct every product letter,
 including when a common zero corner is discarded by the forward map.
-
-**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
-active family; no unsupported corner is inserted.  Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
-
-**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
-orientation and is a coisometry onto the active direct sum.  Its adjoint gives
-the exact reconstruction.  Documented in
-`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem transportedVerticalSector_exists_positiveFusionDecomposition

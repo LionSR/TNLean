@@ -199,73 +199,6 @@ theorem insertedTensor_braRightAction_toMPSTensor
   · intro i hi
     simp [hi.symm]
 
-/-- The two first-site identities in Proposition 4.13 imply equality of the
-opposite-corner insertions on every BNT representative.
-
-Positive-length MPV equality transports the first-site identities from the
-doubled-index tensor of `M` to the representative-indexed sector
-decomposition.  The representative-grouped Lemma L then separates the BNT
-representatives while grouping all repeated copies of each representative.
-
-Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858, applied to
-the contractions in Proposition 4.13, lines 1873--1887. -/
-theorem representative_opposite_insert_eq_of_rotated_mpo_entries
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
-    (Q : Matrix (Fin d) (Fin d) ℂ)
-    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, Q (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
-      ∑ i : Fin d, ∑ j : Fin d, Q (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * Q j (ρ 0).modNat))
-    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, Q (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n => (ρ (Fin.succ n)).modNat)) =
-      ∑ j : Fin d,
-        mpo M (N + 1)
-          (Fin.cons (ρ 0).divNat (fun n => (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n => (ρ (Fin.succ n)).modNat)) * Q j (ρ 0).modNat)) :
-    ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
-      MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by
-  intro j
-  calc
-    MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
-        MPSTensor.insertedTensor (MPSTensor.ketLeftAction Q) (S.basis j) :=
-      (hCF.insertedTensor_basis_eq_of_firstSiteActionAgree
-        ((MPSTensor.firstSiteActionAgree_ketLeft_braRight M Q hComm).of_sameMPVPos hM)
-        j).symm
-    _ = MPSTensor.insertedTensor
-        (MPSTensor.ketLeftBraRightAction Q) (S.basis j) :=
-      hCF.insertedTensor_basis_eq_of_firstSiteActionAgree
-        ((MPSTensor.firstSiteActionAgree_ketLeft_ketLeftBraRight M Q hInv).of_sameMPVPos hM)
-        j
-
-/-- A one-sided invariant Hermitian matrix reduces every horizontal BNT
-representative.
-
-If `Q M = Q M Q` for the vertically viewed tensor, positivity of every MPDO
-density operator gives the two first-site identities in Proposition 4.13.
-The representative-grouped Lemma L then shows that the insertions of `M Q`
-and `Q M Q` agree on every representative.
-
-This is the representative-indexed form of the invariant-projection step in
-arXiv:1606.00608, Proposition 4.13, lines 1873--1887. -/
-theorem representative_braRight_eq_ketLeftBraRight_of_invariant
-    (M : MPOTensor d D) (hMpdo : IsMPDO M)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hCF : MPSTensor.IsBNTCanonicalForm S)
-    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
-    {Q : Matrix (Fin d) (Fin d) ℂ} (hQ : Q.IsHermitian)
-    (hQM : M.ketLeftMul Q = (M.ketLeftMul Q).braRightMul Q) :
-    ∀ j, MPSTensor.insertedTensor (MPSTensor.braRightAction Q) (S.basis j) =
-      MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction Q) (S.basis j) := by
-  exact hCF.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree M.toMPSTensor hM
-    (firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant M hMpdo hQ hQM)
-
 /-- **Lemma L on the original bond space.**
 
 Let `M` be in normalized BNT-refined horizontal form. If two physical operators
@@ -357,7 +290,7 @@ theorem IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight
     intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
   exact ⟨S, hCF, hM,
-    representative_braRight_eq_ketLeftBraRight_of_invariant
+    basis_braRight_eq_ketLeftBraRight_of_invariant
       M hMpdo S hCF hM hQ hQM⟩
 
 /-- A one-sided invariant Hermitian matrix also reduces the MPO tensor from
@@ -392,7 +325,7 @@ theorem IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant
   have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor := by
     intro N _hN σ
     exact (hGauge.sameMPV N σ).symm
-  have hBasis := representative_braRight_eq_ketLeftBraRight_of_invariant
+  have hBasis := basis_braRight_eq_ketLeftBraRight_of_invariant
     M hMpdo S hCF hM hQ hQM
   have hSector :
       MPSTensor.insertedTensor (MPSTensor.braRightAction Q) S.toTensor =

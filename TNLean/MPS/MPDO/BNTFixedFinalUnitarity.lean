@@ -89,27 +89,9 @@ theorem sigmaDiagonal_conjTranspose_mul_eq_one
     (i : ι) :
     (C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R i => ⟨i, y⟩))ᴴ *
         C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R i => ⟨i, y⟩) = 1 := by
-  ext x y
-  have hentry := congrArg (fun M => M ⟨i, x⟩ ⟨i, y⟩) hunit
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-    Matrix.submatrix_apply, Fintype.sum_sigma] at hentry ⊢
-  rw [Finset.sum_eq_single i] at hentry
-  · by_cases hxy : x = y
-    · subst y
-      simpa using hentry
-    · have hsigma : Sigma.mk i x ≠ Sigma.mk i y := by
-        intro h
-        cases h
-        exact hxy rfl
-      simp only [hxy, hsigma, ↓reduceIte] at hentry ⊢
-      exact hentry
-  · intro j _ hji
-    apply Finset.sum_eq_zero
-    intro z _
-    have hz := congrArg (fun M => M z x) (hoff i j hji)
-    simp only [Matrix.submatrix_apply, Matrix.zero_apply] at hz
-    simp [hz]
-  · simp
+  simpa using
+    sigmaDiagonal_mul_conjTranspose_eq_one (L := R) (R := L) Cᴴ (by simpa using hunit)
+      (fun i j hji => by simpa using congrArg Matrix.conjTranspose (hoff i j hji)) i
 
 end Matrix
 

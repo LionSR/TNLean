@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.KroneckerFactorPositivity
 import QICLean.Algebra.SpinCover.Basic
+import TNLean.Algebra.NegMulLog
 import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
@@ -58,28 +60,6 @@ Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--935. -/
 noncomputable def M : MPOTensor 2 2 :=
   fun i j => if i = j then Matrix.diagonal ![(1 : ℂ), sigmaZ i i] else 0
 
-@[simp] private lemma M_zero_zero : M 0 0 = (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [M, sigmaZ, SpinCover.pauli]
-
-@[simp] private lemma M_one_one : M 1 1 = sigmaZ := by
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [M, sigmaZ, SpinCover.pauli]
-
-@[simp] private lemma M_zero_one : M 0 1 = 0 := by simp [M]
-@[simp] private lemma M_one_zero : M 1 0 = 0 := by simp [M]
-
-/-- The $\sigma_z$ eigenvalue at one physical letter. -/
-noncomputable def siteSign (i : Fin 2) : ℂ := sigmaZ i i
-
-/-- The eigenvalue of $\sigma_z^{\otimes N}$ on a binary configuration. -/
-noncomputable def configurationSign {N : ℕ} (σ : Fin N → Fin 2) : ℂ :=
-  ∏ k, siteSign (σ k)
-
-private lemma siteSign_eq_one_or_neg_one (i : Fin 2) :
-    siteSign i = 1 ∨ siteSign i = -1 := by
-  fin_cases i <;> simp [siteSign, sigmaZ, SpinCover.pauli]
-
 private lemma prod_M_diagonal :
     ∀ {N : ℕ} (σ : Fin N → Fin 2),
       (List.ofFn fun k => M (σ k) (σ k)).prod =
@@ -96,7 +76,7 @@ private lemma prod_M_diagonal :
         ih (fun i => σ i.succ), Matrix.diagonal_mul_diagonal]
       ext a b
       fin_cases a <;> fin_cases b <;>
-        simp [configurationSign, Fin.prod_univ_succ, siteSign]
+        simp [configurationSign, Fin.prod_univ_succ, siteSign, sigmaZ]
 
 private lemma prod_M_off_diagonal {N : ℕ} {σ τ : Fin N → Fin 2}
     (hστ : σ ≠ τ) :
@@ -133,7 +113,7 @@ theorem rho_eq_finKronecker (N : ℕ) (_hN : 0 < N) :
   ext σ τ
   by_cases hστ : σ = τ
   · subst τ
-    simp [Matrix.finKronecker_apply, configurationSign, siteSign,
+    simp [Matrix.finKronecker_apply, configurationSign, siteSign, sigmaZ,
       Matrix.diagonal_apply_eq]
   · rw [Matrix.diagonal_apply_ne _ hστ]
     obtain ⟨k, hk⟩ := Function.ne_iff.mp hστ
@@ -145,26 +125,6 @@ theorem rho_eq_finKronecker (N : ℕ) (_hN : 0 < N) :
       apply Finset.prod_eq_zero (Finset.mem_univ k)
       exact sigmaZ_apply_ne hk
     rw [hone, hz, add_zero]
-
-private lemma configurationSign_eq_one_or_neg_one {N : ℕ} (σ : Fin N → Fin 2) :
-    configurationSign σ = 1 ∨ configurationSign σ = -1 := by
-  induction N with
-  | zero =>
-      left
-      simp [configurationSign]
-  | succ N ih =>
-      have hprod : configurationSign σ =
-          siteSign (σ 0) * configurationSign (σ ∘ Fin.succ) := by
-        rw [configurationSign, Fin.prod_univ_succ]
-        rfl
-      rw [hprod]
-      rcases siteSign_eq_one_or_neg_one (σ 0) with hhead | hhead
-      · rcases ih (σ ∘ Fin.succ) with htail | htail
-        · left; rw [hhead, htail, one_mul]
-        · right; rw [hhead, htail, one_mul]
-      · rcases ih (σ ∘ Fin.succ) with htail | htail
-        · right; rw [hhead, htail, neg_one_mul]
-        · left; rw [hhead, htail]; norm_num
 
 /-- The literal tensor generates positive semidefinite operators at every
 positive chain length, hence is an MPDO tensor in the project convention.
@@ -181,27 +141,6 @@ theorem M_isMPDO : IsMPDO M := by
 
 /-! ### Trace, one-site loss, and saturation of the area law -/
 
-private lemma sum_siteSign_eq_zero : (∑ a : Fin 2, siteSign a) = (0 : ℂ) := by
-  rw [Fin.sum_univ_two]
-  norm_num [siteSign, sigmaZ, SpinCover.pauli]
-
-private lemma sum_configurationSign_eq_zero {n : ℕ} (hn : 0 < n) :
-    ∑ w : Fin n → Fin 2, configurationSign w = 0 := by
-  have hcard : Fintype.card (Fin n) = n := Fintype.card_fin n
-  calc
-    ∑ w : Fin n → Fin 2, configurationSign w =
-        ∑ w : Fin n → Fin 2, (∏ k : Fin n, siteSign (w k)) := rfl
-    _ = ∑ w ∈ (Fintype.piFinset fun (_ : Fin n) => (Finset.univ : Finset (Fin 2))),
-        (∏ k : Fin n, siteSign (w k)) := by simp [Fintype.piFinset_univ]
-    _ = ∏ k : Fin n, (∑ a ∈ (Finset.univ : Finset (Fin 2)), siteSign a) := by
-      rw [← Finset.prod_univ_sum (fun (_ : Fin n) => (Finset.univ : Finset (Fin 2)))
-        (fun (_ : Fin n) a => siteSign a)]
-    _ = ∏ _k : Fin n, (∑ a : Fin 2, siteSign a) := by simp
-    _ = ∏ _k : Fin n, (0 : ℂ) := by rw [sum_siteSign_eq_zero]
-    _ = 0 := by
-      rw [Finset.prod_const, Finset.card_univ, hcard]
-      exact zero_pow hn.ne'
-
 /-- The trace of the literal positive-length operator is $2^N$.
 
 Source formula: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--936. -/
@@ -214,19 +153,6 @@ theorem trace_rho (N : ℕ) (hN : 0 < N) :
 private lemma normalizedMPO_M_eq (N : ℕ) (hN : 0 < N) :
     normalizedMPO M N = ((2 : ℂ)⁻¹ ^ N) • mpo M N := by
   rw [normalizedMPO, trace_rho N hN, inv_pow]
-
-private lemma configurationSign_append {L K : ℕ}
-    (u : Fin L → Fin 2) (w : Fin K → Fin 2) :
-    configurationSign (Fin.append u w) = configurationSign u * configurationSign w := by
-  rw [configurationSign, configurationSign, configurationSign, Fin.prod_univ_add]
-  simp [Fin.append_left, Fin.append_right]
-
-private lemma configurationSign_append_cast {L K N : ℕ} (hN : N = L + K)
-    (u : Fin L → Fin 2) (w : Fin K → Fin 2) :
-    configurationSign (Fin.append u w ∘ Fin.cast hN) =
-      configurationSign u * configurationSign w := by
-  subst hN
-  simp [configurationSign_append]
 
 private lemma reducedBlockState_M_apply {N L : ℕ} (hL : L ≤ N) (hN : 0 < N)
     (u v : Fin L → Fin 2) :
@@ -313,15 +239,6 @@ theorem one_site_trace_loses_sigmaZ (L : ℕ) (hL : 1 ≤ L) :
         (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :=
   reducedBlockState_M_eq_scaled_one hL (by omega)
 
-private lemma negMulLog_pow_inv_mul (d : ℝ) (hd : d ≠ 0) :
-    d * Real.negMulLog (d⁻¹) = Real.log d := by
-  rw [Real.negMulLog]
-  calc
-    d * (-(d⁻¹) * Real.log (d⁻¹)) = -(d * d⁻¹ * Real.log (d⁻¹)) := by ring
-    _ = -(1 * Real.log (d⁻¹)) := by field_simp [hd]
-    _ = -Real.log (d⁻¹) := by simp
-    _ = Real.log d := by rw [Real.log_inv, neg_neg]
-
 private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
     (hL : L ≤ N) (hM : (mpo M N).PosSemidef) :
     blockEntropy M N L hL hM = L * Real.log 2 := by
@@ -357,7 +274,7 @@ private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
       _ = ((2⁻¹ : ℝ) ^ L : ℝ) := by rw [Complex.ofReal_re]
   rw [hre, show ((2⁻¹ : ℝ) ^ L) = ((2 ^ L : ℝ)⁻¹) by simp [inv_pow]]
   push_cast
-  rw [negMulLog_pow_inv_mul ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num)), Real.log_pow]
+  rw [Real.mul_negMulLog_inv ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num)), Real.log_pow]
 
 /-- The literal tensor satisfies saturation of the area law: every nonempty proper
 reduced block is maximally mixed, so $S_L=L\log 2$ and the mutual information
@@ -465,5 +382,6 @@ theorem M_not_isRFPViaTS : ¬ IsRFPViaTS M := by
   intro h
   exact physTraceTransfer_M_not_idempotent
     (physTraceTransfer_sq_of_isRFPViaTS M h)
+
 
 end MPOTensor.CPSVExample412Literal

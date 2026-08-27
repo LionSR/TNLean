@@ -95,6 +95,20 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.reindex` identity. The three equivalences remain explicit, so the
   source-cut orientations are still visible and no searching tactic is used.
 
+### blocked-coordinate transport of a channel — promoted
+- **Pattern:** relabel the source matrix index along one equivalence, conjugate
+  by a rectangular isometry, and relabel the target index back along a second
+  equivalence; then assemble trace-preserving complete positivity from the two
+  reindexings and the single-Kraus conjugation.
+- **Seen:** four defining occurrences and four accompanying positivity proofs
+  in `TNLean/MPS/MPDO/PhysicalSectorPhysicalTransport.lean` before promotion
+  (2026-08-27).
+- **Abstraction:** the private `blockTransportMap` and
+  `blockTransportMap_isKrausCPTP` at the head of that file.
+- **Notes:** the four blocked physical-sector transports and their inverses now
+  differ only in the two coordinate equivalences and the isometry, so the
+  blocking convention stays explicit at each call site.
+
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
   site by rewriting the periodic trace as the trace of the vertical loop and
@@ -512,12 +526,12 @@ abstracted — record why, so it is not re-proposed).
   identify equal retained-sector words with a dependent block-diagonal entry.
 - **Seen:** three suffix lengths in
   `CyclicActiveFourthRegionContraction.lean` and
-  `CyclicActiveSuffixMarginal.lean` before promotion.
+  `CyclicActiveAdjacentCoefficientExtraction.lean` before promotion.
 - **Abstraction:**
   `PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction`
   in `TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean`.
 - **Notes:** the arbitrary suffix length is the mathematical parameter; the
-  source-facing one-, two-, and three-suffix theorems are specializations.
+  source-facing three-suffix theorem is a specialization.
 
 ### partial trace under product reindexing — promoted
 - **Pattern:** split a simultaneous relabelling of both tensor factors into
@@ -657,6 +671,33 @@ abstracted — record why, so it is not re-proposed).
   three callers establish it respectively from irreducibility or from
   fixed-length vector spreading.
 
+### off-edge delta collapse to the consistent-off-`e` subtype — promoted
+- **Pattern:** a sum over all open local configurations of a three-factor
+  summand whose first factor is the product of the per-edge consistency deltas
+  away from a distinguished edge, collapsed by `prod_off_delta_eq` into an
+  `if … then … else 0`, then re-expressed as a sum over the subtype of
+  configurations consistent off that edge via `Finset.sum_ite` followed by
+  `Finset.sum_subtype_eq_sum_filter`.
+- **Seen:** four occurrences across `PEPS/FundamentalTheorem/GaugeAction.lean`
+  (`edgeInsertedCoeff_eq_sum_local`),
+  `PEPS/FundamentalTheorem/EdgeInsertion.lean` (`open_gauge_sum_over_outer`),
+  `PEPS/FundamentalTheorem/OneVertexComparison.lean`
+  (`edgeInsertedCoeff_eq_doubled`), and `PEPS/RegionBlock/GaugeBridge.lean`
+  (`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`) before promotion — four
+  files, clearing the rule of three.
+- **Abstraction:** `TNLean.PEPS.sum_off_delta_eq_sum_consistentOff` in
+  `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`. The trailing factor is
+  taken as an arbitrary function of the configuration, which is what lets the
+  four callers pass their own per-vertex tensor product, gauge-matrix product,
+  or region-assembled component product.
+- **Notes:** the decidability of consistency off the edge is an explicit
+  `DecidablePred` instance argument rather than an `open scoped Classical in`
+  on the lemma; this is load-bearing, since each caller derives its own
+  instance from a `classical` in its proof and those must unify with the
+  lemma's. Each call site collapses a twenty-odd-line `calc` to a two- to
+  five-line term. Net source delta over the four sites: −69 lines against +37
+  for the lemma.
+
 ---
 
 ## Completed refactors
@@ -763,7 +804,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** put a matrix in the kernel of `MPSTensor.traceMulRightPi`, expand the
   map pointwise, and use `traceMulRightPi_ker_eq_bot` to conclude that the matrix is zero.
 - **Reuse:** `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` in
-  `TNLean/Algebra/TracePairing.lean` accepts the pointwise vanishing trace pairings directly.
+  `TNLean/MPS/Core/TracePairing.lean` accepts the pointwise vanishing trace pairings directly.
 - **Result:** all six known expansions now invoke the shared consequence of injectivity:
   the three public selected-sector visibility proofs, the injective invariant-projection
   argument, the per-block Gram-map injectivity proof, and the one-site boundary block-window
@@ -827,6 +868,17 @@ abstracted — record why, so it is not re-proposed).
   wrappers in `LocalPurificationAreaLaw.lean` and `RFPViaTSSAL.lean` were removed, and the
   pre-existing third wrapper in `MutualInformationDataProcessing.lean` now also uses
   `Entropy.mutualInformation_congr`.
+- **Further evidence (2026-08-27):** four more copies of the same matrix-entry
+  congruence — `cyclicActiveLeftBoundary_entry_eq_of_heq` and
+  `cyclicActiveRightBoundary_entry_eq_of_heq` in `CyclicActiveCutRegrouping.lean`,
+  `rightTensor_eq_of_heq` and `leftTensor_eq_of_heq` in
+  `CyclicActiveFourthRegionContraction.lean` — were replaced by the single
+  index-family lemma `Matrix.entry_eq_of_heq` in
+  `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`. The family goes in as an
+  explicit lambda, so the per-boundary weight or virtual-index argument is
+  captured rather than threaded through the lemma signature.
+  `neighboringOperator_entry_eq_of_heq` stays: its conclusion is indexed by a
+  sector pair, not a single index family.
 
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
@@ -878,11 +930,12 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/ParentHamiltonian/CyclicWindowIndex.lean` provide the shared API; the
   product theorem holds for every commutative monoid. Isolating these declarations from
   `ParentHamiltonian/Defs.lean` avoids invalidating its broad downstream import cone.
-- **Result:** the exact call sites are `reindex_sitewisePhysicalMatrix_windowComplement`
-  and `embed_twoSiteSectorProjection_eq_finKronecker` in
+- **Result:** the exact call sites are the shared public lemma
+  `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` in
+  `PhysicalSectorProductTransport.lean`, used from both that file and
   `PhysicalSupportProductTransport.lean`, and
-  `reindex_physicalCoordinateMatrixN_windowComplement` in
-  `PhysicalSectorProductTransport.lean`. Across the four changed Lean files, including
+  `embed_twoSiteSectorProjection_eq_finKronecker` in
+  `PhysicalSupportProductTransport.lean`. Across the four changed Lean files, including
   the generated ParentHamiltonian aggregator, the final diff is 90 insertions and 87
   deletions, a net increase of 3 lines.
 
@@ -1065,7 +1118,7 @@ abstracted — record why, so it is not re-proposed).
   combined scalar normalization, transfer-map scaling, and the full inverse
   physical-action calculation in one large proof.
 - **Reuse:** `inverse_physical_action_of_twisted_companion` isolates the
-  unitary change-of-basis calculation, while `transferMap_smul_apply` replaces
+  unitary change-of-basis calculation, while `transferMap_smul` replaces
   the entrywise scaled-Kraus expansion.
 - **Result:** `virtualUnitary_of_gaugePhaseEquiv_twisted` falls from 13.3 to
   6.7 seconds in the declaration profiler. The full profiled source check falls
@@ -1497,9 +1550,9 @@ current counts and full location lists).
   cancel the resulting normalization with
   `(x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1` for `0 < x`.
 - **Seen:** 2 occurrences in `TNLean/MPS/MPU/PhysicalAncilla.lean`:
-  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 188--210), for
+  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 160--182), for
   `A ij * X * (A ij)ᴴ`, and
-  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 252--273), for
+  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 224--245), for
   `(A ij)ᴴ * A ij`.
 - **Abstraction (proposed):** if a third occurrence appears, extract the
   lowest-sufficient helper lemma shared by both matrix-product orientations;

@@ -51,14 +51,6 @@ omit [Fintype V] in
       Fin.cast (congr_fun hDim ie.1) (η ie) := by
   simp [castLocalVirtualConfig, finCongr_apply]
 
-omit [Fintype V] in
-@[simp] theorem castLocalVirtualConfig_symm_apply (A B : Tensor G d)
-    (hDim : A.bondDim = B.bondDim) (v : V)
-    (η : LocalVirtualConfig B v) (ie : IncidentEdge G v) :
-    (castLocalVirtualConfig A B hDim v).symm η ie =
-      Fin.cast (congr_fun hDim.symm ie.1) (η ie) := by
-  simp [castLocalVirtualConfig]
-
 /-- Reindex coefficient functions on local virtual configurations along
 `castLocalVirtualConfig`. -/
 noncomputable def castLocalCoeffMap (A B : Tensor G d)

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.Insertion
 import TNLean.PEPS.FundamentalTheorem
-import TNLean.PEPS.NormalEdgeGauge
 
 /-!
 # Region-versus-complement comparison for the normal PEPS Fundamental Theorem

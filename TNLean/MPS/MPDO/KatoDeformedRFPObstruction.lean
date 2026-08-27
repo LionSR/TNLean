@@ -4,6 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import TNLean.Algebra.ComplexSqrt
+import TNLean.Algebra.NegMulLog
+import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.SectorTrace
 import TNLean.MPS.MPDO.AreaLaw
@@ -64,10 +67,6 @@ namespace MPOTensor.KatoDeformedRFPObstruction
 noncomputable def pauliZ : Matrix (Fin 2) (Fin 2) ℂ :=
   !![1, 0; 0, -1]
 
-/-- The sign carried by one physical letter in the second virtual sector. -/
-noncomputable def siteSign (i : Fin 2) : ℂ :=
-  pauliZ i i
-
 /-- Kato's $p=1/2$ tensor after a physical Hadamard conjugation.
 
 Thus $K^{00}=\operatorname{diag}(1/2,1/4)$,
@@ -98,14 +97,6 @@ noncomputable def tensor : MPOTensor 2 2 :=
   simp [tensor]
 
 /-! ### Closed operators at arbitrary length -/
-
-/-- The product of the $Z$ eigenvalues along a physical configuration. -/
-noncomputable def configurationSign {N : ℕ} (σ : Fin N → Fin 2) : ℂ :=
-  ∏ k, siteSign (σ k)
-
-private lemma siteSign_eq_one_or_neg_one (i : Fin 2) :
-    siteSign i = 1 ∨ siteSign i = -1 := by
-  fin_cases i <;> simp [siteSign, pauliZ]
 
 private lemma prod_tensor_diagonal :
     ∀ {N : ℕ} (σ : Fin N → Fin 2),
@@ -153,32 +144,6 @@ theorem mpo_tensor_eq_diagonal (N : ℕ) :
     simp [Fin.sum_univ_two]
   · rw [Matrix.diagonal_apply_ne _ hστ, mpo_apply, mpoMatrixEntry,
       evalWord_ofFn, prod_tensor_off_diagonal hστ, Matrix.trace_zero]
-
-private lemma configurationSign_eq_one_or_neg_one {N : ℕ} (σ : Fin N → Fin 2) :
-    configurationSign σ = 1 ∨ configurationSign σ = -1 := by
-  induction N with
-  | zero =>
-      left
-      simp [configurationSign]
-  | succ N ih =>
-      have hprod :
-          configurationSign σ =
-            siteSign (σ 0) * configurationSign (σ ∘ Fin.succ) := by
-        rw [configurationSign, Fin.prod_univ_succ]
-        rfl
-      rw [hprod]
-      rcases siteSign_eq_one_or_neg_one (σ 0) with hhead | hhead
-      · rcases ih (σ ∘ Fin.succ) with htail | htail
-        · left
-          rw [hhead, htail, one_mul]
-        · right
-          rw [hhead, htail, one_mul]
-      · rcases ih (σ ∘ Fin.succ) with htail | htail
-        · right
-          rw [hhead, htail, neg_one_mul]
-        · left
-          rw [hhead, htail]
-          norm_num
 
 /-- Kato's $p=1/2$ tensor generates a positive semidefinite operator at every
 positive chain length.
@@ -367,21 +332,14 @@ theorem tensor_not_isRFPViaTS : ¬ IsRFPViaTS tensor := by
 
 /-! ### CPSV canonical form of the doubled-index MPS tensor -/
 
-private lemma sqrt2_sq_complex : ((Real.sqrt 2 : ℂ) ^ 2) = (2 : ℂ) := by
-  have hsq_real : (Real.sqrt 2 : ℝ) ^ 2 = (2 : ℝ) :=
-    Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)
-  calc
-    ((Real.sqrt 2 : ℂ) ^ 2) = (((Real.sqrt 2 : ℝ) ^ 2 : ℝ) : ℂ) := by push_cast; ring
-    _ = ((2 : ℝ) : ℂ) := by rw [hsq_real]
-    _ = (2 : ℂ) := rfl
-
 private noncomputable def blockLetterAmplitude : ℂ := (1 : ℂ) / Real.sqrt 2
 
 private lemma blockLetterAmplitude_sq : blockLetterAmplitude ^ 2 = (1 / 2 : ℂ) := by
   calc
     blockLetterAmplitude ^ 2 = ((1 : ℂ) / Real.sqrt 2) ^ 2 := rfl
     _ = 1 / ((Real.sqrt 2 : ℂ) ^ 2) := by ring
-    _ = 1 / (2 : ℂ) := by rw [sqrt2_sq_complex]
+    _ = 1 / (2 : ℂ) := by
+      norm_num [Complex.ofReal_sqrt_sq 2 (by norm_num : (0 : ℝ) ≤ 2)]
     _ = (1 / 2 : ℂ) := by norm_num
 
 private noncomputable def block0Weight : ℂ := (1 : ℂ) / Real.sqrt 2
@@ -400,7 +358,8 @@ private lemma block0Weight_times_amplitude :
     block0Weight * blockLetterAmplitude =
         ((1 : ℂ) / Real.sqrt 2) * ((1 : ℂ) / Real.sqrt 2) := rfl
     _ = 1 / ((Real.sqrt 2 : ℂ) ^ 2) := by ring
-    _ = 1 / (2 : ℂ) := by rw [sqrt2_sq_complex]
+    _ = 1 / (2 : ℂ) := by
+      norm_num [Complex.ofReal_sqrt_sq 2 (by norm_num : (0 : ℝ) ≤ 2)]
     _ = (1 / 2 : ℂ) := by norm_num
 
 private lemma block1Weight_times_amplitude :
@@ -409,7 +368,8 @@ private lemma block1Weight_times_amplitude :
     block1Weight * blockLetterAmplitude =
         ((1 : ℂ) / (2 * Real.sqrt 2)) * ((1 : ℂ) / Real.sqrt 2) := rfl
     _ = 1 / (2 * ((Real.sqrt 2 : ℂ) ^ 2)) := by ring
-    _ = 1 / (2 * (2 : ℂ)) := by rw [sqrt2_sq_complex]
+    _ = 1 / (2 * (2 : ℂ)) := by
+      norm_num [Complex.ofReal_sqrt_sq 2 (by norm_num : (0 : ℝ) ≤ 2)]
     _ = (1 / 4 : ℂ) := by ring
 
 private noncomputable def katoCFBlock0 : MPSTensor 4 1 :=
@@ -534,14 +494,14 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
         · right; rfl
       rcases hp_val with rfl | rfl
       · fin_cases x
-        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat,
+        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
             katoCFBlock0, block0Weight_times_amplitude]
-        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat,
+        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
             katoCFBlock1, block1Weight_times_amplitude]
       · fin_cases x
-        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat,
+        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
             katoCFBlock0, block0Weight_times_amplitude]
-        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat,
+        · simp [tensor, siteSign, Fin.divNat, Fin.modNat,
             katoCFBlock1, block1Weight_times_amplitude]
     · -- p.divNat ≠ p.modNat means p is 1 or 2; tensor = 0 and blocks = 0
       have hp12 : p = (1 : Fin (2*2)) ∨ p = (2 : Fin (2*2)) := by
@@ -573,8 +533,8 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
           exact hp_diag
         · right; rfl
       rcases hp_val with rfl | rfl
-      · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, h]
-      · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, h]
+      · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
+      · simp [tensor, siteSign, Fin.divNat, Fin.modNat, h]
     · -- p.divNat ≠ p.modNat: tensor evaluates to 0 because off-diagonal physical letter
       rw [tensor, ite_eq_right hp_diag]
       simp
@@ -607,62 +567,6 @@ to the bare MPO.  This relies on `trace_mpo_tensor` giving trace 1. -/
 private lemma normalizedMPO_tensor_eq_mpo (N : ℕ) (hN : 0 < N) :
     normalizedMPO tensor N = mpo tensor N := by
   rw [normalizedMPO, trace_mpo_tensor N hN, inv_one, one_smul]
-
-/-- The site-sum vanishes: $\sum_{a=0,1} \operatorname{siteSign} a = 1+(-1)=0$. -/
-private lemma sum_siteSign_eq_zero : (∑ a : Fin 2, siteSign a) = (0 : ℂ) := by
-  calc
-    (∑ a : Fin 2, siteSign a) = siteSign 0 + siteSign 1 := Fin.sum_univ_two _
-    _ = (1 : ℂ) + (-1 : ℂ) := by simp [siteSign, pauliZ]
-    _ = 0 := by ring
-
-/-- Sum of `configurationSign` over all binary words of length $n$
-vanishes when $n > 0$.  This is the distributive-law identity
-$\sum_{w} \prod_k \operatorname{siteSign}(w_k)
-  = \prod_k \sum_{a} \operatorname{siteSign}(a) = 0^n$.
-(project derivation) -/
-private lemma sum_configurationSign_eq_zero {n : ℕ} (hn : 0 < n) :
-    ∑ w : Fin n → Fin 2, configurationSign w = 0 := by
-  have hcard : Fintype.card (Fin n) = n := Fintype.card_fin n
-  calc
-    ∑ w : Fin n → Fin 2, configurationSign w
-        = ∑ w : Fin n → Fin 2, (∏ k : Fin n, siteSign (w k)) := rfl
-    _ = ∑ w ∈ (Fintype.piFinset fun (_ : Fin n) => (Finset.univ : Finset (Fin 2))),
-        (∏ k : Fin n, siteSign (w k)) := by simp [Fintype.piFinset_univ]
-    _ = ∏ k : Fin n, (∑ a ∈ (Finset.univ : Finset (Fin 2)), siteSign a) := by
-      rw [← Finset.prod_univ_sum (fun (_ : Fin n) => (Finset.univ : Finset (Fin 2)))
-        (fun (_ : Fin n) a => siteSign a)]
-    _ = ∏ k : Fin n, (∑ a : Fin 2, siteSign a) := by simp
-    _ = ∏ k : Fin n, (0 : ℂ) := by rw [sum_siteSign_eq_zero]
-    _ = 0 := by
-      rw [Finset.prod_const, Finset.card_univ, hcard]
-      exact zero_pow hn.ne'
-
-/-- `configurationSign` factorises through `Fin.append`.
-For $u : \operatorname{Fin} L \to \operatorname{Fin} 2$ and
-$w : \operatorname{Fin} M \to \operatorname{Fin} 2$,
-$\operatorname{configurationSign}(u \mathbin{+\!\!+} w)
-  = \operatorname{configurationSign}(u) \cdot \operatorname{configurationSign}(w)$.
-(project derivation) -/
-private lemma configurationSign_append {L M : ℕ}
-    (u : Fin L → Fin 2) (w : Fin M → Fin 2) :
-    configurationSign (Fin.append u w) = configurationSign u * configurationSign w := by
-  rw [configurationSign, configurationSign, configurationSign]
-  rw [Fin.prod_univ_add]
-  simp [Fin.append_left, Fin.append_right]
-
-/-- `configurationSign` is invariant under the canonical bijection
-$\operatorname{Fin} N \simeq \operatorname{Fin}(L+M)$ given by $h_N : N = L + M$:
-for $u : \operatorname{Fin} L \to \operatorname{Fin} 2$ and
-$w : \operatorname{Fin} M \to \operatorname{Fin} 2$,
-$\operatorname{configurationSign}(u \mathbin{+\!\!+} w \circ e_{h_N})
-  = \operatorname{configurationSign}(u) \cdot \operatorname{configurationSign}(w)$.
-(project derivation) -/
-private lemma configurationSign_append_cast {L M N : ℕ} (hN : N = L + M)
-    (u : Fin L → Fin 2) (w : Fin M → Fin 2) :
-    configurationSign (Fin.append u w ∘ Fin.cast hN) =
-      configurationSign u * configurationSign w := by
-  subst hN
-  simp [configurationSign_append]
 
 /-- The $(u,v)$ entry of the reduced block state of the Kato tensor.
 
@@ -775,18 +679,6 @@ private lemma reducedBlockState_tensor_eq_scaled_one {N L : ℕ}
       show ((1 : ℂ) / 2) = (2 : ℂ)⁻¹ by norm_num]
   · simp [huv, Matrix.one_apply_ne huv]
 
-/-- For $d \neq 0$, $d \cdot \operatorname{negMulLog}(d^{-1}) = \log d$
-(project derivation). -/
-private lemma negMulLog_pow_inv_mul (d : ℝ) (hd : d ≠ 0) :
-    d * Real.negMulLog (d⁻¹) = Real.log d := by
-  rw [Real.negMulLog]
-  calc
-    d * (-(d⁻¹) * Real.log (d⁻¹)) = -(d * d⁻¹ * Real.log (d⁻¹)) := by ring
-    _ = -(1 * Real.log (d⁻¹)) := by
-      field_simp [hd]
-    _ = -Real.log (d⁻¹) := by simp
-    _ = Real.log d := by rw [Real.log_inv, neg_neg]
-
 /-- The block entropy $S_L$ for the Kato tensor equals $L \log 2$
 whenever $1 \le L < N$ (so the block is a proper subsystem).
 (project derivation; the maximally-mixed computation above
@@ -847,7 +739,7 @@ private lemma blockEntropy_tensor_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
   -- Push the Nat.cast through
   push_cast
   -- Goal: (2 ^ L : ℝ) * Real.negMulLog ((2 ^ L : ℝ)⁻¹) = (L : ℝ) * Real.log 2
-  rw [negMulLog_pow_inv_mul ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num : (2 : ℝ) ≠ 0))]
+  rw [Real.mul_negMulLog_inv ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num : (2 : ℝ) ≠ 0))]
   rw [Real.log_pow]
 
 /-- Kato's $p=1/2$ tensor saturates the area law (arXiv:1606.00608,
@@ -914,5 +806,6 @@ theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
   -- The canonical form is stated for the MPSTensor, not MPOTensor.toMPSTensor
   -- But the theorem `tensor_toMPSTensor_isCPSVCanonicalForm` gives exactly this
   exact tensor_toMPSTensor_isCPSVCanonicalForm
+
 
 end MPOTensor.KatoDeformedRFPObstruction

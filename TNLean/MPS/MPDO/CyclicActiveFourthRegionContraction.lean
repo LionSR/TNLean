@@ -85,42 +85,10 @@ private theorem suffixContraction_suffix_last_succ {n m : ℕ} :
   simp only [Nat.add_zero]
   rw [show n + 1 + m + 1 = n + 1 + (m + 1) by omega, Nat.mod_self]
 
-private theorem suffixContraction_last_suffix_index {m : ℕ} :
-    Fin.natAdd m (0 : Fin 1) = Fin.last m := by
-  ext
-  rfl
-
-private theorem suffixContraction_castAdd_one_eq_castSucc {m : ℕ} (i : Fin m) :
-    Fin.castAdd 1 i = i.castSucc := by
-  ext
-  rfl
-
 private theorem fourthRegion_retained_internal_index {n : ℕ} (i : Fin n) :
     Fin.castAdd 1 i = (Fin.last n).succAbove i := by
   ext
   simp [Fin.succAbove_last]
-
-private theorem rightTensor_eq_of_heq
-    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
-    (kh : k = h) (a : Fin D)
-    {x y : Fin (F.rightDim k)} {x' y' : Fin (F.rightDim h)}
-    (hx : HEq x x') (hy : HEq y y') :
-    F.rightTensor k a x y = F.rightTensor h a x' y' := by
-  subst h
-  cases hx
-  cases hy
-  rfl
-
-private theorem leftTensor_eq_of_heq
-    (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount}
-    (kh : k = h) (a : Fin D)
-    {x y : Fin (F.leftDim k)} {x' y' : Fin (F.leftDim h)}
-    (hx : HEq x x') (hy : HEq y y') :
-    F.leftTensor k a x y = F.leftTensor h a x' y' := by
-  subst h
-  cases hx
-  cases hy
-  rfl
 
 private theorem partialTraceRight_neighboringOperator_eq_of_right
     (F : PhysicalSectorFactorization K)
@@ -149,18 +117,6 @@ private theorem neighboringOperator_trace_eq_of_eq
   subst h'
   rfl
 
-private theorem dependent_prod_fst_heq {ι : Type*} {α β : ι → Type*}
-    (f : (i : ι) → α i × β i) {i j : ι} (h : i = j) :
-    (f i).1 ≍ (f j).1 := by
-  subst j
-  rfl
-
-private theorem dependent_prod_snd_heq {ι : Type*} {α β : ι → Type*}
-    (f : (i : ι) → α i × β i) {i j : ι} (h : i = j) :
-    (f i).2 ≍ (f j).2 := by
-  subst j
-  rfl
-
 private theorem appendSectorFiber_castAdd_heq
     (F : PhysicalSectorFactorization K)
     {L R : ℕ} {k : Fin L → Fin F.sectorCount}
@@ -186,7 +142,7 @@ private theorem appendSectorFiber_fst_castAdd_heq
     (x : F.SectorChainFiber k) (z : F.SectorChainFiber t)
     {j : Fin (L + R)} (i : Fin L) (h : j = Fin.castAdd R i) :
     (F.appendSectorFiber x z j).1 ≍ (x i).1 := by
-  refine (dependent_prod_fst_heq (F.appendSectorFiber x z) h).trans ?_
+  refine (congr_arg_heq (fun s ↦ (F.appendSectorFiber x z s).1) h).trans ?_
   exact sectorIndex_fst_heq_of_heq F (by simp)
     (F.appendSectorFiber_castAdd_heq x z i)
 
@@ -197,7 +153,7 @@ private theorem appendSectorFiber_snd_castAdd_heq
     (x : F.SectorChainFiber k) (z : F.SectorChainFiber t)
     {j : Fin (L + R)} (i : Fin L) (h : j = Fin.castAdd R i) :
     (F.appendSectorFiber x z j).2 ≍ (x i).2 := by
-  refine (dependent_prod_snd_heq (F.appendSectorFiber x z) h).trans ?_
+  refine (congr_arg_heq (fun s ↦ (F.appendSectorFiber x z s).2) h).trans ?_
   exact sectorIndex_snd_heq_of_heq F (by simp)
     (F.appendSectorFiber_castAdd_heq x z i)
 
@@ -208,7 +164,7 @@ private theorem appendSectorFiber_fst_natAdd_heq
     (x : F.SectorChainFiber k) (z : F.SectorChainFiber t)
     {j : Fin (L + R)} (i : Fin R) (h : j = Fin.natAdd L i) :
     (F.appendSectorFiber x z j).1 ≍ (z i).1 := by
-  refine (dependent_prod_fst_heq (F.appendSectorFiber x z) h).trans ?_
+  refine (congr_arg_heq (fun s ↦ (F.appendSectorFiber x z s).1) h).trans ?_
   exact sectorIndex_fst_heq_of_heq F (by simp)
     (F.appendSectorFiber_natAdd_heq x z i)
 
@@ -219,7 +175,7 @@ private theorem appendSectorFiber_snd_natAdd_heq
     (x : F.SectorChainFiber k) (z : F.SectorChainFiber t)
     {j : Fin (L + R)} (i : Fin R) (h : j = Fin.natAdd L i) :
     (F.appendSectorFiber x z j).2 ≍ (z i).2 := by
-  refine (dependent_prod_snd_heq (F.appendSectorFiber x z) h).trans ?_
+  refine (congr_arg_heq (fun s ↦ (F.appendSectorFiber x z s).2) h).trans ?_
   exact sectorIndex_snd_heq_of_heq F (by simp)
     (F.appendSectorFiber_natAdd_heq x z i)
 
@@ -247,18 +203,20 @@ private theorem suffixContraction_retained_neighboring_entry
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F (by simp [suffixContraction_internal_index]) a
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.rightTensor s a)
+      (by simp [suffixContraction_internal_index])
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.castAdd 1 i) rfl).trans ?_
-      refine (dependent_prod_snd_heq ((F.retainedOpenEdgeEquiv k).symm x)
+      refine (congr_arg_heq (fun s ↦ (((F.retainedOpenEdgeEquiv k).symm x) s).2)
         (fourthRegion_retained_internal_index i)).trans ?_
       exact heq_of_eq (congrArg Prod.fst
         (F.retainedOpenEdgeEquiv_symm_internal_edge k x i))
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.castAdd 1 i) rfl).trans ?_
-      refine (dependent_prod_snd_heq ((F.retainedOpenEdgeEquiv k).symm y)
+      refine (congr_arg_heq (fun s ↦ (((F.retainedOpenEdgeEquiv k).symm y) s).2)
         (fourthRegion_retained_internal_index i)).trans ?_
       exact heq_of_eq (congrArg Prod.fst
         (F.retainedOpenEdgeEquiv_symm_internal_edge k y i))
-  · apply leftTensor_eq_of_heq F (by simp [suffixContraction_internal_succ_index]) a
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.leftTensor s a)
+      (by simp [suffixContraction_internal_succ_index])
     · refine (F.appendSectorFiber_fst_castAdd_heq _ _
         ((Fin.last n).succAbove i + 1)
           (suffixContraction_internal_succ_index i)).trans ?_
@@ -294,16 +252,16 @@ private theorem suffixContraction_leftBoundary_neighboring_entry
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F
-      (by simp [suffixContraction_last_retained_index]) a
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.rightTensor s a)
+      (by simp [suffixContraction_last_retained_index])
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.last n)
         suffixContraction_last_retained_index).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_last_right k x)
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.last n)
         suffixContraction_last_retained_index).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_last_right k y)
-  · apply leftTensor_eq_of_heq F
-      (by simp [suffixContraction_first_suffix_index]) a
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.leftTensor s a)
+      (by simp [suffixContraction_first_suffix_index])
     · exact F.appendSectorFiber_fst_natAdd_heq _ _ 0
         suffixContraction_first_suffix_index
     · exact F.appendSectorFiber_fst_natAdd_heq _ _ 0
@@ -333,10 +291,10 @@ private theorem suffixContraction_internalSuffix_neighboring_entry
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F (by simp) a <;>
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.rightTensor s a) (by simp) <;>
       exact F.appendSectorFiber_snd_natAdd_heq _ _ (Fin.castAdd 1 i) rfl
-  · apply leftTensor_eq_of_heq F
-      (by simp [suffixContraction_suffix_succ]) a <;>
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.leftTensor s a)
+      (by simp [suffixContraction_suffix_succ]) <;>
       exact F.appendSectorFiber_fst_natAdd_heq _ _ i.succ
         (suffixContraction_suffix_succ i)
 
@@ -365,20 +323,20 @@ private theorem suffixContraction_rightBoundary_neighboring_entry
   apply Finset.sum_congr rfl
   intro a ha
   congr 1
-  · apply rightTensor_eq_of_heq F (by
-      rw [Fin.append_right, suffixContraction_last_suffix_index]) a
+  · apply Matrix.entry_eq_of_heq (fun s ↦ F.rightTensor s a) (by
+      rw [Fin.append_right]; exact congrArg t Fin.natAdd_last)
     · refine (F.appendSectorFiber_snd_natAdd_heq _ _
         (Fin.natAdd m (0 : Fin 1)) rfl).trans ?_
-      exact dependent_prod_snd_heq z suffixContraction_last_suffix_index
+      exact congr_arg_heq (fun s ↦ (z s).2) Fin.natAdd_last
     · refine (F.appendSectorFiber_snd_natAdd_heq _ _
         (Fin.natAdd m (0 : Fin 1)) rfl).trans ?_
-      exact dependent_prod_snd_heq z suffixContraction_last_suffix_index
+      exact congr_arg_heq (fun s ↦ (z s).2) Fin.natAdd_last
   · have hsector :
         Fin.append k t
             (Fin.natAdd (n + 1) (Fin.natAdd m (0 : Fin 1)) + 1) =
           k (Fin.last n + 1) := by
       rw [suffixContraction_suffix_last_succ, Fin.append_left]
-    apply leftTensor_eq_of_heq F hsector a
+    apply Matrix.entry_eq_of_heq (fun s ↦ F.leftTensor s a) hsector
     · refine (F.appendSectorFiber_fst_castAdd_heq _ _ (Fin.last n + 1)
         suffixContraction_suffix_last_succ).trans ?_
       exact heq_of_eq (F.retainedOpenEdgeEquiv_symm_first_left k x)
@@ -405,6 +363,7 @@ noncomputable def suffixSectorContraction
       ∑ z : F.SectorChainFiber t,
         F.cyclicNeighboringProduct (Fin.append k t)
           (F.appendSectorFiber x z) (F.appendSectorFiber y z)
+
 
 /-- Trace the last three site fibers of a fixed retained sector block of the
 cyclic neighboring product, summing over all three discarded sector labels.
@@ -475,7 +434,7 @@ theorem sum_suffixFiber_cyclicNeighboringProduct
               ((z i.castSucc).2, (z i.succ).1) := by
       apply Finset.prod_congr rfl
       intro i hi
-      rw [suffixContraction_castAdd_one_eq_castSucc]
+      exact rfl
     rw [hprod]
     ring
   · ring

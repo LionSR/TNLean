@@ -11,14 +11,12 @@ import TNLean.MPS.RFP.PhysicalObservableRealization
 # Converse from zero correlation length to a renormalization fixed point
 
 This file formalizes the multiplicity-one correlation contradiction in the proof of
-arXiv:1606.00608, Theorem 3.8, lines 1250--1268. The converse is conditional on the
-spectral assertion made at line 1250: every non-idempotent normal block has a nonzero
-subleading eigenvalue with normalized left and right eigenvectors.
-
-It also gives an eigenvalue-free local repair of line 1250 at the multiplicity-one,
-unit-weight representative. The repair uses arbitrary sector-supported rank-one
-observables and trace-pairing nondegeneracy, and does not alter the conditional
-theorems recording the printed spectral argument.
+arXiv:1606.00608, Theorem 3.8, lines 1250--1268, and gives an eigenvalue-free local
+repair of line 1250 at the multiplicity-one, unit-weight representative. The repair
+uses arbitrary sector-supported rank-one observables and trace-pairing
+nondegeneracy, so the converse proved here needs no spectral hypothesis. The
+source's printed spectral step survives as the two-point contradiction argument for
+an assumed normalized nonzero subleading eigenpair.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -351,100 +349,6 @@ theorem not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
   rw [hν_one, norm_one] at hν_norm
   exact (lt_irrefl 1 hν_norm)
 
-/-- Conditional reverse implication at the multiplicity-one representative.
-The additional hypothesis is precisely the spectral assertion invoked at
-arXiv:1606.00608, line 1250 for a non-idempotent normal block.
-
-**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
-1248--1268):** this theorem uses positive-gap CID, one unit-weight copy of each
-BNT basis tensor, and the normalized nonzero subleading spectral pair asserted
-at line 1250. It does not prove that spectral assertion or cover raw weighted
-repeated copies. See
-`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
-theorem isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
-    (hCF : IsBNTCanonicalForm P)
-    (hspectral : ∀ j : Fin P.basisCount,
-      ¬ IsTransferIdempotent (P.basis j) →
-        ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
-          ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
-          Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
-          Matrix.trace (l * r) = 1)
-    (hZCL : IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis) :
-    IsTransferIdempotent (directSumTensor P.basis) := by
-  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
-    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-  apply (isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem
-    P.basis).2
-  intro j j'
-  by_cases hEq : j = j'
-  · subst j'
-    rw [Kraus.mixedMapLM_self]
-    by_contra hnot
-    obtain ⟨ν, r, l, hν_ne, hν_norm, hr, hl, hlr⟩ := hspectral j hnot
-    exact hCF.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair
-      j hν_ne hν_norm hr hl hlr hZCL.2.1
-  · rw [hZCL.2.2 j j' hEq]
-    exact IsIdempotentElem.zero
-
-/-- Conditional equivalence between positive-gap BNT zero correlation length
-and transfer idempotence for the multiplicity-one representative.
-
-**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
-1248--1268):** the reverse implication assumes the normalized nonzero
-subleading spectral pair from line 1250 and excludes adjacent-gap CID and raw
-weighted repeated copies. See
-`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
-theorem isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_pair
-    (hCF : IsBNTCanonicalForm P)
-    (hspectral : ∀ j : Fin P.basisCount,
-      ¬ IsTransferIdempotent (P.basis j) →
-        ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
-          ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
-          Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
-          Matrix.trace (l * r) = 1) :
-    IsPositiveGapBNTZCL (directSumTensor P.basis) P.basis ↔
-      IsTransferIdempotent (directSumTensor P.basis) := by
-  constructor
-  · exact hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
-      hspectral
-  · intro hRFP
-    let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
-      fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-    apply isPositiveGapBNTZCL_of_isTransferIdempotent_directSum P.basis
-    · exact hCF.isCPSVBasisOfNormalTensors_basisDirectSum
-    · exact hCF.basis_irreducible
-    · exact hCF.basis_left_canonical
-    · exact hCF.basis_distinct
-    · exact hRFP
-
-/-- Source physical BNT zero correlation length implies transfer idempotence at
-the multiplicity-one representative under the line-1250 spectral assertion.
-
-**Scope restriction (arXiv:1606.00608, Theorem `TheoremZCLPure`, lines
-1248--1268):** although the premise uses source physical CID, the tensor is the
-multiplicity-one unit-weight representative and the proof assumes the
-normalized nonzero subleading spectral pair from line 1250. Raw weighted
-repeated copies remain outside the conclusion. See
-`docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
-theorem isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL_of_spectral_pair
-    (hCF : IsBNTCanonicalForm P)
-    (hspectral : ∀ j : Fin P.basisCount,
-      ¬ IsTransferIdempotent (P.basis j) →
-        ∃ (ν : ℂ) (r l : Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ),
-          ν ≠ 0 ∧ ‖ν‖ < 1 ∧
-          Module.End.HasEigenvector (Kraus.transferMap (P.basis j)) ν r ∧
-          Module.End.HasEigenvector
-            (Matrix.traceAdjointMap (Kraus.transferMap (P.basis j))) ν l ∧
-          Matrix.trace (l * r) = 1)
-    (hZCL : IsPhysicalBNTZCL (directSumTensor P.basis) P.basis) :
-    IsTransferIdempotent (directSumTensor P.basis) :=
-  hCF.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair
-    hspectral (isPositiveGapBNTZCL_of_isPhysicalBNTZCL _ _ hZCL)
-
 /-- Arbitrary virtual matrices on one BNT sector can be tested by two physical
 observables whose two-point expectation is the corresponding transfer-map
 trace pairing.
@@ -458,8 +362,8 @@ $\operatorname{tr}(u\mathbb E_j^{n_1}(v))$.
 **Local fix (arXiv:1606.00608, line 1250):** this eigenvalue-free probe identity
 replaces the source's unjustified passage from non-idempotence to a nonzero
 subleading eigenvalue. It applies only to the multiplicity-one, unit-weight
-direct sum. The source's printed spectral argument remains formalized by the
-theorems with suffix `_of_spectral_pair`. See
+direct sum. The source's printed spectral argument remains formalized by
+`not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair`. See
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex`. -/
 theorem exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow
     (hCF : IsBNTCanonicalForm P) (j : Fin P.basisCount)

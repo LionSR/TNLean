@@ -103,10 +103,6 @@ instance instFintypeRegionBoundaryConfig (A : Tensor G d) (R : Finset V) :
 abbrev RegionPhysicalConfig (R : Finset V) : Type _ :=
   (w : {w : V // w ∈ R}) → Fin d
 
-instance instFintypeRegionPhysicalConfig (R : Finset V) :
-    Fintype (RegionPhysicalConfig (V := V) (d := d) R) :=
-  inferInstance
-
 omit [Fintype V] in
 /-- The vertex product over `R` reads a virtual configuration only through edges incident to
 `R`: two configurations agreeing on every `R`-incident edge give the same product. -/
@@ -158,6 +154,61 @@ noncomputable def regionBlockedTensorFamily (A : Tensor G d) (R : Finset V) :
 /-- Injectivity of the blocked-region tensor family. -/
 def RegionBlockedTensorInjective (A : Tensor G d) (R : Finset V) : Prop :=
   LinearIndependent ℂ (regionBlockedTensorFamily (G := G) A R)
+
+variable {A : Tensor G d}
+
+/-! ### Transporting region configurations along a region-set equality
+
+When two regions are equal as finite sets, their boundary and physical configuration types
+coincide. The transport equivalences carry a configuration across the equality, and the blocked
+weight transports with them. -/
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- Equal regions have the same boundary-edge predicate. -/
+theorem isRegionBoundaryEdge_congr {S R : Finset V} (h : S = R) (e : Edge G) :
+    IsRegionBoundaryEdge (G := G) S e ↔ IsRegionBoundaryEdge (G := G) R e := by
+  rw [h]
+
+/-- The transport equivalence of boundary configurations along a region-set equality: relabel
+the boundary edges by the predicate equivalence, leaving the assignment unchanged. -/
+def regionBoundaryConfigCongr {S R : Finset V} (h : S = R) :
+    RegionBoundaryConfig (G := G) A S ≃ RegionBoundaryConfig (G := G) A R :=
+  Equiv.piCongrLeft' _
+    (Equiv.subtypeEquivRight (isRegionBoundaryEdge_congr (G := G) h))
+
+omit [Fintype V] in
+/-- The transported configuration reads the same value as the original on a boundary edge. -/
+theorem regionBoundaryConfigCongr_apply {S R : Finset V} (h : S = R)
+    (bcfg : RegionBoundaryConfig (G := G) A S)
+    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    regionBoundaryConfigCongr (A := A) h bcfg f =
+      bcfg ⟨f.1, (isRegionBoundaryEdge_congr (G := G) h f.1).mpr f.2⟩ := by
+  rfl
+
+/-- The transport equivalence of physical configurations along a region-set equality: relabel
+the vertex index along the equality of regions. -/
+def regionPhysicalConfigCongr {S R : Finset V} (h : S = R) :
+    RegionPhysicalConfig (V := V) (d := d) S ≃ RegionPhysicalConfig (V := V) (d := d) R :=
+  Equiv.piCongrLeft' _ (Equiv.subtypeEquivRight (fun _ => by rw [h]))
+
+omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
+/-- The transported physical configuration reads the same value as the original on a vertex. -/
+theorem regionPhysicalConfigCongr_apply {S R : Finset V} (h : S = R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) S) (w : {w : V // w ∈ R}) :
+    regionPhysicalConfigCongr (d := d) h τ w = τ ⟨w.1, by rw [h]; exact w.2⟩ := rfl
+
+/-- The blocked-region weight transports along a region-set equality: for equal regions the
+weight of a configuration agrees with the weight of its transported boundary and physical
+configurations. -/
+theorem regionBlockedWeight_congr {S R : Finset V} (h : S = R)
+    (bdry : RegionBoundaryConfig (G := G) A S)
+    (τ : RegionPhysicalConfig (V := V) (d := d) S) :
+    regionBlockedWeight (G := G) A S bdry τ =
+      regionBlockedWeight (G := G) A R
+        (regionBoundaryConfigCongr (A := A) h bdry)
+        (regionPhysicalConfigCongr (d := d) h τ) := by
+  subst h
+  rfl
 
 end PEPS
 end TNLean

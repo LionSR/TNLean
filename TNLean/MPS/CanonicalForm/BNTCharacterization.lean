@@ -33,27 +33,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Normal tensors which are not MPV-phase equivalent have asymptotically
-vanishing overlap.
-
-This is the contrapositive form of arXiv:1606.00608, Corollary `eqV`, lines
-1121--1128. -/
-private lemma overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hA : IsNormalTensor A) (hB : IsNormalTensor B)
-    (hNot : ¬ MPVBlockPhaseEquiv A B) :
-    Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (𝓝 0) := by
-  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
-  · exact hZero
-  · exfalso
-    apply hNot
-    refine ⟨ζ, ?_, ?_⟩
-    · exact Complex.ne_zero_of_norm_eq_one hζ
-    · intro N _hN σ
-      have hEq := congrArg (fun v : MPVSpace d N => v σ) (hState N)
-      simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq
-
 /-- Every sector of a full-support sector decomposition is represented in any
 basis of normal tensors for the same matrix product vectors.
 
@@ -206,14 +185,7 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     intro N hN
     rcases hN with ⟨hLIN, hNpos⟩
     obtain ⟨cB, hcB⟩ := hBNT.spans_mpv N hNpos
-    have hPstate :
-        mpvState (d := d) P.toTensor N =
-          ∑ j : Fin P.basisCount, P.coeff N j •
-            mpvState (d := d) (P.basis j) N := by
-      refine mpvState_eq_sum_of_decomp (d := d) P.toTensor P.basis
-        (N := N) (fun j => P.coeff N j) ?_
-      intro σ
-      simpa [smul_eq_mul] using P.mpv_toTensor_eq_sum_coeff (N := N) σ
+    have hPstate := P.mpvState_toTensor_eq_sum_coeff N
     have hBstate :
         mpvState (d := d) P.toTensor N =
           ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=

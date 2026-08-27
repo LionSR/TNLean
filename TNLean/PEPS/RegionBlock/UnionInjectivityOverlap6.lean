@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
+import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap3b
 
 /-!
 # The overlapping union lemma: the overlap re-insertion and the closure
@@ -16,9 +16,10 @@ inverse application `overlap_firstStrip`. `UnionInjectivityOverlap2` proves the 
 blue-side rebuild and identifies the overlap-crossing edges. `UnionInjectivityOverlap3` constructs
 the `P₀`-outer and overlap-crossing glues, the indicator-gathering identities, and the bridge row
 with its coefficient identity. `UnionInjectivityOverlap3b` reduces the first strip through the
-crossing collapse and proves that the summed bridge row has vanishing right coupling.
-`UnionInjectivityOverlap5` supplies transport of physical configurations and blocked weights along
-region equalities, together with surjectivity of the fused physical leg. This file restricts the
+crossing collapse and proves the bridge host-coefficient identity in the right geometry.
+`RegionBlock.Basic` supplies transport of boundary and physical configurations and of blocked
+weights along region equalities, and `UnionInjectivityGeneral` supplies surjectivity of the fused
+physical leg of a three-block geometry. This file restricts the
 coefficient family to each `P₀`-outer fiber, applies that chain fiberwise, and extracts every union
 host coefficient from the vanishing fiber rows.
 
@@ -264,36 +265,6 @@ theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero {R₁ R₂ : Fins
       rw [cFiber, ite_eq_right hδbdry, zero_mul]
     · rw [ite_eq_right hind, mul_zero]
 
-private theorem overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry
-    {R₁ R₂ : Finset V}
-    (hR₁ : RegionBlockedTensorInjective (G := G) A R₁)
-    (c : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂) → ℂ)
-    (hc : ∑ bdry : RegionBoundaryConfig (G := G) A
-          (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red),
-        (fun b => c (regionBoundaryConfigCongr (A := A)
-            (overlapLeftGeometry_univ_sdiff_red R₁ R₂) b)) bdry •
-          regionBlockedWeight (G := G) A
-            (Finset.univ \ (overlapLeftGeometry (V := V) R₁ R₂).red) bdry = 0)
-    (δ : P0OuterConfig A R₁ R₂)
-    (β₁ : RegionBoundaryConfig (G := G) A R₁)
-    (σcompl : RegionPhysicalConfig (V := V) (d := d)
-      (overlapRightGeometry (V := V) R₁ R₂).complement) :
-    ∑ bc' : RegionBoundaryConfig (G := G) A
-        (overlapRightGeometry (V := V) R₁ R₂).complement,
-      (∑ bdry : RegionBoundaryConfig (G := G) A (R₁ ∪ R₂),
-          cFiber (A := A) c δ bdry *
-            (if ∃ q : VirtualConfig A,
-                regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry ∧
-                  regionBoundaryLabel (G := G) A R₁ q = β₁ ∧
-                  regionBoundaryLabel (G := G) A
-                    (overlapRightGeometry (V := V) R₁ R₂).complement q = bc'
-              then (1 : ℂ) else 0)) •
-        regionBlockedWeight (G := G) A
-          (overlapRightGeometry (V := V) R₁ R₂).complement bc' σcompl = 0 := by
-  convert overlapLeft_firstStrip_fiber_weightCombination_eq_zero (G := G) (A := A)
-    hR₁ c hc δ β₁ σcompl using 1
-  all_goals rfl
-
 /-! ### The `P₀`-fiber bridge: the right coupling vanishes
 
 The right coupling combination of the `δ`-fiber bridge row, read through the right-geometry
@@ -309,8 +280,8 @@ open scoped Classical in
 `R₁` blocked-tensor injective, positive bond dimensions, and a reference `P₀`-outer label `δ`, the
 `δ`-fiber bridge row `overlapBridgeRow (cFiber c δ)` (carried to the right host) makes the right
 coupling combination vanish for every difference physical leg and overlap boundary configuration.
-This is the fiber analogue of `overlap_bridge_rightCoupling_eq_zero`, and the exact hypothesis the
-rebuild step `overlapRight_bondProd_smul_hostWeight_combination_eq_zero` consumes.
+This is the exact hypothesis the rebuild step
+`overlapRight_bondProd_smul_hostWeight_combination_eq_zero` consumes.
 
 Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400 of
 `Papers/1804.04964/paper_normal.tex`. -/
@@ -385,10 +356,8 @@ theorem overlapFiber_bridge_rightCoupling_eq_zero {R₁ R₂ : Finset V}
   rw [Finset.sum_comm]
   refine Finset.sum_eq_zero (fun β₁ _ => ?_)
   rw [Finset.sum_congr rfl (fun bc' _ => by rw [mul_smul]), ← Finset.smul_sum]
-  have hstripzero :=
-    overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry
-      (G := G) (A := A) hR₁ c hc δ β₁ σcompl
-  rw [hstripzero, smul_zero]
+  exact smul_eq_zero_of_right _ (overlapLeft_firstStrip_fiber_weightCombination_eq_zero
+    (G := G) (A := A) hR₁ c hc δ β₁ σcompl)
 
 /-! ### The `P₀`-fiber bridge row vanishes after inverting `R₂`
 

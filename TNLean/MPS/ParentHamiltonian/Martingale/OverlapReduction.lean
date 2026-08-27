@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
-import TNLean.MPS.RFP.AppendixBStructuralData
 
 /-!
 # Overlap reduction for commuting parent-Hamiltonian local terms
@@ -99,45 +98,5 @@ noncomputable def HasProductPairLocalProjectors.of_adjacent_twoSite_commute
     HasProductPairLocalProjectors A N :=
   HasProductPairLocalProjectors.of_commuting_localTerms
     (isNNCPH_of_adjacent_twoSite_commute (A := A) hN hAdjacent)
-
-/-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the overlapping length-two cyclic-window commutation
-equations on every chain.
-
-This is only the locality reduction from overlapping pairs to all pairs; the
-source \(Q_{AX},Q_{XB}\) projectors and their lifted commutator remain separate
-inputs to the proof of the overlap hypotheses. -/
-noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndOverlapCommutation
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hOverlap : ∀ N, 2 < N → ∀ i j : Fin N, cyclicWindowsOverlap N 2 i j →
-      localTerm A 2 N i * localTerm A 2 N j =
-        localTerm A 2 N j * localTerm A 2 N i) :
-    AppendixBProductPairExtraction hStruct :=
-  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
-    (fun N hN =>
-      HasProductPairLocalProjectors.of_twoSite_cyclicWindowsOverlap_commute
-        (A := A) (by omega) (hOverlap N hN))
-
-/-- Construct the conditional Appendix B extraction from the coefficient
-factorization and the adjacent length-two cyclic-window commutation equations on
-every chain.
-
-This is the finite-chain reduction from the source nearest-neighbor commutator
-\([\tau_1(P_2),P_2]=0\) to full pairwise commutation of all translated two-site
-local terms. It does not prove the Appendix B source-projector commutator. -/
-noncomputable def AppendixBProductPairExtraction.ofCoreTensorFactorizationAndAdjacentCommutation
-    {A : MPSTensor d D} {hStruct : AppendixBStructuralData A}
-    (hCore : ∀ N, 0 < N → ∀ σ : Cfg d (2 * N),
-      mpv hStruct.coreTensor σ = productPairState hStruct.twoSiteAmplitude N σ)
-    (hAdjacent : ∀ N, 2 < N → ∀ i : Fin N,
-      localTerm A 2 N i * localTerm A 2 N (cyclicForwardSite i 1) =
-        localTerm A 2 N (cyclicForwardSite i 1) * localTerm A 2 N i) :
-    AppendixBProductPairExtraction hStruct :=
-  AppendixBProductPairExtraction.ofCoreTensorFactorization hCore
-    (fun N hN =>
-      HasProductPairLocalProjectors.of_adjacent_twoSite_commute
-        (A := A) (by omega) (hAdjacent N hN))
 
 end MPSTensor

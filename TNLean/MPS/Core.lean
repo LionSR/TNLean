@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Core
 
+import TNLean.MPS.Core.BlockTriangularTrace
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
@@ -20,10 +21,12 @@ import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.MultiBlockWord
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Core.PhysicalReindexTransport
+import TNLean.MPS.Core.ProjectionTriangularTrace
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.TensorProduct
 import TNLean.MPS.Core.TensorProductSpan
+import TNLean.MPS.Core.TracePairing
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.TransferPeripheral
 import TNLean.MPS.Core.WordFactor

@@ -2872,9 +2872,9 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{theorem}[Gap bound from cyclic overlap compression]
     \label{thm:overlap_norm_gap_bound}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
-    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es, thm:parent_ground_space_es_kernel, rem:euclidean_local_projector_ingredients, lem:local_term_es_average, lem:transported_es_positive, lem:transported_es_local_projections, lem:transported_es_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction, lem:parent_hamiltonian_ordered_rowsum_gap, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_norm_gap, thm:overlap_norm_gap_bound_constant}
+    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es, thm:parent_ground_space_es_kernel, rem:euclidean_local_projector_ingredients, lem:local_term_es_average, lem:transported_es_positive, lem:transported_es_local_projections, lem:transported_es_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction, lem:parent_hamiltonian_ordered_rowsum_gap, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_norm_gap, thm:overlap_norm_gap_bound_constant}
     Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}
@@ -2917,11 +2917,9 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     combines these results with the finite-overlap reduction, so the only
     additional input is the ordered anticommutator or cross-term estimate for
     overlapping cyclic windows.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap}
-    states the same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a
-    sufficient norm-compression formulation. Equivalently, this is the
-    constant-compression theorem below with
+    sufficient norm-compression formulation. It is the constant-compression
+    statement of Theorem~\ref{thm:overlap_norm_gap_bound_constant} at
     $\eta = \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}$.
     Since $1-\eta\,2(L-1)=1/(4L)$, the displayed hypothesis gives the stated
     lower bound with $\gamma_L=1/(4L)$.
@@ -2929,7 +2927,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{theorem}[Gap bound from a cyclic anticommutator estimate]
     \label{thm:anticommutator_gap_bound}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
     Let $L>1$. Suppose that for every $N\ge2L$ and every overlapping
@@ -2951,15 +2949,15 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    This is
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
-    stated as the public conditional gap theorem, with the anticommutator
+    The finite-overlap martingale reduction applies with the cyclic overlap
+    relation: at most $2(L-1)$ off-diagonal neighbours per row, non-overlapping
+    pairs handled by disjoint-window positivity, and the anticommutator
     inequality retained as an explicit hypothesis.
 \end{proof}
 
 \begin{theorem}[Gap bound from a strict cyclic compression constant]
     \label{thm:overlap_norm_gap_bound_constant}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_constant}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}
     Let $L>1$. Put $m=2(L-1)$. Suppose that there is a constant $\eta\ge0$
@@ -2978,22 +2976,23 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_constant_gap}, with
-    $\gamma=1-\eta m$, applies to the displayed hypothesis
+    The cyclic-window compression reduction applies with $\gamma=1-\eta m$ to
+    the displayed hypothesis
     \begin{align}
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
          & \le
         \eta\,\|h_{i,\mathrm{ES}}v\|.
         \notag
     \end{align}
-    It gives $0<1-\eta m$ and the stated norm lower bound.
-    The preceding fixed-coefficient theorem is the specialization
-    $\eta=(1-1/(4L))/(2(L-1))$.
+    Since $\eta m<1$ the gap constant $1-\eta m$ is positive, and the
+    quadratic-form criterion converts the compression estimate into the stated
+    norm lower bound. The preceding fixed-coefficient theorem is the
+    specialization $\eta=(1-1/(4L))/(2(L-1))$.
 \end{proof}
 
 \begin{theorem}[Gap bound from a cyclic operator-product norm constant]
     \label{thm:overlap_operator_norm_gap_bound_constant}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant}
+    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt}
     \leanok
     \uses{lem:parent_hamiltonian_cyclic_overlap_operator_norm_constant_gap}
     Let $L>1$. Put $m=2(L-1)$. Suppose there is a constant $\eta\ge0$ with
@@ -3024,10 +3023,11 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_operator_norm_constant_gap},
-    with $\gamma=1-\eta m$, applies to the displayed operator-product
-    hypothesis and gives $0<1-\eta m$ together with the stated norm lower
-    bound.
+    The symmetric anticommutator reduction turns the displayed
+    operator-product hypothesis into the row-summable anticommutator estimate
+    with coefficient $\eta$; the cyclic-window martingale reduction with
+    $\gamma=1-\eta m$ then gives $0<1-\eta m$ together with the stated norm
+    lower bound.
 \end{proof}
 
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]

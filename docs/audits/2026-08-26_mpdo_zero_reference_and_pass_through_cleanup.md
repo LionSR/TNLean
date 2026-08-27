@@ -21,6 +21,8 @@ tag naming one was redirected to its survivor in the same change.
 | `MPOTensor.BNTFusionTensorClause.conjugatedProjectorQBlock` | `MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock` at `H.toBNTFusionCoisometryFamily`. |
 | `MPOTensor.BNTFusionTensorClause.conjugatedProjectorQBlock_isOrthogonalProjection` | `MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock_isOrthogonalProjection` at `H.toBNTFusionCoisometryFamily`, same coefficient-family arguments. |
 | `MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond` (`TNLean/MPS/MPDO/CommutingFormSpatialBridge.lean`) | `MPOTensor.TranslationInvariantBondData.exists_unitary_blockActions_of_pairBond` in the same file, reached by `data.bondData`. The removed theorem's whole body was that projection. |
+| `MPOTensor.physCloseN_three_apply` (`TNLean/MPS/MPDO/PhysicalClosure.lean`) | None needed. The flat-coordinate (`Fin 3 -> Fin d`) restatement of `MPOTensor.physCloseN_apply` at `N = 3`; its whole proof was `simp [physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]`, the same unfold used inline for the length-four case at `TNLean/MPS/MPDO/BNTChannelComposition.lean:87`. It carried no `@[simp]`, had no consumer, and no sibling `physCloseN_two_apply`/`physCloseN_four_apply` exists. |
+| `MPOTensor.finOneArrowEquiv` (`TNLean/MPS/MPDO/PhysicalGibbsEmbedding.lean`) | `Equiv.funUnique (Fin 1) (Fin d)` from Mathlib. The removed `private def` rebuilt that equivalence by hand; both use sites now name the Mathlib equivalence directly. It was `private`, so no Blueprint tag or out-of-file consumer named it. |
 
 ## Blueprint and documentation redirects
 
@@ -42,6 +44,13 @@ tag naming one was redirected to its survivor in the same change.
   `EtaLocalStructureData` tag was dropped; the entry keeps
   `MPOTensor.TranslationInvariantBondData.exists_unitary_blockActions_of_pairBond`,
   whose statement is the one the surrounding prose describes.
+* `lem:phys_close_three`
+  (`blueprint/src/chapter/ch21_mpdo_rfp_renormalization.tex`): the
+  `MPOTensor.physCloseN_three_apply` tag was dropped; the entry keeps
+  `MPOTensor.physClose3_apply` and
+  `MPOTensor.physCloseN_three_eq_physClose3`, which together prove the
+  displayed right-associated coefficient formula, so `\leanok` on the
+  statement and on the proof remains correct.
 * `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`: the sentence naming the
   application of the finite-matrix theorem now cites the
   `TranslationInvariantBondData` form. The eta-local bond is by definition the

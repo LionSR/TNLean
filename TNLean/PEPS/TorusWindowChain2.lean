@@ -112,23 +112,6 @@ def nestedThreeBlockGeometry {R S : Finset V} (hRS : R ⊆ S) : ThreeBlockGeomet
       · exact Or.inl (Or.inr ⟨hvS, hvR⟩)
       · exact Or.inr hvS
 
-omit [DecidableRel G.Adj] in
-@[simp] theorem nestedThreeBlockGeometry_red {R S : Finset V} (hRS : R ⊆ S) :
-    (nestedThreeBlockGeometry (V := V) hRS).red = R := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem nestedThreeBlockGeometry_blue {R S : Finset V} (hRS : R ⊆ S) :
-    (nestedThreeBlockGeometry (V := V) hRS).blue = S \ R := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem nestedThreeBlockGeometry_complement {R S : Finset V} (hRS : R ⊆ S) :
-    (nestedThreeBlockGeometry (V := V) hRS).complement = Finset.univ \ S := rfl
-
-omit [DecidableRel G.Adj] in
-/-- The host `univ \ red` of the nested geometry is `univ \ R`. -/
-theorem nestedThreeBlockGeometry_sdiff_red {R S : Finset V} (hRS : R ⊆ S) :
-    Finset.univ \ (nestedThreeBlockGeometry (V := V) hRS).red = Finset.univ \ R := rfl
-
 /-! ### Restricting a global physical configuration to a region
 
 The deformed state is read as a function of the full physical configuration through
@@ -178,11 +161,6 @@ def restrictSubRegionσ {R S : Finset V} (hRS : R ⊆ S)
     (σ : RegionPhysicalConfig (V := V) (d := d) S) :
     RegionPhysicalConfig (V := V) (d := d) R :=
   fun w => σ ⟨w.1, hRS w.2⟩
-
-omit [Fintype V] [LinearOrder V] [DecidableRel G.Adj] in
-@[simp] theorem restrictSubRegionσ_restrict {R S : Finset V} (hRS : R ⊆ S) (cfg : V → Fin d) :
-    restrictSubRegionσ (V := V) (d := d) hRS (restrictRegionσ (V := V) (d := d) S cfg) =
-      restrictRegionσ (V := V) (d := d) R cfg := rfl
 
 /-! ### The corner-extended insert and the extension identity
 
@@ -418,15 +396,6 @@ theorem deformedRegionState_eq_of_assembled_eq (A : Tensor G d) (R : Finset V)
   simp only [deformedRegionStateAssembled, restrictRegionσ_assembleRegionσ,
     restrictRegionσ_compl_assembleRegionσ] at hcfg
   exact hcfg
-
-/-- Equal curried deformed states give equal assembled deformed states. -/
-theorem deformedRegionStateAssembled_eq_of_curried_eq (A : Tensor G d) (R : Finset V)
-    (C₁ C₂ : RegionInsert (G := G) (d := d) A R)
-    (h : deformedRegionState (G := G) A R C₁ = deformedRegionState (G := G) A R C₂) :
-    deformedRegionStateAssembled (G := G) A R C₁ =
-      deformedRegionStateAssembled (G := G) A R C₂ := by
-  funext cfg
-  rw [deformedRegionStateAssembled, deformedRegionStateAssembled, h]
 
 /-- The complement-inversion engine in assembled form: two inserts on `R` whose assembled
 deformed states agree are equal when the set complement `univ \ R` is blocked-tensor

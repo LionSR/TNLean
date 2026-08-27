@@ -120,22 +120,8 @@ private lemma coeff_identity_via_matched_mpv_phase_scalar
       ∑ j : Fin P.basisCount, a N j • mpvState (d := d) (P.basis j) N =
         ∑ j : Fin P.basisCount, b N j • mpvState (d := d) (P.basis j) N := by
     filter_upwards [hc_mpv, hζ_mpv] with N hNscalar hNphase
-    have hPstate :
-        mpvState (d := d) P.toTensor N =
-          ∑ j : Fin P.basisCount, P.coeff N j •
-            mpvState (d := d) (P.basis j) N := by
-      refine mpvState_eq_sum_of_decomp (d := d) P.toTensor P.basis
-        (N := N) (fun j => P.coeff N j) ?_
-      intro σ
-      simpa [smul_eq_mul] using P.mpv_toTensor_eq_sum_coeff (N := N) σ
-    have hQstate :
-        mpvState (d := d) Q.toTensor N =
-          ∑ k : Fin Q.basisCount, Q.coeff N k •
-            mpvState (d := d) (Q.basis k) N := by
-      refine mpvState_eq_sum_of_decomp (d := d) Q.toTensor Q.basis
-        (N := N) (fun k => Q.coeff N k) ?_
-      intro σ
-      simpa [smul_eq_mul] using Q.mpv_toTensor_eq_sum_coeff (N := N) σ
+    have hPstate := P.mpvState_toTensor_eq_sum_coeff N
+    have hQstate := Q.mpvState_toTensor_eq_sum_coeff N
     have hStateEq :
         mpvState (d := d) P.toTensor N = c N • mpvState (d := d) Q.toTensor N := by
       apply PiLp.ext

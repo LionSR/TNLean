@@ -85,11 +85,6 @@ def regionBoundaryEdgeComplEquiv (R : Finset V) :
   Equiv.subtypeEquivRight (fun f => (isRegionBoundaryEdge_compl_iff (G := G) R f).symm)
 
 omit [DecidableRel G.Adj] in
-@[simp] theorem regionBoundaryEdgeComplEquiv_apply_coe (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
-    ((regionBoundaryEdgeComplEquiv (G := G) R f) : Edge G) = f.1 := rfl
-
-omit [DecidableRel G.Adj] in
 @[simp] theorem regionBoundaryEdgeComplEquiv_symm_apply_coe (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f}) :
     (((regionBoundaryEdgeComplEquiv (G := G) R).symm f) : Edge G) = f.1 := rfl

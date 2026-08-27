@@ -111,21 +111,12 @@ theorem bipartitionedNormalizedMPO_trace (M : MPOTensor d D)
   rw [bipartitionedNormalizedMPO, Matrix.trace_submatrix_equiv,
     normalizedMPO_trace M N htr]
 
-private theorem append_empty {K : ℕ} {n : Type*} (u : Fin K → n) (g : Fin 0 → n) :
-    Fin.append u g = fun i ↦ u (Fin.cast (Nat.add_zero K) i) := by
-  funext i
-  refine Fin.addCases (fun j ↦ ?_) (fun j ↦ j.elim0) i
-  rw [Fin.append_left]
-  congr 1
-
 private theorem append_sub_self {K : ℕ} {n : Type*} (u : Fin K → n)
     (g : Fin (K - K) → n) (h : K = K + (K - K)) :
     Fin.append u g ∘ Fin.cast h = u := by
+  rw [Fin.append_right_nil u g (Nat.sub_self K)]
   funext i
-  have hi : Fin.cast h i = Fin.castAdd (K - K) i := by
-    apply Fin.ext
-    simp
-  rw [Function.comp_apply, hi, Fin.append_left]
+  simp
 
 /-- Keeping all `N` sites of the normalized MPO leaves the state unchanged. -/
 theorem reducedBlockState_full (M : MPOTensor d D) (N : ℕ) :
@@ -206,7 +197,7 @@ theorem bipartitionedNormalizedMPO_traceLeft (M : MPOTensor d D) (N L : ℕ)
   rw [Fintype.sum_unique]
   dsimp only [f]
   congr 1 <;> funext k
-  all_goals rw [append_empty]
+  all_goals rw [Fin.append_right_nil _ _ rfl]
   all_goals simp only [Function.comp_apply, Fin.cast_eq_self]
 
 /-- The block-entropy expression `I_L` is the ordinary bipartite mutual

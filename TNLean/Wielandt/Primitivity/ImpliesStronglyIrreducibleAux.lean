@@ -31,15 +31,6 @@ section SpectralPerturbation
 
 variable {d D : ℕ}
 
-/-! ### Step 5: Hermitian, nonzero, trace-zero matrix is not PSD -/
-
-/-- A nonzero Hermitian matrix with trace zero is not positive semidefinite. -/
-theorem not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-    {H : Matrix (Fin D) (Fin D) ℂ}
-    (_hH : H.IsHermitian) (hne : H ≠ 0) (htr : H.trace = 0) :
-    ¬H.PosSemidef := fun hpsd =>
-  hne ((Matrix.PosSemidef.trace_eq_zero_iff hpsd).mp htr)
-
 /-! ### Step 6: Conclusion — existence of a Hermitian, nonzero, trace-zero E^p-fixed point -/
 
 /-- **From a nontrivial peripheral eigenvector, extract a nonzero Hermitian trace-zero
@@ -58,7 +49,7 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
     Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
       (Kraus.mapLM A) (Kraus.isChannel_mapLM A hNorm) hEig hX_ne hμ_ne hroot
   refine ⟨H, hH, hH_ne, hH_tr, ?_,
-    not_posSemidef_of_hermitian_ne_zero_trace_eq_zero hH hH_ne hH_tr⟩
+    fun hpsd => hH_ne ((Matrix.PosSemidef.trace_eq_zero_iff hpsd).mp hH_tr)⟩
   simpa only using hH_fix
 
 end SpectralPerturbation

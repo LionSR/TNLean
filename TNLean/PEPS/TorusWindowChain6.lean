@@ -307,14 +307,6 @@ theorem horizontalStaircaseCorner_subset_completedCorner (s : TorusVertex width 
   exact ⟨hv.1, hv.2.trans_le (Nat.sub_le _ _)⟩
 
 omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- The staircase end pair sits inside the patch: `P = S ∪ corner`, so `S ⊆ P`. -/
-theorem horizontalStaircaseEndPair_subset_patch {L K : ℕ} (hL : 0 < L) (hK : 0 < K)
-    (hxw : 2 * L ≤ width) (hyh : 2 * K ≤ height) (s : TorusVertex width height) :
-    horizontalStaircaseEndPair s L K ⊆ horizontalStaircasePatch s L K := by
-  rw [horizontalStaircasePatch_eq_endPair_union_corner hL hK hxw hyh s]
-  exact Finset.subset_union_left
-
-omit [Fact (1 < width)] [Fact (1 < height)] in
 /-- The patch sits inside the completed union: `P = S ∪ corner ⊆ S ∪ Q`, the corner block
 `corner ⊆ Q` being completed by one row. -/
 theorem horizontalStaircasePatch_subset_completedUnion {L K : ℕ} (hL : 0 < L) (hK : 0 < K)

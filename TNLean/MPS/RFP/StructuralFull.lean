@@ -3,11 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FinSum
 import TNLean.MPS.RFP.StructuralForm
-import QICLean.Spectral.GaugeConstruction
-import QICLean.Channel.KrausRepresentation
-import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!
 # Full structural form for RFP tensors (Lemma B.1)
@@ -713,95 +709,6 @@ theorem rfp_nt_structural_full_unit_pair (A : MPSTensor d D) [NeZero D]
     isIsometryCanonicalForm_of_rfp_nt A hNT hRFP hLeft
   exact ⟨X, fun k => Real.sqrt (Λ k), U, hX_det,
     fun k => Real.sqrt_pos.2 (hΛ_pos k), hU_pair, hA_eq⟩
-
-/-- **Per-block trace-normalized isometry canonical form.** Each block of a
-multi-block tensor that is a normal, left-canonical renormalization fixed point
-is in isometry canonical form: it admits a decomposition
-\(A_k^i = X\sqrt{\Lambda_k}\,U^iX^{-1}\) with \(\Lambda_k\) diagonal positive,
-trace-normalized (\(\sum_j (\Lambda_k)_j = 1\)), and \(U\) a unit pair-index
-isometry.
-
-This is the single-block trace-normalized form (`isIsometryCanonicalForm_of_rfp_nt`,
-the diagonal j = j' case of arXiv:1606.00608, Corollary III.cor3, lines
-583--589) applied to each block.
-
-**Scope restriction (source isometry):** Corollary III.cor3 also invokes the
-cross-block \(\delta_{j,j'}\) orthogonality between distinct normal-tensor blocks
-(eq. III_isometry, lines 550--554). This per-block statement omits those
-cross-block equations; the gap is recorded in
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Deriving the per-block
-normal/RFP/left-canonical hypotheses from a whole-tensor canonical-form
-fixed-point condition is a separate step. -/
-theorem isIsometryCanonicalForm_of_rfp_nt_blocks {r : ℕ} {dim : Fin r → ℕ}
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNT : ∀ k, Kraus.IsNormal (A k)) (hRFP : ∀ k, IsTransferIdempotent (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
-    ∀ k, IsIsometryCanonicalForm (A k) :=
-  fun k => isIsometryCanonicalForm_of_rfp_nt (A k) (hNT k) (hRFP k) (hLeft k)
-
-/-- **Per-block isometry canonical form.** When each block of a multi-block tensor
-is a normal, left-canonical renormalization fixed point, that block admits an
-isometry decomposition A_k^i = X diag(Λ) U^i X⁻¹ with X invertible, Λ positive,
-and U a physical-index isometry.
-
-This is the isometry canonical form applied separately to each normal-tensor
-block; it is a per-block form related to arXiv:1606.00608, Corollary III.cor3,
-lines 583--589. The source additionally imposes the normalization tr(Λ_k) = 1;
-the statement here gives positive Λ_k without it. The normalization is genuine,
-not a conjugation gauge: rescaling Λ_k ↦ Λ_k / tr(Λ_k) factors out as an overall
-scalar on A_k, since conjugation by X preserves the scale.
-
-**Scope restriction (source isometry):** Corollary III.cor3 also invokes the
-joint isometry condition from eq:III_isometry, lines 550--554. This theorem now
-records the diagonal pair-index equation for each block in the normalization used
-by `rfp_nt_structural_full`, where the right-hand side is multiplied by
-$(\dim k)^{-1}$. It still omits the source trace-normalization of $\Lambda_k$ and the
-δ_{j,j'} orthogonality between distinct blocks. This restriction is recorded in
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. Elimination: strengthen the
-normalization comparison, then prove a joint BNT-family isometry form from
-whole-tensor canonical-form RFP data.
-
-Deriving the per-block normal/RFP/left-canonical hypotheses from a whole-tensor
-canonical-form fixed-point condition is a separate step. -/
-theorem rfp_nt_structural_full_blocks {r : ℕ} {dim : Fin r → ℕ}
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNT : ∀ k, Kraus.IsNormal (A k)) (hRFP : ∀ k, IsTransferIdempotent (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
-    ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) (Λ : Fin (dim k) → ℝ)
-      (U : MPSTensor d (dim k)),
-      X.det ≠ 0 ∧ (∀ j, 0 < Λ j) ∧ (∑ i : Fin d, (U i)ᴴ * U i = 1) ∧
-      (∀ p q : Fin (dim k) × Fin (dim k),
-        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
-          if p = q then (dim k : ℂ)⁻¹ else 0) ∧
-      (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
-  fun k => rfp_nt_structural_full (A k) (hNT k) (hRFP k) (hLeft k)
-
-/-- Per-block unit pair-index form of the isometry canonical form
-(Theorem~\ref{thm:rfp_nt_structural_full_blocks}).
-
-This only changes the pair-index normalization convention.  In this convention
-the contracted identity is \(D_k I\), not \(I\), so the conclusion records the
-unit pair-index equation and the decomposition but not a contracted-isometry
-equation.
-
-**Scope restriction (source isometry):** Corollary III.cor3 and the joint
-isometry equation in arXiv:1606.00608, lines 550--554, also require
-\(\operatorname{tr}\Lambda_k=1\) and cross-block \(\delta_{j,j'}\)
-orthogonality.  This theorem is only the per-block normalization comparison;
-the full source assertion is recorded as a remaining gap in
-`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
-theorem rfp_nt_structural_full_blocks_unit_pair {r : ℕ} {dim : Fin r → ℕ}
-    [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNT : ∀ k, Kraus.IsNormal (A k)) (hRFP : ∀ k, IsTransferIdempotent (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
-    ∀ k, ∃ (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
-      (Λ : Fin (dim k) → ℝ) (U : MPSTensor d (dim k)),
-      X.det ≠ 0 ∧ (∀ j, 0 < Λ j) ∧
-      (∀ p q : Fin (dim k) × Fin (dim k),
-        ∑ i : Fin d, star (U i p.1 p.2) * U i q.1 q.2 =
-          if p = q then 1 else 0) ∧
-      (∀ i, A k i = X * Matrix.diagonal (fun j => (Λ j : ℂ)) * U i * X⁻¹) :=
-  fun k => rfp_nt_structural_full_unit_pair (A k) (hNT k) (hRFP k) (hLeft k)
 
 /-- **Reference-tensor transfer identity for a unit pair-index isometry family.**
 

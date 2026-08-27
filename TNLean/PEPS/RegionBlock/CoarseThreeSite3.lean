@@ -123,13 +123,6 @@ def toThreeBlockGeometry (hP : F.IsPartition) : ThreeBlockGeometry V where
   blue_disjoint_complement := hP.blue_disjoint_complement
   cover_univ := hP.cover_univ
 
-@[simp] theorem toThreeBlockGeometry_red (hP : F.IsPartition) :
-    (F.toThreeBlockGeometry hP).red = F.red := rfl
-@[simp] theorem toThreeBlockGeometry_blue (hP : F.IsPartition) :
-    (F.toThreeBlockGeometry hP).blue = F.blue := rfl
-@[simp] theorem toThreeBlockGeometry_complement (hP : F.IsPartition) :
-    (F.toThreeBlockGeometry hP).complement = F.complement := rfl
-
 /-! ### Crossing classification of region boundary edges
 
 Under the partition, every boundary edge of a region crosses to exactly one
@@ -277,13 +270,6 @@ def incidentRC2 : IncidentEdge coarseGraph 2 := ⟨coarseEdgeRC, Or.inr rfl⟩
 
 /-- The incident super-edge `b-c` at the complement super-site `2`. -/
 def incidentBC2 : IncidentEdge coarseGraph 2 := ⟨coarseEdgeBC, Or.inr rfl⟩
-
-@[simp] theorem incidentRB0_fst : (incidentRB0).1 = coarseEdgeRB := rfl
-@[simp] theorem incidentRC0_fst : (incidentRC0).1 = coarseEdgeRC := rfl
-@[simp] theorem incidentRB1_fst : (incidentRB1).1 = coarseEdgeRB := rfl
-@[simp] theorem incidentBC1_fst : (incidentBC1).1 = coarseEdgeBC := rfl
-@[simp] theorem incidentRC2_fst : (incidentRC2).1 = coarseEdgeRC := rfl
-@[simp] theorem incidentBC2_fst : (incidentBC2).1 = coarseEdgeBC := rfl
 
 /-! ### Reading a region boundary leg off the bond models
 
@@ -444,26 +430,6 @@ theorem legEquivComplement_apply_eq (hP : F.frame.IsPartition)
       (F.frame.isCrossingEdge_red_complement_or_blue_complement hP b.2).resolve_left hb
     have := F.legEquivComplement_eq_bondModel_bc η b.1 hc
     simpa using this
-
-/-! ### Single-configuration consistency
-
-For a single coarse virtual configuration `η`, the three region boundary
-configurations it induces agree on every shared crossing edge: the two super-sites
-incident to a super-edge read the same super-bond value (the one in `η`) through
-the same bond model. These are the agreement lemmas of
-`TNLean.PEPS.RegionBlock.CoarseThreeSite2` specialized to a single `η`, the form
-the three-region merge collapse consumes when summing the three weights' product
-over one coarse configuration. -/
-
-/-- For a single `η`, the red and blue boundary configurations agree on every
-red-to-blue crossing edge. -/
-theorem legEquivRed_eq_legEquivBlue_on_rb_single
-    (η : VirtualConfig (F.frame.coarseTensor)) (g : Edge G)
-    (hf : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
-    (F.frame.legEquivRed (fun ie => η ie.1) ⟨g, hf.1⟩ : Fin (A.bondDim g)) =
-      (F.frame.legEquivBlue (fun ie => η ie.1) ⟨g, hf.2⟩ : Fin (A.bondDim g)) :=
-  F.legEquivRed_eq_legEquivBlue_on_rb (fun ie => η ie.1) (fun ie => η ie.1)
-    incidentRB0 rfl incidentRB1 rfl rfl g hf
 
 end CoherentCoarseBlockingFrame
 

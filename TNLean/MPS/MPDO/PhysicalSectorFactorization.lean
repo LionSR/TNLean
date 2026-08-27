@@ -34,6 +34,21 @@ arbitrary virtual matrix against the two outer tensors.
 
 open scoped Matrix BigOperators
 
+namespace Matrix
+
+/-- Entries of a dependent family of matrices agree once the index equation and
+both coordinate identifications are given heterogeneously. -/
+theorem entry_eq_of_heq {ι : Type*} {m n : ι → Type*} {R : Type*}
+    (M : (i : ι) → Matrix (m i) (n i) R) {i j : ι} (h : i = j)
+    {x : m i} {y : n i} {x' : m j} {y' : n j} (hx : x ≍ x') (hy : y ≍ y') :
+    M i x y = M j x' y' := by
+  subst h
+  cases hx
+  cases hy
+  rfl
+
+end Matrix
+
 namespace MPOTensor
 
 variable {d D : ℕ}

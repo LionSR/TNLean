@@ -3,20 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.KrausGauge
-import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPDO.StackedLayers
-import TNLean.MPS.CanonicalForm.Reduction
-import QICLean.Channel.Peripheral.CyclicDecomposition.Decomposition
-import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
-import TNLean.MPS.Core.TransferPeripheral
-import QICLean.Channel.Peripheral.GroupStructure
-import QICLean.Kraus.CPPrimitive
-import TNLean.MPS.Irreducible.FixedPointProjection
-import TNLean.MPS.Irreducible.Adjoint
-import TNLean.MPS.Irreducible.FormII
-import QICLean.Channel.FixedPoint.Cesaro
-import QICLean.QPF.PosDef
 import TNLean.MPS.MPDO.HorizontalBNT
 
 /-!
@@ -65,13 +52,6 @@ CPSV canonical-form hypothesis; see
   nontrivial periodic vector of the vertically viewed tensor supplies an
   orthogonal projector, invariant for every full-period word and displaced by
   the single letters.
-* `MPOTensor.NoninvariantProjectorNoncommuting`: the hypothesis that a
-  displaced projector never commutes with the density operator.
-* `MPOTensor.periodicVectorYieldsCyclicProjector_of_noncommutation`: the
-  hypothesis implies `PeriodicVectorYieldsCyclicProjector`.
-* `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_noncommutation`: granted
-  the hypothesis, a matrix product density operator has no nontrivial
-  periodic vectors in the vertical direction.
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_exists_not_commute_of_displaced`:
   one noncommuting length for every displaced idempotent excludes periodic vectors.
 * `MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF`: an MPDO in
@@ -517,70 +497,15 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
       rwa [sub_add_cancel, hmap0, eq_comm] at this
     exact Kraus.cyclicProj_ne_zero K P hPsum hcyclicLM (0 - 1) hP1
 
-/-- **Hypothesis** (arXiv:1606.00608, lines 1888--1891, resting on the
-canonical-form input of lines 1874--1887): an orthogonal projector on the
-physical space that is displaced by the vertically viewed tensor —
-$Q\widetilde M\ne Q\widetilde MQ$ — fails to commute with the density
-operator $H^{(N)}$ at every length.
-
-This is the horizontal-canonical-form step of the periodic-sector argument.
-The source assumes literal canonical form in the horizontal direction.  Under
-normalized BNT-refined horizontal form, Lemma L turns the full positive-length
-family of first-site identities into the letter-level invariance
-$Q\widetilde M=Q\widetilde MQ$.  The all-length assertion below is stronger
-than needed: `hasNoPeriodicVectors_verticalTensor_of_horizontalCF` uses the
-single noncommuting length supplied by the contrapositive of Lemma L. -/
-def NoninvariantProjectorNoncommuting {d D : ℕ} (M : MPOTensor d D) : Prop :=
-  ∀ Q : Matrix (Fin d) (Fin d) ℂ, Q.IsHermitian → IsIdempotentElem Q →
-    M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q →
-    ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))
-
-/-- The non-commutation hypothesis discharges the cyclic-projector hypothesis
-of the periodic-sector step: the cyclic decomposition of the peripheral
-spectrum supplies the invariant, displaced projector unconditionally
-(`exists_displaced_invariant_projector_of_periodic_vector`), and the
-displacement upgrades to the all-length non-commutation family through the
-hypothesis.  This reduces the periodic-sector step of the proof of
-Proposition 4.13 of arXiv:1606.00608, lines 1888--1893, to the explicit
-all-length non-commutation interface.  This is a stronger conditional
-formulation than the normalized BNT-refined theorem below. -/
-theorem periodicVectorYieldsCyclicProjector_of_noncommutation
-    {d D : ℕ} (M : MPOTensor d D)
-    (hNC : NoninvariantProjectorNoncommuting M) :
-    PeriodicVectorYieldsCyclicProjector M := by
-  intro n V B ρ rad hV hint hirr hρ hrad hfix μ hμ hnorm hne
-  obtain ⟨p, Q, hp, hherm, hidem, hword, hdisp⟩ :=
-    exists_displaced_invariant_projector_of_periodic_vector M V B ρ rad hV hint
-      hirr hρ hrad hfix μ hμ hnorm hne
-  exact ⟨p, Q, hp, hherm, hidem, hword, hNC Q hherm hidem hdisp⟩
-
-/-- The vertically viewed tensor of a matrix product density operator has no
-nontrivial periodic vectors, granted that displaced projectors never commute
-with the density operator.  This is the periodic-sector step in the proof of
-Proposition 4.13 of arXiv:1606.00608, lines 1888--1893, with the projector
-and its word invariance constructed from the cyclic decomposition of the
-peripheral spectrum (Wolf 2012, Theorem 6.6) rather than assumed.
-
-**Scope restriction (conditional on the non-commutation family):** the
-hypothesis requires noncommutation at every length.  The theorem
-`hasNoPeriodicVectors_verticalTensor_of_horizontalCF` instead uses one
-noncommuting length supplied by normalized BNT-refined horizontal form; it is
-not the literal source theorem. -/
-theorem hasNoPeriodicVectors_verticalTensor_of_noncommutation
-    {d D : ℕ} (M : MPOTensor d D) (hM : IsMPDO M)
-    (hNC : NoninvariantProjectorNoncommuting M) :
-    MPSTensor.HasNoPeriodicVectors (verticalTensor M) :=
-  hasNoPeriodicVectors_verticalTensor_of_cyclicProjector M hM
-    (periodicVectorYieldsCyclicProjector_of_noncommutation M hNC)
 
 /-- **The periodic-sector step for a single-letter injective matrix product
 density operator, unconditionally.**
 
 If `M`'s doubled-index tensor is (single-letter) injective, the vertically
 viewed tensor has no nontrivial periodic vectors, with no further hypothesis.
-This bypasses `NoninvariantProjectorNoncommuting` entirely: rather than
-requiring the displaced-projector-noncommutation family at *every* chain
-length, the contradiction only ever needs the commutation family at chain
+Rather than needing the displaced-projector-noncommutation family at
+*every* chain length, the contradiction only ever needs the commutation
+family at chain
 length `2`, where `ketLeftMul_eq_braRightMul_of_commute_of_isInjective`
 (`TNLean/MPS/MPDO/InvariantProjection.lean`) applies directly to `M`'s own
 letters through injectivity's trace-pairing nondegeneracy — no horizontal

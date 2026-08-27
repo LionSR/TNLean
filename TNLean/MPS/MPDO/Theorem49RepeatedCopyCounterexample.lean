@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.RFPViaTS
-import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.StackedLayers
 
 /-!

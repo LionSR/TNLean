@@ -9,13 +9,12 @@ never move here.
 
 ## Style (MATHLIB_style)
 
-TNLean exercises the repository-local pass-through exception described in
-the deprecation section: a public declaration that merely forwards to an
-existing theorem, exposes a bundled-structure field, or names a proof step
-now written at the use site may be removed without a transition declaration,
-provided all non-`Archive` uses are migrated, no blueprint `\lean{...}` tag
-cites the old name, and the PR body plus an audit note name each removed
-declaration with its replacement.
+TNLean does not promise a stable public Lean API. A declaration may be removed
+without a deprecation or transition period when all non-`Archive` uses are
+migrated, no blueprint `\lean{...}` tag cites the old name, and the PR body plus
+an audit note name the removed declaration and its replacement. This local
+policy applies to definitions, structures, abbreviations, and theorems alike;
+do not retain an otherwise dead declaration solely as a compatibility alias.
 
 ## Proof integrity (PROOF_INTEGRITY)
 

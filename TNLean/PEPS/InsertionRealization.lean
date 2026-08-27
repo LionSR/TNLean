@@ -109,22 +109,6 @@ noncomputable def edgeMiddleLeftInverse (A : Tensor G d) {e : Edge G}
   ((edgeMiddleTensorMap (G := G) A e).exists_leftInverse_of_injective
     (edgeMiddleTensorMap_ker_eq_bot_of_injective hMid)).choose
 
-@[simp] theorem edgeMiddleLeftInverse_comp_edgeMiddleTensorMap (A : Tensor G d)
-    {e : Edge G} (hMid : EdgeMiddleTensorInjective (G := G) A e) :
-    (edgeMiddleLeftInverse (G := G) A hMid).comp (edgeMiddleTensorMap (G := G) A e) =
-      LinearMap.id :=
-  ((edgeMiddleTensorMap (G := G) A e).exists_leftInverse_of_injective
-    (edgeMiddleTensorMap_ker_eq_bot_of_injective hMid)).choose_spec
-
-@[simp] theorem edgeMiddleLeftInverse_apply_edgeMiddleTensorMap (A : Tensor G d)
-    {e : Edge G} (hMid : EdgeMiddleTensorInjective (G := G) A e)
-    (c : EdgeMiddleBoundaryLabel (G := G) A e → ℂ) :
-    edgeMiddleLeftInverse (G := G) A hMid (edgeMiddleTensorMap (G := G) A e c) = c := by
-  change ((edgeMiddleLeftInverse (G := G) A hMid).comp
-    (edgeMiddleTensorMap (G := G) A e)) c = c
-  rw [edgeMiddleLeftInverse_comp_edgeMiddleTensorMap]
-  rfl
-
 /-- A virtual matrix inserted on an edge is physically realizable on either
 neighboring endpoint tensor, provided the PEPS tensor is vertex-injective.
 

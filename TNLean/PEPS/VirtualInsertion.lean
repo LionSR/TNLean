@@ -83,6 +83,7 @@ noncomputable def localVirtualConfigSplitAt (A : Tensor G d) {v : V}
     (Equiv.piSplitAt ie fun je : IncidentEdge G v => Fin (A.bondDim je.1))
 
 omit [Fintype V] in
+-- restored: fired by the bare `simp` in `localIncidentMatrixOp_single` below
 @[simp] theorem localVirtualConfigSplitAt_apply_fst (A : Tensor G d) {v : V}
     (ie : IncidentEdge G v) (η : LocalVirtualConfig A v) :
     (localVirtualConfigSplitAt (G := G) A ie η).1 = η ie := by
@@ -196,11 +197,7 @@ noncomputable def localLeftInverse (A : Tensor G d) (hA : IsVertexInjective A)
     (v : V) : (Fin d → ℂ) →ₗ[ℂ] (LocalVirtualConfig A v → ℂ) :=
   localLeftInverseAt A (hA v)
 
-@[simp] theorem localLeftInverse_comp_localTensorMap (A : Tensor G d)
-    (hA : IsVertexInjective A) (v : V) :
-    (localLeftInverse A hA v).comp (localTensorMap A v) = LinearMap.id :=
-  localLeftInverseAt_comp_localTensorMap A (hA v)
-
+-- restored: fired by the bare `simp` in `TNLean.PEPS.LocalGauge`
 @[simp] theorem localLeftInverse_apply_localTensorMap (A : Tensor G d)
     (hA : IsVertexInjective A) (v : V) (c : LocalVirtualConfig A v → ℂ) :
     localLeftInverse A hA v (localTensorMap A v c) = c :=
@@ -337,31 +334,6 @@ theorem localIncidentMatrixOp_single (A : Tensor G d) {v : V}
         have hp := congrArg φ h
         simpa using congrArg Prod.fst hp
       rw [Pi.single_eq_of_ne hcfg, mul_zero]
-
-omit [Fintype V] in
-/-- The identity matrix on one incident edge induces the identity virtual
-operation. -/
-@[simp] theorem localIncidentMatrixOp_one (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) :
-    localIncidentMatrixOp A ie (1 : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) =
-      LinearMap.id := by
-  classical
-  ext c η'
-  rw [localIncidentMatrixOp_apply, LinearMap.id_apply]
-  rw [Fintype.sum_eq_single (η' ie)]
-  · have hcfg :
-        (localVirtualConfigSplitAt (G := G) A ie).symm
-          (η' ie, (localVirtualConfigSplitAt (G := G) A ie η').2) = η' := by
-      have hp :
-          (η' ie, (localVirtualConfigSplitAt (G := G) A ie η').2) =
-            localVirtualConfigSplitAt (G := G) A ie η' := by
-        ext
-        · simp
-        · rfl
-      rw [hp, Equiv.symm_apply_apply]
-    rw [Matrix.one_apply_eq, one_mul, hcfg]
-  · intro y hy
-    rw [Matrix.one_apply_ne hy, zero_mul]
 
 omit [Fintype V] in
 /-- The incident-edge matrix operation is additive in the inserted matrix. -/
@@ -628,21 +600,11 @@ noncomputable def localVirtualOpOfPhysicalOp (A : Tensor G d)
   simpa [localProjectorAt] using
     (physRealizeLocalOpAt_spec A hv LinearMap.id c)
 
+-- restored: fired by the bare `simp` in `TNLean.PEPS.LocalGauge`
 @[simp] theorem localProjector_apply_localTensorMap (A : Tensor G d)
     (hA : IsVertexInjective A) (v : V) (c : LocalVirtualConfig A v → ℂ) :
     localProjector A hA v (localTensorMap A v c) = localTensorMap A v c :=
   localProjectorAt_apply_localTensorMap A (hA v) c
-
-@[simp] theorem localProjectorAt_apply_component (A : Tensor G d) {v : V}
-    (hv : LinearIndependent ℂ (A.component v)) (η : LocalVirtualConfig A v) :
-    localProjectorAt A hv (A.component v η) = A.component v η := by
-  simpa [localTensorMap_apply_single] using
-    (localProjectorAt_apply_localTensorMap A hv (Pi.single η (1 : ℂ)))
-
-@[simp] theorem localProjector_apply_component (A : Tensor G d)
-    (hA : IsVertexInjective A) (v : V) (η : LocalVirtualConfig A v) :
-    localProjector A hA v (A.component v η) = A.component v η :=
-  localProjectorAt_apply_component A (hA v) η
 
 /-- The projection onto the image of the single-site tensor family is
 idempotent. -/

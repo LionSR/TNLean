@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition
-import TNLean.MPS.MPDO.PhysicalSupportSALTransport
 import TNLean.MPS.MPDO.SALArbitraryCut
 
 /-!

@@ -47,11 +47,6 @@ theorem gaugePhaseEquiv_of_krausGaugePhaseEquiv
   change B i = μ⁻¹ • (Xinv * A i * X)
   rw [hstep, smul_smul, inv_mul_cancel₀ hμ_ne0, one_smul]
 
-private theorem irreducibleMap_of_irreducibleTensor
-    (A : MPSTensor d D) (hA : Kraus.IsIrreducibleFamily A) :
-    IsIrreducibleMap (Kraus.mapLM A) :=
-  Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA
-
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
@@ -63,8 +58,8 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     GaugePhaseEquiv A B :=
   gaugePhaseEquiv_of_krausGaugePhaseEquiv <|
     Kraus.modulus_one_mixedMapSpectralRadius_implies_gauge A B
-      (irreducibleMap_of_irreducibleTensor A hA_irr)
-      (irreducibleMap_of_irreducibleTensor B hB_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB_irr)
       hA_left hB_left (by
         simpa [Kraus.mixedTransferSpectralRadius, Kraus.mixedMapLM,
           Kraus.mixedMapSpectralRadius] using hsr)
@@ -83,8 +78,8 @@ theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
   simpa [Kraus.mixedTransferSpectralRadius, Kraus.mixedMapLM,
     Kraus.mixedMapSpectralRadius] using
     Kraus.mixedMapSpectralRadius_lt_one_of_irreducible_TP A B
-      (irreducibleMap_of_irreducibleTensor A hA_irr)
-      (irreducibleMap_of_irreducibleTensor B hB_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB_irr)
       hA_left hB_left hK
 
 /-- Mixed transfer iterates decay for distinct irreducible left-canonical blocks. -/
@@ -101,8 +96,8 @@ theorem mixedTransfer_pow_tendsto_zero_of_irreducible_TP
     fun h => hAB (gaugePhaseEquiv_of_krausGaugePhaseEquiv h)
   simpa [Kraus.mixedMapLM] using
     Kraus.mixedMapLM_pow_tendsto_zero_of_irreducible_TP A B
-      (irreducibleMap_of_irreducibleTensor A hA_irr)
-      (irreducibleMap_of_irreducibleTensor B hB_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB_irr)
       hA_left hB_left hK X
 
 /-- Overlap decay for distinct irreducible left-canonical blocks of the same bond dimension. -/
@@ -131,8 +126,8 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
   simpa [Kraus.mixedTransferSpectralRadius₂, Kraus.mixedMapLM,
     Kraus.mixedMapSpectralRadius] using
     Kraus.mixedMapSpectralRadius_lt_one_of_dim_ne_of_irreducible_TP A B
-      (irreducibleMap_of_irreducibleTensor A hA_irr)
-      (irreducibleMap_of_irreducibleTensor B hB_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hA_irr)
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB_irr)
       hA_left hB_left hD
 
 /-- Overlap decay for irreducible left-canonical blocks of different bond dimensions. -/

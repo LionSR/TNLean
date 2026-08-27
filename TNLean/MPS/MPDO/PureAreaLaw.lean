@@ -285,12 +285,6 @@ theorem pureBlockEntropy_monotone (A : MPSTensor d D) {N L : ℕ} (hN : 2 * L + 
 
 /-! ## S_N = 0 and the pure mutual information `I_L = 2 S_L` -/
 
-theorem append_zero_eq {α : Type*} {L : ℕ} (u : Fin L → α) (g : Fin 0 → α) :
-    Fin.append u g = fun i => u (Fin.cast (Nat.add_zero L) i) := by
-  funext i
-  refine Fin.addCases (fun j => ?_) (fun j => j.elim0) i
-  rw [Fin.append_left]; congr 1
-
 /-- With an empty right block, the block-reduced state is the input matrix
 reindexed along the trivial length identity L + 0 = L. -/
 theorem blockReducedState_zero {L : ℕ}
@@ -300,7 +294,7 @@ theorem blockReducedState_zero {L : ℕ}
           (Equiv.arrowCongr (finCongr (Nat.add_zero L).symm) (Equiv.refl (Fin d))) := by
   ext u v
   simp only [blockReducedState, partialTraceRight_apply, Matrix.submatrix_apply,
-    blockSplitEquiv_symm_apply, Fintype.sum_unique, append_zero_eq]
+    blockSplitEquiv_symm_apply, Fintype.sum_unique, Fin.append_right_nil]
   rfl
 
 /-- The full-system pure block entropy vanishes: the whole-chain reduced state

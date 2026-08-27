@@ -10,7 +10,6 @@ import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
-import QICLean.Channel.Peripheral.CyclicDecomposition
 import QICLean.Channel.Peripheral.GroupStructure
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan

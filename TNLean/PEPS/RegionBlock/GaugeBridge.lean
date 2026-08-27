@@ -407,23 +407,12 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
             (assembleRegionσ (V := V) (d := d) R σ τ)
             (regionEdgeOrient (G := G) B R f N) =
           ∑ ξ : {ξ : OpenLocalConfig (G := G) B //
-            IsConsistentOff (G := G) B f.1 ξ}, H ξ.1 := by
-      rw [edgeInsertedCoeff_eq_sum_local]
-      calc
-        _ = ∑ ξ : OpenLocalConfig (G := G) B,
-              if IsConsistentOff (G := G) B f.1 ξ then H ξ else 0 := by
-            refine Finset.sum_congr rfl ?_
-            intro ξ _
-            rw [prod_off_delta_eq]
-            by_cases h : IsConsistentOff (G := G) B f.1 ξ <;> simp [h, hH]
-        _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) B //
-              IsConsistentOff (G := G) B f.1 ξ}, H ξ.1 := by
-            rw [Finset.sum_ite]
-            simp only [Finset.sum_const_zero, add_zero]
-            rw [← Finset.sum_subtype_eq_sum_filter
-              (s := (Finset.univ : Finset (OpenLocalConfig (G := G) B)))
-              (f := H) (p := IsConsistentOff (G := G) B f.1)]
-            simp
+            IsConsistentOff (G := G) B f.1 ξ}, H ξ.1 :=
+      (edgeInsertedCoeff_eq_sum_local B f.1 (assembleRegionσ (V := V) (d := d) R σ τ)
+          (regionEdgeOrient (G := G) B R f N)).trans
+        (sum_off_delta_eq_sum_consistentOff B f.1 (regionEdgeOrient (G := G) B R f N)
+          (fun ξ => ∏ v : V, B.component v (ξ v)
+            (assembleRegionσ (V := V) (d := d) R σ τ v)))
     rw [hcollapse]
     have hHfilter :
         (∑ ξ ∈ Finset.univ.filter

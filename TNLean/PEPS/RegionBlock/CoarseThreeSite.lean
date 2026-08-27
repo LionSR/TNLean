@@ -199,13 +199,6 @@ def regionOf : Fin 3 → Finset V
   | 2 => F.complement
 
 omit [DecidableEq V] in
-@[simp] theorem regionOf_zero : F.regionOf 0 = F.red := rfl
-omit [DecidableEq V] in
-@[simp] theorem regionOf_one : F.regionOf 1 = F.blue := rfl
-omit [DecidableEq V] in
-@[simp] theorem regionOf_two : F.regionOf 2 = F.complement := rfl
-
-omit [DecidableEq V] in
 /-- The blocked-tensor injectivity of the region attached to a coarse vertex. -/
 theorem regionOf_injective : ∀ v : Fin 3,
     RegionBlockedTensorInjective (G := G) A (F.regionOf v)
@@ -241,9 +234,6 @@ noncomputable def coarseTensor : Tensor coarseGraph (coarseDim V d) where
   component v legs p :=
     regionBlockedWeight (G := G) A (F.regionOf v) (F.legEquiv v legs)
       (coarseProj (F.regionOf v) p)
-
-@[simp] theorem coarseTensor_bondDim :
-    (F.coarseTensor).bondDim = F.coarseBondDim := rfl
 
 @[simp] theorem coarseTensor_component (v : Fin 3)
     (legs : (ie : IncidentEdge coarseGraph v) → Fin (F.coarseBondDim ie.1))
