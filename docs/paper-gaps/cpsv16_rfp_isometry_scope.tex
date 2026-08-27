@@ -2,10 +2,10 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 % Fallbacks keep this author document compilable when it is built outside its
 % source directory and a different command.tex is found first.
@@ -30,7 +30,7 @@
 
 \section{Source statement}
 
-The pure-state RFP characterization in Section~3 of
+The pure-state RFP characterization in Section~\cpsvref{Sec:MPS} of
 Ref.~\cite{Cirac2016MPDO_arXiv} writes a canonical-form RFP tensor as
 \begin{align}
     A^i
@@ -39,24 +39,23 @@ Ref.~\cite{Cirac2016MPDO_arXiv} writes a canonical-form RFP tensor as
     \mu_{j,q}X_{j,q}\Lambda_jU_j^iX_{j,q}^{-1}.
     \label{eq:cpsv16_canonical_rfp_tensor}
 \end{align}
-This is Equation~\path{III_CFI_RFP} of
-Ref.~\cite{Cirac2016MPDO_arXiv}. The matrices $\Lambda_j$ are diagonal,
-positive, and trace-normalized. The same theorem requires the joint isometry
-condition
+This is Equation~(\cpsvref{III_CFI_RFP}) of Ref.~\cite{Cirac2016MPDO_arXiv},
+where the matrices $\Lambda_j$ are diagonal, positive, and trace-normalized. The
+same theorem imposes the joint isometry condition
 \begin{align}
     \sum_{i=1}^s
     (U_j^i)_{\alpha,\beta}
     \overline{(U_{j'}^i)_{\alpha',\beta'}}
         &=
-    \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
     \label{eq:cpsv16_source_joint_isometry}
 \end{align}
-This is Equation~\path{eq:III_isometry} of
-Ref.~\cite{Cirac2016MPDO_arXiv}. The diagonal case $j=j'$ is full
-pair-index orthonormality in the two virtual indices $(\alpha,\beta)$. The
-factor $\delta_{j,j'}$ adds cross-block orthogonality: for $j\ne j'$, the
-physical-index isometries associated with the two normal-tensor blocks are
-mutually orthogonal. Corollary~III.cor3 of
+which is Equation~(\cpsvref{eq:III_isometry}) of
+Ref.~\cite{Cirac2016MPDO_arXiv}. The diagonal case $j=j'$ asserts full
+pair-index orthonormality in the virtual indices $(\alpha,\beta)$, while the
+Kronecker delta $\delta_{j,j'}$ adds cross-block orthogonality: for $j\ne j'$,
+the physical-index isometries associated with distinct normal-tensor blocks are
+mutually orthogonal. Corollary~\cpsvref{III_cor3} of
 Ref.~\cite{Cirac2016MPDO_arXiv} invokes the same isometry condition for the
 BNT elements.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:543--554} and
@@ -64,10 +63,10 @@ BNT elements.\footnote{Local source:
 
 \section{Formal boundary}
 
-The single-normal-tensor characterization is formalized under the exact source
-hypotheses. If $A$ is normal in the sense of
-Ref.~\cite{Cirac2016MPDO_arXiv}, then its bond dimension is necessarily
-positive by \leanid{MPSTensor.IsNormalTensor.bondDim_ne_zero}, and
+The single-normal-tensor characterization is formalized under the source
+hypotheses. When $A$ is normal in the sense of Ref.~\cite{Cirac2016MPDO_arXiv},
+its bond dimension is positive,\footnote{Formal declaration:
+\leanid{MPSTensor.IsNormalTensor.bondDim_ne_zero}.} and
 \begin{align}
     A\text{ is a renormalization fixed point}
         \quad\Longleftrightarrow\quad
@@ -76,8 +75,8 @@ positive by \leanid{MPSTensor.IsNormalTensor.bondDim_ne_zero}, and
 \end{align}
 The forward implication in Eq.~\ref{eq:cpsv16_normal_rfp_iff_sqrt_isometry}
 passes to the trace-preserving Perron gauge, applies the left-canonical
-structural theorem there, and returns along the similarity. The reverse
-implication follows directly from the rank-one transfer formula.\footnote{Formal
+structural theorem there, and pulls the result back along the similarity; the
+converse follows directly from the rank-one transfer formula.\footnote{Formal
 declarations:
 \leanid{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff} in
 \doclink{TNLean/MPS/RFP/StructuralFull} and
@@ -105,7 +104,7 @@ For each block $k$, let $D_k$ denote its bond dimension. The theorem gives
     D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:cpsv16_per_block_normalized_pair_isometry}
 \end{align}
-Here and below, $I$ denotes the identity matrix of the required dimension.
+Here and below, $I$ denotes the identity matrix of the appropriate dimension.
 Equation~\ref{eq:cpsv16_per_block_contracted_identity} is the contracted
 identity
 \begin{align}
@@ -116,18 +115,16 @@ identity
     \delta_{\beta,\beta'}.
     \label{eq:cpsv16_per_block_contracted_entries}
 \end{align}
-Equation~\ref{eq:cpsv16_per_block_normalized_pair_isometry} records the
-diagonal pair-index orthonormality in the normalization used by the formal
-theorem. Compared with the convention in
-Eq.~\ref{eq:cpsv16_source_joint_isometry}, the entries of $U_k^i$ carry the
-normalized matrix-unit factor $D_k^{-1/2}$. Thus the compatible pair-index
-equation is precisely
-Eq.~\ref{eq:cpsv16_per_block_normalized_pair_isometry}. The remaining
-normalization comparison with Equation~\path{eq:III_isometry} of
-Ref.~\cite{Cirac2016MPDO_arXiv} is therefore explicit rather than hidden.
+Equation~\ref{eq:cpsv16_per_block_normalized_pair_isometry} records diagonal
+pair-index orthonormality in the normalization of the formal theorem. Compared
+with Eq.~\ref{eq:cpsv16_source_joint_isometry}, the entries of $U_k^i$ carry the
+normalized matrix-unit factor $D_k^{-1/2}$, making
+Eq.~\ref{eq:cpsv16_per_block_normalized_pair_isometry} the matching pair-index
+relation. The normalization comparison with
+Equation~(\cpsvref{eq:III_isometry}) of Ref.~\cite{Cirac2016MPDO_arXiv} is thus
+explicit.
 
-A subsequent comparison theorem rescales the same single-block decomposition
-according to
+A comparison theorem rescales this single-block decomposition by
 \begin{align}
     U_k^i
         &\longmapsto
@@ -141,9 +138,8 @@ according to
 \footnote{Formal declaration:
 \leanid{MPSTensor.rfp_nt_structural_full_unit_pair} in
 \doclink{TNLean/MPS/RFP/StructuralFull}.}
-The rescaling in Eq.~\ref{eq:cpsv16_unit_pair_rescaling} leaves
-$\Lambda_kU_k^i$ unchanged and gives the diagonal pair-index equation in the
-source unit convention,
+This rescaling leaves $\Lambda_kU_k^i$ unchanged and recovers the diagonal
+pair-index equation in the source unit convention,
 \begin{align}
     \sum_i
     \overline{(U_k^i)_{\alpha,\beta}}
@@ -152,14 +148,13 @@ source unit convention,
     \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:cpsv16_per_block_unit_pair_isometry}
 \end{align}
-Thus the scalar normalization mismatch is no longer hidden in the formal
-statement: both conventions are available, and their comparison is explicit.
+Both conventions are available, and their relation is fully recorded.
 
-The Appendix~B structural datum used in the conditional parent-Hamiltonian
-theorem chooses the unit pair-index convention, so the remaining coefficient
-problem starts from the source normalization. Appendix~B of
-Ref.~\cite{Cirac2016MPDO_arXiv} first gives the coefficient form of the
-basic-vector expression
+The structural datum in Appendix~\cpsvref{AppendixPure} used in the conditional
+parent-Hamiltonian theorem adopts the unit pair-index convention, so the
+coefficient problem starts from the source normalization. The same appendix of
+Ref.~\cite{Cirac2016MPDO_arXiv} gives the coefficient form of the basic-vector
+expression as
 \begin{align}
     C_L(\sigma)
         &=
@@ -171,7 +166,7 @@ basic-vector expression
     \alpha_L=\alpha_0.
     \label{eq:cpsv16_cyclic_coefficient}
 \end{align}
-Equation~\ref{eq:cpsv16_cyclic_coefficient} is the coefficient form of
+This is the coefficient form of
 \begin{align}
     \ket{V^{(L)}(A_j)}
         &=
@@ -180,33 +175,33 @@ Equation~\ref{eq:cpsv16_cyclic_coefficient} is the coefficient form of
 \end{align}
 where $\varphi_j$ is shared between $b_t$ and $a_{t+1}$. The even-chain
 physical-pair factorization considered in the conditional parent-Hamiltonian
-theorem is therefore a separate statement, not the source expression itself.
+theorem is therefore a separate statement rather than the source expression
+itself.
 
-The formal development proves the cyclic coefficient formula for the original
-tensor after the Appendix~B change of basis, for every nonempty chain length
-and a chosen structural datum:
+For every nonempty chain length and chosen structural datum, the formal
+development proves the cyclic coefficient formula for the original tensor
+after the basis change of Appendix~\cpsvref{AppendixPure}:
 \begin{align}
     V^{(L)}(A)_\sigma
         &=
     C_L(\sigma).
     \label{eq:cpsv16_formal_cyclic_virtual_pair_state}
 \end{align}
-This is the declaration
-\leanid{MPSTensor.AppendixBStructuralData.mpv_eq_cyclicVirtualPairState}. It
-does not prove the even-chain physical-pair factorization.
+\footnote{Formal theorem:
+\leanid{MPSTensor.AppendixBStructuralData.mpv_eq_cyclicVirtualPairState}.} This
+cyclic identity does not by itself establish the even-chain physical-pair
+factorization.
 
-The pair-index isometry in
-Eq.~\ref{eq:cpsv16_per_block_unit_pair_isometry} is an orthogonality equation
-after summing over the physical letter $i$. It is therefore not, by itself, a
-coefficient identity for a fixed physical word $\sigma$. Any proof of a
-fixed-word physical-pair factorization must use the source basic-vector
-expression in Eq.~\ref{eq:cpsv16_basic_vector_expression}, or an equivalent
-construction of the corresponding local projectors, rather than applying the
-summed isometry as if the physical labels were also summed in
-$C_L(\sigma)$.
+The pair-index isometry in Eq.~\ref{eq:cpsv16_per_block_unit_pair_isometry}
+sums over the physical letter $i$ and thus does not supply a coefficient identity
+for an individual physical word $\sigma$. Proving a fixed-word physical-pair
+factorization requires the source basic-vector expression in
+Eq.~\ref{eq:cpsv16_basic_vector_expression} or an explicit projector
+construction, because the physical indices in $C_L(\sigma)$ are fixed rather
+than summed.
 
-This obstruction is genuine, not merely a missing formal proof. For example,
-take two virtual indices and physical labels $i=(a,b)$, and define
+This obstruction is structural rather than a formal artifact. Consider two
+virtual indices, physical labels $i=(a,b)$, and
 \begin{align}
     (U^{(a,b)})_{x,y}
         &=
@@ -219,22 +214,21 @@ take two virtual indices and physical labels $i=(a,b)$, and define
     \lambda_0,\lambda_1>0.
     \label{eq:cpsv16_fixed_word_counterexample_tensor}
 \end{align}
-The unit pair-index isometry holds. Consider the length-four word
+The unit pair-index isometry holds. For the length-four word
 \begin{align}
     \sigma
         &=
-    ((0,1),(1,0),(1,0),(0,1)).
+    ((0,1),(1,0),(1,0),(0,1)),
     \label{eq:cpsv16_fixed_word_counterexample_word}
 \end{align}
-The cyclic coefficient vanishes because the middle virtual matching condition
-fails:
+the cyclic coefficient vanishes because virtual indices fail to match:
 \begin{align}
     C_4(\sigma)
         &=
     0.
     \label{eq:cpsv16_counterexample_cyclic_coefficient}
 \end{align}
-The physical-pair product is instead
+The physical-pair product, however, evaluates to
 \begin{align}
     (\lambda_0\lambda_1)(\lambda_1\lambda_0)
         &=
@@ -245,11 +239,11 @@ The physical-pair product is instead
 \end{align}
 Equations~\ref{eq:cpsv16_counterexample_cyclic_coefficient}
 and~\ref{eq:cpsv16_counterexample_physical_pair_product} show that the
-even-chain physical-pair coefficient identity does not follow from the unit
+even-chain physical-pair coefficient identity cannot be deduced from the unit
 pair-index isometry alone.
 
-The per-block isometry form does not by itself relate $U_k$ and $U_\ell$ for
-$k\ne\ell$. The cross-block equations
+The per-block isometry form does not constrain $U_k$ and $U_\ell$ for
+$k\ne\ell$. The cross-block relations
 \begin{align}
     \sum_i
     (U_k^i)_{\alpha,\beta}
@@ -260,22 +254,22 @@ $k\ne\ell$. The cross-block equations
     k\ne\ell,
     \label{eq:cpsv16_cross_block_residual_isometry}
 \end{align}
-are the $j\ne j'$ part of
-Eq.~\ref{eq:cpsv16_source_joint_isometry}. They are established separately at
-the normal-tensor-block level in Section~\ref{sec:cpsv16_cross_block}.
+form the $j\ne j'$ portion of Eq.~\ref{eq:cpsv16_source_joint_isometry}; they
+are proved at the normal-tensor-block level in
+Section~\ref{sec:cpsv16_cross_block}.
 
 \section{Square-root diagonal (local correction)}
 \label{sec:cpsv16_square_root_correction}
 
-The displayed normal-tensor form in Equation~\path{eq_III_NT_RFP} of
-Ref.~\cite{Cirac2016MPDO_arXiv} is
+Equation~(\cpsvref{eq_III_NT_RFP}) in Ref.~\cite{Cirac2016MPDO_arXiv} displays
+the normal-tensor decomposition as
 \begin{align}
     A^i
         &=
-    X\Lambda U^iX^{-1}.
+    X\Lambda U^iX^{-1},
     \label{eq:cpsv16_source_normal_tensor_form}
 \end{align}
-It uses the diagonal $\Lambda$ itself together with the unit isometry
+combining the unsquared diagonal matrix $\Lambda$ with the unit isometry
 condition\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1278} for the displayed equation and
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1281--1283} for the unit isometry.}
@@ -287,20 +281,18 @@ condition\footnote{Local source:
     \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:cpsv16_source_normal_tensor_unit_isometry}
 \end{align}
-This literal pairing is internally inconsistent. The same proof in
-Ref.~\cite{Cirac2016MPDO_arXiv} constructs the reference
-tensor\footnote{Local source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1300}.}
+Taken literally, these two conditions are incompatible. The proof in
+Ref.~\cite{Cirac2016MPDO_arXiv} builds the reference tensor\footnote{Local
+source: \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1300}.}
 \begin{align}
     \widehat A^{(\alpha',\beta')}_{\alpha,\beta}
         &=
     \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}
-    \sqrt{\Lambda_\alpha}.
+    \sqrt{\Lambda_\alpha},
     \label{eq:cpsv16_source_reference_tensor}
 \end{align}
-This tensor is left-canonical and has fixed point
-$\operatorname{diag}(\Lambda)$ with $\tr(\Lambda)=1$. Writing
-$\widehat A=\Lambda U$ would force
+which is left-canonical with fixed point $\operatorname{diag}(\Lambda)$ and
+$\tr(\Lambda)=1$. Setting $\widehat A=\Lambda U$ forces
 \begin{align}
     U^{(\alpha',\beta')}_{\alpha,\beta}
         &=
@@ -308,7 +300,7 @@ $\widehat A=\Lambda U$ would force
          {\sqrt{\Lambda_\alpha}},
     \label{eq:cpsv16_residual_after_full_diagonal}
 \end{align}
-whose pair-index sum is
+giving the pair-index sum
 \begin{align}
     \sum_i
     (U^i)_{\alpha,\beta}
@@ -322,51 +314,47 @@ whose pair-index sum is
     \Lambda_\alpha\ne1.
     \label{eq:cpsv16_full_diagonal_nonunit_residual}
 \end{align}
-Thus the residual after factoring $\Lambda$ is not a unit isometry. Writing
-instead $\widehat A=\sqrt{\Lambda}\,U$ gives
+Whenever $\Lambda_\alpha\ne1$, this residual is not a unit isometry. Setting
+$\widehat A=\sqrt{\Lambda}\,U$ yields instead
 \begin{align}
     U^{(\alpha',\beta')}_{\alpha,\beta}
         &=
     \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
     \label{eq:cpsv16_residual_after_square_root_diagonal}
 \end{align}
-whose pair-index sum is
+with pair-index sum
 \begin{align}
     \sum_i
     (U^i)_{\alpha,\beta}
     \overline{(U^i)_{\alpha',\beta'}}
         &=
-    \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+    \delta_{\alpha,\alpha'}\delta_{\beta,\beta'},
     \label{eq:cpsv16_square_root_unit_residual}
 \end{align}
-Equation~\ref{eq:cpsv16_square_root_unit_residual} is a genuine unit
-isometry.
+which is indeed a unit isometry.
 
-The formalization therefore states the decomposition with the square-root
-diagonal,
+The formalization therefore adopts the square-root diagonal decomposition
 \begin{align}
     A^i
         &=
-    X\sqrt{\Lambda}\,U^iX^{-1}.
+    X\sqrt{\Lambda}\,U^iX^{-1},
     \label{eq:cpsv16_corrected_square_root_form}
 \end{align}
-This form keeps both the source trace normalization $\tr(\Lambda)=1$ on
-$\Lambda$ and the source unit isometry condition on $U$. The replacement
-$\Lambda\mapsto\sqrt{\Lambda}$ is a local correction of the source display.
-It is mathematically correct as stated, and the source itself uses
-$\sqrt{\Lambda_\alpha}$ for the reference tensor at line~1300. Thus the
-displayed $\Lambda$ at line~1278 is a typographic simplification of the
-dressing.
+preserving both the trace normalization $\tr(\Lambda)=1$ on $\Lambda$ and the
+unit isometry condition on $U$. The replacement $\Lambda\mapsto\sqrt{\Lambda}$
+is a local correction to the printed display. The source itself uses
+$\sqrt{\Lambda_\alpha}$ in the reference tensor at line~1300, confirming that
+$\Lambda$ at line~1278 is an imprecise notation for the dressing.
 
 \section{Trace normalization (discharged)}
 \label{sec:cpsv16_trace_normalization}
 
-A named predicate records the trace-normalized isometry canonical
-form.\footnote{Formal declaration: \leanid{MPSTensor.IsIsometryCanonicalForm}
+The trace-normalized isometry canonical form is captured by a dedicated
+predicate.\footnote{Formal declaration: \leanid{MPSTensor.IsIsometryCanonicalForm}
 in \doclink{TNLean/MPS/RFP/StructuralFull}.}
-The predicate asserts the existence of an invertible $X$, a positive diagonal
-$\Lambda$ with $\sum_\alpha\Lambda_\alpha=1$, and a unit pair-index isometry
-$U$ such that
+It asserts the existence of an invertible matrix $X$, a positive diagonal
+matrix $\Lambda$ with $\sum_\alpha\Lambda_\alpha=1$, and a unit pair-index
+isometry $U$ such that
 \begin{align}
     A^i
         &=
@@ -379,11 +367,10 @@ $U$ such that
     \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:cpsv16_trace_normalized_unit_isometry}
 \end{align}
-The square root on the diagonal matches the source reference tensor. The
-square-root correction is documented in
-Section~\ref{sec:cpsv16_square_root_correction}. The trace condition is imposed
-on $\Lambda$ itself, equivalently on the normalized diagonal fixed point
-$\rho=\operatorname{diag}(\Lambda)$:
+The square root on the diagonal matches the reference tensor in
+Section~\ref{sec:cpsv16_square_root_correction}. The trace normalization
+applies directly to $\Lambda$, or equivalently to the normalized diagonal fixed
+point $\rho=\operatorname{diag}(\Lambda)$:
 \begin{align}
     \Lambda_\alpha
         &=
@@ -391,11 +378,10 @@ $\rho=\operatorname{diag}(\Lambda)$:
     &
     \sum_\alpha\Lambda_\alpha
         &=
-    1.
+    1,
     \label{eq:cpsv16_fixed_point_trace_normalization}
 \end{align}
-The second equality in Eq.~\ref{eq:cpsv16_fixed_point_trace_normalization}
-follows from the diagonal fixed-point identity
+where the normalization sum follows from
 \begin{align}
     \sum_\alpha\rho_{\alpha,\alpha}
         &=
@@ -403,33 +389,35 @@ follows from the diagonal fixed-point identity
     \label{eq:cpsv16_diagonal_fixed_point_trace}
 \end{align}
 
-The left-canonical forward theorem
-\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt} proves this form for the
-Perron representative. Gauge invariance then proves that every normal tensor
-is a renormalization fixed point if and only if it admits the square-root form
-in Eq.~\ref{eq:cpsv16_trace_normalized_sqrt_decomposition}, with no
-bond-dimension or left-canonical hypothesis on the original tensor. This is
-\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.
+The forward theorem establishes this form for the Perron representative in
+left-canonical gauge.\footnote{Formal theorem:
+\leanid{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}.}
+By gauge invariance, every normal tensor is a renormalization fixed point if
+and only if it admits the square-root form in
+Eq.~\ref{eq:cpsv16_trace_normalized_sqrt_decomposition}, without requiring
+left-canonical normalization or bond-dimension restrictions on the original
+tensor.\footnote{Formal equivalence:
+\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.}
 
-This discharges the single-normal-tensor statement and its trace-normalization
-scope item. The cross-block $\delta_{j,j'}$ orthogonality between distinct
-normal-tensor blocks is treated next.
+This discharges the single-normal-tensor characterization and its trace
+normalization. The cross-block orthogonality ($\delta_{j,j'}$) between
+distinct normal-tensor blocks is treated next.
 
 \section{Cross-block residual isometry}
 \label{sec:cpsv16_cross_block}
 
-The cross-block $\delta_{j,j'}$ orthogonality is formalized at the level of the
+Cross-block orthogonality ($\delta_{j,j'}$) is formalized at the level of
 normal-tensor blocks. Let $(A_j)_j$ be a family of normal, irreducible,
-left-canonical blocks, no two of which are gauge-phase equivalent. Assume
-$\dim_j\geq1$ and that the direct sum $\bigoplus_jA_j$ is a renormalization
-fixed point. For distinct blocks, define the mixed transfer operator by
+left-canonical blocks of positive dimensions, pairwise inequivalent under gauge
+transformations and phase shifts, such that $\bigoplus_jA_j$ is a
+renormalization fixed point. For distinct blocks, the mixed transfer operator
 \begin{align}
     \mathcal E_{j,j'}
         &=
-    \sum_i A_j^i\otimes\overline{A_{j'}^i}.
+    \sum_i A_j^i\otimes\overline{A_{j'}^i}
     \label{eq:cpsv16_mixed_transfer_definition}
 \end{align}
-Then
+vanishes identically:
 \begin{align}
     \mathcal E_{j,j'}
         &=
@@ -438,24 +426,24 @@ Then
     j\ne j'.
     \label{eq:cpsv16_mixed_transfer_vanishing}
 \end{align}
-Equation~\ref{eq:cpsv16_mixed_transfer_vanishing} is formalized by
-\leanid{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}.
-The argument decomposes the direct-sum transfer map block by block using
-\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}. Whole-tensor
-idempotence makes each $\mathcal E_{j,j'}$ idempotent, and the same-dimension
-and dimension-mismatch transfer-operator gaps force an idempotent of spectral
-radius below one to vanish.
+\footnote{Formal theorem:
+\leanid{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}.}
+The proof decomposes the direct-sum transfer map block by block.\footnote{Formal
+decomposition: \leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}.}
+Transfer-map idempotence of the direct sum implies that each $\mathcal
+E_{j,j'}$ is idempotent; because distinct blocks have peripheral spectral
+radius strictly below one, every such idempotent must vanish.
 
-Passing to the residual isometries uses the isometry canonical form of each
-block. Write
+Passing to the residual isometries uses the canonical form of each block.
+Writing
 \begin{align}
     A_j^i
         &=
     X_j\sqrt{\Lambda_j}\,U_j^iX_j^{-1},
     \label{eq:cpsv16_cross_block_sqrt_decomposition}
 \end{align}
-where $X_j$ and $\sqrt{\Lambda_j}$ are invertible. The mixed transfer operator
-is covariant under the two-sided change of variables:
+with invertible $X_j$ and $\sqrt{\Lambda_j}$, the mixed transfer operator
+transforms covariantly under two-sided gauge changes:
 \begin{align}
     \mathcal E_{A_j,A_{j'}}(Y)
         &=
@@ -465,9 +453,8 @@ is covariant under the two-sided change of variables:
     (X_{j'}\sqrt{\Lambda_{j'}})^\dagger.
     \label{eq:cpsv16_mixed_transfer_covariance}
 \end{align}
-Equation~\ref{eq:cpsv16_mixed_transfer_covariance} is formalized by
-\leanid{MPSTensor.mixedMapLM_conj_apply}. Cancelling the invertible outer
-factors gives the explicit intermediate implication
+\footnote{Formal covariance: \leanid{MPSTensor.mixedMapLM_conj_apply}.}
+Cancelling the invertible outer factors yields
 \begin{align}
     \mathcal E_{A_j,A_{j'}}
         =
@@ -478,8 +465,8 @@ factors gives the explicit intermediate implication
     0.
     \label{eq:cpsv16_cancel_mixed_transfer_gauges}
 \end{align}
-Reading Eq.~\ref{eq:cpsv16_cancel_mixed_transfer_gauges} at a matrix unit
-yields
+Evaluating Eq.~\ref{eq:cpsv16_cancel_mixed_transfer_gauges} on matrix units
+gives
 \begin{align}
     \sum_i
     (U_j^i)_{\alpha,\beta}
@@ -490,25 +477,26 @@ yields
     j\ne j'.
     \label{eq:cpsv16_residual_cross_block_entries}
 \end{align}
-Together with the within-block orthonormality of the isometry canonical form,
-Eq.~\ref{eq:cpsv16_residual_cross_block_entries} gives the full source
+Combined with within-block orthonormality,
+Eq.~\ref{eq:cpsv16_residual_cross_block_entries} establishes the full source
 condition in Eq.~\ref{eq:cpsv16_source_joint_isometry}. The formal development
-packages this condition as the predicate
-\leanid{MPSTensor.IsResidualIsometryFamily} and establishes it under
-whole-tensor renormalization fixed point of the direct sum by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.
-This is the residual-isometry content of Corollary~III.cor3 of
-Ref.~\cite{Cirac2016MPDO_arXiv} at the normal-tensor-block level.
+packages this condition as a residual isometry family\footnote{Formal
+predicate: \leanid{MPSTensor.IsResidualIsometryFamily}.} and proves it for
+direct sums with idempotent transfer map,\footnote{Formal theorem:
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.}
+discharging the residual-isometry claim of Corollary~\cpsvref{III_cor3} in
+Ref.~\cite{Cirac2016MPDO_arXiv} at the block level.
 
-\section{Corollary 3.12: phase-class representatives}
+\section{Corollary~\cpsvref{III_cor3}: phase-class representatives}
 \label{sec:cpsv16_phase_class_representatives}
 
-Corollary~3.12 of Ref.~\cite{Cirac2016MPDO_arXiv} applies the joint
-residual-isometry conclusion to a basis of normal tensors of a canonical-form
-renormalization fixed point. Under the nonzero-coefficient convention of
-\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}, every basis
-element is gauge-phase equivalent to a block of the canonical form. The
-statement therefore concerns the phase-class representatives.
+Corollary~\cpsvref{III_cor3} of Ref.~\cite{Cirac2016MPDO_arXiv} applies this
+joint residual-isometry conclusion to a basis of normal tensors for a
+canonical-form renormalization fixed point. Under the nonzero-coefficient
+convention of
+\path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}, each basis
+element is gauge-phase equivalent to a canonical-form block, reducing the
+statement to phase-class representatives.
 
 Write
 \begin{align}
@@ -521,11 +509,10 @@ Write
     I,
     \label{eq:cpsv16_canonical_coisometric_decomposition}
 \end{align}
-where every $A_k$ is normal and every $\mu_k$ is nonzero. Choose one
-representative $C_j$ from each phase class. If $A$ has idempotent transfer map,
-then there are invertible matrices $X_j$, positive numbers
-$\lambda_{j,\alpha}$ satisfying
-$\sum_\alpha\lambda_{j,\alpha}=1$, and tensors $V_j$ such that
+where each $A_k$ is normal and each $\mu_k$ is nonzero. Choosing one
+representative $C_j$ per phase class, if $A$ has an idempotent transfer map,
+there exist invertible matrices $X_j$, positive weights $\lambda_{j,\alpha}$
+with $\sum_\alpha\lambda_{j,\alpha}=1$, and tensors $V_j$ such that
 \begin{align}
     C_j^i
         &=
@@ -539,16 +526,17 @@ $\sum_\alpha\lambda_{j,\alpha}=1$, and tensors $V_j$ such that
     \delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
     \label{eq:cpsv16_phase_representative_joint_isometry}
 \end{align}
-This statement includes the case of no phase classes. It is formalized by
-\leanid{MPSTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent}.
-The predicate-level wrapper, which chooses the canonical witness data and its
-refinement, is
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}.
-Both declarations are in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.
+This holds also when the index set of phase classes is empty. The result is
+formalized for phase-class representatives.\footnote{Formal declarations:
+\leanid{MPSTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent}
+and predicate wrapper
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}
+in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.}
 
-The proof first recovers the retained weighted direct sum through the ambient
-coisometry. For every block,
-\leanid{MPSTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp} gives
+The proof recovers the weighted direct sum through the ambient coisometry.
+For each block, the weight has modulus one and the block is an RFP:\footnote{Formal
+declaration:
+\leanid{MPSTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp}.}
 \begin{align}
     \lvert\mu_j\rvert
         &=
@@ -556,14 +544,14 @@ coisometry. For every block,
     &
     \mathcal E_{C_j}^2
         &=
-    \mathcal E_{C_j}.
+    \mathcal E_{C_j},
     \label{eq:cpsv16_weight_norm_and_block_rfp}
 \end{align}
-The normal-tensor characterization supplies the square-root decomposition.
-Next, put each representative in a trace-preserving Perron gauge and retain its
-unit-modulus weight. Idempotence of the retained direct sum restricts to every
-mixed pair. Distinct phase-class representatives are not gauge-phase
-equivalent, so the mixed spectral gap forces
+and the single-block theorem provides the square-root decomposition. Putting
+each representative into a trace-preserving Perron gauge and tracking its
+unit-modulus weight, idempotence of the direct sum restricts to each mixed pair.
+Because distinct phase-class representatives are not gauge-phase equivalent,
+the mixed spectral gap forces
 \begin{align}
     \mathcal E_{\mu_jC_j,\mu_{j'}C_{j'}}
         &=
@@ -572,7 +560,7 @@ equivalent, so the mixed spectral gap forces
     j\ne j'.
     \label{eq:cpsv16_weighted_phase_mixed_transfer_zero}
 \end{align}
-Cancelling the nonzero scalar factors and the invertible gauges gives
+Cancelling the nonzero scalar factors and invertible gauges yields
 \begin{align}
     \mathcal E_{C_j,C_{j'}}
         &=
@@ -581,19 +569,18 @@ Cancelling the nonzero scalar factors and the invertible gauges gives
     j\ne j'.
     \label{eq:cpsv16_phase_mixed_transfer_zero}
 \end{align}
-Removing the positive diagonal factors in the square-root decompositions and
-evaluating at matrix units yields
-Eq.~\ref{eq:cpsv16_phase_representative_joint_isometry}. Thus the simultaneous
-off-diagonal equations require no additional direct-sum hypothesis, and
-Corollary~3.12 is formalized up to the square-root diagonal correction in
+Factoring out the positive diagonal matrices and evaluating on matrix units
+gives Eq.~\ref{eq:cpsv16_phase_representative_joint_isometry}. The off-diagonal
+equations require no extra direct-sum assumptions, establishing
+Corollary~\cpsvref{III_cor3} up to the square-root correction of
 Section~\ref{sec:cpsv16_square_root_correction}.
 
 \section{Backward direction (multiplicity-one)}
 \label{sec:cpsv16_backward_multiplicity_one}
 
-The backward direction of the characterization is also formalized at the
-normal-tensor-block level. If each block $B_k$ is in isometry canonical form
-and the cross-block mixed transfer operators vanish,
+The converse implication is likewise formalized at the block level. If each
+block $B_k$ is in isometry canonical form and all off-diagonal mixed transfer
+operators vanish,
 \begin{align}
     \mathcal E_{j,j'}
         &=
@@ -611,42 +598,40 @@ then the direct sum is a renormalization fixed point:
 \footnote{Formal declaration:
 \leanid{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm}
 in \doclink{TNLean/MPS/RFP/ResidualIsometry}.}
-This follows from
-\leanid{MPSTensor.blockTransferSum_idempotent_of_isIsometryCanonicalForm}.
-The direct-sum transfer map decomposes block by block using
-\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}: the diagonal blocks are
-the per-block transfer maps, which are idempotent by
-\leanid{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}, and the
-off-diagonal blocks vanish by
-Eq.~\ref{eq:cpsv16_backward_cross_block_hypothesis}. The cross-block hypothesis
-is the $j\ne j'$ part of Eq.~\ref{eq:cpsv16_source_joint_isometry}, so it
-belongs to the source isometry form rather than being an added assumption.
+This follows from transfer-map block additivity.\footnote{Formal theorem:
+\leanid{MPSTensor.blockTransferSum_idempotent_of_isIsometryCanonicalForm}.}
+Decomposing the direct-sum transfer map blockwise,\footnote{Formal decomposition:
+\leanid{MPSTensor.blockDiagonal'_transferSum_toBlock}.} the diagonal blocks are
+idempotent,\footnote{Formal theorem:
+\leanid{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}.} and the
+off-diagonal blocks vanish by Eq.~\ref{eq:cpsv16_backward_cross_block_hypothesis}.
+Because this off-diagonal condition is the $j\ne j'$ clause of
+Eq.~\ref{eq:cpsv16_source_joint_isometry}, it is part of the source isometry
+form rather than an extraneous hypothesis.
 
-This handles the distinct-blocks, multiplicity-one, phase-one case of the
-source canonical form in Eq.~\ref{eq:cpsv16_canonical_rfp_tensor}. In this
-case, the inner direct sum over copies $q=1,\ldots,r_j$ has a single summand
-and all phases $\mu_{j,q}$ equal $1$, so the direct sum carries one copy of
-each normal-tensor block. The full-multiplicity backward direction sums
-repeated copies of each block with their phases and scalar weights. It requires
-care about the physical direct sum carried by the copy index: a literal
-virtual-block substitution need not satisfy the defining physical-isometry
-relation.
+This covers the distinct-block, multiplicity-one, unit-phase case of
+Eq.~\ref{eq:cpsv16_canonical_rfp_tensor}, where the inner sum over copies
+$q=1,\ldots,r_j$ is trivial and every phase $\mu_{j,q}$ equals $1$. The
+full-multiplicity converse includes repeated copies of each block with distinct
+phases and scalar weights. Treating those copies requires care with the physical
+direct sum indexed by $q$, since a naive virtual-block substitution fails the
+defining physical-isometry condition.
 
-For a sector decomposition $P$ satisfying the single BNT canonical-form
-predicate, the explicit blockwise hypotheses are now eliminated. The theorem
-\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff}
-derives positive bond dimensions, normality, irreducibility, left-canonical
-normalization, and gauge-phase distinctness from that predicate and gives the
-preceding characterization for the direct sum of the basis representatives.
-Under the forward hypothesis,
-\leanid{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum}
-also supplies the trace-normalized decompositions and the full residual
-isometry family. This discharges the canonical-form extraction for the
-multiplicity-one basis direct sum. It does not identify that direct sum with
-the repeated-copy tensor carrying the weights $\mu_{j,q}$.
+For a sector decomposition satisfying the BNT canonical-form predicate,
+explicit blockwise hypotheses are no longer required. The basis-direct-sum
+equivalence extracts positive bond dimensions, normality, irreducibility,
+left-canonical normalization, and gauge-phase distinctness directly from the
+predicate.\footnote{Formal theorem:
+\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff}.}
+In the forward direction, the trace-normalized decompositions and the residual
+isometry family are supplied unconditionally.\footnote{Formal theorem:
+\leanid{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum}.}
+This settles the canonical-form extraction for the multiplicity-one basis direct
+sum, though it does not identify that sum with the repeated-copy tensor carrying
+weights $\mu_{j,q}$.
 
-For a literal direct sum of any block family $(B_k)_k$, whole-tensor transfer
-idempotence has now been reduced exactly to the mixed block equations:
+For an arbitrary block direct sum $\bigoplus_kB_k$, whole-tensor transfer
+idempotence reduces to pairwise block equations:
 \begin{align}
     \mathcal E_{\bigoplus_kB_k}^2
         =
@@ -658,70 +643,64 @@ idempotence has now been reduced exactly to the mixed block equations:
     \quad\text{for every }j,j'.
     \label{eq:cpsv16_direct_sum_pairwise_idempotence}
 \end{align}
-This is formalized by
-\leanid{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem}.
+\footnote{Formal equivalence:
+\leanid{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem}.}
 Equation~\ref{eq:cpsv16_direct_sum_pairwise_idempotence} shows that repeated
-virtual copies necessarily impose equations between distinct copies of the
-same normal tensor. Checking only the representative block omits part of the
-whole-tensor fixed-point condition.
+virtual copies impose relations between distinct copies of the same normal
+block; testing only representative blocks misses part of the whole-tensor
+fixed-point condition.
 
 \section{Why the fixed-letter virtual-block reading is excluded}
 \label{sec:cpsv16_fixed_letter_exclusion}
 
-Equation~\ref{eq:cpsv16_canonical_rfp_tensor} allows a fixed normal tensor
-indexed by $j$ to occur several times, indexed by $q$, with independent
-coefficients $\mu_{j,q}$ satisfying $\lvert\mu_{j,q}\rvert=1$. Read as an
-ordinary virtual block diagonal at each fixed physical letter, one physical
-letter and the scalar representative $B^0=(1)$ with copy phases $1$ and $-1$
-would give
+Equation~\ref{eq:cpsv16_canonical_rfp_tensor} allows a normal tensor $j$ to
+appear in multiple copies $q$ with independent unimodular phases $\mu_{j,q}$.
+Interpreted as a standard virtual block diagonal for each fixed physical
+letter, a single physical letter with scalar representative $B^0=(1)$ and copy
+phases $1$ and $-1$ yields
 \begin{align}
     A^0
         &=
-    \operatorname{diag}(1,-1).
+    \operatorname{diag}(1,-1),
     \label{eq:cpsv16_literal_virtual_block_example}
 \end{align}
-This tensor satisfies neither \path{AA=A} nor whole-tensor transfer
-idempotence.
+which satisfies neither Eq.~(\cpsvref{AA=A}) nor transfer-map idempotence.
 
-That reading is not the source's. The prose immediately after
-Equation~\path{III_CFI_RFP} in Ref.~\cite{Cirac2016MPDO_arXiv} states that the
-indices $j,q$ connect the physical and virtual indices and therefore give a
-direct sum in both spaces, up to the physical isometry.\footnote{Local source:
+This reading, however, does not match the source. The text following
+Equation~(\cpsvref{III_CFI_RFP}) in Ref.~\cite{Cirac2016MPDO_arXiv} explains
+that $j$ and $q$ connect the physical and virtual indices, producing a direct
+sum in both spaces up to the physical isometry.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:559--563}.}
-A single physical letter cannot carry a nontrivial physical direct sum, so
-Eq.~\ref{eq:cpsv16_literal_virtual_block_example} lies outside the class the
-theorem describes and is not evidence against it. The development records no
-counterexample here.
+Because a single physical letter cannot host a nontrivial physical direct sum,
+Eq.~\ref{eq:cpsv16_literal_virtual_block_example} falls outside the intended
+class and does not constitute a counterexample to the source claim.
 
-What the source leaves open is the coordinate data for the physical routing of
-$q$. The displayed isometry equation at lines~551--554 contains $j$ but no
-$q$. The prose at lines~561--563 says that $j,q$ participate in physical and
-virtual direct sums, but it gives neither a $q$-indexed isometry nor an equation
-for such an isometry. A formal construction would also require a dimension
-condition for embedding the resulting direct sum into the physical space; no
-such condition occurs in the theorem. Adding these data to a \Lean{} statement
-would therefore add hypotheses absent from the cited statement and would
-violate the faithfulness rule. The full repeated-copy theorem cannot be marked
-as formalized without a corrected source statement.
+What the source omits is the coordinate data for routing $q$ physically. The
+isometry display at lines~551--554 indexes $j$ without mentioning $q$, while
+lines~561--563 describe physical and virtual direct sums without defining a
+$q$-dependent isometry or stating its isometry relation. A rigorous construction
+would also need dimension bounds to embed the direct sum into the physical space,
+which the theorem does not provide. Introducing such hypotheses in \Lean{} would
+alter the source statement. Formalizing the full repeated-copy theorem therefore
+requires a corrected source formulation.
 
 \section{Elimination plan}
 \label{sec:cpsv16_elimination_plan}
 
-The canonical-form extraction is discharged for the multiplicity-one basis
-direct sum by the two theorems cited in
-Section~\ref{sec:cpsv16_backward_multiplicity_one}. For the literal repeated
-virtual block sum, the scaling law is
+Canonical-form extraction for the multiplicity-one basis direct sum is
+complete, as established by the theorems in
+Section~\ref{sec:cpsv16_backward_multiplicity_one}. For literal repeated
+virtual block sums, the mixed transfer operator obeys the scaling law
 \begin{align}
     \mathcal E_{\mu B,\nu C}
         &=
-    \mu\overline{\nu} \mathcal E_{B,C}.
+    \mu\overline{\nu} \mathcal E_{B,C},
     \label{eq:cpsv16_mixed_transfer_scaling}
 \end{align}
-Equation~\ref{eq:cpsv16_mixed_transfer_scaling} is formalized by
-\leanid{Kraus.mixedMapLM_smul}. Combining it with the pairwise mixed-transfer
-criterion in Eq.~\ref{eq:cpsv16_direct_sum_pairwise_idempotence} proves that,
-for repeated copies of a nonzero transfer-idempotent block, whole-tensor
-idempotence forces
+\footnote{Formal identity: \leanid{Kraus.mixedMapLM_smul}.}
+Combining this with the pairwise criterion in
+Eq.~\ref{eq:cpsv16_direct_sum_pairwise_idempotence} shows that for repeated
+copies of a nonzero idempotent block, whole-tensor idempotence forces
 \begin{align}
     \mu_q\overline{\mu_{q'}}
         &=
@@ -729,34 +708,34 @@ idempotence forces
     \label{eq:cpsv16_repeated_copy_phase_product}\\
     \mu_q
         &=
-    \mu_{q'}.
+    \mu_{q'}
     \label{eq:cpsv16_repeated_copy_phase_equality}
 \end{align}
-The second conclusion uses the unit-modulus phases. This corrected
-literal-block theorem is
-\leanid{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}.
-Thus the literal-block replacement is complete, but it is a correction rather
-than a formalization of the printed independent-phase theorem.
+and hence $\mu_q=\mu_{q'}$ for unimodular phases. This corrected literal-block
+result is established unconditionally.\footnote{Formal theorem:
+\leanid{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}.} It
+resolves the literal block construction by correcting the statement rather than
+formalizing the printed independent-phase claim.
 
-The independent-phase statement itself requires an author correction or an
-erratum specifying the missing $q$-dependent physical map, its isometry
-equation, and the necessary dimension hypothesis. No such data will be
-introduced as new assumptions merely to obtain a formal equivalence.
+A formalization of the independent-phase claim requires an erratum specifying
+the $q$-dependent physical map, its isometry relations, and the necessary
+dimension constraints. These missing data cannot be supplied as ad hoc
+hypotheses.
 
 \section{Conclusion}
 
-The per-block isometry form exposes two normalization conventions, which the
-formal development makes explicit. In the $D_k^{-1/2}$ convention, the
-residual tensor satisfies
+The per-block isometry form admits two normalization conventions, both
+formalized explicitly. In the $D_k^{-1/2}$ convention, the residual tensor
+satisfies
 \begin{align}
     \sum_i(U_k^i)^\dagger U_k^i
         &=
     I,
     \label{eq:cpsv16_conclusion_normalized_contraction}
 \end{align}
-and its pair-index equation has right-hand side
+with pair-index right-hand side
 $D_k^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}$. In the rescaled unit
-pair-index convention, the residual tensor satisfies
+pair-index convention, it satisfies
 \begin{align}
     \sum_i
     \overline{(U_k^i)_{\alpha,\beta}}
@@ -772,11 +751,12 @@ while the contracted identity becomes
     D_kI.
     \label{eq:cpsv16_conclusion_unit_pair_contraction}
 \end{align}
-Thus the scalar normalization comparison is explicit.
+The relation between these two scalings is therefore fully accounted for.
 
-For every normal tensor, whose bond dimension is necessarily positive,
-transfer idempotence is equivalent to the trace-normalized square-root form by
-\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.
+For every normal tensor, whose bond dimension is positive, transfer-map
+idempotence is equivalent to the trace-normalized square-root form.\footnote{Formal
+equivalence:
+\leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}.}
 The diagonal weight is
 \begin{align}
     \Lambda_\alpha
@@ -784,31 +764,30 @@ The diagonal weight is
     \frac{\rho_{\alpha,\alpha}}{\tr\rho},
     \label{eq:cpsv16_conclusion_diagonal_weight}
 \end{align}
-and $\sqrt{\Lambda}$ dresses the unit isometry. This closes the
-single-normal-tensor lemma under its printed hypotheses while preserving the
-local square-root correction.
+and $\sqrt{\Lambda}$ dresses the unit isometry. This discharges the
+single-normal-tensor lemma under its source hypotheses with the corrected
+square-root dressing.
 
-The cross-block $\delta_{j,j'}$ orthogonality equations in
-Eq.~\ref{eq:cpsv16_source_joint_isometry} hold for a direct sum of distinct
-normal blocks whose whole transfer map is idempotent, by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.
-For CPSV canonical-form data, every listed block has unit-modulus weight and is
-itself a renormalization fixed point. After choosing one representative from
-each phase class, the trace-normalized square-root forms can be chosen
-simultaneously so that all diagonal and off-diagonal joint residual-isometry
-equations hold. This is
+The cross-block orthogonality relations ($\delta_{j,j'}$) in
+Eq.~\ref{eq:cpsv16_source_joint_isometry} hold for direct sums of distinct
+normal blocks with idempotent transfer maps.\footnote{Formal theorem:
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.}
+In CPSV canonical-form data, every block carries a unit-modulus weight and is
+itself a renormalization fixed point. Selecting one representative per phase
+class yields simultaneous trace-normalized square-root forms satisfying all
+diagonal and off-diagonal residual isometry equations.\footnote{Formal theorem:
 \leanid{MPSTensor.CPSVCanonicalFormData.BNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent},
-with predicate wrapper
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}.
+wrapped by
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}.}
 
-The remaining repeated-copy part of Theorem~3.11 of
-Ref.~\cite{Cirac2016MPDO_arXiv} is not presently a well-specified mathematical
-statement: its displayed isometry omits $q$, while the prose invokes an
-unspecified physical direct sum. The tensor in
-Eq.~\ref{eq:cpsv16_literal_virtual_block_example} proves that the literal
-virtual-block reading fails both \path{AA=A} and whole-tensor transfer-map
-idempotence. The exact literal-block criterion is therefore recorded, while
-the independent-phase claim awaits a corrected source statement.
+The repeated-copy clause of Theorem~\cpsvref{thm:charact-MPS} in
+Ref.~\cite{Cirac2016MPDO_arXiv} remains underspecified: the displayed isometry
+omits $q$, and the text refers to an unconstructed physical direct sum. The
+tensor in Eq.~\ref{eq:cpsv16_literal_virtual_block_example} shows that a
+literal virtual block diagonal violates both Eq.~(\cpsvref{AA=A}) and
+transfer-map idempotence. The formal development records the exact criterion
+for literal blocks, while the independent-phase assertion remains open
+pending a clarified source statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -11,6 +11,8 @@ on:
       - 'lake-manifest.json'
       - 'blueprint/src/**'
       - 'docs/paper-gaps/**'
+      - 'Papers/1606.00608/**'
+      - 'scripts/generate_paper_aux.sh'
       - 'texra-blueprint.toml'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
@@ -54,8 +56,8 @@ jobs:
         with:
           # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
           # keep this cache separate from the extra-package-free web cache.
-          cache-suffix: web-v2
-          extra-packages: texlive-fonts-extra
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
 
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
@@ -81,6 +83,9 @@ jobs:
       # The bibliography links every paper-gap note to its published PDF. Build
       # those PDFs in the same merge-triggered workflow that publishes the links
       # instead of reusing the last Full documentation artifact.
+      - name: Generate paper source aux for paper-gap references
+        run: ./scripts/generate_paper_aux.sh 1606.00608
+
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
 

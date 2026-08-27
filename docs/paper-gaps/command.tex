@@ -41,6 +41,36 @@
 \providecommand{\MN}[1]{M_{#1}(\C)}
 \providecommand{\MD}{M_D(\C)}
 
+% External referencing for paper sources.  The build helper writes sanitized
+% auxiliary files under build/paper-aux/ and excludes duplicated source labels.
+\usepackage{xr}
+
+% Import a generated paper auxiliary file with a caller-supplied label prefix.
+% The candidate paths support builds from docs/paper-gaps/, the repository root,
+% and build/paper-aux/ itself.
+\newcommand{\importpaperaux}[2]{%
+  \IfFileExists{../../build/paper-aux/#2.aux}{%
+    \externaldocument[#1]{../../build/paper-aux/#2}%
+  }{%
+    \IfFileExists{build/paper-aux/#2.aux}{%
+      \externaldocument[#1]{build/paper-aux/#2}%
+    }{%
+      \IfFileExists{#2.aux}{%
+        \externaldocument[#1]{#2}%
+      }{}%
+    }%
+  }%
+}
+
+% General external reference macros
+\newcommand{\paperref}[2]{\ref{#1-#2}}
+\newcommand{\papereqref}[2]{(\ref{#1-#2})}
+
+% CPSV16 source (1606.00608 / MPDO-22-12-17-2.tex) external document and shortcuts
+\importpaperaux{cpsv16-}{1606.00608/MPDO-22-12-17-2-tnlean}
+\newcommand{\cpsvref}[1]{\paperref{cpsv16}{#1}}
+\newcommand{\cpsveqref}[1]{\papereqref{cpsv16}{#1}}
+
 % Verdict marker: \gapnote{<kind>}{<status>}. Kind is the policy
 % classification (clarification, local-correction, scope-restriction,
 % unfaithful, false-source, open-gap); status is open, wip (elimination

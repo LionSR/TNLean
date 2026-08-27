@@ -2,13 +2,14 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 % Fallbacks keep this author document compilable when it is built outside its
 % source directory and a different command.tex is found first.
+\providecommand{\Lean}{\textsc{Lean}}
 \providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
 \providecommand{\doclink}[1]{%
     \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
@@ -27,11 +28,14 @@
 \section{Purpose}
 
 A paper-gap note records a mathematical discrepancy between a cited source and
-the statement, proof, or route used in the formal development. The source
-itself should remain intact. If a proof appears to require a hypothesis absent
-from the article, a different scalar, a different normalization, or a
-replacement theorem from the formal library, explain the change in a separate
-note under \path{docs/paper-gaps/}.
+the statement, proof, or route used in the formal development. The archived
+source itself must remain intact. When a printed statement lacks the stable
+anchor needed for an external reference, a build helper may add a metadata-only
+\verb|\label| to a temporary copy under \path{build/}; never add the label to
+the archived source. If a proof appears to require a hypothesis absent from the
+article, a different scalar, a different normalization, or a replacement
+theorem from the formal library, explain the change in a separate note under
+\path{docs/paper-gaps/}.
 
 The note is a mathematical document first. It should be readable by a
 mathematician or mathematical physicist who has not read the corresponding
@@ -125,9 +129,21 @@ equation above'', ``the preceding display'', a raw local equation number, or an
 unlinked source equation number. A source-paper equation is not a local
 cross-reference: name the source, identify its equation, and cite it with an
 existing bibliography key, for example Equation~(5.2) of
-Ref.~\cite{Wolf2012Quantum}. Every mathematical claim attributed to a paper or
-other literature source must likewise carry a \verb|\cite{...}| citation using
-a key already present in \path{references.bib}. Do not invent citation keys.
+Ref.~\cite{Wolf2012Quantum}. When a local \LaTeX{} source is available, run the
+paper's declared auxiliary-label build step before compiling its paper-gap
+notes; for CPSV16, run
+\path{./scripts/generate_paper_aux.sh 1606.00608}. Cite source equations,
+theorems, and definitions through a prefixed external label so the rendered
+number comes from the source; do not hardcode numbers or expose raw source label
+names. The build helper imports only labels that occur exactly once and excludes
+ambiguous duplicates. A note may compile without the generated auxiliary file,
+but unresolved external references render as ``??'' and are not acceptable in a
+published artifact. If the source statement has no stable label or auxiliary
+file, use an ordinary bibliographic citation and explicit printed designation
+rather than inventing a number. Every mathematical
+claim attributed to a paper or other literature source must likewise carry a
+\verb|\cite{...}| citation using a key already present in \path{references.bib}.
+Do not invent citation keys.
 
 Do not use \verb|$$|\ldots\verb|$$|, \verb|\[|\ldots\verb|\]|,
 \verb|equation|, \verb|equation*|, \verb|align*|, \verb|gather|,
@@ -143,11 +159,13 @@ definitions may remain inline when that placement makes the sentence clearer.
 
 \section{Formal traceability}
 
-Write formal identifiers with \verb|\leanid| and place them in footnotes unless
-the formal declaration itself is the mathematical object under discussion. For
-example, the prose may say that the formal theorem is the same-dimensional
-gauge-phase component of a source lemma, while a footnote identifies the
-declaration.\footnote{Formal declaration:
+Source citations and external references belong in running prose, whereas
+\Lean{} declarations remain supporting footnotes and never substitute for
+source statements or citations. Write formal identifiers with \verb|\leanid| and
+place them in footnotes unless the formal declaration itself is the mathematical
+object under discussion. For example, the prose may say that the formal theorem
+is the same-dimensional gauge-phase component of a source lemma, while a
+footnote identifies the declaration.\footnote{Formal declaration:
     \leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
     in \doclink{TNLean/MPS/SharedInfra/GaugePhase}.}
 Do not put formal identifiers in displayed equations merely as traceability

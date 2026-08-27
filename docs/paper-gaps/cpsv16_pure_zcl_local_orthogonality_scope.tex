@@ -2,10 +2,10 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 \title{Pure zero correlation length and local orthogonality in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017}
@@ -18,20 +18,19 @@ Cirac--Perez-Garcia--Schuch--Verstraete 2017}
 
 \section{Source statement}
 
-Section~3.2 of Ref.~\cite{Cirac2016MPDO_arXiv} defines correlations independent
-of distance (CID) by requiring that, for separated observables, translating one
-observable through any allowed separation leaves the expectation value
-unchanged.\footnote{Local source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:437--445}, label
-\path{ZCL}.}
-For a basis-of-normal-tensors (BNT) family $\{A_j\}_j$, define the mixed
-transfer matrices by
+Section~\cpsvref{Sec:MPS} of Ref.~\cite{Cirac2016MPDO_arXiv} defines
+correlations independent of distance (CID) by requiring that translating one
+observable through any allowed separation leaves the two-region expectation
+value unchanged.\footnote{Local source:
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:437--445}, Eq.~(\cpsvref{ZCL}).}
+For a basis of normal tensors (BNT) $\{A_j\}_j$, the mixed transfer matrices
+are
 \begin{align}
     \mathbb E_{j,j'}
         &:= \sum_i A_j^i\otimes\overline{A_{j'}^i}.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_mixed_transfer}
 \end{align}
-The same subsection defines local orthogonality by
+The source defines local orthogonality by
 \begin{align}
     \mathbb E_{j,j'} &= 0,
     \qquad j\ne j',
@@ -40,7 +39,8 @@ The same subsection defines local orthogonality by
 \end{align}
 and defines zero correlation length (ZCL) as the conjunction of CID and local
 orthogonality.\footnote{Local source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:467--479}.}
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:467--479},
+Definitions~\cpsvref{DefLO} and~3.6.}
 
 For a single tensor $A=\{A^i\}_i$, write
 \begin{align}
@@ -48,43 +48,45 @@ For a single tensor $A=\{A^i\}_i$, write
         &:= \sum_i A^i\otimes\overline{A^i}
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_transfer_matrix}
 \end{align}
-for its transfer matrix. The pure-state theorem in
-Ref.~\cite{Cirac2016MPDO_arXiv} states that a canonical-form tensor satisfies
+for its transfer matrix. Theorem~\cpsvref{TheoremZCLPure} of
+Ref.~\cite{Cirac2016MPDO_arXiv} asserts that every canonical-form tensor
+satisfies
 \begin{align}
     \mathrm{ZCL}(A)
         &\Longleftrightarrow \mathbb E_A^2=\mathbb E_A.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_source_equivalence}
 \end{align}
 Its proof first identifies local orthogonality with
-Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_source_lo}. After
-assuming those mixed-sector equations, it identifies transfer idempotence with
-CID.\footnote{Local source:
+Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_source_lo} and then
+identifies transfer idempotence with CID under those mixed-sector
+equations.\footnote{Local source:
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1248--1268}.}
 
 \section{Formal boundary}
 
-The formal predicate \leanid{MPSTensor.IsLocallyOrthogonal} adopts a
-single-tensor convention:
+The formal development adopts a single-tensor local orthogonality
+convention:\footnote{Formal predicate: \leanid{MPSTensor.IsLocallyOrthogonal}.}
 \begin{align}
-    \leanid{MPSTensor.IsLocallyOrthogonal}(A)
+    \mathrm{LO}_{\mathrm{single}}(A)
         &\Longleftrightarrow \mathbb E_A^2=\mathbb E_A.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_formal_local_orthogonality}
 \end{align}
-Consequently, the corresponding ZCL predicate is
+The corresponding single-tensor ZCL condition is then\footnote{Formal
+predicate: \leanid{MPSTensor.IsZCL}.}
 \begin{align}
-    \leanid{MPSTensor.IsZCL}(A)
+    \mathrm{ZCL}_{\mathrm{single}}(A)
         &\Longleftrightarrow
         (\mathbb E_A^2=\mathbb E_A)\wedge\mathrm{CID}(A).
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_formal_zcl}
 \end{align}
-The theorem \leanid{MPSTensor.zcl_iff_idempotent_transfer} therefore proves
-only the single-block equivalence
+The formal single-block equivalence therefore proves\footnote{Formal theorem:
+\leanid{MPSTensor.zcl_iff_idempotent_transfer}.}
 \begin{align}
     (\mathbb E_A^2=\mathbb E_A)\wedge\mathrm{CID}(A)
         &\Longleftrightarrow \mathbb E_A^2=\mathbb E_A.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_single_block_equivalence}
 \end{align}
-The nontrivial direction follows from
+The forward direction follows from
 \begin{align}
     \mathbb E_A^2=\mathbb E_A
         &\Longrightarrow \mathbb E_A^n=\mathbb E_A
@@ -97,33 +99,36 @@ The nontrivial direction follows from
 \end{align}
 The reverse direction of
 Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_single_block_equivalence}
-is immediate because its left-hand side already contains transfer
+holds immediately because its left-hand side already contains transfer
 idempotence.
 
-This result does not prove Theorem~3.8 of
+This result does not establish Theorem~\cpsvref{TheoremZCLPure} of
 Ref.~\cite{Cirac2016MPDO_arXiv}, whose proof appears at source
 lines~1248--1268. That theorem combines unrestricted physical CID with the
 BNT-family equations in
 Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_source_lo}.
 
-The source predicates now have distinct formal counterparts.
-\leanid{MPSTensor.IsPhysicalCID} quantifies over two nonempty physical blocks
-and arbitrary natural complementary gap lengths, including zero. It requires
-the two-region expectation to remain unchanged when the gaps are redistributed
-with fixed total length. The predicate
-\leanid{MPSTensor.IsPhysicalBNTZCL} is the conjunction of the BNT relation,
-unrestricted physical CID, and BNT local orthogonality. These predicates encode
-Definitions~3.3 and~3.6 of Ref.~\cite{Cirac2016MPDO_arXiv}; they do not prove
-the equivalence asserted in its Theorem~3.8. In particular,
-\leanid{MPSTensor.zcl_iff_idempotent_transfer} still concerns the older
+The source definitions now have distinct formal counterparts. Physical
+CID\footnote{Formal predicate: \leanid{MPSTensor.IsPhysicalCID}.} quantifies
+over two nonempty physical blocks and arbitrary complementary gap lengths,
+including zero; it requires the two-region expectation value to remain invariant
+when the gaps are redistributed at fixed total length. Physical BNT
+ZCL\footnote{Formal predicate: \leanid{MPSTensor.IsPhysicalBNTZCL}.} is the
+conjunction of the BNT relation, unrestricted physical CID, and BNT local
+orthogonality. While these definitions encode the source CID property and
+Definition~3.6 of Ref.~\cite{Cirac2016MPDO_arXiv}, they do not
+yield the equivalence stated in Theorem~\cpsvref{TheoremZCLPure}. In particular,
+the idempotence equivalence\footnote{Formal theorem:
+\leanid{MPSTensor.zcl_iff_idempotent_transfer}.} applies only to the
 single-block and virtual-insertion predicates.
 
 \section{BNT predicates and the raw-weight obstruction}
 
-The predicate \leanid{MPSTensor.IsBNTLocallyOrthogonal} records
-Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_source_lo} for every
-pair of distinct sectors. Let $\mathrm{BNT}(A)$ mean that the family is a basis
-of normal tensors for $A$. The source predicate is
+BNT local orthogonality\footnote{Formal predicate:
+\leanid{MPSTensor.IsBNTLocallyOrthogonal}.} records
+Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_source_lo} for every pair
+of distinct sectors. Writing $\mathrm{BNT}(A)$ when the family forms a basis of
+normal tensors for $A$, the source predicate is
 \begin{align}
     \mathrm{ZCL}_{\mathrm{BNT}}(A)
         &:=
@@ -133,8 +138,10 @@ of normal tensors for $A$. The source predicate is
         (\forall j\ne j',\ \mathbb E_{j,j'}=0).
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_physical_bnt_zcl}
 \end{align}
-Its formal name is \leanid{MPSTensor.IsPhysicalBNTZCL}. By contrast, the older
-predicate \leanid{MPSTensor.IsBNTZCL} uses arbitrary virtual insertions:
+This physical condition is formalized directly.\footnote{Formal predicate:
+\leanid{MPSTensor.IsPhysicalBNTZCL}.} In contrast, the virtual-insertion
+predicate\footnote{Formal predicate: \leanid{MPSTensor.IsBNTZCL}.} uses
+arbitrary virtual insertions:
 \begin{align}
     \mathrm{ZCL}^{\mathrm{virt}}_{\mathrm{BNT}}(A)
         &:=
@@ -155,46 +162,46 @@ The positive-gap physical predicate is
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_positive_gap_bnt_zcl}
 \end{align}
 where $\mathrm{CID}^{\mathrm{pos}}_{\mathrm{physical}}$ requires both
-complementary gaps to be positive.\footnote{Formal predicates:
+complementary gaps to be strictly positive.\footnote{Formal predicates:
 \leanid{MPSTensor.IsPositiveGapBNTZCL} and
 \leanid{MPSTensor.IsPositiveGapPhysicalCID}.}
-The unrestricted condition implies its positive-gap restriction through
-\leanid{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}; the analogous
-BNT implication is
-\leanid{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}.
+The unrestricted condition implies this positive-gap restriction,\footnote{Formal
+implications: \leanid{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID} and
+\leanid{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}.} and the
+corresponding BNT implication follows directly.
 
-The unrestricted BNT-level equivalence is not a remaining proof target because
-it is false under the raw-weight canonical-form normalization of
+The unrestricted BNT-level equivalence is not an open proof target because it
+fails under the raw-weight canonical-form normalization of
 Ref.~\cite{Cirac2016MPDO_arXiv}. Consider the one-letter tensor
 \begin{align}
     A^0
         &= \operatorname{diag}\left(1,\frac12\right).
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_raw_weight_tensor}
 \end{align}
-It has one normal BNT component with raw weights $1$ and $1/2$. Local
-orthogonality is vacuous, and the tensor satisfies physical CID, but its
+It has a single normal BNT component with raw weights $1$ and $1/2$. Local
+orthogonality holds vacuously and the tensor satisfies physical CID, yet its
 transfer matrix is not idempotent. The companion note
-\path{docs/paper-gaps/cpsv16_pure_zcl_raw_weight_counterexample.tex} gives the
-counterexample and identifies the failed inference at source
+\path{docs/paper-gaps/cpsv16_pure_zcl_raw_weight_counterexample.tex} details
+this counterexample and identifies the invalid inference at source
 lines~1248--1251.\footnote{Tracked by \ghissue{2597}.}
-The existing single-block theorem therefore remains a scope restriction: it
-records the one-block idempotence--CID consequence without asserting the false
+The formalized single-block theorem therefore remains a scope restriction: it
+proves the one-block idempotence--CID implication without asserting the false
 raw-weight BNT equivalence.
 
 \section{Physical correlations and complementary gaps}
 
-Definition~3.3 of Ref.~\cite{Cirac2016MPDO_arXiv} quantifies over physical
-observables on arbitrary nonempty finite regions. For a block observable $O$,
-define its insertion map by
+The CID definition at Eq.~(\cpsvref{ZCL}) of Ref.~\cite{Cirac2016MPDO_arXiv}
+quantifies over physical observables on arbitrary nonempty finite regions.
+For a block observable $O$, the insertion map is
 \begin{align}
     \mathbb E_O(X)
         &:=
         \sum_{\boldsymbol i,\boldsymbol j}
         \bra{\boldsymbol j}O\ket{\boldsymbol i}
-        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
+        A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger,
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_observable_insertion}
 \end{align}
-This is the two-observable construction at source lines~490--496 of
+following the two-observable construction at Eq.~(\cpsvref{Corr}) of
 Ref.~\cite{Cirac2016MPDO_arXiv}. For observed blocks $O_1,O_2$ on a periodic
 chain with complementary gap lengths $n_1,n_2$, the contraction is the
 operator trace on the virtual matrix space:
@@ -204,10 +211,9 @@ operator trace on the virtual matrix space:
         \circ\mathbb E_{O_1}\circ\mathbb E_A^{n_1}\right).
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_periodic_contraction}
 \end{align}
-This is not the matrix trace obtained by applying the composition in
-Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_periodic_contraction}
-to the identity matrix; the two contractions differ for a general Kraus
-family.
+This contraction is not the matrix trace obtained by applying the composition
+in Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_periodic_contraction}
+to the identity matrix; for a general Kraus family, the two traces differ.
 
 The formal positive-gap theorem proves
 \begin{align}
@@ -218,37 +224,39 @@ The formal positive-gap theorem proves
 \end{align}
 \footnote{Formal theorem:
 \leanid{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}.}
-This result does not establish Definition~3.3 of
-Ref.~\cite{Cirac2016MPDO_arXiv}, which also includes adjacent regions. For an
-adjacent pair, one complementary transfer power in the source formula is
+This result does not establish the unrestricted CID definition of
+Ref.~\cite{Cirac2016MPDO_arXiv}, which includes adjacent regions. For an
+adjacent pair, one complementary transfer power in the source expression is
 \begin{align}
     \mathbb E_A^0
         &= \operatorname{id}_{M_D(\C)}.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_zero_gap_power}
 \end{align}
-Transfer idempotence gives
+Transfer idempotence yields
 Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_positive_power_idempotence}
-only for $n\geq 1$ and does not identify $\mathbb E_A^0$ with $\mathbb E_A$.
-The positive-gap theorem is therefore a scope restriction, not the full
-forward implication of Theorem~3.8 in
+only for $n\geq 1$ and does not equate $\mathbb E_A^0$ with $\mathbb E_A$. The
+positive-gap theorem is thus a scope restriction rather than the complete
+forward implication of Theorem~\cpsvref{TheoremZCLPure} in
 Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-The older predicate \leanid{MPSTensor.IsCID} quantifies directly over arbitrary
-virtual matrices $X,Y$. Its converse to idempotence is valid, but it is
-stronger than physical CID. For the multiplicity-one, unit-weight direct sum,
-the simultaneous block-injectivity theorem supplies the physical observables
-used at source lines~1250--1258 of Ref.~\cite{Cirac2016MPDO_arXiv}. More
-precisely, the theorem identified below selects one BNT basis sector and
-realizes the insertion $|R)(l|$ on that sector using a region of size at most
-$3D^5$, while producing zero insertion on every other sector
-pair.\footnote{Formal theorem:
+The virtual-insertion CID predicate\footnote{Formal predicate:
+\leanid{MPSTensor.IsCID}.} quantifies directly over arbitrary virtual
+matrices $X,Y$. Its converse implication to idempotence is valid, but it
+imposes a condition stronger than physical CID. For the multiplicity-one,
+unit-weight direct sum, simultaneous block injectivity supplies the physical
+observables required at source lines~1250--1258 of
+Ref.~\cite{Cirac2016MPDO_arXiv}. Specifically, the realization theorem selects
+a target BNT sector and realizes the rank-one insertion $|R)(l|$ on that sector
+via a region of length at most $3D^5$, while giving zero on all other sector
+pairs.\footnote{Formal theorem:
 \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}.}
-This theorem acts on \leanid{directSumTensor P.basis}, not on the raw weighted
-repeated-copy tensor \leanid{P.toTensor}. The source equations include all copy
-pairs and their weight powers, so unrestricted realization for the raw tensor
-remains separate.
+Because this theorem operates on the unweighted basis direct sum rather than
+the raw weighted repeated-copy tensor,\footnote{Formal declarations:
+\leanid{directSumTensor P.basis} and \leanid{P.toTensor}.} and because the
+source equations involve all copy pairs with their respective weight powers,
+unrestricted observable realization for the raw tensor remains separate.
 
-A second obstruction occurs at source line~1250. The proof in
+A second obstruction occurs at source line~1250, where the proof in
 Ref.~\cite{Cirac2016MPDO_arXiv} claims that
 \begin{align}
     \mathbb E_1^2\ne\mathbb E_1
@@ -265,13 +273,14 @@ argument takes exactly the nonzero subleading left and right eigenvectors used
 at source lines~1250--1262 as an explicit hypothesis, rather than deriving them
 from non-idempotence.
 
-\paragraph{Local correction at source line~1250.}
+\paragraph{Local correction at Theorem~\cpsvref{TheoremZCLPure}.}
 
-The multiplicity-one, unit-weight case admits a proof that avoids
+The multiplicity-one, unit-weight setting admits an alternate proof that
+bypasses
 Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_false_spectral_inference}.
-Fix a BNT sector $j$, let $\rho_j$ be its trace-one stationary state, and choose
-arbitrary $u,v\in M_{D_j}(\C)$. Simultaneous physical-observable realization
-gives sector-supported rank-one insertions
+Fix a BNT sector $j$, denote its trace-one stationary state by $\rho_j$, and
+choose arbitrary matrices $u,v\in M_{D_j}(\C)$. Simultaneous physical-observable
+realization yields sector-supported rank-one insertions
 \begin{align}
     \mathbb E_{O_1}
         &= |\rho_j)(u|,
@@ -280,8 +289,9 @@ gives sector-supported rank-one insertions
         &= |v)(1|.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_second_rank_one_insertion}
 \end{align}
-Sector compression, stationarity of $\rho_j$, and the operator trace of a
-rank-one map give, for all complementary gap lengths $n_1,n_2$,
+Sector compression, stationarity of $\rho_j$, and the trace of a rank-one
+superoperator evaluate the periodic contraction for all complementary gap
+lengths $n_1,n_2$ as
 \begin{align}
     \tr_{M_D(\C)}
     \left(\mathbb E_{O_2}\mathbb E_A^{n_2}
@@ -289,55 +299,56 @@ rank-one map give, for all complementary gap lengths $n_1,n_2$,
         &= \tr\left(u\mathbb E_j^{n_1}(v)\right).
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_rank_one_contraction}
 \end{align}
-No transpose occurs in
-Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_rank_one_contraction},
-and its right-hand side is independent of $n_2$. Positive-gap CID at
-$(n_1,n_2)=(1,2)$ and $(2,1)$ therefore gives
+No transpose appears in
+Eq.~\ref{eq:cpsv16_pure_zcl_local_orthogonality_scope_rank_one_contraction}, and
+the right-hand side does not depend on $n_2$. Comparing positive-gap CID at
+$(n_1,n_2)=(1,2)$ and $(2,1)$ gives
 \begin{align}
     \tr\left(u\mathbb E_j(v)\right)
         &= \tr\left(u\mathbb E_j^2(v)\right)
-        \qquad\text{for every }u,v.
+        \qquad\text{for all }u,v.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_trace_pairing_identity}
 \end{align}
-Nondegeneracy of the trace pairing implies
+Because the trace pairing is nondegenerate,
 \begin{align}
     \mathbb E_j^2 &= \mathbb E_j.
     \label{eq:cpsv16_pure_zcl_local_orthogonality_scope_sector_idempotence}
 \end{align}
-Local orthogonality eliminates the off-diagonal mixed transfer maps, so the
-multiplicity-one direct sum is idempotent.
+Local orthogonality eliminates the off-diagonal mixed transfer maps, ensuring
+that the multiplicity-one direct sum is idempotent.
 
-This repair assumes neither diagonalizability nor semisimplicity at zero, and
-it requires no nonzero subleading eigenvalue. It is formalized by
-\leanid{MPSTensor.IsBNTCanonicalForm.%
-isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}.
-It is a local correction to source line~1250 rather than a formalization of the
-printed spectral argument. It does not remove the raw-weight counterexample or
-the adjacent-gap scope restriction.
+This repair requires neither diagonalizability nor semisimplicity at zero, and
+it avoids assuming a nonzero subleading eigenvalue. It constitutes a local
+correction to source line~1250 rather than a literal formalization of the
+printed spectral argument.\footnote{Formal theorem:
+\leanid{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}.}
+It does not resolve the raw-weight counterexample or lift the positive-gap
+restriction to adjacent sites.
 
-Combining this repair with the fixed-point characterization of the all-chain
-commuting parent ground spaces gives the representative-level equivalence
-formalized by
-\leanid{MPSTensor.IsBNTCanonicalForm.%
-isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.
-This theorem concerns the multiplicity-one, unit-weight basis direct sum and
-positive complementary gaps. It excludes repeated copies, arbitrary raw
-weights, and zero complementary gaps.
+Combining this repair with the fixed-point characterization of commuting parent
+ground spaces on all chain lengths yields the representative equivalence for
+the basis direct sum.\footnote{Formal theorem:
+\leanid{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.}
+This theorem applies specifically to the multiplicity-one, unit-weight basis
+direct sum with positive complementary gaps, leaving repeated copies, arbitrary
+raw weights, and adjacent zero gaps outside its scope.
 
-The older virtual-insertion predicate also quantifies over positive-definite
-fixed points and is therefore vacuous for a tensor without such a fixed point.
-The periodic-chain predicate avoids this boundary-state issue. In the
-unrestricted raw-weight setting, the argument also fails when it passes from
-non-idempotence of the full transfer matrix to non-idempotence of a normal BNT
-component, because the full transfer matrix contains eigenvalues contributed
-by the raw copy weights.
+The older virtual-insertion predicate also quantified over positive-definite
+fixed points, making it vacuous for tensors lacking one. The periodic-chain
+formulation avoids this boundary-state issue entirely. In the unrestricted
+raw-weight setting, the source proof also fails when passing from
+non-idempotence of the full transfer matrix to that of an individual normal BNT
+component, since the full spectrum includes eigenvalues contributed directly by
+raw copy weights.
 
-Accordingly, \leanid{MPSTensor.IsBNTZCL} remains the virtual-insertion
-surrogate, and \leanid{MPSTensor.IsPositiveGapBNTZCL} denotes the physical
-positive-gap condition. Neither predicate is Definition~3.6 of
-Ref.~\cite{Cirac2016MPDO_arXiv}; that definition is represented by
-\leanid{MPSTensor.IsPhysicalBNTZCL}. The raw-weight counterexample disproves
-the unrestricted equivalence between that predicate and transfer idempotence.
+Accordingly, the virtual-insertion predicate\footnote{Formal predicate:
+\leanid{MPSTensor.IsBNTZCL}.} serves as the surrogate, while the positive-gap
+predicate\footnote{Formal predicate: \leanid{MPSTensor.IsPositiveGapBNTZCL}.}
+encodes the physical positive-gap condition. Neither matches
+Definition~3.6 of Ref.~\cite{Cirac2016MPDO_arXiv},\footnote{Represented
+in the library by \leanid{MPSTensor.IsPhysicalBNTZCL}.} and the raw-weight
+counterexample refutes the unrestricted equivalence between that definition and
+transfer-matrix idempotence.
 
 \bibliographystyle{alpha}
 \bibliography{references}

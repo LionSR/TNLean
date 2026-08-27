@@ -51,8 +51,8 @@ jobs:
       - name: Install TeX and graphviz
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
-          cache-suffix: docgen-v2
-          extra-packages: latexmk texlive-science texlive-xetex texlive-fonts-extra
+          cache-suffix: docgen-v3
+          extra-packages: latexmk texlive-science texlive-xetex texlive-fonts-extra texlive-publishers
 
       - name: Install leanblueprint
         uses: texra-ai/lean-env-action/leanblueprint@v1
@@ -64,6 +64,9 @@ jobs:
 
       - name: Build blueprint bibliography
         run: texra-blueprint bbl
+
+      - name: Generate paper source aux for paper-gap references
+        run: ./scripts/generate_paper_aux.sh 1606.00608
 
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
