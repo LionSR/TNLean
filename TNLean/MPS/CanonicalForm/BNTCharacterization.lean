@@ -185,14 +185,7 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
     intro N hN
     rcases hN with ⟨hLIN, hNpos⟩
     obtain ⟨cB, hcB⟩ := hBNT.spans_mpv N hNpos
-    have hPstate :
-        mpvState (d := d) P.toTensor N =
-          ∑ j : Fin P.basisCount, P.coeff N j •
-            mpvState (d := d) (P.basis j) N := by
-      refine mpvState_eq_sum_of_decomp (d := d) P.toTensor P.basis
-        (N := N) (fun j => P.coeff N j) ?_
-      intro σ
-      simpa [smul_eq_mul] using P.mpv_toTensor_eq_sum_coeff (N := N) σ
+    have hPstate := P.mpvState_toTensor_eq_sum_coeff N
     have hBstate :
         mpvState (d := d) P.toTensor N =
           ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=

@@ -1118,7 +1118,7 @@ abstracted — record why, so it is not re-proposed).
   combined scalar normalization, transfer-map scaling, and the full inverse
   physical-action calculation in one large proof.
 - **Reuse:** `inverse_physical_action_of_twisted_companion` isolates the
-  unitary change-of-basis calculation, while `transferMap_smul_apply` replaces
+  unitary change-of-basis calculation, while `transferMap_smul` replaces
   the entrywise scaled-Kraus expansion.
 - **Result:** `virtualUnitary_of_gaugePhaseEquiv_twisted` falls from 13.3 to
   6.7 seconds in the declaration profiler. The full profiled source check falls

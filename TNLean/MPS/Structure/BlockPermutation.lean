@@ -15,7 +15,7 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 # Decomposition of algebra automorphisms of products of matrix algebras
 
 This file connects the algebra-level decomposition results from
-`TNLean.Algebra.BlockPermutation` with the MPS gauge-equivalence theory.
+`QICLean.Algebra.BlockPermutation` with the MPS gauge-equivalence theory.
 
 Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as:
 1. A block permutation `σ : ι ≃ ι`
@@ -31,32 +31,16 @@ Technical note on the two-level algebraic structure:
 
 ## Main results
 
-* `TwoSidedIdeal.mem_blockIdeal_iff` — block ideal membership characterisation
 * `componentMap` — the per-block map extracted from T
 * `algEquiv_pi_matrix_decomposition` — the main decomposition theorem
 -/
 
 open scoped Matrix
-open TwoSidedIdeal (blockIdeal blockComponentMap blockComponentMap_surjective
+open TwoSidedIdeal (blockIdeal blockComponentMap blockComponentMap_bijective
   ringEquiv_maps_single_support_between ringEquiv_pi_simple_permutes_blockIdeals)
 open Matrix (skolemNoether_matrix)
 
 namespace MPSTensor
-
-/-! ### Block ideal membership -/
-section BlockIdealMembership
-
-variable {ι : Type*} [Finite ι] [DecidableEq ι]
-variable {R : ι → Type*} [∀ i, Ring (R i)] [∀ i, IsSimpleRing (R i)]
-
-theorem ringEquiv_maps_single_support
-    (T : (∀ j, R j) ≃+* (∀ j, R j)) (σ : ι ≃ ι)
-    (hσ : ∀ i, T.mapTwoSidedIdeal (blockIdeal R i) = blockIdeal R (σ i))
-    {i : ι} (M : R i) (j : ι) (hj : j ≠ σ i) :
-    T (Pi.single i M) j = 0 :=
-  ringEquiv_maps_single_support_between T σ hσ M j hj
-
-end BlockIdealMembership
 
 /-! ### T maps Pi.single i 1 to Pi.single (σ i) 1 -/
 section PiSingleOne
@@ -71,7 +55,7 @@ theorem ringEquiv_single_one_eq
     T (Pi.single i (1 : R i)) = Pi.single (σ i) (1 : R (σ i)) := by
   cases nonempty_fintype ι
   have h_support : ∀ j, j ≠ σ i → T (Pi.single i (1 : R i)) j = 0 :=
-    fun j hj => ringEquiv_maps_single_support T σ hσ 1 j hj
+    fun j hj => ringEquiv_maps_single_support_between T σ hσ 1 j hj
   have h_eq_single : T (Pi.single i (1 : R i)) =
       Pi.single (σ i) (T (Pi.single i (1 : R i)) (σ i)) := by
     ext j; by_cases hj : j = σ i
@@ -84,7 +68,7 @@ theorem ringEquiv_single_one_eq
     have h_at := congr_fun h_T_sum (σ i)
     simp only [Finset.sum_apply, Pi.one_apply] at h_at
     rwa [Finset.sum_eq_single i (fun j _ hj =>
-      ringEquiv_maps_single_support T σ hσ 1 (σ i) (fun h => hj (σ.injective h.symm)))
+      ringEquiv_maps_single_support_between T σ hσ 1 (σ i) (fun h => hj (σ.injective h.symm)))
       (fun hi => absurd (Finset.mem_univ i) hi)] at h_at
   rw [h_eq_single, h_eval]
 
@@ -150,42 +134,6 @@ theorem componentMap_map_smul_of_algEquiv
   change T (Pi.single i (c • M)) (σ i) = c • T (Pi.single i M) (σ i)
   rw [Pi.single_smul, map_smul, Pi.smul_apply]
 
-private noncomputable def componentMapRingHom
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
-    (hσ : ∀ i, T.mapTwoSidedIdeal
-        (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
-      blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) : Matrix (Fin (D i)) (Fin (D i)) ℂ →+* Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ where
-  toFun := componentMap T σ i
-  map_one' := componentMap_map_one hσ i
-  map_mul' := componentMap_map_mul
-  map_zero' := componentMap_map_zero
-  map_add' := componentMap_map_add
-
-theorem componentMap_injective
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
-    (hσ : ∀ i, T.mapTwoSidedIdeal
-        (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
-      blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) : Function.Injective (componentMap T σ i) :=
-  (componentMapRingHom hσ i).injective
-
-theorem componentMap_surjective
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
-    (hσ : ∀ i, T.mapTwoSidedIdeal
-        (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
-      blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) : Function.Surjective (componentMap T σ i) :=
-  blockComponentMap_surjective T σ hσ i
-
-theorem componentMap_bijective
-    {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι}
-    (hσ : ∀ i, T.mapTwoSidedIdeal
-        (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
-      blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i))
-    (i : ι) : Function.Bijective (componentMap T σ i) :=
-  ⟨componentMap_injective hσ i, componentMap_surjective hσ i⟩
-
 end ComponentMap
 
 /-! ### Dimension preservation -/
@@ -205,7 +153,7 @@ theorem dim_preserved
     { toFun := componentMap T.toRingEquiv σ i
       map_add' := componentMap_map_add
       map_smul' := componentMap_map_smul_of_algEquiv }
-  have h := (LinearEquiv.ofBijective φ (componentMap_bijective hσ i)).finrank_eq
+  have h := (LinearEquiv.ofBijective φ (blockComponentMap_bijective _ _ hσ i)).finrank_eq
   rw [Module.finrank_matrix, Module.finrank_matrix] at h
   simp only [Module.finrank_self, Fintype.card_fin, mul_one] at h
   exact (Nat.mul_self_inj.mp h).symm
@@ -244,7 +192,7 @@ theorem algEquiv_pi_matrix_decomposition
         simp only [Algebra.algebraMap_eq_smul_one]
         rw [componentMap_map_smul_of_algEquiv, componentMap_map_one hσ i] }
   have castMap_bij : ∀ i, Function.Bijective (castMap i) :=
-    fun i => (reind i).bijective.comp (componentMap_bijective hσ i)
+    fun i => (reind i).bijective.comp (blockComponentMap_bijective _ _ hσ i)
   choose X hX using fun i =>
     skolemNoether_matrix (AlgEquiv.ofBijective (castMap i) (castMap_bij i))
   exact ⟨σ, hDeq, X, fun i M => hX i M⟩
