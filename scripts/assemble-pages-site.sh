@@ -3,9 +3,14 @@
 # Usage: assemble-pages-site.sh COMPONENTS_DIR OUT_DIR
 #
 # COMPONENTS_DIR may contain:
-#   site-blueprint/  Jekyll-built homepage, blueprint web + PDFs  (required)
+#   site-blueprint/  Jekyll-built homepage, blueprint web + PDFs,
+#                    paper-gap PDFs                               (required)
 #   site-docs/       doc-gen4 API docs and paper-gap PDFs         (optional)
 #   site-badges/     badge endpoint JSON                          (optional)
+#
+# Paper-gap PDFs come from site-blueprint when present: the blueprint job
+# rebuilds them on every push that touches a note, so its copy is at least
+# as fresh as the weekly docgen's site-docs copy, which remains a fallback.
 set -euo pipefail
 
 COMPONENTS="$1"
@@ -38,8 +43,11 @@ if [ -d "$COMPONENTS/site-docs/docs" ]; then
 else
   echo "::warning::site-docs component missing — deploying without API docs (the next docgen run restores them)"
 fi
-if [ -d "$COMPONENTS/site-docs/paper-gaps" ]; then
-  echo "==> Paper-gap PDFs..."
+if [ -d "$COMPONENTS/site-blueprint/paper-gaps" ]; then
+  echo "==> Paper-gap PDFs (blueprint component)..."
+  cp -r "$COMPONENTS/site-blueprint/paper-gaps" "$OUT/paper-gaps"
+elif [ -d "$COMPONENTS/site-docs/paper-gaps" ]; then
+  echo "==> Paper-gap PDFs (docs component)..."
   cp -r "$COMPONENTS/site-docs/paper-gaps" "$OUT/paper-gaps"
 fi
 
