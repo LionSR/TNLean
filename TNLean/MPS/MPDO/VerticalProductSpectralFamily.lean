@@ -12,6 +12,14 @@ This file assembles the normal decompositions of all retained copy-pair
 tensors, enumerates their active corners, and records their blocked-sector
 comparison data.
 
+**Local fix (Figure-11 fixed-pair support):** A fixed product pair may have no
+corner of a given blocked label, and such a label has an empty multiplicity
+fiber.  `exists_blockedBNT_gaugePhase_of_flatBlock` and
+`FlatBlockedBNTComparison` assert no nonempty multiplicity space for an unused
+blocked label, and `OriginalCornerFamily` represents a pair with no active
+corner by an empty family.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -449,10 +457,6 @@ the product of a prescribed pair, or even among the active product corners.
 The conclusion therefore chooses a blocked label for each active corner and
 makes no converse assertion.
 
-**Local fix (Figure-11 fixed-pair support):** A fixed product pair may have no
-corner of a given blocked label; such a label has an empty multiplicity fiber.
-Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
-
 Source: CPSV16, Appendix C.4, lines 2025--2029, using Proposition 2.7
 (`prop:char-BNT`). -/
 theorem exists_blockedBNT_gaugePhase_of_flatBlock
@@ -505,10 +509,6 @@ gauge, and phase for every enumerated active product corner.
 
 The map `label` need not be surjective: unused blocked BNT labels are allowed.
 
-**Local fix (Figure-11 fixed-pair support):** No nonempty multiplicity space is
-asserted for an unused blocked label.  Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
-
 Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 structure FlatBlockedBNTComparison {g₂ : ℕ}
     (S : RetainedProductSpectralFamily dim mult weight B)
@@ -534,11 +534,6 @@ structure FlatBlockedBNTComparison {g₂ : ℕ}
 
 /-- The active normal corners of every retained copy pair, transported back
 to the original one-site BNT labels and normalized by isometries.
-
-**Local fix (Figure-11 fixed-pair support):** A copy pair with no active
-corner is represented by an empty family; no unsupported corner is inserted.
-Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 structure OriginalCornerFamily

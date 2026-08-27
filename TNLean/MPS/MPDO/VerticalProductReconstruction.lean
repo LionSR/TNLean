@@ -6,15 +6,10 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.VerticalCoisometry
 import TNLean.MPS.MPDO.HorizontalBlocking
-import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.CanonicalForm.BNTTransport
-import TNLean.MPS.CanonicalForm.NormalCommutant
-import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.MPDO.BNTFusionCoisometries
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.VerticalBNTConstruction
-import TNLean.MPS.MPDO.VerticalBNT
-import TNLean.MPS.MPDO.VerticalSpectral
 
 /-!
 # Coisometric reconstruction of retained vertical products

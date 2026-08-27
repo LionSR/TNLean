@@ -13,6 +13,13 @@ This file transports active retained-product corners to the original BNT
 labels, compares them with blocked reference corners, and constructs the
 resulting original-label corner family.
 
+**Local fix (Figure-11 fixed-pair support):** `exists_flatBlockedBNTComparison`
+leaves unused blocked labels for empty multiplicity fibers, and
+`exists_originalCornerFamily` keeps empty active families empty: the exact
+local reconstruction then forces the corresponding weighted raw product to
+vanish, and positivity of the outer copy weight gives the raw reconstruction.
+Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -697,10 +704,6 @@ theorem FlatBlockedBNTComparison.reference_compression
 
 /-- The active-to-blocked BNT comparisons can be chosen simultaneously.
 
-**Local fix (Figure-11 fixed-pair support):** Unused blocked labels are left
-for empty multiplicity fibers.  Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
-
 Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem exists_flatBlockedBNTComparison
     {d g₂ : ℕ}
@@ -855,12 +858,6 @@ theorem ambient_compression {d : ℕ}
 
 /-- Normalized active product corners form a positive decomposition in the
 original one-site BNT labels.
-
-**Local fix (Figure-11 fixed-pair support):** Empty active families are kept
-empty.  The exact local reconstruction then forces the corresponding weighted
-raw product to vanish, and positivity of the outer copy weight gives the raw
-reconstruction.  Documented in
-`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_originalCornerFamily
