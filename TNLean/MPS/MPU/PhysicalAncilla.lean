@@ -116,26 +116,6 @@ theorem IsMPU.tensorPhysicalId {U : MPOTensor d D} (hU : IsMPU U)
 
 /-! ## Normalized doubled-index tensor -/
 
-/-- Shuffle the doubled enlarged physical index by
-\(((i,a),(j,b))\mapsto((i,j),(a,b))\), with both pairs encoded by
-`finProdFinEquiv`.
-
-This makes the original and ancilla doubled indices explicit and fixes their
-orientation for identity-ancilla attachment.
-
-Source: arXiv:1703.09188, lines 706--724. -/
-private def doubledPhysicalAncillaMiddleShuffle (d x : ℕ) :
-    ((Fin d × Fin x) × (Fin d × Fin x)) ≃
-      ((Fin d × Fin d) × (Fin x × Fin x)) where
-  toFun z := ((z.1.1, z.2.1), (z.1.2, z.2.2))
-  invFun z := ((z.1.1, z.2.1), (z.1.2, z.2.2))
-  left_inv := by rintro ⟨⟨i, a⟩, ⟨j, b⟩⟩; rfl
-  right_inv := by rintro ⟨⟨i, j⟩, ⟨a, b⟩⟩; rfl
-
-@[simp] private theorem doubledPhysicalAncillaMiddleShuffle_apply
-    (i j : Fin d) (a b : Fin x) :
-    doubledPhysicalAncillaMiddleShuffle d x ((i, a), (j, b)) = ((i, j), (a, b)) := rfl
-
 /-- Separate the original and ancilla doubled physical indices by the shuffle
 \(((i,a),(j,b))\mapsto((i,j),(a,b))\).
 
@@ -145,7 +125,7 @@ def doubledPhysicalAncillaShuffle (d x : ℕ) :
     Fin ((d * x) * (d * x)) ≃ Fin ((d * d) * (x * x)) :=
   finProdFinEquiv.symm |>.trans <|
     (Equiv.prodCongr finProdFinEquiv.symm finProdFinEquiv.symm).trans <|
-      (doubledPhysicalAncillaMiddleShuffle d x).trans <|
+      (Equiv.prodProdProdComm (Fin d) (Fin x) (Fin d) (Fin x)).trans <|
         (Equiv.prodCongr finProdFinEquiv finProdFinEquiv).trans finProdFinEquiv
 
 /-- Coordinate action of the doubled physical-ancilla shuffle. -/

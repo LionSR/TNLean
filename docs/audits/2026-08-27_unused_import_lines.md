@@ -8,6 +8,12 @@ folded together here because they were applied and verified as one root build.
 Net delta of this sweep: −23 Lean lines (one of the twenty-four edits is a
 one-for-one replacement, not a deletion).
 
+A later cross-cutting pass added one further line to the table below, the
+`QICLean.Kraus.MixedMap` import of `TNLean/MPS/MPDO/PureRFPSAL.lean`, bringing
+the sweep to −24 Lean lines across twenty-five edits. That module keeps four
+other TNLean importers, so the removal narrows one module's import closure
+rather than dropping the mixed-map development from the build.
+
 ## Method, and the mistake the method has to avoid
 
 An import line is a candidate when no identifier that the file elaborates is
@@ -79,6 +85,7 @@ importer set, it does not disconnect it.
 | `TNLean/MPS/Irreducible/FixedPointProjection.lean` | `QICLean.Channel.Irreducible.Basic` |
 | `TNLean/MPS/MPDO/BondTwoSingletonPhysicalGauge.lean` | `TNLean.MPS.CanonicalForm.CPSVBlocking` |
 | `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` | `QICLean.Algebra.MatrixCyclicTracePower` |
+| `TNLean/MPS/MPDO/PureRFPSAL.lean` | `QICLean.Kraus.MixedMap` |
 | `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean` | `TNLean.MPS.MPDO.SimpleTensor` |
 | `TNLean/MPS/Overlap/CastDecay.lean` | `TNLean.Spectral.TransferOperatorGapInjective` |
 | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossing.lean` | `TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalLastCrossing` |
