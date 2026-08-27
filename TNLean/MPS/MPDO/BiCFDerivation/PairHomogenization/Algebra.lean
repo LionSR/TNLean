@@ -288,170 +288,14 @@ private theorem subalgebra_prod_eq_top_of_axes {R A B : Type*}
 /-- If both coordinate axes lie in a matrix-pair subalgebra, the subalgebra is
 the whole product. This is the top branch of the subdirect-product dichotomy
 used in the pair-algebra density argument. -/
-theorem matrixPairSubalgebra_eq_top_of_axes {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hfst : ∀ x : MatD D, (x, 0) ∈ S)
-    (hsnd : ∀ y : MatD D, (0, y) ∈ S) :
+theorem matrixPairSubalgebra_eq_top_of_axes {D₁ D₂ : ℕ}
+    (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
+    (hfst : ∀ x : MatD D₁, (x, 0) ∈ S)
+    (hsnd : ∀ y : MatD D₂, (0, y) ∈ S) :
     S = ⊤ :=
   subalgebra_prod_eq_top_of_axes S hfst hsnd
 
-private noncomputable def leftAxisIdeal {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hfst : S.map (AlgHom.fst ℂ (MatD D) (MatD D)) = ⊤) :
-    TwoSidedIdeal (MatD D) :=
-  TwoSidedIdeal.mk'
-    {x : MatD D | (x, 0) ∈ S}
-    S.zero_mem
-    (fun hx hy => by simpa using S.add_mem hx hy)
-    (fun hx => by simpa using S.neg_mem hx)
-    (fun {x y} hy => by
-      have hxmap : x ∈ S.map (AlgHom.fst ℂ (MatD D) (MatD D)) := by
-        rw [hfst]
-        trivial
-      rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
-      have hpx' : p.1 = x := by simpa using hpx
-      have hmul : (p * (y, 0)) ∈ S := S.mul_mem hpS hy
-      have hprod : p * (y, 0) = (x * y, 0) := by
-        ext <;> simp [hpx']
-      simpa [hprod] using hmul)
-    (fun {x y} hx => by
-      have hymap : y ∈ S.map (AlgHom.fst ℂ (MatD D) (MatD D)) := by
-        rw [hfst]
-        trivial
-      rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
-      have hpy' : p.1 = y := by simpa using hpy
-      have hmul : ((x, 0) * p) ∈ S := S.mul_mem hx hpS
-      have hprod : (x, 0) * p = (x * y, 0) := by
-        ext <;> simp [hpy']
-      simpa [hprod] using hmul)
-
-private noncomputable def rightAxisIdeal {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hsnd : S.map (AlgHom.snd ℂ (MatD D) (MatD D)) = ⊤) :
-    TwoSidedIdeal (MatD D) :=
-  TwoSidedIdeal.mk'
-    {y : MatD D | (0, y) ∈ S}
-    S.zero_mem
-    (fun hx hy => by simpa using S.add_mem hx hy)
-    (fun hx => by simpa using S.neg_mem hx)
-    (fun {x y} hy => by
-      have hxmap : x ∈ S.map (AlgHom.snd ℂ (MatD D) (MatD D)) := by
-        rw [hsnd]
-        trivial
-      rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
-      have hpx' : p.2 = x := by simpa using hpx
-      have hmul : (p * (0, y)) ∈ S := S.mul_mem hpS hy
-      have hprod : p * (0, y) = (0, x * y) := by
-        ext <;> simp [hpx']
-      simpa [hprod] using hmul)
-    (fun {x y} hx => by
-      have hymap : y ∈ S.map (AlgHom.snd ℂ (MatD D) (MatD D)) := by
-        rw [hsnd]
-        trivial
-      rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
-      have hpy' : p.2 = y := by simpa using hpy
-      have hmul : ((0, x) * p) ∈ S := S.mul_mem hx hpS
-      have hprod : (0, x) * p = (0, x * y) := by
-        ext <;> simp [hpy']
-      simpa [hprod] using hmul)
-
-/-- A full left-axis ideal forces a subdirect matrix-pair subalgebra to be the
-whole product. -/
-theorem matrixPairSubalgebra_eq_top_of_leftAxisIdeal_eq_top {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hfst : S.map (AlgHom.fst ℂ (MatD D) (MatD D)) = ⊤)
-    (hsnd : S.map (AlgHom.snd ℂ (MatD D) (MatD D)) = ⊤)
-    (hleft : leftAxisIdeal S hfst = ⊤) :
-    S = ⊤ := by
-  apply matrixPairSubalgebra_eq_top_of_axes
-  · intro x
-    have hx : x ∈ leftAxisIdeal S hfst := by rw [hleft]; trivial
-    simpa [leftAxisIdeal] using hx
-  · intro y
-    have hymap : y ∈ S.map (AlgHom.snd ℂ (MatD D) (MatD D)) := by
-      rw [hsnd]
-      trivial
-    rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
-    have hpy' : p.2 = y := by simpa using hpy
-    have hneg : (-p.1, 0) ∈ S := by
-      have hx : p.1 ∈ leftAxisIdeal S hfst := by rw [hleft]; trivial
-      have hpos : (p.1, 0) ∈ S := by simpa [leftAxisIdeal] using hx
-      simpa using S.neg_mem hpos
-    have hadd : (-p.1, 0) + p ∈ S := S.add_mem hneg hpS
-    have hsum : (-p.1, 0) + p = (0, y) := by
-      ext <;> simp [hpy']
-    simpa [hsum] using hadd
-
-/-- A full right-axis ideal forces a subdirect matrix-pair subalgebra to be the
-whole product. -/
-theorem matrixPairSubalgebra_eq_top_of_rightAxisIdeal_eq_top {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hfst : S.map (AlgHom.fst ℂ (MatD D) (MatD D)) = ⊤)
-    (hsnd : S.map (AlgHom.snd ℂ (MatD D) (MatD D)) = ⊤)
-    (hright : rightAxisIdeal S hsnd = ⊤) :
-    S = ⊤ := by
-  apply matrixPairSubalgebra_eq_top_of_axes
-  · intro x
-    have hxmap : x ∈ S.map (AlgHom.fst ℂ (MatD D) (MatD D)) := by
-      rw [hfst]
-      trivial
-    rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
-    have hpx' : p.1 = x := by simpa using hpx
-    have hneg : (0, -p.2) ∈ S := by
-      have hy : p.2 ∈ rightAxisIdeal S hsnd := by rw [hright]; trivial
-      have hpos : (0, p.2) ∈ S := by simpa [rightAxisIdeal] using hy
-      simpa using S.neg_mem hpos
-    have hadd : p + (0, -p.2) ∈ S := S.add_mem hpS hneg
-    have hsum : p + (0, -p.2) = (x, 0) := by
-      ext <;> simp [hpx']
-    simpa [hsum] using hadd
-  · intro y
-    have hy : y ∈ rightAxisIdeal S hsnd := by rw [hright]; trivial
-    simpa [rightAxisIdeal] using hy
-
-private theorem fstProjection_injective_of_rightAxisIdeal_eq_bot {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hsnd : S.map (AlgHom.snd ℂ (MatD D) (MatD D)) = ⊤)
-    (hright : rightAxisIdeal S hsnd = ⊥) :
-    Function.Injective ((AlgHom.fst ℂ (MatD D) (MatD D)).comp S.val) := by
-  intro x y hxy
-  apply Subtype.ext
-  apply Prod.ext
-  · exact hxy
-  · have hdiffS : x.1 - y.1 ∈ S := S.sub_mem x.2 y.2
-    have hfirst : x.1.1 - y.1.1 = 0 := sub_eq_zero.mpr hxy
-    have haxis : x.1.2 - y.1.2 ∈ rightAxisIdeal S hsnd := by
-      have hdiff : x.1 - y.1 = (0, x.1.2 - y.1.2) := by
-        apply Prod.ext
-        · exact hfirst
-        · rfl
-      simpa [rightAxisIdeal] using (hdiff ▸ hdiffS)
-    have hbot : x.1.2 - y.1.2 ∈ (⊥ : TwoSidedIdeal (MatD D)) := by
-      simpa [hright] using haxis
-    exact sub_eq_zero.mp (by simpa using hbot)
-
-private theorem sndProjection_injective_of_leftAxisIdeal_eq_bot {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hfst : S.map (AlgHom.fst ℂ (MatD D) (MatD D)) = ⊤)
-    (hleft : leftAxisIdeal S hfst = ⊥) :
-    Function.Injective ((AlgHom.snd ℂ (MatD D) (MatD D)).comp S.val) := by
-  intro x y hxy
-  apply Subtype.ext
-  apply Prod.ext
-  · have hdiffS : x.1 - y.1 ∈ S := S.sub_mem x.2 y.2
-    have hsecond : x.1.2 - y.1.2 = 0 := sub_eq_zero.mpr hxy
-    have haxis : x.1.1 - y.1.1 ∈ leftAxisIdeal S hfst := by
-      have hdiff : x.1 - y.1 = (x.1.1 - y.1.1, 0) := by
-        apply Prod.ext
-        · rfl
-        · exact hsecond
-      simpa [leftAxisIdeal] using (hdiff ▸ hdiffS)
-    have hbot : x.1.1 - y.1.1 ∈ (⊥ : TwoSidedIdeal (MatD D)) := by
-      simpa [hleft] using haxis
-    exact sub_eq_zero.mp (by simpa using hbot)
-  · exact hxy
-
-private noncomputable def leftAxisIdealHetero {D₁ D₂ : ℕ}
+private noncomputable def leftAxisIdeal {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) = ⊤) :
     TwoSidedIdeal (MatD D₁) :=
@@ -481,7 +325,7 @@ private noncomputable def leftAxisIdealHetero {D₁ D₂ : ℕ}
         ext <;> simp [hpy']
       simpa [hprod] using hmul)
 
-private noncomputable def rightAxisIdealHetero {D₁ D₂ : ℕ}
+private noncomputable def rightAxisIdeal {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hsnd : S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) = ⊤) :
     TwoSidedIdeal (MatD D₂) :=
@@ -511,16 +355,18 @@ private noncomputable def rightAxisIdealHetero {D₁ D₂ : ℕ}
         ext <;> simp [hpy']
       simpa [hprod] using hmul)
 
-private theorem matrixPairSubalgebra_eq_top_of_leftAxisIdealHetero_eq_top {D₁ D₂ : ℕ}
+/-- A full left-axis ideal forces a subdirect matrix-pair subalgebra to be the
+whole product. -/
+theorem matrixPairSubalgebra_eq_top_of_leftAxisIdeal_eq_top {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) = ⊤)
     (hsnd : S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) = ⊤)
-    (hleft : leftAxisIdealHetero S hfst = ⊤) :
+    (hleft : leftAxisIdeal S hfst = ⊤) :
     S = ⊤ := by
-  apply subalgebra_prod_eq_top_of_axes
+  apply matrixPairSubalgebra_eq_top_of_axes
   · intro x
-    have hx : x ∈ leftAxisIdealHetero S hfst := by rw [hleft]; trivial
-    simpa [leftAxisIdealHetero] using hx
+    have hx : x ∈ leftAxisIdeal S hfst := by rw [hleft]; trivial
+    simpa [leftAxisIdeal] using hx
   · intro y
     have hymap : y ∈ S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) := by
       rw [hsnd]
@@ -528,21 +374,23 @@ private theorem matrixPairSubalgebra_eq_top_of_leftAxisIdealHetero_eq_top {D₁ 
     rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
     have hpy' : p.2 = y := by simpa using hpy
     have hneg : (-p.1, 0) ∈ S := by
-      have hx : p.1 ∈ leftAxisIdealHetero S hfst := by rw [hleft]; trivial
-      have hpos : (p.1, 0) ∈ S := by simpa [leftAxisIdealHetero] using hx
+      have hx : p.1 ∈ leftAxisIdeal S hfst := by rw [hleft]; trivial
+      have hpos : (p.1, 0) ∈ S := by simpa [leftAxisIdeal] using hx
       simpa using S.neg_mem hpos
     have hadd : (-p.1, 0) + p ∈ S := S.add_mem hneg hpS
     have hsum : (-p.1, 0) + p = (0, y) := by
       ext <;> simp [hpy']
     simpa [hsum] using hadd
 
-private theorem matrixPairSubalgebra_eq_top_of_rightAxisIdealHetero_eq_top {D₁ D₂ : ℕ}
+/-- A full right-axis ideal forces a subdirect matrix-pair subalgebra to be the
+whole product. -/
+theorem matrixPairSubalgebra_eq_top_of_rightAxisIdeal_eq_top {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) = ⊤)
     (hsnd : S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) = ⊤)
-    (hright : rightAxisIdealHetero S hsnd = ⊤) :
+    (hright : rightAxisIdeal S hsnd = ⊤) :
     S = ⊤ := by
-  apply subalgebra_prod_eq_top_of_axes
+  apply matrixPairSubalgebra_eq_top_of_axes
   · intro x
     have hxmap : x ∈ S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) := by
       rw [hfst]
@@ -550,21 +398,21 @@ private theorem matrixPairSubalgebra_eq_top_of_rightAxisIdealHetero_eq_top {D₁
     rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
     have hpx' : p.1 = x := by simpa using hpx
     have hneg : (0, -p.2) ∈ S := by
-      have hy : p.2 ∈ rightAxisIdealHetero S hsnd := by rw [hright]; trivial
-      have hpos : (0, p.2) ∈ S := by simpa [rightAxisIdealHetero] using hy
+      have hy : p.2 ∈ rightAxisIdeal S hsnd := by rw [hright]; trivial
+      have hpos : (0, p.2) ∈ S := by simpa [rightAxisIdeal] using hy
       simpa using S.neg_mem hpos
     have hadd : p + (0, -p.2) ∈ S := S.add_mem hpS hneg
     have hsum : p + (0, -p.2) = (x, 0) := by
       ext <;> simp [hpx']
     simpa [hsum] using hadd
   · intro y
-    have hy : y ∈ rightAxisIdealHetero S hsnd := by rw [hright]; trivial
-    simpa [rightAxisIdealHetero] using hy
+    have hy : y ∈ rightAxisIdeal S hsnd := by rw [hright]; trivial
+    simpa [rightAxisIdeal] using hy
 
-private theorem fstProjectionHetero_injective_of_rightAxisIdeal_eq_bot {D₁ D₂ : ℕ}
+private theorem fstProjection_injective_of_rightAxisIdeal_eq_bot {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hsnd : S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) = ⊤)
-    (hright : rightAxisIdealHetero S hsnd = ⊥) :
+    (hright : rightAxisIdeal S hsnd = ⊥) :
     Function.Injective ((AlgHom.fst ℂ (MatD D₁) (MatD D₂)).comp S.val) := by
   intro x y hxy
   apply Subtype.ext
@@ -572,38 +420,38 @@ private theorem fstProjectionHetero_injective_of_rightAxisIdeal_eq_bot {D₁ D�
   · exact hxy
   · have hdiffS : x.1 - y.1 ∈ S := S.sub_mem x.2 y.2
     have hfirst : x.1.1 - y.1.1 = 0 := sub_eq_zero.mpr hxy
-    have haxis : x.1.2 - y.1.2 ∈ rightAxisIdealHetero S hsnd := by
+    have haxis : x.1.2 - y.1.2 ∈ rightAxisIdeal S hsnd := by
       have hdiff : x.1 - y.1 = (0, x.1.2 - y.1.2) := by
         apply Prod.ext
         · exact hfirst
         · rfl
-      simpa [rightAxisIdealHetero] using (hdiff ▸ hdiffS)
+      simpa [rightAxisIdeal] using (hdiff ▸ hdiffS)
     have hbot : x.1.2 - y.1.2 ∈ (⊥ : TwoSidedIdeal (MatD D₂)) := by
       simpa [hright] using haxis
     exact sub_eq_zero.mp (by simpa using hbot)
 
-private theorem sndProjectionHetero_injective_of_leftAxisIdeal_eq_bot {D₁ D₂ : ℕ}
+private theorem sndProjection_injective_of_leftAxisIdeal_eq_bot {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) = ⊤)
-    (hleft : leftAxisIdealHetero S hfst = ⊥) :
+    (hleft : leftAxisIdeal S hfst = ⊥) :
     Function.Injective ((AlgHom.snd ℂ (MatD D₁) (MatD D₂)).comp S.val) := by
   intro x y hxy
   apply Subtype.ext
   apply Prod.ext
   · have hdiffS : x.1 - y.1 ∈ S := S.sub_mem x.2 y.2
     have hsecond : x.1.2 - y.1.2 = 0 := sub_eq_zero.mpr hxy
-    have haxis : x.1.1 - y.1.1 ∈ leftAxisIdealHetero S hfst := by
+    have haxis : x.1.1 - y.1.1 ∈ leftAxisIdeal S hfst := by
       have hdiff : x.1 - y.1 = (x.1.1 - y.1.1, 0) := by
         apply Prod.ext
         · rfl
         · exact hsecond
-      simpa [leftAxisIdealHetero] using (hdiff ▸ hdiffS)
+      simpa [leftAxisIdeal] using (hdiff ▸ hdiffS)
     have hbot : x.1.1 - y.1.1 ∈ (⊥ : TwoSidedIdeal (MatD D₁)) := by
       simpa [hleft] using haxis
     exact sub_eq_zero.mp (by simpa using hbot)
   · exact hxy
 
-private theorem fstProjectionHetero_surjective_of_map_eq_top {D₁ D₂ : ℕ}
+private theorem fstProjection_surjective_of_map_eq_top {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) = ⊤) :
     Function.Surjective ((AlgHom.fst ℂ (MatD D₁) (MatD D₂)).comp S.val) := by
@@ -614,7 +462,7 @@ private theorem fstProjectionHetero_surjective_of_map_eq_top {D₁ D₂ : ℕ}
   rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
   exact ⟨⟨p, hpS⟩, by simpa using hpx⟩
 
-private theorem sndProjectionHetero_surjective_of_map_eq_top {D₁ D₂ : ℕ}
+private theorem sndProjection_surjective_of_map_eq_top {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hsnd : S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) = ⊤) :
     Function.Surjective ((AlgHom.snd ℂ (MatD D₁) (MatD D₂)).comp S.val) := by
@@ -633,21 +481,21 @@ private theorem matrixAlgEquiv_dim_eq {D₁ D₂ : ℕ}
     simpa [MatD, Module.finrank_matrix, Fintype.card_fin] using hfin
   exact Nat.mul_self_inj.mp hdim
 
-private noncomputable def matrixPairSubalgebra_algEquiv_of_axisIdealsHetero_eq_bot {D₁ D₂ : ℕ}
+private noncomputable def matrixPairSubalgebra_algEquiv_of_axisIdeals_eq_bot {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : S.map (AlgHom.fst ℂ (MatD D₁) (MatD D₂)) = ⊤)
     (hsnd : S.map (AlgHom.snd ℂ (MatD D₁) (MatD D₂)) = ⊤)
-    (hleft : leftAxisIdealHetero S hfst = ⊥)
-    (hright : rightAxisIdealHetero S hsnd = ⊥) :
+    (hleft : leftAxisIdeal S hfst = ⊥)
+    (hright : rightAxisIdeal S hsnd = ⊥) :
     MatD D₁ ≃ₐ[ℂ] MatD D₂ := by
   let p₁ : S →ₐ[ℂ] MatD D₁ := (AlgHom.fst ℂ (MatD D₁) (MatD D₂)).comp S.val
   let p₂ : S →ₐ[ℂ] MatD D₂ := (AlgHom.snd ℂ (MatD D₁) (MatD D₂)).comp S.val
   have hp₁ : Function.Bijective p₁ :=
-    ⟨fstProjectionHetero_injective_of_rightAxisIdeal_eq_bot S hsnd hright,
-      fstProjectionHetero_surjective_of_map_eq_top S hfst⟩
+    ⟨fstProjection_injective_of_rightAxisIdeal_eq_bot S hsnd hright,
+      fstProjection_surjective_of_map_eq_top S hfst⟩
   have hp₂ : Function.Bijective p₂ :=
-    ⟨sndProjectionHetero_injective_of_leftAxisIdeal_eq_bot S hfst hleft,
-      sndProjectionHetero_surjective_of_map_eq_top S hsnd⟩
+    ⟨sndProjection_injective_of_leftAxisIdeal_eq_bot S hfst hleft,
+      sndProjection_surjective_of_map_eq_top S hsnd⟩
   let e₁ : S ≃ₐ[ℂ] MatD D₁ := AlgEquiv.ofBijective p₁ hp₁
   let e₂ : S ≃ₐ[ℂ] MatD D₂ := AlgEquiv.ofBijective p₂ hp₂
   exact e₁.symm.trans e₂
@@ -665,36 +513,14 @@ theorem subdirect_matrix_pair_eq_top_of_dim_ne {D₁ D₂ : ℕ} [NeZero D₁] [
   have : Nonempty (Fin D₂) := Fin.pos_iff_nonempty.mp (Nat.pos_of_neZero D₂)
   have : IsSimpleRing (MatD D₁) := IsSimpleRing.matrix (Fin D₁) ℂ
   have : IsSimpleRing (MatD D₂) := IsSimpleRing.matrix (Fin D₂) ℂ
-  rcases eq_bot_or_eq_top (leftAxisIdealHetero S hfst) with hleft | hleft
-  · rcases eq_bot_or_eq_top (rightAxisIdealHetero S hsnd) with hright | hright
+  rcases eq_bot_or_eq_top (leftAxisIdeal S hfst) with hleft | hleft
+  · rcases eq_bot_or_eq_top (rightAxisIdeal S hsnd) with hright | hright
     · exact False.elim
         (hdim (matrixAlgEquiv_dim_eq
-          (matrixPairSubalgebra_algEquiv_of_axisIdealsHetero_eq_bot
+          (matrixPairSubalgebra_algEquiv_of_axisIdeals_eq_bot
             S hfst hsnd hleft hright)))
-    · exact matrixPairSubalgebra_eq_top_of_rightAxisIdealHetero_eq_top S hfst hsnd hright
-  · exact matrixPairSubalgebra_eq_top_of_leftAxisIdealHetero_eq_top S hfst hsnd hleft
-
-private theorem fstProjection_surjective_of_map_eq_top {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hfst : S.map (AlgHom.fst ℂ (MatD D) (MatD D)) = ⊤) :
-    Function.Surjective ((AlgHom.fst ℂ (MatD D) (MatD D)).comp S.val) := by
-  intro x
-  have hxmap : x ∈ S.map (AlgHom.fst ℂ (MatD D) (MatD D)) := by
-    rw [hfst]
-    trivial
-  rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
-  exact ⟨⟨p, hpS⟩, by simpa using hpx⟩
-
-private theorem sndProjection_surjective_of_map_eq_top {D : ℕ}
-    (S : Subalgebra ℂ (MatD D × MatD D))
-    (hsnd : S.map (AlgHom.snd ℂ (MatD D) (MatD D)) = ⊤) :
-    Function.Surjective ((AlgHom.snd ℂ (MatD D) (MatD D)).comp S.val) := by
-  intro y
-  have hymap : y ∈ S.map (AlgHom.snd ℂ (MatD D) (MatD D)) := by
-    rw [hsnd]
-    trivial
-  rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
-  exact ⟨⟨p, hpS⟩, by simpa using hpy⟩
+    · exact matrixPairSubalgebra_eq_top_of_rightAxisIdeal_eq_top S hfst hsnd hright
+  · exact matrixPairSubalgebra_eq_top_of_leftAxisIdeal_eq_top S hfst hsnd hleft
 
 /-- If both axis ideals are trivial, a subdirect matrix-pair subalgebra is the
 graph of a matrix-algebra automorphism. -/

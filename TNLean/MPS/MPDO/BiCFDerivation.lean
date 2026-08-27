@@ -17,8 +17,6 @@ is intended to retain the lighter criterion layer.
 
 The supporting modules are:
 
-* `TNLean.MPS.MPDO.BiCFDerivation.Basic` — historical import path for the
-  finite-length biCF criteria.
 * `TNLean.MPS.MPDO.BiCFDerivation.Core` — tuple-span, linear-independence, and
   finite/cumulative pair trace-separation criteria.
 * `TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization` — homogeneous pair-span

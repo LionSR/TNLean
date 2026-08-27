@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.PositiveOverlappingProduct
 /-!
 # Algebra of overlapping matrix lifts
 
-This file records the multiplicative, additive, support-annihilation, and
+This file records the additive, support-annihilation, and
 positivity properties of the natural lifts from two adjacent tensor factors to
 three tensor factors. These lemmas isolate the matrix algebra used in the
 four-cycle quantum Markov argument.
@@ -21,39 +21,6 @@ namespace Matrix
 variable {a b c : Type*}
 variable [Fintype a] [Fintype b] [Fintype c]
 variable [DecidableEq a] [DecidableEq b] [DecidableEq c]
-
-omit [DecidableEq a] [DecidableEq b] in
-/-- The natural lift on the first two factors preserves multiplication. -/
-private theorem leftOverlappingLift_mul (X Y : Matrix (a × b) (a × b) ℂ) :
-    leftOverlappingLift (c := c) (X * Y) =
-      leftOverlappingLift X * leftOverlappingLift Y := by
-  ext p q
-  simp only [leftOverlappingLift, Matrix.mul_apply]
-  conv_rhs => rw [Fintype.sum_prod_type]
-  simp [Matrix.one_apply]
-
-omit [DecidableEq b] [DecidableEq c] in
-/-- The natural lift on the last two factors preserves multiplication. -/
-private theorem rightOverlappingLift_mul (X Y : Matrix (b × c) (b × c) ℂ) :
-    rightOverlappingLift (a := a) (X * Y) =
-      rightOverlappingLift X * rightOverlappingLift Y := by
-  ext p q
-  simp only [rightOverlappingLift, Matrix.mul_apply]
-  conv_rhs => rw [Fintype.sum_prod_type]
-  conv_rhs => rw [Fintype.sum_prod_type]
-  by_cases h : p.1.1 = q.1.1
-  · simp [Matrix.one_apply, h, Fintype.sum_prod_type]
-  · simp [Matrix.one_apply, h]
-
-omit [Fintype a] [Fintype b] [Fintype c] [DecidableEq b] in
-/-- The right overlapping lift of a middle-system operator is its three-factor
-Kronecker lift. -/
-private theorem rightOverlappingLift_kronecker_one (U : Matrix b b ℂ) :
-    rightOverlappingLift (a := a) (U ⊗ₖ (1 : Matrix c c ℂ)) =
-      ((1 : Matrix a a ℂ) ⊗ₖ U) ⊗ₖ (1 : Matrix c c ℂ) := by
-  ext p q
-  simp [rightOverlappingLift]
-  ring
 
 omit [DecidableEq b] in
 /-- Orthogonal middle supports force the product of two overlapping operators
@@ -126,17 +93,6 @@ theorem rightOverlappingLift_sum {I : Type*} [Fintype I]
   ext p q
   simp only [rightOverlappingLift, Matrix.sum_apply]
   rw [Finset.mul_sum]
-
-omit [Fintype a] [Fintype b] [Fintype c]
-    [DecidableEq b] [DecidableEq c] in
-/-- The right overlapping lift preserves scalar multiplication. -/
-private theorem rightOverlappingLift_smul (z : ℂ)
-    (X : Matrix (b × c) (b × c) ℂ) :
-    rightOverlappingLift (a := a) (z • X) =
-      z • rightOverlappingLift (a := a) X := by
-  ext p q
-  simp [rightOverlappingLift]
-  ring
 
 omit [Fintype a] [Fintype b] [Fintype c]
     [DecidableEq a] [DecidableEq b] in

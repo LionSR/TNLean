@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.TracePairing
-import TNLean.MPS.MPDO.BiCFDerivation.Basic
+import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
 /-!
 # Diagonal restriction need not preserve normality

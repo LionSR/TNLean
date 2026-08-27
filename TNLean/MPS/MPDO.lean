@@ -65,7 +65,6 @@ import TNLean.MPS.MPDO.BNTTripleFusionComparison
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
-import TNLean.MPS.MPDO.BiCFDerivation.Basic
 import TNLean.MPS.MPDO.BiCFDerivation.Blocking
 import TNLean.MPS.MPDO.BiCFDerivation.Core
 import TNLean.MPS.MPDO.BiCFDerivation.DiagonalRestrictionCounterexample
