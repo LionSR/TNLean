@@ -32,8 +32,6 @@ namespace MPOTensor.BondTwoSingletonBaseModel
 
 open BondTwoSingletonGramBoundary
 
-private abbrev I := Fin 2
-
 /-- The base MPO after ket-left multiplication by `X` and bra-right
 multiplication by `X⁻¹`.
 
@@ -167,9 +165,6 @@ private def gaugedNormalizedSingletonFamily :
     (alpha : Fin 1) → MPSTensor (4 * 4) 2 :=
   fun _ ↦ gaugedNormalizedSingletonTensor
 
-private lemma singletonScale_pos_physicalGauge : 0 < singletonScale := by
-  simp [singletonScale]
-
 private lemma normalizedSingletonTensor_gaugeEquiv_gauged :
     MPSTensor.GaugeEquiv normalizedSingletonTensor
       gaugedNormalizedSingletonTensor :=
@@ -203,7 +198,7 @@ private lemma gaugedNormalizedSingleton_verticalAssembledTensor :
           singletonRetainedCoordinateEquiv.symm (gaugedSingletonTensor v)) := by
   let e : (Σ _k : Fin 1, Fin 2) ≃ Fin 2 := finSigmaFinEquiv
   have hs : (singletonScale : ℂ) ≠ 0 := by
-    exact_mod_cast ne_of_gt singletonScale_pos_physicalGauge
+    exact_mod_cast ne_of_gt singletonScale_pos
   have hscaled (v : Fin (4 * 4)) :
       (singletonScale : ℂ)⁻¹ • gaugedNormalizedSingletonTensor v =
         gaugedSingletonTensor v := by
@@ -300,7 +295,7 @@ private noncomputable def gaugedNormalizedSingletonAlgebraClause :
   }
   · intro alpha beta gamma q
     simpa [normalizedSingletonChi] using
-      (Complex.zero_lt_real.mpr singletonScale_pos_physicalGauge)
+      (Complex.zero_lt_real.mpr singletonScale_pos)
   · intro L hL alpha beta
     fin_cases alpha
     fin_cases beta
@@ -312,7 +307,7 @@ private noncomputable def gaugedNormalizedSingletonAlgebraClause :
   · intro gamma
     fin_cases gamma
     have hs : (singletonScale : ℂ) ≠ 0 := by
-      exact_mod_cast ne_of_gt singletonScale_pos_physicalGauge
+      exact_mod_cast ne_of_gt singletonScale_pos
     simp only [verticalBNTTraceScalarFamily_traceScalar,
       Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton,
       normalizedSingletonCoeffs_coeff]
@@ -338,7 +333,7 @@ noncomputable def gaugeDeformedBaseMPOBNTAlgebraTensorClause :
   weight_pos := by
     intro alpha q
     have hs : (0 : ℂ) < (singletonScale : ℂ) :=
-      Complex.zero_lt_real.mpr singletonScale_pos_physicalGauge
+      Complex.zero_lt_real.mpr singletonScale_pos
     simpa using inv_pos.mpr hs
   coisometry := singletonVerticalCoisometry_coisometry
   isCPSVBNT := gaugeDeformedBaseMPO_isCPSVBasis

@@ -32,7 +32,7 @@ namespace MPOTensor.BondTwoSingletonBaseModel
 
 open BondTwoSingletonGramBoundary
 
-private abbrev I := Fin 2
+abbrev I := Fin 2
 
 /-- The ambient bond-four MPO.  Its physical letter `(i,j)` is the diagonal
 matrix unit indexed by the same pair. -/
@@ -376,7 +376,7 @@ def singletonScale : ℝ := Real.sqrt (1 / 2)
 def normalizedSingletonTensor : MPSTensor (4 * 4) 2 :=
   fun v ↦ (singletonScale : ℂ) • singletonTensor v
 
-private lemma singletonScale_pos : 0 < singletonScale := by
+lemma singletonScale_pos : 0 < singletonScale := by
   simp [singletonScale]
 
 private lemma singletonScale_sq : singletonScale ^ 2 = 1 / 2 := by
