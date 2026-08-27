@@ -686,20 +686,6 @@ theorem IsMPUSimple.reindexPhysical {d' : ℕ} {U : MPOTensor d D}
     simp only [doubleLayerTensor_reindexPhysical]
     exact h₂ (e i) (e j) (e k) (e l)
 
-private theorem evalWord_blockTensor_ofFn_local
-    (U : MPOTensor d D) (L : ℕ) {N : ℕ}
-    (s t : Fin N → Fin (Kraus.blockPhysDim d L)) :
-    evalWord (MPOTensor.blockTensor U L) (List.ofFn s) (List.ofFn t) =
-      evalWord U (Kraus.flattenBlockedWord d L (List.ofFn s))
-        (Kraus.flattenBlockedWord d L (List.ofFn t)) := by
-  induction N with
-  | zero => simp [Kraus.flattenBlockedWord]
-  | succ N ih =>
-      simp only [List.ofFn_succ, evalWord_cons, blockTensor_apply,
-        Kraus.flattenBlockedWord_cons]
-      rw [ih]
-      rw [evalWord_append U _ _ _ _ (by simp)]
-
 /-- Iterated MPO blocking, reindexed by the canonical grouping equivalence,
 agrees with direct blocking at the product length.
 
@@ -711,7 +697,7 @@ theorem reindexPhysical_blockTensor_blockTensor
       MPOTensor.blockTensor U (m * n) := by
   funext i j
   simp only [reindexPhysical, blockTensor_apply, Kraus.wordOfBlock]
-  rw [evalWord_blockTensor_ofFn_local]
+  rw [evalWord_blockTensor_ofFn]
   change evalWord U
       (Kraus.flattenBlockedWord d m
         (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n

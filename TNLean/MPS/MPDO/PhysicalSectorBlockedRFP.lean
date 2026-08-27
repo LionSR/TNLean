@@ -248,21 +248,9 @@ theorem NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS
             (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
             (physClose2 (blockTwo F.sectorCoordinateTensor) X))) =
       physClose1 (blockTwo F.sectorCoordinateTensor) X
-    rw [show Matrix.reindex
-        (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-        (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-        (physClose2 (blockTwo F.sectorCoordinateTensor) X) =
-      physClose4 F.sectorCoordinateTensor X by
-        exact LinearMap.congr_fun
-          (physClose2_blockTwo_eq_physClose4 F.sectorCoordinateTensor) X]
+    rw [physClose2_blockTwo_reindex_eq_physClose4 F.sectorCoordinateTensor X]
     rw [H.physicalSSquaredMap_fourSiteClosure_eq_twoSiteClosure]
-    rw [← show Matrix.reindex
-        (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-        (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-        (physClose1 (blockTwo F.sectorCoordinateTensor) X) =
-      physClose2 F.sectorCoordinateTensor X by
-        exact LinearMap.congr_fun
-          (physClose1_blockTwo_eq_physClose2 F.sectorCoordinateTensor) X]
+    rw [← physClose1_blockTwo_reindex_eq_physClose2 F.sectorCoordinateTensor X]
     simp
   · intro X
     change Matrix.reindex
@@ -274,21 +262,9 @@ theorem NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS
             (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
             (physClose1 (blockTwo F.sectorCoordinateTensor) X))) =
       physClose2 (blockTwo F.sectorCoordinateTensor) X
-    rw [show Matrix.reindex
-        (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-        (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-        (physClose1 (blockTwo F.sectorCoordinateTensor) X) =
-      physClose2 F.sectorCoordinateTensor X by
-        exact LinearMap.congr_fun
-          (physClose1_blockTwo_eq_physClose2 F.sectorCoordinateTensor) X]
+    rw [physClose1_blockTwo_reindex_eq_physClose2 F.sectorCoordinateTensor X]
     rw [H.physicalTSquaredMap_twoSiteClosure_eq_fourSiteClosure]
-    rw [← show Matrix.reindex
-        (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-        (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-        (physClose2 (blockTwo F.sectorCoordinateTensor) X) =
-      physClose4 F.sectorCoordinateTensor X by
-        exact LinearMap.congr_fun
-          (physClose2_blockTwo_eq_physClose4 F.sectorCoordinateTensor) X]
+    rw [← physClose2_blockTwo_reindex_eq_physClose4 F.sectorCoordinateTensor X]
     simp
 
 end MPOTensor.PhysicalSectorFactorization

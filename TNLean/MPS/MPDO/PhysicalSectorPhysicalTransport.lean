@@ -109,17 +109,9 @@ private theorem physicalBlockOneMap_closure
       (singleKrausMap F.physicalCoordinateMatrixTwo
         (Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
           (physClose1 (blockTwo K) X))) = _
-  rw [show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-      (physClose1 (blockTwo K) X) = physClose2 K X by
-    exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 K) X]
+  rw [physClose1_blockTwo_reindex_eq_physClose2 K X]
   rw [F.physicalCoordinateMatrixTwo_physClose2]
-  rw [← show Matrix.reindex
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-      (physClose1 (blockTwo F.sectorCoordinateTensor) X) =
-        physClose2 F.sectorCoordinateTensor X by
-    exact LinearMap.congr_fun
-      (physClose1_blockTwo_eq_physClose2 F.sectorCoordinateTensor) X]
+  rw [← physClose1_blockTwo_reindex_eq_physClose2 F.sectorCoordinateTensor X]
   simp
 
 private theorem physicalBlockOneInverseMap_closure
@@ -133,17 +125,9 @@ private theorem physicalBlockOneInverseMap_closure
           (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
           (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
           (physClose1 (blockTwo F.sectorCoordinateTensor) X))) = _
-  rw [show Matrix.reindex
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
-      (physClose1 (blockTwo F.sectorCoordinateTensor) X) =
-        physClose2 F.sectorCoordinateTensor X by
-    exact LinearMap.congr_fun
-      (physClose1_blockTwo_eq_physClose2 F.sectorCoordinateTensor) X]
+  rw [physClose1_blockTwo_reindex_eq_physClose2 F.sectorCoordinateTensor X]
   rw [F.physicalCoordinateMatrixTwo_conjTranspose_physClose2]
-  rw [← show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-      (physClose1 (blockTwo K) X) = physClose2 K X by
-    exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 K) X]
+  rw [← physClose1_blockTwo_reindex_eq_physClose2 K X]
   simp
 
 private theorem physicalBlockTwoMap_closure
@@ -156,17 +140,9 @@ private theorem physicalBlockTwoMap_closure
       (singleKrausMap F.physicalCoordinateMatrixFour
         (Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
           (physClose2 (blockTwo K) X))) = _
-  rw [show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-      (physClose2 (blockTwo K) X) = physClose4 K X by
-    exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 K) X]
+  rw [physClose2_blockTwo_reindex_eq_physClose4 K X]
   rw [F.physicalCoordinateMatrixFour_physClose4]
-  rw [← show Matrix.reindex
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-      (physClose2 (blockTwo F.sectorCoordinateTensor) X) =
-        physClose4 F.sectorCoordinateTensor X by
-    exact LinearMap.congr_fun
-      (physClose2_blockTwo_eq_physClose4 F.sectorCoordinateTensor) X]
+  rw [← physClose2_blockTwo_reindex_eq_physClose4 F.sectorCoordinateTensor X]
   simp
 
 private theorem physicalBlockTwoInverseMap_closure
@@ -180,17 +156,9 @@ private theorem physicalBlockTwoInverseMap_closure
           (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
           (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
           (physClose2 (blockTwo F.sectorCoordinateTensor) X))) = _
-  rw [show Matrix.reindex
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
-      (physClose2 (blockTwo F.sectorCoordinateTensor) X) =
-        physClose4 F.sectorCoordinateTensor X by
-    exact LinearMap.congr_fun
-      (physClose2_blockTwo_eq_physClose4 F.sectorCoordinateTensor) X]
+  rw [physClose2_blockTwo_reindex_eq_physClose4 F.sectorCoordinateTensor X]
   rw [F.physicalCoordinateMatrixFour_conjTranspose_physClose4]
-  rw [← show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-      (physClose2 (blockTwo K) X) = physClose4 K X by
-    exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 K) X]
+  rw [← physClose2_blockTwo_reindex_eq_physClose4 K X]
   simp
 
 /-- The original two-site blocked tensor is a renormalization fixed point.

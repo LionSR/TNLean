@@ -32,6 +32,10 @@ arXiv:1606.00608.
 * `MPOTensor.physClose4`: the right-associated four-site physical closure.
 * `MPOTensor.physClose1_blockTwo_eq_physClose2`: one blocked site is two original sites.
 * `MPOTensor.physClose2_blockTwo_eq_physClose4`: two blocked sites are four original sites.
+* `MPOTensor.physClose1_blockTwo_reindex_eq_physClose2`: the one-site statement in
+  index-relabelling form.
+* `MPOTensor.physClose2_blockTwo_reindex_eq_physClose4`: the two-site statement in
+  index-relabelling form.
 
 ## References
 
@@ -200,7 +204,9 @@ theorem blockTensor_mulTensor {D₁ D₂ : ℕ}
   simp only [Kraus.decodeBlockEquiv_apply, blockTensor_apply,
     Kraus.wordOfBlock]
 
-private theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
+/-- Evaluating a blocked MPO tensor on finite-index ket and bra words is
+evaluating the original tensor on the flattened words. -/
+theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
     (s t : Fin N → Fin (MPSTensor.blockPhysDim d L)) :
     evalWord (blockTensor M L) (List.ofFn s) (List.ofFn t) =
       evalWord M (MPSTensor.flattenBlockedWord d L (List.ofFn s))
@@ -427,6 +433,28 @@ theorem physClose2_blockTwo_eq_physClose4 (M : MPOTensor d D) :
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, blockedPairEquiv, blockedIndexEquiv,
     blockTwo, Matrix.mul_assoc]
+
+/-- Evaluating the one-site closure of the two-site blocking at a virtual
+matrix gives the two-site closure, in the index-relabelling spelling used
+where the blocked coordinates appear explicitly.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+theorem physClose1_blockTwo_reindex_eq_physClose2
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
+        (physClose1 (blockTwo M) X) = physClose2 M X :=
+  LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X
+
+/-- Evaluating the two-site closure of the two-site blocking at a virtual
+matrix gives the right-associated four-site closure, in the index-relabelling
+spelling used where the blocked coordinates appear explicitly.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
+theorem physClose2_blockTwo_reindex_eq_physClose4
+    (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
+        (physClose2 (blockTwo M) X) = physClose4 M X :=
+  LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X
 
 @[deprecated _root_.finFourArrowEquiv (since := "2026-07-13")]
 alias finFourArrowEquiv := _root_.finFourArrowEquiv

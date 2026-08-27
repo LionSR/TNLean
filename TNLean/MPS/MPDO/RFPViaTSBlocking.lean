@@ -183,13 +183,9 @@ theorem blockTwo_isRFPViaTS_of_two_four_maps
           (Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
             (physClose2 (MPOTensor.blockTwo M) X))) =
       physClose1 (MPOTensor.blockTwo M) X
-    rw [show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-        (physClose2 (MPOTensor.blockTwo M) X) = physClose4 M X by
-      exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X]
+    rw [physClose2_blockTwo_reindex_eq_physClose4 M X]
     rw [hSclose X]
-    rw [← show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-        (physClose1 (MPOTensor.blockTwo M) X) = physClose2 M X by
-      exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
+    rw [← physClose1_blockTwo_reindex_eq_physClose2 M X]
     simp
   · intro X
     change Matrix.reindex (blockedPairEquiv d).symm (blockedPairEquiv d).symm
@@ -197,13 +193,9 @@ theorem blockTwo_isRFPViaTS_of_two_four_maps
           (Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
             (physClose1 (MPOTensor.blockTwo M) X))) =
       physClose2 (MPOTensor.blockTwo M) X
-    rw [show Matrix.reindex (blockedIndexEquiv d) (blockedIndexEquiv d)
-        (physClose1 (MPOTensor.blockTwo M) X) = physClose2 M X by
-      exact LinearMap.congr_fun (physClose1_blockTwo_eq_physClose2 M) X]
+    rw [physClose1_blockTwo_reindex_eq_physClose2 M X]
     rw [hTclose X]
-    rw [← show Matrix.reindex (blockedPairEquiv d) (blockedPairEquiv d)
-        (physClose2 (MPOTensor.blockTwo M) X) = physClose4 M X by
-      exact LinearMap.congr_fun (physClose2_blockTwo_eq_physClose4 M) X]
+    rw [← physClose2_blockTwo_reindex_eq_physClose4 M X]
     simp
 
 /-- A tensor satisfying the trace-preserving completely positive map condition

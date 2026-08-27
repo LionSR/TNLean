@@ -34,6 +34,18 @@ The surviving lemma is the specialized one with its double-layer hypothesis
 dropped: it needs no nonempty-physical-dimension assumption, so it is strictly
 more general than either copy.
 
+### The blocked-word evaluation lemma (added 2026-08-27)
+
+The identity evaluating a blocked MPO tensor on finite-index ket and bra words
+as the original tensor on the flattened words was proved twice, once under
+`MPS/MPDO` and once under `MPS/MPU`. This pair is cross-directory, which is why
+the original sweep missed it. The MPU file reaches the MPDO original through
+`MPU.ThreeFormSpan`, so the surviving copy is the MPDO one, now public.
+
+| Removed | Replacement |
+| --- | --- |
+| `MPOTensor.evalWord_blockTensor_ofFn_local` (private, `TNLean/MPS/MPU/SimpleBlocking.lean`) | `MPOTensor.evalWord_blockTensor_ofFn` (`TNLean/MPS/MPDO/PhysicalBlocking.lean`) |
+
 ### The rank-one sandwich and list-product identities
 
 Four statements about a rank-one insertion between matrix factors were retyped
