@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalBoundaryClosing
-import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.ResidualWordSpan
 

@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Commuting
-import TNLean.MPS.SharedInfra.SectorDecomposition
 import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!

@@ -84,9 +84,10 @@ declarations:
 \leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
 in \doclink{TNLean/MPS/RFP/NormalIsometryCharacterization}.}
 
-The earlier per-block theorem remains useful for an indexed family.\footnote{Formal
-declaration: \leanid{MPSTensor.rfp_nt_structural_full_blocks} in
-\doclink{TNLean/MPS/RFP/StructuralFull}. Introduced in \ghpr{2785}.}
+Applied to each block of an indexed family, the same theorem gives the
+following.\footnote{Formal declaration:
+\leanid{MPSTensor.rfp_nt_structural_full} in
+\doclink{TNLean/MPS/RFP/StructuralFull}.}
 For each block $k$, let $D_k$ denote its bond dimension. The theorem gives
 \begin{align}
     A_k^i
@@ -137,9 +138,8 @@ according to
     D_k^{-1/2}\Lambda_k.
     \label{eq:cpsv16_unit_pair_rescaling}
 \end{align}
-\footnote{Formal declarations:
-\leanid{MPSTensor.rfp_nt_structural_full_unit_pair} and
-\leanid{MPSTensor.rfp_nt_structural_full_blocks_unit_pair} in
+\footnote{Formal declaration:
+\leanid{MPSTensor.rfp_nt_structural_full_unit_pair} in
 \doclink{TNLean/MPS/RFP/StructuralFull}.}
 The rescaling in Eq.~\ref{eq:cpsv16_unit_pair_rescaling} leaves
 $\Lambda_kU_k^i$ unchanged and gives the diagonal pair-index equation in the

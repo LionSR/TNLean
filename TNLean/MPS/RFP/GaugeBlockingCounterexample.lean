@@ -7,7 +7,6 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.RFP.PhaseOscillation
-import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
 # A counterexample to blocking up to virtual gauge implying an RFP

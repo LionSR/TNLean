@@ -3,8 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Kraus.CPPrimitive
-import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.RFP.Defs
 import TNLean.PiAlgebra.CanonicalFormSepAux
 import TNLean.Spectral.QuantitativeGap
@@ -22,7 +20,6 @@ that are renormalization fixed points, following arXiv:1606.00608 Section 3.4
 * `rfp_nt_structural_of_leftCanonical`: left-canonical normal RFP tensors are injective
 * `rfp_nt_cfii_diagonal_fixedPoint`: Appendix B / CFII reduction step — after unitary
   conjugation, a left-canonical normal RFP tensor has a diagonal positive-definite fixed point
-* `rfp_cf_structural`: each canonical-form block is injective
 
 ## Proof strategy
 
@@ -192,12 +189,5 @@ theorem transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective [NeZero 
   have h_tend : Filter.Tendsto (fun _ : ℕ => E X - P X) Filter.atTop (nhds 0) :=
     squeeze_zero_norm h_bound_const h_rate
   exact eq_of_sub_eq_zero (tendsto_nhds_unique tendsto_const_nhds h_tend)
-
-/-- Canonical-form blocks are already injective, so the structural precursor above is automatic. -/
-theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalForm μ A) :
-    ∀ k, Kraus.IsInjective (A k) :=
-  hCF.block_injective
 
 end MPSTensor

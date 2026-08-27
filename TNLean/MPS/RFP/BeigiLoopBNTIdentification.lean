@@ -3,14 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.NormalTensorDichotomy
 import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.ResidualIsometry
-import TNLean.MPS.RFP.StructuralForm
 
 /-!
 # Identification of Beigi loop sectors with normal tensors

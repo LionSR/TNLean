@@ -564,91 +564,6 @@
     contrary to $|\lambda|<1$.
 \end{proof}
 
-\begin{theorem}[Conditional positive-gap equivalence at the multiplicity-one representative]%
-    \label{thm:positive_gap_bnt_zcl_conditional_converse}
-    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL_of_spectral_pair}
-    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent_of_spectral_pair}
-    \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf, thm:zcl_subleading_pair_excludes_cid}
-    Let $P$ be an auxiliary BNT sector decomposition and
-    $A=\bigoplus_j A_j$. Assume that every
-    non-idempotent block $\E_j^2\ne\E_j$ has matrices $r_j,l_j$ and a scalar
-    $\lambda_j$ satisfying the five spectral conditions in
-    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid}. Then
-    \begin{align}
-        A\text{ has positive-gap BNT ZCL}
-         & \Longleftrightarrow \E_A^2=\E_A.
-        \notag
-    \end{align}
-    The spectral-pair hypothesis is assumed explicitly.
-    % CPSV16 line 1250 uses such a pair without deriving it from non-idempotence;
-    % a general non-idempotent operator may instead have only a nilpotent Jordan
-    % part at eigenvalue zero.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:zcl_subleading_pair_excludes_cid, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed, thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
-    If some $\E_j$ were not idempotent, its assumed spectral pair would
-    contradict physical CID by
-    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid}. Thus every diagonal
-    mixed transfer map is idempotent. Local orthogonality makes every
-    off-diagonal mixed transfer map zero, so
-    Theorem~\ref{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed} gives
-    $\E_A^2=\E_A$. The reverse implication is
-    Theorem~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}.
-\end{proof}
-
-\begin{theorem}[Conditional positive-gap ZCL implication for commuting parent ground spaces]%
-    \label{thm:positive_gap_bnt_zcl_conditional_nncph}
-    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum_of_spectral_pair}
-    \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf, def:has_nncph_ground_spaces}
-    Let $P$ and $A=\bigoplus_j A_j$ satisfy the multiplicity-one unit-weight
-    hypotheses of
-    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}, including its
-    normalized nonzero subleading spectral pair for every non-idempotent
-    block. If $A$ has positive-gap BNT zero correlation length, then for every
-    $N>2$ its translated two-site parent interactions satisfy all three
-    ground-space conditions:
-    \begin{align}
-        h_i h_j       & =h_j h_i,
-        \notag                                                        \\
-        h_iV^{(N)}(A) & =0,
-        \notag                                                        \\
-        \ker H_2^{(N)}(A)
-                      & =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
-        \notag
-    \end{align}
-    This is only the conditional corrected implication from (ii) to (iii) of
-    \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}, not a three-way equivalence.
-    % The normalized nonzero subleading spectral pair remains an explicit
-    % hypothesis; CPSV16 line 1250 does not exclude a nilpotent zero-Jordan part.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:positive_gap_bnt_zcl_conditional_converse, thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
-    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse} gives
-    $\E_A^2=\E_A$. The multiplicity-one fixed-point theorem
-    \ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces} then gives the
-    commuting parent interactions, zero-energy direct-sum state, and stated
-    common kernel for every $N>2$.
-\end{proof}
-
-\begin{theorem}[Physical ZCL implies idempotence under the spectral assumption]%
-    \label{thm:physical_bnt_zcl_conditional_converse}
-    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL_of_spectral_pair}
-    \leanok
-    \uses{def:mps_transfer_idempotence, def:sector_bnt_cf, thm:positive_gap_bnt_zcl_conditional_converse}
-    Under the spectral-pair hypotheses of
-    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}, physical BNT
-    zero correlation length for $A=\bigoplus_j A_j$ implies
-    $\E_A^2=\E_A$.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:positive_gap_bnt_zcl_conditional_converse, lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
-    Source physical CID includes all positive-gap configurations. Apply the
-    forward implication in
-    Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}.
-\end{proof}
-
 \begin{lemma}[Sector-supported probes without spectral assumptions]
     \label{lem:positive_gap_bnt_rank_one_probe_expectation}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow}
@@ -838,7 +753,8 @@
     Theorem~3.8. At multiplicity one,
     Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} repairs the
     argument by arbitrary trace probes, without deriving the nonzero
-    subleading left and right eigenvectors used at lines 1260--1268. The
-    conditional theorems above remain the formal record of the printed
-    spectral argument.
+    subleading left and right eigenvectors used at lines 1260--1268.
+    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid} remains the formal
+    record of the printed spectral argument, taking the normalized nonzero
+    subleading pair as an explicit hypothesis.
 \end{remark}

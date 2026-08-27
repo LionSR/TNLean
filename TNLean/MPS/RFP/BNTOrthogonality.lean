@@ -3,14 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ComplexPhasePositivity
-import QICLean.Algebra.FinSum
-import TNLean.MPS.Core.MultiBlock
-import QICLean.Kraus.Transfer
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.SharedInfra.Scaling
-import TNLean.Spectral.TransferOperatorGapNT
 
 /-!
 # Cross-block orthogonality of the renormalization fixed-point isometry

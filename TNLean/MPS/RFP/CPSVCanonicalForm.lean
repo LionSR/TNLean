@@ -3,14 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.KrausGauge
 import TNLean.MPS.CanonicalForm.BNTRefinement
-import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.NormalIsometryCharacterization
 import TNLean.MPS.RFP.ResidualIsometry
-import TNLean.MPS.SharedInfra.Scaling
-import QICLean.Analysis.SpectralRadius
 
 /-!
 # Blocks of a literal CPSV renormalization fixed point
