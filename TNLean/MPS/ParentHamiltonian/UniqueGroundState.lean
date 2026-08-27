@@ -3,7 +3,12 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.ParentHamiltonian.BoundaryClosingAuxiliary
+import TNLean.MPS.ParentHamiltonian.CyclicTranslation
+import TNLean.MPS.ParentHamiltonian.ExtendRight
+import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
+import TNLean.MPS.ParentHamiltonian.RestrictTransport
 
 /-!
 # Unique ground state for injective MPS parent Hamiltonians

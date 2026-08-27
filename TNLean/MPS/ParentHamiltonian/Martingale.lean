@@ -36,7 +36,8 @@ principal-angle estimate for the local ground spaces.
 The twelve components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
-  `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
+  `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`
+  (quadratic form implies norm bound);
 * `Martingale.Transport` — Euclidean local projectors, ground-space and
   Hamiltonian transport, positivity, commutation, and kernel identification;
 * `Martingale.AdjacentLocalTerms` — individual three-site kernels and the

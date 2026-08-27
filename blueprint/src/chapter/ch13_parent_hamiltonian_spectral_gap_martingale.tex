@@ -2874,7 +2874,7 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     \label{thm:overlap_norm_gap_bound}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_overlap_norm_bound}
     \leanok
-    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es, thm:parent_ground_space_es_kernel, rem:euclidean_local_projector_ingredients, lem:local_term_es_average, lem:transported_es_positive, lem:transported_es_local_projections, lem:transported_es_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction, lem:parent_hamiltonian_ordered_rowsum_gap, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_norm_gap, thm:overlap_norm_gap_bound_constant}
+    \uses{def:parent_ground_space_es, def:parent_hamiltonian_es, thm:parent_ground_space_es_kernel, rem:euclidean_local_projector_ingredients, lem:local_term_es_average, lem:transported_es_positive, lem:transported_es_local_projections, lem:transported_es_nonoverlap_positive, lem:parent_hamiltonian_es_quadratic_reduction, lem:parent_hamiltonian_ordered_rowsum_gap, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, lem:parent_hamiltonian_cyclic_overlap_norm_gap, thm:overlap_norm_gap_bound_constant}
     Let $A$ be a tensor and let $L>1$. Suppose that, for every $N\ge2L$ and
     every overlapping off-diagonal pair of cyclic length-$L$ windows,
     \begin{align}
@@ -2917,8 +2917,6 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
     combines these results with the finite-overlap reduction, so the only
     additional input is the ordered anticommutator or cross-term estimate for
     overlapping cyclic windows.
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap}
-    states the same overlap-only formulation, and
     Lemma~\ref{lem:parent_hamiltonian_cyclic_overlap_norm_gap} states a
     sufficient norm-compression formulation. Equivalently, this is the
     constant-compression theorem below with

@@ -207,7 +207,7 @@ TNLean/MPS/ParentHamiltonian/
 
 - [ ] **PH-4a**: Martingale criterion (abstract)
   - **Blueprint**: `\begin{theorem}[Martingale criterion for spectral gap]` citing \cite{KL18}
-  - **Lean tag**: `\lean{FrustrationFree.spectralGap_of_martingale}`
+  - **Lean tag**: `\lean{FrustrationFree.spectralGap_of_martingale_of_finiteDimensional}`
   - **Lean**: `TNLean/MPS/ParentHamiltonian/Martingale.lean`
   - **Math**: For a frustration-free $H = \sum h_i$ with projector terms, if for all overlapping pairs:
     $$h_i h_j + h_j h_i \geq -c_{ij}(1-\gamma)(h_i + h_j)$$

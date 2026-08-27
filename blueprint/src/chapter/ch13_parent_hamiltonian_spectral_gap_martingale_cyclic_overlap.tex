@@ -441,35 +441,6 @@
     estimate (\ref{eq:ph_cyclic_window_overlap_estimate}).
 \end{proof}
 
-\begin{lemma}[Parent-Hamiltonian gap from an overlapping cyclic martingale estimate]
-    \label{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term}
-    \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
-    Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
-    length-$L$ windows at $i$ and $j$ meet. Suppose uniformly for every
-    $N\ge2L$ that overlapping off-diagonal terms satisfy
-    \begin{align}
-        \re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
-         & \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
-        \re\langle h_{i,\mathrm{ES}}v,v\rangle.
-        \label{eq:ph_cyclic_overlap_ordered_cross_term}
-    \end{align}
-    Then the explicit norm lower bound with constant $1/(4L)$ follows for
-    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
-    Apply
-    Lemma~\ref{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}.
-    Its non-overlap positivity and finite-family hypotheses are already internal
-    to the preceding reduction; the overlapping
-    estimate (\ref{eq:ph_cyclic_overlap_ordered_cross_term}) supplies its
-    remaining ordered cross-term condition.
-\end{proof}
-
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic anticommutator estimate]
     \label{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
@@ -506,7 +477,7 @@
     \label{lem:parent_hamiltonian_cyclic_overlap_norm_gap}
     \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, rem:projection_geometry_rowsum_identities}
+    \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, rem:projection_geometry_rowsum_identities}
     Fix $L>1$. Suppose uniformly for every $N\ge2L$ and every overlapping
     off-diagonal pair that
     \begin{align}
@@ -521,7 +492,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_hamiltonian_cyclic_overlap_ordered_cross_term_gap, rem:projection_geometry_rowsum_identities}
+    \uses{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap, rem:projection_geometry_rowsum_identities}
     For an overlapping pair, Cauchy--Schwarz and
     $h_{i,\mathrm{ES}}^2=h_{i,\mathrm{ES}}$ give
     \begin{align}
