@@ -75,8 +75,8 @@ theorem parentHamiltonianES_norm_bound_of_quadratic_form
     (parentHamiltonianES_isPositive A L N) (hQuad N hLN) v hvKer
 
 /-- The exact explicit gap-bound reduction needed by
-`parentHamiltonianES_gap_bound_of_overlap_norm_bound` follows from the corresponding
-uniform quadratic-form estimate with constant \(1 / (4 * L)\).
+`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound` follows from
+the corresponding uniform quadratic-form estimate with constant \(1 / (4 * L)\).
 
 Thus the remaining MPS-specific content is precisely to prove the hypothesis
 `hQuad` from the source anticommutator estimate, or from a sufficient

@@ -30,8 +30,7 @@ in its equal-case strengthening:
 * **Supporting lemmas for the equal-case theorem `thm:bdequal`**: The equal-case
   strengthening produces per-block Z-gauge data (diagonal Z with Z^m = 1) from the
   Newton–Girard identity on multiplicity entries.
-  The Z-gauge construction is packaged in `zgauge_construction` and
-  `perBlock_zgauge_of_power_eq`.
+  The Z-gauge construction is packaged in `zgauge_construction`.
 
 ## Conditional block matching from periodic overlaps
 
@@ -470,31 +469,6 @@ theorem zgauge_construction
    zGaugeDiagonal_pow_eq_one m μ ν hpow hν,
    zGaugeDiagonal_mul_diagonal μ ν hν⟩
 
-/-- **Per-block multiplicity-entry Z-gauge for `Fin r`.**
-
-Convenience reformulation: given matched multiplicity entries indexed by `Fin r`
-whose `m`-th powers agree and whose denominator entries are nonzero, produces the
-diagonal Z-gauge matrix. -/
-theorem perBlock_zgauge_of_power_eq
-    {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
-    (hpow : ∀ i, μ i ^ m = ν i ^ m)
-    (hν : ∀ i, ν i ≠ 0) :
-    ∃ Z : Matrix (Fin r) (Fin r) ℂ,
-      Z ^ m = 1 ∧
-      Z * Matrix.diagonal ν = Matrix.diagonal μ :=
-  zgauge_construction m μ ν hpow hν
-
-/-- **Multiplicity-entry multiset recovery via Newton-Girard.**
-
-If two finite lists of multiplicity entries have equal power sums for all positive
-exponents, they determine the same multiset. Direct reformulation of
-`Matrix.sum_pow_eq_implies_multiset_eq`. -/
-theorem weight_multisets_eq_of_power_sums_eq
-    {r : ℕ} (μ ν : Fin r → ℂ)
-    (h : ∀ k : ℕ, 0 < k → ∑ i : Fin r, μ i ^ k = ∑ i : Fin r, ν i ^ k) :
-    Finset.univ.val.map μ = Finset.univ.val.map ν :=
-  Matrix.sum_pow_eq_implies_multiset_eq μ ν h
-
 /-- **Scalar multiplicity-entry Z-gauge construction.**
 
 Given two multiplicity-entry families where:
@@ -520,7 +494,7 @@ theorem equalCase_zgauge_of_power_sums
       Z * Matrix.diagonal ν = Matrix.diagonal μ ∧
       Finset.univ.val.map μ = Finset.univ.val.map ν :=
   let ⟨Z, hZm, hZmul⟩ := zgauge_construction m μ ν hPow hν
-  ⟨Z, hZm, hZmul, weight_multisets_eq_of_power_sums_eq μ ν hPS⟩
+  ⟨Z, hZm, hZmul, Matrix.sum_pow_eq_implies_multiset_eq μ ν hPS⟩
 
 end ZGaugeConstruction
 

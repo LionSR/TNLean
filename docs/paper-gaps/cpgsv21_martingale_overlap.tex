@@ -353,8 +353,7 @@ without this stronger one-sided estimate.\footnote{The formal anchors are
     \leanid{parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator},
     and
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
-    The final gap statements are
-    \leanid{parentHamiltonianES_gap_bound_of_anticommutator} and
+    The final gap statement is
     \leanid{parentHamiltonian_gapped_of_anticommutator} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
     The cyclic-window compression reductions are
@@ -363,10 +362,9 @@ without this stronger one-sided estimate.\footnote{The formal anchors are
     and
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
     in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}.
-    The constant-$\eta$ reductions are
+    The constant-$\eta$ reduction is
     \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
-    in the same file and
-    \leanid{parentHamiltonianES_gap_bound_of_overlap_norm_constant},
+    in the same file; the public spectral-gap statement is
     \leanid{parentHamiltonian_gapped_of_overlap_norm_constant} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
     The projection-geometry results are in
@@ -509,8 +507,7 @@ entry points are
 \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
 and
 \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt};
-the public reformulations are
-\leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
+the public reformulation is
 \leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. For the
 blocked range-two theorem, the exact three-site identity and the forward and
 backward transport results replace this conditional route. The theorem
@@ -539,13 +536,13 @@ and the transport of the $7/16$ adjacent anticommutator estimate to every
 cyclic overlap.
 
 The source-matching entry \path{thm:anticommutator_gap_bound} points to
-\leanid{parentHamiltonianES_gap_bound_of_anticommutator} in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}; its hypothesis is
-(\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}). The entries
-\path{thm:overlap_norm_gap_bound} and
+\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}; its hypothesis
+is (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}). The
+entries \path{thm:overlap_norm_gap_bound} and
 \path{thm:overlap_norm_gap_bound_constant} point to the special and
-constant-$\eta$ norm-compression theorems in the same file. The special theorem
-uses
+constant-$\eta$ cyclic-window norm-compression reductions in the same file. The
+special reduction uses
 \begin{align}
     \eta
     &=

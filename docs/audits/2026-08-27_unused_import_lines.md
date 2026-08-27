@@ -5,7 +5,7 @@ their file needed. No declaration was removed, so no blueprint `\lean{}` tag
 moved and no compatibility alias question arises. Three surveyed batches are
 folded together here because they were applied and verified as one root build.
 
-Net delta of this sweep: −22 Lean lines (one of the twenty-three edits is a
+Net delta of this sweep: −23 Lean lines (one of the twenty-four edits is a
 one-for-one replacement, not a deletion).
 
 ## Method, and the mistake the method has to avoid
@@ -76,6 +76,7 @@ importer set, it does not disconnect it.
 
 | File | Module dropped |
 |---|---|
+| `TNLean/MPS/Irreducible/FixedPointProjection.lean` | `QICLean.Channel.Irreducible.Basic` |
 | `TNLean/MPS/MPDO/BondTwoSingletonPhysicalGauge.lean` | `TNLean.MPS.CanonicalForm.CPSVBlocking` |
 | `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` | `QICLean.Algebra.MatrixCyclicTracePower` |
 | `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean` | `TNLean.MPS.MPDO.SimpleTensor` |
