@@ -762,28 +762,6 @@ the boundary label of a global configuration transports the same way, so an exis
 indicator over one host description is the existence indicator over the equal one. This is the
 bridge between the geometry-native host `univ \ g.red` and the literal union regions. -/
 
-omit [Fintype V] [DecidableEq V] [DecidableRel G.Adj] in
-/-- Equal regions have the same boundary-edge predicate. -/
-theorem isRegionBoundaryEdge_congr {S R : Finset V} (h : S = R) (e : Edge G) :
-    IsRegionBoundaryEdge (G := G) S e ↔ IsRegionBoundaryEdge (G := G) R e := by
-  rw [h]
-
-/-- The transport equivalence of boundary configurations along a region-set equality: relabel
-the boundary edges by the predicate equivalence, leaving the assignment unchanged. -/
-def regionBoundaryConfigCongr {S R : Finset V} (h : S = R) :
-    RegionBoundaryConfig (G := G) A S ≃ RegionBoundaryConfig (G := G) A R :=
-  Equiv.piCongrLeft' _
-    (Equiv.subtypeEquivRight (isRegionBoundaryEdge_congr (G := G) h))
-
-omit [Fintype V] [DecidableEq V] in
-/-- The transported configuration reads the same value as the original on a boundary edge. -/
-theorem regionBoundaryConfigCongr_apply {S R : Finset V} (h : S = R)
-    (bcfg : RegionBoundaryConfig (G := G) A S)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
-    regionBoundaryConfigCongr (A := A) h bcfg f =
-      bcfg ⟨f.1, (isRegionBoundaryEdge_congr (G := G) h f.1).mpr f.2⟩ := by
-  rfl
-
 omit [Fintype V] [DecidableEq V] in
 /-- The boundary label of a global configuration transports across a region-set equality: for
 equal regions the two labels correspond under the transport equivalence. -/

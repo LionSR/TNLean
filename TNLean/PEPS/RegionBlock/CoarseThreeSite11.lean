@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.CoarseThreeSite10
 import TNLean.PEPS.RegionBlock.ThreeBlockTransfer
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
 
 /-!
 # The single-edge inserted-coefficient transfer and the per-edge gauge

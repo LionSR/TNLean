@@ -114,19 +114,22 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 ### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — net 750 lines, risk 4/10
 - **Status**: open (#4567)
 - **What**: `PEPS/RegionBlock/UnionInjectivityOverlap4.lean` (238 ln, 100%
-  dead) plus the `overlapHostGeometry` sub-chain in
-  `UnionInjectivityOverlap5.lean:139-349` (211 ln) plus scattered dead
-  spans in files 1/2/3/6 (~123 ln). **Correction**: the original candidate
+  dead) plus scattered dead spans in files 1/2/3/6 (~123 ln).
+  **Correction**: the original candidate
   wrongly proposed also collapsing files 1-2 (`overlapLeftGeometry`/
   `overlapRightGeometry`) — those are live, called directly by the
-  chain's capstone proof, and must be kept.
+  chain's capstone proof, and must be kept. **Update 2026-08-27**: the
+  `overlapHostGeometry` sub-chain in file 5 (211 ln) is already gone, and
+  file 5 itself was dissolved into `RegionBlock/Basic.lean` and
+  `RegionBlock/UnionInjectivityGeneral.lean`
+  (`docs/audits/2026-08-27_peps_regionblock_overlap_chain_retirement.md`),
+  so the entry's remaining target is file 4 plus the scattered spans.
 - **Why it's excess**: the project's own paper-gap note
   (`docs/paper-gaps/peps_normal_ft_section3_route.tex`) documents this
   exact sub-route as an abandoned dead end that forced a switch to the
   surviving P0-outer parametrization.
-- **First PR**: delete `UnionInjectivityOverlap4.lean` in full plus the
-  211-line dead block in file 5. Net -449 lines, zero consumers, zero
-  proof changes to the live capstone.
+- **First PR**: delete `UnionInjectivityOverlap4.lean` in full. Net -238
+  lines, zero consumers, zero proof changes to the live capstone.
 
 ### S8. Derive injective-tensor Perron-Frobenius as a corollary of the irreducible-CP-map theory — completed
 - **Status**: closed 2026-07-23 (#4568; #4594 and #4628)

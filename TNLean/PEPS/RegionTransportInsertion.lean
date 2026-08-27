@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransport
-import TNLean.PEPS.RegionBlock.UnionInjectivityOverlap5
+import TNLean.PEPS.RegionBlock.Insertion
 
 /-!
 # Covariance of the region-inserted coefficient under a graph isomorphism
