@@ -4,7 +4,7 @@ This audit records the repository-local pass-through exception of
 `docs/project_conventions.md` §Style for the PEPS subdirectories. Four
 independent cleanups are covered: two forwarding lemmas with no independent
 content, one theorem that was declared three times inside a single import
-closure, two edge-incidence helpers that existed in three private copies, and
+closure, three edge-incidence helpers that existed in private copies, and
 one definition with no consumer at all.
 
 | Removed | Replacement |
@@ -14,6 +14,7 @@ one definition with no consumer at all.
 | `TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean` and `TNLean/PEPS/VertexComplement/Basic.lean`) | the single declaration of the same name in `TNLean/PEPS/VirtualInsertion.lean`, the common ancestor of both files |
 | `TNLean.PEPS.otherLeft_edge_ne'` and `TNLean.PEPS.otherRight_edge_ne'` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean` and `TNLean/PEPS/EdgeMiddlePhysical/KernelDescent.lean`) | `TNLean.PEPS.otherLeft_edge_ne` and `TNLean.PEPS.otherRight_edge_ne` in `TNLean/PEPS/Blocking.lean`, now public |
 | `TNLean.PEPS.localTensorEval` (`TNLean/PEPS/FundamentalTheorem/LocalGaugeExtraction.lean`) | none — zero consumers; the local tensor map that the file actually uses is `localTensorMap` in `TNLean/PEPS/VirtualInsertion.lean` |
+| `TNLean.PEPS.edge_ne_of_middle_incident_for_physical` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`) and `TNLean.PEPS.incidentMiddle_ne` (`TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean`) | `TNLean.PEPS.edge_ne_of_middle_incident` in `TNLean/PEPS/Blocking.lean`, now public and carrying the `incidentMiddle_ne` docstring |
 
 ## What was checked
 
@@ -48,6 +49,19 @@ downstream files were renamed to the unprimed spellings, which resolve without
 qualification since both files open `namespace TNLean.PEPS`. No file outside
 `TNLean/PEPS` referenced either name, and neither `blueprint/src` nor `docs`
 mentions them.
+
+A third private-hiding instance in the same closure was missed by that first
+pass and is retired here. `Blocking.lean` also hid, behind `private`, the fact
+that an edge incident to a middle vertex of `e` is not `e` itself; two
+downstream modules restated it verbatim, one as
+`edge_ne_of_middle_incident_for_physical` and one as `incidentMiddle_ne`. The
+`Blocking.lean` original is now public and carries the docstring the
+`CoarseThreeSite7.lean` copy had; the three call sites in
+`EdgeMiddlePhysical/Basic.lean`, `EdgeMiddlePhysical/KernelDescent.lean`, and
+`CoarseThreeSite7.lean` were renamed and resolve without qualification, all
+three files having `TNLean.PEPS.Blocking` in their transitive import closure.
+Neither retired spelling occurs under `blueprint/src` or `docs`, and
+`_for_physical` was never referenced outside `TNLean/PEPS/EdgeMiddlePhysical/`.
 
 **Dead definition.** `localTensorEval` had no Lean consumer: the only occurrence
 of the name in `TNLean` was its own definition. Its blueprint node

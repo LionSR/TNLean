@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleMPSTensor
 import TNLean.PEPS.RegionBlock.Basic
-import TNLean.Algebra.TracePairing
 
 /-!
 # Arc injectivity of the cycle tensor from block injectivity of the MPS tensor

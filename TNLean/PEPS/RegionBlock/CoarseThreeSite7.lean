@@ -61,22 +61,12 @@ instance (A : Tensor G d) (e : Edge G) (ζL ζR : VirtualConfig A) :
     Decidable (AgreeOffEdge (G := G) A e ζL ζR) := by
   unfold AgreeOffEdge; infer_instance
 
-omit [DecidableRel G.Adj] in
-/-- An edge incident to a middle vertex of `e` is not `e` itself. -/
-theorem incidentMiddle_ne (e : Edge G) {v : V} (hv : v ∈ edgeMiddleVertices e)
-    (ie : IncidentEdge G v) : ie.1 ≠ e := by
-  intro hie
-  have hvne := (mem_edgeMiddleVertices_iff e v).mp hv
-  rcases ie.2 with hleft | hright
-  · exact hvne.1 (hleft.symm.trans (congrArg (fun f : Edge G => f.1.1) hie))
-  · exact hvne.2 (hright.symm.trans (congrArg (fun f : Edge G => f.1.2) hie))
-
 /-- On any edge incident to a middle vertex of `e`, two configurations agreeing off
 `e` coincide. -/
 theorem AgreeOffEdge.middle (A : Tensor G d) (e : Edge G) {ζL ζR : VirtualConfig A}
     (h : AgreeOffEdge (G := G) A e ζL ζR) {v : V} (hv : v ∈ edgeMiddleVertices e)
     (ie : IncidentEdge G v) : ζL ie.1 = ζR ie.1 :=
-  h ie.1 (incidentMiddle_ne (G := G) e hv ie)
+  h ie.1 (edge_ne_of_middle_incident (G := G) e hv ie)
 
 /-! ### The open-bond expansion of the edge-inserted coefficient
 

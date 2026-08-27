@@ -28,7 +28,7 @@ is a complement edge of `e`. -/
 private def middleIncidentToComplement (e : Edge G) {j : V}
     (hj : j ∈ edgeMiddleVertices e) (ie : IncidentEdge G j) :
     {f : Edge G // f ≠ e} :=
-  ⟨ie.1, edge_ne_of_middle_incident_for_physical (G := G) e hj ie⟩
+  ⟨ie.1, edge_ne_of_middle_incident (G := G) e hj ie⟩
 
 /-- For a middle vertex `j`, incident edges at `j` are the complement edges of
 `e` incident to `j`. -/

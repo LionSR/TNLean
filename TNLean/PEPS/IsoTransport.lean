@@ -83,13 +83,9 @@ def Edge.equiv (φ : G ≃g G') : Edge G ≃ Edge G' where
   right_inv := Edge.map_map_symm φ
 
 omit [Fintype V] [Fintype W] in
+-- restored: fired by the bare `simpa` in `IncidentEdge.equiv` below
 @[simp] theorem Edge.equiv_apply (φ : G ≃g G') (e : Edge G) :
     Edge.equiv φ e = Edge.map φ e :=
-  rfl
-
-omit [Fintype V] [Fintype W] in
-@[simp] theorem Edge.equiv_symm_apply (φ : G ≃g G') (e : Edge G') :
-    (Edge.equiv φ).symm e = Edge.map φ.symm e :=
   rfl
 
 /-! ### The incident-edge correspondence -/
@@ -119,12 +115,6 @@ def IncidentEdge.equiv (φ : G ≃g G') (v : V) :
     · intro h
       have h' := Edge.map_incident φ.symm (v := φ v) h
       simpa using h'
-
-omit [Fintype V] [Fintype W] in
-@[simp] theorem IncidentEdge.equiv_coe (φ : G ≃g G') (v : V)
-    (ie : IncidentEdge G v) :
-    (IncidentEdge.equiv φ v ie).1 = Edge.map φ ie.1 :=
-  rfl
 
 /-- The edge incident to `φ.symm w` carried to an edge incident to `w` (not merely
 to `φ (φ.symm w)`).  The membership at `w` is recomputed from `Edge.map_incident`

@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.CoarseThreeSite11
-import TNLean.PEPS.NormalEdgeBlockingData
-import TNLean.PEPS.RegionBlock.UnionClosure
 
 /-!
 # The coherent coarse blocking frame of a one-edge blocking datum
@@ -161,25 +159,6 @@ noncomputable def legPair2 {cbd : Edge coarseGraph → ℕ} :
     · change (if h : incidentBC2 = incidentRC2 then h ▸ a' else
           ((incident2_cases incidentBC2).resolve_left h) ▸ b') = b'
       rw [dite_eq_right (show incidentBC2 ≠ incidentRC2 by decide)]
-
-@[simp] theorem legPair0_apply_fst {cbd : Edge coarseGraph → ℕ}
-    (legs : (ie : IncidentEdge coarseGraph 0) → Fin (cbd ie.1)) :
-    (legPair0 legs).1 = legs incidentRB0 := rfl
-@[simp] theorem legPair0_apply_snd {cbd : Edge coarseGraph → ℕ}
-    (legs : (ie : IncidentEdge coarseGraph 0) → Fin (cbd ie.1)) :
-    (legPair0 legs).2 = legs incidentRC0 := rfl
-@[simp] theorem legPair1_apply_fst {cbd : Edge coarseGraph → ℕ}
-    (legs : (ie : IncidentEdge coarseGraph 1) → Fin (cbd ie.1)) :
-    (legPair1 legs).1 = legs incidentRB1 := rfl
-@[simp] theorem legPair1_apply_snd {cbd : Edge coarseGraph → ℕ}
-    (legs : (ie : IncidentEdge coarseGraph 1) → Fin (cbd ie.1)) :
-    (legPair1 legs).2 = legs incidentBC1 := rfl
-@[simp] theorem legPair2_apply_fst {cbd : Edge coarseGraph → ℕ}
-    (legs : (ie : IncidentEdge coarseGraph 2) → Fin (cbd ie.1)) :
-    (legPair2 legs).1 = legs incidentRC2 := rfl
-@[simp] theorem legPair2_apply_snd {cbd : Edge coarseGraph → ℕ}
-    (legs : (ie : IncidentEdge coarseGraph 2) → Fin (cbd ie.1)) :
-    (legPair2 legs).2 = legs incidentBC2 := rfl
 
 /-! ### Crossing exclusivity at a super-site
 
@@ -619,44 +598,6 @@ noncomputable def coarseFrameOfRegions
         (bondModelOf red blue complement coarseEdgeBC))).trans
       (complementBoundaryEquivOf hrb hrc hbc hcover).symm
 
-@[simp] theorem coarseFrameOfRegions_red
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red = red := rfl
-
-@[simp] theorem coarseFrameOfRegions_blue
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue = blue := rfl
-
-@[simp] theorem coarseFrameOfRegions_complement
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement =
-      complement := rfl
-
-@[simp] theorem coarseFrameOfRegions_coarseBondDim
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim =
-      coarseBondDimOf (A := A) red blue complement := rfl
-
 /-! ### The coherent coarse blocking frame
 
 A coherent coarse blocking frame extends the coarse blocking frame above with the
@@ -920,44 +861,6 @@ noncomputable def coherentFrameOfRegions
     coarseFrameOfRegions_factor_compl_rc hRed hBlue hCompl hd hpos hrb hrc hbc hcover
   factor_compl_bc :=
     coarseFrameOfRegions_factor_compl_bc hRed hBlue hCompl hd hpos hrb hrc hbc hcover
-
-@[simp] theorem coherentFrameOfRegions_frame
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).toCoarseBlockingFrame =
-      coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover := rfl
-
-@[simp] theorem coherentFrameOfRegions_red
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).frame.red = red := rfl
-
-@[simp] theorem coherentFrameOfRegions_blue
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).frame.blue = blue := rfl
-
-@[simp] theorem coherentFrameOfRegions_complement
-    (hRed : RegionBlockedTensorInjective (G := G) A red)
-    (hBlue : RegionBlockedTensorInjective (G := G) A blue)
-    (hCompl : RegionBlockedTensorInjective (G := G) A complement)
-    (hd : 0 < d) (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hrb : Disjoint red blue) (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
-    (hcover : red ∪ blue ∪ complement = Finset.univ) :
-    (coherentFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).frame.complement =
-      complement := rfl
 
 /-- The coherent frame of three partitioned regions is partitioned. -/
 @[deprecated "Construct `CoarseBlockingFrame.IsPartition` directly from the supplied

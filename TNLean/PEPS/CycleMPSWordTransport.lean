@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
-import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 
 /-!
 # Word-span extension and word transport for block-injective matrix tensors

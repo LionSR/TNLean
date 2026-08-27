@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Chain.Defs
-import TNLean.Algebra.TracePairing
 
 /-!
 # Arc products and window injectivity for site-dependent closed chains

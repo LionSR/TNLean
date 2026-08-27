@@ -5,8 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Blocking
 
-import Mathlib.Data.Matrix.Basic
-
 /-!
 # Identity edge insertions for PEPS coefficients
 

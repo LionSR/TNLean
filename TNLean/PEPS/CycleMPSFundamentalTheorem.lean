@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.CycleMPSInjectivity
 import TNLean.PEPS.CycleFundamentalTheorem
-import TNLean.PEPS.TorusAbsorbedCovariance
 import TNLean.PEPS.CycleMPSOverlapCapstone
 
 /-!

@@ -5,8 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.VirtualInsertion
 
-import Mathlib.Data.Matrix.Basic
-
 /-!
 # Edge-centered decompositions for PEPS local data
 
@@ -85,11 +83,6 @@ omit [Fintype V] [DecidableRel G.Adj] in
     v ∈ edgeLeftVertices e ↔ v = e.1.1 := by
   simp [edgeLeftVertices]
 
-omit [Fintype V] [DecidableRel G.Adj] in
-@[simp] theorem mem_edgeRightVertices (e : Edge G) (v : V) :
-    v ∈ edgeRightVertices e ↔ v = e.1.2 := by
-  simp [edgeRightVertices]
-
 omit [DecidableRel G.Adj] in
 @[simp] theorem mem_edgeMiddleVertices_iff (e : Edge G) (v : V) :
     v ∈ edgeMiddleVertices e ↔ v ≠ e.1.1 ∧ v ≠ e.1.2 := by
@@ -105,26 +98,6 @@ theorem edgeVertices_union (e : Edge G) :
   · by_cases hvRight : v = e.1.2
     · simp [edgeLeftVertices, edgeMiddleVertices, edgeRightVertices, hvRight]
     · simp [edgeLeftVertices, edgeMiddleVertices, edgeRightVertices, hvLeft, hvRight]
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem notMem_edgeMiddleVertices_left (e : Edge G) :
-    e.1.1 ∉ edgeMiddleVertices e := by
-  simp [mem_edgeMiddleVertices_iff]
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem notMem_edgeMiddleVertices_right (e : Edge G) :
-    e.1.2 ∉ edgeMiddleVertices e := by
-  simp [mem_edgeMiddleVertices_iff]
-
-omit [Fintype V] [DecidableRel G.Adj] in
-@[simp] theorem edgeLeftVertices_card (e : Edge G) :
-    (edgeLeftVertices e).card = 1 :=
-  Finset.card_singleton _
-
-omit [Fintype V] [DecidableRel G.Adj] in
-@[simp] theorem edgeRightVertices_card (e : Edge G) :
-    (edgeRightVertices e).card = 1 :=
-  Finset.card_singleton _
 
 omit [DecidableRel G.Adj] in
 private theorem card_erase_erase_univ (a b : V) (hab : a ≠ b) :
@@ -395,34 +368,6 @@ def edgeBoundaryToInsertedBoundaryConfig (A : Tensor G d) (e : Edge G)
   leftResidual := β.leftResidual
   rightResidual := β.rightResidual
 
-omit [Fintype V] in
-@[simp] theorem edgeBoundaryToInsertedBoundaryConfig_leftEdgeIndex
-    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
-    (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).leftEdgeIndex =
-      β.edgeIndex :=
-  rfl
-
-omit [Fintype V] in
-@[simp] theorem edgeBoundaryToInsertedBoundaryConfig_rightEdgeIndex
-    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
-    (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).rightEdgeIndex =
-      β.edgeIndex :=
-  rfl
-
-omit [Fintype V] in
-@[simp] theorem edgeBoundaryToInsertedBoundaryConfig_leftResidual
-    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
-    (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).leftResidual =
-      β.leftResidual :=
-  rfl
-
-omit [Fintype V] in
-@[simp] theorem edgeBoundaryToInsertedBoundaryConfig_rightResidual
-    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
-    (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).rightResidual =
-      β.rightResidual :=
-  rfl
-
 /-- Product model for inserted-edge boundary configurations. -/
 def edgeInsertedBoundaryConfigEquivProd (A : Tensor G d) (e : Edge G) :
     EdgeInsertedBoundaryConfig (G := G) A e ≃
@@ -590,6 +535,8 @@ omit [Fintype V] in
       (β.rightEdgeIndex, β.rightResidual) ie
 
 omit [Fintype V] in
+-- restored: fired by the bare `simp` in
+-- `edgeInsertedCoeff_identity_diagonal_summand` below
 @[simp] theorem edgeInsertedLeftLocalConfig_edgeBoundaryToInsertedBoundaryConfig
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     edgeInsertedLeftLocalConfig (G := G) A e
@@ -598,6 +545,8 @@ omit [Fintype V] in
   rfl
 
 omit [Fintype V] in
+-- restored: fired by the bare `simp` in
+-- `TNLean.PEPS.InsertionCoefficientRealization`
 @[simp] theorem edgeInsertedLeftLocalConfig_edgeBoundary_rightIndex
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e)
     (y : Fin (A.bondDim e)) :
@@ -610,6 +559,8 @@ omit [Fintype V] in
   rfl
 
 omit [Fintype V] in
+-- restored: fired by the bare `simp` in
+-- `TNLean.PEPS.InsertionCoefficientRealization`
 @[simp] theorem edgeInsertedRightLocalConfig_edgeBoundary_leftIndex
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e)
     (y : Fin (A.bondDim e)) :
@@ -622,6 +573,8 @@ omit [Fintype V] in
   rfl
 
 omit [Fintype V] in
+-- restored: fired by the bare `simp` in
+-- `edgeInsertedCoeff_identity_diagonal_summand` below
 @[simp] theorem edgeInsertedRightLocalConfig_edgeBoundaryToInsertedBoundaryConfig
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     edgeInsertedRightLocalConfig (G := G) A e
@@ -638,7 +591,8 @@ instance instFintypeEdgeComplementConfig (A : Tensor G d) (e : Edge G) :
   inferInstance
 
 omit [DecidableRel G.Adj] in
-private theorem edge_ne_of_middle_incident (e : Edge G) {v : V}
+/-- An edge incident to a middle vertex of `e` is not `e` itself. -/
+theorem edge_ne_of_middle_incident (e : Edge G) {v : V}
     (hv : v ∈ edgeMiddleVertices e) (ie : IncidentEdge G v) : ie.1 ≠ e := by
   intro hie
   have hvne := (mem_edgeMiddleVertices_iff e v).mp hv
@@ -699,13 +653,6 @@ def edgeMiddleConfigToOpenMiddleConfig (A : Tensor G d) (e : Edge G)
     EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual :=
   ⟨fun f => η.1 f.1, η.2.2.1, η.2.2.2⟩
 
-omit [Fintype V] in
-@[simp] theorem edgeMiddleConfigToOpenMiddleConfig_apply (A : Tensor G d) (e : Edge G)
-    (β : EdgeBoundaryConfig (G := G) A e)
-    (η : EdgeMiddleConfig (G := G) A e β) (f : {f : Edge G // f ≠ e}) :
-    (edgeMiddleConfigToOpenMiddleConfig (G := G) A e β η).1 f = η.1 f.1 :=
-  rfl
-
 /-- Extend a compatible complement configuration by putting the ordinary
 edge-boundary index back on the distinguished edge. This is the inverse map
 needed for the identity-insertion reindexing. -/
@@ -728,13 +675,6 @@ noncomputable def edgeOpenMiddleConfigToMiddleConfig (A : Tensor G d) (e : Edge 
         · intro ie
           have hne := otherRight_edge_ne (G := G) e ie
           simpa [hne] using ζ.2.2 ie⟩
-
-omit [Fintype V] in
-@[simp] theorem edgeOpenMiddleConfigToMiddleConfig_edge (A : Tensor G d) (e : Edge G)
-    (β : EdgeBoundaryConfig (G := G) A e)
-    (ζ : EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual) :
-    (edgeOpenMiddleConfigToMiddleConfig (G := G) A e β ζ).1 e = β.edgeIndex := by
-  simp [edgeOpenMiddleConfigToMiddleConfig]
 
 omit [Fintype V] in
 @[simp] theorem edgeOpenMiddleConfigToMiddleConfig_apply_ne (A : Tensor G d) (e : Edge G)
@@ -773,15 +713,6 @@ def edgeComplementValue (A : Tensor G d) (e : Edge G)
     (hv : v ∈ edgeMiddleVertices e) (ie : IncidentEdge G v) :
     Fin (A.bondDim ie.1) :=
   ζ ⟨ie.1, edge_ne_of_middle_incident (G := G) e hv ie⟩
-
-@[simp] theorem edgeComplementValue_edgeMiddleConfigToOpenMiddleConfig
-    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e)
-    (η : EdgeMiddleConfig (G := G) A e β) {v : V}
-    (hv : v ∈ edgeMiddleVertices e) (ie : IncidentEdge G v) :
-    edgeComplementValue (G := G) A e
-        (edgeMiddleConfigToOpenMiddleConfig (G := G) A e β η).1 hv ie =
-      η.1 ie.1 :=
-  rfl
 
 /-- The blocked middle tensor with the distinguished edge left open.
 

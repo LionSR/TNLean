@@ -73,12 +73,6 @@ theorem Edge.ofAdj_endpoints {G : SimpleGraph V} {u v : V} (h : G.Adj u v) :
   · exact Or.inr ⟨by rw [Edge.ofAdj_of_gt h hvu], by rw [Edge.ofAdj_of_gt h hvu]⟩
 
 omit [Fintype V] in
-/-- `Edge.ofAdj` recovers an edge from either of its incidence directions. -/
-@[simp] theorem Edge.ofAdj_fst_snd {G : SimpleGraph V} (e : Edge G) :
-    Edge.ofAdj e.2.2 = e := by
-  rw [Edge.ofAdj_of_lt e.2.2 e.2.1]
-
-omit [Fintype V] in
 /-- The image edge `Edge.ofAdj h` is independent of the incidence direction of the
 adjacency `h`: orienting the pair `(u, v)` and the pair `(v, u)` gives the same
 edge, since `Edge.ofAdj` places the smaller endpoint first either way. -/
