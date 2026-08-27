@@ -806,4 +806,12 @@ theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
   -- But the theorem `tensor_toMPSTensor_isCPSVCanonicalForm` gives exactly this
   exact tensor_toMPSTensor_isCPSVCanonicalForm
 
+/-- Deprecated compatibility name for the shared binary site sign. -/
+@[deprecated MPOTensor.siteSign (since := "2026-08-27")]
+alias siteSign := MPOTensor.siteSign
+
+/-- Deprecated compatibility name for the shared binary configuration sign. -/
+@[deprecated MPOTensor.configurationSign (since := "2026-08-27")]
+alias configurationSign := MPOTensor.configurationSign
+
 end MPOTensor.KatoDeformedRFPObstruction

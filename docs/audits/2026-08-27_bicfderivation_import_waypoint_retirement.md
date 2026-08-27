@@ -43,8 +43,3 @@ appear in `BiCFDerivation/Core.lean`, `BiCFDerivation/Selectors.lean`, and
 
 Aggregator census after the change: 36 generated files covering 995 production
 modules (was 35 / 996).
-
-Deferred: `TNLean/MPS/MPDO/BiCFDerivation/Basic.lean` is the same shape — 23
-lines, zero declarations, stale docstring — differing only in having one real
-importer (`BiCFDerivation/DiagonalRestrictionCounterexample.lean`). It is left
-for a separate change.

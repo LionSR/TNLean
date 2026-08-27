@@ -1,11 +1,11 @@
 # MPDO shared sign calculus and generic private helpers (2026-08-27)
 
-Three cleanups in `TNLean/MPS/MPDO`, all under the repository-local
-pass-through exception of `docs/project_conventions.md` §Style: every removed
-name was `private` or `private`-equivalent (no external surface), every
-non-`Archive` use is migrated, and the two blueprint `\lean{}` tags affected are
-redirected in the same change. No `@[deprecated] alias` is added, and no removed
-name encoded misleading terminology.
+Three cleanups in `TNLean/MPS/MPDO`. The private helper removals use the
+repository-local pass-through exception of `docs/project_conventions.md`
+§Style. Every non-`Archive` use is migrated, and the two blueprint `\lean{}`
+tags affected are redirected in the same change. The four public sign-definition
+names retain deprecated aliases to the shared owners; no private removed name
+needs an alias, and no removed name encoded misleading terminology.
 
 ## 1. Generic helpers replaced by their owned equivalents
 
@@ -69,7 +69,9 @@ specialisation of the two local spellings (`pauliZ` and `sigmaZ`).
 | `…configurationSign_append_cast` (both) | `MPOTensor.configurationSign_append_cast` |
 
 Both consuming files sit in namespaces under `MPOTensor`, so no unqualified
-reference needed requalifying.
+internal reference needed requalifying. Because `siteSign` and
+`configurationSign` were public in both old namespaces, those four qualified
+names remain as deprecated aliases to the shared definitions.
 
 Retained on purpose: `MPOTensor.KatoDeformedRFPObstruction.pauliZ` (blueprint
 tagged, and used by the closure identities) and
