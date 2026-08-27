@@ -10,7 +10,7 @@ declared in a single file, a private restatement of four helpers hidden behind
 `private` in the file that owned them, and a wrapper around a Mathlib
 definition.
 
-| Removed | Replacement |
+| Audited declaration | Disposition / replacement |
 |---|---|
 | `TNLean.PEPS.complementVertex_ne` (`TNLean/PEPS/VertexComplement/Basic.lean`) | `(mem_vertexComplementVertices_iff (V := V) v w).mp hw` — the `@[simp]` iff in the same file, carrying the same `omit [DecidableRel G.Adj]` |
 | `TNLean.PEPS.gauge_sum_left_right` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`) | inlined into `TNLean.PEPS.gauge_sum_left_right_matrix_inv`, its only consumer |
@@ -20,7 +20,7 @@ definition.
 | `TNLean.PEPS.edge_ne_of_middle_incident_for_physical` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`) and `TNLean.PEPS.incidentMiddle_ne` (`TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean`) | `TNLean.PEPS.edge_ne_of_middle_incident` in `TNLean/PEPS/Blocking.lean`, now public and carrying the `incidentMiddle_ne` docstring |
 | `TNLean.PEPS.LocalConfig` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`) | `TNLean.PEPS.OpenLocalConfig` in the same file — the two abbreviations unfolded to the same product type, and the public one keeps the fuller docstring |
 | `TNLean.PEPS.edgeFinEqDelta` (private, `TNLean/PEPS/FundamentalTheorem/EdgeInsertion.lean`) | `TNLean.PEPS.finEqDelta (leftIncidentValue A ξ f) (rightIncidentValue A ξ f)`, the composition of three `GaugeAction.lean` helpers that are now public |
-| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/TwoInjectiveComparison/Basic.lean`) | `Matrix.single i j (1 : ℂ)` from Mathlib, which the removed definition merely wrapped |
+| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/TwoInjectiveComparison/Basic.lean`) | retained as a deprecated compatibility declaration; new code uses `Matrix.single i j (1 : ℂ)` from Mathlib directly |
 
 ## What was checked
 
@@ -94,28 +94,29 @@ but that a downstream file can now write the statement at all: with the
 originals private, every open-edge delta statement outside `GaugeAction.lean`
 had to be restated. Neither spelling occurs under `blueprint/src` or `docs`.
 
-**Mathlib shadow.** `matrixUnit` was a two-line wrapper whose body was
-`Matrix.single i j (1 : ℂ)`, and every one of its six uses was accompanied by a
+**Mathlib shadow.** `matrixUnit` is a two-line wrapper whose body is
+`Matrix.single i j (1 : ℂ)`, and every one of its six former uses was accompanied by a
 `simp` argument list that already named `Matrix.single` to unfold it. The uses
 now name Mathlib's spelling directly, and the six argument lists shed the
 redundant leading entry. Only `twoBlockInsertedCoeff_singletonBond_single`
 needed the classical-instance opener that the wrapper had been supplying
-implicitly. The blueprint node `def:peps_matrixUnit` is not a leaf — the
-one-shared-bond extraction theorem cites it — so the label and the `\uses`
-edge stay and only the tag changes, from a `\lean{}` naming the removed
-declaration to `\mathlibok`, this repository's documented idiom for a statement
-discharged upstream. The theorem name `twoBlockInsertedCoeff_matrixUnit` and the
-prose that describes inserting matrix units are unchanged: they name the
-mathematics, not the retired definition.
+implicitly. The old fully qualified name remains available as a deprecated
+compatibility declaration for downstream users. The blueprint node
+`def:peps_matrixUnit` is not a leaf — the one-shared-bond extraction theorem
+cites it — so the label and the `\uses` edge stay and the tag is `\mathlibok`,
+this repository's documented idiom for a statement discharged upstream. The
+theorem name `twoBlockInsertedCoeff_matrixUnit` and the prose that describes
+inserting matrix units are unchanged: they name the mathematics, not the
+compatibility wrapper.
 
 ## Transition declarations
 
-Every removed name is either `private`, zero-referenced, a byte-level mirror of
-a surviving declaration with the same fully qualified name, or — in the single
-public case, `matrixUnit` — a wrapper whose consumers all live in the file that
-declared it and were migrated in the same change. No surviving blueprint
-`\lean{...}` tag cites a removed spelling. No deprecation alias is warranted
-under the pass-through exception.
+Every removed name is either `private`, zero-referenced, or a byte-level mirror
+of a surviving declaration with the same fully qualified name. The distinct
+public wrapper `matrixUnit` is instead retained under its exact former name and
+signature with a deprecation pointing new code to `Matrix.single`. No surviving
+blueprint `\lean{...}` tag cites a removed spelling; the compatibility retention
+protects downstream Lean imports independently of the blueprint surface.
 
 ## Ledger
 

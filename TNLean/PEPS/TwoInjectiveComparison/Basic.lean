@@ -225,6 +225,14 @@ theorem twoBlockReciprocalScalarProportional_of_pointwise_mul_eq
 
 /-! ### The one-shared-bond case -/
 
+/-- Deprecated compatibility name for the elementary matrix with a single
+nonzero entry equal to `1` at position `(i, j)`. -/
+@[deprecated "Use `Matrix.single i j (1 : ℂ)` directly." (since := "2026-08-27")]
+noncomputable def matrixUnit {ι κ : Type*} (i : ι) (j : κ) :
+    Matrix ι κ ℂ := by
+  classical
+  exact Matrix.single i j (1 : ℂ)
+
 open scoped Classical in
 /-- Inserting the matrix unit `E_{p,q}` on the shared bond `b` extracts the
 open-bond contraction: every other shared bond is contracted by the identity,

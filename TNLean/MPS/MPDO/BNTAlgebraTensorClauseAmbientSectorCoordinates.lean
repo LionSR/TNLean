@@ -25,6 +25,7 @@ C.4.
 * `relabeledTwoSiteMultiplicity`
 * `relabeledTwoSiteWeight`
 * `RelabeledTwoSiteSectorAlgebra`
+* `RelabeledTwoSiteWeightedSectorSpace` (deprecated compatibility name)
 * `relabeledTwoSiteRetainedEquiv`
 * `relabeledTwoSiteCoisometry`
 
@@ -78,6 +79,17 @@ abbrev relabeledTwoSiteWeight (S : TwoSiteMultiplicitySpectrum H) :
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2058. -/
 abbrev RelabeledTwoSiteSectorAlgebra (S : TwoSiteMultiplicitySpectrum H) :=
   VerticalSectorAlgebra S.relabeledTwoSiteBondDim
+
+/-- Deprecated compatibility name for the two-site weighted-sector family
+indexed by the matched one-site labels. -/
+@[deprecated
+  "Use `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim \
+  S.relabeledTwoSiteMultiplicity` directly."
+  (since := "2026-08-27")]
+abbrev RelabeledTwoSiteWeightedSectorSpace
+    (S : TwoSiteMultiplicitySpectrum H) :=
+  VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim
+    S.relabeledTwoSiteMultiplicity
 
 /-- Relabel the retained two-site coordinate from the matched one-site labels
 to the native labels of the two-site vertical decomposition.

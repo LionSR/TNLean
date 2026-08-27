@@ -1,9 +1,11 @@
 # MPDO BNT algebra-clause dead subgraph and attribute-carrying batch
 
 Two zero-reference passes over `TNLean/MPS/MPDO/` were applied in one commit.
-The first removed a closed subgraph of six declarations whose only occurrence
+The first audited a closed subgraph of six declarations whose only occurrence
 anywhere in `TNLean/`, `blueprint/`, or `docs/` was the definition site plus a
-module-docstring bullet. The second removed six attribute-carrying declarations
+module-docstring bullet. Five were removed; the distinct public weighted-sector
+abbreviation is retained as deprecated compatibility. The second removed six
+attribute-carrying declarations
 in the same directory, which a name-level grep cannot settle on its own — a
 `@[simp]` lemma can be consumed by a name-free tactic invocation — so both sets
 were validated together by a root `lake build`.
@@ -14,14 +16,14 @@ restatement, a projection, or an abbreviation of something that survives, no
 blueprint `\lean{...}` tag cites any of the removed names, and each removal is
 paired with its replacement below.
 
-## Removed: the dead subgraph
+## Audited: the dead subgraph
 
-| Removed declaration | File | Replacement |
+| Audited declaration | File | Disposition / replacement |
 |---|---|---|
 | `MPOTensor.BNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | build `IsVerticalCF M` from the clause fields at the use site: `⟨H.labelCount, H.bondDim, H.multiplicity, H.weight, H.tensor, H.verticalCoisometry, H.multiplicity_pos, H.weight_pos, H.coisometry, H.isBNT, H.forward, H.reconstruction⟩` |
 | `MPOTensor.HasBNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | destructure the `Nonempty` and use the anonymous constructor above |
 | `MPOTensor.BNTFusionTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTFusionTensorClause.lean` | the same, after `BNTFusionTensorClause.toBNTAlgebraTensorClause` |
-| `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity`, which it abbreviated |
+| `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | retained with its exact former signature as deprecated compatibility; new code uses `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity` directly |
 | `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalUnitary.lean` | `gauge_gram_eq_pos_smul_one_of_identityMarkedRealization` followed by `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`, both retained |
 | `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` | `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
 
@@ -30,10 +32,12 @@ structure already exposes every field of the vertical canonical form, so the
 theorem was the anonymous constructor written out with a name attached, and each
 downstream carrier re-forwarded it. Nothing consumed any of the three.
 
-The subgraph is closed: removing these six strands no helper. The module
-docstring bullets naming `RelabeledTwoSiteWeightedSectorSpace`,
-`exists_unitary_sector_conjugacy_of_identityMarkedRealization`, and
-`toMultiplicitySpectrumComparison` were removed alongside their declarations;
+The subgraph remains closed after removing five strands; the sixth,
+`RelabeledTwoSiteWeightedSectorSpace`, is a distinct public API and remains under
+its exact former name and signature with a deprecation. Its module-docstring
+bullet is retained accordingly. The bullets naming
+`exists_unitary_sector_conjugacy_of_identityMarkedRealization` and
+`toMultiplicitySpectrumComparison` were removed alongside those declarations;
 the sibling bullets around them (`RelabeledTwoSiteSectorAlgebra`,
 `relabeledTwoSiteRetainedEquiv`,
 `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`,

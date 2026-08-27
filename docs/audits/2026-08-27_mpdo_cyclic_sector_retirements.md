@@ -73,21 +73,24 @@ the `Fin 3` decomposition directly through `Fin.cons` and `Fin.addCases`.
 `TNLean/MPS/MPDO/CyclicActiveSuffixMarginal.lean` contained nothing but four
 instantiations of the general suffix-sector contraction at suffix lengths one
 and two. The module is deleted and the generated aggregator
-`TNLean/MPS/MPDO.lean` regenerated.
+`TNLean/MPS/MPDO.lean` regenerated. The two public contraction abbreviations
+move to the surviving `CyclicActiveFourthRegionContraction.lean` import surface
+and remain available as deprecated compatibility declarations; only the two
+theorem wrappers are removed.
 
-| Removed declaration | Replacement |
+| Audited declaration | Disposition / replacement |
 |---|---|
-| `MPOTensor.PhysicalSectorFactorization.oneSuffixSectorContraction` | `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 1` |
-| `MPOTensor.PhysicalSectorFactorization.twoSuffixSectorContraction` | `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 2` |
-| `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction` | `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 1` |
-| `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction` | `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 2` |
+| `MPOTensor.PhysicalSectorFactorization.oneSuffixSectorContraction` | retained with its exact former signature as deprecated compatibility for `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 1` |
+| `MPOTensor.PhysicalSectorFactorization.twoSuffixSectorContraction` | retained with its exact former signature as deprecated compatibility for `MPOTensor.PhysicalSectorFactorization.suffixSectorContraction 2` |
+| `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_one_eq_oneSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 1` |
+| `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_two_eq_twoSuffixSectorContraction` | removed; use `MPOTensor.PhysicalSectorFactorization.reindex_reducedBlockState_add_eq_suffixSectorContraction L 2` |
 
 The sole consumer,
 `TNLean/MPS/MPDO/CyclicActiveAdjacentCoefficientExtraction.lean`, now imports
 `CyclicActiveFourthRegionContraction` directly, and its two private helpers were
 renamed `trace_suffixSectorContraction_one_eq` and
-`trace_suffixSectorContraction_two_eq` so that no name points at a deleted
-declaration.
+`trace_suffixSectorContraction_two_eq` so production code points directly at
+the general declaration rather than the deprecated compatibility names.
 
 In the blueprint, `def:mpdo_suffix_sector_contraction` and
 `thm:mpdo_suffix_marginal_block_expansion` in
