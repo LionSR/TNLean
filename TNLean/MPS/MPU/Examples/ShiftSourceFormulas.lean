@@ -467,8 +467,10 @@ theorem shiftExampleU₂_sourceU_reindex_eq_identitySwapIdentity
         (SourceFactors.sourceU (shiftExampleU₂ d)
           (shiftExampleU₂SourceFactors d)) =
       identitySwapIdentityMatrix d := by
-  apply Matrix.reindex_eq_of_apply_eq
-  rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  ext row col
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  rcases row with ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  rcases col with ⟨⟨i, j⟩, ⟨k, l⟩⟩
   simpa only [Equiv.symm_symm] using
     shiftExampleU₂_sourceU_fourSpin_apply d a b c e i j k l
 
@@ -524,8 +526,10 @@ theorem shiftExampleU₂_sourceV_reindex_eq_swapSwap_mul_identitySwapIdentity
         (SourceFactors.sourceV (shiftExampleU₂ d)
           (shiftExampleU₂SourceFactors d)) =
       swapTensorSwapMatrix d * identitySwapIdentityMatrix d := by
-  apply Matrix.reindex_eq_of_apply_eq
-  rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  ext row col
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  rcases row with ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  rcases col with ⟨⟨a, b⟩, ⟨c, e⟩⟩
   simpa only [Equiv.symm_symm] using
     shiftExampleU₂_sourceV_fourSpin_apply d i j k l a b c e
 
@@ -593,8 +597,10 @@ theorem shiftExampleU₃_sourceU_reindex_eq_identitySwapIdentity_mul_swapSwap
         (SourceFactors.sourceU (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) =
       identitySwapIdentityMatrix d * swapTensorSwapMatrix d := by
-  apply Matrix.reindex_eq_of_apply_eq
-  rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  ext row col
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  rcases row with ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  rcases col with ⟨⟨i, j⟩, ⟨k, l⟩⟩
   simpa only [Equiv.symm_symm] using
     shiftExampleU₃_sourceU_fourSpin_apply d a b c e i j k l
 
@@ -666,8 +672,10 @@ theorem shiftExampleU₃_sourceV_reindex_eq_identitySwapIdentity
         (SourceFactors.sourceV (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) =
       identitySwapIdentityMatrix d := by
-  apply Matrix.reindex_eq_of_apply_eq
-  rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  ext row col
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  rcases row with ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  rcases col with ⟨⟨a, b⟩, ⟨c, e⟩⟩
   simpa only [Equiv.symm_symm] using
     shiftExampleU₃_sourceV_fourSpin_apply d i j k l a b c e
 
@@ -758,12 +766,16 @@ theorem shiftExampleU₁_sourceUV_eq_identityTensorIdentity (d : ℕ) :
         (SourceFactors.sourceV (shiftExampleU₁ d)
           (shiftExampleU₁SourceFactors d)) = identityTensorIdentityMatrix d := by
   constructor
-  · apply Matrix.reindex_eq_of_apply_eq
-    rintro ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩
+  · ext row col
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+    rcases row with ⟨⟨a, b⟩, ⟨c, e⟩⟩
+    rcases col with ⟨⟨i, j⟩, ⟨k, l⟩⟩
     simpa only [Equiv.symm_symm] using
       shiftExampleU₁_sourceU_apply d a b c e i j k l
-  · apply Matrix.reindex_eq_of_apply_eq
-    rintro ⟨⟨i, j⟩, ⟨k, l⟩⟩ ⟨⟨a, b⟩, ⟨c, e⟩⟩
+  · ext row col
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+    rcases row with ⟨⟨i, j⟩, ⟨k, l⟩⟩
+    rcases col with ⟨⟨a, b⟩, ⟨c, e⟩⟩
     simpa only [Equiv.symm_symm] using
       shiftExampleU₁_sourceV_apply d i j k l a b c e
 
@@ -844,8 +856,8 @@ theorem shiftExampleU₃_sourceUV_eq_swap (d : ℕ) [NeZero d] :
         (SourceFactors.sourceV (shiftExampleU₃ d)
           (shiftExampleU₃SourceFactors d)) = Matrix.swapMatrix (d * d) := by
   constructor
-  · apply Matrix.reindex_eq_of_apply_eq
-    intro row col
+  · ext row col
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
     obtain ⟨⟨⟨a, b⟩, ⟨c, e⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective row
     obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ :=
@@ -853,8 +865,8 @@ theorem shiftExampleU₃_sourceUV_eq_swap (d : ℕ) [NeZero d] :
     simpa only [Equiv.symm_symm, Equiv.refl_symm, Equiv.refl_apply,
       shiftTwoSitePhysicalEquiv, Equiv.prodCongr_apply, Prod.map_apply'] using
       shiftExampleU₃_sourceU_eq_swap_apply d a b c e i j k l
-  · apply Matrix.reindex_eq_of_apply_eq
-    intro row col
+  · ext row col
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
     obtain ⟨⟨⟨i, j⟩, ⟨k, l⟩⟩, rfl⟩ :=
       (shiftTwoSitePhysicalEquiv d).surjective row
     obtain ⟨⟨⟨a, b⟩, ⟨c, e⟩⟩, rfl⟩ :=
