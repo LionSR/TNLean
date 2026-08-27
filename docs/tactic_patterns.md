@@ -671,6 +671,33 @@ abstracted — record why, so it is not re-proposed).
   three callers establish it respectively from irreducibility or from
   fixed-length vector spreading.
 
+### off-edge delta collapse to the consistent-off-`e` subtype — promoted
+- **Pattern:** a sum over all open local configurations of a three-factor
+  summand whose first factor is the product of the per-edge consistency deltas
+  away from a distinguished edge, collapsed by `prod_off_delta_eq` into an
+  `if … then … else 0`, then re-expressed as a sum over the subtype of
+  configurations consistent off that edge via `Finset.sum_ite` followed by
+  `Finset.sum_subtype_eq_sum_filter`.
+- **Seen:** four occurrences across `PEPS/FundamentalTheorem/GaugeAction.lean`
+  (`edgeInsertedCoeff_eq_sum_local`),
+  `PEPS/FundamentalTheorem/EdgeInsertion.lean` (`open_gauge_sum_over_outer`),
+  `PEPS/FundamentalTheorem/OneVertexComparison.lean`
+  (`edgeInsertedCoeff_eq_doubled`), and `PEPS/RegionBlock/GaugeBridge.lean`
+  (`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`) before promotion — four
+  files, clearing the rule of three.
+- **Abstraction:** `TNLean.PEPS.sum_off_delta_eq_sum_consistentOff` in
+  `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`. The trailing factor is
+  taken as an arbitrary function of the configuration, which is what lets the
+  four callers pass their own per-vertex tensor product, gauge-matrix product,
+  or region-assembled component product.
+- **Notes:** the decidability of consistency off the edge is an explicit
+  `DecidablePred` instance argument rather than an `open scoped Classical in`
+  on the lemma; this is load-bearing, since each caller derives its own
+  instance from a `classical` in its proof and those must unify with the
+  lemma's. Each call site collapses a twenty-odd-line `calc` to a two- to
+  five-line term. Net source delta over the four sites: −69 lines against +37
+  for the lemma.
+
 ---
 
 ## Completed refactors

@@ -20,17 +20,6 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-
-
-private def edgeFinEqDelta (A : Tensor G d) (ξ : OpenLocalConfig (G := G) A)
-    (e : Edge G) : ℂ :=
-  @ite ℂ
-    (ξ e.1.1 (edgeLeftIncident (G := G) e) =
-      ξ e.1.2 (edgeRightIncident (G := G) e))
-    (instDecidableEqFin (A.bondDim e)
-      (ξ e.1.1 (edgeLeftIncident (G := G) e))
-      (ξ e.1.2 (edgeRightIncident (G := G) e))) 1 0
-
 /-- The gauge-matrix product over all vertices and incident edges factors into one
 two-endpoint factor per edge: the left gauge `X_g` and the right gauge
 `(X_g⁻¹)ᵀ`, evaluated against the outer and inner configurations. -/
@@ -69,12 +58,12 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
     (ω : OpenLocalConfig (G := G) A) :
     (∑ ξ : OpenLocalConfig (G := G) A,
       (∏ f : {f : Edge G // f ≠ e},
-        edgeFinEqDelta A ξ f.1) *
+        finEqDelta (leftIncidentValue A ξ f.1) (rightIncidentValue A ξ f.1)) *
         N (ξ e.1.1 (edgeLeftIncident (G := G) e))
           (ξ e.1.2 (edgeRightIncident (G := G) e)) *
         ∏ v : V, ∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (ξ v ie) (ω v ie)) =
       (∏ f : {f : Edge G // f ≠ e},
-        edgeFinEqDelta A ω f.1) *
+        finEqDelta (leftIncidentValue A ω f.1) (rightIncidentValue A ω f.1)) *
         ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)ᵀ * N *
           ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)ᵀ)
           (ω e.1.1 (edgeLeftIncident (G := G) e)) (ω e.1.2 (edgeRightIncident (G := G) e)) := by
@@ -93,7 +82,7 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
   have hcollapse :
       (∑ ξ : OpenLocalConfig (G := G) A,
         (∏ f : {f : Edge G // f ≠ e},
-          edgeFinEqDelta A ξ f.1) *
+          finEqDelta (leftIncidentValue A ξ f.1) (rightIncidentValue A ξ f.1)) *
           N (ξ e.1.1 (edgeLeftIncident (G := G) e))
             (ξ e.1.2 (edgeRightIncident (G := G) e)) *
           ∏ g : Edge G,
@@ -102,25 +91,13 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
               ((X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)⁻¹)
                 (ω g.1.2 (edgeRightIncident (G := G) g))
                 (ξ g.1.2 (edgeRightIncident (G := G) g))) =
-        ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, G' ξ.1 := by
-    calc
-      _ = ∑ ξ : OpenLocalConfig (G := G) A,
-            if IsConsistentOff (G := G) A e ξ then G' ξ else 0 := by
-            refine Finset.sum_congr rfl ?_
-            intro ξ _
-            have hdelta : (∏ f : {f : Edge G // f ≠ e}, edgeFinEqDelta A ξ f.1) =
-                if IsConsistentOff (G := G) A e ξ then 1 else 0 :=
-              prod_off_delta_eq A e ξ
-            rw [hdelta]
-            by_cases h : IsConsistentOff (G := G) A e ξ <;> simp [h, hG']
-      _ = ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ},
-            G' ξ.1 := by
-            rw [Finset.sum_ite]
-            simp only [Finset.sum_const_zero, add_zero]
-            rw [← Finset.sum_subtype_eq_sum_filter
-              (s := (Finset.univ : Finset (OpenLocalConfig (G := G) A)))
-              (f := G') (p := IsConsistentOff (G := G) A e)]
-            simp
+        ∑ ξ : {ξ : OpenLocalConfig (G := G) A // IsConsistentOff (G := G) A e ξ}, G' ξ.1 :=
+    sum_off_delta_eq_sum_consistentOff A e N (fun ξ =>
+      ∏ g : Edge G,
+        (X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)
+            (ξ g.1.1 (edgeLeftIncident (G := G) g)) (ω g.1.1 (edgeLeftIncident (G := G) g)) *
+          ((X g : Matrix (Fin (A.bondDim g)) (Fin (A.bondDim g)) ℂ)⁻¹)
+            (ω g.1.2 (edgeRightIncident (G := G) g)) (ξ g.1.2 (edgeRightIncident (G := G) g)))
   rw [hcollapse]
   -- Reindex the consistent-off-`e` outer configurations to the two open indices
   -- and a free complement configuration.
@@ -205,7 +182,7 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
             ((X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)⁻¹)
               (ω e.1.2 (edgeRightIncident (G := G) e)) k)) *
         ∏ f : {f : Edge G // f ≠ e},
-          edgeFinEqDelta A ω f.1 := by
+          finEqDelta (leftIncidentValue A ω f.1) (rightIncidentValue A ω f.1) := by
     intro i
     -- the complement sum factors into one per-edge sum, each cancelling to a delta.
     have hQ :
@@ -216,7 +193,7 @@ private lemma open_gauge_sum_over_outer (A : Tensor G d)
               ((X g.1 : Matrix (Fin (A.bondDim g.1)) (Fin (A.bondDim g.1)) ℂ)⁻¹)
                 (ω g.1.1.2 (edgeRightIncident (G := G) g.1)) (ζ g)) =
           ∏ f : {f : Edge G // f ≠ e},
-            edgeFinEqDelta A ω f.1 := by
+            finEqDelta (leftIncidentValue A ω f.1) (rightIncidentValue A ω f.1) := by
       rw [show (∑ ζ : EdgeComplementConfig (G := G) A e,
           ∏ g : {g : Edge G // g ≠ e},
             (X g.1 : Matrix (Fin (A.bondDim g.1)) (Fin (A.bondDim g.1)) ℂ)
@@ -347,14 +324,14 @@ theorem edgeInsertedCoeff_applyGauge (B : Tensor G d)
   -- For fixed inner `ω`, pull `∏ v B.component v (ω v)` out and apply the gauge sum.
   have hpull : ∀ ξ : OpenLocalConfig (G := G) (applyGauge B Z),
       (∏ f : {f : Edge G // f ≠ e},
-        edgeFinEqDelta B ξ f.1) *
+        finEqDelta (leftIncidentValue B ξ f.1) (rightIncidentValue B ξ f.1)) *
         N (ξ e.1.1 (edgeLeftIncident (G := G) e))
           (ξ e.1.2 (edgeRightIncident (G := G) e)) *
         ∏ v : V,
           ((∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *
             B.component v (ω v) (σ v)) =
       ((∏ f : {f : Edge G // f ≠ e},
-        edgeFinEqDelta B ξ f.1) *
+        finEqDelta (leftIncidentValue B ξ f.1) (rightIncidentValue B ξ f.1)) *
         N (ξ e.1.1 (edgeLeftIncident (G := G) e))
           (ξ e.1.2 (edgeRightIncident (G := G) e)) *
         ∏ v : V, ∏ ie : IncidentEdge G v, edgeGaugeAt B Z v ie (ξ v ie) (ω v ie)) *

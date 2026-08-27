@@ -95,13 +95,6 @@ private theorem edgeComplementConfigSplitAt_symm_apply_incident
   rw [dite_eq_left hinc]
   exact incidentComplementPiEquiv_symm_apply_of (G := G) A e hj η f hinc
 
-@[simp] theorem edgeComplementConfigSplitAt_fst (A : Tensor G d) (e : Edge G) {j : V}
-    (hj : j ∈ edgeMiddleVertices e) (ζ : EdgeComplementConfig (G := G) A e)
-    (ie : IncidentEdge G j) :
-    (edgeComplementConfigSplitAt (G := G) A e hj ζ).1 ie =
-      edgeComplementValue (G := G) A e ζ hj ie :=
-  rfl
-
 @[simp] theorem edgeComplementValue_edgeComplementConfigSplitAt_symm
     (A : Tensor G d) (e : Edge G) {j : V} (hj : j ∈ edgeMiddleVertices e)
     (η : LocalVirtualConfig A j)

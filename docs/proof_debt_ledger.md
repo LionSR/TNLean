@@ -37,8 +37,9 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
 - **What**: top-level declarations whose name appears exactly once
-  repo-wide (their own definition), excluding instances and
-  `@[simp]`/`@[grind]`-tagged lemmas. Largest concentrations:
+  repo-wide (their own definition), including attribute-carrying
+  declarations and instances cleared by a root build. Largest
+  concentrations:
   `Wielandt/RectangularSpan/Universality.lean` (144 ln),
   `Wielandt/RankOne/ExtractionFull.lean` (123 ln),
   `MPS/ParentHamiltonian/BNTBlockIntersection.lean` (117 ln).
@@ -68,6 +69,14 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   blueprint definition node that nothing cited, so the node was deleted
   rather than redirected; see
   `docs/audits/2026-08-26_peps_forwarders_and_mirrors.md`.
+- **Evidence update (2026-08-27)**: the PEPS subdirectories contributed a
+  further three zero-reference declarations that fall outside this entry's
+  original scope, which excluded instances and `@[simp]`-tagged lemmas
+  because a name search cannot clear them. Two `@[simp]` lemmas and one
+  `Fintype` instance whose body was `inferInstance` were retired with a
+  root `lake build` as the oracle, and the **What** bullet above is widened
+  accordingly; see
+  `docs/audits/2026-08-27_peps_attribute_carrying_dead_weight.md`.
 
 ### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
 - **Status**: open (#4565)

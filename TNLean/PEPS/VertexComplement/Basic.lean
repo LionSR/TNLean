@@ -49,11 +49,6 @@ omit [DecidableRel G.Adj] in
     w ∈ vertexComplementVertices (V := V) v ↔ w ≠ v := by
   simp [vertexComplementVertices]
 
-omit [DecidableRel G.Adj] in
-@[simp] theorem notMem_vertexComplementVertices_self (v : V) :
-    v ∉ vertexComplementVertices (V := V) v := by
-  simp [vertexComplementVertices]
-
 /-! ### The vertex-complement tensor family
 
 The complement region $V\setminus\{v\}$ is contracted over a global virtual
@@ -74,10 +69,6 @@ omit [Fintype V] in
 /-- Physical configurations on the complement region $V\setminus\{v\}$. -/
 abbrev VertexComplementPhysicalConfig (v : V) : Type _ :=
   (w : {w : V // w ≠ v}) → Fin d
-
-instance instFintypeVertexComplementPhysicalConfig (v : V) :
-    Fintype (VertexComplementPhysicalConfig (V := V) (d := d) v) :=
-  inferInstance
 
 /-- The complement tensor weight: the sum over all global virtual configurations
 restricting to `starCfg` on the v-star, of the product of all tensors at

@@ -1,11 +1,14 @@
 # PEPS forwarder, mirror, and dead-definition retirement
 
 This audit records the repository-local pass-through exception of
-`docs/project_conventions.md` §Style for the PEPS subdirectories. Four
+`docs/project_conventions.md` §Style for the PEPS subdirectories. Seven
 independent cleanups are covered: two forwarding lemmas with no independent
 content, one theorem that was declared three times inside a single import
-closure, three edge-incidence helpers that existed in private copies, and
-one definition with no consumer at all.
+closure, three edge-incidence helpers that existed in private copies, one
+definition with no consumer at all, two abbreviations of the same product type
+declared in a single file, a private restatement of four helpers hidden behind
+`private` in the file that owned them, and a wrapper around a Mathlib
+definition.
 
 | Removed | Replacement |
 |---|---|
@@ -15,6 +18,9 @@ one definition with no consumer at all.
 | `TNLean.PEPS.otherLeft_edge_ne'` and `TNLean.PEPS.otherRight_edge_ne'` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean` and `TNLean/PEPS/EdgeMiddlePhysical/KernelDescent.lean`) | `TNLean.PEPS.otherLeft_edge_ne` and `TNLean.PEPS.otherRight_edge_ne` in `TNLean/PEPS/Blocking.lean`, now public |
 | `TNLean.PEPS.localTensorEval` (`TNLean/PEPS/FundamentalTheorem/LocalGaugeExtraction.lean`) | none — zero consumers; the local tensor map that the file actually uses is `localTensorMap` in `TNLean/PEPS/VirtualInsertion.lean` |
 | `TNLean.PEPS.edge_ne_of_middle_incident_for_physical` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`) and `TNLean.PEPS.incidentMiddle_ne` (`TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean`) | `TNLean.PEPS.edge_ne_of_middle_incident` in `TNLean/PEPS/Blocking.lean`, now public and carrying the `incidentMiddle_ne` docstring |
+| `TNLean.PEPS.LocalConfig` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`) | `TNLean.PEPS.OpenLocalConfig` in the same file — the two abbreviations unfolded to the same product type, and the public one keeps the fuller docstring |
+| `TNLean.PEPS.edgeFinEqDelta` (private, `TNLean/PEPS/FundamentalTheorem/EdgeInsertion.lean`) | `TNLean.PEPS.finEqDelta (leftIncidentValue A ξ f) (rightIncidentValue A ξ f)`, the composition of three `GaugeAction.lean` helpers that are now public |
+| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/TwoInjectiveComparison/Basic.lean`) | `Matrix.single i j (1 : ℂ)` from Mathlib, which the removed definition merely wrapped |
 
 ## What was checked
 
@@ -71,12 +77,45 @@ and `\leanok` coverage for chapter 24 drops by one definition. The dated audit
 snapshot `blueprint/comments/20260407/ch13_lean_audit.md` still names the
 declaration; it is a historical record and was left alone.
 
+**Edge-delta helpers.** This is the same shape as the `otherLeft_edge_ne'` row
+above. `GaugeAction.lean` owned the endpoint readers of a local configuration
+and the complex-valued Kronecker delta on a finite index type, but hid all four
+declarations behind `private`, so `EdgeInsertion.lean` restated their
+composition as a single private definition spelling out the `ite` and its
+decidability instance by hand. The `GaugeAction.lean` originals —
+`leftIncidentValue`, `rightIncidentValue`, `finEqDelta`, and `finEqDelta_eq` —
+are now public and carry docstrings stating what each computes; the eight
+`edgeFinEqDelta` call sites in `EdgeInsertion.lean` were rewritten to the
+composition. One of those eight was a `have` restating `prod_off_delta_eq` only
+to name the delta product in the private spelling; with the spellings unified it
+collapses to the direct `rw [prod_off_delta_eq]` already used in
+`OneVertexComparison.lean` and `GaugeBridge.lean`. The win is not the line count
+but that a downstream file can now write the statement at all: with the
+originals private, every open-edge delta statement outside `GaugeAction.lean`
+had to be restated. Neither spelling occurs under `blueprint/src` or `docs`.
+
+**Mathlib shadow.** `matrixUnit` was a two-line wrapper whose body was
+`Matrix.single i j (1 : ℂ)`, and every one of its six uses was accompanied by a
+`simp` argument list that already named `Matrix.single` to unfold it. The uses
+now name Mathlib's spelling directly, and the six argument lists shed the
+redundant leading entry. Only `twoBlockInsertedCoeff_singletonBond_single`
+needed the classical-instance opener that the wrapper had been supplying
+implicitly. The blueprint node `def:peps_matrixUnit` is not a leaf — the
+one-shared-bond extraction theorem cites it — so the label and the `\uses`
+edge stay and only the tag changes, from a `\lean{}` naming the removed
+declaration to `\mathlibok`, this repository's documented idiom for a statement
+discharged upstream. The theorem name `twoBlockInsertedCoeff_matrixUnit` and the
+prose that describes inserting matrix units are unchanged: they name the
+mathematics, not the retired definition.
+
 ## Transition declarations
 
-Every removed name is either `private`, zero-referenced, or a byte-level mirror
-of a surviving declaration with the same fully qualified name, and no surviving
-blueprint `\lean{...}` tag cites a removed spelling. No deprecation alias is
-warranted under the pass-through exception.
+Every removed name is either `private`, zero-referenced, a byte-level mirror of
+a surviving declaration with the same fully qualified name, or — in the single
+public case, `matrixUnit` — a wrapper whose consumers all live in the file that
+declared it and were migrated in the same change. No surviving blueprint
+`\lean{...}` tag cites a removed spelling. No deprecation alias is warranted
+under the pass-through exception.
 
 ## Ledger
 
