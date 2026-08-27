@@ -488,95 +488,6 @@ theorem activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemid
   rw [F.activeRestrictedPhysicalSectorFactorization_neighboringOperator]
   exact F.compressedNeighboringOperator_posSemidef A hpos _ _
 
-/-- The complete canonical active compression associated with a
-physical-sector factorization.
-
-The stored datum is only the simultaneous choice of factor-support
-coordinates.  Its canonical projection, exact physical restriction,
-active-sector factorization, sector correspondence, neighboring congruences,
-and neighboring positivity are exposed below.
-
-Source: arXiv:1606.00608, Appendix C.2, equations `Appetakhetc` and
-`etarl`, lines 1435--1450. -/
-structure ActivePhysicalCompressionWitness
-    (F : PhysicalSectorFactorization K) where
-  /-- The support coordinates chosen in every ambient sector. -/
-  factorSupport : ActiveFactorSupportData F
-
-namespace ActivePhysicalCompressionWitness
-
-variable {F : PhysicalSectorFactorization K}
-
-/-- The canonical active compression witness. -/
-noncomputable def canonical
-    (F : PhysicalSectorFactorization K) :
-    ActivePhysicalCompressionWitness F where
-  factorSupport := F.activeFactorSupportData
-
-/-- The canonical physical-support restriction carried by the witness. -/
-noncomputable def restrictionData
-    (W : ActivePhysicalCompressionWitness F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
-    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    PhysicalSupportRestrictionData (physicalSupportProj K) K :=
-  F.activePhysicalSupportRestrictionData W.factorSupport hK hpos
-
-/-- The restricted factorization carried by the witness. -/
-noncomputable abbrev factorization
-    (W : ActivePhysicalCompressionWitness F) :
-    PhysicalSectorFactorization
-      (F.activePhysicalSupportRestriction W.factorSupport) :=
-  F.activeRestrictedPhysicalSectorFactorization W.factorSupport
-
-/-- The restricted factorization has exactly the tensor obtained from the
-canonical restriction datum. -/
-noncomputable abbrev factorizationForRestrictionData
-    (W : ActivePhysicalCompressionWitness F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
-    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    PhysicalSectorFactorization
-      (changePhysicalBasis (W.restrictionData hK hpos).inclusionᴴ K) :=
-  W.factorization
-
-/-- Sectors of the restricted factorization correspond bijectively to the
-active ambient sectors. -/
-noncomputable def sectorCorrespondence
-    (W : ActivePhysicalCompressionWitness F) :
-    Fin W.factorization.sectorCount ≃ FactorActiveSector F :=
-  F.activeSectorFinEquiv
-
-/-- The witness exposes the exact neighboring congruence for every pair of
-its active sectors.
-
-Source: arXiv:1606.00608, Appendix C.2, equations `Appetakhetc` and
-`etarl`, lines 1435--1450. -/
-theorem neighboringOperator_eq_congruence
-    (W : ActivePhysicalCompressionWitness F)
-    (j l : Fin W.factorization.sectorCount) :
-    W.factorization.neighboringOperator j l =
-      (F.neighboringSupportInclusion W.factorSupport
-          (W.sectorCorrespondence j).1 (W.sectorCorrespondence l).1)ᴴ *
-        F.neighboringOperator
-          (W.sectorCorrespondence j).1 (W.sectorCorrespondence l).1 *
-        F.neighboringSupportInclusion W.factorSupport
-          (W.sectorCorrespondence j).1
-          (W.sectorCorrespondence l).1 :=
-  F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_eq_congruence
-    W.factorSupport j l
-
-/-- The witness exposes positive semidefiniteness of every restricted
-neighboring operator, obtained by the explicit congruence.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `Appetakhetc`, lines
-1435--1450. -/
-theorem neighboringOperator_posSemidef
-    (W : ActivePhysicalCompressionWitness F)
-    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
-    (j l : Fin W.factorization.sectorCount) :
-    (W.factorization.neighboringOperator j l).PosSemidef :=
-  F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef
-    W.factorSupport hpos j l
-
 /-- The trace of each restricted neighboring operator
 $\widetilde\eta_{j,l}$ equals the trace of the ambient
 $\eta_{k,h}$ at the corresponding active sectors.
@@ -585,18 +496,18 @@ $\eta_{k,h}$ at the corresponding active sectors.
 transport is an auxiliary construction absent from CPSV16. It preserves the
 trace condition in Theorem 4.9(iv), equation `tralktrrk`, lines 864--889. See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
-theorem neighboringOperator_trace
-    (W : ActivePhysicalCompressionWitness F)
+theorem activeRestrictedPhysicalSectorFactorization_neighboringOperator_trace
+    (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : Kraus.IsInjective K.toMPSTensor)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
-    (j l : Fin W.factorization.sectorCount) :
-    (W.factorization.neighboringOperator j l).trace =
+    (j l : Fin F.activeSectorCount) :
+    ((F.activeRestrictedPhysicalSectorFactorization A).neighboringOperator
+        j l).trace =
       (F.neighboringOperator
-        (W.sectorCorrespondence j).1
-        (W.sectorCorrespondence l).1).trace := by
+        (F.activeSectorFinEquiv j).1 (F.activeSectorFinEquiv l).1).trace := by
   rw [F.activeRestrictedPhysicalSectorFactorization_neighboringOperator]
-  exact F.compressedNeighboringOperator_trace W.factorSupport hK hpos
-    (W.sectorCorrespondence j).2 (W.sectorCorrespondence l).2
+  exact F.compressedNeighboringOperator_trace A hK hpos
+    (F.activeSectorFinEquiv j).2 (F.activeSectorFinEquiv l).2
 
 /-- Restriction to the active physical support preserves a neighboring trace
 factorization.
@@ -611,23 +522,23 @@ restriction is a project auxiliary lemma, not an assertion of CPSV16. It
 preserves the conditions printed in Theorem 4.9(iv), equations `tralktrrk`
 and `PsiPhi`, lines 864--889, under the auxiliary compression recorded in
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
-noncomputable def neighboringTraceFactorization
-    (W : ActivePhysicalCompressionWitness F)
+noncomputable def activeRestrictedPhysicalSectorFactorization_neighboringTraceFactorization
+    (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : Kraus.IsInjective K.toMPSTensor)
     (H : NeighboringTraceFactorization F) :
-    NeighboringTraceFactorization W.factorization where
+    NeighboringTraceFactorization
+      (F.activeRestrictedPhysicalSectorFactorization A) where
   neighboringOperator_pos :=
-    W.neighboringOperator_posSemidef H.neighboringOperator_pos
-  a := fun j ↦ H.a (W.sectorCorrespondence j).1
-  b := fun j ↦ H.b (W.sectorCorrespondence j).1
+    F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemidef
+      A H.neighboringOperator_pos
+  a := fun j ↦ H.a (F.activeSectorFinEquiv j).1
+  b := fun j ↦ H.b (F.activeSectorFinEquiv j).1
   trace_neighboringOperator := by
     intro j l
-    rw [W.neighboringOperator_trace hK H.neighboringOperator_pos]
+    rw [F.activeRestrictedPhysicalSectorFactorization_neighboringOperator_trace
+      A hK H.neighboringOperator_pos]
     exact H.trace_neighboringOperator
-      (W.sectorCorrespondence j).1 (W.sectorCorrespondence l).1
-  sum_mul := by
-    simpa only [sectorCorrespondence] using H.sum_mul_activeSectorFinEquiv
-
-end ActivePhysicalCompressionWitness
+      (F.activeSectorFinEquiv j).1 (F.activeSectorFinEquiv l).1
+  sum_mul := H.sum_mul_activeSectorFinEquiv
 
 end MPOTensor.PhysicalSectorFactorization

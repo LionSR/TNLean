@@ -95,6 +95,20 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.reindex` identity. The three equivalences remain explicit, so the
   source-cut orientations are still visible and no searching tactic is used.
 
+### blocked-coordinate transport of a channel — promoted
+- **Pattern:** relabel the source matrix index along one equivalence, conjugate
+  by a rectangular isometry, and relabel the target index back along a second
+  equivalence; then assemble trace-preserving complete positivity from the two
+  reindexings and the single-Kraus conjugation.
+- **Seen:** four defining occurrences and four accompanying positivity proofs
+  in `TNLean/MPS/MPDO/PhysicalSectorPhysicalTransport.lean` before promotion
+  (2026-08-27).
+- **Abstraction:** the private `blockTransportMap` and
+  `blockTransportMap_isKrausCPTP` at the head of that file.
+- **Notes:** the four blocked physical-sector transports and their inverses now
+  differ only in the two coordinate equivalences and the isometry, so the
+  blocking convention stays explicit at each call site.
+
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
   site by rewriting the periodic trace as the trace of the vertical loop and
@@ -889,11 +903,12 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/ParentHamiltonian/CyclicWindowIndex.lean` provide the shared API; the
   product theorem holds for every commutative monoid. Isolating these declarations from
   `ParentHamiltonian/Defs.lean` avoids invalidating its broad downstream import cone.
-- **Result:** the exact call sites are `reindex_sitewisePhysicalMatrix_windowComplement`
-  and `embed_twoSiteSectorProjection_eq_finKronecker` in
+- **Result:** the exact call sites are the shared public lemma
+  `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` in
+  `PhysicalSectorProductTransport.lean`, used from both that file and
   `PhysicalSupportProductTransport.lean`, and
-  `reindex_physicalCoordinateMatrixN_windowComplement` in
-  `PhysicalSectorProductTransport.lean`. Across the four changed Lean files, including
+  `embed_twoSiteSectorProjection_eq_finKronecker` in
+  `PhysicalSupportProductTransport.lean`. Across the four changed Lean files, including
   the generated ParentHamiltonian aggregator, the final diff is 90 insertions and 87
   deletions, a net increase of 3 lines.
 

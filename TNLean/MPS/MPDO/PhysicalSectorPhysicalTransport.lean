@@ -25,107 +25,79 @@ namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D} {F : PhysicalSectorFactorization K}
 
+/-- Transport a channel through a change of blocked physical coordinates:
+relabel the source index along `eS`, conjugate by `V`, then relabel the target
+index back along `eT`. -/
+private noncomputable def blockTransportMap {a b a' b' : Type*}
+    [Fintype b] [Fintype b'] (eS : a ≃ b) (eT : a' ≃ b') (V : Matrix b' b ℂ) :
+    Matrix a a ℂ →ₗ[ℂ] Matrix a' a' ℂ :=
+  Matrix.equivReindexMap eT.symm ∘ₗ singleKrausMap V ∘ₗ
+    Matrix.equivReindexMap eS
+
+/-- A coordinate transport by an isometry is trace-preserving completely
+positive. -/
+private theorem blockTransportMap_isKrausCPTP {a b a' b' : Type*}
+    [Fintype a] [DecidableEq a] [Fintype b] [DecidableEq b]
+    [Fintype a'] [DecidableEq a'] [Fintype b']
+    (eS : a ≃ b) (eT : a' ≃ b') (V : Matrix b' b ℂ) (hV : Vᴴ * V = 1) :
+    IsKrausCPTP (blockTransportMap eS eT V) := by
+  classical
+  exact isKrausCPTP_comp
+    (isKrausCPTP_comp (Matrix.equivReindexMap_isKrausCPTP eS)
+      (singleKrausMap_isKrausCPTP V hV))
+    (Matrix.equivReindexMap_isKrausCPTP eT.symm)
+
 private noncomputable def physicalBlockOneMap
-    (F : PhysicalSectorFactorization K) :
-    Matrix (Fin (d * d)) (Fin (d * d)) ℂ →ₗ[ℂ]
-      Matrix (Fin (Fintype.card (SectorSiteIndex F) *
-        Fintype.card (SectorSiteIndex F)))
-        (Fin (Fintype.card (SectorSiteIndex F) *
-          Fintype.card (SectorSiteIndex F))) ℂ :=
-  Matrix.equivReindexMap
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))).symm ∘ₗ
-    singleKrausMap F.physicalCoordinateMatrixTwo ∘ₗ
-    Matrix.equivReindexMap (blockedIndexEquiv d)
+    (F : PhysicalSectorFactorization K) :=
+  blockTransportMap (blockedIndexEquiv d)
+    (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
+    F.physicalCoordinateMatrixTwo
 
 private noncomputable def physicalBlockOneInverseMap
-    (F : PhysicalSectorFactorization K) :
-    Matrix (Fin (Fintype.card (SectorSiteIndex F) *
-        Fintype.card (SectorSiteIndex F)))
-      (Fin (Fintype.card (SectorSiteIndex F) *
-        Fintype.card (SectorSiteIndex F))) ℂ →ₗ[ℂ]
-      Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
-  Matrix.equivReindexMap (blockedIndexEquiv d).symm ∘ₗ
-    singleKrausMap F.physicalCoordinateMatrixTwoᴴ ∘ₗ
-    Matrix.equivReindexMap
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
+    (F : PhysicalSectorFactorization K) :=
+  blockTransportMap (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
+    (blockedIndexEquiv d) F.physicalCoordinateMatrixTwoᴴ
 
 private noncomputable def physicalBlockTwoMap
-    (F : PhysicalSectorFactorization K) :
-    Matrix (Fin (d * d) × Fin (d * d)) (Fin (d * d) × Fin (d * d)) ℂ →ₗ[ℂ]
-      Matrix
-        (Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F)) ×
-          Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F)))
-        (Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F)) ×
-          Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F))) ℂ :=
-  Matrix.equivReindexMap
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F))).symm ∘ₗ
-    singleKrausMap F.physicalCoordinateMatrixFour ∘ₗ
-    Matrix.equivReindexMap (blockedPairEquiv d)
+    (F : PhysicalSectorFactorization K) :=
+  blockTransportMap (blockedPairEquiv d)
+    (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
+    F.physicalCoordinateMatrixFour
 
 private noncomputable def physicalBlockTwoInverseMap
-    (F : PhysicalSectorFactorization K) :
-    Matrix
-        (Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F)) ×
-          Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F)))
-        (Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F)) ×
-          Fin (Fintype.card (SectorSiteIndex F) *
-            Fintype.card (SectorSiteIndex F))) ℂ →ₗ[ℂ]
-      Matrix (Fin (d * d) × Fin (d * d)) (Fin (d * d) × Fin (d * d)) ℂ :=
-  Matrix.equivReindexMap (blockedPairEquiv d).symm ∘ₗ
-    singleKrausMap F.physicalCoordinateMatrixFourᴴ ∘ₗ
-    Matrix.equivReindexMap
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
+    (F : PhysicalSectorFactorization K) :=
+  blockTransportMap (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
+    (blockedPairEquiv d) F.physicalCoordinateMatrixFourᴴ
 
 private theorem physicalBlockOneMap_isKrausCPTP
     (F : PhysicalSectorFactorization K) :
-    IsKrausCPTP (physicalBlockOneMap F) := by
-  exact isKrausCPTP_comp
-    (isKrausCPTP_comp
-      (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d))
-      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixTwo
-        F.physicalCoordinateMatrixTwo_isometry))
-    (Matrix.equivReindexMap_isKrausCPTP
-      (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))).symm)
+    IsKrausCPTP (physicalBlockOneMap F) :=
+  blockTransportMap_isKrausCPTP (blockedIndexEquiv d)
+    (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
+    F.physicalCoordinateMatrixTwo F.physicalCoordinateMatrixTwo_isometry
 
 private theorem physicalBlockOneInverseMap_isKrausCPTP
     (F : PhysicalSectorFactorization K) :
-    IsKrausCPTP (physicalBlockOneInverseMap F) := by
-  exact isKrausCPTP_comp
-    (isKrausCPTP_comp
-      (Matrix.equivReindexMap_isKrausCPTP
-        (blockedIndexEquiv (Fintype.card (SectorSiteIndex F))))
-      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixTwoᴴ (by
-        simpa using F.physicalCoordinateMatrixTwo_coisometry)))
-    (Matrix.equivReindexMap_isKrausCPTP (blockedIndexEquiv d).symm)
+    IsKrausCPTP (physicalBlockOneInverseMap F) :=
+  blockTransportMap_isKrausCPTP
+    (blockedIndexEquiv (Fintype.card (SectorSiteIndex F)))
+    (blockedIndexEquiv d) F.physicalCoordinateMatrixTwoᴴ
+    (by simpa using F.physicalCoordinateMatrixTwo_coisometry)
 
 private theorem physicalBlockTwoMap_isKrausCPTP
     (F : PhysicalSectorFactorization K) :
-    IsKrausCPTP (physicalBlockTwoMap F) := by
-  exact isKrausCPTP_comp
-    (isKrausCPTP_comp
-      (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d))
-      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixFour
-        F.physicalCoordinateMatrixFour_isometry))
-    (Matrix.equivReindexMap_isKrausCPTP
-      (blockedPairEquiv (Fintype.card (SectorSiteIndex F))).symm)
+    IsKrausCPTP (physicalBlockTwoMap F) :=
+  blockTransportMap_isKrausCPTP (blockedPairEquiv d)
+    (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
+    F.physicalCoordinateMatrixFour F.physicalCoordinateMatrixFour_isometry
 
 private theorem physicalBlockTwoInverseMap_isKrausCPTP
     (F : PhysicalSectorFactorization K) :
-    IsKrausCPTP (physicalBlockTwoInverseMap F) := by
-  exact isKrausCPTP_comp
-    (isKrausCPTP_comp
-      (Matrix.equivReindexMap_isKrausCPTP
-        (blockedPairEquiv (Fintype.card (SectorSiteIndex F))))
-      (singleKrausMap_isKrausCPTP F.physicalCoordinateMatrixFourᴴ (by
-        simpa using F.physicalCoordinateMatrixFour_coisometry)))
-    (Matrix.equivReindexMap_isKrausCPTP (blockedPairEquiv d).symm)
+    IsKrausCPTP (physicalBlockTwoInverseMap F) :=
+  blockTransportMap_isKrausCPTP
+    (blockedPairEquiv (Fintype.card (SectorSiteIndex F)))
+    (blockedPairEquiv d) F.physicalCoordinateMatrixFourᴴ
+    (by simpa using F.physicalCoordinateMatrixFour_coisometry)
 
 private theorem physicalBlockOneMap_closure
     (F : PhysicalSectorFactorization K) (X : Matrix (Fin D) (Fin D) ℂ) :

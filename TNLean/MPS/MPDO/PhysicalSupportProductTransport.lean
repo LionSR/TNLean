@@ -64,39 +64,6 @@ theorem singleKrausMap_list_prod_of_ne_nil
           exact congrArg (singleKrausMap V X * ·)
             (ih (by simp))
 
-private theorem reindex_sitewisePhysicalMatrix_windowComplement
-    (V : Matrix (Fin d) (Fin e) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
-    Matrix.reindex (windowComplementEquiv (d := d) 2 N hN i)
-        (windowComplementEquiv (d := e) 2 N hN i)
-        (sitewisePhysicalMatrix V N) =
-      sitewisePhysicalMatrix V 2 ⊗ₖ sitewisePhysicalMatrix V (N - 2) := by
-  ext ⟨x, u⟩ ⟨y, v⟩
-  let ed := windowComplementEquiv (d := d) 2 N hN i
-  let ee := windowComplementEquiv (d := e) 2 N hN i
-  let s := ed.symm (x, u)
-  let t := ee.symm (y, v)
-  have hx : MPSTensor.extractWindow 2 i s = x :=
-    congrArg Prod.fst (ed.apply_symm_apply (x, u))
-  have hy : MPSTensor.extractWindow 2 i t = y :=
-    congrArg Prod.fst (ee.apply_symm_apply (y, v))
-  have hu : (fun r ↦ s ⟨(i.val + 2 + r.val) % N,
-      Nat.mod_lt _ (Fin.pos i)⟩) = u :=
-    congrArg Prod.snd (ed.apply_symm_apply (x, u))
-  have hv : (fun r ↦ t ⟨(i.val + 2 + r.val) % N,
-      Nat.mod_lt _ (Fin.pos i)⟩) = v :=
-    congrArg Prod.snd (ee.apply_symm_apply (y, v))
-  change (∏ n : Fin N, V (s n) (t n)) = _
-  rw [MPSTensor.prod_cyclicWindow_complement 2 N hN i]
-  simp only [MPSTensor.extractWindow] at hx hy
-  simp only [sitewisePhysicalMatrix, Matrix.kroneckerMap_apply]
-  apply congrArg₂ (fun a b : ℂ ↦ a * b)
-  · apply Finset.prod_congr rfl
-    intro r _
-    rw [congrFun hx r, congrFun hy r]
-  · apply Finset.prod_congr rfl
-    intro r _
-    rw [congrFun hu r, congrFun hv r]
-
 private noncomputable def cyclicBondProjectionFactor
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (i n : Fin N) :
     Matrix (Fin d) (Fin d) ℂ :=

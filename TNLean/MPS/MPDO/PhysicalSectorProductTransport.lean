@@ -23,6 +23,45 @@ coordinates to the original physical coordinates.
 
 open scoped Matrix BigOperators Kronecker
 
+namespace MPOTensor
+
+/-- Splitting a sitewise product over a two-site window and its cyclic
+complement writes the reindexed sitewise matrix as a Kronecker product. -/
+theorem reindex_sitewisePhysicalMatrix_windowComplement
+    {d e : ℕ} (V : Matrix (Fin d) (Fin e) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
+    Matrix.reindex (windowComplementEquiv (d := d) 2 N hN i)
+        (windowComplementEquiv (d := e) 2 N hN i)
+        (sitewisePhysicalMatrix V N) =
+      sitewisePhysicalMatrix V 2 ⊗ₖ sitewisePhysicalMatrix V (N - 2) := by
+  ext ⟨x, u⟩ ⟨y, v⟩
+  let ed := windowComplementEquiv (d := d) 2 N hN i
+  let ee := windowComplementEquiv (d := e) 2 N hN i
+  let s := ed.symm (x, u)
+  let t := ee.symm (y, v)
+  have hx : MPSTensor.extractWindow 2 i s = x :=
+    congrArg Prod.fst (ed.apply_symm_apply (x, u))
+  have hy : MPSTensor.extractWindow 2 i t = y :=
+    congrArg Prod.fst (ee.apply_symm_apply (y, v))
+  have hu : (fun r ↦ s ⟨(i.val + 2 + r.val) % N,
+      Nat.mod_lt _ (Fin.pos i)⟩) = u :=
+    congrArg Prod.snd (ed.apply_symm_apply (x, u))
+  have hv : (fun r ↦ t ⟨(i.val + 2 + r.val) % N,
+      Nat.mod_lt _ (Fin.pos i)⟩) = v :=
+    congrArg Prod.snd (ee.apply_symm_apply (y, v))
+  change (∏ n : Fin N, V (s n) (t n)) = _
+  rw [MPSTensor.prod_cyclicWindow_complement 2 N hN i]
+  simp only [MPSTensor.extractWindow] at hx hy
+  simp only [sitewisePhysicalMatrix, Matrix.kroneckerMap_apply]
+  apply congrArg₂ (fun a b : ℂ ↦ a * b)
+  · apply Finset.prod_congr rfl
+    intro r _
+    rw [congrFun hx r, congrFun hy r]
+  · apply Finset.prod_congr rfl
+    intro r _
+    rw [congrFun hu r, congrFun hv r]
+
+end MPOTensor
+
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -31,67 +70,24 @@ variable {d D : ℕ} {K : MPOTensor d D}
 chain of length `N`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1581--1583. -/
-private noncomputable def physicalCoordinateMatrixN
+private noncomputable abbrev physicalCoordinateMatrixN
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     Matrix (Fin N → Fin (Fintype.card (SectorSiteIndex F)))
       (Fin N → Fin d) ℂ :=
-  fun s t ↦ ∏ n : Fin N, F.physicalCoordinateMatrix (s n) (t n)
+  sitewisePhysicalMatrix F.physicalCoordinateMatrix N
 
 /-- The sitewise physical coordinate matrix is an isometry. -/
 private theorem physicalCoordinateMatrixN_isometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
-    (F.physicalCoordinateMatrixN N)ᴴ * F.physicalCoordinateMatrixN N = 1 := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    physicalCoordinateMatrixN]
-  simp_rw [star_prod, ← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦
-      (Finset.univ : Finset (Fin (Fintype.card (SectorSiteIndex F)))))
-    (fun n a ↦ star (F.physicalCoordinateMatrix a (x n)) *
-      F.physicalCoordinateMatrix a (y n))]
-  have hentry : ∀ n : Fin N,
-      (∑ a : Fin (Fintype.card (SectorSiteIndex F)),
-        star (F.physicalCoordinateMatrix a (x n)) *
-        F.physicalCoordinateMatrix a (y n)) =
-      if x n = y n then 1 else 0 := by
-    intro n
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Matrix.one_apply] using
-      congrFun (congrFun F.physicalCoordinateMatrix_isometry (x n)) (y n)
-  simp_rw [hentry]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
+    (F.physicalCoordinateMatrixN N)ᴴ * F.physicalCoordinateMatrixN N = 1 :=
+  sitewisePhysicalMatrix_isometry _ F.physicalCoordinateMatrix_isometry N
 
 /-- The sitewise physical coordinate matrix is a coisometry. -/
 private theorem physicalCoordinateMatrixN_coisometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     F.physicalCoordinateMatrixN N * (F.physicalCoordinateMatrixN N)ᴴ = 1 := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    physicalCoordinateMatrixN]
-  simp_rw [star_prod, ← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin d)))
-    (fun n a ↦ F.physicalCoordinateMatrix (x n) a *
-      star (F.physicalCoordinateMatrix (y n) a))]
-  have hentry : ∀ n : Fin N,
-      (∑ a, F.physicalCoordinateMatrix (x n) a *
-        star (F.physicalCoordinateMatrix (y n) a)) =
-      if x n = y n then 1 else 0 := by
-    intro n
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Matrix.one_apply] using
-      congrFun (congrFun F.physicalCoordinateMatrix_coisometry (x n)) (y n)
-  simp_rw [hentry]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
+  rw [physicalCoordinateMatrixN, sitewisePhysicalMatrix_mul_conjTranspose,
+    F.physicalCoordinateMatrix_coisometry, sitewisePhysicalMatrix_one]
 
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
 matrix.
@@ -102,101 +98,7 @@ private theorem physicalCoordinateMatrixN_mpo
     singleKrausMap (F.physicalCoordinateMatrixN N) (mpo K N) =
       mpo F.sectorCoordinateTensor N := by
   rw [F.sectorCoordinateTensor_eq_changePhysicalBasis]
-  ext s t
-  simp only [singleKrausMap_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    physicalCoordinateMatrixN, mpo_apply, mpoMatrixEntry,
-    MPOTensor.evalWord_changePhysicalBasis_ofFn, Matrix.trace_sum, Matrix.trace_smul,
-    smul_eq_mul, star_prod]
-  have hexpand :
-      (∑ q : Fin N → Fin d,
-        (∑ p : Fin N → Fin d,
-          (∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p i)) *
-            Matrix.trace (MPOTensor.evalWord K (List.ofFn p) (List.ofFn q))) *
-          (∏ i : Fin N, star (F.physicalCoordinateMatrix (t i) (q i)))) =
-        ∑ q : Fin N → Fin d, ∑ p : Fin N → Fin d,
-          ((∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p i)) *
-            Matrix.trace (MPOTensor.evalWord K (List.ofFn p) (List.ofFn q))) *
-          (∏ i : Fin N, star (F.physicalCoordinateMatrix (t i) (q i))) := by
-    apply Finset.sum_congr rfl
-    intro q _
-    simpa only using Finset.sum_mul Finset.univ
-      (fun p : Fin N → Fin d ↦
-        (∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p i)) *
-          Matrix.trace (MPOTensor.evalWord K (List.ofFn p) (List.ofFn q)))
-      (∏ i : Fin N, star (F.physicalCoordinateMatrix (t i) (q i)))
-  rw [hexpand]
-  have h := Fintype.sum_equiv
-    (MPOTensor.braKetFunctionsEquiv (i := Fin N) (a := Fin d) (b := Fin d))
-    (fun p : (Fin N → Fin d) × (Fin N → Fin d) ↦
-      (∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p.2 i)) *
-        Matrix.trace (MPOTensor.evalWord K (List.ofFn p.2) (List.ofFn p.1)) *
-        (∏ i : Fin N, star (F.physicalCoordinateMatrix (t i) (p.1 i))))
-    (fun x : Fin N → Fin d × Fin d ↦
-      (∏ i : Fin N,
-        F.physicalCoordinateMatrix (s i) (x i).1 *
-          star (F.physicalCoordinateMatrix (t i) (x i).2)) *
-        Matrix.trace (MPOTensor.evalWord K
-          (List.ofFn fun i : Fin N ↦ (x i).1)
-          (List.ofFn fun i : Fin N ↦ (x i).2)))
-    (fun p ↦ by
-      dsimp
-      change
-        (∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p.2 i)) *
-              Matrix.trace (MPOTensor.evalWord K
-                (List.ofFn p.2) (List.ofFn p.1)) *
-            (∏ i : Fin N,
-              star (F.physicalCoordinateMatrix (t i) (p.1 i))) =
-          (∏ i : Fin N,
-            F.physicalCoordinateMatrix (s i) (p.2 i) *
-              star (F.physicalCoordinateMatrix (t i) (p.1 i))) *
-            Matrix.trace (MPOTensor.evalWord K
-              (List.ofFn p.2) (List.ofFn p.1))
-      have hprod :
-          (∏ i : Fin N,
-            F.physicalCoordinateMatrix (s i) (p.2 i) *
-              star (F.physicalCoordinateMatrix (t i) (p.1 i))) =
-            (∏ i : Fin N, F.physicalCoordinateMatrix (s i) (p.2 i)) *
-              (∏ i : Fin N,
-                star (F.physicalCoordinateMatrix (t i) (p.1 i))) := by
-        exact Finset.prod_mul_distrib
-      rw [hprod]
-      ring)
-  rw [Fintype.sum_prod_type] at h
-  exact h
-
-private theorem reindex_physicalCoordinateMatrixN_windowComplement
-    (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
-    Matrix.reindex
-        (windowComplementEquiv
-          (d := Fintype.card (SectorSiteIndex F)) 2 N hN i)
-        (windowComplementEquiv (d := d) 2 N hN i)
-        (F.physicalCoordinateMatrixN N) =
-      F.physicalCoordinateMatrixN 2 ⊗ₖ F.physicalCoordinateMatrixN (N - 2) := by
-  ext ⟨x, u⟩ ⟨y, v⟩
-  let es := windowComplementEquiv
-    (d := Fintype.card (SectorSiteIndex F)) 2 N hN i
-  let ep := windowComplementEquiv (d := d) 2 N hN i
-  let s := es.symm (x, u)
-  let t := ep.symm (y, v)
-  have hes : es s = (x, u) := es.apply_symm_apply (x, u)
-  have het : ep t = (y, v) := ep.apply_symm_apply (y, v)
-  have hx : MPSTensor.extractWindow 2 i s = x := congrArg Prod.fst hes
-  have hy : MPSTensor.extractWindow 2 i t = y := congrArg Prod.fst het
-  have hu : (fun r ↦ s ⟨(i.val + 2 + r.val) % N,
-      Nat.mod_lt _ (Fin.pos i)⟩) = u := congrArg Prod.snd hes
-  have hv : (fun r ↦ t ⟨(i.val + 2 + r.val) % N,
-      Nat.mod_lt _ (Fin.pos i)⟩) = v := congrArg Prod.snd het
-  change (∏ n : Fin N, F.physicalCoordinateMatrix (s n) (t n)) = _
-  rw [MPSTensor.prod_cyclicWindow_complement 2 N hN i]
-  simp only [MPSTensor.extractWindow] at hx hy
-  simp only [physicalCoordinateMatrixN, Matrix.kroneckerMap_apply]
-  apply congrArg₂ (fun a b : ℂ ↦ a * b)
-  · apply Finset.prod_congr rfl
-    intro r _
-    rw [congrFun hx r, congrFun hy r]
-  · apply Finset.prod_congr rfl
-    intro r _
-    rw [congrFun hu r, congrFun hv r]
+  exact singleKrausMap_sitewisePhysicalMatrix_mpo _ _ _
 
 private theorem physicalCoordinateMatrixN_two
     (F : PhysicalSectorFactorization K) :
@@ -206,8 +108,9 @@ private theorem physicalCoordinateMatrixN_two
           (Fin (Fintype.card (SectorSiteIndex F)))).symm
         (finTwoArrowEquiv (Fin d)).symm F.physicalCoordinateMatrixTwo := by
   ext s t
-  simp [physicalCoordinateMatrixN, physicalCoordinateMatrixTwo,
-    Matrix.reindex_apply, Matrix.kroneckerMap_apply, finTwoArrowEquiv]
+  simp [physicalCoordinateMatrixN, sitewisePhysicalMatrix,
+    physicalCoordinateMatrixTwo, Matrix.reindex_apply,
+    Matrix.kroneckerMap_apply, finTwoArrowEquiv]
 
 private theorem singleKrausMap_physicalCoordinateMatrixN_two_physicalBond
     (F : PhysicalSectorFactorization K) :
@@ -283,14 +186,16 @@ private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ es ep es,
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ es ep ep]
   simp only [Matrix.coe_reindexLinearEquiv]
-  rw [F.reindex_physicalCoordinateMatrixN_windowComplement hN i,
+  rw [reindex_sitewisePhysicalMatrix_windowComplement
+      F.physicalCoordinateMatrix hN i,
     reindex_embedLocalOperator_windowComplement]
   have hVH : Matrix.reindex ep es (F.physicalCoordinateMatrixN N)ᴴ =
       (F.physicalCoordinateMatrixN 2)ᴴ ⊗ₖ
         (F.physicalCoordinateMatrixN (N - 2))ᴴ := by
     simpa only [Matrix.conjTranspose_reindex,
       Matrix.conjTranspose_kronecker] using congrArg Matrix.conjTranspose
-        (F.reindex_physicalCoordinateMatrixN_windowComplement hN i)
+        (reindex_sitewisePhysicalMatrix_windowComplement
+          F.physicalCoordinateMatrix hN i)
   rw [hVH, reindex_embedLocalOperator_windowComplement]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
   simp only [Matrix.mul_one]
