@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.Chain.OneSidedInverse
-import TNLean.Algebra.TracePairing
+import TNLean.MPS.Core.TracePairing
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 
 /-!

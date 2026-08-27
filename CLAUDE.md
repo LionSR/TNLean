@@ -411,7 +411,7 @@ follow-up, not against the temporary `sorry` count.
 | `SpinChain.quasiLocalTranslation_inv` | helper theorem | Rewriting the group inverse of a quasi-local translation as translation by the negative displacement | `TNLean/QCA/QuasiLocalTranslation.lean` |
 | `SpinChain.quasiLocalTranslation_one` | helper theorem | Rewriting the identity automorphism as quasi-local translation by zero | `TNLean/QCA/QuasiLocalTranslation.lean` |
 | `Kraus.map_compressed_fixedPoint` | helper theorem | Preserving a supported fixed point under finite-Kraus compression along an isometry | `QICLean/Channel/KrausCornerCompression.lean` (QICLean dependency) |
-| `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/Algebra/TracePairing.lean` |
+| `MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero` | helper theorem | Concluding that a matrix is zero from vanishing trace pairings against every one-site matrix of an injective tensor | `TNLean/MPS/Core/TracePairing.lean` |
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
 | `Complex.ofReal_sqrt_sq` | helper theorem | Squaring the complex coercion of a nonnegative real square root | `TNLean/Algebra/ComplexSqrt.lean` |

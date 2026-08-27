@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
-import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.ComplexSqrt
@@ -22,6 +21,4 @@ import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
-import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.Algebra.ProjectiveRepresentation
-import TNLean.Algebra.TracePairing

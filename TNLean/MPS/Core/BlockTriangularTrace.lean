@@ -19,7 +19,7 @@ upper-triangular tensor to its block-diagonal part.
 
 The coordinate-free strict generalization is
 `MPSTensor.sameMPV_diagPart_of_lowerZero` in
-`TNLean.Algebra.ProjectionTriangularTrace`. The declarations here retain the
+`TNLean.MPS.Core.ProjectionTriangularTrace`. The declarations here retain the
 two-block coordinate presentation as a compatibility interface; they should be
 derived from that projection formulation before deprecation.
 -/
