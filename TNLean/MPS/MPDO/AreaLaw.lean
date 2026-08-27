@@ -75,6 +75,19 @@ theorem ofFn_comp_finRotate {α : Type*} {n : ℕ} (σ : Fin (n + 1) → α) :
       rw [finRotate_apply]; ext; simp [Fin.add_def]
     rw [this]
 
+/-- For `d ≠ 0`, `d * Real.negMulLog d⁻¹ = Real.log d`.
+
+Upstreamable to Mathlib's `Mathlib/Analysis/SpecialFunctions/Log/NegMulLog.lean`,
+which has no lemma of this shape. -/
+theorem Real.mul_negMulLog_inv (d : ℝ) (hd : d ≠ 0) :
+    d * Real.negMulLog d⁻¹ = Real.log d := by
+  rw [Real.negMulLog]
+  calc
+    d * (-(d⁻¹) * Real.log (d⁻¹)) = -(d * d⁻¹ * Real.log (d⁻¹)) := by ring
+    _ = -(1 * Real.log (d⁻¹)) := by field_simp [hd]
+    _ = -Real.log (d⁻¹) := by simp
+    _ = Real.log d := by rw [Real.log_inv, neg_neg]
+
 namespace MPOTensor
 
 variable {d D : ℕ}

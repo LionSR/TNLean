@@ -35,12 +35,6 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-private lemma equivReindexMap_symm_apply_self
-    {α β : Type*} (e : α ≃ β) (X : Matrix α α ℂ) :
-    Matrix.equivReindexMap e.symm (Matrix.equivReindexMap e X) = X := by
-  ext i j
-  simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv]
-
 /-- Apply a one-to-two physical channel twice, in product coordinates. -/
 private noncomputable def refinementSquaredMap
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]

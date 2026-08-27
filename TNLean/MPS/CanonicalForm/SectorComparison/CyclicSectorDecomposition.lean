@@ -173,28 +173,6 @@ private theorem cyclic_projection_mul_right
   simpa [K, Kraus.transferMap_apply, KadisonSchwarz.krausMap] using
     KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain (K := K) (hMulDomain k) X
 
-private theorem compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner
-    {r D n : ℕ} [NeZero n]
-    (B : MPSTensor r D) (C : MPSTensor r n) (P : MatrixAlg D)
-    (T : MatrixEnd D)
-    (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P)
-    (hT : Kraus.transferMap (d := r) (D := D) (fun i => (B i)ᴴ) = T)
-    (hPproj : IsOrthogonalProjection P)
-    (hIntertwine :
-      ∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          Kraus.transferMap (d := r) (D := D) (fun i => (P * B i)ᴴ) ((φ X).1))
-    (hMul : ∀ X Y : Matrix (Fin n) (Fin n) ℂ, (φ (X * Y)).1 = (φ X).1 * (φ Y).1)
-    (hStar : ∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ)
-    (hInv : PreservesCorner P T)
-    (hCornerPrim : _root_.IsPrimitive (cornerRestriction P T hInv))
-    (hCornerIrr : IsIrreducibleOnCorner P T) :
-    _root_.IsPrimitive (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) ∧
-      IsIrreducibleMap (Kraus.transferMap (d := r) (D := n) (fun i => (C i)ᴴ)) :=
-  compressedTensor_adjointTransferMap_cornerBridge
-    (B := B) (C := C) (P := P) (T := T) (φ := φ)
-    hT hPproj hIntertwine hMul hStar hInv hCornerPrim hCornerIrr
-
 /-- Transport corner primitivity and corner irreducibility of the blocked adjoint
 transfer map to the compressed cyclic-sector tensors.
 
@@ -262,7 +240,7 @@ private theorem
     ext X : 1
     exact transferMap_adjoint_blocked_eq_pow A m X
   obtain ⟨hPrimAdj, hIrrAdj⟩ :=
-    compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner
+    compressedTensor_adjointTransferMap_cornerBridge
       (B := blockTensor A m) (C := blocks u) (P := P u) (T := T ^ m) (φ := φ u)
       hTpow (hPproj u) (hIntertwine u) (hMul u) (hStar u) hInv hCornerPrim (hCornerIrr u)
   have hM : (1 : Matrix (Fin (dim u)) (Fin (dim u)) ℂ).PosDef := by

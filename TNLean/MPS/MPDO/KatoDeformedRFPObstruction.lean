@@ -775,18 +775,6 @@ private lemma reducedBlockState_tensor_eq_scaled_one {N L : ℕ}
       show ((1 : ℂ) / 2) = (2 : ℂ)⁻¹ by norm_num]
   · simp [huv, Matrix.one_apply_ne huv]
 
-/-- For $d \neq 0$, $d \cdot \operatorname{negMulLog}(d^{-1}) = \log d$
-(project derivation). -/
-private lemma negMulLog_pow_inv_mul (d : ℝ) (hd : d ≠ 0) :
-    d * Real.negMulLog (d⁻¹) = Real.log d := by
-  rw [Real.negMulLog]
-  calc
-    d * (-(d⁻¹) * Real.log (d⁻¹)) = -(d * d⁻¹ * Real.log (d⁻¹)) := by ring
-    _ = -(1 * Real.log (d⁻¹)) := by
-      field_simp [hd]
-    _ = -Real.log (d⁻¹) := by simp
-    _ = Real.log d := by rw [Real.log_inv, neg_neg]
-
 /-- The block entropy $S_L$ for the Kato tensor equals $L \log 2$
 whenever $1 \le L < N$ (so the block is a proper subsystem).
 (project derivation; the maximally-mixed computation above
@@ -847,7 +835,7 @@ private lemma blockEntropy_tensor_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
   -- Push the Nat.cast through
   push_cast
   -- Goal: (2 ^ L : ℝ) * Real.negMulLog ((2 ^ L : ℝ)⁻¹) = (L : ℝ) * Real.log 2
-  rw [negMulLog_pow_inv_mul ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num : (2 : ℝ) ≠ 0))]
+  rw [Real.mul_negMulLog_inv ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num : (2 : ℝ) ≠ 0))]
   rw [Real.log_pow]
 
 /-- Kato's $p=1/2$ tensor saturates the area law (arXiv:1606.00608,

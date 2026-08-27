@@ -529,7 +529,9 @@ theorem IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric
   simpa only [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
     range_groundSpaceMapES, q] using hInjectiveDefect
 
-private theorem groundSpaceESHasOrthogonalProjection
+/-- The `N`-site excited-state ground space of an MPS tensor admits an
+orthogonal projection: it is a submodule of a finite-dimensional space. -/
+theorem groundSpaceESHasOrthogonalProjection
     (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
   let : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
   exact Submodule.HasOrthogonalProjection.ofCompleteSpace _

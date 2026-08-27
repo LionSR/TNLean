@@ -313,15 +313,6 @@ theorem one_site_trace_loses_sigmaZ (L : ℕ) (hL : 1 ≤ L) :
         (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :=
   reducedBlockState_M_eq_scaled_one hL (by omega)
 
-private lemma negMulLog_pow_inv_mul (d : ℝ) (hd : d ≠ 0) :
-    d * Real.negMulLog (d⁻¹) = Real.log d := by
-  rw [Real.negMulLog]
-  calc
-    d * (-(d⁻¹) * Real.log (d⁻¹)) = -(d * d⁻¹ * Real.log (d⁻¹)) := by ring
-    _ = -(1 * Real.log (d⁻¹)) := by field_simp [hd]
-    _ = -Real.log (d⁻¹) := by simp
-    _ = Real.log d := by rw [Real.log_inv, neg_neg]
-
 private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
     (hL : L ≤ N) (hM : (mpo M N).PosSemidef) :
     blockEntropy M N L hL hM = L * Real.log 2 := by
@@ -357,7 +348,7 @@ private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
       _ = ((2⁻¹ : ℝ) ^ L : ℝ) := by rw [Complex.ofReal_re]
   rw [hre, show ((2⁻¹ : ℝ) ^ L) = ((2 ^ L : ℝ)⁻¹) by simp [inv_pow]]
   push_cast
-  rw [negMulLog_pow_inv_mul ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num)), Real.log_pow]
+  rw [Real.mul_negMulLog_inv ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num)), Real.log_pow]
 
 /-- The literal tensor satisfies saturation of the area law: every nonempty proper
 reduced block is maximally mixed, so $S_L=L\log 2$ and the mutual information

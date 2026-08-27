@@ -47,6 +47,14 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
+/-- Reindexing a matrix by an equivalence and then by its inverse returns the
+original matrix. -/
+theorem equivReindexMap_symm_apply_self
+    {α β : Type*} (e : α ≃ β) (X : Matrix α α ℂ) :
+    Matrix.equivReindexMap e.symm (Matrix.equivReindexMap e X) = X := by
+  ext i j
+  simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv]
+
 /-! ### Arbitrary physical blocking -/
 
 /-- The MPO tensor obtained by blocking `L` adjacent physical sites.  A ket

@@ -195,41 +195,6 @@ theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
     exact Matrix.one_sub_supportProj_mul_mul_supportProj_eq_zero Y hGB
 
 
-/-! ## Two-block MPV formula -/
-
-/-- The MPV of `twoBlockTensor A₁ A₂` equals `mpv A₁ σ + mpv A₂ σ`. -/
-private lemma mpv_twoBlockTensor_eq {n m : ℕ} (A₁ : MPSTensor d n) (A₂ : MPSTensor d m)
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (twoBlockTensor A₁ A₂) σ = mpv A₁ σ + mpv A₂ σ := by
-  classical
-  have h :=
-    mpv_toTensorFromBlocks_eq_sum (d := d) (r := 2) (dim := ![n, m])
-      (μ := fun _ => (1 : ℂ))
-      (A := twoBlockBlocks (d := d) (n := n) (m := m) A₁ A₂) (σ := σ)
-  have h' : mpv (twoBlockTensor A₁ A₂) σ =
-      ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := by
-    convert h using 1
-    · simp [mpv, twoBlockTensor]
-      rfl
-  calc mpv (twoBlockTensor A₁ A₂) σ
-      = ∑ k : Fin 2, (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ k) σ := h'
-    _ = ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ) +
-          ((1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ (Fin.succ 0)) σ) := by
-        simp [Fin.sum_univ_succ]
-        rfl
-    _ = mpv A₁ σ + mpv A₂ σ := by
-        have h0 :
-            (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ 0) σ =
-              mpv A₁ σ := by
-          simp only [one_pow, one_smul, twoBlockBlocks]
-          rfl
-        have h1 :
-            (1 : ℂ) ^ N • mpv (twoBlockBlocks A₁ A₂ (Fin.succ 0)) σ =
-              mpv A₂ σ := by
-          simp only [one_pow, one_smul, twoBlockBlocks]
-          rfl
-        simp only [h0, h1]
-
 /-! ## Main theorem: iterated irreducible block decomposition -/
 
 /-- **Iterated invariant-projection splitting**

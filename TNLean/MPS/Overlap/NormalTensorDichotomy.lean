@@ -20,6 +20,8 @@ matrix product vectors differ by the corresponding power of the phase at every l
   to zero or has modulus tending to one with gauge-phase equivalence by a unit phase.
 * `IsNormalTensor.mpv_phase_alternative`: the overlap tends to zero, or the matrix product vectors
   differ by a unit phase raised to each chain length.
+* `overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv`: normal tensors that are not MPV-phase
+  equivalent have overlap tending to zero.
 * `EventuallyNonzeroProportionalMPV₂.exists_unit_phase_power_of_isNormalTensor`: eventually
   proportional normal matrix product vectors differ by the powers of one unit phase.
 
@@ -128,6 +130,26 @@ theorem IsNormalTensor.mpv_phase_alternative
     rw [mpv_eq_pow_mul_of_gaugePhase
       (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hrel N w,
       mpv_cast_dim hdim A N w]
+
+/-- Normal tensors which are not MPV-phase equivalent have asymptotically
+vanishing overlap.
+
+This is the contrapositive form of arXiv:1606.00608, Corollary `eqV`, lines
+1121--1128. -/
+theorem overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
+    [NeZero D₁] [NeZero D₂]
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNormalTensor A) (hB : IsNormalTensor B)
+    (hNot : ¬ MPVBlockPhaseEquiv A B) :
+    Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) := by
+  rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
+  · exact hZero
+  · exfalso
+    apply hNot
+    refine ⟨ζ, Complex.ne_zero_of_norm_eq_one hζ, ?_⟩
+    intro N _hN σ
+    have hEq := congrArg (fun v : MPVSpace d N ↦ v σ) (hState N)
+    simpa [mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hEq
 
 /-- **Geometric proportionality scalar for two normal blocks.**
 

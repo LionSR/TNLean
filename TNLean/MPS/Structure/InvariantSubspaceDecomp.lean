@@ -63,7 +63,7 @@ variable {d D : ℕ}
 /-! ## Two-block MPV evaluation -/
 
 /-- The MPV of a two-block tensor is the sum of the MPVs of its two blocks. -/
-private lemma mpv_twoBlockTensor_eq {n m N : ℕ}
+lemma mpv_twoBlockTensor_eq {n m N : ℕ}
     (A₁ : MPSTensor d n) (A₂ : MPSTensor d m) (σ : Fin N → Fin d) :
     mpv (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) σ =
       mpv A₁ σ + mpv A₂ σ := by

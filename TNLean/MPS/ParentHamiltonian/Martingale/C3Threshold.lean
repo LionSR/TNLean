@@ -39,11 +39,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private theorem groundSpaceESHasOrthogonalProjection
-    (A : MPSTensor d D) (N : ℕ) : (groundSpaceES A N).HasOrthogonalProjection := by
-  let : CompleteSpace (groundSpaceES A N) := FiniteDimensional.complete ℂ _
-  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
-
 attribute [local instance] groundSpaceESHasOrthogonalProjection
 
 private theorem tendsto_sqrt_succ_mul_pow_of_lt_one {r : ℝ}
