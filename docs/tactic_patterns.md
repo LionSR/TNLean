@@ -42,11 +42,12 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`
   (`diagBlock_diagonalRestrictionUnits_not_isNormal`).
 - **Abstraction:** `Kraus.not_isInjective_of_linearMap` and
-  `Kraus.not_isNBlkInjective_of_linearMap` in `TNLean/MPS/Defs.lean`.
+  `Kraus.not_isNBlkInjective_of_linearMap` in
+  `QICLean/Kraus/Injectivity.lean`.
 - **Notes:** the caller supplies the functional (typically a signed sum of
   `Matrix.entryLinearMap`), the vanishing proof on the generators, and one
   witness on which the functional is nonzero; the span induction disappears.
-  Both lemmas are channel-generic finite-Kraus results whose long-run home is
+  Both lemmas are channel-generic finite-Kraus results and are owned by
   QICLean's injectivity file.
 
 ### Kronecker product of matrix isometries — promoted
