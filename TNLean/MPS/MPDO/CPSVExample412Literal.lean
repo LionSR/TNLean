@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.KroneckerFactorPositivity
 import QICLean.Algebra.SpinCover.Basic
+import TNLean.Algebra.NegMulLog
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS

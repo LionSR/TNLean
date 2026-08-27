@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
 import TNLean.Algebra.ComplexSqrt
+import TNLean.Algebra.NegMulLog
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.SectorTrace

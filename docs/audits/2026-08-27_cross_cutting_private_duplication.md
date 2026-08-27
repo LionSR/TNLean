@@ -14,8 +14,8 @@ terminology.
 | `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv` (private, `TNLean/MPS/CanonicalForm/BNTCharacterization.lean`) | `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv`, new public theorem in `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` beside `IsNormalTensor.mpv_phase_alternative`, of which it is the contrapositive |
 | `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv` (private, `TNLean/MPS/RFP/BeigiLoopBNTIdentification.lean`) | the same new public theorem in `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` |
 | `MPOTensor.equivReindexMap_symm_apply_self` (private, `TNLean/MPS/MPDO/RFPViaTSBlocking.lean`) | `MPOTensor.equivReindexMap_symm_apply_self`, moved from `TNLean/MPS/MPDO/BNTChannelComposition.lean` to their common ancestor `TNLean/MPS/MPDO/PhysicalBlocking.lean` under the same fully qualified name |
-| `MPOTensor.KatoDeformedRFPObstruction.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean`) | `Real.mul_negMulLog_inv`, new public theorem at root level of `TNLean/MPS/MPDO/AreaLaw.lean` |
-| `MPOTensor.CPSVExample412Literal.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/CPSVExample412Literal.lean`) | `Real.mul_negMulLog_inv` in `TNLean/MPS/MPDO/AreaLaw.lean` |
+| `MPOTensor.KatoDeformedRFPObstruction.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean`) | `Real.mul_negMulLog_inv`, new public theorem in `TNLean/Algebra/NegMulLog.lean` |
+| `MPOTensor.CPSVExample412Literal.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/CPSVExample412Literal.lean`) | `Real.mul_negMulLog_inv` in `TNLean/Algebra/NegMulLog.lean` |
 | `MPSTensor.compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.compressedTensor_adjointTransferMap_cornerBridge` (`TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`), which the removed wrapper forwarded to with an identical argument list |
 | `MPSTensor.mpv_twoBlockTensor_eq` (private, `TNLean/MPS/CanonicalForm/Reduction.lean`) | `MPSTensor.mpv_twoBlockTensor_eq` in `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`, now public — the module that owns `twoBlockTensor` and `twoBlockBlocks` |
 
@@ -45,10 +45,10 @@ confirms it still resolves.
 **Negated multiplication by a logarithm.** The identity relating a nonzero real
 multiplied by the negated-multiply-logarithm of its inverse to the logarithm of
 the real itself was proved twice, in two modules that both import
-`TNLean/MPS/MPDO/AreaLaw.lean`. The survivor is stated in that ancestor at root
-level, in the `Real` namespace where the Mathlib lemmas it composes live; it is
-upstreamable, since Mathlib's `Analysis/SpecialFunctions/Log/NegMulLog.lean` has
-no lemma of this shape. The two call sites now name it.
+`TNLean/MPS/MPDO/AreaLaw.lean`. The survivor is stated in `TNLean/Algebra/NegMulLog.lean`, in the `Real`
+namespace where the Mathlib lemmas it composes live; it is upstreamable, since
+Mathlib's `Analysis/SpecialFunctions/Log/NegMulLog.lean` has no lemma of this
+shape. Both consuming modules import the lightweight owner directly.
 
 **Corner-bridge wrapper.** The private theorem in `CyclicSectorDecomposition.lean`
 restated the signature of `compressedTensor_adjointTransferMap_cornerBridge` and

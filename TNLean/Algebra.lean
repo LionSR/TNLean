@@ -19,6 +19,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
+import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.ProjectionTriangularTrace
