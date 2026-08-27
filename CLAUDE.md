@@ -416,7 +416,5 @@ follow-up, not against the temporary `sorry` count.
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
 | `Complex.ofReal_sqrt_sq` | helper theorem | Squaring the complex coercion of a nonnegative real square root | `TNLean/Algebra/ComplexSqrt.lean` |
 | `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `TNLean/Algebra/MatrixIsometryKronecker.lean` |
-| `Matrix.reindex_mul_reindex` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences | `TNLean/Algebra/MatrixReindex.lean` |
-| `Matrix.reindex_eq_of_apply_eq` | helper theorem | Packaging an original-coordinate entry formula as an equality after matrix reindexing | `TNLean/Algebra/MatrixReindex.lean` |
-| `Matrix.apply_eq_of_reindex_eq` | helper theorem | Recovering an original-coordinate entry formula from an equality after matrix reindexing | `TNLean/Algebra/MatrixReindex.lean` |
+| `Matrix.reindexLinearEquiv_mul` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences; instantiate all three equivalences explicitly | `Mathlib/LinearAlgebra/Matrix/Reindex.lean` |
 | `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean` |
