@@ -38,7 +38,7 @@ jobs:
       CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.base_ref }}
           fetch-depth: 10
@@ -80,7 +80,7 @@ jobs:
 
       - name: Set up Python for warning summary
         if: always() && steps.write_mode.outputs.skip != 'true'
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
