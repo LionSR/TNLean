@@ -1550,9 +1550,9 @@ current counts and full location lists).
   cancel the resulting normalization with
   `(x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1` for `0 < x`.
 - **Seen:** 2 occurrences in `TNLean/MPS/MPU/PhysicalAncilla.lean`:
-  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 188--210), for
+  `MPOTensor.transferMap_normalizedDiagonalLift` (lines 180--202), for
   `A ij * X * (A ij)ᴴ`, and
-  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 252--273), for
+  `MPOTensor.leftCanonical_normalizedDiagonalLift` (lines 244--265), for
   `(A ij)ᴴ * A ij`.
 - **Abstraction (proposed):** if a third occurrence appears, extract the
   lowest-sufficient helper lemma shared by both matrix-product orientations;

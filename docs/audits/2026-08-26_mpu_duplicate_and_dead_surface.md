@@ -9,9 +9,10 @@ declaration that supersedes it. No compatibility alias is provided; every
 removed name was `private` or had no consumer at all.
 
 Each removal was checked by name across `TNLean/` (excluding `Archive/`),
-`blueprint/src/`, and `docs/`, and confirmed by a full `lake build`. None of the
-removed names carries a blueprint `\lean{...}` tag, so no blueprint entry was
-redirected.
+`blueprint/src/`, and `docs/`, and confirmed by a full `lake build`. Through the
+section on zero-reference declarations below, none of the removed names carries
+a blueprint `\lean{...}` tag, so no blueprint entry was redirected. The two
+later sections are the exception and record their own blueprint handling.
 
 ## Duplicated helper lemmas
 
@@ -85,6 +86,60 @@ The three predicates retained in `MPUCanonicalForm.lean`
 (`MPSTensor.IsMPUCanonicalBlock`, `MPSTensor.MPUCanonicalFormData`,
 `MPSTensor.IsMPUCanonicalForm`) are the ones the blueprint cites; all three are
 untouched.
+
+## Duplicated configuration-splitting equivalences
+
+The sitewise splitting of a product-valued physical configuration into its two
+component configurations was declared three times: once in the algebra layer and
+twice more under `TNLean/MPS/MPU/`, one of the two an alias whose body is a
+single call and the other a character-for-character copy of the algebra-layer
+body. Both MPU copies were removed and their four use sites retargeted at the
+algebra-layer declaration.
+
+| Removed | Replacement |
+| --- | --- |
+| `MPOTensor.tensorProductConfigEquiv` (`TNLean/MPS/MPU/TensorProduct.lean`) | `finTupleProdEquiv` (`TNLean/Algebra/FinTupleEquiv.lean`) |
+| `MPOTensor.physicalAncillaConfigEquiv` (`TNLean/MPS/MPU/PhysicalAncilla.lean`) | `finTupleProdEquiv` (`TNLean/Algebra/FinTupleEquiv.lean`) |
+
+One blueprint payload was shortened rather than redirected. The definition node
+for the independent tensor product of matrix product operator tensors named
+three declarations, the third of which was the removed alias; the name it
+forwarded to is already tagged, with its own proof marked complete, at the node
+for the independent tensor product of matrix product state tensors, so
+repeating it here would double-tag one declaration across two nodes. The prose
+of the shortened node is unchanged, including its closing sentence about
+sitewise splitting, which is the prose of the surviving declaration.
+
+`TNLean/MPS/MPU/PhysicalAncilla.lean` gained the explicit import of the algebra
+module it now uses; the module was already in its transitive import closure.
+
+## Mirrored blocking factorizations
+
+The one-site blocking bound for the left source-cut rank was proved by an
+explicit factorization of the second source-cut matrix that mirrors, symbol for
+symbol, the factorization already proved for the first. Physical adjunction is
+the transport carrying one orientation to the other: it exchanges the two source
+ranks and commutes with physical blocking, so the left bound follows from the
+right one in three rewriting steps. The mirrored factorization and its two
+auxiliary matrices were removed.
+
+| Removed | Replacement |
+| --- | --- |
+| `MPOTensor.leftSuccLeft` (private, `TNLean/MPS/MPU/BlockingRanks.lean`) | none — the transported proof needs no factorization matrices |
+| `MPOTensor.leftSuccRight` (private, `TNLean/MPS/MPU/BlockingRanks.lean`) | none — the transported proof needs no factorization matrices |
+| `MPOTensor.sourceCutM₂_blockTensor_succ_factorization` (private, `TNLean/MPS/MPU/BlockingRanks.lean`) | `MPOTensor.rightRank_physicalAdjointTensor` composed with `MPOTensor.physicalAdjointTensor_blockTensor` |
+
+Both public theorems of the module keep their statements and their blueprint
+tags: only the proof body of the left-rank bound changed.
+
+The commutation of blocking with the physical adjoint was rehomed from
+`TNLean/MPS/MPU/DoubleLayerContraction.lean` to
+`TNLean/MPS/MPDO/PhysicalBlocking.lean`, where the blocking operation itself is
+defined, so that the rank module reaches it without importing the double-layer
+development. The statement, the name, and the source citation are unchanged, so
+its blueprint tag is unaffected. `TNLean/MPS/MPDO/PhysicalBlocking.lean` gained
+the import of the physical-adjoint module, which imports only the shared MPDO
+definitions and therefore introduces no cycle.
 
 ## Records
 

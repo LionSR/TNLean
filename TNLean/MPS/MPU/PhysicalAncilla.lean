@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPU.CanonicalForm
 
 /-!
@@ -16,8 +17,6 @@ the virtual bond dimension remains \(D\).
 ## Main definitions
 
 * `MPOTensor.tensorPhysicalId`: attach an identity ancilla at each physical site.
-* `MPOTensor.physicalAncillaConfigEquiv`: split every enlarged physical configuration
-  into its original and ancilla configurations.
 * `MPOTensor.doubledPhysicalAncillaShuffle`: separate the original and ancilla doubled indices.
 * `MPOTensor.normalizedDiagonalLift`: adjoin the normalized diagonal ancilla alphabet.
 * `MPOTensor.normalizedDiagonalLiftCFIIData`: construct canonical-form-II data for the lift.
@@ -58,13 +57,6 @@ def tensorPhysicalId (U : MPOTensor d D) (x : ℕ) : MPOTensor (d * x) D :=
       U i j β α * if a = b then 1 else 0 := by
   by_cases h : a = b <;> simp [tensorPhysicalId, h]
 
-/-- Split a sitewise enlarged physical configuration into its original and
-ancilla configurations. -/
-def physicalAncillaConfigEquiv (N d x : ℕ) :
-    (Fin N → Fin (d * x)) ≃ (Fin N → Fin d) × (Fin N → Fin x) :=
-  (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv.symm).trans
-    (Equiv.arrowProdEquivProdArrow (Fin N) (fun _ ↦ Fin d) (fun _ ↦ Fin x))
-
 private theorem evalWord_tensorPhysicalId (U : MPOTensor d D) (x : ℕ)
     (is js : List (Fin (d * x))) :
     evalWord (tensorPhysicalId U x) is js =
@@ -88,8 +80,8 @@ sitewise product coordinates.
 Source: arXiv:1703.09188, lines 706--724. -/
 theorem mpo_tensorPhysicalId (U : MPOTensor d D) (x N : ℕ) :
     mpo (tensorPhysicalId U x) N =
-      Matrix.reindex (physicalAncillaConfigEquiv N d x).symm
-        (physicalAncillaConfigEquiv N d x).symm
+      Matrix.reindex (finTupleProdEquiv N d x).symm
+        (finTupleProdEquiv N d x).symm
         (mpo U N ⊗ₖ (1 : Matrix (Fin N → Fin x) (Fin N → Fin x) ℂ)) := by
   ext σ τ
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
@@ -97,7 +89,7 @@ theorem mpo_tensorPhysicalId (U : MPOTensor d D) (x N : ℕ) :
   rw [evalWord_tensorPhysicalId]
   simp only [List.length_ofFn, true_and, List.map_ofFn]
   by_cases h : (fun c ↦ (σ c).modNat) = (fun c ↦ (τ c).modNat) <;>
-    simp [physicalAncillaConfigEquiv, Equiv.arrowCongr, Function.comp_def, h]
+    simp [finTupleProdEquiv, Equiv.arrowCongr, Function.comp_def, h]
 
 /-- Attaching a nonempty physical identity ancilla preserves the matrix product
 unitary property.

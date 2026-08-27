@@ -162,8 +162,8 @@ theorem mpo_shiftExampleU₁ (d N : ℕ) : mpo (shiftExampleU₁ d) N = 1 := by
 /-- Exact all-chain formula for $U_2$. -/
 theorem mpo_shiftExampleU₂ (d N : ℕ) [NeZero N] :
     mpo (shiftExampleU₂ d) N =
-      Matrix.reindex (tensorProductConfigEquiv N d d).symm
-        (tensorProductConfigEquiv N d d).symm
+      Matrix.reindex (finTupleProdEquiv N d d).symm
+        (finTupleProdEquiv N d d).symm
         ((Equiv.Perm.permMatrix ℂ (rotateConfig N d))ᴴ ⊗ₖ
           Equiv.Perm.permMatrix ℂ (rotateConfig N d)) := by
   rw [shiftExampleU₂, mpo_tensorProduct, mpo_leftShiftTensor,
@@ -172,8 +172,8 @@ theorem mpo_shiftExampleU₂ (d N : ℕ) [NeZero N] :
 /-- Exact all-chain formula for $U_3$. -/
 theorem mpo_shiftExampleU₃ (d N : ℕ) [NeZero N] :
     mpo (shiftExampleU₃ d) N =
-      Matrix.reindex (tensorProductConfigEquiv N d d).symm
-        (tensorProductConfigEquiv N d d).symm
+      Matrix.reindex (finTupleProdEquiv N d d).symm
+        (finTupleProdEquiv N d d).symm
         (Equiv.Perm.permMatrix ℂ (rotateConfig N d) ⊗ₖ
           (Equiv.Perm.permMatrix ℂ (rotateConfig N d))ᴴ) := by
   rw [shiftExampleU₃, mpo_tensorProduct, mpo_rightShiftTensor,

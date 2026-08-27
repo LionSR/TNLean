@@ -9,6 +9,7 @@ import QICLean.Channel.KrausCPTP
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalClosure
 
 /-!
@@ -23,6 +24,8 @@ arXiv:1606.00608.
 
 * `MPOTensor.blockTensor`: the tensor obtained by blocking an arbitrary number
   of adjacent sites.
+* `MPOTensor.physicalAdjointTensor_blockTensor`: physical blocking commutes with
+  the physical adjoint.
 * `MPOTensor.continuous_blockTensor` and `Continuous.blockTensor`: fixed-length
   blocking is continuous, including along continuous tensor families.
 * `MPOTensor.mpo_blockTensor_eq_reindex`: closing a blocked chain gives the
@@ -76,6 +79,21 @@ lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
     (i j : Fin (MPSTensor.blockPhysDim d L)) :
     blockTensor M L i j =
       evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j) :=
+  rfl
+
+/-- Physical blocking commutes with the physical adjoint. The equality is
+literal: both operations preserve the order of the virtual word.
+
+Source: arXiv:1703.09188, lines 390--405. -/
+theorem physicalAdjointTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
+    physicalAdjointTensor (blockTensor U L) =
+      blockTensor (physicalAdjointTensor U) L := by
+  funext I K
+  ext β α
+  rw [blockTensor_apply]
+  have h := evalWord_physicalAdjointTensor U
+    (MPSTensor.wordOfBlock d L I) (MPSTensor.wordOfBlock d L K) (by simp)
+  rw [h]
   rfl
 
 /-- Word evaluation at fixed ket and bra words depends continuously on the MPO tensor.

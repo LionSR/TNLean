@@ -24,8 +24,6 @@ Theorem in arXiv:1703.09188, lines 824--847.
 
 * `MPOTensor.tensorProduct`: the local Kronecker product with standard finite-product
   coordinates.
-* `MPOTensor.tensorProductConfigEquiv`: the sitewise splitting of product physical
-  configurations.
 * `MPOTensor.tensorProductBlockEquiv`: the splitting of blocked product letters into
   the two component blocked letters.
 * `MPOTensor.tensorProductCutShuffle`: the shuffle relating a Kronecker product of
@@ -65,11 +63,6 @@ def tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
         (finProdFinEquiv (α, γ)) (finProdFinEquiv (β, δ)) =
       U i j α β * V k l γ δ := by
   simp [tensorProduct, Matrix.reindex_apply]
-
-/-- Split a product-valued physical configuration site by site. -/
-def tensorProductConfigEquiv (N d e : ℕ) :
-    (Fin N → Fin (d * e)) ≃ (Fin N → Fin d) × (Fin N → Fin e) :=
-  finTupleProdEquiv N d e
 
 /-- Split every letter of a blocked product alphabet and re-encode the two
 component words as a pair of blocked letters.
@@ -152,13 +145,13 @@ the two closed MPOs, in sitewise product coordinates.
 Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
 theorem mpo_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) (N : ℕ) :
     mpo (tensorProduct U V) N =
-      Matrix.reindex (tensorProductConfigEquiv N d e).symm
-        (tensorProductConfigEquiv N d e).symm (mpo U N ⊗ₖ mpo V N) := by
+      Matrix.reindex (finTupleProdEquiv N d e).symm
+        (finTupleProdEquiv N d e).symm (mpo U N ⊗ₖ mpo V N) := by
   ext σ τ
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
     mpo_apply, mpoMatrixEntry]
   rw [evalWord_tensorProduct, Matrix.trace_reindex, Matrix.trace_kronecker]
-  simp [tensorProductConfigEquiv, Function.comp_def]
+  simp [Function.comp_def]
 
 /-- Independent tensor products of matrix product unitaries are matrix product
 unitaries.

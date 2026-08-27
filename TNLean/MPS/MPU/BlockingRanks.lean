@@ -124,62 +124,6 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
   · intro i hi
     simp [hi]
 
-private noncomputable def leftSuccLeft (U : MPOTensor d D) (k : ℕ) :
-    Matrix (Fin D × Fin (Kraus.blockPhysDim d (k + 1)))
-      (Fin d × Fin ℓ[blockTensor U k]) ℂ :=
-  fun (α, I) (j, q) =>
-    ∑ γ : Fin D, U (blockHead k I) j α γ *
-      Matrix.conjTranspose (sourceSVD₂ (blockTensor U k)).V (γ, blockTail k I) q
-
-private noncomputable def leftSuccRight (U : MPOTensor d D) (k : ℕ) :
-    Matrix (Fin d × Fin ℓ[blockTensor U k])
-      (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D) ℂ :=
-  fun (j, q) (J, β) =>
-    if j = blockHead k J then
-      ((sourceSVD₂ (blockTensor U k)).diagonal *
-        (sourceSVD₂ (blockTensor U k)).U) q (blockTail k J, β)
-    else 0
-
-private theorem sourceCutM₂_blockTensor_succ_factorization
-    (U : MPOTensor d D) (k : ℕ) :
-    sourceCutM₂ (blockTensor U (k + 1)) =
-      leftSuccLeft U k * leftSuccRight U k := by
-  classical
-  let S := sourceSVD₂ (blockTensor U k)
-  ext ⟨α, I⟩ ⟨J, β⟩
-  symm
-  simp only [sourceCutM₂_apply, Matrix.mul_apply, leftSuccLeft, leftSuccRight]
-  rw [Fintype.sum_prod_type, Fintype.sum_eq_single (blockHead k J)]
-  · simp only [ite_eq_left]
-    change (∑ q, (∑ γ, U (blockHead k I) (blockHead k J) α γ *
-      Matrix.conjTranspose S.V (γ, blockTail k I) q) *
-        (S.diagonal * S.U) q (blockTail k J, β)) = _
-    calc
-      ∑ q, (∑ γ, U (blockHead k I) (blockHead k J) α γ *
-          Matrix.conjTranspose S.V (γ, blockTail k I) q) *
-          (S.diagonal * S.U) q (blockTail k J, β) =
-          ∑ γ, U (blockHead k I) (blockHead k J) α γ *
-            ∑ q, Matrix.conjTranspose S.V (γ, blockTail k I) q *
-              (S.diagonal * S.U) q (blockTail k J, β) := by
-            simp only [Finset.sum_mul, mul_assoc]
-            rw [Finset.sum_comm]
-            apply Finset.sum_congr rfl
-            intro γ _
-            rw [Finset.mul_sum]
-      _ = ∑ γ, U (blockHead k I) (blockHead k J) α γ *
-            sourceCutM₂ (blockTensor U k) (γ, blockTail k I)
-              (blockTail k J, β) := by
-            apply Finset.sum_congr rfl
-            intro γ _
-            rw [sourceCutSVD_factorization_apply S]
-      _ = (U (blockHead k I) (blockHead k J) *
-            blockTensor U k (blockTail k I) (blockTail k J)) α β := by
-            simp only [sourceCutM₂_apply, Matrix.mul_apply]
-      _ = blockTensor U (k + 1) I J α β := by
-            rw [blockTensor_succ_apply]
-  · intro j hj
-    simp [hj]
-
 /-- Blocking one additional site multiplies the right source-cut rank by at most $d$.
 
 This is the one-site form of the right-rank upper bound in the proof of
@@ -196,9 +140,15 @@ This is the one-site form of the left-rank upper bound in the proof of
 arXiv:1703.09188, Proposition IV.2 (`index-well-defined`), lines 697--703. -/
 theorem leftRank_blockTensor_succ_le (U : MPOTensor d D) (k : ℕ) :
     ℓ[blockTensor U (k + 1)] ≤ d * ℓ[blockTensor U k] := by
-  rw [leftRank, sourceCutM₂_blockTensor_succ_factorization]
-  exact (Matrix.rank_mul_le_left _ _).trans
-    ((Matrix.rank_le_card_width (leftSuccLeft U k)).trans_eq (by simp))
+  calc ℓ[blockTensor U (k + 1)]
+      = r[blockTensor (physicalAdjointTensor U) (k + 1)] := by
+        rw [← physicalAdjointTensor_blockTensor,
+          rightRank_physicalAdjointTensor]
+    _ ≤ d * r[blockTensor (physicalAdjointTensor U) k] :=
+        rightRank_blockTensor_succ_le (physicalAdjointTensor U) k
+    _ = d * ℓ[blockTensor U k] := by
+        rw [← physicalAdjointTensor_blockTensor,
+          rightRank_physicalAdjointTensor]
 
 /-- Between direct blocking lengths $k_0 \leq k$, the right rank grows by at most
 $d^{k-k_0}$.
