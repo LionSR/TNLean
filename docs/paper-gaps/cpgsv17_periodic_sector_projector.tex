@@ -144,10 +144,11 @@ The periodic-sector step is complete under literal CPSV canonical form and
 under the stronger normalized BNT-refined predicate
 \path{MPOTensor.IsHorizontalCF}. The source's all-length condition for its
 distinguished periodic-sector projector is formalized as
-\leanid{MPOTensor.PeriodicSectorProjector.not_commute}. The stronger retired
-predicate required this noncommutation at every length for every displaced
-projector; that uniform condition is used by neither proof and is not
-formalized.
+\leanid{MPOTensor.PeriodicSectorProjector.not_commute}. The stronger uniform
+predicate requiring this noncommutation at every length for every displaced
+Hermitian idempotent remains formalized, but deprecated, as
+\leanid{MPOTensor.NoninvariantProjectorNoncommuting}; it is used by neither
+active proof and is retained only for API compatibility.
 
 Combining literal periodic exclusion with literal invariant-projector closure
 produces normal vertical corners with positive weights and exact letterwise
