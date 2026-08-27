@@ -3,8 +3,9 @@
 Two zero-reference passes over `TNLean/MPS/MPDO/` were applied in one commit.
 The first audited a closed subgraph of six declarations whose only occurrence
 anywhere in `TNLean/`, `blueprint/`, or `docs/` was the definition site plus a
-module-docstring bullet. Five were removed; the distinct public weighted-sector
-abbreviation is retained as deprecated compatibility. The second removed six
+module-docstring bullet. Four were removed; the distinct public weighted-sector
+abbreviation and multiplicity-spectrum constructor are retained as deprecated
+compatibility. The second removed six
 attribute-carrying declarations
 in the same directory, which a name-level grep cannot settle on its own — a
 `@[simp]` lemma can be consumed by a name-free tactic invocation — so both sets
@@ -25,20 +26,20 @@ paired with its replacement below.
 | `MPOTensor.BNTFusionTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTFusionTensorClause.lean` | the same, after `BNTFusionTensorClause.toBNTAlgebraTensorClause` |
 | `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | retained with its exact former signature as deprecated compatibility; new code uses `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity` directly |
 | `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalUnitary.lean` | `gauge_gram_eq_pos_smul_one_of_identityMarkedRealization` followed by `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`, both retained |
-| `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` | `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
+| `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` | retained with its exact former signature as a deprecated wrapper around `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
 
 The first three are one restatement carried through three carriers: the clause
 structure already exposes every field of the vertical canonical form, so the
 theorem was the anonymous constructor written out with a name attached, and each
 downstream carrier re-forwarded it. Nothing consumed any of the three.
 
-The subgraph remains closed after removing five strands; the sixth,
-`RelabeledTwoSiteWeightedSectorSpace`, is a distinct public API and remains under
-its exact former name and signature with a deprecation. Its module-docstring
-bullet is retained accordingly. The bullets naming
-`exists_unitary_sector_conjugacy_of_identityMarkedRealization` and
-`toMultiplicitySpectrumComparison` were removed alongside those declarations;
-the sibling bullets around them (`RelabeledTwoSiteSectorAlgebra`,
+The subgraph remains closed after removing four strands. Two distinct public APIs
+remain under their exact former names and signatures with deprecations:
+`RelabeledTwoSiteWeightedSectorSpace` and
+`toMultiplicitySpectrumComparison`. Their module-docstring bullets are retained
+accordingly. The bullet naming
+`exists_unitary_sector_conjugacy_of_identityMarkedRealization` was removed with
+that declaration; the sibling bullets around it (`RelabeledTwoSiteSectorAlgebra`,
 `relabeledTwoSiteRetainedEquiv`,
 `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`,
 `exists_unitary_sector_conjugacy_of_positive_tail_reflected_target`,
@@ -71,13 +72,19 @@ through `traceScalars_traceScalar`'s neighbourhood in the clause API.
 `sigmaZ_apply_ne` and `complementPathWeight_zero` are attribute-carrying
 siblings of removed lemmas but are both used by name, and are untouched.
 
-## Restored set: empty
+## Restored set: two compatibility declarations
 
 The root `lake build` was clean on the first attempt across all 10,365 jobs,
-with every reverse dependent of the seven edited modules rebuilt. No declaration
-had to be put back, so there is no "fires inside a bare tactic call" retention
-to record and no tactic pattern to promote into `docs/tactic_patterns.md` from
-this batch.
+with every reverse dependent of the seven edited modules rebuilt. That build did
+not expose a name-free in-tree consumer, so there is no "fires inside a bare
+tactic call" retention or tactic pattern to promote into
+`docs/tactic_patterns.md` from this batch. API review nevertheless restored
+`RelabeledTwoSiteWeightedSectorSpace` and
+`toMultiplicitySpectrumComparison`: the former names a public weighted-sector
+type, while the latter is a distinct data-producing constructor rather than a
+theorem forwarder or structure-field projection. They remain with their exact
+former signatures as dated deprecated compatibility
+declarations.
 
 ## Refuted candidate
 
