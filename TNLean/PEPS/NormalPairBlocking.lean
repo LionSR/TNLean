@@ -72,13 +72,6 @@ def regionInjectivityDataPair (κ κ' : RegionInjectivityData V) :
     RegionInjectivityData V where
   IsInjective R := κ.IsInjective R ∧ κ'.IsInjective R
 
-omit [Fintype V] [LinearOrder V] in
-@[simp] theorem regionInjectivityDataPair_isInjective
-    (κ κ' : RegionInjectivityData V) (R : Finset V) :
-    (regionInjectivityDataPair κ κ').IsInjective R ↔
-      κ.IsInjective R ∧ κ'.IsInjective R :=
-  Iff.rfl
-
 /-! ### Projections of a one-edge blocking datum
 
 A one-edge blocking datum over a stronger predicate projects to a datum over a
@@ -127,42 +120,6 @@ def NormalEdgeBlockingData.pairRight {κ κ' : RegionInjectivityData V} {e : Edg
     (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
     NormalEdgeBlockingData κ' G e :=
   D.ofLE fun _ h => h.2
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem NormalEdgeBlockingData.pairLeft_red
-    {κ κ' : RegionInjectivityData V} {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
-    D.pairLeft.red = D.red := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem NormalEdgeBlockingData.pairLeft_blue
-    {κ κ' : RegionInjectivityData V} {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
-    D.pairLeft.blue = D.blue := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem NormalEdgeBlockingData.pairLeft_complement
-    {κ κ' : RegionInjectivityData V} {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
-    D.pairLeft.complement = D.complement := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem NormalEdgeBlockingData.pairRight_red
-    {κ κ' : RegionInjectivityData V} {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
-    D.pairRight.red = D.red := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem NormalEdgeBlockingData.pairRight_blue
-    {κ κ' : RegionInjectivityData V} {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
-    D.pairRight.blue = D.blue := rfl
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem NormalEdgeBlockingData.pairRight_complement
-    {κ κ' : RegionInjectivityData V} {e : Edge G}
-    (D : NormalEdgeBlockingData (regionInjectivityDataPair κ κ') G e) :
-    D.pairRight.complement = D.complement := rfl
 
 /-! ### Boundary edges of a proper region on a connected graph
 
