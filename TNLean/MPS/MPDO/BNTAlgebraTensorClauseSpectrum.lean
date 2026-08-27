@@ -32,8 +32,6 @@ under literal CPSV canonical form and MPDO positivity is documented in
   comparison directly from the tensor algebra clause.
 * `MPOTensor.BNTAlgebraTensorClause.toTwoSiteExactSectorGauge` additionally retains the
   bond-dimension identifications and exact invertible gauges of the paired sectors.
-* `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` retains the
-  resulting multiplicity-spectrum comparison alone.
 
 ## References
 
@@ -692,19 +690,6 @@ noncomputable def toTwoSiteMultiplicitySpectrum
     (hM : IsMPDO M) :
     TwoSiteMultiplicitySpectrum H :=
   (H.toTwoSiteExactSectorGauge hCanonical hM).toTwoSiteMultiplicitySpectrum
-
-/-- The two-site multiplicity spectrum under literal CPSV canonical form entails
-the corresponding multiplicity-spectrum comparison.
-
-Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-noncomputable def toMultiplicitySpectrumComparison
-    {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
-    (hM : IsMPDO M) :
-    BNTMultiplicitySpectrumComparison H.algebraClause.positiveChi.chi
-      H.traceScalars :=
-  (H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison
 
 end BNTAlgebraTensorClause
 

@@ -212,12 +212,6 @@ noncomputable def toBNTAlgebraTensorClause (H : BNTFusionTensorClause M) :
   algebraClause := H.toBNTFusionCoisometryFamily.toBNTAlgebraClause
     (verticalBNTTraceScalarFamily H.weight) H.idempotent
 
-/-- The chosen decomposition in a tensor-attached fusion clause is a vertical
-canonical form of the underlying MPO tensor. -/
-theorem isVerticalCF (H : BNTFusionTensorClause M) : IsVerticalCF M :=
-  BNTAlgebraTensorClause.isVerticalCF
-    (BNTFusionTensorClause.toBNTAlgebraTensorClause H)
-
 end BNTFusionTensorClause
 
 /-- Existence of the active-support fusion clause for a chosen vertical canonical

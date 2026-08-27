@@ -143,6 +143,9 @@ rather than the raw reflected target.  See
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
+@[deprecated "Unused alternative constructor for `IdentityMarkedRealization`; the
+retained route is `IdentityMarkedRealization.ofPositiveTailReflectedTarget`, whose
+hypothesis set differs." (since := "2026-08-27")]
 noncomputable def IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization
     (S : TwoSiteExactSectorGauge H) (hBlock : IsMPDO (blockTwo M))
     (γ : Fin H.labelCount)

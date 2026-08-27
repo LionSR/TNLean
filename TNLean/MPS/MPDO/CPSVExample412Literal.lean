@@ -59,17 +59,6 @@ Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--935. -/
 noncomputable def M : MPOTensor 2 2 :=
   fun i j => if i = j then Matrix.diagonal ![(1 : ℂ), sigmaZ i i] else 0
 
-@[simp] private lemma M_zero_zero : M 0 0 = (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [M, sigmaZ, SpinCover.pauli]
-
-@[simp] private lemma M_one_one : M 1 1 = sigmaZ := by
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [M, sigmaZ, SpinCover.pauli]
-
-@[simp] private lemma M_zero_one : M 0 1 = 0 := by simp [M]
-@[simp] private lemma M_one_zero : M 1 0 = 0 := by simp [M]
-
 private lemma prod_M_diagonal :
     ∀ {N : ℕ} (σ : Fin N → Fin 2),
       (List.ofFn fun k => M (σ k) (σ k)).prod =

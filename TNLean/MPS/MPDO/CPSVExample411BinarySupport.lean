@@ -126,11 +126,6 @@ def complementPathWeight (a b : Fin 2) : {K : ℕ} → (Fin K → Fin 2) → ℂ
 @[simp] private theorem complementPathWeight_zero (a b : Fin 2) (w : Fin 0 → Fin 2) :
     complementPathWeight a b w = weightMatrix a b := rfl
 
-@[simp] private theorem complementPathWeight_cons {K : ℕ} (a b c : Fin 2)
-    (w : Fin K → Fin 2) :
-    complementPathWeight a b (Fin.cons c w) =
-      weightMatrix a c * complementPathWeight c b w := rfl
-
 /-- The endpoint-augmented vertex list of a complementary path. -/
 private def pathVertices {R : ℕ} (a b : Fin 2) (w : Fin R → Fin 2) :
     Fin (R + 2) → Fin 2 :=
