@@ -29,7 +29,6 @@ import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 import TNLean.MPS.CanonicalForm.CyclicSectors.FixedAdjoint
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.Existence
-import TNLean.MPS.CanonicalForm.NormalCommutant
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.NormalReduction.Main
 import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge

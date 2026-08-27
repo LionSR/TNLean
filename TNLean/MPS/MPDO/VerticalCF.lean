@@ -105,7 +105,7 @@ letterwise reconstruction. `TNLean.MPS.MPDO.VerticalBNT` groups these corners
 into representatives while retaining their physical isometries, and
 `TNLean.MPS.MPDO.SectorTrace` proves positivity of every grouped coefficient.
 The relative Gram algebra is formalized in
-`TNLean.MPS.CanonicalForm.NormalCommutant`; its application to the grouped
+`QICLean.Kraus.NormalCommutant`; its application to the grouped
 sectors is carried out in `TNLean.MPS.MPDO.GroupedFigure8` and
 `TNLean.MPS.MPDO.GroupedGramNormalization`.  The normalized physical maps and
 the algebraic vertical BNT are constructed in
