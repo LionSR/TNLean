@@ -3024,11 +3024,16 @@ $N=L$. They give no gap estimate for $N>L$ and no periodic coercivity.
 
 \begin{proof}
     \leanok
-    The symmetric anticommutator reduction turns the displayed
-    operator-product hypothesis into the row-summable anticommutator estimate
-    with coefficient $\eta$; the cyclic-window martingale reduction with
-    $\gamma=1-\eta m$ then gives $0<1-\eta m$ together with the stated norm
-    lower bound.
+    For every overlapping pair, the operator-product bound gives
+    \begin{align}
+        &\re\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
+         +\re\langle h_{j,\mathrm{ES}}v,h_{i,\mathrm{ES}}v\rangle \\
+        &\qquad\ge -\eta\bigl(
+          \re\langle h_{i,\mathrm{ES}}v,v\rangle
+         +\re\langle h_{j,\mathrm{ES}}v,v\rangle\bigr).
+    \end{align}
+    The cyclic-window row-sum bounds with $\gamma=1-\eta m$ then give
+    $0<1-\eta m$ together with the stated norm lower bound.
 \end{proof}
 
 \begin{theorem}[Conditional spectral gap for MPS parent Hamiltonians]
