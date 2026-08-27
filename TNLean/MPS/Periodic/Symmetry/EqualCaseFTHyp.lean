@@ -12,7 +12,6 @@ import QICLean.Kraus.CPPrimitive
 import QICLean.Channel.Basic
 import QICLean.Channel.KrausRepresentation
 import QICLean.Channel.KrausUnitaryFreedom
-import QICLean.Channel.Peripheral.CyclicDecomposition
 
 /-!
 # Periodic equal-case Fundamental Theorem hypothesis

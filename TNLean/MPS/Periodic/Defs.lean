@@ -5,12 +5,10 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.Irreducible.FormII
-import TNLean.MPS.Irreducible.PeriodicBlocking
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Chain.Defs
 import QICLean.Channel.Peripheral.Spectrum
-import QICLean.Channel.Peripheral.CyclicDecomposition
 import Mathlib.RingTheory.RootsOfUnity.Complex
 
 /-!

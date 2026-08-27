@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusAbsorbedCovariance
 import TNLean.PEPS.RegionBlock.GaugeInjectivity2
-import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 
 /-!
 # Translation covariance of the gauge-absorbed blocked weights

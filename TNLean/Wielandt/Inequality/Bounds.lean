@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.Equivalence
-import TNLean.Wielandt.Inequality.EigenvectorSpreading
 import TNLean.Wielandt.Inequality.MatrixSpanSharpBound
 import TNLean.Wielandt.Inequality.NonzeroTraceWord
 import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
