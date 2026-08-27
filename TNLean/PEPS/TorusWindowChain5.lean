@@ -81,14 +81,6 @@ theorem bareExtendInsert_add {R S : Finset V} (hRS : R ⊆ S)
   refine Finset.sum_congr rfl (fun μ _ => ?_)
   rw [add_mul]
 
-/-- The bare corner-extended coefficient of the zero insert vanishes. -/
-theorem bareExtendInsert_zero {R S : Finset V} (hRS : R ⊆ S) :
-    bareExtendInsert (G := G) hRS (0 : RegionInsert (G := G) (d := d) A R) = 0 := by
-  funext ν σ
-  rw [bareExtendInsert]
-  refine Finset.sum_eq_zero (fun μ _ => ?_)
-  rw [Pi.zero_apply, Pi.zero_apply, zero_mul]
-
 /-- The clean corner extension is additive in its insert: extending the pointwise sum
 `C₁ + C₂` is the pointwise sum of the two corner extensions.  The bare coefficient is
 additive (`bareExtendInsert_add`) and the inverse multiplicity divisor distributes over the
@@ -105,13 +97,6 @@ theorem extendInsert_add {R S : Finset V} (hRS : R ⊆ S)
     bareExtendInsert_add]
   funext ν σ
   simp only [mul_add]
-
-/-- The clean corner extension of the zero insert vanishes. -/
-theorem extendInsert_zero {R S : Finset V} (hRS : R ⊆ S) :
-    extendInsert (G := G) hRS (0 : RegionInsert (G := G) (d := d) A R) = 0 := by
-  rw [extendInsert_eq_smul_bare, bareExtendInsert_zero]
-  funext ν σ
-  simp only [Pi.zero_apply, mul_zero]
 
 /-- The clean corner extension respects pointwise subtraction of inserts: extending the
 difference `C₁ - C₂` is the pointwise difference of the two corner extensions.  Combines the

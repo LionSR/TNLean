@@ -1492,17 +1492,12 @@ The remaining obligations are the following.
           reindexed by the edge action and the vertex bijection, so blocked-region
           injectivity transports, and a one-edge blocking datum transports to a datum
           for the transported tensor at the image edge with the single red-to-blue
-          crossing carried across. Specialized to a translation-invariant tensor,
-          this carries one reference blocking datum at the reference edge of an
-          orientation class to a datum at every translate of that edge, for the same
-          tensor.\footnote{
+          crossing carried across.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.regionBlockedWeight_transport},
           \leanid{TNLean.PEPS.regionBlockedTensorInjective_transport},
-          \leanid{TNLean.PEPS.transportBlockingDataAlong},
-          \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong},
-          \leanid{TNLean.PEPS.translateBlockingData}, and
-          \leanid{TNLean.PEPS.isCrossingEdge_translateBlockingData}.}
+          \leanid{TNLean.PEPS.transportBlockingDataAlong}, and
+          \leanid{TNLean.PEPS.isCrossingEdge_transportBlockingDataAlong}.}
           The reference blocking datum at each class's reference edge is
           constructed from the rectangular injectivity hypotheses directly: the
           reference red and blue blocks are the two source
@@ -1861,9 +1856,10 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}); the proportionality scalar is
           unique once the comparison block is injective
           (\leanid{TNLean.PEPS.twoBlockScalarProportional_unique}). The torus scalar condition is then
-          assembled directly from the bare-edge absorbed equality plus the per-vertex two-block
-          proportionalities with a common ratio
-          (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_edgeAbsorbed}).
+          assembled from the bare-edge absorbed equality at the two one-site-different comparison
+          regions together with the per-vertex two-block proportionalities of common ratio, as the
+          unconditional torus theorem does
+          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}).
 
           What remains for an unconditional \path{hPV}, and hence for an unconditional torus
           Fundamental Theorem, are three pieces, all consuming the landed \(X\) above. First, the

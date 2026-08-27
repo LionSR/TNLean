@@ -87,7 +87,6 @@ import TNLean.PEPS.SquareLatticeCoordinateSwap
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.TorusAbsorbedCovariance
-import TNLean.PEPS.TorusBlockingData
 import TNLean.PEPS.TorusConjCovarianceFamily
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.TorusCovariantAbsorbedFamily

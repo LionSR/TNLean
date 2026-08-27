@@ -39,18 +39,6 @@ namespace PEPS
 variable {width height d : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
-/-- The bond dimension of a translation-invariant tensor at the translated boundary edge of a
-region equals its bond dimension at the reference boundary edge, packaged for the inserted matrix
-at the translated edge. -/
-theorem bondDim_boundaryEdgeMap_translate_eq
-    {A : Tensor (torusGraph width height) d}
-    (hA : IsTorusTranslationInvariant A)
-    (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
-    (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f}) :
-    A.bondDim (boundaryEdgeMap (translate a b) R f).1 = A.bondDim f.1 :=
-  bondDim_boundaryEdgeMap_translate hA a b R f
-
 /-- **Transport of a conjugation coefficient identity along a torus translation.**
 
 For translation-invariant tensors `A`, `B` on the torus with matched bond dimensions on the

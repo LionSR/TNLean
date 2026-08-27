@@ -268,39 +268,6 @@ theorem verticalAdjacentWindows_union {L K : ℕ} (hK : 0 < K) (hh : 1 < height)
     · refine Or.inr ⟨h1, ?_⟩
       rw [ite_eq_right (by omega : ¬ (v.2 - s.2).val < 1)]; omega
 
-namespace NormalTorusArcWindowInjectivityHypotheses
-
-variable {L K : ℕ} {κ : RegionInjectivityData (TorusVertex width height)}
-
-/-- A horizontally consecutive-window union is injective: it is the
-`(L + 1) × K` cyclic rectangle, a width-at-least-`L`, height-at-least-`K`
-rectangle.
-
-Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 1. -/
-theorem horizontalUnion_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
-    κ.IsInjective (torusArcRectangle s (L + 1) K) :=
-  h.arcRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-    (by omega) (by omega)
-
-/-- A vertically consecutive-window union is injective: it is the `L × (K + 1)`
-cyclic rectangle.
-
-Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
-`Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,
-Step 1. -/
-theorem verticalUnion_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
-    (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
-    κ.IsInjective (torusArcRectangle s L (K + 1)) :=
-  h.arcRectangle_injective hUnion (by omega) (by omega) (by omega) (by omega)
-    (by omega) (by omega)
-
-end NormalTorusArcWindowInjectivityHypotheses
-
 /-! ### The two-piece complement of a cyclic rectangle
 
 The torus complement of a cyclic rectangle of width `w < width` and height

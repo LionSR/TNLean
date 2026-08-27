@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.TorusBlockingData
+import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.NormalEdgeGaugeFamily
 
 /-!
@@ -18,9 +18,9 @@ region-insertion transfer is conjugation by an invertible matrix
 required `Fintype`, `LinearOrder`, and `DecidableRel` instances, so the interface applies
 verbatim.
 
-For a translation-invariant pair the reference datum at the reference edge of an orientation
-class is translated to every edge of that class
-(`TNLean/PEPS/TorusBlockingData.lean`), so this gauge is available at every edge.
+The reference datum at each orientation class's distinguished edge is built directly from the
+rectangular injectivity hypotheses (`TNLean/PEPS/TorusRectangleReferenceData.lean`), so this
+gauge is available at every edge.
 
 ## References
 
