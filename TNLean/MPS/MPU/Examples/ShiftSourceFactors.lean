@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
-import QICLean.Algebra.MatrixReindex
+import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
 import TNLean.MPS.MPU.SourceUV
 
@@ -270,13 +270,13 @@ noncomputable def identitySourceFactors (d : ℕ) :
     change Matrix.reindex eRow.symm eCol.symm 1 =
       Matrix.reindex eRow.symm eR 1 *
         Matrix.reindex eR eCol.symm 1
-    rw [Matrix.reindex_mul_reindex, Matrix.one_mul]
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ, Matrix.one_mul]
   have hcut₂ : sourceCutM₂ (identityMPUTensor d) = X₂ * Y₂ := by
     rw [sourceCutM₂_identityMPUTensor]
     change Matrix.reindex eRow.symm eCol.symm 1 =
       Matrix.reindex eRow.symm eL 1 *
         Matrix.reindex eL eCol.symm 1
-    rw [Matrix.reindex_mul_reindex, Matrix.one_mul]
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ, Matrix.one_mul]
   have hweighted : X₁ᴴ * sourceWeight (d := d)
       (1 : Matrix (Fin 1) (Fin 1) ℂ) * X₁ = 1 := by
     rw [show sourceWeight (d := d) (1 : Matrix (Fin 1) (Fin 1) ℂ) = 1 by
@@ -285,12 +285,12 @@ noncomputable def identitySourceFactors (d : ℕ) :
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
     change Matrix.reindex eR eCol.symm 1 *
         Matrix.reindex eCol.symm eR 1 = 1
-    rw [Matrix.reindex_mul_reindex, Matrix.one_mul]
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ, Matrix.one_mul]
     simp [Matrix.reindex_apply]
   have hY₂Z₂ : Y₂ * Z₂ = 1 := by
     change Matrix.reindex eL eCol.symm 1 *
         Matrix.reindex eCol.symm eL 1 = 1
-    rw [Matrix.reindex_mul_reindex, Matrix.one_mul]
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ, Matrix.one_mul]
     simp [Matrix.reindex_apply]
   exact ⟨X₁, Y₁, Z₁, X₂, Y₂, Z₂, hcut₁, hcut₂,
     hweighted, hX₂.1, hY₁Z₁, hY₂Z₂⟩
@@ -332,7 +332,7 @@ noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
       Matrix.reindex (Equiv.refl _) eL (normalizedIdentityColumn d) *
         Matrix.reindex eL (Equiv.refl _)
           ((d : ℂ) • (normalizedIdentityColumn d)ᴴ)
-    rw [Matrix.reindex_mul_reindex,
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ,
       normalizedIdentityColumn_mul_scaled_conjTranspose d]
     rfl
   have hweighted : Pᴴ * sourceWeight (d := d)
@@ -346,7 +346,7 @@ noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
           ((d : ℂ) • (normalizedIdentityColumn d)ᴴ) *
         Matrix.reindex (Equiv.refl _) eL
           ((d : ℂ)⁻¹ • normalizedIdentityColumn d) = 1
-    rw [Matrix.reindex_mul_reindex,
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ,
       scaled_conjTranspose_mul_inverse_scaled_column d]
     simp [Matrix.reindex_apply]
   exact ⟨P, Pᴴ, P, C, R, Z, hcut₁, hcut₂, hweighted, hC,
@@ -387,7 +387,7 @@ noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
       Matrix.reindex (Equiv.refl _) eR (normalizedIdentityColumn d) *
         Matrix.reindex eR (Equiv.refl _)
           ((d : ℂ) • (normalizedIdentityColumn d)ᴴ)
-    rw [Matrix.reindex_mul_reindex,
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ,
       normalizedIdentityColumn_mul_scaled_conjTranspose d]
     rfl
   have hcut₂ : sourceCutM₂ (leftShiftTensor d) = P * Pᴴ := by
@@ -404,7 +404,7 @@ noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
           ((d : ℂ) • (normalizedIdentityColumn d)ᴴ) *
         Matrix.reindex (Equiv.refl _) eR
           ((d : ℂ)⁻¹ • normalizedIdentityColumn d) = 1
-    rw [Matrix.reindex_mul_reindex,
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ,
       scaled_conjTranspose_mul_inverse_scaled_column d]
     simp [Matrix.reindex_apply]
   exact ⟨C, R, Z, P, Pᴴ, P, hcut₁, hcut₂, hweighted, hP.1,
