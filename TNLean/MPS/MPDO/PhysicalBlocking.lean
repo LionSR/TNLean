@@ -3,9 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Topology.Instances.Matrix
-import TNLean.Algebra.FinTupleEquiv
-import QICLean.Channel.KrausCPTP
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.MPDO.OperatorProduct

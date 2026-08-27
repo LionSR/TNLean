@@ -80,16 +80,6 @@ theorem physCloseN_identity_eq_mpo (M : MPOTensor d D) (N : ℕ) :
   ext σ τ
   simp [mpoMatrixEntry]
 
-/-- The general length-three physical closure has the coefficient formula for
-$M_3(X)$. When $M=\mathcal K$, it is the operator $\mathcal K_3(X)$ in
-arXiv:1606.00608, Proposition C.7, lines 1510--1516. -/
-lemma physCloseN_three_apply (M : MPOTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin 3 → Fin d) :
-    physCloseN M 3 X σ τ =
-      Matrix.trace
-        (M (σ 0) (τ 0) * M (σ 1) (τ 1) * M (σ 2) (τ 2) * X) := by
-  simp [physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]
-
 /-! ### The one-site physical operator -/
 
 /-- The **one-site physical operator** as a linear map in the virtual operator
