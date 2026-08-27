@@ -38,7 +38,7 @@ were proved live only by importers several modules downstream.
 
 ## Removed
 
-### `TNLean.Algebra.TracePairing`
+### `TNLean.MPS.Core.TracePairing`
 
 | File | Line removed |
 |---|---|
@@ -47,8 +47,9 @@ were proved live only by importers several modules downstream.
 | `TNLean/MPS/MPDO/PhysicalSectorSupportRecurrence.lean` | `import TNLean.Algebra.TracePairing` |
 | `TNLean/MPS/MPDO/RFPViaTS.lean` | `import TNLean.Algebra.TracePairing` |
 
-`TNLean/Algebra.lean` keeps `TNLean.Algebra.TracePairing` root-reachable, and
-`TNLean/MPS/FundamentalTheorem/FiniteLength.lean`,
+The module was subsequently moved from `TNLean/Algebra/TracePairing.lean` to
+`TNLean/MPS/Core/TracePairing.lean`; `TNLean/MPS/Core.lean` now keeps it
+root-reachable. `TNLean/MPS/FundamentalTheorem/FiniteLength.lean`,
 `TNLean/MPS/Structure/LinearExtension.lean` and
 `TNLean/MPS/MPDO/BiCFDerivation/DirectSumInput.lean` are genuine users of its
 declarations.
@@ -115,9 +116,9 @@ sweep does not re-propose them.
 
 | File | Import retained | Identifier that forced it | Consumer |
 |---|---|---|---|
-| `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean` | `TNLean.Algebra.TracePairing` | `ker_bot_of_range_le` | `TNLean/PEPS/CycleMPSWordTransport.lean:122` |
-| `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean` | `TNLean.Algebra.TracePairing` | `Matrix.trace_mul_right_eq_zero_iff` | same file, line 160 |
-| `TNLean/MPS/Core/MultiBlock.lean` | `QICLean.Algebra.TraceReindex` | `Matrix.trace_reindex` | `TNLean/Algebra/BlockTriangularTrace.lean`, `TNLean/MPS/SharedInfra/BlockAssembly.lean` |
+| `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean` | `TNLean.MPS.Core.TracePairing` | `ker_bot_of_range_le` | `TNLean/PEPS/CycleMPSWordTransport.lean:122` |
+| `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean` | `TNLean.MPS.Core.TracePairing` | `Matrix.trace_mul_right_eq_zero_iff` | same file, line 160 |
+| `TNLean/MPS/Core/MultiBlock.lean` | `QICLean.Algebra.TraceReindex` | `Matrix.trace_reindex` | `TNLean/MPS/Core/BlockTriangularTrace.lean`, `TNLean/MPS/SharedInfra/BlockAssembly.lean` |
 | `TNLean/Algebra/CommutingProjectionProduct.lean` | `QICLean.Algebra.PiProductTrace` | `Matrix.trace_piProduct` | `TNLean/MPS/RFP/BeigiSectorGraph.lean:457` |
 | `TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean` | `TNLean.MPS.FundamentalTheorem.SectorWeightComparison` | `Matrix.charpoly_eq_of_forall_trace_pow_eq` | `TNLean/MPS/FundamentalTheorem/SectorBNT/SupplierNormalized.lean:60` |
 | `TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean` | `QICLean.Algebra.ScalarPowerSumIdentity` | `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card` | `TNLean/MPS/MPDO/BNTMultiplicityNormalization.lean:150`, `TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean:129` |
