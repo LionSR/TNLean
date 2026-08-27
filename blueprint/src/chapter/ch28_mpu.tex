@@ -1538,7 +1538,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceCutM₁Fin_apply,
         MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank}
     \leanok
-    \uses{def:mpo_tensor}
+    \uses{def:mpo_tensor, def:mps_independent_tensor_product}
     The matrix $M_1$ is obtained by combining the left auxiliary index with the
     lower physical index, and the upper physical index with the right auxiliary
     index. Thus
@@ -1983,7 +1983,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Independent tensor product of matrix product operator tensors]
     \label{def:mpu_independent_tensor_product}
-    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply, finTupleProdEquiv}
+    \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply}
     \leanok
     \uses{def:mpo_tensor}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
