@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixReindex
+import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
 import TNLean.MPS.MPU.StandardForm
 
@@ -30,10 +30,12 @@ private theorem shiftExampleU₂_sourceU_eq_identitySwapIdentity_apply
       identitySwapIdentityMatrix d
         ((shiftExampleU₂SourceURowEquiv d).symm lr)
         ((shiftTwoSitePhysicalEquiv d).symm ij) := by
-  exact Matrix.apply_eq_of_reindex_eq
-    (shiftExampleU₂SourceURowEquiv d).symm
-    (shiftTwoSitePhysicalEquiv d).symm
-    (shiftExampleU₂_sourceU_reindex_eq_identitySwapIdentity d) lr ij
+  have h := congrFun (congrFun
+    (shiftExampleU₂_sourceU_reindex_eq_identitySwapIdentity d)
+    ((shiftExampleU₂SourceURowEquiv d).symm lr))
+    ((shiftTwoSitePhysicalEquiv d).symm ij)
+  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply] using h
 
 /-- The supplied two-site block of $U_2$ has central gate
 $u_2^{(2)}=\Id\otimes\mathbb S\otimes\Id$ in the paper's four-spin order.
@@ -67,10 +69,12 @@ private theorem shiftExampleU₂_sourceV_eq_swapSwap_mul_identitySwapIdentity_ap
       (swapTensorSwapMatrix d * identitySwapIdentityMatrix d)
         ((shiftTwoSitePhysicalEquiv d).symm ij)
         ((shiftExampleU₂SourceVColumnEquiv d).symm rl) := by
-  exact Matrix.apply_eq_of_reindex_eq
-    (shiftTwoSitePhysicalEquiv d).symm
-    (shiftExampleU₂SourceVColumnEquiv d).symm
-    (shiftExampleU₂_sourceV_reindex_eq_swapSwap_mul_identitySwapIdentity d) ij rl
+  have h := congrFun (congrFun
+    (shiftExampleU₂_sourceV_reindex_eq_swapSwap_mul_identitySwapIdentity d)
+    ((shiftTwoSitePhysicalEquiv d).symm ij))
+    ((shiftExampleU₂SourceVColumnEquiv d).symm rl)
+  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply] using h
 
 /-- The reflected supplied two-site block of $U_2$ has central gate
 $v_2^{(2)}=(\mathbb S\otimes\mathbb S)
@@ -106,10 +110,12 @@ private theorem shiftExampleU₃_sourceU_eq_identitySwapIdentity_mul_swapSwap_ap
       (identitySwapIdentityMatrix d * swapTensorSwapMatrix d)
         ((shiftExampleU₃SourceURowEquiv d).symm lr)
         ((shiftTwoSitePhysicalEquiv d).symm ij) := by
-  exact Matrix.apply_eq_of_reindex_eq
-    (shiftExampleU₃SourceURowEquiv d).symm
-    (shiftTwoSitePhysicalEquiv d).symm
-    (shiftExampleU₃_sourceU_reindex_eq_identitySwapIdentity_mul_swapSwap d) lr ij
+  have h := congrFun (congrFun
+    (shiftExampleU₃_sourceU_reindex_eq_identitySwapIdentity_mul_swapSwap d)
+    ((shiftExampleU₃SourceURowEquiv d).symm lr))
+    ((shiftTwoSitePhysicalEquiv d).symm ij)
+  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply] using h
 
 /-- The supplied two-site block of $U_3$ has central gate
 $u_3^{(2)}=(\Id\otimes\mathbb S\otimes\Id)
@@ -144,10 +150,12 @@ private theorem shiftExampleU₃_sourceV_eq_identitySwapIdentity_apply
       identitySwapIdentityMatrix d
         ((shiftTwoSitePhysicalEquiv d).symm ij)
         ((shiftExampleU₃SourceVColumnEquiv d).symm rl) := by
-  exact Matrix.apply_eq_of_reindex_eq
-    (shiftTwoSitePhysicalEquiv d).symm
-    (shiftExampleU₃SourceVColumnEquiv d).symm
-    (shiftExampleU₃_sourceV_reindex_eq_identitySwapIdentity d) ij rl
+  have h := congrFun (congrFun
+    (shiftExampleU₃_sourceV_reindex_eq_identitySwapIdentity d)
+    ((shiftTwoSitePhysicalEquiv d).symm ij))
+    ((shiftExampleU₃SourceVColumnEquiv d).symm rl)
+  simpa only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply] using h
 
 /-- The reflected supplied two-site block of $U_3$ has central gate
 $v_3^{(2)}=\Id\otimes\mathbb S\otimes\Id$ in the paper's four-spin order.

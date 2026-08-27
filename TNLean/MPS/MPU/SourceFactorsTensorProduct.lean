@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixIsometryKronecker
-import QICLean.Algebra.MatrixReindex
+import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.TensorProduct
 
@@ -101,14 +101,18 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
         ((S.X₁ * S.Y₁) ⊗ₖ (T.X₁ * T.Y₁)) =
       Matrix.reindex eRow eR (S.X₁ ⊗ₖ T.X₁) *
         Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁)
-    rw [Matrix.reindex_mul_reindex, Matrix.mul_kronecker_mul]
+    rw [Matrix.mul_kronecker_mul]
+    exact (Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eR eCol
+      (S.X₁ ⊗ₖ T.X₁) (S.Y₁ ⊗ₖ T.Y₁)).symm
   have hcut₂ : sourceCutM₂ (tensorProduct U V) = X₂ * Y₂ := by
     rw [sourceCutM₂_tensorProduct, S.sourceCutM₂_eq, T.sourceCutM₂_eq]
     change Matrix.reindex eRow eCol
         ((S.X₂ * S.Y₂) ⊗ₖ (T.X₂ * T.Y₂)) =
       Matrix.reindex eRow eL (S.X₂ ⊗ₖ T.X₂) *
         Matrix.reindex eL eCol (S.Y₂ ⊗ₖ T.Y₂)
-    rw [Matrix.reindex_mul_reindex, Matrix.mul_kronecker_mul]
+    rw [Matrix.mul_kronecker_mul]
+    exact (Matrix.reindexLinearEquiv_mul ℂ ℂ eRow eL eCol
+      (S.X₂ ⊗ₖ T.X₂) (S.Y₂ ⊗ₖ T.Y₂)).symm
   have hweighted : X₁ᴴ * sourceWeight (d := d * e)
       (1 : Matrix (Fin (D * E)) (Fin (D * E)) ℂ) * X₁ = 1 := by
     rw [show sourceWeight (d := d * e)
@@ -118,15 +122,25 @@ noncomputable def SourceFactors.independentTensorProductOfIdentityWeight
   have hY₁Z₁ : Y₁ * Z₁ = 1 := by
     change Matrix.reindex eR eCol (S.Y₁ ⊗ₖ T.Y₁) *
       Matrix.reindex eCol eR (S.Z₁ ⊗ₖ T.Z₁) = 1
-    rw [Matrix.reindex_mul_reindex, ← Matrix.mul_kronecker_mul,
-      S.Y₁_mul_Z₁, T.Y₁_mul_Z₁]
-    simp
+    calc
+      _ = Matrix.reindex eR eR
+          ((S.Y₁ ⊗ₖ T.Y₁) * (S.Z₁ ⊗ₖ T.Z₁)) :=
+        Matrix.reindexLinearEquiv_mul ℂ ℂ eR eCol eR
+          (S.Y₁ ⊗ₖ T.Y₁) (S.Z₁ ⊗ₖ T.Z₁)
+      _ = 1 := by
+        rw [← Matrix.mul_kronecker_mul, S.Y₁_mul_Z₁, T.Y₁_mul_Z₁]
+        simp
   have hY₂Z₂ : Y₂ * Z₂ = 1 := by
     change Matrix.reindex eL eCol (S.Y₂ ⊗ₖ T.Y₂) *
       Matrix.reindex eCol eL (S.Z₂ ⊗ₖ T.Z₂) = 1
-    rw [Matrix.reindex_mul_reindex, ← Matrix.mul_kronecker_mul,
-      S.Y₂_mul_Z₂, T.Y₂_mul_Z₂]
-    simp
+    calc
+      _ = Matrix.reindex eL eL
+          ((S.Y₂ ⊗ₖ T.Y₂) * (S.Z₂ ⊗ₖ T.Z₂)) :=
+        Matrix.reindexLinearEquiv_mul ℂ ℂ eL eCol eL
+          (S.Y₂ ⊗ₖ T.Y₂) (S.Z₂ ⊗ₖ T.Z₂)
+      _ = 1 := by
+        rw [← Matrix.mul_kronecker_mul, S.Y₂_mul_Z₂, T.Y₂_mul_Z₂]
+        simp
   exact ⟨X₁, Y₁, Z₁, X₂, Y₂, Z₂, hcut₁, hcut₂,
     hweighted, hX₂, hY₁Z₁, hY₂Z₂⟩
 

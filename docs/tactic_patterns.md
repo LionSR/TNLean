@@ -42,11 +42,12 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean`
   (`diagBlock_diagonalRestrictionUnits_not_isNormal`).
 - **Abstraction:** `Kraus.not_isInjective_of_linearMap` and
-  `Kraus.not_isNBlkInjective_of_linearMap` in `TNLean/MPS/Defs.lean`.
+  `Kraus.not_isNBlkInjective_of_linearMap` in
+  `QICLean/Kraus/Injectivity.lean`.
 - **Notes:** the caller supplies the functional (typically a signed sum of
   `Matrix.entryLinearMap`), the vanishing proof on the generators, and one
   witness on which the functional is nonzero; the span induction disappears.
-  Both lemmas are channel-generic finite-Kraus results whose long-run home is
+  Both lemmas are channel-generic finite-Kraus results and are owned by
   QICLean's injectivity file.
 
 ### Kronecker product of matrix isometries — promoted
@@ -67,33 +68,32 @@ abstracted — record why, so it is not re-proposed).
   four first- and second-stage fusion proofs compose it with
   `Matrix.IsIsometry.reindex`.
 
-### matrix-reindex entry wrappers — promoted
-- **Pattern:** package an entrywise formula as a `Matrix.reindex` equality by
-  extensionality, or recover an original-coordinate entry by applying a
-  reindexed equality twice and simplifying the inverse equivalences.
+### matrix-reindex entry transport — direct
+- **Pattern:** package an entrywise formula as a `Matrix.reindex` equality with
+  `ext` and `Matrix.reindex_apply`, or recover an original-coordinate entry by
+  applying the reindexed equality with `congrFun` twice and simplifying the
+  inverse equivalences.
 - **Seen:** eight packaging proofs in
   `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` and four recovery proofs
-  in `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` before
-  promotion (2026-08-24).
-- **Abstraction:** `Matrix.reindex_eq_of_apply_eq` and
-  `Matrix.apply_eq_of_reindex_eq` in `TNLean/Algebra/MatrixReindex.lean`.
-- **Notes:** all twelve source-gate call sites use the common lemmas while
-  retaining the paper's four-spin coordinate order explicitly in their local
-  arguments.
+  in `TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean`.
+- **Abstraction:** none. The former project wrappers were retired with
+  `QICLean.Algebra.MatrixReindex`; the direct extensionality and evaluation
+  proofs are the canonical pattern.
+- **Notes:** the source-gate call sites retain the paper's four-spin coordinate
+  order explicitly in their local arguments.
 
-### multiplication of compatibly reindexed matrices — promoted
+### multiplication of compatibly reindexed matrices — Mathlib API
 - **Pattern:** replace the product of two `Matrix.reindex` operations with one
   reindexing of the matrix product along the common middle equivalence.
 - **Seen:** eight occurrences in
   `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean` and four in
-  `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean` before promotion
-  (2026-08-24).
-- **Abstraction:** `Matrix.reindex_mul_reindex` in
-  `TNLean/Algebra/MatrixReindex.lean`, a direct wrapper around Mathlib's
-  `Matrix.reindexLinearEquiv_mul`.
-- **Notes:** all twelve source-factor call sites now use the direct
-  `Matrix.reindex` identity. The three equivalences remain explicit, so the
-  source-cut orientations are still visible and no searching tactic is used.
+  `TNLean/MPS/MPU/SourceFactorsTensorProduct.lean`.
+- **Abstraction:** Mathlib's `Matrix.reindexLinearEquiv_mul`; instantiate the
+  row, middle, and column equivalences explicitly and use
+  `Matrix.coe_reindexLinearEquiv` when coercion normalization is needed.
+- **Notes:** the source-factor call sites keep all three equivalences explicit,
+  so the source-cut orientations remain visible and no searching tactic is
+  used. The former `Matrix.reindex_mul_reindex` wrapper is retired.
 
 ### blocked-coordinate transport of a channel — promoted
 - **Pattern:** relabel the source matrix index along one equivalence, conjugate

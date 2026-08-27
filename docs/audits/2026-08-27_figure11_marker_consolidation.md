@@ -73,13 +73,14 @@ terminology, and both removals fall under the pass-through exception.
 
 Five import lines were removed from
 `TNLean/MPS/MPDO/VerticalProductReconstruction.lean`:
-`TNLean.MPS.CanonicalForm.BNTCharacterization`,
+`TNLean.MPS.CanonicalForm.BNTCharacterization`, the then-current
 `TNLean.MPS.CanonicalForm.NormalCommutant`,
 `TNLean.MPS.MPDO.FigureEightPairwise`, `TNLean.MPS.MPDO.VerticalBNT`, and
-`TNLean.MPS.MPDO.VerticalSpectral`. Each remains reachable through the four
-surviving imports, so the import closure of this module and of every module
-downstream of it is unchanged and the deletion cannot alter elaboration
-anywhere.
+`TNLean.MPS.MPDO.VerticalSpectral`. At that checkpoint each remained reachable
+through the four surviving imports, so the import closure of this module and of
+every module downstream of it was unchanged and the deletion could not alter
+elaboration anywhere. The generic normal-commutant API subsequently moved to
+`QICLean.Kraus.NormalCommutant`.
 
 Three further imports of the same module —
 `TNLean.MPS.MPDO.VerticalCoisometry`,

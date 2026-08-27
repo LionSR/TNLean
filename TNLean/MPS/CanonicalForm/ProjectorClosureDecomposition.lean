@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.OrthogonalProjection
 import TNLean.MPS.CanonicalForm.ProjectorClosure
 
 /-!
@@ -34,21 +35,6 @@ positive-length treatment of zero blocks is recorded in
 -/
 
 open scoped Matrix BigOperators
-
-/-- Every orthogonal projection is the range projection of an isometry: there
-are `n` and `V` with `Vᴴ * V = 1`, `V * Vᴴ = P`, and `n = tr P`.
-
-This is the support-isometry factorization used by the sector compressions of
-arXiv:1606.00608, Appendix A; it is stated here without any trace-preservation
-hypothesis on a tensor. -/
-theorem IsOrthogonalProjection.exists_support_isometry {D : ℕ}
-    {P : Matrix (Fin D) (Fin D) ℂ} (hP : IsOrthogonalProjection P) :
-    ∃ (n : ℕ) (V : Matrix (Fin D) (Fin n) ℂ),
-      ((n : ℂ) = Matrix.trace P) ∧ Vᴴ * V = 1 ∧ V * Vᴴ = P := by
-  obtain ⟨n, V, hViso, hVrange⟩ := hP.exists_range_isometry
-  refine ⟨n, V, ?_, hViso, hVrange⟩
-  rw [← hVrange, Matrix.trace_mul_comm, hViso, Matrix.trace_one]
-  simp
 
 namespace MPSTensor
 
