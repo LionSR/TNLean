@@ -42,8 +42,8 @@ sector weight to be nonzero. This is TNLean's retained-block convention:
 zero-weight summands are omitted from `SectorWeightData` and hence from
 `SectorDecomposition`, rather than retained as listed sectors. This shared
 infrastructure is not itself a definition from CPSV16. The convention is
-recorded in
-`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+recorded in the canonical QICLean note:
+https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf.
 -/
 structure SectorWeightData (g : ℕ) where
   /-- The multiplicity `r_j` of the basis block `j`. -/
