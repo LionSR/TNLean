@@ -1402,74 +1402,29 @@ The remaining obligations are the following.
           gauge files. This is a finite engineering step with no further mathematical
           content: the gauge of a one-edge datum
           (\leanid{TNLean.PEPS.exists_regionEdgeGauge_of_blockingData}) and the
-          single-crossing discharge are already in place. The orientation-uniform
-          reduction (obligation~6) and the boundary geometry (obligation~4) remain the
-          open mathematical pieces above this bridge.
+          single-crossing discharge were already in place. In that now-retired
+          skeleton, the orientation-uniform reduction (obligation~6) and the boundary
+          geometry (obligation~4) were the open mathematical pieces above this bridge.
     \item In the translationally invariant case, show that the edge gauges obtained
           after blocking reduce to one horizontal gauge $X$ and one vertical gauge
           $Y$, up to scalar.
 
-          The carrier of this reduction is now formalized. A square-lattice
-          bond-dimension function is orientation uniform when every horizontal edge
-          has one dimension and every vertical edge has another; given that, a single
-          horizontal matrix and a single vertical matrix determine a gauge family by
-          transport across the bond-dimension equalities, and a gauge family of this
-          shape is called orientation uniform. The absorption step incorporates such
-          an orientation-uniform family into the second tensor, preserving the
-          orientation-uniform bond dimensions and vertex injectivity; the
-          post-absorption edge-insertion equality is taken as the conditional kernel
-          input, in the shape produced unconditionally in the vertex-injective case.\footnote{
-          Formal declarations:
-          \path{TNLean.PEPS.SquareLatticeUniformBondDim},
-          \path{TNLean.PEPS.orientationUniformGauge},
-          \path{TNLean.PEPS.IsOrientationUniformGaugeFamily},
-          \path{TNLean.PEPS.exists_orientationUniformGaugeFamily},
-          \path{TNLean.PEPS.tiAbsorb},
-          \path{TNLean.PEPS.isVertexInjective_tiAbsorb},
-          \path{TNLean.PEPS.tiNormalGaugeAbsorption}, and
-          \path{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}.}
+          A now-retired open-lattice translation-invariant skeleton formalized an
+          orientation-uniform gauge route. That route was removed because the open
+          coordinate lattice carries no translation action from which such covariance
+          can be derived. The current open-lattice construction instead chooses an
+          absorbing gauge independently at each interior edge and asserts no covariance
+          between distinct edges.\footnote{Current declarations:
+          \leanid{TNLean.PEPS.exists_normalSquareInteriorAbsorbedGaugeFamily} and
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional}.
+          The retired orientation-uniform apparatus is recorded in the section
+          ``Removal of the conditional square-lattice skeleton.''}
 
-          The uniqueness-up-to-scalar step is now formalized. The conjugating
-          matrix realizing a forward per-edge transfer is determined up to a
-          multiplicative constant: if two invertible matrices induce the same
-          conjugation on every bond matrix then their quotient commutes with the
-          whole bond matrix algebra, hence lies in its center, the scalars, so the
-          two differ by a nonzero constant. Reading this through the bond-dimension
-          reindexing gives the same statement for the per-edge transfer map of an
-          edge: two gauges with the same transfer map differ by a constant. This is
-          the source's statement that the horizontal and vertical matrices are unique
-          up to a multiplicative constant, at the level of a single edge.\footnote{
-          Formal declarations:
+          The surviving per-edge uniqueness result is weaker and does not assemble a
+          translation-covariant open-lattice family: two gauges realizing the same
+          transfer map differ by a nonzero scalar.\footnote{Formal declarations:
           \leanid{TNLean.PEPS.gl_conj_unique_scalar} and
           \leanid{TNLean.PEPS.edgeGauge_unique_scalar}.}
-
-          Because each per-edge gauge is fixed only up to a constant, the reduction
-          to one horizontal and one vertical matrix holds only up to a per-edge
-          scalar: a gauge family is orientation uniform up to scalars when each edge
-          gauge is the transported reference matrix rescaled by a nonzero per-edge
-          constant. The assembly across the two orientation classes is formalized:
-          collecting, on each class, the per-edge ``agree with the reference up to a
-          constant'' facts produces one orientation-uniform-up-to-scalar family, with
-          the exact orientation-uniform family as the all-constants-one
-          specialization.\footnote{
-          Formal declarations:
-          \path{TNLean.PEPS.IsOrientationUniformGaugeFamilyModScalar},
-          \path{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_isOrientationUniform},
-          and
-          \path{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_classAgreement}.}
-
-          The per-edge constants are absorbed at the absorption step when they are
-          vertex balanced. A per-edge scalar rescaling whose oriented product around
-          every vertex is one is a balanced edge-scalar reweighting, and such a
-          reweighting leaves the absorbed tensor unchanged. Hence the
-          scalar-carrying orientation-uniform gauge and the underlying exact
-          orientation-uniform gauge incorporate into the same modified second tensor,
-          so the conditional square-lattice theorem may consume an exact
-          orientation-uniform gauge even though the blocking delivers one only up to
-          balanced constants.\footnote{
-          Formal declarations:
-          \path{TNLean.PEPS.gaugeEquivModEdgeScalars_of_matrixScalar} and
-          \path{TNLean.PEPS.absorbEdgeGauges_eq_of_matrixScalar}.}
 
           The periodic lattice on which this transport lives is now formalized,
           together with the covariance of the blocking machinery under it. The
@@ -1506,21 +1461,20 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isCrossingEdge_torusHorizontalRectangleBlockingDatum},
           and
           \leanid{TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum}.}
-          The per-edge gauge interface applies verbatim on the torus (it is stated
-          over a general finite ordered vertex set), and the orientation-uniform
-          reduction is ported to the torus, so the assembly above a class-agreement
-          input is in place there too.\footnote{
-          Formal declarations:
-          \leanid{TNLean.PEPS.exists_regionEdgeGauge_torus},
-          \path{TNLean.PEPS.torusOrientationUniformGauge},
-          \path{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar},
-          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_classAgreement},
-          and
-          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_translationInvariant}.}
+          The per-edge gauge interface applies verbatim on the torus, since it is
+          stated over a general finite ordered vertex set. The surviving torus
+          assembly does not pass through a lexicographic orientation-uniform-up-to-
+          scalar family. Instead, it transports one reference witness per orientation
+          class and constructs a translation-covariant absorbed gauge family;
+          translations that reverse the stored endpoint order carry the gauge to its
+          transposed inverse.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.IsTranslationCovariantGaugeFamily} and
+          \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily}.}
 
           The covariance of the region-inserted coefficient is now established, and
-          with it the determinacy that closes the class-agreement input above the
-          per-edge gauge of obligation~5. The region-inserted coefficient of a tensor
+          with it the transfer-map determinacy used in the transported-witness
+          development above the per-edge gauge of obligation~5. The region-inserted
+          coefficient of a tensor
           transported along a graph isomorphism, over the image region with the
           inserted matrix carried to the image bond and the boundary edge to its image,
           equals the original coefficient over the original region; the boundary
@@ -1543,37 +1497,20 @@ The remaining obligations are the following.
           The non-constructive transfer map of the gauge interface is determined by the
           coefficient identity it satisfies: with the second tensor's region and
           complement injective and positive bond dimensions, two matrix maps realizing
-          the same coefficient identity coincide. Hence the per-edge transfer map at a
-          translate equals the reference transfer map carried across the translation,
-          two independently chosen per-edge gauges realize the same conjugation map, and
-          the per-edge uniqueness up to scalar supplies the constants; gathering the two
-          orientation classes yields the orientation-uniform-up-to-scalar family.
-          \footnote{Formal declarations:
+          the same coefficient identity coincide. This identifies the conjugation maps
+          realized by two matched coefficient identities. In the surviving torus route,
+          the transported reference witnesses are converted directly into the
+          translation-covariant absorbed family rather than being assembled through a
+          lexicographic uniform-up-to-scalar predicate.\footnote{Formal declarations:
           \leanid{TNLean.PEPS.regionInsertedCoeff_transferMap_unique},
-          \path{TNLean.PEPS.regionTransferMap_eq_of_coeffIdentities}, and
-          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_conjCovariance}.}
-          The algebraic reduction from matched coefficient identities to the conjugation
-          covariance is now in place. The per-edge gauge at a torus edge carries its
-          defining coefficient identity, so the gauge conjugation itself satisfies the
-          identity. Reindexing across a bond-dimension equality commutes with
-          conjugation, identifying the transported reference matrix with the conjugation
-          by the reindexed reference. Two gauges realizing the same coefficient identity
-          by conjugation induce the same conjugation map on every bond matrix, by the
-          transfer-map determinacy. These supply, edge by edge, the conjugation
-          coincidence the orientation-uniform selection consumes.\footnote{Formal
-          declarations: \leanid{TNLean.PEPS.exists_regionEdgeGauge_torus_coeff},
-          \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity_conj},
-          \leanid{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities}, and
-          \leanid{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities_target}.}
-          What remains is the geometric production of the two matched coefficient
-          identities at every edge: reading the per-edge gauge off the reference blocking
-          datum transported along each class translation, and matching its region and
-          boundary edge with those of the transported reference identity. The transported
-          blocking datum reads its three blocks from the translation, which may reorder
-          the edge endpoints and so place the reference red region in the blue slot; the
-          orientation-class matching must account for this branch. This construction
-          still depends on the open per-edge gauge of obligation~5 for the transfer maps
-          themselves.
+          \leanid{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities},
+          \leanid{TNLean.PEPS.gaugeConj_eq_of_coeffIdentities_target}, and
+          \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily}.}
+          The geometric input is the production of two matched coefficient identities
+          at every edge, obtained by transporting the reference blocking datum along
+          each class translation. A translation may reverse the stored endpoint order
+          and place the reference red region in the blue slot; the witness transport
+          accounts for this branch explicitly.
 
           The endpoint-reordering branch is now handled at the level of the gauge-interface
           inputs. The transported datum's complement block is always the image of the
@@ -1582,10 +1519,10 @@ The remaining obligations are the following.
           remaining two covers the host region of the red block and is injective under
           union closure. So both injectivity inputs the per-edge gauge consumes are
           available on both branches, with no case split, and the region-inserted
-          coefficient is endpoint-symmetric. What is left is to route the orientation-class
-          matching through the image of the reference red region rather than the
-          possibly-swapped red slot, which the region-polymorphic coefficient covariance
-          already supplies.\footnote{Formal declarations:
+          coefficient is endpoint-symmetric. The orientation-class matching is routed
+          through the image of the reference red region rather than the possibly swapped
+          red slot, using the region-polymorphic coefficient covariance.\footnote{
+          Formal declarations:
           \leanid{TNLean.PEPS.transportBlockingDataAlong_complement},
           \leanid{TNLean.PEPS.regionBlockedTensorInjective_transportBlockingDataAlong_red},
           and
@@ -1613,56 +1550,20 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.isCrossingEdge_torusHorizontalEdge}, and
           \leanid{TNLean.PEPS.isCrossingEdge_torusVerticalEdge}.}
 
-          Feeding this faithful datum to the per-edge gauge engine yields, at the reference
-          edge, the per-edge conjugation gauge realizing the region-insertion coefficient
-          identity, with the second tensor's red and host injectivities supplied by its own
-          rectangle hypotheses and union closure. The conjugation-covariance input the
-          orientation-uniform selection consumes is packaged as a per-edge coefficient-identity
-          witness — a region with single boundary edge $e$, the second tensor's
-          region and host injectivity, and the two coefficient identities the per-edge gauge
-          and the transported reference gauge realize. Each witness yields the conjugation
-          coincidence by the transfer-map determinacy, and gathering the two orientation
-          classes assembles the orientation-uniform-up-to-scalar family. The reference edge
-          inhabits this witness interface directly.
-
-          The translation production is now carried out. The reference coefficient identity,
-          realized by conjugation with the reference gauge, transports along each class
-          translation to the same identity at every edge of the class, realized by conjugation
-          with the reference gauge carried across the bond-dimension reindexing. The translated
-          region is the image of the reference region; the second tensor's image region and its
-          host are injective there by transport of the reference injectivities, since the
-          second tensor is fixed by the translation; and an arbitrary region or complement
-          configuration on the image region is the transport of a unique configuration on the
-          reference region. Composing the two reindexings of the transported gauge collapses to
-          the single transported orientation matrix the selection expects, so the per-edge
-          witness against that matrix holds at every edge. Gathering the horizontal and vertical
-          witness families through the orientation-uniform selection produces, from the source's
-          rectangle hypotheses on a translation-invariant pair, the
-          orientation-uniform-up-to-scalar family unconditionally: the per-edge gauge family is
-          the single reference matrix per class transported to every edge, the source's
-          ``$X$ and $Y$, the same matrix on all horizontal (vertical) edges'', with the per-edge
-          scalars all one.\footnote{Formal declarations:
+          Feeding this faithful datum to the per-edge gauge engine yields a reference
+          conjugation gauge and its region-insertion coefficient identity. The surviving
+          witness interface records the region, its single boundary edge, the required
+          injectivity, and the matched coefficient identities. Witness transport supplies
+          the horizontal and vertical families, while transfer-map determinacy identifies
+          the transported conjugations. The final constructor assembles these data directly
+          into the translation-covariant absorbed gauge family, including the
+          transpose-inverse branch when endpoint order reverses.\footnote{Formal declarations:
+          \leanid{TNLean.PEPS.exists_regionEdgeGauge_torus_coeff},
           \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity_conj},
           \leanid{TNLean.PEPS.edgeCoeffIdentityWitness_translate},
-          \path{TNLean.PEPS.edgeCoeffIdentityWitness_translateUniform},
           \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_horizontalFamily},
           \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_verticalFamily}, and
-          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}.}
-
-          One strengthening remains. The family produced above takes the per-edge gauge to be the
-          transported reference matrix itself, so the witness's two coefficient identities are the
-          same single identity and the per-edge scalars are all one. The source's stronger claim is
-          that \emph{any} per-edge gauge independently produced by the edge-blocking engine at each
-          edge agrees with the transported reference up to a scalar. Reading that independent engine
-          gauge over the image of the reference region requires a blocking datum at the translated
-          edge whose red block is the image of the reference red block; but the lexicographic edge
-          convention reorders the endpoints under a wraparound translation, so the transported
-          datum's red block is the image of the reference \emph{blue} block on that branch, and the
-          reference coefficient identity — tied to the reference red region — does not transport to
-          it. Closing the independent-gauge strengthening therefore needs a branch-free reference
-          identity (one stated over the reference region's host orientation as well), which the
-          present reference engine does not supply. The unconditional family above does not depend
-          on this strengthening.
+          \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily}.}
 
           The final region comparison setup is also formalized: a region and its set
           complement are wrapped as the two blocks consumed by the two-injective
@@ -1734,34 +1635,20 @@ The remaining obligations are the following.
           which is what the region comparison \leanid{TNLean.PEPS.regionComplement_comparison}
           consumes.
 
-          On the torus the per-edge coefficient identity is produced at a single boundary edge of
-          each \emph{red blocking region} of the orientation-uniform family
-          (\leanid{TNLean.PEPS.exists_regionEdgeGauge_torus_coeff},
-          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}). The
-          per-vertex relation \(A_v=\lambda\cdot\operatorname{gaugeVertex} B\,X\,v\) that the
-          torus Fundamental Theorem
-          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}) takes as the hypothesis
-          \path{hPV} still needs two pieces above the region-independence just recorded. First, the
-          absorbing matrix \leanid{TNLean.PEPS.absorbedBoundaryGauge} is the orientation-adapted
-          transpose of each \emph{per-edge} engine gauge \(Z_e\), so the absorbed equality holds
-          against a per-edge absorbing family rather than against the single
-          orientation-uniform \(X=\operatorname{torusOrientationUniformGauge}\) that
-          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}
-          returns and that \path{hPV} is stated against; reconciling the per-edge absorbing family
-          with that orientation-uniform \(X\) (the transpose/orientation bookkeeping across the two
-          orientation classes) is the first open piece. Second, feeding the absorbed equality to
-          \leanid{TNLean.PEPS.regionComplement_comparison} at the source comparison regions \(R\)
-          and \(S\) (which differ in one site, both blocked-tensor injective with injective
-          complements) gives \(A_R\propto\widetilde B_R\) and \(A_S\propto\widetilde B_S\);
-          quotienting the two region proportionalities to isolate the single differing vertex is
-          the second open piece. The block-granularity one-site quotient that performs this
-          isolation without single-vertex injectivity --- the region analogue of
-          \leanid{TNLean.PEPS.perVertexScalar}, whose present form rests on
-          \leanid{TNLean.PEPS.one_vertex_complement_comparison} and edge-level vertex injectivity
-          --- needs a factorization of the blocked-region weight of \(\operatorname{withSite} v\)
-          through the blocked-region weight of \(\operatorname{withoutSite} v\) and the single
-          vertex tensor at \(v\) (the one-vertex analogue of
-          \leanid{TNLean.PEPS.regionBlockedWeight_eq_localTensorMap}).
+          On the torus, the transported witness families and the covariant absorbed
+          constructor supply one gauge family with the absorbed coefficient identity at
+          every edge. Feeding this equality to
+          \leanid{TNLean.PEPS.regionComplement_comparison} at the one-site-different
+          comparison regions \(R\) and \(S\) gives
+          \(A_R\propto\widetilde B_R\) and \(A_S\propto\widetilde B_S\). The landed
+          block-granularity quotient described next isolates the differing vertex without
+          assuming single-site injectivity; the subsequent scalar extraction turns these
+          proportionalities into the per-vertex relation concluded by
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}. The
+          comparison uses the factorization of the blocked-region weight of
+          \(\operatorname{withSite} v\) through the weight of
+          \(\operatorname{withoutSite} v\) and the tensor at \(v\), the block analogue of
+          \leanid{TNLean.PEPS.regionBlockedWeight_eq_localTensorMap}.
 
           The foundational layer of this quotient is now landed. Writing the differing regions as
           \(S=\operatorname{insert} v\,R\) with \(v\notin R\), the vertex product over the sites of
@@ -1834,8 +1721,9 @@ The remaining obligations are the following.
           two-block proportionalities at every vertex with a common ratio
           (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}).
 
-          The production of a \emph{single} per-edge family carrying the absorbed equality at every
-          edge is now landed. The conjugation-to-absorbed conversion is packaged so the bare-edge
+          An intermediate construction produced a \emph{single} per-edge family carrying the
+          absorbed equality at every edge. The conjugation-to-absorbed conversion is
+          packaged so the bare-edge
           absorbed equality at a single edge follows from one coefficient-identity witness, depending
           only on the gauge at that edge (the open-edge gauge cancellation isolates the boundary
           edge), so the per-edge absorbing choices are independent
@@ -1858,48 +1746,31 @@ The remaining obligations are the following.
           unconditional torus theorem does
           (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}).
 
-          What remains for an unconditional \path{hPV}, and hence for an unconditional torus
-          Fundamental Theorem, are three pieces, all consuming the landed \(X\) above. First, the
-          \emph{orientation-uniformity} of that absorbing family --- that it is one horizontal matrix
-          and one vertical matrix up to per-edge scalars, the shape the Fundamental Theorem's gauge
-          conclusion \path{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar} asserts. The
-          absorbing matrix \leanid{TNLean.PEPS.absorbedBoundaryGauge} is \(Z^{\mathsf T}\) or
-          \(Z^{-1}\) according to whether the boundary edge's left endpoint lies in the red blocking
-          region, and the engine gauge \(Z_e\) is the transported reference; both are
-          orientation-determined, but the endpoint-membership branch varies across the translates of
-          a class with wraparound, which is the transpose/orientation bookkeeping that remains.
-          Second, the blocked-tensor injectivity of the comparison regions of the reindexed
-          \(\operatorname{applyGauge} B\,X\) (the gauge-absorbed analogue of the rectangle injectivity
-          of \(B\)), and of \(A\)'s one-site-different comparison regions and their complements.
-          Third, the translation-invariant common ratio \(c_S/c_R\) of the
-          (now uniquely-named, \leanid{TNLean.PEPS.twoBlockScalarProportional_unique}) proportionality
-          scalars across the vertices. The scalar extraction itself is no longer on the critical
-          path.
-    \item Prove the scalar condition $\lambda^{nm}=1$ for the square-lattice
-          theorem, and state separately the scalar freedom in the non-translation
-          invariant normal theorem.
+          The proof of the completed unconditional torus Fundamental Theorem replaces
+          that independently chosen family by the translation-covariant family supplied
+          by \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily}. The theorem
+          concludes: translation covariance of the absorbing family, expressed by
+          \leanid{TNLean.PEPS.IsTranslationCovariantGaugeFamily}; the absorbed
+          inserted-coefficient equality at every edge; and a single scalar \(\lambda\)
+          giving the per-vertex gauge relation with
+          \(\lambda^{\,\mathrm{width}\cdot\mathrm{height}}=1\). The comparison-region
+          injectivity and the common ratio \(c_S/c_R\), whose uniqueness uses
+          \leanid{TNLean.PEPS.twoBlockScalarProportional_unique}, are internal proof
+          ingredients rather than additional theorem conclusions.
+    \item Distinguish the scalar conclusions in the open and periodic settings.
 
-          The square-lattice scalar condition is formalized: when all per-vertex
-          scalars equal a single $\lambda$, their product over the
-          $\text{width}\times\text{height}$ lattice is $\lambda$ raised to the site
-          count, which the injective theorem forces to be one, giving
-          $\lambda^{\,\text{width}\cdot\text{height}}=1$. The square-lattice theorem
-          skeleton records the top-down assembly: from the orientation-uniform gauge
-          absorption datum and the per-vertex single-scalar relation (the region
-          comparison output) the scalar condition follows. A second entry to the same
-          assembly consumes the gauge in the shape the edge blocking actually
-          delivers: an orientation-uniform gauge fixed only up to vertex-balanced
-          per-edge constants, which absorb identically, so the exact
-          orientation-uniform reference carries the post-absorption equality and the
-          per-vertex relation against it yields the same scalar condition. Both
-          skeletons remain conditional on the open per-edge gauge of
-          obligation~5.\footnote{
-          Formal declarations:
-          \path{TNLean.PEPS.card_squareLatticeVertex},
-          \leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one},
+          The open-lattice square theorem chooses absorbing gauges independently on
+          interior edges and concludes a per-vertex scalar relation on the interior
+          comparison window; it asserts neither one global scalar nor a power-one
+          condition. The periodic torus theorem instead concludes a single scalar
+          \(\lambda\) for every vertex and
+          \(\lambda^{\,\mathrm{width}\cdot\mathrm{height}}=1\). The general-graph
+          normal theorem states gauge equivalence under its blocking, single-crossing,
+          same-state, positivity, and connectivity hypotheses without adding the torus
+          scalar constraint.\footnote{Formal declarations:
           \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional},
-          \path{TNLean.PEPS.tiNormalGaugeAbsorptionData_of_modScalar}, and
-          \path{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_of_modScalarGauge}.}
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}, and
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS}.}
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
@@ -2415,11 +2286,15 @@ The conditional square-lattice skeleton recorded earlier in this note has been
 removed. Its assembly assumed single-site injectivity of $A$
 (\path{IsVertexInjective}), the hypothesis the normal theorem exists to avoid: its
 scalar condition rested on the vertex-injective product identity rather than the
-region-injective one (\path{prod_perVertexScalar_eq_one_of_regionInjective}), and
-the interior-window open-lattice theorem
-(\path{fundamentalTheorem_normalSquarePEPS_unconditional}) and the general-graph
-gauge-equivalence theorem (\path{fundamentalTheorem_normalPEPS}) now cover the
-square-lattice content from region injectivity alone. Gone are: the conditional
+region-injective one (\path{prod_perVertexScalar_eq_one_of_regionInjective}). The
+interior-window open-lattice theorem
+\leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional} and the
+general-graph gauge-equivalence theorem
+\leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS} now cover the corresponding
+square-lattice content without single-site injectivity: the former uses the stated
+rectangle-injectivity, matched-bond, same-state, and positivity hypotheses, while
+the latter uses the paired blocking, single-crossing, same-state, positivity, and
+connectivity hypotheses. Gone are: the conditional
 statements themselves (\path{fundamentalTheorem_normalSquarePEPS},
 \path{fundamentalTheorem_normalSquarePEPS_of_modScalarGauge},
 \path{lambda_pow_card_eq_one}, \path{card_squareLatticeVertex}); the

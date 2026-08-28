@@ -64,19 +64,21 @@ intertwiner has the usual permutation-and-phase interpretation
 
 The checked Chapter~9 block-separation lemmas do not formalize
 Theorem~\texttt{thm-uniq} of Ref.~\cite{PerezGarcia2007MPSReps}. They compare
-representations that already have the same block structure. Their hypotheses
-include blockwise normalization, injective or irreducible blocks, a common
-block index set, a common block-dimension function, and strict ordering of
-weight moduli.\footnote{The formal declarations are
+block families that already share a block index set and block-dimension
+function. Their substantive hypotheses are blockwise injectivity of the first
+family and equality of the corresponding MPV families; the global and
+canonical-form variants retain the same block correspondence and use a common,
+otherwise arbitrary, weight function. They assume neither blockwise
+normalization nor strict ordering of weight moduli.\footnote{The formal declarations are
 \leanid{MPSTensor.fundamentalTheorem_multiBlock_blocks},
 \leanid{MPSTensor.fundamentalTheorem_multiBlock_global},
 \leanid{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}, and
 \leanid{MPSTensor.fundamentalTheorem_multiBlock_explicit}.}
 
-These assumptions are useful in local MPS arguments, but they are not the
-source hypotheses. In particular, the source theorem does not assume that the
-representations have a common prepared block decomposition, nor does it assume
-the Chapter~9 strict-modulus separation result. Its proof instead uses
+These same-structure assumptions are useful in local MPS arguments, but they
+are not the source hypotheses. In particular, the source theorem does not
+assume that the representations have a common prepared block decomposition.
+Its proof instead uses
 uniqueness of the OBC canonical representation and the Horn--Johnson
 matrix-lemma route described after Theorem~\texttt{thm-uniq} in
 Ref.~\cite{PerezGarcia2007MPSReps}.
@@ -97,9 +99,11 @@ provide one unitary $U$ satisfying
 (\ref{eq:pgvwc07_ti_uniqueness_scope_unitary_intertwiner}) for every physical
 index.
 
-The current Chapter~9 block-separation lemmas may support such a proof only
-after their stronger same-structure and strict-modulus hypotheses have been
-derived within the argument. They cannot replace the source theorem.
+The current same-structure lemmas may support such a proof only after the
+source argument has produced a common block correspondence and established,
+block by block, equality of the corresponding matrix product vector families.
+They do not themselves derive that correspondence from finite-ring state
+equality and therefore cannot replace the source theorem.
 
 \section{Tracked consequences}
 

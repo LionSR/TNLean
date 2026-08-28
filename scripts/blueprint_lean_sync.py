@@ -88,7 +88,8 @@ _TEX_PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}")
 _TEX_PROOF_END_RE = re.compile(r"\\end\{proof\}")
 
 
-def _is_escaped_tex_char(text: str, index: int) -> bool:
+def is_escaped_tex_char(text: str, index: int) -> bool:
+    """Return whether the character at ``index`` is escaped in TeX source."""
     backslashes = 0
     cursor = index - 1
     while cursor >= 0 and text[cursor] == "\\":
@@ -101,7 +102,7 @@ def _strip_tex_comments(payload: str) -> str:
     parts: list[str] = []
     index = 0
     while index < len(payload):
-        if payload[index] == "%" and not _is_escaped_tex_char(payload, index):
+        if payload[index] == "%" and not is_escaped_tex_char(payload, index):
             newline = payload.find("\n", index)
             if newline < 0:
                 break
@@ -127,7 +128,7 @@ def split_tex_lean_decls(payload: str) -> list[str]:
     start = 0
     depth = 0
     for index, char in enumerate(payload):
-        if _is_escaped_tex_char(payload, index):
+        if is_escaped_tex_char(payload, index):
             continue
         if char in "([{":
             depth += 1
