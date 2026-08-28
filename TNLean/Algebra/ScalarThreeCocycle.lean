@@ -62,8 +62,13 @@ def IsCocycle (ω : ScalarThreeCochain G) : Prop :=
       ω g h k * ω g (h * k) l * ω h k l
 
 /-- A scalar 3-cochain is normalized when it equals one whenever any argument
-is the identity. This is the standing normalization convention following arXiv:2502.20257,
-`eq:triv_omegas` (whose displayed formula repeats its third case). -/
+is the identity. This is the standing normalization convention following
+arXiv:2502.20257, `eq:triv_omegas`.
+
+**Local fix (repeated normalization case):** The source display repeats
+`ω(g,h,1) = 1` three times. The three clauses below give the intended cases in
+which the first, second, or third argument is the identity. See
+`docs/paper-gaps/fbc25_three_cocycle_normalization_typo.tex`. -/
 def IsNormalized (ω : ScalarThreeCochain G) : Prop :=
   (∀ h k, ω 1 h k = 1) ∧
     (∀ g k, ω g 1 k = 1) ∧
