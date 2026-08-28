@@ -351,17 +351,35 @@ def main() -> int:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
-            page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Use the Blueprint UI's own detail-level API to expose proofs.
-            # This avoids racing its document-ready handler, which otherwise can
-            # hide proof rows after a test-injected style or click has run.
+            # The MPDO-RFP page is large; do not wait for every unrelated asset.
+            # The fixture pictures have their own readiness check below.
+            page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
+            # Settle MathJax before measuring selectable operators between the
+            # pictures. The bundle is asynchronous even after DOMContentLoaded.
+            page.wait_for_function(
+                "() => window.MathJax && window.MathJax.startup"
+                " && window.MathJax.startup.promise",
+                timeout=120_000,
+            )
+            page.evaluate("() => window.MathJax.startup.promise")
+            equations = page.locator(".tenkz-equation")
+            # Ignore unrelated chapter pictures: only these fixtures contribute
+            # to the row geometry checked below.
+            page.wait_for_function("""() =>
+              [...document.querySelectorAll('.tenkz-equation .tenkz-pic')]
+                .every(image => image.complete)
+            """)
+            # Exercise the shipped layout, not a test-only width override.
             page.wait_for_function("() => typeof window.showmore_update === 'function'")
             page.evaluate("showmore_update(2)")
-            equations = page.locator(".tenkz-equation")
-            page.wait_for_function("""() =>
-              [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
-            """)
-            equations.first.wait_for(state="visible")
+            visibility = equations.evaluate_all("""nodes => nodes.map(node => ({
+              width: node.offsetWidth,
+              height: node.offsetHeight,
+            }))""")
+            assert all(fact["width"] > 0 and fact["height"] > 0 for fact in visibility), (
+                filename,
+                visibility,
+            )
             assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
