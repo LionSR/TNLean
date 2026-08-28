@@ -1,0 +1,500 @@
+\usepackage{graphicx} 
+\usepackage{dsfont}
+\usepackage{amsthm}
+\usepackage{listings}
+
+\usepackage[dvipsnames]{xcolor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz,tikz-cd,calc} 
+
+\usetikzlibrary{decorations.pathreplacing,decorations.markings,calc,3d,positioning,quotes}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{snakes}
+
+\newcommand\TikzScaling{1.4}
+\newcommand\Shift{2.1}
+
+\tikzset{
+  tensor/.style={
+    inner sep = 0.06cm,
+    shape = circle,
+    draw,
+    fill,
+    thick
+  },
+}
+
+\tikzset{
+  tensorempty/.style={
+    inner sep = 0.06cm,
+    shape = circle,
+    draw
+  },
+}
+
+\tikzset{
+  mpo/.style={
+    inner sep = 0.1cm,
+    shape = rectangle,
+    draw,
+    fill = violet,
+    thick
+  },
+}
+
+\tikzset{
+  circle/.style={
+    inner sep = 0.06cm,
+    shape = circle,
+    draw,
+    fill
+  },
+}
+
+\tikzset{
+  square/.style={
+    inner sep = 0.1cm,
+    shape = rectangle,
+    draw,
+    fill,
+    thick
+  },
+}
+
+\tikzset{
+  rectangle/.style={
+    inner sep = 0.18cm,
+    shape = rectangle,
+    draw,
+    fill
+  },
+}
+
+\tikzset{
+  widetensor/.style={
+    minimum width= 0.34cm,
+    minimum height = 0.22cm,
+    inner sep = 0,
+    shape = rectangle,
+    draw,
+    fill
+  },
+}  
+  \tikzset{
+  simpstensor/.style={
+    minimum width= 0.6cm,
+    minimum height = 0.25cm,
+    inner sep = 0,
+    shape = rectangle,
+    draw,
+    fill = yellow,
+    thick
+  },
+}
+    \tikzset{
+  tritensor/.style={
+    inner sep = 0.06cm,
+    shape = triangle,
+    draw,
+    fill,
+    thick
+  },
+}
+\tikzset{decoration={snake,amplitude=.4mm,segment length=2mm, post length=0mm,pre length=0mm}}
+
+%\draw[fill=black] (-0.2,-0.11) rectangle ++ (0.4,0.22);
+
+\tikzset{
+every picture/.style = {
+    baseline={([yshift=-.5ex]current bounding box.center)},
+%    font=\scriptsize
+  }
+}
+
+\tikzset{
+  fusion/.style={
+    line cap=round,
+    line width=1.5mm,
+  },
+    fusion_dagger/.style={
+    line cap=rect,
+    line width=1.5mm,
+  },
+  every picture/.style = {
+    baseline={([yshift=-.5ex]current bounding box.center)},
+    font=\scriptsize
+  },
+  irrep/.style={
+    anchor=south,
+    font = \tiny,
+    inner sep=2pt
+  },
+   tiny/.style={
+    font = \tiny,
+    inner sep=2pt
+  },
+   gelL/.style={
+    anchor = south east,
+    font = \tiny,
+    inner sep=2pt
+  },
+   gelR/.style={
+    anchor = south west,
+    font = \tiny,
+    inner sep=2pt
+  }
+}
+
+\tikzset{
+        pics/fusL/.style args={#1/#2/#3/#4}{
+        code = {
+	    \draw[fusion] (0,0)--(0,#1);
+	    \node[gelL] at ($0.5*(-0.1,#1)$) {$#2$};
+	    \node[gelR] at (0.05,#1) {$#3$};
+	    \node[gelR] at (0.05,0) {$#4$};
+    }}
+  }
+
+\tikzset{
+        pics/fusR/.style args={#1/#2/#3/#4}{
+        code = {
+	    \draw[fusion] (0,0)--(0,#1);
+	    \node[gelR] at ($0.5*(0.1,#1)$) {$#4$};
+	    \node[gelL] at (-0.05,#1) {$#2$};
+	    \node[gelL] at (-0.05,0) {$#3$};
+    }}
+  }
+\tikzset{
+        pics/actL/.style args={#1/#2/#3/#4}{
+        code = {
+	    \draw[fusion, gray] (0,0)--(0,#1);
+	    \node[gelL] at ($0.5*(-0.1,#1)$) {$#2$};
+	    \node[gelR] at (0.05,#1) {$#3$};
+	    \node[gelR] at (0.05,0) {$#4$};
+    }}
+  }
+
+\tikzset{
+        pics/actR/.style args={#1/#2/#3/#4}{
+        code = {
+	    \draw[fusion, gray] (0,0)--(0,#1);
+	    \node[gelR] at ($0.5*(0.1,#1)$) {$#4$};
+	    \node[gelL] at (-0.05,#1) {$#2$};
+	    \node[gelL] at (-0.05,0) {$#3$};
+    }}
+  }
+\tikzset{
+        pics/fusLdag/.style args={#1/#2/#3/#4}{
+        code = {
+	    \draw[fusion_dagger, brightube] (0,0)--(0,#1);
+	    \node[gelL] at ($0.5*(-0.1,#1)$) {$#2$};
+	    \node[gelR] at (0.05,#1) {$#3$};
+	    \node[gelR] at (0.05,0) {$#4$};
+    }}
+  }
+\tikzset{
+        pics/fusRdag/.style args={#1/#2/#3/#4}{
+        code = {
+	    \draw[fusion_dagger, brightube] (0,0)--(0,#1);
+	    \node[gelR] at ($0.5*(0.1,#1)$) {$#4$};
+	    \node[gelL] at (-0.05,#1) {$#2$};
+	    \node[gelL] at (-0.05,0) {$#3$};
+    }}
+  }
+
+  \tikzset{
+        ddash/.pic={
+        \draw[thick] (-0.075,-0.075) -- (0.075,0);
+        \draw[thick] (-0.075,0) -- (0.075,0.075);
+    }
+  }
+  
+
+\tikzset{
+      pics/V/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.4);
+	    \coordinate (-down) at (0.5,-0.4);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	    \draw[red,thick] (0,0.4)--(-up);
+	    \draw[red,thick] (0,-0.4)--(-down);
+	    \draw[fusion] (0,-0.55)--(0,0.55);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+  pics/W/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.4);
+	    \coordinate (-down) at (-0.5,-0.4);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	    \draw[red,thick] (0,0.4)--(-up);
+	    \draw[red,thick] (0,-0.4)--(-down);
+	    \draw[fusion] (0,-0.55)--(0,0.55);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  }
+ }
+
+
+\tikzset{
+        pics/V1/.style args={#1/#2/#3}{
+        code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.4);
+	    \coordinate (-down) at (0.5,-0.6);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	    \draw[red,thick] (0,0.4)--(-up);
+	    \draw[thick] (0,-0.6)--(-down);
+        \draw[thick] (-0.5,-0.6)--(-down);
+	    \draw[fusion,gray] (0,-0.55)--(0,0.55);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.45) {$#2$};
+	    \node[irrep] at (0.25,-0.4) {$#3$};
+    }
+  },
+        pics/W1/.style args={#1/#2/#3}{
+        code = {
+        \coordinate (-top) at (0,0.45);
+	    \coordinate (-up) at (-0.5,0.4);   
+        \coordinate (-mid) at (0.4,0);
+	    \coordinate (-down) at (-0.5,-0.6);
+	    \coordinate (-bottom) at (0,-0.45);
+	    \draw[red,thick] (0,0.4)--(-up);
+	    \draw[thick] (0,-0.6)--(-down);
+        \draw[thick] (-down) -- (0.5,-0.6);
+	    \draw[fusion,gray] (0,-0.55)--(0,0.55);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.15,0.45) {$#2$};
+	    \node[irrep] at (-0.25,-0.4) {$#3$};
+    }
+  },
+        pics/AL/.style args={#1}{
+        code = {
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0.3) {$#1$};
+    }
+  },
+        pics/AR/.style args={#1}{
+        code = {
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,0.3) {$#1$};
+    }
+  },
+        pics/ALrot/.style args={#1}{
+        code = {
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0,-0.3);
+	    \draw[red,thick] (-0.5,-0.3)--(-down);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.2,-0.75) {$#1$};
+    }
+ },
+        pics/FL/.style args={#1/#2/#3}{
+        code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	  	    \draw[red, thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    \draw[red, thick] (0,0)--(-mid);
+	      \draw[fusion] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+        pics/FR/.style args={#1/#2/#3}{
+        code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    \draw[red,thick] (0,0)--(-mid);
+	    \draw[fusion] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  },
+   pics/FLD/.style args={#1/#2/#3}{
+        code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	  	    \draw[red, thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    \draw[red, thick] (0,0)--(-mid);
+	      \draw[fusion_dagger, brightube] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+        pics/FRD/.style args={#1/#2/#3}{
+        code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    \draw[red,thick] (0,0)--(-mid);
+	    \draw[fusion_dagger, brightube] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  },
+      pics/ALl/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    \draw[thick] (0,-0.3)--(-down);
+	    %\draw[thick] (0,0)--(-mid);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,-0.3) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+  pics/ARl/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.35,0);
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    \draw[thick] (0,-0.3)--(-down);
+	    %\draw[thick] (0,0)--(-mid);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,-0.3) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  }
+ }
+
+\tikzset{
+  pics/W2/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.4);
+	    \coordinate (-down) at (-0.5,-1.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.4)--(-up);
+	    \draw[thick] (-0.5,-1.3)--(-down);
+       \draw[thick] (-down) -- (0.5,-1.3);
+	    	    \draw[fusion,gray] (0,-1.25)--(0,0.55);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  }
+ }
+
+
+
+\tikzset{
+ pics/ALe/.style args={#1}{
+        code = {
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    %\draw[red,thick] (0,0.3)--(-up);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0.3) {$#1$};
+    }
+  }
+ }
+
+ \tikzset{
+ pics/ALs/.style args={#1}{
+        code = {
+	    \coordinate (-up) at (0.2,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    \draw[fusion,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0.3) {$#1$};
+    }
+  }
+ }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\pf}{pf}
+\newcommand{\sign}{sign}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\bra}[1]{\langle#1|}
+\newcommand{\ev}[1]{\langle#1\rangle}
+\newcommand{\ketbra}[2]{|#1\rangle\hspace{-0.5mm}\langle#2|}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\hilb}{\mathcal{H}}
+\newcommand{\mcG}{\mathcal{G}}
+\newcommand{\ha}{\frac{1}{2}}
+\newcommand{\pheq}{\begin{equation}\text{\textcolor{blue}{Placeholder equation}}\end{equation}}
+\newcommand{\pheql}[1]{\begin{equation}\text{\textcolor{blue}{Placeholder equation}}\label{#1}\end{equation}}
+\newcommand{\note}[1]{\textcolor{blue}{[#1]}}
+
+\newcommand{\upin}{\mathbin{\rotatebox[origin=c]{90}{$\in$}}}
+\newcommand{\upset}{\mathbin{\rotatebox[origin=c]{90}{$\subseteq$}}}
+
+\newcommand{\ammaG}{\text{\reflectbox{$\Gamma$}}}
+
+\newcommand{\id}{\mathrm{id}}
+        
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\definecolor{wisteria}{rgb}{0.79, 0.63, 0.86}
+\definecolor{xanadu}{rgb}{0.45, 0.53, 0.47}
+\definecolor{classicrose}{rgb}{0.98, 0.8, 0.91}
+\definecolor{celadon}{rgb}{0.67, 0.88, 0.69}
+\definecolor{carrotorange}{rgb}{0.93, 0.57, 0.13}
+\definecolor{citrine}{rgb}{0.89, 0.82, 0.04}
+\definecolor{antiquewhite}{rgb}{0.98, 0.92, 0.84}
+\definecolor{brightube}{rgb}{0.82, 0.62, 0.91}
+
+
+\usepackage{scalerel}
+\newcommand\bigbracket{\scaleobj{2.5}{\Biggr\}}}
+
+\newcommand\inv[1]{#1^{\text{-}1}}
+
+\newcommand{\I}{\mathds{1}}
+
+\newtheorem{appxprop}{Proposition}[section]
+
+\usepackage[hyperindex,breaklinks]{hyperref}

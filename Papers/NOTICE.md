@@ -28,3 +28,4 @@ record for each paper is the arXiv posting or the journal publication.
 | [1804.04964](https://arxiv.org/abs/1804.04964) | Normal projected entangled pair states generating the same state | A. Molnár, J. Garre-Rubio, D. Pérez-García, N. Schuch, J. I. Cirac | non-exclusive-distrib 1.0 |
 | [1903.09439](https://arxiv.org/abs/1903.09439) | Mathematical open problems in projected entangled pair states | J. I. Cirac, J. Garre-Rubio, D. Pérez-García | non-exclusive-distrib 1.0 |
 | [2011.12127](https://arxiv.org/abs/2011.12127) | Matrix Product States and Projected Entangled Pair States: Concepts, Symmetries, and Theorems | J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete | non-exclusive-distrib 1.0 |
+| [2502.20257](https://arxiv.org/abs/2502.20257) | Symmetry defects and gauging for quantum states with matrix product unitary symmetries | A. Franco-Rubio, A. Bochniak, J. I. Cirac | non-exclusive-distrib 1.0 |
