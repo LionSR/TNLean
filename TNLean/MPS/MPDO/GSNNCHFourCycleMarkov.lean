@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.FourCycle
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.PositiveOverlappingProduct
 
 /-!
 # Four-cycle quantum Markov structure
 
-This module collects the generic positive-overlapping-product criterion and
-its application to four-site GSNNCH states.
+This module collects the four-site GSNNCH quantum Markov application and its
+obstruction example. The generic positive-overlapping-product criterion is owned
+by QICLean.
 -/
