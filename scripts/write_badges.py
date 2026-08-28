@@ -16,6 +16,8 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from badge_utils import count_color
+
 
 ROOT = Path(__file__).resolve().parents[1]
 LEAN_ROOT = ROOT / "TNLean"
@@ -119,16 +121,6 @@ def write_badge(name: str, label: str, message: str, color: str, badge_dir: Path
     badge_dir.mkdir(parents=True, exist_ok=True)
     payload = {"schemaVersion": 1, "label": label, "message": message, "color": color}
     (badge_dir / f"{name}.json").write_text(json.dumps(payload, indent=2) + "\n")
-
-
-def count_color(count: int, *, warning_at: int = 1, danger_at: int | None = None) -> str:
-    if count == 0:
-        return "brightgreen"
-    if count <= warning_at:
-        return "yellow"
-    if danger_at is not None and count >= danger_at:
-        return "red"
-    return "orange"
 
 
 def blueprint_badge_counts() -> tuple[int, int]:

@@ -38,6 +38,8 @@ import tomllib
 from collections import defaultdict
 from pathlib import Path
 
+from badge_utils import count_color
+
 
 SORRY_RE = re.compile(r"\bsorry\b")
 AXIOM_RE = re.compile(
@@ -132,16 +134,6 @@ def count_pattern(files: list[Path], pattern: re.Pattern[str]) -> int:
         source = path.read_text(encoding="utf-8")
         count += len(pattern.findall(strip_lean_comments_and_strings(source)))
     return count
-
-
-def count_color(count: int, *, warn: int, danger: int) -> str:
-    if count == 0:
-        return "brightgreen"
-    if count < warn:
-        return "yellow"
-    if count < danger:
-        return "orange"
-    return "red"
 
 
 def lean_version(repo_root: Path) -> str:
@@ -261,7 +253,9 @@ def main() -> None:
 
     badge_records = {
         "sorries.json": badge(
-            "sorries", str(sorry_count), count_color(sorry_count, warn=10, danger=50)
+            "sorries",
+            str(sorry_count),
+            count_color(sorry_count, warning_at=10, danger_at=50),
         ),
         "axioms.json": badge(
             "axioms", str(axiom_count), "brightgreen" if axiom_count == 0 else "red"
@@ -287,12 +281,12 @@ def main() -> None:
         badge_records["blueprint_no_leanok.json"] = badge(
             r"blueprint: no \leanok",
             str(no_leanok_count),
-            count_color(no_leanok_count, warn=100, danger=300),
+            count_color(no_leanok_count, warning_at=100, danger_at=300),
         )
         badge_records["blueprint_not_ready.json"] = badge(
             "blueprint: not ready",
             str(not_ready_count),
-            count_color(not_ready_count, warn=100, danger=300),
+            count_color(not_ready_count, warning_at=100, danger_at=300),
         )
 
     # --- Write badges ---
