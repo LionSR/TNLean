@@ -41,8 +41,9 @@ abbrev ScalarThreeCochain (G : Type*) := G → G → G → Units ℂ
 namespace ScalarCocycle
 
 /-- A scalar 2-cochain is normalized when it is one whenever either argument
-is the identity. This is the normalization required for its coboundary to
-preserve normalized 3-cochains. -/
+is the identity. This standard condition is sufficient for its coboundary to
+preserve normalized 3-cochains; `isNormalized_coboundary_iff` records the exact
+weaker condition. -/
 def IsNormalized (β : ScalarCocycle G) : Prop :=
   (∀ g, β 1 g = 1) ∧ (∀ g, β g 1 = 1)
 
@@ -122,14 +123,30 @@ theorem IsCocycle.fusionGauge {ω : ScalarThreeCochain G} (hω : IsCocycle ω)
     (β : ScalarCocycle G) : IsCocycle (fusionGauge β ω) :=
   (isCocycle_coboundary β).mul hω
 
+/-- A scalar 2-cochain has normalized 3-coboundary exactly when its values on
+both identity axes agree with one constant. Normalizing that constant to one is
+sufficient but not necessary. -/
+theorem isNormalized_coboundary_iff (β : ScalarCocycle G) :
+    IsNormalized (coboundary β) ↔
+      ∃ c : Units ℂ, (∀ g, β 1 g = c) ∧ (∀ g, β g 1 = c) := by
+  constructor
+  · rintro ⟨hleft, hmiddle, -⟩
+    refine ⟨β 1 1, fun g => ?_, fun g => ?_⟩
+    · exact div_eq_one.mp (by simpa [coboundary] using hleft 1 g)
+    · exact (div_eq_one.mp (by simpa [coboundary] using hmiddle g 1)).symm
+  · rintro ⟨c, hleft, hright⟩
+    refine ⟨fun h k => ?_, fun g k => ?_, fun g h => ?_⟩
+    · simp [coboundary, hleft]
+    · simp only [coboundary, one_mul, mul_one, hleft, hright]
+      rw [mul_comm]
+      simp
+    · simp [coboundary, hright]
+
 /-- A normalized scalar 2-cochain has normalized 3-coboundary. -/
 theorem isNormalized_coboundary {β : ScalarCocycle G}
     (hβ : β.IsNormalized) : IsNormalized (coboundary β) := by
-  rcases hβ with ⟨hβl, hβr⟩
-  refine ⟨fun h k => ?_, fun g k => ?_, fun g h => ?_⟩
-  · simp [ScalarThreeCochain.coboundary, hβl]
-  · simp [ScalarThreeCochain.coboundary, hβl, hβr]
-  · simp [ScalarThreeCochain.coboundary, hβr]
+  apply (isNormalized_coboundary_iff β).2
+  exact ⟨1, hβ.1, hβ.2⟩
 
 /-- Pointwise multiplication preserves normalized scalar 3-cochains. -/
 theorem IsNormalized.mul {ω η : ScalarThreeCochain G}
