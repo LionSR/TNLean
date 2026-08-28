@@ -68,12 +68,22 @@ theorem IsCompatible.gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (β : ScalarCocycle G) (γ : ActionTensorGauge G X) :
     IsCompatible (gauge β γ L) (ScalarThreeCochain.fusionGauge β ω) := by
   intro x g h k
-  simp only [gauge, ScalarThreeCochain.fusionGauge, ScalarThreeCochain.coboundary]
-  rw [hL]
+  simp only [LSymbol.gauge, ScalarThreeCochain.fusionGauge,
+    ScalarThreeCochain.coboundary]
   apply Units.ext
   push_cast
-  simp only [map_mul, map_div, smul_smul]
+  simp only [smul_smul]
+  have hL' := congrArg Units.val (hL x g h k)
+  push_cast at hL'
   field_simp
+  simp only [mul_assoc]
+  calc
+    _ = (γ (g * (h * k)) x : ℂ) *
+        ((L x g (h * k) : ℂ) * (L x h k : ℂ)) := by ring
+    _ = (γ (g * (h * k)) x : ℂ) *
+        ((ω g h k : ℂ) * (L (k • x) g h : ℂ) * (L x (g * h) k : ℂ)) := by
+      rw [hL']
+    _ = _ := by ring
 
 /-- L-symbols are normalized when `Lˣ_{g,1} = Lˣ_{1,g} = 1`. This is the
 standing convention in arXiv:2502.20257, `eq:triv_Ls`. -/
@@ -102,20 +112,20 @@ theorem isNormalized_gauge_iff (β : ScalarCocycle G) (γ : ActionTensorGauge G 
   constructor
   · rintro ⟨hright, hleft⟩
     refine ⟨fun x g => ?_, fun x g => ?_⟩
-    · exact (div_mul_eq_one_iff_eq (γ 1 x)).mp (hright x g)
-    · exact (div_mul_eq_one_iff_eq (γ 1 (g • x))).mp (hleft x g)
+    · simpa only [div_mul_eq_mul_div, div_eq_one] using hright x g
+    · simpa only [div_mul_eq_mul_div, div_eq_one] using hleft x g
   · rintro ⟨hright, hleft⟩
     refine ⟨fun x g => ?_, fun x g => ?_⟩
-    · exact (div_mul_eq_one_iff_eq (γ 1 x)).mpr (hright x g)
-    · exact (div_mul_eq_one_iff_eq (γ 1 (g • x))).mpr (hleft x g)
+    · simpa only [div_mul_eq_mul_div, div_eq_one] using hright x g
+    · simpa only [div_mul_eq_mul_div, div_eq_one] using hleft x g
 
 /-- Normalized fusion and action gauges preserve normalized L-symbols. -/
 theorem IsNormalized.gauge {L : LSymbol G X} (hL : IsNormalized L)
     {β : ScalarCocycle G} (hβ : β.IsNormalized) {γ : ActionTensorGauge G X}
     (hγ : γ.IsNormalized) : IsNormalized (gauge β γ L) := by
   apply (isNormalized_gauge_iff β γ L).2
-  exact ⟨fun x g => by simp [hβ.2, hL.1, hγ],
-    fun x g => by simp [hβ.1, hL.2, hγ]⟩
+  exact ⟨fun x g => by simp [hβ.2, hL.1, hγ x],
+    fun x g => by simp [hβ.1, hL.2, hγ (g • x)]⟩
 
 end LSymbol
 
