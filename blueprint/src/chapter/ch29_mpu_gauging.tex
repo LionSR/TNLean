@@ -221,6 +221,111 @@ they do not construct fusion tensors or an MPU representation.
     the constant cochain $1$.
 \end{definition}
 
+\begin{definition}[L-symbols and compatibility]
+    \label{def:mpug_l_symbols}
+    \lean{TNLean.Algebra.LSymbol,
+        TNLean.Algebra.LSymbol.IsCompatible}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    Let $G$ act on a set $\mathsf X$. An $L$-symbol is a function
+    $L\colon \mathsf X\times G^2\to\C^\times$, written $L^x_{g,h}$.
+    It is compatible with a scalar $3$-cochain $\omega$ when, for every
+    $x\in\mathsf X$ and $g,h,k\in G$,
+    \begin{align}
+        L^x_{g,hk}L^x_{h,k}
+        & =\omega(g,h,k)L^{k x}_{g,h}L^x_{gh,k}.
+        \label{eq:mpug_l_compatibility}
+    \end{align}
+    This is the scalar compatibility relation of
+    \cite{FrancoRubio2025MPUGauging}. No transitivity or finiteness assumption
+    is imposed on the action.
+    % Source anchor: arXiv:2502.20257, eq:omega_and_Ls.
+\end{definition}
+
+\begin{definition}[Joint scalar gauge of L-symbols]
+    \label{def:mpug_l_gauge}
+    \lean{TNLean.Algebra.ActionTensorGauge,
+        TNLean.Algebra.LSymbol.gauge}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge}
+    An action-tensor scalar gauge is a function
+    $\gamma\colon G\times\mathsf X\to\C^\times$. Together with a
+    fusion-tensor scalar gauge $\beta\colon G^2\to\C^\times$, it changes an
+    $L$-symbol by
+    \begin{align}
+        (\beta,\gamma)\mathbin{\triangleright}L^x_{g,h}
+        & =\frac{\gamma_{gh,x}\beta_{g,h}}
+        {\gamma_{g,hx}\gamma_{h,x}}L^x_{g,h}.
+        \label{eq:mpug_l_gauge}
+    \end{align}
+    This is the joint fusion-tensor and action-tensor gauge freedom in
+    \cite{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, eq:Lsymbgauge.
+\end{definition}
+
+\begin{definition}[Normalized L-symbols and action-tensor gauges]
+    \label{def:mpug_l_normalized}
+    \lean{TNLean.Algebra.LSymbol.IsNormalized,
+        TNLean.Algebra.ActionTensorGauge.IsNormalized}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    The $L$-symbol is normalized when, for every $x\in\mathsf X$ and $g\in G$,
+    \begin{align}
+        L^x_{g,e} & =1.
+        \label{eq:mpug_l_normalized_right}
+    \end{align}
+    \begin{align}
+        L^x_{e,g} & =1.
+        \label{eq:mpug_l_normalized_left}
+    \end{align}
+    The action-tensor gauge is normalized when $\gamma_{e,x}=1$ for every
+    $x\in\mathsf X$. These conventions match the trivial-identity choices of
+    \cite{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, eq:triv_Ls.
+\end{definition}
+
+\begin{theorem}[Joint scalar gauges preserve L-symbol compatibility]
+    \label{thm:mpug_l_gauge_preservation}
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.gauge,
+        TNLean.Algebra.LSymbol.gauge_apply_right_one,
+        TNLean.Algebra.LSymbol.gauge_apply_left_one,
+        TNLean.Algebra.LSymbol.isNormalized_gauge_iff,
+        TNLean.Algebra.LSymbol.IsNormalized.gauge}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_l_symbols,
+        def:mpug_l_gauge, def:mpug_l_normalized}
+    If $L$ is compatible with $\omega$, then
+    $(\beta,\gamma)\mathbin{\triangleright}L$ is compatible with
+    $\beta\mathbin{\triangleright}\omega$. On the identity axes, the gauge
+    formula is exactly
+    \begin{align}
+        ((\beta,\gamma)\mathbin{\triangleright}L)^x_{g,e}
+        & =\frac{\beta_{g,e}}{\gamma_{e,x}}L^x_{g,e}.
+        \label{eq:mpug_l_gauge_right}
+    \end{align}
+    \begin{align}
+        ((\beta,\gamma)\mathbin{\triangleright}L)^x_{e,g}
+        & =\frac{\beta_{e,g}}{\gamma_{e,gx}}L^x_{e,g}.
+        \label{eq:mpug_l_gauge_left}
+    \end{align}
+    Thus the gauged $L$-symbol is normalized exactly when
+    $\beta_{g,e}L^x_{g,e}=\gamma_{e,x}$ and
+    $\beta_{e,g}L^x_{e,g}=\gamma_{e,gx}$ for all $x$ and $g$. In particular,
+    normalized $\beta$, $\gamma$, and $L$ give a normalized gauged $L$-symbol.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_l_symbols, def:mpug_l_gauge}
+    Substitute (\ref{eq:mpug_l_gauge}) into both sides of
+    (\ref{eq:mpug_l_compatibility}). The $L$-factors give the original
+    compatibility relation, while the remaining $\beta$-factors give
+    $d\beta$. The $\gamma$-factors cancel after using
+    $h(kx)=(hk)x$. Setting either group argument equal to $e$ gives
+    (\ref{eq:mpug_l_gauge_right}) and
+    (\ref{eq:mpug_l_gauge_left}), from which the normalization statements
+    follow.
+\end{proof}
+
 \begin{definition}[Inversion cochains]
     \label{def:mpug_inversion_cochains}
     \lean{TNLean.Algebra.ScalarOneCochain,
