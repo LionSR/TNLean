@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.SpinCover.Basic
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
@@ -29,6 +30,13 @@ isometry `U = 1`, and maximally mixed spectrum `Λ = (1/2, 1/2)`,
 Its generated states are the chains of `eq:III_MPSRFP`--`eq:III_varphi`
 (lines 564--578): each node `n` carries two spins `aₙ, bₙ`, and the maximally
 entangled pair `|φ⟩ = (|00⟩ + |11⟩)/√2` is shared between `bₙ` and `aₙ₊₁`.
+
+## Main definitions
+
+* `bellPairChainTensor`: the Bell-pair chain tensor.
+* `bellPairChainZFirst` and `bellPairChainZSecond`: the two single-spin `Z`
+  observables, identified in the transfer-map proofs with QICLean's
+  `SpinCover.pauli 2`.
 
 ## Main results
 
@@ -205,21 +213,10 @@ theorem bellPairChainTensor_isTransferIdempotent :
 /-- The Pauli `Z` eigenvalue sign on a basis spin state. -/
 private def zSign : Fin 2 → ℂ := fun a => if a = 0 then 1 else -1
 
-/-- The Pauli `Z` matrix on one spin. -/
-private def pauliZ : Matrix (Fin 2) (Fin 2) ℂ := !![1, 0; 0, -1]
-
-private lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
+private lemma diagonal_zSign : Matrix.diagonal zSign = SpinCover.pauli 2 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [pauliZ, Matrix.mul_apply, Fin.sum_univ_two]
-
-private lemma trace_pauliZ : Matrix.trace pauliZ = 0 := by
-  simp [pauliZ, Matrix.trace_fin_two_of]
-
-private lemma diagonal_zSign : Matrix.diagonal zSign = pauliZ := by
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [pauliZ, zSign]
+    simp [SpinCover.pauli, zSign]
 
 /-- `Z` on the first spin `aₙ` of a node: the single-node block observable
 `Z ⊗ I` on the two-spin physical space, presented as a matrix on one-letter
@@ -238,10 +235,10 @@ noncomputable def bellPairChainZSecond :
   (Matrix.diagonal fun i => zSign (finProdFinEquiv.symm i).2).submatrix
     (fun f => f 0) (fun f => f 0)
 
-private lemma bell_trace_pauliZ_mul (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    Matrix.trace (pauliZ * X) = ∑ b : Fin 2, zSign b * X b b := by
+private lemma bell_trace_pauli_mul (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    Matrix.trace (SpinCover.pauli 2 * X) = ∑ b : Fin 2, zSign b * X b b := by
   rw [Matrix.trace_fin_two]
-  simp [pauliZ, zSign, Matrix.mul_apply, Fin.sum_univ_two]
+  simp [SpinCover.pauli, zSign, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-! ### One-letter observable transfer maps -/
 
@@ -284,7 +281,7 @@ private lemma physicalObservableTransfer_one_apply (A : MPSTensor d D)
 `𝔼_{Z ⊗ I}(X) = tr(X) · (Z · diag Λ)`. -/
 private lemma bell_observableTransfer_fst_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
     physicalObservableTransfer bellPairChainTensor 1 bellPairChainZFirst X =
-      (1 / 2 * Matrix.trace X) • pauliZ := by
+      (1 / 2 * Matrix.trace X) • SpinCover.pauli 2 := by
   rw [physicalObservableTransfer_one_apply]
   have hO : ∀ i j : Fin (2 * 2),
       bellPairChainZFirst (fun _ => j) (fun _ => i) •
@@ -309,7 +306,7 @@ private lemma bell_observableTransfer_fst_apply (X : Matrix (Fin 2) (Fin 2) ℂ)
 map. -/
 private lemma bell_observableTransfer_fst :
     physicalObservableTransfer bellPairChainTensor 1 bellPairChainZFirst =
-      (Matrix.traceLinearMap (Fin 2) ℂ ℂ).smulRight ((1 / 2 : ℂ) • pauliZ) := by
+      (Matrix.traceLinearMap (Fin 2) ℂ ℂ).smulRight ((1 / 2 : ℂ) • SpinCover.pauli 2) := by
   ext X
   rw [bell_observableTransfer_fst_apply, LinearMap.smulRight_apply,
     Matrix.traceLinearMap_apply, smul_smul, mul_comm (Matrix.trace X) (1 / 2 : ℂ)]
@@ -342,12 +339,12 @@ private lemma bell_observableTransfer_snd_apply (X : Matrix (Fin 2) (Fin 2) ℂ)
 map. -/
 private lemma bell_observableTransfer_snd :
     physicalObservableTransfer bellPairChainTensor 1 bellPairChainZSecond =
-      ((Matrix.traceLinearMap (Fin 2) ℂ ℂ).comp (LinearMap.mulLeft ℂ pauliZ)).smulRight
-        ((1 / 2 : ℂ) • 1) := by
+      ((Matrix.traceLinearMap (Fin 2) ℂ ℂ).comp
+        (LinearMap.mulLeft ℂ (SpinCover.pauli 2))).smulRight ((1 / 2 : ℂ) • 1) := by
   ext X
   rw [bell_observableTransfer_snd_apply, LinearMap.smulRight_apply,
     LinearMap.comp_apply, LinearMap.mulLeft_apply, Matrix.traceLinearMap_apply,
-    bell_trace_pauliZ_mul, smul_smul,
+    bell_trace_pauli_mul, smul_smul,
     mul_comm (∑ b : Fin 2, zSign b * X b b) (1 / 2 : ℂ)]
 
 /-! ### The adjacent and shifted two-region expectations -/
@@ -376,7 +373,7 @@ theorem bellPairChainTensor_adjacent_twoPointExpectation :
       LinearMap.mulLeft_apply, Matrix.smul_apply, smul_eq_mul, mul_eq_mul_left_iff,
       inv_eq_zero, or_false]
     left
-    rw [pauliZ_sq, Matrix.trace_one, Fintype.card_fin, Nat.cast_ofNat]
+    rw [SpinCover.pauli_mul_eq, Matrix.trace_one, Fintype.card_fin, Nat.cast_ofNat]
     exact mul_inv_cancel_left₀ (show (2 : ℂ) ≠ 0 by norm_num) _
   unfold physicalTwoPointExpectation
   rw [hcomp, LinearMap.trace_smulRight, bell_trace_half_one]
@@ -401,7 +398,7 @@ theorem bellPairChainTensor_shifted_twoPointExpectation :
       LinearMap.mulLeft_apply, mul_one, Matrix.smul_apply, smul_eq_mul,
       LinearMap.zero_apply, Matrix.zero_apply, mul_eq_zero, inv_eq_zero, false_or,
       or_self_left]
-    exact Or.inr (Or.inl trace_pauliZ)
+    exact Or.inr (Or.inl (SpinCover.trace_pauli 2))
   unfold physicalTwoPointExpectation
   rw [hcomp, map_zero]
 

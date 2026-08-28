@@ -81,16 +81,6 @@ theorem IsResidualIsometryFamily.wordEntryFamily_linearIndependent
       simp_rw [← mul_assoc]
       rw [← Finset.sum_mul, hcoeff w, zero_mul]
 
-/-- A residual-isometry family spans the product of its block matrix algebras
-with one-site word tuples. This is the simultaneous one-site span consequence
-of arXiv:1606.00608, eq:III_isometry (line 551). -/
-theorem IsResidualIsometryFamily.wordTupleSpanTop_one
-    {U : (j : Fin r) → MPSTensor d (dim j)}
-    (hU : IsResidualIsometryFamily U) :
-    WordTupleSpanTop U 1 :=
-  wordTupleSpanTop_of_wordEntryFamily_linearIndependent U
-    hU.wordEntryFamily_linearIndependent
-
 /-- Simultaneous one-site word spanning is preserved by invertible left and
 right multiplication in each block. -/
 theorem wordTupleSpanTop_one_of_blockwise_mul
@@ -189,6 +179,7 @@ theorem wordTupleSpanTop_one_of_isTransferIdempotent_directSum
     exact (Matrix.isUnit_nonsing_inv_det (X j) (Ne.isUnit (hXdet j))).ne_zero
   · intro j i
     simpa only [D, Matrix.mul_assoc] using hdecomp j i
-  · exact hU.wordTupleSpanTop_one
+  · exact wordTupleSpanTop_of_wordEntryFamily_linearIndependent U
+      hU.wordEntryFamily_linearIndependent
 
 end MPSTensor

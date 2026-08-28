@@ -703,13 +703,6 @@ strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
   ∀ α β γ : I, ∀ k : Fin (χ.dim α β γ), 0 < χ.entry α β γ k
 
-/-- Reindexing preserves positivity of the diagonal entries. -/
-theorem PosEntries.comap {J : Type*} {χ : DiagonalChiFamily I}
-    (hχ : χ.PosEntries) (f : J → I) :
-    (χ.comap f).PosEntries := by
-  intro α β γ k
-  exact hχ (f α) (f β) (f γ) k
-
 end DiagonalChiFamily
 
 /-- *Trace-power compatibility* between an abstract structure-coefficient family

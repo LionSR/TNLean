@@ -76,26 +76,11 @@ structure RetainedProductSpectralFamily
   local_intertwine_adjoint : ∀ p k ab,
     (localInclusion p k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab =
       (coefficient p k • block p k ab) * (localInclusion p k)ᴴ
-  /-- Compression to a local corner gives its weighted normal tensor. -/
-  local_compression : ∀ p k ab,
-    coefficient p k • block p k ab =
-      (localInclusion p k)ᴴ *
-        weightedVerticalProductBlock dim mult weight B p ab *
-          localInclusion p k
   /-- The local corners reconstruct every letter of their copy-pair tensor. -/
   local_reconstruction : ∀ p ab,
     weightedVerticalProductBlock dim mult weight B p ab =
       ∑ k, localInclusion p k * (coefficient p k • block p k ab) *
         (localInclusion p k)ᴴ
-  /-- The local decomposition preserves every positive-length closed chain. -/
-  local_sameMPV₂Pos : ∀ p, MPSTensor.SameMPV₂Pos
-    (weightedVerticalProductBlock dim mult weight B p)
-      (MPSTensor.toTensorFromBlocks (d := D * D)
-      (μ := coefficient p) (block p))
-  /-- The total local bond dimension does not exceed the copy-pair bond
-  dimension. -/
-  local_dimension_bound : ∀ p,
-    (∑ k, localDim p k) ≤ dim p.1.1 * dim p.2.1
 
 /-- The local spectral decompositions may be chosen simultaneously for every
 retained copy pair when the blocked vertical tensor has projector closure and
@@ -124,8 +109,7 @@ theorem exists_retainedProductSpectralFamily_of_blockTwo
   choose count localDim coefficient block localInclusion
     localDim_pos coefficient_pos block_normal localInclusion_isometry
     localInclusion_orthogonal local_intertwine local_intertwine_adjoint
-    local_compression local_reconstruction local_sameMPV₂Pos
-    local_dimension_bound using hExists
+    _ local_reconstruction _ _ using hExists
   exact ⟨{
     count := count
     localDim := localDim
@@ -139,10 +123,7 @@ theorem exists_retainedProductSpectralFamily_of_blockTwo
     localInclusion_orthogonal := localInclusion_orthogonal
     local_intertwine := local_intertwine
     local_intertwine_adjoint := local_intertwine_adjoint
-    local_compression := local_compression
-    local_reconstruction := local_reconstruction
-    local_sameMPV₂Pos := local_sameMPV₂Pos
-    local_dimension_bound := local_dimension_bound }⟩
+    local_reconstruction := local_reconstruction }⟩
 
 /-- The local spectral decompositions may be chosen simultaneously for every
 retained copy pair of a tensor in normalized BNT-refined horizontal form.

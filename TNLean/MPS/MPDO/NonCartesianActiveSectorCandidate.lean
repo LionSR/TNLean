@@ -21,17 +21,15 @@ right factors are
 \]
 The product \(LR\) is the rank-one projection
 \(\operatorname{diag}(1,0)\), whereas the opposite product \(T=RL\) is
-strictly positive, has rank two, and satisfies \(T^2=T^3\) but not
-\(T^2=T\).  The four matrices \(l_k r_k\) span the full two-by-two matrix
-algebra.
+strictly positive and satisfies \(T^2=T^3\) but not \(T^2=T\).  The four
+matrices \(l_k r_k\) span the full two-by-two matrix algebra.
 
-Unlike the earlier active-sector witness, the four projective left factors
-are pairwise distinct, as are the four projective right factors.  Thus the
-displayed sectors do not arise from a Cartesian product of two binary
-coordinates; the corresponding injectivity statements are proved below.  The
-statements in this file establish the finite-dimensional
-algebraic data only; they do not yet assert that every physical-sector
-factorization retains these four sectors.
+Unlike the earlier active-sector witness, the selected projective left and
+right factors are pairwise distinct.  Thus the displayed sectors do not
+arise from a Cartesian product of two binary coordinates.  The statements
+in this file establish the finite-dimensional algebraic data only; they do
+not yet assert that every physical-sector factorization retains these four
+sectors.
 
 This construction concerns the gap in arXiv:1606.00608, Appendix C.2,
 Proposition `prop2to3`, lines 1740--1782.
@@ -93,12 +91,6 @@ lemma rightPairing_mul_leftPairing :
 lemma traceMatrix_pos (i j : Fin 4) : 0 < traceMatrix i j := by
   fin_cases i <;> fin_cases j <;> norm_num [traceMatrix]
 
-/-- Every row of the neighboring trace matrix sums to one. -/
-lemma traceMatrix_row_sum (i : Fin 4) : ∑ j, traceMatrix i j = 1 := by
-  fin_cases i <;>
-    norm_num [traceMatrix, Fin.sum_univ_four,
-      Matrix.cons_val_two, Matrix.cons_val_three]
-
 /-- Every column of the neighboring trace matrix sums to one. -/
 lemma traceMatrix_column_sum (j : Fin 4) : ∑ i, traceMatrix i j = 1 := by
   fin_cases j <;>
@@ -129,13 +121,6 @@ lemma traceMatrix_not_idempotent : traceMatrix ^ 2 ≠ traceMatrix := by
   have h01 := congrFun (congrFun h 0) 1
   rw [traceMatrix_sq] at h01
   norm_num [traceMatrix] at h01
-
-/-- The neighboring trace matrix has rank at least two, witnessed by a
-nonzero two-by-two minor. -/
-lemma traceMatrix_rank_ge_two_minor :
-    traceMatrix 0 0 * traceMatrix 1 1 -
-        traceMatrix 0 1 * traceMatrix 1 0 ≠ 0 := by
-  norm_num [traceMatrix]
 
 /-- The four sector matrices form a basis of the two-by-two matrix algebra. -/
 lemma sectorMatrix_span_eq_top :
@@ -282,21 +267,5 @@ lemma tensor_isSAL : tensor.IsSAL := by
   let _ : NeZero 2 := ⟨by omega⟩
   exact factorization.isSAL_of_isSourceZCL tensor_isInjective
     neighboringOperator_pos tensor_isSourceZCL
-
-/-- The four left projective factors are pairwise distinct after fixing their
-first coordinate to one. -/
-lemma left_factor_injective :
-    Function.Injective (fun k : Fin 4 ↦ leftPairing 1 k) := by
-  intro i j hij
-  fin_cases i <;> fin_cases j
-  all_goals first | rfl | (exfalso; norm_num [leftPairing] at hij)
-
-/-- The four right projective factors are pairwise distinct after fixing
-their first coordinate to \(1/4\). -/
-lemma right_factor_injective :
-    Function.Injective (fun k : Fin 4 ↦ rightPairing k 1) := by
-  intro i j hij
-  fin_cases i <;> fin_cases j
-  all_goals first | rfl | (exfalso; norm_num [rightPairing] at hij)
 
 end MPOTensor.NonCartesianActiveSectorCandidate

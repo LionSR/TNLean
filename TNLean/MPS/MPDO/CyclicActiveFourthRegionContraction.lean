@@ -85,38 +85,6 @@ private theorem suffixContraction_suffix_last_succ {n m : ℕ} :
   simp only [Nat.add_zero]
   rw [show n + 1 + m + 1 = n + 1 + (m + 1) by omega, Nat.mod_self]
 
-private theorem fourthRegion_retained_internal_index {n : ℕ} (i : Fin n) :
-    Fin.castAdd 1 i = (Fin.last n).succAbove i := by
-  ext
-  simp [Fin.succAbove_last]
-
-private theorem partialTraceRight_neighboringOperator_eq_of_right
-    (F : PhysicalSectorFactorization K)
-    (k h h' : Fin F.sectorCount) (hh : h = h')
-    (x y : Fin (F.rightDim k)) :
-    Matrix.partialTraceRight (F.neighboringOperator k h) x y =
-      Matrix.partialTraceRight (F.neighboringOperator k h') x y := by
-  subst h'
-  rfl
-
-private theorem partialTraceLeft_neighboringOperator_eq_of_left
-    (F : PhysicalSectorFactorization K)
-    (k k' h : Fin F.sectorCount) (hk : k = k')
-    (x y : Fin (F.leftDim h)) :
-    Matrix.partialTraceLeft (F.neighboringOperator k h) x y =
-      Matrix.partialTraceLeft (F.neighboringOperator k' h) x y := by
-  subst k'
-  rfl
-
-private theorem neighboringOperator_trace_eq_of_eq
-    (F : PhysicalSectorFactorization K)
-    (k k' h h' : Fin F.sectorCount) (hk : k = k') (hh : h = h') :
-    (F.neighboringOperator k h).trace =
-      (F.neighboringOperator k' h').trace := by
-  subst k'
-  subst h'
-  rfl
-
 private theorem appendSectorFiber_castAdd_heq
     (F : PhysicalSectorFactorization K)
     {L R : ℕ} {k : Fin L → Fin F.sectorCount}
@@ -207,12 +175,16 @@ private theorem suffixContraction_retained_neighboring_entry
       (by simp [suffixContraction_internal_index])
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.castAdd 1 i) rfl).trans ?_
       refine (congr_arg_heq (fun s ↦ (((F.retainedOpenEdgeEquiv k).symm x) s).2)
-        (fourthRegion_retained_internal_index i)).trans ?_
+        (show Fin.castAdd 1 i = (Fin.last n).succAbove i by
+          ext
+          simp)).trans ?_
       exact heq_of_eq (congrArg Prod.fst
         (F.retainedOpenEdgeEquiv_symm_internal_edge k x i))
     · refine (F.appendSectorFiber_snd_castAdd_heq _ _ (Fin.castAdd 1 i) rfl).trans ?_
       refine (congr_arg_heq (fun s ↦ (((F.retainedOpenEdgeEquiv k).symm y) s).2)
-        (fourthRegion_retained_internal_index i)).trans ?_
+        (show Fin.castAdd 1 i = (Fin.last n).succAbove i by
+          ext
+          simp)).trans ?_
       exact heq_of_eq (congrArg Prod.fst
         (F.retainedOpenEdgeEquiv_symm_internal_edge k y i))
   · apply Matrix.entry_eq_of_heq (fun s ↦ F.leftTensor s a)
@@ -746,21 +718,7 @@ theorem sum_threeSuffixFiber_cyclicNeighboringProduct_active
         (F.activeThreeSectorWord q r h) x y
     _ = _ := by
       simp only [Matrix.kroneckerMap_apply]
-      rw [F.partialTraceRight_neighboringOperator_eq_of_right
-          (k (Fin.last n)) (F.activeThreeSectorWord q r h 0) q
-          (F.activeThreeSectorWord_zero q r h) x.2.1 y.2.1,
-        F.partialTraceLeft_neighboringOperator_eq_of_left
-          (F.activeThreeSectorWord q r h 2) h (k (Fin.last n + 1))
-          (F.activeThreeSectorWord_two q r h) x.2.2 y.2.2,
-        F.neighboringOperator_trace_eq_of_eq
-          (F.activeThreeSectorWord q r h 0) q
-          (F.activeThreeSectorWord q r h 1) r
-          (F.activeThreeSectorWord_zero q r h)
-          (F.activeThreeSectorWord_one q r h),
-        F.neighboringOperator_trace_eq_of_eq
-          (F.activeThreeSectorWord q r h 1) r
-          (F.activeThreeSectorWord q r h 2) h
-          (F.activeThreeSectorWord_one q r h)
-          (F.activeThreeSectorWord_two q r h)]
+      rw [F.activeThreeSectorWord_zero, F.activeThreeSectorWord_one,
+        F.activeThreeSectorWord_two]
 
 end MPOTensor.PhysicalSectorFactorization

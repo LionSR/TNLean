@@ -100,23 +100,6 @@ namespace BNTFusionCoisometryFamily
 variable {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
 variable (Fam : BNTFusionCoisometryFamily Λ p)
 
-private theorem listProd_conj_of_conjTranspose_mul_self_fintype
-    {S T : Type*} [Fintype S] [Fintype T] [DecidableEq S] [DecidableEq T]
-    (W : Matrix S T ℂ) (hW : Wᴴ * W = 1)
-    {n : ℕ} (F : Fin (n + 1) → Matrix T T ℂ) :
-    (List.ofFn fun l => W * F l * Wᴴ).prod =
-      W * (List.ofFn F).prod * Wᴴ := by
-  induction n with
-  | zero => simp
-  | succ m ih =>
-    rw [List.ofFn_succ, List.prod_cons,
-      List.ofFn_succ (f := F), List.prod_cons]
-    have ih_step := ih (F ∘ Fin.succ)
-    simp only [Function.comp_def] at ih_step
-    rw [ih_step]
-    simp only [Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc Wᴴ W, hW, Matrix.one_mul]
-
 /-- The fusion coisometry carries every product letter to its retained
 weighted direct sum. -/
 theorem fusionCoisometry_mul_mulTensor (α β : Λ) (i j : Fin p) :
@@ -170,7 +153,7 @@ theorem mpo_mul_mpo_eq_sum (L : ℕ) (hL : 0 < L) (α β : Λ) :
       fun l => mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l) := by
     funext l
     simpa [W, U, G] using (Fam.reconstruction α β (σ l) (τ l)).symm
-  have hconj := listProd_conj_of_conjTranspose_mul_self_fintype W hW G
+  have hconj := listProd_conj_of_conjTranspose_mul_self W hW G
   have htraceP : Matrix.trace (List.ofFn fun l =>
       mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l)).prod =
       Matrix.trace (List.ofFn G).prod := by

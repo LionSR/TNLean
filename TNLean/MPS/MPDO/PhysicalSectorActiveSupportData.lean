@@ -94,9 +94,6 @@ structure SectorActiveFactorSupportData
   /-- No left coordinate is retained in an inactive sector. -/
   leftDim_eq_zero_of_not_isActiveSector :
     ¬ F.IsActiveSector k → leftDim = 0
-  /-- No right coordinate is retained in an inactive sector. -/
-  rightDim_eq_zero_of_not_isActiveSector :
-    ¬ F.IsActiveSector k → rightDim = 0
 
 /-- Every physical sector admits factor-support coordinates, with
 zero-dimensional coordinates in the inactive case.
@@ -128,8 +125,7 @@ theorem nonempty_sectorActiveFactorSupportData
         rw [hRangeL, hRangeR, ← F.sectorProductFamily_supportProj k]
       leftDim_pos_of_isActiveSector := fun _ ↦ hl
       rightDim_pos_of_isActiveSector := fun _ ↦ hr
-      leftDim_eq_zero_of_not_isActiveSector := fun h ↦ (h hk).elim
-      rightDim_eq_zero_of_not_isActiveSector := fun h ↦ (h hk).elim }⟩
+      leftDim_eq_zero_of_not_isActiveSector := fun h ↦ (h hk).elim }⟩
   · let VL : Matrix (Fin (F.leftDim k)) (Fin 0) ℂ := 0
     let VR : Matrix (Fin (F.rightDim k)) (Fin 0) ℂ := 0
     exact ⟨{
@@ -146,8 +142,7 @@ theorem nonempty_sectorActiveFactorSupportData
         simp [VL, VR]
       leftDim_pos_of_isActiveSector := fun h ↦ (hk h).elim
       rightDim_pos_of_isActiveSector := fun h ↦ (hk h).elim
-      leftDim_eq_zero_of_not_isActiveSector := fun _ ↦ rfl
-      rightDim_eq_zero_of_not_isActiveSector := fun _ ↦ rfl }⟩
+      leftDim_eq_zero_of_not_isActiveSector := fun _ ↦ rfl }⟩
 
 /-- A simultaneous choice of factor-support coordinates for all physical
 sectors.

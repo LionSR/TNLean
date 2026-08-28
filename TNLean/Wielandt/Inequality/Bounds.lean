@@ -119,7 +119,7 @@ theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
     qIndex A ≤ iIndex A := by
-  exact prop3_qIndex_le_iIndex A
+  exact qIndex_le_iIndex A
     (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
 
 /-! ## Part 2: Case (3) — noninvertible with nonzero eigenvalue gives `D²` -/

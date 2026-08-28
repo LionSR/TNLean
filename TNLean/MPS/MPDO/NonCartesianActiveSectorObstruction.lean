@@ -8,8 +8,8 @@ import TNLean.MPS.MPDO.NonCartesianActiveSectorRigidity
 /-!
 # The universal neighboring-trace obstruction
 
-Every physical-sector decomposition of the candidate is reduced to four
-scalar sectors, and its neighboring trace matrix has a nonzero minor.
+Every physical-sector decomposition of the candidate is reduced to scalar
+sectors, and its neighboring trace matrix has a nonzero minor.
 
 This construction concerns arXiv:1606.00608, Appendix C.2,
 Proposition `prop2to3`, lines 1740--1782.
@@ -20,14 +20,6 @@ open scoped Matrix BigOperators ComplexOrder Matrix.Norms.Operator
 noncomputable section
 
 namespace MPOTensor.NonCartesianActiveSectorCandidate
-
-/-- Every factorization has four scalar sectors. -/
-lemma sectorCount_eq_four (F : PhysicalSectorFactorization tensor) :
-    F.sectorCount = 4 := by
-  have hcard := Fintype.card_congr F.sectorEquiv
-  simp only [Fintype.card_fin, Fintype.card_sigma, Fintype.card_prod] at hcard
-  simp_rw [leftDim_eq_one F, rightDim_eq_one F] at hcard
-  simpa using hcard.symm
 
 /-- The unique physical coordinate in a scalar sector. -/
 def scalarSectorIndex (F : PhysicalSectorFactorization tensor)
