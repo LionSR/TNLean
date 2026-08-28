@@ -88,18 +88,65 @@ _TEX_PROOF_BEGIN_RE = re.compile(r"\\begin\{proof\}")
 _TEX_PROOF_END_RE = re.compile(r"\\end\{proof\}")
 
 
-def _split_lean_decls(payload: str) -> list[str]:
-    """Split the contents of a ``\\lean{...}`` tag into declaration names.
+def _is_escaped_tex_char(text: str, index: int) -> bool:
+    backslashes = 0
+    cursor = index - 1
+    while cursor >= 0 and text[cursor] == "\\":
+        backslashes += 1
+        cursor -= 1
+    return backslashes % 2 == 1
+
+
+def _strip_tex_comments(payload: str) -> str:
+    parts: list[str] = []
+    index = 0
+    while index < len(payload):
+        if payload[index] == "%" and not _is_escaped_tex_char(payload, index):
+            newline = payload.find("\n", index)
+            if newline < 0:
+                break
+            index = newline + 1
+            while index < len(payload) and payload[index].isspace():
+                index += 1
+            continue
+        parts.append(payload[index])
+        index += 1
+    return "".join(parts)
+
+
+def split_tex_lean_decls(payload: str) -> list[str]:
+    """Split the contents of a TeX Lean-declaration tag into declaration names.
 
     Blueprint tags are often wrapped across several TeX source lines for
     readability.  Normalising whitespace here keeps the sync checker aligned
     with ``leanblueprint web``, whose generated ``lean_decls`` file includes
     declarations from both one-line and multi-line tags.
     """
-    payload = re.sub(r"%[^\n]*\n\s*", "", payload)
-    payload = re.sub(r"%[^\n]*$", "", payload)
-    normalised = re.sub(r"\s+", " ", payload)
-    return [decl.strip() for decl in normalised.split(",") if decl.strip()]
+    payload = _strip_tex_comments(payload)
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    for index, char in enumerate(payload):
+        if _is_escaped_tex_char(payload, index):
+            continue
+        if char in "([{":
+            depth += 1
+        elif char in ")]}" and depth > 0:
+            depth -= 1
+        elif char == "," and depth == 0:
+            parts.append(payload[start:index])
+            start = index + 1
+    parts.append(payload[start:])
+    return [
+        normalised
+        for part in parts
+        if (normalised := re.sub(r"\s+", " ", part).strip())
+    ]
+
+
+def _split_lean_decls(payload: str) -> list[str]:
+    """Backward-compatible wrapper for blueprint ``\\lean{...}`` payloads."""
+    return split_tex_lean_decls(payload)
 
 
 # ---------------------------------------------------------------------------

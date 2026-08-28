@@ -221,7 +221,7 @@ The formal route has three distinct layers:
           canonical-form supplier establishes the required
           unit-modulus-copy normalization.
     \item The declaration
-          \leanid{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
+          \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
           is an auxiliary rectangular comparison theorem. Given a sector-basis
           matching, linear independence, and equality of the total MPV
           families, it proves equality of the corresponding sector-weight
@@ -263,7 +263,7 @@ to be obtained from the source argument in
 Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \paragraph{Data structures and transport lemmas.}
-Objects such as \leanid{SectorBasisOverlapSpanHypotheses} store formal
+Objects such as \path{SectorBasisOverlapSpanHypotheses} store formal
 comparison data. They are not paper theorems. Declarations that convert one
 such structure into another are auxiliary unless they directly state one of
 the mathematical claims in Refs.~\cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}.
@@ -284,7 +284,7 @@ The following declarations are auxiliary and should not be read as independent
 paper-level theorems.
 \begin{itemize}
     \item The explicit-coefficient equal-MPV declaration
-          \leanid{fundamentalTheorem_equalMPV_of_explicit_coefficients} is
+          \path{fundamentalTheorem_equalMPV_of_explicit_coefficients} is
           lemma-level. It assumes coefficient arrays and their nonzero limits,
           so it is not the full equal-MPV corollary in
           Refs.~\cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}.
@@ -318,16 +318,16 @@ paper-level theorems.
           \end{align}
           See lines~217--219 of Ref.~\cite{Cirac2016MPDO_arXiv}.
     \item The declaration
-          \leanid{power_sum_eq_implies_multiset_eq} is a lemma-level
+          \leanid{Matrix.sum_pow_eq_implies_multiset_eq} is a lemma-level
           restatement of the elementary Newton--Girard input used in the
           equal-MPV proof. The former declaration
-          \leanid{perBlock_sameMPV_of_equalMPV_CFBNT}, which extracted
+          \path{perBlock_sameMPV_of_equalMPV_CFBNT}, which extracted
           blockwise equality from the common-block equal-MPV lemma, has also
           been removed from the active Lean tree. These names identify the
           retired one-copy route and should not be counted as additional
           source-level Fundamental Theorems.
     \item The implication
-          \leanid{sameMPV₂_implies_proportionalMPV₂} converts equal MPV
+          \leanid{MPSTensor.SameMPV₂Pos.toNonzeroProportionalMPV₂} converts equal MPV
           families into proportional MPV families with proportionality
           constant $1$. It is lemma-level because it is a logical conversion
           between hypotheses, not a separate theorem from
@@ -335,8 +335,8 @@ paper-level theorems.
           the identifier is the Unicode subscript used in the Lean declaration
           name.
     \item The BNT sector-weight recovery declarations
-          \leanid{weight_multiset_eq_of_sameMPV_bnt} and
-          \leanid{exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
+          \leanid{MPSTensor.matched_sector_weight_multiset_eq} and
+          \leanid{MPSTensor.matched_sector_weight_equiv}
           are lemma-level. They formalize the coefficient identity
           \begin{align}
               c_{S,j}^{(N)}
@@ -348,9 +348,9 @@ paper-level theorems.
           They do not add BNT theorems beyond the basis-normal-tensor
           comparison in Ref.~\cite{Cirac2016MPDO_arXiv}.
     \item The phase-matched sector-comparison adapters
-          \leanid{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
+          \path{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
           and
-          \leanid{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
+          \path{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
           are lemma-level. Their legacy names describe rectangular comparison
           adapters that transport the same coefficient and multiset formulas
           across a supplied phase or matched-basis identification. The

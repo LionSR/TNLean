@@ -106,7 +106,7 @@ from finitely many polynomial identities. It does not use a limiting argument.
 \section{The basis-of-representatives restriction}
 
 The surviving formal normal-CF-BNT structure is
-\leanid{IsNormalCanonicalFormBNT}.\footnote{Defined in
+\leanid{MPSTensor.IsNormalCanonicalFormBNT}.\footnote{Defined in
 \path{TNLean/MPS/BNT/Construction.lean}. The earlier non-normal wrapper was
 retired after its downstream consumers were replaced by explicit
 separated-block hypotheses.} This structure no longer requires strict
@@ -116,7 +116,7 @@ Instead of strict modulus separation, its BNT separation field requires
 distinct blocks not to be gauge-phase equivalent.
 
 The remaining restriction is therefore not strict modulus ordering.
-The structure \leanid{IsNormalCanonicalFormBNT} is a
+The structure \leanid{MPSTensor.IsNormalCanonicalFormBNT} is a
 basis-of-representatives surface: its block family already contains one
 selected representative for each gauge-phase class. It does not retain
 multiple copies of one source BNT tensor as separate summands together with
@@ -127,8 +127,8 @@ their individual weights $\mu_{j,q}$, copy gauges, and coefficient
     \label{eq:cpsv16_ft_one_copy_scope_restriction_sector_copy_coefficient}
 \end{align}
 The formalization carries this raw multiplicity data in
-\leanid{SectorDecomposition} and in the SectorBNT comparison theorems, not in
-\leanid{IsNormalCanonicalFormBNT}.
+\leanid{MPSTensor.SectorDecomposition} and in the SectorBNT comparison theorems, not in
+\leanid{MPSTensor.IsNormalCanonicalFormBNT}.
 
 In the one-copy special case, the source decomposition becomes
 \begin{align}
@@ -166,7 +166,7 @@ $N=1,\ldots,\max(x_a,x_b)$ are equal as multisets. This finite algebraic fact
 follows from the Newton--Girard identities: the power sums determine the
 elementary symmetric polynomials, which determine the multiset of roots.
 
-A module named \leanid{ScalarPowerSumIdentity}\footnote{Introduced in commit
+A module named \path{QICLean/Algebra/ScalarPowerSumIdentity.lean}\footnote{Introduced in commit
 \texttt{dd54b79e}.} was added early in the project, but it does not specialize
 to the fixed-length statement in the form required by Step~4 of the source
 proof. The result must therefore be available as a standalone theorem,
@@ -190,10 +190,10 @@ Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 \subsection{Multi-copy sector structure}
 
-The structure \leanid{IsNormalCanonicalFormBNT} permits equal moduli but does
+The structure \leanid{MPSTensor.IsNormalCanonicalFormBNT} permits equal moduli but does
 not store repeated gauge-phase-equivalent copies with their individual
 weights. The general theorem therefore requires the
-\leanid{SectorDecomposition}/SectorBNT multiplicity structure, in which every
+\leanid{MPSTensor.SectorDecomposition}/SectorBNT multiplicity structure, in which every
 sector has an arbitrary finite list of copy weights and gauges. Without this
 data, the general-multiplicity form of Corollary~\texttt{II\_cor2} of
 Ref.~\cite{Cirac2016MPDO_arXiv} and its gauge-assembly step cannot be stated on
@@ -219,28 +219,28 @@ matches the per-block gauges.
 
 The former strict-modulus proportional branch has been deleted. The surviving
 block-matching boundary uses the explicit conclusion
-\leanid{BlockPermutationGaugePhaseConclusion} only when the BNT comparison has
+\leanid{MPSTensor.BlockPermutationGaugePhaseConclusion} only when the BNT comparison has
 already been supplied. Thus no current theorem is presented as deriving the
 source proportional comparison from the discarded coefficient hypotheses.
 
 Neither the old dominant-normalization field nor the old strict-ordering field
-remains in \leanid{IsNormalCanonicalFormBNT}. When a CPSV argument needs a
+remains in \leanid{MPSTensor.IsNormalCanonicalFormBNT}. When a CPSV argument needs a
 unit-modulus witness for a sector, it carries that datum as an explicit
 SectorBNT hypothesis, for example through the corresponding field of
-\leanid{SectorDecomposition}.
+\leanid{MPSTensor.SectorDecomposition}.
 
 \section{Downstream audit status}
 
 The downstream CPSV16 surfaces that consume the restricted normal-CF-BNT
 predicate have been audited against the basis-of-representatives
 boundary.\footnote{The relevant \Lean{} surfaces are
-\leanid{IsNormalCanonicalFormBNT},
-\leanid{IsNormalCanonicalFormBNT.ofSeparatedData},
-\leanid{IsNormalCanonicalFormBNT.cross_overlap_tendsto_zero},
-\leanid{IsNormalCanonicalFormBNT.isBNT},
-\leanid{IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective},
+\leanid{MPSTensor.IsNormalCanonicalFormBNT},
+\leanid{MPSTensor.IsNormalCanonicalFormBNT.ofSeparatedData},
+\leanid{MPSTensor.cross_overlap_tendsto_zero_of_separated_normal_bnt_data},
+\leanid{MPSTensor.IsNormalCanonicalFormBNT.isBNT},
+\leanid{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective},
 and
-\leanid{exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}.}
+\leanid{MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}.}
 
 Each public surface assumes or constructs an already selected representative
 family whose weights are ordered non-increasingly by modulus. Equal moduli are
@@ -253,7 +253,7 @@ Wielandt blueprint corollary therefore carry the same
 basis-of-representatives marker.
 
 This marker does not apply to the sector-BNT development based on
-\leanid{IsBNTCanonicalForm}. That predicate is the paper-faithful sector
+\leanid{MPSTensor.IsBNTCanonicalForm}. That predicate is the paper-faithful sector
 surface used for the CPSV16 coefficient and weight-multiplicity arguments,
 where repeated copies inside one sector remain explicit.
 

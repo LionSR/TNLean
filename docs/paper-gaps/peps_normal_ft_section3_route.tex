@@ -496,7 +496,7 @@ The remaining obligations are the following.
           with the crossing-edge family taken to be the $P_1$--$P_0$ edges and the
           produced block taken to be $B$. After the collapse, the right
           geometry's blue-side factorization
-          \leanid{TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockBlueWeight_eq}
+          \leanid{TNLean.PEPS.regionInteriorBondProd_smul_threeBlockBlueWeight_eq}
           reads the rebuilt coupling as a combination of $B$ blocked weights, the
           left inverse for $B$ forces the reconstructed host residual coefficients
           to vanish, and host-boundary surjectivity
@@ -1219,7 +1219,7 @@ The remaining obligations are the following.
           \leanid{TNLean.PEPS.bondLocal_iff_coeffTransfer} in both directions). Both are now
           landed; the per-edge gauge is delivered through the coherent-frame interface
           \leanid{TNLean.PEPS.exists_regionEdgeGauge_of_coherentFrames}, which discharges the
-          three hypotheses \leanid{hbondAB}, \leanid{hbondBA}, and \leanid{hmul} of the
+          three hypotheses \path{hbondAB}, \path{hbondBA}, and \path{hmul} of the
           abstract \leanid{TNLean.PEPS.SharedNormalEdgeBlockingData.exists_regionEdgeGauge}
           from the two coherent frames and the single-crossing hypothesis, returning the same
           gauge conclusion. The final assembly is recorded below.
@@ -1420,14 +1420,14 @@ The remaining obligations are the following.
           post-absorption edge-insertion equality is taken as the conditional kernel
           input, in the shape produced unconditionally in the vertex-injective case.\footnote{
           Formal declarations:
-          \leanid{TNLean.PEPS.SquareLatticeUniformBondDim},
-          \leanid{TNLean.PEPS.orientationUniformGauge},
-          \leanid{TNLean.PEPS.IsOrientationUniformGaugeFamily},
-          \leanid{TNLean.PEPS.exists_orientationUniformGaugeFamily},
-          \leanid{TNLean.PEPS.tiAbsorb},
-          \leanid{TNLean.PEPS.isVertexInjective_tiAbsorb},
-          \leanid{TNLean.PEPS.tiNormalGaugeAbsorption}, and
-          \leanid{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}.}
+          \path{TNLean.PEPS.SquareLatticeUniformBondDim},
+          \path{TNLean.PEPS.orientationUniformGauge},
+          \path{TNLean.PEPS.IsOrientationUniformGaugeFamily},
+          \path{TNLean.PEPS.exists_orientationUniformGaugeFamily},
+          \path{TNLean.PEPS.tiAbsorb},
+          \path{TNLean.PEPS.isVertexInjective_tiAbsorb},
+          \path{TNLean.PEPS.tiNormalGaugeAbsorption}, and
+          \path{TNLean.PEPS.exists_postAbsorption_of_vertexInjective}.}
 
           The uniqueness-up-to-scalar step is now formalized. The conjugating
           matrix realizing a forward per-edge transfer is determined up to a
@@ -1453,10 +1453,10 @@ The remaining obligations are the following.
           the exact orientation-uniform family as the all-constants-one
           specialization.\footnote{
           Formal declarations:
-          \leanid{TNLean.PEPS.IsOrientationUniformGaugeFamilyModScalar},
-          \leanid{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_isOrientationUniform},
+          \path{TNLean.PEPS.IsOrientationUniformGaugeFamilyModScalar},
+          \path{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_isOrientationUniform},
           and
-          \leanid{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_classAgreement}.}
+          \path{TNLean.PEPS.isOrientationUniformGaugeFamilyModScalar_of_classAgreement}.}
 
           The per-edge constants are absorbed at the absorption step when they are
           vertex balanced. A per-edge scalar rescaling whose oriented product around
@@ -1468,8 +1468,8 @@ The remaining obligations are the following.
           orientation-uniform gauge even though the blocking delivers one only up to
           balanced constants.\footnote{
           Formal declarations:
-          \leanid{TNLean.PEPS.gaugeEquivModEdgeScalars_of_matrixScalar} and
-          \leanid{TNLean.PEPS.absorbEdgeGauges_eq_of_matrixScalar}.}
+          \path{TNLean.PEPS.gaugeEquivModEdgeScalars_of_matrixScalar} and
+          \path{TNLean.PEPS.absorbEdgeGauges_eq_of_matrixScalar}.}
 
           The periodic lattice on which this transport lives is now formalized,
           together with the covariance of the blocking machinery under it. The
@@ -1512,11 +1512,11 @@ The remaining obligations are the following.
           input is in place there too.\footnote{
           Formal declarations:
           \leanid{TNLean.PEPS.exists_regionEdgeGauge_torus},
-          \leanid{TNLean.PEPS.torusOrientationUniformGauge},
-          \leanid{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar},
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_classAgreement},
+          \path{TNLean.PEPS.torusOrientationUniformGauge},
+          \path{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar},
+          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_classAgreement},
           and
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_translationInvariant}.}
+          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_translationInvariant}.}
 
           The covariance of the region-inserted coefficient is now established, and
           with it the determinacy that closes the class-agreement input above the
@@ -1550,8 +1550,8 @@ The remaining obligations are the following.
           orientation classes yields the orientation-uniform-up-to-scalar family.
           \footnote{Formal declarations:
           \leanid{TNLean.PEPS.regionInsertedCoeff_transferMap_unique},
-          \leanid{TNLean.PEPS.regionTransferMap_eq_of_coeffIdentities}, and
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_conjCovariance}.}
+          \path{TNLean.PEPS.regionTransferMap_eq_of_coeffIdentities}, and
+          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_of_conjCovariance}.}
           The algebraic reduction from matched coefficient identities to the conjugation
           covariance is now in place. The per-edge gauge at a torus edge carries its
           defining coefficient identity, so the gauge conjugation itself satisfies the
@@ -1644,10 +1644,10 @@ The remaining obligations are the following.
           scalars all one.\footnote{Formal declarations:
           \leanid{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity_conj},
           \leanid{TNLean.PEPS.edgeCoeffIdentityWitness_translate},
-          \leanid{TNLean.PEPS.edgeCoeffIdentityWitness_translateUniform},
+          \path{TNLean.PEPS.edgeCoeffIdentityWitness_translateUniform},
           \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_horizontalFamily},
           \leanid{TNLean.PEPS.exists_edgeCoeffIdentityWitness_verticalFamily}, and
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}.}
+          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}.}
 
           One strengthening remains. The family produced above takes the per-edge gauge to be the
           transported reference matrix itself, so the witness's two coefficient identities are the
@@ -1737,16 +1737,16 @@ The remaining obligations are the following.
           On the torus the per-edge coefficient identity is produced at a single boundary edge of
           each \emph{red blocking region} of the orientation-uniform family
           (\leanid{TNLean.PEPS.exists_regionEdgeGauge_torus_coeff},
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}). The
+          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}). The
           per-vertex relation \(A_v=\lambda\cdot\operatorname{gaugeVertex} B\,X\,v\) that the
           torus Fundamental Theorem
-          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS}) takes as the hypothesis
+          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}) takes as the hypothesis
           \path{hPV} still needs two pieces above the region-independence just recorded. First, the
           absorbing matrix \leanid{TNLean.PEPS.absorbedBoundaryGauge} is the orientation-adapted
           transpose of each \emph{per-edge} engine gauge \(Z_e\), so the absorbed equality holds
           against a per-edge absorbing family rather than against the single
           orientation-uniform \(X=\operatorname{torusOrientationUniformGauge}\) that
-          \leanid{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}
+          \path{TNLean.PEPS.isTorusOrientationUniformGaugeFamilyModScalar_torus_rectangle}
           returns and that \path{hPV} is stated against; reconciling the per-edge absorbing family
           with that orientation-uniform \(X\) (the transpose/orientation bookkeeping across the two
           orientation classes) is the first open piece. Second, feeding the absorbed equality to
@@ -1845,7 +1845,7 @@ The remaining obligations are the following.
           per-edge gauge family \(X\) --- the orientation-adapted absorbing gauge read off each chosen
           witness --- for which the bare-edge absorbed equality against \(\operatorname{applyGauge}
           B\,X\) holds at every torus edge
-          (\leanid{TNLean.PEPS.exists_edgeAbsorbed_torus_rectangle}). The region-independence step
+          (\path{TNLean.PEPS.exists_edgeAbsorbed_torus_rectangle}). The region-independence step
           then multiplies this back up to the region absorbed equality, supplying the comparison's
           \path{hregion} and producing the region-block proportionality \(A_R\propto\widetilde B_R\)
           at \emph{every} comparison region from the bare-edge equality
@@ -1862,7 +1862,7 @@ The remaining obligations are the following.
           Fundamental Theorem, are three pieces, all consuming the landed \(X\) above. First, the
           \emph{orientation-uniformity} of that absorbing family --- that it is one horizontal matrix
           and one vertical matrix up to per-edge scalars, the shape the Fundamental Theorem's gauge
-          conclusion \leanid{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar} asserts. The
+          conclusion \path{TNLean.PEPS.IsTorusOrientationUniformGaugeFamilyModScalar} asserts. The
           absorbing matrix \leanid{TNLean.PEPS.absorbedBoundaryGauge} is \(Z^{\mathsf T}\) or
           \(Z^{-1}\) according to whether the boundary edge's left endpoint lies in the red blocking
           region, and the engine gauge \(Z_e\) is the transported reference; both are
@@ -1895,11 +1895,11 @@ The remaining obligations are the following.
           skeletons remain conditional on the open per-edge gauge of
           obligation~5.\footnote{
           Formal declarations:
-          \leanid{TNLean.PEPS.card_squareLatticeVertex},
-          \leanid{TNLean.PEPS.lambda_pow_card_eq_one},
-          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS},
-          \leanid{TNLean.PEPS.tiNormalGaugeAbsorptionData_of_modScalar}, and
-          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_of_modScalarGauge}.}
+          \path{TNLean.PEPS.card_squareLatticeVertex},
+          \leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one},
+          \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional},
+          \path{TNLean.PEPS.tiNormalGaugeAbsorptionData_of_modScalar}, and
+          \path{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_of_modScalarGauge}.}
 \end{enumerate}
 
 \section{Source-to-formalization ledger}

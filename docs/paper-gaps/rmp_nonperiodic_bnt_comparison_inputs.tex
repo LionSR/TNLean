@@ -495,7 +495,7 @@ The source comparison gives the following formal requirements.
 \section{Current formal anchors}
 
 The one-copy normal-canonical BNT surface is represented by
-\leanid{IsNormalCanonicalFormBNT}, together with explicit separated-block
+\leanid{MPSTensor.IsNormalCanonicalFormBNT}, together with explicit separated-block
 hypotheses used by the BNT comparison lemmas.\footnote{%
 \path{TNLean/MPS/BNT/Construction.lean}.}
 This already-grouped formulation is restricted: it suppresses the repeated-copy
@@ -619,13 +619,13 @@ the block-diagonal expansion contains the length-dependent coefficients
 \end{align}
 and nonzero weights alone do not imply nonzero full-sequence limits. A faithful
 proof must formalize the relevant power-sum and phase comparison before
-constructing the \leanid{BlockPermutationGaugePhaseConclusion} data and
+constructing the \leanid{MPSTensor.BlockPermutationGaugePhaseConclusion} data and
 applying the BNT sector-data comparison.
 
 Zero-tail equality and common-sector relabelling are primarily formal
 bookkeeping. The source uses positive lengths and treats zero blocks as unused
 bond dimension \cite{Cirac2016MPDO_arXiv}. The $N=0$ convention in
-\leanid{SameMPV}\textsubscript{2} forces an explicit zero-tail identity, and the
+\leanid{MPSTensor.SameMPV₂} forces an explicit zero-tail identity, and the
 common-sector construction must track casts between grouped and flat blocked
 words. These are not additional paper hypotheses, but the final after-blocking
 theorem must transport the identities through the same reblocking coordinates

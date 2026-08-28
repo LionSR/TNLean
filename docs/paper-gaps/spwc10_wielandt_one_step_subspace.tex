@@ -108,7 +108,7 @@ By (\ref{eq:spwc10_wielandt_one_step_subspace_source_kraus_count}) and
 $\operatorname{kr}(A)$ is the invariant form of the source parameter $d$.
 Replacing $d$ by $\operatorname{kr}(A)$ therefore does not change the
 bound.\footnote{The formal definitions are
-    \leanid{MPSTensor.wordSpan} in
+    \leanid{Kraus.wordSpan} in
     \path{TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean:57--64} and
     \leanid{MPSTensor.krausRank} in
     \path{TNLean/Wielandt/Primitivity/Definitions.lean:84--90}. The local
@@ -184,7 +184,7 @@ spaces $S_n(A)$ cannot stagnate for too many successive lengths.
 The formal proof adjoins the chosen matrix $X\in S_1(A)$ as a redundant
 generator. It then proves that the exact word spans and the Kraus rank remain
 unchanged. The relevant declarations are
-\leanid{MPSTensor.wordSpan_oneStepAugment_eq} and
+\leanid{Kraus.wordSpan_oneStepAugment_eq} and
 \leanid{MPSTensor.krausRank_oneStepAugment}, both in
 \path{TNLean/Wielandt/SpanGrowth/InvertibleWordSpan.lean}. This construction
 reduces the source hypothesis to the single-generator argument without
@@ -202,7 +202,7 @@ The theorem
 \leanid{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}\footnote{See
     \path{TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean}.}
 derives normality from a chosen fixed point $\rho$, the local complementary
-transfer-map gap predicate \leanid{IsPrimitiveMPS}, and the additional
+transfer-map gap predicate \leanid{MPSTensor.IsPrimitiveMPS}, and the additional
 hypothesis $\rho>0$.
 
 This theorem formalizes one route for Proposition~3(c)$\Rightarrow$(b) of
@@ -261,7 +261,7 @@ than the full quantum Wielandt theorem. The final theorem in
 $i(A)$ defined by the exact-length spaces in
 (\ref{eq:spwc10_wielandt_one_step_subspace_i_index}).\footnote{The
     cumulative-span theorem is
-    \leanid{MPSTensor.cumulativeSpan_eq_top} in
+    \leanid{Kraus.cumulativeSpan_eq_top} in
     \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
     exact-length theorem is the general result identified above. The blueprint
     distinguishes these statements in

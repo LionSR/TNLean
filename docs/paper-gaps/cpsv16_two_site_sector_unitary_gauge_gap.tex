@@ -102,8 +102,8 @@ The formal declarations for these corners are
 \begin{center}
 \scriptsize
 \mbox{\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.}}\\
-\mbox{\leanid{exists_oneSite_raw_sector_corner},}\qquad
-\mbox{\leanid{exists_blockTwo_gauge_sector_corner}.}
+\mbox{\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_oneSite_raw_sector_corner},}\qquad
+\mbox{\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_blockTwo_gauge_sector_corner}.}
 \end{center}
 
 \section{The common unblocked reflected tail}
@@ -144,9 +144,7 @@ Thus, for every positive tail length and all open indices and tail words,
 The mixed-prefix identity is formalized by
 \begin{center}
 \scriptsize
-\mbox{\leanid{MPOTensor.IsMPDO.}}\\
-\mbox{\leanid{markedChainCoefficient_blockTwoPrefix_}}\\
-\mbox{\leanid{gramDressing_eq_reflectedAdjoint}.}
+\mbox{\leanid{MPOTensor.IsMPDO.markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint}.}
 \end{center}
 Its essential feature is that the two-site prefix is followed by the original
 one-site tensor, not by the blocked tensor.
@@ -390,10 +388,9 @@ canonical form, and MPDO positivity from which both physical corners arise.
 The relevant formal declarations are
 \begin{center}
 \scriptsize
-\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
-\mbox{\leanid{sameMPV}\ensuremath{{}_{2}}\leanid{Pos_does_not_force_positive_}}\\
-\mbox{\leanid{isometric_realization},}\qquad
-\mbox{\leanid{gramDressing_gauge_ne_one}.}
+\mbox{\path{MPSTensor.PositiveMinimalRealizationCounterexample}}\\
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.sameMPV₂Pos_does_not_force_positive_isometric_realization},}\qquad
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.gramDressing_gauge_ne_one}.}
 \end{center}
 
 The same distinction explains the negative result for the per-block linear
@@ -407,8 +404,8 @@ require this positivity. The corresponding formal declarations are
 \scriptsize
 \mbox{\leanid{Matrix.exists_unitary_conj_of_positive_algEquiv_matrix},}\\
 \mbox{\leanid{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension},}\\
-\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
-\mbox{\leanid{perBlockLinearExtension_not_positive}.}
+\mbox{\path{MPSTensor.PositiveMinimalRealizationCounterexample}}\\
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.perBlockLinearExtension_not_positive}.}
 \end{center}
 
 \subsection{Terminal positivity and the bond-two test}
@@ -443,11 +440,11 @@ for a metric boundary is superseded by the mixed-prefix comparison. The
 formal tests are
 \begin{center}
 \scriptsize
-\mbox{\leanid{MPOTensor.BondTwoSingletonBaseModel.}}\\
-\mbox{\leanid{gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO},}\\
-\mbox{\leanid{gaugeDeformedBaseMPO_gauge_not_isMPDO},}\\
-\mbox{\leanid{gaugeDeformedBaseMPOBNTAlgebraTensorClause},}\qquad
-\mbox{\leanid{gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm}.}
+\mbox{\path{MPOTensor.BondTwoSingletonBaseModel}}\\
+\mbox{\leanid{MPOTensor.BondTwoSingletonBaseModel.gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO},}\\
+\mbox{\leanid{MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_gauge_not_isMPDO},}\\
+\mbox{\leanid{MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPOBNTAlgebraTensorClause},}\qquad
+\mbox{\leanid{MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm}.}
 \end{center}
 
 \section{Verdict}

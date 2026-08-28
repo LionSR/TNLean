@@ -174,12 +174,12 @@ reduction.
 
 The open-chain geometry is independent of the later cyclic specialization.
 Inside the Hilbert space on $\Lambda_{n+1}$, the formal subspaces
-\leanid{openChainLeftGroundSpaceES} and
-\leanid{openChainTailGroundSpaceES} are the ranges of $G_{\Lambda_n}$ and
+\leanid{MPSTensor.openChainLeftGroundSpaceES} and
+\leanid{MPSTensor.openChainTailGroundSpaceES} are the ranges of $G_{\Lambda_n}$ and
 $G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$. They use the existing last-site
 and fixed-prefix restriction maps. Under $L_0$-block injectivity, with
 $n=K+L_0$ and $l=L_0$, the theorem
-\leanid{openChainLeft_inf_tailGroundSpaceES} proves
+\leanid{MPSTensor.openChainLeft_inf_tailGroundSpaceES} proves
 \begin{align}
     U\cap V
     &=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A).
@@ -187,7 +187,7 @@ $n=K+L_0$ and $l=L_0$, the theorem
 \end{align}
 
 The theorem
-\leanid{isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
+\leanid{Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
 turns
 \begin{align}
     \lVert P_UP_V-P_{U\cap V}\rVert
@@ -196,7 +196,7 @@ turns
 \end{align}
 into a Friedrichs bound. Combined with the complementary-projection theorem,
 it gives
-\leanid{re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}.
+\leanid{MPSTensor.re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}.
 Its hypothesis is the C3 defect
 \begin{align}
     \lVert
@@ -345,27 +345,27 @@ Thus
 (\ref{eq:cpgsv21_martingale_overlap_ordered_cross_term}). The formal
 development also contains the source anticommutator row-sum argument directly,
 without this stronger one-sided estimate.\footnote{The formal anchors are
-    \leanid{crossTerm_sum_bound_of_anticommutator_rowCol},
-    \leanid{quadraticForm_sum_projections_of_anticommutator_rowCol}, and
-    \leanid{parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}.
+    \leanid{ProjectionGeometry.crossTerm_sum_bound_of_anticommutator_rowCol},
+    \leanid{ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol}, and
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}.
     The finite-overlap reductions are
-    \leanid{quadraticForm_sum_projections_of_finite_overlap_anticommutator},
-    \leanid{parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator},
+    \leanid{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_anticommutator},
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator},
     and
-    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
     The final gap statement is
-    \leanid{parentHamiltonian_gapped_of_anticommutator} in
+    \leanid{MPSTensor.parentHamiltonian_gapped_of_anticommutator} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
     The cyclic-window compression reductions are
-    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term},
-    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term},
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
     and
-    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le}
     in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}.
     The constant-$\eta$ reduction is
-    \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
+    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt}
     in the same file; the public spectral-gap statement is
-    \leanid{parentHamiltonian_gapped_of_overlap_norm_constant} in
+    \leanid{MPSTensor.parentHamiltonian_gapped_of_overlap_norm_constant} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
     The projection-geometry results are in
     \path{TNLean/Analysis/ProjectionGeometry.lean}. The declaration names
@@ -431,7 +431,7 @@ The optimized FNW coefficient and its source constants remain unmatched. This
 comparison is unnecessary for the proved range-two blocked theorem: the exact
 three-site identification gives $7/16$, and cyclic transport covers every
 overlap. The theorem
-\leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
+\leanid{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 shows that a Friedrichs bound $\eta$ for the two ground-space ranges, after
 removing their common intersection, gives
 \begin{align}
@@ -502,19 +502,19 @@ argument. Both norm conditions are conditional formal reductions, not
 achievable source-faithful estimates in the generic overlapping case.
 
 The abstract conversion is
-\leanid{re_inner_anticommutator_ge_neg_of_norm_apply_le}. The cyclic-window
+\leanid{LinearMap.IsSymmetricProjection.re_inner_anticommutator_ge_neg_of_norm_apply_le}. The cyclic-window
 entry points are
-\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
+\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_le}
 and
-\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt};
+\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt};
 the public reformulation is
-\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. For the
+\leanid{MPSTensor.parentHamiltonian_gapped_of_overlap_operator_norm_constant}. For the
 blocked range-two theorem, the exact three-site identity and the forward and
 backward transport results replace this conditional route. The theorem
-\leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
+\leanid{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 uses the intersection identity
 (\ref{eq:cpgsv21_martingale_overlap_common_ground_space}), equivalently
-\leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; it does not
+\leanid{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; it does not
 require a small bound on $\lVert p_ip_j\rVert$.
 
 \section{Relation to the blueprint}
@@ -536,7 +536,7 @@ and the transport of the $7/16$ adjacent anticommutator estimate to every
 cyclic overlap.
 
 The source-matching entry \path{thm:anticommutator_gap_bound} points to
-\leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
 in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}; its hypothesis
 is (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}). The
 entries \path{thm:overlap_norm_gap_bound} and

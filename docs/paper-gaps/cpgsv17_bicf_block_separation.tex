@@ -95,16 +95,16 @@ suffix gives Eq.~\ref{eq:cpgsv17_bicf_block_separation_word_tuple_span}.
 
 These criteria yield the older per-copy trace-separation conclusion in the
 formal development.\footnote{The criteria are
-    \leanid{WordTupleSpanTop}, \leanid{wordEntryFamily}, and
-    \leanid{PropBlockInjective}. The trace-separation assumption is
-    \leanid{HorizontalCFData.biCF}. The constructors from these hypotheses to
-    \leanid{HorizontalCFData} structures are in the modules under
+    \leanid{MPSTensor.WordTupleSpanTop}, \leanid{MPSTensor.wordEntryFamily}, and
+    \leanid{MPSTensor.PropBlockInjective}. The trace-separation assumption is
+    \leanid{MPOTensor.HorizontalCFData.biCF}. The constructors from these hypotheses to
+    \leanid{MPOTensor.HorizontalCFData} structures are in the modules under
     \path{TNLean/MPS/MPDO/BiCFDerivation/}. Relevant implications include
-    \leanid{hasBiCF_of_wordTupleSpanTop},
-    \leanid{hasBiCF_of_wordEntryFamily_linearIndependent},
-    \leanid{hasBiCF_of_propBlockInjective}, and corresponding
-    \leanid{HorizontalCFData} constructors such as
-    \leanid{horizontalCFData_of_propBlockInjective}. The blueprint records
+    \leanid{MPSTensor.hasBiCF_of_wordTupleSpanTop},
+    \leanid{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent},
+    \leanid{MPSTensor.hasBiCF_of_propBlockInjective}, and corresponding
+    \leanid{MPOTensor.HorizontalCFData} constructors such as
+    \leanid{MPOTensor.horizontalCFData_of_propBlockInjective}. The blueprint records
     these restricted criteria in its finite-witness remark.}
 They remain valid restricted results. The sharp proposition is now proved
 separately for a representative-indexed BNT sector decomposition, which groups
@@ -137,7 +137,7 @@ counterexample is recorded.
 \section{Consequence for Lemma L}
 
 The same independence restricts the older theorem
-\leanid{blockwise_insert_eq_of_mpv_agree}, which assumes \leanid{biCF} for the
+\leanid{MPOTensor.blockwise_insert_eq_of_mpv_agree}, which assumes \leanid{MPOTensor.HorizontalCFData.biCF} for the
 full family of flattened copies. Lemma~L in Appendix~C.3 of the source instead
 decomposes the canonical-form tensor as
 \begin{align}
@@ -360,7 +360,7 @@ representatives. The representative-grouped Lemma~L gives equality of the
 opposite-corner insertions on every minimal representative. Linearity extends
 this equality to the full weighted direct sum, and gauge conjugation transports
 it to the original matrix product operator tensor. The older per-copy
-\leanid{HorizontalCFData} theorems remain available only as explicitly
+\leanid{MPOTensor.HorizontalCFData} theorems remain available only as explicitly
 restricted auxiliary statements.
 
 \section{The Appendix C.2 sector entropy argument}
@@ -377,7 +377,7 @@ that the one-letter tuples of the minimal normal representatives span
 The inverse tensor used immediately afterward, and hence the one-site
 projections in the proof of Proposition~4.13, depend on this hypothesis
 \cite{Cirac2016MPDO_arXiv}. The formal assumption
-\leanid{WordTupleSpanTop S.basis 1} is therefore the direct algebraic form of
+\leanid{MPSTensor.WordTupleSpanTop S.basis 1} is therefore the direct algebraic form of
 the source's block-injective canonical-form hypothesis.
 
 Starting instead from an unblocked canonical form and removing the one-letter

@@ -4,7 +4,16 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from blueprint_lean_sync import collect_file_lean_decls
+from blueprint_lean_sync import collect_file_lean_decls, split_tex_lean_decls
+
+
+def test_split_tex_lean_decls_handles_continuations_and_top_level_commas() -> None:
+    assert split_tex_lean_decls(
+        r"""
+Foo.%
+  bar (x, y), Baz.qux [a, b], Quux.{u}
+"""
+    ) == ["Foo.bar (x, y)", "Baz.qux [a, b]", "Quux.{u}"]
 
 
 def test_structure_fields_are_declarations() -> None:
@@ -52,5 +61,6 @@ end Example
 
 
 if __name__ == "__main__":
+    test_split_tex_lean_decls_handles_continuations_and_top_level_commas()
     test_structure_fields_are_declarations()
     print("Blueprint declaration scanner tests passed.")

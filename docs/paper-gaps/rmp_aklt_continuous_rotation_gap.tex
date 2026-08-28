@@ -58,7 +58,7 @@ $A^i=\sigma^i$ given by the Pauli matrices. For each
 $R\in\mathrm{SO}(3)$, applying $R$ to the physical index gives a tensor gauge
 equivalent to $A$. The gauge is an $\mathrm{SU}(2)$ preimage $U$ of $R$ under
 the adjoint double cover.\footnote{Formal declaration:
-\leanid{aklt\_isOnSiteSymmetric\_SO3} in
+\leanid{MPSTensor.aklt_isOnSiteSymmetric_SO3} in
 \doclink{TNLean/MPS/Examples/AKLTRotation}.}
 
 The substantive group-theoretic input is the surjectivity of the adjoint map
@@ -80,7 +80,7 @@ Every rotation has a preimage:
 The proof uses an explicit $ZXZ$ Euler-angle construction. Each coordinate
 rotation is the image of an explicit $\mathrm{SU}(2)$ generator, and every
 rotation factors into coordinate rotations.\footnote{Formal declaration:
-\leanid{spinHalfCover\_surjective\_onto\_SO3}.}
+\leanid{SpinCover.spinHalfCover_surjective_onto_SO3}.}
 
 The physical spin-$1$ representation is the defining action of
 $\mathrm{SO}(3)$ on the three Cartesian components. The map
@@ -120,7 +120,7 @@ identifies as the smallest subgroup of $\mathrm{SO}(3)$ with a nontrivial
 $2$-cocycle, is formalized separately on the $\ket{m}$-basis AKLT tensor
 \cite{Cirac2021Matrix}. Its two gauges are $i\sigma_y$ and $\sigma_z$, and
 they anticommute.\footnote{Formal declaration:
-\leanid{aklt\_isOnSiteSymmetric\_Z2Z2} in
+\leanid{MPSTensor.aklt_isOnSiteSymmetric_Z2Z2} in
 \doclink{TNLean/MPS/Examples/AKLT}.} Explicitly,
 \begin{align}
     (i\sigma_y)\sigma_z
