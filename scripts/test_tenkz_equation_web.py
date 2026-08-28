@@ -352,19 +352,31 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Several source-linked rows live in proofs, which the blueprint UI
-            # collapses by default. Reveal the complete proof wrapper so this
-            # geometry test does not depend on the UI's asynchronous toggle
-            # initialization on headless browsers.
-            page.add_style_tag(content="""
-                .proof_wrapper:has(.tenkz-equation),
-                .proof_wrapper:has(.tenkz-equation) .proof_heading,
-                .proof_wrapper:has(.tenkz-equation) .proof_content {
-                    display: block !important;
-                    visibility: visible !important;
+            # Several source-linked rows live in content collapsed by the
+            # Blueprint UI. Reveal every hidden ancestor of an equation so this
+            # geometry test is independent of asynchronous toggle setup in
+            # headless browsers.
+            equations = page.locator(".tenkz-equation")
+            equations.evaluate_all("""nodes => {
+              for (const node of nodes) {
+                for (let ancestor = node; ancestor; ancestor = ancestor.parentElement) {
+                  const style = getComputedStyle(ancestor);
+                  if (style.display === "none") {
+                    ancestor.style.setProperty("display", "block", "important");
+                  }
+                  if (style.visibility === "hidden") {
+                    ancestor.style.setProperty("visibility", "visible", "important");
+                  }
+                  if (style.opacity === "0") {
+                    ancestor.style.setProperty("opacity", "1", "important");
+                  }
                 }
+              }
+            }""")
+            page.wait_for_function("""() =>
+              [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
             """)
-            page.locator(".tenkz-equation").first.wait_for(state="visible")
+            equations.first.wait_for(state="visible")
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
             if args.screenshot_dir:
