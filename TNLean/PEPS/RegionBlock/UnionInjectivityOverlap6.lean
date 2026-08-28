@@ -94,11 +94,6 @@ abbrev P0OuterConfig (A : Tensor G d) (R₁ R₂ : Finset V) : Type _ :=
 def p0OuterLabel (A : Tensor G d) (R₁ R₂ : Finset V) (ζ : VirtualConfig A) :
     P0OuterConfig A R₁ R₂ := fun f => ζ f.1
 
-omit [Fintype V] in
-@[simp] theorem p0OuterLabel_apply (R₁ R₂ : Finset V) (ζ : VirtualConfig A)
-    (f : {e : Edge G // IsP0OuterEdge (G := G) R₁ R₂ e}) :
-    p0OuterLabel A R₁ R₂ ζ f = ζ f.1 := rfl
-
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₀`-outer edge is a boundary edge of `R₁`: one endpoint lies in `R₁ \ R₂ ⊆ R₁`, the other
 lies outside `R₁ ∪ R₂`, hence outside `R₁`. -/

@@ -149,10 +149,6 @@ omit [LinearOrder V] [DecidableRel G.Adj] in
     (overlapRightGeometry (V := V) R₁ R₂).blue = R₁ ∩ R₂ := rfl
 
 omit [LinearOrder V] [DecidableRel G.Adj] in
-@[simp] theorem overlapRightGeometry_complement (R₁ R₂ : Finset V) :
-    (overlapRightGeometry (V := V) R₁ R₂).complement = R₂ \ R₁ := rfl
-
-omit [LinearOrder V] [DecidableRel G.Adj] in
 @[simp] theorem overlapRightGeometry_red (R₁ R₂ : Finset V) :
     (overlapRightGeometry (V := V) R₁ R₂).red = Finset.univ \ R₂ := rfl
 

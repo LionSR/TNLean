@@ -13,6 +13,9 @@ module parked between the bridge and the closure.
 | `TNLean.PEPS.overlap_bridge_rightCoupling_eq_zero` (`TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean`) | deleted; live code uses `TNLean.PEPS.overlapFiber_bridge_rightCoupling_eq_zero` (`TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean`) |
 | `TNLean.PEPS.overlapLeft_firstStrip_weightCombination_eq_zero_rightGeometry` (private, same file) | deleted with its sole consumer |
 | `TNLean.PEPS.overlapLeft_firstStrip_fiber_weightCombination_eq_zero_rightGeometry` (private, `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean`) | removed in favor of `TNLean.PEPS.overlapLeft_firstStrip_fiber_weightCombination_eq_zero`, applied at the call site through `smul_eq_zero_of_right` |
+| `TNLean.PEPS.overlapRightGeometry_complement` (`UnionInjectivityOverlap.lean`) | deleted; the projection was a zero-call-site simp theorem |
+| `TNLean.PEPS.isBlueRedCrossingEdge_right_of_overlapCrossing` (`UnionInjectivityOverlap2.lean`) | deleted; the live bridge never consumes this characterization |
+| `TNLean.PEPS.p0OuterLabel_apply` (`UnionInjectivityOverlap6.lean`) | deleted; the reducible label projection had no call site |
 
 The non-fiber bridge is superseded for the live proof route. A bridge row indexed
 by the `R₂` boundary alone cannot separate the `P₀`-outer host indices, which is
@@ -26,7 +29,7 @@ base lemmas with `R₂ \ R₁` spelled as
 its sole consumer, while the surviving live fiber call site accepts the base
 lemma directly.
 
-No blueprint `\lean{...}` tag cites the deleted theorem. No compatibility
+No blueprint `\lean{...}` tag cites the deleted declarations. No compatibility
 declaration is retained under the maintainer's explicit confirmation that TNLean
 does not promise public API compatibility.
 
@@ -97,8 +100,8 @@ the same document are untouched.
 
 ## Ledger
 
-Ledger entry S7 (issue #4567) plans further deletions in this chain and cites a
-line range inside the deleted waypoint that no longer existed at the audited
-head. `UnionInjectivityOverlap4.lean` was already absent before this PR. That
-entry's remaining targets are only the dead spans in files 1, 2, 3, and 6;
-they are unaffected by this slice.
+Ledger entry S7 is now burned down. `UnionInjectivityOverlap4.lean` was already
+absent before this audit; PR #4625 removed seven scattered zero-reference
+wrappers from files 1, 2, 3, and 6, and follow-up #7232 removes the final three
+zero-call-site declarations listed above. The live capstone and its
+`overlapLeftGeometry`/`overlapRightGeometry` inputs are unchanged.
