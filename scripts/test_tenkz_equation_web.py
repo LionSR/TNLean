@@ -352,16 +352,25 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Use the Blueprint UI's own detail-level API to expose proofs.
-            # This avoids racing its document-ready handler, which otherwise can
-            # hide proof rows after a test-injected style or click has run.
-            page.wait_for_function("() => typeof window.showmore_update === 'function'")
-            page.evaluate("showmore_update(2)")
             equations = page.locator(".tenkz-equation")
             page.wait_for_function("""() =>
               [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
             """)
-            equations.first.wait_for(state="visible")
+            # Expand proofs only after the page and its pictures are ready. The
+            # generated UI can otherwise apply its cookie-selected detail level
+            # after an earlier test action and hide these geometry fixtures.
+            page.wait_for_function("() => typeof window.showmore_update === 'function'")
+            page.evaluate("""() => {
+              showmore_update(2);
+              for (const node of document.querySelectorAll(
+                '.proof_wrapper:has(.tenkz-equation), .proof_content:has(.tenkz-equation)'
+              )) {
+                node.style.setProperty('display', 'block', 'important');
+              }
+            }""")
+            assert equations.evaluate_all(
+                "nodes => nodes.every(node => node.offsetWidth > 0 && node.offsetHeight > 0)"
+            )
             assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
