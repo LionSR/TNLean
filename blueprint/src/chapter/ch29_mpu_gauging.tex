@@ -1,0 +1,222 @@
+\chapter{Scalar Three-Cocycles and Fusion-Tensor Gauge Freedom}%
+\label{ch:mpu_gauging}
+
+Let $G$ be a group and write $\C^\times$ for the multiplicative group of
+nonzero complex numbers. The fusion tensors have the scalar gauge freedom
+\begin{align}
+    F^>_{g,h} & \longmapsto \beta_{g,h}F^>_{g,h},      \\
+    F^<_{g,h} & \longmapsto \beta_{g,h}^{-1}F^<_{g,h}.
+    \label{eq:mpug_fusion_gauge}
+\end{align}
+% Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
+This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
+The results below formalize only the scalar functions $\beta$ and $\omega$;
+they do not construct fusion tensors or an MPU representation.
+
+\begin{definition}[Scalar cochains and normalization]
+    \label{def:mpug_scalar_cochains}
+    \lean{TNLean.Algebra.ScalarThreeCochain,
+        TNLean.Algebra.ScalarCocycle.IsNormalized,
+        TNLean.Algebra.ScalarThreeCochain.IsNormalized}
+    \leanok
+    \uses{def:scalar_cocycle}
+    Recall from Definition~\ref{def:scalar_cocycle} that a scalar $2$-cochain
+    is a function $\beta\colon G^2\to\C^\times$. A scalar $3$-cochain is a
+    function $\omega\colon G^3\to\C^\times$. Following the paper's later
+    standing convention, it is normalized when
+    \begin{align}
+        \omega(e,h,k) & = 1, \\
+        \omega(g,e,k) & = 1, \\
+        \omega(g,h,e) & = 1.
+        \label{eq:mpug_three_normalized}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, standing convention following eq:triv_omegas.
+    The scalar $2$-cochain $\beta$ is normalized when
+    $\beta(e,g)=\beta(g,e)=1$ for every $g\in G$.
+\end{definition}
+
+\begin{definition}[Scalar three-cocycle]
+    \label{def:mpug_three_cocycle}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    A scalar $3$-cochain is a $3$-cocycle when, for all $g,h,k,l\in G$,
+    \begin{align}
+        \omega(gh,k,l)\omega(g,h,kl)
+         & =\omega(g,h,k)\omega(g,hk,l)\omega(h,k,l).
+        \label{eq:mpug_three_cocycle}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, eq:3-cocycle.
+    This is the scalar $3$-cocycle relation
+    of~\cite{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{definition}[Three-coboundary and fusion-tensor gauge action]
+    \label{def:mpug_fusion_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.coboundary,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a scalar $2$-cochain $\beta$, define
+    \begin{align}
+        (d\beta)(g,h,k)
+         & =\frac{\beta(g,hk)\beta(h,k)}
+            {\beta(g,h)\beta(gh,k)},
+        \label{eq:mpug_coboundary}        \\
+        (\beta\mathbin{\triangleright}\omega)(g,h,k)
+         & =(d\beta)(g,h,k)\omega(g,h,k).
+        \label{eq:mpug_gauge_action}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, eq:omegagauge.
+    Formula~(\ref{eq:mpug_gauge_action}) is the change of $\omega$ induced by
+    (\ref{eq:mpug_fusion_gauge}), as in~\cite{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Identity and composition of fusion gauges]
+    \label{thm:mpug_gauge_action}
+    \lean{TNLean.Algebra.ScalarThreeCochain.fusionGauge_one,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge_comp}
+    \leanok
+    \uses{def:mpug_fusion_gauge}
+    Let $1$ denote the constant scalar $2$-cochain and let
+    $(\beta\gamma)(g,h)=\beta(g,h)\gamma(g,h)$. Then
+    \begin{align}
+        1\mathbin{\triangleright}\omega & =\omega,
+        \label{eq:mpug_gauge_identity}                                                  \\
+        \gamma\mathbin{\triangleright}
+        (\beta\mathbin{\triangleright}\omega)
+                                        & =(\beta\gamma)\mathbin{\triangleright}\omega.
+        \label{eq:mpug_gauge_composition}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge}
+    The constant cochain has $d1=1$. Commutativity of $\C^\times$ gives
+    $d(\beta\gamma)=(d\beta)(d\gamma)$, and substitution into
+    (\ref{eq:mpug_gauge_action}) gives
+    (\ref{eq:mpug_gauge_identity}) and
+    (\ref{eq:mpug_gauge_composition}).
+\end{proof}
+
+\begin{theorem}[A three-coboundary is a three-cocycle]
+    \label{thm:mpug_coboundary_cocycle}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isCocycle_coboundary}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    For every scalar $2$-cochain $\beta$, the cochain $d\beta$ satisfies
+    (\ref{eq:mpug_three_cocycle}).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    Expanding the two sides gives the same product after cancellation:
+    \begin{align}
+         & (d\beta)(gh,k,l)(d\beta)(g,h,kl)     \\
+         & \quad =
+        \frac{\beta(k,l)\beta(h,kl)\beta(g,hkl)}
+        {\beta(ghk,l)\beta(gh,k)\beta(g,h)} \\
+         & \quad =
+        (d\beta)(g,h,k)(d\beta)(g,hk,l)(d\beta)(h,k,l).
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Products and fusion gauges preserve three-cocycles]
+    \label{thm:mpug_gauge_preserves_cocycle}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.mul,
+        TNLean.Algebra.ScalarThreeCochain.IsCocycle.fusionGauge}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    The pointwise product of two scalar $3$-cocycles is a scalar
+    $3$-cocycle. Consequently, if $\omega$ satisfies
+    (\ref{eq:mpug_three_cocycle}), then so does
+    $\beta\mathbin{\triangleright}\omega$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, thm:mpug_coboundary_cocycle}
+    Multiply the two instances of (\ref{eq:mpug_three_cocycle}) and reorder
+    their factors in $\C^\times$. Apply this product identity to
+    $(d\beta)\omega$, using Theorem~\ref{thm:mpug_coboundary_cocycle} for
+    $d\beta$.
+\end{proof}
+
+\begin{theorem}[Normalization under a fusion gauge]
+    \label{thm:mpug_gauge_preserves_normalization}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary_iff,
+        TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary,
+        TNLean.Algebra.ScalarThreeCochain.IsNormalized.mul,
+        TNLean.Algebra.ScalarThreeCochain.IsNormalized.fusionGauge}
+    \leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    The $3$-coboundary $d\beta$ is normalized if and only if there is a
+    constant $c\in\C^\times$ such that
+    \begin{align}
+        \beta(e,g) & =c=\beta(g,e)
+        \qquad\text{for every }g\in G.
+        \label{eq:mpug_coboundary_normalized_iff}
+    \end{align}
+    In particular, a normalized scalar $2$-cochain has normalized
+    $3$-coboundary. Hence $\beta\mathbin{\triangleright}\omega$ is normalized
+    whenever both $\beta$ and $\omega$ are normalized.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    Set one argument at a time equal to $e$ in
+    (\ref{eq:mpug_coboundary}). If $d\beta$ is normalized, the first identity
+    at $(e,e,g)$ and the second at $(g,e,e)$ give
+    $\beta(e,g)=\beta(e,e)=\beta(g,e)$. Conversely, these constant-axis
+    identities give
+    \begin{align}
+        (d\beta)(e,h,k) & =1, \\
+        (d\beta)(g,e,k) & =1, \\
+        (d\beta)(g,h,e) & =1.
+    \end{align}
+    Taking the common constant to be $1$ proves the normalized-$\beta$
+    corollary. Pointwise products preserve the three identities, so
+    (\ref{eq:mpug_gauge_action}) is normalized when $\omega$ is normalized.
+\end{proof}
+
+\begin{definition}[Cohomologous scalar three-cochains]
+    \label{def:mpug_cohomologous_to}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo}
+    \leanok
+    \uses{def:mpug_fusion_gauge}
+    Two scalar $3$-cochains $\omega$ and $\eta$ are cohomologous when
+    $\omega=\beta\mathbin{\triangleright}\eta$ for some scalar
+    $2$-cochain $\beta$.
+\end{definition}
+
+\begin{theorem}[Cohomologous-to is an equivalence relation]
+    \label{thm:mpug_cohomologous_to_equivalence}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.refl,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.symm,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.trans,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.equivalence}
+    \leanok
+    \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
+    Cohomologous-to is reflexive, symmetric, and transitive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauge_action}
+    Reflexivity uses the constant cochain $1$. If $\omega=
+        \beta\mathbin{\triangleright}\eta$, then
+    \begin{align}
+        \beta^{-1}\mathbin{\triangleright}\omega
+         & =(\beta\beta^{-1})\mathbin{\triangleright}\eta
+        =\eta,
+    \end{align}
+    which proves symmetry. Composition formula
+    (\ref{eq:mpug_gauge_composition}) proves transitivity.
+\end{proof}
+
+\begin{definition}[Trivial scalar gauge class]
+    \label{def:mpug_trivial_gauge_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass}
+    \leanok
+    \uses{def:mpug_cohomologous_to}
+    A scalar $3$-cochain has trivial gauge class when it is cohomologous to
+    the constant cochain $1$.
+\end{definition}

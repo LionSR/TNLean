@@ -1,0 +1,64 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Repeated Case in the Scalar Three-Cocycle Normalization}
+\author{}
+\date{2026-08-28}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Printed normalization}
+
+In its later list of standing gauge conventions, Ref.~\cite{FrancoRubio2025MPUGauging}
+states that fusion tensors involving the identity element $e$ are trivial and
+that the scalar $3$-cocycle $\omega$ is normalized. The accompanying display
+prints
+\begin{align}
+    \omega(g,h,e)=\omega(g,h,e)=\omega(g,h,e)
+        &=1,
+        \qquad \text{for every }g,h.
+    \label{eq:fbc25_three_cocycle_normalization_typo_printed}
+\end{align}
+Thus the same identity-axis case appears three times, while the other two
+identity axes do not appear.
+
+\section{Corrected convention}
+
+The preceding sentence requires triviality whenever any fusion input is the
+identity. The normalized scalar $3$-cochain convention is therefore
+\begin{align}
+    \omega(e,h,k)=\omega(g,e,k)=\omega(g,h,e)
+        &=1,
+        \qquad \text{for every }g,h,k.
+    \label{eq:fbc25_three_cocycle_normalization_typo_corrected}
+\end{align}
+Equation~\ref{eq:fbc25_three_cocycle_normalization_typo_corrected} replaces the
+three repeated copies in
+Eq.~\ref{eq:fbc25_three_cocycle_normalization_typo_printed} by the three
+possible identity-axis cases. It changes neither the scalar codomain nor the
+$3$-cocycle equation.
+
+\section{Formal treatment}
+
+The formal definition uses
+Eq.~\ref{eq:fbc25_three_cocycle_normalization_typo_corrected}.
+This is a local correction of the repeated case in the printed display, not an
+additional hypothesis on scalar $3$-cochains.\footnote{Formal declaration:
+\leanid{TNLean.Algebra.ScalarThreeCochain.IsNormalized} in
+\doclink{TNLean/Algebra/ScalarThreeCocycle}.}
+
+\textbf{Verdict: resolved local fix.}
+The source's surrounding standing convention determines all three
+identity-axis conditions, so the repetition is typographical.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
