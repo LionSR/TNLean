@@ -7,9 +7,10 @@
 > [QICLean](https://github.com/LionSR/QICLean) repository, and the audited
 > modules recorded below under extracted stacks — `TNLean/Channel/...`,
 > `TNLean/Kraus/...`, `TNLean/Entropy/...`, `TNLean/Analysis/...`, and
-> parts of `TNLean/Algebra/...` and `TNLean/MPS/Core/...` — now live in
-> QICLean under the corresponding `QICLean/...` paths. The audit's verdicts
-> are unchanged; re-checking a citation requires a QICLean checkout. Current
+> parts of `TNLean/Algebra/...` and `TNLean/MPS/Core/...` — mostly now live in
+> QICLean under the corresponding `QICLean/...` paths; entries explicitly
+> marked deleted below have no relocated module. The audit's verdicts are
+> unchanged; re-checking a live citation requires a QICLean checkout. Current
 > Wolf theorem-number coverage tracking lives in QICLean's
 > [`docs/wolf_numbering_coverage.md`](https://github.com/LionSR/QICLean/blob/main/docs/wolf_numbering_coverage.md).
 
@@ -361,7 +362,8 @@ theorem uses the necessary unital hypothesis, as documented in
 - `TNLean/Analysis/LiebConcavity.lean`
 - `TNLean/Channel/Schwarz/OperatorConvexity.lean`
 - `TNLean/Channel/Schwarz/OperatorJensenAux.lean`
-- `TNLean/Channel/Schwarz/OperatorMonotone.lean`
+- `TNLean/Channel/Schwarz/OperatorMonotone.lean` — deleted during extraction;
+  there is no corresponding QICLean module
 - `blueprint/src/chapter/ch18_operator_convexity.tex`
 - `blueprint/src/chapter/ch18_operator_convexity_schwarz_and_jensen.tex`
 - `https://sirui-lu.com/QICLean/paper-gaps/wolf_ch5_operator_jensen_lieb.pdf`

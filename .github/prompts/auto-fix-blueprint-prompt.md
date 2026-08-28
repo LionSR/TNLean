@@ -16,9 +16,10 @@ Instructions:
 4. You can test your fix locally by running:
 
    - `pip install leanblueprint plastex git+https://github.com/LionSR/texra-blueprint@v0.3.8`
-   - `cd blueprint && leanblueprint web`
+   - `cd blueprint && texra-blueprint web`
 
-   Check that no `ERROR` lines appear in the output.
+   Require the command to succeed; it rejects unresolved `ERROR` lines and
+   renderer warnings that the Blueprint CI gate treats as failures.
 5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
 6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
 7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
