@@ -18,3 +18,13 @@ def count_color(
     if danger_at is not None and count >= danger_at:
         return "red"
     return "orange"
+
+
+def sorries_color(count: int) -> str:
+    """Color the shared sorries endpoint."""
+    return count_color(count, warning_at=10, danger_at=50)
+
+
+def axioms_color(count: int) -> str:
+    """Color the shared axioms endpoint."""
+    return "brightgreen" if count == 0 else "red"

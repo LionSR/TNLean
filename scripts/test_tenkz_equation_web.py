@@ -11,6 +11,8 @@ import json
 import re
 import socketserver
 import threading
+import time
+import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -167,6 +169,30 @@ class _GeneratedStructureParser(HTMLParser):
     def handle_data(self, data: str) -> None:
         if self.in_paragraph:
             self.paragraph_parts.append(data)
+
+
+def _mathjax_bundle(root: Path) -> tuple[str, bytes]:
+    """Fetch once so Chromium does not depend on a cross-origin CDN request."""
+    script_sources: set[str] = set()
+    script_pattern = re.compile(r'<script\b[^>]*\bsrc=["\']([^"\']+)["\']', re.I)
+    for filename in PAGES:
+        source = (root / filename).read_text(encoding="utf-8")
+        script_sources.update(
+            src for src in script_pattern.findall(source)
+            if re.search(r"mathjax|tex-(?:chtml|mml|svg)", src, re.I)
+        )
+    assert len(script_sources) == 1, script_sources
+    url = script_sources.pop()
+    request = urllib.request.Request(url, headers={"User-Agent": "TNLean-CI/1"})
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return url, response.read()
+        except OSError:
+            if attempt == 2:
+                raise
+            time.sleep(2 ** attempt)
+    raise AssertionError("unreachable")
 
 
 def _assert_generated_blocks(root: Path) -> None:
@@ -345,23 +371,38 @@ def main() -> int:
         args.screenshot_dir.mkdir(parents=True, exist_ok=True)
     _assert_generated_blocks(root)
 
+    mathjax_url, mathjax_bundle = _mathjax_bundle(root)
     collected: list[dict[str, object]] = []
     mobile: list[dict[str, object]] = []
     with serve(root) as base_url, sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
+        page.route(
+            mathjax_url,
+            lambda route: route.fulfill(
+                body=mathjax_bundle, content_type="application/javascript"
+            ),
+        )
         for filename in PAGES:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
             # The fixture pictures have their own readiness check below.
             page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
             # Settle MathJax before measuring selectable operators between the
-            # pictures. The bundle is asynchronous even after DOMContentLoaded.
+            # pictures. The bundle is served from the local route above, but
+            # typesetting the large MPDO pages still takes minutes on loaded
+            # runners, so budget generously: a page whose MathJax never starts
+            # still fails, just later.
             page.wait_for_function(
                 "() => window.MathJax && window.MathJax.startup"
                 " && window.MathJax.startup.promise",
-                timeout=120_000,
+                timeout=300_000,
             )
-            page.evaluate("() => window.MathJax.startup.promise")
+            # Wait out the typesetting pass under the same explicit budget, so
+            # a failure distinguishes slow typesetting from bundle installation.
+            page.wait_for_function(
+                "async () => { await window.MathJax.startup.promise; return true; }",
+                timeout=300_000,
+            )
             equations = page.locator(".tenkz-equation")
             # Ignore unrelated chapter pictures: only these fixtures contribute
             # to the row geometry checked below.

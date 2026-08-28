@@ -29,8 +29,8 @@ on:
       - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
-      - '.github/workflows/pr-ci.yml'
-      - '.github/workflows/docgen.yml'
+      - '.github/workflows/**'
+      - '.github/dependabot.yml'
       - 'tenkz.toml'
       - 'scripts/fetch_tenkz.py'
       - 'scripts/tenkz_paths.py'
@@ -93,8 +93,8 @@ on:
       - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
-      - '.github/workflows/pr-ci.yml'
-      - '.github/workflows/docgen.yml'
+      - '.github/workflows/**'
+      - '.github/dependabot.yml'
       - 'tenkz.toml'
       - 'scripts/fetch_tenkz.py'
       - 'scripts/tenkz_paths.py'
@@ -217,9 +217,8 @@ jobs:
               - 'docs/**/*.md'
               - 'texra-blueprint.toml'
             workflow:
-              - '.github/workflows/pr-ci.yml'
-              - '.github/workflows/docgen.yml'
-              - '.github/workflows/blueprint.yml'
+              - '.github/workflows/**'
+              - '.github/dependabot.yml'
 
   build:
     needs: changes
