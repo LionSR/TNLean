@@ -38,7 +38,7 @@ import tomllib
 from collections import defaultdict
 from pathlib import Path
 
-from badge_utils import count_color
+from badge_utils import axioms_color, count_color, sorries_color
 
 
 SORRY_RE = re.compile(r"\bsorry\b")
@@ -229,6 +229,11 @@ def _blueprint_badge_counts(
 # ---------------------------------------------------------------------------
 
 
+def badge_count_colors(sorries: int, axioms: int) -> dict[str, str]:
+    """Return colors for the count badges emitted by this generator."""
+    return {"sorries": sorries_color(sorries), "axioms": axioms_color(axioms)}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=Path("badges"))
@@ -250,16 +255,15 @@ def main() -> None:
 
     sorry_count = count_pattern(lean_files, SORRY_RE)
     axiom_count = count_pattern(lean_files, AXIOM_RE)
+    colors = badge_count_colors(sorry_count, axiom_count)
 
     badge_records = {
         "sorries.json": badge(
             "sorries",
             str(sorry_count),
-            count_color(sorry_count, warning_at=10, danger_at=50),
+            colors["sorries"],
         ),
-        "axioms.json": badge(
-            "axioms", str(axiom_count), "brightgreen" if axiom_count == 0 else "red"
-        ),
+        "axioms.json": badge("axioms", str(axiom_count), colors["axioms"]),
         "lean.json": badge("Lean", lean_version(repo_root), "blue"),
         "mathlib.json": badge("Mathlib", mathlib_version(repo_root), "blue"),
     }
