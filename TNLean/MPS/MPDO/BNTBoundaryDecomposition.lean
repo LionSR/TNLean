@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTProjectorSelection
 import TNLean.MPS.MPDO.PhysicalClosure
-import TNLean.MPS.MPDO.SourceSimpleScaling
+import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.SharedInfra.BoundaryDecomposition
 
 /-!

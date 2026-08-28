@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
-import TNLean.MPS.MPDO.SourceSimpleTensor
+import TNLean.MPS.MPDO.Simple
 
 /-!
 # Simplicity of the dimer tensor
