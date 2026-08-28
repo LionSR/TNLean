@@ -397,11 +397,10 @@ def main() -> int:
                 " && window.MathJax.startup.promise",
                 timeout=300_000,
             )
-            # Wait out the typesetting pass as well; otherwise the evaluate
-            # inherits playwright's default 30s budget, the same loaded-runner
-            # flake one step later.
-            page.evaluate(
-                "() => window.MathJax.startup.promise",
+            # Wait out the typesetting pass under the same explicit budget, so
+            # a failure distinguishes slow typesetting from bundle installation.
+            page.wait_for_function(
+                "async () => { await window.MathJax.startup.promise; return true; }",
                 timeout=300_000,
             )
             equations = page.locator(".tenkz-equation")
