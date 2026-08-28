@@ -761,9 +761,9 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.toLin_mul` in the standard orthonormal basis.
 - **Reuse:** `Matrix.toEuclideanLin_mul` in `QICLean/Analysis/TraceNormAbs.lean` (QICLean dependency) is the shared
   layer-0 statement.
-- **Result:** `TNLean/Analysis/MatrixReducedProjection.lean` uses the shared theorem directly,
+- **Result:** `QICLean/Analysis/MatrixReducedProjection.lean` uses the shared theorem directly,
   and `PositiveOnAbelian.Internal.toEuclideanLin_mul` remains as a compatibility wrapper for
-  its three existing Channel call sites. The two-copy candidate was promoted early as required
+  its three existing QICLean Channel call sites. The two-copy candidate was promoted early as required
   by issue #6525, preventing a third layer-crossing copy.
 
 ### One-step cyclic-forward offset
@@ -954,12 +954,12 @@ abstracted — record why, so it is not re-proposed).
   strong-subadditivity argument is a direct corollary of the same statement.
 
 ### Support-correct tensor logarithm
-- **Pattern:** `TNLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
+- **Pattern:** `QICLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
   simultaneous-diagonalization proof of the support-correct tensor logarithm.
 - **Reuse:** `Matrix.log_kronecker_posSemidef` in
   `QICLean/Analysis/CfcKronecker.lean` (QICLean dependency) is the canonical low-layer theorem.
 - **Result:** the duplicate proof was removed from
-  `TNLean/Channel/Schwarz/SSAEqualityDPI.lean`; the faithful entropy comparison
+  `QICLean/Channel/Schwarz/SSAEqualityDPI.lean`; the faithful entropy comparison
   uses the Analysis declaration directly.
 
 ### Transpose covariance of the continuous functional calculus
