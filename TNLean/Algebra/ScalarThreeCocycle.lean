@@ -164,10 +164,10 @@ theorem IsNormalized.fusionGauge {ω : ScalarThreeCochain G}
     IsNormalized (fusionGauge β ω) :=
   (isNormalized_coboundary hβ).mul hω
 
-/-- Two scalar 3-cochains are cohomologous when one is obtained from the
-other by the fusion-gauge action in arXiv:2502.20257, `eq:omegagauge`. -/
+/-- Two scalar 3-cochains are cohomologous when the first is obtained from the
+second by the fusion-gauge action in arXiv:2502.20257, `eq:omegagauge`. -/
 def CohomologousTo (ω η : ScalarThreeCochain G) : Prop :=
-  ∃ β : ScalarCocycle G, fusionGauge β ω = η
+  ∃ β : ScalarCocycle G, fusionGauge β η = ω
 
 namespace CohomologousTo
 
@@ -178,19 +178,23 @@ theorem refl (ω : ScalarThreeCochain G) : CohomologousTo ω ω :=
 /-- Cohomologous-to is symmetric. -/
 theorem symm {ω η : ScalarThreeCochain G} (h : CohomologousTo ω η) :
     CohomologousTo η ω := by
-  obtain ⟨β, rfl⟩ := h
+  obtain ⟨β, hβ⟩ := h
   refine ⟨β⁻¹, ?_⟩
-  rw [fusionGauge_comp, mul_inv_cancel]
-  change fusionGauge (fun _ _ => 1) ω = ω
-  exact fusionGauge_one ω
+  rw [← hβ, fusionGauge_comp, mul_inv_cancel]
+  exact fusionGauge_one η
 
 /-- Cohomologous-to is transitive. -/
 theorem trans {ω η θ : ScalarThreeCochain G}
     (hωη : CohomologousTo ω η) (hηθ : CohomologousTo η θ) :
     CohomologousTo ω θ := by
-  obtain ⟨β, rfl⟩ := hωη
-  obtain ⟨γ, rfl⟩ := hηθ
-  exact ⟨β * γ, (fusionGauge_comp β γ ω).symm⟩
+  obtain ⟨β, hβ⟩ := hωη
+  obtain ⟨γ, hγ⟩ := hηθ
+  refine ⟨γ * β, ?_⟩
+  calc
+    fusionGauge (γ * β) θ = fusionGauge β (fusionGauge γ θ) :=
+      (fusionGauge_comp γ β θ).symm
+    _ = fusionGauge β η := congrArg (fusionGauge β) hγ
+    _ = ω := hβ
 
 /-- Cohomologous-to is an equivalence relation. -/
 theorem equivalence : Equivalence (CohomologousTo (G := G)) :=

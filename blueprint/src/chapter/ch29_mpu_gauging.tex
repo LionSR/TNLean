@@ -15,8 +15,7 @@ they do not construct fusion tensors or an MPU representation.
 
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
-    \lean{TNLean.Algebra.ScalarCocycle,
-        TNLean.Algebra.ScalarThreeCochain,
+    \lean{TNLean.Algebra.ScalarThreeCochain,
         TNLean.Algebra.ScalarCocycle.IsNormalized,
         TNLean.Algebra.ScalarThreeCochain.IsNormalized}
     \leanok
@@ -185,7 +184,7 @@ they do not construct fusion tensors or an MPU representation.
     \leanok
     \uses{def:mpug_fusion_gauge}
     Two scalar $3$-cochains $\omega$ and $\eta$ are cohomologous when
-    $\eta=\beta\mathbin{\triangleright}\omega$ for some scalar
+    $\omega=\beta\mathbin{\triangleright}\eta$ for some scalar
     $2$-cochain $\beta$.
 \end{definition}
 
@@ -202,12 +201,12 @@ they do not construct fusion tensors or an MPU representation.
 
 \begin{proof}\leanok
     \uses{thm:mpug_gauge_action}
-    Reflexivity uses the constant cochain $1$. If $\eta=
-        \beta\mathbin{\triangleright}\omega$, then
+    Reflexivity uses the constant cochain $1$. If $\omega=
+        \beta\mathbin{\triangleright}\eta$, then
     \begin{align}
-        \beta^{-1}\mathbin{\triangleright}\eta
-         & =(\beta\beta^{-1})\mathbin{\triangleright}\omega
-        =\omega,
+        \beta^{-1}\mathbin{\triangleright}\omega
+         & =(\beta\beta^{-1})\mathbin{\triangleright}\eta
+        =\eta,
     \end{align}
     which proves symmetry. Composition formula
     (\ref{eq:mpug_gauge_composition}) proves transitivity.
