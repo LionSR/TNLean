@@ -350,12 +350,22 @@ def main() -> int:
     with serve(root) as base_url, sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
+        # The page's own showmore widget collapses proofs by default and
+        # stores the reader's chosen expansion level in a cookie.  Preset the
+        # fully-expanded level before any page script runs, so the geometry
+        # below is measured the way a reader sees the expanded page rather
+        # than inferred from a collapsed state that the reveal style does not
+        # cover (the widget also folds whole proof wrappers and figures).
+        page.add_init_script("document.cookie = 'showmore_level=2; path=/';")
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Several source-linked rows live in proofs, which the blueprint UI
-            # collapses by default.  Reveal them so geometry is measured rather
-            # than inferred from zero-sized hidden descendants.
-            page.add_style_tag(content=".proof_content { display: block !important; }")
+            # Belt and braces on top of the cookie: keep proof content, its
+            # wrapper, and figure containers displayed even if a stale
+            # collapse state survives.
+            page.add_style_tag(content=(
+                ".proof_content, .proof_wrapper, figure {"
+                " display: block !important; }"
+            ))
             page.locator(".tenkz-equation").first.wait_for(state="visible")
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
