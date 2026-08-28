@@ -92,10 +92,10 @@ difficult inclusion in
 Eq.~\ref{eq:cpgsv21_normal_range_reduction_periodic_ground_space} combines a
 complementary-word argument for $L_0+1<N$ with a full-ring cyclic change of cut
 for $N=L_0+1$.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:885 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:738 for
 \leanid{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:923 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:776 for
 \leanid{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal
 hypotheses are named \leanid{Kraus.IsNormal A} and
 \leanid{Kraus.IsNBlkInjective A L0}, together with
@@ -113,11 +113,11 @@ available intersection theorem applies to a tensor that is already injective
 at one site. Its proof writes the identity as a linear combination of the
 one-site matrices $A_j$ and iterates the resulting single-letter intersection
 property through contiguous windows.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:281--284 for
+\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:343 for
 \leanid{MPSTensor.groundSpace_intersection},
-\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:341--364 for
+\path{TNLean/MPS/Chain/OneSidedInverse.lean}:67 for
 \leanid{Kraus.decompositionMap hA 1}, and
-\path{TNLean/MPS/ParentHamiltonian/CyclicWindow.lean}:153--163 for the
+\path{TNLean/MPS/ParentHamiltonian/CyclicWindow.lean}:220--257 for the
 contiguous iteration.}
 For a normal tensor with injectivity length $L_0$, the available inverse acts
 on words of length $L_0$, not on individual letters. This does not contradict
@@ -131,9 +131,9 @@ chain belongs to its full MPS ground space. Cyclic-window monotonicity derives
 this conclusion from the cyclic length-$L$ constraints. This formalizes the
 iterated open-boundary argument without using the single-site intersection
 lemma.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:266 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:107 for
 \leanid{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}, and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:328 for
+\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:169 for
 \leanid{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
 
 \section{The boundary block-window identity}

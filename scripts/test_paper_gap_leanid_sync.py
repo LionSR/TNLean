@@ -11,12 +11,12 @@ from paper_gap_leanid_sync import (
 )
 
 
-def _heads(source: str) -> list[str]:
+def _heads(source: str, filename: str = "example.tex") -> list[str]:
     with TemporaryDirectory() as tmp:
         root = Path(tmp)
         paper_gaps = root / "docs" / "paper-gaps"
         paper_gaps.mkdir(parents=True)
-        (paper_gaps / "example.tex").write_text(source)
+        (paper_gaps / filename).write_text(source)
         return [ref.head for ref in collect_paper_gap_leanid_refs(paper_gaps, root)]
 
 
@@ -98,6 +98,15 @@ def test_empty_and_malformed_payloads_are_ignored() -> None:
     ) == []
 
 
+def test_intentional_policy_placeholders_are_scoped_to_their_files() -> None:
+    assert _heads(r"\leanid{modelCorrected}", "template.tex") == []
+    assert _heads(r"\leanid{someDeclaration}", "policy.tex") == []
+    assert _heads(r"\leanid{modelCorrected, someDeclaration}") == [
+        "modelCorrected",
+        "someDeclaration",
+    ]
+
+
 if __name__ == "__main__":
     test_comma_lists_percent_continuations_and_applied_arguments()
     test_comments_and_nonmatching_macros_do_not_create_references()
@@ -106,4 +115,5 @@ if __name__ == "__main__":
     test_source_locations_point_to_macro_start()
     test_duplicates_are_preserved_in_refs_and_deduplicated_in_output()
     test_empty_and_malformed_payloads_are_ignored()
+    test_intentional_policy_placeholders_are_scoped_to_their_files()
     print("Paper-gap leanid sync tests passed.")

@@ -16,11 +16,16 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from blueprint_lean_sync import split_tex_lean_decls
+from blueprint_lean_sync import is_escaped_tex_char, split_tex_lean_decls
 
 
 _MACRO_NAME = "leanid"
 _HEAD_STRIP_CHARS = "`$.,;:()[]{}"
+# Intentional placeholders used to document the macro in policy/template prose.
+_EXAMPLE_PLACEHOLDER_HEADS = {
+    "policy.tex": {"someDeclaration"},
+    "template.tex": {"modelCorrected"},
+}
 
 
 @dataclass(frozen=True)
@@ -30,15 +35,6 @@ class LeanIdRef:
     column: int
     payload: str
     head: str
-
-
-def _is_escaped(text: str, index: int) -> bool:
-    backslashes = 0
-    cursor = index - 1
-    while cursor >= 0 and text[cursor] == "\\":
-        backslashes += 1
-        cursor -= 1
-    return backslashes % 2 == 1
 
 
 def _line_col(text: str, index: int) -> tuple[int, int]:
@@ -64,7 +60,7 @@ def iter_tex_macro_payloads(text: str, macro_name: str = _MACRO_NAME) -> list[tu
     index = 0
     while index < len(text):
         char = text[index]
-        if char == "%" and not _is_escaped(text, index):
+        if char == "%" and not is_escaped_tex_char(text, index):
             index = _skip_tex_comment(text, index)
             continue
         if not text.startswith(marker, index):
@@ -87,14 +83,14 @@ def iter_tex_macro_payloads(text: str, macro_name: str = _MACRO_NAME) -> list[tu
         depth = 1
         payload_parts: list[str] = []
         while cursor < len(text) and depth > 0:
-            if text[cursor] == "%" and not _is_escaped(text, cursor):
+            if text[cursor] == "%" and not is_escaped_tex_char(text, cursor):
                 comment_end = _skip_tex_comment(text, cursor)
                 payload_parts.append(text[cursor:comment_end])
                 cursor = comment_end
                 continue
-            if text[cursor] == "{" and not _is_escaped(text, cursor):
+            if text[cursor] == "{" and not is_escaped_tex_char(text, cursor):
                 depth += 1
-            elif text[cursor] == "}" and not _is_escaped(text, cursor):
+            elif text[cursor] == "}" and not is_escaped_tex_char(text, cursor):
                 depth -= 1
                 if depth == 0:
                     break
@@ -144,6 +140,8 @@ def collect_paper_gap_leanid_refs(paper_gaps_dir: Path, root: Path) -> list[Lean
             for payload_item in split_tex_lean_decls(payload):
                 head = lean_decl_head(payload_item)
                 if head is None:
+                    continue
+                if head in _EXAMPLE_PLACEHOLDER_HEADS.get(tex_file.name, set()):
                     continue
                 refs.append(
                     LeanIdRef(
