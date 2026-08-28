@@ -354,6 +354,15 @@ def main() -> int:
             page.goto(f"{base_url}/{filename}", wait_until="load")
             # Wait for the generated flex shell before exposing descendants.
             page.locator("div.content").wait_for(state="visible")
+            # Pin the test fixture's reading column as well as the production
+            # stylesheet: Chromium 140 can otherwise preserve a stale zero-width
+            # intrinsic flex size during this headless navigation.
+            page.add_style_tag(content="""
+              div.content-wrapper, div.main-text {
+                width: 100% !important;
+                min-width: 0 !important;
+              }
+            """)
             equations = page.locator(".tenkz-equation")
             page.wait_for_function("""() =>
               [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
