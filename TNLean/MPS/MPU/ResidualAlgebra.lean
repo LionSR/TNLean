@@ -17,7 +17,7 @@ algebra, hence every element is nilpotent.  Finally, the finite-dimensional
 nil-matrix theorem shows that every product of exactly `D²` residual matrices vanishes.
 
 The source claims a strict intermediate bound.  We use the corrected exact
-length `D²`; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`.
+length `D²`; see <https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>.
 -/
 
 open scoped Matrix
@@ -168,7 +168,7 @@ theorem IsMPU.isNilpotent_of_mem_residualAlgebra
 
 **Local fix (arXiv:1703.09188, Proposition III.3, lines 410--415):** the source's
 unsupported strict intermediate bound is replaced by the exact ambient-dimension
-length `D²`; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+length `D²`; see <https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.residualAlgebra_list_prod_eq_zero
     [NeZero d] {U : MPOTensor d D} (hU : IsMPU U)
     (l : List (Matrix (Fin (D * D)) (Fin (D * D)) ℂ))
@@ -182,7 +182,7 @@ theorem IsMPU.residualAlgebra_list_prod_eq_zero
 
 **Local fix (arXiv:1703.09188, equation `Sprime=0`, lines 410--415):** the
 corrected length is `D²`, rather than a strict bound below it; see
-`docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.prod_residualSlice_doubleLayerTensor_eq_zero
     [NeZero d] {U : MPOTensor d D} (hU : IsMPU U)
     (X : Fin (D * D) → Matrix (Fin d) (Fin d) ℂ) :
