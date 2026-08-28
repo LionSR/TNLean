@@ -220,3 +220,122 @@ they do not construct fusion tensors or an MPU representation.
     A scalar $3$-cochain has trivial gauge class when it is cohomologous to
     the constant cochain $1$.
 \end{definition}
+
+\begin{definition}[Inversion cochains]
+    \label{def:mpug_inversion_cochains}
+    \lean{TNLean.Algebra.ScalarOneCochain,
+        TNLean.Algebra.ScalarOneCochain.coboundary,
+        TNLean.Algebra.ScalarCocycle.hat,
+        TNLean.Algebra.ScalarThreeCochain.hat,
+        TNLean.Algebra.ScalarThreeCochain.Xi,
+        TNLean.Algebra.ScalarThreeCochain.sigma}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For scalar cochains with one, two, and three arguments, set
+    \begin{equation}
+        (d\sigma)(g,h)=\frac{\sigma(g)\sigma(h)}{\sigma(gh)}.
+        \label{eq:mpug_one_coboundary}
+    \end{equation}
+    The hat reverses the arguments and replaces each group element by its
+    inverse:
+    \begin{equation}
+        \widehat\beta(g,h)=\beta(h^{-1},g^{-1}).
+        \label{eq:mpug_two_hat}
+    \end{equation}
+    \begin{equation}
+        \widehat\omega(g,h,k)=\omega(k^{-1},h^{-1},g^{-1}).
+        \label{eq:mpug_three_hat}
+    \end{equation}
+    Define the inversion cochains by
+    \begin{equation}
+        \Xi(g,h)=
+        \frac{\omega(h^{-1},g^{-1},g)}
+             {\omega(h^{-1}g^{-1},g,h)}.
+        \label{eq:mpug_intro_Xi}
+    \end{equation}
+    \begin{equation}
+        \sigma(g)=\omega(g,g^{-1},g).
+        \label{eq:mpug_intro_sigma}
+    \end{equation}
+    % Source anchors: arXiv:2502.20257, lines 5910--5916 and eq:introXi.
+\end{definition}
+
+\begin{theorem}[Two inversion-cochain formulas]
+    \label{thm:mpug_inversion_cochain_formulas}
+    \lean{TNLean.Algebra.ScalarCocycle.hat_hat,
+        TNLean.Algebra.ScalarThreeCochain.hat_hat,
+        TNLean.Algebra.ScalarThreeCochain.Xi_eq_second_formula,
+        TNLean.Algebra.ScalarThreeCochain.sigma_inv}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
+    Let $\omega$ be a normalized scalar $3$-cocycle. The hat operation is an
+    involution, and
+    \begin{equation}
+        \Xi(g,h)=
+        \frac{\omega(h^{-1},g^{-1},g)}
+             {\omega(h^{-1}g^{-1},g,h)}
+        =
+        \frac{\omega(h^{-1},g^{-1},gh)}
+             {\omega(g^{-1},g,h)}.
+        \label{eq:mpug_Xi_two_formulas}
+    \end{equation}
+    Moreover,
+    \begin{equation}
+        \sigma(g^{-1})=\sigma(g)^{-1}.
+        \label{eq:mpug_sigma_inverse}
+    \end{equation}
+    No finiteness assumption on $G$ is needed.
+    % Source anchor: arXiv:2502.20257, eq:introXi and lemma:omegaXi.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
+    Apply the cocycle identity to $(h^{-1},g^{-1},g,h)$ and use normalization;
+    this gives the second quotient in
+    (\ref{eq:mpug_Xi_two_formulas}). Applying it to
+    $(g,g^{-1},g,g^{-1})$ gives
+    $1=\sigma(g)\sigma(g^{-1})$, hence
+    (\ref{eq:mpug_sigma_inverse}). Reversing and inverting the arguments twice
+    proves the involution statements.
+\end{proof}
+
+\begin{theorem}[Inversion identities for a normalized three-cocycle]
+    \label{thm:mpug_omega_Xi}
+    \lean{TNLean.Algebra.ScalarThreeCochain.hat_eq_mul_coboundary_Xi,
+        TNLean.Algebra.ScalarThreeCochain.Xi_eq_hat_mul_coboundary_sigma}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_inversion_cochains,
+        thm:mpug_inversion_cochain_formulas}
+    Let $\omega$ be a normalized scalar $3$-cocycle. Then
+    \begin{equation}
+        \widehat\omega=\omega\,d\Xi.
+        \label{eq:mpug_hat_omega}
+    \end{equation}
+    The inversion two-cochain also satisfies
+    \begin{equation}
+        \Xi=\widehat\Xi\,d\sigma.
+        \label{eq:mpug_Xi_hat_sigma}
+    \end{equation}
+    % Source anchor: arXiv:2502.20257, lemma:omegaXi, lines 5967--5979.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, thm:mpug_inversion_cochain_formulas}
+    For (\ref{eq:mpug_hat_omega}), multiply the cocycle identities at
+    \begin{equation}
+        (k^{-1},h^{-1},g^{-1},g),\quad
+        (k^{-1},h^{-1}g^{-1},g,h),\quad
+        (k^{-1}h^{-1}g^{-1},g,h,k),
+    \end{equation}
+    and cancel the normalized factors. For (\ref{eq:mpug_Xi_hat_sigma}), use
+    the second expression in (\ref{eq:mpug_Xi_two_formulas}) for
+    $\widehat\Xi$, then combine the identities at
+    \begin{equation}
+        (h^{-1}g^{-1},g,h,h^{-1}g^{-1}),\quad
+        (h^{-1},h,h^{-1},g^{-1}),\quad
+        (h^{-1},g^{-1},g,g^{-1}),\quad
+        (g,g^{-1},g,g^{-1}).
+    \end{equation}
+    The last identity at $g$, $h$, and $gh$ supplies
+    (\ref{eq:mpug_sigma_inverse}) in the three required places.
+\end{proof}

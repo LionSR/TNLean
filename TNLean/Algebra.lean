@@ -24,3 +24,4 @@ import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleInversion
