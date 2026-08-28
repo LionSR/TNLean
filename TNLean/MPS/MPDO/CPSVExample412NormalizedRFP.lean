@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CPSVExample412Literal
-import TNLean.MPS.MPDO.SourceSimpleScaling
+import TNLean.MPS.MPDO.SimpleScaling
 
 /-!
 # The density-normalized channel fixed point of CPSV16 Example 4.12

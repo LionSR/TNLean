@@ -1,0 +1,24 @@
+# BNT block-diagonal declaration renames (issue #7175)
+
+Issue #7175 shortened nine exported PGVWC07 source-normalization declarations whose names
+forced lines beyond 100 columns. The theorem statements, hypotheses, and proofs are unchanged.
+No compatibility aliases were retained because TNLean does not promise a stable external Lean API.
+
+## Exact mapping
+
+| Old declaration | New declaration |
+|---|---|
+| `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint` |
+| `MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint` | `MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint` |
+
+The new names preserve the conclusion-first prefixes and use the common
+`_pgvwc07_of_dualFixedPoint` suffix for this source-normalized theorem family. In-repository
+Lean call sites, Blueprint declaration tags, paper-gap references, and the paper-coverage audit
+were migrated together.

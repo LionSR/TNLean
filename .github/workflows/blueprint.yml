@@ -29,7 +29,9 @@ on:
       - 'scripts/build_blueprint_ch01_12.sh'
       - 'scripts/assemble-pages-site.sh'
       - 'scripts/fetch-latest-artifact.sh'
+      - 'scripts/badge_utils.py'
       - 'scripts/write_badges.py'
+      - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
   workflow_dispatch:

@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.OverlappingLiftAlgebra
+import QICLean.Entropy.PositiveOverlappingProduct
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.OverlappingLiftAlgebra
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.PositiveOverlappingProduct
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.PhysicalSectorBondTransport
 import TNLean.MPS.MPDO.PhysicalSupportBondTransport

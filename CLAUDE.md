@@ -415,7 +415,7 @@ follow-up, not against the temporary `sorry` count.
 | `MPOTensor.IsSAL.physTraceTransfer_ne_zero` | helper theorem | Deriving nonvanishing of the one-site physical-trace transfer from the positive-length normalization clause in saturation of the area law | `TNLean/MPS/MPDO/SALTraceTransfer.lean` |
 | `Finset.sum_eq_sum_subtype_ne_zero` | helper theorem | Restricting a finite sum to the subtype where a weight is nonzero when the remaining summands vanish | `TNLean/Algebra/FinsetSubtypeSum.lean` |
 | `Complex.ofReal_sqrt_sq` | helper theorem | Squaring the complex coercion of a nonnegative real square root | `TNLean/Algebra/ComplexSqrt.lean` |
-| `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `TNLean/Algebra/MatrixIsometryKronecker.lean` |
+| `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `QICLean/Algebra/MatrixIsometryKronecker.lean` (QICLean dependency) |
 | `Matrix.reindexLinearEquiv_mul` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences; instantiate all three equivalences explicitly | `Mathlib/LinearAlgebra/Matrix/Reindex.lean` |
 | `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean` |
 | `MPSTensor.cyclic_projection_mul_left` | helper theorem | Multiplying out the adjoint transfer map applied to a cyclic-sector projection times an arbitrary matrix, instead of rebuilding the Kadison–Schwarz multiplicative-domain argument | `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |

@@ -263,7 +263,10 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
             match = _LEAN_STRUCTURE_FIELD_RE.match(code)
             if not match:
                 continue
-            indent = len(code) - len(code.lstrip())
+            # Comment stripping concatenates the surviving fragments and does
+            # not preserve source columns. Lean layout uses the original line's
+            # leading indentation, including for an inline field doc comment.
+            indent = len(raw) - len(raw.lstrip())
             if field_indent is None:
                 field_indent = indent
             elif indent != field_indent:

@@ -38,6 +38,8 @@ import tomllib
 from collections import defaultdict
 from pathlib import Path
 
+from badge_utils import axioms_color, count_color, sorries_color
+
 
 SORRY_RE = re.compile(r"\bsorry\b")
 AXIOM_RE = re.compile(
@@ -134,16 +136,6 @@ def count_pattern(files: list[Path], pattern: re.Pattern[str]) -> int:
     return count
 
 
-def count_color(count: int, *, warn: int, danger: int) -> str:
-    if count == 0:
-        return "brightgreen"
-    if count < warn:
-        return "yellow"
-    if count < danger:
-        return "orange"
-    return "red"
-
-
 def lean_version(repo_root: Path) -> str:
     toolchain = (repo_root / "lean-toolchain").read_text(encoding="utf-8").strip()
     return toolchain.rsplit(":", maxsplit=1)[-1]
@@ -237,6 +229,11 @@ def _blueprint_badge_counts(
 # ---------------------------------------------------------------------------
 
 
+def badge_count_colors(sorries: int, axioms: int) -> dict[str, str]:
+    """Return colors for the count badges emitted by this generator."""
+    return {"sorries": sorries_color(sorries), "axioms": axioms_color(axioms)}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=Path("badges"))
@@ -258,14 +255,15 @@ def main() -> None:
 
     sorry_count = count_pattern(lean_files, SORRY_RE)
     axiom_count = count_pattern(lean_files, AXIOM_RE)
+    colors = badge_count_colors(sorry_count, axiom_count)
 
     badge_records = {
         "sorries.json": badge(
-            "sorries", str(sorry_count), count_color(sorry_count, warn=10, danger=50)
+            "sorries",
+            str(sorry_count),
+            colors["sorries"],
         ),
-        "axioms.json": badge(
-            "axioms", str(axiom_count), "brightgreen" if axiom_count == 0 else "red"
-        ),
+        "axioms.json": badge("axioms", str(axiom_count), colors["axioms"]),
         "lean.json": badge("Lean", lean_version(repo_root), "blue"),
         "mathlib.json": badge("Mathlib", mathlib_version(repo_root), "blue"),
     }
@@ -287,12 +285,12 @@ def main() -> None:
         badge_records["blueprint_no_leanok.json"] = badge(
             r"blueprint: no \leanok",
             str(no_leanok_count),
-            count_color(no_leanok_count, warn=100, danger=300),
+            count_color(no_leanok_count, warning_at=100, danger_at=300),
         )
         badge_records["blueprint_not_ready.json"] = badge(
             "blueprint: not ready",
             str(not_ready_count),
-            count_color(not_ready_count, warn=100, danger=300),
+            count_color(not_ready_count, warning_at=100, danger_at=300),
         )
 
     # --- Write badges ---

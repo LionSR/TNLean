@@ -170,7 +170,7 @@ exact length \(D^2\).
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 405--427.
 
 **Local fix (nil-matrix length):** the second blocking uses \(D^2\), replacing the
-unsupported strict intermediate bound; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+unsupported strict intermediate bound; see <https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMulVec
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ Φ : Fin (D * D) → ℂ) (hpair : Φ ⬝ᵥ ρ = 1)
@@ -246,7 +246,7 @@ MPU-simple after the corrected second blocking of exact length \(D^2\).
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 405--427.
 
 **Local fix (nil-matrix length):** the second blocking uses \(D^2\), replacing the
-unsupported strict intermediate bound; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+unsupported strict intermediate bound; see <https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ Φ : Fin (D * D) → ℂ) (hpair : Φ ⬝ᵥ ρ = 1)
@@ -728,7 +728,7 @@ Source: arXiv:1703.09188, Proposition III.3(ii), lines 397--427.
 
 **Local fix (nil-matrix length):** the first exponent satisfies \(J \leq D^2 - 1\)
 and the second length is exactly \(D^2\), still giving \(JD^2 < D^4\); see
-`docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.exists_blockTensor_isMPUSimple_of_one_lt
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D) :
     ∃ k : ℕ, 0 < k ∧ k < D ^ 4 ∧ IsMPUSimple (MPOTensor.blockTensor U k) := by

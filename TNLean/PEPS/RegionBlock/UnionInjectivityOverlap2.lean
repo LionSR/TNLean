@@ -180,33 +180,5 @@ theorem not_isRegionBoundaryEdge_union_of_overlapCrossing {R₁ R₂ : Finset V}
   · exact h2' (Finset.mem_union_left _ h2)
   · exact h1' (Finset.mem_union_left _ h1)
 
-/-- A `P₁`--`P₀` crossing edge is a blue/red crossing edge of the right geometry: its
-overlap endpoint lies in the blue block `R₁ ∩ R₂`, and its difference endpoint lies in
-the red block `R₂ᶜ`. This identifies the crossing-edge family with the blue/red crossings
-of `overlapRightGeometry`, so the landed right-geometry collapse acts over them. -/
-theorem isBlueRedCrossingEdge_right_of_overlapCrossing {R₁ R₂ : Finset V} {eg : Edge G}
-    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) :
-    (overlapRightGeometry (V := V) R₁ R₂).IsBlueRedCrossingEdge A eg := by
-  refine ⟨?_, ?_⟩
-  · -- A boundary edge of the red block `R₂ᶜ`: the overlap endpoint is in `R₂`, hence not
-    -- in `R₂ᶜ`, and the difference endpoint is outside `R₂`, hence in `R₂ᶜ`.
-    rw [overlapRightGeometry_red]
-    rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
-    · refine Or.inr ⟨?_, ?_⟩
-      · rw [Finset.mem_sdiff]
-        push Not
-        exact fun _ => (Finset.mem_inter.mp h1).2
-      · rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, (Finset.mem_sdiff.mp h2).2⟩
-    · refine Or.inl ⟨?_, ?_⟩
-      · rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, (Finset.mem_sdiff.mp h1).2⟩
-      · rw [Finset.mem_sdiff]
-        push Not
-        exact fun _ => (Finset.mem_inter.mp h2).2
-  · -- A boundary edge of the blue block `R₁ ∩ R₂`.
-    rw [overlapRightGeometry_blue]
-    rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
-    · exact Or.inl ⟨h1, fun hc => (Finset.mem_sdiff.mp h2).2 (Finset.mem_inter.mp hc).2⟩
-    · exact Or.inr ⟨fun hc => (Finset.mem_sdiff.mp h1).2 (Finset.mem_inter.mp hc).2, h2⟩
-
 end PEPS
 end TNLean

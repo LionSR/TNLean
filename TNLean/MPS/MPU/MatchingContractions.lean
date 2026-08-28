@@ -121,7 +121,7 @@ Source: arXiv:1703.09188, equations `Erightleft`, `simple1`, and `simple2`,
 lines 397--427.
 
 **Local fix (nil-matrix length):** the second blocking uses \(D^2\); see
-`docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρtrace : Matrix.trace ρ = 1)
@@ -193,7 +193,7 @@ representative supplied by
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
 **Local fix (nil-matrix length):** the second blocking uses \(D^2\); see
-`docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/mpu_nil_matrix_bound.pdf>. -/
 theorem IsMPU.exists_reduced_cfii_forced_block_simple_contractions
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D)
     (cfii : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)

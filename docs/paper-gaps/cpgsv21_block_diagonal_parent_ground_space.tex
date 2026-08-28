@@ -76,7 +76,7 @@ comparison has a formal span-dependent form on the main branch
 \path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
 The short crossing-tail span hypothesis is removed by the global change-of-cut
 comparison in
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint};
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint};
 this resolves
 \href{https://github.com/LionSR/TNLean/issues/3597}{issue \#3597} at the
 length bound of the source. The removal of the former extra $(L_0+1)$ in the
@@ -410,11 +410,11 @@ gives
   \label{eq:cpgsv21_block_diagonal_parent_ground_space_kernel_span}
 \end{align}
 No source left-canonical assumption is needed.\footnote{Lean declarations:
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint},
-\leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint},
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint},
 and
-\leanid{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}.}
+\leanid{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint}.}
 
 Earlier conditional reductions isolated the source comparison after opening the
 periodic boundary at a cut. Suppose
@@ -468,9 +468,9 @@ it translates the entire periodic state past the final $L_0$ sites and compares
 the two open-boundary decompositions on the long complementary
 segment.\footnote{Formal declarations:
 \leanid{MPSTensor.block_boundary_intertwines_of_cyclicTranslate_sum_groundSpaceMap_eq},
-\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint},
 and
-\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}.
+\leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_pgvwc07_of_dualFixedPoint}.
 The earlier conditional declarations are
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities},
 \leanid{MPSTensor.blockDiagonal_boundary_component_chainGroundSpace_of_complementary_word_identities_of_injective},
@@ -899,7 +899,7 @@ boundary-crossing comparison. It follows from the source-shaped, span-based
 one-step intersection theorem. Its block components belong to the
 open-boundary spaces $\mathcal G_N^{A_j}$, and its proof does not use the
 periodic-boundary comparison at crossing windows.\footnote{Lean declarations:
-\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
+\leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint}
 and
 \leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}.}
 Earlier conditional block-diagonal parent-space theorems retain the

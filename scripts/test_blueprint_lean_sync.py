@@ -29,6 +29,10 @@ structure Witness where
       letI : NeZero (n + 1) := ⟨by omega⟩
       True
 
+structure InlineDoc where
+  /-- Documentation on the first field. -/ first : Nat
+  second : Nat
+
  theorem after : True := by trivial
 
 end Example
@@ -42,6 +46,8 @@ end Example
         assert "Example.Witness.letI" not in decls
         assert "Example.Witness.this" not in decls
         assert "Example.Witness.fake" not in decls
+        assert decls["Example.InlineDoc.first"].kind == "field"
+        assert decls["Example.InlineDoc.second"].kind == "field"
         assert "Example.after" in decls
 
 

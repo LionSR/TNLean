@@ -16,6 +16,8 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from badge_utils import axioms_color, count_color, sorries_color
+
 
 ROOT = Path(__file__).resolve().parents[1]
 LEAN_ROOT = ROOT / "TNLean"
@@ -121,16 +123,6 @@ def write_badge(name: str, label: str, message: str, color: str, badge_dir: Path
     (badge_dir / f"{name}.json").write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def count_color(count: int, *, warning_at: int = 1, danger_at: int | None = None) -> str:
-    if count == 0:
-        return "brightgreen"
-    if count <= warning_at:
-        return "yellow"
-    if danger_at is not None and count >= danger_at:
-        return "red"
-    return "orange"
-
-
 def blueprint_badge_counts() -> tuple[int, int]:
     """Return (no_leanok_count, not_ready_count) for unique blueprint declarations."""
     sys.path.insert(0, str(ROOT / "scripts"))
@@ -160,12 +152,18 @@ def blueprint_badge_counts() -> tuple[int, int]:
     return no_leanok, not_ready
 
 
+def badge_count_colors(sorries: int, axioms: int) -> dict[str, str]:
+    """Return colors for the count badges emitted by this generator."""
+    return {"sorries": sorries_color(sorries), "axioms": axioms_color(axioms)}
+
+
 def main() -> None:
     badge_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "home_page" / "badges"
     sorries = count_token("sorry")
     axioms = count_token("axiom")
-    write_badge("sorries", "sorries", str(sorries), count_color(sorries, warning_at=10), badge_dir)
-    write_badge("axioms", "axioms", str(axioms), count_color(axioms, warning_at=0), badge_dir)
+    colors = badge_count_colors(sorries, axioms)
+    write_badge("sorries", "sorries", str(sorries), colors["sorries"], badge_dir)
+    write_badge("axioms", "axioms", str(axioms), colors["axioms"], badge_dir)
     write_badge("lean", "Lean", lean_version(), "blue", badge_dir)
     write_badge("mathlib", "Mathlib", mathlib_version(), "blue", badge_dir)
     no_leanok, not_ready = blueprint_badge_counts()
