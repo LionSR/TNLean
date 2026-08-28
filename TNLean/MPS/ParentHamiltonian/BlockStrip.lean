@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.WordFactor
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
-import TNLean.MPS.FundamentalTheorem.FiniteLength
 import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Data.List.OfFn
 

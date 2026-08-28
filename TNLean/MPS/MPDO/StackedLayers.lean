@@ -53,9 +53,6 @@ decomposition in `TNLean/MPS/MPDO/CyclicProjector.lean`.
   length-$p$ vertical word gives one-sided invariance for the stacked tensor.
 * `periodicVectorYieldsProjector_of_cyclic`: the cyclic-projector hypothesis
   implies the projector-supplying hypothesis of the periodic-sector step.
-* `hasNoPeriodicVectors_verticalTensor_of_cyclicProjector`: granted the
-  cyclic-projector hypothesis, a matrix product density operator has no
-  nontrivial $p$-periodic vectors in the vertical direction.
 
 ## References
 
@@ -388,23 +385,5 @@ theorem periodicVectorYieldsProjector_of_cyclic (M : MPOTensor d D)
   obtain ⟨p, Q, hp, hherm, hidem, hword, hnc⟩ :=
     hCyc V B ρ r hV hint hirr hρ hr hfix μ hμ hnorm hne
   exact ⟨p, ⟨periodicSectorProjectorOfCyclicData M hM hp hherm hidem hword hnc⟩⟩
-
-/-- The vertically viewed tensor of a matrix product density operator has no
-nontrivial $p$-periodic vectors, granted that periodic vectors supply cyclic
-projectors.  This is the periodic-sector step in the proof of Proposition
-4.13 of arXiv:1606.00608, lines 1888--1893, with the commutation family
-derived from the stacked-layers identity rather than assumed.
-
-**Scope restriction (conditional on the supplied cyclic projector):** This
-theorem retains the stronger all-length projector hypothesis. Under normalized
-BNT-refined horizontal form, `hasNoPeriodicVectors_verticalTensor_of_horizontalCF`
-uses the same invariant projector at one noncommuting length; see
-`docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
-theorem hasNoPeriodicVectors_verticalTensor_of_cyclicProjector
-    (M : MPOTensor d D) (hM : IsMPDO M)
-    (hCyc : PeriodicVectorYieldsCyclicProjector M) :
-    MPSTensor.HasNoPeriodicVectors (verticalTensor M) :=
-  hasNoPeriodicVectors_verticalTensor M hM
-    (periodicVectorYieldsProjector_of_cyclic M hM hCyc)
 
 end MPOTensor

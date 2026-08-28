@@ -46,13 +46,14 @@ source projector's surviving all-length field
 uniform predicate. The active proofs use neither a uniform predicate nor an
 all-length hypothesis.
 
-## Deferred follow-on
+## Completed follow-on
 
-The `StackedLayers` closure is left for a separate change. After this deletion
-the only Lean call site of
-`MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector` is gone, but
-that theorem is still tagged inside `thm:mpdo_cyclic_projector_reduction`,
-which also tags the live `MPOTensor.periodicVectorYieldsProjector_of_cyclic`;
-and `MPOTensor.PeriodicVectorYieldsCyclicProjector` is tagged by its own
-blueprint definition and referenced from `PeriodicExclusion.lean`. Unwinding
-those requires redirecting or deleting two further blueprint entries.
+The zero-call-site `StackedLayers` closure
+`MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector` is deleted
+directly under the no-public-API-compatibility policy. Its tag is removed from
+`thm:mpdo_cyclic_projector_reduction`, which continues to tag the live
+`MPOTensor.periodicVectorYieldsProjector_of_cyclic`; the live predicate
+`MPOTensor.PeriodicVectorYieldsCyclicProjector` keeps its own blueprint
+definition and remains the interface referenced from `PeriodicExclusion.lean`.
+No private dependency became dead: the surviving reduction theorem uses the
+predicate and `periodicSectorProjectorOfCyclicData` directly.

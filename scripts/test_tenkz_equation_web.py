@@ -352,11 +352,17 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Several source-linked rows live in proofs, which the blueprint UI
-            # collapses by default.  Reveal them so geometry is measured rather
-            # than inferred from zero-sized hidden descendants.
-            page.add_style_tag(content=".proof_content { display: block !important; }")
-            page.locator(".tenkz-equation").first.wait_for(state="visible")
+            # Use the Blueprint UI's own detail-level API to expose proofs.
+            # This avoids racing its document-ready handler, which otherwise can
+            # hide proof rows after a test-injected style or click has run.
+            page.wait_for_function("() => typeof window.showmore_update === 'function'")
+            page.evaluate("showmore_update(2)")
+            equations = page.locator(".tenkz-equation")
+            page.wait_for_function("""() =>
+              [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
+            """)
+            equations.first.wait_for(state="visible")
+            assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
             if args.screenshot_dir:

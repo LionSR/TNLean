@@ -133,9 +133,11 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   spectral-split body, derive both public theorems as corollaries. Net
   ~-300 to -350 lines, proof-only.
 
-### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — net 750 lines, risk 4/10
-- **Status**: open (#4567)
-- **What**: scattered dead spans in files 1/2/3/6 (~123 ln).
+### S7. Delete the confirmed-dead half of the UnionInjectivityOverlap chain — completed
+- **Status**: burned down (#4567, #4625, follow-up #7232)
+- **What**: all scattered dead spans in files 1/2/3/6 are gone. PR #4625
+  removed seven zero-reference wrappers (78 lines); follow-up #7232 removes
+  the final three zero-call-site declarations (37 lines).
   `PEPS/RegionBlock/UnionInjectivityOverlap4.lean` (238 ln, formerly 100%
   dead) had already been removed before this audit.
   **Correction**: the original candidate
@@ -146,14 +148,14 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   file 5 itself was dissolved into `RegionBlock/Basic.lean` and
   `RegionBlock/UnionInjectivityGeneral.lean`
   (`docs/audits/2026-08-27_peps_regionblock_overlap_chain_retirement.md`).
-  File 4 was already absent before this PR, so the entry's remaining target is
-  only the scattered spans in files 1, 2, 3, and 6.
+  File 4 was already absent before this PR, and the scattered spans in files
+  1, 2, 3, and 6 are now deleted as well.
 - **Why it's excess**: the project's own paper-gap note
   (`docs/paper-gaps/peps_normal_ft_section3_route.tex`) documents this
   exact sub-route as an abandoned dead end that forced a switch to the
   surviving P0-outer parametrization.
-- **First PR**: delete the confirmed-dead spans in files 1, 2, 3, and 6,
-  without changing the live capstone.
+- **Resolution**: the dead spans were deleted without changing the live
+  `overlapLeftGeometry`/`overlapRightGeometry` machinery or the capstone.
 
 ### S8. Derive injective-tensor Perron-Frobenius as a corollary of the irreducible-CP-map theory — completed
 - **Status**: closed 2026-07-23 (#4568; #4594 and #4628)

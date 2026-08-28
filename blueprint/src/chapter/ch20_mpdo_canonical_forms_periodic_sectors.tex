@@ -230,13 +230,11 @@
         decomposition]
     \label{thm:mpdo_cyclic_projector_reduction}
     \lean{MPOTensor.periodicVectorYieldsProjector_of_cyclic}
-    \lean{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cyclicProjector}
     \leanok
-    \uses{def:mpdo, def:mpdo_periodic_vector_yields_cyclic_projector, def:mpdo_periodic_vector_yields_projector, def:vertical_tensor_mpdo, def:no_periodic_vectors}
+    \uses{def:mpdo, def:mpdo_periodic_vector_yields_cyclic_projector, def:mpdo_periodic_vector_yields_projector}
     Let $M$ generate matrix product density operators. If periodic vectors
     of $M$ supply cyclic projectors, then they supply periodic-sector
-    projectors, and the vertically viewed tensor $\widetilde M$ has no
-    nontrivial $p$-periodic vectors. This reduces the hypothesis of the
+    projectors. This reduces the projector-supply hypothesis of the
     periodic-sector step in the proof of
     \cite[Proposition~4.13, lines~1888--1893]{Cirac2016MPDO_arXiv} to the
     cyclic decomposition of the peripheral spectrum of the vertical
@@ -245,12 +243,10 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_periodic_sector_projector_of_cyclic, thm:mpdo_vertical_no_periodic_vectors}
+    \uses{def:mpdo_periodic_sector_projector_of_cyclic}
     A nontrivial $p$-periodic vector supplies an invariant non-commuting
     projector, which is a periodic-sector projector by
-    Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}. The
-    exclusion of periodic vectors is then
-    Theorem~\ref{thm:mpdo_vertical_no_periodic_vectors}.
+    Definition~\ref{def:mpdo_periodic_sector_projector_of_cyclic}.
 \end{proof}
 
 \begin{theorem}[The displaced invariant projector of a nontrivial periodic

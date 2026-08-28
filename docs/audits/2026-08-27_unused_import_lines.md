@@ -143,18 +143,22 @@ The pattern in that table is worth naming: most of these imports are dead
 twenty-one were forced by a consumer in a different module. An import survey
 that stops at the file boundary will keep proposing them.
 
-## Deferred, not cleared
+## Deferred lines cleared in follow-up #7228
 
-Five further lines were carried by the survey but are deliberately untouched
-here. Their exclusive cones do contain Mathlib instance, `simp`, `to_additive`
-or `elab_as_elim` content, so no static argument settles them and each needs
-its own build:
+The five lines deferred by the original static survey were each removed and
+checked in the follow-up batch. Three remain deleted. The
+`CanonicalFormSepAux.lean` line was restored when its changed-module build named
+the supplied identifier; the `TransferPeripheral.lean` line was restored when
+the root build exposed its downstream use in `NormalizedSelfOverlap.lean`.
+The final root build succeeds with those two imports restored.
 
-- `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean:8`
-- `TNLean/MPS/ParentHamiltonian/BoundaryOverlap.lean:6`
-- `TNLean/MPS/ParentHamiltonian/BlockStrip.lean:8`
-- `TNLean/MPS/Core/TransferPeripheral.lean:7`
-- `TNLean/PiAlgebra/CanonicalFormSepAux.lean:13`
+| File | Module dropped | Local outcome |
+|---|---|---|
+| `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean` | `TNLean.PEPS.EdgeGaugeFamily` | changed module builds without the line |
+| `TNLean/MPS/ParentHamiltonian/BoundaryOverlap.lean` | `TNLean.MPS.ParentHamiltonian.BlockStrip` | changed module builds without the line |
+| `TNLean/MPS/ParentHamiltonian/BlockStrip.lean` | `TNLean.MPS.FundamentalTheorem.FiniteLength` | changed module builds without the line |
+| `TNLean/MPS/Core/TransferPeripheral.lean` | `QICLean.Channel.Peripheral.CyclicGroupKraus` | restored: the root build named `Kraus.peripheralEigenvalues_eq_range_primitiveRoot` in `TNLean/MPS/Periodic/NormalizedSelfOverlap.lean` |
+| `TNLean/PiAlgebra/CanonicalFormSepAux.lean` | `TNLean.MPS.Overlap.PeripheralToTransferMapGap` | restored: the build named `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` at lines 230 and 328 |
 
 ## Already absent
 
