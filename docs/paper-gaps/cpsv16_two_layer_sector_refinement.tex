@@ -20,7 +20,7 @@
 \textbf{Historical proof archaeology, not an active gap.}
 This note records the mismatch between a retired strict-modulus specialization
 and the repeated-copy BNT decomposition in CPSV16. The current
-\leanid{SectorDecomposition} and \leanid{IsBNTCanonicalForm} surfaces retain the
+\leanid{MPSTensor.SectorDecomposition} and \leanid{MPSTensor.IsBNTCanonicalForm} surfaces retain the
 raw copy weights, and
 \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm} proves the
 corrected proportional theorem on BNT families with nonzero copy weights. No
@@ -98,14 +98,14 @@ imposed three hypotheses stronger than the source decomposition:
 \section{The surviving formal surface}
 
 The surviving surface separates the source decomposition into two pieces.
-\leanid{SectorDecomposition} stores the basis blocks, their copy
+\leanid{MPSTensor.SectorDecomposition} stores the basis blocks, their copy
 multiplicities, and the raw weights $\mu_{j,q}$ through the coefficient
 \begin{align}
     P.\mathtt{coeff}\,N\,j
         &=\sum_q(P.\mathtt{weight}\,j\,q)^N.
     \label{eq:two-layer_sector_power_sum_coefficient}
 \end{align}
-The predicate \leanid{IsBNTCanonicalForm} records the BNT hypotheses used by
+The predicate \leanid{MPSTensor.IsBNTCanonicalForm} records the BNT hypotheses used by
 the fundamental-theorem route: irreducibility, left canonical normalization,
 gauge-phase distinctness of equal-dimensional basis blocks, eventual linear
 independence of the basis MPVs, bounded weights, and the existence of at least
@@ -119,12 +119,12 @@ hypothesis rather than hidden in the canonical-form predicate.
 
 \section{Historical scope restriction and its resolution}
 
-The representative-family predicate \leanid{IsNormalCanonicalFormBNT} covers
+The representative-family predicate \leanid{MPSTensor.IsNormalCanonicalFormBNT} covers
 one chosen block per gauge-phase class and therefore does not itself store the
 repeated-copy data $r_j>1$. The earlier route tried to bridge this restriction
 through a strict-modulus adapter. That adapter was retired.
 
-The current \leanid{SectorDecomposition} surface directly permits
+The current \leanid{MPSTensor.SectorDecomposition} surface directly permits
 $P.\mathtt{copies}(j)>1$, and the SectorBNT comparison recovers repeated weights
 from the power sums
 \begin{align}
@@ -139,10 +139,10 @@ proportional fundamental theorem. Its history is documented in
 
 The relevant surviving formal declarations are:
 \begin{itemize}
-    \item \leanid{SectorDecomposition}: the raw two-layer sector surface
+    \item \leanid{MPSTensor.SectorDecomposition}: the raw two-layer sector surface
     (\doclink{TNLean/MPS/SharedInfra/SectorDecomposition}).
 
-    \item \leanid{IsBNTCanonicalForm}: the BNT canonical-form predicate
+    \item \leanid{MPSTensor.IsBNTCanonicalForm}: the BNT canonical-form predicate
     (\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Basic}).
 
     \item

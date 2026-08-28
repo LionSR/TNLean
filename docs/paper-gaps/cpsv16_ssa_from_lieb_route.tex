@@ -38,7 +38,7 @@ Lieb and Ruskai proved this inequality in finite dimensions
 
 The formal development previously asserted
 Eq.~\ref{eq:cpsv16_ssa_from_lieb_route_strong_subadditivity} as the standalone
-axiom \leanid{strong_subadditivity}. It now derives the result as
+axiom \path{strong_subadditivity}. It now derives the result as
 \leanid{strong_subadditivity_general} in
 \doclink{TNLean/Channel/Schwarz/StrongSubadditivityPosDef}. The former axiom has
 been removed from \doclink{TNLean/Entropy/SSAEqualityCharacterization}, and its
@@ -118,7 +118,7 @@ and records its formal implementation.
     logarithm limits on the positive eigenvalues. The condition
     $\ker\sigma\subseteq\ker\rho$ eliminates the diagonal weights associated
     with zero eigenvalues. The formal limit is
-    \leanid{tendsto_re_trace_mul_log_perturb}. This proof uses neither Lieb
+    \leanid{TNLean.Klein.tendsto_re_trace_mul_log_perturb}. This proof uses neither Lieb
     concavity nor operator Jensen.
 
     The full-rank equality case is
@@ -161,18 +161,18 @@ and records its formal implementation.
     Their pointwise limit is therefore convex.
 
     The positive-definite result is
-    \leanid{convexOn_quantumRelativeEntropy} in
+    \leanid{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyConvexity}
     (\path{TNLean/Channel/Schwarz/RelativeEntropyConvexity.lean}).
     The convexity of the approximants is
-    \leanid{convexOn_relativeEntropyApprox}, which consumes
+    \leanid{TNLean.RelativeEntropyConvexity.convexOn_relativeEntropyApprox}, which consumes
     \leanid{lieb_concavity_posDef}, and their convergence is
-    \leanid{tendsto_relativeEntropyApprox}. The double-sum identity
-    \leanid{re_trace_cfc_mul_cfc_eq_double_sum} used in the limit requires no
+    \leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyApprox}. The double-sum identity
+    \leanid{TNLean.Klein.re_trace_cfc_mul_cfc_eq_double_sum} used in the limit requires no
     Lieb input.
 
     The theorem
-    \leanid{convexOn_quantumRelativeEntropy_support} extends joint convexity to
+    \leanid{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_support} extends joint convexity to
     the full domain $\ker\sigma\subseteq\ker\rho$. It regularizes both
     arguments by
     \begin{align}
@@ -183,10 +183,10 @@ and records its formal implementation.
     \end{align}
     applies positive-definite convexity to the four regularized endpoints and
     their mixture, and passes to the limit with
-    \leanid{tendsto_relativeEntropyPerturb}. The domain is convex because the
+    \leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyPerturb}. The domain is convex because the
     kernel of a positively weighted sum of positive semidefinite matrices is
     the intersection of their kernels; this step is
-    \leanid{mulVec_eq_zero_of_smul_add}. The extension uses no additional Lieb
+    \leanid{TNLean.RelativeEntropyConvexity.mulVec_eq_zero_of_smul_add}. The extension uses no additional Lieb
     input.
 
     \item \emph{Data processing under a partial trace.}
@@ -290,13 +290,13 @@ and records its formal implementation.
         \label{eq:cpsv16_ssa_from_lieb_route_partial_trace_monotonicity}
     \end{align}
     The positive-definite theorem is
-    \leanid{quantumRelativeEntropy_partialTraceRight_le} in
+    \leanid{Matrix.quantumRelativeEntropy_partialTraceRight_le} in
     \doclink{TNLean/Channel/Schwarz/RelativeEntropyDataProcessing}. Transport
     of joint convexity to the product index uses
-    \leanid{quantumRelativeEntropy_submatrix_equiv}.
+    \leanid{Matrix.quantumRelativeEntropy_submatrix_equiv}.
 
     The support-domain theorem is
-    \leanid{quantumRelativeEntropy_partialTraceRight_le_support} in the same
+    \leanid{Matrix.quantumRelativeEntropy_partialTraceRight_le_support} in the same
     file. It regularizes both arguments by
     \begin{align}
         M_\varepsilon
@@ -309,7 +309,7 @@ and records its formal implementation.
     limit. The partial traces are affine regularizations of
     $\tr_C\rho$ and $\tr_C\sigma$ with scaling rate $N_{SC}$ and shift rate
     $d_C$; this identity is
-    \leanid{partialTraceRight_regPerturbAffine}. The support condition passes
+    \leanid{Matrix.partialTraceRight_regPerturbAffine}. The support condition passes
     to the marginals by \leanid{Matrix.partialTraceRight_support}. The
     arbitrary-rate affine limit
     \leanid{TNLean.RelativeEntropyConvexity.tendsto_relativeEntropyPerturbAffine}
@@ -487,8 +487,8 @@ The general theorem is \leanid{strong_subadditivity_general} in the same file.
 It applies to every positive semidefinite unit-trace $\rho_{ABC}$. The theorem
 \leanid{Matrix.marginal_support} places the possibly singular reference state
 in the domain of
-\leanid{quantumRelativeEntropy_partialTraceRight_le_support}. The two relative
-entropies are evaluated by \leanid{rel_entropy_eval_support}, which regularizes
+\leanid{Matrix.quantumRelativeEntropy_partialTraceRight_le_support}. The two relative
+entropies are evaluated by \leanid{SSAPosDef.rel_entropy_eval_support}, which regularizes
 the reduced state as
 \begin{align}
     \rho_{R,\varepsilon}
@@ -502,7 +502,7 @@ tensor-logarithm split is unavailable for a singular reference state.
 The stable entropy interface re-exports the inequality from
 \doclink{TNLean/Entropy/StrongSubadditivity}. Its consumers import that theorem
 rather than the former axiom module. Their statements require no change; only
-the justification has changed from the axiom \leanid{strong_subadditivity} to
+the justification has changed from the axiom \path{strong_subadditivity} to
 the theorem \leanid{strong_subadditivity_general}.
 
 \section{Verdict}
@@ -513,12 +513,12 @@ entropy, Klein's inequality, joint convexity from Lieb concavity, data
 processing under a partial trace, and the tripartite instantiation.
 
 The positive-definite joint-convexity theorem
-\leanid{convexOn_quantumRelativeEntropy} is extended to the support domain by
-\leanid{convexOn_quantumRelativeEntropy_support}. Unitary invariance,
+\leanid{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy} is extended to the support domain by
+\leanid{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_support}. Unitary invariance,
 ancilla-additivity, the finite Heisenberg--Weyl twirl, and its ancilla lift give
-\leanid{quantumRelativeEntropy_partialTraceRight_le}; regularization gives
-\leanid{quantumRelativeEntropy_partialTraceRight_le_support}. The marginal
-support lemma and \leanid{rel_entropy_eval_support} then establish
+\leanid{Matrix.quantumRelativeEntropy_partialTraceRight_le}; regularization gives
+\leanid{Matrix.quantumRelativeEntropy_partialTraceRight_le_support}. The marginal
+support lemma and \leanid{SSAPosDef.rel_entropy_eval_support} then establish
 \leanid{strong_subadditivity_general} for every positive semidefinite
 unit-trace state.
 

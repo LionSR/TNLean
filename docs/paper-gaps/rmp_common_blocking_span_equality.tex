@@ -113,13 +113,13 @@ form \cite[lines~1891--1900]{Cirac2021Matrix}.
 \section{The formal argument}
 
 The canonical-form reduction uses the positive-length relation
-\leanid{SameMPV₂Pos}, which matches the source definition in
+\leanid{MPSTensor.SameMPV₂Pos}, which matches the source definition in
 (\ref{eq:rmp_common_blocking_span_equality_mpv_definition}). All-zero blocks
 contribute nothing at positive length and are discarded. The structural
 direct-sum identity directly bounds the total bond dimension of the retained
 blocks, without using an empty-word comparison.\footnote{See
-\leanid{exists_irreducible_blockDecomp_nonzeroBlocks} and
-\leanid{exists_tp_gauge_from_arbitrary}.}
+\leanid{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks} and
+\leanid{MPSTensor.exists_tp_gauge_from_arbitrary}.}
 
 The common blocking step must also be explicit. For one block family, the source
 instruction to ``block by the least common multiple of the periods'' is

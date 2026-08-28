@@ -351,7 +351,7 @@ The four-site specialization used by the later argument takes $L=1$. SAL makes
 the normalization scalar nonzero, so every $\widehat R_j$ is nonzero.
 \footnote{The relevant declarations are
 \leanid{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix},
-\leanid{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV}\textsubscript{2},
+\leanid{MPOTensor.reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos},
 and
 \leanid{MPOTensor.reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing}.}
 
@@ -363,7 +363,7 @@ the four-site Hayashi decomposition. Every active Markov sector then has a
 unique BNT label, and the BNT-labelled sums of Hayashi projections are
 orthogonal, mutually disjoint, and resolve the active Markov support.
 \footnote{The relevant declaration is
-\leanid{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV}\textsubscript{2}\leanid{Pos_isSAL}.}
+\leanid{MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL}.}
 This specialization needs no further closing-matrix hypothesis.
 
 For every physical slice of the $i$-th normal representative,
@@ -396,7 +396,7 @@ relevant declarations are
 \leanid{MPOTensor.sum_bntSectorProjection_mul_physicalSlice_mul_self},
 \leanid{MPOTensor.changePhysicalBasis_bntSectorProjection_basis},
 \leanid{MPOTensor.sitewise_bntSectorProjection_mul_mpo_mul_self}, and
-\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV}\textsubscript{2}\leanid{Pos_isSAL}.}
+\leanid{MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL}.}
 
 The literal identity resolution in Equation \emph{Pis} of
 Ref.~\cite{Cirac2016MPDO_arXiv} is recovered in the ambient physical space.
@@ -433,7 +433,7 @@ the active-support resolution and Equation \emph{Pis} of
 Ref.~\cite{Cirac2016MPDO_arXiv}. The construction and its SAL specialization
 are
 \leanid{MPOTensor.completedBntSectorProjection} and
-\leanid{MPOTensor.exists_bntSeparatingProjectors_of_sameMPV}\textsubscript{2}\leanid{Pos_isSAL_of_weight_copy_independent}.
+\leanid{MPOTensor.exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent}.
 
 The source's standing assumptions are recovered by
 \leanid{MPOTensor.exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL}.
@@ -452,7 +452,7 @@ integer $n_s$. ZCL follows by restricting the full transfer equation to the
 $s$-th canonical block and using nonnilpotence to exclude the zero transfer.
 \footnote{The relevant declarations are
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV}\textsubscript{2}\leanid{Pos_isSAL},
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
 and
 \leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
 
@@ -482,7 +482,7 @@ under the biCF hypothesis imposed at the beginning of Case II in the source.
 \footnote{The principal declarations are
 \leanid{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
 \leanid{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV}\textsubscript{2}\leanid{Pos}.}
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
 This completes the entropy argument at lines 1748--1781 of Appendix C.2 of
 Ref.~\cite{Cirac2016MPDO_arXiv} under its stated biCF hypothesis.
 
@@ -1125,7 +1125,7 @@ row and zero column and cannot be primitive. The primitive matrix in Lemma
 \end{align}
 This is the customary convention when zero-probability terms are omitted from
 a direct-sum state decomposition. The Lean definition
-\leanid{PhysicalSectorFactorization.activeSectorTraceMatrix} restricts the
+\leanid{MPOTensor.PhysicalSectorFactorization.activeSectorTraceMatrix} restricts the
 trace matrix to this subtype while preserving the full physical sector
 equivalence and hence the complete Hilbert space.
 

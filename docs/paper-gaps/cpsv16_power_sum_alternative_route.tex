@@ -146,7 +146,7 @@ For the two sector-weight families, apply this lemma to
     \label{eq:cpsv16_power_sum_alternative_route_signed_weight_sum}
 \end{align}
 The nonzero-weight hypothesis permits the use of $w_1^M\neq 0$. Every weight
-in \leanid{SectorWeightData} is nonzero, so the exponent-zero power sum counts
+in \leanid{MPSTensor.SectorWeightData} is nonzero, so the exponent-zero power sum counts
 the entries:
 \begin{align}
     \sum_{q=1}^{r_j}\mu_{j,q}^{0}
@@ -168,10 +168,10 @@ The same-cardinality Newton--Girard theorem then recovers the weight multiset.
 This route previously existed as checked \Lean{} code through declarations for
 the copy count, transported positive power sums, and weight-multiset
 equality.\footnote{Formal declarations:
-\leanid{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq};
-\leanid{MPSTensor.SectorWeightData.eventually_coeff_eq_implies_all_pos_eq_after_copies};
+\path{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq};
+\path{MPSTensor.SectorWeightData.eventually_coeff_eq_implies_all_pos_eq_after_copies};
 and
-\leanid{MPSTensor.SectorWeightData.weight_multiset_eq_of_copies_eq_of_coeff_eq}.}
+\path{MPSTensor.SectorWeightData.weight_multiset_eq_of_copies_eq_of_coeff_eq}.}
 Those declarations have been removed because the proportional Fundamental
 Theorem no longer uses this same-cardinality detour. The calculation records
 the removed route for comparison with Ref.~\cite{Cirac2016MPDO_arXiv}; it is

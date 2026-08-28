@@ -106,7 +106,7 @@ development, this coupling produced transport lemmas used only to move the
 empty-word instance of
 Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_all_length_identity}
 through those operations.\footnote{%
-  These were the \leanid{zeroTail_*} lemmas in
+  These were the \path{zeroTail_*} lemmas in
   \path{TNLean/MPS/CanonicalForm/SectorComparison/}; they are removed in
   PRs \ghpr{2156} and \ghpr{2167} once the comparison is stated at positive
   length.}
@@ -141,7 +141,7 @@ blocks, the downstream argument needs only
 \end{align}
 No physical theorem therefore needs an empty-word coefficient or a scalar
 recording the dimension of the discarded bond space. Formally, positive-length
-equality is \leanid{SameMPV₂Pos}; the canonical-form reduction carries
+equality is \leanid{MPSTensor.SameMPV₂Pos}; the canonical-form reduction carries
 Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_positive_length_comparison}
 and the bound in
 Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
@@ -149,7 +149,7 @@ Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
 \section{Formal status}
 
 The declaration
-\leanid{exists_tp_primitive_blockDecomp_after_blocking}, corresponding to
+\leanid{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}, corresponding to
 blueprint item \path{thm:tp_primitive_blockdecomp} in
 \path{blueprint/src/chapter/ch09_canonical.tex}, now has the source-faithful
 shape. Its matrix-product-vector clause is the positive-length comparison in
@@ -158,9 +158,9 @@ and its dimension clause is
 Eq.~\ref{eq:cpsv16_zero_tail_length_zero_decomposition_dimension_bound}.
 
 The intermediate declarations carrying \texttt{zeroTailDim} and the former
-support lemma \leanid{zeroTail_toTensorFromBlocks_blockPower} have been
+support lemma \path{zeroTail_toTensorFromBlocks_blockPower} have been
 removed. The subsequent common-sector theorems now assume
-\leanid{SameMPV₂Pos} directly; their proofs no longer convert an all-length
+\leanid{MPSTensor.SameMPV₂Pos} directly; their proofs no longer convert an all-length
 hypothesis back to positive length. The former bridge from positive-length
 equality plus equal bond dimensions to an all-length statement has also been
 removed from the public comparison surface. The empty-word coefficient lemma

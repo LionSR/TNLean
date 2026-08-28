@@ -58,7 +58,7 @@ a scalar sequence $c_N$, nonzero cofinally, such that
     \label{eq:nondominant_eventual_proportionality}
 \end{align}
 This condition is formalized as
-\leanid{EventuallyNonzeroProportionalMPV}\textsubscript{2}.
+\leanid{MPSTensor.EventuallyNonzeroProportionalMPV₂}.
 
 The retired one-copy normal-canonical BNT route carried a single weight
 $\mu_k$ per sector with the strict ordering
@@ -69,12 +69,12 @@ $\mu_k$ per sector with the strict ordering
 \end{align}
 Together with the dominant normalization $|\mu_1|=1$, this ordering made every
 sub-dominant block have modulus strictly less than $1$. These fields are not
-part of the current \leanid{IsNormalCanonicalFormBNT} predicate, which allows
+part of the current \leanid{MPSTensor.IsNormalCanonicalFormBNT} predicate, which allows
 equal-modulus blocks. The discussion below concerns the deleted strict-modulus
 variant. Definition~4.2 and lines~1864--1884 of
 Ref.~\cite{Cirac2021Matrix} state the source structure using repeated copies
 and raw weights $\mu_{j,q}$ with sector multiplicities $r_j\geq 1$. The current
-\leanid{SectorDecomposition} surface retains those power-sum coefficients; see
+\leanid{MPSTensor.SectorDecomposition} surface retains those power-sum coefficients; see
 \path{docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex}.
 
 \section{Cited assertion}
@@ -103,7 +103,7 @@ not establish linear independence of the full combined family.
 The historical target was the following statement for arbitrary
 $k_0:\mathrm{Fin}\,r_B$: given the one-copy normal-canonical BNT hypotheses on
 both $\mu^A,A$ and $\mu^B,B$,
-\leanid{EventuallyNonzeroProportionalMPV}\textsubscript{2} between the
+\leanid{MPSTensor.EventuallyNonzeroProportionalMPV₂} between the
 assembled tensors, and the hypothesis
 \begin{align}
     \braket{V^{(N)}(A_j)}{V^{(N)}(B_{k_0})}
@@ -112,8 +112,8 @@ assembled tensors, and the hypothesis
     \label{eq:nondominant_retired_target_decay}
 \end{align}
 derive a contradiction. The old one-copy fixed-block declarations for this
-target have been retired. The corrected \leanid{SectorBNT} proportional
-matching theorem keeps the raw coefficients of \leanid{SectorDecomposition}
+target have been retired. The corrected \path{TNLean/MPS/FundamentalTheorem/SectorBNT} proportional
+matching theorem keeps the raw coefficients of \leanid{MPSTensor.SectorDecomposition}
 visible and uses the API lemmas in
 \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}. It does not require a
 separate universally quantified fixed-block projection theorem.
@@ -207,7 +207,7 @@ fails at $r_A=r_B=2$ with distinct sub-dominant moduli. Path~$\beta$ scope
 adjustment
 (\path{docs/audits/2026-05-13_cpsv16_ft_path_beta_scout.md},
 \ghpr{1664}) shows that the lifted per-block projection on the
-\leanid{SectorDecomposition} surface inherits the same decay mismatch.
+\leanid{MPSTensor.SectorDecomposition} surface inherits the same decay mismatch.
 
 \section{The fixed-block source claim and the formal repair}
 
@@ -256,7 +256,7 @@ unproved theorem required by the current development.
 The source line~1182 fixed-block claim and the current formal repair must be
 kept distinct. The repair uses restricted combined-family linear independence,
 scalar relations for the complementary blocks, and the raw power sums
-$\sum_q\mu_{j,q}^N$ carried by \leanid{SectorDecomposition}. Together with
+$\sum_q\mu_{j,q}^N$ carried by \leanid{MPSTensor.SectorDecomposition}. Together with
 \leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}, this gives
 the active-sector coefficient comparison proved in the current theorem.
 Collapsing a sector to one strictly ordered weight destroys precisely the

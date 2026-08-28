@@ -46,7 +46,7 @@ define equality of projective points.
 \section{Formal reading}
 
 The formal predicate
-\leanid{NonzeroProportionalMPV}\textsubscript{2} requires that, for every
+\leanid{MPSTensor.NonzeroProportionalMPV₂} requires that, for every
 positive length $N\geq 1$, there be a scalar $c_N\neq 0$ such that
 \begin{align}
     V^{(N)}(A)
@@ -106,9 +106,8 @@ projective statement.
 
 One eventual-proportionality hypothesis remains outside the named predicate.
 The overlap-convergence theorem
-\leanid{mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV}%
-\textsubscript{2} in
-\leanid{TNLean/MPS/FundamentalTheorem/Proportional.lean} assumes only that,
+\leanid{MPSTensor.mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂} in
+\path{TNLean/MPS/FundamentalTheorem/Proportional.lean} assumes only that,
 eventually in $N$, some scalar $c_N$ satisfies
 (\ref{eq:cpsv16_nonzero_proportionality_reading_formal_relation}); it does not
 assume $c_N\neq 0$. Its self-overlap convergence hypotheses imply the eventual

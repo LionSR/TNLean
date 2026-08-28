@@ -22,14 +22,14 @@ This note compares the formal proof of the periodic overlap dichotomy with the
 Appendix~A argument of Ref.~\cite{DeLasCuevas2017Irreducible}. It identifies
 the equivalent proof routes used in the formal development and the statements
 that remain restricted relative to the source.\footnote{Formal files:
-\leanid{TNLean/MPS/Periodic/Overlap/}. Local source:
-\leanid{Papers/1708.00029/main.tex}. Paper-level umbrella:
+\path{TNLean/MPS/Periodic/Overlap/}. Local source:
+\path{Papers/1708.00029/main.tex}. Paper-level umbrella:
 \href{https://github.com/LionSR/TNLean/issues/619}{issue \#619};
 proposition-level subtracking:
 \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The Case-3
 contraction and phase construction was tracked by
 \href{https://github.com/LionSR/TNLean/issues/873}{issue \#873} and is now
-formalized by \leanid{sectorTensor_proportional_of_blockedMatch}.}
+formalized by \leanid{MPSTensor.sectorTensor_proportional_of_blockedMatch}.}
 
 The source proposition is ``equal-or-orthogonal-generalized''.\footnote{The
 statement appears at lines 589--609 and its proof appears at lines 903--1118
@@ -42,8 +42,7 @@ mathematically equivalent to the source route.
 
 The formal periodic-overlap argument states its matrix-product-vector
 equalities for $N\geq 1$. In particular,
-\leanid{peripheralProportionalCase_periodicFT_of_sameMPV}%
-\textsubscript{2}\leanid{Pos} assumes equality
+\leanid{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos} assumes equality
 at every positive length. This assumption suffices because the overlap
 argument is asymptotic and uses only a tail of positive lengths. The empty word
 contains only a bond-dimension trace and does not enter theorem
@@ -110,8 +109,8 @@ equal-or-orthogonal dichotomy gives
 This spectral argument replaces the least-common-multiple blocking and
 translation argument of the source and is complete.\footnote{Formal
 declaration:
-\leanid{periodicOverlap_tendsto_zero_of_ne_period} in
-\leanid{DifferentPeriod.lean}.}
+\leanid{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period} in
+\path{DifferentPeriod.lean}.}
 
 \section{Sector non-repetition from the blocked fixed-point structure}
 
@@ -185,8 +184,8 @@ off-diagonal. Since $U\neq 0$, this is a contradiction.
 The formal statement proves the same non-repetition result: distinct cyclic
 sectors with $P_uP_v=0$ are not gauge-phase equivalent.\footnote{Formal
 declaration:
-\leanid{not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces} in
-\leanid{SelfOverlap.lean}.} The proof follows the spectral route above. From a
+\path{MPSTensor.not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces} in
+\path{SelfOverlap.lean}.} The proof follows the spectral route above. From a
 gauge-phase equivalence between two compressed sectors, it constructs a
 nonzero off-diagonal eigenvector of $\mathcal E_A^m$ using the sector
 corner-letter identity and rectangular support isometries for the compressed
@@ -194,9 +193,9 @@ corners. The existing off-diagonal vanishing lemma then gives the
 contradiction. The scalar normalization uses the same Perron--Frobenius
 eigenvalue-uniqueness input as the different-period proof.\footnote{Formal
 declarations:
-\leanid{exists_offDiag_eigenvector_of_gaugePhase_cast_left},
-\leanid{offDiag_eigenvector_eq_zero_of_isPeriodic}, and
-\leanid{period_eq_of_gaugePhaseEquiv_of_isPeriodic}.}
+\leanid{MPSTensor.exists_offDiag_eigenvector_of_gaugePhase_cast_left},
+\leanid{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}, and
+\path{MPSTensor.period_eq_of_gaugePhaseEquiv_of_isPeriodic}.}
 
 \paragraph{Signature correction.}
 
@@ -209,9 +208,9 @@ gauge-phase-equivalent distinct sectors. The spectral proof requires $A$ to
 be a periodic irreducible block, because periodicity supplies irreducibility,
 the prescribed peripheral spectrum, and primitive sectors.
 
-The hypothesis \leanid{hP : IsPeriodic m A} was therefore added to the lemma
+The hypothesis \path{hP : IsPeriodic m A} was therefore added to the lemma
 signature. It is supplied at the unique call site
-\leanid{sectorBlocks_not_gaugePhaseEquiv_of_ne}. With this hypothesis and the
+\path{MPSTensor.sectorBlocks_not_gaugePhaseEquiv_of_ne}. With this hypothesis and the
 corner-isometry data, the spectral proof is formalized.
 
 \section{Sector matching: propagation and phase construction}
@@ -284,14 +283,14 @@ The sector phases then telescope into the global phase and unitary
 The formal development follows the same two stages: the $T^l$ and
 Theorem~2.10 propagation staircase, followed by the $\Omega_u$ contraction and
 the $\kappa/\theta/\phi$ phase construction.\footnote{Formal declarations:
-\leanid{sectorMatch_propagation} in
-\leanid{SectorMatch/Propagation.lean},
-\leanid{sectorTensor_proportional_of_blockedMatch} in
-\leanid{SectorMatch/Contraction.lean}, and
-\leanid{periodicOverlap_gaugeEquiv_of_sector_match} in
-\leanid{SectorMatch/Consequences.lean}.} The top-level theorem invokes these
+\leanid{MPSTensor.sectorMatch_propagation} in
+\path{SectorMatch/Propagation.lean},
+\leanid{MPSTensor.sectorTensor_proportional_of_blockedMatch} in
+\path{SectorMatch/Contraction.lean}, and
+\leanid{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match} in
+\path{SectorMatch/Consequences.lean}.} The top-level theorem invokes these
 component lemmas. The contraction leaf
-\leanid{sectorTensor_proportional_of_blockedMatch}, the global unitary gauge,
+\leanid{MPSTensor.sectorTensor_proportional_of_blockedMatch}, the global unitary gauge,
 and the repeated-blocks theorem are proved.
 
 The docstrings now cite the source equation identifiers and line ranges rather
@@ -303,10 +302,10 @@ $\kappa/\theta/\phi$ construction is essential.
 
 The formal single-site off-diagonal decomposition follows from the cyclic
 adjoint-shift relation.\footnote{Formal declarations:
-\leanid{offDiag_shift_of_adjoint_cyclic_shift},
-\leanid{eq_sum_offDiag_of_adjoint_cyclic_shift},
-\leanid{IsCyclicSectorDecomp.offDiag_shift}, and
-\leanid{IsCyclicSectorDecomp.eq_sum_offDiag}.} With the repository's inverse
+\leanid{MPSTensor.offDiag_shift_of_adjoint_cyclic_shift},
+\leanid{MPSTensor.eq_sum_offDiag_of_adjoint_cyclic_shift},
+\leanid{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}, and
+\leanid{MPSTensor.IsCyclicSectorDecomp.eq_sum_offDiag}.} With the repository's inverse
 cyclic indexing convention, it gives
 \begin{align}
     P_{u+1}A^i
@@ -329,9 +328,9 @@ Ref.~\cite{DeLasCuevas2017Irreducible}. The later source equation
 The cyclic-sector construction also records a letter-level corner identity
 and a rectangular support isometry for each corner.\footnote{Formal
 declarations:
-\leanid{exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
+\leanid{MPSTensor.exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
 and
-\leanid{exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}.}
+\leanid{MPSTensor.exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}.}
 If $\varphi_u$ is the compression isomorphism from the compressed sector
 algebra onto $P_uM_DP_u$, then
 \begin{align}
@@ -354,7 +353,7 @@ Define the sector overlap by
 \end{align}
 The one-site sector-overlap translation is also formalized.\footnote{Formal
 declaration:
-\leanid{sectorOverlap_succ_eq_of_cyclicSectorDecomp}.} For every $N>0$, it
+\leanid{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}.} For every $N>0$, it
 proves
 \begin{align}
     O_{A_{u+1},B_{v+1}}(N)
@@ -389,18 +388,18 @@ The formal contraction and gauge construction has two parts.
 \end{itemize}
 These steps discharge the contraction obligation for the repeated-blocks
 theorem.\footnote{Formal declaration:
-\leanid{sectorTensor_proportional_of_blockedMatch} in
-\leanid{SectorMatch/Contraction.lean}.} Tensor-product scalar extraction and
+\leanid{MPSTensor.sectorTensor_proportional_of_blockedMatch} in
+\path{SectorMatch/Contraction.lean}.} Tensor-product scalar extraction and
 product-one normalization are isolated in
-\leanid{PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul} and
-\leanid{PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}.
+\leanid{TNLean.Algebra.PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul} and
+\leanid{TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}.
 The finite-cycle phase choice is isolated in
-\leanid{exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one}.
+\leanid{TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one}.
 The one-step transport theorem follows from the single-site overlap theorem,
 the overlap-to-gauge theorem, and sector primitivity.\footnote{Formal
 declarations:
-\leanid{sectorGaugePhaseEquiv_succ_of_cyclicTransport} and
-\leanid{gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}.}
+\path{MPSTensor.sectorGaugePhaseEquiv_succ_of_cyclicTransport} and
+\leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}.}
 
 \subsection{Corner-letter building blocks}
 
@@ -428,7 +427,7 @@ projector is absorbed by idempotency, so this law requires neither injectivity
 nor normality. These are the $A_u^i$ and $F_u$ objects used in the cyclic
 contraction. The formal right-inverse contraction to source equation
 \emph{eq:resultprop} and the global unitary assembly are completed in
-\leanid{sectorTensor_proportional_of_blockedMatch}.
+\leanid{MPSTensor.sectorTensor_proportional_of_blockedMatch}.
 
 \section{Scope restriction: independence without spanning}
 
@@ -444,12 +443,12 @@ source phrase ``basis of periodic vectors'' at line 611.
 
 The formal theorem states only eventual linear independence.\footnote{Formal
 declaration:
-\leanid{periodicBasis_eventuallyLinearlyIndependent} in
-\leanid{Dichotomy.lean}. The corresponding blueprint entry is in
+\leanid{MPSTensor.periodicBasis_eventuallyLinearlyIndependent} in
+\path{Dichotomy.lean}. The corresponding blueprint entry is in
 \path{blueprint/src/chapter/ch22_periodic_ft_overlap_sector_match_and_consequences.tex}.}
 It encodes the basis assumptions directly as the pairwise non-repetition
-hypothesis \leanid{hNonrep} and the common-period divisibility hypothesis
-\leanid{hDiv}. It neither derives them from a basis of periodic tensors nor
+hypothesis \path{hNonrep} and the common-period divisibility hypothesis
+\path{hDiv}. It neither derives them from a basis of periodic tensors nor
 uses the almost-orthonormal-implies-independent Lemma~\emph{Lem1t}. Restoring
 the spanning clause and routing the proof through \emph{Lem1t} was classified
 under \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The
@@ -587,8 +586,8 @@ hypothesis to the original spectral-radius-one blocks. This completes the
 overlap-hypothesis step tracked by
 \href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}.
 
-The declarations \leanid{fundamentalTheorem_periodic_proportional} and
-\leanid{fundamentalTheorem_periodic_proportional_of_isPeriodic} start after
+The declarations \leanid{MPSTensor.fundamentalTheorem_periodic_proportional} and
+\leanid{MPSTensor.fundamentalTheorem_periodic_proportional_of_isPeriodic} start after
 this step. They assume the periodic-overlap hypothesis, or its non-decaying
 partner fields, and prove finite block matching. Together with the spectrally
 periodic multiplicity theorem, they yield block matching for literal

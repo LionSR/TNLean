@@ -47,7 +47,7 @@ cross-overlap between basis blocks $j$ and $k$ by
             \overline{\mathtt{mpv}(P.\mathtt{basis}\,k)(\sigma)}.
     \label{eq:bnt-rate_cross_overlap_expansion}
 \end{align}
-This overlap is written \leanid{mpvOverlap} in the
+This overlap is written \leanid{MPSTensor.mpvOverlap} in the
 formalization.\footnote{Declaration \leanid{MPSTensor.mpvOverlap} in
     \doclink{TNLean/MPS/Overlap/Basic}.}
 
@@ -112,11 +112,11 @@ such that, for every $j\ne k$,
 together with the geometric bound
 (\ref{eq:bnt-rate_geometric_cross_overlap_bound}) for every $N$.
 
-The surviving \leanid{SectorBNT} surface does not package such constants. It
-keeps the raw BNT weights in \leanid{SectorDecomposition} and records
+The surviving \path{TNLean/MPS/FundamentalTheorem/SectorBNT} surface does not package such constants. It
+keeps the raw BNT weights in \leanid{MPSTensor.SectorDecomposition} and records
 qualitative consequences in
 \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}: the raw power-sum
-coefficient identity \leanid{SectorDecomposition.coeff_eq_sum_weight_pow},
+coefficient identity \leanid{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow},
 within-family cross-decay
 \leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}, the
 combined-family linear-independence criterion
@@ -170,7 +170,7 @@ what Ref.~\cite[\S II]{Cirac2016MPDO_arXiv} and
 Definition~4.2 of Ref.~\cite{Cirac2021Matrix} make explicit. Obtaining a
 geometric rate requires a separate finite-dimensional spectral-radius input
 for the mixed transfer operator underlying
-\leanid{mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP}.
+\leanid{MPSTensor.mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP}.
 Moreover, the compatibility inequality
 $\eta_{j,k}|\lambda_j/\lambda_k|<1$ is not implied by the BNT structure. The
 retired projection argument would therefore have needed this condition as an
@@ -178,7 +178,7 @@ additional hypothesis or a separate analytic theorem.
 
 The design memo
 \path{docs/audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} records the
-abandoned spectral-gap proposal. The corrected \leanid{SectorBNT} theorem uses
+abandoned spectral-gap proposal. The corrected \path{TNLean/MPS/FundamentalTheorem/SectorBNT} theorem uses
 coefficient comparison and combined-family linear independence instead. This
 note documents why the rate-quantified projection route must not be revived as
 a purported obligation of the proportional fundamental theorem.

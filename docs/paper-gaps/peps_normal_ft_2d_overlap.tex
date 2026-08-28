@@ -203,7 +203,7 @@ injective tensors.''} instantiated at the $L \times K$ blocking; it is not a
 second, stronger hypothesis. The faithful Lean hypothesis bundle is
 \leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
 (\path{TNLean/PEPS/TorusWindowComplement.lean}), a single field
-\leanid{arcWindow_injective}: every cyclic $L \times K$ window is injective in
+\leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.arcWindow_injective}: every cyclic $L \times K$ window is injective in
 the sense of \leanid{TNLean.PEPS.RegionBlockedTensorInjective}. This neither
 exceeds nor falls short of the source's hypothesis.
 
@@ -257,7 +257,7 @@ $O_j(X)$ and proves $O_j(X)T_{B,W_j}(\mu)=C_j(X)(\mu)$ before complementary
 contraction; all these inserts also have common closed state
 $P_B(W_0)E_B(e,\cdot,X)$.  The outstanding input is instead the cross-tensor
 coefficient transfer between $A$ and $B$ and its multiplicativity
-\leanid{hmul}, the two-dimensional counterpart of Lemma~5's algebra
+\path{hmul}, the two-dimensional counterpart of Lemma~5's algebra
 homomorphisms.  Existing single-window and coarse-three-site attempts do not
 derive that input at the minimal size; a source-faithful extraction must use
 the actual overlapping-window comparison rather than assume a matrix span.
@@ -507,14 +507,14 @@ The faithful step is therefore the shared-block cancellation that yields
 needs only injectivity of the completed rectangle $Q$ (an $L \times K$
 window, injective by hypothesis) and never asserts injectivity of
 $\mathrm{univ} \setminus S$. The Lean stripping is the open-boundary
-shared-corner cancellation \leanid{staircasePair_insert_eq_open}: it cancels
+shared-corner cancellation \leanid{TNLean.PEPS.staircasePair_insert_eq_open}: it cancels
 the shared injective completed rectangle $Q$ from
 (\ref{eq:peps_normal_ft_2d_overlap_patch_end_window_comparison}) and never
 inverts $\mathrm{univ} \setminus S$. An earlier closed-torus stripping
 discharged Step~3 with the full-complement engine
-\leanid{deformedRegionStateAssembled_insert_eq_of_complementInjective} and so
-carried \leanid{RegionBlockedTensorInjective}~$B\;(\mathrm{univ} \setminus
-\text{\leanid{horizontalStaircaseEndPair}}\;s\,L\,K)$ as an explicit
+\leanid{TNLean.PEPS.deformedRegionStateAssembled_insert_eq_of_complementInjective} and so
+carried \leanid{TNLean.PEPS.RegionBlockedTensorInjective}~$B\;(\mathrm{univ} \setminus
+\text{\leanid{TNLean.PEPS.horizontalStaircaseEndPair}}\;s\,L\,K)$ as an explicit
 hypothesis not derivable at the minimal size; it has been removed in favour of
 the shared-injective-block cancellation engine for $Q$, which inverts the
 common completed-corner block rather than the whole complement.
