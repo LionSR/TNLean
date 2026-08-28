@@ -1716,47 +1716,28 @@ The remaining obligations are the following.
           tensor is the gauge action \(\operatorname{gaugeVertex} B\,X\,v\), so the extraction reads
           as the per-vertex gauge relation
           \(A_v=(c_S/c_R)\cdot\operatorname{gaugeVertex} B\,X\,v\)
-          (\leanid{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}), exactly the shape
-          of \path{hPV}. Consequently the torus scalar condition follows directly from the two
-          two-block proportionalities at every vertex with a common ratio
+          (\leanid{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}),
+          exactly the per-vertex relation concluded by the torus theorem. Consequently
+          the torus scalar condition follows directly from two-block proportionalities
+          at every vertex with a common ratio
           (\leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one_of_twoBlockProportional}).
 
-          An intermediate construction produced a \emph{single} per-edge family carrying the
-          absorbed equality at every edge. The conjugation-to-absorbed conversion is
-          packaged so the bare-edge
-          absorbed equality at a single edge follows from one coefficient-identity witness, depending
-          only on the gauge at that edge (the open-edge gauge cancellation isolates the boundary
-          edge), so the per-edge absorbing choices are independent
-          (\leanid{TNLean.PEPS.edgeAbsorbed_of_conjIdentity},
-          \leanid{TNLean.PEPS.edgeAbsorbed_of_edgeCoeffIdentityWitness}). Feeding the two
-          orientation-class coefficient-identity witness families to that conversion produces one
-          per-edge gauge family \(X\) --- the orientation-adapted absorbing gauge read off each chosen
-          witness --- for which the bare-edge absorbed equality against \(\operatorname{applyGauge}
-          B\,X\) holds at every torus edge
-          (\path{TNLean.PEPS.exists_edgeAbsorbed_torus_rectangle}). The region-independence step
-          then multiplies this back up to the region absorbed equality, supplying the comparison's
-          \path{hregion} and producing the region-block proportionality \(A_R\propto\widetilde B_R\)
-          at \emph{every} comparison region from the bare-edge equality
-          (\leanid{TNLean.PEPS.regionAbsorbed_of_edgeAbsorbed},
-          \leanid{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}); the proportionality scalar is
-          unique once the comparison block is injective
-          (\leanid{TNLean.PEPS.twoBlockScalarProportional_unique}). The torus scalar condition is then
-          assembled from the bare-edge absorbed equality at the two one-site-different comparison
-          regions together with the per-vertex two-block proportionalities of common ratio, as the
-          unconditional torus theorem does
-          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}).
-
-          The proof of the completed unconditional torus Fundamental Theorem replaces
-          that independently chosen family by the translation-covariant family supplied
-          by \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily}. The theorem
-          concludes: translation covariance of the absorbing family, expressed by
+          The completed proof obtains a translation-covariant absorbing family directly
+          from \leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily}. Its
+          bare-edge absorbed equality gives the two comparison-region proportionalities
+          through \leanid{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}. Translation
+          covariance then makes the ratio \(c_S/c_R\) common across vertices via
+          \leanid{TNLean.PEPS.component_eq_gaugeVertex_of_cornerProportional}; no
+          uniqueness lemma for the proportionality scalar is used in this argument.
+          The resulting theorem
+          (\leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional})
+          concludes translation covariance of the absorbing family, expressed by
           \leanid{TNLean.PEPS.IsTranslationCovariantGaugeFamily}; the absorbed
           inserted-coefficient equality at every edge; and a single scalar \(\lambda\)
           giving the per-vertex gauge relation with
-          \(\lambda^{\,\mathrm{width}\cdot\mathrm{height}}=1\). The comparison-region
-          injectivity and the common ratio \(c_S/c_R\), whose uniqueness uses
-          \leanid{TNLean.PEPS.twoBlockScalarProportional_unique}, are internal proof
-          ingredients rather than additional theorem conclusions.
+          \(\lambda^{\,\mathrm{width}\cdot\mathrm{height}}=1\). Comparison-region
+          injectivity and the ratio \(c_S/c_R\) are internal proof ingredients rather
+          than additional theorem conclusions.
     \item Distinguish the scalar conclusions in the open and periodic settings.
 
           The open-lattice square theorem chooses absorbing gauges independently on
