@@ -124,7 +124,8 @@ theorem hat_eq_mul_coboundary_Xi (ω : ScalarThreeCochain G)
   simp only [inv_mul_cancel, mul_one, mul_assoc] at hCocycle_kInvMulHInvMulGInv_g_h_k
   have hCocycle_kInv_hInv_gInv_g_val :
       (↑(ω (k⁻¹ * h⁻¹) g⁻¹ g) : ℂ) =
-        ↑(ω k⁻¹ h⁻¹ g⁻¹) * ↑(ω k⁻¹ (h⁻¹ * g⁻¹) g) * ↑(ω h⁻¹ g⁻¹ g) := by
+        ↑(ω k⁻¹ h⁻¹ g⁻¹) * ↑(ω k⁻¹ (h⁻¹ * g⁻¹) g) *
+          ↑(ω h⁻¹ g⁻¹ g) := by
     simpa only [Units.val_mul] using congrArg Units.val hCocycle_kInv_hInv_gInv_g
   have hCocycle_kInv_hInvMulGInv_g_h_val :
       (↑(ω (k⁻¹ * (h⁻¹ * g⁻¹)) g h) : ℂ) *
@@ -146,7 +147,8 @@ theorem hat_eq_mul_coboundary_Xi (ω : ScalarThreeCochain G)
     ((ω k⁻¹ h⁻¹ g⁻¹ : ℂ) * (ω h⁻¹ g⁻¹ g : ℂ) *
       (ω k⁻¹ (h⁻¹ * g⁻¹) (g * h) : ℂ)) * hCocycle_kInvMulHInvMulGInv_g_h_k_val +
     ((ω k⁻¹ h⁻¹ g⁻¹ : ℂ) * (ω h⁻¹ g⁻¹ g : ℂ) *
-      (ω (k⁻¹ * (h⁻¹ * g⁻¹)) (g * h) k : ℂ) * (ω g h k : ℂ)) * hCocycle_kInv_hInvMulGInv_g_h_val -
+      (ω (k⁻¹ * (h⁻¹ * g⁻¹)) (g * h) k : ℂ) * (ω g h k : ℂ)) *
+        hCocycle_kInv_hInvMulGInv_g_h_val -
     ((ω g h k : ℂ) * (ω k⁻¹ h⁻¹ h : ℂ) *
       (ω (h⁻¹ * g⁻¹) g h : ℂ) *
       (ω (k⁻¹ * (h⁻¹ * g⁻¹)) (g * h) k : ℂ)) * hCocycle_kInv_hInv_gInv_g_val
@@ -223,10 +225,12 @@ theorem Xi_eq_hat_mul_coboundary_sigma (ω : ScalarThreeCochain G)
           ↑(ω (g * h) (h⁻¹ * g⁻¹) (g * h)) = 1 := by
     simpa only [Units.val_mul, Units.val_one] using congrArg Units.val hSigmaGH
   have hA' :
-      (↑(ω h⁻¹ g⁻¹ g) : ℂ) = ↑(ω (h⁻¹ * g⁻¹) g g⁻¹) * ↑(ω g g⁻¹ g) := by
+      (↑(ω h⁻¹ g⁻¹ g) : ℂ) =
+        ↑(ω (h⁻¹ * g⁻¹) g g⁻¹) * ↑(ω g g⁻¹ g) := by
     simpa only [Units.val_mul] using congrArg Units.val hA
   have hP' :
-      (↑(ω h h⁻¹ g⁻¹) : ℂ) = ↑(ω h⁻¹ h (h⁻¹ * g⁻¹)) * ↑(ω h h⁻¹ h) := by
+      (↑(ω h h⁻¹ g⁻¹) : ℂ) =
+        ↑(ω h⁻¹ h (h⁻¹ * g⁻¹)) * ↑(ω h h⁻¹ h) := by
     simpa only [Units.val_mul] using congrArg Units.val hP
   simp only [Xi, ScalarOneCochain.coboundary, sigma, mul_inv_rev, inv_inv]
   apply Units.ext
