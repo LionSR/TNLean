@@ -14,10 +14,10 @@ The campaign covers the MPDO/RFP development sourced from
 `Papers/1606.00608/MPDO-22-12-17-2.tex`, Blueprint Chapters 20, 21,
 and 26, and the normal-tensor, canonical-form, BNT, and Wielandt
 prerequisites used by those chapters. The source paper itself is unchanged.
-Before adding this record, the integrated tracked diff contained 29 files:
-20 Lean sources, four Blueprint chapter sources, and five audit, glossary, or
-paper-gap documents. It had 128 added and 417 deleted lines, for a net reduction
-of 289 lines. The Lean part removes or stops storing 36 named declarations,
+Excluding this record, the integrated tracked diff contains 28 files:
+19 Lean sources, four Blueprint chapter sources, and five audit, glossary, or
+paper-gap documents. It has 126 added and 410 deleted lines, for a net reduction
+of 284 lines. The Lean part removes or stops storing 35 named declarations,
 private helpers, or structure fields while preserving the substantive tagged
 results.
 
@@ -111,11 +111,12 @@ In `TNLean/MPS/MPDO/PhysicalSectorActiveCoordinates.lean`, the one-use theorem
 `dependentSupportInclusion_range_eq_dependentPhysicalSupportProj` in the
 `MPOTensor.PhysicalSectorFactorization` namespace is removed;
 `PhysicalSectorActiveRestriction.lean` calls the underlying
-`dependentSupportInclusion_range` theorem directly. The unprojected structure
-field `rightDim_eq_zero_of_not_isActiveSector` of
-`MPOTensor.PhysicalSectorFactorization.SectorActiveFactorSupportData` and its
-constructor plumbing are removed from `PhysicalSectorActiveSupportData.lean`; the live active-sector
-right-dimension positivity data remain.
+`dependentSupportInclusion_range` theorem directly. The structure
+`MPOTensor.PhysicalSectorFactorization.SectorActiveFactorSupportData` retains
+both inactive-sector dimension invariants, including
+`rightDim_eq_zero_of_not_isActiveSector`, and both constructor branches supply
+them. Thus its contract continues to force both coordinate dimensions to vanish
+in an inactive sector, alongside the retained active-sector positivity data.
 
 In `TNLean/MPS/MPDO/VerticalProductSpectralFamily.lean`, the unprojected fields
 `MPOTensor.RetainedProductSpectralFamily.local_compression`,
@@ -197,7 +198,7 @@ status of the following active boundaries:
 
 ## Validation
 
-All 20 modified Lean modules pass targeted cached `lake build` checks, with zero
+All 19 modified Lean modules pass targeted cached `lake build` checks, with zero
 warnings. No changed Lean file contains `sorry` or `axiom`, and no build target
 remains blocked. In particular, the dependent-index substitutions and final
 simplification in `CyclicActiveFourthRegionContraction.lean` were repaired, and
