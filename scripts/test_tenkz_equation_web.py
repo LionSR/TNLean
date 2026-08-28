@@ -361,6 +361,7 @@ def main() -> int:
               div.content-wrapper, div.main-text {
                 width: 100% !important;
                 min-width: 0 !important;
+                max-width: 600px !important;
               }
             """)
             equations = page.locator(".tenkz-equation")

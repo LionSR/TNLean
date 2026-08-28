@@ -41,12 +41,13 @@ div.proof_content {
 	height: auto;
 }
 
-/* Claim the available reading-column width explicitly. The generated theme
- * otherwise uses only max-width here, so inline-size-contained equations can
- * leave Chromium with a zero-width intrinsic flex item. */
+/* Give the reading column a stable width basis. The generated theme uses only
+ * a ch-based max-width here, so inline-size-contained equations can leave
+ * headless Chromium with a zero-width intrinsic flex item. */
 div.content-wrapper {
 	width: 100%;
 	min-width: 0;
+	max-width: 600px;
 }
 
 /* A text-mode tensor-network equation keeps each SVG outside MathJax while
