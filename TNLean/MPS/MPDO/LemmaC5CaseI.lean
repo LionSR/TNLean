@@ -60,7 +60,7 @@ index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
 cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
 The singleton-sector proof is by contradiction, following the source-facing repair
-documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap formula and
+documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>: the overlap formula and
 normality (`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
 self-overlap limit) give `tr(S^N) → 1`.  Conjugating the primitive `T` by its
 Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`) gives a
@@ -573,7 +573,7 @@ normal (in the paper's spectral-radius-one sense), then the active sector set ha
 one element.
 
 The proof is by contradiction from the source-faithful route recorded in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>: the overlap
 formula and normality give `tr(S^N) → 1`; positivity bounds `S` entrywise by the Hadamard
 square of the primitive stochastic conjugate `P` of `T`; if there were more than one active
 sector, `P` would be irreducible substochastic on a nontrivial index set, forcing
@@ -699,7 +699,7 @@ on the active sector such that $T_{kh}=a_kb_h$ and $\sum_k a_kb_k=1$.
 The unique active sector, the identity $T^2=T$, and strict positivity of $T^2$ force
 the sole entry of $T$ to equal one, so the constant functions $a=b=1$ suffice.
 
-**Scope restriction (`docs/paper-gaps/cpgsv17_pf_rank_one.tex`):** this is the normal
+**Scope restriction (<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>):** this is the normal
 Case-I active-sector packaging of CPSV16 equations `Apptralktrrk` and `AppPsiPhi`
 (Appendix C.2, lines 1394--1401 and 1484--1499). No Case-II conclusion follows;
 Case II requires its separate coefficient argument. -/
@@ -749,7 +749,7 @@ factors, and `QL` is the complexification of the active-sector trace matrix `T`.
 Thus this identity is the algebraic form of
 `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`, namely `T² = T`.
 
-**Local fix (`docs/paper-gaps/cpgsv17_pf_rank_one.tex`):** this is a project-derived
+**Local fix (<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>):** this is a project-derived
 rectangular form, in project notation, of the factors built from $l_h$ and $r_k$ in
 CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper does not state it as a
 separate displayed theorem. -/
