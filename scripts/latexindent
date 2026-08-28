@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly LATEXINDENT_VERSION="3.24.7"
+readonly LATEXINDENT_TAG="V${LATEXINDENT_VERSION}"
+readonly RELEASE_BASE="https://github.com/cmhughes/latexindent.pl/releases/download/${LATEXINDENT_TAG}"
+
+case "$(uname -s):$(uname -m)" in
+  Darwin:arm64)
+    readonly ASSET="latexindent-macos"
+    readonly EXPECTED_SHA256="c2092c1e0da5a06e7cc09c24253ebbfa69a2b277f71339c8fee494c5396d5f80"
+    ;;
+  Linux:x86_64)
+    readonly ASSET="latexindent-linux"
+    readonly EXPECTED_SHA256="14a3f56807f9bdfa8b7b654bbfd054a59be79ddb959b57b691edcf39b2dc65e5"
+    ;;
+  Linux:aarch64 | Linux:arm64)
+    readonly ASSET="latexindent-linux-arm64"
+    readonly EXPECTED_SHA256="ebb30b9aacfa32fdc5938332956a7cbd080c63769723713cc9c42ed480640657"
+    ;;
+  *)
+    echo "error: latexindent ${LATEXINDENT_VERSION} is not pinned for $(uname -s) $(uname -m)" >&2
+    exit 1
+    ;;
+esac
+
+if command -v sha256sum >/dev/null 2>&1; then
+  sha256() {
+    sha256sum "$1" | awk '{print $1}'
+  }
+elif command -v shasum >/dev/null 2>&1; then
+  sha256() {
+    shasum -a 256 "$1" | awk '{print $1}'
+  }
+else
+  echo "error: sha256sum or shasum is required to verify latexindent" >&2
+  exit 1
+fi
+
+readonly CACHE_ROOT="${XDG_CACHE_HOME:-${HOME}/.cache}/tnlean/latexindent/${LATEXINDENT_VERSION}"
+readonly BINARY="${CACHE_ROOT}/${ASSET}"
+
+verify_checksum() {
+  local actual
+  actual="$(sha256 "$1")"
+  if [[ "$actual" != "$EXPECTED_SHA256" ]]; then
+    echo "error: checksum mismatch for $1" >&2
+    echo "expected: ${EXPECTED_SHA256}" >&2
+    echo "actual:   ${actual}" >&2
+    return 1
+  fi
+}
+
+if [[ -e "$BINARY" ]]; then
+  verify_checksum "$BINARY"
+else
+  command -v curl >/dev/null 2>&1 || {
+    echo "error: curl is required to download latexindent ${LATEXINDENT_VERSION}" >&2
+    exit 1
+  }
+  mkdir -p "$CACHE_ROOT"
+  temporary="$(mktemp "${CACHE_ROOT}/.${ASSET}.XXXXXX")"
+  trap 'rm -f "$temporary"' EXIT
+  curl --fail --location --retry 3 --silent --show-error \
+    "${RELEASE_BASE}/${ASSET}" --output "$temporary"
+  verify_checksum "$temporary"
+  chmod 0755 "$temporary"
+  mv "$temporary" "$BINARY"
+  trap - EXIT
+fi
+
+reported_version="$($BINARY --version 2>&1 | awk 'NR == 1 {print $1}')"
+reported_version="${reported_version%,}"
+if [[ "$reported_version" != "$LATEXINDENT_VERSION" ]]; then
+  echo "error: expected latexindent ${LATEXINDENT_VERSION}, got ${reported_version}" >&2
+  exit 1
+fi
+
+exec "$BINARY" "$@"
