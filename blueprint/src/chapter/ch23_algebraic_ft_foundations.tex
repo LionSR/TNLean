@@ -579,8 +579,10 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
               solution.
         \item The tensor of any solution is a translation-invariant
               matrix product representation of the state with matrices of
-              size $D\times D$, related to the canonical one by a unitary
-              $U$ through $A_i=UB_iU^{\dagger}$.
+              size $D\times D$. There are a unitary $U$ and a phase
+              $\xi\in\C$, $|\xi|=1$, such that
+              $A_i=\xi UB_iU^{\dagger}$; after rephasing the tensor, the
+              relation is exact unitary conjugacy.
     \end{enumerate}
     This is \cite[Theorem~8]{PerezGarcia2007Matrix}; its formalization is
     not yet complete.
@@ -592,7 +594,8 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     open-boundary representation. For the converse, a comparison of the two
     open-boundary representations must first supply intertwiners at all
     $D^4+1$ cuts around the $D^4$-site window, including both endpoint cuts,
-    together with the $D^4$ adjacent relations. Linear dependence in
+    together with the $D^4$ adjacent relations
+    \cite{gap:pgvwc07_intertwiner_chain_off_by_one}. Linear dependence in
     $M_{D^2}(\C)$ then provides the hypothesis of
     Lemma~\ref{lem:pgvwc07_chain_combination}. The internal construction in
     Lemma~\ref{lem:pgvwc07_solution_chain} gives only $D^4-1$ intertwiners
@@ -601,10 +604,14 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     Once the full cut chain is supplied, the combination lemma and the slice
     extraction of Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} give a
     nonzero matrix $R$ and a scalar $x\neq0$ with
-    $RB_i=\tfrac1x A_iR$. The normalization
-    (\ref{eq:quadratic_system_normalization}), the invariance of the
-    positive diagonal fixed point, and the uniqueness of the fixed point of
-    the transfer map under condition C1 then force $|x|=1$ and $R$ unitary.
+    $RB_i=\tfrac1x A_iR$. The two normalizations
+    (\ref{eq:quadratic_system_normalization}), the invariance of the positive
+    diagonal fixed point, and the uniqueness of the transfer-map fixed point
+    under condition C1 give $|x|=1$ and
+    $RR^{\dagger}=c\Id$ for some $c>0$. Thus
+    $U=c^{-1/2}R$ is unitary and implements the same intertwining relation;
+    after the standard global phase choice for the tensor, this gives the
+    stated conjugacy $A_i=UB_iU^{\dagger}$.
 \end{proof}
 
 %% ---------------------------------------------------------
