@@ -1,4 +1,4 @@
-\chapter{Anomaly Three-Cocycles and Fusion-Tensor Gauge Freedom}%
+\chapter{Scalar Three-Cocycles and Fusion-Tensor Gauge Freedom}%
 \label{ch:mpu_gauging}
 
 Let $G$ be a group and write $\C^\times$ for the multiplicative group of
@@ -10,28 +10,28 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-The same source identifies the physical
-information with $[\omega]\in H^3(G,\C^\times)$ and calls an MPU
-representation anomalous when this class is nontrivial. The results below
-formalize only the scalar functions $\beta$ and $\omega$; they do not construct
-fusion tensors or an MPU representation.
+The results below formalize only the scalar functions $\beta$ and $\omega$;
+they do not construct fusion tensors or an MPU representation.
 
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
-    \lean{TNLean.Algebra.ScalarThreeCochain,
+    \lean{TNLean.Algebra.ScalarCocycle,
+        TNLean.Algebra.ScalarThreeCochain,
         TNLean.Algebra.ScalarCocycle.IsNormalized,
         TNLean.Algebra.ScalarThreeCochain.IsNormalized}
     \leanok
     \uses{def:scalar_cocycle}
     Recall from Definition~\ref{def:scalar_cocycle} that a scalar $2$-cochain
     is a function $\beta\colon G^2\to\C^\times$. A scalar $3$-cochain is a
-    function $\omega\colon G^3\to\C^\times$. It is normalized when
+    function $\omega\colon G^3\to\C^\times$. Following the paper's later
+    standing convention, it is normalized when
     \begin{align}
         \omega(e,h,k) & = 1, \\
         \omega(g,e,k) & = 1, \\
         \omega(g,h,e) & = 1.
         \label{eq:mpug_three_normalized}
     \end{align}
+    % Source anchor: arXiv:2502.20257, standing convention following eq:triv_omegas.
     The scalar $2$-cochain $\beta$ is normalized when
     $\beta(e,g)=\beta(g,e)=1$ for every $g\in G$.
 \end{definition}
@@ -179,25 +179,25 @@ fusion tensors or an MPU representation.
     (\ref{eq:mpug_gauge_action}) is normalized when $\omega$ is normalized.
 \end{proof}
 
-\begin{definition}[Scalar fusion-gauge equivalence]
-    \label{def:mpug_gauge_equivalent}
-    \lean{TNLean.Algebra.ScalarThreeCochain.GaugeEquivalent}
+\begin{definition}[Cohomologous scalar three-cochains]
+    \label{def:mpug_cohomologous_to}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo}
     \leanok
     \uses{def:mpug_fusion_gauge}
-    Two scalar $3$-cochains $\omega$ and $\eta$ are fusion-gauge equivalent
-    when $\eta=\beta\mathbin{\triangleright}\omega$ for some scalar
+    Two scalar $3$-cochains $\omega$ and $\eta$ are cohomologous when
+    $\eta=\beta\mathbin{\triangleright}\omega$ for some scalar
     $2$-cochain $\beta$.
 \end{definition}
 
-\begin{theorem}[Fusion-gauge equivalence is an equivalence relation]
-    \label{thm:mpug_gauge_equivalence}
-    \lean{TNLean.Algebra.ScalarThreeCochain.GaugeEquivalent.refl,
-        TNLean.Algebra.ScalarThreeCochain.GaugeEquivalent.symm,
-        TNLean.Algebra.ScalarThreeCochain.GaugeEquivalent.trans,
-        TNLean.Algebra.ScalarThreeCochain.GaugeEquivalent.equivalence}
+\begin{theorem}[Cohomologous-to is an equivalence relation]
+    \label{thm:mpug_cohomologous_to_equivalence}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.refl,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.symm,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.trans,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.equivalence}
     \leanok
-    \uses{def:mpug_gauge_equivalent}
-    Scalar fusion-gauge equivalence is reflexive, symmetric, and transitive.
+    \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
+    Cohomologous-to is reflexive, symmetric, and transitive.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -213,27 +213,11 @@ fusion tensors or an MPU representation.
     (\ref{eq:mpug_gauge_composition}) proves transitivity.
 \end{proof}
 
-\begin{definition}[Trivial and nonanomalous scalar gauge class]
-    \label{def:mpug_nonanomalous}
-    \lean{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass,
-        TNLean.Algebra.ScalarThreeCochain.IsNonanomalous}
+\begin{definition}[Trivial scalar gauge class]
+    \label{def:mpug_trivial_gauge_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass}
     \leanok
-    \uses{def:mpug_gauge_equivalent}
-    A scalar $3$-cochain has trivial gauge class when it is fusion-gauge
-    equivalent to the constant cochain $1$. At the scalar level, such a
-    cochain is called nonanomalous, opposite to the anomalous case described
-    in~\cite{FrancoRubio2025MPUGauging}.
+    \uses{def:mpug_cohomologous_to}
+    A scalar $3$-cochain has trivial gauge class when it is cohomologous to
+    the constant cochain $1$.
 \end{definition}
-
-\begin{theorem}[Nonanomalous means gauge trivial]
-    \label{thm:mpug_nonanomalous_iff}
-    \lean{TNLean.Algebra.ScalarThreeCochain.isNonanomalous_iff_isTrivialGaugeClass}
-    \leanok
-    \uses{def:mpug_nonanomalous}
-    A scalar $3$-cochain is nonanomalous if and only if its fusion-gauge class
-    is trivial.
-\end{theorem}
-
-\begin{proof}\leanok
-    This is the defining meaning of nonanomalousness at the scalar level.
-\end{proof}

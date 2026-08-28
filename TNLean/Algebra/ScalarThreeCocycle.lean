@@ -24,8 +24,8 @@ represented by the existing function type `ScalarCocycle G`; its name and
 * `ScalarThreeCochain.IsNormalized`: triviality when any argument is the identity.
 * `ScalarThreeCochain.coboundary`: the 2-cochain coboundary in `eq:omegagauge`.
 * `ScalarThreeCochain.fusionGauge`: the scalar fusion-tensor gauge action.
-* `ScalarThreeCochain.GaugeEquivalent`: equality up to a fusion gauge.
-* `ScalarThreeCochain.IsNonanomalous`: triviality of the scalar gauge class.
+* `ScalarThreeCochain.CohomologousTo`: equality up to a fusion gauge.
+* `ScalarThreeCochain.IsTrivialGaugeClass`: triviality of the scalar gauge class.
 -/
 
 namespace TNLean.Algebra
@@ -62,7 +62,7 @@ def IsCocycle (ω : ScalarThreeCochain G) : Prop :=
       ω g h k * ω g (h * k) l * ω h k l
 
 /-- A scalar 3-cochain is normalized when it equals one whenever any argument
-is the identity. This is the normalization stated after arXiv:2502.20257,
+is the identity. This is the standing normalization convention following arXiv:2502.20257,
 `eq:triv_omegas` (whose displayed formula repeats its third case). -/
 def IsNormalized (ω : ScalarThreeCochain G) : Prop :=
   (∀ h k, ω 1 h k = 1) ∧
@@ -164,55 +164,44 @@ theorem IsNormalized.fusionGauge {ω : ScalarThreeCochain G}
     IsNormalized (fusionGauge β ω) :=
   (isNormalized_coboundary hβ).mul hω
 
-/-- Two scalar 3-cochains are fusion-gauge equivalent when one is obtained from
-the other by the action in arXiv:2502.20257, `eq:omegagauge`. -/
-def GaugeEquivalent (ω η : ScalarThreeCochain G) : Prop :=
+/-- Two scalar 3-cochains are cohomologous when one is obtained from the
+other by the fusion-gauge action in arXiv:2502.20257, `eq:omegagauge`. -/
+def CohomologousTo (ω η : ScalarThreeCochain G) : Prop :=
   ∃ β : ScalarCocycle G, fusionGauge β ω = η
 
-namespace GaugeEquivalent
+namespace CohomologousTo
 
-/-- Scalar fusion-gauge equivalence is reflexive. -/
-theorem refl (ω : ScalarThreeCochain G) : GaugeEquivalent ω ω :=
+/-- Cohomologous-to is reflexive. -/
+theorem refl (ω : ScalarThreeCochain G) : CohomologousTo ω ω :=
   ⟨fun _ _ => 1, fusionGauge_one ω⟩
 
-/-- Scalar fusion-gauge equivalence is symmetric. -/
-theorem symm {ω η : ScalarThreeCochain G} (h : GaugeEquivalent ω η) :
-    GaugeEquivalent η ω := by
+/-- Cohomologous-to is symmetric. -/
+theorem symm {ω η : ScalarThreeCochain G} (h : CohomologousTo ω η) :
+    CohomologousTo η ω := by
   obtain ⟨β, rfl⟩ := h
   refine ⟨β⁻¹, ?_⟩
   rw [fusionGauge_comp, mul_inv_cancel]
   change fusionGauge (fun _ _ => 1) ω = ω
   exact fusionGauge_one ω
 
-/-- Scalar fusion-gauge equivalence is transitive. -/
+/-- Cohomologous-to is transitive. -/
 theorem trans {ω η θ : ScalarThreeCochain G}
-    (hωη : GaugeEquivalent ω η) (hηθ : GaugeEquivalent η θ) :
-    GaugeEquivalent ω θ := by
+    (hωη : CohomologousTo ω η) (hηθ : CohomologousTo η θ) :
+    CohomologousTo ω θ := by
   obtain ⟨β, rfl⟩ := hωη
   obtain ⟨γ, rfl⟩ := hηθ
   exact ⟨β * γ, (fusionGauge_comp β γ ω).symm⟩
 
-/-- Scalar fusion-gauge equivalence is an equivalence relation. -/
-theorem equivalence : Equivalence (GaugeEquivalent (G := G)) :=
+/-- Cohomologous-to is an equivalence relation. -/
+theorem equivalence : Equivalence (CohomologousTo (G := G)) :=
   ⟨refl, symm, trans⟩
 
-end GaugeEquivalent
+end CohomologousTo
 
-/-- A scalar 3-cochain has trivial gauge class when it is fusion-gauge
-equivalent to the constant cochain one. -/
+/-- A scalar 3-cochain has trivial gauge class when it is cohomologous to
+the constant cochain one. -/
 def IsTrivialGaugeClass (ω : ScalarThreeCochain G) : Prop :=
-  GaugeEquivalent ω (fun _ _ _ => 1)
-
-/-- At the scalar algebra level, nonanomalous means that the 3-cochain has
-trivial gauge class, matching the terminology following arXiv:2502.20257,
-`eq:omegagauge`. No existence claim about MPU fusion tensors is included. -/
-def IsNonanomalous (ω : ScalarThreeCochain G) : Prop :=
-  IsTrivialGaugeClass ω
-
-/-- Scalar nonanomalousness is exactly triviality of the fusion-gauge class. -/
-theorem isNonanomalous_iff_isTrivialGaugeClass (ω : ScalarThreeCochain G) :
-    IsNonanomalous ω ↔ IsTrivialGaugeClass ω :=
-  Iff.rfl
+  CohomologousTo ω (fun _ _ _ => 1)
 
 end ScalarThreeCochain
 
