@@ -353,14 +353,17 @@ def main() -> int:
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
             # Several source-linked rows live in proofs, which the blueprint UI
-            # collapses by default. Open those proofs through the same control a
-            # reader uses so geometry is measured rather than inferred from
-            # zero-sized hidden descendants.
-            proof_wrappers = page.locator(".proof_wrapper:has(.tenkz-equation)")
-            for index in range(proof_wrappers.count()):
-                wrapper = proof_wrappers.nth(index)
-                if not wrapper.locator(".proof_content").is_visible():
-                    wrapper.locator(".proof_heading").click()
+            # collapses by default. Reveal the complete proof wrapper so this
+            # geometry test does not depend on the UI's asynchronous toggle
+            # initialization on headless browsers.
+            page.add_style_tag(content="""
+                .proof_wrapper:has(.tenkz-equation),
+                .proof_wrapper:has(.tenkz-equation) .proof_heading,
+                .proof_wrapper:has(.tenkz-equation) .proof_content {
+                    display: block !important;
+                    visibility: visible !important;
+                }
+            """)
             page.locator(".tenkz-equation").first.wait_for(state="visible")
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
