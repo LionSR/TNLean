@@ -81,9 +81,8 @@ theorem neighboringSupportInclusion_isometry
 $P^R_k \otimes P^L_h$, the right factor support of the source sector tensored
 with the left factor support of the target sector.
 
-**Scope restriction (active physical support compression):** This support
-identity is an auxiliary construction absent from CPSV16. See
-`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+This support identity is an auxiliary consequence of the active compression;
+it does not appear in CPSV16. -/
 theorem neighboringSupportInclusion_range
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     {k h : Fin F.sectorCount} (hk : F.IsActiveSector k)
@@ -142,11 +141,8 @@ theorem neighboringOperator_self_eq_zero_of_not_isActiveSector
 $\eta_{k,h}$ is supported on $P^R_k \otimes P^L_h$ from both sides.
 
 Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`etarl`, lines 1381--1445.
-
-**Scope restriction (active physical support compression):** The factor
-support projections are auxiliary to the source argument. See
-`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+`etarl`, lines 1381--1445. The factor support projections are auxiliary to the
+source argument. -/
 theorem neighboringOperator_factorSupport_twoSided
     (F : PhysicalSectorFactorization K)
     (hK : Kraus.IsInjective K.toMPSTensor)
@@ -197,11 +193,8 @@ operator: $\operatorname{tr}(\widetilde\eta_{k,h}) =
 \operatorname{tr}(\eta_{k,h})$.
 
 The equality follows by cyclicity of the rectangular trace and two-sided
-factor-support absorption.
-
-**Scope restriction (active physical support compression):** This compressed
-trace identity is an auxiliary construction absent from CPSV16. See
-`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+factor-support absorption. This compressed trace identity is an auxiliary
+construction absent from CPSV16. -/
 theorem compressedNeighboringOperator_trace
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : Kraus.IsInjective K.toMPSTensor)
@@ -267,10 +260,9 @@ theorem diagonal_weight_eq_zero_of_not_isActiveSector
 /-- Restricting $a_k$ and $b_k$ to the active sectors preserves the
 normalization $\sum_k a_kb_k=1$.
 
-**Scope restriction (active physical support compression):** The finite-sum
-restriction is an auxiliary construction absent from CPSV16. It preserves the
-normalization in Theorem 4.9(iv), equation `PsiPhi`, lines 864--889. See
-`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+This finite-sum restriction is an auxiliary construction absent from CPSV16.
+It preserves the normalization in Theorem 4.9(iv), equation `PsiPhi`, lines
+864--889. -/
 theorem sum_mul_activeSectorFinEquiv
     (H : NeighboringTraceFactorization F) :
     ∑ j : Fin F.activeSectorCount,
@@ -492,10 +484,9 @@ theorem activeRestrictedPhysicalSectorFactorization_neighboringOperator_posSemid
 $\widetilde\eta_{j,l}$ equals the trace of the ambient
 $\eta_{k,h}$ at the corresponding active sectors.
 
-**Scope restriction (active physical support compression):** This trace
-transport is an auxiliary construction absent from CPSV16. It preserves the
-trace condition in Theorem 4.9(iv), equation `tralktrrk`, lines 864--889. See
-`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+This trace transport is an auxiliary construction absent from CPSV16. It
+preserves the trace condition in Theorem 4.9(iv), equation `tralktrrk`, lines
+864--889. -/
 theorem activeRestrictedPhysicalSectorFactorization_neighboringOperator_trace
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : Kraus.IsInjective K.toMPSTensor)
@@ -515,13 +506,10 @@ factorization.
 The restricted coefficients are exactly $a_k$ and $b_k$ along the active
 sector correspondence. The preceding trace identity preserves
 $\operatorname{tr}(\eta_{k,h})=a_kb_h$, while the vanishing inactive diagonal
-weights preserve $\sum_k a_kb_k=1$.
-
-**Scope restriction (active physical support compression):** This packaged
-restriction is a project auxiliary lemma, not an assertion of CPSV16. It
-preserves the conditions printed in Theorem 4.9(iv), equations `tralktrrk`
-and `PsiPhi`, lines 864--889, under the auxiliary compression recorded in
-`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
+weights preserve $\sum_k a_kb_k=1$. This packaged restriction is a project
+auxiliary lemma, not an assertion of CPSV16. It preserves the conditions
+printed in Theorem 4.9(iv), equations `tralktrrk` and `PsiPhi`, lines 864--889.
+-/
 noncomputable def activeRestrictedPhysicalSectorFactorization_neighboringTraceFactorization
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : Kraus.IsInjective K.toMPSTensor)

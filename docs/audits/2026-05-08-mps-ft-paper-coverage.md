@@ -44,12 +44,13 @@ trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition
 `prop3to4`, the fixed-bond/source-ZCL SAL theorem, the literal sharp
 `propblockinj` theorem, and the literal CPSV topological-projector commuting
 Gibbs theorem, the paper has 45 theorem-like occurrences and 40 distinct
-results. The occurrence-level count is 25 complete, 7 partial, and 13
-not-ready; the distinct-result count is 24 complete, 5 partial, and 11
-not-ready. Here **not-ready** means that the printed statement is false,
-ambiguous, or depends essentially on a formally refuted source lemma. It does
-not mean that every printed result has been formalized. These counts predate
-the 2026-08-23 reclassification; the rows below reflect the nonzero-coefficient convention adopted on 2026-08-23
+results. The occurrence-level count is 25 complete, 6 partial, 12 not-ready,
+and 2 refuted; the distinct-result count is 24 complete, 4 partial, 10
+not-ready, and 2 refuted. Here **not-ready** means that the printed statement is
+ambiguous, remains beyond the current formalization, or depends essentially on
+a formally refuted source lemma. It does not mean that every printed result has
+been formalized. These counts use the nonzero-coefficient convention adopted on
+2026-08-23
 (`docs/audits/2026-08-23_nonzero_coefficient_convention.md`): every
 canonical-form coefficient is nonzero by the source's line-246 normalization,
 and the zero-coefficient refutations recorded by earlier versions of this
@@ -62,14 +63,15 @@ The following ledger makes the count reproducible from source line numbers:
 - **Complete (24 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
   1130, 1274, 1333, 1351, 1406, 1484, 1503, 1510, 1569, 1597, 1647, 1680,
   1786, 1835, and 2221.
-- **Partial (5 distinct):** 278, 801, 851, 972, and 1801.
-- **Not-ready (11 distinct):** 349, 354, 500, 534, 543, 583, 777, 1155,
-  1197, 1740, and 1810.
+- **Partial (4 distinct):** 278, 851, 972, and 1801.
+- **Not-ready (10 distinct):** 349, 354, 500, 534, 543, 583, 1155, 1197,
+  1740, and 1810.
+- **Refuted (2 distinct):** 777 and 801.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
-  Appendix C.3--C.4 restatements at 1863 and 1929 inherit complete and partial status.
-  Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 25/7/13.
+  Appendix C.3--C.4 restatements at 1863 and 1929 inherit complete and partial
+  status. Thus the five restatements add one complete, two partial, and two
+  not-ready occurrences, giving the displayed totals 25/6/12/2.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -362,8 +364,8 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 16 non-complete distinct CPSV16 results comprise 4 partial, 11 not-ready,
-and 1 refuted result. They are source-ambiguous, formally refuted, research-level,
+The 16 non-complete distinct CPSV16 results comprise 4 partial, 10 not-ready,
+and 2 refuted results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal statement. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
 Appendix B single-normal-tensor RFP/isometry characterization are complete and
