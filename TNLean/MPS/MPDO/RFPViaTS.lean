@@ -93,7 +93,7 @@ trace preservation of the map from one site to
 two sites identifies the traces of the one-site and two-site physical closures
 for every virtual boundary matrix. For its interaction with the line-246
 unit-weight convention on a fixed tensor representative, see
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>. -/
 theorem physTraceTransfer_sq_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M) :
     physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
   obtain ⟨_, T, _, hT, _, hT_close⟩ := h
@@ -118,13 +118,13 @@ project's broader scale-invariant physical-trace relation.
 **Scope restriction (scale-invariant corollary):** CPSV16 Definition 4.2 is the
 literal identity proved by `physTraceTransfer_sq_of_isRFPViaTS`. This theorem
 records the resulting, broader `IsSourceZCL` relation for later uses. See
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 **Scope restriction (nonzero transfer):** The source assumes that the tensor is
 in canonical form and generates normalized density operators. The bare
 predicate `IsRFPViaTS` does not include these standing hypotheses, so the
 nonzero transfer is stated explicitly. This restriction is documented in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 Source: arXiv:1606.00608, lines 1333--1340. -/
 theorem isSourceZCL_of_isRFPViaTS (M : MPOTensor d D) (h : IsRFPViaTS M)

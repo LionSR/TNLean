@@ -103,7 +103,7 @@ of normalizing by the finite-chain trace.
 **Local fix (finite-chain bound):** The local-purification argument cited in
 the Appendix does not apply to every positive MPO. The proof instead uses the
 periodic-cut operator-Schmidt estimate; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem IsMPDO.mutualInfoChain_le_four_log_bondDim
     {M : MPOTensor d D} (hM : IsMPDO M) (N L : ℕ) (hN : 0 < N)
     (hL : L ≤ N) (htr : (mpo M N).trace ≠ 0) :

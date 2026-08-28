@@ -460,7 +460,7 @@ nonzero trace.
 **Scope restriction (scale-invariant corollary):** the source-facing ZCL
 conclusion is the literal identity `physTraceTransfer_sq_of_isRFPViaTS`. This
 theorem packages the broader `IsSourceZCL` consequence with SAL for later uses. See
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 Nonzero positive-length traces are the normalization condition implicit in the
 source's density-operator language.  The one-site instance, together with the

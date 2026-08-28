@@ -31,7 +31,8 @@ satisfies the project's scale-invariant `IsSourceZCL` relation with scale $2$,
 but it fails the paper's literal ZCL equation and is not an RFP via
 trace-preserving physical maps. The separate likely normalized representative
 $(1/2)\,M$ is discussed in
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex` and is not treated here.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>
+and is not treated here.
 
 ## References
 
@@ -327,7 +328,7 @@ $(I+\sigma_z)^2=2(I+\sigma_z)$.
 **Local fix (normalization):** Definition 4.2 of the source requires literal
 idempotence, whereas the tensor printed in Example 4.12 satisfies only this
 scale-two relation. See
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem physTraceTransfer_M_sq :
@@ -345,7 +346,7 @@ relation with the explicit positive scale $\lambda=2$.
 therefore broader than the literal idempotence in CPSV16 Definition 4.2. This
 theorem records the corrected scale-two relation for the printed tensor, not
 the paper's literal ZCL assertion. See
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem M_isSourceZCL : IsSourceZCL M := by
@@ -360,7 +361,7 @@ normalization mismatch hidden by the source's statement that the same printed
 representative is an RFP.
 
 **Local fix (normalization):** see
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
 theorem physTraceTransfer_M_not_idempotent :
@@ -375,7 +376,7 @@ trace-preserving physical maps, since that condition forces literal transfer
 idempotence.
 
 **Local fix (normalization):** the likely $(1/2)\,M$ representative is separate;
-see `docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+see <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
 theorem M_not_isRFPViaTS : ¬ IsRFPViaTS M := by

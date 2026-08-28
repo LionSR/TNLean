@@ -19,7 +19,7 @@ factorization on every ambient Hayashi sector.
 **Scope restriction (normal Case I):** this module proves only the normal
 Case-I conclusion. It does not replace literal zero correlation length by a
 scale-invariant condition and does not pass to Case II. See
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505.
@@ -91,7 +91,7 @@ positivity used there is the one contained in `IsSAL K`.
 **Scope restriction (active Hayashi/Case I):** this is the normal Case-I
 active-sector conclusion of CPSV16 Appendix C.2. It does not assert the
 coefficient-rescaled Case-II result. See
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
@@ -121,7 +121,7 @@ ambient sectors and $\sum_k a_kb_k=1$.
 
 **Scope restriction (normal Case I):** this theorem assumes literal zero
 correlation length and normality. It makes no Case-II or scale-invariant ZCL
-claim. See `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+claim. See <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
@@ -191,12 +191,12 @@ the left and right factor tensors, and the exact physical-slice factorization.
 
 **Local fix (inactive sectors):** the zero-weight extension belongs to the
 coherently rephased inverse-map witness; CPSV16 does not specify this
-inactive-sector convention. See `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+inactive-sector convention. See <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 **Scope restriction (normal Case I):** this theorem assumes injectivity, the
 strong area law, literal zero correlation length, and normality. It makes no
 scale-invariant ZCL or Case-II claim. See
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex` for the precise paper boundary.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> for the precise paper boundary.
 
 Source: arXiv:1606.00608, Appendix C.2, the corollary after Lemma C.5, lines
 1503--1506. -/

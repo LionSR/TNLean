@@ -24,7 +24,7 @@ this data separately for every outer BNT element. This file assumes one
 `NeighboringTraceFactorization`; it neither assembles the resulting channel
 pairs along the outer physical supports nor proves the full implication to
 Theorem 4.9(v). Documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 **Local fix (cyclic implication labels):** The concluding proof at source
 lines 1822--1824 assigns the wrong conditions to Propositions `prop2to3`,
@@ -215,7 +215,7 @@ transport the two channels through the two- and four-site physical unitaries.
 `NeighboringTraceFactorization`. Theorem 4.9(iv) supplies such a factorization
 separately for every outer BNT element; their projector-controlled channel
 assembly is not proved here. Documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 645--659; Proposition C.7,
 lines 1510--1563; and the twice-applied channel observation at Appendix C.2,

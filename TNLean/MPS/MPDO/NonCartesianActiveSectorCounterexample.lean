@@ -350,8 +350,9 @@ neighboring trace factorization.
 This theorem does not package the ambient simple-biCF canonical reconstruction
 or the global unit-weight convention assumed in arXiv:1606.00608, lines
 217--246 and 1626--1665. It therefore does not refute the source-context
-implication `(ii) ⇒ (iv)`. See `docs/paper-gaps/cpgsv17_pf_rank_one.tex` and
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
+implication `(ii) ⇒ (iv)`. See
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> and
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>. -/
 theorem full_lowLevel_counterexample :
     ∃ (K A : MPOTensor 4 2) (mu : ℂ),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧

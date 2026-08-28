@@ -48,7 +48,7 @@ tensor.
 **Scope restriction (virtual bond dimension one):** This is a boundary
 specialization of the physical-sector assertion in CPSV16 Theorem 4.9.  It
 does not establish the unrestricted all-sector statement documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 1381--1388, and equation `etarl`, lines 1441--1450. -/
@@ -151,7 +151,7 @@ factorization $1=1\cdot1$.
 **Scope restriction (virtual bond dimension one):** This is a conditional
 boundary specialization of CPSV16 Theorem 4.9 and Appendix C.2.  It does not
 prove the unrestricted absorbed-BNT representative assertion documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Theorem 4.9 and Appendix C.2, lines 1381--1403,
 1441--1450, and 1647--1782. -/
@@ -178,7 +178,7 @@ physical-sector conclusion at virtual bond dimension one.
 **Scope restriction (virtual bond dimension one):** This theorem is a
 conditional boundary specialization of CPSV16 Theorem 4.9.  The unrestricted
 all-sector assertion is documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Theorem 4.9 and Appendix C.2, lines 1381--1403,
 1441--1450, and 1647--1782. -/

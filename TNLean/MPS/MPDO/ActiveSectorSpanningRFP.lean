@@ -253,7 +253,7 @@ satisfy the global unit-weight canonical normalization, while the Lean
 predicate `IsRFPViaTS` records only the two channel equations. Thus this
 theorem is not an instance of Definition 4.1 for the raw representative.
 Documented in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 This is a classification of this explicit tensor, not a proof of the general
 strong-area-law and zero-correlation-length implication in Theorem 4.9.
@@ -273,7 +273,7 @@ coarse-graining and refinement maps twice and passing to blocked coordinates.
 inherits the scope restriction of `tensor_isRFPViaTS`. It proves the two channel
 equations after blocking, but does not supply the canonical-form hypothesis of
 Definition 4.1. Documented in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 This proves the bare channel equations for this witness only; it does not prove
 the universal implication from the hypotheses of Theorem 4.9.
@@ -343,7 +343,7 @@ outer labels `k,h` in the selected four-sector factorization.
 **Scope restriction (selected four-sector factorization):** this excludes
 only the inverse-map-selected four-sector decomposition.  It does not exclude
 mixing or coarsening those labels, nor a different physical-sector
-factorization.  Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+factorization.  Documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Derived from the sector-controlled, twice-iterated maps in
 arXiv:1606.00608, Appendix C.2, lines 1522--1555 and 1821--1825. -/
@@ -371,7 +371,7 @@ labels `k,h` in the selected four-sector factorization.
 **Scope restriction (selected four-sector factorization):** this excludes
 only the inverse-map-selected four-sector decomposition.  It does not exclude
 mixing or coarsening those labels, nor a different physical-sector
-factorization.  Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+factorization.  Documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Derived from the sector-controlled, twice-iterated maps in
 arXiv:1606.00608, Appendix C.2, lines 1522--1555 and 1821--1825. -/
@@ -402,8 +402,8 @@ This does not contradict the pair-preserving obstructions above: the bare
 pair of a chosen nonminimal decomposition.
 
 **Scope restriction (bare predicate and selected decomposition):** documented
-in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex` and
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+in <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf> and
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source comparison: arXiv:1606.00608, Definition 4.1, lines 645--659, and the
 sector-projected construction at Appendix C.2, lines 1810--1825. -/

@@ -55,7 +55,7 @@ the leading eigenvalue from `1` to `½`. The predicate
 `IsPhysicalTraceIdempotent` records the paper's literal fixed-tensor diagram.
 The separate predicate `IsSourceZCL` uses the same physical-trace object but
 allows a positive scalar, giving a broader scale-invariant relation. Recorded
-in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+in <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 See arXiv:1606.00608, lines 735–739 (and the canonical-form characterization at
 line 1248), and arXiv:2011.12127, Section II.E.2, lines 937–939. -/
@@ -73,7 +73,8 @@ theorem isZCL_iff_toMPSTensor_isTransferIdempotent (M : MPOTensor d D) :
 single bond matrix obtained by closing the ket and bra physical legs of one
 tensor. This is the transfer object of the source zero-correlation-length
 condition (arXiv:1606.00608, Definition 4.2, lines 735–739), as identified in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. It is distinct
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
+It is distinct
 from the doubled-index completely positive map `transferMap`, which sums
 `∑_{i,j} M^{ij} X (M^{ij})ᴴ` over both physical legs; the physical-trace transfer
 instead contracts the two legs of a single tensor. -/
@@ -110,7 +111,7 @@ arXiv:1606.00608, Definition 4.2, lines 735--739, is the literal `λ = 1`
 identity for a fixed tensor. This development's predicate is a broader,
 scale-invariant repair at the level of the generated state family; it must not
 be substituted unchanged into fixed-tensor implications such as Theorem 4.9.
-Documented in `docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+Documented in <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
 The relation uses the paper's physical-trace transfer object `𝒯_M`, unlike
 `MPOTensor.IsZCL`, which records idempotence of the doubled-index map
@@ -127,7 +128,7 @@ The required nonzero physical-trace transfer cannot be represented on an empty
 bond space.
 
 Scope: the up-to-scalar interpretation documented in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>. -/
 theorem IsSourceZCL.bondDim_ne_zero {M : MPOTensor d D} (h : IsSourceZCL M) :
     D ≠ 0 := by
   intro hD

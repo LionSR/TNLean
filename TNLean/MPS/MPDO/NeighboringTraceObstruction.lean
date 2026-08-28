@@ -48,7 +48,7 @@ on each absorbed representative.
   Theorem 4.9, lines 862--892; Appendix C.2, equation `Tkn` and the
   normalization step, lines 1473--1498; the ambient normalization at lines
   1755--1759.
-* `docs/paper-gaps/cpgsv17_pf_rank_one.tex`, the unit-closure-trace
+* <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>, the unit-closure-trace
   necessary condition.
 -/
 

@@ -42,7 +42,7 @@ does not assert presentation independence.
 that every canonical weight has modulus at most one and at least one has
 modulus one; that normalization is not part of this statement. The resulting
 fixed-representative scale tension is recorded in
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>. -/
 theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R :
     ∃ (M : MPOTensor 4 4) (H : BNTAlgebraTensorClause M),
       MPSTensor.IsCPSVCanonicalForm M.toMPSTensor ∧

@@ -80,7 +80,7 @@ neighboring trace factorizations of the absorbed representatives are assumed
 here, while Proposition `prop2to5` derives them from the strong area law and
 zero correlation length through the printed factorization assertion of
 Proposition `prop2to3`.  That derivation remains open; it is documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817; the closing proof at lines 1821--1825; and the weight
@@ -124,7 +124,7 @@ four selected sectors.
 **Scope restriction (supplied per-representative factorizations):** the
 single-sector factorizations are assumed here rather than derived from the
 strong area law and zero correlation length; the derivation is documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines
 1810--1817, and lines 1389--1403. -/

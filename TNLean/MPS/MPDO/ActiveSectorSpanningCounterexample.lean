@@ -34,7 +34,7 @@ The same tensor also has an explicit one-sector factorization with a positive,
 trace-one neighboring operator.  Thus the selected four-sector factorization is
 nonminimal.  This observation concerns only the displayed tensor and does not
 settle the general absorbed-representative assertion documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 ## Main result
 
@@ -278,7 +278,7 @@ two controls the right Pauli \(Z\).
 **Scope restriction (one explicit tensor):** This construction proves only
 that the selected four-sector inverse-map factorization is nonminimal for this
 tensor.  It does not settle the general factorization assertion documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Derived from the physical-sector identity in arXiv:1606.00608, Appendix C.2,
 equation `AppUkU=rl`, lines 1381--1388. -/
@@ -374,7 +374,7 @@ physical factorization.
 **Scope restriction (one explicit tensor):** This construction proves only
 that the selected four-sector inverse-map factorization is nonminimal for this
 tensor.  It does not settle the general factorization assertion documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Derived from the neighboring-trace identities in arXiv:1606.00608,
 Appendix C.2, lines 1389--1403. -/
@@ -400,7 +400,7 @@ trace factors with normalized product.
 selected four-sector inverse-map factorization is nonminimal for this tensor.
 It neither supplies a coarsening result for arbitrary physical-sector
 factorizations nor settles the general assertion documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Derived from the physical-sector and neighboring-trace identities in
 arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and `etarl`, lines
@@ -561,7 +561,7 @@ source-selected inverse-map identification is proved separately in
 `inverseMap_provenance_preserves_rectangular_remainder`.
 
 **Scope restriction (non-normal representative):** documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
     tensor.IsInjective ∧ tensor.IsSourceZCL ∧
       physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor ∧

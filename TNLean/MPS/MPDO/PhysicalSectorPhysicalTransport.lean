@@ -180,7 +180,7 @@ the channels for one `PhysicalSectorFactorization` and its neighboring trace
 data. Theorem 4.9(iv) supplies such data separately for each outer BNT element;
 assembling the resulting channels by the mutually orthogonal outer physical
 supports is proved in `TNLean/MPS/MPDO/BNTFactorizationChannels.lean`.
-Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+Documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 645--659; Proposition C.7,
 lines 1510--1563; and the twice-applied channel observation at lines
