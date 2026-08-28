@@ -356,6 +356,24 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
     return facts
 
 
+def _assert_font_relative_reading_width(page: Page) -> None:
+    widths = page.evaluate(
+        """() => {
+          const root = document.documentElement;
+          const wrapper = document.querySelector('div.content-wrapper');
+          const originalSize = root.style.fontSize;
+          root.style.fontSize = '16px';
+          const defaultWidth = parseFloat(getComputedStyle(wrapper).maxWidth);
+          root.style.fontSize = '32px';
+          const enlargedWidth = parseFloat(getComputedStyle(wrapper).maxWidth);
+          root.style.fontSize = originalSize;
+          return {defaultWidth, enlargedWidth};
+        }"""
+    )
+    ratio = widths["enlargedWidth"] / widths["defaultWidth"]
+    assert 1.95 <= ratio <= 2.05, widths
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--web-root", type=Path, default=Path("blueprint/web"))
@@ -387,6 +405,7 @@ def main() -> int:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
             # The fixture pictures have their own readiness check below.
             page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
+            _assert_font_relative_reading_width(page)
             # Settle MathJax before measuring selectable operators between the
             # pictures. The bundle is served from the local route above, but
             # typesetting the large MPDO pages still takes minutes on loaded

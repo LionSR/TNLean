@@ -41,15 +41,13 @@ div.proof_content {
 	height: auto;
 }
 
-/* Give the reading column a stable width basis. The generated theme uses only
- * a ch-based max-width here, so inline-size-contained equations can leave
- * headless Chromium with a zero-width intrinsic flex item. The 600px cap
- * approximates 75ch at the default font size and deliberately trades away
- * font-relative scaling until that Chromium failure can be avoided safely. */
+/* Give the reading column a stable, font-relative width basis. Using em rather
+ * than the generated theme's ch cap avoids Chromium's zero-width intrinsic flex
+ * item for inline-size-contained equations while preserving text-zoom scaling. */
 div.content-wrapper {
 	width: 100%;
 	min-width: 0;
-	max-width: 600px;
+	max-width: 37.5em;
 }
 
 /* A text-mode tensor-network equation keeps each SVG outside MathJax while
