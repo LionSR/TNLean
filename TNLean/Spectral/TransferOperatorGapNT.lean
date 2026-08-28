@@ -47,6 +47,22 @@ theorem gaugePhaseEquiv_of_krausGaugePhaseEquiv
   change B i = μ⁻¹ • (Xinv * A i * X)
   rw [hstep, smul_smul, inv_mul_cancel₀ hμ_ne0, one_smul]
 
+/-- Intertwining after invertible gauges yields gauge-phase equivalence of the original tensors. -/
+theorem gaugePhaseEquiv_of_gauged_intertwining
+    (A B : MPSTensor d D)
+    (SA SB X' : Matrix (Fin D) (Fin D) ℂ) (μ : ℂ)
+    (hSA_det : SA.det ≠ 0) (hSB_det : SB.det ≠ 0)
+    (hX'_u : IsUnit X'.det) (hμ : ‖μ‖ = 1)
+    (hInter :
+      ∀ i : Fin d, Kraus.gaugeTensor SA A i * X' = μ • X' * Kraus.gaugeTensor SB B i) :
+    GaugePhaseEquiv A B := by
+  rcases eq_or_ne D 0 with rfl | hD
+  · exact ⟨1, 1, one_ne_zero, fun i => by ext a; exact a.elim0⟩
+  let _ : NeZero D := ⟨hD⟩
+  exact gaugePhaseEquiv_of_krausGaugePhaseEquiv <|
+    Kraus.gaugePhaseEquiv_of_gauged_intertwining
+      A B SA SB X' μ hSA_det hSB_det hX'_u hμ hInter
+
 /-- If the mixed transfer spectral radius of two irreducible left-canonical tensors is at least
 `1`, then the tensors are gauge-phase equivalent. -/
 theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
