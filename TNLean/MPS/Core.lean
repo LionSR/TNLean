@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Core
 
-import TNLean.MPS.Core.BlockTriangularTrace
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer

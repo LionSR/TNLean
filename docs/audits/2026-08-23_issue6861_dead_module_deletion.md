@@ -9,10 +9,11 @@ Repository-wide prose search finds only dated inventory snapshots in
 `docs/audits/`. These records describe earlier tree states; they neither
 prescribe an import nor present either module as a current public interface.
 
-## Retained: `TNLean/MPS/Core/BlockTriangularTrace.lean`
+## Retired: `TNLean/MPS/Core/BlockTriangularTrace.lean`
 
-The module is reachable through the generated `TNLean.MPS.Core` aggregator. It
-contains the following substantive public declarations:
+Issue #7250 removed this coordinate compatibility module after confirming that
+none of its public declarations had a non-`Archive` Lean consumer or Blueprint
+tag. The removed declarations were:
 
 - `MPSTensor.upperSum`;
 - `MPSTensor.diagSum`;
@@ -25,27 +26,28 @@ contains the following substantive public declarations:
 - `MPSTensor.mpv_upperFin_eq_mpv_diagFin`;
 - `MPSTensor.sameMPV_upperFin_diagFin`.
 
-Issue #7135 completed the compatibility transition. The implementation now
-uses the orthogonal projection obtained by reindexing
-`Matrix.fromBlocks 1 0 0 0` along `finSumFinEquiv`; its complement is
-`Matrix.fromBlocks 0 0 0 1`. The exact replacement relation is:
+Issue #7135 had already completed the compatibility transition to the
+coordinate-free API in `TNLean/MPS/Core/ProjectionTriangularTrace.lean`, using
+an orthogonal projection and its complement. The exact replacement relation at
+removal was:
 
-| Retained coordinate declaration | Projection-based implementation |
+| Removed coordinate declaration | Surviving replacement |
 |---|---|
-| `MPSTensor.upperSum` | Definition `fun i ↦ Matrix.fromBlocks (A11 i) (A12 i) 0 (A22 i)` |
-| `MPSTensor.diagSum` | Definition `fun i ↦ Matrix.fromBlocks (A11 i) 0 0 (A22 i)` |
-| `MPSTensor.upperFin` | `upperSum` reindexed along `finSumFinEquiv` |
-| `MPSTensor.diagFin` | The same reindexing of `diagSum`; the bridge proves it is `Kraus.diagPart upperFin coordProj` |
-| `MPSTensor.trace_fromBlocks_upper` | `Matrix.trace_eq_trace_diag_of_proj` plus the two block-compression identities |
-| `MPSTensor.evalWord_upperSum_is_fromBlocks` | `Kraus.lowerZero_evalWord` and `Kraus.evalWord_diagPart_eq`, transported through `finSumFinEquiv` |
-| `MPSTensor.evalWord_diagSum_is_fromBlocks` | The two diagonal inclusion intertwiners, via `Kraus.evalWord_intertwine` |
-| `MPSTensor.trace_evalWord_upperSum_eq_trace_evalWord_diagSum` | `Kraus.trace_evalWord_diagPart_eq` plus the `diagPart_upperFin` and trace-reindex bridges |
-| `MPSTensor.mpv_upperFin_eq_mpv_diagFin` | Pointwise specialization of `MPSTensor.sameMPV_diagPart_of_lowerZero` through `diagPart_upperFin` |
-| `MPSTensor.sameMPV_upperFin_diagFin` | Direct specialization of `MPSTensor.sameMPV_diagPart_of_lowerZero` through `diagPart_upperFin` |
+| `MPSTensor.upperSum` | None; construct the block matrix directly when coordinates are required. |
+| `MPSTensor.diagSum` | `Kraus.diagPart` for the coordinate-free diagonal compression. |
+| `MPSTensor.upperFin` | None; reindex a tensor directly when coordinates are required. |
+| `MPSTensor.diagFin` | `Kraus.diagPart` after choosing the orthogonal projection. |
+| `MPSTensor.trace_fromBlocks_upper` | `Matrix.trace_eq_trace_diag_of_proj`. |
+| `MPSTensor.evalWord_upperSum_is_fromBlocks` | `Kraus.lowerZero_evalWord` and `Kraus.evalWord_diagPart_eq`; no individual block-coordinate wrapper remains. |
+| `MPSTensor.evalWord_diagSum_is_fromBlocks` | `Kraus.evalWord_diagPart_eq`; no individual block-coordinate wrapper remains. |
+| `MPSTensor.trace_evalWord_upperSum_eq_trace_evalWord_diagSum` | `Kraus.trace_evalWord_diagPart_eq`. |
+| `MPSTensor.mpv_upperFin_eq_mpv_diagFin` | Pointwise use of `MPSTensor.sameMPV_diagPart_of_lowerZero`. |
+| `MPSTensor.sameMPV_upperFin_diagFin` | `MPSTensor.sameMPV_diagPart_of_lowerZero`. |
 
-Thus no independent word induction remains in the coordinate module, and the
-coordinate names are compatibility wrappers around the projection argument.
-They remain available; deletion and deprecation are outside #7135.
+The four coordinate constructors and the two individual diagonal-block lemmas
+were removed with the rest of the orphan module: no consumer justified moving
+them into the projection API. The surviving projection declarations provide
+the coordinate-free trace and matrix-product-vector invariance results.
 
 ## Retired: `TNLean/Wielandt/RankOne/MatrixFittingRange.lean`
 
@@ -74,6 +76,5 @@ Each removed compatibility name and its surviving replacement are:
 | `MPSTensor.WielandtRankOne.vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow` | `Matrix.vec_eq_zero_of_mulVec_eq_zero_of_mem_range_pow` |
 | `MPSTensor.WielandtRankOne.matrix_eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow` | `Matrix.eq_zero_of_mul_eq_zero_of_mem_range_mulLeft_pow` |
 
-The generated `TNLean.Algebra` and `TNLean.Wielandt.RankOne` aggregators were
-regenerated. The former continues to import `BlockTriangularTrace`; the latter
-no longer imports `MatrixFittingRange`.
+The generated `TNLean.MPS.Core` and `TNLean.Wielandt.RankOne` aggregators were
+regenerated and no longer import the retired modules.
