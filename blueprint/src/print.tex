@@ -25,6 +25,7 @@
 \maketitle
 \tableofcontents
 \csname input\endcsname{\blueprintcontent} % chktex 27 (macro-based path; use \csname to bypass chktex \input pattern matching)
-\bibliographystyle{alpha}
+% `alpha` emits an invalid label after 26 same-author/year paper-gap entries.
+\bibliographystyle{plain}
 \bibliography{references}
 \end{document}

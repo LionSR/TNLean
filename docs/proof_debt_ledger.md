@@ -91,31 +91,19 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   parent record by `rfl` with nothing reading the pin; see
   `docs/audits/2026-08-26_canonical_form_retirements.md`.
 
-### S5. Retire the ch23 algebraic-FT route and the redundant TI CycleMPS mirror — net 2,400 lines, risk 6/10
-- **Status**: open (#4565)
-- **What**: `MPS/Chain/{GaugePhase,SameStateBridge}.lean`;
-  `PiAlgebra/{Construction,FundamentalTheoremComplete,TIReduction}.lean`;
-  `PEPS/{CycleMPSOverlapWindow,CycleMPSOverlapInsertion}.lean`; only the
-  ~30-line redundant wrapper in `CycleMPSTranslationInvariant.lean` (NOT
-  its ~150-line gauge-uniqueness theorem — see caution below);
-  `blueprint/src/chapter/ch23_algebraic_ft.tex` (1,776 ln, already dormant).
-- **Why it's excess**: the ch23 route proves a stronger-hypothesis variant
-  gated on the never-instantiated `SameStateBridgeHyp`
-  ([D2](#d2-fundamental-theorem-gauge-extraction-spine-re-instantiated-per-setting-capstone-conditional-on-an-unconstructed-bridge--abstraction-gap-impact-710-effort-710));
-  a translation-invariant closed chain is the constant instance of the
-  site-dependent one, so the TI window/insertion lemmas are second proofs
-  of already-proved content.
-- **Caution (verified)**: `CycleMPSTranslationInvariant.lean`'s
-  `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique` (~150-160
-  ln) is the sole, currently-irreplaceable formalization of the source's
-  uniqueness clause, `\leanok`-cited 3x from `ch24_peps_ft_normal_capstone.tex`
-  — it only looks deletable because its chapter is dormant. It must be
-  **relocated** into `CycleMPSOverlapCapstone.lean`, not deleted.
-- **First PR**: rehome `piTrace_mul_right_eq_zero` into
-  `BiCFDerivation/Core.lean`, then delete the four zero-consumer PiAlgebra
-  files plus `GaugePhase.lean`/`SameStateBridge.lean` (~940 lines, zero
-  blueprint exposure). The CycleMPS collapse and gauge-uniqueness
-  relocation are separate follow-on PRs given the content-loss risk above.
+### S5. Preserve the ch23 algebraic-FT chapter — retirement cancelled
+- **Status**: cancelled (#4565; owner decision on #7220)
+- **Decision**: the Chapter 23 algebraic Fundamental Theorem material is a
+  useful account of András's paper and remains part of the Blueprint. Its
+  chapter router and three section files are restored to the full build; they
+  are not deletion candidates.
+- **History**: earlier Lean-side deduplication and the relocation of
+  `fundamentalTheorem_normalMPS_translationInvariant_gauge_unique` remain in
+  place. Those implementation cleanups do not justify deleting the mathematical
+  chapter. Any future citation migration caused by Lean refactoring must update
+  the retained chapter in place.
+- **Scope**: no further chapter or Lean deletion is authorized by S5. Any
+  future CycleMPS simplification requires a separate, freshly verified issue.
 
 ### S12. Collapse duplicated spectral-split proofs onto `ProjectionSpectralSplit`/corner-compression API — net 520 lines, risk 5/10
 - **Status**: open (#4566)
