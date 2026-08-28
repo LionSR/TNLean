@@ -376,7 +376,7 @@ def main() -> int:
             page.wait_for_function("""() =>
               [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
             """)
-            equations.first.wait_for(state="visible")
+            assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
             if args.screenshot_dir:
