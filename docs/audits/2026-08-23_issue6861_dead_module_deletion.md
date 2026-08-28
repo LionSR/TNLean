@@ -34,12 +34,12 @@ removal was:
 | Removed coordinate declaration | Surviving replacement |
 |---|---|
 | `MPSTensor.upperSum` | None; construct the block matrix directly when coordinates are required. |
-| `MPSTensor.diagSum` | `Kraus.diagPart` for the coordinate-free diagonal compression. |
+| `MPSTensor.diagSum` | None; construct the block matrix directly when coordinates are required. |
 | `MPSTensor.upperFin` | None; reindex a tensor directly when coordinates are required. |
 | `MPSTensor.diagFin` | `Kraus.diagPart` after choosing the orthogonal projection. |
 | `MPSTensor.trace_fromBlocks_upper` | `Matrix.trace_eq_trace_diag_of_proj`. |
-| `MPSTensor.evalWord_upperSum_is_fromBlocks` | `Kraus.lowerZero_evalWord` and `Kraus.evalWord_diagPart_eq`; no individual block-coordinate wrapper remains. |
-| `MPSTensor.evalWord_diagSum_is_fromBlocks` | `Kraus.evalWord_diagPart_eq`; no individual block-coordinate wrapper remains. |
+| `MPSTensor.evalWord_upperSum_is_fromBlocks` | `Kraus.lowerZero_evalWord`, `Kraus.evalWord_diagPart_eq`, and the diagonal inclusion intertwiners via `Kraus.evalWord_intertwine`; no individual block-coordinate wrapper remains. |
+| `MPSTensor.evalWord_diagSum_is_fromBlocks` | The diagonal inclusion intertwiners via `Kraus.evalWord_intertwine`; no individual block-coordinate wrapper remains. |
 | `MPSTensor.trace_evalWord_upperSum_eq_trace_evalWord_diagSum` | `Kraus.trace_evalWord_diagPart_eq`. |
 | `MPSTensor.mpv_upperFin_eq_mpv_diagFin` | Pointwise use of `MPSTensor.sameMPV_diagPart_of_lowerZero`. |
 | `MPSTensor.sameMPV_upperFin_diagFin` | `MPSTensor.sameMPV_diagPart_of_lowerZero`. |
