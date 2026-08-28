@@ -105,7 +105,7 @@ and `RescalingStableSourceSimple.lean` are unchanged in this pass.
 
 The private helper `R_mpo_ne_zero` went with
 `R_isNonvanishingSourceSimple`. `MPSTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff`
-and `MPSTensor.mixedTransferMap₂_comp_self_eq_smul_of_transferMap_comp_self_eq_smul`
+and `MPSTensor.mixedMapLM_comp_self_eq_smul_of_transferMap_comp_self_eq_smul`
 are kept: both are general transfer-map lemmas with their own blueprint nodes.
 
 ## Deleted modules

@@ -163,7 +163,7 @@ theorem sectorCoordinateSupportInclusion_range
           (F.dependentSupportInclusion A)ᴴ =
     F.sectorCoordinatePhysicalSupportProj
   rw [Matrix.reindexLinearEquiv_mul,
-    F.dependentSupportInclusion_range_eq_dependentPhysicalSupportProj A]
+    F.dependentSupportInclusion_range A]
   rfl
 
 /-- A physical slice of the sector-coordinate tensor is the finite

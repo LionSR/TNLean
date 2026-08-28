@@ -147,19 +147,6 @@ theorem HasPositiveLengthChiTracePowerForm.entry_eq_one_of_lengthIndependent
   rw [← h L hL α β γ, ← h 1 one_pos α β γ]
   exact hLI L hL α β γ
 
-/-- The diagonal entries of a positive chi witness for a length-independent
-coefficient system lie in $\{0, 1\}$, as stated in the source; positivity
-excludes the value zero.
-
-Source: arXiv:1606.00608, line 1010 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem HasPositiveLengthChiTracePowerForm.entry_eq_zero_or_eq_one_of_lengthIndependent
-    {χ : DiagonalChiFamily Λ}
-    (h : c.HasPositiveLengthChiTracePowerForm χ) (hχ : χ.PosEntries)
-    (hLI : c.LengthIndependent) (α β γ : Λ) (k : Fin (χ.dim α β γ)) :
-    χ.entry α β γ k = 0 ∨ χ.entry α β γ k = 1 :=
-  Or.inr (h.entry_eq_one_of_lengthIndependent hχ hLI α β γ k)
-
 /-- Length-independent coefficients with a positive chi witness equal the
 sizes of the corresponding diagonal matrices at every positive length.
 

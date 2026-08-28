@@ -254,13 +254,13 @@ together with the derivation of the same-length product law from them.
     adjoint specializations.
 \end{proof}
 
-\begin{definition}[Fusion-isometry family]%
+\begin{definition}[Full-support labelled fusion family]%
     \label{def:mpdo_bnt_fusion_isometry_family}
     \lean{MPOTensor.BNTFusionIsometryFamily}
     \leanok
     \uses{def:mpdo_operator_product, def:mpdo_diagonal_chi_family}
-    A \emph{fusion-isometry family} over a finite set of labels consists of a
-    family of tensors $M_\gamma$ with a common physical dimension and
+    A \emph{full-support labelled fusion family} over a finite set of labels
+    consists of tensors $M_\gamma$ with a common physical dimension and
     per-label bond dimensions, diagonal matrices $\chi_{\alpha,\beta,\gamma}$
     with positive entries, and isometries $U_{\alpha,\beta}$ such that, site
     by site,
@@ -273,12 +273,16 @@ together with the derivation of the same-length product law from them.
         \label{eq:rfp_fusion_identity}
     \end{align}
     This is the full-support specialization of the fusion statement in
-    \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}; the tensors are the
-    vertically read basis of normal tensors from
-    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, so the physical dimension
-    is the bond dimension of the original tensor. Statement (iii) of the
-    source theorem additionally asserts the idempotent identity for the trace
-    scalars of the vertical decomposition, recorded separately by
+    \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}. The definition records only
+    the labelled tensors and their fusion data; it does not require the
+    labelled family itself to be a basis of normal tensors. In the later
+    tensor-attached applications, the tensors are supplied by the vertically
+    read basis of normal tensors from
+    \cite[Proposition~4.13]{Cirac2016MPDO_arXiv}, and hence carry the BNT
+    structure needed there; their physical dimension is the bond dimension of
+    the original tensor. Statement (iii) of the source theorem additionally
+    asserts the idempotent identity for the trace scalars of the vertical
+    decomposition, recorded separately by
     Definition~\ref{def:mpdo_bnt_label_idempotent_coefficient_form}.
 
     \textbf{Scope restriction (full-support fusion family):} The displayed

@@ -617,8 +617,10 @@ Appendix C.3--C.4, lines 1830--1942 of
 theorem pulledBlockedChiFamily_toDiagonal_posEntries
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c) (n : ℕ) (hn : 0 < n) :
-    ((cmp.pulledBlockedChiFamily hχ).toDiagonal n hn).PosEntries :=
-  hχ.posEntries.comap (cmp.blockedLabel n hn)
+    ((cmp.pulledBlockedChiFamily hχ).toDiagonal n hn).PosEntries := by
+  intro α β γ k
+  exact hχ.posEntries (cmp.blockedLabel n hn α) (cmp.blockedLabel n hn β)
+    (cmp.blockedLabel n hn γ) k
 
 /-- At positive blocked length, the finite-sum trace-power coefficient of the
 pulled-back blocked chi family is the corresponding BNT-label trace-power

@@ -332,11 +332,6 @@ theorem isCPSVCanonicalFormII (data : CPSVCanonicalFormIIData A) :
     IsCPSVCanonicalFormII A :=
   ⟨data⟩
 
-/-- Forgetting the blockwise normalization leaves literal CPSV canonical-form data. -/
-theorem isCPSVCanonicalForm (data : CPSVCanonicalFormIIData A) :
-    IsCPSVCanonicalForm A :=
-  data.toCPSVCanonicalFormData.isCPSVCanonicalForm
-
 end CPSVCanonicalFormIIData
 
 namespace IsCPSVCanonicalFormII
@@ -344,10 +339,6 @@ namespace IsCPSVCanonicalFormII
 /-- Choose normalized retained-block data from a canonical-form-II predicate. -/
 noncomputable def data (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
   Classical.choice h
-
-/-- Canonical form II is, in particular, literal CPSV canonical form. -/
-theorem isCPSVCanonicalForm (h : IsCPSVCanonicalFormII A) : IsCPSVCanonicalForm A :=
-  ⟨h.data.toCPSVCanonicalFormData⟩
 
 end IsCPSVCanonicalFormII
 

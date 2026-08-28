@@ -62,15 +62,12 @@ private lemma trace_single_eq_if {a : Type*} [Fintype a] [DecidableEq a]
   split_ifs with h
   · subst j
     exact Matrix.trace_single_eq_same i x
-  · simp [Matrix.trace, h]
+  · exact Matrix.trace_single_eq_of_ne i j x h
 
 private lemma trace_ite {a : Type*} [Fintype a] (p : Prop) [Decidable p]
     (A B : Matrix a a ℂ) :
     Matrix.trace (if p then A else B) = if p then Matrix.trace A else Matrix.trace B := by
   split_ifs <;> rfl
-
-private lemma trace_zero {a : Type*} [Fintype a] :
-    Matrix.trace (0 : Matrix a a ℂ) = 0 := by simp [Matrix.trace]
 
 private def toggle (k x : Fin 2) : Fin 2 := if k = 0 then x else 1 - x
 
@@ -184,7 +181,8 @@ private theorem amplitude (κ : Fin 4 → Fin 2) (σ : Fin 4 → Fin 4) :
   have hsqrtTwoNe : (↑(Real.sqrt 2) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2))
   simp [List.ofFn_succ, purifier_eq_single, single_mul_single_eq_if]
-  simp only [trace_ite, trace_zero, trace_single_eq_if, toggle_eq_iff_xor_eq]
+  simp only [trace_ite, Matrix.trace_zero, trace_single_eq_if,
+    toggle_eq_iff_xor_eq]
   simp [VFour_apply, physicalBondPattern, flipTuple, boolOfFin,
     CPSVExample410CorrelatedFlip.bondPattern, Fin.prod_univ_succ]
   have hcommPhysical := Bool.xor_comm (finTwoEquiv (pairEquiv (σ 0)).1)

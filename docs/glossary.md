@@ -451,10 +451,10 @@ model different levels of data and different sources.
   distinct blocks.
 - **Source:** the separated-representative reading of arXiv:1606.00608 §II.C,
   especially lines 264--301.
-- **Sanctioned bridges:** the inherited projection
-  `MPSTensor.IsNormalCanonicalFormBNT.toIsNormalCanonicalForm` and the public
-  projections `toHasIrreducibleBlocks`, `toIsLeftCanonicalBlockFamily`, and
-  `toHasPrimitiveBlocks` in its namespace.
+- **Sanctioned bridges:**
+  `MPSTensor.IsNormalCanonicalFormBNT.toIsNormalCanonicalForm`,
+  `MPSTensor.IsNormalCanonicalFormBNT.ofSeparatedData`, and
+  `MPSTensor.IsNormalCanonicalFormBNT.isBNT`.
 - **Caveat:** this is a one-representative-per-gauge-phase-class surface. It
   suppresses repeated copies and their power-sum coefficients; see
   `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex`. It is not equivalent by
@@ -502,8 +502,9 @@ model different levels of data and different sources.
 - `MPOTensor.IsVerticalCF` in `TNLean/MPS/MPDO/VerticalCF.lean` is the vertical
   basis decomposition with positive multiplicities, positive diagonal weights,
   and a coisometry `U` satisfying `U * Uᴴ = 1` (equivalently, `Uᴴ` is an
-  isometry), sourced to arXiv:1606.00608 lines 1901 and 1956. It requires both
-  the compressed block identity and exact reconstruction by `Uᴴ` and `U`.
+  isometry), sourced to arXiv:1606.00608 lines 1895--1921 and 1952--1956. It
+  requires both the compressed block identity and exact reconstruction by `Uᴴ`
+  and `U`.
   Reconstruction still permits an omitted all-zero complement because `Uᴴ * U`
   is the retained-support projection; see
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.

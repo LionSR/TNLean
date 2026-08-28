@@ -253,9 +253,10 @@ conjugated letters is the conjugated product.
 This carries the isometry invariance of the operator family used in the
 fusion identity of arXiv:1606.00608, Theorem IV.13(iii), lines 986--993 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem listProd_conj_of_conjTranspose_mul_self {S : Type*} [Fintype S]
-    [DecidableEq S] {b : ℕ} (U : Matrix S (Fin b) ℂ) (hU : Uᴴ * U = 1)
-    {n : ℕ} (F : Fin (n + 1) → Matrix (Fin b) (Fin b) ℂ) :
+theorem listProd_conj_of_conjTranspose_mul_self {S T : Type*} [Fintype S]
+    [Fintype T] [DecidableEq S] [DecidableEq T]
+    (U : Matrix S T ℂ) (hU : Uᴴ * U = 1)
+    {n : ℕ} (F : Fin (n + 1) → Matrix T T ℂ) :
     (List.ofFn fun l => U * F l * Uᴴ).prod = U * (List.ofFn F).prod * Uᴴ := by
   induction n with
   | zero => simp

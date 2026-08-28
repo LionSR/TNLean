@@ -117,14 +117,6 @@ noncomputable def dependentPhysicalSupportProj
   Matrix.blockDiagonal' fun k ↦
     Matrix.familySupportProj (F.sectorProductFamily k)
 
-/-- The range of the active-factor inclusion is the dependent physical
-support projection. -/
-theorem dependentSupportInclusion_range_eq_dependentPhysicalSupportProj
-    (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F) :
-    F.dependentSupportInclusion A * (F.dependentSupportInclusion A)ᴴ =
-      F.dependentPhysicalSupportProj := by
-  exact F.dependentSupportInclusion_range A
-
 /-- The dependent physical support fixes every transformed physical slice on
 the left. -/
 theorem dependentPhysicalSupportProj_mul_transformedPhysicalSlice

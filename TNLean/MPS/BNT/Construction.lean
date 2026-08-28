@@ -37,8 +37,7 @@ separated finite block families.
    a valid `IsBNT` structure with the required overlap and independence properties.
 
 4. **`IsNormalCanonicalFormBNT`**: normal-canonical separated hypotheses retained for
-   the primitive-transfer-map route. Its forgetful projections feed the explicit
-   separated-hypotheses lemmas.
+   the primitive-transfer-map route and used directly to construct an `IsBNT` witness.
 
 ## Design note on coefficients
 
@@ -90,27 +89,6 @@ namespace IsNormalCanonicalFormBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Project normal-CF-BNT hypotheses to blockwise irreducibility. -/
-theorem toHasIrreducibleBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
-    HasIrreducibleBlocks (d := d) A :=
-  hNCF.toIsNormalCanonicalForm.toHasIrreducibleBlocks
-
-/-- Project normal-CF-BNT hypotheses to left-canonical block-family normalization. -/
-theorem toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalFormBNT μ A) :
-    IsLeftCanonicalBlockFamily (d := d) A :=
-  hNCF.toIsNormalCanonicalForm.toIsLeftCanonicalBlockFamily
-
-/-- Project normal-CF-BNT hypotheses to blockwise primitive transfer maps. -/
-theorem toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
-    HasPrimitiveBlocks (d := d) A :=
-  hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
-
-/-- Project normal-CF-BNT hypotheses to self-overlap normalization. -/
-theorem toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
-    (hNCF : IsNormalCanonicalFormBNT μ A) :
-    HasNormalizedSelfOverlap (d := d) A :=
-  hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
 the BNT separation assumption. -/
@@ -254,7 +232,7 @@ end SeparatedBNT
 section SeparatedNormalBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Separated-hypotheses version of normal BNT cross-overlap decay.
 
@@ -283,44 +261,6 @@ theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
       (hLeft.leftCanonical k)
       hdim
 
-/-- The NT hypotheses already supply the `spans_mpv` and `eventually_li` hypotheses used by the
-proportional-FT / permutation arguments. The only missing ingredient for a full `IsBNT`
-construction is blockwise `Kraus.IsNormal`. -/
-theorem spans_mpv_and_eventually_li_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNCF : IsNormalCanonicalForm μ A)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
-    (∀ N : ℕ, ∃ c : Fin r → ℂ, ∀ σ : Fin N → Fin d,
-      mpv (toTensorFromBlocks μ A) σ = ∑ j : Fin r, c j * mpv (A j) σ) ∧
-    (∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N)) :=
-  ⟨spans_mpv_toTensorFromBlocks μ A,
-   exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-     (fun j => hNCF.overlap_tendsto_one j)
-     (fun i j hij =>
-       cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
-         hNCF.toHasIrreducibleBlocks
-         hNCF.toIsLeftCanonicalBlockFamily
-         hBlocks i j hij)⟩
-
-/-- Separated-hypotheses version of `IsNormalCanonicalFormBNT.isBNT`.
-
-Here `hNCF` supplies normality via the primitive-transfer-map characterization from
-`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `Kraus.IsNormal`
-hypotheses (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes
-from the Wielandt / primitive-to-normal implication. -/
-theorem isBNT_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (hNCF : IsNormalCanonicalForm μ A)
-    (hNormal : ∀ j, Kraus.IsNormal (A j))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
-    IsBNT (toTensorFromBlocks μ A) r dim A := by
-  obtain ⟨hSpans, hLI⟩ :=
-    spans_mpv_and_eventually_li_of_separated_normal_bnt_data μ A hNCF hBlocks
-  exact ⟨hNormal, fun N _ => hSpans N, hLI⟩
-
 end SeparatedNormalBNT
 
 namespace IsNormalCanonicalFormBNT
@@ -341,11 +281,17 @@ decomposition. The restriction is documented in
 lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, Kraus.IsNormal (A j)) :
-    IsBNT (toTensorFromBlocks μ A) r dim A :=
-  isBNT_of_separated_normal_bnt_data μ A
-    hNCF.toIsNormalCanonicalForm
-    hNormal
-    hNCF.blocks_not_equiv
+    IsBNT (toTensorFromBlocks μ A) r dim A where
+  normal := hNormal
+  spans_mpv := fun N _ => spans_mpv_toTensorFromBlocks μ A N
+  eventually_li :=
+    exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
+      (fun j => hNCF.toIsNormalCanonicalForm.overlap_tendsto_one j)
+      (fun i j hij =>
+        cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
+          hNCF.toIsNormalCanonicalForm.toHasIrreducibleBlocks
+          hNCF.toIsNormalCanonicalForm.toIsLeftCanonicalBlockFamily
+          hNCF.blocks_not_equiv i j hij)
 
 end IsNormalCanonicalFormBNT
 
