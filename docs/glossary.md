@@ -514,7 +514,7 @@ model different levels of data and different sources.
   `MPOTensor.IsSimpleCanonicalForm.isHorizontalCF`. It is not a quotient by
   nonzero scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
-- `MPOTensor.IsSimple` in `TNLean/MPS/MPDO/SourceSimpleTensor.lean` is the sole
+- `MPOTensor.IsSimple` in `TNLean/MPS/MPDO/Simple.lean` is the sole
   simplicity predicate: Definition 4.7 of arXiv:1606.00608 at lines 815--822
   read over the canonical blocks of lines 217--246. It existentially chooses a
   positive physical blocking whose doubled-index tensor has a BNT sector

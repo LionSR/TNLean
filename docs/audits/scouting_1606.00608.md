@@ -395,7 +395,7 @@ TNLean/Entropy/
 ```
 TNLean/MPDO/
 ├── ... (Tier 3 files)
-├── SourceSimpleTensor.lean      -- active Def 4.7 reading and strengthened nonvanishing
+├── Simple.lean                  -- active Def 4.7 reading and strengthened nonvanishing
 ├── EtaStructure.lean            -- Lem C.3: SAL ⟹ isometry + η_{k,h} + primitive T
 ├── GibbsForm.lean               -- §4.4: GSNNCH definition (Def 4.8), Prop C.6 (commuting form)
 ├── SimpleRFP.lean               -- Thm 4.9: (i)⟹(ii)⟺(iii)⟹(iv)⟹(v)
