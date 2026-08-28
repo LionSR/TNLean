@@ -351,7 +351,9 @@ def main() -> int:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
-            page.goto(f"{base_url}/{filename}", wait_until="load")
+            # The MPDO-RFP page is large; do not wait for every unrelated asset.
+            # The fixture pictures have their own readiness check below.
+            page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
             # Wait for the generated flex shell before exposing descendants.
             page.locator("div.content").wait_for(state="visible")
             # Pin the test fixture's reading column as well as the production
