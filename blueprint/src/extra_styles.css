@@ -41,6 +41,14 @@ div.proof_content {
 	height: auto;
 }
 
+/* Claim the available reading-column width explicitly. The generated theme
+ * otherwise uses only max-width here, so inline-size-contained equations can
+ * leave Chromium with a zero-width intrinsic flex item. */
+div.content-wrapper {
+	width: 100%;
+	min-width: 0;
+}
+
 /* A text-mode tensor-network equation keeps each SVG outside MathJax while
  * laying the pictures and their operator text out as one equation row. */
 .tenkz-equation {
