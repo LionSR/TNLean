@@ -388,13 +388,22 @@ def main() -> int:
             # The fixture pictures have their own readiness check below.
             page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
             # Settle MathJax before measuring selectable operators between the
-            # pictures. The bundle is asynchronous even after DOMContentLoaded.
+            # pictures. The bundle is served from the local route above, but
+            # typesetting the large MPDO pages still takes minutes on loaded
+            # runners, so budget generously: a page whose MathJax never starts
+            # still fails, just later.
             page.wait_for_function(
                 "() => window.MathJax && window.MathJax.startup"
                 " && window.MathJax.startup.promise",
-                timeout=120_000,
+                timeout=300_000,
             )
-            page.evaluate("() => window.MathJax.startup.promise")
+            # Wait out the typesetting pass as well; otherwise the evaluate
+            # inherits playwright's default 30s budget, the same loaded-runner
+            # flake one step later.
+            page.evaluate(
+                "() => window.MathJax.startup.promise",
+                timeout=300_000,
+            )
             equations = page.locator(".tenkz-equation")
             # Ignore unrelated chapter pictures: only these fixtures contribute
             # to the row geometry checked below.
