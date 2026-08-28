@@ -18,7 +18,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-set_option linter.style.longLine false in
 /-- Under the PGVWC07 source normalization, every block-diagonal periodic vector
 belongs to the sum of the open-boundary block spaces at the sharp source length.
 The positive dual fixed points are used only by the tuple-span/intersection layer;
@@ -28,7 +27,7 @@ Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 proof lines 1346--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -63,7 +62,6 @@ theorem
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
-set_option linter.style.longLine false in
 /-- Under the source-shaped PGVWC07 hypotheses, the chain-ground-space
 containment is accompanied by independence of the open-boundary block spaces.
 
@@ -71,7 +69,7 @@ Source: arXiv:quant-ph/0608197, Theorem 12 direct-sum proof lines 1346--1421
 and canonical normalization lines 742--763 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+    chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -93,14 +91,13 @@ chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc
       iSupIndep (fun j : Fin r => groundSpace (A j) N) := by
   refine ⟨?_, ?_⟩
   · exact
-      chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+      chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_pgvwc07_of_dualFixedPoint
         μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
           hN hL hLN hRange
   · exact
       groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
         A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
-set_option linter.style.longLine false in
 /-- Every source-shaped PGVWC07 block-diagonal chain vector has a unique sum
 decomposition into the open-boundary spaces of the blocks.
 
@@ -108,7 +105,7 @@ Source: arXiv:quant-ph/0608197, Theorem 12 direct-sum proof lines 1346--1421
 and canonical normalization lines 742--763 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+    exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -134,10 +131,10 @@ theorem
             (∀ j, φ' j ∈ groundSpace (A j) N) →
               ψ = ∑ j, φ' j → φ' = φ := by
   classical
-  obtain ⟨hLe, hIndep⟩ := (
-chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+  obtain ⟨hLe, hIndep⟩ :=
+    chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
       μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
-        hN hL hLN hRange)
+        hN hL hLN hRange
   obtain ⟨φ, hφ, hφsum⟩ :=
     (Submodule.mem_iSup_iff_exists_finsupp
       (fun j : Fin r => groundSpace (A j) N) ψ).mp (hLe hψ)
@@ -156,7 +153,6 @@ chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc
   have hzero := hIndep Finset.univ (fun i => φ' i - φ i) hmem hsum j (Finset.mem_univ j)
   exact sub_eq_zero.mp hzero
 
-set_option linter.style.longLine false in
 /-- Under the source-shaped PGVWC07 hypotheses, a periodic vector of the block
 sum admits one block-diagonal open-boundary matrix. Its block components belong
 to the corresponding open-boundary block spaces.
@@ -165,7 +161,7 @@ Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 proof lines 1424--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+    exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -190,7 +186,7 @@ theorem
       ∀ j : Fin r,
         groundSpaceMap (A j) N ((μ j) ^ N • X j) ∈ groundSpace (A j) N := by
   have hOpen : ψ ∈ ⨆ j : Fin r, groundSpace (A j) N :=
-    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+    chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_pgvwc07_of_dualFixedPoint
       μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
         hN hL hLN hRange hψ
   exact BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace

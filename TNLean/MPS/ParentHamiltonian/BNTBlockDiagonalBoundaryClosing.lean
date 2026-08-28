@@ -309,7 +309,6 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
     omega
   · exact hψ
 
-set_option linter.style.longLine false in
 /-- A global change of cut closes the block-diagonal boundary conditions
 under the PGVWC07 source normalization: source unitality together with positive,
 full-rank dual fixed points. No left-canonical identity is assumed on the source
@@ -319,7 +318,7 @@ Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 global change-of-cut lines 1454--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r) (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -351,7 +350,7 @@ theorem
     μ A hBlk hL₀ hN hLN (by omega)
   · intro φ hφ
     obtain ⟨X, hX, _⟩ :=
-      exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
+      exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint
         μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
           hN hL hLN hRange hφ
     exact ⟨X, hX⟩
@@ -360,7 +359,6 @@ theorem
     omega
   · exact hψ
 
-set_option linter.style.longLine false in
 /-- Under the PGVWC07 source normalization, the periodic chain space of
 the block sum is the sum of the periodic block spaces, and the open-boundary
 block spaces are independent. This is the unrestricted source-shaped chain-space
@@ -370,7 +368,7 @@ Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 proof lines 1424--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -398,7 +396,7 @@ theorem
         ⨆ j : Fin r, chainGroundSpace (A j) L N :=
     chainGroundSpace_toTensorFromBlocks_le_iSup_of_blockDiagonal_boundary_groundSpaceMap
       μ A (fun ψ hψ ↦
-      exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+      exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint
           μ A hr hμ hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
             hRange hNlarge hψ)
   refine ⟨?_, ?_⟩
@@ -409,14 +407,13 @@ theorem
       groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
         A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
-set_option linter.style.longLine false in
 /-- The unrestricted PGVWC07 source-shaped periodic chain-space equality.
 
 Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 proof lines 1424--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -436,11 +433,10 @@ theorem
     (hNlarge : L + L₀ ≤ N) :
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
       ⨆ j : Fin r, chainGroundSpace (A j) L N :=
-  (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+  (chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
     μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
       hRange hNlarge).1
 
-set_option linter.style.longLine false in
 /-- Under the unrestricted PGVWC07 source normalization, blockwise periodic
 uniqueness implies containment of the block-sum parent-Hamiltonian kernel in the
 span of the BNT matrix product vectors.
@@ -449,7 +445,7 @@ Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 proof lines 1424--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -477,11 +473,10 @@ theorem
   refine ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan
     μ A hN hLN ?_ hBlock
   exact le_of_eq
-    (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    (chainGroundSpace_toTensorFromBlocks_eq_iSup_pgvwc07_of_dualFixedPoint
       μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
         hRange hNlarge)
 
-set_option linter.style.longLine false in
 /-- The parent-Hamiltonian kernel of the unrestricted PGVWC07 source-shaped block
 sum is exactly the span of its periodic component vectors.
 
@@ -489,7 +484,7 @@ Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
 Theorem 12 proof lines 1424--1456 in
 `Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
-    ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -525,7 +520,7 @@ theorem
   have hNstrict : L₀ + 1 < N := by omega
   apply le_antisymm
   · apply
-      ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+      ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
         μ A hμ hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital
           hRange hNlarge
     intro j
@@ -534,7 +529,6 @@ theorem
   · exact bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
       μ A hμ hN hLN
 
-set_option linter.style.longLine false in
 /-- At the length bound of Perez-Garcia, Verstraete, Wolf, and Cirac, the
 periodic chain space of a normalized BNT block sum is the sum of the periodic
 chain spaces of its blocks, while the open-boundary block spaces are independent.
@@ -567,7 +561,7 @@ theorem
         ⨆ j : Fin r, chainGroundSpace (A j) L N ∧
       iSupIndep (fun j : Fin r ↦ groundSpace (A j) N) := by
   apply
-    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint
       μ A hμ hr hIrr hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
         (fun j ↦ ?_) hBlk hL₀ hUnital hRange hNlarge
   simpa [Kraus.transferMap] using hLeft.leftCanonical j
@@ -636,7 +630,6 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
     (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
       μ A hμ hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge)
 
-set_option linter.style.longLine false in
 /-- At the PGVWC07 source range, the parent-Hamiltonian kernel of the normalized
 BNT block direct sum is exactly the span of the periodic component vectors.
 
@@ -670,7 +663,7 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
       (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
   apply
-    ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
+    ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_pgvwc07_of_dualFixedPoint
       μ A hμ hr hIrr hBlocks (fun _ ↦ 1) (fun _ ↦ Matrix.PosDef.one)
         (fun j ↦ ?_) hBlk hL₀ hUnital hRange hNlarge
   simpa [Kraus.transferMap] using hLeft.leftCanonical j
