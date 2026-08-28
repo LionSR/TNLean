@@ -354,48 +354,28 @@ def main() -> int:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
             # The fixture pictures have their own readiness check below.
             page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
-            # Pin the test shell and reading column as well as the production
-            # stylesheet. This makes geometry independent of delayed theme/UI
-            # initialization on Chromium's very large MPDO-RFP page.
-            page.add_style_tag(content="""
-              body, div.wrapper, div.content {
-                display: flex !important;
-              }
-              div.content {
-                width: 100% !important;
-              }
-              div.content-wrapper, div.main-text {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 600px !important;
-              }
-            """)
+            # Settle MathJax before measuring selectable operators between the
+            # pictures. The bundle is asynchronous even after DOMContentLoaded.
+            page.wait_for_function(
+                "() => window.MathJax && window.MathJax.startup"
+                " && window.MathJax.startup.promise",
+                timeout=120_000,
+            )
+            page.evaluate("() => window.MathJax.startup.promise")
             equations = page.locator(".tenkz-equation")
+            # Ignore unrelated chapter pictures: only these fixtures contribute
+            # to the row geometry checked below.
             page.wait_for_function("""() =>
-              [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
+              [...document.querySelectorAll('.tenkz-equation .tenkz-pic')]
+                .every(image => image.complete)
             """)
-            # Expand proofs only after the page and its pictures are ready. The
-            # generated UI can otherwise apply its cookie-selected detail level
-            # after an earlier test action and hide these geometry fixtures.
+            # Exercise the shipped layout, not a test-only width override.
             page.wait_for_function("() => typeof window.showmore_update === 'function'")
-            visibility = equations.evaluate_all("""nodes => {
-              showmore_update(2);
-              for (const node of nodes) {
-                for (let ancestor = node; ancestor; ancestor = ancestor.parentElement) {
-                  const style = getComputedStyle(ancestor);
-                  if (style.display === 'none') {
-                    ancestor.style.setProperty('display', 'block', 'important');
-                  }
-                  if (style.visibility === 'hidden') {
-                    ancestor.style.setProperty('visibility', 'visible', 'important');
-                  }
-                }
-              }
-              return nodes.map(node => ({
-                width: node.offsetWidth,
-                height: node.offsetHeight,
-              }));
-            }""")
+            page.evaluate("showmore_update(2)")
+            visibility = equations.evaluate_all("""nodes => nodes.map(node => ({
+              width: node.offsetWidth,
+              height: node.offsetHeight,
+            }))""")
             assert all(fact["width"] > 0 and fact["height"] > 0 for fact in visibility), (
                 filename,
                 visibility,
