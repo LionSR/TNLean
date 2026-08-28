@@ -829,16 +829,14 @@ theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
   exact parentHamiltonian_unique_gs hA hL₀ (by omega) hN
 
-set_option linter.unusedVariables false in
 /-- Unique ground state for normal tensors at range \(L₀+1\) on every ring
 with \(L₀+1\le N\): \(\dim \mathcal G_{N,L₀+1}(A)=1\). This is
 arXiv:2011.12127, Section IV.C, lines 2086--2094.
 
 The normality hypothesis is redundant because positive-length block injectivity already
 implies normality; it is retained in this specialization. -/
-@[nolint unusedArguments]
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : Kraus.IsNormal A) (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {L₀ : ℕ} (_hA : Kraus.IsNormal A) (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
   exact parentHamiltonian_unique_gs hInj hL₀ (by omega) hN

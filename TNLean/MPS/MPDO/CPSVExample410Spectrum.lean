@@ -150,15 +150,6 @@ private lemma bellEmbedding_isometry : bellEmbeddingᴴ * bellEmbedding = 1 := b
       Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)] <;>
     norm_num
 
-set_option linter.unusedFintypeInType false in
-private lemma reindex_isometry {a b a' b' : Type*} [Fintype a] [Fintype b]
-    [Fintype a'] [Fintype b'] [DecidableEq b] [DecidableEq b']
-    (A : Matrix a b ℂ) (ha : a ≃ a') (hb : b ≃ b') (hA : Aᴴ * A = 1) :
-    (Matrix.reindex ha hb A)ᴴ * Matrix.reindex ha hb A = 1 := by
-  rw [Matrix.conjTranspose_reindex]
-  change Aᴴ.submatrix hb.symm ha.symm * A.submatrix ha.symm hb.symm = 1
-  rw [Matrix.submatrix_mul_equiv, hA, Matrix.submatrix_one_equiv]
-
 private lemma rawFour_isometry : rawFourᴴ * rawFour = 1 := by
   apply Matrix.IsIsometry.kronecker bellEmbedding _ bellEmbedding_isometry
   apply Matrix.IsIsometry.kronecker bellEmbedding _ bellEmbedding_isometry
@@ -166,7 +157,7 @@ private lemma rawFour_isometry : rawFourᴴ * rawFour = 1 := by
     bellEmbedding_isometry
 
 private theorem VFour_isometry : VFourᴴ * VFour = 1 :=
-  reindex_isometry rawFour rowFourEquiv (Equiv.refl _) rawFour_isometry
+  Matrix.IsIsometry.reindex rawFour rawFour_isometry rowFourEquiv (Equiv.refl _)
 
 private theorem amplitude (κ : Fin 4 → Fin 2) (σ : Fin 4 → Fin 4) :
     Matrix.trace ((List.ofFn fun l => purifier (σ l) (κ l)).prod) =
@@ -430,7 +421,7 @@ private lemma VThree_apply (σ : Fin 3 → Fin 4) (x : Bool × Bool × Bool × B
   rfl
 
 private lemma VThree_isometry : VThreeᴴ * VThree = 1 := by
-  apply reindex_isometry rawThree rowThreeEquiv (Equiv.refl _)
+  apply Matrix.IsIsometry.reindex rawThree _ rowThreeEquiv (Equiv.refl _)
   apply Matrix.IsIsometry.kronecker bitEmbedding _ bitEmbedding_isometry
   apply Matrix.IsIsometry.kronecker bellEmbedding _ bellEmbedding_isometry
   exact Matrix.IsIsometry.kronecker bellEmbedding bitEmbedding bellEmbedding_isometry
@@ -459,7 +450,7 @@ private lemma VTwo_apply (σ : Fin 2 → Fin 4) (x : Bool × Bool × Bool) :
   rfl
 
 private lemma VTwo_isometry : VTwoᴴ * VTwo = 1 := by
-  apply reindex_isometry rawTwo rowTwoEquiv (Equiv.refl _)
+  apply Matrix.IsIsometry.reindex rawTwo _ rowTwoEquiv (Equiv.refl _)
   apply Matrix.IsIsometry.kronecker bitEmbedding _ bitEmbedding_isometry
   exact Matrix.IsIsometry.kronecker bellEmbedding bitEmbedding bellEmbedding_isometry
     bitEmbedding_isometry
@@ -482,7 +473,7 @@ private lemma VOne_apply (σ : Fin 1 → Fin 4) (x : Bool × Bool) :
   rfl
 
 private lemma VOne_isometry : VOneᴴ * VOne = 1 := by
-  apply reindex_isometry rawOne rowOneEquiv (Equiv.refl _)
+  apply Matrix.IsIsometry.reindex rawOne _ rowOneEquiv (Equiv.refl _)
   exact Matrix.IsIsometry.kronecker bitEmbedding bitEmbedding bitEmbedding_isometry
     bitEmbedding_isometry
 
