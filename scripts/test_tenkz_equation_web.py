@@ -352,30 +352,19 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Several source-linked rows live in content collapsed by the
-            # Blueprint UI. Reveal every hidden ancestor of an equation so this
-            # geometry test is independent of asynchronous toggle setup in
-            # headless browsers.
+            # Wait for the Blueprint UI to finish exposing its main flex
+            # layout. On slower headless runners the window load event can fire
+            # while the page wrapper is still hidden.
+            page.locator("div.content").wait_for(state="visible")
+            # Several source-linked rows live in proofs, which the Blueprint UI
+            # collapses by default. Reveal them so geometry is measured rather
+            # than inferred from zero-sized hidden descendants.
+            page.add_style_tag(content=".proof_content { display: block !important; }")
             equations = page.locator(".tenkz-equation")
-            equations.evaluate_all("""nodes => {
-              for (const node of nodes) {
-                for (let ancestor = node; ancestor; ancestor = ancestor.parentElement) {
-                  const style = getComputedStyle(ancestor);
-                  if (style.display === "none") {
-                    ancestor.style.setProperty("display", "block", "important");
-                  }
-                  if (style.visibility === "hidden") {
-                    ancestor.style.setProperty("visibility", "visible", "important");
-                  }
-                  if (style.opacity === "0") {
-                    ancestor.style.setProperty("opacity", "1", "important");
-                  }
-                }
-              }
-            }""")
             page.wait_for_function("""() =>
               [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
             """)
+            equations.first.wait_for(state="visible")
             assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
             collected.extend(_equation_facts(page))
             _assert_desktop_rows(page)
