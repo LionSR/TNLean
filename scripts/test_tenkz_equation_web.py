@@ -352,6 +352,13 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
+            # The generated page exposes its flex layout asynchronously on the
+            # Linux runner; do not normalize descendants while their column is
+            # still zero-width.
+            page.locator("div.content").wait_for(state="visible")
+            page.wait_for_function(
+                "() => document.querySelector('.main-text')?.clientWidth > 0"
+            )
             equations = page.locator(".tenkz-equation")
             page.wait_for_function("""() =>
               [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
