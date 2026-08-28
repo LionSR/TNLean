@@ -14,10 +14,10 @@ The campaign covers the MPDO/RFP development sourced from
 `Papers/1606.00608/MPDO-22-12-17-2.tex`, Blueprint Chapters 20, 21,
 and 26, and the normal-tensor, canonical-form, BNT, and Wielandt
 prerequisites used by those chapters. The source paper itself is unchanged.
-Excluding this record, the integrated tracked diff contains 28 files:
-19 Lean sources, four Blueprint chapter sources, and five audit, glossary, or
-paper-gap documents. It has 126 added and 410 deleted lines, for a net reduction
-of 284 lines. The Lean part removes or stops storing 35 named declarations,
+Excluding this record, the integrated tracked diff contains 29 files:
+20 Lean sources, four Blueprint chapter sources, and five audit, glossary, or
+paper-gap documents. It has 118 added and 398 deleted lines, for a net reduction
+of 280 lines. The Lean part removes or stops storing 33 named declarations,
 private helpers, or structure fields while preserving the substantive tagged
 results.
 
@@ -86,15 +86,18 @@ the generalized owner.
 `TNLean/MPS/RFP/BellPairCIDObstruction.lean` removes the private matrix
 `pauliZ` and its private square and trace lemmas. The proofs use
 `SpinCover.pauli 2`, `SpinCover.pauli_mul_eq`, and `SpinCover.trace_pauli` from
-QICLean. `TNLean/MPS/MPDO/CPSVExample410Spectrum.lean` removes the private
-`single_mul_single_eq_if`, `trace_single_eq_if`, and `trace_zero` shadows and
-uses the corresponding `Matrix.single_mul_single_same`,
-`Matrix.single_mul_single_of_ne`, `Matrix.trace_single_eq_same`,
-`Matrix.trace_single_eq_of_ne`, and `Matrix.trace_zero` facts.
+QICLean. `TNLean/MPS/MPDO/CPSVExample410Spectrum.lean` retains the private
+`single_mul_single_eq_if` and `trace_single_eq_if` lemmas as readable local
+interfaces, proved from `Matrix.single_mul_single_same`,
+`Matrix.single_mul_single_of_ne`, `Matrix.trace_single_eq_same`, and
+`Matrix.trace_single_eq_of_ne`. It removes only the private `trace_zero` shadow
+and uses `Matrix.trace_zero` directly.
 
 `TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean` removes the private
-index restatement `fourthRegion_retained_internal_index` in favour of
-`Fin.succAbove_last_apply`, together with the three private equality wrappers
+index restatement `fourthRegion_retained_internal_index`, which is subsumed by
+`Fin.succAbove_last_apply`; the two call sites prove the required equality
+directly by extensionality and simplification. It also removes the three private
+equality wrappers
 `partialTraceRight_neighboringOperator_eq_of_right`,
 `partialTraceLeft_neighboringOperator_eq_of_left`, and
 `neighboringOperator_trace_eq_of_eq`. Their intended replacements are direct
@@ -198,7 +201,7 @@ status of the following active boundaries:
 
 ## Validation
 
-All 19 modified Lean modules pass targeted cached `lake build` checks, with zero
+All 20 modified Lean modules pass targeted cached `lake build` checks, with zero
 warnings. No changed Lean file contains `sorry` or `axiom`, and no build target
 remains blocked. In particular, the dependent-index substitutions and final
 simplification in `CyclicActiveFourthRegionContraction.lean` were repaired, and

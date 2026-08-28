@@ -110,12 +110,13 @@ label Ualphabeta: a family of tensors indexed by BNT labels, positive diagonal
 chi matrices, and per-pair isometries conjugating the product tensor onto the
 chi-weighted direct sum of the labelled tensors.
 
-The tensors are the vertically read basis of normal tensors of
-Proposition IV.12: the physical dimension `p` is the bond dimension of the
-original tensor, and each label carries its own bond dimension. The direct
-sum is realized block-diagonally over the labels, with the block of label
-`γ` the Kronecker product of the diagonal matrix `χ_{α,β,γ}` and the letter
-of the tensor of `γ`.
+In the tensor-attached applications, the tensors are supplied by the vertically
+read basis of normal tensors of Proposition IV.12, and `p` is instantiated by
+the bond dimension of the original tensor. The structure itself records only a
+labelled family with common physical dimension `p`, where each label carries
+its own bond dimension. The direct sum is realized block-diagonally over the
+labels, with the block of label `γ` the Kronecker product of the diagonal matrix
+`χ_{α,β,γ}` and the letter of the tensor of `γ`.
 
 Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/

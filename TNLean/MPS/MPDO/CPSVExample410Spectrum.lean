@@ -46,6 +46,24 @@ noncomputable section
 namespace MPOTensor.CPSVExample410Spectrum
 open MPOTensor MPOTensor.CPSVExample410Operator
 
+private lemma single_mul_single_eq_if {a b c : Type*} [Fintype b]
+    [DecidableEq a] [DecidableEq b] [DecidableEq c]
+    (i : a) (j k : b) (l : c) (x y : ℂ) :
+    Matrix.single i j x * Matrix.single k l y =
+      if j = k then Matrix.single i l (x * y) else 0 := by
+  split_ifs with h
+  · subst k
+    exact Matrix.single_mul_single_same x i j l y
+  · exact Matrix.single_mul_single_of_ne x i j k h y
+
+private lemma trace_single_eq_if {a : Type*} [Fintype a] [DecidableEq a]
+    (i j : a) (x : ℂ) :
+    Matrix.trace (Matrix.single i j x) = if i = j then x else 0 := by
+  split_ifs with h
+  · subst j
+    exact Matrix.trace_single_eq_same i x
+  · exact Matrix.trace_single_eq_of_ne i j x h
+
 private lemma trace_ite {a : Type*} [Fintype a] (p : Prop) [Decidable p]
     (A B : Matrix a a ℂ) :
     Matrix.trace (if p then A else B) = if p then Matrix.trace A else Matrix.trace B := by
@@ -162,23 +180,8 @@ private theorem amplitude (κ : Fin 4 → Fin 2) (σ : Fin 4 → Fin 4) :
     norm_num
   have hsqrtTwoNe : (↑(Real.sqrt 2) : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2))
-  simp [List.ofFn_succ, purifier_eq_single,
-    show ∀ (i j k l : Fin 2) (x y : ℂ),
-        Matrix.single i j x * Matrix.single k l y =
-          if j = k then Matrix.single i l (x * y) else 0 by
-      intro i j k l x y
-      split_ifs with h
-      · subst k
-        exact Matrix.single_mul_single_same x i j l y
-      · exact Matrix.single_mul_single_of_ne x i j k h y]
-  simp only [trace_ite, Matrix.trace_zero,
-    show ∀ (i j : Fin 2) (x : ℂ),
-        Matrix.trace (Matrix.single i j x) = if i = j then x else 0 by
-      intro i j x
-      split_ifs with h
-      · subst j
-        exact Matrix.trace_single_eq_same i x
-      · exact Matrix.trace_single_eq_of_ne i j x h,
+  simp [List.ofFn_succ, purifier_eq_single, single_mul_single_eq_if]
+  simp only [trace_ite, Matrix.trace_zero, trace_single_eq_if,
     toggle_eq_iff_xor_eq]
   simp [VFour_apply, physicalBondPattern, flipTuple, boolOfFin,
     CPSVExample410CorrelatedFlip.bondPattern, Fin.prod_univ_succ]

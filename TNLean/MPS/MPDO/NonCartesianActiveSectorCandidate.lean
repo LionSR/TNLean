@@ -25,11 +25,11 @@ strictly positive and satisfies \(T^2=T^3\) but not \(T^2=T\).  The four
 matrices \(l_k r_k\) span the full two-by-two matrix algebra.
 
 Unlike the earlier active-sector witness, the selected projective left and
-right factors are pairwise distinct.  Thus the displayed sectors do not
-arise from a Cartesian product of two binary coordinates.  The statements
-in this file establish the finite-dimensional algebraic data only; they do
-not yet assert that every physical-sector factorization retains these four
-sectors.
+right factors are pairwise distinct, as is immediate from the second row of
+\(L\) and the second column of \(R\).  Thus the displayed sectors do not arise
+from a Cartesian product of two binary coordinates.  The statements in this
+file establish the finite-dimensional algebraic data only; they do not yet
+assert that every physical-sector factorization retains these four sectors.
 
 This construction concerns the gap in arXiv:1606.00608, Appendix C.2,
 Proposition `prop2to3`, lines 1740--1782.
