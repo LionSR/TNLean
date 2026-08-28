@@ -9,10 +9,10 @@ Repository-wide prose search finds only dated inventory snapshots in
 `docs/audits/`. These records describe earlier tree states; they neither
 prescribe an import nor present either module as a current public interface.
 
-## Retained: `TNLean/Algebra/BlockTriangularTrace.lean`
+## Retained: `TNLean/MPS/Core/BlockTriangularTrace.lean`
 
-The whole module is reachable only through the generated `TNLean.Algebra`
-aggregator. It contains the following substantive public declarations:
+The module is reachable through the generated `TNLean.MPS.Core` aggregator. It
+contains the following substantive public declarations:
 
 - `MPSTensor.upperSum`;
 - `MPSTensor.diagSum`;
@@ -25,21 +25,27 @@ aggregator. It contains the following substantive public declarations:
 - `MPSTensor.mpv_upperFin_eq_mpv_diagFin`;
 - `MPSTensor.sameMPV_upperFin_diagFin`.
 
-These declarations are not literal pass-throughs, but their mathematical
-content is the two-block coordinate specialization of the projection-based API
-in `TNLean/Algebra/ProjectionTriangularTrace.lean`. In particular,
-`MPSTensor.sameMPV_diagPart_of_lowerZero` is the coordinate-free strict
-generalization of `MPSTensor.sameMPV_upperFin_diagFin`, with the remaining
-projection lemmas supplying the corresponding word-evaluation and trace
-statements.
+Issue #7135 completed the compatibility transition. The implementation now
+uses the orthogonal projection obtained by reindexing
+`Matrix.fromBlocks 1 0 0 0` along `finSumFinEquiv`; its complement is
+`Matrix.fromBlocks 0 0 0 1`. The exact replacement relation is:
 
-Issue #7135 tracks the missing compatibility transition: the ten coordinate
-names are to be rederived as thin specializations of the projection API before
-deprecation is considered. Until then they do not satisfy the
-immediate-removal exception in `docs/project_conventions.md`, which is limited
-to exact pass-through declarations, bundled fields, and proof-step names
-replaced at their use sites. The module and its aggregator import therefore
-remain available.
+| Retained coordinate declaration | Projection-based implementation |
+|---|---|
+| `MPSTensor.upperSum` | Definition `fun i ↦ Matrix.fromBlocks (A11 i) (A12 i) 0 (A22 i)` |
+| `MPSTensor.diagSum` | Definition `fun i ↦ Matrix.fromBlocks (A11 i) 0 0 (A22 i)` |
+| `MPSTensor.upperFin` | `upperSum` reindexed along `finSumFinEquiv` |
+| `MPSTensor.diagFin` | The same reindexing of `diagSum`; the bridge proves it is `Kraus.diagPart upperFin coordProj` |
+| `MPSTensor.trace_fromBlocks_upper` | `Matrix.trace_eq_trace_diag_of_proj` plus the two block-compression identities |
+| `MPSTensor.evalWord_upperSum_is_fromBlocks` | `Kraus.lowerZero_evalWord` and `Kraus.evalWord_diagPart_eq`, transported through `finSumFinEquiv` |
+| `MPSTensor.evalWord_diagSum_is_fromBlocks` | The two diagonal inclusion intertwiners, via `Kraus.evalWord_intertwine` |
+| `MPSTensor.trace_evalWord_upperSum_eq_trace_evalWord_diagSum` | `Kraus.trace_evalWord_diagPart_eq` plus the `diagPart_upperFin` and trace-reindex bridges |
+| `MPSTensor.mpv_upperFin_eq_mpv_diagFin` | Pointwise specialization of `MPSTensor.sameMPV_diagPart_of_lowerZero` through `diagPart_upperFin` |
+| `MPSTensor.sameMPV_upperFin_diagFin` | Direct specialization of `MPSTensor.sameMPV_diagPart_of_lowerZero` through `diagPart_upperFin` |
+
+Thus no independent word induction remains in the coordinate module, and the
+coordinate names are compatibility wrappers around the projection argument.
+They remain available; deletion and deprecation are outside #7135.
 
 ## Retired: `TNLean/Wielandt/RankOne/MatrixFittingRange.lean`
 
