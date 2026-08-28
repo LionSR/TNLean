@@ -352,14 +352,11 @@ def main() -> int:
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
         for filename in PAGES:
             page.goto(f"{base_url}/{filename}", wait_until="load")
-            # Wait for the Blueprint UI to finish exposing its main flex
-            # layout. On slower headless runners the window load event can fire
-            # while the page wrapper is still hidden.
-            page.locator("div.content").wait_for(state="visible")
-            # Several source-linked rows live in proofs, which the Blueprint UI
-            # collapses by default. Reveal them so geometry is measured rather
-            # than inferred from zero-sized hidden descendants.
-            page.add_style_tag(content=".proof_content { display: block !important; }")
+            # Use the Blueprint UI's own detail-level API to expose proofs.
+            # This avoids racing its document-ready handler, which otherwise can
+            # hide proof rows after a test-injected style or click has run.
+            page.wait_for_function("() => typeof window.showmore_update === 'function'")
+            page.evaluate("showmore_update(2)")
             equations = page.locator(".tenkz-equation")
             page.wait_for_function("""() =>
               [...document.querySelectorAll(".tenkz-pic")].every(image => image.complete)
