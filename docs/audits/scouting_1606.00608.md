@@ -70,7 +70,7 @@
 
 ## Section 4: Mixed States — MPDO (lines 620–1019)
 
-This is the paper's main novel contribution. **None of §4 is formalized.**
+This is the paper's main novel contribution. The tables preserve the original scouting status and record current coverage where later work has changed it.
 
 ### §4.1 MPDO Definition + RFP Definition (Def 4.1)
 
@@ -92,9 +92,9 @@ This is the paper's main novel contribution. **None of §4 is formalized.**
 
 | Item | Description | Formalizability | Our Status |
 |------|-------------|-----------------|------------|
-| **Def 4.2: ZCL (mixed)** `DefinitionZCL` | Transfer matrix equation: tr(M·M) = tr(M)·tr(M) (graphical) | Medium | Not formalized. |
-| **Def 4.3: PRFP** `def:Puri-RFP` | Purification RFP — M is PRFP if purification A is RFP | Medium | Not formalized. Requires purification construction. |
-| **Thm 4.4 (PRFP ⟺ ZCL ⟺ form (27))** | For MPDO with MPS purification | Medium-Hard | Not formalized. |
+| **Def 4.2: ZCL (mixed)** `DefinitionZCL` | Physical-trace transfer idempotence $\mathcal T_M^2=\mathcal T_M$ (graphical) | Medium | Historical scouting status: not formalized. Current status (2026-08-28): formalized by `MPOTensor.IsPhysicalTraceIdempotent` and Blueprint `def:mpo_physical_trace_idempotence`. |
+| **Def 4.3: PRFP** `def:Puri-RFP` | Purification RFP — M is PRFP if purification A is RFP | Medium | Historical scouting status: not formalized. Current status (2026-08-28): formalized by `MPOTensor.IsPRFP` using the one-site ancillary-contraction presentation introduced at `Psipuri`; the global family equation is a proved consequence. |
+| **Thm 4.4 (PRFP ⟺ ZCL ⟺ form (27))** | For MPDO with MPS purification | Medium-Hard | Historical scouting status: not formalized. Current status (2026-08-28): the forward implication to literal physical-trace idempotence is proved by `MPOTensor.IsPRFP.isPhysicalTraceIdempotent`; the local-presentation converse between clauses (i) and (ii) is proved by `MPOTensor.isPRFP_iff_isLPDO_and_physTraceTransfer_sq`; only equivalence with clause (iii), the repeated-copy density formula, remains not ready. |
 | **Limitation** | ZCL alone is too weak for mixed states (Example 4.10) | — | — |
 
 ### §4.4 Mutual Information & Area Law (Prop 4.5, Thm 4.9)

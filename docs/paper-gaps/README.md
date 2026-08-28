@@ -154,13 +154,13 @@ For MPDO renormalization fixed points:
   and the exact finite-chain bond product are formalized. Deriving recurrence
   from injectivity and choosing positive representatives coherently across
   the sector graph remain open.
-- `cpsv16_purification_rfp_definition.tex` records the distinction between
-  the printed global PRFP predicate, formalized here at positive chain lengths,
-  and the corrected local purification condition. A nonzero MPDO with a
-  trace-invisible nilpotent bond sector formally refutes the printed global
-  implication to literal physical-trace idempotence. The stronger
-  scale-invariant counterexample is retained separately, while the
-  local-purification equivalences remain restricted results.
+- `cpsv16_purification_rfp_definition.tex` records the adopted reading of
+  Definition 4.3 through the surrounding one-site purification presentation.
+  On this surface, PRFP is equivalent to literal physical-trace idempotence,
+  and the positive-length global purification equation is a consequence. The
+  nilpotent hidden-sector example separates the bare global-family equation
+  from the one-site presentation but is not a source counterexample. Only the
+  equivalence with Theorem 4.4's repeated-copy density form remains open.
 - `cpsv16_pure_zcl_local_orthogonality_scope.tex` records that the current
   pure-MPS ZCL theorem is a single-block idempotence/CID equivalence. The
   source theorem also includes the BNT-level local-orthogonality equations

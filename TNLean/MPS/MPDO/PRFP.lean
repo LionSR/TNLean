@@ -10,52 +10,39 @@ import TNLean.MPS.RFP.Defs
 /-!
 # Purification renormalization fixed points for MPDO tensors
 
-This file states the purification renormalization fixed-point data from
+This file states the purification renormalization fixed-point condition from
 arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete), Definition 4.3,
-lines 756--764.
+lines 744--764. Definition 4.3 inherits the one-site ancillary-contraction
+presentation `Psipuri` from lines 744--747: an MPO tensor `M` is the ancillary
+contraction of a pure-state RFP tensor `A`,
 
-The source definition is global in the system size: an MPO tensor `M` is written
-at each positive chain length as the ancillary trace of a pure MPS density matrix
+`M^{ij} = ∑_k A^{(i,k)} ⊗ conj(A^{(j,k)})`.
 
-`rho_p^(N)(M) = tr_a(|Psi^(N)(A)><Psi^(N)(A)|)`
-
-with the purifying spin-ancilla tensor `A` a pure-state RFP whose reduced
-density is obtained by tracing the ancillary legs. This file encodes that
-equality as an equality of the finite-chain matrices indexed by spin
-configurations.
-
-The source text immediately after Definition 4.3 observes that tracing the
-ancilla gives a trace-preserving completely positive map on the spin degrees of
-freedom. This structure is proved separately for the ancillary trace map.
-
-The predicate `IsPRFP` below records the displayed positive-length equation and
-pure-state transfer idempotence literally. It is a bare global predicate. Even
-MPDO positivity and a nonzero physical-trace transfer do not make its printed
-PRFP-to-ZCL implication valid, because positive-length traces can miss a
-nilpotent bond sector. The counterexample, the stronger local tensor predicate
-`IsNondegeneratePRFP`, and that local predicate's forward implication to source
-zero correlation length are in `TNLean.MPS.MPDO.LocalPurificationRFP`.
+The finite-chain formula `MPDO-Puri-1` at line 751 is the resulting global
+interpretation. `HasGlobalPurificationEquation` records that equation without
+replacing the source's one-site definition. The source text after Definition
+4.3 also observes that tracing the ancilla gives a trace-preserving completely
+positive map on the spin degrees of freedom.
 
 ## Main definitions
 
 * `MPOTensor.purificationTensor`: the spin-ancilla MPS tensor.
 * `MPOTensor.purificationDensity`: the finite-chain ancillary trace.
-* `MPOTensor.HasGlobalPurificationEquation`: the positive-length equation
-  at line 751.
+* `MPOTensor.HasGlobalPurificationEquation`: the finite-chain equation
+  `MPDO-Puri-1`.
+* `MPOTensor.HasPurificationRFPWitness`: the global-family equation together
+  with a pure-state RFP purifier.
 * `MPOTensor.ancillaryTraceMap`: the spin map obtained by tracing the ancilla.
 * `MPOTensor.HasTracePreservingSpinReduction`: the tpCPM condition for that map.
-* `MPOTensor.HasPurificationRFPWitness`: the source purification-RFP witness.
-* `MPOTensor.IsPRFP`: the bare positive-length global purification-RFP
-  predicate.
+* `MPOTensor.IsPRFP`: the source one-site ancillary-contraction predicate.
 
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  the global purification equation (line 751), Definition 4.3 (line 758), and the
-  tpCPM discussion after tracing ancillas (lines 761--764).
+  the purification presentation (lines 744--751), Definition 4.3
+  (lines 756--758), and the tpCPM discussion (lines 761--764).
 -/
-
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kronecker
 
 namespace MPOTensor
 
@@ -107,6 +94,20 @@ def HasGlobalPurificationEquation (M : MPOTensor d D)
     {dK D' : ℕ} (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) : Prop :=
   ∀ N : ℕ, 0 < N → mpo M N = purificationDensity A N
 
+/-- An MPO tensor has a **global-family purification RFP witness** when its
+positive-length density operators agree with those obtained from a purifying
+spin-ancilla tensor that is a pure-state renormalization fixed point.
+
+This predicate packages the finite-chain equation `MPDO-Puri-1` at
+arXiv:1606.00608, line 751, together with the RFP condition on the purifier. It
+does not assert the one-site ancillary-contraction presentation inherited by
+Definition 4.3, so it is strictly an auxiliary global-family condition rather
+than the source-facing definition `IsPRFP`. -/
+def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
+  ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
+    HasGlobalPurificationEquation M A ∧
+      MPSTensor.IsTransferIdempotent (purificationTensor A)
+
 /-- The post-ancilla spin reduction is trace-preserving and completely positive.
 This records the tpCPM described after arXiv:1606.00608, Definition 4.3
 (lines 761--764), without imposing the two-map mixed-state RFP
@@ -130,26 +131,31 @@ theorem hasTracePreservingSpinReduction (d dK : ℕ) :
     HasTracePreservingSpinReduction d dK :=
   ancillaryTraceMap_isKrausCPTP d dK
 
-/-- The bare positive-length purification-RFP witness from arXiv:1606.00608,
-Definition 4.3 (lines 756--764): there is a purifying spin-ancilla
-MPS tensor satisfying the global purification equation, and that purifying
-tensor is a pure-state renormalization fixed point.
+/-- An MPO tensor is a **purification renormalization fixed point** when
+it has the one-site ancillary-contraction presentation inherited by
+arXiv:1606.00608, Definition 4.3 from `Psipuri` (lines 744--758), and the
+purifying spin-ancilla MPS tensor is a pure-state renormalization fixed point.
 
-This witness predicate does not include the nondegeneracy implicit in the density
-operators of the equivalence theorem at lines 775--786, and therefore admits
-the zero purifying tensor. -/
-def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
-  ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ),
-    HasGlobalPurificationEquation M A ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
+Thus there are an ancillary dimension `dK`, a purifying bond dimension `D'`, a
+family `A^{(i,k)} ∈ M_{D'}(ℂ)`, and a bond-space identification
+`e : Fin D ≃ Fin D' × Fin D'` such that
 
-/-- Bare global purification renormalization fixed-point predicate: the tensor
-has a positive-length global purification-RFP witness as displayed in
-arXiv:1606.00608, Definition 4.3 (lines 756--764).
+`M^{ij} = (∑_k A^{(i,k)} ⊗ conj(A^{(j,k)})).submatrix e e`.
 
-The nondegenerate tensor-level predicate is `IsNondegeneratePRFP`; the distinction
-is forced by the zero-purifier obstruction documented in
-`docs/paper-gaps/cpsv16_purification_rfp_definition.tex`. -/
+**Local fix (intended presentation):** Definition 4.3 literally points to the
+finite-chain equation, but lines 744--763 first introduce the one-site tensor
+presentation, call the finite-chain equation its MPDO interpretation, and then
+return to the tensor in `Psipuri`. We retain both readings as separate predicates
+and use the standing one-site presentation here. Documented in
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex`.
+
+The finite-chain equation `MPDO-Puri-1` is a consequence of this one-site
+identity, not the definition itself. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
-  HasPurificationRFPWitness M
+  ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
+    (e : Fin D ≃ Fin D' × Fin D'),
+    (∀ i j : Fin d, M i j = (∑ k : Fin dK,
+      (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
+    ∧ MPSTensor.IsTransferIdempotent (purificationTensor A)
 
 end MPOTensor

@@ -47,9 +47,9 @@ idempotence of the physical-trace transfer `physTraceTransfer M`. The condition
 here is instead literal idempotence of the doubled-index completely positive
 map `transferMap M`. These are different transfer objects. The deviation is
 witnessed by
-`MPOTensor.exists_isLocalPurificationRFP_not_isZCL`: the rescaled purification
-`d = dK = 2`, `D = 1`, `A = [1/√2, 0, 0, 1/√2]` satisfies the local
-purification-RFP condition, yet its transfer map is `½ • id`, so
+`MPOTensor.exists_isPRFP_not_isZCL`: the rescaled purification
+`d = dK = 2`, `D = 1`, `A = [1/√2, 0, 0, 1/√2]` is a purification
+renormalization fixed point, yet its transfer map is `½ • id`, so
 `E_M ∘ E_M = ¼ • id ≠ E_M`; the trace contraction in the purification has dropped
 the leading eigenvalue from `1` to `½`. The predicate
 `IsPhysicalTraceIdempotent` records the paper's literal fixed-tensor diagram.

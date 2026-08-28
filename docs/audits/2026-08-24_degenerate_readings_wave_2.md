@@ -182,20 +182,21 @@ $Q=\bigl(\begin{smallmatrix}1&0&0\\0&0&1\\0&0&0\end{smallmatrix}\bigr)$, whose
 generated density operator is the scalar $1$ at every positive length while
 $Q^2$ loses the $(2,3)$ entry — lie outside the convention.
 
-This item is withdrawn and the witnesses are restored. Retiring them is
-admissible only once the intended reading is carried by the predicate itself,
-and `MPOTensor.IsPRFP` does not carry it: it is the bare positive-length global
-witness, with no canonical-form clause, so $Q$ remains a witness against the
-predicate as written. Nor can the clause simply be added: Definition 4.3 and
-the theorem at lines 777–784 state their hypothesis as the purification
-equation alone, without the "in CF" qualification the source attaches
-explicitly to Definition 4.1 (line 659) and to Theorem 3.11 (line 543); and a
-canonical-form field on `IsPRFP` would break
-`MPOTensor.isPRFP_of_isLocalPurificationRFP`, since a tensor with a local
-purification identity need not be a canonical representative. Until a
-purification predicate carrying the source's standing presentation exists, the
-witnesses and the printed-status node stay. The obligation is recorded in the
-paper-gap note, whose `false-source` verdict is likewise unchanged.
+At the time of this audit, this item was withdrawn and the witnesses were
+restored because `MPOTensor.IsPRFP` recorded only positive-length global-family
+equality. The audit therefore correctly retained $Q$ against that predicate
+as it then stood.
+
+This current-status conclusion was superseded on 2026-08-28. Lines 744–763
+first give the one-site ancillary-contraction presentation `Psipuri`, interpret
+it as the global MPDO equation, and then continue with the same tensor $A$.
+`MPOTensor.IsPRFP` now carries that local presentation directly, without a
+canonical-form assumption. The nilpotent $Q$ example consequently separates
+global-family equality from the local presentation but is not a source
+counterexample. The obsolete source-counterexample declarations were removed,
+the local-presentation equivalence of clauses (i) and (ii) is proved, and the
+full Theorem 4.4 node remains `\notready` only for equivalence with clause (iii),
+the repeated-copy density form.
 
 **(ii) Two identical blocks are not a basis of normal tensors.** The
 duplicate-scalar example put the same $1\times1$ block in two sectors with
@@ -267,10 +268,26 @@ correction.
 | `MPSTensor.duplicateScalarBlocks_counterexample` (deprecated) | None. |
 | `MPOTensor.SourceVCounterexample.*` (whole namespace) | None; the module is deleted. |
 
-`TNLean/MPS/MPDO/LocalPurificationRFP.lean` is unchanged: the three
-purification witnesses, their private helpers (`nilpotentTransfer`,
-`supportProjection`, `nilpotentGlobalPRFP`, `scalarPurifier` and their lemmas),
-and every theorem about `MPOTensor.IsLocalPurificationRFP` are all retained.
+The 2026-08-28 source-presentation correction later removed the bare global
+PRFP witnesses and the separate `MPOTensor.IsLocalPurificationRFP` name.
+`MPOTensor.IsPRFP` now denotes the local ancillary-contraction predicate, while
+`MPOTensor.HasGlobalPurificationEquation` remains as a separate family-level
+condition.
+
+| Removed PRFP declaration | Replacement or disposition |
+|---|---|
+| `MPOTensor.IsLocalPurificationRFP` | `MPOTensor.IsPRFP`. |
+| `MPOTensor.IsLocalPurificationRFP.isLPDO` | `MPOTensor.IsPRFP.isLPDO`. |
+| `MPOTensor.IsLocalPurificationRFP.isMPDO` | `MPOTensor.IsPRFP.isMPDO`. |
+| `MPOTensor.exists_isLocalPurificationRFP_not_isZCL` | `MPOTensor.exists_isPRFP_not_isZCL`. |
+| `MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP` | `MPOTensor.physTraceTransfer_sq_of_isPRFP`. |
+| `MPOTensor.isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq` | `MPOTensor.isPRFP_iff_isLPDO_and_physTraceTransfer_sq`. |
+| `MPOTensor.isSourceZCL_of_isLocalPurificationRFP` | `MPOTensor.isSourceZCL_of_isPRFP`. |
+| `MPOTensor.isPRFP_of_isLocalPurificationRFP` | Removed as an obsolete conversion between names for the same adopted presentation. |
+| `MPOTensor.IsNondegeneratePRFP.isPRFP` | The first conjunct of `MPOTensor.IsNondegeneratePRFP`; use `h.1`. |
+| `MPOTensor.exists_isPRFP_not_isSourceZCL` | No replacement; `MPOTensor.isSourceZCL_of_isPRFP` records the required nonzero boundary, while `MPOTensor.IsPRFP.isPhysicalTraceIdempotent` gives the unconditional literal equation. |
+| `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL` | No replacement; the nilpotent global-family witness does not satisfy the adopted one-site `IsPRFP` presentation. |
+| `MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent` | No source-facing replacement; the witness still separates the surviving `HasPurificationRFPWitness` predicate, and hence `HasGlobalPurificationEquation`, from physical-trace idempotence. |
 
 ## Deleted modules
 
@@ -289,13 +306,16 @@ and every theorem about `MPOTensor.IsLocalPurificationRFP` are all retained.
 `thm:phase_flip_tensor_not_rfp`
 (`ch26_mps_rfp_direct_sums_residual_isometries.tex`).
 
-`ch21_mpdo_rfp_foundations.tex` and
-`ch21_mpdo_rfp_fusion_isometries_product_laws.tex` are unchanged:
+At the audited head, `ch21_mpdo_rfp_foundations.tex` and
+`ch21_mpdo_rfp_fusion_isometries_product_laws.tex` were unchanged:
 `thm:cpsv_theorem44_printed_status`, `thm:global_prfp_not_source_zcl`,
 `thm:nonzero_global_prfp_not_source_zcl`,
 `thm:nonzero_global_prfp_not_physical_trace_idempotence`, and
-`thm:cpsv_theorem414_printed_status` are all retained, with items (i) and (v)
-withdrawn.
+`thm:cpsv_theorem414_printed_status` were retained, with items (i) and (v)
+withdrawn. The 2026-08-28 correction later removed the three global-PRFP
+counterexample nodes, retained the full Theorem 4.4 node as `\notready` for
+clause (iii), and recorded the proved local-presentation equivalence of clauses
+(i) and (ii).
 
 ## Markers and prose removed
 
@@ -303,22 +323,25 @@ withdrawn.
 from the fixed-letter virtual-block reading; the rest of that node, which
 records the missing physical-routing data, is unchanged.
 
-`thm:mpdo_cpsv_bnt_rfp_equivalence` keeps its `(iii_act)` subscript and its
-`**Scope restriction (active product BNT)**` stamp, and the
-`**Scope restriction (normalization)**` stamp on
-`isSourceZCL_of_isLocalPurificationRFP` is likewise unchanged: both belong to
-the withdrawn items.
+`thm:mpdo_cpsv_bnt_rfp_equivalence` kept its `(iii_act)` subscript and its
+`**Scope restriction (active product BNT)**` stamp. At the audited head, the
+normalization marker on `isSourceZCL_of_isLocalPurificationRFP` was also
+unchanged. The 2026-08-28 correction renamed the source-facing predicate to
+`IsPRFP`: literal physical-trace idempotence needs no nonzero assumption, while
+the separate project predicate `IsSourceZCL` still does.
 
 ## Paper-gap notes
 
-`docs/paper-gaps/cpsv16_purification_rfp_definition.tex` keeps its
-`false-source` (resolved) verdict together with the counterexamples it cites.
-The reclassification to `open-gap` was withdrawn with item (i); it becomes
-correct only once a purification predicate carrying the source's standing
-presentation exists, which is the outstanding obligation this pass leaves
-behind. One cross-reference in it was rewritten: the sentence pointing at the
-repeated-copy witness now points at the missing routing data instead, since
-that witness belongs to item (iii).
+At the audited head,
+`docs/paper-gaps/cpsv16_purification_rfp_definition.tex` kept its
+`false-source` (resolved) verdict together with the counterexamples it cited.
+The 2026-08-28 source reading supplied the missing distinction: the one-site
+presentation precedes the global equation and Definition 4.3 continues using
+that same tensor. The note is now `local-correction` (resolved). The nilpotent
+example is retained only as a separation between global-family equality and
+the local presentation. The local-presentation equivalence of clauses (i) and
+(ii) is proved; only equivalence with clause (iii), the repeated-copy density
+form, remains open.
 
 `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` moves from `false-source` to
 `open-gap`, both still open: after the rewrite it records missing
