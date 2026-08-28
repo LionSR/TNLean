@@ -360,16 +360,27 @@ def main() -> int:
             # generated UI can otherwise apply its cookie-selected detail level
             # after an earlier test action and hide these geometry fixtures.
             page.wait_for_function("() => typeof window.showmore_update === 'function'")
-            page.evaluate("""() => {
+            visibility = equations.evaluate_all("""nodes => {
               showmore_update(2);
-              for (const node of document.querySelectorAll(
-                '.proof_wrapper:has(.tenkz-equation), .proof_content:has(.tenkz-equation)'
-              )) {
-                node.style.setProperty('display', 'block', 'important');
+              for (const node of nodes) {
+                for (let ancestor = node; ancestor; ancestor = ancestor.parentElement) {
+                  const style = getComputedStyle(ancestor);
+                  if (style.display === 'none') {
+                    ancestor.style.setProperty('display', 'block', 'important');
+                  }
+                  if (style.visibility === 'hidden') {
+                    ancestor.style.setProperty('visibility', 'visible', 'important');
+                  }
+                }
               }
+              return nodes.map(node => ({
+                width: node.offsetWidth,
+                height: node.offsetHeight,
+              }));
             }""")
-            assert equations.evaluate_all(
-                "nodes => nodes.every(node => node.offsetWidth > 0 && node.offsetHeight > 0)"
+            assert all(fact["width"] > 0 and fact["height"] > 0 for fact in visibility), (
+                filename,
+                visibility,
             )
             assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
             collected.extend(_equation_facts(page))
