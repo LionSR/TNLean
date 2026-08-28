@@ -354,12 +354,16 @@ def main() -> int:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.
             # The fixture pictures have their own readiness check below.
             page.goto(f"{base_url}/{filename}", wait_until="domcontentloaded")
-            # Wait for the generated flex shell before exposing descendants.
-            page.locator("div.content").wait_for(state="visible")
-            # Pin the test fixture's reading column as well as the production
-            # stylesheet: Chromium 140 can otherwise preserve a stale zero-width
-            # intrinsic flex size during this headless navigation.
+            # Pin the test shell and reading column as well as the production
+            # stylesheet. This makes geometry independent of delayed theme/UI
+            # initialization on Chromium's very large MPDO-RFP page.
             page.add_style_tag(content="""
+              body, div.wrapper, div.content {
+                display: flex !important;
+              }
+              div.content {
+                width: 100% !important;
+              }
               div.content-wrapper, div.main-text {
                 width: 100% !important;
                 min-width: 0 !important;
