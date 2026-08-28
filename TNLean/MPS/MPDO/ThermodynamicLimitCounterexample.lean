@@ -46,6 +46,9 @@ even lengths it is the mixture with weights \(1/3\) and \(2/3\).
   \(h_2(1/3)\) at positive even chain lengths.
 * `not_exists_tendsto_parityMutualInfoAfterCut`: the mutual information has no
   thermodynamic limit at any fixed nonempty cut.
+* `proposition45_limit_counterexample`: the parity tensor is an MPDO and has no
+  real mutual-information limit at any fixed nonempty cut, refuting the
+  unrestricted thermodynamic-limit clause of Proposition 4.5.
 
 ## Reference
 

@@ -36,6 +36,14 @@ Sector multiplicity and weight data over a family of basis blocks.
 
 `copies j` is the multiplicity `r_j` of basis block `j`, while `weight j q` is the sector
 weight `μ_{j,q}` attached to the `q`-th copy.
+
+**Local fix (nonzero coefficients):** `weight_ne_zero` requires every listed
+sector weight to be nonzero. This is TNLean's retained-block convention:
+zero-weight summands are omitted from `SectorWeightData` and hence from
+`SectorDecomposition`, rather than retained as listed sectors. This shared
+infrastructure is not itself a definition from CPSV16. The convention is
+recorded in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
 -/
 structure SectorWeightData (g : ℕ) where
   /-- The multiplicity `r_j` of the basis block `j`. -/
