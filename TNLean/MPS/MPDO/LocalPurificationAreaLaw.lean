@@ -279,7 +279,7 @@ using the local purification of arXiv:1606.00608, Section 4.3.
 the purifying bond dimension. It is not the unrestricted finite-chain estimate
 in the MPO bond dimension asserted for every positive MPDO in arXiv:1606.00608,
 Proposition 4.5; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem IsLPDO.exists_bipartitionedNormalizedMPO_eq_blockAncillaryTrace
     {M : MPOTensor d D} (hLPDO : IsLPDO M)
     (N L K : ℕ) (h : N = L + K) :
@@ -307,7 +307,7 @@ using the local purification of arXiv:1606.00608, Section 4.3.
 the purifying bond dimension. It is not the unrestricted finite-chain estimate
 in the MPO bond dimension asserted for every positive MPDO in arXiv:1606.00608,
 Proposition 4.5; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem IsLPDO.exists_forall_bipartitionedNormalizedMPO_eq_blockAncillaryTrace
     {M : MPOTensor d D} (hLPDO : IsLPDO M) :
     ∃ (dK D' : ℕ)
@@ -339,7 +339,7 @@ arXiv:1606.00608, Appendix C, line 1319.
 For a locally purified tensor it must be derived by tracing the ancillary
 physical indices on the two blocks. An arbitrary positive MPO need not possess
 such a purification; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem mutualInfoChain_le_of_bipartitioned_channel_image
     (M : MPOTensor d D) (A : MPSTensor dP D') (N L : ℕ) (hL : L ≤ N)
     (S : Matrix (Fin (dP ^ L)) (Fin (dP ^ L)) ℂ →ₗ[ℂ]
@@ -391,7 +391,7 @@ purification equation `eq:MPDO-Puri-1` of arXiv:1606.00608 (line 751).
 representation; it does not assert that an arbitrary positive matrix product
 operator has a local purification. The bound is in the purifying bond dimension
 `D'`, not the MPO bond dimension `D`; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem mutualInfoChain_le_of_lpdoWitness
     {dK D' : ℕ} (M : MPOTensor d D)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
@@ -424,7 +424,7 @@ equation (4) of arXiv:0704.3906.
 dimension and remains restricted to LPDOs. It is not the unrestricted bound in
 the MPO bond dimension asserted for arbitrary MPDOs in Proposition 4.5 of
 arXiv:1606.00608; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem IsLPDO.exists_mutualInfoChain_le_purifyingBond
     {M : MPOTensor d D} (hLPDO : IsLPDO M)
     (N L : ℕ) (hN : 0 < N) (hL : L ≤ N)

@@ -22,11 +22,11 @@ trace-preserving completely positive map equations of CPSV16 Definition 4.1.
 The horizontal normal-block weights of `\widehat M` have modulus `1 / √2`, not
 one. Thus the theorem here concerns the bare channel predicate `IsRFPViaTS`; it
 does not assert the line-246 global unit-weight convention. This scale tension
-is documented in `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+is documented in <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 
 **Local fix (normalization):** The source prints the unscaled tensor, whose
 physical-trace transfer is not idempotent. See
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 ## Main results
 
@@ -54,7 +54,7 @@ namespace MPOTensor.CPSVExample412NormalizedRFP
 Example 4.12.
 
 **Local fix (normalization):** The source omits the factor `1 / 2`; see
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--938. -/
 def Mhat : MPOTensor 2 2 :=
@@ -73,7 +73,7 @@ theorem mpo_Mhat (N : ℕ) :
 of the tensor printed in CPSV16 Example 4.12.
 
 **Local fix (normalization):** The equality uses the omitted tensor factor
-`1 / 2`; see `docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+`1 / 2`; see <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--938. -/
 theorem mpo_Mhat_eq_normalizedMPO_M (N : ℕ) (hN : 0 < N) :
@@ -85,7 +85,7 @@ theorem mpo_Mhat_eq_normalizedMPO_M (N : ℕ) (hN : 0 < N) :
 /-- The positive-length periodic MPO of `Mhat` has trace one.
 
 **Local fix (normalization):** The printed tensor instead has trace `2 ^ N`;
-see `docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+see <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--938. -/
 theorem trace_mpo_Mhat (N : ℕ) (hN : 0 < N) :
@@ -251,7 +251,7 @@ private lemma physClose2_Mhat_of_ne (X : Matrix (Fin 2) (Fin 2) ℂ)
 
 **Local fix (normalization):** This equation holds for `Mhat = (1 / 2) • M`,
 not for the tensor printed without the scalar. See
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, equations `eq:Smap` and
 `RFPMixedTS`, lines 645--660, and Example 4.12, lines 932--939. -/
@@ -291,7 +291,7 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 2) (Fin 2) ℂ) :
 
 **Local fix (normalization):** This equation holds for `Mhat = (1 / 2) • M`,
 not for the tensor printed without the scalar. See
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, equations `eq:Tmap` and
 `RFPMixedTS`, lines 650--660, and Example 4.12, lines 932--939. -/
@@ -325,12 +325,12 @@ two trace-preserving completely positive map equations of Definition 4.1.
 **Local fix (normalization):** The source prints the unscaled tensor, for which
 the channel equations are impossible. This theorem concerns
 `Mhat = (1 / 2) • M`; see
-`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
 
 **Scope restriction (canonical weight):** `IsRFPViaTS` isolates the two channel
 equations. This theorem does not assert the line-246 unit-weight horizontal
 canonical convention; see
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 
 Source comparison: CPSV16, arXiv:1606.00608, Definition 4.1, lines 638--660,
 and Example 4.12, lines 932--939. -/

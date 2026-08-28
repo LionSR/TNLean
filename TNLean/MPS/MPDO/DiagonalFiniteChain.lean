@@ -44,7 +44,7 @@ and positive semidefiniteness at every positive chain length.
 * arXiv:1606.00608, Proposition 4.5, lines 792--806, and its proof at
   lines 1316--1320.
 * Riazanov--Vyalyi, arXiv:1704.06507, Theorem 4.1.
-* `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`, section
+* <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>, section
   "Diagonal matrix product operators".
 -/
 
@@ -60,7 +60,7 @@ operator has no off-diagonal matrix entries.
 
 This is the fixed-length diagonal restriction used here to study the bound
 invoked in the proof of arXiv:1606.00608, Proposition 4.5, lines 1316--1320;
-see `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+see <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 def IsDiagonalAt (M : MPOTensor d D) (N : ℕ) : Prop :=
   (mpo M N).IsDiag
 
@@ -69,7 +69,7 @@ positive chain length.
 
 This is the global diagonal restriction used here to study the bound invoked
 in the proof of arXiv:1606.00608, Proposition 4.5, lines 1316--1320; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 def IsDiagonal (M : MPOTensor d D) : Prop :=
   ∀ N : ℕ, 0 < N → M.IsDiagonalAt N
 
@@ -78,7 +78,8 @@ def IsDiagonal (M : MPOTensor d D) : Prop :=
 For a positive finite-chain operator these coefficients are real and
 nonnegative.  This matrix belongs to the fixed-length diagonal restriction of
 the bound invoked in the proof of arXiv:1606.00608, Proposition 4.5, lines
-1316--1320; see `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+1316--1320; see
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 noncomputable def diagonalCutRealMatrix (M : MPOTensor d D) (L R : ℕ) :
     Matrix (Fin L → Fin d) (Fin R → Fin d) ℝ :=
   (diagonalCutMatrix M L R).map Complex.re
@@ -88,7 +89,7 @@ noncomputable def diagonalCutRealMatrix (M : MPOTensor d D) (L R : ℕ) :
 This is the normalization constant for the fixed-length diagonal restriction
 of arXiv:1606.00608, Proposition 4.5.  The source normalization convention is
 at lines 792--793; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 noncomputable def diagonalCutMass (M : MPOTensor d D) (L R : ℕ) : ℝ :=
   ∑ x, ∑ y, diagonalCutRealMatrix M L R x y
 
@@ -97,7 +98,7 @@ noncomputable def diagonalCutMass (M : MPOTensor d D) (L R : ℕ) : ℝ :=
 This is the joint distribution $\widehat P=Z^{-1}P$ for the fixed-length
 diagonal restriction of arXiv:1606.00608, Proposition 4.5.  The source
 normalization convention is at lines 792--793; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 noncomputable def normalizedDiagonalCutDistribution (M : MPOTensor d D) (L R : ℕ) :
     Matrix (Fin L → Fin d) (Fin R → Fin d) ℝ :=
   (diagonalCutMass M L R)⁻¹ • diagonalCutRealMatrix M L R
@@ -107,7 +108,8 @@ the finite-chain MPO operator.
 
 This is the coefficient identity used for the fixed-length diagonal restriction
 of the bound invoked in the proof of arXiv:1606.00608, Proposition 4.5, lines
-1316--1320; see `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+1316--1320; see
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalCutMatrix_apply_eq_mpo (M : MPOTensor d D) (L R : ℕ)
     (x : Fin L → Fin d) (y : Fin R → Fin d) :
     diagonalCutMatrix M L R x y =
@@ -119,7 +121,8 @@ extension of its real part.
 
 This is the real-coefficient step for the fixed-length diagonal restriction of
 the bound invoked in the proof of arXiv:1606.00608, Proposition 4.5, lines
-1316--1320; see `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+1316--1320; see
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalCutRealMatrix_map_ofReal_of_posSemidef (M : MPOTensor d D) (L R : ℕ)
     (hpos : (mpo M (L + R)).PosSemidef) :
     (diagonalCutRealMatrix M L R).map Complex.ofReal = diagonalCutMatrix M L R := by
@@ -133,7 +136,8 @@ nonnegative.
 
 This is the positivity step for the fixed-length diagonal restriction of the
 bound invoked in the proof of arXiv:1606.00608, Proposition 4.5, lines
-1316--1320; see `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+1316--1320; see
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalCutRealMatrix_nonneg_of_posSemidef (M : MPOTensor d D) (L R : ℕ)
     (hpos : (mpo M (L + R)).PosSemidef) (x : Fin L → Fin d) (y : Fin R → Fin d) :
     0 ≤ diagonalCutRealMatrix M L R x y := by
@@ -145,7 +149,7 @@ finite-chain trace.
 
 This identifies the local normalization constant with the trace in the
 normalization convention of arXiv:1606.00608, lines 792--793; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalCutMass_eq_trace_re (M : MPOTensor d D) (L R : ℕ) :
     diagonalCutMass M L R = (mpo M (L + R)).trace.re := by
   classical
@@ -184,7 +188,7 @@ diagonal cut coefficients a joint probability distribution.
 This is the normalization step for the fixed-length diagonal restriction of
 arXiv:1606.00608, Proposition 4.5.  The source normalization convention is at
 lines 792--793; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem normalizedDiagonalCutDistribution_isJointDistribution (M : MPOTensor d D)
     (L R : ℕ) (hpos : (mpo M (L + R)).PosSemidef)
     (hmass : 0 < diagonalCutMass M L R) :
@@ -218,7 +222,8 @@ for unrestricted quantum mutual information.
 **Scope restriction (diagonal finite-chain operator):** Proposition 4.5 concerns
 arbitrary MPDOs, whereas this theorem treats the classical diagonal subcase at
 one chain length.  The distinction and the unrestricted quantum question are
-documented in `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+documented in
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalFiniteChain_classicalMutualInformation_le_two_log [NeZero D]
     (M : MPOTensor d D) (L R : ℕ) (_hdiag : M.IsDiagonalAt (L + R))
     (hpos : (mpo M (L + R)).PosSemidef) (hmass : 0 < diagonalCutMass M L R) :
@@ -247,7 +252,7 @@ Theorem 4.1 (arXiv:1704.06507).
 **Scope restriction (globally diagonal MPDO):** Proposition 4.5 concerns
 arbitrary MPDOs, whereas this theorem treats globally diagonal tensors.  The
 unrestricted quantum question is documented in
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalMPDO_classicalMutualInformation_le_two_log [NeZero D]
     (M : MPOTensor d D) (hdiag : M.IsDiagonal) (hmpdo : M.IsMPDO)
     (L R : ℕ) (hN : 0 < L + R) (htrace : 0 < (mpo M (L + R)).trace.re) :

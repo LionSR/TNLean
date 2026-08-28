@@ -716,7 +716,7 @@ source hypotheses, this theorem assumes that the outer support projections
 resolve the physical identity (`hPsum`) and that every absorbed representative
 already has a blocked renormalization channel pair (`hRFP`). These two
 obligations and their elimination plans are recorded in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`: prove projector completeness from
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>: prove projector completeness from
 the source hypotheses and construct the representative channel pairs. -/
 theorem blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels
     (S : MPSTensor.SectorDecomposition (d * d))

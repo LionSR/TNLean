@@ -156,7 +156,7 @@ square--cube and trace-power identities from source zero correlation length.
 The remaining problem is to exclude the nilpotent generalized zero-eigenspace
 of the concrete trace matrix without an additional hypothesis absent from
 Lemma C.5. It is recorded in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 ## References
 
@@ -542,7 +542,7 @@ not use primitivity once `trace T = 1` and constant trace powers are known.
 semidefiniteness is absent from arXiv:1606.00608, Appendix C.2, Lemma
 `SALZCL` (Lemma C.5), lines 1484--1499. The primitivity hypothesis is retained
 for comparison with the source but is unused by this corrected argument.
-Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+Documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem sal_zcl_implies_rank_one_T_of_posSemidef
     (T : Matrix (Fin n) (Fin n) ℝ)
     (_hPrimitive : Matrix.IsPrimitive T)
@@ -622,7 +622,8 @@ the zero-correlation-length identity: $T^2=T$.
 arXiv:1606.00608, lines 1484--1499 neither assumes nor derives
 linear independence of the sector tensors; see the marker on
 `Matrix.mul_self_eq_self_of_pairing_idempotent` and
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.  The hypothesis
+`hl` is discharged
 by `SectorPairingData.linearIndependent_l` once each sector tensor lies in the
 corresponding member of an independent family of subspaces. -/
 theorem mul_self_eq_self (data : SectorPairingData T V)
@@ -636,7 +637,7 @@ closed sector tensors $|l_k)$ or the functionals $(r_k|$: pairing the
 identity with $(r_j|$ and $|l_i)$ gives this matrix identity directly.
 
 Source: arXiv:1606.00608, lines 1494--1497. This is the pairing computation
-of `docs/paper-gaps/cpgsv17_pf_rank_one.tex`, §3 ("What the operator-valued
+of <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>, §3 ("What the operator-valued
 ZCL identity implies"). -/
 theorem pairing_sq_eq_pairing_cube (data : SectorPairingData T V) : T ^ 2 = T ^ 3 :=
   Matrix.pow_two_eq_pow_three_of_pairing_idempotent data.pairing data.pairing_operator_idempotent
@@ -673,7 +674,7 @@ indices, but the closed tensors $|l_k)$ at lines 1473--1477 live in a common
 bond space after the physical sector legs are contracted. Whether the
 inverse-map construction supplies such supports, or proves independence by
 another argument, remains open; documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem linearIndependent_l (data : SectorPairingData T V)
     (support : Fin n → Submodule ℝ V)
     (hmem : ∀ k, data.l k ∈ support k)
@@ -699,7 +700,8 @@ the closed sector tensors nonzero.
 
 **Scope restriction (linear independence):** the source lemma neither assumes
 nor derives linear independence of the sector tensors; documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.  The hypothesis `hl` is discharged
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.  The hypothesis
+`hl` is discharged
 by `SectorPairingData.linearIndependent_l` when each sector tensor lies in the
 corresponding member of an independent family of subspaces. -/
 theorem sal_zcl_implies_rank_one_T_of_pairing_idempotent
@@ -724,7 +726,7 @@ an independent family of subspaces containing the respective sector tensors.
 
 **Scope restriction (independent subspaces):** the subspace family carrying the
 closed sector tensors is not displayed in arXiv:1606.00608; documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem sal_zcl_implies_rank_one_T_of_sector_supports
     {V : Type*} [AddCommGroup V] [Module ℝ V]
     (T : Matrix (Fin n) (Fin n) ℝ)

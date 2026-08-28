@@ -549,7 +549,7 @@ the ambient doubled-index tensor.
 **Scope restriction (normalized fixed representative):** this is the
 project's fixed-representative predicate, which includes the global
 unit-weight convention of arXiv:1606.00608, line 246. See
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 Source: arXiv:1606.00608, canonical form at lines 224--246, simplicity at
 lines 815--822, and the Case-II standing hypothesis at line 1628. -/
 theorem ambient_isSimpleCanonicalForm : IsSimpleCanonicalForm ambient := by
@@ -918,7 +918,7 @@ refute the conclusion of Proposition `prop2to3` or Theorem 4.9.
 **Scope restriction (normalized fixed representative):** simplicity is the
 project's fixed-representative predicate, including the line-246 unit-weight
 convention. See
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>.
 Source: arXiv:1606.00608, canonical normalization at lines 224--246,
 Definition 4.1 at lines 638--660, and the simple Case-II argument at lines
 1628--1665 and 1740--1782. -/

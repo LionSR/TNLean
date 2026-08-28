@@ -522,7 +522,8 @@ tensor. The raw tensor here has doubled-transfer spectral radius `5 / 16` and
 does not meet that normalization. Its normalized representative loses the
 paper's literal zero-correlation-length identity. Thus this theorem records the
 normalization obstruction but does not refute Lemma C.5 under its complete
-standing hypotheses. Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+standing hypotheses. Documented in
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Case I at lines 1374--1381 and Lemma
 `SALZCL` at lines 1473--1499. -/

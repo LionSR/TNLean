@@ -400,7 +400,7 @@ It does not assert `MPSTensor.IsNormalTensor`: coefficient absorption rescales t
 spectral radius by the squared coefficient modulus, while the global canonical-form normalization
 does not force every coefficient to have modulus one. The normal Case-I structural theorem
 therefore remains unavailable sectorwise. This boundary is recorded in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
 theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL

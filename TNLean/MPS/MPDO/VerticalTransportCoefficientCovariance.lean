@@ -39,7 +39,7 @@ normalization of their representatives, and the algebra isomorphism identifies
 the ambient operator algebras at each positive length.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equations
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equations
 `eq:vertical-coefficient-explicit-transport` and
 `eq:vertical-coefficient-covariance`. -/
 structure ExplicitVerticalTransport
@@ -63,7 +63,7 @@ structure ExplicitVerticalTransport
 /-- The coefficient family obtained by explicit vertical transport.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equation
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equation
 `eq:vertical-coefficient-covariance`. -/
 def verticalTransportCoefficients
     (c : BNTLabelCoefficientFamily Λ) (e : Λ' ≃ Λ) (s : Λ' → ℂ) :
@@ -78,7 +78,7 @@ variable [Fintype Λ] [Fintype Λ']
 scale-covariant coefficient family.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equations
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equations
 `eq:vertical-coefficient-explicit-transport` and
 `eq:vertical-coefficient-covariance`. -/
 theorem ExplicitVerticalTransport.hasSameLengthProductForm_verticalTransport
@@ -119,7 +119,7 @@ theorem ExplicitVerticalTransport.hasSameLengthProductForm_verticalTransport
 forces the scale-covariant comparison law for the structure coefficients.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equation
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equation
 `eq:vertical-coefficient-covariance`. -/
 theorem ExplicitVerticalTransport.coeff_eq_verticalTransport_of_linearIndependentAt
     {op : BNTLabelOperatorFamily Λ O} {op' : BNTLabelOperatorFamily Λ' O'}
@@ -138,7 +138,7 @@ theorem ExplicitVerticalTransport.coeff_eq_verticalTransport_of_linearIndependen
 vertical transport preserves its structure coefficient exactly.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equation
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equation
 `eq:vertical-coefficient-covariance`. -/
 theorem ExplicitVerticalTransport.coeff_eq_of_scale_mul_eq_of_linearIndependentAt
     {op : BNTLabelOperatorFamily Λ O} {op' : BNTLabelOperatorFamily Λ' O'}
@@ -162,7 +162,7 @@ variable {d D d' D' : ℕ} {M : MPOTensor d D} {M' : MPOTensor d' D'}
 the scale-covariant comparison law for their structure coefficients.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equation
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equation
 `eq:vertical-coefficient-covariance`. -/
 theorem coeff_eq_of_explicitVerticalTransport
     (H : BNTAlgebraTensorClause M) (H' : BNTAlgebraTensorClause M')
@@ -180,7 +180,7 @@ explicit vertical transport preserves a tensor-attached structure coefficient
 exactly.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1997--2008; see also
-`docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`, equation
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>, equation
 `eq:vertical-coefficient-covariance`. -/
 theorem coeff_eq_of_explicitVerticalTransport_of_scale_mul_eq
     (H : BNTAlgebraTensorClause M) (H' : BNTAlgebraTensorClause M')

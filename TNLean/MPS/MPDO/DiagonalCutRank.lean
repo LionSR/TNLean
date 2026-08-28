@@ -97,7 +97,7 @@ periodic MPO cut is at most $D^2$.
 
 This is the virtual-pair factorization used in the classical-diagonal analysis
 of Proposition 4.5 of arXiv:1606.00608; see
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_mpdo_mutual_information_bound.pdf>. -/
 theorem diagonalCutMatrix_rank_le (M : MPOTensor d D) (L R : ℕ) :
     (diagonalCutMatrix M L R).rank ≤ D * D := by
   classical

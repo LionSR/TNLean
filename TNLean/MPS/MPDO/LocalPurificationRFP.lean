@@ -157,7 +157,7 @@ diagonal purification at `d = d_K = 2`, `D = D' = 1`, `A = [1/√2, 0, 0, 1/√2
 its purifying tensor is a pure-state renormalization fixed point, yet the ancilla
 trace contraction halves the leading eigenvalue, so the induced transfer map is
 `½ • id` and idempotence fails. See
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>. -/
 
 /-- Scalar amplitudes of the diagonal purifying tensor: `1/√2` on the diagonal. -/
 noncomputable def witnessAmplitude (i k : Fin 2) : ℂ := if i = k then (Real.sqrt 2)⁻¹ else 0
@@ -242,7 +242,7 @@ length.** There is an MPO tensor satisfying `IsLocalPurificationRFP` whose
 literal transfer-map idempotence `E_M ∘ E_M = E_M` fails, because the
 purification's trace contraction drops the leading eigenvalue below `1`. This is
 the canonical-form deviation documented in
-`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`. -/
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>. -/
 theorem exists_isLocalPurificationRFP_not_isZCL :
     ∃ M : MPOTensor 2 1, IsLocalPurificationRFP M ∧ ¬ IsZCL M := by
   refine ⟨witnessM, ⟨2, 1, witnessA, (finProdFinEquiv (m := 1) (n := 1)).symm, fun _ _ => rfl,
@@ -274,8 +274,8 @@ purification tensor, which is the counterexample above to literal doubled-index
 idempotence, has physical-trace transfer equal to the identity. This transfer is
 nonzero and idempotent, hence the tensor has source zero correlation length. The
 example is recorded in
-docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex: the physical-trace
-transfer correctly classifies the maximally mixed product state as having zero
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>:
+the physical-trace transfer correctly classifies the maximally mixed product state as having zero
 correlation length, whereas the doubled-index condition wrongly excludes it. -/
 theorem isSourceZCL_witnessM : IsSourceZCL witnessM :=
   isSourceZCL_of_physTraceTransfer_sq witnessM
