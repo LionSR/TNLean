@@ -43,7 +43,9 @@ div.proof_content {
 
 /* Give the reading column a stable width basis. The generated theme uses only
  * a ch-based max-width here, so inline-size-contained equations can leave
- * headless Chromium with a zero-width intrinsic flex item. */
+ * headless Chromium with a zero-width intrinsic flex item. The 600px cap
+ * approximates 75ch at the default font size and deliberately trades away
+ * font-relative scaling until that Chromium failure can be avoided safely. */
 div.content-wrapper {
 	width: 100%;
 	min-width: 0;
