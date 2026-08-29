@@ -537,7 +537,9 @@ jobs:
 
       - name: Generate paper source labels
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        run: ./scripts/generate_paper_aux.sh 1606.00608
+        run: |
+          ./scripts/generate_paper_aux.sh 1606.00608
+          ./scripts/generate_paper_aux.sh 2502.20257
 
       - name: Check paper-gap references resolve
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
