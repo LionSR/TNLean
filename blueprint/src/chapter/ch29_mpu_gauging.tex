@@ -265,6 +265,30 @@ an MPU representation.
     % Source anchor: arXiv:2502.20257, eq:Lsymbgauge.
 \end{definition}
 
+\begin{theorem}[Identity and composition of joint scalar gauges]
+    \label{thm:mpug_l_gauge_composition}
+    \lean{TNLean.Algebra.LSymbol.gauge_one,
+        TNLean.Algebra.LSymbol.gauge_comp}
+    \leanok
+    \uses{def:mpug_l_gauge}
+    The constant fusion and action gauges leave every $L$-symbol unchanged.
+    Successive joint gauges compose by pointwise multiplication:
+    \begin{align}
+        (\delta,\varepsilon)\mathbin{\triangleright}
+        \bigl((\beta,\gamma)\mathbin{\triangleright}L\bigr)
+         & = (\beta\delta,\gamma\varepsilon)
+            \mathbin{\triangleright}L.
+        \label{eq:mpug_l_gauge_composition}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge}
+    Substitute (\ref{eq:mpug_l_gauge}) twice and cancel the intermediate
+    factors. The identity case follows by taking all four cochains equal to
+    $1$.
+\end{proof}
+
 \begin{definition}[Normalized L-symbols and action-tensor gauges]
     \label{def:mpug_l_normalized}
     \lean{TNLean.Algebra.LSymbol.IsNormalized,
@@ -353,7 +377,10 @@ an MPU representation.
 
 \begin{definition}[Four scalar gauge formulations]
     \label{def:mpug_block_independence_gauge_forms}
-    \lean{TNLean.Algebra.LSymbol.HasTrivialGauge,
+    \lean{TNLean.Algebra.LSymbol.IsBlockConstant,
+        TNLean.Algebra.LSymbol.IsTrivialEll,
+        TNLean.Algebra.LSymbol.IsTrivial,
+        TNLean.Algebra.LSymbol.HasTrivialGauge,
         TNLean.Algebra.LSymbol.HasBlockConstantGauge,
         TNLean.Algebra.LSymbol.HasTrivialEllGauge,
         TNLean.Algebra.LSymbol.IsBlockIndependent}
@@ -383,7 +410,8 @@ an MPU representation.
 
 \begin{theorem}[Corrected block factorization]
     \label{thm:mpug_block_factorization}
-    \lean{TNLean.Algebra.LSymbol.blockFactor,
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_right_one,
+        TNLean.Algebra.LSymbol.blockFactor,
         TNLean.Algebra.LSymbol.factorization_of_isBlockIndependentEll}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_block_independence_factor}
@@ -421,7 +449,8 @@ an MPU representation.
 
 \begin{theorem}[Relative block character]
     \label{thm:mpug_relative_block_character}
-    \lean{TNLean.Algebra.LSymbol.relativeCharacter,
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_left_one,
+        TNLean.Algebra.LSymbol.relativeCharacter,
         TNLean.Algebra.LSymbol.relativeCharacter_mul_base,
         TNLean.Algebra.LSymbol.relativeCharacter_mul}
     \leanok
@@ -467,8 +496,8 @@ an MPU representation.
         TNLean.Algebra.LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll,
         TNLean.Algebra.LSymbol.hasTrivialGauge_of_isBlockIndependentEll}
     \leanok
-    \uses{def:mpug_l_gauge, thm:mpug_block_factorization,
-        thm:mpug_relative_block_character}
+    \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
+        thm:mpug_block_factorization, thm:mpug_relative_block_character}
     With $A$ and $\rho$ as above, define the forward gauges by
     \begin{align}
         \beta^+_{g,h}
@@ -500,7 +529,7 @@ an MPU representation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_block_factorization,
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_block_factorization,
         thm:mpug_relative_block_character}
     Substitute (\ref{eq:mpug_forward_fusion_gauge}) and
     (\ref{eq:mpug_forward_action_gauge}) into
@@ -514,10 +543,14 @@ an MPU representation.
 
 \begin{theorem}[Trivial and block-constant gauges]
     \label{thm:mpug_trivial_iff_block_constant}
-    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge}
+    \lean{TNLean.Algebra.LSymbol.IsTrivial.isBlockConstant,
+        TNLean.Algebra.LSymbol.IsBlockConstant.isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.HasTrivialGauge.hasBlockConstantGauge,
+        TNLean.Algebra.LSymbol.HasBlockConstantGauge.isBlockIndependent,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
-        thm:mpug_l_gauge_preservation,
+        thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
@@ -527,7 +560,7 @@ an MPU representation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_l_gauge_preservation,
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     A trivial $L$-symbol is block-constant. Conversely, a block-constant
     representative has block-independent $\ell$. Apply
@@ -537,10 +570,14 @@ an MPU representation.
 
 \begin{theorem}[Trivial gauges and trivial block scalars]
     \label{thm:mpug_trivial_iff_trivial_ell}
-    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}
+    \lean{TNLean.Algebra.LSymbol.IsTrivial.isTrivialEll,
+        TNLean.Algebra.LSymbol.IsTrivialEll.isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.HasTrivialGauge.hasTrivialEllGauge,
+        TNLean.Algebra.LSymbol.HasTrivialEllGauge.isBlockIndependent,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
-        thm:mpug_l_gauge_preservation,
+        thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
@@ -550,7 +587,7 @@ an MPU representation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_l_gauge_preservation,
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     A trivial $L$-symbol has $\ell=1$. Conversely, the identity $\ell=1$
     implies block independence. Apply
@@ -560,10 +597,11 @@ an MPU representation.
 
 \begin{theorem}[Scalar gauge triviality and block independence]
     \label{thm:mpug_trivial_iff_block_independent}
-    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}
+    \lean{TNLean.Algebra.LSymbol.IsBlockIndependent.hasTrivialGauge,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
-        thm:mpug_l_gauge_preservation,
+        thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
@@ -573,7 +611,7 @@ an MPU representation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_l_gauge_preservation,
+    \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
     Gauge triviality implies block constancy and hence block independence.
     For the converse, apply
