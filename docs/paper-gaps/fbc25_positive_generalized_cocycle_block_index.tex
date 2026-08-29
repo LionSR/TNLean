@@ -1,0 +1,81 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Block Index in the Positive Generalized-Cocycle Corollary}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source context}
+
+The finite-group determinant lemma in
+Ref.~\cite[lines~5931--5947]{FrancoRubio2025MPUGauging} starts with a
+block-dependent generalized cocycle $\Omega^x_{g,h}$ and constructs a
+block-dependent cochain $\chi^x_g=\det X^x_g$. The following corollary instead
+writes that there exists $\chi_g>0$ with $\Omega=d\chi$.
+
+The omitted superscript is shorthand, not a restriction to a block-independent
+cochain. The later displays at lines~6023--6029 similarly suppress block
+indices while applying the same generalized-cocycle result to
+block-dependent quantities.
+
+\section{A two-block counterexample}
+
+Let $G=C_2=\{e,s\}$ act trivially on the two-element block set
+$\mathsf X=\{a,b\}$. Define a positive block-dependent $1$-cochain $\rho$ by
+\begin{align}
+    \rho^a_e=\rho^b_e&=1,
+    &\rho^a_s&=1,
+    &\rho^b_s&=2.
+    \label{eq:fbc25_positive_block_index_cochain}
+\end{align}
+Set $\Omega=d\rho$. Since the action is trivial and $s^2=e$,
+\begin{align}
+    \Omega^a_{s,s}
+        &=\frac{\rho^a_s\rho^a_s}{\rho^a_e}=1,
+    &
+    \Omega^b_{s,s}
+        &=\frac{\rho^b_s\rho^b_s}{\rho^b_e}=4.
+    \label{eq:fbc25_positive_block_index_values}
+\end{align}
+Thus $\Omega$ is a positive generalized $2$-cocycle and a generalized
+coboundary. If a primitive $\chi_g$ were independent of the block, then
+$(d\chi)^x_{s,s}$ would also be independent of $x$, contradicting
+Eq.~\ref{eq:fbc25_positive_block_index_values}.
+
+\section{Corrected statement}
+
+The primitive in the corollary must retain its block label:
+\begin{align}
+    \Omega^x_{g,h}
+        &=(d\chi)^x_{g,h}
+          =\frac{\chi^{h x}_g\chi^x_h}{\chi^x_{gh}}.
+    \label{eq:fbc25_positive_block_index_corrected}
+\end{align}
+This agrees with the determinant construction immediately preceding the
+corollary and leaves all other hypotheses and conclusions unchanged.
+
+\section{Formal treatment}
+
+The formal theorem quantifies over a block-dependent cochain and proves
+Eq.~\ref{eq:fbc25_positive_block_index_corrected}.\footnote{Formal
+declarations: \leanid{TNLean.Algebra.ActionTensorGauge.coboundary} and
+\leanid{TNLean.Algebra.LSymbol.exists\_positive\_coboundary} in
+\doclink{TNLean/Algebra/PositiveGeneralizedCocycle}.}
+
+\textbf{Verdict: resolved local correction.}
+The surrounding determinant construction and the explicit two-block example
+show that the block superscript on $\chi$ is necessary.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

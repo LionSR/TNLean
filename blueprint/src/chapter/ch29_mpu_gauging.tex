@@ -358,6 +358,86 @@ an MPU representation.
     % Source anchor: arXiv:2502.20257, lines 5914--5921 and lemma:G_cocycle.
 \end{definition}
 
+\begin{definition}[Positive block-dependent cochains]
+    \label{def:mpug_positive_generalized_cochains}
+    \lean{TNLean.Algebra.PositiveUnits.embedding,
+        TNLean.Algebra.PositiveUnits.IsPositive,
+        TNLean.Algebra.ActionTensorGauge.IsPositiveValued,
+        TNLean.Algebra.LSymbol.IsPositiveValued}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    Let $\iota\colon\mathbb R_{>0}\to\C^\times$ be the natural
+    multiplicative embedding. A block-dependent scalar $1$-cochain $\chi$ is
+    positive when
+    \begin{align}
+        \chi^x_g & \in\iota(\mathbb R_{>0})
+        \label{eq:mpug_positive_one_cochain}
+    \end{align}
+    for every $x\in\mathsf X$ and $g\in G$. A block-dependent scalar
+    $2$-cochain $\Omega$ is positive when
+    \begin{align}
+        \Omega^x_{g,h} & \in\iota(\mathbb R_{>0})
+        \label{eq:mpug_positive_two_cochain}
+    \end{align}
+    for every $x\in\mathsf X$ and $g,h\in G$. Thus positivity means
+    membership in the embedded subgroup of strictly positive real numbers,
+    not positivity of the real part.
+\end{definition}
+
+\begin{definition}[Hat operation on block-dependent cochains]
+    \label{def:mpug_generalized_hat}
+    \lean{TNLean.Algebra.ActionTensorGauge.hat,
+        TNLean.Algebra.LSymbol.hat}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    For block-dependent scalar cochains, define
+    \begin{align}
+        \widehat\chi^{\,x}_g
+         & =\chi^{\,g x}_{g^{-1}},
+        \label{eq:mpug_generalized_hat_one}
+    \end{align}
+    and
+    \begin{align}
+        \widehat\Omega^{\,x}_{g,h}
+         & =\Omega^{\,(gh)x}_{h^{-1},g^{-1}}.
+        \label{eq:mpug_generalized_hat_two}
+    \end{align}
+    These are the one-index and two-index cases of the hat operation in
+    \cite[line~5912]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Hat involution and generalized coboundaries]
+    \label{thm:mpug_generalized_hat_coboundary}
+    \lean{TNLean.Algebra.ActionTensorGauge.hat_hat,
+        TNLean.Algebra.LSymbol.hat_hat,
+        TNLean.Algebra.LSymbol.hat_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
+    The block-dependent hat operation is an involution:
+    \begin{align}
+        \widehat{\widehat\chi} & =\chi,
+        \label{eq:mpug_generalized_hat_hat_one}
+    \end{align}
+    and
+    \begin{align}
+        \widehat{\widehat\Omega} & =\Omega.
+        \label{eq:mpug_generalized_hat_hat_two}
+    \end{align}
+    It commutes with the generalized coboundary:
+    \begin{align}
+        \widehat{d\chi} & =d\widehat\chi.
+        \label{eq:mpug_generalized_hat_coboundary}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
+    Apply the group action law and cancel each group element with its inverse.
+    Expanding both sides of
+    (\ref{eq:mpug_generalized_hat_coboundary}) gives the same three cochain
+    values, with their scalar factors reordered in $\C^\times$.
+\end{proof}
+
 \begin{definition}[Regular-action matrices]
     \label{def:mpug_generalized_regular_matrices}
     \lean{TNLean.Algebra.LSymbol.regularMatrix}
@@ -453,6 +533,129 @@ an MPU representation.
     (\ref{eq:mpug_generalized_regular_multiplication}) and using
     $\det(cX)=c^{|G|}\det X$ gives
     (\ref{eq:mpug_generalized_power_coboundary}).
+\end{proof}
+
+\begin{theorem}[Positive generalized cocycles are coboundaries]
+    \label{thm:mpug_positive_generalized_cocycle}
+    \lean{TNLean.Algebra.PositiveUnits.positiveRpow,
+        TNLean.Algebra.ActionTensorGauge.positiveRpow,
+        TNLean.Algebra.LSymbol.positivePrimitive,
+        TNLean.Algebra.LSymbol.isPositiveValued_positivePrimitive,
+        TNLean.Algebra.LSymbol.exists_positive_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_positive_generalized_cochains,
+        thm:mpug_generalized_cocycle_power}
+    Let $G$ be finite and let $G$ act on a set $\mathsf X$. If $\Omega$ is a
+    positive generalized $2$-cocycle, then there is a positive
+    block-dependent scalar $1$-cochain $\chi_0$ such that
+    \begin{align}
+        \Omega^x_{g,h}
+         & =(d\chi_0)^x_{g,h}
+        =\frac{\chi^{\,h x}_{0,g}\chi^x_{0,h}}
+        {\chi^x_{0,gh}}
+        \label{eq:mpug_positive_coboundary}
+    \end{align}
+    for all $x\in\mathsf X$ and $g,h\in G$.
+    This is the first assertion of
+    \cite[Corollary at lines~5950--5960]{FrancoRubio2025MPUGauging}.
+    The source writes $\chi_g$ here, whereas the
+    preceding determinant lemma constructs $\chi^x_g$; the block label $x$ is
+    therefore retained.
+    % Local correction:
+    % docs/paper-gaps/fbc25_positive_generalized_cocycle_block_index.tex.
+    % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5950--5956.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_positive_generalized_cochains,
+        thm:mpug_generalized_cocycle_power}
+    Write $\delta^x_g=\det X^x_g$ for the determinant cochain from
+    Theorem~\ref{thm:mpug_generalized_cocycle_power}, and set
+    \begin{align}
+        \chi^x_{0,g}
+         & =\lvert\delta^x_g\rvert^{1/\lvert G\rvert}.
+        \label{eq:mpug_positive_determinant_root}
+    \end{align}
+    The regular-action permutation can contribute a sign to $\delta^x_g$.
+    Its norm is therefore taken before the positive $\lvert G\rvert$-th root.
+    Taking norms in $\Omega^{\lvert G\rvert}=d\delta$ gives
+    \begin{align}
+        \Omega^{\lvert G\rvert} & =d\lvert\delta\rvert.
+    \end{align}
+    Positive real powers are multiplicative, and the
+    $\lvert G\rvert$-th power is injective on $\mathbb R_{>0}$. Hence
+    $d\chi_0=\Omega$.
+    % Consolidated clarification:
+    % docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex.
+\end{proof}
+
+\begin{theorem}[Hat-compatible positive primitive]
+    \label{thm:mpug_positive_generalized_cocycle_hat}
+    \lean{TNLean.Algebra.ActionTensorGauge.coboundary_div,
+        TNLean.Algebra.ActionTensorGauge.coboundary_positiveRpow,
+        TNLean.Algebra.LSymbol.exists_positive_coboundary_hat_mul_eq_one}
+    \leanok
+    \uses{def:mpug_generalized_hat,
+        def:mpug_positive_generalized_cochains,
+        thm:mpug_generalized_hat_coboundary,
+        thm:mpug_positive_generalized_cocycle}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpug_positive_generalized_cocycle}, suppose additionally
+    that
+    \begin{align}
+        \Omega^x_{g,h}\widehat\Omega^{\,x}_{g,h}
+         & =1
+        \label{eq:mpug_positive_hat_hypothesis}
+    \end{align}
+    for every $x\in\mathsf X$ and $g,h\in G$. Then the positive cochain can
+    be chosen so that
+    \begin{align}
+        \Omega & =d\chi,
+        \label{eq:mpug_positive_hat_coboundary}
+    \end{align}
+    and
+    \begin{align}
+        \chi^x_g\widehat\chi^{\,x}_g
+         & =1.
+        \label{eq:mpug_positive_hat_witness_identity}
+    \end{align}
+    This is the second assertion of
+    \cite[Corollary at lines~5950--5960]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5955--5960.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_generalized_hat_coboundary,
+        thm:mpug_positive_generalized_cocycle}
+    Let $\chi_0$ satisfy $d\chi_0=\Omega$ as in
+    Theorem~\ref{thm:mpug_positive_generalized_cocycle}. Define
+    \begin{align}
+        \chi^x_g
+         & =\sqrt{\frac{\chi^x_{0,g}}
+            {\widehat\chi^{\,x}_{0,g}}}
+        =\sqrt{\frac{\chi^x_{0,g}}
+            {\chi^{\,g x}_{0,g^{-1}}}}.
+        \label{eq:mpug_positive_hat_witness}
+    \end{align}
+    All values are positive, so the positive square roots are unambiguous.
+    Using $\widehat{d\chi_0}=d\widehat\chi_0$ and
+    $\Omega\widehat\Omega=1$ gives
+    \begin{align}
+        d\chi
+         & =\sqrt{\frac{d\chi_0}{d\widehat\chi_0}}
+        =\sqrt{\frac{\Omega}{\widehat\Omega}}
+        =\sqrt{\Omega^2}
+        =\Omega.
+    \end{align}
+    Moreover,
+    \begin{align}
+        \widehat\chi
+         & =\sqrt{\frac{\widehat\chi_0}{\chi_0}}
+        =\chi^{-1},
+    \end{align}
+    which proves
+    (\ref{eq:mpug_positive_hat_witness_identity}).
 \end{proof}
 
 \begin{definition}[Inversion cochains]

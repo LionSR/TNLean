@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Positive Primitive in the Generalized-Cocycle Corollary}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source argument}
+
+Let $G$ be finite and let the positive generalized $2$-cocycle $\Omega$ take
+values in the embedded subgroup $\mathbb R_{>0}\subset\mathbb C^\times$.
+The proof of
+\cite[Corollary~\texttt{cor:positive\_trivial}, lines~5950--5960]
+{FrancoRubio2025MPUGauging} invokes the preceding identity
+\begin{align}
+    \Omega^{|G|} &= d\delta,
+    \qquad
+    \delta^x_g=\det X^x_g,
+    \label{eq:fbc25_positive_generalized_power}
+\end{align}
+and then takes a positive $|G|$-th root.
+
+The determinant cochain $\delta$ need not itself be positive. Indeed, the
+regular-action matrix factors as a permutation matrix times a diagonal matrix,
+and the permutation determinant can equal $-1$. Thus a positive root of
+$\delta^x_g$ is not defined in general.
+
+\section{Positive primitive}
+
+Take the pointwise complex norm before taking the root:
+\begin{align}
+    \chi^x_{0,g}
+        &=\lvert\delta^x_g\rvert^{1/|G|}
+          =\lvert\det X^x_g\rvert^{1/|G|}.
+    \label{eq:fbc25_positive_generalized_primitive}
+\end{align}
+Since $\delta^x_g\ne0$, every value of $\chi_0$ lies in
+$\mathbb R_{>0}\subset\mathbb C^\times$. Multiplicativity of the complex norm
+and positivity of $\Omega$ turn
+Eq.~\ref{eq:fbc25_positive_generalized_power} into
+\begin{align}
+    \Omega^{|G|} &= d\lvert\delta\rvert.
+    \label{eq:fbc25_positive_generalized_norm_power}
+\end{align}
+Positive real powers are multiplicative, so
+$(d\chi_0)^{|G|}=\Omega^{|G|}$. Injectivity of the $|G|$-th power on
+$\mathbb R_{>0}$ gives $d\chi_0=\Omega$.
+
+\section{Formal treatment}
+
+The formal construction takes the pointwise norm of the determinant cochain
+and then its positive $|G|$-th root. The block label $x$ is retained in
+Eq.~\ref{eq:fbc25_positive_generalized_primitive}. This changes no hypothesis
+or conclusion of the corollary.\footnote{Formal declarations:
+\leanid{TNLean.Algebra.LSymbol.positivePrimitive} and
+\leanid{TNLean.Algebra.LSymbol.exists\_positive\_coboundary} in
+\doclink{TNLean/Algebra/PositiveGeneralizedCocycle}.}
+
+\textbf{Verdict: resolved local correction.}
+The norm removes the possible permutation sign while preserving the
+coboundary identity required by the positive-root argument.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
