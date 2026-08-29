@@ -1,0 +1,217 @@
+%apsrev4-2.bst 2019-01-14 (MD) hand-edited version of apsrev4-1.bst
+%Control: key (0)
+%Control: author (8) initials jnrlst
+%Control: editor formatted (1) identically to author
+%Control: production of article title (0) allowed
+%Control: page (0) single
+%Control: year (1) truncated
+%Control: production of eprint (0) enabled
+\begin{thebibliography}{55}%
+\makeatletter
+\providecommand \@ifxundefined [1]{%
+ \@ifx{#1\undefined}
+}%
+\providecommand \@ifnum [1]{%
+ \ifnum #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \@ifx [1]{%
+ \ifx #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \natexlab [1]{#1}%
+\providecommand \enquote  [1]{``#1''}%
+\providecommand \bibnamefont  [1]{#1}%
+\providecommand \bibfnamefont [1]{#1}%
+\providecommand \citenamefont [1]{#1}%
+\providecommand \href@noop [0]{\@secondoftwo}%
+\providecommand \href [0]{\begingroup \@sanitize@url \@href}%
+\providecommand \@href[1]{\@@startlink{#1}\@@href}%
+\providecommand \@@href[1]{\endgroup#1\@@endlink}%
+\providecommand \@sanitize@url [0]{\catcode `\\12\catcode `\$12\catcode `\&12\catcode `\#12\catcode `\^12\catcode `\_12\catcode `\%12\relax}%
+\providecommand \@@startlink[1]{}%
+\providecommand \@@endlink[0]{}%
+\providecommand \url  [0]{\begingroup\@sanitize@url \@url }%
+\providecommand \@url [1]{\endgroup\@href {#1}{\urlprefix }}%
+\providecommand \urlprefix  [0]{URL }%
+\providecommand \Eprint [0]{\href }%
+\providecommand \doibase [0]{https://doi.org/}%
+\providecommand \selectlanguage [0]{\@gobble}%
+\providecommand \bibinfo  [0]{\@secondoftwo}%
+\providecommand \bibfield  [0]{\@secondoftwo}%
+\providecommand \translation [1]{[#1]}%
+\providecommand \BibitemOpen [0]{}%
+\providecommand \bibitemStop [0]{}%
+\providecommand \bibitemNoStop [0]{.\EOS\space}%
+\providecommand \EOS [0]{\spacefactor3000\relax}%
+\providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
+\let\auto@bib@innerbib\@empty
+%</preamble>
+\bibitem [{\citenamefont {Lieb}\ \emph {et~al.}(1961)\citenamefont {Lieb}, \citenamefont {Schultz},\ and\ \citenamefont {Mattis}}]{Lieb61}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Lieb}}, \bibinfo {author} {\bibfnamefont {T.}~\bibnamefont {Schultz}},\ and\ \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Mattis}},\ }\bibfield  {title} {\bibinfo {title} {Two soluble models of an antiferromagnetic chain},\ }\href {https://doi.org/https://doi.org/10.1016/0003-4916(61)90115-4} {\bibfield  {journal} {\bibinfo  {journal} {Annals of Physics}\ }\textbf {\bibinfo {volume} {16}},\ \bibinfo {pages} {407} (\bibinfo {year} {1961})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Oshikawa}\ \emph {et~al.}(1997)\citenamefont {Oshikawa}, \citenamefont {Yamanaka},\ and\ \citenamefont {Affleck}}]{Oshikawa97}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Oshikawa}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Yamanaka}},\ and\ \bibinfo {author} {\bibfnamefont {I.}~\bibnamefont {Affleck}},\ }\bibfield  {title} {\bibinfo {title} {Magnetization plateaus in spin chains: ``haldane gap'' for half-integer spins},\ }\href {https://doi.org/10.1103/PhysRevLett.78.1984} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {78}},\ \bibinfo {pages} {1984} (\bibinfo {year} {1997})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Tasaki}(2020)}]{Tasaki_book}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Tasaki}},\ }\href@noop {} {\emph {\bibinfo {title} {Physics and Mathematics of Quantum Many-Body Systems}}}\ (\bibinfo  {publisher} {Springer Cham},\ \bibinfo {year} {2020})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Fuji}(2016)}]{Fuji16}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Fuji}},\ }\bibfield  {title} {\bibinfo {title} {Effective field theory for one-dimensional valence-bond-solid phases and their symmetry protection},\ }\href {https://doi.org/10.1103/PhysRevB.93.104425} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {93}},\ \bibinfo {pages} {104425} (\bibinfo {year} {2016})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Po}\ \emph {et~al.}(2017)\citenamefont {Po}, \citenamefont {Watanabe}, \citenamefont {Jian},\ and\ \citenamefont {Zaletel}}]{Po17}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {H.~C.}\ \bibnamefont {Po}}, \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Watanabe}}, \bibinfo {author} {\bibfnamefont {C.-M.}\ \bibnamefont {Jian}},\ and\ \bibinfo {author} {\bibfnamefont {M.~P.}\ \bibnamefont {Zaletel}},\ }\bibfield  {title} {\bibinfo {title} {Lattice homotopy constraints on phases of quantum magnets},\ }\href {https://doi.org/10.1103/PhysRevLett.119.127202} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {119}},\ \bibinfo {pages} {127202} (\bibinfo {year} {2017})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Ogata}\ \emph {et~al.}(2021)\citenamefont {Ogata}, \citenamefont {Tachikawa},\ and\ \citenamefont {Tasaki}}]{Ogata21}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Ogata}}, \bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Tachikawa}},\ and\ \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Tasaki}},\ }\bibfield  {title} {\bibinfo {title} {General lieb–schultz–mattis type theorems for quantum spin chains},\ }\href {https://doi.org/10.1007/s00220-021-04116-9} {\bibfield  {journal} {\bibinfo  {journal} {Commun. Math. Phys.}\ }\textbf {\bibinfo {volume} {385}},\ \bibinfo {pages} {79–99} (\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Tasaki}(2022)}]{Tasaki22}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Tasaki}},\ }\bibinfo {title} {The lieb–schultz–mattis theorem. a topological point of view}\ (\bibinfo  {publisher} {European Mathematical Society Press},\ \bibinfo {year} {2022})\ pp.\ \bibinfo {pages} {405--446}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Landau}(1937)}]{Landau}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.~D.}\ \bibnamefont {Landau}},\ }\bibfield  {title} {\bibinfo {title} {On the theory of phase transitions},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Zh. Eksp. Teor. Fiz.}\ }\textbf {\bibinfo {volume} {7}},\ \bibinfo {pages} {19} (\bibinfo {year} {1937})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Bhardwaj}\ \emph {et~al.}(2024)\citenamefont {Bhardwaj}, \citenamefont {Bottini}, \citenamefont {Pajer},\ and\ \citenamefont {Sch\"afer-Nameki}}]{Bhardwaj24}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bhardwaj}}, \bibinfo {author} {\bibfnamefont {L.~E.}\ \bibnamefont {Bottini}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Pajer}},\ and\ \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Sch\"afer-Nameki}},\ }\bibfield  {title} {\bibinfo {title} {Categorical {L}andau {P}aradigm for {G}apped {P}hases},\ }\href {https://doi.org/10.1103/PhysRevLett.133.161601} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {133}},\ \bibinfo {pages} {161601} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Bhardwaj}\ \emph {et~al.}()\citenamefont {Bhardwaj}, \citenamefont {Bottini}, \citenamefont {Schafer-Nameki},\ and\ \citenamefont {Tiwari}}]{Bhardwaj2024a}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bhardwaj}}, \bibinfo {author} {\bibfnamefont {L.~E.}\ \bibnamefont {Bottini}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Schafer-Nameki}},\ and\ \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Tiwari}},\ }\bibfield  {title} {\bibinfo {title} {Illustrating the {C}ategorical {L}andau {P}aradigm in {L}attice {M}odels},\ }\href {https://arxiv.org/abs/2405.05302} {\ }\Eprint {https://arxiv.org/abs/2405.05302} {arXiv:2405.05302 [cond-mat.str-el]} \BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Bhardwaj}\ \emph {et~al.}(2025)\citenamefont {Bhardwaj}, \citenamefont {Bottini}, \citenamefont {Pajer},\ and\ \citenamefont {Schäfer-Nameki}}]{Bhardwaj25}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Bhardwaj}}, \bibinfo {author} {\bibfnamefont {L.~E.}\ \bibnamefont {Bottini}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Pajer}},\ and\ \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Schäfer-Nameki}},\ }\bibfield  {title} {\bibinfo {title} {{Gapped phases with non-invertible symmetries: (1+1)d}},\ }\href {https://doi.org/10.21468/SciPostPhys.18.1.032} {\bibfield  {journal} {\bibinfo  {journal} {SciPost Phys.}\ }\textbf {\bibinfo {volume} {18}},\ \bibinfo {pages} {032} (\bibinfo {year} {2025})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Iqbal}\ and\ \citenamefont {McGreevy}(2022)}]{Iqbal22}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Iqbal}}\ and\ \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {McGreevy}},\ }\bibfield  {title} {\bibinfo {title} {{Mean string field theory: {L}andau-{G}inzburg theory for 1-form symmetries}},\ }\href {https://doi.org/10.21468/SciPostPhys.13.5.114} {\bibfield  {journal} {\bibinfo  {journal} {SciPost Phys.}\ }\textbf {\bibinfo {volume} {13}},\ \bibinfo {pages} {114} (\bibinfo {year} {2022})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Liu}\ \emph {et~al.}()\citenamefont {Liu}, \citenamefont {Luo},\ and\ \citenamefont {Wang}}]{Liu24}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Liu}}, \bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Luo}},\ and\ \bibinfo {author} {\bibfnamefont {Y.-N.}\ \bibnamefont {Wang}},\ }\bibfield  {title} {\bibinfo {title} {Higher-matter and {L}andau-{G}inzburg theory of higher-group symmetries},\ }\href {https://arxiv.org/abs/2406.03974} {\ }\Eprint {https://arxiv.org/abs/2406.03974} {arXiv:2406.03974 [hep-th]} \BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Wen}(1990)}]{Wen90}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {X.~G.}\ \bibnamefont {Wen}},\ }\bibfield  {title} {\bibinfo {title} {Topological orders in rigid states},\ }\href {https://doi.org/10.1142/S0217979290000139} {\bibfield  {journal} {\bibinfo  {journal} {International Journal of Modern Physics B}\ }\textbf {\bibinfo {volume} {04}},\ \bibinfo {pages} {239} (\bibinfo {year} {1990})},\ \Eprint {https://arxiv.org/abs/https://doi.org/10.1142/S0217979290000139} {https://doi.org/10.1142/S0217979290000139} \BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Cirac}\ \emph {et~al.}(2021)\citenamefont {Cirac}, \citenamefont {P\'erez-Garc\'{\i}a}, \citenamefont {Schuch},\ and\ \citenamefont {Verstraete}}]{Review}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {P\'erez-Garc\'{\i}a}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}},\ and\ \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ }\bibfield  {title} {\bibinfo {title} {Matrix product states and projected entangled pair states: Concepts, symmetries, theorems},\ }\href {https://doi.org/10.1103/RevModPhys.93.045003} {\bibfield  {journal} {\bibinfo  {journal} {Rev. Mod. Phys.}\ }\textbf {\bibinfo {volume} {93}},\ \bibinfo {pages} {045003} (\bibinfo {year} {2021})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Ran}\ \emph {et~al.}(2020)\citenamefont {Ran}, \citenamefont {Tirrito}, \citenamefont {Peng}, \citenamefont {Chen}, \citenamefont {Tagliacozzo}, \citenamefont {Su},\ and\ \citenamefont {Lewenstein}}]{TN_book}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.-J.}\ \bibnamefont {Ran}}, \bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Tirrito}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {Peng}}, \bibinfo {author} {\bibfnamefont {X.}~\bibnamefont {Chen}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Tagliacozzo}}, \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont {Su}},\ and\ \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Lewenstein}},\ }\href@noop {} {\emph {\bibinfo {title} {Tensor Network Contractions, Methods and Applications to Quantum Many-Body Systems}}}\ (\bibinfo  {publisher} {Springer Cham},\ \bibinfo {year} {2020})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Chen}\ \emph {et~al.}(2011{\natexlab{a}})\citenamefont {Chen}, \citenamefont {Gu},\ and\ \citenamefont {Wen}}]{Chen11a}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {X.}~\bibnamefont {Chen}}, \bibinfo {author} {\bibfnamefont {Z.-C.}\ \bibnamefont {Gu}},\ and\ \bibinfo {author} {\bibfnamefont {X.-G.}\ \bibnamefont {Wen}},\ }\bibfield  {title} {\bibinfo {title} {Classification of gapped symmetric phases in one-dimensional spin systems},\ }\href {https://doi.org/10.1103/PhysRevB.83.035107} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {83}},\ \bibinfo {pages} {035107} (\bibinfo {year} {2011}{\natexlab{a}})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Schuch}\ \emph {et~al.}(2011)\citenamefont {Schuch}, \citenamefont {P\'erez-Garc\'{\i}a},\ and\ \citenamefont {Cirac}}]{Schuch11}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {P\'erez-Garc\'{\i}a}},\ and\ \bibinfo {author} {\bibfnamefont {I.}~\bibnamefont {Cirac}},\ }\bibfield  {title} {\bibinfo {title} {Classifying quantum phases using matrix product states and projected entangled pair states},\ }\href {https://doi.org/10.1103/PhysRevB.84.165139} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {84}},\ \bibinfo {pages} {165139} (\bibinfo {year} {2011})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {P\'erez-Garc\'{\i}a}\ \emph {et~al.}(2008)\citenamefont {P\'erez-Garc\'{\i}a}, \citenamefont {Wolf}, \citenamefont {Sanz}, \citenamefont {Verstraete},\ and\ \citenamefont {Cirac}}]{string_order}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {P\'erez-Garc\'{\i}a}}, \bibinfo {author} {\bibfnamefont {M.~M.}\ \bibnamefont {Wolf}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Sanz}}, \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ and\ \bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}},\ }\bibfield  {title} {\bibinfo {title} {String order and symmetries in quantum spin lattices},\ }\href {https://doi.org/10.1103/PhysRevLett.100.167202} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {100}},\ \bibinfo {pages} {167202} (\bibinfo {year} {2008})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {O'Raifeartaigh}\ and\ \citenamefont {Straumann}(2000)}]{Straumann00}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {O'Raifeartaigh}}\ and\ \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Straumann}},\ }\bibfield  {title} {\bibinfo {title} {Gauge theory: Historical origins and some modern developments},\ }\href {https://doi.org/10.1103/RevModPhys.72.1} {\bibfield  {journal} {\bibinfo  {journal} {Rev. Mod. Phys.}\ }\textbf {\bibinfo {volume} {72}},\ \bibinfo {pages} {1} (\bibinfo {year} {2000})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Yang}\ and\ \citenamefont {Mills}(1954)}]{YangMills54}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {C.~N.}\ \bibnamefont {Yang}}\ and\ \bibinfo {author} {\bibfnamefont {R.~L.}\ \bibnamefont {Mills}},\ }\bibfield  {title} {\bibinfo {title} {Conservation of isotopic spin and isotopic gauge invariance},\ }\href {https://doi.org/10.1103/PhysRev.96.191} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev.}\ }\textbf {\bibinfo {volume} {96}},\ \bibinfo {pages} {191} (\bibinfo {year} {1954})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Wu}\ and\ \citenamefont {Yang}(1975)}]{Wu75}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~T.}\ \bibnamefont {Wu}}\ and\ \bibinfo {author} {\bibfnamefont {C.~N.}\ \bibnamefont {Yang}},\ }\bibfield  {title} {\bibinfo {title} {Concept of nonintegrable phase factors and global formulation of gauge fields},\ }\href {https://doi.org/10.1103/PhysRevD.12.3845} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. D}\ }\textbf {\bibinfo {volume} {12}},\ \bibinfo {pages} {3845} (\bibinfo {year} {1975})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Englert}\ and\ \citenamefont {Brout}(1964)}]{Englert64}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Englert}}\ and\ \bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Brout}},\ }\bibfield  {title} {\bibinfo {title} {Broken symmetry and the mass of gauge vector mesons},\ }\href {https://doi.org/10.1103/PhysRevLett.13.321} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {13}},\ \bibinfo {pages} {321} (\bibinfo {year} {1964})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Higgs}(1964)}]{Higgs64}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {P.~W.}\ \bibnamefont {Higgs}},\ }\bibfield  {title} {\bibinfo {title} {Broken symmetries and the masses of gauge bosons},\ }\href {https://doi.org/10.1103/PhysRevLett.13.508} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {13}},\ \bibinfo {pages} {508} (\bibinfo {year} {1964})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Anderson}(1963)}]{Anderson63}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {P.~W.}\ \bibnamefont {Anderson}},\ }\bibfield  {title} {\bibinfo {title} {Plasmons, gauge invariance, and mass},\ }\href {https://doi.org/10.1103/PhysRev.130.439} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev.}\ }\textbf {\bibinfo {volume} {130}},\ \bibinfo {pages} {439} (\bibinfo {year} {1963})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Kleinert}(1989)}]{Kleinert}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Kleinert}},\ }\href@noop {} {\emph {\bibinfo {title} {Gauge Fields in Condensed Matter}}}\ (\bibinfo  {publisher} {World Scientific},\ \bibinfo {year} {1989})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Fr{\"o}hlich}(2023)}]{Fr23}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Fr{\"o}hlich}},\ }\bibfield  {title} {\bibinfo {title} {Gauge invariance and anomalies in condensed matter physics},\ }\href {https://doi.org/https://doi.org/10.1063/5.0135142} {\bibfield  {journal} {\bibinfo  {journal} {J. Math. Phys.}\ }\textbf {\bibinfo {volume} {64}},\ \bibinfo {pages} {031903} (\bibinfo {year} {2023})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Kogut}\ and\ \citenamefont {Susskind}(1975)}]{Kogut75}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Kogut}}\ and\ \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Susskind}},\ }\bibfield  {title} {\bibinfo {title} {Hamiltonian formulation of wilson's lattice gauge theories},\ }\href {https://doi.org/10.1103/PhysRevD.11.395} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. D}\ }\textbf {\bibinfo {volume} {11}},\ \bibinfo {pages} {395} (\bibinfo {year} {1975})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Haegeman}\ \emph {et~al.}(2015)\citenamefont {Haegeman}, \citenamefont {Van~Acoleyen}, \citenamefont {Schuch}, \citenamefont {Cirac},\ and\ \citenamefont {Verstraete}}]{PhysRevX.5.011024}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Haegeman}}, \bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Van~Acoleyen}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}}, \bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}},\ and\ \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ }\bibfield  {title} {\bibinfo {title} {Gauging quantum states: From global to local symmetries in many-body systems},\ }\href {https://doi.org/10.1103/PhysRevX.5.011024} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. X}\ }\textbf {\bibinfo {volume} {5}},\ \bibinfo {pages} {011024} (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Rubio}\ and\ \citenamefont {Kull}(2023)}]{GarreKull}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~G.}\ \bibnamefont {Rubio}}\ and\ \bibinfo {author} {\bibfnamefont {I.}~\bibnamefont {Kull}},\ }\bibfield  {title} {\bibinfo {title} {{Gauging quantum states with nonanomalous matrix product operator symmetries}},\ }\href {https://doi.org/10.1103/PhysRevB.107.075137} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {107}},\ \bibinfo {pages} {075137} (\bibinfo {year} {2023})},\ \Eprint {https://arxiv.org/abs/2209.07355} {arXiv:2209.07355 [quant-ph]} \BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Barkeshli}\ \emph {et~al.}(2019)\citenamefont {Barkeshli}, \citenamefont {Bonderson}, \citenamefont {Cheng},\ and\ \citenamefont {Wang}}]{Barkeshli19}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Barkeshli}}, \bibinfo {author} {\bibfnamefont {P.}~\bibnamefont {Bonderson}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Cheng}},\ and\ \bibinfo {author} {\bibfnamefont {Z.}~\bibnamefont {Wang}},\ }\bibfield  {title} {\bibinfo {title} {Symmetry fractionalization, defects, and gauging of topological phases},\ }\href {https://doi.org/10.1103/PhysRevB.100.115147} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {100}},\ \bibinfo {pages} {115147} (\bibinfo {year} {2019})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Kull}\ \emph {et~al.}(2017)\citenamefont {Kull}, \citenamefont {Molnar}, \citenamefont {Zohar},\ and\ \citenamefont {Cirac}}]{KULL2017199}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {I.}~\bibnamefont {Kull}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Molnar}}, \bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Zohar}},\ and\ \bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}},\ }\bibfield  {title} {\bibinfo {title} {Classification of matrix product states with a local (gauge) symmetry},\ }\href {https://doi.org/https://doi.org/10.1016/j.aop.2017.08.029} {\bibfield  {journal} {\bibinfo  {journal} {Annals of Physics}\ }\textbf {\bibinfo {volume} {386}},\ \bibinfo {pages} {199} (\bibinfo {year} {2017})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Blanik}\ \emph {et~al.}(2025)\citenamefont {Blanik}, \citenamefont {Garre-Rubio}, \citenamefont {Molnár},\ and\ \citenamefont {Zohar}}]{Blanik_2025}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Blanik}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Garre-Rubio}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Molnár}},\ and\ \bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Zohar}},\ }\bibfield  {title} {\bibinfo {title} {Internal structure of gauge-invariant projected entangled pair states},\ }\href {https://doi.org/10.1088/1751-8121/adae83} {\bibfield  {journal} {\bibinfo  {journal} {Journal of Physics A: Mathematical and Theoretical}\ }\textbf {\bibinfo {volume} {58}},\ \bibinfo {pages} {065301} (\bibinfo {year} {2025})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Seifnashri}(2024)}]{Seifnashri}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Seifnashri}},\ }\bibfield  {title} {\bibinfo {title} {{Lieb-Schultz-Mattis anomalies as obstructions to gauging (non-on-site) symmetries}},\ }\href {https://doi.org/10.21468/SciPostPhys.16.4.098} {\bibfield  {journal} {\bibinfo  {journal} {SciPost Phys.}\ }\textbf {\bibinfo {volume} {16}},\ \bibinfo {pages} {098} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Cirac}\ \emph {et~al.}(2017{\natexlab{a}})\citenamefont {Cirac}, \citenamefont {Pérez-García}, \citenamefont {Schuch},\ and\ \citenamefont {Verstraete}}]{Cirac17}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Cirac}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Pérez-García}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}},\ and\ \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ }\bibfield  {title} {\bibinfo {title} {Matrix product density operators: Renormalization fixed points and boundary theories},\ }\href {https://doi.org/https://doi.org/10.1016/j.aop.2016.12.030} {\bibfield  {journal} {\bibinfo  {journal} {Annals of Physics}\ }\textbf {\bibinfo {volume} {378}},\ \bibinfo {pages} {100} (\bibinfo {year} {2017}{\natexlab{a}})}\BibitemShut {NoStop}%
+\bibitem [{Note1()}]{Note1}%
+  \BibitemOpen
+  \bibinfo {note} {An MPS tensor that has the form \protect \eqref {eq:block_inj} with $A_k$ normal tensors is said to be in \protect \textit {canonical form}. Any MPS tensor can, potentially after blocking, be put in canonical form. Further blocking, if necessary, will then yield a block-injective tensor. Beware of the terminology coincidence of the \protect \textit {blocking} operation, putting tensors together, and the \protect \textit { block} that make up the matrices of a tensor in canonical or in \protect \textit {block}-injective form.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Cirac}\ \emph {et~al.}(2017{\natexlab{b}})\citenamefont {Cirac}, \citenamefont {Perez-Garcia}, \citenamefont {Schuch},\ and\ \citenamefont {Verstraete}}]{MPU}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Perez-Garcia}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}},\ and\ \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ }\bibfield  {title} {\bibinfo {title} {Matrix product unitaries: structure, symmetries, and topological invariants},\ }\href {https://doi.org/10.1088/1742-5468/aa7e55} {\bibfield  {journal} {\bibinfo  {journal} {Journal of Statistical Mechanics: Theory and Experiment}\ }\textbf {\bibinfo {volume} {2017}},\ \bibinfo {pages} {083105} (\bibinfo {year} {2017}{\natexlab{b}})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Molnar}\ \emph {et~al.}(2018)\citenamefont {Molnar}, \citenamefont {Ge}, \citenamefont {Schuch},\ and\ \citenamefont {Cirac}}]{semiinjective}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Molnar}}, \bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Ge}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}},\ and\ \bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}},\ }\bibfield  {title} {\bibinfo {title} {{A generalization of the injectivity condition for projected entangled pair states}},\ }\href {https://doi.org/10.1063/1.5007017} {\bibfield  {journal} {\bibinfo  {journal} {Journal of Mathematical Physics}\ }\textbf {\bibinfo {volume} {59}},\ \bibinfo {pages} {021902} (\bibinfo {year} {2018})}\BibitemShut {NoStop}%
+\bibitem [{Note2()}]{Note2}%
+  \BibitemOpen
+  \bibinfo {note} {We thank José Garre-Rubio for clarifying this point}\BibitemShut {NoStop}%
+\bibitem [{Note3()}]{Note3}%
+  \BibitemOpen
+  \bibinfo {note} {The reader should be cautioned that the word \protect \textit {gauge} is going to appear in different contexts in this work since we are dealing with the procedure of gauging a physical symmetry as well as with the redundancies in the definition of the tensors that arise naturally in tensor networks. We hope that in every instance it will be clear what we are referring to.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Chen}\ \emph {et~al.}(2011{\natexlab{b}})\citenamefont {Chen}, \citenamefont {Liu},\ and\ \citenamefont {Wen}}]{Chen11}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {X.}~\bibnamefont {Chen}}, \bibinfo {author} {\bibfnamefont {Z.-X.}\ \bibnamefont {Liu}},\ and\ \bibinfo {author} {\bibfnamefont {X.-G.}\ \bibnamefont {Wen}},\ }\bibfield  {title} {\bibinfo {title} {Two-dimensional symmetry-protected topological orders and their protected gapless edge excitations},\ }\href {https://doi.org/10.1103/PhysRevB.84.235141} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {84}},\ \bibinfo {pages} {235141} (\bibinfo {year} {2011}{\natexlab{b}})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Garre-Rubio}\ and\ \citenamefont {Schuch}(2024)}]{GarreSchuch}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Garre-Rubio}}\ and\ \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}},\ }\bibfield  {title} {\bibinfo {title} {{Fractional domain wall statistics in spin chains with anomalous symmetries}},\ }\href@noop {} {\  (\bibinfo {year} {2024})},\ \Eprint {https://arxiv.org/abs/2405.00439} {arXiv:2405.00439 [cond-mat.str-el]} \BibitemShut {NoStop}%
+\bibitem [{Note4()}]{Note4}%
+  \BibitemOpen
+  \bibinfo {note} {See also \cite {GarreLootensMolnar} and references therein for yet another motivation, based on the analysis of perturbations of parent Hamiltonian, to consider only transitive actions.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Garre-Rubio}\ \emph {et~al.}(2023)\citenamefont {Garre-Rubio}, \citenamefont {Lootens},\ and\ \citenamefont {Moln\'ar}}]{GarreLootensMolnar}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Garre-Rubio}}, \bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Lootens}},\ and\ \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Moln\'ar}},\ }\bibfield  {title} {\bibinfo {title} {{Classifying phases protected by matrix product operator symmetries using matrix product states}},\ }\href {https://doi.org/10.22331/q-2023-02-21-927} {\bibfield  {journal} {\bibinfo  {journal} {Quantum}\ }\textbf {\bibinfo {volume} {7}},\ \bibinfo {pages} {927} (\bibinfo {year} {2023})},\ \Eprint {https://arxiv.org/abs/2203.12563} {arXiv:2203.12563 [cond-mat.str-el]} \BibitemShut {NoStop}%
+\bibitem [{Note5()}]{Note5}%
+  \BibitemOpen
+  \bibinfo {note} {Since $U(1)$ is an abelian topological group (equipped with the standard topology) that is homotopically equivalent to $\protect \mathbb {C}^\times $ (also understood as an abelian topological group), there is an induced isomorphism in sheaf cohomology, $H^2(X,\protect \mathbb {C}^\times )\protect \cong H^2(X,U(1))$ for $X$ being a CW-complex, cf. \cite {Brown}}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Haegeman}\ \emph {et~al.}(2012)\citenamefont {Haegeman}, \citenamefont {Pirvu}, \citenamefont {Weir}, \citenamefont {Cirac}, \citenamefont {Osborne}, \citenamefont {Verschelde},\ and\ \citenamefont {Verstraete}}]{PhysRevB.85.100408}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Haegeman}}, \bibinfo {author} {\bibfnamefont {B.}~\bibnamefont {Pirvu}}, \bibinfo {author} {\bibfnamefont {D.~J.}\ \bibnamefont {Weir}}, \bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}}, \bibinfo {author} {\bibfnamefont {T.~J.}\ \bibnamefont {Osborne}}, \bibinfo {author} {\bibfnamefont {H.}~\bibnamefont {Verschelde}},\ and\ \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ }\bibfield  {title} {\bibinfo {title} {Variational matrix product ansatz for dispersion relations},\ }\href {https://doi.org/10.1103/PhysRevB.85.100408} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Rev. B}\ }\textbf {\bibinfo {volume} {85}},\ \bibinfo {pages} {100408} (\bibinfo {year} {2012})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Stephen}()}]{simps}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.~T.}\ \bibnamefont {Stephen}},\ }\bibfield  {title} {\bibinfo {title} {Non-onsite symmetries and quantum teleportation in split-index matrix product states},\ }\href {https://arxiv.org/abs/2404.15883} {\ }\Eprint {https://arxiv.org/abs/2404.15883} {arXiv:2404.15883 [quant-ph]} \BibitemShut {NoStop}%
+\bibitem [{Note6()}]{Note6}%
+  \BibitemOpen
+  \bibinfo {note} {Alternatively, we could have directly arrived at modified Gauss generators by precomposing $\protect \mathcal {G}$ with a unitary $Q_{g}$ that satisfies \begin {equation} Q'_{g}v(x, h_1, h_2)=\protect \dfrac {L^x_{h_1,h_2}}{L^x_{h_1g, g^{-1}h_2}}v(x, h_1, h_2) \end {equation} which can be seen to exist in the locally orthogonal case by a very similar argument to Lemma \ref {lemma:modif}.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Blanik}\ \emph {et~al.}()\citenamefont {Blanik}, \citenamefont {Garre-Rubio},\ and\ \citenamefont {Schuch}}]{BlanikGarreSchuch}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Blanik}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Garre-Rubio}},\ and\ \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}},\ }\href@noop {} {\bibinfo {title} {Quantum phases and gauging: A matrix product state approach}},\ \bibinfo {note} {to appear.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Lootens}\ \emph {et~al.}(2023)\citenamefont {Lootens}, \citenamefont {Delcamp}, \citenamefont {Ortiz},\ and\ \citenamefont {Verstraete}}]{Lootens_2023}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {L.}~\bibnamefont {Lootens}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {Delcamp}}, \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont {Ortiz}},\ and\ \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Verstraete}},\ }\bibfield  {title} {\bibinfo {title} {Dualities in one-dimensional quantum lattice models: Symmetric hamiltonians and matrix product operator intertwiners},\ }\bibfield  {journal} {\bibinfo  {journal} {PRX Quantum}\ }\textbf {\bibinfo {volume} {4}},\ \href {https://doi.org/10.1103/prxquantum.4.020357} {10.1103/prxquantum.4.020357} (\bibinfo {year} {2023})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Rubio}()}]{rubio2024}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~G.}\ \bibnamefont {Rubio}},\ }\bibfield  {title} {\bibinfo {title} {Emergent (2+1)d topological orders from iterative (1+1)d gauging},\ }\href {https://arxiv.org/abs/2403.07575} {\ }\Eprint {https://arxiv.org/abs/2403.07575} {arXiv:2403.07575 [quant-ph]} \BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Seiberg}\ \emph {et~al.}(2024)\citenamefont {Seiberg}, \citenamefont {Seifnashri},\ and\ \citenamefont {Shao}}]{SSS}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Seiberg}}, \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Seifnashri}},\ and\ \bibinfo {author} {\bibfnamefont {S.-H.}\ \bibnamefont {Shao}},\ }\bibfield  {title} {\bibinfo {title} {{Non-invertible symmetries and LSM-type constraints on a tensor product Hilbert space}},\ }\href {https://doi.org/10.21468/SciPostPhys.16.6.154} {\bibfield  {journal} {\bibinfo  {journal} {SciPost Phys.}\ }\textbf {\bibinfo {volume} {16}},\ \bibinfo {pages} {154} (\bibinfo {year} {2024})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Molnar}\ \emph {et~al.}()\citenamefont {Molnar}, \citenamefont {de~Alarcón}, \citenamefont {Garre-Rubio}, \citenamefont {Schuch}, \citenamefont {Cirac},\ and\ \citenamefont {Pérez-García}}]{weakHopf}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Molnar}}, \bibinfo {author} {\bibfnamefont {A.~R.}\ \bibnamefont {de~Alarcón}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Garre-Rubio}}, \bibinfo {author} {\bibfnamefont {N.}~\bibnamefont {Schuch}}, \bibinfo {author} {\bibfnamefont {J.~I.}\ \bibnamefont {Cirac}},\ and\ \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Pérez-García}},\ }\bibfield  {title} {\bibinfo {title} {Matrix product operator algebras {I}: representations of weak {H}opf algebras and projected entangled pair states},\ }\href {https://arxiv.org/abs/2204.05940} {\ }\Eprint {https://arxiv.org/abs/2204.05940} {arXiv:2204.05940 [quant-ph]} \BibitemShut {NoStop}%
+\bibitem [{Note7()}]{Note7}%
+  \BibitemOpen
+  \bibinfo {note} {This anomaly index coincides with what is called the Frobenius-Schur indicator in category theory. The authors thank Sahand Seifnashri for informing us of this and thus motivating this proposition.}\BibitemShut {Stop}%
+\bibitem [{\citenamefont {Brown}(1973)}]{Brown}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.~S.}\ \bibnamefont {Brown}},\ }\bibfield  {title} {\bibinfo {title} {Abstract homotopy theory and generalized sheaf cohomology},\ }\href {http://www.jstor.org/stable/1996573} {\bibfield  {journal} {\bibinfo  {journal} {Transactions of the American Mathematical Society}\ }\textbf {\bibinfo {volume} {186}},\ \bibinfo {pages} {419} (\bibinfo {year} {1973})}\BibitemShut {NoStop}%
+\end{thebibliography}%
