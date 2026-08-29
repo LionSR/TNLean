@@ -176,13 +176,29 @@ dimension once they are invertible.
 \end{lemma}
 
 \begin{proof}\leanok
-    If the bond dimension is zero, take the unit scalar and identity gauge;
-    the matrix relation is vacuous because the bond index is empty. Otherwise,
-    install the resulting nonzero-dimension hypothesis and apply the companion
-    quantum-channel gauged-intertwining theorem, which combines the two gauges
-    with the intertwiner into a Kraus gauge-phase witness. Finally, the local
-    conversion theorem translates that witness, including its relation
-    orientation, to gauge-phase equivalence of the original tensors.
+    If the bond dimension is zero, the bond spaces are empty, and the unit
+    scalar together with the unique identity gauge satisfies the relation.
+    Now suppose the bond dimension is positive, and write $S_A,S_B$ for the
+    two gauges. The corresponding gauged-intertwining theorem in the companion
+    quantum-channel volume~\cite[the square gauge construction]{QICLean2026Blueprint}
+    forms the inverse pair
+    \begin{align}
+        X
+         & :=S_AX'S_B^{-1},
+         &
+        X^{-1}
+         & =S_B(X')^{-1}S_A^{-1}.
+        \label{eq:spectral_gauged_intertwining_composed_gauge}
+    \end{align}
+    Transporting the assumed relation through $S_A$ and $S_B$ gives
+    $A^iX=\mu XB^i$. Multiplication by $X^{-1}$ therefore yields
+    \begin{align}
+        B^i
+         & =\mu^{-1}X^{-1}A^iX.
+        \label{eq:spectral_gauged_intertwining_phase_relation}
+    \end{align}
+    Since $|\mu|=1$, the scalar $\mu^{-1}$ is nonzero, so this is the required
+    gauge-phase equivalence.
 \end{proof}
 
 Combining these two lemmas proves Theorem~\ref{thm:modulus_one_gauge_irr_tp}:
