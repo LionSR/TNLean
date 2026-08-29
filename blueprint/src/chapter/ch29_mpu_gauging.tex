@@ -46,10 +46,12 @@ $N\geq1$. In particular, no identity at length zero is asserted.
 
 \begin{proof}\leanok
     \uses{thm:mpu_reindex_unitary, thm:mpdo_closed_chain_physical_blocking}
-    At chain length $N\geq1$, the blocked periodic operator is $U^{(NL)}$ up to
-    the canonical reindexing of configurations. Since $N,L>0$, the length $NL$
-    is positive. Thus $U^{(NL)}$ is unitary, and simultaneous reindexing
-    preserves unitarity.
+    At chain length $N\geq1$, the canonical reindexing of configurations gives
+    \begin{align}
+        O_N(\mathcal U^{[L]}) & \cong U^{(NL)}.
+    \end{align}
+    Since $N,L>0$, the length $NL$ is positive. Thus $U^{(NL)}$ is unitary,
+    and simultaneous reindexing preserves unitarity.
 \end{proof}
 
 \begin{definition}[Group representation by simple injective MPUs]
@@ -170,7 +172,8 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{def:mpug_raw_group_representation}
     \lean{MPOTensor.GroupFamily.IsRawRepresentation}
     \leanok
-    \uses{def:injective, def:mpug_positive_mpu}
+    \uses{def:injective, def:mpug_positive_mpu,
+        def:mpug_group_representation}
     A raw MPU representation is a dependent-bond family
     $\{\mathcal U_g\}_{g\in G}$ of injective matrix product unitaries on
     nonempty chains satisfying (\ref{eq:mpug_rep_identity}) and
@@ -197,8 +200,8 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.GroupFamily.IsRawRepresentation.block_common_then_block}
     \leanok
     \uses{def:mpug_raw_group_representation,
-        def:mpug_common_simple_length, def:mpu_simple,
-        def:mpdo_physical_blocking}
+        def:mpug_common_simple_length, def:mpug_group_representation,
+        def:mpu_simple, def:mpdo_physical_blocking}
     Let $\{\mathcal U_g\}_{g\in G}$ be a raw MPU representation. Then $L_*>0$,
     and every $\mathcal U_g^{[L_*]}$ is simple. For every $K>0$, each further
     block $(\mathcal U_g^{[L_*]})^{[K]}$ is simple. Consequently the blocked
