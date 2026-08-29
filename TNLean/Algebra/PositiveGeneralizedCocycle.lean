@@ -45,15 +45,9 @@ namespace PositiveUnits
 def embedding : Units NNReal →* Units ℂ :=
   Units.map (Complex.ofRealHom.comp NNReal.toRealHom).toMonoidHom
 
-/-- The complex norm as a multiplicative map into the nonnegative reals. -/
-noncomputable def normMonoidHom : ℂ →* NNReal where
-  toFun z := ⟨‖z‖, norm_nonneg z⟩
-  map_one' := NNReal.eq norm_one
-  map_mul' z w := NNReal.eq (norm_mul z w)
-
 /-- The norm of a complex unit, regarded as a nonnegative-real unit. -/
 noncomputable def norm : Units ℂ →* Units NNReal :=
-  Units.map normMonoidHom
+  Units.map nnnormHom.toMonoidHom
 
 /-- Raising nonnegative-real units to a real power is a multiplicative map. -/
 noncomputable def rpow (r : ℝ) : Units NNReal →* Units NNReal :=
