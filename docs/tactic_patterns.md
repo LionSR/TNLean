@@ -1645,7 +1645,7 @@ current counts and full location lists).
   through the shifted-resolvent difference, commute the scalar identity shift,
   and normalize the resulting module expression.
 - **Seen:** 2 occurrences in
-  `TNLean/Channel/Schwarz/OperatorJensenAux.lean`:
+  `QICLean/Channel/Schwarz/OperatorJensenAux.lean`:
   `positiveMap_rpowIntegrand₀₁_jensen` and
   `positiveMap_rpowIntegrand₁₂_jensen`.
 - **Abstraction:** a shared algebraic lemma parameterized by the exponent
@@ -1731,7 +1731,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** alternating `· intro i / simp` and
   `· intro i u v / simp [mul_assoc, mul_add]` blocks discharging
   bilinearity side goals.
-- **Seen:** 9 occurrences, all in `TNLean/Channel/Schwarz/TwoPositive.lean`
+- **Seen:** 9 occurrences, all in `QICLean/Channel/Schwarz/TwoPositive.lean`
   (lines 359-396).
 - **Abstraction (proposed):** single-file duplication — restructure the
   underlying definition to take a bundled bilinear map, or a local
@@ -1864,9 +1864,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   almost-everywhere vanishing, then use continuity and
   `Measure.eqOn_open_of_ae_eq` to obtain pointwise vanishing.
 - **Seen:** 2 occurrences across 2 files:
-  `TNLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean` in
+  `QICLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean` in
   `weyl_sourceB_defect_eq_zero_of_gap_eq_zero`, and
-  `TNLean/Channel/Schwarz/SupportRelativeEntropyGap.lean` in
+  `QICLean/Channel/Schwarz/SupportRelativeEntropyGap.lean` in
   `supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq` (2026-07-27).
 - **Abstraction (proposed):** a measure-theoretic lemma taking `IntegrableOn f (Ioi 0)`,
   `ContinuousOn f (Ioi 0)`, nonnegativity on `Ioi 0`, and zero restricted integral,
@@ -1881,7 +1881,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `P R⁻¹ D y` for a `P`-fixed vector `y`, and use the witness to show that
   the support projection of the left--right operator fixes `y`.
 - **Seen:** 2 occurrences in
-  `TNLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean`, in
+  `QICLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean`, in
   `supportRightProj_mul_supportLeftRightSupportProj_eq` and
   `supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular`
   (2026-07-27).
