@@ -81,6 +81,8 @@ lemma isNBlkInjective_iff_blockTensor_isInjective
 theorem isNBlkInjective_mul_of_isNBlkInjective
     (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m) (hN : Kraus.IsNBlkInjective A N) :
     Kraus.IsNBlkInjective A (m * N) := by
+  -- Use word-span factorization here rather than importing the higher-level
+  -- Wielandt theorem `Kraus.wordSpan_top_of_mul` into basic blocking.
   induction m with
   | zero => omega
   | succ m ih =>
