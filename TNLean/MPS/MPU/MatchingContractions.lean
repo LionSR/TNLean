@@ -53,12 +53,12 @@ theorem IsMPU.normalized_mpo_tail_coisometry [NeZero d]
           star (mpo U (K + 2)
             ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ)) η)) =
         if q = p then 1 else 0 := by
-    have := congrArg (fun M ↦ M
-      ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))
-      ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))) hco
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-      (finAddTwoArrowEquiv (Fin d) K).symm.injective.eq_iff, Prod.mk.injEq,
-      and_true] using this
+    simpa only [(finAddTwoArrowEquiv (Fin d) K).symm.injective.eq_iff,
+      Prod.mk.injEq, and_true] using
+      Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+        (mpo U (K + 2)) hco
+        ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))
+        ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))
   simp_rw [hentry]
   by_cases hpq : p = q
   · subst q

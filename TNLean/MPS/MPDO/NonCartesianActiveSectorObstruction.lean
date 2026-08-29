@@ -212,10 +212,10 @@ lemma isometry_mul_star_at_support
         star (F.physicalIsometry
           (scalarSectorPhysicalIndex F (supportSector F p)) p) = 1 := by
   let i := scalarSectorPhysicalIndex F (supportSector F p)
-  have hrow := congrFun (congrFun F.physicalIsometry_mul_conjTranspose i) i
   have hsum :
       ∑ q, F.physicalIsometry i q * star (F.physicalIsometry i q) = 1 := by
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply] using hrow
+    simpa using Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+      F.physicalIsometry F.physicalIsometry_mul_conjTranspose i i
   rw [← hsum]
   symm
   apply Finset.sum_eq_single p

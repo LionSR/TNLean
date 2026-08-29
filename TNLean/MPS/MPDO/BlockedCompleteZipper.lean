@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
@@ -76,7 +77,8 @@ theorem blockedFusionAnalysis_mul_blockedFusionSynthesis
   ext x y
   simp only [blockedFusionAnalysis, blockedFusionSynthesis, Matrix.mul_apply,
     Matrix.one_apply]
-  have h := congrArg (fun M ↦ M x y) (hcoisometry α β)
+  have h := Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+    (Fam.fusionIsometry α β) (hcoisometry α β) x y
   calc
     (∑ xy : Fin (Fam.bondDim α) × Fin (Fam.bondDim β),
       Fam.fusionIsometry α β x (finProdFinEquiv xy) *
@@ -91,7 +93,7 @@ theorem blockedFusionAnalysis_mul_blockedFusionSynthesis
         (fun q ↦ Fam.fusionIsometry α β x q *
           (Fam.fusionIsometry α β)ᴴ q y)
     _ = if x = y then 1 else 0 := by
-      simpa [Matrix.mul_apply, Matrix.one_apply] using h
+      simpa only [Matrix.conjTranspose_apply] using h
 
 /-- The blocked second zipper identity in the paired product-bond
 coordinates of the complete zipper family.
