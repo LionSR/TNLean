@@ -7,6 +7,8 @@ import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.BNTProjectorSelection
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.NeighboringTraceObstructionAmbientBlocks
+import TNLean.MPS.MPDO.PhysicalIsometricEmbeddingNeighboringTrace
+import TNLean.MPS.MPDO.PhysicalSectorGaugeTransport
 import TNLean.MPS.MPDO.SALTraceTransfer
 
 /-!
@@ -32,7 +34,7 @@ noncomputable section
 
 namespace MPOTensor.NeighboringTraceObstructionAmbientCounterexample
 
-open NeighboringTraceObstructionAmbientBlocks
+open NeighboringTraceObstructionAmbientBlocks PhysicalSectorFactorization
 
 /-- The two-sector decomposition used for the ambient construction. -/
 @[reducible] def sectors (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
@@ -479,6 +481,45 @@ theorem trace_mpo_ambient_pos
     (ambient_isMPDO mu B hmu hGauge)
     ((ambient_isSAL mu B hmu hGauge).isSourceZCL_of_physTraceTransfer_sq
       (ambient_literal_physTrace_ZCL mu B hmu hGauge)) hN
+
+/-- The first common-weight-absorbed representative admits no normalized
+rank-one neighboring-trace factorization.
+
+The contradiction transports a hypothetical factorization through the
+virtual gauge to the embedded obstruction and then descends it through the
+isometric physical inclusion to the four-letter obstruction.  Gauge transport
+and isometric descent are project-derived bridges; CPSV16 uses the asserted
+factorization at Appendix C.2, lines 1740--1782, but does not supply these
+transport results. -/
+theorem firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
+    ¬ ∃ F : PhysicalSectorFactorization
+        (commonWeightAbsorbedBasisMPOTensor (sectors mu B hmu)
+          (sectors_weight_copy_independent mu B hmu) 0),
+      Nonempty F.NeighboringTraceFactorization := by
+  intro hAbsorbed
+  have hGaugeAbsorbed : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor
+      (commonWeightAbsorbedBasisMPOTensor (sectors mu B hmu)
+        (sectors_weight_copy_independent mu B hmu) 0).toMPSTensor := by
+    rw [firstAbsorbedSector_toMPSTensor]
+    exact hGauge
+  have hEmbedded :
+      ∃ F : PhysicalSectorFactorization embeddedObstruction,
+        Nonempty F.NeighboringTraceFactorization :=
+    (PhysicalSectorFactorization.exists_neighboringTraceFactorization_iff_of_gaugeEquiv
+        hGaugeAbsorbed).mpr hAbsorbed
+  have hSource :
+      ∃ F : PhysicalSectorFactorization
+          MPOTensor.NonCartesianActiveSectorCandidate.tensor,
+        Nonempty F.NeighboringTraceFactorization := by
+    exact
+      exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry
+        physicalInclusion physicalInclusion_isometry
+        MPOTensor.NonCartesianActiveSectorCandidate.tensor_isInjective
+        tensor_physicalSupportProj_eq_one hEmbedded
+  exact MPOTensor.NonCartesianActiveSectorCandidate.not_exists_neighboringTraceFactorization
+    hSource
 
 /-- There is a five-letter ambient tensor satisfying the complete standing
 simple-biCF, MPDO, SAL, and literal physical-trace ZCL package used in CPSV16,
