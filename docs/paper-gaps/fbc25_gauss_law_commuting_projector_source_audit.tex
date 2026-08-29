@@ -71,9 +71,15 @@ Seifnashri first uses defect Hilbert spaces which may depend on all link
 labels.  For a discrete group, the formula used here is obtained after the
 explicit simplifying assumption that every defect Hilbert space is an
 identical copy of the untwisted matter space.  The extended space then becomes
-$\mathcal H\otimes\bigotimes_{j=1}^{L}\mathbb C[G]$, with one gauge factor per
-oriented link \cite[Section~3.2, arXiv source lines~1637--1678]
-{Seifnashri2024LSM}.
+\begin{align}
+    \mathcal H_{\mathrm{ext}}
+        &=\left(\bigotimes_{j=1}^{L}\mathcal H_j\right)
+          \otimes
+          \left(\bigotimes_{j=1}^{L}\mathbb C[G]_{(j,j+1)}\right),
+    \label{eq:fbc25_gauss_extended_space}
+\end{align}
+with one matter factor per site and one gauge factor per oriented link
+\cite[Section~3.2, arXiv source lines~1637--1678]{Seifnashri2024LSM}.
 
 \section{The local representation and its multiplication convention}
 
@@ -102,8 +108,9 @@ Eq.~\ref{eq:fbc25_gauss_oriented_local_space}, the local operator is
     \label{eq:fbc25_gauss_local_representation}
 \end{align}
 The superscript $j$ records the support and is suppressed in the displayed
-formula \papereqref{fbc25}{eq:mcG} of the MPU paper.  Applying first $h$ and then $g$ to
-one gauge sector gives
+formula \papereqref{fbc25}{eq:mcG} of
+Ref.~\cite[lines~3380--3386]{FrancoRubio2025MPUGauging}.  Applying first $h$
+and then $g$ to one gauge sector gives
 \begin{align}
     (a,b)
         &\overset{\mathcal G^j_h}{\longmapsto}(ah^{-1},hb)
@@ -148,9 +155,12 @@ subspace; the additional constraint is $P_j=1$ on physical states.
 \section{The three-defect associator calculation}
 
 The commuting-projector proof uses more than the scalar $3$-cocycle equation.
+Let $\omega\colon G^3\to\mathbb C^\times$ be the anomaly $3$-cocycle defined by
+the MPU fusion tensors in
+Ref.~\cite[lines~1506--1545]{FrancoRubio2025MPUGauging}.
 Let $T_{g(hk)}$ and $T_{(gh)k}$ denote the two unitary fusion paths for three
-consecutive defects in Equation~\papereqref{fbc25}{eq:assoc} of the MPU paper.  In the
-notation of its Appendix~\paperref{fbc25}{app:associativity}, they satisfy
+consecutive defects in Equation~\papereqref{fbc25}{eq:assoc} of the MPU paper.
+In the notation of its Appendix~\paperref{fbc25}{app:associativity}, they satisfy
 \begin{align}
     T_{g(hk)}
         &=F(g,h,k)T_{(gh)k}.
