@@ -37,9 +37,11 @@ The final group index must be $k$:
         {f^{kx}_{g,h}f^x_{gh,k}}.
     \label{eq:fbc25_two_cochain_coboundary_corrected}
 \end{align}
-This is the unique correction with the declared argument types. It also gives
-the generalized cocycle equation $d\Omega=1$ used in
-Lemma~\texttt{lemma:G\_cocycle}.
+Typing rules out the printed block label $x$, but does not by itself
+distinguish among the group elements $g$, $h$, and $k$.  The standard
+generalized coboundary cancellation $d(df)=1$ determines the final index as
+$k$; this is also the identity used in the ensuing generalized-cocycle
+argument of Lemma~\texttt{lemma:G\_cocycle}.
 
 \section{Formal treatment}
 
@@ -51,8 +53,9 @@ declarations: \leanid{TNLean.Algebra.LSymbol.coboundary} and
 \doclink{TNLean/Algebra/GeneralizedCocycle}.}
 
 \textbf{Verdict: resolved local fix.}
-The source's declared argument types and subsequent generalized cocycle
-identity determine the final index as $k$.
+The source's declared argument types rule out the printed block label $x$.
+The coboundary cancellation $d(df)=1$, together with its subsequent
+generalized-cocycle use, determines the final group index as $k$.
 
 \bibliographystyle{alpha}
 \bibliography{references}
