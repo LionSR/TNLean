@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 import QICLean.Kraus.Blocking
+import QICLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
 
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.EquivFin
@@ -76,6 +77,12 @@ lemma isNBlkInjective_iff_blockTensor_isInjective
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
     Kraus.IsNBlkInjective A N ↔ Kraus.IsInjective (blockTensor A N) := by
   exact Kraus.isNBlkInjective_iff_blockTensor_isInjective A N
+
+/-- Fixed-length injectivity persists at positive multiples of the length. -/
+theorem isNBlkInjective_mul_of_isNBlkInjective
+    (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m) (hN : Kraus.IsNBlkInjective A N) :
+    Kraus.IsNBlkInjective A (m * N) := by
+  exact Kraus.wordSpan_top_of_mul A hN m hm
 
 /-- Flatten a word in blocked indices into a word in the original alphabet. -/
 noncomputable abbrev flattenBlockedWord (d L : ℕ) :
