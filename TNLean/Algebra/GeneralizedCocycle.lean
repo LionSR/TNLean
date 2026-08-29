@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.LSymbol
 import Mathlib.LinearAlgebra.Matrix.Permutation
+import TNLean.Algebra.LSymbol
 
 /-!
 # Finite-group generalized cocycles
@@ -18,6 +18,11 @@ labels `X`, it constructs the regular-action matrices
 
 and uses their determinants to prove that `Ω ^ |G|` is a generalized
 coboundary. No transitivity or finiteness assumption is imposed on `X`.
+
+**Local fix (two-cochain coboundary index):** The source prints the ill-typed
+factor `fˣ_{gh,x}` where the final group index must be `k`. The generalized
+cocycle equation below uses the corrected factor `fˣ_{gh,k}`. See
+`docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex`.
 
 **Local fix (determinant numerator):** The determinant display in the source
 repeats `det Xˣ_g`. Taking determinants of the preceding operator identity
@@ -47,7 +52,7 @@ namespace ActionTensorGauge
 
 `(dχ)ˣ_{g,h} = χ^{h • x}_g χˣ_h / χˣ_{gh}`.
 
-This is arXiv:2502.20257, lines 5908--5910. -/
+This is arXiv:2502.20257, lines 5914--5917. -/
 def coboundary (χ : ActionTensorGauge G X) : LSymbol G X :=
   fun x g h => (χ g (h • x) * χ h x) / χ (g * h) x
 

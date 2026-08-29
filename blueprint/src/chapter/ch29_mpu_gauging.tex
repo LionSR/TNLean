@@ -350,19 +350,26 @@ an MPU representation.
         \label{eq:mpug_generalized_cocycle}
     \end{align}
     These are the block-dependent coboundary and the equation $d\Omega=1$ in
-    \cite[lines~5908--5916 and Lemma~\texttt{lemma:G\_cocycle}]
+    \cite[lines~5914--5921 and Lemma~\texttt{lemma:G\_cocycle}]
         {FrancoRubio2025MPUGauging}. No transitivity or finiteness assumption
     is imposed on $\mathsf X$.
-    % Source anchor: arXiv:2502.20257, lines 5908--5916 and lemma:G_cocycle.
+
+    \textbf{Local fix (two-cochain coboundary index).}
+    In the source definition of $df$ for $f^x_{g,h}$, the final denominator
+    factor is printed as $f^x_{gh,x}$, with a block label in a group-index
+    position. The corrected factor is $f^x_{gh,k}$, which gives
+    (\ref{eq:mpug_generalized_cocycle}) when $d\Omega=1$.
+    % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
+    % Source anchor: arXiv:2502.20257, lines 5914--5921 and lemma:G_cocycle.
 \end{definition}
 
 \begin{definition}[Regular-action matrices]
     \label{def:mpug_generalized_regular_matrices}
     \lean{TNLean.Algebra.LSymbol.regularMatrix}
     \leanok
-    \uses{def:mpug_generalized_cocycle}
-    Suppose that $G$ is finite. On the group algebra $\C G$, define
-    $X^x_g$ by
+    \uses{def:mpug_l_symbols}
+    Let $\Omega\colon\mathsf X\times G^2\to\C^\times$ be an $L$-symbol.
+    On the group algebra $\C G$, define $X^x_g$ by
     \begin{align}
         X^x_g\ket{k}
         & =\Omega^{k^{-1}x}_{g,k}\ket{gk}.
@@ -410,7 +417,8 @@ an MPU representation.
         TNLean.Algebra.LSymbol.pow_card_eq_coboundary_apply,
         TNLean.Algebra.LSymbol.pow_card_eq_coboundary}
     \leanok
-    \uses{def:mpug_generalized_cocycle}
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_generalized_regular_matrices}
     Let $G$ be finite and let $\Omega$ be a generalized $2$-cocycle. Then
     $\Omega^{|G|}$ is a generalized coboundary. More precisely, with
     \begin{align}
@@ -440,15 +448,15 @@ an MPU representation.
 \begin{proof}\leanok
     \uses{def:mpug_generalized_regular_matrices,
         thm:mpug_generalized_regular_multiplication}
-    Write $P_{g^{-1}}$ for the permutation matrix of left multiplication by
-    $g^{-1}$ and
+    Let $P_g$ be the regular-action permutation matrix defined by
+    $P_g\ket{k}=\ket{gk}$, and set
     $D^x_g=\operatorname{diag}(\Omega^{k^{-1}x}_{g,k})_{k\in G}$.
-    The row-to-column convention for permutation matrices gives
+    Then
     \begin{align}
         X^x_g
-        & =P_{g^{-1}}D^x_g.
+        & =P_gD^x_g.
     \end{align}
-    Since $\det P_{g^{-1}}\in\{1,-1\}$ and every diagonal entry of $D^x_g$
+    Since $\det P_g\in\{1,-1\}$ and every diagonal entry of $D^x_g$
     is nonzero, $\det X^x_g\ne0$. Thus
     (\ref{eq:mpug_generalized_determinant_cochain}) takes values in
     $\C^\times$. Taking determinants in
