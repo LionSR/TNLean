@@ -1,0 +1,193 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Reciprocal Factors in the Block-Independence Argument}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The gauge multiplier}
+
+Let $G$ act on a set $\mathsf X$, and let
+$L\colon\mathsf X\times G^2\to\mathbb C^\times$ be an $L$-symbol. A fusion
+scalar $\beta_{g,h}$ and an action scalar $\gamma^x_g$ act by multiplication
+with
+\begin{align}
+    M^x_{g,h}(\beta,\gamma)
+        &=\frac{\gamma^x_{gh}\beta_{g,h}}
+        {\gamma^{h x}_g\gamma^x_h}.
+    \label{eq:fbc25_bi_joint_gauge_multiplier}
+\end{align}
+At line~6990, Ref.~\cite{FrancoRubio2025MPUGauging} instead repeats
+$\gamma_g$ in the second denominator factor. The second factor must be
+$\gamma_h^x$, as in
+(\ref{eq:fbc25_bi_joint_gauge_multiplier}); its group index is the second
+argument of $L^x_{g,h}$.
+
+\section{Factorization and the relative character}
+
+The source defines
+\begin{align}
+    \ell^x_{a,b;r}
+        &=\frac{L^x_{ar,r^{-1}b}}{L^x_{a,b}}.
+    \label{eq:fbc25_bi_ell_definition}
+\end{align}
+Taking $a=g$, $b=h$, and $r=h$ in
+(\ref{eq:fbc25_bi_ell_definition}) gives
+\begin{align}
+    \ell^x_{g,h;h}
+        &=\frac{L^x_{gh,e}}{L^x_{g,h}},
+    \label{eq:fbc25_bi_ell_specialization}\\
+    L^x_{g,h}
+        &=\frac{L^x_{gh,e}}{\ell^x_{g,h;h}}.
+    \label{eq:fbc25_bi_ell_solved}
+\end{align}
+Thus line~6996 of Ref.~\cite{FrancoRubio2025MPUGauging} must divide by
+$\ell^x_{g,h;h}$ rather than multiply by it. Compatibility at
+$(gh,e,e)$ gives
+\begin{align}
+    L^x_{gh,e}
+        &=\frac{L^x_{e,e}}{\omega(gh,e,e)},
+    \label{eq:fbc25_bi_right_identity}\\
+    L^x_{g,h}
+        &=\frac{L^x_{e,e}}
+        {\omega(gh,e,e)\ell^x_{g,h;h}}.
+    \label{eq:fbc25_bi_corrected_factorization}
+\end{align}
+Under block independence, $\ell^x_{g,h;h}$ may be evaluated at any fixed
+$x_0\in\mathsf X$. Hence the corrected block factor is
+\begin{align}
+    A(g,h)
+        &=(\omega(gh,e,e)\ell^{x_0}_{g,h;h})^{-1},
+    \label{eq:fbc25_bi_block_factor}\\
+    L^x_{g,h}
+        &=A(g,h)L^x_{e,e}.
+    \label{eq:fbc25_bi_factorized_lsymbol}
+\end{align}
+These identities are formalized directly from the definition of $\ell$ and
+compatibility.\footnote{Formal declarations:
+\leanid{TNLean.Algebra.LSymbol.ell},
+\leanid{TNLean.Algebra.LSymbol.blockFactor}, and
+\leanid{TNLean.Algebra.LSymbol.factorization_of_isBlockIndependentEll} in
+\doclink{TNLean/Algebra/LSymbolBlockIndependence}.}
+
+Compatibility at $(e,e,g)$ also gives
+\begin{align}
+    L^x_{e,g}
+        &=\omega(e,e,g)L^{g x}_{e,e}.
+    \label{eq:fbc25_bi_left_identity}
+\end{align}
+Combining (\ref{eq:fbc25_bi_corrected_factorization}) at $(e,g)$ with
+(\ref{eq:fbc25_bi_left_identity}) yields
+\begin{align}
+    L^{g x}_{e,e}
+        &=\rho(g)L^x_{e,e},
+    \label{eq:fbc25_bi_relative_transport}\\
+    \rho(g)
+        &=\bigl(\ell^{x_0}_{e,g;g}\omega(g,e,e)
+            \omega(e,e,g)\bigr)^{-1}.
+    \label{eq:fbc25_bi_corrected_relative_character}
+\end{align}
+The factor $\ell^{x_0}_{e,g;g}$ at line~7016 of
+Ref.~\cite{FrancoRubio2025MPUGauging} must therefore occur reciprocally.
+Applying (\ref{eq:fbc25_bi_relative_transport}) successively to $h$ and $g$
+shows that
+\begin{align}
+    \rho(gh)
+        &=\rho(g)\rho(h).
+    \label{eq:fbc25_bi_character_multiplicativity}
+\end{align}
+No transitivity or finiteness assumption on the action is needed.\footnote{Formal
+declarations: \leanid{TNLean.Algebra.LSymbol.relativeCharacter},
+\leanid{TNLean.Algebra.LSymbol.relativeCharacter_mul_base}, and
+\leanid{TNLean.Algebra.LSymbol.relativeCharacter_mul} in
+\doclink{TNLean/Algebra/LSymbolBlockIndependence}.}
+
+\section{Forward and inverse gauges}
+
+Define
+\begin{align}
+    \beta^+_{g,h}
+        &=\frac{A(g,h)}{\rho(h)},
+    \label{eq:fbc25_bi_forward_fusion_gauge}\\
+    \gamma^{+,x}_g
+        &=(L^{g x}_{e,e})^{-1}.
+    \label{eq:fbc25_bi_forward_action_gauge}
+\end{align}
+Using (\ref{eq:fbc25_bi_relative_transport}), their multiplier is
+\begin{align}
+    M^x_{g,h}(\beta^+,\gamma^+)
+        &=\frac{A(g,h)}{\rho(h)}
+          \frac{(L^{ghx}_{e,e})^{-1}}
+          {(L^{ghx}_{e,e})^{-1}(L^{hx}_{e,e})^{-1}}
+    \label{eq:fbc25_bi_forward_multiplier_first}\\
+        &=A(g,h)L^x_{e,e}
+    \label{eq:fbc25_bi_forward_multiplier_second}\\
+        &=L^x_{g,h}.
+    \label{eq:fbc25_bi_forward_multiplier_lsymbol}
+\end{align}
+Consequently, $(\beta^+,\gamma^+)$ sends the trivial $L$-symbol to $L$:
+\begin{align}
+    (\beta^+,\gamma^+)\mathbin{\triangleright}1
+        &=L.
+    \label{eq:fbc25_bi_forward_gauge_produces_lsymbol}
+\end{align}
+The displayed factor in the source is therefore a forward gauge multiplier,
+not a multiplier that trivializes $L$. The pointwise inverse gauges give the
+required conclusion:
+\begin{align}
+    ((\beta^+)^{-1},(\gamma^+)^{-1})
+        \mathbin{\triangleright}L
+        &=1.
+    \label{eq:fbc25_bi_inverse_gauge_trivializes_lsymbol}
+\end{align}
+For a supplied compatible scalar $L$-symbol, this proves the implication from
+block independence to gauge triviality and, together with the immediate
+converse implications, the four-way scalar equivalence used in the proof of
+Proposition~\texttt{prop:technical01} of
+Ref.~\cite{FrancoRubio2025MPUGauging}.\footnote{Formal declarations:
+\leanid{TNLean.Algebra.LSymbol.factorFusionGauge},
+\leanid{TNLean.Algebra.LSymbol.factorActionGauge},
+\leanid{TNLean.Algebra.LSymbol.gauge_one_eq_of_isBlockIndependentEll},
+\leanid{TNLean.Algebra.LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll}, and
+\leanid{TNLean.Algebra.LSymbol.hasTrivialGauge_of_isBlockIndependentEll} in
+\doclink{TNLean/Algebra/LSymbolBlockIndependence}. The capstone equivalences
+are \leanid{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge},
+\leanid{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}, and
+\leanid{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}.}
+
+\section{Scope of the formal result}
+
+The formal declarations start with a supplied compatible scalar $L$-symbol and
+prove the algebraic equivalence among its four scalar gauge properties. The
+fourth condition of Proposition~\texttt{prop:technical01} in
+Ref.~\cite{FrancoRubio2025MPUGauging} is instead stated for an MPS--MPU pair.
+A tensor-facing result must still construct the associated $L$-symbol and prove
+that the MPS and MPU tensor gauges induce the scalar multiplier
+(\ref{eq:fbc25_bi_joint_gauge_multiplier}). The scalar calculation does not
+supply that bridge and therefore does not by itself establish the full source
+proposition.
+
+\section{Conclusion}
+
+The four local corrections form one reciprocal chain. The denominator of the
+joint gauge multiplier uses $\gamma_h^x$; the definition of $\ell$ forces
+division by $\ell^x_{g,h;h}$ in the factorization; the relative character
+consequently contains the reciprocal of $\ell^{x_0}_{e,g;g}$; and the resulting
+factor is a forward gauge multiplier whose inverse trivializes the supplied
+$L$-symbol. These reciprocal corrections are resolved. The tensor-facing bridge
+required for the full statement of Proposition~\texttt{prop:technical01}
+remains outside the scalar result.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
