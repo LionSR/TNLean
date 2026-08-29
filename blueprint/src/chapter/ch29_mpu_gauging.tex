@@ -249,10 +249,70 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-The results in this section formalize only the scalar functions $\beta$,
-$\omega$, $\gamma$, and $L$; they construct neither fusion tensors nor action
-tensors. The representation-level data were specified in
+Apart from the preliminary matrix-factor result below, the results in this
+section formalize only the scalar functions $\beta$, $\omega$, $\gamma$, and
+$L$; they construct neither fusion tensors nor action tensors. The
+representation-level data were specified in
 Definition~\ref{def:mpug_group_representation}.
+
+\begin{theorem}[Scalar factors of an identity Kronecker product]
+    \label{thm:mpug_kronecker_identity_factors}
+    \lean{Matrix.exists_eq_smul_one_of_kronecker_eq_one}
+    \leanok
+    Let $M$ and $N$ be nonempty sets with decidable equality, and let
+    $A\in\operatorname{Mat}_M(\C)$ and $B\in\operatorname{Mat}_N(\C)$. If
+    $A\otimes B=\mathbf 1$, then there is a nonzero $c\in\C$ such that
+    \begin{align}
+        A&=c\mathbf 1, & B&=c^{-1}\mathbf 1.
+        \label{eq:mpug_kronecker_identity_factors}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $i_0\in M$ and $j_0\in N$. The
+    $((i_0,j_0),(i_0,j_0))$ entry gives
+    $A_{i_0i_0}B_{j_0j_0}=1$. Thus $c=A_{i_0i_0}$ is nonzero and
+    $B_{j_0j_0}=c^{-1}$. Comparing every
+    $((i,j_0),(i',j_0))$ entry gives $A_{ii'}=c\delta_{ii'}$; comparing every
+    $((i_0,j),(i_0,j'))$ entry gives $B_{jj'}=c^{-1}\delta_{jj'}$.
+\end{proof}
+
+\begin{theorem}[Unitary factors of a unitary Kronecker product]
+    \label{thm:mpug_unitary_kronecker_factors}
+    \lean{Matrix.exists_pos_real_rescaling_mem_unitaryGroup_of_kronecker_mem_unitaryGroup,
+        Matrix.exists_pos_real_smul_unitary_factors_of_kronecker_mem_unitaryGroup}
+    \leanok
+    Let $M$ and $N$ be nonempty finite sets. If
+    $K_1\in\operatorname{Mat}_M(\C)$ and
+    $K_2\in\operatorname{Mat}_N(\C)$ satisfy that $K_1\otimes K_2$ is
+    unitary, then there are a positive real number $\delta$ and unitary
+    matrices $W_1,W_2$ such that
+    \begin{align}
+        K_1&=\delta W_1, & K_2&=\delta^{-1}W_2.
+        \label{eq:mpug_unitary_kronecker_factors}
+    \end{align}
+    Equivalently, $\delta^{-1}K_1$ and $\delta K_2$ are unitary.
+    % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
+    This is only the tensor-factor step in the decomposition result
+    of~\cite{FrancoRubio2025MPUGauging}; it does not construct or compare the
+    three-legged decompositions occurring there.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_kronecker_identity_factors}
+    Unitarity gives
+    \begin{align}
+      (K_1^\dagger K_1)\otimes(K_2^\dagger K_2)=\mathbf 1.
+    \end{align}
+    Theorem~\ref{thm:mpug_kronecker_identity_factors} supplies a nonzero
+    $c\in\C$ such that
+    $K_1^\dagger K_1=c\mathbf 1$ and
+    $K_2^\dagger K_2=c^{-1}\mathbf 1$. Positivity of the first Gram matrix
+    makes $c$ a positive real number. Taking $\delta=\sqrt c$ shows directly
+    that $\delta^{-1}K_1$ and $\delta K_2$ have identity Gram matrices; these
+    are $W_1$ and $W_2$ in
+    (\ref{eq:mpug_unitary_kronecker_factors}).
+\end{proof}
 
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}

@@ -31,3 +31,4 @@ import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleInversion
+import TNLean.Algebra.UnitaryKronecker
