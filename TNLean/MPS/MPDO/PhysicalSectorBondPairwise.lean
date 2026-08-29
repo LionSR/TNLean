@@ -37,8 +37,8 @@ private theorem cyclicForwardSite_one_eq_finRotate {N : ℕ} (i : Fin N) :
 chain of length at least two.
 
 This assembles the adjacent, crossed two-site, and disjoint-support
-calculations. It uses no positivity, strong-area-law, zero-correlation-length,
-or injectivity hypothesis beyond the given physical-sector factorization.
+calculations. It uses no hypothesis of positivity, saturation of the area law, zero correlation
+length, or injectivity beyond the given physical-sector factorization.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 1571--1593. -/

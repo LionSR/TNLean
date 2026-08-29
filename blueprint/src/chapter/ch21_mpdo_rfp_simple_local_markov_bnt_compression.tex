@@ -1,7 +1,7 @@
 \subsection{Markov decomposition and inverse-map sector factorization}
 
 For the simple MPDO case in Appendix~C.2 of \cite{Cirac2016MPDO_arXiv},
-the strong-area-law hypothesis is used locally through the equality case of
+the hypothesis of saturation of the area law is used locally through the equality case of
 strong subadditivity for a normalized three-site reduced state.
 
 \begin{definition}[Local $\eta$-structure for a three-site reduced state]
@@ -494,7 +494,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.exists_etaStructure_reducedBlockState_three_of_isSAL}
     \leanok
     \uses{def:is_sal, def:mpdo_eta_structure}
-    Let $K$ satisfy the strong area law and let $N\geq4$. If
+    Let $K$ satisfy saturation of the area law and let $N\geq4$. If
     $\sigma_3^{(N)}(K)$ is obtained from the normalized $N$-site periodic state
     by tracing out all but its first three sites, then
     $\sigma_3^{(N)}(K)$ admits a quantum Markov decomposition on its middle
@@ -539,7 +539,7 @@ strong subadditivity for a normalized three-site reduced state.
     \lean{MPOTensor.exists_etaStructure_reducedBlockState_of_isSAL}
     \leanok
     \uses{def:is_sal, def:mpdo_eta_structure}
-    Let $K$ satisfy the strong area law. If $\sigma_3^{(4)}(K)$ is obtained
+    Let $K$ satisfy saturation of the area law. If $\sigma_3^{(4)}(K)$ is obtained
     from its normalized four-site periodic state by tracing out the fourth
     site, then $\sigma_3^{(4)}(K)$ admits a quantum Markov decomposition on its
     middle site.

@@ -77,7 +77,7 @@ twice-applied channel observation at lines 1821--1825.
 
 **Scope restriction (supplied per-representative factorizations):** the
 neighboring trace factorizations of the absorbed representatives are assumed
-here, while Proposition `prop2to5` derives them from the strong area law and
+here, while Proposition `prop2to5` derives them from saturation of the area law and
 zero correlation length through the printed factorization assertion of
 Proposition `prop2to3`.  That derivation remains open; it is documented in
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
@@ -123,7 +123,7 @@ four selected sectors.
 
 **Scope restriction (supplied per-representative factorizations):** the
 single-sector factorizations are assumed here rather than derived from the
-strong area law and zero correlation length; the derivation is documented in
+saturation of the area law and zero correlation length; the derivation is documented in
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `prop2to5`, lines

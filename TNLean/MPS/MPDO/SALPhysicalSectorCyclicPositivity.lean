@@ -8,10 +8,10 @@ import TNLean.MPS.MPDO.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.SectorEtaPositivity
 
 /-!
-# Positive cyclic sector products from the strong area law
+# Positive cyclic sector products from saturation of the area law
 
 This file combines the raw physical-sector factorization obtained from an
-injective tensor satisfying the strong area law with positivity of the
+injective tensor satisfying saturation of the area law with positivity of the
 finite-chain operators. Every complete cyclic product of neighboring
 contractions is positive semidefinite because it is a diagonal sector
 compression of a physically conjugated finite-chain operator.

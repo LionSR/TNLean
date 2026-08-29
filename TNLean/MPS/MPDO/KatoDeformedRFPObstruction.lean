@@ -48,7 +48,7 @@ A completely positive coarse-graining map cannot send the former to the latter.
 * `tensor_isSAL`: the tensor saturates the area law (Definition 4.6).
 * `exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS`:
   the tensor simultaneously exhibits CPSV canonical form, MPDO positivity,
-  idempotent physical-trace transfer, strong area law, and absence of
+  idempotent physical-trace transfer, saturation of the area law, and absence of
   fixed-scale renormalization.
 
 ## References
@@ -318,7 +318,7 @@ The nonexistence of fixed-scale channels is not stated by Kato; it follows
 from the one- and two-site closure identities above.  Kato proves that the family has an
 exact renormalization flow in which the tensor changes; arXiv:2410.22696,
 lines 692--706 and 827--838 distinguishes that flow from its fixed points.
-No canonical-form, strong-area-law, or static-converse assertion is made here.
+No assertion about canonical form, saturation of the area law, or a static converse is made here.
 -/
 theorem tensor_not_isRFPViaTS : ¬ IsRFPViaTS tensor := by
   intro hRFP
@@ -552,7 +552,7 @@ theorem tensor_toMPSTensor_isCPSVCanonicalForm :
     (fun _ => by norm_num) katoCFWeights katoCFWeights_ne_zero katoCFBlocks
     katoCFBlocks_normal).isCPSVCanonicalForm
 
-/-! ### Strong Area Law (SAL)
+/-! ### Saturation of the Area Law (SAL)
 
 The saturation of the area law (arXiv:1606.00608, Definition 4.6, line 811)
 requires the mutual information chain $I_1 = I_2 = \dots$ with

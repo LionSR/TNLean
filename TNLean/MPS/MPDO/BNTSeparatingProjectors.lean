@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.BNTProjectorSelection
 
 /-!
-# Separating projectors for a simple tensor satisfying the strong area law
+# Separating projectors for a simple tensor satisfying saturation of the area law
 
 For the four-site quantum-Markov decomposition, the BNT projectors resolve the
 positive-weight Markov support. The remaining zero-weight Markov summands

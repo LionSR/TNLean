@@ -255,7 +255,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
   exact ⟨z, hpos, (F.rephase z).activeSectorTraceMatrix_isPrimitive
     hη.p hpos hspan hnonzero htriangle⟩
 
-/-- Every injective MPO tensor satisfying the strong area law admits a
+/-- Every injective MPO tensor satisfying saturation of the area law admits a
 positive physical-sector factorization whose active trace matrix is primitive.
 
 The accompanying weights are nonnegative and sum to one. Zero-weight sectors

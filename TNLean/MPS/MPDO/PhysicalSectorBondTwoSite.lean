@@ -255,8 +255,8 @@ periodic chain of length two.
 
 In sector coordinates `(k,h)`, the translate beginning at site zero acts on
 $R_k \otimes L_h$, while the translate beginning at site one acts on
-$R_h \otimes L_k$.  No positivity, strong-area-law, zero-correlation-length,
-or injectivity hypothesis is used.
+$R_h \otimes L_k$.  No hypothesis of positivity, saturation of the area law, zero correlation
+length, or injectivity is used.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source proves
 commutativity of translated bonds but does not discuss this crossed two-site

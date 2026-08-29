@@ -11,7 +11,7 @@ import TNLean.MPS.MPDO.PhysicalSupportBondTransport
 # Normal representative for the SAL-selected commuting-bond product
 
 The positive physical-sector factorization of an injective tensor satisfying
-the strong area law selects a particular commuting bond. The tensor itself
+saturation of the area law selects a particular commuting bond. The tensor itself
 represents the products of this bond exactly, with scalar one. If its
 doubled-index tensor is normal, it is therefore already a normal representative
 of the selected product family.
