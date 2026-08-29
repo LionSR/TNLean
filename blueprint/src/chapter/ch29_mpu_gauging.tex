@@ -353,6 +353,88 @@ an MPU representation.
     follow.
 \end{proof}
 
+\begin{theorem}[Cocycles and coboundaries for trivial coefficients]
+    \label{thm:mpug_h2_trivial_coefficients}
+    \lean{TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.isCoboundary_iff_isMulCoboundary₂,
+        TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isCoboundary_div,
+        TNLean.Algebra.ScalarCocycle.isCoboundary_iff_mem_mathlibCoboundaries,
+        TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_H2π_eq}
+    \leanok
+    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle}
+    Let $G$ act trivially on $\C^\times$, and let
+    $f(g,h)=\omega(g,h)$. The multiplicative cocycle equation
+    \begin{align}
+        f(gh,k)f(g,h)
+         & =f(h,k)f(g,hk)
+        \label{eq:mpug_h2_cocycle_comparison}
+    \end{align}
+    is equivalent to Definition~\ref{def:is_cocycle}. Likewise, the
+    multiplicative coboundary equation
+    \begin{align}
+        \frac{\varphi(h)}{\varphi(gh)}\varphi(g)
+         & =f(g,h)
+        \label{eq:mpug_h2_coboundary_comparison}
+    \end{align}
+    is equivalent to Definition~\ref{def:is_coboundary}.
+
+    If $\pi$ denotes the canonical map from multiplicative $2$-cocycles to
+    degree-two group cohomology, then for any two cocycles $\omega_1$ and
+    $\omega_2$,
+    \begin{align}
+        \omega_1\sim\omega_2
+         & \quad\Longleftrightarrow\quad
+        \pi(\omega_1)=\pi(\omega_2).
+        \label{eq:mpug_h2_class_comparison}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 1927--1931.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle}
+    Since $\C^\times$ is commutative,
+    (\ref{eq:mpug_h2_cocycle_comparison}) is obtained from the cocycle
+    equation by interchanging the two factors on each side, and
+    (\ref{eq:mpug_h2_coboundary_comparison}) is obtained from
+    $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ by reordering its factors.
+    Moreover, $\omega_1\sim\omega_2$ holds exactly when
+    $\omega_1\omega_2^{-1}$ is a coboundary. In additive notation this ratio
+    is the difference of the corresponding cochains, so the quotient
+    criterion for $\pi$ gives
+    (\ref{eq:mpug_h2_class_comparison}).
+\end{proof}
+
+\begin{definition}[Comparison with low-degree group cohomology]
+    \label{def:mpug_h2_group_cohomology_comparison}
+    \lean{TNLean.Algebra.h2EquivGroupCohomology,
+        TNLean.Algebra.ScalarCocycle.trivialMulDistribMulAction,
+        TNLean.Algebra.scalarH2Representation,
+        TNLean.Algebra.ScalarCocycle.toMathlibCocycle,
+        TNLean.Algebra.ScalarCocycle.ofMathlibCocycle,
+        TNLean.Algebra.ScalarCocycle.representativesEquivMathlib,
+        TNLean.Algebra.h2ToGroupCohomology,
+        TNLean.Algebra.h2ToGroupCohomology_injective,
+        TNLean.Algebra.h2ToGroupCohomology_surjective}
+    \leanok
+    \uses{def:h2_cx, thm:mpug_h2_trivial_coefficients}
+    Give $\C^\times$ the trivial $G$-action. Currying and uncurrying identify
+    the cocycle representatives in Definition~\ref{def:h2_cx} with the
+    multiplicative representatives in the inhomogeneous cochain complex.
+    By (\ref{eq:mpug_h2_class_comparison}), this correspondence induces a
+    canonical equivalence
+    \begin{align}
+        Z^2(G,\C^\times)/{\sim}
+         & \simeq H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr).
+        \label{eq:mpug_h2_equivalence}
+    \end{align}
+    The left-hand side is the quotient already defined in
+    Definition~\ref{def:h2_cx}; no additional quotient is introduced.
+    This is the $H^2(H,\C^\times)$ appearing in the pair $(H,\psi)$ in
+    \cite[lines~1927--1931]{FrancoRubio2025MPUGauging}.
+    % Reuse boundary: the right-hand side is Mathlib's low-degree H2 for
+    % Rep.ofMulDistribMulAction with the explicit trivial action.
+\end{definition}
+
 \begin{definition}[Block scalar and block independence]
     \label{def:mpug_block_independence_factor}
     \lean{TNLean.Algebra.LSymbol.ell,
