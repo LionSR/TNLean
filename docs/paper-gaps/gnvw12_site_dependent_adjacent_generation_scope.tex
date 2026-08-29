@@ -139,23 +139,31 @@ their Appendix fixes $\mathcal A_y\cong M_d(\mathbb C)$ and constructs the
 even support algebra at lines 2320--2329
 \cite{Cirac2017MPU}.
 
-The theorems currently proved for the fixed-$d$ spin chain establish only the
+The theorems currently proved for the fixed-$d$ spin chain establish the
 homogeneous forms of
 (\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_locality}) and
 (\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_left_support})--%
 (\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_right_support}),
-together with two-sided support containment.\footnote{Formal declarations:
+together with two-sided support containment. They also prove that the
+canonically embedded support algebras at distinct site indices commute
+pairwise. This is the homogeneous specialization of the consecutive/disjoint
+commutation argument at lines 1270--1274 of
+Ref.~\cite{Gross2012IndexTheory}; it does not use translation covariance.%
+\footnote{Formal declarations:
 \leanid{SpinChain.PropagatesWithin.evenPairLocalImage},
 \leanid{SpinChain.PropagatesWithin.evenSupportAlgebra},
 \leanid{SpinChain.PropagatesWithin.oddSupportAlgebra}, and
 \leanid{SpinChain.PropagatesWithin.evenPairLocalImage_le_support_kroneckerSubmodule}
-in \doclink{TNLean/QCA/SiteIndexedSupportAlgebra}.}
-They do not include the adjacent-generation equalities, matrix-factor
-presentations, the identities
+in \doclink{TNLean/QCA/SiteIndexedSupportAlgebra}, and
+\leanid{SpinChain.PropagatesWithin.embeddedSupportAlgebra_pairwise_commute}
+in \doclink{TNLean/QCA/SupportAlgebraCommutation}.}
+The fixed-$d$ development does not classify the support algebras as full
+matrix factors, prove the adjacent-generation equalities or their dimension
+consequences
 (\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_even})--%
 (\ref{eq:gnvw12_site_dependent_adjacent_generation_scope_homogeneous_ratio}),
-or the index. Any future fixed-$d$ formulation of those results remains
-restricted to homogeneous chains.
+or construct the GNVW index. Extending the construction and the commutation
+theorem to site-dependent cell sizes also remains outside the present scope.
 
 This restriction differs from the full-matrix-factor restriction recorded in
 \path{docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex}. That note
