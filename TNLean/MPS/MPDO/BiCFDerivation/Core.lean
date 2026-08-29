@@ -10,23 +10,24 @@ import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
 
 /-!
-# Finite-length sufficient conditions for MPDO biCF
+# Finite-word trace separation for MPDO block families
 
-The `HorizontalCFData` structure in `PerCopyHorizontalCF.lean` states the block-injective
-canonical-form property `biCF` as a hypothesis. This file states finite-length
-sufficient conditions for deriving that field.
+The `HorizontalCFData` structure in `PerCopyHorizontalCF.lean` assumes
+finite-word trace separation for its block family. This file gives finite-length
+span, linear-independence, and selector criteria for that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
    length `L`, the word-evaluation tuples
    `w ↦ (k ↦ Kraus.evalWord (A k) (List.ofFn w))`
    span the full product algebra `∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ`,
-   then the `biCF` conclusion follows from nondegeneracy of the product trace
-   pairing.
+   then finite-word trace separation follows from nondegeneracy of the product
+   trace pairing.
 
 2. A finite-dimensional **linear-independence criterion**: if the scalar word-entry
    family obtained by reading off every block matrix entry is linearly
    independent, then those tuple-valued word evaluations already span the full
-   product algebra. This reduces biCF to a concrete linear-algebra condition.
+   product algebra. This reduces finite-word trace separation to a concrete
+   linear-algebra condition.
 
 3. An abstract **block-injectivity selector-data criterion**: if each block is
    block-injective at some common length and a second finite family of words

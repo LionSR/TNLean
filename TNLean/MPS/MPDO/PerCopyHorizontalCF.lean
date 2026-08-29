@@ -31,7 +31,7 @@ variable {d D : ℕ}
 
 This is the stronger flattened hypothesis used by the older per-copy results
 in this file: injective blocks, the left-canonical normalization, nonzero block
-weights, and block-injective canonical form (biCF). -/
+weights, and finite-word trace separation for the ungrouped block family. -/
 structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective. -/

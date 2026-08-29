@@ -453,15 +453,14 @@ Consequently, $K^{-1}K=\bigoplus_j\Id_j$.
 This is the inverse identity in
 \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
 
-\begin{theorem}[Finite block-separation criterion]
+\begin{theorem}[Finite-word trace-separation criterion]
     \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasFiniteWordTraceSeparation_of_propBlockInjective}
     \leanok
     \uses{rem:word_tuple_span_top}
-    If a block family admits the finite-length data described in
-    the block-injectivity proposition of
-    \cite[lines~340--345]{Cirac2016MPDO_arXiv}, then it is in
-    block-injective canonical form.
+    If a block family has a common injective word length and finite words that
+    select each block from the others, then the family has finite-word trace
+    separation.
 \end{theorem}
 
 \begin{proof}
