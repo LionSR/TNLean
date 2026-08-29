@@ -750,6 +750,72 @@
     \end{align}
 \end{proof}
 
+% This descent statement is project-derived. It combines the canonical active
+% restriction with the coordinate comparison for a fixed physical support; it
+% is not asserted in CPSV16.
+\begin{theorem}[Neighboring-trace factorization descends through a full-support
+        physical embedding]
+    \label{thm:mpdo_neighboring_trace_factorization_isometric_embedding_descent}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+        exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry}
+    \leanok
+    \uses{def:injective, def:mpdo_physical_sector_factorization,
+        def:mpdo_neighboring_trace_factorization}
+    Let $\mathcal K$ be injective, and suppose that the joint column support
+    of its physical slices is the whole one-site space,
+    $\Pi_{\mathcal K}=\Id_d$. Let $V:\C^d\to\C^e$ be an isometry and put
+    \begin{align}
+        \mathcal K_V^{ij}
+         & =\sum_{p,q}V_{i,p}\overline{V_{j,q}}\mathcal K^{pq}.
+        \notag
+    \end{align}
+    If $\mathcal K_V$ admits a physical-sector factorization for which there
+    exist families $(a_k)_k$ and $(b_h)_h$ of real numbers such that the
+    neighboring operators satisfy
+    \begin{align}
+        \eta_{k,h}      & \geq 0,
+        \notag                     \\
+        \tr(\eta_{k,h}) & =a_kb_h,
+        \notag                     \\
+        \sum_k a_kb_k   & =1,
+        \notag
+    \end{align}
+    then $\mathcal K$ admits such a factorization as well.
+
+    This implication is project-derived and is not stated in
+    \cite{Cirac2016MPDO_arXiv}. It transports the neighboring data of
+    Theorem~4.9(iv), lines~864--889, through the physical-support restriction
+    used in Appendix~C.2, lines~1680--1691 and 1733--1770.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_isometric_physical_embedding,
+        thm:mpdo_active_physical_sector_restriction,
+        thm:mpdo_active_physical_sector_neighboring_positivity,
+        thm:mpdo_neighboring_trace_factorization_presentation_invariant}
+    The isometric embedding theorem gives
+    \begin{align}
+        \Pi_{\mathcal K_V}
+         & =V\Pi_{\mathcal K}V^*=VV^*.
+        \notag
+    \end{align}
+    It also preserves injectivity. Restrict the assumed factorization to its
+    canonical active physical support. The preceding theorem preserves
+    positivity, the identities $\tr(\eta_{k,h})=a_kb_h$, and the normalized
+    sum $\sum_k a_kb_k=1$ on that restriction. Its isometric inclusion $W$
+    satisfies $WW^*=\Pi_{\mathcal K_V}=VV^*$.
+
+    The support-coordinate comparison therefore carries the factorization
+    from $W^*\mathcal K_VW$ to $V^*\mathcal K_VV$. Finally,
+    \begin{align}
+        V^*\mathcal K_VV
+         & =(V^*V)\mathcal K(V^*V)=\mathcal K,
+        \notag
+    \end{align}
+    which proves the assertion.
+\end{proof}
+
 % This theorem supplies the orthogonal-support step used in the completed
 % proof of CPSV16 Proposition `prop3to4`. The final proof does not derive or
 % assume common-copy-weight independence.
