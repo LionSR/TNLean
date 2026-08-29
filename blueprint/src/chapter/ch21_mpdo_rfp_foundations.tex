@@ -516,6 +516,19 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     as in \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+\begin{definition}[Global-family purification RFP witness]
+    \label{def:mpdo_purification_rfp_witness}
+    \lean{MPOTensor.HasPurificationRFPWitness}
+    \leanok
+    \uses{def:mpdo_global_purification_equation, def:mps_transfer_idempotence}
+    An MPO tensor $M$ has a global-family purification RFP witness if, for some
+    purifying spin--ancilla tensor $A$, it satisfies the positive-length global
+    purification equation and $\widehat A$ is a pure-state renormalization fixed
+    point. This auxiliary condition records the density-operator equation at
+    \cite[line~751]{Cirac2016MPDO_arXiv}. It does not assert the one-site
+    ancillary-contraction presentation in Definition~\ref{def:mpdo_is_prfp}.
+\end{definition}
+
 \begin{definition}[Trace-preserving spin reduction]
     \label{def:mpdo_has_trace_preserving_spin_reduction}
     \lean{MPOTensor.HasTracePreservingSpinReduction}
@@ -543,100 +556,75 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}.
 \end{proof}
 
-\begin{definition}[Bare global purification RFP witness]
-    \label{def:mpdo_purification_rfp_witness}
-    \lean{MPOTensor.HasPurificationRFPWitness}
-    \leanok
-    \uses{def:mpdo_global_purification_equation, def:mps_transfer_idempotence}
-    An MPO tensor $M$ has a bare global purification RFP witness if it satisfies the global
-    purification equation for some purifying spin--ancilla tensor $A$, and
-    $\widehat A$ is a pure-state renormalization fixed point:
-    $\E_{\widehat A}\circ\E_{\widehat A}=\E_{\widehat A}$.
-    This records the displayed conditions of Definition~4.3 in
-    \cite[lines~756--764]{Cirac2016MPDO_arXiv}. It does not include the
-    nondegeneracy implicit when the subsequent theorem speaks of density
-    operators.
-\end{definition}
-
-\begin{definition}[Bare global purification RFP]
+% **Local fix (intended presentation):** Definition 4.3 literally refers to
+% the global equation MPDO-Puri-1, while lines 744--763 continue with the
+% one-site presentation Psipuri. We adopt the latter standing presentation.
+% See docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
+\begin{definition}[Purification renormalization fixed point]
     \label{def:mpdo_is_prfp}
     \lean{MPOTensor.IsPRFP}
     \leanok
-    \uses{def:mpdo_purification_rfp_witness}
-    An MPO tensor satisfies the bare global purification RFP predicate if it has
-    a positive-length global purification RFP witness. Equivalently, it admits a purifying tensor $A$
-    such that, for every positive length $N$,
-    \begin{align}
-        \rho^{(N)}(M)
-         & =
-        \tr_a
-        \bigl(        \ketbra{\Psi^{(N)}(A)}{\Psi^{(N)}(A)}
-        \bigr),
-        \notag
-    \end{align}
-    and $\widehat A$ is a pure-state renormalization fixed point. These are the
-    displayed conditions of Definition~4.3 in
-    \cite[lines~756--764]{Cirac2016MPDO_arXiv}; the nondegenerate
-    tensor-level predicate is Definition~\ref{def:is_nondegenerate_prfp}.
-\end{definition}
-
-\begin{definition}[Local purification RFP condition]\label{def:is_local_purification_rfp}
-    \lean{MPOTensor.IsLocalPurificationRFP}
-    \leanok
     \uses{def:lpdo, def:mps_transfer_idempotence}
-    An MPO tensor $M$ satisfies the local purification RFP condition if it is an
-    LPDO whose purifying tensor $A$, viewed as a matrix product state tensor on
-    the combined spin--ancilla index, is a pure-state renormalization fixed point.
-    Thus
+    An MPO tensor $M$ is a purification renormalization fixed point if there is
+    a spin--ancilla tensor $A$ and an identification of the doubled purifying
+    bond space with the bond space of $M$ such that
     \begin{align}
         M^{ij}
          & =
-        \left(\sum_{k} A^{(i,k)} \otimes
-        \overline{A^{(j,k)}}\right)_{e,e}.
+        \left(\sum_k A^{(i,k)}\otimes
+        \overline{A^{(j,k)}}\right)_{e,e},
         \notag
     \end{align}
-    This local condition is motivated by the purification tensor formula
-    \cite[lines~744--747]{Cirac2016MPDO_arXiv}, but it is a one-site
-    tensor-level condition rather than the global finite-chain definition in
-    Definition~\ref{def:mpdo_global_purification_equation}.
+    and $\widehat A$ is a pure-state renormalization fixed point. Here PRFP
+    denotes the standing one-site presentation; the positive-length equation is
+    its MPDO interpretation.
 \end{definition}
 
 \begin{definition}[Nondegenerate purification RFP]
     \label{def:is_nondegenerate_prfp}
     \lean{MPOTensor.IsNondegeneratePRFP}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_is_prfp, def:mpo_physical_trace_transfer}
     An MPO tensor is a nondegenerate purification renormalization fixed point if
-    it is the local ancillary contraction of a pure-state renormalization fixed
-    point and $\mathcal T_M=\sum_i M^{ii}\ne0$.
-    The nonzero condition records the nondegeneracy implicit in the density
-    operators of \cite[lines~744--786]{Cirac2016MPDO_arXiv} and excludes the
-    zero purifying tensor.
+    it is a purification renormalization fixed point and
+    $\mathcal T_M=\sum_i M^{ii}\ne0$.
 \end{definition}
 
-\begin{theorem}[A local purification RFP generates MPDOs]
-    \label{thm:local_purification_rfp_is_mpdo}
-    \lean{MPOTensor.IsLocalPurificationRFP.isMPDO}
+\begin{theorem}[A purification RFP is an LPDO]
+    \label{thm:prfp_is_lpdo}
+    \lean{MPOTensor.IsPRFP.isLPDO}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpdo, thm:lpdo_is_mpdo}
-    Every tensor satisfying the local purification RFP condition generates
-    matrix product density operators.
+    \uses{def:mpdo_is_prfp, def:lpdo}
+    Every purification renormalization fixed point is a local purification
+    density operator.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:lpdo_is_mpdo}
-    Dropping the renormalization-fixed-point condition on the purifying tensor
-    leaves the local purification structure, so $M$ is an LPDO; the conclusion
-    follows from Theorem~\ref{thm:lpdo_is_mpdo}.
+    Forget the renormalization-fixed-point condition on the purifying tensor.
 \end{proof}
 
-\begin{theorem}[Local purification RFP does not imply doubled-index idempotence]
-    \label{thm:local_purification_rfp_not_zcl}
-    \lean{MPOTensor.exists_isLocalPurificationRFP_not_isZCL}
+\begin{theorem}[A purification RFP generates MPDOs]
+    \label{thm:prfp_is_mpdo}
+    \lean{MPOTensor.IsPRFP.isMPDO}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpo_is_zcl}
-    There is an MPO tensor satisfying the local purification RFP condition for
-    which the literal transfer-map idempotence $\E_M\circ\E_M=\E_M$ fails.
+    \uses{def:mpdo_is_prfp, def:mpdo}
+    Every purification renormalization fixed point generates matrix product
+    density operators.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:prfp_is_lpdo, thm:lpdo_is_mpdo}
+    Apply Theorem~\ref{thm:lpdo_is_mpdo} to the local purification supplied by
+    Theorem~\ref{thm:prfp_is_lpdo}.
+\end{proof}
+
+\begin{theorem}[Purification RFP does not imply doubled-index idempotence]
+    \label{thm:prfp_not_doubled_index_zcl}
+    \lean{MPOTensor.exists_isPRFP_not_isZCL}
+    \leanok
+    \uses{def:mpdo_is_prfp, def:mpo_is_zcl}
+    There is a purification renormalization fixed point for which the
+    doubled-index transfer-map equation $\E_M\circ\E_M=\E_M$ fails.
 \end{theorem}
 
 % Counterexample analysed in docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
@@ -678,7 +666,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
-    \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl}
+    \uses{def:mpo_source_zcl, thm:prfp_not_doubled_index_zcl}
     The maximally mixed witness $M_{\mathrm w}$ satisfies the nonzero
     up-to-scalar physical-trace relation.
 \end{theorem}
@@ -705,8 +693,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \end{align}
     Then the purification tensor $\widehat A$ is a pure-state renormalization
     fixed point if and only if $\mathcal T_M^2=\mathcal T_M$.
-    This is the normalized tensor-level equivalence underlying the
-    purification theorem in \cite[lines~744--786]{Cirac2016MPDO_arXiv}.
+    This is the tensor-level equivalence between the first two conditions of
+    the purification theorem in \cite[lines~744--786]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -738,101 +726,92 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Physical-trace transfer is idempotent under the local purification RFP condition]
-    \label{thm:phys_trace_transfer_sq_of_local_purification_rfp}
-    \lean{MPOTensor.physTraceTransfer_sq_of_isLocalPurificationRFP}
+\begin{theorem}[A purification RFP has idempotent physical-trace transfer]
+    \label{thm:prfp_physical_trace_idempotent}
+    \lean{MPOTensor.physTraceTransfer_sq_of_isPRFP}
+    \lean{MPOTensor.IsPRFP.isPhysicalTraceIdempotent}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpo_physical_trace_transfer, def:mps_transfer_idempotence}
-    If an MPO tensor $M$ is the ancilla contraction of a pure-state
-    renormalization fixed point, then its physical-trace transfer
-    $\mathcal T_M=\sum_i M^{ii}$ is idempotent:
-    $\mathcal T_M\mathcal T_M=\mathcal T_M$.
+    \uses{def:mpdo_is_prfp, def:mpo_physical_trace_idempotence}
+    If $M$ is a purification renormalization fixed point, then
+    \begin{align}
+        \mathcal T_M^2 & = \mathcal T_M.
+        \notag
+    \end{align}
+    Thus the forward implication from PRFP to the literal zero-correlation-
+    length equation in \cite[Theorem~4.4]{Cirac2016MPDO_arXiv} requires no
+    nonzero assumption.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
     Apply the forward implication of
     Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent} to
-    the local purifying tensor and bond identification.
+    the purifying tensor and bond identification in the PRFP presentation.
 \end{proof}
 
-\begin{theorem}[Local purification form and transfer idempotence characterize a local purification RFP]
-    \label{thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent}
-    \lean{MPOTensor.isLocalPurificationRFP_iff_isLPDO_and_physTraceTransfer_sq}
+\begin{theorem}[Purification form and physical-trace idempotence characterize PRFP]
+    \label{thm:prfp_iff_lpdo_physical_trace_idempotent}
+    \lean{MPOTensor.isPRFP_iff_isLPDO_and_physTraceTransfer_sq}
     \leanok
-    \uses{def:is_local_purification_rfp, def:lpdo, thm:purification_tensor_rfp_iff_physical_trace_idempotent, thm:phys_trace_transfer_sq_of_local_purification_rfp}
-    An MPO tensor satisfies the local purification RFP condition if and only if
+    \uses{def:mpdo_is_prfp, def:lpdo, def:mpo_physical_trace_idempotence}
+    An MPO tensor is a purification renormalization fixed point if and only if
     it has a local purification and its physical-trace transfer is idempotent:
     \begin{align}
-        \mathrm{LocalPRFP}(M)
+        \operatorname{PRFP}(M)
         \quad & \Longleftrightarrow\quad
-        \mathrm{LPDO}(M)\ \text{and}\ \mathcal T_M^2=\mathcal T_M.
+        \operatorname{LPDO}(M)\ \text{and}\ \mathcal T_M^2=\mathcal T_M.
         \notag
     \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Choose the local purifying tensor and bond identification. The equivalence
-    is Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
-    for that fixed purification.
+    \uses{thm:prfp_is_lpdo, thm:prfp_physical_trace_idempotent,
+        thm:purification_tensor_rfp_iff_physical_trace_idempotent}
+    The forward direction combines Theorems~\ref{thm:prfp_is_lpdo} and
+    \ref{thm:prfp_physical_trace_idempotent}. Conversely, choose the local
+    purifying tensor and bond identification and apply
+    Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent} to
+    that fixed purification.
 \end{proof}
 
 \begin{theorem}[Nondegenerate PRFP equivalence]
     \label{thm:nondegenerate_prfp_iff_lpdo_normalized_zcl}
     \lean{MPOTensor.isNondegeneratePRFP_iff}
     \leanok
-    \uses{def:is_nondegenerate_prfp, def:lpdo, thm:local_purification_rfp_iff_lpdo_physical_trace_idempotent, thm:phys_trace_transfer_sq_of_local_purification_rfp}
+    \uses{def:is_nondegenerate_prfp, def:lpdo, def:mpo_physical_trace_idempotence}
     An MPO tensor is a nondegenerate purification renormalization fixed point if
-    and only if it is a local purification density operator
-    (Definition~\ref{def:lpdo}) and
+    and only if it is a local purification density operator and
     \begin{align}
         \mathcal T_M   & \ne0,
         \notag                          \\
         \mathcal T_M^2 & =\mathcal T_M.
         \notag
     \end{align}
-    This is the normalized, nonzero structural characterization used in the
-    forward PRFP-to-ZCL implication of
-    \cite[lines~744--786]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Combine the preceding equivalence with the nonzero clause in
-    Definition~\ref{def:is_nondegenerate_prfp}.
+    \uses{thm:prfp_iff_lpdo_physical_trace_idempotent}
+    Combine Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent} with the
+    nonzero clause in Definition~\ref{def:is_nondegenerate_prfp}.
 \end{proof}
 
-\begin{theorem}[Local purification RFP with nonzero physical-trace transfer
-        satisfies the up-to-scalar relation]
-    \label{thm:source_zcl_of_local_purification_rfp}
-    \lean{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}
+\begin{theorem}[A nonzero purification RFP satisfies the up-to-scalar relation]
+    \label{thm:source_zcl_of_prfp}
+    \lean{MPOTensor.isSourceZCL_of_isPRFP}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpo_source_zcl}
-    Let $M$ be the ancilla contraction of a pure-state renormalization fixed
-    point, satisfying the local purification renormalization fixed point
-    condition. If the physical-trace transfer $\mathcal T_M=\sum_i M^{ii}$ is
-    nonzero, then $M$ satisfies the nonzero up-to-scalar physical-trace
-    relation.
-    % Scope restriction: this is a local analogue (predicate
-    % \ref{def:is_local_purification_rfp}) of the forward implication of the source
-    % theorem (arXiv:1606.00608, lines 775--786), not that implication itself; it
-    % does not cover a purification renormalization fixed point known only through
-    % the global purification equation and the definition at arXiv:1606.00608,
-    % line 758.
-    % Normalization restriction: the unconditional implication fails -- the zero
-    % tensor in bond dimension one is a counterexample -- and the hypothesis
-    % $\mathcal T_M \neq 0$ reflects the source purification renormalization fixed
-    % point being a normalized fixed point with leading eigenvalue 1.
-    % See docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
+    \uses{def:mpdo_is_prfp, def:mpo_source_zcl}
+    If $M$ is a purification renormalization fixed point and
+    $\mathcal T_M\ne0$, then $M$ satisfies the nonzero up-to-scalar
+    physical-trace relation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:phys_trace_transfer_sq_of_local_purification_rfp, thm:mpo_source_zcl_of_physical_trace_idempotent}
-    Theorem~\ref{thm:phys_trace_transfer_sq_of_local_purification_rfp} gives
-    idempotence of the physical-trace transfer, and the nonzero hypothesis lets
-    Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent} conclude the
-    up-to-scalar relation with $\lambda=1$.
+    \uses{thm:prfp_physical_trace_idempotent, thm:mpo_source_zcl_of_physical_trace_idempotent}
+    Theorem~\ref{thm:prfp_physical_trace_idempotent} gives literal
+    idempotence, and the nonzero hypothesis gives the scalar-one case of
+    Definition~\ref{def:mpo_source_zcl}.
 \end{proof}
 
 \begin{theorem}[A nondegenerate purification RFP satisfies the nonzero
@@ -840,17 +819,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nondegenerate_prfp_source_zcl}
     \lean{MPOTensor.IsNondegeneratePRFP.isSourceZCL}
     \leanok
-    \uses{def:is_nondegenerate_prfp, thm:source_zcl_of_local_purification_rfp}
+    \uses{def:is_nondegenerate_prfp, def:mpo_source_zcl}
     Every nondegenerate purification renormalization fixed point satisfies the
     nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Definition~\ref{def:is_nondegenerate_prfp} supplies both the local
-    purification RFP condition
-    and the nonzero physical-trace transfer required by
-    Theorem~\ref{thm:source_zcl_of_local_purification_rfp}.
+    \uses{thm:source_zcl_of_prfp}
+    Apply Theorem~\ref{thm:source_zcl_of_prfp} to the two clauses of
+    Definition~\ref{def:is_nondegenerate_prfp}.
 \end{proof}
 
 \begin{theorem}[The tensor purification identity yields the global purification equation]
@@ -900,137 +878,41 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     length, so no positive-length restriction is needed.
 \end{proof}
 
-\begin{theorem}[The local purification RFP condition implies the purification RFP]
-    \label{thm:is_prfp_of_local_purification_rfp}
-    \lean{MPOTensor.isPRFP_of_isLocalPurificationRFP}
+\begin{theorem}[A purification RFP supplies a global-family witness]
+    \label{thm:prfp_has_purification_rfp_witness}
+    \lean{MPOTensor.IsPRFP.hasPurificationRFPWitness}
     \leanok
-    \uses{def:is_local_purification_rfp, def:mpdo_is_prfp}
-    Every MPO tensor satisfying the local purification renormalization fixed
-    point condition is a purification renormalization fixed point in the sense of
-    Definition~4.3 of \cite[lines~756--764]{Cirac2016MPDO_arXiv}.
+    \uses{def:mpdo_is_prfp, def:mpdo_purification_rfp_witness}
+    Every purification renormalization fixed point has a global-family
+    purification RFP witness with the same purifying tensor.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpo_eq_purification_density, def:mpdo_global_purification_equation}
-    The local condition supplies a purifying tensor $A$ that is a pure-state
-    renormalization fixed point and whose ancilla contraction is $M$. By
-    Theorem~\ref{thm:mpo_eq_purification_density} this contraction satisfies the
-    global purification equation at every positive length, so the same $A$ is a
-    purification RFP witness.
-\end{proof}
-
-\begin{corollary}[A nondegenerate purification RFP satisfies the global PRFP predicate]
-    \label{cor:nondegenerate_prfp_is_global_prfp}
-    \lean{MPOTensor.IsNondegeneratePRFP.isPRFP}
-    \leanok
-    \uses{def:is_nondegenerate_prfp, thm:is_prfp_of_local_purification_rfp}
-    Every nondegenerate purification renormalization fixed point satisfies the
-    positive-length global purification predicate of Definition~4.3 in
-    \cite[lines~744--758]{Cirac2016MPDO_arXiv}.
-\end{corollary}
-
-\begin{proof}
-    \leanok
-    Forget the nonzero condition and apply
-    Theorem~\ref{thm:is_prfp_of_local_purification_rfp}.
+    \uses{thm:mpo_eq_purification_density}
+    The local ancillary-contraction identity implies equality of the two
+    generated density operators at every length by
+    Theorem~\ref{thm:mpo_eq_purification_density}.
 \end{proof}
 
 % CPSV16 Theorem 4.4, the unlabeled theorem environment at lines 777--784.
 % Gap: docs/paper-gaps/cpsv16_purification_rfp_definition.tex.
-\begin{theorem}[Printed purification fixed-point equivalence]
+\begin{theorem}[Purification fixed-point equivalence]
     \label{thm:cpsv_theorem44_printed_status}
-    \uses{def:mpdo_global_purification_equation, def:mpdo_is_prfp, def:mpo_physical_trace_idempotence, def:mpdo_purification_rfp_witness, thm:nonzero_global_prfp_not_physical_trace_idempotence}
+    \uses{def:mpdo_is_prfp, def:mpo_physical_trace_idempotence}
     \notready
-    Let an MPO tensor admit the global purification equation of
-    Definition~\ref{def:mpdo_global_purification_equation}.  According to
-    \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}, being a purification
-    renormalization fixed point, having zero correlation length, and admitting
-    the displayed trace-preserving purification form are equivalent.
+    For an MPO tensor with the one-site purification presentation displayed in
+    \cite[lines~744--763]{Cirac2016MPDO_arXiv}, Theorem~4.4 asserts the
+    equivalence of the following conditions: the purifying tensor is a
+    pure-state renormalization fixed point, the physical-trace transfer is
+    idempotent, and the generated density operators have the repeated-copy
+    form displayed in \cite[lines~765--773]{Cirac2016MPDO_arXiv}.
 
-    This equivalence is false under the printed hypotheses.  Positive-length
-    equations do not detect nilpotent hidden bond sectors.
-    Theorem~\ref{thm:nonzero_global_prfp_not_physical_trace_idempotence} gives a
-    nonzero matrix product density operator that is a purification fixed point
-    but fails the literal physical-trace idempotence equation of
-    Definition~\ref{def:mpo_physical_trace_idempotence}.  The corrected local
-    purification equivalences above require a tensor-level purification identity
-    and do not recover the printed global statement.
+    % The identification with the repeated-copy density formula is the only
+    % part not yet formalized.
+    The equivalence between the first two conditions is
+    Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent}. The
+    positive-length global purification equation follows from the local
+    presentation by
+    Theorem~\ref{thm:prfp_has_purification_rfp_witness}, but it does not by
+    itself determine that presentation.
 \end{theorem}
-
-\begin{theorem}[The bare global PRFP predicate does not imply the nonzero
-        physical-trace relation]
-    \label{thm:global_prfp_not_source_zcl}
-    \lean{MPOTensor.exists_isPRFP_not_isSourceZCL}
-    \leanok
-    \uses{def:mpdo_is_prfp, def:mpo_source_zcl, def:is_local_purification_rfp, thm:is_prfp_of_local_purification_rfp}
-    There is an MPO tensor satisfying the bare positive-length global
-    purification RFP predicate which does not satisfy the nonzero up-to-scalar
-    physical-trace relation.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Take the zero tensor at spin, ancillary, and bond dimensions one, purified
-    by the zero spin--ancilla tensor. Its transfer map is idempotent and every
-    positive-length density operator is zero, so the global purification
-    equation holds. Its physical-trace transfer is zero, which is excluded by
-    the nonzero up-to-scalar physical-trace relation.
-\end{proof}
-
-\begin{theorem}[A nonzero global PRFP need not satisfy the up-to-scalar
-        physical-trace relation]
-    \label{thm:nonzero_global_prfp_not_source_zcl}
-    \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
-    \leanok
-    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_source_zcl}
-    There is an MPO tensor which is an MPDO, satisfies the positive-length
-    global purification RFP predicate, and has nonzero physical-trace transfer,
-    but does not satisfy the nonzero up-to-scalar physical-trace relation.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Take one physical state and bond dimension three, with the only tensor entry
-    \begin{align}
-        Q & =
-        \begin{pmatrix}
-            1 & 0 & 0 \\
-            0 & 0 & 1 \\
-            0 & 0 & 0
-        \end{pmatrix}.
-        \notag
-    \end{align}
-    Since $\tr(Q^N)=1$ for every $N>0$, all positive-length MPOs
-    equal the scalar density operator $1$ and are purified by the scalar
-    pure-state RFP tensor $A=1$. At length zero the MPO is the positive scalar
-    $3$, so the tensor is an MPDO at every length. Its physical-trace transfer
-    is the nonzero matrix $Q$. However,
-    $Q^2=\diag(1,0,0)$ is not a positive scalar multiple of $Q$,
-    because the $(2,3)$ entry is lost on squaring. Thus the up-to-scalar
-    physical-trace relation fails. The global equation cannot detect this
-    nilpotent bond sector.
-\end{proof}
-
-\begin{theorem}[A nonzero global PRFP need not satisfy literal physical-trace
-        idempotence]
-    \label{thm:nonzero_global_prfp_not_physical_trace_idempotence}
-    \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isPhysicalTraceIdempotent}
-    \leanok
-    \uses{def:mpdo, def:mpdo_is_prfp, def:mpo_physical_trace_transfer, def:mpo_physical_trace_idempotence}
-    There is an MPO tensor which is an MPDO, satisfies the positive-length
-    global purification RFP predicate, and has nonzero physical-trace transfer,
-    but its physical-trace transfer is not idempotent.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:nonzero_global_prfp_not_source_zcl, thm:mpo_source_zcl_of_physical_trace_idempotent}
-    Use the tensor from
-    Theorem~\ref{thm:nonzero_global_prfp_not_source_zcl}.  If its nonzero
-    physical-trace transfer $\mathcal T_M$ were idempotent, then
-    \[
-        \mathcal T_M^2=\mathcal T_M=1\cdot\mathcal T_M,
-    \]
-    which is the scalar-one case of the up-to-scalar relation refuted by that
-    theorem.
-\end{proof}

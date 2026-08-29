@@ -67,3 +67,13 @@ already carried by a surviving entry.
   Proposition 4.13.
 * `TNLean/MPS/MPDO/InvariantProjection.lean`: the now-unused import of
   `TNLean.MPS.MPDO.PerCopyHorizontalCF` was dropped.
+
+## Subsequent PRFP correction
+
+On 2026-08-28, `MPOTensor.IsPRFP` was changed from the bare positive-length
+global witness to the one-site ancillary-contraction presentation intended by
+CPSV16 Definition 4.3. This does not alter the alias-deletion result recorded
+above: the removed trace-preserving-spin-reduction predicate was definitionally
+redundant at the audited head. The global family equation now remains as the
+separate predicate `MPOTensor.HasGlobalPurificationEquation` and is a theorem
+of the source-facing `IsPRFP` predicate.

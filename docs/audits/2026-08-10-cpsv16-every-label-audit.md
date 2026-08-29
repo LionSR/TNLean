@@ -146,7 +146,7 @@ the printed statement.
 | Theorem 3.10 | `thm:cpsv_theorem_zcl_pure_status` (merged from the former `thm:cpsv_main_mps_status`, which was folded into the Theorem 3.8 node) | corrected representative-level implications in Chapters 26 and 13 |
 | Theorem 3.11 | `thm:cpsv_charact_mps_status` | one-copy and direct-sum structural results in Chapter 26 |
 | Corollary 3.12 | none since the nonzero-coefficient convention; anchor on `thm:cpsv_phase_class_residual_isometries` | phase-class residual-isometry results in Chapter 26 |
-| Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | literal global implication refuted by `thm:nonzero_global_prfp_not_physical_trace_idempotence`; stronger scale-invariant counterexample and restricted local equivalences remain separate in Chapter 21 |
+| Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | the adopted one-site presentation gives the proved equivalence of clauses (i) and (ii); equivalence with clause (iii), the repeated-copy density formula, remains open, while the bare global-family equation is tracked as a distinct weaker reading in Chapter 21 |
 | Proposition 4.5 | `thm:cpsv_prop45_printed_status`; `thm:cpsv_prop45_limit_counterexample` | monotonicity and finite-chain bounds remain separate proved results; the unrestricted limit clause is formally refuted by the parity MPDO |
 | Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; literal (iv)$\Rightarrow$(v) refuted by the exact repeated-copy capstone; the two preserved not-ready nodes record the viable source (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) routes |
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
@@ -187,10 +187,11 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
 - Theorem 3.11 lacks the repeated-copy physical routing needed to interpret its
   displayed shared isometry.  Corollary 3.12 is false for an arbitrary BNT but
   complete for active phase-class representatives.
-- Theorem 4.4's printed global implication to literal ZCL is refuted: a nonzero
-  MPDO global PRFP can have a trace-invisible nilpotent hidden sector. The
-  local-purification equivalences remain restricted corrections, and the
-  stronger scale-invariant counterexample remains a separate result.
+- The adopted one-site presentation gives the proved equivalence of Theorem
+  4.4 clauses (i) and (ii). A trace-invisible nilpotent hidden sector shows only
+  that the bare positive-length global-family equation is weaker than that
+  presentation. Equivalence with clause (iii), the repeated-copy density form,
+  remains open.
 - Proposition 4.5's monotonicity and finite-chain bounds are proved and retained
   separately.  Its unrestricted thermodynamic-limit clause is formally refuted
   by an MPDO whose mutual information has no real limit at any fixed nonempty
