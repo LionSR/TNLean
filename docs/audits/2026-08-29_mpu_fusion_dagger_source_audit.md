@@ -11,7 +11,7 @@ The primary sources used here are:
 
 | Source | Audited passage | Source archive SHA-256 |
 |---|---|---|
-| Molnár--Ge--Schuch--Cirac, [arXiv:1706.07329v2](https://arxiv.org/abs/1706.07329) | `cornerproblem.tex:3121--3168`, with definitions at `1002--1060` and proof details at `3935--4034` | `045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e` |
+| Molnár--Ge--Schuch--Cirac, [arXiv:1706.07329v2](https://arxiv.org/abs/1706.07329) | `cornerproblem.tex:3121--3168`, with definitions at `1002--1060` and proof details at `3815--4034` | `045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e` |
 | Garre-Rubio--Schuch, [arXiv:2405.00439v2](https://arxiv.org/abs/2405.00439) | `MPU-DW.tex:343--377`, especially Theorem 1 and its footnote at lines 358--364 | `166ce15a174167772f53d53b7ed15438fdf799717e053b128f612a264d3f8bb4` |
 | MPU gauging paper | `Papers/2502.20257/main.tex:1403--1678` | repository source |
 
@@ -227,7 +227,9 @@ this.  The same assertion is repeated at
 `Papers/2502.20257/main.tex:1498`.  It is not part of Proposition 20,
 Definition 8, or Theorem 22, and neither audited source states a theorem that
 chooses one blocking length simultaneously for every pair in a finite group.
-That common finite blocking is a separate prerequisite owned by #7321.
+After #7321 supplies representation-level common blocking and the properties
+stable under further blocking, #7322 owns this reduction-dependent finite
+common block for the selected family of reductions.
 
 The dependence on length one is therefore:
 
