@@ -15,6 +15,7 @@ TARGET="$TEST_ROOT/target"
 MISMATCH_TARGET="$TEST_ROOT/mismatch-target"
 mkdir -p "$REPO/scripts"
 cp "$SCRIPT_SOURCE/seed_lake_build.sh" "$REPO/scripts/seed_lake_build.sh"
+cp "$SCRIPT_SOURCE/lake_build_locked.sh" "$REPO/scripts/lake_build_locked.sh"
 printf 'leanprover/lean4:v4.34.0-rc1\n' >"$REPO/lean-toolchain"
 printf '{}\n' >"$REPO/lake-manifest.json"
 printf 'name = "LakeSeedTest"\n' >"$REPO/lakefile.toml"
@@ -55,15 +56,75 @@ EOF
 chmod +x "$TEST_ROOT/bin/cp"
 cat >"$TEST_ROOT/bin/lake" <<'EOF'
 #!/usr/bin/env bash
-if test "$*" != "exe cache get"; then
-  echo "unexpected lake arguments: $*" >&2
-  exit 2
-fi
-printf 'called\n' >>"$LAKE_CALL_LOG"
+case "$*" in
+  "exe cache get"|build*)
+    printf '%s\n' "$*" >>"$LAKE_CALL_LOG"
+    ;;
+  *)
+    echo "unexpected lake arguments: $*" >&2
+    exit 2
+    ;;
+esac
 EOF
 chmod +x "$TEST_ROOT/bin/lake"
 export LAKE_CALL_LOG="$TEST_ROOT/lake-calls.log"
 PATH="$TEST_ROOT/bin:$PATH"
+
+LOCK_FILE="$REPO/.git/tnlean-lake-cache.lock"
+LOCK_READY="$TEST_ROOT/lock-ready"
+LOCK_CONTINUE="$TEST_ROOT/lock-continue"
+COMMAND_CONTINUE="$TEST_ROOT/command-continue"
+LOCKED_COMMAND_RAN="$TEST_ROOT/locked-command-ran"
+SECOND_COMMAND_RAN="$TEST_ROOT/second-command-ran"
+# shellcheck disable=SC2016
+/usr/bin/lockf -k "$LOCK_FILE" /bin/sh -c \
+  'printf ready >"$1"; while test ! -e "$2"; do sleep 0.1; done' \
+  sh "$LOCK_READY" "$LOCK_CONTINUE" &
+LOCK_HOLDER_PID="$!"
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  test -e "$LOCK_READY" && break
+  sleep 0.1
+done
+test -e "$LOCK_READY"
+(
+  cd "$REPO"
+  # shellcheck disable=SC2016
+  scripts/lake_build_locked.sh -- /bin/sh -c \
+    'test -e /dev/fd/9; printf ran >"$1"; while test ! -e "$2"; do sleep 0.1; done' \
+    sh "$LOCKED_COMMAND_RAN" "$COMMAND_CONTINUE"
+) &
+LOCKED_COMMAND_PID="$!"
+sleep 0.2
+test ! -e "$LOCKED_COMMAND_RAN"
+printf continue >"$LOCK_CONTINUE"
+wait "$LOCK_HOLDER_PID"
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  test -e "$LOCKED_COMMAND_RAN" && break
+  sleep 0.1
+done
+test "$(cat "$LOCKED_COMMAND_RAN")" = "ran"
+(
+  cd "$REPO"
+  # shellcheck disable=SC2016
+  scripts/lake_build_locked.sh -- /bin/sh -c \
+    'printf second >"$1"' sh "$SECOND_COMMAND_RAN"
+) &
+SECOND_COMMAND_PID="$!"
+sleep 0.2
+test ! -e "$SECOND_COMMAND_RAN"
+printf continue >"$COMMAND_CONTINUE"
+wait "$LOCKED_COMMAND_PID"
+wait "$SECOND_COMMAND_PID"
+test "$(cat "$SECOND_COMMAND_RAN")" = "second"
+test -f "$LOCK_FILE"
+(
+  cd "$REPO"
+  scripts/lake_build_locked.sh Example.Target
+)
+test "$(sed -n '1p' "$LAKE_CALL_LOG")" = "exe cache get"
+test "$(sed -n '2p' "$LAKE_CALL_LOG")" = "build Example.Target"
+test "$(wc -l <"$LAKE_CALL_LOG" | tr -d ' ')" -eq 2
+find "$LAKE_CALL_LOG" -delete
 
 mv "$REPO/.lake" "$REPO/.lake.real"
 ln -s .lake.real "$REPO/.lake"
