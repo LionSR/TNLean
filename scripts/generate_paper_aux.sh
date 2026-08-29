@@ -68,15 +68,18 @@ for tex in "${tex_files[@]}"; do
   if command -v latexmk >/dev/null 2>&1; then
     (
       cd "$target_dir"
-      latexmk -pdf -interaction=nonstopmode -halt-on-error \
+      TEXINPUTS=".:${TEXINPUTS:-}" \
+        latexmk -pdf -interaction=nonstopmode -halt-on-error \
         -outdir="$output_dir" "$tex"
     )
   elif command -v pdflatex >/dev/null 2>&1; then
     (
       cd "$target_dir"
-      pdflatex -interaction=nonstopmode -halt-on-error \
+      TEXINPUTS=".:${TEXINPUTS:-}" \
+        pdflatex -interaction=nonstopmode -halt-on-error \
         -output-directory="$output_dir" "$tex"
-      pdflatex -interaction=nonstopmode -halt-on-error \
+      TEXINPUTS=".:${TEXINPUTS:-}" \
+        pdflatex -interaction=nonstopmode -halt-on-error \
         -output-directory="$output_dir" "$tex"
     )
   else
