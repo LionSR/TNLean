@@ -37,7 +37,7 @@ open NonCartesianActiveSectorCandidate
 coordinates of the five-dimensional physical space.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 def physicalInclusion : Matrix (Fin 5) (Fin 4) ℂ :=
   fun i p ↦ if i.val = p.val then 1 else 0
@@ -45,7 +45,7 @@ def physicalInclusion : Matrix (Fin 5) (Fin 4) ℂ :=
 /-- The literal coordinate inclusion is an isometry.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem physicalInclusion_isometry :
     physicalInclusionᴴ * physicalInclusion = 1 := by
@@ -66,7 +66,7 @@ its actual `(0,0)` virtual slice, which is one quarter of the identity, rather
 than assuming full support.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem candidate_physicalSupportProj_eq_one :
     physicalSupportProj tensor = 1 := by
@@ -96,7 +96,7 @@ def embeddedCandidate : MPOTensor 5 2 :=
 /-- The embedded candidate has exactly the first-four-coordinate support.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem embeddedCandidate_physicalSupportProj :
     physicalSupportProj embeddedCandidate = badPhysicalSupport := by
@@ -107,7 +107,7 @@ theorem embeddedCandidate_physicalSupportProj :
 /-- One-site injectivity is preserved by the literal physical inclusion.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem embeddedCandidate_isInjective : embeddedCandidate.IsInjective := by
   exact (isInjective_toMPSTensor_changePhysicalBasis_iff
@@ -116,7 +116,7 @@ theorem embeddedCandidate_isInjective : embeddedCandidate.IsInjective := by
 /-- The embedded candidate remains an MPDO tensor.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem embeddedCandidate_isMPDO : embeddedCandidate.IsMPDO := by
   exact (isMPDO_changePhysicalBasis_iff
@@ -125,7 +125,7 @@ theorem embeddedCandidate_isMPDO : embeddedCandidate.IsMPDO := by
 /-- The embedded candidate still saturates the area law.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem embeddedCandidate_isSAL : embeddedCandidate.IsSAL := by
   exact (isSAL_changePhysicalBasis_iff
@@ -134,7 +134,7 @@ theorem embeddedCandidate_isSAL : embeddedCandidate.IsSAL := by
 /-- The embedded candidate obeys literal physical-trace idempotence.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem embeddedCandidate_physTraceTransfer_idempotent :
     physTraceTransfer embeddedCandidate * physTraceTransfer embeddedCandidate =
@@ -144,19 +144,89 @@ theorem embeddedCandidate_physTraceTransfer_idempotent :
       physicalInclusion_isometry tensor]
   exact physTraceTransfer_tensor_idempotent
 
+private theorem physicalSlice_eq_sum_of_conjugation {d D : ℕ}
+    {K L : MPOTensor d D} (X : GL (Fin D) ℂ)
+    (hX : ∀ i, L.toMPSTensor i = X * K.toMPSTensor i * X⁻¹) (β α : Fin D) :
+    physicalSlice L β α = ∑ ν : Fin D, ∑ μ : Fin D,
+      (X β μ * (X⁻¹ : Matrix (Fin D) (Fin D) ℂ) ν α) • physicalSlice K μ ν := by
+  ext i j
+  have hEntry := congrArg
+    (fun A : Matrix (Fin D) (Fin D) ℂ ↦ A β α)
+    (hX (finProdFinEquiv (i, j)))
+  simpa [toMPSTensor, physicalSlice, Matrix.mul_apply, Matrix.sum_apply,
+    Pi.smul_apply, smul_eq_mul, Finset.mul_sum, Finset.sum_mul,
+    mul_assoc, mul_left_comm, mul_comm] using hEntry
+
+private theorem physicalSupportProj_isHermitian {d D : ℕ} (K : MPOTensor d D) :
+    (physicalSupportProj K).IsHermitian :=
+  (Matrix.posSemidef_self_mul_conjTranspose (physicalSliceColumns K)).supportProj_isHermitian
+
+private theorem physicalSupportProj_eq_of_gaugeEquiv {d D : ℕ}
+    {K L : MPOTensor d D} (hGauge : MPSTensor.GaugeEquiv K.toMPSTensor L.toMPSTensor) :
+    physicalSupportProj K = physicalSupportProj L := by
+  have hGaugeSymm := hGauge.symm
+  obtain ⟨X, hX⟩ := hGauge
+  have hKL : physicalSupportProj K * physicalSupportProj L = physicalSupportProj L :=
+    mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq L
+      (physicalSupportProj K) (fun β α ↦ by
+        rw [physicalSlice_eq_sum_of_conjugation X hX]
+        simp_rw [Matrix.mul_sum, Matrix.mul_smul, physicalSupportProj_mul_physicalSlice])
+  obtain ⟨Y, hY⟩ := hGaugeSymm
+  have hLK : physicalSupportProj L * physicalSupportProj K = physicalSupportProj K :=
+    mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq K
+      (physicalSupportProj L) (fun β α ↦ by
+        rw [physicalSlice_eq_sum_of_conjugation Y hY]
+        simp_rw [Matrix.mul_sum, Matrix.mul_smul, physicalSupportProj_mul_physicalSlice])
+  have hLK' : physicalSupportProj K * physicalSupportProj L = physicalSupportProj K := by
+    simpa only [Matrix.conjTranspose_mul, (physicalSupportProj_isHermitian K).eq,
+      (physicalSupportProj_isHermitian L).eq] using congrArg Matrix.conjTranspose hLK
+  exact hLK'.symm.trans hKL
+
+private theorem physicalSupportProj_smul_of_ne {d D : ℕ} (K : MPOTensor d D)
+    {c : ℂ} (hc : c ≠ 0) :
+    physicalSupportProj (c • K) = physicalSupportProj K := by
+  have hScaled : ∀ β α,
+      physicalSupportProj K * physicalSlice (c • K) β α = physicalSlice (c • K) β α := by
+    intro β α
+    rw [show physicalSlice (c • K) β α = c • physicalSlice K β α by rfl,
+      Matrix.mul_smul, physicalSupportProj_mul_physicalSlice]
+  have hUnscaled : ∀ β α,
+      physicalSupportProj (c • K) * physicalSlice K β α = physicalSlice K β α := by
+    intro β α
+    apply MulAction.injective₀ hc
+    change c • (physicalSupportProj (c • K) * physicalSlice K β α) =
+      c • physicalSlice K β α
+    rw [← Matrix.mul_smul]
+    exact physicalSupportProj_mul_physicalSlice (c • K) β α
+  have hScaledSupport :
+      physicalSupportProj K * physicalSupportProj (c • K) = physicalSupportProj (c • K) :=
+    mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
+      (c • K) (physicalSupportProj K) hScaled
+  have hUnscaledSupport :
+      physicalSupportProj (c • K) * physicalSupportProj K = physicalSupportProj K :=
+    mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
+      K (physicalSupportProj (c • K)) hUnscaled
+  have hUnscaledSupport' :
+      physicalSupportProj K * physicalSupportProj (c • K) = physicalSupportProj K := by
+    simpa only [Matrix.conjTranspose_mul, (physicalSupportProj_isHermitian K).eq,
+      (physicalSupportProj_isHermitian (c • K)).eq] using
+      congrArg Matrix.conjTranspose hUnscaledSupport
+  exact hScaledSupport.symm.trans hUnscaledSupport'
+
 /-- The embedded candidate has a left-canonical normal representative with a
 nonzero coefficient of norm strictly below one. The representative is obtained
 by applying the literal physical inclusion to the already-constructed
 Perron-gauged representative.
 
 This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608; lines 217--246, 1628--1665, and 1740--1782 are
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
 context only. -/
 theorem exists_embedded_leftCanonical_normal_bad_block :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
         MPSTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
-        MPSTensor.GaugeEquiv embeddedCandidate.toMPSTensor (mu • B) := by
+        MPSTensor.GaugeEquiv embeddedCandidate.toMPSTensor (mu • B) ∧
+        physicalSupportProj (verticalBNTMPO B) = badPhysicalSupport := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hTensorGauge⟩ :=
     exists_leftCanonical_normalTensor_scalar_representation
   let Bmpo : MPOTensor 4 2 := verticalBNTMPO B
@@ -181,16 +251,38 @@ theorem exists_embedded_leftCanonical_normal_bad_block :
     have hVertical : verticalBNTMPO (mu • B) = mu • verticalBNTMPO B := rfl
     rw [hVertical, changePhysicalBasis_smul] at h
     exact h
+  have hAmbientGaugeMPO : MPSTensor.GaugeEquiv embeddedCandidate.toMPSTensor
+      (mu • verticalBNTMPO Bambient).toMPSTensor := by
+    rw [← show verticalBNTMPO (mu • Bambient) =
+      mu • verticalBNTMPO Bambient from rfl, verticalBNTMPO_toMPSTensor]
+    exact hAmbientGauge
+  have hAmbientSupport :
+      physicalSupportProj (verticalBNTMPO Bambient) = badPhysicalSupport := by
+    calc
+      physicalSupportProj (verticalBNTMPO Bambient) =
+          physicalSupportProj (mu • verticalBNTMPO Bambient) :=
+        (physicalSupportProj_smul_of_ne (verticalBNTMPO Bambient) hmu).symm
+      _ = physicalSupportProj embeddedCandidate :=
+        (physicalSupportProj_eq_of_gaugeEquiv hAmbientGaugeMPO).symm
+      _ = badPhysicalSupport := embeddedCandidate_physicalSupportProj
   exact ⟨mu, Bambient, hmu, hmuNorm, hAmbientInj, hAmbientLeft,
-    hAmbientNormal, hAmbientGauge⟩
+    hAmbientNormal, hAmbientGauge, hAmbientSupport⟩
 
 /-! ## The terminal physical block -/
 
-/-- The one-dimensional physical coordinate included as ambient coordinate four. -/
+/-- The one-dimensional physical coordinate included as ambient coordinate four.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 def terminalPhysicalInclusion : Matrix (Fin 5) (Fin 1) ℂ :=
   fun i _ ↦ if i = 4 then 1 else 0
 
-/-- The terminal coordinate inclusion is an isometry. -/
+/-- The terminal coordinate inclusion is an isometry.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalPhysicalInclusion_isometry :
     terminalPhysicalInclusionᴴ * terminalPhysicalInclusion = 1 := by
   ext p q
@@ -199,7 +291,7 @@ theorem terminalPhysicalInclusion_isometry :
   norm_num [terminalPhysicalInclusion, Matrix.mul_apply, Fin.sum_univ_five]
 
 /-- The scalar product-state MPO before inclusion into the ambient coordinate. -/
-noncomputable def terminalSource : MPOTensor 1 1 :=
+private noncomputable def terminalSource : MPOTensor 1 1 :=
   doubledTensor MPSTensor.scalarUnitTensor
 
 @[simp] private theorem terminalSource_apply (i j : Fin 1) :
@@ -219,12 +311,6 @@ private lemma scalarUnitTensor_evalWord {N : ℕ} (σ : Fin N → Fin 1) :
       rw [List.ofFn_succ, Kraus.evalWord_cons, ih]
       simp [MPSTensor.scalarUnitTensor]
 
-private lemma terminalSource_evalWord {N : ℕ} (σ τ : Fin N → Fin 1) :
-    evalWord terminalSource (List.ofFn σ) (List.ofFn τ) = 1 := by
-  rw [terminalSource, evalWord_doubledTensor, scalarUnitTensor_evalWord,
-    scalarUnitTensor_evalWord]
-  simp
-
 private theorem scalarUnitTensor_transferMap :
     Kraus.transferMap MPSTensor.scalarUnitTensor = LinearMap.id := by
   apply LinearMap.ext
@@ -243,16 +329,24 @@ private theorem terminalSource_transferMap :
   fin_cases b
   simp [toMPSTensor, terminalSource_apply]
 
-/-- The terminal bond-one block, supported exactly on ambient coordinate four. -/
+/-- The terminal bond-one block, supported exactly on ambient coordinate four.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 def terminalBlock : MPOTensor 5 1 :=
   changePhysicalBasis terminalPhysicalInclusion terminalSource
 
-/-- The projection onto ambient physical coordinate four. -/
+/-- The projection onto ambient physical coordinate four.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 def terminalPhysicalSupport : Matrix (Fin 5) (Fin 5) ℂ :=
   terminalPhysicalInclusion * terminalPhysicalInclusionᴴ
 
 /-- The scalar source is one-site injective. -/
-theorem terminalSource_isInjective : Kraus.IsInjective terminalSource.toMPSTensor := by
+private theorem terminalSource_isInjective : Kraus.IsInjective terminalSource.toMPSTensor := by
   apply top_unique
   intro X _hX
   have hGenerator : terminalSource.toMPSTensor 0 ∈
@@ -266,20 +360,32 @@ theorem terminalSource_isInjective : Kraus.IsInjective terminalSource.toMPSTenso
   fin_cases b
   simp [toMPSTensor, terminalSource_apply]
 
-/-- The terminal block is one-site injective. -/
+/-- The terminal block is one-site injective.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_isInjective : Kraus.IsInjective terminalBlock.toMPSTensor := by
   exact (isInjective_toMPSTensor_changePhysicalBasis_iff
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
       terminalSource_isInjective
 
-/-- The terminal block is left-canonical. -/
+/-- The terminal block is left-canonical.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_isLeftCanonical :
     MPSTensor.IsLeftCanonical terminalBlock.toMPSTensor := by
   apply isLeftCanonical_toMPSTensor_changePhysicalBasis
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource
   simp [MPSTensor.IsLeftCanonical, Kraus.IsTP, toMPSTensor, terminalSource_apply]
 
-/-- The terminal block is a normal tensor. -/
+/-- The terminal block is a normal tensor.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_isNormalTensor :
     MPSTensor.IsNormalTensor terminalBlock.toMPSTensor := by
   exact (isNormalTensor_toMPSTensor_changePhysicalBasis_iff
@@ -334,26 +440,42 @@ private theorem terminalSource_isSAL : terminalSource.IsSAL := by
     congr 1
     exact hPureSAL N L hL hLN
 
-/-- The terminal block is an MPDO tensor. -/
+/-- The terminal block is an MPDO tensor.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_isMPDO : terminalBlock.IsMPDO := by
   exact (isMPDO_changePhysicalBasis_iff
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
       terminalSource_isMPDO
 
-/-- The terminal block saturates the area law. -/
+/-- The terminal block saturates the area law.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_isSAL : terminalBlock.IsSAL := by
   exact (isSAL_changePhysicalBasis_iff
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource).2
       terminalSource_isSAL
 
-/-- The physical-trace transfer of the terminal block is exactly one. -/
+/-- The physical-trace transfer of the terminal block is exactly one.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_physTraceTransfer :
     physTraceTransfer terminalBlock = 1 := by
   rw [terminalBlock, physTraceTransfer_changePhysicalBasis
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource]
   exact terminalSource_physTraceTransfer
 
-/-- The terminal block has literal physical-trace idempotence. -/
+/-- The terminal block has literal physical-trace idempotence.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_physTraceTransfer_idempotent :
     physTraceTransfer terminalBlock * physTraceTransfer terminalBlock =
       physTraceTransfer terminalBlock := by
@@ -370,7 +492,11 @@ private theorem terminalSource_physicalSupportProj :
   rw [hSlice, Matrix.mul_one] at hFix
   exact hFix
 
-/-- The terminal block has exactly the coordinate-four physical support. -/
+/-- The terminal block has exactly the coordinate-four physical support.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalBlock_physicalSupportProj :
     physicalSupportProj terminalBlock = terminalPhysicalSupport := by
   rw [terminalBlock, physicalSupportProj_changePhysicalBasis
@@ -378,7 +504,11 @@ theorem terminalBlock_physicalSupportProj :
     terminalSource_physicalSupportProj]
   simp [terminalPhysicalSupport]
 
-/-- The bad and terminal physical supports are orthogonal, in this order. -/
+/-- The bad and terminal physical supports are orthogonal, in this order.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badPhysicalSupport_mul_terminalPhysicalSupport :
     badPhysicalSupport * terminalPhysicalSupport = 0 := by
   ext i j
@@ -387,7 +517,11 @@ theorem badPhysicalSupport_mul_terminalPhysicalSupport :
       terminalPhysicalInclusion, Matrix.mul_apply, Fin.sum_univ_one,
       Fin.sum_univ_four, Fin.sum_univ_five] <;> simp
 
-/-- The terminal and bad physical supports are orthogonal, in the reverse order. -/
+/-- The terminal and bad physical supports are orthogonal, in the reverse order.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem terminalPhysicalSupport_mul_badPhysicalSupport :
     terminalPhysicalSupport * badPhysicalSupport = 0 := by
   ext i j
@@ -396,7 +530,11 @@ theorem terminalPhysicalSupport_mul_badPhysicalSupport :
       terminalPhysicalInclusion, Matrix.mul_apply, Fin.sum_univ_one,
       Fin.sum_univ_four, Fin.sum_univ_five] <;> simp
 
-/-- The bad and terminal physical supports resolve the ambient identity. -/
+/-- The bad and terminal physical supports resolve the ambient identity.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badPhysicalSupport_add_terminalPhysicalSupport :
     badPhysicalSupport + terminalPhysicalSupport = 1 := by
   ext i j
@@ -408,7 +546,11 @@ theorem badPhysicalSupport_add_terminalPhysicalSupport :
 /-! ## The literal two-block SectorBNT decomposition -/
 
 /-- The two-sector, one-copy-per-sector decomposition with bad-block weight
-`mu` and terminal-block weight exactly one. -/
+`mu` and terminal-block weight exactly one.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 @[reducible] noncomputable def badTerminalDecomposition
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     MPSTensor.SectorDecomposition (5 * 5) where
@@ -429,18 +571,30 @@ theorem badPhysicalSupport_add_terminalPhysicalSupport :
         · exact hmu
         · exact one_ne_zero }
 
-/-- The decomposition has exactly two basis sectors. -/
+/-- The decomposition has exactly two basis sectors.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badTerminalDecomposition_basisCount
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     (badTerminalDecomposition mu B hmu).basisCount = 2 := rfl
 
-/-- Each basis sector occurs exactly once. -/
+/-- Each basis sector occurs exactly once.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badTerminalDecomposition_copies
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
     (j : Fin (badTerminalDecomposition mu B hmu).basisCount) :
     (badTerminalDecomposition mu B hmu).copies j = 1 := rfl
 
-/-- The two basis bond dimensions are exactly two and one. -/
+/-- The two basis bond dimensions are exactly two and one.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badTerminalDecomposition_basisDim
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     (badTerminalDecomposition mu B hmu).basisDim 0 = 2 ∧
@@ -450,7 +604,11 @@ theorem badTerminalDecomposition_basisDim
   · rfl
 
 /-- The basis blocks are literally the unabsorbed bad normal block and the
-terminal bond-one block. -/
+terminal bond-one block.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badTerminalDecomposition_basis
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     (badTerminalDecomposition mu B hmu).basis 0 = B ∧
@@ -459,7 +617,11 @@ theorem badTerminalDecomposition_basis
   · rfl
   · rfl
 
-/-- The two raw weights are literally `(mu, 1)`. -/
+/-- The two raw weights are literally `(mu, 1)`.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badTerminalDecomposition_weight
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
     (badTerminalDecomposition mu B hmu).weight 0 0 = mu ∧
@@ -470,7 +632,11 @@ theorem badTerminalDecomposition_weight
 
 /-- The literal two-block decomposition is in BNT canonical form. The
 basis-family separation is forced by the impossible bond-dimension equality
-`2 = 1`; the terminal weight supplies the single global unit witness. -/
+`2 = 1`; the terminal weight supplies the single global unit witness.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem badTerminalDecomposition_isBNTCanonicalForm
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) (hmuNorm : ‖mu‖ < 1)
     (hBInj : Kraus.IsInjective B) (hBLeft : MPSTensor.IsLeftCanonical B)
@@ -567,7 +733,13 @@ theorem badTerminalDecomposition_isBNTCanonicalForm
 
 /-- The prepared non-Cartesian candidate and terminal block give an explicit
 normalized two-sector BNT witness. The bad basis tensor remains unabsorbed and
-normal; only the gauge target carries the coefficient `mu`. -/
+normal; only the gauge target carries the coefficient `mu`. Its MPO presentation
+has the first-four-coordinate support, orthogonal to the terminal support in
+both multiplication orders.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by CPSV16 (arXiv:1606.00608); lines 217--246, 1628--1665, and 1740--1782 are
+context only. -/
 theorem exists_bad_terminal_twoBlock_BNT_witness :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       ‖mu‖ < 1 ∧
@@ -584,20 +756,30 @@ theorem exists_bad_terminal_twoBlock_BNT_witness :
       (badTerminalDecomposition mu B hmu).basis (Fin.succ 0) = terminalBlock.toMPSTensor ∧
       (badTerminalDecomposition mu B hmu).weight 0 0 = mu ∧
       (badTerminalDecomposition mu B hmu).weight (Fin.succ 0) 0 = 1 ∧
-      physicalSupportProj embeddedCandidate = badPhysicalSupport ∧
+      physicalSupportProj (verticalBNTMPO B) = badPhysicalSupport ∧
       physicalSupportProj terminalBlock = terminalPhysicalSupport ∧
-      badPhysicalSupport * terminalPhysicalSupport = 0 ∧
-      terminalPhysicalSupport * badPhysicalSupport = 0 ∧
-      badPhysicalSupport + terminalPhysicalSupport = 1 ∧
+      physicalSupportProj (verticalBNTMPO B) * physicalSupportProj terminalBlock = 0 ∧
+      physicalSupportProj terminalBlock * physicalSupportProj (verticalBNTMPO B) = 0 ∧
+      physicalSupportProj (verticalBNTMPO B) + physicalSupportProj terminalBlock = 1 ∧
       MPSTensor.IsBNTCanonicalForm (badTerminalDecomposition mu B hmu) := by
-  obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge⟩ :=
+  obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge, hBadSupport⟩ :=
     exists_embedded_leftCanonical_normal_bad_block
+  have hBadTerminal :
+      physicalSupportProj (verticalBNTMPO B) * physicalSupportProj terminalBlock = 0 := by
+    rw [hBadSupport, terminalBlock_physicalSupportProj]
+    exact badPhysicalSupport_mul_terminalPhysicalSupport
+  have hTerminalBad :
+      physicalSupportProj terminalBlock * physicalSupportProj (verticalBNTMPO B) = 0 := by
+    rw [hBadSupport, terminalBlock_physicalSupportProj]
+    exact terminalPhysicalSupport_mul_badPhysicalSupport
+  have hSupportSum :
+      physicalSupportProj (verticalBNTMPO B) + physicalSupportProj terminalBlock = 1 := by
+    rw [hBadSupport, terminalBlock_physicalSupportProj]
+    exact badPhysicalSupport_add_terminalPhysicalSupport
   refine ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge, ?_⟩
   refine ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl,
-    embeddedCandidate_physicalSupportProj, terminalBlock_physicalSupportProj,
-    badPhysicalSupport_mul_terminalPhysicalSupport,
-    terminalPhysicalSupport_mul_badPhysicalSupport,
-    badPhysicalSupport_add_terminalPhysicalSupport, ?_⟩
+    hBadSupport, terminalBlock_physicalSupportProj, hBadTerminal,
+    hTerminalBad, hSupportSum, ?_⟩
   exact badTerminalDecomposition_isBNTCanonicalForm
     mu B hmu hmuNorm hBInj hBLeft hBNormal
 
