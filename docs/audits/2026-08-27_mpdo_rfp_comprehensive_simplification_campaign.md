@@ -188,11 +188,12 @@ unused structure fields, and zero-consumer or strictly weaker leaves. It does
 not change the statement of a source-facing theorem, the source paper, or the
 status of the following active boundaries:
 
-- #6775 remains the source-context existence or counterexample problem for the
-  absorbed-representative neighboring-trace factorization in Theorem 4.9;
-- #7088 is the project-derived preparation of the embedded rank-one
-  neighboring-trace obstruction and terminal unit-weight BNT blocks for that
-  problem; this campaign makes no claim that CPSV16 contains that construction;
+- #6775 is resolved separately by the ambient biCF counterexample, which
+  refutes the absorbed-representative neighboring-trace assertion in
+  Theorem 4.9;
+- #7088 supplies the project-derived embedded rank-one neighboring-trace
+  obstruction and terminal unit-weight BNT blocks used by that counterexample;
+  this campaign makes no claim that CPSV16 contains that construction;
 - #7142 remains the unresolved choice of a purification-RFP predicate carrying
   the source's standing presentation; the existing counterexamples and printed
   status are untouched;

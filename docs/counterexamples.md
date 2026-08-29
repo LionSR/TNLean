@@ -75,9 +75,10 @@ mathematical obstruction.
   and biCF. The first absorbed representative nevertheless has transfer
   spectral radius $1/2$ and is not normal.
 - Scope: this is proof-path drift in the printed argument. The four-letter
-  neighboring-trace obstruction below refutes only the implication from the
-  inherited local analytic properties; it has no ambient simple-biCF witness.
-  The source-context factorization remains issue #6775. The source first
+  neighboring-trace obstruction below is embedded in a five-letter ambient
+  tensor whose two normal representatives form a BNT presentation in biCF and
+  whose terminal coefficient is one. This refutes the source-context
+  factorization assertion. The source first
   projects into each local physical subspace labelled by $j$ and then applies
   the representative channels supplied by that factorization. The
   projector-controlled assembly
@@ -85,18 +86,19 @@ mathematical obstruction.
   direct sector-mixing alternative formerly tracked in #6793 is not a separate
   source obligation.
 
-### An absorbed normal representative need not have neighboring trace factors
+### The absorbed-representative structure assertion is false
 
 - Locations: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
-  and `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientBlocks.lean`
+  `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientBlocks.lean`, and
+  `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientCounterexample.lean`
 - Main declarations:
   `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
   and
-  `MPOTensor.NeighboringTraceObstructionAmbientBlocks.exists_obstruction_terminal_twoBlock_BNT_witness`
-- Statement refuted: injectivity, SAL, literal physical-trace idempotence, and
-  a representation $K=\mu A$ with $A$ normal and $0<|\mu|<1$ imply the
-  existence of a physical-sector factorization with normalized rank-one
-  neighboring traces.
+  `MPOTensor.NeighboringTraceObstructionAmbientCounterexample.printed_theorem49_ii_to_iv_is_false`
+- Statement refuted: under the standing simple canonical-form, biCF, MPDO,
+  SAL, literal-ZCL, and global normalization hypotheses, every
+  common-weight-absorbed BNT representative has a physical-sector
+  factorization with normalized rank-one neighboring traces.
 - Witness: the four diagonal physical slices are the outer products determined
   by
   \[
@@ -118,10 +120,15 @@ mathematical obstruction.
   bond-one terminal block. The two blocks form a normalized BNT decomposition
   with one copy per block, raw weights $(\mu,1)$, and disjoint physical
   supports which resolve the ambient physical space.
-- Boundary: these low-level analytic hypotheses do not imply the
-  factorization. The prepared pair does not supply the ambient simple-biCF
-  reconstruction, so the source-context assertion and contradiction remain
-  open in issue #6775. The explicit label-mixing channels of
+- Ambient closure: both BNT representatives are normal, and their family is in
+  biCF. The weighted direct sum is an MPDO with positive normalization at every
+  positive length, SAL, literal physical-trace ZCL, and simple canonical form.
+  The terminal coefficient is one and all coefficient norms are at most one.
+  Virtual-gauge invariance followed by isometric physical descent carries any
+  factorization of the absorbed obstruction back
+  to the four-letter tensor, contradicting its universal obstruction. Thus the
+  source-context representativewise assertion is false. The explicit
+  label-mixing channels of
   the earlier active-spanning example do not give the general construction
   used by the source.
 
@@ -144,9 +151,11 @@ mathematical obstruction.
   Definition 4.1 for $K^{[2]}$ would make its physical-trace transfer
   idempotent, hence would give $1+2^{-4}=1+2^{-2}$ after taking traces.
 - Scope: this does not refute `prop2to5`, whose hypothesis is condition (ii).
-  The earlier ZCL argument first forces common repeated-copy weights and
-  absorbs them. The all-sector factorization and projector-controlled channel
-  assembly remain missing for that viable route.
+  The separate ambient counterexample satisfies condition (ii) and refutes the
+  representativewise factorization used by the printed proof of that
+  proposition. It does not rule out different blocking channels. The
+  projector-controlled channel assembly remains valid conditionally for
+  supplied representative factorizations, so `prop2to5` remains conditional.
 
 ### Horizontal periodic equality does not determine vertical BNT coefficients
 

@@ -165,7 +165,7 @@ the printed statement.
 | Corollary 3.12 | none since the nonzero-coefficient convention; anchor on `thm:cpsv_phase_class_residual_isometries` | phase-class residual-isometry results in Chapter 26 |
 | Theorem 4.4 | `thm:cpsv_theorem44_printed_status` | the adopted one-site presentation gives the proved equivalence of clauses (i) and (ii); equivalence with clause (iii), the repeated-copy density formula, remains open, while the bare global-family equation is tracked as a distinct weaker reading in Chapter 21 |
 | Proposition 4.5 | `thm:cpsv_prop45_printed_status`; `thm:cpsv_prop45_limit_counterexample` | monotonicity and finite-chain bounds remain separate proved results; the unrestricted limit clause is formally refuted by the parity MPDO |
-| Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; literal (iv)$\Rightarrow$(v) refuted by the exact repeated-copy capstone; the two preserved not-ready nodes record the viable source (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) routes |
+| Theorem 4.9 | `thm:cpsv_theorem49_printed_status`; `thm:mpdo_sal_zcl_bnt_sector_structure`; `thm:mpdo_theorem49_iv_to_v_counterexample` | completed implications; the ambient counterexample is in biCF and refutes the printed representativewise assertion in (ii)$\Rightarrow$(iv), while the exact repeated-copy capstone refutes literal (iv)$\Rightarrow$(v) |
 | Theorem 4.14 | `thm:cpsv_theorem414_printed_status` | algebra equivalence and corrected active-support fusion equivalence |
 | Lemma A.5 | none since the nonzero-coefficient convention; anchor on `thm:bounded_power_sum_multiset` | `thm:bounded_power_sum_multiset` |
 | Corollary A.6 | none since the nonzero-coefficient convention; anchor on `cor:sector_bnt_proportional_unitary_sector_match` | unitary refinements in Chapter 11 |
@@ -185,9 +185,12 @@ equation.  The corresponding declarations are
 
 Proposition 4.13 is already represented by a theorem with the literal CPSV
 canonical-form hypotheses and the correct rectangular coisometry orientation;
-a second source-status node would duplicate it.  The two existing Case-II
-nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
-`thm:mpdo_sal_zcl_blocking_channels` remain `\notready`.
+a second source-status node would duplicate it.  The Case-II structure node
+`thm:mpdo_sal_zcl_bnt_sector_structure` is now a proved false-source result.
+The distinct blocked-channel node `thm:mpdo_sal_zcl_blocking_channels` remains
+`\notready`: its representative-channel and outer-sector conclusions are
+conditional on supplied absorbed-sector factorizations, and no counterexample to
+Proposition~C.15 itself is claimed.
 
 ## Semantic boundaries retained
 
@@ -223,18 +226,20 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   outer-sector assembly. At virtual bond dimension one, SAL and literal ZCL do
   give the complete normalized one-sector factorization; this is a conditional
   boundary specialization, not the all-sector theorem. The four-letter
-  rank-one neighboring-trace obstruction refutes only the low-level implication
-  from injectivity, SAL, literal ZCL, and a nonzero scalar relation to a normal
-  tensor. Its original four-letter presentation lacks the line-246 unit-weight
-  convention. The project-derived ambient preparation adjoins a disjoint
-  terminal block and supplies a normalized two-block BNT decomposition with
-  weights $(\mu,1)$, but no ambient simple-biCF reconstruction. The printed
-  source-context factorization therefore remains open in #6775. Proposition C.7 then
-  constructs the representative channel pairs, and the projector-controlled
-  outer-sector combination is formalized in #6632. The direct sector-mixing
+  rank-one neighboring-trace obstruction is embedded into a five-letter
+  ambient tensor with normalized BNT coefficients $(\mu,1)$ and
+  $0<|\mu|<1$. Its two normal representatives form a BNT presentation in
+  biCF, and the tensor has simple canonical form, MPDO positivity, SAL, and
+  literal ZCL. Its first absorbed representative has no normalized rank-one
+  neighboring-trace factorization, so the printed source-context assertion in
+  (ii)$\Rightarrow$(iv) is false.
+  Complementary one-site supports give SAL; virtual-gauge invariance and
+  isometric physical descent reduce a hypothetical factorization to the
+  four-letter obstruction. Proposition C.7 and the projector-controlled
+  outer-sector construction remain valid conditionally for a supplied
+  factorization, but this does not refute Proposition~C.15 itself. The direct sector-mixing
   alternative formerly tracked in #6793 is not a separate source statement.
-  The two `\notready` nodes preserve the source-context factorization and its
-  blocked-channel consequence separately. The
+  The
   printed proof of `prop3to4` has separate proof-path drift because it invokes
   the ZCL lemma `lemmus` although its displayed statement assumes only
   condition-(iv) data; the completed Lean proof avoids that hidden hypothesis.
