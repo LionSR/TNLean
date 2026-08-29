@@ -18,8 +18,8 @@ source pairs are disjoint, and the support-algebra commutation lemma then applie
 
 **Scope restriction (homogeneous chain):** Gross--Nesme--Vogts--Werner allow the one-site
 matrix size to depend on the site. This file treats the fixed positive size \(d\) of the present
-quasi-local algebra. See
-[the homogeneous-chain scope note](https://sirui-lu.com/TNLean/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.pdf).
+quasi-local algebra. See the homogeneous-chain scope note in
+`docs/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.tex`.
 
 ## References
 
@@ -249,14 +249,9 @@ private lemma transport_evenPairLocalImage_add_one
   apply transport_bipartiteLocalRestrictionRange_left hω
     (rightPair_eq_leftPair_add_one x)
 
-section
-
-set_option maxHeartbeats 800000
-
-/-- The canonical lifts of two consecutive finite images commute in the common six-site
-left--middle--right coordinates.
-
-This is the disjoint-source step in GNVW, arXiv:0910.3675v2, lines 1270--1274. -/
+set_option maxHeartbeats 800000 in
+-- Elaborating the dependent finite-region transports in this disjoint-source step needs more
+-- than the project heartbeat default (GNVW, arXiv:0910.3675v2, lines 1270--1274).
 private theorem evenPairLocalImages_overlappingLifts_commute
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) :
     ∀ ⦃X⦄, X ∈ evenPairLocalImage hω x →
@@ -308,7 +303,6 @@ private theorem evenPairLocalImages_overlappingLifts_commute
   rw [← map_mul, (quasiLocalObservable_commute_of_disjoint
     (disjoint_evenPair_evenPair_add_one x) A₀ B₀).eq, map_mul]
 
-end
 
 /-- Left support algebras respect equality of their left finite region. -/
 private lemma transport_leftSupportAlgebra {d : ℕ} {Λ Γ Δ : Finset ℤ} (h : Λ = Γ)
@@ -353,7 +347,7 @@ private theorem oddSupportAlgebra_commute_consecutiveLeftSupportAlgebra
     (evenPairLocalImages_overlappingLifts_commute hω x) R hR L hL
 
 /-- The two embedded support algebras in the unique overlapping odd--even configuration commute. -/
-theorem embeddedOddSupportAlgebra_commute_embeddedEvenSupportAlgebra_add_one
+theorem embeddedOddSupport_commute_embeddedEvenSupport_add_one
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) :
     ∀ X ∈ embeddedOddSupportAlgebra hω x,
       ∀ Y ∈ embeddedEvenSupportAlgebra hω (x + 1), Commute X Y := by
@@ -441,10 +435,7 @@ theorem embeddedSupportAlgebra_supportedIn
       omega
     rw [hrepl, supportRegion_even]
     exact embeddedSupportAlgebra_even_supportedIn hω (y / 2) (hrepl ▸ hR)
-  · have hmod : y % 2 = 1 := by
-      have hnonneg := Int.emod_nonneg y (by norm_num : (2 : ℤ) ≠ 0)
-      have hlt := Int.emod_lt_of_pos y (by norm_num : (0 : ℤ) < 2)
-      omega
+  · have hmod : y % 2 = 1 := by omega
     have hrepl : y = 2 * (y / 2) + 1 := by
       have hdiv := Int.ediv_mul_add_emod y 2
       omega
@@ -471,10 +462,7 @@ theorem supportRegion_disjoint_or_consecutive {y z : ℤ} (hyz : y ≠ z) :
   · have hy' : y = 2 * (y / 2) := by
       have := Int.ediv_mul_add_emod y 2
       omega
-    have hzmod : z % 2 = 1 := by
-      have hnonneg := Int.emod_nonneg z (by norm_num : (2 : ℤ) ≠ 0)
-      have hlt := Int.emod_lt_of_pos z (by norm_num : (0 : ℤ) < 2)
-      omega
+    have hzmod : z % 2 = 1 := by omega
     have hz' : z = 2 * (z / 2) + 1 := by
       have := Int.ediv_mul_add_emod z 2
       omega
@@ -484,10 +472,7 @@ theorem supportRegion_disjoint_or_consecutive {y z : ℤ} (hyz : y ≠ z) :
     · left
       rw [hy', hz', supportRegion_even, supportRegion_odd]
       exact disjoint_leftPair_rightPair_of_ne_add_one h
-  · have hymod : y % 2 = 1 := by
-      have hnonneg := Int.emod_nonneg y (by norm_num : (2 : ℤ) ≠ 0)
-      have hlt := Int.emod_lt_of_pos y (by norm_num : (0 : ℤ) < 2)
-      omega
+  · have hymod : y % 2 = 1 := by omega
     have hy' : y = 2 * (y / 2) + 1 := by
       have := Int.ediv_mul_add_emod y 2
       omega
@@ -500,14 +485,8 @@ theorem supportRegion_disjoint_or_consecutive {y z : ℤ} (hyz : y ≠ z) :
     · left
       rw [hy', hz', supportRegion_odd, supportRegion_even]
       exact disjoint_rightPair_leftPair_of_ne_add_one h
-  · have hymod : y % 2 = 1 := by
-      have hnonneg := Int.emod_nonneg y (by norm_num : (2 : ℤ) ≠ 0)
-      have hlt := Int.emod_lt_of_pos y (by norm_num : (0 : ℤ) < 2)
-      omega
-    have hzmod : z % 2 = 1 := by
-      have hnonneg := Int.emod_nonneg z (by norm_num : (2 : ℤ) ≠ 0)
-      have hlt := Int.emod_lt_of_pos z (by norm_num : (0 : ℤ) < 2)
-      omega
+  · have hymod : y % 2 = 1 := by omega
+    have hzmod : z % 2 = 1 := by omega
     have hy' : y = 2 * (y / 2) + 1 := by
       have := Int.ediv_mul_add_emod y 2
       omega
@@ -535,11 +514,11 @@ theorem embeddedSupportAlgebra_pairwise_commute
   · rcases hover with ⟨x, rfl, rfl⟩
     rw [embeddedSupportAlgebra_odd] at hX
     rw [show 2 * x + 2 = 2 * (x + 1) by ring, embeddedSupportAlgebra_even] at hY
-    exact embeddedOddSupportAlgebra_commute_embeddedEvenSupportAlgebra_add_one hω x X hX Y hY
+    exact embeddedOddSupport_commute_embeddedEvenSupport_add_one hω x X hX Y hY
   · rcases hover with ⟨x, rfl, rfl⟩
     rw [show 2 * x + 2 = 2 * (x + 1) by ring, embeddedSupportAlgebra_even] at hX
     rw [embeddedSupportAlgebra_odd] at hY
-    exact (embeddedOddSupportAlgebra_commute_embeddedEvenSupportAlgebra_add_one
+    exact (embeddedOddSupport_commute_embeddedEvenSupport_add_one
       hω x Y hY X hX).symm
 
 end PropagatesWithin
