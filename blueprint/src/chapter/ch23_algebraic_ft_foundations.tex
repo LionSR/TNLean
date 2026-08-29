@@ -568,38 +568,51 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     \label{thm:pgvwc07_quadratic_reconstruction}
     \notready
     \uses{def:pgvwc07_quadratic_system}
-    Consider a translation-invariant state with unique open-boundary
-    canonical form such that the rank of each reduced density operator of
-    successive spins is bounded by $D^2$, and form the quadratic system of
-    Definition~\ref{def:pgvwc07_quadratic_system} over the window of $D^4$
-    open-boundary canonical matrices starting after the injectivity onset.
+    Consider a translation-invariant state on an $N$-site ring with unique
+    open-boundary canonical form such that the rank of each reduced density
+    operator of successive spins is bounded by $D^2$, and form the quadratic
+    system of Definition~\ref{def:pgvwc07_quadratic_system} over the window of
+    $D^4$ open-boundary canonical matrices starting after the injectivity
+    onset. Write $A=(A_i)_i$ for its canonical translation-invariant tensor.
     \begin{enumerate}
         \item If the state admits a translation-invariant matrix product
               representation satisfying condition C1, then the system has a
               solution.
-        \item The tensor of any solution is a translation-invariant
-              matrix product representation of the state with matrices of
-              size $D\times D$. There are a unitary $U$ and a phase
-              $\xi\in\C$, $|\xi|=1$, such that
-              $A_i=\xi UB_iU^{\dagger}$; after rephasing the tensor, the
-              relation is exact unitary conjugacy.
+        \item Let $B=(B_i)_i$ be the tensor of a solution and suppose in
+              addition that its length-$N$ trace-MPS representation is the
+              given state. Then there are a unitary $U$ and a scalar
+              $\xi\in\C$ such that $|\xi|=1$, $\xi^N=1$, and
+              \begin{align}
+                  A_i & =\xi UB_iU^{\dagger}
+                  \qquad\text{for every }i.
+                  \label{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}
+              \end{align}
+              Consequently the explicitly rephased tensor
+              $\widehat B_i:=\xi B_i$ still represents the same length-$N$
+              state and is exactly unitarily conjugate to $A$.
     \end{enumerate}
-    This is \cite[Theorem~8]{PerezGarcia2007Matrix}; its formalization is
-    not yet complete.
+    No assertion is made here that every algebraic solution represents the
+    prescribed state. The unrestricted representation claim and the exact
+    conjugacy claimed in the source have a residual finite-ring phase defect
+    \cite{gap:pgvwc07_quadratic_reconstruction_phase}. This is the corrected
+    form of \cite[Theorem~8]{PerezGarcia2007Matrix}; its formalization is not
+    yet complete.
 \end{theorem}
 
 \begin{proof}
     \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner, lem:pgvwc07_quadratic_system_units, lem:pgvwc07_solution_chain}
     The canonical representation solves the system by the freedom in the
-    open-boundary representation. For the converse, a comparison of the two
-    open-boundary representations must first supply intertwiners at all
-    $D^4+1$ cuts around the $D^4$-site window, including both endpoint cuts,
-    together with the $D^4$ adjacent relations
+    open-boundary representation. For the converse, assume that the solution
+    tensor $B$ represents the given length-$N$ state. Comparing its
+    open-boundary representation with the canonical one supplies intertwiners
+    at all $D^4+1$ cuts around the $D^4$-site window, including both endpoint
+    cuts, together with the $D^4$ adjacent relations
     \cite{gap:pgvwc07_intertwiner_chain_off_by_one}. Linear dependence in
     $M_{D^2}(\C)$ then provides the hypothesis of
     Lemma~\ref{lem:pgvwc07_chain_combination}. The internal construction in
     Lemma~\ref{lem:pgvwc07_solution_chain} gives only $D^4-1$ intertwiners
-    and $D^4-2$ relations, so it does not force this dependence.
+    and $D^4-2$ relations, so it does not force this dependence for an
+    arbitrary algebraic solution.
 
     Once the full cut chain is supplied, the combination lemma and the slice
     extraction of Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} give a
@@ -608,10 +621,12 @@ proof of the uniqueness theorem \cite[Theorem~7]{PerezGarcia2007Matrix}.
     (\ref{eq:quadratic_system_normalization}), the invariance of the positive
     diagonal fixed point, and the uniqueness of the transfer-map fixed point
     under condition C1 give $|x|=1$ and
-    $RR^{\dagger}=c\Id$ for some $c>0$. Thus
-    $U=c^{-1/2}R$ is unitary and implements the same intertwining relation;
-    after the standard global phase choice for the tensor, this gives the
-    stated conjugacy $A_i=UB_iU^{\dagger}$.
+    $RR^{\dagger}=c\Id$ for some $c>0$. Thus $U=c^{-1/2}R$ is unitary and
+    $A_i=xUB_iU^{\dagger}$ for every $i$. Since $A$ and $B$ represent the
+    same nonzero length-$N$ state, their coefficients satisfy
+    $V^{(N)}(A)=x^NV^{(N)}(B)=V^{(N)}(B)$, and hence $x^N=1$. The tensor
+    $\widehat B_i=xB_i$ therefore represents the same state and satisfies
+    $A_i=U\widehat B_iU^{\dagger}$.
 \end{proof}
 
 %% ---------------------------------------------------------

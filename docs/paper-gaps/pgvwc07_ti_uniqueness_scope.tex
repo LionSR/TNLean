@@ -50,15 +50,36 @@ the finite-size bound
         &> 2L_0+D^4.
     \label{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}
 \end{align}
-It concludes that one unitary matrix $U$ intertwines the two representations:
+As printed, it concludes that one unitary matrix $U$ intertwines the two
+representations exactly:
 \begin{align}
     B_i
-        &= UC_iU^\dagger
-    \label{eq:pgvwc07_ti_uniqueness_scope_unitary_intertwiner}
+        &=UC_iU^\dagger
+        \qquad\text{for every }i.
+    \label{eq:pgvwc07_ti_uniqueness_scope_printed_unitary_intertwiner}
 \end{align}
-for every physical index $i$. When the Schmidt weights are nondegenerate, this
-intertwiner has the usual permutation-and-phase interpretation
+When the Schmidt weights are nondegenerate, the source gives the usual
+permutation-and-phase interpretation
 \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+
+The exact conclusion
+(\ref{eq:pgvwc07_ti_uniqueness_scope_printed_unitary_intertwiner}) overlooks a
+finite-ring phase. If the tensors represent the same nonzero length-$N$ state,
+the corrected conclusion has a unitary $U$ and a scalar $\xi\in\C$ satisfying
+\begin{align}
+    |\xi|
+        &=1,
+    \label{eq:pgvwc07_ti_uniqueness_scope_unit_phase}\\
+    \xi^N
+        &=1,
+    \label{eq:pgvwc07_ti_uniqueness_scope_root_phase}\\
+    B_i
+        &=\xi UC_iU^\dagger
+        \qquad\text{for every }i.
+    \label{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}
+\end{align}
+The counterexample and corrected reconstruction statement are recorded in
+\path{docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex}.
 
 \section{Formal boundary}
 
@@ -90,14 +111,18 @@ as formalizations of that theorem.
 
 \section{Required formalization}
 
-A source-faithful theorem must quantify over two translation-invariant
-canonical $D$-MPS representations of the same finite-ring state. It must assume
+A mathematically corrected theorem must quantify over two
+translation-invariant canonical $D$-MPS representations of the same nonzero
+finite-ring state. It must assume
 (\ref{eq:pgvwc07_ti_uniqueness_scope_finite_injectivity}), uniqueness of the
 OBC canonical representation, and
 (\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}). Its conclusion must
-provide one unitary $U$ satisfying
-(\ref{eq:pgvwc07_ti_uniqueness_scope_unitary_intertwiner}) for every physical
-index.
+provide a unitary $U$ and an $N$th-root phase $\xi$ satisfying
+(\ref{eq:pgvwc07_ti_uniqueness_scope_unit_phase})--
+(\ref{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}). Exact
+unitary conjugacy holds only after the explicit rephasing
+$\widehat C_i:=\xi C_i$, which preserves the length-$N$ state because
+$\xi^N=1$.
 
 The current same-structure lemmas may support such a proof only after the
 source argument has produced a common block correspondence and established,
@@ -112,9 +137,9 @@ strict weight-modulus hypothesis whenever the corresponding \Lean{}
 declaration requires it. Downstream CPSV16 uses must not cite these statements
 as PGVWC07 canonical-form uniqueness unless a separate formal theorem
 establishes finite injectivity, OBC uniqueness, the finite-size bound
-(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}), and the unitary
-conclusion
-(\ref{eq:pgvwc07_ti_uniqueness_scope_unitary_intertwiner}).
+(\ref{eq:pgvwc07_ti_uniqueness_scope_finite_size_bound}), and the corrected
+unitary-phase conclusion
+(\ref{eq:pgvwc07_ti_uniqueness_scope_corrected_unitary_intertwiner}).
 
 \bibliographystyle{alpha}
 \bibliography{references}

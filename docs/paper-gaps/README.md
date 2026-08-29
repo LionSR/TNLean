@@ -241,6 +241,10 @@ For the non-periodic MPS Fundamental Theorem background:
   sources.
 - `pgvwc07_direct_sum_input.tex` explains the older MPS representation
   paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
+  symmetry of the quadratic reconstruction system, the resulting failure of
+  the printed unrestricted representation and exact-conjugacy claims, and the
+  corrected same-state conclusion up to an $N$th-root phase.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
