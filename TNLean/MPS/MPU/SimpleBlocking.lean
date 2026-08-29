@@ -40,7 +40,7 @@ private theorem threeFormSubmodule_eq_span_generatorSet
     residualMulProjectorSubmodule, residualMulProjectorMulResidualSubmodule,
     threeFormGeneratorSet, Submodule.span_union]
 
-set_option linter.unusedDecidableInType false in
+omit [DecidableEq n] in
 private theorem threeForm_generator_mul_eq_mul_projector_mul
     (E : Matrix n n ℂ) (A : NonUnitalSubalgebra ℂ (Matrix n n ℂ))
     (hE : E * E = E) (hEAE : ∀ a : A, E * (a : Matrix n n ℂ) * E = 0)
@@ -124,7 +124,7 @@ theorem mul_eq_mul_projector_mul_of_mem_threeFormSubmodule
   | add x z _ _ hx hz => simp [Matrix.add_mul, hx, hz]
   | smul c x _ hx => simp [hx]
 
-set_option linter.unusedDecidableInType false in
+omit [DecidableEq n] in
 private theorem trace_mul_projector_eq_zero_generator
     (E : Matrix n n ℂ) (A : NonUnitalSubalgebra ℂ (Matrix n n ℂ))
     (hE : E * E = E) (hEAE : ∀ a : A, E * (a : Matrix n n ℂ) * E = 0)
