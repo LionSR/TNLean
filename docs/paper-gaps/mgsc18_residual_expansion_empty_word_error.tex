@@ -1,0 +1,176 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Empty-Word Summation Error in the MPS Residual Expansion}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The printed expansion}
+
+Let $A=(A^i)_i$ be a normal matrix product state tensor, let
+$B=(B^i)_i$ be another tensor with the same physical alphabet, and let
+$V,W$ be a reduction from $B$ to $A$.  Thus
+\begin{align}
+    VW
+        &=\mathbf 1,
+    \label{eq:mgsc18_residual_expansion_retraction}\\
+    VB^{i_1}\cdots B^{i_n}W
+        &=A^{i_1}\cdots A^{i_n}
+        \qquad (n\geq1).
+    \label{eq:mgsc18_residual_expansion_reduction_words}
+\end{align}
+Define the residual matrices and their nilpotency length $\ell$ by
+\begin{align}
+    R^i
+        &=B^i-WA^iV,
+    \label{eq:mgsc18_residual_expansion_residual_definition}\\
+    R^{i_1}\cdots R^{i_n}
+        &=0
+        \qquad (n\geq\ell).
+    \label{eq:mgsc18_residual_expansion_nilpotency}
+\end{align}
+The lemma immediately preceding Lemma~\texttt{B\_expand} proves
+\begin{align}
+    VR^{i_1}\cdots R^{i_m}W
+        &=0
+        \qquad (m>0).
+    \label{eq:mgsc18_residual_expansion_sandwiched_word}
+\end{align}
+
+The first equality of Lemma~\texttt{B\_expand} in
+Ref.~\cite{Molnar2018SemiInjective} then prints
+\begin{align}
+    B^{i_1}\cdots B^{i_n}
+        &=\sum_{0\leq r\leq s\leq n}
+          R^{i_1}\cdots R^{i_r}
+          W A^{i_{r+1}}\cdots A^{i_s}V
+          R^{i_{s+1}}\cdots R^{i_n}.
+    \label{eq:mgsc18_residual_expansion_printed_sum}
+\end{align}
+The source coordinates are
+\path{cornerproblem.tex:3993--4005} in the official
+\href{https://arxiv.org/e-print/1706.07329v2}{arXiv:1706.07329v2 source
+archive}.  The archive has SHA-256 digest
+\nolinkurl{045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e}.
+
+With the ordinary convention that an empty matrix product is the identity,
+the summands with $r=s$ in
+(\ref{eq:mgsc18_residual_expansion_printed_sum}) contain $WV$.  The sum also
+has no pure residual term.  In particular, at $n=1$ its right-hand side is
+$WVR^i+WA^iV+R^iWV$, rather than $R^i+WA^iV$.
+
+\section{A nondegenerate counterexample}
+
+Take one physical letter, a one-dimensional normal tensor $A$, and a
+three-dimensional tensor $B$.  Set
+\begin{align}
+    A^1
+        &=1,
+        \qquad W=(1,0,0)^{\mathsf T},
+        \qquad V=(1,0,0),
+    \label{eq:mgsc18_residual_expansion_example_target_and_reduction}\\
+    R^1
+        &=\begin{pmatrix}
+             0&0&0\\
+             0&0&1\\
+             0&0&0
+          \end{pmatrix},
+    &B^1
+        &=WV+R^1.
+    \label{eq:mgsc18_residual_expansion_example_tensors}
+\end{align}
+These data satisfy
+\begin{align}
+    VW
+        &=1,
+    \label{eq:mgsc18_residual_expansion_example_retraction}\\
+    V(B^1)^nW
+        &=1=(A^1)^n
+        \qquad (n\geq0),
+    \label{eq:mgsc18_residual_expansion_example_word_reduction}\\
+    (R^1)^2
+        &=0,
+    &V(R^1)^mW
+        &=0
+        \qquad (m>0).
+    \label{eq:mgsc18_residual_expansion_example_residual_properties}
+\end{align}
+Thus all hypotheses used for
+(\ref{eq:mgsc18_residual_expansion_printed_sum}) hold, with a nonzero
+nilpotent residual.  Nevertheless, its $n=1$ right-hand side is
+\begin{align}
+    WVR^1+WA^1V+R^1WV
+        &=WV,
+    \label{eq:mgsc18_residual_expansion_example_printed_value}\\
+    B^1
+        &=WV+R^1\ne WV.
+    \label{eq:mgsc18_residual_expansion_example_contradiction}
+\end{align}
+Hence the printed equality is false on data satisfying the intended reduction
+and nilpotency conditions; the discrepancy is not a degenerate reading of a
+definition.
+
+\section{The corrected expansion}
+
+Expand each factor as $B^i=R^i+WA^iV$.  If two selected $WA^iV$ factors are
+separated by a nonempty residual word, then
+(\ref{eq:mgsc18_residual_expansion_sandwiched_word}) makes that term zero.
+The surviving terms are therefore the pure residual word and the terms with
+one nonempty consecutive $A$-word.  The corrected all-length identity is
+\begin{align}
+    B^{i_1}\cdots B^{i_n}
+        &=R^{i_1}\cdots R^{i_n}
+          +\sum_{0\leq r<s\leq n}
+          R^{i_1}\cdots R^{i_r}
+          W A^{i_{r+1}}\cdots A^{i_s}V
+          R^{i_{s+1}}\cdots R^{i_n}.
+    \label{eq:mgsc18_residual_expansion_corrected_sum}
+\end{align}
+The strict inequality $r<s$ is essential: it says that the central $A$-word
+is nonempty.
+
+The two contracted equalities printed after
+(\ref{eq:mgsc18_residual_expansion_printed_sum}) remain valid.  In the present
+notation they are
+\begin{align}
+    VB^{i_1}\cdots B^{i_n}
+        &=\sum_{\max(0,n-\ell)\leq s\leq n}
+          A^{i_1}\cdots A^{i_s}V
+          R^{i_{s+1}}\cdots R^{i_n},
+    \label{eq:mgsc18_residual_expansion_left_contraction}\\
+    B^{i_1}\cdots B^{i_n}W
+        &=\sum_{0\leq r\leq\min(\ell,n)}
+          R^{i_1}\cdots R^{i_r}W
+          A^{i_{r+1}}\cdots A^{i_n}.
+    \label{eq:mgsc18_residual_expansion_right_contraction}
+\end{align}
+For $n<\ell$, the terms with $s=0$ and $r=n$ are the contracted pure
+residual word.  For $n\geq\ell$, the displayed endpoints with residual length
+exactly $\ell$ vanish by
+(\ref{eq:mgsc18_residual_expansion_nilpotency}); retaining them is harmless.
+
+\section{Verdict}
+
+The first equality in Lemma~\texttt{B\_expand} is false as printed because its
+weak summation range mishandles the empty central word.  The source proof route
+gives the pure-residual and strict-range formula
+(\ref{eq:mgsc18_residual_expansion_corrected_sum}).  The two contracted
+equalities remain correct with their zero endpoints understood as above.
+
+The eventual formal residual-expansion theorem is tracked by
+\href{https://github.com/LionSR/TNLean/issues/7322}{TNLean issue 7322}; no
+parallel tensor or cohomology interface is introduced here.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -132,8 +132,8 @@ $\ell_{g,x}$ is the least length after which every residual word vanishes:
     \label{eq:fbc25_action_audit_residual_nilpotency}
 \end{align}
 Nilpotency alone does not remove the mixed terms in an expansion of $B$.
-The additional input is the residual-word expansion lemma of Appendix~B and
-its preceding sandwiched-residual lemma
+The additional input is the intended residual-word expansion of Appendix~B
+and its preceding sandwiched-residual lemma
 \cite[source lines~3946--3970 and 3993--4005]{Molnar2018SemiInjective}.
 Suppress $g,x$ temporarily, write an empty product as the identity, and let
 $\mathbf i=(i_1,\ldots,i_n)$.  The sandwiched residual words obey
@@ -143,15 +143,32 @@ $\mathbf i=(i_1,\ldots,i_n)$.  The sandwiched residual words obey
         &&r>0.
     \label{eq:fbc25_action_audit_sandwiched_residual_vanishes}
 \end{align}
-Consequently the full mixed-term expansion and its two boundary contractions
-are
+
+The first equality printed in Lemma~\texttt{B\_expand}, at source
+lines~3993--4005, is false as printed and admits the following local
+correction.  Its weak inequality
+$0\leq r\leq s\leq n$ includes terms with an empty $A$-word and omits the
+pure residual word.  At $n=1$ the printed right-hand side is
+$WVR^i+WA^iV+R^iWV$, rather than $R^i+WA^iV$.  A nondegenerate reduction
+counterexample and the correction are recorded in the dedicated false-source
+note \cite{gap:mgsc18_residual_expansion_empty_word_error}.
+
+Expanding $B^i=R^i+WA^iV$ and using
+(\ref{eq:fbc25_action_audit_sandwiched_residual_vanishes}) shows that the
+correct full expansion is
 \begin{align}
     B^{i_1}\cdots B^{i_n}
-        &=\sum_{0\leq r\leq s\leq n}
+        &=R^{i_1}\cdots R^{i_n}
+          +\sum_{0\leq r<s\leq n}
           R^{i_1}\cdots R^{i_r}
           W A^{i_{r+1}}\cdots A^{i_s}V
-          R^{i_{s+1}}\cdots R^{i_n},
-    \label{eq:fbc25_action_audit_full_residual_expansion}\\
+          R^{i_{s+1}}\cdots R^{i_n}.
+    \label{eq:fbc25_action_audit_full_residual_expansion}
+\end{align}
+Here the strict inequality $r<s$ says that the central $A$-word is nonempty.
+Contracting this corrected identity and using residual nilpotency gives the
+other two equalities printed in Lemma~\texttt{B\_expand}:
+\begin{align}
     V B^{i_1}\cdots B^{i_n}
         &=\sum_{\max(0,n-\ell)\leq s\leq n}
           A^{i_1}\cdots A^{i_s}V
@@ -163,12 +180,21 @@ are
           A^{i_{r+1}}\cdots A^{i_n}.
     \label{eq:fbc25_action_audit_right_residual_expansion}
 \end{align}
-The terms with a residual prefix or suffix of length at least $\ell$ vanish.
-Thus, if $\mathbf p$ and $\mathbf q$ both have length $m\geq\ell$, every
-surviving term in the full expansion of
-$B^{\mathbf p\mathbf c\mathbf q}$ has its central $A$-word crossing all of
-$\mathbf c$.  The last two equations factor precisely those surviving terms,
-and give
+For $n<\ell$, the endpoints $s=0$ and $r=n$ in these contracted sums are the
+pure residual terms $VR^{\mathbf i}$ and $R^{\mathbf i}W$.  For
+$n\geq\ell$, the displayed endpoints with residual length exactly $\ell$
+are zero by the source definition of nilpotency length.  They are retained to
+match the printed bounds; the strictly surviving ranges are
+$n-\ell<s\leq n$ and $0\leq r<\ell$.
+
+Now let $\mathbf p$ and $\mathbf q$ both have length $m\geq\ell$.  The pure
+residual term in the corrected full expansion of
+$B^{\mathbf p\mathbf c\mathbf q}$ vanishes.  A central $A$-word which starts
+after $\mathbf p$ leaves a residual prefix of length at least $\ell$, and one
+which ends before $\mathbf q$ leaves a residual suffix of length at least
+$\ell$.  Hence every surviving central $A$-word crosses all of $\mathbf c$.
+The two contracted equations enumerate precisely these surviving terms and
+give
 \begin{align}
     B^{\mathbf p}W A^{\mathbf c}V B^{\mathbf q}
         &=B^{\mathbf p\mathbf c\mathbf q},
@@ -396,7 +422,11 @@ $2$-cochain rather than a canonically based element of $H^2$.
 
 Equation~(20) of Ref.~\cite{GarreRubio2023MPOSym} makes the
 representative-level choices explicit; it is at lines~752--759 of the
-official v3 source.  Choose a representative
+official v3 source.  The prose at line~754 announces a solution for
+$L^\alpha_{g_2,g_1}$, whereas the displayed equation at lines~755--758 is for
+$L^\alpha_{g_1,g_2}$ and first resolves the $g_2$ action, then the $g_1$
+action.  The prose has the swapped-order typo; the display fixes the convention
+recorded here.  Choose a representative
 $k_\alpha\in G$ for every coset and define $h_2,h_1\in H$ by
 $g_2k_\alpha=k_\beta h_2$ and
 $g_1k_\beta=k_\gamma h_1$.  The source gives
@@ -456,8 +486,8 @@ The existing library separates the following layers.
           \leanid{MPSTensor.primitivePaper\_iff\_hasEventuallyFullKrausRank}
           assumes left-canonical normalization.  Thus an exact named formal
           predicate for source primitivity already exists, while any passage
-          from it to word-span normality must retain the normalization used by
-          the available bridge.
+          from it to word-span normality must retain its left-canonical
+          normalization hypothesis.
 
           QICLean also defines \leanid{Kraus.IsInjective} and
           \leanid{Kraus.IsNBlkInjective} for one matrix family.  The latter
@@ -551,7 +581,10 @@ existence or classification of MPU action tensors.
 The cited action-tensor claim is supported by
 Ref.~\cite{Molnar2018SemiInjective}, provided that one retains the normal
 target, positive-length periodic equality, residual nilpotency, and finite
-blocking used by that theorem.  Its scalar uniqueness is the tailwise
+blocking used by that theorem.  Its printed full residual expansion requires
+the pure-residual and nonempty-middle correction in
+(\ref{eq:fbc25_action_audit_full_residual_expansion}).  Its scalar uniqueness
+is the tailwise
 statement
 (\ref{eq:fbc25_action_audit_reduction_left_uniqueness})--
 (\ref{eq:fbc25_action_audit_reduction_right_uniqueness}).  The

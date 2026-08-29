@@ -234,6 +234,12 @@ For the non-periodic MPS Fundamental Theorem background:
   scalar $\lambda\ne1$; the equality specialization used for MPU fusion is
   unaffected, while a nonzero general scalar contributes
   $\lambda^{\lvert\mathbf a\rvert}$ to the reduced word.
+- `mgsc18_residual_expansion_empty_word_error.tex` is the open false-source
+  record for the first equality in Lemma `B_expand`.  The printed weak range
+  inserts empty central words and omits the pure residual word; a
+  three-dimensional reduction with residual $E_{23}$ is a counterexample.
+  The corrected formula separates the pure residual term and sums only over
+  nonempty central words.
 - [cpsv16_bnt_uniqueness_zero_coefficient.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf) records the nonzero-coefficient
   convention: every coefficient of a CPSV16 canonical form is nonzero, as the
   line-246 normalization presupposes. Under this convention Proposition 2.7,
@@ -327,6 +333,8 @@ For the MPU action on injective MPS blocks in arXiv:2502.20257:
 - `fbc25_mpu_action_stabilizer_source_audit.tex` separates the
   positive-length MPS reduction route to action tensors from the stronger
   arbitrary-boundary MPO-algebra route, records the nilpotency and tailwise
-  scalar-uniqueness hypotheses, fixes the left-action and scalar-gauge
-  conventions, and explains the stabilizer/coset and
+  scalar-uniqueness hypotheses, corrects the empty-word summation in the
+  printed residual expansion, fixes the left-action and scalar-gauge
+  conventions (including the swapped-order prose typo preceding Equation
+  (20)), and explains the stabilizer/coset and
   $H^2(H,\mathbb C^\times)$-torsor meanings of the notation $(H,\psi)$.
