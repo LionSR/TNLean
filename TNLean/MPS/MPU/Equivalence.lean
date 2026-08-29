@@ -270,9 +270,13 @@ enlarged physical dimension is supplied by the coherent family; it is not an
 extension chosen from the original-dimension action. The blocked applicable
 lengths are exactly \(\{N\mid Nk\in A\}\).
 
-**Scope restriction (arXiv:1703.09188, lines 1356--1366):** the bond dimension
-\(D\) is fixed. The standard-form path criterion belongs to a separate result.
-See `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+**Scope restriction (arXiv:1703.09188, lines 1356--1366):** the virtual bond
+dimension \(D\) is fixed. In addition, the symmetry is supplied as a family
+indexed by physical dimension that semiconjugates every canonical
+identity-ancilla embedding. The standard-form path criterion belongs to a
+separate result. See
+`docs/paper-gaps/mpu_equivalence_fixed_bond.tex` and
+`docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
 
 Source: arXiv:1703.09188, Definition `def:equivalent-symmetry`, lines 1356--1366. -/
 def EquivalentUnderSymmetry (S : FiniteChainOperatorSymmetryFamily)
