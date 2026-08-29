@@ -1977,6 +1977,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### scalar-unit equality by coercion and field cancellation — rejected
+- **Pattern:** reduce an equality in `Units ℂ` to an equality in `ℂ` with
+  `apply Units.ext; push_cast`, then cancel the nonzero scalar denominators
+  with `field_simp`.
+- **Seen:** seven occurrences across
+  `TNLean/Algebra/CocycleCohomology.lean`,
+  `TNLean/Algebra/ScalarThreeCocycle.lean`,
+  `TNLean/Algebra/ScalarThreeCocycleInversion.lean`, and
+  `TNLean/Algebra/GeneralizedCocycle.lean` in the 2026-08-29 scan.
+- **Reason:** `Units.ext` is already the semantic abstraction. The remaining
+  two tactics expose the standard passage to the ambient field and a
+  goal-specific cancellation; a macro would merely hide three idiomatic lines
+  without sharing any mathematical conclusion or simplifying hypotheses.
+
 ### matrix_entry_cases — rejected
 - **Pattern:** matrix extensionality followed by a diagonal/off-diagonal split:
   `ext i j; by_cases hij : i = j; · subst hij`.

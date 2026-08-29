@@ -633,7 +633,11 @@ show that the tensor gauge freedoms induce the joint scalar gauge
 
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
-    \lean{TNLean.Algebra.ActionTensorGauge.coboundary,
+    \lean{TNLean.Algebra.GeneralizedThreeCochain,
+        TNLean.Algebra.GeneralizedFourCochain,
+        TNLean.Algebra.ActionTensorGauge.coboundary,
+        TNLean.Algebra.LSymbol.coboundary,
+        TNLean.Algebra.GeneralizedThreeCochain.coboundary,
         TNLean.Algebra.LSymbol.IsGeneralizedCocycle}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge}
@@ -644,6 +648,27 @@ show that the tensor gauge freedoms induce the joint scalar gauge
          & =\frac{\chi^{h x}_g\chi^x_h}{\chi^x_{gh}}.
         \label{eq:mpug_generalized_coboundary}
     \end{align}
+    For a block-dependent scalar $2$-cochain
+    $f\colon\mathsf X\times G^2\to\C^\times$, set
+    \begin{align}
+        (df)^x_{g,h,k}
+         &=\frac{f^x_{g,hk}f^x_{h,k}}
+             {f^{k x}_{g,h}f^x_{gh,k}}.
+        \label{eq:mpug_generalized_two_coboundary}
+    \end{align}
+    The final group index in the denominator is $k$; this local correction
+    of the printed formula is recorded in
+    \cite{gap:fbc25_two_cochain_coboundary_index_typo}. For a block-dependent
+    scalar $3$-cochain
+    $\omega\colon\mathsf X\times G^3\to\C^\times$, the corresponding next
+    coboundary is
+    \begin{align}
+        (d\omega)^x_{g,h,k,l}
+         &=\frac{\omega^{l x}_{g,h,k}\omega^x_{g,hk,l}
+                  \omega^x_{h,k,l}}
+                 {\omega^x_{gh,k,l}\omega^x_{g,h,kl}}.
+        \label{eq:mpug_generalized_three_coboundary}
+    \end{align}
     A function $\Omega\colon\mathsf X\times G^2\to\C^\times$ is a
     generalized $2$-cocycle when
     \begin{align}
@@ -651,14 +676,42 @@ show that the tensor gauge freedoms induce the joint scalar gauge
          & =\Omega^{k x}_{g,h}\Omega^x_{gh,k}.
         \label{eq:mpug_generalized_cocycle}
     \end{align}
-    These are the block-dependent coboundary and the equation $d\Omega=1$ in
-    \cite[lines~5914--5921 and Lemma~\texttt{lemma:G\_cocycle}]
-    {FrancoRubio2025MPUGauging}. No transitivity or finiteness assumption
-    is imposed on $\mathsf X$.
+    The source gives the first two coboundaries and the equation $d\Omega=1$
+    in \cite[lines~5914--5922 and Lemma~\texttt{lemma:G\_cocycle}]
+    {FrancoRubio2025MPUGauging}. Equation
+    \eqref{eq:mpug_generalized_three_coboundary} spells out the
+    three-to-four-cochain instance needed to read its assertion $d(df)=1$.
+    No transitivity or finiteness assumption is imposed on $\mathsf X$.
 
     % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
-    % Source anchor: arXiv:2502.20257, lines 5914--5921 and lemma:G_cocycle.
+    % Source anchor: arXiv:2502.20257, lines 5914--5922 and lemma:G_cocycle.
 \end{definition}
+
+\begin{theorem}[Generalized coboundaries square to one]
+    \label{thm:mpug_generalized_coboundary_squared}
+    \lean{TNLean.Algebra.ActionTensorGauge.isGeneralizedCocycle_coboundary,
+        TNLean.Algebra.GeneralizedThreeCochain.coboundary_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle}
+    The generalized coboundary of every block-dependent scalar $1$-cochain
+    is a generalized $2$-cocycle. For every block-dependent scalar
+    $2$-cochain $f$,
+    \begin{align}
+        d(df)&=1.
+        \label{eq:mpug_generalized_coboundary_squared}
+    \end{align}
+    This is the identity stated in
+    \cite[line~5922]{FrancoRubio2025MPUGauging}, with the index correction in
+    \cite{gap:fbc25_two_cochain_coboundary_index_typo}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_cocycle}
+    Substitute the coboundary formulas. The action law
+    $k(lx)=(kl)x$ and associativity identify the shifted block labels and
+    group products. Every value of the original cochain then occurs once in
+    the numerator and once in the denominator, so all factors cancel.
+\end{proof}
 
 \begin{definition}[Positive block-dependent cochains]
     \label{def:mpug_positive_generalized_cochains}

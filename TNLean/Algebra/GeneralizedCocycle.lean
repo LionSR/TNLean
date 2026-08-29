@@ -9,10 +9,12 @@ import TNLean.Algebra.LSymbol
 /-!
 # Finite-group generalized cocycles
 
-This file proves the finite-group power-trivialization lemma from
-arXiv:2502.20257, `lemma:G_cocycle`, lines 5931--5948. For generalized
-2-cocycles `Ωˣ_{g,h}` attached to an action of a finite group `G` on block
-labels `X`, it constructs the regular-action matrices
+This file formalizes the block-dependent coboundaries from arXiv:2502.20257,
+lines 5914--5922, and proves that two successive coboundaries are trivial. It
+also proves the finite-group power-trivialization lemma `lemma:G_cocycle`,
+lines 5931--5948. For generalized 2-cocycles `Ωˣ_{g,h}` attached to an action
+of a finite group `G` on block labels `X`, it constructs the regular-action
+matrices
 
 `Xˣ_g |k⟩ = Ω^{k⁻¹ • x}_{g,k} |gk⟩`
 
@@ -32,12 +34,18 @@ gives `det X^{h • x}_g det Xˣ_h`. See
 ## Main definitions
 
 * `ActionTensorGauge.coboundary`: the generalized coboundary `dχ`.
+* `LSymbol.coboundary`: the corrected two-index generalized coboundary `df`.
+* `GeneralizedThreeCochain.coboundary`: the generalized coboundary of a
+  block-dependent scalar three-cochain.
 * `LSymbol.IsGeneralizedCocycle`: the equation `dΩ = 1`.
 * `LSymbol.regularMatrix`: the regular-action matrix `Xˣ_g`.
 * `LSymbol.determinantCochain`: the cochain `χˣ_g = det Xˣ_g`.
 
 ## Main results
 
+* `ActionTensorGauge.isGeneralizedCocycle_coboundary`: `dχ` is a generalized
+  2-cocycle.
+* `GeneralizedThreeCochain.coboundary_coboundary`: `d(df) = 1`.
 * `LSymbol.regularMatrix_mul`: `X^{h • x}_g Xˣ_h = Ωˣ_{g,h} Xˣ_{gh}`.
 * `LSymbol.pow_card_eq_coboundary`: `Ω ^ |G| = dχ`.
 -/
@@ -45,6 +53,12 @@ gives `det X^{h • x}_g det Xˣ_h`. See
 namespace TNLean.Algebra
 
 variable {G X : Type*} [Group G] [MulAction G X]
+
+/-- Block-dependent scalar three-cochains `fˣ_{g,h,k}` for an action of `G` on `X`. -/
+abbrev GeneralizedThreeCochain (G X : Type*) := X → G → G → G → Units ℂ
+
+/-- Block-dependent scalar four-cochains `fˣ_{g,h,k,l}` for an action of `G` on `X`. -/
+abbrev GeneralizedFourCochain (G X : Type*) := X → G → G → G → G → Units ℂ
 
 namespace ActionTensorGauge
 
@@ -60,6 +74,16 @@ end ActionTensorGauge
 
 namespace LSymbol
 
+/-- The generalized coboundary of a block-dependent scalar two-cochain:
+
+`(df)ˣ_{g,h,k} = fˣ_{g,hk} fˣ_{h,k} / (f^{k • x}_{g,h} fˣ_{gh,k})`.
+
+This is the locally corrected formula from arXiv:2502.20257, lines 5918--5921.
+The source prints the block label `x` in the final group-index position; see
+`docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex`. -/
+def coboundary (f : LSymbol G X) : GeneralizedThreeCochain G X :=
+  fun x g h k => (f x g (h * k) * f x h k) / (f (k • x) g h * f x (g * h) k)
+
 /-- A generalized scalar 2-cocycle is an L-symbol compatible with the constant
 scalar 3-cochain one. Equivalently,
 
@@ -68,6 +92,55 @@ scalar 3-cochain one. Equivalently,
 This is the equation `dΩ = 1` in arXiv:2502.20257, `lemma:G_cocycle`. -/
 def IsGeneralizedCocycle (Ω : LSymbol G X) : Prop :=
   IsCompatible Ω (fun _ _ _ => 1)
+
+end LSymbol
+
+namespace ActionTensorGauge
+
+/-- The generalized coboundary of a block-dependent scalar one-cochain is a
+generalized scalar two-cocycle.
+
+This is the one-index instance of `d(df) = 1` in arXiv:2502.20257, line 5922. -/
+theorem isGeneralizedCocycle_coboundary (χ : ActionTensorGauge G X) :
+    LSymbol.IsGeneralizedCocycle (coboundary χ) := by
+  intro x g h k
+  simp only [coboundary, mul_smul, one_mul, mul_assoc]
+  apply Units.ext
+  push_cast
+  field_simp
+
+end ActionTensorGauge
+
+namespace GeneralizedThreeCochain
+
+/-- The generalized coboundary of a block-dependent scalar three-cochain:
+
+`(dω)ˣ_{g,h,k,l} = ω^{l • x}_{g,h,k} ωˣ_{g,hk,l} ωˣ_{h,k,l} /
+  (ωˣ_{gh,k,l} ωˣ_{g,h,kl})`.
+
+This spells out the three-to-four-cochain instance needed to state the identity
+`d(df) = 1` in arXiv:2502.20257, line 5922. -/
+def coboundary (ω : GeneralizedThreeCochain G X) : GeneralizedFourCochain G X :=
+  fun x g h k l =>
+    (ω (l • x) g h k * ω x g (h * k) l * ω x h k l) /
+      (ω x (g * h) k l * ω x g h (k * l))
+
+/-- Two successive block-dependent scalar coboundaries are trivial:
+`d(df) = 1`.
+
+This is arXiv:2502.20257, line 5922, using the corrected two-index coboundary
+recorded in `docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex`. -/
+theorem coboundary_coboundary (f : LSymbol G X) :
+    coboundary (LSymbol.coboundary f) = 1 := by
+  funext x g h k l
+  simp only [coboundary, LSymbol.coboundary, Pi.one_apply, mul_smul, mul_assoc]
+  apply Units.ext
+  push_cast
+  field_simp
+
+end GeneralizedThreeCochain
+
+namespace LSymbol
 
 /-- The regular-action matrix from arXiv:2502.20257, `lemma:G_cocycle`:
 
