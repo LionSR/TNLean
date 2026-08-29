@@ -85,54 +85,6 @@ theorem normalizedMPO_eq_sum_bntSectorProbability_smul
     (mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
       M S hM hWeight hN) hMtrace hSectorTrace
 
-/-- Left local invariance fixes the first site of every normalized periodic
-state.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1733--1770. -/
-private theorem firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq
-    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (hPM : M.ketLeftMul P = M) (N : ℕ) :
-    firstSiteMatrix P N * normalizedMPO M (N + 1) = normalizedMPO M (N + 1) := by
-  ext σ τ
-  obtain ⟨a, σ', rfl⟩ : ∃ a σ', σ = Fin.cons a σ' :=
-    ⟨σ 0, σ ∘ Fin.succ, (Fin.cons_self_tail σ).symm⟩
-  obtain ⟨b, τ', rfl⟩ : ∃ b τ', τ = Fin.cons b τ' :=
-    ⟨τ 0, τ ∘ Fin.succ, (Fin.cons_self_tail τ).symm⟩
-  rw [firstSiteMatrix_mul_apply]
-  simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ, normalizedMPO,
-    Matrix.smul_apply, smul_eq_mul, mpo_cons_cons]
-  have hPMab := congrFun (congrFun hPM a) b
-  simp only [ketLeftMul] at hPMab
-  calc
-    ∑ i : Fin d, P a i *
-        ((mpo M (N + 1)).trace⁻¹ *
-          Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')))
-        = (mpo M (N + 1)).trace⁻¹ *
-            ∑ i : Fin d, P a i *
-              Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
-          simpa only [mul_comm, mul_left_comm, mul_assoc] using
-            Fintype.sum_mul_mul_eq_mul_sum_mul
-              (mpo M (N + 1)).trace⁻¹ (fun i => P a i)
-              (fun i => Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')))
-    _ = (mpo M (N + 1)).trace⁻¹ *
-        Matrix.trace ((∑ i : Fin d, P a i • M i b) *
-          evalWord M (List.ofFn σ') (List.ofFn τ')) := by
-      rw [sum_mul_trace_eq_trace_sum_smul]
-    _ = (mpo M (N + 1)).trace⁻¹ *
-        Matrix.trace (M a b * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
-      rw [hPMab]
-
-/-- Left local invariance is preserved by taking a nonempty contiguous
-marginal. -/
-private theorem firstSiteMatrix_mul_reducedBlockState_of_ketLeftMul_eq
-    (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (hPM : M.ketLeftMul P = M) {N L : ℕ} (hL : L + 1 ≤ N) :
-    firstSiteMatrix P L * reducedBlockState M N (L + 1) hL =
-      reducedBlockState M N (L + 1) hL := by
-  obtain ⟨N', rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : N ≠ 0)
-  exact firstSiteMatrix_mul_reducedBlockState_of_mul_normalizedMPO M P hL
-    (firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq M P hPM N')
-
 /-- Every nonempty contiguous marginal has the same BNT-sector
 probabilities as the normalized full chain.
 
