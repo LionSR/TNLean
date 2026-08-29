@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.MPDO.LPDO
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.ZCL
 
