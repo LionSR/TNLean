@@ -69,69 +69,16 @@ theorem pointwise_mul_mem_span_wordTuple_add
     (fun k : Fin r => M k * N k) ∈
       Submodule.span ℂ (Set.range (wordTuple A (L + S))) := by
   classical
-  let spanLS : Submodule ℂ ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
-    Submodule.span ℂ (Set.range (wordTuple A (L + S)))
-  have hleft_gen : ∀ u : Fin L → Fin d,
-      (fun k : Fin r => wordTuple A L u k * N k) ∈ spanLS := by
-    intro u
-    induction hN using Submodule.span_induction with
-    | mem N hNmem =>
-        rcases hNmem with ⟨v, rfl⟩
-        have hEq : (fun k : Fin r => wordTuple A L u k * wordTuple A S v k) =
-            wordTuple A (L + S) (Fin.append u v) := by
-          funext k
-          simp [wordTuple, List.ofFn_fin_append, Kraus.evalWord_append]
-        rw [hEq]
-        exact Submodule.subset_span ⟨Fin.append u v, rfl⟩
-    | zero =>
-        have hzero : (fun k : Fin r =>
-            wordTuple A L u k *
-              (0 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) k) = 0 := by
-          funext k
-          simp
-        rw [hzero]
-        exact Submodule.zero_mem _
-    | add N₁ N₂ _ _ hN₁ hN₂ =>
-        have hEq : (fun k : Fin r => wordTuple A L u k * (N₁ + N₂) k) =
-            (fun k : Fin r => wordTuple A L u k * N₁ k) +
-              (fun k : Fin r => wordTuple A L u k * N₂ k) := by
-          funext k
-          simp [Matrix.mul_add]
-        rw [hEq]
-        exact Submodule.add_mem _ hN₁ hN₂
-    | smul a N _ hN =>
-        have hEq : (fun k : Fin r => wordTuple A L u k * (a • N) k) =
-            a • (fun k : Fin r => wordTuple A L u k * N k) := by
-          funext k
-          simp
-        rw [hEq]
-        exact Submodule.smul_mem _ a hN
-  induction hM using Submodule.span_induction with
-  | mem M hMmem =>
-      rcases hMmem with ⟨u, rfl⟩
-      exact hleft_gen u
-  | zero =>
-      have hzero : (fun k : Fin r =>
-          (0 : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) k * N k) = 0 := by
-        funext k
-        simp
-      rw [hzero]
-      exact Submodule.zero_mem _
-  | add M₁ M₂ _ _ hM₁ hM₂ =>
-      have hEq : (fun k : Fin r => (M₁ + M₂) k * N k) =
-          (fun k : Fin r => M₁ k * N k) +
-            (fun k : Fin r => M₂ k * N k) := by
-        funext k
-        simp [Matrix.add_mul]
-      rw [hEq]
-      exact Submodule.add_mem _ hM₁ hM₂
-  | smul a M _ hM =>
-      have hEq : (fun k : Fin r => (a • M) k * N k) =
-          a • (fun k : Fin r => M k * N k) := by
-        funext k
-        simp
-      rw [hEq]
-      exact Submodule.smul_mem _ a hM
+  apply LinearMap.BilinMap.apply_apply_mem_of_mem_span
+      (B := LinearMap.mul ℂ _)
+      (s := Set.range (wordTuple A L)) (t := Set.range (wordTuple A S))
+  · rintro _ ⟨u, rfl⟩ _ ⟨v, rfl⟩
+    apply Submodule.subset_span
+    refine ⟨Fin.append u v, ?_⟩
+    funext k
+    simp [wordTuple, List.ofFn_fin_append, Kraus.evalWord_append]
+  · exact hM
+  · exact hN
 
 /-- Homogeneous identity padding preserves the full word-tuple span.
 
