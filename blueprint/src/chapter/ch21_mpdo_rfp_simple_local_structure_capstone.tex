@@ -2616,3 +2616,39 @@ This is the calculation in
     normalization and a canonical gauge therefore express the tensor as
     $K=\mu A$ with $A$ normal and $0<|\mu|=\sqrt r<1$.
 \end{proof}
+
+\begin{theorem}[A prepared two-block BNT decomposition]
+    \label{thm:mpdo_noncartesian_prepared_two_block_bnt}
+    \lean{MPOTensor.NonCartesianAmbientSectorBlocks.exists_bad_terminal_twoBlock_BNT_witness,
+        MPOTensor.NonCartesianAmbientSectorBlocks.terminalBlock_isNormalTensor}
+    \leanok
+    \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample, def:sector_bnt_cf}
+    There are a scalar $\mu$ with $0<|\mu|<1$ and two normal
+    left-canonical blocks $B_{\mathrm{bad}}$ and $B_{\mathrm{term}}$, of bond
+    dimensions two and one respectively, such that the embedded
+    non-Cartesian tensor is gauge equivalent to $\mu B_{\mathrm{bad}}$.
+    The two-block decomposition with one copy of each block and raw weights
+    $(\mu,1)$ is in normalized BNT canonical form. Its one-site physical
+    supports $P_{\mathrm{bad}}$ and $P_{\mathrm{term}}$ are disjoint and
+    resolve the ambient physical space:
+    \begin{align}
+        P_{\mathrm{bad}}P_{\mathrm{term}}
+          &=P_{\mathrm{term}}P_{\mathrm{bad}}=0,
+        \notag \\
+        P_{\mathrm{bad}}+P_{\mathrm{term}}&=1.
+        \notag
+    \end{align}
+    This is a project-derived preparation of the counterexample, not a
+    construction asserted in \cite{Cirac2016MPDO_arXiv}. It does not provide
+    the ambient simple-biCF reconstruction required by the source argument,
+    so the source-context contradiction remains open in Issue~\#6775.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample, def:sector_bnt_cf}
+    Embed the non-Cartesian block into four coordinates of a five-dimensional
+    physical space and place a bond-one product block on the remaining
+    coordinate. The coordinate projections are complementary. The terminal
+    block has weight one, while the first block retains the coefficient
+    $\mu$. Their unequal bond dimensions separate the two BNT representatives.
+\end{proof}

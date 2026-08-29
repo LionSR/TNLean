@@ -86,9 +86,12 @@ mathematical obstruction.
 
 ### An absorbed normal representative need not have neighboring trace factors
 
-- Location: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
-- Main declaration:
+- Locations: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
+  and `TNLean/MPS/MPDO/NonCartesianAmbientSectorBlocks.lean`
+- Main declarations:
   `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
+  and
+  `MPOTensor.NonCartesianAmbientSectorBlocks.exists_bad_terminal_twoBlock_BNT_witness`
 - Statement refuted: injectivity, SAL, literal physical-trace idempotence, and
   a representation $K=\mu A$ with $A$ normal and $0<|\mu|<1$ imply the
   existence of a physical-sector factorization with normalized rank-one
@@ -110,10 +113,14 @@ mathematical obstruction.
   force the left and right factors in every possible sector decomposition to
   be one-dimensional. The resulting neighboring trace matrix has a nonzero
   two-by-two minor and therefore cannot be of the form $(a_kb_h)_{k,h}$.
+- Prepared pair: a project-derived five-dimensional extension adjoins a
+  bond-one terminal block. The two blocks form a normalized BNT decomposition
+  with one copy per block, raw weights $(\mu,1)$, and disjoint physical
+  supports which resolve the ambient physical space.
 - Boundary: these low-level analytic hypotheses do not imply the
-  factorization. The witness does not supply the ambient simple-biCF
-  reconstruction or line-246 unit-weight convention, so the source-context
-  assertion remains open in issue #6775. The explicit label-mixing channels of
+  factorization. The prepared pair does not supply the ambient simple-biCF
+  reconstruction, so the source-context assertion and contradiction remain
+  open in issue #6775. The explicit label-mixing channels of
   the earlier active-spanning example do not give the general construction
   used by the source.
 
