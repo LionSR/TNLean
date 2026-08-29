@@ -59,10 +59,11 @@ makes sense with separate horizontal and vertical dimensions.
     The row-to-row transfer operator of a homogeneous PEPS is represented by a
     strip of local ket-bra doubled tensors. A boundary fixed point is a left or
     right boundary operator invariant under the corresponding transfer action.
-    This is the object shown in the source figure labelled
-    \texttt{PEPS-transfer-operator}. Its definition depends on the transfer
-    space, orientation, normalization, and inward contraction with the local
-    doubled tensor. In particular, $E_A$ is not itself such a fixed point.
+    The source figure labelled \texttt{PEPS-transfer-operator} depicts the
+    transfer operator from which the fixed point is selected; it does not depict
+    the fixed point itself. Defining the fixed point requires the transfer space,
+    orientation, normalization, and inward contraction with the local doubled
+    tensor. In particular, $E_A$ is not itself such a fixed point.
 \end{definition}
 
 \begin{definition}[Algebraic PEPS renormalization fixed-point relation]
@@ -110,21 +111,22 @@ makes sense with separate horizontal and vertical dimensions.
     \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
         def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
         def:is_rfp_via_ts}
-    Suppose the neighboring PEPS blocking relation, the normalized left and
-    right transfer fixed points, and the global channels $\mathcal S$ and
-    $\mathcal T$ are compatible. Then the resulting boundary MPO is a
-    renormalization fixed point in the sense of
-    Definition~\ref{def:is_rfp_via_ts}.
+    Suppose a homogeneous PEPS satisfies the neighboring blocking relation and
+    its normalized transfer fixed points determine the boundary MPO shown in
+    FigureDavid1. Then that boundary MPO is a renormalization fixed point in the
+    sense of Definition~\ref{def:is_rfp_via_ts}. In particular, the coarse-
+    graining and refinement channels must be derived from the PEPS relation,
+    rather than included among the hypotheses.
 \end{theorem}
 
 \begin{proof}
     \notready
     \uses{def:peps_boundary_coarse_graining,
         def:peps_boundary_refinement, def:is_rfp_via_ts}
-    The physical isometry and the normalized transfer fixed points determine
-    the two maps on the boundary subspaces $M_1(X)$ and $M_2(X)$. A compatible
-    completely positive trace-preserving extension to the full boundary
-    algebras gives
+    The remaining task is to type the physical isometry and virtual
+    identifications in FigureDavid0, identify the selected transfer fixed-point
+    contraction, and construct globally trace-preserving completely positive
+    maps on the full boundary algebras. Those constructions must prove
     $\mathcal S[M_2(X)]=M_1(X)$ and
     $\mathcal T[M_1(X)]=M_2(X)$ for every $X$.
 \end{proof}
