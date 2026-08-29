@@ -6868,15 +6868,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1356--1364.
 \end{definition}
 
-\begin{lemma}[Identity-ancilla transport of symmetry invariance]
-    \label{lem:mpu_symmetry_identity_ancilla_invariant}
+\begin{theorem}[Identity-ancilla transport of symmetry invariance]
+    \label{thm:mpu_symmetry_identity_ancilla_invariant}
     \lean{MPOTensor.IsInvariantUnderSymmetry.tensorPhysicalId}
     \leanok
     \uses{def:mpu_coherent_symmetry_family, def:equivalent-tensors}
     If $\mathcal U$ is invariant under the $d$-dimensional component of a
     coherent symmetry family, then $\mathcal U^{(x)}$ is invariant under its
     $dx$-dimensional component.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The finite-chain operator of $\mathcal U^{(x)}$ is $\iota_x(U^{(N)})$.
@@ -6904,14 +6904,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source line: paper_v2.tex 1366.
 \end{definition}
 
-\begin{lemma}[Blocking transport of symmetry invariance]
-    \label{lem:mpu_symmetry_blocking_invariant}
+\begin{theorem}[Blocking transport of symmetry invariance]
+    \label{thm:mpu_symmetry_blocking_invariant}
     \lean{MPOTensor.IsInvariantUnderSymmetry.blockTensor}
     \leanok
     \uses{def:mpu_blocked_finite_chain_symmetry, thm:mpdo_closed_chain_physical_blocking}
     If $\mathcal U$ is invariant under $\mathcal S$, then its $k$-site blocking
     is invariant under the blocked symmetry.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Let $R_{d,N,k}$ be the canonical identification from blocked length-$N$
@@ -7032,15 +7032,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1356--1366, under the stated restrictions.
 \end{definition}
 
-\begin{lemma}[Forgetting symmetry from coherent stabilized equivalence]
-    \label{lem:mpu_symmetry_equivalence_forget}
+\begin{theorem}[Forgetting symmetry from coherent stabilized equivalence]
+    \label{thm:mpu_symmetry_equivalence_forget}
     \lean{MPOTensor.EquivalentUnderSymmetry.toEquivalent}
     \leanok
     \uses{def:mpu_coherent_family_equivalent_symmetry, def:equivalent-tensors,
         lem:mpu_strict_symmetry_equivalence_forget}
     Fixed-bond equivalence under a coherent symmetry family implies ordinary
     equivalence after the same ancillas and blocking.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Retain the MPU hypotheses, positive coprime ancilla dimensions, common
