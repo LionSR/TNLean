@@ -562,21 +562,27 @@ jobs:
           find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
-      # Phase 1 of LionSR/TNLean#6878 pins latexindent 3.24.7 and formats the
-      # current tree, but keeps this check advisory while the real
-      # pull_request-triggered job is exercised repeatedly. Remove
-      # continue-on-error after those runs establish that the pinned check is
-      # deterministic.
+      # latexindent's -k mode remains nondeterministic on GitHub runners even
+      # at the pinned version (LionSR/TNLean#6878). Format temporary copies and
+      # compare bytes instead; -w mode is stable and leaves sources untouched.
       - name: Check LaTeX formatting (latexindent)
         if: env.TEX_CHANGED == 'true'
-        continue-on-error: true
         timeout-minutes: 5
         run: |
           set -e
           scripts/latexindent --version
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
           status=0
+          index=0
           while IFS= read -r f; do
-            if ! scripts/latexindent -k -s -l blueprint/latexindent.yaml "$f" > /dev/null; then
+            candidate_dir="$tmpdir/$index"
+            index=$((index + 1))
+            mkdir "$candidate_dir"
+            candidate="$candidate_dir/$(basename "$f")"
+            cp -- "$f" "$candidate"
+            scripts/latexindent -w -s -l blueprint/latexindent.yaml "$candidate" > /dev/null
+            if ! cmp -s -- "$f" "$candidate"; then
               echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'scripts/latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
               status=1
             fi
