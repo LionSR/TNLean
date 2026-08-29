@@ -7,6 +7,7 @@
 \setlength{\emergencystretch}{2em}
 
 \input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
 
 \title{Source Boundary for MPU Action Tensors and Stabilizer Data}
 \author{}
@@ -18,13 +19,29 @@
 
 \section{Scope and conclusion}
 
-The source coordinates in this note are pinned to
-\path{Papers/2502.20257/main.tex}, the official
-arXiv:1706.07329v2 file \path{cornerproblem.tex}, the official
-arXiv:2203.12563v3 file \path{REsubmission.tex}, and the official
-arXiv:2405.00439v2 file \path{MPU-DW.tex}.  Thus every source-line range below
-is reproducible against a specified source version rather than a reformatted
-PDF.
+The target-paper coordinates in this note are pinned to
+\path{Papers/2502.20257/main.tex}.  The three external source archives are not
+duplicated in this repository.  They are pinned by exact version, stable
+retrieval link, internal filename, and archive digest as follows.
+\begin{itemize}
+    \item The
+          \href{https://arxiv.org/e-print/1706.07329v2}
+          {arXiv:1706.07329v2 source archive} contains
+          \path{cornerproblem.tex}; its SHA-256 digest is
+          \nolinkurl{045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e}.
+    \item The
+          \href{https://arxiv.org/e-print/2203.12563v3}
+          {arXiv:2203.12563v3 source archive} contains
+          \path{REsubmission.tex}; its SHA-256 digest is
+          \nolinkurl{53f0eb58d275d4bd801c9f38dc87e0928344745148860c97ba2e03fad4bd9b8c}.
+    \item The
+          \href{https://arxiv.org/e-print/2405.00439v2}
+          {arXiv:2405.00439v2 source archive} contains
+          \path{MPU-DW.tex}; its SHA-256 digest is
+          \nolinkurl{166ce15a174167772f53d53b7ed15438fdf799717e053b128f612a264d3f8bb4}.
+\end{itemize}
+Every external line range below is therefore reproducible against the named
+source file rather than a reformatted PDF.
 
 The discussion of an MPU action on MPSs in
 Ref.~\cite[lines~1782--1931]{FrancoRubio2025MPUGauging} uses two logically
@@ -67,10 +84,17 @@ $A_{g\mathbin{\cdot}x}$ is injective and therefore normal.
 
 Proposition~20 of Ref.~\cite[source lines~3124--3133, with proof at
 lines~3815--3939]{Molnar2018SemiInjective} applies to a normal target tensor
-$A$ and an arbitrary tensor $B$ which generates the same MPS family, allowing
-an exponential scalar $\lambda^N$.  In the exact symmetry relation
-(\ref{eq:fbc25_action_audit_positive_length_symmetry}), that scalar is one.
-The proposition supplies matrices $V_{g,x}$ and $W_{g,x}$ such that
+$A$ and an arbitrary tensor $B$.  Its printed hypothesis allows an exponential
+scalar $\lambda^N$, but its unscaled conclusion is false when $\lambda\ne1$.
+The source proof establishes the equality specialization; the corrected
+nonzero-$\lambda$ conclusion retains the factor $\lambda^n$ on words of
+length $n$.  This source defect and its scalar counterexamples are recorded in
+the
+\href{https://sirui-lu.com/TNLean/paper-gaps/mgsc18_reduction_proportionality_scalar.pdf}
+{dedicated paper-gap note}.  In the exact symmetry relation
+(\ref{eq:fbc25_action_audit_positive_length_symmetry}), $\lambda=1$, so the
+application here is unaffected.  The equality specialization supplies
+matrices $V_{g,x}$ and $W_{g,x}$ such that
 \begin{align}
     V_{g,x}W_{g,x}
         &=\mathbf 1,
@@ -107,14 +131,66 @@ $\ell_{g,x}$ is the least length after which every residual word vanishes:
         &&n\geq \ell_{g,x}.
     \label{eq:fbc25_action_audit_residual_nilpotency}
 \end{align}
-Expanding $B_{g,x}$ using
-(\ref{eq:fbc25_action_audit_residual_definition}) and applying
-(\ref{eq:fbc25_action_audit_residual_nilpotency}) gives the exterior and
-interior action identities used in the target paper.  This is why its
-Equation~\texttt{eq:action\_exterior} requires exterior tails of length
-$m\geq\ell$, whereas Equation~\texttt{eq:action\_interior} permits an
-interior length $n\geq0$
-\cite[lines~1787--1870]{FrancoRubio2025MPUGauging}.
+Nilpotency alone does not remove the mixed terms in an expansion of $B$.
+The additional input is the residual-word expansion lemma of Appendix~B and
+its preceding sandwiched-residual lemma
+\cite[source lines~3946--3970 and 3993--4005]{Molnar2018SemiInjective}.
+Suppress $g,x$ temporarily, write an empty product as the identity, and let
+$\mathbf i=(i_1,\ldots,i_n)$.  The sandwiched residual words obey
+\begin{align}
+    V R^{i_1}\cdots R^{i_r}W
+        &=0,
+        &&r>0.
+    \label{eq:fbc25_action_audit_sandwiched_residual_vanishes}
+\end{align}
+Consequently the full mixed-term expansion and its two boundary contractions
+are
+\begin{align}
+    B^{i_1}\cdots B^{i_n}
+        &=\sum_{0\leq r\leq s\leq n}
+          R^{i_1}\cdots R^{i_r}
+          W A^{i_{r+1}}\cdots A^{i_s}V
+          R^{i_{s+1}}\cdots R^{i_n},
+    \label{eq:fbc25_action_audit_full_residual_expansion}\\
+    V B^{i_1}\cdots B^{i_n}
+        &=\sum_{\max(0,n-\ell)\leq s\leq n}
+          A^{i_1}\cdots A^{i_s}V
+          R^{i_{s+1}}\cdots R^{i_n},
+    \label{eq:fbc25_action_audit_left_residual_expansion}\\
+    B^{i_1}\cdots B^{i_n}W
+        &=\sum_{0\leq r\leq\min(\ell,n)}
+          R^{i_1}\cdots R^{i_r}W
+          A^{i_{r+1}}\cdots A^{i_n}.
+    \label{eq:fbc25_action_audit_right_residual_expansion}
+\end{align}
+The terms with a residual prefix or suffix of length at least $\ell$ vanish.
+Thus, if $\mathbf p$ and $\mathbf q$ both have length $m\geq\ell$, every
+surviving term in the full expansion of
+$B^{\mathbf p\mathbf c\mathbf q}$ has its central $A$-word crossing all of
+$\mathbf c$.  The last two equations factor precisely those surviving terms,
+and give
+\begin{align}
+    B^{\mathbf p}W A^{\mathbf c}V B^{\mathbf q}
+        &=B^{\mathbf p\mathbf c\mathbf q},
+        &&|\mathbf p|=|\mathbf q|=m\geq\ell.
+    \label{eq:fbc25_action_audit_exterior_from_residual_expansion}
+\end{align}
+This is the algebraic content of the exterior action identity
+\papereqref{fbc25}{eq:action_exterior}; the interior identity
+\papereqref{fbc25}{eq:action_interior} is the reduction relation
+(\ref{eq:fbc25_action_audit_reduction_words}) and permits an interior length
+$n\geq0$ \cite[lines~1787--1870]{FrancoRubio2025MPUGauging}.
+
+Neither one-sided identity $VB^{\mathbf i}=A^{\mathbf i}V$ nor
+$B^{\mathbf i}W=WA^{\mathbf i}$ follows.  For example,
+$A^1=1$, $W=(1,0)^{\mathsf T}$, $V=(1,0)$, and
+$B^1=\left(\begin{smallmatrix}1&1\\0&0\end{smallmatrix}\right)$ satisfy the
+retraction and all-word reduction relations, while
+$R^1=\left(\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right)$ has
+$(R^1)^2=0$ but $V(B^1)^n=(1,1)\ne V$ for every $n>0$.  The full mixed-term
+expansions, rather than residual nilpotency by itself, are therefore
+load-bearing for
+(\ref{eq:fbc25_action_audit_exterior_from_residual_expansion}).
 
 Theorem~22 of Ref.~\cite[source lines~3154--3162, with proof at
 lines~3990--4035]{Molnar2018SemiInjective} gives the precise uniqueness
@@ -163,8 +239,8 @@ compare the traces of two identity matrices and therefore force equality of
 the bond dimensions, although the stacked tensor $B_{g,x}$ and the reduced
 tensor $A_{g\mathbin{\cdot}x}$ need not have equal bond dimensions.  Thus the
 correct formal input is
-\leanid{MPSTensor.SameMPV}\textsubscript{2}\leanid{Pos}, not
-\leanid{MPSTensor.SameMPV}\textsubscript{2}.
+\leanid{MPSTensor.SameMPV₂Pos}, not
+\leanid{MPSTensor.SameMPV₂}.
 
 \section{The arbitrary-boundary route is different}
 
@@ -181,7 +257,7 @@ is a boundary matrix $Y(C,X)$, again independent of $N$, such that
         &&\text{for every }C,X,N.
     \label{eq:fbc25_action_audit_arbitrary_boundary_invariance}
 \end{align}
-This is Equation~\texttt{eq:compatible} of that source
+This is Equation~(7) of that source
 \cite[source lines~429--460]{GarreRubio2023MPOSym}.  Its Appendix~A starts
 from the size-independent linear boundary map, takes a minimal-rank
 decomposition, and uses the one-site and two-site identities plus block
@@ -192,11 +268,13 @@ applies the same construction to
 tensors and their orthogonality
 \cite[source line~2455]{GarreRubio2023MPOSym}.
 
-By contrast, the simple-MPU hypothesis gives the periodic relation
+By contrast, the simple-MPU hypothesis together with the independent periodic
+symmetry assumption gives
 (\ref{eq:fbc25_action_audit_positive_length_symmetry}) for the distinguished
-closed boundaries.  It does not quantify over $C$ and $X$, and it does not
-supply the boundary map used in Appendix~A.  The mismatch is structural, not
-merely a missing lemma.  Ref.~\cite[source lines~1211--1216]{GarreRubio2023MPOSym}
+closed boundaries.  Simplicity alone does not assert this equality.  These
+hypotheses do not quantify over $C$ and $X$, and they do not supply the
+boundary map used in Appendix~A.  The mismatch is structural, not merely a
+missing lemma.  Ref.~\cite[source lines~1211--1216]{GarreRubio2023MPOSym}
 proves that an injective group MPO satisfying $U_gU_h=U_{gh}$ and
 $U_e=\mathbf 1$ must be on-site, with trivial $3$-cocycle, if its fusion
 tensors also satisfy the arbitrary-boundary closedness condition.  Hence an
@@ -228,7 +306,7 @@ The shifted block is $k\mathbin{\cdot}x$, not
 $g\mathbin{\cdot}x$ or $h\mathbin{\cdot}x$, because the comparison begins
 with the rightmost action.  Equation
 (\ref{eq:fbc25_action_audit_l_compatibility}) is
-Equation~\texttt{eq:omega\_and\_Ls} of the target paper
+Equation~\papereqref{fbc25}{eq:omega_and_Ls} of the target paper
 \cite[lines~1920--1924]{FrancoRubio2025MPUGauging} and agrees with the group
 specialization in Ref.~\cite[source lines~683--719]{GarreRubio2023MPOSym}.
 
@@ -253,9 +331,10 @@ Together with its fusion-tensor convention this gives
           L^x_{g,h}.
     \label{eq:fbc25_action_audit_target_l_gauge}
 \end{align}
-These are Equations~\texttt{eq:scalar\_act\_ten} and
-\texttt{eq:Lsymbgauge} of Ref.~\cite[lines~1870--1919]{FrancoRubio2025MPUGauging}.
-Equation~\texttt{gdgroup} of Ref.~\cite[source lines~720--726]{GarreRubio2023MPOSym}
+These are Equations~\papereqref{fbc25}{eq:scalar_act_ten} and
+\papereqref{fbc25}{eq:Lsymbgauge} of
+Ref.~\cite[lines~1870--1919]{FrancoRubio2025MPUGauging}.
+Equation~(19) of Ref.~\cite[source lines~720--726]{GarreRubio2023MPOSym}
 prints the reciprocal factor.  The two formulas use inverse names for both
 scalar gauges: replacing the 2023 parameters by
 $\gamma^{-1}$ and $\beta^{-1}$ gives
@@ -366,11 +445,25 @@ data realizing every such solution in the simple-MPU setting.
 The existing library separates the following layers.
 
 \begin{itemize}
-    \item QICLean defines \leanid{Kraus.IsInjective},
-          \leanid{Kraus.IsNBlkInjective}, and \leanid{Kraus.IsNormal} for one
-          matrix family.  The second predicate says that the length-$N$ words
-          of one tensor span its full matrix algebra.  It is not the paper's
-          direct-sum block-injective condition
+    \item TNLean defines
+          \leanid{MPSTensor.IsPrimitivePaper}, the unnormalized uniform
+          vector-spreading formulation of paper primitivity, and
+          \leanid{MPSTensor.HasEventuallyFullKrausRank}.  The latter is
+          equivalent to QICLean's \leanid{Kraus.IsNormal} by
+          \leanid{MPSTensor.hasEventuallyFullKrausRank\_iff\_isNormal}.
+          The reverse bridge from \leanid{MPSTensor.IsPrimitivePaper} to the
+          word-span predicate in
+          \leanid{MPSTensor.primitivePaper\_iff\_hasEventuallyFullKrausRank}
+          assumes left-canonical normalization.  Thus an exact named formal
+          predicate for source primitivity already exists, while any passage
+          from it to word-span normality must retain the normalization used by
+          the available bridge.
+
+          QICLean also defines \leanid{Kraus.IsInjective} and
+          \leanid{Kraus.IsNBlkInjective} for one matrix family.  The latter
+          says that the length-$N$ words of one tensor span its full matrix
+          algebra.  None of these predicates is the paper's direct-sum
+          block-injective condition
           \begin{align}
               A^i&=\bigoplus_{x\in\mathsf X}A_x^i,
               &\operatorname{span}\{A_x^i\}_i
@@ -394,7 +487,7 @@ The existing library separates the following layers.
           MPU on an MPS.  Those notions must precede the reduction theorem;
           they should not be inferred from the scalar $L$-symbol API.
 
-    \item \leanid{MPSTensor.SameMPV}\textsubscript{2}\leanid{Pos}
+    \item \leanid{MPSTensor.SameMPV₂Pos}
           expresses the global
           equality in
           (\ref{eq:fbc25_action_audit_positive_length_symmetry}) across
