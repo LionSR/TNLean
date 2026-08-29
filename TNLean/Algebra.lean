@@ -18,12 +18,14 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.GeneralizedCocycle
+import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
+import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleInversion
