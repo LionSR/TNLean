@@ -77,6 +77,32 @@ lemma isNBlkInjective_iff_blockTensor_isInjective
     Kraus.IsNBlkInjective A N ↔ Kraus.IsInjective (blockTensor A N) := by
   exact Kraus.isNBlkInjective_iff_blockTensor_isInjective A N
 
+/-- Fixed-length injectivity persists at positive multiples of the length. -/
+theorem isNBlkInjective_mul_of_isNBlkInjective
+    (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m) (hN : Kraus.IsNBlkInjective A N) :
+    Kraus.IsNBlkInjective A (m * N) := by
+  -- Use word-span factorization here rather than importing the higher-level
+  -- Wielandt theorem `Kraus.wordSpan_top_of_mul` into basic blocking.
+  induction m with
+  | zero => omega
+  | succ m ih =>
+      by_cases hm0 : m = 0
+      · simpa [hm0] using hN
+      · have hm_pos : 0 < m := Nat.pos_of_ne_zero hm0
+        have hih : Kraus.wordSpan A (m * N) = ⊤ := ih hm_pos
+        rw [Nat.succ_mul]
+        change Kraus.wordSpan A (m * N + N) = ⊤
+        rw [Kraus.wordSpan_add, hih, hN]
+        apply eq_top_iff.mpr
+        intro M _
+        simpa using
+          (Submodule.mul_mem_mul
+            (show M ∈ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+              Submodule.mem_top)
+            (show (1 : Matrix (Fin D) (Fin D) ℂ) ∈
+                (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
+              Submodule.mem_top))
+
 /-- Flatten a word in blocked indices into a word in the original alphabet. -/
 noncomputable abbrev flattenBlockedWord (d L : ℕ) :
     List (Fin (blockPhysDim d L)) → List (Fin d) :=

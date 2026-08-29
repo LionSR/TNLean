@@ -1,5 +1,244 @@
-\chapter{Scalar Three-Cocycles and Fusion-Tensor Gauge Freedom}%
+\chapter{Finite-Group MPU Representations and Scalar Gauge Data}%
 \label{ch:mpu_gauging}
+
+\section{Finite-group representations by matrix product unitaries}
+\label{sec:mpug_group_representations}
+
+Let $G$ be a group, let $d\in\N$, and let
+$D\colon G\to\N_{>0}$ assign a virtual bond dimension to each group element.
+For every $g\in G$, let $\mathcal U_g$ be an MPO tensor with physical input and
+output dimension $d$ and virtual bond dimension $D_g$. Write $U_g^{(N)}$ for
+the periodic operator obtained by closing a chain of $N$ copies of
+$\mathcal U_g$. Throughout this section the chain length is positive:
+$N\geq1$. In particular, no identity at length zero is asserted.
+
+\begin{definition}[Matrix product unitarity on nonempty chains]
+    \label{def:mpug_positive_mpu}
+    \lean{MPOTensor.IsMPUPos}
+    \leanok
+    An MPO tensor $\mathcal U$ is a matrix product unitary on nonempty chains
+    when $U^{(N)}$ is unitary for every $N\geq1$. This is the system-size
+    convention in \cite[line~207]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Comparison with the $N>1$ MPU convention]
+    \label{thm:mpug_positive_mpu_to_mpu}
+    \lean{MPOTensor.IsMPUPos.isMPU}
+    \leanok
+    \uses{def:mpug_positive_mpu, def:mpu}
+    Every matrix product unitary on nonempty chains is a matrix product unitary
+    in the sense of Definition~\ref{def:mpu}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_positive_mpu, def:mpu}
+    The nonempty-chain condition applies in particular to every $N>1$.
+\end{proof}
+
+\begin{theorem}[Physical blocking preserves nonempty-chain unitarity]
+    \label{thm:mpug_positive_mpu_blocking}
+    \lean{MPOTensor.IsMPUPos.blockTensor}
+    \leanok
+    \uses{def:mpug_positive_mpu, def:mpdo_physical_blocking}
+    If $\mathcal U$ is a matrix product unitary on nonempty chains and $L>0$,
+    then $\mathcal U^{[L]}$ is also a matrix product unitary on nonempty chains.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reindex_unitary, thm:mpdo_closed_chain_physical_blocking}
+    At chain length $N\geq1$, the canonical reindexing of configurations gives
+    \begin{align}
+        O_N(\mathcal U^{[L]}) & \cong U^{(NL)}.
+    \end{align}
+    Since $N,L>0$, the length $NL$ is positive. Thus $U^{(NL)}$ is unitary,
+    and simultaneous reindexing preserves unitarity.
+\end{proof}
+
+\begin{definition}[Group representation by simple injective MPUs]
+    \label{def:mpug_group_representation}
+    \lean{MPOTensor.GroupFamily,
+        MPOTensor.GroupFamily.IsRepresentation}
+    \leanok
+    \uses{def:injective, def:mpu_simple, def:mpug_positive_mpu}
+    A group representation by simple injective MPUs consists of the
+    dependent-bond family $\{\mathcal U_g\}_{g\in G}$ above such that every
+    $\mathcal U_g$ is injective and simple, every $\mathcal U_g$ is a matrix
+    product unitary on nonempty chains, and
+    \begin{align}
+        U_e^{(N)}          & =\Id,
+        \label{eq:mpug_rep_identity}       \\
+        U_g^{(N)}U_h^{(N)} & =U_{gh}^{(N)}
+        \label{eq:mpug_rep_multiplication}
+    \end{align}
+    for all $g,h\in G$ and all $N\geq1$.
+    The multiplicative law is the representation-level input
+    in~\cite[Subsection ``MPU group representations'']
+    {FrancoRubio2025MPUGauging}.
+    The identity law is its standard consequence and is recorded explicitly for
+    positive lengths. It is also compatible with the later, stronger convention
+    that $\mathcal U_e=\Id$ has bond dimension one
+    in~\cite[Subsection ``Assumptions for the rest of the paper'']
+    {FrancoRubio2025MPUGauging}.
+    The dimensions $D_gD_h$ and $D_{gh}$ need not agree, so
+    (\ref{eq:mpug_rep_multiplication}) is an identity of periodic operators,
+    not an equality of local tensors.
+\end{definition}
+
+\begin{theorem}[Product-tensor operator identity]
+    \label{thm:mpug_product_tensor_operator}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_mulTensor}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpdo_operator_product}
+    Let $\mathcal U_g\mathbin{\cdot}\mathcal U_h$ denote the product MPO tensor,
+    whose virtual bond dimension is $D_gD_h$. For every $N\geq1$,
+    \begin{align}
+        O_N(\mathcal U_g\mathbin{\cdot}\mathcal U_h)
+         & =U_g^{(N)}U_h^{(N)}
+        =U_{gh}^{(N)}.
+        \label{eq:mpug_product_tensor_positive_chain}
+    \end{align}
+    Thus the product tensor and the selected tensor $\mathcal U_{gh}$ generate
+    the same nonempty-chain periodic operators, although their virtual bond
+    dimensions may differ.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_group_representation, thm:mpdo_operator_product_mpo}
+    The first equality in
+    (\ref{eq:mpug_product_tensor_positive_chain}) is multiplicativity of the
+    periodic operator under the product-tensor contraction. The second is
+    (\ref{eq:mpug_rep_multiplication}).
+\end{proof}
+
+\begin{definition}[Common positive physical blocking]
+    \label{def:mpug_common_blocking}
+    \lean{MPOTensor.GroupFamily.block}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpdo_physical_blocking}
+    For a positive integer $L$, the common length-$L$ physical blocking is the
+    family
+    \begin{align}
+        \widetilde{\mathcal U}_g & =\mathcal U_g^{[L]}.
+        \label{eq:mpug_common_blocked_family}
+    \end{align}
+    Each blocked tensor has physical dimension $d^L$ and the same virtual bond
+    dimension $D_g$ as $\mathcal U_g$. The physical alphabet is replaced
+    simultaneously for every group element by words of length $L$.
+\end{definition}
+
+\begin{theorem}[Common blocking preserves the representation laws]
+    \label{thm:mpug_common_blocking_representation}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.block,
+        MPOTensor.mpo_blockTensor_eq_reindex,
+        MPOTensor.blockTensor_mulTensor}
+    \leanok
+    \uses{def:mpug_common_blocking}
+    Let $L>0$. The commonly blocked family
+    $\{\mathcal U_g^{[L]}\}_{g\in G}$ is again a group representation by simple
+    injective MPUs. Under the canonical identification of blocked
+    configurations with words of length $NL$,
+    \begin{align}
+        O_N(\mathcal U_g^{[L]})
+         & \cong U_g^{(NL)},
+        \label{eq:mpug_blocked_operator} \\
+        O_N(\mathcal U_e^{[L]})
+         & =\Id,
+        \label{eq:mpug_blocked_identity} \\
+        O_N(\mathcal U_g^{[L]})O_N(\mathcal U_h^{[L]})
+         & =O_N(\mathcal U_{gh}^{[L]})
+        \label{eq:mpug_blocked_multiplication}
+    \end{align}
+    for every $N\geq1$. Physical blocking also commutes with tensor products:
+    \begin{align}
+        (\mathcal U_g\mathbin{\cdot}\mathcal U_h)^{[L]}
+         & =\mathcal U_g^{[L]}\mathbin{\cdot}\mathcal U_h^{[L]}.
+        \label{eq:mpug_block_product_tensor}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_positive_mpu_blocking,
+        thm:mpdo_blocking_doubled_index,
+        thm:mpu_bounded_simple_blocking,
+        thm:mpdo_closed_chain_physical_blocking,
+        thm:mpdo_blocking_product}
+    Physical blocking preserves nonempty-chain unitarity, injectivity, and
+    simplicity. By (\ref{eq:mpug_blocked_operator}), the blocked periodic operator is
+    the original operator at length $NL$ up to the canonical simultaneous reindexing.
+    Since $N,L>0$,
+    the length $NL$ is positive, so (\ref{eq:mpug_rep_identity}) and
+    (\ref{eq:mpug_rep_multiplication}) apply. Simultaneous reindexing preserves
+    identities and products, which gives (\ref{eq:mpug_blocked_identity}) and
+    (\ref{eq:mpug_blocked_multiplication}). Expanding one blocked letter gives
+    (\ref{eq:mpug_block_product_tensor}).
+\end{proof}
+
+Assume from now until the end of this section that $G$ is finite and $d>0$.
+
+\begin{definition}[Raw MPU representation]
+    \label{def:mpug_raw_group_representation}
+    \lean{MPOTensor.GroupFamily.IsRawRepresentation}
+    \leanok
+    \uses{def:injective, def:mpug_positive_mpu,
+        def:mpug_group_representation}
+    A raw MPU representation is a dependent-bond family
+    $\{\mathcal U_g\}_{g\in G}$ of injective matrix product unitaries on
+    nonempty chains satisfying (\ref{eq:mpug_rep_identity}) and
+    (\ref{eq:mpug_rep_multiplication}) for all $g,h\in G$ and all $N\geq1$.
+    No simplicity hypothesis is imposed.
+\end{definition}
+
+\begin{definition}[Common simplicity length]
+    \label{def:mpug_common_simple_length}
+    \lean{MPOTensor.GroupFamily.commonSimpleLength}
+    \leanok
+    \uses{def:mpug_raw_group_representation}
+    For a finite dependent-bond family, define
+    \begin{align}
+        L_* & =\sum_{g\in G}D_g^4.
+        \label{eq:mpug_common_simple_length}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[A finite MPU family has a common simple blocking]
+    \label{thm:mpug_finite_common_simple_blocking}
+    \lean{MPOTensor.GroupFamily.commonSimpleLength_pos,
+        MPOTensor.GroupFamily.IsRawRepresentation.block_common,
+        MPOTensor.GroupFamily.IsRawRepresentation.block_common_then_block}
+    \leanok
+    \uses{def:mpug_raw_group_representation,
+        def:mpug_common_simple_length, def:mpug_group_representation,
+        def:mpu_simple, def:mpdo_physical_blocking}
+    Let $\{\mathcal U_g\}_{g\in G}$ be a raw MPU representation. Then $L_*>0$,
+    and every $\mathcal U_g^{[L_*]}$ is simple. For every $K>0$, each further
+    block $(\mathcal U_g^{[L_*]})^{[K]}$ is simple. Consequently the blocked
+    family at length $L_*$ satisfies
+    Definition~\ref{def:mpug_group_representation}, and every further common
+    positive blocking does as well.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_positive_mpu_blocking,
+        thm:mpug_positive_mpu_to_mpu,
+        thm:mpu_common_pow_four_simple_blocking,
+        thm:mpu_all_later_simple_blockings,
+        thm:mpdo_blocking_doubled_index,
+        thm:mpdo_closed_chain_physical_blocking,
+        thm:mpug_common_blocking_representation}
+    Positivity of the bond dimensions gives $L_*>0$. For each $g$, the direct
+    block of length $D_g^4$ is simple, and $D_g^4\leq L_*$ by
+    (\ref{eq:mpug_common_simple_length}). Simplicity holds at every later direct
+    blocking, hence at the common length $L_*$. Nonempty-chain unitarity and
+    injectivity are preserved by physical blocking. Reindexing the closed chain
+    at length $NL_*$ carries the identity and multiplication laws of the raw
+    representation to the blocked family. The length-$L_*$ family is therefore
+    a group representation by simple injective MPUs. Applying
+    Theorem~\ref{thm:mpug_common_blocking_representation} to this established
+    representation proves the assertion for every further positive blocking.
+\end{proof}
+
+\section{Scalar three-cocycles and fusion-tensor gauge freedom}
+\label{sec:mpug_scalar_gauge}
 
 Let $G$ be a group and write $\C^\times$ for the multiplicative group of
 nonzero complex numbers. The fusion tensors have the scalar gauge freedom
@@ -10,9 +249,10 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-The results below formalize only the scalar functions $\beta$, $\omega$,
-$\gamma$, and $L$; they construct neither fusion tensors nor action tensors nor
-an MPU representation.
+The results in this section formalize only the scalar functions $\beta$,
+$\omega$, $\gamma$, and $L$; they construct neither fusion tensors nor action
+tensors. The representation-level data were specified in
+Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
