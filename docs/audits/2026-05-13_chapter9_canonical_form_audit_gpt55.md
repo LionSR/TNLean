@@ -321,7 +321,7 @@ Legend:
    `SectorDecomposition` is not a faithful replacement unless explicitly connected to `M_j` and `r_j`.
 
 7. Missing in Chapter 9: injective and biCF definitions from [1606.00608] §2.3 lines 317--322.
-   There is `HasBiCF` code in `BlockDiagonalCommutant.lean`, but the chapter does not present the paper definition.
+   There was code under the historical name `HasBiCF` (now `HasFiniteWordTraceSeparation`), but the chapter did not present the paper definition.
 
 8. Missing in Chapter 9: Proposition `propblockinj`, after at most `3D^5` blocking any CF tensor is biCF.
    Related injectivity-after-blocking facts exist, but not the paper statement.

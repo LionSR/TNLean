@@ -339,7 +339,7 @@ description of current `main`.
   one special case (`MPDO/VerticalBNTConstruction.lean:111-145`). MPDO's
   vertical route builds on `IsBNT` (`VerticalCF.lean:623`) while the
   horizontal rides `IsBNTCanonicalForm` (`HorizontalBNT.lean:135`), joined
-  by `HasBiCF` across the missing bridge; `Axioms/Beigi.lean:104` binds the
+  by `HasFiniteWordTraceSeparation` across the missing bridge; `Axioms/Beigi.lean:104` binds the
   axiom-discharge path to one side.
 - **Remediation**: pick one core predicate; define others as abbreviations
   or explicit iff-bridges (the `IsNormal` vs `IsNormalTensor` gap needs a

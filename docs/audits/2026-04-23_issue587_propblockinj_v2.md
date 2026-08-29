@@ -2,7 +2,7 @@
 
 ## Scope of this pass
 
-This pass does **not** delete the `biCF` field from `MPOTensor.HorizontalCFData`.
+This pass did **not** delete the then-named `HorizontalCFData.biCF` field (now `HorizontalCFData.finiteWordTraceSeparation`).
 Instead it adds a substantive finite-dimensional reduction step in
 `TNLean/MPS/MPDO/BiCFDerivation.lean` and sharpens the remaining blocker.
 
@@ -16,13 +16,13 @@ New declarations in `TNLean/MPS/MPDO/BiCFDerivation.lean`:
 - `MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop`
 - `MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent`
 - `MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent`
-- `MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent`
+- `MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent` (historical name; now `MPSTensor.hasFiniteWordTraceSeparation_of_wordEntryFamily_linearIndependent`)
 - `MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent`
 
 Mathematical content:
 
 1. The old abstract route
-   $$\texttt{WordTupleSpanTop} \Rightarrow \texttt{HasBiCF}$$
+   $$\texttt{WordTupleSpanTop} \Rightarrow \texttt{HasFiniteWordTraceSeparation}$$
    is now complemented by the new concrete route
    $$\texttt{LinearIndependent}\bigl(\texttt{wordEntryFamily } A\,L\bigr)
      \Rightarrow \texttt{WordTupleSpanTop } A\,L.$$
@@ -31,7 +31,7 @@ Mathematical content:
    finite word space. Those dual coefficients reconstruct arbitrary tuples of block
    matrices, hence force `WordTupleSpanTop`.
 3. As corollaries, the same linear-independence criterion yields block selectors,
-   a `HasBiCF` witness, and a direct `HorizontalCFData`.
+   a `HasFiniteWordTraceSeparation` witness, and a direct `HorizontalCFData`.
 
 So the issue is now reduced to a more precise criterion than the earlier abstract
 selector data: it is enough to prove
@@ -45,7 +45,7 @@ from the canonical-form/BNT hypotheses of CPGSV17 Proposition IV.3.
 The remaining gap is **not** a generic linear-algebra reduction issue anymore.
 It is the actual block-separation theorem from CPGSV17 / David2006.
 
-The current `HorizontalCFData` fields still do **not** imply `biCF` directly; the
+The current `HorizontalCFData` fields still do **not** imply `finiteWordTraceSeparation` directly; the
 counterexample already documented in `BiCFDerivation.lean` remains valid.
 What is missing is a theorem that produces finite-length separation between the
 full families of inserted/block-entry word functionals for distinct BNT sectors.
@@ -94,5 +94,5 @@ Current repo-side missing criterion:
 
 This pass is substantive forward progress, not a vacuous alias: it proves that one
 concrete finite-dimensional criterion (`wordEntryFamily` linear independence) is
-already sufficient to obtain the full abstract `biCF` witness. But the pass does
+already sufficient to obtain the full finite-word trace-separation witness. But the pass does
 **not** yet derive that criterion from the paper's hypotheses, so issue #587 stays open.

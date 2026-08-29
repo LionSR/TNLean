@@ -52,8 +52,8 @@ File: `TNLean/MPS/MPDO/BiCFDerivation.lean`
 - `MPSTensor.wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords`
   - Common block injectivity plus pairwise separators gives full product-word span.
 
-- `MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords`
-  - The same hypotheses give the biCF trace-separation predicate.
+- `MPSTensor.hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords` (historical name; now `MPSTensor.hasFiniteWordTraceSeparation_of_common_blockInjective_of_pairBlockSeparatingWords`)
+  - The same hypotheses give finite-word trace separation.
 
 File: `TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean`
 

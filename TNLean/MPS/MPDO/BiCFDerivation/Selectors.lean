@@ -514,13 +514,13 @@ theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
   hasBlockSelectorWords_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI)
 
-/-- The linear-independence criterion above also yields the `HasBiCF` witness
+/-- The linear-independence criterion above also yields the `HasFiniteWordTraceSeparation` witness
 used by `HorizontalCFData`. -/
-theorem hasBiCF_of_wordEntryFamily_linearIndependent
+theorem hasFiniteWordTraceSeparation_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
-    HasBiCF A :=
-  hasBiCF_of_wordTupleSpanTop A
+    HasFiniteWordTraceSeparation A :=
+  hasFiniteWordTraceSeparation_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI)
 
 /-- Abstract finite-length data isolating the content of the block-injectivity
@@ -661,14 +661,14 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
     (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
 
 /-- Common block injectivity plus pairwise block-separating word polynomials
-imply `HasBiCF`. -/
-theorem hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords
+imply `HasFiniteWordTraceSeparation`. -/
+theorem hasFiniteWordTraceSeparation_of_common_blockInjective_of_pairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
     (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
-    HasBiCF A :=
-  hasBiCF_of_wordTupleSpanTop A
+    HasFiniteWordTraceSeparation A :=
+  hasFiniteWordTraceSeparation_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hInj hPair)
 
 /-- The abstract block-injectivity selector data imply the finite-length word-tuple
@@ -681,13 +681,13 @@ theorem wordTupleSpanTop_of_propBlockInjective
   exact ⟨L + S,
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj hSel⟩
 
-/-- The abstract block-injectivity selector data imply `HasBiCF`. -/
-theorem hasBiCF_of_propBlockInjective
+/-- The abstract block-injectivity selector data imply `HasFiniteWordTraceSeparation`. -/
+theorem hasFiniteWordTraceSeparation_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hProp : PropBlockInjective A) :
-    HasBiCF A := by
+    HasFiniteWordTraceSeparation A := by
   rcases wordTupleSpanTop_of_propBlockInjective A hProp with ⟨N, hN⟩
-  exact hasBiCF_of_wordTupleSpanTop A hN
+  exact hasFiniteWordTraceSeparation_of_wordTupleSpanTop A hN
 
 end MPSTensor
 
@@ -708,9 +708,9 @@ theorem horizontalCFData_of_wordTupleSpanTop
     block_injective := hInj
     left_canonical := hLeft
     weight_ne_zero := hμne
-    biCF := ?_
+    finiteWordTraceSeparation := ?_
   }
-  exact MPSTensor.hasBiCF_of_wordTupleSpanTop A hL
+  exact MPSTensor.hasFiniteWordTraceSeparation_of_wordTupleSpanTop A hL
 
 /-- Linear independence of the scalar word-entry family is another concrete
 route into `HorizontalCFData`: it already implies the finite-length product
@@ -739,7 +739,8 @@ theorem horizontalCFData_of_propBlockInjective
     block_injective := hInj
     left_canonical := hLeft
     weight_ne_zero := hμne
-    biCF := MPSTensor.hasBiCF_of_propBlockInjective A hProp
+    finiteWordTraceSeparation :=
+      MPSTensor.hasFiniteWordTraceSeparation_of_propBlockInjective A hProp
   }
 
 
@@ -759,7 +760,7 @@ any blocking length `L` there is only one word `w : Fin L → Fin 1`, and
 
 `∑ k, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w)) = 0`
 
-for that unique word, while `Δ ≠ 0`. Therefore `HasBiCF A` fails.
+for that unique word, while `Δ ≠ 0`. Therefore `HasFiniteWordTraceSeparation A` fails.
 
 The predicate `PropBlockInjective` expresses one abstract finite-length route,
 while `wordEntryFamily` gives a second, equivalent linear-algebra criterion.

@@ -26,7 +26,7 @@ Ported the word-entry endpoint from the earlier Prop. IV.3 work into
 - `MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop`
 - `MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent`
 - `MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent`
-- `MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent`
+- `MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent` (historical name; now `MPSTensor.hasFiniteWordTraceSeparation_of_wordEntryFamily_linearIndependent`)
 - `MPOTensor.horizontalCFData_of_wordEntryFamily_linearIndependent`
 
 Added a **formal obstruction** to the stronger Issue-#822 target:
@@ -40,7 +40,8 @@ Added a **formal obstruction** to the stronger Issue-#822 target:
 
 ### Docs
 
-- updated the `HorizontalCFData.biCF` docstring, now located in
+- updated the then-named `HorizontalCFData.biCF` docstring (now
+  `HorizontalCFData.finiteWordTraceSeparation`), located in
   `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`,
   so it describes the current honest constructor surface (`WordTupleSpanTop`,
   `PropBlockInjective`, `wordEntryFamily`) instead of claiming the remaining
@@ -109,7 +110,7 @@ mixed-transfer / Wielandt-style quantitative theorem that is not yet present in
 3. prove within-sector Gram convergence to a nondegenerate limit form;
 4. apply
    `TNLean.Algebra.GramMatrixLI.eventually_linearIndependent_of_gram_tendsto_nondegenerate`;
-5. convert the resulting finite `L` into `WordTupleSpanTop`, then into `HasBiCF`;
+5. convert the resulting finite `L` into `WordTupleSpanTop`, then into `HasFiniteWordTraceSeparation`;
 6. if the quantitative mixed-transfer theorem is later formalized, sharpen this
    existential witness to the paper bound `L ≤ 3 * D^5`.
 
