@@ -589,4 +589,65 @@ theorem exists_ambient_standing_simpleBiCF_package :
     obstructionPhysicalSupport_add_terminalPhysicalSupport,
     ambient_literal_physTrace_ZCL mu B hmu hGauge⟩
 
+/-- The representativewise neighboring-trace conclusion used in the printed
+CPSV16 Theorem 4.9 implication `(ii) ⇒ (iv)` is false under its standing
+hypotheses.  The witness is an MPDO with positive normalization at every
+positive length, SAL, literal physical-trace ZCL, and the displayed simple
+biCF canonical form.  Its BNT coefficients have the strict values
+`0 < ‖mu‖ < 1` and `1`, so the terminal block supplies exactly the global
+unit-weight witness required at line 246.  Nevertheless, the first
+common-weight-absorbed representative admits no normalized rank-one
+neighboring-trace factorization.
+
+The finite simultaneous-span argument, local orthogonal-sum entropy transport,
+virtual-gauge transport, and isometric-embedding descent are project-derived
+bridges.  The counterexample addresses the source assertion and proof path at
+CPSV16, Theorem 4.9(iv), lines 864--889, and Appendix C.2, lines 1628--1782.
+See `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+theorem printed_theorem49_ii_to_iv_is_false :
+    ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
+      0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
+      Kraus.IsInjective B ∧
+      MPSTensor.IsLeftCanonical B ∧
+      MPSTensor.IsNormalTensor B ∧
+      MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      let S := sectors mu B hmu
+      let M := ambient mu B hmu
+      (IsMPDO M ∧
+        (∀ N, 0 < N → 0 < Matrix.trace (mpo M N)) ∧
+        IsSAL M ∧
+        IsSimpleCanonicalForm M ∧
+        MPSTensor.IsBNTCanonicalForm S ∧
+        MPSTensor.HasBiCF S.basis ∧
+        M.toMPSTensor = S.toTensor ∧
+        (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+          S.weight j q = S.weight j q') ∧
+        S.basisCount = 2 ∧
+        S.copies 0 = 1 ∧
+        S.copies (Fin.succ 0) = 1 ∧
+        S.basisDim 0 = 2 ∧
+        S.basisDim (Fin.succ 0) = 1 ∧
+        S.basis 0 = B ∧
+        S.basis (Fin.succ 0) = terminalBlock.toMPSTensor ∧
+        S.weight 0 0 = mu ∧
+        S.weight (Fin.succ 0) 0 = 1 ∧
+        physicalSupportProj embeddedObstruction = obstructionPhysicalSupport ∧
+        physicalSupportProj terminalBlock = terminalPhysicalSupport ∧
+        obstructionPhysicalSupport * terminalPhysicalSupport = 0 ∧
+        terminalPhysicalSupport * obstructionPhysicalSupport = 0 ∧
+        obstructionPhysicalSupport + terminalPhysicalSupport = 1 ∧
+        physTraceTransfer M * physTraceTransfer M = physTraceTransfer M) ∧
+      ¬ ∃ F : PhysicalSectorFactorization
+          (commonWeightAbsorbedBasisMPOTensor S
+            (sectors_weight_copy_independent mu B hmu) 0),
+        Nonempty F.NeighboringTraceFactorization := by
+  obtain ⟨mu, B, hmu, hmuNormPos, hmuNorm, hBInj, hBLeft, hBNormal,
+    hGauge, hStanding⟩ := exists_ambient_standing_simpleBiCF_package
+  refine ⟨mu, B, hmu, hmuNormPos, hmuNorm, hBInj, hBLeft, hBNormal,
+    hGauge, ?_⟩
+  dsimp only at hStanding ⊢
+  exact ⟨hStanding,
+    firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization
+      mu B hmu hGauge⟩
+
 end MPOTensor.NeighboringTraceObstructionAmbientCounterexample
