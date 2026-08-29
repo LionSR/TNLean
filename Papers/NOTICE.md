@@ -2,17 +2,34 @@
 
 This directory contains the arXiv LaTeX sources of the papers whose results
 TNLean formalizes. They are included as reference material for the
-formalization, with the permission of their authors. Copyright in these
-works remains with their authors and, where applicable, their publishers.
+formalization, either with the permission of their authors or under the public
+license recorded below. Copyright in these works remains with their authors
+and, where applicable, their publishers.
 
-**These files are not covered by the repository's license.** The top-level
-`LICENSE` (Apache License 2.0) applies to the Lean code, the blueprint, and
-the other original content of this repository, not to this directory. The
-sources below carry arXiv's non-exclusive distribution license (or, for the
-older submissions noted below, arXiv's assumed license for 1991-2003 submissions),
-which grants no redistribution rights beyond arXiv itself. Do not reuse them
-outside this repository without the authors' permission; the version of
-record for each paper is the arXiv posting or the journal publication.
+**The paper source files are not covered by the repository's license.** The
+top-level `LICENSE` (Apache License 2.0) applies to the Lean code, the blueprint,
+and the other original content of this repository, including this notice; it
+does not apply to the paper source files. Entries marked
+`non-exclusive-distrib 1.0` or `assumed 1991-2003` are present under author
+permissions specific to this repository; the arXiv licenses alone grant no
+downstream redistribution right, and that permission is not inferred for
+additional works. Entries marked `CC BY 4.0` are redistributed under the linked
+Creative Commons license. The version of record for each paper is the arXiv
+posting or the journal publication.
+
+## Sources used by the MPU audits
+
+| Exact source | Title | Authors | Source file | Availability and license |
+|---|---|---|---|---|
+| [arXiv:1706.07329v2](https://arxiv.org/abs/1706.07329v2) | A generalization of the injectivity condition for Projected Entangled Pair States | András Molnár, Yimin Ge, Norbert Schuch, J. Ignacio Cirac | `cornerproblem.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2203.12563v3](https://arxiv.org/abs/2203.12563v3) | Classifying phases protected by matrix product operator symmetries using matrix product states | José Garre-Rubio, Laurens Lootens, András Molnár | `REsubmission.tex` | Vendored at `Papers/2203.12563/REsubmission.tex`; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [arXiv:2308.05151v3](https://arxiv.org/abs/2308.05151v3) | Lieb-Schultz-Mattis anomalies as obstructions to gauging (non-on-site) symmetries | Sahand Seifnashri | `LSMcocycle.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2405.00439v2](https://arxiv.org/abs/2405.00439v2) | Fractional domain wall statistics in spin chains with anomalous symmetries | José Garre-Rubio, Norbert Schuch | `MPU-DW.tex` | Vendored at `Papers/2405.00439/MPU-DW.tex`; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
+The link-only sources are not redistributed by TNLean. Their source coordinates
+refer to the named file in the linked exact arXiv version.
+
+## Other paper sources in this directory
 
 | arXiv ID | Title | Authors | arXiv license |
 |---|---|---|---|
