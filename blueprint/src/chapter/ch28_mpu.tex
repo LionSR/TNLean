@@ -11928,10 +11928,10 @@ left/right order below agrees with the adjacent-pair convention in
         SpinChain.leftPair_union_rightPair_union_rightPair_add_one}
     \leanok
     \uses{def:qca_nearest_neighbor_pair_regions}
-    The three regions $L_x,P_x,P_{x+1}$ are pairwise disjoint, and
+    Let $T_x=(L_x\cup P_x)\cup P_{x+1}$. The three regions
+    $L_x,P_x,P_{x+1}$ are pairwise disjoint, and
     \begin{align}
-        T_x & =(L_x\cup P_x)\cup P_{x+1}        \\
-            & =\{2x-1,2x,2x+1,2x+2,2x+3,2x+4\}.
+        T_x & =\{2x-1,2x,2x+1,2x+2,2x+3,2x+4\}.
     \end{align}
 \end{lemma}
 
@@ -12034,6 +12034,7 @@ left/right order below agrees with the adjacent-pair convention in
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:qca_support_algebra_region}
     Write each index in its even or odd form.  Two regions of equal parity
     are disjoint.  In the mixed-parity cases, the defining two-site sets
     intersect exactly for the displayed consecutive odd--even pair.
@@ -12054,7 +12055,7 @@ left/right order below agrees with the adjacent-pair convention in
     consecutive/disjoint argument in
     \cite[lines~1270--1274]{Gross2012IndexTheory}, using Lemma
     \texttt{sppcomm} from lines~1221--1246; compare
-    \cite[lines~1174--1194]{Schumacher2004QCA}.  Cirac et al. provide the
+    \cite[lines~1174--1194]{SchumacherWerner2004QCA}.  Cirac et al. provide the
     homogeneous four-site localization at
     \cite[lines~2313--2329]{Cirac2017MPU}, but do not state this commutation
     result.  The site-dependent GNVW statement is not claimed; see
