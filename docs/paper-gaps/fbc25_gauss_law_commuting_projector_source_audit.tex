@@ -1,0 +1,374 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{Source Boundary for the MPU Gauss Laws and Their Commuting Projectors}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{open-gap}{open}
+
+\section{Scope}
+
+Proposition~\paperref{fbc25}{prop:gausslaws} of
+Ref.~\cite[lines~3378--3499]{FrancoRubio2025MPUGauging} defines a local
+unitary representation $\mathcal G$ and the corresponding Gauss-law
+projectors $P_j$.  Proposition~\paperref{fbc25}{prop:comm_proj} then states that the
+projectors commute if and only if the MPU symmetry is nonanomalous, and refers
+to Section~3.2 of Ref.~\cite{Seifnashri2024LSM} for the adjacent-projector
+calculation \cite[lines~3602--3655]{FrancoRubio2025MPUGauging}.
+
+This note fixes the mathematical meaning of that citation before either
+proposition is formalized.  It records the oriented local Hilbert space, the
+multiplication convention, the hypotheses used by the three-defect
+calculation, and the exact boundary of the existing formal library.  It does
+not replace the cited tensor calculation by an abstract cocycle argument.
+The Seifnashri line ranges below refer to the official
+\texttt{arXiv:2308.05151v3} source file \path{LSMcocycle.tex}.
+\footnote{The official v3 source bundle has SHA-256
+\nolinkurl{6a3900756a78d8540d937396fabd41e49478b68f28d1ae2904fc89abd757a7ad};
+the extracted \path{LSMcocycle.tex} has SHA-256
+\nolinkurl{47aa9fbc3fd1efc1f97f12a4be95227d9feb0a5351cd7daafcdb723c7553658f}.}
+The formalization prerequisite is tracked by \ghissue{7339}.
+
+\section{Oriented local Hilbert space}
+
+Let $G$ be a finite group and let the matter space at site $j$ be
+$\mathcal H_j\cong\mathcal H$.  In the Hamiltonian construction of
+Ref.~\cite[Section~3.2]{Seifnashri2024LSM}, the chain is periodic, a defect
+$g_j$ lies on the oriented link $(j,j+1)$, and the gauge basis on that link is
+written $\ket{g_j}$.  The local transformation at $j$ uses two matter factors
+and the two links adjacent to $j$.  After the harmless reordering of tensor
+factors used in Ref.~\cite[lines~3380--3386]{FrancoRubio2025MPUGauging}, its
+space is
+\begin{align}
+    \mathcal K_j
+        &=\mathcal H_j\otimes\mathcal H_{j+1}
+          \otimes\mathbb C[G]_{(j-1,j)}
+          \otimes\mathbb C[G]_{(j,j+1)}.
+    \label{eq:fbc25_gauss_oriented_local_space}
+\end{align}
+The first gauge label is therefore incoming and the second is outgoing.  If
+their values are $a$ and $b$, a transformation by $g$ sends
+\begin{align}
+    (a,b)&\longmapsto(ag^{-1},gb).
+    \label{eq:fbc25_gauss_oriented_link_action}
+\end{align}
+Thus the incoming link carries right multiplication by $g^{-1}$, while the
+outgoing link carries left multiplication by $g$.  Reversing these roles, or
+replacing either action by multiplication on the other side, changes the
+representation law.
+
+Seifnashri first uses defect Hilbert spaces which may depend on all link
+labels.  For a discrete group, the formula used here is obtained after the
+explicit simplifying assumption that every defect Hilbert space is an
+identical copy of the untwisted matter space.  The extended space then becomes
+\begin{align}
+    \mathcal H_{\mathrm{ext}}
+        &=\left(\bigotimes_{j=1}^{L}\mathcal H_j\right)
+          \otimes
+          \left(\bigotimes_{j=1}^{L}\mathbb C[G]_{(j,j+1)}\right),
+    \label{eq:fbc25_gauss_extended_space}
+\end{align}
+with one matter factor per site and one gauge factor per oriented link
+\cite[Section~3.2, arXiv source lines~1637--1678]{Seifnashri2024LSM}.
+
+\section{The local representation and its multiplication convention}
+
+For $a,b,c,d\in G$ with $ab=cd$, let
+$\lambda_{a,b}^{c,d}$ be the unitary comparison of the two defect-pair
+factorizations.  The MPU paper defines it from right fusion operators by
+$\lambda_{a,b}^{c,d}=(\lambda^R_{c,d})^\dagger\lambda^R_{a,b}$ and proves the
+composition law
+\begin{align}
+    \lambda_{a,b}^{r,s}
+        &=\lambda_{c,d}^{r,s}\lambda_{a,b}^{c,d},
+        &ab&=cd=rs.
+    \label{eq:fbc25_gauss_lambda_composition}
+\end{align}
+These are the comparison operators of
+Ref.~\cite[lines~2782--2821]{FrancoRubio2025MPUGauging}; they are not new
+fusion tensors.
+
+On the oriented space in
+Eq.~\ref{eq:fbc25_gauss_oriented_local_space}, the local operator is
+\begin{align}
+    \mathcal G^j_g
+        &=\sum_{a,b\in G}
+          \lambda_{a,b}^{ag^{-1},gb}
+          \otimes\ketbra{ag^{-1},gb}{a,b}.
+    \label{eq:fbc25_gauss_local_representation}
+\end{align}
+The superscript $j$ records the support and is suppressed in the displayed
+formula \papereqref{fbc25}{eq:mcG} of
+Ref.~\cite[lines~3380--3386]{FrancoRubio2025MPUGauging}.  Applying first $h$
+and then $g$ to one gauge sector gives
+\begin{align}
+    (a,b)
+        &\overset{\mathcal G^j_h}{\longmapsto}(ah^{-1},hb)
+         \overset{\mathcal G^j_g}{\longmapsto}
+         (ah^{-1}g^{-1},ghb)
+         =(a(gh)^{-1},(gh)b),
+    \label{eq:fbc25_gauss_sector_multiplication}\\
+    \lambda_{ah^{-1},hb}^{ah^{-1}g^{-1},ghb}
+      \lambda_{a,b}^{ah^{-1},hb}
+        &=\lambda_{a,b}^{a(gh)^{-1},(gh)b}.
+    \label{eq:fbc25_gauss_material_multiplication}
+\end{align}
+Equation~\ref{eq:fbc25_gauss_material_multiplication} is precisely
+Eq.~\ref{eq:fbc25_gauss_lambda_composition}.  Hence the convention is
+\begin{align}
+    \mathcal G^j_g\mathcal G^j_h
+        &=\mathcal G^j_{gh},
+    &
+    (\mathcal G^j_g)^\dagger
+        &=\mathcal G^j_{g^{-1}}.
+    \label{eq:fbc25_gauss_representation_law}
+\end{align}
+This agrees with the explicit convention in
+Ref.~\cite[arXiv source lines~1691--1734]{Seifnashri2024LSM}.  Unitarity is
+not a consequence of the label permutation alone: every nonzero block
+$\lambda_{a,b}^{ag^{-1},gb}$ must be unitary.  In Seifnashri's construction
+this comes from unitary defect fusion operators $\lambda^j(g,h)$; the
+link-extended operators $\widetilde\lambda^j(g,h)$ are partial operators and
+are explicitly not unitary \cite[arXiv source lines~709--744 and
+1680--1729]{Seifnashri2024LSM}.
+
+The Gauss-law projector is the group average
+\begin{align}
+    P_j
+        &=\frac{1}{|G|}\sum_{g\in G}\mathcal G^j_g.
+    \label{eq:fbc25_gauss_projector}
+\end{align}
+Equation~\ref{eq:fbc25_gauss_representation_law} makes
+$P_j^2=P_j=P_j^\dagger$.  This is the local projection onto the invariant
+subspace; the additional constraint is $P_j=1$ on physical states.
+
+\section{The three-defect associator calculation}
+
+The commuting-projector proof uses more than the scalar $3$-cocycle equation.
+Let $\omega\colon G^3\to\mathbb C^\times$ be the anomaly $3$-cocycle defined by
+the MPU fusion tensors in
+Ref.~\cite[lines~1506--1545]{FrancoRubio2025MPUGauging}.
+Let $T_{g(hk)}$ and $T_{(gh)k}$ denote the two unitary fusion paths for three
+consecutive defects in Equation~\papereqref{fbc25}{eq:assoc} of
+Ref.~\cite[lines~3602--3655]{FrancoRubio2025MPUGauging}.  In the notation of
+its Appendix~\paperref{fbc25}{app:associativity}
+\cite[lines~6040--6961]{FrancoRubio2025MPUGauging}, they satisfy
+\begin{align}
+    T_{g(hk)}
+        &=F(g,h,k)T_{(gh)k}.
+    \label{eq:fbc25_gauss_three_defect_associator}
+\end{align}
+The left path contains the movement operator
+$w_R^g=\lambda^R_{g,e}$ between the fusions of $(h,k)$ and $(g,hk)$; the
+right path fuses $(g,h)$ and then $(gh,k)$.  The appendix computes the two
+tensor networks and obtains
+\begin{align}
+    F(g,h,k)&=\omega(g,h,k).
+    \label{eq:fbc25_gauss_associator_is_omega}
+\end{align}
+This is a tensor-level result, proved at lines~6040--6962 of
+Ref.~\cite{FrancoRubio2025MPUGauging}; it must not be inferred merely from
+the existence of an independently supplied scalar cochain.
+
+To compare $P_jP_{j-1}$ with $P_{j-1}P_j$, the cited calculation expands both
+products in defect sectors.  The bottom labels
+$g_1,g_2,g_3$ and top labels $h_1,h_2,h_3$ have equal total product.  A
+unitary fusion of the three top defects converts equality of the two expanded
+operators into equality of the two three-defect networks.  Unitarity then
+cancels every fusion bubble through
+$\lambda^j(g,h)(\lambda^j(g,h))^\dagger=1$.  Applying an $F$-move on each
+side, followed by two further $F$-moves on the right, gives exactly
+\begin{align}
+    \frac{F(h_1,h_2h_3g_3^{-1},g_3)}
+         {F(g_1,g_2,g_3)}
+        &=
+      \frac{F(h_1,h_2,h_3)}
+           {F(g_1,g_1^{-1}h_1h_2,h_3)}.
+    \label{eq:fbc25_gauss_adjacent_commutation_condition}
+\end{align}
+This is the calculation at arXiv source lines~1745--1955 of
+Ref.~\cite{Seifnashri2024LSM}, relabelled as in lines~3607--3650 of
+Ref.~\cite{FrancoRubio2025MPUGauging}.  The denominators are legitimate
+because the fusion paths are unitary, so $F$ has unit modulus in the chosen
+gauge.
+
+If the projectors commute, set
+$h_1=e$, $h_2=g_1$, and $h_3=g_2g_3$ in
+Eq.~\ref{eq:fbc25_gauss_adjacent_commutation_condition}.  One obtains
+\begin{align}
+    F(g_1,g_2,g_3)
+        &=\frac{F(g_1,e,g_2g_3)F(e,g_1g_2,g_3)}
+        {F(e,g_1,g_2g_3)}.
+    \label{eq:fbc25_gauss_specialized_associator}
+\end{align}
+The standing identity gauges give
+$F(e,g,h)=F(g,e,h)=1$, hence
+$F(g_1,g_2,g_3)=1$.  Conversely, pointwise $F=1$ makes
+Eq.~\ref{eq:fbc25_gauss_adjacent_commutation_condition} automatic.  This is
+the actual ``if and only if'' calculation.  The scalar cocycle identity does
+not by itself imply either direction.
+
+\section{Gauge-class triviality versus a pointwise trivial representative}
+
+The MPU paper calls a representation nonanomalous when the cohomology class
+of $\omega$ is trivial.  This is an assertion about the orbit under fusion
+gauges, not the pointwise equation $\omega(g,h,k)=1$ for an arbitrary
+representative.  Proposition~\paperref{fbc25}{prop:unitarity_and_gauges} of
+Ref.~\cite{FrancoRubio2025MPUGauging} first constructs a compatible
+fusion/action gauge in which all fusion operators are unitary and, in the
+nonanomalous case, the selected representative satisfies
+\begin{align}
+    \omega(g,h,k)&=1
+        &&\text{for every }g,h,k\in G.
+    \label{eq:fbc25_gauss_pointwise_trivial_gauge}
+\end{align}
+Only after this choice may
+Eq.~\ref{eq:fbc25_gauss_associator_is_omega} and
+Eq.~\ref{eq:fbc25_gauss_specialized_associator} identify nonanomalous with
+commuting projectors.  Seifnashri makes the same distinction: the direct
+calculation says $F^j=1$, while the obstruction is the phase-redefinition
+class $[F^j]$ \cite[arXiv source lines~1541--1619 and
+1956--1960]{Seifnashri2024LSM}.
+
+The existing scalar API distinguishes class-triviality from the three
+identity-axis normalization conditions, but only algebraically over
+$\mathbb C^\times$.  Both scalar $2$-cochains and scalar $3$-cochains take
+values in $\mathbb C^\times$ (the type \leanid{Units}~$\mathbb C$);
+\leanid{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass} expresses
+class-triviality, while
+\leanid{TNLean.Algebra.ScalarThreeCochain.IsNormalized} expresses the three
+identity-axis normalizations.  No present predicate restricts these units to
+the unit-modulus subgroup $U(1)$.  Consequently, this API does not yet encode
+faithfully the phase-valued fusion gauge required by
+Proposition~\paperref{fbc25}{prop:unitarity_and_gauges} of
+Ref.~\cite[lines~3268--3346]{FrancoRubio2025MPUGauging}; that phase/unitarity
+restriction remains an explicit formal boundary.  The API also does not
+package an $H^3$ quotient or attach a scalar cochain to fusion tensors.
+\footnote{Formal declarations are in
+\doclink{TNLean/Algebra/ScalarThreeCocycle}.  The corrected three-axis
+normalization is documented in
+\doclink{docs/paper-gaps/fbc25_three_cocycle_normalization_typo}.}
+
+\section{Finite-chain support convention}
+
+Seifnashri's Section~3.2 uses a periodic chain of $L$ sites.  Earlier, the
+defect width is defined independently of the system size, and the discussion
+then fixes width $k=1$ so that adjacent defects and fusion operators are
+unambiguous \cite[arXiv source lines~555--584 and 602--760]
+{Seifnashri2024LSM}.  With this convention, $\mathcal G^j_g$ is supported on
+matter sites $j,j+1$ and gauge links $(j-1,j),(j,j+1)$.  Thus projectors whose
+supports are separated commute by tensor-factor locality, and the only
+load-bearing overlap is the adjacent pair $P_j,P_{j-1}$.
+
+The adjacent calculation uses three distinct matter sites
+$j-1,j,j+1$ and three distinct gauge links from $(j-2,j-1)$ through
+$(j,j+1)$.  Thus $L\geq3$ is the natural stable finite-periodic convention.
+For $L=3$, the two endpoint names $j-2$ and $j+1$ coincide, but the three
+matter factors and three oriented link factors used by the operators remain
+distinct; every pair of different projectors is adjacent.  For $L=2$, the
+three-link sector expansion identifies gauge factors and is not the cited
+calculation.  The papers do not separately verify this wrapped case.
+Consequently, a theorem restricted to $L\geq3$ does not by itself formalize an
+unqualified all-length reading that includes $L=2$; that case requires a
+separate calculation.
+
+The current finite-region API supplies identity-tensor inclusions and
+commutation for disjoint subsets of $\mathbb Z$.
+\footnote{Formal declarations:
+\leanid{SpinChain.LocalAlgebra},
+\leanid{SpinChain.localInclusion}, and
+\leanid{SpinChain.localInclusion\_commute\_of\_disjoint} in
+\doclink{TNLean/QCA/LocalAlgebra} and
+\doclink{TNLean/QCA/DisjointSupport}.}
+It does not yet represent the heterogeneous oriented factors in
+Eq.~\ref{eq:fbc25_gauss_oriented_local_space}, nor cyclic wrap-around.
+Conversely, \leanid{MPOTensor.IsMPU} and
+\leanid{MPOTensor.IsMPU.mpo\_mem\_unitaryGroup} describe homogeneous periodic
+MPO operators for every $N>1$, but not an arbitrary-boundary local operator
+with separate matter and link factors.
+\footnote{Formal declarations are in
+\doclink{TNLean/MPS/MPU/Basic}.}
+Neither surface is by itself a definition of $\mathcal G^j_g$ or $P_j$.
+
+\section{Existing ownership boundaries}
+
+The remaining work should use the following existing declarations and issue
+boundaries.
+
+\begin{enumerate}
+    \item The comparison operators $\lambda_{a,b}^{c,d}$ and
+    Eq.~\ref{eq:fbc25_gauss_lambda_composition} belong to \ghissue{7334}.
+    That issue uses the paper's definition
+    $(\lambda^R_{c,d})^\dagger\lambda^R_{a,b}$ and standard matrix-unitary
+    multiplication.
+
+    \item Unitary $\lambda^L,\lambda^R$ and the gauge in
+    Eq.~\ref{eq:fbc25_gauss_pointwise_trivial_gauge} belong to
+    \ghissue{7336}.  That issue owns the trace normalization and the
+    compatible fusion/action gauge.
+
+    \item The fusion operators and anomaly data needed for the associator
+    comparison belong to \ghissue{7322}.  The tensor theorem $F=\omega$ in
+    Eq.~\ref{eq:fbc25_gauss_associator_is_omega} belongs to \ghissue{7359},
+    which depends on \ghissue{7322}.  The scalar must be derived from the two
+    MPU fusion trees.
+
+    \item The identity and inverse gauges used in
+    Eq.~\ref{eq:fbc25_gauss_specialized_associator} belong to
+    \ghissue{7325}.  Their normalized identity cases should be reused rather
+    than postulated again.
+
+    \item Scalar class and normalization are already expressed by
+    \leanid{TNLean.Algebra.ScalarThreeCochain.CohomologousTo},
+    \leanid{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass}, and
+    \leanid{TNLean.Algebra.ScalarThreeCochain.IsNormalized}.
+
+    \item Disjoint finite support is already expressed by
+    \leanid{SpinChain.localInclusion\_commute\_of\_disjoint}.  It closes only
+    the separated-support part after a faithful oriented embedding has been
+    given.
+\end{enumerate}
+
+Matrix unitarity itself is already expressed by
+\leanid{Matrix.unitaryGroup}, with the two equations exposed by
+\leanid{Matrix.mem\_unitaryGroup\_iff} and
+\leanid{Matrix.mem\_unitaryGroup\_iff'}.  QICLean supplies the matrix
+$C^*$-algebra infrastructure used by the finite-region API, but a repository
+search finds no defect-fusion, Gauss-law, or oriented matter--link
+representation that would make
+Eq.~\ref{eq:fbc25_gauss_local_representation} redundant.
+
+\section{Conclusion}
+
+The citation fixes a left representation
+$\mathcal G^j_g\mathcal G^j_h=\mathcal G^j_{gh}$ on two matter factors and
+the incoming/outgoing gauge links, with the incoming label transformed by
+right multiplication by $g^{-1}$ and the outgoing label by left multiplication
+by $g$.  The commuting-projector result depends on the full adjacent
+three-defect tensor calculation, unitary bubble cancellation, the theorem
+$F=\omega$, the normalized identity gauges, and a subsequent choice of a
+pointwise trivial representative of a trivial anomaly class.
+
+The open formal boundary is therefore not scalar cohomology.  It is the
+construction and oriented finite-chain placement of the unitary comparison
+operators, followed by the exact calculation in
+Eq.~\ref{eq:fbc25_gauss_adjacent_commutation_condition}.  The stable-range
+support argument is $L\geq3$; an unrestricted finite-chain theorem also owes
+the $L=2$ wrapped case.  No implementation of
+Proposition~\paperref{fbc25}{prop:comm_proj} of
+Ref.~\cite[lines~3602--3655]{FrancoRubio2025MPUGauging} is claimed here.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

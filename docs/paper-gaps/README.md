@@ -11,6 +11,15 @@ the current formal boundary.
   and the remaining reduction from a full-rank fixed point to an explicitly
   chosen positive-definite invariant weight.
 
+For the MPU symmetry-defect gauging paper:
+
+- `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
+  matter--link space and multiplication convention of the local Gauss-law
+  representation, the cited three-defect associator calculation, the
+  distinction between a trivial anomaly class and a pointwise trivial gauge,
+  and the stable finite-periodic-chain support boundary. It is a prerequisite
+  audit, not a formalization of Proposition `prop:comm_proj`.
+
 For GNVW support algebras, the source corrections and the remaining scope
 restriction are recorded separately.
 
