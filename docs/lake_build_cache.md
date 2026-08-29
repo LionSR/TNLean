@@ -22,8 +22,9 @@ regular, non-symlinked source `.lake`, `.lake/build`, and `.lake/packages`
 directories, and an absent target `.lake`. Git dependency checkouts must be
 clean and at the revisions recorded in `lake-manifest.json`; nested Lake build
 directories must not be symlinks; and Mathlib's prebuilt `Mathlib.olean` must
-already be present. If it is missing, run `lake exe cache get` in the source
-worktree before seeding. The seed command also runs `lake exe cache get` itself
+already be present. If it is missing, run
+`scripts/lake_build_locked.sh -- lake exe cache get` in the source worktree
+before seeding. The seed command also runs `lake exe cache get` itself
 to verify that the prebuilt artifacts match the current manifest revision.
 macOS `/bin/cp -c` creates independent writable files and fails instead of
 falling back to a full copy when APFS cloning is unavailable. The absolute path
@@ -38,23 +39,52 @@ validated dependency packages, including prebuilt Mathlib artifacts, and
 leaves the target without `.lake/build`. This prevents Lean from loading stale
 TNLean `.olean` files whose declarations no longer match the target source.
 
-At an identical commit, run the desired `lake build` or `lake env lean`
-command and Lake will reuse the full build. After a cross-commit seed, run
-`lake build` first so TNLean is rebuilt against the seeded dependencies. For a
-targeted check that applies the package `leanOptions`, including the Mathlib
-standard linter set, run `lake build TNLean.Path.To.File`. Linter diagnostics
+At an identical commit, run the desired command through the build wrapper and
+Lake will reuse the full build. After a cross-commit seed, run
+`scripts/lake_build_locked.sh` first so TNLean is rebuilt against the seeded
+dependencies. For a targeted check that applies the package `leanOptions`,
+including the Mathlib standard linter set, run
+`scripts/lake_build_locked.sh TNLean.Path.To.File`. Linter diagnostics
 appear only when Lake re-elaborates the module; an unchanged, already-built
 module produces no new diagnostics. A bare
 `lake env lean TNLean/Path/To/File.lean` remains useful for fast elaboration,
 but it does not apply those package options and is not a linter-bearing local
 verification.
 
+## Serialize local builds
+
+The seed command and the build wrapper use the standard macOS `lockf` utility
+with one lock file in Git's common directory. This serializes cooperating
+commands across TNLean worktrees without sharing writable package checkouts:
+
+```bash
+scripts/lake_build_locked.sh
+scripts/lake_build_locked.sh TNLean.Path.To.File
+scripts/lake_build_locked.sh -- lake build -q --log-level=info
+```
+
+Without `--`, the wrapper fetches the pinned prebuilt cache before building.
+The `--` form runs exactly the supplied command. Direct `lake` commands bypass
+the lock, so use the wrapper for local TNLean builds while another worktree may
+be warming or seeding its cache.
+
+To refresh the canonical cache and seed an issue worktree, use regular,
+self-contained package directories throughout:
+
+```bash
+git -C worktrees/hot-main fetch
+git -C worktrees/hot-main reset --hard origin/main
+(cd worktrees/hot-main && scripts/lake_build_locked.sh)
+scripts/seed_lake_build.sh worktrees/issue-N worktrees/hot-main --dry-run
+scripts/seed_lake_build.sh worktrees/issue-N worktrees/hot-main
+```
+
 ## Sort build timings
 
 Save a build log and list every job taking at least 25 seconds:
 
 ```bash
-lake build 2>&1 | tee /tmp/tnlean-build.log
+scripts/lake_build_locked.sh -- lake build 2>&1 | tee /tmp/tnlean-build.log
 python3 scripts/lake_build_hotspots.py /tmp/tnlean-build.log
 ```
 

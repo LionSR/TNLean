@@ -25,6 +25,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
@@ -93,6 +94,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
       - 'docs/ci-automation.md'
@@ -186,6 +188,7 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
+              - 'scripts/lake_build_locked.sh'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
               - 'docs/ci-automation.md'
@@ -409,6 +412,7 @@ jobs:
 
       - name: Check local cache-seeding shell syntax
         run: |
+          bash -n scripts/lake_build_locked.sh
           bash -n scripts/seed_lake_build.sh
           bash -n scripts/test_seed_lake_build.sh
 

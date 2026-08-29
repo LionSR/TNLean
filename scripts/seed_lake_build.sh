@@ -140,6 +140,13 @@ RESERVATION_DIR=""
 RESERVATION_INODE=""
 DRY_RUN="false"
 
+if test "${TNLEAN_LAKE_LOCK_HELD:-}" != "1"; then
+  # Keep the locked file description through cache fetch and APFS cloning.
+  exec 9<>"$REPO_COMMON_DIR/tnlean-lake-cache.lock"
+  /usr/bin/lockf 9
+  export TNLEAN_LAKE_LOCK_HELD=1
+fi
+
 test "$#" -ge 1 || {
   usage
   exit 2
