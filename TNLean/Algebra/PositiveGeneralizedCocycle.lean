@@ -23,6 +23,11 @@ we first take its pointwise norm and then its positive `|G|`-th root. If also
 The block label is retained throughout. No transitivity or finiteness assumption
 is imposed on the block-label type.
 
+**Local fix (block index):** The source writes `χ_g` in the corollary, while
+its preceding determinant construction gives `χ_g^x`. The block label is
+necessary in general. See
+`docs/paper-gaps/fbc25_positive_generalized_cocycle_block_index.tex`.
+
 **Local fix (determinant sign):** The source invokes the positive-root
 bijection without addressing that the determinant primitive can carry the sign
 of the regular permutation. We first take the pointwise norm and then the
