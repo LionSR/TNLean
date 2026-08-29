@@ -348,6 +348,10 @@ note.
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
+- `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
+  footnote's sheaf-cohomology comparison from the algebraic group cohomology
+  of a finite discrete group and records the direct phase-and-radial proof of
+  $H^2(G,U(1)) \cong H^2(G,\mathbb C^\times)$ in the latter setting.
 - `fbc25_mpu_action_stabilizer_source_audit.tex` separates the
   positive-length MPS reduction route to action tensors from the stronger
   arbitrary-boundary MPO-algebra route, records the nilpotency and tailwise

@@ -1,0 +1,93 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Circle and Nonzero-Complex Coefficients in Degree-Two Cohomology}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{Source context}
+
+For a finite on-site symmetry group $G$, Ref.~\cite[lines~1927--1931]{FrancoRubio2025MPUGauging}
+labels the fully unbroken phases by $H^2(G,\mathbb C^\times)$, or equivalently
+by $H^2(G,U(1))$.  Its footnote regards the two coefficient groups as
+topological abelian groups and invokes an induced comparison in sheaf
+cohomology over a CW complex.
+
+The formal development instead uses algebraic group cohomology.  It regards
+$G$ as finite and discrete and computes cohomology from inhomogeneous cochains
+with trivial coefficient action.  The sheaf-cohomology sentence does not
+directly identify these algebraic cochain complexes.
+
+\section{Finite-discrete comparison}
+
+Let $i:U(1)\longrightarrow\mathbb C^\times$ be inclusion and let
+$q:\mathbb C^\times\longrightarrow U(1)$ be the phase homomorphism
+$q(z)=z/|z|$.  Then
+\begin{align}
+    q\circ i
+        & =\operatorname{id}_{U(1)},
+    &
+    \frac{z}{i(q(z))}
+        & =|z|\in\mathbb R_{>0}.
+    \label{eq:fbc25_circle_polar_retraction}
+\end{align}
+Consequently, if $\omega$ is a $\mathbb C^\times$-valued $2$-cocycle, then
+$q\circ\omega$ is a $U(1)$-valued $2$-cocycle and its radial residual is
+\begin{align}
+    \frac{\omega(g,h)}{i(q(\omega(g,h)))}
+        & =|\omega(g,h)|.
+    \label{eq:fbc25_circle_radial_residual}
+\end{align}
+The right-hand side of
+(\ref{eq:fbc25_circle_radial_residual}) is a positive generalized cocycle on
+the one-point block space.  The finite-group positive-cocycle theorem gives a
+positive $1$-cochain $\chi$ such that
+\begin{align}
+    |\omega(g,h)|
+        & =\frac{\chi(g)\chi(h)}{\chi(gh)}.
+    \label{eq:fbc25_circle_positive_coboundary}
+\end{align}
+Thus $\omega$ and $i\circ q\circ\omega$ are cohomologous.  Every
+$\mathbb C^\times$-valued class therefore has a unit-modulus representative.
+
+Equation~(\ref{eq:fbc25_circle_polar_retraction}) also shows, without assuming
+that $G$ is finite, that the map induced by $i$ is injective: the map induced
+by $q$ is its left inverse.  Combining this injectivity with the finite-group
+surjectivity above gives
+\begin{align}
+    H^2(G,U(1))
+        & \cong H^2(G,\mathbb C^\times)
+        \qquad (G\text{ finite}),
+    \label{eq:fbc25_circle_h2_equivalence}
+\end{align}
+for algebraic group cohomology with trivial coefficient actions.
+
+\section{Formal treatment}
+
+The formal proof implements the phase map, the polar identity, the positive
+one-block trivialization, and the induced maps on the canonical degree-two
+group cohomology object.
+\footnote{Formal declarations:
+\leanid{TNLean.Algebra.ScalarCocycle.cohomologousTo\_circlePhaseInclusion}
+and \leanid{TNLean.Algebra.circleH2EquivComplexUnitsH2} in
+\doclink{TNLean/Algebra/CircleCohomology}.}
+
+\textbf{Verdict: resolved clarification.}
+The source's finite-group equivalence is available for the algebraic
+cohomology used in the classification, but it is established here by a direct
+polar-decomposition argument rather than by identifying it with the sheaf
+cohomology comparison in the footnote.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

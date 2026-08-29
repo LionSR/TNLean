@@ -31,11 +31,13 @@ in~\cite{Schuch2011Phases}.
 
 \begin{remark}[Scalar and character conventions]
     \label{rem:spt_scalar_character_conventions}
-    \uses{def:is_same_spt_phase, def:h2_cx}
-    These factor systems take values in $\C^\times$.  For unitary bond
-    representations one may choose unit-modulus representatives and obtain the
-    physical classification label in $H^2(G,\mathrm U(1))$; this normalization
-    is not an equality $\C^\times=\mathrm U(1)$.  Moreover,
+    \uses{def:is_same_spt_phase, def:h2_cx,
+        thm:mpug_circle_complex_units_h2}
+    These factor systems take values in $\C^\times$.  For finite $G$,
+    Theorem~\ref{thm:mpug_circle_complex_units_h2} gives unit-modulus
+    representatives and identifies their classes with
+    $H^2(G,\mathrm U(1))$; this comparison is not an equality
+    $\C^\times=\mathrm U(1)$.  Moreover,
     Definition~\ref{def:is_same_spt_phase} requires exact tensor equations.
     A physical state symmetry may instead act on an MPS vector by a
     one-dimensional character $\chi(g)$, producing a scalar factor in the
