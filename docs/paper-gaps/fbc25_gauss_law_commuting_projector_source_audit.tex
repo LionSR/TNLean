@@ -6,6 +6,7 @@
 \setlength{\emergencystretch}{2em}
 
 \input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
 
 \title{Source Boundary for the MPU Gauss Laws and Their Commuting Projectors}
 \author{}
@@ -17,10 +18,10 @@
 
 \section{Scope}
 
-Proposition~\texttt{prop:gausslaws} of
+Proposition~\paperref{fbc25}{prop:gausslaws} of
 Ref.~\cite[lines~3378--3499]{FrancoRubio2025MPUGauging} defines a local
 unitary representation $\mathcal G$ and the corresponding Gauss-law
-projectors $P_j$.  Proposition~\texttt{prop:comm\_proj} then states that the
+projectors $P_j$.  Proposition~\paperref{fbc25}{prop:comm_proj} then states that the
 projectors commute if and only if the MPU symmetry is nonanomalous, and refers
 to Section~3.2 of Ref.~\cite{Seifnashri2024LSM} for the adjacent-projector
 calculation \cite[lines~3602--3655]{FrancoRubio2025MPUGauging}.
@@ -101,7 +102,7 @@ Eq.~\ref{eq:fbc25_gauss_oriented_local_space}, the local operator is
     \label{eq:fbc25_gauss_local_representation}
 \end{align}
 The superscript $j$ records the support and is suppressed in the displayed
-formula \texttt{eq:mcG} of the MPU paper.  Applying first $h$ and then $g$ to
+formula \papereqref{fbc25}{eq:mcG} of the MPU paper.  Applying first $h$ and then $g$ to
 one gauge sector gives
 \begin{align}
     (a,b)
@@ -148,8 +149,8 @@ subspace; the additional constraint is $P_j=1$ on physical states.
 
 The commuting-projector proof uses more than the scalar $3$-cocycle equation.
 Let $T_{g(hk)}$ and $T_{(gh)k}$ denote the two unitary fusion paths for three
-consecutive defects in Equation~\texttt{eq:assoc} of the MPU paper.  In the
-notation of its Appendix~\texttt{app:associativity}, they satisfy
+consecutive defects in Equation~\papereqref{fbc25}{eq:assoc} of the MPU paper.  In the
+notation of its Appendix~\paperref{fbc25}{app:associativity}, they satisfy
 \begin{align}
     T_{g(hk)}
         &=F(g,h,k)T_{(gh)k}.
@@ -210,7 +211,7 @@ not by itself imply either direction.
 The MPU paper calls a representation nonanomalous when the cohomology class
 of $\omega$ is trivial.  This is an assertion about the orbit under fusion
 gauges, not the pointwise equation $\omega(g,h,k)=1$ for an arbitrary
-representative.  Proposition~\texttt{prop:unitarity\_and\_gauges} first
+representative.  Proposition~\paperref{fbc25}{prop:unitarity_and_gauges} first
 constructs a compatible fusion/action gauge in which all fusion operators are
 unitary and, in the nonanomalous case, the selected representative satisfies
 \begin{align}
@@ -226,13 +227,19 @@ calculation says $F^j=1$, while the obstruction is the phase-redefinition
 class $[F^j]$ \cite[arXiv source lines~1541--1619 and
 1956--1960]{Seifnashri2024LSM}.
 
-The existing scalar API represents this distinction faithfully.  A scalar
-$3$-cochain has values in $\mathbb C^\times$;
+The existing scalar API distinguishes class-triviality from the three
+identity-axis normalization conditions, but only algebraically over
+$\mathbb C^\times$.  Both scalar $2$-cochains and scalar $3$-cochains take
+values in $\mathbb C^\times$ (the type \leanid{Units}~$\mathbb C$);
 \leanid{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass} expresses
 class-triviality, while
 \leanid{TNLean.Algebra.ScalarThreeCochain.IsNormalized} expresses the three
-identity-axis normalizations.  It does not package an $H^3$ quotient and does
-not attach a scalar cochain to fusion tensors.
+identity-axis normalizations.  No present predicate restricts these units to
+the unit-modulus subgroup $U(1)$.  Consequently, this API does not yet encode
+faithfully the phase-valued fusion gauge required by
+Proposition~\paperref{fbc25}{prop:unitarity_and_gauges}; that phase/unitarity
+restriction remains an explicit formal boundary.  The API also does not
+package an $H^3$ quotient or attach a scalar cochain to fusion tensors.
 \footnote{Formal declarations are in
 \doclink{TNLean/Algebra/ScalarThreeCocycle}.  The corrected three-axis
 normalization is documented in
@@ -296,9 +303,11 @@ boundaries.
     \ghissue{7336}.  That issue owns the trace normalization and the
     compatible fusion/action gauge.
 
-    \item The tensor theorem $F=\omega$ in
-    Eq.~\ref{eq:fbc25_gauss_associator_is_omega} belongs to \ghissue{7322}.
-    The scalar must be derived from the two MPU fusion trees.
+    \item The fusion operators and anomaly data needed for the associator
+    comparison belong to \ghissue{7322}.  The tensor theorem $F=\omega$ in
+    Eq.~\ref{eq:fbc25_gauss_associator_is_omega} belongs to \ghissue{7359},
+    which depends on \ghissue{7322}.  The scalar must be derived from the two
+    MPU fusion trees.
 
     \item The identity and inverse gauges used in
     Eq.~\ref{eq:fbc25_gauss_specialized_associator} belong to
@@ -342,7 +351,7 @@ operators, followed by the exact calculation in
 Eq.~\ref{eq:fbc25_gauss_adjacent_commutation_condition}.  The stable-range
 support argument is $L\geq3$; an unrestricted finite-chain theorem also owes
 the $L=2$ wrapped case.  No implementation of
-Proposition~\texttt{prop:comm\_proj} is claimed here.
+Proposition~\paperref{fbc25}{prop:comm_proj} is claimed here.
 
 \bibliographystyle{alpha}
 \bibliography{references}
