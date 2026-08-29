@@ -314,7 +314,7 @@ For every positive chain length,
 This refinement is formalized by
 \leanid{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}.
 
-\section{Remaining physical-space construction}
+\section{Physical-space completion and chain-length boundary}
 
 The all-label density identity corresponding to
 Eq.~\ref{eq:cpsv16_topological_projector_recursion_source_chain_decomposition},
@@ -334,15 +334,22 @@ Eqs.~\ref{eq:cpsv16_topological_projector_recursion_source_gibbs_decomposition}
 and~\ref{eq:cpsv16_topological_projector_recursion_source_gibbs_commutator}.
 
 The adjoint retained-row map reconstructs the physical density operator from
-this analogue. It does not yet produce physical projectors and a finite
-physical-space Hamiltonian because the rectangular vertical map may have a
-nontrivial complementary zero sector. The required complementary-subspace
-extension is recorded in
+this analogue. Extending the retained one-site energy by zero on the orthogonal
+physical complement gives a finite physical-space Hamiltonian, and transporting
+the retained projectors through the adjoint sitewise coisometry gives physical
+projectors. This completes the source decomposition for every chain length
+$L\geq2$.\footnote{Formal declaration:
+\leanid{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
+in \doclink{TNLean/MPS/MPDO/CPSVTopologicalPhysicalGibbs}. The corresponding
+Blueprint entry is
+\path{thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two}.}
+The complementary-subspace construction is recorded in
 \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
 
-Independently, Ref.~\cite{Cirac2016MPDO_arXiv} defines the local term on two
-spins but gives no separate convention for a one-site periodic chain. This
-boundary is recorded in
+Ref.~\cite{Cirac2016MPDO_arXiv} defines the local term on two spins but gives no
+separate convention for a one-site periodic chain. Thus the physical-space
+theorem covers precisely the source-defined range $L\geq2$; no length-one
+statement is asserted. This boundary is recorded in
 \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
 
 \bibliographystyle{alpha}

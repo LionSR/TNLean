@@ -118,7 +118,7 @@ Their dispositions are:
 
 | Source label | Source line | Disposition |
 |---|---:|---|
-| `RFP-gauge` | 2101 | The printed pure-state equivalence is false.  The cube-phase tensor blocks to itself up to swap gauge-phase but has non-idempotent transfer.  The exact source-shaped counterexample is tracked by issue #5920 and Blueprint node `thm:cpsv_pure_rfp_gauge_status` (the former printed-status stub `thm:cpsv_rfp_gauge_printed_status` was removed; superseded by `thm:cpsv_pure_rfp_gauge_status`, which is `\leanok`). |
+| `RFP-gauge` | 2101 | The printed pure-state equivalence is false.  The cube-phase tensor blocks to itself up to swap gauge-phase but has non-idempotent transfer.  The exact source-shaped counterexample is formalized in `TNLean/MPS/RFP/GaugeBlockingCounterexample.lean` and Blueprint node `thm:cpsv_pure_rfp_gauge_status`; issue #5920 is closed.  The former printed-status stub `thm:cpsv_rfp_gauge_printed_status` was removed in favor of this `\leanok` refutation node. |
 | `Strong-RFP` | 2110 | The unnormalized structural predicate is `MPOTensor.IsStrongRFP`, with literal relation $M_2=U(M_1\otimes P)U^\dagger$, $P\geq0$, and physical-closure equivalence recorded in Blueprint nodes `def:mpdo_strong_rfp` and `thm:mpdo_strong_rfp_phys_close`. Its general periodic geometric-rank implication and the Fibonacci obstruction are complete. |
 | `rank-Fibonacci` | 2122 | The periodic rank formula, its non-geometricity, and the resulting $\lnot\,\mathrm{IsStrongRFP}$ theorem are complete for every positive choice of fusion weights with the prescribed Fibonacci support; see Blueprint nodes `thm:cpsv_fibonacci_periodic_rank`, `thm:cpsv_fibonacci_operator_rank_not_geometric`, and `thm:cpsv_fibonacci_not_strong_rfp`. |
 | `eq:1` | 2158 | This is the internal diagonalization calculation supporting `rank-Fibonacci`, not an independent theorem. |
@@ -154,7 +154,7 @@ the printed statement.
 | Corollary A.6 | none since the nonzero-coefficient convention; anchor on `cor:sector_bnt_proportional_unitary_sector_match` | unitary refinements in Chapter 11 |
 | Proposition C.14 | none since the printed-status stub `thm:cpsv_prop_c14_printed_status` was removed as redundant; anchor on `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` | `thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal` |
 | Examples 4.10--4.12 | `thm:cpsv_examples410_412_status` | Example 4.10 is complete for the corrected fixed-$p=1/4$ witness under #6301; Example 4.11's printed SAL clause is refuted and its printed non-ZCL clause is verified under #6302; Example 4.12 has the literal normalization obstruction, normalized channel equations, strict four-site SSA defect, and full GSNNCH exclusion complete under #6038, with the line-246 unit-weight boundary recorded |
-| Appendix D `RFP-gauge` | none since the printed-status stub `thm:cpsv_rfp_gauge_printed_status` was removed; anchor on `thm:cpsv_pure_rfp_gauge_status` | cube-phase obstruction plus active issue #5920 |
+| Appendix D `RFP-gauge` | none since the printed-status stub `thm:cpsv_rfp_gauge_printed_status` was removed; anchor on `thm:cpsv_pure_rfp_gauge_status` | exact cube-phase refutation completed under closed issue #5920 |
 | Appendix D Fibonacci periodic rank formula | `thm:cpsv_fibonacci_periodic_rank`; `thm:cpsv_fibonacci_operator_rank_not_geometric`; `thm:cpsv_fibonacci_not_strong_rfp` | complete periodic rank formula, non-geometricity, and $\lnot\,\mathrm{IsStrongRFP}$ conclusion |
 
 Example 3.4 no longer needs a separate source-status node.  Chapter 15 states
