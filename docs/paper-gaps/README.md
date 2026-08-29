@@ -228,6 +228,12 @@ For MPDO renormalization fixed points:
 
 For the non-periodic MPS Fundamental Theorem background:
 
+- `mgsc18_reduction_proportionality_scalar.tex` records that Proposition 20
+  of arXiv:1706.07329 silently replaces proportional state families by equal
+  state families.  Its unscaled conclusion is false for every unrestricted
+  scalar $\lambda\ne1$; the equality specialization used for MPU fusion is
+  unaffected, while a nonzero general scalar contributes
+  $\lambda^{\lvert\mathbf a\rvert}$ to the reduced word.
 - [cpsv16_bnt_uniqueness_zero_coefficient.tex](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.pdf) records the nonzero-coefficient
   convention: every coefficient of a CPSV16 canonical form is nonzero, as the
   line-246 normalization presupposes. Under this convention Proposition 2.7,
