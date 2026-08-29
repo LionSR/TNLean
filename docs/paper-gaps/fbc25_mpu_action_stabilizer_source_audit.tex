@@ -1,0 +1,479 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Source Boundary for MPU Action Tensors and Stabilizer Data}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{open-gap}{open}
+
+\section{Scope and conclusion}
+
+The source coordinates in this note are pinned to
+\path{Papers/2502.20257/main.tex}, the official
+arXiv:1706.07329v2 file \path{cornerproblem.tex}, the official
+arXiv:2203.12563v3 file \path{REsubmission.tex}, and the official
+arXiv:2405.00439v2 file \path{MPU-DW.tex}.  Thus every source-line range below
+is reproducible against a specified source version rather than a reformatted
+PDF.
+
+The discussion of an MPU action on MPSs in
+Ref.~\cite[lines~1782--1931]{FrancoRubio2025MPUGauging} uses two logically
+different results.  The existence and scalar uniqueness of the action tensors
+come from the MPS reduction theorem of
+Ref.~\cite{Molnar2018SemiInjective}.  The description of scalar
+$L$-symbols by stabilizer data comes from Sections~3 and~4.1 of
+Ref.~\cite{GarreRubio2023MPOSym}.  The second paper also proves an existence
+theorem for action tensors, but under an arbitrary-boundary invariance
+hypothesis that is stronger than the periodic-boundary hypothesis in the
+first paper and in Ref.~\cite{FrancoRubio2025MPUGauging}.
+
+Thus there are two valid existence routes, but they cannot be interchanged.
+For the simple-MPU setting of Ref.~\cite{FrancoRubio2025MPUGauging}, the
+source-faithful route is the positive-length MPS reduction theorem, followed
+by its nilpotency and scalar-uniqueness results.  Appendix~A of
+Ref.~\cite{GarreRubio2023MPOSym} applies only after arbitrary-boundary
+invariance has been supplied.  Once action and fusion tensors exist, the
+scalar analysis of Section~4.1 of that paper applies independently of which
+existence route produced them.
+
+This distinction is the present open formal boundary.  The scalar
+$L$-symbol relations are already formalized, whereas the tensor-valued
+reduction and action data are not.
+
+\section{The reduction route to action tensors}
+
+Let $A_x$ be an injective MPS tensor for every $x$ in a set $\mathsf X$, and
+let $B_{g,x}$ denote the MPS tensor obtained by stacking the MPU tensor
+$\mathcal U_g$ on $A_x$ and vectorizing the physical legs.  The periodic
+symmetry assumption is equality of the positive-length MPS vectors:
+\begin{align}
+    \mathcal V_N(B_{g,x})
+        &=\mathcal V_N(A_{g\mathbin{\cdot}x}),
+        &&N\geq 1.
+    \label{eq:fbc25_action_audit_positive_length_symmetry}
+\end{align}
+Here the dot denotes the left action fixed below.  The target tensor
+$A_{g\mathbin{\cdot}x}$ is injective and therefore normal.
+
+Proposition~20 of Ref.~\cite[source lines~3124--3133, with proof at
+lines~3815--3939]{Molnar2018SemiInjective} applies to a normal target tensor
+$A$ and an arbitrary tensor $B$ which generates the same MPS family, allowing
+an exponential scalar $\lambda^N$.  In the exact symmetry relation
+(\ref{eq:fbc25_action_audit_positive_length_symmetry}), that scalar is one.
+The proposition supplies matrices $V_{g,x}$ and $W_{g,x}$ such that
+\begin{align}
+    V_{g,x}W_{g,x}
+        &=\mathbf 1,
+    \label{eq:fbc25_action_audit_reduction_retraction}\\
+    V_{g,x}B_{g,x}^{i_1}\cdots B_{g,x}^{i_n}W_{g,x}
+        &=A_{g\mathbin{\cdot}x}^{i_1}\cdots
+          A_{g\mathbin{\cdot}x}^{i_n},
+        &&n\geq 1.
+    \label{eq:fbc25_action_audit_reduction_words}
+\end{align}
+The proof obtains
+(\ref{eq:fbc25_action_audit_reduction_retraction}) by taking the empty
+interior word in the local reduction identity; it does not require equality
+of the two length-zero periodic MPS coefficients.
+
+The two matrices in
+(\ref{eq:fbc25_action_audit_reduction_words}) are the source of the action
+tensors $A^{\Gamma}_{g,x}$ and
+$A^{\text{\reflectbox{$\Gamma$}}}_{g,x}$ in the target paper, after matching
+the left and right virtual-leg orientations in its diagrams.  Proposition~21
+and Definition~8 of Ref.~\cite[source lines~3142--3152, with proof at
+lines~3943--3986]{Molnar2018SemiInjective} introduce the residual matrices
+\begin{align}
+    R_{g,x}^{i}
+        &=B_{g,x}^{i}
+          -W_{g,x}A_{g\mathbin{\cdot}x}^{i}V_{g,x}
+    \label{eq:fbc25_action_audit_residual_definition}
+\end{align}
+and prove that their generated algebra is nilpotent.  The nilpotency length
+$\ell_{g,x}$ is the least length after which every residual word vanishes:
+\begin{align}
+    R_{g,x}^{i_1}\cdots R_{g,x}^{i_n}
+        &=0,
+        &&n\geq \ell_{g,x}.
+    \label{eq:fbc25_action_audit_residual_nilpotency}
+\end{align}
+Expanding $B_{g,x}$ using
+(\ref{eq:fbc25_action_audit_residual_definition}) and applying
+(\ref{eq:fbc25_action_audit_residual_nilpotency}) gives the exterior and
+interior action identities used in the target paper.  This is why its
+Equation~\texttt{eq:action\_exterior} requires exterior tails of length
+$m\geq\ell$, whereas Equation~\texttt{eq:action\_interior} permits an
+interior length $n\geq0$
+\cite[lines~1787--1870]{FrancoRubio2025MPUGauging}.
+
+Theorem~22 of Ref.~\cite[source lines~3154--3162, with proof at
+lines~3990--4035]{Molnar2018SemiInjective} gives the precise uniqueness
+statement.  If $(V,W)$ and $(\widetilde V,\widetilde W)$ are two reductions
+whose nilpotency lengths are at most $N_0$, then there is
+$c\in\mathbb C^\times$ such that, for every word of length $n>2N_0$,
+\begin{align}
+    VB^{i_1}\cdots B^{i_n}
+        &=c\,\widetilde V B^{i_1}\cdots B^{i_n},
+    \label{eq:fbc25_action_audit_reduction_left_uniqueness}\\
+    B^{i_1}\cdots B^{i_n}W
+        &=c^{-1}B^{i_1}\cdots B^{i_n}\widetilde W.
+    \label{eq:fbc25_action_audit_reduction_right_uniqueness}
+\end{align}
+This is tailwise scalar uniqueness.  It is not the unconditional assertion
+$V=c\widetilde V$ and $W=c^{-1}\widetilde W$ as bare matrices.
+
+Theorem~1 of Ref.~\cite[source lines~358--377]{GarreRubioSchuch2024DomainWall}
+restates the nilpotency-one case in the form used for MPU products and MPU
+actions.  Its hypotheses give
+\begin{align}
+    VB^i\widehat V
+        &=A^i,
+    \label{eq:fbc25_action_audit_domain_wall_reduction}\\
+    B^i\widehat V A^j V B^k
+        &=B^iB^jB^k,
+    \label{eq:fbc25_action_audit_domain_wall_exterior}\\
+    V\widehat V
+        &=\mathbf 1.
+    \label{eq:fbc25_action_audit_domain_wall_retraction}
+\end{align}
+The statement is explicitly described there as informal: its footnote assumes
+that the off-diagonal residual has nilpotency length one and says that this is
+achieved by blocking.  Likewise, the target paper first permits
+$m\geq\ell$ and then assumes that all nilpotency lengths have been reduced to
+one by blocking
+\cite[lines~1870--1874]{FrancoRubio2025MPUGauging}.  Consequently a formal
+action-tensor theorem must either retain $\ell$ in its identities or prove the
+blocking step before using the one-site identities.  Simplicity of the MPU is
+not, by itself, a cited proof that an unblocked stacked tensor has
+$\ell=1$.
+
+The relevant global equality in the formal library is positive-length equality
+for possibly different bond dimensions.  Full equality at length zero would
+compare the traces of two identity matrices and therefore force equality of
+the bond dimensions, although the stacked tensor $B_{g,x}$ and the reduced
+tensor $A_{g\mathbin{\cdot}x}$ need not have equal bond dimensions.  Thus the
+correct formal input is
+\leanid{MPSTensor.SameMPV}\textsubscript{2}\leanid{Pos}, not
+\leanid{MPSTensor.SameMPV}\textsubscript{2}.
+
+\section{The arbitrary-boundary route is different}
+
+Section~2 of Ref.~\cite[source lines~302--331]{GarreRubio2023MPOSym} defines
+an MPS arbitrary-boundary subspace by allowing every virtual boundary matrix
+$X$, and an MPO algebra by allowing every MPO boundary matrix $C$.  Its
+closedness condition requires one boundary matrix, independent of the system
+size, to represent each product of arbitrary-boundary MPOs.  Section~3 then
+defines symmetry by the stronger condition that for every $C$ and $X$ there
+is a boundary matrix $Y(C,X)$, again independent of $N$, such that
+\begin{align}
+    O^N_{T,C}\,\lvert\psi^N_{A,X}\rangle
+        &=\lvert\psi^N_{A,Y(C,X)}\rangle,
+        &&\text{for every }C,X,N.
+    \label{eq:fbc25_action_audit_arbitrary_boundary_invariance}
+\end{align}
+This is Equation~\texttt{eq:compatible} of that source
+\cite[source lines~429--460]{GarreRubio2023MPOSym}.  Its Appendix~A starts
+from the size-independent linear boundary map, takes a minimal-rank
+decomposition, and uses the one-site and two-site identities plus block
+injectivity to obtain fusion tensors and their orthogonality
+\cite[source lines~2305--2454]{GarreRubio2023MPOSym}.  The final sentence
+applies the same construction to
+(\ref{eq:fbc25_action_audit_arbitrary_boundary_invariance}) to obtain action
+tensors and their orthogonality
+\cite[source line~2455]{GarreRubio2023MPOSym}.
+
+By contrast, the simple-MPU hypothesis gives the periodic relation
+(\ref{eq:fbc25_action_audit_positive_length_symmetry}) for the distinguished
+closed boundaries.  It does not quantify over $C$ and $X$, and it does not
+supply the boundary map used in Appendix~A.  The mismatch is structural, not
+merely a missing lemma.  Ref.~\cite[source lines~1211--1216]{GarreRubio2023MPOSym}
+proves that an injective group MPO satisfying $U_gU_h=U_{gh}$ and
+$U_e=\mathbf 1$ must be on-site, with trivial $3$-cocycle, if its fusion
+tensors also satisfy the arbitrary-boundary closedness condition.  Hence an
+anomalous injective MPU representation with $U_e=\mathbf 1$ cannot satisfy
+that condition.
+
+There is a second difference.  In the arbitrary-boundary group algebra of
+Ref.~\cite[source lines~638--683]{GarreRubio2023MPOSym}, the neutral operator
+$O_e$ is generally a projector onto a relevant periodic-boundary subspace,
+not the identity on the full Hilbert space, and the operators need not be
+unitary.  The target paper instead uses simple injective MPUs, each unitary on
+the full periodic chain, with $\mathcal U_e=\mathbf 1$.  The reduction theorem
+of the preceding section is designed for this latter situation.
+
+\section{Left-action and scalar conventions}
+
+The target paper uses a left action: $g\mathbin{\cdot}x$ is the block obtained
+by applying $g$ to $x$, and $gh\mathbin{\cdot}x$ means that $h$ acts first and
+then $g$.  Its transitivity assumption is that for every $x,y\in\mathsf X$
+there is $g\in G$ with $y=g\mathbin{\cdot}x$
+\cite[lines~1782--1785]{FrancoRubio2025MPUGauging}.  With this convention,
+the scalar compatibility equation is
+\begin{align}
+    L^x_{g,hk}L^x_{h,k}
+        &=\omega(g,h,k)L^{k\mathbin{\cdot}x}_{g,h}L^x_{gh,k}.
+    \label{eq:fbc25_action_audit_l_compatibility}
+\end{align}
+The shifted block is $k\mathbin{\cdot}x$, not
+$g\mathbin{\cdot}x$ or $h\mathbin{\cdot}x$, because the comparison begins
+with the rightmost action.  Equation
+(\ref{eq:fbc25_action_audit_l_compatibility}) is
+Equation~\texttt{eq:omega\_and\_Ls} of the target paper
+\cite[lines~1920--1924]{FrancoRubio2025MPUGauging} and agrees with the group
+specialization in Ref.~\cite[source lines~683--719]{GarreRubio2023MPOSym}.
+
+The target paper scales its reflected-$\Gamma$ action tensor by
+$\gamma_{g,x}$ and its $\Gamma$ action tensor by $\gamma_{g,x}^{-1}$:
+\begin{align}
+    A^{\text{\reflectbox{$\Gamma$}}}_{g,x}
+        &\longmapsto
+          \gamma_{g,x}A^{\text{\reflectbox{$\Gamma$}}}_{g,x},
+    &
+    A^{\Gamma}_{g,x}
+        &\longmapsto
+          \gamma_{g,x}^{-1}A^{\Gamma}_{g,x}.
+    \label{eq:fbc25_action_audit_action_tensor_gauge}
+\end{align}
+Together with its fusion-tensor convention this gives
+\begin{align}
+    L^x_{g,h}
+        &\longmapsto
+          \frac{\gamma_{gh,x}\,\beta_{g,h}}
+               {\gamma_{g,h\mathbin{\cdot}x}\,\gamma_{h,x}}
+          L^x_{g,h}.
+    \label{eq:fbc25_action_audit_target_l_gauge}
+\end{align}
+These are Equations~\texttt{eq:scalar\_act\_ten} and
+\texttt{eq:Lsymbgauge} of Ref.~\cite[lines~1870--1919]{FrancoRubio2025MPUGauging}.
+Equation~\texttt{gdgroup} of Ref.~\cite[source lines~720--726]{GarreRubio2023MPOSym}
+prints the reciprocal factor.  The two formulas use inverse names for both
+scalar gauges: replacing the 2023 parameters by
+$\gamma^{-1}$ and $\beta^{-1}$ gives
+(\ref{eq:fbc25_action_audit_target_l_gauge}).  The compatibility equation is
+unchanged.  The formal library follows the target convention, so a proof may
+not import the 2023 gauge formula without this inversion.
+
+\section{Stabilizer data and the meaning of
+  \texorpdfstring{$(H,\psi)$}{(H, psi)}}
+
+Assume now that $G$ is finite, $\mathsf X$ is nonempty, and the left action is
+transitive.  After choosing $x_0\in\mathsf X$, the subgroup in Section~4.1 of
+Ref.~\cite[source lines~731--749]{GarreRubio2023MPOSym} is precisely the
+stabilizer
+\begin{align}
+    H=\operatorname{Stab}_G(x_0)
+        &=\{h\in G\mid h\mathbin{\cdot}x_0=x_0\}.
+    \label{eq:fbc25_action_audit_stabilizer}
+\end{align}
+It is not an additional ``largest'' subgroup and it need not be normal.
+Transitivity gives an equivariant bijection of sets
+\begin{align}
+    G/H&\longrightarrow\mathsf X,
+    &gH&\longmapsto g\mathbin{\cdot}x_0,
+    \label{eq:fbc25_action_audit_coset_equivalence}\\
+    \lvert\mathsf X\rvert
+        &=\lvert G/H\rvert.
+    \label{eq:fbc25_action_audit_coset_cardinality}
+\end{align}
+Here $G/H$ is the left-coset set.  It is not a quotient group unless $H$ is
+normal.  Replacing $x_0$ by $g\mathbin{\cdot}x_0$ replaces $H$ by the
+conjugate subgroup $gHg^{-1}$, so the basepoint-free datum is a conjugacy
+class of stabilizer data, not a distinguished subgroup.
+
+Restricting
+(\ref{eq:fbc25_action_audit_l_compatibility}) to $H$ shows that
+$\omega|_H$ is cohomologically trivial.  In the convention printed in
+Ref.~\cite[source lines~740--749]{GarreRubio2023MPOSym}, one chooses a
+$2$-cochain $\beta$ satisfying
+\begin{align}
+    \omega(h_1,h_2,h_3)
+    \frac{\beta_{h_1,h_2}\,\beta_{h_1h_2,h_3}}
+         {\beta_{h_2,h_3}\,\beta_{h_1,h_2h_3}}
+        &=1,
+        &&h_1,h_2,h_3\in H,
+    \label{eq:fbc25_action_audit_restricted_trivialization}
+\end{align}
+and then defines the representative
+\begin{align}
+    \psi_{x_0}(h_1,h_2)
+        &=\frac{L^{x_0}_{h_1,h_2}}{\beta_{h_1,h_2}}.
+    \label{eq:fbc25_action_audit_psi_representative}
+\end{align}
+In that chosen trivializing gauge, $\psi_{x_0}$ is a $2$-cocycle.  Changing
+the action-tensor gauge changes it by a $2$-coboundary, so the invariant is its
+class $[\psi_{x_0}]\in H^2(H,\mathbb C^\times)$.  Before choosing a
+trivializer for $\omega|_H$, the corresponding object is a trivializing
+$2$-cochain rather than a canonically based element of $H^2$.
+
+Equation~(20) of Ref.~\cite{GarreRubio2023MPOSym} makes the
+representative-level choices explicit; it is at lines~752--759 of the
+official v3 source.  Choose a representative
+$k_\alpha\in G$ for every coset and define $h_2,h_1\in H$ by
+$g_2k_\alpha=k_\beta h_2$ and
+$g_1k_\beta=k_\gamma h_1$.  The source gives
+\begin{align}
+    L^\alpha_{g_1,g_2}
+        &=\frac{
+          \omega(g_1g_2k_\alpha,h_2^{-1},h_1^{-1})\,
+          \psi(h_1,h_2)}{
+          \omega(g_1,g_2k_\alpha,h_2^{-1})\,
+          \omega(g_1,g_2,k_\alpha)}.
+    \label{eq:fbc25_action_audit_l_reconstruction}
+\end{align}
+Thus Equation~(20) constructs a chosen scalar $L$-symbol representative from
+a chosen representative of $\omega$, a chosen trivialization and cocycle
+representative, a basepoint, and coset representatives.  It is not a canonical
+formula on cohomology classes, and it does not construct action tensors or an
+MPU realization.
+
+For fixed $(G,\omega,H)$, Ref.~\cite[source line~761]{GarreRubio2023MPOSym}
+states that gauge classes of solutions form a torsor for
+$H^2(H,\mathbb C^\times)$.  A choice of trivialization identifies that torsor
+with the group, but in general there is no canonical solution corresponding
+to the identity cohomology class.  Accordingly, the notation $(H,\psi)$ has
+three levels which should not be conflated:
+\begin{enumerate}
+    \item in Equation~(20), $H$ and $\psi$ are chosen representatives, together
+          with the unprinted auxiliary gauge choices just listed;
+    \item for scalar classification, the invariant is stabilizer data up to
+          basepoint conjugacy and a gauge class represented by $\psi$;
+    \item for phases, the invariant is the resulting equivalence class of
+          $L$-symbols, under the hypotheses of the phase theorem.
+\end{enumerate}
+The phase theorem itself concerns periodic Hamiltonians with exact MPS ground
+spaces, equivalent $F$-symbols, and the restricted symmetric gapped paths
+specified in that paper
+\cite[source lines~1219--1272, especially the main result at line~1231]
+{GarreRubio2023MPOSym}.  It is not a classification of arbitrary Hamiltonian
+phases, raw cocycle representatives, action tensors, or MPU tensor data.
+Conversely, the scalar construction
+(\ref{eq:fbc25_action_audit_l_reconstruction}) proves existence of an
+$L$-symbol solution for admissible chosen data, but not existence of tensor
+data realizing every such solution in the simple-MPU setting.
+
+\section{Present formal boundary}
+
+The existing library separates the following layers.
+
+\begin{itemize}
+    \item QICLean defines \leanid{Kraus.IsInjective},
+          \leanid{Kraus.IsNBlkInjective}, and \leanid{Kraus.IsNormal} for one
+          matrix family.  The second predicate says that the length-$N$ words
+          of one tensor span its full matrix algebra.  It is not the paper's
+          direct-sum block-injective condition
+          \begin{align}
+              A^i&=\bigoplus_{x\in\mathsf X}A_x^i,
+              &\operatorname{span}\{A_x^i\}_i
+                  &=\operatorname{Mat}_{D_x}(\mathbb C)
+                  \quad\text{for every }x.
+              \label{eq:fbc25_action_audit_block_injective_distinction}
+          \end{align}
+          The direct-sum assembly is available through
+          \leanid{MPSTensor.toTensorFromBlocks} and the richer
+          \leanid{MPSTensor.SectorDecomposition} infrastructure, but no
+          existing predicate attaches a transitive group action and an MPU
+          action to that family.
+
+    \item TNLean defines \leanid{MPOTensor.IsMPU} by unitarity for every
+          system size $N>1$, following the 2017 MPU convention, and defines
+          \leanid{MPOTensor.IsMPUSimple} by the two local simple-tensor
+          contractions.  It also has the product tensor
+          \leanid{MPOTensor.mulTensor} and the doubled-index view
+          \leanid{MPOTensor.toMPSTensor}.  It has no group-indexed MPU
+          representation object and no tensor for the stacked action of an
+          MPU on an MPS.  Those notions must precede the reduction theorem;
+          they should not be inferred from the scalar $L$-symbol API.
+
+    \item \leanid{MPSTensor.SameMPV}\textsubscript{2}\leanid{Pos}
+          expresses the global
+          equality in
+          (\ref{eq:fbc25_action_audit_positive_length_symmetry}) across
+          different bond dimensions.  The missing result is the
+          Moln\'ar--Ge--Schuch--Cirac reduction package:
+          (\ref{eq:fbc25_action_audit_reduction_retraction})--
+          (\ref{eq:fbc25_action_audit_residual_nilpotency}), its transport
+          under blocking, and the tailwise uniqueness
+          (\ref{eq:fbc25_action_audit_reduction_left_uniqueness})--
+          (\ref{eq:fbc25_action_audit_reduction_right_uniqueness}).
+
+    \item Mathlib's \leanid{MulAction},
+          \leanid{MulAction.IsPretransitive},
+          \leanid{MulAction.stabilizer}, and
+          \leanid{MulAction.orbitEquivQuotientStabilizer} provide the correct
+          action, transitivity, stabilizer, and coset-set language for
+          (\ref{eq:fbc25_action_audit_stabilizer})--
+          (\ref{eq:fbc25_action_audit_coset_equivalence}).  Transitivity is
+          represented by pretransitivity together with nonemptiness.  No
+          normality hypothesis on $H$ should be introduced.
+
+    \item TNLean's \leanid{TNLean.Algebra.LSymbol} is the scalar function
+          $\mathsf X\to G\to G\to\mathbb C^\times$.
+          \leanid{TNLean.Algebra.LSymbol.IsCompatible} is exactly
+          (\ref{eq:fbc25_action_audit_l_compatibility}), and
+          \leanid{TNLean.Algebra.LSymbol.gauge} is exactly
+          (\ref{eq:fbc25_action_audit_target_l_gauge}).  The name
+          \leanid{TNLean.Algebra.ActionTensorGauge} denotes only the scalar
+          cochain $\gamma_{g,x}$; it is not tensor data.  These declarations
+          deliberately assert neither existence of action tensors nor their
+          attachment to an MPU.
+
+    \item \leanid{TNLean.Algebra.H2} is the quotient of genuine
+          $\mathbb C^\times$-valued $2$-cocycles by coboundary equivalence.
+          Its coefficient type is \leanid{Units}\,$\mathbb C$; despite prose in
+          some module comments using $U(1)$, the implemented coefficient
+          group matches the $\mathbb C^\times$ notation of the cited papers.
+          No present theorem packages the restriction to a stabilizer, a
+          chosen trivializer of $\omega|_H$, the torsor of solutions, or the
+          representative reconstruction
+          (\ref{eq:fbc25_action_audit_l_reconstruction}).
+
+    \item The on-site, single-block specialization is already represented by
+          \leanid{MPSTensor.IsOnSiteSymmetric} and
+          \leanid{MPSTensor.virtual_rep_of_symmetric_injective}.  It should be
+          reused when $H=G$ and the anomaly is trivial, but it is not a
+          substitute for an anomalous MPU acting on several injective blocks.
+          Likewise, the MPDO structure named
+          \leanid{MPOTensor.BNTFusionTensorClause} concerns the CPSV16
+          renormalization-fixed-point fusion clause and is not the group-MPU
+          fusion tensor of the present sources.
+\end{itemize}
+
+The tensor-valued reduction package, rather than a new cohomology interface,
+is therefore the next mathematical prerequisite.  Until it exists, the
+formal scalar $L$-symbol results must not be described as proving the
+existence or classification of MPU action tensors.
+
+\section{Verdict}
+
+The cited action-tensor claim is supported by
+Ref.~\cite{Molnar2018SemiInjective}, provided that one retains the normal
+target, positive-length periodic equality, residual nilpotency, and finite
+blocking used by that theorem.  Its scalar uniqueness is the tailwise
+statement
+(\ref{eq:fbc25_action_audit_reduction_left_uniqueness})--
+(\ref{eq:fbc25_action_audit_reduction_right_uniqueness}).  The
+arbitrary-boundary theorem of Ref.~\cite{GarreRubio2023MPOSym} is not an
+alternative proof under the simple-MPU hypotheses.
+
+The stabilizer classification is a classification of gauge classes of scalar
+$L$-symbol solutions, and under the separate phase hypotheses it classifies
+the corresponding exact-MPS symmetric phases.  The notation $(H,\psi)$ does
+not by itself denote tensor data, and the solution set is naturally an
+$H^2(H,\mathbb C^\times)$-torsor.  The formal gap remains open exactly at the
+reduction-to-action-tensor layer; no new tensor data or cohomology interface is
+introduced in this note.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

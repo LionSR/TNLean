@@ -321,3 +321,12 @@ note.
   load-bearing κ/θ/φ phase assembly (Case 3). It also records the scope
   restriction of `periodicBasis_eventuallyLinearlyIndependent` (independence
   half only, no spanning clause).
+
+For the MPU action on injective MPS blocks in arXiv:2502.20257:
+
+- `fbc25_mpu_action_stabilizer_source_audit.tex` separates the
+  positive-length MPS reduction route to action tensors from the stronger
+  arbitrary-boundary MPO-algebra route, records the nilpotency and tailwise
+  scalar-uniqueness hypotheses, fixes the left-action and scalar-gauge
+  conventions, and explains the stabilizer/coset and
+  $H^2(H,\mathbb C^\times)$-torsor meanings of the notation $(H,\psi)$.
