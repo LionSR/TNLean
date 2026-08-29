@@ -84,9 +84,9 @@ This is the paper's main novel contribution. The tables preserve the original sc
 
 | Item | Description | Formalizability | Our Status |
 |------|-------------|-----------------|------------|
-| **PEPS definition** | Tensor network on 2D lattice | **Out of scope** | No PEPS infrastructure exists. |
-| **Bulk-boundary correspondence** | PEPS RFP ↦ boundary MPDO RFP via transfer operator fixed points | **Out of scope** | Would need 2D TN infrastructure. |
-| **Holographic motivation** | RFP MPDO as boundary theory of 2D topological state | Conceptual | Not formalizable without 2D. |
+| **PEPS definition** | Tensor network on 2D lattice | Partial | Graph-level PEPS infrastructure exists. The homogeneous rank-five component function is used directly as the input to `TNLean.PEPS.doubledLocalTransferMPOTensor` and Blueprint `def:peps_doubled_local_transfer_tensor`; no duplicative public local-tensor wrapper is introduced. Distinct horizontal and vertical virtual dimensions are a project generalization permitted by the diagram. |
+| **Bulk-boundary correspondence** | PEPS RFP ↦ boundary MPDO RFP via transfer operator fixed points | Hard | The project convention for the local ket-bra doubled transfer tensor suggested by FigureDavid1 and its component formula are complete in `TNLean.PEPS.doubledLocalTransferMPOTensor` and Blueprint `def:peps_doubled_local_transfer_tensor`. The selected transfer fixed point, algebraic `PEPS-RFP` typing, fixed-point normalization, ancillary factor, globally trace-preserving channels $\mathcal S$ and $\mathcal T$, and implication to `MPOTensor.IsRFPViaTS` remain explicit not-ready nodes. |
+| **Holographic motivation** | RFP MPDO as boundary theory of 2D topological state | Conceptual | Retained as motivation; no holographic correspondence theorem is claimed. |
 
 ### §4.3 Zero Correlation Length for MPDO (Def 4.2, Def 4.3, Thm 4.4)
 
@@ -220,7 +220,7 @@ This is a **dimension-independent** result (not restricted to 1D/MPS). Could be 
 
 1. **Thm 4.14 (general MPDO RFP ⟺ algebra)** — Paper's headline theorem. ~800+ LOC. Needs all of Tier 3 plus C*-algebra isomorphism theory.
 2. **Fusion categories / Levin-Wen connection** — Abstract algebra far beyond current scope.
-3. **PEPS / boundary theory correspondence** — Needs 2D tensor network infrastructure.
+3. **PEPS / boundary theory correspondence:** The homogeneous component-function input and doubled local transfer MPO are complete. Transfer fixed points, the algebraic PEPS fixed-point relation, and the induced boundary channels remain open.
 
 ---
 

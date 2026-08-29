@@ -88,6 +88,31 @@ are:
 In particular, the proofs of Proposition 4.13 and Theorem 4.14 are subsections
 of Appendix C, and the decorrelation results are in Appendix D.
 
+## Boundary-theory labels
+
+The Section 4.2 boundary interlude now has a dedicated Chapter 21 section. Its
+label classifications remain unchanged. The smallest faithful local slice is
+complete, while the fixed-point implication remains planned:
+
+| Source label | Source line | Disposition |
+|---|---:|---|
+| `Section:Boundary` | 694 | Partially represented by the Chapter 21 PEPS-boundary section |
+| `PEPS-single tensor` | 697 | The homogeneous rank-five component function is the input to `TNLean.PEPS.doubledLocalTransferMPOTensor` and Blueprint `def:peps_doubled_local_transfer_tensor`; no separate public local-tensor wrapper is introduced, and distinct horizontal and vertical dimensions are a project generalization |
+| `PEPS-square-lattice` | 701 | Homogeneous repetition is represented by using one component function at every site; the full finite two-dimensional contraction is outside this local slice |
+| `PEPS-transfer-operator` | 710 | Blueprint `def:peps_transfer_fixed_point` is `\notready`; the completed local ket-bra doubled transfer tensor is not claimed to be a selected transfer fixed point |
+| `PEPS-RFP` | 717 | Blueprint `def:peps_rfp_relation`, the coarse-graining and refinement channel nodes, and `thm:peps_rfp_implies_boundary_rfp` are `\notready` and carry no `\lean{}` tags; the neighboring blocking type, fixed-point normalization, ancillary factor, and global channel extensions remain unspecified |
+
+The project convention for the local ket-bra doubled transfer tensor suggested
+by the unlabelled FigureDavid1 display at source lines 721--724 is formalized by
+`TNLean.PEPS.doubledLocalTransferMPOTensor` and its packed-coordinate formula.
+Its first physical coordinate groups the up and down ket indices, its second
+groups the up and down bra indices, and its bonds group the corresponding left
+and right ket-bra pairs. The tensor has physical dimension
+$D_{\mathrm v}^2$ and bond dimension $D_{\mathrm h}^2$. Leg ordering and
+product-index packing are project coordinate conventions. No statement
+identifies FigureDavid1 with a selected transfer fixed point or complete
+boundary theory, and issue #7371 is not classified as complete.
+
 ## Literal mixed-state ZCL definition
 
 Source Definition 4.2, label `DefinitionZCL` at line 736, is complete in
