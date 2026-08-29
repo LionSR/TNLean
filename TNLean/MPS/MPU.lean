@@ -18,6 +18,7 @@ import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
+import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
