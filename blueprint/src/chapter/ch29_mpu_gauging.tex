@@ -10,7 +10,60 @@ nonzero complex numbers. The fusion tensors have the scalar gauge freedom
 \end{align}
 % Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
 This is the fusion-tensor gauge freedom of~\cite{FrancoRubio2025MPUGauging}.
-The results below formalize only the scalar functions $\beta$, $\omega$,
+
+\begin{theorem}[Reciprocal unitary factors of a Kronecker product]
+    \label{thm:mpug_unitary_kronecker_factors}
+    \lean{Matrix.exists_pos_rescaling_mem_unitaryGroup_of_kronecker}
+    \leanok
+    Let $m,n>0$, let $K_1\in\C^{m\times m}$ and
+    $K_2\in\C^{n\times n}$, and suppose that $K_1\otimes K_2$ is unitary.
+    Then there is a real number $\delta>0$ such that
+    \begin{align}
+        K_1^\dagger K_1 & =\delta^2\Id_m,
+        \label{eq:mpug_kronecker_factor_gram_one_col} \\
+        K_1K_1^\dagger  & =\delta^2\Id_m,
+        \label{eq:mpug_kronecker_factor_gram_one_row} \\
+        K_2^\dagger K_2 & =\delta^{-2}\Id_n,
+        \label{eq:mpug_kronecker_factor_gram_two_col} \\
+        K_2K_2^\dagger  & =\delta^{-2}\Id_n.
+        \label{eq:mpug_kronecker_factor_gram_two_row}
+    \end{align}
+    The reciprocal rescalings
+    \begin{align}
+        W_1 & =\delta^{-1}K_1
+        \label{eq:mpug_kronecker_factor_rescaling_one} \\
+        W_2 & =\delta K_2
+        \label{eq:mpug_kronecker_factor_rescaling_two}
+    \end{align}
+    are unitary. This is the reciprocal unitary-factor step in the proof of
+    the decomposition-uniqueness lemma of~\cite{FrancoRubio2025MPUGauging}.
+    It is a prerequisite for that decomposition lemma, not a statement of the
+    full lemma: constructing $K_1,K_2$ from the two decompositions and proving that
+    $K_1\otimes K_2$ is unitary are separate steps.
+    % Source: arXiv:2502.20257, main.tex lines 1052--1066, especially line 1065.
+\end{theorem}
+
+\begin{proof}\leanok
+    Set $A=K_1^\dagger K_1$ and $B=K_2^\dagger K_2$. Unitarity gives
+    \begin{align}
+        A\otimes B & =\Id_m\otimes\Id_n.
+    \end{align}
+    Choose one diagonal entry in each nonempty factor. Their product is $1$,
+    so both entries are nonzero. Comparing all diagonal and off-diagonal
+    entries with this fixed product gives a scalar $c\ne0$ such that
+    \begin{align}
+        A & =c\Id_m,      \\
+        B & =c^{-1}\Id_n.
+    \end{align}
+    Since $A$ is a Gram matrix, $c$ is a positive real number. Put
+    $\delta=\sqrt c$. The column Gram matrices of $W_1$ and $W_2$ are the
+    identity, so both matrices are unitary. Their row Gram matrices are also
+    the identity; undoing the rescalings gives
+    (\ref{eq:mpug_kronecker_factor_gram_one_row}) and
+    (\ref{eq:mpug_kronecker_factor_gram_two_row}).
+\end{proof}
+
+The remaining results treat only the scalar functions $\beta$, $\omega$,
 $\gamma$, and $L$; they construct neither fusion tensors nor action tensors nor
 an MPU representation.
 
