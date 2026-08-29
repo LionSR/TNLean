@@ -22,6 +22,11 @@ we first take its pointwise norm and then its positive `|G|`-th root. If also
 
 The block label is retained throughout. No transitivity or finiteness assumption
 is imposed on the block-label type.
+
+**Local fix (determinant sign):** The source takes a positive root of the
+determinant cochain but does not account for the sign of the regular
+permutation. We first take the pointwise norm and then the positive root. See
+`docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex`.
 -/
 
 namespace TNLean.Algebra
@@ -139,7 +144,7 @@ noncomputable def positivePrimitive [Fintype G] (Ω : LSymbol G X) :
   ActionTensorGauge.positiveRpow (Fintype.card G : ℝ)⁻¹ (determinantCochain Ω)
 
 /-- The determinant/root primitive is positive-valued. -/
-theorem positivePrimitive_isPositiveValued [Fintype G] (Ω : LSymbol G X) :
+theorem isPositiveValued_positivePrimitive [Fintype G] (Ω : LSymbol G X) :
     ActionTensorGauge.IsPositiveValued (positivePrimitive Ω) :=
   ActionTensorGauge.isPositiveValued_positiveRpow _ _
 
@@ -156,7 +161,7 @@ theorem exists_positive_coboundary [Finite G] {Ω : LSymbol G X}
       ActionTensorGauge.IsPositiveValued χ ∧
         Ω = ActionTensorGauge.coboundary χ := by
   let _ := Fintype.ofFinite G
-  refine ⟨positivePrimitive Ω, positivePrimitive_isPositiveValued Ω, ?_⟩
+  refine ⟨positivePrimitive Ω, isPositiveValued_positivePrimitive Ω, ?_⟩
   funext x g h
   let n := Fintype.card G
   have hn : n ≠ 0 := Fintype.card_ne_zero
@@ -188,7 +193,7 @@ theorem exists_positive_coboundary_hat_mul_eq_one [Finite G]
       ActionTensorGauge.IsPositiveValued χ ∧
         Ω = ActionTensorGauge.coboundary χ ∧
           χ * ActionTensorGauge.hat χ = 1 := by
-  obtain ⟨χ₀, hχ₀pos, hχ₀⟩ := exists_positive_coboundary hΩ hpos
+  obtain ⟨χ₀, _, hχ₀⟩ := exists_positive_coboundary hΩ hpos
   let χ : ActionTensorGauge G X :=
     ActionTensorGauge.positiveRpow (2 : ℝ)⁻¹ (χ₀ / ActionTensorGauge.hat χ₀)
   refine ⟨χ, ActionTensorGauge.isPositiveValued_positiveRpow _ _, ?_, ?_⟩
