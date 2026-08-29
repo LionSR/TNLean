@@ -524,7 +524,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     An MPO tensor $M$ has a global-family purification RFP witness if, for some
     purifying spin--ancilla tensor $A$, it satisfies the positive-length global
     purification equation and $\widehat A$ is a pure-state renormalization fixed
-    point. This auxiliary condition packages the density-operator equation at
+    point. This auxiliary condition records the density-operator equation at
     \cite[line~751]{Cirac2016MPDO_arXiv}. It does not assert the one-site
     ancillary-contraction presentation in Definition~\ref{def:mpdo_is_prfp}.
 \end{definition}
@@ -575,12 +575,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \overline{A^{(j,k)}}\right)_{e,e},
         \notag
     \end{align}
-    and $\widehat A$ is a pure-state renormalization fixed point. Definition~4.3
-    literally refers to the positive-length purification equation, but the
-    surrounding discussion continues with the one-site presentation displayed
-    in \cite[lines~744--763]{Cirac2016MPDO_arXiv}. Here PRFP denotes that
-    standing one-site presentation; the positive-length equation is its MPDO
-    interpretation.
+    and $\widehat A$ is a pure-state renormalization fixed point. Here PRFP
+    denotes the standing one-site presentation; the positive-length equation is
+    its MPDO interpretation.
 \end{definition}
 
 \begin{definition}[Nondegenerate purification RFP]
@@ -740,7 +737,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \notag
     \end{align}
     Thus the forward implication from PRFP to the literal zero-correlation-
-    length equation in Theorem~4.4 requires no nonzero assumption.
+    length equation in \cite[Theorem~4.4]{Cirac2016MPDO_arXiv} requires no
+    nonzero assumption.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -754,7 +752,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:prfp_iff_lpdo_physical_trace_idempotent}
     \lean{MPOTensor.isPRFP_iff_isLPDO_and_physTraceTransfer_sq}
     \leanok
-    \uses{def:mpdo_is_prfp, def:lpdo, thm:purification_tensor_rfp_iff_physical_trace_idempotent, thm:prfp_physical_trace_idempotent}
+    \uses{def:mpdo_is_prfp, def:lpdo, def:mpo_physical_trace_idempotence}
     An MPO tensor is a purification renormalization fixed point if and only if
     it has a local purification and its physical-trace transfer is idempotent:
     \begin{align}
@@ -767,6 +765,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
+    \uses{thm:prfp_is_lpdo, thm:purification_tensor_rfp_iff_physical_trace_idempotent}
     Choose the local purifying tensor and bond identification. The equivalence
     is Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
     for that fixed purification.
@@ -776,7 +775,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nondegenerate_prfp_iff_lpdo_normalized_zcl}
     \lean{MPOTensor.isNondegeneratePRFP_iff}
     \leanok
-    \uses{def:is_nondegenerate_prfp, thm:prfp_iff_lpdo_physical_trace_idempotent}
+    \uses{def:is_nondegenerate_prfp, def:lpdo, def:mpo_physical_trace_idempotence}
     An MPO tensor is a nondegenerate purification renormalization fixed point if
     and only if it is a local purification density operator and
     \begin{align}
@@ -789,6 +788,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
+    \uses{thm:prfp_iff_lpdo_physical_trace_idempotent}
     Combine Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent} with the
     nonzero clause in Definition~\ref{def:is_nondegenerate_prfp}.
 \end{proof}
@@ -815,13 +815,14 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \label{thm:nondegenerate_prfp_source_zcl}
     \lean{MPOTensor.IsNondegeneratePRFP.isSourceZCL}
     \leanok
-    \uses{def:is_nondegenerate_prfp, thm:source_zcl_of_prfp}
+    \uses{def:is_nondegenerate_prfp, def:mpo_source_zcl}
     Every nondegenerate purification renormalization fixed point satisfies the
     nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:source_zcl_of_prfp}
     Apply Theorem~\ref{thm:source_zcl_of_prfp} to the two clauses of
     Definition~\ref{def:is_nondegenerate_prfp}.
 \end{proof}

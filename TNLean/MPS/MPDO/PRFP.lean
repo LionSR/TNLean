@@ -98,7 +98,7 @@ def HasGlobalPurificationEquation (M : MPOTensor d D)
 positive-length density operators agree with those obtained from a purifying
 spin-ancilla tensor that is a pure-state renormalization fixed point.
 
-This predicate packages the finite-chain equation `MPDO-Puri-1` at
+This predicate records the finite-chain equation `MPDO-Puri-1` at
 arXiv:1606.00608, line 751, together with the RFP condition on the purifier. It
 does not assert the one-site ancillary-contraction presentation inherited by
 Definition 4.3, so it is strictly an auxiliary global-family condition rather
