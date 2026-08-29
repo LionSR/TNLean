@@ -14,31 +14,47 @@
 \date{2026-08-29}
 
 \begin{document}
+% TNLEAN_EXTERNAL_SOURCE_RANGES: 1706.07329v2 3124-3133,3142-3152,3154-3162,3815-3939,3943-3986,3946-3970,3990-4035,3993-4005
+% TNLEAN_EXTERNAL_SOURCE_RANGES: 2203.12563v3 302-331,429-460,638-683,683-719,720-726,731-749,740-749,752-759,754,755-758,761,1211-1216,1219-1272,1231,2305-2454,2455
+% TNLEAN_EXTERNAL_SOURCE_RANGES: 2405.00439v2 358-377
 \maketitle
 \gapnote{open-gap}{open}
 
 \section{Scope and conclusion}
 
 The target-paper coordinates in this note are pinned to
-\path{Papers/2502.20257/main.tex}.  The three external source archives are not
-duplicated in this repository.  They are pinned by exact version, stable
-retrieval link, internal filename, and archive digest as follows.
+\path{Papers/2502.20257/main.tex}.  The three external source artifacts are
+recorded in \path{Papers/external_sources.toml}.  Running
+\path{scripts/verify_external_paper_sources.py} with \texttt{--fetch} verifies each official
+archive and its named member.  Sources carrying CC BY 4.0 are kept unchanged
+under \path{Papers/}; the source carrying only arXiv's non-exclusive
+distribution license is recovered under ignored \path{build/} output.
 \begin{itemize}
     \item The
           \href{https://arxiv.org/e-print/1706.07329v2}
           {arXiv:1706.07329v2 source archive} contains
-          \path{cornerproblem.tex}; its SHA-256 digest is
-          \nolinkurl{045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e}.
+          \path{cornerproblem.tex}.  The archive digest is
+          \nolinkurl{045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e};
+          the extracted-file digest is
+          \nolinkurl{94f71715645ea4c612f0602f5393991df0d4d92550a92c224b53796be98a6c0e}.
+          The helper writes the verified file to
+          \path{build/paper-sources/1706.07329/cornerproblem.tex}.
     \item The
           \href{https://arxiv.org/e-print/2203.12563v3}
           {arXiv:2203.12563v3 source archive} contains
-          \path{REsubmission.tex}; its SHA-256 digest is
-          \nolinkurl{53f0eb58d275d4bd801c9f38dc87e0928344745148860c97ba2e03fad4bd9b8c}.
+          \path{REsubmission.tex}.  The archive digest is
+          \nolinkurl{53f0eb58d275d4bd801c9f38dc87e0928344745148860c97ba2e03fad4bd9b8c};
+          the extracted-file digest is
+          \nolinkurl{c820b20187584d441c1a40ef80fdccbc8a2aad819ac6673464c6b913c28fa58c}.
+          The unchanged file is \path{Papers/2203.12563/REsubmission.tex}.
     \item The
           \href{https://arxiv.org/e-print/2405.00439v2}
           {arXiv:2405.00439v2 source archive} contains
-          \path{MPU-DW.tex}; its SHA-256 digest is
-          \nolinkurl{166ce15a174167772f53d53b7ed15438fdf799717e053b128f612a264d3f8bb4}.
+          \path{MPU-DW.tex}.  The archive digest is
+          \nolinkurl{166ce15a174167772f53d53b7ed15438fdf799717e053b128f612a264d3f8bb4};
+          the extracted-file digest is
+          \nolinkurl{d53fa420cab774b97e032ab214b0782cde68bc535a3cf910b85bbbd726b5b858}.
+          The unchanged file is \path{Papers/2405.00439/MPU-DW.tex}.
 \end{itemize}
 Every external line range below is therefore reproducible against the named
 source file rather than a reformatted PDF.

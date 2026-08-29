@@ -1,3 +1,5 @@
 .github/workflows/*.lock.yml linguist-generated=true merge=ours
 Papers/**/*.eps binary
 Papers/quant-ph_0405174/qca.tex binary
+Papers/2203.12563/REsubmission.tex -text -whitespace
+Papers/2405.00439/MPU-DW.tex -text -whitespace

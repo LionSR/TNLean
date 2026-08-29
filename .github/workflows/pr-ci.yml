@@ -70,6 +70,13 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - '.gitattributes'
+      - 'Papers/NOTICE.md'
+      - 'Papers/external_sources.toml'
+      - 'Papers/2203.12563/**'
+      - 'Papers/2405.00439/**'
+      - 'scripts/verify_external_paper_sources.py'
+      - 'scripts/test_verify_external_paper_sources.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -132,6 +139,13 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
+      - '.gitattributes'
+      - 'Papers/NOTICE.md'
+      - 'Papers/external_sources.toml'
+      - 'Papers/2203.12563/**'
+      - 'Papers/2405.00439/**'
+      - 'scripts/verify_external_paper_sources.py'
+      - 'scripts/test_verify_external_paper_sources.py'
   workflow_dispatch:
 
 concurrency:
@@ -226,6 +240,13 @@ jobs:
               - 'texra-blueprint.toml'
               - 'scripts/paper_gap_leanid_sync.py'
               - 'scripts/test_paper_gap_leanid_sync.py'
+              - '.gitattributes'
+              - 'Papers/NOTICE.md'
+              - 'Papers/external_sources.toml'
+              - 'Papers/2203.12563/**'
+              - 'Papers/2405.00439/**'
+              - 'scripts/verify_external_paper_sources.py'
+              - 'scripts/test_verify_external_paper_sources.py'
             workflow:
               - '.github/workflows/**'
               - '.github/dependabot.yml'
@@ -472,6 +493,14 @@ jobs:
         run: |
           python3 scripts/test_audit_cpsv16_labels.py
           python3 scripts/audit_cpsv16_labels.py
+
+      - name: Test external-paper-source verifier
+        run: python3 scripts/test_verify_external_paper_sources.py
+
+      - name: Verify vendored external paper sources
+        run: >
+          python3 scripts/verify_external_paper_sources.py
+          2203.12563v3 2405.00439v2
 
       - name: Check reader-facing prose patterns
         if: github.event_name == 'pull_request'

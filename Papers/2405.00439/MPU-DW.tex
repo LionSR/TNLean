@@ -1,0 +1,2144 @@
+\documentclass[aps,pra,export,nofootinbib]{revtex4-2} 
+\usepackage[utf8]{inputenc}
+
+
+
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage{tikz,tikz-cd,calc} 
+\usepackage{amsthm,amsmath,amssymb,amsfonts,mathtools,tensor,mhchem}
+\usepackage{bbold}
+\usepackage{pdfcomment}
+\usepackage{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\id}{\mathbb{1}}
+\newcommand{\tr}{{\rm Tr}}
+\newcommand{\com}[1]{{\color{blue} {\it  #1}}}
+\newcommand{\rem}[1]{\textcolor{red}{\textbf{[#1]}}}
+\newtheorem{thm}{Theorem}
+
+\usetikzlibrary{decorations.pathreplacing,decorations.markings,calc,3d,positioning,quotes}
+\usetikzlibrary{shapes.geometric}
+
+
+\tikzset{
+  tensor/.style={
+    inner sep = 0.055cm,
+    shape = circle,
+    draw,
+    fill
+  },
+  t/.style={
+    inner sep = 0.03cm,
+    shape = circle,
+    draw,
+    fill
+  },
+}
+\tikzset{
+  tenex/.style={
+    inner sep = 0.1cm,
+    shape = rectangle,
+    draw,
+    fill=blue
+  },
+}
+
+\tikzset{
+  hopf2/.style={
+    line cap=round,
+    line width=1.5mm,
+  },
+  epsilon2/.style={
+   draw = red,
+   thin,
+   densely dotted,
+   rounded corners,
+   fill opacity=0.2,
+   fill=red,
+  },
+  every picture/.style = {
+    baseline={([yshift=-.5ex]current bounding box.center)},
+    font=\scriptsize
+  },
+  irrep/.style={
+    anchor=south,
+    font = \tiny,
+    inner sep=2pt
+  }
+}
+
+
+\tikzset{
+  every label/.style = {
+    text depth=0pt,
+    text height=1ex,
+  },
+}
+
+\tikzset{
+      pics/V/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	     \draw[hopf2] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+  pics/W/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    	    \draw[hopf2] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  },
+      pics/V1/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	  	    \draw[red, thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    \draw[red, thick] (0,0)--(-mid);
+	      \draw[hopf2] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+  pics/W1/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    \draw[red,thick] (0,-0.3)--(-down);
+	    \draw[red,thick] (0,0)--(-mid);
+	    \draw[hopf2] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  },
+    pics/V2/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (-0.4,0);
+	    \coordinate (-up) at (0.5,0.3);
+	    \coordinate (-down) at (0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    %\draw[thick] (0,-0.3)--(-down);
+	    \draw[thick] (0,0)--(-mid);
+	    \draw[hopf2,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.25,0) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.3) {$#3$};
+    }
+  },
+  pics/W2/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.35,0);
+	    \coordinate (-up) at (-0.5,0.3);
+	    \coordinate (-down) at (-0.5,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    %\draw[thick] (0,-0.3)--(-down);
+	    \draw[thick] (0,0)--(-mid);
+	    \draw[hopf2,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.3) {$#3$};
+    }
+  },
+    pics/W2big/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.4,0);
+	    \coordinate (-up) at (-0.5,0.45);
+	    \coordinate (-down) at (-0.5,-0.45);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.45)--(-up);
+	    \draw[thick](0,-0.45)--(-down);
+	    \draw[thick](0,0)--(-mid);
+	    \draw[hopf2,gray] (0,-0.5)--(0,0.5);
+	    \node[irrep] at (0.25,0) {$#1$};
+	    \node[irrep] at (-0.25,0.45) {$#2$};
+	    \node[irrep] at (-0.25,-0.45) {$#3$};
+    }
+  },
+  pics/V2p/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (-0.1,0);
+	    \coordinate (-up) at (0.4,0.3);
+	    \coordinate (-down) at (0.1,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	    \draw[red,thick] (0,0.3)--(-up);
+	    \draw[thick](0,-0.3)--(-down);
+	    \draw[thick](0,0)--(-mid);
+	    \draw[hopf2,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (-0.2,-0.2) {$#1$};
+	    \node[irrep] at (0.25,0.3) {$#2$};
+	    \node[irrep] at (0.25,-0.4) {$#3$};
+    }
+  },
+  pics/W2p/.style args={#1/#2/#3}{
+    code = {
+	    \coordinate (-mid) at (0.3,0);
+	    \coordinate (-up) at (-0.1,0.3);
+	    \coordinate (-down) at (-0.1,-0.3);
+	    \coordinate (-top) at (0,0.45);
+	    \coordinate (-bottom) at (0,-0.45);
+	   \draw[red,thick] (0,0.3)--(-up);
+	    \draw[thick] (0,-0.3)--(-down);
+	    \draw[thick] (0,0)--(-mid);
+	    \draw[hopf2,gray] (0,-0.35)--(0,0.35);
+	    \node[irrep] at (0.2,-0.2) {$#1$};
+	    \node[irrep] at (-0.25,0.3) {$#2$};
+	    \node[irrep] at (-0.25,-0.4) {$#3$};
+    }
+  }
+ }
+
+
+
+\begin{document}
+
+
+
+
+
+\title{Fractional domain wall statistics in spin chains with anomalous symmetries}
+
+\author{ Jos\'e Garre-Rubio$^1$}
+
+
+\author{Norbert Schuch$^{1,2}$}
+\affiliation{\mbox{$^1$University of Vienna, Faculty of Mathematics, Oskar-Morgenstern-Platz 1, 1090 Wien, Austria} \\ $^2$University of Vienna, Faculty of Physics, Boltzmanngasse 5, 1090 Wien, Austria}
+
+\begin{abstract}
+We study the statistics of domain wall excitations in quantum spin chains. 
+We focus on systems with finite symmetry groups represented by  matrix product unitaries
+(MPUs), i.e. finite depth quantum circuits. Such symmetries can be anomalous, in which case gapped phases which they support must break the symmetry.
+%
+The lowest lying excitations of those systems are thus domain wall excitations.
+We investigate the behavior of these domain walls under exchange, and find that
+they can exhibit non-trivial exchange statistics. This statistics is completely
+determined by the anomaly of the symmetry, and we provide a direct relation between the known classification of MPU symmetry actions on ground states and the domain wall statistics. 
+%
+Already for the simplest case of a $\mathbb Z_2$ symmetry,
+we obtain that the presence of an anomalous MPU symmetry gives rise 
+to domain wall excitations which behave neither as bosons nor as fermions, but rather exhibit fractional statistics. 
+%
+Finally, we show that the exchange statistics of domain walls is a physically
+accessible quantity, by devising explicit measurement operators through which it can be determined.
+%%
+\end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+
+
+Topological order is a new type of order which defies a description in terms of symmetry breaking and local order parameters; instead, the order in such systems is characterized by a global ordering in their entanglement pattern \cite{Wen90A}. In gapped phases, such entanglement order can manifest itself in a variety of phenomena. In two dimensions (2D), topological phases possess ground states which support excitations which can only be created
+in pairs and are thus topologically protected, and which display non-trivial, including non-Abelian, braiding statistics \cite{Kitaev03,Levin05}; this behavior
+arises from the global entanglement in the ground state substrate on top of which those excitations are created.  
+
+In one dimension (1D), no topological order exists; in fact, in the absence of symmetries, there is only a single gapped phase. On the one hand, imposing symmetries gives rise to symmetry broken phases. While these differ from topological phases in many ways, they still exhibit topologically protected excitations, namely domain walls between different symmetry broken
+sectors, which can only be created and destroyed in pairs.  Yet, unlike in topologically ordered systems, these excitations do not
+exhibit any non-trivial statistics, and are simply permuted by the symmetry action. On the other hand, 1D systems with symmetries can also exhibit so-called ``symmetry protected topological''
+(SPT) phases, which possess a unique ground state yet are distinct from the trivial phase: What tells these phases apart is that the physical symmetry acts non-trivially (namely, projectively) on the entanglement \cite{Pollmann10}. This can be formalized using the language of Matrix Product States (MPS), which form the right framework for the description of ground states of gapped systems \cite{Hastings07A, Hastings07B},
+and which has led to a full classification of SPT phases in 1D \cite{Schuch11,Chen11B}.
+In those phases, the projective symmetry action on the
+entanglement also manifests itself in non-trivial physical properties, such as boundary excitations with fractional charges, or a characteristic counting of multiplicities in the entanglement spectrum.
+
+The landscape of 1D phases gets much more rich if we allow
+for the inclusion of non-trivial ``anomalous'' symmetries \cite{Wen13,kapustin14}.
+Anomalous symmetries are symmetries which cannot be expressed as
+a tensor product of local symmetry actions, and thus cannot be
+defined locally.  Rather, they have to be expressed as a
+finite-depth quantum circuit, or, equivalently, as the unitary
+equivalent of an MPS, namely, a Matrix Product Unitary (MPU)\cite{Cirac17B}. Anomalous symmetries appear naturally at the boundary of 2D SPT phases \cite{Chen11A}, but they can also show up as symmetries of families of 1D Hamiltonians---we will see such an example momentarily. 
+
+The presence of an anomalous symmetry has strong consequences.
+Most importantly, gapped Hamiltonians with anomalous symmetries
+cannot have a unique ground state \cite{Chen11A,reviewPEPS}: Rather, they must exhibit
+symmetry breaking, with the different ground states connected by
+the symmetry action. Unlike conventional symmetry breaking
+(i.e., of on-site global symmetries), however, the action of the anomalous
+symmetry does not simply permute the symmetry broken ground
+states, but also acts non-trivially on the entanglement in those
+ground states, which can be classified by the way 
+in which the MPU representation of the symmetry acts irreducibly
+on the MPS representations of the states~\cite{Garre22},
+generalizing the SPT classification of phases. 
+
+This raises the question whether this non-trivial symmetry action has
+physical, and thus measurable, consequences.  In particular, given that
+those systems have degenerate ground states, and the symmetry acts
+non-trivially when interchanging them, could this imply that the domain
+wall excitations carry some signature of this unconventional order?  A
+first step in this direction was taken in Ref.~\cite{Roose19}, where it was
+argued that for a specific model with an anomalous $\mathbb Z_2$ symmetry, the domain wall excitation in
+the gapped phase exhibit \emph{semionic} statistics: Under full
+exchange, they collect a $-1$ phase, and thus, their self-statistics phase
+is half that of a fermion.
+
+In this paper, we provide a comprehensive and rigorous study the physics of domain wall excitations in gapped phases with anomalous symmetries, and in particular of their exchange statistics. We prove that the statistics of those excitations is completely determined by the anomaly of the symmetry and the way in which it acts on the entanglement in the ground states, as classified in Ref.~\cite{Garre22} (and in Ref.~\cite{Garre24} outside tensor network methods). Note that these domain wall excitations have a non-trivial statistics regarding the exchange of their creation operators, but that there is no natural notion of braiding in 1D, so this is an aspect in which they differ from anyons in 2D.
+
+
+In particular, already in the simplest example of an anomalous $\mathbb Z_2$ symmetry, this gives rise to domain wall excitations which exhibit a semionic statistics. This is thus showing  us a way how anomalous symmetries and their unconventional phases manifest themselves in physically testable properties, rather than having to rely on
+algebraic invariants of the phases. For completeness, we provide a recipe for how to measure this exchange statistics. Our results are akin to the
+characterization of symmetry protected topological phases in terms of degenerate edge modes and the degeneracies of their the entanglement spectrum, rather than through projective representations of the symmetry group. Altogether, our work provides an extension of the classification of quantum phases under anomalous symmetries beyond ground state properties, by connecting them to the behavior of low-lying excited states.
+
+
+We start our paper by discussing in detail the simplest case of an anomalous $\mathbb{Z}_2$ symmetry where we deepen on the semionic statistics of the domain walls found in the deformed Ising Hamiltonian studied in Ref.~\cite{Roose19} and we compare with the on-site case. To be more tangible, these two cases are manifested in the family of Hamiltonians $H_p(\mu)$ where $p=0,1$:
+\begin{equation}\label{eq:Hmotiv}
+ H_p(\mu) = \sum_i -X_i (-CZ_{i-1,i+1})^p - \mu Z_i Z_{i+1}, 
+\end{equation}
+where the symmetry is $U_p = \prod_i X_i  \prod_i (CZ _{i,i+1})^p$.
+Here, $CZ_{i,j}$ is the controlled-Z gate between sites $i$ and $j$ (which applies a $-1$ phase exactly on $|k\rangle_i |l\rangle_j$ if $k=l=1$). The Hamiltonian $H_0(\mu)$ is the transverse-field Ising model that hosts an ordered phase (ferromagnetic ordering) for $\mu >1$. The Hamiltonian $H_1(\mu)$ has a two-fold degenerate ground state with a gap above for $\mu >0$ \cite{Roose19}.
+
+
+We then generalize our findings to gapped systems with a finite symmetry group represented by MPUs, by modeling their ground space by MPS.
+In that case, we analyze both the domain wall statistics in case where the symmetry is fully broken (see also \cite{Kawagoe21}), as well as other situations where the symmetry is only partially broken, where we find projective
+actions of the symmetry on the domain walls, see Refs. \cite{Lan14, Lu14,Zaletel14,Wang15A}. 
+Furthermore, our results allow us to 
+connect these projective actions with the invariants classifying MPU-symmetric
+phases~\cite{Garre22,Garre24}. 
+
+Finally, we show that the non-trivial domain wall statistics which we derived 
+are physically accessible quantities: We provide an explicit operator which one can measure to detect the non-trivial exchange statistics of the domain wall excitations.
+
+
+
+%%%
+\section{Tensor network basics}
+%%%
+
+\subsection{Matrix Product States and the Fundamental Theorem of MPS}
+
+A Matrix Product State (MPS) on a spin chain of length $n$ with local Hilbert space dimension $d$, $(\mathbb C^d)^{\otimes N}$, 
+is defined via a $d\times D\times D$ tensor $A$, where $D$ is called the \emph{bond dimension} or \emph{virtual dimension}; the corresponding space is called \emph{virtual space}.
+We consider MPSs that are translationally invariant where each tensor in the MPS is the same. A $N$-site periodic boundary condition MPS with tensor $A$ is defined by
+$$|\psi_A\rangle = \sum_{\{i_k\}} \tr[A^{i_1}{\cdots} A^{i_N}]|{i_1}, \dots, {i_N}\rangle,$$
+where $A=\sum_i |i\rangle \otimes A^i$ and $A^i$ is a $D\times D$ matrix for each $i=1,\dots,d$. 
+
+An important class of MPSs, dubbed injective MPS, corresponds to the ones whose tensors $A$ -- interpreted as a map from the virtual to the physical system -- posses a left-inverse, that is, $\hat{A} A = \id_{D\times D}$. To any injective MPS a gapped local and frustration free Hamiltonian, called {\it parent} Hamiltonian, can be associated whose unique ground state is the injective MPS. 
+
+One can also consider block-injective tensors $A^i = \bigoplus_{x \in \mathcal{I} } A^i_x$, where each $A^i_x$ is a $D_x \times D_x$ matrix and $x\in \mathcal{I}$ denotes the block labels -- that is, for each $x$, the $A^i_x$ define an injective MPS. Then, the ground space of the corresponding parent Hamiltonian is spanned by the individual blocks of the MPS, $\{ |\psi_{A_x} \rangle, x \in \mathcal{I} \}$, so that its degeneracy coincides with the number of blocks. Note that any MPS can be brought into a block-injective form \cite{PerezGarcia07} after blocking a {\it small} number of sites \cite{Sanz10}. Because any two injective MPSs become either orthogonal or proportional in the thermodynamic limit \cite{Cirac17A}, when considering degenerate ground spaces spanned by injective MPSs we restrict w.l.o.g.\ to blocks which become orthogonal.
+
+
+For example, the MPS tensor $A^0=|0\rangle \langle 0|, A^1=|1\rangle \langle 1|$ corresponds to the GHZ state and its parent Hamiltonian has a two-fold degenerate ground space, spanned by $|00\cdots 0\rangle$ and $|11\cdots 1\rangle$. This degeneracy can be seen as symmetry breaking: there is always a symmetry action that permutes between the ground states, i.e.\ between the different blocks of the MPS. In the previous example, the symmetry is just $\sigma_x^{\otimes n}$. 
+
+An important question regarding MPSs is the remaining gauge freedom of the tensors when constrcuting a specific state -- that is, if for two MPS tensors $A$ and $B$, $|\psi_A\rangle = |\psi_B\rangle$, then how $A$ and $B$ are related? The so-called `Fundamental Theorem (FT) of MPSs' answers this question -- in fact, depending on the assumptions on the given tensors, different results have been stated \cite{Cuevas17,Andras18B, Molnar18A}. In this work, we will rely on the FT proven in Ref.~\cite{Andras18B}, which informally\footnote{We state the theorem assuming that the nilpotency length of the off-diagonal blocks of $B$ is 1, see \cite{Andras18B} for details; this can always be achieved by blocking.} states the following:
+\begin{thm}[Fundamental Theorem of MPS of Ref.\cite{Andras18B}]\label{FT1}
+    If $A$ is injective and $|\psi_A\rangle = |\psi_B\rangle$, and where no assumption on $B$ is required, there exists a pair of matrices $(V,\hat{V})$ acting on the virtual level such that
+$$  V B^i \hat{V} = A^i, \quad B^i\hat{V}A^j V B^k = B^iB^jB^k, \quad V\hat{V}=\id_{D_A} \ .$$
+Moreover if there are two such pairs $(V,\hat{V})$ and $(W,\hat{W})$ then they are related by a constant factor:
+$$V B^i= \lambda \cdot WB^i \ , \quad B^i\hat{V}= \lambda^{-1} \cdot B^i\hat{W} \ ,   \quad \Rightarrow \quad VB^i\hat{W}= \lambda \cdot A^i .$$
+\end{thm}
+
+\subsection{Matrix Product Unitaries}
+
+
+The global symmetries we consider in this work have the structure of a matrix product unitary (MPU). MPUs are unitary operators, analogous to MPSs, that can be constructed using local tensors for any system size. We define a periodic boundary condition MPU 
+on a chain $(\mathbb C^d)^{\otimes N}$ with bond dimension $\chi$
+by placing a $d\times d\times \chi \times \chi$ tensor $T$ at every site:
+%
+$$ U= \sum_{ \{ i_k, j_k \} }  \tr[T^{i_1 j_1} T^{i_2 j_2}{\cdots} T^{i_N j_N} ] | i_1 {\cdots} i_N \rangle \langle  j_1 {\cdots} j_N |, $$
+%
+where $i,j=1,\dots, d$ and $T^{i,j}$ is defined through $T=\sum_{i,j}|i\rangle \langle j|  \otimes T^{i,j} $. Interestingly, for MPUs, the unitarity condition implies that the tensors can be chosen to be injective \cite{Cirac17B}. We note that regular tensor product of unitaries, $U=u^{\otimes N}$, are indeed MPUs with trivial bond dimension $\chi = 1$. We will consider global symmetries coming from a finite group and represented by MPUs: $U_gU_h=U_{gh}, \ g,h\in G$. 
+
+We emphasize that Theorem\ref{FT1} can in particular be applied to the product of two MPUs, as well as to the MPU action on an MPS; this is done simply by `vectorizing' the MPUs to MPSs. As we will see, this will be a powerful tool which will allow us to derive local characterizations of global properties. 
+
+As customary when working with tensor networks we will use a graphical notation to denote the tensors such that MPSs and MPUs are depicted as follows (for details, see e.g.~\cite{reviewPEPS}):
+$$
+|\psi_A\rangle = 
+\begin{tikzpicture}
+    \draw[rounded corners, thick] (-0.1,0) rectangle (2.55,-0.5);
+    \foreach \x in {0.25,0.75,2.25}{
+	\node[tensor] (t\x) at (\x,0) {};
+	\node[] at (\x,-0.25) {$A$};
+	\draw[thick] (\x,0) --++ (0,0.3);
+    }
+    \node[fill=white] at (1.5,0) {$\dots$};
+\end{tikzpicture} 
+\ , \quad U =
+\begin{tikzpicture}
+		  \draw[red,rounded corners, thick] (-0.1,0) rectangle (2.55,-0.5);
+		  \foreach \x in {0.25,0.75,2.25}{
+		    \node[tensor] (t\x) at (\x,0) {};
+		    \node[] at (\x+0.25,0.25) {$T$};
+		    \draw[thick] (\x,-.3) --++ (0,0.6);
+		  }
+		  \node[fill=white] at (1.5,0) {$\dots$};
+		\end{tikzpicture} \ .
+$$
+
+
+%%
+\section{\texorpdfstring{$\mathbb{Z}_2$ }- MPU representation and its domain walls} 
+\label{sec:Z2case}
+%%
+\subsection{Anomaly index of the MPU symmetry and fusion tensors}
+
+We consider an MPU
+$$
+U= \sum_{ \{ i_k, j_k \} }  \tr[T^{i_1 j_1} T^{i_2 j_2}{\cdots} T^{i_N j_N} ] | i_1 {\cdots} i_N \rangle \langle  j_1 {\cdots} j_N |=
+\begin{tikzpicture}
+		  \draw[red,rounded corners, thick] (-0.1,0) rectangle (2.55,-0.5);
+		  \foreach \x in {0.25,0.75,2.25}{
+		    \node[tensor] (t\x) at (\x,0) {};
+		    \node[] at (\x+0.25,0.25) {$T$};
+		    \draw[thick] (\x,-.3) --++ (0,0.6);
+		  }
+		  \node[fill=white] at (1.5,0) {$\dots$};
+		\end{tikzpicture} \ ,
+$$
+%
+of order two,  $U^2 = \id$, for any length $n$. Since the tensor $T$ can be chosen to be injective~\cite{Cirac17B}, the global condition $U^2 = \id$ implies that a \emph{local} condition must hold (which in turn gives rise to the global one) using Theorem\ref{FT1}:
+There exists a pair of \emph{fusion tensors} $(V,\widehat{V})$ acting at the virtual level which satisfy \cite{Andras18B}
+\begin{equation}\label{eq:Ured}
+%
+ \begin{tikzpicture}
+    \node at (1,1) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+\foreach \y in {0,0.5}{
+		  \foreach \x in {0.4,0.8,1.2,1.6}{
+		  \draw[thick] (\x,\y-0.3) -- (\x,\y+0.3);
+		    \draw[thick,red] (\x-0.3,\y) -- (\x+0.3,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor] at (\x,0) {};  
+		      }}
+\end{tikzpicture} 
+=
+\begin{tikzpicture}
+    \node at (0,0.3) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+     \pic (w) at (-0.6,-0.3) {W=//};
+\pic (v) at (0.6,-0.3) {V=//};
+\node[anchor=north,inner sep=2pt] at (w-bottom) {$V$};
+\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{V}$};
+\foreach \y in {0,-0.6}{
+		  \foreach \x in {-1,1}{
+		  \draw[thick] (\x,\y-0.3) -- (\x,\y+0.3);
+		    \draw[thick,red] (\x-0.3,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		      }}
+		      		  \foreach \x in {-0.2,0.2}{
+		  \draw[thick] (\x,-0.3-0.3) -- (\x,-0.3+0.3);
+		      }
+\end{tikzpicture} 
+\quad {\rm and } \quad
+  \begin{tikzpicture}
+  \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+      \draw[red,thick] (0,-0.6) -- (1,-0.6);
+    \draw[red,thick] (0,0) -- (1,0);
+     \pic (v) at (-0.5,-0.3) {V=//};
+     \pic (w) at (1,-0.3) {W=//};
+     \node[anchor=north,inner sep=2pt] at (w-bottom) {$V$};
+\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{V}$};
+    \node[tensor] (t) at (0,0) {};
+    \node[tensor] (t) at (0,-0.6) {};
+        \node[tensor] (t) at (0.5,0) {};
+    \node[tensor] (t) at (0.5,-0.6) {};
+    \draw[thick] (0,-0.9) -- (0,0.3);
+        \draw[thick] (0.5,-0.9) -- (0.5,0.3);
+  \end{tikzpicture} =
+  \begin{tikzpicture}[baseline=-1mm]
+    \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+      \draw[thick] (0,-0.3) -- (0,0.3);
+            \draw[thick] (0.5,-0.3) -- (0.5,0.3);
+     \end{tikzpicture} \ ,
+\end{equation}
+for all $m \ge 0$. Notice that the fusion tensors are defined up to a phase factor $V\to \beta V$ and $\widehat{V} \to \beta^{-1} \widehat{V}$. 
+
+Since there are two local ways to decompose the product of 3 tensors $(TT)T= T(TT)$ using the fusion tensors, these two decomposition are related by a phase factor:
+%
+\begin{equation}\label{eq:Uanomal}
+\begin{tikzpicture}
+      \pic[scale=0.83] at (1.2,0.25 ) {W=//};
+      \pic[scale=0.83] at (-0.4,0.75 ) {V=//};
+\foreach \y in {0,0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};   }}
+\end{tikzpicture}
+= \omega\cdot \
+\begin{tikzpicture} [baseline=-1mm]
+\foreach \y in {0}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};   }}
+\end{tikzpicture} \ ,
+\end{equation}
+%
+where $\omega$ is invariant under phase factor redefinitions of the fusion tensors, i.e. it is a gauge invariant quantity. By applying the above equation in two different ways to the product of 4 tensors:
+$$
+\begin{tikzpicture}
+	\draw[draw=blue!30, fill= cyan!30, rounded corners] (-0.7,0.4) rectangle (1.4,1.6);
+      \pic[scale=0.83] (v) at (-0.4,0.25 ) {V=//};
+      \pic[scale=0.83] at (-0.4,1.25 ) {V=//};
+      \pic[scale=0.83] (w1) at (1.15,0.75 ) {W=//};
+        \pic[scale=2.5] (w2) at (1.6,0.75) {W=//};
+\foreach \y in {0,0.5,1,1.5}{
+		  \foreach \x in {0,0.35,0.7}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.35,\y);
+		    \node[tensor] at (\x,\y) {}; }}
+\end{tikzpicture}
+=
+\omega
+\begin{tikzpicture}
+      \pic[scale=0.83] (v) at (-0.4,0.25 ) {V=//};
+      \pic[scale=0.83] (w1) at (1.15,0.25 ) {W=//};
+\foreach \y in {0,0.5}{
+		  \foreach \x in {0,0.35,0.7}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.35,\y);
+		    \node[tensor] at (\x,\y) {}; }}
+\end{tikzpicture}
+\quad
+{\rm and}
+\quad
+\begin{tikzpicture}
+	\draw[draw=blue!30, fill= cyan!30, rounded corners] (-0.7,-0.2) rectangle (1.4,1.1);
+      \pic[scale=0.83] (v) at (-0.4,0.25 ) {V=//};
+      \pic[scale=0.83] at (-0.4,1.25 ) {V=//};
+      \pic[scale=0.83] (w1) at (1.15,0.75 ) {W=//};
+        \pic[scale=2.5] (w2) at (1.6,0.75) {W=//};
+\foreach \y in {0,0.5,1,1.5}{
+		  \foreach \x in {0,0.35,0.7}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.35,\y);
+		    \node[tensor] at (\x,\y) {}; }}
+\end{tikzpicture}
+=
+\omega^{-1}
+\begin{tikzpicture}
+      \pic[scale=0.83] (v) at (-0.4,0.25 ) {V=//};
+      \pic[scale=0.83] (w1) at (1.15,0.25 ) {W=//};
+\foreach \y in {0,0.5}{
+		  \foreach \x in {0,0.35,0.7}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.35,\y);
+		    \node[tensor] at (\x,\y) {}; }}
+\end{tikzpicture}\ ,
+$$
+we obtain that $\omega$ has to satisfy the consistency equation 
+%
+\begin{equation} \label{omegavalues}
+    \omega^2 =1  
+\end{equation}
+and thus, $\omega=\pm1$.
+%
+
+
+Notice that for an on-site symmetry of order two, $U = u^{\otimes N}$ with $u^2 = \id$, we have that $T^{ij}=u_{ij}$, i.e., the virtual dimension is $1$, and thus the fusion tensors
+defined in Eq.~\eqref{eq:Ured} are trivial. Then, on-site symmetries satisfies $\omega=1$. In this work we are interested in the case where $\omega = -1$ -- we refer to this case as {\it anomalous}, and say that the MPU carries an anomaly. 
+
+
+\subsection{Ground space and domain walls}
+
+Let us now turn towards the structure of ground states of local, gapped Hamiltonians $H$ which possess an MPU symmetry, $HU=UH$. As is customary, we will assume that the ground space of the Hamiltonian is spanned by injective Matrix Product States (MPS): This is well motivated by the fact that MPS faithfully approximate ground states of gapped local Hamiltonians \cite{Hastings07A,Hastings07B}, and once one has a MPS basis of the ground space, one can decompose the MPS into injective blocks \cite{PerezGarcia07}, each of which is again a ground state. Since the Hamiltonian is symmetric under the MPU $U$, the ground space must be left invariant by the action of $U$ as well. These properties -- symmetric ground space spanned by injective MPS -- is all which we will make use of in what follows, and no other information on the Hamiltonian will be required. 
+
+In the case of an anomalous MPU, an important point arises: As  was shown in Ref.~\onlinecite{Chen11A}, an anomalous MPU cannot leave an injective MPS invariant. This implies that the ground space must be at least two-fold degenerate (which it will be in the absence of additional symmetries or fine-tuning), spanned by two MPS $\lvert\psi_A\rangle$ and $\lvert\psi_B\rangle$ with MPS tensors $A$ and $B$, respectively, on which $U$ acts by interchanging them,\footnote{More generally, we could allow for
+$U \lvert \psi_A \rangle = c_N\lvert \psi_B \rangle$ for length $N$, $|c_N|^2=1$.  Since 
+$\lvert\psi_B\rangle$ is injective, the canonical form of $U\lvert\psi_A\rangle$ consists of a fixed number of blocks $\tilde A_i$ which are all proportional to $B$ , $\tilde A_i = \lambda_i X_iBX_i^{-1}$, and thus $c_N=\sum_i \lambda_i^N$.
+By choosing an $N$ such that all $\lambda_i^{N}$ are sufficiently close to the positive real axis, and using $|\sum\lambda_i^m|=1$ for $m=N,2N$, we find that there can only be a single $\lambda_i\ne0$, which must be a phase. Thus, 
+$U \lvert \psi_A \rangle = \lambda^N\lvert \psi_B \rangle$ with some phase $\lambda$ which can be absorbed in the tensor $B$, leaving us with Eq.~\eqref{eq:UpsiA-eq-psiB}.}
+\begin{equation}
+\label{eq:UpsiA-eq-psiB}
+U \lvert \psi_A \rangle = \lvert \psi_B \rangle \ .
+\end{equation}
+
+
+Just as before for MPUs, the global symmetry in Eq.~\eqref{eq:UpsiA-eq-psiB} implies (using Theorem\ref{FT1}) that a 
+\emph{local} equation which characterizes this symmetry action holds: There exist a  pair of \emph{action tensors} $(W_B,\widehat{W}_B)$ acting at the virtual level that satisfy for all $m \ge 0$ 
+\begin{equation}\label{eq:Wdef}
+     %
+     \begin{tikzpicture}[baseline=5pt]
+    \node at (1,1) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+    \draw[thick, red] (0,0.5) -- (2,0.5);
+    \draw[thick] (0,0) -- (2,0);
+		  \foreach \x in {0.4,0.8,1.2,1.6}{
+		  \draw[thick] (\x,0) -- (\x,0.8);
+		    \node[tensor] at (\x,0.5) {};
+		    \node[tensor,label=below:$A$] at (\x,0) {};  
+		      }
+\end{tikzpicture} 
+=
+\begin{tikzpicture}[baseline=-11pt]
+    \node at (0,0.3) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+     \pic (w) at (-0.6,-0.3) {W2=//};
+\pic (v) at (0.6,-0.3) {V2=//};
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{W}_B$};
+		  \foreach \x in {-1,1}{
+		  \draw[thick] (\x,-0.6) -- (\x,+0.3);
+		  \draw[red,thick] (\x-0.3,0) -- (\x+0.3,0);
+		\draw[thick] (\x-0.325,-0.6) -- (\x+0.325,-0.6);
+	    \node[tensor] at (\x,0) {};
+	    \node[tensor, label=below:$A$] at (\x,-0.6) {};
+	    }
+		\foreach \x in {-0.2,0.2}{
+		   \draw[thick] (\x,-0.3) -- (\x,-0.3+0.3);
+		   \draw[thick] (\x-0.3,-0.3) -- (\x+0.3,-0.3);
+		   \node[tensor, label=below:$B$] at (\x,-0.3) {};
+		      }
+\end{tikzpicture} 
+\quad {\rm and } \quad
+ \begin{tikzpicture}[baseline=-3mm]
+    \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+        \draw[thick] (-0.5,-0.6) -- (1,-0.6);
+    \draw[thick,red] (0,0) -- (1,0);
+     \pic (v) at (-0.5,-0.3) {V2=//};
+      \pic (w) at (1,-0.3) {W2=//};
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{W}_B$};
+    \node[tensor] (t) at (0,0) {};
+    \node[tensor, label=below:$A$] (t) at (0,-0.6) {};
+        \node[tensor] (t) at (0.5,0) {};
+    \node[tensor,, label=below:$A$] (t) at (0.5,-0.6) {};
+    \draw[thick] (0,-0.6) -- (0,0.3);
+        \draw[thick] (0.5,-0.6) -- (0.5,0.3);
+  \end{tikzpicture} =
+  \begin{tikzpicture}[baseline=-1mm]
+      \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+      \draw[thick]  (0,0) -- (0,0.3);
+            \draw[thick]  (0.5,0) -- (0.5,0.3);
+      \draw[thick]  (-0.3,0) -- (0.8,0);
+    \node[tensor, label=below:$B$] (t) at (0,0) {};
+    \node[tensor, label=below:$B$] (t) at (0.5,0) {};
+     \end{tikzpicture}\ ,
+\end{equation}
+where we have the freedom to redefine the action tensors by a phase factor $W_{B}\to \gamma_{B} W_{B}$ and $\widehat{W}_{B} \to \gamma_{B}^{-1} \widehat{W}_{B} $. 
+Analogously, the equation $ U | \psi_B \rangle = | \psi_A \rangle $ gives rise to the pair of action tensors $(W_A,\widehat{W}_A)$ which satisfy an equation analogous to Eq.~\eqref{eq:Wdef}.
+
+In a system with more than one ground state, the natural fundamental excitations are domain walls between the different ground states. To model those domain walls for the setting at hand, we introduce ``domain wall tensors'' $e_{AB}$ and $e_{BA}$ which interface between domains with $A$ and $B$ tensors as 
+\begin{equation}\label{SingleDW}
+\begin{tikzpicture}[baseline=-3pt]
+\draw[thick,dashed] (-0.6,0) -- (-0.2,0);
+\draw[thick,dashed] (1.8,0) -- (2.4,0);
+\draw[thick] (-0.2,0) -- (1.8,0);
+		  \foreach \x in {0,0.4}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+\node[tenex, label=below:$e_{AB}$] at (0.8,0) {}; 
+		  \foreach \x in {1.2,1.6}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\end{tikzpicture}
+\mbox{\quad and\quad}
+\begin{tikzpicture}[baseline=-3pt]
+\draw[thick,dashed] (-0.6,0) -- (-0.2,0);
+\draw[thick,dashed] (1.8,0) -- (2.4,0);
+\draw[thick] (-0.2,0) -- (1.8,0);
+		  \foreach \x in {0,0.4}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+\node[tenex, label=below:$e_{BA}$] at (0.8,0) {}; 
+		  \foreach \x in {1.2,1.6}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\end{tikzpicture} \ .
+\end{equation}
+Intuitively, the $e_{AB}$ and $e_{BA}$ are meant to model the fundamental excitations of the Hamiltonian, 
+but any choice will do, as long as they are interchanged by the symmetry action. Let us define what we mean by that more specifically:
+Given domain wall tensors $e_{AB}$, $e_{BA}$, we can construct a state on a periodic system with a pair of domain walls at some specific positions $k$ and $\ell$,
+\begin{align}\label{DWopmps} | \psi(A\!-\!B\!-\!A) \rangle  =  &   \sum_{ \{ i_k \} }  \tr[A^{i_{1}}{\cdots}   A^{i_{k-1}}  e^{i_k}_{AB} B^{i_{k+1}} \cdots B^{i_{\ell-1}} e^{i_\ell}_{BA} A^{i_{\ell+1}}{\cdots}   A^{i_{N}} ] |  i_1 {\cdots} i_k\cdots i_\ell \cdots i_{N}\rangle \notag
+\\ 
+= & \ 
+\begin{tikzpicture}
+\draw[rounded corners, thick] (-0.4,0) rectangle (3.2,-0.5);
+		  \foreach \x in {0,0.4,2.4,2.8}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+\node[tenex, label=below:$e_{AB}$] at (0.8,0) {}; 
+		  \foreach \x in {1.2,1.6}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (2,0) -- (2,+0.25);
+          \node[tenex, label=below:$e_{BA}$] at (2,0) {};  
+\end{tikzpicture} 
+\end{align}
+as well as its ``twin''
+\begin{align} | \psi(B\!-\!A\!-\!B) \rangle  
+= \ 
+\begin{tikzpicture}
+\label{eq:domain-walls-on-B}
+\draw[rounded corners, thick] (-0.4,0) rectangle (3.2,-0.5);
+		  \foreach \x in {0,0.4,2.4,2.8}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+\node[tenex, label=below:$e_{BA}$] at (0.8,0) {}; 
+		  \foreach \x in {1.2,1.6}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (2,0) -- (2,+0.25);
+          \node[tenex, label=below:$e_{AB}$] at (2,0) {};  
+\end{tikzpicture} \quad.
+\end{align}
+
+We now demand that the symmetry acts by exchanging these two states (up to a phase),
+$U \lvert \psi(A\!-\!B\!-\!A) \rangle = c \lvert \psi(B\!-\!A\!-\!B) \rangle $. Using the injectivity of $A$ and $B$ and the relations in Eq.\ \eqref{eq:Wdef} we obtain: 
+\begin{equation}\label{eq:prodlocaldef}
+\begin{tikzpicture}[baseline=4pt]
+   \pic[scale=0.83] (w) at (1.6,0.25) {W2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_A$};
+   \pic[scale=0.83] (v) at (0,0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat W_B$};
+      \draw[thick] (0.075,0)--(1.525,0);
+      \draw[thick, red] (0.2,0.5)--(1.4,0.5);
+		  \foreach \x in {0.4, 0.8,1.2}{
+    \node[tensor] at (\x,0.5) {}; 
+\draw[thick] (\x,0) -- (\x,0.7); }
+		    \node[tensor, label=below:$A$] at (0.4,0) {};  
+		    \node[tensor, label=below:$B$] at (1.2,0) {};  
+		\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{AB}$] at (0.8,0) {};  
+\end{tikzpicture}
+\otimes
+\begin{tikzpicture}[baseline=4pt]
+   \pic[scale=0.83] (w) at (1.6,0.25) {W2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+   \pic[scale=0.83] (v) at (0,0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat W_A$};
+      \draw[thick] (0.075,0)--(1.525,0);
+      \draw[thick, red] (0.2,0.5)--(1.4,0.5);
+		  \foreach \x in {0.4, 0.8,1.2}{
+    \node[tensor] at (\x,0.5) {}; 
+\draw[thick] (\x,0) -- (\x,0.7); }
+		    \node[tensor, label=below:$B$] at (0.4,0) {};  
+		    \node[tensor, label=below:$A$] at (1.2,0) {};  
+		\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{BA}$] at (0.8,0) {};  
+\end{tikzpicture}
+= \ c \cdot \
+\begin{tikzpicture}[baseline=-2pt]
+      \draw[thick] (0.1,0)--(1.5,0);
+		  \foreach \x in {0.4}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+		  \foreach \x in {1.2}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{BA}$] at (0.8,0) {};  
+\end{tikzpicture}
+\otimes
+\begin{tikzpicture}[baseline=-2pt]
+      \draw[thick] (0.1,0)--(1.5,0);
+		  \foreach \x in {0.4}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+		  \foreach \x in {1.2}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{AB}$] at (0.8,0) {};  
+\end{tikzpicture} 
+\ .
+\end{equation}
+
+That in particular entails how the domain walls transform into each other since this implies that 
+\begin{equation}\label{eq:localcdef}
+\begin{tikzpicture}[baseline=4pt]
+   \pic[scale=0.83] (w) at (1.6,0.25) {W2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_A$};
+   \pic[scale=0.83] (v) at (0,0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat W_B$};
+      \draw[thick] (0.075,0)--(1.525,0);
+      \draw[thick, red] (0.2,0.5)--(1.4,0.5);
+		  \foreach \x in {0.4, 0.8,1.2}{
+    \node[tensor] at (\x,0.5) {}; 
+\draw[thick] (\x,0) -- (\x,0.7); }
+		    \node[tensor, label=below:$A$] at (0.4,0) {};  
+		    \node[tensor, label=below:$B$] at (1.2,0) {};  
+		\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{AB}$] at (0.8,0) {};  
+\end{tikzpicture}
+= c_{AB}\,
+\begin{tikzpicture}[baseline=-2pt]
+      \draw[thick] (0.1,0)--(1.5,0);
+		  \foreach \x in {0.4}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+		  \foreach \x in {1.2}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{BA}$] at (0.8,0) {};  
+\end{tikzpicture} \quad
+\mbox{and}\quad
+\begin{tikzpicture}[baseline=4pt]
+   \pic[scale=0.83] (w) at (1.6,0.25) {W2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+   \pic[scale=0.83] (v) at (0,0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat W_A$};
+      \draw[thick] (0.075,0)--(1.525,0);
+      \draw[thick, red] (0.2,0.5)--(1.4,0.5);
+		  \foreach \x in {0.4, 0.8,1.2}{
+    \node[tensor] at (\x,0.5) {}; 
+\draw[thick] (\x,0) -- (\x,0.7); }
+		    \node[tensor, label=below:$B$] at (0.4,0) {};  
+		    \node[tensor, label=below:$A$] at (1.2,0) {};  
+		\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{BA}$] at (0.8,0) {};  
+\end{tikzpicture}
+= c_{BA}\,
+\begin{tikzpicture}[baseline=-2pt]
+      \draw[thick] (0.1,0)--(1.5,0);
+		  \foreach \x in {0.4}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+		  \foreach \x in {1.2}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex, label=below:$e_{AB}$] at (0.8,0) {};  
+\end{tikzpicture}
+\end{equation}
+must hold, 
+where $c_{AB}$ is defined up to $\gamma_B/\gamma_A$ due to the dependence of $W_A$ and $W_B$ on their phase factor choice. In fact, in order to ensure that the domain walls transform into each other under the symmetry, we could have chosen any $e_{AB}$ and then \emph{defined} $e_{BA}$ through the left part of Equation~\eqref{eq:localcdef}, for an arbitrary choice of $c_{AB}$. Note, however, that the choice of $c_{AB}$ fixes $e_{AB}$ and $e_{BA}$ (relative to $\gamma_B/\gamma_A$), and in particular their relative phase, and thus $c_{BA}$ is uniquely determined. 
+
+In fact, from Eq.~\eqref{eq:localcdef}, one can easily check that the product $c_{BA}c_{AB}$ is gauge invariant. 
+This can also be understood more directly, by observing that 
+$U\lvert\psi(A\!-\!B\!-\!A) \rangle = c_{BA}c_{AB} \lvert\psi(B\!-\!A\!-\!B) \rangle$, that is,  $c_{BA}c_{AB}=c$ is a physically observable quantity.
+Since $U^2=\id$, it must hold that $(c_{BA}c_{AB})^2=1$, and therefore, the way the symmetry acts on domain walls must fall into one of the two cases
+\begin{equation}
+    c_{BA}c_{AB}=\pm 1\ .
+\end{equation}
+
+The fact that both $c_{BA}c_{AB}$ and the phase $\omega$ 
+[Eq.~\eqref{eq:Uanomal}]
+which characterizes the anomaly of the MPS can take values $\pm1$ is not a
+coincidence. As we will show in the next subsection, they are in fact equal,
+$c_{AB}c_{BA}=\omega$: That is, the anomaly of the MPU symmetry shows up
+in the transformation properties of domain wall excitations. 
+
+Translation symmetry allows to construct  excitations with momentum $k$ by a superposition of the domain walls in Eq.\eqref{SingleDW} as in \cite{Haegeman12A}. We note that the MPU action on those well-defined momenta excitations would result in the same phase factors as in Eq.\eqref{eq:localcdef}.
+
+
+\subsection{Relation between $c_{BA}c_{AB}$ and the MPU anomaly}
+%
+
+Let us now consider  
+\begin{equation}
+(U^2) | \psi_A \rangle = U(U| \psi_A \rangle) =| \psi_A \rangle
+\ .    
+\end{equation}
+As $\lvert\psi_A\rangle$ is an injective MPS, the left equality once more implies that a corresponding local condition holds, 
+where for the left term, we first merge the two MPU tensors $T$ using Eq.~\eqref{eq:Ured} (the resulting MPU $U^2=\id$ is trivial, so it merges trivially with $A$), 
+while for the right term, we merge the MPU tensors $T$ one after another with the MPS tensor $A$, using Eq.~\eqref{eq:Wdef}. 
+The two decompositions are then related via a phase factor $L_A$ [which measures the  associativity of the fusion orders $(T\cdot T)\cdot A$ and $T\cdot (T\cdot A)$] ,
+\begin{equation}\label{eq:Ldef}
+\begin{tikzpicture}
+      \pic[scale=0.83] at (1.2,0.75) {W=//};
+      \draw[thick] (-0.3,0) -- (1.1,0);
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[thick,red] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+\end{tikzpicture} 
+= {L}_A \ 
+\begin{tikzpicture}
+ \draw[thick] (1.3,0.25) -- (1.55,0.25);
+      \draw[red,thick] (1,1) -- (1,1);
+      \draw[thick] (-0.2,0)--(1.15,0);
+      \pic[scale=1.25] (w1) at (1.6,0.625) {W2=//};
+      \pic[scale=0.83] (w2) at (1.2,0.25) {W2=//};
+      \node[anchor=north,inner sep=2pt] at (w2-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (w1-bottom) {${W}_A$};
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+\end{tikzpicture} \ .
+\end{equation}
+Note that $L_A$ is only defined up to a phase factor $\gamma_{A}\cdot \gamma_{B} / \beta$, arising from the gauge freedom in the action and fusion tensors. In the same way, $L_B$ can be defined. We will now derive a key relation between these $L$-symbols and  $\omega$ which characterizes the anomaly of the MPU in Eq.~\eqref{eq:Uanomal}, namely
+\begin{equation}\label{eq:Lsignrel} 
+L_A / L_B= \omega \ ,
+\end{equation}
+which is invariant under phase factor redefinitions of the tensors. This relation can be shown
+as follows (we start by simplifying the blue region):
+$$
+\begin{tikzpicture}
+ \draw[draw=blue!30, fill= cyan!30, rounded corners] (0.5,-0.45) rectangle (1.8,1.2);
+      \draw[red,thick] (1,1.5) -- (1.5,1.5);
+      \draw[red,thick] (1,1) -- (1.2,1);
+      \draw[thick] (-0.35,0)--(1.2,0);
+     \draw[thick] (1.2,0.25)--(1.6,0.25);
+      \pic[scale=0.83] (v) at (-0.4,0.25 ) {V2=//};
+      \pic[scale=0.83] at (-0.4,1.25 ) {V=//};
+      \pic[scale=0.83] (w1) at (1.15,0.25 ) {W2=//};
+        \pic[scale=1.25] (w2) at (1.6,0.625) {W2=//};
+      \pic[scale=1.4] (w3) at (2,1.08) {W2=//};
+      \node[anchor=north,inner sep=2pt] at (w1-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (w2-bottom) {${W}_A$};
+      \node[anchor=north,inner sep=2pt] at (w3-bottom) {$W_B$};
+      \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{W}_B$};
+\foreach \y in {0.5,1,1.5}{
+		  \foreach \x in {0,0.35,0.7}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.35,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+\end{tikzpicture}
+\stackrel{(\ref{eq:Ldef})}{=} \  L_A \ 
+\begin{tikzpicture}
+      \pic[scale=1.4] (w) at (1.7,1.08) {W2p=//};
+       \draw[red,thick] (1,1.5) to [out=0,in=180] (w-up);
+      \draw[thick] (-0.4,0) -- (1.2,0) to [out=0,in=180] (w-down);
+            \pic[scale=0.83] (v) at (-0.4,0.25 ) {V2=//};
+      \pic[scale=0.83] at (-0.4,1.25 ) {V=//};
+      \pic[scale=0.83] at (1.2,0.75 ) {W=//};
+              \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{W}_B$};
+           \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+\foreach \y in {0.5,1,1.5}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+\end{tikzpicture}
+\stackrel{(\ref{eq:Uanomal})}{=}  \omega \cdot  L_A\:
+\begin{tikzpicture}[baseline=-10pt]
+        \draw[thick] (-0.4,-0.5) -- (1.2,-0.5);
+    \draw[thick,red] (0,0) -- (1,0);
+     \pic[scale=0.83] (v) at (-0.4,-0.25) {V2=//};
+      \pic[scale=0.83] (w) at (1.2,-0.25) {W2=//};
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{W}_B$};
+		  \foreach \x in {0,0.4,0.8}{
+		    \node[tensor] at (\x,0) {};  
+		     \draw[thick] (\x,-0.5) -- (\x,0.25); 
+		         \node[tensor, label=below:$A$] (t) at (\x,-0.5) {};
+		         }
+  \end{tikzpicture}
+   \stackrel{(\ref{eq:Wdef})}{=}  \omega \cdot L_A\:
+  \begin{tikzpicture}
+        \draw[thick] (-0.2,-0.5) -- (1,-0.5);
+		  \foreach \x in {0,0.4,0.8}{
+		     \draw[thick] (\x,-0.5) -- (\x,-0.2); 
+		         \node[tensor, label=below:$B$] (t) at (\x,-0.5) {};
+		         }
+  \end{tikzpicture} \ .
+$$
+On the other hand, we can transform the left hand side in the above equation by starting to simplify the bottom left part, 
+again marked blue:
+$$
+\begin{tikzpicture}
+	\draw[draw=blue!30, fill= cyan!30, rounded corners] (-0.8,-0.5) rectangle (1.4,0.75);
+      \draw[red,thick] (1,1.5) -- (1.5,1.5);
+      \draw[red,thick] (1,1) -- (1.2,1);
+      \draw[thick] (-0.35,0)--(1.2,0);
+     \draw[thick] (1.2,0.25)--(1.6,0.25);
+      \pic[scale=0.83] (v) at (-0.4,0.25 ) {V2=//};
+      \pic[scale=0.83] at (-0.4,1.25 ) {V=//};
+      \pic[scale=0.83] (w1) at (1.15,0.25 ) {W2=//};
+        \pic[scale=1.25] (w2) at (1.6,0.625) {W2=//};
+      \pic[scale=1.4] (w3) at (2,1.08) {W2=//};
+      \node[anchor=north,inner sep=2pt] at (w1-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (w2-bottom) {${W}_A$};
+      \node[anchor=north,inner sep=2pt] at (w3-bottom) {$W_B$};
+      \node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{W}_B$};
+\foreach \y in {0.5,1,1.5}{
+		  \foreach \x in {0,0.35,0.7}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.35,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+\end{tikzpicture}
+ \stackrel{(\ref{eq:Wdef})}{=} 
+\begin{tikzpicture}
+      \draw[red,thick] (1,1) -- (1.2,1);
+      \draw[thick] (-0.4,0)--(1.2,0);
+    \draw[thick] (1.6,0.25)--(1.2,0.25);
+\pic[scale=0.83] at (-0.5,0.75) {V=//};
+      \pic[scale=1.25] (w1) at (1.6,0.625) {W2=//};
+      \pic[scale=0.83] (w2) at (1.2,0.25) {W2=//};
+      \node[anchor=north,inner sep=2pt] at (w1-bottom) {$W_B$};
+\node[anchor=north,inner sep=2pt] at (w2-bottom) {${W}_A$};
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+\end{tikzpicture}
+\stackrel{(\ref{eq:Ldef})}{=}  \ L_B \ 
+\begin{tikzpicture}
+      \draw[thick] (-0.2,0)--(1,0);
+		  \foreach \x in {0,0.4,0.8}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+\end{tikzpicture} \ .
+$$
+Comparing the two equations, we indeed find $L_A/L_B= \omega$.
+
+
+Finally, we have that
+\begin{equation}
+\begin{aligned}
+\ c_{BA}  c_{AB} \ 
+\begin{tikzpicture}
+      \draw[thick] (-0.4,0)--(1.2,0);
+      \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,0) -- (\x,0.3);}
+ \node[tenex, label=below:$e_{AB}$] at (0.4,0) {};  
+ \node[tensor, label=below:${A}$] at (0,0) {};  
+ \node[tensor, label=below:${B}$] at (0.8,0) {};  
+\end{tikzpicture} 
+& =
+\begin{tikzpicture}
+      \draw[red,thick] (1,1) -- (1.2,1);
+      \draw[thick] (-0.4,0)--(1.2,0);
+    \draw[thick] (1.6,0.25)--(1.2,0.25);
+      \pic[scale=1.25] (w1) at (1.6,0.625) {W2=//};
+      \pic[scale=0.83] (w2) at (1.2,0.25) {W2=//};
+      \node[anchor=north west,inner sep=2pt] at (w1-bottom) {$W_B$};
+\node[anchor=north west,inner sep=2pt] at (w2-bottom) {${W}_A$};
+      \pic[scale=1.25] (v1) at (-0.8,0.625) {V2=//};
+      \pic[scale=0.83] (v2) at (-0.4,0.25) {V2=//};
+      \node[anchor=north east,inner sep=2pt] at (v1-bottom) {$\widehat{W}_A$};
+\node[anchor=north ,inner sep=2pt] at (v2-bottom) {$\widehat{W}_B$};
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+ \node[tenex, label=below:$e_{AB}$] at (0.4,0) {};  
+ \node[tensor, label=below:${A}$] at (0,0) {};  
+ \node[tensor, label=below:${B}$] at (0.8,0) {};  
+\end{tikzpicture}
+\\
+& =  
+\ \frac{1}{L_A}
+\begin{tikzpicture}
+      \draw[red,thick] (1,1) -- (1.2,1);
+      \draw[thick] (-0.4,0)--(1.2,0);
+    \draw[thick] (1.6,0.25)--(1.2,0.25);
+      \pic[scale=1.25] (w1) at (1.6,0.625) {W2=//};
+      \pic[scale=0.83] (w2) at (1.2,0.25) {W2=//};
+      \node[anchor=north west,inner sep=2pt] at (w1-bottom) {$W_B$};
+\node[anchor=north west,inner sep=2pt] at (w2-bottom) {${W}_A$};
+      \pic[scale=0.83] (v2) at (-0.45,0.75) {V=//};
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+ \node[tenex, label=below:$e_{AB}$] at (0.4,0) {};  
+ \node[tensor, label=below:${A}$] at (0,0) {};  
+ \node[tensor, label=below:${B}$] at (0.8,0) {};  
+\end{tikzpicture} 
+=
+\frac{L_B}{L_A}
+\begin{tikzpicture}
+      \draw[red,thick] (1,1) -- (1.2,1);
+      \draw[thick] (-0.4,0)--(1.2,0);
+      \pic[scale=0.83] (w2) at (1.25,0.75) {W=//};
+      \pic[scale=0.83] (v2) at (-0.45,0.75) {V=//};
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		     \draw[thick] (\x,0) -- (\x,+0.25); }}
+ \node[tenex, label=below:$e_{AB}$] at (0.4,0) {};  
+ \node[tensor, label=below:${A}$] at (0,0) {};  
+ \node[tensor, label=below:${B}$] at (0.8,0) {};  
+\end{tikzpicture} 
+=
+\frac{L_B}{L_A}
+\begin{tikzpicture}
+      \draw[thick] (-0.4,0)--(1.2,0);
+      \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,0) -- (\x,0.3);}
+ \node[tenex, label=below:$e_{AB}$] at (0.4,0) {};  
+ \node[tensor, label=below:${A}$] at (0,0) {};  
+ \node[tensor, label=below:${B}$] at (0.8,0) {};  
+\end{tikzpicture} 
+\ .
+\end{aligned}
+\end{equation}
+that is, 
+\begin{equation}
+\label{eq:CC-LL}
+c_{BA} \cdot c_{AB} = L_A / L_B = \omega\ .
+\end{equation}
+We thus find the product $c_{AB}c_{BA}$, which characterizes how pairs of domain walls transform under the MPU symmetry, is precisely given by the phase $\omega$ which characterizes the anomaly of the MPU -- differently put, the MPU anomaly can be physically probed through the way in which it acts on domain wall excitations.
+
+Let us finally point out another connection established by Eq.~\eqref{eq:CC-LL}: It links the $c$'s, which characterize the
+symmetry action on domain wall excitations, to the $L$'s, which characterize the
+way in which the symmetry acts on the ground state. Those $L$'s have been
+introduced in Ref.~\onlinecite{Garre22}, where it was shown that their
+equivalence classes are the invariants which classify quantum phases with MPU
+symmetries. Importantly, for a $\mathbb Z_2$ symmetry, the quotient $L_A/L_B$
+completely characterized the quantum phase of a given Hamiltonian.
+
+
+\subsection{The simplest example}
+
+Let us now illustrate this through a simple example. To this end, consider the
+two states $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$ on $(\mathbb C^2)^{\otimes N}$, and two
+different $\mathbb Z_2$ symmetries which permute them: First, a trivial local
+symmetry $U_x = \prod_i X_i$, and second, the CZX symmetry  $U_{CZX} =  \prod_i
+Z_{i} \cdot CZ_{i,i+1} \prod_i X_i$, which has an anomaly, i.e., $\omega=-1$~\cite{Chen11A} (here, $CZ_{i,i+1}$ 
+is the controlled-Z on qubits $i$ and $i+1$, i.e., it applies a $-1$ phase exactly if both qubits are in the state $|1\rangle$).
+For
+the trivial symmetry action, it is easy to see that the fusion tensors for $U_x$
+are trivial, so $\omega=+1$ and since $X$ swaps $|0\rangle$ and $|1\rangle$, the
+action tensors are trivial too, so $L_0/L_1=+1 $. 
+
+Let us now consider the CZX MPU $U_{CZX}$. We will now calculate the fusion tensors of $U_{CZX}$, as well as the action tensors when applied to  $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N} = U_{CZX} |0\rangle^{\otimes N}$, to show that in this case $\omega= L_0/L_1=-1$. 
+To this end, notice that the $CZ$ gate can be written as a tensor network using delta tensors and (unormalized) Hadamard matrices as follows:
+$$
+CZ =
+\begin{tikzpicture}
+\draw[thick](0,-0.25)--(0,0.25){};
+\draw[thick,red](0,0)--(1,0){};
+\draw[thick](1,-0.25)--(1,0.25){};
+\node[tensor,label=above:$\hat{H}$] at (0.5,0) {};
+\end{tikzpicture} 
+\ , 
+\hat{H} =
+\begin{pmatrix}
+1 & 1 \\
+1 & -1
+\end{pmatrix}
+\ , 
+\begin{tikzpicture}
+\node[] at (0,-0.4) {$i$};
+\node[] at (0,0.4) {$j$};
+\node[] at (0.4,0) {$k$};
+\draw[thick](0,-0.25)--(0,0.25){};
+\draw[thick,red](0,0)--(0.3,0){};
+\end{tikzpicture} 
+= 
+\delta_{ijk}
+$$
+
+The MPU tensor of $U_{CZX}$ that we choose is
+$$
+\begin{tikzpicture}
+\draw[red, thick](-0.3,0)-- (0.3,0){};
+\draw[ thick](0,-0.3)-- (0,0.3){};
+\node[tensor] at (0,0) {};
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+\draw[thick,red](-0.6,0)--(0,0){};
+\draw[thick](0,-0.5)--(0,0.8){};
+\draw[thick,red](0,0.3)--(0.5,0.3){};
+\node[tensor,label=above:$\hat{H}$] at (-0.25,0) {};
+\node[tensor,label=right:$X$] at (0,-0.3) {};
+\node[tensor,label=right:$Z$] at (0,0.6) {};
+\end{tikzpicture}
+$$
+Notice that this tensor becomes injective when blocking two sites. To obtain fusion tensor we only need to use 3 sites as follows:
+$$
+\begin{tikzpicture}
+\foreach \y in {0.5,1}{
+	\foreach \x in {0,0.4,0.8}{
+		\draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		\draw[thick,red] (\x-0.25,\y) -- (\x+0.25,\y);
+		\node[tensor] at (\x,\y) {}; 
+  }}
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+     \pic (w) at (-0.6,-0.3) {W=//};
+\pic (v) at (0.6,-0.3) {V=//};
+\node[anchor=north,inner sep=2pt] at (w-bottom) {$V$};
+\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{V}$};
+\foreach \y in {0,-0.6}{
+	\foreach \x in {-1,1}{
+		\draw[thick] (\x,\y-0.3) -- (\x,\y+0.3);
+		\draw[thick,red] (\x-0.3,\y) -- (\x+0.25,\y);
+		\node[tensor] at (\x,\y) {};
+	}}
+    \foreach \x in {0}{
+		  \draw[thick] (\x,-0.3-0.4) -- (\x,-0.3+0.4);
+	}
+\end{tikzpicture}
+=
+(-1)
+\begin{tikzpicture}
+    \foreach \y in {0.25,-0.25}{
+    \draw[thick,red] (-0.6,\y) -- (0,\y);
+    \draw[thick,red] (1,\y) -- (1.4,\y);
+}
+\foreach \x in {0,0.5,1}{
+	\draw[thick] (\x,-0.5) -- (\x,0.5);	
+  }
+\node[tensor,label=above:$\hat{H}$] at (-0.25,0.25) {};
+\node[tensor,label=below:$\hat{H}$] at (-0.45,-0.25) {};
+\node[tensor,label=below:$X$] at (-0.2,-0.25) {};
+\node[tensor,label=below:$X$] at (1.2,-0.25) {};
+\node[tensor,label=left:$Z$] at (1,0) {};
+\node[tensor,label=right:$Z$] at (0,0) {};
+\end{tikzpicture}
+, \
+\begin{tikzpicture}
+\pic (v) at (0,0) {V=//};
+\end{tikzpicture}
+= 
+\begin{tikzpicture}
+\node[] at (0,0.3) {$\langle 1 |$};
+\node[] at (0,-0.3) {$\langle 0 |$};
+\end{tikzpicture}
+, \
+\begin{tikzpicture}
+\pic (v) at (0,0) {W=//};
+\end{tikzpicture}
+= 
+\begin{tikzpicture}
+\node[] at (0,0.3) {$ -{| \hat{ -} \rangle} $};
+\node[] at (0,-0.3) {$ {| \hat{ +} \rangle} $};
+\end{tikzpicture}
+\ ,
+$$
+where $ |\hat{+} \rangle= | 0 \rangle +| 1 \rangle $ and $|\hat{-} \rangle= | 0 \rangle -| 1 \rangle$. 
+
+Since the MPSs we are dealing with have bond dimension $D=1$, i.e., they are product states, the fusion tensors have only one index coming from the MPU virtual level -- that is, they are vectors. Then, we obtain the following decompositions:
+$$
+\begin{tikzpicture}
+ \draw[thick,red] (-0.25,0.5) -- (0.8+0.25,0.5);
+\foreach \y in {0,0.5}{
+	\foreach \x in {0,0.4,0.8}{
+ \node[] at (\x,-0.3) {$| 0 \rangle$};
+		\draw[thick] (\x,0) -- (\x,0.5+0.25);
+		\node[tensor] at (\x,\y) {}; 
+  }}
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+	\foreach \x in {0,0.7,1.4}{
+		\draw[thick] (\x,0) -- (\x,0.5+0.25);
+		\node[tensor] at (\x,0) {}; 
+  }
+\draw[thick,red] (-0.25,0.5) -- (0.25,0.5);
+\draw[thick,red] (-0.25+1.4,0.5) -- (0.25+1.4,0.5);
+\node[tensor] at (0,0.5) {};
+\node[tensor] at (1.4,0.5) {};
+ \node[] at (0,-0.3) {$| 0 \rangle$};
+  \node[] at (1.4,-0.3) {$| 0 \rangle$};
+   \node[] at (0.7,-0.3) {$| 1 \rangle$};
+  \node[tensor,fill=blue] at (0.3,0.5) {};
+\node[tensor,fill=blue] at (1.4-0.3,0.5) {}; 
+  \node[scale=0.8] at (1.4-0.3,0.7) {$\langle \hat{ +} |$};
+    \node[scale=0.8] at (0.3,0.7) {$| \hat{ +} \rangle$};
+\end{tikzpicture}
+\ , \quad
+\begin{tikzpicture}
+ \draw[thick,red] (-0.25,0.5) -- (0.8+0.25,0.5);
+\foreach \y in {0,0.5}{
+	\foreach \x in {0,0.4,0.8}{
+ \node[] at (\x,-0.3) {$| 1 \rangle$};
+		\draw[thick] (\x,0) -- (\x,0.5+0.25);
+		\node[tensor] at (\x,\y) {}; 
+  }}
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+	\foreach \x in {0,0.7,1.4}{
+		\draw[thick] (\x,0) -- (\x,0.5+0.25);
+		\node[tensor] at (\x,0) {}; 
+  }
+\draw[thick,red] (-0.25,0.5) -- (0.25,0.5);
+\draw[thick,red] (-0.25+1.4,0.5) -- (0.25+1.4,0.5);
+\node[tensor] at (0,0.5) {};
+\node[tensor] at (1.4,0.5) {};
+ \node[] at (0,-0.3) {$| 1 \rangle$};
+  \node[] at (1.4,-0.3) {$| 1 \rangle$};
+   \node[] at (0.7,-0.3) {$| 0 \rangle$};
+  \node[tensor,fill=orange] at (0.3,0.5) {};
+\node[tensor,fill=orange] at (1.4-0.3,0.5) {}; 
+  \node[scale=0.8] at (1.4-0.3,0.7) {${\langle \hat{ +} |}$};
+    \node[scale=0.8] at (0.3,0.7) {$-{| \hat{ +} \rangle}$};
+\end{tikzpicture}
+$$
+We can now obtain the $L$-symbols defined in Eq.\ \eqref{eq:Ldef} (and using Eq.\ \eqref{eq:Ured}):
+$$
+\begin{tikzpicture}
+\draw[thick] (0,-0.5) -- (0,0);
+\node[tensor,label=below:$|i\rangle$] at (0,-0.5) {};
+\end{tikzpicture}
+= L_i \cdot  
+\begin{tikzpicture}
+\pic (v) at (1.4,-0.3) {W=//};
+%\node[anchor=north,inner sep=2pt] at (v-bottom) {$\widehat{V}$};
+\foreach \y in {0,-0.6}{
+	\foreach \x in {1}{
+		\draw[thick] (\x,\y-0.3) -- (\x,\y+0.3);
+		\draw[thick,red] (\x-0.3,\y) -- (\x+0.25,\y);
+		\node[tensor] at (\x,\y) {};
+	}}
+\node[tensor,fill=orange] at (1-0.35,0) {};
+\node[tensor,fill=blue] at (1-0.35,-0.6) {};
+\node[tensor,label=below:$|i\rangle$] at (1,-0.9) {};
+\end{tikzpicture}
+=
+L_i
+\begin{tikzpicture}
+\draw[thick] (0,-0.5) -- (0,0.5);
+\node[tensor,label=left:$-Z$] at (0,0) {};
+\node[tensor,label=below:$|i\rangle$] at (0,-0.5) {};
+\end{tikzpicture}
+=
+(-1)^{i+1} L_i \cdot 
+\begin{tikzpicture}
+\draw[thick] (0,-0.5) -- (0,0);
+\node[tensor,label=below:$|i\rangle$] at (0,-0.5) {};
+\end{tikzpicture}
+\Rightarrow  L_i = (-1)^{i+1} \Rightarrow L_0/L_1 = -1 
+\ .
+$$
+
+\subsection{Creation of domain walls}
+
+Let us now study how to create a pair of domain wall excitations on top of an
+(unkown) ground state, located at positions $i$ and $j$. In the case of an
+on-site symmetry, $U=u^{\otimes N}$, this can be accomplished by acting with the
+symmetry operation $\bigotimes_{x\in [i,j]} u^{[x]}$ on the region $[i,j$]. In
+addition, if we are interested in creating a ``nice'' excitation, such as an
+eigenstate of the Hamiltonian, we will have to dress the endpoints, that is, act
+with an additional operator around sites $a$ and $b$. The support of this
+operator will, in general, depend on the correlation length of the system: While
+for an RG fixed point, an operator with fixed support will create an exact
+eigenstate, for a system away from the fixed point the accuracy of the
+eigenstate will converge exponentially with the ratio of its support $\ell$ and
+the correlation length $\xi$. Note that in MPS, a similar effect can achieved by
+changing the tensor at sites $i$ and $j$, since this affects the physical state
+on a scale of the correlation length.
+
+In the following, we will focus on the case of the RG fixed point for clarity. However, the same analysis applies to MPS with finite correlation $\xi$ length away from the fixed point: By blocking $\ell$ tensors, one obtains an MPS whose tensors converge to an RG fixed point exponentially in $\ell/\xi$.
+
+In the case of an MPU symmetry, we can't simply act with a bare symmetry string:
+There are open virtual indices at the ends of the MPU string operator, which we
+need to take care of. We do so by adding three-leg endpoint tensors (yellow diamonds) at
+the two ends of the MPU string: 
+%
+\begin{equation}\label{eq:DWophys}
+| \psi(A\!-\!B\!-\! A) \rangle  =  O^{[i,j]} | \psi_A \rangle = \ \cdots
+\begin{tikzpicture}
+      \draw[thick] (-0.2,0)--(3.4,0);
+      \node[] at (0.7,0.8) {$i$};
+      \node[] at (2.55,0.8) {$j$};
+		  \foreach \x in {0,0.4,0.8,2.4,2.8,3.2}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.25); }
+\draw[thick, red] (0.8,0.5)-- (2.4,0.5);
+\draw[thick] (0.8,0) -- (0.8,0.7);
+\draw[thick] (2.4,0) -- (2.4,0.7);
+   %\node[tensor, blue] at (0.8,0.5) {};
+   \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0.8,0.5) {};
+      \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (2.4,0.5) {};
+		  \foreach \x in {1.2,1.6,2}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0) -- (\x,0.7); } 
+\end{tikzpicture}
+\cdots \  .
+\end{equation}
+Here, the endpoint tensors are chosen precisely such as to create the previously constructed endpoint excitations 
+of Eqs.~\eqref{DWopmps} and \eqref{eq:domain-walls-on-B} when acting on $\lvert\psi_A\rangle$ and $\lvert\psi_B\rangle$, respectively. This is achieved by defining
+\begin{equation}\label{eq:defEndT}
+\begin{tikzpicture}
+\draw[thick] (0,0.2) -- (0,0.8);
+\draw[thick,red] (0,0.5) -- (0.3,0.5);
+%\node[tensor, blue] at (0,0.5) {};
+   \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0,0.5) {};
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+\draw[thick] (0,0.25)-- (0,0.5);
+\draw[thick] (0,-0.25)-- (0,-0.5);
+\draw[thick, rounded corners] (0,0.25) -- (-0.35,0.25)-- (-0.35,-0.3)-- (0.75,-0.3) -- (0.75,0.05)--(0.4,0.05);
+\node[tensor] at (0,-0.3) {};
+\pic[scale=0.83] (w) at (0.4,0.25) {V2=//};
+\node[tenex] at (0,0.25) {};  
+\node[] at (0.4,0.75) {$\widehat{W}_{B}$};
+\node[] at (0.05,0) {$e_{AB}$};
+\node[] at (-0.2,-0.5) {$\widehat{A}$};
+\end{tikzpicture}
++
+\begin{tikzpicture}
+\draw[thick] (0,0.25)-- (0,0.5);
+\draw[thick] (0,-0.25)-- (0,-0.5);
+\draw[thick, rounded corners] (0,0.25) -- (-0.35,0.25)-- (-0.35,-0.3)-- (0.75,-0.3) -- (0.75,0.05)--(0.4,0.05);
+\node[tensor] at (0,-0.3) {};
+\pic[scale=0.83] (w) at (0.4,0.25) {V2=//};
+\node[tenex] at (0,0.25) {};  
+\node[] at (0.4,0.75) {$\widehat{W}_{A}$};
+\node[] at (0.05,0) {$e_{BA}$};
+\node[] at (-0.2,-0.5) {$\widehat{B}$};
+\end{tikzpicture}
+\end{equation}
+and correspondingly for the right endpoint,
+where  $\hat{A}$, $\hat{B}$ are the left inverses of the MPS tensors $A$ and $B$, respectively -- those exist since 
+$\lvert\psi_A\rangle$ and $\lvert\psi_B\rangle$ are injective, and have orthogonal support since we work at the RG fixed point (otherwise, we would have to define them to act on a block of $\ell$ tensors), and thus the two terms in the sum act separately on $A$ and $B$, respectively.
+
+
+
+\subsection{Exchange statistics of domain walls}
+%
+Let us now turn to our key goal: To characterize the exchange statistics of domain wall excitations. To this end, we 
+need to consider individual domain walls, which we obtain by  cutting the operator creating a pair in the center, 
+\begin{equation}
+ O^{[i]}_x  = \ 
+\begin{tikzpicture}[baseline=12pt]
+      %\draw[thick] (-0.2,0)--(2.2,0);
+      \node[] at (0.7,0.8) {$i$};
+      \node[] at (2.4,0.5) {$|x\rangle$};
+		  %\foreach \x in {0,0.4,0.8}{
+		%    \node[tensor, label=below:$A$] at (\x,0) {};  
+		   %  \draw[thick] (\x,0) -- (\x,0.25); }
+\draw[thick, red] (0.8,0.5)-- (2.2,0.5);
+\draw[thick] (0.8,0.3) -- (0.8,0.7);
+   %\node[tensor, blue] at (0.8,0.5) {};
+   \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0.8,0.5) {};
+		  \foreach \x in {1.2,1.6,2}{
+		    %\node[tensor, label=below:$A$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0.3) -- (\x,0.7); } 
+\end{tikzpicture}\ ,
+\end{equation}
+where we fix the open MPU bond to have a value $x$ (which captures the correlations between left and right domain wall.) 
+Acting with $O_x^{[i]}$ on the left half of $\lvert\psi_A\rangle$ results in 
+$$
+\begin{tikzpicture}
+      \node[] at (0.7,0.8) {$i$};
+      \node[] at (2.4,0.5) {$|x\rangle$};
+\foreach \x in {0,0.4,0.8,1.2,1.6,2}{
+    \node[tensor, label=below:$A$] at (\x,0){};  
+  \draw[thick] (\x,0) -- (\x,0.3){}; 
+  \draw[thick] (\x-0.25,0) -- (\x+0.25,0); }
+%
+\draw[thick, red] (0.8,0.5)-- (2.2,0.5);
+\draw[thick] (0.8,0.3) -- (0.8,0.7);
+\node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0.8,0.5) {};
+\foreach \x in {1.2,1.6,2}{
+\node[tensor] at (\x,0.5) {};  \draw[thick] (\x,0.3) -- (\x,0.7); } 
+\end{tikzpicture}
+=
+\begin{tikzpicture}
+    \node[] at (1.2,0.5) {$i$};
+    \draw[thick] (0,0)--(2.2,0);
+    \foreach \x in {0.4,0.8}{
+	\node[tensor, label=below:$A$] at (\x,0) {};  
+	\draw[thick] (\x,0) -- (\x,0.3); }
+    \foreach \x in {1.6,2}{
+	\node[tensor, label=below:$B$] at (\x,0) {};  
+	\draw[thick] (\x,0) -- (\x,0.3); } 
+    \draw[thick] (1.2,0) -- (1.2,0.3); 
+    \node[tenex, label=below:$e_{AB}$] at (1.2,0) {}; 
+    \draw[thick] (2.4,-0.25) -- (3,-0.25); 
+    \draw[thick,red] (2.8,0.25) -- (3,0.25); 
+    \pic[scale=0.83] (w) at (2.4,0) {V2=//};.
+    \node[] at (3.2,0.3) {$|x\rangle$};
+    \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$}; 
+    \node[tensor, label=below:$A$] at (2.8,-0.25) {};  
+    \node[tensor] at (2.8,0.25) {};  
+	\draw[thick] (2.8,-0.25) -- (2.8,0.45); 
+\end{tikzpicture} \  , 
+$$
+where we have used \eqref{eq:defEndT}  and \eqref{eq:Wdef}. The resulting object has a cut on the right, with an $x$-dependent dangling MPU leg, which needs to be re-glued with the other half of the domain wall creation operator to make sense as a state, and -- using again Eq.~\eqref{eq:Wdef} -- results in the pair of domain wall excitations Eq.~\eqref{eq:DWophys}.  For simplicity, we denote the resulting object (which in principle is defined only on a half-chain) by $O_x^{[i]}\lvert\psi_A\rangle$.
+
+We can now study the exchange statistics of domain walls by comparing  $O^{[i]}_xO^{[j]}_y$ and $O^{[j]}_xO^{[i]}_y$.
+This can be interpreted as exchanging the position of the two domain walls, while leaving the order of their creation unchanged (that is, as exchanging $i$ and $j$). Alternatively, this can be interpreted as the effect of exchanging the order in which the domain walls at positions $i$ and $j$ are created, while keeping the order at the other (right) end unchanged (that is, exchanging the ordering of $O^{[i]}$ and $O^{[j]}$, together with exchanging their $x$ and $y$). In either case, the MPU labels $x$ and $y$ at the right cut are left untouched, which allows to study the effect at the two ends independently.
+For $i>j$, this results in
+\begin{align}
+ O^{[j]}_x O^{[i]}_y| \psi_A \rangle &=
+ \begin{tikzpicture}
+\node[] at (2.4,0.9) {$i$};
+\node[] at (1.2,0.9) {$j$};
+      \draw[thick] (0.2,0)--(3.6,0);
+		  \foreach \x in {0.4,0.8}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.25); }
+\draw[thick, red] (1.2,0.5)-- (4.2,0.5);
+ \foreach \x in {1.2,1.6,2}{
+,		    \node[tensor, label=below:$A$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+                \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (1.2,0.5) {};
+		     \draw[thick] (\x,0) -- (\x,0.7); 
+} 
+         		  \foreach \x in {2.8,3.2}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0) -- (\x,0.7); } 
+		     \draw[thick] (2.4,0) -- (2.4,0.7); 
+         \node[tensor] at (2.4,0.5) {};  
+         \node[tenex, label=below:$e_{AB}$] at (2.4,0) {}; 
+         %
+    \draw[thick] (3.6,-0.2)-- (4.2,-0.2);
+    \draw[thick, red] (4,0.25)-- (4.2,0.25);
+    \pic[scale=0.83] (w) at (3.6,0) {V2=//};
+    \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+    \node[tensor, label=below:$A$] at (4,-0.2) {};  
+    \node[tensor] at (4,0.5) {}; 
+    \node[tensor] at (4,0.25) {};
+    \draw[thick] (4,-0.2)-- (4,0.7);
+    \node[] at (4.4,0.55) {$|x\rangle$};
+    \node[] at (4.4,0.2) {$|y\rangle$};
+\end{tikzpicture}
+= \ 
+\begin{tikzpicture}
+\node[] at (3.2,0.9) {$i$};
+\node[] at (1.2,0.9) {$j$};
+      \draw[thick] (0.2,0)--(1.6,0);
+           \draw[thick] (2.4,0)--(4,0);
+           \draw[thick,red] (2.8,0.5) -- (3.6,0.5); 
+		  \foreach \x in {0.4,0.8}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.25); }
+\draw[thick, red]  (1.2,0.5)-- (1.4,0.5);
+   \pic[scale=0.83] (w) at (1.6,0.25) {W2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+\node[tensor, label=below:$B$] at (2,0.25) {}; 
+\draw[thick] (2,0.25) -- (2,0.55); 
+   \pic[scale=0.83] (w) at (2.4,0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+       \foreach \x in {1.2,2.8}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0) -- (\x,0.7); } 
+          \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (1.2,0.5) {};
+		       \pic[scale=0.83] (w) at (4,0.25) {W2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_A$};
+      \node[tensor, label=below:$A$] at (4.4,0.25) {}; 
+      \draw[thick] (4.4,0.25) -- (4.4,0.55);
+      %
+         \pic[scale=0.83] (w) at (4.8,0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_A$};
+      \draw[thick] (5.6,-0.2) -- (5.6,0.7);
+      \draw[thick,red] (5.2,0.5) -- (5.8,0.5);
+      \draw[thick,red] (5.6,0.25) -- (5.8,0.25);
+      \draw[thick] (5.2,-0.2) -- (5.8,-0.2);
+         \pic[scale=0.83] (w) at (5.2,0) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+      \node[tensor] at (5.6,0.5) {}; 
+      \node[tensor] at (5.6,0.25) {}; 
+      \node[tensor, label=below:$A$] at (5.6,-0.2) {};
+    \node[] at (6,0.55) {$|x\rangle$};
+    \node[] at (6,0.2) {$|y\rangle$};
+      %
+          \foreach \x in {3.6}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.7); 
+		      \draw[thick] (\x-0.325,0) -- (\x+0.325,0); 
+		      \draw[thick, red] (\x-0.325,0.5) -- (\x+0.325,0.5); 
+		\node[tensor] at (\x,0.5) {};  
+        } 
+\draw[thick] (3.2,0) -- (3.2,0.7); 
+\node[tensor] at (3.2,0.5) {};  
+\node[tenex, label=below:$e_{AB}$] at (3.2,0) {};  
+\end{tikzpicture}
+\notag \\ 
+&= c_{AB} \ 
+\begin{tikzpicture}
+\node[] at (0,0.5) {$j$};
+\node[] at (1.2,0.5) {$i$};
+      \draw[thick] (-1,0)--(2.2,0);
+\foreach \x in {0.4,0.8}{
+\node[tensor, label=below:$B$] at (\x,0) {};  
+ \draw[thick] (\x,0) -- (\x,0.3); }
+\foreach \x in {-0.4,-0.8}{
+	\node[tensor, label=below:$A$] at (\x,0) {};  
+	\draw[thick] (\x,0) -- (\x,0.3); }
+		     %
+\foreach \x in {1.6,2}{
+	\node[tensor, label=below:$A$] at (\x,0) {};  
+	\draw[thick] (\x,0) -- (\x,0.3); } 
+         \draw[thick] (0,0) -- (0,0.3); 
+         \draw[thick] (1.2,0) -- (1.2,0.3); 
+         \node[tenex, label=below:$e_{BA}$] at (1.2,0) {}; 
+         \node[tenex, label=below:$e_{AB}$] at (0,0) {};      
+ \pic[scale=0.83] (w) at (2.4,0) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_A$};
+      \draw[thick] (5.6-2.4,-0.2-0.25) -- (5.6-2.4,0.7-0.25);
+      \draw[thick,red] (5.2-2.4,0.25) -- (5.8-2.4,0.25);
+      \draw[thick,red] (5.6-2.4,0) -- (5.8-2.4,0);
+      \draw[thick] (5.2-2.4,-0.2-0.25) -- (5.8-2.4,-0.2-0.25);
+         \pic[scale=0.83] (w) at (5.2-2.4,-0.25) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+      \node[tensor] at (5.6-2.4,0.25) {}; 
+      \node[tensor] at (5.6-2.4,0) {}; 
+      \node[tensor, label=below:$A$] at (5.6-2.4,-0.2-0.25) {};
+    \node[] at (6-2.4,0.3) {$|x\rangle$};
+    \node[] at (6-2.4,0.2-0.25) {$|y\rangle$};
+\end{tikzpicture}
+=  
+\ c_{AB} \ 
+\begin{tikzpicture}
+\node[] at (-0.4,0.5) {$j$};
+\node[] at (0.8,0.9) {$i$};
+      \draw[thick] (-1.4,0)--(2,0);
+      	\foreach \x in {-1.2,-0.8}{
+		    \node[tensor, label=below:$A$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.25); }
+	 \foreach \x in {0,0.4}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.25); }
+\draw[thick, red] (0.8,0.5)-- (2,0.5);
+		  \foreach \x in {0.8,1.2,1.6}{
+		    \node[tensor, label=below:$B$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0) -- (\x,0.7); 
+} 
+    \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0.8,0.5) {};
+         \draw[thick] (-0.4,0) -- (-0.4,0.3); 
+                  \node[tenex, label=below:$e_{AB}$] at (-0.4,0) {}; 
+                  %5.2-->2, 5.6-->2.4
+      \draw[thick] (2.4,-0.2) -- (2.4,0.7);
+      \draw[thick,red] (2,0.5) -- (2.6,0.5);
+      \draw[thick,red] (2.4,0.25) -- (2.6,0.25);
+      \draw[thick] (2,-0.2) -- (2.6,-0.2);
+         \pic[scale=0.83] (w) at (2,0) {V2=//};.
+      \node[anchor=north,inner sep=2pt] at (w-bottom) {$W_B$};
+      \node[tensor] at (2.4,0.5) {}; 
+      \node[tensor] at (2.4,0.25) {}; 
+      \node[tensor, label=below:$A$] at (2.4,-0.2) {};
+    \node[] at (2.8,0.55) {$|x\rangle$};
+    \node[] at (2.8,0.2) {$|y\rangle$};                
+\end{tikzpicture} 
+\notag \\
+& = \  c_{AB} \  O^{[i]}_x O^{[j]}_y| \psi_A \rangle \ ,  \notag
+\end{align}
+i.e., we obtain the commutation relation
+\begin{equation}\label{eq:z2int}
+ O^{[j]}_x \cdot O^{[i]}_y| \psi_A \rangle = c_{AB} \ O^{[i]}_x \cdot O^{[j]}_y| \psi_A \rangle  \ ,  \quad i > j \ .
+\end{equation}
+That is, $c_{AB}$ is the phase factor resulting from the interchange of two domain walls on top of the ground state $|\psi _A\rangle$. Analogously, $c_{BA}$ results from the interchange of domain walls on top of $|\psi _B\rangle$. 
+
+
+What is the statistics of these domain wall excitations? Let us first repeat the above calculation with three domain walls at positions $i>j>k$, which we exchange twice:
+\begin{equation}\label{DWstat}
+O^{[k]}_z O^{[j]}_y O^{[i]}_x | \psi_A \rangle = c_{AB}\cdot O^{[k]}_z  O^{[i]}_y O^{[j]}_x | \psi_A \rangle  = \overbrace{c_{AB}c_{BA}}^{\omega} \cdot O^{[i]}_z  O^{[k]}_y  O^{[j]}_x | \psi_A \rangle\ ,    \quad i > j > k \ ,
+\end{equation}
+which can be seen as the composition of the transposition operators $T_{12}\circ T_{23}$. 
+Such a double exchange would give a phase of $+1$ for both bosons and fermions. In the case of an anomalous MPU symmetry with $\omega=-1$, such as $U_{CZX}$, this will however result in a phase $-1$ -- that is, the domain walls behave neither as bosons nor as fermions. Rather, they exhibit a fractional \emph{semionic} statistics, where exchanging twice gives rise to a minus sign. In fact, since we are free to fix $c_{AB}$ by suitably defining $e_{BA}$ [see discussion below Eq.~\eqref{eq:localcdef}], we can choose $c_{AB}=c_{BA}=i$, in which case the interchange of two domain walls will result in a phase $i$, i.e., semionic statistics. We note the same conclusion has been found in Ref.\cite{Chatterjee23} by also truncating the symmetry operators.
+
+
+
+We emphasize that the gauge invariant quantity $c_{AB}c_{BA}= \omega $ can be physically measured by using the operators defined in \eqref{eq:DWophys}. To do so, we consider two pairs of domain wall placed on sites $(i_1,j_1)$ and $(i_2,j_2)$ satisfying $i_2 < i_1 < j_1 < j_2$, for which  
+\begin{equation}\label{signphysop}
+   O^{[i_1,j_1]} O^{[i_2,j_2]}| \psi_A \rangle  =  c_{AB}c_{BA}\cdot O^{[i_2,j_2]}  O^{[i_1,j_1]} | \psi_A \rangle   \ .
+\end{equation} 
+
+
+%%%
+%
+\section{General case}
+%%
+
+In this section, we generalize the study done in the previous section to the case of a global symmetry given by an MPU representation of a finite group $G$. To do so we first explain what is the generalization of $\omega$, the anomaly of an MPU representation of $G$. Second, we revisit how the action of those MPUs act on ground states and we also explain how the classifying invariants of these phases are constructed (generalizing $L_A$ and $L_B$). Then, we define quantities characterizing the action of the MPUs on the domain wall excitations (generalizing $c_{AB}$ and $c_{BA}$) and  we connect these to the invariant of the quantum phases. Finally we show how these quantities are related to the interchange of domain wall excitations. 
+
+\subsection{MPU symmetries and their invariant ground states}
+%%
+
+We consider MPU representations of a finite group $G$: $U_g U_h = U_{gh}$ and $U_e =\id$ given by injective tensors. Using Theorem~\ref{FT1}, this implies that for every pair $g,h\in G$ of group elements, there are pairs of {\it fusion} tensors $(V_{g,h},\widehat{V}_{g,h})$ 
+acting at the virtual level that satisfy:
+\begin{equation}\label{fusiontensorG2}
+  \begin{tikzpicture}
+  \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+      \draw[red,thick] (0,-0.6) -- (1,-0.6);
+    \draw[red,thick] (0,0) -- (1,0);
+     \pic (v) at (-0.5,-0.3) {V1=gh/g/h};
+     \pic (w) at (1,-0.3) {W1=gh/g/h};
+    \node[tensor] (t) at (0,0) {};
+    \node[tensor] (t) at (0,-0.6) {};
+        \node[tensor] (t) at (0.5,0) {};
+    \node[tensor] (t) at (0.5,-0.6) {};
+    \draw[thick] (0,-0.9) -- (0,0.3);
+        \draw[thick] (0.5,-0.9) -- (0.5,0.3);
+  \end{tikzpicture} =
+  \begin{tikzpicture}[baseline=-1mm]
+    \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+      \draw[thick] (0,-0.3) -- (0,0.3);
+            \draw[thick] (0.5,-0.3) -- (0.5,0.3);
+      \draw[red,thick] (-0.3,0) -- (0.8,0);
+    \node[tensor] (t) at (0,0) {};
+     \node[tensor] (t) at (0.5,0) {};
+   \node[irrep] at (0.65,0.05) {$gh$};
+     \end{tikzpicture}\
+      , \quad
+ \begin{tikzpicture}
+\node[irrep] at (-0.05,0.5) {$g$};
+\node[irrep] at (-0.05,0) {$h$};
+\node[irrep] at (2.,0.5) {$g$};
+\node[irrep] at (2.,0) {$h$};
+    \node at (1,1) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+\foreach \y in {0,0.5}{
+		  \foreach \x in {0.4,0.8,1.2,1.6}{
+		  \draw[thick] (\x,\y-0.3) -- (\x,\y+0.3);
+		    \draw[red,thick] (\x-0.3,\y) -- (\x+0.3,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor] at (\x,0) {};  
+		      }}
+\end{tikzpicture} 
+=
+\begin{tikzpicture}
+    \node at (0,0.3) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+     \pic (w) at (-0.6,-0.3) {W1=gh/g/h};
+\pic (v) at (0.6,-0.3) {V1=gh/g/h};
+\foreach \y in {0,-0.6}{
+		  \foreach \x in {-1,1}{
+		  \draw[thick] (\x,\y-0.3) -- (\x,\y+0.3);
+		    \draw[red,thick] (\x-0.3,\y) -- (\x+0.3,\y);
+		    \node[tensor] at (\x,\y) {};
+		      }}
+		      		  \foreach \x in {-0.2,0.2}{
+		  \draw[thick] (\x,-0.3-0.3) -- (\x,-0.3+0.3);
+		    \draw[red,thick] (\x-0.3,-0.3) -- (\x+0.3,-0.3);
+		    \node[tensor] at (\x,-0.3) {};
+		      }
+\end{tikzpicture} 
+\end{equation}
+for all $m \ge 0$, where we omit the label $V_{g,h}$ of the fusion tensors and we just indicate the group element where they act. Notice that Eq.\eqref{fusiontensorG2} is invariant under the redefinition of the fusion tensors by phase factors $V_{g,h}\to \beta_{g,h} V_{g,h}$ and $\widehat{V}_{g,h} \to \beta_{g,h}^{-1} \widehat{V}_{g,h}$.
+
+Using Theorem\ref{FT1}, different fusion tensor decompositions are related by a phase factor $\omega(g,h,k)$:
+$$  
+\begin{tikzpicture}
+\node[irrep] at (-0.35,0.9) {$g$};
+\node[irrep] at (-0.35,0.4) {$h$};
+\node[irrep] at (-0.35,-0.1) {$k$};
+      \pic[scale=1.25] at (1.75,0.625) {W1=ghk/g/hk};
+      \pic[scale=0.83] at (1.2,0.25 ) {W1=/h/k};
+      \draw[red,thick] (1,1) -- (1.2,1);
+\foreach \y in {0,0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};   }}
+\end{tikzpicture}
+= \omega(g,h,k)
+\begin{tikzpicture}
+\node[irrep] at (-0.35,0.9) {$g$};
+\node[irrep] at (-0.35,0.4) {$h$};
+\node[irrep] at (-0.35,-0.1) {$k$};
+ \pic[scale=1.25] at (1.75,0.375) {W1=ghk/gh/k};
+      \pic[scale=0.83] at (1.2,0.75) {W1=/g/h};
+      \draw[red,thick] (1,0) -- (1.2,0);
+\foreach \y in {0,0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick] (\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};   }}
+\end{tikzpicture} \ ,
+$$
+and it can be shown by decomposing in different ways the product of 4 MPU tensors, that $\omega$ satisfies a consistency equation \cite{Andras18B}: The so-called 3-cocycle condition:
+\begin{equation}\label{3cocycleeq}
+ \omega(g, h, k) \omega(g, h k,l) \omega(h, k, l) = \omega(g h, k, l)\omega(g, h, k l).
+ \end{equation}
+Due to the phase factor freedom on the definition of the fusion tensors, the 3-cocycles are defined up to  a phase ${\beta_{h,k}\beta_{g,hk}}/{\beta_{g,h}\beta_{gh,k}} $ which correspond to a $3$-coboundary. Quotienting by this freedom, $3$-cocycles are classified by the third cohomology group of $G$, $\mathcal{H}^3[G,U(1)]$, a finite abelian group. For example, the case studied in the previous section results in $\mathcal{H}^3[\mathbb{Z}_2,U(1)]=\mathbb{Z}_2$ which means that there are only two classes of $3$-cocycles; the trivial one and the anomalous one.
+
+
+We represent the ground space by a set of injective MPS $\{|\psi_x\rangle, x\in \mathcal{I} \}$, permuted transitively by the MPU representation of $G$ such that for every $x,y \in \mathcal{I}$ there is a $g \in G$ satisfying $gx=y$ and $U_g |\psi_x \rangle = |\psi_y \rangle$. That implies \cite{Andras18B} the existence of a set of action tensors which locally reduce the action of the MPU tensors on the MPS tensors in the following way:
+\begin{equation}\label{mpoMPSsten}
+  \begin{tikzpicture}[baseline=-3mm]
+    \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+        \draw[thick] (-0.5,-0.6) -- (1,-0.6);
+    \draw[red,thick] (0,0) -- (1,0);
+     \pic (v) at (-0.5,-0.3) {V2=y/g/x};
+      \pic (w) at (1,-0.3) {W2=y/g/x};
+    \node[tensor] (t) at (0,0) {};
+    \node[tensor] (t) at (0,-0.6) {};
+        \node[tensor] (t) at (0.5,0) {};
+    \node[tensor] (t) at (0.5,-0.6) {};
+    \draw[thick] (0,-0.6) -- (0,0.3);
+        \draw[thick] (0.5,-0.6) -- (0.5,0.3);
+  \end{tikzpicture} =
+  \begin{tikzpicture}[baseline=-1mm]
+      \node at (0.25,0.45) {$\overbrace{\hspace{0.8cm}}^{m}$};
+      \draw[thick] (0,0) -- (0,0.3);
+            \draw[thick] (0.5,0) -- (0.5,0.3);
+      \draw[thick](-0.3,0) -- (0.8,0);
+    \node[tensor] (t) at (0,0) {};
+    \node[tensor] (t) at (0.5,0) {};
+   \node[irrep] at (0.65,0.05) {$y$};
+     \end{tikzpicture}\ ,
+     \quad
+\begin{tikzpicture}
+\node[irrep] at (0.05,0.5) {$g$};
+\node[irrep] at (0.05,0) {$x$};
+\node[irrep] at (1.9,0.5) {$g$};
+\node[irrep] at (1.9,0) {$x$};
+    \node at (1,1) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+    \draw[red,thick] (0.1,0.5) -- (1.9,0.5);
+    \draw[thick](0.1,0) -- (1.9,0);
+\foreach \y in {0,0.5}{
+		  \foreach \x in {0.4,0.8,1.2,1.6}{
+		  \draw[thick](\x,0) -- (\x,0.8);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor] at (\x,0) {};  
+		      }}
+\end{tikzpicture} 
+=
+\begin{tikzpicture}
+    \node at (0,0.3) {$\overbrace{\hspace{0.7cm}}^{m+1}$};
+     \pic (w) at (-0.6,-0.3) {W2=y/g/x};
+\pic (v) at (0.6,-0.3) {V2=y/g/x};
+		  \foreach \x in {-1,1}{
+		  \draw[thick](\x,-0.6) -- (\x,+0.3);
+		  \draw[red,thick] (\x-0.3,0) -- (\x+0.3,0);
+		\draw[thick](\x-0.3,-0.6) -- (\x+0.3,-0.6);
+	    \foreach \y in {0,-0.6}{ \node[tensor] at (\x,\y) {};} }
+		\foreach \x in {-0.2,0.2}{
+		   \draw[thick](\x,-0.3) -- (\x,-0.3+0.3);
+		   \draw[red,thick] (\x-0.3,-0.3) -- (\x+0.3,-0.3);
+		   \node[tensor] at (\x,-0.3) {};
+		      }
+\end{tikzpicture} \ ,
+\end{equation}
+for all system sizes $m\ge0$. Eq.\eqref{mpoMPSsten} is invariant under the redefintion of the action tensors by a phase factor $W_{g,x}\to \gamma_{g,x} W_{g,x}$ and $\widehat{W}_{g,x} \to \gamma_{g,x}^{-1} \widehat{W}_{g,x}$.  The local action of the MPU on the MPS is associative up to a phase factor, the so-called $L$-symbols:
+%
+$$  \begin{tikzpicture}
+\node[irrep] at (-0.35,0.9) {$g$};
+\node[irrep] at (-0.35,0.4) {$h$};
+\node[irrep] at (-0.35,-0.1) {$x$};
+
+ \pic[scale=1.25] at (1.75,0.375) {W2=y/gh/x};
+      \pic[scale=0.83] at (1.2,0.75) {W1=/g/h};
+      \draw[thick](-0.2,0) -- (1.7,0);
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick](\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor] at (\x,0) {};  
+		     \draw[thick](\x,0) -- (\x,+0.25); }}
+\end{tikzpicture} 
+= {L}^x_{g,h}
+\begin{tikzpicture}
+\node[irrep] at (-0.35,0.9) {$g$};
+\node[irrep] at (-0.35,0.4) {$h$};
+\node[irrep] at (-0.35,-0.1) {$x$};
+      \pic[scale=1.25] at (1.75,0.625) {W2=y/g/z};
+      \pic[scale=0.83] at (1.2,0.25 ) {W2=/h/x};
+      \draw[red,thick] (1,1) -- (1.6,1);
+      \draw[thick](-0.2,0)--(1.125,0);
+      \draw[thick](1.67,0.25)--(1.275,0.25);
+\foreach \y in {0.5,1}{
+		  \foreach \x in {0,0.4,0.8}{
+		  \draw[thick](\x,\y-0.25) -- (\x,\y+0.25);
+		    \draw[red,thick] (\x-0.25,\y) -- (\x+0.25,\y);
+		    \node[tensor] at (\x,\y) {};
+		    \node[tensor] at (\x,0) {};  
+		     \draw[thick](\x,0) -- (\x,+0.25); }}
+\end{tikzpicture}
+\ ,$$
+which satisfy the following equation involving the $3$-cocycle of the MPU symmetry:
+\begin{equation}\label{coupledpent}
+{L}_{h,k}^{x} \cdot {L}_{g,hk}^{x}
+ = \omega(g,h,k) \cdot  {L}_{g,h}^{k {\cdot} x} \cdot  {L}_{gh,k}^{x} .
+\end{equation}
+The solutions to the previous equation, up to the equivalence relation ${L}^x_{g,h} \sim {L}^x_{g,h} \frac{\gamma_{h,x}\gamma_{g,hx}}{\gamma_{gh,x}\beta_{g,h}}$, classify the different phases protected by MPU symmetry representation of $G$ given by $\omega$ \cite{Garre22}. Let us review this classification. A MPU with a non-trivial 3-cocycle restricts the possible degeneracies of the ground state of a symmetric Hamiltonian. To see this let us denote by $H\subseteq G$ the unbroken symmetry group ($h\cdot x = x$ for all $h\in H$ and $x \in \mathcal{I} $) such that the ground state degeneracy is $|G/H|$. Then, Eq.\eqref{coupledpent} restricted to $H$ is ${L}_{h_2,h_3}^{x} \cdot {L}_{h_1,h_2h_3}^{x} = \omega(h_1,h_2,h_3) \cdot  {L}_{h_1,h_2}^{x} \cdot  {L}_{h_1h_2,h_3}^{x}$ which implies that $\omega$ is trivial in $H$ (there is a gauge freedom such that $\omega|_H=1$). Given $\omega$, we denote by $\hat{H}_\omega\subseteq G$ the biggest subgroup where this can happen, so the smallest ground state degeneracy is $|G/\hat{H}_\omega|$.
+
+Then, the possible phases of Hamiltonians symmetric under MPUs indexed by ($G,\omega$) are given by $H\subseteq \hat{H}_\omega$ and a $2$-cocycle of $H$. This is because when $\omega|_H=1$, Eq.\eqref{coupledpent} is a $2$-cocycle condition for the $L$-symbols: ${L}_{h_2,h_3}^{x} \cdot {L}_{h_1,h_2h_3}^{x}
+ =   {L}_{h_1,h_2}^{x} \cdot  {L}_{h_1h_2,h_3}^{x}$. For a trivial 3-cocycle this results in the classification of SPT phases \cite{Schuch11}.
+
+%%
+\subsection{Symmetry action on domain walls and their interchange statistics}
+%%
+%
+
+We consider now domain wall excitations between the ground states, described by $| \mathcal{I} |^2 $ MPS tensors $\{e_{xy}| x,y\in \mathcal{I}\}$. A state with periodic boundary conditions hosting a pair of domain walls between the states $x$ and $y$  can be written as:
+$$ | \psi(x,y) \rangle =  \sum_{ \{ i_k \} }  \tr[  e^{i_1}_{xy} A_y^{i_2} \cdots A_y^{i_{l-1}} e^{i_l}_{yx} A_x^{i_{l+1}}{\cdots}   A_x^{i_{N}} ] |  i_1 {\cdots} i_{l-1} i_{l} i_{l+1} \cdots i_{N}\rangle .
+$$  
+
+The main assumption here is that the MPUs permute between the different domain walls, that is $U_g| \psi(x,y) \rangle \propto | \psi(gx,gy) \rangle$. Then, due to the injectivity of the MPS tensors and the relations in Eq. \eqref{mpoMPSsten} we obtain that there are phase factors, denoted by $B_{x,y}^g$, which encode this permutation locally:
+
+\begin{equation}\label{eq:localcdefG}
+\begin{tikzpicture}
+   \pic[scale=0.83] (w) at (1.6,0.25) {W2=gx/g/x};.
+   \pic[scale=0.83] (v) at (0,0.25) {V2=gy/g/y};.
+      \draw[thick] (0.075,0)--(1.525,0);
+      \draw[thick, red] (0.2,0.5)--(1.4,0.5);
+		  \foreach \x in {0.4, 0.8,1.2}{
+    \node[tensor] at (\x,0.5) {}; 
+\draw[thick] (\x,0) -- (\x,0.7); }
+		    \node[tensor] at (0.4,0) {};  
+		    \node[tensor] at (1.2,0) {};  
+		\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex,label=below:$e_{yx}$] at (0.8,0) {};  
+\end{tikzpicture}
+= B^g_{y,x}
+\begin{tikzpicture}
+      \draw[thick] (0.1,0)--(1.5,0);
+      \node[scale=0.8] at (0.15,0.15) {$gy$};
+      \node[scale=0.8] at (1.45,0.15) {$gx$};
+		  \foreach \x in {0.4}{
+		    \node[tensor] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); }
+		  \foreach \x in {1.2}{
+		    \node[tensor] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,+0.25); 
+       }
+\draw[thick] (0.8,0) -- (0.8,+0.25);
+          \node[tenex,label=below:$e_{gygx}$] at (0.8,0) {};  
+\end{tikzpicture}
+ ,  \quad {\rm where} \quad  \ {B}_{y,x}^{g} \sim  \frac{ \gamma_{g, x}  }{ \gamma_{g,y} } \cdot {B}_{y,x}^{g} \ .
+\end{equation}
+
+These phase factors are subjected to certain relations with the $L$-symbols. Those can be obtained by comparing the two ways of locally decomposing the action of two group elements into an individual domain wall excitation, which results in
+%
+\begin{equation}\label{PentLB}
+B^{g}_{hx,hy}  B^{h}_{x,y} =\frac{ L^{x}_{g,h} }{L^{y}_{g,h}} B^{gh}_{x,y}, \ \quad \forall g,h\in G \ \ {\rm and} \ \  x,y\in \mathcal{I} \ .
+\end{equation} 
+This equation can be seen as the fractionalization of the global symmetry on the domain walls.  We remark that this equation is valid both for local excitations (where $x=y$ so they transform linearly) and for on-site symmetries.
+
+
+Domain walls can be created on the physical Hilbert space with finite strings of MPUs terminated by an appropriate tensor. We assume that there is always a group element $g\in G$ permuting $x$ to $y$, such that $y=gx$. Then we can denote the operator creating a pair of domain walls, at sites $i$ and $j$ and from $x$ to $y=gx$, by the operator $O^{[i,j]}_g $ defined by: 
+%
+\begin{equation}\label{eq:DWophysG}
+ | \psi(x,y) \rangle = O^{[i,j]}_g | \psi_{A_x} \rangle = \ \cdots
+\begin{tikzpicture}
+      \draw[thick] (-0.2,0)--(3.4,0);
+      \node[] at (0.7,0.8) {$i$};
+      \node[] at (1.4,0.65) {$g$};
+      \node[] at (2.55,0.8) {$j$};
+    
+		  \foreach \x in {0,0.4,0.8,2.4,2.8,3.2}{
+		    \node[tensor, label=below:$A_x$] at (\x,0) {};  
+		     \draw[thick] (\x,0) -- (\x,0.25); }
+\draw[thick, red] (0.8,0.5)-- (2.4,0.5);
+\draw[thick] (0.8,0) -- (0.8,0.7);
+\draw[thick] (2.4,0) -- (2.4,0.7);
+   %\node[tensor, blue] at (0.8,0.5) {};
+   \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0.8,0.5) {};
+      \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (2.4,0.5) {};
+		  \foreach \x in {1.2,1.6,2}{
+		\node[tensor, label=below:$A_x$] at (\x,0) {};  
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0) -- (\x,0.7); } 
+\end{tikzpicture}
+\cdots \  ,
+\end{equation}
+where the yellow endpoint tensor is defined as follows:
+\begin{equation}\label{eq:defEndTG}
+\begin{tikzpicture}
+\draw[thick] (0,0.2) -- (0,0.8);
+\draw[thick,red] (0,0.5) -- (0.3,0.5);
+%\node[tensor, blue] at (0,0.5) {};
+   \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0,0.5) {};
+\end{tikzpicture}
+= \sum_{x\in \mathcal{I}}
+\begin{tikzpicture}
+\draw[thick] (0,0.25)-- (0,0.5);
+\draw[thick] (0,-0.25)-- (0,-0.5);
+\draw[thick, rounded corners] (0,0.25) -- (-0.35,0.25)-- (-0.35,-0.3)-- (0.75,-0.3) -- (0.75,0.05)--(0.4,0.05);
+\node[tensor] at (0,-0.3) {};
+\pic[scale=0.83] (w) at (0.4,0.25) {V2=y/g/x};
+\node[tenex] at (0,0.25) {};  
+\node[] at (0.05,0) {$e_{x,y}$};
+\node[] at (-0.2,-0.5) {$\hat{A}_x$};
+\end{tikzpicture}
+\ .
+\end{equation}
+
+We would like to study the properties of isolated domain walls. To this end, we cut the operator $O^{[i,j]}_{g}$ in the middle and define the following operator:
+\begin{equation}
+ O^{[i]}_{g,a}  = 
+\begin{tikzpicture}
+      \node[] at (0.7,0.8) {$i$};
+      \node[] at (1.4,0.65) {$g$};
+      \node[] at (2.4,0.5) {$|a\rangle$};
+\draw[thick, red] (0.8,0.5)-- (2.2,0.5);
+\draw[thick] (0.8,0.3) -- (0.8,0.7);
+   \node [draw=black,fill=yellow, diamond, aspect=1, scale=0.5] at (0.8,0.5) {};
+		  \foreach \x in {1.2,1.6,2}{
+         \node[tensor] at (\x,0.5) {};  
+		     \draw[thick] (\x,0.3) -- (\x,0.7); } 
+\end{tikzpicture}
+\end{equation}
+%
+Then, comparing the effect of $O_{g}^{[i]} O_{g}^{[j]}$ versus $O_{g}^{[j]} O_{g}^{[i]}$ we get:
+%
+$$
+ O_{g,a}^{[j]} \cdot O_{g,b}^{[i]} | \psi_x \rangle = B^g_{x,gx} \ O_{g,a}^{[i]} \cdot O_{g,b}^{[j]}| \psi_x \rangle    \quad i > j \ ,
+$$
+where we can interpret this identity as $B^g_{x,gx}$ being the phase factor from the interchange of two $g$-domain walls on top of the ground state $| \psi_x \rangle$. We note the swap on the virtual level of the operators and that $B^g_{x,gx}$ is gauge dependent. 
+
+\subsection{Quantities to determine the quantum phase}
+
+We consider a quantum phase of $(G,\omega)$ characterized by $\{ H\subseteq G:\omega_H=1,\alpha\in \mathcal{H}^2[H,U(1)] \}$. We first show that the non-trivial part of $\omega$, given by the elements of $G\setminus H$, is captured by a gauge invariant quantity resulting from the appropriate interchange of several domain walls. Then we show that the $2$-cocycle of $H$ also characterizes the action of the MPU on the domain walls.
+
+These findings translate the characterization of quantum phases based on ground states (the $L$-symbols) into its characterization through the first excited states that could be detected by the dynamics of the system.
+
+Let us consider a group element $g\in G\setminus H $ with order $o(g)$ ($gx \neq x$ for all $x\in \mathcal{I}$ and $g^{o(g)}=e$). The interchange of $o(g)+1$ of these domain wall operators ordered by the sites $k_i > k_{i+1}$ and permuted from the first to the last, results in:
+%
+$$ O^{[k_{o(g)+1}]}_{g,c}\cdots O^{[k_2]}_{g,b} O^{[k_1]}_{g,a} |\psi_x\rangle =   B^{g}_{x,gx} O^{[k_{o(g)+1}]}_{g,c} \cdots O^{[k_1]}_{g,b} O^{[k_2]}_{g,a}  |\psi_x\rangle = \left (  \prod_{i=1}^{o(g)} B^{g}_{ g^{i}x, {g^{i-1}x}}\right ) O^{[k_1]}_{g,c} O^{[k_{o(g)+1}]}_{g,b}\cdots O^{[k_2]}_{g,a} |\psi_x\rangle \ .$$
+%
+The phase factor $\prod_{i=1}^{o(g)} B^{g}_{ g^{i}x, {g^{i-1}x}}$ is a gauge invariant quantity since a phase factor modification of the action tensors corresponds to $\prod_{i=1}^{o(g)}\frac{\gamma_{g,g^{i-1}x}} { \gamma_{g, g^{i}x}} = 1$. Using Eq.~\eqref{PentLB}, the phase factor that appears in the interchange is
+%
+\begin{equation}\label{Intequiv}
+ \prod_{i=1}^{o(g)} B^{g}_{ g^{i}x, {g^{i-1}x}}  =  \prod_{i=1}^{o(g)-1} \frac{L^{gx}_{g,g^i}}{L^{x}_{g,g^i }} = \prod_{i=1}^{o(g)} \omega^{-1}(g,g^i,g) \ ,
+ \end{equation}
+where in the second equality we have used Eq.\eqref{coupledpent} in the form ${L^{gx}_{g,g^i}}/{L^{x}_{g,g^i }} =  \omega^{-1}(g,g^i,g) {L^{x}_{g^i,g}}/{L^{x}_{g^{i+1},g }} $, using that $gx\neq x$ (since $\omega$ restricted to the unbroken symmetry group is trivial)
+
+Eq.\ \eqref{Intequiv} shows how the gauge invariant phase factor characterizing the interchange of domain walls can be written in terms of the $3$-cocycle of the MPU symmetry and viceversa.
+
+Notice that for trivial $3$-cocycle, like on-site symmetries, the phase factor interchange is trivial. Moreover, this gauge invariant phase factor is independent of the ground state we start with. \\ 
+
+
+Given $H$, the unbroken symmetry group $H=\{h\in G,|\,hx=x\ \mbox{for all\ }x\in \mathcal{I}\}$, Eq.\eqref{PentLB} restricted to  $h_1, h_2 \in H$ has the following form:
+$$ B^{h_1}_{y,x} B^{h_2}_{y,x}=  \frac{L^{y}_{h_1,h_2}}{L^{x}_{h_1,h_2}} B^{h_1h_2}_{y,x}, $$ 
+where the factor $\frac{L^{y}_{h_1,h_2}}{L^{x}_{h_1,h_2}}$ satisfies a $2$-cocycle condition, using Eq.\eqref{coupledpent} and Eq.\eqref{3cocycleeq}, for every pair $y,x \in \mathcal{I}$:
+$$ \frac{ L^{y}_{h_1,h_2}}{L^{x}_{h_1,h_2}}
+\frac{ L^{y}_{h_1h_2,h_3}}{L^{x}_{h_1h_2,h_3}} = 
+\frac{ L^{y}_{h_1,h_2h_3}}{L^{x}_{h_1,h_2h_3}} 
+\frac{ L^{y}_{h_2,h_3}}{L^{x}_{h_2,h_3}} \ ,$$
+with phase factor freedom $\frac{(\gamma_{h_1,y}/\gamma_{h_1,x}) \cdot (\gamma_{h_2,y}/\gamma_{h_2,x}) }{ (\gamma_{h_1h_2,y}/\gamma_{h_1h_2,x})}$, which shows that the action of the unbroken symmetry on the domain walls can be projective. Local excitations, $y=x$ so no domain wall, transform linearly: $B^{h_1}_{x,x} B^{h_2}_{x,x}= B^{h_1h_2}_{x,x}$. This matches with the well known fact that for on-site symmetries local excitations can be decomposed into irreps of the symmetry group. Notice that Eq.\ \eqref{Intequiv} is also consistent with the following fact:  if $gx=x$, such that $O_g |\psi_x\rangle$ is a local excitation and not a domain wall, then $L^{gx}_{g,g^i}= L^{x}_{g,g^i}$, that is, the  phase factor there is trivial.
+
+\subsection{Example: $ G = \mathbb{Z}_n$ with fully symmetry breaking } 
+
+In this section we consider MPU symmetries coming from the abelian group $\mathbb{Z}_n$. The are $n$ distinct MPU representations according to its $3$-cocycle since $\mathcal{H}^3(\mathbb{Z}_n,U(1)) = \mathbb{Z}_n$. The explicit formula is $\omega_j(a,b,c)= \exp\{\frac{2 \pi i j}{n^2}a(b+c-[b+c])\}$, where $[b+c] = b+c  \mod n$, and $j=0,\cdots, n-1$ labels the different cocycle classes ($j=0$ corresponds to the trivial 3-cocycle). Let us consider the maximally symmetry-broken phase, i.e.\ $n$-fold degeneracy, for every cocycle class $\omega_j$. Then, we can give a closed formula for the phase factor of the interchange of domain walls created from the group element $a$ in Eq.\eqref{Intequiv}:
+ %$ \omega(a,a^k,a) = \exp\{\frac{2 \pi i j}{n^2}a(ka+a-[ka+a])\}$
+ $$\prod_{k=1}^{o(a)} \omega_j^{-1}(a,a^k,a) = \exp\left \{- \frac{2 \pi i j}{n^2}a\sum_{k=0}^{o(a)-1}\left ( ka+a-[ka+a]\right )\right \}$$
+%
+Specifically, for $n=3$, we obtain  
+\begin{equation}
+\begin{tabular}{|l|c|c|}
+\hline
+$a$ & $1 $   & $2 $  \\
+\hline
+$j=1$     & $e^{-\frac{2\pi}{3}i} $ & $e^{-\frac{2\pi}{3}i}$   \\
+$j=2  $   & $e^{\frac{2\pi}{3}i} $& $e^{\frac{2\pi}{3}i}$   \\
+\hline
+\end{tabular}
+\end{equation}
+and for $n=4$ 
+\begin{equation}
+\begin{tabular}{|l|c|c|c|}
+\hline
+$a$ & $1 $   & $2 $ & $3 $   \\
+\hline
+$j=1$     & $-i $ & $-1 $ & $-i$   \\
+$j=2  $   & $-1 $ & $1 $ & $-1$   \\
+$j=3  $   & $i $ & $-1 $ & $i$   \\
+\hline
+\end{tabular}\ .
+\end{equation}
+From these tables, we can infer that the excitations exhibit a statistics which is neither fermionic nor bosonic.
+
+\section{Detection of the phase factors}
+%%
+
+In this section we propose a finite size operator whose expectation value on a ground state, labeled by $x$, returns in the gauge invariant quantity of Eq.\eqref{Intequiv}; it can thus be used to measure the domain wall statistics and 
+thereby detect the nature of the underlying phase. The construction of the
+operator is based on truncating the MPU symmetry. It does not require an MPS representation of the ground state nor the explicit form of the domain wall excitations. 
+
+We will start by discussing the $\mathbb{Z}_2$ case where the goal is to reproduce Eq.~\eqref{signphysop} and get $c_{AB}c_{BA}=\omega$, see Eq.\eqref{eq:CC-LL}. The first step is to consider a truncated version of the MPU symmetry $U$, restricted to a region which includes an
+interval $[i_1, j_1]$ and a region on the scale of the correlation length around it; we will denote this truncated unitary by $U^{[i_1,j_1]}$. We can always
+construct such a truncated $U^{[i_1,j_1]}$, since any MPU can be rewritten as a
+unitary circuit of depth $2$ with nearest-neighbor gates under finite blocking
+\cite{Cirac17B}; we can then obtain $U^{[i_1,j_1]}$ by dropping the gates
+outside the given range. The resulting $U^{[i_1,j_1]}$ is then a unitary
+operator which is equal to $U$ inside the given region. Thus, the action of
+$U^{[i_1,j_1]}$ on a ground state $A$ produces the same effect inside the region
+as $U$ -- that is, it exchanges $A$ and $B$ if the distance between $i_1$ and
+$j_1$ is bigger than the correlation length, and acts trivially outside the
+region. Therefore, $U^{[i_1,j_1]}$ creates a pair of domain walls around sites
+$i_1$ and $j_1$.  
+
+
+If we act with $U$ on top of $ U^{[i_1,j_1]}$, we will obtain the global phase
+factor ${c}_{BA}{c}_{AB}$. Since we want to obtain this phase factor by using 
+operators with a finite range, we instead use $U^{[i_2,j_2]}$, which creates a  pair of domain
+walls around sites $i_2$ and $j_2$, where we choose  $i_2 < i_1 < j_1 < j_2$, and 
+demand that the distance between the different positions is sufficiently bigger than the
+length scale set by the correlation length of the ground state. 
+
+To get a non-vanishing expectation value on a ground state, we need to `undo' the domain walls and map them back to the ground space. To achieve this, we use first $(U^{[i_1,j_1]})^\dagger$ and then $(U^{[i_2,j_2]})^\dagger$. Notice that in general $(U_g^{[i_1,j_1]})^\dagger$ and $(U_g^\dagger)^{[i_1,j_1]}$ are not the same, but are related by unitaries at the boundaries. The result can be written as:
+%
+\begin{equation}\label{detecZ2}
+  \langle \psi_A | (U^{[i_2,j_2]})^\dagger (U^{[i_1,j_1]})^\dagger  U^{[i_2,j_2]}U^{[i_1,j_1]} | \psi_A \rangle  = \ \omega   \ ,
+\end{equation} 
+which precisely measures the commutator between $U^{[i_1,j_1]}$ and $U^{[i_2,j_2]}$.
+
+
+As an aside, note that for  on-site symmetries on a chain $\Lambda$,  truncating the global symmetry $U= \bigotimes_{i\in \Lambda} u^{[i]}$ results in $U^{[a,b]}=\bigotimes_{i\in [a,b]} u^{[i]}$. Therefore, for on-site symmetries we get that $(U^{[i_2,j_2]})^\dagger (U^{[i_1,j_1]})^\dagger  U^{[i_2,j_2]}U^{[i_1,j_1]} =  \id$, so its expectation value is $+1$, in agreement with our findings in the previous sections.\\
+
+
+For the general case of any finite group $G$, the first thing to notice is that the phase factor $\prod_{i=1}^{o(g)} B^{g}_{ g^{i}x, {g^{i-1}x}} $ of Eq.\eqref{Intequiv} only depends on the order of the element $g$ (and its powers) and not on the group itself. That reduces the problem of truncating MPUs representing the cyclic group $\mathbb{Z}_{o(g)}$. We first create a pair of domain walls around $i_0$ and $j_0$ by acting with the truncated unitary $U_g^{[i_0,j_0]}$ on the ground state labeled by $x$. We will focus on the excitation created around $j_0$ which correspond to a domain wall of type $gx-x$ (analogous to the tensor $e_{gx,x}$ in the MPS scenario). We now apply $U_g^{[i_1,j_1]}$ where $i_0 < i_1 < j_0 < j_1$, obtaining the phase factor $B^g_{gx,x}$ and permuting the domain wall type to $g^2x-gx$, see \eqref{eq:localcdefG}. We have also created domain walls around $i_1$ and $j_1$ but we will avoid acting on them with the next truncated unitaries. To achieve this, we act with $U_g^{[i_2,j_2]}$ satisfying $i_1 < i_2 < j_0 < j_2 < j_1$, where we get $B^g_{g^2x,gx}$ and the domain wall is now of type $g^3x-g^2x$. Following this strategy we can conclude that the phase factor of Eq.\eqref{Intequiv} can be obtained by applying the following operator: 
+$$X = \prod_{i=0} ^{o(g)}U_g^{[i_i,j_i]}, \quad i_0<i_{o(g)}<\cdots < i_1 < j_0 < j_{o(g)}< \cdots <j_1 \ .$$
+Finally, to get a non-vanishing expectation value on a ground state, we need to annihilate the domain wall excitations. The important point here is to 'undo' each of the domain walls without acting on any of the other ones, which would result in undesirable $B$ phases. This can be achieved by acting with 
+$$ Y = (U^{[i_0,j_1]})^\dagger (U^{[i_{o(g)},j_2]})^\dagger \cdots (U^{[i_2,j_{o(g)}]})^\dagger (U^{[i_1,j_{0}]})^\dagger \ .$$
+Finally:
+\begin{equation}\label{detectG}
+\langle\psi_x\vert Y X \vert\psi_x\rangle = \prod_{i=1}^{o(g)} B^{g}_{ g^{i}x, {g^{i-1}x}} \ .
+\end{equation}
+
+We notice that the previous method is also valid for $\mathbb{Z}_2$, we would obtain $B^{g}_{ gx, {x}}B^{g}_{ x, {gx}} \equiv c_{AB}c_{BA}= \omega$, but it does not coincide with the one presented in Eq.\eqref{detecZ2}. This is because for Eq.\eqref{detecZ2} we have used that $g^{-1} = g$ so $B^{g}_{ x, {g^{-1}x}} =  B^{g}_{ x, {gx}} \equiv c_{AB} $, so this phase factor can be obtained by acting with $g$ on the domain wall $x-gx$ (the partner of the domain wall $gx-x$) and then simplify the general procedure.
+
+\section{Conclusions}
+%%
+We have studied the exchange statistics of domain wall excitations in gapped spin chains with anomalous symmetry breaking, and have found that the anomaly of the symmetry and the way in which the symmetry broken ground states transform under it is directly reflected in the statistics of the domain wall excitations.  Our results extend Ref.\cite{Garre22}, which characterized the anomalous gapped phases through their ground states, beyond ground state properties, by connecting them to the properties exhibited by their low-lying excited states and thus to to physically testable properties.
+
+Our main technical tools are the representation of the ground states by injective MPS, and the characterization of the anomalous symmetry action on them through local fusion tensors. This allowed us to construct domain wall excitations in terms of the ground state MPS and the operators creating them in terms of MPUs, which in turn enabled us to extract their exchange statistics from the fusion tensors.
+
+The approach pursued here can be extended to non-invertible global symmetries representing fusion categories in terms of matrix product operators, whose gapped phases have been classified in Ref.~\cite{Garre22} as well. Such a tensor network approach will provide a local characterization of the boundary excitation of string-net models developed by Kitaev and Kong in Ref.~\cite{Kitaev12}. It could also be interesting to generalized our study to anomalous non-internal symmetries like time reversal or reflexion.
+
+
+
+\subsection*{Acknowledgements}
+%%
+JGR thanks Laurens Lootens for helpful conversations. 
+%
+This research was funded in part by 
+the  European Union’s Horizon 2020 research and innovation programme through Grant No.\ 863476 (ERC-CoG SEQUAM),
+the Austrian Science Fund FWF
+(Grant DOIs \href{https://doi.org/10.55776/COE1}{10.55776/COE1}, \href{https://doi.org/10.55776/P36305}{10.55776/P36305}, and \href{https://doi.org/10.55776/F71}{10.55776/F71}), and the European Union through NextGenerationEU.
+%
+For open access purposes, the authors have applied a CC BY public copyright 
+license to any author accepted manuscript version arising from this submission.
+
+
+\bibliography{bibliography.bib}
+
+\end{document}

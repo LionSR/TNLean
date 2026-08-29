@@ -1,0 +1,148 @@
+schema_version = 1
+generated_root = "build/paper-sources"
+cited_range_count = 60
+
+[[source]]
+arxiv_id = "1706.07329v2"
+title = "A generalization of the injectivity condition for Projected Entangled Pair States"
+authors = ["András Molnár", "Yimin Ge", "Norbert Schuch", "J. Ignacio Cirac"]
+eprint_url = "https://arxiv.org/e-print/1706.07329v2"
+archive_filename = "arXiv-1706.07329v2.tar.gz"
+archive_sha256 = "045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e"
+source_filename = "cornerproblem.tex"
+source_sha256 = "94f71715645ea4c612f0602f5393991df0d4d92550a92c224b53796be98a6c0e"
+source_lines = 4221
+license = "arXiv non-exclusive distribution license 1.0"
+license_url = "https://arxiv.org/licenses/nonexclusive-distrib/1.0/"
+preservation = "download-only"
+local_path = "build/paper-sources/1706.07329/cornerproblem.tex"
+
+[[source.citation]]
+document = "docs/audits/2026-08-29_mpu_fusion_dagger_source_audit.md"
+ranges = [
+  "1002-1060",
+  "1011-1017",
+  "3121-3168",
+  "3124-3133",
+  "3137-3139",
+  "3142-3144",
+  "3147-3152",
+  "3156-3162",
+  "3168",
+  "3815-4034",
+  "3839",
+  "3865",
+  "3935-3938",
+  "3973-3976",
+  "3993-4005",
+  "4029-4033",
+]
+
+[[source.citation]]
+document = "docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex"
+ranges = [
+  "3124-3133",
+  "3142-3152",
+  "3154-3162",
+  "3815-3939",
+  "3943-3986",
+  "3946-3970",
+  "3990-4035",
+  "3993-4005",
+]
+
+[[source.citation]]
+document = "docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex"
+ranges = ["3124-3133", "3815-3938", "3839", "3865", "3973-3976"]
+
+[[source.citation]]
+document = "docs/paper-gaps/mgsc18_residual_expansion_empty_word_error.tex"
+ranges = ["3993-4005"]
+
+[[source]]
+arxiv_id = "2203.12563v3"
+title = "Classifying phases protected by matrix product operator symmetries using matrix product states"
+authors = ["José Garre-Rubio", "Laurens Lootens", "András Molnár"]
+eprint_url = "https://arxiv.org/e-print/2203.12563v3"
+archive_filename = "arXiv-2203.12563v3.tar.gz"
+archive_sha256 = "53f0eb58d275d4bd801c9f38dc87e0928344745148860c97ba2e03fad4bd9b8c"
+source_filename = "REsubmission.tex"
+source_sha256 = "c820b20187584d441c1a40ef80fdccbc8a2aad819ac6673464c6b913c28fa58c"
+source_lines = 2477
+license = "Creative Commons Attribution 4.0 International"
+license_url = "https://creativecommons.org/licenses/by/4.0/"
+preservation = "vendored"
+local_path = "Papers/2203.12563/REsubmission.tex"
+
+[[source.citation]]
+document = "docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex"
+ranges = [
+  "302-331",
+  "429-460",
+  "638-683",
+  "683-719",
+  "720-726",
+  "731-749",
+  "740-749",
+  "752-759",
+  "754",
+  "755-758",
+  "761",
+  "1211-1216",
+  "1219-1272",
+  "1231",
+  "2305-2454",
+  "2455",
+]
+
+[[source]]
+arxiv_id = "2308.05151v3"
+title = "Lieb-Schultz-Mattis anomalies as obstructions to gauging (non-on-site) symmetries"
+authors = ["Sahand Seifnashri"]
+eprint_url = "https://arxiv.org/e-print/2308.05151v3"
+archive_filename = "arXiv-2308.05151v3.tar.gz"
+archive_sha256 = "6a3900756a78d8540d937396fabd41e49478b68f28d1ae2904fc89abd757a7ad"
+source_filename = "LSMcocycle.tex"
+source_sha256 = "47aa9fbc3fd1efc1f97f12a4be95227d9feb0a5351cd7daafcdb723c7553658f"
+source_lines = 2744
+license = "arXiv non-exclusive distribution license 1.0"
+license_url = "https://arxiv.org/licenses/nonexclusive-distrib/1.0/"
+preservation = "download-only"
+local_path = "build/paper-sources/2308.05151/LSMcocycle.tex"
+
+[[source.citation]]
+document = "docs/paper-gaps/fbc25_gauss_law_commuting_projector_source_audit.tex"
+ranges = [
+  "555-584",
+  "602-760",
+  "709-744",
+  "1541-1619",
+  "1637-1678",
+  "1680-1729",
+  "1691-1734",
+  "1745-1955",
+  "1956-1960",
+]
+
+[[source]]
+arxiv_id = "2405.00439v2"
+title = "Fractional domain wall statistics in spin chains with anomalous symmetries"
+authors = ["José Garre-Rubio", "Norbert Schuch"]
+eprint_url = "https://arxiv.org/e-print/2405.00439v2"
+archive_filename = "arXiv-2405.00439v2.tar.gz"
+archive_sha256 = "166ce15a174167772f53d53b7ed15438fdf799717e053b128f612a264d3f8bb4"
+source_filename = "MPU-DW.tex"
+source_sha256 = "d53fa420cab774b97e032ab214b0782cde68bc535a3cf910b85bbbd726b5b858"
+source_lines = 2144
+license = "Creative Commons Attribution 4.0 International"
+license_url = "https://creativecommons.org/licenses/by/4.0/"
+preservation = "vendored"
+local_path = "Papers/2405.00439/MPU-DW.tex"
+
+[[source.citation]]
+document = "docs/audits/2026-08-29_mpu_fusion_dagger_source_audit.md"
+ranges = ["343-377", "358", "358-364", "359-364"]
+
+[[source.citation]]
+document = "docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex"
+ranges = ["358-377"]

@@ -28,13 +28,26 @@
 \section{Purpose}
 
 A paper-gap note records a mathematical discrepancy between a cited source and
-the statement, proof, or route used in the formal development. The archived
-source itself must remain intact. When a printed statement lacks the stable
-anchor needed for an external reference, a build helper may add a metadata-only
-\verb|\label| to a temporary copy under \path{build/}; never add the label to
-the archived source. If a proof appears to require a hypothesis absent from the
-article, a different scalar, a different normalization, or a replacement
-theorem from the formal library, explain the change in a separate note under
+the statement, proof, or route used in the formal development. A cited source
+artifact must remain byte-exact. When its license permits redistribution, keep
+the exact archive member under \path{Papers/}. When redistribution is not
+authorized, record the official retrieval link, archive filename, archive
+digest, internal filename, and extracted-file digest in a manifest; a helper
+may then recover the exact file under ignored \path{build/} output. The MPU
+source convention is recorded in \path{Papers/external_sources.toml} and
+implemented by \path{scripts/verify_external_paper_sources.py}.
+Each audited document carries a non-rendered, source-associated inventory of
+the exact ranges it cites. The verifier compares these inventories with the
+manifest in both directions and also checks that every listed range occurs in
+the corresponding reader-facing document. Reassigning a range to another
+source, or omitting it from either side, is therefore an error.
+
+When a printed statement lacks the stable anchor needed for an external
+reference, a build helper may add a metadata-only \verb|\label| to a temporary
+copy under \path{build/}; never add the label to the vendored or recovered
+source. If a proof appears to require a hypothesis absent from the article, a
+different scalar, a different normalization, or a replacement theorem from the
+formal library, explain the change in a separate note under
 \path{docs/paper-gaps/}.
 
 The note is a mathematical document first. It should be readable by a

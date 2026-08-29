@@ -1,5 +1,8 @@
 # MPU fusion and dagger source audit
 
+<!-- TNLEAN_EXTERNAL_SOURCE_RANGES: 1706.07329v2 1002-1060,1011-1017,3121-3168,3124-3133,3137-3139,3142-3144,3147-3152,3156-3162,3168,3815-4034,3839,3865,3935-3938,3973-3976,3993-4005,4029-4033 -->
+<!-- TNLEAN_EXTERNAL_SOURCE_RANGES: 2405.00439v2 343-377,358,358-364,359-364 -->
+
 This note pins the external tensor results invoked in
 `Papers/2502.20257/main.tex:1403--1678`.  It is a source-audit prerequisite for
 issue #7281 and its implementation children; it does not formalize
@@ -14,6 +17,13 @@ The primary sources used here are:
 | Molnár--Ge--Schuch--Cirac, [arXiv:1706.07329v2](https://arxiv.org/abs/1706.07329) | `cornerproblem.tex:3121--3168`, with definitions at `1002--1060` and proof details at `3815--4034` | `045a2a94589c6d4f82946bc9a1b4322ebd5109882355356191f462b3d362b23e` |
 | Garre-Rubio--Schuch, [arXiv:2405.00439v2](https://arxiv.org/abs/2405.00439) | `MPU-DW.tex:343--377`, especially Theorem 1 and its footnote at lines 358--364 | `166ce15a174167772f53d53b7ed15438fdf799717e053b128f612a264d3f8bb4` |
 | MPU gauging paper | `Papers/2502.20257/main.tex:1403--1678` | repository source |
+
+The exact external artifacts, extracted-file digests, and every cited subrange
+are recorded in `Papers/external_sources.toml`. Running
+`python3 scripts/verify_external_paper_sources.py --fetch` recovers
+`cornerproblem.tex` under ignored `build/paper-sources/1706.07329/` output and
+checks the unchanged vendored file `Papers/2405.00439/MPU-DW.tex` against the
+official archive.
 
 Fix $g,h\in G$.  Write
 
