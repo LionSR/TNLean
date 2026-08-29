@@ -447,7 +447,7 @@ theorem cluster_isOnSiteSymmetric_Z2Z2 :
   · exact cluster_gaugeEquiv_X2.sameMPV
   · exact cluster_gaugeEquiv_X1X2.sameMPV
 
-/-! ### The cluster factor system is the non-trivial class of `H²(Z₂ × Z₂, U(1))`
+/-! ### The cluster factor system is the non-trivial class of `H²(Z₂ × Z₂, ℂˣ)`
 
 The anticommuting virtual gauges `σz` and `σx` assemble into an explicit
 projective representation of `Z₂ × Z₂` on the bond space.  Its factor system
@@ -455,7 +455,7 @@ projective representation of `Z₂ × Z₂` on the bond space.  Its factor syste
 and the first component of `h` are both nonzero, the standard commutator cocycle
 `(-1)^{g₂ h₁}`.  Its commutator phase on the two generators is `-1`, so by
 `isNontrivialClass_of_commPhase_ne_one` its class is the non-trivial element of
-`H²(Z₂ × Z₂, U(1)) = Z₂`. -/
+`H²(Z₂ × Z₂, ℂˣ) = Z₂`. -/
 
 open TNLean.Algebra in
 /-- The cluster factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{g₂ h₁}`, the value
@@ -500,7 +500,7 @@ def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
 open TNLean.Algebra in
 /-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `clusterProjRep`, so its class lives in
-`H²(Z₂ × Z₂, U(1))`. -/
+`H²(Z₂ × Z₂, ℂˣ)`. -/
 lemma clusterOmega_isCocycle : ScalarCocycle.IsCocycle clusterOmega :=
   ScalarCocycle.isCocycle_of_projRep clusterProjRep (by norm_num)
 
@@ -515,7 +515,7 @@ lemma cluster_commPhase_eq_neg_one :
 
 open TNLean.Algebra in
 /-- The cluster factor system represents the non-trivial element of
-`H²(Z₂ × Z₂, U(1)) = Z₂`: the cluster state is a non-trivial SPT phase. -/
+`H²(Z₂ × Z₂, ℂˣ) = Z₂`: the cluster state is a non-trivial SPT phase. -/
 theorem cluster_isNontrivialSPT : ScalarCocycle.IsNontrivialClass clusterOmega := by
   refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_

@@ -492,7 +492,7 @@ theorem aklt_isUnitary_Z2Z2 (g : Multiplicative (ZMod 2 × ZMod 2)) :
     (by rw [akltPhysP1_conjTranspose, akltPhysP1_sq])
     (by rw [akltPhysP2_conjTranspose, akltPhysP2_sq]) g
 
-/-! ### The AKLT factor system is the non-trivial class of `H²(Z₂ × Z₂, U(1))`
+/-! ### The AKLT factor system is the non-trivial class of `H²(Z₂ × Z₂, ℂˣ)`
 
 The anticommuting virtual gauges `iσy` and `σz` assemble into an explicit
 projective representation of `Z₂ × Z₂` on the bond space.  Its factor system
@@ -500,7 +500,7 @@ projective representation of `Z₂ × Z₂` on the bond space.  Its factor syste
 nonzero and the two components of `g` differ, the cocycle `(-1)^{(g₁+g₂) h₁}`;
 the extra diagonal term over the cluster case reflects `(iσy)² = -I`.  Its
 commutator phase on the two generators is `-1`, so the commutator-phase test
-shows its class is the non-trivial element of `H²(Z₂ × Z₂, U(1)) = Z₂`. -/
+shows its class is the non-trivial element of `H²(Z₂ × Z₂, ℂˣ) = Z₂`. -/
 
 open TNLean.Algebra in
 /-- The AKLT factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{(g₁ + g₂) h₁}`, the
@@ -547,7 +547,7 @@ def akltProjRep : ProjectiveRepresentation (D := 2) akltOmega where
 open TNLean.Algebra in
 /-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `akltProjRep`, so its class lives in
-`H²(Z₂ × Z₂, U(1))`. -/
+`H²(Z₂ × Z₂, ℂˣ)`. -/
 lemma akltOmega_isCocycle : ScalarCocycle.IsCocycle akltOmega :=
   ScalarCocycle.isCocycle_of_projRep akltProjRep (by norm_num)
 
@@ -562,7 +562,7 @@ lemma aklt_commPhase_eq_neg_one :
 
 open TNLean.Algebra in
 /-- The AKLT factor system represents the non-trivial element of
-`H²(Z₂ × Z₂, U(1)) = Z₂`: the AKLT state is a non-trivial SPT phase. -/
+`H²(Z₂ × Z₂, ℂˣ) = Z₂`: the AKLT state is a non-trivial SPT phase. -/
 theorem aklt_isNontrivialSPT : ScalarCocycle.IsNontrivialClass akltOmega := by
   refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_

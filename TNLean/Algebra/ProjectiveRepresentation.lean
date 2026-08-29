@@ -7,7 +7,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 /-!
-# Projective representations and concrete `U(1)`-valued 2-cocycles
+# Projective representations and concrete `ℂˣ`-valued 2-cocycles
 
 This file introduces a concrete notion of projective representation for matrix-valued
 virtual symmetries:
