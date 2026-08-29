@@ -26,7 +26,7 @@ used in this development. The paper's literal zero-correlation-length diagram
 has the same normalization sensitivity and is not the up-to-scalar predicate.
 
 This classification concerns the explicit tensor. It does not prove the
-general implication from the strong area law and zero correlation length to a
+general implication from saturation of the area law and zero correlation length to a
 renormalization fixed point in Theorem 4.9; the printed proof of that implication
 still passes through the normalization-sensitive rank-one step of Lemma C.5.
 
@@ -255,8 +255,8 @@ theorem is not an instance of Definition 4.1 for the raw representative.
 Documented in
 <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_zcl_canonical_form_normalization.pdf>.
 
-This is a classification of this explicit tensor, not a proof of the general
-strong-area-law and zero-correlation-length implication in Theorem 4.9.
+This is a classification of this explicit tensor, not a proof of the general implication
+from saturation of the area law and zero correlation length in Theorem 4.9.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 645--659, and the proposed
 implication in Theorem 4.9 at lines 1810--1825. -/

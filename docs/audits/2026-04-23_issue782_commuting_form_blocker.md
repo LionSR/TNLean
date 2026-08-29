@@ -19,7 +19,7 @@ So the **downstream API** needed for Theorem 4.9 is now present.
 ## Honest remaining blocker
 
 The missing theorem is the **upstream entropy / local-structure bridge** that
-should produce `HasCommutingForm` from the strong-area-law hypotheses.
+should produce `HasCommutingForm` from hypotheses asserting saturation of the area law.
 
 The paper route is:
 
@@ -39,7 +39,7 @@ block decomposition to the explicit two-site commuting factor.
 
 With the new file in place, the mathematically precise remaining theorem is:
 
-> For a simple MPDO tensor satisfying the Appendix C.2 strong-area-law
+> For a simple MPDO tensor satisfying the Appendix C.2 saturation-of-the-area-law
 > hypotheses, prove `MPOTensor.HasCommutingForm`.
 
 Equivalently, once the local `η`-structure is defined, the immediate next Lean

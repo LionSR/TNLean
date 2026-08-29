@@ -262,7 +262,7 @@ lemma neighboringOperator_pos (k h : Fin 4) :
   change (0 : ℂ) ≤ (traceMatrix k h : ℂ)
   exact_mod_cast (traceMatrix_pos k h).le
 
-/-- The candidate tensor satisfies the strong area law. -/
+/-- The candidate tensor satisfies saturation of the area law. -/
 lemma tensor_isSAL : tensor.IsSAL := by
   let _ : NeZero 2 := ⟨by omega⟩
   exact factorization.isSAL_of_isSourceZCL tensor_isInjective

@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.SectorTrace
 /-!
 # Saturated area law for the four-sector classical tensor
 
-This file proves the strong area law for the explicit four-sector tensor in
+This file proves saturation of the area law for the explicit four-sector tensor in
 `ActiveSectorSpanningCounterexample`.  Its finite-chain operators are the
 classical cyclic law determined by the neighboring transition matrix
 \[
@@ -22,7 +22,7 @@ explicit Hayashi quantum-Markov decomposition at every admissible cut.
 
 ## Main result
 
-* `tensor_isSAL`: the four-sector tensor satisfies the strong area law.
+* `tensor_isSAL`: the four-sector tensor satisfies saturation of the area law.
 
 ## Reference
 
@@ -479,7 +479,7 @@ private theorem nonempty_markovDecomposition_tripartite
     rw [Matrix.one_apply_ne htuple]
     simp [hii]
 
-/-- The four-sector classical tensor satisfies the strong area law.  The
+/-- The four-sector classical tensor satisfies saturation of the area law.  The
 proof uses its exact cyclic transition law and the resulting quantum-Markov
 decomposition at every admissible cut; it does not assume that the transition
 matrix has rank one.

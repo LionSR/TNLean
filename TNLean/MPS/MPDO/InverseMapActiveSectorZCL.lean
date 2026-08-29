@@ -12,7 +12,7 @@ import TNLean.MPS.MPDO.SALTraceTransfer
 
 The positive normalization furnished by source zero correlation length gives
 the square--cube and positive-power trace relations on the same active,
-positively rephased trace matrix that is primitive under the strong area law.
+positively rephased trace matrix that is primitive under saturation of the area law.
 
 The argument writes the physical-trace transfer as a rectangular product
 indexed only by sectors of nonzero Hayashi weight.  The opposite rectangular
@@ -25,7 +25,7 @@ neighboring operators are positive semidefinite.
   the inverse-map construction has one rephasing for which positivity,
   primitivity, and both normalized relations hold.
 * `exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL`:
-  the corresponding existence statement from the strong area law and source
+  the corresponding existence statement from saturation of the area law and source
   zero correlation length.
 
 ## References
@@ -93,7 +93,7 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
       hη.p hinactive hpos hZCL
   exact ⟨z, lam, hlam, hpos, hprim, hrel⟩
 
-/-- Every injective MPO tensor satisfying the strong area law and source zero
+/-- Every injective MPO tensor satisfying saturation of the area law and source zero
 correlation length admits a positive physical-sector factorization whose
 active trace matrix is primitive and whose common positive normalization
 satisfies the square--cube and positive-power trace relations.
@@ -141,7 +141,7 @@ theorem exists_activeTraceMatrix_relations_of_isSAL_of_isSourceZCL
   exact ⟨F₀.rephase z, hη.p, lam, hlam, hη.hp_nonneg, hη.hp_sum,
     hpos, hprim, hrel⟩
 
-/-- Every injective MPO tensor satisfying the strong area law and literal
+/-- Every injective MPO tensor satisfying saturation of the area law and literal
 idempotence of the physical-trace transfer admits the same positive
 physical-sector factorization and primitive normalized active trace matrix as
 in the source-ZCL theorem.

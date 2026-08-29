@@ -268,7 +268,7 @@ theorem exists_positive_inverseMapPhysicalSectorFactorization
     K hK R hρ hη alpha beta hm hM
   exact ⟨F.rephase z, hpos⟩
 
-/-- Every injective MPO tensor satisfying the strong area law admits a
+/-- Every injective MPO tensor satisfying saturation of the area law admits a
 physical-sector factorization with positive semidefinite neighboring
 operators.
 
@@ -293,7 +293,7 @@ theorem exists_positive_physicalSectorFactorization_of_isSAL
     (normalizedFourSiteTail K) (isThreeSiteClosure_reducedBlockState K)
     hη alpha beta hm (Classical.choose hSAL)
 
-/-- Every injective MPO tensor satisfying the strong area law has the
+/-- Every injective MPO tensor satisfying saturation of the area law has the
 positive commuting nearest-neighbor product structure of Proposition C.8.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines

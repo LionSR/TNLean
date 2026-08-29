@@ -25,7 +25,7 @@ while
 
 Thus spanning by the full virtual matrix algebra does not, by itself, prove
 the missing vanishing in the proof of Lemma C.5.  The induced classical cyclic
-family satisfies the strong area law mathematically.  The companion
+family satisfies saturation of the area law mathematically.  The companion
 `ActiveSectorInverseMapProvenance` calculation identifies the factorization
 below with one selected by an explicit Hayashi decomposition, normalized tail,
 and inverse map.
@@ -550,7 +550,7 @@ positive semidefinite neighboring operators, an injective tensor with literal
 physical-trace idempotence, and a primitive trace-one active trace matrix, while
 that matrix is non-idempotent and the rectangular remainder is nonzero.
 
-The companion area-law theorem proves the strong area law for this tensor.
+The companion area-law theorem proves saturation of the area law for this tensor.
 Nevertheless, this is a counterexample only to the proposed intermediate
 implication.  Lemma C.5 is proved in Case I under the standing assumption that
 the tensor is an injective normal tensor; the raw tensor here does not have that

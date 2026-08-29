@@ -244,7 +244,7 @@ abbrev EtaStructure
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
   Entropy.QuantumMarkovDecomposition ρ_ABC
 
-/-- **Lemma C.2, local entropy form**: strong area law implies the local
+/-- **Lemma C.2, local entropy form**: saturation of the area law implies the local
 `η`-structure.
 
 We formalize the SAL input at the exact local point where the paper invokes it:
@@ -259,7 +259,7 @@ theorem sal_implies_eta_structure
     Nonempty (EtaStructure ρ_ABC) :=
   Entropy.exists_quantumMarkovDecomposition_of_ssaEquality ρ_ABC hρ_dm hSAL
 
-/-- **Lemma Lsigma3.** If `K` satisfies the strong area law, then the first-three-site
+/-- **Lemma Lsigma3.** If `K` satisfies saturation of the area law, then the first-three-site
 marginal of every periodic chain of length at least four admits a quantum Markov
 decomposition on the middle site.
 

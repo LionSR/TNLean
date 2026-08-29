@@ -1318,13 +1318,13 @@
     $\sum_{k\in I_*}a_kb_k=1$.
 \end{proof}
 
-\begin{theorem}[Strong-area-law form of the normalized Case-I coefficients]
+\begin{theorem}[Saturation-of-the-area-law form of the normalized Case-I coefficients]
     \label{thm:mpdo_casei_rank_one_coefficients_of_is_sal}
     \lean{MPOTensor.exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective MPO tensor. Suppose
-    that ${\cal K}$ satisfies the strong area law, that its physical-trace
+    that ${\cal K}$ satisfies saturation of the area law, that its physical-trace
     transfer is literally idempotent,
     \begin{align}
         \mathcal T_{\cal K}^2 & =\mathcal T_{\cal K},
@@ -1401,7 +1401,7 @@
     \lean{MPOTensor.exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses}
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal, def:mpo_physical_trace_transfer, def:nt_cpsv}
-    Let ${\cal K}$ be an injective MPO tensor satisfying the strong area law.
+    Let ${\cal K}$ be an injective MPO tensor satisfying saturation of the area law.
     Suppose that its physical-trace transfer is literally idempotent and that
     its underlying tensor is normal. Then one can choose a single coherently
     rephased, zero-weight-reparameterized inverse-map factorization with
@@ -1433,7 +1433,7 @@
 \begin{proof}
     \leanok
     \uses{thm:cpsv_normal_bond_dim_pos, def:mpdo_normalized_four_site_tail, def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, thm:mpdo_three_site_closure_reduced, thm:mpdo_inverse_map_active_sector_witnesses, thm:mpdo_casei_rank_one_coefficients, thm:mpdo_rephased_zero_weight_incident_vanish}
-    Normality makes the bond dimension positive. The strong area law supplies
+    Normality makes the bond dimension positive. Saturation of the area law supplies
     the four-site Hayashi decomposition, while the normalized four-site tail
     gives nonzero outer indices and the required three-site closure. Choose the
     coherently rephased zero-weight-reparameterized inverse-map factorization.

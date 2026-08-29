@@ -7,9 +7,9 @@ import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.LemmaC5CaseI
 
 /-!
-# The literal normal Case-I coefficient theorem from the strong area law
+# The literal normal Case-I coefficient theorem from saturation of the area law
 
-The strong area law supplies the Hayashi decomposition and its MPDO positivity.
+Saturation of the area law supplies the Hayashi decomposition and its MPDO positivity.
 The inverse-map construction retains one positive rephasing together with the
 active spanning, nonvanishing, recurrence, inactive-sector, and nonemptiness
 witnesses. Literal zero correlation length and normality then give normalized
@@ -80,7 +80,7 @@ theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
     K hK (normalizedFourSiteTail K) (isThreeSiteClosure_reducedBlockState K)
       hη alpha beta hm z k h hzero
 
-/-- An injective normal MPO tensor satisfying the strong area law and literal
+/-- An injective normal MPO tensor satisfying saturation of the area law and literal
 zero correlation length admits normalized rank-one coefficients for the active
 inverse-map trace matrix.
 
@@ -194,7 +194,7 @@ coherently rephased inverse-map witness; CPSV16 does not specify this
 inactive-sector convention. See <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 
 **Scope restriction (normal Case I):** this theorem assumes injectivity, the
-strong area law, literal zero correlation length, and normality. It makes no
+saturation of the area law, literal zero correlation length, and normality. It makes no
 scale-invariant ZCL or Case-II claim. See
 <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf> for the precise paper boundary.
 
