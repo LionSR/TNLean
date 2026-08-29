@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Algebra.MatrixUnitaryBetween
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 
@@ -72,9 +73,9 @@ theorem physicalCoordinateMatrix_isometry
   rw [← F.physicalFinEquiv.sum_comp (fun x ↦
     star (F.physicalIsometry (F.physicalFinEquiv.symm x) i) *
       F.physicalIsometry (F.physicalFinEquiv.symm x) j)]
-  simpa only [Equiv.symm_apply_apply, Matrix.mul_apply,
-    Matrix.conjTranspose_apply] using
-    congrFun (congrFun F.physicalIsometry_isometry i) j
+  simpa only [Equiv.symm_apply_apply, Matrix.one_apply] using
+    Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+      F.physicalIsometry F.physicalIsometry_isometry i j
 
 theorem physicalCoordinateMatrix_coisometry
     (F : PhysicalSectorFactorization K) :

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexPhasePositivity
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
 import QICLean.Kraus.CPPrimitive
@@ -261,8 +262,7 @@ private lemma unitary_mix_inverse
       ∀ j : Fin d,
         ∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j = if k = j then 1 else 0 := by
     intro j
-    have hentry := congrFun (congrFun hu k) j
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using hentry
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu k j
   calc
     ∑ i : Fin d, (starRingEnd ℂ) (u i k) • (∑ j : Fin d, u i j • A j)
         = ∑ i : Fin d, ∑ j : Fin d,

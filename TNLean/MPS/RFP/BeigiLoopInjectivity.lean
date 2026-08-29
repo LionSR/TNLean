@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.RFP.BeigiLoopSchmidtSupport
 
 /-!
@@ -99,8 +100,8 @@ private theorem isInjective_rotatePhysical (A : MPSTensor d D)
       A j = ∑ i : Fin d, (uᴴ) j i • rotatePhysical u A i := by
     have hentry (k : Fin d) :
         ∑ i : Fin d, (uᴴ) j i * u i k = if j = k then 1 else 0 := by
-      have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ ↦ M j k) hstar
-      simpa [Matrix.mul_apply, Matrix.one_apply] using h
+      exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+        u hstar j k
     simp only [rotatePhysical_apply]
     simp_rw [Finset.smul_sum, smul_smul]
     rw [Finset.sum_comm]

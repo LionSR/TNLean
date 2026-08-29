@@ -3,23 +3,24 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.PhysicalSectorFactorization
-import TNLean.MPS.MPDO.PhysicalSectorProductRealization
-import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
-import TNLean.MPS.MPDO.CyclicActiveAdjacentCoefficientExtraction
-import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
-import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
-import TNLean.MPS.MPDO.Purity
-import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
-import TNLean.MPS.MPDO.SectorEtaPositivity
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import QICLean.Analysis.MatrixTraceInequalities
 import QICLean.Algebra.MatrixCyclicTracePower
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Algebra.PerronFrobenius.Idempotent
 import QICLean.Algebra.PerronFrobenius.PerronVector
 import QICLean.Algebra.PerronFrobenius.RankOne
 import QICLean.Algebra.PerronFrobenius.Substochastic
 import QICLean.Algebra.TraceReindex
+import QICLean.Analysis.MatrixTraceInequalities
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
+import TNLean.MPS.MPDO.CyclicActiveAdjacentCoefficientExtraction
+import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
+import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
+import TNLean.MPS.MPDO.PhysicalSectorFactorization
+import TNLean.MPS.MPDO.PhysicalSectorProductRealization
+import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
+import TNLean.MPS.MPDO.Purity
+import TNLean.MPS.MPDO.SectorEtaPositivity
 
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components
@@ -401,9 +402,8 @@ theorem sitewise_prod_conjTranspose_mul_self {N : ℕ} (U : Matrix (Fin d) (Fin 
   · have hinner : ∀ n : Fin N, (∑ x : Fin d, star (U x (σ n)) * U x (τ n)) =
         if σ n = τ n then (1 : ℂ) else 0 := by
       intro n
-      have : (∑ x : Fin d, star (U x (σ n)) * U x (τ n)) = (Uᴴ * U) (σ n) (τ n) := by
-        simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
-      rw [this, hU, Matrix.one_apply]
+      exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+        U hU (σ n) (τ n)
     simp_rw [hinner]
     by_cases hστ : σ = τ
     · simp [hστ, Matrix.one_apply]

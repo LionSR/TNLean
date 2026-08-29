@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixAux
 import QICLean.Channel.KrausGauge
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
@@ -159,43 +160,18 @@ lemma transferMap_posDef_eigenvalue_lt_one
     (hrho : rho.PosDef)
     (hEig : Kraus.transferMap tensor.toMPSTensor rho = (r : ℂ) • rho) :
     r < 1 := by
-  have htraceNonneg :
-      0 ≤ Matrix.trace (normalizingCoefficientWitness * rho) :=
-    Matrix.PosSemidef.trace_mul_nonneg
-      normalizingCoefficientWitness_posDef.posSemidef hrho.posSemidef
-  have htraceNe :
-      Matrix.trace (normalizingCoefficientWitness * rho) ≠ 0 := by
-    intro hzero
-    exact (Matrix.PosDef.isUnit hrho).ne_zero
-      (Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
-        hrho.posSemidef normalizingCoefficientWitness_posDef hzero)
+  have hrho_ne : rho ≠ 0 := (Matrix.PosDef.isUnit hrho).ne_zero
   have htracePos :
       0 < Matrix.trace (normalizingCoefficientWitness * rho) :=
-    lt_of_le_of_ne htraceNonneg
-      (by simpa only [ne_eq, eq_comm] using htraceNe)
-  have hgapNonneg :
-      0 ≤ Matrix.trace
-        ((normalizingCoefficientWitness -
-          Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
-            rho) :=
-    Matrix.PosSemidef.trace_mul_nonneg
-      normalizingCoefficientWitness_sub_adjointMap_posDef.posSemidef
-      hrho.posSemidef
-  have hgapNe :
-      Matrix.trace
-        ((normalizingCoefficientWitness -
-          Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
-            rho) ≠ 0 := by
-    intro hzero
-    exact (Matrix.PosDef.isUnit hrho).ne_zero
-      (Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
-        hrho.posSemidef normalizingCoefficientWitness_sub_adjointMap_posDef hzero)
+    normalizingCoefficientWitness_posDef.trace_mul_pos_of_posSemidef_of_ne_zero
+      hrho.posSemidef hrho_ne
   have hgapPos :
       0 < Matrix.trace
         ((normalizingCoefficientWitness -
           Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
             rho) :=
-    lt_of_le_of_ne hgapNonneg (by simpa only [ne_eq, eq_comm] using hgapNe)
+    normalizingCoefficientWitness_sub_adjointMap_posDef.trace_mul_pos_of_posSemidef_of_ne_zero
+      hrho.posSemidef hrho_ne
   have hEigMap :
       Kraus.map tensor.toMPSTensor rho = (r : ℂ) • rho := by
     rw [← Kraus.mapLM_apply]

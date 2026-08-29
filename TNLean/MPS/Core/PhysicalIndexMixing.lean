@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.KrausMap
 import QICLean.Channel.KrausRepresentation
 import QICLean.Kraus.Transfer
@@ -90,9 +91,8 @@ theorem isInjective_kraus_isometry
         have hentry (rho : Fin d) :
             (∑ tau : Fin m, star (W tau sigma) * W tau rho) =
               if sigma = rho then 1 else 0 := by
-          simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-            Matrix.one_apply] using
-            congrFun (congrFun hW sigma) rho
+          exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+            W hW sigma rho
         simp_rw [hentry]
         simp
   rw [Kraus.IsInjective, eq_top_iff]

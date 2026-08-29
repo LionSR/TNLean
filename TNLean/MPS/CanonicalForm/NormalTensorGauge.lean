@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexPhasePositivity
+import QICLean.Algebra.MatrixAux
 import QICLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.Definitions
 import QICLean.Channel.KrausMap
@@ -252,10 +253,8 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
         (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ * ρ) :=
     Kraus.trace_mul_mapLM_adjoint A rfl σ ρ
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
-    intro htr
-    exact (Matrix.PosDef.isUnit hρ).ne_zero
-      (Kraus.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero
-        hρ.posSemidef hσ htr)
+    exact ne_of_gt (hσ.trace_mul_pos_of_posSemidef_of_ne_zero
+      hρ.posSemidef (Matrix.PosDef.isUnit hρ).ne_zero)
   have hscalar : (r : ℂ) * Matrix.trace (σ * ρ) =
       (t : ℂ) * Matrix.trace (σ * ρ) := by
     calc

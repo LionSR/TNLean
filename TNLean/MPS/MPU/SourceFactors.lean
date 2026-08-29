@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.CompactSVD
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Algebra.MatrixUnitaryBetween
 import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPU.SourceCuts
@@ -463,9 +464,9 @@ theorem sourceX₂_isometry_apply (l l' : Fin ℓ[U]) :
     (∑ β : Fin D, ∑ i : Fin d,
       star (sourceX₂ U (β, i) l) * sourceX₂ U (β, i) l') =
       if l = l' then 1 else 0 := by
-  have h := congrArg (fun M ↦ M l l') (sourceX₂_isometry U)
-  simpa only [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply,
-    Fintype.sum_prod_type] using h
+  simpa only [Fintype.sum_prod_type] using
+    Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+      (sourceX₂ U) (sourceX₂_isometry U) l l'
 
 /-- The weighted right-inverse identity $Y_1Z_1=I$ from arXiv:1703.09188,
 `YZ=1` (lines 503--506). -/

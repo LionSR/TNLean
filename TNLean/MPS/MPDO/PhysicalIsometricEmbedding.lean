@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.MPDO.BNTLayerOrthogonality
 import TNLean.MPS.MPDO.PhysicalSupportSALTransport
@@ -85,18 +86,11 @@ theorem doubledPhysicalMatrix_isometry
     ring
   simp_rw [hterm]
   rw [← Fintype.sum_mul_sum]
-  have hpr := congrFun (congrFun hV p) r
-  have hsq := congrFun (congrFun hV s) q
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply] at hpr hsq
-  rw [hpr]
-  have hsecond :
-      (∑ j : Fin e, V j q * star (V j s)) =
-        (1 : Matrix (Fin d) (Fin d) ℂ) s q := by
-    simpa only [mul_comm] using hsq
-  rw [hsecond]
+  rw [Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one V hV p r,
+    Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one V hV q s]
   simp only [Matrix.one_apply, Equiv.apply_eq_iff_eq, Prod.mk.injEq]
   by_cases h₁ : p = r <;> by_cases h₂ : q = s <;>
-    simp [h₁, h₂, eq_comm]
+    simp [h₁, h₂]
 
 /-- Changing the physical basis of an MPO tensor is exactly isometric mixing
 of its doubled-index MPS matrices by `doubledPhysicalMatrix`.
@@ -320,9 +314,8 @@ theorem physTraceTransfer_changePhysicalBasis
       have hentry (p q : Fin d) :
           (∑ i : Fin e, V i p * star (V i q)) =
             if p = q then 1 else 0 := by
-        have hpq := congrFun (congrFun hV q) p
-        simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-          Matrix.one_apply, mul_comm, eq_comm] using hpq
+        exact Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one
+          V hV p q
       rw [Fintype.sum_prod_type]
       simp_rw [hentry]
       simp
@@ -364,8 +357,7 @@ theorem physicalSliceColumnCoisometry_mul_conjTranspose
     Matrix.one_apply, Equiv.apply_eq_iff_eq, Prod.mk.injEq]
   have hpq :
       (∑ i : Fin e, star (V i p) * V i q) = if p = q then 1 else 0 := by
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Matrix.one_apply] using congrFun (congrFun hV p) q
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one V hV p q
   by_cases huv : u = v
   · subst v
     simpa [hpq]

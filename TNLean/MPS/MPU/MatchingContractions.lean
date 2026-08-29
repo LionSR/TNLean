@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.TransferStabilization
 
@@ -97,12 +98,12 @@ theorem IsMPU.normalized_mpo_tail_isometry [NeZero d]
         mpo U (K + 2) η
           ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))) =
         if p = q then 1 else 0 := by
-    have := congrArg (fun M ↦ M
-      ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))
-      ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))) hiso
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-      (finAddTwoArrowEquiv (Fin d) K).symm.injective.eq_iff, Prod.mk.injEq,
-      and_true] using this
+    simpa only [(finAddTwoArrowEquiv (Fin d) K).symm.injective.eq_iff,
+      Prod.mk.injEq, and_true] using
+      Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+        (mpo U (K + 2)) hiso
+          ((finAddTwoArrowEquiv (Fin d) K).symm (p, τ))
+          ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))
   simp_rw [hentry]
   by_cases hpq : p = q
   · subst q
