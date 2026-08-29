@@ -562,12 +562,10 @@ jobs:
           find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
-      # Phase 1 of LionSR/TNLean#6878 pinned latexindent 3.24.7 and formatted
-      # the current tree. Keep this second real pull-request run advisory;
-      # after it passes, remove continue-on-error to enforce the pinned check.
+      # LionSR/TNLean#6878 pins latexindent 3.24.7 after repeated successful
+      # real pull-request runs, so formatting regressions fail this job.
       - name: Check LaTeX formatting (latexindent)
         if: env.TEX_CHANGED == 'true'
-        continue-on-error: true
         timeout-minutes: 5
         run: |
           set -e
