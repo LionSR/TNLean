@@ -24,8 +24,8 @@ one.
 
 The assembly follows the standing simple-biCF setting and the block-diagonal
 argument of CPSV16, Appendix C.2, lines 1628--1782.  The finite simultaneous
-word span and the entropy transport used below are project-derived bridges;
-they are not attributed to that passage beyond their stated source roles.
+word span and the entropy argument used below are proved in TNLean; they are
+not attributed to that passage beyond their stated source roles.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -67,8 +67,8 @@ theorem sectors_weight_copy_independent
 /-- A BNT canonical form supplies the finite simultaneous word span, hence
 the biCF condition used at the start of CPSV16 Appendix C.2.
 
-The implication from the quantitative simultaneous span to `HasBiCF` is a
-project-derived bridge. -/
+The implication from the quantitative simultaneous span to `HasBiCF` is
+proved in TNLean. -/
 theorem sectors_hasBiCF
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
     (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
@@ -76,6 +76,143 @@ theorem sectors_hasBiCF
   obtain ⟨N, _hN, _hNBound, hSpan⟩ :=
     hBNT.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
   exact MPSTensor.hasBiCF_of_wordTupleSpanTop (sectors mu B hmu).basis hSpan
+
+/-- The terminal block evaluates to the identity at its terminal physical
+letter. -/
+theorem terminalBlock_terminal_letter :
+    terminalBlock.toMPSTensor
+      (finProdFinEquiv ((4 : Fin 5), (4 : Fin 5))) = 1 := by
+  simp only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat]
+  ext a b
+  fin_cases a
+  fin_cases b
+  simp [terminalBlock, changePhysicalBasis, physicalSlice,
+    Matrix.mul_apply, terminalPhysicalInclusion]
+
+private theorem pairWordTupleSpanTop_obstruction_terminal
+    (B : MPSTensor (5 * 5) 2)
+    (hInjective : Kraus.IsInjective B)
+    (hSupport : physicalSupportProj (verticalBNTMPO B) =
+      obstructionPhysicalSupport) :
+    MPSTensor.PairWordTupleSpanTop B terminalBlock.toMPSTensor 1 := by
+  unfold MPSTensor.PairWordTupleSpanTop
+  apply top_unique
+  rintro ⟨X, y⟩ _hy
+  let terminalLetter : Fin (5 * 5) :=
+    finProdFinEquiv ((4 : Fin 5), (4 : Fin 5))
+  let terminalWord : Fin 1 → Fin (5 * 5) := fun _ ↦ terminalLetter
+  have hBTerminal : B terminalLetter = 0 := by
+    ext β α
+    have hFix :=
+      physicalSupportProj_mul_physicalSlice (verticalBNTMPO B) β α
+    rw [hSupport] at hFix
+    have hEntry := congrFun (congrFun hFix (4 : Fin 5)) (4 : Fin 5)
+    symm
+    simpa [obstructionPhysicalSupport, physicalInclusion, Matrix.mul_apply,
+      Fin.sum_univ_four, physicalSlice, terminalLetter] using hEntry
+  have hTerminalTuple :
+      MPSTensor.pairWordTuple B terminalBlock.toMPSTensor 1 terminalWord =
+        (0, 1) := by
+    apply Prod.ext
+    · simpa [MPSTensor.pairWordTuple, terminalWord, terminalLetter]
+        using hBTerminal
+    · simpa [MPSTensor.pairWordTuple, terminalWord, terminalLetter]
+        using terminalBlock_terminal_letter
+  have hTerminalMem : (0, 1) ∈ Submodule.span ℂ
+      (Set.range
+        (MPSTensor.pairWordTuple B terminalBlock.toMPSTensor 1)) := by
+    rw [← hTerminalTuple]
+    exact Submodule.subset_span (Set.mem_range_self terminalWord)
+  have hX : X ∈ Submodule.span ℂ (Set.range B) := by
+    rw [hInjective]
+    exact Submodule.mem_top
+  obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hX
+  let Z := ∑ i : Fin (5 * 5), c i •
+    MPSTensor.pairWordTuple B terminalBlock.toMPSTensor 1 (fun _ ↦ i)
+  have hZMem : Z ∈ Submodule.span ℂ
+      (Set.range
+        (MPSTensor.pairWordTuple B terminalBlock.toMPSTensor 1)) := by
+    apply Submodule.sum_mem
+    intro i _hi
+    exact Submodule.smul_mem _ _
+      (Submodule.subset_span (Set.mem_range_self (fun _ : Fin 1 ↦ i)))
+  have hZFirst : Z.1 = X := by
+    ext a b
+    have hcEntry := congrFun (congrFun hc a) b
+    simpa [Z, MPSTensor.pairWordTuple, Prod.fst_sum, Prod.smul_fst,
+      Finset.sum_apply] using hcEntry
+  have hEq : (X, y) = Z + (y 0 0 - Z.2 0 0) • (0, 1) := by
+    apply Prod.ext
+    · simp [hZFirst]
+    · ext a b
+      fin_cases a
+      fin_cases b
+      simp
+  rw [hEq]
+  exact Submodule.add_mem _ hZMem (Submodule.smul_mem _ _ hTerminalMem)
+
+private theorem pairWordTupleSpanTop_terminal_obstruction
+    (B : MPSTensor (5 * 5) 2)
+    (hPair : MPSTensor.PairWordTupleSpanTop B terminalBlock.toMPSTensor 1) :
+    MPSTensor.PairWordTupleSpanTop terminalBlock.toMPSTensor B 1 := by
+  unfold MPSTensor.PairWordTupleSpanTop at hPair ⊢
+  apply top_unique
+  rintro ⟨y, X⟩ _h
+  have hSwap : (X, y) ∈ Submodule.span ℂ
+      (Set.range
+        (MPSTensor.pairWordTuple B terminalBlock.toMPSTensor 1)) := by
+    rw [hPair]
+    exact Submodule.mem_top
+  obtain ⟨c, hc⟩ :=
+    (Submodule.mem_span_range_iff_exists_fun ℂ).mp hSwap
+  refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, ?_⟩
+  apply Prod.ext
+  · ext a b
+    have hSecond := congrFun (congrFun (congrArg Prod.snd hc) a) b
+    simpa [MPSTensor.pairWordTuple, Prod.snd_sum, Prod.smul_snd,
+      Prod.fst_sum, Prod.smul_fst, Finset.sum_apply] using hSecond
+  · ext a b
+    have hFirst := congrFun (congrFun (congrArg Prod.fst hc) a) b
+    simpa [MPSTensor.pairWordTuple, Prod.snd_sum, Prod.smul_snd,
+      Prod.fst_sum, Prod.smul_fst, Finset.sum_apply] using hFirst
+
+/-- The displayed obstruction and terminal representatives simultaneously span
+their full matrix spaces using words of literal length one. -/
+theorem sectors_wordTupleSpanTop_one
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (hInjective : Kraus.IsInjective B)
+    (hSupport : physicalSupportProj (verticalBNTMPO B) =
+      obstructionPhysicalSupport) :
+    MPSTensor.WordTupleSpanTop (sectors mu B hmu).basis 1 := by
+  have hPair :=
+    pairWordTupleSpanTop_obstruction_terminal B hInjective hSupport
+  have hPairSymm := pairWordTupleSpanTop_terminal_obstruction B hPair
+  have hr : 2 ≤ (sectors mu B hmu).basisCount := by
+    change 2 ≤ 2
+    omega
+  have hSpan :=
+    MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
+      (sectors mu B hmu).basis hr (S := 1) (fun k j hjk ↦ by
+        change Fin 2 at k j
+        fin_cases k <;> fin_cases j
+        · exact absurd rfl hjk
+        · exact hPair
+        · exact hPairSymm
+        · exact absurd rfl hjk)
+  norm_num at hSpan ⊢
+  exact hSpan
+
+/-- Both representatives displayed by the ambient decomposition are normal. -/
+theorem sectors_basis_isNormalTensor
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (hBNormal : MPSTensor.IsNormalTensor B) :
+    ∀ j, MPSTensor.IsNormalTensor ((sectors mu B hmu).basis j) := by
+  intro j
+  change Fin 2 at j
+  fin_cases j
+  · exact hBNormal
+  · exact terminalBlock_isNormalTensor
 
 /-- Bond dimensions of the two physical sectors. -/
 @[reducible] def sectorDim : Fin 2 → ℕ :=
@@ -487,10 +624,10 @@ rank-one neighboring-trace factorization.
 
 The contradiction transports a hypothetical factorization through the
 virtual gauge to the embedded obstruction and then descends it through the
-isometric physical inclusion to the four-letter obstruction.  Gauge transport
-and isometric descent are project-derived bridges; CPSV16 uses the asserted
+isometric physical inclusion to the four-letter obstruction.  The gauge and
+isometric descent arguments are proved in TNLean; CPSV16 uses the asserted
 factorization at Appendix C.2, lines 1740--1782, but does not supply these
-transport results. -/
+results. -/
 theorem firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
     (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B)) :
@@ -522,16 +659,18 @@ theorem firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization
     hSource
 
 /-- There is a five-letter ambient tensor satisfying the complete standing
-simple-biCF, MPDO, SAL, and literal physical-trace ZCL package used in CPSV16,
-Appendix C.2.  Its displayed BNT has one obstruction block with strict
+simple-biCF, MPDO, SAL, and literal physical-trace ZCL conditions used in
+CPSV16, Appendix C.2.  Its displayed BNT has one obstruction block with strict
 coefficient bound `0 < ‖mu‖ < 1` and one terminal block with coefficient
-exactly one, which is the single global unit-weight witness.
+exactly one, which is the single global unit-weight witness.  Both displayed
+representatives are normal, and their simultaneous word span is top at length
+one.
 
 The simultaneous word span behind biCF and the local orthogonal-sum entropy
-argument are project-derived bridges.  The displayed canonical assembly,
-global normalization, and literal ZCL condition are the source hypotheses at
+argument are proved in TNLean.  The displayed canonical assembly, global
+normalization, and literal ZCL condition are the source hypotheses at
 CPSV16, lines 224--246, 623--630, 735--739, 811--822, and 1628--1782. -/
-theorem exists_ambient_standing_simpleBiCF_package :
+theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
@@ -545,7 +684,9 @@ theorem exists_ambient_standing_simpleBiCF_package :
       IsSAL M ∧
       IsSimpleCanonicalForm M ∧
       MPSTensor.IsBNTCanonicalForm S ∧
+      MPSTensor.WordTupleSpanTop S.basis 1 ∧
       MPSTensor.HasBiCF S.basis ∧
+      (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
       M.toMPSTensor = S.toTensor ∧
       (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
         S.weight j q = S.weight j q') ∧
@@ -566,7 +707,7 @@ theorem exists_ambient_standing_simpleBiCF_package :
       physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge,
     hBasisCount, hCopiesZero, hCopiesOne, hDimZero, hDimOne,
-    hBasisZero, hBasisOne, hWeightZero, hWeightOne, _hBSupport,
+    hBasisZero, hBasisOne, hWeightZero, hWeightOne, hBSupport,
     _hTerminalSupport, _hSupportZeroTerminal, _hTerminalZeroSupport,
     _hSupportSum, hBNT⟩ := exists_obstruction_terminal_twoBlock_BNT_witness
   have hmuNormPos : 0 < ‖mu‖ := norm_pos_iff.mpr hmu
@@ -577,7 +718,9 @@ theorem exists_ambient_standing_simpleBiCF_package :
     fun N hN ↦ trace_mpo_ambient_pos mu B hmu hGauge hN,
     ambient_isSAL mu B hmu hGauge,
     ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT,
-    hBNT, sectors_hasBiCF mu B hmu hBNT,
+    hBNT, sectors_wordTupleSpanTop_one mu B hmu hBInj hBSupport,
+    sectors_hasBiCF mu B hmu hBNT,
+    sectors_basis_isNormalTensor mu B hmu hBNormal,
     ambient_toMPSTensor_eq_sectors_toTensor mu B hmu,
     sectors_weight_copy_independent mu B hmu,
     hBasisCount, hCopiesZero, hCopiesOne, hDimZero, hDimOne,
@@ -593,15 +736,16 @@ theorem exists_ambient_standing_simpleBiCF_package :
 CPSV16 Theorem 4.9 implication `(ii) ⇒ (iv)` is false under its standing
 hypotheses.  The witness is an MPDO with positive normalization at every
 positive length, SAL, literal physical-trace ZCL, and the displayed simple
-biCF canonical form.  Its BNT coefficients have the strict values
-`0 < ‖mu‖ < 1` and `1`, so the terminal block supplies exactly the global
-unit-weight witness required at line 246.  Nevertheless, the first
+biCF canonical form.  Every displayed representative is normal, and their
+simultaneous word span is top at literal length one.  Its BNT coefficients have
+the strict values `0 < ‖mu‖ < 1` and `1`, so the terminal block supplies exactly
+the global unit-weight witness required at line 246.  Nevertheless, the first
 common-weight-absorbed representative admits no normalized rank-one
 neighboring-trace factorization.
 
-The finite simultaneous-span argument, local orthogonal-sum entropy transport,
-virtual-gauge transport, and isometric-embedding descent are project-derived
-bridges.  The counterexample addresses the source assertion and proof path at
+The finite simultaneous-span, local orthogonal-sum entropy, virtual-gauge, and
+isometric-embedding descent arguments are proved in TNLean.  The counterexample
+addresses the source assertion and proof path at
 CPSV16, Theorem 4.9(iv), lines 864--889, and Appendix C.2, lines 1628--1782.
 See `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem printed_theorem49_ii_to_iv_is_false :
@@ -618,7 +762,9 @@ theorem printed_theorem49_ii_to_iv_is_false :
         IsSAL M ∧
         IsSimpleCanonicalForm M ∧
         MPSTensor.IsBNTCanonicalForm S ∧
+        MPSTensor.WordTupleSpanTop S.basis 1 ∧
         MPSTensor.HasBiCF S.basis ∧
+        (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
         M.toMPSTensor = S.toTensor ∧
         (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q') ∧
@@ -642,7 +788,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
             (sectors_weight_copy_independent mu B hmu) 0),
         Nonempty F.NeighboringTraceFactorization := by
   obtain ⟨mu, B, hmu, hmuNormPos, hmuNorm, hBInj, hBLeft, hBNormal,
-    hGauge, hStanding⟩ := exists_ambient_standing_simpleBiCF_package
+    hGauge, hStanding⟩ := exists_ambient_simpleBiCF_neighboringTraceObstruction
   refine ⟨mu, B, hmu, hmuNormPos, hmuNorm, hBInj, hBLeft, hBNormal,
     hGauge, ?_⟩
   dsimp only at hStanding ⊢
