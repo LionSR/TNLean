@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Keep this wrapper in pr-ci's trigger paths and Blueprint change filter so
+# version, checksum, and platform changes exercise the formatting gate.
 readonly LATEXINDENT_VERSION="3.24.7"
 readonly LATEXINDENT_TAG="V${LATEXINDENT_VERSION}"
 readonly RELEASE_BASE="https://github.com/cmhughes/latexindent.pl/releases/download/${LATEXINDENT_TAG}"
