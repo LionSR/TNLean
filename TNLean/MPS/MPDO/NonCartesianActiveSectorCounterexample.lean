@@ -20,6 +20,11 @@ Proposition `prop2to3`, lines 1740--1782. It does not supply the ambient
 simple-biCF reconstruction or the line-246 normalization convention of the
 source.
 
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by arXiv:1606.00608. The paper's lines 217--246, 1628--1665, and
+1740--1782 provide only the normal-block, simple-biCF, and per-block reduction
+context.
+
 The filename and namespace retain the older project term "non-Cartesian";
 CPSV16 does not use that term for the neighboring-trace factorization.
 -/
@@ -266,12 +271,7 @@ The scalar is the positive square root of the Perron value of the unnormalized
 completely positive map. Algebraic one-site injectivity supplies primitivity;
 after scalar normalization, the already-constructed Perron gauge gives the
 representative `B`. The exact test-matrix estimate above gives
-`0 < |μ| < 1`.
-
-This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608. The paper's lines 217--246, 1628--1665, and
-1740--1782 provide only the normal-block, simple-biCF, and per-block reduction
-context. -/
+`0 < |μ| < 1`. -/
 private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     ∃ (A : MPOTensor 4 2) (mu : ℂ) (B : MPSTensor (4 * 4) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
@@ -368,12 +368,7 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
 
 /-- The candidate has an injective, left-canonical normal representative with
 a nonzero coefficient of norm strictly below one and the required gauge
-relation after scalar absorption.
-
-This is project-derived auxiliary counterexample infrastructure, not a result
-asserted by arXiv:1606.00608. The paper's lines 217--246, 1628--1665, and
-1740--1782 provide only the normal-block, simple-biCF, and per-block reduction
-context. -/
+relation after scalar absorption. -/
 theorem exists_leftCanonical_normalTensor_scalar_representation :
     ∃ (mu : ℂ) (B : MPSTensor (4 * 4) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
@@ -387,9 +382,7 @@ theorem exists_leftCanonical_normalTensor_scalar_representation :
 /-- The candidate is a nonzero scalar multiple of a normal tensor.
 
 This is the original companion statement obtained from the same normalized
-representative construction. It is project-derived auxiliary counterexample
-infrastructure, not a result asserted by arXiv:1606.00608. The paper's lines
-217--246, 1628--1665, and 1740--1782 provide only context. -/
+representative construction. -/
 theorem exists_normalTensor_scalar_representation :
     ∃ (A : MPOTensor 4 2) (mu : ℂ),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
