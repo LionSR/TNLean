@@ -35,14 +35,14 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     The nonempty-chain condition applies in particular to every $N>1$.
 \end{proof}
 
-\begin{lemma}[Physical blocking preserves nonempty-chain unitarity]
-    \label{lem:mpug_positive_mpu_blocking}
+\begin{theorem}[Physical blocking preserves nonempty-chain unitarity]
+    \label{thm:mpug_positive_mpu_blocking}
     \lean{MPOTensor.IsMPUPos.blockTensor}
     \leanok
     \uses{def:mpug_positive_mpu, def:mpdo_physical_blocking}
     If $\mathcal U$ is a matrix product unitary on nonempty chains and $L>0$,
     then $\mathcal U^{[L]}$ is also a matrix product unitary on nonempty chains.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_reindex_unitary, thm:mpdo_closed_chain_physical_blocking}
@@ -73,12 +73,12 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     for all $g,h\in G$ and all $N\geq1$.
     The multiplicative law is the representation-level input
     in~\cite[Subsection ``MPU group representations'']
-        {FrancoRubio2025MPUGauging}.
+    {FrancoRubio2025MPUGauging}.
     The identity law is its standard consequence and is recorded explicitly for
     positive lengths. It is also compatible with the later, stronger convention
     that $\mathcal U_e=\Id$ has bond dimension one
     in~\cite[Subsection ``Assumptions for the rest of the paper'']
-        {FrancoRubio2025MPUGauging}.
+    {FrancoRubio2025MPUGauging}.
     The dimensions $D_gD_h$ and $D_{gh}$ need not agree, so
     (\ref{eq:mpug_rep_multiplication}) is an identity of periodic operators,
     not an equality of local tensors.
@@ -157,7 +157,7 @@ $N\geq1$. In particular, no identity at length zero is asserted.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_positive_mpu_blocking,
+    \uses{thm:mpug_positive_mpu_blocking,
         thm:mpdo_blocking_doubled_index,
         thm:mpu_bounded_simple_blocking,
         thm:mpdo_closed_chain_physical_blocking,
@@ -218,7 +218,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_positive_mpu_blocking,
+    \uses{thm:mpug_positive_mpu_blocking,
         thm:mpug_positive_mpu_to_mpu,
         thm:mpu_common_pow_four_simple_blocking,
         thm:mpu_all_later_simple_blockings,
