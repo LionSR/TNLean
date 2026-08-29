@@ -38,8 +38,13 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
 
 \begin{proof}
     \leanok
-    Split every word of length $m+n$ after its first $m$ letters. Conversely,
-    concatenate a word of length $m$ with one of length $n$.
+    For words $w_1,w_2$ of lengths $m,n$, concatenation satisfies
+    \begin{align}
+        A^{w_1w_2} & =A^{w_1}A^{w_2}.
+        \notag
+    \end{align}
+    Split each word of length $m+n$ after its first $m$ letters for one
+    inclusion, and concatenate words of lengths $m$ and $n$ for the other.
 \end{proof}
 
 \begin{lemma}[Zero-length word span]
