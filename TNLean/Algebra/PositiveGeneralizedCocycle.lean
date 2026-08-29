@@ -23,9 +23,10 @@ we first take its pointwise norm and then its positive `|G|`-th root. If also
 The block label is retained throughout. No transitivity or finiteness assumption
 is imposed on the block-label type.
 
-**Local fix (determinant sign):** The source takes a positive root of the
-determinant cochain but does not account for the sign of the regular
-permutation. We first take the pointwise norm and then the positive root. See
+**Local fix (determinant sign):** The source invokes the positive-root
+bijection without addressing that the determinant primitive can carry the sign
+of the regular permutation. We first take the pointwise norm and then the
+positive root. See
 `docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex`.
 -/
 
