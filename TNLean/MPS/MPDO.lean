@@ -187,6 +187,7 @@ import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.NeighboringTraceObstruction
 import TNLean.MPS.MPDO.NeighboringTraceObstructionAmbientBlocks
+import TNLean.MPS.MPDO.NeighboringTraceObstructionAmbientCounterexample
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCounterexample
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction

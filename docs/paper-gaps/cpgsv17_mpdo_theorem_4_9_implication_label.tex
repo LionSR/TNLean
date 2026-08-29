@@ -120,17 +120,18 @@ projector-controlled outer-BNT assembly as its sole missing step would instead
 be \emph{proof-path drift}. No channel-assembly argument can establish the
 assertion with unrestricted raw copy weights.
 
-This counterexample does not refute the source proposition
+This counterexample alone does not refute the source proposition
 \texttt{prop2to5}, because that proposition starts from condition~(ii), not
-condition~(iv). In the preceding Case-II derivation, source lines~1646--1665
-use literal zero correlation length to show that repeated-copy weights are
-independent of the copy label and then absorb their common value into the
-representative. Proposition~\texttt{prop2to5} subsequently invokes
-Proposition~\texttt{3to5} inside each outer BNT sector. The
-projector-controlled assembly required by this viable
-$(ii)\Rightarrow(v)$ route is formalized in \ghissue{6632}; the
-source-context factorization for each representative remains tracked by
-\ghissue{6775}.
+condition~(iv). The separate five-letter ambient counterexample
+\leanid{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
+printed_theorem49_ii_to_iv_is_false} has a two-representative BNT presentation
+in biCF. It satisfies the complete condition-(ii) and line-246 normalization
+hypotheses, but its first absorbed representative has no normalized rank-one
+neighboring-trace factorization. This refutes Proposition~\texttt{prop2to3}
+and the printed route through it. The projector-controlled assembly formalized
+in \ghissue{6632} remains valid conditionally for supplied representative
+factorizations. The ambient witness does not rule out different blocking
+channels, so Proposition~\texttt{prop2to5} itself remains conditional.
 
 \section{Formal treatment}
 
@@ -149,9 +150,11 @@ implication labels)} marker and cite this note. The marker records the printed
 proof-path drift, including the hidden use of ZCL in \texttt{prop3to4}. The
 restriction to one supplied factorization is recorded separately in
 \path{docs/paper-gaps/cpgsv17_pf_rank_one.tex}. The projector-controlled
-assembly needed for the source proposition \texttt{prop2to5}, after
-common-weight absorption derived from ZCL, is formalized in \ghissue{6632};
-it does not prove the refuted literal implication.
+assembly used in the source proof of \texttt{prop2to5}, after common-weight
+absorption derived from ZCL, is formalized in \ghissue{6632}. It is a
+conditional construction. Since the printed route obtains its premise from the
+false Proposition~\texttt{prop2to3}, it does not prove \texttt{prop2to5}; no
+counterexample to \texttt{prop2to5} itself is claimed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

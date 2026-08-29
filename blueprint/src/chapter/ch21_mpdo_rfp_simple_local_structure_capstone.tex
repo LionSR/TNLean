@@ -1332,13 +1332,15 @@ This is the calculation in
     (iv)$\Rightarrow$(v) between the fixed-point condition, SAL with zero
     correlation length, the commuting Gibbs form with zero correlation length,
     the blockwise local structure, and the fixed-point condition for $M$.
-    Theorem~\ref{thm:mpdo_caseii_absorption_not_normal} refutes the printed
-    absorbed-sector normality route for (ii)$\Rightarrow$(iv) in Case II, and
+    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes the
+    representativewise assertion used in (ii)$\Rightarrow$(iv). Its ambient
+    tensor has a two-representative BNT presentation in biCF. Independently,
     Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample} refutes the literal
-    implication (iv)$\Rightarrow$(v).  The viable channel route of
-    Appendix~C.2 is (ii)$\Rightarrow$(v); its remaining source step is the
-    existence of a physical-sector factorization for every absorbed
-    representative, the outer-sector combination being complete.
+    implication (iv)$\Rightarrow$(v). Proposition~C.15 remains conditional:
+    the representative-channel and outer-sector constructions are proved for
+    supplied absorbed-sector factorizations, but the printed route obtains
+    those factorizations from the false representativewise assertion. No
+    counterexample to different blocking channels is claimed.
 \end{remark}
 
 % CPSV16 Examples 4.10--4.12, lines 897--942.
@@ -2564,64 +2566,6 @@ This is the calculation in
     by $a_0=b_0=1$.
 \end{proof}
 
-% **Missing statement; proof-path drift:** Analytic inheritance is complete
-% for every common-weight absorbed BNT representative, but the explicit
-% bond-one construction refutes preservation of normality under all conditions
-% used in Appendix C.2.  The
-% four-letter rank-one neighboring-trace obstruction below shows that the
-% resulting local analytic properties do not alone imply a neighboring trace
-% factorization.
-% It does not supply the ambient biCF witness required to refute the printed
-% implication (ii)=>(iv).  The source-context factorization remains #6775.
-% Once it is supplied, the Proposition C.7 channel construction and its
-% outer-sector composition are formalized; the latter was tracked in #6632.
-% Independently,
-% thm:mpdo_theorem49_iv_to_v_counterexample refutes the literal implication
-% (iv)=>(v).  Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-% The necessary condition thm:mpdo_neighboring_trace_unit_closure shows that
-% any qualifying factorization of a tensor forces every nonempty closed chain
-% of that tensor to have unit trace.  The per-representative assertion below
-% therefore carries the implicit normalization tr(T_{K_s}) = 1 for each
-% absorbed representative, which the line-1498 normalization asserts but the
-% ambient normalization at lines 1755-1759 supplies only summed over
-% representatives.  Whether the standing hypotheses of (ii) imply this
-% per-representative unit trace is part of the remaining content of #6775.
-\begin{theorem}[Physical sector structure of absorbed BNT representatives]
-    \label{thm:mpdo_sal_zcl_bnt_sector_structure}
-    \notready
-    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer, def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
-    Let $K$ be a simple tensor in block-injective canonical form (biCF),
-    with BNT representatives $A_s$ and canonical coefficients $\mu_{s,q}$.
-    Suppose that $K$ generates positive semidefinite periodic operators,
-    satisfies the strong area law, and has literal zero correlation length,
-    \begin{align}
-        \mathcal T_K^2 & =\mathcal T_K.
-        \notag
-    \end{align}
-    Then $\mu_{s,q}$ is independent of $q$ for each fixed $s$.  Absorb this
-    common value into $A_s$ and write $\mathcal K_s=\mu_sA_s$.  The tensors
-    $\mathcal K_s$ have mutually orthogonal physical supports and each
-    generates positive semidefinite periodic operators.  For every $s$, there
-    is a physical-sector factorization
-    \begin{align}
-        \C^d & \simeq\bigoplus_k(B^L_{s,k}\otimes B^R_{s,k}),
-        \notag                                                     \\
-        U_s\kappa^{(s)}_{\beta,\alpha}U_s^\dagger
-             & =\bigoplus_k(l_{s,k})_\beta\otimes(r_{s,k})_\alpha,
-        \notag
-    \end{align}
-    whose neighboring operators $\eta^{(s)}_{k,h}$ are positive semidefinite.
-    There are real families $(a_{s,k})_k,(b_{s,k})_k$ satisfying
-    \begin{align}
-        \tr(\eta^{(s)}_{k,h}) & =a_{s,k}b_{s,h}, \notag \\
-        \sum_k a_{s,k}b_{s,k} & =1. \notag
-    \end{align}
-    This is implication (ii)$\Rightarrow$(iv) of
-    \cite[Theorem~4.9 and Appendix~C.2, lines~1740--1782]
-    {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
-    imposed at line~849 and restated at line~1628 of the same source.
-\end{theorem}
-
 \begin{theorem}[Counterexample to the low-level absorbed-sector implication]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}
     \lean{MPOTensor.NonCartesianActiveSectorCandidate.transferMap_posDef_eigenvalue_lt_one,
@@ -2706,9 +2650,8 @@ This is the calculation in
         \notag
     \end{align}
     This is a project-derived preparation of the counterexample, not a
-    construction asserted in \cite{Cirac2016MPDO_arXiv}. It does not provide
-    the ambient simple-biCF reconstruction required by the source argument.
-    % The source-context contradiction is tracked in GitHub issue #6775.
+    construction asserted in \cite{Cirac2016MPDO_arXiv}. It supplies the two
+    normal blocks used in the ambient construction below.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2720,4 +2663,155 @@ This is the calculation in
     terminal block has coefficient one, while the first block retains the
     coefficient $\mu$. Their unequal bond dimensions separate the two BNT
     representatives.
+\end{proof}
+
+% The displayed conjunction matches the hypotheses used in CPSV16
+% Appendix C.2, lines 1628--1782. The simultaneous one-letter span and the
+% local orthogonal-sum entropy calculation are proved directly in TNLean.
+\begin{theorem}[Ambient neighboring-trace counterexample properties]
+    \label{thm:mpdo_neighboring_trace_obstruction_ambient_properties}
+    \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
+        exists_ambient_simpleBiCF_neighboringTraceObstruction}
+    \leanok
+    \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal,
+        def:mpo_physical_trace_transfer}
+    There is a five-letter MPO tensor $K$ of virtual bond dimension three
+    with a two-representative horizontal canonical presentation. The
+    representatives $A_0,A_1$ are normal and left-canonical, have bond
+    dimensions two and one, and each occurs once. The bond-two representative
+    is one-site injective. Their coefficients are $\mu$ and $1$, where
+    $0<|\mu|<1$. In particular, every coefficient has modulus at most one and
+    the second coefficient has modulus one. The embedded four-letter
+    obstruction is virtually gauge equivalent to $\mu A_0$.
+
+    The representatives have simultaneous one-letter span
+    \begin{align}
+        \operatorname{span}\{(A_0^i,A_1^i):1\leq i\leq25\}
+        =M_2(\mathbb C)\times\mathbb C.
+        \notag
+    \end{align}
+    Thus the presentation is in biCF. The tensor $K$ is the exact weighted
+    direct sum $\mu A_0\oplus A_1$ with the identity global virtual gauge. It
+    is simple, generates positive semidefinite periodic operators with
+    strictly positive trace at every positive length, satisfies the strong
+    area law, and has literal zero correlation length,
+    \begin{align}
+        \mathcal T_K^2 & =\mathcal T_K.
+        \notag
+    \end{align}
+    The obstruction and terminal sectors have one-site support projections
+    $P_0,P_1$ satisfying
+    \begin{align}
+        P_0P_1=P_1P_0 & =0, \notag \\
+        P_0+P_1       & =1. \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt,
+        thm:mpdo_local_orthogonal_sum_sal}
+    Use the prepared obstruction and terminal blocks. The obstruction slices
+    span $M_2(\mathbb C)$ and vanish on the terminal coordinate, whereas the
+    terminal block equals one on that coordinate. Hence the pairs of one-site
+    slices span $M_2(\mathbb C)\times\mathbb C$ in one letter. Both
+    representatives are normal, and the coefficients give the stated global
+    normalization.
+
+    At every positive length, the ambient periodic operator is the sum of the
+    two positive sector operators. Their complementary supports give the local
+    orthogonal-sum entropy identity, so the strong area law passes from the
+    sectors to $K$. The physical-trace transfer is block diagonal. Its two
+    diagonal blocks are idempotent, hence so is the ambient transfer. The
+    exact weighted direct sum and nonnilpotency of both representatives give
+    the asserted simple canonical presentation. Positivity and literal zero
+    correlation length imply strict positivity of every nonempty periodic
+    trace.
+\end{proof}
+
+\begin{theorem}[Universal obstruction for the absorbed representative]
+    \label{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization}
+    \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
+        firstCommonWeightAbsorbed_not_exists_neighboringTraceFactorization}
+    \leanok
+    \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample,
+        thm:mpdo_neighboring_trace_factorization_presentation_invariant,
+        thm:mpdo_neighboring_trace_factorization_isometric_embedding_descent}
+    Let $\mu\neq0$ and let $B$ be a five-letter tensor such that $\mu B$ is
+    virtually gauge equivalent to the embedded four-letter obstruction. Then
+    the absorbed tensor $\mu B$ admits no physical-sector factorization with
+    positive neighboring operators $\eta_{k,h}$ and real families
+    $(a_k)_k,(b_h)_h$ satisfying
+    \begin{align}
+        \tr(\eta_{k,h}) & =a_kb_h, \notag \\
+        \sum_k a_kb_k   & =1. \notag
+    \end{align}
+    The negation is universal over all physical-sector factorizations of
+    $\mu B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample,
+        thm:mpdo_neighboring_trace_factorization_presentation_invariant,
+        thm:mpdo_neighboring_trace_factorization_isometric_embedding_descent}
+    Suppose such a factorization exists. Virtual gauge invariance gives the
+    same neighboring-trace factorization for the embedded four-letter
+    obstruction. The embedding is an isometry, and the original obstruction
+    is injective with full one-site physical support. Isometric physical
+    descent therefore gives a normalized rank-one neighboring-trace
+    factorization of the original four-letter tensor. This contradicts
+    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample}.
+\end{proof}
+
+% **False source result:** Proposition C.12 is contradicted under the complete
+% simultaneous-one-letter-span, simple-canonical, MPDO, SAL, literal-ZCL, and
+% line-246 normalization hypotheses. Documented in
+% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{theorem}[The printed absorbed-representative structure assertion is false]
+    \label{thm:mpdo_sal_zcl_bnt_sector_structure}
+    \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
+        printed_theorem49_ii_to_iv_is_false}
+    \leanok
+    \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
+        thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization,
+        def:mpdo_physical_sector_factorization,
+        def:mpdo_neighboring_trace_factorization}
+    There is a five-letter MPO tensor $K$ of virtual bond dimension three
+    with two normal left-canonical representatives $A_0,A_1$ whose one-site
+    matrices simultaneously span $M_2(\mathbb C)\times\mathbb C$. The first
+    representative is one-site injective, and the embedded four-letter
+    obstruction is virtually gauge equivalent to $\mu A_0$. Each
+    representative occurs once, with coefficients $\mu$ and $1$, where
+    $0<|\mu|<1$; hence every coefficient has modulus at most one and the second
+    has modulus one. The tensor has simple canonical form, generates positive
+    semidefinite periodic operators with strictly positive trace at every
+    positive length, satisfies
+    the strong area law, and obeys
+    \begin{align}
+        \mathcal T_K^2 & =\mathcal T_K.
+        \notag
+    \end{align}
+    Its two one-site sector supports are complementary. Nevertheless, the
+    first absorbed representative $\mathcal K_0=\mu A_0$ has no
+    physical-sector factorization with positive neighboring operators and
+    real families $(a_k)_k,(b_h)_h$ satisfying
+    \begin{align}
+        \tr(\eta_{k,h}) & =a_kb_h, \notag \\
+        \sum_k a_kb_k   & =1. \notag
+    \end{align}
+    Hence Proposition~C.12 and the representativewise assertion used in
+    implication (ii)$\Rightarrow$(iv) of
+    \cite[Theorem~4.9 and Appendix~C.2, lines~1628--1782]
+    {Cirac2016MPDO_arXiv} are false under the stated hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_neighboring_trace_obstruction_ambient_properties,
+        thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization}
+    Choose the tensor and its two representatives from
+    Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_ambient_properties}.
+    The first representative satisfies the gauge relation required by
+    Theorem~\ref{thm:mpdo_neighboring_trace_obstruction_absorbed_no_factorization},
+    which excludes every normalized rank-one neighboring-trace factorization
+    of its absorbed tensor. All remaining hypotheses are the properties listed
+    in the ambient theorem.
 \end{proof}

@@ -145,10 +145,14 @@ For MPDO renormalization fixed points:
 - [cpgsv17_pf_rank_one.tex](https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf) records the completed normal Case-I rank-one
   theorem, the false absorbed-normality route in Case II, the exact
   repeated-copy counterexample to (iv)$\Rightarrow$(v), the nonminimality of
-  the selected four-sector inverse-map factorization, and the remaining
-  source question after ZCL-derived common-weight absorption: the printed
-  per-representative factorization. Proposition C.7 supplies the resulting
-  representative channels, and their outer-sector combination is complete.
+  the selected four-sector inverse-map factorization, and the resolved
+  false-source verdict for (ii)$\Rightarrow$(iv). The five-letter ambient
+  witness has a two-representative BNT presentation in biCF and satisfies the
+  MPDO, SAL, literal-ZCL, simple-canonical, and line-246 normalization
+  hypotheses. Its first absorbed representative has no normalized rank-one
+  neighboring-trace factorization. Proposition~C.15 remains conditional: its
+  channel construction is proved for supplied representative factorizations,
+  but no counterexample to other blocking channels is claimed.
 - `cpsv16_gsnnch_sector_decomposition.tex` records that
   `MPOTensor.GSNNCHData` retains the source orthogonal sectors and natural
   multiplicities. Positive commuting products on supplied orthogonal sectors
