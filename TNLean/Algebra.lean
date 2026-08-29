@@ -20,6 +20,7 @@ import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.LSymbol
+import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NegMulLog
