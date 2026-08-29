@@ -17,6 +17,7 @@ import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FinsetSubtypeSum
+import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.NatInterval
