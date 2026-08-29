@@ -23,9 +23,8 @@ gives a coherently positive physical-sector factorization satisfying
 \]
 Consequently, `MPOTensor.nonempty_etaLocalStructureData_of_isSAL` constructs
 the eta-local structure from injectivity and SAL alone. Zero correlation length
-is not used in Proposition C.8; it enters only in the later
-single-bond commuting-form-with-ZCL and RFP consequences. The source GSNNCH
-definition is recorded in `GSNNCHData`. Later results construct orthogonal-sector
+is not used in Proposition C.8; it enters only in later RFP consequences. The source
+GSNNCH definition is recorded in `GSNNCHData`. Later results construct orthogonal-sector
 direct sums with natural multiplicities. Under the standing Case II positivity,
 positive-dimension, and simultaneous biCF assumptions, the five printed
 blockwise identities of Proposition `prop3to4` yield the required supported
@@ -36,9 +35,7 @@ bonds; fixed-length rescaling then accommodates arbitrary BNT copy weights.
 * `MPOTensor.TranslationInvariantBondData`
 * `MPOTensor.EtaLocalStructureData`
 * `MPOTensor.hasCommutingForm_of_etaLocalStructure`
-* `MPOTensor.hasCommutingBondProduct_of_etaLocalStructure`
 * `MPOTensor.hasGSNNCHForm_of_etaLocalStructure`
-* `MPOTensor.hasCommutingBondProductWithZCL_of_etaLocalStructure`
 
 ## References
 
@@ -202,45 +199,15 @@ theorem positive_commuting_product_form
   ⟨(data.formAt N hN).bond_pos, data.formAt_bondAt_comm N hN,
     data.exists_positive_scalar_mpo_eq_product N hN⟩
 
-/-- The chain-level single-bond commuting-product witness induced by the
-local `η`-structure at a fixed chain length. -/
-theorem hasCommutingBondProductAt
-    (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
-    HasCommutingBondProductAt (mpo M N) :=
-  (data.formAt N hN).hasCommutingBondProductAt_of_realizes
-    (data.formAt_realizes N hN)
-
-/-- The explicit `η`-local structure yields a single-bond commuting-product
-witness on every finite chain. -/
-theorem hasCommutingBondProduct (data : EtaLocalStructureData M) :
-    HasCommutingBondProduct M := fun N hN ↦
-  data.hasCommutingBondProductAt N hN
-
 /-- The explicit `η`-local structure yields the one-sector instance of the
 source GSNNCH sector form on every finite chain. -/
 theorem hasGSNNCHForm (data : EtaLocalStructureData M) : HasGSNNCHForm M :=
-  hasGSNNCHForm_of_hasCommutingBondProduct data.hasCommutingBondProduct
+  fun N hN ↦ (data.formAt N hN).hasGSNNCHFormAt_of_realizes
+    (data.formAt_realizes N hN)
 
 /-- The explicit `η`-local structure yields the global commuting-form property. -/
 theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M :=
   fun N hN => ⟨data.formAt N hN, data.formAt_realizes N hN⟩
-
-/-- The explicit `η`-local structure, together with ZCL, gives the
-single-bond commuting-product condition with ZCL.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
-the neighboring operators give a commuting nearest-neighbor product form.
-
-**One-sector scope:** This theorem records only the single-bond presentation.
-Under the standing Case II assumptions, the five printed blockwise identities
-of Proposition `prop3to4` also determine the supported orthogonal sectors and,
-after fixed-length coefficient rescaling, the full direct sum with natural
-multiplicities. -/
-theorem hasCommutingBondProductWithZCL
-    (data : EtaLocalStructureData M) (hZCL : IsZCL M) :
-    HasCommutingBondProductWithZCL M :=
-  (hasCommutingBondProductWithZCL_iff_hasCommutingForm_and_isZCL M).2
-    ⟨data.hasCommutingForm, hZCL⟩
 
 end EtaLocalStructureData
 
@@ -251,29 +218,10 @@ theorem hasCommutingForm_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) : HasCommutingForm M :=
   hEta.hasCommutingForm
 
-/-- The explicit local `η`-structure also yields the single-bond
-commuting-product condition.
-
-**Scope restriction (single-bond presentation):** See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
-theorem hasCommutingBondProduct_of_etaLocalStructure {M : MPOTensor d D}
-    (hEta : EtaLocalStructureData M) : HasCommutingBondProduct M :=
-  hEta.hasCommutingBondProduct
-
 /-- The explicit local `η`-structure gives the one-sector instance of the
 source GSNNCH sector form. -/
 theorem hasGSNNCHForm_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) : HasGSNNCHForm M :=
   hEta.hasGSNNCHForm
-
-/-- Once the explicit local `η`-structure has been assembled, adding ZCL gives
-the single-bond commuting-product condition with ZCL.
-
-**Scope restriction (single-bond presentation):** See
-docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex. -/
-theorem hasCommutingBondProductWithZCL_of_etaLocalStructure
-    {M : MPOTensor d D} (hEta : EtaLocalStructureData M) (hZCL : IsZCL M) :
-    HasCommutingBondProductWithZCL M :=
-  hEta.hasCommutingBondProductWithZCL hZCL
 
 end MPOTensor

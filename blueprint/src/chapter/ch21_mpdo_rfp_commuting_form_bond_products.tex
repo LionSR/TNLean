@@ -150,38 +150,6 @@
     provided by the $\eta$-local structure.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure gives a single-bond product]
-    \label{thm:mpdo_eta_local_structure_has_commuting_bond_product}
-    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProductAt}
-    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProduct}
-    \lean{MPOTensor.hasCommutingBondProduct_of_etaLocalStructure}
-    \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_bond_product}
-    The same $\eta$-local structure gives a single-bond product witness
-    on every finite periodic chain.
-\end{theorem}
-
-\begin{proof}\leanok
-    Evaluate the local structure at each chain length $N\ge2$.
-\end{proof}
-
-\begin{theorem}[Single-bond product with doubled-index idempotence]
-    \label{thm:mpdo_eta_local_structure_has_commuting_bond_product_zcl}
-    \lean{MPOTensor.EtaLocalStructureData.hasCommutingBondProductWithZCL}
-    \lean{MPOTensor.hasCommutingBondProductWithZCL_of_etaLocalStructure}
-    \leanok
-    \uses{thm:mpdo_eta_local_structure_has_commuting_form, thm:mpdo_has_commuting_bond_product_zcl_iff_has_commuting_form_and_is_zcl}
-    An $\eta$-local structure together with the doubled-index transfer
-    condition gives the corresponding single-bond branch.
-    % Scope restriction (single-bond presentation): see
-    % docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex.
-\end{theorem}
-
-\begin{proof}\leanok
-    Use the commuting-form witness carried by the $\eta$-local structure and
-    combine it with the doubled-index transfer hypothesis.
-\end{proof}
-
 \begin{theorem}[A commuting bond admits unitary block actions]
     \label{thm:mpdo_eta_local_pair_bond_unitary_block_actions}
     \lean{MPOTensor.TranslationInvariantBondData.%
