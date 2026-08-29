@@ -1427,10 +1427,10 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
-### supplied source-gate indicator entries — candidate
+### supplied mixed-kernel indicator entries — candidate
 - **Pattern:** case-split the two or four physical-index equalities in an
-  explicit source-gate entry, simplify the resulting indicator functions and
-  primitive `sourceU`/`sourceV` entries, and cancel the factors
+  explicit mixed-kernel entry, simplify the resulting indicator functions and
+  primitive `sourceY₁X₂`/`sourceX₁Y₂` entries, and cancel the factors
   $d(\sqrt d)^{-1}(\sqrt d)^{-1}=1$ before closing the zero and nonzero cases.
 - **Seen:** 10 four-index occurrences in
   `TNLean/MPS/MPU/Examples/ShiftSourceFormulas.lean` (representatively lines

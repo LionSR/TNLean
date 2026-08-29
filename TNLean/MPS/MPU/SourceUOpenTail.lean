@@ -8,21 +8,20 @@ import TNLean.MPS.MPU.SourceUContraction
 import TNLean.MPS.MPU.SourceUV
 
 /-!
-# Open-tail expansions through the source tensor u
+# Open-tail expansions through the $Y_1$--$X_2$ mixed kernel
 
-This file develops the open-tail source-factor algebra used in the proof of
-`lemuisometry` from arXiv:1703.09188, lines 536--557. It factors an open
-periodic MPO through $X_1$, the source tensor $u$, and $X_2$, without closing
-the remaining virtual tail.
+This file develops auxiliary open-tail source-factor algebra through $X_1$,
+the $Y_1$--$X_2$ mixed kernel, and $X_2$. This kernel is not the paper gate
+$u$, and these expansions are not attributed to CPSV17 `lemuisometry`.
 
 The retained output pair is consistently denoted by \(q\); the corresponding
 pair in a conjugated expression is denoted by \(p\). Thus later contractions
 have the paper's order: the \(q\) term is unstarred and the \(p\) term is starred.
 
 **Scope boundary:** no result here collapses the sandwiched open tail, proves
-that `sourceU` is an isometry, or derives its rank bound. In particular, the
-proofs use only the valid identity $X_2^\dagger X_2=1$ and never assert the
-false ambient identity $X_2X_2^\dagger=1$.
+that the paper gate `sourceU` is an isometry, or derives its rank bound. In
+particular, the proofs use only the valid identity $X_2^\dagger X_2=1$ and
+never assert the false ambient identity $X_2X_2^\dagger=1$.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -44,18 +43,18 @@ theorem sourceX₁_weighted_isometry_apply
   simpa only [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply,
     Finset.sum_mul] using h
 
-/-- Contracting the right source leg of $X_1$ with $u$ leaves the open $X_2$
-leg of the first raw tensor letter.
+/-- Contracting the right source leg of $X_1$ with the $Y_1$--$X_2$
+mixed kernel leaves the open $X_2$ leg of the first raw tensor letter.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 515--537. -/
-theorem sum_sourceX₁_mul_sourceU
+Auxiliary mixed-cut identity; not CPSV17 equation `uu`. -/
+theorem sum_sourceX₁_mul_sourceY₁X₂
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ j₁ i₂ : Fin d) (α : Fin D) (l : Fin ℓ[U]) :
     (∑ r : Fin r[U],
-      sourceX₁ U ρ hρ (α, j₁) r * sourceU U ρ hρ (l, r) (i₁, i₂)) =
+      sourceX₁ U ρ hρ (α, j₁) r * sourceY₁X₂ U ρ hρ (l, r) (i₁, i₂)) =
       ∑ β : Fin D, U i₁ j₁ α β * sourceX₂ U (β, i₂) l := by
   classical
-  simp only [sourceU_apply, Finset.mul_sum]
+  simp only [sourceY₁X₂_apply, Finset.mul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro β _
@@ -71,17 +70,16 @@ theorem sum_sourceX₁_mul_sourceU
 
 namespace SourceFactors
 
-/-- The open two-site product factors through $X_1,u,Y_2$ for any supplied
-source factorization.
+/-- The open two-site product factors through $X_1$, the auxiliary
+$Y_1$--$X_2$ kernel, and $Y_2$ for any supplied source factorization.
 
-Source: arXiv:1703.09188, equations `SVDforms2`, `uu`, and `StandardForm`,
-lines 526--540 and 603--617. -/
-theorem mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂
+This is an algebraic mixed-cut identity, not the CPSV17 `StandardForm` gate. -/
+theorem mul_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
     (U i₁ j₁ * U i₂ j₂) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
-        S.X₁ (α, j₁) r * sourceU U S (l, r) (i₁, i₂) * S.Y₂ l (j₂, γ) := by
+        S.X₁ (α, j₁) r * sourceY₁X₂ U S (l, r) (i₁, i₂) * S.Y₂ l (j₂, γ) := by
   classical
   simp only [Matrix.mul_apply]
   have h₁ (β : Fin D) : U i₁ j₁ α β =
@@ -91,7 +89,7 @@ theorem mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂
       ∑ l : Fin ℓ[U], S.X₂ (β, i₂) l * S.Y₂ l (j₂, γ) := by
     simpa only [Matrix.mul_apply] using (X₂_mul_Y₂_apply U S β i₂ j₂ γ).symm
   simp_rw [h₁, h₂, Finset.sum_mul_sum]
-  simp_rw [sourceU_apply, Finset.mul_sum, Finset.sum_mul]
+  simp_rw [sourceY₁X₂_apply, Finset.mul_sum, Finset.sum_mul]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro r _
@@ -104,48 +102,48 @@ theorem mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂
 
 end SourceFactors
 
-/-- The open two-site matrix product factors through $X_1$, $u$, and $Y_2$.
+/-- The open two-site matrix product factors through $X_1$, the auxiliary
+$Y_1$--$X_2$ kernel, and $Y_2$.
 
-Source: arXiv:1703.09188, equation `SVDforms2`, lines 526--530, and equation
-`uu`, lines 536--537. -/
-theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂
+This is an algebraic mixed-cut identity, not the CPSV17 gate $u$. -/
+theorem mul_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
     (U i₁ j₁ * U i₂ j₂) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
-        sourceX₁ U ρ hρ (α, j₁) r * sourceU U ρ hρ (l, r) (i₁, i₂) *
+        sourceX₁ U ρ hρ (α, j₁) r * sourceY₁X₂ U ρ hρ (l, r) (i₁, i₂) *
           sourceY₂ U l (j₂, γ) := by
-  simpa [sourceFactors, sourceFactors_sourceU] using
-    SourceFactors.mul_apply_eq_sum_X₁_mul_sourceU_mul_Y₂ U
+  simpa [sourceFactors, sourceFactors_sourceY₁X₂] using
+    SourceFactors.mul_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂ U
       (sourceFactors U ρ hρ) i₁ j₁ i₂ j₂ α γ
 
 /-- Pair-index reformulation of the open two-site factorization. The output
 pair is \(q\), while \(j\) is the input pair. The name \(p\) remains reserved for the
 retained output pair in the conjugated factor of a later Gram contraction.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--537. -/
-theorem mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair
+Auxiliary mixed-cut identity; not CPSV17 equation `uu`. -/
+theorem mul_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂_pair
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (q j : Fin d × Fin d) (α γ : Fin D) :
     (U q.1 j.1 * U q.2 j.2) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
-        sourceX₁ U ρ hρ (α, j.1) r * sourceU U ρ hρ (l, r) q *
+        sourceX₁ U ρ hρ (α, j.1) r * sourceY₁X₂ U ρ hρ (l, r) q *
           sourceY₂ U l (j.2, γ) := by
-  exact mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂ U ρ hρ
+  exact mul_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂ U ρ hρ
     q.1 j.1 q.2 j.2 α γ
 
 /-- An open periodic MPO, reindexed into its first two sites and tail, factors
-through $X_1$, $u$, $Y_2$, and the unevaluated virtual tail.
+through $X_1$, the $Y_1$--$X_2$ mixed kernel, $Y_2$, and the unevaluated virtual tail.
 
 The retained output pair is \(q\); the pair \(j\) belongs to the input word.
-Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 515--537. -/
-theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord
+Auxiliary mixed-cut identity; not CPSV17 equation `uu`. -/
+theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceY₂_evalWord
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
     (q j : Fin d × Fin d) (τ ζ : Fin K → Fin d) :
     mpo U (K + 2) ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))
         ((finAddTwoArrowEquiv (Fin d) K).symm (j, ζ)) =
       ∑ α : Fin D, ∑ γ : Fin D, ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
-        sourceX₁ U ρ hρ (α, j.1) r * sourceU U ρ hρ (l, r) q *
+        sourceX₁ U ρ hρ (α, j.1) r * sourceY₁X₂ U ρ hρ (l, r) q *
           sourceY₂ U l (j.2, γ) * evalWord U (List.ofFn τ) (List.ofFn ζ) γ α := by
   classical
   simp only [finAddTwoArrowEquiv_symm_apply]
@@ -160,26 +158,26 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord
           evalWord U (List.ofFn τ) (List.ofFn ζ) γ α := by
       simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
     _ = _ := by
-      simp_rw [mul_apply_eq_sum_sourceX₁_mul_sourceU_mul_sourceY₂_pair U ρ hρ]
+      simp_rw [mul_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂_pair U ρ hρ]
       simp only [Finset.sum_mul, mul_assoc]
 
-/-- The fully reconstructed open periodic MPO expansion through $X_1$, $u$,
-$X_2$, and the open $K$-site virtual tail.
+/-- The fully reconstructed open periodic MPO expansion through $X_1$, the
+$Y_1$--$X_2$ mixed kernel, $X_2$, and the open $K$-site virtual tail.
 
 There is no normalization factor in this algebraic expansion. The unique
 factor $d^{-K}$ enters only when the future normalized output-tail contraction
 is formed.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uUnitary`, lines
-515--554. -/
-theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
+Auxiliary consequence of the source-cut factorizations in arXiv:1703.09188,
+`SVDforms2` (lines 515--528); not equation `uUnitary`. -/
+theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
     (q j : Fin d × Fin d) (τ ζ : Fin K → Fin d) :
     mpo U (K + 2) ((finAddTwoArrowEquiv (Fin d) K).symm (q, τ))
         ((finAddTwoArrowEquiv (Fin d) K).symm (j, ζ)) =
       ∑ α : Fin D, ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         ∑ β : Fin D, ∑ i : Fin d,
-          sourceX₁ U ρ hρ (α, j.1) r * sourceU U ρ hρ (l, r) q *
+          sourceX₁ U ρ hρ (α, j.1) r * sourceY₁X₂ U ρ hρ (l, r) q *
             star (sourceX₂ U (β, i) l) *
               (U i j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α := by
   classical
@@ -191,7 +189,7 @@ theorem mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
     simp only [Matrix.mul_apply, Matrix.conjTranspose_apply] at h
     rw [Fintype.sum_prod_type] at h
     exact h
-  rw [mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceY₂_evalWord U ρ hρ K q j τ ζ]
+  rw [mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceY₂_evalWord U ρ hρ K q j τ ζ]
   simp_rw [hY₂]
   simp only [Finset.mul_sum, Finset.sum_mul, Matrix.mul_apply, mul_assoc]
   apply Finset.sum_congr rfl

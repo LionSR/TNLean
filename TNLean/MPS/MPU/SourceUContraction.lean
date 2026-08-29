@@ -8,7 +8,7 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SourceFactors
 
 /-!
-# Algebraic identities for the source-u contraction
+# Algebraic identities for source-cut contractions
 
 This module records the algebraic identities used before the finite-sum contraction in
 arXiv:1703.09188, Lemma `lemuisometry` (lines 545--557). It records how the physical adjoint
@@ -20,8 +20,9 @@ The first source cut uses rows `(left virtual, down physical)`, so its weight is
 left bond
 pair and `(β, δ)` for its right bond pair.
 
-This module does not identify the resulting finite sum with `sourceUᴴ * sourceU` and proves no
-isometry or rank theorem. The finite-sum source-u Gram contraction is not established here.
+This module does not identify the resulting finite sum with
+`sourceY₁X₂ᴴ * sourceY₁X₂` and proves no isometry or rank theorem. In
+particular, it establishes no Gram formula for the paper gate $u$.
 
 ## Main results
 

@@ -7,11 +7,10 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SourceURangeTransport
 
 /-!
-# Closed source-u networks
+# Closed networks for the $Y_1$--$X_2$ mixed kernel
 
-This file gives two exact closed-network formulas used in the proof of
-lemuisometry from arXiv:1703.09188, lines 545--557. The first writes an
-ordinary source-u Gram entry as an output-first double-layer letter whose
+This file gives two exact auxiliary closed-network formulas. The first writes
+an ordinary mixed-kernel Gram entry as an output-first double-layer letter whose
 remaining bond is closed by the second-cut range projector. The second writes
 the normalized $(K+2)$-site output-tail contraction as a trace of two retained
 output-first letters followed by the Kth normalized-diagonal power.
@@ -43,13 +42,13 @@ private lemma sourceY₁_conjTranspose_mul_self
       sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁ U ρ hρ
   simp only [Matrix.mul_assoc, hrange]
 
-/-- Exact closed cut-projector formula for the ordinary source-u Gram entry. -/
-private lemma sourceU_gram_eq_closed_cut
+/-- Exact closed cut-projector formula for the ordinary mixed-kernel Gram entry. -/
+private lemma sourceY₁X₂_gram_eq_closed_cut
     {d D : ℕ} (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) :
     (∑ lr : Fin ℓ[U] × Fin r[U],
-      sourceU U ρ hρ lr q * star (sourceU U ρ hρ lr p)) =
+      sourceY₁X₂ U ρ hρ lr q * star (sourceY₁X₂ U ρ hρ lr p)) =
       ∑ β : Fin D, ∑ δ : Fin D,
         ((sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U)
             (p.1, δ) (q.1, β) *
@@ -102,23 +101,23 @@ private lemma sourceU_gram_eq_closed_cut
       intro δ _
       exact Finset.sum_comm
 
-/-- The source-u Gram as one output-first double-layer letter closed by the
-weighted left boundary and the range projector of the second source cut.
-The doubled bonds have order $(\text{ket}, \text{bra})$.
+/-- The auxiliary $Y_1$--$X_2$ Gram as one output-first double-layer letter
+closed by the weighted left boundary and the range projector of the second
+source cut. The doubled bonds have order $(\text{ket}, \text{bra})$.
 
-Source: arXiv:1703.09188, equation uUnitary, lines 545--556. -/
-theorem sourceU_gram_apply_eq_closed_output_letter
+Algebraic mixed-cut identity; not CPSV17 equation `uUnitary`. -/
+theorem sourceY₁X₂_gram_apply_eq_closed_output_letter
     {d D : ℕ} (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) :
     (∑ lr : Fin ℓ[U] × Fin r[U],
-      sourceU U ρ hρ lr q * star (sourceU U ρ hρ lr p)) =
+      sourceY₁X₂ U ρ hρ lr q * star (sourceY₁X₂ U ρ hρ lr p)) =
       ∑ β : Fin D, ∑ δ : Fin D, ∑ γ : Fin D, ∑ α : Fin D,
         ρ α γ *
           doubleLayerTensor (physicalAdjointTensor U) q.1 p.1
             (finProdFinEquiv (γ, α)) (finProdFinEquiv (β, δ)) *
           (sourceX₂ U * (sourceX₂ U)ᴴ) (β, q.2) (δ, p.2) := by
-  rw [sourceU_gram_eq_closed_cut U ρ hρ p q]
+  rw [sourceY₁X₂_gram_eq_closed_cut U ρ hρ p q]
   apply Finset.sum_congr rfl
   intro β _
   apply Finset.sum_congr rfl

@@ -448,95 +448,95 @@ noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
   exact ⟨C, R, Z, P, Pᴴ, P, hcut₁, hcut₂, hweighted, hP.1,
     hRZ, hP.1⟩
 
-/-- Entry formula for the source $u$ supplied by the bond-one identity
+/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the bond-one identity
 factors.  The source row is written in the paper order (left, right).
 
 Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
 arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
 entry formula. -/
-theorem sourceU_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
-    SourceFactors.sourceU (identityMPUTensor d) (identitySourceFactors d)
+theorem sourceY₁X₂_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fin d) :
+    SourceFactors.sourceY₁X₂ (identityMPUTensor d) (identitySourceFactors d)
         (identityLeftRankEquiv d l, identityRightRankEquiv d r) (i₁, i₂) =
       if r = i₁ ∧ l = i₂ then 1 else 0 := by
   by_cases hr : r = i₁ <;> by_cases hl : l = i₂ <;>
-    simp [SourceFactors.sourceU_apply, identitySourceFactors,
+    simp [SourceFactors.sourceY₁X₂_apply, identitySourceFactors,
       Matrix.reindex_apply, Matrix.one_apply, hr, hl, ne_comm]
 
-/-- Entry formula for the source $v$ supplied by the bond-one identity
+/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the bond-one identity
 factors.  Its source column has the paper order (right, left).
 
 Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
 arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
 entry formula. -/
-theorem sourceV_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
-    SourceFactors.sourceV (identityMPUTensor d) (identitySourceFactors d)
+theorem sourceX₁Y₂_identitySourceFactors_apply (d : ℕ) (j₁ j₂ r l : Fin d) :
+    SourceFactors.sourceX₁Y₂ (identityMPUTensor d) (identitySourceFactors d)
         (j₁, j₂) (identityRightRankEquiv d r, identityLeftRankEquiv d l) =
       if r = j₁ ∧ l = j₂ then 1 else 0 := by
   by_cases hr : r = j₁ <;> by_cases hl : l = j₂ <;>
-    simp [SourceFactors.sourceV_apply, identitySourceFactors,
+    simp [SourceFactors.sourceX₁Y₂_apply, identitySourceFactors,
       Matrix.reindex_apply, Matrix.one_apply, hr, hl]
   all_goals grind
 
-/-- Entry formula for the source $u$ supplied by the right-shift factors.
+/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the right-shift factors.
 
 Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
 does not state this intermediate entry formula. -/
-theorem sourceU_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
+theorem sourceY₁X₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
-    SourceFactors.sourceU (rightShiftTensor d) (rightShiftSourceFactors d)
+    SourceFactors.sourceY₁X₂ (rightShiftTensor d) (rightShiftSourceFactors d)
         (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
       if a = i₁ ∧ b = i₂ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
   by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
-    simp [SourceFactors.sourceU_apply, rightShiftSourceFactors,
+    simp [SourceFactors.sourceY₁X₂_apply, rightShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb]
 
-/-- Entry formula for the source $v$ supplied by the right-shift factors.
+/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the right-shift factors.
 
 Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
 does not state this intermediate entry formula. -/
-theorem sourceV_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
+theorem sourceX₁Y₂_rightShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (j₁ j₂ a b : Fin d) :
-    SourceFactors.sourceV (rightShiftTensor d) (rightShiftSourceFactors d)
+    SourceFactors.sourceX₁Y₂ (rightShiftTensor d) (rightShiftSourceFactors d)
         (j₁, j₂) (rightShiftRightRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) =
       if a = j₂ ∧ b = j₁ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
   by_cases ha : a = j₂ <;> by_cases hb : b = j₁ <;>
-    simp [SourceFactors.sourceV_apply, rightShiftSourceFactors,
+    simp [SourceFactors.sourceX₁Y₂_apply, rightShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d,
       mul_comm, mul_left_comm]
   all_goals grind
 
-/-- Entry formula for the source $u$ supplied by the left-shift factors.
+/-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the left-shift factors.
 
 Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
 does not state this intermediate entry formula. -/
-theorem sourceU_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
+theorem sourceY₁X₂_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (a b i₁ i₂ : Fin d) :
-    SourceFactors.sourceU (leftShiftTensor d) (leftShiftSourceFactors d)
+    SourceFactors.sourceY₁X₂ (leftShiftTensor d) (leftShiftSourceFactors d)
         (leftShiftLeftRankEquiv d (a, b), leftShiftRightRankEquiv d 0) (i₁, i₂) =
       if a = i₁ ∧ b = i₂ then (d : ℂ) * (Real.sqrt d : ℂ)⁻¹ else 0 := by
   by_cases ha : a = i₁ <;> by_cases hb : b = i₂ <;>
-    simp [SourceFactors.sourceU_apply, leftShiftSourceFactors,
+    simp [SourceFactors.sourceY₁X₂_apply, leftShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d, ne_comm,
       mul_comm, mul_left_comm]
 
-/-- Entry formula for the source $v$ supplied by the left-shift factors.
+/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the left-shift factors.
 
 Formalization coordinate identity used to derive equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` in arXiv:1703.09188, lines 2009--2034; the paper
 does not state this intermediate entry formula. -/
-theorem sourceV_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
+theorem sourceX₁Y₂_leftShiftSourceFactors_apply (d : ℕ) [NeZero d]
     (j₁ j₂ a b : Fin d) :
-    SourceFactors.sourceV (leftShiftTensor d) (leftShiftSourceFactors d)
+    SourceFactors.sourceX₁Y₂ (leftShiftTensor d) (leftShiftSourceFactors d)
         (j₁, j₂) (leftShiftRightRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) =
       if a = j₂ ∧ b = j₁ then (Real.sqrt d : ℂ)⁻¹ else 0 := by
   by_cases ha : a = j₂ <;> by_cases hb : b = j₁ <;>
-    simp [SourceFactors.sourceV_apply, leftShiftSourceFactors,
+    simp [SourceFactors.sourceX₁Y₂_apply, leftShiftSourceFactors,
       normalizedIdentityColumn, normalizedIdentityVec, Matrix.reindex_apply,
       Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d]
   all_goals grind

@@ -6,21 +6,22 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.SourceUOpenTail
 
 /-!
-# Boundary algebra for the source tensor u
+# Boundary algebra for the $Y_1$--$X_2$ mixed kernel
 
-This file records the normalized open-tail coefficient occurring in the proof
-of `lemuisometry` from arXiv:1703.09188, lines 545--557, and closes its outer
-source-factor boundary once the internal tail has the rank-one kernel shown in
-equation `uUnitary`.
+This file records a normalized open-tail coefficient for the auxiliary mixed
+kernel and closes its outer source-factor boundary under an explicit rank-one
+internal-tail hypothesis. It is not attributed to CPSV17 `lemuisometry` or
+`uUnitary`.
 
-The coefficient retains exactly one factor $d^{-K}$. In the surrounding Gram
-contraction the output pair $q$ is unstarred and the conjugated output pair $p$
-is starred; their source-$u$ entries are external to the coefficient defined
-here.
+The coefficient retains exactly one factor $d^{-K}$. In the surrounding
+mixed-kernel Gram contraction the output pair $q$ is unstarred and the
+conjugated output pair $p$ is starred; the two $Y_1$--$X_2$ entries are external
+to the coefficient defined here.
 
 **Scope boundary:** no result here identifies the forward open tail with a
-reflected contraction, proves that `sourceU` is an isometry, or derives a rank
-bound. The terminal contraction uses only $X_2^\dagger X_2=1$, never an ambient
+reflected contraction, proves that the paper gate `sourceU` is an isometry, or
+derives a rank bound. The terminal contraction uses only
+$X_2^\dagger X_2=1$, never an ambient
 coisometry identity.
 -/
 
@@ -33,13 +34,13 @@ variable {d D : ℕ} (U : MPOTensor d D)
 
 /-- The normalized coefficient of the fully sandwiched open $K$-site tail.
 
-The retained source-$u$ entry indexed by $q$ is unstarred and the entry indexed
-by $p$ is starred in the Gram contraction; these two external entries are not
-part of the coefficient. Thus the displayed expression contains exactly one
-normalization factor $d^{-K}$.
+The retained mixed-kernel entry indexed by $q$ is unstarred and the entry
+indexed by $p$ is starred in the Gram contraction; these two external entries
+are not part of the coefficient. Thus the displayed expression contains
+exactly one normalization factor $d^{-K}$.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 550--556. -/
-noncomputable def sourceUOpenTailCoefficient
+Auxiliary mixed-cut definition; not CPSV17 equation `uUnitary`. -/
+noncomputable def sourceY₁X₂OpenTailCoefficient
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
     (l : Fin ℓ[U]) (r : Fin r[U]) (l' : Fin ℓ[U]) (r' : Fin r[U]) : ℂ :=
   ((d : ℂ)⁻¹) ^ K *
@@ -59,10 +60,11 @@ $\rho_{\alpha',\alpha}\delta_{\beta,\beta'}\delta_{i,i'}$, then its weighted
 $X_1$ and unweighted $X_2$ boundary is
 $\delta_{l,l'}\delta_{r,r'}$.
 
-This is the terminal boundary step in arXiv:1703.09188, equation `uUnitary`,
-lines 550--556. It uses the normalization identities in equation `Y1Y1X1X1`,
-lines 479--494. -/
-theorem sourceU_boundary_sandwich
+This auxiliary boundary calculation uses the normalization identities in
+arXiv:1703.09188, equation `Y1Y1X1X1` (lines 479--494). It is not the terminal
+step of the paper's `uUnitary` argument because its surrounding mixed kernel is
+not the paper gate $u$. -/
+theorem sourceY₁X₂_boundary_sandwich
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (l : Fin ℓ[U]) (r : Fin r[U]) (l' : Fin ℓ[U]) (r' : Fin r[U]) :
     (∑ j : Fin d, ∑ α : Fin D, ∑ α' : Fin D,
