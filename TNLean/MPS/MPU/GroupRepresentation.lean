@@ -83,6 +83,7 @@ namespace GroupFamily
 
 variable {G : Type u} {d : ℕ}
 
+/-- Every bond dimension in a group family is nonzero. -/
 instance (F : GroupFamily G d) (g : G) : NeZero (F.bondDim g) :=
   ⟨Nat.ne_of_gt (F.bondDim_pos g)⟩
 
@@ -99,15 +100,16 @@ structure IsRepresentation [Group G] (F : GroupFamily G d) : Prop where
     mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
 
 /-- The multiplication law as exact positive-length equality of doubled-index
-matrix product vectors.  The orientation exposes the product tensor on the left
-and the chosen tensor for `g * h` on the right.
+matrix product vectors. The chosen injective tensor for `g * h` is placed first,
+matching the orientation used by the later rectangular reduction interface.
 
 Source: arXiv:2502.20257, lines 1403--1407. -/
 theorem IsRepresentation.sameMPV₂Pos_mulTensor [Group G]
     (F : GroupFamily G d) (hF : F.IsRepresentation) (g h : G) :
     MPSTensor.SameMPV₂Pos
-      (MPOTensor.mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-      (F.tensor (g * h)).toMPSTensor := by
+      (F.tensor (g * h)).toMPSTensor
+      (MPOTensor.mulTensor (F.tensor g) (F.tensor h)).toMPSTensor := by
+  apply MPSTensor.SameMPV₂Pos.symm
   intro N hN ρ
   let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
   let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
@@ -138,19 +140,21 @@ private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
     (F.tensor g).toMPSTensor L).1 (by simpa using hMul)
 
 private theorem operator_one_block [Group G] (F : GroupFamily G d)
-    (hF : F.IsRepresentation) {L : ℕ} (hL : 0 < L) (N : ℕ) (hN : 0 < N) :
+    (hOne : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
+    {L : ℕ} (hL : 0 < L) (N : ℕ) (hN : 0 < N) :
     mpo ((F.block L).tensor 1) N = 1 := by
   simp only [block]
   rw [mpo_blockTensor_eq_reindex,
-    hF.operator_one (N * L) (Nat.mul_pos hN hL)]
+    hOne (N * L) (Nat.mul_pos hN hL)]
   change (Matrix.reindexLinearEquiv ℂ ℂ
     (MPSTensor.blockedConfigEquiv d N L).symm
     (MPSTensor.blockedConfigEquiv d N L).symm) 1 = 1
   exact Matrix.reindexLinearEquiv_one ℂ ℂ _
 
 private theorem operator_mul_block [Group G] (F : GroupFamily G d)
-    (hF : F.IsRepresentation) {L : ℕ} (hL : 0 < L)
-    (g h : G) (N : ℕ) (hN : 0 < N) :
+    (hMul : ∀ g h N, 0 < N →
+      mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
+    {L : ℕ} (hL : 0 < L) (g h : G) (N : ℕ) (hN : 0 < N) :
     mpo ((F.block L).tensor g) N * mpo ((F.block L).tensor h) N =
       mpo ((F.block L).tensor (g * h)) N := by
   simp only [block]
@@ -163,7 +167,7 @@ private theorem operator_mul_block [Group G] (F : GroupFamily G d)
           (mpo (F.tensor h) (N * L)) =
       (Matrix.reindexAlgEquiv ℂ ℂ (MPSTensor.blockedConfigEquiv d N L).symm)
         (mpo (F.tensor (g * h)) (N * L))
-  rw [← map_mul, hF.operator_mul g h (N * L) (Nat.mul_pos hN hL)]
+  rw [← map_mul, hMul g h (N * L) (Nat.mul_pos hN hL)]
 
 /-- Positive physical blocking preserves exact representation laws, unitarity,
 simplicity, and injectivity. -/
@@ -173,8 +177,8 @@ theorem IsRepresentation.block [Group G] (F : GroupFamily G d)
   isMPUPos g := (hF.isMPUPos g).blockTensor L hL
   isSimple g := (hF.isSimple g).blockTensor L hL
   isInjective g := injective_blockTensor F g hL (hF.isInjective g)
-  operator_one N hN := operator_one_block F hF hL N hN
-  operator_mul g h N hN := operator_mul_block F hF hL g h N hN
+  operator_one N hN := operator_one_block F hF.operator_one hL N hN
+  operator_mul g h N hN := operator_mul_block F hF.operator_mul hL g h N hN
 
 /-- An exact positive-length MPU representation before simplicity is imposed. -/
 structure IsRawRepresentation [Group G] (F : GroupFamily G d) : Prop where
@@ -217,31 +221,10 @@ theorem IsRawRepresentation.block_common [Group G] [Fintype G] [NeZero d]
       ((hF.isMPUPos g).isMPU.blockTensor_pow_four_isMPUSimple)
   isInjective g :=
     injective_blockTensor F g F.commonSimpleLength_pos (hF.isInjective g)
-  operator_one N hN := by
-    simp only [block]
-    rw [mpo_blockTensor_eq_reindex,
-      hF.operator_one (N * F.commonSimpleLength)
-        (Nat.mul_pos hN F.commonSimpleLength_pos)]
-    change (Matrix.reindexLinearEquiv ℂ ℂ
-      (MPSTensor.blockedConfigEquiv d N F.commonSimpleLength).symm
-      (MPSTensor.blockedConfigEquiv d N F.commonSimpleLength).symm) 1 = 1
-    exact Matrix.reindexLinearEquiv_one ℂ ℂ _
-  operator_mul g h N hN := by
-    simp only [block]
-    rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex,
-      mpo_blockTensor_eq_reindex]
-    change
-      (Matrix.reindexAlgEquiv ℂ ℂ
-          (MPSTensor.blockedConfigEquiv d N F.commonSimpleLength).symm)
-            (mpo (F.tensor g) (N * F.commonSimpleLength)) *
-        (Matrix.reindexAlgEquiv ℂ ℂ
-          (MPSTensor.blockedConfigEquiv d N F.commonSimpleLength).symm)
-            (mpo (F.tensor h) (N * F.commonSimpleLength)) =
-      (Matrix.reindexAlgEquiv ℂ ℂ
-        (MPSTensor.blockedConfigEquiv d N F.commonSimpleLength).symm)
-          (mpo (F.tensor (g * h)) (N * F.commonSimpleLength))
-    rw [← map_mul, hF.operator_mul g h (N * F.commonSimpleLength)
-      (Nat.mul_pos hN F.commonSimpleLength_pos)]
+  operator_one N hN :=
+    operator_one_block F hF.operator_one F.commonSimpleLength_pos N hN
+  operator_mul g h N hN :=
+    operator_mul_block F hF.operator_mul F.commonSimpleLength_pos g h N hN
 
 /-- After the explicit common simplicity block, every further positive physical
 blocking remains an exact simple injective MPU representation. -/
