@@ -190,9 +190,9 @@ status of the following active boundaries:
 
 - #6775 remains the source-context existence or counterexample problem for the
   absorbed-representative neighboring-trace factorization in Theorem 4.9;
-- #7088 remains project-derived preparation of embedded non-Cartesian and
-  terminal unit-weight BNT blocks for that problem; this campaign makes no
-  claim that CPSV16 contains that construction;
+- #7088 is the project-derived preparation of the embedded rank-one
+  neighboring-trace obstruction and terminal unit-weight BNT blocks for that
+  problem; this campaign makes no claim that CPSV16 contains that construction;
 - #7142 remains the unresolved choice of a purification-RFP predicate carrying
   the source's standing presentation; the existing counterexamples and printed
   status are untouched;
@@ -205,7 +205,7 @@ All 20 modified Lean modules pass targeted cached `lake build` checks, with zero
 warnings. No changed Lean file contains `sorry` or `axiom`, and no build target
 remains blocked. In particular, the dependent-index substitutions and final
 simplification in `CyclicActiveFourthRegionContraction.lean` were repaired, and
-both modified non-Cartesian modules compile against the result.
+both modified four-letter obstruction modules compile against the result.
 
 `git diff --check`, the HEAD-relative reader-facing prose check, and the CPSV16
 source-label disposition audit pass. All three changed standalone paper-gap

@@ -74,21 +74,25 @@ mathematical obstruction.
   physical-trace ZCL, normalized fixed-representative simple canonical form,
   and biCF. The first absorbed representative nevertheless has transfer
   spectral radius $1/2$ and is not normal.
-- Scope: this is proof-path drift in the printed argument. The non-Cartesian
-  construction below refutes only the implication from the inherited local
-  analytic properties; it has no ambient simple-biCF witness. The source-context
-  factorization remains issue #6775. The source first projects into each local
-  physical subspace labelled by $j$ and then applies the representative
-  channels supplied by that factorization. The projector-controlled assembly
+- Scope: this is proof-path drift in the printed argument. The four-letter
+  neighboring-trace obstruction below refutes only the implication from the
+  inherited local analytic properties; it has no ambient simple-biCF witness.
+  The source-context factorization remains issue #6775. The source first
+  projects into each local physical subspace labelled by $j$ and then applies
+  the representative channels supplied by that factorization. The
+  projector-controlled assembly
   is formalized in #6632. The
   direct sector-mixing alternative formerly tracked in #6793 is not a separate
   source obligation.
 
 ### An absorbed normal representative need not have neighboring trace factors
 
-- Location: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
-- Main declaration:
+- Locations: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
+  and `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientBlocks.lean`
+- Main declarations:
   `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
+  and
+  `MPOTensor.NeighboringTraceObstructionAmbientBlocks.exists_obstruction_terminal_twoBlock_BNT_witness`
 - Statement refuted: injectivity, SAL, literal physical-trace idempotence, and
   a representation $K=\mu A$ with $A$ normal and $0<|\mu|<1$ imply the
   existence of a physical-sector factorization with normalized rank-one
@@ -110,10 +114,14 @@ mathematical obstruction.
   force the left and right factors in every possible sector decomposition to
   be one-dimensional. The resulting neighboring trace matrix has a nonzero
   two-by-two minor and therefore cannot be of the form $(a_kb_h)_{k,h}$.
+- Prepared pair: a project-derived five-dimensional extension adjoins a
+  bond-one terminal block. The two blocks form a normalized BNT decomposition
+  with one copy per block, raw weights $(\mu,1)$, and disjoint physical
+  supports which resolve the ambient physical space.
 - Boundary: these low-level analytic hypotheses do not imply the
-  factorization. The witness does not supply the ambient simple-biCF
-  reconstruction or line-246 unit-weight convention, so the source-context
-  assertion remains open in issue #6775. The explicit label-mixing channels of
+  factorization. The prepared pair does not supply the ambient simple-biCF
+  reconstruction, so the source-context assertion and contradiction remain
+  open in issue #6775. The explicit label-mixing channels of
   the earlier active-spanning example do not give the general construction
   used by the source.
 

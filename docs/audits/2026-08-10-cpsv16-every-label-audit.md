@@ -205,13 +205,14 @@ nodes `thm:mpdo_sal_zcl_bnt_sector_structure` and
   $1+2^{-4}=1+2^{-2}$. This is an unfaithful statement, not an unfinished
   outer-sector assembly. At virtual bond dimension one, SAL and literal ZCL do
   give the complete normalized one-sector factorization; this is a conditional
-  boundary specialization, not the all-sector theorem. The non-Cartesian
-  four-letter witness refutes only the
-  low-level implication from injectivity, SAL, literal ZCL, and a nonzero
-  scalar relation to a normal tensor: no factorization has normalized rank-one
-  neighboring traces. It does not supply the ambient simple-biCF
-  reconstruction or the line-246 unit-weight convention, so the printed
-  source-context factorization remains open in #6775. Proposition C.7 then
+  boundary specialization, not the all-sector theorem. The four-letter
+  rank-one neighboring-trace obstruction refutes only the low-level implication
+  from injectivity, SAL, literal ZCL, and a nonzero scalar relation to a normal
+  tensor. Its original four-letter presentation lacks the line-246 unit-weight
+  convention. The project-derived ambient preparation adjoins a disjoint
+  terminal block and supplies a normalized two-block BNT decomposition with
+  weights $(\mu,1)$, but no ambient simple-biCF reconstruction. The printed
+  source-context factorization therefore remains open in #6775. Proposition C.7 then
   constructs the representative channel pairs, and the projector-controlled
   outer-sector combination is formalized in #6632. The direct sector-mixing
   alternative formerly tracked in #6793 is not a separate source statement.
