@@ -338,7 +338,8 @@ theorem physTraceTransfer_sq_of_isPRFP (M : MPOTensor d D)
   exact (purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq A e hM).mp hRFP
 
 /-- A purification renormalization fixed point satisfies the literal
-physical-trace idempotence diagram of arXiv:1606.00608, Definition 4.2. -/
+physical-trace idempotence diagram of arXiv:1606.00608, Theorem 4.4,
+lines 777--784. The conclusion is the equation in Definition 4.2. -/
 theorem IsPRFP.isPhysicalTraceIdempotent {M : MPOTensor d D} (h : IsPRFP M) :
     IsPhysicalTraceIdempotent M :=
   (isPhysicalTraceIdempotent_iff M).2 (physTraceTransfer_sq_of_isPRFP M h)

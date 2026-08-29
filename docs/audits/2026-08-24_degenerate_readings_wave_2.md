@@ -353,18 +353,23 @@ why the witness is out of scope, and the one docstring in
 `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean` that named a removed declaration now
 cites only the note.
 
-## Records left as historical
+## Historical and living records
 
-Dated audit records naming the removed declarations were not rewritten:
-`docs/audits/2026-08-20_mpo_rfp_statement_integrity.md`,
-`docs/audits/2026-08-10-cpsv16-every-label-audit.md`,
+The source-wide audits
+`docs/audits/2026-08-20_mpo_rfp_statement_integrity.md` and
+`docs/audits/2026-08-10-cpsv16-every-label-audit.md` were updated to record the
+corrected PRFP reading. Other dated records naming removed declarations were
+left unchanged:
 `docs/audits/2026-08-15_mpdo_dead_proof_cleanup.md`,
 `docs/audits/2026-06-18_mathlib_4_31_replacement_audit.md`, and
 `docs/audits/2026-04-24_issue822_biCF_finite_length.md`. This note supersedes
-them where they disagree. The living registries were updated:
-`docs/counterexamples.md` (the purification entry is retained) and
-`docs/audits/2026-05-08-mps-ft-paper-coverage.md`, whose Theorem 3.11 row
-now names the surviving structural results and the paper-gap note in place of
-the deleted module. `docs/audits/data/cpsv16-label-dispositions.tsv` and
-`docs/audits/data/cpsv16-contained-result-anchors.tsv` are unchanged: their
-Theorem 4.14 rows belong to the withdrawn item (v).
+them where they disagree.
+
+The living registries were also updated. The obsolete purification entry was
+removed from `docs/counterexamples.md`;
+`docs/audits/2026-05-08-mps-ft-paper-coverage.md` records the corrected status;
+and `docs/audits/data/cpsv16-label-dispositions.tsv` maps the purification
+presentation and repeated-copy labels to their Blueprint coverage. The
+Theorem 4.14 rows in
+`docs/audits/data/cpsv16-contained-result-anchors.tsv` remain unchanged because
+they belong to the withdrawn item (v).
