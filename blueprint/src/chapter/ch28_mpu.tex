@@ -2591,7 +2591,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Given source-cut decompositions $M_1=X_1Y_1$ and $M_2=X_2Y_2$, define
     \begin{align}
         u_{(l,r),(i_1,i_2)}
-         & =\sum_\beta (Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(i_2,\beta)}, \\
+         & =\sum_\beta (Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(i_2,\beta)},    \\
         v_{(j_1,j_2),(r,l)}
          & =\sum_\alpha (X_1)_{(\alpha,j_1),r}(X_2)_{(\alpha,j_2),l}.
     \end{align}
@@ -2618,7 +2618,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Define the auxiliary mixed contractions
     \begin{align}
         a_{(l,r),(i_1,i_2)}
-         & =\sum_\beta (Y_1)_{r,(i_1,\beta)}(X_2)_{(\beta,i_2),l}, \\
+         & =\sum_\beta (Y_1)_{r,(i_1,\beta)}(X_2)_{(\beta,i_2),l},    \\
         b_{(j_1,j_2),(r,l)}
          & =\sum_\alpha (X_1)_{(\alpha,j_1),r}(Y_2)_{l,(j_2,\alpha)}.
     \end{align}
@@ -2654,7 +2654,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{theorem}[Open two-site source factorization]
-    \label{thm:mpu_mixed_y1x2_open_two_site}
+    \label{thm:mpu_mixed_y1_x2_open_two_site}
     \lean{MPOTensor.SourceFactors.mul_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂,
         MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂,
         MPOTensor.sum_sourceX₁_mul_sourceY₁X₂,
@@ -2733,11 +2733,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{theorem}[Open periodic-tail source expansion]
-    \label{thm:mpu_mixed_y1x2_open_periodic_tail}
+    \label{thm:mpu_mixed_y1_x2_open_periodic_tail}
     \lean{MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceY₂_evalWord,
         MPOTensor.mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail}
     \leanok
-    \uses{def:mpo_family, thm:mpu_mixed_y1x2_open_two_site, thm:mpu_source_factor_recovery}
+    \uses{def:mpo_family, thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_source_factor_recovery}
     Separate the first two physical sites of a length-$(K+2)$ configuration.
     For an output pair $q$, an input pair $j$, and tails $\tau,\zeta$, the
     periodic entry first expands as
@@ -2761,7 +2761,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_mixed_y1x2_open_two_site, thm:mpu_source_factor_recovery}
+    \uses{thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_source_factor_recovery}
     Reindexing each configuration into its first two coordinates and its tail
     gives
     \begin{align}
@@ -2784,10 +2784,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{definition}[Auxiliary mixed-kernel open-tail coefficient]
-    \label{def:mpu_mixed_y1x2_open_tail_coefficient}
+    \label{def:mpu_mixed_y1_x2_open_tail_coefficient}
     \lean{MPOTensor.sourceY₁X₂OpenTailCoefficient}
     \leanok
-    \uses{thm:mpu_mixed_y1x2_open_periodic_tail, def:mpu_weighted_source_factors}
+    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, def:mpu_weighted_source_factors}
     For
     \begin{align}
         A^{\tau,\zeta}_{i,j_2}
@@ -2814,10 +2814,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{definition}
 
 \begin{definition}[Auxiliary forward mixed-kernel network]
-    \label{def:mpu_mixed_y1x2_forward_kernel}
+    \label{def:mpu_mixed_y1_x2_forward_kernel}
     \lean{MPOTensor.sourceY₁X₂ForwardKernel}
     \leanok
-    \uses{thm:mpu_mixed_y1x2_open_periodic_tail}
+    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail}
     For a tail of length $K$, define
     \begin{align}
         F^{(K)}_{ii';\beta\beta',\alpha\alpha'}
@@ -2851,10 +2851,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{theorem}[Forward-kernel double-layer packaging]
-    \label{thm:mpu_mixed_y1x2_forward_kernel_packaging}
+    \label{thm:mpu_mixed_y1_x2_forward_kernel_packaging}
     \lean{MPOTensor.sourceY₁X₂ForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}
     \leanok
-    \uses{def:mpu_mixed_y1x2_forward_kernel,
+    \uses{def:mpu_mixed_y1_x2_forward_kernel,
         thm:mpu_output_layer_tail_entry,
         thm:mpu_output_first_double_layer_entry}
     The forward kernel is
@@ -2911,10 +2911,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{theorem}[Expanded normalized source-$a$ metric]
-    \label{thm:mpu_mixed_y1x2_expanded_metric}
+    \label{thm:mpu_mixed_y1_x2_expanded_metric}
     \lean{MPOTensor.IsMPU.normalized_sourceY₁X₂_openTail_metric}
     \leanok
-    \uses{thm:mpu_mixed_y1x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
+    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
     Assume $d>0$, let $\mathcal U$ be an MPU, and let $\rho$ be positive
     definite.  Expanding both $(K+2)$-site periodic entries through
     $X_1,a,X_2$ and the open tail gives
@@ -2932,14 +2932,14 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_mixed_y1x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
+    \uses{thm:mpu_mixed_y1_x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
     Replace each source-factor sum by its periodic MPO entry. Reindex the input
     configuration into its first two coordinates and its length-$K$ tail, then
     apply normalized output-first MPU coisometry.
 \end{proof}
 
 \begin{theorem}[Auxiliary closed output-letter formula for mixed-kernel Gram entries]
-    \label{thm:mpu_mixed_y1x2_gram_closed_output_letter}
+    \label{thm:mpu_mixed_y1_x2_gram_closed_output_letter}
     \lean{MPOTensor.sourceY₁X₂_gram_apply_eq_closed_output_letter}
     \leanok
     \uses{def:mpu_mixed_source_kernels, def:mpu_double_layer, def:mpu_weighted_source_factors}
@@ -3023,10 +3023,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{proof}
 
 \begin{theorem}[Auxiliary mixed-kernel Gram entry with the second-cut metric]
-    \label{thm:mpu_mixed_y1x2_gram_second_cut_metric}
+    \label{thm:mpu_mixed_y1_x2_gram_second_cut_metric}
     \lean{MPOTensor.sourceY₁X₂_gram_apply_eq_secondCutMetric}
     \leanok
-    \uses{thm:mpu_mixed_y1x2_gram_closed_output_letter, thm:mpu_second_cut_metric}
+    \uses{thm:mpu_mixed_y1_x2_gram_closed_output_letter, thm:mpu_second_cut_metric}
     Let $\mathcal U$ be an MPO tensor, let $\rho$ be positive definite,
     and let $p,q\in\Fin d\times\Fin d$ be the retained physical pairs.
     No MPU or positive-dimension hypothesis is required.  With
@@ -3043,7 +3043,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_mixed_y1x2_gram_closed_output_letter, thm:mpu_second_cut_metric}
+    \uses{thm:mpu_mixed_y1_x2_gram_closed_output_letter, thm:mpu_second_cut_metric}
     Substitute the second-cut metric factorization into the closed
     output-letter formula and expand both matrix products.  Reordering the
     finite sums gives the displayed eight-index expression.
@@ -3254,10 +3254,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{remark}
 
 \begin{theorem}[Auxiliary mixed-network boundary contraction]
-    \label{thm:mpu_mixed_y1x2_terminal_boundary}
+    \label{thm:mpu_mixed_y1_x2_terminal_boundary}
     \lean{MPOTensor.sourceY₁X₂_boundary_sandwich}
     \leanok
-    \uses{def:mpu_mixed_y1x2_open_tail_coefficient, thm:mpu_source_factor_normalizations}
+    \uses{def:mpu_mixed_y1_x2_open_tail_coefficient, thm:mpu_source_factor_normalizations}
     If the normalized internal tail supplies
     \begin{align}
         \rho_{\alpha',\alpha}\,
@@ -5193,7 +5193,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_mixed_y1x2_open_two_site,
+    \uses{thm:mpu_mixed_y1_x2_open_two_site,
         thm:mpu_mixed_x1y2_open_two_site,
         thm:mpdo_blocking_product,
         thm:mpdo_block_two_as_positive_blocking,
@@ -7870,7 +7870,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁}
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
-        thm:mpu_mixed_y1x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
+        thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
     Assume $d>0$. The two auxiliary open-leg factorizations of the blocked
     tensor have, as their respective mixed kernels,
     \begin{align}
@@ -7888,7 +7888,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
-        thm:mpu_mixed_y1x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
+        thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
     Write $B_2=\mathcal U_{2,2}$ for the actual two-site block and decode
     $I=(I_1,I_2)$ and $J=(J_1,J_2)$.  If $\pi$ is the four-spin physical
     identification and $\iota_a,\iota_b$ are the two source-rank
@@ -7937,7 +7937,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁}
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
-        thm:mpu_mixed_y1x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
+        thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
     Assume $d>0$. The two auxiliary open-leg factorizations of the blocked
     tensor have, as their respective mixed kernels,
     \begin{align}
@@ -7954,7 +7954,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
-        thm:mpu_mixed_y1x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
+        thm:mpu_mixed_y1_x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
     With $B_3=\mathcal U_{3,2}$ for the actual two-site block and the
     corresponding identifications $\pi,\iota_a,\iota_b$, the exact equalities
     are
