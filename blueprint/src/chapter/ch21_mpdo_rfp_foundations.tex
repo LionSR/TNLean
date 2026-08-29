@@ -728,6 +728,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{theorem}[A purification RFP has idempotent physical-trace transfer]
     \label{thm:prfp_physical_trace_idempotent}
+    \lean{MPOTensor.physTraceTransfer_sq_of_isPRFP}
     \lean{MPOTensor.IsPRFP.isPhysicalTraceIdempotent}
     \leanok
     \uses{def:mpdo_is_prfp, def:mpo_physical_trace_idempotence}
@@ -765,10 +766,13 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    \uses{thm:prfp_is_lpdo, thm:purification_tensor_rfp_iff_physical_trace_idempotent}
-    Choose the local purifying tensor and bond identification. The equivalence
-    is Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent}
-    for that fixed purification.
+    \uses{thm:prfp_is_lpdo, thm:prfp_physical_trace_idempotent,
+        thm:purification_tensor_rfp_iff_physical_trace_idempotent}
+    The forward direction combines Theorems~\ref{thm:prfp_is_lpdo} and
+    \ref{thm:prfp_physical_trace_idempotent}. Conversely, choose the local
+    purifying tensor and bond identification and apply
+    Theorem~\ref{thm:purification_tensor_rfp_iff_physical_trace_idempotent} to
+    that fixed purification.
 \end{proof}
 
 \begin{theorem}[Nondegenerate PRFP equivalence]
