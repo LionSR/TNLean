@@ -8,6 +8,7 @@ import QICLean.Channel.SingleKrausPositivity
 import QICLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPDO.CPSVExample410CorrelatedFlip
 import TNLean.MPS.MPDO.CPSVExample410Operator
+import TNLean.MPS.MPDO.LPDO
 import TNLean.MPS.MPDO.SourceZCLMarginal
 
 /-!

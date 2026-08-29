@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.MPDO.LPDO
 import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.ZCL
 

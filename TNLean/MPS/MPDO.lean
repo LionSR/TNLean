@@ -174,6 +174,7 @@ import TNLean.MPS.MPDO.InverseMapLemmaC5CaseI
 import TNLean.MPS.MPDO.InverseMapPhysicalSectorFactorization
 import TNLean.MPS.MPDO.IsometricAdjacentBondTransport
 import TNLean.MPS.MPDO.KatoDeformedRFPObstruction
+import TNLean.MPS.MPDO.LPDO
 import TNLean.MPS.MPDO.LemmaC5CaseI
 import TNLean.MPS.MPDO.LengthDependentRFPExample
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
