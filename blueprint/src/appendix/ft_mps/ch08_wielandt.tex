@@ -33,17 +33,13 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
     \lean{Kraus.wordSpan_add}
     \leanok
     \uses{def:word_span}
-    For all $m,n\geq 0$,
-    \[
-        S_{m+n}(A)=S_m(A)S_n(A).
-    \]
+    For all $m,n\geq 0$, one has $S_{m+n}(A)=S_m(A)S_n(A)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:word_span_mul}
-    Split every word of length $m+n$ after its first $m$ letters. The reverse
-    inclusion is Lemma~\ref{lem:word_span_mul}.
+    Split every word of length $m+n$ after its first $m$ letters. Conversely,
+    concatenate a word of length $m$ with one of length $n$.
 \end{proof}
 
 \begin{lemma}[Zero-length word span]
