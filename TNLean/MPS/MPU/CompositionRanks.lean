@@ -178,7 +178,8 @@ private theorem sum_eight_cut_factorization
 /-- The left rectangular factor of the generic four-site product cut. With the
 local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
 matrix $A_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
-$A_{2,4}$.
+$A_{2,4}$. The rank argument uses this algebraic mixed-cut factorization rather
+than the paper source gates.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutLeft
@@ -198,7 +199,8 @@ private noncomputable def compositionCutLeft
 /-- The right rectangular factor of the generic four-site product cut. With the
 local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
 matrix $B_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
-$B_{2,4}$.
+$B_{2,4}$. The rank argument uses this algebraic mixed-cut factorization rather
+than the paper source gates.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutRight

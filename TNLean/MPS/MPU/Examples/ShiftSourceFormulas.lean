@@ -420,7 +420,7 @@ CPSV17 gate $v_3$. -/
         shiftExampleU₃LeftRankEquiv d (b, e)) := by
   simp [shiftExampleU₃SwapSourceX₁Y₂ColumnEquiv]
 
-/-- Entry formula for the supplied auxiliary $Y_1$--$X_2$ kernel of $U_2$ in the four-spin
+/-- Entry formula for the supplied auxiliary $Y_1$--$X_2$ kernel of $U_2$ in
 explicit four-spin coordinates.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U2`
@@ -480,7 +480,7 @@ theorem shiftExampleU₂_sourceY₁X₂_reindex_eq_identitySwapIdentity
   simpa only [Equiv.symm_symm] using
     shiftExampleU₂_sourceY₁X₂_fourSpin_apply d a b c e i j k l
 
-/-- Entry formula for the supplied auxiliary $X_1$--$Y_2$ kernel of $U_2$ in the four-spin
+/-- Entry formula for the supplied auxiliary $X_1$--$Y_2$ kernel of $U_2$ in
 explicit reflected four-spin coordinates.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U2`
@@ -559,7 +559,7 @@ private theorem shiftExampleU₃_sourceY₁X₂_product_apply (d : ℕ) [NeZero 
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (a, b))
       (rightShiftRightRankEquiv d (c, e)) (leftShiftRightRankEquiv d 0) i k j l
 
-/-- Entry formula for the supplied auxiliary $Y_1$--$X_2$ kernel of $U_3$ in the four-spin
+/-- Entry formula for the supplied auxiliary $Y_1$--$X_2$ kernel of $U_3$ in
 explicit four-spin coordinates.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U3`
@@ -635,7 +635,7 @@ private theorem shiftExampleU₃_sourceX₁Y₂_product_apply (d : ℕ) [NeZero 
       (rightShiftRightRankEquiv d (b, a)) (leftShiftRightRankEquiv d 0)
       (rightShiftLeftRankEquiv d 0) (leftShiftLeftRankEquiv d (e, c))
 
-/-- Entry formula for the supplied auxiliary $X_1$--$Y_2$ kernel of $U_3$ in the four-spin
+/-- Entry formula for the supplied auxiliary $X_1$--$Y_2$ kernel of $U_3$ in
 explicit reflected four-spin coordinates.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:uv2_U3`
