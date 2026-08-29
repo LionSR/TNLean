@@ -163,19 +163,19 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
     $S_{L+k}(A)=\MN{D}$.
 \end{proof}
 
-\begin{lemma}[Exact block injectivity at positive multiples]
-    \label{lem:exact_block_injectivity_positive_multiple}
+\begin{theorem}[Exact block injectivity at positive multiples]
+    \label{thm:exact_block_injectivity_positive_multiple}
     \lean{MPSTensor.isNBlkInjective_mul_of_isNBlkInjective}
     \leanok
     \uses{def:l_blk_injective}
     If $A$ is $N$-block injective and $m>0$, then $A$ is
     $(mN)$-block injective.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:l_blk_injective}
-    Induct on $m$. Concatenation gives
+    \uses{def:l_blk_injective, thm:word_span_add_exact}
+    Induct on $m$. Theorem~\ref{thm:word_span_add_exact} gives
     $S_{mN+N}(A)=S_{mN}(A)S_N(A)$, and the product of the full matrix
     algebra with itself is again the full matrix algebra.
 \end{proof}
@@ -186,14 +186,14 @@ construction is in Section~\ref{sec:app_wielandt_blocking_support}.
         exists_common_isNBlkInjective_of_isNormal_leftCanonical}
     \leanok
     \uses{def:l_blk_injective, def:normal, thm:bounded_injective_blocking_normal_left_canonical,
-        lem:exact_block_injectivity_positive_multiple}
+        thm:exact_block_injectivity_positive_multiple}
     Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension,
     left-canonical normal tensors. There is a positive integer $L$ such that
     every $A_j$ is $L$-block injective.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:exact_block_injectivity_positive_multiple}
+    \uses{thm:exact_block_injectivity_positive_multiple}
     Apply
     Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical} to each
     block. The product of the finitely many positive lengths is a common

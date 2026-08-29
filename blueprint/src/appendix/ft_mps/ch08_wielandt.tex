@@ -28,6 +28,24 @@ Theorem~\ref{thm:tp_primitive_irred_block_injective}.
     $|w_1w_2|=m+n$.
 \end{proof}
 
+\begin{theorem}[Exact factorization of word spans]
+    \label{thm:word_span_add_exact}
+    \lean{Kraus.wordSpan_add}
+    \leanok
+    \uses{def:word_span}
+    For all $m,n\geq 0$,
+    \[
+        S_{m+n}(A)=S_m(A)S_n(A).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:word_span_mul}
+    Split every word of length $m+n$ after its first $m$ letters. The reverse
+    inclusion is Lemma~\ref{lem:word_span_mul}.
+\end{proof}
+
 \begin{lemma}[Zero-length word span]
     \label{lem:wordspan_zero_ne_top}
     \lean{Kraus.wordSpan_zero_ne_top_of_two_le}
