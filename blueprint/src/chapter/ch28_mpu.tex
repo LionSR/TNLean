@@ -6914,9 +6914,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    At a blocked length $N$, identify the blocked operator with $U^{(Nk)}$.
-    The two inverse configuration reindexings cancel, and invariance follows
-    because $Nk\in A$.
+    Let $R_{d,N,k}$ be the canonical identification from blocked length-$N$
+    configurations to unblocked length-$Nk$ configurations. For $N\in A_k$,
+    one has $Nk\in A$ and
+    \begin{align}
+        \mathcal S_{k,N}\bigl[U_k^{(N)}\bigr]
+         & = R_{d,N,k}^{-1}\!\left(
+        \mathcal S_{d,Nk}\!\left[
+                R_{d,N,k}\bigl(U_k^{(N)}\bigr)
+        \right]\right)                               \\
+         & = R_{d,N,k}^{-1}\!\left(
+        \mathcal S_{d,Nk}\bigl[U^{(Nk)}\bigr]\right) \\
+         & = R_{d,N,k}^{-1}\bigl(U^{(Nk)}\bigr)      \\
+         & = U_k^{(N)}.
+    \end{align}
+    The second and final equalities are the inverse reindexing identities, and
+    the third is invariance of $U^{(Nk)}$ because $Nk\in A$.
 \end{proof}
 
 \begin{definition}[Strict equivalence under a symmetry]
