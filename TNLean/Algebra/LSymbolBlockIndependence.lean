@@ -8,17 +8,22 @@ import TNLean.Algebra.LSymbol
 /-!
 # Block independence for scalar L-symbols
 
-This file formalizes arXiv:2502.20257, Proposition `prop:technical01`
-(lines 6965–7027), by explicit scalar gauges. No finiteness, transitivity,
-or cocyclicity assumption is used.
+This file formalizes the scalar L-symbol core of arXiv:2502.20257,
+Proposition `prop:technical01` (lines 6965–7027), by explicit scalar gauges.
+It starts from a supplied compatible L-symbol. It does not construct the
+L-symbol from an MPS–MPU pair or identify tensor gauges with scalar gauges.
+That tensor-facing bridge is required for the full source proposition. No
+finiteness, transitivity, or cocyclicity assumption is used in the scalar
+argument.
 
 The proof first factors a block-independent compatible L-symbol as
 `Lˣ_{g,h} = A(g,h) q(x)`. Compatibility then shows that
 `q(g • x) / q(x)` is a character. The resulting forward gauge multiplier is
 exactly `L`, so the pointwise inverse gauges trivialize it.
 
-**Local fixes (source algebra):** The proof follows the paper-gap notes in
-issue #7268 for `prop:technical01`: line 6990 needs `γ_h` in the second denominator factor;
+**Local fixes (source algebra):** See
+`docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex`. In
+`prop:technical01`, line 6990 needs `γ_h` in the second denominator factor;
 line 6996 requires division by `ell_{g,h;h}`; line 7016 therefore contains its
 reciprocal; and the displayed factor is a forward gauge multiplier, whose
 inverse gauges trivialize `L`.
@@ -30,15 +35,19 @@ inverse gauges trivialize `L`.
   the three raw conditions.
 * `LSymbol.HasTrivialGauge`, `HasBlockConstantGauge`,
   `HasTrivialEllGauge`, and `IsBlockIndependent`: the four gauge-existential
-  formulations in `prop:technical01`.
+  formulations underlying the scalar core of `prop:technical01`.
 
 ## Main results
 
 * `LSymbol.factorization_of_isBlockIndependentEll`: corrected factorization.
 * `LSymbol.relativeCharacter_mul`: the relative block scalar is a character.
-* `LSymbol.exists_gauge_eq_one_of_isBlockIndependentEll`: explicit inverse
+* `LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll`: explicit inverse
   gauges trivialize a block-independent compatible L-symbol.
-* `LSymbol.hasTrivialGauge_iff_*`: the four conditions are equivalent.
+* `LSymbol.hasTrivialGauge_iff_*`: the four scalar conditions are
+  equivalent for a supplied compatible L-symbol.
+
+These results do not establish the tensor-facing fourth condition of the source
+for an MPS–MPU pair.
 -/
 
 namespace TNLean.Algebra
@@ -54,19 +63,20 @@ def ell (L : LSymbol G X) (x : X) (a b g : G) : Units ℂ :=
   L x (a * g) (g⁻¹ * b) / L x a b
 
 /-- The raw block-independence condition for `ell`, before choosing a gauge.
-This is the condition preceding arXiv:2502.20257, `prop:technical01`. -/
+This is the scalar condition preceding arXiv:2502.20257,
+`prop:technical01`. -/
 def IsBlockIndependentEll (L : LSymbol G X) : Prop :=
   ∀ x y a b g, ell L x a b g = ell L y a b g
 
 /-- L-symbols are block-constant when they do not depend on the block label.
-This is the raw condition in item 2 of arXiv:2502.20257,
-`prop:technical01`. -/
+This is the raw scalar condition underlying item 2 of
+arXiv:2502.20257, `prop:technical01`. -/
 def IsBlockConstant (L : LSymbol G X) : Prop :=
   ∀ x y g h, L x g h = L y g h
 
 /-- The raw condition that every scalar factor `ellˣ_{a,b;g}` is one.
-This is item 3 of arXiv:2502.20257, `prop:technical01`, before choosing a
-gauge. -/
+This is the raw scalar condition underlying item 3 of
+arXiv:2502.20257, `prop:technical01`, before choosing a gauge. -/
 def IsTrivialEll (L : LSymbol G X) : Prop :=
   ∀ x a b g, ell L x a b g = 1
 
@@ -74,25 +84,29 @@ def IsTrivialEll (L : LSymbol G X) : Prop :=
 def IsTrivial (L : LSymbol G X) : Prop :=
   ∀ x g h, L x g h = 1
 
-/-- Item 1 of arXiv:2502.20257, `prop:technical01`: some joint scalar gauge
-trivializes every L-symbol. -/
+/-- The scalar L-symbol formulation underlying item 1 of
+arXiv:2502.20257, `prop:technical01`: some joint scalar gauge trivializes the
+supplied L-symbol. -/
 def HasTrivialGauge (L : LSymbol G X) : Prop :=
   ∃ β : ScalarCocycle G, ∃ γ : ActionTensorGauge G X, IsTrivial (gauge β γ L)
 
-/-- Item 2 of arXiv:2502.20257, `prop:technical01`: some joint scalar gauge
-makes the L-symbols block-constant. -/
+/-- The scalar L-symbol formulation underlying item 2 of
+arXiv:2502.20257, `prop:technical01`: some joint scalar gauge makes the supplied
+L-symbol block-constant. -/
 def HasBlockConstantGauge (L : LSymbol G X) : Prop :=
   ∃ β : ScalarCocycle G, ∃ γ : ActionTensorGauge G X,
     IsBlockConstant (gauge β γ L)
 
-/-- Item 3 of arXiv:2502.20257, `prop:technical01`: some joint scalar gauge
-makes every `ell` equal to one. -/
+/-- The scalar L-symbol formulation underlying item 3 of
+arXiv:2502.20257, `prop:technical01`: some joint scalar gauge makes every `ell`
+equal to one. -/
 def HasTrivialEllGauge (L : LSymbol G X) : Prop :=
   ∃ β : ScalarCocycle G, ∃ γ : ActionTensorGauge G X,
     IsTrivialEll (gauge β γ L)
 
-/-- Item 4 of arXiv:2502.20257, `prop:technical01`: the block-independence
-condition holds after some joint scalar gauge. -/
+/-- Scalar block independence after a joint scalar gauge. This is the
+L-symbol condition used by the source proof of item 4 in arXiv:2502.20257,
+`prop:technical01`; it is not the tensor-facing predicate on an MPS–MPU pair. -/
 def IsBlockIndependent (L : LSymbol G X) : Prop :=
   ∃ β : ScalarCocycle G, ∃ γ : ActionTensorGauge G X,
     IsBlockIndependentEll (gauge β γ L)
@@ -299,33 +313,35 @@ theorem hasTrivialGauge_of_isBlockIndependentEll [Nonempty X]
   exact congrFun (congrFun (congrFun
     (gauge_inv_eq_one_of_isBlockIndependentEll hCompat hBI x₀) x) g) h
 
-/-- Item 1 implies item 2 of arXiv:2502.20257, `prop:technical01`. -/
+/-- At the scalar L-symbol level, triviality implies block constancy. -/
 theorem HasTrivialGauge.hasBlockConstantGauge {L : LSymbol G X}
     (hL : HasTrivialGauge L) : HasBlockConstantGauge L := by
   obtain ⟨β, γ, h⟩ := hL
   exact ⟨β, γ, h.isBlockConstant⟩
 
-/-- Item 1 implies item 3 of arXiv:2502.20257, `prop:technical01`. -/
+/-- At the scalar L-symbol level, triviality implies trivial `ell`. -/
 theorem HasTrivialGauge.hasTrivialEllGauge {L : LSymbol G X}
     (hL : HasTrivialGauge L) : HasTrivialEllGauge L := by
   obtain ⟨β, γ, h⟩ := hL
   exact ⟨β, γ, h.isTrivialEll⟩
 
-/-- Item 2 implies item 4 of arXiv:2502.20257, `prop:technical01`. -/
+/-- At the scalar L-symbol level, block constancy implies block
+independence. -/
 theorem HasBlockConstantGauge.isBlockIndependent {L : LSymbol G X}
     (hL : HasBlockConstantGauge L) : IsBlockIndependent L := by
   obtain ⟨β, γ, h⟩ := hL
   exact ⟨β, γ, h.isBlockIndependentEll⟩
 
-/-- Item 3 implies item 4 of arXiv:2502.20257, `prop:technical01`. -/
+/-- At the scalar L-symbol level, trivial `ell` implies block
+independence. -/
 theorem HasTrivialEllGauge.isBlockIndependent {L : LSymbol G X}
     (hL : HasTrivialEllGauge L) : IsBlockIndependent L := by
   obtain ⟨β, γ, h⟩ := hL
   exact ⟨β, γ, h.isBlockIndependentEll⟩
 
-/-- Item 4 implies item 1 of arXiv:2502.20257, `prop:technical01`.
-Compatibility is transported through the witnessing gauge and the two gauges
-are then composed. -/
+/-- For a supplied compatible L-symbol, scalar block independence implies
+scalar gauge triviality. Compatibility is transported through the witnessing
+gauge and the two gauges are then composed. -/
 theorem IsBlockIndependent.hasTrivialGauge [Nonempty X]
     {L : LSymbol G X} {ω : ScalarThreeCochain G} (hCompat : IsCompatible L ω)
     (hL : IsBlockIndependent L) : HasTrivialGauge L := by
@@ -336,8 +352,8 @@ theorem IsBlockIndependent.hasTrivialGauge [Nonempty X]
   rw [← gauge_comp]
   exact hTriv
 
-/-- Capstone equivalence of items 1 and 2 in arXiv:2502.20257,
-`prop:technical01`. -/
+/-- Scalar-core equivalence underlying items 1 and 2 of
+arXiv:2502.20257, `prop:technical01`. -/
 theorem hasTrivialGauge_iff_hasBlockConstantGauge [Nonempty X]
     {L : LSymbol G X} {ω : ScalarThreeCochain G} (hCompat : IsCompatible L ω) :
     HasTrivialGauge L ↔ HasBlockConstantGauge L := by
@@ -345,8 +361,8 @@ theorem hasTrivialGauge_iff_hasBlockConstantGauge [Nonempty X]
   · exact HasTrivialGauge.hasBlockConstantGauge
   · exact fun h ↦ (h.isBlockIndependent).hasTrivialGauge hCompat
 
-/-- Capstone equivalence of items 1 and 3 in arXiv:2502.20257,
-`prop:technical01`. -/
+/-- Scalar-core equivalence underlying items 1 and 3 of
+arXiv:2502.20257, `prop:technical01`. -/
 theorem hasTrivialGauge_iff_hasTrivialEllGauge [Nonempty X]
     {L : LSymbol G X} {ω : ScalarThreeCochain G} (hCompat : IsCompatible L ω) :
     HasTrivialGauge L ↔ HasTrivialEllGauge L := by
@@ -354,8 +370,9 @@ theorem hasTrivialGauge_iff_hasTrivialEllGauge [Nonempty X]
   · exact HasTrivialGauge.hasTrivialEllGauge
   · exact fun h ↦ (h.isBlockIndependent).hasTrivialGauge hCompat
 
-/-- Capstone equivalence of items 1 and 4 in arXiv:2502.20257,
-`prop:technical01`. -/
+/-- Scalar-core equivalence between gauge triviality and block-independent
+`ell` for a supplied compatible L-symbol. The tensor-facing item 4 of
+arXiv:2502.20257, `prop:technical01` requires an additional bridge. -/
 theorem hasTrivialGauge_iff_isBlockIndependent [Nonempty X]
     {L : LSymbol G X} {ω : ScalarThreeCochain G} (hCompat : IsCompatible L ω) :
     HasTrivialGauge L ↔ IsBlockIndependent L := by

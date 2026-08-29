@@ -329,6 +329,268 @@ an MPU representation.
     follow.
 \end{proof}
 
+\begin{definition}[Block scalar and block independence]
+    \label{def:mpug_block_independence_factor}
+    \lean{TNLean.Algebra.LSymbol.ell,
+        TNLean.Algebra.LSymbol.IsBlockIndependentEll}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    For an $L$-symbol, define
+    \begin{align}
+        \ell^x_{a,b;r}
+         & =\frac{L^x_{ar,r^{-1}b}}{L^x_{a,b}}.
+        \label{eq:mpug_block_scalar}
+    \end{align}
+    The scalar $\ell$ is block-independent when
+    \begin{align}
+        \ell^x_{a,b;r}
+         & =\ell^y_{a,b;r}
+        \label{eq:mpug_block_independence}
+    \end{align}
+    for all $a,b,r\in G$ and $x,y\in\mathsf X$.
+    % Source anchor: arXiv:2502.20257, app:block_indep, lines 6965--6974.
+\end{definition}
+
+\begin{definition}[Four scalar gauge formulations]
+    \label{def:mpug_block_independence_gauge_forms}
+    \lean{TNLean.Algebra.LSymbol.HasTrivialGauge,
+        TNLean.Algebra.LSymbol.HasBlockConstantGauge,
+        TNLean.Algebra.LSymbol.HasTrivialEllGauge,
+        TNLean.Algebra.LSymbol.IsBlockIndependent}
+    \leanok
+    \uses{def:mpug_l_gauge, def:mpug_block_independence_factor}
+    These are the four scalar $L$-symbol properties used in the proof of the
+    source proposition. Write
+    $L'=(\beta,\gamma)\mathbin{\triangleright}L$ for a joint scalar gauge of a
+    supplied $L$-symbol. The four properties are, respectively, the existence
+    of $\beta$ and $\gamma$ such that
+    \begin{align}
+        (L')^x_{g,h} & =1
+        &&\text{for all $x,g,h$},
+        \label{eq:mpug_block_form_trivial}\\
+        (L')^x_{a,b} & =(L')^y_{a,b}
+        &&\text{for all $x,y,a,b$},
+        \label{eq:mpug_block_form_constant}\\
+        \ell[L']^x_{a,b;r} & =1
+        &&\text{for all $x,a,b,r$},
+        \label{eq:mpug_block_form_trivial_ell}\\
+        \ell[L']^x_{a,b;r} & =\ell[L']^y_{a,b;r}
+        &&\text{for all $x,y,a,b,r$}.
+        \label{eq:mpug_block_form_independent_ell}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
+\end{definition}
+
+\begin{theorem}[Corrected block factorization]
+    \label{thm:mpug_block_factorization}
+    \lean{TNLean.Algebra.LSymbol.blockFactor,
+        TNLean.Algebra.LSymbol.factorization_of_isBlockIndependentEll}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_block_independence_factor}
+    Suppose that $L$ is compatible with $\omega$ and that $\ell$ is
+    block-independent. Fix $x_0\in\mathsf X$ and set
+    \begin{align}
+        A(g,h)
+         & =\bigl(\omega(gh,e,e)\ell^{x_0}_{g,h;h}\bigr)^{-1}.
+        \label{eq:mpug_block_factor}
+    \end{align}
+    Then, for every $x\in\mathsf X$ and $g,h\in G$,
+    \begin{align}
+        L^x_{g,h}
+         & =A(g,h)L^x_{e,e}.
+        \label{eq:mpug_corrected_block_factorization}
+    \end{align}
+    % Local correction:
+    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % Source anchor: arXiv:2502.20257, eq:Lfact, lines 6994--7002.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_block_independence_factor}
+    Definition~\ref{def:mpug_block_independence_factor} gives
+    \begin{align}
+        L^x_{g,h}
+         & =\frac{L^x_{gh,e}}{\ell^x_{g,h;h}}.
+        \label{eq:mpug_block_factorization_first}
+    \end{align}
+    Block independence replaces $x$ by $x_0$ in the denominator.
+    Compatibility at $(gh,e,e)$ gives
+    $L^x_{gh,e}=L^x_{e,e}/\omega(gh,e,e)$, which proves
+    (\ref{eq:mpug_corrected_block_factorization}).
+\end{proof}
+
+\begin{theorem}[Relative block character]
+    \label{thm:mpug_relative_block_character}
+    \lean{TNLean.Algebra.LSymbol.relativeCharacter,
+        TNLean.Algebra.LSymbol.relativeCharacter_mul_base,
+        TNLean.Algebra.LSymbol.relativeCharacter_mul}
+    \leanok
+    \uses{thm:mpug_block_factorization}
+    Under the hypotheses of Theorem~\ref{thm:mpug_block_factorization}, define
+    \begin{align}
+        \rho(g)
+         & =\bigl(\ell^{x_0}_{e,g;g}\omega(g,e,e)
+            \omega(e,e,g)\bigr)^{-1}.
+        \label{eq:mpug_relative_block_character}
+    \end{align}
+    Then
+    \begin{align}
+        L^{g x}_{e,e}
+         & =\rho(g)L^x_{e,e},
+        \label{eq:mpug_relative_block_transport}\\
+        \rho(gh)
+         & =\rho(g)\rho(h).
+        \label{eq:mpug_relative_block_multiplicative}
+    \end{align}
+    Thus $\rho\colon G\to\C^\times$ is a one-dimensional character. No
+    transitivity or finiteness assumption on the action is required.
+    % Local correction:
+    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % Source anchor: arXiv:2502.20257, eq:defrho, lines 7003--7018.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_block_factorization}
+    Compatibility at $(e,e,g)$ gives
+    $L^x_{e,g}=\omega(e,e,g)L^{g x}_{e,e}$. Compare this with
+    (\ref{eq:mpug_corrected_block_factorization}) at $(e,g)$ to obtain
+    (\ref{eq:mpug_relative_block_transport}). Applying that identity first
+    to $h$ and then to $g$, and comparing with its application to $gh$, proves
+    (\ref{eq:mpug_relative_block_multiplicative}) by cancellation.
+\end{proof}
+
+\begin{theorem}[Explicit inverse gauge]
+    \label{thm:mpug_block_independence_inverse_gauge}
+    \lean{TNLean.Algebra.LSymbol.factorFusionGauge,
+        TNLean.Algebra.LSymbol.factorActionGauge,
+        TNLean.Algebra.LSymbol.gauge_one_eq_of_isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll,
+        TNLean.Algebra.LSymbol.hasTrivialGauge_of_isBlockIndependentEll}
+    \leanok
+    \uses{def:mpug_l_gauge, thm:mpug_block_factorization,
+        thm:mpug_relative_block_character}
+    With $A$ and $\rho$ as above, define the forward gauges by
+    \begin{align}
+        \beta^+_{g,h}
+         & =\frac{A(g,h)}{\rho(h)},
+        \label{eq:mpug_forward_fusion_gauge}\\
+        \gamma^{+,x}_g
+         & =\bigl(L^{g x}_{e,e}\bigr)^{-1}.
+        \label{eq:mpug_forward_action_gauge}
+    \end{align}
+    Their joint gauge multiplier equals $L$:
+    \begin{align}
+        (\beta^+,\gamma^+)\mathbin{\triangleright}1
+         & =L.
+        \label{eq:mpug_forward_gauge_multiplier}
+    \end{align}
+    Consequently the pointwise inverse gauges trivialize $L$:
+    \begin{align}
+        ((\beta^+)^{-1},(\gamma^+)^{-1})
+            \mathbin{\triangleright}L
+         & =1.
+        \label{eq:mpug_inverse_gauge_trivialization}
+    \end{align}
+    If $\mathsf X$ is nonempty, a choice of $x_0$ therefore gives a
+    trivializing joint scalar gauge for every compatible block-independent
+    $L$-symbol.
+    % Local correction:
+    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % Source anchor: arXiv:2502.20257, eq:Lgauge and lines 7019--7027.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_block_factorization,
+        thm:mpug_relative_block_character}
+    Substitute (\ref{eq:mpug_forward_fusion_gauge}) and
+    (\ref{eq:mpug_forward_action_gauge}) into
+    (\ref{eq:mpug_l_gauge}). Equation
+    (\ref{eq:mpug_relative_block_transport}) reduces the multiplier to
+    $A(g,h)L^x_{e,e}$, which equals $L^x_{g,h}$ by
+    (\ref{eq:mpug_corrected_block_factorization}). Joint gauges compose by
+    pointwise multiplication, so the inverse gauges give
+    (\ref{eq:mpug_inverse_gauge_trivialization}).
+\end{proof}
+
+\begin{theorem}[Trivial and block-constant gauges]
+    \label{thm:mpug_trivial_iff_block_constant}
+    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
+    $L$ if and only if a joint scalar gauge makes $L^x_{g,h}$ independent of
+    $x$.
+    % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 2.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    A trivial $L$-symbol is block-constant. Conversely, a block-constant
+    representative has block-independent $\ell$. Apply
+    Theorem~\ref{thm:mpug_block_independence_inverse_gauge} to that
+    representative and compose the two joint gauges.
+\end{proof}
+
+\begin{theorem}[Trivial gauges and trivial block scalars]
+    \label{thm:mpug_trivial_iff_trivial_ell}
+    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
+    $L$ if and only if a joint scalar gauge makes every
+    $\ell^x_{a,b;r}$ equal to $1$.
+    % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 3.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    A trivial $L$-symbol has $\ell=1$. Conversely, the identity $\ell=1$
+    implies block independence. Apply
+    Theorem~\ref{thm:mpug_block_independence_inverse_gauge} and compose the
+    gauges.
+\end{proof}
+
+\begin{theorem}[Scalar gauge triviality and block independence]
+    \label{thm:mpug_trivial_iff_block_independent}
+    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}
+    \leanok
+    \uses{def:mpug_block_independence_gauge_forms,
+        thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
+    $L$ if and only if a joint scalar gauge makes $\ell^x_{a,b;r}$ independent
+    of $x$.
+    % Source anchor: arXiv:2502.20257, prop:technical01, items 1 and 4.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_l_gauge_preservation,
+        thm:mpug_block_independence_inverse_gauge}
+    Gauge triviality implies block constancy and hence block independence.
+    For the converse, apply
+    Theorem~\ref{thm:mpug_block_independence_inverse_gauge} to the
+    block-independent representative and compose its trivializing gauge with
+    the original gauge.
+\end{proof}
+
+The source's fourth condition is a statement about an MPS--MPU pair. The
+results above begin instead with a supplied compatible scalar $L$-symbol and
+prove the algebraic equivalence among its four scalar gauge properties. A
+separate tensor-level statement must construct the associated $L$-symbol and
+show that the tensor gauge freedoms induce the joint scalar gauge
+(\ref{eq:mpug_l_gauge}).
+% Scope boundary: the tensor-facing bridge for arXiv:2502.20257,
+% prop:technical01 is not contained in the scalar L-symbol declarations.
+
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
     \lean{TNLean.Algebra.ActionTensorGauge.coboundary,
