@@ -2502,8 +2502,9 @@ This is the calculation in
 % for every common-weight absorbed BNT representative, but the explicit
 % bond-one construction refutes preservation of normality under all conditions
 % used in Appendix C.2.  The
-% non-Cartesian four-letter construction below shows that the resulting local
-% analytic properties do not alone imply a neighboring trace factorization.
+% four-letter rank-one neighboring-trace obstruction below shows that the
+% resulting local analytic properties do not alone imply a neighboring trace
+% factorization.
 % It does not supply the ambient biCF witness required to refute the printed
 % implication (ii)=>(iv).  The source-context factorization remains #6775.
 % Once it is supplied, the Proposition C.7 channel construction and its
@@ -2617,25 +2618,25 @@ This is the calculation in
     $K=\mu A$ with $A$ normal and $0<|\mu|=\sqrt r<1$.
 \end{proof}
 
-\begin{theorem}[A prepared two-block BNT decomposition]
-    \label{thm:mpdo_noncartesian_prepared_two_block_bnt}
-    \lean{MPOTensor.NonCartesianAmbientSectorBlocks.exists_bad_terminal_twoBlock_BNT_witness,
-        MPOTensor.NonCartesianAmbientSectorBlocks.terminalBlock_isNormalTensor}
+\begin{theorem}[Prepared BNT decomposition for the rank-one neighboring-trace obstruction]
+    \label{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt}
+    \lean{MPOTensor.NeighboringTraceObstructionAmbientBlocks.exists_obstruction_terminal_twoBlock_BNT_witness,
+        MPOTensor.NeighboringTraceObstructionAmbientBlocks.terminalBlock_isNormalTensor}
     \leanok
     \uses{def:sector_bnt_cf}
     There are a scalar $\mu$ with $0<|\mu|<1$ and two normal
-    left-canonical blocks $B_{\mathrm{bad}}$ and $B_{\mathrm{term}}$, of bond
-    dimensions two and one respectively, such that the embedded
-    non-Cartesian tensor is gauge equivalent to $\mu B_{\mathrm{bad}}$.
-    The two-block decomposition with one copy of each block and raw weights
+    left-canonical blocks $B_{\mathrm{obs}}$ and $B_{\mathrm{term}}$, of bond
+    dimensions two and one respectively, such that the embedded obstruction
+    tensor is gauge equivalent to $\mu B_{\mathrm{obs}}$.
+    The two-block decomposition with one copy of each block and coefficients
     $(\mu,1)$ is in normalized BNT canonical form. Its one-site physical
-    supports $P_{\mathrm{bad}}$ and $P_{\mathrm{term}}$ are disjoint and
+    supports $P_{\mathrm{obs}}$ and $P_{\mathrm{term}}$ are disjoint and
     resolve the ambient physical space:
     \begin{align}
-        P_{\mathrm{bad}}P_{\mathrm{term}}
-          &=P_{\mathrm{term}}P_{\mathrm{bad}}=0,
-        \notag \\
-        P_{\mathrm{bad}}+P_{\mathrm{term}}&=1.
+        P_{\mathrm{obs}}P_{\mathrm{term}}
+                                           & =P_{\mathrm{term}}P_{\mathrm{obs}}=0,
+        \notag                                                                     \\
+        P_{\mathrm{obs}}+P_{\mathrm{term}} & =1.
         \notag
     \end{align}
     This is a project-derived preparation of the counterexample, not a
@@ -2647,9 +2648,10 @@ This is the calculation in
 \begin{proof}\leanok
     \uses{thm:mpdo_sal_zcl_bnt_sector_structure_counterexample,
         thm:mpdo_isometric_physical_embedding}
-    Embed the non-Cartesian block into four coordinates of a five-dimensional
-    physical space and place a bond-one product block on the remaining
-    coordinate. The coordinate projections are complementary. The terminal
-    block has weight one, while the first block retains the coefficient
-    $\mu$. Their unequal bond dimensions separate the two BNT representatives.
+    Embed the four-letter obstruction tensor into four coordinates of a
+    five-dimensional physical space and place a bond-one product block on the
+    remaining coordinate. The coordinate projections are complementary. The
+    terminal block has coefficient one, while the first block retains the
+    coefficient $\mu$. Their unequal bond dimensions separate the two BNT
+    representatives.
 \end{proof}

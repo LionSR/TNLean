@@ -74,12 +74,13 @@ mathematical obstruction.
   physical-trace ZCL, normalized fixed-representative simple canonical form,
   and biCF. The first absorbed representative nevertheless has transfer
   spectral radius $1/2$ and is not normal.
-- Scope: this is proof-path drift in the printed argument. The non-Cartesian
-  construction below refutes only the implication from the inherited local
-  analytic properties; it has no ambient simple-biCF witness. The source-context
-  factorization remains issue #6775. The source first projects into each local
-  physical subspace labelled by $j$ and then applies the representative
-  channels supplied by that factorization. The projector-controlled assembly
+- Scope: this is proof-path drift in the printed argument. The four-letter
+  neighboring-trace obstruction below refutes only the implication from the
+  inherited local analytic properties; it has no ambient simple-biCF witness.
+  The source-context factorization remains issue #6775. The source first
+  projects into each local physical subspace labelled by $j$ and then applies
+  the representative channels supplied by that factorization. The
+  projector-controlled assembly
   is formalized in #6632. The
   direct sector-mixing alternative formerly tracked in #6793 is not a separate
   source obligation.
@@ -87,11 +88,11 @@ mathematical obstruction.
 ### An absorbed normal representative need not have neighboring trace factors
 
 - Locations: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
-  and `TNLean/MPS/MPDO/NonCartesianAmbientSectorBlocks.lean`
+  and `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientBlocks.lean`
 - Main declarations:
   `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
   and
-  `MPOTensor.NonCartesianAmbientSectorBlocks.exists_bad_terminal_twoBlock_BNT_witness`
+  `MPOTensor.NeighboringTraceObstructionAmbientBlocks.exists_obstruction_terminal_twoBlock_BNT_witness`
 - Statement refuted: injectivity, SAL, literal physical-trace idempotence, and
   a representation $K=\mu A$ with $A$ normal and $0<|\mu|<1$ imply the
   existence of a physical-sector factorization with normalized rank-one
