@@ -104,7 +104,8 @@ theorem doubledLocalTransferMPOTensor_finProdFinEquiv_apply
       ∑ s : Fin d,
         A lKet rKet uKet dKet s *
           (starRingEnd ℂ) (A lBra rBra uBra dBra s) := by
-  simp [doubledLocalTransferMPOTensor]
+  simp only [doubledLocalTransferMPOTensor, MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat]
 
 end PEPS
 end TNLean
