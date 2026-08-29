@@ -83,6 +83,25 @@ specialization has the source scalar $\lambda=1$.  The source applies the
 proposition to the product tensor explicitly at
 `cornerproblem.tex:3168`.
 
+The printed proposition is false when $\lambda\ne1$.  In the scalar example
+$D=d=1$, take $A^1=1$, $B^1=2$, and $\lambda=2$.  Then
+$V_n(B)=2^nV_n(A)$ at every positive length, but $VW=1$ would force
+$VB^1W=2$, contrary to the printed conclusion $VB^1W=A^1=1$.  The proof
+silently replaces proportionality by equality: it says that $A$ and $B$
+generate the same state at `cornerproblem.tex:3839`, `3865`, and again at
+`3973--3976`.  For $\lambda\ne0$, applying the equality case to
+$\lambda^{-1}B$ instead gives the corrected word relation
+
+\[
+  VB^{\mathbf a}W=\lambda^{|\mathbf a|}A^{\mathbf a}.
+\]
+
+The case $\lambda=0$ is degenerate and does not admit this rescaling.  This
+false-source defect is recorded in
+`docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`.  It does not
+affect the MPU application, which uses $\lambda=1$ and hence exactly the
+equality case proved by the source.
+
 The source writes the state-family hypothesis for $n\in\mathbb N$ without
 declaring whether zero is included.  Its intended rectangular application
 forces the chain lengths here to be positive: at length zero the coefficient
@@ -262,9 +281,19 @@ encodes its product bond as `Fin (D_g * D_h)` through `finProdFinEquiv`, the
 formal comparison must also reindex the pair by `Equiv.prodComm`; it is not a
 definitional equality.
 
-No public TNLean declaration currently packages either a rectangular fusion
-tensor with this dagger operation or the theorem that
-`physicalAdjointTensor` reverses `mulTensor` up to the product-bond swap.
+TNLean already transports normalized canonical-form-II data through this
+physical adjoint.  In particular,
+`MPOTensor.normalizedFlattening_physicalAdjointTensor` identifies the
+normalized flattening with a physically reindexed entrywise conjugate, while
+`MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening` and
+`MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening` transport
+the data and predicate.  These declarations in
+`TNLean/MPS/MPU/PhysicalAdjointCanonicalForm.lean` are the canonical-form input
+for #7323 and must be reused.
+
+No public TNLean declaration currently packages a rectangular fusion tensor
+with its dagger operation or proves that `physicalAdjointTensor` reverses
+`mulTensor` up to the product-bond swap.
 `TNLean/MPS/MPU/CompositionRanks.lean` contains only private analogues
 `reindexBond`, `bondSwapEquiv`, and `mulTensor_physicalFlip_swap` for a
 physical flip.  They are evidence for the required coordinate convention,
@@ -286,7 +315,7 @@ which #7324 may derive the displayed $\zeta$-relations.
 | Vectorized coefficient | `MPSTensor.mpv_toMPSTensor_pairConfig`, `TNLean/MPS/MPDO/VerticalCF.lean` | Identifies MPO matrix entries with raw flattened MPS coefficients. |
 | Equality for different bond dimensions | `MPSTensor.SameMPV₂Pos`, `TNLean/MPS/Defs.lean` | Correct positive-length interface.  `SameMPV₂` includes the empty chain and is too strong here. |
 | Injective $A$ | `Kraus.IsInjective`, `QICLean/Kraus/Injectivity.lean`; `MPOTensor.IsInjective`, `TNLean/MPS/MPDO/SimpleLocalInverseMaps.lean` | Exact spanning/left-inverse notion after raw flattening. |
-| Source normal tensor | `MPSTensor.IsNormalTensor`, `TNLean/MPS/CanonicalForm/Definitions.lean`; `Kraus.IsNormal`, `QICLean/Kraus/Injectivity.lean` | The source requires a primitive transfer map but explicitly does not normalize its spectral radius.  `IsNormalTensor` is the spectral-radius-one version, while `Kraus.IsNormal` is eventual positive block injectivity.  There is no exact named predicate for the source's unnormalized formulation, and the sanctioned bridge `MPSTensor.IsNormalTensor.isNormal` is only one-way.  The target uses the injective specialization, so neither predicate should silently replace the source hypothesis. |
+| Source normal tensor | `MPSTensor.IsPrimitivePaper`, `TNLean/Wielandt/Primitivity/Definitions.lean`; `MPSTensor.HasEventuallyFullKrausRank`, `TNLean/Wielandt/Primitivity/Definitions.lean`; `Kraus.HasEventuallyFullWordSpan` and `Kraus.IsNormal`, `QICLean/Kraus/Injectivity.lean` | `IsPrimitivePaper` is the existing unnormalized vector-spreading formulation of transfer primitivity, so this predicate must be reused rather than duplicated.  `HasEventuallyFullKrausRank` is equivalent to `Kraus.IsNormal` by `hasEventuallyFullKrausRank_iff_isNormal`.  The available reverse bridge `primitivePaper_iff_hasEventuallyFullKrausRank` assumes left-canonical normalization, and `Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP` similarly assumes trace preservation.  Thus the exact source predicate exists, while normalization transport to the word-span APIs remains an explicit boundary.  The present target uses the injective specialization. |
 | MPU property | `MPOTensor.IsMPU`, `TNLean/MPS/MPU/Basic.lean` | Existing predicate is unitarity for every $N>1$.  The 2025 paper says every chain length; #7321 must retain this convention difference. |
 | Raw versus normalized flattening | `MPOTensor.toMPSTensor`, `TNLean/MPS/MPDO/Defs.lean`; `MPOTensor.normalizedFlattening`, `TNLean/MPS/MPU/TransferMatrix.lean`; `normalizedFlattening_mulTensor_apply`, `TNLean/MPS/MPU/CompositionFlattening.lean` | The cited reduction vectorizes the raw MPO tensor.  `normalizedFlattening` is the separate arXiv:1703.09188 transfer normalization; its composition formula carries an explicit $\sqrt d$. |
 | Paper's simple MPU tensor | `MPOTensor.IsMPUSimple`, `TNLean/MPS/MPU/Simple.lean` | Matches arXiv:1703.09188 Definition III.2; unrelated to MPDO simplicity. |
@@ -296,6 +325,8 @@ which #7324 may derive the displayed $\zeta$-relations.
 | Same-bond injective fundamental theorem | `MPSTensor.fundamentalTheorem_singleBlock`, `TNLean/MPS/FundamentalTheorem/Basic.lean` | Gives a square invertible gauge only when the bond dimensions already agree.  It is not Proposition 20. |
 | Unitary canonical gauge | `MPSTensor.exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible`, `TNLean/MPS/FundamentalTheorem/UnitaryGauge.lean` | Reusable for #7323 after the required same-bond, left-canonical, irreducible data are established; it does not construct a rectangular fusion reduction. |
 | Physical dagger | `MPOTensor.physicalAdjointTensor` and `mpo_physicalAdjointTensor`, `TNLean/MPS/MPDO/PhysicalAdjoint.lean` | Correct global-adjoint convention without spatial reflection. |
+| Canonical form under physical dagger | `MPOTensor.normalizedFlattening_physicalAdjointTensor`, `MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening`, and `MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening`, `TNLean/MPS/MPU/PhysicalAdjointCanonicalForm.lean` | Exact normalized-flattening identity and reusable transport of literal canonical-form-II data and its predicate.  This is the existing input for #7323; it does not itself reverse a product tensor or define a dagger on rectangular fusion legs. |
+| Existing MPU residual algebra | `MPOTensor.residualGeneratorSet`, `MPOTensor.residualAlgebra`, `MPOTensor.IsMPU.residualAlgebra_list_prod_eq_zero`, and `MPOTensor.IsMPU.prod_residualSlice_doubleLayerTensor_eq_zero`, `TNLean/MPS/MPU/ResidualAlgebra.lean` | These are the arXiv:1703.09188 physical-adjoint double-layer residual slices used in `blockingsimple`.  They are not the selected-reduction residual letters $N^a=B^a-WA^aV$ of arXiv:1706.07329 Proposition 21 and cannot serve as their definition or nilpotency theorem. |
 | Nil matrix algebra bound | `NonUnitalSubalgebra.matrix_list_prod_eq_zero_of_forall_isNilpotent`, `QICLean/Algebra/NilMatrixSubalgebra.lean` | Reusable after constructing the residual nonunital algebra.  It does not supply Proposition 20, Proposition 21, Definition 8, or Theorem 22. |
 
 The following objects are genuinely missing:
@@ -311,7 +342,10 @@ The following objects are genuinely missing:
 
 No declaration named `Reduction` or `nilpotencyLength`, and no theorem with the
 content of Proposition 20 or Theorem 22, was found in TNLean or its current
-QICLean dependency.
+QICLean dependency.  The existing `MPOTensor.residualAlgebra` has a different
+generator family and is intentionally excluded from this claim; only its
+generic QICLean nil-matrix engine is reusable for a newly constructed
+selected-reduction residual algebra.
 
 ## Boundary with the 2017 MPU development
 
@@ -333,16 +367,21 @@ must not be used as a substitute proof of fusion existence or uniqueness.
 
 ## Implementation consequences
 
-- #7321 must own the common finite blocking statement.  Elementwise blocking
-  and the current `IsMPU.blockTensor` theorem do not establish simultaneous
-  nilpotency length one for all $(g,h)$.
+- #7321 owns only the representation-level common blocking and the
+  elementwise simple, injective, and one-block-canonical properties stable
+  under further common blocking.  It does not own a `Reduction`, a residual
+  family, a nilpotency length, or the fusion existential.
 - #7322 should first formalize the reusable rectangular MPS reduction API from
-  Proposition 20, Proposition 21, Definition 8, `lem:B_expand`, and Theorem 22,
-  then specialize it to `MPOTensor.mulTensor`.  It should express uniqueness
-  in the boundary-dressed form printed by the source.
-- #7323 may reuse the same-bond fundamental theorem and canonical unitary-gauge
-  refinement for $T_g$, but must use `physicalAdjointTensor`, not
-  `adjointTensor`.
+  the equality specialization ($\lambda=1$) of Proposition 20, Proposition 21,
+  Definition 8, `lem:B_expand`, and Theorem 22, then choose one reduction for
+  every $(g,h)$ and prove its block and product-reindex transport.  It owns the
+  additional finite-family common block which makes those selected residual
+  letters vanish at length one, and only then constructs the fusion/anomaly
+  data.  Uniqueness must remain in the boundary-dressed form printed by the
+  source.
+- #7323 may reuse the physical-adjoint canonical-form transport, the same-bond
+  fundamental theorem, and the canonical unitary-gauge refinement for $T_g$;
+  it must use `physicalAdjointTensor`, not `adjointTensor`.
 - #7324 must implement the product-bond order reversal and compare the
   dagger-reflected reductions in the one-letter, boundary-dressed form of
   Garre-Rubio--Schuch Theorem 1 before deriving $\zeta$.

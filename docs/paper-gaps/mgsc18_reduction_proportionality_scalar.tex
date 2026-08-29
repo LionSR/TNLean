@@ -1,0 +1,153 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Proportionality Scalar in the MPS Reduction Theorem}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The printed statement}
+
+Let $A$ be a normal matrix product state tensor and let $B$ be another tensor
+with the same physical alphabet.  Proposition~20 of
+Ref.~\cite{Molnar2018SemiInjective} assumes that, for some
+$\lambda\in\mathbb C$,
+\footnote{Source coordinates in arXiv:1706.07329v2:
+    \path{cornerproblem.tex:3124--3133}.}
+\begin{align}
+    V_n(B)
+        &=\lambda^n V_n(A)
+        \qquad\text{for every positive chain length }n.
+    \label{eq:mgsc18_reduction_proportionality_printed_hypothesis}
+\end{align}
+It concludes that there are rectangular matrices $V,W$ such that
+\begin{align}
+    VW
+        &=1,
+    \label{eq:mgsc18_reduction_proportionality_printed_retraction}\\
+    VB^{i_1}\cdots B^{i_m}W
+        &=A^{i_1}\cdots A^{i_m}
+        \qquad\text{for every word }(i_1,\ldots,i_m).
+    \label{eq:mgsc18_reduction_proportionality_printed_word_relation}
+\end{align}
+The source proof subsequently says that $A$ and $B$ generate the same state,
+rather than proportional state families, and uses that equality in the
+construction of $V,W$ and in the residual-algebra argument
+\cite{Molnar2018SemiInjective}.
+\footnote{The equality is asserted at
+    \path{cornerproblem.tex:3839}, \path{cornerproblem.tex:3865}, and
+    \path{cornerproblem.tex:3973--3976}; the proof of Proposition~20 occupies
+    \path{cornerproblem.tex:3815--3938}.}
+
+\section{Counterexamples}
+
+The printed implication is false for every nonzero $\lambda\ne1$.  Fix such a
+scalar and take one bond coordinate and one physical letter, with
+\begin{align}
+    A^1
+        &=1,
+    & B^1
+        &=\lambda.
+    \label{eq:mgsc18_reduction_proportionality_nonzero_example}
+\end{align}
+The transfer map of $A$ is the identity on the one-dimensional matrix algebra,
+and is therefore primitive.  Moreover,
+\begin{align}
+    V_n(B)
+        &=\lambda^n
+    \label{eq:mgsc18_reduction_proportionality_nonzero_left_state}\\
+        &=\lambda^n V_n(A),
+    \label{eq:mgsc18_reduction_proportionality_nonzero_hypothesis}
+\end{align}
+so
+Eq.~\ref{eq:mgsc18_reduction_proportionality_printed_hypothesis} holds.  But
+Eq.~\ref{eq:mgsc18_reduction_proportionality_printed_retraction} would give
+\begin{align}
+    VB^1W
+        &=\lambda VW
+    \label{eq:mgsc18_reduction_proportionality_nonzero_reduction_first_step}\\
+        &=\lambda,
+    \label{eq:mgsc18_reduction_proportionality_nonzero_reduction_value}
+\end{align}
+whereas
+Eq.~\ref{eq:mgsc18_reduction_proportionality_printed_word_relation} requires
+$VB^1W=A^1=1$.  Taking $\lambda=2$ gives the simplest nondegenerate numerical
+instance.
+
+The zero scalar is additionally degenerate.  Taking $A^1=1$, $B^1=0$, and
+$\lambda=0$ satisfies the positive-length hypothesis, but every pair obeying
+$VW=1$ has
+\begin{align}
+    VB^1W
+        &=0
+    \label{eq:mgsc18_reduction_proportionality_zero_reduction_value}\\
+        &\ne A^1.
+    \label{eq:mgsc18_reduction_proportionality_zero_contradiction}
+\end{align}
+
+\section{Corrected statements}
+
+The proof printed in Ref.~\cite{Molnar2018SemiInjective} establishes the
+equality specialization $\lambda=1$.  If $\lambda\ne0$, define
+$\widetilde B^i=\lambda^{-1}B^i$.  Then
+\begin{align}
+    V_n(\widetilde B)
+        &=V_n(A).
+    \label{eq:mgsc18_reduction_proportionality_rescaled_state_equality}
+\end{align}
+Applying the equality specialization to $\widetilde B$ gives $VW=1$ and
+\begin{align}
+    V\widetilde B^{i_1}\cdots\widetilde B^{i_m}W
+        &=A^{i_1}\cdots A^{i_m}.
+    \label{eq:mgsc18_reduction_proportionality_rescaled_word_relation}
+\end{align}
+Equivalently, the corrected conclusion for the original tensor is
+\begin{align}
+    VB^{i_1}\cdots B^{i_m}W
+        &=\lambda^m A^{i_1}\cdots A^{i_m}.
+    \label{eq:mgsc18_reduction_proportionality_corrected_word_relation}
+\end{align}
+Thus one may either assume $\lambda=1$ and retain the printed conclusion, or
+assume $\lambda\ne0$ and use
+Eq.~\ref{eq:mgsc18_reduction_proportionality_corrected_word_relation}.  No
+corresponding conclusion follows from the printed hypotheses when
+$\lambda=0$.
+
+\section{MPU specialization}
+
+The MPU application in Ref.~\cite{FrancoRubio2025MPUGauging} starts from the
+linear representation identity $U_gU_h=U_{gh}$.  Hence the product tensor and
+the target tensor generate exactly the same operator at every positive chain
+length: this is the case $\lambda=1$.  The fusion equations used there are
+therefore unaffected by the defect in the proportional version of
+Proposition~20.
+
+The formal development should state the reusable reduction theorem first for
+equal positive-length matrix product state families.  A later proportional
+version may be derived by the rescaling above, with the power
+$\lambda^m$ retained explicitly.  The equality-case implementation and its
+selected-reduction residual algebra are tracked by
+\href{https://github.com/LionSR/TNLean/issues/7322}{TNLean issue 7322}.
+
+\section{Verdict}
+
+The unscaled conclusion of Proposition~20 is false for every unrestricted
+choice of $\lambda\ne1$, not merely in the degenerate zero case.  The source
+proof establishes the $\lambda=1$ specialization.  For nonzero $\lambda$, the
+corrected general word relation is
+Eq.~\ref{eq:mgsc18_reduction_proportionality_corrected_word_relation}; the
+zero case requires separate hypotheses.  The MPU use is source-faithful
+because it supplies exact equality.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
