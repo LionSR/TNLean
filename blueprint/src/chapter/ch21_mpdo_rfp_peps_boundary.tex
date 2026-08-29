@@ -1,0 +1,133 @@
+\section{PEPS boundary tensors}
+
+Let $d$ be the physical dimension. We allow horizontal virtual dimension
+$D_{\mathrm h}$ and vertical virtual dimension $D_{\mathrm v}$ to differ.
+This is a project generalization permitted by the source diagram, not a claim
+that \cite{Cirac2016MPDO_arXiv} explicitly introduces two dimensions.
+
+\begin{definition}[Doubled local transfer tensor]
+    \label{def:peps_doubled_local_transfer_tensor}
+    \lean{TNLean.PEPS.doubledLocalTransferMPOTensor}
+    \leanok
+    \uses{def:mpo_tensor}
+    Let $A^s_{l,r,u,b}$ be a rank-five component function, with physical index
+    $0\leq s<d$, horizontal virtual indices
+    $0\leq l,r<D_{\mathrm h}$, and vertical virtual indices
+    $0\leq u,b<D_{\mathrm v}$. The same component function is used at every
+    lattice site. Contracting its physical leg between a ket copy and a bra
+    copy defines an MPO tensor $E_A$ with physical dimension
+    $D_{\mathrm v}^2$ and bond dimension $D_{\mathrm h}^2$.
+
+    This is the project's local ket-bra doubled transfer tensor suggested by
+    FigureDavid1 of \cite[Section~4.2]{Cirac2016MPDO_arXiv}. It does not select
+    a left or right transfer fixed point, contract an inward fixed-point tensor,
+    or construct the complete boundary theory.
+\end{definition}
+
+\begin{theorem}[Component formula for the doubled local transfer tensor]
+    \label{thm:peps_doubled_local_transfer_tensor_formula}
+    \lean{TNLean.PEPS.doubledLocalTransferMPOTensor_apply,
+        TNLean.PEPS.doubledLocalTransferMPOTensor_finProdFinEquiv_apply}
+    \leanok
+    \uses{def:peps_doubled_local_transfer_tensor}
+    For ket and bra indices on each virtual leg,
+    \begin{align}
+        (E_A)^{(u,b),(u',b')}_{(l,l'),(r,r')}
+        & =\sum_{s=0}^{d-1}
+        A^s_{l,r,u,b}
+        \overline{A^s_{l',r',u',b'}}.
+        \label{eq:peps_doubled_transfer_component}
+    \end{align}
+    The first physical coordinate is the ket pair $(u,b)$, the second is the
+    bra pair $(u',b')$, and the bond coordinates are $(l,l')$ and $(r,r')$.
+    The order of the five legs and the packing of each ordered pair into one
+    product index are coordinate conventions of this project.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_doubled_local_transfer_tensor}
+    Expand the contraction over the common physical index and decode the four
+    packed coordinates. This gives
+    (\ref{eq:peps_doubled_transfer_component}).
+\end{proof}
+
+\begin{definition}[Boundary fixed point]
+    \label{def:peps_transfer_fixed_point}
+    \notready
+    \discussion{7371}
+    \uses{def:peps_doubled_local_transfer_tensor}
+    The row-to-row transfer operator of a homogeneous PEPS is represented by a
+    strip of local ket-bra doubled tensors. A boundary fixed point is a left or
+    right boundary operator invariant under the corresponding transfer action.
+    This is the object shown in the source figure labelled
+    \texttt{PEPS-transfer-operator}. The exact transfer space, orientation,
+    normalization, and inward contraction with the local doubled tensor remain
+    to be specified. In particular, $E_A$ is not itself such a fixed point.
+\end{definition}
+
+\begin{definition}[Algebraic PEPS renormalization fixed-point relation]
+    \label{def:peps_rfp_relation}
+    \notready
+    \discussion{7371}
+    \uses{def:peps_doubled_local_transfer_tensor}
+    The source figure labelled \texttt{PEPS-RFP} relates a neighboring blocked
+    tensor to one effective local tensor, up to a map on the physical indices.
+    The figure does not determine the external virtual-space identifications or
+    the exact direction and type of that physical map. An algebraic definition
+    must specify these data before the relation can be stated.
+\end{definition}
+
+\begin{definition}[Boundary coarse-graining channel]
+    \label{def:peps_boundary_coarse_graining}
+    \notready
+    \discussion{7371}
+    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
+        def:peps_doubled_local_transfer_tensor}
+    The desired coarse-graining map $\mathcal S$ acts from two boundary sites
+    to one and must satisfy $\mathcal S[M_2(X)]=M_1(X)$ for every virtual
+    operator $X$. Its construction requires normalized boundary fixed-point
+    data and a globally trace-preserving completely positive extension. The
+    source does not specify this normalization or the complement data needed
+    when the physical map is only an isometry.
+\end{definition}
+
+\begin{definition}[Boundary refinement channel]
+    \label{def:peps_boundary_refinement}
+    \notready
+    \discussion{7371}
+    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
+        def:peps_doubled_local_transfer_tensor}
+    The desired refinement map $\mathcal T$ acts from one boundary site to two
+    and must satisfy $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator
+    $X$. Its construction must specify the inserted ancillary factor and its
+    normalization. The source diagram also leaves open whether the physical
+    map is unitary or merely isometric, which changes the data needed for a
+    globally trace-preserving completely positive map.
+\end{definition}
+
+\begin{theorem}[PEPS renormalization induces a boundary MPO fixed point]
+    \label{thm:peps_rfp_implies_boundary_rfp}
+    \notready
+    \discussion{7371}
+    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
+        def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
+        def:is_rfp_via_ts}
+    After the neighboring PEPS blocking relation, the normalized left and
+    right transfer fixed points, and the global channels $\mathcal S$ and
+    $\mathcal T$ have been specified compatibly, the resulting boundary MPO is
+    expected to be a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}.
+\end{theorem}
+
+\begin{proof}
+    \notready
+    \uses{def:peps_boundary_coarse_graining,
+        def:peps_boundary_refinement, def:is_rfp_via_ts}
+    The construction must first fix the external virtual identifications, the
+    normalization of the transfer fixed points, the ancillary factor used by
+    refinement, and a global completely positive trace-preserving extension of
+    any isometric inverse. One must then prove
+    $\mathcal S[M_2(X)]=M_1(X)$ and
+    $\mathcal T[M_1(X)]=M_2(X)$ for every $X$.
+\end{proof}
