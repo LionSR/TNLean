@@ -255,9 +255,10 @@ spatial word.  The existing declaration with this behavior is
 
 `MPOTensor.mpo_physicalAdjointTensor` proves that its periodic operator is the
 conjugate transpose of the original one.  By contrast,
-`MPOTensor.adjointTensor` conjugate-transposes each virtual matrix and reverses
-the virtual word; it gives the global adjoint only with a spatial reflection
-and is not the convention of `main.tex:1552--1662`.
+`MPOTensor.adjointTensor` conjugate-transposes each virtual matrix and therefore
+reverses the physical/spatial word order in word evaluation; it gives the
+global adjoint only with a spatial reflection and is not the convention of
+`main.tex:1552--1662`.
 
 The same passage distinguishes two operations on the square inverse gauge:
 $T_g^\dagger$ is conjugate transpose, whereas
