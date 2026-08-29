@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 
 /-!
@@ -428,10 +429,10 @@ lemma rightDim_eq_one (F : PhysicalSectorFactorization tensor)
   let q₀ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₀)⟩
   let q₁ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₁)⟩
   let i := F.sectorEquiv.symm q₀
-  have hrow := congrFun (congrFun F.physicalIsometry_mul_conjTranspose i) i
   have hsum :
       ∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p) = 1 := by
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply] using hrow
+    simpa using Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+      F.physicalIsometry F.physicalIsometry_mul_conjTranspose i i
   have hsum_ne :
       (∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p)) ≠ 0 := by
     rw [hsum]
@@ -631,10 +632,10 @@ lemma leftDim_eq_one (F : PhysicalSectorFactorization tensor)
   let q₀ : Σ h, F.SectorIndex h := ⟨k, (x₀, y₀)⟩
   let q₁ : Σ h, F.SectorIndex h := ⟨k, (x₁, y₀)⟩
   let i := F.sectorEquiv.symm q₀
-  have hrow := congrFun (congrFun F.physicalIsometry_mul_conjTranspose i) i
   have hsum :
       ∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p) = 1 := by
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply] using hrow
+    simpa using Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+      F.physicalIsometry F.physicalIsometry_mul_conjTranspose i i
   have hsum_ne :
       (∑ p, F.physicalIsometry i p * star (F.physicalIsometry i p)) ≠ 0 := by
     rw [hsum]

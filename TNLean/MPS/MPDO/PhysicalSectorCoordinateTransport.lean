@@ -85,8 +85,9 @@ theorem physicalCoordinateMatrix_coisometry
     Matrix.conjTranspose_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
     Equiv.refl_symm, Equiv.refl_apply, Matrix.one_apply,
     Equiv.apply_eq_iff_eq] using
-    congrFun (congrFun F.physicalIsometry_mul_conjTranspose
-      (F.physicalFinEquiv.symm i)) (F.physicalFinEquiv.symm j)
+    Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+      F.physicalIsometry F.physicalIsometry_mul_conjTranspose
+      (F.physicalFinEquiv.symm i) (F.physicalFinEquiv.symm j)
 
 /-- Change the physical coordinates of an MPO tensor by a rectangular matrix. -/
 noncomputable def changePhysicalBasis {e : ℕ}

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SourceFactors
 
@@ -57,9 +58,9 @@ theorem IsMPU.physicalAdjointTensor {U : MPOTensor d D} (hU : IsMPU U) :
   ext σ τ
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
     mpo_physicalAdjointTensor]
-  have h := congrArg (fun M ↦ M σ τ) (hU.mpo_mul_conjTranspose_mpo hN)
-  simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-    star_star] using h
+  simpa only [Matrix.one_apply, star_star] using
+    Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+      (mpo U N) (hU.mpo_mul_conjTranspose_mpo hN) σ τ
 
 /-- Entrywise output-layer form of the physical-adjoint double layer.
 

@@ -91,6 +91,26 @@ abstracted — record why, so it is not re-proposed).
   rectangular matrix layer. All cited TNLean consumers now invoke them
   directly; no MPS- or MPO-specific wrapper is retained.
 
+### rectangular coisometry entries — promoted
+- **Pattern:** extract either scalar-product orientation of row
+  orthonormality from `V * Vᴴ = 1` by applying the matrix equality at two row
+  indices and unfolding matrix multiplication, conjugate transpose, and the
+  identity matrix.
+- **Seen:** eight entry extractions across seven TNLean files before promotion
+  (2026-08-29): `MPU/MatchingContractions.lean`,
+  `MPU/SourceUContraction.lean`, `MPDO/BNTFixedFinalUnitarity.lean`,
+  `MPDO/PhysicalSectorCoordinateTransport.lean`,
+  `MPDO/NonCartesianActiveSectorObstruction.lean`,
+  `MPDO/NonCartesianActiveSectorRigidity.lean` (two extractions), and
+  `MPDO/BlockedCompleteZipper.lean`.
+- **Abstraction:**
+  `Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one` and
+  `Matrix.sum_star_mul_eq_ite_of_mul_conjTranspose_eq_one` in
+  `QICLean/Algebra/MatrixIsometryEntries.lean` (QICLean dependency).
+- **Notes:** both complex scalar orientations are owned by QICLean's generic
+  rectangular matrix layer. All eight TNLean consumers now invoke the public
+  row-entry API directly; no tensor-network-specific wrapper is retained.
+
 ### positive-definite trace pairing with a nonzero positive matrix — promoted
 - **Pattern:** prove `0 < Matrix.trace (A * B)` or its cyclic orientation from
   `A.PosDef`, `B.PosSemidef`, and `B ≠ 0` by combining nonnegativity with
@@ -1403,32 +1423,6 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
-
-### rectangular coisometry entries — candidate (blocked)
-- **Pattern:** extract row orthonormality entrywise from `V * Vᴴ = 1` by
-  unfolding matrix multiplication, conjugate transpose, and the identity
-  matrix. This is the dual of the promoted column-isometry pattern above.
-- **Seen:** eight occurrences across seven files (2026-08-29):
-  `IsMPU.normalized_mpo_tail_coisometry` in
-  `TNLean/MPS/MPU/MatchingContractions.lean`,
-  `IsMPU.physicalAdjointTensor` in
-  `TNLean/MPS/MPU/SourceUContraction.lean`, and
-  `sigmaDiagonal_mul_conjTranspose_eq_one` in
-  `TNLean/MPS/MPDO/BNTFixedFinalUnitarity.lean`;
-  `physicalCoordinateMatrix_coisometry` in
-  `TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport.lean`;
-  `isometry_mul_star_at_support` in
-  `TNLean/MPS/MPDO/NonCartesianActiveSectorObstruction.lean`;
-  `rightDim_eq_one` and `leftDim_eq_one` in
-  `TNLean/MPS/MPDO/NonCartesianActiveSectorRigidity.lean`; and
-  `blockedFusionAnalysis_mul_blockedFusionSynthesis` in
-  `TNLean/MPS/MPDO/BlockedCompleteZipper.lean`.
-- **Abstraction (proposed):** a source-independent pair of rectangular-matrix
-  entry lemmas in QICLean's algebra layer, tracked in #7380.
-- **Notes:** the current QICLean pin supplies only the `Vᴴ * V = 1`
-  column-isometry API. Keep these eight `V * Vᴴ = 1` consumers unchanged
-  until QICLean promotes the dual API and TNLean advances its pin; do not add a
-  TNLean-specific wrapper.
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).

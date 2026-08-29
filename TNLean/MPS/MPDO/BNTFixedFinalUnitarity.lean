@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.BNTTripleFusionSeparation
 
 /-!
@@ -53,7 +54,8 @@ theorem sigmaDiagonal_mul_conjTranspose_eq_one
     C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R i => ⟨i, y⟩) *
         (C.submatrix (fun x : L i => ⟨i, x⟩) (fun y : R i => ⟨i, y⟩))ᴴ = 1 := by
   ext x y
-  have hentry := congrArg (fun M => M ⟨i, x⟩ ⟨i, y⟩) hunit
+  have hentry := Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one
+    C hunit ⟨i, x⟩ ⟨i, y⟩
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
     Matrix.submatrix_apply, Fintype.sum_sigma] at hentry ⊢
   rw [Finset.sum_eq_single i] at hentry
