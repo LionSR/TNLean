@@ -3,11 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.MPS.Periodic.Defs
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.KrausRepresentation
 import QICLean.Kraus.MixedMap
 import QICLean.Kraus.Transfer
+import TNLean.MPS.FundamentalTheorem.Basic
+import TNLean.MPS.Periodic.Defs
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.
@@ -165,8 +166,7 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
   have hU : ∀ j k : Fin d,
       ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
-    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
-    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
   simp_rw [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, star_eq,
     Matrix.sum_mul, Matrix.mul_sum]
@@ -212,8 +212,7 @@ theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (
   have hU : ∀ j k : Fin d,
       ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
-    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
-    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
   -- Suffices: show the expanded sum equals ∑_j A_j† A_j
   suffices h : ∑ i : Fin d, (∑ j : Fin d, u i j • A j)ᴴ * (∑ k : Fin d, u i k • A k) =
@@ -251,8 +250,7 @@ theorem isIrreducibleTensor_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin 
   have hU : ∀ j k : Fin d,
       ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
-    have h := congrArg (fun M : Matrix (Fin d) (Fin d) ℂ => M j k) hu'
-    simpa [Matrix.mul_apply, Matrix.one_apply, Matrix.conjTranspose_apply] using h
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   -- Distribute (1-P)*_*P through the sum in the invariance condition
   have hInv' : ∀ i : Fin d, ∑ j : Fin d, u i j • ((1 - P) * A j * P) = 0 := by
     intro i

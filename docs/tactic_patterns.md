@@ -73,13 +73,16 @@ abstracted — record why, so it is not re-proposed).
   orthonormality from `Vᴴ * V = 1` by applying the matrix equality at two
   column indices and unfolding matrix multiplication, conjugate transpose,
   and the identity matrix.
-- **Seen:** twelve entry extractions across nine TNLean files before promotion
-  (2026-08-29): `PhysicalIndexMixing.lean`,
+- **Seen:** nineteen entry extractions across fourteen TNLean files before
+  promotion (2026-08-29): `PhysicalIndexMixing.lean`,
   `PhysicalIsometricEmbedding.lean`, `SitewisePhysicalMatrix.lean`,
   `PhysicalSectorCoordinateTransport.lean`,
   `PhysicalSectorBondTransport.lean`, `RFP/Defs.lean`,
-  `RFP/StructuralFull.lean`, `Symmetry/StringOrderAux.lean`, and
-  `MPU/MatchingContractions.lean`.
+  `RFP/StructuralFull.lean`, `RFP/BeigiLoopInjectivity.lean`,
+  `Symmetry/StringOrderAux.lean`, `MPU/MatchingContractions.lean`,
+  `MPU/SourceFactors.lean`, `Periodic/Applications.lean`,
+  `MPDO/LemmaC5CaseI.lean`, and
+  `MPDO/NonCartesianActiveSectorObstruction.lean`.
 - **Abstraction:**
   `Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one` and
   `Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one` in
@@ -1405,17 +1408,25 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** extract row orthonormality entrywise from `V * Vᴴ = 1` by
   unfolding matrix multiplication, conjugate transpose, and the identity
   matrix. This is the dual of the promoted column-isometry pattern above.
-- **Seen:** three occurrences across three files (2026-08-29):
+- **Seen:** eight occurrences across seven files (2026-08-29):
   `IsMPU.normalized_mpo_tail_coisometry` in
   `TNLean/MPS/MPU/MatchingContractions.lean`,
   `IsMPU.physicalAdjointTensor` in
   `TNLean/MPS/MPU/SourceUContraction.lean`, and
   `sigmaDiagonal_mul_conjTranspose_eq_one` in
-  `TNLean/MPS/MPDO/BNTFixedFinalUnitarity.lean`.
+  `TNLean/MPS/MPDO/BNTFixedFinalUnitarity.lean`;
+  `physicalCoordinateMatrix_coisometry` in
+  `TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport.lean`;
+  `isometry_mul_star_at_support` in
+  `TNLean/MPS/MPDO/NonCartesianActiveSectorObstruction.lean`;
+  `rightDim_eq_one` and `leftDim_eq_one` in
+  `TNLean/MPS/MPDO/NonCartesianActiveSectorRigidity.lean`; and
+  `blockedFusionAnalysis_mul_blockedFusionSynthesis` in
+  `TNLean/MPS/MPDO/BlockedCompleteZipper.lean`.
 - **Abstraction (proposed):** a source-independent pair of rectangular-matrix
   entry lemmas in QICLean's algebra layer, tracked in #7380.
 - **Notes:** the current QICLean pin supplies only the `Vᴴ * V = 1`
-  column-isometry API. Keep these three `V * Vᴴ = 1` consumers unchanged
+  column-isometry API. Keep these eight `V * Vᴴ = 1` consumers unchanged
   until QICLean promotes the dual API and TNLean advances its pin; do not add a
   TNLean-specific wrapper.
 

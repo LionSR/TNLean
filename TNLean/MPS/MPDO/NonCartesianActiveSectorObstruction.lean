@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.NonCartesianActiveSectorRigidity
 
 /-!
@@ -54,10 +55,10 @@ sector. -/
 lemma exists_scalarSector_isometry_ne_zero
     (F : PhysicalSectorFactorization tensor) (p : Fin 4) :
     ∃ k, F.physicalIsometry (scalarSectorPhysicalIndex F k) p ≠ 0 := by
-  have hcolumn := congrFun (congrFun F.physicalIsometry_isometry p) p
   have hsum :
       ∑ i, star (F.physicalIsometry i p) * F.physicalIsometry i p = 1 := by
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply] using hcolumn
+    simpa using Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+      F.physicalIsometry F.physicalIsometry_isometry p p
   have hsum_ne :
       (∑ i, star (F.physicalIsometry i p) * F.physicalIsometry i p) ≠ 0 := by
     rw [hsum]
