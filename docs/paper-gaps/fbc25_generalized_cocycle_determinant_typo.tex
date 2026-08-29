@@ -1,0 +1,59 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Repeated Determinant Factor in the Generalized-Cocycle Lemma}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Printed determinant identity}
+
+In the proof of \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging},
+the regular-action matrices satisfy
+\begin{align}
+    X^{h x}_g X^x_h
+        &=\Omega^x_{g,h}X^x_{gh}.
+    \label{eq:fbc25_generalized_cocycle_operator}
+\end{align}
+The next display prints the numerator
+$\det(X^{h x}_g)\det(X^x_g)$, repeating the index $g$ in the second factor.
+
+\section{Corrected determinant identity}
+
+Taking determinants in
+Eq.~\ref{eq:fbc25_generalized_cocycle_operator} gives
+\begin{align}
+    \left(\Omega^x_{g,h}\right)^{|G|}
+        &=\frac{\det(X^{h x}_g)\det(X^x_h)}{\det(X^x_{gh})}.
+    \label{eq:fbc25_generalized_cocycle_determinant_corrected}
+\end{align}
+Thus the second numerator factor carries the index $h$. This is also the factor
+required by the stated choice $\chi^x_g=\det(X^x_g)$ and the preceding
+definition
+$[d\chi]^x_{g,h}=\chi^{h x}_g\chi^x_h/\chi^x_{gh}$.
+
+\section{Formal treatment}
+
+The formal proof takes determinants of
+Eq.~\ref{eq:fbc25_generalized_cocycle_operator} and uses
+Eq.~\ref{eq:fbc25_generalized_cocycle_determinant_corrected}.
+This changes no hypothesis or conclusion of the lemma.\footnote{Formal
+declaration: \leanid{TNLean.Algebra.LSymbol.pow\_card\_eq\_coboundary} in
+\doclink{TNLean/Algebra/GeneralizedCocycle}.}
+
+\textbf{Verdict: resolved local fix.}
+The operator identity, generalized-coboundary definition, and declared
+cochain determine the missing index uniquely.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
