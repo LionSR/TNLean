@@ -435,6 +435,63 @@ an MPU representation.
     % Rep.ofMulDistribMulAction with the explicit trivial action.
 \end{definition}
 
+\begin{theorem}[Circle and nonzero-complex coefficients in degree two]
+    \label{thm:mpug_circle_complex_units_h2}
+    \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
+        TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.positiveResidual_isCoboundary,
+        TNLean.Algebra.ScalarCocycle.cohomologousTo_circlePhaseInclusion,
+        TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
+        TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
+        TNLean.Algebra.circleH2ToComplexUnitsH2_injective,
+        TNLean.Algebra.circleH2ToComplexUnitsH2_surjective,
+        TNLean.Algebra.circleH2EquivComplexUnitsH2}
+    \leanok
+    \uses{def:mpug_h2_group_cohomology_comparison,
+        thm:mpug_positive_generalized_cocycle}
+    Let $G$ be finite, and give $U(1)$ and $\C^\times$ the trivial
+    $G$-actions.  Inclusion of the unit circle induces an equivalence
+    \begin{align}
+        H^2(G,U(1))
+         & \simeq H^2(G,\C^\times).
+        \label{eq:mpug_circle_complex_units_h2}
+    \end{align}
+    More concretely, for a $\C^\times$-valued cocycle $\omega$, define its
+    pointwise phase and radial residual by
+    \begin{align}
+        u(g,h)
+         & =\frac{\omega(g,h)}{|\omega(g,h)|}\in U(1),
+        &
+        r(g,h)
+         & =\frac{\omega(g,h)}{u(g,h)}=|\omega(g,h)|.
+        \label{eq:mpug_circle_phase_residual}
+    \end{align}
+    Then $u$ is a cocycle, $r$ is a positive coboundary, and hence $\omega$
+    is cohomologous to the inclusion of $u$.  The inclusion map is injective
+    for every group because pointwise phase is its left inverse; finiteness is
+    used only to prove surjectivity.
+
+    This is an algebraic group-cohomology statement for a finite discrete
+    group.  The footnote at
+    \cite[line~1931]{FrancoRubio2025MPUGauging} instead invokes a comparison
+    of sheaf cohomology with topological coefficient groups; the distinction
+    and the direct finite-group proof are recorded in
+    \cite{gap:fbc25_circle_complex_units_cohomology}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_positive_generalized_cocycle}
+    The phase map $q(z)=z/|z|$ is multiplicative and satisfies
+    $q(u)=u$ for $u\in U(1)$, so it preserves the cocycle equation and
+    retracts inclusion.  The polar identity in
+    (\ref{eq:mpug_circle_phase_residual}) identifies the residual $r$ with a
+    positive cocycle.  Apply
+    Theorem~\ref{thm:mpug_positive_generalized_cocycle} to the one-point block
+    space to write $r=d\chi$.  Therefore $\omega\sim u$, which proves
+    surjectivity of coefficient inclusion on degree-two classes.  Its left
+    inverse induced by $q$ proves injectivity.
+\end{proof}
+
 \begin{definition}[Block scalar and block independence]
     \label{def:mpug_block_independence_factor}
     \lean{TNLean.Algebra.LSymbol.ell,
