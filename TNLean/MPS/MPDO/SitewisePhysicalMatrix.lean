@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ListProduct
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.SingleKrausPositivity
+import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 
 /-!
@@ -92,8 +93,8 @@ theorem sitewisePhysicalMatrix_isometry
       (∑ a : Fin e, star (V a (x n)) * V a (y n)) =
         if x n = y n then 1 else 0 := by
     intro n
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Matrix.one_apply] using congrFun (congrFun hV (x n)) (y n)
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+      V hV (x n) (y n)
   simp_rw [hentry]
   rw [Fintype.prod_boole]
   congr 1

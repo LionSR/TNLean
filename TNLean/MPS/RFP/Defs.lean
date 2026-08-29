@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Defs
-import QICLean.Kraus.Transfer
+import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.KrausFreedom
+import QICLean.Kraus.Transfer
+import TNLean.MPS.Defs
 
 /-!
 # Pure-state renormalization fixed point (RFP) — definitions
@@ -69,11 +70,8 @@ theorem isTransferIdempotent_of_kraus_isometry (A : MPSTensor d D)
         V (x₁, x₂) j * star (V (x₁, x₂) k) =
         if k = j then 1 else 0 := by
     intro j k
-    have h := congrFun (congrFun hV k) j
-    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
-      Fintype.sum_prod_type, RCLike.star_def] at h
-    simp_rw [mul_comm] at h
-    exact h
+    simpa only [Fintype.sum_prod_type, eq_comm] using
+      Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one V hV j k
   change Kraus.transferMap A ∘ₗ Kraus.transferMap A = Kraus.transferMap A
   apply LinearMap.ext; intro X
   simp only [LinearMap.comp_apply, Kraus.transferMap_apply]

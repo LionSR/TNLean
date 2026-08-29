@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.RFP.StructuralForm
 
 /-!
@@ -310,8 +311,8 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
   have hV_entry : ∀ p q : Fin D × Fin D,
       ∑ i : Fin d, star (V i p) * V i q = if p = q then 1 else 0 := by
     intro p q
-    have h := congrFun (congrFun hV_iso p) q
-    simpa [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using h
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+      V hV_iso p q
   have hU_entry : ∀ (i : Fin d) (p : Fin D × Fin D), U i p.1 p.2 = c * V i p := by
     intro i p
     simp only [U, E, Matrix.smul_single, smul_eq_mul, mul_one]

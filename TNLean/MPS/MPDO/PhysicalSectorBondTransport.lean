@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 
@@ -508,8 +509,8 @@ private theorem leftPairMatrix_physicalPairBond
       (∑ s, star (F.physicalCoordinateMatrix s x.2.2) *
         F.physicalCoordinateMatrix s y.2.2) =
         if x.2.2 = y.2.2 then 1 else 0 := by
-    have h := congrFun (congrFun F.physicalCoordinateMatrix_isometry x.2.2) y.2.2
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using h
+    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
+      F.physicalCoordinateMatrix F.physicalCoordinateMatrix_isometry x.2.2 y.2.2
   have hfactor :
       (∑ a, ∑ b, ∑ s,
         (∑ c, ∑ e,

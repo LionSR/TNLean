@@ -68,6 +68,41 @@ abstracted — record why, so it is not re-proposed).
   four first- and second-stage fusion proofs compose it with
   `Matrix.IsIsometry.reindex`.
 
+### rectangular isometry entries — promoted
+- **Pattern:** extract either scalar-product orientation of column
+  orthonormality from `Vᴴ * V = 1` by applying the matrix equality at two
+  column indices and unfolding matrix multiplication, conjugate transpose,
+  and the identity matrix.
+- **Seen:** ten entry extractions across seven TNLean files before promotion
+  (2026-08-29): `PhysicalIndexMixing.lean`,
+  `PhysicalIsometricEmbedding.lean`, `SitewisePhysicalMatrix.lean`,
+  `PhysicalSectorCoordinateTransport.lean`,
+  `PhysicalSectorBondTransport.lean`, `RFP/Defs.lean`, and
+  `RFP/StructuralFull.lean`.
+- **Abstraction:**
+  `Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one` and
+  `Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one` in
+  `QICLean/Algebra/MatrixIsometryEntries.lean` (QICLean dependency).
+- **Notes:** both complex scalar orientations are owned by QICLean's generic
+  rectangular matrix layer. All cited TNLean consumers now invoke them
+  directly; no MPS- or MPO-specific wrapper is retained.
+
+### positive-definite trace pairing with a nonzero positive matrix — promoted
+- **Pattern:** prove `0 < Matrix.trace (A * B)` or its cyclic orientation from
+  `A.PosDef`, `B.PosSemidef`, and `B ≠ 0` by combining nonnegativity with
+  faithfulness of the positive-definite weighted trace.
+- **Seen:** three occurrences across two TNLean files before promotion
+  (2026-08-23): two in
+  `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean` and one in
+  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean`. QICLean also contained
+  two private copies before the upstream promotion.
+- **Abstraction:** `Matrix.PosDef.trace_mul_pos_of_posSemidef_of_ne_zero` and
+  `Matrix.PosSemidef.trace_mul_pos_of_ne_zero_of_posDef` in
+  `QICLean/Algebra/MatrixAux.lean` (QICLean dependency).
+- **Notes:** QICLean owns the canonical statement and derives the cyclic
+  product orientation by trace commutativity. All three TNLean derivations
+  now use the public theorem directly; no companion API is duplicated locally.
+
 ### matrix-reindex entry transport — direct
 - **Pattern:** package an entrywise formula as a `Matrix.reindex` equality with
   `ext` and `Matrix.reindex_apply`, or recover an original-coordinate entry by
@@ -1364,29 +1399,6 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
-
-### positive-definite trace pairing with a nonzero positive matrix — candidate
-- **Pattern:** prove
-  `0 < Matrix.trace (B * A)` from `A.PosDef`, `B.PosSemidef`, and `B ≠ 0`
-  by combining `Matrix.PosSemidef.trace_mul_nonneg` with faithfulness of the
-  positive-definite weighted trace.
-- **Seen:** 3 occurrences across 2 TNLean files: `htraceNe`/`htracePos`
-  (lines 150-163) and `hgapNe`/`hgapPos` (lines 164-186) in
-  `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`, and
-  `htr_ne` (lines 253-257) in
-  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean` (2026-08-23). QICLean also
-  contains the same proof as the private theorem
-  `trace_mul_pos_of_posDef_posSemidef_ne_zero` (lines 44-57) in
-  `QICLean/Channel/Irreducible/Growth/OrthogonalTrace.lean`.
-- **Abstraction (proposed):** expose the existing QICLean theorem as public API
-  and replace all three TNLean call sites with it. The pinned QICLean release
-  keeps that theorem private, so this TNLean PR cannot perform the promotion
-  without changing the dependency checkout or pin.
-- **Notes:** Mathlib provides positivity of the trace of a positive-definite
-  matrix and QICLean provides the weighted-trace faithfulness theorem, but
-  neither exposes this exact strict pairing statement through TNLean's pinned
-  imports. Keep the local proofs until QICLean publishes the general lemma;
-  do not add a TNLean wrapper around companion-library matrix API.
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
