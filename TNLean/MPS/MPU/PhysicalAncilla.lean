@@ -17,7 +17,6 @@ the virtual bond dimension remains \(D\).
 ## Main definitions
 
 * `MPOTensor.tensorPhysicalId`: attach an identity ancilla at each physical site.
-* `MPOTensor.doubledPhysicalAncillaShuffle`: separate the original and ancilla doubled indices.
 * `MPOTensor.normalizedDiagonalLift`: adjoin the normalized diagonal ancilla alphabet.
 * `MPOTensor.normalizedDiagonalLiftCFIIData`: construct canonical-form-II data for the lift.
 * `MPOTensor.tensorPhysicalIdCFIIData`: construct canonical-form-II data after ancilla attachment.
@@ -108,25 +107,6 @@ theorem IsMPU.tensorPhysicalId {U : MPOTensor d D} (hU : IsMPU U)
 
 
 /-! ## Normalized doubled-index tensor -/
-
-/-- Separate the original and ancilla doubled physical indices by the shuffle
-\(((i,a),(j,b))\mapsto((i,j),(a,b))\).
-
-This is the physical relabeling used to identify the normalized flattening and
-canonical-form-II data after identity-ancilla attachment. -/
-def doubledPhysicalAncillaShuffle (d x : ℕ) :
-    Fin ((d * x) * (d * x)) ≃ Fin ((d * d) * (x * x)) :=
-  finProdFinEquiv.symm |>.trans <|
-    (Equiv.prodCongr finProdFinEquiv.symm finProdFinEquiv.symm).trans <|
-      (Equiv.prodProdProdComm (Fin d) (Fin x) (Fin d) (Fin x)).trans <|
-        (Equiv.prodCongr finProdFinEquiv finProdFinEquiv).trans finProdFinEquiv
-
-/-- Coordinate action of the doubled physical-ancilla shuffle. -/
-@[simp] theorem doubledPhysicalAncillaShuffle_apply (i j : Fin d) (a b : Fin x) :
-    doubledPhysicalAncillaShuffle d x
-        (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
-      finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (a, b)) := by
-  simp [doubledPhysicalAncillaShuffle]
 
 /-- Lift a doubled-index MPS tensor by a normalized diagonal ancilla alphabet.
 Only letters \((a,a)\) are nonzero, and each is scaled by \(1/\sqrt{x}\).
@@ -252,7 +232,7 @@ lines 336--340. -/
 theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
     (x : ℕ) (_hx : 0 < x) :
     (tensorPhysicalId U x).normalizedFlattening =
-      Kraus.reindexPhysical (doubledPhysicalAncillaShuffle d x)
+      Kraus.reindexPhysical (finDoubledProdEquiv d x)
         (normalizedDiagonalLift U.normalizedFlattening x) := by
   funext k
   rcases finProdFinEquiv.surjective k with ⟨⟨ia, jb⟩, rfl⟩
@@ -263,7 +243,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
         ((Real.sqrt (d * x) : ℂ)⁻¹) •
           tensorPhysicalId U x (finProdFinEquiv (i, a)) (finProdFinEquiv (j, b)) by
       simp [normalizedFlattening, MPOTensor.toMPSTensor]]
-  rw [show Kraus.reindexPhysical (doubledPhysicalAncillaShuffle d x)
+  rw [show Kraus.reindexPhysical (finDoubledProdEquiv d x)
       (normalizedDiagonalLift U.normalizedFlattening x)
       (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
         normalizedDiagonalLift U.normalizedFlattening x
@@ -366,7 +346,7 @@ noncomputable def tensorPhysicalIdCFIIData (U : MPOTensor d D)
     MPSTensor.CPSVCanonicalFormIIData (tensorPhysicalId U x).normalizedFlattening :=
   (normalizedFlattening_tensorPhysicalId U x hx).symm ▸
     (normalizedDiagonalLiftCFIIData data x hx).reindexPhysical
-      (doubledPhysicalAncillaShuffle d x)
+      (finDoubledProdEquiv d x)
 
 /-- Full support is preserved by physical identity-ancilla attachment.
 
@@ -381,10 +361,10 @@ theorem hasFullSupport_tensorPhysicalIdCFIIData (U : MPOTensor d D)
   let lifted := normalizedDiagonalLiftCFIIData data x hx
   have hlift : lifted.toCPSVCanonicalFormData.HasFullSupport :=
     hasFullSupport_normalizedDiagonalLiftCFIIData data hfull x hx
-  let shuffled := lifted.reindexPhysical (doubledPhysicalAncillaShuffle d x)
+  let shuffled := lifted.reindexPhysical (finDoubledProdEquiv d x)
   have hshuffle : shuffled.toCPSVCanonicalFormData.HasFullSupport :=
     MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
-      lifted.toCPSVCanonicalFormData hlift (doubledPhysicalAncillaShuffle d x)
+      lifted.toCPSVCanonicalFormData hlift (finDoubledProdEquiv d x)
   exact hasFullSupport_castCFIIData
     (normalizedFlattening_tensorPhysicalId U x hx) shuffled hshuffle
 
