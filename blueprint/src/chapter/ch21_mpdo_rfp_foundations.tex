@@ -47,6 +47,97 @@
     This is the defining equation.
 \end{proof}
 
+\begin{definition}[Periodic two-point MPDO correlation]
+    \label{def:mpdo_periodic_two_point_correlation}
+    \lean{MPOTensor.periodicTwoPointCorrelation}
+    \leanok
+    \uses{def:mpdo_vertical_loops, def:mpo_physical_trace_transfer}
+    For one-site observables $O_1,O_2\in\MN{d}$ and complementary gap
+    lengths $g_{\mathrm{mid}},g_{\mathrm{wrap}}\geq0$, set
+    \begin{align}
+        C_M(O_1,O_2;g_{\mathrm{mid}},g_{\mathrm{wrap}})
+         & =\tr\!\left(
+        \mathbb E_{O_1}\mathcal T_M^{g_{\mathrm{mid}}}
+        \mathbb E_{O_2}\mathcal T_M^{g_{\mathrm{wrap}}}\right),
+        \label{eq:mpdo_periodic_correlation}
+    \end{align}
+    where
+    $\mathbb E_O=\sum_{i,j}O_{ji}M^{ij}$.
+    In the notation of the two-observable formula in
+    \cite[lines~490--496]{Cirac2016MPDO_arXiv},
+    $g_{\mathrm{mid}}=n_2-n_1-1$,
+    $g_{\mathrm{wrap}}=N+n_1-n_2-1$, and
+    $N=g_{\mathrm{mid}}+g_{\mathrm{wrap}}+2$.
+    This is the unnormalized contraction: the source introduces normalization
+    only at lines~792--793 for entropic quantities.
+\end{definition}
+
+\begin{theorem}[Zero correlation length removes positive wrapping-gap dependence]
+    \label{thm:mpdo_zcl_periodic_correlation_positive_wrap_gaps_independent}
+    \lean{MPOTensor.periodicTwoPointCorrelation_positiveWrapGaps_independent}
+    \leanok
+    \uses{def:mpo_physical_trace_idempotence,
+        def:mpdo_periodic_two_point_correlation}
+    Let $M$ be an MPO tensor satisfying the literal zero-correlation-length
+    condition. Fix $O_1,O_2$ and a middle gap $g_{\mathrm{mid}}\geq0$.
+    For two positive wrapping gaps
+    $g_{\mathrm{wrap}},g'_{\mathrm{wrap}}>0$,
+    \begin{align}
+        C_M(O_1,O_2;g_{\mathrm{mid}},g_{\mathrm{wrap}})
+         & =C_M(O_1,O_2;g_{\mathrm{mid}},g'_{\mathrm{wrap}}).
+        \label{eq:mpdo_zcl_correlation_positive_wrap_gap_independence}
+    \end{align}
+    This is independence under changing the ring length at fixed observable
+    separation. It includes adjacent marked sites, for which
+    $g_{\mathrm{mid}}=0$. In particular, it applies when $M$ generates an
+    MPDO, which is the source context of the assertion following
+    \cite[Definition~4.2, lines~735--742]{Cirac2016MPDO_arXiv}. The exact
+    positive-power boundary is recorded in
+    \cite{gap:cpsv16_mpdo_zcl_correlation_length_boundary}.
+    No invariance between a zero wrapping gap and a positive one is asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Idempotence gives $\mathcal T_M^r=\mathcal T_M$ for every $r>0$.
+    Apply this identity to the wrapping power in each side of
+    (\ref{eq:mpdo_zcl_correlation_positive_wrap_gap_independence}); the middle
+    power is unchanged.
+\end{proof}
+
+\begin{corollary}[Zero correlation length gives positive-gap distance independence]
+    \label{thm:mpdo_zcl_periodic_correlation_positive_gaps_independent}
+    \lean{MPOTensor.periodicTwoPointCorrelation_positiveGaps_independent}
+    \leanok
+    \uses{def:mpo_physical_trace_idempotence,
+        def:mpdo_periodic_two_point_correlation}
+    Let $M$ be an MPO tensor satisfying the literal zero-correlation-length
+    condition. Fix $O_1,O_2$. For two pairs of positive complementary gaps
+    $g_{\mathrm{mid}},g_{\mathrm{wrap}}>0$ and
+    $g'_{\mathrm{mid}},g'_{\mathrm{wrap}}>0$,
+    \begin{align}
+        C_M(O_1,O_2;g_{\mathrm{mid}},g_{\mathrm{wrap}})
+         & =C_M(O_1,O_2;g'_{\mathrm{mid}},g'_{\mathrm{wrap}}).
+        \label{eq:mpdo_zcl_correlation_positive_gap_independence}
+    \end{align}
+    For equal gap sums this is correlation independence under changing the
+    observable distance on a fixed ring while the observables are nonadjacent
+    on both complementary arcs, as in the CID discussion at
+    \cite[lines~433--500]{Cirac2016MPDO_arXiv}. The positive-power boundary is
+    recorded in
+    \cite{gap:cpsv16_mpdo_zcl_correlation_length_boundary}.
+    No invariance between a zero complementary gap and a positive one is
+    asserted.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    Idempotence gives $\mathcal T_M^r=\mathcal T_M$ for every $r>0$.
+    Applying this identity to both powers in each instance of
+    (\ref{eq:mpdo_periodic_correlation}) proves
+    (\ref{eq:mpdo_zcl_correlation_positive_gap_independence}).
+\end{proof}
+
 \begin{definition}[Nonzero up-to-scalar physical-trace relation]
     \label{def:mpo_source_zcl}
     \lean{MPOTensor.IsSourceZCL}

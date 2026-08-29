@@ -98,6 +98,23 @@ $\mathcal T_M^2=\mathcal T_M$. The source label is mapped only to this literal
 predicate. `MPOTensor.IsSourceZCL` remains a separate nonzero up-to-scalar
 relation and is not the fixed-tensor definition.
 
+The length-independence sentence at lines 740--742 is recorded separately.
+The insertion `MPOTensor.verticalLoopWith` has the source orientation
+$\mathbb E_O=\sum_{i,j}O_{ji}M^{ij}$, and
+`MPOTensor.periodicTwoPointCorrelation` is the unnormalized periodic
+contraction obtained from equation `Corr` at lines 490--496 by replacing the
+pure transfer matrix with the physical-trace transfer. At fixed arbitrary
+middle gap, literal idempotence makes this contraction ring-length independent
+between any two positive wrapping gaps; the unchanged middle gap may be zero,
+so adjacent marked sites are included. This is a scope-restricted completion
+at the positive-varied-gap boundary. Separately, equal gap sums give fixed-ring
+distance independence for observables nonadjacent on both complementary arcs
+when all four compared gaps are positive. The unrestricted claim comparing a
+zero varied gap with a positive one is not made. This zero-power boundary and
+the fact that normalization is introduced only later, at lines 792--793, are
+recorded in
+`docs/paper-gaps/cpsv16_mpdo_zcl_correlation_length_boundary.tex`.
+
 ## Examples
 
 Three examples carry labels and therefore occur in the TSV ledger.  The fourth

@@ -76,6 +76,15 @@ two-layer refinement notes.
 
 For MPDO renormalization fixed points:
 
+- `cpsv16_mpdo_zcl_correlation_length_boundary.tex` records the mixed-state
+  observable insertion $\mathbb E_O=\sum_{i,j}O_{ji}M^{ij}$ and the
+  unnormalized periodic two-point formula. Literal physical-trace
+  idempotence gives a scope-restricted completion of ring-length independence
+  at fixed arbitrary middle gap when the two compared wrapping gaps are
+  positive; this includes adjacent marked sites. It also gives fixed-ring
+  distance independence for observables nonadjacent on both complementary
+  arcs when all four compared gaps are positive and their sums agree. No
+  theorem compares a zero varied gap with a positive one.
 - `cpsv16_active_physical_support_compression.tex` records that CPSV16
   Lemma `propSN` and Proposition `3to4` use the full physical-sector factor
   spaces, whereas the local development first restricts them to the joint

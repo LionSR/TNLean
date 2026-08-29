@@ -592,6 +592,32 @@ The following notions use different transfer objects and are not interchangeable
   which use the up-to-scalar relation and doubled-index completely positive
   map, respectively.
 
+### `MPOTensor.periodicTwoPointCorrelation`
+
+- **Declaration:**
+  `MPOTensor.periodicTwoPointCorrelation M O₁ O₂ middleGap wrapGap`.
+- **Defined in:** `TNLean/MPS/MPDO/Correlations.lean`.
+- **Meaning:** the unnormalized periodic contraction
+  $\tr(\mathbb E_{O_1}\mathcal T_M^{g_{\mathrm{mid}}}
+  \mathbb E_{O_2}\mathcal T_M^{g_{\mathrm{wrap}}})$, where
+  $\mathbb E_O=\sum_{i,j}O_{ji}M^{ij}$.
+- **Source:** CPSV16 equation `Corr`, lines 490--496, and the mixed-state
+  length-independence sentence following Definition 4.2, lines 735--742.
+- **Sanctioned results:**
+  `MPOTensor.periodicTwoPointCorrelation_positiveWrapGaps_independent`
+  compares two positive wrapping gaps at an arbitrary fixed middle gap under
+  literal physical-trace idempotence. This gives ring-length independence and
+  includes an unchanged zero middle gap. The corollary
+  `MPOTensor.periodicTwoPointCorrelation_positiveGaps_independent` compares
+  any two pairs positive on both complementary arcs; equal gap sums give
+  fixed-ring distance independence for nonadjacent observables.
+- **Caveat:** these are scope-restricted results. No theorem compares a zero
+  varied gap with a positive one because idempotence does not identify
+  $\mathcal T_M^0=1$ with $\mathcal T_M$.
+  The contraction is not normalized; the source introduces normalization
+  later for entropic quantities. See
+  `docs/paper-gaps/cpsv16_mpdo_zcl_correlation_length_boundary.tex`.
+
 ### `MPOTensor.IsSourceZCL`
 
 - **Declaration:** `MPOTensor.IsSourceZCL (M : MPOTensor d D) : Prop`.

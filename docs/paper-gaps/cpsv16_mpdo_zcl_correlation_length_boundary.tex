@@ -1,0 +1,181 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Positive-Gap Boundary for Distance- and Length-Independent MPDO
+Correlations}
+\author{}
+\date{2026-08-29}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{Source formula and mixed-state reading}
+
+Equation~\cpsveqref{Corr} of
+Ref.~\cite{Cirac2016MPDO_arXiv} writes the two-observable contraction of a
+periodic matrix product vector as
+\begin{align}
+    \langle V|O_1O_2|V\rangle
+        &=\tr\!\left(
+          \mathbb E_{O_1}\mathbb E^{\,n_2-n_1-1}
+          \mathbb E_{O_2}\mathbb E^{\,N+n_1-n_2-1}\right).
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_source_correlation}
+\end{align}
+Here $N$ is the ring length and $n_1<n_2$ are the marked sites.
+Definition~\cpsvref{DefinitionZCL} gives the mixed-state zero-correlation-length
+condition, and the following sentence states that the corresponding MPDO
+correlation functions are independent of length
+\cite[lines~735--742]{Cirac2016MPDO_arXiv}.
+
+For an MPO tensor $M$, closing the physical indices gives
+\begin{align}
+    \mathcal T_M
+        &=\sum_i M^{ii},
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_physical_trace_transfer}
+\end{align}
+and inserting a one-site observable $O$ in the same contraction gives
+\begin{align}
+    \mathbb E_O
+        &=\sum_{i,j}O_{ji}M^{ij}.
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_observable_insertion}
+\end{align}
+Thus the mixed-state counterpart of
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_source_correlation}
+is
+\begin{align}
+    C_M(O_1,O_2;g_{\mathrm{mid}},g_{\mathrm{wrap}})
+        &=\tr\!\left(
+          \mathbb E_{O_1}\mathcal T_M^{g_{\mathrm{mid}}}
+          \mathbb E_{O_2}\mathcal T_M^{g_{\mathrm{wrap}}}\right),
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_mixed_correlation}
+\end{align}
+where
+\begin{align}
+    g_{\mathrm{mid}}
+        &=n_2-n_1-1,
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_middle_gap}\\
+    g_{\mathrm{wrap}}
+        &=N+n_1-n_2-1.
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_wrapping_gap}
+\end{align}
+Equivalently, the ring length is
+\begin{align}
+    N
+        &=g_{\mathrm{mid}}+g_{\mathrm{wrap}}+2.
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_ring_length}
+\end{align}
+
+The contraction in
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_mixed_correlation}
+is unnormalized. The source introduces normalization of finite-chain MPDOs
+only later, at lines~792--793, for entropic quantities. The unnormalized
+reading therefore requires no nonvanishing hypothesis absent from
+Definition~\cpsvref{DefinitionZCL}.
+
+\section{Positive varied gaps}
+
+Definition~\cpsvref{DefinitionZCL} is the literal idempotence equation
+\begin{align}
+    \mathcal T_M^2
+        &=\mathcal T_M.
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_idempotence}
+\end{align}
+It implies
+\begin{align}
+    \mathcal T_M^r
+        &=\mathcal T_M,
+        \qquad r\geq 1.
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_power}
+\end{align}
+For the length-independence assertion, fix an arbitrary middle gap
+$g_{\mathrm{mid}}\geq0$ and compare two positive wrapping gaps
+$g_{\mathrm{wrap}},g'_{\mathrm{wrap}}>0$. Substitution of
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_power} for
+the two wrapping powers gives
+\begin{align}
+    C_M(O_1,O_2;g_{\mathrm{mid}},g_{\mathrm{wrap}})
+        &=C_M(O_1,O_2;g_{\mathrm{mid}},g'_{\mathrm{wrap}}).
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_wrap_gap_independence}
+\end{align}
+The middle power is identical on both sides and need not have a positive
+exponent. By
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_ring_length}, varying
+the wrapping gap at fixed middle gap varies the ring length while keeping the
+observable separation fixed. Thus
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_wrap_gap_independence}
+is the positive-wrapping-gap scope restriction of the length-independence
+claim for MPDO correlations at lines~740--742. It includes adjacent marked
+sites, for which $g_{\mathrm{mid}}=0$.
+
+For the distance comparison, take two pairs of positive complementary gaps
+$g_{\mathrm{mid}},g_{\mathrm{wrap}}>0$ and
+$g'_{\mathrm{mid}},g'_{\mathrm{wrap}}>0$. Applying
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_power} to
+all four powers gives
+\begin{align}
+    C_M(O_1,O_2;g_{\mathrm{mid}},g_{\mathrm{wrap}})
+        &=C_M(O_1,O_2;g'_{\mathrm{mid}},g'_{\mathrm{wrap}}).
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_gap_independence}
+\end{align}
+If the two gap sums are equal, the ring length in
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_ring_length} is fixed
+and
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_gap_independence}
+gives correlation independence under changing the observable distance while
+the observables are nonadjacent on both complementary arcs. This is the
+positive-complementary-gap scope restriction of the implication from
+equation~\cpsveqref{Corr} to CID in the discussion at lines 433--500 of
+Ref.~\cite{Cirac2016MPDO_arXiv}.
+
+Positivity is required only for an exponent that is replaced using
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_power}. At a
+zero gap,
+\begin{align}
+    \mathcal T_M^0
+        &=\Id,
+    \label{eq:cpsv16_mpdo_zcl_correlation_length_boundary_zero_power}
+\end{align}
+and
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_idempotence} does not
+identify $\Id$ with $\mathcal T_M$. Hence the length theorem permits an
+unchanged zero middle gap but does not compare a zero wrapping gap with a
+positive one. The distance theorem, which varies both gaps, requires all four
+compared gaps to be positive. The unrestricted source/CID reading involving a
+zero varied complementary gap is not claimed.
+
+\section{Formal status}
+
+The observable insertion in
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_observable_insertion}
+is \leanid{MPOTensor.verticalLoopWith}. The correlation in
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_mixed_correlation}
+is \leanid{MPOTensor.periodicTwoPointCorrelation}, and
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_wrap_gap_independence}
+is
+\leanid{MPOTensor.periodicTwoPointCorrelation_positiveWrapGaps_independent}.
+This length-independence theorem assumes only literal physical-trace
+idempotence and positivity of the two compared wrapping gaps; the fixed middle
+gap may be zero. It introduces no positivity, normalization, nonvanishing, or
+equal-total-length condition on the MPO tensor.
+
+Eq.~\ref{eq:cpsv16_mpdo_zcl_correlation_length_boundary_positive_gap_independence}
+is \leanid{MPOTensor.periodicTwoPointCorrelation_positiveGaps_independent}.
+This fixed-ring distance corollary requires positivity of the four compared
+complementary gaps; equal gap sums give the nonadjacent-on-both-arcs CID
+specialization.
+
+The scope restriction is resolved by requiring positivity precisely for each
+gap exponent that is varied. No invariance replacing a zeroth power by a
+positive power is claimed.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
