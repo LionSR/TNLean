@@ -9,13 +9,19 @@ import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Wielandt.Primitivity.Equivalence
 
 /-!
-# Normalization of the non-Cartesian counterexample
+# Normalization of the rank-one neighboring-trace obstruction
 
-The candidate is expressed as a nonzero scalar multiple of a normal tensor.
-Together with its analytic properties, this refutes a proposed low-level
-implication associated with arXiv:1606.00608, Appendix C.2, Proposition
-`prop2to3`, lines 1740--1782. It does not supply the ambient simple-biCF
-reconstruction or the line-246 normalization convention of the source.
+The four-letter tensor has no physical-sector factorization whose neighboring
+traces satisfy `tr(η_{k,h}) = a_k b_h` and `∑_k a_k b_k = 1`. This module
+expresses that obstruction tensor as a nonzero scalar multiple of a normal
+tensor. Together with its analytic properties, this refutes a proposed
+low-level implication associated with arXiv:1606.00608, Appendix C.2,
+Proposition `prop2to3`, lines 1740--1782. It does not supply the ambient
+simple-biCF reconstruction or the line-246 normalization convention of the
+source.
+
+The filename and namespace retain the older project term "non-Cartesian";
+CPSV16 does not use that term for the neighboring-trace factorization.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Matrix.Norms.Operator
