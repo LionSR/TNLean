@@ -363,8 +363,16 @@ two-site source-cut factors $X_1,Y_1,Z_1,X_2,Y_2,Z_2$.
 `TNLean/MPS/MPU/SourceUV.lean` construct the literal three-legged gates
 $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$ of arXiv:1703.09188. The
 separate declarations `sourceY₁X₂` and `sourceX₁Y₂` retain auxiliary mixed-cut
-factorizations and are not the paper gates. These constructions concern one
-MPU tensor and its two source cuts. They are not the rectangular reduction
+factorizations and are not the paper gates. To make that boundary visible at the
+module level, the former `SourceUContraction`, `SourceUOpenTail`,
+`SourceUBoundary`, `SourceURangeTransport`, `SourceUClosedNetwork`,
+`SourceUSecondCutMetric`, and `SourceUReflectedKernel` files were replaced by
+`SourceFactorContraction`, the five `MixedKernel*` modules, and
+`ReflectedTransferKernel`, respectively. No compatibility modules or aliases
+retain the misleading source-$u$ names.
+
+These constructions concern one MPU tensor and its two source cuts. They are
+not the rectangular reduction
 $V,W$ from the product
 tensor $\mathcal U_g\mathcal U_h$ to $\mathcal U_{gh}$, and their one-sided
 inverse identities do not imply Proposition 20 or Theorem 22.

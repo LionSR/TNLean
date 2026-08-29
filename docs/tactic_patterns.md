@@ -98,7 +98,7 @@ abstracted — record why, so it is not re-proposed).
   identity matrix.
 - **Seen:** eight entry extractions across seven TNLean files before promotion
   (2026-08-29): `MPU/MatchingContractions.lean`,
-  `MPU/SourceUContraction.lean`, `MPDO/BNTFixedFinalUnitarity.lean`,
+  `MPU/SourceFactorContraction.lean`, `MPDO/BNTFixedFinalUnitarity.lean`,
   `MPDO/PhysicalSectorCoordinateTransport.lean`,
   `MPDO/NonCartesianActiveSectorObstruction.lean`,
   `MPDO/NonCartesianActiveSectorRigidity.lean` (two extractions), and
@@ -769,8 +769,8 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPU/CompositionRanks.lean` performs the distributivity step on
   abstract scalar functions.  Its proof descends through all eight sums by
   explicit congruences and closes the scalar identity with `ac_rfl`; the
-  concrete source-tensor $u$ proof now instantiates this lemma without constructing a
-  distributed matrix-entry expression.
+  concrete auxiliary $Y_1$--$X_2$ mixed-kernel proof now instantiates this
+  lemma without constructing a distributed matrix-entry expression.
 - **Performance:** the cached target build before the refactor reported 25 s.
   Profiler-reported cumulative module-elaboration totals fell from 16,129,355
   heartbeats before the refactor to 13,899,455 after it, a 13.8% reduction.
@@ -790,7 +790,7 @@ abstracted — record why, so it is not re-proposed).
 ### Reversing `List.ofFn` by `Fin.rev`
 - **Seen:** five former proofs in `Kraus.Blocking`, `Kraus.Wielandt.RankOne.Construction`,
   `Kraus.Wielandt.RectangularSpan.Basic`, `MPS.MPDO.Defs`, and
-  `MPS.MPU.SourceUReflectedKernel`.
+  `MPS.MPU.ReflectedTransferKernel`.
 - **Abstraction:** `List.ofFn_reverse` in `QICLean/Kraus/Word.lean` (QICLean dependency).
 - **Result:** all five consumers use the shared theorem directly.
 

@@ -5,18 +5,20 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Word
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.SourceUContraction
+import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SuppliedWitnessReblocking
 
 /-!
-# Reflected open-tail contraction for the source tensor u
+# Reflected transfer and supplied-contraction kernels
 
 This file exposes the doubled-bond reflection and an independent spatial
 reindexing of blocked words, then transports the supplied transfer witnesses
-to the output-layer insertion used by the sandwiched open-tail coefficient in
-arXiv:1703.09188, Lemma III.7 and its proof in Section III.B
-(lines 536--557).  The transfer proof uses the doubled-bond swap; the blocked-word
-reversal records a separate spatial coordinate and is not used in that proof.
+to an output-layer insertion formerly used in an auxiliary mixed-kernel
+open-tail comparison. The transport identities are source-supported
+ingredients from arXiv:1703.09188, Lemma III.7 and its proof in Section III.B
+(lines 536--557), but they do not establish a contraction for the paper gate
+$u$. The transfer proof uses the doubled-bond swap; the blocked-word reversal
+records a separate spatial coordinate and is not used in that proof.
 The final sandwiched finite-sum collapse is separate from these transport
 identities.
 -/

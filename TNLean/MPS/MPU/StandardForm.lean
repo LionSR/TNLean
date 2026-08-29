@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalBlocking
-import TNLean.MPS.MPU.SourceUOpenTail
+import TNLean.MPS.MPU.MixedKernelOpenTail
 
 /-!
 # Auxiliary mixed-cut open-leg two-site equations
@@ -25,7 +25,7 @@ variable {d D : ℕ} (U : MPOTensor d D)
 namespace SourceFactors
 
 /-- The concrete two-site block factors through $X_1$--$(Y_1$--$X_2)$--$Y_2$ for any supplied
-source factorization. The decoded source row has order `(l, r)`.
+source factorization. The decoded mixed-kernel row has order `(l, r)`.
 
 Auxiliary consequence of $M_1=X_1Y_1$ and $M_2=X_2Y_2$; this is not a
 CPSV17 standard-form gate identity. -/
@@ -43,7 +43,7 @@ theorem blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂
 
 /-- The reflected open two-site product factors through $X_2$--$(X_1$--$Y_2)$--$Y_1$ for any
 supplied source factorization. The physical row of the mixed kernel is `(j₂, j₁)`, and its
-source column is `(r, l)`.
+kernel column is `(r, l)`.
 
 Auxiliary consequence of $M_1=X_1Y_1$ and $M_2=X_2Y_2$; this is not a
 CPSV17 standard-form gate identity. -/
@@ -74,7 +74,7 @@ theorem mul_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁
   ring
 
 /-- The concrete two-site block has the reflected $X_2$--$(X_1$--$Y_2)$--$Y_1$ form for any
-supplied source factorization. Its physical row and source column retain the
+supplied source factorization. Its physical row and kernel column retain the
 orders `(j₂, j₁)` and `(r, l)`.
 
 Auxiliary consequence of $M_1=X_1Y_1$ and $M_2=X_2Y_2$; this is not a
@@ -95,7 +95,7 @@ theorem blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁
 end SourceFactors
 
 /-- The concrete two-site block factors through the auxiliary $X_1$--$(Y_1$--$X_2)$--$Y_2$ form.
-The decoded ket and bra pairs retain the source tensor's row order `(l, r)`.
+The decoded ket and bra pairs retain the mixed kernel's row order `(l, r)`.
 
 Auxiliary consequence of $M_1=X_1Y_1$ and $M_2=X_2Y_2$; this is not a
 CPSV17 standard-form gate identity. -/
@@ -113,7 +113,7 @@ theorem blockTwo_apply_eq_sum_sourceX₁_mul_sourceY₁X₂_mul_sourceY₂
 
 /-- The reflected open two-site product factors through the auxiliary
 $X_2$--$(X_1$--$Y_2)$--$Y_1$ form. The physical row of the mixed kernel is
-explicitly `(j₂, j₁)`, and its source column is explicitly `(r, l)`.
+explicitly `(j₂, j₁)`, and its kernel column is explicitly `(r, l)`.
 
 Auxiliary consequence of $M_1=X_1Y_1$ and $M_2=X_2Y_2$; this is not a
 CPSV17 standard-form gate identity. -/

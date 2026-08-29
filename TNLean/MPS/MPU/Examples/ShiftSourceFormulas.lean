@@ -371,7 +371,7 @@ def shiftExampleU₃SourceY₁X₂SwapShuffle (d : ℕ) :
   left_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
   right_inv x := by rcases x with ⟨⟨_, _⟩, ⟨_, _⟩⟩; rfl
 
-/-- Composite-site coordinates for the source row of the auxiliary
+/-- Composite-site coordinates for the row of the auxiliary
 $Y_1$--$X_2$ kernel for the third shift.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:SF_u1_u3`
@@ -384,7 +384,7 @@ noncomputable def shiftExampleU₃SwapSourceY₁X₂RowEquiv (d : ℕ) [NeZero d
       (Equiv.prodCongr (shiftExampleU₃LeftRankEquiv d)
         (shiftExampleU₃RightRankEquiv d))
 
-/-- Composite-site coordinates for the source column of the auxiliary
+/-- Composite-site coordinates for the column of the auxiliary
 $X_1$--$Y_2$ kernel for the third shift.
 
 Auxiliary computation near arXiv:1703.09188, equation `eq:SF_u1_u3`

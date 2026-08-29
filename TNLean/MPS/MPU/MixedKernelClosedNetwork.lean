@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Simple
-import TNLean.MPS.MPU.SourceURangeTransport
+import TNLean.MPS.MPU.MixedKernelRangeTransport
 
 /-!
 # Closed networks for the $Y_1$--$X_2$ mixed kernel

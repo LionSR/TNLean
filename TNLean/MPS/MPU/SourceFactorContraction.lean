@@ -8,7 +8,7 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SourceFactors
 
 /-!
-# Algebraic identities for source-cut contractions
+# Source-factor and physical-adjoint contraction identities
 
 This module records the algebraic identities used before the finite-sum contraction in
 arXiv:1703.09188, Lemma `lemuisometry` (lines 545--557). It records how the physical adjoint

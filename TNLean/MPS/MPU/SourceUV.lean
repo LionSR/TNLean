@@ -262,7 +262,8 @@ theorem trace_mul_eq_sourceY₁X₂_mul_sourceX₁Y₂_swap
     (i₁ i₂ j₁ j₂ : Fin d) :
     Matrix.trace (U i₁ j₁ * U i₂ j₂) =
       ∑ lr : Fin ℓ[U] × Fin r[U],
-        sourceY₁X₂ U ρ hρ lr (i₁, i₂) * sourceX₁Y₂ U ρ hρ (j₁, j₂) (lr.2, lr.1) := by
+        sourceY₁X₂ U ρ hρ lr (i₁, i₂) *
+          sourceX₁Y₂ U ρ hρ (j₁, j₂) (lr.2, lr.1) := by
   classical
   simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, sourceY₁X₂, sourceX₁Y₂,
     Finset.mul_sum, Finset.sum_mul]
@@ -317,7 +318,8 @@ theorem mpo_two_pair_entry_eq_sourceY₁X₂_mul_sourceX₁Y₂_swap
     (i₁ i₂ j₁ j₂ : Fin d) :
     mpo U 2 ![i₁, i₂] ![j₁, j₂] =
       ∑ lr : Fin ℓ[U] × Fin r[U],
-        sourceY₁X₂ U ρ hρ lr (i₁, i₂) * sourceX₁Y₂ U ρ hρ (j₁, j₂) (lr.2, lr.1) := by
+        sourceY₁X₂ U ρ hρ lr (i₁, i₂) *
+          sourceX₁Y₂ U ρ hρ (j₁, j₂) (lr.2, lr.1) := by
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
   simpa only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil,
     Matrix.mul_one, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_succ,
@@ -327,9 +329,9 @@ theorem mpo_two_pair_entry_eq_sourceY₁X₂_mul_sourceX₁Y₂_swap
 /-- The exact two-site periodic MPO factorization through the auxiliary mixed kernels.
 
 The two-site physical configurations are reindexed by `finTwoArrowEquiv`. The
-columns of $v$ have order $r\times\ell$, so `Equiv.prodComm` explicitly swaps
-them to the $\ell\times r$ order used by the rows of $u$. This is the one-site
-translation/bond swap visible in the paper figures.
+columns of the auxiliary $X_1$--$Y_2$ kernel have order $r\times\ell$, so
+`Equiv.prodComm` explicitly swaps them to the $\ell\times r$ order used by
+the rows of the auxiliary $Y_1$--$X_2$ kernel.
 
 Algebraic mixed-cut factorization; not the CPSV17/FBC25 source gates. -/
 theorem mpo_two_reindex_eq_sourceY₁X₂_transpose_mul_sourceX₁Y₂_swap_transpose

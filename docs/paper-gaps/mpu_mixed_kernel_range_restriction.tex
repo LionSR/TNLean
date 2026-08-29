@@ -28,9 +28,9 @@ surjective. The available isometry relation is only
 \begin{align}
     X_2^\dagger X_2
         &= 1.
-    \label{eq:mpu_sourceu_range_restriction_source_isometry}
+    \label{eq:mpu_mixed_kernel_range_restriction_source_isometry}
 \end{align}
-Equation~\ref{eq:mpu_sourceu_range_restriction_source_isometry} does not imply
+Equation~\ref{eq:mpu_mixed_kernel_range_restriction_source_isometry} does not imply
 the ambient coisometry relation $X_2X_2^\dagger=1$.
 
 \section{Range-restricted interpretation}
@@ -43,10 +43,10 @@ moving the cut. The two projection identities used in this closed network are
 \begin{align}
     X_1X_1^\dagger W_\rho M_1
         &= M_1,
-    \label{eq:mpu_sourceu_range_restriction_first_range_identity}\\
+    \label{eq:mpu_mixed_kernel_range_restriction_first_range_identity}\\
     X_2X_2^\dagger M_2
         &= M_2.
-    \label{eq:mpu_sourceu_range_restriction_second_range_identity}
+    \label{eq:mpu_mixed_kernel_range_restriction_second_range_identity}
 \end{align}
 These identities follow from the source-cut factorizations and the recovery
 formulas for $Y_1$ and $Y_2$. They assert that the relevant source-cut factors
@@ -75,8 +75,8 @@ The forward kernel and its output-layer expression are formalized by
 \leanid{MPOTensor.sourceY₁X₂ForwardKernel} and
 \leanid{MPOTensor.sourceY₁X₂ForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}.
 The range identities in
-Eqs.~\ref{eq:mpu_sourceu_range_restriction_first_range_identity} and
-\ref{eq:mpu_sourceu_range_restriction_second_range_identity} are formalized by
+Eqs.~\ref{eq:mpu_mixed_kernel_range_restriction_first_range_identity} and
+\ref{eq:mpu_mixed_kernel_range_restriction_second_range_identity} are formalized by
 \leanid{MPOTensor.sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁} and
 \leanid{MPOTensor.sourceX₂_mul_conjTranspose_mul_sourceCutM₂}, respectively.
 The fully expanded normalized metric is formalized by

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.SourceUOpenTail
+import TNLean.MPS.MPU.MixedKernelOpenTail
 
 /-!
 # Forward open-tail identities for the $Y_1$--$X_2$ mixed kernel
@@ -25,7 +25,7 @@ apply only to the source-cut matrices $M_1$ and $M_2$.
 is read as a contraction of the complete external network, not as an ambient
 matrix identity. This clarification and the fact that the historical
 closed-network comparison is not part of the paper-gate proof are recorded in
-`docs/paper-gaps/mpu_sourceu_range_restriction.tex`.
+`docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder

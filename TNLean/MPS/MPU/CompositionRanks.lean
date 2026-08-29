@@ -11,9 +11,9 @@ import TNLean.MPS.MPU.SimpleBlocking
 
 This file proves the four-site source-rank bounds used in the composition part
 of the Matrix Product Unitary index theorem.  The argument is algebraic: the
-two-site source factorizations of the two factors give a factorization of each
-source cut of the four-site product tensor through the legs crossed by the
-paper's diagonal cut.
+two-site factorizations through the auxiliary mixed kernels of the two factors
+give a factorization of each source cut of the four-site product tensor through
+the legs crossed by the paper's diagonal cut.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -175,9 +175,10 @@ private theorem sum_eight_cut_factorization
   refine Finset.sum_congr rfl fun y _ => ?_
   ac_rfl
 
-/-- The left rectangular factor of the generic four-site product cut.  With
-the source-tensor $u$ local factors it is the Chapter 28 matrix $A_{1,4}$;
-with the reflected source-tensor $v$ local factors it is $A_{2,4}$.
+/-- The left rectangular factor of the generic four-site product cut. With the
+local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
+matrix $A_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
+$A_{2,4}$.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutLeft
@@ -194,9 +195,10 @@ private noncomputable def compositionCutLeft
       ∑ t : ι₂, ∑ y : Fin E₂,
         L₂ (c, K₁) t * R₂ t (J, y) * L₂ (y, K₂) rs.2
 
-/-- The right rectangular factor of the generic four-site product cut.  With
-the source-tensor $u$ local factors it is the Chapter 28 matrix $B_{1,4}$;
-with the reflected source-tensor $v$ local factors it is $B_{2,4}$.
+/-- The right rectangular factor of the generic four-site product cut. With the
+local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
+matrix $B_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
+$B_{2,4}$.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutRight

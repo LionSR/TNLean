@@ -449,7 +449,7 @@ noncomputable def leftShiftSourceFactors (d : ℕ) [NeZero d] :
     hRZ, hP.1⟩
 
 /-- Entry formula for the auxiliary $Y_1$--$X_2$ kernel supplied by the bond-one identity
-factors.  The source row is written in the paper order (left, right).
+factors. The kernel row has order (left, right).
 
 Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
 arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
@@ -462,8 +462,8 @@ theorem sourceY₁X₂_identitySourceFactors_apply (d : ℕ) (l r i₁ i₂ : Fi
     simp [SourceFactors.sourceY₁X₂_apply, identitySourceFactors,
       Matrix.reindex_apply, Matrix.one_apply, hr, hl, ne_comm]
 
-/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the bond-one identity
-factors.  Its source column has the paper order (right, left).
+/-- Entry formula for the auxiliary $X_1$--$Y_2$ kernel supplied by the
+bond-one identity factors. Its kernel column has order (right, left).
 
 Formalization coordinate identity used to derive equation `eq:SF_u1_u3` in
 arXiv:1703.09188, lines 2009--2016; the paper does not state this intermediate
