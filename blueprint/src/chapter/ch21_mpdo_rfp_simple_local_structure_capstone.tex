@@ -2666,30 +2666,35 @@ This is the calculation in
 \end{proof}
 
 % The displayed conjunction matches the hypotheses used in CPSV16
-% Appendix C.2, lines 1628--1782. The finite simultaneous word span and the
-% local orthogonal-sum entropy calculation are project-derived bridges.
+% Appendix C.2, lines 1628--1782. The simultaneous one-letter span and the
+% local orthogonal-sum entropy calculation are proved directly in TNLean.
 \begin{theorem}[Ambient neighboring-trace counterexample properties]
     \label{thm:mpdo_neighboring_trace_obstruction_ambient_properties}
     \lean{MPOTensor.NeighboringTraceObstructionAmbientCounterexample.%
-        exists_ambient_standing_simpleBiCF_package}
+        exists_ambient_simpleBiCF_neighboringTraceObstruction}
     \leanok
     \uses{def:mpdo_simple_cf_tensor, def:sector_bnt_cf, def:is_sal,
         def:mpo_physical_trace_transfer}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
     with a two-representative horizontal canonical presentation. The
     representatives $A_0,A_1$ are normal and left-canonical, have bond
-    dimensions two and one, and each occurs once. Their coefficients are
-    $\mu$ and $1$, where
+    dimensions two and one, and each occurs once. The bond-two representative
+    is one-site injective. Their coefficients are $\mu$ and $1$, where
     $0<|\mu|<1$. In particular, every coefficient has modulus at most one and
-    the second coefficient is the single global unit-modulus coefficient. The
-    embedded four-letter
+    the second coefficient has modulus one. The embedded four-letter
     obstruction is virtually gauge equivalent to $\mu A_0$.
 
-    The representatives form a BNT presentation in biCF. The tensor $K$ is the
-    exact weighted direct sum $\mu A_0\oplus A_1$ with the identity global
-    virtual gauge. It is simple, generates positive semidefinite periodic
-    operators with strictly positive trace at every positive length, satisfies
-    the strong area law, and has literal zero correlation length,
+    The representatives have simultaneous one-letter span
+    \begin{align}
+        \operatorname{span}\{(A_0^i,A_1^i):1\leq i\leq25\}
+        =M_2(\mathbb C)\times\mathbb C.
+        \notag
+    \end{align}
+    Thus the presentation is in biCF. The tensor $K$ is the exact weighted
+    direct sum $\mu A_0\oplus A_1$ with the identity global virtual gauge. It
+    is simple, generates positive semidefinite periodic operators with
+    strictly positive trace at every positive length, satisfies the strong
+    area law, and has literal zero correlation length,
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
         \notag
@@ -2704,13 +2709,13 @@ This is the calculation in
 
 \begin{proof}\leanok
     \uses{thm:mpdo_neighboring_trace_obstruction_prepared_two_block_bnt,
-        thm:sharp_bnt_block_separation, rem:word_tuple_span_top,
         thm:mpdo_local_orthogonal_sum_sal}
-    Use the prepared obstruction and terminal blocks. Their normalized BNT
-    form has a finite simultaneous word span by
-    Theorem~\ref{thm:sharp_bnt_block_separation}; the separation property in
-    Remark~\ref{rem:word_tuple_span_top} gives biCF. Both representatives are
-    normal, and the coefficients give the stated global normalization.
+    Use the prepared obstruction and terminal blocks. The obstruction slices
+    span $M_2(\mathbb C)$ and vanish on the terminal coordinate, whereas the
+    terminal block equals one on that coordinate. Hence the pairs of one-site
+    slices span $M_2(\mathbb C)\times\mathbb C$ in one letter. Both
+    representatives are normal, and the coefficients give the stated global
+    normalization.
 
     At every positive length, the ambient periodic operator is the sum of the
     two positive sector operators. Their complementary supports give the local
@@ -2758,7 +2763,7 @@ This is the calculation in
 \end{proof}
 
 % **False source result:** Proposition C.12 is contradicted under the complete
-% biCF, simple-canonical, MPDO, SAL, literal-ZCL, and
+% simultaneous-one-letter-span, simple-canonical, MPDO, SAL, literal-ZCL, and
 % line-246 normalization hypotheses. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[The printed absorbed-representative structure assertion is false]
@@ -2771,13 +2776,15 @@ This is the calculation in
         def:mpdo_physical_sector_factorization,
         def:mpdo_neighboring_trace_factorization}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
-    with two normal left-canonical representatives $A_0,A_1$ forming a BNT
-    presentation in biCF. The embedded four-letter obstruction is virtually
-    gauge equivalent to $\mu A_0$. Each
+    with two normal left-canonical representatives $A_0,A_1$ whose one-site
+    matrices simultaneously span $M_2(\mathbb C)\times\mathbb C$. The first
+    representative is one-site injective, and the embedded four-letter
+    obstruction is virtually gauge equivalent to $\mu A_0$. Each
     representative occurs once, with coefficients $\mu$ and $1$, where
-    $0<|\mu|<1$; hence $1$ is the single global unit-modulus coefficient. The
-    tensor has simple canonical form, generates positive semidefinite periodic
-    operators with strictly positive trace at every positive length, satisfies
+    $0<|\mu|<1$; hence every coefficient has modulus at most one and the second
+    has modulus one. The tensor has simple canonical form, generates positive
+    semidefinite periodic operators with strictly positive trace at every
+    positive length, satisfies
     the strong area law, and obeys
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
