@@ -760,8 +760,7 @@
         exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry}
     \leanok
     \uses{def:injective, def:mpdo_physical_sector_factorization,
-        def:mpdo_neighboring_trace_factorization,
-        thm:mpdo_isometric_physical_embedding}
+        def:mpdo_neighboring_trace_factorization}
     Let $\mathcal K$ be injective, and suppose that the joint column support
     of its physical slices is the whole one-site space,
     $\Pi_{\mathcal K}=\Id_d$. Let $V:\C^d\to\C^e$ be an isometry and put
@@ -770,8 +769,9 @@
          & =\sum_{p,q}V_{i,p}\overline{V_{j,q}}\mathcal K^{pq}.
         \notag
     \end{align}
-    If $\mathcal K_V$ admits a physical-sector factorization whose neighboring
-    operators satisfy
+    If $\mathcal K_V$ admits a physical-sector factorization for which there
+    exist families $(a_k)_k$ and $(b_h)_h$ of real numbers such that the
+    neighboring operators satisfy
     \begin{align}
         \eta_{k,h}      & \geq 0,
         \notag                     \\
@@ -791,6 +791,7 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_isometric_physical_embedding,
+        thm:mpdo_active_physical_sector_restriction,
         thm:mpdo_active_physical_sector_neighboring_positivity,
         thm:mpdo_neighboring_trace_factorization_presentation_invariant}
     The isometric embedding theorem gives
