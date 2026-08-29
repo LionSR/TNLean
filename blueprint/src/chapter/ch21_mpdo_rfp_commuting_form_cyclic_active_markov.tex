@@ -1270,14 +1270,14 @@
     \lean{MPOTensor.EtaLocalStructureData.hasGSNNCHForm}
     \lean{MPOTensor.hasGSNNCHForm_of_etaLocalStructure}
     \leanok
-    \uses{thm:mpdo_eta_local_structure_has_commuting_bond_product, thm:mpdo_commuting_bond_product_has_gsnnch_form}
+    \uses{thm:mpdo_eta_local_structure_has_commuting_form, thm:mpdo_commuting_form_data_has_gsnnch_form}
     The single positive bond determined by the $\eta$-local structure gives
     the one-sector instance of the explicit GSNNCH decomposition.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the one-sector construction to the single-bond product at every
-    chain length.
+    At each chain length, apply the one-sector construction directly to the
+    commuting-form data carried by the $\eta$-local structure.
 \end{proof}
 
 \begin{theorem}[Injective SAL tensors generate GSNNCH states]

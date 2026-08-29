@@ -70,9 +70,10 @@ operator at every length $N\geq2$.\footnote{\raggedright Formal structure:
 \leanid{MPOTensor.IsGSNNCHAt}, \leanid{MPOTensor.IsGSNNCH}, and
 \leanid{MPOTensor.normalizedMPO}.}
 
-The auxiliary single-bond presentation is stored separately.\footnote{\raggedright
-Formal structure: \leanid{MPOTensor.CommutingBondProductData}.} It has the
-form
+The auxiliary single-bond presentation is the realization relation for
+commuting-form data.\footnote{\raggedright Formal structure:
+\leanid{MPOTensor.CommutingFormData}. Formal predicate:
+\leanid{MPOTensor.CommutingFormData.Realizes}.} It has the form
 \begin{align}
     \rho^{(N)}
         &=c_N\prod_{j=1}^N\tau_j(B_N),
