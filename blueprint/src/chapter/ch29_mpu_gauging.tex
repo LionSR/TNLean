@@ -329,6 +329,134 @@ an MPU representation.
     follow.
 \end{proof}
 
+\begin{definition}[Generalized coboundary and cocycle]
+    \label{def:mpug_generalized_cocycle}
+    \lean{TNLean.Algebra.ActionTensorGauge.coboundary,
+        TNLean.Algebra.LSymbol.IsGeneralizedCocycle}
+    \leanok
+    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    Let $\chi\colon G\times\mathsf X\to\C^\times$ be block-dependent. Its
+    generalized coboundary is
+    \begin{align}
+        (d\chi)^x_{g,h}
+        & =\frac{\chi^{h x}_g\chi^x_h}{\chi^x_{gh}}.
+        \label{eq:mpug_generalized_coboundary}
+    \end{align}
+    A function $\Omega\colon\mathsf X\times G^2\to\C^\times$ is a
+    generalized $2$-cocycle when
+    \begin{align}
+        \Omega^x_{g,hk}\Omega^x_{h,k}
+        & =\Omega^{k x}_{g,h}\Omega^x_{gh,k}.
+        \label{eq:mpug_generalized_cocycle}
+    \end{align}
+    These are the block-dependent coboundary and the equation $d\Omega=1$ in
+    \cite[lines~5908--5916 and Lemma~\texttt{lemma:G\_cocycle}]
+        {FrancoRubio2025MPUGauging}. No transitivity or finiteness assumption
+    is imposed on $\mathsf X$.
+    % Source anchor: arXiv:2502.20257, lines 5908--5916 and lemma:G_cocycle.
+\end{definition}
+
+\begin{definition}[Regular-action matrices]
+    \label{def:mpug_generalized_regular_matrices}
+    \lean{TNLean.Algebra.LSymbol.regularMatrix}
+    \leanok
+    \uses{def:mpug_generalized_cocycle}
+    Suppose that $G$ is finite. On the group algebra $\C G$, define
+    $X^x_g$ by
+    \begin{align}
+        X^x_g\ket{k}
+        & =\Omega^{k^{-1}x}_{g,k}\ket{gk}.
+        \label{eq:mpug_generalized_regular_matrix}
+    \end{align}
+    This is the regular-action matrix in
+    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, lines 5938--5942.
+\end{definition}
+
+\begin{theorem}[Generalized projective multiplication law]
+    \label{thm:mpug_generalized_regular_multiplication}
+    \lean{TNLean.Algebra.LSymbol.regularMatrix_mul}
+    \leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_generalized_regular_matrices}
+    If $\Omega$ satisfies~(\ref{eq:mpug_generalized_cocycle}), then
+    \begin{align}
+        X^{h x}_gX^x_h
+        & =\Omega^x_{g,h}X^x_{gh}.
+        \label{eq:mpug_generalized_regular_multiplication}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_cocycle,
+        def:mpug_generalized_regular_matrices}
+    Apply the left side to $\ket{k}$. Its coefficient is
+    \begin{align}
+        \Omega^{(hk)^{-1}h x}_{g,hk}\Omega^{k^{-1}x}_{h,k}
+        & =\Omega^{k^{-1}x}_{g,hk}\Omega^{k^{-1}x}_{h,k} \\
+        & =\Omega^x_{g,h}\Omega^{k^{-1}x}_{gh,k},
+    \end{align}
+    where the last equality is
+    (\ref{eq:mpug_generalized_cocycle}) at the block $k^{-1}x$.
+    Formula~(\ref{eq:mpug_generalized_regular_matrix}) now gives
+    (\ref{eq:mpug_generalized_regular_multiplication}).
+\end{proof}
+
+\begin{theorem}[Finite-group power trivialization]
+    \label{thm:mpug_generalized_cocycle_power}
+    \lean{TNLean.Algebra.LSymbol.regularMatrix_eq_permutation_mul_diagonal,
+        TNLean.Algebra.LSymbol.regularDeterminant_ne_zero,
+        TNLean.Algebra.LSymbol.determinantCochain,
+        TNLean.Algebra.LSymbol.pow_card_eq_coboundary_apply,
+        TNLean.Algebra.LSymbol.pow_card_eq_coboundary}
+    \leanok
+    \uses{def:mpug_generalized_cocycle}
+    Let $G$ be finite and let $\Omega$ be a generalized $2$-cocycle. Then
+    $\Omega^{|G|}$ is a generalized coboundary. More precisely, with
+    \begin{align}
+        \chi^x_g
+        & =\det X^x_g,
+        \label{eq:mpug_generalized_determinant_cochain}
+    \end{align}
+    one has
+    \begin{align}
+        \left(\Omega^x_{g,h}\right)^{|G|}
+        & =\frac{\det X^{h x}_g\det X^x_h}{\det X^x_{gh}}
+         =(d\chi)^x_{g,h}.
+        \label{eq:mpug_generalized_power_coboundary}
+    \end{align}
+    This is
+    \cite[Lemma~\texttt{lemma:G\_cocycle}]{FrancoRubio2025MPUGauging}.
+
+    \textbf{Local fix (determinant numerator).}
+    The source repeats $\det X^x_g$ as the second numerator factor. Taking
+    determinants in~(\ref{eq:mpug_generalized_regular_multiplication}) gives
+    the corrected factor $\det X^x_h$ displayed in
+    (\ref{eq:mpug_generalized_power_coboundary}).
+    % Local fix: docs/paper-gaps/fbc25_generalized_cocycle_determinant_typo.tex.
+    % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5948.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_generalized_regular_matrices,
+        thm:mpug_generalized_regular_multiplication}
+    Write $P_{g^{-1}}$ for the permutation matrix of left multiplication by
+    $g^{-1}$ and
+    $D^x_g=\operatorname{diag}(\Omega^{k^{-1}x}_{g,k})_{k\in G}$.
+    The row-to-column convention for permutation matrices gives
+    \begin{align}
+        X^x_g
+        & =P_{g^{-1}}D^x_g.
+    \end{align}
+    Since $\det P_{g^{-1}}\in\{1,-1\}$ and every diagonal entry of $D^x_g$
+    is nonzero, $\det X^x_g\ne0$. Thus
+    (\ref{eq:mpug_generalized_determinant_cochain}) takes values in
+    $\C^\times$. Taking determinants in
+    (\ref{eq:mpug_generalized_regular_multiplication}) and using
+    $\det(cX)=c^{|G|}\det X$ gives
+    (\ref{eq:mpug_generalized_power_coboundary}).
+\end{proof}
+
 \begin{definition}[Inversion cochains]
     \label{def:mpug_inversion_cochains}
     \lean{TNLean.Algebra.ScalarOneCochain,
