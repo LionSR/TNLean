@@ -189,6 +189,7 @@ import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCounterexample
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction
 import TNLean.MPS.MPDO.NonCartesianActiveSectorRigidity
+import TNLean.MPS.MPDO.NonCartesianAmbientSectorBlocks
 import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.NormalizedMPOProportionality

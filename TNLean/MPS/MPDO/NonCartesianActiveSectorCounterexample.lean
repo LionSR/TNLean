@@ -253,22 +253,26 @@ lemma exists_toMPSTensor_apply_ne_zero :
     rightPairing, MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat] at hentry
 
-/-- The candidate is a nonzero scalar multiple of a CPSV normal tensor.
+/-- The candidate is a nonzero scalar multiple of a normal tensor whose
+Perron-gauged representative is injective and left-canonical.
 
 The scalar is the positive square root of the Perron value of the unnormalized
 completely positive map. Algebraic one-site injectivity supplies primitivity;
-after the scalar normalization, a Perron gauge gives a left-canonical
-representative, and normal-tensor status is transported back through that
-gauge. The exact test-matrix estimate above gives the one-sector bound
+after scalar normalization, the already-constructed Perron gauge gives the
+representative `B`. The exact test-matrix estimate above gives
 `0 < |μ| < 1`.
 
-This is a counterexample helper for arXiv:1606.00608, lines 224--246.  It does
-not establish the source's ambient convention that at least one coefficient
-among all simple-biCF sectors has modulus one. -/
-theorem exists_normalTensor_scalar_representation :
-    ∃ (A : MPOTensor 4 2) (mu : ℂ),
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by arXiv:1606.00608. The paper's lines 217--246, 1628--1665, and
+1740--1782 provide only the normal-block, simple-biCF, and per-block reduction
+context. -/
+private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
+    ∃ (A : MPOTensor 4 2) (mu : ℂ) (B : MPSTensor (4 * 4) 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
-        A.toMPSTensor.IsNormalTensor := by
+        MPSTensor.GaugeEquiv A.toMPSTensor B ∧
+        Kraus.IsInjective B ∧ MPSTensor.IsLeftCanonical B ∧
+        MPSTensor.IsNormalTensor B ∧
+        MPSTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
   let _ : NeZero 2 := ⟨by omega⟩
   have hNormal : Kraus.IsNormal tensor.toMPSTensor :=
     Kraus.IsInjective.isNormal tensor_isInjective
@@ -338,9 +342,55 @@ theorem exists_normalTensor_scalar_representation :
   have hGaugeNormalTensor :
       MPSTensor.IsNormalTensor (Kraus.tpGauge A.toMPSTensor sigma) :=
     MPSTensor.isNormalTensor_of_isNormal_leftCanonical _ hGaugeNormal hLeft
-  have hANormalTensor : A.toMPSTensor.IsNormalTensor :=
-    hGaugeNormalTensor.of_gaugeEquiv hGauge
-  exact ⟨A, mu, hmu, hmu_norm, hrecover, hANormalTensor⟩
+  have hGaugeInjective :
+      Kraus.IsInjective (Kraus.tpGauge A.toMPSTensor sigma) :=
+    MPSTensor.isInjective_of_gaugeEquiv hAinj hGauge
+  have hTensorGauge :
+      MPSTensor.GaugeEquiv tensor.toMPSTensor
+        (mu • Kraus.tpGauge A.toMPSTensor sigma) := by
+    obtain ⟨X, hX⟩ := hGauge
+    refine ⟨X, fun i ↦ ?_⟩
+    have hrecoverMPS := congrFun (congrArg MPOTensor.toMPSTensor hrecover) i
+    change mu • Kraus.tpGauge A.toMPSTensor sigma i =
+      X * tensor.toMPSTensor i * X⁻¹
+    rw [hX i, hrecoverMPS]
+    change mu • (X * A.toMPSTensor i * X⁻¹) =
+      X * (mu • A.toMPSTensor i) * X⁻¹
+    simp only [Matrix.mul_smul, Matrix.smul_mul]
+  exact ⟨A, mu, Kraus.tpGauge A.toMPSTensor sigma, hmu, hmu_norm,
+    hrecover, hGauge, hGaugeInjective, hLeft, hGaugeNormalTensor, hTensorGauge⟩
+
+/-- The candidate has an injective, left-canonical normal representative with
+a nonzero coefficient of norm strictly below one and the required gauge
+relation after scalar absorption.
+
+This is project-derived auxiliary counterexample infrastructure, not a result
+asserted by arXiv:1606.00608. The paper's lines 217--246, 1628--1665, and
+1740--1782 provide only the normal-block, simple-biCF, and per-block reduction
+context. -/
+theorem exists_leftCanonical_normalTensor_scalar_representation :
+    ∃ (mu : ℂ) (B : MPSTensor (4 * 4) 2),
+      mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
+        MPSTensor.IsLeftCanonical B ∧ MPSTensor.IsNormalTensor B ∧
+        MPSTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
+  obtain ⟨_, mu, B, hmu, hmuNorm, _, _, hBInj, hBLeft, hBNormal,
+      hTensorGauge⟩ :=
+    exists_scalar_and_leftCanonical_normalTensor_representations
+  exact ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hTensorGauge⟩
+
+/-- The candidate is a nonzero scalar multiple of a normal tensor.
+
+This is the original companion statement obtained from the same normalized
+representative construction. It is project-derived auxiliary counterexample
+infrastructure, not a result asserted by arXiv:1606.00608. The paper's lines
+217--246, 1628--1665, and 1740--1782 provide only context. -/
+theorem exists_normalTensor_scalar_representation :
+    ∃ (A : MPOTensor 4 2) (mu : ℂ),
+      mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
+        A.toMPSTensor.IsNormalTensor := by
+  obtain ⟨A, mu, _, hmu, hmuNorm, hrecover, hGauge, _, _, hBNormal, _⟩ :=
+    exists_scalar_and_leftCanonical_normalTensor_representations
+  exact ⟨A, mu, hmu, hmuNorm, hrecover, hBNormal.of_gaugeEquiv hGauge⟩
 
 /-- Counterexample to the low-level implication asserting that injectivity,
 SAL, literal physical-trace idempotence, and being a nonzero scalar multiple
