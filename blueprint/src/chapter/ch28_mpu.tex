@@ -11904,6 +11904,94 @@ left/right order below agrees with the adjacent-pair convention in
     $\widehat{\mathcal R}_{2x+1}$ in $\mathcal A_{P_x}$.
 \end{proof}
 
+\begin{theorem}[Tripartite coordinates for consecutive pair images]
+    \label{thm:qca_consecutive_pair_tripartite_coordinates}
+    \lean{SpinChain.Config.disjointTripleEquiv,
+        SpinChain.tripartiteLocalAlgebraEquiv,
+        SpinChain.tripartiteLocalAlgebraEquiv_localInclusion_left,
+        SpinChain.tripartiteLocalAlgebraEquiv_localInclusion_right,
+        SpinChain.disjoint_leftPair_union_rightPair_rightPair_add_one,
+        SpinChain.leftPair_union_rightPair_union_rightPair_add_one}
+    \leanok
+    \uses{lem:qca_nearest_neighbor_pair_geometry, def:qca_bipartite_local_algebra_coordinates,
+        thm:qca_bipartite_local_algebra_inclusions}
+    Let
+    \begin{align}
+        T_x&=(L_x\cup P_x)\cup P_{x+1}
+        =\{2x-1,2x,2x+1,2x+2,2x+3,2x+4\}.
+    \end{align}
+    The regions $L_x,P_x,P_{x+1}$ are pairwise disjoint, and their ordered
+    configuration coordinates identify
+    \begin{align}
+        \mathcal A_{T_x}
+        &\cong M_{(\mathcal C_{L_x}\times\mathcal C_{P_x})
+          \times\mathcal C_{P_{x+1}}}(\mathbb C).
+    \end{align}
+    In these coordinates, the canonical inclusion from $L_x\cup P_x$ is
+    $X\mapsto X\otimes\mathbf 1$, while the canonical inclusion from
+    $P_x\cup P_{x+1}$ is $Y\mapsto\mathbf 1\otimes Y$, with the displayed
+    left--middle--right factor order.
+\end{theorem}
+
+\begin{proof}\leanok
+    Split configurations first across $(L_x\cup P_x),P_{x+1}$ and then
+    across $L_x,P_x$.  The two canonical local inclusions become the left
+    and right overlapping lifts after this product reassociation.  The
+    explicit formulas for the three pairs give their disjointness and the
+    six displayed sites.
+\end{proof}
+
+\begin{theorem}[Pairwise commutation of distinct support algebras]
+    \label{thm:qca_site_indexed_support_algebras_commute}
+    \lean{SpinChain.supportRegion,
+        SpinChain.supportRegion_even,
+        SpinChain.supportRegion_odd,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_supportedIn,
+        SpinChain.PropagatesWithin.supportRegion_disjoint_or_consecutive,
+        SpinChain.PropagatesWithin.embeddedOddSupportAlgebra_commute_embeddedEvenSupportAlgebra_add_one,
+        SpinChain.PropagatesWithin.embeddedSupportAlgebra_pairwise_commute}
+    \leanok
+    \uses{def:qca_site_indexed_support_algebras,
+        thm:qca_site_indexed_support_regions,
+        thm:qca_consecutive_pair_tripartite_coordinates,
+        thm:qca_overlapping_support_algebras_commute}
+    Let $Q_{2x}=L_x$ and $Q_{2x+1}=P_x$.  For $y\ne z$, the regions
+    $Q_y,Q_z$ are disjoint except when
+    \begin{align}
+        (y,z)&=(2x+1,2x+2)
+    \end{align}
+    for some $x$, or when this ordered pair is reversed.  Consequently,
+    distinct members of the canonically embedded family commute
+    elementwise:
+    \begin{align}
+        [X,Y]&=0,
+        &X\in\widehat{\mathcal R}_y,\quad
+        Y\in\widehat{\mathcal R}_z,\quad y\ne z.
+    \end{align}
+    This is the homogeneous fixed-$d$ specialization of the
+    consecutive/disjoint argument in
+    \cite[lines~1270--1274]{Gross2012IndexTheory}, using Lemma
+    \texttt{sppcomm} from lines~1221--1246; compare
+    \cite[lines~1174--1194]{Schumacher2004QCA}.  Cirac et al. provide the
+    homogeneous four-site localization at
+    \cite[lines~2313--2329]{Cirac2017MPU}, but do not state this commutation
+    result.  The site-dependent GNVW statement is not claimed; see
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Consecutive source pairs $E_x,E_{x+1}$ are disjoint, so their canonical
+    observables commute.  Multiplicativity of $\omega$ preserves this
+    equality.  Embed both finite images into $\mathcal A_{T_x}$ and use the
+    tripartite coordinates above; the two overlapping lifts commute.
+    Lemma~\ref{thm:qca_overlapping_support_algebras_commute}, in the order
+    $\operatorname{Spp}_{\mathrm R}(S_x)$ followed by
+    $\operatorname{Spp}_{\mathrm L}(S_{x+1})$, gives commutation of
+    $\mathcal R_{2x+1}$ and $\mathcal R_{2x+2}$.  Every remaining ordered
+    pair has disjoint physical supports, so disjoint locality applies; the
+    reversed exceptional pair follows by symmetry.
+\end{proof}
+
 Equation~(A1) in lines~2300--2306 of \cite{Cirac2017MPU} defines the
 local action associated with an MPU by eventual finite-chain conjugation.  In
 lines~2300--2306, eventual constancy is used to obtain a norm-preserving
