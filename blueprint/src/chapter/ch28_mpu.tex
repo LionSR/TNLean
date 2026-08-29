@@ -2917,7 +2917,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \uses{thm:mpu_mixed_y1x2_open_periodic_tail, thm:mpu_normalized_output_tail_coisometry}
     Assume $d>0$, let $\mathcal U$ be an MPU, and let $\rho$ be positive
     definite.  Expanding both $(K+2)$-site periodic entries through
-    $X_1,u,X_2$ and the open tail gives
+    $X_1,a,X_2$ and the open tail gives
     \begin{align}
         d^{-K}\sum_{\tau,j,\zeta}
         \mathcal A_{q;\tau,j,\zeta}
@@ -4656,35 +4656,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
     output words of length $K+2$. This is the supplied-fixed-pair form of the
-    range-insertion equality in \cite[Lemma~III.7]{Cirac2017MPU}.
+    complete-network equality in \cite[Lemma~III.7]{Cirac2017MPU}.
     % Source locator: paper_v2.tex, lines 545--557.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpu_reflected_transfer_power,
-        thm:mpu_matching_direct_block_contractions,
-        thm:mpu_supplied_witness_overlapping_reblocking,
-        thm:mpu_reflected_supplied_contractions,
-        thm:mpu_source_x1_range_projection,
-        thm:mpu_source_x2_range_projection,
-        thm:mpu_mixed_y1x2_gram_second_cut_metric,
-        thm:mpu_mixed_y1x2_terminal_boundary,
-        thm:mpu_normalized_output_tail_closed_trace}
-    Put $W=\mathcal U^{[K]}$. The reflected transfer-power identity, the direct
-    matching contractions, and supplied-witness reblocking give the aligned
-    direct and reflected contractions at lengths $K$ and $K+2$, with the same
-    fixed pair at both lengths. The block $W$ is used
-    only inside this contraction argument; the external source tensors are the
-    source-$u$ factors of $\mathcal U$.
+    Expand both external paper gates using
+    $u=Y_2\mathbin{-}Y_1$, retaining the two $Y_2$--$Y_1$ triangles and their
+    common virtual indices in the staggered order of
+    \cite[Figure~\texttt{II\_uUnitary.png} and
+        Lemma~III.7]{Cirac2017MPU}. The remaining source-facing obligation is
+    to insert $E^J=\lvert\rho)(\Phi\rvert$ into that exact network and contract
+    it directly to the displayed normalized $(K+2)$-site MPU sum.
 
-    Expand the ordinary Gram entry while retaining both external source-$u$
-    tensors and the full $\rho$-weighted boundary. Insert the first- and
-    second-cut range projections, but contract them only inside the closed
-    $(K+2)$-site network. The reflected contractions move the second-cut metric
-    through the overlapping windows. After every virtual and source index is
-    closed, the terminal boundary contraction gives the normalized output-first
-    trace displayed above. No separate identity for the second-cut metric or
-    either ambient range projection is asserted.
+    This staggered $Y_2$--$Y_1$ network identity is not yet formalized. The
+    checked $Y_1$--$X_2$ mixed-kernel Gram, range-projection, reflected-transfer,
+    and terminal-boundary lemmas concern a different network and do not supply
+    any step of this proof.
 \end{proof}
 
 \begin{theorem}[Complete reduced source-$v$ contraction]
@@ -4839,7 +4827,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_supplied_projector_simple2,
         thm:mpu_supplied_witness_overlapping_reblocking,
         thm:mpu_source_v_complete_reduced_contraction,
-        thm:mpu_mixed_kernels_two_site_factorization,
         thm:mpu_source_v_dressed_gram_cancel}
     Lemma~\ref{lem:mpu_admissible_source_u_isometry} gives
     $u^\dagger u=\Id$ before any of the four
@@ -4860,9 +4847,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     source-$u$ isometry, this gives $r\ell=d^2$.
 
     If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
-    If $u$ is unitary, the exact two-site factorization of $U^{(2)}$ and
-    unitarity of $U^{(2)}$ imply that $v$ is unitary. Finally, suppose that $v$
-    is unitary. Unitarity gives the dressed Gram identity, and
+    The implication from unitary $u$ to unitary $v$ still requires the exact
+    staggered CPSV17 factorization of $U^{(2)}$ through the paper gates
+    $u=Y_2\mathbin{-}Y_1$ and $v=X_1\mathbin{-}X_2$. That source-facing
+    factorization is not yet formalized. The checked factorization through the
+    auxiliary kernels $a=Y_1\mathbin{-}X_2$ and $b=X_1\mathbin{-}Y_2$ is a
+    different identity and is not used here.
+
+    Finally, suppose that $v$ is unitary. Unitarity gives the dressed Gram
+    identity, and
     Theorem~\ref{thm:mpu_source_v_complete_reduced_contraction} gives the
     supplied second contraction for $\mathcal U$. The same-witness implication
     in Theorem~\ref{thm:mpu_supplied_witness_overlapping_reblocking} supplies
@@ -7808,7 +7801,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{definition}
 
 \begin{theorem}[One-site supplied mixed kernels for $U_1$ and $U_3$]
-    \label{thm:threeMPU_supplied_source_uv_one}
+    \label{thm:threeMPU_supplied_mixed_kernels_one}
     \lean{MPOTensor.shiftExampleU₁SourceY₁X₂RowEquiv,
         MPOTensor.shiftExampleU₁SourceX₁Y₂ColumnEquiv,
         MPOTensor.shiftExampleU₃SourceY₁X₂SwapShuffle,
@@ -7866,7 +7859,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proof}
 
 \begin{theorem}[Auxiliary mixed kernels in the two-site factorizations of $U_2$]
-    \label{thm:threeMPU_U2_supplied_source_uv_two}
+    \label{thm:threeMPU_U2_supplied_mixed_kernels_two}
     \lean{MPOTensor.shiftExampleU₂SourceY₁X₂RowEquiv,
         MPOTensor.shiftExampleU₂SourceX₁Y₂ColumnEquiv,
         MPOTensor.shiftExampleU₂_sourceY₁X₂_fourSpin_apply,
@@ -7898,19 +7891,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_mixed_y1x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
     Write $B_2=\mathcal U_{2,2}$ for the actual two-site block and decode
     $I=(I_1,I_2)$ and $J=(J_1,J_2)$.  If $\pi$ is the four-spin physical
-    identification and $\iota_u,\iota_v$ are the two source-rank
+    identification and $\iota_a,\iota_b$ are the two source-rank
     identifications, the asserted open-leg equalities are
     \begin{align}
         (B_2)_{I,J;\alpha,\gamma}
          & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
         [\Id\otimes\mathbb S\otimes\Id]_
-        {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        {\iota_a^{-1}(l,r),\pi^{-1}(I_1,I_2)}
         (Y_2)_{l,(J_2,\gamma)},              \\
         (B_2)_{I,J;\alpha,\gamma}
          & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
         [(\mathbb S\otimes\mathbb S)
             (\Id\otimes\mathbb S\otimes\Id)]_
-        {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        {\pi^{-1}(J_2,J_1),\iota_b^{-1}(r,l)}
         (Y_1)_{r,(I_2,\gamma)}.
     \end{align}
     Write $s=d^{-1/2}$, so that $d\,s^2=1$.  In the product-rank coordinates,
@@ -7933,7 +7926,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proof}
 
 \begin{theorem}[Auxiliary mixed kernels in the two-site factorizations of $U_3$]
-    \label{thm:threeMPU_U3_supplied_source_uv_two}
+    \label{thm:threeMPU_U3_supplied_mixed_kernels_two}
     \lean{MPOTensor.shiftExampleU₃SourceY₁X₂RowEquiv,
         MPOTensor.shiftExampleU₃SourceX₁Y₂ColumnEquiv,
         MPOTensor.shiftExampleU₃_sourceY₁X₂_fourSpin_apply,
@@ -7963,19 +7956,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:threeMPU_supplied_source_factors, def:mpu_mixed_source_kernels,
         thm:mpu_mixed_y1x2_open_two_site, thm:mpu_mixed_x1y2_open_two_site}
     With $B_3=\mathcal U_{3,2}$ for the actual two-site block and the
-    corresponding identifications $\pi,\iota_u,\iota_v$, the exact equalities
+    corresponding identifications $\pi,\iota_a,\iota_b$, the exact equalities
     are
     \begin{align}
         (B_3)_{I,J;\alpha,\gamma}
          & =\sum_{r,l}(X_1)_{(\alpha,J_1),r}
         [(\Id\otimes\mathbb S\otimes\Id)
             (\mathbb S\otimes\mathbb S)]_
-        {\iota_u^{-1}(l,r),\pi^{-1}(I_1,I_2)}
+        {\iota_a^{-1}(l,r),\pi^{-1}(I_1,I_2)}
         (Y_2)_{l,(J_2,\gamma)},              \\
         (B_3)_{I,J;\alpha,\gamma}
          & =\sum_{l,r}(X_2)_{(\alpha,I_1),l}
         [\Id\otimes\mathbb S\otimes\Id]_
-        {\pi^{-1}(J_2,J_1),\iota_v^{-1}(r,l)}
+        {\pi^{-1}(J_2,J_1),\iota_b^{-1}(r,l)}
         (Y_1)_{r,(I_2,\gamma)}.
     \end{align}
     Again write $s=d^{-1/2}$, so that $d\,s^2=1$.  Reversing the two supplied

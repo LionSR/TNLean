@@ -128,7 +128,8 @@ theorem mul_apply_eq_sum_sourceX₂_mul_sourceX₁Y₂_reflected_mul_sourceY₁
     SourceFactors.mul_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁ U
       (sourceFactors U ρ hρ) i₁ j₁ i₂ j₂ α γ
 
-/-- The concrete two-site block in the reflected paper form $X_2$--$(X_1$--$Y_2)$--$Y_1$.
+/-- The concrete two-site block in the reflected auxiliary mixed-kernel form
+$X_2$--$(X_1$--$Y_2)$--$Y_1$.
 The standard product-index decoding exposes `(j₂, j₁)` and `(r, l)` without an
 implicit identification of either order.
 

@@ -10,16 +10,15 @@ import TNLean.MPS.MPU.TransferStabilization
 /-!
 # Matching blocked contractions and output-tail coisometry
 
-These results supply the two contraction ingredients for the later source-u
-Gram calculation. They do not identify that Gram matrix; the finite-sum
-reduction to the source factors is treated separately.
+These checked results supply blocked matching and global coisometry identities
+used by the auxiliary $Y_1$--$X_2$ mixed-kernel calculations. They do not
+identify a Gram matrix for the paper gate $u=Y_2\mathbin{-}Y_1$.
 
-These are the blocked matching and global coisometry contractions used in
-arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma `lemuisometry` (lines
-536--556). In the present open-leg conventions, the output-tail proof keeps the
-first two sites and traces the remaining tail using the global unitary equation
-`U Uᴴ = 1`; the figure instead traces the first tail and keeps the final two
-sites in the `Uᴴ U = 1` orientation.
+The source proof in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
+`lemuisometry` (lines 536--556), instead contracts the staggered paper-$u$
+network. That route remains unformalized. Similar blocked and output-tail
+shapes in this file must not be read as a formalization of the figure or as
+support for the paper source-$u$ isometry.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
