@@ -179,12 +179,10 @@ dimension once they are invertible.
     If the bond dimension is zero, take the unit scalar and identity gauge;
     the matrix relation is vacuous because the bond index is empty. Otherwise,
     install the resulting nonzero-dimension hypothesis and apply the companion
-    quantum-channel theorem
-    \leanid{Kraus.gaugePhaseEquiv_of_gauged_intertwining}, which combines the
-    two gauges with the intertwiner into a Kraus gauge-phase witness. Finally,
-    \leanid{MPSTensor.gaugePhaseEquiv_of_krausGaugePhaseEquiv} converts that
-    witness, including its relation orientation, to the local
-    \leanid{MPSTensor.GaugePhaseEquiv} conclusion.
+    quantum-channel gauged-intertwining theorem, which combines the two gauges
+    with the intertwiner into a Kraus gauge-phase witness. Finally, the local
+    conversion theorem translates that witness, including its relation
+    orientation, to gauge-phase equivalence of the original tensors.
 \end{proof}
 
 Combining these two lemmas proves Theorem~\ref{thm:modulus_one_gauge_irr_tp}:
