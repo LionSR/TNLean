@@ -90,7 +90,10 @@ instance (F : GroupFamily G d) (g : G) : NeZero (F.bondDim g) :=
 /-- An exact positive-length MPU representation by simple injective tensors.
 The operator identities are literal matrix equalities, with no scalar freedom.
 
-Source: arXiv:2502.20257, lines 1403--1407. -/
+The multiplication law comes from arXiv:2502.20257, lines 1403--1407. The
+identity law is a standard consequence retained explicitly in this bounded
+positive-length interface; it is compatible with the stronger bond-one identity
+tensor convention at lines 1933--1937. -/
 structure IsRepresentation [Group G] (F : GroupFamily G d) : Prop where
   isMPUPos : ∀ g, IsMPUPos (F.tensor g)
   isSimple : ∀ g, IsMPUSimple (F.tensor g)
