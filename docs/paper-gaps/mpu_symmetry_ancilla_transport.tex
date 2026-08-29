@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Identity-Ancilla Transport of MPU Symmetries}
+\author{}
+\date{2026-08-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source definition}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete define two MPU tensors to be
+equivalent under a symmetry when identity ancillas and a common blocking make
+them strictly equivalent under that symmetry
+\cite[lines~1356--1366]{Cirac2017MPU}. The definition does not state how an
+action on the original physical dimension determines an action after adjoining
+an identity ancilla.
+
+\section{Missing transport}
+
+For an ancilla dimension $x$, the canonical map on a length-$N$ chain is
+\begin{align}
+    \iota_x(X) & = R(X\otimes I_{x^N})R^{-1}.
+\end{align}
+When $x>1$, this is an embedding into the enlarged operator algebra, not an
+equivalence onto it. Consequently, an action specified at dimension $d$ can
+constrain the enlarged action on $\iota_x(X)$ but cannot determine its values
+on arbitrary operators at dimension $dx$. A strict-equivalence path can leave
+the image of $\iota_x$, so an action defined only on that image is insufficient.
+
+The formalized restricted definition therefore takes actions at every physical
+dimension as supplied data and assumes
+\begin{align}
+    \iota_x(\mathcal S_{d,N}(X))
+     & = \mathcal S_{dx,N}(\iota_x(X)).
+\end{align}
+It also fixes one ambient virtual bond dimension along the path.
+
+\section{Verdict}
+
+\textbf{Verdict: scope restriction.} The coherent-family definition is a
+well-defined strengthened variant, not the unrestricted source definition.
+The source-level definition remains unformalized until the intended actions on
+the full enlarged operator algebras are specified without adding the
+semiconjugacy hypothesis to the cited statement.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
