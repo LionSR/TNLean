@@ -297,7 +297,6 @@ def ScalarCocycle.representativesEquivMathlib (G : Type) [Group G] :
     rcases p with ⟨g, h⟩
     rfl
 
-set_option linter.style.haveILetI false in
 /-- A scalar cochain is a TNLean coboundary precisely when the corresponding
 additive cochain belongs to Mathlib's submodule of 2-coboundaries. -/
 theorem ScalarCocycle.isCoboundary_iff_mem_mathlibCoboundaries
@@ -305,7 +304,7 @@ theorem ScalarCocycle.isCoboundary_iff_mem_mathlibCoboundaries
     ω.IsCoboundary ↔
       (fun p : G × G ↦ Additive.ofMul (ω p.1 p.2)) ∈
         groupCohomology.coboundaries₂ (scalarH2Representation G) := by
-  letI := ScalarCocycle.trivialMulDistribMulAction (G := G)
+  let _ := ScalarCocycle.trivialMulDistribMulAction (G := G)
   constructor
   · intro h
     exact (groupCohomology.coboundariesOfIsMulCoboundary₂
