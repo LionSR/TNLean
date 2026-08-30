@@ -94,7 +94,7 @@ trivial port (1-line signature change).
 | 428 | `exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks` | old BNT plus irreducibility gives a pair-span period window. |
 | 460 | `exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks` | old BNT plus irreducibility gives a positive product-word span length. |
 | 524 | `exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_injectiveBlocks` | word-tuple version of the preceding span result. |
-| 550 | `hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks` | old BNT plus irreducibility gives `HasBiCF A`. |
+| 550 | `hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks` | Historical declaration: old BNT plus irreducibility gave the predicate now named `HasFiniteWordTraceSeparation A`. |
 | 580 | `pairTraceSeparatingAll_of_isCanonicalFormBNT` | old BNT gives all-words pair trace separation for distinct basis blocks. |
 | 605 | `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows` | old BNT plus identity period windows gives a common pair trace-separating length. |
 | 627 | `exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows` | old BNT plus identity period windows gives a product-word span length. |
@@ -113,7 +113,7 @@ Sibling old-normal declarations in the same file:
 | 478 | `exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks` | old normal-BNT data plus explicit injectivity gives common pair trace separation. |
 | 502 | `exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks` | old normal-BNT data plus explicit injectivity gives positive product-word span. |
 | 537 | `exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks` | word-tuple version of the preceding normal-BNT span result. |
-| 564 | `hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks` | old normal-BNT data plus explicit injectivity gives `HasBiCF A`. |
+| 564 | `hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks` | Historical declaration: old normal-BNT data plus explicit injectivity gave the predicate now named `HasFiniteWordTraceSeparation A`. |
 
 ### Facts actually used
 
@@ -152,7 +152,7 @@ The assembled projection/commutant declarations do rely on one scalar per basis 
 
 ### Estimated effort
 
-* Basis-only selector, pair-separation, and `HasBiCF` declarations: moderate (re-state on new surface).
+* Basis-only selector, pair-separation, and finite-word trace-separation declarations: moderate (re-state on new surface).
 * `blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords` and `isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords`: research-level (genuinely needs the one-copy specialization) unless their conclusions are changed to grouped sector projections for `P.toTensor`.
 
 ## `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`
@@ -299,5 +299,5 @@ Easiest first:
 1. `TNLean/MPS/RFP/StructuralForm.lean`: move `rfp_bnt_structural` to `P : SectorDecomposition d` plus `IsBNTCanonicalForm P`.
 2. `TNLean/PiAlgebra/CanonicalFormSepAux.lean`: update doc-only strict-order wording if desired.
 3. `TNLean/PiAlgebra/CanonicalFormSep.lean`: update the docstring at line 602 only; leave strict FT lemmas for the FT workstream.
-4. `TNLean/MPS/ParentHamiltonian/BiCF/BlockDiagonalCommutant.lean`: first port basis-only selector/pair-separation/`HasBiCF` declarations; defer assembled projection/commutant declarations until grouped-sector projection statements are chosen.
+4. `TNLean/MPS/ParentHamiltonian/BiCF/BlockDiagonalCommutant.lean`: first port basis-only selector/pair-separation/finite-word trace-separation declarations; defer assembled projection/commutant declarations until grouped-sector projection statements are chosen.
 5. `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`: do last. Start with the forward inclusion over `P.toTensor`; treat reverse inclusion and equality as new multi-copy parent-Hamiltonian work rather than a signature edit.

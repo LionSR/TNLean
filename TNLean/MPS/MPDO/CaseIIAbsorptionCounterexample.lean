@@ -266,14 +266,6 @@ theorem sectors_wordTupleSpanTop_one :
   exact Submodule.add_mem _
     (Submodule.smul_mem _ _ hw₀) (Submodule.smul_mem _ _ hw₁)
 
-/-- The two normal representatives satisfy the biCF condition, witnessed by
-their simultaneous one-letter tuple span.
-
-Source: arXiv:1606.00608, Definition `defnbi`, lines 317--326; the condition is
-used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
-theorem sectors_hasBiCF : MPSTensor.HasBiCF sectors.basis :=
-  MPSTensor.hasBiCF_of_wordTupleSpanTop sectors.basis sectors_wordTupleSpanTop_one
-
 /-- The first representative after common-weight absorption.
 Source: arXiv:1606.00608, lines 1646--1665. -/
 noncomputable def firstAbsorbed : MPSTensor (3 * 3) 1 :=
@@ -923,7 +915,7 @@ theorem
       IsSAL ambient ∧
       IsSimpleCanonicalForm ambient ∧
       MPSTensor.IsBNTCanonicalForm sectors ∧
-      MPSTensor.HasBiCF sectors.basis ∧
+      MPSTensor.WordTupleSpanTop sectors.basis 1 ∧
       ambient.toMPSTensor = sectors.toTensor ∧
       (∀ (s : Fin sectors.basisCount)
           (q q' : Fin (sectors.copies s)),
@@ -940,7 +932,7 @@ theorem
       ¬ MPSTensor.IsNormalTensor firstAbsorbed := by
   exact ⟨ambient_isMPDO, fun N _hN => trace_mpo_ambient_pos N,
     ambient_isSAL, ambient_isSimpleCanonicalForm,
-    sectors_isBNTCanonicalForm, sectors_hasBiCF,
+    sectors_isBNTCanonicalForm, sectors_wordTupleSpanTop_one,
     ambient_toMPSTensor_eq_sectors_toTensor, weights_copy_independent,
     rfl, rfl, weight_globally_normalized.1, weight_globally_normalized.2,
     basis_isNormalTensor, basis_disjoint_support, ambient_literal_physTrace_ZCL,

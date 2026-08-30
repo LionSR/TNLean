@@ -254,16 +254,18 @@
     \label{fig:mpdo_vertical_direct_sum}
 \end{figure}
 
-\begin{remark}[Finite witnesses for block-injective canonical form]%
+\begin{remark}[Finite-word span and trace separation]%
     \label{rem:word_tuple_span_top}
     \lean{MPSTensor.BlockEntryIndex}
     \lean{MPSTensor.wordEntryFamily}
     \lean{MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop}
     \lean{MPSTensor.hasBlockSelectorWords_of_wordEntryFamily_linearIndependent}
-    \lean{MPSTensor.HasBiCF}
-    \lean{MPSTensor.hasBiCF_of_wordTupleSpanTop}
-    \lean{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent}
+    \lean{MPSTensor.HasFiniteWordTraceSeparation}
+    \lean{MPSTensor.hasFiniteWordTraceSeparation_of_wordTupleSpanTop}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation}
+    \lean{MPSTensor.hasFiniteWordTraceSeparation_iff_exists_wordTupleSpanTop}
+    \lean{MPSTensor.hasFiniteWordTraceSeparation_of_wordEntryFamily_linearIndependent}
     \lean{MPSTensor.HasBlockSelectorWords}
     \lean{MPSTensor.PropBlockInjective}
     \lean{MPSTensor.wordTupleSpanTop_of_propBlockInjective}
@@ -292,13 +294,18 @@
          & \implies \forall k,\ \Delta_k = 0.
         \label{eq:mpdo_finite_separation}
     \end{align}
-    Spanning at length~$L$ gives separation at the same length: a trace
-    functional that vanishes on every tuple $(A_k^w)_k$ vanishes on their
-    span, hence on the whole product algebra, so nondegeneracy of the
-    product trace pairing forces every $\Delta_k=0$. Combined with
-    injectivity, left-canonicality, and nonzero block weights, this
-    finite-length separation supplies the older per-copy trace-separation
-    hypotheses for the block-diagonal tensor.
+    The spanning and separation conditions are equivalent after existentially
+    quantifying the length. Spanning at length~$L$ gives separation at that
+    length by nondegeneracy of the product trace pairing. Conversely, if the
+    span were proper, a nonzero linear functional $f$ would annihilate it.
+    Nondegeneracy of the matrix trace pairing represents $f$ as
+    \begin{align}
+        f\bigl((M_k)_k\bigr) & =\sum_k\tr(\Delta_kM_k), \notag
+    \end{align}
+    for some tuple $(\Delta_k)_k$, contradicting separation. This finite-word
+    property is not the literal one-letter
+    simultaneous span in the source definition of block-injective canonical
+    form.
 
     The spanning hypothesis has an equivalent entrywise form. For a block
     index $k$ and matrix entry $(a,b)$, let
@@ -450,15 +457,14 @@ Consequently, $K^{-1}K=\bigoplus_j\Id_j$.
 This is the inverse identity in
 \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}.
 
-\begin{theorem}[Finite block-separation criterion]
+\begin{theorem}[Finite-word trace-separation criterion]
     \label{thm:propblockinj_abstract}
-    \lean{MPSTensor.hasBiCF_of_propBlockInjective}
+    \lean{MPSTensor.hasFiniteWordTraceSeparation_of_propBlockInjective}
     \leanok
     \uses{rem:word_tuple_span_top}
-    If a block family admits the finite-length data described in
-    the block-injectivity proposition of
-    \cite[lines~340--345]{Cirac2016MPDO_arXiv}, then it is in
-    block-injective canonical form.
+    If a block family has a common injective word length and finite words that
+    select each block from the others, then the family has finite-word trace
+    separation.
 \end{theorem}
 
 \begin{proof}

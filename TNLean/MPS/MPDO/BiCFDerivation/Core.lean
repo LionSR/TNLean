@@ -10,23 +10,24 @@ import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
 
 /-!
-# Finite-length sufficient conditions for MPDO biCF
+# Finite-word trace separation for MPDO block families
 
-The `HorizontalCFData` structure in `PerCopyHorizontalCF.lean` states the block-injective
-canonical-form property `biCF` as a hypothesis. This file states finite-length
-sufficient conditions for deriving that field.
+The `HorizontalCFData` structure in `PerCopyHorizontalCF.lean` assumes
+finite-word trace separation for its block family. This file gives finite-length
+span, linear-independence, and selector criteria for that field.
 
 1. A clean **abstract sufficient condition**: if, after blocking to some fixed
    length `L`, the word-evaluation tuples
    `w ↦ (k ↦ Kraus.evalWord (A k) (List.ofFn w))`
    span the full product algebra `∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ`,
-   then the `biCF` conclusion follows from nondegeneracy of the product trace
-   pairing.
+   then finite-word trace separation follows from nondegeneracy of the product
+   trace pairing.
 
 2. A finite-dimensional **linear-independence criterion**: if the scalar word-entry
    family obtained by reading off every block matrix entry is linearly
    independent, then those tuple-valued word evaluations already span the full
-   product algebra. This reduces biCF to a concrete linear-algebra condition.
+   product algebra. This reduces finite-word trace separation to a concrete
+   linear-algebra condition.
 
 3. An abstract **block-injectivity selector-data criterion**: if each block is
    block-injective at some common length and a second finite family of words
@@ -199,19 +200,22 @@ def wordEntryFamily
     (L : ℕ) : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
   fun x w => blockEntryValue (wordTuple A L w) x
 
-/-- The block-injective canonical-form property used by `HorizontalCFData`. -/
-def HasBiCF
+/-- A finite family of homogeneous words whose trace pairings separate every
+matrix tuple. This is a finite-word condition, not the literal one-letter
+block-injective canonical form of arXiv:1606.00608, Definition `defnbi`,
+lines 317--322. -/
+def HasFiniteWordTraceSeparation
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
   ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,
         (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
-/-- A finite-length spanning hypothesis implies `HasBiCF`. -/
-theorem hasBiCF_of_wordTupleSpanTop
+/-- A finite-length spanning hypothesis implies `HasFiniteWordTraceSeparation`. -/
+theorem hasFiniteWordTraceSeparation_of_wordTupleSpanTop
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L : ℕ} (hSpan : WordTupleSpanTop A L) :
-    HasBiCF A := by
+    HasFiniteWordTraceSeparation A := by
   refine ⟨L, ?_⟩
   intro Δ hΔ k
   exact block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan Δ hΔ k
@@ -411,6 +415,32 @@ private theorem exists_trace_repr {n : Type*} [Fintype n]
   intro M
   simp [hfg]
 
+private theorem exists_pi_trace_repr
+    (f : ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ] ℂ) :
+    ∃ Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      ∀ M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        f M = ∑ k : Fin r, Matrix.trace (Δ k * M k) := by
+  classical
+  have hcomponent : ∀ k : Fin r,
+      ∃ Δk : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        ∀ Mk : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          (f.comp (LinearMap.single ℂ
+            (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k)) Mk =
+            Matrix.trace (Δk * Mk) :=
+    fun k => exists_trace_repr
+      (f.comp (LinearMap.single ℂ
+        (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k))
+  choose Δ hΔ using hcomponent
+  refine ⟨Δ, ?_⟩
+  intro M
+  have hM : (∑ k : Fin r, Pi.single k (M k)) = M := by
+    ext j
+    simp
+  rw [← hM, map_sum]
+  apply Finset.sum_congr rfl
+  intro k _
+  simpa [LinearMap.comp_apply, LinearMap.single_apply] using hΔ k (M k)
+
 private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
     (f : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ) :
     ∃ ΔA : Matrix m m ℂ, ∃ ΔB : Matrix n n ℂ,
@@ -434,6 +464,32 @@ private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
       change (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.1 +
           (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.2 = _
       rw [hA M.1, hB M.2]
+
+private theorem matrix_pi_span_top_of_trace_separating
+    (W : Submodule ℂ
+      ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ))
+    (hSep : ∀ Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+      (∀ M ∈ W, (∑ k : Fin r, Matrix.trace (Δ k * M k)) = 0) →
+        ∀ k, Δ k = 0) :
+    W = ⊤ := by
+  classical
+  by_contra hnot
+  have hlt : W < ⊤ := lt_of_le_of_ne le_top hnot
+  obtain ⟨f, hfne, hfker⟩ := Submodule.exists_le_ker_of_lt_top W hlt
+  obtain ⟨Δ, hf_repr⟩ := exists_pi_trace_repr f
+  have hΔ : ∀ k, Δ k = 0 := by
+    refine hSep Δ ?_
+    intro M hM
+    have hf0 : f M = 0 := hfker hM
+    simpa [hf_repr] using hf0
+  have hfzero : f = 0 := by
+    apply LinearMap.ext
+    intro M
+    have hM := hf_repr M
+    have hΔzero : Δ = 0 := funext hΔ
+    rw [hΔzero] at hM
+    simpa using hM
+  exact hfne hfzero
 
 private theorem pair_matrix_span_top_of_pair_trace_separating {D₁ D₂ : ℕ}
     (W : Submodule ℂ
@@ -460,6 +516,34 @@ private theorem pair_matrix_span_top_of_pair_trace_separating {D₁ D₂ : ℕ}
     rw [hΔ.1, hΔ.2] at hM
     simpa using hM
   exact hfne hfzero
+
+/-- Finite-word trace separation has a finite homogeneous word-tuple span
+witness. -/
+theorem exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : HasFiniteWordTraceSeparation A) :
+    ∃ L : ℕ, WordTupleSpanTop A L := by
+  classical
+  rcases hSep with ⟨L, hL⟩
+  refine ⟨L, ?_⟩
+  unfold WordTupleSpanTop
+  exact matrix_pi_span_top_of_trace_separating
+    (Submodule.span ℂ (Set.range (wordTuple A L))) (by
+      intro Δ hZero
+      refine hL Δ ?_
+      intro w
+      have hwmem : wordTuple A L w ∈
+          Submodule.span ℂ (Set.range (wordTuple A L)) :=
+        Submodule.subset_span ⟨w, rfl⟩
+      simpa [wordTuple] using hZero (wordTuple A L w) hwmem)
+
+/-- Finite-word trace separation is equivalent to a homogeneous word-tuple span
+at some finite length. -/
+theorem hasFiniteWordTraceSeparation_iff_exists_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k)) :
+    HasFiniteWordTraceSeparation A ↔ ∃ L : ℕ, WordTupleSpanTop A L :=
+  ⟨exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation A, fun ⟨_, hSpan⟩ ↦
+    hasFiniteWordTraceSeparation_of_wordTupleSpanTop A hSpan⟩
 
 private theorem pair_trace_zero_on_span {D₁ D₂ : ℕ}
     {Ω : Set (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ)}

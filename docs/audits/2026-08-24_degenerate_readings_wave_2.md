@@ -264,7 +264,7 @@ correction.
 | `MPSTensor.duplicateScalarWeights_ne_zero` | None. |
 | `MPSTensor.duplicateScalarBlocks_not_linearIndependent_wordEntryFamily` | None. |
 | `MPSTensor.duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily` | None. |
-| `MPSTensor.duplicateScalarBlocks_not_hasBiCF` | None. |
+| `MPSTensor.duplicateScalarBlocks_not_hasBiCF` (historical name for a theorem about the predicate now called `HasFiniteWordTraceSeparation`) | None. |
 | `MPSTensor.duplicateScalarBlocks_counterexample` (deprecated) | None. |
 | `MPOTensor.SourceVCounterexample.*` (whole namespace) | None; the module is deleted. |
 

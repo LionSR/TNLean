@@ -64,19 +64,6 @@ theorem sectors_weight_copy_independent
   intro j q q'
   fin_cases j <;> exact Subsingleton.elim q q' ▸ rfl
 
-/-- A BNT canonical form supplies the finite simultaneous word span, hence
-the biCF condition used at the start of CPSV16 Appendix C.2.
-
-The implication from the quantitative simultaneous span to `HasBiCF` is
-proved in TNLean. -/
-theorem sectors_hasBiCF
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hBNT : MPSTensor.IsBNTCanonicalForm (sectors mu B hmu)) :
-    MPSTensor.HasBiCF (sectors mu B hmu).basis := by
-  obtain ⟨N, _hN, _hNBound, hSpan⟩ :=
-    hBNT.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five
-  exact MPSTensor.hasBiCF_of_wordTupleSpanTop (sectors mu B hmu).basis hSpan
-
 /-- The terminal block evaluates to the identity at its terminal physical
 letter. -/
 theorem terminalBlock_terminal_letter :
@@ -685,7 +672,6 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       IsSimpleCanonicalForm M ∧
       MPSTensor.IsBNTCanonicalForm S ∧
       MPSTensor.WordTupleSpanTop S.basis 1 ∧
-      MPSTensor.HasBiCF S.basis ∧
       (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
       M.toMPSTensor = S.toTensor ∧
       (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
@@ -719,7 +705,6 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
     ambient_isSAL mu B hmu hGauge,
     ambient_isSimpleCanonicalForm mu B hmu hGauge hBNT,
     hBNT, sectors_wordTupleSpanTop_one mu B hmu hBInj hBSupport,
-    sectors_hasBiCF mu B hmu hBNT,
     sectors_basis_isNormalTensor mu B hmu hBNormal,
     ambient_toMPSTensor_eq_sectors_toTensor mu B hmu,
     sectors_weight_copy_independent mu B hmu,
@@ -763,7 +748,6 @@ theorem printed_theorem49_ii_to_iv_is_false :
         IsSimpleCanonicalForm M ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
-        MPSTensor.HasBiCF S.basis ∧
         (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
         M.toMPSTensor = S.toTensor ∧
         (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),

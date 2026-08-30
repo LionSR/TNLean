@@ -97,12 +97,12 @@ These criteria yield the older per-copy trace-separation conclusion in the
 formal development.\footnote{The criteria are
     \leanid{MPSTensor.WordTupleSpanTop}, \leanid{MPSTensor.wordEntryFamily}, and
     \leanid{MPSTensor.PropBlockInjective}. The trace-separation assumption is
-    \leanid{MPOTensor.HorizontalCFData.biCF}. The constructors from these hypotheses to
+    \leanid{MPOTensor.HorizontalCFData.finiteWordTraceSeparation}. The constructors from these hypotheses to
     \leanid{MPOTensor.HorizontalCFData} structures are in the modules under
     \path{TNLean/MPS/MPDO/BiCFDerivation/}. Relevant implications include
-    \leanid{MPSTensor.hasBiCF_of_wordTupleSpanTop},
-    \leanid{MPSTensor.hasBiCF_of_wordEntryFamily_linearIndependent},
-    \leanid{MPSTensor.hasBiCF_of_propBlockInjective}, and corresponding
+    \leanid{MPSTensor.hasFiniteWordTraceSeparation_of_wordTupleSpanTop},
+    \leanid{MPSTensor.hasFiniteWordTraceSeparation_of_wordEntryFamily_linearIndependent},
+    \leanid{MPSTensor.hasFiniteWordTraceSeparation_of_propBlockInjective}, and corresponding
     \leanid{MPOTensor.HorizontalCFData} constructors such as
     \leanid{MPOTensor.horizontalCFData_of_propBlockInjective}. The blueprint records
     these restricted criteria in its finite-witness remark.}
@@ -137,7 +137,7 @@ counterexample is recorded.
 \section{Consequence for Lemma L}
 
 The same independence restricts the older theorem
-\leanid{MPOTensor.blockwise_insert_eq_of_mpv_agree}, which assumes \leanid{MPOTensor.HorizontalCFData.biCF} for the
+\leanid{MPOTensor.blockwise_insert_eq_of_mpv_agree}, which assumes \leanid{MPOTensor.HorizontalCFData.finiteWordTraceSeparation} for the
 full family of flattened copies. Lemma~L in Appendix~C.3 of the source instead
 decomposes the canonical-form tensor as
 \begin{align}

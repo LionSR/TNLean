@@ -139,7 +139,7 @@ private theorem diagonalRestrictionBlock_horizontalCFData :
     block_injective := ?_
     left_canonical := ?_
     weight_ne_zero := ?_
-    biCF := ?_
+    finiteWordTraceSeparation := ?_
   }
   · intro k
     fin_cases k
