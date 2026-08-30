@@ -124,6 +124,8 @@ import TNLean.PEPS.TorusWindowMult
 import TNLean.PEPS.TorusWindowPeeling
 import TNLean.PEPS.TorusWindowPeeling.BondInsertedRegion
 import TNLean.PEPS.TorusWindowPeeling.BoundaryGeometry
+import TNLean.PEPS.TorusWindowPeeling.EndOperation
+import TNLean.PEPS.TorusWindowPeeling.EndWindowCoupling
 import TNLean.PEPS.TorusWindowPeeling.SingleBond
 import TNLean.PEPS.TorusWindowPeeling.WindowIndependence
 import TNLean.PEPS.TorusWindowRealizes
