@@ -344,13 +344,6 @@ lemma tensor_isSourceZCL : tensor.IsSourceZCL := by
     exact one_ne_zero
   · rw [physTraceTransfer_tensor, one_mul]
 
-/-- The unique bond index as a pair of unique purification indices. -/
-noncomputable def singletonPairEquiv : Fin 1 ≃ Fin 1 × Fin 1 where
-  toFun _ := (0, 0)
-  invFun _ := 0
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
 /-- A local purification of the product tensor. -/
 noncomputable def purification (i : Fin 2) (_k : Fin 1) :
     Matrix (Fin 1) (Fin 1) ℂ :=
@@ -358,13 +351,13 @@ noncomputable def purification (i : Fin 2) (_k : Fin 1) :
 
 /-- The product tensor is locally purifiable. -/
 lemma tensor_isLPDO : tensor.IsLPDO := by
-  refine ⟨1, 1, purification, singletonPairEquiv, ?_⟩
+  refine ⟨1, 1, purification, (finProdFinEquiv (m := 1) (n := 1)).symm, ?_⟩
   intro i j
   ext a b
   fin_cases a
   fin_cases b
   fin_cases i <;> fin_cases j <;>
-    norm_num [tensor, purification, singletonPairEquiv, sectorWeight,
+    norm_num [tensor, purification, finProdFinEquiv, sectorWeight,
       Matrix.kroneckerMap_apply]
 
 /-- The product tensor generates positive semidefinite operators on every
