@@ -319,6 +319,47 @@ boundary conditions (PBC).
     $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N > 0$.
 \end{definition}
 
+\begin{definition}[Rectangular MPS reduction]
+    \label{def:mps_rectangular_reduction}
+    \lean{MPSTensor.IsReduction}
+    \leanok
+    \uses{def:mps_tensor, def:eval_word}
+    Let $A$ and $B$ have the same physical alphabet and respective bond
+    dimensions $D_A$ and $D_B$.  A reduction from $B$ to $A$ is a pair
+    $V\in\C^{D_A\times D_B}$ and
+    $W\in\C^{D_B\times D_A}$ such that
+    \begin{align}
+        VW              & =1_{D_A},
+        \label{eq:mps_rectangular_reduction_retraction} \\
+        VB^{\mathbf a}W & =A^{\mathbf a}.
+        \label{eq:mps_rectangular_reduction_word}
+    \end{align}
+    for every word $\mathbf a$, including the empty word.
+    This is the reduction of
+    \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective}.
+\end{definition}
+
+\begin{theorem}[Basic rectangular reduction identities]
+    \label{thm:mps_rectangular_reduction_identities}
+    \lean{MPSTensor.IsReduction.mul_eq_one,
+        MPSTensor.IsReduction.evalWord,
+        MPSTensor.IsReduction.evalWord_nil,
+        MPSTensor.IsReduction.iff_forall_evalWord}
+    \leanok
+    \uses{def:mps_rectangular_reduction}
+    A rectangular reduction satisfies the retraction identity
+    (\ref{eq:mps_rectangular_reduction_retraction}) and the word identity
+    (\ref{eq:mps_rectangular_reduction_word}).  Conversely, the all-word
+    identity alone implies $VW=1_{D_A}$ by taking the empty word.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward statements are the two defining clauses.  For the converse,
+    $A^{\varnothing}=1_{D_A}$ and $B^{\varnothing}=1_{D_B}$, so the empty-word
+    instance reads $V1_{D_B}W=1_{D_A}$.
+\end{proof}
+
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
     specialization of Definition~\ref{def:same_mpv2}.

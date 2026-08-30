@@ -131,11 +131,14 @@ length: this is the case $\lambda=1$.  The fusion equations used there are
 therefore unaffected by the defect in the proportional version of
 Proposition~20.
 
-The formal development should state the reusable reduction theorem first for
-equal positive-length matrix product state families.  A later proportional
-version may be derived by the rescaling above, with the power
-$\lambda^m$ retained explicitly.  The equality-case implementation and its
-selected-reduction residual algebra are tracked by
+The formal predicate \leanid{MPSTensor.IsReduction} records the rectangular
+pair, the retraction $VW=1$, and the word equation including the empty word.
+The reusable existence theorem must first be proved for equal positive-length
+matrix product state families.  A later proportional version may be derived
+by the rescaling above, with the power $\lambda^m$ retained explicitly.  The
+equality-case existence proof is tracked by
+\href{https://github.com/LionSR/TNLean/issues/7393}{TNLean issue 7393}; its
+selected-reduction residual algebra is tracked under
 \href{https://github.com/LionSR/TNLean/issues/7322}{TNLean issue 7322}.
 
 \section{Verdict}
