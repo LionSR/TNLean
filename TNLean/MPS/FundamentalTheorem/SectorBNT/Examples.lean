@@ -36,6 +36,15 @@ namespace MPSTensor
 /-- The one-letter bond-dimension-one tensor whose sole matrix is `1`. -/
 def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
 
+/-- Every word of the scalar unit tensor evaluates to the identity matrix. -/
+@[simp] theorem scalarUnitTensor_evalWord (w : List (Fin 1)) :
+    Kraus.evalWord scalarUnitTensor w = 1 := by
+  induction w with
+  | nil => rfl
+  | cons i w ih =>
+      rw [Kraus.evalWord_cons, ih]
+      simp [scalarUnitTensor]
+
 private theorem scalarUnitTensor_transferMap :
     Kraus.transferMap scalarUnitTensor = LinearMap.id := by
   apply LinearMap.ext

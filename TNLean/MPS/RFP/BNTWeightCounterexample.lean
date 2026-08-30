@@ -47,14 +47,6 @@ theorem halvedWeightTensor_eq_halvedDecomp_toTensor :
     halvedWeightTensor =
       (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor := rfl
 
-private lemma scalarUnitTensor_evalWord (w : List (Fin 1)) :
-    Kraus.evalWord scalarUnitTensor w = 1 := by
-  induction w with
-  | nil => rfl
-  | cons i w ih =>
-      rw [Kraus.evalWord_cons, ih]
-      simp [scalarUnitTensor]
-
 private lemma scalarUnitTensor_mpv {N : ℕ} (σ : Fin N → Fin 1) :
     mpv scalarUnitTensor σ = 1 := by
   simp [mpv, scalarUnitTensor_evalWord, Matrix.trace]

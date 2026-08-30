@@ -90,11 +90,6 @@ theorem embeddedObstruction_physicalSupportProj :
     physicalInclusion physicalInclusion_isometry, tensor_physicalSupportProj_eq_one]
   simp [obstructionPhysicalSupport]
 
-/-- One-site injectivity is preserved by the literal physical inclusion. -/
-theorem embeddedObstruction_isInjective : embeddedObstruction.IsInjective := by
-  exact (isInjective_toMPSTensor_changePhysicalBasis_iff
-    physicalInclusion physicalInclusion_isometry tensor).2 tensor_isInjective
-
 /-- The embedded obstruction remains an MPDO tensor. -/
 theorem embeddedObstruction_isMPDO : embeddedObstruction.IsMPDO := by
   exact (isMPDO_changePhysicalBasis_iff
@@ -261,14 +256,6 @@ private noncomputable def terminalSource : MPOTensor 1 1 :=
   fin_cases b
   simp [terminalSource, doubledTensor, MPSTensor.scalarUnitTensor]
 
-private lemma scalarUnitTensor_evalWord {N : ℕ} (σ : Fin N → Fin 1) :
-    Kraus.evalWord MPSTensor.scalarUnitTensor (List.ofFn σ) = 1 := by
-  induction N with
-  | zero => simp
-  | succ N ih =>
-      rw [List.ofFn_succ, Kraus.evalWord_cons, ih]
-      simp [MPSTensor.scalarUnitTensor]
-
 private theorem scalarUnitTensor_transferMap_eq_id :
     Kraus.transferMap MPSTensor.scalarUnitTensor = LinearMap.id := by
   apply LinearMap.ext
@@ -347,7 +334,7 @@ private theorem scalarUnitTensor_pureState_trace_ne_zero (N : ℕ) :
   have hMpv : ∀ σ : Fin N → Fin 1,
       MPSTensor.mpv MPSTensor.scalarUnitTensor σ = 1 := by
     intro σ
-    simp [MPSTensor.mpv, scalarUnitTensor_evalWord, Matrix.trace]
+    simp [MPSTensor.mpv, MPSTensor.scalarUnitTensor_evalWord, Matrix.trace]
   have hPure : MPSTensor.pureState MPSTensor.scalarUnitTensor N = 1 := by
     ext σ τ
     obtain rfl : τ = σ := Subsingleton.elim τ σ
@@ -396,12 +383,6 @@ theorem terminalBlock_physTraceTransfer_eq_one :
   rw [terminalBlock, physTraceTransfer_changePhysicalBasis
     terminalPhysicalInclusion terminalPhysicalInclusion_isometry terminalSource]
   exact terminalSource_physTraceTransfer_eq_one
-
-/-- The terminal block has literal physical-trace idempotence. -/
-theorem terminalBlock_physTraceTransfer_idempotent :
-    physTraceTransfer terminalBlock * physTraceTransfer terminalBlock =
-      physTraceTransfer terminalBlock := by
-  rw [terminalBlock_physTraceTransfer_eq_one, one_mul]
 
 private theorem terminalSource_physicalSupportProj :
     physicalSupportProj terminalSource = 1 := by

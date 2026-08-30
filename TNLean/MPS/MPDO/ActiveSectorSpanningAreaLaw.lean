@@ -186,6 +186,10 @@ private def lastFrom (i : Fin 4) : List (Fin 4) → Fin 4
   | [] => i
   | j :: w => lastFrom j w
 
+private lemma tensor_apply_eq_zero_of_ne {i j : Fin 4} (hij : i ≠ j) :
+    tensor i j = 0 := by
+  simp [tensor, hij]
+
 private lemma evalWord_same_eq (i : Fin 4) (w : List (Fin 4)) :
     evalWord tensor (i :: w) (i :: w) =
       (pathWeight (i :: w) : ℂ) • crossSectorMatrix i (lastFrom i w) := by
@@ -214,31 +218,6 @@ private lemma trace_evalWord_same (i : Fin 4) (w : List (Fin 4)) :
   rw [evalWord_same_eq, Matrix.trace_smul, trace_crossSectorMatrix]
   simp [cycleWeight]
 
-private lemma evalWord_eq_zero_of_ne :
-    ∀ (u v : List (Fin 4)), u.length = v.length → u ≠ v →
-      evalWord tensor u v = 0 := by
-  intro u
-  induction u with
-  | nil =>
-      intro v hlen
-      have hv : v = [] := List.eq_nil_of_length_eq_zero hlen.symm
-      subst v
-      simp
-  | cons i u ih =>
-      intro v hlen hne
-      cases v with
-      | nil => simp at hlen
-      | cons j v =>
-          have hlen' : u.length = v.length := by simpa using hlen
-          by_cases hij : i = j
-          · subst j
-            rw [evalWord_cons, tensor, ite_eq_left rfl]
-            have huv : u ≠ v := by
-              intro huv
-              exact hne (huv ▸ rfl)
-            rw [ih v hlen' huv, Matrix.mul_zero]
-          · rw [evalWord_cons, tensor, ite_eq_right hij, Matrix.zero_mul]
-
 private lemma trace_evalWord_same_mul_loop (i : Fin 4) (w : List (Fin 4)) :
     Matrix.trace
         (evalWord tensor (i :: w) (i :: w) * physTraceTransfer tensor) =
@@ -266,9 +245,8 @@ private lemma mpo_tensor_eq_diagonal (N : ℕ) (hN : 0 < N) :
     rw [List.ofFn_succ]
     exact trace_evalWord_same _ _
   · rw [Matrix.diagonal_apply_ne _ hst, mpo_apply, mpoMatrixEntry,
-      evalWord_eq_zero_of_ne (List.ofFn sigma) (List.ofFn tau) (by simp)]
-    · simp
-    · exact fun h => hst (List.ofFn_injective h)
+      evalWord_ofFn_eq_zero_of_ne tensor (fun _ _ => tensor_apply_eq_zero_of_ne) hst]
+    simp
 
 private lemma tensor_isMPDO : IsMPDO tensor := by
   intro N hN
@@ -319,9 +297,8 @@ private lemma reducedBlockState_pred_eq_diagonal
     rw [List.ofFn_succ]
     exact trace_evalWord_same_mul_loop _ _
   · rw [Matrix.diagonal_apply_ne _ huv,
-      evalWord_eq_zero_of_ne (List.ofFn u) (List.ofFn v) (by simp)]
-    · simp
-    · exact fun h => huv (List.ofFn_injective h)
+      evalWord_ofFn_eq_zero_of_ne tensor (fun _ _ => tensor_apply_eq_zero_of_ne) huv]
+    simp
 
 private noncomputable def oneSiteEquiv : Fin 4 ≃ Fin (4 ^ 1) :=
   (Equiv.funUnique (Fin 1) (Fin 4)).symm.trans finFunctionFinEquiv

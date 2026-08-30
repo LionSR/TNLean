@@ -79,13 +79,6 @@ private lemma prod_M_diagonal :
       fin_cases a <;> fin_cases b <;>
         simp [configurationSign, Fin.prod_univ_succ, siteSign, sigmaZ]
 
-private lemma prod_M_off_diagonal {N : ℕ} {σ τ : Fin N → Fin 2}
-    (hστ : σ ≠ τ) :
-    (List.ofFn fun k => M (σ k) (τ k)).prod = 0 := by
-  obtain ⟨k, hk⟩ := Function.ne_iff.mp hστ
-  apply List.prod_eq_zero
-  exact List.mem_ofFn.mpr ⟨k, by simp [M, hk]⟩
-
 /-- The exact entrywise version of
 $\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$.
 
@@ -99,7 +92,7 @@ theorem rho_eq_diagonal (N : ℕ) :
       prod_M_diagonal, Matrix.trace_diagonal]
     simp [Fin.sum_univ_two]
   · rw [Matrix.diagonal_apply_ne _ hστ, mpo_apply, mpoMatrixEntry,
-      evalWord_ofFn, prod_M_off_diagonal hστ, Matrix.trace_zero]
+      evalWord_ofFn_eq_zero_of_ne M (by simp [M]) hστ, Matrix.trace_zero]
 
 /-- Formula-driven form of the source identity using the public finite
 Kronecker product: for every positive $N$,
