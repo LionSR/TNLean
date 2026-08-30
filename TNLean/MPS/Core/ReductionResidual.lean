@@ -55,8 +55,10 @@ noncomputable def reductionResidualAlgebra (B : MPSTensor d D_B)
     NonUnitalSubalgebra ℂ (Matrix (Fin D_B) (Fin D_B) ℂ) :=
   NonUnitalAlgebra.adjoin ℂ (reductionResidualGeneratorSet B A V W)
 
-/-- A residual-word nilpotency bound for a selected reduction: every word of
-exactly this length in the residual letters vanishes.
+/-- An exact-length residual-word nilpotency bound for a selected reduction:
+every word of exactly this length in the residual letters vanishes.  Definition 8
+requires vanishing at every greater length; the two formulations are equivalent
+by splitting a longer word after the bounded prefix.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/
@@ -66,8 +68,8 @@ def IsReductionResidualNilpotencyBound (B : MPSTensor d D_B)
   ∀ w : List (Fin d), w.length = N →
     Kraus.evalWord (reductionResidual B A V W) w = 0
 
-/-- The least residual-word bound, called the nilpotency length of the selected
-reduction in MGSC18.
+/-- The least exact-length residual-word bound.  Prefix factorization identifies
+it with the nilpotency length of the selected reduction in MGSC18.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
 3147--3152. -/

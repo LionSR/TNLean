@@ -979,10 +979,12 @@ $A^{-1}A=\Id$. This is the identity used in
     \uses{def:mps_reduction_residual_algebra}
     A natural number $L$ is a \emph{residual-word nilpotency bound} if
     every word $N^{i_1}\cdots N^{i_L}$ of exactly $L$ residual letters is
-    zero.  The residual nilpotency length
-    $\ell(B,A;V,W)$ is the infimum of the set of such bounds.  When a
-    bound exists, this is its least value.
-    This is Definition~8 of \cite{Molnar2018SemiInjective}.
+    zero.  Definition~8 of \cite{Molnar2018SemiInjective} requires all
+    residual words of every length $n\geq L$ to vanish.  The formulations
+    are equivalent: an exact-length-zero prefix forces every longer word to
+    vanish.  The residual nilpotency length $\ell(B,A;V,W)$ is the infimum
+    of the set of exact-length bounds.  When a bound exists, this is its
+    least value and equals the nilpotency length of Definition~8.
 \end{definition}
 
 \begin{theorem}[Positive residual words vanish under the reduction]
