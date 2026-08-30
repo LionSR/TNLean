@@ -10,10 +10,9 @@ import TNLean.Algebra.CircleCohomology
 # Cocycle-twisted regular representations
 
 This file formalizes the left and right regular actions in
-arXiv:2502.20257, equations following `eq:localsyms` and the onsite
-specialization at lines 3758--3766.  For a scalar cocycle `ω`, we use its
-canonical circle-valued representative `ω.circlePhase` and the paper's inverse
-conventions
+arXiv:2502.20257, lines 412--418, and the onsite specialization at lines
+3758--3766. For a scalar cocycle `ω`, we use its canonical circle-valued
+representative `ω.circlePhase` and the paper's inverse conventions
 
 `Lᵠ_g |h⟩ = ϕ(g,h)⁻¹ |gh⟩`,
 
@@ -69,7 +68,7 @@ attribute [simp] phase_ne_zero
 
 `Lᵠ_g = ∑_h ϕ(g,h)⁻¹ |gh⟩⟨h|`
 
-from arXiv:2502.20257, equations following `eq:localsyms`. -/
+from arXiv:2502.20257, lines 412--415. -/
 def twistedLeftRegular (ω : ScalarCocycle G) (g : G) : Matrix G G ℂ := by
   classical
   exact fun i h ↦ if i = g * h then (ω.phase g h)⁻¹ else 0
@@ -78,7 +77,7 @@ def twistedLeftRegular (ω : ScalarCocycle G) (g : G) : Matrix G G ℂ := by
 
 `Rᵠ_g = ∑_h ϕ(h,g⁻¹)⁻¹ |hg⁻¹⟩⟨h|`
 
-from arXiv:2502.20257, equations following `eq:localsyms`. -/
+from arXiv:2502.20257, lines 416--418. -/
 def twistedRightRegular (ω : ScalarCocycle G) (g : G) : Matrix G G ℂ := by
   classical
   exact fun i h ↦ if i = h * g⁻¹ then (ω.phase h g⁻¹)⁻¹ else 0
@@ -109,8 +108,8 @@ theorem twistedRightRegular_apply_of_ne (ω : ScalarCocycle G) (g i h : G)
   classical
   simp [twistedRightRegular, hi]
 
-/-- The left regular matrix acts on coefficient functions by the paper's
-formula `Lᵠ_g |h⟩ = ϕ(g,h)⁻¹ |gh⟩`. -/
+/-- The left regular matrix acts on coefficient functions by
+`(Lᵠ_g v)(gh) = ϕ(g,h)⁻¹ v(h)`. -/
 theorem twistedLeftRegular_mulVec_apply [Fintype G]
     (ω : ScalarCocycle G) (g h : G) (v : G → ℂ) :
     (twistedLeftRegular ω g).mulVec v (g * h) = (ω.phase g h)⁻¹ * v h := by
@@ -123,8 +122,8 @@ theorem twistedLeftRegular_mulVec_apply [Fintype G]
     · intro heq
       exact hj (mul_left_cancel heq.symm)
 
-/-- The right regular matrix acts on coefficient functions by the paper's
-formula `Rᵠ_g |h⟩ = ϕ(h,g⁻¹)⁻¹ |hg⁻¹⟩`. -/
+/-- The right regular matrix acts on coefficient functions by
+`(Rᵠ_g v)(hg⁻¹) = ϕ(h,g⁻¹)⁻¹ v(h)`. -/
 theorem twistedRightRegular_mulVec_apply [Fintype G]
     (ω : ScalarCocycle G) (g h : G) (v : G → ℂ) :
     (twistedRightRegular ω g).mulVec v (h * g⁻¹) =
@@ -220,9 +219,8 @@ theorem twistedLeftRegular_commute [Fintype G] {ω : ScalarCocycle G}
     rw [twistedRightRegular_apply_of_ne ω h j k hj]
     simp
 
-/-- The cocycle-twisted left regular matrix is unitary.  The unit-modulus
-hypothesis is honest because the coefficients are taken from
-`ScalarCocycle.circlePhase`. -/
+/-- The cocycle-twisted left regular matrix is unitary because its phase
+coefficients have norm one. -/
 theorem twistedLeftRegular_mem_unitaryGroup [Fintype G] [DecidableEq G]
     (ω : ScalarCocycle G) (g : G) :
     twistedLeftRegular ω g ∈ Matrix.unitaryGroup G ℂ := by
@@ -247,9 +245,8 @@ theorem twistedLeftRegular_mem_unitaryGroup [Fintype G] [DecidableEq G]
   · intro k hk
     simp [twistedLeftRegular, hk]
 
-/-- The cocycle-twisted right regular matrix is unitary.  The unit-modulus
-hypothesis is honest because the coefficients are taken from
-`ScalarCocycle.circlePhase`. -/
+/-- The cocycle-twisted right regular matrix is unitary because its phase
+coefficients have norm one. -/
 theorem twistedRightRegular_mem_unitaryGroup [Fintype G] [DecidableEq G]
     (ω : ScalarCocycle G) (g : G) :
     twistedRightRegular ω g ∈ Matrix.unitaryGroup G ℂ := by
@@ -278,10 +275,10 @@ theorem twistedRightRegular_mem_unitaryGroup [Fintype G] [DecidableEq G]
 
 `ϕ(ag⁻¹,gb) / ϕ(a,b) = 1 / (ϕ(a,g⁻¹) ϕ(g,b))`.
 
-Besides cocyclicity, this explicitly assumes the paper's normalization
-`ϕ(t⁻¹,t) = 1`.  In particular, the normalization is not claimed as a
-consequence of an arbitrary cocycle.  This is arXiv:2502.20257, lines
-3763--3766. -/
+Besides cocyclicity, this explicitly assumes `ϕ(t⁻¹,t) = 1`, the normalization
+corresponding to the scalar convention `S_{t⁻¹} = S_t⁻¹` at line 238. The
+normalization is not claimed as a consequence of an arbitrary cocycle. The
+coefficient rewrite is arXiv:2502.20257, lines 3763--3766. -/
 theorem onsiteGauss_phase_div {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) (hInv : ∀ t : G, ω.phase t⁻¹ t = 1)
     (a g b : G) :

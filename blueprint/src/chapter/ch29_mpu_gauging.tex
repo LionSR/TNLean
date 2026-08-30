@@ -1351,14 +1351,34 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \begin{align}
         L_g^\phi
          & =\sum_{h\in G}\phi(g,h)^{-1}|gh\rangle\langle h|,
-        &
+         &
         R_g^\phi
          & =\sum_{h\in G}\phi(h,g^{-1})^{-1}|hg^{-1}\rangle\langle h|.
         \label{eq:mpug_twisted_regular_matrices}
     \end{align}
-    These are the leg and inverse conventions used after
-    \cite[Eq.~\texttt{eq:localsyms}]{FrancoRubio2025MPUGauging}.
+    The source uses a $U(1)$-valued cocycle $\Omega$; taking $\Omega=\phi$
+    gives exactly the leg and inverse conventions in
+    \cite[lines~412--418]{FrancoRubio2025MPUGauging}.
 \end{definition}
+
+\begin{lemma}[Cocycle equation for the circle phase]
+    \label{lem:mpug_circle_phase_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.phase_isCocycle}
+    \leanok
+    \uses{def:is_cocycle, thm:mpug_circle_complex_units_h2}
+    If $\omega$ is a cocycle, then its circle phase satisfies
+    \begin{align}
+        \phi(g,h)\phi(gh,k)
+         & =\phi(g,hk)\phi(h,k)
+    \end{align}
+    for all $g,h,k\in G$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_circle_complex_units_h2}
+    The pointwise phase map $z\mapsto z/|z|$ is multiplicative, so it preserves
+    the cocycle equation.
+\end{proof}
 
 \begin{theorem}[Action of the twisted regular matrices]
     \label{thm:mpug_twisted_regular_action}
@@ -1370,7 +1390,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \begin{align}
         (L_g^\phi v)(gh)
          & =\phi(g,h)^{-1}v(h),
-        &
+         &
         (R_g^\phi v)(hg^{-1})
          & =\phi(h,g^{-1})^{-1}v(h).
     \end{align}
@@ -1382,29 +1402,48 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     indexed by $h$.
 \end{proof}
 
-\begin{theorem}[Multiplication and commutation of twisted regular matrices]
+\begin{theorem}[Multiplication laws for twisted regular matrices]
     \label{thm:mpug_twisted_regular_multiplication}
     \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mul,
-        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mul,
-        TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
+        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mul}
     \leanok
-    \uses{def:mpug_twisted_regular_matrices, def:is_cocycle}
-    If $\omega$ is a cocycle, then its circle phase $\phi$ is a cocycle and
+    \uses{def:mpug_twisted_regular_matrices,
+        lem:mpug_circle_phase_cocycle}
+    If $\omega$ is a cocycle, then
     \begin{align}
         L_g^\phi L_h^\phi
-         & =\phi(g,h)^{-1}L_{gh}^\phi, \\
+         & =\phi(g,h)^{-1}L_{gh}^\phi,           \\
         R_g^\phi R_h^\phi
-         & =\phi(h^{-1},g^{-1})^{-1}R_{gh}^\phi, \\
-        L_g^\phi R_h^\phi
-         & =R_h^\phi L_g^\phi.
+         & =\phi(h^{-1},g^{-1})^{-1}R_{gh}^\phi.
         \label{eq:mpug_twisted_regular_multiplication}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_twisted_regular_action}
-    Apply both sides to a basis vector.  The scalar equalities are respectively
-    the cocycle equation at $(g,h,k)$, $(k,h^{-1},g^{-1})$, and
+    \uses{thm:mpug_twisted_regular_action,
+        thm:mpug_circle_complex_units_h2}
+    Apply both sides to a basis vector.  The two scalar identities are the
+    cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
+\end{proof}
+
+\begin{theorem}[Commutation of twisted left and right actions]
+    \label{thm:mpug_twisted_regular_commutation}
+    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
+    \leanok
+    \uses{thm:mpug_twisted_regular_action,
+        thm:mpug_circle_complex_units_h2}
+    If $\omega$ is a cocycle, then
+    \begin{align}
+        L_g^\phi R_h^\phi
+         & =R_h^\phi L_g^\phi.
+        \label{eq:mpug_twisted_regular_commutation}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_twisted_regular_action,
+        thm:mpug_circle_complex_units_h2}
+    Apply both sides to a basis vector and use the cocycle equation at
     $(g,k,h^{-1})$.
 \end{proof}
 
@@ -1415,6 +1454,8 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \leanok
     \uses{def:mpug_twisted_regular_matrices}
     The matrices $L_g^\phi$ and $R_g^\phi$ are unitary for every $g\in G$.
+    % Source anchor: arXiv:2502.20257, lines 406--418, where these matrices
+    % form the two gauge legs of the local unitary representation.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1429,7 +1470,7 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
     \lean{TNLean.Algebra.ScalarCocycle.onsiteGauss_phase_div}
     \leanok
     \uses{def:mpug_twisted_regular_matrices, def:is_cocycle}
-    Suppose that $\omega$ is a cocycle and, as an additional normalization,
+    Suppose that $\omega$ is a cocycle and impose the additional normalization
     \begin{align}
         \phi(t^{-1},t) & =1
     \end{align}
@@ -1439,9 +1480,10 @@ Theorems~\ref{thm:mpug_factorization_comparison} and
          & =\frac{1}{\phi(a,g^{-1})\phi(g,b)}.
         \label{eq:mpug_onsite_gauss_phase}
     \end{align}
-    This is the scalar rewrite in
-    \cite[lines~3763--3766]{FrancoRubio2025MPUGauging}.  The displayed
-    normalization is an assumption, not a consequence of cocyclicity.
+    The scalar convention $S_{t^{-1}}=S_t^{-1}$ appears in
+    \cite[line~238]{FrancoRubio2025MPUGauging}, and the coefficient rewrite is
+    at lines 3763--3766. The displayed normalization remains an explicit
+    assumption here; it is not a consequence of cocyclicity.
 \end{theorem}
 
 \begin{proof}\leanok
