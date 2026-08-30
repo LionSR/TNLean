@@ -247,7 +247,10 @@ noncomputable def reductionOpenBoundaryMatrixContraction
     Matrix.trace (Kraus.evalWord B (List.ofFn σ) * X) *
       Kraus.evalWord C (List.ofFn σ).reverse a' a
 
-/-- The same-alphabet specialization whose lower tail is the word `B^w`. -/
+/-- The same-alphabet specialization whose lower tail is the word `B^w`.
+
+Source: arXiv:1706.07329v2, proof of Proposition 20,
+`cornerproblem.tex` lines 3866--3887. -/
 noncomputable def reductionOpenBoundaryContraction
     (B : MPSTensor d D_B) (C : MPSTensor d D_A)
     (n : ℕ) (w : List (Fin d)) (a' a : Fin D_A) : ℂ :=
