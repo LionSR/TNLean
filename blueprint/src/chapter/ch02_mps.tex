@@ -998,8 +998,8 @@ $A^{-1}A=\Id$. This is the identity used in
         VB^{\mathbf p}N^{\mathbf u}B^{\mathbf q}W & =0.
         \label{eq:mps_reduction_residual_exterior_sandwich}
     \end{align}
-    This buffered statement is a derived TNLean strengthening; it is not the
-    statement of Lemma~\texttt{VNW=0}.
+    This strengthens the sandwiched residual identity below by allowing
+    arbitrary exterior $B$-words.
 \end{theorem}
 
 \begin{proof}
@@ -1030,9 +1030,8 @@ $A^{-1}A=\Id$. This is the identity used in
         \label{eq:mps_reduction_residual_sandwich}
     \end{align}
     No equality of closed chains is required.
-    This is Lemma~\texttt{VNW=0} of
-    \cite{Molnar2018SemiInjective}; see
-    \texttt{cornerproblem.tex} lines 3946--3970.
+    This is the sandwiched residual identity of
+    \cite{Molnar2018SemiInjective}.
 \end{theorem}
 
 \begin{proof}
@@ -1092,8 +1091,8 @@ $A^{-1}A=\Id$. This is the identity used in
         B^{\mathbf i}=N^{\mathbf i}+\mathcal W(\mathbf i).
         \label{eq:mps_reduction_recursive_residual_expansion}
     \end{align}
-    This recursive identity is a precursor to the explicit corrected form of
-    Lemma~\texttt{B\_expand}; it is not itself a formula printed in the source.
+    Combining this recursion with the explicit window sum below gives the
+    corrected residual expansion.
 \end{theorem}
 
 \begin{proof}
@@ -1192,9 +1191,8 @@ $A^{-1}A=\Id$. This is the identity used in
         \label{eq:mps_reduction_residual_expansion}
     \end{align}
     This statement requires only the reduction.  The weak range $r\leq s$
-    printed in Lemma~\texttt{B\_expand} of
-    \cite{Molnar2018SemiInjective} is false: it introduces empty central
-    words and omits the pure residual term.  Formula
+    printed in \cite{Molnar2018SemiInjective} is false: it introduces empty
+    central words and omits the pure residual term.  Formula
     (\ref{eq:mps_reduction_residual_expansion}) is the corrected identity
     established in \cite{gap:mgsc18_residual_expansion_empty_word_error}.
 \end{theorem}
@@ -1209,22 +1207,19 @@ $A^{-1}A=\Id$. This is the identity used in
     the positive central length by $s=r+m$.
 \end{proof}
 
-\begin{theorem}[Residual trace vanishing and nilpotence]
+\begin{theorem}[Residual trace vanishing and elementwise nilpotence]
     \label{thm:mps_reduction_residual_algebra_nilpotent}
     \lean{MPSTensor.IsReduction.trace_evalWord_eq_trace_evalWord_add_trace_reductionResidual,
         MPSTensor.IsReduction.trace_evalWord_reductionResidual_eq_zero,
         MPSTensor.IsReduction.trace_eq_zero_of_mem_reductionResidualAlgebra,
-        MPSTensor.IsReduction.isNilpotent_of_mem_reductionResidualAlgebra,
-        MPSTensor.IsReduction.reductionResidualNilpotencyLength_isBound}
+        MPSTensor.IsReduction.isNilpotent_of_mem_reductionResidualAlgebra}
     \leanok
     \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length}
+        def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$, and assume
     $\mc{V}^+(B)=\mc{V}^+(A)$.  Then every nonempty residual word has trace
     zero, every element of $\mathcal R(B,A;V,W)$ has trace zero, and every
-    element of this algebra is nilpotent.  The algebra is nilpotent, so the
-    least residual-word nilpotency length $\ell(B,A;V,W)$ exists and is itself
-    a bound.
+    element of this algebra is nilpotent.
 
     This is the nilpotency assertion in Proposition~21 of
     \cite{Molnar2018SemiInjective}.  The positive-length closed-chain
@@ -1238,8 +1233,7 @@ $A^{-1}A=\Id$. This is the identity used in
     \leanok
     \uses{thm:mps_reduction_residual_expansion,
         thm:mps_reduction_residual_exterior_sandwich,
-        thm:mpu_shifted_zero_trace_power_nilpotent,
-        thm:mpu_nil_matrices}
+        thm:mpu_shifted_zero_trace_power_nilpotent}
     Take the trace of the corrected residual expansion.  Cyclicity moves each
     mixed term to a positive residual word between $V$ and $W$, so it
     vanishes.  The unique term with no residual letters is $WA^{\mathbf i}V$;
@@ -1250,18 +1244,16 @@ $A^{-1}A=\Id$. This is the identity used in
         \label{eq:mps_reduction_residual_trace_decomposition}
     \end{align}
     Equality of the two closed chains now gives
-    $\tr(N^{\mathbf i})=0$, exactly as in
-    \texttt{cornerproblem.tex} lines 3973--3981.  Linearity extends this
-    identity to the generated nonunital algebra.  Vanishing traces of positive
-    powers make each algebra element nilpotent, and finite-dimensional
-    nil-algebra nilpotence supplies a residual-word bound.  Well-ordering gives
-    the least such bound.
+    $\tr(N^{\mathbf i})=0$.  Linearity extends this identity to the generated
+    nonunital algebra.  Vanishing traces of positive powers make each algebra
+    element nilpotent.
 \end{proof}
 
 \begin{theorem}[Dimension bound for the residual nilpotency length]
     \label{thm:mps_reduction_residual_dimension_bound}
     \lean{MPSTensor.IsReduction.reductionResidualAlgebra_list_prod_eq_zero,
         MPSTensor.IsReduction.bondDim_isReductionResidualNilpotencyBound,
+        MPSTensor.IsReduction.reductionResidualNilpotencyLength_isBound,
         MPSTensor.IsReduction.reductionResidualNilpotencyLength_le_bondDim,
         MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bondDim_le_length}
     \leanok
@@ -1269,24 +1261,24 @@ $A^{-1}A=\Id$. This is the identity used in
         thm:mpu_nil_matrices}
     Under the hypotheses of the preceding theorem, every mixed product of
     $D_B$ elements of $\mathcal R(B,A;V,W)$ vanishes.  Consequently $D_B$ is
-    a residual-word nilpotency bound,
+    a residual-word nilpotency bound.  The least bound exists, is itself a
+    bound, and satisfies
     \begin{align}
-        \ell(B,A;V,W) & \leq D_B,
+        \ell(B,A;V,W) & \leq D_B.
         \label{eq:mps_reduction_residual_nilpotency_length_bound}
     \end{align}
-    and $N^{\mathbf i}=0$ whenever $|\mathbf i|\geq D_B$.
-
-    This numerical bond-dimension estimate is a derived TNLean/QICLean
-    consequence of the finite-dimensional nil-matrix theorem.  It is not a
-    statement of Proposition~21 in \cite{Molnar2018SemiInjective}.
+    In particular, $N^{\mathbf i}=0$ whenever $|\mathbf i|\geq D_B$.
+    The numerical estimate follows from the finite-dimensional nil-matrix
+    theorem.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Apply the finite-dimensional nil-matrix theorem to the residual algebra.
     Its dimension-sharp matrix form makes every product of $D_B$ algebra
-    elements zero.  Residual letters lie in this algebra, and prefix
-    factorization then proves the three stated consequences.
+    elements zero.  Residual letters lie in this algebra, so $D_B$ is a bound.
+    Well-ordering gives the least bound, and prefix factorization gives
+    vanishing for all longer residual words.
 \end{proof}
 
 \begin{theorem}[Consequences of an arbitrary residual bound]
@@ -1337,9 +1329,7 @@ $A^{-1}A=\Id$. This is the identity used in
     Here $n-L$ denotes truncated subtraction, equivalently
     $\max(0,n-L)$ in integer notation.  The endpoints with a residual word of
     length exactly $L$ are retained as zero terms.  These are the two
-    contracted formulas in Lemma~\texttt{B\_expand} of
-    \cite{Molnar2018SemiInjective}, printed respectively at
-    \texttt{cornerproblem.tex} lines 3997 and 3998.
+    contracted formulas of \cite{Molnar2018SemiInjective}.
 \end{theorem}
 
 \begin{proof}
@@ -1375,9 +1365,9 @@ $A^{-1}A=\Id$. This is the identity used in
         \label{eq:mps_reduction_exterior_buffer}
     \end{align}
     No closed-chain equality is assumed: only the reduction and the supplied
-    residual bound enter this identity.  This is a derived blocking lemma in
-    TNLean; it is not stated in Lemma~\texttt{B\_expand} or in its later uses
-    in \cite{Molnar2018SemiInjective}.
+    residual bound enter this identity.  It follows from the corrected
+    residual expansion by eliminating every term with a sufficiently long
+    residual buffer.
 \end{theorem}
 
 \begin{proof}
