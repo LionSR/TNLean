@@ -167,10 +167,12 @@ theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
       ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n =
         ∑ i : NonwrappingStart L N,
           ((windows i).card : ℂ) • localTermES A L i.1 := by
-    rw [openSuffixParentHamiltonianES]
-    rw [Finset.sum_comm' (fun n i => by
-      simp only [Finset.mem_Icc, Finset.mem_filter, Finset.mem_univ, true_and, windows]
-      tauto)]
+    simp_rw [openSuffixParentHamiltonianES]
+    rw [Finset.sum_comm'
+      (s := Finset.Icc l N)
+      (t := fun n => Finset.univ.filter fun i : NonwrappingStart L N =>
+        n - l ≤ i.1.val ∧ i.1.val + L ≤ n)
+      (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows])]
     apply Finset.sum_congr rfl
     intro i _
     simp only [windows, Finset.sum_const, Nat.cast_smul_eq_nsmul]
@@ -182,9 +184,10 @@ theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
   · rw [hsum, openParentHamiltonianES, Finset.smul_sum]
     apply Finset.sum_le_sum
     intro i _
-    rw [LinearMap.le_def, ← sub_smul]
-    apply (localTermES_isPositive A L i.1).smul_of_nonneg
-    exact_mod_cast hwindows_card i
+    simp only [Nat.cast_smul_eq_nsmul]
+    apply nsmul_le_nsmul_left
+    · exact (LinearMap.nonneg_iff_isPositive _).mpr (localTermES_isPositive A L i.1)
+    · exact hwindows_card i
 
 /-- If the open-chain Hamiltonian annihilates a vector, then every individual
 nonwrapping local term annihilates it.
