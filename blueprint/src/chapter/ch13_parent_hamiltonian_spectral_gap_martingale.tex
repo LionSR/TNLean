@@ -676,6 +676,33 @@ norm estimate is derived here.
 
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
 
+\begin{theorem}[Moving-window double counting]
+    \label{thm:moving_window_sum_le}
+    \lean{FrustrationFree.movingWindow_sum_le}
+    \leanok
+    Let $(a_m)_{m\geq0}$ be a nonnegative real sequence. For all $l,N\in\N$,
+    \begin{align}
+        \sum_{n=l}^{N-1}\sum_{m=n-l}^{n}a_m
+         & \leq (l+1)\sum_{m=0}^{N-1}a_m.
+        \label{eq:moving_window_sum_le}
+    \end{align}
+    When $l\geq N$, the sum on the left is empty.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $m=n-l+k$, where $0\leq k\leq l$, and reverse the order of
+    summation. For each fixed $k$, the map $n\mapsto n-l+k$ is injective on
+    $\{l,\ldots,N-1\}$ and has image in $\{0,\ldots,N-1\}$. Nonnegativity
+    therefore bounds the corresponding inner sum by
+    $\sum_{m=0}^{N-1}a_m$. Summing over the $l+1$ values of $k$ proves
+    (\ref{eq:moving_window_sum_le}). This is the counting step in the proof of
+    Nachtergaele's Theorem~2.1(i), between Equation~(Enpsi2) and the following
+    summed estimate: for $a_m=\lVert E_m\psi\rVert^2$, each term occurs in at
+    most $l+1$ consecutive windows
+    \cite[Proof of Theorem~2.1(i)]{Nachtergaele1996Spectral}.
+\end{proof}
+
 \begin{theorem}[Martingale criterion for a finite family of projections]
     \label{thm:martingale_criterion}
     \lean{MPSTensor.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional}
