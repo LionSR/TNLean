@@ -2098,6 +2098,57 @@ the scalar data and their gauge classes.
     $\C^\times$ are $1$ and $-1$.
 \end{proof}
 
+\begin{definition}[Anomalous sign for an involution]
+    \label{def:mpug_anomalous_involution_sign}
+    \lean{TNLean.Algebra.IsComplexUnitSign,
+        TNLean.Algebra.HasAnomalousInvolutionSign}
+    \leanok
+    Let $f\colon\mathsf X\to\mathsf X$. An anomalous sign for $f$ is a
+    function $\xi\colon\mathsf X\to\C^\times$ such that
+    \begin{align}
+        \xi(x) & \in\{1,-1\},
+        \label{eq:mpug_anomalous_sign_range}
+    \end{align}
+    and
+    \begin{align}
+        \xi(x)\xi(f(x)) & =-1
+        \label{eq:mpug_anomalous_sign_pairing}
+    \end{align}
+    for every $x\in\mathsf X$.
+    % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
+    % eq:defects_Z2b, lines 2979--2981.
+\end{definition}
+
+\begin{theorem}[Anomalous signs and fixed points]
+    \label{thm:mpug_anomalous_involution_sign_iff}
+    \lean{TNLean.Algebra.hasAnomalousInvolutionSign_of_fixedPointFree,
+        TNLean.Algebra.not_hasAnomalousInvolutionSign_of_fixedPoint,
+        TNLean.Algebra.hasAnomalousInvolutionSign_iff_fixedPointFree,
+        TNLean.Algebra.involutive_smul_of_mul_self_eq_one,
+        TNLean.Algebra.hasAnomalousInvolutionSign_smul_iff}
+    \leanok
+    \uses{def:mpug_anomalous_involution_sign}
+    Let $f\colon\mathsf X\to\mathsf X$ be an involution. An anomalous sign
+    exists if and only if $f$ has no fixed point. In particular, if a group
+    element $g$ satisfies $g^2=e$, then the action $x\mapsto gx$ admits such a
+    sign if and only if $gx\neq x$ for every $x\in\mathsf X$.
+    This isolates the choice of $\xi_g$ in
+    \cite[Proposition~\texttt{prop:def\_tens\_anomalous},
+    lines~2979--2981]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, prop:def_tens_anomalous,
+    % eq:defects_Z2b, lines 2979--2981.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomalous_involution_sign}
+    Choose a well-order on $\mathsf X$. In each two-element orbit
+    $\{x,f(x)\}$, assign $1$ to the smaller element and $-1$ to the larger.
+    Involutivity exchanges the two elements, so their signs multiply to
+    $-1$. Conversely, at a fixed point the product is the square of either
+    $1$ or $-1$, hence equals $1$ rather than $-1$. The group-action statement
+    follows from $g(gx)=g^2x=x$.
+\end{proof}
+
 \begin{theorem}[Nontrivial scalar gauge class for $\Z_2$]
     \label{thm:mpug_z2_nontrivial_scalar_class}
     \lean{TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one}
