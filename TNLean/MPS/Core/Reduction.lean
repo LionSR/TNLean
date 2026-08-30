@@ -14,8 +14,6 @@ Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 20, is separate from
 the definition below.
 -/
 
-open scoped Matrix
-
 namespace MPSTensor
 
 variable {d D₁ D₂ : ℕ}
@@ -46,8 +44,7 @@ theorem mul_eq_one (h : IsReduction B A V W) : V * W = 1 := h.1
 theorem evalWord (h : IsReduction B A V W) (w : List (Fin d)) :
     V * Kraus.evalWord B w * W = Kraus.evalWord A w := h.2 w
 
-/-- The empty-word intertwining equation is the rectangular retraction
-identity. -/
+/-- The empty-word instance of the intertwining equation. -/
 theorem evalWord_nil (h : IsReduction B A V W) :
     V * Kraus.evalWord B [] * W = Kraus.evalWord A [] := h.2 []
 
