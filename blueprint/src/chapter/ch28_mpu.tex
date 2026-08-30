@@ -1423,6 +1423,62 @@ nonzero spectrum as a set.
     \end{align}
 \end{proof}
 
+\begin{theorem}[Semisimple rank-one Jordan--Chevalley reduction]
+    \label{thm:mpu_semisimple_scaled_trace_rank_one}
+    \lean{Module.End.finrank_range_eq_one_of_isSemisimple_of_scaled_trace_pow_eq_one,
+        Module.End.IsNilpotent.mul_eq_zero_and_mul_eq_zero_of_commute_of_finrank_range_eq_one,
+        Module.End.IsNilpotent.exists_add_pow_eq_right_of_mul_eq_zero,
+        Module.End.IsNilpotent.products_eq_zero_and_eventual_add_pow_eq_of_scaled_trace}
+    \leanok
+    Let $V$ be a finite-dimensional complex vector space and let $S$ be a
+    semisimple endomorphism of $V$. Suppose that $c\in\mathbb C$ is nonzero and
+    \begin{align}
+        \tr\bigl((cS)^k\bigr) & =1
+    \end{align}
+    for every integer $k>1$. Then
+    \begin{align}
+        \dim\operatorname{range}(S) & =1.
+    \end{align}
+    If $N$ is nilpotent and commutes with $S$, then
+    \begin{align}
+        NS & =SN=0.
+    \end{align}
+    Moreover, there is an integer $J>0$ such that, for every $k\geq J$,
+    \begin{align}
+        (N+S)^k & =S^k.
+    \end{align}
+    This is the generic Jordan--Chevalley step in arXiv:1706.07329v2,
+    Proposition~20, lines 3839--3866.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_shifted_trace_power_charpoly}
+    Choose an arbitrary basis of $V$ and represent $cS$ by a matrix $A$.
+    The shifted trace-power theorem gives
+    \begin{align}
+        \chi_A(X) & =X^{\dim V-1}(X-1).
+    \end{align}
+    Since $cS$ is semisimple, its generalized zero-eigenspace is its ordinary
+    zero-eigenspace, namely its kernel. The dimension of the generalized
+    zero-eigenspace is the root multiplicity of zero in the characteristic
+    polynomial, so
+    \begin{align}
+        \dim\ker(cS) & =\dim V-1.
+    \end{align}
+    Rank--nullity and $c\ne0$ therefore give
+    $\dim\operatorname{range}(S)=1$.
+
+    Commutation makes $\operatorname{range}(S)$ invariant under $N$. The
+    restriction of $N$ to this one-dimensional space is both nilpotent and a
+    scalar endomorphism, hence zero. Therefore $NS=0$, and commutation also
+    gives $SN=0$. For every positive $k$, induction using these two identities
+    yields
+    \begin{align}
+        (N+S)^k & =N^k+S^k.
+    \end{align}
+    Taking $J$ at least the nilpotency index of $N$ removes the first summand.
+\end{proof}
+
 \begin{theorem}[Vanishing positive trace powers determine the characteristic polynomial]
     \label{thm:mpu_zero_trace_power_charpoly}
     \lean{Matrix.charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero}
