@@ -8006,19 +8006,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween,
         MPOTensor.identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors}
-    Let $\mathbb S$ exchange two $d$-dimensional spins. The four matrices
-    displayed in the blocked forms of $U_2$ and $U_3$ are unitary:
-    \[
-    \begin{gathered}
-        \Id\otimes\mathbb S\otimes\Id, \quad
-        \mathbb S\otimes\mathbb S, \\
-        (\mathbb S\otimes\mathbb S)
-            (\Id\otimes\mathbb S\otimes\Id), \quad
-        (\Id\otimes\mathbb S\otimes\Id)
+    Let $\mathbb S$ exchange two $d$-dimensional spins. The two swap factors
+    appearing in the blocked forms of $U_2$ and $U_3$, and both ordered
+    products, are unitary:
+    \begin{align}
+        &\Id\otimes\mathbb S\otimes\Id, \\
+        &\mathbb S\otimes\mathbb S, \\
+        &(\mathbb S\otimes\mathbb S)
+            (\Id\otimes\mathbb S\otimes\Id), \\
+        &(\Id\otimes\mathbb S\otimes\Id)
             (\mathbb S\otimes\mathbb S).
-    \end{gathered}
-    \]
+    \end{align}
     % Source lines: paper_v2.tex 2018--2034.
 \end{theorem}
 

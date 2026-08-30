@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
 import QICLean.Algebra.MatrixIsometryKronecker
+import TNLean.MPS.MPU.Examples.ShiftSourceFormulas
 
 /-!
 # Unitarity of the shift-example swap matrices
@@ -47,8 +47,8 @@ Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
 (lines 2018--2034). -/
 theorem identitySwapIdentityMatrix_isUnitaryBetween (d : ℕ) :
     (identitySwapIdentityMatrix d).IsUnitaryBetween := by
-  let hOne := one_isUnitaryBetween d
-  let hSwap := swapMatrix_isUnitaryBetween d
+  have hOne := one_isUnitaryBetween d
+  have hSwap := swapMatrix_isUnitaryBetween d
   have hFirst :
       ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ Matrix.swapMatrix d).IsIsometry :=
     Matrix.IsIsometry.kronecker _ _ hOne.1 hSwap.1
@@ -72,9 +72,9 @@ Source: arXiv:1703.09188, equations `eq:uv2_U2` and `eq:uv2_U3`
 (lines 2018--2034). -/
 theorem swapTensorSwapMatrix_isUnitaryBetween (d : ℕ) :
     (swapTensorSwapMatrix d).IsUnitaryBetween := by
+  have hSwap := swapMatrix_isUnitaryBetween d
   have hIso : (swapTensorSwapMatrix d).IsIsometry :=
-    Matrix.IsIsometry.kronecker _ _
-      (swapMatrix_isUnitaryBetween d).1 (swapMatrix_isUnitaryBetween d).1
+    Matrix.IsIsometry.kronecker _ _ hSwap.1 hSwap.1
   exact hIso.isUnitaryBetween_of_card_eq _ rfl
 
 /-- The displayed matrix
