@@ -8729,10 +8729,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Finite three-swap ancilla endpoint]
     \label{lem:mpu_shift_ancilla_three_swap_endpoint}
-    \lean{MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂_apply,
+    \lean{MPOTensor.shiftAncillaSwap₁₂,
+        MPOTensor.shiftAncillaSwap₂a,
+        MPOTensor.shiftAncillaSwap₁aNext,
+        MPOTensor.shiftAncillaThreeSwap,
+        MPOTensor.shiftAncillaCounterShift,
+        MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂_apply,
         MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂,
-        MPOTensor.permMatrix_shiftAncillaThreeSwap_endpoint}
+        MPOTensor.permMatrix_shiftAncillaThreeSwap_endpoint,
+        MPOTensor.permMatrix_shiftAncillaThreeSwap_conj_swap₁₂}
     \leanok
+    \discussion{7470}
     \uses{threeMPU2}
     Let $R$ cyclically rotate configurations on a periodic chain of length $N$.
     On triples $((\sigma_1,\sigma_2),a)$ of two physical configurations and one
@@ -8741,12 +8748,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     source figure. Then
     \begin{align}
         C^{-1}S^{1,2}C((\sigma_1,\sigma_2),a)
-            &=((R\sigma_2,R^{-1}\sigma_1),a).
+         & =((R\sigma_2,R^{-1}\sigma_1),a).
     \end{align}
-    Hence the corresponding permutation matrices are equal. This is only the
-    finite endpoint identity; it asserts neither a continuous path nor a
-    symmetry action on the full ancilla-enlarged operator algebra.
-    % Source lines: paper_v2.tex 2203--2230.
+    Let $K((\sigma_1,\sigma_2),a)=((R\sigma_2,R^{-1}\sigma_1),a)$.
+    Writing $P_f$ for the permutation matrix of $f$, the matrix endpoint is
+    \begin{align}
+        P_C P_{S^{1,2}} P_{C^{-1}}
+         & =P_K.
+    \end{align}
+    This is only the finite endpoint identity; it asserts neither a continuous
+    path nor a symmetry action on the full ancilla-enlarged operator algebra.
+    % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -8754,7 +8766,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     before and after $S^{1,2}$ gives
     \begin{align}
         ((\sigma_1,\sigma_2),a)
-        &\longmapsto ((R\sigma_2,R^{-1}\sigma_1),a).
+         & \longmapsto ((R\sigma_2,R^{-1}\sigma_1),a).
     \end{align}
     Extensionality proves the permutation equality, and applying the
     permutation-matrix construction proves its matrix form.
@@ -8764,7 +8776,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:U1-U2-equiv-ancillatrick}
     \notready
     \discussion{5715}
-    \uses{threeMPU2, lemma:sym-trafo-swap, thm:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
+    \uses{threeMPU2, lem:mpu_shift_ancilla_three_swap_endpoint, lemma:sym-trafo-swap, thm:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
     After adding one ancilla of dimension $d$ per site,
     $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
     under both time reversal and transposition.
@@ -8779,7 +8791,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % ancilla-enlarged tensors carry source data and the comparison path is
     % admissible. No preservation under adjoining ancillas is asserted.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_admissible_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{threeMPU2, lem:mpu_shift_ancilla_three_swap_endpoint, lem:mpu_admissible_swap_symmetry_equivalence, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_admissible_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     After adding one ancilla of dimension $d$ per site and performing the source
     blocking, denote the actual enlarged blocked endpoints by
     $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. For either time

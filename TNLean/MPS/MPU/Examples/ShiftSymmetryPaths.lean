@@ -9,7 +9,7 @@ import TNLean.MPS.MPU.Examples.Shift
 # The finite three-swap endpoint for the counter-shift MPU
 
 The proof of arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick`
-(lines 2203--2230), conjugates the swap endpoint by three layers of swaps after
+(lines 2217--2229), conjugates the swap endpoint by three layers of swaps after
 adjoining one identity ancilla of dimension $d$. This module records only the
 resulting finite permutation identity. It does not construct a path or an
 action on the full enlarged operator algebra.
@@ -89,7 +89,7 @@ Conjugating the sitewise physical swap by the three displayed swap layers sends
 $((σ_1,σ_2),a)$ to $((Rσ_2,R^{-1}σ_1),a)$, where $R$ is the cyclic rotation.
 
 Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
-`fig:TR-ancilla` (lines 2203--2230). -/
+`fig:TR-ancilla` (lines 2217--2229). -/
 @[simp] theorem shiftAncillaThreeSwap_conj_swap₁₂_apply (N d : ℕ)
     (σ₁ σ₂ a : Fin N → Fin d) :
     (((shiftAncillaThreeSwap N d).trans (shiftAncillaSwap₁₂ N d)).trans
@@ -107,7 +107,7 @@ permutation. This is the finite endpoint equality from Figure
 `fig:TR-ancilla`, without path or symmetry-action packaging.
 
 Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
-`fig:TR-ancilla` (lines 2203--2230). -/
+`fig:TR-ancilla` (lines 2217--2229). -/
 theorem shiftAncillaThreeSwap_conj_swap₁₂ (N d : ℕ) :
     ((shiftAncillaThreeSwap N d).trans (shiftAncillaSwap₁₂ N d)).trans
         (shiftAncillaThreeSwap N d).symm =
@@ -123,5 +123,22 @@ theorem permMatrix_shiftAncillaThreeSwap_endpoint (N d : ℕ) :
           (shiftAncillaThreeSwap N d).symm) =
       Equiv.Perm.permMatrix ℂ (shiftAncillaCounterShift N d) := by
   rw [shiftAncillaThreeSwap_conj_swap₁₂]
+
+/-- Matrix-conjugation form of the finite endpoint identity.
+
+Source: arXiv:1703.09188, Proposition `prop:U1-U2-equiv-ancillatrick` and Figure
+`fig:TR-ancilla` (lines 2217--2229). -/
+theorem permMatrix_shiftAncillaThreeSwap_conj_swap₁₂ (N d : ℕ) :
+    Equiv.Perm.permMatrix ℂ (shiftAncillaThreeSwap N d) *
+          Equiv.Perm.permMatrix ℂ (shiftAncillaSwap₁₂ N d) *
+        Equiv.Perm.permMatrix ℂ (shiftAncillaThreeSwap N d).symm =
+      Equiv.Perm.permMatrix ℂ (shiftAncillaCounterShift N d) := by
+  rw [← Matrix.permMatrix_mul, ← Matrix.permMatrix_mul]
+  change
+    Equiv.Perm.permMatrix ℂ
+        (((shiftAncillaThreeSwap N d).trans (shiftAncillaSwap₁₂ N d)).trans
+          (shiftAncillaThreeSwap N d).symm) =
+      Equiv.Perm.permMatrix ℂ (shiftAncillaCounterShift N d)
+  exact permMatrix_shiftAncillaThreeSwap_endpoint N d
 
 end MPOTensor
