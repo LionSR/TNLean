@@ -6827,22 +6827,110 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.FiniteChainOperatorSymmetry,
         MPOTensor.IsInvariantUnderSymmetry}
     \leanok
-    A finite-chain operator symmetry $\mathcal S$ specifies a set $A$ of
-    applicable chain lengths and, for every physical dimension $d$ and length
-    $N$, a map
+    At physical dimension $d$, a finite-chain operator symmetry $\mathcal S$
+    specifies a set $A$ of applicable chain lengths and, for every length $N$,
+    a map
     \begin{align}
         \mathcal S_{d,N}\colon
         \operatorname{Mat}_{d^N}(\mathbb C)
          & \longrightarrow \operatorname{Mat}_{d^N}(\mathbb C).
     \end{align}
-    We suppress the subscripts on $\mathcal S_{d,N}$ when $d$ and $N$ are
-    understood. An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
+    An MPO tensor $\mathcal W$ is invariant under $\mathcal S$ if
     \begin{align}
         \mathcal S_{d,N}[W^{(N)}] & =W^{(N)}
     \end{align}
     for every $N\in A$.
     % Source lines: paper_v2.tex 1345--1354.
 \end{definition}
+
+\begin{definition}[Coherent symmetry family under identity ancillas]
+    \label{def:mpu_coherent_symmetry_family}
+    \lean{MPOTensor.tensorPhysicalIdOperator,
+        MPOTensor.FiniteChainOperatorSymmetryFamily,
+        MPOTensor.FiniteChainOperatorSymmetryFamily.at}
+    \leanok
+    \uses{def:mpu_finite_chain_operator_symmetry, def:equivalent-tensors}
+    A coherent symmetry family supplies an action $\mathcal S_{d,N}$ for every
+    physical dimension $d$, with one common set $A$ of applicable lengths. For
+    an ancilla dimension $x$, let
+    \begin{align}
+        \iota_x(X)
+         & = R_{d,x,N}\bigl(X\otimes I_{x^N}\bigr)R_{d,x,N}^{-1},
+    \end{align}
+    where $R_{d,x,N}$ is the canonical sitewise identification of the
+    $d$-dimensional and $x$-dimensional configurations. Coherence means
+    \begin{align}
+        \iota_x\bigl(\mathcal S_{d,N}(X)\bigr)
+         & = \mathcal S_{dx,N}\bigl(\iota_x(X)\bigr).
+    \end{align}
+    Thus the action on the full enlarged operator algebra is supplied data; it
+    is not obtained by extending its values on operators $X\otimes I$.
+    % Source lines: paper_v2.tex 1356--1364.
+\end{definition}
+
+\begin{theorem}[Identity-ancilla transport of symmetry invariance]
+    \label{thm:mpu_symmetry_identity_ancilla_invariant}
+    \lean{MPOTensor.IsInvariantUnderSymmetry.tensorPhysicalId}
+    \leanok
+    \uses{def:mpu_coherent_symmetry_family, def:equivalent-tensors}
+    If $\mathcal U$ is invariant under the $d$-dimensional component of a
+    coherent symmetry family, then $\mathcal U^{(x)}$ is invariant under its
+    $dx$-dimensional component.
+\end{theorem}
+
+\begin{proof}\leanok
+    The finite-chain operator of $\mathcal U^{(x)}$ is $\iota_x(U^{(N)})$.
+    Semiconjugacy and invariance of $U^{(N)}$ give
+    \begin{align}
+        \mathcal S_{dx,N}\bigl(\iota_x(U^{(N)})\bigr)
+         & = \iota_x\bigl(\mathcal S_{d,N}(U^{(N)})\bigr)
+        = \iota_x(U^{(N)}).
+    \end{align}
+\end{proof}
+
+\begin{definition}[Blocked finite-chain symmetry]
+    \label{def:mpu_blocked_finite_chain_symmetry}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.block,
+        MPOTensor.FiniteChainOperatorSymmetry.block_action}
+    \leanok
+    \uses{def:mpu_finite_chain_operator_symmetry, lem:eval_word_block}
+    For a blocking length $k$, the blocked symmetry has applicable lengths
+    \begin{align}
+        A_k & = \{N\mid Nk\in A\}.
+    \end{align}
+    Its action is obtained by conjugating $\mathcal S_{d,Nk}$ along the
+    canonical identification
+    $(\mathbb C^{d^k})^{\otimes N}\cong(\mathbb C^d)^{\otimes Nk}$.
+    % Source line: paper_v2.tex 1366.
+\end{definition}
+
+\begin{theorem}[Blocking transport of symmetry invariance]
+    \label{thm:mpu_symmetry_blocking_invariant}
+    \lean{MPOTensor.IsInvariantUnderSymmetry.blockTensor}
+    \leanok
+    \uses{def:mpu_blocked_finite_chain_symmetry, thm:mpdo_closed_chain_physical_blocking}
+    If $\mathcal U$ is invariant under $\mathcal S$, then its $k$-site blocking
+    is invariant under the blocked symmetry.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $R_{d,N,k}$ be the canonical identification from blocked length-$N$
+    configurations to unblocked length-$Nk$ configurations. For $N\in A_k$,
+    one has $Nk\in A$ and
+    \begin{align}
+        \mathcal S_{k,N}\bigl[U_k^{(N)}\bigr]
+         & = R_{d,N,k}^{-1}\!\left(
+        \mathcal S_{d,Nk}\!\left[
+                R_{d,N,k}\bigl(U_k^{(N)}\bigr)
+        \right]\right)                               \\
+         & = R_{d,N,k}^{-1}\!\left(
+        \mathcal S_{d,Nk}\bigl[U^{(Nk)}\bigr]\right) \\
+         & = R_{d,N,k}^{-1}\bigl(U^{(Nk)}\bigr)      \\
+         & = U_k^{(N)}.
+    \end{align}
+    The second and final equalities are the inverse reindexing identities, and
+    the third is invariance of $U^{(Nk)}$ because $Nk\in A$.
+\end{proof}
 
 \begin{definition}[Strict equivalence under a symmetry]
     \label{def:strictly-equivalent-symmetry}
@@ -6902,15 +6990,57 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{definition}[Equivalence under a symmetry]
     \label{def:equivalent-symmetry}
     \notready
-    \discussion{6017}
+    \discussion{7422}
     \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
     $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
     positive blocking length $k$ and coprime positive ancilla dimensions
     $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
     $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$.
-    % Source lines: paper_v2.tex 1356--1364.
+    % Source lines: paper_v2.tex 1356--1366.
 \end{definition}
+
+\begin{definition}[Fixed-bond coherent-family equivalence under a symmetry]
+    \label{def:mpu_coherent_family_equivalent_symmetry}
+    \lean{MPOTensor.EquivalentUnderSymmetry}
+    \leanok
+    \discussion{7015}
+    \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors,
+        def:mpu_coherent_symmetry_family, def:mpu_blocked_finite_chain_symmetry}
+    % **Scope restriction (fixed bond and coherent family):** the symmetry is
+    % supplied at every physical dimension and semiconjugates the canonical
+    % identity-ancilla embeddings. Documented in
+    % docs/paper-gaps/mpu_symmetry_ancilla_transport.tex.
+    Fix a virtual bond dimension $D$, and let $\mathcal U$ and $\mathcal V$
+    have physical dimensions $d_a$ and $d_b$. They are coherently equivalent
+    under a dimension-indexed symmetry family $\mathcal S$ if they are MPUs and
+    there are a positive blocking length $k$ and coprime positive ancilla
+    dimensions $p_a,p_b$ with $p_ad_a=p_bd_b$ such that
+    $(\mathcal U^{(p_a)})_k$ and
+    $(\mathcal V^{(p_b)})_k$ are strictly equivalent under the $k$-site
+    blocking of the supplied enlarged-dimension symmetry. The family obeys the
+    identity-ancilla semiconjugacy law, and its applicable blocked lengths are
+    precisely the lengths $N$ for which $Nk\in A$. The ancillas are attached
+    before the common blocking.
+    % Source lines: paper_v2.tex 1356--1366, under the stated restrictions.
+\end{definition}
+
+\begin{theorem}[Forgetting symmetry from coherent stabilized equivalence]
+    \label{thm:mpu_symmetry_equivalence_forget}
+    \lean{MPOTensor.EquivalentUnderSymmetry.toEquivalent}
+    \leanok
+    \uses{def:mpu_coherent_family_equivalent_symmetry, def:equivalent-tensors,
+        lem:mpu_strict_symmetry_equivalence_forget}
+    Fixed-bond equivalence under a coherent symmetry family implies ordinary
+    equivalence after the same ancillas and blocking.
+\end{theorem}
+
+\begin{proof}\leanok
+    Retain the MPU hypotheses, positive coprime ancilla dimensions, common
+    positive blocking length, and physical-dimension equality from the
+    symmetry-preserving witness. Forgetting invariance from its final strict
+    path gives the required ordinary stabilized equivalence.
+\end{proof}
 
 \begin{definition}[Admissible equivalence under a symmetry]
     \label{def:mpu_admissible_symmetry_equivalence}
