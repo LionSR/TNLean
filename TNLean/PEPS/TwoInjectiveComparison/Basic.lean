@@ -22,6 +22,11 @@ Molnár--Schuch--Verstraete--Cirac, arXiv:1804.04964, Section 3, lines
 injective tensors agree after inserting an arbitrary matrix on each shared
 virtual bond, then the corresponding tensors differ by reciprocal nonzero
 scalars.
+
+The module also gives the operator-Schmidt comparison used in Lemma 5,
+lines 2213--2252 of the same source: equality of the two end contractions and
+linear independence of the two genuine families determine one unique matrix
+on their common bond.
 -/
 
 open scoped BigOperators Matrix
@@ -645,6 +650,68 @@ theorem gauge_eq2
   simp only [map_smul, smul_eq_mul, hχ ν₀, mul_ite, mul_one, mul_zero,
     Finset.sum_ite_eq' Finset.univ ν₀, Finset.mem_univ, ite_true] at happ
   rw [happ]
+
+omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+/-- **The virtual operation obtained by comparing the two end blocks.**
+
+Let `A₁` and `A₂` be the two genuine injective blocks on the ends of a
+tensor-network segment, and let `C₁` and `C₂` be the corresponding blocks
+after applying the two end physical operations.  If the two resulting open
+contractions agree, then there is a unique matrix `X` on the bond between the
+blocks such that `C₁` is obtained from `A₁` by inserting `X`, while `C₂` is
+obtained from `A₂` by inserting the transpose action of the same `X`.
+
+Only the two genuine blocks are required to be injective.  In particular, no
+injectivity assumption is made on the physically modified blocks.  This is the
+operator-Schmidt uniqueness argument used in the converse of Lemma 5 of
+arXiv:1804.04964: after inverting the genuine regions `45` and `51`, comparing
+the two ends produces `X` and `Y`, and equality of the common state forces
+`X = Y`.
+
+Source: arXiv:1804.04964, Lemma 5 and its proof, lines 2044--2250 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem existsUnique_virtualOperation_of_endPair
+    {K V₁ V₂ : Type*} [Fintype K]
+    (A₁ C₁ : K → V₁ → ℂ) (A₂ C₂ : K → V₂ → ℂ)
+    (hA₁ : LinearIndependent ℂ (fun μ : K ↦ (A₁ μ : V₁ → ℂ)))
+    (hA₂ : LinearIndependent ℂ (fun μ : K ↦ (A₂ μ : V₂ → ℂ)))
+    (hcontract : ∀ (p₁ : V₁) (p₂ : V₂),
+      (∑ μ : K, C₁ μ p₁ * A₂ μ p₂) = ∑ ν : K, A₁ ν p₁ * C₂ ν p₂) :
+    ∃! X : Matrix K K ℂ,
+      (∀ (ν : K) (p₁ : V₁), C₁ ν p₁ = ∑ μ : K, A₁ μ p₁ * X μ ν) ∧
+        ∀ (μ : K) (p₂ : V₂), C₂ μ p₂ = ∑ ν : K, X μ ν * A₂ ν p₂ := by
+  classical
+  obtain ⟨g, hleft⟩ := gauge_eq1
+    (a := C₁) (b := A₁) (a' := A₂) (b' := C₂) hA₂ hcontract
+  have hright := gauge_eq2
+    (a := C₁) (b := A₁) (a' := A₂) (b' := C₂) (g := g) hA₁ hcontract hleft
+  let X : Matrix K K ℂ := fun μ ν ↦ g ν μ
+  have hleftX : ∀ (ν : K) (p₁ : V₁), C₁ ν p₁ = ∑ μ : K, A₁ μ p₁ * X μ ν := by
+    intro ν p₁
+    simpa [X, mul_comm] using hleft ν p₁
+  have hrightX : ∀ (μ : K) (p₂ : V₂), C₂ μ p₂ = ∑ ν : K, X μ ν * A₂ ν p₂ := by
+    intro μ p₂
+    simpa [X] using hright μ p₂
+  refine ⟨X, ⟨hleftX, hrightX⟩, ?_⟩
+  intro Y hY
+  apply Matrix.ext
+  intro μ ν
+  have hzero :
+      (∑ κ : K, (X κ ν - Y κ ν) • (A₁ κ : V₁ → ℂ)) = 0 := by
+    funext p₁
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Pi.zero_apply]
+    calc
+      (∑ κ : K, (X κ ν - Y κ ν) * A₁ κ p₁) =
+          (∑ κ : K, A₁ κ p₁ * X κ ν) - ∑ κ : K, A₁ κ p₁ * Y κ ν := by
+        rw [← Finset.sum_sub_distrib]
+        apply Finset.sum_congr rfl
+        intro κ _
+        ring
+      _ = C₁ ν p₁ - C₁ ν p₁ := by rw [← hleftX ν p₁, ← hY.1 ν p₁]
+      _ = 0 := sub_self _
+  have hcoeff := (Fintype.linearIndependent_iff.mp hA₁)
+    (fun κ : K ↦ X κ ν - Y κ ν) hzero μ
+  exact (sub_eq_zero.mp hcoeff).symm
 
 omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
 /-- Invertibility of the gauge. If `a = g·b` and `b = g'·a` with the family `a`

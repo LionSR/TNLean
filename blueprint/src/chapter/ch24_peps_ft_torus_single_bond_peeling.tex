@@ -97,6 +97,54 @@
     boundary edge of $S$.
 \end{proof}
 
+\begin{definition}[Boundary configurations of the staircase end windows]
+    \label{def:peps_horizontal_staircase_end_window_boundary_config}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_fst}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_snd}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_fst}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_snd}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_fst}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_snd}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_symm_referenceEdge}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindowBoundaryConfigEquiv_symm_external}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_symm_referenceEdge}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindowBoundaryConfigEquiv_symm_external}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_left}
+    \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_right}
+    \leanok
+    \uses{thm:peps_horizontal_staircase_end_pair_boundary, thm:peps_horizontal_staircase_reference_edge_crossing}
+    Under the same geometric bounds, write
+    $\partial_{\mathrm{left}}S$ and $\partial_{\mathrm{right}}S$
+    for the boundary edges of $S$ which lie on the corresponding end-window
+    boundary.  Then the boundary-configuration spaces have canonical
+    factorizations
+    \begin{align}
+        \operatorname{Conf}(\partial W_{\mathrm{left}})
+         & \cong \operatorname{Conf}(e)
+        \times\operatorname{Conf}(\partial_{\mathrm{left}}S),
+        \notag                          \\
+        \operatorname{Conf}(\partial W_{\mathrm{right}})
+         & \cong \operatorname{Conf}(e)
+        \times\operatorname{Conf}(\partial_{\mathrm{right}}S),
+        \notag                          \\
+        \operatorname{Conf}(\partial S)
+         & \cong
+        \operatorname{Conf}(\partial_{\mathrm{left}}S)
+        \times\operatorname{Conf}(\partial_{\mathrm{right}}S).
+        \notag
+    \end{align}
+    These equivalences preserve every underlying lattice-edge label.  Thus
+    the reference edge is the only contracted virtual index shared by the
+    two highlighted end windows; every other virtual index remains on the
+    corresponding open boundary of $S$.
+    The constructions split each end-window configuration at the reference
+    edge and reindex the remaining dependent products along the corresponding
+    boundary-edge identifications.
+\end{definition}
+
 \begin{lemma}[Complement split for an end window]
     \label{lem:peps_horizontal_staircase_end_window_complement_split}
     \lean{TNLean.PEPS.horizontalStaircaseEndPair_sdiff_leftWindow}
@@ -184,6 +232,176 @@
     completed corner is an injective $L\times K$ window, so
     Theorem~\ref{thm:peps_staircase_pair_cancel} cancels it and leaves the
     equality on the end pair $S$.
+\end{proof}
+
+\begin{theorem}[Lemma 5 comparison of the two end blocks]
+    \label{thm:peps_existsUnique_virtualOperation_of_endPair}
+    \lean{TNLean.PEPS.gauge_eq1}
+    \lean{TNLean.PEPS.gauge_eq2}
+    \lean{TNLean.PEPS.existsUnique_virtualOperation_of_endPair}
+    \leanok
+    Let $K$ be the basis of the virtual space on the bond between two
+    injective blocks, and let
+    $\{A_{1,\mu}\}_{\mu\in K}$ and
+    $\{A_{2,\mu}\}_{\mu\in K}$ be linearly independent families.  Suppose
+    that the two end physical operations $O_1$ and $O_3$ produce families
+    $C_1$ and $C_2$ satisfying the open contraction identity
+    \begin{align}
+        \sum_{\mu\in K} C_{1,\mu}\otimes A_{2,\mu}
+        =
+        \sum_{\nu\in K} A_{1,\nu}\otimes C_{2,\nu}.
+        \notag
+    \end{align}
+    Then there is a unique matrix $X\in\MN{|K|}$ such that
+    \begin{align}
+        C_{1,\nu}
+         & =\sum_{\mu\in K} A_{1,\mu}X_{\mu,\nu},
+         &
+        C_{2,\mu}
+         & =\sum_{\nu\in K} X_{\mu,\nu}A_{2,\nu}.
+        \notag
+    \end{align}
+    Thus the two end operations are obtained by inserting the same virtual
+    operation $X$ on their common bond.  No injectivity is required of the
+    modified families $C_1$ and $C_2$.  This is the ``compare the two ends''
+    step in Lemma~5 of \cite{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply a dual functional to the linearly independent family
+    $\{A_{2,\mu}\}$ in the open contraction identity.  This expresses every
+    $C_{1,\nu}$ as a linear combination of the $A_{1,\mu}$ with a coefficient
+    matrix $X$.  Substitution into the same identity and linear independence
+    of $\{A_{1,\mu}\}$ gives the second displayed relation with the same
+    matrix.  Linear independence of the first genuine family also makes the
+    coefficient matrix unique.
+\end{proof}
+
+\begin{theorem}[Normalized coupling of the highlighted end windows]
+    \label{thm:peps_horizontal_staircase_normalized_blue_coupling}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_isExternalCrossingEdge_iff}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_isExternalCrossingEdge_iff}
+    \lean{TNLean.PEPS.horizontalStaircaseEndWindows_externalCrossingBondProd_eq}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.regionBoundaryLabel_blue_eq_of_host_eq_of_complement_eq}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq_regionBlockedWeight}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_inv_smul_regionBlockedWeight}
+    \lean{TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff_eq_zero_of_no_compatible_boundary}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_threeBlockBlueCoeff_factorization}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_threeBlockBlueCoeff_factorization}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_threeBlockBlueCoeff_eq_zero_of_external_ne}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_threeBlockBlueCoeff_eq_zero_of_external_ne}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_normalized_threeBlockBlueCoeff_factorization}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_normalized_threeBlockBlueCoeff_factorization}
+    \leanok
+    \uses{def:peps_horizontal_staircase_end_window_boundary_config, lem:peps_horizontal_staircase_end_window_complement_split}
+    Write the boundary coordinates of the two end windows and their union as
+    \begin{align}
+        \mu_{\mathrm L} & =(k,\eta_{\mathrm L}),
+                        & \mu_{\mathrm R}        & =(k,\eta_{\mathrm R}),
+                        & \nu                    & =(\eta'_{\mathrm L},\eta'_{\mathrm R}),
+        \notag
+    \end{align}
+    where $k$ is the coordinate on the reference edge.  In the extension of
+    a left-window insert to the end pair, the normalized coupling to the
+    right window vanishes unless
+    $\eta_{\mathrm L}=\eta'_{\mathrm L}$.  On that fibre it is
+    \begin{align}
+        \Lambda_{\mathrm L}^{-1}
+        A_{\mathrm R}(k,\eta'_{\mathrm R}),
+        \notag
+    \end{align}
+    where $A_{\mathrm R}$ is the genuine blocked tensor of the right window
+    and $\Lambda_{\mathrm L}$ is the product of the exterior interior-bond
+    factor and the bond dimensions on the external legs of the left window.
+    The analogous statement holds after interchanging left and right.  If
+    the tensor is translation invariant and every bond dimension is
+    positive, then $\Lambda_{\mathrm L}=\Lambda_{\mathrm R}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The crossing edges are precisely the boundary edges of the host window
+    other than the reference edge.  Compatible host and end-pair boundary
+    labels therefore determine one boundary label on the opposite window;
+    the blue coupling reduces to its genuine blocked tensor.  Incompatible
+    external labels cannot arise from a global virtual configuration and give
+    zero.
+    Finally, the two end windows are translates.  Translation invariance
+    equates their full boundary products, and cancellation of the common
+    positive reference-edge factor equates the two normalizations.
+\end{proof}
+
+\begin{theorem}[The end-pair extensions contract over one bond]
+    \label{thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
+    \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_extendInsert_eq_singleBondContraction}
+    \lean{TNLean.PEPS.horizontalStaircaseRightWindow_extendInsert_eq_singleBondContraction}
+    \lean{TNLean.PEPS.singleBondContraction_eq_of_horizontalStaircaseEndPair_extendInsert_eq}
+    \leanok
+    \uses{thm:peps_horizontal_staircase_normalized_blue_coupling}
+    Let $C_{\mathrm L}$ and $C_{\mathrm R}$ be arbitrary inserts on the two
+    end windows.  In the boundary coordinates above, their extensions to the
+    end pair are
+    \begin{align}
+        \Ext(C_{\mathrm L})
+         & =\Lambda_{\mathrm L}^{-1}
+        \sum_k C_{\mathrm L}(k,\eta_{\mathrm L})
+        A_{\mathrm R}(k,\eta_{\mathrm R}),
+        \notag                       \\
+        \Ext(C_{\mathrm R})
+         & =\Lambda_{\mathrm R}^{-1}
+        \sum_k A_{\mathrm L}(k,\eta_{\mathrm L})
+        C_{\mathrm R}(k,\eta_{\mathrm R}).
+        \notag
+    \end{align}
+    Hence, for a translation-invariant tensor with positive bond dimensions,
+    equality of the two extensions implies the single-bond identity
+    \begin{align}
+        \sum_k C_{\mathrm L}(k,\eta_{\mathrm L})
+        A_{\mathrm R}(k,\eta_{\mathrm R})
+        =
+        \sum_k A_{\mathrm L}(k,\eta_{\mathrm L})
+        C_{\mathrm R}(k,\eta_{\mathrm R}).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Reindex each extension sum by the reference-edge coordinate and the
+    external boundary data.  The normalized-coupling theorem kills every
+    incompatible fibre and identifies the unique surviving fibre with the
+    genuine opposite-window tensor.  The common nonzero normalization then
+    cancels from the equality of extensions.
+\end{proof}
+
+\begin{theorem}[Lemma 5 operation on the staircase reference edge]
+    \label{thm:peps_existsUnique_virtualOperation_of_horizontal_staircase_end_pair}
+    \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}
+    \leanok
+    \uses{thm:peps_existsUnique_virtualOperation_of_endPair, thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
+    Suppose the tensor is translation invariant, all bond dimensions are
+    positive, and the two genuine highlighted end-window blocked tensors are
+    injective.  If arbitrary inserts $C_{\mathrm L}$ and $C_{\mathrm R}$ on
+    those windows have equal extensions to the open end pair, then there is
+    a unique matrix $X$ on the reference edge such that
+    \begin{align}
+        C_{\mathrm L}(k,\eta_{\mathrm L})
+         & =\sum_j A_{\mathrm L}(j,\eta_{\mathrm L})X_{jk},
+        \notag                                              \\
+        C_{\mathrm R}(k,\eta_{\mathrm R})
+         & =\sum_j X_{kj}A_{\mathrm R}(j,\eta_{\mathrm R}).
+        \notag
+    \end{align}
+    No injectivity is assumed for either modified insert, a single vertex,
+    the end pair, or its complement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The preceding theorem turns the open end-pair equality into the exact
+    one-bond contraction identity.  Injectivity of each genuine end window
+    implies linear independence after keeping its external boundary and
+    physical coordinates together.  The two-end comparison theorem then
+    gives the displayed relations and uniqueness of $X$.
 \end{proof}
 
 \begin{theorem}[Single-bond peeling of the staircase end equality]

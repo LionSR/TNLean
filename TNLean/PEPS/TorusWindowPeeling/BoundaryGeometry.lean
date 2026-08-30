@@ -239,6 +239,494 @@ theorem isRegionBoundaryEdge_endPair_exactlyOne_window {L K a b : ℕ}
   · refine Or.inr ⟨fun hfL => hne ?_, hfR⟩
     exact eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows A hL hK ha0 haw hbh hfL hfR
 
+/-! ### Boundary configurations of the two end windows
+
+The preceding edge partition now gives the configuration spaces that occur in the final
+comparison in Lemma 5.  Each end-window boundary consists of the reference edge `e` and that
+window's portion of the external boundary of the end pair.  The boundary of the end pair itself
+is the product of the two external portions.  These equivalences retain the actual lattice-edge
+indices; in particular, they do not replace a window boundary by an unrelated square matrix
+space. -/
+
+/-- The external boundary edges of the left end window: boundary edges of the end pair which
+also lie on the left window boundary.  The reference edge is absent because it is interior to the
+end pair.
+
+Source: arXiv:1804.04964, the two highlighted end regions and their common bond in the proof
+sketch at lines 2415--2444 of `Papers/1804.04964/paper_normal.tex`. -/
+abbrev HorizontalStaircaseLeftExternalBoundaryEdge {L K : ℕ}
+    (s : TorusVertex width height) :=
+  {f : {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height)
+        (horizontalStaircaseEndPair s L K) f} //
+    IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseLeftWindow s L K) f.1}
+
+/-- The external boundary edges of the right end window: boundary edges of the end pair which
+also lie on the right window boundary.
+
+Source: arXiv:1804.04964, the two highlighted end regions and their common bond in the proof
+sketch at lines 2415--2444 of `Papers/1804.04964/paper_normal.tex`. -/
+abbrev HorizontalStaircaseRightExternalBoundaryEdge {L K : ℕ}
+    (s : TorusVertex width height) :=
+  {f : {f : Edge (torusGraph width height) //
+      IsRegionBoundaryEdge (G := torusGraph width height)
+        (horizontalStaircaseEndPair s L K) f} //
+    IsRegionBoundaryEdge (G := torusGraph width height)
+      (horizontalStaircaseRightWindow s L K) f.1}
+
+/-- A virtual configuration on the left end window's external legs.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+abbrev HorizontalStaircaseLeftExternalBoundaryConfig
+    (A : Tensor (torusGraph width height) d) {L K : ℕ} (s : TorusVertex width height) :=
+  (f : HorizontalStaircaseLeftExternalBoundaryEdge (width := width) (height := height)
+    (L := L) (K := K) s) → Fin (A.bondDim f.1.1)
+
+/-- A virtual configuration on the right end window's external legs.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+abbrev HorizontalStaircaseRightExternalBoundaryConfig
+    (A : Tensor (torusGraph width height) d) {L K : ℕ} (s : TorusVertex width height) :=
+  (f : HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+    (L := L) (K := K) s) → Fin (A.bondDim f.1.1)
+
+private noncomputable def horizontalStaircaseLeftExternalBoundaryEdgeEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    {f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
+      f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩} ≃
+      HorizontalStaircaseLeftExternalBoundaryEdge (width := width) (height := height)
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) where
+  toFun f :=
+    ⟨⟨f.1.1, isRegionBoundaryEdge_endPair_of_leftWindow A hL hK ha0 haw hbh f.1.2
+      (fun he => f.2 (Subtype.ext he))⟩, f.1.2⟩
+  invFun f :=
+    ⟨⟨f.1.1, f.2⟩, fun he =>
+      ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh f.1.2
+        (congrArg Subtype.val he)⟩
+  left_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+  right_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+
+private noncomputable def horizontalStaircaseRightExternalBoundaryEdgeEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    {f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
+      f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩} ≃
+      HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) where
+  toFun f :=
+    ⟨⟨f.1.1, isRegionBoundaryEdge_endPair_of_rightWindow A hL hK ha0 haw hbh f.1.2
+      (fun he => f.2 (Subtype.ext he))⟩, f.1.2⟩
+  invFun f :=
+    ⟨⟨f.1.1, f.2⟩, fun he =>
+      ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh f.1.2
+        (congrArg Subtype.val he)⟩
+  left_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+  right_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+
+private noncomputable def horizontalStaircaseLeftAwayConfigEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    ((f : {f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
+      f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩}) → Fin (A.bondDim f.1.1)) ≃
+      HorizontalStaircaseLeftExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
+  Equiv.piCongrLeft' (fun f => Fin (A.bondDim f.1.1))
+    (horizontalStaircaseLeftExternalBoundaryEdgeEquiv A hL hK ha0 haw hbh)
+
+private noncomputable def horizontalStaircaseRightAwayConfigEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    ((f : {f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
+      f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩}) → Fin (A.bondDim f.1.1)) ≃
+      HorizontalStaircaseRightExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
+  Equiv.piCongrLeft' (fun f => Fin (A.bondDim f.1.1))
+    (horizontalStaircaseRightExternalBoundaryEdgeEquiv A hL hK ha0 haw hbh)
+
+/-- **Boundary-configuration factorization of the left end window.**
+
+The boundary configuration of the left end window is equivalently its virtual index on the
+reference edge `e`, together with a configuration on precisely the left portion of the end-pair
+boundary.  The equivalence is the split at `e`, followed by the geometric identification
+`isRegionBoundaryEdge_endPair_of_leftWindow`; the converse uses
+`ne_referenceEdge_of_isRegionBoundaryEdge_endPair`.
+
+Source: arXiv:1804.04964, the comparison of the two highlighted end regions at lines 2415--2444
+of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def horizontalStaircaseLeftWindowBoundaryConfigEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    RegionBoundaryConfig (G := torusGraph width height) A
+        (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) ≃
+      Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)) ×
+      HorizontalStaircaseLeftExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
+  (Equiv.piSplitAt
+    (⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+      isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
+        hL hK ha0 haw hbh⟩ :
+      {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f})
+    (fun f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f} =>
+      Fin (A.bondDim f.1))).trans
+  (Equiv.prodCongr (Equiv.refl _)
+    (horizontalStaircaseLeftAwayConfigEquiv A hL hK ha0 haw hbh))
+
+/-- **Boundary-configuration factorization of the right end window.**
+
+The transpose of `horizontalStaircaseLeftWindowBoundaryConfigEquiv`: the boundary configuration
+of the right end window is its index on `e` together with its external portion of the end-pair
+boundary.
+
+Source: arXiv:1804.04964, the comparison of the two highlighted end regions at lines 2415--2444
+of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def horizontalStaircaseRightWindowBoundaryConfigEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    RegionBoundaryConfig (G := torusGraph width height) A
+        (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) ≃
+      Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)) ×
+      HorizontalStaircaseRightExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
+  (Equiv.piSplitAt
+    (⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+      isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
+        hL hK ha0 haw hbh⟩ :
+      {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f})
+    (fun f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f} =>
+      Fin (A.bondDim f.1))).trans
+  (Equiv.prodCongr (Equiv.refl _)
+    (horizontalStaircaseRightAwayConfigEquiv A hL hK ha0 haw hbh))
+
+private noncomputable def horizontalStaircaseNotLeftExternalBoundaryEdgeEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    {f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f} //
+      ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+        (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f.1} ≃
+      HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) where
+  toFun f := ⟨f.1, (isRegionBoundaryEdge_window_of_endPair f.1.2).resolve_left f.2⟩
+  invFun f := ⟨f.1, fun hfL =>
+    ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh f.1.2
+      (eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows A hL hK ha0 haw hbh hfL f.2)⟩
+  left_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+  right_inv f := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+
+private noncomputable def horizontalStaircaseNotLeftExternalBoundaryConfigEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    ((f : {f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f} //
+      ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+        (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f.1}) →
+      Fin (A.bondDim f.1.1)) ≃
+      HorizontalStaircaseRightExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
+  Equiv.piCongrLeft' (fun f => Fin (A.bondDim f.1.1))
+    (horizontalStaircaseNotLeftExternalBoundaryEdgeEquiv A hL hK ha0 haw hbh)
+
+/-- **Boundary-configuration factorization of the end pair.**
+
+The boundary configuration of the end pair is equivalently a pair consisting of its left-window
+external configuration and its right-window external configuration.  This is the configuration
+form of `isRegionBoundaryEdge_endPair_exactlyOne_window`.  Together with the two window
+factorizations, it states that the two highlighted regions have exactly one contracted leg, the
+reference edge `e`, while all remaining legs stay open on one side or the other.
+
+Source: arXiv:1804.04964, the open-boundary comparison of the two highlighted end regions at
+lines 2415--2444 of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def horizontalStaircaseEndPairBoundaryConfigEquiv
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
+    RegionBoundaryConfig (G := torusGraph width height) A
+        (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) ≃
+      HorizontalStaircaseLeftExternalBoundaryConfig A
+          (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) ×
+        HorizontalStaircaseRightExternalBoundaryConfig A
+          (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
+  (Equiv.piEquivPiSubtypeProd
+    (fun f : {f : Edge (torusGraph width height) //
+        IsRegionBoundaryEdge (G := torusGraph width height)
+          (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f} =>
+      IsRegionBoundaryEdge (G := torusGraph width height)
+        (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f.1)
+    (fun f => Fin (A.bondDim f.1))).trans
+  (Equiv.prodCongr (Equiv.refl _)
+    (horizontalStaircaseNotLeftExternalBoundaryConfigEquiv A hL hK ha0 haw hbh))
+
+/-! The following evaluation rules make the three equivalences usable for reindexing the finite
+sums in the end-pair contraction. -/
+
+/-- The left-window split reads its first factor at the reference edge.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseLeftWindowBoundaryConfigEquiv_fst
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (mu : RegionBoundaryConfig (G := torusGraph width height) A
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)) :
+    (horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh mu).1 =
+      mu ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩ := rfl
+
+/-- The left-window split restricts its second factor to the left external legs.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseLeftWindowBoundaryConfigEquiv_snd
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (mu : RegionBoundaryConfig (G := torusGraph width height) A
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K))
+    (f : HorizontalStaircaseLeftExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh mu).2 f =
+      mu ⟨f.1.1, f.2⟩ := rfl
+
+/-- The right-window split reads its first factor at the reference edge.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseRightWindowBoundaryConfigEquiv_fst
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (mu : RegionBoundaryConfig (G := torusGraph width height) A
+      (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K)) :
+    (horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh mu).1 =
+      mu ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩ := rfl
+
+/-- The right-window split restricts its second factor to the right external legs.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseRightWindowBoundaryConfigEquiv_snd
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (mu : RegionBoundaryConfig (G := torusGraph width height) A
+      (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K))
+    (f : HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh mu).2 f =
+      mu ⟨f.1.1, f.2⟩ := rfl
+
+/-- The end-pair split restricts its first factor to the left external legs.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseEndPairBoundaryConfigEquiv_fst
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (mu : RegionBoundaryConfig (G := torusGraph width height) A
+      (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K))
+    (f : HorizontalStaircaseLeftExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh mu).1 f =
+      mu f.1 := rfl
+
+/-- The end-pair split restricts its second factor to the right external legs.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseEndPairBoundaryConfigEquiv_snd
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (mu : RegionBoundaryConfig (G := torusGraph width height) A
+      (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K))
+    (f : HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh mu).2 f =
+      mu f.1 := rfl
+
+/-- Reassembling a left-window boundary configuration reads the distinguished factor at `e`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseLeftWindowBoundaryConfigEquiv_symm_referenceEdge
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (x : Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)) ×
+      HorizontalStaircaseLeftExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).symm x
+      ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩ = x.1 := by
+  have hx := congrArg Prod.fst
+    ((horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).apply_symm_apply x)
+  exact hx
+
+/-- Reassembling a left-window boundary configuration preserves every external leg.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseLeftWindowBoundaryConfigEquiv_symm_external
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (x : Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)) ×
+      HorizontalStaircaseLeftExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)))
+    (f : HorizontalStaircaseLeftExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).symm x
+      ⟨f.1.1, f.2⟩ = x.2 f := by
+  have hx := congrFun (congrArg Prod.snd
+    ((horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).apply_symm_apply x)) f
+  exact hx
+
+/-- Reassembling a right-window boundary configuration reads the distinguished factor at `e`.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseRightWindowBoundaryConfigEquiv_symm_referenceEdge
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (x : Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)) ×
+      HorizontalStaircaseRightExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).symm x
+      ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
+        isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
+          hL hK ha0 haw hbh⟩ = x.1 := by
+  have hx := congrArg Prod.fst
+    ((horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).apply_symm_apply x)
+  exact hx
+
+/-- Reassembling a right-window boundary configuration preserves every external leg.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseRightWindowBoundaryConfigEquiv_symm_external
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (x : Fin (A.bondDim
+        (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)) ×
+      HorizontalStaircaseRightExternalBoundaryConfig A
+        (L := L) (K := K) ((a : ZMod width), (b : ZMod height)))
+    (f : HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).symm x
+      ⟨f.1.1, f.2⟩ = x.2 f := by
+  have hx := congrFun (congrArg Prod.snd
+    ((horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh).apply_symm_apply x)) f
+  exact hx
+
+/-- Reassembling an end-pair boundary configuration preserves its left external factor.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseEndPairBoundaryConfigEquiv_symm_left
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (x : HorizontalStaircaseLeftExternalBoundaryConfig A
+          (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) ×
+        HorizontalStaircaseRightExternalBoundaryConfig A
+          (L := L) (K := K) ((a : ZMod width), (b : ZMod height)))
+    (f : HorizontalStaircaseLeftExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh).symm x f.1 =
+      x.1 f := by
+  have hx := congrFun (congrArg Prod.fst
+    ((horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh).apply_symm_apply x)) f
+  exact hx
+
+/-- Reassembling an end-pair boundary configuration preserves its right external factor.
+
+Source: arXiv:1804.04964, proof sketch at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem horizontalStaircaseEndPairBoundaryConfigEquiv_symm_right
+    (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
+    (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
+    (x : HorizontalStaircaseLeftExternalBoundaryConfig A
+          (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) ×
+        HorizontalStaircaseRightExternalBoundaryConfig A
+          (L := L) (K := K) ((a : ZMod width), (b : ZMod height)))
+    (f : HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
+      (L := L) (K := K) ((a : ZMod width), (b : ZMod height))) :
+    (horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh).symm x f.1 =
+      x.2 f := by
+  have hx := congrFun (congrArg Prod.snd
+    ((horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh).apply_symm_apply x)) f
+  exact hx
+
 /-! ### The complement of one window is the opposite window and the rest
 
 The complement of one end window splits as the opposite end window joined with the complement of
