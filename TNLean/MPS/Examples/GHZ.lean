@@ -158,14 +158,13 @@ This virtual symmetry, together with $\sigma_z$ being a fixed point of the
 transfer map, are the transfer-matrix fingerprints of long-range order. -/
 
 /-- The Pauli Z matrix `σz = diag(1, -1)` on the bond space. -/
-private def pauliZ : Matrix (Fin 2) (Fin 2) ℂ := !![(1 : ℂ), 0; 0, -1]
+def pauliZ : Matrix (Fin 2) (Fin 2) ℂ := !![(1 : ℂ), 0; 0, -1]
 
-private lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
+lemma pauliZ_sq : pauliZ * pauliZ = 1 := by
   ext i j; fin_cases i <;> fin_cases j <;>
     simp [pauliZ, Matrix.mul_apply, Fin.sum_univ_two]
 
-/-- Each GHZ matrix commutes with `σz`: both `A⁰` and `A¹` are diagonal.  (Kept
-`private`, as `σz` here is only an internal abbreviation.) -/
+/-- Each GHZ matrix commutes with `σz`: both `A⁰` and `A¹` are diagonal. -/
 private lemma ghz_pauliZ_commutes (i : Fin 2) :
     pauliZ * ghzTensor i = ghzTensor i * pauliZ := by
   fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;>

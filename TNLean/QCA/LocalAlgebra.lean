@@ -77,10 +77,6 @@ def restrict {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (x : Config d Γ) : 
   fun i ↦ x ⟨i, h i.2⟩
 
 @[simp]
-lemma restrict_apply {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (x : Config d Γ) (i : Λ) :
-    restrict h x i = x ⟨i, h i.2⟩ := rfl
-
-@[simp]
 lemma restrict_refl {d : ℕ} {Λ : Finset ℤ} (x : Config d Λ) : restrict (by rfl) x = x := by
   rfl
 
@@ -110,10 +106,6 @@ def splitEquiv {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
       simp [restrict]
     · funext i
       simp [Finset.mem_sdiff.mp i.2]
-
-@[simp]
-lemma splitEquiv_apply_fst {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (x : Config d Γ) :
-    (splitEquiv h x).1 = restrict h x := rfl
 
 /-- Restricting a configuration reconstructed by `splitEquiv` to the retained region recovers
 the first component.
