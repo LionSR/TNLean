@@ -393,7 +393,7 @@ specified in Definition~\ref{def:mpug_group_representation}.
         X_i & =\widetilde X_iK_i, & \widetilde Y_i & =K_iY_i.
         \label{eq:mpug_comparison_matrices}
     \end{align}
-    If $K_2\otimes K_1$ is unitary, then there are a positive real number
+    If $K_1\otimes K_2$ is unitary, then there are a positive real number
     $\delta$ and unitary matrices $W_1,W_2$ such that
     \begin{align}
         \widetilde X_1 & =\delta^{-1}X_1W_1,          &
@@ -412,8 +412,8 @@ specified in Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{thm:mpug_unitary_kronecker_factors}
     Apply Theorem~\ref{thm:mpug_unitary_kronecker_factors} to
-    $K_2\otimes K_1$. It gives $r>0$ and unitary matrices $U_2,U_1$ with
-    $K_2=rU_2$ and $K_1=r^{-1}U_1$. Set $\delta=r^{-1}$ and
+    $K_1\otimes K_2$. It gives $\delta>0$ and unitary matrices $U_1,U_2$ with
+    $K_1=\delta U_1$ and $K_2=\delta^{-1}U_2$. Set
     $W_i=U_i^\dagger$. Substitution into
     (\ref{eq:mpug_comparison_matrices}) gives
     (\ref{eq:mpug_reciprocal_unitary_gauges}); positivity of $\delta$ gives
