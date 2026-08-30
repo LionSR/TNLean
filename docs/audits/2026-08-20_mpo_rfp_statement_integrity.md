@@ -51,3 +51,5 @@ in `TNLean/MPS/MPDO/LocalOrthogonalSumAreaLaw.lean`. Its statement and proof
 are unchanged. Its sole non-`Archive` consumer is the public theorem
 `MPOTensor.firstSiteMatrix_mul_reducedBlockState_of_ketLeftMul_eq` in the same
 module, and no Blueprint declaration cites the former public name.
+No compatibility alias is retained, in accordance with
+`docs/project_conventions.md`.
