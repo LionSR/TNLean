@@ -44,10 +44,11 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   length-`L` block products separates every tuple of block matrices.
 
   **Scope restriction (per-copy finite-word separation):** this field is not
-  CPSV16 block-injective canonical form. The paper's definition is a literal
-  one-letter simultaneous span, and its Lemma L first groups gauge-equivalent
-  copies of one basis-of-normal-tensors representative. Requiring separation
-  for the ungrouped family here is stronger and fails on repeated copies; see
+  the block-injective canonical form of arXiv:1606.00608, Definition `defnbi`,
+  lines 317--322. That definition is a literal one-letter simultaneous span,
+  and Lemma L first groups gauge-equivalent copies of one
+  basis-of-normal-tensors representative. Requiring separation for the
+  ungrouped family here is stronger and fails on repeated copies; see
   `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`. -/
   finiteWordTraceSeparation : ∃ L : ℕ,
     ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),

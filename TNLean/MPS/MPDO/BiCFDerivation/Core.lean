@@ -202,7 +202,8 @@ def wordEntryFamily
 
 /-- A finite family of homogeneous words whose trace pairings separate every
 matrix tuple. This is a finite-word condition, not the literal one-letter
-block-injective canonical form of CPSV16 Definition `defnbi`. -/
+block-injective canonical form of arXiv:1606.00608, Definition `defnbi`,
+lines 317--322. -/
 def HasFiniteWordTraceSeparation
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
   ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
@@ -424,11 +425,11 @@ private theorem exists_pi_trace_repr
       ∃ Δk : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
         ∀ Mk : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
           (f.comp (LinearMap.single ℂ
-            (fun j : Fin r => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k)) Mk =
+            (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k)) Mk =
             Matrix.trace (Δk * Mk) :=
     fun k => exists_trace_repr
       (f.comp (LinearMap.single ℂ
-        (fun j : Fin r => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k))
+        (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k))
   choose Δ hΔ using hcomponent
   refine ⟨Δ, ?_⟩
   intro M

@@ -45,7 +45,8 @@ from the canonical-form/BNT hypotheses of CPGSV17 Proposition IV.3.
 The remaining gap is **not** a generic linear-algebra reduction issue anymore.
 It is the actual block-separation theorem from CPGSV17 / David2006.
 
-The current `HorizontalCFData` fields still do **not** imply `finiteWordTraceSeparation` directly; the
+The `block_injective`, `left_canonical`, and `weight_ne_zero` fields of
+`HorizontalCFData` still do **not** imply `finiteWordTraceSeparation`; the
 counterexample already documented in `BiCFDerivation.lean` remains valid.
 What is missing is a theorem that produces finite-length separation between the
 full families of inserted/block-entry word functionals for distinct BNT sectors.
