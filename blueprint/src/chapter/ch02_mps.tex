@@ -325,19 +325,36 @@ boundary conditions (PBC).
     \leanok
     Let $A$ and $B$ have the same physical alphabet and respective bond
     dimensions $D_A$ and $D_B$.  A reduction from $B$ to $A$ is a pair
-    \begin{align}
-        V&\in\mathbb C^{D_A\times D_B}, &
-        W&\in\mathbb C^{D_B\times D_A}
-    \end{align}
-    such that
+    $V\in\mathbb C^{D_A\times D_B}$ and
+    $W\in\mathbb C^{D_B\times D_A}$ such that
     \begin{align}
         VW&=1_{D_A}, &
         VB^{\mathbf a}W&=A^{\mathbf a}
+        \label{eq:mps_rectangular_reduction}
     \end{align}
     for every word $\mathbf a$, including the empty word.
     This is the reduction of
     \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective}.
 \end{definition}
+
+\begin{lemma}[Basic rectangular reduction identities]
+    \label{lem:mps_rectangular_reduction_identities}
+    \lean{MPSTensor.IsReduction.mul_eq_one,
+        MPSTensor.IsReduction.evalWord,
+        MPSTensor.IsReduction.evalWord_nil,
+        MPSTensor.IsReduction.iff_forall_evalWord}
+    \leanok
+    \uses{def:mps_rectangular_reduction}
+    A rectangular reduction satisfies both identities in
+    Eq.~\eqref{eq:mps_rectangular_reduction}.  Conversely, the all-word
+    identity alone implies $VW=1_{D_A}$ by taking the empty word.
+\end{lemma}
+
+\begin{proof}
+    The forward statements are the two defining clauses.  For the converse,
+    $A^{\varnothing}=1_{D_A}$ and $B^{\varnothing}=1_{D_B}$, so the empty-word
+    instance reads $V1_{D_B}W=1_{D_A}$.
+\end{proof}
 
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
