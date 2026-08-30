@@ -676,7 +676,13 @@ theorem reductionResidualNilpotencyLength_le_bondDim
     reductionResidualNilpotencyLength B A V W ≤ D_B :=
   Nat.sInf_le (h.bondDim_isReductionResidualNilpotencyBound hSame)
 
-/-- Every residual word at least as long as a residual-word bound vanishes. -/
+/-- Every residual word at least as long as a residual-word bound vanishes.
+Together with the immediate converse obtained by specializing to words of
+exactly the bound length, this identifies the exact-length predicate with the
+all-greater-length condition in MGSC18 Definition 8.
+
+Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines
+3147--3152. -/
 theorem evalWord_reductionResidual_eq_zero_of_bound_le_length
     {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N)
     (w : List (Fin d)) (hlen : N ≤ w.length) :

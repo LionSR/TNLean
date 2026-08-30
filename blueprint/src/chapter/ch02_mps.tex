@@ -1257,6 +1257,7 @@ $A^{-1}A=\Id$. This is the identity used in
         thm:mps_reduction_residual_sandwich,
         thm:mps_reduction_strict_window_range,
         thm:mps_rectangular_reduction_identities,
+        thm:mps_reduction_cross_trace_open,
         thm:mpu_shifted_zero_trace_power_nilpotent}
     Take the trace of the corrected residual expansion.  For a mixed term in
     the explicit strict-window sum, cyclicity gives
@@ -1321,6 +1322,7 @@ $A^{-1}A=\Id$. This is the identity used in
 \begin{proof}
     \leanok
     \uses{thm:mps_reduction_residual_algebra_nilpotent,
+        thm:mps_reduction_residual_mem_algebra,
         thm:mps_reduction_residual_bound_consequences,
         thm:mpu_nil_matrices}
     Apply the finite-dimensional nil-matrix theorem to the residual algebra.
