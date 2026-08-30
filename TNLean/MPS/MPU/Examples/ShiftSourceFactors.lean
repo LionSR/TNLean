@@ -34,6 +34,22 @@ private theorem sourceSqrt_ne_zero (d : ℕ) [NeZero d] : sourceSqrt d ≠ 0 := 
 private theorem sourceSqrt_sq (d : ℕ) : sourceSqrt d ^ 2 = (d : ℂ) := by
   exact Complex.ofReal_sqrt_sq d (by positivity)
 
+private theorem sourceSqrt_mul_inv (d : ℕ) [NeZero d] :
+    sourceSqrt d * (sourceSqrt d)⁻¹ = 1 := by
+  exact mul_inv_cancel₀ (sourceSqrt_ne_zero d)
+
+private theorem sourceSqrt_inv_mul (d : ℕ) [NeZero d] :
+    (sourceSqrt d)⁻¹ * sourceSqrt d = 1 := by
+  exact inv_mul_cancel₀ (sourceSqrt_ne_zero d)
+
+private theorem sourceSqrt_mul_nat_inv_mul_sourceSqrt (d : ℕ) [NeZero d] :
+    sourceSqrt d * (d : ℂ)⁻¹ * sourceSqrt d = 1 := by
+  calc
+    sourceSqrt d * (d : ℂ)⁻¹ * sourceSqrt d =
+        sourceSqrt d ^ 2 * (d : ℂ)⁻¹ := by ring
+    _ = (d : ℂ) * (d : ℂ)⁻¹ := by rw [sourceSqrt_sq]
+    _ = 1 := mul_inv_cancel₀ (by exact_mod_cast NeZero.ne d)
+
 private theorem sourceSqrt_inv_mul_nat_mul_inv (d : ℕ) [NeZero d] :
     (sourceSqrt d)⁻¹ * (d : ℂ) * (sourceSqrt d)⁻¹ = 1 := by
   rw [← sourceSqrt_sq]
@@ -374,6 +390,135 @@ noncomputable def rightShiftSourceFactors (d : ℕ) [NeZero d] :
         simp
   exact ⟨P, Pᴴ, P, C, R, Z, hcut₁, hcut₂, hweighted, hC,
     hP.1, hRZ⟩
+
+/-- The trace-one canonical-form-II weight for the right shift.
+
+The factor (d^{-1}) is required by the normalization
+\(\operatorname{tr}(\rho)=1\) used in CPSV17 equation `Erightleft`. -/
+noncomputable def rightShiftTraceOneSourceWeight (d : ℕ) :
+    Matrix (Fin d) (Fin d) ℂ :=
+  (d : ℂ)⁻¹ • 1
+
+/-- The right-shift canonical-form-II weight is positive definite.
+
+Source: CPSV17 equation `Erightleft` (lines 269--280). -/
+theorem rightShiftTraceOneSourceWeight_posDef (d : ℕ) [NeZero d] :
+    (rightShiftTraceOneSourceWeight d).PosDef := by
+  unfold rightShiftTraceOneSourceWeight
+  exact Matrix.PosDef.one.smul (by positivity)
+
+/-- The right-shift canonical-form-II weight has trace one.
+
+Source: CPSV17 equation `Erightleft` (lines 269--280). -/
+theorem trace_rightShiftTraceOneSourceWeight (d : ℕ) [NeZero d] :
+    Matrix.trace (rightShiftTraceOneSourceWeight d) = 1 := by
+  rw [rightShiftTraceOneSourceWeight, Matrix.trace_smul, Matrix.trace_one]
+  simp [NeZero.ne d]
+
+/-- Supplied source factors for the right shift with the trace-one
+canonical-form-II weight \(\rho=d^{-1}I\).
+
+Relative to `rightShiftSourceFactors`, the first-cut factors are rescaled as
+\(X_1'=\sqrt d\,X_1\), \(Y_1'=d^{-1/2}Y_1\), and
+\(Z_1'=\sqrt d\,Z_1\).  This preserves both the source-cut factorization and
+the right inverse while changing the weighted normalization to the source
+normalization used in CPSV17 equation `X1X2b`.
+
+Source: CPSV17 equations `Erightleft`, `X1X2b`, and `YZ=1` (lines 269--280
+and 487--506). -/
+noncomputable def rightShiftTraceOneSourceFactors (d : ℕ) [NeZero d] :
+    SourceFactors (rightShiftTensor d) (rightShiftTraceOneSourceWeight d) := by
+  let S := rightShiftSourceFactors d
+  let s := sourceSqrt d
+  let X₁ := s • S.X₁
+  let Y₁ := s⁻¹ • S.Y₁
+  let Z₁ := s • S.Z₁
+  have hcut₁ : sourceCutM₁ (rightShiftTensor d) = X₁ * Y₁ := by
+    calc
+      sourceCutM₁ (rightShiftTensor d) = S.X₁ * S.Y₁ := S.sourceCutM₁_eq
+      _ = X₁ * Y₁ := by
+        simp only [X₁, Y₁, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+        rw [sourceSqrt_mul_inv]
+        simp
+  have hweighted : X₁ᴴ * sourceWeight (d := d)
+      (rightShiftTraceOneSourceWeight d) * X₁ = 1 := by
+    have hS : S.X₁ᴴ * S.X₁ = 1 := by
+      simpa [sourceWeight] using S.X₁_weighted_isometry
+    simp only [X₁, rightShiftTraceOneSourceWeight, sourceWeight,
+      Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+      Matrix.smul_kronecker, Matrix.one_kronecker_one]
+    rw [show star s = s by simp [s, sourceSqrt], hS,
+      sourceSqrt_mul_nat_inv_mul_sourceSqrt]
+    simp
+  have hY₁Z₁ : Y₁ * Z₁ = 1 := by
+    simp only [Y₁, Z₁, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+    rw [sourceSqrt_inv_mul, S.Y₁_mul_Z₁]
+    simp
+  exact
+    { X₁ := X₁
+      Y₁ := Y₁
+      Z₁ := Z₁
+      X₂ := S.X₂
+      Y₂ := S.Y₂
+      Z₂ := S.Z₂
+      sourceCutM₁_eq := hcut₁
+      sourceCutM₂_eq := S.sourceCutM₂_eq
+      X₁_weighted_isometry := hweighted
+      X₂_isometry := S.X₂_isometry
+      Y₁_mul_Z₁ := hY₁Z₁
+      Y₂_mul_Z₂ := S.Y₂_mul_Z₂ }
+
+/-- With the trace-one canonical-form-II weight, the paper gate
+\(u=Y_2\mathbin{-}Y_1\) of the right shift is a literal permutation matrix.
+
+The source coordinate `(a,b)` is sent to the physical coordinate `(b,a)`,
+fixing both the triangle order and the normalization in CPSV17 equation `uu`.
+-/
+theorem sourceU_rightShiftTraceOneSourceFactors_apply (d : ℕ) [NeZero d]
+    (a b i₁ i₂ : Fin d) :
+    SourceFactors.sourceU (rightShiftTensor d)
+        (rightShiftTraceOneSourceFactors d)
+        (rightShiftLeftRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) (i₁, i₂) =
+      if a = i₂ ∧ b = i₁ then 1 else 0 := by
+  by_cases ha : a = i₂ <;> by_cases hb : b = i₁ <;>
+    simp [SourceFactors.sourceU_apply, rightShiftTraceOneSourceFactors,
+      rightShiftSourceFactors, normalizedIdentityColumn, normalizedIdentityVec,
+      Matrix.reindex_apply, Matrix.one_apply, sourceSqrt, ha, hb, NeZero.ne d,
+      shiftSourceScale_cancel, mul_comm, mul_left_comm]
+  all_goals grind
+
+/-- The trace-one right-shift source gate has the expected input-oriented
+Gram matrix.  This is the normalization and orientation regression for the
+complete-network theorem corresponding to CPSV17 equation `uUnitary`.
+-/
+theorem sourceU_rightShiftTraceOneSourceFactors_gram (d : ℕ) [NeZero d]
+    (p q : Fin d × Fin d) :
+    (∑ lr, SourceFactors.sourceU (rightShiftTensor d)
+        (rightShiftTraceOneSourceFactors d) lr q *
+      star (SourceFactors.sourceU (rightShiftTensor d)
+        (rightShiftTraceOneSourceFactors d) lr p)) =
+      if p = q then 1 else 0 := by
+  classical
+  let e := (rightShiftLeftRankEquiv d).prodCongr (rightShiftRightRankEquiv d)
+  rw [← e.sum_comp, Fintype.sum_prod_type]
+  simp only [e, sourceU_rightShiftTraceOneSourceFactors_apply]
+  rcases p with ⟨p₁, p₂⟩
+  rcases q with ⟨q₁, q₂⟩
+  simp only [Prod.mk.injEq]
+  by_cases h₁ : p₁ = q₁ <;> by_cases h₂ : p₂ = q₂ <;> simp [h₁, h₂]
+
+/-- The paper source gate of the right shift is an isometry when its first
+source cut uses the trace-one canonical-form-II weight.
+
+Source: CPSV17 Lemma `lemuisometry` and equation `uUnitary` (lines 545--557).
+-/
+theorem sourceU_rightShiftTraceOneSourceFactors_isIsometry (d : ℕ) [NeZero d] :
+    (SourceFactors.sourceU (rightShiftTensor d)
+      (rightShiftTraceOneSourceFactors d)).IsIsometry := by
+  rw [Matrix.IsIsometry]
+  ext p q
+  simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply,
+    eq_comm] using sourceU_rightShiftTraceOneSourceFactors_gram d p q
 
 /-- Explicit supplied source factors for the left-shift tensor.
 
