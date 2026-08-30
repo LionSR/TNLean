@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
 import TNLean.MPS.MPDO.LPDO
 import TNLean.MPS.MPDO.PhysicalSectorEtaLocalStructure
 import TNLean.MPS.MPDO.ZCL
@@ -105,55 +106,13 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
       simp [tensor, hkh]
 
-/-- The two physical basis vectors as one sector with a two-dimensional left
-factor and a one-dimensional right factor.
-
-Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1; arXiv:1606.00608,
-Appendix C.2, lines 1603--1605. -/
-noncomputable def oneSectorEquiv :
-    Fin 2 ≃ Sigma fun _k : Fin 1 => Fin 2 × Fin 1 where
-  toFun i := ⟨0, (i, 0)⟩
-  invFun q := q.2.1
-  left_inv _ := rfl
-  right_inv := by
-    rintro ⟨k, i, j⟩
-    have hk : k = 0 := Subsingleton.elim _ _
-    have hj : j = 0 := Subsingleton.elim _ _
-    subst k
-    subst j
-    rfl
-
 /-- A one-sector factorization of the product tensor, with the sector weight
 placed entirely in its two-dimensional left factor.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1; arXiv:1606.00608,
 Appendix C.2, lines 1603--1605. -/
-noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
-  sectorCount := 1
-  leftDim := fun _ => 2
-  rightDim := fun _ => 1
-  leftDim_pos := fun _ => by omega
-  rightDim_pos := fun _ => by omega
-  sectorEquiv := oneSectorEquiv
-  physicalIsometry := 1
-  physicalIsometry_isometry := by simp
-  leftTensor := fun _ _ => Matrix.diagonal sectorWeight
-  rightTensor := fun _ _ => 1
-  factorization := by
-    intro beta alpha
-    ext q r
-    obtain ⟨k, x, y⟩ := q
-    obtain ⟨h, u, v⟩ := r
-    fin_cases k
-    fin_cases h
-    fin_cases y
-    fin_cases v
-    fin_cases beta
-    fin_cases alpha
-    simp [Matrix.reindex_apply, oneSectorEquiv, physicalSlice, tensor,
-      Matrix.blockDiagonal'_apply_eq, Matrix.kroneckerMap_apply, Matrix.diagonal_apply]
-    by_cases hxu : x = u
-    all_goals simp [hxu]
+noncomputable abbrev oneSectorFactorization : PhysicalSectorFactorization tensor :=
+  BondOnePhysicalSectorFactorization.factorization tensor
 
 /-- The real trace matrix of the neighboring operators considered in
 arXiv:1606.00608, Appendix C.2, line 1613. -/
@@ -181,20 +140,8 @@ lemma oneSector_neighboringOperator_eq
     Fin.default_eq_zero, Fin.isValue, Finset.sum_singleton]
   fin_cases x₁
   fin_cases y₁
-  simp only [oneSectorFactorization, Matrix.one_apply]
-  by_cases hxy : x₂ = y₂
-  · subst y₂
-    rw [ite_eq_left True.intro, one_mul]
-    exact ((Matrix.diagonal_apply sectorWeight x₂ x₂).trans (ite_eq_left rfl)).trans
-      ((Matrix.diagonal_apply (fun x : Fin 1 × Fin 2 => sectorWeight x.2)
-        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, x₂⟩).trans (ite_eq_left rfl)).symm
-  · rw [ite_eq_left True.intro, one_mul]
-    have hpair : (⟨0, x₂⟩ : Fin 1 × Fin 2) ≠ ⟨0, y₂⟩ := by
-      intro hp
-      exact hxy (congrArg Prod.snd hp)
-    exact ((Matrix.diagonal_apply sectorWeight x₂ y₂).trans (ite_eq_right hxy)).trans
-      ((Matrix.diagonal_apply (fun x : Fin 1 × Fin 2 => sectorWeight x.2)
-        (⟨0, x₂⟩ : Fin 1 × Fin 2) ⟨0, y₂⟩).trans (ite_eq_right hpair)).symm
+  simp [oneSectorFactorization, physicalSlice, tensor, Matrix.diagonal_apply]
+  split <;> simp_all
 
 /-- Every neighboring operator in the one-sector factorization is positive
 semidefinite.

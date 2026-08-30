@@ -4,14 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.SupportCompletion
-import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.SimpleTensor
-import TNLean.MPS.MPDO.ZCL
-import TNLean.MPS.MPDO.Theorem49RepeatedCopyCounterexample
-import TNLean.MPS.SharedInfra.WordTupleGauge
-import TNLean.MPS.SharedInfra.Scaling
 
 /-!
 # Coefficient absorption need not preserve CPSV normality
