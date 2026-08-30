@@ -10,6 +10,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedOriginalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
+import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
@@ -33,7 +34,7 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The twelve components are:
+The thirteen components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`
@@ -55,6 +56,8 @@ The twelve components are:
   and quadratic-form domination by the original range-\(2p\) Hamiltonian;
 * `Martingale.BlockedOriginalGap` — transfer of the gap constant \(1/8\) to
   original-site periodic chains of length divisible by the block length;
+* `Martingale.MovingWindowCount` — reversal and counting of the finite moving-window
+  sums in Nachtergaele's martingale estimate;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation
   to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered
