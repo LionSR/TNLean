@@ -119,7 +119,7 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     $\mathcal U_g$ generates the operator representing $g^{-1}$:
     \begin{align}
         O_N(\mathcal U_g^\sharp)
-         & =U_{g^{-1}}^{(N)}=\bigl(U_g^{(N)}\bigr)^\dagger.
+         & =U_{g^{-1}}^{(N)}.
         \label{eq:mpug_physical_adjoint_inverse}
     \end{align}
     This is the first assertion in
@@ -151,7 +151,7 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     \label{thm:mpug_physical_adjoint_inverse_mpv}
     \lean{MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv}
     \leanok
-    \uses{thm:mpug_physical_adjoint_inverse, def:mpo_to_mps,
+    \uses{def:mpug_group_representation, def:mpo_to_mps,
         def:same_mpv2_pos}
     View $\mathcal U_g^\sharp$ and $\mathcal U_{g^{-1}}$ as MPS tensors by
     pairing their two physical indices. They generate the same matrix product
