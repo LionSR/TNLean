@@ -54,6 +54,20 @@ noncomputable def reductionResidualAlgebra (B : MPSTensor d D_B)
     NonUnitalSubalgebra ℂ (Matrix (Fin D_B) (Fin D_B) ℂ) :=
   NonUnitalAlgebra.adjoin ℂ (reductionResidualGeneratorSet B A V W)
 
+/-- A uniform mixed-word bound for the selected-reduction residual algebra. -/
+def IsReductionResidualNilpotencyBound (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) (N : ℕ) : Prop :=
+  ∀ l : List (Matrix (Fin D_B) (Fin D_B) ℂ),
+    (∀ X ∈ l, X ∈ reductionResidualAlgebra B A V W) → l.length = N → l.prod = 0
+
+/-- The least uniform mixed-word bound for the selected-reduction residual
+algebra, called the nilpotency length in MGSC18. -/
+noncomputable def reductionResidualNilpotencyLength (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) : ℕ :=
+  sInf {N | IsReductionResidualNilpotencyBound B A V W N}
+
 /-- The strict-window terms whose central $A$-word starts at the first
 letter of the input word.  The recursion enumerates every nonempty initial
 central word exactly once. -/
@@ -77,6 +91,33 @@ noncomputable def reductionStrictWindowSum (B : MPSTensor d D_B)
   | [] => 0
   | i :: w => reductionInitialWindowSum B A V W (i :: w) +
       reductionResidual B A V W i * reductionStrictWindowSum B A V W w
+
+/-- The all-cut left-contracted sum
+$\sum_{s=0}^{|w|} A^{w_{<s}}V N^{w_{\geq s}}$.
+When a nilpotency bound is available, terms with residual suffix at least that
+long vanish, giving the truncated left contraction printed in MGSC18,
+Lemma `B_expand`. -/
+noncomputable def reductionLeftContractedSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
+    List (Fin d) → Matrix (Fin D_A) (Fin D_B) ℂ
+  | [] => V
+  | i :: w => V * reductionResidual B A V W i *
+      Kraus.evalWord (reductionResidual B A V W) w +
+      A i * reductionLeftContractedSum B A V W w
+
+/-- The all-cut right-contracted sum
+$\sum_{r=0}^{|w|}N^{w_{<r}}W A^{w_{\geq r}}$.
+When a nilpotency bound is available, terms with residual prefix at least that
+long vanish, giving the truncated right contraction printed in MGSC18,
+Lemma `B_expand`. -/
+noncomputable def reductionRightContractedSum (B : MPSTensor d D_B)
+    (A : MPSTensor d D_A) (V : Matrix (Fin D_A) (Fin D_B) ℂ)
+    (W : Matrix (Fin D_B) (Fin D_A) ℂ) :
+    List (Fin d) → Matrix (Fin D_B) (Fin D_A) ℂ
+  | [] => W
+  | i :: w => W * A i * Kraus.evalWord A w +
+      reductionResidual B A V W i * reductionRightContractedSum B A V W w
 
 /-- Every selected-reduction residual letter belongs to its generated algebra. -/
 theorem reductionResidual_mem_reductionResidualAlgebra
@@ -229,6 +270,92 @@ theorem evalWord_eq_reductionResidual_add_strictWindowSum
         simpa only [Matrix.mul_assoc] using hmerge
       simp only [Kraus.evalWord_cons, reductionResidual, Matrix.mul_add]
       noncomm_ring [hmerge']
+
+private theorem reductionInitialWindowSum_cons
+    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    reductionInitialWindowSum B A V W (i :: w) =
+      W * A i * V * Kraus.evalWord B w := by
+  rw [reductionInitialWindowSum, h.evalWord_eq_reductionResidual_add_strictWindowSum w]
+  have hmerge := congrArg (fun X ↦ W * A i * X)
+    (h.mul_strictWindowSum_eq_mul_initialWindowSum w)
+  have hmerge' :
+      W * A i * V * reductionStrictWindowSum B A V W w =
+        W * A i * V * reductionInitialWindowSum B A V W w := by
+    simpa only [Matrix.mul_assoc] using hmerge
+  simp only [Matrix.mul_add]
+  noncomm_ring [hmerge']
+
+/-- Left-contracted corrected expansion.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 3999--4002. -/
+theorem mul_evalWord_eq_reductionLeftContractedSum
+    (h : IsReduction B A V W) (w : List (Fin d)) :
+    V * Kraus.evalWord B w = reductionLeftContractedSum B A V W w := by
+  induction w with
+  | nil => simp [reductionLeftContractedSum]
+  | cons i w ih =>
+      rw [Kraus.evalWord_cons, reductionLeftContractedSum]
+      have htail := h.evalWord_eq_reductionResidual_add_strictWindowSum w
+      have hzero := h.evalWord_reductionResidual_mul_strictWindowSum_eq_zero [i] w (by simp)
+      have hVW := h.mul_eq_one
+      simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one] at hzero
+      rw [← ih, htail]
+      have hcompressN := congrArg
+        (fun X ↦ X * A i * V * Kraus.evalWord (reductionResidual B A V W) w) hVW
+      have hcompressS := congrArg
+        (fun X ↦ X * A i * V * reductionStrictWindowSum B A V W w) hVW
+      have hcompressN' :
+          V * W * A i * V * Kraus.evalWord (reductionResidual B A V W) w =
+            A i * V * Kraus.evalWord (reductionResidual B A V W) w := by
+        simpa only [Matrix.mul_assoc, Matrix.one_mul] using hcompressN
+      have hcompressS' :
+          V * W * A i * V * reductionStrictWindowSum B A V W w =
+            A i * V * reductionStrictWindowSum B A V W w := by
+        simpa only [Matrix.mul_assoc, Matrix.one_mul] using hcompressS
+      have hdecomp :
+          B i = reductionResidual B A V W i + W * A i * V := by
+        simp [reductionResidual]
+      have hzero' :
+          V * (reductionResidual B A V W i *
+            reductionStrictWindowSum B A V W w) = 0 := by
+        simpa only [Matrix.mul_assoc] using hzero
+      have hcompressN'' :
+          V * (W * A i * V * Kraus.evalWord (reductionResidual B A V W) w) =
+            A i * (V * Kraus.evalWord (reductionResidual B A V W) w) := by
+        simpa only [Matrix.mul_assoc] using hcompressN'
+      have hcompressS'' :
+          V * (W * A i * V * reductionStrictWindowSum B A V W w) =
+            A i * (V * reductionStrictWindowSum B A V W w) := by
+        simpa only [Matrix.mul_assoc] using hcompressS'
+      rw [hdecomp]
+      simp only [Matrix.add_mul, Matrix.mul_add]
+      rw [hzero', hcompressN'', hcompressS'']
+      simp only [zero_add, Matrix.mul_assoc]
+      ac_rfl
+
+/-- Right-contracted corrected expansion.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand`, lines 4003--4005. -/
+theorem evalWord_mul_eq_reductionRightContractedSum
+    (h : IsReduction B A V W) (w : List (Fin d)) :
+    Kraus.evalWord B w * W = reductionRightContractedSum B A V W w := by
+  induction w with
+  | nil => simp [reductionRightContractedSum]
+  | cons i w ih =>
+      rw [Kraus.evalWord_cons, reductionRightContractedSum]
+      have htail := h.evalWord w
+      rw [← ih]
+      have hcompressed := congrArg (fun X ↦ W * A i * X) htail
+      have hcompressed' :
+          W * A i * V * Kraus.evalWord B w * W =
+            W * A i * Kraus.evalWord A w := by
+        simpa only [Matrix.mul_assoc] using hcompressed
+      have hdecomp :
+          B i = reductionResidual B A V W i + W * A i * V := by
+        simp [reductionResidual]
+      rw [hdecomp, Matrix.add_mul, Matrix.add_mul, hcompressed']
+      simp only [Matrix.mul_assoc]
+      ac_rfl
 
 /-- Every nonempty residual word has zero trace when `B` and `A` have the
 same positive-length closed chains.  This is the trace input to the residual
@@ -399,6 +526,217 @@ theorem reductionResidualAlgebra_list_prod_eq_zero
   apply (reductionResidualAlgebra B A V W).matrix_list_prod_eq_zero_of_forall_isNilpotent
     (h.isNilpotent_of_mem_reductionResidualAlgebra hSame) l hl
   simpa using hlen
+
+/-- The bond dimension `D_B` is a uniform mixed-word bound for the
+selected-reduction residual algebra. -/
+theorem bondDim_isReductionResidualNilpotencyBound
+    (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
+    IsReductionResidualNilpotencyBound B A V W D_B := by
+  intro l hl hlen
+  exact h.reductionResidualAlgebra_list_prod_eq_zero hSame l hl hlen
+
+/-- The MGSC18 nilpotency length exists and is itself a mixed-word bound. -/
+theorem reductionResidualNilpotencyLength_isBound
+    (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
+    IsReductionResidualNilpotencyBound B A V W
+      (reductionResidualNilpotencyLength B A V W) := by
+  change reductionResidualNilpotencyLength B A V W ∈
+    {N | IsReductionResidualNilpotencyBound B A V W N}
+  rw [reductionResidualNilpotencyLength]
+  exact Nat.sInf_mem ⟨D_B, h.bondDim_isReductionResidualNilpotencyBound hSame⟩
+
+/-- The least MGSC18 nilpotency length is at most the bond dimension `D_B`. -/
+theorem reductionResidualNilpotencyLength_le_bondDim
+    (h : IsReduction B A V W) (hSame : SameMPV₂Pos B A) :
+    reductionResidualNilpotencyLength B A V W ≤ D_B :=
+  Nat.sInf_le (h.bondDim_isReductionResidualNilpotencyBound hSame)
+
+/-- A mixed product at least as long as any uniform residual bound vanishes. -/
+theorem reductionResidualAlgebra_list_prod_eq_zero_of_bound_le_length
+    {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (l : List (Matrix (Fin D_B) (Fin D_B) ℂ))
+    (hl : ∀ X ∈ l, X ∈ reductionResidualAlgebra B A V W)
+    (hlen : N ≤ l.length) : l.prod = 0 := by
+  rw [← l.take_append_drop N, List.prod_append]
+  have htake : (l.take N).prod = 0 := by
+    apply hBound (l.take N)
+    · intro X hX
+      exact hl X (List.mem_of_mem_take hX)
+    · simp [List.length_take, Nat.min_eq_left hlen]
+  rw [htake, zero_mul]
+
+/-- Every residual word at least as long as any uniform residual bound vanishes. -/
+theorem evalWord_reductionResidual_eq_zero_of_bound_le_length
+    {N : ℕ} (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (w : List (Fin d)) (hlen : N ≤ w.length) :
+    Kraus.evalWord (reductionResidual B A V W) w = 0 := by
+  rw [evalWord_eq_prod_map]
+  apply reductionResidualAlgebra_list_prod_eq_zero_of_bound_le_length hBound
+  · intro X hX
+    obtain ⟨i, hi, rfl⟩ := List.mem_map.mp hX
+    exact reductionResidual_mem_reductionResidualAlgebra B A V W i
+  · simpa
+
+private theorem mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (p u q : List (Fin d)) (hu : u ≠ [])
+    (hlen : N ≤ u.length + q.length) :
+    V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
+      Kraus.evalWord B q = 0 := by
+  induction q generalizing u with
+  | nil =>
+      have hzero :=
+        evalWord_reductionResidual_eq_zero_of_bound_le_length hBound u (by simpa using hlen)
+      rw [Kraus.evalWord_nil, Matrix.mul_one, hzero]
+      simp
+  | cons i q ih =>
+      rw [Kraus.evalWord_cons]
+      have hdecomp : B i = reductionResidual B A V W i + W * A i * V := by
+        simp [reductionResidual]
+      rw [hdecomp, Matrix.add_mul, Matrix.mul_add]
+      have hresidual :
+          V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
+            (reductionResidual B A V W i * Kraus.evalWord B q) = 0 := by
+        have hz := ih (u ++ [i]) (by simp [hu]) (by simp at hlen ⊢; omega)
+        rw [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil,
+          Matrix.mul_one] at hz
+        simpa only [Matrix.mul_assoc] using hz
+      have hsandwich := h.evalWord_mul_reductionResidual_mul_evalWord_eq_zero p u [] hu
+      have hcorrection :
+          V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
+            (W * A i * V * Kraus.evalWord B q) = 0 := by
+        have hsandwich' :
+            V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u * W = 0 := by
+          simpa only [Kraus.evalWord_nil, Matrix.one_mul, Matrix.mul_assoc] using hsandwich
+        have := congrArg (fun X ↦ X * A i * V * Kraus.evalWord B q) hsandwich'
+        simpa only [Matrix.mul_assoc, Matrix.zero_mul] using this
+      rw [hresidual, hcorrection, add_zero]
+
+private theorem strictWindowSum_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (p u q : List (Fin d)) (hu : u ≠ [])
+    (hlen : N ≤ u.length + q.length) :
+    reductionStrictWindowSum B A V W p *
+      Kraus.evalWord (reductionResidual B A V W) u * Kraus.evalWord B q = 0 := by
+  induction p with
+  | nil => simp [reductionStrictWindowSum]
+  | cons i p ih =>
+      rw [reductionStrictWindowSum, Matrix.add_mul]
+      have hinitial :
+          reductionInitialWindowSum B A V W (i :: p) *
+            Kraus.evalWord (reductionResidual B A V W) u * Kraus.evalWord B q = 0 := by
+        rw [h.reductionInitialWindowSum_cons]
+        have hzero := h.mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
+          hBound p u q hu hlen
+        have := congrArg (fun X ↦ W * A i * X) hzero
+        simpa only [Matrix.mul_assoc, Matrix.mul_zero] using this
+      simp only [Matrix.add_mul]
+      rw [hinitial]
+      have hshift := congrArg (fun X ↦ reductionResidual B A V W i * X) ih
+      simpa only [Matrix.mul_assoc, Matrix.mul_zero, zero_add] using hshift
+
+private theorem evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_buffers
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (p q : List (Fin d)) (i : Fin d)
+    (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1) :
+    Kraus.evalWord B p * reductionResidual B A V W i * Kraus.evalWord B q = 0 := by
+  rw [h.evalWord_eq_reductionResidual_add_strictWindowSum p, Matrix.add_mul]
+  have hpure :
+      Kraus.evalWord (reductionResidual B A V W) p *
+        reductionResidual B A V W i * Kraus.evalWord B q = 0 := by
+    have hzero := evalWord_reductionResidual_eq_zero_of_bound_le_length hBound
+      (p ++ [i]) (by simpa using hp)
+    have := congrArg (fun X ↦ X * Kraus.evalWord B q) hzero
+    simpa only [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil,
+      Matrix.mul_one, Matrix.mul_assoc, Matrix.zero_mul] using this
+  have hwindow := h.strictWindowSum_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
+    hBound p [i] q (by simp) (by simp at hq ⊢; omega)
+  have hwindow' :
+      reductionStrictWindowSum B A V W p * reductionResidual B A V W i *
+        Kraus.evalWord B q = 0 := by
+    simpa only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one,
+      Matrix.mul_assoc] using hwindow
+  have hpure' :
+      Kraus.evalWord (reductionResidual B A V W) p *
+        (reductionResidual B A V W i * Kraus.evalWord B q) = 0 := by
+    simpa only [Matrix.mul_assoc] using hpure
+  have hwindow'' :
+      reductionStrictWindowSum B A V W p *
+        (reductionResidual B A V W i * Kraus.evalWord B q) = 0 := by
+    simpa only [Matrix.mul_assoc] using hwindow'
+  simp only [Matrix.add_mul, Matrix.mul_assoc]
+  rw [hpure', hwindow'', add_zero]
+
+private theorem mul_evalWord_append_eq_mul_evalWord_of_right_buffer
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (c q : List (Fin d)) (hq : N ≤ q.length + 1) :
+    V * Kraus.evalWord B (c ++ q) =
+      Kraus.evalWord A c * V * Kraus.evalWord B q := by
+  induction c with
+  | nil => simp
+  | cons i c ih =>
+      simp only [List.cons_append, Kraus.evalWord_cons]
+      have hdecomp : B i = reductionResidual B A V W i + W * A i * V := by
+        simp [reductionResidual]
+      rw [hdecomp, Matrix.add_mul, Matrix.mul_add]
+      have hresidual := h.mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
+        hBound [] [i] (c ++ q) (by simp) (by simp at hq ⊢; omega)
+      have hresidual' :
+          V * (reductionResidual B A V W i * Kraus.evalWord B (c ++ q)) = 0 := by
+        simpa only [Kraus.evalWord_nil, Kraus.evalWord_cons, Matrix.one_mul,
+          Matrix.mul_one, Matrix.mul_assoc] using hresidual
+      have hVW := h.mul_eq_one
+      rw [hresidual']
+      have hcompress := congrArg (fun X ↦ X * A i * (V * Kraus.evalWord B (c ++ q))) hVW
+      have hcompress' :
+          V * (W * A i * V * Kraus.evalWord B (c ++ q)) =
+            A i * (V * Kraus.evalWord B (c ++ q)) := by
+        simpa only [Matrix.mul_assoc, Matrix.one_mul] using hcompress
+      rw [hcompress', ih, zero_add]
+      simp only [Matrix.mul_assoc]
+
+/-- General exterior-buffer identity.  A nonempty central word may be replaced
+by its reduced $W A^{\mathbf c}V$ block once both exterior buffers, with the
+adjacent central letter, reach a uniform residual nilpotency bound.
+
+This theorem uses only the reduction and an arbitrary supplied bound; it does
+not assume `SameMPV₂Pos`.
+
+Source: arXiv:1706.07329v2, Lemma `lem:B_expand` and its use after lines
+3993--4005. -/
+theorem evalWord_mul_reduced_exterior_eq_evalWord_append
+    (h : IsReduction B A V W) {N : ℕ}
+    (hBound : IsReductionResidualNilpotencyBound B A V W N)
+    (p c q : List (Fin d)) (hc : c ≠ [])
+    (hp : N ≤ p.length + 1) (hq : N ≤ q.length + 1) :
+    Kraus.evalWord B p * W * Kraus.evalWord A c * V * Kraus.evalWord B q =
+      Kraus.evalWord B (p ++ c ++ q) := by
+  obtain ⟨i, c, rfl⟩ := List.exists_cons_of_ne_nil hc
+  simp only [Kraus.evalWord_cons, Kraus.evalWord_append]
+  have hdecomp : B i = reductionResidual B A V W i + W * A i * V := by
+    simp [reductionResidual]
+  rw [hdecomp, Matrix.add_mul, Matrix.mul_add]
+  have hresidual := h.evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_buffers
+    hBound p (c ++ q) i hp (by simp at hq ⊢; omega)
+  have hresidual' :
+      Kraus.evalWord B p *
+        (reductionResidual B A V W i * (Kraus.evalWord B c * Kraus.evalWord B q)) = 0 := by
+    simpa only [Kraus.evalWord_append, Matrix.mul_assoc] using hresidual
+  have htail := h.mul_evalWord_append_eq_mul_evalWord_of_right_buffer hBound c q hq
+  have htail' :
+      V * (Kraus.evalWord B c * Kraus.evalWord B q) =
+        Kraus.evalWord A c * V * Kraus.evalWord B q := by
+    simpa only [Kraus.evalWord_append, Matrix.mul_assoc] using htail
+  have hcorrection := congrArg
+    (fun X ↦ Kraus.evalWord B p * W * A i * X) htail'
+  simp only [Matrix.add_mul, Matrix.mul_assoc]
+  rw [hresidual']
+  simp only [zero_add]
+  simpa only [Matrix.mul_assoc] using hcorrection.symm
 
 /-- Every residual word whose length is at least `D_B` vanishes.  The bound is
 the bond dimension, not its square. -/
