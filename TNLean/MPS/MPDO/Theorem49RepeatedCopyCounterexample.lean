@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
 import TNLean.MPS.MPDO.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.RFPViaTS
@@ -231,55 +232,14 @@ theorem scalarBNT_layer_orthogonal :
   intro x y hxy
   exact absurd (Subsingleton.elim x y) hxy
 
-/-- The one-dimensional physical space as one sector with one-dimensional
-left and right factors.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
-1381--1388. -/
-noncomputable def scalarSectorEquiv :
-    Fin 1 ≃ Sigma fun _k : Fin 1 ↦ Fin 1 × Fin 1 where
-  toFun _ := ⟨0, (0, 0)⟩
-  invFun _ := 0
-  left_inv i := Subsingleton.elim _ _
-  right_inv := by
-    rintro ⟨k, x, y⟩
-    fin_cases k
-    fin_cases x
-    fin_cases y
-    rfl
-
 /-- The scalar BNT representative has the one-sector physical
 factorization asserted in condition (iv).
 
 Source: arXiv:1606.00608, Theorem 4.9(iv), lines 869--889, and Appendix C.2,
 equation `AppUkU=rl`, lines 1381--1388. -/
-noncomputable def scalarFactorization :
-    PhysicalSectorFactorization scalarBNT where
-  sectorCount := 1
-  leftDim := fun _ ↦ 1
-  rightDim := fun _ ↦ 1
-  leftDim_pos := fun _ ↦ by omega
-  rightDim_pos := fun _ ↦ by omega
-  sectorEquiv := scalarSectorEquiv
-  physicalIsometry := 1
-  physicalIsometry_isometry := by simp
-  leftTensor := fun _ _ ↦ 1
-  rightTensor := fun _ _ ↦ 1
-  factorization := by
-    intro beta alpha
-    ext q r
-    obtain ⟨k, x, y⟩ := q
-    obtain ⟨h, u, v⟩ := r
-    fin_cases k
-    fin_cases h
-    fin_cases x
-    fin_cases y
-    fin_cases u
-    fin_cases v
-    fin_cases beta
-    fin_cases alpha
-    simp [Matrix.reindex_apply, scalarSectorEquiv, physicalSlice, scalarBNT,
-      Matrix.blockDiagonal'_apply_eq]
+noncomputable abbrev scalarFactorization :
+    PhysicalSectorFactorization scalarBNT :=
+  BondOnePhysicalSectorFactorization.factorization scalarBNT
 
 /-- The sole neighboring operator of `scalarFactorization` is the identity
 density matrix.
@@ -297,7 +257,7 @@ theorem scalarFactorization_neighboringOperator (k h) :
   fin_cases yR
   fin_cases yL
   simp [PhysicalSectorFactorization.neighboringOperator_apply,
-    scalarFactorization]
+    scalarFactorization, physicalSlice, scalarBNT]
 
 /-- The scalar factorization has positive neighboring operators and the
 rank-one trace factorization required in condition (iv).

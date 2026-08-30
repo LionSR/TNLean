@@ -473,17 +473,6 @@ coefficient `mu` and terminal-block coefficient exactly one. -/
         · exact hmu
         · exact one_ne_zero }
 
-/-- The decomposition has exactly two basis sectors. -/
-theorem obstructionTerminalDecomposition_basisCount
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
-    (obstructionTerminalDecomposition mu B hmu).basisCount = 2 := rfl
-
-/-- Each basis sector occurs exactly once. -/
-theorem obstructionTerminalDecomposition_copies
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (j : Fin (obstructionTerminalDecomposition mu B hmu).basisCount) :
-    (obstructionTerminalDecomposition mu B hmu).copies j = 1 := rfl
-
 /-- The two basis bond dimensions are exactly two and one. -/
 theorem obstructionTerminalDecomposition_basisDim
     (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
@@ -500,15 +489,6 @@ theorem obstructionTerminalDecomposition_basis
     (obstructionTerminalDecomposition mu B hmu).basis 0 = B ∧
       (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) =
         terminalBlock.toMPSTensor := by
-  constructor
-  · rfl
-  · rfl
-
-/-- The two canonical-form coefficients are literally `(mu, 1)`. -/
-theorem obstructionTerminalDecomposition_weight
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
-    (obstructionTerminalDecomposition mu B hmu).weight 0 0 = mu ∧
-      (obstructionTerminalDecomposition mu B hmu).weight (Fin.succ 0) 0 = 1 := by
   constructor
   · rfl
   · rfl
@@ -651,15 +631,11 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
       physicalSupportProj (verticalBNTMPO B) + physicalSupportProj terminalBlock = 1 := by
     rw [hObstructionSupport, terminalBlock_physicalSupportProj]
     exact obstructionPhysicalSupport_add_terminalPhysicalSupport
-  have hBasisCount := obstructionTerminalDecomposition_basisCount mu B hmu
-  have hCopiesZero := obstructionTerminalDecomposition_copies mu B hmu 0
-  have hCopiesOne := obstructionTerminalDecomposition_copies mu B hmu (Fin.succ 0)
   obtain ⟨hDimZero, hDimOne⟩ := obstructionTerminalDecomposition_basisDim mu B hmu
   obtain ⟨hBasisZero, hBasisOne⟩ := obstructionTerminalDecomposition_basis mu B hmu
-  obtain ⟨hWeightZero, hWeightOne⟩ := obstructionTerminalDecomposition_weight mu B hmu
   refine ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge, ?_⟩
-  refine ⟨hBasisCount, hCopiesZero, hCopiesOne, hDimZero, hDimOne,
-    hBasisZero, hBasisOne, hWeightZero, hWeightOne, hObstructionSupport,
+  refine ⟨rfl, rfl, rfl, hDimZero, hDimOne,
+    hBasisZero, hBasisOne, rfl, rfl, hObstructionSupport,
     terminalBlock_physicalSupportProj, hObstructionTerminal,
     hTerminalObstruction, hSupportSum, ?_⟩
   exact obstructionTerminalDecomposition_isBNTCanonicalForm
