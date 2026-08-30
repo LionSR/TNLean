@@ -49,6 +49,23 @@ theorem evalWord (h : IsReduction B A V W) (w : List (Fin d)) :
 theorem evalWord_nil (h : IsReduction B A V W) :
     V * Kraus.evalWord B [] * W = Kraus.evalWord A [] := h.2 []
 
+/-- Scaling both tensors by the same scalar preserves a rectangular reduction. -/
+theorem smul (h : IsReduction B A V W) (c : ℂ) :
+    IsReduction (fun i => c • B i) (fun i => c • A i) V W := by
+  refine ⟨h.mul_eq_one, fun w => ?_⟩
+  simp only [Kraus.evalWord_smul, Matrix.mul_smul, Matrix.smul_mul, h.evalWord]
+
+/-- A reduction whose target is scaled by `c` intertwines an unscaled source
+word with `c` to the word length times the corresponding unscaled target word.
+
+This is the explicit corrected relation in MGSC18, Proposition 20,
+`eq:mgsc18_reduction_proportionality_corrected_word_relation`; see
+`docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`, lines 96--120. -/
+theorem evalWord_smul_target {c : ℂ}
+    (h : IsReduction B (fun i => c • A i) V W) (w : List (Fin d)) :
+    V * Kraus.evalWord B w * W = (c ^ w.length) • Kraus.evalWord A w := by
+  simpa only [Kraus.evalWord_smul] using h.evalWord w
+
 /-- A rectangular reduction cannot increase the bond dimension: the target
 bond dimension is at most the source bond dimension. -/
 theorem bondDim_le (h : IsReduction B A V W) : D₁ ≤ D₂ :=
