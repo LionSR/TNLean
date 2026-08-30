@@ -8,6 +8,7 @@ import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.BNT.DirectSumSelectors
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.SourceBNTBlocking
+import TNLean.MPS.ParentHamiltonian.CoisometricReconstruction
 import TNLean.MPS.SharedInfra.WordTupleGauge
 
 /-!
@@ -177,6 +178,37 @@ theorem CPSVCanonicalFormData.sum_representative_dim_le
     _ = ∑ k : Fin data.r, data.dim k := rfl
     _ ≤ D := data.total_dim_le
 
+/-- The sharp CPSV blocking witnesses retain the exact nearest-neighbor local-space
+identity for the actual blocked tensor.
+
+This is Proposition `propblockinj` together with the coisometric reconstruction
+of equation `II_CF1`. Source: arXiv:1606.00608, lines 237--244, 317--345,
+and 511--527. -/
+theorem IsCPSVCanonicalForm.exists_bnt_sharp_blocking_and_groundSpace
+    {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
+    ∃ g : ℕ, ∃ dim : Fin g → ℕ,
+      ∃ B : (j : Fin g) → MPSTensor d (dim j),
+        IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
+        ∃ L : ℕ, 0 < L ∧ L ≤ 3 * D ^ 5 ∧
+          WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 ∧
+          groundSpace (MPSTensor.blockTensor A L) 2 =
+            ⨆ j : Fin g, groundSpace (MPSTensor.blockTensor (B j) L) 2 := by
+  let data := Classical.choice hA
+  let ref := data.bntRefinement
+  let dim : Fin data.phaseClasses.g → ℕ := fun j =>
+    data.dim (data.representativeIndex j)
+  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (dim j) := fun j =>
+    data.blocks (data.representativeIndex j)
+  have hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) := by
+    simpa [dim, B] using ref.representativesBNT
+  obtain ⟨L, hL, hLbound, hSpan⟩ :=
+    hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
+      (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
+  refine ⟨data.phaseClasses.g, dim, B, hBNT, L, hL, hLbound,
+    wordTupleSpanTop_blockTensor_one B hSpan, ?_⟩
+  simpa [B] using
+    data.groundSpace_blockTensor_eq_iSup_representatives ref hL (by omega : 0 < 2)
+
 /-- **CPSV16 Proposition `propblockinj`.** A tensor in literal CPSV canonical form has a
 basis of normal tensors that becomes simultaneously block-injective after blocking a
 positive number `L ≤ 3 * D ^ 5` of sites.
@@ -190,19 +222,9 @@ theorem IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_
       ∃ B : (j : Fin g) → MPSTensor d (dim j),
         IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
         ∃ L : ℕ, 0 < L ∧ L ≤ 3 * D ^ 5 ∧
-          WordTupleSpanTop (fun j => blockTensor (B j) L) 1 := by
-  let data := Classical.choice hA
-  let ref := data.bntRefinement
-  let dim : Fin data.phaseClasses.g → ℕ := fun j =>
-    data.dim (data.representativeIndex j)
-  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (dim j) := fun j =>
-    data.blocks (data.representativeIndex j)
-  have hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) := by
-    simpa [dim, B] using ref.representativesBNT
-  obtain ⟨L, hL, hLbound, hSpan⟩ :=
-    hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
-      (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
-  exact ⟨data.phaseClasses.g, dim, B, hBNT, L, hL, hLbound,
-    wordTupleSpanTop_blockTensor_one B hSpan⟩
+          WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 := by
+  obtain ⟨g, dim, B, hBNT, L, hL, hLbound, hSpan, _⟩ :=
+    hA.exists_bnt_sharp_blocking_and_groundSpace
+  exact ⟨g, dim, B, hBNT, L, hL, hLbound, hSpan⟩
 
 end MPSTensor

@@ -57,6 +57,43 @@ construction; they are not attributed to a source theorem.
     (\ref{eq:blocked_boundary_map_transport}).
 \end{proof}
 
+\begin{theorem}[Sharp blocking gives a nearest-neighbour parent Hamiltonian]
+    \label{thm:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
+    \leanok
+    \uses{thm:cpsv_literal_propblockinj, def:blocked_tensor, def:parent_hamiltonian_ground_space_spanning}
+    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    dimension $D$. There are a basis of normal tensors
+    $(A_j)_{j=1}^{g}$ and an integer $p$ satisfying
+    $1\leq p\leq 3D^5$ such that, for every $N>2$,
+    \begin{align}
+        \ker H_2^{(N)}\!\left(A^{[p]}\right)
+         & =\spn\left\{V^{(N)}\!\left(A_j^{[p]}\right):
+             1\leq j\leq g\right\}.
+        \label{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
+    \end{align}
+    Thus the actual blocked tensor has a nearest-neighbour parent Hamiltonian
+    on the blocked lattice. This does not identify an interaction of range
+    at most $3D^5$ on every original lattice; that distinction is recorded in
+    \cite{gap:cpsv16_parent_hamiltonian_range_short_ring}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_literal_propblockinj}
+    Choose $p$ so that the simultaneous one-letter evaluations of the blocked
+    normal representatives span the product of their full matrix algebras.
+    Block injectivity identifies each periodic chain ground space with the
+    corresponding matrix product vector. The direct-sum intersection theorem
+    then identifies the parent-Hamiltonian kernel with the span on the
+    right-hand side of
+    (\ref{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}). Finally,
+    repeated phase-gauge copies and the rectangular ambient coisometry preserve
+    every positive-length local space, so the equality transports from the
+    direct sum to $A^{[p]}$.
+\end{proof}
+
 \begin{theorem}[Local ground-space transport under blocking]
     \label{thm:blocked_local_ground_space_transport}
     \lean{MPSTensor.groundSpaceES_blockTensor_map}
