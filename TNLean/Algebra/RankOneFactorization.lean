@@ -24,7 +24,7 @@ open Module
 
 namespace LinearMap
 
-variable {K M₁ M₂ : Type*} [Field K]
+variable {K M₁ M₂ : Type*} [DivisionRing K]
   [AddCommGroup M₁] [Module K M₁] [AddCommGroup M₂] [Module K M₂]
 
 /-- A linear map whose range is one-dimensional is a scalar functional followed by scalar
@@ -106,34 +106,34 @@ theorem exists_eq_vecMulVec_of_rank_eq_one [Finite m] [Fintype n]
     simp at this
   exact ⟨w, v, hw, hv, hM⟩
 
-/-- A rank-one matrix on the product index `D_A × D_B` reshapes into rectangular factors
+/-- A rank-one matrix on the product index `D_B × D_A` reshapes into rectangular factors
 `W : D_B × D_A` and `V : D_A × D_B`. The index order is explicit in both the outer-product
 identity and its entrywise form. -/
 theorem exists_rectangular_factors_of_rank_eq_one
     {D_A D_B : Type*} [Fintype D_A] [Fintype D_B]
-    (M : Matrix (D_A × D_B) (D_A × D_B) K) (hrank : M.rank = 1) :
+    (M : Matrix (D_B × D_A) (D_B × D_A) K) (hrank : M.rank = 1) :
     ∃ (W : Matrix D_B D_A K) (V : Matrix D_A D_B K),
       W ≠ 0 ∧ V ≠ 0 ∧
-      M = Matrix.vecMulVec (fun p ↦ W p.2 p.1) (fun p ↦ V p.1 p.2) ∧
-      ∀ a b a' b', M (a, b) (a', b') = W b a * V a' b' := by
+      M = Matrix.vecMulVec (fun p ↦ W p.1 p.2) (fun p ↦ V p.2 p.1) ∧
+      ∀ b a b' a', M (b, a) (b', a') = W b a * V a' b' := by
   obtain ⟨w, v, hw, hv, hM⟩ := M.exists_eq_vecMulVec_of_rank_eq_one hrank
-  let W : Matrix D_B D_A K := fun b a ↦ w (a, b)
-  let V : Matrix D_A D_B K := fun a b ↦ v (a, b)
+  let W : Matrix D_B D_A K := fun b a ↦ w (b, a)
+  let V : Matrix D_A D_B K := fun a b ↦ v (b, a)
   have hW : W ≠ 0 := by
     intro h
     apply hw
     funext p
-    have hp := congrFun (congrFun h p.2) p.1
+    have hp := congrFun (congrFun h p.1) p.2
     exact hp
   have hV : V ≠ 0 := by
     intro h
     apply hv
     funext p
-    have hp := congrFun (congrFun h p.1) p.2
+    have hp := congrFun (congrFun h p.2) p.1
     exact hp
   refine ⟨W, V, hW, hV, ?_, ?_⟩
   · simpa [W, V] using hM
-  · intro a b a' b'
-    simpa [W, V, Matrix.vecMulVec_apply] using congrFun (congrFun hM (a, b)) (a', b')
+  · intro b a b' a'
+    simpa [W, V, Matrix.vecMulVec_apply] using congrFun (congrFun hM (b, a)) (b', a')
 
 end Matrix
