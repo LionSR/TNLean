@@ -665,15 +665,15 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       MPSTensor.IsNormalTensor B ∧
       MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
-      let M := ambient mu B hmu
-      IsMPDO M ∧
-      (∀ N, 0 < N → 0 < Matrix.trace (mpo M N)) ∧
-      IsSAL M ∧
-      IsSimpleCanonicalForm M ∧
+      let K := ambient mu B hmu
+      IsMPDO K ∧
+      (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
+      IsSAL K ∧
+      IsSimpleCanonicalForm K ∧
       MPSTensor.IsBNTCanonicalForm S ∧
       MPSTensor.WordTupleSpanTop S.basis 1 ∧
       (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
-      M.toMPSTensor = S.toTensor ∧
+      K.toMPSTensor = S.toTensor ∧
       (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
         S.weight j q = S.weight j q') ∧
       S.basisCount = 2 ∧
@@ -690,7 +690,7 @@ theorem exists_ambient_simpleBiCF_neighboringTraceObstruction :
       obstructionPhysicalSupport * terminalPhysicalSupport = 0 ∧
       terminalPhysicalSupport * obstructionPhysicalSupport = 0 ∧
       obstructionPhysicalSupport + terminalPhysicalSupport = 1 ∧
-      physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
+      physTraceTransfer K * physTraceTransfer K = physTraceTransfer K := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge,
     hBasisCount, hCopiesZero, hCopiesOne, hDimZero, hDimOne,
     hBasisZero, hBasisOne, hWeightZero, hWeightOne, hBSupport,
@@ -732,7 +732,8 @@ The finite simultaneous-span, local orthogonal-sum entropy, virtual-gauge, and
 isometric-embedding descent arguments are proved in TNLean.  The counterexample
 addresses the source assertion and proof path at
 CPSV16, Theorem 4.9(iv), lines 864--889, and Appendix C.2, lines 1628--1782.
-See `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+See
+<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>. -/
 theorem printed_theorem49_ii_to_iv_is_false :
     ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
       0 < ‖mu‖ ∧ ‖mu‖ < 1 ∧
@@ -741,15 +742,15 @@ theorem printed_theorem49_ii_to_iv_is_false :
       MPSTensor.IsNormalTensor B ∧
       MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
       let S := sectors mu B hmu
-      let M := ambient mu B hmu
-      (IsMPDO M ∧
-        (∀ N, 0 < N → 0 < Matrix.trace (mpo M N)) ∧
-        IsSAL M ∧
-        IsSimpleCanonicalForm M ∧
+      let K := ambient mu B hmu
+      (IsMPDO K ∧
+        (∀ N, 0 < N → 0 < Matrix.trace (mpo K N)) ∧
+        IsSAL K ∧
+        IsSimpleCanonicalForm K ∧
         MPSTensor.IsBNTCanonicalForm S ∧
         MPSTensor.WordTupleSpanTop S.basis 1 ∧
         (∀ j, MPSTensor.IsNormalTensor (S.basis j)) ∧
-        M.toMPSTensor = S.toTensor ∧
+        K.toMPSTensor = S.toTensor ∧
         (∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
           S.weight j q = S.weight j q') ∧
         S.basisCount = 2 ∧
@@ -766,7 +767,7 @@ theorem printed_theorem49_ii_to_iv_is_false :
         obstructionPhysicalSupport * terminalPhysicalSupport = 0 ∧
         terminalPhysicalSupport * obstructionPhysicalSupport = 0 ∧
         obstructionPhysicalSupport + terminalPhysicalSupport = 1 ∧
-        physTraceTransfer M * physTraceTransfer M = physTraceTransfer M) ∧
+        physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) ∧
       ¬ ∃ F : PhysicalSectorFactorization
           (commonWeightAbsorbedBasisMPOTensor S
             (sectors_weight_copy_independent mu B hmu) 0),

@@ -362,8 +362,8 @@ theorem exists_etaStructure_reducedBlockState_three_of_isSAL
         ![p.1, p.2.1, p.2.2] ![q.1, q.2.1, q.2.2])
   rwa [hstate] at hηSmall
 
-/-- **Four-site specialization of Lemma Lsigma3.** If `K` satisfies the strong
-area law, then the three-site marginal of its normalized four-site periodic
+/-- **Four-site specialization of Lemma Lsigma3.** If `K` saturates the area
+law, then the three-site marginal of its normalized four-site periodic
 state admits a quantum Markov decomposition on the middle site.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma Lsigma3, lines 1351--1363;
