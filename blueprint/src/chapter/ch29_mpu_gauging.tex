@@ -1582,9 +1582,6 @@ show that the tensor gauge freedoms induce the joint scalar gauge
     (\ref{eq:mpug_sigma_inverse}) in the three required places.
 \end{proof}
 
-\subsection{The scalar class for $\Z_2$}
-\label{sec:mpug_z2_scalar_class}
-
 Write $\Z_2=\{e,s\}$, where $s^2=e$. The following statements concern only
 the scalar data and their gauge classes.
 
@@ -1603,8 +1600,8 @@ the scalar data and their gauge classes.
         \label{eq:mpug_sigma_l_ratio}
     \end{align}
     This is the scalar identity in
-    \cite[lines~5326--5329]{FrancoRubio2025MPUGauging}.
-    % Source anchor: arXiv:2502.20257, lines 5326--5329.
+    \cite[lines~5327--5329]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, lines 5327--5329.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1628,13 +1625,15 @@ the scalar data and their gauge classes.
         \sigma(s) & =1.
         \label{eq:mpug_z2_trivial_sigma}
     \end{align}
-    This is the direct scalar gauge-class criterion underlying
-    \cite[lines~5331--5341]{FrancoRubio2025MPUGauging}.
+    This strengthens the scalar step in
+    \cite[lines~5339--5341]{FrancoRubio2025MPUGauging}: only normalization,
+    rather than the cocycle identity, is needed for this equivalence.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge,
-        thm:mpug_gauge_preserves_normalization}
+        thm:mpug_gauge_preserves_normalization,
+        thm:mpug_cohomologous_to_equivalence}
     Suppose first that $\omega=d\beta$ for an arbitrary scalar $2$-cochain
     $\beta$. Although $\beta$ need not be normalized, the normalization of
     $d\beta$ implies that there is a constant $c\in\C^\times$ such that
@@ -1684,9 +1683,9 @@ the scalar data and their gauge classes.
         \sigma(s) & =-1.
         \label{eq:mpug_z2_nontrivial_sigma}
     \end{align}
-    This is the scalar cohomology classification used in the proposition of
-    \cite[lines~5336--5341]{FrancoRubio2025MPUGauging}.
-    % Source anchor: arXiv:2502.20257, lines 5331--5341.
+    This is the scalar cohomology classification used in the proof at
+    \cite[lines~5339--5341]{FrancoRubio2025MPUGauging}.
+    % Source anchor: arXiv:2502.20257, lines 5339--5341.
 \end{theorem}
 
 \begin{proof}\leanok
