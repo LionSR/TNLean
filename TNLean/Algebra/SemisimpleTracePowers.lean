@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ShiftedTracePowerSpectrum
 import Mathlib.LinearAlgebra.Eigenspace.Semisimple
-import Mathlib.LinearAlgebra.JordanChevalley
 import Mathlib.LinearAlgebra.Trace
+import QICLean.Algebra.ShiftedTracePowerSpectrum
 
 /-!
 # Semisimple Endomorphisms with Rank-One Trace Powers
