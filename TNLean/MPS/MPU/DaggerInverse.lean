@@ -49,16 +49,8 @@ theorem IsRepresentation.mpo_physicalAdjointTensor_eq_inv [Group G]
       MPOTensor.mpo (F.tensor g) N * star (MPOTensor.mpo (F.tensor g) N) = 1 :=
     Matrix.mem_unitaryGroup_iff.mp (hF.isMPUPos g N hN)
   have hInvEqStar :
-      MPOTensor.mpo (F.tensor g⁻¹) N = star (MPOTensor.mpo (F.tensor g) N) := by
-    calc
-      MPOTensor.mpo (F.tensor g⁻¹) N =
-          MPOTensor.mpo (F.tensor g⁻¹) N * 1 := (mul_one _).symm
-      _ = MPOTensor.mpo (F.tensor g⁻¹) N *
-          (MPOTensor.mpo (F.tensor g) N * star (MPOTensor.mpo (F.tensor g) N)) := by
-            rw [hUnit]
-      _ = (MPOTensor.mpo (F.tensor g⁻¹) N * MPOTensor.mpo (F.tensor g) N) *
-          star (MPOTensor.mpo (F.tensor g) N) := by rw [mul_assoc]
-      _ = star (MPOTensor.mpo (F.tensor g) N) := by rw [hInvMul, one_mul]
+      MPOTensor.mpo (F.tensor g⁻¹) N = star (MPOTensor.mpo (F.tensor g) N) :=
+    left_inv_eq_right_inv hInvMul hUnit
   ext σ τ
   rw [MPOTensor.mpo_physicalAdjointTensor]
   exact (congrFun (congrFun hInvEqStar σ) τ).symm
