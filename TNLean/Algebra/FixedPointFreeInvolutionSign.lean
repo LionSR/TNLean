@@ -107,8 +107,8 @@ theorem involutive_smul_of_mul_self_eq_one {g : G} (hg : g * g = 1) :
   change g • (g • x) = x
   rw [← mul_smul, hg, one_smul]
 
-/-- For an order-two group element, an anomalous `{±1}` sign on the block set
-exists exactly when that element fixes no block.
+/-- For a group element whose square is the identity, an anomalous `{±1}` sign on the
+block set exists exactly when that element fixes no block.
 
 This is the group-action specialization of the function `ξ_g` required in
 arXiv:2502.20257, Proposition `prop:def_tens_anomalous`, equation
