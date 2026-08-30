@@ -323,6 +323,7 @@ boundary conditions (PBC).
     \label{def:mps_rectangular_reduction}
     \lean{MPSTensor.IsReduction}
     \leanok
+    \uses{def:mps_tensor, def:eval_word}
     Let $A$ and $B$ have the same physical alphabet and respective bond
     dimensions $D_A$ and $D_B$.  A reduction from $B$ to $A$ is a pair
     $V\in\mathbb C^{D_A\times D_B}$ and
@@ -351,6 +352,7 @@ boundary conditions (PBC).
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The forward statements are the two defining clauses.  For the converse,
     $A^{\varnothing}=1_{D_A}$ and $B^{\varnothing}=1_{D_B}$, so the empty-word
     instance reads $V1_{D_B}W=1_{D_A}$.
