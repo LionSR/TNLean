@@ -8359,8 +8359,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2110--2134.
 \end{proposition}
 
-\begin{lemma}[Continuous unitary path to the factor swap]
-    \label{lem:mpu-continuous-unitary-swap-path}
+\begin{theorem}[Continuous unitary path to the factor swap]
+    \label{thm:mpu-continuous-unitary-swap-path}
     \lean{Matrix.swapSymmetricProjection,
         Matrix.swapAntisymmetricProjection,
         Matrix.swapPath,
@@ -8368,7 +8368,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     Let $\mathbb S$ denote the swap operator on
     $\mathbb C^d\otimes\mathbb C^d$. There is a continuous map
-    $S\colon\mathbb R\to U(d^2)$ such that
+    $S\colon\mathbb R\to \mathrm{U}(d^2)$ such that
     \begin{align}
         \bigl(S(0),S(1)\bigr) & = \bigl(\Id,\mathbb S\bigr).
     \end{align}
@@ -8385,22 +8385,49 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         P_{\mathrm{anti}} & = \frac{\Id-\mathbb S}{2}.
     \end{align}
     % Source lines: paper_v2.tex 2148--2151 and 2229--2234.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    Since $\mathbb S$ is a self-adjoint involution, the two displayed
-    operators are complementary orthogonal projections. The phase
-    $e^{\mathrm{i}\pi x}$ has modulus one, so $S(x)$ is unitary for every
-    $x$. Continuity follows from continuity of the exponential, while
-    $e^0=1$ and $e^{\mathrm{i}\pi}=-1$ give the endpoint identities.
+    The swap is a self-adjoint involution:
+    \begin{align}
+        \mathbb S^2 & = \Id,
+    \end{align}
+    and
+    \begin{align}
+        \mathbb S^\dagger & = \mathbb S.
+    \end{align}
+    Hence the two projections satisfy
+    \begin{align}
+        \bigl(P_{\mathrm{sym}}^2,P_{\mathrm{anti}}^2\bigr)
+            & = \bigl(P_{\mathrm{sym}},P_{\mathrm{anti}}\bigr),
+    \end{align}
+    \begin{align}
+        \bigl(P_{\mathrm{sym}}P_{\mathrm{anti}},
+            P_{\mathrm{anti}}P_{\mathrm{sym}}\bigr) & = (0,0),
+    \end{align}
+    \begin{align}
+        \bigl(P_{\mathrm{sym}}^\dagger,P_{\mathrm{anti}}^\dagger\bigr)
+            & = \bigl(P_{\mathrm{sym}},P_{\mathrm{anti}}\bigr),
+    \end{align}
+    and
+    \begin{align}
+        P_{\mathrm{sym}}+P_{\mathrm{anti}} & = \Id.
+    \end{align}
+    Since $\lvert e^{\mathrm{i}\pi x}\rvert=1$, these identities imply
+    \begin{align}
+        S(x)S(x)^\dagger
+            & = P_{\mathrm{sym}}+P_{\mathrm{anti}}=\Id.
+    \end{align}
+    Continuity follows from continuity of the exponential, while $e^0=1$ and
+    $e^{\mathrm{i}\pi}=-1$ give the endpoint identities.
 \end{proof}
 
 \begin{proposition}[Time-reversal and transposition phases of $U_2$ and $U_3$]
     \label{prop:U2-U3-trivial-tr-transpose}
     \notready
     \discussion{5715}
-    \uses{threeMPU2, lemma:sym-trafo-swap, lem:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
+    \uses{threeMPU2, lemma:sym-trafo-swap, thm:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
     The MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are in the same
     phase under both time reversal and transposition.
     % Source lines: paper_v2.tex 2136--2155.
@@ -8477,7 +8504,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{prop:U1-U2-equiv-ancillatrick}
     \notready
     \discussion{5715}
-    \uses{threeMPU2, lemma:sym-trafo-swap, lem:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
+    \uses{threeMPU2, lemma:sym-trafo-swap, thm:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
     After adding one ancilla of dimension $d$ per site,
     $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
     under both time reversal and transposition.
