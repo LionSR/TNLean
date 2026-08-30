@@ -15,6 +15,7 @@ import TNLean.QCA.BipartiteSupportAlgebra
 import TNLean.QCA.Blocking
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.BlockingTranslation
+import TNLean.QCA.CommutingStarSubalgebraKronecker
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.DisjointSupport
 import TNLean.QCA.FiniteLocalRestriction
