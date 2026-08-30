@@ -31,7 +31,7 @@ import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleInversion
-import TNLean.Algebra.ScalarThreeCocycleZMod2
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.UnitaryKronecker
