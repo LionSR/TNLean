@@ -186,6 +186,47 @@
     equality on the end pair $S$.
 \end{proof}
 
+\begin{theorem}[Lemma 5 comparison of the two end blocks]
+    \label{thm:peps_existsUnique_virtualOperation_of_endPair}
+    \lean{TNLean.PEPS.existsUnique_virtualOperation_of_endPair}
+    \leanok
+    Let $K$ be the basis of the virtual space on the bond between two
+    injective blocks, and let
+    $\{A_{1,\mu}\}_{\mu\in K}$ and
+    $\{A_{2,\mu}\}_{\mu\in K}$ be linearly independent families.  Suppose
+    that the two end physical operations $O_1$ and $O_3$ produce families
+    $C_1$ and $C_2$ satisfying the open contraction identity
+    \begin{align}
+        \sum_{\mu\in K} C_{1,\mu}\otimes A_{2,\mu}
+        =
+        \sum_{\nu\in K} A_{1,\nu}\otimes C_{2,\nu}.
+        \notag
+    \end{align}
+    Then there is a unique matrix $X\in\MN{|K|}$ such that
+    \begin{align}
+        C_{1,\nu}
+        &=\sum_{\mu\in K} A_{1,\mu}X_{\mu,\nu},
+        &
+        C_{2,\mu}
+        &=\sum_{\nu\in K} X_{\mu,\nu}A_{2,\nu}.
+        \notag
+    \end{align}
+    Thus the two end operations are obtained by inserting the same virtual
+    operation $X$ on their common bond.  No injectivity is required of the
+    modified families $C_1$ and $C_2$.  This is the ``compare the two ends''
+    step in Lemma~5 of \cite{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply a dual functional to the linearly independent family
+    $\{A_{2,\mu}\}$ in the open contraction identity.  This expresses every
+    $C_{1,\nu}$ as a linear combination of the $A_{1,\mu}$ with a coefficient
+    matrix $X$.  Substitution into the same identity and linear independence
+    of $\{A_{1,\mu}\}$ gives the second displayed relation with the same
+    matrix.  Linear independence of the first genuine family also makes the
+    coefficient matrix unique.
+\end{proof}
+
 \begin{theorem}[Single-bond peeling of the staircase end equality]
     \label{thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase}

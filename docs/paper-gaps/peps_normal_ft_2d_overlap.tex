@@ -1092,6 +1092,26 @@ identity reads: the open legs of $S$ split into the left-window external legs an
 the right-window external legs, and the matrix on $e$ is the only datum the two
 windows share. These facts are in \path{TNLean/PEPS/TorusWindowPeeling/BoundaryGeometry.lean}.
 
+The finite-dimensional ``compare the two ends'' argument of Lemma~5 is also
+landed, independently of the remaining torus reindexing.  The theorem
+$\text{\path{existsUnique\_virtualOperation\_of\_endPair}}$ starts from the exact
+operator-Schmidt identity
+\begin{align}
+  \sum_\mu C_{1,\mu}\otimes A_{2,\mu}
+    &= \sum_\nu A_{1,\nu}\otimes C_{2,\nu}
+\end{align}
+and, assuming only linear independence of the two genuine families $A_1$ and
+$A_2$, produces the unique matrix $X$ for which
+$C_{1,\nu}=\sum_\mu A_{1,\mu}X_{\mu\nu}$ and
+$C_{2,\mu}=\sum_\nu X_{\mu\nu}A_{2,\nu}$.  No injectivity of the modified
+families $C_1,C_2$ is used.  Thus the algebraic inversion step in
+\cite[Lemma~5]{Molnar2018NormalPEPS} no longer requires a separate PEPS
+argument.  The remaining Step~4 work is to expand
+(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}), using the
+boundary partition above, into precisely this single-bond contraction identity,
+and then to formalize the composition argument for the maps
+$O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$.
+
 \subsection{The back half transfers with a window as witness region}
 
 The torus back half of Theorem~3 consumes host injectivity in exactly two
