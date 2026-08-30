@@ -1,6 +1,42 @@
 \chapter{Finite-Group MPU Representations and Scalar Gauge Data}%
 \label{ch:mpu_gauging}
 
+\section{Finite-group unitary averages}
+
+\begin{definition}[Finite-group unitary average]
+    \label{def:mpug_finite_group_unitary_average}
+    \lean{TNLean.Algebra.finiteGroupUnitaryAverage}
+    \leanok
+    Let $G$ be a finite group and let $\rho\colon G\to\mathrm U(n)$ be a
+    unitary representation. Define
+    \begin{align}
+        P_\rho & = \frac{1}{|G|}\sum_{g\in G}\rho(g).
+    \end{align}
+    This is the local gauge average in
+    \cite[lines~459--461]{FrancoRubio2025MPUGauging}.
+\end{definition}
+
+\begin{theorem}[Finite-group unitary average is an orthogonal projection]
+    \label{thm:mpug_finite_group_unitary_average_projection}
+    \lean{TNLean.Algebra.finiteGroupUnitaryAverage_isOrthogonalProjection}
+    \leanok
+    \uses{def:mpug_finite_group_unitary_average}
+    For every finite-dimensional unitary representation $\rho$ of a finite
+    group, $P_\rho$ is an orthogonal projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    The standard averaging operator on a representation is the projection onto
+    its invariant subspace, so $P_\rho^2=P_\rho$. Unitarity gives
+    $\rho(g)^\dagger=\rho(g^{-1})$. Since inversion permutes $G$,
+    \begin{align}
+        P_\rho^\dagger
+         & = \frac{1}{|G|}\sum_{g\in G}\rho(g)^\dagger
+          = \frac{1}{|G|}\sum_{g\in G}\rho(g^{-1})
+          = P_\rho.
+    \end{align}
+\end{proof}
+
 \section{Finite-group representations by matrix product unitaries}
 \label{sec:mpug_group_representations}
 
