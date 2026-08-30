@@ -3,18 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.SourceUClosedNetwork
+import TNLean.MPS.MPU.MixedKernelClosedNetwork
 
 /-!
-# The second-cut metric in the closed source-u network
+# The second-cut metric in the closed $Y_1$--$X_2$ mixed network
 
 This file factors the second-cut range projector through the right inverse
-$Z_2$ and exposes the resulting eight-index formula for the ordinary source-u
-Gram entry. The metric is $H_2=Z_2Z_2^\dagger$; no result identifies $H_2$
-with the identity or asserts an ambient coisometry.
+$Z_2$ and exposes the resulting eight-index formula for the auxiliary
+mixed-kernel Gram entry. The metric is $H_2=Z_2Z_2^\dagger$; no result
+identifies $H_2$ with the identity or asserts an ambient coisometry.
 
-These are the exact second-cut identities used in the closed contraction of
-arXiv:1703.09188, equation `uUnitary`, lines 545--557.
+The surrounding mixed network is not the paper gate $u$, so these declarations
+are not attributed to CPSV17 equation `uUnitary`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -42,15 +42,15 @@ theorem sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric
       simp only [Matrix.mul_assoc]
 
 
-/-- The ordinary source-u Gram entry with the exact second-cut metric
+/-- The auxiliary $Y_1$--$X_2$ Gram entry with the exact second-cut metric
 $H_2=Z_2Z_2^\dagger$ and all eight virtual and physical indices explicit.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 545--557. -/
-theorem sourceU_gram_apply_eq_secondCutMetric
+Algebraic mixed-cut identity; not CPSV17 equation `uUnitary`. -/
+theorem sourceY₁X₂_gram_apply_eq_secondCutMetric
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (p q : Fin d × Fin d) :
     (∑ lr : Fin ℓ[U] × Fin r[U],
-      sourceU U ρ hρ lr q * star (sourceU U ρ hρ lr p)) =
+      sourceY₁X₂ U ρ hρ lr q * star (sourceY₁X₂ U ρ hρ lr p)) =
       ∑ β : Fin D, ∑ δ : Fin D, ∑ γ : Fin D, ∑ α : Fin D,
       ∑ j : Fin d, ∑ a : Fin D, ∑ k : Fin d, ∑ c : Fin D,
         ρ α γ *
@@ -59,7 +59,7 @@ theorem sourceU_gram_apply_eq_secondCutMetric
           (U q.2 j β a *
             (sourceZ₂ U * (sourceZ₂ U)ᴴ) (j, a) (k, c) *
               star (U p.2 k δ c)) := by
-  rw [sourceU_gram_apply_eq_closed_output_letter]
+  rw [sourceY₁X₂_gram_apply_eq_closed_output_letter]
   simp_rw [sourceX₂_mul_conjTranspose_eq_sourceCutM₂_mul_secondCutMetric U]
   let H := sourceZ₂ U * (sourceZ₂ U)ᴴ
   have hentry (β δ : Fin D) (i i' : Fin d) :

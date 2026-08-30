@@ -11,9 +11,9 @@ import TNLean.MPS.MPU.SimpleBlocking
 
 This file proves the four-site source-rank bounds used in the composition part
 of the Matrix Product Unitary index theorem.  The argument is algebraic: the
-two-site source factorizations of the two factors give a factorization of each
-source cut of the four-site product tensor through the legs crossed by the
-paper's diagonal cut.
+two-site factorizations through the auxiliary mixed kernels of the two factors
+give a factorization of each source cut of the four-site product tensor through
+the legs crossed by the paper's diagonal cut.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -23,13 +23,12 @@ namespace MPOTensor
 
 variable {d D₁ D₂ : ℕ}
 
-/-- The left local factor in the two-site source-tensor $u$ factorization.  These
+/-- The left local factor in the $Y_1$--$X_2$ mixed-kernel factorization.  These
 local factors are substituted into `compositionCutLeft` and
 `compositionCutRight` to obtain the Chapter 28 factors $A_{1,4}$ and
 $B_{1,4}$.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--543,
-and Theorem `IndexTh` (ii), lines 837--845. -/
+Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `uu`. -/
 private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin r[U]) ℂ :=
@@ -37,31 +36,29 @@ private noncomputable def rightBlockLeft (U : MPOTensor d D₁)
     if j₂ = (finProdFinEquiv.symm J).2 then
       S.X₁ (a, (finProdFinEquiv.symm J).1) r else 0
 
-/-- The right local factor in the two-site source-tensor $u$ factorization used to
+/-- The right local factor in the $Y_1$--$X_2$ mixed-kernel factorization used to
 construct the Chapter 28 factors $A_{1,4}$ and $B_{1,4}$.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--543,
-and Theorem `IndexTh` (ii), lines 837--845. -/
+Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `uu`. -/
 private noncomputable def rightBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin r[U]) (Fin (d * d) × Fin D₁) ℂ :=
   fun (j₂, r) (I, b) => ∑ l : Fin ℓ[U],
-    SourceFactors.sourceU U S (l, r) (finProdFinEquiv.symm I) *
+    SourceFactors.sourceY₁X₂ U S (l, r) (finProdFinEquiv.symm I) *
       S.Y₂ l (j₂, b)
 
-/-- The two-site right-cut factorization through the paper's source tensor
-$u$; it is applied to both product factors before assembling
+/-- The two-site right-cut factorization through the auxiliary $Y_1$--$X_2$
+kernel; it is applied to both product factors before assembling
 $M_1((\mathcal U\mathbin{\cdot}\mathcal V)_4)=A_{1,4}B_{1,4}$.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uu`, lines 526--543,
-and Theorem `IndexTh` (ii), lines 837--845. -/
+Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `uu`. -/
 private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₁ (blockTwo U) = rightBlockLeft U S * rightBlockRight U S := by
   ext ⟨a, J⟩ ⟨I, b⟩
   classical
   simp only [sourceCutM₁_apply, Matrix.mul_apply, rightBlockLeft, rightBlockRight]
-  rw [SourceFactors.blockTwo_apply_eq_sum_X₁_mul_sourceU_mul_Y₂ U S I J a b,
+  rw [SourceFactors.blockTwo_apply_eq_sum_X₁_mul_sourceY₁X₂_mul_Y₂ U S I J a b,
     Fintype.sum_prod_type, Finset.sum_eq_single (finProdFinEquiv.symm J).2]
   · simp only [ite_true, Finset.mul_sum]
     ring_nf
@@ -69,12 +66,11 @@ private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
     simp only [hx, ite_false, zero_mul, Finset.sum_const_zero]
   · simp
 
-/-- The left local factor in the reflected two-site source-tensor $v$ factorization.
+/-- The left local factor in the reflected $X_1$--$Y_2$ mixed-kernel factorization.
 These local factors are substituted into the generic four-site cut factors to
 obtain the Chapter 28 matrices $A_{2,4}$ and $B_{2,4}$.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `vdagger`, lines 526--543,
-and Theorem `IndexTh` (ii), lines 837--845. -/
+Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `vdagger`. -/
 private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin D₁ × Fin (d * d)) (Fin d × Fin ℓ[U]) ℂ :=
@@ -82,32 +78,30 @@ private noncomputable def leftBlockLeft (U : MPOTensor d D₁)
     if i₂ = (finProdFinEquiv.symm I).2 then
       S.X₂ (a, (finProdFinEquiv.symm I).1) l else 0
 
-/-- The right local factor in the reflected two-site source-tensor $v$ factorization
+/-- The right local factor in the reflected $X_1$--$Y_2$ mixed-kernel factorization
 used to construct the Chapter 28 matrices $A_{2,4}$ and $B_{2,4}$.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `vdagger`, lines 526--543,
-and Theorem `IndexTh` (ii), lines 837--845. -/
+Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `vdagger`. -/
 private noncomputable def leftBlockRight (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     Matrix (Fin d × Fin ℓ[U]) (Fin (d * d) × Fin D₁) ℂ :=
   fun (i₂, l) (J, b) => ∑ r : Fin r[U],
-    SourceFactors.sourceV U S
+    SourceFactors.sourceX₁Y₂ U S
       ((finProdFinEquiv.symm J).2, (finProdFinEquiv.symm J).1) (r, l) *
         S.Y₁ r (i₂, b)
 
-/-- The two-site left-cut factorization through the reflected source tensor
-$v$; it is applied to both product factors before assembling
+/-- The two-site left-cut factorization through the auxiliary $X_1$--$Y_2$
+kernel; it is applied to both product factors before assembling
 $M_2((\mathcal U\mathbin{\cdot}\mathcal V)_4)=A_{2,4}B_{2,4}$.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `vdagger`, lines 526--543,
-and Theorem `IndexTh` (ii), lines 837--845. -/
+Auxiliary mixed-cut construction used in the composition-rank proof; not CPSV17 `vdagger`. -/
 private theorem sourceCutM₂_blockTwo_factorization (U : MPOTensor d D₁)
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} (S : SourceFactors U ρ) :
     sourceCutM₂ (blockTwo U) = leftBlockLeft U S * leftBlockRight U S := by
   ext ⟨a, I⟩ ⟨J, b⟩
   classical
   simp only [sourceCutM₂_apply, Matrix.mul_apply, leftBlockLeft, leftBlockRight]
-  rw [SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceV_reflected_mul_Y₁ U S I J a b,
+  rw [SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceX₁Y₂_reflected_mul_Y₁ U S I J a b,
     Fintype.sum_prod_type, Finset.sum_eq_single (finProdFinEquiv.symm I).2]
   · simp only [ite_true, Finset.mul_sum]
     ring_nf
@@ -181,9 +175,11 @@ private theorem sum_eight_cut_factorization
   refine Finset.sum_congr rfl fun y _ => ?_
   ac_rfl
 
-/-- The left rectangular factor of the generic four-site product cut.  With
-the source-tensor $u$ local factors it is the Chapter 28 matrix $A_{1,4}$;
-with the reflected source-tensor $v$ local factors it is $A_{2,4}$.
+/-- The left rectangular factor of the generic four-site product cut. With the
+local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
+matrix $A_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
+$A_{2,4}$. The rank argument uses this algebraic mixed-cut factorization rather
+than the paper source gates.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutLeft
@@ -200,9 +196,11 @@ private noncomputable def compositionCutLeft
       ∑ t : ι₂, ∑ y : Fin E₂,
         L₂ (c, K₁) t * R₂ t (J, y) * L₂ (y, K₂) rs.2
 
-/-- The right rectangular factor of the generic four-site product cut.  With
-the source-tensor $u$ local factors it is the Chapter 28 matrix $B_{1,4}$;
-with the reflected source-tensor $v$ local factors it is $B_{2,4}$.
+/-- The right rectangular factor of the generic four-site product cut. With the
+local factors built from the auxiliary $Y_1$--$X_2$ kernel it is the Chapter 28
+matrix $B_{1,4}$; with the reflected auxiliary $X_1$--$Y_2$ kernel factors it is
+$B_{2,4}$. The rank argument uses this algebraic mixed-cut factorization rather
+than the paper source gates.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 837--845. -/
 private noncomputable def compositionCutRight

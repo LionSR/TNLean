@@ -5,14 +5,14 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.MatchingContractions
-import TNLean.MPS.MPU.SourceUOpenTail
+import TNLean.MPS.MPU.MixedKernelOpenTail
 
 /-!
-# Forward open-tail identities for the source tensor u
+# Forward open-tail identities for the $Y_1$--$X_2$ mixed kernel
 
-This file defines the forward kernel occurring inside the complete source-$u$
-network in arXiv:1703.09188, Figure `II_uUnitary.png` and Lemma
-`lemuisometry` (lines 536--557). The normalized internal sum is an output-first
+This file defines an auxiliary forward kernel for the $Y_1$--$X_2$ mixed
+network. It is not the paper gate $u$ and is not attributed to CPSV17
+`lemuisometry`. The normalized internal sum is an output-first
 double-layer letter followed by a power of its normalized diagonal. It also
 records the two source-cut range projections used when moving the cut in the
 closed network.
@@ -23,9 +23,9 @@ apply only to the source-cut matrices $M_1$ and $M_2$.
 
 **Local fix (range-restricted graphical contraction):** the source diagram
 is read as a contraction of the complete external network, not as an ambient
-matrix identity. This clarification and the remaining closed-network
-obligation are recorded in
-`docs/paper-gaps/mpu_sourceu_range_restriction.tex`.
+matrix identity. This clarification and the fact that the historical
+closed-network comparison is not part of the paper-gate proof are recorded in
+`docs/paper-gaps/mpu_mixed_kernel_range_restriction.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -55,8 +55,8 @@ private lemma sum_rotate_five {A B C P Q R : Type*}
 /-- The normalized forward kernel before applying the outer $X_1$ and $X_2$
 factors. It contains exactly one factor $d^{-K}$.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 545--556. -/
-noncomputable def sourceUForwardKernel (K : ℕ) (i i' : Fin d)
+Auxiliary mixed-network definition; not CPSV17 equation `uUnitary`. -/
+noncomputable def sourceY₁X₂ForwardKernel (K : ℕ) (i i' : Fin d)
     (β β' α α' : Fin D) : ℂ :=
   ((d : ℂ)⁻¹) ^ K *
     ∑ τ : Fin K → Fin d, ∑ ζ : Fin K → Fin d, ∑ j₂ : Fin d,
@@ -110,18 +110,18 @@ by the $K$th power of its normalized diagonal.
 
 The unstarred bond component precedes the starred component in both doubled
 bond indices. This is the forward, rather than conjugate-transpose-reversed,
-chain needed inside the complete source-$u$ network.
+chain occurring in the auxiliary mixed-kernel network.
 
-Source: arXiv:1703.09188, Figure `II_uUnitary.png` and equation `uUnitary`,
-lines 545--556. -/
-theorem sourceUForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow
+Auxiliary output-layer packaging; not the paper's source-$u$ network or equation
+`uUnitary`. -/
+theorem sourceY₁X₂ForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow
     [NeZero d] (K : ℕ) (i i' : Fin d) (β β' α α' : Fin D) :
-    sourceUForwardKernel U K i i' β β' α α' =
+    sourceY₁X₂ForwardKernel U K i i' β β' α α' =
       (doubleLayerTensor (physicalAdjointTensor U) i i' *
         normalizedDiagonal (doubleLayerTensor (physicalAdjointTensor U)) ^ K)
           (finProdFinEquiv (β, β')) (finProdFinEquiv (α, α')) := by
   classical
-  unfold sourceUForwardKernel
+  unfold sourceY₁X₂ForwardKernel
   rw [Matrix.mul_apply, ← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
   simp_rw [normalizedDiagonal_outputLayer_pow_apply U K]
   simp only [doubleLayerTensor_physicalAdjointTensor_apply, Matrix.mul_apply,
@@ -167,17 +167,18 @@ theorem sourceX₂_mul_conjTranspose_mul_sourceCutM₂ :
   rw [Matrix.mul_assoc, ← sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂]
   exact (sourceCutM₂_eq_sourceX₂_mul_sourceY₂ U).symm
 
-/-- Expanding both periodic MPO entries through $X_1$, the source tensor $u$,
-$X_2$, and the forward open tail gives the normalized source-$u$ metric. MPU
+/-- Expanding both periodic MPO entries through $X_1$, the auxiliary
+$Y_1$--$X_2$ kernel, $X_2$, and the forward open tail gives a normalized
+mixed-kernel metric. MPU
 output coisometry evaluates this complete expression to the retained physical
 Kronecker delta. The entry indexed by $q$ is unstarred and the entry indexed by
 $p$ is starred. The theorem evaluates the displayed expansion directly; it
 does not fold the sum through the separately defined open-tail coefficient
-or identify the ordinary Gram matrix `sourceUᴴ * sourceU`.
+or identify the Gram matrix of the paper gate `sourceU`.
 
-Source: arXiv:1703.09188, Figure `II_uUnitary.png`, equation `uUnitary`, and
-Lemma `lemuisometry`, lines 536--557. -/
-theorem IsMPU.normalized_sourceU_openTail_metric [NeZero d]
+Auxiliary mixed-cut identity; not CPSV17 equation `uUnitary` or Lemma
+`lemuisometry`. -/
+theorem IsMPU.normalized_sourceY₁X₂_openTail_metric [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (K : ℕ)
     (p q : Fin d × Fin d) :
@@ -185,18 +186,18 @@ theorem IsMPU.normalized_sourceU_openTail_metric [NeZero d]
         ∑ τ : Fin K → Fin d, ∑ j : Fin d × Fin d, ∑ ζ : Fin K → Fin d,
           (∑ α : Fin D, ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
             ∑ β : Fin D, ∑ i : Fin d,
-              sourceX₁ U ρ hρ (α, j.1) r * sourceU U ρ hρ (l, r) q *
+              sourceX₁ U ρ hρ (α, j.1) r * sourceY₁X₂ U ρ hρ (l, r) q *
                 star (sourceX₂ U (β, i) l) *
                   (U i j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β α) *
           star (∑ α' : Fin D, ∑ r' : Fin r[U], ∑ l' : Fin ℓ[U],
             ∑ β' : Fin D, ∑ i' : Fin d,
-              sourceX₁ U ρ hρ (α', j.1) r' * sourceU U ρ hρ (l', r') p *
+              sourceX₁ U ρ hρ (α', j.1) r' * sourceY₁X₂ U ρ hρ (l', r') p *
                 star (sourceX₂ U (β', i') l') *
                   (U i' j.2 * evalWord U (List.ofFn τ) (List.ofFn ζ)) β' α') =
       if p = q then 1 else 0 := by
   classical
-  simp_rw [← mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
-    U ρ hρ K q, ← mpo_finAddTwo_eq_sum_sourceX₁_sourceU_sourceX₂_openTail
+  simp_rw [← mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail
+    U ρ hρ K q, ← mpo_finAddTwo_eq_sum_sourceX₁_sourceY₁X₂_sourceX₂_openTail
     U ρ hρ K p]
   have hreindex (τ : Fin K → Fin d) :
       (∑ j : Fin d × Fin d, ∑ ζ : Fin K → Fin d,

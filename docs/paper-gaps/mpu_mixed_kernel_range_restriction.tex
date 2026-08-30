@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{The Hidden Range Restriction in the Source-$u$ Contraction}
+\title{The Historical Range Restriction in the $Y_1$--$X_2$ Mixed Contraction}
 \author{}
 \date{2026-08-10}
 
@@ -17,9 +17,10 @@
 
 \section{The graphical step}
 
-The proof of the source-tensor isometry in
-Ref.~\cite[lines~536--557]{Cirac2017MPU} contracts a normalized open tail
-between source-cut factors and simplifies the resulting diagram. Interpreted
+A historical formalization attempt replaced the paper gate
+$u=Y_2\mathbin{-}Y_1$ by the mixed contraction $Y_1\mathbin{-}X_2$ and then
+contracted a normalized open tail between source-cut factors. This replacement
+does not occur in Ref.~\cite[lines~536--557]{Cirac2017MPU}. Interpreted
 as an ambient matrix identity, this simplification would identify the
 open-tail coefficient with the identity on the full product-index space. That
 identity is false in general because the source factors need not be
@@ -27,9 +28,9 @@ surjective. The available isometry relation is only
 \begin{align}
     X_2^\dagger X_2
         &= 1.
-    \label{eq:mpu_sourceu_range_restriction_source_isometry}
+    \label{eq:mpu_mixed_kernel_range_restriction_source_isometry}
 \end{align}
-Equation~\ref{eq:mpu_sourceu_range_restriction_source_isometry} does not imply
+Equation~\ref{eq:mpu_mixed_kernel_range_restriction_source_isometry} does not imply
 the ambient coisometry relation $X_2X_2^\dagger=1$.
 
 \section{Range-restricted interpretation}
@@ -37,15 +38,15 @@ the ambient coisometry relation $X_2X_2^\dagger=1$.
 Let $M_1$ and $M_2$ denote the source-cut factors, let $X_1$ and $X_2$ denote
 the corresponding source isometries, and define
 $W_\rho=\rho\otimes 1_d$. The valid interpretation retains the external
-source-$u$ tensors and closes the complete tensor network before moving the
-cut. The two projection identities used in this closed network are
+$Y_1$--$X_2$ mixed kernels and closes the complete tensor network before
+moving the cut. The two projection identities used in this closed network are
 \begin{align}
     X_1X_1^\dagger W_\rho M_1
         &= M_1,
-    \label{eq:mpu_sourceu_range_restriction_first_range_identity}\\
+    \label{eq:mpu_mixed_kernel_range_restriction_first_range_identity}\\
     X_2X_2^\dagger M_2
         &= M_2.
-    \label{eq:mpu_sourceu_range_restriction_second_range_identity}
+    \label{eq:mpu_mixed_kernel_range_restriction_second_range_identity}
 \end{align}
 These identities follow from the source-cut factorizations and the recovery
 formulas for $Y_1$ and $Y_2$. They assert that the relevant source-cut factors
@@ -58,31 +59,30 @@ diagonal. Conjugate transposition reverses the virtual chain. Consequently, the
 reflected simple-contraction equations cannot be substituted pointwise into
 this coefficient.
 
-The remaining independent obligation compares two complete contractions: the
-ordinary source-$u$ Gram matrix and the normalized closed output tail on
-$K+2$ sites. This equality must be proved while retaining the full external
-network. The normalized open-tail metric alone does not establish it.
+The historical route would next compare two complete contractions: the
+ordinary $Y_1$--$X_2$ mixed-kernel Gram matrix and the normalized closed output
+tail on $K+2$ sites. The normalized open-tail metric does not establish this
+equality, and the comparison is not an obligation for the paper gate $u$.
 
 \section{Verdict}
 
-The discrepancy is a graphical clarification. The source argument in
-Ref.~\cite{Cirac2017MPU} must be read as a range-restricted contraction of the
-closed network, not as an identity on the ambient product-index space. This
-reading does not make the source lemma false because its diagram retains the
-external network. An indexed translation must preserve that restriction.
+The range identities are valid auxiliary algebra, but the surrounding
+$Y_1$--$X_2$ network is not the source gate of Ref.~\cite{Cirac2017MPU}.
+Accordingly, this note no longer supplies a route to the paper's source-$u$
+isometry lemma. The paper-facing proof must start from $u=Y_2\mathbin{-}Y_1$.
 
 The forward kernel and its output-layer expression are formalized by
-\leanid{MPOTensor.sourceUForwardKernel} and
-\leanid{MPOTensor.sourceUForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}.
+\leanid{MPOTensor.sourceY₁X₂ForwardKernel} and
+\leanid{MPOTensor.sourceY₁X₂ForwardKernel_eq_outputLayer_mul_normalizedDiagonal_pow}.
 The range identities in
-Eqs.~\ref{eq:mpu_sourceu_range_restriction_first_range_identity} and
-\ref{eq:mpu_sourceu_range_restriction_second_range_identity} are formalized by
+Eqs.~\ref{eq:mpu_mixed_kernel_range_restriction_first_range_identity} and
+\ref{eq:mpu_mixed_kernel_range_restriction_second_range_identity} are formalized by
 \leanid{MPOTensor.sourceX₁_mul_conjTranspose_mul_weight_mul_sourceCutM₁} and
 \leanid{MPOTensor.sourceX₂_mul_conjTranspose_mul_sourceCutM₂}, respectively.
 The fully expanded normalized metric is formalized by
-\leanid{MPOTensor.IsMPU.normalized_sourceU_openTail_metric}. This theorem does
-not identify the normalized metric with the ordinary source-$u$ Gram matrix;
-the final closed-network equality remains a separate obligation.
+\leanid{MPOTensor.IsMPU.normalized_sourceY₁X₂_openTail_metric}. This theorem does
+not identify the normalized metric with the ordinary $Y_1$--$X_2$ mixed-kernel
+Gram matrix, and no such equality is claimed as part of the paper-gate proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}

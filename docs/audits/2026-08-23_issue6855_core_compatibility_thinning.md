@@ -46,7 +46,7 @@ canonical-form and example calculations in `CPSVBlocking.lean`, `Conjugation.lea
 `BlockedBNTFusionIsometries.lean`, `FirstSiteBlocking.lean`,
 `PhysicalBlocking.lean`, and `ExtendRight.lean`; the MPU calculations in
 `BlockingRanks.lean`, `CanonicalForm.lean`, `SimpleBlocking.lean`,
-`SourceURangeTransport.lean`, `SourceUReflectedKernel.lean`,
+`MixedKernelRangeTransport.lean`, `ReflectedTransferKernel.lean`,
 `TensorProduct.lean`, and `ThreeFormSpan.lean`; the periodic and symmetry
 calculations in
 `Periodic/Defs.lean`,
