@@ -102,6 +102,34 @@ structure IsRepresentation [Group G] (F : GroupFamily G d) : Prop where
   operator_mul : ∀ g h N, 0 < N →
     mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
 
+/-- The represented operator preserves natural powers on every nonempty chain.
+
+Source: arXiv:2502.20257, line 1547. -/
+theorem IsRepresentation.operator_pow [Group G]
+    (F : GroupFamily G d) (hF : F.IsRepresentation) (g : G)
+    (n N : ℕ) (hN : 0 < N) :
+    mpo (F.tensor g) N ^ n = mpo (F.tensor (g ^ n)) N := by
+  induction n with
+  | zero => rw [pow_zero, pow_zero, hF.operator_one N hN]
+  | succ n ih =>
+      calc
+        mpo (F.tensor g) N ^ (n + 1) =
+            mpo (F.tensor g) N ^ n * mpo (F.tensor g) N := pow_succ _ _
+        _ = mpo (F.tensor (g ^ n)) N * mpo (F.tensor g) N := by rw [ih]
+        _ = mpo (F.tensor (g ^ n * g)) N := hF.operator_mul (g ^ n) g N hN
+        _ = mpo (F.tensor (g ^ (n + 1))) N := by rw [pow_succ]
+
+/-- The operator representing an element of a finite group has finite order on
+any nonempty chain.
+
+Source: arXiv:2502.20257, line 1547. -/
+theorem IsRepresentation.operator_pow_orderOf_eq_one [Group G] [Finite G]
+    (F : GroupFamily G d) (hF : F.IsRepresentation) (g : G)
+    (N : ℕ) (hN : 0 < N) :
+    mpo (F.tensor g) N ^ orderOf g = 1 := by
+  rw [hF.operator_pow F g (orderOf g) N hN, pow_orderOf_eq_one,
+    hF.operator_one N hN]
+
 /-- The multiplication law as exact positive-length equality of doubled-index
 matrix product vectors. The chosen injective tensor for `g * h` is placed first,
 matching the orientation used by the later rectangular reduction interface.

@@ -84,6 +84,59 @@ $N\geq1$. In particular, no identity at length zero is asserted.
     not an equality of local tensors.
 \end{definition}
 
+\begin{theorem}[Powers of represented operators]
+    \label{thm:mpug_operator_power}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.operator_pow}
+    \leanok
+    \discussion{7445}
+    \uses{def:mpug_group_representation}
+    For every $g\in G$, every $n\in\N$, and every $N\geq1$,
+    \begin{align}
+        \bigl(U_g^{(N)}\bigr)^n & =U_{g^n}^{(N)}.
+        \label{eq:mpug_operator_power}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_group_representation}
+    Induct on $n$. For $n=0$, the identity law gives
+    $U_e^{(N)}=\Id$. For the induction step, multiply the induction hypothesis
+    by $U_g^{(N)}$ and apply the representation multiplication law:
+    \begin{align}
+        \bigl(U_g^{(N)}\bigr)^{n+1}
+         & =U_{g^n}^{(N)}U_g^{(N)}
+        =U_{g^{n+1}}^{(N)}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Finite order of represented operators]
+    \label{thm:mpug_operator_finite_order}
+    \lean{MPOTensor.GroupFamily.IsRepresentation.operator_pow_orderOf_eq_one}
+    \leanok
+    \discussion{7445}
+    \uses{def:mpug_group_representation}
+    Suppose that $G$ is finite. For every $g\in G$ and every $N\geq1$, the
+    represented operator has finite order dividing the order of $g$:
+    \begin{align}
+        \bigl(U_g^{(N)}\bigr)^{\operatorname{ord}(g)} & =\Id.
+    \end{align}
+    This is the finite-order assertion in
+    \cite[line~1547]{FrancoRubio2025MPUGauging}.
+    % Source anchor: Papers/2502.20257/main.tex, line 1547.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_group_representation, thm:mpug_operator_power}
+    Apply (\ref{eq:mpug_operator_power}) with $n=\operatorname{ord}(g)$.
+    The finite-order identity $g^{\operatorname{ord}(g)}=e$ and the
+    representation identity law then give
+    $\bigl(U_g^{(N)}\bigr)^{\operatorname{ord}(g)}=U_e^{(N)}=\Id$.
+\end{proof}
+
+% Tracking boundary: these entries cover only finite order of the periodic
+% operators. Issue #7318 remains open for public-index vanishing, the
+% rank-product input r l = d^2, and the final rank equality r = l = d.
+
 \begin{theorem}[Product-tensor operator identity]
     \label{thm:mpug_product_tensor_operator}
     \lean{MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_mulTensor}
