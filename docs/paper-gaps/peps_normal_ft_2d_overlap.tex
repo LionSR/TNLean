@@ -1118,18 +1118,24 @@ $C_{1,\nu}=\sum_\mu A_{1,\mu}X_{\mu\nu}$ and
 $C_{2,\mu}=\sum_\nu X_{\mu\nu}A_{2,\nu}$.  No injectivity of the modified
 families $C_1,C_2$ is used.  Thus the algebraic inversion step in
 \cite[Lemma~5]{Molnar2018NormalPEPS} no longer requires a separate PEPS
-argument.  The three boundary-configuration equivalences above now provide
-the exact reindexing for the open legs.  The remaining Step~4 work is to expand
-(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}) into the
-single-bond contraction identity.  Concretely, the present definition of
-\path{extendInsert} is expressed through
-\path{ThreeBlockGeometry.threeBlockBlueCoeff} and the
-$\mathrm{univ}\setminus S$ interior-bond multiplicity.  The missing lemma must
-identify that normalized blue coupling, for the two-window geometry, with the
-genuine opposite-window block indexed by the same $e$-coordinate and the
-opposite external configuration.  This is a coefficient factorization, not an
-additional injectivity hypothesis.  After it, one must formalize the composition
-argument for the maps $O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$.
+argument.  The three boundary-configuration equivalences above provide the
+exact reindexing for the open legs.  The normalized coefficient factorization
+is now also landed.  On each end, incompatible external labels make
+\path{ThreeBlockGeometry.threeBlockBlueCoeff} vanish; on the compatible fibre,
+its normalized value is the genuine opposite-window blocked tensor at the same
+reference-edge coordinate and the opposite external configuration.  This gives
+the two explicit single-bond formulas for \path{extendInsert}.  Translation
+invariance identifies their external crossing-bond products, so equality in
+(\ref{eq:peps_normal_ft_2d_overlap_formal_end_pair_insert_equality}) cancels to
+the operator-Schmidt identity above.  The theorem
+\path{existsUnique_virtualOperation_of_horizontalStaircaseEndPair} consequently
+extracts the unique highlighted-edge matrix $X$ assuming injectivity only of
+the two genuine end windows.  No injectivity of a modified insert, a single
+vertex, the end pair, or its complement enters this step.
+
+The remaining Step~4 work is the composition argument for the maps
+$O_1\mapsto X$ and $O_3^{\mathsf T}\mapsto X$, followed by their use in the
+cross-tensor assembly and the back half of the proof.
 
 \subsection{The back half transfers with a window as witness region}
 

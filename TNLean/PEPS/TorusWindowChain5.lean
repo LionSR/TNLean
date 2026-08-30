@@ -195,6 +195,60 @@ theorem ThreeBlockGeometry.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff
   rw [ThreeBlockGeometry.threeBlockBlueCoeff, ThreeBlockGeometry.threeBlockComplCoeff]
   rfl
 
+/-- The boundary label of the blue block is determined by the host and complement labels.
+
+Indeed, every boundary edge of the blue block joins it either to the red block, where its value
+is read by the host boundary label, or to the complement block, where its value is read by the
+complement boundary label.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400, and the
+open-boundary end comparison at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem ThreeBlockGeometry.regionBoundaryLabel_blue_eq_of_host_eq_of_complement_eq
+    (g : ThreeBlockGeometry V) (q q' : VirtualConfig A)
+    (hhost : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q =
+      regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q')
+    (hcompl : regionBoundaryLabel (G := G) A g.complement q =
+      regionBoundaryLabel (G := G) A g.complement q') :
+    regionBoundaryLabel (G := G) A g.blue q =
+      regionBoundaryLabel (G := G) A g.blue q' := by
+  funext f
+  have hblue : IsRegionIncidentEdge (G := G) g.blue f.1 :=
+    isRegionBoundaryEdge_touches g.blue f.2
+  have hother : IsRegionIncidentEdge (G := G) g.red f.1 ∨
+      IsRegionIncidentEdge (G := G) g.complement f.1 := by
+    have hmem : ∀ w : V, w ∉ g.blue → w ∈ g.red ∨ w ∈ g.complement := by
+      intro w hnblue
+      have hw : w ∈ g.red ∪ g.blue ∪ g.complement := by
+        rw [g.cover_univ]
+        exact Finset.mem_univ w
+      rcases Finset.mem_union.mp hw with hrb | hc
+      · rcases Finset.mem_union.mp hrb with hr | hb
+        · exact Or.inl hr
+        · exact absurd hb hnblue
+      · exact Or.inr hc
+    rcases f.2 with ⟨hb1, hb2⟩ | ⟨hb1, hb2⟩
+    · rcases hmem f.1.1.2 hb2 with hr | hc
+      · exact Or.inl (Or.inr hr)
+      · exact Or.inr (Or.inr hc)
+    · rcases hmem f.1.1.1 hb1 with hr | hc
+      · exact Or.inl (Or.inl hr)
+      · exact Or.inr (Or.inl hc)
+  simp only [regionBoundaryLabel_apply]
+  rcases hother with hred | hcomplInc
+  · have hredBoundary : IsRegionBoundaryEdge (G := G) g.red f.1 :=
+      isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.red
+        g.red_disjoint_blue.symm hblue hred
+    have hhostBoundary : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f.1 :=
+      (isRegionBoundaryEdge_compl_iff (G := G) g.red f.1).mpr hredBoundary
+    have h := congrFun hhost ⟨f.1, hhostBoundary⟩
+    simpa only [regionBoundaryLabel_apply] using h
+  · have hcomplBoundary : IsRegionBoundaryEdge (G := G) g.complement f.1 :=
+      isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.complement
+        g.blue_disjoint_complement hblue hcomplInc
+    have h := congrFun hcompl ⟨f.1, hcomplBoundary⟩
+    simpa only [regionBoundaryLabel_apply] using h
+
 open scoped Classical in
 /-- **The `Q`-weight span of the blue coupling.**  The red/blue crossing bond multiple of the
 blue coupling `threeBlockBlueCoeff g bdry σblue bc'`, read as a function of the blue physical
@@ -229,6 +283,91 @@ theorem ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq
   rw [g.threeBlockBlueCoeff_eq_swap_threeBlockComplCoeff bdry σblue bc',
     g.swapBlueComplement.blueRedCrossingBondProd_smul_threeBlockComplCoeff_eq
       bdry bc' σblue]
+
+open scoped Classical in
+/-- **The realized blue-coupling coefficient is one genuine blocked tensor.**
+
+If a global virtual configuration `q₀` realizes the prescribed host and complement boundary
+labels, then the red/complement crossing-bond multiple of the blue coupling is exactly the
+blocked-region weight of the blue block at the boundary label carried by `q₀`.  The preceding
+boundary-determination theorem shows that every other realized summand has that same blue label,
+so the general blocked-tensor combination collapses to one term.
+
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400, and the
+single-bond comparison at lines 2213--2252 and 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem ThreeBlockGeometry.crossingBondProd_smul_threeBlockBlueCoeff_eq_regionBlockedWeight
+    (g : ThreeBlockGeometry V)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
+    (bc' : RegionBoundaryConfig (G := G) A g.complement)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
+    (q₀ : VirtualConfig A)
+    (hq0host : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q₀ = bdry)
+    (hq0compl : regionBoundaryLabel (G := G) A g.complement q₀ = bc') :
+    (g.swapBlueComplement.blueRedCrossingBondProd A : ℂ) •
+        g.threeBlockBlueCoeff bdry σblue bc' =
+      regionBlockedWeight (G := G) A g.blue
+        (regionBoundaryLabel (G := G) A g.blue q₀) σblue := by
+  rw [g.crossingBondProd_smul_threeBlockBlueCoeff_eq bdry bc' σblue]
+  rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A g.blue q₀)]
+  · rw [ite_eq_left ⟨q₀, hq0host, hq0compl, rfl⟩, one_smul]
+  · intro bβ _ hbβ
+    rw [ite_eq_right, zero_smul]
+    rintro ⟨q, hqhost, hqcompl, hqblue⟩
+    apply hbβ
+    rw [← hqblue]
+    exact g.regionBoundaryLabel_blue_eq_of_host_eq_of_complement_eq q q₀
+      (hqhost.trans hq0host.symm) (hqcompl.trans hq0compl.symm)
+  · intro hmem
+    exact absurd (Finset.mem_univ _) hmem
+
+/-- With nonzero red/complement crossing-bond product, a realized blue coupling is the inverse
+crossing multiple of the corresponding genuine blue blocked-region weight.
+
+Source: arXiv:1804.04964, the single-bond comparison at lines 2213--2252 and 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem ThreeBlockGeometry.threeBlockBlueCoeff_eq_inv_smul_regionBlockedWeight
+    (g : ThreeBlockGeometry V)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
+    (bc' : RegionBoundaryConfig (G := G) A g.complement)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
+    (q₀ : VirtualConfig A)
+    (hq0host : regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q₀ = bdry)
+    (hq0compl : regionBoundaryLabel (G := G) A g.complement q₀ = bc')
+    (hcross : (g.swapBlueComplement.blueRedCrossingBondProd A : ℂ) ≠ 0) :
+    g.threeBlockBlueCoeff bdry σblue bc' =
+      (g.swapBlueComplement.blueRedCrossingBondProd A : ℂ)⁻¹ •
+        regionBlockedWeight (G := G) A g.blue
+          (regionBoundaryLabel (G := G) A g.blue q₀) σblue := by
+  calc
+    g.threeBlockBlueCoeff bdry σblue bc' =
+        (g.swapBlueComplement.blueRedCrossingBondProd A : ℂ)⁻¹ •
+          ((g.swapBlueComplement.blueRedCrossingBondProd A : ℂ) •
+            g.threeBlockBlueCoeff bdry σblue bc') :=
+      (inv_smul_smul₀ hcross _).symm
+    _ = (g.swapBlueComplement.blueRedCrossingBondProd A : ℂ)⁻¹ •
+        regionBlockedWeight (G := G) A g.blue
+          (regionBoundaryLabel (G := G) A g.blue q₀) σblue := by
+      rw [g.crossingBondProd_smul_threeBlockBlueCoeff_eq_regionBlockedWeight
+        bdry bc' σblue q₀ hq0host hq0compl]
+
+open scoped Classical in
+/-- The blue coupling vanishes when its prescribed host and complement boundary labels are
+incompatible, meaning that no global virtual configuration realizes both labels.
+
+Source: arXiv:1804.04964, the open-boundary single-bond comparison at lines 2415--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem ThreeBlockGeometry.threeBlockBlueCoeff_eq_zero_of_no_compatible_boundary
+    (g : ThreeBlockGeometry V)
+    (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
+    (bc' : RegionBoundaryConfig (G := G) A g.complement)
+    (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
+    (h : ¬ ∃ q : VirtualConfig A,
+      regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q = bdry ∧
+        regionBoundaryLabel (G := G) A g.complement q = bc') :
+    g.threeBlockBlueCoeff bdry σblue bc' = 0 := by
+  rw [ThreeBlockGeometry.threeBlockBlueCoeff]
+  rw [Finset.filter_eq_empty_iff.mpr (fun q _ hq => h ⟨q, hq⟩), Finset.sum_empty]
 
 /-! ### The `S ⊔ Q` assembly bridge
 
